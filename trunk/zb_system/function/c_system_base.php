@@ -24,7 +24,7 @@ class zblogphp{
 	}
 
 	public function run(){
-		echo 'hello zblog php!';
+		echo 'hello zblog php!<br>';
 	}
 
 }
