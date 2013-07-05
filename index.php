@@ -3,25 +3,9 @@
 ////              Z-Blog PHP 坑爹的开始
 /////////////////////////////////////////////////////////////////////////////////
 
-//phpinfo();
-printf(__LINE__);
+require_once 'zb_system\function\c_system_base.php';
 
-
-echo "creating a databse \n";
-try {
-     $dbh=new PDO('sqlite:voting.db');
-     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-     $dbh->exec('
-     CREATE TABLE tally(
-     QID varchar(32) NOT NULL,
-     AID integer NOT NULL,
-     votes integer NOT NULL,
-     PRIMARY KEY(QID,AID)
-     )');
- } catch (Exception $e) {
-     echo "error!!:$e";
-     exit;
-     
- }
- echo "db created successfully!";
+$zblogphp=new zblogphp;
+//echo $zblogphp->option['ZC_MYSQL']['ZC_MYSQL_PRE'];
+$zblogphp->run();
 ?>
