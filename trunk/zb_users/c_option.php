@@ -33,11 +33,10 @@ return array(
 	'ZC_MYSQL' => array(				
 			'ZC_MYSQL_SERVER' => 'localhost',								
 			'ZC_MYSQL_USERNAME' => 'root',				
-			'ZC_MYSQL_PASSWORD' => 'phpwind.net',				
+			'ZC_MYSQL_PASSWORD' => '',				
 			'ZC_MYSQL_DATABASE' => 'zblog',				
-			'ZC_MYSQL_charset' => 'utf8',				
-			'ZC_MYSQL_tablepre' => 'blog_',								
-			'ZC_MYSQL_engine'=>'MyISAM',
+			'ZC_MYSQL_CHARSET' => 'utf8',				
+			'ZC_MYSQL_PRE' => 'blog_'								
 			),
 
 	// '---------------------------------插件----------------------------------------

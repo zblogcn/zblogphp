@@ -6,13 +6,13 @@
  * @version 2.0 2013-06-14
  */
 
-class c_system_base{
+class zblogphp{
 	// 当前应用的配置
-	public $c_option = array();
+	public $option = array();
 	
-	function __construct(&$c_option) {
-		$this->c_option = &$c_option;
-		define();
+	function __construct() {
+		$this->option = include('./zb_users/c_option.php');
+		//define();
 	}
 	
 	public function __get($var) {
@@ -22,5 +22,11 @@ class c_system_base{
 	public function __call($method, $args) {
 		throw new Exception('');
 	}
+
+	public function run(){
+		echo 'hello zblog php!';
+	}
+
 }
+
 ?>
