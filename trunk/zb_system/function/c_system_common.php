@@ -8,7 +8,7 @@
 
 
 function getguid(){
-	
+	$s=com_create_guid();
 }
 
 

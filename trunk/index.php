@@ -3,9 +3,9 @@
 ////              Z-Blog PHP 坑爹的开始
 /////////////////////////////////////////////////////////////////////////////////
 
-require_once 'zb_system\function\c_system_base.php';
+require_once 'zb_system/function/c_system_base.php';
 
-$zblogphp=new zblogphp;
+$zbp=new zblogphp;
 //echo $zblogphp->option['ZC_MYSQL']['ZC_MYSQL_PRE'];
-$zblogphp->run();
+$zbp->run();
 ?>
