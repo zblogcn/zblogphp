@@ -13,13 +13,13 @@
  */
 return array(
 	// '---------------------------------网站基本设置-----------------------------------
-	'ZC_BLOG_HOST' => 'http://iis.imzhou.com/zblog2/',
+	'ZC_BLOG_HOST' => 'http://localhost/',
 	'ZC_BLOG_TITLE' => '标题blog！！！',
 	'ZC_BLOG_SUBTITLE' => 'Good Luck To You!',
 	'ZC_BLOG_NAME' => '标题blog！！！',
 	'ZC_BLOG_SUB_NAME' => 'Good Luck To You!',
-	'ZC_BLOG_THEME' => 'X2013',
-	'ZC_BLOG_CSS' => 'style',
+	'ZC_BLOG_THEME' => 'default',
+	'ZC_BLOG_CSS' => 'default',
 	'ZC_BLOG_COPYRIGHT' => 'Copyright xxxx-xxxx Your WebSite.Some Rights Reserved.',
 	'ZC_BLOG_MASTER' => 'zblogger',
 	'ZC_BLOG_LANGUAGE' => 'zh-CN',
@@ -27,7 +27,7 @@ return array(
 
 
 	// '----------------------------数据库配置---------------------------------------
-	'ZC_DATABASE_PATH' => 'zb_users/data/#%20768d53283c63b13403f0.mdb',
+	'ZC_DATABASE_PATH' => '',
 
 	'ZC_MYSQL_ENABLE' => False,
 	'ZC_MYSQL' => array(				
@@ -36,14 +36,14 @@ return array(
 			'ZC_MYSQL_PASSWORD' => '',				
 			'ZC_MYSQL_DATABASE' => 'zblog',				
 			'ZC_MYSQL_CHARSET' => 'utf8',				
-			'ZC_MYSQL_PRE' => 'blog_'								
+			'ZC_MYSQL_PRE' => 'zbp_'								
 			),
 
 	// '---------------------------------插件----------------------------------------
-	'ZC_USING_PLUGIN_LIST' => 'STACentre|FileManage|AppCentre|AdvancedConfig|ZBDK|ReaderWall|weixin_Search|KindEditor|api',
+	'ZC_USING_PLUGIN_LIST' => '',
 
 	// '-------------------------------全局配置-----------------------------------
-	'ZC_BLOG_CLSID' => '6464be54bfc0416bffd0485f6edde956',
+	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE' => '+0800',
 	'ZC_HOST_TIME_ZONE' => '+0800',
 	'ZC_UPDATE_INFO_URL' => 'http://update.rainbowsoft.org/info/',
@@ -52,7 +52,7 @@ return array(
 	'ZC_MULTI_DOMAIN_SUPPORT' => False,
 
 	// '当前 Z-Blog 版本
-	'ZC_BLOG_VERSION' => '2.2 Beta Build 130323',
+	'ZC_BLOG_VERSION' => '1.0 Beta Build 130707',
 
 
 
@@ -186,6 +186,10 @@ return array(
 
 	'ZC_SIDEBAR_ORDER4' => '',
 
-	'ZC_SIDEBAR_ORDER5' => '',	
+	'ZC_SIDEBAR_ORDER5' => '',
+
+	//The default language of uEditor
+	//The language files will be loaded from ue-lang\ZC_EDITORLANG by editor.
+	'ZC_EDITORLANG'=>'zh-cn',
 );
 ?>

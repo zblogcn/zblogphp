@@ -6,12 +6,15 @@
  * @version 2.0 2013-06-14
  */
 
+$c_option = include('zb_users/c_option.php');
+$c_lang = include('zb_users/language/'.$c_option['ZC_BLOG_LANGUAGEPACK'].'.php');
+
 class zblogphp{
 	// 当前应用的配置
-	public $option = array();
+	//public $option = array();
 	
 	function __construct() {
-		$this->option = include('./zb_users/c_option.php');
+		//$this->option = include('zb_users/c_option.php');
 		//define();
 	}
 	
