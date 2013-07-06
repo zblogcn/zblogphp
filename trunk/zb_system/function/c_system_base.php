@@ -6,15 +6,20 @@
  * @version 2.0 2013-06-14
  */
 
+require_once 'c_system_common.php';
+
 $c_option = include('zb_users/c_option.php');
 $c_lang = include('zb_users/language/'.$c_option['ZC_BLOG_LANGUAGEPACK'].'.php');
 
 class zblogphp{
 	// 当前应用的配置
-	//public $option = array();
+	public $option = array();
+	public $lang = array();	
 	
 	function __construct() {
-		//$this->option = include('zb_users/c_option.php');
+		global $c_option,$c_lang;
+		$this->option = unserialize(serialize($c_option));
+		$this->lang = unserialize(serialize($c_lang));
 		//define();
 	}
 	
