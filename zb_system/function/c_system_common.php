@@ -8,7 +8,8 @@
 
 
 function getguid(){
-	$s=com_create_guid();
+	$s=trim(com_create_guid(),'{..}');
+	return $s;
 }
 
 
