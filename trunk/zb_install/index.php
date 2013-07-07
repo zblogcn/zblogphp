@@ -279,6 +279,30 @@ CheckServer();
     <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option'][0];?></td>
     <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option'][1];?></td>
   </tr>
+  <tr>
+    <th colspan="3" scope="row">函数检查</th>
+  </tr>
+  <tr>
+    <td scope="row">file_get_contents</td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['file_get_contents'][0];?></td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['file_get_contents'][1];?></td>
+  </tr>
+  <tr>
+    <td scope="row">gethostbyname</td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gethostbyname'][0];?></td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gethostbyname'][1];?></td>
+  </tr>
+  <tr>
+    <td scope="row">xml_parser_create</td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['xml_parser_create'][0];?></td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['xml_parser_create'][1];?></td>
+  </tr>
+  <tr>
+    <td scope="row">fsockopen</td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['fsockopen'][0];?></td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['fsockopen'][1];?></td>
+  </tr>
+
 </table>
 
 
@@ -343,6 +367,12 @@ $CheckResult=array(
   'plugin'=>array('',''), 
   'upload'=>array('',''), 
   'c_option'=>array('',''), 
+  //函数
+  'file_get_contents'=>array(function_exists('file_get_contents'),''),
+  'gethostbyname'=>array(function_exists('gethostbyname'),''),
+  'xml_parser_create'=>array(function_exists('xml_parser_create'),''),
+  'fsockopen'=>array(function_exists('fsockopen'),'')
+
 );
   if( function_exists("gd_info") ){
     $info = gd_info();
