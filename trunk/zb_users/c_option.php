@@ -29,16 +29,22 @@ return array(
 	// '----------------------------数据库配置---------------------------------------
 	'ZC_SQLITE_ENABLE' => False,
 	//'ZC_SQLITE' => array(
-		'ZC_SQLITE_DATABASE' => '',
+		'ZC_SQLITE_NAME' => '',
 		'ZC_SQLITE_PRE' => 'zbp_',
-	//),	
+	//),
+
+	'ZC_SQLITE3_ENABLE' => False,
+	//'ZC_SQLITE' => array(
+		'ZC_SQLITE3_NAME' => '',
+		'ZC_SQLITE3_PRE' => 'zbp_',
+	//),		
 
 	'ZC_MYSQL_ENABLE' => False,
 	//'ZC_MYSQL' => array(				
 			'ZC_MYSQL_SERVER' => 'localhost',								
 			'ZC_MYSQL_USERNAME' => 'root',				
 			'ZC_MYSQL_PASSWORD' => '',				
-			'ZC_MYSQL_DATABASE' => 'zblog',				
+			'ZC_MYSQL_NAME' => 'zblog',				
 			'ZC_MYSQL_CHARSET' => 'utf8',				
 			'ZC_MYSQL_PRE' => 'zbp_',							
 			'ZC_MYSQL_ENGINE'=>'MyISAM',
