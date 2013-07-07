@@ -8,13 +8,16 @@
 error_reporting(0);
 error_reporting(E_ALL);
 
-$blogpath = realpath(dirname(__FILE__).'/../../').'/';
+$blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 
 require_once $blogpath.'/zb_system/function/c_system_common.php';
 require_once $blogpath.'/zb_system/function/c_system_plugin.php';
 
 $c_option = include($blogpath.'zb_users/c_option.php');	
 $c_lang = include($blogpath.'zb_users/language/'.$c_option['ZC_BLOG_LANGUAGEPACK'].'.php');
+
+$cookiespath = null;
+$bloghost = GetCurrentHost($cookiespath);
 
 /*include plugin*/
 
