@@ -227,7 +227,7 @@ CheckServer();
     <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gd2'][1];?></td>
   </tr>
   <tr>
-    <td scope="row">MYSQL</td>
+    <td scope="row">MySQL</td>
     <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][0];?></td>
     <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][1];?></td>
   </tr>
@@ -329,14 +329,79 @@ CheckServer();
 <?php
 function Setup3(){
 ?>
-
+<dl>
+<dd id="ddleft">
+<img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
+<div class="left">安装进度： </div><div id="setup3"  class="left"></div>
+<p><b>安装协议</b> » <b>环境检查</b> » <b>数据库建立与设置</b> » 安装结果</p>
+</dd>
+<dd id="ddright">
+<div id="title">数据库建立与设置</div>
+<div id="content">
+<input type="hidden" name="dbtype" id="dbtype" value="mysql" />
+<p><b>类型选择</b>:
+  &nbsp;&nbsp;<label onClick="$('#sqlite').hide();$('#sqlite3').hide();$('#mysql').show();$('#dbtype').val('mysql');"><input type="radio" name="db" checked="checked" />MySQL</label>
+  &nbsp;&nbsp;<label onClick="$('#mysql').hide();$('#sqlite3').hide();$('#sqlite').show();$('#dbtype').val('sqlite');"><input type="radio" name="db" />SQLite</label>
+  &nbsp;&nbsp;<label onClick="$('#mysql').hide();$('#sqlite').hide();$('#sqlite3').show();$('#dbtype').val('sqlite3');"><input type="radio" name="db" />SQLite3</label>  
+</p>
+<div id="sqlite" style="display:none;">
+<p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite_name" id="dbsqlite_name" value="" readonly style="width:350px;" /></p>
+<p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" /></p>
+</div>
+<div id="sqlite3" style="display:none;">
+<p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite3_name" id="dbsqlite3_name" value="" readonly style="width:350px;" /></p>
+<p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite3_pre" id="dbsqlite3_pre" value="zbp_" style="width:350px;" /></p>
+</div>
+<div id="mysql">
+<p><b>数据库主机:</b><input type="text" name="dbmysql_server" id="dbmysql_server" value="(local)" style="width:350px;" /></p>
+<p><b>数据库名称:</b><input type="text" name="dbmysql_name" id="dbmysql_name" value="" style="width:350px;" /></p>
+<p><b>用户名称:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_username" id="dbmysql_username" value="" style="width:350px;" /></p>
+<p><b>用户密码:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_password" id="dbmysql_password" value="" style="width:350px;" /></p>
+<p><b>表&nbsp;前&nbsp;缀:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_pre" id="dbmysql_pre" value="zbp_" style="width:350px;" /></p>
+</div>
+<p class="title">网站设置</p>
+<p><b>网站名称:</b>&nbsp;&nbsp;<input type="text" name="blogtitle" id="blogtitle" value="" style="width:350px;" /></p>
+<p><b>用&nbsp;户&nbsp;名:</b>&nbsp;&nbsp;<input type="text" name="username" id="username" value="" style="width:250px;" />&nbsp;(英文,数字,汉字和._的组合)</p>
+<p><b>密&nbsp;&nbsp;&nbsp;&nbsp;码:</b>&nbsp;&nbsp;<input type="password" name="password" id="password" value="" style="width:250px;" />&nbsp;(8位或更长的数字和字母,字符组合)</p>
+<p><b>确认密码:</b>&nbsp;&nbsp;<input type="password" name="repassword" id="repassword" value="" style="width:250px;" /></p>
+</div>
+<div id="bottom">
+<input type="submit" name="next" id="netx" onClick="return Setup3()" value="下一步" />
+</div>
+</dd>
+</dl>
 <?php
 }
 ?>
 
 <?php
 function Setup4(){
+
+$dbtype=isset($_POST['dbtype']) ? $_POST['dbtype'] : '';
+//echo $dbtype;
 ?>
+<dl>
+<dd id="ddleft">
+<img src="../zb_system/image/admin/install.png" alt="Z-Blog2.0在线安装" />
+<div class="left">安装进度： </div><div id="setup4"  class="left"></div>
+<p><b>安装协议</b> » <b>环境检查</b> » <b>数据库建立与设置</b> » <b>安装结果</b></p>
+</dd>
+<dd id="ddright">
+
+<div id="title">安装结果</div>
+<div id="content">
+
+
+<p>Z-Blog 2.0安装成功了,现在您可以点击"完成"进入网站首页.</p>
+
+</div>
+<div id="bottom">
+<input type="button" name="next" onClick="window.location.href='../'" id="netx" value="完成" />
+</div>
+</dd>
+</dl>
+
+
 
 <?php
 }
@@ -344,9 +409,9 @@ function Setup4(){
 
 <?php
 function Setup5(){
-?>
 
-<?php
+  header('Location: '.$GLOBALS['zbp']->host);
+
 }
 
 

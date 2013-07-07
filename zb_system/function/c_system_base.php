@@ -8,6 +8,8 @@
 error_reporting(0);
 error_reporting(E_ALL);
 
+ob_start();
+
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 
 require_once $blogpath.'/zb_system/function/c_system_common.php';
