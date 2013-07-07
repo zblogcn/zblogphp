@@ -13,7 +13,7 @@
  */
 require_once '../zb_system/function/c_system_base.php';
 
-$zblogstep=@$_GET['step'];
+$zblogstep=isset($_GET['step']) ? intval($_GET['step']) : 0;
 if($zblogstep=="") { $zblogstep=1;}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -237,6 +237,11 @@ CheckServer();
     <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
   </tr>
   <tr>
+    <td scope="row">SQLite3</td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][0];?></td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][1];?></td>
+  </tr>
+  <tr>
     <th colspan="3" scope="row">权限检查</th>
   </tr>
   <tr>
@@ -348,6 +353,7 @@ function Setup5(){
 $CheckResult=null;
 
 function CheckServer(){
+
 global $CheckResult;
 $CheckResult=array(
  //服务器 
@@ -356,7 +362,8 @@ $CheckResult=array(
   'zbppath' => array($GLOBALS['zbp']->path,''), 
  //组件
   'mysql' => array('',''), 
-  'sqlite' => array('',''), 
+  'sqlite' => array('',''),
+  'sqlite3' => array('',''),
   'gd2' => array('',''), 
  //权限  
   'zb_users'=>array('',''), 
@@ -384,16 +391,19 @@ $CheckResult=array(
   if( function_exists("sqlite_libversion") ){
     $CheckResult['sqlite'][0]=sqlite_libversion();
   };
+  if( method_exists('SQLite3','version') ){
+    $info = SQLite3::version();
+    $CheckResult['sqlite3'][0]=$info['versionString'];
+  };
 
-$CheckResult['zb_users'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users')), -4);
-$CheckResult['cache'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/cache')), -4);
-$CheckResult['data'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/data')), -4);
-$CheckResult['include'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/include')), -4);
-$CheckResult['theme'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/theme')), -4);
-$CheckResult['plugin'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/plugin')), -4);
-$CheckResult['upload'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/upload')), -4);
-$CheckResult['c_option'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/c_option.php')), -4);
-
+  $CheckResult['zb_users'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users')), -4);
+  $CheckResult['cache'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/cache')), -4);
+  $CheckResult['data'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/data')), -4);
+  $CheckResult['include'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/include')), -4);
+  $CheckResult['theme'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/theme')), -4);
+  $CheckResult['plugin'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/plugin')), -4);
+  $CheckResult['upload'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/upload')), -4);
+  $CheckResult['c_option'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/c_option.php')), -4);
 
 }
 ?>
