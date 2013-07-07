@@ -5,13 +5,13 @@
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
+$blogpath = realpath(rtrim(dirname(__FILE__),'\/\\').'/../../');
 
-require_once 'c_system_common.php';
-require_once 'c_system_plugin.php';
+require_once $blogpath.'/zb_system/function/c_system_common.php';
+require_once $blogpath.'/zb_system/function/c_system_plugin.php';
 
-
-$c_option = include('zb_users/c_option.php');	
-$c_lang = include('zb_users/language/'.$c_option['ZC_BLOG_LANGUAGEPACK'].'.php');
+$c_option = include($blogpath.'/zb_users/c_option.php');	
+$c_lang = include($blogpath.'/zb_users/language/'.$c_option['ZC_BLOG_LANGUAGEPACK'].'.php');
 
 /*include plugin*/
 

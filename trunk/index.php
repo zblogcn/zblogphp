@@ -6,7 +6,7 @@
  * @version 2.0 2013-06-14
  */
 
-require_once 'zb_system/function/c_system_base.php';
+require_once './zb_system/function/c_system_base.php';
 
 
 //echo $zbp->option['ZC_BLOG_TITLE'];
