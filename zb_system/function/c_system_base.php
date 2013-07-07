@@ -7,9 +7,15 @@
  */
 
 require_once 'c_system_common.php';
+require_once 'c_system_plugin.php';
 
-$c_option = include('zb_users/c_option.php');
+
+$c_option = include('zb_users/c_option.php');	
 $c_lang = include('zb_users/language/'.$c_option['ZC_BLOG_LANGUAGEPACK'].'.php');
+
+/*include plugin*/
+
+$zbp=new zblogphp;
 
 class zblogphp{
 	// 当前应用的配置
@@ -17,9 +23,8 @@ class zblogphp{
 	public $lang = array();	
 	
 	function __construct() {
-		global $c_option,$c_lang;
-		$this->option = unserialize(serialize($c_option));
-		$this->lang = unserialize(serialize($c_lang));
+		$this->option = $GLOBALS["c_option"];
+		$this->lang = $GLOBALS["c_lang"];
 		//define();
 	}
 	
