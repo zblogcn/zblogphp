@@ -11,7 +11,7 @@
  * @param 
  * @return array
  */
-
+require_once '../zb_system/function/c_system_base.php';
 
 $zblogstep=$_GET['step'];
 if($zblogstep=="") { $zblogstep=1;}
@@ -29,26 +29,32 @@ if($zblogstep=="") { $zblogstep=1;}
     <script language="JavaScript" src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
 	<link rel="stylesheet" rev="stylesheet" href="../zb_system/css/jquery-ui.custom.css"  type="text/css" media="screen" />
 	<link rel="stylesheet" rev="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
-	<title>Z-Blog <%=ZC_BLOG_VERSION%> 安装程序</title>
+	<title>Z-Blog <?=ZC_BLOG_VERSION?> 安装程序</title>
     
 </head>
 <body>
-	<div class="setup"><form method="post" action="index.php?step=<?php echo $zblogstep+1;?>">
+	<div class="setup"><form method="post" action="?step=<?php echo $zblogstep+1;?>">
 <?php
 
 switch ($zblogstep) {
     case 0:
         Setup0();
+        break;
     case 1:
         Setup1();
+        break;
     case 2:
         Setup2();
+        break;
     case 3:
         Setup3();
+        break;
     case 4:
         Setup4();
+        break;
     case 5:
         Setup5();
+        break;
 }
 
 ?>
