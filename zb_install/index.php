@@ -24,9 +24,10 @@ if($zblogstep=="") { $zblogstep=1;}
   <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 	<meta name="generator" content="Z-Blog <?=$zbp->option['ZC_BLOG_VERSION']?>" />
 	<meta name="robots" content="nofollow" />
-	<script language="JavaScript" src="../zb_system/script/common.js" type="text/javascript"></script>
-	<script language="JavaScript" src="../zb_system/script/md5.js" type="text/javascript"></script>
-  <script language="JavaScript" src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
+	<script src="../zb_system/script/common.js" type="text/javascript"></script>
+  <script src="../zb_system/function/c_admin_js_add.php" type="text/javascript"></script>
+	<script src="../zb_system/script/md5.js" type="text/javascript"></script>
+  <script src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
 	<link rel="stylesheet" rev="stylesheet" href="../zb_system/css/jquery-ui.custom.css"  type="text/css" media="screen" />
 	<link rel="stylesheet" rev="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
 	<title>Z-BlogPHP <?=$zbp->option['ZC_BLOG_VERSION']?> 安装程序</title>
@@ -284,7 +285,6 @@ CheckServer();
 
 </div>
 <div id="bottom">
-
 <script type="text/javascript">bmx2table();</script>
 <?php ?>
 <input type="submit" name="next" id="netx" value="下一步" />
