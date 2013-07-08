@@ -403,14 +403,19 @@ switch ($dbtype) {
         die($sqliteerror);
     }
 */
-    $dbf=new DbFactory('sqlite');
-    $dbf->open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'],$_POST['dbsqlite_pre']));
+    $dbf=DbFactory::Create('sqlite');
+    $dbf->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'],$_POST['dbsqlite_pre']));
+
+    $dbf->Close();
 
     break;
   case 'sqlite3':
 
-    $dbf=new DbFactory('sqlite3');
-    $dbf->open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite3_name'],$_POST['dbsqlite3_pre']));
+    $dbf=DbFactory::Create('sqlite3');
+    $dbf->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite3_name'],$_POST['dbsqlite3_pre']));
+
+    $dbf->Close();
+
     break;
 }
 
