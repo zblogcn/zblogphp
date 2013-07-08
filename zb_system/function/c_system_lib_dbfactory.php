@@ -14,11 +14,28 @@ class DbFactory #extends AnotherClass
 {
 
 	public $dbtype = null;
+	public $dbpre = null;
 
 	function __construct($type)
 	{
 		$dbtype=$type;
 	}
+
+	function open($array)
+	{
+		switch ($dbtype) {
+			case 'mysql':
+				# code...
+				break;
+
+			case 'sqlite':
+				break;
+
+			case 'sqlite3':
+				break;	
+		}
+	}
+
 }
 
 ?>
