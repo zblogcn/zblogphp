@@ -36,7 +36,7 @@ class DbSQLite3 implements iDataBase
 	}
 
 	function CreateTable(){
-		CreateTable_SQLite3();
+		$this->db->query('CREATE TABLE foo (bar varchar(10))');
 	}
 
 	function Query(){
