@@ -393,7 +393,7 @@ switch ($dbtype) {
     # code...
     break;
   case 'sqlite':
-    if ($db = sqlite_open($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'], 0666, $sqliteerror)) { 
+/*    if ($db = sqlite_open($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'], 0666, $sqliteerror)) { 
         try {
           sqlite_close($db);
         } catch (Exception $e) {
@@ -402,9 +402,15 @@ switch ($dbtype) {
     } else {
         die($sqliteerror);
     }
+*/
+    $dbf=new DbFactory('sqlite');
+    $dbf->open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'],$_POST['dbsqlite_pre']));
+
     break;
   case 'sqlite3':
-    # code...
+
+    $dbf=new DbFactory('sqlite3');
+    $dbf->open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite3_name'],$_POST['dbsqlite3_pre']));
     break;
 }
 
