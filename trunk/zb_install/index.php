@@ -349,10 +349,10 @@ function Setup3(){
 <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite3_pre" id="dbsqlite3_pre" value="zbp_" style="width:350px;" /></p>
 </div>
 <div id="mysql">
-<p><b>数据库主机:</b><input type="text" name="dbmysql_server" id="dbmysql_server" value="(local)" style="width:350px;" /></p>
-<p><b>数据库名称:</b><input type="text" name="dbmysql_name" id="dbmysql_name" value="" style="width:350px;" /></p>
+<p><b>数据库主机:</b><input type="text" name="dbmysql_server" id="dbmysql_server" value="localhost" style="width:350px;" /></p>
 <p><b>用户名称:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_username" id="dbmysql_username" value="" style="width:350px;" /></p>
 <p><b>用户密码:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_password" id="dbmysql_password" value="" style="width:350px;" /></p>
+<p><b>数据库名称:</b><input type="text" name="dbmysql_name" id="dbmysql_name" value="" style="width:350px;" /></p>
 <p><b>表&nbsp;前&nbsp;缀:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_pre" id="dbmysql_pre" value="zbp_" style="width:350px;" /></p>
 </div>
 <p class="title">网站设置</p>
@@ -390,31 +390,30 @@ echo $dbtype;
 
 switch ($dbtype) {
   case 'mysql':
-    # code...
+
+    $dbf=DbFactory::Create('mysql');
+    if($dbf->Open(array($_POST['dbmysql_server'],$_POST['dbmysql_username'],$_POST['dbmysql_password'],$_POST['dbmysql_name'],$_POST['dbmysql_pre']))==true){
+      $dbf->CreateTable();
+      $dbf->Close();
+    }
+
     break;
   case 'sqlite':
-/*    if ($db = sqlite_open($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'], 0666, $sqliteerror)) { 
-        try {
-          sqlite_close($db);
-        } catch (Exception $e) {
-          sqlite_close($db);
-        }
-    } else {
-        die($sqliteerror);
-    }
-*/
-    $dbf=DbFactory::Create('sqlite');
-    $dbf->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'],$_POST['dbsqlite_pre']));
 
-    $dbf->Close();
+    $dbf=DbFactory::Create('sqlite');
+    if($dbf->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'],$_POST['dbsqlite_pre']))==true){
+      $dbf->CreateTable();
+      $dbf->Close();
+    }
 
     break;
   case 'sqlite3':
 
     $dbf=DbFactory::Create('sqlite3');
-    $dbf->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite3_name'],$_POST['dbsqlite3_pre']));
-
-    $dbf->Close();
+    if($dbf->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite3_name'],$_POST['dbsqlite3_pre']))==true){
+      $dbf->CreateTable();
+      $dbf->Close();
+    }
 
     break;
 }

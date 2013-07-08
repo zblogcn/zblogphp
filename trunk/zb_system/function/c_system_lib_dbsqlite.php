@@ -11,7 +11,7 @@
 /**
 * 
 */
-class DbMySQL implements iDataBase
+class DbSQLite implements iDataBase
 {
 
 	public $dbpre = null;
@@ -36,7 +36,7 @@ class DbMySQL implements iDataBase
 	}
 
 	function CreateTable(){
-		CreateTable_SQLite();
+		sqlite_query($this->db, 'CREATE TABLE foo (bar varchar(10))');
 	}
 
 	function Query(){
