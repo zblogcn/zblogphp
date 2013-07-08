@@ -13,11 +13,11 @@
 class DbFactory #extends AnotherClass
 {
 
-	public $type = null;
-		
+	public $dbtype = null;
+
 	function __construct($type)
 	{
-		# code...
+		$dbtype=$type;
 	}
 }
 
