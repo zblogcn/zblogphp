@@ -31,19 +31,8 @@ class DbFactory #extends AnotherClass
 
 	function Create($type)
 	{
-		switch ($type) {
-			case 'mysql':
-				$db=New DbMySQL();
-				break;
-			
-			case 'sqlite':
-				$db=New DbSQLite();
-				break;
-
-			case 'sqlite3':
-				$db=New DbSQLite3();
-				break;
-		}
+		$newtype='Db'.$type;
+		$db=New $newtype();
 		return $db;
 	}
 
