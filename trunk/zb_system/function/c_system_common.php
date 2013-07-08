@@ -21,12 +21,12 @@ function RunTime(){
 
 	$endtime = microtime();
 	$startime = explode(' ',$GLOBALS['startime']);
-	//$endtime = explode(' ',$endtime);
-	//$totaltime = $endtime[0]-$startime[0]+$endtime[1]-$startime[1];
-	//$timecost = sprintf("%s",$totaltime);
-	//return '<!--'.$timecost.'s-->';
+	$endtime = explode(' ',$endtime);
+	$totaltime = $endtime[0]-$startime[0]+$endtime[1]-$startime[1];
+	$timecost = sprintf("%s",$totaltime);
+	return '<!--'.$timecost.'s-->';
 
-
+/*
 	$endtime=microtime(true);
     $totaltime=$endtime-$startime;
 
@@ -36,6 +36,7 @@ function RunTime(){
         $totaltime = $float_total/100000;
 		return '<!--'.$totaltime.'s-->';
 	}
+*/
 }
 
 function GetCurrentHost(&$cookiespath){
