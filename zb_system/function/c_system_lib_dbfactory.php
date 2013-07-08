@@ -13,18 +13,18 @@
 class DbFactory #extends AnotherClass
 {
 
-	private $db = null;
 	public $dbtype = null;
 	public $dbpre = null;
+	private $db = null;	
 
 	function __construct($type)
 	{
-		$dbtype=$type;
+		$this->dbtype=$type;
 	}
 
-	function open($array)
+	function Open($array)
 	{
-		switch ($dbtype) {
+		switch ($this->dbtype) {
 			case 'mysql':
 				# code...
 				break;
@@ -32,8 +32,8 @@ class DbFactory #extends AnotherClass
 			case 'sqlite':
 
 
-if ($db = sqlite_open($array[0], 0666, $sqliteerror)) {
-	$dbpre=$array[1];
+if ($this->db = sqlite_open($array[0], 0666, $sqliteerror)) {
+	$this->dbpre=$array[1];
 	return true;
 } else {
 	return false;
@@ -44,15 +44,31 @@ if ($db = sqlite_open($array[0], 0666, $sqliteerror)) {
 			case 'sqlite3':
 
 
-if ($db = new SQLite3($array[0]) ){
-	$dbpre=$array[1];
-	return ture;
+if ($this->db = new SQLite3($array[0]) ){
+	$this->dbpre=$array[1];
+	return true;
 } else{
 	return false;
 }
 
 				break;	
 		}
+	}
+	function Close(){
+		switch ($this->dbtype) {
+			case 'mysql':
+				break;
+			case 'sqlite':
+
+				break;
+			case 'sqlite3':
+				$this->db::close();
+				break;	
+		}
+	}
+
+	function CreateTable(){
+
 	}
 
 }
