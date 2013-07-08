@@ -27,6 +27,8 @@ return array(
 
 
 	// '----------------------------数据库配置---------------------------------------
+	//mysql|sqlite|sqlite3
+	'ZC_DATABASE_TYPE'=> '',
 	'ZC_SQLITE_ENABLE' => False,
 	//'ZC_SQLITE' => array(
 		'ZC_SQLITE_NAME' => '',

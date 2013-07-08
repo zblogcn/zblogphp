@@ -16,5 +16,5 @@ $zbp->run();
 //echo $c_lang['ZC_MSG001'];
 //echo getguid();
 //var_dump($zbp->option);
-
+echo RunTime();
 ?>
