@@ -13,6 +13,7 @@
 class DbFactory #extends AnotherClass
 {
 
+	private $db = null;
 	public $dbtype = null;
 	public $dbpre = null;
 
@@ -29,9 +30,27 @@ class DbFactory #extends AnotherClass
 				break;
 
 			case 'sqlite':
+
+
+if ($db = sqlite_open($array[0], 0666, $sqliteerror)) {
+	$dbpre=$array[1];
+	return true;
+} else {
+	return false;
+}
+
 				break;
 
 			case 'sqlite3':
+
+
+if ($db = new SQLite3($array[0]) ){
+	$dbpre=$array[1];
+	return ture;
+} else{
+	return false;
+}
+
 				break;	
 		}
 	}
