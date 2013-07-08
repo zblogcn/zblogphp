@@ -12,6 +12,21 @@ function GetGuid(){
 	return $s;
 }
 
+function CreateDbName(){
+
+	return 'zb_users/data/' . str_replace('-','','#%20' . strtolower(GetGuid()));
+}
+
+function RunTime(){
+
+	$endtime = microtime(); 
+	$startime = explode(' ',$GLOBALS['startime']); 
+	$endtime = explode(' ',$endtime); 
+	$totaltime = $endtime[0]-$startime[0]+$endtime[1]-$startime[1]; 
+	$timecost = sprintf("%s",$totaltime);
+	return '<!--'.$timecost.'s-->';
+}
+
 function GetCurrentHost(&$cookiespath){
 	if (array_key_exists('HTTPS',$_SERVER)) {
 		if ($_SERVER['HTTPS']=='off') {

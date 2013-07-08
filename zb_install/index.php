@@ -90,7 +90,6 @@ $(function() {
 </script>
 </body>
 </html>
-
 <?php
 function Setup0(){
 ?>
@@ -112,9 +111,7 @@ function Setup0(){
 </dl>
 <?php
 }
-?>
 
-<?php
 function Setup1(){
 ?>
 <dl>
@@ -181,9 +178,7 @@ $( "input[type=checkbox]" ).click(function() {
 </dl>
 <?php
 }
-?>
 
-<?php
 function Setup2(){
 
 CheckServer();
@@ -324,10 +319,11 @@ CheckServer();
 </dl>
 <?php
 }
-?>
 
-<?php
 function Setup3(){
+
+  global $CheckResult;
+  CheckServer();
 ?>
 <dl>
 <dd id="ddleft">
@@ -341,15 +337,15 @@ function Setup3(){
 <input type="hidden" name="dbtype" id="dbtype" value="mysql" />
 <p><b>类型选择</b>:
   &nbsp;&nbsp;<label onClick="$('#sqlite').hide();$('#sqlite3').hide();$('#mysql').show();$('#dbtype').val('mysql');"><input type="radio" name="db" checked="checked" />MySQL</label>
-  &nbsp;&nbsp;<label onClick="$('#mysql').hide();$('#sqlite3').hide();$('#sqlite').show();$('#dbtype').val('sqlite');"><input type="radio" name="db" />SQLite</label>
-  &nbsp;&nbsp;<label onClick="$('#mysql').hide();$('#sqlite').hide();$('#sqlite3').show();$('#dbtype').val('sqlite3');"><input type="radio" name="db" />SQLite3</label>  
+  &nbsp;&nbsp;<label onClick="$('#mysql').hide();$('#sqlite3').hide();$('#sqlite').show();$('#dbtype').val('sqlite');"<?php if(!$CheckResult['sqlite'][0]){ echo 'style=\'display:none;\''; }?>><input type="radio" name="db" />SQLite</label>
+  &nbsp;&nbsp;<label onClick="$('#mysql').hide();$('#sqlite').hide();$('#sqlite3').show();$('#dbtype').val('sqlite3');"<?php if(!$CheckResult['sqlite3'][0]){ echo 'style=\'display:none;\''; }?>><input type="radio" name="db" />SQLite3</label>  
 </p>
 <div id="sqlite" style="display:none;">
-<p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite_name" id="dbsqlite_name" value="" readonly style="width:350px;" /></p>
+<p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo CreateDbName()?>.db" readonly style="width:350px;" /></p>
 <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" /></p>
 </div>
 <div id="sqlite3" style="display:none;">
-<p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite3_name" id="dbsqlite3_name" value="" readonly style="width:350px;" /></p>
+<p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite3_name" id="dbsqlite3_name" value="<?php echo CreateDbName()?>.db" readonly style="width:350px;" /></p>
 <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite3_pre" id="dbsqlite3_pre" value="zbp_" style="width:350px;" /></p>
 </div>
 <div id="mysql">
@@ -372,13 +368,9 @@ function Setup3(){
 </dl>
 <?php
 }
-?>
 
-<?php
 function Setup4(){
 
-$dbtype=isset($_POST['dbtype']) ? $_POST['dbtype'] : '';
-//echo $dbtype;
 ?>
 <dl>
 <dd id="ddleft">
@@ -391,6 +383,32 @@ $dbtype=isset($_POST['dbtype']) ? $_POST['dbtype'] : '';
 <div id="title">安装结果</div>
 <div id="content">
 
+<?php
+
+$dbtype=isset($_POST['dbtype']) ? $_POST['dbtype'] : '';
+echo $dbtype;
+
+switch ($dbtype) {
+  case 'mysql':
+    # code...
+    break;
+  case 'sqlite':
+    if ($db = sqlite_open($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'], 0666, $sqliteerror)) { 
+        try {
+          sqlite_close($db);
+        } catch (Exception $e) {
+          sqlite_close($db);
+        }
+    } else {
+        die($sqliteerror);
+    }
+    break;
+  case 'sqlite3':
+    # code...
+    break;
+}
+
+?>
 
 <p>Z-Blog 2.0安装成功了,现在您可以点击"完成"进入网站首页.</p>
 
@@ -400,14 +418,9 @@ $dbtype=isset($_POST['dbtype']) ? $_POST['dbtype'] : '';
 </div>
 </dd>
 </dl>
-
-
-
 <?php
 }
-?>
 
-<?php
 function Setup5(){
 
   header('Location: '.$GLOBALS['zbp']->host);
@@ -449,17 +462,17 @@ $CheckResult=array(
   if( function_exists("gd_info") ){
     $info = gd_info();
     $CheckResult['gd2'][0]=$info['GD Version'];
-  };
+  }
   if( function_exists("mysql_get_client_info") ){
     $CheckResult['mysql'][0]=mysql_get_client_info();
-  };
+  }
   if( function_exists("sqlite_libversion") ){
     $CheckResult['sqlite'][0]=sqlite_libversion();
-  };
+  }
   if( method_exists('SQLite3','version') ){
     $info = SQLite3::version();
     $CheckResult['sqlite3'][0]=$info['versionString'];
-  };
+  }
 
   $CheckResult['zb_users'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users')), -4);
   $CheckResult['cache'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/cache')), -4);
@@ -471,4 +484,6 @@ $CheckResult=array(
   $CheckResult['c_option'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/c_option.php')), -4);
 
 }
+
+echo RunTime();
 ?>
