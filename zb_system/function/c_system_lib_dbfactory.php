@@ -7,6 +7,18 @@
  */
 
 
+/**
+* DbFactory
+*/
+class DbFactory #extends AnotherClass
+{
 
+	public $type = null;
+		
+	function __construct($type)
+	{
+		# code...
+	}
+}
 
 ?>
