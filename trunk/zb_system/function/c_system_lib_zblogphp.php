@@ -7,16 +7,22 @@
  */
 
 
-class zblogphp{
+class ZBlogPHP{
 	// 当前应用的配置
 	public $option = array();
 	public $lang = array();
 	public $path = null;
+	public $host = null;
 	
 	function __construct() {
-		$this->option = $GLOBALS["c_option"];
-		$this->lang = $GLOBALS["c_lang"];
+
+		$c_option = include($GLOBALS["blogpath"].'zb_users/c_option.php');	
+		$c_lang = include($GLOBALS["blogpath"].'zb_users/language/'.$c_option['ZC_BLOG_LANGUAGEPACK'].'.php');
+
+		$this->option = $c_option;
+		$this->lang = $c_lang;
 		$this->path = $GLOBALS["blogpath"];
+		$this->host = $GLOBALS["bloghost"];
 		//define();
 	}
 	
@@ -30,6 +36,14 @@ class zblogphp{
 
 	public function run(){
 		echo 'hello zblog php!<br>';
+	}
+
+	public function initialize(){
+
+	}
+
+	public function terminate(){
+
 	}
 
 }
