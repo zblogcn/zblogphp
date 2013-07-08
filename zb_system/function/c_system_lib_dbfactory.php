@@ -10,65 +10,41 @@
 /**
 * DbFactory
 */
+interface iDataBase
+{
+	public function Open($array);
+	public function Close();
+	public function Query();
+	public function Update();
+	public function Delete();
+	public function CreateTable();
+}
+
+
+/**
+* DbFactory
+*/
 class DbFactory #extends AnotherClass
 {
 
 	public $dbtype = null;
-	public $dbpre = null;
-	private $db = null;	
 
-	function __construct($type)
+	function Create($type)
 	{
-		$this->dbtype=$type;
-	}
-
-	function Open($array)
-	{
-		switch ($this->dbtype) {
+		switch ($type) {
 			case 'mysql':
-				# code...
+				$db=New DbMySQL();
 				break;
-
+			
 			case 'sqlite':
-
-
-if ($this->db = sqlite_open($array[0], 0666, $sqliteerror)) {
-	$this->dbpre=$array[1];
-	return true;
-} else {
-	return false;
-}
-
+				$db=New DbSQLite();
 				break;
 
 			case 'sqlite3':
-
-
-if ($this->db = new SQLite3($array[0]) ){
-	$this->dbpre=$array[1];
-	return true;
-} else{
-	return false;
-}
-
-				break;	
-		}
-	}
-	function Close(){
-		switch ($this->dbtype) {
-			case 'mysql':
+				$db=New DbSQLite3();
 				break;
-			case 'sqlite':
-
-				break;
-			case 'sqlite3':
-				$this->db::close();
-				break;	
 		}
-	}
-
-	function CreateTable(){
-
+		return $db;
 	}
 
 }
