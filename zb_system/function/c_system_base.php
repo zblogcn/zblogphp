@@ -15,7 +15,8 @@ $startime=microtime();
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 
 require_once $blogpath.'/zb_system/function/c_system_common.php';
-require_once $blogpath.'/zb_system/function/c_system_lib.php';
+require_once $blogpath.'/zb_system/function/c_system_lib_zblogphp.php';
+require_once $blogpath.'/zb_system/function/c_system_lib_dbfactory.php';
 require_once $blogpath.'/zb_system/function/c_system_plugin.php';
 
 $c_option = include($blogpath.'zb_users/c_option.php');	

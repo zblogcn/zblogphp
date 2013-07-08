@@ -8,6 +8,8 @@
 
 require_once './zb_system/function/c_system_base.php';
 
+if (!$c_option['ZC_DATABASE_TYPE']) {header('Location: ./zb_install/');}
+
 //echo method_exists('SQLite3','version');
 //echo $zbp->option['ZC_BLOG_TITLE'];
 $zbp->run();
