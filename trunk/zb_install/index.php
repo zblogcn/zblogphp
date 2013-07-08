@@ -386,7 +386,7 @@ function Setup4(){
 <?php
 
 $dbtype=isset($_POST['dbtype']) ? $_POST['dbtype'] : '';
-echo $dbtype;
+#echo $dbtype;
 
 switch ($dbtype) {
   case 'mysql':
@@ -395,6 +395,8 @@ switch ($dbtype) {
     if($dbf->Open(array($_POST['dbmysql_server'],$_POST['dbmysql_username'],$_POST['dbmysql_password'],$_POST['dbmysql_name'],$_POST['dbmysql_pre']))==true){
       $dbf->CreateTable();
       $dbf->Close();
+    } else {
+      echo 'MySQL服务器连接失败，或数据库不存在。';
     }
 
     break;
@@ -404,6 +406,8 @@ switch ($dbtype) {
     if($dbf->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'],$_POST['dbsqlite_pre']))==true){
       $dbf->CreateTable();
       $dbf->Close();
+   } else {
+      echo 'SQLite数据库创建失败。';
     }
 
     break;
@@ -413,6 +417,8 @@ switch ($dbtype) {
     if($dbf->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite3_name'],$_POST['dbsqlite3_pre']))==true){
       $dbf->CreateTable();
       $dbf->Close();
+   } else {
+      echo 'SQLite数据库创建失败。';
     }
 
     break;
@@ -420,7 +426,7 @@ switch ($dbtype) {
 
 ?>
 
-<p>Z-Blog 2.0安装成功了,现在您可以点击"完成"进入网站首页.</p>
+<!--<p>Z-Blog 2.0安装成功了,现在您可以点击"完成"进入网站首页.</p>-->
 
 </div>
 <div id="bottom">
