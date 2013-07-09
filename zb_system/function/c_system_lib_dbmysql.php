@@ -46,7 +46,7 @@ class DbMySQL implements iDataBase
 	function CreateTable(){
 		//mysql_query('CREATE TABLE foo (bar varchar(10))');
 
-		foreach ($GLOBALS['TableSql1'] as $s) {
+		foreach ($GLOBALS['TableSql_MySQL'] as $s) {
 			$s=str_replace('%pre%', $this->dbpre, $s);
 			mysql_query($s);
 		}
