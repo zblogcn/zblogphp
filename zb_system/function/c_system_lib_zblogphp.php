@@ -25,6 +25,14 @@ class ZBlogPHP{
 		$this->host = $GLOBALS["bloghost"];
 		//define();
 	}
+
+	function __destruct(){
+		$c_option = null;
+		$c_land = null;
+		$path = null;
+		$host = null;
+		
+	}
 	
 	public function __get($var) {
 

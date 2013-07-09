@@ -6,6 +6,7 @@
  * @version 2.0 2013-06-14
  */
 
+$_SERVER['_start_time'] = microtime(1); //RunTime
 
 function GetGuid(){
 	$s=str_replace('.','',trim(uniqid('zbp',true),'zbp'));
@@ -18,7 +19,6 @@ function CreateDbName(){
 }
 
 function RunTime(){
-	$_SERVER['_start_time'] = microtime(1);
 	return '<!--'.number_format(microtime(1) - $_SERVER['_start_time'], 6).'s-->';
 }
 
