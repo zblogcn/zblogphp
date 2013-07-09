@@ -14,7 +14,7 @@ function GetGuid(){
 
 function CreateDbName(){
 
-	return 'zb_users/data/' . str_replace('-','','#%20' . strtolower(GetGuid()));
+	return 'zb_users/data/' . str_replace('-','','#%20' . strtolower(GetGuid())) . '.db';
 }
 
 function RunTime(){
