@@ -11,7 +11,13 @@
  * @param 
  * @return array
  */
+
 require_once '../zb_system/function/c_system_base.php';
+const bingo='<span class=\'bingo\'></span>';
+const error='<span class=\'error\'></span>';
+
+ini_set('display_errors',1);
+error_reporting(E_ALL);
 
 $zblogstep=isset($_GET['step']) ? intval($_GET['step']) : 0;
 if($zblogstep=="") { $zblogstep=1;}
@@ -275,9 +281,9 @@ CheckServer();
     <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['upload'][1];?></td>
   </tr>
   <tr>
-    <td scope="row">zb_users/c_option.asp</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option'][1];?></td>
+    <td scope="row">zb_users/c_option.php</td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option_php'][0];?></td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option_php'][1];?></td>
   </tr>
   <tr>
     <th colspan="3" scope="row">函数检查</th>
@@ -467,14 +473,23 @@ $CheckResult=array(
   'theme'=>array('',''), 
   'plugin'=>array('',''), 
   'upload'=>array('',''), 
-  'c_option'=>array('',''), 
+  'c_option_php'=>array('',''), 
   //函数
-  'file_get_contents'=>array(function_exists('file_get_contents'),''),
-  'gethostbyname'=>array(function_exists('gethostbyname'),''),
-  'xml_parser_create'=>array(function_exists('xml_parser_create'),''),
-  'fsockopen'=>array(function_exists('fsockopen'),'')
+  'file_get_contents'=>array('用于从服务器下载文件',''),
+  'gethostbyname'=>array('用于解析DNS',''),
+  'xml_parser_create'=>array('用于处理XML',''),
+  'fsockopen'=>array('用于打开文件','')
 
 );
+
+  if((float)(substr(phpversion(),0,3))>=5.2){
+    $CheckResult['phpver'][1]=bingo;
+  }
+  else{
+    $CheckResult['phpver'][1]=error;
+  }
+
+
   if( function_exists("gd_info") ){
     $info = gd_info();
     $CheckResult['gd2'][0]=$info['GD Version'];
@@ -490,15 +505,27 @@ $CheckResult=array(
     $CheckResult['sqlite3'][0]=$info['versionString'];
   }
 
-  $CheckResult['zb_users'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users')), -4);
-  $CheckResult['cache'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/cache')), -4);
-  $CheckResult['data'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/data')), -4);
-  $CheckResult['include'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/include')), -4);
-  $CheckResult['theme'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/theme')), -4);
-  $CheckResult['plugin'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/plugin')), -4);
-  $CheckResult['upload'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/upload')), -4);
-  $CheckResult['c_option'][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.'zb_users/c_option.php')), -4);
+  getRightsAndExport('','zb_users','0777');
+  getRightsAndExport('zb_users/','cache','0777');
+  getRightsAndExport('zb_users/','data','0777');
+  getRightsAndExport('zb_users/','include','0777');
+  getRightsAndExport('zb_users/','theme','0777');
+  getRightsAndExport('zb_users/','plugin','0777');
+  getRightsAndExport('zb_users/','upload','0777');
+  getRightsAndExport('zb_users/','c_option.php','0666');
 
+
+  $CheckResult['file_get_contents'][1]=function_exists('file_get_contents')?bingo:error;
+  $CheckResult['gethostbyname'][1]=function_exists('gethostbyname')?bingo:error;
+  $CheckResult['xml_parser_create'][1]=function_exists('xml_parser_create')?bingo:error;
+  $CheckResult['fsockopen'][1]=function_exists('fsockopen')?bingo:error;
+
+}
+
+function getRightsAndExport($folderparent,$folder,$right){
+  $sGlobal=str_replace('.','_',$folder);
+  $GLOBALS['CheckResult'][$sGlobal][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.$folderparent.$folder)), -4);
+  $GLOBALS['CheckResult'][$sGlobal][1]=$GLOBALS['CheckResult'][$sGlobal][0]==$right?bingo:error;
 }
 
 echo RunTime();
