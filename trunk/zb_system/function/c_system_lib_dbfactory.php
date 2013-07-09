@@ -62,11 +62,11 @@ $TableSql_MySQL=array(
 ,
 "CREATE TABLE %pre%Function (fn_ID integer primary key auto_increment,fn_Name varchar(50) default '',fn_FileName varchar(50) default '',fn_Order integer default 0,fn_Content text default '',fn_IsHidden bit default 0,fn_SidebarID integer default 0,fn_HtmlID varchar(50) default '',fn_Ftype varchar(5) default '',fn_MaxLi integer default 0,fn_Source varchar(50) default '',fn_ViewType varchar(50) default '',fn_IsHideTitle bit default 0,fn_Meta text default '') ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci"
 ,
-"CREATE INDEX _log_PostTime on %pre%Article (log_PostTime)"
+"CREATE INDEX %pre%log_PostTime on %pre%Article (log_PostTime)"
 ,
-"CREATE INDEX _comm_PostTime on %pre%Comment (comm_PostTime)"
+"CREATE INDEX %pre%comm_PostTime on %pre%Comment (comm_PostTime)"
 ,
-"CREATE INDEX _mem_Name on %pre%Member (mem_Name)"
+"CREATE INDEX %pre%mem_Name on %pre%Member (mem_Name)"
 );
 
 
@@ -93,29 +93,29 @@ $TableSql_SQLite3=array(
 ,
 "CREATE TABLE %pre%Function (fn_ID integer primary key autoincrement,fn_Name varchar(50) default '',fn_FileName varchar(50) default '',fn_Order integer default 0,fn_Content text default '',fn_IsHidden bit default 0,fn_SidebarID integer default 0,fn_HtmlID varchar(50) default '',fn_Ftype varchar(5) default '',fn_MaxLi integer default 0,fn_Source varchar(50) default '',fn_ViewType varchar(50) default '',fn_IsHideTitle bit default 0,fn_Meta text default '')"
 ,
-"CREATE INDEX _log_PostTime on %pre%Article (log_PostTime)"
+"CREATE INDEX %pre%log_PostTime on %pre%Article (log_PostTime)"
 ,
-"CREATE INDEX _comm_PostTime on %pre%Comment (comm_PostTime)"
+"CREATE INDEX %pre%comm_PostTime on %pre%Comment (comm_PostTime)"
 ,
-"CREATE INDEX _mem_Name on %pre%Member (mem_Name)"
+"CREATE INDEX %pre%mem_Name on %pre%Member (mem_Name)"
 ,
-"CREATE UNIQUE INDEX _tag_ID on %pre%Tag (tag_ID)"
+"CREATE UNIQUE INDEX %pre%tag_ID on %pre%Tag (tag_ID)"
 ,
-"CREATE UNIQUE INDEX _log_ID on %pre%Article (log_ID)"
+"CREATE UNIQUE INDEX %pre%log_ID on %pre%Article (log_ID)"
 ,
-"CREATE UNIQUE INDEX _cate_ID on %pre%Category (cate_ID)"
+"CREATE UNIQUE INDEX %pre%cate_ID on %pre%Category (cate_ID)"
 ,
-"CREATE UNIQUE INDEX _comm_ID on %pre%Comment (comm_ID)"
+"CREATE UNIQUE INDEX %pre%comm_ID on %pre%Comment (comm_ID)"
 ,
-"CREATE UNIQUE INDEX _tb_ID on %pre%TrackBack (tb_ID)"
+"CREATE UNIQUE INDEX %pre%tb_ID on %pre%TrackBack (tb_ID)"
 ,
-"CREATE UNIQUE INDEX _ul_ID on %pre%UpLoad (ul_ID)"
+"CREATE UNIQUE INDEX %pre%ul_ID on %pre%UpLoad (ul_ID)"
 ,
-"CREATE UNIQUE INDEX _key_ID on %pre%Keyword (key_ID)"
+"CREATE UNIQUE INDEX %pre%key_ID on %pre%Keyword (key_ID)"
 ,
-"CREATE UNIQUE INDEX _mem_ID on %pre%Member (mem_ID)"
+"CREATE UNIQUE INDEX %pre%mem_ID on %pre%Member (mem_ID)"
 ,
-"CREATE UNIQUE INDEX _fn_ID on %pre%Function (fn_ID)"
+"CREATE UNIQUE INDEX %pre%fn_ID on %pre%Function (fn_ID)"
 );
 
 
@@ -148,23 +148,23 @@ $TableSql_SQLite=array(
 ,
 "CREATE INDEX _mem_Name on %pre%Member (mem_Name)"
 ,
-"CREATE UNIQUE INDEX _tag_ID on %pre%Tag (tag_ID)"
+"CREATE UNIQUE INDEX %pre%tag_ID on %pre%Tag (tag_ID)"
 ,
-"CREATE UNIQUE INDEX _log_ID on %pre%Article (log_ID)"
+"CREATE UNIQUE INDEX %pre%log_ID on %pre%Article (log_ID)"
 ,
-"CREATE UNIQUE INDEX _cate_ID on %pre%Category (cate_ID)"
+"CREATE UNIQUE INDEX %pre%cate_ID on %pre%Category (cate_ID)"
 ,
-"CREATE UNIQUE INDEX _comm_ID on %pre%Comment (comm_ID)"
+"CREATE UNIQUE INDEX %pre%comm_ID on %pre%Comment (comm_ID)"
 ,
-"CREATE UNIQUE INDEX _tb_ID on %pre%TrackBack (tb_ID)"
+"CREATE UNIQUE INDEX %pre%tb_ID on %pre%TrackBack (tb_ID)"
 ,
-"CREATE UNIQUE INDEX _ul_ID on %pre%UpLoad (ul_ID)"
+"CREATE UNIQUE INDEX %pre%ul_ID on %pre%UpLoad (ul_ID)"
 ,
-"CREATE UNIQUE INDEX _key_ID on %pre%Keyword (key_ID)"
+"CREATE UNIQUE INDEX %pre%key_ID on %pre%Keyword (key_ID)"
 ,
-"CREATE UNIQUE INDEX _mem_ID on %pre%Member (mem_ID)"
+"CREATE UNIQUE INDEX %pre%mem_ID on %pre%Member (mem_ID)"
 ,
-"CREATE UNIQUE INDEX _fn_ID on %pre%Function (fn_ID)"
+"CREATE UNIQUE INDEX %pre%fn_ID on %pre%Function (fn_ID)"
 );
 
 
