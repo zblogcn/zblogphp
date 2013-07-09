@@ -38,7 +38,7 @@ class DbSQLite implements iDataBase
 	function CreateTable(){
 		#sqlite_query($this->db, 'CREATE TABLE foo (bar varchar(10))');
 
-		foreach ($GLOBALS['TableSql3'] as $s) {
+		foreach ($GLOBALS['TableSql_SQLite'] as $s) {
 			$s=str_replace('%pre%', $this->dbpre, $s);
 			sqlite_query($this->db, $s);
 		}

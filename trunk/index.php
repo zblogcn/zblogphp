@@ -9,7 +9,7 @@
 require_once './zb_system/function/c_system_base.php';
 
 if (!$zbp->option['ZC_DATABASE_TYPE']) {header('Location: ./zb_install/');}
-
+#echo GetGuid();
 //echo method_exists('SQLite3','version');
 //echo $zbp->option['ZC_BLOG_TITLE'];
 

@@ -8,7 +8,7 @@
 
 
 function GetGuid(){
-	$s=trim(uniqid(),'{..}');
+	$s=str_replace('.','',trim(uniqid('zbp',true),'zbp'));
 	return $s;
 }
 
