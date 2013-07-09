@@ -159,19 +159,19 @@ return array(
 	// '列表页的静态模式ACTIVE or MIX or REWRITE
 	'ZC_STATIC_MODE' => 'ACTIVE',
 
-	'ZC_ARTICLE_REGEX' => '{%host%}/view.asp?id={%id%}',
+	'ZC_ARTICLE_REGEX' => '{%host%}/view.php?id={%id%}',
 
-	'ZC_PAGE_REGEX' => '{%host%}/view.asp?id={%id%}',
+	'ZC_PAGE_REGEX' => '{%host%}/view.php?id={%id%}',
 
-	'ZC_CATEGORY_REGEX' => '{%host%}/catalog.asp?cate={%id%}',
+	'ZC_CATEGORY_REGEX' => '{%host%}/catalog.php?cate={%id%}',
 
-	'ZC_USER_REGEX' => '{%host%}/catalog.asp?auth={%id%}',
+	'ZC_USER_REGEX' => '{%host%}/catalog.php?auth={%id%}',
 
-	'ZC_TAGS_REGEX' => '{%host%}/catalog.asp?tags={%alias%}',
+	'ZC_TAGS_REGEX' => '{%host%}/catalog.php?tags={%alias%}',
 
-	'ZC_DATE_REGEX' => '{%host%}/catalog.asp?date={%date%}',
+	'ZC_DATE_REGEX' => '{%host%}/catalog.php?date={%date%}',
 
-	'ZC_DEFAULT_REGEX' => '{%host%}/catalog.asp',
+	'ZC_DEFAULT_REGEX' => '{%host%}/catalog.php',
 
 	// '--------------------------其它----------------------------------------
 	// '代码高亮
