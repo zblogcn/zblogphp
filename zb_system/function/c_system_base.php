@@ -15,6 +15,8 @@ ob_start();
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 
 require_once $blogpath.'zb_system/function/c_system_common.php';
+require_once $blogpath.'zb_system/function/c_system_plugin.php';
+
 require_once $blogpath.'zb_system/function/c_system_lib_zblogphp.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbfactory.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbmysql.php';
@@ -29,9 +31,6 @@ require_once $blogpath.'zb_system/function/c_system_lib_meta.php';
 require_once $blogpath.'zb_system/function/c_system_lib_module.php';
 require_once $blogpath.'zb_system/function/c_system_lib_tag.php';
 require_once $blogpath.'zb_system/function/c_system_lib_upload.php';
-
-
-require_once $blogpath.'zb_system/function/c_system_plugin.php';
 
 $cookiespath = null;
 $bloghost = GetCurrentHost($cookiespath);
