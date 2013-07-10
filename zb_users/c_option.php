@@ -14,14 +14,11 @@
 return array(
 	// '---------------------------------网站基本设置-----------------------------------
 	'ZC_BLOG_HOST' => 'http://localhost/',
-	'ZC_BLOG_TITLE' => '标题blog！！！',
+	'ZC_BLOG_TITLE' => '我的网站',
 	'ZC_BLOG_SUBTITLE' => 'Good Luck To You!',
-	'ZC_BLOG_NAME' => '标题blog！！！',
-	'ZC_BLOG_SUB_NAME' => 'Good Luck To You!',
 	'ZC_BLOG_THEME' => 'default',
 	'ZC_BLOG_CSS' => 'default',
-	'ZC_BLOG_COPYRIGHT' => 'Copyright xxxx-xxxx Your WebSite.Some Rights Reserved.',
-	'ZC_BLOG_MASTER' => 'zblogger',
+	'ZC_BLOG_COPYRIGHT' => 'Copyright Your WebSite.Some Rights Reserved.',
 	'ZC_BLOG_LANGUAGE' => 'zh-CN',
 	'ZC_BLOG_LANGUAGEPACK' => 'SimpChinese',
 
