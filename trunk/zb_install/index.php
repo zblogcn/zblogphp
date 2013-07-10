@@ -398,8 +398,10 @@ switch ($dbtype) {
   case 'mysql':
 
     $db=DbFactory::Create('mysql');
+    $GLOBALS['zbp']->db=&$db;
     if($db->Open(array($_POST['dbmysql_server'],$_POST['dbmysql_username'],$_POST['dbmysql_password'],$_POST['dbmysql_name'],$_POST['dbmysql_pre']))==true){
       $db->CreateTable();
+      InsertInfo();
       $db->Close();
     } else {
       echo 'MySQL服务器连接失败，或数据库不存在。';
@@ -409,8 +411,10 @@ switch ($dbtype) {
   case 'sqlite':
 
     $db=DbFactory::Create('sqlite');
-    if($db->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'],$_POST['dbsqlite_pre']))==true){
+    $GLOBALS['zbp']->db=&$db;
+      if($db->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'],$_POST['dbsqlite_pre']))==true){
       $db->CreateTable();
+      InsertInfo();
       $db->Close();
    } else {
       echo 'SQLite数据库创建失败。';
@@ -420,8 +424,10 @@ switch ($dbtype) {
   case 'sqlite3':
 
     $db=DbFactory::Create('sqlite3');
+    $GLOBALS['zbp']->db=&$db;
     if($db->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite3_name'],$_POST['dbsqlite3_pre']))==true){
       $db->CreateTable();
+      InsertInfo();
       $db->Close();
    } else {
       echo 'SQLite数据库创建失败。';
@@ -526,6 +532,14 @@ function getRightsAndExport($folderparent,$folder,$right){
   $sGlobal=str_replace('.','_',$folder);
   $GLOBALS['CheckResult'][$sGlobal][0]=substr(sprintf('%o', fileperms($GLOBALS['zbp']->path.$folderparent.$folder)), -4);
   $GLOBALS['CheckResult'][$sGlobal][1]=$GLOBALS['CheckResult'][$sGlobal][0]==$right?bingo:error;
+}
+
+function InsertInfo(){
+
+  $mem = new Member();
+  $guid=GetGuid();
+  $mem->LoadInfobyArray(array(0,$guid,$_POST['username'],'1',GetPassWordbyGUID($_POST['password'],$guid),'','','','','','',''));
+  $mem->Post();
 }
 
 echo RunTime();

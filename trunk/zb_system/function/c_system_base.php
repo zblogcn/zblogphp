@@ -15,6 +15,7 @@ ob_start();
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 
 require_once $blogpath.'zb_system/function/c_system_common.php';
+require_once $blogpath.'zb_system/function/c_system_debug.php';
 require_once $blogpath.'zb_system/function/c_system_plugin.php';
 
 require_once $blogpath.'zb_system/function/c_system_lib_zblogphp.php';
