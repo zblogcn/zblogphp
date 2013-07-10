@@ -15,6 +15,7 @@ interface iDataBase
 	public function Open($array);
 	public function Close();
 	public function Query();
+	public function Insert();
 	public function Update();
 	public function Delete();
 	public function CreateTable();

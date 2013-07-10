@@ -13,6 +13,7 @@ class ZBlogPHP{
 	public $lang = array();
 	public $path = null;
 	public $host = null;
+	public $db = null;
 	
 	function __construct() {
 
