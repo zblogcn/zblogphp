@@ -64,6 +64,9 @@ class DbMySQL implements iDataBase
 
 	}
 
+	function Insert(){
+		
+	}
 
 }
 
