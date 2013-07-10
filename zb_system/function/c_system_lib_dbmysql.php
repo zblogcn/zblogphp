@@ -44,8 +44,6 @@ class DbMySQL implements iDataBase
 	}
 
 	function CreateTable(){
-		//mysql_query('CREATE TABLE foo (bar varchar(10))');
-
 		foreach ($GLOBALS['TableSql_MySQL'] as $s) {
 			$s=str_replace('%pre%', $this->dbpre, $s);
 			mysql_query($s);
@@ -64,8 +62,11 @@ class DbMySQL implements iDataBase
 
 	}
 
-	function Insert(){
-		
+	function Insert($query){
+		$query=str_replace('%pre%', $this->dbpre, $query);
+		var_dump($query);
+		mysql_query($query);
+		return mysql_insert_id();
 	}
 
 }

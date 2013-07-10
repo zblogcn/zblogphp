@@ -17,11 +17,8 @@ class ZBlogPHP{
 	
 	function __construct() {
 
-		$c_option = include($GLOBALS["blogpath"].'zb_users/c_option.php');	
-		$c_lang = include($GLOBALS["blogpath"].'zb_users/language/'.$c_option['ZC_BLOG_LANGUAGEPACK'].'.php');
-
-		$this->option = $c_option;
-		$this->lang = $c_lang;
+		$this->option = $GLOBALS["c_option"];
+		$this->lang = $GLOBALS["c_lang"];
 		$this->path = $GLOBALS["blogpath"];
 		$this->host = $GLOBALS["bloghost"];
 		//define();
@@ -43,15 +40,17 @@ class ZBlogPHP{
 		throw new Exception('');
 	}
 
-	public function run(){
+	public function Run(){
 		echo 'hello zblog php!<br>';
 	}
 
-	public function initialize(){
+	#初始化连接
+	public function Initialize(){
 
 	}
 
-	public function terminate(){
+	#终止连接，释放资源
+	public function Terminate(){
 
 	}
 

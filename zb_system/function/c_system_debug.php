@@ -32,17 +32,17 @@ function exception_error_handler($errno, $errstr, $errfile, $errline ){
 
 
 
-function exception_handler($error){
+function exception_handler($exception){
 
 	#echo "exception_handler:".'<br/>';
-	#var_dump($error);
+	#var_dump($exception);
 	#die();
 
 	ob_clean();
 	$zbe=new ZblogException();
-	$zbe->ParseException($error);
+	$zbe->ParseException($exception);
 	$zbe->Display();
-
+	die();
 }
 
 
@@ -59,6 +59,7 @@ function shutdown_error_handler(){
 		$zbe=new ZblogException();
 		$zbe->ParseError($error);
 		$zbe->Display();
+		die();
 	}
 }
 
@@ -84,23 +85,36 @@ class ZblogException
 
 	function ParseError($error){
 
-		var_dump($error);
+		$this->type=$error['type'];
+		$this->message=$error['message'];
+		$this->file=$error['file'];
+		$this->line=$error['line'];	
 
 	}
 
-	function ParseException($error){
-		var_dump($error);
+	function ParseException($exception){
+		var_dump($exception);
 	}
+
+
 
 	function Display(){
 
-		echo $this->type;
-		echo "<hr/>";
-		echo $this->message;
-		echo "<hr/>";
-		echo $this->file;
-		echo "<hr/>";
-		echo $this->line;		
+		$e='';
+		$e.= 'type:<br/>'.$this->type;
+		$e.= "<hr/>";
+		$e.= 'message:<br/>'.$this->message;
+		$e.= "<hr/>";
+		$e.= 'file:<br/>'.$this->file;
+		$e.= "<hr/>";
+		$e.= 'line:<br/>'.$this->line;		
+
+		$h=file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/error.html');
+		$h=str_replace('<#ZC_BLOG_HOST#>', $GLOBALS['bloghost'], $h);
+		$h=str_replace('<#ZC_BLOG_TITLE#>', $GLOBALS['c_option']['ZC_BLOG_TITLE'], $h);
+		$h=str_replace('<#BlogTitle#>', $GLOBALS['c_lang']['ZC_MSG045'], $h);		
+		$h=str_replace('<#ERROR#>', $e, $h);
+		echo $h;
 
 	}
 
