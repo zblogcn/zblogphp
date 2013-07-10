@@ -6,49 +6,38 @@
  * @version 2.0 2013-06-14
  */
 
-$_SERVER['_start_time'] = microtime(1); //RunTime
+function exception_error_handler($errno, $errstr, $errfile, $errline ){
 
-function GetGuid(){
-	$s=str_replace('.','',trim(uniqid('zbp',true),'zbp'));
-	return $s;
+    // if (error_reporting() === 0)
+    // {
+    //     return;
+     //}
+
+     //throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+	ob_clean();
+	echo "string";
+ }
+
+set_error_handler("exception_error_handler");
+
+function catchException($error){
+     // Do some stuff
+	ob_clean();
+	var_dump($error);
 }
 
-function CreateDbName(){
-
-	return 'zb_users/data/' . str_replace('-','','#%20' . strtolower(GetGuid())) . '.db';
-}
-
-function RunTime(){
-	return '<!--'.number_format(microtime(1) - $_SERVER['_start_time'], 6).'s-->';
-}
-
-function GetCurrentHost(&$cookiespath){
-	if (array_key_exists('HTTPS',$_SERVER)) {
-		if ($_SERVER['HTTPS']=='off') {
-			$host='http://';
-		} else {
-			$host='https://';
-		}
-	} else {
-		$host='http://';
-	}
+set_exception_handler('catchException');
 
 
-	$host.=$_SERVER['HTTP_HOST'].'/';
-
-	$a=$GLOBALS['blogpath'];
-	$b=str_replace('\\','/',$_SERVER['DOCUMENT_ROOT']).'/';
-	$c=str_replace($b,'',$a);
-	$cookiespath=$c==''?'/':'/'.$c;
-
-	return $host . $c;
+function shutdown_error_handler(){
+    if ($error = error_get_last()) {
+    	ob_clean();
+        var_dump($error);
+    }
 }
 
 
-function GetPassWordbyGUID($ps,$guid){
+register_shutdown_function('shutdown_error_handler');
 
-return md5(md5($ps).$guid);
-
-}
 
 ?>
