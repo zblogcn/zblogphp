@@ -6,42 +6,105 @@
  * @version 2.0 2013-06-14
  */
 
+set_error_handler("exception_error_handler");
+set_exception_handler('exception_handler');
+register_shutdown_function('shutdown_error_handler');
+
+
+
 function exception_error_handler($errno, $errstr, $errfile, $errline ){
 
-    if (error_reporting() === 0){
-		return;
-	}
+	#throw new ErrorException($errstr,0,$errno, $errfile, $errline);
+	//die();
 
-    #throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
-	ob_clean();
-	echo "exception_error_handler:".'<br/>';
-	echo $errno, $errstr, $errfile, $errline;
+	#echo "exception_error_handler:".'<br/>';
+	#echo $errno, $errstr, $errfile, $errline;
+	#die();
+
+	ob_clean();		
+	$zbe=new ZblogException();
+	$zbe->ParseHandler($errno, $errstr, $errfile, $errline);
+	$zbe->Display();
 	die();
+
  }
 
-set_error_handler("exception_error_handler");
+
+
 
 function exception_handler($error){
-     // Do some stuff
+
+	#echo "exception_handler:".'<br/>';
+	#var_dump($error);
+	#die();
+
 	ob_clean();
-	echo "exception_handler:".'<br/>';
-	var_dump($error);
-	die();
+	$zbe=new ZblogException();
+	$zbe->ParseException($error);
+	$zbe->Display();
+
 }
 
-set_exception_handler('exception_handler');
+
 
 
 function shutdown_error_handler(){
 	if ($error = error_get_last()) {
+
+		#echo "shutdown_error_handler:".'<br/>';
+		#var_dump($error);
+		#die();
+
 		ob_clean();
-		echo "shutdown_error_handler:".'<br/>';
-		var_dump($error);
-		die();
+		$zbe=new ZblogException();
+		$zbe->ParseError($error);
+		$zbe->Display();
 	}
 }
 
-register_shutdown_function('shutdown_error_handler');
 
+/**
+* 
+*/
+class ZblogException
+{
+	
+	public $type;
+	public $message;
+	public $file;
+	public $line;
+
+
+	function ParseHandler($type,$message,$file,$line){
+		$this->type=$type;
+		$this->message=$message;
+		$this->file=$file;
+		$this->line=$line;	
+	}	
+
+	function ParseError($error){
+
+		var_dump($error);
+
+	}
+
+	function ParseException($error){
+		var_dump($error);
+	}
+
+	function Display(){
+
+		echo $this->type;
+		echo "<hr/>";
+		echo $this->message;
+		echo "<hr/>";
+		echo $this->file;
+		echo "<hr/>";
+		echo $this->line;		
+
+	}
+
+
+}
 
 ?>
