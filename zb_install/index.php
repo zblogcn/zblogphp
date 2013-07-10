@@ -397,10 +397,10 @@ $dbtype=isset($_POST['dbtype']) ? $_POST['dbtype'] : '';
 switch ($dbtype) {
   case 'mysql':
 
-    $dbf=DbFactory::Create('mysql');
-    if($dbf->Open(array($_POST['dbmysql_server'],$_POST['dbmysql_username'],$_POST['dbmysql_password'],$_POST['dbmysql_name'],$_POST['dbmysql_pre']))==true){
-      $dbf->CreateTable();
-      $dbf->Close();
+    $db=DbFactory::Create('mysql');
+    if($db->Open(array($_POST['dbmysql_server'],$_POST['dbmysql_username'],$_POST['dbmysql_password'],$_POST['dbmysql_name'],$_POST['dbmysql_pre']))==true){
+      $db->CreateTable();
+      $db->Close();
     } else {
       echo 'MySQL服务器连接失败，或数据库不存在。';
     }
@@ -408,10 +408,10 @@ switch ($dbtype) {
     break;
   case 'sqlite':
 
-    $dbf=DbFactory::Create('sqlite');
-    if($dbf->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'],$_POST['dbsqlite_pre']))==true){
-      $dbf->CreateTable();
-      $dbf->Close();
+    $db=DbFactory::Create('sqlite');
+    if($db->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'],$_POST['dbsqlite_pre']))==true){
+      $db->CreateTable();
+      $db->Close();
    } else {
       echo 'SQLite数据库创建失败。';
     }
@@ -419,10 +419,10 @@ switch ($dbtype) {
     break;
   case 'sqlite3':
 
-    $dbf=DbFactory::Create('sqlite3');
-    if($dbf->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite3_name'],$_POST['dbsqlite3_pre']))==true){
-      $dbf->CreateTable();
-      $dbf->Close();
+    $db=DbFactory::Create('sqlite3');
+    if($db->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite3_name'],$_POST['dbsqlite3_pre']))==true){
+      $db->CreateTable();
+      $db->Close();
    } else {
       echo 'SQLite数据库创建失败。';
     }

@@ -20,17 +20,24 @@ require_once $blogpath.'zb_system/function/c_system_lib_dbfactory.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbmysql.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite3.php';
+
+require_once $blogpath.'zb_system/function/c_system_lib_article.php';
+require_once $blogpath.'zb_system/function/c_system_lib_category.php';
+require_once $blogpath.'zb_system/function/c_system_lib_comment.php';
+require_once $blogpath.'zb_system/function/c_system_lib_member.php';
+require_once $blogpath.'zb_system/function/c_system_lib_meta.php';
+require_once $blogpath.'zb_system/function/c_system_lib_module.php';
+require_once $blogpath.'zb_system/function/c_system_lib_tag.php';
+require_once $blogpath.'zb_system/function/c_system_lib_upload.php';
+
+
 require_once $blogpath.'zb_system/function/c_system_plugin.php';
 
 $cookiespath = null;
 $bloghost = GetCurrentHost($cookiespath);
 
-/*include plugin*/
-
-
-
-
-
 $zbp=new ZBlogPHP;
+
+/*include plugin*/
 
 ?>
