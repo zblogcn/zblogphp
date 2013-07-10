@@ -15,27 +15,29 @@ function exception_error_handler($errno, $errstr, $errfile, $errline ){
 
      //throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 	ob_clean();
+	echo "exception_error_handler:".'<br/>';
 	echo "string";
  }
 
 set_error_handler("exception_error_handler");
 
-function catchException($error){
+function exception_handler($error){
      // Do some stuff
 	ob_clean();
+	echo "exception_handler:".'<br/>';
 	var_dump($error);
 }
 
-set_exception_handler('catchException');
+set_exception_handler('exception_handler');
 
 
 function shutdown_error_handler(){
-    if ($error = error_get_last()) {
-    	ob_clean();
-        var_dump($error);
-    }
+	if ($error = error_get_last()) {
+		ob_clean();
+		echo "shutdown_error_handler:".'<br/>';
+		var_dump($error);
+	}
 }
-
 
 register_shutdown_function('shutdown_error_handler');
 
