@@ -535,6 +535,7 @@ function getRightsAndExport($folderparent,$folder,$right){
 }
 
 function InsertInfo(){
+throw new Exception("Error Processing Request", 1);
 
   $mem = new Member();
   $guid=GetGuid();

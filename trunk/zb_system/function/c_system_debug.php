@@ -6,24 +6,20 @@
  * @version 2.0 2013-06-14
  */
 
-set_error_handler("exception_error_handler");
+set_error_handler("error_handler");
 set_exception_handler('exception_handler');
 register_shutdown_function('shutdown_error_handler');
 
 
 
-function exception_error_handler($errno, $errstr, $errfile, $errline ){
+function error_handler($errno, $errstr, $errfile, $errline ){
 
 	#throw new ErrorException($errstr,0,$errno, $errfile, $errline);
 	//die();
 
-	#echo "exception_error_handler:".'<br/>';
-	#echo $errno, $errstr, $errfile, $errline;
-	#die();
-
 	ob_clean();		
 	$zbe=new ZblogException();
-	$zbe->ParseHandler($errno, $errstr, $errfile, $errline);
+	$zbe->ParseError($errno, $errstr, $errfile, $errline);
 	$zbe->Display();
 	die();
 
@@ -33,10 +29,6 @@ function exception_error_handler($errno, $errstr, $errfile, $errline ){
 
 
 function exception_handler($exception){
-
-	#echo "exception_handler:".'<br/>';
-	#var_dump($exception);
-	#die();
 
 	ob_clean();
 	$zbe=new ZblogException();
@@ -51,13 +43,9 @@ function exception_handler($exception){
 function shutdown_error_handler(){
 	if ($error = error_get_last()) {
 
-		#echo "shutdown_error_handler:".'<br/>';
-		#var_dump($error);
-		#die();
-
 		ob_clean();
 		$zbe=new ZblogException();
-		$zbe->ParseError($error);
+		$zbe->ParseShutdown($error);
 		$zbe->Display();
 		die();
 	}
@@ -76,14 +64,14 @@ class ZblogException
 	public $line;
 
 
-	function ParseHandler($type,$message,$file,$line){
+	function ParseError($type,$message,$file,$line){
 		$this->type=$type;
 		$this->message=$message;
 		$this->file=$file;
 		$this->line=$line;	
 	}	
 
-	function ParseError($error){
+	function ParseShutdown($error){
 
 		$this->type=$error['type'];
 		$this->message=$error['message'];
@@ -93,7 +81,11 @@ class ZblogException
 	}
 
 	function ParseException($exception){
-		var_dump($exception);
+
+		$this->message=$exception->getMessage();
+		$this->type=$exception->getCode();
+		$this->file=$exception->getFile();
+		$this->line=$exception->getLine();
 	}
 
 
@@ -115,7 +107,7 @@ class ZblogException
 		$h=str_replace('<#BlogTitle#>', $GLOBALS['c_lang']['ZC_MSG045'], $h);		
 		$h=str_replace('<#ERROR#>', $e, $h);
 		echo $h;
-
+		echo RunTime();
 	}
 
 
