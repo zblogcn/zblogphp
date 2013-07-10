@@ -13,11 +13,11 @@ if (!$zbp->option['ZC_DATABASE_TYPE']) {header('Location: ./zb_install/');}
 //echo method_exists('SQLite3','version');
 //echo $zbp->option['ZC_BLOG_TITLE'];
 
-$zbp->initialize();
+$zbp->Initialize();
 
-$zbp->run();
+$zbp->Run();
 
-$zbp->terminate();
+$zbp->Terminate();
 
 //echo $c_option['ZC_BLOG_TITLE'].'<br/>';
 //echo $c_lang['ZC_MSG001'];

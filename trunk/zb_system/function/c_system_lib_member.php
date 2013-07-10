@@ -22,8 +22,8 @@ class BaseMember
 	public $HomePage=null;
 	public $Count=null;
 	public $Alias=null;
-	public $TemplateName=null;
 	public $Intro=null;
+	public $Template=null;
 	public $MetaString=null;
 }
 
@@ -40,6 +40,7 @@ class Member extends BaseMember
 	{
 		$this->db = &$GLOBALS['zbp']->db;
 		$this->ID = 0;
+		$this->Count = 0;
 		var_dump($this->db);
 	}
 
@@ -58,14 +59,48 @@ class Member extends BaseMember
 		$this->HomePage=$array[6];
 		$this->Count=$array[7];
 		$this->Alias=$array[8];
-		$this->TemplateName=$array[9];
-		$this->Intro=$array[10];
+		$this->Intro=$array[9];
+		$this->Template=$array[10];
 		$this->MetaString=$array[11];
 	}
 
 	function Post(){
 
 		var_dump($this->Password);
+		if ($this->ID==0) {
+			$s=<<<sql
+INSERT INTO %pre%Member(
+mem_Guid,
+mem_Level,
+mem_Name,
+mem_PassWord,
+mem_Email,
+mem_HomePage,
+mem_Count,
+mem_Alias,
+mem_Intro,
+mem_Template,
+mem_Meta
+) VALUES (
+'$this->Guid',
+$this->Level,
+'$this->Name',
+'$this->Password',
+'$this->Email',
+'$this->HomePage',
+$this->Count,
+'$this->Alias',
+'$this->Intro',
+'$this->Template',
+'$this->MetaString'
+)
+sql;
+			$this->ID=$this->db->Insert($s);
+			#var_dump($this->ID);
+		} else {
+
+		}
+		
 
 	}
 }
