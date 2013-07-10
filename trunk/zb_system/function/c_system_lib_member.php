@@ -8,7 +8,7 @@
 
 
 /**
-* 
+* BaseMember
 */
 class BaseMember
 {
@@ -23,17 +23,19 @@ class BaseMember
 	public $Count=null;
 	public $Alias=null;
 	public $TemplateName=null;
-	public $FullUrl=null;
 	public $Intro=null;
 	public $MetaString=null;
+}
+
+
 
 /**
-* 
+* Member
 */
 class Member extends BaseMember
 {
 	
-	function __construct(argument)
+	function __construct()
 	{
 		# code...
 	}
