@@ -134,11 +134,11 @@ $TableSql_SQLite=array(
 ,
 "CREATE TABLE %pre%Module (fn_ID integer primary key,fn_Name varchar(50) default '',fn_FileName varchar(50) default '',fn_Order integer default 0,fn_Content text default '',fn_IsHidden bit default 0,fn_SidebarID integer default 0,fn_HtmlID varchar(50) default '',fn_Ftype varchar(5) default '',fn_MaxLi integer default 0,fn_Source varchar(50) default '',fn_ViewType varchar(50) default '',fn_IsHideTitle bit default 0,fn_Meta text default '')"
 ,
-"CREATE INDEX _log_PostTime on %pre%Article (log_PostTime)"
+"CREATE INDEX %pre%log_PostTime on %pre%Article (log_PostTime)"
 ,
-"CREATE INDEX _comm_PostTime on %pre%Comment (comm_PostTime)"
+"CREATE INDEX %pre%comm_PostTime on %pre%Comment (comm_PostTime)"
 ,
-"CREATE INDEX _mem_Name on %pre%Member (mem_Name)"
+"CREATE INDEX %pre%mem_Name on %pre%Member (mem_Name)"
 ,
 "CREATE UNIQUE INDEX %pre%tag_ID on %pre%Tag (tag_ID)"
 ,
