@@ -5,7 +5,9 @@
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
-error_reporting(0);
+
+#error_reporting(0);
+ini_set('display_errors',1);
 error_reporting(E_ALL);
 
 ob_start();

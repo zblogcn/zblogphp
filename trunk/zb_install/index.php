@@ -13,14 +13,14 @@
  */
 
 require_once '../zb_system/function/c_system_base.php';
+
 const bingo='<span class=\'bingo\'></span>';
 const error='<span class=\'error\'></span>';
 
-ini_set('display_errors',1);
-error_reporting(E_ALL);
 
 $zblogstep=isset($_GET['step']) ? intval($_GET['step']) : 0;
 if($zblogstep=="") { $zblogstep=1;}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?=$zbp->option['ZC_BLOG_LANGUAGE']?>" lang="<?=$zbp->option['ZC_BLOG_LANGUAGE']?>">
