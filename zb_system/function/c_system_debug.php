@@ -8,15 +8,15 @@
 
 function exception_error_handler($errno, $errstr, $errfile, $errline ){
 
-    // if (error_reporting() === 0)
-    // {
-    //     return;
-     //}
+    if (error_reporting() === 0){
+		return;
+	}
 
-     //throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+    #throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 	ob_clean();
 	echo "exception_error_handler:".'<br/>';
-	echo "string";
+	echo $errno, $errstr, $errfile, $errline;
+	die();
  }
 
 set_error_handler("exception_error_handler");
@@ -26,6 +26,7 @@ function exception_handler($error){
 	ob_clean();
 	echo "exception_handler:".'<br/>';
 	var_dump($error);
+	die();
 }
 
 set_exception_handler('exception_handler');
@@ -36,6 +37,7 @@ function shutdown_error_handler(){
 		ob_clean();
 		echo "shutdown_error_handler:".'<br/>';
 		var_dump($error);
+		die();
 	}
 }
 

@@ -30,7 +30,7 @@ class DbFactory #extends AnotherClass
 
 	public $dbtype = null;
 
-	function Create($type)
+	public static function Create($type)
 	{
 		$newtype='Db'.$type;
 		$db=New $newtype();

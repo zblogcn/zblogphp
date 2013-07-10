@@ -57,6 +57,10 @@ class DbSQLite implements iDataBase
 		
 	}
 
+	function Insert(){
+		
+	}
+
 }
 
 ?>
