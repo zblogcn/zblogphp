@@ -413,7 +413,7 @@ switch ($dbtype) {
     $db=DbFactory::Create('sqlite');
     $GLOBALS['zbp']->db=&$db;
       if($db->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'],$_POST['dbsqlite_pre']))==true){
-      $db->CreateTable();
+      #$db->CreateTable();
       InsertInfo();
       $db->Close();
    } else {
@@ -536,17 +536,16 @@ function getRightsAndExport($folderparent,$folder,$right){
 
 function InsertInfo(){
 #throw new Exception("Error Processing Request", 1);
+  /*
     $mem = new Member();
     $mem->LoadInfobyID(5);
     echo $mem->Guid;
-  /*
+  */
   $mem = new Member();
   $guid=GetGuid();
   $mem->LoadInfobyArray(array(0,$guid,$_POST['username'],'1',GetPassWordbyGUID($_POST['password'],$guid),'','',0,'','',time(),'',''));
   $mem->Post();
-  $mem->Name='xxx';
-  $mem->Post(); 
-  */
+
 }
 
 echo RunTime();
