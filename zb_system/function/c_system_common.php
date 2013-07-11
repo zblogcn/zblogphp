@@ -45,7 +45,7 @@ function GetCurrentHost(&$cookiespath){
 }
 
 
-function GetPassWordbyGUID($ps,$guid){
+function GetPassWordByGUID($ps,$guid){
 
 return md5(md5($ps).$guid);
 

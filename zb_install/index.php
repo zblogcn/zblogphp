@@ -542,7 +542,7 @@ function InsertInfo(){
   */
   $mem = new Member();
   $guid=GetGuid();
-  $mem->LoadInfobyArray(array(0,$guid,$_POST['username'],'1',GetPassWordbyGUID($_POST['password'],$guid),'','',0,'','',time(),'',''));
+  $mem->LoadInfobyArray(array(0,$guid,$_POST['username'],'1',GetPassWordByGuid($_POST['password'],$guid),'','',0,'','',time(),'',''));
   $mem->Post();
 
 }
