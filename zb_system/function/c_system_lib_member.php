@@ -23,8 +23,10 @@ class BaseMember
 	public $Count=null;
 	public $Alias=null;
 	public $Intro=null;
+	public $PostTime=null;	
 	public $Template=null;
 	public $MetaString=null;
+
 }
 
 
@@ -60,12 +62,13 @@ class Member extends BaseMember
 		$this->Count=$array[7];
 		$this->Alias=$array[8];
 		$this->Intro=$array[9];
-		$this->Template=$array[10];
-		$this->MetaString=$array[11];
+		$this->PostTime=$array[10];
+		$this->Template=$array[11];
+		$this->MetaString=$array[12];
 	}
 
 	function Post(){
-
+$this->PostTime=time();
 		var_dump($this->Password);
 		if ($this->ID==0) {
 			$s=<<<sql
@@ -79,6 +82,7 @@ mem_HomePage,
 mem_Count,
 mem_Alias,
 mem_Intro,
+mem_PostTime,
 mem_Template,
 mem_Meta
 ) VALUES (
@@ -91,12 +95,13 @@ $this->Level,
 $this->Count,
 '$this->Alias',
 '$this->Intro',
+$this->PostTime,
 '$this->Template',
 '$this->MetaString'
 )
 sql;
 			$this->ID=$this->db->Insert($s);
-			#var_dump($this->ID);
+			var_dump($this->ID);
 		} else {
 
 		}

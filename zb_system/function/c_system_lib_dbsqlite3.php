@@ -58,7 +58,9 @@ class DbSQLite3 implements iDataBase
 	}
 
 	function Insert($query){
-		
+		$query=str_replace('%pre%', $this->dbpre, $query);
+		$this->db->query($query);
+		return $this->db->lastInsertRowID();
 	}
 
 }
