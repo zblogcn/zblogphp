@@ -55,7 +55,7 @@ return array(
 	// '-------------------------------全局配置-----------------------------------
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE' => '+0800',
-	'ZC_HOST_TIME_ZONE' => '+0800',
+	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
 	'ZC_UPDATE_INFO_URL' => 'http://update.rainbowsoft.org/info/',
 	// '固定域名,默认为False,如启用则'ZC_BLOG_HOST生效而'ZC_MULTI_DOMAIN_SUPPORT无效
 	'ZC_PERMANENT_DOMAIN_ENABLE' => False,

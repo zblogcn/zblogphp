@@ -49,6 +49,26 @@ class Member extends BaseMember
 
 	function LoadInfoByID($id){
 
+$s=<<<sql
+SELECT * FROM %pre%Member WHERE mem_ID=$id
+sql;
+		$array=$this->db->Query($s);
+		if (count($array)>0) {
+		$this->ID=$array[0]['mem_ID'];
+		$this->Guid=$array[0]['mem_Guid'];
+		$this->Name=$array[0]['mem_Name'];
+		$this->Level=$array[0]['mem_Level'];
+		$this->Password=$array[0]['mem_Password'];
+		$this->Email=$array[0]['mem_Email'];
+		$this->HomePage=$array[0]['mem_HomePage'];
+		$this->Count=$array[0]['mem_Count'];
+		$this->Alias=$array[0]['mem_Alias'];
+		$this->Intro=$array[0]['mem_Intro'];
+		$this->PostTime=$array[0]['mem_PostTime'];
+		$this->Template=$array[0]['mem_Template'];
+		$this->MetaString=$array[0]['mem_Meta'];
+		}
+
 	}
 
 	function LoadInfoByArray($array){
@@ -68,10 +88,10 @@ class Member extends BaseMember
 	}
 
 	function Post(){
-$this->PostTime=time();
+
 		var_dump($this->Password);
 		if ($this->ID==0) {
-			$s=<<<sql
+$s=<<<sql
 INSERT INTO %pre%Member(
 mem_Guid,
 mem_Level,
@@ -102,7 +122,27 @@ $this->PostTime,
 sql;
 			$this->ID=$this->db->Insert($s);
 			var_dump($this->ID);
+			var_dump($this->PostTime);			
 		} else {
+
+$s=<<<sql
+UPDATE %pre%Member SET 
+mem_Guid='$this->Guid',
+mem_Level=$this->Level,
+mem_Name='$this->Name',
+mem_PassWord='$this->Password',
+mem_Email='$this->Email',
+mem_HomePage='$this->HomePage',
+mem_Count=$this->Count,
+mem_Alias='$this->Alias',
+mem_Intro='$this->Intro',
+mem_PostTime=$this->PostTime,
+mem_Template='$this->Template',
+mem_Meta='$this->MetaString'
+WHERE 
+mem_ID=$this->ID
+sql;
+$this->db->Update($s);
 
 		}
 		
