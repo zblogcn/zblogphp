@@ -7,8 +7,6 @@
  */
 
 require_once './zb_system/function/c_system_base.php';
-var_export($c_option);
-die();
 
 if (!$zbp->option['ZC_DATABASE_TYPE']) {header('Location: ./zb_install/');}
 #echo GetGuid();
