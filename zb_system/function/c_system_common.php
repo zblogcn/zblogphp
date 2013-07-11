@@ -13,6 +13,23 @@ function GetGuid(){
 	return $s;
 }
 
+function GetVars($name,$type='REQUEST'){
+	if ($type=='ENV') {$array=$_ENV;}
+	if ($type=='GET') {$array=$_GET;}
+	if ($type=='POST') {$array=$_POST;}
+	if ($type=='COOKIE') {$array=$_COOKIE;}
+	if ($type=='REQUEST') {$array=$_REQUEST;}
+	if ($type=='SERVER') {$array=$_SERVER;}
+	if ($type=='SESSION') {$array=$_SESSION;}
+	if ($type=='FILES') {$array=$_FILES;}
+
+	if(array_key_exists($name,$array)==true){
+		return $array[$name];
+	}else{
+		return '';
+	}
+}
+
 function CreateDbName(){
 
 	return 'zb_users/data/' . str_replace('-','','#%20' . strtolower(GetGuid())) . '.db';
@@ -47,7 +64,7 @@ function GetCurrentHost(&$cookiespath){
 
 function GetPassWordByGuid($ps,$guid){
 
-return md5(md5($ps).$guid);
+	return md5(md5($ps).$guid);
 
 }
 

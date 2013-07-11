@@ -25,7 +25,7 @@ class BaseMember
 	public $Intro=null;
 	public $PostTime=null;	
 	public $Template=null;
-	public $MetaString=null;
+	public $Meta=null;
 
 }
 
@@ -36,8 +36,10 @@ class BaseMember
 */
 class Member extends BaseMember
 {
+
 	private $db;
-	
+	public $Metas=array();
+
 	function __construct()
 	{
 		$this->db = &$GLOBALS['zbp']->db;
@@ -45,7 +47,6 @@ class Member extends BaseMember
 		$this->Count = 0;
 		var_dump($this->db);
 	}
-
 
 	function LoadInfoByID($id){
 
@@ -86,7 +87,7 @@ sql;
 		$this->Intro=$array[9];
 		$this->PostTime=$array[10];
 		$this->Template=$array[11];
-		$this->MetaString=$array[12];
+		$this->Meta=$array[12];
 	}
 
 	function Post(){
@@ -119,7 +120,7 @@ $this->Count,
 '$this->Intro',
 $this->PostTime,
 '$this->Template',
-'$this->MetaString'
+'$this->Meta'
 )
 sql;
 			$this->ID=$this->db->Insert($s);
@@ -140,7 +141,7 @@ mem_Alias='$this->Alias',
 mem_Intro='$this->Intro',
 mem_PostTime=$this->PostTime,
 mem_Template='$this->Template',
-mem_Meta='$this->MetaString'
+mem_Meta='$this->Meta'
 WHERE 
 mem_ID=$this->ID
 sql;
