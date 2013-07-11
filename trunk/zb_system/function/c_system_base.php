@@ -18,6 +18,8 @@ $bloghost = null;
 $c_option = require_once($blogpath.'zb_users/c_option.php');	
 $c_lang = require_once($blogpath.'zb_users/language/'.$c_option['ZC_BLOG_LANGUAGEPACK'].'.php');
 
+#date_default_timezone_set($c_option['ZC_TIME_ZONE_NAME']);
+
 require_once $blogpath.'zb_system/function/c_system_debug.php';
 require_once $blogpath.'zb_system/function/c_system_common.php';
 require_once $blogpath.'zb_system/function/c_system_plugin.php';

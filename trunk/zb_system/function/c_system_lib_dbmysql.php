@@ -50,15 +50,26 @@ class DbMySQL implements iDataBase
 		}
 	}
 
-	function Query(){
-//mysql_query('CREATE DATABASE `zblog`'); // 创建数据库
+	function Query($query){
+
+		$query=str_replace('%pre%', $this->dbpre, $query);
+
+		$result = mysql_query($query);
+		// 遍历出来
+		$data = array();
+		while($row = mysql_fetch_assoc($result)){
+			$data[] = $row;
+		}
+		return $data;
+
 	}
 
-	function Update(){
-
+	function Update($query){
+		$query=str_replace('%pre%', $this->dbpre, $query);
+		mysql_query($query);
 	}
 
-	function Delete(){
+	function Delete($query){
 
 	}
 
