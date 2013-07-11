@@ -401,6 +401,7 @@ switch ($dbtype) {
     if($db->Open(array($_POST['dbmysql_server'],$_POST['dbmysql_username'],$_POST['dbmysql_password'],$_POST['dbmysql_name'],$_POST['dbmysql_pre']))==true){
       $db->CreateTable();
       InsertInfo();
+      SaveConfig();
       $db->Close();
     } else {
       echo 'MySQL服务器连接失败，或数据库不存在。';
@@ -414,6 +415,7 @@ switch ($dbtype) {
       if($db->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'],$_POST['dbsqlite_pre']))==true){
       #$db->CreateTable();
       InsertInfo();
+      SaveConfig();
       $db->Close();
    } else {
       echo 'SQLite数据库创建失败。';
@@ -427,6 +429,7 @@ switch ($dbtype) {
     if($db->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite3_name'],$_POST['dbsqlite3_pre']))==true){
       $db->CreateTable();
       InsertInfo();
+      SaveConfig();
       $db->Close();
    } else {
       echo 'SQLite数据库创建失败。';
@@ -544,6 +547,33 @@ function InsertInfo(){
   $guid=GetGuid();
   $mem->LoadInfobyArray(array(0,$guid,$_POST['username'],'1',GetPassWordByGuid($_POST['password'],$guid),'','',0,'','',time(),'',''));
   $mem->Post();
+
+}
+
+function SaveConfig(){
+
+
+  $GLOBALS['zbp']->option['ZC_DATABASE_TYPE']=$_POST['dbtype'];
+
+  switch ($GLOBALS['zbp']->option['ZC_DATABASE_TYPE']) {
+    case 'mysql':
+      $GLOBALS['zbp']->option['ZC_MYSQL_SERVER']=$_POST['dbmysql_server'];
+      $GLOBALS['zbp']->option['ZC_MYSQL_USERNAME']=$_POST['dbmysql_username'];
+      $GLOBALS['zbp']->option['ZC_MYSQL_PASSWORD']=$_POST['dbmysql_password'];
+      $GLOBALS['zbp']->option['ZC_MYSQL_NAME']=$_POST['dbmysql_name'];
+      $GLOBALS['zbp']->option['ZC_MYSQL_PRE']=$_POST['dbmysql_pre'];
+      break;
+    case 'sqlite':
+      $GLOBALS['zbp']->option['ZC_SQLITE_NAME']=$_POST['dbsqlite_name'];
+      $GLOBALS['zbp']->option['ZC_SQLITE_PRE']=$_POST['dbsqlite_pre'];
+      break;
+    case 'sqlite3':
+      $GLOBALS['zbp']->option['ZC_SQLITE3_NAME']=$_POST['dbsqlite3_name'];
+      $GLOBALS['zbp']->option['ZC_SQLITE3_PRE']=$_POST['dbsqlite3_pre'];
+      break;  
+  }
+
+  $GLOBALS['zbp']->SaveConfig();
 
 }
 
