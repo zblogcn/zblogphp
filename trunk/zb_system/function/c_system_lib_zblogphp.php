@@ -54,6 +54,10 @@ class ZBlogPHP{
 
 	}
 
+	public function SaveConfig(){
+		$s=var_export($this->option,true);
+	}	
+
 }
 
 ?>
