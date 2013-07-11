@@ -7,7 +7,7 @@
  */
 header('Content-Type: application/x-javascript; Charset=utf8');  
 
-require_once 'c_system_base.php';
+require_once '../function/c_system_base.php';
 
 ?>
 var bloghost="<?php echo $bloghost ?>";

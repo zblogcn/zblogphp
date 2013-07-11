@@ -30,7 +30,7 @@ if($zblogstep=="") { $zblogstep=1;}
 	<meta name="generator" content="Z-Blog <?=$zbp->option['ZC_BLOG_VERSION']?>" />
 	<meta name="robots" content="nofollow" />
 	<script src="../zb_system/script/common.js" type="text/javascript"></script>
-  <script src="../zb_system/function/c_admin_js_add.php" type="text/javascript"></script>
+  <script src="../zb_system/script/c_admin_js_add.php" type="text/javascript"></script>
 	<script src="../zb_system/script/md5.js" type="text/javascript"></script>
   <script src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
 	<link rel="stylesheet" rev="stylesheet" href="../zb_system/css/jquery-ui.custom.css"  type="text/css" media="screen" />
