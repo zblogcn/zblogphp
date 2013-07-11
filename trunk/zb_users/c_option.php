@@ -11,7 +11,7 @@ return array (
   'ZC_DATABASE_TYPE' => 'mysql',
   'ZC_SQLITE_NAME' => '',
   'ZC_SQLITE_PRE' => 'zbp_',
-  'ZC_SQLITE3_NAME' => '',
+  'ZC_SQLITE3_NAME' => 'zb_users/data/#%2051ded9dcc0393605768888.db',
   'ZC_SQLITE3_PRE' => 'zbp_',
   'ZC_MYSQL_SERVER' => 'localhost',
   'ZC_MYSQL_USERNAME' => 'root',

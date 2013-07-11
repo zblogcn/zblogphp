@@ -17,7 +17,7 @@ require_once '../zb_system/function/c_system_base.php';
 define('bingo','<span class="bingo"></span>');
 define('error','<span class="error"></span>');
 
-$zblogstep=isset($_GET['step']) ? intval($_GET['step']) : 0;
+$zblogstep=GetVars('step')<>'' ? intval(GetVars('step')) : 0;
 if($zblogstep=="") { $zblogstep=1;}
 
 ?>
@@ -390,7 +390,7 @@ function Setup4(){
 
 <?php
 
-$dbtype=isset($_POST['dbtype']) ? $_POST['dbtype'] : '';
+$dbtype=GetVars('dbtype','POST');
 #echo $dbtype;
 
 switch ($dbtype) {
@@ -398,7 +398,7 @@ switch ($dbtype) {
 
     $db=DbFactory::Create('mysql');
     $GLOBALS['zbp']->db=&$db;
-    if($db->Open(array($_POST['dbmysql_server'],$_POST['dbmysql_username'],$_POST['dbmysql_password'],$_POST['dbmysql_name'],$_POST['dbmysql_pre']))==true){
+    if($db->Open(array(GetVars('dbmysql_server','POST'),GetVars('dbmysql_username','POST'),GetVars('dbmysql_password','POST'),GetVars('dbmysql_name','POST'),GetVars('dbmysql_pre','POST')))==true){
       $db->CreateTable();
       InsertInfo();
       SaveConfig();
@@ -412,7 +412,7 @@ switch ($dbtype) {
 
     $db=DbFactory::Create('sqlite');
     $GLOBALS['zbp']->db=&$db;
-      if($db->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite_name'],$_POST['dbsqlite_pre']))==true){
+      if($db->Open(array($GLOBALS["zbp"]->path . GetVars('dbsqlite_name','POST'),GetVars('dbsqlite_pre','POST')))==true){
       #$db->CreateTable();
       InsertInfo();
       SaveConfig();
@@ -426,7 +426,7 @@ switch ($dbtype) {
 
     $db=DbFactory::Create('sqlite3');
     $GLOBALS['zbp']->db=&$db;
-    if($db->Open(array($GLOBALS["zbp"]->path . $_POST['dbsqlite3_name'],$_POST['dbsqlite3_pre']))==true){
+    if($db->Open(array($GLOBALS["zbp"]->path . GetVars('dbsqlite3_name','POST'),GetVars('dbsqlite3_pre','POST')))==true){
       $db->CreateTable();
       InsertInfo();
       SaveConfig();
@@ -465,7 +465,7 @@ function CheckServer(){
 global $CheckResult;
 $CheckResult=array(
  //服务器 
-  'server' => array($_SERVER['SERVER_SOFTWARE'],''), 
+  'server' => array(GetVars('SERVER_SOFTWARE','SERVER'),''), 
   'phpver' => array(phpversion(),''), 
   'zbppath' => array($GLOBALS['zbp']->path,''), 
  //组件
@@ -545,7 +545,7 @@ function InsertInfo(){
   */
   $mem = new Member();
   $guid=GetGuid();
-  $mem->LoadInfobyArray(array(0,$guid,$_POST['username'],'1',GetPassWordByGuid($_POST['password'],$guid),'','',0,'','',time(),'',''));
+  $mem->LoadInfobyArray(array(0,$guid,GetVars('username','POST'),'1',GetPassWordByGuid(GetVars('password','POST'),$guid),'','',0,'','',time(),'',''));
   $mem->Post();
 
 }
@@ -553,23 +553,23 @@ function InsertInfo(){
 function SaveConfig(){
 
 
-  $GLOBALS['zbp']->option['ZC_DATABASE_TYPE']=$_POST['dbtype'];
+  $GLOBALS['zbp']->option['ZC_DATABASE_TYPE']=GetVars('dbtype','POST');
 
   switch ($GLOBALS['zbp']->option['ZC_DATABASE_TYPE']) {
     case 'mysql':
-      $GLOBALS['zbp']->option['ZC_MYSQL_SERVER']=$_POST['dbmysql_server'];
-      $GLOBALS['zbp']->option['ZC_MYSQL_USERNAME']=$_POST['dbmysql_username'];
-      $GLOBALS['zbp']->option['ZC_MYSQL_PASSWORD']=$_POST['dbmysql_password'];
-      $GLOBALS['zbp']->option['ZC_MYSQL_NAME']=$_POST['dbmysql_name'];
-      $GLOBALS['zbp']->option['ZC_MYSQL_PRE']=$_POST['dbmysql_pre'];
+      $GLOBALS['zbp']->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
+      $GLOBALS['zbp']->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
+      $GLOBALS['zbp']->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
+      $GLOBALS['zbp']->option['ZC_MYSQL_NAME']=GetVars('dbmysql_name','POST');
+      $GLOBALS['zbp']->option['ZC_MYSQL_PRE']=GetVars('dbmysql_pre','POST');
       break;
     case 'sqlite':
-      $GLOBALS['zbp']->option['ZC_SQLITE_NAME']=$_POST['dbsqlite_name'];
-      $GLOBALS['zbp']->option['ZC_SQLITE_PRE']=$_POST['dbsqlite_pre'];
+      $GLOBALS['zbp']->option['ZC_SQLITE_NAME']=GetVars('dbsqlite_name','POST');
+      $GLOBALS['zbp']->option['ZC_SQLITE_PRE']=GetVars('dbsqlite_pre','POST');
       break;
     case 'sqlite3':
-      $GLOBALS['zbp']->option['ZC_SQLITE3_NAME']=$_POST['dbsqlite3_name'];
-      $GLOBALS['zbp']->option['ZC_SQLITE3_PRE']=$_POST['dbsqlite3_pre'];
+      $GLOBALS['zbp']->option['ZC_SQLITE3_NAME']=GetVars('dbsqlite3_name','POST');
+      $GLOBALS['zbp']->option['ZC_SQLITE3_PRE']=GetVars('dbsqlite3_pre','POST');
       break;  
   }
 

@@ -15,6 +15,14 @@ class ZBlogPHP{
 	public $host = null;
 	public $db = null;
 	public $guid=null;
+
+	public $users=array();
+	public $categorys=array();
+	public $tags=array();
+	public $modules=array();	
+	public $sidebars=array(1=>'',2=>'',3=>'',4=>'',5=>'');
+	public $templates=array();
+	public $configs=array();	
 	
 	function __construct() {
 
@@ -47,9 +55,6 @@ class ZBlogPHP{
 		throw new Exception('');
 	}
 
-	public function Run(){
-		echo 'hello zblog php!<br>';
-	}
 
 	#初始化连接
 	public function Initialize(){
@@ -112,6 +117,7 @@ class ZBlogPHP{
 
 		file_put_contents($this->path . 'zb_users/c_option.php',$s);
 	}	
+
 
 }
 
