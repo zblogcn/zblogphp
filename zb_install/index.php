@@ -14,9 +14,8 @@
 
 require_once '../zb_system/function/c_system_base.php';
 
-const bingo='<span class=\'bingo\'></span>';
-const error='<span class=\'error\'></span>';
-
+define('bingo','<span class="bingo"></span>');
+define('error','<span class="error"></span>');
 
 $zblogstep=isset($_GET['step']) ? intval($_GET['step']) : 0;
 if($zblogstep=="") { $zblogstep=1;}
