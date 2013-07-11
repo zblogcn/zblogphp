@@ -50,23 +50,25 @@ class Member extends BaseMember
 	function LoadInfoByID($id){
 
 $s=<<<sql
-SELECT * FROM %pre%Member WHERE mem_ID=$id
+SELECT 
+mem_ID,
+mem_Guid,
+mem_Level,
+mem_Name,
+mem_PassWord,
+mem_Email,
+mem_HomePage,
+mem_Count,
+mem_Alias,
+mem_Intro,
+mem_PostTime,
+mem_Template,
+mem_Meta
+ FROM %pre%Member WHERE mem_ID=$id
 sql;
 		$array=$this->db->Query($s);
 		if (count($array)>0) {
-		$this->ID=$array[0]['mem_ID'];
-		$this->Guid=$array[0]['mem_Guid'];
-		$this->Name=$array[0]['mem_Name'];
-		$this->Level=$array[0]['mem_Level'];
-		$this->Password=$array[0]['mem_Password'];
-		$this->Email=$array[0]['mem_Email'];
-		$this->HomePage=$array[0]['mem_HomePage'];
-		$this->Count=$array[0]['mem_Count'];
-		$this->Alias=$array[0]['mem_Alias'];
-		$this->Intro=$array[0]['mem_Intro'];
-		$this->PostTime=$array[0]['mem_PostTime'];
-		$this->Template=$array[0]['mem_Template'];
-		$this->MetaString=$array[0]['mem_Meta'];
+			$this->LoadInfoByArray($array[0]);
 		}
 
 	}
