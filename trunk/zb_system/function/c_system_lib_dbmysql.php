@@ -64,7 +64,6 @@ class DbMySQL implements iDataBase
 
 	function Insert($query){
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		var_dump($query);
 		mysql_query($query);
 		return mysql_insert_id();
 	}

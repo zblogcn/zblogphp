@@ -535,11 +535,11 @@ function getRightsAndExport($folderparent,$folder,$right){
 }
 
 function InsertInfo(){
-throw new Exception("Error Processing Request", 1);
+#throw new Exception("Error Processing Request", 1);
 
   $mem = new Member();
   $guid=GetGuid();
-  $mem->LoadInfobyArray(array(0,$guid,$_POST['username'],'1',GetPassWordbyGUID($_POST['password'],$guid),'','',0,'','','',''));
+  $mem->LoadInfobyArray(array(0,$guid,$_POST['username'],'1',GetPassWordbyGUID($_POST['password'],$guid),'','',0,'','',time(),'',''));
   $mem->Post();
 }
 
