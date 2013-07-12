@@ -75,19 +75,19 @@ sql;
 	}
 
 	function LoadInfoByArray($array){
-		$this->ID=$array[0];
-		$this->Guid=$array[1];
-		$this->Name=$array[2];
-		$this->Level=$array[3];
-		$this->Password=$array[4];
-		$this->Email=$array[5];
-		$this->HomePage=$array[6];
-		$this->Count=$array[7];
-		$this->Alias=$array[8];
-		$this->Intro=$array[9];
-		$this->PostTime=$array[10];
-		$this->Template=$array[11];
-		$this->Meta=$array[12];
+		$this->ID=$array['ID'];
+		$this->Guid=$array['Guid'];
+		$this->Name=$array['Name'];
+		$this->Level=$array['Level'];
+		$this->Password=$array['Password'];
+		$this->Email=$array['Email'];
+		$this->HomePage=$array['HomePage'];
+		$this->Count=$array['Count'];
+		$this->Alias=$array['Alias'];
+		$this->Intro=$array['Intro'];
+		$this->PostTime=$array['PostTime'];
+		$this->Template=$array['Template'];
+		$this->Meta=$array['Meta'];
 	}
 
 	function Post(){
