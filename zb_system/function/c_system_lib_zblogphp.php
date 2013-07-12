@@ -98,6 +98,8 @@ class ZBlogPHP{
 				}
 			break;
 		}
+
+		$this->LoadMembers();
 	}
 
 
@@ -119,6 +121,21 @@ class ZBlogPHP{
 
 		file_put_contents($this->path . 'zb_users/c_option.php',$s);
 	}	
+
+	public function LoadMembers(){
+
+		$s='SELECT * FROM %pre%Member';
+		$array=$this->db->Query($s);
+		foreach ($array as $ma) {
+			$m=new Member();
+			$m->LoadInfoByAssoc($ma);
+			//array_push($this->members,$m);
+			$this->members[$m->ID]=$m;
+		}
+
+		var_dump($this->members);
+
+	}
 
 
 }
