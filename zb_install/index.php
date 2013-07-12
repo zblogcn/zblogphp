@@ -21,22 +21,20 @@ $zblogstep=GetVars('step')<>'' ? intval(GetVars('step')) : 0;
 if($zblogstep=="") { $zblogstep=1;}
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?=$zbp->option['ZC_BLOG_LANGUAGE']?>" lang="<?=$zbp->option['ZC_BLOG_LANGUAGE']?>">
+<!DOCTYPE HTML>
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="Content-Language" content="<?=$zbp->option['ZC_BLOG_LANGUAGE']?>" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-	<meta name="generator" content="Z-Blog <?=$zbp->option['ZC_BLOG_VERSION']?>" />
-	<meta name="robots" content="nofollow" />
-	<script src="../zb_system/script/common.js" type="text/javascript"></script>
+  <meta name="generator" content="Z-Blog <?=$zbp->option['ZC_BLOG_VERSION']?>" />
+  <meta name="robots" content="noindex,nofollow"/>
+  <script src="../zb_system/script/common.js" type="text/javascript"></script>
   <script src="../zb_system/script/c_admin_js_add.php" type="text/javascript"></script>
-	<script src="../zb_system/script/md5.js" type="text/javascript"></script>
+  <script src="../zb_system/script/md5.js" type="text/javascript"></script>
   <script src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
-	<link rel="stylesheet" rev="stylesheet" href="../zb_system/css/jquery-ui.custom.css"  type="text/css" media="screen" />
-	<link rel="stylesheet" rev="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
-	<title>Z-BlogPHP <?=$zbp->option['ZC_BLOG_VERSION']?> 安装程序</title>
-    
+  <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css"  type="text/css" media="screen" />
+  <link rel="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
+  <title>Z-BlogPHP <?=$zbp->option['ZC_BLOG_VERSION']?> 安装程序</title>
 </head>
 <body>
 	<div class="setup"><form method="post" action="?step=<?php echo $zblogstep+1;?>">
@@ -66,7 +64,7 @@ switch ($zblogstep) {
 ?>
   </form></div>
 
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 function Setup3(){
 	if($("#dbtype").val()=="mssql"){
 		if($("#dbserver").val()==""){alert("数据库服务器需要填写");return false;};
@@ -99,6 +97,7 @@ $(function() {
 function Setup0(){
 ?>
 <dl>
+<dt></dt>
 <dd id="ddleft">
 <img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
 <div class="left">安装进度： </div><div id="setup0"  class="left"></div>
@@ -120,6 +119,7 @@ function Setup0(){
 function Setup1(){
 ?>
 <dl>
+<dt></dt>
 <dd id="ddleft">
 <img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
 <div class="left">安装进度： </div><div id="setup1"  class="left"></div>
@@ -190,6 +190,7 @@ CheckServer();
 
 ?>
 <dl>
+<dt></dt>
 <dd id="ddleft">
 <img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
 <div class="left">安装进度： </div><div id="setup2"  class="left"></div>
@@ -331,6 +332,7 @@ function Setup3(){
   CheckServer();
 ?>
 <dl>
+<dt></dt>
 <dd id="ddleft">
 <img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
 <div class="left">安装进度： </div><div id="setup3"  class="left"></div>
@@ -361,7 +363,7 @@ function Setup3(){
 <p><b>表&nbsp;前&nbsp;缀:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_pre" id="dbmysql_pre" value="zbp_" style="width:350px;" /></p>
 </div>
 <p class="title">网站设置</p>
-<p><b>网站名称:</b>&nbsp;&nbsp;<input type="text" name="blogtitle" id="blogtitle" value="" style="width:350px;" /></p>
+<p><b>网站名称:</b>&nbsp;&nbsp;<input type="text" name="blogtitle" id="blogtitle" value="" style="width:250px;" /></p>
 <p><b>用&nbsp;户&nbsp;名:</b>&nbsp;&nbsp;<input type="text" name="username" id="username" value="" style="width:250px;" />&nbsp;(英文,数字,汉字和._的组合)</p>
 <p><b>密&nbsp;&nbsp;&nbsp;&nbsp;码:</b>&nbsp;&nbsp;<input type="password" name="password" id="password" value="" style="width:250px;" />&nbsp;(8位或更长的数字和字母,字符组合)</p>
 <p><b>确认密码:</b>&nbsp;&nbsp;<input type="password" name="repassword" id="repassword" value="" style="width:250px;" /></p>
@@ -378,6 +380,7 @@ function Setup4(){
 
 ?>
 <dl>
+<dt></dt>
 <dd id="ddleft">
 <img src="../zb_system/image/admin/install.png" alt="Z-Blog2.0在线安装" />
 <div class="left">安装进度： </div><div id="setup4"  class="left"></div>

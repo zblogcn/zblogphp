@@ -10,11 +10,15 @@ require_once './zb_system/function/c_system_base.php';
 
 if (!$zbp->option['ZC_DATABASE_TYPE']) {header('Location: ./zb_install/');}
 
+
+
 $zbp->Initialize();
 
 echo ListExport(GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'));
 
 $zbp->Terminate();
+
+
 
 echo RunTime();
 ?>
