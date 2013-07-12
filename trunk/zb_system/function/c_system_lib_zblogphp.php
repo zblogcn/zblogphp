@@ -18,12 +18,15 @@ class ZBlogPHP{
 	public $guid=null;
 
 	public $members=array();
+	#public $members_name=array();
 	public $categorys=array();
 	public $tags=array();
-	public $modules=array();	
+	public $modules=array();
 	public $sidebars=array(1=>'',2=>'',3=>'',4=>'',5=>'');
 	public $templates=array();
 	public $configs=array();
+	public $cache_includes=array();
+	public $template_includes=array();
 	
 	function __construct() {
 
@@ -100,6 +103,11 @@ class ZBlogPHP{
 		}
 
 		$this->LoadMembers();
+		$this->LoadCategorys();
+		$this->LoadTemplates();
+		$this->LoadCacheIncludes();
+		$this->LoadTemplateIncludes();
+
 	}
 
 
@@ -129,14 +137,39 @@ class ZBlogPHP{
 		foreach ($array as $ma) {
 			$m=new Member();
 			$m->LoadInfoByAssoc($ma);
-			//array_push($this->members,$m);
 			$this->members[$m->ID]=$m;
+			#$this->membersbyname[$m->Name]=&$m;
 		}
-
-		var_dump($this->members);
-
 	}
 
+	public function LoadCategorys(){
+	}
+
+	public function LoadTemplates(){
+		$dir=$this->path .'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/template/';
+		$files=GetFilesInDir($dir,'html');
+		foreach ($files as $sortname => $fullname) {
+			$this->templates[$sortname]=file_get_contents($fullname);
+		}
+	}
+
+	public function LoadCacheIncludes(){
+		$dir=$this->path .'zb_users/include/';
+		$files=GetFilesInDir($dir,'html');
+		foreach ($files as $sortname => $fullname) {
+			$this->cache_includes[$sortname]=file_get_contents($fullname);
+		}
+		var_dump($this->cache_includes);
+	}
+
+	public function LoadTemplateIncludes(){
+		$dir=$this->path .'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/include/';
+		$files=GetFilesInDir($dir,'html');
+		foreach ($files as $sortname => $fullname) {
+			$this->template_includes[$sortname]=file_get_contents($fullname);
+		}
+		var_dump($this->template_includes);
+	}
 
 }
 
