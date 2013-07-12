@@ -45,7 +45,7 @@ function RegisterPlugin($strPluginName,$strPluginActiveFunction){
 function ActivePlugin(){
 
 	foreach ($GLOBALS['PluginActiveFunctions'] as &$sPluginActiveFunctions) {
-		eval($sPluginActiveFunctions);
+		$sPluginActiveFunctions();
 	}
 
 	return ture;
