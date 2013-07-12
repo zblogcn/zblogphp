@@ -17,13 +17,13 @@ class ZBlogPHP{
 	public $db = null;
 	public $guid=null;
 
-	public $users=array();
+	public $members=array();
 	public $categorys=array();
 	public $tags=array();
 	public $modules=array();	
 	public $sidebars=array(1=>'',2=>'',3=>'',4=>'',5=>'');
 	public $templates=array();
-	public $configs=array();	
+	public $configs=array();
 	
 	function __construct() {
 
@@ -61,42 +61,42 @@ class ZBlogPHP{
 	#初始化连接
 	public function Initialize(){
 
+		ActivePlugin();
 
+		switch ($this->option['ZC_DATABASE_TYPE']) {
+			case 'mysql':
+				$db=DbFactory::Create('mysql');
+				$this->db=&$db;
+				if($db->Open(array(
+						$this->option['ZC_MYSQL_SERVER'],
+						$this->option['ZC_MYSQL_USERNAME'],
+						$this->option['ZC_MYSQL_PASSWORD'],
+						$this->option['ZC_MYSQL_NAME'],
+						$this->option['ZC_MYSQL_PRE']
+					))==false){
+					throw new Exception('MySQL数据库打不开啦！');
+				}
 
-	switch ($this->option['ZC_DATABASE_TYPE']) {
-		case 'mysql':
-			$db=DbFactory::Create('mysql');
-			$this->db=&$db;
-			if($db->Open(array(
-					$this->option['ZC_MYSQL_SERVER'],
-					$this->option['ZC_MYSQL_USERNAME'],
-					$this->option['ZC_MYSQL_PASSWORD'],
-					$this->option['ZC_MYSQL_NAME'],
-					$this->option['ZC_MYSQL_PRE']
-				))==false){
-				throw new Exception('MySQL数据库打不开啦！');
-			}
-
-		break;
-		case 'sqlite':
-			$db=DbFactory::Create('sqlite');
-			$GLOBALS['zbp']->db=&$db;
-			if($db->Open(array(
-				$this->path . $this->option['ZC_SQLITE_NAME'],
-				$this->option['ZC_SQLITE_PRE']
-				))==false){
-				throw new Exception('SQLite数据库打不开啦！');
-			}
-		break;
-		case 'sqlite3':
-			$this->db=DbFactory::Create('sqlite3');
-			if($this->db->Open(array(
-				$this->path . $this->option['ZC_SQLITE3_NAME'],
-				$this->option['ZC_SQLITE3_PRE']
-				))==false){
-				throw new Exception('SQLite3数据库打不开啦！');
-			}
-		break;
+			break;
+			case 'sqlite':
+				$db=DbFactory::Create('sqlite');
+				$GLOBALS['zbp']->db=&$db;
+				if($db->Open(array(
+					$this->path . $this->option['ZC_SQLITE_NAME'],
+					$this->option['ZC_SQLITE_PRE']
+					))==false){
+					throw new Exception('SQLite数据库打不开啦！');
+				}
+			break;
+			case 'sqlite3':
+				$this->db=DbFactory::Create('sqlite3');
+				if($this->db->Open(array(
+					$this->path . $this->option['ZC_SQLITE3_NAME'],
+					$this->option['ZC_SQLITE3_PRE']
+					))==false){
+					throw new Exception('SQLite3数据库打不开啦！');
+				}
+			break;
 		}
 	}
 

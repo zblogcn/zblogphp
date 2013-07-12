@@ -10,9 +10,7 @@
 
 
 #定义总插件激活函数列表
-$PluginNames=array();
-$PluginActiveFunctions=array();
-
+$Plugins=array();
 
 
 
@@ -24,10 +22,7 @@ $PluginActiveFunctions=array();
 */
 function RegisterPlugin($strPluginName,$strPluginActiveFunction){
 
-	static $i=0;
-	$GLOBALS['PluginNames'][$i]=$strPluginName;
-	$GLOBALS['PluginActiveFunctions'][$i]=$strPluginActiveFunction;
-	$i+=1;
+	$GLOBALS['Plugins'][$strPluginName]=$strPluginActiveFunction;
 
 }
 
@@ -44,10 +39,9 @@ function RegisterPlugin($strPluginName,$strPluginActiveFunction){
 */
 function ActivePlugin(){
 
-	foreach ($GLOBALS['PluginActiveFunctions'] as &$sPluginActiveFunctions) {
+	foreach ($GLOBALS['Plugins'] as &$sPluginActiveFunctions) {
 		$sPluginActiveFunctions();
 	}
-	return ture;
 
 }
 
@@ -162,12 +156,9 @@ Function Add_Response_Plugin($plugname,$parameter){
 $Filter_Plugin_ListExport_Begin=array();
 
 
-#$Action_Plugin_ListExport_Begin[0]='echo $page;';
-Add_Filter_Plugin('Filter_Plugin_ListExport_Begin','Default_ListExport_Begin');
 
 
-function Default_ListExport_Begin(&$page,&$cate,&$auth,&$date,&$tags){
-	$page='4444';
-}
+
+
 
 ?>
