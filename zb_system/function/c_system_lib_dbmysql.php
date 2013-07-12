@@ -6,7 +6,10 @@
  * @version 2.0 2013-06-14
  */
 
-
+// TODO:
+// mysql_connect将被替换
+// 需要添加mysqli或PDO_mysql
+// http://php.net/manual/zh/function.mysql-connect.php
 
 /**
 * 
