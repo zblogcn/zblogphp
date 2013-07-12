@@ -400,21 +400,28 @@ $GLOBALS['zbp']->db=&$db;
 switch ($dbtype) {
   case 'mysql':
     $array=array(GetVars('dbmysql_server','POST'),GetVars('dbmysql_username','POST'),GetVars('dbmysql_password','POST'),GetVars('dbmysql_name','POST'),GetVars('dbmysql_pre','POST'));
-    if($db->Open($array)==true){
+    if($db->Open($array)){
     } else {
-      echo 'MySQL服务器连接失败，或数据库不存在。';
+      echo '<p>MySQL服务器连接失败，或数据库不存在。</p>
+            <p>请确认：</p>
+            <ul>
+            <li> 您的MySQL帐号密码是否正确？ </li>
+            <li> 是否创建了'.GetVars('dbmysql_name','POST').'数据库？</li>
+            </ul>
+
+      ';
     }
     break;
   case 'sqlite':
     $array=array($GLOBALS["zbp"]->path . GetVars('dbsqlite_name','POST'),GetVars('dbsqlite_pre','POST'));
-    if($db->Open($array)==true){
+    if($db->Open($array)){
       } else {
       echo 'SQLite数据库创建失败。';
     }
     break;
   case 'sqlite3':
     $array=array($GLOBALS["zbp"]->path . GetVars('dbsqlite3_name','POST'),GetVars('dbsqlite3_pre','POST'));
-    if($db->Open($array)==true){
+    if($db->Open($array)){
     } else {
         echo 'SQLite数据库创建失败。';
     }
@@ -532,11 +539,25 @@ function InsertInfo(){
   */
   $mem = new Member();
   $guid=GetGuid();
-  $mem->LoadInfobyArray(array(0,$guid,GetVars('username','POST'),'1',GetPassWordByGuid(GetVars('password','POST'),$guid),'','',0,'','',time(),'',''));
+  //$mem->LoadInfobyArray(array(0,$guid,GetVars('username','POST'),'1',GetPassWordByGuid(GetVars('password','POST'),$guid),'','',0,'','',time(),'',''));
+
+  $mem->LoadInfobyArray(array(
+    'ID' => 0,
+    'Guid' => $guid,
+    'Name' => GetVars('username','POST'),
+    'Level' => '1',
+    'Password' => GetPassWordByGuid(GetVars('password','POST'),$guid),
+    'Email' => '',
+    'HomePage' => '',
+    'Count' => 0,
+    'Alias' => '',
+    'Intro' => '',
+    'PostTime' => time(),
+    'Template' => '',
+    'Meta' =>''));
   $mem->Post();
 
 }
-
 function SaveConfig(){
 
 

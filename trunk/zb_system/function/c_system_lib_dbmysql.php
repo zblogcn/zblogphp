@@ -24,17 +24,21 @@ class DbMySQL implements iDataBase
 
 	function Open($array){
 
-		if ($this->db = mysql_connect($array[0], $array[1], $array[2])) {
+		$db_link = @mysql_connect($array[0], $array[1], $array[2]);
+
+		if(!$db_link){
+			return false;
+		} else {
+			$this->db = $db_link;		
 			if(mysql_select_db($array[3], $this->db)){
 				$this->dbpre=$array[4];
 				return true;
 			} else {
 				$this->Close();
 				return false;
-			}
-		} else {
-			return false;
+			}	
 		}
+
 
 
 	}
