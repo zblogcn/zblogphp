@@ -14,7 +14,7 @@ function ListExport($page,$cate,$auth,$date,$tags){
 
 	$zbp=$GLOBALS['zbp'];
 
-	echo $page;
+	#echo $page;
 
 	return null;
 
