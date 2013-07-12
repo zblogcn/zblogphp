@@ -13,6 +13,7 @@ class ZBlogPHP{
 	public $lang = array();
 	public $path = null;
 	public $host = null;
+	public $cookiespath=null;
 	public $db = null;
 	public $guid=null;
 
@@ -26,10 +27,11 @@ class ZBlogPHP{
 	
 	function __construct() {
 
-		$this->option = $GLOBALS["c_option"];
-		$this->lang = $GLOBALS["c_lang"];
-		$this->path = $GLOBALS["blogpath"];
-		$this->host = $GLOBALS["bloghost"];
+		$this->option = &$GLOBALS['c_option'];
+		$this->lang = &$GLOBALS['c_lang'];
+		$this->path = &$GLOBALS['blogpath'];
+		$this->host = &$GLOBALS['bloghost'];
+		$this->cookiespath = &$GLOBALS['cookiespath'];
 
 		if (trim($this->option['ZC_BLOG_CLSID'])===''){
 			$this->guid=GetGuid();

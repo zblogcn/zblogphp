@@ -392,51 +392,35 @@ function Setup4(){
 
 $dbtype=GetVars('dbtype','POST');
 #echo $dbtype;
-
+$db=DbFactory::Create($dbtype);
+$GLOBALS['zbp']->db=&$db;
 switch ($dbtype) {
   case 'mysql':
-
-    $db=DbFactory::Create('mysql');
-    $GLOBALS['zbp']->db=&$db;
-    if($db->Open(array(GetVars('dbmysql_server','POST'),GetVars('dbmysql_username','POST'),GetVars('dbmysql_password','POST'),GetVars('dbmysql_name','POST'),GetVars('dbmysql_pre','POST')))==true){
-      $db->CreateTable();
-      InsertInfo();
-      SaveConfig();
-      $db->Close();
+    $array=array(GetVars('dbmysql_server','POST'),GetVars('dbmysql_username','POST'),GetVars('dbmysql_password','POST'),GetVars('dbmysql_name','POST'),GetVars('dbmysql_pre','POST'));
+    if($db->Open($array)==true){
     } else {
       echo 'MySQL服务器连接失败，或数据库不存在。';
     }
-
     break;
   case 'sqlite':
-
-    $db=DbFactory::Create('sqlite');
-    $GLOBALS['zbp']->db=&$db;
-      if($db->Open(array($GLOBALS["zbp"]->path . GetVars('dbsqlite_name','POST'),GetVars('dbsqlite_pre','POST')))==true){
-      #$db->CreateTable();
-      InsertInfo();
-      SaveConfig();
-      $db->Close();
-   } else {
+    $array=array($GLOBALS["zbp"]->path . GetVars('dbsqlite_name','POST'),GetVars('dbsqlite_pre','POST'));
+    if($db->Open($array)==true){
+      } else {
       echo 'SQLite数据库创建失败。';
     }
-
     break;
   case 'sqlite3':
-
-    $db=DbFactory::Create('sqlite3');
-    $GLOBALS['zbp']->db=&$db;
-    if($db->Open(array($GLOBALS["zbp"]->path . GetVars('dbsqlite3_name','POST'),GetVars('dbsqlite3_pre','POST')))==true){
-      $db->CreateTable();
-      InsertInfo();
-      SaveConfig();
-      $db->Close();
-   } else {
-      echo 'SQLite数据库创建失败。';
+    $array=array($GLOBALS["zbp"]->path . GetVars('dbsqlite3_name','POST'),GetVars('dbsqlite3_pre','POST'));
+    if($db->Open($array)==true){
+    } else {
+        echo 'SQLite数据库创建失败。';
     }
-
     break;
 }
+$db->CreateTable();
+InsertInfo();
+SaveConfig();
+$db->Close();
 
 ?>
 

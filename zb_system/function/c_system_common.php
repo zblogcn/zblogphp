@@ -14,16 +14,16 @@ function GetGuid(){
 }
 
 function GetVars($name,$type='REQUEST'){
-	if ($type=='ENV') {$array=$_ENV;}
-	if ($type=='GET') {$array=$_GET;}
-	if ($type=='POST') {$array=$_POST;}
-	if ($type=='COOKIE') {$array=$_COOKIE;}
-	if ($type=='REQUEST') {$array=$_REQUEST;}
-	if ($type=='SERVER') {$array=$_SERVER;}
-	if ($type=='SESSION') {$array=$_SESSION;}
-	if ($type=='FILES') {$array=$_FILES;}
+	if ($type=='ENV') {$array=&$_ENV;}
+	if ($type=='GET') {$array=&$_GET;}
+	if ($type=='POST') {$array=&$_POST;}
+	if ($type=='COOKIE') {$array=&$_COOKIE;}
+	if ($type=='REQUEST') {$array=&$_REQUEST;}
+	if ($type=='SERVER') {$array=&$_SERVER;}
+	if ($type=='SESSION') {$array=&$_SESSION;}
+	if ($type=='FILES') {$array=&$_FILES;}
 
-	if(array_key_exists($name,$array)==true){
+	if(isset($array[$name])){
 		return $array[$name];
 	}else{
 		return '';
