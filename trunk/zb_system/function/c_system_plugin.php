@@ -14,6 +14,9 @@ $PluginNames=array();
 $PluginActiveFunctions=array();
 
 
+
+
+
 /*
 '*********************************************************
 ' 目的： 注册插件函数，由每个插件主动调用
@@ -22,8 +25,8 @@ $PluginActiveFunctions=array();
 function RegisterPlugin($strPluginName,$strPluginActiveFunction){
 
 	static $i=0;
-	$GLOBALS['PluginNames'][0]=$strPluginName;
-	$GLOBALS['PluginActiveFunctions'][0]=$strPluginActiveFunction .';';
+	$GLOBALS['PluginNames'][$i]=$strPluginName;
+	$GLOBALS['PluginActiveFunctions'][$i]=$strPluginActiveFunction .';';
 	$i+=1;
 
 }
