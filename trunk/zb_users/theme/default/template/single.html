@@ -1,0 +1,25 @@
+﻿<#TEMPLATE_HEADER#>
+</head>
+<body class="single">
+<div id="divAll">
+	<div id="divPage">
+	<div id="divMiddle">
+		<div id="divTop">
+			<h1 id="BlogTitle"><a href="<#ZC_BLOG_HOST#>"><#ZC_BLOG_NAME#></a></h1>
+			<h3 id="BlogSubTitle"><#ZC_BLOG_SUB_NAME#></h3>
+		</div>
+		<div id="divNavBar">
+<ul>
+<#CACHE_INCLUDE_NAVBAR#>
+</ul>
+		</div>
+		<div id="divMain">
+<#template:article-single#>
+		</div>
+		<div id="divSidebar">
+
+<#template:sidebar#>
+
+		</div>
+<#TEMPLATE_FOOTER#>
+<!-- <#BLOG_CREATE_TIME#> -->
