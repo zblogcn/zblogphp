@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Z-Blog with PHP
  * @author 
@@ -46,5 +47,14 @@ require_once $blogpath.'zb_system/function/c_system_lib_upload.php';
 $zbp=new ZBlogPHP;
 
 /*include plugin*/
-
+#加载主题插件
+if (file_exists($filename=$blogpath.'zb_users/theme/'.$c_option['ZC_BLOG_THEME'].'/plugin/include.php')) {
+	require_once $filename;
+}
+#加载激活插件
+foreach (explode("|", $c_option['ZC_USING_PLUGIN_LIST']) as $plugin) {
+	if ($filename&&file_exists($filename=$blogpath.'zb_users/plugin/'.$plugin.'/include.php')) {
+		require_once $filename;
+	}
+}
 ?>
