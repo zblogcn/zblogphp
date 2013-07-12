@@ -8,11 +8,13 @@
 
 function ListExport($page,$cate,$auth,$date,$tags){
 
-	foreach ($GLOBALS['Action_Plugin_ListExport_Begin'] as &$sAction_Plugin_ListExport_Begin) {
-		eval($sAction_Plugin_ListExport_Begin);
+	foreach ($GLOBALS['Filter_Plugin_ListExport_Begin'] as &$sFilter_Plugin_ListExport_Begin) {
+		$sFilter_Plugin_ListExport_Begin($page,$cate,$auth,$date,$tags);
 	}
 
 	$zbp=$GLOBALS['zbp'];
+
+	echo $page;
 
 	return null;
 

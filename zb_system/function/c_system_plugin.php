@@ -26,7 +26,7 @@ function RegisterPlugin($strPluginName,$strPluginActiveFunction){
 
 	static $i=0;
 	$GLOBALS['PluginNames'][$i]=$strPluginName;
-	$GLOBALS['PluginActiveFunctions'][$i]=$strPluginActiveFunction .';';
+	$GLOBALS['PluginActiveFunctions'][$i]=$strPluginActiveFunction;
 	$i+=1;
 
 }
@@ -47,7 +47,6 @@ function ActivePlugin(){
 	foreach ($GLOBALS['PluginActiveFunctions'] as &$sPluginActiveFunctions) {
 		$sPluginActiveFunctions();
 	}
-
 	return ture;
 
 }
@@ -61,9 +60,12 @@ function ActivePlugin(){
 '*********************************************************
 */
 function InstallPlugin($strPluginName){
+
 	if(function_exists('InstallPlugin_' . $strPluginName)==true){
-		eval('InstallPlugin_' . $strPluginName . '();');
+		$f='InstallPlugin_' . $strPluginName;
+		$f();
 	}
+
 }
 
 
@@ -75,9 +77,12 @@ function InstallPlugin($strPluginName){
 '*********************************************************
 */
 function UninstallPlugin($strPluginName){
+
 	if(function_exists('UninstallPlugin_' . $strPluginName)==true){
-		eval('UninstallPlugin_' . $strPluginName . '();');
+		$f='UninstallPlugin_' . $strPluginName;
+		$f();
 	}
+
 }
 
 
@@ -89,9 +94,7 @@ function UninstallPlugin($strPluginName){
 '*********************************************************
 */
 function CheckPluginState($strPluginName){
-
 	return false;
-
 }
 
 
@@ -106,9 +109,7 @@ function CheckPluginState($strPluginName){
 '*********************************************************
 */
 function Add_Action_Plugin($plugname,$actioncode){
-
 	array_push($GLOBALS[$plugname],$actioncode);
-
 }
 
 
@@ -122,11 +123,7 @@ function Add_Action_Plugin($plugname,$actioncode){
 '*********************************************************
 */
 function Add_Filter_Plugin($plugname,$functionname){
-	/*
-	On Error Resume Next
-	Call Execute("s" & plugname & "=" & "s" & plugname & "&""" & functionname & """" & "& ""|""")
-	Err.Clear
-	*/
+	array_push($GLOBALS[$plugname],$functionname);
 }
 
 
@@ -155,17 +152,22 @@ Function Add_Response_Plugin($plugname,$parameter){
 
 /*
 '**************************************************<
-'类型:action
-'名称:Action_Plugin_ListExport_Begin
+'类型:Filter
+'名称:Filter_Plugin_ListExport_Begin
 '参数:
 '说明:定义列表输出接口
 '调用:
 '**************************************************>
 */
-$Action_Plugin_ListExport_Begin=array();
+$Filter_Plugin_ListExport_Begin=array();
 
 
 #$Action_Plugin_ListExport_Begin[0]='echo $page;';
-Add_Action_Plugin('Action_Plugin_ListExport_Begin','echo $page;');
+Add_Filter_Plugin('Filter_Plugin_ListExport_Begin','Default_ListExport_Begin');
+
+
+function Default_ListExport_Begin(&$page,&$cate,&$auth,&$date,&$tags){
+	$page='4444';
+}
 
 ?>
