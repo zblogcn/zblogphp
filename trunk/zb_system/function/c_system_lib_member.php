@@ -23,10 +23,10 @@ class BaseMember
 'Password'=>array('mem_Password','string',32,''),
 'Email'=>array('mem_Email','string',50,''),
 'HomePage'=>array('mem_HomePage','string',250,''),
-'Count'=>array('mem_Count','integer','',''),
+'Count'=>array('mem_Count','integer','',0),
 'Alias'=>array('mem_Alias','string',250,''),
 'Intro'=>array('mem_Intro','string','',''),
-'PostTime'=>array('mem_PostTime','integer','',''),	
+'PostTime'=>array('mem_PostTime','integer','',0),	
 'Template'=>array('mem_Template','string',50,''),
 'Meta'=>array('mem_Meta','string','',''),
 	);
@@ -99,6 +99,7 @@ class Member extends BaseMember
 	function Post(){
 
 		if ($this->ID==0) {
+/*
 $s=<<<sql
 INSERT INTO %pre%Member(
 mem_Guid,
@@ -128,6 +129,7 @@ $this->PostTime,
 '$this->Meta'
 )
 sql;
+*/
 			$s="INSERT INTO " . self::$table . " (";
 			$a=array();
 			foreach (self::$datainfo as $key => $value) {
@@ -152,7 +154,7 @@ sql;
 			var_dump($this->ID);
 			var_dump($this->PostTime);			
 		} else {
-
+/*
 $s=<<<sql
 UPDATE %pre%Member SET 
 mem_Guid='$this->Guid',
@@ -170,7 +172,20 @@ mem_Meta='$this->Meta'
 WHERE 
 mem_ID=$this->ID
 sql;
-$this->db->Update($s);
+*/
+			$s="UPDATE " . self::$table . " SET ";
+			$a=array();
+			foreach (self::$datainfo as $key => $value) {
+				if ($value[0]==='mem_ID') {continue;}
+				if ($value[1]==='string') {
+					$a[]=$value[0] . '=\'' . addslashes($this->$key) . '\'';
+				}else{
+					$a[]=$value[0] . '=' . $this->$key;	
+				}
+			}
+			$s.=implode(',', $a);
+			$s.=" WHERE mem_ID=" . $this->ID;
+			$this->db->Update($s);
 			var_dump($this->ID);
 			var_dump($this->PostTime);	
 		}
