@@ -16,13 +16,13 @@ class BaseMember
 	static public $table='%pre%Member';
 
 	static public $datainfo=array(
-'ID'=>array('mem_','integer','',0),
+'ID'=>array('mem_ID','integer','',0),
 'Guid'=>array('mem_Guid','string',36,''),
 'Name'=>array('mem_Name','string',20,''),
 'Level'=>array('mem_Level','integer','',5),
 'Password'=>array('mem_Password','string',32,''),
 'Email'=>array('mem_Email','string',50,''),
-'HomePage'=>array('mem_HomePage','integer',250,''),
+'HomePage'=>array('mem_HomePage','string',250,''),
 'Count'=>array('mem_Count','integer','',''),
 'Alias'=>array('mem_Alias','string',250,''),
 'Intro'=>array('mem_Intro','string','',''),
@@ -73,23 +73,8 @@ class Member extends BaseMember
 
 	function LoadInfoByID($id){
 
-$s=<<<sql
-SELECT 
-mem_ID,
-mem_Guid,
-mem_Level,
-mem_Name,
-mem_PassWord,
-mem_Email,
-mem_HomePage,
-mem_Count,
-mem_Alias,
-mem_Intro,
-mem_PostTime,
-mem_Template,
-mem_Meta
- FROM %pre%Member WHERE mem_ID=$id
-sql;
+		$s="SELECT * FROM %pre%Member WHERE mem_ID=$id";
+
 		$array=$this->db->Query($s);
 		if (count($array)>0) {
 			$this->LoadInfoByAssoc($array[0]);
@@ -98,40 +83,21 @@ sql;
 	}
 
 	function LoadInfoByAssoc($array){
-		$this->ID=$array['mem_ID'];
-		$this->Guid=$array['mem_Guid'];
-		$this->Name=$array['mem_Name'];
-		$this->Level=$array['mem_Level'];
-		$this->Password=$array['mem_Password'];
-		$this->Email=$array['mem_Email'];
-		$this->HomePage=$array['mem_HomePage'];
-		$this->Count=$array['mem_Count'];
-		$this->Alias=$array['mem_Alias'];
-		$this->Intro=$array['mem_Intro'];
-		$this->PostTime=$array['mem_PostTime'];
-		$this->Template=$array['mem_Template'];
-		$this->Meta=$array['mem_Meta'];
+		foreach (self::$datainfo as $key => $value) {
+			$this->$key=$array[$value[0]];
+		}
 	}
 
 	function LoadInfoByArray($array){
-		$this->ID=$array[0];
-		$this->Guid=$array[1];
-		$this->Name=$array[2];
-		$this->Level=$array[3];
-		$this->Password=$array[4];
-		$this->Email=$array[5];
-		$this->HomePage=$array[6];
-		$this->Count=$array[7];
-		$this->Alias=$array[8];
-		$this->Intro=$array[9];
-		$this->PostTime=$array[10];
-		$this->Template=$array[11];
-		$this->Meta=$array[12];
+		$i=0;
+		foreach (self::$datainfo as $key => $value) {
+			$this->$key=$array[$i];
+			$i+=1;
+		}
 	}	
 
 	function Post(){
 
-		var_dump($this->Password);
 		if ($this->ID==0) {
 $s=<<<sql
 INSERT INTO %pre%Member(
@@ -162,6 +128,26 @@ $this->PostTime,
 '$this->Meta'
 )
 sql;
+			$s="INSERT INTO " . self::$table . " (";
+			$a=array();
+			foreach (self::$datainfo as $key => $value) {
+				if ($value[0]==='mem_ID') {continue;}
+				$a[]=$value[0];
+			}
+			$s.=implode(',', $a);
+			$s.=") VALUES (";
+			$a=array();
+			foreach (self::$datainfo as $key => $value) {
+				if ($value[0]==='mem_ID') {continue;}
+				if ($value[1]==='string') {
+					$a[]='\'' . addslashes($this->$key) . '\'';	
+				}else{
+					$a[]=$this->$key;		
+				}
+			}
+			$s.=implode(',', $a);
+			$s.=")";
+
 			$this->ID=$this->db->Insert($s);
 			var_dump($this->ID);
 			var_dump($this->PostTime);			
@@ -185,7 +171,8 @@ WHERE
 mem_ID=$this->ID
 sql;
 $this->db->Update($s);
-
+			var_dump($this->ID);
+			var_dump($this->PostTime);	
 		}
 		
 

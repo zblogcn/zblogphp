@@ -541,20 +541,8 @@ function InsertInfo(){
   $guid=GetGuid();
   //$mem->LoadInfobyArray(array(0,$guid,GetVars('username','POST'),'1',GetPassWordByGuid(GetVars('password','POST'),$guid),'','',0,'','',time(),'',''));
 
-  $mem->LoadInfobyArray(array(
-    'ID' => 0,
-    'Guid' => $guid,
-    'Name' => GetVars('username','POST'),
-    'Level' => '1',
-    'Password' => GetPassWordByGuid(GetVars('password','POST'),$guid),
-    'Email' => '',
-    'HomePage' => '',
-    'Count' => 0,
-    'Alias' => '',
-    'Intro' => '',
-    'PostTime' => time(),
-    'Template' => '',
-    'Meta' =>''));
+  $mem->LoadInfobyArray(array(0,$guid,GetVars('username','POST'),'1',GetPassWordByGuid(GetVars('password','POST'),$guid),'','',0,'','',time(),'',''));
+  $mem->Post();
   $mem->Post();
 
 }

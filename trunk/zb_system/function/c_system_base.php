@@ -29,6 +29,15 @@ require_once $blogpath.'zb_system/function/c_system_event.php';
 $cookiespath = null;
 $bloghost = GetCurrentHost($cookiespath);
 
+@ini_set('magic_quotes_runtime',0);
+@ini_set('magic_quotes_gpc',0);
+if(get_magic_quotes_gpc()){
+	_stripslashes($_GET);
+	_stripslashes($_POST);
+	_stripslashes($_COOKIE);
+}
+
+
 require_once $blogpath.'zb_system/function/c_system_lib_zblogphp.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbfactory.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbmysql.php';

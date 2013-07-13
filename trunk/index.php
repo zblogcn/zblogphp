@@ -16,7 +16,5 @@ ListExport(GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),Get
 
 $zbp->Terminate();
 
-
-
 echo RunTime();
 ?>
