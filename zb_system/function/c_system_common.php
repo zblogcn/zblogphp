@@ -73,23 +73,30 @@ function GetFilesInDir($dir,$type){
 
 	$files=array();
 
-foreach (scandir($dir) as $f) {
-	if (is_file($dir . $f)) {
-		foreach (explode("|",$type) as $t) {
-			$t='.' . $t;
-			$i=strlen($t);
-			if (substr($f,-$i,$i)==$t) {
-				$sortname=substr($f,0,strlen($f)-$i);
-				$files[$sortname]=$dir . $f;
-				break;
+	foreach (scandir($dir) as $f) {
+		if (is_file($dir . $f)) {
+			foreach (explode("|",$type) as $t) {
+				$t='.' . $t;
+				$i=strlen($t);
+				if (substr($f,-$i,$i)==$t) {
+					$sortname=substr($f,0,strlen($f)-$i);
+					$files[$sortname]=$dir . $f;
+					break;
+				}
 			}
-		}
 
+		}
 	}
-}
 
 	return $files;
 
+}
+
+
+function _stripslashes(&$val) {
+	if(!is_array($val)) return stripslashes($val);
+	foreach($val as $k => &$v) $val[$k] = _stripslashes($v);
+	return $val;
 }
 
 ?>
