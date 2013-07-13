@@ -8,7 +8,7 @@
 
 
 class ZBlogPHP{
-	// 当前应用的配置
+	static private $_zbp=null;
 	public $option = array();
 	public $lang = array();
 	public $path = null;
@@ -30,8 +30,8 @@ class ZBlogPHP{
 	
 	function __construct() {
 
-		$this->option = &$GLOBALS['c_option'];
-		$this->lang = &$GLOBALS['c_lang'];
+		$this->option = &$GLOBALS['option'];
+		$this->lang = &$GLOBALS['lang'];
 		$this->path = &$GLOBALS['blogpath'];
 		$this->host = &$GLOBALS['bloghost'];
 		$this->cookiespath = &$GLOBALS['cookiespath'];
@@ -45,68 +45,79 @@ class ZBlogPHP{
 	}
 
 	function __destruct(){
-		$c_option = null;
-		$c_land = null;
+		$option = null;
+		$lang = null;
 		$path = null;
 		$host = null;
-		
-	}
-	
-	public function __get($var) {
-
+		$db = null;
 	}
 	
 	public function __call($method, $args) {
 		throw new Exception('');
 	}
 
+	static public function GetInstance(){
+		if(!isset(ZBlogPHP::$_zbp)){
+			ZBlogPHP::$_zbp=new ZBlogPHP;
+		}
+		return ZBlogPHP::$_zbp;
+	}
+
+
+	function OpenConnect(){
+		static $isconnect=false;
+		if($isconnect){return;}
+
+		switch ($this->option['ZC_DATABASE_TYPE']) {
+		case 'mysql':
+			$db=DbFactory::Create('mysql');
+			$this->db=&$db;
+			if($db->Open(array(
+					$this->option['ZC_MYSQL_SERVER'],
+					$this->option['ZC_MYSQL_USERNAME'],
+					$this->option['ZC_MYSQL_PASSWORD'],
+					$this->option['ZC_MYSQL_NAME'],
+					$this->option['ZC_MYSQL_PRE']
+				))==false){
+				throw new Exception('MySQL数据库打不开啦！');
+			}
+
+		break;
+		case 'sqlite':
+			$db=DbFactory::Create('sqlite');
+			$GLOBALS['zbp']->db=&$db;
+			if($db->Open(array(
+				$this->path . $this->option['ZC_SQLITE_NAME'],
+				$this->option['ZC_SQLITE_PRE']
+				))==false){
+				throw new Exception('SQLite数据库打不开啦！');
+			}
+		break;
+		case 'sqlite3':
+			$this->db=DbFactory::Create('sqlite3');
+			if($this->db->Open(array(
+				$this->path . $this->option['ZC_SQLITE3_NAME'],
+				$this->option['ZC_SQLITE3_PRE']
+				))==false){
+				throw new Exception('SQLite3数据库打不开啦！');
+			}
+		break;
+		}
+		$isconnect=true;	
+	}
 
 	#初始化连接
 	public function Initialize(){
 
 		ActivePlugin();
 
-		switch ($this->option['ZC_DATABASE_TYPE']) {
-			case 'mysql':
-				$db=DbFactory::Create('mysql');
-				$this->db=&$db;
-				if($db->Open(array(
-						$this->option['ZC_MYSQL_SERVER'],
-						$this->option['ZC_MYSQL_USERNAME'],
-						$this->option['ZC_MYSQL_PASSWORD'],
-						$this->option['ZC_MYSQL_NAME'],
-						$this->option['ZC_MYSQL_PRE']
-					))==false){
-					throw new Exception('MySQL数据库打不开啦！');
-				}
-
-			break;
-			case 'sqlite':
-				$db=DbFactory::Create('sqlite');
-				$GLOBALS['zbp']->db=&$db;
-				if($db->Open(array(
-					$this->path . $this->option['ZC_SQLITE_NAME'],
-					$this->option['ZC_SQLITE_PRE']
-					))==false){
-					throw new Exception('SQLite数据库打不开啦！');
-				}
-			break;
-			case 'sqlite3':
-				$this->db=DbFactory::Create('sqlite3');
-				if($this->db->Open(array(
-					$this->path . $this->option['ZC_SQLITE3_NAME'],
-					$this->option['ZC_SQLITE3_PRE']
-					))==false){
-					throw new Exception('SQLite3数据库打不开啦！');
-				}
-			break;
-		}
-
+		$this->OpenConnect();
 		$this->LoadMembers();
 		$this->LoadCategorys();
 		$this->LoadTemplates();
 		$this->LoadCacheIncludes();
 		$this->LoadTemplateIncludes();
+		$this->LoadConfigs();		
 
 	}
 
@@ -120,7 +131,6 @@ class ZBlogPHP{
 	public function SaveConfig(){
 
 		$this->option['ZC_BLOG_CLSID']=$this->guid;
-
 
 		$s="<?php\r\n";
 		$s.="return ";
@@ -159,7 +169,6 @@ class ZBlogPHP{
 		foreach ($files as $sortname => $fullname) {
 			$this->cache_includes[$sortname]=file_get_contents($fullname);
 		}
-		var_dump($this->cache_includes);
 	}
 
 	public function LoadTemplateIncludes(){
@@ -168,7 +177,15 @@ class ZBlogPHP{
 		foreach ($files as $sortname => $fullname) {
 			$this->template_includes[$sortname]=file_get_contents($fullname);
 		}
-		var_dump($this->template_includes);
+	}
+
+	public function LoadConfigs(){
+
+		$s='SELECT * FROM %pre%Config';
+		$array=$this->db->Query($s);
+		foreach ($array as $c) {
+			$this->configs[$c['conf_Name']]=$c['conf_Value'];
+		}
 	}
 
 }

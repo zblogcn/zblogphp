@@ -10,7 +10,7 @@
 
 
 #定义总插件激活函数列表
-$Plugins=array();
+$plguins=array();
 
 
 
@@ -22,7 +22,7 @@ $Plugins=array();
 */
 function RegisterPlugin($strPluginName,$strPluginActiveFunction){
 
-	$GLOBALS['Plugins'][$strPluginName]=$strPluginActiveFunction;
+	$GLOBALS['plguins'][$strPluginName]=$strPluginActiveFunction;
 
 }
 
@@ -39,7 +39,7 @@ function RegisterPlugin($strPluginName,$strPluginActiveFunction){
 */
 function ActivePlugin(){
 
-	foreach ($GLOBALS['Plugins'] as &$sPluginActiveFunctions) {
+	foreach ($GLOBALS['plguins'] as &$sPluginActiveFunctions) {
 		$sPluginActiveFunctions();
 	}
 
@@ -103,7 +103,7 @@ function CheckPluginState($strPluginName){
 '*********************************************************
 */
 function Add_Action_Plugin($plugname,$actioncode){
-	array_push($GLOBALS[$plugname],$actioncode);
+	$GLOBALS[$plugname][]=$actioncode;
 }
 
 
@@ -116,8 +116,8 @@ function Add_Action_Plugin($plugname,$actioncode){
 		'functionname:要挂接的函数名
 '*********************************************************
 */
-function Add_Filter_Plugin($plugname,$functionname){
-	array_push($GLOBALS[$plugname],$functionname);
+function Add_Filter_Plugin($plugname,$functionname,$exitsignal=false){
+	$GLOBALS[$plugname][$functionname]=$exitsignal;
 }
 
 
@@ -130,12 +130,8 @@ function Add_Filter_Plugin($plugname,$functionname){
 		'parameter:要写入的内容
 '*********************************************************
 */
-Function Add_Response_Plugin($plugname,$parameter){
-	/*
-	On Error Resume Next
-	Call Execute(plugname & "=" & plugname & "&""" & Replace(Replace(Replace(Replace(parameter,"""",""""""),vbCrlf,"""&vbCrlf&"""),vbLf,"""&vbLf&"""),vbCr,"""&vbCr&""") & """")
-	Err.Clear
-	*/
+Function Add_Response_Plugin($plugname,$functionname){
+	$GLOBALS[$plugname][]=$functionname;
 }
 
 

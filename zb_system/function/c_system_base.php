@@ -16,10 +16,10 @@ ob_start();
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $cookiespath = null;
 $bloghost = null;
-$c_option = require_once($blogpath.'zb_users/c_option.php');	
-$c_lang = require_once($blogpath.'zb_users/language/'.$c_option['ZC_BLOG_LANGUAGEPACK'].'.php');
+$option = require_once($blogpath . 'zb_users/c_option.php');	
+$lang = require_once($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 
-#date_default_timezone_set($c_option['ZC_TIME_ZONE_NAME']);
+#date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 
 require_once $blogpath.'zb_system/function/c_system_debug.php';
 require_once $blogpath.'zb_system/function/c_system_common.php';
@@ -44,15 +44,15 @@ require_once $blogpath.'zb_system/function/c_system_lib_module.php';
 require_once $blogpath.'zb_system/function/c_system_lib_tag.php';
 require_once $blogpath.'zb_system/function/c_system_lib_upload.php';
 
-$zbp=new ZBlogPHP;
+$zbp=ZBlogPHP::GetInstance();
 
 /*include plugin*/
 #加载主题插件
-if (file_exists($filename=$blogpath.'zb_users/theme/'.$c_option['ZC_BLOG_THEME'].'/plugin/include.php')) {
+if (file_exists($filename=$blogpath.'zb_users/theme/'.$option['ZC_BLOG_THEME'].'/plugin/include.php')) {
 	require_once $filename;
 }
 #加载激活插件
-foreach (explode("|", $c_option['ZC_USING_PLUGIN_LIST']) as $plugin) {
+foreach (explode("|", $option['ZC_USING_PLUGIN_LIST']) as $plugin) {
 	if ($filename&&file_exists($filename=$blogpath.'zb_users/plugin/'.$plugin.'/include.php')) {
 		require_once $filename;
 	}
