@@ -13,19 +13,42 @@
 class BaseMember
 {
 
-	public $ID=null;
-	public $Guid=null;
-	public $Name=null;
-	public $Level=null;
-	public $Password=null;
-	public $Email=null;
-	public $HomePage=null;
-	public $Count=null;
-	public $Alias=null;
-	public $Intro=null;
-	public $PostTime=null;	
-	public $Template=null;
-	public $Meta=null;
+	static public $table='%pre%Member';
+
+	static public $datainfo=array(
+'ID'=>array('mem_','integer','',0),
+'Guid'=>array('mem_Guid','string',36,''),
+'Name'=>array('mem_Name','string',20,''),
+'Level'=>array('mem_Level','integer','',5),
+'Password'=>array('mem_Password','string',32,''),
+'Email'=>array('mem_Email','string',50,''),
+'HomePage'=>array('mem_HomePage','integer',250,''),
+'Count'=>array('mem_Count','integer','',''),
+'Alias'=>array('mem_Alias','string',250,''),
+'Intro'=>array('mem_Intro','string','',''),
+'PostTime'=>array('mem_PostTime','integer','',''),	
+'Template'=>array('mem_Template','string',50,''),
+'Meta'=>array('mem_Meta','string','',''),
+	);
+	
+	public $Data=array();
+	
+	function __construct(){
+		foreach (self::$datainfo as $key => $value) {
+			$Data[$key]=$value[3];
+		}
+	}
+
+    public function __set($name, $value) 
+    {
+		$this->Data[$name] = $value;
+    }
+
+    public function __get($name) 
+    {
+    	return $this->Data[$name];
+    }
+
 
 }
 
@@ -42,6 +65,7 @@ class Member extends BaseMember
 
 	function __construct()
 	{
+		parent::__construct();
 		$this->db = &$GLOBALS['zbp']->db;
 		$this->ID = 0;
 		$this->Count = 0;

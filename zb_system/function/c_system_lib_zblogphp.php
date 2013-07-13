@@ -57,10 +57,10 @@ class ZBlogPHP{
 	}
 
 	static public function GetInstance(){
-		if(!isset(ZBlogPHP::$_zbp)){
-			ZBlogPHP::$_zbp=new ZBlogPHP;
+		if(!isset(self::$_zbp)){
+			self::$_zbp=new ZBlogPHP;
 		}
-		return ZBlogPHP::$_zbp;
+		return self::$_zbp;
 	}
 
 
