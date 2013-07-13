@@ -18,6 +18,9 @@ function ActivePlugin_Default() {
 
 function Default_ListExport_Begin(&$page,&$cate,&$auth,&$date,&$tags){
 	$page='4444';
+	echo 'xxxxx3423';
+	$GLOBALS['Filter_Plugin_ListExport_Begin']['Default_ListExport_Begin']=true;
+	return null;
 }
 
 ?>

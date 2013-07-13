@@ -60,7 +60,7 @@ $TableSql_MySQL=array(
 ,
 "CREATE TABLE %pre%Config (conf_Name varchar(255) not null default '',conf_Value text default '') ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci"
 ,
-"CREATE TABLE %pre%Module (fn_ID integer primary key auto_increment,fn_Name varchar(50) default '',fn_FileName varchar(50) default '',fn_Order integer default 0,fn_Content text default '',fn_IsHidden bit default 0,fn_SidebarID integer default 0,fn_HtmlID varchar(50) default '',fn_Ftype varchar(5) default '',fn_MaxLi integer default 0,fn_Source varchar(50) default '',fn_ViewType varchar(50) default '',fn_IsHideTitle bit default 0,fn_Meta text default '') ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci"
+"CREATE TABLE %pre%Module (mod_ID integer primary key auto_increment,mod_Name varchar(50) default '',mod_FileName varchar(50) default '',mod_Order integer default 0,mod_Content text default '',mod_IsHidden bit default 0,mod_SidebarID integer default 0,mod_HtmlID varchar(50) default '',mod_Ftype varchar(5) default '',mod_MaxLi integer default 0,mod_Source varchar(50) default '',mod_ViewType varchar(50) default '',mod_IsHideTitle bit default 0,mod_Meta text default '') ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci"
 ,
 "CREATE INDEX %pre%log_PostTime on %pre%Article (log_PostTime)"
 ,
@@ -89,7 +89,7 @@ $TableSql_SQLite3=array(
 ,
 "CREATE TABLE %pre%Config (conf_Name varchar(255) not null default '',conf_Value text default '')"
 ,
-"CREATE TABLE %pre%Module (fn_ID integer primary key autoincrement,fn_Name varchar(50) default '',fn_FileName varchar(50) default '',fn_Order integer default 0,fn_Content text default '',fn_IsHidden bit default 0,fn_SidebarID integer default 0,fn_HtmlID varchar(50) default '',fn_Ftype varchar(5) default '',fn_MaxLi integer default 0,fn_Source varchar(50) default '',fn_ViewType varchar(50) default '',fn_IsHideTitle bit default 0,fn_Meta text default '')"
+"CREATE TABLE %pre%Module (mod_ID integer primary key autoincrement,mod_Name varchar(50) default '',mod_FileName varchar(50) default '',mod_Order integer default 0,mod_Content text default '',mod_IsHidden bit default 0,mod_SidebarID integer default 0,mod_HtmlID varchar(50) default '',mod_Ftype varchar(5) default '',mod_MaxLi integer default 0,mod_Source varchar(50) default '',mod_ViewType varchar(50) default '',mod_IsHideTitle bit default 0,mod_Meta text default '')"
 ,
 "CREATE INDEX %pre%log_PostTime on %pre%Article (log_PostTime)"
 ,
@@ -111,7 +111,7 @@ $TableSql_SQLite3=array(
 ,
 "CREATE UNIQUE INDEX %pre%mem_ID on %pre%Member (mem_ID)"
 ,
-"CREATE UNIQUE INDEX %pre%fn_ID on %pre%Module (fn_ID)"
+"CREATE UNIQUE INDEX %pre%mod_ID on %pre%Module (mod_ID)"
 );
 
 
@@ -134,7 +134,7 @@ $TableSql_SQLite=array(
 ,
 "CREATE TABLE %pre%Config (conf_Name varchar(255) not null default '',conf_Value text default '')"
 ,
-"CREATE TABLE %pre%Module (fn_ID integer primary key,fn_Name varchar(50) default '',fn_FileName varchar(50) default '',fn_Order integer default 0,fn_Content text default '',fn_IsHidden bit default 0,fn_SidebarID integer default 0,fn_HtmlID varchar(50) default '',fn_Ftype varchar(5) default '',fn_MaxLi integer default 0,fn_Source varchar(50) default '',fn_ViewType varchar(50) default '',fn_IsHideTitle bit default 0,fn_Meta text default '')"
+"CREATE TABLE %pre%Module (mod_ID integer primary key,mod_Name varchar(50) default '',mod_FileName varchar(50) default '',mod_Order integer default 0,mod_Content text default '',mod_IsHidden bit default 0,mod_SidebarID integer default 0,mod_HtmlID varchar(50) default '',mod_Ftype varchar(5) default '',mod_MaxLi integer default 0,mod_Source varchar(50) default '',mod_ViewType varchar(50) default '',mod_IsHideTitle bit default 0,mod_Meta text default '')"
 ,
 "CREATE INDEX %pre%log_PostTime on %pre%Article (log_PostTime)"
 ,
@@ -156,7 +156,7 @@ $TableSql_SQLite=array(
 ,
 "CREATE UNIQUE INDEX %pre%mem_ID on %pre%Member (mem_ID)"
 ,
-"CREATE UNIQUE INDEX %pre%fn_ID on %pre%Module (fn_ID)"
+"CREATE UNIQUE INDEX %pre%mod_ID on %pre%Module (mod_ID)"
 );
 
 
