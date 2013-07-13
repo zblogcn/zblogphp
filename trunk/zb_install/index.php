@@ -233,6 +233,11 @@ CheckServer();
     <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][1];?></td>
   </tr>
   <tr>
+    <td scope="row">pdo_mysql</td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][0];?></td>
+    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][1];?></td>
+  </tr>
+  <tr>
     <td scope="row">SQLite</td>
     <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0];?></td>
     <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
@@ -343,19 +348,28 @@ function Setup3(){
 <div id="content">
 <input type="hidden" name="dbtype" id="dbtype" value="mysql" />
 <p><b>类型选择</b>:
-  &nbsp;&nbsp;<label onClick="$('#sqlite').hide();$('#sqlite3').hide();$('#mysql').show();$('#dbtype').val('mysql');"><input type="radio" name="db" checked="checked" />MySQL</label>
-  &nbsp;&nbsp;<label onClick="$('#mysql').hide();$('#sqlite3').hide();$('#sqlite').show();$('#dbtype').val('sqlite');"<?php if(!$CheckResult['sqlite'][0]){ echo 'style=\'display:none;\''; }?>><input type="radio" name="db" />SQLite</label>
-  &nbsp;&nbsp;<label onClick="$('#mysql').hide();$('#sqlite').hide();$('#sqlite3').show();$('#dbtype').val('sqlite3');"<?php if(!$CheckResult['sqlite3'][0]){ echo 'style=\'display:none;\''; }?>><input type="radio" name="db" />SQLite3</label>  
+  &nbsp;&nbsp;<label class="dbselect" id="mysql_radio"><input type="radio" name="db" checked="checked" />MySQL</label>
+  &nbsp;&nbsp;<label class="dbselect" id="pdo_mysql_radio"<?php if(!$CheckResult['pdo_mysql'][0]){ echo 'style=\'display:none;\''; }?>><input type="radio" name="db" checked="checked" />pdo_mysql</label>
+  &nbsp;&nbsp;<label class="dbselect" id="sqlite_radio"<?php if(!$CheckResult['sqlite'][0]){ echo 'style=\'display:none;\''; }?>><input type="radio" name="db" />SQLite</label>
+  &nbsp;&nbsp;<label class="dbselect" id="sqlite3_radio"<?php if(!$CheckResult['sqlite3'][0]){ echo 'style=\'display:none;\''; }?>><input type="radio" name="db" />SQLite3</label>  
 </p>
-<div id="sqlite" style="display:none;">
+
+<div class="dbdetail" id="sqlite" style="display:none;">
 <p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo CreateDbName()?>" readonly style="width:350px;" /></p>
 <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" /></p>
 </div>
-<div id="sqlite3" style="display:none;">
+<div class="dbdetail" id="sqlite3" style="display:none;">
 <p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite3_name" id="dbsqlite3_name" value="<?php echo CreateDbName()?>" readonly style="width:350px;" /></p>
 <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite3_pre" id="dbsqlite3_pre" value="zbp_" style="width:350px;" /></p>
 </div>
-<div id="mysql">
+<div class="dbdetail" id="pdo_mysql" style="display:none">
+<p><b>数据库主机:</b><input type="text" name="dbmysql_server" id="dbmysql_server" value="localhost" style="width:350px;" /></p>
+<p><b>用户名称:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_username" id="dbmysql_username" value="" style="width:350px;" /></p>
+<p><b>用户密码:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_password" id="dbmysql_password" value="" style="width:350px;" /></p>
+<p><b>数据库名称:</b><input type="text" name="dbmysql_name" id="dbmysql_name" value="" style="width:350px;" /></p>
+<p><b>表&nbsp;前&nbsp;缀:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_pre" id="dbmysql_pre" value="zbp_" style="width:350px;" /></p>
+</div>
+<div class="dbdetail" id="mysql">
 <p><b>数据库主机:</b><input type="text" name="dbmysql_server" id="dbmysql_server" value="localhost" style="width:350px;" /></p>
 <p><b>用户名称:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_username" id="dbmysql_username" value="" style="width:350px;" /></p>
 <p><b>用户密码:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_password" id="dbmysql_password" value="" style="width:350px;" /></p>
@@ -373,6 +387,12 @@ function Setup3(){
 </div>
 </dd>
 </dl>
+<script type="text/javascript">
+$(".dbselect").click(function(){
+  $(".dbdetail").hide();
+  $("#"+$(this).attr("id").split("_radio")[0]).show();
+})
+</script>
 <?php
 }
 
@@ -464,6 +484,7 @@ $CheckResult=array(
   'zbppath' => array($GLOBALS['zbp']->path,''), 
  //组件
   'mysql' => array('',''), 
+  'pdo_mysql' => array('',''),
   'sqlite' => array('',''),
   'sqlite3' => array('',''),
   'gd2' => array('',''), 
@@ -498,6 +519,9 @@ $CheckResult=array(
   }
   if( function_exists("mysql_get_client_info") ){
     $CheckResult['mysql'][0]=mysql_get_client_info();
+  }
+  if( class_exists("PDO") ){
+    $CheckResult['pdo_mysql'][0]=PDO::ATTR_DRIVER_NAME;
   }
   if( function_exists("sqlite_libversion") ){
     $CheckResult['sqlite'][0]=sqlite_libversion();
