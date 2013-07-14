@@ -6,11 +6,11 @@
  * @version 2.0 2013-06-14
  */
 
-function ListExport($page,$cate,$auth,$date,$tags){
+function ViewList($page,$cate,$auth,$date,$tags){
 
-	foreach ($GLOBALS['Filter_Plugin_ListExport_Begin'] as $fpk => &$fpv) {
+	foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpk => &$fpv) {
 		$fpr=$fpk($page,$cate,$auth,$date,$tags);
-		if ($fpv) {return $fpr;}
+		if ($fpv==PLUGIN_EXITSIGNAL_RETURN) {return $fpr;}
 	}
 
 	$zbp=$GLOBALS['zbp'];
@@ -21,12 +21,12 @@ function ListExport($page,$cate,$auth,$date,$tags){
 
 }
 
-function ArticleExport(){
+function ViewArticle(){
 
 
 }
 
-function PageExport(){
+function ViewPage(){
 
 
 }

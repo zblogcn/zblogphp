@@ -12,7 +12,7 @@ if (!$zbp->option['ZC_DATABASE_TYPE']) {header('Location: ./zb_install/');}
 
 $zbp->Initialize();
 
-ListExport(GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'));
+ViewList(GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'));
 
 $zbp->Terminate();
 

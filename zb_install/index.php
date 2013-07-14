@@ -14,8 +14,12 @@
 
 require_once '../zb_system/function/c_system_base.php';
 
+#加载默认的c_option.php
+
+
 define('bingo','<span class="bingo"></span>');
 define('error','<span class="error"></span>');
+$option = require_once($blogpath . 'zb_system/defend/c_option.php');
 
 $zblogstep=GetVars('step')<>'' ? intval(GetVars('step')) : 0;
 if($zblogstep=="") { $zblogstep=1;}
@@ -346,12 +350,11 @@ function Setup3(){
 <dd id="ddright">
 <div id="title">数据库建立与设置</div>
 <div id="content">
-<input type="hidden" name="dbtype" id="dbtype" value="mysql" />
 <p><b>类型选择</b>:
-  &nbsp;&nbsp;<label class="dbselect" id="mysql_radio"><input type="radio" name="db" checked="checked" />MySQL</label>
-  &nbsp;&nbsp;<label class="dbselect" id="pdo_mysql_radio"<?php if(!$CheckResult['pdo_mysql'][0]){ echo 'style=\'display:none;\''; }?>><input type="radio" name="db" checked="checked" />pdo_mysql</label>
-  &nbsp;&nbsp;<label class="dbselect" id="sqlite_radio"<?php if(!$CheckResult['sqlite'][0]){ echo 'style=\'display:none;\''; }?>><input type="radio" name="db" />SQLite</label>
-  &nbsp;&nbsp;<label class="dbselect" id="sqlite3_radio"<?php if(!$CheckResult['sqlite3'][0]){ echo 'style=\'display:none;\''; }?>><input type="radio" name="db" />SQLite3</label>  
+  &nbsp;&nbsp;<label class="dbselect" id="mysql_radio"><input value="mysql" type="radio" name="dbtype" checked="checked"/>MySQL</label>
+  &nbsp;&nbsp;<label class="dbselect" id="pdo_mysql_radio"<?php if(!$CheckResult['pdo_mysql'][0]){ echo 'style=\'display:none;\''; }?>><input value="pdo_mysql" type="radio" name="dbtype" checked="checked" />pdo_mysql</label>
+  &nbsp;&nbsp;<label class="dbselect" id="sqlite_radio"<?php if(!$CheckResult['sqlite'][0]){ echo 'style=\'display:none;\''; }?>><input value="sqlite" type="radio" name="dbtype" />SQLite</label>
+  &nbsp;&nbsp;<label class="dbselect" id="sqlite3_radio"<?php if(!$CheckResult['sqlite3'][0]){ echo 'style=\'display:none;\''; }?>><input value="sqlite3" type="radio" name="dbtype" />SQLite3</label>  
 </p>
 
 <div class="dbdetail" id="sqlite" style="display:none;">
