@@ -8,10 +8,13 @@
 
 #接口模式复制自Z-Blog ASP版
 
+define('PLUGIN_EXITSIGNAL_NONE', '');
+define('PLUGIN_EXITSIGNAL_RETURN', 'return');
+define('PLUGIN_EXITSIGNAL_BREAK', 'break');
+
 
 #定义总插件激活函数列表
 $plguins=array();
-
 
 
 
@@ -114,9 +117,10 @@ function Add_Action_Plugin($plugname,$actioncode){
 ' 目的：挂上Filter接口
 ' 参数：'plugname:接口名称
 		'functionname:要挂接的函数名
+		'exitsignal:return,break,continue
 '*********************************************************
 */
-function Add_Filter_Plugin($plugname,$functionname,$exitsignal=false){
+function Add_Filter_Plugin($plugname,$functionname,$exitsignal=''){
 	$GLOBALS[$plugname][$functionname]=$exitsignal;
 }
 
@@ -143,13 +147,13 @@ Function Add_Response_Plugin($plugname,$functionname){
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_ListExport_Begin
+'名称:Filter_Plugin_ViewList_Begin
 '参数:
 '说明:定义列表输出接口
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_ListExport_Begin=array();
+$Filter_Plugin_ViewList_Begin=array();
 
 
 
