@@ -18,7 +18,7 @@ function error_handler($errno, $errstr, $errfile, $errline ){
 	//die();
 
 	ob_clean();		
-	$zbe=new ZblogException();
+	$zbe=ZBlogException::GetInstance();
 	$zbe->ParseError($errno, $errstr, $errfile, $errline);
 	$zbe->Display();
 	die();
@@ -31,7 +31,7 @@ function error_handler($errno, $errstr, $errfile, $errline ){
 function exception_handler($exception){
 
 	ob_clean();
-	$zbe=new ZblogException();
+	$zbe=ZBlogException::GetInstance();
 	$zbe->ParseException($exception);
 	$zbe->Display();
 	die();
@@ -44,7 +44,7 @@ function shutdown_error_handler(){
 	if ($error = error_get_last()) {
 
 		ob_clean();
-		$zbe=new ZblogException();
+		$zbe=ZBlogException::GetInstance();
 		$zbe->ParseShutdown($error);
 		$zbe->Display();
 		die();
@@ -55,13 +55,29 @@ function shutdown_error_handler(){
 /**
 * 
 */
-class ZblogException
+class ZBlogException
 {
-	
+	static private $_zbe=null;
 	public $type;
 	public $message;
 	public $file;
 	public $line;
+
+	static public function GetInstance(){
+		if(!isset(self::$_zbe)){
+			self::$_zbe=new ZBlogException;
+		}
+		return self::$_zbe;
+	}
+
+
+	static public function Trace($s){
+		$f=$GLOBALS['zbp']->path . $GLOBALS['zbp']->guid . '.txt';
+		$handle = fopen($f, 'a+');
+		fwrite($handle,date('c') . "~" . current(explode(" ", microtime()))  . ":" . $s . "\r");
+		fclose($handle);
+
+	}
 
 
 	function ParseError($type,$message,$file,$line){

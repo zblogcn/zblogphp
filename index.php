@@ -16,5 +16,7 @@ ViewList(GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVa
 
 $zbp->Terminate();
 
+ZBlogException::Trace('看看写入debug信息成功吧？');
+
 echo RunTime();
 ?>
