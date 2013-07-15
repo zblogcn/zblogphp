@@ -45,7 +45,7 @@ require_once $blogpath.'zb_system/function/c_system_lib_dbmysql.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite3.php';
 
-for($i=0,$i<=7,$i++){
+for($i = 0; $i <= 7; $i++){
 	require $blogpath.'zb_system/function/c_system_lib_' .$lib_array[$i]. '.php';
 }
 
