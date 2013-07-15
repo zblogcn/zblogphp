@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once './function/c_system_base.php';
 ?><!DOCTYPE HTML>
 <html>

@@ -120,7 +120,7 @@ class ZBlogException
 		$h=file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/error.html');
 		$h=str_replace('<#ZC_BLOG_HOST#>', $GLOBALS['bloghost'], $h);
 		$h=str_replace('<#ZC_BLOG_TITLE#>', $GLOBALS['option']['ZC_BLOG_TITLE'], $h);
-		$h=str_replace('<#BlogTitle#>', $GLOBALS['lang']['ZC_MSG045'], $h);		
+		$h=str_replace('<#BlogTitle#>', $GLOBALS['lang']['ZC_MSG']['045'], $h);		
 		$h=str_replace('<#ERROR#>', $e, $h);
 		echo $h;
 		echo RunTime();
