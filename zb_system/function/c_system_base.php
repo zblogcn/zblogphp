@@ -18,6 +18,7 @@ $cookiespath = null;
 $bloghost = null;
 $option = require_once($blogpath . 'zb_users/c_option.php');	
 $lang = require_once($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+$lib_array = array('base', 'article','category','comment','member','meta','module','tag','upload');
 
 date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 
@@ -44,17 +45,11 @@ require_once $blogpath.'zb_system/function/c_system_lib_dbmysql.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite3.php';
 
-require_once $blogpath.'zb_system/function/c_system_lib_article.php';
-require_once $blogpath.'zb_system/function/c_system_lib_category.php';
-require_once $blogpath.'zb_system/function/c_system_lib_comment.php';
-require_once $blogpath.'zb_system/function/c_system_lib_member.php';
-require_once $blogpath.'zb_system/function/c_system_lib_meta.php';
-require_once $blogpath.'zb_system/function/c_system_lib_module.php';
-require_once $blogpath.'zb_system/function/c_system_lib_tag.php';
-require_once $blogpath.'zb_system/function/c_system_lib_upload.php';
-require_once $blogpath.'zb_system/function/c_system_lib_base.php';
-$zbp=ZBlogPHP::GetInstance();
+for($i=0,$i<=7,$i++){
+	require $blogpath.'zb_system/function/c_system_lib_' .$lib_array[$i]. '.php';
+}
 
+$zbp=ZBlogPHP::GetInstance();
 /*include plugin*/
 #加载主题插件
 if (file_exists($filename=$blogpath.'zb_users/theme/'.$option['ZC_BLOG_THEME'].'/plugin/include.php')) {
