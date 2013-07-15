@@ -174,7 +174,6 @@ class ZBlogPHP{
 	}
 
 	public function LoadModules(){
-
 		$s='SELECT * FROM ' . BaseModule::$table;
 		$array=$this->db->Query($s);
 		foreach ($array as $ma) {
@@ -182,7 +181,6 @@ class ZBlogPHP{
 			$m->LoadInfoByAssoc($ma);
 			$this->modules[$m->ID]=$m;
 		}
-
 	}
 
 

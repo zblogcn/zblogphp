@@ -18,7 +18,6 @@ $cookiespath = null;
 $bloghost = null;
 $option = require_once($blogpath . 'zb_users/c_option.php');	
 $lang = require_once($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
-$lib_array = array('base', 'article','category','comment','member','meta','module','tag','upload');
 
 date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 
@@ -38,15 +37,15 @@ if(get_magic_quotes_gpc()){
 	_stripslashes($_COOKIE);
 }
 
-
 require_once $blogpath.'zb_system/function/c_system_lib_zblogphp.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbfactory.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbmysql.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite3.php';
 
-for($i = 0; $i <= 7; $i++){
-	require $blogpath.'zb_system/function/c_system_lib_' .$lib_array[$i]. '.php';
+$lib_array = array('base', 'article','category','comment','member','meta','module','tag','upload');
+foreach ($lib_array as $f) {
+	require_once $blogpath.'zb_system/function/c_system_lib_' .$f. '.php';
 }
 
 $zbp=ZBlogPHP::GetInstance();
