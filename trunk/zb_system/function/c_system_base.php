@@ -52,7 +52,7 @@ require_once $blogpath.'zb_system/function/c_system_lib_meta.php';
 require_once $blogpath.'zb_system/function/c_system_lib_module.php';
 require_once $blogpath.'zb_system/function/c_system_lib_tag.php';
 require_once $blogpath.'zb_system/function/c_system_lib_upload.php';
-
+require_once $blogpath.'zb_system/function/c_system_lib_base.php';
 $zbp=ZBlogPHP::GetInstance();
 
 /*include plugin*/

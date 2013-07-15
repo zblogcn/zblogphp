@@ -119,6 +119,7 @@ class ZBlogPHP{
 		$this->OpenConnect();
 		$this->LoadMembers();
 		$this->LoadCategorys();
+		$this->LoadModules();		
 
 		#if (file_exists('cache')) {
 		#	$this->templatetags=unserialize(file_get_contents('cache'));
@@ -159,7 +160,7 @@ class ZBlogPHP{
 
 	public function LoadMembers(){
 
-		$s='SELECT * FROM %pre%Member';
+		$s='SELECT * FROM ' . BaseMember::$table;
 		$array=$this->db->Query($s);
 		foreach ($array as $ma) {
 			$m=new Member();
@@ -170,6 +171,18 @@ class ZBlogPHP{
 	}
 
 	public function LoadCategorys(){
+	}
+
+	public function LoadModules(){
+
+		$s='SELECT * FROM ' . BaseModule::$table;
+		$array=$this->db->Query($s);
+		foreach ($array as $ma) {
+			$m=new Module();
+			$m->LoadInfoByAssoc($ma);
+			$this->modules[$m->ID]=$m;
+		}
+
 	}
 
 

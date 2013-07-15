@@ -73,7 +73,7 @@ class Member extends BaseMember
 
 	function LoadInfoByID($id){
 
-		$s="SELECT * FROM %pre%Member WHERE mem_ID=$id";
+		$s="SELECT * FROM " . self::$table . " WHERE mem_ID=$id";
 
 		$array=$this->db->Query($s);
 		if (count($array)>0) {
