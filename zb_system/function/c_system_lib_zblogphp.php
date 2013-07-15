@@ -125,12 +125,13 @@ class ZBlogPHP{
 		#	return;
 		#}
 
+		$this->LoadDefaultTemplates();
 		$this->LoadTemplates();
 		$this->LoadCacheIncludes();
 		$this->LoadTemplateIncludes();
 		$this->LoadConfigs();
+		$this->BuildSidebar();	
 		$this->BuildTemplatetags();
-
 		#$s=serialize($this->templatetags);
 		#file_put_contents('cache', $s);
 
@@ -170,6 +171,16 @@ class ZBlogPHP{
 
 	public function LoadCategorys(){
 	}
+
+
+	public function LoadDefaultTemplates(){
+		$dir=$this->path .'zb_system/defend/default/';
+		$files=GetFilesInDir($dir,'html');
+		foreach ($files as $sortname => $fullname) {
+			$this->templates[$sortname]=file_get_contents($fullname);
+		}
+	}
+
 
 	public function LoadTemplates(){
 		$dir=$this->path .'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/template/';
@@ -224,9 +235,16 @@ class ZBlogPHP{
 
 		$this->templatetags['ZC_BLOG_SUB_NAME']=&$this->templatetags['ZC_BLOG_SUBTITLE'];
 		$this->templatetags['ZC_BLOG_NAME']=&$this->templatetags['ZC_BLOG_TITLE'];
-
+		$this->templatetags['ZC_BLOG_PRODUCT_FULL']=$this->templatetags['ZC_BLOG_PRODUCT'] . ' ' . $this->templatetags['ZC_BLOG_VERSION'];
+		$this->templatetags['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title="RainbowSoft Z-BlogPHP">' . $this->templatetags['ZC_BLOG_PRODUCT_FULL'] . '</a>';
 		$this->templatetags['BlogTitle']=&$this->title;
 
+	}
+
+
+	public function BuildSidebar(){
+
+		
 	}
 
 }
