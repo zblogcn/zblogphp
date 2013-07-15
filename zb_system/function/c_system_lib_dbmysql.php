@@ -32,7 +32,8 @@ class DbMySQL implements iDataBase
 		if(!$db_link){
 			return false;
 		} else {
-			$this->db = $db_link;		
+			$this->db = $db_link;
+			mysql_query("SET NAMES 'utf8'",$db_link);
 			if(mysql_select_db($array[3], $this->db)){
 				$this->dbpre=$array[4];
 				return true;

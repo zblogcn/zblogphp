@@ -431,7 +431,6 @@ switch ($dbtype) {
             <li> 您的MySQL帐号密码是否正确？ </li>
             <li> 是否创建了'.GetVars('dbmysql_name','POST').'数据库？</li>
             </ul>
-
       ';
     }
     break;
@@ -501,7 +500,7 @@ $CheckResult=array(
   'upload'=>array('',''), 
   'c_option_php'=>array('',''), 
   //函数
-  'file_get_contents'=>array('用于从服务器下载文件',''),
+  'file_get_contents'=>array('用于连接应用中心',''),
   'gethostbyname'=>array('用于解析DNS',''),
   'xml_parser_create'=>array('用于处理XML',''),
   'fsockopen'=>array('用于打开文件','')
