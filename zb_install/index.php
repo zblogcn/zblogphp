@@ -570,7 +570,206 @@ function InsertInfo(){
 
   $mem->LoadInfobyArray(array(0,$guid,GetVars('username','POST'),'1',GetPassWordByGuid(GetVars('password','POST'),$guid),'','',0,'','',time(),'',''));
   $mem->Post();
-  $mem->Post();
+
+  
+$t=new Module();
+$t->Name="导航栏";
+$t->FileName="navbar";
+$t->IsHidden=0;
+$t->Source="system";
+$t->SidebarID=0;
+$t->Order=1;
+$t->Content='<li><a href="<#ZC_BLOG_HOST#>">首页</a></li><li><a href="<#ZC_BLOG_HOST#>tags.asp">标签</a></li><li id="menu-page-2"><a href="<#ZC_BLOG_HOST#>guestbook.html">留言本</a></li>';
+$t->HtmlID="divNavBar";
+$t->Ftype="ul";
+$t->Post();
+
+
+$t=new Module();
+$t->Name="日历";
+$t->FileName="calendar";
+$t->IsHidden=false;
+$t->Source="system";
+$t->SidebarID=1;
+$t->Order=2;
+$t->Content="";
+$t->HtmlID="divCalendar";
+$t->Ftype="div";
+$t->IsHideTitle=true;
+$t->Post();
+
+
+
+
+$t=new Module();
+$t->Name="控制面板";
+$t->FileName="controlpanel";
+$t->IsHidden=false;
+$t->Source="system";
+$t->SidebarID=1;
+$t->Order=3;
+$t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="<#ZC_BLOG_HOST#>zb_system/cmd.asp?act=login">[<#ZC_MSG009#>]</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="<#ZC_BLOG_HOST#>zb_system/cmd.asp?act=vrs">[<#ZC_MSG021#>]</a></span>';
+$t->HtmlID="divContorPanel";
+$t->Ftype="div";
+$t->Post();
+
+
+
+
+$t=new Module();
+$t->Name="网站分类";
+$t->FileName="catalog";
+$t->IsHidden=false;
+$t->Source="system";
+$t->SidebarID=1;
+$t->Order=4;
+$t->Content="";
+$t->HtmlID="divCatalog";
+$t->Ftype="ul";
+$t->Post();
+
+
+$t=new Module();
+$t->Name="搜索";
+$t->FileName="searchpanel";
+$t->IsHidden=false;
+$t->Source="system";
+$t->SidebarID=1;
+$t->Order=5;
+$t->Content='<form method="post" action="<#ZC_BLOG_HOST#>zb_system/cmd.asp?act=Search"><input type="text" name="edtSearch" id="edtSearch" size="12" /> <input type="submit" value="<#ZC_MSG087#>" name="btnPost" id="btnPost" /></form>';
+$t->HtmlID="divSearchPanel";
+$t->Ftype="div";
+$t->Post();
+
+
+$t=new Module();
+$t->Name="最新留言";
+$t->FileName="comments";
+$t->IsHidden=false;
+$t->Source="system";
+$t->SidebarID=1;
+$t->Order=6;
+$t->Content="";
+$t->HtmlID="divComments";
+$t->Ftype="ul";
+$t->Post();
+
+
+
+
+$t=new Module();
+$t->Name="文章归档";
+$t->FileName="archives";
+$t->IsHidden=true;
+$t->Source="system";
+$t->SidebarID=1;
+$t->Order=7;
+$t->Content="";
+$t->HtmlID="divArchives";
+$t->Ftype="ul";
+$t->Post();
+
+
+
+$t=new Module();
+$t->Name="站点统计";
+$t->FileName="statistics";
+$t->IsHidden=false;
+$t->Source="system";
+$t->SidebarID=0;
+$t->Order=8;
+$t->Content="";
+$t->HtmlID="divStatistics";
+$t->Ftype="ul";
+$t->Post();
+
+
+
+
+$t=new Module();
+$t->Name="网站收藏";
+$t->FileName="favorite";
+$t->IsHidden=false;
+$t->Source="system";
+$t->SidebarID=1;
+$t->Order=9;
+$t->Content='<li><a href="http://bbs.rainbowsof$t->org/" target="_blank">ZBlogger社区</a></li><li><a href="http://download.rainbowsof$t->org/" target="_blank">菠萝的海</a></li><li><a href="http://$t->qq.com/zblogcn" target="_blank">Z-Blog微博</a></li>';
+$t->HtmlID="divFavorites";
+$t->Ftype="ul";
+$t->Post();
+
+
+
+
+$t=new Module();
+$t->Name="友情链接";
+$t->FileName="link";
+$t->IsHidden=false;
+$t->Source="system";
+$t->SidebarID=1;
+$t->Order=10;
+$t->Content='<li><a href="http://www.dbshos$t->cn/" target="_blank" title="独立博客服务 Z-Blog官方主机">DBS主机</a></li><li><a href="http://www.dutory.com/blog/" target="_blank">Dutory官方博客</a></li>';
+$t->HtmlID="divLinkage";
+$t->Ftype="ul";
+$t->Post();
+
+
+
+$t=new Module();
+$t->Name="图标汇集";
+$t->FileName="misc";
+$t->IsHidden=false;
+$t->Source="system";
+$t->SidebarID=1;
+$t->Order=11;
+$t->Content='<li><a href="http://www.rainbowsoft.org/" target="_blank"><img src="<#ZC_BLOG_HOST#>zb_system/image/logo/zblog.gif" height="31" width="88" alt="RainbowSoft Studio Z-Blog" /></a></li><li><a href="<#ZC_BLOG_HOST#>feed.asp" target="_blank"><img src="<#ZC_BLOG_HOST#>zb_system/image/logo/rss.png" height="31" width="88" alt="订阅本站的 RSS 2.0 新闻聚合" /></a></li>';
+$t->HtmlID="divMisc";
+$t->Ftype="ul";
+$t->Post();
+
+
+
+
+$t=new Module();
+$t->Name="作者列表";
+$t->FileName="authors";
+$t->IsHidden=false;
+$t->Source="system";
+$t->SidebarID=0;
+$t->Order=12;
+$t->Content="";
+$t->HtmlID="divAuthors";
+$t->Ftype="ul";
+$t->Post();
+
+
+
+
+$t=new Module();
+$t->Name="最近发表";
+$t->FileName="previous";
+$t->IsHidden=false;
+$t->Source="system";
+$t->SidebarID=0;
+$t->Order=13;
+$t->Content="";
+$t->HtmlID="divPrevious";
+$t->Ftype="ul";
+$t->Post();
+
+
+
+$t=new Module();
+$t->Name="Tags列表";
+$t->FileName="tags";
+$t->IsHidden=false;
+$t->Source="system";
+$t->SidebarID=0;
+$t->Order=14;
+$t->Content="";
+$t->HtmlID="divTags";
+$t->Ftype="ul";
+$t->Post();
 
 }
 function SaveConfig(){
