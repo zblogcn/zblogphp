@@ -42,6 +42,8 @@ require_once $blogpath.'zb_system/function/c_system_lib_dbfactory.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbmysql.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite3.php';
+//以后修改
+//require_once $blogpath.'zb_system/function/c_system_lib_db' .$option['ZC_DATABASE_TYPE']. '.php';
 
 $lib_array = array('base', 'article','category','comment','member','meta','module','tag','upload');
 foreach ($lib_array as $f) {
