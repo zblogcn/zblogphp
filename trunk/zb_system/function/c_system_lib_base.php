@@ -92,7 +92,7 @@ abstract class Base
 				if ($value[1]=='string') {
 					$a[]=$value[0] . '=\'' . addslashes($this->$key) . '\'';
 				}elseif ($value[1]=='boolean') {
-					$a[]=(integer)$this->$key;
+					$a[]=$value[0] . '=' . (integer)$this->$key;
 				}else{
 					$a[]=$value[0] . '=' . $this->$key;	
 				}
