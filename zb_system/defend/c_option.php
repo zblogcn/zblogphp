@@ -62,6 +62,8 @@ return array(
 	'ZC_MULTI_DOMAIN_SUPPORT' => False,
 
 	// '当前 Z-Blog 版本
+	
+	'ZC_BLOG_PRODUCT' => 'Z-BlogPHP',	
 	'ZC_BLOG_VERSION' => '1.0 Beta Build 130707',
 
 
