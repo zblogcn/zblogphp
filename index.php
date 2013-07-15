@@ -12,11 +12,15 @@ if (!$zbp->option['ZC_DATABASE_TYPE']) {header('Location: ./zb_install/');}
 
 $zbp->Initialize();
 
+foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpk => &$fpv) {
+	$fpr=$fpk($page,$cate,$auth,$date,$tags);
+}
+
 ViewList(GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'));
 
 $zbp->Terminate();
 
-ZBlogException::Trace('看看写入debug信息成功吧？');
+#ZBlogException::Trace('看看写入debug信息成功吧？');
 
 echo RunTime();
 ?>

@@ -27,6 +27,8 @@ class ZBlogPHP{
 	public $configs=array();
 	public $cache_includes=array();
 	public $template_includes=array();
+	public $templatetags=array();	
+	public $title=null;
 	
 	function __construct() {
 
@@ -41,6 +43,8 @@ class ZBlogPHP{
 		}else{
 			$this->guid=$this->option['ZC_BLOG_CLSID'];
 		}
+
+		$this->option['ZC_BLOG_HOST']=&$GLOBALS['bloghost'];
 		//define();
 	}
 
@@ -111,13 +115,25 @@ class ZBlogPHP{
 
 		ActivePlugin();
 
+
 		$this->OpenConnect();
 		$this->LoadMembers();
 		$this->LoadCategorys();
+
+		#if (file_exists('cache')) {
+		#	$this->templatetags=unserialize(file_get_contents('cache'));
+		#	return;
+		#}
+
 		$this->LoadTemplates();
 		$this->LoadCacheIncludes();
 		$this->LoadTemplateIncludes();
-		$this->LoadConfigs();		
+		$this->LoadConfigs();
+		$this->BuildTemplatetags();
+
+		#$s=serialize($this->templatetags);
+		#file_put_contents('cache', $s);
+
 
 	}
 
@@ -186,6 +202,31 @@ class ZBlogPHP{
 		foreach ($array as $c) {
 			$this->configs[$c['conf_Name']]=$c['conf_Value'];
 		}
+	}
+
+	public function BuildTemplatetags(){
+
+		foreach ($this->templates as $key => $value) {
+			$this->templatetags['TEMPLATE_' . strtoupper($key)]=$value;
+		}
+
+		foreach ($this->cache_includes as $key => $value) {
+			$this->templatetags['CACHE_INCLUDE_' . strtoupper($key)]=$value;
+		}	
+
+		foreach ($this->option as $key => $value) {
+			$this->templatetags[strtoupper($key)]=$value;
+		}
+
+		foreach ($this->lang['ZC_MSG'] as $key => $value) {
+			$this->templatetags['ZC_MSG' . $key]=$value;
+		}
+
+		$this->templatetags['ZC_BLOG_SUB_NAME']=&$this->templatetags['ZC_BLOG_SUBTITLE'];
+		$this->templatetags['ZC_BLOG_NAME']=&$this->templatetags['ZC_BLOG_TITLE'];
+
+		$this->templatetags['BlogTitle']=&$this->title;
+
 	}
 
 }

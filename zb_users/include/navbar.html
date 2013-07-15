@@ -1,0 +1,1 @@
+﻿<li><a href="<#ZC_BLOG_HOST#>">首页</a></li><li><a href="<#ZC_BLOG_HOST#>tags.asp">标签</a></li><li id="menu-page-2"><a href="<#ZC_BLOG_HOST#>guestbook.html">留言本</a></li>

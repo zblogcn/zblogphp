@@ -1,0 +1,1 @@
+﻿<form method="post" action="<#ZC_BLOG_HOST#>zb_system/cmd.asp?act=Search"><input type="text" name="edtSearch" id="edtSearch" size="12" />&nbsp;&nbsp;<input type="submit" value="<#ZC_MSG087#>" name="btnPost" id="btnPost" /></form>
