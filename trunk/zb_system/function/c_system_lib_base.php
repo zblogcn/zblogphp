@@ -111,6 +111,7 @@ abstract class Base
 $table=array('Module'=> '%pre%Module');
 $datainfo=array('Module'=> array(
 'ID'=>array('mod_ID','integer','',0),
+'Name'=>array('mod_Name','string',50,''),
 'FileName'=>array('mod_FileName','string',50,''),
 'Order'=>array('mod_Order','integer','',0),
 'Content'=>array('mod_Content','string','',''),
