@@ -30,7 +30,7 @@ if($zblogstep=="") { $zblogstep=1;}
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-  <meta name="generator" content="Z-Blog <?=$zbp->option['ZC_BLOG_VERSION']?>" />
+  <meta name="generator" content="Z-Blog <?php echo $zbp->option['ZC_BLOG_VERSION']?>" />
   <meta name="robots" content="noindex,nofollow"/>
   <script src="../zb_system/script/common.js" type="text/javascript"></script>
   <script src="../zb_system/script/c_admin_js_add.php" type="text/javascript"></script>
@@ -38,7 +38,7 @@ if($zblogstep=="") { $zblogstep=1;}
   <script src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
   <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css"  type="text/css" media="screen" />
   <link rel="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
-  <title>Z-BlogPHP <?=$zbp->option['ZC_BLOG_VERSION']?> 安装程序</title>
+  <title>Z-BlogPHP <?php echo $zbp->option['ZC_BLOG_VERSION']?> 安装程序</title>
 </head>
 <body>
 	<div class="setup"><form method="post" action="?step=<?php echo $zblogstep+1;?>">
@@ -130,7 +130,7 @@ function Setup1(){
 <p><b>安装协议</b> » 环境检查 » 数据库建立与设置 » 安装结果</p>
 </dd>
 <dd id="ddright">
-<div id="title">Z-BlogPHP <?=$GLOBALS['zbp']->option['ZC_BLOG_VERSION']?> 安装协议</div>
+<div id="title">Z-BlogPHP <?php echo $GLOBALS['zbp']->option['ZC_BLOG_VERSION']?> 安装协议</div>
 <div id="content">
   <textarea readonly>
 Z-BlogPHP  最终用户授权协议 
