@@ -40,6 +40,7 @@ if(get_magic_quotes_gpc()){
 require_once $blogpath.'zb_system/function/c_system_lib_zblogphp.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbfactory.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbmysql.php';
+require_once $blogpath.'zb_system/function/c_system_lib_dbpdo_mysql.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite3.php';
 //以后修改

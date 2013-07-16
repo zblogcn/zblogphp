@@ -422,6 +422,7 @@ $db=DbFactory::Create($dbtype);
 $GLOBALS['zbp']->db=&$db;
 switch ($dbtype) {
   case 'mysql':
+  case 'pdo_mysql':
     $array=array(GetVars('dbmysql_server','POST'),GetVars('dbmysql_username','POST'),GetVars('dbmysql_password','POST'),GetVars('dbmysql_name','POST'),GetVars('dbmysql_pre','POST'));
     if($db->Open($array)){
     } else {

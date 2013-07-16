@@ -74,7 +74,8 @@ class ZBlogPHP{
 
 		switch ($this->option['ZC_DATABASE_TYPE']) {
 		case 'mysql':
-			$db=DbFactory::Create('mysql');
+		case 'pdo_mysql':
+			$db=DbFactory::Create($this->option['ZC_DATABASE_TYPE']);
 			$this->db=&$db;
 			if($db->Open(array(
 					$this->option['ZC_MYSQL_SERVER'],

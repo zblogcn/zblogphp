@@ -1,0 +1,87 @@
+<?php
+/**
+ * Z-Blog with PHP
+ * @author 
+ * @copyright (C) RainbowSoft Studio
+ * @version 2.0 2013-06-14
+ */
+
+/**
+* 
+*/
+class Dbpdo_MySQL implements iDataBase
+{
+	
+	public $dbpre = null;
+	private $db = null;
+
+	function __construct()
+	{
+		# code...
+	}
+
+	function Open($array){
+		/*$array=array(
+		GetVars('dbmysql_server','POST'),
+		GetVars('dbmysql_username','POST'),
+		GetVars('dbmysql_password','POST'),
+		GetVars('dbmysql_name','POST'),
+		GetVars('dbmysql_pre','POST'));
+		*/
+
+		//new PDO(DB_TYPE.':host='.DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASSWD);
+		$db_link = new PDO('mysql:host='.$array[0].';dbname='.$this->db,$array[1],$array[2]);
+		$db_link->query('set names utf8;');
+		$this->db = $db_link;		
+		$this->dbpre=$array[4];
+		return true;
+		
+
+
+
+	}
+
+	function Close(){
+
+	}
+
+	function CreateTable(){
+		foreach ($GLOBALS['TableSql_MySQL'] as $s) {
+			$s=str_replace('%pre%', $this->dbpre, $s);
+			$this->db->exec($s);
+		}
+	}
+
+	function Query($query){
+
+		$query=str_replace('%pre%', $this->dbpre, $query);
+echo $query;
+exit();
+		$result = $this->db->query($query);
+		// 遍历出来
+
+		//fetch || fetchAll
+
+		$data = $result->fetchAll();
+		return $data;
+
+	}
+
+	function Update($query){
+		$query=str_replace('%pre%', $this->dbpre, $query);
+		mysql_query($query);
+	}
+
+	function Delete($query){
+
+	}
+
+	function Insert($query){
+		$query=str_replace('%pre%', $this->dbpre, $query);
+		$this->db->exec($query);
+		return $this->db->lastInsertId();
+	}
+
+}
+
+?>
