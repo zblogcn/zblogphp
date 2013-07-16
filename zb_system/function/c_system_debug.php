@@ -108,17 +108,8 @@ class ZBlogException
 
 	function Display(){
 
-		$e='';
-		$e.= '类别:<br/>'.$this->type;
-		$e.= "<hr/>";
-		$e.= '信息:<br/>'.$this->message;
-		$e.= "<hr/>";
-		$e.= '文件:<br/>'.$this->file;
-		$e.= "<hr/>";
-		$e.= '位置:<br/>'.$this->line;		
-
 		include $GLOBALS['blogpath'] . 'zb_system/defend/error.html';
-		
+
 	}
 
 	function get_code($file, $line) {
