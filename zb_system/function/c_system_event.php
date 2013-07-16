@@ -30,4 +30,22 @@ function ViewPage(){
 
 
 }
+
+function Login(){
+	global $zbp;
+
+	if (isset($zbp->membersbyname[GetVars('username')])) {
+		$m=$zbp->membersbyname[GetVars('username')];
+		if($m->Password == md5(GetVars('password') . $m->Guid)){
+			header('Location:admin/');
+		}else{
+			throw new Exception("用户密码错误！");
+		}
+	}else{
+		throw new Exception("用户不存在！");
+		
+	}
+
+}
+
 ?>

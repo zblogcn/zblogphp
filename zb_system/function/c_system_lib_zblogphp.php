@@ -18,7 +18,7 @@ class ZBlogPHP{
 	public $guid=null;
 
 	public $members=array();
-	#public $members_name=array();
+	public $membersbyname=array();
 	public $categorys=array();
 	public $tags=array();
 	public $modules=array();
@@ -168,7 +168,7 @@ class ZBlogPHP{
 			$m=new Member();
 			$m->LoadInfoByAssoc($ma);
 			$this->members[$m->ID]=$m;
-			#$this->membersbyname[$m->Name]=&$m;
+			$this->membersbyname[$m->Name]=&$m;
 		}
 	}
 
@@ -282,8 +282,6 @@ class ZBlogPHP{
 				$this->sidebars[($k+1)] .=$f ;
 			}
 		}
-#var_dump($this->sidebars);
-		#die();
 
 	}
 
