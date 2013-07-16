@@ -203,5 +203,6 @@ return array(
 	//The default language of uEditor
 	//The language files will be loaded from ue-lang\ZC_EDITORLANG by editor.
 	'ZC_EDITORLANG'=>'zh-cn',
+	'ZC_DEBUGMODE' => true
 );
 ?>
