@@ -41,6 +41,53 @@ class DbFactory #extends AnotherClass
 
 
 
+$table=array(
+
+'Module'=> '%pre%Module',
+'Member'=> '%pre%Member',
+
+);
+
+
+$datainfo=array(
+	
+'Module'=> array(
+	'ID'=>array('mod_ID','integer','',0),
+	'Name'=>array('mod_Name','string',50,''),
+	'FileName'=>array('mod_FileName','string',50,''),
+	'Order'=>array('mod_Order','integer','',0),
+	'Content'=>array('mod_Content','string','',''),
+	'IsHidden'=>array('mod_IsHidden','boolean','',0),
+	'SidebarID'=>array('mod_SidebarID','integer','',0),
+	'HtmlID'=>array('mod_HtmlID','string',50,''),
+	'Ftype'=>array('mod_Ftype','string',5,''),
+	'MaxLi'=>array('mod_MaxLi','integer','',0),
+	'Source'=>array('mod_Source','string',50,''),
+	'ViewType'=>array('mod_ViewType','string',50,''),
+	'IsHideTitle'=>array('mod_IsHideTitle','boolean','',0),
+	'Meta'=>array('mod_Meta','string','',''),
+	),
+'Member'=> array(
+	'ID'=>array('mem_ID','integer','',0),
+	'Guid'=>array('mem_Guid','string',36,''),
+	'Name'=>array('mem_Name','string',20,''),
+	'Level'=>array('mem_Level','integer','',5),
+	'Password'=>array('mem_Password','string',32,''),
+	'Email'=>array('mem_Email','string',50,''),
+	'HomePage'=>array('mem_HomePage','string',250,''),
+	'Count'=>array('mem_Count','integer','',0),
+	'Alias'=>array('mem_Alias','string',250,''),
+	'Intro'=>array('mem_Intro','string','',''),
+	'PostTime'=>array('mem_PostTime','integer','',0),	
+	'Template'=>array('mem_Template','string',50,''),
+	'Meta'=>array('mem_Meta','string','',''),
+	),
+
+
+);
+
+
+
 $TableSql_MySQL=array(
 "CREATE TABLE %pre%Tag (tag_ID integer primary key auto_increment,tag_Name varchar(255) default '',tag_Intro text default '',tag_ParentID integer default 0,tag_Alias varchar(255) default '',tag_Order integer default 0,tag_Count integer default 0,tag_Template varchar(50) default '',tag_Url varchar(255) default '',tag_Meta text default '') ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci"
 ,

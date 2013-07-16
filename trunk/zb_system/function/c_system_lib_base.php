@@ -6,9 +6,8 @@
  * @version 2.0 2013-06-14
  */
 
-
 /**
-* BaseMember
+* BaseClass
 */
 abstract class Base
 {
@@ -103,45 +102,6 @@ abstract class Base
 		}
 
 
-	}
-
-
-}
-
-$table=array('Module'=> '%pre%Module');
-$datainfo=array('Module'=> array(
-'ID'=>array('mod_ID','integer','',0),
-'Name'=>array('mod_Name','string',50,''),
-'FileName'=>array('mod_FileName','string',50,''),
-'Order'=>array('mod_Order','integer','',0),
-'Content'=>array('mod_Content','string','',''),
-'IsHidden'=>array('mod_IsHidden','boolean','',0),
-'SidebarID'=>array('mod_SidebarID','integer','',0),
-'HtmlID'=>array('mod_HtmlID','string',50,''),
-'Ftype'=>array('mod_Ftype','string',5,''),
-'MaxLi'=>array('mod_MaxLi','integer','',0),
-'Source'=>array('mod_Source','string',50,''),
-'ViewType'=>array('mod_ViewType','string',50,''),
-'IsHideTitle'=>array('mod_IsHideTitle','boolean','',0),
-'Meta'=>array('mod_Meta','string','',''),
-	));
-
-
-class Module extends Base{
-
-
-	function __construct()
-	{
-		$this->table=&$GLOBALS['table']['Module'];	
-		$this->datainfo=&$GLOBALS['datainfo']['Module'];
-
-		foreach ($this->datainfo as $key => $value) {
-			$this->Data[$key]=$value[3];
-		}
-
-		$this->db = &$GLOBALS['zbp']->db;
-		$this->ID = 0;
-		$this->Order = 0;
 	}
 
 

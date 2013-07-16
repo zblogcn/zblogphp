@@ -22,6 +22,7 @@ class ZBlogPHP{
 	public $categorys=array();
 	public $tags=array();
 	public $modules=array();
+	public $modules_filename=array();
 	public $sidebars=array(1=>'',2=>'',3=>'',4=>'',5=>'');
 	public $templates=array();
 	public $configs=array();
@@ -161,7 +162,7 @@ class ZBlogPHP{
 
 	public function LoadMembers(){
 
-		$s='SELECT * FROM ' . BaseMember::$table;
+		$s='SELECT * FROM ' . $GLOBALS['table']['Member'];
 		$array=$this->db->Query($s);
 		foreach ($array as $ma) {
 			$m=new Member();
@@ -172,15 +173,17 @@ class ZBlogPHP{
 	}
 
 	public function LoadCategorys(){
+
 	}
 
 	public function LoadModules(){
-		$s='SELECT * FROM ' . BaseModule::$table;
+		$s='SELECT * FROM ' . $GLOBALS['table']['Module'];
 		$array=$this->db->Query($s);
 		foreach ($array as $ma) {
 			$m=new Module();
 			$m->LoadInfoByAssoc($ma);
 			$this->modules[$m->ID]=$m;
+			$this->modulesbyfilename[$m->FileName]=&$m;
 		}
 	}
 
@@ -229,6 +232,14 @@ class ZBlogPHP{
 
 	public function BuildTemplatetags(){
 
+		
+
+		$this->templatetags['template:sidebar'] =$this->sidebars[1];
+		$this->templatetags['template:sidebar2']=$this->sidebars[2];
+		$this->templatetags['template:sidebar3']=$this->sidebars[3];
+		$this->templatetags['template:sidebar4']=$this->sidebars[4];	
+		$this->templatetags['template:sidebar5']=$this->sidebars[5];
+
 		foreach ($this->templates as $key => $value) {
 			$this->templatetags['TEMPLATE_' . strtoupper($key)]=$value;
 		}
@@ -256,7 +267,24 @@ class ZBlogPHP{
 
 	public function BuildSidebar(){
 
-		
+		$s=array($this->option['ZC_SIDEBAR_ORDER'],
+				$this->option['ZC_SIDEBAR_ORDER2'],
+				$this->option['ZC_SIDEBAR_ORDER3'],
+				$this->option['ZC_SIDEBAR_ORDER4'],
+				$this->option['ZC_SIDEBAR_ORDER5'] );
+
+
+		foreach ($s as $k =>$v) {
+			$a=explode(':', $v);
+			foreach ($a as $v2) {
+				$f=$this->templates['b_function'];
+				$f=str_replace('<#function/content#>', '<#CACHE_INCLUDE_' . strtoupper($v2) . '#>', $f);
+				$this->sidebars[($k+1)] .=$f ;
+			}
+		}
+#var_dump($this->sidebars);
+		#die();
+
 	}
 
 }
