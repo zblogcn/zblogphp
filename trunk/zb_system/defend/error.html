@@ -4,23 +4,70 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 	<meta name="robots" content="noindex,nofollow"/>
-	<title><#ZC_BLOG_TITLE#>-<#BlogTitle#></title>
-	<link rel="stylesheet" rev="stylesheet" href="<#ZC_BLOG_HOST#>zb_system/css/admin.css" type="text/css" media="screen" />
+	<title><?php echo $GLOBALS['option']['ZC_BLOG_TITLE'] ?>-<?php echo $GLOBALS['lang']['ZC_MSG']['045'] ?></title>
+	<link rel="stylesheet" rev="stylesheet" href="<?php echo $GLOBALS['bloghost']?>zb_system/css/admin.css" type="text/css" media="screen" />
+	<script type="text/javascript" src="<?php echo $GLOBALS['bloghost']?>zb_system/script/common.js"></script>
+	<style type="text/css">
+	.content div{
+	}
+	</style>
 </head>
 <body class="short">
 
 <div class="bg">
 <div id="wrapper">
-  <div class="logo"><img src="<#ZC_BLOG_HOST#>zb_system/image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></div>
+  <div class="logo"><img src="<?php echo $GLOBALS['bloghost']?>zb_system/image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></div>
   <div class="login">
 	<form id="frmLogin" method="post" action="">
 	  <div class="divHeader">错误提示</div>
-<#ERROR#>
-<p style='text-align:right;'><a href="<#ZC_BLOG_HOST#>">返回</a></p>
+	  <div class="content">
+	 	<div>错误信息<hr/><?php echo '(' . $this->type . ')     ' . $this->message?></div>
+	 	<br/>  <!-- 不会弄CSS 猪快来弄-->
+	 	<?php if($GLOBALS['option']['ZC_DEBUGMODE']){?>
+	 	<div>文件位置<hr/>
+	 	<?php echo $this->file ?>
+	 	<table cellspacing="0" width="100%">
+	 	<tbody>
+		 	<?php
+		 		$aFile = $this->get_code($this->file,$this->line);
+		 		foreach ($aFile as $iInt => $sData) {
+		 	?>
+		 		<tr<?php echo($iInt+1 == $this->line?' style="background:#75BAFF"':'')?>>
+		 			<td width="40"><?php echo $iInt+1 ?></td>
+		 			<td><?php echo $sData?></td>
+		 		</tr>
+		 	<?php
+		 		}
+		 	?>
+		</tbody>
+	 	</table>
+	 	</div>
+	 	</br/>
+	 	<div>请求数据<hr/>
+	 	<?php echo '$_GET = '.print_r($_GET, 1) ?><br/>
+	 	<?php echo '$_POST = '.print_r($_POST, 1) ?><br/>
+		<?php echo '$_COOKIE = '.print_r($_COOKIE, 1) ?>
+	 	</div>
+	 	<br/>
+	 	<div>引用文件<hr/>
+	 	<table cellspacing="0" width="100%">
+	 	<tbody>
+		<?php foreach(get_included_files() as $iInt => $sData) {?>	
+			<tr><td width="40"><?php echo $iInt?></td><td><?php echo $sData;?></td></tr>
+		<?php }	?>
+		</tbody>
+		</table>
+	 	</div>
+	 	<?php } ?>
+	  </div>
+
+	<p style='text-align:right;'><a href="javascript:history.back(-1)">返回</a> &nbsp; <a href="javascript:location.reload()">刷新</a></p>
 
     </form>
   </div>
 </div>
 </div>
+<script type="text/javascript">
+</script>
 </body>
 </html>

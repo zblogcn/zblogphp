@@ -99,5 +99,6 @@ return array (
   'ZC_SIDEBAR_ORDER4' => '',
   'ZC_SIDEBAR_ORDER5' => '',
   'ZC_EDITORLANG' => 'zh-cn',
+  'ZC_DEBUGMODE' => true
 )
 ?>
