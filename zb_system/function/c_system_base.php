@@ -11,6 +11,9 @@
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 
+@ini_set('magic_quotes_runtime',0);
+@ini_set('magic_quotes_gpc',0);
+
 ob_start();
 
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
@@ -29,8 +32,6 @@ require_once $blogpath.'zb_system/function/c_system_event.php';
 $cookiespath = null;
 $bloghost = GetCurrentHost($cookiespath);
 
-@ini_set('magic_quotes_runtime',0);
-@ini_set('magic_quotes_gpc',0);
 if(get_magic_quotes_gpc()){
 	_stripslashes($_GET);
 	_stripslashes($_POST);

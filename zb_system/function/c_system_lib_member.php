@@ -7,9 +7,37 @@
  */
 
 
-/**
-* BaseMember
-*/
+
+class Member extends Base{
+
+
+	function __construct()
+	{
+		$this->table=&$GLOBALS['table']['Member'];	
+		$this->datainfo=&$GLOBALS['datainfo']['Member'];
+
+		foreach ($this->datainfo as $key => $value) {
+			$this->Data[$key]=$value[3];
+		}
+
+		$this->db = &$GLOBALS['zbp']->db;
+		$this->ID = 0;
+		$this->Count = 0;
+		$this->Level = 0;
+	}
+
+
+}
+
+
+
+
+
+
+
+
+
+/*
 class BaseMember
 {
 
@@ -54,9 +82,7 @@ class BaseMember
 
 
 
-/**
-* Member
-*/
+
 class Member extends BaseMember
 {
 
@@ -129,7 +155,7 @@ $this->PostTime,
 '$this->Meta'
 )
 sql;
-*/
+
 			$s="INSERT INTO " . self::$table . " (";
 			$a=array();
 			foreach (self::$datainfo as $key => $value) {
@@ -172,7 +198,7 @@ mem_Meta='$this->Meta'
 WHERE 
 mem_ID=$this->ID
 sql;
-*/
+
 			$s="UPDATE " . self::$table . " SET ";
 			$a=array();
 			foreach (self::$datainfo as $key => $value) {
@@ -193,5 +219,9 @@ sql;
 
 	}
 }
+*/
+
+
+
 
 ?>

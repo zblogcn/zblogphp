@@ -579,7 +579,7 @@ function InsertInfo(){
   $t->Source="system";
   $t->SidebarID=0;
   $t->Order=1;
-  $t->Content='<li><a href="<#ZC_BLOG_HOST#>">首页</a></li><li><a href="<#ZC_BLOG_HOST#>tags.asp">标签</a></li><li id="menu-page-2"><a href="<#ZC_BLOG_HOST#>guestbook.html">留言本</a></li>';
+  $t->Content='<li><a href="<#ZC_BLOG_HOST#>">首页</a></li><li><a href="<#ZC_BLOG_HOST#>tags.php">标签</a></li><li id="menu-page-2"><a href="<#ZC_BLOG_HOST#>guestbook.html">留言本</a></li>';
   $t->HtmlID="divNavBar";
   $t->Ftype="ul";
   $t->Post();
@@ -608,7 +608,7 @@ function InsertInfo(){
   $t->Source="system";
   $t->SidebarID=1;
   $t->Order=3;
-  $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="<#ZC_BLOG_HOST#>zb_system/cmd.asp?act=login">[<#ZC_MSG009#>]</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="<#ZC_BLOG_HOST#>zb_system/cmd.asp?act=vrs">[<#ZC_MSG021#>]</a></span>';
+  $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="<#ZC_BLOG_HOST#>zb_system/cmd.php?act=login">[<#ZC_MSG009#>]</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="<#ZC_BLOG_HOST#>zb_system/cmd.php?act=vrs">[<#ZC_MSG021#>]</a></span>';
   $t->HtmlID="divContorPanel";
   $t->Ftype="div";
   $t->Post();
@@ -636,7 +636,7 @@ function InsertInfo(){
   $t->Source="system";
   $t->SidebarID=1;
   $t->Order=5;
-  $t->Content='<form method="post" action="<#ZC_BLOG_HOST#>zb_system/cmd.asp?act=Search"><input type="text" name="edtSearch" id="edtSearch" size="12" /> <input type="submit" value="<#ZC_MSG087#>" name="btnPost" id="btnPost" /></form>';
+  $t->Content='<form method="post" action="<#ZC_BLOG_HOST#>zb_system/cmd.php?act=Search"><input type="text" name="edtSearch" id="edtSearch" size="12" /> <input type="submit" value="<#ZC_MSG087#>" name="btnPost" id="btnPost" /></form>';
   $t->HtmlID="divSearchPanel";
   $t->Ftype="div";
   $t->Post();
@@ -722,7 +722,7 @@ function InsertInfo(){
   $t->Source="system";
   $t->SidebarID=1;
   $t->Order=11;
-  $t->Content='<li><a href="http://www.rainbowsoft.org/" target="_blank"><img src="<#ZC_BLOG_HOST#>zb_system/image/logo/zblog.gif" height="31" width="88" alt="RainbowSoft Studio Z-Blog" /></a></li><li><a href="<#ZC_BLOG_HOST#>feed.asp" target="_blank"><img src="<#ZC_BLOG_HOST#>zb_system/image/logo/rss.png" height="31" width="88" alt="订阅本站的 RSS 2.0 新闻聚合" /></a></li>';
+  $t->Content='<li><a href="http://www.rainbowsoft.org/" target="_blank"><img src="<#ZC_BLOG_HOST#>zb_system/image/logo/zblog.gif" height="31" width="88" alt="RainbowSoft Studio Z-Blog" /></a></li><li><a href="<#ZC_BLOG_HOST#>feed.php" target="_blank"><img src="<#ZC_BLOG_HOST#>zb_system/image/logo/rss.png" height="31" width="88" alt="订阅本站的 RSS 2.0 新闻聚合" /></a></li>';
   $t->HtmlID="divMisc";
   $t->Ftype="ul";
   $t->Post();
