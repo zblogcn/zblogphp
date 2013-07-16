@@ -109,21 +109,24 @@ class ZBlogException
 	function Display(){
 
 		$e='';
-		$e.= 'type:<br/>'.$this->type;
+		$e.= '类别:<br/>'.$this->type;
 		$e.= "<hr/>";
-		$e.= 'message:<br/>'.$this->message;
+		$e.= '信息:<br/>'.$this->message;
 		$e.= "<hr/>";
-		$e.= 'file:<br/>'.$this->file;
+		$e.= '文件:<br/>'.$this->file;
 		$e.= "<hr/>";
-		$e.= 'line:<br/>'.$this->line;		
+		$e.= '位置:<br/>'.$this->line;		
 
-		$h=file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/error.html');
-		$h=str_replace('<#ZC_BLOG_HOST#>', $GLOBALS['bloghost'], $h);
-		$h=str_replace('<#ZC_BLOG_TITLE#>', $GLOBALS['option']['ZC_BLOG_TITLE'], $h);
-		$h=str_replace('<#BlogTitle#>', $GLOBALS['lang']['ZC_MSG']['045'], $h);		
-		$h=str_replace('<#ERROR#>', $e, $h);
-		echo $h;
-		echo RunTime();
+		include $GLOBALS['blogpath'] . 'zb_system/defend/error.html';
+		
+	}
+
+	function get_code($file, $line) {
+		$aFile = array_slice(file($file), max(0, $line - 5), 10, true);
+		foreach ($aFile as &$sData) { //&$ = ByRef
+				$sData = htmlspecialchars($sData);
+		}
+		return $aFile;
 	}
 
 
