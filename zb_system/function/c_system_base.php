@@ -19,6 +19,7 @@ ob_start();
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $cookiespath = null;
 $bloghost = null;
+$blogtitle = null;
 $option = require_once($blogpath . 'zb_users/c_option.php');	
 $lang = require_once($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 

@@ -134,11 +134,11 @@ function bmx2table(){
 // 返回：    无
 //*********************************************************
 function Batch2Tip(s){$("#batch p").html(s)}
-function BatchContinue(){$("#batch p").before("<iframe style='width:20px;height:20px;' frameborder='0' scrolling='no' src='<%=BlogHost%>zb_system/cmd.asp?act=batch'></iframe>");$("#batch img").remove();}
+function BatchContinue(){$("#batch p").before("<iframe style='width:20px;height:20px;' frameborder='0' scrolling='no' src='<%=BlogHost%>zb_system/cmd.php?act=batch'></iframe>");$("#batch img").remove();}
 function BatchBegin(){};
 function BatchEnd(){};
 function BatchNotify(){notify($("#batch p").html())}
-function BatchCancel(){$("#batch iframe").remove();$("#batch p").before("<iframe style='width:20px;height:20px;' frameborder='0' scrolling='no' src='<%=BlogHost%>zb_system/cmd.asp?act=batch&cancel=true'></iframe>");};
+function BatchCancel(){$("#batch iframe").remove();$("#batch p").before("<iframe style='width:20px;height:20px;' frameborder='0' scrolling='no' src='<%=BlogHost%>zb_system/cmd.php?act=batch&cancel=true'></iframe>");};
 //*********************************************************
 
 
@@ -190,7 +190,7 @@ function notify(s){
 function statistic(s){
 	$("#statloading").show();
 	$("#updatatime").hide();
-	$.get("c_statistic.asp"+s,{},
+	$.get("c_statistic.php"+s,{},
 		function(data){
 			$("#tbStatistic").html(data);
 			bmx2table();
@@ -202,7 +202,7 @@ function statistic(s){
 
 function updateinfo(s){
 	$("#infoloading").show();
-	$.get("c_updateinfo.asp"+s,{},
+	$.get("c_updateinfo.php"+s,{},
 		function(data){
 			$("#tdUpdateInfo").html(data);
 			$("#infoloading").hide();

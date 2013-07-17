@@ -7,6 +7,12 @@
  */
 
 
+function ResponseAdminLeftMenu(){
 
+}
+
+function ResponseAdminTopMenu(){
+
+}
 
 ?>

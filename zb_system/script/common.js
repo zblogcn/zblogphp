@@ -211,8 +211,8 @@ function VerifyMessage() {
 			}
 			if($("#inpVerify").length>0){
 				$("#inpVerify").val("");
-				var objImageValid=$("img[src^='"+bloghost+"zb_system/function/c_validcode.asp?name=commentvalid']");
-				objImageValid.attr("src",bloghost+"zb_system/function/c_validcode.asp?name=commentvalid"+"&random="+Math.random());
+				var objImageValid=$("img[src^='"+bloghost+"zb_system/function/c_validcode.php?name=commentvalid']");
+				objImageValid.attr("src",bloghost+"zb_system/function/c_validcode.php?name=commentvalid"+"&random="+Math.random());
 			}
 
 			$("#frmSumbit :submit").removeClass("loading");
@@ -568,7 +568,7 @@ function GetComments(logid,page){
 
 	 $('span.commentspage').html("Waiting...");
 
-	$.get(bloghost+"zb_system/cmd.asp?act=CommentGet&logid="+logid+"&page="+page, function(data){
+	$.get(bloghost+"zb_system/cmd.php?act=CommentGet&logid="+logid+"&page="+page, function(data){
 	  $('#AjaxCommentBegin').nextUntil('#AjaxCommentEnd').remove();
 	  $('#AjaxCommentBegin').after(data);
 	});

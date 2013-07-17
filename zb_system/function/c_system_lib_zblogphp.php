@@ -30,6 +30,8 @@ class ZBlogPHP{
 	public $template_includes=array();
 	public $templatetags=array();	
 	public $title=null;
+
+	public $user=null;
 	
 	function __construct() {
 
@@ -47,6 +49,10 @@ class ZBlogPHP{
 
 		$this->option['ZC_BLOG_HOST']=&$GLOBALS['bloghost'];
 		//define();
+
+		$this->title=&$GLOBALS['blogtitle'];
+
+		$this->user=new Member();
 	}
 
 	function __destruct(){
