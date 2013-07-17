@@ -23,10 +23,10 @@ function Default_ViewList_Begin(&$page,&$cate,&$auth,&$date,&$tags){
 	$zbp->title='首页';
 	$html=null;
 
-	$html=$zbp->templatetags['TEMPLATE_DEFAULT'];
+	if(isset($zbp->templatetags['TEMPLATE_DEFAULT'])){$html=$zbp->templatetags['TEMPLATE_DEFAULT'];}
 
 foreach ($zbp->templatetags as $key => $value) {
-	$html=str_ireplace('<#' . $key . '#>', $value, $html);
+	$html=str_replace('<#' . $key . '#>', $value, $html);
 }
 
 	echo $html;

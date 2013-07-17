@@ -25,6 +25,14 @@ $lang = require_once($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAG
 
 date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 
+$actions=array(
+'login'=>5,
+'logout'=>5,
+'admin'=>4,
+'SettingMng'=>1,
+'vrs'=>5,
+);
+
 require_once $blogpath.'zb_system/function/c_system_debug.php';
 require_once $blogpath.'zb_system/function/c_system_common.php';
 require_once $blogpath.'zb_system/function/c_system_plugin.php';
