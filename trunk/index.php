@@ -22,5 +22,5 @@ $zbp->Terminate();
 
 #ZBlogException::Trace('看看写入debug信息成功吧？');
 
-echo RunTime();
+RunTime();
 ?>

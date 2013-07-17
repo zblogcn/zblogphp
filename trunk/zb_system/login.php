@@ -2,6 +2,7 @@
 require_once './function/c_system_base.php';
 
 $zbp->Initialize();
+$blogtitle=$lang['ZC_MSG']['009'];
 ?><!DOCTYPE HTML>
 <html>
 <head>
@@ -12,7 +13,7 @@ $zbp->Initialize();
 	<link rel="stylesheet" rev="stylesheet" href="css/admin.css" type="text/css" media="screen" />
 	<script language="JavaScript" src="script/common.js" type="text/javascript"></script>
 	<script language="JavaScript" src="script/md5.js" type="text/javascript"></script>
-	<title><?php echo $option['ZC_BLOG_TITLE'] . '-' . $lang['ZC_MSG']['009']?></title>
+	<title><?php echo $option['ZC_BLOG_TITLE'] . '-' . $blogtitle?></title>
 </head>
 <body>
 <div class="bg">
@@ -79,5 +80,5 @@ $("#chkRemember").click(function(){
 
 $zbp->Terminate();
 
-echo RunTime();
+RunTime();
 ?>

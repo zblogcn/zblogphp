@@ -23,7 +23,32 @@ class Member extends Base{
 		$this->db = &$GLOBALS['zbp']->db;
 		$this->ID = 0;
 		$this->Count = 0;
-		$this->Level = 0;
+		$this->Level = 5;
+		$this->Name = $GLOBALS['lang']['ZC_MSG'][205];
+
+	}
+
+
+	public function __set($name, $value) 
+	{
+		if ($name=='Avatar') {
+			return null;
+		}
+		if ($name=='LevelName') {
+			return null;
+		}
+		$this->Data[$name] = $value;
+	}
+
+	public function __get($name) 
+	{
+		if ($name=='Avatar') {
+			return null;
+		}
+		if ($name=='LevelName') {
+			return $GLOBALS['zbp']->lang['ZVA_User_Level_Name'][$this->Level];
+		}
+		return $this->Data[$name];
 	}
 
 

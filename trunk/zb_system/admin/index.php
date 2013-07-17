@@ -12,6 +12,14 @@ require_once '../function/c_system_admin.php';
 $zbp->Initialize();
 
 
+require_once $blogpath . 'zb_system/admin/admin_header.php';
+require_once $blogpath . 'zb_system/admin/admin_top.php';
+
+
+
+
+require_once $blogpath . 'zb_system/admin/admin_footer.php';
+
 $zbp->Terminate();
 
 echo RunTime();

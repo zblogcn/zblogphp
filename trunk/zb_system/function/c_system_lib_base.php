@@ -21,15 +21,15 @@ abstract class Base
 
 	public $Data=array();
 	
-    public function __set($name, $value) 
-    {
+	public function __set($name, $value) 
+	{
 		$this->Data[$name] = $value;
-    }
+	}
 
-    public function __get($name) 
-    {
-    	return $this->Data[$name];
-    }
+	public function __get($name) 
+	{
+		return $this->Data[$name];
+	}
 
 
 	function LoadInfoByID($id){

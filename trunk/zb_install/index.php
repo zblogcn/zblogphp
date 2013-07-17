@@ -801,5 +801,5 @@ function SaveConfig(){
 
 }
 
-echo RunTime();
+RunTime();
 ?>
