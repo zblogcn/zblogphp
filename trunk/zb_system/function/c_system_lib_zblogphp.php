@@ -127,10 +127,18 @@ class ZBlogPHP{
 		$this->OpenConnect();
 		$this->LoadMembers();
 		$this->LoadCategorys();
-		$this->LoadModules();		
+		$this->LoadModules();
 
-		#if (file_exists('cache')) {
-		#	$this->templatetags=unserialize(file_get_contents('cache'));
+		if (isset($this->membersbyname[GetVars('username','COOKIE')])) {
+			$m=$this->membersbyname[GetVars('username','COOKIE')];
+			if($m->Password == md5(GetVars('password','COOKIE') . $m->Guid)){
+				$this->user=$m;
+			}
+		}
+
+		#$cache=$this->path . 'zb_users/cache/' . $this->guid;
+		#if (file_exists($cache)) {
+		#	$this->templatetags=unserialize(file_get_contents($cache));
 		#	return;
 		#}
 
@@ -141,8 +149,12 @@ class ZBlogPHP{
 		$this->LoadConfigs();
 		$this->BuildSidebar();	
 		$this->BuildTemplatetags();
+
+
+
+
 		#$s=serialize($this->templatetags);
-		#file_put_contents('cache', $s);
+		#file_put_contents($cache, $s);
 
 
 	}
