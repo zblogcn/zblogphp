@@ -43,7 +43,7 @@ class Member extends Base{
 	public function __get($name) 
 	{
 		if ($name=='Avatar') {
-			return null;
+			return $GLOBALS['zbp']->host . 'zb_users/avatar/0.png';
 		}
 		if ($name=='LevelName') {
 			return $GLOBALS['zbp']->lang['ZVA_User_Level_Name'][$this->Level];
