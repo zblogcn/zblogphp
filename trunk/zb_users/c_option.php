@@ -32,6 +32,8 @@ return array (
   'ZC_MULTI_DOMAIN_SUPPORT' => false,
   'ZC_BLOG_PRODUCT' => 'Z-BlogPHP',
   'ZC_BLOG_VERSION' => '1.0 Beta Build 130707',
+  'ZC_BLOG_PRODUCT_FULL' => '',
+  'ZC_BLOG_PRODUCT_FULLHTML' => '',  
   'ZC_COMMENT_TURNOFF' => false,
   'ZC_COMMENT_VERIFY_ENABLE' => true,
   'ZC_COMMENT_REVERSE_ORDER_EXPORT' => false,

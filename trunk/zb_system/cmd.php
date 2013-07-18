@@ -3,15 +3,24 @@ require_once './function/c_system_base.php';
 
 $zbp->Initialize();
 
-switch (GetVars('act','GET')) {
+$action=GetVars('act','GET');
 
+if (!CheckRights($action)) {throw new Exception("没有权限！！！");}
 
-
-
-
+switch ($action) {
 	case 'login':
+		header("HTTP/1.1 302 Found");
 		header('Location:login.php');
 		break;
+	case 'logout':
+		Logout();
+		header("HTTP/1.1 302 Found");
+		header('Location:' . $bloghost);
+		break;
+	case 'admin':
+		header("HTTP/1.1 302 Found");
+		header('Location:admin/');
+		break;	
 	case 'vrs':
 		# code...
 		break;

@@ -8,13 +8,11 @@
 
 require_once './zb_system/function/c_system_base.php';
 
-if (!$zbp->option['ZC_DATABASE_TYPE']) {header('Location: ./zb_install/');}
+if (!$zbp->option['ZC_DATABASE_TYPE']) {header("HTTP/1.1 302 Found");header('Location: ./zb_install/');}
 
 $zbp->Initialize();
 
-foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpk => &$fpv) {
-	$fpr=$fpk($page,$cate,$auth,$date,$tags);
-}
+foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
 ViewList(GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'));
 
