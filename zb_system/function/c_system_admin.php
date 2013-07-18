@@ -20,7 +20,7 @@ function ResponseAdminLeftMenu(){
 
 	$leftmenus[]=MakeLeftMenu("ArticleEdt",$GLOBALS['lang']['ZC_MSG']['168'],$GLOBALS['bloghost'] . "zb_system/cmd.php?act=ArticleEdt","nav_new","aArticleEdt","");
 	$leftmenus[]=MakeLeftMenu("ArticleMng",$GLOBALS['lang']['ZC_MSG']['067'],$GLOBALS['bloghost'] . "zb_system/cmd.php?act=ArticleMng","nav_article","aArticleMng","");
-	$leftmenus[]=MakeLeftMenu("ArticleAll",$GLOBALS['lang']['ZC_MSG']['111'],$GLOBALS['bloghost'] . "zb_system/cmd.php?act=ArticleMng&amp;type=Page","nav_page","aPageMng","");
+	$leftmenus[]=MakeLeftMenu("ArticleMng",$GLOBALS['lang']['ZC_MSG']['111'],$GLOBALS['bloghost'] . "zb_system/cmd.php?act=ArticleMng&amp;type=Page","nav_page","aPageMng","");
 
 	$leftmenus[]="<li class='split'><hr/></li>";
 

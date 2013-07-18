@@ -8,7 +8,7 @@
 <title><?php echo $option['ZC_BLOG_TITLE'] . '-' . $blogtitle?></title>
 <link href="<?php echo $bloghost?>zb_system/css/admin2.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo $bloghost?>zb_system/script/common.js" type="text/javascript"></script>
-<script src="<?php echo $bloghost?>zb_system/function/c_admin_js_add.php" type="text/javascript"></script>
+<script src="<?php echo $bloghost?>zb_system/script/c_admin_js_add.php" type="text/javascript"></script>
 <link rel="stylesheet" href="<?php echo $bloghost?>zb_system/css/jquery.bettertip.css" type="text/css" media="screen" />
 <script src="<?php echo $bloghost?>zb_system/script/jquery.bettertip.pack.js" type="text/javascript"></script>
 <script src="<?php echo $bloghost?>zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
