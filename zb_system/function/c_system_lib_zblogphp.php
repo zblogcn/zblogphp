@@ -81,6 +81,7 @@ class ZBlogPHP{
 
 		switch ($this->option['ZC_DATABASE_TYPE']) {
 		case 'mysql':
+			break;
 		case 'pdo_mysql':
 			$db=DbFactory::Create($this->option['ZC_DATABASE_TYPE']);
 			$this->db=&$db;
@@ -94,7 +95,7 @@ class ZBlogPHP{
 				throw new Exception('MySQL数据库打不开啦！');
 			}
 
-		break;
+			break;
 		case 'sqlite':
 			$db=DbFactory::Create('sqlite');
 			$GLOBALS['zbp']->db=&$db;
@@ -104,7 +105,7 @@ class ZBlogPHP{
 				))==false){
 				throw new Exception('SQLite数据库打不开啦！');
 			}
-		break;
+			break;
 		case 'sqlite3':
 			$this->db=DbFactory::Create('sqlite3');
 			if($this->db->Open(array(
@@ -113,7 +114,7 @@ class ZBlogPHP{
 				))==false){
 				throw new Exception('SQLite3数据库打不开啦！');
 			}
-		break;
+			break;
 		}
 		$isconnect=true;	
 	}

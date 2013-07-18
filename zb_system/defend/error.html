@@ -22,7 +22,7 @@
 	  <div class="divHeader">错误提示</div>
 	  <div class="content">
 	 	<div>错误信息<hr/><?php echo '(' . $this->type . ')     ' . $this->message?></div>
-	 	<br/>  <!-- 不会弄CSS 猪快来弄-->
+	 	<br/>  <!-- 不会弄CSS 猪猪快来弄-->
 	 	<?php if($GLOBALS['option']['ZC_DEBUGMODE']){?>
 	 	<div>文件位置<hr/>
 	 	<?php echo $this->file ?>
@@ -44,9 +44,9 @@
 	 	</div>
 	 	</br/>
 	 	<div>请求数据<hr/>
-	 	<?php echo '$_GET = '.print_r($_GET, 1) ?><br/>
-	 	<?php echo '$_POST = '.print_r($_POST, 1) ?><br/>
-		<?php echo '$_COOKIE = '.print_r($_COOKIE, 1) ?>
+	 	<pre><?php echo '$_GET = '.print_r($_GET, 1) ?></pre>
+	 	<pre><?php echo '$_POST = '.print_r($_POST, 1) ?></pre>
+		<pre><?php echo '$_COOKIE = '.print_r($_COOKIE, 1) ?></pre>
 	 	</div>
 	 	<br/>
 	 	<div>引用文件<hr/>
