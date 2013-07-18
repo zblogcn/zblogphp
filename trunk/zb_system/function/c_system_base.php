@@ -25,14 +25,6 @@ $lang = require_once($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAG
 
 date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 
-$actions=array(
-'login'=>5,
-'logout'=>5,
-'admin'=>4,
-'SettingMng'=>1,
-'vrs'=>5,
-);
-
 require_once $blogpath.'zb_system/function/c_system_debug.php';
 require_once $blogpath.'zb_system/function/c_system_common.php';
 require_once $blogpath.'zb_system/function/c_system_plugin.php';
@@ -61,7 +53,37 @@ foreach ($lib_array as $f) {
 	require_once $blogpath.'zb_system/function/c_system_lib_' .$f. '.php';
 }
 
+
+
+MakeLeftMenu("ArticleEdt",$GLOBALS['lang']['ZC_MSG']['168'],$GLOBALS['bloghost'] . "zb_system/cmd.php?act=ArticleEdt","nav_new","aArticleEdt","");
+MakeLeftMenu("ArticleMng",$GLOBALS['lang']['ZC_MSG']['067'],$GLOBALS['bloghost'] . "zb_system/cmd.php?act=ArticleMng","nav_article","aArticleMng","");
+MakeLeftMenu("ArticleAll",$GLOBALS['lang']['ZC_MSG']['111'],$GLOBALS['bloghost'] . "zb_system/cmd.php?act=ArticleMng&amp;type=Page","nav_page","aPageMng","");
+
+"<li class='split'><hr/></li>";
+
+
+
+
+
+$actions=array(
+'login'=>5,
+'logout'=>5,
+'admin'=>4,
+'SettingMng'=>1,
+'vrs'=>5,
+'CategoryMng'=>1,
+'TagMng'=>1,
+'CommentMng'=>1,
+'FileMng'=>1,
+'UserMng'=>1,
+'ThemeMng'=>1,
+'PlugInMng'=>1,
+'FunctionMng'=>1,
+);
+
+
 $zbp=ZBlogPHP::GetInstance();
+
 /*include plugin*/
 #加载主题插件
 if (file_exists($filename=$blogpath.'zb_users/theme/'.$option['ZC_BLOG_THEME'].'/plugin/include.php')) {
