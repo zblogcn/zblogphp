@@ -55,11 +55,8 @@ foreach ($lib_array as $f) {
 
 
 
-MakeLeftMenu("ArticleEdt",$GLOBALS['lang']['ZC_MSG']['168'],$GLOBALS['bloghost'] . "zb_system/cmd.php?act=ArticleEdt","nav_new","aArticleEdt","");
-MakeLeftMenu("ArticleMng",$GLOBALS['lang']['ZC_MSG']['067'],$GLOBALS['bloghost'] . "zb_system/cmd.php?act=ArticleMng","nav_article","aArticleMng","");
-MakeLeftMenu("ArticleAll",$GLOBALS['lang']['ZC_MSG']['111'],$GLOBALS['bloghost'] . "zb_system/cmd.php?act=ArticleMng&amp;type=Page","nav_page","aPageMng","");
 
-"<li class='split'><hr/></li>";
+
 
 
 
@@ -71,9 +68,11 @@ $actions=array(
 'admin'=>4,
 'SettingMng'=>1,
 'vrs'=>5,
+'ArticleEdt'=>3,
+'ArticleMng'=>3,
 'CategoryMng'=>1,
 'TagMng'=>1,
-'CommentMng'=>1,
+'CommentMng'=>4,
 'FileMng'=>1,
 'UserMng'=>1,
 'ThemeMng'=>1,
