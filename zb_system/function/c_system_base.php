@@ -20,8 +20,11 @@ $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $cookiespath = null;
 $bloghost = null;
 $blogtitle = null;
-$option = require_once($blogpath . 'zb_users/c_option.php');	
+$option = require_once($blogpath . 'zb_users/c_option.php');
+$option['ZC_BLOG_PRODUCT_FULL']=$option['ZC_BLOG_PRODUCT'] . ' ' . $option['ZC_BLOG_VERSION'];
+$option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title="RainbowSoft Z-BlogPHP">' . $option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
 $lang = require_once($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+$action=null;
 
 date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 
@@ -41,12 +44,13 @@ if(get_magic_quotes_gpc()){
 
 require_once $blogpath.'zb_system/function/c_system_lib_zblogphp.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbfactory.php';
+
 require_once $blogpath.'zb_system/function/c_system_lib_dbmysql.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbpdo_mysql.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite.php';
 require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite3.php';
-//以后修改
-//require_once $blogpath.'zb_system/function/c_system_lib_db' .$option['ZC_DATABASE_TYPE']. '.php';
+#以后修改
+#require_once $blogpath.'zb_system/function/c_system_lib_db' .$option['ZC_DATABASE_TYPE']. '.php';
 
 $lib_array = array('base', 'article','category','comment','member','meta','module','tag','upload');
 foreach ($lib_array as $f) {
@@ -57,12 +61,9 @@ foreach ($lib_array as $f) {
 
 
 
-
-
-
-
-
+#定义命令
 $actions=array(
+'root'=>1,
 'login'=>5,
 'logout'=>5,
 'admin'=>4,
@@ -78,10 +79,16 @@ $actions=array(
 'ThemeMng'=>1,
 'PlugInMng'=>1,
 'FunctionMng'=>1,
+'UserEdt'=>0,
 );
 
 
+
+
 $zbp=ZBlogPHP::GetInstance();
+
+
+
 
 /*include plugin*/
 #加载主题插件
@@ -94,4 +101,13 @@ foreach (explode("|", $option['ZC_USING_PLUGIN_LIST']) as $plugin) {
 		require_once $filename;
 	}
 }
+
+
+
+
+function __autoload($classname) {
+     require_once $GLOBALS['blogpath'] . 'zb_system/function/c_system_lib_' . strtolower($classname) .'.php';
+ }
+
+
 ?>

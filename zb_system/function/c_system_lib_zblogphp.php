@@ -276,8 +276,6 @@ class ZBlogPHP{
 
 		$this->templatetags['ZC_BLOG_SUB_NAME']=&$this->templatetags['ZC_BLOG_SUBTITLE'];
 		$this->templatetags['ZC_BLOG_NAME']=&$this->templatetags['ZC_BLOG_TITLE'];
-		$this->templatetags['ZC_BLOG_PRODUCT_FULL']=$this->templatetags['ZC_BLOG_PRODUCT'] . ' ' . $this->templatetags['ZC_BLOG_VERSION'];
-		$this->templatetags['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title="RainbowSoft Z-BlogPHP">' . $this->templatetags['ZC_BLOG_PRODUCT_FULL'] . '</a>';
 		$this->templatetags['BlogTitle']=&$this->title;
 
 	}

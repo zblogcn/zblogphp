@@ -95,4 +95,21 @@ function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUr
 	
 }
 
+
+function ExportSiteInfo(){
+
+	echo "<div class=\"divHeader\">" . $GLOBALS['lang']['ZC_MSG']['159'] . "</div>";
+	echo "<div class=\"SubMenu\">" . '@$Response_Plugin_SiteInfo_SubMenu' . "</div>";
+	echo "<div id=\"divMain2\">";
+
+
+
+	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" class=\"tableBorder\" id=\"tbStatistic\"><tr><th height=\"32\" colspan=\"4\"  align=\"center\">&nbsp;" . $GLOBALS['lang']['ZC_MSG']['167'] . "&nbsp;<a href=\"javascript:statistic('?reload');\">[" . $GLOBALS['lang']['ZC_MSG']['302'] . "]</a> <img id=\"statloading\" style=\"display:none\" src=\"../image/admin/loading.gif\"></th></tr><tr><td></td></tr></table>";
+	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" class=\"tableBorder\"><tr><th height=\"32\" colspan=\"4\" align=\"center\">&nbsp;" . $GLOBALS['lang']['ZC_MSG']['164'] . "&nbsp;<a href=\"javascript:updateinfo('?reload');\">[" . $GLOBALS['lang']['ZC_MSG']['225'] . "]</a> <img id=\"infoloading\" style=\"display:none\" src=\"../image/admin/loading.gif\"></th></tr><tr><td height=\"25\" colspan=\"4\" id=\"tdUpdateInfo\"></td></tr></table>";
+
+
+require_once $GLOBALS['blogpath'] . 'zb_system/defend/thanks.html';
+
+}
+
 ?>

@@ -3,6 +3,12 @@ require_once './function/c_system_base.php';
 
 $zbp->Initialize();
 $blogtitle=$lang['ZC_MSG']['009'];
+
+if (CheckRights('admin')) {
+	header("HTTP/1.1 302 Found");
+	header('Location:cmd.php?act=admin');
+}
+
 ?><!DOCTYPE HTML>
 <html>
 <head>

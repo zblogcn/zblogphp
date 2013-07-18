@@ -18,9 +18,9 @@ function CheckRights($action){
 
 function ViewList($page,$cate,$auth,$date,$tags){
 
-	foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpk => &$fpv) {
-		$fpr=$fpk($page,$cate,$auth,$date,$tags);
-		if ($fpv==PLUGIN_EXITSIGNAL_RETURN) {return $fpr;}
+	foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($page,$cate,$auth,$date,$tags);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
 
 	$zbp=$GLOBALS['zbp'];
@@ -63,6 +63,13 @@ function Login(){
 		
 	}
 
+}
+
+
+function Logout(){
+	global $zbp;
+	setcookie("username", '');
+	setcookie("password", '');
 }
 
 ?>
