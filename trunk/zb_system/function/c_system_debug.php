@@ -72,7 +72,7 @@ class ZBlogException
 
 
 	static public function Log($s){
-		$f=$GLOBALS['zbp']->path . 'zu_user/cache/log' . date("YmdHis"). '.txt';
+		$f=$GLOBALS['zbp']->path . 'zb_users/cache/log' . date("Ymd"). '.txt';
 		$handle = fopen($f, 'a+');
 		fwrite($handle,date('c') . "~" . current(explode(" ", microtime()))  . ":" . $s . "\r");
 		fclose($handle);
