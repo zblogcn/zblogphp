@@ -3,7 +3,7 @@
  * Z-Blog with PHP
  * @author 
  * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * @version
  */
 
 require_once './zb_system/function/c_system_base.php';
