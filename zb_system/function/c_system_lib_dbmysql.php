@@ -51,9 +51,9 @@ class DbMySQL implements iDataBase
 
 	}
 
-	function CreateTable(){
-		foreach ($GLOBALS['TableSql_MySQL'] as $s) {
-			$s=str_replace('%pre%', $this->dbpre, $s);
+	function CreateTable($path){
+		$a=explode(';',str_replace('%pre%', $this->dbpre, file_get_contents($path.'zb_system/defend/createtable/mysql.sql')));
+		foreach ($a as $s) {
 			mysql_query($s);
 		}
 	}

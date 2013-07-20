@@ -35,11 +35,9 @@ class DbSQLite3 implements iDataBase
 		$this->db->close();
 	}
 
-	function CreateTable(){
-		#$this->db->query('CREATE TABLE foo (bar varchar(10))');
-
-		foreach ($GLOBALS['TableSql_SQLite3'] as $s) {
-			$s=str_replace('%pre%', $this->dbpre, $s);
+	function CreateTable($path){
+		$a=explode(';',str_replace('%pre%', $this->dbpre, file_get_contents($path.'zb_system/defend/createtable/sqlite3.sql')));
+		foreach ($a as $s) {
 			$this->db->query($s);
 		}
 
