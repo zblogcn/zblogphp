@@ -492,7 +492,7 @@ switch ($dbtype) {
     }
     break;
 }
-$db->CreateTable();
+$db->CreateTable($GLOBALS["zbp"]->path);
 InsertInfo();
 SaveConfig();
 $db->Close();
