@@ -565,13 +565,13 @@ $CheckResult=array(
   if( function_exists("mysql_get_client_info") ){
     $CheckResult['mysql'][0]=mysql_get_client_info();
   }
-  if( class_exists("PDO") ){
+  if( class_exists("PDO",false) ){
     $CheckResult['pdo_mysql'][0]=PDO::ATTR_DRIVER_NAME;
   }
   if( function_exists("sqlite_libversion") ){
     $CheckResult['sqlite'][0]=sqlite_libversion();
   }
-  if( method_exists('SQLite3','version') ){
+  if( class_exists('SQLite3',false) ){
     $info = SQLite3::version();
     $CheckResult['sqlite3'][0]=$info['versionString'];
   }
