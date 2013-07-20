@@ -100,4 +100,9 @@ function _stripslashes(&$val) {
 	return $val;
 }
 
+function redirect($url){
+	header("HTTP/1.1 302 Found");
+	header('Location: '.$url);
+}
+
 ?>
