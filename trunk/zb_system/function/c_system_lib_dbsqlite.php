@@ -35,14 +35,11 @@ class DbSQLite implements iDataBase
 		sqlite_close($this->db);
 	}
 
-	function CreateTable(){
-		#sqlite_query($this->db, 'CREATE TABLE foo (bar varchar(10))');
-
-		foreach ($GLOBALS['TableSql_SQLite'] as $s) {
-			$s=str_replace('%pre%', $this->dbpre, $s);
-			sqlite_query($this->db, $s);
+	function CreateTable($path){
+		$a=explode(';',str_replace('%pre%', $this->dbpre, file_get_contents($path.'zb_system/defend/createtable/sqlite.sql')));
+		foreach ($a as $s) {
+			sqlite_query($s);
 		}
-
 	}
 
 	function Query($query){

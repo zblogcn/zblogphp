@@ -30,7 +30,8 @@ class Dbpdo_MySQL implements iDataBase
 		*/
 
 		//new PDO(DB_TYPE.':host='.DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASSWD);
-		$db_link = new PDO('mysql:host='.$array[0].';dbname='.$this->db,$array[1],$array[2]);
+
+		$db_link = new PDO('mysql:host='.$array[0].';dbname='.$array[3],$array[1],$array[2]);
 		$db_link->query('set names utf8;');
 		$this->db = $db_link;		
 		$this->dbpre=$array[4];
@@ -45,9 +46,9 @@ class Dbpdo_MySQL implements iDataBase
 
 	}
 
-	function CreateTable(){
-		foreach ($GLOBALS['TableSql_MySQL'] as $s) {
-			$s=str_replace('%pre%', $this->dbpre, $s);
+	function CreateTable($path){
+		$a=explode(';',str_replace('%pre%', $this->dbpre, file_get_contents($path.'zb_system/defend/createtable/mysql.sql')));
+		foreach ($a as $s) {
 			$this->db->exec($s);
 		}
 	}
@@ -55,15 +56,16 @@ class Dbpdo_MySQL implements iDataBase
 	function Query($query){
 
 		$query=str_replace('%pre%', $this->dbpre, $query);
-echo $query;
-exit();
 		$result = $this->db->query($query);
 		// 遍历出来
 
 		//fetch || fetchAll
-
-		$data = $result->fetchAll();
-		return $data;
+		if($result){
+			return $result->fetchAll();
+		}
+		else{
+			return array();
+		}
 
 	}
 
