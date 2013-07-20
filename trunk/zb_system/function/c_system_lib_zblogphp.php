@@ -26,6 +26,7 @@ class ZBlogPHP{
 	public $sidebars=array(1=>'',2=>'',3=>'',4=>'',5=>'');
 	public $templates=array();
 	public $configs=array();
+	public $_configs=array();	
 	public $cache_includes=array();
 	public $template_includes=array();
 	public $templatetags=array();	
@@ -167,7 +168,7 @@ class ZBlogPHP{
 	}
 
 
-	public function SaveConfig(){
+	public function SaveOption(){
 
 		$this->option['ZC_BLOG_CLSID']=$this->guid;
 
@@ -246,7 +247,13 @@ class ZBlogPHP{
 		$array=$this->db->Query($s);
 		foreach ($array as $c) {
 			$this->configs[$c['conf_Name']]=$c['conf_Value'];
+			$this->_configs[$c['conf_Name']]=$c['conf_Value'];			
 		}
+	}
+
+	public function SaveConfigs(){
+
+
 	}
 
 	public function BuildTemplatetags(){

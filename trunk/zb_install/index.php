@@ -797,7 +797,7 @@ function SaveConfig(){
       break;  
   }
 
-  $GLOBALS['zbp']->SaveConfig();
+  $GLOBALS['zbp']->SaveOption();
 
 }
 
