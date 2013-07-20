@@ -109,7 +109,7 @@ foreach (explode("|", $option['ZC_USING_PLUGIN_LIST']) as $plugin) {
 
 function __autoload($classname) {
      require_once $GLOBALS['blogpath'] . 'zb_system/function/c_system_lib_' . strtolower($classname) .'.php';
- }
+}
 
 
 ?>

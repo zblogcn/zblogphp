@@ -8,12 +8,14 @@
 
 
 function CheckRights($action){
+
 	ZBlogException::Log('$action=' . $action);
 	if ($GLOBALS['zbp']->user->Level > $GLOBALS['actions'][$action]) {
 		return false;
 	} else {
 		return true;
-	}
+	}	
+
 }
 
 function ViewList($page,$cate,$auth,$date,$tags){
