@@ -117,6 +117,7 @@ class ZBlogException
 		foreach ($aFile as &$sData) { //&$ = ByRef
 				$sData = htmlspecialchars($sData);
 		}
+		unset($sData);
 		return $aFile;
 	}
 
