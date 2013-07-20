@@ -8,7 +8,7 @@
 
 require_once './zb_system/function/c_system_base.php';
 
-if (!$zbp->option['ZC_DATABASE_TYPE']) {header("HTTP/1.1 302 Found");header('Location: ./zb_install/');}
+if (!$zbp->option['ZC_DATABASE_TYPE']) {redirect('./zb_install');}
 
 $zbp->Initialize();
 
