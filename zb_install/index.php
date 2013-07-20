@@ -28,21 +28,22 @@ if($zblogstep=="") { $zblogstep=1;}
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-  <meta name="generator" content="Z-Blog <?php echo $zbp->option['ZC_BLOG_VERSION']?>" />
-  <meta name="robots" content="noindex,nofollow"/>
-  <script src="../zb_system/script/common.js" type="text/javascript"></script>
-  <script src="../zb_system/script/c_admin_js_add.php" type="text/javascript"></script>
-  <script src="../zb_system/script/md5.js" type="text/javascript"></script>
-  <script src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
-  <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css"  type="text/css" media="screen" />
-  <link rel="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
-  <title>Z-BlogPHP <?php echo $zbp->option['ZC_BLOG_VERSION']?> 安装程序</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<meta name="generator" content="Z-Blog <?php echo $zbp->option['ZC_BLOG_VERSION']?>" />
+<meta name="robots" content="noindex,nofollow"/>
+<script src="../zb_system/script/common.js" type="text/javascript"></script>
+<script src="../zb_system/script/c_admin_js_add.php" type="text/javascript"></script>
+<script src="../zb_system/script/md5.js" type="text/javascript"></script>
+<script src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css"  type="text/css" media="screen" />
+<link rel="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
+<title>Z-BlogPHP<?php echo $zbp->option['ZC_BLOG_VERSION']?>安装程序</title>
 </head>
 <body>
-	<div class="setup"><form method="post" action="?step=<?php echo $zblogstep+1;?>">
-<?php
+<div class="setup">
+  <form method="post" action="?step=<?php echo $zblogstep+1;?>">
+    <?php
 
 switch ($zblogstep) {
     case 0:
@@ -66,8 +67,8 @@ switch ($zblogstep) {
 }
 
 ?>
-  </form></div>
-
+  </form>
+</div>
 <script type="text/javascript">
 function Setup3(){
 	if($("#dbtype").val()=="mssql"){
@@ -101,21 +102,19 @@ $(function() {
 function Setup0(){
 ?>
 <dl>
-<dt></dt>
-<dd id="ddleft">
-<img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
-<div class="left">安装进度： </div><div id="setup0"  class="left"></div>
-<p>安装协议 » 环境检查 » 数据库建立与设置 » 安装结果</p>
-</dd>
-<dd id="ddright">
-<div id="title">安装提示</div>
-<div id="content">
-通过配置文件的检验,您已经安装并配置好Z-BlogPHP了,不能再重复使用安装程序.
-</div>
-<div id="bottom">
-<input type="button" name="next" onClick="window.location.href='<%=BlogHost%>'" id="netx" value="退出" />
-</div>
-</dd>
+  <dt></dt>
+  <dd id="ddleft"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
+    <div class="left">安装进度：</div>
+    <div id="setup0"  class="left"></div>
+    <p>安装协议 » 环境检查 » 数据库建立与设置 » 安装结果</p>
+  </dd>
+  <dd id="ddright">
+    <div id="title">安装提示</div>
+    <div id="content">通过配置文件的检验,您已经安装并配置好Z-BlogPHP了,不能再重复使用安装程序.</div>
+    <div id="bottom">
+      <input type="button" name="next" onClick="window.location.href='<%=BlogHost%>'" id="netx" value="退出" />
+    </div>
+  </dd>
 </dl>
 <?php
 }
@@ -123,16 +122,16 @@ function Setup0(){
 function Setup1(){
 ?>
 <dl>
-<dt></dt>
-<dd id="ddleft">
-<img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
-<div class="left">安装进度： </div><div id="setup1"  class="left"></div>
-<p><b>安装协议</b> » 环境检查 » 数据库建立与设置 » 安装结果</p>
-</dd>
-<dd id="ddright">
-<div id="title">Z-BlogPHP <?php echo $GLOBALS['zbp']->option['ZC_BLOG_VERSION']?> 安装协议</div>
-<div id="content">
-  <textarea readonly>
+  <dt></dt>
+  <dd id="ddleft"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
+    <div class="left">安装进度：</div>
+    <div id="setup1"  class="left"></div>
+    <p><b>安装协议</b>» 环境检查 » 数据库建立与设置 » 安装结果</p>
+  </dd>
+  <dd id="ddright">
+    <div id="title">Z-BlogPHP<?php echo $GLOBALS['zbp']->option['ZC_BLOG_VERSION']?>安装协议</div>
+    <div id="content">
+      <textarea readonly>
 Z-BlogPHP  最终用户授权协议 
 
 感谢您选择Z-BlogPHP。 Z-BlogPHP基于 PHP 的技术开发，采用MySQL 和 SQLite 作为数据库，全部源码开放。希望我们的努力能为您提供一个高效快速、强大的站点解决方案。
@@ -169,10 +168,14 @@ Z-BlogPHP官方网址：http://www.rainbowsoft.org/
 
 
   </textarea>
-</div>
-<div id="bottom">
- <label><input type="checkbox"/>我已阅读并同意此协议.</label>&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="next" id="netx" value="下一步" disabled="disabled" />
- <script type="text/javascript">
+    </div>
+    <div id="bottom">
+      <label>
+        <input type="checkbox"/>
+        我已阅读并同意此协议.</label>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="submit" name="next" id="netx" value="下一步" disabled="disabled" />
+      <script type="text/javascript">
 $( "input[type=checkbox]" ).click(function() {
 	if ( $( this ).prop( "checked" ) ) {
 		$("#netx").prop("disabled",false);
@@ -182,8 +185,8 @@ $( "input[type=checkbox]" ).click(function() {
 	}
 });
 </script>
-</div>
-</dd>
+    </div>
+  </dd>
 </dl>
 <?php
 }
@@ -194,143 +197,137 @@ CheckServer();
 
 ?>
 <dl>
-<dt></dt>
-<dd id="ddleft">
-<img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
-<div class="left">安装进度： </div><div id="setup2"  class="left"></div>
-<p><b>安装协议</b> » <b>环境检查</b> » 数据库建立与设置 » 安装结果</p>
-</dd>
-<dd id="ddright">
-<div id="title">环境检查</div>
-<div id="content">
-
-<table border="0" style="width:100%;">
-  <tr>
-    <th colspan="3" scope="row">服务器环境检查</th>
-  </tr>
-  <tr>
-    <td scope="row">HTTP 服务器</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['server'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['server'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">PHP 版本支持</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['phpver'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['phpver'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">Z-BlogPHP 路径</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['zbppath'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['zbppath'][1];?></td>
-  </tr>
-  <tr>
-    <th colspan="3" scope="col">组件支持检查</th>
-  </tr>
-  <tr>
-    <td scope="row" style="width:200px">GD2</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gd2'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gd2'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">MySQL</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">pdo_mysql</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">SQLite</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">SQLite3</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][1];?></td>
-  </tr>
-  <tr>
-    <th colspan="3" scope="row">权限检查</th>
-  </tr>
-  <tr>
-    <td scope="row">zb_users</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['zb_users'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['zb_users'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">zb_users/cache</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['cache'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['cache'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">zb_users/data</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['data'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['data'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">zb_users/include</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['include'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['include'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">zb_users/theme</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['theme'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['theme'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">zb_users/plugin</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['plugin'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['plugin'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">zb_users/upload</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['upload'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['upload'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">zb_users/c_option.php</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option_php'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option_php'][1];?></td>
-  </tr>
-  <tr>
-    <th colspan="3" scope="row">函数检查</th>
-  </tr>
-  <tr>
-    <td scope="row">file_get_contents</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['file_get_contents'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['file_get_contents'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">gethostbyname</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gethostbyname'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gethostbyname'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">xml_parser_create</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['xml_parser_create'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['xml_parser_create'][1];?></td>
-  </tr>
-  <tr>
-    <td scope="row">fsockopen</td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['fsockopen'][0];?></td>
-    <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['fsockopen'][1];?></td>
-  </tr>
-
-</table>
-
-
-
-</div>
-<div id="bottom">
-<script type="text/javascript">bmx2table();</script>
-<?php ?>
-<input type="submit" name="next" id="netx" value="下一步" />
-<?php ?>
-</div>
-
-</dd>
+  <dt></dt>
+  <dd id="ddleft"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
+    <div class="left">安装进度：</div>
+    <div id="setup2"  class="left"></div>
+    <p><b>安装协议</b>»<b>环境检查</b>» 数据库建立与设置 » 安装结果</p>
+  </dd>
+  <dd id="ddright">
+    <div id="title">环境检查</div>
+    <div id="content">
+      <table border="0" style="width:100%;">
+        <tr>
+          <th colspan="3" scope="row">服务器环境检查</th>
+        </tr>
+        <tr>
+          <td scope="row">HTTP 服务器</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['server'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['server'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">PHP 版本支持</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['phpver'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['phpver'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">Z-BlogPHP 路径</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['zbppath'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['zbppath'][1];?></td>
+        </tr>
+        <tr>
+          <th colspan="3" scope="col">组件支持检查</th>
+        </tr>
+        <tr>
+          <td scope="row" style="width:200px">GD2</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gd2'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gd2'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">MySQL</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">pdo_mysql</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">SQLite</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">SQLite3</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][1];?></td>
+        </tr>
+        <tr>
+          <th colspan="3" scope="row">权限检查</th>
+        </tr>
+        <tr>
+          <td scope="row">zb_users</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['zb_users'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['zb_users'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">zb_users/cache</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['cache'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['cache'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">zb_users/data</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['data'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['data'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">zb_users/include</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['include'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['include'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">zb_users/theme</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['theme'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['theme'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">zb_users/plugin</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['plugin'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['plugin'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">zb_users/upload</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['upload'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['upload'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">zb_users/c_option.php</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option_php'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option_php'][1];?></td>
+        </tr>
+        <tr>
+          <th colspan="3" scope="row">函数检查</th>
+        </tr>
+        <tr>
+          <td scope="row">file_get_contents</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['file_get_contents'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['file_get_contents'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">gethostbyname</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gethostbyname'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gethostbyname'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">xml_parser_create</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['xml_parser_create'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['xml_parser_create'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">fsockopen</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['fsockopen'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['fsockopen'][1];?></td>
+        </tr>
+      </table>
+    </div>
+    <div id="bottom">
+      <script type="text/javascript">bmx2table();</script>
+      <?php ?>
+      <input type="submit" name="next" id="netx" value="下一步" />
+      <?php ?>
+    </div>
+  </dd>
 </dl>
 <?php
 }
@@ -341,54 +338,101 @@ function Setup3(){
   CheckServer();
 ?>
 <dl>
-<dt></dt>
-<dd id="ddleft">
-<img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
-<div class="left">安装进度： </div><div id="setup3"  class="left"></div>
-<p><b>安装协议</b> » <b>环境检查</b> » <b>数据库建立与设置</b> » 安装结果</p>
-</dd>
-<dd id="ddright">
-<div id="title">数据库建立与设置</div>
-<div id="content">
-<p><b>类型选择</b>:
-  &nbsp;&nbsp;<label class="dbselect" id="mysql_radio"><input value="mysql" type="radio" name="dbtype" checked="checked"/>MySQL</label>
-  &nbsp;&nbsp;<label class="dbselect" id="pdo_mysql_radio"<?php if(!$CheckResult['pdo_mysql'][0]){ echo 'style=\'display:none;\''; }?>><input value="pdo_mysql" type="radio" name="dbtype" checked="checked" />pdo_mysql</label>
-  &nbsp;&nbsp;<label class="dbselect" id="sqlite_radio"<?php if(!$CheckResult['sqlite'][0]){ echo 'style=\'display:none;\''; }?>><input value="sqlite" type="radio" name="dbtype" />SQLite</label>
-  &nbsp;&nbsp;<label class="dbselect" id="sqlite3_radio"<?php if(!$CheckResult['sqlite3'][0]){ echo 'style=\'display:none;\''; }?>><input value="sqlite3" type="radio" name="dbtype" />SQLite3</label>  
-</p>
-
-<div class="dbdetail" id="sqlite" style="display:none;">
-<p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo CreateDbName()?>" readonly style="width:350px;" /></p>
-<p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" /></p>
-</div>
-<div class="dbdetail" id="sqlite3" style="display:none;">
-<p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite3_name" id="dbsqlite3_name" value="<?php echo CreateDbName()?>" readonly style="width:350px;" /></p>
-<p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dbsqlite3_pre" id="dbsqlite3_pre" value="zbp_" style="width:350px;" /></p>
-</div>
-<div class="dbdetail" id="pdo_mysql" style="display:none">
-<p><b>数据库主机:</b><input type="text" name="dbmysql_server" id="dbmysql_server" value="localhost" style="width:350px;" /></p>
-<p><b>用户名称:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_username" id="dbmysql_username" value="" style="width:350px;" /></p>
-<p><b>用户密码:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_password" id="dbmysql_password" value="" style="width:350px;" /></p>
-<p><b>数据库名称:</b><input type="text" name="dbmysql_name" id="dbmysql_name" value="" style="width:350px;" /></p>
-<p><b>表&nbsp;前&nbsp;缀:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_pre" id="dbmysql_pre" value="zbp_" style="width:350px;" /></p>
-</div>
-<div class="dbdetail" id="mysql">
-<p><b>数据库主机:</b><input type="text" name="dbmysql_server" id="dbmysql_server" value="localhost" style="width:350px;" /></p>
-<p><b>用户名称:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_username" id="dbmysql_username" value="" style="width:350px;" /></p>
-<p><b>用户密码:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_password" id="dbmysql_password" value="" style="width:350px;" /></p>
-<p><b>数据库名称:</b><input type="text" name="dbmysql_name" id="dbmysql_name" value="" style="width:350px;" /></p>
-<p><b>表&nbsp;前&nbsp;缀:</b>&nbsp;&nbsp;<input type="text" name="dbmysql_pre" id="dbmysql_pre" value="zbp_" style="width:350px;" /></p>
-</div>
-<p class="title">网站设置</p>
-<p><b>网站名称:</b>&nbsp;&nbsp;<input type="text" name="blogtitle" id="blogtitle" value="" style="width:250px;" /></p>
-<p><b>用&nbsp;户&nbsp;名:</b>&nbsp;&nbsp;<input type="text" name="username" id="username" value="" style="width:250px;" />&nbsp;(英文,数字,汉字和._的组合)</p>
-<p><b>密&nbsp;&nbsp;&nbsp;&nbsp;码:</b>&nbsp;&nbsp;<input type="password" name="password" id="password" value="" style="width:250px;" />&nbsp;(8位或更长的数字和字母,字符组合)</p>
-<p><b>确认密码:</b>&nbsp;&nbsp;<input type="password" name="repassword" id="repassword" value="" style="width:250px;" /></p>
-</div>
-<div id="bottom">
-<input type="submit" name="next" id="netx" onClick="return Setup3()" value="下一步" />
-</div>
-</dd>
+  <dt></dt>
+  <dd id="ddleft"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
+    <div class="left">安装进度：</div>
+    <div id="setup3"  class="left"></div>
+    <p><b>安装协议</b>»<b>环境检查</b>»<b>数据库建立与设置</b>» 安装结果</p>
+  </dd>
+  <dd id="ddright">
+    <div id="title">数据库建立与设置</div>
+    <div id="content">
+      <p><b>类型选择</b>:
+        &nbsp;&nbsp;
+        <label class="dbselect" id="mysql_radio">
+          <input value="mysql" type="radio" name="dbtype" checked="checked"/>
+          MySQL</label>
+        &nbsp;&nbsp;
+        <label class="dbselect" id="pdo_mysql_radio"<?php if(!$CheckResult['pdo_mysql'][0]){ echo 'style=\'display:none;\''; }?>>
+          <input value="pdo_mysql" type="radio" name="dbtype" checked="checked" />
+          pdo_mysql</label>
+        &nbsp;&nbsp;
+        <label class="dbselect" id="sqlite_radio"<?php if(!$CheckResult['sqlite'][0]){ echo 'style=\'display:none;\''; }?>>
+          <input value="sqlite" type="radio" name="dbtype" />
+          SQLite</label>
+        &nbsp;&nbsp;
+        <label class="dbselect" id="sqlite3_radio"<?php if(!$CheckResult['sqlite3'][0]){ echo 'style=\'display:none;\''; }?>>
+          <input value="sqlite3" type="radio" name="dbtype" />
+          SQLite3</label>
+      </p>
+      <div class="dbdetail" id="sqlite" style="display:none;">
+        <p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo CreateDbName()?>" readonly style="width:350px;" />
+        </p>
+        <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" />
+        </p>
+      </div>
+      <div class="dbdetail" id="sqlite3" style="display:none;">
+        <p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="text" name="dbsqlite3_name" id="dbsqlite3_name" value="<?php echo CreateDbName()?>" readonly style="width:350px;" />
+        </p>
+        <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="text" name="dbsqlite3_pre" id="dbsqlite3_pre" value="zbp_" style="width:350px;" />
+        </p>
+      </div>
+      <div class="dbdetail" id="pdo_mysql" style="display:none">
+        <p><b>数据库主机:</b>
+          <input type="text" name="dbmysql_server" id="dbmysql_server" value="localhost" style="width:350px;" />
+        </p>
+        <p><b>用户名称:</b>&nbsp;&nbsp;
+          <input type="text" name="dbmysql_username" id="dbmysql_username" value="" style="width:350px;" />
+        </p>
+        <p><b>用户密码:</b>&nbsp;&nbsp;
+          <input type="text" name="dbmysql_password" id="dbmysql_password" value="" style="width:350px;" />
+        </p>
+        <p><b>数据库名称:</b>
+          <input type="text" name="dbmysql_name" id="dbmysql_name" value="" style="width:350px;" />
+        </p>
+        <p><b>表&nbsp;前&nbsp;缀:</b>&nbsp;&nbsp;
+          <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="zbp_" style="width:350px;" />
+        </p>
+      </div>
+      <div class="dbdetail" id="mysql">
+        <p><b>数据库主机:</b>
+          <input type="text" name="dbmysql_server" id="dbmysql_server" value="localhost" style="width:350px;" />
+        </p>
+        <p><b>用户名称:</b>&nbsp;&nbsp;
+          <input type="text" name="dbmysql_username" id="dbmysql_username" value="" style="width:350px;" />
+        </p>
+        <p><b>用户密码:</b>&nbsp;&nbsp;
+          <input type="text" name="dbmysql_password" id="dbmysql_password" value="" style="width:350px;" />
+        </p>
+        <p><b>数据库名称:</b>
+          <input type="text" name="dbmysql_name" id="dbmysql_name" value="" style="width:350px;" />
+        </p>
+        <p><b>表&nbsp;前&nbsp;缀:</b>&nbsp;&nbsp;
+          <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="zbp_" style="width:350px;" />
+        </p>
+      </div>
+      <p class="title">网站设置</p>
+      <p><b>网站名称:</b>&nbsp;&nbsp;
+        <input type="text" name="blogtitle" id="blogtitle" value="" style="width:250px;" />
+      </p>
+      <p><b>用&nbsp;户&nbsp;名:</b>&nbsp;&nbsp;
+        <input type="text" name="username" id="username" value="" style="width:250px;" />
+        &nbsp;(英文,数字,汉字和._的组合)</p>
+      <p><b>密&nbsp;&nbsp;&nbsp;&nbsp;码:</b>&nbsp;&nbsp;
+        <input type="password" name="password" id="password" value="" style="width:250px;" />
+        &nbsp;(8位或更长的数字和字母,字符组合)</p>
+      <p><b>确认密码:</b>&nbsp;&nbsp;
+        <input type="password" name="repassword" id="repassword" value="" style="width:250px;" />
+      </p>
+    </div>
+    <div id="bottom">
+      <input type="submit" name="next" id="netx" onClick="return Setup3()" value="下一步" />
+    </div>
+  </dd>
 </dl>
 <script type="text/javascript">
 $(".dbselect").click(function(){
@@ -403,18 +447,16 @@ function Setup4(){
 
 ?>
 <dl>
-<dt></dt>
-<dd id="ddleft">
-<img src="../zb_system/image/admin/install.png" alt="Z-Blog2.0在线安装" />
-<div class="left">安装进度： </div><div id="setup4"  class="left"></div>
-<p><b>安装协议</b> » <b>环境检查</b> » <b>数据库建立与设置</b> » <b>安装结果</b></p>
-</dd>
-<dd id="ddright">
-
-<div id="title">安装结果</div>
-<div id="content">
-
-<?php
+  <dt></dt>
+  <dd id="ddleft"><img src="../zb_system/image/admin/install.png" alt="Z-Blog2.0在线安装" />
+    <div class="left">安装进度：</div>
+    <div id="setup4"  class="left"></div>
+    <p><b>安装协议</b>»<b>环境检查</b>»<b>数据库建立与设置</b>»<b>安装结果</b></p>
+  </dd>
+  <dd id="ddright">
+    <div id="title">安装结果</div>
+    <div id="content">
+      <?php
 
 $dbtype=GetVars('dbtype','POST');
 #echo $dbtype;
@@ -456,14 +498,14 @@ SaveConfig();
 $db->Close();
 
 ?>
-
-<!--<p>Z-Blog 2.0安装成功了,现在您可以点击"完成"进入网站首页.</p>-->
-
-</div>
-<div id="bottom">
-<input type="button" name="next" onClick="window.location.href='../'" id="netx" value="完成" />
-</div>
-</dd>
+      
+      <!--<p>Z-Blog 2.0安装成功了,现在您可以点击"完成"进入网站首页.</p>-->
+      
+    </div>
+    <div id="bottom">
+      <input type="button" name="next" onClick="window.location.href='../'" id="netx" value="完成" />
+    </div>
+  </dd>
 </dl>
 <?php
 }
