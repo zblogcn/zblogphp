@@ -24,11 +24,19 @@ function ViewList($page,$cate,$auth,$date,$tags){
 		$fpreturn=$fpname($page,$cate,$auth,$date,$tags);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
+	
+	global $zbp;
 
-	$zbp=$GLOBALS['zbp'];
+	$zbp->title=$zbp->option['ZC_BLOG_SUBTITLE'];
+	$html=null;
 
-	echo $page;
+	if(isset($zbp->templatetags['TEMPLATE_DEFAULT'])){$html=$zbp->templatetags['TEMPLATE_DEFAULT'];}
 
+	foreach ($zbp->templatetags as $key => $value) {
+		$html=str_replace('<#' . $key . '#>', $value, $html);
+	}
+
+	echo $html;
 	return null;
 
 }

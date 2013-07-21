@@ -17,20 +17,7 @@ function ActivePlugin_Default() {
 
 
 function Default_ViewList_Begin(&$page,&$cate,&$auth,&$date,&$tags){
-	$GLOBALS['Filter_Plugin_ViewList_Begin']['Default_ViewList_Begin']=PLUGIN_EXITSIGNAL_RETURN;
-	global $zbp;
-
-	$zbp->title='首页';
-	$html=null;
-
-	if(isset($zbp->templatetags['TEMPLATE_DEFAULT'])){$html=$zbp->templatetags['TEMPLATE_DEFAULT'];}
-
-foreach ($zbp->templatetags as $key => $value) {
-	$html=str_replace('<#' . $key . '#>', $value, $html);
-}
-
-	echo $html;
-
+	#$GLOBALS['Filter_Plugin_ViewList_Begin']['Default_ViewList_Begin']=PLUGIN_EXITSIGNAL_RETURN;
 }
 
 ?>
