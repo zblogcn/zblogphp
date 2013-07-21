@@ -52,14 +52,21 @@ function GetCurrentHost(&$cookiespath){
 	}
 
 
-	$host.=$_SERVER['HTTP_HOST'].'/';
+	$host.=$_SERVER['HTTP_HOST'];
 
-	$a=$GLOBALS['blogpath'];
-	$b=str_replace('\\','/',$_SERVER['DOCUMENT_ROOT']).'/';
-	$c=str_replace($b,'',$a);
-	$cookiespath=$c==''?'/':'/'.$c;
+	$y=strtolower($GLOBALS['blogpath']);
+	$x=strtolower($_SERVER['SCRIPT_NAME']);
 
-	return $host . $c;
+	for ($i=strlen($x); $i >0 ; $i--) { 
+		$z=substr($x,0,$i);
+		if(substr($y,strlen($y)-$i)==$z){
+			break;
+		}
+	}
+
+	$cookiespath=$z;
+
+	return $host . $z;
 }
 
 
