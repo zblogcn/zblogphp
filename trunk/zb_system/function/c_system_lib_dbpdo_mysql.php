@@ -48,6 +48,7 @@ class Dbpdo_MySQL implements iDataBase
 
 	function CreateTable($path){
 		$a=explode(';',str_replace('%pre%', $this->dbpre, file_get_contents($path.'zb_system/defend/createtable/mysql.sql')));
+
 		foreach ($a as $s) {
 			$this->db->exec($s);
 		}

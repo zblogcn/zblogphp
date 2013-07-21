@@ -14,6 +14,7 @@ $zbp->Initialize();
 $action=(GetVars('act','GET')=='') ? 'admin' : GetVars('act','GET') ;
 if (!CheckRights($action)) {throw new Exception("没有权限！！！");}
 
+$blogtitle='后台管理';
 
 require_once $blogpath . 'zb_system/admin/admin_header.php';
 require_once $blogpath . 'zb_system/admin/admin_top.php';
@@ -53,5 +54,5 @@ require_once $blogpath . 'zb_system/admin/admin_footer.php';
 
 $zbp->Terminate();
 
-echo RunTime();
+RunTime();
 ?>
