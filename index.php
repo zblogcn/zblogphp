@@ -8,7 +8,7 @@
 
 require_once './zb_system/function/c_system_base.php';
 
-if (!$zbp->option['ZC_DATABASE_TYPE']) {redirect('./zb_install');}
+if (!$zbp->option['ZC_DATABASE_TYPE']) {Redirect('./zb_install');}
 
 $zbp->Initialize();
 
@@ -18,7 +18,7 @@ ViewList(GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVa
 
 $zbp->Terminate();
 
-#ZBlogException::Trace('看看写入debug信息成功吧？');
+#ZBlogException::Log('看看写入debug信息成功吧？');
 
 RunTime();
 ?>

@@ -33,7 +33,7 @@ return array (
   'ZC_BLOG_PRODUCT' => 'Z-BlogPHP',
   'ZC_BLOG_VERSION' => '1.0 Beta Build 130707',
   'ZC_BLOG_PRODUCT_FULL' => '',
-  'ZC_BLOG_PRODUCT_FULLHTML' => '',  
+  'ZC_BLOG_PRODUCT_FULLHTML' => '',
   'ZC_COMMENT_TURNOFF' => false,
   'ZC_COMMENT_VERIFY_ENABLE' => true,
   'ZC_COMMENT_REVERSE_ORDER_EXPORT' => false,
@@ -101,6 +101,6 @@ return array (
   'ZC_SIDEBAR_ORDER4' => '',
   'ZC_SIDEBAR_ORDER5' => '',
   'ZC_EDITORLANG' => 'zh-cn',
-  'ZC_DEBUGMODE' => true
+  'ZC_DEBUGMODE' => true,
 )
 ?>

@@ -8,3 +8,13 @@ d:\my documents\visual studio 2012\Projects\ngiphp\ngiphp\obj\Debug\ngiphp.vbpro
 d:\my documents\visual studio 2012\Projects\ngiphp\ngiphp\obj\Debug\ngiphp.exe
 d:\my documents\visual studio 2012\Projects\ngiphp\ngiphp\obj\Debug\ngiphp.xml
 d:\my documents\visual studio 2012\Projects\ngiphp\ngiphp\obj\Debug\ngiphp.pdb
+D:\inetpub\zbphp\ngiphp\ngiphp\bin\Debug\ngiphp.exe.config
+D:\inetpub\zbphp\ngiphp\ngiphp\obj\Debug\ngiphp.exe
+D:\inetpub\zbphp\ngiphp\ngiphp\obj\Debug\ngiphp.xml
+D:\inetpub\zbphp\ngiphp\ngiphp\obj\Debug\ngiphp.pdb
+D:\inetpub\zbphp\ngiphp\ngiphp\bin\Debug\ngiphp.exe
+D:\inetpub\zbphp\ngiphp\ngiphp\bin\Debug\ngiphp.pdb
+D:\inetpub\zbphp\ngiphp\ngiphp\bin\Debug\ngiphp.xml
+D:\inetpub\zbphp\ngiphp\ngiphp\obj\Debug\ngiphp.Form1.resources
+D:\inetpub\zbphp\ngiphp\ngiphp\obj\Debug\ngiphp.Resources.resources
+D:\inetpub\zbphp\ngiphp\ngiphp\obj\Debug\ngiphp.vbproj.GenerateResource.Cache
