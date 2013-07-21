@@ -823,6 +823,7 @@ function SaveConfig(){
 
   switch ($GLOBALS['zbp']->option['ZC_DATABASE_TYPE']) {
     case 'mysql':
+    case 'pdo_mysql':	
       $GLOBALS['zbp']->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
       $GLOBALS['zbp']->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
       $GLOBALS['zbp']->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
