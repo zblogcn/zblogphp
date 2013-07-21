@@ -5,8 +5,7 @@ $zbp->Initialize();
 $blogtitle=$lang['ZC_MSG']['009'];
 
 if (CheckRights('admin')) {
-	header("HTTP/1.1 302 Found");
-	header('Location:cmd.php?act=admin');
+	Redirect('cmd.php?act=admin');
 }
 
 ?><!DOCTYPE HTML>
@@ -14,8 +13,8 @@ if (CheckRights('admin')) {
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-	<meta name="generator" content="Z-BlogPHP" />
 	<meta name="robots" content="none" />
+	<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']?>" />
 	<link rel="stylesheet" rev="stylesheet" href="css/admin.css" type="text/css" media="screen" />
 	<script language="JavaScript" src="script/common.js" type="text/javascript"></script>
 	<script language="JavaScript" src="script/md5.js" type="text/javascript"></script>

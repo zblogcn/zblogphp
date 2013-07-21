@@ -101,13 +101,7 @@ function GetFilesInDir($dir,$type){
 }
 
 
-function _stripslashes(&$val) {
-	if(!is_array($val)) return stripslashes($val);
-	foreach($val as $k => &$v) $val[$k] = _stripslashes($v);
-	return $val;
-}
-
-function redirect($url){
+function Redirect($url){
 	header("HTTP/1.1 302 Found");
 	header('Location: '.$url);
 }

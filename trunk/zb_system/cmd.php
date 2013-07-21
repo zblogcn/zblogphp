@@ -9,17 +9,14 @@ if (!CheckRights($action)) {throw new Exception("没有权限！！！");}
 
 switch ($action) {
 	case 'login':
-		header("HTTP/1.1 302 Found");
-		header('Location:login.php');
+		Redirect('login.php');
 		break;
 	case 'logout':
 		Logout();
-		header("HTTP/1.1 302 Found");
-		header('Location:' . $bloghost);
+		Redirect($bloghost);
 		break;
 	case 'admin':
-		header("HTTP/1.1 302 Found");
-		header('Location:admin/');
+		Redirect('admin/');
 		break;	
 	case 'vrs':
 		# code...
