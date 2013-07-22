@@ -9,12 +9,12 @@
 
 class ZBlogPHP{
 	static private $_zbp=null;
+	public $db = null;
 	public $option = array();
 	public $lang = array();
 	public $path = null;
 	public $host = null;
 	public $cookiespath=null;
-	public $db = null;
 	public $guid=null;
 
 	public $members=array();
@@ -34,6 +34,13 @@ class ZBlogPHP{
 
 	public $user=null;
 	
+	static public function GetInstance(){
+		if(!isset(self::$_zbp)){
+			self::$_zbp=new ZBlogPHP;
+		}
+		return self::$_zbp;
+	}
+	
 	function __construct() {
 
 		$this->option = &$GLOBALS['option'];
@@ -42,18 +49,19 @@ class ZBlogPHP{
 		$this->host = &$GLOBALS['bloghost'];
 		$this->cookiespath = &$GLOBALS['cookiespath'];
 
-		if (trim($this->option['ZC_BLOG_CLSID'])===''){
+		if (trim($this->option['ZC_BLOG_CLSID'])==''){
 			$this->guid=GetGuid();
 		}else{
-			$this->guid=$this->option['ZC_BLOG_CLSID'];
+			$this->guid=&$this->option['ZC_BLOG_CLSID'];
 		}
 
 		$this->option['ZC_BLOG_HOST']=&$GLOBALS['bloghost'];
 		//define();
 
 		$this->title=&$GLOBALS['blogtitle'];
-
+		
 		$this->user=new Member();
+
 	}
 
 	function __destruct(){
@@ -67,14 +75,6 @@ class ZBlogPHP{
 	public function __call($method, $args) {
 		throw new Exception('');
 	}
-
-	static public function GetInstance(){
-		if(!isset(self::$_zbp)){
-			self::$_zbp=new ZBlogPHP;
-		}
-		return self::$_zbp;
-	}
-
 
 	function OpenConnect(){
 		static $isconnect=false;
@@ -98,7 +98,7 @@ class ZBlogPHP{
 			break;
 		case 'sqlite':
 			$db=DbFactory::Create('sqlite');
-			$GLOBALS['zbp']->db=&$db;
+			$this->db=&$db;
 			if($db->Open(array(
 				$this->path . $this->option['ZC_SQLITE_NAME'],
 				$this->option['ZC_SQLITE_PRE']
@@ -107,8 +107,9 @@ class ZBlogPHP{
 			}
 			break;
 		case 'sqlite3':
-			$this->db=DbFactory::Create('sqlite3');
-			if($this->db->Open(array(
+			$db=DbFactory::Create('sqlite3');
+			$this->db=&$db;
+			if($db->Open(array(
 				$this->path . $this->option['ZC_SQLITE3_NAME'],
 				$this->option['ZC_SQLITE3_PRE']
 				))==false){
