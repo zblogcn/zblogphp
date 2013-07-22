@@ -106,4 +106,13 @@ function Redirect($url){
 	header('Location: '.$url);
 }
 
+
+function Logs($s){
+	$f=$GLOBALS['blogpath'] . 'zb_users/logs/'. $GLOBALS['option']['ZC_BLOG_CLSID'] .'-log' . date("Ymd"). '.txt';
+	$handle = fopen($f, 'a+');
+	fwrite($handle,date('c') . "~" . current(explode(" ", microtime()))  . ":" . $s . "\r");
+	fclose($handle);	
+}
+
+
 ?>

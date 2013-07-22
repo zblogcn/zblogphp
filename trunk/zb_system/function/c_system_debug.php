@@ -71,11 +71,7 @@ class ZBlogException
 	}
 
 
-	static public function Log($s){
-		$f=$GLOBALS['zbp']->path . 'zb_users/cache/log' . date("Ymd"). '.txt';
-		$handle = fopen($f, 'a+');
-		fwrite($handle,date('c') . "~" . current(explode(" ", microtime()))  . ":" . $s . "\r");
-		fclose($handle);
+	static public function Trace($s){
 
 	}
 
