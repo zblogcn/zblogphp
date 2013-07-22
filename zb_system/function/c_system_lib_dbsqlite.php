@@ -38,7 +38,8 @@ class DbSQLite implements iDataBase
 	function CreateTable($path){
 		$a=explode(';',str_replace('%pre%', $this->dbpre, file_get_contents($path.'zb_system/defend/createtable/sqlite.sql')));
 		foreach ($a as $s) {
-			sqlite_query($s);
+			$s=trim($s);
+			if($s<>''){sqlite_query($this->db,$s);}
 		}
 	}
 
