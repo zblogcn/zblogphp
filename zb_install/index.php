@@ -610,7 +610,27 @@ function InsertInfo(){
   $guid=GetGuid();
   //$mem->LoadInfobyArray(array(0,$guid,GetVars('username','POST'),'1',GetPassWordByGuid(GetVars('password','POST'),$guid),'','',0,'','',time(),'',''));
 
-  $mem->LoadInfobyArray(array(0,$guid,GetVars('username','POST'),'1',GetPassWordByGuid(GetVars('password','POST'),$guid),'','',0,'','',time(),'',''));
+  $mem->LoadInfobyArray(
+    array(
+      0,
+      $guid,
+      1,
+      0,
+      GetVars('username','POST'),
+      GetPassWordByGuid(GetVars('password','POST'),$guid),
+      '',
+      '',
+      getGuestIP(),
+      time(),
+      '',
+      '',
+      0,
+      0,
+      0,
+      0,
+      '',
+      ''
+    ));
   $mem->Post();
 
   

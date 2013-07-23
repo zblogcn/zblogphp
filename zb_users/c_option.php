@@ -13,7 +13,7 @@ return array (
   'ZC_SQLITE_NAME' => '',
   'ZC_SQLITE_PRE' => 'zbp_',
   'ZC_SQLITE3_ENABLE' => false,
-  'ZC_SQLITE3_NAME' => 'zb_users/data/#%2051ec7f26dd4be428058985.db',
+  'ZC_SQLITE3_NAME' => '',
   'ZC_SQLITE3_PRE' => 'zbp_',
   'ZC_MYSQL_ENABLE' => false,
   'ZC_MYSQL_SERVER' => 'localhost',
