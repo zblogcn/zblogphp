@@ -114,5 +114,9 @@ function Logs($s){
 	fclose($handle);	
 }
 
+function getGuestIP(){
+	return $_SERVER["REMOTE_ADDR"];
+}
+
 
 ?>
