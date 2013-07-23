@@ -1,9 +1,13 @@
-CREATE TABLE IF NOT EXISTS `%pre%article` (
+CREATE TABLE IF NOT EXISTS `%pre%_article` (
   `log_ID` int(11) NOT NULL AUTO_INCREMENT,
   `log_CateID` int(11) DEFAULT '0',
   `log_AuthorID` int(11) DEFAULT '0',
-  `log_Level` int(11) DEFAULT '0',
+  `log_Tag` varchar(255) DEFAULT NULL,
+  `log_Status` int(11) DEFAULT '0',
+  `log_Type` int(11) DEFAULT '0',
   `log_Alias` varchar(255) DEFAULT '',
+  `log_IsTop` tinyint(1) DEFAULT '0',
+  `log_IsLock` tinyint(1) DEFAULT '0',
   `log_Title` varchar(255) DEFAULT '',
   `log_Intro` text,
   `log_Content` text,
@@ -11,40 +15,35 @@ CREATE TABLE IF NOT EXISTS `%pre%article` (
   `log_PostTime` int(11) DEFAULT '0',
   `log_CommNums` int(11) DEFAULT '0',
   `log_ViewNums` int(11) DEFAULT '0',
-  `log_TrackBackNums` int(11) DEFAULT '0',
-  `log_Tag` varchar(255) DEFAULT '',
-  `log_IsTop` bit(1) DEFAULT b'0',
-  `log_Yea` int(11) DEFAULT '0',
-  `log_Nay` int(11) DEFAULT '0',
-  `log_Ratting` int(11) DEFAULT '0',
   `log_Template` varchar(50) DEFAULT '',
-  `log_Url` varchar(255) DEFAULT '',
-  `log_Type` int(11) DEFAULT '0',
   `log_Meta` text,
   PRIMARY KEY (`log_ID`),
-  KEY `%pre%log_PostTime` (`log_PostTime`)
+  KEY `%pre%_log_PostTime` (`log_PostTime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
-CREATE TABLE IF NOT EXISTS `%pre%category` (
+CREATE TABLE IF NOT EXISTS `%pre%_category` (
   `cate_ID` int(11) NOT NULL AUTO_INCREMENT,
   `cate_Name` varchar(50) DEFAULT '',
   `cate_Order` int(11) DEFAULT '0',
-  `cate_Intro` text,
   `cate_Count` int(11) DEFAULT '0',
-  `cate_Alias` varchar(255) DEFAULT '',
+  `cate_Alias` varchar(255) DEFAULT NULL,
+  `cate_RootID` int(11) DEFAULT '0',
   `cate_ParentID` int(11) DEFAULT '0',
-  `cate_Template` varchar(50) DEFAULT '',
-  `cate_LogTemplate` varchar(50) DEFAULT '',
-  `cate_Url` varchar(255) DEFAULT '',
+  `cate_Template` varchar(50) DEFAULT NULL,
+  `cate_LogTemplate` varchar(50) DEFAULT NULL,
+  `cate_Intro` text,
   `cate_Meta` text,
   PRIMARY KEY (`cate_ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
-CREATE TABLE IF NOT EXISTS `%pre%comment` (
+CREATE TABLE IF NOT EXISTS `%pre%_comment` (
   `comm_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `log_ID` int(11) DEFAULT '0',
+  `comm_logID` int(11) DEFAULT '0',
+  `comm_IsCheck` tinyint(1) DEFAULT '0',
+  `comm_RootID` int(11) DEFAULT '0',
+  `comm_ParentID` int(11) DEFAULT '0',
   `comm_AuthorID` int(11) DEFAULT '0',
   `comm_Author` varchar(20) DEFAULT '',
   `comm_Content` text,
@@ -53,71 +52,58 @@ CREATE TABLE IF NOT EXISTS `%pre%comment` (
   `comm_PostTime` int(11) DEFAULT '0',
   `comm_IP` varchar(20) DEFAULT '',
   `comm_Agent` text,
-  `comm_Reply` text,
-  `comm_LastReplyIP` varchar(20) DEFAULT '',
-  `comm_LastReplyTime` int(11) DEFAULT '0',
-  `comm_Yea` int(11) DEFAULT '0',
-  `comm_Nay` int(11) DEFAULT '0',
-  `comm_Ratting` int(11) DEFAULT '0',
-  `comm_ParentID` int(11) DEFAULT '0',
-  `comm_IsCheck` bit(1) DEFAULT b'0',
   `comm_Meta` text,
   PRIMARY KEY (`comm_ID`),
-  KEY `%pre%comm_PostTime` (`comm_PostTime`)
+  KEY `%pre%_comm_PostTime` (`comm_PostTime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
-CREATE TABLE IF NOT EXISTS `%pre%config` (
+CREATE TABLE IF NOT EXISTS `%pre%_config` (
   `conf_Name` varchar(255) NOT NULL DEFAULT '',
   `conf_Value` text
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE IF NOT EXISTS `%pre%counter` (
+CREATE TABLE IF NOT EXISTS `%pre%_counter` (
   `coun_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `coun_UserID` int(11) DEFAULT '0',
   `coun_IP` varchar(20) DEFAULT '',
   `coun_Agent` text,
   `coun_Refer` varchar(255) DEFAULT '',
+  `coun_Title` varchar(255) DEFAULT NULL,
   `coun_PostTime` int(11) DEFAULT '0',
-  `coun_Content` text,
-  `coun_UserID` int(11) DEFAULT '0',
+  `coun_Description` text,
   `coun_PostData` text,
-  `coun_Alias` text,
   `coun_AllRequestHeader` text,
-  `coun_LogName` text,
   PRIMARY KEY (`coun_ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
-
-CREATE TABLE IF NOT EXISTS `%pre%member` (
+CREATE TABLE IF NOT EXISTS `%pre%_member` (
   `mem_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `mem_Guid` varchar(36) DEFAULT '',
   `mem_Level` int(11) DEFAULT '0',
-  `mem_Name` varchar(20) DEFAULT '',
-  `mem_Password` varchar(32) DEFAULT '',
-  `mem_Sex` int(11) DEFAULT '0',
-  `mem_Email` varchar(50) DEFAULT '',
-  `mem_HomePage` varchar(255) DEFAULT '',
-  `mem_PostTime` int(11) DEFAULT '0',
   `mem_Status` int(11) DEFAULT '0',
+  `mem_Name` varchar(20) DEFAULT NULL,
+  `mem_Alias` varchar(255) DEFAULT NULL,
+  `mem_Password` varchar(32) DEFAULT NULL,
+  `mem_PostTime` int(11) DEFAULT '0',
+  `mem_Email` varchar(50) DEFAULT NULL,
+  `mem_HomePage` varchar(255) DEFAULT NULL,
+  `mem_IP` varchar(20) DEFAULT NULL,
+  `mem_Guid` varchar(36) DEFAULT '',
+  `mem_Template` varchar(50) DEFAULT NULL,
+  `mem_Intro` text,
   `mem_Articles` int(11) DEFAULT '0',
   `mem_Pages` int(11) DEFAULT '0',
   `mem_Comments` int(11) DEFAULT '0',
-  `mem_Intro` text,
-  `mem_IP` varchar(20) DEFAULT '',
-  `mem_Count` int(11) DEFAULT '0',
-  `mem_Template` varchar(50) DEFAULT '',
-  `mem_Url` varchar(255) DEFAULT '',
-  `mem_Alias` varchar(255) DEFAULT '',
+  `mem_Attachments` int(11) DEFAULT '0',
   `mem_Meta` text,
   PRIMARY KEY (`mem_ID`),
-  KEY `%pre%mem_Name` (`mem_Name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `%pre%_mem_Name` (`mem_Name`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 
-
-CREATE TABLE IF NOT EXISTS `%pre%module` (
+CREATE TABLE IF NOT EXISTS `%pre%_module` (
   `mod_ID` int(11) NOT NULL AUTO_INCREMENT,
   `mod_Name` varchar(50) DEFAULT '',
   `mod_FileName` varchar(50) DEFAULT '',
@@ -133,34 +119,31 @@ CREATE TABLE IF NOT EXISTS `%pre%module` (
   `mod_IsHideTitle` bit(1) DEFAULT b'0',
   `mod_Meta` text,
   PRIMARY KEY (`mod_ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
 
 
-CREATE TABLE IF NOT EXISTS `%pre%tag` (
+CREATE TABLE IF NOT EXISTS `%pre%_tag` (
   `tag_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `tag_Name` varchar(255) DEFAULT '',
-  `tag_Intro` text,
   `tag_ParentID` int(11) DEFAULT '0',
-  `tag_Alias` varchar(255) DEFAULT '',
+  `tag_Name` varchar(255) DEFAULT '',
+  `tag_Alias` varchar(255) DEFAULT NULL,
   `tag_Order` int(11) DEFAULT '0',
   `tag_Count` int(11) DEFAULT '0',
-  `tag_Template` varchar(50) DEFAULT '',
-  `tag_Url` varchar(255) DEFAULT '',
+  `tag_Template` varchar(50) DEFAULT NULL,
+  `tag_Intro` text,
   `tag_Meta` text,
   PRIMARY KEY (`tag_ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
-CREATE TABLE IF NOT EXISTS `%pre%upload` (
+CREATE TABLE IF NOT EXISTS `%pre%_upload` (
   `ul_ID` int(11) NOT NULL AUTO_INCREMENT,
   `ul_AuthorID` int(11) DEFAULT '0',
   `ul_FileSize` int(11) DEFAULT '0',
   `ul_FileName` varchar(255) DEFAULT '',
   `ul_PostTime` int(11) DEFAULT '0',
-  `ul_Quote` varchar(255) DEFAULT '',
   `ul_DownNum` int(11) DEFAULT '0',
-  `ul_FileIntro` varchar(255) DEFAULT '',
-  `ul_DirByTime` bit(1) DEFAULT b'0',
+  `ul_Intro` varchar(255) DEFAULT NULL,
   `ul_Meta` text,
   PRIMARY KEY (`ul_ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
