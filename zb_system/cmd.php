@@ -9,14 +9,14 @@ if (!CheckRights($action)) {throw new Exception("没有权限！！！");}
 
 switch ($action) {
 	case 'login':
-		Redirect('login.php');
+		redirect('login.php');
 		break;
 	case 'logout':
 		Logout();
-		Redirect($bloghost);
+		redirect($bloghost);
 		break;
 	case 'admin':
-		Redirect('admin/');
+		redirect('admin/');
 		break;	
 	case 'vrs':
 		# code...

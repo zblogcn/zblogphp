@@ -9,7 +9,7 @@
 
 function CheckRights($action){
 
-	Logs('$action=' . $action);
+	logs('$action=' . $action);
 	
 	if ($GLOBALS['zbp']->user->Level > $GLOBALS['actions'][$action]) {
 		return false;
