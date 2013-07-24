@@ -50,8 +50,14 @@ class Dbpdo_MySQL implements iDataBase
 		$a=explode(';',str_replace('%pre%', $this->dbpre, file_get_contents($path.'zb_system/defend/createtable/mysql.sql')));
 
 		foreach ($a as $s) {
-			$this->db->exec($s);
+			$s=trim($s);
+			$s=str_replace("IF NOT EXISTS", '', $s);			
+			$s=str_replace("\r", '', $s);
+			$s=str_replace("\n", '', $s);		
+			echo "$s" . "<br/>";
+			$this->db->query($s);
 		}
+		die();
 	}
 
 	function Query($query){

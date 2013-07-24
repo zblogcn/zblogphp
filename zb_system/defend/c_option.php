@@ -26,17 +26,17 @@ return array(
 	// '----------------------------数据库配置---------------------------------------
 	//mysql|sqlite|sqlite3|pdo_mysql
 	'ZC_DATABASE_TYPE'=> '',
-	'ZC_SQLITE_ENABLE' => False,
+	'ZC_SQLITE_ENABLE' => false,
 
 		'ZC_SQLITE_NAME' => '',
 		'ZC_SQLITE_PRE' => 'zbp_',
 
-	'ZC_SQLITE3_ENABLE' => False,
+	'ZC_SQLITE3_ENABLE' => false,
 
 		'ZC_SQLITE3_NAME' => '',
 		'ZC_SQLITE3_PRE' => 'zbp_',
 	
-	'ZC_MYSQL_ENABLE' => False,
+	'ZC_MYSQL_ENABLE' => false,
 			
 		'ZC_MYSQL_SERVER' => 'localhost',								
 		'ZC_MYSQL_USERNAME' => 'root',				
@@ -50,26 +50,27 @@ return array(
 	'ZC_USING_PLUGIN_LIST' => '',
 
 	// '-------------------------------全局配置-----------------------------------
+	'ZC_DEBUG_MODE' => true,
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE' => '+0800',
 	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
 	'ZC_UPDATE_INFO_URL' => 'http://update.rainbowsoft.org/info/',
-	// '固定域名,默认为False,如启用则'ZC_BLOG_HOST生效而'ZC_MULTI_DOMAIN_SUPPORT无效
-	'ZC_PERMANENT_DOMAIN_ENABLE' => False,
-	'ZC_MULTI_DOMAIN_SUPPORT' => False,
+	// '固定域名,默认为false,如启用则'ZC_BLOG_HOST生效而'ZC_MULTI_DOMAIN_SUPPORT无效
+	'ZC_PERMANENT_DOMAIN_ENABLE' => false,
+	'ZC_MULTI_DOMAIN_SUPPORT' => false,
 
 	// '当前 Z-Blog 版本
 	
 	'ZC_BLOG_PRODUCT' => 'Z-BlogPHP',
-	'ZC_BLOG_VERSION' => '1.0 Beta Build 130707',
+	'ZC_BLOG_VERSION' => '',
 	'ZC_BLOG_PRODUCT_FULL' => '',
 	'ZC_BLOG_PRODUCT_FULLHTML' => '',
 
 
 	// '留言评论
-	'ZC_COMMENT_TURNOFF' => False,
-	'ZC_COMMENT_VERIFY_ENABLE' => True,
-	'ZC_COMMENT_REVERSE_ORDER_EXPORT' => False,
+	'ZC_COMMENT_TURNOFF' => false,
+	'ZC_COMMENT_VERIFY_ENABLE' => true,
+	'ZC_COMMENT_REVERSE_ORDER_EXPORT' => false,
 	'ZC_COMMNET_MAXFLOOR' => 8,
 
 	// '验证码
@@ -86,27 +87,25 @@ return array(
 	'ZC_COMMENTS_DISPLAY_COUNT' => 3,
 
 	// '杂项
-	'ZC_USE_NAVIGATE_ARTICLE' => True,
-	'ZC_RSS_EXPORT_WHOLE' => True,
+	'ZC_USE_NAVIGATE_ARTICLE' => true,
+	'ZC_RSS_EXPORT_WHOLE' => true,
 	'ZC_TEMPLATE_DIRECTORY' => 'template',
 
 	// '后台管理
 	'ZC_MANAGE_COUNT' => 50,
-	'ZC_REBUILD_FILE_COUNT' => 50,
-	'ZC_REBUILD_FILE_INTERVAL' => 1,
 
 	// 'UBB转换
-	'ZC_UBB_ENABLE' => True,
-	'ZC_UBB_LINK_ENABLE' => False,
-	'ZC_UBB_FONT_ENABLE' => True,
-	'ZC_UBB_CODE_ENABLE' => True,
-	'ZC_UBB_FACE_ENABLE' => True,
-	'ZC_UBB_IMAGE_ENABLE' => True,
-	'ZC_UBB_MEDIA_ENABLE' => True,
-	'ZC_UBB_FLASH_ENABLE' => True,
-	'ZC_UBB_TYPESET_ENABLE' => True,
-	'ZC_UBB_AUTOLINK_ENABLE' => False,
-	'ZC_UBB_AUTOKEY_ENABLE' => False,
+	'ZC_UBB_ENABLE' => true,
+	'ZC_UBB_LINK_ENABLE' => false,
+	'ZC_UBB_FONT_ENABLE' => true,
+	'ZC_UBB_CODE_ENABLE' => true,
+	'ZC_UBB_FACE_ENABLE' => true,
+	'ZC_UBB_IMAGE_ENABLE' => true,
+	'ZC_UBB_MEDIA_ENABLE' => true,
+	'ZC_UBB_FLASH_ENABLE' => true,
+	'ZC_UBB_TYPESET_ENABLE' => true,
+	'ZC_UBB_AUTOLINK_ENABLE' => false,
+	'ZC_UBB_AUTOKEY_ENABLE' => false,
 
 
 	// '表情相关
@@ -121,8 +120,6 @@ return array(
 	'ZC_UPLOAD_FILETYPE' => 'jpg|gif|png|jpeg|bmp|psd|wmf|ico|rpm|deb|tar|gz|sit|7z|bz2|zip|rar|xml|xsl|svg|svgz|doc|xls|wps|chm|txt|pdf|mp3|avi|mpg|rm|ra|rmvb|mov|wmv|wma|swf|fla|torrent|zpi|zti|zba',
 
 	'ZC_UPLOAD_FILESIZE' => 10485760,
-
-	'ZC_UPLOAD_DIRBYMONTH' => True,
 
 	'ZC_UPLOAD_DIRECTORY' => 'zb_users/upload',
 
@@ -171,10 +168,10 @@ return array(
 
 	// '--------------------------其它----------------------------------------
 	// '代码高亮
-	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => True,
+	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
 
 	// '源码编辑高亮
-	'ZC_CODEMIRROR_ENABLE' => True,
+	'ZC_CODEMIRROR_ENABLE' => true,
 
 	// '自动摘要字数
 	'ZC_ARTICLE_EXCERPT_MAX' => 250,
@@ -183,7 +180,7 @@ return array(
 	'ZC_COMMENT_EXCERPT_MAX' => 20,
 
 
-	'ZC_HTTP_LASTMODIFIED' => False,
+	'ZC_HTTP_LASTMODIFIED' => false,
 
 	'ZC_DEFAULT_PAGES_TEMPLATE' => '',
 
@@ -200,6 +197,5 @@ return array(
 	//The default language of uEditor
 	//The language files will be loaded from ue-lang\ZC_EDITORLANG by editor.
 	'ZC_EDITORLANG'=>'zh-cn',
-	'ZC_DEBUGMODE' => true
 );
 ?>
