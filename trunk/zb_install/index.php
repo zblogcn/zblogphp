@@ -38,7 +38,7 @@ if($zblogstep=="") { $zblogstep=1;}
 <script src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css"  type="text/css" media="screen" />
 <link rel="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
-<title>Z-BlogPHP<?php echo $zbp->option['ZC_BLOG_VERSION']?>安装程序</title>
+<title>Z-BlogPHP <?php echo $zbp->option['ZC_BLOG_VERSION']?>安装程序</title>
 </head>
 <body>
 <div class="setup">
@@ -129,7 +129,7 @@ function Setup1(){
     <p><b>安装协议</b>» 环境检查 » 数据库建立与设置 » 安装结果</p>
   </dd>
   <dd id="ddright">
-    <div id="title">Z-BlogPHP<?php echo $GLOBALS['zbp']->option['ZC_BLOG_VERSION']?>安装协议</div>
+    <div id="title">Z-BlogPHP <?php echo $GLOBALS['zbp']->option['ZC_BLOG_VERSION']?>安装协议</div>
     <div id="content">
       <textarea readonly>
 Z-BlogPHP  最终用户授权协议 
@@ -600,15 +600,9 @@ function getRightsAndExport($folderparent,$folder,$right){
 }
 
 function InsertInfo(){
-#throw new Exception("Error Processing Request", 1);
-  /*
-    $mem = new Member();
-    $mem->LoadInfobyID(5);
-    echo $mem->Guid;
-  */
+
   $mem = new Member();
   $guid=GetGuid();
-  //$mem->LoadInfobyArray(array(0,$guid,GetVars('username','POST'),'1',GetPassWordByGuid(GetVars('password','POST'),$guid),'','',0,'','',time(),'',''));
 
   $mem->LoadInfobyArray(array(
       0,
@@ -917,6 +911,9 @@ function SaveConfig(){
       $GLOBALS['zbp']->option['ZC_SQLITE3_PRE']=GetVars('dbsqlite3_pre','POST');
       break;  
   }
+
+
+      $GLOBALS['zbp']->option['ZC_BLOG_VERSION']='1.0 Alpha Build 130707';
 
   $GLOBALS['zbp']->SaveOption();
 
