@@ -30,10 +30,9 @@ class Dbpdo_MySQL implements iDataBase
 		*/
 
 		//new PDO(DB_TYPE.':host='.DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASSWD);
-
-		$db_link = new PDO('mysql:host='.$array[0].';dbname='.$array[3],$array[1],$array[2]);
-		$db_link->query('set names utf8;');
-		$this->db = $db_link;		
+		$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',); 
+		$db_link = new PDO('mysql:host=' . $array[0] . ';dbname=' . $array[3],$array[1],$array[2],$options);
+		$this->db = $db_link;	
 		$this->dbpre=$array[4];
 		return true;
 		
@@ -48,16 +47,10 @@ class Dbpdo_MySQL implements iDataBase
 
 	function CreateTable($path){
 		$a=explode(';',str_replace('%pre%', $this->dbpre, file_get_contents($path.'zb_system/defend/createtable/mysql.sql')));
-
 		foreach ($a as $s) {
 			$s=trim($s);
-			$s=str_replace("IF NOT EXISTS", '', $s);			
-			$s=str_replace("\r", '', $s);
-			$s=str_replace("\n", '', $s);		
-			echo "$s" . "<br/>";
-			$this->db->query($s);
+			if($s<>''){$this->db->exec($s);}
 		}
-		die();
 	}
 
 	function Query($query){
