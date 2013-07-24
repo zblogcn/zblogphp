@@ -7,12 +7,12 @@
  */
 
 $_SERVER['_start_time'] = microtime(1); //RunTime
-function runtime(){
+function RunTime(){
 	echo '<!--'.number_format(microtime(1) - $_SERVER['_start_time'], 6).'s-->';
 }
 
 
-function getGuid(){
+function GetGuid(){
 	$s=str_replace('.','',trim(uniqid('zbp',true),'zbp'));
 	return $s;
 }
@@ -34,13 +34,13 @@ function GetVars($name,$type='REQUEST'){
 	}
 }
 
-function getDbName(){
+function GetDbName(){
 
-	return 'zb_users/data/' . str_replace('-','','#%20' . strtolower(getGuid())) . '.db';
+	return 'zb_users/data/' . str_replace('-','','#%20' . strtolower(GetGuid())) . '.db';
 }
 
 
-function getCurrentHost(&$cookiespath){
+function GetCurrentHost(&$cookiespath){
 	if (array_key_exists('HTTPS',$_SERVER)) {
 		if ($_SERVER['HTTPS']=='off') {
 			$host='http://';
@@ -70,14 +70,14 @@ function getCurrentHost(&$cookiespath){
 }
 
 
-function getPassWordByGuid($ps,$guid){
+function GetPassWordByGuid($ps,$guid){
 
 	return md5(md5($ps).$guid);
 
 }
 
 
-function getFilesInDir($dir,$type){
+function GetFilesInDir($dir,$type){
 
 	$files=array();
 
@@ -101,20 +101,20 @@ function getFilesInDir($dir,$type){
 }
 
 
-function redirect($url){
+function Redirect($url){
 	header("HTTP/1.1 302 Found");
 	header('Location: '.$url);
 }
 
 
-function logs($s){
+function Logs($s){
 	$f=$GLOBALS['blogpath'] . 'zb_users/logs/'. $GLOBALS['option']['ZC_BLOG_CLSID'] .'-log' . date("Ymd"). '.txt';
 	$handle = fopen($f, 'a+');
 	fwrite($handle,"[" . date('c') . "~" . current(explode(" ", microtime()))  . "]" . $s . "\r\n");
 	fclose($handle);	
 }
 
-function getGuestIP(){
+function GetGuestIP(){
 	return $_SERVER["REMOTE_ADDR"];
 }
 

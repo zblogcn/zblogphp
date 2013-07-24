@@ -14,11 +14,11 @@ $zbp->Initialize();
 
 foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
-ViewList(GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'));
+ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('tags','GET'),GetVars('date','GET'));
 
 $zbp->Terminate();
 
-logs('看看写入debug信息成功吧？');
+Logs('看看写入debug信息成功吧？');
 
 RunTime();
 ?>
