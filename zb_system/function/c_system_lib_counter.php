@@ -8,13 +8,13 @@
 
 
 
-class Comment extends Base{
+class Counter extends Base{
 
 
 	function __construct()
 	{
-		$this->table=&$GLOBALS['table']['Comment'];	
-		$this->datainfo=&$GLOBALS['datainfo']['Comment'];
+		$this->table=&$GLOBALS['table']['Counter'];	
+		$this->datainfo=&$GLOBALS['datainfo']['Counter'];
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];

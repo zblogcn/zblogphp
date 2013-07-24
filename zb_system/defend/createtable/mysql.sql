@@ -28,11 +28,11 @@ CREATE TABLE IF NOT EXISTS %pre%category (
   cate_Order int(11) DEFAULT '0',
   cate_Count int(11) DEFAULT '0',
   cate_Alias varchar(255) DEFAULT NULL,
+  cate_Intro text,
   cate_RootID int(11) DEFAULT '0',
   cate_ParentID int(11) DEFAULT '0',
   cate_Template varchar(50) DEFAULT NULL,
   cate_LogTemplate varchar(50) DEFAULT NULL,
-  cate_Intro text,
   cate_Meta text,
   PRIMARY KEY (cate_ID)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS %pre%category (
 
 CREATE TABLE IF NOT EXISTS %pre%comment (
   comm_ID int(11) NOT NULL AUTO_INCREMENT,
-  comm_logID int(11) DEFAULT '0',
+  comm_LogID int(11) DEFAULT '0',
   comm_IsCheck tinyint(1) DEFAULT '0',
   comm_RootID int(11) DEFAULT '0',
   comm_ParentID int(11) DEFAULT '0',
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS %pre%config (
 
 CREATE TABLE IF NOT EXISTS %pre%counter (
   coun_ID int(11) NOT NULL AUTO_INCREMENT,
-  coun_UserID int(11) DEFAULT '0',
+  coun_MemID int(11) DEFAULT '0',
   coun_IP varchar(15) DEFAULT '',
   coun_Agent text,
   coun_Refer varchar(255) DEFAULT '',
@@ -124,13 +124,12 @@ CREATE TABLE IF NOT EXISTS %pre%module (
 
 CREATE TABLE IF NOT EXISTS %pre%tag (
   tag_ID int(11) NOT NULL AUTO_INCREMENT,
-  tag_ParentID int(11) DEFAULT '0',
   tag_Name varchar(255) DEFAULT '',
   tag_Alias varchar(255) DEFAULT NULL,
   tag_Order int(11) DEFAULT '0',
   tag_Count int(11) DEFAULT '0',
+  tag_Intro text,  
   tag_Template varchar(50) DEFAULT NULL,
-  tag_Intro text,
   tag_Meta text,
   PRIMARY KEY (tag_ID)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -143,7 +142,7 @@ CREATE TABLE IF NOT EXISTS %pre%upload (
   ul_FileName varchar(255) DEFAULT '',
   ul_PostTime int(11) DEFAULT '0',
   ul_DownNum int(11) DEFAULT '0',
-  ul_Intro varchar(255) DEFAULT NULL,
+  ul_Intro text,
   ul_Meta text,
   PRIMARY KEY (ul_ID)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

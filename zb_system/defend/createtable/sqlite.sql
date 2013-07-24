@@ -26,18 +26,18 @@ CREATE TABLE %pre%category (
   cate_Order integer DEFAULT 0,
   cate_Count integer DEFAULT 0,
   cate_Alias varchar(255) DEFAULT NULL,
+  cate_Intro text,
   cate_RootID integer DEFAULT 0,
   cate_ParentID integer DEFAULT 0,
   cate_Template varchar(50) DEFAULT NULL,
   cate_LogTemplate varchar(50) DEFAULT NULL,
-  cate_Intro text,
   cate_Meta text
 );
 
 
 CREATE TABLE %pre%comment (
   comm_ID integer primary key,
-  comm_logID integer DEFAULT 0,
+  comm_LogID integer DEFAULT 0,
   comm_IsCheck bit DEFAULT 0,
   comm_RootID integer DEFAULT 0,
   comm_ParentID integer DEFAULT 0,
@@ -61,7 +61,7 @@ CREATE TABLE %pre%config (
 
 CREATE TABLE %pre%counter (
   coun_ID integer primary key,
-  coun_UserID integer DEFAULT 0,
+  coun_MemID integer DEFAULT 0,
   coun_IP varchar(15) DEFAULT '',
   coun_Agent text,
   coun_Refer varchar(255) DEFAULT '',
@@ -115,13 +115,12 @@ CREATE TABLE %pre%module (
 
 CREATE TABLE %pre%tag (
   tag_ID integer primary key,
-  tag_ParentID integer DEFAULT 0,
   tag_Name varchar(255) DEFAULT '',
   tag_Alias varchar(255) DEFAULT NULL,
   tag_Order integer DEFAULT 0,
   tag_Count integer DEFAULT 0,
+  tag_Intro text,  
   tag_Template varchar(50) DEFAULT NULL,
-  tag_Intro text,
   tag_Meta text
 );
 
@@ -133,7 +132,7 @@ CREATE TABLE %pre%upload (
   ul_FileName varchar(255) DEFAULT '',
   ul_PostTime integer DEFAULT 0,
   ul_DownNum integer DEFAULT 0,
-  ul_Intro varchar(255) DEFAULT NULL,
+  ul_Intro text,
   ul_Meta text
 );
 	

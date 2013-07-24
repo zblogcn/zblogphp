@@ -6,15 +6,15 @@
  * @version 2.0 2013-06-14
  */
 
+ 
 
-
-class Comment extends Base{
+class Log extends Base{
 
 
 	function __construct()
 	{
-		$this->table=&$GLOBALS['table']['Comment'];	
-		$this->datainfo=&$GLOBALS['datainfo']['Comment'];
+		$this->table=&$GLOBALS['table']['Log'];	
+		$this->datainfo=&$GLOBALS['datainfo']['Log'];
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];
@@ -27,6 +27,5 @@ class Comment extends Base{
 
 
 }
-
 
 ?>

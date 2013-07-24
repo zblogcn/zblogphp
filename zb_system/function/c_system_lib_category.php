@@ -7,6 +7,24 @@
  */
 
 
+class Category extends Base{
 
+
+	function __construct()
+	{
+		$this->table=&$GLOBALS['table']['Category'];	
+		$this->datainfo=&$GLOBALS['datainfo']['Category'];
+
+		foreach ($this->datainfo as $key => $value) {
+			$this->Data[$key]=$value[3];
+		}
+
+		$this->db = &$GLOBALS['zbp']->db;
+		$this->ID = 0;
+		$this->Order = 0;
+	}
+
+
+}
 
 ?>
