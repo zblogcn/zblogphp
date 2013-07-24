@@ -66,8 +66,8 @@ $actions=array(
 'logout'=>5,
 'verify'=>5,
 'admin'=>4,
-'SettingMng'=>1,
 'vrs'=>5,
+'SettingMng'=>1,
 'ArticleEdt'=>3,
 'ArticleMng'=>3,
 'CategoryMng'=>1,
@@ -79,6 +79,8 @@ $actions=array(
 'PlugInMng'=>1,
 'FunctionMng'=>1,
 'UserEdt'=>0,
+'UserAll'=>1,
+
 );
 
 
