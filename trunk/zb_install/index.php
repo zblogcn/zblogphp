@@ -610,8 +610,7 @@ function InsertInfo(){
   $guid=GetGuid();
   //$mem->LoadInfobyArray(array(0,$guid,GetVars('username','POST'),'1',GetPassWordByGuid(GetVars('password','POST'),$guid),'','',0,'','',time(),'',''));
 
-  $mem->LoadInfobyArray(
-    array(
+  $mem->LoadInfobyArray(array(
       0,
       $guid,
       1,
@@ -620,7 +619,7 @@ function InsertInfo(){
       GetPassWordByGuid(GetVars('password','POST'),$guid),
       '',
       '',
-      getGuestIP(),
+      GetGuestIP(),
       time(),
       '',
       '',
@@ -633,6 +632,22 @@ function InsertInfo(){
     ));
   $mem->Post();
 
+
+  $cate = new Category();
+  $cate->LoadInfobyArray(array(
+    0,
+    '未分类',
+    0,
+    0,
+    '',
+    '',
+    0,
+    0,
+    '',
+    '',
+    '',
+  ));
+  $cate->Post();
   
   $t=new Module();
   $t->Name="导航栏";
@@ -832,6 +847,49 @@ function InsertInfo(){
   $t->HtmlID="divTags";
   $t->Ftype="ul";
   $t->Post();
+
+
+
+  $a=new Log();
+  $a->CateID=1;
+  $a->AuthorID=1;
+  $a->Tag='';
+  $a->Status=ZC_LOG_STATUS_PUBLIC;
+  $a->Type=ZC_LOG_TYPE_ARTICLE;
+  $a->Alias='';
+  $a->IsTop=false;
+  $a->IsLock=false;
+  $a->Title='欢迎使用Z-BlogPHP';
+  $a->Intro='欢迎使用Z-BlogPHP';
+  $a->Content='欢迎使用Z-BlogPHP';
+  $a->IP=GetGuestIP();
+  $a->PostTime=time();
+  $a->CommNums=0;
+  $a->ViewNums=0;
+  $a->Template='';
+  $a->Meta='';
+  $a->Post();
+
+
+  $a=new Log();
+  $a->CateID=0;
+  $a->AuthorID=1;
+  $a->Tag='';
+  $a->Status=ZC_LOG_STATUS_PUBLIC;
+  $a->Type=ZC_LOG_TYPE_PAGE;
+  $a->Alias='';
+  $a->IsTop=false;
+  $a->IsLock=false;
+  $a->Title='留言本';
+  $a->Intro='';
+  $a->Content='这是一个留言本.';
+  $a->IP=GetGuestIP();
+  $a->PostTime=time();
+  $a->CommNums=0;
+  $a->ViewNums=0;
+  $a->Template='';
+  $a->Meta='';
+  $a->Post();  
 
 }
 

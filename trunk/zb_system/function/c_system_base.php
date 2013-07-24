@@ -53,8 +53,11 @@ foreach ($lib_array as $f) {
 }
 
 
-
-
+define('ZC_LOG_TYPE_ARTICLE', 0);
+define('ZC_LOG_TYPE_PAGE', 1);
+define('ZC_LOG_STATUS_PUBLIC', 0);
+define('ZC_LOG_STATUS_PRIVATE', 1);
+define('ZC_LOG_STATUS_DRAFT', 2);
 
 #定义命令
 $actions=array(

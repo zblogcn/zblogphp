@@ -8,7 +8,7 @@ return array (
   'ZC_BLOG_COPYRIGHT' => 'Copyright Your WebSite.Some Rights Reserved.',
   'ZC_BLOG_LANGUAGE' => 'zh-CN',
   'ZC_BLOG_LANGUAGEPACK' => 'SimpChinese',
-  'ZC_DATABASE_TYPE' => 'mysql',
+  'ZC_DATABASE_TYPE' => 'pdo_mysql',
   'ZC_SQLITE_ENABLE' => false,
   'ZC_SQLITE_NAME' => '',
   'ZC_SQLITE_PRE' => 'zbp_',

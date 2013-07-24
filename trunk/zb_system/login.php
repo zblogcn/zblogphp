@@ -5,7 +5,7 @@ $zbp->Initialize();
 $blogtitle=$lang['ZC_MSG']['009'];
 
 if (CheckRights('admin')) {
-	Redirect('cmd.php?act=admin');
+	redirect('cmd.php?act=admin');
 }
 
 ?><!DOCTYPE HTML>

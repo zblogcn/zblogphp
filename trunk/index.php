@@ -18,7 +18,7 @@ ViewList(GetVars('page','GET'),GetVars('page','GET'),GetVars('page','GET'),GetVa
 
 $zbp->Terminate();
 
-Logs('看看写入debug信息成功吧？');
+logs('看看写入debug信息成功吧？');
 
 RunTime();
 ?>

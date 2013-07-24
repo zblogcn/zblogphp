@@ -101,20 +101,20 @@ function GetFilesInDir($dir,$type){
 }
 
 
-function Redirect($url){
+function redirect($url){
 	header("HTTP/1.1 302 Found");
 	header('Location: '.$url);
 }
 
 
-function Logs($s){
+function logs($s){
 	$f=$GLOBALS['blogpath'] . 'zb_users/logs/'. $GLOBALS['option']['ZC_BLOG_CLSID'] .'-log' . date("Ymd"). '.txt';
 	$handle = fopen($f, 'a+');
-	fwrite($handle,date('c') . "~" . current(explode(" ", microtime()))  . ":" . $s . "\r\n");
+	fwrite($handle,"[" . date('c') . "~" . current(explode(" ", microtime()))  . "]" . $s . "\r\n");
 	fclose($handle);	
 }
 
-function getGuestIP(){
+function GetGuestIP(){
 	return $_SERVER["REMOTE_ADDR"];
 }
 

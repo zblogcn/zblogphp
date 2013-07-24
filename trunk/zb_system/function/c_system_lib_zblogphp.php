@@ -193,7 +193,13 @@ class ZBlogPHP{
 	}
 
 	public function LoadCategorys(){
-
+		$s='SELECT * FROM ' . $GLOBALS['table']['Category'];
+		$array=$this->db->Query($s);
+		foreach ($array as $ca) {
+			$c=new Category();
+			$c->LoadInfoByAssoc($ca);
+			$this->categorys[$c->ID]=$c;
+		}
 	}
 
 	public function LoadModules(){
