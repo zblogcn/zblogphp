@@ -383,19 +383,19 @@ function Setup3(){
       </div>
       <div class="dbdetail" id="pdo_mysql" style="display:none">
         <p><b>数据库主机:</b>
-          <input type="text" name="dbmysql_server" id="dbmysql_server" value="localhost" style="width:350px;" />
+          <input type="text" name="dbpdo_mysql_server" id="dbpdo_mysql_server" value="localhost" style="width:350px;" />
         </p>
         <p><b>用户名称:</b>&nbsp;&nbsp;
-          <input type="text" name="dbmysql_username" id="dbmysql_username" value="" style="width:350px;" />
+          <input type="text" name="dbpdo_mysql_username" id="dbpdo_mysql_username" value="" style="width:350px;" />
         </p>
         <p><b>用户密码:</b>&nbsp;&nbsp;
-          <input type="text" name="dbmysql_password" id="dbmysql_password" value="" style="width:350px;" />
+          <input type="text" name="dbpdo_mysql_password" id="dbpdo_mysql_password" value="" style="width:350px;" />
         </p>
         <p><b>数据库名称:</b>
-          <input type="text" name="dbmysql_name" id="dbmysql_name" value="" style="width:350px;" />
+          <input type="text" name="dbpdo_mysql_name" id="dbpdo_mysql_name" value="" style="width:350px;" />
         </p>
         <p><b>表&nbsp;前&nbsp;缀:</b>&nbsp;&nbsp;
-          <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="zbp_" style="width:350px;" />
+          <input type="text" name="dbpdo_mysql_pre" id="dbpdo_mysql_pre" value="zbp_" style="width:350px;" />
         </p>
       </div>
       <div class="dbdetail" id="mysql">
@@ -464,7 +464,6 @@ $db=DbFactory::Create($dbtype);
 $GLOBALS['zbp']->db=&$db;
 switch ($dbtype) {
   case 'mysql':
-  case 'pdo_mysql':
     $array=array(GetVars('dbmysql_server','POST'),GetVars('dbmysql_username','POST'),GetVars('dbmysql_password','POST'),GetVars('dbmysql_name','POST'),GetVars('dbmysql_pre','POST'));
     if($db->Open($array)){
     } else {
@@ -473,6 +472,19 @@ switch ($dbtype) {
             <ul>
             <li> 您的MySQL帐号密码是否正确？ </li>
             <li> 是否创建了'.GetVars('dbmysql_name','POST').'数据库？</li>
+            </ul>
+      ';
+    }
+    break; 
+  case 'pdo_mysql':
+    $array=array(GetVars('dbpdo_mysql_server','POST'),GetVars('dbpdo_mysql_username','POST'),GetVars('dbpdo_mysql_password','POST'),GetVars('dbpdo_mysql_name','POST'),GetVars('dbpdo_mysql_pre','POST'));
+    if($db->Open($array)){
+    } else {
+      echo '<p>MySQL服务器连接失败，或数据库不存在。</p>
+            <p>请确认：</p>
+            <ul>
+            <li> 您的MySQL帐号密码是否正确？ </li>
+            <li> 是否创建了'.GetVars('dbpdo_mysql_name','POST').'数据库？</li>
             </ul>
       ';
     }
@@ -895,12 +907,17 @@ function SaveConfig(){
 
   switch ($GLOBALS['zbp']->option['ZC_DATABASE_TYPE']) {
     case 'mysql':
-    case 'pdo_mysql':	
       $GLOBALS['zbp']->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
       $GLOBALS['zbp']->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
       $GLOBALS['zbp']->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
       $GLOBALS['zbp']->option['ZC_MYSQL_NAME']=GetVars('dbmysql_name','POST');
-      $GLOBALS['zbp']->option['ZC_MYSQL_PRE']=GetVars('dbmysql_pre','POST');
+      $GLOBALS['zbp']->option['ZC_MYSQL_PRE']=GetVars('dbmysql_pre','POST');	
+    case 'pdo_mysql':	
+      $GLOBALS['zbp']->option['ZC_MYSQL_SERVER']=GetVars('dbpdo_mysql_server','POST');
+      $GLOBALS['zbp']->option['ZC_MYSQL_USERNAME']=GetVars('dbpdo_mysql_username','POST');
+      $GLOBALS['zbp']->option['ZC_MYSQL_PASSWORD']=GetVars('dbpdo_mysql_password','POST');
+      $GLOBALS['zbp']->option['ZC_MYSQL_NAME']=GetVars('dbpdo_mysql_name','POST');
+      $GLOBALS['zbp']->option['ZC_MYSQL_PRE']=GetVars('dbpdo_mysql_pre','POST');
       break;
     case 'sqlite':
       $GLOBALS['zbp']->option['ZC_SQLITE_NAME']=GetVars('dbsqlite_name','POST');
