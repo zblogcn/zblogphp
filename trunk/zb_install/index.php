@@ -367,7 +367,7 @@ function Setup3(){
       </p>
       <div class="dbdetail" id="sqlite" style="display:none;">
         <p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;
-          <input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo CreateDbName()?>" readonly style="width:350px;" />
+          <input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo getDbName()?>" readonly style="width:350px;" />
         </p>
         <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;
           <input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" />
@@ -375,7 +375,7 @@ function Setup3(){
       </div>
       <div class="dbdetail" id="sqlite3" style="display:none;">
         <p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;
-          <input type="text" name="dbsqlite3_name" id="dbsqlite3_name" value="<?php echo CreateDbName()?>" readonly style="width:350px;" />
+          <input type="text" name="dbsqlite3_name" id="dbsqlite3_name" value="<?php echo getDbName()?>" readonly style="width:350px;" />
         </p>
         <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;
           <input type="text" name="dbsqlite3_pre" id="dbsqlite3_pre" value="zbp_" style="width:350px;" />

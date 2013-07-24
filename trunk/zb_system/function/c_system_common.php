@@ -7,12 +7,12 @@
  */
 
 $_SERVER['_start_time'] = microtime(1); //RunTime
-function RunTime(){
+function runtime(){
 	echo '<!--'.number_format(microtime(1) - $_SERVER['_start_time'], 6).'s-->';
 }
 
 
-function GetGuid(){
+function getGuid(){
 	$s=str_replace('.','',trim(uniqid('zbp',true),'zbp'));
 	return $s;
 }
@@ -34,13 +34,13 @@ function GetVars($name,$type='REQUEST'){
 	}
 }
 
-function CreateDbName(){
+function getDbName(){
 
-	return 'zb_users/data/' . str_replace('-','','#%20' . strtolower(GetGuid())) . '.db';
+	return 'zb_users/data/' . str_replace('-','','#%20' . strtolower(getGuid())) . '.db';
 }
 
 
-function GetCurrentHost(&$cookiespath){
+function getCurrentHost(&$cookiespath){
 	if (array_key_exists('HTTPS',$_SERVER)) {
 		if ($_SERVER['HTTPS']=='off') {
 			$host='http://';
@@ -70,14 +70,14 @@ function GetCurrentHost(&$cookiespath){
 }
 
 
-function GetPassWordByGuid($ps,$guid){
+function getPassWordByGuid($ps,$guid){
 
 	return md5(md5($ps).$guid);
 
 }
 
 
-function GetFilesInDir($dir,$type){
+function getFilesInDir($dir,$type){
 
 	$files=array();
 
@@ -114,7 +114,7 @@ function logs($s){
 	fclose($handle);	
 }
 
-function GetGuestIP(){
+function getGuestIP(){
 	return $_SERVER["REMOTE_ADDR"];
 }
 
