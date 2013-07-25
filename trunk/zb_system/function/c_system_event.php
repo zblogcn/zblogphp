@@ -60,11 +60,11 @@ function Login(){
 		$m=$zbp->membersbyname[GetVars('username')];
 		if($m->Password == md5(GetVars('password') . $m->Guid)){
 			if(GetVars('savedate')==0){
-				setcookie("username", GetVars('username'));
-				setcookie("password", GetVars('password'));
+				setcookie("username", GetVars('username'),0,$zbp->cookiespath);
+				setcookie("password", GetVars('password'),0,$zbp->cookiespath);
 			}else{
-				setcookie("username", GetVars('username'), time()+3600*24*GetVars('savedate'));
-				setcookie("password", GetVars('password'), time()+3600*24*GetVars('savedate'));
+				setcookie("username", GetVars('username'), time()+3600*24*GetVars('savedate'),$zbp->cookiespath);
+				setcookie("password", GetVars('password'), time()+3600*24*GetVars('savedate'),$zbp->cookiespath);
 			}
 			header('Location:admin/');
 		}else{
@@ -80,8 +80,8 @@ function Login(){
 
 function Logout(){
 	global $zbp;
-	setcookie("username", '');
-	setcookie("password", '');
+	setcookie("username", "",time() - 3600,$zbp->cookiespath);
+	setcookie("password", "",time() - 3600,$zbp->cookiespath);
 }
 
 ?>
