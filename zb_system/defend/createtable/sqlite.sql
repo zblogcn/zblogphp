@@ -89,7 +89,7 @@ CREATE TABLE %pre%member (
   mem_Articles integer DEFAULT 0,
   mem_Pages integer DEFAULT 0,
   mem_Comments integer DEFAULT 0,
-  mem_Attachments integer DEFAULT 0,
+  mem_Uploads integer DEFAULT 0,
   mem_Template varchar(50) DEFAULT NULL,  
   mem_Meta text
 );

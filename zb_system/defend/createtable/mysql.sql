@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS %pre%member (
   mem_Articles int(11) DEFAULT '0',
   mem_Pages int(11) DEFAULT '0',
   mem_Comments int(11) DEFAULT '0',
-  mem_Attachments int(11) DEFAULT '0',
+  mem_Uploads int(11) DEFAULT '0',
   mem_Template varchar(50) DEFAULT NULL,
   mem_Meta text,
   PRIMARY KEY (mem_ID),

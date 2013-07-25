@@ -150,7 +150,7 @@ $datainfo=array(
 	'Articles'=>array('mem_Articles','integer','',0),
 	'Pages'=>array('mem_Pages','integer','',0),
 	'Comments'=>array('mem_Comments','integer','',0),
-	'Attachments'=>array('mem_Attachments','integer','',0),
+	'Uploads'=>array('mem_Uploads','integer','',0),
 	'Template'=>array('mem_Template','string',50,''),
 	'Meta'=>array('mem_Meta','string','',''),
 ),
