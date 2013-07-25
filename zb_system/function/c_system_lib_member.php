@@ -24,7 +24,7 @@ class Member extends Base{
 		$this->ID = 0;
 		$this->Count = 0;
 		$this->Level = 5;
-		$this->Name = $GLOBALS['lang']['ZC_MSG'][205];
+		$this->Name = $GLOBALS['lang']['ZC_MSG']['anonymous'];
 
 	}
 

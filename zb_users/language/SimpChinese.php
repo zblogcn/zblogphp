@@ -10,6 +10,40 @@ return array(
 
 #Front-End & Back-End
 'ZC_MSG'=>array(
+	'error'=>'错误',
+	'anonymous'=>'无名氏',
+	'edit'=>'编辑',
+	'login'=>'登录',	
+	'logout'=>'退出登录',	
+	'view_permissions'=>'查看权限',
+	'password'=>'密码',
+	'username'=>'用户名',
+	'return_to_site'=>'返回网站',
+	'dashboard'=>'后台首页',
+	'settings'=>'设置管理',
+	'official_website'=>'官方网站',
+	'new_article'=>'新建文章',
+	'article_manage'=>'文章管理',
+	'page_manage'=>'页面管理',
+	'category_manage'=>'分类管理',
+	'tags_manage'=>'标签管理',
+	'comment_manage'=>'评论管理',
+	'upload_manage'=>'附件管理',	
+	'member_manage'=>'用户管理',	
+	'theme_manage'=>'主题管理',	
+	'plugin_manage'=>'插件管理',	
+	'module_manage'=>'模块管理',
+	'site_analyze'=>'Site Analyze',	
+	'info_intro'=>'Info Intro',
+	'refresh_cache'=>'Refresh Cache',
+	'latest_news'=>'Latest News',
+	'refresh'=>'Refresh',	
+	'stay_signed_in'=>'保持登录',
+	'batch_operation'=>'批量操作',
+	'previous_operation_not_finished'=>'之前的批量操作还未全部执行,请点击',',<a href=\'#\'>继续</a>',',执行完所有的操作.',	
+	''=>'',
+),
+'ZC_MSGXXX'=>array(
 '001'=>'名称',
 '002'=>'密码',
 '003'=>'用户名',
@@ -316,11 +350,9 @@ return array(
 
 //Article Level
 'ZVA_Article_Level_Name'=>array(
-'0','无',
-'1','草稿',
-'2','私人浏览',
-'3','禁止评论',
-'4','普通',
+'0','公开',
+'1','私人',
+'2','草稿',
 ),
 
 //User Level
@@ -454,6 +486,7 @@ return array(
 '63'=>'草稿禁止浏览',
 '64'=>'启用失败,该应用的xml配置信息不是Z-Blog 2.X版本的.',
 '65'=>'Windows Phone手机自带IE可能无法正常上传，建议您使用第三方浏览器。',
+'66'=>'用户名和密码不能为空',
 ),
 
 );
