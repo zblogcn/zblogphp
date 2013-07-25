@@ -23,7 +23,10 @@ switch ($action) {
 		break;
 	case 'verify':
 		Login();
-		break;	
+		break;
+	case 'ArticleEdt':
+		redirect('admin/edit.php');
+		break;		
 	default:
 		# code...
 		break;
