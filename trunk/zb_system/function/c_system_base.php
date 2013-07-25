@@ -69,7 +69,10 @@ $actions=array(
 'vrs'=>5,
 'SettingMng'=>1,
 'ArticleEdt'=>3,
+'ArticleDel'=>3,
 'ArticleMng'=>3,
+'ArticleAll'=>2,
+
 'CategoryMng'=>1,
 'TagMng'=>1,
 'CommentMng'=>4,
