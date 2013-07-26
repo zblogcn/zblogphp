@@ -91,9 +91,15 @@ function Reload(){
 
 	if(strpos($qs,'statistic')){
 		$r='statistic';
+		$r .= '<tr><td>1</td><td>a</td><td>2</td><td>b</td></tr>';
+		$r .= '<tr><td>1</td><td>a</td><td>2</td><td>b</td></tr>';
+		$r .= '<tr><td>1</td><td>a</td><td>2</td><td>b</td></tr>';
+		$r .= '<tr><td>1</td><td>a</td><td>2</td><td>b</td></tr>';
+		$r .= '<tr><td>1</td><td>a</td><td>2</td><td>b</td></tr>';		
 	}
 	if(strpos($qs,'updateinfo')){
-		$r='updateinfo';
+		$r = file_get_contents("http://www.baidu.com/robots.txt");
+		$r = '<tr><td>' . $r . '</td></tr>';
 	}
 	echo $r;
 

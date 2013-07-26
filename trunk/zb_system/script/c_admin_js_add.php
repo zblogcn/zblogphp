@@ -192,6 +192,7 @@ function statistic(s){
 	$("#updatatime").hide();
 	$.get("<?php echo $bloghost; ?>zb_system/cmd.php"+s,{},
 		function(data){
+			$("#tbStatistic tr:first ~ tr").remove();
 			$("#tbStatistic tr:first").after(data);
 			bmx2table();
 			$("#statloading").hide();
@@ -204,6 +205,7 @@ function updateinfo(s){
 	$("#infoloading").show();
 	$.get("<?php echo $bloghost; ?>zb_system/cmd.php"+s,{},
 		function(data){
+			$("#tbUpdateInfo tr:first ~ tr").remove();
 			$("#tbUpdateInfo tr:first").after(data);
 			$("#infoloading").hide();
 		}
