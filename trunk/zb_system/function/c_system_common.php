@@ -118,5 +118,12 @@ function GetGuestIP(){
 	return $_SERVER["REMOTE_ADDR"];
 }
 
+function GetValueInArray($array,$name){
+	if(is_array($array)){
+		if(array_key_exists($name,$array)){
+			return $array[$name];
+		}
+	}
+}
 
 ?>
