@@ -32,7 +32,7 @@ class Networkfile_get_contents implements iNetwork
 	}
 	
 	public function __get($property_name){
-		if(strtolower($property_name)='responsexml')
+		if(strtolower($property_name)=='responsexml')
 		{
 			$w = new DOMDocument();
 			return $w->loadXML($this->responseText);			
