@@ -84,10 +84,9 @@ function Logout(){
 	setcookie("password", "",time() - 3600,$zbp->cookiespath);
 }
 
-function Reload(){
+function Reload($qs){
 	global $zbp;
-	
-	$qs=GetVars('QUERY_STRING','SERVER');
+
 	$r=null;
 
 
@@ -127,7 +126,8 @@ function Reload(){
 		$zbp->SetCache('reload_updateinfo',$r);
 		$zbp->SaveCache();
 	}
-	echo $r;
+
+	return $r;
 
 }
 
