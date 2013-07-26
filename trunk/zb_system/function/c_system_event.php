@@ -90,30 +90,42 @@ function Reload(){
 	$qs=GetVars('QUERY_STRING','SERVER');
 	$r=null;
 
-	$xmlrpc_address=$zbp->host . 'zb_system/xml-rpc/';
-	$current_member=$zbp->user->Name;
-	$current_version=$zbp->option['ZC_BLOG_VERSION'];
-	$all_artiles=GetValueInArray(current($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Log'] . ' WHERE log_Type=0')),'num');
-	$all_pages=GetValueInArray(current($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Log'] . ' WHERE log_Type=0')),'num');	
-	$all_categorys=GetValueInArray(current($zbp->db->Query('SELECT COUNT(cate_ID) AS num FROM ' . $GLOBALS['table']['Category'])),'num');
-	$all_comments=GetValueInArray(current($zbp->db->Query('SELECT COUNT(comm_ID) AS num FROM ' . $GLOBALS['table']['Comment'])),'num');
-	$all_views=GetValueInArray(current($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Log'])),'num');
-	$all_tags=GetValueInArray(current($zbp->db->Query('SELECT COUNT(tag_ID) as num FROM ' . $GLOBALS['table']['Tag'])),'num');
-	$all_members=GetValueInArray(current($zbp->db->Query('SELECT COUNT(mem_ID) AS num FROM ' . $GLOBALS['table']['Member'])),'num');
-	$current_theme=$zbp->option['ZC_BLOG_THEME'];
-	$current_style=$zbp->option['ZC_BLOG_CSS'];
+
 
 	if(strpos($qs,'statistic')){
+
+		$xmlrpc_address=$zbp->host . 'zb_system/xml-rpc/';
+		$current_member=$zbp->user->Name;
+		$current_version=$zbp->option['ZC_BLOG_VERSION'];
+		$all_artiles=GetValueInArray(current($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Log'] . ' WHERE log_Type=0')),'num');
+		$all_pages=GetValueInArray(current($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Log'] . ' WHERE log_Type=0')),'num');	
+		$all_categorys=GetValueInArray(current($zbp->db->Query('SELECT COUNT(cate_ID) AS num FROM ' . $GLOBALS['table']['Category'])),'num');
+		$all_comments=GetValueInArray(current($zbp->db->Query('SELECT COUNT(comm_ID) AS num FROM ' . $GLOBALS['table']['Comment'])),'num');
+		$all_views=GetValueInArray(current($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Log'])),'num');
+		$all_tags=GetValueInArray(current($zbp->db->Query('SELECT COUNT(tag_ID) as num FROM ' . $GLOBALS['table']['Tag'])),'num');
+		$all_members=GetValueInArray(current($zbp->db->Query('SELECT COUNT(mem_ID) AS num FROM ' . $GLOBALS['table']['Member'])),'num');
+		$current_theme=$zbp->option['ZC_BLOG_THEME'];
+		$current_style=$zbp->option['ZC_BLOG_CSS'];
+
 		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['current_member']}</td><td width='30%'>{$current_member}</td><td width='20%'>{$zbp->lang['msg']['current_version']}</td><td width='30%'>{$current_version}</td></tr>";
 		$r .= "<tr><td>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_artiles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categorys}</td></tr>";
 		$r .= "<tr><td>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
 		$r .= "<tr><td>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
 		$r .= "<tr><td>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
 		$r .= "<tr><td>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td></td><td></td></tr>";		
+
+		$zbp->SetCache('reload_statistic',$r);
+		$zbp->SaveCache();
+
+
 	}
 	if(strpos($qs,'updateinfo')){
-		$r = file_get_contents($zbp->option['ZC_UPDATE_INFO_URL']);
+		#$r = file_get_contents($zbp->option['ZC_UPDATE_INFO_URL']);
+		$r = file_get_contents('http://www.baidu.com/robots.txt');
 		$r = '<tr><td>' . $r . '</td></tr>';
+
+		$zbp->SetCache('reload_updateinfo',$r);
+		$zbp->SaveCache();
 	}
 	echo $r;
 
