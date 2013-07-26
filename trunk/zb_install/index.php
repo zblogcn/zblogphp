@@ -38,7 +38,7 @@ if($zblogstep=="") { $zblogstep=1;}
 <script src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css"  type="text/css" media="screen" />
 <link rel="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
-<title>Z-BlogPHP <?php echo $zbp->option['ZC_BLOG_VERSION']?>安装程序</title>
+<title>Z-BlogPHP<?php echo $zbp->option['ZC_BLOG_VERSION']?>安装程序</title>
 </head>
 <body>
 <div class="setup">
@@ -129,7 +129,7 @@ function Setup1(){
     <p><b>安装协议</b>» 环境检查 » 数据库建立与设置 » 安装结果</p>
   </dd>
   <dd id="ddright">
-    <div id="title">Z-BlogPHP <?php echo $GLOBALS['zbp']->option['ZC_BLOG_VERSION']?>安装协议</div>
+    <div id="title">Z-BlogPHP<?php echo $GLOBALS['zbp']->option['ZC_BLOG_VERSION']?>安装协议</div>
     <div id="content">
       <textarea readonly>
 Z-BlogPHP  最终用户授权协议 
@@ -348,56 +348,32 @@ function Setup3(){
     <div id="title">数据库建立与设置</div>
     <div id="content">
       <p><b>类型选择</b>:
+        <?php if($CheckResult['mysql'][0]){?>
         &nbsp;&nbsp;
         <label class="dbselect" id="mysql_radio">
-          <input value="mysql" type="radio" name="dbtype" checked="checked"/>
+          <input value="mysql" type="radio" name="dbtype"/>
           MySQL</label>
+        <?php } ?>
+        <?php if($CheckResult['pdo_mysql'][0]){?>
         &nbsp;&nbsp;
-        <label class="dbselect" id="pdo_mysql_radio"<?php if(!$CheckResult['pdo_mysql'][0]){ echo 'style=\'display:none;\''; }?>>
-          <input value="pdo_mysql" type="radio" name="dbtype" checked="checked" />
+        <label class="dbselect" id="pdo_mysql_radio">
+          <input value="pdo_mysql" type="radio" name="dbtype" />
           pdo_mysql</label>
+        <?php } ?>
+        <?php if($CheckResult['sqlite'][0]){?>
         &nbsp;&nbsp;
-        <label class="dbselect" id="sqlite_radio"<?php if(!$CheckResult['sqlite'][0]){ echo 'style=\'display:none;\''; }?>>
+        <label class="dbselect" id="sqlite_radio">
           <input value="sqlite" type="radio" name="dbtype" />
           SQLite</label>
+        <?php } ?>
+        <?php if($CheckResult['sqlite3'][0]){?>
         &nbsp;&nbsp;
-        <label class="dbselect" id="sqlite3_radio"<?php if(!$CheckResult['sqlite3'][0]){ echo 'style=\'display:none;\''; }?>>
+        <label class="dbselect" id="sqlite3_radio">
           <input value="sqlite3" type="radio" name="dbtype" />
           SQLite3</label>
+        <?php } ?>
       </p>
-      <div class="dbdetail" id="sqlite" style="display:none;">
-        <p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;
-          <input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo GetDbName()?>" readonly style="width:350px;" />
-        </p>
-        <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;
-          <input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" />
-        </p>
-      </div>
-      <div class="dbdetail" id="sqlite3" style="display:none;">
-        <p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;
-          <input type="text" name="dbsqlite3_name" id="dbsqlite3_name" value="<?php echo GetDbName()?>" readonly style="width:350px;" />
-        </p>
-        <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;
-          <input type="text" name="dbsqlite3_pre" id="dbsqlite3_pre" value="zbp_" style="width:350px;" />
-        </p>
-      </div>
-      <div class="dbdetail" id="pdo_mysql" style="display:none">
-        <p><b>数据库主机:</b>
-          <input type="text" name="dbpdo_mysql_server" id="dbpdo_mysql_server" value="localhost" style="width:350px;" />
-        </p>
-        <p><b>用户名称:</b>&nbsp;&nbsp;
-          <input type="text" name="dbpdo_mysql_username" id="dbpdo_mysql_username" value="" style="width:350px;" />
-        </p>
-        <p><b>用户密码:</b>&nbsp;&nbsp;
-          <input type="text" name="dbpdo_mysql_password" id="dbpdo_mysql_password" value="" style="width:350px;" />
-        </p>
-        <p><b>数据库名称:</b>
-          <input type="text" name="dbpdo_mysql_name" id="dbpdo_mysql_name" value="" style="width:350px;" />
-        </p>
-        <p><b>表&nbsp;前&nbsp;缀:</b>&nbsp;&nbsp;
-          <input type="text" name="dbpdo_mysql_pre" id="dbpdo_mysql_pre" value="zbp_" style="width:350px;" />
-        </p>
-      </div>
+      <?php if($CheckResult['mysql'][0]){?>
       <div class="dbdetail" id="mysql">
         <p><b>数据库主机:</b>
           <input type="text" name="dbmysql_server" id="dbmysql_server" value="localhost" style="width:350px;" />
@@ -415,6 +391,46 @@ function Setup3(){
           <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="zbp_" style="width:350px;" />
         </p>
       </div>
+      <?php } ?>
+      <?php if($CheckResult['pdo_mysql'][0]){?>
+      <div class="dbdetail" id="pdo_mysql">
+        <p><b>数据库主机:</b>
+          <input type="text" name="dbpdo_mysql_server" id="dbpdo_mysql_server" value="localhost" style="width:350px;" />
+        </p>
+        <p><b>用户名称:</b>&nbsp;&nbsp;
+          <input type="text" name="dbpdo_mysql_username" id="dbpdo_mysql_username" value="" style="width:350px;" />
+        </p>
+        <p><b>用户密码:</b>&nbsp;&nbsp;
+          <input type="text" name="dbpdo_mysql_password" id="dbpdo_mysql_password" value="" style="width:350px;" />
+        </p>
+        <p><b>数据库名称:</b>
+          <input type="text" name="dbpdo_mysql_name" id="dbpdo_mysql_name" value="" style="width:350px;" />
+        </p>
+        <p><b>表&nbsp;前&nbsp;缀:</b>&nbsp;&nbsp;
+          <input type="text" name="dbpdo_mysql_pre" id="dbpdo_mysql_pre" value="zbp_" style="width:350px;" />
+        </p>
+      </div>
+      <?php } ?>
+      <?php if($CheckResult['sqlite'][0]){?>
+      <div class="dbdetail" id="sqlite">
+        <p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo GetDbName()?>" readonly style="width:350px;" />
+        </p>
+        <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" />
+        </p>
+      </div>
+      <?php } ?>
+      <?php if($CheckResult['sqlite3'][0]){?>
+      <div class="dbdetail" id="sqlite3">
+        <p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="text" name="dbsqlite3_name" id="dbsqlite3_name" value="<?php echo GetDbName()?>" readonly style="width:350px;" />
+        </p>
+        <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="text" name="dbsqlite3_pre" id="dbsqlite3_pre" value="zbp_" style="width:350px;" />
+        </p>
+      </div>
+      <?php } ?>
       <p class="title">网站设置</p>
       <p><b>网站名称:</b>&nbsp;&nbsp;
         <input type="text" name="blogtitle" id="blogtitle" value="" style="width:250px;" />
@@ -438,7 +454,9 @@ function Setup3(){
 $(".dbselect").click(function(){
   $(".dbdetail").hide();
   $("#"+$(this).attr("id").split("_radio")[0]).show();
-})
+});
+$($(".dbdetail").hide().get(0)).show();
+$($(".dbselect").get(0)).click();
 </script>
 <?php
 }
