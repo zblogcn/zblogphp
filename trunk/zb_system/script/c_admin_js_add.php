@@ -173,7 +173,7 @@ function changeCheckValue(obj){
 function notify(s){
 	if (window.webkitNotifications) {
 		if (window.webkitNotifications.checkPermission() == 0) {
-			var zb_notifications = window.webkitNotifications.createNotification('<%=BlogHost%>zb_system/IMAGE/ADMIN/logo-16.png', '<%=ZC_MSG257%>', s);
+			var zb_notifications = window.webkitNotifications.createNotification('<%=BlogHost%>zb_system/IMAGE/ADMIN/logo-16.png', '<%=msg257%>', s);
 			zb_notifications.show();
 			zb_notifications.onclick = function() {top.focus(),this.cancel();}
 			zb_notifications.replaceId = 'Meteoric';
@@ -260,7 +260,7 @@ $(document).ready(function(){
 	$('span.imgcheck').click(function(){changeCheckValue(this)})
 
 	//batch
-	$("#batch a").bind("click", function(){ BatchContinue();$("#batch p").html("<%=ZC_MSG109%>...");});
+	$("#batch a").bind("click", function(){ BatchContinue();$("#batch p").html("<%=msg109%>...");});
 
 	$(".SubMenu span.m-right").parent().css({"float":"right"});
 

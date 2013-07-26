@@ -68,10 +68,10 @@ function Login(){
 			}
 			header('Location:admin/');
 		}else{
-			throw new Exception($GLOBALS['lang']['ZVA_ErrorMsg'][8]);
+			throw new Exception($GLOBALS['lang']['error'][8]);
 		}
 	}else{
-		throw new Exception($GLOBALS['lang']['ZVA_ErrorMsg'][8]);
+		throw new Exception($GLOBALS['lang']['error'][8]);
 		
 	}
 

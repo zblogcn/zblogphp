@@ -2,7 +2,7 @@
 require_once './function/c_system_base.php';
 
 $zbp->Initialize();
-$blogtitle=$lang['ZC_MSG']['login'];
+$blogtitle=$lang['msg']['login'];
 
 if (CheckRights('admin')) {
 	redirect('cmd.php?act=admin');
@@ -27,12 +27,12 @@ if (CheckRights('admin')) {
   <div class="login">
     <form id="frmLogin" method="post" action="">
     <dl>
-      <dd><label for="edtUserName"><?php echo $lang['ZC_MSG']['username']?>:</label><input type="text" id="edtUserName" name="edtUserName" size="20" tabindex="1" /></dd>
-      <dd><label for="edtPassWord"><?php echo $lang['ZC_MSG']['password']?>:</label><input type="password" id="edtPassWord" name="edtPassWord" size="20" tabindex="2" /></dd>
+      <dd><label for="edtUserName"><?php echo $lang['msg']['username']?>:</label><input type="text" id="edtUserName" name="edtUserName" size="20" tabindex="1" /></dd>
+      <dd><label for="edtPassWord"><?php echo $lang['msg']['password']?>:</label><input type="password" id="edtPassWord" name="edtPassWord" size="20" tabindex="2" /></dd>
     </dl>
     <dl>
-      <dd class="checkbox"><input type="checkbox" name="chkRemember" id="chkRemember"  tabindex="3" /><label for="chkRemember"><?php echo $lang['ZC_MSG']['stay_signed_in']?></label></dd>
-      <dd class="submit"><input id="btnPost" name="btnPost" type="submit" value="<?php echo $lang['ZC_MSG']['login']?>" class="button" tabindex="4"/></dd>
+      <dd class="checkbox"><input type="checkbox" name="chkRemember" id="chkRemember"  tabindex="3" /><label for="chkRemember"><?php echo $lang['msg']['stay_signed_in']?></label></dd>
+      <dd class="submit"><input id="btnPost" name="btnPost" type="submit" value="<?php echo $lang['msg']['login']?>" class="button" tabindex="4"/></dd>
     </dl>
 	<input type="hidden" name="username" id="username" value="" />
 	<input type="hidden" name="password" id="password" value="" />
@@ -53,7 +53,7 @@ $("#btnPost").click(function(){
 	var strSaveDate=$("#savedate").val()
 
 	if((strUserName=="")||(strPassWord=="")){
-		alert("<?php echo $lang['ZVA_ErrorMsg']['66']?>");
+		alert("<?php echo $lang['error']['66']?>");
 		return false;
 	}
 

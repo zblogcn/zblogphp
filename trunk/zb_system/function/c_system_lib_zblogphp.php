@@ -259,8 +259,17 @@ class ZBlogPHP{
 
 	public function SaveConfigs(){
 
+		foreach ($this->configs as $name => $value) {
+			if(isset($this->_configs[$name])){
+				#update
+			}else{
+				#insert
+			}
+		}
 
+		$this->_configs=$this->configs;
 	}
+
 
 	public function BuildTemplatetags(){
 
@@ -284,8 +293,8 @@ class ZBlogPHP{
 			$this->templatetags[strtoupper($key)]=$value;
 		}
 
-		foreach ($this->lang['ZC_MSG'] as $key => $value) {
-			$this->templatetags['ZC_MSG' . $key]=$value;
+		foreach ($this->lang['msg'] as $key => $value) {
+			$this->templatetags['msg' . $key]=$value;
 		}
 
 		$this->templatetags['ZC_BLOG_SUB_NAME']=&$this->templatetags['ZC_BLOG_SUBTITLE'];
