@@ -46,7 +46,7 @@ class Member extends Base{
 			return $GLOBALS['zbp']->host . 'zb_users/avatar/0.png';
 		}
 		if ($name=='LevelName') {
-			return $GLOBALS['zbp']->lang['ZVA_User_Level_Name'][$this->Level];
+			return $GLOBALS['zbp']->lang['user_level_name'][$this->Level];
 		}
 		return $this->Data[$name];
 	}

@@ -10,8 +10,8 @@ header('Content-Type: application/x-javascript; Charset=utf8');
 require_once '../function/c_system_base.php';
 
 ?>
-var bloghost="<?php echo $bloghost ?>";
-var cookiespath="<?php echo $cookiespath ?>";
+var bloghost="<?php echo $bloghost; ?>";
+var cookiespath="<?php echo $cookiespath; ?>";
 
 
 
@@ -134,11 +134,11 @@ function bmx2table(){
 // 返回：    无
 //*********************************************************
 function Batch2Tip(s){$("#batch p").html(s)}
-function BatchContinue(){$("#batch p").before("<iframe style='width:20px;height:20px;' frameborder='0' scrolling='no' src='<%=BlogHost%>zb_system/cmd.php?act=batch'></iframe>");$("#batch img").remove();}
+function BatchContinue(){$("#batch p").before("<iframe style='width:20px;height:20px;' frameborder='0' scrolling='no' src='<?php echo $bloghost ?>zb_system/cmd.php?act=batch'></iframe>");$("#batch img").remove();}
 function BatchBegin(){};
 function BatchEnd(){};
 function BatchNotify(){notify($("#batch p").html())}
-function BatchCancel(){$("#batch iframe").remove();$("#batch p").before("<iframe style='width:20px;height:20px;' frameborder='0' scrolling='no' src='<%=BlogHost%>zb_system/cmd.php?act=batch&cancel=true'></iframe>");};
+function BatchCancel(){$("#batch iframe").remove();$("#batch p").before("<iframe style='width:20px;height:20px;' frameborder='0' scrolling='no' src='<?php echo $bloghost ?>zb_system/cmd.php?act=batch&cancel=true'></iframe>");};
 //*********************************************************
 
 
@@ -173,7 +173,7 @@ function changeCheckValue(obj){
 function notify(s){
 	if (window.webkitNotifications) {
 		if (window.webkitNotifications.checkPermission() == 0) {
-			var zb_notifications = window.webkitNotifications.createNotification('<%=BlogHost%>zb_system/IMAGE/ADMIN/logo-16.png', '<%=msg257%>', s);
+			var zb_notifications = window.webkitNotifications.createNotification('<?php echo $bloghost; ?>zb_system/IMAGE/ADMIN/logo-16.png', '<?php echo $lang['msg']['notify'];?>', s);
 			zb_notifications.show();
 			zb_notifications.onclick = function() {top.focus(),this.cancel();}
 			zb_notifications.replaceId = 'Meteoric';
@@ -260,7 +260,7 @@ $(document).ready(function(){
 	$('span.imgcheck').click(function(){changeCheckValue(this)})
 
 	//batch
-	$("#batch a").bind("click", function(){ BatchContinue();$("#batch p").html("<%=msg109%>...");});
+	$("#batch a").bind("click", function(){ BatchContinue();$("#batch p").html("<?php echo $lang['msg']['batch_operation_in_progress']; ?>");});
 
 	$(".SubMenu span.m-right").parent().css({"float":"right"});
 
