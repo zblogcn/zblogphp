@@ -6,8 +6,6 @@
  * @version 2.0 2013-06-14
  */
 
-
-
 class Member extends Base{
 
 

@@ -74,7 +74,7 @@ class DbMySQL implements iDataBase
 
 	function Update($query){
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		mysql_query($query);
+		return mysql_query($query);
 	}
 
 	function Delete($query){
