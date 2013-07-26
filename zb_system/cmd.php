@@ -24,9 +24,12 @@ switch ($action) {
 	case 'verify':
 		Login();
 		break;
+	case 'reload':
+		Reload();
+		break;
 	case 'ArticleEdt':
-		redirect('admin/edit.php');
-		break;		
+		redirect('admin/edit.php?' . GetVars('QUERY_STRING','SERVER'));
+		break;
 	default:
 		# code...
 		break;

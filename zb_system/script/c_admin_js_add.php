@@ -149,7 +149,7 @@ function BatchCancel(){$("#batch iframe").remove();$("#batch p").before("<iframe
 // 输入：    无
 // 返回：    无
 //*********************************************************
-function changeCheckValue(obj){
+function ChangeCheckValue(obj){
 
 	$(obj).toggleClass('imgcheck-on');
 
@@ -173,7 +173,7 @@ function changeCheckValue(obj){
 function notify(s){
 	if (window.webkitNotifications) {
 		if (window.webkitNotifications.checkPermission() == 0) {
-			var zb_notifications = window.webkitNotifications.createNotification('<?php echo $bloghost; ?>zb_system/IMAGE/ADMIN/logo-16.png', '<?php echo $lang['msg']['notify'];?>', s);
+			var zb_notifications = window.webkitNotifications.createNotification('<?php echo $bloghost; ?>zb_system/image/admin/logo-16.png', '<?php echo $lang['msg']['notify'];?>', s);
 			zb_notifications.show();
 			zb_notifications.onclick = function() {top.focus(),this.cancel();}
 			zb_notifications.replaceId = 'Meteoric';
@@ -190,9 +190,9 @@ function notify(s){
 function statistic(s){
 	$("#statloading").show();
 	$("#updatatime").hide();
-	$.get("c_statistic.php"+s,{},
+	$.get("<?php echo $bloghost; ?>zb_system/cmd.php"+s,{},
 		function(data){
-			$("#tbStatistic").html(data);
+			$("#tbStatistic tr:first").after(data);
 			bmx2table();
 			$("#statloading").hide();
 			$("#updatatime").show();
@@ -202,9 +202,9 @@ function statistic(s){
 
 function updateinfo(s){
 	$("#infoloading").show();
-	$.get("c_updateinfo.php"+s,{},
+	$.get("<?php echo $bloghost; ?>zb_system/cmd.php"+s,{},
 		function(data){
-			$("#tdUpdateInfo").html(data);
+			$("#tbUpdateInfo tr:first").after(data);
 			$("#infoloading").hide();
 		}
 	);
@@ -257,7 +257,7 @@ $(document).ready(function(){
 		$('input.checkbox').click(function(){  if($(this).val()=='True'){$(this).val('False')}else{$(this).val('True')} })
 	}
 
-	$('span.imgcheck').click(function(){changeCheckValue(this)})
+	$('span.imgcheck').click(function(){ChangeCheckValue(this)})
 
 	//batch
 	$("#batch a").bind("click", function(){ BatchContinue();$("#batch p").html("<?php echo $lang['msg']['batch_operation_in_progress']; ?>");});
