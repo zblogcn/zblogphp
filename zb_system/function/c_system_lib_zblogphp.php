@@ -33,6 +33,11 @@ class ZBlogPHP{
 	public $title=null;
 
 	public $user=null;
+	public $cache=array();
+	#cache={name,value,time}
+
+	public $table=null;
+	public $datainfo=null;
 	
 	static public function GetInstance(){
 		if(!isset(self::$_zbp)){
@@ -49,6 +54,9 @@ class ZBlogPHP{
 		$this->host = &$GLOBALS['bloghost'];
 		$this->cookiespath = &$GLOBALS['cookiespath'];
 
+		$this->table=&$GLOBALS['table'];
+		$this->datainfo=&$GLOBALS['datainfo'];
+
 		if (trim($this->option['ZC_BLOG_CLSID'])==''){
 			$this->guid=GetGuid();
 		}else{
@@ -62,6 +70,43 @@ class ZBlogPHP{
 		
 		$this->user=new Member();
 
+	}
+
+	function GetCache($name){
+		if(array_key_exists($name,$this->cache)){
+			return $this->cache[$name];
+		}
+	}	
+	function GetCacheValue($name){
+
+		if(array_key_exists($name,$this->cache)){
+
+			return $this->cache[$name]['value'];
+		}
+	}
+	function GetCacheTime($name){
+		if(array_key_exists($name,$this->cache)){
+			return $this->cache[$name]['time'];
+		}
+	}
+	function SetCache($name,$value){
+		$time=time();
+		$this->cache[$name]=array('value'=>$value,'time'=>$time);
+	}
+	function DelCache($name){
+
+	}
+	function SaveCache(){
+
+		$s=$this->path . 'zb_users/cache/' . $this->guid . '.cache';
+		$c=serialize($this->cache);
+		file_put_contents($s, $c);
+	}
+	function LoadCache(){
+		$s=$this->path . 'zb_users/cache/' . $this->guid . '.cache';
+		if (file_exists($s)) {
+			$this->cache=unserialize(file_get_contents($s));
+		}
 	}
 
 	function __destruct(){
@@ -125,6 +170,7 @@ class ZBlogPHP{
 
 		ActivePlugin();
 
+		$this->LoadCache();
 
 		$this->OpenConnect();
 		$this->LoadMembers();
@@ -138,12 +184,6 @@ class ZBlogPHP{
 			}
 		}
 
-		#$cache=$this->path . 'zb_users/cache/' . $this->guid;
-		#if (file_exists($cache)) {
-		#	$this->templatetags=unserialize(file_get_contents($cache));
-		#	return;
-		#}
-
 		$this->LoadDefaultTemplates();
 		$this->LoadTemplates();
 		$this->LoadCacheIncludes();
@@ -151,13 +191,6 @@ class ZBlogPHP{
 		$this->LoadConfigs();
 		$this->BuildSidebar();	
 		$this->BuildTemplatetags();
-
-
-
-
-		#$s=serialize($this->templatetags);
-		#file_put_contents($cache, $s);
-
 
 	}
 
@@ -182,7 +215,7 @@ class ZBlogPHP{
 
 	public function LoadMembers(){
 
-		$s='SELECT * FROM ' . $GLOBALS['table']['Member'];
+		$s='SELECT * FROM ' . $this->table['Member'];
 		$array=$this->db->Query($s);
 		foreach ($array as $ma) {
 			$m=new Member();
@@ -193,7 +226,7 @@ class ZBlogPHP{
 	}
 
 	public function LoadCategorys(){
-		$s='SELECT * FROM ' . $GLOBALS['table']['Category'];
+		$s='SELECT * FROM ' . $this->table['Category'];
 		$array=$this->db->Query($s);
 		foreach ($array as $ca) {
 			$c=new Category();
@@ -203,7 +236,7 @@ class ZBlogPHP{
 	}
 
 	public function LoadModules(){
-		$s='SELECT * FROM ' . $GLOBALS['table']['Module'];
+		$s='SELECT * FROM ' . $this->table['Module'];
 		$array=$this->db->Query($s);
 		foreach ($array as $ma) {
 			$m=new Module();
