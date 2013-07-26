@@ -87,8 +87,15 @@ function Logout(){
 function Reload(){
 
 	$qs=GetVars('QUERY_STRING','SERVER');
+	$r=null;
 
-	echo $qs;
+	if(strpos($qs,'statistic')){
+		$r='statistic';
+	}
+	if(strpos($qs,'updateinfo')){
+		$r='updateinfo';
+	}
+	echo $r;
 
 }
 
