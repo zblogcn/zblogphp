@@ -691,7 +691,7 @@ function InsertInfo(){
   $t->Source="system";
   $t->SidebarID=1;
   $t->Order=3;
-  $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="<#ZC_BLOG_HOST#>zb_system/cmd.php?act=login">[<#ZC_MSG009#>]</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="<#ZC_BLOG_HOST#>zb_system/cmd.php?act=vrs">[<#ZC_MSG021#>]</a></span>';
+  $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="<#ZC_BLOG_HOST#>zb_system/cmd.php?act=login">[<#msg009#>]</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="<#ZC_BLOG_HOST#>zb_system/cmd.php?act=vrs">[<#msg021#>]</a></span>';
   $t->HtmlID="divContorPanel";
   $t->Ftype="div";
   $t->Post();
@@ -719,7 +719,7 @@ function InsertInfo(){
   $t->Source="system";
   $t->SidebarID=1;
   $t->Order=5;
-  $t->Content='<form method="post" action="<#ZC_BLOG_HOST#>zb_system/cmd.php?act=Search"><input type="text" name="edtSearch" id="edtSearch" size="12" /> <input type="submit" value="<#ZC_MSG087#>" name="btnPost" id="btnPost" /></form>';
+  $t->Content='<form method="post" action="<#ZC_BLOG_HOST#>zb_system/cmd.php?act=Search"><input type="text" name="edtSearch" id="edtSearch" size="12" /> <input type="submit" value="<#msg087#>" name="btnPost" id="btnPost" /></form>';
   $t->HtmlID="divSearchPanel";
   $t->Ftype="div";
   $t->Post();

@@ -17,7 +17,7 @@ $(document).ready(function(){
 	$("input[type='file']").click(function(){
 
 		if(/IEMobile|WPDesktop/g.test(navigator.userAgent)&&$(this).val()==""){
-			alert('<?php echo $lang['ZVA_ErrorMsg'][65]?>')
+			alert('<?php echo $lang['error'][65]?>')
 		}
 	})
 });

@@ -9,7 +9,7 @@
 return array(
 
 #Front-End & Back-End
-'ZC_MSG'=>array(
+'msg'=>array(
 	'error'=>'错误',
 	'anonymous'=>'无名氏',
 	'edit'=>'编辑',
@@ -349,14 +349,14 @@ return array(
 ),
 
 //Article Level
-'ZVA_Article_Level_Name'=>array(
+'article_level_name'=>array(
 '0','公开',
 '1','私人',
 '2','草稿',
 ),
 
 //User Level
-'ZVA_User_Level_Name'=>array(
+'user_level_name'=>array(
 '1'=>'管理员',
 '2'=>'网站编辑',
 '3'=>'作者',
@@ -365,7 +365,7 @@ return array(
 ),
 
 //January, February...
-'ZVA_Month'=>array(
+'month'=>array(
 '1'=>'一月',
 '2'=>'二月',
 '3'=>'三月',
@@ -381,7 +381,7 @@ return array(
 ),
 
 //Jan., Feb. ...
-'ZVA_Month'=>array(
+'month_abbr'=>array(
 '1'=>'1月',
 '2'=>'2月',
 '3'=>'3月',
@@ -397,7 +397,7 @@ return array(
 ),
 
 //Sunday, Monday..
-'ZVA_Week'=>array(
+'week'=>array(
 '1'=>'星期日',
 '2'=>'星期一',
 '3'=>'星期二',
@@ -408,7 +408,7 @@ return array(
 ),
 
 //Sun., Mon. ...
-'ZVA_Week_Abbr'=>array(
+'week_abbr'=>array(
 '1'=>'日',
 '2'=>'一',
 '3'=>'二',
@@ -419,7 +419,7 @@ return array(
 ),
 
 //Custom Error Information
-'ZVA_ErrorMsg'=>array(
+'error'=>array(
 '0'=>'未知错误',
 '1'=>'未知命令',
 '2'=>'未查询到相关页面',
