@@ -34,7 +34,7 @@ abstract class Base
 
 	function LoadInfoByID($id){
 
-		$s="SELECT * FROM " . $this->table . " WHERE " . $this->datainfo[0][0] . "=$id";
+		$s="SELECT * FROM " . $this->table . " WHERE " . $this->datainfo['ID'][0] . "=$id";
 
 		$array=$this->db->Query($s);
 		if (count($array)>0) {
@@ -81,12 +81,12 @@ abstract class Base
 			}
 			$s.=implode(',', $a);
 			$s.=")";
-
+			Logs($s);
 			$this->ID=$this->db->Insert($s);
 		} else {
 			$s="UPDATE " . $this->table . " SET ";
 			$a=array();
-			foreach (self::$datainfo as $key => $value) {
+			foreach ($this->datainfo as $key => $value) {
 				if ($value[0]==$this->datainfo['ID'][0]) {continue;}
 				if ($value[1]=='string') {
 					$a[]=$value[0] . '=\'' . addslashes($this->$key) . '\'';
@@ -96,9 +96,10 @@ abstract class Base
 					$a[]=$value[0] . '=' . $this->$key;	
 				}
 			}
-			$s.=implode(',', $a);
+			$s.=implode(', ', $a);
 			$s.=" WHERE " . $this->datainfo['ID'][0] . "=" . $this->ID;
-			$this->db->Update($s);
+			Logs($s);
+			return $this->db->Update($s);
 		}
 
 

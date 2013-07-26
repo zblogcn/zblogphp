@@ -30,6 +30,12 @@ switch ($action) {
 	case 'ArticleEdt':
 		redirect('admin/edit.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
+	case 'CategoryMng':
+		redirect('admin/catalog.php?' . GetVars('QUERY_STRING','SERVER'));
+		break;
+	case 'CategoryEdt':
+		redirect('admin/catalog_edit.php?' . GetVars('QUERY_STRING','SERVER'));
+		break;
 	default:
 		# code...
 		break;
