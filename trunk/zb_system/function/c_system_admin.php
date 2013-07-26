@@ -104,8 +104,8 @@ function ExportSiteInfo(){
 
 
 
-	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" class=\"tableBorder\" id=\"tbStatistic\"><tr><th height=\"32\" colspan=\"4\"  align=\"center\">&nbsp;" . $GLOBALS['lang']['msg']['site_analyze'] . "&nbsp;<a href=\"javascript:statistic('?reload');\">[" . $GLOBALS['lang']['msg']['refresh_cache'] . "]</a> <img id=\"statloading\" style=\"display:none\" src=\"../image/admin/loading.gif\"></th></tr><tr><td></td></tr></table>";
-	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" class=\"tableBorder\"><tr><th height=\"32\" colspan=\"4\" align=\"center\">&nbsp;" . $GLOBALS['lang']['msg']['latest_news'] . "&nbsp;<a href=\"javascript:updateinfo('?reload');\">[" . $GLOBALS['lang']['msg']['refresh'] . "]</a> <img id=\"infoloading\" style=\"display:none\" src=\"../image/admin/loading.gif\"></th></tr><tr><td height=\"25\" colspan=\"4\" id=\"tdUpdateInfo\"></td></tr></table>";
+	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" class=\"tableBorder\" id=\"tbStatistic\"><tr><th height=\"32\" colspan=\"4\"  align=\"center\">&nbsp;" . $GLOBALS['lang']['msg']['site_analyze'] . "&nbsp;<a href=\"javascript:statistic('?act=reload&amp;statistic');\">[" . $GLOBALS['lang']['msg']['refresh_cache'] . "]</a> <img id=\"statloading\" style=\"display:none\" src=\"../image/admin/loading.gif\"></th></tr></table>";
+	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" class=\"tableBorder\" id=\"tbUpdateInfo\"><tr><th height=\"32\" colspan=\"4\" align=\"center\">&nbsp;" . $GLOBALS['lang']['msg']['latest_news'] . "&nbsp;<a href=\"javascript:updateinfo('?act=reload&amp;updateinfo');\">[" . $GLOBALS['lang']['msg']['refresh'] . "]</a> <img id=\"infoloading\" style=\"display:none\" src=\"../image/admin/loading.gif\"></th></tr></table>";
 
 
 	include_once $GLOBALS['blogpath'] . "zb_system/defend/thanks.html";

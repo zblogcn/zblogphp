@@ -67,6 +67,7 @@ $actions=array(
 'verify'=>5,
 'admin'=>4,
 'vrs'=>5,
+'reload'=>4,
 'SettingMng'=>1,
 'ArticleEdt'=>3,
 'ArticleDel'=>3,

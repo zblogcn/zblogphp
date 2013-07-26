@@ -84,4 +84,12 @@ function Logout(){
 	setcookie("password", "",time() - 3600,$zbp->cookiespath);
 }
 
+function Reload(){
+
+	$qs=GetVars('QUERY_STRING','SERVER');
+
+	echo $qs;
+
+}
+
 ?>
