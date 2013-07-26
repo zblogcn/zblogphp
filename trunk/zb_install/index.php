@@ -930,7 +930,7 @@ function SaveConfig(){
       $GLOBALS['zbp']->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
       $GLOBALS['zbp']->option['ZC_MYSQL_NAME']=GetVars('dbmysql_name','POST');
       $GLOBALS['zbp']->option['ZC_MYSQL_PRE']=GetVars('dbmysql_pre','POST');
-	  break;
+      break;
     case 'pdo_mysql':	
       $GLOBALS['zbp']->option['ZC_MYSQL_SERVER']=GetVars('dbpdo_mysql_server','POST');
       $GLOBALS['zbp']->option['ZC_MYSQL_USERNAME']=GetVars('dbpdo_mysql_username','POST');
@@ -948,7 +948,7 @@ function SaveConfig(){
       break;  
   }
 
-      $GLOBALS['zbp']->option['ZC_BLOG_VERSION']='1.0 Alpha Build 130707';
+  $GLOBALS['zbp']->option['ZC_BLOG_VERSION']='1.0 Alpha Build 130707';
 
   $GLOBALS['zbp']->SaveOption();
 
