@@ -110,10 +110,6 @@ class ZBlogPHP{
 	}
 
 	function __destruct(){
-		$option = null;
-		$lang = null;
-		$path = null;
-		$host = null;
 		$db = null;
 	}
 	
