@@ -25,7 +25,7 @@ switch ($action) {
 		Login();
 		break;
 	case 'reload':
-		Reload();
+		echo Reload(GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'ArticleEdt':
 		redirect('admin/edit.php?' . GetVars('QUERY_STRING','SERVER'));
