@@ -37,19 +37,19 @@ require_once $blogpath.'zb_system/function/c_system_event.php';
 $cookiespath = null;
 $bloghost = GetCurrentHost($cookiespath);
 
-require_once $blogpath.'zb_system/function/c_system_lib_zblogphp.php';
-require_once $blogpath.'zb_system/function/c_system_lib_dbfactory.php';
+require_once $blogpath.'zb_system/function/lib/zblogphp.php';
+require_once $blogpath.'zb_system/function/lib/dbfactory.php';
 
-require_once $blogpath.'zb_system/function/c_system_lib_dbmysql.php';
-require_once $blogpath.'zb_system/function/c_system_lib_dbpdo_mysql.php';
-require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite.php';
-require_once $blogpath.'zb_system/function/c_system_lib_dbsqlite3.php';
+require_once $blogpath.'zb_system/function/lib/dbmysql.php';
+require_once $blogpath.'zb_system/function/lib/dbpdo_mysql.php';
+require_once $blogpath.'zb_system/function/lib/dbsqlite.php';
+require_once $blogpath.'zb_system/function/lib/dbsqlite3.php';
 #以后修改
-#require_once $blogpath.'zb_system/function/c_system_lib_db' .$option['ZC_DATABASE_TYPE']. '.php';
+#require_once $blogpath.'zb_system/function/lib/db' .$option['ZC_DATABASE_TYPE']. '.php';
 
 $lib_array = array('base', 'log','category','comment','counter','member','module','tag','upload');
 foreach ($lib_array as $f) {
-	require_once $blogpath.'zb_system/function/c_system_lib_' .$f. '.php';
+	require_once $blogpath.'zb_system/function/lib/' . $f . '.php';
 }
 
 
@@ -113,7 +113,7 @@ foreach (explode("|", $option['ZC_USING_PLUGIN_LIST']) as $plugin) {
 
 
 function __autoload($classname) {
-     require_once $GLOBALS['blogpath'] . 'zb_system/function/c_system_lib_' . strtolower($classname) .'.php';
+     require_once $GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php';
 }
 
 
