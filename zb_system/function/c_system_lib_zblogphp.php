@@ -72,52 +72,90 @@ class ZBlogPHP{
 
 	}
 
-	function GetCache($name){
+
+	function __destruct(){
+		$db = null;
+	}
+
+	function __call($method, $args) {
+		throw new Exception('');
+	}
+
+	#初始化连接
+	public function Initialize(){
+
+		ActivePlugin();
+
+		$this->LoadCache();
+
+		$this->OpenConnect();
+		$this->LoadMembers();
+		$this->LoadCategorys();
+		$this->LoadModules();
+		$this->LoadConfigs();
+
+		if (isset($this->membersbyname[GetVars('username','COOKIE')])) {
+			$m=$this->membersbyname[GetVars('username','COOKIE')];
+			if($m->Password == md5(GetVars('password','COOKIE') . $m->Guid)){
+				$this->user=$m;
+			}
+		}
+
+		$this->LoadDefaultTemplates();
+		$this->LoadTemplates();
+		$this->LoadCacheIncludes();
+		$this->LoadTemplateIncludes();
+		$this->BuildSidebar();	+
+		$this->BuildTemplatetags();
+
+	}
+
+
+	#终止连接，释放资源
+	public function Terminate(){
+		$this->db->Close();
+	}
+
+
+	public function GetCache($name){
 		if(array_key_exists($name,$this->cache)){
 			return $this->cache[$name];
 		}
-	}	
-	function GetCacheValue($name){
+	}
+	public function GetCacheValue($name){
 
 		if(array_key_exists($name,$this->cache)){
 
 			return $this->cache[$name]['value'];
 		}
 	}
-	function GetCacheTime($name){
+	public function GetCacheTime($name){
 		if(array_key_exists($name,$this->cache)){
 			return $this->cache[$name]['time'];
 		}
 	}
-	function SetCache($name,$value){
+	public function SetCache($name,$value){
 		$time=time();
 		$this->cache[$name]=array('value'=>$value,'time'=>$time);
 	}
-	function DelCache($name){
-
+	public function DelCache($name){
+		unset($this->cache[$name]);
 	}
-	function SaveCache(){
+	public function SaveCache($delay=false){
 
 		$s=$this->path . 'zb_users/cache/' . $this->guid . '.cache';
 		$c=serialize($this->cache);
 		file_put_contents($s, $c);
 	}
-	function LoadCache(){
+	public function LoadCache(){
 		$s=$this->path . 'zb_users/cache/' . $this->guid . '.cache';
 		if (file_exists($s)) {
 			$this->cache=unserialize(file_get_contents($s));
 		}
 	}
 
-	function __destruct(){
-		$db = null;
-	}
-	
-	public function __call($method, $args) {
-		throw new Exception('');
-	}
 
-	function OpenConnect(){
+	public function OpenConnect(){
 		static $isconnect=false;
 		if($isconnect){return;}
 
@@ -159,41 +197,6 @@ class ZBlogPHP{
 			break;
 		}
 		$isconnect=true;	
-	}
-
-	#初始化连接
-	public function Initialize(){
-
-		ActivePlugin();
-
-		$this->LoadCache();
-
-		$this->OpenConnect();
-		$this->LoadMembers();
-		$this->LoadCategorys();
-		$this->LoadModules();
-
-		if (isset($this->membersbyname[GetVars('username','COOKIE')])) {
-			$m=$this->membersbyname[GetVars('username','COOKIE')];
-			if($m->Password == md5(GetVars('password','COOKIE') . $m->Guid)){
-				$this->user=$m;
-			}
-		}
-
-		$this->LoadDefaultTemplates();
-		$this->LoadTemplates();
-		$this->LoadCacheIncludes();
-		$this->LoadTemplateIncludes();
-		$this->LoadConfigs();
-		$this->BuildSidebar();	
-		$this->BuildTemplatetags();
-
-	}
-
-
-	#终止连接，释放资源
-	public function Terminate(){
-		$this->db->Close();
 	}
 
 
@@ -321,7 +324,7 @@ class ZBlogPHP{
 		foreach ($this->option as $key => $value) {
 			$this->templatetags[strtoupper($key)]=$value;
 		}
-
+v
 		foreach ($this->lang['msg'] as $key => $value) {
 			$this->templatetags['msg' . $key]=$value;
 		}
