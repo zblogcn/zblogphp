@@ -47,7 +47,7 @@ echo "</pre>";
 <div id="divMain"> 
 <div class="divHeader">分类管理</div>
 <div class="SubMenu" style="display: block;">
-<a href="../cmd.php?act=CategoryEdt"><span class="m-left">新建分类</span></a>
+<a href="../cmd.php?act=CategoryEdt&id=0"><span class="m-left">新建分类</span></a>
 </div>
 <div id="divMain2">
 <table border="1" width="100%" cellspacing="0" cellpadding="0" class="tableBorder tableBorder-thcenter">
@@ -87,6 +87,7 @@ foreach($cata_child as $k => $v){
 		   <td align="center"><a href="../cmd.php?act=CategoryEdt&amp;id={$v['ID']}" class="button"><img src="../image/admin/folder_edit.png" alt="编辑" title="编辑" width="16" /></a>&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="return window.confirm(&quot;单击“确定”继续。单击“取消”停止。&quot;);" href="../cmd.php?act=CategoryDel&amp;id=1" class="button"><img src="../image/admin/delete.png" alt="删除" title="删除" width="16" /></a></td>
 		  </tr>
 html;
+	unset($cata_child[$k]);
 	}
 }
 } 

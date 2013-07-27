@@ -36,6 +36,10 @@ switch ($action) {
 	case 'CategoryEdt':
 		redirect('admin/category_edit.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
+	case 'CategoryPst':
+		CategoryPost();
+		//redirect('admin/category_edit.php?' . GetVars('QUERY_STRING','SERVER'));
+		break;
 	default:
 		# code...
 		break;

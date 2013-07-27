@@ -21,31 +21,44 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
 <?php
-//不要吐槽，我会改的！！！
-
-if(isset($_POST['edtID'])){
+	//不要吐槽，我会改的！！！
+	//if(isset($_GET['id'])){$cateid = $_GET['id'];}else{$cateid = 0;}
+	$cateid = $_GET['id'];
 	$cate = new Category();
-	if($_POST['edtID'] == 0){
-		$cate->LoadInfobyArray(array($_POST['edtID'], $_POST['edtName'], $_POST['edtOrder'], 0, $_POST['edtAlias'], '', 0, $_POST['edtPareID'], $_POST['edtTemplate'], $_POST['edtLogTemplate'], ''));
-		$cate->Post();
-		redirect('category.php');
-	}else{
-		$cate->LoadInfoByID($_POST['edtID']);
-		$cate->Data['Name'] = $_POST['edtName'];
-		$catadata = $cate->Data;
-		if($cate->Post()){redirect('category.php');}
+	$cate->LoadInfoByID($cateid);
+	$catadata = $cate->Data;
+	//print_r($catadata);
+	
+	$a = $cate->GetLibIDArray(array($cate->datainfo['Order'][0] => 'ASC'), null);
+	foreach ($a as $key => $value) {
+		$cate->LoadInfoByID($value);
+		foreach ($cate->datainfo as $k => $v) {
+			$cata_value[$value][$k] = $cate->Data[$k];
+		}
 	}
-}
+	foreach ($cata_value as $key => $value) {
+		if($value['ParentID'] == 0){
+			$cata_parent[$value['ID']] = $value;
+		}else{
+			$cata_child[$value['ID']] = $value;
+		}
+	}
+	
+	$parenthtml = '<select id="edtPareID" name="edtPareID" class="edit cleanuphtml-2" size="1">';
+		
+	foreach($cata_parent as $key => $value){
+			$parenthtml .= "<option value='$v['ID']' selected='selected'>$value['Name']</option>";
 
-
-
-if(isset($_GET['id'])){$cateid = $_GET['id'];}else{$cateid = 0;}
-
-$cate = new Category();
-$cate->LoadInfoByID($cateid);
-$catadata = $cate->Data;
-//print_r($catadata);
-
+		foreach($cata_child as $k => $v){
+			if($key == $v['ParentID']){
+				$parenthtml .= "<option value='$v['ID']' selected='selected'>|--$v['Name']</option>";
+			unset($cata_child[$k]);
+			}
+		}
+	} 
+	$parenthtml .= '</select>';
+	
+	
 ?>
 
 <div id="divMain">
@@ -69,9 +82,7 @@ $catadata = $cate->Data;
 	  </p>
 	  <p>
 		<span class="title">父分类:</span><br />
-		<select id="edtPareID" name="edtPareID" class="edit cleanuphtml-2" size="1">
-		  <option value="<?php echo $catadata['ParentID'];?>" selected="selected">无</option>
-		</select>
+		<?php echo $parenthtml;?>
 	  </p>
 	  <p>
 		<span class="title">模板:</span><br />
@@ -100,7 +111,7 @@ $catadata = $cate->Data;
 	<script type="text/javascript">
 			var str17="名称不能为空";
 			function checkCateInfo(){
-					document.getElementById("edit").action="category_edit.php?act=CategoryEdt";
+					document.getElementById("edit").action="../cmd.php?act=CategoryPst";
 
 					if(!$("#edtName").val()){
 							alert(str17);
