@@ -89,7 +89,6 @@ return array(
 	// '杂项
 	'ZC_USE_NAVIGATE_ARTICLE' => true,
 	'ZC_RSS_EXPORT_WHOLE' => true,
-	'ZC_TEMPLATE_DIRECTORY' => 'template',
 
 	// '后台管理
 	'ZC_MANAGE_COUNT' => 50,
@@ -182,8 +181,6 @@ return array(
 
 	'ZC_HTTP_LASTMODIFIED' => false,
 
-	'ZC_DEFAULT_PAGES_TEMPLATE' => '',
-
 	'ZC_SIDEBAR_ORDER' => 'calendar:comments:controlpanel:searchpanel:archives:favorite:catalog:statistics:previous:tags:link:misc',
 
 	'ZC_SIDEBAR_ORDER2' => '',
@@ -193,7 +190,14 @@ return array(
 	'ZC_SIDEBAR_ORDER4' => '',
 
 	'ZC_SIDEBAR_ORDER5' => '',
-
+	
+	'ZC_TEMPLATE_DIRECTORY' => 'template',
+	#首页，分类页，文章页，页面页的默认模板
+	'ZC_INDEX_DEFAULT_TEMPLATE' => 'default',
+	'ZC_CATALOG_DEFAULT_TEMPLATE' => 'catalog',
+	'ZC_ARTICLE_DEFAULT_TEMPLATE' => 'single',
+	'ZC_PAGE_DEFAULT_TEMPLATE' => 'page',
+	
 	//The default language of uEditor
 	//The language files will be loaded from ue-lang\ZC_EDITORLANG by editor.
 	'ZC_EDITORLANG'=>'zh-cn',

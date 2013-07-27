@@ -19,38 +19,7 @@ function CheckRights($action){
 
 }
 
-function ViewList($page,$cate,$auth,$date,$tags){
 
-	foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($page,$cate,$auth,$date,$tags);
-		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-	}
-	
-	global $zbp;
-
-	$zbp->title=$zbp->option['ZC_BLOG_SUBTITLE'];
-	$html=null;
-
-	if(isset($zbp->templatetags['TEMPLATE_DEFAULT'])){$html=$zbp->templatetags['TEMPLATE_DEFAULT'];}
-
-	foreach ($zbp->templatetags as $key => $value) {
-		$html=str_replace('<#' . $key . '#>', $value, $html);
-	}
-
-	echo $html;
-	return null;
-
-}
-
-function ViewArticle(){
-
-
-}
-
-function ViewPage(){
-
-
-}
 
 function Login(){
 	global $zbp;
@@ -131,17 +100,17 @@ function Reload($qs){
 		$r .= "<tr><td>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td></td><td></td></tr>";		
 
 		$zbp->SetCache('reload_statistic',$r);
-		$zbp->SaveCache();
+		$zbp->SaveCache(true);
 
 
 	}
 	if(strpos($qs,'updateinfo')){
-		#$r = file_get_contents($zbp->option['ZC_UPDATE_INFO_URL']);
-		$r = file_get_contents('http://www.baidu.com/robots.txt');
+		$r = file_get_contents($zbp->option['ZC_UPDATE_INFO_URL']);
+		#$r = file_get_contents('http://www.baidu.com/robots.txt');
 		$r = '<tr><td>' . $r . '</td></tr>';
 
 		$zbp->SetCache('reload_updateinfo',$r);
-		$zbp->SaveCache();
+		$zbp->SaveCache(true);
 	}
 
 	return $r;
