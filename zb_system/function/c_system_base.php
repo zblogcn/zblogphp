@@ -40,10 +40,10 @@ $bloghost = GetCurrentHost($cookiespath);
 require_once $blogpath.'zb_system/function/lib/zblogphp.php';
 require_once $blogpath.'zb_system/function/lib/dbfactory.php';
 
-require_once $blogpath.'zb_system/function/lib/dbmysql.php';
-require_once $blogpath.'zb_system/function/lib/dbpdo_mysql.php';
-require_once $blogpath.'zb_system/function/lib/dbsqlite.php';
-require_once $blogpath.'zb_system/function/lib/dbsqlite3.php';
+require_once $blogpath.'zb_system/function/lib/db/dbmysql.php';
+require_once $blogpath.'zb_system/function/lib/db/dbpdo_mysql.php';
+require_once $blogpath.'zb_system/function/lib/db/dbsqlite.php';
+require_once $blogpath.'zb_system/function/lib/db/dbsqlite3.php';
 #以后修改
 #require_once $blogpath.'zb_system/function/lib/db' .$option['ZC_DATABASE_TYPE']. '.php';
 
