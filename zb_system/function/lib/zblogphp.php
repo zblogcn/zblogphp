@@ -392,7 +392,13 @@ class ZBlogPHP{
 			foreach ($a as $v2) {
 				$f=$this->templates['b_function'];
 				if(isset($this->modulesbyfilename[$v2])){
-				$f=str_replace('<#function/content#>', $this->modulesbyfilename[$v2]->Content, $f);
+
+				$f=str_replace('<#function/content#>',
+					($this->modulesbyfilename[$v2]->Type=='ul'?'<ul>':'<div>') .
+					$this->modulesbyfilename[$v2]->Content
+					. ($this->modulesbyfilename[$v2]->Type=='ul'?'</ul>':'</div>')
+					,$f);
+
 				$f=str_replace('<#function/name#>', $this->modulesbyfilename[$v2]->Name, $f);
 				$f=str_replace('<#function/htmlid#>', $this->modulesbyfilename[$v2]->HtmlID, $f);				
 				}

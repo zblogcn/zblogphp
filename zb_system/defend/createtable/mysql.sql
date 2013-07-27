@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS %pre%module (
   mod_IsHidden bit(1) NOT NULL DEFAULT b'0',
   mod_SidebarID int(11) NOT NULL DEFAULT '0',
   mod_HtmlID varchar(50) NOT NULL DEFAULT '',
-  mod_Ftype varchar(5) NOT NULL DEFAULT '',
+  mod_Type varchar(5) NOT NULL DEFAULT '',
   mod_MaxLi int(11) NOT NULL DEFAULT '0',
   mod_Source varchar(50) NOT NULL DEFAULT '',
   mod_ViewType varchar(50) NOT NULL DEFAULT '',
