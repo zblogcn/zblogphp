@@ -14,7 +14,7 @@ $zbp->Initialize();
 
 foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
-ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('tags','GET'),GetVars('date','GET'));
+echo $zbp->ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('tags','GET'),GetVars('date','GET'));
 
 $zbp->Terminate();
 

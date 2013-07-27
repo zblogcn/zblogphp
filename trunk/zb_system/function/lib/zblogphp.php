@@ -38,6 +38,11 @@ class ZBlogPHP{
 
 	public $table=null;
 	public $datainfo=null;
+
+	public $templatepath=null;
+
+	public $isconnect=false;
+	public $isdelay_savecache=false;	
 	
 	static public function GetInstance(){
 		if(!isset(self::$_zbp)){
@@ -69,6 +74,8 @@ class ZBlogPHP{
 		$this->title=&$GLOBALS['blogtitle'];
 		
 		$this->user=new Member();
+
+		$this->templatepath=$this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
 
 	}
 
@@ -113,7 +120,13 @@ class ZBlogPHP{
 
 	#终止连接，释放资源
 	public function Terminate(){
-		$this->db->Close();
+		if($this->isconnect){
+			$this->db->Close();
+		}
+		if($this->isdelay_savecache){
+			$this->SaveCache();
+		}		
+
 	}
 
 
@@ -143,9 +156,15 @@ class ZBlogPHP{
 	}
 	public function SaveCache($delay=false){
 
-		$s=$this->path . 'zb_users/cache/' . $this->guid . '.cache';
-		$c=serialize($this->cache);
-		file_put_contents($s, $c);
+		if($delay==true){
+			$this->isdelay_savecache=true;
+		}else{
+			$s=$this->path . 'zb_users/cache/' . $this->guid . '.cache';
+			$c=serialize($this->cache);
+			file_put_contents($s, $c);
+			$this->isdelay_savecache=false;
+		}
+
 	}
 	public function LoadCache(){
 		$s=$this->path . 'zb_users/cache/' . $this->guid . '.cache';
@@ -156,8 +175,8 @@ class ZBlogPHP{
 
 
 	public function OpenConnect(){
-		static $isconnect=false;
-		if($isconnect){return;}
+
+		if($this->isconnect){return;}
 
 		switch ($this->option['ZC_DATABASE_TYPE']) {
 		case 'mysql':
@@ -196,7 +215,7 @@ class ZBlogPHP{
 			}
 			break;
 		}
-		$isconnect=true;	
+		$this->isconnect=true;	
 	}
 
 
@@ -355,6 +374,46 @@ class ZBlogPHP{
 		}
 
 	}
+	
+	
+	
+	
+	function ViewList($page,$cate,$auth,$date,$tags){
+
+		foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($page,$cate,$auth,$date,$tags);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+
+		$this->title=$this->option['ZC_BLOG_SUBTITLE'];
+		$html=null;
+
+/*
+		if(isset($this->templatetags['TEMPLATE_DEFAULT'])){$html=$this->templatetags['TEMPLATE_DEFAULT'];}
+
+		foreach ($this->templatetags as $key => $value) {
+			$html=str_replace('<#' . $key . '#>', $value, $html);
+		}
+*/
+
+		include $this->templatepath . $this->option['ZC_INDEX_DEFAULT_TEMPLATE'] . '.php';
+		#return $html;
+
+	}
+
+	function ViewArticle(){
+
+
+	}
+
+	function ViewPage(){
+
+
+	}
+		
+	function template($name){
+		return $this->templatepath . $name . '.php';
+	}	
 
 }
 
