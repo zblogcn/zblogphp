@@ -13,17 +13,17 @@ abstract class Base
 {
 
 	public $table='';
-	public $datainfo=array();
+	public $datainfo = array();
 
-	protected $db=null;
+	protected $db = null;
 
-	public $Metas=array();
+	public $Metas = array();
 
-	public $Data=array();
+	public $Data = array();
 	
 	public function __set($name, $value) 
 	{
-		$this->Data[$name] = $value;
+		$this->Data[$name]  =  $value;
 	}
 
 	public function __get($name) 
@@ -32,11 +32,31 @@ abstract class Base
 	}
 
 
+	function GetLibIDArray($orderby, $limit){	//$orderby=array(id=>'ASC',order=>'ASC'), $limit=array(0,30)
+
+		$s = "SELECT `". $this->datainfo['ID'][0] ."` FROM " . $this->table . "";
+		
+		if(!empty($orderby)) {
+			$s .= ' ORDER BY ';
+			$comma = '';
+			foreach($orderby as $k=>$v) {
+				$s .= $comma."$k $v";
+				$comma = ',';
+			}
+		}
+		$s .= ($limit ? " LIMIT $limit[0], $limit[1]" : '');
+		
+		foreach ($this->db->Query($s) as $key => $value) {
+			$array[$key] = $value[$this->datainfo['ID'][0]];
+		}
+		return $array;
+	}
+
 	function LoadInfoByID($id){
 
 		$s="SELECT * FROM " . $this->table . " WHERE " . $this->datainfo['ID'][0] . "=$id";
 
-		$array=$this->db->Query($s);
+		$array = $this->db->Query($s);
 		if (count($array)>0) {
 			$this->LoadInfoByAssoc($array[0]);
 		}
@@ -50,54 +70,54 @@ abstract class Base
 	}
 
 	function LoadInfoByArray($array){
-		$i=0;
+		$i = 0;
 		foreach ($this->datainfo as $key => $value) {
 			$this->$key=$array[$i];
-			$i+=1;
+			$i += 1;
 		}
 	}	
 
 	function Post(){
 
-		if ($this->ID==0) {
+		if ($this->ID  ==  0) {
 			$s="INSERT INTO " . $this->table . " (";
-			$a=array();
+			$a = array();
 			foreach ($this->datainfo as $key => $value) {
-				if ($value[0]==$this->datainfo['ID'][0]) {continue;}
+				if ($value[0] == $this->datainfo['ID'][0]) {continue;}
 				$a[]=$value[0];
 			}
-			$s.=implode(',', $a);
-			$s.=") VALUES (";
-			$a=array();
+			$s .= implode(',', $a);
+			$s .= ") VALUES (";
+			$a = array();
 			foreach ($this->datainfo as $key => $value) {
-				if ($value[0]==$this->datainfo['ID'][0]) {continue;}
-				if ($value[1]=='string') {
+				if ($value[0] == $this->datainfo['ID'][0]) {continue;}
+				if ($value[1] == 'string') {
 					$a[]='\'' . addslashes($this->$key) . '\'';	
-				}elseif ($value[1]=='boolean') {
+				}elseif ($value[1] == 'boolean') {
 					$a[]=(integer)$this->$key;
 				}else{
-					$a[]=$this->$key;		
+					$a[] = $this->$key;		
 				}
 			}
-			$s.=implode(',', $a);
-			$s.=")";
+			$s .= implode(',', $a);
+			$s .= ")";
 			Logs($s);
-			$this->ID=$this->db->Insert($s);
+			$this->ID = $this->db->Insert($s);
 		} else {
 			$s="UPDATE " . $this->table . " SET ";
-			$a=array();
+			$a = array();
 			foreach ($this->datainfo as $key => $value) {
-				if ($value[0]==$this->datainfo['ID'][0]) {continue;}
-				if ($value[1]=='string') {
+				if ($value[0] == $this->datainfo['ID'][0]) {continue;}
+				if ($value[1] == 'string') {
 					$a[]=$value[0] . '=\'' . addslashes($this->$key) . '\'';
-				}elseif ($value[1]=='boolean') {
+				}elseif ($value[1] == 'boolean') {
 					$a[]=$value[0] . '=' . (integer)$this->$key;
 				}else{
 					$a[]=$value[0] . '=' . $this->$key;	
 				}
 			}
-			$s.=implode(', ', $a);
-			$s.=" WHERE " . $this->datainfo['ID'][0] . "=" . $this->ID;
+			$s .= implode(', ', $a);
+			$s .= " WHERE " . $this->datainfo['ID'][0] . "=" . $this->ID;
 			Logs($s);
 			return $this->db->Update($s);
 		}

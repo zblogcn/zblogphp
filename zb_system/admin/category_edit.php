@@ -28,11 +28,12 @@ if(isset($_POST['edtID'])){
 	if($_POST['edtID'] == 0){
 		$cate->LoadInfobyArray(array($_POST['edtID'], $_POST['edtName'], $_POST['edtOrder'], 0, $_POST['edtAlias'], '', 0, $_POST['edtPareID'], $_POST['edtTemplate'], $_POST['edtLogTemplate'], ''));
 		$cate->Post();
+		redirect('category.php');
 	}else{
 		$cate->LoadInfoByID($_POST['edtID']);
 		$cate->Data['Name'] = $_POST['edtName'];
 		$catadata = $cate->Data;
-		if($cate->Post()){redirect('catalog.php');}
+		if($cate->Post()){redirect('category.php');}
 	}
 }
 
@@ -61,7 +62,7 @@ $catadata = $cate->Data;
 		<span class="title">别名:</span><br />
 		<input id="edtAlias" class="cleanuphtml-1" size="40" name="edtAlias" type="text" value="<?php echo $catadata['Alias'];?>" />
 	  </p>
-	  <?php if($cateid != 1){ ?>
+
 	  <p>
 		<span class="title">排序:</span><br />
 		<input id="edtOrder" class="cleanuphtml-1" size="40" name="edtOrder" type="text" value="<?php echo $catadata['Order'];?>" />
@@ -92,7 +93,6 @@ $catadata = $cate->Data;
 	  <p>
 		<label><input type="checkbox" name="edtAddNavbar" id="edtAddNavbar" value="True" />  <span class="title">加入导航栏菜单</span></label>
 	  </p>
-	  <?php }else{echo "<p> 提示:'未分类'分类是系统默认加入的分类,不能删除;未指定分类的文章都归入'未分类'下,该分类下没有文章的话将不显示在前台分类列表中.</p>";}?>
 	  <p>
 		<input type="submit" class="button" value="提交" id="btnPost" onclick="return checkCateInfo();" />
 	  </p>
@@ -100,7 +100,7 @@ $catadata = $cate->Data;
 	<script type="text/javascript">
 			var str17="名称不能为空";
 			function checkCateInfo(){
-					document.getElementById("edit").action="catalog_edit.php?act=CategoryEdt";
+					document.getElementById("edit").action="category_edit.php?act=CategoryEdt";
 
 					if(!$("#edtName").val()){
 							alert(str17);

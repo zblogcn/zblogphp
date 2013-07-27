@@ -56,7 +56,7 @@ class DbSQLite3 implements iDataBase
 
 	function Update($query){
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		$this->db->query($query);
+		return $this->db->query($query);
 	}
 
 	function Delete($query){
