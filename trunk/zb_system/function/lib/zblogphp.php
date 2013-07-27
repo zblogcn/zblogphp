@@ -323,13 +323,11 @@ class ZBlogPHP{
 
 	public function MakeTemplatetags(){
 
-		
-
-		$this->templatetags['template:sidebar'] =$this->sidebars[1];
-		$this->templatetags['template:sidebar2']=$this->sidebars[2];
-		$this->templatetags['template:sidebar3']=$this->sidebars[3];
-		$this->templatetags['template:sidebar4']=$this->sidebars[4];	
-		$this->templatetags['template:sidebar5']=$this->sidebars[5];
+		#$this->templatetags['template:sidebar'] =$this->sidebars[1];
+		#$this->templatetags['template:sidebar2']=$this->sidebars[2];
+		#$this->templatetags['template:sidebar3']=$this->sidebars[3];
+		#$this->templatetags['template:sidebar4']=$this->sidebars[4];	
+		#$this->templatetags['template:sidebar5']=$this->sidebars[5];
 
 		foreach ($this->templates as $key => $value) {
 			$this->templatetags['TEMPLATE_' . strtoupper($key)]=$value;
@@ -362,6 +360,10 @@ class ZBlogPHP{
 		$content=str_ireplace('<#template:sidebar3#>', '<?php include $this->template("sidebar3");?>', $content);
 		$content=str_ireplace('<#template:sidebar4#>', '<?php include $this->template("sidebar4");?>', $content);		
 		$content=str_ireplace('<#template:sidebar5#>', '<?php include $this->template("sidebar5");?>', $content);
+
+		foreach ($this->templatetags as $key => $value) {
+			$content=str_ireplace('<#' . $key . '#>', '<?php echo $this->templatetags["' . $key . '"];?>', $content);
+		}
 		return $content;
 	}
 	public function Compiling(){
