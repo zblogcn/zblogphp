@@ -41,22 +41,12 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
 	foreach ($cata_value as $key => $value) {
 		if($value['ParentID'] == 0){
 			$cata_parent[$value['ID']] = $value;
-		}else{
-			$cata_child[$value['ID']] = $value;
 		}
 	}
 
 	$parenthtml = '';
 	foreach($cata_parent as $key => $value){
 		$parenthtml .= "<option value='".$value['ID'].($catadata['ParentID'] == $value['ID'] ? "' selected='selected'>" : "' >").$value['Name']."</option>";
-		//if(isset($cata_child)){
-		//	foreach($cata_child as $k => $v){
-		//		if($key == $v['ParentID']){
-		//			$parenthtml .= "<option value='".$v['ID'].($cateid['ParentID'] == $value['ID'] ? "' selected='selected'>&nbsp;&nbsp;&nbsp;&nbsp;|--" : "' >&nbsp;&nbsp;&nbsp;&nbsp;|--").$v['Name']."</option>";
-		//		unset($cata_child[$k]);
-		//		}
-		//	}
-		//}
 	}
 	
 ?>
