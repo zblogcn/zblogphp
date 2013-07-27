@@ -324,7 +324,7 @@ class ZBlogPHP{
 		foreach ($this->option as $key => $value) {
 			$this->templatetags[strtoupper($key)]=$value;
 		}
-v
+
 		foreach ($this->lang['msg'] as $key => $value) {
 			$this->templatetags['msg' . $key]=$value;
 		}
