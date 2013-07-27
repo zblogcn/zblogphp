@@ -69,7 +69,7 @@ foreach($cata_parent as $key => $value){
 	   <td align="center"><img width="16" src="../image/admin/folder.png" alt="" /></td>
 	   <td>{$value['ID']}</td>
 	   <td>{$value['Order']}</td>
-	   <td><a href="{$blogpath}catalog.php?cate={$value['ID']}" target="_blank">{$value['Name']}</a></td>
+	   <td><a href="{$bloghost}catalog.php?cate={$value['ID']}" target="_blank">{$value['Name']}</a></td>
 	   <td>{$value['Alias']}</td>
 	   <td align="center"><a href="../cmd.php?act=CategoryEdt&amp;id={$value['ID']}" class="button"><img src="../image/admin/folder_edit.png" alt="编辑" title="编辑" width="16" /></a>&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="return window.confirm(&quot;单击“确定”继续。单击“取消”停止。&quot;);" href="../cmd.php?act=CategoryDel&amp;id=1" class="button"><img src="../image/admin/delete.png" alt="删除" title="删除" width="16" /></a></td>
 	  </tr>
