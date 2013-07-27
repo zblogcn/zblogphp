@@ -76,6 +76,7 @@ $actions=array(
 
 'CategoryMng'=>1,
 'CategoryEdt'=>1,
+'CategoryPst'=>1,
 'TagMng'=>1,
 'CommentMng'=>4,
 'FileMng'=>1,

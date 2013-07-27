@@ -84,13 +84,30 @@ function Logout(){
 	setcookie("password", "",time() - 3600,$zbp->cookiespath);
 }
 
+function CategoryPost(){
+	$cate = new Category();
+	if($_POST['edtID'] == 0){
+		$cate->LoadInfobyArray(array($_POST['edtID'], $_POST['edtName'], $_POST['edtOrder'], 0, $_POST['edtAlias'], '', 0, $_POST['edtPareID'], $_POST['edtTemplate'], $_POST['edtLogTemplate'], ''));
+		print_r($_POST);die();
+		if($cate->Post()){redirect('admin/category.php');}
+	}else{
+		$cate->LoadInfoByID($_POST['edtID']);
+		$cate->Name = $_POST['edtName'];
+		$cate->Order = $_POST['edtOrder'];
+		$cate->Alias = $_POST['edtAlias'];
+		$cate->PareID = $_POST['edtPareID'];
+		$cate->Template = $_POST['edtTemplate'];
+		$cate->LogTemplate = $_POST['edtLogTemplate'];
+
+		if($cate->Post()){redirect('admin/category.php');}
+	}
+}
+
 function Reload($qs){
 	global $zbp;
 
 	$r=null;
-
-
-
+	
 	if(strpos($qs,'statistic')){
 
 		$xmlrpc_address=$zbp->host . 'zb_system/xml-rpc/';
