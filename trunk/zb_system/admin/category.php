@@ -82,7 +82,7 @@ foreach($cata_child as $k => $v){
 		   <td align="center"><img width="16" src="../image/admin/arrow_turn_right.png" alt="" /></td>
 		   <td>{$v['ID']}</td>
 		   <td>{$v['Order']}</td>
-		   <td><a href="{$blogpath}catalog.php?cate={$v['ID']}" target="_blank">{$v['Name']}</a></td>
+		   <td><a href="{$bloghost}catalog.php?cate={$v['ID']}" target="_blank">{$v['Name']}</a></td>
 		   <td>{$v['Alias']}</td>
 		   <td align="center"><a href="../cmd.php?act=CategoryEdt&amp;id={$v['ID']}" class="button"><img src="../image/admin/folder_edit.png" alt="编辑" title="编辑" width="16" /></a>&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="return window.confirm(&quot;单击“确定”继续。单击“取消”停止。&quot;);" href="../cmd.php?act=CategoryDel&amp;id=1" class="button"><img src="../image/admin/delete.png" alt="删除" title="删除" width="16" /></a></td>
 		  </tr>
