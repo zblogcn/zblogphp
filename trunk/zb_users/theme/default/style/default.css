@@ -26,7 +26,7 @@ a:active {
 	text-decoration: none;
 }
 
-ol,ul{
+ol,ul,dl{
 	list-style-type:none;
 	list-style-position : outside;
 	margin:0 0 0 0;
@@ -226,9 +226,12 @@ h1,h2,h3,h4,h5,h6{
 	background:url("default/pointblue.gif") no-repeat 0 16px;
 	width:auto;
 }
-
+.function .function_c{
+	padding:0em;
+}
 .function .function_c div{
 	padding:0.5em 0 0.5em 1em;
+	line-height:2em;
 }
 
 .function a{
@@ -289,6 +292,25 @@ h1,h2,h3,h4,h5,h6{
     word-break:keep-all;
     overflow:hidden;
     text-overflow:ellipsis;
+}
+
+/*-----------------------------日历-----------------------------*/
+#divCalendar{
+    width:100%;
+	padding:0 0 0 0;
+}
+
+
+#divCalendar div{
+    width:225px;
+	margin:0 0 0 0;
+	padding:5px 0 5px 5px;
+	float:left;
+}
+
+#divCalendar table{
+	width:96%;
+	padding:0 2% 0 2%;
 }
 
 /*------------------------------文章模块---------------------------*/
@@ -572,26 +594,6 @@ div.post-body h6{
 }
 
 
-
-/*-----------------------------日历-----------------------------*/
-#divCalendar{
-    width:100%;
-	padding:0 0 0 0;
-	text-align:center;
-}
-
-
-#divCalendar div{
-    width:225px;
-	margin:0 0 0 0;
-	padding:5px 0 5px 5px;
-	float:left;
-}
-
-#divCalendar table{
-	width:96%;
-	padding:0 2% 0 2%;
-}
 
 /*---------------------------文章和评论翻页条------------------------*/
 a.l{

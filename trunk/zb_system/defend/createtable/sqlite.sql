@@ -104,7 +104,7 @@ CREATE TABLE %pre%module (
   mod_IsHidden bit NOT NULL DEFAULT b0,
   mod_SidebarID integer NOT NULL DEFAULT 0,
   mod_HtmlID varchar(50) NOT NULL DEFAULT '',
-  mod_Ftype varchar(5) NOT NULL DEFAULT '',
+  mod_Type varchar(5) NOT NULL DEFAULT '',
   mod_MaxLi integer NOT NULL DEFAULT 0,
   mod_Source varchar(50) NOT NULL DEFAULT '',
   mod_ViewType varchar(50) NOT NULL DEFAULT '',
