@@ -22,7 +22,7 @@ class ZBlogPHP{
 	public $categorys=array();
 	public $tags=array();
 	public $modules=array();
-	public $modules_filename=array();
+	public $modulesbyfilename=array();
 	public $sidebars=array(1=>'',2=>'',3=>'',4=>'',5=>'');
 	public $templates=array();
 	public $configs=array();
@@ -112,8 +112,7 @@ class ZBlogPHP{
 		$this->LoadTemplates();
 		$this->LoadCacheIncludes();
 		$this->LoadTemplateIncludes();
-		$this->BuildSidebar();	+
-		$this->BuildTemplatetags();
+		$this->MakeTemplatetags();
 
 	}
 
@@ -239,7 +238,7 @@ class ZBlogPHP{
 			$m=new Member();
 			$m->LoadInfoByAssoc($ma);
 			$this->members[$m->ID]=$m;
-			$this->membersbyname[$m->Name]=&$m;
+			$this->membersbyname[$m->Name]=&$this->members[$m->ID];
 		}
 	}
 
@@ -260,7 +259,7 @@ class ZBlogPHP{
 			$m=new Module();
 			$m->LoadInfoByAssoc($ma);
 			$this->modules[$m->ID]=$m;
-			$this->modulesbyfilename[$m->FileName]=&$m;
+			$this->modulesbyfilename[$m->FileName]=&$this->modules[$m->ID];
 		}
 	}
 
@@ -322,7 +321,7 @@ class ZBlogPHP{
 	}
 
 
-	public function BuildTemplatetags(){
+	public function MakeTemplatetags(){
 
 		
 
@@ -354,28 +353,53 @@ class ZBlogPHP{
 
 	}
 
+	public function CompileFile($content){
+		foreach ($this->templates as $name => $file) {
+			$content=str_ireplace('<#TEMPLATE_' . $name . '#>', '<?php include $this->template("' . $name . '");?>', $content);
+		}
+		$content=str_ireplace('<#template:sidebar#>',  '<?php include $this->template("sidebar");?>',  $content);
+		$content=str_ireplace('<#template:sidebar2#>', '<?php include $this->template("sidebar2");?>', $content);
+		$content=str_ireplace('<#template:sidebar3#>', '<?php include $this->template("sidebar3");?>', $content);
+		$content=str_ireplace('<#template:sidebar4#>', '<?php include $this->template("sidebar4");?>', $content);		
+		$content=str_ireplace('<#template:sidebar5#>', '<?php include $this->template("sidebar5");?>', $content);
+		return $content;
+	}
+	public function Compiling(){
 
-	public function BuildSidebar(){
+		$this->Compiling_Templates();
+		$this->Compiling_Sidebars();
 
+	}
+	public function Compiling_Templates(){
+
+		foreach ($this->templates as $name => $file) {
+			$f=$this->CompileFile($file);
+			file_put_contents($this->templatepath . $name . '.php', $f, LOCK_EX);
+		}
+
+	}
+	public function Compiling_Sidebars(){
 		$s=array($this->option['ZC_SIDEBAR_ORDER'],
 				$this->option['ZC_SIDEBAR_ORDER2'],
 				$this->option['ZC_SIDEBAR_ORDER3'],
 				$this->option['ZC_SIDEBAR_ORDER4'],
 				$this->option['ZC_SIDEBAR_ORDER5'] );
 
-
 		foreach ($s as $k =>$v) {
 			$a=explode(':', $v);
 			foreach ($a as $v2) {
 				$f=$this->templates['b_function'];
-				$f=str_replace('<#function/content#>', '<#CACHE_INCLUDE_' . strtoupper($v2) . '#>', $f);
+				if(isset($this->modulesbyfilename[$v2])){
+				$f=str_replace('<#function/content#>', $this->modulesbyfilename[$v2]->Content, $f);
+				$f=str_replace('<#function/name#>', $this->modulesbyfilename[$v2]->Name, $f);
+				$f=str_replace('<#function/htmlid#>', $this->modulesbyfilename[$v2]->HtmlID, $f);				
+				}
 				$this->sidebars[($k+1)] .=$f ;
 			}
+			$f=$this->CompileFile($this->sidebars[($k+1)]);
+			file_put_contents($this->templatepath . 'sidebar' . ($k==0?'':$k+1) . '.php', $f, LOCK_EX);
 		}
-
 	}
-	
-	
 	
 	
 	function ViewList($page,$cate,$auth,$date,$tags){
