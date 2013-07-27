@@ -79,6 +79,8 @@ function Reload($qs){
 	
 	if(strpos($qs,'statistic')){
 
+		$zbp->Compiling();
+
 		$xmlrpc_address=$zbp->host . 'zb_system/xml-rpc/';
 		$current_member=$zbp->user->Name;
 		$current_version=$zbp->option['ZC_BLOG_VERSION'];
