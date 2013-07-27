@@ -39,9 +39,9 @@ foreach ($cata_value as $key => $value) {
 	}
 }
 
-echo "<pre>";
+//echo "<pre>";
 //print_r($cata_parent);print_r($cata_child);
-echo "</pre>";
+//echo "</pre>";
 ?>
 
 <div id="divMain"> 
@@ -74,7 +74,7 @@ foreach($cata_parent as $key => $value){
 	   <td align="center"><a href="../cmd.php?act=CategoryEdt&amp;id={$value['ID']}" class="button"><img src="../image/admin/folder_edit.png" alt="编辑" title="编辑" width="16" /></a>&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="return window.confirm(&quot;单击“确定”继续。单击“取消”停止。&quot;);" href="../cmd.php?act=CategoryDel&amp;id=1" class="button"><img src="../image/admin/delete.png" alt="删除" title="删除" width="16" /></a></td>
 	  </tr>
 html;
-
+if(isset($cata_child)){
 foreach($cata_child as $k => $v){
 	if($key == $v['ParentID']){
 		print <<<html
@@ -89,6 +89,7 @@ foreach($cata_child as $k => $v){
 html;
 	unset($cata_child[$k]);
 	}
+}
 }
 } 
 ?>

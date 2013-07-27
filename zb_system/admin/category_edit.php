@@ -36,6 +36,8 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
 			$cata_value[$value][$k] = $cate->Data[$k];
 		}
 	}
+	
+
 	foreach ($cata_value as $key => $value) {
 		if($value['ParentID'] == 0){
 			$cata_parent[$value['ID']] = $value;
@@ -43,21 +45,19 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
 			$cata_child[$value['ID']] = $value;
 		}
 	}
-	
-	$parenthtml = '<select id="edtPareID" name="edtPareID" class="edit cleanuphtml-2" size="1">';
-		
-	foreach($cata_parent as $key => $value){
-			$parenthtml .= "<option value='$v['ID']' selected='selected'>$value['Name']</option>";
 
-		foreach($cata_child as $k => $v){
-			if($key == $v['ParentID']){
-				$parenthtml .= "<option value='$v['ID']' selected='selected'>|--$v['Name']</option>";
-			unset($cata_child[$k]);
-			}
-		}
-	} 
-	$parenthtml .= '</select>';
-	
+	$parenthtml = '';
+	foreach($cata_parent as $key => $value){
+		$parenthtml .= "<option value='".$value['ID'].($catadata['ParentID'] == $value['ID'] ? "' selected='selected'>" : "' >").$value['Name']."</option>";
+		//if(isset($cata_child)){
+		//	foreach($cata_child as $k => $v){
+		//		if($key == $v['ParentID']){
+		//			$parenthtml .= "<option value='".$v['ID'].($cateid['ParentID'] == $value['ID'] ? "' selected='selected'>&nbsp;&nbsp;&nbsp;&nbsp;|--" : "' >&nbsp;&nbsp;&nbsp;&nbsp;|--").$v['Name']."</option>";
+		//		unset($cata_child[$k]);
+		//		}
+		//	}
+		//}
+	}
 	
 ?>
 
@@ -82,7 +82,10 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
 	  </p>
 	  <p>
 		<span class="title">父分类:</span><br />
-		<?php echo $parenthtml;?>
+		<select id="edtPareID" name="edtPareID" class="edit cleanuphtml-2" size="1">
+			<option value="0">无</option>
+			<?php echo $parenthtml;?>
+		</select>
 	  </p>
 	  <p>
 		<span class="title">模板:</span><br />
