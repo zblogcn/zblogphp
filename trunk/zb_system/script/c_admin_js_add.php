@@ -267,3 +267,5 @@ $(document).ready(function(){
 	$(".SubMenu span.m-right").parent().css({"float":"right"});
 
 });
+
+<?php die(); ?>

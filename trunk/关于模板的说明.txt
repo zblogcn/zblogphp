@@ -1,0 +1,21 @@
+1.指令性
+嵌入模板{template:hearder}
+
+嵌入模块内容{module:xxxxxx}
+
+
+2.变量
+{$article.name$}
+
+3.zblog传统的常量型
+{#ZC_BLOG_HOST#}
+
+4.if
+
+
+5.for
+
+
+
+2.注释
+{* Smarty这里是注释 *}
