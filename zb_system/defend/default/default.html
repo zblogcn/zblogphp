@@ -1,4 +1,4 @@
-<#TEMPLATE_HEADER#>
+{template:header}
 	<link rel="alternate" type="application/rss+xml" href="<#ZC_BLOG_HOST#>feed.php" title="<#ZC_BLOG_TITLE#>" />
 </head>
 <body class="multi default">
@@ -11,7 +11,7 @@
 		</div>
 		<div id="divNavBar">
 <ul>
-<#CACHE_INCLUDE_NAVBAR#>
+{module:navbar}
 </ul>
 		</div>
 		<div id="divMain">
@@ -19,7 +19,6 @@
 <div class="post pagebar"><#template:pagebar#></div>
 		</div>
 		<div id="divSidebar">
-<#template:sidebar#>
-
+{template:sidebar}
 		</div>
-<#TEMPLATE_FOOTER#>
+{template:footer}

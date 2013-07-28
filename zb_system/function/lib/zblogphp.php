@@ -21,9 +21,8 @@ class ZBlogPHP{
 	public $membersbyname=array();
 	public $categorys=array();
 	public $tags=array();
-	public $modules=array();
+	#public $modules=array();
 	public $modulesbyfilename=array();
-	public $sidebars=array(1=>'',2=>'',3=>'',4=>'',5=>'');
 	public $templates=array();
 	public $configs=array();
 	public $_configs=array();	
@@ -108,10 +107,10 @@ class ZBlogPHP{
 			}
 		}
 
-		$this->LoadDefaultTemplates();
+
 		$this->LoadTemplates();
-		$this->LoadCacheIncludes();
-		$this->LoadTemplateIncludes();
+		#$this->LoadCacheIncludes();
+		#$this->LoadTemplateIncludes();
 		$this->MakeTemplatetags();
 
 	}
@@ -258,29 +257,47 @@ class ZBlogPHP{
 		foreach ($array as $ma) {
 			$m=new Module();
 			$m->LoadInfoByAssoc($ma);
-			$this->modules[$m->ID]=$m;
-			$this->modulesbyfilename[$m->FileName]=&$this->modules[$m->ID];
+			#$this->modules[$m->ID]=$m;
+			#$this->modulesbyfilename[$m->FileName]=&$this->modules[$m->ID];
+			$this->modulesbyfilename[$m->FileName]=$m;
 		}
+
+		$dir=$this->path .'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/include/';
+		$files=GetFilesInDir($dir,'html');
+		foreach ($files as $sortname => $fullname) {
+			$m=new Module();
+			$m->FileName=$sortname;
+			$m->Content=file_get_contents($fullname);
+			$m->Type='div';
+			#$this->template_includes[$sortname]=file_get_contents($fullname);
+
+			#$this->modules[$m->ID]=$m;
+			#$this->modulesbyfilename[$m->FileName]=&$this->modules[$m->ID];
+			$this->modulesbyfilename[$m->FileName]=$m;
+		}
+
+
 	}
 
 
-	public function LoadDefaultTemplates(){
+	public function LoadTemplates(){
+		#先读默认的
 		$dir=$this->path .'zb_system/defend/default/';
 		$files=GetFilesInDir($dir,'html');
 		foreach ($files as $sortname => $fullname) {
 			$this->templates[$sortname]=file_get_contents($fullname);
 		}
-	}
-
-
-	public function LoadTemplates(){
+		#再读当前的
 		$dir=$this->path .'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/template/';
 		$files=GetFilesInDir($dir,'html');
 		foreach ($files as $sortname => $fullname) {
 			$this->templates[$sortname]=file_get_contents($fullname);
 		}
+
 	}
 
+
+/*
 	public function LoadCacheIncludes(){
 		$dir=$this->path .'zb_users/include/';
 		$files=GetFilesInDir($dir,'html');
@@ -296,7 +313,7 @@ class ZBlogPHP{
 			$this->template_includes[$sortname]=file_get_contents($fullname);
 		}
 	}
-
+*/
 	public function LoadConfigs(){
 
 		$s='SELECT * FROM %pre%Config';
@@ -329,21 +346,25 @@ class ZBlogPHP{
 		#$this->templatetags['template:sidebar4']=$this->sidebars[4];	
 		#$this->templatetags['template:sidebar5']=$this->sidebars[5];
 
-		foreach ($this->templates as $key => $value) {
-			$this->templatetags['TEMPLATE_' . strtoupper($key)]=$value;
-		}
+		#foreach ($this->templates as $key => $value) {
+		#	$this->templatetags['TEMPLATE_' . strtoupper($key)]=$value;
+		#}
 
-		foreach ($this->cache_includes as $key => $value) {
-			$this->templatetags['CACHE_INCLUDE_' . strtoupper($key)]=$value;
-		}	
+		#foreach ($this->cache_includes as $key => $value) {
+		#	$this->templatetags['CACHE_INCLUDE_' . strtoupper($key)]=$value;
+		#}
+
+		foreach ($this->modulesbyfilename as $key => $mod) {
+			$this->templatetags[strtoupper($key)]=$mod->Content;
+		}
 
 		foreach ($this->option as $key => $value) {
 			$this->templatetags[strtoupper($key)]=$value;
 		}
 
-		foreach ($this->lang['msg'] as $key => $value) {
-			$this->templatetags['msg' . $key]=$value;
-		}
+		#foreach ($this->lang['msg'] as $key => $value) {
+		#	$this->templatetags['msg' . $key]=$value;
+		#}
 
 		$this->templatetags['ZC_BLOG_SUB_NAME']=&$this->templatetags['ZC_BLOG_SUBTITLE'];
 		$this->templatetags['ZC_BLOG_NAME']=&$this->templatetags['ZC_BLOG_TITLE'];
@@ -351,9 +372,18 @@ class ZBlogPHP{
 
 	}
 
+
+
+
+
+
+
+
+
 	public function CompileFile($content){
 		foreach ($this->templates as $name => $file) {
 			$content=str_ireplace('<#TEMPLATE_' . $name . '#>', '<?php include $this->template("' . $name . '");?>', $content);
+			$content=str_ireplace('{template:' . $name . '}', '<?php include $this->template("' . $name . '");?>', $content);	
 		}
 		$content=str_ireplace('<#template:sidebar#>',  '<?php include $this->template("sidebar");?>',  $content);
 		$content=str_ireplace('<#template:sidebar2#>', '<?php include $this->template("sidebar2");?>', $content);
@@ -361,26 +391,23 @@ class ZBlogPHP{
 		$content=str_ireplace('<#template:sidebar4#>', '<?php include $this->template("sidebar4");?>', $content);		
 		$content=str_ireplace('<#template:sidebar5#>', '<?php include $this->template("sidebar5");?>', $content);
 
+		foreach ($this->modulesbyfilename as $key => $value) {
+			$content=str_ireplace('{module:' . $key . '}', $value->Content, $content);
+		}
+
 		foreach ($this->templatetags as $key => $value) {
 			$content=str_ireplace('<#' . $key . '#>', '<?php echo $this->templatetags["' . $key . '"];?>', $content);
+			$content=str_ireplace('{#' . $key . '#}', '<?php echo $this->templatetags["' . $key . '"];?>', $content);			
 		}
 		return $content;
 	}
+
+
+
 	public function Compiling(){
 
-		$this->Compiling_Templates();
-		$this->Compiling_Sidebars();
-
-	}
-	public function Compiling_Templates(){
-
-		foreach ($this->templates as $name => $file) {
-			$f=$this->CompileFile($file);
-			file_put_contents($this->templatepath . $name . '.php', $f, LOCK_EX);
-		}
-
-	}
-	public function Compiling_Sidebars(){
+		#先生成sidebar1-5
+		$sidebars=array(1=>'',2=>'',3=>'',4=>'',5=>'');
 		$s=array($this->option['ZC_SIDEBAR_ORDER'],
 				$this->option['ZC_SIDEBAR_ORDER2'],
 				$this->option['ZC_SIDEBAR_ORDER3'],
@@ -402,14 +429,28 @@ class ZBlogPHP{
 				$f=str_replace('<#function/name#>', $this->modulesbyfilename[$v2]->Name, $f);
 				$f=str_replace('<#function/htmlid#>', $this->modulesbyfilename[$v2]->HtmlID, $f);				
 				}
-				$this->sidebars[($k+1)] .=$f ;
+				$sidebars[($k+1)] .=$f ;
 			}
-			$f=$this->CompileFile($this->sidebars[($k+1)]);
-			file_put_contents($this->templatepath . 'sidebar' . ($k==0?'':$k+1) . '.php', $f, LOCK_EX);
 		}
+		$this->templates['sidebar']=$sidebars[1];
+		$this->templates['sidebar2']=$sidebars[2];
+		$this->templates['sidebar3']=$sidebars[3];
+		$this->templates['sidebar4']=$sidebars[4];
+		$this->templates['sidebar5']=$sidebars[5];
+
+		#把所有模板编辑到template目录下
+		foreach ($this->templates as $name => $file) {
+			$f=$this->CompileFile($file);
+			file_put_contents($this->templatepath . $name . '.php', $f, LOCK_EX);
+		}
+
 	}
-	
-	
+
+
+
+
+
+
 	function ViewList($page,$cate,$auth,$date,$tags){
 
 		foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
