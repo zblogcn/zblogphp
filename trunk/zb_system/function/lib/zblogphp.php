@@ -103,14 +103,7 @@ class ZBlogPHP{
 		$this->LoadModules();
 		$this->LoadConfigs();
 
-		if (isset($this->membersbyname[GetVars('username','COOKIE')]))
-		{
-			$m=$this->membersbyname[GetVars('username','COOKIE')];
-			if($m->Password == md5(GetVars('password','COOKIE') . $m->Guid))
-			{
-				$this->user=$m;
-			}
-		}
+		$this->Verify();
 
 		$this->MakeTemplatetags();
 
@@ -118,9 +111,9 @@ class ZBlogPHP{
 		$this->template = new Template();
 		$this->template->path = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
 
-		$this->template->tags=&$this->templatetags;
+		$this->template->tags = &$this->templatetags;
 		$this->template->SetTags('modules',$this->modulesbyfilename);
-		$this->template->SetTags('sidebars',$this->modulesbyfilename);		
+		$this->template->SetTags('sidebars',$this->modulesbyfilename);
 	}
 
 
@@ -138,6 +131,16 @@ class ZBlogPHP{
 
 	}
 
+	public function Verify(){
+		if (isset($this->membersbyname[GetVars('username','COOKIE')]))
+		{
+			$m=$this->membersbyname[GetVars('username','COOKIE')];
+			if($m->Password == md5(GetVars('password','COOKIE') . $m->Guid))
+			{
+				$this->user=$m;
+			}
+		}
+	}
 
 	public function GetCache($name){
 		if(array_key_exists($name,$this->cache))
