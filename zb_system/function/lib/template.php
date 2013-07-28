@@ -50,14 +50,14 @@ class Template{
 		$content = preg_replace('/\{\$include:([^\}]+)\}/', '{php} $this->IncludeCompiled(\'$1\'); {/php}', $content);
 
 		#zblog asp 特别魔法
-		$content = preg_replace('#\{\#([^\}]+)\#\}#', '<?php echo $this->\\1; ?>', $content);
+		$content = preg_replace('#\{\#([^\}]+)\#\}#', '<?php echo $option[\'\\1\']; ?>', $content);
 
 		$content = preg_replace('/\{php\}([\D\d]+?)\{\/php\}/', '<?php $1 ?>', $content);
 
 		#正则替换{$变量}
 		/*$content = preg_replace('#\{\$([^\}]+)\}#', '<?php echo $this->\\1; ?>', $content);*/
 
-		$content = preg_replace_callback('#\{\$([^\}]+)\}#', create_function('$matches','return \'<?php echo $this->\' . str_replace(\'.\',\'->\',$matches[1]) . \';?>\';'), $content);
+		$content = preg_replace_callback('#\{\$([^\}]+)\}#', create_function('$matches','return \'<?php echo $\' . str_replace(\'.\',\'->\',$matches[1]) . \';?>\';'), $content);
         
 		return $content;
 	}
@@ -74,9 +74,13 @@ class Template{
 		include $this->path . $name . '.php';
 	}
 
+	#模板入口
 	public function Display($name)
 	{
-
+		#入口处将tags里的变量提升全局!!!
+		foreach ($this->tags as $key => &$value) {
+			$$key=&$value;
+		}
 		include $this->path . $name . '.php';
 	}
 
@@ -84,7 +88,7 @@ class Template{
 	{
 
 		ob_start();
-		include $this->path . $name . '.php';
+		$this->Display($name);
 		$data = ob_get_contents();
 		ob_end_clean();
 		return $data;
