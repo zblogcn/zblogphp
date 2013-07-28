@@ -80,7 +80,7 @@ function Reload($qs){
 	if(strpos($qs,'statistic')){
 
 
-		$zbp->BuildSidebarTemplate();
+		$zbp->BuildTemplate();
 		$zbp->template->CompileAll();
 		
 
