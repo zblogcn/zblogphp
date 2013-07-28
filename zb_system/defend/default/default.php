@@ -11,7 +11,7 @@
 		</div>
 		<div id="divNavBar">
 <ul>
-{$module['navbar'].Content}
+{$modules['navbar'].Content}
 </ul>
 		</div>
 		<div id="divMain">
