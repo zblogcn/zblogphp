@@ -94,12 +94,14 @@ function Reload($qs){
 		$current_theme=$zbp->option['ZC_BLOG_THEME'];
 		$current_style=$zbp->option['ZC_BLOG_CSS'];
 
+		$system_environment=GetVars('OS','SERVER') . ';' . GetVars('SERVER_SOFTWARE','SERVER') . ';' . 'PHP ' . phpversion();
+
 		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['current_member']}</td><td width='30%'>{$current_member}</td><td width='20%'>{$zbp->lang['msg']['current_version']}</td><td width='30%'>{$current_version}</td></tr>";
-		$r .= "<tr><td>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_artiles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categorys}</td></tr>";
-		$r .= "<tr><td>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
-		$r .= "<tr><td>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
-		$r .= "<tr><td>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
-		$r .= "<tr><td>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td></td><td></td></tr>";		
+		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_artiles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categorys}</td></tr>";
+		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
+		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
+		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
+		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";		
 
 		$zbp->SetCache('reload_statistic',$r);
 		$zbp->SaveCache(true);
