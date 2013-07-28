@@ -52,6 +52,7 @@ return array(
 	'current_theme'=>'当前主题',
 	'current_style'=>'当前样式',
 	'xmlrpc_address'=>'XML-RPC地址',
+	'system_environment'=>'系统环境',
 
 	'batch_operation'=>'批量操作',
 	'batch_operation_in_progress'=>'批量操作进行中...',

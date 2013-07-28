@@ -76,6 +76,8 @@ class ZBlogPHP{
 
 		$this->templatepath=$this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
 
+
+		$this->title=$this->option['ZC_BLOG_TITLE'] . '-' . $this->option['ZC_BLOG_SUBTITLE'];
 	}
 
 
@@ -333,9 +335,9 @@ class ZBlogPHP{
 			$this->templatetags[strtoupper($key)]=$value;
 		}
 
-		$this->templatetags['ZC_BLOG_SUB_NAME']=&$this->templatetags['ZC_BLOG_SUBTITLE'];
-		$this->templatetags['ZC_BLOG_NAME']=&$this->templatetags['ZC_BLOG_TITLE'];
-		$this->templatetags['BlogTitle']=&$this->title;
+		#$this->templatetags['ZC_BLOG_SUB_NAME']=&$this->templatetags['ZC_BLOG_SUBTITLE'];
+		#$this->templatetags['ZC_BLOG_NAME']=&$this->templatetags['ZC_BLOG_TITLE'];
+		$this->templatetags['blogtitle']=&$this->title;
 
 	}
 
