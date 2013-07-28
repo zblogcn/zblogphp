@@ -51,6 +51,7 @@ class ZBlogPHP{
 	
 	function __construct() {
 
+		//基本配置加载到$zbp内
 		$this->option = &$GLOBALS['option'];
 		$this->lang = &$GLOBALS['lang'];
 		$this->path = &$GLOBALS['blogpath'];
@@ -75,15 +76,13 @@ class ZBlogPHP{
 
 		$this->title=$this->option['ZC_BLOG_TITLE'] . '-' . $this->option['ZC_BLOG_SUBTITLE'];
 		
+		//创建User类
 		$this->user=new Member();
 
+		//创建模板类
 		$this->template = new Template();
+		$this->template->path = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
 
-		$this->template->zbp_path = $this->path;
-
-		$this->template->templatepath = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
-
-		$this->template->themename = $this->option['ZC_BLOG_THEME'];
 
 		
 
@@ -95,7 +94,7 @@ class ZBlogPHP{
 	}
 
 	function __call($method, $args) {
-		throw new Exception($method);
+		throw new Exception('zbp不存在方法：'.$method);
 	}
 
 	#初始化连接
@@ -126,11 +125,17 @@ class ZBlogPHP{
 		#$this->LoadTemplateIncludes();
 		
 
-		$this->template->modulesbyfilename = $this->modulesbyfilename;
-		$this->template->LoadTemplates();
-		$this->template->MakeTemplatetags();
+		//初始化模板
+
+
+		$this->template->LoadTemplates($this->path.'zb_system/defend/default/');
+		$this->template->LoadTemplates($this->path.'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/template/');
+
+		$this->MakeTemplatetags();
+		
 
 	}
+
 
 
 	#终止连接，释放资源
@@ -333,6 +338,89 @@ class ZBlogPHP{
 		}
 
 		$this->_configs=$this->configs;
+	}
+
+
+	function MakeTemplatetags(){
+
+		foreach ($this->modulesbyfilename as $key => $mod) {
+			$this->modulesbyfilename[strtoupper($key)]=$mod->Content;
+			$this->template->tags['module[\'' . $key . '\']'] = $this->IncludeModule($key);
+		}
+
+		foreach ($this->option as $key => $value) {
+			$this->template->tags[strtoupper($key)]=$value;
+		}
+
+
+		$this->template->tags['ZC_BLOG_SUB_NAME']=&$this->template->tags['ZC_BLOG_SUBTITLE'];
+		$this->template->tags['ZC_BLOG_NAME']=&$this->template->tags['ZC_BLOG_TITLE'];
+		$this->template->tags['BlogTitle']=&$this->title;
+
+
+	}
+
+	function IncludeModule($name){
+		
+		if(isset($this->modulesbyfilename[$name]))
+		{
+			$c=$this->modulesbyfilename[$name]->Content;
+			return str_replace('{$ZC_BLOG_HOST}', $this->host, $c);
+		}
+
+	}
+
+	function IncludeModuleFull($name){
+
+		if(isset($this->modulesbyfilename[$name]))
+		{
+			$module=$this->modulesbyfilename[$name];
+		}
+		else
+		{
+			$module=new Module;
+		}		
+		
+		return $this->template->output('b_module');
+	}
+
+
+	function BuildSidebarTemplate()
+	{
+
+		#先生成sidebar1-5
+		$sidebars=array(
+			1 => '',
+			2 => '',
+			3 => '',
+			4 => '',
+			5 => ''
+		);
+		
+		$s=array($this->option['ZC_SIDEBAR_ORDER'],
+				$this->option['ZC_SIDEBAR_ORDER2'],
+				$this->option['ZC_SIDEBAR_ORDER3'],
+				$this->option['ZC_SIDEBAR_ORDER4'],
+				$this->option['ZC_SIDEBAR_ORDER5'] );
+
+		foreach ($s as $k =>$v) {
+			$a=explode(':', $v);
+			foreach ($a as $v2) {
+				if(isset($this->modulesbyfilename[$v2])){
+					$f=$this->IncludeModuleFull($v2) . "\r\n";
+				}
+				$sidebars[($k+1)] .=$f ;
+			}
+		}
+
+		for($i=1; $i<=5; $i++)
+		{
+			//$i=1不按照sidebar处理，而按照sidebar1
+			$this->template->tags['sidebar'.$i]=$sidebars[1];
+			$this->template->SaveTemplate('sidebar'.$i,$this->template->CompileFile('sidebar'));
+		}
+		
+
 	}
 
 
