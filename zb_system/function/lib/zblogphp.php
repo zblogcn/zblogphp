@@ -353,7 +353,6 @@ class ZBlogPHP{
 		}
 
 		foreach ($this->modulesbyfilename as $key => $value) {
-			#$content=str_ireplace('{module:' . $key . '}', $value->Content, $content);
 			$content=str_ireplace('{module:' . $key . '}', '<?php echo $this->IncludeModule("' . $key . '");?>', $content);
 		}
 
@@ -361,7 +360,7 @@ class ZBlogPHP{
 			$content=str_ireplace('<#' . $key . '#>', '<?php echo $this->templatetags["' . $key . '"];?>', $content);
 			$content=str_ireplace('{#' . $key . '#}', '<?php echo $this->templatetags["' . $key . '"];?>', $content);			
 		}
-		#正则替换{$变量$}
+		#正则替换{$变量}
 		$content = preg_replace('#\{\$([^\}]+)\}#', '<?php echo $\\1; ?>', $content);
 		return $content;
 	}
