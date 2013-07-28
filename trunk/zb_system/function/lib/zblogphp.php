@@ -112,8 +112,8 @@ class ZBlogPHP{
 		$this->template->path = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
 
 		$this->template->tags = &$this->templatetags;
-		$this->template->SetTags('modules',$this->modulesbyfilename);
-		$this->template->SetTags('sidebars',$this->modulesbyfilename);
+		#$this->template->SetTags('modules',$this->modulesbyfilename);
+		#$this->template->SetTags('sidebars',$this->modulesbyfilename);
 	}
 
 
@@ -347,17 +347,36 @@ class ZBlogPHP{
 
 	function MakeTemplatetags(){
 
-		foreach ($this->modulesbyfilename as $key => $mod) {
-			$this->templatetags[strtoupper($key)]=$mod->Content;
-		}
-
-		foreach ($this->option as $key => $value) {
-			$this->templatetags[strtoupper($key)]=$value;
-		}
-
+		$this->templatetags['option']=&$this->option;
 		$this->templatetags['title']=&$this->title;
 		$this->templatetags['host']=&$this->host;	
 		$this->templatetags['path']=&$this->path;
+		$this->templatetags['cookiespath']=&$this->cookiespath;
+
+		$this->templatetags['modules']=&$this->modulesbyfilename;	
+
+		$s=array(
+			$this->option['ZC_SIDEBAR_ORDER'],
+			$this->option['ZC_SIDEBAR_ORDER2'],
+			$this->option['ZC_SIDEBAR_ORDER3'],
+			$this->option['ZC_SIDEBAR_ORDER4'],
+			$this->option['ZC_SIDEBAR_ORDER5']
+		);
+		foreach ($s as $k =>$v) {
+			$a=explode(':', $v);
+			$ms=array();
+			foreach ($a as $v2) {
+				if(isset($this->modulesbyfilename[$v2])){
+					$m=$this->modulesbyfilename[$v2];
+				}
+				$ms[]=$m ;
+			}
+			reset($ms);
+			$this->templatetags['sidebars' . ($k==0?'':$k+1)]=$ms;
+			$ms=null;
+
+		}
+
 	}
 
 
@@ -366,43 +385,9 @@ class ZBlogPHP{
 
 		//初始化模板
 		$this->LoadTemplates();
-
-		#先生成sidebar1-5
-		$sidebars=array(
-			1 => '',
-			2 => '',
-			3 => '',
-			4 => '',
-			5 => ''
-		);
-		
-		$s=array(
-			$this->option['ZC_SIDEBAR_ORDER'],
-			$this->option['ZC_SIDEBAR_ORDER2'],
-			$this->option['ZC_SIDEBAR_ORDER3'],
-			$this->option['ZC_SIDEBAR_ORDER4'],
-			$this->option['ZC_SIDEBAR_ORDER5']
-		);
-
-		foreach ($s as $k =>$v) {
-			$a=explode(':', $v);
-			foreach ($a as $v2) {
-				if(isset($this->modulesbyfilename[$v2])){
-					#$f=$this->IncludeModuleFull($v2) . "\r\n";
-					$f=null;
-				}
-				$sidebars[($k+1)] .=$f ;
-
-			}
-		}
-
-		$this->templates['sidebar']=$sidebars[1];
-		$this->templates['sidebar2']=$sidebars[2];
-		$this->templates['sidebar3']=$sidebars[3];
-		$this->templates['sidebar4']=$sidebars[4];
-		$this->templates['sidebar5']=$sidebars[5];
-		
+		//编译&Save模板
 		$this->template->Compiling($this->templates);
+
 	}
 
 
@@ -414,18 +399,8 @@ class ZBlogPHP{
 		}
 
 		$this->title=$this->option['ZC_BLOG_SUBTITLE'];
-		$html=null;
-
-/*
-		if(isset($this->templatetags['TEMPLATE_DEFAULT'])){$html=$this->templatetags['TEMPLATE_DEFAULT'];}
-
-		foreach ($this->templatetags as $key => $value) {
-			$html=str_replace('<#' . $key . '#>', $value, $html);
-		}
-*/
 
 		$this->template->display($this->option['ZC_INDEX_DEFAULT_TEMPLATE']);
-		#return $html;
 
 	}
 
