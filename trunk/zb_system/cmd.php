@@ -13,7 +13,7 @@ switch ($action) {
 		break;
 	case 'logout':
 		Logout();
-		redirect($bloghost);
+		redirect('../');
 		break;
 	case 'admin':
 		redirect('admin/');

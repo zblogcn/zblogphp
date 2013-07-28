@@ -10,6 +10,7 @@ require_once '../function/c_system_base.php';
 require_once '../function/c_system_admin.php';
 
 $zbp->Initialize();
+#$zbp->Compiling();
 
 $action=(GetVars('act','GET')=='') ? 'admin' : GetVars('act','GET') ;
 if (!CheckRights($action)) {throw new Exception("没有权限！！！");}
