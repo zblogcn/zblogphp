@@ -23,12 +23,11 @@ class ZBlogPHP{
 	public $tags=array();
 	#public $modules=array();
 	public $modulesbyfilename=array();
-	public $templates=array();
+
 	public $configs=array();
 	public $_configs=array();	
 	public $cache_includes=array();
-	public $template_includes=array();
-	public $templatetags=array();	
+
 	public $title=null;
 
 	public $user=null;
@@ -38,10 +37,10 @@ class ZBlogPHP{
 	public $table=null;
 	public $datainfo=null;
 
-	public $templatepath=null;
-
 	public $isconnect=false;
 	public $isdelay_savecache=false;	
+
+	public $template = null;
 	
 	static public function GetInstance(){
 		if(!isset(self::$_zbp)){
@@ -61,23 +60,33 @@ class ZBlogPHP{
 		$this->table=&$GLOBALS['table'];
 		$this->datainfo=&$GLOBALS['datainfo'];
 
-		if (trim($this->option['ZC_BLOG_CLSID'])==''){
+		if (trim($this->option['ZC_BLOG_CLSID'])=='')
+		{
 			$this->guid=GetGuid();
-		}else{
+		}
+		else
+		{
 			$this->guid=&$this->option['ZC_BLOG_CLSID'];
 		}
 
 		$this->option['ZC_BLOG_HOST']=&$GLOBALS['bloghost'];
 		//define();
 
-		$this->title=&$GLOBALS['blogtitle'];
+
+		$this->title=$this->option['ZC_BLOG_TITLE'] . '-' . $this->option['ZC_BLOG_SUBTITLE'];
 		
 		$this->user=new Member();
 
-		$this->templatepath=$this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
+		$this->template = new Template();
 
+		$this->template->zbp_path = $this->path;
 
-		$this->title=$this->option['ZC_BLOG_TITLE'] . '-' . $this->option['ZC_BLOG_SUBTITLE'];
+		$this->template->templatepath = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
+
+		$this->template->themename = $this->option['ZC_BLOG_THEME'];
+
+		
+
 	}
 
 
@@ -86,7 +95,7 @@ class ZBlogPHP{
 	}
 
 	function __call($method, $args) {
-		throw new Exception('');
+		throw new Exception($method);
 	}
 
 	#初始化连接
@@ -102,28 +111,36 @@ class ZBlogPHP{
 		$this->LoadModules();
 		$this->LoadConfigs();
 
-		if (isset($this->membersbyname[GetVars('username','COOKIE')])) {
+		if (isset($this->membersbyname[GetVars('username','COOKIE')]))
+		{
 			$m=$this->membersbyname[GetVars('username','COOKIE')];
-			if($m->Password == md5(GetVars('password','COOKIE') . $m->Guid)){
+			if($m->Password == md5(GetVars('password','COOKIE') . $m->Guid))
+			{
 				$this->user=$m;
 			}
 		}
 
 
-		$this->LoadTemplates();
+		
 		#$this->LoadCacheIncludes();
 		#$this->LoadTemplateIncludes();
-		$this->MakeTemplatetags();
+		
+
+		$this->template->modulesbyfilename = $this->modulesbyfilename;
+		$this->template->LoadTemplates();
+		$this->template->MakeTemplatetags();
 
 	}
 
 
 	#终止连接，释放资源
 	public function Terminate(){
-		if($this->isconnect){
+		if($this->isconnect)
+		{
 			$this->db->Close();
 		}
-		if($this->isdelay_savecache){
+		if($this->isdelay_savecache)
+		{
 			$this->SaveCache();
 		}		
 
@@ -131,34 +148,44 @@ class ZBlogPHP{
 
 
 	public function GetCache($name){
-		if(array_key_exists($name,$this->cache)){
+		if(array_key_exists($name,$this->cache))
+		{
 			return $this->cache[$name];
 		}
 	}
-	public function GetCacheValue($name){
 
-		if(array_key_exists($name,$this->cache)){
+	public function GetCacheValue($name){
+		if(array_key_exists($name,$this->cache))
+		{
 
 			return $this->cache[$name]['value'];
 		}
 	}
+
 	public function GetCacheTime($name){
-		if(array_key_exists($name,$this->cache)){
+		if(array_key_exists($name,$this->cache))
+		{
 			return $this->cache[$name]['time'];
 		}
 	}
+
 	public function SetCache($name,$value){
 		$time=time();
 		$this->cache[$name]=array('value'=>$value,'time'=>$time);
 	}
+
 	public function DelCache($name){
 		unset($this->cache[$name]);
 	}
+
 	public function SaveCache($delay=false){
 
-		if($delay==true){
+		if($delay==true)
+		{
 			$this->isdelay_savecache=true;
-		}else{
+		}
+		else
+		{
 			$s=$this->path . 'zb_users/cache/' . $this->guid . '.cache';
 			$c=serialize($this->cache);
 			file_put_contents($s, $c);
@@ -166,9 +193,11 @@ class ZBlogPHP{
 		}
 
 	}
+
 	public function LoadCache(){
 		$s=$this->path . 'zb_users/cache/' . $this->guid . '.cache';
-		if (file_exists($s)) {
+		if (file_exists($s))
+		{
 			$this->cache=unserialize(file_get_contents($s));
 		}
 	}
@@ -282,23 +311,6 @@ class ZBlogPHP{
 	}
 
 
-	public function LoadTemplates(){
-		#先读默认的
-		$dir=$this->path .'zb_system/defend/default/';
-		$files=GetFilesInDir($dir,'html');
-		foreach ($files as $sortname => $fullname) {
-			$this->templates[$sortname]=file_get_contents($fullname);
-		}
-		#再读当前的
-		$dir=$this->path .'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/template/';
-		$files=GetFilesInDir($dir,'html');
-		foreach ($files as $sortname => $fullname) {
-			$this->templates[$sortname]=file_get_contents($fullname);
-		}
-
-	}
-
-
 
 	public function LoadConfigs(){
 
@@ -324,89 +336,6 @@ class ZBlogPHP{
 	}
 
 
-	public function MakeTemplatetags(){
-
-
-		foreach ($this->modulesbyfilename as $key => $mod) {
-			$this->templatetags[strtoupper($key)]=$mod->Content;
-		}
-
-		foreach ($this->option as $key => $value) {
-			$this->templatetags[strtoupper($key)]=$value;
-		}
-
-		#$this->templatetags['ZC_BLOG_SUB_NAME']=&$this->templatetags['ZC_BLOG_SUBTITLE'];
-		#$this->templatetags['ZC_BLOG_NAME']=&$this->templatetags['ZC_BLOG_TITLE'];
-		$this->templatetags['blogtitle']=&$this->title;
-
-	}
-
-
-
-
-
-
-
-
-
-	public function CompileFile($content){
-		foreach ($this->templates as $name => $file) {
-			$content=str_ireplace('{template:' . $name . '}', '<?php include $this->IncludeTemplate("' . $name . '");?>', $content);
-		}
-
-		foreach ($this->modulesbyfilename as $key => $value) {
-			$content=str_ireplace('{module:' . $key . '}', '<?php echo $this->IncludeModule("' . $key . '");?>', $content);
-		}
-
-		foreach ($this->templatetags as $key => $value) {
-			$content=str_ireplace('<#' . $key . '#>', '<?php echo $this->templatetags["' . $key . '"];?>', $content);
-			$content=str_ireplace('{#' . $key . '#}', '<?php echo $this->templatetags["' . $key . '"];?>', $content);			
-		}
-		#正则替换{$变量}
-		$content = preg_replace('#\{\$([^\}]+)\}#', '<?php echo $\\1; ?>', $content);
-		return $content;
-	}
-
-
-
-	public function Compiling(){
-
-		#先生成sidebar1-5
-		$sidebars=array(1=>'',2=>'',3=>'',4=>'',5=>'');
-		$s=array($this->option['ZC_SIDEBAR_ORDER'],
-				$this->option['ZC_SIDEBAR_ORDER2'],
-				$this->option['ZC_SIDEBAR_ORDER3'],
-				$this->option['ZC_SIDEBAR_ORDER4'],
-				$this->option['ZC_SIDEBAR_ORDER5'] );
-
-		foreach ($s as $k =>$v) {
-			$a=explode(':', $v);
-			foreach ($a as $v2) {
-				if(isset($this->modulesbyfilename[$v2])){
-					$f='<?php $this->IncludeModuleFull(\'' . $v2 . '\');?>' . "\r\n";
-				}
-				$sidebars[($k+1)] .=$f ;
-			}
-		}
-		$this->templates['sidebar']=$sidebars[1];
-		$this->templates['sidebar2']=$sidebars[2];
-		$this->templates['sidebar3']=$sidebars[3];
-		$this->templates['sidebar4']=$sidebars[4];
-		$this->templates['sidebar5']=$sidebars[5];
-
-		#把所有模板编辑到template目录下
-		foreach ($this->templates as $name => $file) {
-			$f=$this->CompileFile($file);
-			file_put_contents($this->templatepath . $name . '.php', $f, LOCK_EX);
-		}
-
-	}
-
-
-
-
-
-
 	function ViewList($page,$cate,$auth,$date,$tags){
 
 		foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
@@ -425,7 +354,7 @@ class ZBlogPHP{
 		}
 */
 
-		include $this->templatepath . $this->option['ZC_INDEX_DEFAULT_TEMPLATE'] . '.php';
+		$this->template->display($this->option['ZC_INDEX_DEFAULT_TEMPLATE']);
 		#return $html;
 
 	}
@@ -440,24 +369,7 @@ class ZBlogPHP{
 
 	}
 		
-	function IncludeTemplate($name){
-		return $this->templatepath . $name . '.php';
-	}
 
-	function IncludeModule($name){
-		if(isset($this->modulesbyfilename[$name])){
-			$c=$this->modulesbyfilename[$name]->Content;
-			return str_replace('{#ZC_BLOG_HOST#}', $this->host, $c);
-		}
-	}
-	function IncludeModuleFull($name){
-		if(isset($this->modulesbyfilename[$name])){
-			$module=$this->modulesbyfilename[$name];
-		}else{
-			$module=new Module;
-		}		
-		include $this->templatepath . 'b_module' . '.php';
-	}
 }
 
 ?>
