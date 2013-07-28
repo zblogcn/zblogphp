@@ -349,14 +349,8 @@ class ZBlogPHP{
 
 	public function CompileFile($content){
 		foreach ($this->templates as $name => $file) {
-			$content=str_ireplace('<#TEMPLATE_' . $name . '#>', '<?php include $this->IncludeTemplate("' . $name . '");?>', $content);
 			$content=str_ireplace('{template:' . $name . '}', '<?php include $this->IncludeTemplate("' . $name . '");?>', $content);
 		}
-		$content=str_ireplace('<#template:sidebar#>',  '<?php include $this->template("sidebar");?>',  $content);
-		$content=str_ireplace('<#template:sidebar2#>', '<?php include $this->template("sidebar2");?>', $content);
-		$content=str_ireplace('<#template:sidebar3#>', '<?php include $this->template("sidebar3");?>', $content);
-		$content=str_ireplace('<#template:sidebar4#>', '<?php include $this->template("sidebar4");?>', $content);		
-		$content=str_ireplace('<#template:sidebar5#>', '<?php include $this->template("sidebar5");?>', $content);
 
 		foreach ($this->modulesbyfilename as $key => $value) {
 			#$content=str_ireplace('{module:' . $key . '}', $value->Content, $content);
@@ -387,18 +381,7 @@ class ZBlogPHP{
 		foreach ($s as $k =>$v) {
 			$a=explode(':', $v);
 			foreach ($a as $v2) {
-				#$f=$this->templates['b_function'];
 				if(isset($this->modulesbyfilename[$v2])){
-
-				#$f=str_replace('<#function/content#>',
-				#	($this->modulesbyfilename[$v2]->Type=='ul'?'<ul>':'<div>') .
-				#	$this->modulesbyfilename[$v2]->Content
-				#	. ($this->modulesbyfilename[$v2]->Type=='ul'?'</ul>':'</div>')
-				#	,$f);
-
-				#$f=str_replace('<#function/name#>', $this->modulesbyfilename[$v2]->Name, $f);
-				#$f=str_replace('<#function/htmlid#>', $this->modulesbyfilename[$v2]->HtmlID, $f);
-
 					$f='<?php $this->IncludeModuleFull(\'' . $v2 . '\');?>' . "\r\n";
 				}
 				$sidebars[($k+1)] .=$f ;
