@@ -297,23 +297,7 @@ class ZBlogPHP{
 	}
 
 
-/*
-	public function LoadCacheIncludes(){
-		$dir=$this->path .'zb_users/include/';
-		$files=GetFilesInDir($dir,'html');
-		foreach ($files as $sortname => $fullname) {
-			$this->cache_includes[$sortname]=file_get_contents($fullname);
-		}
-	}
 
-	public function LoadTemplateIncludes(){
-		$dir=$this->path .'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/include/';
-		$files=GetFilesInDir($dir,'html');
-		foreach ($files as $sortname => $fullname) {
-			$this->template_includes[$sortname]=file_get_contents($fullname);
-		}
-	}
-*/
 	public function LoadConfigs(){
 
 		$s='SELECT * FROM %pre%Config';
@@ -340,23 +324,6 @@ class ZBlogPHP{
 
 	public function MakeTemplatetags(){
 
-		#$this->templatetags['template:sidebar'] =$this->sidebars[1];
-		#$this->templatetags['template:sidebar2']=$this->sidebars[2];
-		#$this->templatetags['template:sidebar3']=$this->sidebars[3];
-		#$this->templatetags['template:sidebar4']=$this->sidebars[4];	
-		#$this->templatetags['template:sidebar5']=$this->sidebars[5];
-
-		#foreach ($this->templates as $key => $value) {
-		#	$this->templatetags['TEMPLATE_' . strtoupper($key)]=$value;
-		#}
-
-		#foreach ($this->cache_includes as $key => $value) {
-		#	$this->templatetags['CACHE_INCLUDE_' . strtoupper($key)]=$value;
-		#}
-
-		#foreach ($this->lang['msg'] as $key => $value) {
-		#	$this->templatetags['msg' . $key]=$value;
-		#}
 
 		foreach ($this->modulesbyfilename as $key => $mod) {
 			$this->templatetags[strtoupper($key)]=$mod->Content;
@@ -400,6 +367,8 @@ class ZBlogPHP{
 			$content=str_ireplace('<#' . $key . '#>', '<?php echo $this->templatetags["' . $key . '"];?>', $content);
 			$content=str_ireplace('{#' . $key . '#}', '<?php echo $this->templatetags["' . $key . '"];?>', $content);			
 		}
+		#正则替换{$变量$}
+		$content = preg_replace('#\{\$([^\}]+)\$\}#', '<?php echo $\\1; ?>', $content);
 		return $content;
 	}
 
