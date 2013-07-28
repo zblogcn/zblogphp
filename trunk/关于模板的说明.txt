@@ -5,7 +5,7 @@
 
 
 2.变量
-{$article.name$}
+{$article.name}
 
 3.zblog传统的常量型
 {#ZC_BLOG_HOST#}
@@ -17,5 +17,5 @@
 
 
 
-2.注释
+6.注释
 {* Smarty这里是注释 *}

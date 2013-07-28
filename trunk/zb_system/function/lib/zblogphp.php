@@ -368,7 +368,7 @@ class ZBlogPHP{
 			$content=str_ireplace('{#' . $key . '#}', '<?php echo $this->templatetags["' . $key . '"];?>', $content);			
 		}
 		#正则替换{$变量$}
-		$content = preg_replace('#\{\$([^\}]+)\$\}#', '<?php echo $\\1; ?>', $content);
+		$content = preg_replace('#\{\$([^\}]+)\}#', '<?php echo $\\1; ?>', $content);
 		return $content;
 	}
 
