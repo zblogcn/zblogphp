@@ -25,11 +25,6 @@ class Template{
 	}
 
 
-	function SetTagsArray($array){
-		foreach ($array as $key => $value) {
-			$this->tags[$key]=$value;
-		}
-	}
 
 	function SetTags($name,$value){
 		$this->tags[$name]=$value;
@@ -44,19 +39,10 @@ class Template{
 
 	}
 
-
 	public function CompileFile($content)
 	{
 
-/*
-		foreach ($this->templates as $name => $file) {
-			$content=str_ireplace('{$template:' . $name . '}', '{php} include $this->GetTemplate("' . $name . '"); {/php}', $content);
-		}
 
-		foreach ($this->tags as $key => $value) {
-			$content=str_ireplace('{$' . $key . '}', '{php} echo $this->tags["' . $key . '"]; {/php}', $content);
-		}
-*/		
 		//替换<?php，不允许出现。
 		$content = preg_replace("/\<\?php[\d\D]+?\?\>/si", '', $content);
 		#替换template和include

@@ -112,16 +112,15 @@ class ZBlogPHP{
 			}
 		}
 
-
-		//初始化模板
-		$this->LoadTemplates();
 		$this->MakeTemplatetags();
 
 		//创建模板类
 		$this->template = new Template();
 		$this->template->path = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
-		$this->template->SetTagsArray($this->templatetags);
-		$this->template->SetTags('module',$this->modulesbyfilename);
+
+		$this->template->tags=&$this->templatetags;
+		$this->template->SetTags('modules',$this->modulesbyfilename);
+		$this->template->SetTags('sidebars',$this->modulesbyfilename);		
 	}
 
 
@@ -357,34 +356,13 @@ class ZBlogPHP{
 		$this->templatetags['host']=&$this->host;	
 		$this->templatetags['path']=&$this->path;
 	}
-/*
-	function IncludeModule($name){
-		
-		if(isset($this->modulesbyfilename[$name]))
-		{
-			$c=$this->modulesbyfilename[$name]->Content;
-			return str_replace('{$ZC_BLOG_HOST}', $this->host, $c);
-		}
 
-	}
-
-	function IncludeModuleFull($name){
-
-		if(isset($this->modulesbyfilename[$name]))
-		{
-			$module=$this->modulesbyfilename[$name];
-		}
-		else
-		{
-			$module=new Module;
-		}		
-		
-		return $this->template->output('b_module');
-	}
-*/
 
 	function BuildTemplate()
 	{
+
+		//初始化模板
+		$this->LoadTemplates();
 
 		#先生成sidebar1-5
 		$sidebars=array(

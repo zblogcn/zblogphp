@@ -81,8 +81,6 @@ function Reload($qs){
 
 
 		$zbp->BuildTemplate();
-		$zbp->template->CompileAll();
-		
 
 		$xmlrpc_address=$zbp->host . 'zb_system/xml-rpc/';
 		$current_member=$zbp->user->Name;
