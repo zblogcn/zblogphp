@@ -52,12 +52,12 @@ class Template{
 		#zblog asp 特别魔法
 		$content = preg_replace('#\{\#([^\}]+)\#\}#', '<?php echo $this->\\1; ?>', $content);
 
-		$content = preg_replace('/\{php\}([\D\d]+?)\{\/php\}/', '<?php$1?>', $content);
+		$content = preg_replace('/\{php\}([\D\d]+?)\{\/php\}/', '<?php $1 ?>', $content);
 
 		#正则替换{$变量}
 		/*$content = preg_replace('#\{\$([^\}]+)\}#', '<?php echo $this->\\1; ?>', $content);*/
 
-		$content = preg_replace_callback('#\{\$([^\}]+)\}#', create_function('$matches','return \'<?php echo $this->\' . str_replace(\'.\',\'->\',$matches[1]) . \'?>\';'), $content);
+		$content = preg_replace_callback('#\{\$([^\}]+)\}#', create_function('$matches','return \'<?php echo $this->\' . str_replace(\'.\',\'->\',$matches[1]) . \';?>\';'), $content);
         
 		return $content;
 	}
