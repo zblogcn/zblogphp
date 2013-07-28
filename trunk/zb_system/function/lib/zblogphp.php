@@ -23,11 +23,11 @@ class ZBlogPHP{
 	public $tags=array();
 	#public $modules=array();
 	public $modulesbyfilename=array();
-
+	public $templates=array();
 	public $configs=array();
 	public $_configs=array();	
-	public $cache_includes=array();
 
+	public $templatetags=array();	
 	public $title=null;
 
 	public $user=null;
@@ -77,14 +77,7 @@ class ZBlogPHP{
 		$this->title=$this->option['ZC_BLOG_TITLE'] . '-' . $this->option['ZC_BLOG_SUBTITLE'];
 		
 		//创建User类
-		$this->user=new Member();
-
-		//创建模板类
-		$this->template = new Template();
-		$this->template->path = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
-
-
-		
+		$this->user=new Member();		
 
 	}
 
@@ -120,20 +113,15 @@ class ZBlogPHP{
 		}
 
 
-		
-		#$this->LoadCacheIncludes();
-		#$this->LoadTemplateIncludes();
-		
-
 		//初始化模板
-
-
-		$this->template->LoadTemplates($this->path.'zb_system/defend/default/');
-		$this->template->LoadTemplates($this->path.'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/template/');
-
+		$this->LoadTemplates();
 		$this->MakeTemplatetags();
-		
 
+		//创建模板类
+		$this->template = new Template();
+		$this->template->path = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
+		$this->template->SetTagsArray($this->templatetags);
+		$this->template->SetTags('module',$this->modulesbyfilename);
 	}
 
 
@@ -315,7 +303,21 @@ class ZBlogPHP{
 
 	}
 
+	public function LoadTemplates(){
+		#先读默认的
+		$dir=$this->path .'zb_system/defend/default/';
+		$files=GetFilesInDir($dir,'php');
+		foreach ($files as $sortname => $fullname) {
+			$this->templates[$sortname]=file_get_contents($fullname);
+		}
+		#再读当前的
+		$dir=$this->path .'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/template/';
+		$files=GetFilesInDir($dir,'php');
+		foreach ($files as $sortname => $fullname) {
+			$this->templates[$sortname]=file_get_contents($fullname);
+		}
 
+	}
 
 	public function LoadConfigs(){
 
@@ -344,22 +346,18 @@ class ZBlogPHP{
 	function MakeTemplatetags(){
 
 		foreach ($this->modulesbyfilename as $key => $mod) {
-			$this->modulesbyfilename[strtoupper($key)]=$mod->Content;
-			$this->template->tags['module[\'' . $key . '\']'] = $this->IncludeModule($key);
+			$this->templatetags[strtoupper($key)]=$mod->Content;
 		}
 
 		foreach ($this->option as $key => $value) {
-			$this->template->tags[strtoupper($key)]=$value;
+			$this->templatetags[strtoupper($key)]=$value;
 		}
 
-
-		$this->template->tags['ZC_BLOG_SUB_NAME']=&$this->template->tags['ZC_BLOG_SUBTITLE'];
-		$this->template->tags['ZC_BLOG_NAME']=&$this->template->tags['ZC_BLOG_TITLE'];
-		$this->template->tags['BlogTitle']=&$this->title;
-
-
+		$this->templatetags['title']=&$this->title;
+		$this->templatetags['host']=&$this->host;	
+		$this->templatetags['path']=&$this->path;
 	}
-
+/*
 	function IncludeModule($name){
 		
 		if(isset($this->modulesbyfilename[$name]))
@@ -383,9 +381,9 @@ class ZBlogPHP{
 		
 		return $this->template->output('b_module');
 	}
+*/
 
-
-	function BuildSidebarTemplate()
+	function BuildTemplate()
 	{
 
 		#先生成sidebar1-5
@@ -397,31 +395,33 @@ class ZBlogPHP{
 			5 => ''
 		);
 		
-		$s=array($this->option['ZC_SIDEBAR_ORDER'],
-				$this->option['ZC_SIDEBAR_ORDER2'],
-				$this->option['ZC_SIDEBAR_ORDER3'],
-				$this->option['ZC_SIDEBAR_ORDER4'],
-				$this->option['ZC_SIDEBAR_ORDER5'] );
+		$s=array(
+			$this->option['ZC_SIDEBAR_ORDER'],
+			$this->option['ZC_SIDEBAR_ORDER2'],
+			$this->option['ZC_SIDEBAR_ORDER3'],
+			$this->option['ZC_SIDEBAR_ORDER4'],
+			$this->option['ZC_SIDEBAR_ORDER5']
+		);
 
 		foreach ($s as $k =>$v) {
 			$a=explode(':', $v);
 			foreach ($a as $v2) {
 				if(isset($this->modulesbyfilename[$v2])){
-					$f=$this->IncludeModuleFull($v2) . "\r\n";
+					#$f=$this->IncludeModuleFull($v2) . "\r\n";
+					$f=null;
 				}
 				$sidebars[($k+1)] .=$f ;
 
 			}
 		}
 
-		for($i=1; $i<=5; $i++)
-		{
-			//$i=1不按照sidebar处理，而按照sidebar1
-			$this->template->tags['sidebar'.$i]=$sidebars[$i];
-			$this->template->SaveTemplate('sidebar'.$i,$sidebars[$i]);
-		}
+		$this->templates['sidebar']=$sidebars[1];
+		$this->templates['sidebar2']=$sidebars[2];
+		$this->templates['sidebar3']=$sidebars[3];
+		$this->templates['sidebar4']=$sidebars[4];
+		$this->templates['sidebar5']=$sidebars[5];
 		
-
+		$this->template->Compiling($this->templates);
 	}
 
 
