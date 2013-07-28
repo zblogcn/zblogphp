@@ -79,7 +79,9 @@ function Reload($qs){
 	
 	if(strpos($qs,'statistic')){
 
-		$zbp->Compiling();
+		$zbp->template->CompileAll();
+		$zbp->BuildSidebarTemplate();
+		
 
 		$xmlrpc_address=$zbp->host . 'zb_system/xml-rpc/';
 		$current_member=$zbp->user->Name;
