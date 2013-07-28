@@ -354,6 +354,10 @@ class ZBlogPHP{
 		#	$this->templatetags['CACHE_INCLUDE_' . strtoupper($key)]=$value;
 		#}
 
+		#foreach ($this->lang['msg'] as $key => $value) {
+		#	$this->templatetags['msg' . $key]=$value;
+		#}
+
 		foreach ($this->modulesbyfilename as $key => $mod) {
 			$this->templatetags[strtoupper($key)]=$mod->Content;
 		}
@@ -361,10 +365,6 @@ class ZBlogPHP{
 		foreach ($this->option as $key => $value) {
 			$this->templatetags[strtoupper($key)]=$value;
 		}
-
-		#foreach ($this->lang['msg'] as $key => $value) {
-		#	$this->templatetags['msg' . $key]=$value;
-		#}
 
 		$this->templatetags['ZC_BLOG_SUB_NAME']=&$this->templatetags['ZC_BLOG_SUBTITLE'];
 		$this->templatetags['ZC_BLOG_NAME']=&$this->templatetags['ZC_BLOG_TITLE'];
@@ -382,8 +382,8 @@ class ZBlogPHP{
 
 	public function CompileFile($content){
 		foreach ($this->templates as $name => $file) {
-			$content=str_ireplace('<#TEMPLATE_' . $name . '#>', '<?php include $this->template("' . $name . '");?>', $content);
-			$content=str_ireplace('{template:' . $name . '}', '<?php include $this->template("' . $name . '");?>', $content);	
+			$content=str_ireplace('<#TEMPLATE_' . $name . '#>', '<?php include $this->IncludeTemplate("' . $name . '");?>', $content);
+			$content=str_ireplace('{template:' . $name . '}', '<?php include $this->IncludeTemplate("' . $name . '");?>', $content);
 		}
 		$content=str_ireplace('<#template:sidebar#>',  '<?php include $this->template("sidebar");?>',  $content);
 		$content=str_ireplace('<#template:sidebar2#>', '<?php include $this->template("sidebar2");?>', $content);
@@ -392,7 +392,8 @@ class ZBlogPHP{
 		$content=str_ireplace('<#template:sidebar5#>', '<?php include $this->template("sidebar5");?>', $content);
 
 		foreach ($this->modulesbyfilename as $key => $value) {
-			$content=str_ireplace('{module:' . $key . '}', $value->Content, $content);
+			#$content=str_ireplace('{module:' . $key . '}', $value->Content, $content);
+			$content=str_ireplace('{module:' . $key . '}', '<?php echo $this->IncludeModule("' . $key . '");?>', $content);
 		}
 
 		foreach ($this->templatetags as $key => $value) {
@@ -417,17 +418,19 @@ class ZBlogPHP{
 		foreach ($s as $k =>$v) {
 			$a=explode(':', $v);
 			foreach ($a as $v2) {
-				$f=$this->templates['b_function'];
+				#$f=$this->templates['b_function'];
 				if(isset($this->modulesbyfilename[$v2])){
 
-				$f=str_replace('<#function/content#>',
-					($this->modulesbyfilename[$v2]->Type=='ul'?'<ul>':'<div>') .
-					$this->modulesbyfilename[$v2]->Content
-					. ($this->modulesbyfilename[$v2]->Type=='ul'?'</ul>':'</div>')
-					,$f);
+				#$f=str_replace('<#function/content#>',
+				#	($this->modulesbyfilename[$v2]->Type=='ul'?'<ul>':'<div>') .
+				#	$this->modulesbyfilename[$v2]->Content
+				#	. ($this->modulesbyfilename[$v2]->Type=='ul'?'</ul>':'</div>')
+				#	,$f);
 
-				$f=str_replace('<#function/name#>', $this->modulesbyfilename[$v2]->Name, $f);
-				$f=str_replace('<#function/htmlid#>', $this->modulesbyfilename[$v2]->HtmlID, $f);				
+				#$f=str_replace('<#function/name#>', $this->modulesbyfilename[$v2]->Name, $f);
+				#$f=str_replace('<#function/htmlid#>', $this->modulesbyfilename[$v2]->HtmlID, $f);
+
+					$f='<?php $this->IncludeModuleFull(\'' . $v2 . '\');?>' . "\r\n";
 				}
 				$sidebars[($k+1)] .=$f ;
 			}
@@ -484,10 +487,24 @@ class ZBlogPHP{
 
 	}
 		
-	function template($name){
+	function IncludeTemplate($name){
 		return $this->templatepath . $name . '.php';
-	}	
+	}
 
+	function IncludeModule($name){
+		if(isset($this->modulesbyfilename[$name])){
+			$c=$this->modulesbyfilename[$name]->Content;
+			return str_replace('{#ZC_BLOG_HOST#}', $this->host, $c);
+		}
+	}
+	function IncludeModuleFull($name){
+		if(isset($this->modulesbyfilename[$name])){
+			$module=$this->modulesbyfilename[$name];
+		}else{
+			$module=new Module;
+		}		
+		include $this->templatepath . 'b_module' . '.php';
+	}
 }
 
 ?>
