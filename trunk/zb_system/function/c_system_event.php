@@ -79,8 +79,9 @@ function Reload($qs){
 	
 	if(strpos($qs,'statistic')){
 
-		$zbp->template->CompileAll();
+
 		$zbp->BuildSidebarTemplate();
+		$zbp->template->CompileAll();
 		
 
 		$xmlrpc_address=$zbp->host . 'zb_system/xml-rpc/';

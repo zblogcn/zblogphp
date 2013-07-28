@@ -410,14 +410,15 @@ class ZBlogPHP{
 					$f=$this->IncludeModuleFull($v2) . "\r\n";
 				}
 				$sidebars[($k+1)] .=$f ;
+
 			}
 		}
 
 		for($i=1; $i<=5; $i++)
 		{
 			//$i=1不按照sidebar处理，而按照sidebar1
-			$this->template->tags['sidebar'.$i]=$sidebars[1];
-			$this->template->SaveTemplate('sidebar'.$i,$this->template->CompileFile('sidebar'));
+			$this->template->tags['sidebar'.$i]=$sidebars[$i];
+			$this->template->SaveTemplate('sidebar'.$i,$sidebars[$i]);
 		}
 		
 
