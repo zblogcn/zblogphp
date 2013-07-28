@@ -48,21 +48,24 @@ class Template{
 
 		$content = $this->templates[$name];
 
-		echo $name . "\r\n" . $content . "\r\n\r\n";
-
 		foreach ($this->templates as $name => $file) {
 			$content=str_ireplace('{$template:' . $name . '}', '{php} include $this->GetTemplate("' . $name . '"); {/php}', $content);
 		}
 
 		foreach ($this->tags as $key => $value) {
-			$content=str_ireplace('{$' . $key . '}', '{php} echo $this->tags["' . $key . '"]; {/php}', $content);			
+			$content=str_ireplace('{$' . $key . '}', '{php} echo $this->tags["' . $key . '"]; {/php}', $content);
 		}
 		
 		//替换<?php，不允许出现。
 		$content = preg_replace("/\<\?php[\d\D]+?\?\>/si", '', $content);
-		$content = preg_replace('/\{php\}([\D\d]+?)\{\/php\}/', '<?php$1?>', $content);
+		#替换template和include
+		$content = preg_replace('/\{\$template:([^\}]+)\}/', '{php} include $this->GetTemplate(\'$1\'); {/php}', $content);
+		$content = preg_replace('/\{\$include:([^\}]+)\}/', '{php} $this->IncludeCompiled(\'$1\'); {/php}', $content);
 		#正则替换{$变量}
+
 		$content = preg_replace('#\{\$([^\}]+)\}#', '<?php echo $\\1; ?>', $content);
+
+		$content = preg_replace('/\{php\}([\D\d]+?)\{\/php\}/', '<?php$1?>', $content);
 
 		return $content;
 	}
@@ -76,11 +79,18 @@ class Template{
 
 
 
-	public function GetTemplate($name){
+	public function GetTemplate($name)
+	{
 		return $this->path . $name . '.php';
 	}
 
-	public function Display($name){
+	public function IncludeCompiled($name)
+	{
+		include $this->path . $name . '.php';
+	}
+
+	public function Display($name)
+	{
 
 		include $this->path . $name . '.php';
 	}
