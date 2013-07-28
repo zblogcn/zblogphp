@@ -95,7 +95,7 @@ function Reload($qs){
 		$current_theme=$zbp->option['ZC_BLOG_THEME'];
 		$current_style=$zbp->option['ZC_BLOG_CSS'];
 
-		$system_environment=GetVars('OS','SERVER') . ';' . GetVars('SERVER_SOFTWARE','SERVER') . ';' . 'PHP ' . phpversion();
+		$system_environment=getenv('OS') . ';' . current(explode('/',GetVars('SERVER_SOFTWARE','SERVER'))) . ';' . 'PHP ' . phpversion();
 
 		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['current_member']}</td><td width='30%'>{$current_member}</td><td width='20%'>{$zbp->lang['msg']['current_version']}</td><td width='30%'>{$current_version}</td></tr>";
 		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_artiles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categorys}</td></tr>";
