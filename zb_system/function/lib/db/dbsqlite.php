@@ -47,11 +47,11 @@ class DbSQLite implements iDataBase
 
 		$query=str_replace('%pre%', $this->dbpre, $query);
 
-		$result = sqlite_query($this->db,$query);
+		$results = sqlite_query($this->db,$query);
 		// 遍历出来
 		$data = array();
 		if($results){
-			while($row = sqlite_fetch_array($result)){
+			while($row = sqlite_fetch_array($results)){
 				$data[] = $row;
 			}
 		}
