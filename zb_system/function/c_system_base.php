@@ -43,13 +43,10 @@ $bloghost = GetCurrentHost($cookiespath);
 
 require_once $blogpath.'zb_system/function/lib/zblogphp.php';
 require_once $blogpath.'zb_system/function/lib/dbfactory.php';
+if($option['ZC_DATABASE_TYPE']){
+	require_once $blogpath.'zb_system/function/lib/db/' . $option['ZC_DATABASE_TYPE'] . '.php';
+}
 
-require_once $blogpath.'zb_system/function/lib/db/dbmysql.php';
-require_once $blogpath.'zb_system/function/lib/db/dbpdo_mysql.php';
-require_once $blogpath.'zb_system/function/lib/db/dbsqlite.php';
-require_once $blogpath.'zb_system/function/lib/db/dbsqlite3.php';
-#以后修改
-#require_once $blogpath.'zb_system/function/lib/db' .$option['ZC_DATABASE_TYPE']. '.php';
 
 $lib_array = array('base', 'log','category','comment','counter','member','module','tag','template','upload');
 foreach ($lib_array as $f) {
