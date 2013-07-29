@@ -27,6 +27,25 @@ class Module extends Base{
 	}
 
 
+	public function __set($name, $value) 
+	{
+		if ($name=='Content') {
+			$Content = str_replace($GLOBALS['zbp']->host,'{#ZC_BLOG_HOST#}' , $value);
+			$this->Data[$name] = $Content;
+			return null;
+		}
+		$this->Data[$name] = $value;
+	}
+
+	public function __get($name) 
+	{
+		if ($name=='Content') {
+			$Content = str_replace('{#ZC_BLOG_HOST#}',$GLOBALS['zbp']->host,$this->Data[$name]);
+			return $Content;
+		}
+		return $this->Data[$name];
+	}
+
 }
 
 
