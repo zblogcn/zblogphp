@@ -1,1 +1,0 @@
-<a href="<#pagebar/page/url#>"><#pagebar/page/number#></a>

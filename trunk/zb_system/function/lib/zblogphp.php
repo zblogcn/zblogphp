@@ -358,6 +358,14 @@ class ZBlogPHP{
 		$this->templatetags['host']=&$this->host;	
 		$this->templatetags['path']=&$this->path;
 		$this->templatetags['cookiespath']=&$this->cookiespath;
+		$this->templatetags['blogtitle']=&$this->option['ZC_BLOG_TITLE'];	
+		$this->templatetags['blogsubtitle']=&$this->option['ZC_BLOG_SUBTITLE'];
+		$this->templatetags['theme']=&$this->option['ZC_BLOG_THEME'];
+		$this->templatetags['style']=&$this->option['ZC_BLOG_STYLE'];
+		$this->templatetags['language']=&$this->option['ZC_BLOG_LANGUAGE'];
+		$this->templatetags['copyright']=&$this->option['ZC_BLOG_COPYRIGHT'];		
+		$this->templatetags['zblogphp']=&$this->option['ZC_BLOG_PRODUCT_FULL'];		
+		$this->templatetags['zblogphphtml']=&$this->option['ZC_BLOG_PRODUCT_FULLHTML'];
 
 		$this->templatetags['modules']=&$this->modulesbyfilename;	
 
