@@ -110,10 +110,8 @@ class ZBlogPHP{
 		//创建模板类
 		$this->template = new Template();
 		$this->template->path = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
-
 		$this->template->tags = &$this->templatetags;
-		#$this->template->SetTags('modules',$this->modulesbyfilename);
-		#$this->template->SetTags('sidebars',$this->modulesbyfilename);
+
 	}
 
 
@@ -347,7 +345,15 @@ class ZBlogPHP{
 
 	function MakeTemplatetags(){
 
-		$this->templatetags['option']=&$this->option;
+		$option=$this->option;
+		unset($option['ZC_BLOG_CLSID']);
+		unset($option['ZC_SQLITE_NAME']);
+		unset($option['ZC_SQLITE3_NAME']);
+		unset($option['ZC_MYSQL_USERNAME']);
+		unset($option['ZC_MYSQL_PASSWORD']);
+		unset($option['ZC_MYSQL_NAME']);
+
+		$this->templatetags['option']=&$option;
 		$this->templatetags['title']=&$this->title;
 		$this->templatetags['host']=&$this->host;	
 		$this->templatetags['path']=&$this->path;
@@ -356,11 +362,11 @@ class ZBlogPHP{
 		$this->templatetags['modules']=&$this->modulesbyfilename;	
 
 		$s=array(
-			$this->option['ZC_SIDEBAR_ORDER'],
-			$this->option['ZC_SIDEBAR_ORDER2'],
-			$this->option['ZC_SIDEBAR_ORDER3'],
-			$this->option['ZC_SIDEBAR_ORDER4'],
-			$this->option['ZC_SIDEBAR_ORDER5']
+			$option['ZC_SIDEBAR_ORDER'],
+			$option['ZC_SIDEBAR_ORDER2'],
+			$option['ZC_SIDEBAR_ORDER3'],
+			$option['ZC_SIDEBAR_ORDER4'],
+			$option['ZC_SIDEBAR_ORDER5']
 		);
 		foreach ($s as $k =>$v) {
 			$a=explode(':', $v);

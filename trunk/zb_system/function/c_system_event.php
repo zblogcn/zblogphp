@@ -24,7 +24,6 @@ function CheckRights($action){
 function Login(){
 	global $zbp;
 
-
 	if (isset($zbp->membersbyname[GetVars('username')])) {
 		$m=$zbp->membersbyname[GetVars('username')];
 		if($m->Password == md5(GetVars('password') . $m->Guid)){
@@ -49,14 +48,29 @@ function Login(){
 
 function Logout(){
 	global $zbp;
-	setcookie("username", "",time() - 3600,$zbp->cookiespath);
-	setcookie("password", "",time() - 3600,$zbp->cookiespath);
+
+	setcookie('username', '',time() - 3600,$zbp->cookiespath);
+	setcookie('password', '',time() - 3600,$zbp->cookiespath);
 }
 
 function CategoryPost(){
 	$cate = new Category();
 	if($_POST['edtID'] == 0){
-		$cate->LoadInfobyArray(array($_POST['edtID'], $_POST['edtName'], $_POST['edtOrder'], 0, $_POST['edtAlias'], '', 0, $_POST['edtPareID'], $_POST['edtTemplate'], $_POST['edtLogTemplate'], ''));
+		$cate->LoadInfobyArray(
+			array(
+				$_POST['edtID'],
+				$_POST['edtName'],
+				$_POST['edtOrder'],
+				0,
+				$_POST['edtAlias'],
+				'',
+				0,
+				$_POST['edtPareID'],
+				$_POST['edtTemplate'],
+				$_POST['edtLogTemplate'],
+				''
+			)
+		);
 		$cate->Post();
 		redirect('admin/category.php');
 	}else{
