@@ -292,9 +292,9 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['upload'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">zb_users/c_option.php</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option_php'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option_php'][1];?></td>
+          <td scope="row">zb_users/template</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['template'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['template'][1];?></td>
         </tr>
         <tr>
           <th colspan="3" scope="row">函数检查</th>
@@ -612,7 +612,7 @@ $CheckResult=array(
   getRightsAndExport('zb_users/','theme','0777');
   getRightsAndExport('zb_users/','plugin','0777');
   getRightsAndExport('zb_users/','upload','0777');
-  getRightsAndExport('zb_users/','c_option.php','0666');
+  getRightsAndExport('zb_users/','template','0777');
 
 
   $CheckResult['file_get_contents'][1]=function_exists('file_get_contents')?bingo:error;
@@ -793,7 +793,7 @@ function InsertInfo(){
   $t->Source="system";
   $t->SidebarID=1;
   $t->Order=9;
-  $t->Content='<li><a href="http://bbs.rainbowsof$t->org/" target="_blank">ZBlogger社区</a></li><li><a href="http://download.rainbowsof$t->org/" target="_blank">菠萝的海</a></li><li><a href="http://$t->qq.com/zblogcn" target="_blank">Z-Blog微博</a></li>';
+  $t->Content='<li><a href="http://bbs.rainbowsoft.org/" target="_blank">ZBlogger社区</a></li><li><a href="http://download.rainbowsoft.org/" target="_blank">菠萝的海</a></li><li><a href="http://t.qq.com/zblogcn" target="_blank">Z-Blog微博</a></li>';
   $t->HtmlID="divFavorites";
   $t->Ftype="ul";
   $t->Post();
@@ -808,7 +808,7 @@ function InsertInfo(){
   $t->Source="system";
   $t->SidebarID=1;
   $t->Order=10;
-  $t->Content='<li><a href="http://www.dbshos$t->cn/" target="_blank" title="独立博客服务 Z-Blog官方主机">DBS主机</a></li><li><a href="http://www.dutory.com/blog/" target="_blank">Dutory官方博客</a></li>';
+  $t->Content='<li><a href="http://www.dbshost.cn/" target="_blank" title="独立博客服务 Z-Blog官方主机">DBS主机</a></li><li><a href="http://www.dutory.com/blog/" target="_blank">Dutory官方博客</a></li>';
   $t->HtmlID="divLinkage";
   $t->Ftype="ul";
   $t->Post();

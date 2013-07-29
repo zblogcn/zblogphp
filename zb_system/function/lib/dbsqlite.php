@@ -22,6 +22,10 @@ class DbSQLite implements iDataBase
 		# code...
 	}
 
+	public function EscapeString($s){
+		return sqlite_escape_string($s);
+	}
+	
 	function Open($array){
 		if ($this->db = sqlite_open($array[0], 0666, $sqliteerror)) {
 			$this->dbpre=$array[1];

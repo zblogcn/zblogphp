@@ -19,6 +19,10 @@ class Dbpdo_MySQL implements iDataBase
 	{
 		# code...
 	}
+	
+	public function EscapeString($s){
+		return addslashes($s);
+	}
 
 	function Open($array){
 		/*$array=array(
