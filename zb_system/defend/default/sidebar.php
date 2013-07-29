@@ -5,3 +5,7 @@ foreach($sidebars as $module){
 }
 
 {/php}
+
+{foreach $sidebars as $module}
+{template:module}
+{/foreach}
