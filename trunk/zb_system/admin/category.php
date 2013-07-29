@@ -12,7 +12,7 @@ require_once '../function/c_system_admin.php';
 $zbp->Initialize();
 
 $action='CategoryMng';
-if (!CheckRights($action)) {throw new Exception("没有权限！！！");}
+if (!CheckRights($action)) {throw new Exception($GLOBALS['lang']['error'][6]);}
 
 $blogtitle='分类管理';
 

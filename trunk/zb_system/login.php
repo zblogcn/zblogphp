@@ -2,7 +2,6 @@
 require_once './function/c_system_base.php';
 
 $zbp->Initialize();
-$blogtitle=$lang['msg']['login'];
 
 if (CheckRights('admin')) {
 	redirect('cmd.php?act=admin');
@@ -12,25 +11,29 @@ if (CheckRights('admin')) {
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php if(strpos(GetVars('HTTP_USER_AGENT','SERVERS'),'MSIE')){?>
 	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<?php }?>
 	<meta name="robots" content="none" />
 	<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']?>" />
-	<link rel="stylesheet" rev="stylesheet" href="css/admin.css" type="text/css" media="screen" />
-	<script language="JavaScript" src="script/common.js" type="text/javascript"></script>
-	<script language="JavaScript" src="script/md5.js" type="text/javascript"></script>
-	<title><?php echo $option['ZC_BLOG_TITLE'] . '-' . $blogtitle?></title>
+	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
+	<script src="script/common.js" type="text/javascript"></script>
+	<script src="script/md5.js" type="text/javascript"></script>
+	<title><?php echo $option['ZC_BLOG_TITLE'] . '-' . $lang['msg']['login']?></title>
 </head>
 <body>
 <div class="bg">
 <div id="wrapper">
   <div class="logo"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></div>
   <div class="login">
-    <form id="frmLogin" method="post" action="">
+    <form method="post" action="#">
     <dl>
+      <dt></dt>
       <dd><label for="edtUserName"><?php echo $lang['msg']['username']?>:</label><input type="text" id="edtUserName" name="edtUserName" size="20" tabindex="1" /></dd>
       <dd><label for="edtPassWord"><?php echo $lang['msg']['password']?>:</label><input type="password" id="edtPassWord" name="edtPassWord" size="20" tabindex="2" /></dd>
     </dl>
     <dl>
+      <dt></dt>
       <dd class="checkbox"><input type="checkbox" name="chkRemember" id="chkRemember"  tabindex="3" /><label for="chkRemember"><?php echo $lang['msg']['stay_signed_in']?></label></dd>
       <dd class="submit"><input id="btnPost" name="btnPost" type="submit" value="<?php echo $lang['msg']['login']?>" class="button" tabindex="4"/></dd>
     </dl>
@@ -42,7 +45,7 @@ if (CheckRights('admin')) {
 </div>
 </div>
 
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 
 if(GetCookie("username")){$("#edtUserName").val(unescape(GetCookie("username")))};
 
@@ -63,7 +66,7 @@ $("#btnPost").click(function(){
 	strUserName=strUserName;
 	strPassWord=MD5(strPassWord);
 
-	$("#frmLogin").attr("action","cmd.php?act=verify");
+	$("form").attr("action","cmd.php?act=verify");
 	$("#username").val(strUserName);
 	$("#password").val(strPassWord);
 	$("#savedate").val(strSaveDate);

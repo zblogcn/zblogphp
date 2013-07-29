@@ -19,7 +19,7 @@ switch ($action) {
 		redirect('admin/');
 		break;	
 	case 'vrs':
-		# code...
+		ViewRights();
 		break;
 	case 'verify':
 		Login();
@@ -30,6 +30,10 @@ switch ($action) {
 	case 'ArticleEdt':
 		redirect('admin/edit.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
+	case 'ArticleMng':
+		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+	case 'ArticlePst':
+		break;
 	case 'CategoryMng':
 		redirect('admin/category.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
@@ -38,7 +42,27 @@ switch ($action) {
 		break;
 	case 'CategoryPst':
 		CategoryPost();
-		//redirect('admin/category_edit.php?' . GetVars('QUERY_STRING','SERVER'));
+		break;
+	case 'CommentMng':
+		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		break;
+	case 'MemberMng':
+		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		break;
+	case 'UploadMng':
+		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		break;
+	case 'TagMng':
+		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		break;
+	case 'PluginMng':
+		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		break;
+	case 'ThemeMng':
+		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		break;
+	case 'ModuleMng':
+		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	default:
 		# code...
