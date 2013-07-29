@@ -15,11 +15,11 @@
 require_once '../zb_system/function/c_system_base.php';
 
 #加载默认的c_option.php
-
+#$option = require_once($blogpath . 'zb_system/defend/c_option.php');
 
 define('bingo','<span class="bingo"></span>');
 define('error','<span class="error"></span>');
-$option = require_once($blogpath . 'zb_system/defend/c_option.php');
+
 
 $zblogstep=GetVars('step')<>'' ? intval(GetVars('step')) : 0;
 if($zblogstep=="") { $zblogstep=1;}
