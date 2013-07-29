@@ -65,14 +65,22 @@ abstract class Base
 
 	function LoadInfoByAssoc($array){
 		foreach ($this->datainfo as $key => $value) {
-			$this->$key=$array[$value[0]];
+			if($value[1] == 'boolean'){
+				$this->Data[$key]=(boolean)$array[$value[0]];
+			}else{
+				$this->Data[$key]=$array[$value[0]];
+			}			
 		}
 	}
 
 	function LoadInfoByArray($array){
 		$i = 0;
 		foreach ($this->datainfo as $key => $value) {
-			$this->$key=$array[$i];
+			if($value[1] == 'boolean'){
+				$this->Data[$key]=(boolean)$array[$i];
+			}else{
+				$this->Data[$key]=$array[$i];
+			}
 			$i += 1;
 		}
 	}	
