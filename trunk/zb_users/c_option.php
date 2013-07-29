@@ -1,6 +1,6 @@
 <?php
 return array (
-  'ZC_BLOG_HOST' => 'http://localhost/',
+  'ZC_BLOG_HOST' => 'http://127.0.0.1:8080/',
   'ZC_BLOG_TITLE' => '我的网站',
   'ZC_BLOG_SUBTITLE' => 'Good Luck To You!',
   'ZC_BLOG_THEME' => 'default',
@@ -33,8 +33,8 @@ return array (
   'ZC_MULTI_DOMAIN_SUPPORT' => false,
   'ZC_BLOG_PRODUCT' => 'Z-BlogPHP',
   'ZC_BLOG_VERSION' => '1.0 Alpha Build 130707',
-  'ZC_BLOG_PRODUCT_FULL' => '',
-  'ZC_BLOG_PRODUCT_FULLHTML' => '',
+  'ZC_BLOG_PRODUCT_FULL' => 'Z-BlogPHP 1.0 Alpha Build 130707',
+  'ZC_BLOG_PRODUCT_FULLHTML' => '<a href="http://www.rainbowsoft.org/" title="RainbowSoft Z-BlogPHP">Z-BlogPHP 1.0 Alpha Build 130707</a>',
   'ZC_COMMENT_TURNOFF' => false,
   'ZC_COMMENT_VERIFY_ENABLE' => true,
   'ZC_COMMENT_REVERSE_ORDER_EXPORT' => false,
