@@ -20,7 +20,11 @@ $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $cookiespath = null;
 $bloghost = null;
 $blogtitle = null;
-$option = require_once($blogpath . 'zb_users/c_option.php');
+$option = require_once($blogpath . 'zb_system/defend/c_option.php');
+if(file_exists($blogpath . 'zb_users/c_option.php')){
+	$option = require_once($blogpath . 'zb_users/c_option.php');
+}
+
 $option['ZC_BLOG_PRODUCT_FULL']=$option['ZC_BLOG_PRODUCT'] . ' ' . $option['ZC_BLOG_VERSION'];
 $option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title="RainbowSoft Z-BlogPHP">' . $option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
 $lang = require_once($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
