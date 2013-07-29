@@ -56,12 +56,12 @@ class Dbpdo_MySQL implements iDataBase
 	function Query($query){
 
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		$result = $this->db->query($query);
+		$results = $this->db->query($query);
 		// 遍历出来
 
 		//fetch || fetchAll
-		if($result){
-			return $result->fetchAll();
+		if($results){
+			return $results->fetchAll();
 		}
 		else{
 			return array();
