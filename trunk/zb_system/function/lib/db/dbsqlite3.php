@@ -48,8 +48,10 @@ class DbSQLite3 implements iDataBase
 		// 遍历出来
 		$results =$this->db->query($query);
 		$data = array();
-		while($row = $results->fetchArray()){
-			$data[] = $row;
+		if($results){
+			while($row = $results->fetchArray()){
+				$data[] = $row;
+			}
 		}
 		return $data;
 	}
