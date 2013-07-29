@@ -396,11 +396,16 @@ class ZBlogPHP{
 
 	function BuildTemplate()
 	{
-
 		//初始化模板
 		$this->LoadTemplates();
+		
 		//编译&Save模板
+		if($this->template == null){
+			$this->template = new Template();
+			$this->template->path = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
+		}
 		$this->template->Compiling($this->templates);
+
 
 	}
 

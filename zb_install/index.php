@@ -347,9 +347,8 @@ function Setup3(){
   <dd id="ddright">
     <div id="title">数据库建立与设置</div>
     <div id="content">
-      <p><b>类型选择</b>:
+      <p><b>类型选择:</b>
         <?php if($CheckResult['mysql'][0]){?>
-        &nbsp;&nbsp;
         <label class="dbselect" id="mysql_radio">
           <input value="mysql" type="radio" name="dbtype"/>
           MySQL</label>
@@ -378,16 +377,16 @@ function Setup3(){
         <p><b>数据库主机:</b>
           <input type="text" name="dbmysql_server" id="dbmysql_server" value="localhost" style="width:350px;" />
         </p>
-        <p><b>用户名称:</b>&nbsp;&nbsp;
+        <p><b>用户名称:</b>
           <input type="text" name="dbmysql_username" id="dbmysql_username" value="" style="width:350px;" />
         </p>
-        <p><b>用户密码:</b>&nbsp;&nbsp;
+        <p><b>用户密码:</b>
           <input type="text" name="dbmysql_password" id="dbmysql_password" value="" style="width:350px;" />
         </p>
         <p><b>数据库名称:</b>
           <input type="text" name="dbmysql_name" id="dbmysql_name" value="" style="width:350px;" />
         </p>
-        <p><b>表&nbsp;前&nbsp;缀:</b>&nbsp;&nbsp;
+        <p><b>表&nbsp;前&nbsp;缀:</b>
           <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="zbp_" style="width:350px;" />
         </p>
       </div>
@@ -397,51 +396,51 @@ function Setup3(){
         <p><b>数据库主机:</b>
           <input type="text" name="dbpdo_mysql_server" id="dbpdo_mysql_server" value="localhost" style="width:350px;" />
         </p>
-        <p><b>用户名称:</b>&nbsp;&nbsp;
+        <p><b>用户名称:</b>
           <input type="text" name="dbpdo_mysql_username" id="dbpdo_mysql_username" value="" style="width:350px;" />
         </p>
-        <p><b>用户密码:</b>&nbsp;&nbsp;
+        <p><b>用户密码:</b>
           <input type="text" name="dbpdo_mysql_password" id="dbpdo_mysql_password" value="" style="width:350px;" />
         </p>
         <p><b>数据库名称:</b>
           <input type="text" name="dbpdo_mysql_name" id="dbpdo_mysql_name" value="" style="width:350px;" />
         </p>
-        <p><b>表&nbsp;前&nbsp;缀:</b>&nbsp;&nbsp;
+        <p><b>表&nbsp;前&nbsp;缀:</b>
           <input type="text" name="dbpdo_mysql_pre" id="dbpdo_mysql_pre" value="zbp_" style="width:350px;" />
         </p>
       </div>
       <?php } ?>
       <?php if($CheckResult['sqlite'][0]){?>
       <div class="dbdetail" id="sqlite">
-        <p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+        <p><b>数据库:</b>
           <input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo GetDbName()?>" readonly style="width:350px;" />
         </p>
-        <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+        <p><b>表前缀:</b>
           <input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" />
         </p>
       </div>
       <?php } ?>
       <?php if($CheckResult['sqlite3'][0]){?>
       <div class="dbdetail" id="sqlite3">
-        <p><b>数据库:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+        <p><b>数据库:</b>
           <input type="text" name="dbsqlite3_name" id="dbsqlite3_name" value="<?php echo GetDbName()?>" readonly style="width:350px;" />
         </p>
-        <p><b>表前缀:</b>&nbsp;&nbsp;&nbsp;&nbsp;
+        <p><b>表前缀:</b>
           <input type="text" name="dbsqlite3_pre" id="dbsqlite3_pre" value="zbp_" style="width:350px;" />
         </p>
       </div>
       <?php } ?>
       <p class="title">网站设置</p>
-      <p><b>网站名称:</b>&nbsp;&nbsp;
+      <p><b>网站名称:</b>
         <input type="text" name="blogtitle" id="blogtitle" value="" style="width:250px;" />
       </p>
-      <p><b>用&nbsp;户&nbsp;名:</b>&nbsp;&nbsp;
+      <p><b>用&nbsp;户&nbsp;名:</b>
         <input type="text" name="username" id="username" value="" style="width:250px;" />
-        &nbsp;(英文,数字,汉字和._的组合)</p>
-      <p><b>密&nbsp;&nbsp;&nbsp;&nbsp;码:</b>&nbsp;&nbsp;
+        &nbsp;(英文,数字,汉字或._的组合)</p>
+      <p><b>密&nbsp;&nbsp;&nbsp;&nbsp;码:</b>
         <input type="password" name="password" id="password" value="" style="width:250px;" />
-        &nbsp;(8位或更长的数字和字母,字符组合)</p>
-      <p><b>确认密码:</b>&nbsp;&nbsp;
+        &nbsp;(8位或更长的数字或字母组合)</p>
+      <p><b>确认密码:</b>
         <input type="password" name="repassword" id="repassword" value="" style="width:250px;" />
       </p>
     </div>
@@ -951,6 +950,7 @@ function SaveConfig(){
   $GLOBALS['zbp']->option['ZC_BLOG_VERSION']='1.0 Alpha Build 130707';
 
   $GLOBALS['zbp']->SaveOption();
+  $GLOBALS['zbp']->BuildTemplate();
 
 }
 

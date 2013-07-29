@@ -50,8 +50,10 @@ class DbSQLite implements iDataBase
 		$result = sqlite_query($this->db,$query);
 		// 遍历出来
 		$data = array();
-		while($row = sqlite_fetch_array($result)){
-			$data[] = $row;
+		if($results){
+			while($row = sqlite_fetch_array($result)){
+				$data[] = $row;
+			}
 		}
 		return $data;
 

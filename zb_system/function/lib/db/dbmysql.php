@@ -65,8 +65,10 @@ class DbMySQL implements iDataBase
 		$result = mysql_query($query);
 		// 遍历出来print_r($query);die();
 		$data = array();
-		while($row = mysql_fetch_assoc($result)){
-			$data[] = $row;
+		if($result){
+			while($row = mysql_fetch_assoc($result)){
+				$data[] = $row;
+			}
 		}
 		return $data;
 
