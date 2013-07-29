@@ -21,6 +21,10 @@ class DbSQLite3 implements iDataBase
 	{
 		# code...
 	}
+	
+	public function EscapeString($s){
+		return SQLite3::escapeString($s);
+	}
 
 	function Open($array){
 		if ($this->db = new SQLite3($array[0]) ){

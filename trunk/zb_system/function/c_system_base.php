@@ -44,7 +44,7 @@ $bloghost = GetCurrentHost($cookiespath);
 require_once $blogpath.'zb_system/function/lib/zblogphp.php';
 require_once $blogpath.'zb_system/function/lib/dbfactory.php';
 if($option['ZC_DATABASE_TYPE']){
-	require_once $blogpath.'zb_system/function/lib/db/' . $option['ZC_DATABASE_TYPE'] . '.php';
+	require_once $blogpath.'zb_system/function/lib/db' . $option['ZC_DATABASE_TYPE'] . '.php';
 }
 
 

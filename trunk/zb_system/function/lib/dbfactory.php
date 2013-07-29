@@ -19,6 +19,7 @@ interface iDataBase
 	public function Update($query);
 	public function Delete($query);
 	public function CreateTable($path);
+	public function EscapeString($s);	
 }
 
 

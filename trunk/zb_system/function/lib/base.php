@@ -100,7 +100,7 @@ abstract class Base
 			foreach ($this->datainfo as $key => $value) {
 				if ($value[0] == $this->datainfo['ID'][0]) {continue;}
 				if ($value[1] == 'string') {
-					$a[]='\'' . addslashes($this->$key) . '\'';	
+					$a[]='\'' . $this->db->EscapeString($this->$key) . '\'';	
 				}elseif ($value[1] == 'boolean') {
 					$a[]=(integer)$this->$key;
 				}else{
@@ -117,7 +117,7 @@ abstract class Base
 			foreach ($this->datainfo as $key => $value) {
 				if ($value[0] == $this->datainfo['ID'][0]) {continue;}
 				if ($value[1] == 'string') {
-					$a[]=$value[0] . '=\'' . addslashes($this->$key) . '\'';
+					$a[]=$value[0] . '=\'' . $this->db->EscapeString($this->$key) . '\'';
 				}elseif ($value[1] == 'boolean') {
 					$a[]=$value[0] . '=' . (integer)$this->$key;
 				}else{
