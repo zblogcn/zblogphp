@@ -303,22 +303,6 @@ class ZBlogPHP{
 
 	}
 
-	public function LoadTemplates(){
-		#先读默认的
-		$dir=$this->path .'zb_system/defend/default/';
-		$files=GetFilesInDir($dir,'php');
-		foreach ($files as $sortname => $fullname) {
-			$this->templates[$sortname]=file_get_contents($fullname);
-		}
-		#再读当前的
-		$dir=$this->path .'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/template/';
-		$files=GetFilesInDir($dir,'php');
-		foreach ($files as $sortname => $fullname) {
-			$this->templates[$sortname]=file_get_contents($fullname);
-		}
-
-	}
-
 	public function LoadConfigs(){
 
 		$s='SELECT * FROM %pre%Config';
@@ -393,18 +377,42 @@ class ZBlogPHP{
 
 	}
 
+	public function LoadTemplates(){
+		#先读默认的
+		$dir=$this->path .'zb_system/defend/default/';
+		$files=GetFilesInDir($dir,'php');
+		foreach ($files as $sortname => $fullname) {
+			$this->templates[$sortname]=file_get_contents($fullname);
+		}
+		#再读当前的
+		$dir=$this->path .'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/template/';
+		$files=GetFilesInDir($dir,'php');
+		foreach ($files as $sortname => $fullname) {
+			$this->templates[$sortname]=file_get_contents($fullname);
+		}
+
+	}
 
 	function BuildTemplate()
 	{
 		//初始化模板
 		$this->LoadTemplates();
+
+		//清空目标目录
+		$dir = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
+		$files = GetFilesInDir($dir,'php');
+		foreach ($files as $fullname) {
+			unlink($fullname);
+		}
+		
 		
 		//编译&Save模板
 		if($this->template == null){
 			$this->template = new Template();
-			$this->template->path = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
+			$this->template->path = $dir;
 		}
-		$this->template->Compiling($this->templates);
+
+		$this->template->CompileFiles($this->templates);
 
 
 	}

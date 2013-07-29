@@ -26,17 +26,17 @@ return array(
 	// '----------------------------数据库配置---------------------------------------
 	//mysql|sqlite|sqlite3|pdo_mysql
 	'ZC_DATABASE_TYPE'=> '',
-	'ZC_SQLITE_ENABLE' => false,
+	#'ZC_SQLITE_ENABLE' => false,
 
 		'ZC_SQLITE_NAME' => '',
 		'ZC_SQLITE_PRE' => 'zbp_',
 
-	'ZC_SQLITE3_ENABLE' => false,
+	#'ZC_SQLITE3_ENABLE' => false,
 
 		'ZC_SQLITE3_NAME' => '',
 		'ZC_SQLITE3_PRE' => 'zbp_',
 	
-	'ZC_MYSQL_ENABLE' => false,
+	#'ZC_MYSQL_ENABLE' => false,
 			
 		'ZC_MYSQL_SERVER' => 'localhost',								
 		'ZC_MYSQL_USERNAME' => 'root',				

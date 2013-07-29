@@ -31,15 +31,15 @@ class Template{
 	}	
 
 
-	function Compiling($filesarray){
+	function CompileFiles($filesarray){
 
 		foreach ($filesarray as $name => $content) {
-			file_put_contents($this->path . $name . '.php', $this->CompileFile($content), LOCK_EX);
+			file_put_contents($this->path . $name . '.php', $this->Compiling($content), LOCK_EX);
 		}
 
 	}
 
-	public function CompileFile($content)
+	public function Compiling($content)
 	{
 
 
@@ -54,13 +54,8 @@ class Template{
 		$this->parsePHP($content);
 		
 
-
-		
-
 		#正则替换{$变量}
 		/*$content = preg_replace('#\{\$([^\}]+)\}#', '<?php echo $this->\\1; ?>', $content);*/
-
-		
         
 		return $content;
 	}
