@@ -80,13 +80,13 @@ $actions=array(
 	'CategoryPst'=>1,
 	'TagMng'=>1,
 	'CommentMng'=>4,
-	'FileMng'=>1,
-	'UserMng'=>1,
+	'UploadMng'=>1,
+	'MemberMng'=>1,
 	'ThemeMng'=>1,
-	'PlugInMng'=>1,
-	'FunctionMng'=>1,
-	'UserEdt'=>0,
-	'UserAll'=>1,
+	'PluginMng'=>1,
+	'ModuleMng'=>1,
+	'MemberEdt'=>0,
+	'MemberAll'=>1,
 
 );
 

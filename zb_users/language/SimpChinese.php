@@ -53,7 +53,9 @@ return array(
 	'current_style'=>'当前样式',
 	'xmlrpc_address'=>'XML-RPC地址',
 	'system_environment'=>'系统环境',
-
+	'view_rights'=>'查看权限',
+	'member_level'=>'用户等级',	
+	
 	'batch_operation'=>'批量操作',
 	'batch_operation_in_progress'=>'批量操作进行中...',
 	'previous_operation_not_finished'=>'之前的批量操作还未全部执行,请点击',',<a href=\'#\'>继续</a>',',执行完所有的操作.',	

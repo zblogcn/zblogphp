@@ -13,7 +13,7 @@ $zbp->Initialize();
 #$zbp->BuildTemplate();
 
 $action=(GetVars('act','GET')=='') ? 'admin' : GetVars('act','GET') ;
-if (!CheckRights($action)) {throw new Exception("没有权限！！！");}
+if (!CheckRights($action)) {throw new Exception($GLOBALS['lang']['error'][6]);}
 
 $blogtitle='后台管理';
 
@@ -26,27 +26,38 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
 
 switch ($action) {
 	case 'ArticleMng':
+		Admin_ArticleMng();	
 		break;
 	case 'CategoryMng':
+		Admin_CategoryMng();
 		break;
 	case 'CommentMng':
+		Admin_CommentMng();
 		break;
-	case 'UserMng':
+	case 'MemberMng':
+		Admin_MemberMng();
 		break;
-	case 'FileMng':
+	case 'UploadMng':
+		Admin_UploadMng();
 		break;
 	case 'TagMng':
+		Admin_TagMng();
 		break;
-	case 'PlugInMng':
+	case 'PluginMng':
+		Admin_PluginMng();
 		break;
 	case 'ThemeMng':
+		Admin_ThemeMng();
 		break;
 	case 'ModuleMng':
+		Admin_ModuleMng();
 		break;
 	default:
-		ExportSiteInfo();
+		Admin_SiteInfo();
 		break;
 }
+
+
 
 ?>
 </div>

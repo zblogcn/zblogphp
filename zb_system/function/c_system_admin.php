@@ -13,7 +13,6 @@ $leftmenus=array();
 
 
 
-
 function ResponseAdminLeftMenu(){
 
 	global $zbp;
@@ -29,14 +28,14 @@ function ResponseAdminLeftMenu(){
 	$leftmenus[]=MakeLeftMenu("CategoryMng",$zbp->lang['msg']['category_manage'],$zbp->host . "zb_system/cmd.php?act=CategoryMng","nav_category","aCategoryMng","");
 	$leftmenus[]=MakeLeftMenu("TagMng",$zbp->lang['msg']['tags_manage'],$zbp->host . "zb_system/cmd.php?act=TagMng","nav_tags","aTagMng","");
 	$leftmenus[]=MakeLeftMenu("CommentMng",$zbp->lang['msg']['comment_manage'],$zbp->host . "zb_system/cmd.php?act=CommentMng","nav_comments","aCommentMng","");
-	$leftmenus[]=MakeLeftMenu("FileMng",$zbp->lang['msg']['upload_manage'],$zbp->host . "zb_system/cmd.php?act=FileMng","nav_accessories","aFileMng","");
-	$leftmenus[]=MakeLeftMenu("UserMng",$zbp->lang['msg']['member_manage'],$zbp->host . "zb_system/cmd.php?act=UserMng","nav_user","aUserMng","");
+	$leftmenus[]=MakeLeftMenu("UploadMng",$zbp->lang['msg']['upload_manage'],$zbp->host . "zb_system/cmd.php?act=UploadMng","nav_accessories","aFileMng","");
+	$leftmenus[]=MakeLeftMenu("MemberMng",$zbp->lang['msg']['member_manage'],$zbp->host . "zb_system/cmd.php?act=MemberMng","nav_user","aUserMng","");
 
 	$leftmenus[]="<li class='split'><hr/></li>";
 
 	$leftmenus[]=MakeLeftMenu("ThemeMng",$zbp->lang['msg']['theme_manage'],$zbp->host . "zb_system/cmd.php?act=ThemeMng","nav_themes","aThemeMng","");
-	$leftmenus[]=MakeLeftMenu("PlugInMng",$zbp->lang['msg']['plugin_manage'],$zbp->host . "zb_system/cmd.php?act=PlugInMng","nav_plugin","aPlugInMng","");
-	$leftmenus[]=MakeLeftMenu("FunctionMng",$zbp->lang['msg']['module_manage'],$zbp->host . "zb_system/cmd.php?act=FunctionMng","nav_function","aFunctionMng","");
+	$leftmenus[]=MakeLeftMenu("PluginMng",$zbp->lang['msg']['plugin_manage'],$zbp->host . "zb_system/cmd.php?act=PluginMng","nav_plugin","aPlugInMng","");
+	$leftmenus[]=MakeLeftMenu("ModuleMng",$zbp->lang['msg']['module_manage'],$zbp->host . "zb_system/cmd.php?act=ModuleMng","nav_function","aFunctionMng","");
 
 
 	foreach ($leftmenus as $m) {
@@ -100,7 +99,9 @@ function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUr
 }
 
 
-function ExportSiteInfo(){
+
+function Admin_SiteInfo(){
+
 	global $zbp;
 
 	echo "<div class=\"divHeader\">" . $zbp->lang['msg']['info_intro'] . "</div>";
@@ -120,6 +121,61 @@ function ExportSiteInfo(){
 
 	include_once $zbp->path . "zb_system/defend/thanks.html";
 
+}
+
+
+function Admin_ArticleMng(){
+
+	global $zbp;
+	
+}
+
+function Admin_CategoryMng(){
+
+	global $zbp;
+	
+}
+
+function Admin_CommentMng(){
+
+	global $zbp;
+	
+}
+
+function Admin_MemberMng(){
+
+	global $zbp;
+	
+}
+
+function Admin_UploadMng(){
+
+	global $zbp;
+	
+}
+
+function Admin_TagMng(){
+
+	global $zbp;
+	
+}
+
+function Admin_PluginMng(){
+
+	global $zbp;
+	
+}
+
+function Admin_ThemeMng(){
+
+	global $zbp;
+	
+}
+
+function Admin_ModuleMng(){
+
+	global $zbp;
+	
 }
 
 ?>

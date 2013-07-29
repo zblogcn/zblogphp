@@ -136,4 +136,42 @@ function Reload($qs){
 
 }
 
+
+function ViewRights(){
+	global $zbp;
+
+$blogtitle='';
+?><!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php if(strpos(GetVars('HTTP_USER_AGENT','SERVERS'),'MSIE')){?>
+	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<?php }?>
+	<meta name="robots" content="none" />
+	<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']?>" />
+	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
+	<title><?php echo $zbp->option['ZC_BLOG_TITLE'] . '-' . $zbp->lang['msg']['view_rights'];?></title>
+</head>
+<body class="short">
+<div class="bg">
+<div id="wrapper">
+  <div class="logo"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></div>
+  <div class="login">
+    <form method="post" action="#">
+    <dl>
+      <dt><?php echo $zbp->lang['msg']['current_member'] . ':' . $zbp->user->Name;?></dt>
+      <dd><?php echo $zbp->lang['msg']['member_level'] . ':' . $zbp->user->LevelName;?></dd>
+    </dl>
+    </form>
+  </div>
+</div>
+</div>
+</body>
+</html>
+<?php
+
+
+}
+
 ?>
