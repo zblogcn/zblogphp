@@ -1,7 +1,7 @@
 {php}
 
 foreach($sidebars5 as $module){
-	include $this->GetTemplate('b_module');
+	include $this->GetTemplate('module');
 }
 
 {/php}

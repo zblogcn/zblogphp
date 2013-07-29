@@ -5,8 +5,8 @@
 	<div id="divPage">
 	<div id="divMiddle">
 		<div id="divTop">
-			<h1 id="BlogTitle"><a href="{#ZC_BLOG_HOST#}">#ZC_BLOG_TITLE#}</a></h1>
-			<h3 id="BlogSubTitle">{#ZC_BLOG_SUBTITLE#}</h3>
+			<h1 id="BlogTitle"><a href="{$host}">{$blogtitle}</a></h1>
+			<h3 id="BlogSubTitle">{$blogsubtitle}</h3>
 		</div>
 		<div id="divNavBar">
 <ul>
