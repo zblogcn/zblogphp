@@ -1,5 +1,3 @@
-{if !$module.IsHidden}
-
 <dl class="function" id="{$module.HtmlID}">
 {if !$module.IsHideTitle}<dt class="function_t">{$module.Name}</dt>{else} {/if}
 <dd class="function_c">
@@ -14,5 +12,3 @@
 
 </dd>
 </dl>
-
-{/if}
