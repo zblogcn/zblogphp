@@ -13,14 +13,15 @@ class Tag extends Base{
 
 	function __construct()
 	{
-		$this->table=&$GLOBALS['table']['Tag'];	
-		$this->datainfo=&$GLOBALS['datainfo']['Tag'];
+		$this->zbp=&$GLOBALS['zbp'];
+		$this->table=&$this->zbp->table['Tag'];	
+		$this->datainfo=&$this->zbp->datainfo['Tag'];
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->db = &$GLOBALS['zbp']->db;
+		$this->db = &$this->zbp->db;
 		$this->ID = 0;
 
 	}

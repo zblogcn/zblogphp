@@ -13,18 +13,53 @@ class Log extends Base{
 
 	function __construct()
 	{
-		$this->table=&$GLOBALS['table']['Log'];	
-		$this->datainfo=&$GLOBALS['datainfo']['Log'];
+		$this->zbp=&$GLOBALS['zbp'];
+		$this->table=&$this->zbp->table['Log'];	
+		$this->datainfo=&$this->zbp->datainfo['Log'];
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->db = &$GLOBALS['zbp']->db;
+		$this->db = &$this->zbp->db;
 		$this->ID = 0;
-
+		$this->Name	= $GLOBALS['lang']['msg']['unnamed'];
 	}
 
+
+	public function __set($name, $value) 
+	{
+		switch ($name) {
+			case 'Category':
+			case 'Author':
+			case 'TypeName':
+				return null;
+				break;
+			default:
+				$this->Data[$name] = $value;
+				break;
+		}
+	}
+
+	public function __get($name) 
+	{
+
+		switch ($name) {
+			case 'Category':
+				return $this->zbp->GetCategoryByID($this->CateID);
+				break;
+			case 'Author':
+				return $this->zbp->GetMemberByID($this->AuthorID);
+				break;
+			case 'StatusName':
+				return $this->zbp->lang['article_status_name'][$this->Status];
+				break;
+			default:
+				return $this->Data[$name];
+				break;
+		}
+
+	}
 
 }
 

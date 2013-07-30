@@ -10,9 +10,25 @@ return array(
 
 #Front-End & Back-End
 'msg'=>array(
+	'name'=>'名称',
+	'title'=>'标题',
+	'alias'=>'别名',
+	'tags'=>'标签',
+	'content'=>'正文',
+	'intro'=>'摘要',
+	'date'=>'日期',
+	'category'=>'分类',
+	'top'=>'置顶',	
+	'status'=>'状态',
+	'template'=>'模板',
+	'author'=>'作者',		
+	'type'=>'类型',		
+	'submit'=>'提交',	
 	'error'=>'错误',
 	'anonymous'=>'无名氏',
+	'unnamed'=>'未命名',
 	'edit'=>'编辑',
+	'del'=>'删除',
 	'login'=>'登录',	
 	'logout'=>'退出登录',	
 	'view_permissions'=>'查看权限',
@@ -23,6 +39,7 @@ return array(
 	'settings'=>'设置管理',
 	'official_website'=>'官方网站',
 	'new_article'=>'新建文章',
+	'article_edit'=>'文章编辑',	
 	'article_manage'=>'文章管理',
 	'page_manage'=>'页面管理',
 	'category_manage'=>'分类管理',
@@ -54,8 +71,14 @@ return array(
 	'xmlrpc_address'=>'XML-RPC地址',
 	'system_environment'=>'系统环境',
 	'view_rights'=>'查看权限',
-	'member_level'=>'用户等级',	
-	
+	'member_level'=>'用户等级',
+	'disable_comment'=>'禁止评论',
+	'default_template'=>'默认模板',
+	'generate_summary'=>'手动生成摘要',	
+	'help_generate_summary'=>'在正文插入分隔符&quot;&lt;hr class=&quot;more&quot; /&gt;&quot;可以让系统识别摘要内容。如需另外指定摘要内容，请点击',	
+	'use_commas_to_separate'=>'逗号分割',
+	'show_common_tags'=>'显示常用标签',
+	'confirm_operating'=>'单击“确定”继续。单击“取消”停止。',
 	'batch_operation'=>'批量操作',
 	'batch_operation_in_progress'=>'批量操作进行中...',
 	'previous_operation_not_finished'=>'之前的批量操作还未全部执行,请点击',',<a href=\'#\'>继续</a>',',执行完所有的操作.',	
@@ -63,10 +86,10 @@ return array(
 ),
 
 //Article Level
-'article_level_name'=>array(
-'0','公开',
-'1','私人',
-'2','草稿',
+'article_status_name'=>array(
+'0'=>'公开',
+'1'=>'私人',
+'2'=>'草稿',
 ),
 
 //User Level
@@ -201,6 +224,11 @@ return array(
 '64'=>'启用失败,该应用的xml配置信息不是Z-Blog 2.X版本的.',
 '65'=>'Windows Phone手机自带IE可能无法正常上传，建议您使用第三方浏览器。',
 '66'=>'用户名和密码不能为空',
+'67'=>'MySQL数据库打不开啦！',
+'68'=>'SQLite数据库打不开啦！',
+'69'=>'SQLite3数据库打不开啦！',
+'70'=>'正文不能为空！',
+'71'=>'当前的编辑内容还未保存！',
 ),
 
 

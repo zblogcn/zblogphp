@@ -12,16 +12,18 @@ class Category extends Base{
 
 	function __construct()
 	{
-		$this->table=&$GLOBALS['table']['Category'];	
-		$this->datainfo=&$GLOBALS['datainfo']['Category'];
+		$this->zbp=&$GLOBALS['zbp'];
+		$this->table=&$this->zbp->table['Category'];	
+		$this->datainfo=&$this->zbp->datainfo['Category'];
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->db = &$GLOBALS['zbp']->db;
+		$this->db = &$this->zbp->db;
 		$this->ID = 0;
 		$this->Order = 0;
+		$this->Name	= $GLOBALS['lang']['msg']['unnamed'];
 	}
 
 
