@@ -26,7 +26,7 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
 
 $cate = new Category();
 
-$a = $cate->GetLibIDArray(array($cate->datainfo['Order'][0] => 'ASC'), null);
+$a = $cate->GetLibIDArray(null, array($cate->datainfo['Order'][0] => 'ASC'), null);
 foreach ($a as $key => $value) {
 	$cate->LoadInfoByID($value);
 	foreach ($cate->datainfo as $k => $v) {
