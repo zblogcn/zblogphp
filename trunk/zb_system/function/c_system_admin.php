@@ -110,11 +110,11 @@ function Admin_SiteInfo(){
 
 
 
-	echo '<table border="0" cellspacing="0" cellpadding="0" align="center" width="100%" class="tableBorder" id="tbStatistic"><tr><th height="32" colspan="4"  align="center">&nbsp;' . $zbp->lang['msg']['site_analyze'] . '&nbsp;<a href="javascript:statistic(\'?act=reload&amp;statistic\');">[' . $zbp->lang['msg']['refresh_cache'] . ']</a> <img id="statloading" style="display:none" src="../image/admin/loading.gif"></th></tr>';
+	echo '<table class="tableFull tableBorder" id="tbStatistic"><tr><th colspan="4">&nbsp;' . $zbp->lang['msg']['site_analyze'] . '&nbsp;<a href="javascript:statistic(\'?act=reload&amp;statistic\');">[' . $zbp->lang['msg']['refresh_cache'] . ']</a> <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 	echo $zbp->GetCacheValue('reload_statistic');
 	echo '</table>';
 
-	echo '<table border="0" cellspacing="0" cellpadding="0" align="center" width="100%" class="tableBorder" id="tbUpdateInfo"><tr><th height="32" align="center">&nbsp;' . $zbp->lang['msg']['latest_news'] . '&nbsp;<a href="javascript:updateinfo(\'?act=reload&amp;updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a> <img id="infoloading" style="display:none" src="../image/admin/loading.gif"></th></tr>';
+	echo '<table class="tableFull tableBorder" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . '&nbsp;<a href="javascript:updateinfo(\'?act=reload&amp;updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a> <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 	echo $zbp->GetCacheValue('reload_updateinfo');
 	echo '</table>';
 
@@ -132,9 +132,37 @@ function Admin_ArticleMng(){
 	echo '<div class="divHeader">文章管理</div>';
 	echo '<div class="SubMenu"></div><div id="divMain2">';
 	echo '<form class="search" id="edit" method="post" action="#"></form>';
-	echo '<table border="1" width="100%" cellspacing="0" cellpadding="0" class="tableBorder tableBorder-thcenter">';
-	echo '<tr><th width="5%">ID</th><th width="14%">分类</th><th width="12%">用户名</th><th>标题</th><th width="14%">时间</th><th width="6%">评论</th><th width="9%">类型</th><th width="12%"></th></tr>';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<tr>
+	<th>ID</th>
+	<th>分类</th>
+	<th>用户名</th>
+	<th>标题</th>
+	<th>时间</th>
+	<th>评论</th>
+	<th>类型</th>
+	<th></th>
+	</tr>';
 
+$array=$zbp->GetArticleList();
+foreach ($array as $article) {
+	echo '<tr>';
+	echo '<td class="td5">' . $article->ID . '</td>';
+	echo '<td class="td10">' . $article->Category->Name . '</td>';
+	echo '<td class="td10">' . $article->Author->Name . '</td>';
+	echo '<td>' . $article->Title . '</td>';
+	echo '<td class="td15">' . date('Y年m月d日',$article->PostTime) . '</td>';
+	echo '<td class="td5">' . $article->CommNums . '</td>';
+	echo '<td class="td5">' . $article->StatusName . '</td>';
+	echo '<td class="td10 tdCenter">';
+	echo '<a href="../cmd.php?act=ArticleEdt&amp;id='. $article->ID .'"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ArticleDel&amp;id=26"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
+	echo '</td>';
+
+	echo '</tr>';
+}
+	echo '</table>';
 	echo '<hr/><p class="pagebar">分页: </div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
 

@@ -14,14 +14,15 @@ class Upload extends Base{
 
 	function __construct()
 	{
-		$this->table=&$GLOBALS['table']['Upload'];	
-		$this->datainfo=&$GLOBALS['datainfo']['Upload'];
+		$this->zbp=&$GLOBALS['zbp'];
+		$this->table=&$this->zbp->table['Upload'];	
+		$this->datainfo=&$this->zbp->datainfo['Upload'];
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->db = &$GLOBALS['zbp']->db;
+		$this->db = &$this->zbp->db;
 		$this->ID = 0;
 
 	}

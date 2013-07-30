@@ -9,8 +9,6 @@
 
 function CheckRights($action){
 
-	Logs('$action=' . $action);
-	
 	if ($GLOBALS['zbp']->user->Level > $GLOBALS['actions'][$action]) {
 		return false;
 	} else {
@@ -18,6 +16,37 @@ function CheckRights($action){
 	}	
 
 }
+
+
+
+
+function ViewList($page,$cate,$auth,$date,$tags){
+	global $zbp;
+	foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($page,$cate,$auth,$date,$tags);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+	}
+
+	$zbp->title=$zbp->option['ZC_BLOG_SUBTITLE'];
+
+	$zbp->template->display($zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']);
+
+}
+
+function ViewArticle(){
+
+
+}
+
+function ViewPage(){
+
+
+}
+
+
+
+
+
 
 
 
@@ -86,6 +115,8 @@ function CategoryPost(){
 	}
 }
 
+
+
 function Reload($qs){
 	global $zbp;
 
@@ -111,12 +142,12 @@ function Reload($qs){
 
 		$system_environment=(getenv('OS')?getenv('OS'):getenv('XAMPP_OS')) . ';' . current(explode('/',GetVars('SERVER_SOFTWARE','SERVER'))) . ';' . 'PHP ' . phpversion();
 
-		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['current_member']}</td><td width='30%'>{$current_member}</td><td width='20%'>{$zbp->lang['msg']['current_version']}</td><td width='30%'>{$current_version}</td></tr>";
-		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_artiles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categorys}</td></tr>";
-		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
-		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
-		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
-		$r .= "<tr><td width='20%'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";		
+		$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}</td><td class='td30'>{$current_member}</td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";
+		$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_artiles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categorys}</td></tr>";
+		$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
+		$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
+		$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
+		$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";		
 
 		$zbp->SetCache('reload_statistic',$r);
 		$zbp->SaveCache(true);

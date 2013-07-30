@@ -16,6 +16,8 @@ abstract class Base
 	public $datainfo = array();
 
 	protected $db = null;
+	
+	protected $zbp = null;
 
 	public $Metas = array();
 
@@ -89,6 +91,8 @@ abstract class Base
 		foreach ($this->datainfo as $key => $value) {
 			if($value[1] == 'boolean'){
 				$this->Data[$key]=(boolean)$array[$value[0]];
+			}elseif($value[1] == 'string'){
+				$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',$this->zbp->host,$array[$value[0]]);
 			}else{
 				$this->Data[$key]=$array[$value[0]];
 			}			
@@ -100,6 +104,8 @@ abstract class Base
 		foreach ($this->datainfo as $key => $value) {
 			if($value[1] == 'boolean'){
 				$this->Data[$key]=(boolean)$array[$i];
+			}elseif($value[1] == 'string'){
+				$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',$this->zbp->host,$array[$i]);
 			}else{
 				$this->Data[$key]=$array[$i];
 			}
@@ -122,7 +128,7 @@ abstract class Base
 			foreach ($this->datainfo as $key => $value) {
 				if ($value[0] == $this->datainfo['ID'][0]) {continue;}
 				if ($value[1] == 'string') {
-					$a[]='\'' . $this->db->EscapeString($this->$key) . '\'';	
+					$a[]='\'' . $this->db->EscapeString(str_replace($this->zbp->host,'{#ZC_BLOG_HOST#}' , $this->$key)) . '\'';	
 				}elseif ($value[1] == 'boolean') {
 					$a[]=(integer)$this->$key;
 				}else{
@@ -139,7 +145,7 @@ abstract class Base
 			foreach ($this->datainfo as $key => $value) {
 				if ($value[0] == $this->datainfo['ID'][0]) {continue;}
 				if ($value[1] == 'string') {
-					$a[]=$value[0] . '=\'' . $this->db->EscapeString($this->$key) . '\'';
+					$a[]=$value[0] . '=\'' . $this->db->EscapeString(str_replace($this->zbp->host,'{#ZC_BLOG_HOST#}' , $this->$key)) . '\'';
 				}elseif ($value[1] == 'boolean') {
 					$a[]=$value[0] . '=' . (integer)$this->$key;
 				}else{

@@ -13,14 +13,15 @@ class Counter extends Base{
 
 	function __construct()
 	{
-		$this->table=&$GLOBALS['table']['Counter'];	
-		$this->datainfo=&$GLOBALS['datainfo']['Counter'];
+		$this->zbp=&$GLOBALS['zbp'];
+		$this->table=&$this->zbp->table['Counter'];	
+		$this->datainfo=&$this->zbp->datainfo['Counter'];
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->db = &$GLOBALS['zbp']->db;
+		$this->db = &$this->zbp->db;
 		$this->ID = 0;
 
 	}

@@ -273,6 +273,13 @@ padding-right:10px;
 	font-weight:normal;font-size:0.9em;color:#666;font-style: italic;
 }
 
+
+.tableFull{width:100%;}
+.tdCenter{text-align:center;}
+.td20{width:20%;}.td30{width:30%;}
+.td5{width:5%;}.td10{width:10%;}
+.td15{width:15%;}
+
 /*表   单*/
 form {background:#fff;border:0px solid black;padding:0.0em;margin:0.5em 0;}
 
@@ -331,6 +338,8 @@ input[readonly],input[readonly]:hover{
 	border:1px solid #ccc;
 }
 
+#editor_content {width:100%;height:300px;}
+#editor_intro{width:100%;height:150px;}
 
 /*提示DIV*/
 div.hint{
@@ -397,7 +406,7 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 }
 
 #divEditTitle,#divContent,#divIntro,#divEditForm,#divEditForm2{
-	padding-right:210px;
+	padding-right:230px;
 }
 #divIntro{
 	padding-bottom:20px;
@@ -709,3 +718,7 @@ a.button:hover{
 .widget_source_other .widget-title{background: #ded9c0;}
 /*.custom-state-active{background: #B5DCF0;}*/
 .siderbar-list .roll {display:none;}
+
+
+
+

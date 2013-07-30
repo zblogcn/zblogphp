@@ -11,18 +11,19 @@ class Member extends Base{
 
 	function __construct()
 	{
-		$this->table=&$GLOBALS['table']['Member'];	
-		$this->datainfo=&$GLOBALS['datainfo']['Member'];
+		$this->zbp=&$GLOBALS['zbp'];
+		$this->table=&$this->zbp->table['Member'];	
+		$this->datainfo=&$this->zbp->datainfo['Member'];
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->db = &$GLOBALS['zbp']->db;
+		$this->db = &$this->zbp->db;
 		$this->ID = 0;
 		$this->Count = 0;
 		$this->Level = 5;
-		$this->Name = $GLOBALS['lang']['msg']['anonymous'];
+		$this->Name = $this->zbp->lang['msg']['anonymous'];
 
 	}
 
@@ -41,10 +42,10 @@ class Member extends Base{
 	public function __get($name) 
 	{
 		if ($name=='Avatar') {
-			return $GLOBALS['zbp']->host . 'zb_users/avatar/0.png';
+			return $this->zbp->host . 'zb_users/avatar/0.png';
 		}
 		if ($name=='LevelName') {
-			return $GLOBALS['zbp']->lang['user_level_name'][$this->Level];
+			return $this->zbp->lang['user_level_name'][$this->Level];
 		}
 		return $this->Data[$name];
 	}

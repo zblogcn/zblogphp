@@ -75,9 +75,6 @@ class ZBlogPHP{
 
 
 		$this->title=$this->option['ZC_BLOG_TITLE'] . '-' . $this->option['ZC_BLOG_SUBTITLE'];
-		
-		//创建User类
-		$this->user=new Member();		
 
 	}
 
@@ -212,7 +209,7 @@ class ZBlogPHP{
 					$this->option['ZC_MYSQL_NAME'],
 					$this->option['ZC_MYSQL_PRE']
 				))==false){
-				throw new Exception('MySQL数据库打不开啦！');
+				throw new Exception($this->lang['error'][67]);
 			}
 
 			break;
@@ -223,7 +220,7 @@ class ZBlogPHP{
 				$this->path . $this->option['ZC_SQLITE_NAME'],
 				$this->option['ZC_SQLITE_PRE']
 				))==false){
-				throw new Exception('SQLite数据库打不开啦！');
+				throw new Exception($this->lang['error'][68]);
 			}
 			break;
 		case 'sqlite3':
@@ -233,7 +230,7 @@ class ZBlogPHP{
 				$this->path . $this->option['ZC_SQLITE3_NAME'],
 				$this->option['ZC_SQLITE3_PRE']
 				))==false){
-				throw new Exception('SQLite3数据库打不开啦！');
+				throw new Exception($this->lang['error'][69]);
 			}
 			break;
 		}
@@ -255,32 +252,25 @@ class ZBlogPHP{
 
 	public function LoadMembers(){
 
-		$s='SELECT * FROM ' . $this->table['Member'];
-		$array=$this->db->Query($s);
-		foreach ($array as $ma) {
-			$m=new Member();
-			$m->LoadInfoByAssoc($ma);
+		$array=$this->GetMemberList();
+		foreach ($array as $m) {
 			$this->members[$m->ID]=$m;
 			$this->membersbyname[$m->Name]=&$this->members[$m->ID];
 		}
 	}
 
 	public function LoadCategorys(){
-		$s='SELECT * FROM ' . $this->table['Category'];
-		$array=$this->db->Query($s);
-		foreach ($array as $ca) {
-			$c=new Category();
-			$c->LoadInfoByAssoc($ca);
+
+		$array=$this->GetCategoryList();
+		foreach ($array as $c) {
 			$this->categorys[$c->ID]=$c;
 		}
 	}
 
 	public function LoadModules(){
-		$s='SELECT * FROM ' . $this->table['Module'];
-		$array=$this->db->Query($s);
-		foreach ($array as $ma) {
-			$m=new Module();
-			$m->LoadInfoByAssoc($ma);
+
+		$array=$this->GetModuleList();
+		foreach ($array as $m) {
 			#$this->modules[$m->ID]=$m;
 			#$this->modulesbyfilename[$m->FileName]=&$this->modules[$m->ID];
 			$this->modulesbyfilename[$m->FileName]=$m;
@@ -299,7 +289,6 @@ class ZBlogPHP{
 			#$this->modulesbyfilename[$m->FileName]=&$this->modules[$m->ID];
 			$this->modulesbyfilename[$m->FileName]=$m;
 		}
-
 
 	}
 
@@ -418,40 +407,84 @@ class ZBlogPHP{
 	}
 
 
-	function ViewList($page,$cate,$auth,$date,$tags){
 
-		foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
-			$fpreturn=$fpname($page,$cate,$auth,$date,$tags);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-		}
-
-		$this->title=$this->option['ZC_BLOG_SUBTITLE'];
-
-		$this->template->display($this->option['ZC_INDEX_DEFAULT_TEMPLATE']);
-
-	}
-
-	function ViewArticle(){
-
-
-	}
-
-	function ViewPage(){
-
-
-	}
 	
-	
-	function PageList(){
-	}
-
 	function GetArticleList($where=array(),$order=array(),$limit=array(),$option=array()){
-		$array=array();
+		$array=null;
+		$list=array();
+		$s = "SELECT * FROM " . $this->table['Log'] . " ";
+		$array=$this->db->Query($s);
+		if(!isset($array)){return array();}
+		foreach ($array as $a) {
+			$l=new Log();
+			$l->LoadInfoByAssoc($a);
+			$list[]=$l;
+		}		
+		return $list;
+	}
 
-		return $array();
+	function GetPageList($where=array(),$order=array(),$limit=array(),$option=array()){
 	}
-	function GetPageList($where,$order,$limit){
+
+	function GetCommentList($where=array(),$order=array(),$limit=array(),$option=array()){
+
 	}
+
+	function GetMemberList($where=array(),$order=array(),$limit=array(),$option=array()){
+		$array=null;
+		$list=array();
+		$s = "SELECT * FROM " . $this->table['Member'] . " ";
+		$array=$this->db->Query($s);
+		if(!isset($array)){return array();}
+		foreach ($array as $a) {
+			$l=new Member();
+			$l->LoadInfoByAssoc($a);
+			$list[]=$l;
+		}		
+		return $list;
+	}
+
+	function GetCategoryList($where=array(),$order=array(),$limit=array(),$option=array()){
+		$array=null;
+		$list=array();
+		$s = "SELECT * FROM " . $this->table['Category'] . " ";
+		$array=$this->db->Query($s);
+		if(!isset($array)){return array();}
+		foreach ($array as $a) {
+			$l=new Category();
+			$l->LoadInfoByAssoc($a);
+			$list[]=$l;
+		}		
+		return $list;
+	}
+	function GetModuleList($where=array(),$order=array(),$limit=array(),$option=array()){
+		$array=null;
+		$list=array();
+		$s = "SELECT * FROM " . $this->table['Module'] . " ";
+		$array=$this->db->Query($s);
+		foreach ($array as $a) {
+			$l=new Module();
+			$l->LoadInfoByAssoc($a);
+			$list[]=$l;
+		}		
+		return $list;
+	}
+
+	function GetCategoryByID($id){
+		if(isset($this->categorys[$id])){
+			return $this->categorys[$id];
+		}else{
+			return new Category;
+		}
+	}
+
+	function GetMemberByID($id){
+		if(isset($this->members[$id])){
+			return $this->members[$id];
+		}else{
+			return new Member;
+		}
+	}	
 
 
 }
