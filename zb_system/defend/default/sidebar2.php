@@ -1,7 +1,5 @@
-{php}
-
-foreach($sidebars2 as $module){
-	include $this->GetTemplate('module');
-}
-
-{/php}
+{foreach $sidebars2 as $module}
+{if !$module.IsHidden}
+{template:module}
+{/if}
+{/foreach}

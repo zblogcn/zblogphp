@@ -15,7 +15,9 @@
 </ul>
 		</div>
 		<div id="divMain">
-
+{for $i=0;$i<=10;$i++}
+{$j=$i}
+{/for}
 <div class="post pagebar">{template:pagebar}</div>
 		</div>
 		<div id="divSidebar">

@@ -140,7 +140,7 @@ function Reload($qs){
 function ViewRights(){
 	global $zbp;
 
-$blogtitle='';
+$blogtitle=$zbp->option['ZC_BLOG_TITLE'] . '-' . $zbp->lang['msg']['view_rights'];
 ?><!DOCTYPE HTML>
 <html>
 <head>
@@ -151,7 +151,7 @@ $blogtitle='';
 	<meta name="robots" content="none" />
 	<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']?>" />
 	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
-	<title><?php echo $zbp->option['ZC_BLOG_TITLE'] . '-' . $zbp->lang['msg']['view_rights'];?></title>
+	<title><?php echo $blogtitle;?></title>
 </head>
 <body class="short">
 <div class="bg">
