@@ -42,19 +42,23 @@ require_once $blogpath.'zb_system/function/c_system_event.php';
 $cookiespath = null;
 $bloghost = GetCurrentHost($cookiespath);
 
+#加载zbp
 require_once $blogpath.'zb_system/function/lib/zblogphp.php';
+
+#加载数据库类
 require_once $blogpath.'zb_system/function/lib/dbfactory.php';
 if($option['ZC_DATABASE_TYPE']){
 	require_once $blogpath.'zb_system/function/lib/db' . $option['ZC_DATABASE_TYPE'] . '.php';
 }
 
-
+#加载对象
 $lib_array = array('base', 'log','category','comment','counter','member','module','tag','template','upload');
 foreach ($lib_array as $f) {
 	require_once $blogpath.'zb_system/function/lib/' . $f . '.php';
 }
 
 
+#定义常量
 define('ZC_LOG_TYPE_ARTICLE', 0);
 define('ZC_LOG_TYPE_PAGE', 1);
 define('ZC_LOG_STATUS_PUBLIC', 0);

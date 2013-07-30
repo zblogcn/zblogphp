@@ -26,7 +26,7 @@ return array(
 	'article_manage'=>'文章管理',
 	'page_manage'=>'页面管理',
 	'category_manage'=>'分类管理',
-	'tags_manage'=>'标签管理',
+	'tag_manage'=>'标签管理',
 	'comment_manage'=>'评论管理',
 	'upload_manage'=>'附件管理',	
 	'member_manage'=>'用户管理',	

@@ -15,7 +15,58 @@ $zbp->Initialize();
 $action=(GetVars('act','GET')=='') ? 'admin' : GetVars('act','GET') ;
 if (!CheckRights($action)) {throw new Exception($GLOBALS['lang']['error'][6]);}
 
-$blogtitle='后台管理';
+$f=null;
+switch ($action) {
+	case 'ArticleMng':
+		if(GetVars('type','GET')==ZC_LOG_TYPE_PAGE){
+			$f='Admin_PageMng';
+			$blogtitle=$zbp->lang['msg']['page_manage'];	
+		}else{
+			$f='Admin_ArticleMng';
+			$blogtitle=$zbp->lang['msg']['article_manage'];			
+		}
+		break;
+	case 'CategoryMng':
+		$f='Admin_CategoryMng';
+		$blogtitle=$zbp->lang['msg']['category_manage'];
+		break;
+	case 'CommentMng':
+		$f='Admin_CommentMng';
+		$blogtitle=$zbp->lang['msg']['comment_manage'];
+		break;
+	case 'MemberMng':
+		$f='Admin_MemberMng';
+		$blogtitle=$zbp->lang['msg']['member_manage'];
+		break;
+	case 'UploadMng':
+		$f='Admin_UploadMng';
+		$blogtitle=$zbp->lang['msg']['upload_manage'];
+		break;
+	case 'TagMng':
+		$f='Admin_TagMng';
+		$blogtitle=$zbp->lang['msg']['tag_manage'];
+		break;
+	case 'PluginMng':
+		$f='Admin_PluginMng';
+		$blogtitle=$zbp->lang['msg']['plugin_manage'];
+		break;
+	case 'ThemeMng':
+		$f='Admin_ThemeMng';
+		$blogtitle=$zbp->lang['msg']['theme_manage'];
+		break;
+	case 'ModuleMng':
+		$f='Admin_ModuleMng';
+		$blogtitle=$zbp->lang['msg']['module_manage'];
+		break;
+	case 'SettingMng':
+		$f='Admin_SettingMng';
+		$blogtitle=$zbp->lang['msg']['settings'];
+		break;		
+	default:
+		$f='Admin_SiteInfo';
+		$blogtitle=$zbp->lang['msg']['dashboard'];
+		break;
+}
 
 require_once $blogpath . 'zb_system/admin/admin_header.php';
 require_once $blogpath . 'zb_system/admin/admin_top.php';
@@ -23,42 +74,7 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
 <?php
-
-switch ($action) {
-	case 'ArticleMng':
-		Admin_ArticleMng();	
-		break;
-	case 'CategoryMng':
-		Admin_CategoryMng();
-		break;
-	case 'CommentMng':
-		Admin_CommentMng();
-		break;
-	case 'MemberMng':
-		Admin_MemberMng();
-		break;
-	case 'UploadMng':
-		Admin_UploadMng();
-		break;
-	case 'TagMng':
-		Admin_TagMng();
-		break;
-	case 'PluginMng':
-		Admin_PluginMng();
-		break;
-	case 'ThemeMng':
-		Admin_ThemeMng();
-		break;
-	case 'ModuleMng':
-		Admin_ModuleMng();
-		break;
-	default:
-		Admin_SiteInfo();
-		break;
-}
-
-
-
+$f();
 ?>
 </div>
 <?php

@@ -64,6 +64,9 @@ switch ($action) {
 	case 'ModuleMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
+	case 'SettingMng':
+		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		break;		
 	default:
 		# code...
 		break;
