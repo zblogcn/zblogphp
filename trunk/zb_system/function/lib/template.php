@@ -43,16 +43,20 @@ class Template{
 	{
 
 
-
+		//Step1:替换<?php块
 		$this->replacePHP($content);
-
+		//Step2:引入主题
 		$this->parse_template($content);
+		//Step3:替换配置
 		$this->parse_option($content);
+		//Step4:替换标签
 		$this->parse_vars($content);
+		//Step5:解析If
 		$this->parse_if($content);
-
+		//Step6:解析foreach
+		$this->parse_foreach($content);
+		//StepN:解析PHP
 		$this->parsePHP($content);
-		
 
 		#正则替换{$变量}
 		/*$content = preg_replace('#\{\$([^\}]+)\}#', '<?php echo $this->\\1; ?>', $content);*/
@@ -62,7 +66,6 @@ class Template{
 
 	private function replacePHP(&$content)
 	{
-		//替换<?php，不允许出现。
 		$content = preg_replace("/\<\?php[\d\D]+?\?\>/si", '', $content);
 	}
 
@@ -74,7 +77,6 @@ class Template{
 
 	private function parse_option(&$content)
 	{
-		#zblog asp 特别魔法
 		$content = preg_replace('#\{\#([^\}]+)\#\}#', '<?php echo $option[\'\\1\']; ?>', $content);
 	}
 
@@ -118,6 +120,25 @@ class Template{
 	{
 		$ifexp = str_replace($matches[1],$this->replace_dot($matches[1]),$matches[1]);
 		return "{php}}elseif($ifexp) { {/php}";
+	}
+
+
+	private function parse_foreach(&$content)
+	{
+		while(preg_match('/\{foreach(.+?)\}(.+?){\/foreach}/s', $content))
+			$content = preg_replace_callback(
+				'/\{foreach(.+?)\}(.+?){\/foreach}/s',
+				array($this,'parse_foreach_sub'),
+				$content
+			);
+	}
+	
+	private function parse_foreach_sub($matches)
+	{
+		
+		$exp = $this->replace_dot($matches[1]);
+		$code = $matches[2];
+		return "{php} foreach ($exp) {{/php} $code{php} }  {/php}";
 	}
 
 	private function parse_vars_replace_dot($matches)
