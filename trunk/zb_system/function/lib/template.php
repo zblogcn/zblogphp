@@ -55,6 +55,8 @@ class Template{
 		$this->parse_if($content);
 		//Step6:解析foreach
 		$this->parse_foreach($content);
+		//Step7:解析for
+		$this->parse_for($content);
 		//StepN:解析PHP
 		$this->parsePHP($content);
 
@@ -135,11 +137,26 @@ class Template{
 	
 	private function parse_foreach_sub($matches)
 	{
-		
 		$exp = $this->replace_dot($matches[1]);
 		$code = $matches[2];
 		return "{php} foreach ($exp) {{/php} $code{php} }  {/php}";
 	}
+	private function parse_for(&$content)
+	{
+		while(preg_match('/\{for(.+?)\}(.+?){\/for}/s', $content))
+			$content = preg_replace_callback(
+				'/\{for(.+?)\}(.+?){\/for}/s',
+				array($this,'parse_for_sub'),
+				$content
+			);
+	}
+	
+	private function parse_for_sub($matches)
+	{
+		$exp = $this->replace_dot($matches[1]);
+		$code = $matches[2];
+		return "{php} for($exp) {{/php} $code{php} }  {/php}";
+	}	
 
 	private function parse_vars_replace_dot($matches)
 	{
