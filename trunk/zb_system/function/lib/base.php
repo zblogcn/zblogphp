@@ -31,10 +31,32 @@ abstract class Base
 		return $this->Data[$name];
 	}
 
-
-	function GetLibIDArray($orderby, $limit){	//$orderby=array(id=>'ASC',order=>'ASC'), $limit=array(0,30)
+/**
+ * 		返回条件搜索后的表id数组
+ * @	$wheresearch=array(id=>array('>'=>"10"),name=>array('like'=>'ZB'))
+ * @	$orderby=array(id=>'ASC',order=>'ASC')
+ * @	$limit=array(0,30)
+ */
+	function GetLibIDArray($wheresearch, $orderby, $limit){	
 
 		$s = "SELECT `". $this->datainfo['ID'][0] ."` FROM " . $this->table . "";
+		
+		if(!empty($wheresearch)) {
+			$s .= ' WHERE ';
+			foreach($wheresearch as $k=>$v) {
+				if(!is_array($v)) {
+					$v = addslashes($v);
+					$s .= "$k = '$v' AND ";
+				} else {
+					foreach($v as $k1=>$v1) {
+						$v1 = addslashes($v1);
+						$k1 == 'LIKE' && ($k1 = ' LIKE ') && $v1 = "%$v1%";
+						$s .= "$k$k1'$v1' AND ";
+					}
+				}
+			}
+			$s = substr($s, 0, -4);
+		}
 		
 		if(!empty($orderby)) {
 			$s .= ' ORDER BY ';
