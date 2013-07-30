@@ -1,8 +1,6 @@
-    </div>
-  </div>
-</div>
+</section>
 
-			</div>
+
 <script type="text/javascript">
 // <![CDATA[
 $(document).ready(function(){ 
@@ -25,9 +23,7 @@ $(document).ready(function(){
 </script>
 <?php
 
-foreach ($GLOBALS['Filter_Plugin_Admin_Footer'] as $fpk => &$fpv) {
-	$fpr=$fpk();
-}
+foreach ($GLOBALS['Filter_Plugin_Admin_Footer'] as $fpname => &$fpsignal) {$fpname();}
 
 
 ?>

@@ -1,8 +1,8 @@
-<div class="main_left">
+<aside class="left">
   <ul id="leftmenu">
 <?php
 ResponseAdminLeftMenu()
 ?>
   </ul>
-</div>
+</aside>
 

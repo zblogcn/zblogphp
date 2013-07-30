@@ -116,11 +116,9 @@ background:#ffffdd;
 }
 
 
-/**/
-#main { width:100%;}
 /*后台顶部*/
-#header {border-bottom:5px solid white;}
-#header .top { height:85px; padding:0; background:#3a6ea5; position: relative;}
+header {border-bottom:5px solid white;height:85px; padding:0; background:#3a6ea5; position: relative;}
+header .top { }
 /**/
 .logo { width:190px; height:62px; padding:10px 0 0 0; left:20px;}
 /**/
@@ -143,21 +141,21 @@ background:#ffffdd;
 
 
 /*左边导航*/
-#main .main_left { float:left; width:140px; background:#ededed; padding:0px;margin:0 0 0 0;position: absolute;}
-#main .main_left #leftmenu {}
-#main .main_left #leftmenu li { float:left; width:140px; height:32px; margin-bottom:0;border-bottom:5px solid #fff;cursor:pointer;}
-#main .main_left #leftmenu a { float:left;  width:140px; height:32px; line-height:35px;cursor:pointer;}
-#main .main_left #leftmenu a:hover { color:#000000; background:#b0cdee;}
-#main .main_left #leftmenu span {  float:left;width:90px; height:32px; line-height:32px; padding-right:50px; text-align:right;cursor:pointer;}
+.left { float:left; width:140px; background:#ededed; padding:0px;margin:0 0 0 0;position: absolute;}
+.left #leftmenu {}
+.left #leftmenu li { float:left; width:140px; height:32px; margin-bottom:0;border-bottom:5px solid #fff;cursor:pointer;}
+.left #leftmenu a { float:left;  width:140px; height:32px; line-height:35px;cursor:pointer;}
+.left #leftmenu a:hover { color:#000000; background:#b0cdee;}
+.left #leftmenu span {  float:left;width:90px; height:32px; line-height:32px; padding-right:50px; text-align:right;cursor:pointer;}
 
 /*导航高亮*/
-#main .main_left #leftmenu .on a,#main .main_left #leftmenu #on a:hover { color:#ffffff; background:#3399cc;}
+.left #leftmenu .on a,.left #leftmenu #on a:hover { color:#ffffff; background:#3399cc;}
 
-#main .main_left #leftmenu li.sub {
+.left #leftmenu li.sub {
 	float:left; width:140px; height:auto; margin-bottom:0;border-bottom:5px solid #fff;cursor:pointer;
 	background:white;
 }
-#main .main_left #leftmenu li.sub span{
+.left #leftmenu li.sub span{
 height:25px; line-height:25px;
 text-align:left;
 width:105px;
@@ -167,13 +165,13 @@ background:url(../image/admin/pointgray.gif) no-repeat 20px 8px;
 overflow:hidden;
 }
 
-#main .main_left #leftmenu li.sub a{
+.left #leftmenu li.sub a{
 height:25px; line-height:25px;
 }
-#main .main_left #leftmenu li.sub a:hover{
+.left #leftmenu li.sub a:hover{
 background:white;
 }
-#main .main_left #leftmenu li.sub span.m-now{
+.left #leftmenu li.sub span.m-now{
 background:url(../image/admin/pointblue.gif) no-repeat 20px 8px;
 font-weight:bold;
 }
@@ -232,9 +230,10 @@ background:#fff;
 display:none;
 }
 /*主要内容区*/
-#main .main_right {padding-left:140px;}
-#main .main_right .yui { float:left;width:100%;}
-#main .main_right .content { padding:0 12px;}
+.main {
+padding-left:150px;
+padding-right:10px;
+}
 
 
 /*后台首页*/
