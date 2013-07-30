@@ -1,7 +1,7 @@
-{if $module.IsHidden==false}
+{if !$module.IsHidden}
 
 <dl class="function" id="{$module.HtmlID}">
-{if $module.IsHideTitle==false}<dt class="function_t">{$module.Name}</dt>{else} {/if}
+{if !$module.IsHideTitle}<dt class="function_t">{$module.Name}</dt>{else} {/if}
 <dd class="function_c">
 
 {if $module.Type=='div'}

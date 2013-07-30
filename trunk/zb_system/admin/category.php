@@ -76,7 +76,7 @@ getTableRows(0);
 
 
 
-</div>
+
 <?php
 require_once $blogpath . 'zb_system/admin/admin_footer.php';
 

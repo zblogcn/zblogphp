@@ -8,7 +8,7 @@
 
 $_SERVER['_start_time'] = microtime(1); //RunTime
 function RunTime(){
-	echo '<!--'.number_format(microtime(1) - $_SERVER['_start_time'], 6).'s-->';
+	echo '<!--'. (1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6)) .'ms-->';
 }
 
 
