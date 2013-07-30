@@ -114,11 +114,11 @@ function Admin_SiteInfo(){
 	echo $zbp->GetCacheValue('reload_statistic');
 	echo "</table>";
 
-	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" class=\"tableBorder\" id=\"tbUpdateInfo\"><tr><th height=\"32\" colspan=\"4\" align=\"center\">&nbsp;" . $zbp->lang['msg']['latest_news'] . "&nbsp;<a href=\"javascript:updateinfo('?act=reload&amp;updateinfo');\">[" . $zbp->lang['msg']['refresh'] . "]</a> <img id=\"infoloading\" style=\"display:none\" src=\"../image/admin/loading.gif\"></th></tr>";
+	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" class=\"tableBorder\" id=\"tbUpdateInfo\"><tr><th height=\"32\" align=\"center\">&nbsp;" . $zbp->lang['msg']['latest_news'] . "&nbsp;<a href=\"javascript:updateinfo('?act=reload&amp;updateinfo');\">[" . $zbp->lang['msg']['refresh'] . "]</a> <img id=\"infoloading\" style=\"display:none\" src=\"../image/admin/loading.gif\"></th></tr>";
 	echo $zbp->GetCacheValue('reload_updateinfo');
 	echo "</table>";
 
-
+	echo "</div>";
 	include_once $zbp->path . "zb_system/defend/thanks.html";
 
 }
