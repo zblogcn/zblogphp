@@ -5,7 +5,7 @@ $zbp->Initialize();
 
 $action=GetVars('act','GET');
 
-if (!CheckRights($action)) {throw new Exception($GLOBALS['lang']['error'][6]);}
+if (!CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
 switch ($action) {
 	case 'login':

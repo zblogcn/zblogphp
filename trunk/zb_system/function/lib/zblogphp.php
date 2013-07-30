@@ -440,7 +440,19 @@ class ZBlogPHP{
 
 
 	}
-		
+	
+	
+	function PageList(){
+	}
+
+	function GetArticleList($where=array(),$order=array(),$limit=array(),$option=array()){
+		$array=array();
+
+		return $array();
+	}
+	function GetPageList($where,$order,$limit){
+	}
+
 
 }
 

@@ -12,9 +12,9 @@ require_once '../function/c_system_admin.php';
 $zbp->Initialize();
 
 $action='ArticleEdt';
-if (!CheckRights($action)) {throw new Exception($GLOBALS['lang']['error'][6]);}
+if (!CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
-$blogtitle='文章编辑';
+$blogtitle=$option['ZC_BLOG_TITLE'] . '-' . '文章编辑';
 
 require_once $blogpath . 'zb_system/admin/admin_header.php';
 require_once $blogpath . 'zb_system/admin/admin_top.php';
