@@ -109,14 +109,14 @@ CREATE TABLE IF NOT EXISTS %pre%module (
   mod_FileName varchar(50) NOT NULL DEFAULT '',
   mod_Order int(11) NOT NULL DEFAULT '0',
   mod_Content text NOT NULL,
-  mod_IsHidden bit(1) NOT NULL DEFAULT b'0',
+  mod_IsHidden tinyint(1) NOT NULL DEFAULT b'0',
   mod_SidebarID int(11) NOT NULL DEFAULT '0',
   mod_HtmlID varchar(50) NOT NULL DEFAULT '',
   mod_Type varchar(5) NOT NULL DEFAULT '',
   mod_MaxLi int(11) NOT NULL DEFAULT '0',
   mod_Source varchar(50) NOT NULL DEFAULT '',
   mod_ViewType varchar(50) NOT NULL DEFAULT '',
-  mod_IsHideTitle bit(1) NOT NULL DEFAULT b'0',
+  mod_IsHideTitle tinyint(1) NOT NULL DEFAULT b'0',
   mod_Meta text NOT NULL,
   PRIMARY KEY (mod_ID)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
