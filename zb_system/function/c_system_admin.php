@@ -20,13 +20,13 @@ function ResponseAdminLeftMenu(){
 
 	$leftmenus[]=MakeLeftMenu("ArticleEdt",$zbp->lang['msg']['new_article'],$zbp->host . "zb_system/cmd.php?act=ArticleEdt","nav_new","aArticleEdt","");
 	$leftmenus[]=MakeLeftMenu("ArticleMng",$zbp->lang['msg']['article_manage'],$zbp->host . "zb_system/cmd.php?act=ArticleMng","nav_article","aArticleMng","");
-	$leftmenus[]=MakeLeftMenu("ArticleMng",$zbp->lang['msg']['page_manage'],$zbp->host . "zb_system/cmd.php?act=ArticleMng&amp;type=Page","nav_page","aPageMng","");
+	$leftmenus[]=MakeLeftMenu("ArticleMng",$zbp->lang['msg']['page_manage'],$zbp->host . "zb_system/cmd.php?act=ArticleMng&amp;type=1","nav_page","aPageMng","");
 
 	$leftmenus[]="<li class='split'><hr/></li>";
 
 
 	$leftmenus[]=MakeLeftMenu("CategoryMng",$zbp->lang['msg']['category_manage'],$zbp->host . "zb_system/cmd.php?act=CategoryMng","nav_category","aCategoryMng","");
-	$leftmenus[]=MakeLeftMenu("TagMng",$zbp->lang['msg']['tags_manage'],$zbp->host . "zb_system/cmd.php?act=TagMng","nav_tags","aTagMng","");
+	$leftmenus[]=MakeLeftMenu("TagMng",$zbp->lang['msg']['tag_manage'],$zbp->host . "zb_system/cmd.php?act=TagMng","nav_tags","aTagMng","");
 	$leftmenus[]=MakeLeftMenu("CommentMng",$zbp->lang['msg']['comment_manage'],$zbp->host . "zb_system/cmd.php?act=CommentMng","nav_comments","aCommentMng","");
 	$leftmenus[]=MakeLeftMenu("UploadMng",$zbp->lang['msg']['upload_manage'],$zbp->host . "zb_system/cmd.php?act=UploadMng","nav_accessories","aFileMng","");
 	$leftmenus[]=MakeLeftMenu("MemberMng",$zbp->lang['msg']['member_manage'],$zbp->host . "zb_system/cmd.php?act=MemberMng","nav_user","aUserMng","");
@@ -104,27 +104,44 @@ function Admin_SiteInfo(){
 
 	global $zbp;
 
-	echo "<div class=\"divHeader\">" . $zbp->lang['msg']['info_intro'] . "</div>";
-	echo "<div class=\"SubMenu\">" . '@$Response_Plugin_SiteInfo_SubMenu' . "</div>";
-	echo "<div id=\"divMain2\">";
+	echo '<div class="divHeader">' . $zbp->lang['msg']['info_intro'] . '</div>';
+	echo '<div class="SubMenu">' . '@$Response_Plugin_SiteInfo_SubMenu' . '</div>';
+	echo '<div id="divMain2">';
 
 
 
-	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" class=\"tableBorder\" id=\"tbStatistic\"><tr><th height=\"32\" colspan=\"4\"  align=\"center\">&nbsp;" . $zbp->lang['msg']['site_analyze'] . "&nbsp;<a href=\"javascript:statistic('?act=reload&amp;statistic');\">[" . $zbp->lang['msg']['refresh_cache'] . "]</a> <img id=\"statloading\" style=\"display:none\" src=\"../image/admin/loading.gif\"></th></tr>";
+	echo '<table border="0" cellspacing="0" cellpadding="0" align="center" width="100%" class="tableBorder" id="tbStatistic"><tr><th height="32" colspan="4"  align="center">&nbsp;' . $zbp->lang['msg']['site_analyze'] . '&nbsp;<a href="javascript:statistic(\'?act=reload&amp;statistic\');">[' . $zbp->lang['msg']['refresh_cache'] . ']</a> <img id="statloading" style="display:none" src="../image/admin/loading.gif"></th></tr>';
 	echo $zbp->GetCacheValue('reload_statistic');
-	echo "</table>";
+	echo '</table>';
 
-	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" class=\"tableBorder\" id=\"tbUpdateInfo\"><tr><th height=\"32\" align=\"center\">&nbsp;" . $zbp->lang['msg']['latest_news'] . "&nbsp;<a href=\"javascript:updateinfo('?act=reload&amp;updateinfo');\">[" . $zbp->lang['msg']['refresh'] . "]</a> <img id=\"infoloading\" style=\"display:none\" src=\"../image/admin/loading.gif\"></th></tr>";
+	echo '<table border="0" cellspacing="0" cellpadding="0" align="center" width="100%" class="tableBorder" id="tbUpdateInfo"><tr><th height="32" align="center">&nbsp;' . $zbp->lang['msg']['latest_news'] . '&nbsp;<a href="javascript:updateinfo(\'?act=reload&amp;updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a> <img id="infoloading" style="display:none" src="../image/admin/loading.gif"></th></tr>';
 	echo $zbp->GetCacheValue('reload_updateinfo');
-	echo "</table>";
+	echo '</table>';
 
-	echo "</div>";
+	echo '</div>';
 	include_once $zbp->path . "zb_system/defend/thanks.html";
 
 }
 
 
 function Admin_ArticleMng(){
+
+	global $zbp;
+
+
+	echo '<div class="divHeader">文章管理</div>';
+	echo '<div class="SubMenu"></div><div id="divMain2">';
+	echo '<form class="search" id="edit" method="post" action="#"></form>';
+	echo '<table border="1" width="100%" cellspacing="0" cellpadding="0" class="tableBorder tableBorder-thcenter">';
+	echo '<tr><th width="5%">ID</th><th width="14%">分类</th><th width="12%">用户名</th><th>标题</th><th width="14%">时间</th><th width="6%">评论</th><th width="9%">类型</th><th width="12%"></th></tr>';
+
+	echo '<hr/><p class="pagebar">分页: </div>';
+	echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
+
+
+}
+
+function Admin_PageMng(){
 
 	global $zbp;
 	
@@ -173,6 +190,12 @@ function Admin_ThemeMng(){
 }
 
 function Admin_ModuleMng(){
+
+	global $zbp;
+	
+}
+
+function Admin_SettingMng(){
 
 	global $zbp;
 	
