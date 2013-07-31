@@ -16,20 +16,25 @@ error_reporting(E_ALL);
 
 ob_start();
 
+$action=null;
+
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $cookiespath = null;
 $bloghost = null;
-$blogtitle = null;
+
 $option = require_once($blogpath . 'zb_system/defend/c_option.php');
 if(file_exists($blogpath . 'zb_users/c_option.php')){
 	$option = require_once($blogpath . 'zb_users/c_option.php');
 }
 
+$blogtitle = $option['ZC_BLOG_NAME'] . '-' . $option['ZC_BLOG_SUBNAME'];
+$blogname = $option['ZC_BLOG_NAME'];
+$blogsubname = $option['ZC_BLOG_SUBNAME'];
+
 $option['ZC_BLOG_PRODUCT_FULL']=$option['ZC_BLOG_PRODUCT'] . ' ' . $option['ZC_BLOG_VERSION'];
 $option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title="RainbowSoft Z-BlogPHP">' . $option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
 header('Product:' . $option['ZC_BLOG_PRODUCT_FULL']);
 $lang = require_once($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
-$action=null;
 
 date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 
@@ -52,7 +57,7 @@ if($option['ZC_DATABASE_TYPE']){
 }
 
 #加载对象
-$lib_array = array('base', 'log','category','comment','counter','member','module','tag','template','upload');
+$lib_array = array('base', 'post','category','comment','counter','member','module','tag','template','upload');
 foreach ($lib_array as $f) {
 	require_once $blogpath.'zb_system/function/lib/' . $f . '.php';
 }
@@ -73,6 +78,7 @@ $actions=array(
 	'verify'=>5,
 	'admin'=>4,
 	'misc'=>5,
+
 	'SettingMng'=>1,
 	'ArticleEdt'=>3,
 	'ArticleDel'=>3,

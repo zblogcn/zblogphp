@@ -14,8 +14,8 @@
 return array(
 	// '---------------------------------网站基本设置-----------------------------------
 	'ZC_BLOG_HOST' => 'http://localhost/',
-	'ZC_BLOG_TITLE' => '我的网站',
-	'ZC_BLOG_SUBTITLE' => 'Good Luck To You!',
+	'ZC_BLOG_NAME' => '我的网站',
+	'ZC_BLOG_SUBNAME' => 'Good Luck To You!',
 	'ZC_BLOG_THEME' => 'default',
 	'ZC_BLOG_CSS' => 'default',
 	'ZC_BLOG_COPYRIGHT' => 'Copyright Your WebSite.Some Rights Reserved.',

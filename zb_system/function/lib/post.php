@@ -8,14 +8,14 @@
 
  
 
-class Log extends Base{
+class Post extends Base{
 
 
 	function __construct()
 	{
 		$this->zbp=&$GLOBALS['zbp'];
-		$this->table=&$this->zbp->table['Log'];	
-		$this->datainfo=&$this->zbp->datainfo['Log'];
+		$this->table=&$this->zbp->table['Post'];	
+		$this->datainfo=&$this->zbp->datainfo['Post'];
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];
@@ -52,7 +52,7 @@ class Log extends Base{
 				return $this->zbp->GetMemberByID($this->AuthorID);
 				break;
 			case 'StatusName':
-				return $this->zbp->lang['article_status_name'][$this->Status];
+				return $this->zbp->lang['post_status_name'][$this->Status];
 				break;
 			default:
 				return $this->Data[$name];

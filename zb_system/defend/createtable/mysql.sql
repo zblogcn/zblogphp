@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS %pre%log (
+CREATE TABLE IF NOT EXISTS %pre%post (
   log_ID int(11) NOT NULL AUTO_INCREMENT,
   log_CateID int(11) NOT NULL DEFAULT '0',
   log_AuthorID int(11) NOT NULL DEFAULT '0',

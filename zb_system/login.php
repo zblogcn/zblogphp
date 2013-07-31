@@ -19,7 +19,7 @@ if ($zbp->CheckRights('admin')) {
 	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
 	<script src="script/common.js" type="text/javascript"></script>
 	<script src="script/md5.js" type="text/javascript"></script>
-	<title><?php echo $option['ZC_BLOG_TITLE'] . '-' . $lang['msg']['login']?></title>
+	<title><?php echo $blogname . '-' . $lang['msg']['login']?></title>
 </head>
 <body>
 <div class="bg">

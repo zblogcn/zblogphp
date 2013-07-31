@@ -14,7 +14,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
 
-	$zbp->title=$zbp->option['ZC_BLOG_SUBTITLE'];
+
 
 	$zbp->template->display($zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']);
 
