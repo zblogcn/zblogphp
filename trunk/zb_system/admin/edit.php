@@ -38,43 +38,43 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
       <input type="hidden" name="edtID" id="edtID" value="0" />
       <input type="hidden" name="edtFType" id="edtFType" value="0" />
       <!-- title( -->
-      <p><span class='editinputname'><?php echo $lang['msg']['title']?>:</span>
-        <input type="text" name="edtTitle" id="edtTitle" style="width:60%;max-width:520px" maxlength="100" onBlur="if(this.value=='') this.value='<?php echo $lang['msg']['unnamed']?>'" onFocus="if(this.value=='<?php echo $lang['msg']['unnamed']?>') this.value=''" value="<?php echo $lang['msg']['unnamed']?>" />
-      </p>
-      <!-- )title --> 
-      
-      <!-- alias( -->
-      <p><span class='editinputname'><?php echo $lang['msg']['alias']?>:</span>
-        <input type="text" style="width:60%;max-width:520px" name="edtAlias" id="edtAlias" maxlength="250" value="" />
-      </p>
-      <!-- )alias --> 
-      
-      <!-- tags( -->
-      
-      <p><span class='editinputname'><?php echo $lang['msg']['tags']?>:</span>
-        <input type="text" style="width:60%;max-width:520px" name="edtTag" id="edtTag" value="" />
-        (<?php echo $lang['msg']['use_commas_to_separate']?>) <a href="#" id="showtags"><?php echo $lang['msg']['show_common_tags']?></a></p>
-      <!-- Tags -->
-      <div id="ulTag" style="display:none;">
-        <div id="ajaxtags">Watting...</div>
+		<div id='titleheader' class='editmod'>
+			<label for="edtTitle" class="editinputname" ><?php echo $lang['msg']['title']?></label>
+			<div><input type="text" name="edtTitle" id="edtTitle"  maxlength="100" onBlur="if(this.value=='') this.value='<?php echo $lang['msg']['unnamed']?>'" onFocus="if(this.value=='<?php echo $lang['msg']['unnamed']?>') this.value=''" value="<?php echo $lang['msg']['unnamed']?>" /></div>
       </div>
-      
-      <!-- )tags --> 
-      
+      <!-- )title --> 
+  
     </div>
     
     <!-- 1号输出接口 -->
     
     <div id="divContent" style="clear:both;">
-      <p style="text-align:left;"><span class='editinputname'><?php echo $lang['msg']['content']?>:</span>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class='editinputname'></span><script type="text/javascript" src="c_autosaverjs.asp?act=edit"></script></p>
-      <textarea id="editor_content" name="txaContent"></textarea>
-      <div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Watting...</div>
-      <p><span><?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></p>
-    </div>
-    <div id="divIntro" style="display:none;">
-      <p><span class='editinputname'><?php echo $lang['msg']['intro']?>:</span></p>
-      <textarea id="editor_intro" name="txaIntro"></textarea>
-      <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Watting...</div>
+		<div id='cheader' class='editmod'><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="c_autosaverjs.asp?act=edit"></script></div>
+		<div id='carea' class='editmod'><textarea id="editor_content" name="txaContent"></textarea></div>
+		<div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Watting...</div>
+
+      <!-- alias( -->
+      <div id='alias' class='editmod'><label for="edtAlias" class="editinputname" ><?php echo $lang['msg']['alias']?></label>
+        <input type="text" name="edtAlias" id="edtAlias" maxlength="250" value="" />
+        .html </div>
+      <!-- )alias --> 
+
+	 <!-- tags( -->
+      <div id='tags' class='editmod'><label  for="edtTag"  class='editinputname'><?php echo $lang['msg']['tags']?></label>
+        <input type="text"  name="edtTag" id="edtTag" value="" />
+        (<?php echo $lang['msg']['use_commas_to_separate']?>) <a href="#" id="showtags"><?php echo $lang['msg']['show_common_tags']?></a></div>
+      <!-- Tags -->
+      <div id="ulTag" style="display:none;">
+        <div id="ajaxtags">Watting...</div>
+      </div>
+      <!-- )tags --> 
+
+       <div id='insertintro' class='editmod'><span><?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
+		</div>   
+		<div id="divIntro" style="display:none;">
+       <div id='introheader' class='editmod'><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
+       <textarea id="editor_intro" name="txaIntro"></textarea>
+       <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Watting...</div>
     </div>
     
     <!-- 2号输出接口 -->
@@ -86,76 +86,71 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
     <div id="divEditPost">
       <div id="divBox">
         <div id="divFloat">
-          <p>
-            <input class="button" style="width:150px;height:30px;" type="submit" value="提交" id="btnPost" onclick='return checkArticleInfo();' />
-          </p>
+          <div id='post' class='editmod'>
+            <input class="button" style="width:180px;height:38px;" type="submit" value="提交" id="btnPost" onclick='return checkArticleInfo();' />
+          </div>
           
           <!-- cate -->
-          <p>
-            
-            <span class='editinputname'><?php echo $lang['msg']['category']?>:</span>
-            <select style="width:150px;" class="edit" size="1" id="cmbCate" onChange="edtCateID.value=this.options[this.selectedIndex].value;selectlogtemplate(this.options[this.selectedIndex].value);">
+          <div id='cate' class='editmod'>
+            <label for="cmbCate" class="editinputname" ><?php echo $lang['msg']['category']?></label>
+            <select style="width:180px;" class="edit" size="1" id="cmbCate" onChange="edtCateID.value=this.options[this.selectedIndex].value;selectlogtemplate(this.options[this.selectedIndex].value);">
             </select>
             <input type="hidden" name="edtCateID" id="edtCateID" value="0" />
-            
-          </p>
+          </div>
           <!-- cate --> 
           
           <!-- template( -->
-          <p> <span class='editinputname'><?php echo $lang['msg']['template']?>:</span>
-            <select style="width:150px;" class="edit" size="1" id="cmbTemplate" onChange="edtTemplate.value=this.options[this.selectedIndex].value">
+
+          <div id='template' class='editmod'> <label for="cmbTemplate" class="editinputname" ><?php echo $lang['msg']['template']?></label>
+            <select style="width:180px;" class="edit" size="1" id="cmbTemplate" onChange="edtTemplate.value=this.options[this.selectedIndex].value">
               <option value="PAGE">PAGE</option><option value="SINGLE" selected="selected">SINGLE(<?php echo $lang['msg']['default_template']?>)</option><option value="TOP">TOP</option>
             </select>
             <input type="hidden" name="edtTemplate" id="edtTemplate" value="" />
-          </p>
+          </div>
           <!-- )template --> 
           
           <!-- level -->
-          <p> <span class='editinputname'><?php echo $lang['msg']['status']?>:</span>
-            <select class="edit" style="width:150px;" size="1" id="cmbArticleLevel" onChange="edtLevel.value=this.options[this.selectedIndex].value">
+          <div id='level' class='editmod'> <label for="cmbArticleLevel" class="editinputname" ><?php echo $lang['msg']['status']?></label>
+            <select class="edit" style="width:180px;" size="1" id="cmbArticleLevel" onChange="edtLevel.value=this.options[this.selectedIndex].value">
+
               <option value="0" ><?php echo $lang['post_status_name']['0']?></option><option value="1" ><?php echo $lang['post_status_name']['1']?></option><option value="2" ><?php echo $lang['post_status_name']['2']?></option>
             </select>
             <input type="hidden" name="edtLevel" id="edtLevel" value="4" />
-          </p>
+          </div>
           <!-- )level --> 
           
           <!-- user( -->
-          <p> <span class='editinputname'><?php echo $lang['msg']['author']?>:</span>
-            <select style="width:150px;" size="1" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
+          <div id='user' class='editmod'> <label for="cmbUser" class="editinputname" ><?php echo $lang['msg']['author']?></label>
+            <select style="width:180px;" size="1" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
+
               <option value="1" selected="selected">zblogger</option>
             </select>
             <input type="hidden" name="edtAuthorID" id="edtAuthorID" value="1" />
-          </p>
+          </div>
           <!-- )user --> 
           
           <!-- newdatetime( -->
-          <p> <span class='editinputname'><?php echo $lang['msg']['date']?>:</span><span>
-            <input type="text" name="edtDateTime" id="edtDateTime"  value="" style="width:141px;"/>
-            </span> </p>
+          <div id='newdatetime' class='editmod'> <label for="edtDateTime" class="editinputname" ><?php echo $lang['msg']['date']?></label>
+            <input type="text" name="edtDateTime" id="edtDateTime"  value="" style="width:171px;"/>
+            </div>
+
           <!-- )newdatetime --> 
           
           <!-- Istop( -->
-          <p>
-            
-            <label><span class='editinputname'><?php echo $lang['msg']['top']?>:
-              
-              <input type="checkbox" name="edtIstop" id="edtIstop" value="True"/>
-              
-              </span></label>
-            
-          </p>
+          <div id='istop' class='editmod'>    
+            <label for="edtIstop" class="editinputname" ><?php echo $lang['msg']['top']?></label>
+            <input type="checkbox" name="edtIstop" id="edtIstop" value="True"/>
+          </div>
+
           <!-- )Istop --> 
-          <p>
-            
-            <label><span class='editinputname'><?php echo $lang['msg']['disable_comment']?>:
-              
-              <input type="checkbox" name="edtIslock" id="edtIslock" value="True"/>
-              
-              </span></label>
-            
-          </p>
+	  
           <!-- IsLock( -->
 
+          <div id='islock' class='editmod'>
+            
+            <label for="edtIslock" class='editinputname'><?php echo $lang['msg']['disable_comment']?></label>
+             <input type="checkbox" name="edtIslock" id="edtIslock" value="True"/>
+         </div>
           <!-- )IsLock --> 
 
           <!-- Navbar( -->
