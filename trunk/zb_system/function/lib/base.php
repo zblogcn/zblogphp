@@ -137,7 +137,6 @@ abstract class Base
 			}
 			$s .= implode(',', $a);
 			$s .= ")";
-			Logs($s);
 			$this->ID = $this->db->Insert($s);
 		} else {
 			$s="UPDATE " . $this->table . " SET ";
@@ -154,7 +153,6 @@ abstract class Base
 			}
 			$s .= implode(', ', $a);
 			$s .= " WHERE " . $this->datainfo['ID'][0] . "=" . $this->ID;
-			Logs($s);
 			return $this->db->Update($s);
 		}
 

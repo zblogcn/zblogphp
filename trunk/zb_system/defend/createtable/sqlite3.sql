@@ -136,13 +136,13 @@ CREATE TABLE %pre%upload (
   ul_Meta Meta text NOT NULL DEFAULT ''
 );
 
-CREATE INDEX %pre%log_PostTime on %pre%Log (log_PostTime);
-CREATE INDEX %pre%comm_PostTime on %pre%Comment (comm_PostTime);
-CREATE INDEX %pre%mem_Name on %pre%Member (mem_Name);
-CREATE UNIQUE INDEX %pre%tag_ID on %pre%Tag (tag_ID);
-CREATE UNIQUE INDEX %pre%log_ID on %pre%Log (log_ID);
-CREATE UNIQUE INDEX %pre%cate_ID on %pre%Category (cate_ID);
-CREATE UNIQUE INDEX %pre%comm_ID on %pre%Comment (comm_ID);
-CREATE UNIQUE INDEX %pre%ul_ID on %pre%UpLoad (ul_ID);
-CREATE UNIQUE INDEX %pre%mem_ID on %pre%Member (mem_ID);
-CREATE UNIQUE INDEX %pre%mod_ID on %pre%Module (mod_ID);
+CREATE INDEX %pre%log_PostTime on %pre%post (log_PostTime);
+CREATE INDEX %pre%comm_PostTime on %pre%comment (comm_PostTime);
+CREATE INDEX %pre%mem_Name on %pre%member (mem_Name);
+CREATE UNIQUE INDEX %pre%tag_ID on %pre%tag (tag_ID);
+CREATE UNIQUE INDEX %pre%log_ID on %pre%post (log_ID);
+CREATE UNIQUE INDEX %pre%cate_ID on %pre%category (cate_ID);
+CREATE UNIQUE INDEX %pre%comm_ID on %pre%comment (comm_ID);
+CREATE UNIQUE INDEX %pre%ul_ID on %pre%upLoad (ul_ID);
+CREATE UNIQUE INDEX %pre%mem_ID on %pre%member (mem_ID);
+CREATE UNIQUE INDEX %pre%mod_ID on %pre%module (mod_ID);
