@@ -7,27 +7,6 @@
  */
 
 
-function CheckRights($action){
-
-	if(is_int($action)){
-		if ($GLOBALS['zbp']->user->Level > $action) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	if ($GLOBALS['zbp']->user->Level > $GLOBALS['actions'][$action]) {
-		return false;
-	} else {
-		return true;
-	}	
-
-}
-
-
-
-
 function ViewList($page,$cate,$auth,$date,$tags){
 	global $zbp;
 	foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {

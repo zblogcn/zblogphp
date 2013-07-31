@@ -3,7 +3,7 @@ require_once './function/c_system_base.php';
 
 $zbp->Initialize();
 
-if (CheckRights('admin')) {
+if ($zbp->CheckRights('admin')) {
 	redirect('cmd.php?act=admin');
 }
 

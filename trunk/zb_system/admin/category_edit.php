@@ -12,7 +12,7 @@ require_once '../function/c_system_admin.php';
 $zbp->Initialize();
 
 $action='CategoryEdt';
-if (!CheckRights($action)) {throw new Exception($lang['error'][6]);}
+if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
 $blogtitle=$option['ZC_BLOG_TITLE'] . '-' . '分类编辑';
 

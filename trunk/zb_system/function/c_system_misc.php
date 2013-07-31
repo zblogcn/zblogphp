@@ -11,19 +11,19 @@ ob_clean();
 
 switch (GetVars('type','GET')) {
 	case 'statistic':
-		if (!CheckRights(4)) {throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights(4)) {throw new Exception($lang['error'][6]);}
 		misc_statistic();
 		break;
 	case 'updateinfo':
-		if (!CheckRights(4)) {throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights(4)) {throw new Exception($lang['error'][6]);}
 		misc_updateinfo();
 		break;
 	case 'commontags':
-		if (!CheckRights(4)) {throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights(4)) {throw new Exception($lang['error'][6]);}
 		misc_commontags();
 		break;
 	case 'vrs':
-		if (!CheckRights(5)) {throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights(5)) {throw new Exception($lang['error'][6]);}
 		misc_viewrights();
 		break;		
 	default:
