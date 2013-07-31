@@ -410,17 +410,9 @@ class ZBlogPHP{
 
 	
 	function GetArticleList($where=array(),$order=array(),$limit=array(),$option=array()){
-		$array=null;
-		$list=array();
+
 		$s = "SELECT * FROM " . $this->table['Log'] . " ";
-		$array=$this->db->Query($s);
-		if(!isset($array)){return array();}
-		foreach ($array as $a) {
-			$l=new Log();
-			$l->LoadInfoByAssoc($a);
-			$list[]=$l;
-		}		
-		return $list;
+		return $this->GetList('Log',$s);
 	}
 
 	function GetPageList($where=array(),$order=array(),$limit=array(),$option=array()){
@@ -431,45 +423,37 @@ class ZBlogPHP{
 	}
 
 	function GetMemberList($where=array(),$order=array(),$limit=array(),$option=array()){
-		$array=null;
-		$list=array();
+
 		$s = "SELECT * FROM " . $this->table['Member'] . " ";
-		$array=$this->db->Query($s);
-		if(!isset($array)){return array();}
-		foreach ($array as $a) {
-			$l=new Member();
-			$l->LoadInfoByAssoc($a);
-			$list[]=$l;
-		}		
-		return $list;
+		return $this->GetList('Member',$s);
+
 	}
 
 	function GetCategoryList($where=array(),$order=array(),$limit=array(),$option=array()){
-		$array=null;
-		$list=array();
+
 		$s = "SELECT * FROM " . $this->table['Category'] . " ";
-		$array=$this->db->Query($s);
-		if(!isset($array)){return array();}
-		foreach ($array as $a) {
-			$l=new Category();
-			$l->LoadInfoByAssoc($a);
-			$list[]=$l;
-		}		
-		return $list;
+		return $this->GetList('Category',$s);
+
 	}
 	function GetModuleList($where=array(),$order=array(),$limit=array(),$option=array()){
+
+		$s = "SELECT * FROM " . $this->table['Module'] . " ";
+		return $this->GetList('Module',$s);
+	}
+
+	function GetList($type,$sql){
 		$array=null;
 		$list=array();
-		$s = "SELECT * FROM " . $this->table['Module'] . " ";
-		$array=$this->db->Query($s);
+		$array=$this->db->Query($sql);
+		if(!isset($array)){return array();}
 		foreach ($array as $a) {
-			$l=new Module();
+			$l=new $type();
 			$l->LoadInfoByAssoc($a);
 			$list[]=$l;
 		}		
 		return $list;
 	}
-
+	
 	function GetCategoryByID($id){
 		if(isset($this->categorys[$id])){
 			return $this->categorys[$id];
@@ -486,6 +470,24 @@ class ZBlogPHP{
 		}
 	}	
 
+	
+	function CheckRights($action){
+
+		if(is_int($action)){
+			if ($GLOBALS['zbp']->user->Level > $action) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		if ($GLOBALS['zbp']->user->Level > $GLOBALS['actions'][$action]) {
+			return false;
+		} else {
+			return true;
+		}	
+
+	}
 
 }
 

@@ -66,7 +66,7 @@ function MakeTopMenu($requireAction,$strName,$strUrl,$strLiId,$strTarget){
 	global $zbp;
 
 	static $AdminTopMenuCount=0;
-	if (CheckRights($requireAction)==false) {
+	if ($zbp->CheckRights($requireAction)==false) {
 		return null;
 	}
 
@@ -83,7 +83,7 @@ function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUr
 	global $zbp;
 
 	static $AdminLeftMenuCount=0;
-	if (CheckRights($requireAction)==false) {
+	if ($zbp->CheckRights($requireAction)==false) {
 		return null;
 	}
 

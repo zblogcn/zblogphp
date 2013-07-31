@@ -13,7 +13,7 @@ $zbp->Initialize();
 #$zbp->BuildTemplate();
 
 $action=(GetVars('act','GET')=='') ? 'admin' : GetVars('act','GET') ;
-if (!CheckRights($action)) {throw new Exception($lang['error'][6]);}
+if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
 $f=null;
 switch ($action) {
