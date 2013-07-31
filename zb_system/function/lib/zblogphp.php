@@ -343,7 +343,7 @@ class ZBlogPHP{
 		$this->templatetags['zblogphp']=&$this->option['ZC_BLOG_PRODUCT_FULL'];		
 		$this->templatetags['zblogphphtml']=&$this->option['ZC_BLOG_PRODUCT_FULLHTML'];
 
-		$this->templatetags['modules']=&$this->modulesbyfilename;	
+		$this->templatetags['modules']=&$this->modulesbyfilename;
 
 		$s=array(
 			$option['ZC_SIDEBAR_ORDER'],
@@ -409,39 +409,75 @@ class ZBlogPHP{
 
 	}
 
+	function ParseSql($type,$sql,$where,$order,$limit,$option){
 
+
+
+		if(!empty($where)) {
+			$sql .= ' WHERE ';
+			$comma = '';
+			foreach($where as $k=>$v) {
+				$v = addslashes($v);
+				$sql .= $comma . " $k = '$v' ";					
+			}
+		}
+
+		if(!empty($order)) {
+			$sql .= ' ORDER BY ';
+			$comma = '';
+			foreach($order as $k=>$v) {
+				$sql .= $comma ."$k $v";
+				$comma = ',';
+			}
+		}
+
+		if(!empty($limit)){
+			if(!isset($limit[1])){
+				$sql .= " LIMIT $limit[0]";
+			}else{
+				$sql .= " LIMIT $limit[0], $limit[1]";
+			}
+
+		}
+		Logs($sql);
+		return $sql;
+
+	}
 
 	
-	function GetArticleList($where=array(),$order=array(),$limit=array(),$option=array()){
+	function GetArticleList($where=null,$order=null,$limit=null,$option=null){
 
-		$s = "SELECT * FROM " . $this->table['Post'] . " ";
-		return $this->GetList('Post',$s);
+		$sql = "SELECT * FROM {$this->table['Post']} ";
+
+		$sql = $this->ParseSql('Post',$sql,$where,$order,$limit,$option);
+
+		return $this->GetList('Post',$sql);
 	}
 
-	function GetPageList($where=array(),$order=array(),$limit=array(),$option=array()){
+	function GetPageList($where=null,$order=null,$limit=null,$option=null){
 	}
 
-	function GetCommentList($where=array(),$order=array(),$limit=array(),$option=array()){
-
-	}
-
-	function GetMemberList($where=array(),$order=array(),$limit=array(),$option=array()){
-
-		$s = "SELECT * FROM " . $this->table['Member'] . " ";
-		return $this->GetList('Member',$s);
+	function GetCommentList($where=null,$order=null,$limit=null,$option=null){
 
 	}
 
-	function GetCategoryList($where=array(),$order=array(),$limit=array(),$option=array()){
+	function GetMemberList($where=null,$order=null,$limit=null,$option=null){
 
-		$s = "SELECT * FROM " . $this->table['Category'] . " ";
-		return $this->GetList('Category',$s);
+		$sql = "SELECT * FROM " . $this->table['Member'] . " ";
+		return $this->GetList('Member',$sql);
 
 	}
-	function GetModuleList($where=array(),$order=array(),$limit=array(),$option=array()){
 
-		$s = "SELECT * FROM " . $this->table['Module'] . " ";
-		return $this->GetList('Module',$s);
+	function GetCategoryList($where=null,$order=null,$limit=null,$option=null){
+
+		$sql = "SELECT * FROM " . $this->table['Category'] . " ";
+		return $this->GetList('Category',$sql);
+
+	}
+	function GetModuleList($where=null,$order=null,$limit=null,$option=null){
+
+		$sql = "SELECT * FROM " . $this->table['Module'] . " ";
+		return $this->GetList('Module',$sql);
 	}
 
 	function GetList($type,$sql){

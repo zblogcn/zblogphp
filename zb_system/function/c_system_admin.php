@@ -120,7 +120,7 @@ function Admin_SiteInfo(){
 
 	echo '</div>';
 	include_once $zbp->path . "zb_system/defend/thanks.html";
-
+	echo '<script type="text/javascript">ActiveTopMenu("topmenu1");</script>';
 }
 
 
@@ -129,29 +129,29 @@ function Admin_ArticleMng(){
 	global $zbp;
 
 
-	echo '<div class="divHeader">文章管理</div>';
+	echo '<div class="divHeader">' . $zbp->lang['msg']['article_manage'] . '</div>';
 	echo '<div class="SubMenu"></div><div id="divMain2">';
 	echo '<form class="search" id="edit" method="post" action="#"></form>';
 	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
 	echo '<tr>
-	<th>ID</th>
-	<th>分类</th>
-	<th>用户名</th>
-	<th>标题</th>
-	<th>时间</th>
-	<th>评论</th>
-	<th>类型</th>
+	<th>' . $zbp->lang['msg']['id'] . '</th>
+	<th>' . $zbp->lang['msg']['category'] . '</th>
+	<th>' . $zbp->lang['msg']['author'] . '</th>
+	<th>' . $zbp->lang['msg']['title'] . '</th>
+	<th>' . $zbp->lang['msg']['date'] . '</th>
+	<th>' . $zbp->lang['msg']['comment'] . '</th>
+	<th>' . $zbp->lang['msg']['status'] . '</th>
 	<th></th>
 	</tr>';
 
-$array=$zbp->GetArticleList();
+$array=$zbp->GetArticleList(array('log_CateID'=>'0'),'',array(150),'');
 foreach ($array as $article) {
 	echo '<tr>';
 	echo '<td class="td5">' . $article->ID . '</td>';
 	echo '<td class="td10">' . $article->Category->Name . '</td>';
 	echo '<td class="td10">' . $article->Author->Name . '</td>';
 	echo '<td>' . $article->Title . '</td>';
-	echo '<td class="td15">' . date('Y年m月d日',$article->PostTime) . '</td>';
+	echo '<td class="td15">' . date('Y-m-d h:i:s',$article->PostTime) . '</td>';
 	echo '<td class="td5">' . $article->CommNums . '</td>';
 	echo '<td class="td5">' . $article->StatusName . '</td>';
 	echo '<td class="td10 tdCenter">';
@@ -226,7 +226,7 @@ function Admin_ModuleMng(){
 function Admin_SettingMng(){
 
 	global $zbp;
-	
+	echo '<script type="text/javascript">ActiveTopMenu("topmenu2");</script>';
 }
 
 ?>

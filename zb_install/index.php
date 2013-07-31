@@ -14,9 +14,6 @@
 
 require_once '../zb_system/function/c_system_base.php';
 
-#加载默认的c_option.php
-#$option = require_once($blogpath . 'zb_system/defend/c_option.php');
-
 define('bingo','<span class="bingo"></span>');
 define('error','<span class="error"></span>');
 
@@ -919,6 +916,8 @@ function InsertInfo(){
 
 function SaveConfig(){
 
+  #加载默认的c_option.php
+  $GLOBALS['zbp']->option = require($GLOBALS['zbp']->path . 'zb_system/defend/c_option.php');
 
   $GLOBALS['zbp']->option['ZC_DATABASE_TYPE']=GetVars('dbtype','POST');
 

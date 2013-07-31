@@ -10,10 +10,12 @@ return array(
 
 #Front-End & Back-End
 'msg'=>array(
+	'id'=>'ID',
 	'name'=>'名称',
 	'title'=>'标题',
 	'alias'=>'别名',
 	'tags'=>'标签',
+	'comment'=>'评论',
 	'content'=>'正文',
 	'intro'=>'摘要',
 	'date'=>'日期',
