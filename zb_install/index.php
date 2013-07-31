@@ -129,7 +129,7 @@ function Setup1(){
     <p><b>安装协议</b>» 环境检查 » 数据库建立与设置 » 安装结果</p>
   </dd>
   <dd id="ddright">
-    <div id="title">Z-BlogPHP<?php echo $GLOBALS['zbp']->option['ZC_BLOG_VERSION']?>安装协议</div>
+    <div id="title">Z-BlogPHP <?php echo $GLOBALS['zbp']->option['ZC_BLOG_VERSION']?>安装协议</div>
     <div id="content">
       <textarea readonly>
 Z-BlogPHP  最终用户授权协议 
@@ -708,7 +708,7 @@ function InsertInfo(){
   $t->Source="system";
   $t->SidebarID=1;
   $t->Order=3;
-  $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">[用户登录]</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=vrs">[查看权限]</a></span>';
+  $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">[用户登录]</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">[查看权限]</a></span>';
   $t->HtmlID="divContorPanel";
   $t->Type="div";
   $t->Post();
