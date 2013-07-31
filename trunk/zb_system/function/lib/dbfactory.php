@@ -44,7 +44,7 @@ class DbFactory #extends AnotherClass
 
 $table=array(
 
-'Log'=> '%pre%log',
+'Post'=> '%pre%post',
 'Category'=> '%pre%category',
 'Comment'=> '%pre%comment',
 'Tag'=> '%pre%tag',
@@ -58,7 +58,7 @@ $table=array(
 
 
 $datainfo=array(
-'Log'=> array(
+'Post'=> array(
 	'ID'=>array('log_ID','integer','',0),
 	'CateID'=>array('log_CateID','integer','',0),
 	'AuthorID'=>array('log_AuthorID','integer','',0),

@@ -179,20 +179,20 @@ class Template{
 	//}
 
 	#模板入口
-	public function Display($name)
+	public function Display($templatename)
 	{
 		#入口处将tags里的变量提升全局!!!
 		foreach ($this->tags as $key => &$value) {
 			$$key=&$value;
 		}
-		include $this->path . $name . '.php';
+		include $this->path . $templatename . '.php';
 	}
 
-	public function Output($name)
+	public function Output($templatename)
 	{
 
 		ob_start();
-		$this->Display($name);
+		$this->Display($templatename);
 		$data = ob_get_contents();
 		ob_end_clean();
 		return $data;

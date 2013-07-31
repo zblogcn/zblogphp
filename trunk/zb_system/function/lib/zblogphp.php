@@ -29,6 +29,8 @@ class ZBlogPHP{
 
 	public $templatetags=array();	
 	public $title=null;
+	public $name=null;
+	public $subname=null;
 
 	public $user=null;
 	public $cache=array();
@@ -73,8 +75,9 @@ class ZBlogPHP{
 		$this->option['ZC_BLOG_HOST']=&$GLOBALS['bloghost'];
 		//define();
 
-
-		$this->title=$this->option['ZC_BLOG_TITLE'] . '-' . $this->option['ZC_BLOG_SUBTITLE'];
+		$this->title=&$GLOBALS['blogtitle'];
+		$this->name=&$GLOBALS['blogname'];
+		$this->subname=&$GLOBALS['blogsubname'];
 
 	}
 
@@ -331,8 +334,8 @@ class ZBlogPHP{
 		$this->templatetags['host']=&$this->host;	
 		$this->templatetags['path']=&$this->path;
 		$this->templatetags['cookiespath']=&$this->cookiespath;
-		$this->templatetags['blogtitle']=&$this->option['ZC_BLOG_TITLE'];	
-		$this->templatetags['blogsubtitle']=&$this->option['ZC_BLOG_SUBTITLE'];
+		$this->templatetags['name']=&$this->name;	
+		$this->templatetags['subname']=&$this->subname;
 		$this->templatetags['theme']=&$this->option['ZC_BLOG_THEME'];
 		$this->templatetags['style']=&$this->option['ZC_BLOG_STYLE'];
 		$this->templatetags['language']=&$this->option['ZC_BLOG_LANGUAGE'];
@@ -411,8 +414,8 @@ class ZBlogPHP{
 	
 	function GetArticleList($where=array(),$order=array(),$limit=array(),$option=array()){
 
-		$s = "SELECT * FROM " . $this->table['Log'] . " ";
-		return $this->GetList('Log',$s);
+		$s = "SELECT * FROM " . $this->table['Post'] . " ";
+		return $this->GetList('Post',$s);
 	}
 
 	function GetPageList($where=array(),$order=array(),$limit=array(),$option=array()){

@@ -86,7 +86,7 @@ return array(
 ),
 
 //Article Level
-'article_status_name'=>array(
+'post_status_name'=>array(
 '0'=>'公开',
 '1'=>'私人',
 '2'=>'草稿',

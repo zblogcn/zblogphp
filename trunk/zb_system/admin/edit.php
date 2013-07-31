@@ -14,7 +14,7 @@ $zbp->Initialize();
 $action='ArticleEdt';
 if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
-$blogtitle=$option['ZC_BLOG_TITLE'] . '-' . $lang['msg']['article_edit'];
+$blogtitle=$blogname . '-' . $lang['msg']['article_edit'];
 
 require_once $blogpath . 'zb_system/admin/admin_header.php';
 ?>
@@ -113,7 +113,7 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
           <!-- level -->
           <p> <span class='editinputname'><?php echo $lang['msg']['status']?>:</span>
             <select class="edit" style="width:150px;" size="1" id="cmbArticleLevel" onChange="edtLevel.value=this.options[this.selectedIndex].value">
-              <option value="0" ><?php echo $lang['article_status_name']['0']?></option><option value="1" ><?php echo $lang['article_status_name']['1']?></option><option value="2" ><?php echo $lang['article_status_name']['2']?></option>
+              <option value="0" ><?php echo $lang['post_status_name']['0']?></option><option value="1" ><?php echo $lang['post_status_name']['1']?></option><option value="2" ><?php echo $lang['post_status_name']['2']?></option>
             </select>
             <input type="hidden" name="edtLevel" id="edtLevel" value="4" />
           </p>

@@ -1,4 +1,4 @@
-CREATE TABLE %pre%log (
+CREATE TABLE %pre%post (
   log_ID integer primary key,
   log_CateID integer NOT NULL DEFAULT 0,
   log_AuthorID integer NOT NULL DEFAULT 0,

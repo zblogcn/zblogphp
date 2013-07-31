@@ -873,7 +873,7 @@ function InsertInfo(){
 
 
 
-  $a=new Log();
+  $a=new Post();
   $a->CateID=1;
   $a->AuthorID=1;
   $a->Tag='';
@@ -894,7 +894,7 @@ function InsertInfo(){
   $a->Post();
 
 
-  $a=new Log();
+  $a=new Post();
   $a->CateID=0;
   $a->AuthorID=1;
   $a->Tag='';

@@ -14,7 +14,7 @@ $zbp->Initialize();
 $action='CategoryEdt';
 if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
-$blogtitle=$option['ZC_BLOG_TITLE'] . '-' . '分类编辑';
+$blogtitle=$blogname . '-' . '分类编辑';
 
 require_once $blogpath . 'zb_system/admin/admin_header.php';
 require_once $blogpath . 'zb_system/admin/admin_top.php';

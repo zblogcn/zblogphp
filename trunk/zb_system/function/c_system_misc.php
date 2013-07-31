@@ -63,11 +63,11 @@ function misc_statistic(){
 	$xmlrpc_address=$zbp->host . 'zb_system/xml-rpc/';
 	$current_member=$zbp->user->Name;
 	$current_version=$zbp->option['ZC_BLOG_VERSION'];
-	$all_artiles=GetValueInArray(current($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Log'] . ' WHERE log_Type=0')),'num');
-	$all_pages=GetValueInArray(current($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Log'] . ' WHERE log_Type=0')),'num');	
+	$all_artiles=GetValueInArray(current($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=0')),'num');
+	$all_pages=GetValueInArray(current($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=0')),'num');	
 	$all_categorys=GetValueInArray(current($zbp->db->Query('SELECT COUNT(cate_ID) AS num FROM ' . $GLOBALS['table']['Category'])),'num');
 	$all_comments=GetValueInArray(current($zbp->db->Query('SELECT COUNT(comm_ID) AS num FROM ' . $GLOBALS['table']['Comment'])),'num');
-	$all_views=GetValueInArray(current($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Log'])),'num');
+	$all_views=GetValueInArray(current($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post'])),'num');
 	$all_tags=GetValueInArray(current($zbp->db->Query('SELECT COUNT(tag_ID) as num FROM ' . $GLOBALS['table']['Tag'])),'num');
 	$all_members=GetValueInArray(current($zbp->db->Query('SELECT COUNT(mem_ID) AS num FROM ' . $GLOBALS['table']['Member'])),'num');
 	$current_theme=$zbp->option['ZC_BLOG_THEME'];
@@ -98,7 +98,7 @@ function misc_commontags(){
 function misc_viewrights(){
 	global $zbp;
 
-$blogtitle=$zbp->option['ZC_BLOG_TITLE'] . '-' . $zbp->lang['msg']['view_rights'];
+$blogtitle=$zbp->name . '-' . $zbp->lang['msg']['view_rights'];
 ?><!DOCTYPE HTML>
 <html>
 <head>
