@@ -18,14 +18,12 @@ switch ($action) {
 	case 'admin':
 		redirect('admin/');
 		break;	
-	case 'vrs':
-		ViewRights();
-		break;
 	case 'verify':
 		Login();
 		break;
-	case 'reload':
-		echo Reload(GetVars('QUERY_STRING','SERVER'));
+	case 'misc':
+		require_once './function/c_system_misc.php';
+		#echo Reload(GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'ArticleEdt':
 		redirect('admin/edit.php?' . GetVars('QUERY_STRING','SERVER'));
