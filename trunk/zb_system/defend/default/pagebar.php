@@ -1,1 +1,3 @@
-<a href="<#pagebar/page/url#>"><#pagebar/page/number#></a>
+{foreach $pagebar->buttons as $k=>$v}
+	<a href="{$v}">{$k}</a>
+{/foreach}

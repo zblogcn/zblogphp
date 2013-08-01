@@ -13,7 +13,7 @@ font-family:"微软雅黑","宋体", Arial, Helvetica, sans-serif;
 color:#333333;
 font-size: 14px;
 line-height: 20px;
-background:#ffffff url(../image/admin/bg-left.gif) repeat-y;
+background: url(../image/admin/bg-left1.gif) repeat-y;
 };
 * { padding:0; margin:0;}
 
@@ -117,7 +117,7 @@ background:#ffffdd;
 
 
 /*后台顶部*/
-header {border-bottom:5px solid white;height:85px; padding:0; background:#3a6ea5; position: relative;}
+header {margin-bottom:5px;height:85px; padding:0; background:#3a6ea5; position: relative;}
 header .top { }
 /**/
 .logo { width:190px; height:62px; padding:10px 0 0 0; left:20px;}
@@ -141,9 +141,9 @@ header .top { }
 
 
 /*左边导航*/
-.left { float:left; width:140px; background:#ededed; padding:0px;margin:0 0 0 0;position: absolute;}
+.left { float:left; width:140px; background:; padding:0px;margin:0 0 0 0;position: absolute;}
 .left #leftmenu {}
-.left #leftmenu li { float:left; width:140px; height:32px; margin-bottom:0;border-bottom:5px solid #fff;cursor:pointer;}
+.left #leftmenu li { float:left; width:140px; height:32px; margin-bottom:5px; background:#ededed;cursor:pointer;}
 .left #leftmenu a { float:left;  width:140px; height:32px; line-height:35px;cursor:pointer;}
 .left #leftmenu a:hover { color:#000000; background:#b0cdee;}
 .left #leftmenu span {  float:left;width:90px; height:32px; line-height:32px; padding-right:50px; text-align:right;cursor:pointer;}
@@ -237,12 +237,12 @@ padding-right:10px;
 
 
 /*后台首页*/
-#divMain {float:left;width:100%;background:#ffffff;padding:0px;margin:0px;}
+#divMain {float:left;width:100%;background:;padding:0px;margin:0px;}
 #divMain a,#divMain2 a{color:#1d4c7d;}
 #divMain a:hover,#divMain2  a:hover{color:#d60000;}
 #divMain2 { padding:0px;margin:0px;}
-.divHeader { height:1.8em; line-height:1.8em; font-size:1.5em; padding:0; background:#FFF;}
-.divHeader2 { height:1.8em; line-height:1.8em; font-size:1.5em; padding:0; background:#FFF;border-bottom:5px solid #e0e0e0;}
+.divHeader { height:1.8em; line-height:1.8em; font-size:1.5em; padding:0; background:;}
+.divHeader2 { height:1.8em; line-height:1.8em; font-size:1.5em; padding:0; background:;border-bottom:5px solid #e0e0e0;}
 
 
 

@@ -62,7 +62,7 @@ function misc_statistic(){
 	$current_member=$zbp->user->Name;
 	$current_version=$zbp->option['ZC_BLOG_VERSION'];
 	$all_artiles=GetValueInArray(current($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=0')),'num');
-	$all_pages=GetValueInArray(current($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=0')),'num');	
+	$all_pages=GetValueInArray(current($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=1')),'num');	
 	$all_categorys=GetValueInArray(current($zbp->db->Query('SELECT COUNT(cate_ID) AS num FROM ' . $GLOBALS['table']['Category'])),'num');
 	$all_comments=GetValueInArray(current($zbp->db->Query('SELECT COUNT(comm_ID) AS num FROM ' . $GLOBALS['table']['Comment'])),'num');
 	$all_views=GetValueInArray(current($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post'])),'num');

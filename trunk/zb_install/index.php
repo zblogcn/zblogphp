@@ -236,7 +236,7 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">pdo_mysql</td>
+          <td scope="row">PDO_MySQL</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][1];?></td>
         </tr>
@@ -354,7 +354,7 @@ function Setup3(){
         &nbsp;&nbsp;
         <label class="dbselect" id="pdo_mysql_radio">
           <input value="pdo_mysql" type="radio" name="dbtype" />
-          pdo_mysql</label>
+          PDO_MySQL</label>
         <?php } ?>
         <?php if($CheckResult['sqlite'][0]){?>
         &nbsp;&nbsp;

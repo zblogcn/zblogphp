@@ -143,15 +143,67 @@ function Admin_ArticleMng(){
 	<th>' . $zbp->lang['msg']['status'] . '</th>
 	<th></th>
 	</tr>';
+$p=new Pagebar();
+$p->PageCount=20;
+$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+$p->PageBarCount=10;
 
-$array=$zbp->GetArticleList(array('log_CateID'=>'0'),'',array(150),'');
+$array=$zbp->GetArticleList('','',array(($p->PageNow-1) * $p->PageCount,$p->PageCount),array('pagebar'=>$p));
 foreach ($array as $article) {
 	echo '<tr>';
-	echo '<td class="td5">' . $article->ID . '</td>';
+	echo '<td class="td5">' . $article->ID .  '</td>';
 	echo '<td class="td10">' . $article->Category->Name . '</td>';
 	echo '<td class="td10">' . $article->Author->Name . '</td>';
 	echo '<td>' . $article->Title . '</td>';
-	echo '<td class="td15">' . date('Y-m-d h:i:s',$article->PostTime) . '</td>';
+	echo '<td class="td20">' . date('Y-m-d h:i:s',$article->PostTime) . '</td>';
+	echo '<td class="td5">' . $article->CommNums . '</td>';
+	echo '<td class="td5">' . $article->StatusName . '</td>';
+	echo '<td class="td10 tdCenter">';
+	echo '<a href="../cmd.php?act=ArticleEdt&amp;id='. $article->ID .'"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ArticleDel&amp;id=26"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
+	echo '</td>';
+
+	echo '</tr>';
+}
+	echo '</table>';
+	echo '<hr/><p class="pagebar">';
+
+foreach ($p->buttons as $key => $value) {
+	echo '<a href="?act=ArticleMng&amp;page='. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
+}
+
+	echo '</div>';
+	echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
+
+}
+
+function Admin_PageMng(){
+
+	global $zbp;
+
+
+	echo '<div class="divHeader">' . $zbp->lang['msg']['article_manage'] . '</div>';
+	echo '<div class="SubMenu"></div><div id="divMain2">';
+	echo '<form class="search" id="edit" method="post" action="#"></form>';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<tr>
+	<th>' . $zbp->lang['msg']['id'] . '</th>
+	<th>' . $zbp->lang['msg']['author'] . '</th>
+	<th>' . $zbp->lang['msg']['title'] . '</th>
+	<th>' . $zbp->lang['msg']['date'] . '</th>
+	<th>' . $zbp->lang['msg']['comment'] . '</th>
+	<th>' . $zbp->lang['msg']['status'] . '</th>
+	<th></th>
+	</tr>';
+
+$array=$zbp->GetPageList('','',array(50),'');
+foreach ($array as $article) {
+	echo '<tr>';
+	echo '<td class="td5">' . $article->ID . '</td>';
+	echo '<td class="td10">' . $article->Author->Name . '</td>';
+	echo '<td>' . $article->Title . '</td>';
+	echo '<td class="td20">' . date('Y-m-d h:i:s',$article->PostTime) . '</td>';
 	echo '<td class="td5">' . $article->CommNums . '</td>';
 	echo '<td class="td5">' . $article->StatusName . '</td>';
 	echo '<td class="td10 tdCenter">';
@@ -164,14 +216,7 @@ foreach ($array as $article) {
 }
 	echo '</table>';
 	echo '<hr/><p class="pagebar">分页: </div>';
-	echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
-
-
-}
-
-function Admin_PageMng(){
-
-	global $zbp;
+	echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
 	
 }
 

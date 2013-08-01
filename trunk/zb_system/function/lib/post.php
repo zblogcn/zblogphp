@@ -27,6 +27,11 @@ class Post extends Base{
 	}
 
 
+	public function Time($s=''){
+		return date($s,$this->PostTime);
+	}
+
+
 	public function __set($name, $value) 
 	{
 		switch ($name) {
