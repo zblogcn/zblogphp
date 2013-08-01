@@ -57,7 +57,7 @@ if($option['ZC_DATABASE_TYPE']){
 }
 
 #加载对象
-$lib_array = array('base', 'post','category','comment','counter','member','module','tag','template','upload');
+$lib_array = array('base', 'post','category','comment','counter','member','module','tag','template','upload','pagebar');
 foreach ($lib_array as $f) {
 	require_once $blogpath.'zb_system/function/lib/' . $f . '.php';
 }

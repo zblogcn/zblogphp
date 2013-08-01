@@ -1,1 +1,0 @@
-﻿<script src="<#ZC_BLOG_HOST#>zb_system/function/c_html_js.asp?date=now" type="text/javascript"></script>
