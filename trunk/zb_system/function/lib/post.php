@@ -38,6 +38,7 @@ class Post extends Base{
 			case 'Category':
 			case 'Author':
 			case 'TypeName':
+			case 'Url':			
 				return null;
 				break;
 			default:
@@ -59,6 +60,9 @@ class Post extends Base{
 			case 'StatusName':
 				return $this->zbp->lang['post_status_name'][$this->Status];
 				break;
+			case 'Url':
+				return $this->zbp->host . 'view.php?id=' . $this->ID ;
+				break;				
 			default:
 				return $this->Data[$name];
 				break;

@@ -143,10 +143,12 @@ function Admin_ArticleMng(){
 	<th>' . $zbp->lang['msg']['status'] . '</th>
 	<th></th>
 	</tr>';
+
 $p=new Pagebar();
 $p->PageCount=20;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=10;
+$p->UrlRule='{%host%}zb_system/cmd.php?act=ArticleMng&amp;page={%page%}';
 
 $array=$zbp->GetArticleList('','',array(($p->PageNow-1) * $p->PageCount,$p->PageCount),array('pagebar'=>$p));
 foreach ($array as $article) {
@@ -170,10 +172,10 @@ foreach ($array as $article) {
 	echo '<hr/><p class="pagebar">';
 
 foreach ($p->buttons as $key => $value) {
-	echo '<a href="?act=ArticleMng&amp;page='. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
+	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 
-	echo '</div>';
+	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
 
 }
@@ -183,7 +185,7 @@ function Admin_PageMng(){
 	global $zbp;
 
 
-	echo '<div class="divHeader">' . $zbp->lang['msg']['article_manage'] . '</div>';
+	echo '<div class="divHeader">' . $zbp->lang['msg']['page_manage'] . '</div>';
 	echo '<div class="SubMenu"></div><div id="divMain2">';
 	echo '<form class="search" id="edit" method="post" action="#"></form>';
 	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
@@ -197,7 +199,13 @@ function Admin_PageMng(){
 	<th></th>
 	</tr>';
 
-$array=$zbp->GetPageList('','',array(50),'');
+$p=new Pagebar();
+$p->PageCount=20;
+$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+$p->PageBarCount=10;
+$p->UrlRule='{%host%}zb_system/cmd.php?act=ArticleMng&amp;type=1&amp;page={%page%}';
+
+$array=$zbp->GetPageList('','',array(($p->PageNow-1) * $p->PageCount,$p->PageCount),array('pagebar'=>$p));
 foreach ($array as $article) {
 	echo '<tr>';
 	echo '<td class="td5">' . $article->ID . '</td>';
@@ -215,7 +223,11 @@ foreach ($array as $article) {
 	echo '</tr>';
 }
 	echo '</table>';
-	echo '<hr/><p class="pagebar">分页: </div>';
+	echo '<hr/><p class="pagebar">';
+foreach ($p->buttons as $key => $value) {
+	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
+}	
+	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
 	
 }

@@ -18,6 +18,7 @@ $pagebar=new Pagebar();
 $pagebar->PageCount=5;
 $pagebar->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $pagebar->PageBarCount=10;
+$pagebar->UrlRule='{%host%}?page={%page%}';
 
 $articles=$zbp->GetArticleList('','',array(($pagebar->PageNow-1) * $pagebar->PageCount,$pagebar->PageCount),array('pagebar'=>$pagebar));
 

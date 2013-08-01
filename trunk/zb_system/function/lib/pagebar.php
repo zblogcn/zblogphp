@@ -31,7 +31,10 @@ public $PageLast  = 0;
 public $PagePrevious  = 0;
 public $PageNext  = 0;
 
+public $UrlRule  = '';
+
 public function make(){
+	global $zbp;
 
 	$this->PageAll = ceil($this->Count / $this->PageCount);
 	$this->PageFirst = 1;
@@ -43,9 +46,9 @@ public function make(){
 	$this->PageNext=$this->PageNow+1;
 	if($this->PageNext>$this->PageAll){$this->PageNext=$this->PageAll;}
 
-	$this->buttons['‹‹']=$this->PageFirst;
+	$this->buttons['‹‹']=str_replace(array('{%host%}','{%page%}'), array($zbp->host,$this->PageFirst), $this->UrlRule);
 	if($this->PageNow <> $this->PageFirst){
-		$this->buttons['‹'] = $this->PagePrevious;		
+		$this->buttons['‹'] = str_replace(array('{%host%}','{%page%}'), array($zbp->host,$this->PagePrevious), $this->UrlRule);		
 	}
 
 	$j=$this->PageNow;
@@ -56,12 +59,12 @@ public function make(){
 
 	for ($i=$j; $i < $j+$this->PageBarCount; $i++) { 
 		if($i > $this->PageAll){break;}
-		$this->buttons[$i]=$i;
+		$this->buttons[$i]=str_replace(array('{%host%}','{%page%}'), array($zbp->host,$i), $this->UrlRule);
 	}
 	if($this->PageNow <> $this->PageNext){
-		$this->buttons['›']=$this->PageNext;
+		$this->buttons['›']=str_replace(array('{%host%}','{%page%}'), array($zbp->host,$this->PageNext), $this->UrlRule);
 	}
-	$this->buttons['››']=$this->PageLast;
+	$this->buttons['››']=str_replace(array('{%host%}','{%page%}'), array($zbp->host,$this->PageLast), $this->UrlRule);
 
 }
 
