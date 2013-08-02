@@ -733,7 +733,7 @@ function InsertInfo(){
   $t->Source="system";
   $t->SidebarID=1;
   $t->Order=5;
-  $t->Content='<form method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=Search"><input type="text" name="edtSearch" id="edtSearch" size="12" /> <input type="submit" value="搜索" name="btnPost" id="btnPost" /></form>';
+  $t->Content='<form name="search" method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=search"><input type="text" name="q" size="12" /> <input type="submit" value="搜索" /></form>';
   $t->HtmlID="divSearchPanel";
   $t->Type="div";
   $t->Post();

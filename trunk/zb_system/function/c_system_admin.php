@@ -169,10 +169,11 @@ if(GetVars('status','POST')){
 
 $array=$zbp->GetArticleList(
 	$w,
-	'',
+	array('log_PostTime'=>'DESC'),
 	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
 	array('pagebar'=>$p)
-	);
+);
+
 foreach ($array as $article) {
 	echo '<tr>';
 	echo '<td class="td5">' . $article->ID .  '</td>';
@@ -227,7 +228,13 @@ $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=10;
 $p->UrlRule='{%host%}zb_system/cmd.php?act=ArticleMng&amp;type=1&amp;page={%page%}';
 
-$array=$zbp->GetPageList('','',array(($p->PageNow-1) * $p->PageCount,$p->PageCount),array('pagebar'=>$p));
+$array=$zbp->GetPageList(
+	'',
+	array('log_PostTime'=>'DESC'),
+	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
+	array('pagebar'=>$p)
+);
+
 foreach ($array as $article) {
 	echo '<tr>';
 	echo '<td class="td5">' . $article->ID . '</td>';

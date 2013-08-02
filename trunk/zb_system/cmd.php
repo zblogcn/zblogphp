@@ -21,6 +21,9 @@ switch ($action) {
 	case 'verify':
 		Login();
 		break;
+	case 'search':
+		redirect('../search.php?q=' . urlencode(GetVars('q','POST')));	
+		break;
 	case 'misc':
 		require './function/c_system_misc.php';
 		#echo Reload(GetVars('QUERY_STRING','SERVER'));
