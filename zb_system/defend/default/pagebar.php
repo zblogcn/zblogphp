@@ -1,3 +1,7 @@
 {foreach $pagebar->buttons as $k=>$v}
-	<a href="{$v}">{$k}</a>&nbsp;&nbsp;
+  {if $pagebar->PageNow==$k}
+	<span class="page now-page">{$k}</span>
+  {else}
+	<a href="{$v}"><span class="page">{$k}</span></a>
+  {/if}
 {/foreach}
