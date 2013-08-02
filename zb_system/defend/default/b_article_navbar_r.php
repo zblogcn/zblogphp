@@ -1,1 +1,0 @@
-<a class="r" href="<#article/nav_r/url#>" title="<#article/nav_r/name#>"><#msg148#></a>

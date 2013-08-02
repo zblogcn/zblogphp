@@ -194,7 +194,7 @@ return array(
 	'ZC_TEMPLATE_DIRECTORY' => 'template',
 	#首页，分类页，文章页，页面页的默认模板
 	'ZC_INDEX_DEFAULT_TEMPLATE' => 'default',
-	'ZC_CATALOG_DEFAULT_TEMPLATE' => 'catalog',
+	'ZC_CATALOG_DEFAULT_TEMPLATE' => 'default',
 	'ZC_ARTICLE_DEFAULT_TEMPLATE' => 'single',
 	'ZC_PAGE_DEFAULT_TEMPLATE' => 'page',
 	

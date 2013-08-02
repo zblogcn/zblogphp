@@ -1,1 +1,0 @@
-<a href="<#article/tag/url#>"><#article/tag/name#></a>&nbsp;&nbsp;
