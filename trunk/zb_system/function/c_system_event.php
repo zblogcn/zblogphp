@@ -14,29 +14,30 @@ function ViewList($page,$cate,$auth,$date,$tags){
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
 	
-$pagebar=new Pagebar();
-$pagebar->PageCount=5;
-$pagebar->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
-$pagebar->PageBarCount=10;
-$pagebar->UrlRule='{%host%}?page={%page%}';
+	$pagebar=new Pagebar();
+	$pagebar->PageCount=5;
+	$pagebar->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+	$pagebar->PageBarCount=10;
+	$pagebar->UrlRule='{%host%}?page={%page%}';
 
-$articles=$zbp->GetArticleList('','',array(($pagebar->PageNow-1) * $pagebar->PageCount,$pagebar->PageCount),array('pagebar'=>$pagebar));
+	$articles=$zbp->GetArticleList('','',array(($pagebar->PageNow-1) * $pagebar->PageCount,$pagebar->PageCount),array('pagebar'=>$pagebar));
 
-$zbp->template->SetTags('articles',$articles);
-$zbp->template->SetTags('pagebar',$pagebar);
+	$zbp->template->SetTags('articles',$articles);
+	$zbp->template->SetTags('pagebar',$pagebar);
 
 	$zbp->template->display($zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']);
 
 }
 
-function ViewArticle(){
+function ViewPost($id,$alias){
+	global $zbp;
 
 
-}
+	$article = new Post;
+	$article->LoadInfoByID($id);
+	$zbp->template->SetTags('article',$article);
 
-function ViewPage(){
-
-
+	$zbp->template->display($zbp->option['ZC_ARTICLE_DEFAULT_TEMPLATE']);
 }
 
 

@@ -107,6 +107,11 @@ function Redirect($url){
 }
 
 
+function Http404(){
+	header('HTTP/1.1 404 Not Found');
+	header("status: 404 Not Found");
+}
+
 function Logs($s){
 	$f=$GLOBALS['blogpath'] . 'zb_users/logs/'. $GLOBALS['option']['ZC_BLOG_CLSID'] .'-log' . date("Ymd"). '.txt';
 	$handle = fopen($f, 'a+');
