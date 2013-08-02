@@ -6,8 +6,8 @@
  * @version 2.0 2013-07-05
  */
 
-require_once '../function/c_system_base.php';
-require_once '../function/c_system_admin.php';
+require '../function/c_system_base.php';
+require '../function/c_system_admin.php';
 
 $zbp->Initialize();
 
@@ -16,8 +16,8 @@ if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
 $blogtitle=$blogname . '-' . '分类编辑';
 
-require_once $blogpath . 'zb_system/admin/admin_header.php';
-require_once $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath . 'zb_system/admin/admin_header.php';
+require $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
 <?php
@@ -119,7 +119,7 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
 
 
 <?php
-require_once $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath . 'zb_system/admin/admin_footer.php';
 
 $zbp->Terminate();
 

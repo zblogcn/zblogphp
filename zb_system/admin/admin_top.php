@@ -16,7 +16,7 @@ ResponseAdminTopMenu()
 </header>
 
 <?php
-require_once $blogpath . 'zb_system/admin/admin_left.php';
+require $blogpath . 'zb_system/admin/admin_left.php';
 ?>
 <section class="main">
 <?php

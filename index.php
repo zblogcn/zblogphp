@@ -6,7 +6,7 @@
  * @version
  */
 
-require_once './zb_system/function/c_system_base.php';
+require './zb_system/function/c_system_base.php';
 
 if (!$zbp->option['ZC_DATABASE_TYPE']) {Redirect('./zb_install');}
 
