@@ -12,7 +12,7 @@
  * @return array
  */
 
-require_once '../zb_system/function/c_system_base.php';
+require '../zb_system/function/c_system_base.php';
 
 define('bingo','<span class="bingo"></span>');
 define('error','<span class="error"></span>');

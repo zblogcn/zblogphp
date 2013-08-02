@@ -24,7 +24,7 @@ $bloghost = null;
 
 $option = require($blogpath . 'zb_system/defend/c_option.php');
 if(file_exists($blogpath . 'zb_users/c_option.php')){
-	$option = require_once($blogpath . 'zb_users/c_option.php');
+	$option = require($blogpath . 'zb_users/c_option.php');
 }
 
 $option['ZC_BLOG_PRODUCT_FULL']=$option['ZC_BLOG_PRODUCT'] . ' ' . $option['ZC_BLOG_VERSION'];
@@ -33,33 +33,33 @@ $option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title
 date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 header('Product:' . $option['ZC_BLOG_PRODUCT_FULL']);
 
-$lang = require_once($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+$lang = require($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 
 $blogtitle = $option['ZC_BLOG_NAME'] . '-' . $option['ZC_BLOG_SUBNAME'];
 $blogname = $option['ZC_BLOG_NAME'];
 $blogsubname = $option['ZC_BLOG_SUBNAME'];
 
-require_once $blogpath.'zb_system/function/c_system_debug.php';
-require_once $blogpath.'zb_system/function/c_system_common.php';
-require_once $blogpath.'zb_system/function/c_system_plugin.php';
-require_once $blogpath.'zb_system/function/c_system_event.php';
+require $blogpath.'zb_system/function/c_system_debug.php';
+require $blogpath.'zb_system/function/c_system_common.php';
+require $blogpath.'zb_system/function/c_system_plugin.php';
+require $blogpath.'zb_system/function/c_system_event.php';
 
 $cookiespath = null;
 $bloghost = GetCurrentHost($cookiespath);
 
 #加载zbp
-require_once $blogpath.'zb_system/function/lib/zblogphp.php';
+require $blogpath.'zb_system/function/lib/zblogphp.php';
 
 #加载数据库类
-require_once $blogpath.'zb_system/function/lib/dbfactory.php';
+require $blogpath.'zb_system/function/lib/dbfactory.php';
 if($option['ZC_DATABASE_TYPE']){
-	require_once $blogpath.'zb_system/function/lib/db' . $option['ZC_DATABASE_TYPE'] . '.php';
+	require $blogpath.'zb_system/function/lib/db' . $option['ZC_DATABASE_TYPE'] . '.php';
 }
 
 #加载对象
 $lib_array = array('base', 'post','category','comment','counter','member','module','tag','template','upload','pagebar');
 foreach ($lib_array as $f) {
-	require_once $blogpath.'zb_system/function/lib/' . $f . '.php';
+	require $blogpath.'zb_system/function/lib/' . $f . '.php';
 }
 
 
@@ -116,13 +116,13 @@ $zbp->user=new Member();
 
 #加载主题插件
 if (file_exists($filename=$blogpath.'zb_users/theme/'.$option['ZC_BLOG_THEME'].'/plugin/include.php')) {
-	require_once $filename;
+	require $filename;
 }
 
 #加载激活插件
 foreach (explode("|", $option['ZC_USING_PLUGIN_LIST']) as $plugin) {
 	if ($filename&&file_exists($filename=$blogpath.'zb_users/plugin/'.$plugin.'/include.php')) {
-		require_once $filename;
+		require $filename;
 	}
 }
 
@@ -130,7 +130,7 @@ foreach (explode("|", $option['ZC_USING_PLUGIN_LIST']) as $plugin) {
 
 
 function __autoload($classname) {
-     require_once $GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php';
+     require $GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php';
 }
 
 

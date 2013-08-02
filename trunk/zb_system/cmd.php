@@ -1,5 +1,5 @@
 <?php
-require_once './function/c_system_base.php';
+require './function/c_system_base.php';
 
 $zbp->Initialize();
 
@@ -22,7 +22,7 @@ switch ($action) {
 		Login();
 		break;
 	case 'misc':
-		require_once './function/c_system_misc.php';
+		require './function/c_system_misc.php';
 		#echo Reload(GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'ArticleEdt':

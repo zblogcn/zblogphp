@@ -119,7 +119,7 @@ function Admin_SiteInfo(){
 	echo '</table>';
 
 	echo '</div>';
-	include_once $zbp->path . "zb_system/defend/thanks.html";
+	include $zbp->path . "zb_system/defend/thanks.html";
 	echo '<script type="text/javascript">ActiveTopMenu("topmenu1");</script>';
 }
 

@@ -7,7 +7,7 @@
  */
 header('Content-Type: application/x-javascript; Charset=utf8');  
 
-require_once '../function/c_system_base.php';
+require '../function/c_system_base.php';
 
 /*
 <% If ZC_SYNTAXHIGHLIGHTER_ENABLE Then Response.Write Response_Plugin_Html_Js_Add_CodeHighLight_JS%>

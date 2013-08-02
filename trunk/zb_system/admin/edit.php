@@ -6,8 +6,8 @@
  * @version 2.0 2013-07-05
  */
 
-require_once '../function/c_system_base.php';
-require_once '../function/c_system_admin.php';
+require '../function/c_system_base.php';
+require '../function/c_system_admin.php';
 
 $zbp->Initialize();
 
@@ -16,12 +16,12 @@ if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
 $blogtitle=$blogname . '-' . $lang['msg']['article_edit'];
 
-require_once $blogpath . 'zb_system/admin/admin_header.php';
+require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <script type="text/javascript" src="../script/jquery.tagto.js"></script>
 <script type="text/javascript" src="../script/jquery-ui-timepicker-addon.js"></script>
 <?php
-require_once $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
@@ -315,7 +315,7 @@ function selectlogtemplatesub(a){
 
 </div>
 <?php
-require_once $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath . 'zb_system/admin/admin_footer.php';
 
 $zbp->Terminate();
 
