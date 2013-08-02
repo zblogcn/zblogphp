@@ -6,6 +6,7 @@
  * @version 2.0 2013-06-14
  */
 
+
 class Member extends Base{
 
 
@@ -14,6 +15,8 @@ class Member extends Base{
 		$this->zbp=&$GLOBALS['zbp'];
 		$this->table=&$this->zbp->table['Member'];	
 		$this->datainfo=&$this->zbp->datainfo['Member'];
+
+		$this->metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];
@@ -28,7 +31,7 @@ class Member extends Base{
 	}
 
 
-	public function __set($name, $value) 
+	public function __set($name, $value)
 	{
 		if ($name=='Avatar') {
 			return null;
@@ -36,10 +39,10 @@ class Member extends Base{
 		if ($name=='LevelName') {
 			return null;
 		}
-		$this->Data[$name] = $value;
+		parent::__set($name, $value);
 	}
 
-	public function __get($name) 
+	public function __get($name)
 	{
 		if ($name=='Avatar') {
 			return $this->zbp->host . 'zb_users/avatar/0.png';
@@ -47,7 +50,10 @@ class Member extends Base{
 		if ($name=='LevelName') {
 			return $this->zbp->lang['user_level_name'][$this->Level];
 		}
-		return $this->Data[$name];
+		if ($name=='Meta') {
+			return $this->Metas->serialize();
+		}
+		return parent::__get($name);
 	}
 
 

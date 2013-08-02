@@ -19,17 +19,24 @@ abstract class Base
 	
 	protected $zbp = null;
 
-	public $Metas = array();
+	public $Metas = null;
 
 	public $Data = array();
 	
 	public function __set($name, $value) 
 	{
+		if ($name=='Meta') {
+			$this->Metas->unserialize($value);
+			return ;
+		}
 		$this->Data[$name]  =  $value;
 	}
 
 	public function __get($name) 
 	{
+		if ($name=='Meta') {
+			return $this->Metas->serialize();
+		}
 		return $this->Data[$name];
 	}
 
