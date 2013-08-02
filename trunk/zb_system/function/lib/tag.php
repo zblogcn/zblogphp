@@ -7,7 +7,6 @@
  */
 
 
-
 class Tag extends Base{
 
 
@@ -16,6 +15,8 @@ class Tag extends Base{
 		$this->zbp=&$GLOBALS['zbp'];
 		$this->table=&$this->zbp->table['Tag'];	
 		$this->datainfo=&$this->zbp->datainfo['Tag'];
+
+		$this->metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];

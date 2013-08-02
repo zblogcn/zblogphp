@@ -7,7 +7,6 @@
  */
 
 
-
 class Comment extends Base{
 
 
@@ -16,6 +15,8 @@ class Comment extends Base{
 		$this->zbp=&$GLOBALS['zbp'];
 		$this->table=&$this->zbp->table['Comment'];	
 		$this->datainfo=&$this->zbp->datainfo['Comment'];
+
+		$this->metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];

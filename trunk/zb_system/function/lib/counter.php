@@ -7,7 +7,6 @@
  */
 
 
-
 class Counter extends Base{
 
 
@@ -16,6 +15,8 @@ class Counter extends Base{
 		$this->zbp=&$GLOBALS['zbp'];
 		$this->table=&$this->zbp->table['Counter'];	
 		$this->datainfo=&$this->zbp->datainfo['Counter'];
+
+		$this->metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];

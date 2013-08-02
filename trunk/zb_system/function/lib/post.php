@@ -7,7 +7,6 @@
  */
 
  
-
 class Post extends Base{
 
 
@@ -16,6 +15,8 @@ class Post extends Base{
 		$this->zbp=&$GLOBALS['zbp'];
 		$this->table=&$this->zbp->table['Post'];	
 		$this->datainfo=&$this->zbp->datainfo['Post'];
+
+		$this->metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];
@@ -42,7 +43,7 @@ class Post extends Base{
 				return null;
 				break;
 			default:
-				$this->Data[$name] = $value;
+				parent::__set($name, $value);
 				break;
 		}
 	}
@@ -64,7 +65,7 @@ class Post extends Base{
 				return $this->zbp->host . 'view.php?id=' . $this->ID ;
 				break;				
 			default:
-				return $this->Data[$name];
+				return parent::__get($name);
 				break;
 		}
 

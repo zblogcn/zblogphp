@@ -7,8 +7,6 @@
  */
 
 
-
-
 class Module extends Base{
 
 
@@ -17,6 +15,8 @@ class Module extends Base{
 		$this->zbp=&$GLOBALS['zbp'];
 		$this->table=&$this->zbp->table['Module'];	
 		$this->datainfo=&$this->zbp->datainfo['Module'];
+
+		$this->metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];
