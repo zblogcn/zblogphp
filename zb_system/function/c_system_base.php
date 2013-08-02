@@ -77,6 +77,7 @@ $actions=array(
 	'logout'=>5,
 	'verify'=>5,
 	'admin'=>4,
+	'search'=>5,
 	'misc'=>5,
 
 	'ArticleEdt'=>3,
