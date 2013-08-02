@@ -49,15 +49,15 @@ function ViewPage(){
 function Login(){
 	global $zbp;
 
-	if (isset($zbp->membersbyname[GetVars('username')])) {
-		$m=$zbp->membersbyname[GetVars('username')];
-		if($m->Password == md5(GetVars('password') . $m->Guid)){
+	if (isset($zbp->membersbyname[GetVars('username','POST')])) {
+		$m=$zbp->membersbyname[GetVars('username','POST')];
+		if($m->Password == md5(GetVars('password','POST') . $m->Guid)){
 			if(GetVars('savedate')==0){
-				setcookie("username", GetVars('username'),0,$zbp->cookiespath);
-				setcookie("password", GetVars('password'),0,$zbp->cookiespath);
+				setcookie("username", GetVars('username','POST'),0,$zbp->cookiespath);
+				setcookie("password", GetVars('password','POST'),0,$zbp->cookiespath);
 			}else{
-				setcookie("username", GetVars('username'), time()+3600*24*GetVars('savedate'),$zbp->cookiespath);
-				setcookie("password", GetVars('password'), time()+3600*24*GetVars('savedate'),$zbp->cookiespath);
+				setcookie("username", GetVars('username','POST'), time()+3600*24*GetVars('savedate','POST'),$zbp->cookiespath);
+				setcookie("password", GetVars('password','POST'), time()+3600*24*GetVars('savedate','POST'),$zbp->cookiespath);
 			}
 			header('Location:admin/');
 		}else{

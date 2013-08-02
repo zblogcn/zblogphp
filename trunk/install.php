@@ -74,15 +74,15 @@ install3();
 
 
 
-
+$s=null;
 
 function install(){
 
 	echo "<p>正在努力地下载数据包...</p>";
 	ob_flush();
 	sleep(1);
-	$a=file_get_contents('compress.zlib://' . 'http://update.rainbowsoft.org/zblogphp/?install');
-	file_put_contents('release.xml',$a);
+	$GLOBALS['s']=file_get_contents('compress.zlib://' . 'http://update.rainbowsoft.org/zblogphp/?install');
+	//file_put_contents('release.xml',$a);
 
 }
 
@@ -91,18 +91,18 @@ function install2(){
 	echo "<p>正在解压和安装文件...</p>";
 	ob_flush();
 	sleep(1);
-	if (file_exists('release.xml')) {
-		$xml = simplexml_load_file('release.xml');
-
+	if ($GLOBALS['s']) {
+		$xml = simplexml_load_string($GLOBALS['s']);
+		$old = umask(0);
 		foreach ($xml->file as $f) {
 			$filename=str_replace('\\','/',$f->attributes());
 			$dirname= dirname($filename);
-			mkdir($dirname,'0755',true);
+			mkdir($dirname,'0777',true);
 			file_put_contents(iconv("UTF-8","GBK",$filename),base64_decode($f));
 		}
-
+		umask($old);
 	} else {
-		exit('release.xml文件不存在!');
+		exit('release.xml不存在!');
 	}
 
 }
@@ -111,7 +111,7 @@ function install3(){
 
 	unlink('release.xml');
 	unlink('install.php');
-	echo '<script type="text/javascript">location="./"</script>';
+	echo '<script type="text/javascript">location="./zb_install/"</script>';
 	
 }
 
