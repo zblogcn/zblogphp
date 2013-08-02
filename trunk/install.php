@@ -16,7 +16,6 @@ ob_start();
 <!--
 *{
 	font-size:14px;
-	border:none;
 }
 body{
 	margin:0;
@@ -32,6 +31,9 @@ h1,h2,h3,h4,h5,h6{
 }
 h1{
 font-size:28px;
+}
+button{
+	padding:15px 80px;
 }
 div{
 	position:absolute;
@@ -54,16 +56,32 @@ div{
 
 <?php
 
+
+if(strpos($_SERVER['QUERY_STRING'],'begin') !== false){
+
 install();
 install2();
 install3();
+
+}else{
+?>
+<p><button onclick="location='?begin'" value="" />开始安装</button></p>
+<?php
+}
+?>
+
+<?php
+
+
+
+
 
 function install(){
 
 	echo "<p>正在努力地下载数据包...</p>";
 	ob_flush();
 	sleep(1);
-	$a=file_get_contents('compress.zlib://' . 'http://update.rainbowsoft.org/zblog2/?install');
+	$a=file_get_contents('compress.zlib://' . 'http://update.rainbowsoft.org/zblogphp/?install');
 	file_put_contents('release.xml',$a);
 
 }

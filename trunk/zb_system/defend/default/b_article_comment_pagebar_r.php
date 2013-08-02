@@ -1,1 +1,0 @@
-<a class="r" href="#AjaxCommentEnd" onclick="<#article/comment_pagebar_r/url#>"><span class="commentspage"><#msg193#></span></a>

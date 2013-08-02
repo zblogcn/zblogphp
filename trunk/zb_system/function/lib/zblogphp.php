@@ -382,7 +382,18 @@ class ZBlogPHP{
 		foreach ($files as $sortname => $fullname) {
 			$this->templates[$sortname]=file_get_contents($fullname);
 		}
-
+		if(!isset($this->templates['sidebar2'])){
+			$this->templates['sidebar2']=str_replace('$sidebars', '$sidebars2', $this->templates['sidebar']);
+		}
+		if(!isset($this->templates['sidebar3'])){
+			$this->templates['sidebar3']=str_replace('$sidebars', '$sidebars3', $this->templates['sidebar']);
+		}
+		if(!isset($this->templates['sidebar4'])){
+			$this->templates['sidebar4']=str_replace('$sidebars', '$sidebars4', $this->templates['sidebar']);
+		}
+		if(!isset($this->templates['sidebar5'])){
+			$this->templates['sidebar5']=str_replace('$sidebars', '$sidebars5', $this->templates['sidebar']);
+		}
 	}
 
 	function BuildTemplate()
