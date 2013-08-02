@@ -131,7 +131,13 @@ function Admin_ArticleMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['article_manage'] . '</div>';
 	echo '<div class="SubMenu"></div><div id="divMain2">';
-	echo '<form class="search" id="edit" method="post" action="#"></form>';
+	echo '<form class="search" id="edit" method="post" action="#">';
+
+	echo '<p>搜索:&nbsp;&nbsp;分类 <select class="edit" size="1" name="cate" style="width:100px;" ><option value="">任意</option></select>&nbsp;&nbsp;&nbsp;&nbsp;
+	类型 <select class="edit" size="1" name="status" style="width:80px;" ><option value="">任意</option> <option value="0" >公开</option><option value="2" >私人</option><option value="4" >草稿</option></select>&nbsp;&nbsp;&nbsp;&nbsp;
+	<label><input type="checkbox" name="istop" value="True"/>&nbsp;置顶</label>&nbsp;&nbsp;&nbsp;&nbsp;
+	<input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="提交"/></p>';
+	echo '</form>';
 	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
 	echo '<tr>
 	<th>' . $zbp->lang['msg']['id'] . '</th>
@@ -150,7 +156,23 @@ $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=10;
 $p->UrlRule='{%host%}zb_system/cmd.php?act=ArticleMng&amp;page={%page%}';
 
-$array=$zbp->GetArticleList('','',array(($p->PageNow-1) * $p->PageCount,$p->PageCount),array('pagebar'=>$p));
+$w=array();
+if(GetVars('search','POST')){
+	$w[]=array('search','log_Content','log_Intro','log_Title',GetVars('search','POST'));
+}
+if(GetVars('istop','POST')){
+	$w[]=array('=','log_Istop','1');
+}
+if(GetVars('status','POST')){
+	$w[]=array('=','log_Status',GetVars('status','POST'));
+}
+
+$array=$zbp->GetArticleList(
+	$w,
+	'',
+	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
+	array('pagebar'=>$p)
+	);
 foreach ($array as $article) {
 	echo '<tr>';
 	echo '<td class="td5">' . $article->ID .  '</td>';

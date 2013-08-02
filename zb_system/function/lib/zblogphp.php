@@ -435,7 +435,18 @@ class ZBlogPHP{
 					$w[2] = $this->db->EscapeString($w[2]);
 					$sqlw .= $comma . " $w[1] $w[0] '$w[2]' ";
 				}
-
+				if($w[0]=='search'){
+					$j=count($w);
+					$sql_search='';
+					$c='';
+					for ($i=1; $i <= $j-1-1; $i++) { 
+						$x=$w[$i];
+						$y=$this->db->EscapeString($w[$j-1]);
+						$sql_search .= $c . " ($x LIKE '%$y%') ";
+						$c='OR';
+					}
+					$sqlw .= $comma .  '(' . $sql_search . ')';
+				}
 				$comma = 'AND';
 			}
 		}
@@ -466,7 +477,7 @@ class ZBlogPHP{
 			}
 		}
 
-
+		Logs($sqlw);
 
 		return $sql . $sqlw . $sqlo . $sqll;
 

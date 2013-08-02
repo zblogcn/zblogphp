@@ -31,6 +31,7 @@ return array(
 	'unnamed'=>'未命名',
 	'edit'=>'编辑',
 	'del'=>'删除',
+	'any'=>'任意',
 	'login'=>'登录',	
 	'logout'=>'退出登录',	
 	'view_permissions'=>'查看权限',
