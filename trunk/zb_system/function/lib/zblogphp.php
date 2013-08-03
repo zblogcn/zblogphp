@@ -250,7 +250,7 @@ class ZBlogPHP{
 		$s.=var_export($this->option,true);
 		$s.="\r\n?>";
 
-		file_put_contents($this->path . 'zb_users/c_option.php',$s);
+		@file_put_contents($this->path . 'zb_users/c_option.php',$s);
 	}	
 
 	public function LoadMembers(){
@@ -405,7 +405,7 @@ class ZBlogPHP{
 		$dir = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
 		$files = GetFilesInDir($dir,'php');
 		foreach ($files as $fullname) {
-			unlink($fullname);
+			@unlink($fullname);
 		}
 		
 		

@@ -31,7 +31,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 
 <div class="SubMenu"></div>
-<div id="divMain2">
+<div id="divMain2" class="edit post_edit">
 <form id="edit" name="edit" method="post" action="#">
   <div id="divEditLeft">
     <div id="divEditTitle">

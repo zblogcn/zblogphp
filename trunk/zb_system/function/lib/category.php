@@ -12,9 +12,9 @@ class Category extends Base{
 
 	function __construct()
 	{
-		$this->zbp=&$GLOBALS['zbp'];
-		$this->table=&$this->zbp->table['Category'];	
-		$this->datainfo=&$this->zbp->datainfo['Category'];
+        global $zbp;
+		$this->table=&$zbp->table['Category'];	
+		$this->datainfo=&$zbp->datainfo['Category'];
 
 		$this->Metas=new Metas;
 
@@ -22,7 +22,6 @@ class Category extends Base{
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->db = &$this->zbp->db;
 		$this->ID = 0;
 		$this->Order = 0;
 		$this->Name	= $GLOBALS['lang']['msg']['unnamed'];

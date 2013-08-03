@@ -12,9 +12,9 @@ class Tag extends Base{
 
 	function __construct()
 	{
-		$this->zbp=&$GLOBALS['zbp'];
-		$this->table=&$this->zbp->table['Tag'];	
-		$this->datainfo=&$this->zbp->datainfo['Tag'];
+        global $zbp;
+		$this->table=&$zbp->table['Tag'];	
+		$this->datainfo=&$zbp->datainfo['Tag'];
 
 		$this->Metas=new Metas;
 
@@ -22,7 +22,6 @@ class Tag extends Base{
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->db = &$this->zbp->db;
 		$this->ID = 0;
 
 	}

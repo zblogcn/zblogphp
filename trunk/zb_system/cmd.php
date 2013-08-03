@@ -36,7 +36,7 @@ switch ($action) {
 	case 'ArticlePst':
 		break;
 	case 'CategoryMng':
-		redirect('admin/category.php?' . GetVars('QUERY_STRING','SERVER'));
+		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'CategoryEdt':
 		redirect('admin/category_edit.php?' . GetVars('QUERY_STRING','SERVER'));

@@ -12,9 +12,9 @@ class Post extends Base{
 
 	function __construct()
 	{
-		$this->zbp=&$GLOBALS['zbp'];
-		$this->table=&$this->zbp->table['Post'];	
-		$this->datainfo=&$this->zbp->datainfo['Post'];
+        global $zbp;
+		$this->table=&$zbp->table['Post'];	
+		$this->datainfo=&$zbp->datainfo['Post'];
 
 		$this->Metas=new Metas;
 
@@ -22,7 +22,6 @@ class Post extends Base{
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->db = &$this->zbp->db;
 		$this->ID = 0;
 		$this->Name	= $GLOBALS['lang']['msg']['unnamed'];
 	}
@@ -35,6 +34,7 @@ class Post extends Base{
 
 	public function __set($name, $value) 
 	{
+        global $zbp;
 		switch ($name) {
 			case 'Category':
 			case 'Author':
@@ -50,19 +50,19 @@ class Post extends Base{
 
 	public function __get($name) 
 	{
-
+        global $zbp;
 		switch ($name) {
 			case 'Category':
-				return $this->zbp->GetCategoryByID($this->CateID);
+				return $zbp->GetCategoryByID($this->CateID);
 				break;
 			case 'Author':
-				return $this->zbp->GetMemberByID($this->AuthorID);
+				return $zbp->GetMemberByID($this->AuthorID);
 				break;
 			case 'StatusName':
-				return $this->zbp->lang['post_status_name'][$this->Status];
+				return $zbp->lang['post_status_name'][$this->Status];
 				break;
 			case 'Url':
-				return $this->zbp->host . 'view.php?id=' . $this->ID ;
+				return $zbp->host . 'view.php?id=' . $this->ID ;
 				break;				
 			default:
 				return parent::__get($name);

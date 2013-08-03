@@ -50,7 +50,7 @@ return array(
 	'ZC_USING_PLUGIN_LIST' => '',
 
 	// '-------------------------------全局配置-----------------------------------
-	'ZC_DEBUG_MODE' => true,
+	'ZC_DEBUG_MODE' => false,
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE' => '+0800',
 	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
