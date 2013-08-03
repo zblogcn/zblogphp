@@ -87,6 +87,8 @@ function Logout(){
 	setcookie('password', '',time() - 3600,$zbp->cookiespath);
 }
 
+
+
 function CategoryPost(){
 	$cate = new Category();
 	if($_POST['edtID'] == 0){
@@ -106,17 +108,17 @@ function CategoryPost(){
 			)
 		);
 		$cate->Post();
-		redirect('admin/category.php');
+		redirect('cmd.php?act=CategoryMng');
 	}else{
 		$cate->LoadInfoByID($_POST['edtID']);
 		$cate->Name = $_POST['edtName'];
 		$cate->Order = $_POST['edtOrder'];
 		$cate->Alias = $_POST['edtAlias'];
-		$cate->PareID = $_POST['edtPareID'];
+		$cate->ParentID = $_POST['edtPareID'];
 		$cate->Template = $_POST['edtTemplate'];
 		$cate->LogTemplate = $_POST['edtLogTemplate'];
 		$cate->Post();
-		redirect('admin/category.php');
+		redirect('cmd.php?act=CategoryMng');
 	}
 }
 

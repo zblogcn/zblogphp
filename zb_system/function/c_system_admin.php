@@ -34,8 +34,8 @@ function ResponseAdminLeftMenu(){
 	$leftmenus[]="<li class='split'><hr/></li>";
 
 	$leftmenus[]=MakeLeftMenu("ThemeMng",$zbp->lang['msg']['theme_manage'],$zbp->host . "zb_system/cmd.php?act=ThemeMng","nav_themes","aThemeMng","");
-	$leftmenus[]=MakeLeftMenu("PluginMng",$zbp->lang['msg']['plugin_manage'],$zbp->host . "zb_system/cmd.php?act=PluginMng","nav_plugin","aPlugInMng","");
 	$leftmenus[]=MakeLeftMenu("ModuleMng",$zbp->lang['msg']['module_manage'],$zbp->host . "zb_system/cmd.php?act=ModuleMng","nav_function","aFunctionMng","");
+	$leftmenus[]=MakeLeftMenu("PluginMng",$zbp->lang['msg']['plugin_manage'],$zbp->host . "zb_system/cmd.php?act=PluginMng","nav_plugin","aPlugInMng","");
 
 
 	foreach ($leftmenus as $m) {
@@ -264,6 +264,39 @@ foreach ($p->buttons as $key => $value) {
 function Admin_CategoryMng(){
 
 	global $zbp;
+
+	echo '<div class="divHeader">' . $zbp->lang['msg']['category_manage'] . '</div>';
+	echo '<div class="SubMenu"></div><div id="divMain2">';
+	echo '<form class="search" id="edit" method="post" action="#"></form>';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<tr>
+
+	<th>' . $zbp->lang['msg']['id'] . '</th>
+	<th>' . $zbp->lang['msg']['order'] . '</th>
+	<th>' . $zbp->lang['msg']['name'] . '</th>
+	<th>' . $zbp->lang['msg']['alias'] . '</th>
+	<th></th>
+	</tr>';
+
+
+foreach ($zbp->categorys as $category) {
+	echo '<tr>';
+	echo '<td class="td5">' . $category->ID . '</td>';
+	echo '<td class="td5">' . $category->Order . '</td>';
+	echo '<td class="td20">' . $category->Name . '</td>';
+	echo '<td class="td20">' . $category->Alias . '</td>';
+	echo '<td class="td10 tdCenter">';
+	echo '<a href="../cmd.php?act=CategoryEdt&amp;id='. $category->ID .'"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=CategoryDel&amp;id=26"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
+	echo '</td>';
+
+	echo '</tr>';
+}
+	echo '</table>';
+	echo '</div>';
+	echo '<script type="text/javascript">ActiveLeftMenu("aCategoryMng");</script>';
+
 	
 }
 

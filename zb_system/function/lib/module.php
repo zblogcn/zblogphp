@@ -12,9 +12,9 @@ class Module extends Base{
 
 	function __construct()
 	{
-		$this->zbp=&$GLOBALS['zbp'];
-		$this->table=&$this->zbp->table['Module'];	
-		$this->datainfo=&$this->zbp->datainfo['Module'];
+        global $zbp;
+		$this->table=&$zbp->table['Module'];	
+		$this->datainfo=&$zbp->datainfo['Module'];
 
 		$this->Metas=new Metas;
 
@@ -22,7 +22,6 @@ class Module extends Base{
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->db = &$this->zbp->db;
 		$this->ID = 0;
 		$this->Order = 0;
 	}

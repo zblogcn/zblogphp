@@ -34,7 +34,7 @@ class Template{
 	function CompileFiles($filesarray){
 
 		foreach ($filesarray as $name => $content) {
-			file_put_contents($this->path . $name . '.php', $this->Compiling($content), LOCK_EX);
+			@file_put_contents($this->path . $name . '.php', $this->Compiling($content), LOCK_EX);
 		}
 
 	}

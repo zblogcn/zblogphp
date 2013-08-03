@@ -116,8 +116,15 @@ $blogtitle=$zbp->name . '-' . $zbp->lang['msg']['view_rights'];
   <div class="login">
     <form method="post" action="#">
     <dl>
-      <dt><?php echo $zbp->lang['msg']['current_member'] . ':' . $zbp->user->Name;?></dt>
-      <dd><?php echo $zbp->lang['msg']['member_level'] . ':' . $zbp->user->LevelName;?></dd>
+      <dt><?php echo $zbp->lang['msg']['current_member'] . ' : <b>' . $zbp->user->Name;?></b><br/>
+      <?php echo $zbp->lang['msg']['member_level'] . ' : <b>' . $zbp->user->LevelName;?></b></dt>
+<?php
+
+foreach ($GLOBALS['actions']  as $key => $value) {
+	echo '<dd><b>' . $key . '</b> : ' . ($GLOBALS['zbp']->CheckRights($key)?'<span style="color:green">true</span>':'<span style="color:red">false</span>') . '</dd>';
+}
+
+?>
     </dl>
     </form>
   </div>

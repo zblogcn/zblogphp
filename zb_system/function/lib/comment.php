@@ -12,9 +12,9 @@ class Comment extends Base{
 
 	function __construct()
 	{
-		$this->zbp=&$GLOBALS['zbp'];
-		$this->table=&$this->zbp->table['Comment'];	
-		$this->datainfo=&$this->zbp->datainfo['Comment'];
+        global $zbp;
+		$this->table=&$zbp->table['Comment'];	
+		$this->datainfo=&$zbp->datainfo['Comment'];
 
 		$this->Metas=new Metas;
 
@@ -22,7 +22,6 @@ class Comment extends Base{
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->db = &$this->zbp->db;
 		$this->ID = 0;
 
 	}

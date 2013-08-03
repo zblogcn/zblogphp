@@ -7,9 +7,8 @@
  * @version 2.0 2013-06-14
  */
 
-#error_reporting(0);
-ini_set('display_errors',1);
-error_reporting(E_ALL);
+error_reporting(0);
+@ini_set("display_errors",0);
 
 @ini_set('magic_quotes_runtime',0);
 @ini_set('magic_quotes_gpc',0);
@@ -22,9 +21,18 @@ $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $cookiespath = null;
 $bloghost = null;
 
-$option = require($blogpath . 'zb_system/defend/c_option.php');
 if(file_exists($blogpath . 'zb_users/c_option.php')){
-	$option = require($blogpath . 'zb_users/c_option.php');
+	$option_zbusers = require($blogpath . 'zb_users/c_option.php');
+}
+if(is_array($option_zbusers)){
+    $option = $option_zbusers;
+}else{
+    $option = require($blogpath . 'zb_system/defend/c_option.php');
+}
+
+if($option['ZC_DEBUG_MODE']==true){
+    error_reporting(-1);
+    ini_set("display_errors",1);
 }
 
 $option['ZC_BLOG_PRODUCT_FULL']=$option['ZC_BLOG_PRODUCT'] . ' ' . $option['ZC_BLOG_VERSION'];

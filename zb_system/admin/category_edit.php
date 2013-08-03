@@ -14,85 +14,67 @@ $zbp->Initialize();
 $action='CategoryEdt';
 if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
-$blogtitle=$blogname . '-' . '分类编辑';
+$blogtitle=$blogname . '-' . $lang['msg']['category_edit'];
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
 <?php
-	//不要吐槽，我会改的！！！
-	//if(isset($_GET['id'])){$cateid = $_GET['id'];}else{$cateid = 0;}
-	$cateid = $_GET['id'];
-	$cate = new Category();
-	$cate->LoadInfoByID($cateid);
-	$catadata = $cate->Data;
-	//print_r($catadata);
-	
-	$a = $cate->GetLibIDArray(array($cate->datainfo['Order'][0] => 'ASC'), null);
-	foreach ($a as $key => $value) {
-		$cate->LoadInfoByID($value);
-		foreach ($cate->datainfo as $k => $v) {
-			$cata_value[$value][$k] = $cate->Data[$k];
-		}
-	}
-	
 
-	foreach ($cata_value as $key => $value) {
-		if($value['ParentID'] == 0){
-			$cata_parent[$value['ID']] = $value;
-		}
-	}
+if(isset($_GET['id'])){$cateid = $_GET['id'];}else{$cateid = 0;}
 
-	$parenthtml = '';
-	foreach($cata_parent as $key => $value){
-		$parenthtml .= "<option value='".$value['ID'].($catadata['ParentID'] == $value['ID'] ? "' selected='selected'>" : "' >").$value['Name']."</option>";
+$cate=$zbp->GetCategoryByID($cateid);
+
+$p=null;
+
+if($cate->ParentID==0){$p .='<option value="0">无</option>';}
+
+foreach ($zbp->categorys as $k => $v) {
+	if($v->ID==$cate->ID){continue;}
+	if($v->ParentID==0){
+		$p .='<option ' . ($v->ID==$cate->ParentID?'selected="selected"':'') . ' value="'. $v->ID .'">' . $v->Name . '</option>';
 	}
-	
+}
+var_dump($cate);
 ?>
 
 <div id="divMain">
   <div class="divHeader2">分类编辑</div>
   <div class="SubMenu"></div>
-  <div id="divMain2">
-	<form id="edit" name="edit" method="post" action="">
+  <div id="divMain2" class="edit category_edit">
+	<form id="edit" name="edit" method="post" action="#">
 	  <input id="edtID" name="edtID" type="hidden" value="<?php echo $cateid;?>" />
 	  <p>
 		<span class="title">名称:</span><span class="star">(*)</span><br />
-		<input id="edtName" class="cleanuphtml-1" size="40" name="edtName" maxlength="50" type="text" value="<?php echo $catadata['Name'];?>" />
+		<input id="edtName" class="edit" size="40" name="edtName" maxlength="50" type="text" value="<?php echo $cate->Name;?>" />
 	  </p>
 	  <p>
 		<span class="title">别名:</span><br />
-		<input id="edtAlias" class="cleanuphtml-1" size="40" name="edtAlias" type="text" value="<?php echo $catadata['Alias'];?>" />
+		<input id="edtAlias" class="edit" size="40" name="edtAlias" type="text" value="<?php echo $cate->Alias;?>" />
 	  </p>
 
 	  <p>
 		<span class="title">排序:</span><br />
-		<input id="edtOrder" class="cleanuphtml-1" size="40" name="edtOrder" type="text" value="<?php echo $catadata['Order'];?>" />
+		<input id="edtOrder" class="edit" size="40" name="edtOrder" type="text" value="<?php echo $cate->Order;?>" />
 	  </p>
 	  <p>
 		<span class="title">父分类:</span><br />
-		<select id="edtPareID" name="edtPareID" class="edit cleanuphtml-2" size="1">
-			<option value="0">无</option>
-			<?php echo $parenthtml;?>
+		<select id="edtPareID" name="edtPareID" class="edit" size="1">
+			<?php echo $p;?>
 		</select>
 	  </p>
 	  <p>
 		<span class="title">模板:</span><br />
-		<select class="edit cleanuphtml-2" size="1" id="cmbTemplate" onchange="edtTemplate.value=this.options[this.selectedIndex].value">
+		<select class="edit" size="1" id="cmbTemplate" onchange="edtTemplate.value=this.options[this.selectedIndex].value">
 		  <option value="CATALOG" selected="selected">CATALOG (默认模板)</option>
-		  <option value="DEFAULT">DEFAULT</option>
-		  <option value="SEARCH">SEARCH</option>
-		  <option value="TAGS">TAGS</option>
-		</select><input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $catadata['Template'];?>" />
+		</select><input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $cate->Template;?>" />
 	  </p>
 	  <p>
 		<span class="title">此目录下文章的默认模板:</span><br />
-		<select class="edit cleanuphtml-2" size="1" id="cmbLogTemplate" onchange="edtLogTemplate.value=this.options[this.selectedIndex].value">
-		  <option value="PAGE">PAGE</option>
-		  <option value="SEARCH">SEARCH</option>
+		<select class="edit" size="1" id="cmbLogTemplate" onchange="edtLogTemplate.value=this.options[this.selectedIndex].value">
 		  <option value="SINGLE" selected="selected">SINGLE (默认模板)</option>
-		</select><input type="hidden" name="edtLogTemplate" id="edtLogTemplate" value="<?php echo $catadata['LogTemplate'];?>" />
+		</select><input type="hidden" name="edtLogTemplate" id="edtLogTemplate" value="<?php echo $cate->LogTemplate;?>" />
 	  </p>
 	  <p>
 		<label><input type="checkbox" name="edtAddNavbar" id="edtAddNavbar" value="True" />  <span class="title">加入导航栏菜单</span></label>
@@ -102,16 +84,15 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 	  </p>
 	</form>
 	<script type="text/javascript">
-			var str17="名称不能为空";
-			function checkCateInfo(){
-					document.getElementById("edit").action="../cmd.php?act=CategoryPst";
+function checkCateInfo(){
+  document.getElementById("edit").action="../cmd.php?act=CategoryPst";
 
-					if(!$("#edtName").val()){
-							alert(str17);
-							return false
-					}
+  if(!$("#edtName").val()){
+    alert("名称不能为空");
+    return false
+  }
 
-			}
+}
 	</script>
 	<script type="text/javascript">ActiveLeftMenu("aCategoryMng");</script>
   </div>

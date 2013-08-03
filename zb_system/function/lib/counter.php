@@ -12,9 +12,9 @@ class Counter extends Base{
 
 	function __construct()
 	{
-		$this->zbp=&$GLOBALS['zbp'];
-		$this->table=&$this->zbp->table['Counter'];	
-		$this->datainfo=&$this->zbp->datainfo['Counter'];
+        global $zbp;
+		$this->table=&$zbp->table['Counter'];	
+		$this->datainfo=&$zbp->datainfo['Counter'];
 
 		$this->Metas=new Metas;
 
@@ -22,7 +22,6 @@ class Counter extends Base{
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->db = &$this->zbp->db;
 		$this->ID = 0;
 
 	}

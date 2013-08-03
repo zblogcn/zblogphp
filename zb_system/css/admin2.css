@@ -337,6 +337,12 @@ input[readonly],input[readonly]:hover{
 	background:#eee;
 	border:1px solid #ccc;
 }
+select.edit{
+	width:300px;
+}
+input.edit{
+	width:300px;
+}
 
 #editor_content {width:100%;height:300px;}
 #editor_intro{width:100%;height:150px;}
@@ -424,14 +430,14 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 	font-weight:bold;
 	display: inline-block;
 }
-input#edtTitle{
+div.post_edit input#edtTitle{
 	margin-top: 5px;
 	padding: 3px;
 	line-height: 1.6;
 	font-size: 1.2em;
 	width: 100%;
 }
-input#edtAlias, input#edtTag{
+div.post_edit input#edtAlias, input#edtTag{
 	margin-top: 5px;
 	padding: 3px;
 	width: 63%;

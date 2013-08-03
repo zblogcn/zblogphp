@@ -12,9 +12,9 @@ class Upload extends Base{
 
 	function __construct()
 	{
-		$this->zbp=&$GLOBALS['zbp'];
-		$this->table=&$this->zbp->table['Upload'];	
-		$this->datainfo=&$this->zbp->datainfo['Upload'];
+        global $zbp;
+		$this->table=&$zbp->table['Upload'];	
+		$this->datainfo=&$zbp->datainfo['Upload'];
 
 		$this->Metas=new Metas;
 
@@ -22,7 +22,6 @@ class Upload extends Base{
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->db = &$this->zbp->db;
 		$this->ID = 0;
 
 	}
