@@ -16,7 +16,7 @@ class Post extends Base{
 		$this->table=&$this->zbp->table['Post'];	
 		$this->datainfo=&$this->zbp->datainfo['Post'];
 
-		$this->metas=new Metas;
+		$this->Metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];

@@ -68,11 +68,11 @@ switch ($zblogstep) {
 </div>
 <script type="text/javascript">
 function Setup3(){
-	if($("#dbtype").val()=="mssql"){
-		if($("#dbserver").val()==""){alert("数据库服务器需要填写");return false;};
-		if($("#dbname").val()==""){alert("数据库名称需要填写");return false;};
-		if($("#dbusername").val()==""){alert("数据库用户名需要填写");return false;};
-	}
+  if($("#dbtype").val()=="mssql"){
+    if($("#dbserver").val()==""){alert("数据库服务器需要填写");return false;};
+    if($("#dbname").val()==""){alert("数据库名称需要填写");return false;};
+    if($("#dbusername").val()==""){alert("数据库用户名需要填写");return false;};
+  }
 
 
 
@@ -85,11 +85,11 @@ if($("#password").val()!==$("#repassword").val()){alert("必须确认密码");re
 }
 
 $(function() {
-	$( "#setup0" ).progressbar({value: 100});
-	$( "#setup1" ).progressbar({value: 0});
-	$( "#setup2" ).progressbar({value: 33});
-	$( "#setup3" ).progressbar({value: 66});
-	$( "#setup4" ).progressbar({value: 100});
+  $( "#setup0" ).progressbar({value: 100});
+  $( "#setup1" ).progressbar({value: 0});
+  $( "#setup2" ).progressbar({value: 33});
+  $( "#setup3" ).progressbar({value: 66});
+  $( "#setup4" ).progressbar({value: 100});
  });
 
 </script>
@@ -174,12 +174,12 @@ Z-BlogPHP官方网址：http://www.rainbowsoft.org/
       <input type="submit" name="next" id="netx" value="下一步" disabled="disabled" />
       <script type="text/javascript">
 $( "input[type=checkbox]" ).click(function() {
-	if ( $( this ).prop( "checked" ) ) {
-		$("#netx").prop("disabled",false);
-	} 
-	else{
-		$("#netx").prop("disabled",true);
-	}
+  if ( $( this ).prop( "checked" ) ) {
+    $("#netx").prop("disabled",false);
+  } 
+  else{
+    $("#netx").prop("disabled",true);
+  }
 });
 </script>
     </div>
@@ -269,11 +269,6 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['data'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">zb_users/include</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['include'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['include'][1];?></td>
-        </tr>
-        <tr>
           <td scope="row">zb_users/theme</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['theme'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['theme'][1];?></td>
@@ -333,6 +328,17 @@ function Setup3(){
 
   global $CheckResult;
   CheckServer();
+
+  $hasMysql=false;
+
+  $hasSqlite=false;
+
+  echo (boolean)$hasMysql;
+
+  $hasMysql=(boolean)$CheckResult['mysql'][0] ||  $CheckResult['pdo_mysql'][0];
+
+  $hasSqlite=(boolean)$CheckResult['sqlite'][0] ||  $CheckResult['sqlite3'][0];
+
 ?>
 <dl>
   <dt></dt>
@@ -344,31 +350,27 @@ function Setup3(){
   <dd id="ddright">
     <div id="title">数据库建立与设置</div>
     <div id="content">
-      <p><b>类型选择:</b>
-        <?php if($CheckResult['mysql'][0]){?>
-        <label class="dbselect" id="mysql_radio">
-          <input value="mysql" type="radio" name="dbtype"/>
-          MySQL</label>
-        <?php } ?>
-        <?php if($CheckResult['pdo_mysql'][0]){?>
-        &nbsp;&nbsp;
-        <label class="dbselect" id="pdo_mysql_radio">
-          <input value="pdo_mysql" type="radio" name="dbtype" />
-          PDO_MySQL</label>
-        <?php } ?>
-        <?php if($CheckResult['sqlite'][0]){?>
-        &nbsp;&nbsp;
-        <label class="dbselect" id="sqlite_radio">
-          <input value="sqlite" type="radio" name="dbtype" />
-          SQLite</label>
-        <?php } ?>
-        <?php if($CheckResult['sqlite3'][0]){?>
-        &nbsp;&nbsp;
-        <label class="dbselect" id="sqlite3_radio">
-          <input value="sqlite3" type="radio" name="dbtype" />
-          SQLite3</label>
-        <?php } ?>
-      </p>
+      <div>
+        <p><b>数据库：</b>
+        <?php
+        if($hasMysql){
+        ?>
+          <label class="dbselect" id="mysql_radio">
+          <input type="radio" name="fdbtype"/>MySQL数据库</label>
+        <?php
+          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+        }
+        ?>
+        <?php
+        if($hasSqlite){
+        ?>
+          <label class="dbselect" id="sqlite_radio">
+          <input type="radio" name="fdbtype"/>SQLite数据库</label>
+        <?php
+        }
+        ?>
+        </p>
+      </div>
       <?php if($CheckResult['mysql'][0]){?>
       <div class="dbdetail" id="mysql">
         <p><b>数据库主机:</b>
@@ -386,25 +388,16 @@ function Setup3(){
         <p><b>表&nbsp;前&nbsp;缀:</b>
           <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="zbp_" style="width:350px;" />
         </p>
-      </div>
-      <?php } ?>
-      <?php if($CheckResult['pdo_mysql'][0]){?>
-      <div class="dbdetail" id="pdo_mysql">
-        <p><b>数据库主机:</b>
-          <input type="text" name="dbpdo_mysql_server" id="dbpdo_mysql_server" value="localhost" style="width:350px;" />
-        </p>
-        <p><b>用户名称:</b>
-          <input type="text" name="dbpdo_mysql_username" id="dbpdo_mysql_username" value="" style="width:350px;" />
-        </p>
-        <p><b>用户密码:</b>
-          <input type="text" name="dbpdo_mysql_password" id="dbpdo_mysql_password" value="" style="width:350px;" />
-        </p>
-        <p><b>数据库名称:</b>
-          <input type="text" name="dbpdo_mysql_name" id="dbpdo_mysql_name" value="" style="width:350px;" />
-        </p>
-        <p><b>表&nbsp;前&nbsp;缀:</b>
-          <input type="text" name="dbpdo_mysql_pre" id="dbpdo_mysql_pre" value="zbp_" style="width:350px;" />
-        </p>
+      <p><b>连接选择:</b> 
+        <?php if($CheckResult['mysql'][0]){?>
+        <label>
+          <input value="mysql" type="radio" name="dbtype"/>MySQL原生连接</label>
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+        <?php if($CheckResult['pdo_mysql'][0]){?>
+        <label>
+          <input value="pdo_mysql" type="radio" name="dbtype"/>PDO_MySQL连接</label>
+        <?php } ?>
+      </p>
       </div>
       <?php } ?>
       <?php if($CheckResult['sqlite'][0]){?>
@@ -415,16 +408,19 @@ function Setup3(){
         <p><b>表前缀:</b>
           <input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" />
         </p>
-      </div>
-      <?php } ?>
-      <?php if($CheckResult['sqlite3'][0]){?>
-      <div class="dbdetail" id="sqlite3">
-        <p><b>数据库:</b>
-          <input type="text" name="dbsqlite3_name" id="dbsqlite3_name" value="<?php echo GetDbName()?>" readonly style="width:350px;" />
-        </p>
-        <p><b>表前缀:</b>
-          <input type="text" name="dbsqlite3_pre" id="dbsqlite3_pre" value="zbp_" style="width:350px;" />
-        </p>
+      <p><b>版本选择:</b>
+        <?php if($CheckResult['sqlite'][0]){?>
+        <label>
+          <input value="sqlite" type="radio" name="dbtype" />SQLite</label>
+        <?php 
+          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+          }
+        ?>
+        <?php if($CheckResult['sqlite3'][0]){?>
+        <label>
+          <input value="sqlite3" type="radio" name="dbtype" />SQLite3</label>
+        <?php } ?>
+      </p>
       </div>
       <?php } ?>
       <p class="title">网站设置</p>
@@ -450,9 +446,12 @@ function Setup3(){
 $(".dbselect").click(function(){
   $(".dbdetail").hide();
   $("#"+$(this).attr("id").split("_radio")[0]).show();
+  $("input[name='dbtype']:visible").get(0).click();
 });
-$($(".dbdetail").hide().get(0)).show();
-$($(".dbselect").get(0)).click();
+$(".dbdetail").hide();
+$("#"+$(".dbselect").attr("id").split("_radio")[0]).show();
+$("input[name='dbtype']:visible").get(0).click();
+$("input[name='fdbtype']:visible").get(0).click();
 </script>
 <?php
 }
@@ -491,7 +490,7 @@ switch ($dbtype) {
     }
     break; 
   case 'pdo_mysql':
-    $array=array(GetVars('dbpdo_mysql_server','POST'),GetVars('dbpdo_mysql_username','POST'),GetVars('dbpdo_mysql_password','POST'),GetVars('dbpdo_mysql_name','POST'),GetVars('dbpdo_mysql_pre','POST'));
+    $array=array(GetVars('dbmysql_server','POST'),GetVars('dbmysql_username','POST'),GetVars('dbmysql_password','POST'),GetVars('dbmysql_name','POST'),GetVars('dbmysql_pre','POST'));
     if($db->Open($array)){
     } else {
       echo '<p>MySQL服务器连接失败，或数据库不存在。</p>
@@ -511,7 +510,7 @@ switch ($dbtype) {
     }
     break;
   case 'sqlite3':
-    $array=array($GLOBALS["zbp"]->path . GetVars('dbsqlite3_name','POST'),GetVars('dbsqlite3_pre','POST'));
+    $array=array($GLOBALS["zbp"]->path . GetVars('dbsqlite_name','POST'),GetVars('dbsqlite_pre','POST'));
     if($db->Open($array)){
     } else {
         echo 'SQLite数据库创建失败。';
@@ -605,7 +604,6 @@ $CheckResult=array(
   getRightsAndExport('','zb_users','0777');
   getRightsAndExport('zb_users/','cache','0777');
   getRightsAndExport('zb_users/','data','0777');
-  getRightsAndExport('zb_users/','include','0777');
   getRightsAndExport('zb_users/','theme','0777');
   getRightsAndExport('zb_users/','plugin','0777');
   getRightsAndExport('zb_users/','upload','0777');
@@ -923,27 +921,18 @@ function SaveConfig(){
 
   switch ($GLOBALS['zbp']->option['ZC_DATABASE_TYPE']) {
     case 'mysql':
+    case 'pdo_mysql':     
       $GLOBALS['zbp']->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
       $GLOBALS['zbp']->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
       $GLOBALS['zbp']->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
       $GLOBALS['zbp']->option['ZC_MYSQL_NAME']=GetVars('dbmysql_name','POST');
       $GLOBALS['zbp']->option['ZC_MYSQL_PRE']=GetVars('dbmysql_pre','POST');
       break;
-    case 'pdo_mysql':	
-      $GLOBALS['zbp']->option['ZC_MYSQL_SERVER']=GetVars('dbpdo_mysql_server','POST');
-      $GLOBALS['zbp']->option['ZC_MYSQL_USERNAME']=GetVars('dbpdo_mysql_username','POST');
-      $GLOBALS['zbp']->option['ZC_MYSQL_PASSWORD']=GetVars('dbpdo_mysql_password','POST');
-      $GLOBALS['zbp']->option['ZC_MYSQL_NAME']=GetVars('dbpdo_mysql_name','POST');
-      $GLOBALS['zbp']->option['ZC_MYSQL_PRE']=GetVars('dbpdo_mysql_pre','POST');
-      break;
     case 'sqlite':
+    case 'sqlite3':    
       $GLOBALS['zbp']->option['ZC_SQLITE_NAME']=GetVars('dbsqlite_name','POST');
       $GLOBALS['zbp']->option['ZC_SQLITE_PRE']=GetVars('dbsqlite_pre','POST');
       break;
-    case 'sqlite3':
-      $GLOBALS['zbp']->option['ZC_SQLITE3_NAME']=GetVars('dbsqlite3_name','POST');
-      $GLOBALS['zbp']->option['ZC_SQLITE3_PRE']=GetVars('dbsqlite3_pre','POST');
-      break;  
   }
 
   $GLOBALS['zbp']->option['ZC_BLOG_VERSION']='1.0 Alpha Build 130707';
