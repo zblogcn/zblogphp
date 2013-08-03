@@ -16,7 +16,7 @@ class Module extends Base{
 		$this->table=&$this->zbp->table['Module'];	
 		$this->datainfo=&$this->zbp->datainfo['Module'];
 
-		$this->metas=new Metas;
+		$this->Metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];

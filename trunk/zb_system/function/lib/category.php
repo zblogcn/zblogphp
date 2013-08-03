@@ -16,7 +16,7 @@ class Category extends Base{
 		$this->table=&$this->zbp->table['Category'];	
 		$this->datainfo=&$this->zbp->datainfo['Category'];
 
-		$this->metas=new Metas;
+		$this->Metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];

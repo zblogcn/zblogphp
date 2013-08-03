@@ -16,7 +16,7 @@ class Member extends Base{
 		$this->table=&$this->zbp->table['Member'];	
 		$this->datainfo=&$this->zbp->datainfo['Member'];
 
-		$this->metas=new Metas;
+		$this->Metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];

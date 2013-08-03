@@ -16,7 +16,7 @@ class Upload extends Base{
 		$this->table=&$this->zbp->table['Upload'];	
 		$this->datainfo=&$this->zbp->datainfo['Upload'];
 
-		$this->metas=new Metas;
+		$this->Metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->Data[$key]=$value[3];
