@@ -112,7 +112,7 @@ function Admin_SiteInfo(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['info_intro'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_SiteInfo'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Admin_SiteInfo_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}	
 	echo '</div>';
@@ -141,7 +141,7 @@ function Admin_ArticleMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['article_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_ArticleMng'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Admin_ArticleMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}	
 	echo '</div>';
@@ -225,7 +225,7 @@ function Admin_PageMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['page_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_PageMng'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Admin_PageMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}	
 	echo '</div>';
@@ -264,7 +264,7 @@ foreach ($array as $article) {
 	echo '<td class="td5">' . $article->CommNums . '</td>';
 	echo '<td class="td5">' . $article->StatusName . '</td>';
 	echo '<td class="td10 tdCenter">';
-	echo '<a href="../cmd.php?act=ArticleEdt&amp;id='. $article->ID .'"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+	echo '<a href="../cmd.php?act=ArticleEdt&amp;id='. $article->ID .'&amp;type=1"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ArticleDel&amp;id='. $article->ID .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
 	echo '</td>';
@@ -287,7 +287,7 @@ function Admin_CategoryMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['category_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_CategoryMng'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Admin_CategoryMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}	
 	echo '</div>';
@@ -330,7 +330,7 @@ function Admin_CommentMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['comment_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_CommentMng'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Admin_CommentMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}	
 	echo '</div>';
@@ -347,7 +347,7 @@ function Admin_MemberMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['member_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_MemberMng'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Admin_MemberMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}	
 	echo '</div>';
@@ -364,7 +364,7 @@ function Admin_UploadMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['upload_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_UploadMng'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Admin_UploadMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}	
 	echo '</div>';
@@ -381,7 +381,7 @@ function Admin_TagMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['tag_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_TagMng'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Admin_TagMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}	
 	echo '</div>';
@@ -398,7 +398,7 @@ function Admin_PluginMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['plugin_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_MemberMng'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Admin_MemberMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}	
 	echo '</div>';
@@ -415,7 +415,7 @@ function Admin_ThemeMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['theme_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_ThemeMng'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Admin_ThemeMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}	
 	echo '</div>';
@@ -432,7 +432,7 @@ function Admin_ModuleMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['module_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_ModuleMng'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Admin_ModuleMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}	
 	echo '</div>';
@@ -449,7 +449,7 @@ function Admin_SettingMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['settings'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_SettingMng'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Admin_SettingMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}	
 	echo '</div>';

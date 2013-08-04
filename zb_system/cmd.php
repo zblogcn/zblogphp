@@ -31,6 +31,10 @@ switch ($action) {
 	case 'ArticleEdt':
 		redirect('admin/edit.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
+	case 'ArticleDel':
+		PostArticle();
+		redirect('cmd.php?act=CategoryMng');
+		break;
 	case 'ArticleMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 	case 'ArticlePst':
