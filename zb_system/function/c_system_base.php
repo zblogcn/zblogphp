@@ -43,7 +43,7 @@ header('Product:' . $option['ZC_BLOG_PRODUCT_FULL']);
 
 $lang = require($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 
-$blogtitle = $option['ZC_BLOG_NAME'] . '-' . $option['ZC_BLOG_SUBNAME'];
+$blogtitle = $option['ZC_BLOG_SUBNAME'];
 $blogname = $option['ZC_BLOG_NAME'];
 $blogsubname = $option['ZC_BLOG_SUBNAME'];
 

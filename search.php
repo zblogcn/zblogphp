@@ -38,7 +38,7 @@ foreach ($array as $a) {
 }
 
 
-$zbp->template->SetTags('title',$blogname . ' -' . $article->Title);
+$zbp->template->SetTags('title',$article->Title);
 
 $zbp->template->SetTags('article',$article);
 

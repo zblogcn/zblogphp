@@ -27,7 +27,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 		array('pagebar'=>$pagebar)
 	);
 
-	$zbp->template->SetTags('title',$zbp->name . '-' . $pagebar->PageNow);
+	$zbp->template->SetTags('title',$pagebar->PageNow);
 	$zbp->template->SetTags('articles',$articles);
 	$zbp->template->SetTags('pagebar',$pagebar);
 
@@ -42,7 +42,7 @@ function ViewPost($id,$alias){
 	$article = new Post;
 	$article->LoadInfoByID($id);
 
-	$zbp->template->SetTags('title',$zbp->name . '-' . $article->Title);
+	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);
 
 	$zbp->template->display($zbp->option['ZC_ARTICLE_DEFAULT_TEMPLATE']);

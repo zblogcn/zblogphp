@@ -14,7 +14,7 @@ $zbp->Initialize();
 $action='ArticleEdt';
 if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
-$blogtitle=$blogname . '-' . $lang['msg']['article_edit'];
+$blogtitle=$lang['msg']['article_edit'];
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
