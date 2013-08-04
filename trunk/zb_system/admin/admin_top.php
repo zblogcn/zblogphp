@@ -9,7 +9,7 @@
     <div class="menu">
       <ul id="topmenu">
 <?php
-ResponseAdminTopMenu()
+ResponseAdmin_TopMenu()
 ?>
       </ul>
     </div>

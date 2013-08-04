@@ -88,14 +88,26 @@ $actions=array(
 	'admin'=>4,
 	'search'=>5,
 	'misc'=>5,
+	'feed'=>5,
 
 	'ArticleEdt'=>3,
+	'ArticlePst'=>2,
 	'ArticleDel'=>3,
 
-	'CategoryEdt'=>1,
-	'CategoryPst'=>1,
+	'CategoryEdt'=>2,
+	'CategoryPst'=>2,
+	'CategoryDel'=>2,
 
-	'MemberEdt'=>0,
+	'CommentEdt'=>4,
+	'CommentPst'=>4,
+	'CommentDel'=>4,
+
+	'MemberEdt'=>4,
+	'MemberPst'=>4,
+	'MemberDel'=>1,
+
+	'UploadSnd'=>4,
+	'UploadDel'=>4,
 
 	'ArticleMng'=>3,
 	'CategoryMng'=>2,
@@ -109,8 +121,11 @@ $actions=array(
 	'ModuleMng'=>1,
 
 	'ArticleAll'=>2,
+	'CategoryAll'=>2,
+	'CommentAll'=>2,
 	'MemberAll'=>1,
-
+	'TagAll'=>2,
+	'UpdateAll'=>2,
 );
 
 

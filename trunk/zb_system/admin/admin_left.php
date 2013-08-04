@@ -1,7 +1,7 @@
 <aside class="left">
   <ul id="leftmenu">
 <?php
-ResponseAdminLeftMenu()
+ResponseAdmin_LeftMenu()
 ?>
   </ul>
 </aside>

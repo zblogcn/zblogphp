@@ -13,7 +13,7 @@ $leftmenus=array();
 
 
 
-function ResponseAdminLeftMenu(){
+function ResponseAdmin_LeftMenu(){
 
 	global $zbp;
 	global $leftmenus;
@@ -28,15 +28,18 @@ function ResponseAdminLeftMenu(){
 	$leftmenus[]=MakeLeftMenu("CategoryMng",$zbp->lang['msg']['category_manage'],$zbp->host . "zb_system/cmd.php?act=CategoryMng","nav_category","aCategoryMng","");
 	$leftmenus[]=MakeLeftMenu("TagMng",$zbp->lang['msg']['tag_manage'],$zbp->host . "zb_system/cmd.php?act=TagMng","nav_tags","aTagMng","");
 	$leftmenus[]=MakeLeftMenu("CommentMng",$zbp->lang['msg']['comment_manage'],$zbp->host . "zb_system/cmd.php?act=CommentMng","nav_comments","aCommentMng","");
-	$leftmenus[]=MakeLeftMenu("UploadMng",$zbp->lang['msg']['upload_manage'],$zbp->host . "zb_system/cmd.php?act=UploadMng","nav_accessories","aFileMng","");
-	$leftmenus[]=MakeLeftMenu("MemberMng",$zbp->lang['msg']['member_manage'],$zbp->host . "zb_system/cmd.php?act=MemberMng","nav_user","aUserMng","");
+	$leftmenus[]=MakeLeftMenu("UploadMng",$zbp->lang['msg']['upload_manage'],$zbp->host . "zb_system/cmd.php?act=UploadMng","nav_accessories","aUploadMng","");
+	$leftmenus[]=MakeLeftMenu("MemberMng",$zbp->lang['msg']['member_manage'],$zbp->host . "zb_system/cmd.php?act=MemberMng","nav_user","aMemberMng","");
 
 	$leftmenus[]="<li class='split'><hr/></li>";
 
 	$leftmenus[]=MakeLeftMenu("ThemeMng",$zbp->lang['msg']['theme_manage'],$zbp->host . "zb_system/cmd.php?act=ThemeMng","nav_themes","aThemeMng","");
-	$leftmenus[]=MakeLeftMenu("ModuleMng",$zbp->lang['msg']['module_manage'],$zbp->host . "zb_system/cmd.php?act=ModuleMng","nav_function","aFunctionMng","");
-	$leftmenus[]=MakeLeftMenu("PluginMng",$zbp->lang['msg']['plugin_manage'],$zbp->host . "zb_system/cmd.php?act=PluginMng","nav_plugin","aPlugInMng","");
+	$leftmenus[]=MakeLeftMenu("ModuleMng",$zbp->lang['msg']['module_manage'],$zbp->host . "zb_system/cmd.php?act=ModuleMng","nav_function","aModuleMng","");
+	$leftmenus[]=MakeLeftMenu("PluginMng",$zbp->lang['msg']['plugin_manage'],$zbp->host . "zb_system/cmd.php?act=PluginMng","nav_plugin","aPluginMng","");
 
+	foreach ($GLOBALS['Filter_Plugin_Admin_LeftMenu'] as $fpname => &$fpsignal) {
+		$fpname($leftmenus);
+	}
 
 	foreach ($leftmenus as $m) {
 		echo $m;
@@ -44,7 +47,7 @@ function ResponseAdminLeftMenu(){
 
 }
 
-function ResponseAdminTopMenu(){
+function ResponseAdmin_TopMenu(){
 
 	global $zbp;
 	global $topmenus;
@@ -52,6 +55,9 @@ function ResponseAdminTopMenu(){
 	$topmenus[]=MakeTopMenu("admin",$zbp->lang['msg']['dashboard'],$zbp->host . "zb_system/cmd.php?act=admin","","");
 	$topmenus[]=MakeTopMenu("SettingMng",$zbp->lang['msg']['settings'],$zbp->host . "zb_system/cmd.php?act=SettingMng","","");
 
+	foreach ($GLOBALS['Filter_Plugin_Admin_TopMenu'] as $fpname => &$fpsignal) {
+		$fpname($topmenus);
+	}
 
 	$topmenus[]=MakeTopMenu("misc",$zbp->lang['msg']['official_website'],"http://www.rainbowsoft.org/","","_blank");
 
@@ -105,7 +111,11 @@ function Admin_SiteInfo(){
 	global $zbp;
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['info_intro'] . '</div>';
-	echo '<div class="SubMenu">' . '@$Response_Plugin_SiteInfo_SubMenu' . '</div>';
+	echo '<div class="SubMenu">';
+	foreach ($GLOBALS['Filter_Plugin_Admin_SiteInfo'] as $fpname => &$fpsignal) {
+		$fpname();
+	}	
+	echo '</div>';
 	echo '<div id="divMain2">';
 
 
@@ -130,7 +140,12 @@ function Admin_ArticleMng(){
 
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['article_manage'] . '</div>';
-	echo '<div class="SubMenu"></div><div id="divMain2">';
+	echo '<div class="SubMenu">';
+	foreach ($GLOBALS['Filter_Plugin_Admin_ArticleMng'] as $fpname => &$fpsignal) {
+		$fpname();
+	}	
+	echo '</div>';
+	echo '<div id="divMain2">';
 	echo '<form class="search" id="edit" method="post" action="#">';
 
 	echo '<p>搜索:&nbsp;&nbsp;分类 <select class="edit" size="1" name="cate" style="width:100px;" ><option value="">任意</option></select>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -209,8 +224,13 @@ function Admin_PageMng(){
 
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['page_manage'] . '</div>';
-	echo '<div class="SubMenu"></div><div id="divMain2">';
-	echo '<form class="search" id="edit" method="post" action="#"></form>';
+	echo '<div class="SubMenu">';
+	foreach ($GLOBALS['Filter_Plugin_Admin_PageMng'] as $fpname => &$fpsignal) {
+		$fpname();
+	}	
+	echo '</div>';
+	echo '<div id="divMain2">';
+	echo '<!--<form class="search" id="edit" method="post" action="#"></form>-->';
 	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
 	echo '<tr>
 	<th>' . $zbp->lang['msg']['id'] . '</th>
@@ -266,8 +286,12 @@ function Admin_CategoryMng(){
 	global $zbp;
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['category_manage'] . '</div>';
-	echo '<div class="SubMenu"></div><div id="divMain2">';
-	echo '<form class="search" id="edit" method="post" action="#"></form>';
+	echo '<div class="SubMenu">';
+	foreach ($GLOBALS['Filter_Plugin_Admin_CategoryMng'] as $fpname => &$fpsignal) {
+		$fpname();
+	}	
+	echo '</div>';
+	echo '<div id="divMain2">';
 	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
 	echo '<tr>
 
@@ -303,48 +327,135 @@ foreach ($zbp->categorysbyorder as $category) {
 function Admin_CommentMng(){
 
 	global $zbp;
+
+	echo '<div class="divHeader">' . $zbp->lang['msg']['comment_manage'] . '</div>';
+	echo '<div class="SubMenu">';
+	foreach ($GLOBALS['Filter_Plugin_Admin_CommentMng'] as $fpname => &$fpsignal) {
+		$fpname();
+	}	
+	echo '</div>';
+	echo '<div id="divMain2">';
+
+	echo '</div>';
+	echo '<script type="text/javascript">ActiveLeftMenu("aCommentMng");</script>';
 	
 }
 
 function Admin_MemberMng(){
 
 	global $zbp;
+
+	echo '<div class="divHeader">' . $zbp->lang['msg']['member_manage'] . '</div>';
+	echo '<div class="SubMenu">';
+	foreach ($GLOBALS['Filter_Plugin_Admin_MemberMng'] as $fpname => &$fpsignal) {
+		$fpname();
+	}	
+	echo '</div>';
+	echo '<div id="divMain2">';
+
+	echo '</div>';
+	echo '<script type="text/javascript">ActiveLeftMenu("aMemberMng");</script>';
 	
 }
 
 function Admin_UploadMng(){
 
 	global $zbp;
+
+	echo '<div class="divHeader">' . $zbp->lang['msg']['upload_manage'] . '</div>';
+	echo '<div class="SubMenu">';
+	foreach ($GLOBALS['Filter_Plugin_Admin_UploadMng'] as $fpname => &$fpsignal) {
+		$fpname();
+	}	
+	echo '</div>';
+	echo '<div id="divMain2">';
+
+	echo '</div>';
+	echo '<script type="text/javascript">ActiveLeftMenu("aUploadMng");</script>';
 	
 }
 
 function Admin_TagMng(){
 
 	global $zbp;
+
+	echo '<div class="divHeader">' . $zbp->lang['msg']['tag_manage'] . '</div>';
+	echo '<div class="SubMenu">';
+	foreach ($GLOBALS['Filter_Plugin_Admin_TagMng'] as $fpname => &$fpsignal) {
+		$fpname();
+	}	
+	echo '</div>';
+	echo '<div id="divMain2">';
+
+	echo '</div>';
+	echo '<script type="text/javascript">ActiveLeftMenu("aTagMng");</script>';
 	
 }
 
 function Admin_PluginMng(){
 
 	global $zbp;
+
+	echo '<div class="divHeader">' . $zbp->lang['msg']['plugin_manage'] . '</div>';
+	echo '<div class="SubMenu">';
+	foreach ($GLOBALS['Filter_Plugin_Admin_MemberMng'] as $fpname => &$fpsignal) {
+		$fpname();
+	}	
+	echo '</div>';
+	echo '<div id="divMain2">';
+
+	echo '</div>';
+	echo '<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>';
 	
 }
 
 function Admin_ThemeMng(){
 
 	global $zbp;
+
+	echo '<div class="divHeader">' . $zbp->lang['msg']['theme_manage'] . '</div>';
+	echo '<div class="SubMenu">';
+	foreach ($GLOBALS['Filter_Plugin_Admin_ThemeMng'] as $fpname => &$fpsignal) {
+		$fpname();
+	}	
+	echo '</div>';
+	echo '<div id="divMain2">';
+
+	echo '</div>';
+	echo '<script type="text/javascript">ActiveLeftMenu("aThemeMng");</script>';
 	
 }
 
 function Admin_ModuleMng(){
 
 	global $zbp;
+
+	echo '<div class="divHeader">' . $zbp->lang['msg']['module_manage'] . '</div>';
+	echo '<div class="SubMenu">';
+	foreach ($GLOBALS['Filter_Plugin_Admin_ModuleMng'] as $fpname => &$fpsignal) {
+		$fpname();
+	}	
+	echo '</div>';
+	echo '<div id="divMain2">';
+
+	echo '</div>';
+	echo '<script type="text/javascript">ActiveLeftMenu("aModuleMng");</script>';
 	
 }
 
 function Admin_SettingMng(){
 
 	global $zbp;
+
+	echo '<div class="divHeader">' . $zbp->lang['msg']['settings'] . '</div>';
+	echo '<div class="SubMenu">';
+	foreach ($GLOBALS['Filter_Plugin_Admin_SettingMng'] as $fpname => &$fpsignal) {
+		$fpname();
+	}	
+	echo '</div>';
+	echo '<div id="divMain">';
+
+	echo '</div>';
 	echo '<script type="text/javascript">ActiveTopMenu("topmenu2");</script>';
 }
 

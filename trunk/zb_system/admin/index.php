@@ -9,6 +9,12 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
+function aaa(&$lm){
+	$lm[]='adgf';
+}
+
+Add_Filter_Plugin('Filter_Plugin_AdminLeftMenu','aaa');
+
 $zbp->Initialize();
 #$zbp->BuildTemplate();
 
