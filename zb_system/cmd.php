@@ -42,7 +42,7 @@ switch ($action) {
 		redirect('admin/category_edit.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'CategoryPst':
-		CategoryPost();
+		PostCategory();
 		redirect('cmd.php?act=CategoryMng');
 		break;
 	case 'CommentMng':

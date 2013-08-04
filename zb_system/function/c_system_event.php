@@ -89,7 +89,7 @@ function Logout(){
 
 
 
-function CategoryPost(){
+function PostCategory(){
 	global $zbp;
 
 	$parentid=(int)GetVars('edtPareID','POST');
