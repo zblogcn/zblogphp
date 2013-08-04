@@ -177,7 +177,7 @@ $array=$zbp->GetArticleList(
 foreach ($array as $article) {
 	echo '<tr>';
 	echo '<td class="td5">' . $article->ID .  '</td>';
-	echo '<td class="td10">' . $article->Category->Name . '</td>';
+	echo '<td class="td10">' . $article->CateID . '</td>';
 	echo '<td class="td10">' . $article->Author->Name . '</td>';
 	echo '<td>' . $article->Title . '</td>';
 	echo '<td class="td20">' . date('Y-m-d h:i:s',$article->PostTime) . '</td>';
@@ -279,11 +279,11 @@ function Admin_CategoryMng(){
 	</tr>';
 
 
-foreach ($zbp->categorys as $category) {
+foreach ($zbp->categorysbyorder as $category) {
 	echo '<tr>';
 	echo '<td class="td5">' . $category->ID . '</td>';
 	echo '<td class="td5">' . $category->Order . '</td>';
-	echo '<td class="td20">' . $category->Name . '</td>';
+	echo '<td class="td20">' . $category->Symbol . $category->Name . '</td>';
 	echo '<td class="td20">' . $category->Alias . '</td>';
 	echo '<td class="td10 tdCenter">';
 	echo '<a href="../cmd.php?act=CategoryEdt&amp;id='. $category->ID .'"><img src="../image/admin/folder_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';

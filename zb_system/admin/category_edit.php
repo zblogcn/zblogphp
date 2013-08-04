@@ -28,15 +28,17 @@ $cate=$zbp->GetCategoryByID($cateid);
 
 $p=null;
 
-if($cate->ParentID==0){$p .='<option value="0">无</option>';}
+$p .='<option value="0">无</option>';
 
-foreach ($zbp->categorys as $k => $v) {
+foreach ($zbp->categorysbyorder as $k => $v) {
 	if($v->ID==$cate->ID){continue;}
-	if($v->ParentID==0){
-		$p .='<option ' . ($v->ID==$cate->ParentID?'selected="selected"':'') . ' value="'. $v->ID .'">' . $v->Name . '</option>';
+	#if($v->RootID==$cate->ID){continue;}
+	#if($cate->RootID>0){if($v->RootID==$cate->RootID){continue;}}
+	if($v->Level<3){
+		$p .='<option ' . ($v->ID==$cate->ParentID?'selected="selected"':'') . ' value="'. $v->ID .'">' . $v->SymbolName . '</option>';
 	}
 }
-var_dump($cate);
+#var_dump($cate);
 ?>
 
 <div id="divMain">

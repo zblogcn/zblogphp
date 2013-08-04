@@ -16,6 +16,12 @@ if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
 $blogtitle=$lang['msg']['article_edit'];
 
+
+$article=new Post;
+if((GetVars('id','GET')!='')){
+  $article->LoadInfoByID((integer)(GetVars('id','GET')));
+}
+
 require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <script type="text/javascript" src="../script/jquery.tagto.js"></script>
@@ -90,14 +96,18 @@ require $blogpath . 'zb_system/admin/admin_top.php';
             <input class="button" style="width:180px;height:38px;" type="submit" value="提交" id="btnPost" onclick='return checkArticleInfo();' />
           </div>
           
-          <!-- cate -->
+          <!-- cate --><?php if($article->Type==0){ ?>
           <div id='cate' class='editmod'>
-            <label for="cmbCate" class="editinputname" ><?php echo $lang['msg']['category']?></label>
-            <select style="width:180px;" class="edit" size="1" id="cmbCate" onChange="edtCateID.value=this.options[this.selectedIndex].value;selectlogtemplate(this.options[this.selectedIndex].value);">
+            <select style="width:180px;" class="edit" size="1" id="edtCate">
+<?php
+foreach ($zbp->categorysbyorder as $id => $cate) {
+  echo '<option ' . ($article->CateID==$cate->ID?'selected="selected"':'') . ' value="'. $cate->ID .'">' . $cate->SymbolName . '</option>';
+}
+?>
             </select>
             <input type="hidden" name="edtCateID" id="edtCateID" value="0" />
           </div>
-          <!-- cate --> 
+          <?php } ?><!-- cate --> 
           
           <!-- template( -->
 
