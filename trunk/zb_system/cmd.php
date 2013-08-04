@@ -43,6 +43,7 @@ switch ($action) {
 		break;
 	case 'CategoryPst':
 		CategoryPost();
+		redirect('cmd.php?act=CategoryMng');
 		break;
 	case 'CommentMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));

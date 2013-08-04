@@ -21,6 +21,7 @@ $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $cookiespath = null;
 $bloghost = null;
 
+$option_zbusers=null;
 if(file_exists($blogpath . 'zb_users/c_option.php')){
 	$option_zbusers = require($blogpath . 'zb_users/c_option.php');
 }

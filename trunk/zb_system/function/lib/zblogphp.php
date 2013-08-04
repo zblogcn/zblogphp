@@ -20,6 +20,7 @@ class ZBlogPHP{
 	public $members=array();
 	public $membersbyname=array();
 	public $categorys=array();
+	public $categorysbyorder=array();	
 	public $tags=array();
 	#public $modules=array();
 	public $modulesbyfilename=array();
@@ -264,9 +265,40 @@ class ZBlogPHP{
 
 	public function LoadCategorys(){
 
-		$array=$this->GetCategoryList();
+		$lv0=array();
+		$lv1=array();
+		$lv2=array();
+		$lv3=array();	
+		$array=$this->GetCategoryList(null,array('cate_Order'=>'ASC'),null,null);
 		foreach ($array as $c) {
 			$this->categorys[$c->ID]=$c;
+		}
+		foreach ($this->categorys as $id=>$c) {
+			$l='lv' . $c->Level;
+			${$l}[$c->ParentID][]=$id;
+		}
+
+
+		foreach ($lv0[0] as $id0) {
+			$this->categorysbyorder[$id0]=&$this->categorys[$id0];
+			if(!isset($lv1[$id0])){continue;}
+			foreach ($lv1[$id0] as $id1) {
+				if($this->categorys[$id1]->ParentID==$id0){
+					$this->categorysbyorder[$id1]=&$this->categorys[$id1];
+					if(!isset($lv2[$id1])){continue;}
+					foreach ($lv2[$id1] as $id2) {
+						if($this->categorys[$id2]->ParentID==$id1){
+							$this->categorysbyorder[$id2]=&$this->categorys[$id2];
+							if(!isset($lv3[$id2])){continue;}
+							foreach ($lv3[$id2] as $id3) {
+								if($this->categorys[$id3]->ParentID==$id2){
+									$this->categorysbyorder[$id3]=&$this->categorys[$id3];
+								}
+							}
+						}
+					}		
+				}
+			}
 		}
 	}
 

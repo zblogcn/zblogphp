@@ -16,9 +16,9 @@ register_shutdown_function(create_function('',''));
 $zbp->Initialize();
 
 function article(){
-	for ($i=0; $i < 5000; $i++) { 
+	for ($i=0; $i < 2000; $i++) { 
 		$a=new Post();
-		$a->CateID=rand(1,200);
+		$a->CateID=rand(1,20);
 		$a->AuthorID=1;
 		$a->Tag=getTagStr(rand(0,19));
 		$a->Status=ZC_LOG_STATUS_PUBLIC;
@@ -64,7 +64,7 @@ function page(){
 }
 
 function cate(){
-	for ($i=0; $i < 50; $i++) { 
+	for ($i=0; $i < 20; $i++) { 
 		$cate = new Category();
 		$cate->LoadInfobyArray(array(
 		0,
@@ -84,7 +84,7 @@ function cate(){
 }
 
 function tag(){
-	for ($i=0; $i < 3000; $i++) { 
+	for ($i=0; $i < 1000; $i++) { 
 		$tag = new Tag();
 		$tag->LoadInfobyArray(array(
 		0,
@@ -130,7 +130,7 @@ function getRandStr($len) {
 function getTagStr($tagcount) {
  $str = '';
  for($i=0;$i<$tagcount;$i++) {
-  $str = $str . '{' . rand(1,5000) . '}';
+  $str = $str . '{' . rand(1,1000) . '}';
  }
  return $str;
 

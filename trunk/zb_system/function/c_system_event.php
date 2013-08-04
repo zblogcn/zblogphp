@@ -90,41 +90,44 @@ function Logout(){
 
 
 function CategoryPost(){
+	global $zbp;
+
+	$parentid=(int)GetVars('edtPareID','POST');
+	if($parentid>0){
+		if($zbp->categorys[$parentid]->Level>2){
+			$_POST['edtPareID']='0';
+		}
+	}
+
 	$cate = new Category();
 	if($_POST['edtID'] == 0){
 		$cate->LoadInfobyArray(
 			array(
-				$_POST['edtID'],
-				$_POST['edtName'],
-				$_POST['edtOrder'],
+				GetVars('edtID','POST'),
+				GetVars('edtName','POST'),
+				GetVars('edtOrder','POST'),
 				0,
-				$_POST['edtAlias'],
+				GetVars('edtAlias','POST'),
 				'',
 				0,
-				$_POST['edtPareID'],
-				$_POST['edtTemplate'],
-				$_POST['edtLogTemplate'],
+				GetVars('edtPareID','POST'),
+				GetVars('edtTemplate','POST'),
+				GetVars('edtLogTemplate','POST'),
 				''
 			)
 		);
 		$cate->Post();
-		redirect('cmd.php?act=CategoryMng');
 	}else{
-		$cate->LoadInfoByID($_POST['edtID']);
-		$cate->Name = $_POST['edtName'];
-		$cate->Order = $_POST['edtOrder'];
-		$cate->Alias = $_POST['edtAlias'];
-		$cate->ParentID = $_POST['edtPareID'];
-		$cate->Template = $_POST['edtTemplate'];
-		$cate->LogTemplate = $_POST['edtLogTemplate'];
+		$cate->LoadInfoByID(GetVars('edtID','POST'));
+		$cate->Name = GetVars('edtName','POST');
+		$cate->Order = GetVars('edtOrder','POST');
+		$cate->Alias = GetVars('edtAlias','POST');
+		$cate->ParentID = GetVars('edtPareID','POST');
+		$cate->Template = GetVars('edtTemplate','POST');
+		$cate->LogTemplate = GetVars('edtLogTemplate','POST');
 		$cate->Post();
-		redirect('cmd.php?act=CategoryMng');
 	}
 }
-
-
-
-
 
 
 ?>
