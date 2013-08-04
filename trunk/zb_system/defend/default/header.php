@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta http-equiv="Content-Language" content="{$language}" />
-	<title>{$title}</title>
+	<title>{$name}-{$title}</title>
 	<meta name="generator" content="{$zblogphp}" />
 	<link rel="stylesheet" rev="stylesheet" href="{$host}zb_users/theme/{$theme}/source/style.css.php" type="text/css" media="screen" />
 	<script src="{$host}zb_system/script/common.js" type="text/javascript"></script>

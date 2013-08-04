@@ -7,7 +7,7 @@
 <?php }?>
 <meta name="generator" content="Z-BlogPHP <?php echo $option['ZC_BLOG_VERSION']?>" />
 <meta name="robots" content="none" />
-<title><?php echo $blogtitle?></title>
+<title><?php echo $blogname . '-' . $blogtitle?></title>
 <link href="<?php echo $bloghost?>zb_system/css/admin2.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo $bloghost?>zb_system/script/common.js" type="text/javascript"></script>
 <script src="<?php echo $bloghost?>zb_system/script/c_admin_js_add.php" type="text/javascript"></script>

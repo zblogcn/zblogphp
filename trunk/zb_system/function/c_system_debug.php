@@ -6,12 +6,14 @@
  * @version 2.0 2013-06-14
  */
 
-set_error_handler("error_handler");
+
+set_error_handler('error_handler');
 set_exception_handler('exception_handler');
 register_shutdown_function('shutdown_error_handler');
 
 
 
+ 
 function error_handler($errno, $errstr, $errfile, $errline ){
 
 	#throw new ErrorException($errstr,0,$errno, $errfile, $errline);

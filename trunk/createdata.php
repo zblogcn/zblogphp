@@ -7,11 +7,16 @@
  */
 
 require 'zb_system/function/c_system_base.php';
+error_reporting(0);
+ini_set("display_errors",0);
+set_error_handler(create_function('',''));
+set_exception_handler(create_function('',''));
+register_shutdown_function(create_function('',''));
 
 $zbp->Initialize();
 
 function article(){
-	for ($i=0; $i < 10000; $i++) { 
+	for ($i=0; $i < 5000; $i++) { 
 		$a=new Post();
 		$a->CateID=rand(1,200);
 		$a->AuthorID=1;
@@ -22,8 +27,8 @@ function article(){
 		$a->IsTop=false;
 		$a->IsLock=false;
 		$a->Title=getRandStr(rand(8,14));
-		$a->Intro='欢迎使用Z-BlogPHP' . GetGuid();
-		$a->Content='欢迎使用Z-BlogPHP' . GetGuid() . '<br/>' . GetGuid();
+		$a->Intro=getRandStr(rand(50,150)) . GetGuid();
+		$a->Content=getRandStr(rand(200,300)) . GetGuid() . '<br/>' . GetGuid();
 		$a->IP=GetGuestIP();
 		$a->PostTime=time();
 		$a->CommNums=0;
@@ -35,7 +40,7 @@ function article(){
 }
 
 function page(){
-	for ($i=0; $i < 1000; $i++) { 
+	for ($i=0; $i < 500; $i++) { 
 		$a=new Post();
 		$a->CateID=0;
 		$a->AuthorID=1;
@@ -47,7 +52,7 @@ function page(){
 		$a->IsLock=false;
 		$a->Title=getRandStr(rand(6,10));
 		$a->Intro='';
-		$a->Content='这是一个留言本.' . GetGuid() . '<br/>' . GetGuid();
+		$a->Content=getRandStr(rand(200,300)) . GetGuid() . '<br/>' . GetGuid();
 		$a->IP=GetGuestIP();
 		$a->PostTime=time();
 		$a->CommNums=0;
@@ -59,7 +64,7 @@ function page(){
 }
 
 function cate(){
-	for ($i=0; $i < 200; $i++) { 
+	for ($i=0; $i < 50; $i++) { 
 		$cate = new Category();
 		$cate->LoadInfobyArray(array(
 		0,
@@ -79,7 +84,7 @@ function cate(){
 }
 
 function tag(){
-	for ($i=0; $i < 5000; $i++) { 
+	for ($i=0; $i < 3000; $i++) { 
 		$tag = new Tag();
 		$tag->LoadInfobyArray(array(
 		0,
@@ -95,12 +100,24 @@ function tag(){
   	}
 }
 
-function getChineseChar() {
+function getChineseChar2() {
  $unidec = rand(hexdec('4e00'), hexdec('9fa5'));
  $unichr = '&#' . $unidec . ';';
  $zhcnchr = mb_convert_encoding($unichr, "UTF-8", "HTML-ENTITIES");
  return $zhcnchr;
 }
+
+function getChineseChar() {
+
+$i= rand(0xb0, 0xd7);
+$j= rand(0xa1, 0xfe);
+$s=  chr($i).chr($j);
+$s=@iconv('GB2312', 'UTF-8//IGNORE', $s);
+
+return $s;
+}
+
+
 
 function getRandStr($len) {
  $str = '';
@@ -119,20 +136,19 @@ function getTagStr($tagcount) {
 
 }
 
-#echo chr(0xE4).chr(0xB8).chr(0x80);
-#echo chr(0xE8).chr(0xB7).chr(0x8B);
+
 
 echo "生成分类!<br/>";
-#cate();
+cate();
 
 echo "生成文章!<br/>";
 article();
 
 echo "生成页面!<br/>";
-#page();
+page();
 
 echo "tag!<br/>";
-#tag();
+tag();
 
 $zbp->Terminate();
 
