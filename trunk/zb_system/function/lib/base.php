@@ -101,7 +101,7 @@ abstract class Base
 				}elseif ($value[1] == 'boolean') {
 					$a[]=(integer)$this->$key;
 				}else{
-					$a[] = $this->$key;		
+					$a[] = (integer)$this->$key;		
 				}
 			}
 			$s .= implode(',', $a);
@@ -117,7 +117,7 @@ abstract class Base
 				}elseif ($value[1] == 'boolean') {
 					$a[]=$value[0] . '=' . (integer)$this->$key;
 				}else{
-					$a[]=$value[0] . '=' . $this->$key;	
+					$a[]=$value[0] . '=' . (integer)$this->$key;	
 				}
 			}
 			$s .= implode(', ', $a);

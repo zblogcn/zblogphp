@@ -22,6 +22,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <?php
 
+$cateid=null;
 if(isset($_GET['id'])){$cateid = $_GET['id'];}else{$cateid = 0;}
 
 $cate=$zbp->GetCategoryByID($cateid);
@@ -46,40 +47,40 @@ foreach ($zbp->categorysbyorder as $k => $v) {
   <div class="SubMenu"></div>
   <div id="divMain2" class="edit category_edit">
 	<form id="edit" name="edit" method="post" action="#">
-	  <input id="edtID" name="edtID" type="hidden" value="<?php echo $cateid;?>" />
+	  <input id="edtID" name="ID" type="hidden" value="<?php echo $cate->ID;?>" />
 	  <p>
 		<span class="title">名称:</span><span class="star">(*)</span><br />
-		<input id="edtName" class="edit" size="40" name="edtName" maxlength="50" type="text" value="<?php echo $cate->Name;?>" />
+		<input id="edtName" class="edit" size="40" name="Name" maxlength="50" type="text" value="<?php echo $cate->Name;?>" />
 	  </p>
 	  <p>
 		<span class="title">别名:</span><br />
-		<input id="edtAlias" class="edit" size="40" name="edtAlias" type="text" value="<?php echo $cate->Alias;?>" />
+		<input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $cate->Alias;?>" />
 	  </p>
 
 	  <p>
 		<span class="title">排序:</span><br />
-		<input id="edtOrder" class="edit" size="40" name="edtOrder" type="text" value="<?php echo $cate->Order;?>" />
+		<input id="edtOrder" class="edit" size="40" name="Order" type="text" value="<?php echo $cate->Order;?>" />
 	  </p>
 	  <p>
 		<span class="title">父分类:</span><br />
-		<select id="edtPareID" name="edtPareID" class="edit" size="1">
+		<select id="edtParentID" name="ParentID" class="edit" size="1">
 			<?php echo $p;?>
 		</select>
 	  </p>
 	  <p>
 		<span class="title">模板:</span><br />
-		<select class="edit" size="1" id="cmbTemplate" onchange="edtTemplate.value=this.options[this.selectedIndex].value">
+		<select class="edit" size="1" name="Template" id="cmbTemplate">
 		  <option value="CATALOG" selected="selected">CATALOG (默认模板)</option>
 		</select><input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $cate->Template;?>" />
 	  </p>
 	  <p>
 		<span class="title">此目录下文章的默认模板:</span><br />
-		<select class="edit" size="1" id="cmbLogTemplate" onchange="edtLogTemplate.value=this.options[this.selectedIndex].value">
+		<select class="edit" size="1" name="LogTemplate" id="cmbLogTemplate">
 		  <option value="SINGLE" selected="selected">SINGLE (默认模板)</option>
 		</select><input type="hidden" name="edtLogTemplate" id="edtLogTemplate" value="<?php echo $cate->LogTemplate;?>" />
 	  </p>
 	  <p>
-		<label><input type="checkbox" name="edtAddNavbar" id="edtAddNavbar" value="True" />  <span class="title">加入导航栏菜单</span></label>
+		<label><input type="checkbox" name="AddNavbar" id="edtAddNavbar" value="True" />  <span class="title">加入导航栏菜单</span></label>
 	  </p>
 	  <p>
 		<input type="submit" class="button" value="提交" id="btnPost" onclick="return checkCateInfo();" />

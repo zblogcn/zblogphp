@@ -9,11 +9,11 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
-function aaa(&$lm){
-	$lm[]='adgf';
+function zbp_add(){
+	echo '<a href="../cmd.php?act=ArticleEdt&amp;type=1"><span class="m-left">' . $GLOBALS['lang']['msg']['new_page'] . '</span></a>';
 }
 
-Add_Filter_Plugin('Filter_Plugin_AdminLeftMenu','aaa');
+Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','aaa');
 
 $zbp->Initialize();
 #$zbp->BuildTemplate();

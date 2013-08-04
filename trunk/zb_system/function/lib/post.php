@@ -23,11 +23,12 @@ class Post extends Base{
 		}
 
 		$this->ID = 0;
-		$this->Name	= $GLOBALS['lang']['msg']['unnamed'];
+		$this->Title	= $GLOBALS['lang']['msg']['unnamed'];
+		$this->PostTime	= time();		
 	}
 
 
-	public function Time($s=''){
+	public function Time($s='Y-m-d h:i:s'){
 		return date($s,$this->PostTime);
 	}
 
@@ -63,7 +64,7 @@ class Post extends Base{
 				break;
 			case 'Url':
 				return $zbp->host . 'view.php?id=' . $this->ID ;
-				break;				
+				break;	
 			default:
 				return parent::__get($name);
 				break;

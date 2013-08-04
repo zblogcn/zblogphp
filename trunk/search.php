@@ -20,6 +20,9 @@ $article->Title='搜索“' . GetVars('q','GET') . '”';
 $article->IsLock=true;
 
 
+
+$w=array();
+$w[]=array('=','log_Type','0');
 if(GetVars('q','GET')){
 	$w[]=array('search','log_Content','log_Intro','log_Title',GetVars('q','GET'));
 }

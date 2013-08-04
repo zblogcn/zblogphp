@@ -16,6 +16,8 @@ if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
 $blogtitle=$lang['msg']['article_edit'];
 
+$ispage=false;
+if(GetVars('type','GET')=='1'){$ispage=true;}
 
 $article=new Post;
 if((GetVars('id','GET')!='')){
@@ -26,14 +28,17 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <script type="text/javascript" src="../script/jquery.tagto.js"></script>
 <script type="text/javascript" src="../script/jquery-ui-timepicker-addon.js"></script>
+
+<?php
+foreach ($GLOBALS['Filter_Plugin_Edit_Begin'] as $fpname => &$fpsignal) {$fpname();}
+?>
+
 <?php
 require $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
-<script type="text/javascript">ActiveLeftMenu("aArticleEdt");</script>
-
-<div class="divHeader2"><?php echo $lang['msg']['article_edit']?></div>
+<div class="divHeader2"><?php echo $ispage?$lang['msg']['page_edit']:$lang['msg']['article_edit'];?></div>
 
 
 <div class="SubMenu"></div>
@@ -41,12 +46,12 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <form id="edit" name="edit" method="post" action="#">
   <div id="divEditLeft">
     <div id="divEditTitle">
-      <input type="hidden" name="edtID" id="edtID" value="0" />
-      <input type="hidden" name="edtFType" id="edtFType" value="0" />
+      <input type="hidden" name="ID" id="edtID" value="0" />
+      <input type="hidden" name="Type" id="edtType" value="0" />
       <!-- title( -->
 		<div id='titleheader' class='editmod'>
 			<label for="edtTitle" class="editinputname" ><?php echo $lang['msg']['title']?></label>
-			<div><input type="text" name="edtTitle" id="edtTitle"  maxlength="100" onBlur="if(this.value=='') this.value='<?php echo $lang['msg']['unnamed']?>'" onFocus="if(this.value=='<?php echo $lang['msg']['unnamed']?>') this.value=''" value="<?php echo $lang['msg']['unnamed']?>" /></div>
+			<div><input type="text" name="Title" id="edtTitle"  maxlength="100" onBlur="if(this.value=='') this.value='<?php echo $lang['msg']['unnamed']?>'" onFocus="if(this.value=='<?php echo $lang['msg']['unnamed']?>') this.value=''" value="<?php echo $article->Title;?>" /></div>
       </div>
       <!-- )title --> 
   
@@ -56,30 +61,30 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     
     <div id="divContent" style="clear:both;">
 		<div id='cheader' class='editmod'><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="c_autosaverjs.asp?act=edit"></script></div>
-		<div id='carea' class='editmod'><textarea id="editor_content" name="txaContent"></textarea></div>
+		<div id='carea' class='editmod'><textarea id="editor_content" name="Content"></textarea></div>
 		<div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Watting...</div>
 
       <!-- alias( -->
       <div id='alias' class='editmod'><label for="edtAlias" class="editinputname" ><?php echo $lang['msg']['alias']?></label>
-        <input type="text" name="edtAlias" id="edtAlias" maxlength="250" value="" />
+        <input type="text" name="Alias" id="edtAlias" maxlength="250" value="" />
         .html </div>
       <!-- )alias --> 
 
-	 <!-- tags( -->
+	    <!-- tags( --><?php if(!$ispage){?>
       <div id='tags' class='editmod'><label  for="edtTag"  class='editinputname'><?php echo $lang['msg']['tags']?></label>
-        <input type="text"  name="edtTag" id="edtTag" value="" />
+        <input type="text"  name="Tag" id="edtTag" value="" />
         (<?php echo $lang['msg']['use_commas_to_separate']?>) <a href="#" id="showtags"><?php echo $lang['msg']['show_common_tags']?></a></div>
       <!-- Tags -->
       <div id="ulTag" style="display:none;">
         <div id="ajaxtags">Watting...</div>
       </div>
-      <!-- )tags --> 
-
+      <!-- )tags -->
        <div id='insertintro' class='editmod'><span><?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
+       <?php }?>
 		</div>   
 		<div id="divIntro" style="display:none;">
        <div id='introheader' class='editmod'><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
-       <textarea id="editor_intro" name="txaIntro"></textarea>
+       <textarea id="editor_intro" name="Intro"></textarea>
        <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Watting...</div>
     </div>
     
@@ -96,7 +101,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
             <input class="button" style="width:180px;height:38px;" type="submit" value="提交" id="btnPost" onclick='return checkArticleInfo();' />
           </div>
           
-          <!-- cate --><?php if($article->Type==0){ ?>
+          <!-- cate --><?php if(!$ispage){ ?>
           <div id='cate' class='editmod'>
             <select style="width:180px;" class="edit" size="1" id="edtCate">
 <?php
@@ -105,52 +110,47 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
 }
 ?>
             </select>
-            <input type="hidden" name="edtCateID" id="edtCateID" value="0" />
+            <input type="hidden" name="CateID" id="edtCateID" value="0" />
           </div>
-          <?php } ?><!-- cate --> 
+          <!-- cate --><?php } ?>
           
           <!-- template( -->
 
           <div id='template' class='editmod'> <label for="cmbTemplate" class="editinputname" ><?php echo $lang['msg']['template']?></label>
-            <select style="width:180px;" class="edit" size="1" id="cmbTemplate" onChange="edtTemplate.value=this.options[this.selectedIndex].value">
+            <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate" onChange="edtTemplate.value=this.options[this.selectedIndex].value">
               <option value="PAGE">PAGE</option><option value="SINGLE" selected="selected">SINGLE(<?php echo $lang['msg']['default_template']?>)</option><option value="TOP">TOP</option>
             </select>
-            <input type="hidden" name="edtTemplate" id="edtTemplate" value="" />
           </div>
           <!-- )template --> 
           
           <!-- level -->
           <div id='level' class='editmod'> <label for="cmbArticleLevel" class="editinputname" ><?php echo $lang['msg']['status']?></label>
-            <select class="edit" style="width:180px;" size="1" id="cmbArticleLevel" onChange="edtLevel.value=this.options[this.selectedIndex].value">
-
+            <select class="edit" style="width:180px;" size="1" name="Status" id="cmbArticleLevel" onChange="edtLevel.value=this.options[this.selectedIndex].value">
               <option value="0" ><?php echo $lang['post_status_name']['0']?></option><option value="1" ><?php echo $lang['post_status_name']['1']?></option><option value="2" ><?php echo $lang['post_status_name']['2']?></option>
             </select>
-            <input type="hidden" name="edtLevel" id="edtLevel" value="4" />
           </div>
           <!-- )level --> 
           
           <!-- user( -->
           <div id='user' class='editmod'> <label for="cmbUser" class="editinputname" ><?php echo $lang['msg']['author']?></label>
-            <select style="width:180px;" size="1" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
-
+            <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
               <option value="1" selected="selected">zblogger</option>
             </select>
-            <input type="hidden" name="edtAuthorID" id="edtAuthorID" value="1" />
           </div>
           <!-- )user --> 
           
           <!-- newdatetime( -->
           <div id='newdatetime' class='editmod'> <label for="edtDateTime" class="editinputname" ><?php echo $lang['msg']['date']?></label>
-            <input type="text" name="edtDateTime" id="edtDateTime"  value="" style="width:171px;"/>
+            <input type="text" name="PostTime" id="edtDateTime"  value="<?php echo $article->Time();?>" style="width:171px;"/>
             </div>
 
           <!-- )newdatetime --> 
           
-          <!-- Istop( -->
+          <!-- Istop( --><?php if(!$ispage){?>
           <div id='istop' class='editmod'>    
             <label for="edtIstop" class="editinputname" ><?php echo $lang['msg']['top']?></label>
-            <input type="checkbox" name="edtIstop" id="edtIstop" value="True"/>
-          </div>
+            <input type="checkbox" name="Istop" id="edtIstop" value="True"/>
+          </div><?php }?>
 
           <!-- )Istop --> 
 	  
@@ -159,7 +159,7 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
           <div id='islock' class='editmod'>
             
             <label for="edtIslock" class='editinputname'><?php echo $lang['msg']['disable_comment']?></label>
-             <input type="checkbox" name="edtIslock" id="edtIslock" value="True"/>
+             <input type="checkbox" name="Islock" id="edtIslock" value="True"/>
          </div>
           <!-- )IsLock --> 
 
@@ -178,6 +178,17 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
 </form>
 </div>
 
+<?php
+if($ispage){
+  echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
+}elseif($article->ID==0){
+  echo '<script type="text/javascript">ActiveLeftMenu("aArticleEdt");</script>';
+}else{
+  echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
+}
+
+?>
+
 
         <script type="text/javascript">
 
@@ -186,19 +197,34 @@ var sContent="",sIntro="";//原内容与摘要
 var isSubmit=false;//是否提交保存
 
 
+function getContent(){
+  return $('#editor_content').val()
+}
+
+function getIntro(){
+
+}
+
+function setContent(s){
+  $('#editor_content').val(s);
+}
+
+function setIntro(s){
+  $('#editor_intro').val(s);
+}
 
 $(document).click(function (event){$('#ulTag').slideUp("fast");});  
 
 //文章内容或摘要变动提示保存
 window.onbeforeunload = function(){
-  if (!isSubmit && ($('#editor_content').val())) return "<?php echo $zbp->lang['error'][71];?>";
+  if (!isSubmit && getContent()) return "<?php echo $zbp->lang['error'][71];?>";
 }
 
 
 function checkArticleInfo(){
   document.getElementById("edit").action="../cmd.php?act=ArticlePst";
 
-  if(!$('#editor_content').val()){
+  if(!getContent()){
     alert('<?php echo $zbp->lang['error'][70];?>');
     return false
   }
@@ -282,14 +308,16 @@ function DelKey(i) {
 
 //提取摘要
 function AutoIntro() {
-  var s=$('#editor_content').val();
-  if(s.indexOf("<hr class=\"more\" />")>-1||s.indexOf("<hr class=\"more\"/>")>-1){
-    $('#editor_intro').val(s.split("<hr class=\"more\" />")[0]);
-    $('#editor_intro').val(s.split("<hr class=\"more\"/>")[0]);
+  var s=getContent();
+  if(s.indexOf("<hr class=\"more\" />")>-1){
+    setIntro(s.split("<hr class=\"more\" />")[0]);
   }else{
-    $('#editor_intro').val(s.substring(0,250));
+	if(s.indexOf("<hr class=\"more\"/>")>-1){
+	    setIntro(s.split("<hr class=\"more\"/>")[0]);
+	}else{
+		setIntro(s.substring(0,250));
+	}
   }
-
   $("#divIntro").show();
   $('html,body').animate({scrollTop:$('#divIntro').offset().top},'fast');
 }
@@ -315,13 +343,14 @@ function selectlogtemplate(c){
 }
 function selectlogtemplatesub(a){
   $("#cmbTemplate").find("option[value='"+a+"']").attr("selected","selected");
-  $("#edtTemplate").val(a);
 }
 
 
 </script>
 
-
+<?php
+foreach ($GLOBALS['Filter_Plugin_Edit_End'] as $fpname => &$fpsignal) {$fpname();}
+?>
 
 </div>
 <?php

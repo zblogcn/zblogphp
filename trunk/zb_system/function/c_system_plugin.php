@@ -120,7 +120,7 @@ function Add_Action_Plugin($plugname,$actioncode){
 		'exitsignal:return,break,continue
 '*********************************************************
 */
-function Add_Filter_Plugin($plugname,$functionname,$exitsignal=''){
+function Add_Filter_Plugin($plugname,$functionname,$exitsignal=PLUGIN_EXITSIGNAL_NONE){
 	$GLOBALS[$plugname][$functionname]=$exitsignal;
 }
 
@@ -238,7 +238,7 @@ $Filter_Plugin_Admin_TopMenu=array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_SiteInfo=array();
+$Filter_Plugin_Admin_SiteInfo_SubMenu=array();
 
 
 
@@ -252,7 +252,7 @@ $Filter_Plugin_Admin_SiteInfo=array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_ArticleMng=array();
+$Filter_Plugin_Admin_ArticleMng_SubMenu=array();
 
 
 
@@ -266,22 +266,7 @@ $Filter_Plugin_Admin_ArticleMng=array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_PageMng=array();
-
-
-
-
-
-/*
-'**************************************************<
-'类型:Filter
-'名称:
-'参数:
-'说明:
-'调用:
-'**************************************************>
-*/
-$Filter_Plugin_Admin_CategoryMng=array();
+$Filter_Plugin_Admin_PageMng_SubMenu=array();
 
 
 
@@ -296,49 +281,7 @@ $Filter_Plugin_Admin_CategoryMng=array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_CommentMng=array();
-
-
-
-
-/*
-'**************************************************<
-'类型:Filter
-'名称:
-'参数:
-'说明:
-'调用:
-'**************************************************>
-*/
-$Filter_Plugin_Admin_MemberMng=array();
-
-
-
-
-/*
-'**************************************************<
-'类型:Filter
-'名称:
-'参数:
-'说明:
-'调用:
-'**************************************************>
-*/
-$Filter_Plugin_Admin_UploadMng=array();
-
-
-
-
-/*
-'**************************************************<
-'类型:Filter
-'名称:
-'参数:
-'说明:
-'调用:
-'**************************************************>
-*/
-$Filter_Plugin_Admin_TagMng=array();
+$Filter_Plugin_Admin_CategoryMng_SubMenu=array();
 
 
 
@@ -353,7 +296,7 @@ $Filter_Plugin_Admin_TagMng=array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_PluginMng=array();
+$Filter_Plugin_Admin_CommentMng_SubMenu=array();
 
 
 
@@ -367,7 +310,7 @@ $Filter_Plugin_Admin_PluginMng=array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_MemberMng=array();
+$Filter_Plugin_Admin_MemberMng_SubMenu=array();
 
 
 
@@ -381,7 +324,21 @@ $Filter_Plugin_Admin_MemberMng=array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_ThemeMng=array();
+$Filter_Plugin_Admin_UploadMng_SubMenu=array();
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Admin_TagMng_SubMenu=array();
 
 
 
@@ -396,7 +353,35 @@ $Filter_Plugin_Admin_ThemeMng=array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_ModuleMng=array();
+$Filter_Plugin_Admin_PluginMng_SubMenu=array();
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Admin_MemberMng_SubMenu=array();
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Admin_ThemeMng_SubMenu=array();
 
 
 
@@ -411,5 +396,68 @@ $Filter_Plugin_Admin_ModuleMng=array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_SettingMng=array();
+$Filter_Plugin_Admin_ModuleMng_SubMenu=array();
+
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Admin_SettingMng_SubMenu=array();
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Edit_Begin=array();
+
+
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Edit_End=array();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ?>

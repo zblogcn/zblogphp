@@ -89,6 +89,13 @@ function Logout(){
 
 
 
+function PostArticle(){
+	global $zbp;
+	$article = new Post();
+}
+
+
+
 function PostCategory(){
 	global $zbp;
 
@@ -100,31 +107,31 @@ function PostCategory(){
 	}
 
 	$cate = new Category();
-	if($_POST['edtID'] == 0){
+	if(GetVars('ID','POST') == 0){
 		$cate->LoadInfobyArray(
 			array(
-				GetVars('edtID','POST'),
-				GetVars('edtName','POST'),
-				GetVars('edtOrder','POST'),
+				GetVars('ID','POST'),
+				GetVars('Name','POST'),
+				GetVars('Order','POST'),
 				0,
-				GetVars('edtAlias','POST'),
+				GetVars('Alias','POST'),
 				'',
 				0,
-				GetVars('edtPareID','POST'),
-				GetVars('edtTemplate','POST'),
-				GetVars('edtLogTemplate','POST'),
+				GetVars('ParentID','POST'),
+				GetVars('Template','POST'),
+				GetVars('LogTemplate','POST'),
 				''
 			)
 		);
 		$cate->Post();
 	}else{
-		$cate->LoadInfoByID(GetVars('edtID','POST'));
-		$cate->Name = GetVars('edtName','POST');
-		$cate->Order = GetVars('edtOrder','POST');
-		$cate->Alias = GetVars('edtAlias','POST');
-		$cate->ParentID = GetVars('edtPareID','POST');
-		$cate->Template = GetVars('edtTemplate','POST');
-		$cate->LogTemplate = GetVars('edtLogTemplate','POST');
+		$cate->LoadInfoByID(GetVars('ID','POST'));
+		$cate->Name = GetVars('Name','POST');
+		$cate->Order = GetVars('Order','POST');
+		$cate->Alias = GetVars('Alias','POST');
+		$cate->ParentID = GetVars('ParentID','POST');
+		$cate->Template = GetVars('Template','POST');
+		$cate->LogTemplate = GetVars('LogTemplate','POST');
 		$cate->Post();
 	}
 }

@@ -600,7 +600,22 @@ class ZBlogPHP{
 		}
 	}	
 
-	
+
+
+	function CountCategory($postid){
+
+	}
+	function CountComment($postid){
+
+	}
+	function CountTag($postid){
+
+	}
+	function CountAuthor($postid){
+
+	}
+
+
 	function CheckRights($action){
 
 		if(is_int($action)){
