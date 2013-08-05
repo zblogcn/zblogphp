@@ -15,6 +15,8 @@ class Dbpdo_MySQL implements iDataBase
 	public $dbpre = null;
 	private $db = null;
 
+	public $sql=null;
+
 	function __construct()
 	{
 		# code...
