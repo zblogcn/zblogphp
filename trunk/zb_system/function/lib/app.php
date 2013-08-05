@@ -11,6 +11,92 @@
 */
 class App
 {
+	#type='plugin'|'theme'
+	public $type='';
+	public $id;
+	public $name;
+	public $url;
+	public $note;
+
+	public $path;
+	public $include;
+	public $level;
+
+	public $author_name;
+	public $author_email;
+	public $author_url;
+
+	public $source_name;
+	public $source_email;
+	public $source_url;
+
+
+	public $adapted;
+	public $version;
+	public $pubdate;
+	public $modified;
+	public $description;
+	public $price;
+
+	public $advanced_dependency;
+	public $advanced_rewritefunctions;
+	public $advanced_conflict;
+
+	public function CanStop(){
+
+	}
+
+	public function GetLogo(){
+		global $zbp;
+		if($this->type=='plugin'){
+			return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/logo.png';
+		}else{
+			return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png.png';
+		}
+
+	}
+	public function LoadInfoByXml($type,$id){
+		global $zbp;
+		$path=$zbp->path . 'zb_users/' . $type . '/' . $id . '/' . $type . '.xml';
+		$xml = simplexml_load_file($path);
+		$appver = $xml->attributes();
+		if($appver <> 'php'){return false;}
+
+		$this->type = $type;
+
+		$this->id = (string)$xml->id;
+		$this->name = (string)$xml->name;
+
+		$this->url = (string)$xml->url;
+		$this->note = (string)$xml->note;
+
+		$this->path = (string)$xml->path;
+		$this->include = (string)$xml->include;
+		$this->level = (string)$xml->level;
+
+		$this->author_name = (string)$xml->author->name;
+		$this->author_email = (string)$xml->author->email;
+		$this->author_url = (string)$xml->author->url;
+
+		$this->source_name = (string)$xml->source->name;
+		$this->source_email = (string)$xml->source->email;
+		$this->source_url = (string)$xml->source->url;
+
+		$this->adapted = (string)$xml->adapted;
+		$this->version = (string)$xml->version;
+		$this->pubdate = (string)$xml->pubdate;
+		$this->modified = (string)$xml->modified;
+		$this->description = (string)$xml->description;
+		$this->price = (string)$xml->price;
+
+		$this->advanced_dependency = (string)$xml->advanced->dependency;
+		$this->advanced_rewritefunctions = (string)$xml->advanced->rewritefunctions;
+		$this->advanced_conflict = (string)$xml->advanced->conflict;
+
+		return true;
+	}
+
+
 	static public function ZipApp($type,$name){
 		$s=null;
 		return $s;

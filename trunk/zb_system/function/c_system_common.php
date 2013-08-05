@@ -76,6 +76,21 @@ function GetPassWordByGuid($ps,$guid){
 
 }
 
+function GetDirsInDir($dir){
+	$dirs=array();
+
+	foreach (scandir($dir) as $d) {
+		if (is_dir($dir .  $d)) {
+			if( ($d<>'.') && ($d<>'..') ){
+				$dirs[]=$d;
+			}
+		}
+	}
+
+	return $dirs;
+
+}
+
 
 function GetFilesInDir($dir,$type){
 
