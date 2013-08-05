@@ -61,6 +61,12 @@ switch ($action) {
 	case 'TagMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
+	case 'TagEdt':
+		redirect('admin/tag_edit.php?' . GetVars('QUERY_STRING','SERVER'));
+		break;
+	case 'TagPst':
+		PostTag();
+		redirect('cmd.php?act=TagMng');
 	case 'PluginMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;

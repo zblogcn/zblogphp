@@ -12,14 +12,15 @@ $zbp->Initialize();
 
 ob_clean();
 
-//$action='CategoryEdt';
-//if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
+$action='ArticleEdt';
+if (!$zbp->CheckRights($action)) {die();}
 
 
-$upload_dir = str_replace('\\','/',$zbp->option['ZC_UPLOAD_DIRECTORY']."/".date('y/m')) . '/';
+$upload_dir = str_replace('\\','/',$zbp->option['ZC_UPLOAD_DIRECTORY']."/".date('Y/m')) . '/';
 $upload_path = $bloghost . $upload_dir;
 $upload_dir = $blogpath . $upload_dir;
-//echo $upload_dir;
+
+#echo '/*' . $upload_dir . '*/' ;
 
 $output_js="(function(){var URL;URL = '{$bloghost}zb_users/plugin/ueditor/';window.UEDITOR_CONFIG = {";
 
@@ -58,8 +59,8 @@ $array_config = array(
 	'sourceEditor' => '\''.($zbp->option['ZC_CODEMIRROR_ENABLE']?'codemirror':'textarea').'\'',
 	'theme' => '"default"',
     'themePath' => 'URL +"themes/"',
-	'lang' => '\''.$zbp->option['ZC_EDITORLANG'].'\'',
-	'langPath' => 'URL+"../../../zb_users/language/ue-lang/"',
+	'lang' => '\'zh-cn\'',
+	'langPath' => 'URL+"lang/"',
 	'codeMirrorJsUrl' => 'URL+ "third-party/codemirror/codemirror.js"',
 	'codeMirrorCssUrl' => 'URL+ "third-party/codemirror/codemirror.css"',
 	"maxUpFileSize" => $zbp->option['ZC_UPLOAD_FILESIZE']/(1024*1024),

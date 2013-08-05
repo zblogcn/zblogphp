@@ -9,11 +9,16 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
-function zbp_add(){
+function zbp_addpagesubmenu(){
 	echo '<a href="../cmd.php?act=ArticleEdt&amp;type=1"><span class="m-left">' . $GLOBALS['lang']['msg']['new_page'] . '</span></a>';
 }
+function zbp_addtagsubmenu(){
+	echo '<a href="../cmd.php?act=TagEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_tag'] . '</span></a>';
+}
 
-Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','aaa');
+
+Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','zbp_addpagesubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','zbp_addtagsubmenu');
 
 $zbp->Initialize();
 #$zbp->BuildTemplate();
