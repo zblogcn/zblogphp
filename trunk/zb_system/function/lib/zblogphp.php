@@ -44,6 +44,9 @@ class ZBlogPHP{
 	public $isdelay_savecache=false;	
 
 	public $template = null;
+
+	public $themes = array();
+	public $plugins = array();
 	
 	static public function GetInstance(){
 		if(!isset(self::$_zbp)){
@@ -399,6 +402,14 @@ class ZBlogPHP{
 
 		}
 
+	}
+
+	public function LoadThemes(){
+
+	}
+
+	public function LoadPlugins(){
+		
 	}
 
 	public function LoadTemplates(){

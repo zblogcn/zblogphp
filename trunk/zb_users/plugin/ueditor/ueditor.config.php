@@ -10,9 +10,11 @@ header("Content-type: application/x-javascript; charset=utf-8");
 
 $zbp->Initialize();
 
+ob_clean();
+
 //$action='CategoryEdt';
 //if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
-global $blogHost;
+
 
 $upload_dir = str_replace('\\','/',$zbp->option['ZC_UPLOAD_DIRECTORY']."/".date('y/m')) . '/';
 $upload_path = $bloghost . $upload_dir;
@@ -32,7 +34,7 @@ $array_config = array(
     'fileFieldName' => ' "edtFileLoad"',
     'catchRemoteImageEnable' => ' false',
     'imageManagerUrl' => 'URL+"asp/imageManager.asp"',
-    'imageManagerPath' => "\"{$blogHost}\"",
+    'imageManagerPath' => "\"{$bloghost}\"",
     'wordImageUrl' => ' URL+"asp/imageUp.asp"',
     'wordImagePath' => "\"{$upload_path}\"",
     'wordImageFieldName' => '"edtFileLoad"',
@@ -65,15 +67,17 @@ $array_config = array(
 );
 
 
-	foreach ($array_config as $key => $value) {
-		$output_js .= '"' . $key . '":' . $value . ',';
-	}
+foreach ($array_config as $key => $value) {
+	$output_js .= '"' . $key . '":' . $value . ',';
+}
 
-	$output_js .= '"zb_full":""}})();';
+$output_js .= '"zb_full":""}})();';
 
 
-	//Code here
-	echo $output_js;
+//Code here
+echo $output_js;
+
+die();
 
 ?>
 
