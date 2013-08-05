@@ -68,8 +68,9 @@ function editor_init(){
 		$('#editor_txt').prev().removeAttr('style');
 		sContent=editor_api.editor.content.get();
 		$('#introready').hide();
-		editor_api.editor.intro.obj = K.create('#editor_txt2',	{items : ['source', '|','bold','italic','underline','fontname','fontsize','forecolor','hilitecolor','link']});
-		$('#editor_txt2').prev().removeAttr('style');
+		editor_api.editor.intro.obj = K.create('#editor_intro',	{items : ['source', '|','bold','italic','underline','fontname','fontsize','forecolor','hilitecolor','link']});
+		$('#editor_intro').prev().removeAttr('style');
+		$('#editor_intro').prev().removeAttr('style');
 		sIntro=editor_api.editor.intro.get();
 	});
 }
