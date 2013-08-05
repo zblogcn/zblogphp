@@ -21,24 +21,24 @@ $upload_path = $bloghost . $upload_dir;
 $upload_dir = $blogpath . $upload_dir;
 //echo $upload_dir;
 
-$output_js="(function(){var URL;URL = '{$bloghost}zb_system/admin/ueditor/';window.UEDITOR_CONFIG = {";
+$output_js="(function(){var URL;URL = '{$bloghost}zb_users/plugin/ueditor/';window.UEDITOR_CONFIG = {";
 
 $array_config = array(
 	'UEDITOR_HOME_URL' => 'URL',
-    'imageUrl' => ' URL+"asp/imageUp.asp"',
-    'imageNoFlashUrl' => ' URL+"asp/uploadWithoutFlash.asp"',
+    'imageUrl' => ' URL+"php/imageUp.php"',
+    'imageNoFlashUrl' => ' URL+"php/uploadWithoutFlash.php"',
     'imagePath' => "\"{$upload_path}\"",
     'imageFieldName' => ' "edtFileLoad"',
-    'fileUrl' => ' URL+"asp/fileUp.asp"',
+    'fileUrl' => ' URL+"php/fileUp.php"',
     'filePath' => "\"{$upload_path}\"",
     'fileFieldName' => ' "edtFileLoad"',
     'catchRemoteImageEnable' => ' false',
-    'imageManagerUrl' => 'URL+"asp/imageManager.asp"',
+    'imageManagerUrl' => 'URL+"php/imageManager.php"',
     'imageManagerPath' => "\"{$bloghost}\"",
-    'wordImageUrl' => ' URL+"asp/imageUp.asp"',
+    'wordImageUrl' => ' URL+"php/imageUp.php"',
     'wordImagePath' => "\"{$upload_path}\"",
     'wordImageFieldName' => '"edtFileLoad"',
-    'getMovieUrl' => 'URL+"asp/getMovie.asp"',
+    'getMovieUrl' => 'URL+"php/getMovie.php"',
 	'toolbars' => "[ [ 'source', '|', 'undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript','forecolor', 'backcolor', '|', 'insertorderedlist', 'insertunorderedlist','indent', 'justifyleft', 'justifycenter', 'justifyright','|', 'removeformat','formatmatch','autotypeset', 'searchreplace','pasteplain'],[ 'fontfamily', 'fontsize','|', 'emotion','link','music','insertimage','scrawl','insertvideo', 'attachment','spechars','|', 'map', 'gmap','|', "
 				  . ($zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE']?"'insertcode',":'')
 				  . "'blockquote', 'wordimage','inserttable', 'horizontal','fullscreen']]",
@@ -51,7 +51,7 @@ $array_config = array(
 	'elementPathEnabled' => 'true',
 	'initialFrameHeight' => '300',
 	'toolbarTopOffset' => '200',
-    'scrawlUrl' => ' URL+"asp/scrawlUp.asp"',
+    'scrawlUrl' => ' URL+"php/scrawlUp.php"',
     'scrawlPath' => "\"{$upload_path}\"",
 	'scrawlFieldName' => '"edtFileLoad"',
 	'maxImageSideLength' => '2147483647',
