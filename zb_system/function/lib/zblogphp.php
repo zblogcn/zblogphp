@@ -292,7 +292,7 @@ class ZBlogPHP{
 		$lv1=array();
 		$lv2=array();
 		$lv3=array();	
-		$array=$this->GetCategoryList(null,array('cate_Order'=>'ASC'),null,null);
+		$array=$this->GetCategoryList(null,null,array('cate_Order'=>'ASC'),null,null);
 		foreach ($array as $c) {
 			$this->categorys[$c->ID]=$c;
 		}
@@ -495,6 +495,33 @@ class ZBlogPHP{
 
 	}
 
+	function AddTagsString($s=''){
+		static $tagstring;
+		$tagstring .= $s;
+		return $tagstring;
+	}
+	function LoadTagsByString($s){
+		$s=str_replace('}{', '|', $s);
+		$s=str_replace('{', '', $s);
+		$s=str_replace('}', '', $s);
+		$a=explode('|', $s);
+		$t=array();
+		foreach ($a as $v) {
+			$t[$v]=$v;
+		}
+		$a=null;
+		foreach ($t as $v) {
+			$a[]=array('tag_ID',$v);
+		}
+
+		$array=$this->GetTagList('',array('array'=>$a),'','','');
+		foreach ($array as $t) {
+			$this->tags[$t->ID]=$t;
+			$this->tagsbyname[$t->Name]=&$this->tags[$t->ID];
+		}
+
+	}
+
 	function GetList($type,$sql){
 
 		$array=null;
@@ -509,54 +536,68 @@ class ZBlogPHP{
 		return $list;
 	}
 
-	function GetArticleList($where=null,$order=null,$limit=null,$option=null){
+	function GetArticleList($select=null,$where=null,$order=null,$limit=null,$option=null){
+
+		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
-		$where[] = array('=','log_Type','0');
-		$sql = $this->db->sql->Select('Post',array('*'),$where,$order,$limit,$option);
+		$where += array('='=>array('log_Type','0'));
+		$sql = $this->db->sql->Select('Post',$select,$where,$order,$limit,$option);
 		$array = $this->GetList('Post',$sql);
+		foreach ($array as $a) {
+			$this->AddTagsString($a->Tag);
+		}
+
+		$this->LoadTagsByString($this->AddTagsString());
+
 		return $array;
 	}
 
-	function GetPageList($where=null,$order=null,$limit=null,$option=null){
+	function GetPageList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
+		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
-		$where[] = array('=','log_Type','1');
-		$sql = $this->db->sql->Select('Post',array('*'),$where,$order,$limit,$option);
+		$where += array('='=>array('log_Type','1'));
+		$sql = $this->db->sql->Select('Post',$select,$where,$order,$limit,$option);
 		return $this->GetList('Post',$sql);
 
 	}
 
-	function GetCommentList($where=null,$order=null,$limit=null,$option=null){
+	function GetCommentList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
-		$sql = $this->db->sql->Select('Comment',array('*'),$where,$order,$limit,$option);
+		if(empty($select)){$select = array('*');}
+		$sql = $this->db->sql->Select('Comment',$select,$where,$order,$limit,$option);
 		return $this->GetList('Comment',$sql);
 
 	}
 
-	function GetMemberList($where=null,$order=null,$limit=null,$option=null){
+	function GetMemberList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
-		$sql = $this->db->sql->Select('Member',array('*'),$where,$order,$limit,$option);
+		if(empty($select)){$select = array('*');}
+		$sql = $this->db->sql->Select('Member',$select,$where,$order,$limit,$option);
 		return $this->GetList('Member',$sql);
 
 	}
 
-	function GetTagList($where=null,$order=null,$limit=null,$option=null){
+	function GetTagList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
-		$sql = $this->db->sql->Select('Tag',array('*'),$where,$order,$limit,$option);
+		if(empty($select)){$select = array('*');}
+		$sql = $this->db->sql->Select('Tag',$select,$where,$order,$limit,$option);
 		return $this->GetList('Tag',$sql);
 
 	}
 
-	function GetCategoryList($where=null,$order=null,$limit=null,$option=null){
+	function GetCategoryList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
-		$sql = $this->db->sql->Select('Category',array('*'),$where,$order,$limit,$option);
+		if(empty($select)){$select = array('*');}
+		$sql = $this->db->sql->Select('Category',$select,$where,$order,$limit,$option);
 		return $this->GetList('Category',$sql);
 
 	}
 
-	function GetModuleList($where=null,$order=null,$limit=null,$option=null){
+	function GetModuleList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
-		$sql = $this->db->sql->Select('Module',array('*'),$where,$order,$limit,$option);
+		if(empty($select)){$select = array('*');}
+		$sql = $this->db->sql->Select('Module',$select,$where,$order,$limit,$option);
 		return $this->GetList('Module',$sql);
 	}
 

@@ -3,10 +3,10 @@
 
 
 #注册插件
-RegisterPlugin("ueditor","ActivePlugin_ueditor");
+RegisterPlugin("ueditor","ActivePlugin_Ueditor");
 
 
-function ActivePlugin_ueditor() {
+function ActivePlugin_Ueditor() {
 
 	Add_Filter_Plugin('Filter_Plugin_Edit_Begin','ueditor_addscript_begin');
 
@@ -44,11 +44,12 @@ var editor_api={
 		}
 	}
 }
+
 var EditorIntroOption = {
 	toolbars:[['Source', 'bold', 'italic','link','insertimage','Undo', 'Redo']],
 	autoHeightEnabled:false,
 	initialFrameHeight:200
-};
+}
 
 
 function getContent(){
