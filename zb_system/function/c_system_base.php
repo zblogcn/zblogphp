@@ -66,7 +66,7 @@ if($option['ZC_DATABASE_TYPE']){
 }
 
 #加载对象
-$lib_array = array('base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar');
+$lib_array = array('base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','app');
 foreach ($lib_array as $f) {
 	require $blogpath.'zb_system/function/lib/' . $f . '.php';
 }
@@ -132,15 +132,15 @@ $actions=array(
 
 
 $zbp=ZBlogPHP::GetInstance();
+
 #创建User类
 $zbp->user=new Member();	
-
 
 
 /*include plugin*/
 
 #加载主题插件
-if (file_exists($filename=$blogpath.'zb_users/theme/'.$option['ZC_BLOG_THEME'].'/plugin/include.php')) {
+if (file_exists($filename=$blogpath.'zb_users/theme/'.$option['ZC_BLOG_THEME'].'/include.php')) {
 	require $filename;
 }
 
