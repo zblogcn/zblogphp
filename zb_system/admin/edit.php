@@ -60,7 +60,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     <!-- 1号输出接口 -->
     
     <div id="divContent" style="clear:both;">
-		<div id='cheader' class='editmod'><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="c_autosaverjs.asp?act=edit"></script></div>
+		<div id='cheader' class='editmod'><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
 		<div id='carea' class='editmod'><textarea id="editor_content" name="Content"></textarea></div>
 		<div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Watting...</div>
 
@@ -186,7 +186,6 @@ if($ispage){
 }else{
   echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
 }
-
 ?>
 
 

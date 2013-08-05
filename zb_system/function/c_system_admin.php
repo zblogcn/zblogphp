@@ -441,26 +441,11 @@ foreach ($p->buttons as $key => $value) {
 	
 }
 
-function Admin_PluginMng(){
-
-	global $zbp;
-
-	echo '<div class="divHeader">' . $zbp->lang['msg']['plugin_manage'] . '</div>';
-	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_MemberMng_SubMenu'] as $fpname => &$fpsignal) {
-		$fpname();
-	}	
-	echo '</div>';
-	echo '<div id="divMain2">';
-
-	echo '</div>';
-	echo '<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>';
-	
-}
-
 function Admin_ThemeMng(){
 
 	global $zbp;
+
+	$zbp->LoadThemes();
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['theme_manage'] . '</div>';
 	echo '<div class="SubMenu">';
@@ -489,6 +474,50 @@ function Admin_ModuleMng(){
 
 	echo '</div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aModuleMng");</script>';
+	
+}
+
+function Admin_PluginMng(){
+
+	global $zbp;
+	
+	$zbp->LoadPlugins();
+
+	echo '<div class="divHeader">' . $zbp->lang['msg']['plugin_manage'] . '</div>';
+	echo '<div class="SubMenu">';
+	foreach ($GLOBALS['Filter_Plugin_Admin_MemberMng_SubMenu'] as $fpname => &$fpsignal) {
+		$fpname();
+	}	
+	echo '</div>';
+	echo '<div id="divMain2">';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<tr>
+
+	<th></th>
+	<th>' . $zbp->lang['msg']['name'] . '</th>
+	<th>' . $zbp->lang['msg']['author'] . '</th>
+	<th>' . $zbp->lang['msg']['date'] . '</th>
+	<th></th>
+	</tr>';
+
+
+foreach ($zbp->plugins as $plugin) {
+	echo '<tr>';
+	echo '<td class="td5 tdCenter"><img src="' . $plugin->GetLogo() . '" alt="" width="32" /></td>';
+	echo '<td class="td20">' . $plugin->name . '</td>';
+	echo '<td class="td20">' . $plugin->author_name . '</td>';
+	echo '<td class="td20">' . $plugin->modified . '</td>';
+	echo '<td class="td10 tdCenter">';
+	echo '<a href="../cmd.php?act=CategoryEdt&amp;id='. '' .'"><img src="../image/admin/folder_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=CategoryDel&amp;id=26"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
+	echo '</td>';
+
+	echo '</tr>';
+}
+	echo '</table>';
+	echo '</div>';
+	echo '<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>';
 	
 }
 

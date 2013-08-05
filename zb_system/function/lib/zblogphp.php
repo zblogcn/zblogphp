@@ -437,10 +437,20 @@ class ZBlogPHP{
 	}
 
 	public function LoadThemes(){
+		$dirs=GetDirsInDir($this->path . 'zb_users/theme/');
 
 	}
 
 	public function LoadPlugins(){
+		$dirs=GetDirsInDir($this->path . 'zb_users/plugin/');
+
+		foreach ($dirs as $id) {
+			$app = new App;
+			if($app->LoadInfoByXml('plugin',$id)==true){
+				$this->plugins[]=$app;
+			}
+		}
+		#var_dump($this->plugins);
 
 	}
 
