@@ -1,0 +1,33 @@
+﻿<dl id="postcmt">
+  <dt><#ZC_MSG024#></dt>
+  <dd>
+  <h5><#ZC_MSG040#></h5>
+  <form target="_self" method="post" action="<#article/commentposturl#>">
+    <input type="hidden" name="inpId" value="<#article/id#>" />
+    <input type="hidden" name="inpArticle" />
+    <input type="hidden" name="inpLocation" />
+    <p>
+      <label>
+        <input type="text" name="inpName" size="28" tabindex="2" required />
+        <#ZC_MSG001#><sup>*</sup></label>
+    </p>
+    <p>
+      <label>
+        <input type="text" name="inpEmail" size="28" tabindex="3" />
+        <#ZC_MSG053#></label>
+    </p>
+    <p>
+      <label>
+        <input type="text" name="inpHomePage" size="28" tabindex="4" />
+        <#ZC_MSG054#></label>
+    </p>
+    <#template:article_commentpost-verify#>
+    <p>
+      <textarea name="txaArticle" class="txt" cols="50" rows="4" tabindex="6" title="<#ZC_MSG056#><#ZC_CONTENT_MAX#>" ></textarea>
+    </p>
+    <p>
+      <button name="btnSumbit" type="submit" tabindex="6"><#ZC_MSG087#></button>
+    </p>
+  </form>
+  </dd>
+</dl>

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?><theme version="php"><id>metro</id><name>Metro主题</name><url>http://www.htmlit.com.cn/</url><note>Z-Blog2.0 Metro主题</note><author><name>新鲜人</name><email>htmlit@live.com</email><url>http://www.htmlit.com.cn/</url></author><source><name>新鲜人</name><email>htmlit@live.com</email><url>http://www.htmlit.com.cn/</url></source><plugin><path>editor.asp</path><include>include.asp</include><level>1</level></plugin><adapted>130722</adapted><version>1.3</version><pubdate>2012-8-19</pubdate><modified>2013-7-24</modified><description><![CDATA[Z-Blog2 Metro主题加强版，主题插件由月上之木开发，支持主题背景及颜色个性化配置。
+更新记录：
+[13.07.24]更新模板标签，调整部分细节以兼容Z-Blog2.2
+[13.03.22]上传控件改用UE，兼容IE
+[13.01.29]禁用IE的兼容模式浏览
+[12.12.26]更新主题配置页面，兼容ie7以上版本
+[12.12.25]更新新日历样式
+[12.12.23]更新文章内容的列表（ol,ul）样式
+]]></description><advanced><dependency></dependency><rewritefunctions></rewritefunctions><conflict></conflict><wap></wap></advanced><price>0</price><sidebars/><functions/></theme>

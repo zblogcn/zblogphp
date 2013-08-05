@@ -1,0 +1,23 @@
+﻿<article id="log<#article/id#>" class="cate<#article/category/id#> auth<#article/author/id#>">
+  <header>
+    <time><#article/posttime/longdate#></time>
+    <h1><#article/title#></h1>
+  </header>
+  <section><#article/content#></section>
+  <footer>
+    <h4><#ZC_MSG138#>: <#template:article_tag#></h4>
+    <h5><em><#ZC_MSG011#>: <#article/author/name#></em> <em><#ZC_MSG012#>: <#article/category/name#></em> <em><#ZC_MSG013#>: <#article/commnums#></em> <em><#ZC_MSG130#>: <count id="<#article/id#>"><#article/viewnums#></count></em></h5>
+  </footer>
+  <nav><#template:article_navbar_l#><#template:article_navbar_r#></nav>
+</article>
+<dl id="related">
+  <dt><#ZC_MSG231#></dt>
+  <dd><ul><#template:article_mutuality#></ul></dd>
+</dl>
+<dl id="comment">
+  <dt><#ZC_MSG211#></dt>
+  <dd>
+  <#template:article_comment#>
+  </dd>
+</dl>
+<#template:article_commentpost#>

@@ -1,0 +1,26 @@
+﻿	  <div class="breadcrumb"><a href="<#ZC_BLOG_HOST#>">主页</a> › <a href="<#ZC_BLOG_HOST#>catalog.asp?cate=<#article/category/id#>" class="blog_usernames_blog"><#article/category/name#></a></div>
+	  
+                    <div id="mission"></div>
+
+<!-- article node -->
+<div id="node-<#article/id#>" class="node">
+
+
+  <h2><#article/title#></h2>
+<span id="spn<#article/id#>" class="submitted" style="display:none"></span>
+<script language="JavaScript" type="text/javascript">strBatchCount+="spn<#article/id#>=<#article/id#>,"</script>
+  
+  <div class="content">
+    <#article/content#>
+  </div>
+
+</div>
+
+<div id="comment">
+<#template:article_comment:begin#>
+<h2 class="comment">评论</h2>
+<#template:article_comment#>
+<#template:article_comment:end#>
+
+<#template:article_commentpost#>
+</div>

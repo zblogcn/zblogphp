@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 
 #注册插件
@@ -59,10 +59,10 @@ var EditorIntroOption = {
 function editor_init(){
 	editor_api.editor.content.get=function(){return this.obj.html()};
 	editor_api.editor.content.put=function(str){return this.obj.html(str)};
-	editor_api.editor.content.focus=function(str){return this.obj.focus()};
+	editor_api.editor.content.focus=function(){return this.obj.focus()};
 	editor_api.editor.intro.get=function(){return this.obj.html()};
 	editor_api.editor.intro.put=function(str){return this.obj.html(str)};
-	editor_api.editor.intro.focus=function(str){return this.obj.focus()};
+	editor_api.editor.intro.focus=function(){return this.obj.focus()};
 	KindEditor.ready(function(K) {\$('#contentready').hide();
 		editor_api.editor.content.obj = K.create('#editor_content',{uploadJson:'"&BlogHost & "zb_users/plugin/kindeditor/kindeditor/asp/upload_json.asp',fileManagerJson:'"&BlogHost & "zb_users/plugin/kindeditor/kindeditor/asp/file_manager_json.asp',allowFileManager : false,formatUploadUrl : false,width : '980px',height : '450px',emoticonsPath :'"&BlogHost & "zb_users/EMOTION/',	allowPreviewEmoticons : false,items : [ 'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste','plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright','justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript','superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/','formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold','italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage','flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak','anchor', 'link', 'unlink', '|', 'about']});
 		$('#editor_txt').prev().removeAttr('style');
@@ -74,7 +74,6 @@ function editor_init(){
 		sIntro=editor_api.editor.intro.get();
 	});
 }
-editor_init();
 </script>
 script;
 

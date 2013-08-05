@@ -12,7 +12,6 @@ function ActivePlugin_UEditor() {
 
 	Add_Filter_Plugin('Filter_Plugin_Edit_End','ueditor_addscript_end');
 
-
 }
 
 
@@ -74,10 +73,10 @@ editor_api.editor.content.obj=UE.getEditor('editor_content');
 editor_api.editor.intro.obj=UE.getEditor('editor_intro',EditorIntroOption);
 editor_api.editor.content.get=function(){return this.obj.getContent()};
 editor_api.editor.content.put=function(str){return this.obj.setContent(str)};
-editor_api.editor.content.focus=function(str){return this.obj.focus()};
+editor_api.editor.content.focus=function(){return this.obj.focus()};
 editor_api.editor.intro.get=function(){return this.obj.getContent()};
 editor_api.editor.intro.put=function(str){return this.obj.setContent(str)};
-editor_api.editor.intro.focus=function(str){return this.obj.focus()};
+editor_api.editor.intro.focus=function(){return this.obj.focus()};
 editor_api.editor.content.obj.ready(function(){\$('#contentready').hide();$('#editor_content').prev().show();sContent=editor_api.editor.content.get();});
 
 editor_api.editor.intro.obj.ready(function(){\$('#introready').hide();$('#editor_intro').prev().show();sIntro=editor_api.editor.intro.get();});
@@ -89,8 +88,6 @@ $(document).ready(function(){
 });
 
 }
-
-editor_init();
 </script>
 js;
 	echo $s;

@@ -453,9 +453,43 @@ function Admin_ThemeMng(){
 		$fpname();
 	}	
 	echo '</div>';
-	echo '<div id="divMain2">';
+	echo '<div id="divMain2"><form id="frmTheme" method="post" action="../cmd.asp?act=ThemeSav">';
 
-	echo '</div>';
+
+	foreach ($zbp->themes as $theme) {
+echo <<<theme
+<div id="theme-default" class="theme theme-now">
+<div class="theme-name">
+<img width='16' title='' alt='' src='../IMAGE/ADMIN/layout.png'/>
+<a  target="_blank" href="http://www.rainbowsoft.org/"  title="">
+<strong style='display:none;'>default</strong>
+<b>$theme->name</b></a>
+</div>
+<div>
+<a id="mylinkc21f96" href="\$divc21f96tip?width=320" class="betterTip" title="默认主题" >
+<img src="{$theme->GetScreenshot()}" alt="ScreenShot" width="200" height="150" /></a>
+</div>
+<div id="divc21f96tip" style="display:none;">
+<table border="0" cellspacing="0" cellpadding="0" align="center" width="100%" class="tableBorder"><tbody>
+<tr><th colspan="2">ID : default</th></tr>
+<tr><td width="60px">作者</td><td>zx.asd</td></tr>
+<tr><td>网站链接</td><td>http://www.zdevo.com/</td></tr>
+<tr><td>原作</td><td>jiaojiao</td></tr>
+<tr><td>网站链接</td><td>http://imjiao.com/</td>
+</tr><tr><td>发布</td><td>2005-2-18</td></tr>
+<tr><td>最后更新</td><td>2013-7-15</td></tr>
+<tr><td>简介</td><td>Z-Blog的默认主题.模板由zx制作,娇娇设计.新增了Table日历的支持.</tr>
+</tbody></table>
+</div>
+<div class="theme-author">作者: <a target="_blank" href="http://www.zdevo.com/">zx.asd</a></div>
+<div class="theme-style">样式: 
+<select class="edit" size="1" id="catec21f96" name="catec21f96" style="width:110px;">
+<option selected="selected" value="default">default.css</option></select>
+<input type="button" class="theme-activate button" value="启用" onclick=''></div></div>
+theme;
+	}
+
+	echo '</form></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aThemeMng");</script>';
 	
 }
@@ -499,18 +533,51 @@ function Admin_PluginMng(){
 	<th>' . $zbp->lang['msg']['date'] . '</th>
 	<th></th>
 	</tr>';
+$plugins=array();
 
+$app = new App;
+if($app->LoadInfoByXml('theme',$zbp->option['ZC_BLOG_THEME'])==true){
+	if($app->HasPlugin()){
+		array_unshift($plugins,$app);
+	}
+}
 
+$pl=$zbp->option['ZC_USING_PLUGIN_LIST'];
+$apl=explode('|',$pl);
+foreach ($apl as $name) {
+	foreach ($zbp->plugins as $plugin) {
+		if($name==$plugin->id){
+			$plugins[]=$plugin;
+		}
+	}
+}
 foreach ($zbp->plugins as $plugin) {
+	if(!$plugin->IsUsed()){
+		$plugins[]=$plugin;
+	}
+}
+
+
+foreach ($plugins as $plugin) {
 	echo '<tr>';
-	echo '<td class="td5 tdCenter"><img src="' . $plugin->GetLogo() . '" alt="" width="32" /></td>';
-	echo '<td class="td20">' . $plugin->name . '</td>';
+	echo '<td class="td5 tdCenter"><img ' . ($plugin->IsUsed()?'':'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" /></td>';
+	echo '<td class="td25">' . $plugin->name . '</td>';
 	echo '<td class="td20">' . $plugin->author_name . '</td>';
 	echo '<td class="td20">' . $plugin->modified . '</td>';
 	echo '<td class="td10 tdCenter">';
-	echo '<a href="../cmd.php?act=CategoryEdt&amp;id='. '' .'"><img src="../image/admin/folder_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
-	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=CategoryDel&amp;id=26"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
+
+	if($plugin->type=='plugin'){
+		if($plugin->IsUsed()){
+			echo '<a href="../cmd.php?act=PluginDisable&amp;name=' . htmlspecialchars($plugin->id) . '" title="' . $zbp->lang['msg']['disable'] . '"><img width="16" alt="' . $zbp->lang['msg']['disable'] . '" src="../IMAGE/ADMIN/control-power-off.png"/></a>';
+		}else{
+			echo '<a href="../cmd.php?act=PluginEnable&amp;name=' . htmlspecialchars($plugin->id) . '" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../IMAGE/ADMIN/control-power.png"/></a>';
+		}
+	}
+	if($plugin->CanManage()){
+		echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+		echo '<a href="' . $plugin->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><img width="16" alt="' . $zbp->lang['msg']['manage'] . '" src="../IMAGE/ADMIN/setting_tools.png"/></a>';
+	}	
+
 	echo '</td>';
 
 	echo '</tr>';

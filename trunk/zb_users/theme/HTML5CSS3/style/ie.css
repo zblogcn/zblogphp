@@ -1,0 +1,44 @@
+﻿/* -----copyright------
+ Theme Name: Html5CSS3
+ Author: jgpy.cn
+ Pub Date: 2013-1-16
+ Last Modified: 2013-1-25
+----------------------*/
+
+/*=global*/
+html{background:#def;}
+body{background:#fff;margin:50px;}
+ul,ol{zoom:1}
+pre{width:100%;overflow:hidden;}
+img{max-width:100%}
+h1{font-size:2.2em}
+h2{font-size:2em}
+h3{font-size:1.8em}
+h4,
+h5{font-size:1em}
+dt{font-size:1.2em;margin:0 0 10px;}
+dd{margin:0}
+dd ul,
+dd ol{padding:0;margin:0}
+/*=comment*/
+#comment{zoom:1}
+#comment blockquote{zoom:1}
+#comment img{position:absolute;left:0;top:0;}
+#comment q img{position:static}
+/*=reply*/
+#postreply{*padding-top:8px}
+#postreply img{position:absolute;left:auto;top:auto;}
+/*=pstcmt*/
+#postcmt dd{padding:0;zoom:1}
+#postcmt dd h5{display:none}
+form[action*='act=cmt'] p{margin:0 0 12px;}
+form[action*='act=cmt'] input,
+form[action*='act=cmt'] textarea{background:#fff}
+form[action*='act=cmt'] textarea{position:static;}
+/*=search*/
+#divSearchPanel form{zoom:1;}
+#edtSearch{width:auto}
+#btnPost{position:static}
+/*=canledar*/
+#divCalendar td a,
+#divCalendar td b{display:inline}

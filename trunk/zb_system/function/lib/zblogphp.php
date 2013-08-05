@@ -439,6 +439,13 @@ class ZBlogPHP{
 	public function LoadThemes(){
 		$dirs=GetDirsInDir($this->path . 'zb_users/theme/');
 
+		foreach ($dirs as $id) {
+			$app = new App;
+			if($app->LoadInfoByXml('theme',$id)==true){
+				$this->themes[]=$app;
+			}
+		}
+
 	}
 
 	public function LoadPlugins(){
@@ -450,7 +457,6 @@ class ZBlogPHP{
 				$this->plugins[]=$app;
 			}
 		}
-		#var_dump($this->plugins);
 
 	}
 

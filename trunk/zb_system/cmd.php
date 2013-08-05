@@ -70,6 +70,15 @@ switch ($action) {
 	case 'PluginMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
+	case 'PluginDisable':
+		DisablePlugin(GetVars('name','GET'));
+		redirect('cmd.php?act=PluginMng');
+		break;
+	case 'PluginEnable':
+		$install='&install=';
+		$install .= EnablePlugin(GetVars('name','GET'));
+		redirect('cmd.php?act=PluginMng' . $install);
+		break;
 	case 'ThemeMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;

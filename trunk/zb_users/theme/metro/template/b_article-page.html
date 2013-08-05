@@ -1,0 +1,23 @@
+﻿<div class="post cate<#article/category/id#> auth<#article/author/id#>">
+      <div class="post_fu"></div>
+      <div class="post_r">
+        <div class="post_body">
+          <h2><#article/title#></h2>
+          <div class="post_content">
+          <#article/content#>
+          </div>
+        </div>
+
+		<#template:article_comment:begin#>
+        <div class="commentlist" style="overflow:hidden;">
+          <h4>评论列表:</h4>
+          <#template:article_comment#>
+          <#template:article_comment_pagebar#>
+        </div>
+		<#template:article_comment:end#>
+       
+        <#template:article_commentpost#>
+        
+      </div>
+     <div class="clear"></div>
+    </div>

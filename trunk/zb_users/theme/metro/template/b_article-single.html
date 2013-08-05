@@ -1,0 +1,42 @@
+﻿<div class="post cate<#article/category/id#> auth<#article/author/id#>">
+      <div class="post_time">
+        <h5><#article/posttime/day#></h5><h6><#article/posttime/year#><br /><#article/posttime/month#></h6>
+      </div>
+      <div class="post_r">
+        <div class="post_body">
+          <h2><#article/title#></h2>
+          <div class="post_content">
+            <#article/content#>
+          </div>
+          <#template:article_tag:begin#><div class="post_tags"><#ZC_MSG138#>: <span class="tags"><#template:article_tag#></span></div><#template:article_tag:end#>
+          <div class="post_info">
+            <#ZC_MSG011#>:<#article/author/name#> | <#ZC_MSG012#>:<#article/category/name#> | <#ZC_MSG013#>:<#article/commnums#> | <#ZC_MSG130#>:<#article/addviewcount#>
+          </div>
+        </div>
+        
+        <div class="post_nav">
+          <#template:article_navbar_l#><#template:article_navbar_r#>
+        </div>
+
+        <#template:article_mutuality:begin#>
+        <div class="mutuality">
+          <h4><#ZC_MSG231#>:</h4>
+          <div class="mutuality_body">
+            <#template:article_mutuality#>
+          </div>
+        </div>
+		<#template:article_mutuality:end#>
+     
+ 		<#template:article_comment:begin#>
+       <div class="commentlist" style="overflow:hidden;">
+       <h4>评论列表:</h4>
+          <#template:article_comment#>
+          <#template:article_comment_pagebar#>
+        </div>
+		<#template:article_comment:end#>
+
+        <#template:article_commentpost#>
+        
+      </div>
+     <div class="clear"></div>
+    </div>
