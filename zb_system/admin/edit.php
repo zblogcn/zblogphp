@@ -198,11 +198,11 @@ var isSubmit=false;//是否提交保存
 
 
 function getContent(){
-  return $('#editor_content').val()
+  return $('#editor_content').val();
 }
 
 function getIntro(){
-
+  return $('#editor_intro').val();
 }
 
 function setContent(s){

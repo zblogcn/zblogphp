@@ -17,6 +17,8 @@ class DbSQLite implements iDataBase
 	public $dbpre = null;
 	private $db = null;
 	
+	public $sql=null;
+
 	function __construct()
 	{
 		# code...

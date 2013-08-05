@@ -34,8 +34,105 @@ class DbFactory #extends AnotherClass
 	public static function Create($type)
 	{
 		$newtype='Db'.$type;
-		$db=New $newtype();
+		$db=new $newtype();
+		$db->sql=new DbSql;
 		return $db;
+	}
+
+}
+
+
+/**
+* DbSql
+*/
+class DbSql #extends AnotherClass
+{
+
+
+	public function Select($type,$select,$where,$order,$limit,$option)
+	{
+		global $zbp;
+
+		$sqlw='';
+		$sqlo='';
+		$sqll='';
+
+		if(!empty($select)) {
+			$sqls="SELECT * FROM {$zbp->table[$type]} ";
+		}
+
+		if(!empty($where)) {
+			$sqlw .= ' WHERE ';
+			$comma = '';
+			foreach($where as $w) {
+
+				if($w[0]=='='|$w[0]=='<'|$w[0]=='>'|$w[0]=='LIKE'){
+					$w[2] = $zbp->db->EscapeString($w[2]);
+					$sqlw .= $comma . " $w[1] $w[0] '$w[2]' ";
+				}
+				if($w[0]=='search'){
+					$j=count($w);
+					$sql_search='';
+					$c='';
+					for ($i=1; $i <= $j-1-1; $i++) { 
+						$x=$w[$i];
+						$y=$zbp->db->EscapeString($w[$j-1]);
+						$sql_search .= $c . " ($x LIKE '%$y%') ";
+						$c='OR';
+					}
+					$sqlw .= $comma .  '(' . $sql_search . ')';
+				}
+				$comma = 'AND';
+			}
+		}
+
+		if(!empty($order)) {
+			$sqlo .= ' ORDER BY ';
+			$comma = '';
+			foreach($order as $k=>$v) {
+				$sqlo .= $comma ."$k $v";
+				$comma = ',';
+			}
+		}
+
+		if(!empty($limit)){
+			if(!isset($limit[1])){
+				$sqll .= " LIMIT $limit[0]";
+			}else{
+				$sqll .= " LIMIT $limit[0], $limit[1]";
+			}
+		}
+
+		if(!empty($option)){
+			if(isset($option['pagebar'])){
+				$s2 = "SELECT COUNT({$zbp->datainfo[$type]['ID'][0]}) AS num FROM {$zbp->table[$type]} ";
+				$s2 .= $sqlw;
+				$option['pagebar']->Count = GetValueInArray(current($zbp->db->Query($s2)),'num');
+				$option['pagebar']->make();
+			}
+		}
+
+		return $sqls . $sqlw . $sqlo . $sqll;
+	}
+
+	public function Count()
+	{
+
+	}
+	
+	public function Update()
+	{
+
+	}
+
+	public function Insert()
+	{
+
+	}
+
+	public function Delete()
+	{
+
 	}
 
 }

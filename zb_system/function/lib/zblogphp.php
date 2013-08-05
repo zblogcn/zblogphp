@@ -22,6 +22,7 @@ class ZBlogPHP{
 	public $categorys=array();
 	public $categorysbyorder=array();	
 	public $tags=array();
+	public $tagsbyname=array();	
 	#public $modules=array();
 	public $modulesbyfilename=array();
 	public $templates=array();
@@ -94,6 +95,24 @@ class ZBlogPHP{
 		throw new Exception('zbp不存在方法：'.$method);
 	}
 
+	function CheckRights($action){
+
+		if(is_int($action)){
+			if ($GLOBALS['zbp']->user->Level > $action) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		if ($GLOBALS['zbp']->user->Level > $GLOBALS['actions'][$action]) {
+			return false;
+		} else {
+			return true;
+		}	
+
+	}
+
 	#初始化连接
 	public function Initialize(){
 
@@ -104,6 +123,7 @@ class ZBlogPHP{
 		$this->OpenConnect();
 		$this->LoadMembers();
 		$this->LoadCategorys();
+		#$this->LoadTags();		
 		$this->LoadModules();
 		$this->LoadConfigs();
 
@@ -305,6 +325,18 @@ class ZBlogPHP{
 		}
 	}
 
+
+	public function LoadTags(){
+
+		$array=$this->GetTagList();
+		foreach ($array as $t) {
+			$this->tags[$t->ID]=$t;
+			$this->tagsbyname[$t->Name]=&$this->tags[$t->ID];
+		}
+
+	}
+
+
 	public function LoadModules(){
 
 		$array=$this->GetModuleList();
@@ -409,7 +441,7 @@ class ZBlogPHP{
 	}
 
 	public function LoadPlugins(){
-		
+
 	}
 
 	public function LoadTemplates(){
@@ -463,70 +495,8 @@ class ZBlogPHP{
 
 	}
 
-	function ParseSql($type,$sql,$where,$order,$limit,$option){
-
-		$sqlw='';
-		$sqlo='';
-		$sqll='';
-
-		if(!empty($where)) {
-			$sqlw .= ' WHERE ';
-			$comma = '';
-			foreach($where as $w) {
-
-				if($w[0]=='='|$w[0]=='<'|$w[0]=='>'|$w[0]=='LIKE'){
-					$w[2] = $this->db->EscapeString($w[2]);
-					$sqlw .= $comma . " $w[1] $w[0] '$w[2]' ";
-				}
-				if($w[0]=='search'){
-					$j=count($w);
-					$sql_search='';
-					$c='';
-					for ($i=1; $i <= $j-1-1; $i++) { 
-						$x=$w[$i];
-						$y=$this->db->EscapeString($w[$j-1]);
-						$sql_search .= $c . " ($x LIKE '%$y%') ";
-						$c='OR';
-					}
-					$sqlw .= $comma .  '(' . $sql_search . ')';
-				}
-				$comma = 'AND';
-			}
-		}
-
-		if(!empty($order)) {
-			$sqlo .= ' ORDER BY ';
-			$comma = '';
-			foreach($order as $k=>$v) {
-				$sqlo .= $comma ."$k $v";
-				$comma = ',';
-			}
-		}
-
-		if(!empty($limit)){
-			if(!isset($limit[1])){
-				$sqll .= " LIMIT $limit[0]";
-			}else{
-				$sqll .= " LIMIT $limit[0], $limit[1]";
-			}
-		}
-
-		if(!empty($option)){
-			if(isset($option['pagebar'])){
-				$s2 = "SELECT COUNT({$this->datainfo[$type]['ID'][0]}) AS num FROM {$this->table[$type]} ";
-				$s2 .= $sqlw;
-				$option['pagebar']->Count = GetValueInArray(current($this->db->Query($s2)),'num');
-				$option['pagebar']->make();
-			}
-		}
-
-		Logs($sqlw);
-
-		return $sql . $sqlw . $sqlo . $sqll;
-
-	}
-
 	function GetList($type,$sql){
+
 		$array=null;
 		$list=array();
 		$array=$this->db->Query($sql);
@@ -540,57 +510,53 @@ class ZBlogPHP{
 	}
 
 	function GetArticleList($where=null,$order=null,$limit=null,$option=null){
-
-		$sql = "SELECT * FROM {$this->table['Post']} ";
 		if(empty($where)){$where = array();}
 		$where[] = array('=','log_Type','0');
-		$sql = $this->ParseSql('Post',$sql,$where,$order,$limit,$option);
-		return $this->GetList('Post',$sql);
+		$sql = $this->db->sql->Select('Post',array('*'),$where,$order,$limit,$option);
+		$array = $this->GetList('Post',$sql);
+		return $array;
 	}
 
 	function GetPageList($where=null,$order=null,$limit=null,$option=null){
 
-		$sql = "SELECT * FROM {$this->table['Post']} ";
 		if(empty($where)){$where = array();}
 		$where[] = array('=','log_Type','1');
-		$sql = $this->ParseSql('Post',$sql,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select('Post',array('*'),$where,$order,$limit,$option);
 		return $this->GetList('Post',$sql);
 
 	}
 
 	function GetCommentList($where=null,$order=null,$limit=null,$option=null){
 
-		$sql = "SELECT * FROM " . $this->table['Comment'] . " ";
-		$sql = $this->ParseSql('Comment',$sql,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select('Comment',array('*'),$where,$order,$limit,$option);
 		return $this->GetList('Comment',$sql);
 
 	}
 
 	function GetMemberList($where=null,$order=null,$limit=null,$option=null){
 
-		$sql = "SELECT * FROM " . $this->table['Member'] . " ";
-		$sql = $this->ParseSql('Member',$sql,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select('Member',array('*'),$where,$order,$limit,$option);
 		return $this->GetList('Member',$sql);
 
 	}
+
 	function GetTagList($where=null,$order=null,$limit=null,$option=null){
 
-		$sql = "SELECT * FROM " . $this->table['Tag'] . " ";
-		$sql = $this->ParseSql('Tag',$sql,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select('Tag',array('*'),$where,$order,$limit,$option);
 		return $this->GetList('Tag',$sql);
 
 	}
+
 	function GetCategoryList($where=null,$order=null,$limit=null,$option=null){
 
-		$sql = "SELECT * FROM " . $this->table['Category'] . " ";
-		$sql = $this->ParseSql('Category',$sql,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select('Category',array('*'),$where,$order,$limit,$option);
 		return $this->GetList('Category',$sql);
 
 	}
+
 	function GetModuleList($where=null,$order=null,$limit=null,$option=null){
 
-		$sql = "SELECT * FROM " . $this->table['Module'] . " ";
-		$sql = $this->ParseSql('Module',$sql,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select('Module',array('*'),$where,$order,$limit,$option);
 		return $this->GetList('Module',$sql);
 	}
 
@@ -623,25 +589,6 @@ class ZBlogPHP{
 
 	}
 	function CountAuthor($postid){
-
-	}
-
-
-	function CheckRights($action){
-
-		if(is_int($action)){
-			if ($GLOBALS['zbp']->user->Level > $action) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-
-		if ($GLOBALS['zbp']->user->Level > $GLOBALS['actions'][$action]) {
-			return false;
-		} else {
-			return true;
-		}	
 
 	}
 

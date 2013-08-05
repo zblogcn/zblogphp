@@ -51,6 +51,22 @@ var EditorIntroOption = {
 };
 
 
+function getContent(){
+  return editor_api.editor.content.get();
+}
+
+function getIntro(){
+  return editor_api.editor.intro.get();
+}
+
+function setContent(s){
+	editor_api.editor.content.put(s);
+}
+
+function setIntro(s){
+  editor_api.editor.intro.put(s);
+}
+
 function editor_init(){
 
 editor_api.editor.content.obj=UE.getEditor('editor_content');
