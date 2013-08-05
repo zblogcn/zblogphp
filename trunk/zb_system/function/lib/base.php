@@ -81,7 +81,7 @@ abstract class Base
 		}
 	}	
 
-	function Post(){
+	function Save(){
 		global $zbp;
 		
 		if ($this->ID  ==  0) {

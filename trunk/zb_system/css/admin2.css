@@ -278,7 +278,7 @@ padding-right:10px;
 .tdCenter{text-align:center;}
 .td20{width:20%;}.td30{width:30%;}
 .td5{width:5%;}.td10{width:10%;}
-.td15{width:15%;}
+.td15{width:15%;}.td25{width:25%;}
 
 /*表   单*/
 form {background:#fff;border:0px solid black;padding:0.0em;margin:0.5em 0;}

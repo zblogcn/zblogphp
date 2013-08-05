@@ -666,7 +666,7 @@ function InsertInfo(){
       '',
       ''
     ));
-  $mem->Post();
+  $mem->Save();
 
 
   $cate = new Category();
@@ -683,7 +683,7 @@ function InsertInfo(){
     '',
     '',
   ));
-  $cate->Post();
+  $cate->Save();
   
   $t=new Module();
   $t->Name="导航栏";
@@ -695,7 +695,7 @@ function InsertInfo(){
   $t->Content='<li><a href="{#ZC_BLOG_HOST#}">首页</a></li><li><a href="{#ZC_BLOG_HOST#}tags.php">标签</a></li><li id="menu-page-2"><a href="{#ZC_BLOG_HOST#}view.php?id=2">留言本</a></li>';
   $t->HtmlID="divNavBar";
   $t->Type="ul";
-  $t->Post();
+  $t->Save();
 
 
   $t=new Module();
@@ -709,7 +709,7 @@ function InsertInfo(){
   $t->HtmlID="divCalendar";
   $t->Type="div";
   $t->IsHideTitle=true;
-  $t->Post();
+  $t->Save();
 
 
 
@@ -724,7 +724,7 @@ function InsertInfo(){
   $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">[用户登录]</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">[查看权限]</a></span>';
   $t->HtmlID="divContorPanel";
   $t->Type="div";
-  $t->Post();
+  $t->Save();
 
 
 
@@ -739,7 +739,7 @@ function InsertInfo(){
   $t->Content="";
   $t->HtmlID="divCatalog";
   $t->Type="ul";
-  $t->Post();
+  $t->Save();
 
 
   $t=new Module();
@@ -752,7 +752,7 @@ function InsertInfo(){
   $t->Content='<form name="search" method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=search"><input type="text" name="q" size="12" /> <input type="submit" value="搜索" /></form>';
   $t->HtmlID="divSearchPanel";
   $t->Type="div";
-  $t->Post();
+  $t->Save();
 
 
   $t=new Module();
@@ -765,7 +765,7 @@ function InsertInfo(){
   $t->Content="";
   $t->HtmlID="divComments";
   $t->Type="ul";
-  $t->Post();
+  $t->Save();
 
 
 
@@ -780,7 +780,7 @@ function InsertInfo(){
   $t->Content="";
   $t->HtmlID="divArchives";
   $t->Type="ul";
-  $t->Post();
+  $t->Save();
 
 
 
@@ -794,7 +794,7 @@ function InsertInfo(){
   $t->Content="";
   $t->HtmlID="divStatistics";
   $t->Type="ul";
-  $t->Post();
+  $t->Save();
 
 
 
@@ -809,7 +809,7 @@ function InsertInfo(){
   $t->Content='<li><a href="http://bbs.rainbowsoft.org/" target="_blank">ZBlogger社区</a></li><li><a href="http://download.rainbowsoft.org/" target="_blank">菠萝的海</a></li><li><a href="http://t.qq.com/zblogcn" target="_blank">Z-Blog微博</a></li>';
   $t->HtmlID="divFavorites";
   $t->Type="ul";
-  $t->Post();
+  $t->Save();
 
 
 
@@ -824,7 +824,7 @@ function InsertInfo(){
   $t->Content='<li><a href="http://www.dbshost.cn/" target="_blank" title="独立博客服务 Z-Blog官方主机">DBS主机</a></li><li><a href="http://www.dutory.com/blog/" target="_blank">Dutory官方博客</a></li>';
   $t->HtmlID="divLinkage";
   $t->Type="ul";
-  $t->Post();
+  $t->Save();
 
 
 
@@ -838,7 +838,7 @@ function InsertInfo(){
   $t->Content='<li><a href="http://www.rainbowsoft.org/" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/zblog.gif" height="31" width="88" alt="RainbowSoft Studio Z-Blog" /></a></li><li><a href="{#ZC_BLOG_HOST#}feed.php" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/rss.png" height="31" width="88" alt="订阅本站的 RSS 2.0 新闻聚合" /></a></li>';
   $t->HtmlID="divMisc";
   $t->Type="ul";
-  $t->Post();
+  $t->Save();
 
 
 
@@ -853,7 +853,7 @@ function InsertInfo(){
   $t->Content="";
   $t->HtmlID="divAuthors";
   $t->Type="ul";
-  $t->Post();
+  $t->Save();
 
 
 
@@ -868,7 +868,7 @@ function InsertInfo(){
   $t->Content="";
   $t->HtmlID="divPrevious";
   $t->Type="ul";
-  $t->Post();
+  $t->Save();
 
 
 
@@ -882,7 +882,7 @@ function InsertInfo(){
   $t->Content="";
   $t->HtmlID="divTags";
   $t->Type="ul";
-  $t->Post();
+  $t->Save();
 
 
 
@@ -904,7 +904,7 @@ function InsertInfo(){
   $a->ViewNums=0;
   $a->Template='';
   $a->Meta='';
-  $a->Post();
+  $a->Save();
 
 
   $a=new Post();
@@ -925,7 +925,7 @@ function InsertInfo(){
   $a->ViewNums=0;
   $a->Template='';
   $a->Meta='';
-  $a->Post();  
+  $a->Save();  
 
   echo "创建并插入数据成功!<br/>";
   

@@ -181,6 +181,12 @@ class Template{
 	#模板入口
 	public function Display($templatename)
 	{
+		#强制撤除所有错误监控
+		if($GLOBALS['option']['ZC_DEBUG_MODE']==false){
+			set_error_handler(create_function('',''));
+			set_exception_handler(create_function('',''));
+			register_shutdown_function(create_function('',''));
+		}
 		#入口处将tags里的变量提升全局!!!
 		foreach ($this->tags as $key => &$value) {
 			$$key=&$value;

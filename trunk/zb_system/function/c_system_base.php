@@ -105,9 +105,14 @@ $actions=array(
 	'MemberEdt'=>4,
 	'MemberPst'=>4,
 	'MemberDel'=>1,
+	
+	'TagEdt'=>3,
+	'TagPst'=>3,
+	'TagDel'=>1,	
 
-	'UploadSnd'=>4,
-	'UploadDel'=>4,
+
+	'UploadSnd'=>3,
+	'UploadDel'=>3,
 
 	'ArticleMng'=>3,
 	'CategoryMng'=>2,

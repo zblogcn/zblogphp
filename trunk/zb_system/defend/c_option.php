@@ -197,9 +197,5 @@ return array(
 	'ZC_CATALOG_DEFAULT_TEMPLATE' => 'default',
 	'ZC_ARTICLE_DEFAULT_TEMPLATE' => 'single',
 	'ZC_PAGE_DEFAULT_TEMPLATE' => 'page',
-	
-	//The default language of uEditor
-	//The language files will be loaded from ue-lang\ZC_EDITORLANG by editor.
-	'ZC_EDITORLANG'=>'zh-cn',
-);
+
 ?>

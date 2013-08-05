@@ -35,7 +35,7 @@ function article(){
 		$a->ViewNums=0;
 		$a->Template='';
 		$a->Meta='';
-		$a->Post();
+		$a->Save();
 	}
 }
 
@@ -59,7 +59,7 @@ function page(){
 		$a->ViewNums=0;
 		$a->Template='';
 		$a->Meta='';
-		$a->Post();  
+		$a->Save();  
 	}
 }
 
@@ -79,7 +79,7 @@ function cate(){
 		'',
 		'',
 		));
-		$cate->Post();
+		$cate->Save();
   	}
 }
 
@@ -96,7 +96,7 @@ function tag(){
 		'',
 		'',
 		));
-		$tag->Post();
+		$tag->Save();
   	}
 }
 

@@ -123,7 +123,7 @@ function PostCategory(){
 				''
 			)
 		);
-		$cate->Post();
+		$cate->Save();
 	}else{
 		$cate->LoadInfoByID(GetVars('ID','POST'));
 		$cate->Name = GetVars('Name','POST');
@@ -132,7 +132,7 @@ function PostCategory(){
 		$cate->ParentID = GetVars('ParentID','POST');
 		$cate->Template = GetVars('Template','POST');
 		$cate->LogTemplate = GetVars('LogTemplate','POST');
-		$cate->Post();
+		$cate->Save();
 	}
 }
 

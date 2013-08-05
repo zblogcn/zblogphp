@@ -299,6 +299,7 @@ function Admin_CategoryMng(){
 	<th>' . $zbp->lang['msg']['order'] . '</th>
 	<th>' . $zbp->lang['msg']['name'] . '</th>
 	<th>' . $zbp->lang['msg']['alias'] . '</th>
+	<th>' . $zbp->lang['msg']['post_count'] . '</th>
 	<th></th>
 	</tr>';
 
@@ -307,8 +308,9 @@ foreach ($zbp->categorysbyorder as $category) {
 	echo '<tr>';
 	echo '<td class="td5">' . $category->ID . '</td>';
 	echo '<td class="td5">' . $category->Order . '</td>';
-	echo '<td class="td20">' . $category->Symbol . $category->Name . '</td>';
+	echo '<td class="td25">' . $category->Symbol . $category->Name . '</td>';
 	echo '<td class="td20">' . $category->Alias . '</td>';
+	echo '<td class="td10">' . $category->Count . '</td>';
 	echo '<td class="td10 tdCenter">';
 	echo '<a href="../cmd.php?act=CategoryEdt&amp;id='. $category->ID .'"><img src="../image/admin/folder_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -385,9 +387,53 @@ function Admin_TagMng(){
 		$fpname();
 	}	
 	echo '</div>';
-	echo '<div id="divMain2">';
 
-	echo '</div>';
+
+	echo '<div id="divMain2">';
+	echo '<!--<form class="search" id="edit" method="post" action="#"></form>-->';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<tr>
+	<th>' . $zbp->lang['msg']['id'] . '</th>
+	<th>' . $zbp->lang['msg']['name'] . '</th>
+	<th>' . $zbp->lang['msg']['alias'] . '</th>
+	<th>' . $zbp->lang['msg']['post_count'] . '</th>	
+	<th></th>
+	</tr>';
+
+$p=new Pagebar();
+$p->PageCount=50;
+$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+$p->PageBarCount=10;
+$p->UrlRule='{%host%}zb_system/cmd.php?act=TagMng&amp;type=1&amp;page={%page%}';
+
+$array=$zbp->GetTagList(
+	'',
+	array('tag_Count'=>'DESC','tag_ID'=>'ASC'),
+	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
+	array('pagebar'=>$p)
+);
+
+foreach ($array as $tag) {
+	echo '<tr>';
+	echo '<td class="td5">' . $tag->ID . '</td>';
+	echo '<td class="td25">' . $tag->Name . '</td>';
+	echo '<td class="td20">' . $tag->Alias . '</td>';
+	echo '<td class="td10">' . $tag->Count . '</td>';	
+	echo '<td class="td10 tdCenter">';
+	echo '<a href="../cmd.php?act=ArticleEdt&amp;id='. $tag->ID .'"><img src="../image/admin/tag_blue_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=TagDel&amp;id='. $tag->ID .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
+	echo '</td>';
+
+	echo '</tr>';
+}
+	echo '</table>';
+	echo '<hr/><p class="pagebar">';
+foreach ($p->buttons as $key => $value) {
+	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
+}	
+	echo '</p></div>';
+
 	echo '<script type="text/javascript">ActiveLeftMenu("aTagMng");</script>';
 	
 }
