@@ -22,6 +22,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 
 	$articles=$zbp->GetArticleList(
 		'',
+		'',
 		array('log_PostTime'=>'DESC'),
 		array(($pagebar->PageNow-1) * $pagebar->PageCount,$pagebar->PageCount),
 		array('pagebar'=>$pagebar)

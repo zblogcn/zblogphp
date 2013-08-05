@@ -173,16 +173,17 @@ $p->UrlRule='{%host%}zb_system/cmd.php?act=ArticleMng&amp;page={%page%}';
 
 $w=array();
 if(GetVars('search','POST')){
-	$w[]=array('search','log_Content','log_Intro','log_Title',GetVars('search','POST'));
+	$w+=array('search'=>array('log_Content','log_Intro','log_Title',GetVars('search','POST')));
 }
 if(GetVars('istop','POST')){
-	$w[]=array('=','log_Istop','1');
+	$w+=array('='=>array('log_Istop','1'));
 }
 if(GetVars('status','POST')){
-	$w[]=array('=','log_Status',GetVars('status','POST'));
+	$w+=array('='=>array('log_Status',GetVars('status','POST')));
 }
 
 $array=$zbp->GetArticleList(
+	'',
 	$w,
 	array('log_PostTime'=>'DESC'),
 	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
@@ -249,6 +250,7 @@ $p->PageBarCount=10;
 $p->UrlRule='{%host%}zb_system/cmd.php?act=ArticleMng&amp;type=1&amp;page={%page%}';
 
 $array=$zbp->GetPageList(
+	'',
 	'',
 	array('log_PostTime'=>'DESC'),
 	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
@@ -407,6 +409,7 @@ $p->PageBarCount=10;
 $p->UrlRule='{%host%}zb_system/cmd.php?act=TagMng&amp;type=1&amp;page={%page%}';
 
 $array=$zbp->GetTagList(
+	'',
 	'',
 	array('tag_Count'=>'DESC','tag_ID'=>'ASC'),
 	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),

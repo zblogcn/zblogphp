@@ -47,44 +47,65 @@ class DbFactory #extends AnotherClass
 */
 class DbSql #extends AnotherClass
 {
+	public function ParseWhere($where){
+		global $zbp;
 
+		$sqlw=null;
+		if(!empty($where)) {
+			$sqlw .= ' WHERE ';
+			$comma = '';
+			foreach($where as $eq => $w) {
+
+				if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'){
+					$x = (string)$w[0];
+					$y = (string)$w[1];
+					$y = $zbp->db->EscapeString($y);
+					$sqlw .= $comma . " $x $eq '$y' ";
+				}
+				if($eq=='search'){
+					$j=count($w);
+					$sql_search='';
+					$c='';
+					for ($i=0; $i <= $j-1-1; $i++) { 
+						$x=(string)$w[$i];
+						$y=(string)$w[$j-1];
+						$y=$zbp->db->EscapeString($y);
+						$y=$w[$j-1];
+						$sql_search .= $c . " ($x LIKE '%$y%') ";
+						$c='OR';
+					}
+					logs($sql_search);
+					$sqlw .= $comma .  '(' . $sql_search . ')';
+				}
+				if($eq=='array'){
+					$c='';
+					$sql_array='';
+					foreach ($w as $x=>$y) {
+						$sql_array .= $c . " $x=$y ";
+						$c='OR';
+					}
+					$sqlw .= $comma .  '(' . $sql_array . ')';
+				}
+				$comma = 'AND';
+			}
+		}
+		return $sqlw;
+	}
 
 	public function Select($type,$select,$where,$order,$limit,$option)
 	{
 		global $zbp;
 
+		$sqls='';
 		$sqlw='';
 		$sqlo='';
 		$sqll='';
 
 		if(!empty($select)) {
-			$sqls="SELECT * FROM {$zbp->table[$type]} ";
+			$sqls="SELECT $select[0] FROM {$zbp->table[$type]} ";
 		}
 
-		if(!empty($where)) {
-			$sqlw .= ' WHERE ';
-			$comma = '';
-			foreach($where as $w) {
-
-				if($w[0]=='='|$w[0]=='<'|$w[0]=='>'|$w[0]=='LIKE'){
-					$w[2] = $zbp->db->EscapeString($w[2]);
-					$sqlw .= $comma . " $w[1] $w[0] '$w[2]' ";
-				}
-				if($w[0]=='search'){
-					$j=count($w);
-					$sql_search='';
-					$c='';
-					for ($i=1; $i <= $j-1-1; $i++) { 
-						$x=$w[$i];
-						$y=$zbp->db->EscapeString($w[$j-1]);
-						$sql_search .= $c . " ($x LIKE '%$y%') ";
-						$c='OR';
-					}
-					$sqlw .= $comma .  '(' . $sql_search . ')';
-				}
-				$comma = 'AND';
-			}
-		}
+		$sqlw=$this->ParseWhere($where);
 
 		if(!empty($order)) {
 			$sqlo .= ' ORDER BY ';
@@ -105,8 +126,7 @@ class DbSql #extends AnotherClass
 
 		if(!empty($option)){
 			if(isset($option['pagebar'])){
-				$s2 = "SELECT COUNT({$zbp->datainfo[$type]['ID'][0]}) AS num FROM {$zbp->table[$type]} ";
-				$s2 .= $sqlw;
+				$s2 = $this->Count($type,array($zbp->datainfo[$type]['ID'][0]=>'num'),$where);
 				$option['pagebar']->Count = GetValueInArray(current($zbp->db->Query($s2)),'num');
 				$option['pagebar']->make();
 			}
@@ -115,9 +135,20 @@ class DbSql #extends AnotherClass
 		return $sqls . $sqlw . $sqlo . $sqll;
 	}
 
-	public function Count()
+	public function Count($type,$count,$where)
 	{
+		global $zbp;
+		$sqlc=null;
 
+		if(!empty($count)) {
+			foreach ($count as $key => $value) {
+				$sqlc="SELECT COUNT($key) AS $value FROM {$zbp->table[$type]} ";
+			}
+		}
+
+		$sqlw=$this->ParseWhere($where);
+
+		return $sqlc . $sqlw;
 	}
 	
 	public function Update()
