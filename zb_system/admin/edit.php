@@ -188,42 +188,42 @@ if($ispage){
 }
 ?>
 
-
-        <script type="text/javascript">
+<script type="text/javascript">
 
 var tag_loaded=false; //是否已经ajax读取过TAGS
 var sContent="",sIntro="";//原内容与摘要
 var isSubmit=false;//是否提交保存
 
-
-function getContent(){
-  return $('#editor_content').val();
+var editor_api={
+	editor:	{
+		content:{
+			obj:{},
+			get:function(){return ""},
+			put:function(){return ""},
+			focus:function(){return ""}
+		},
+		intro:{
+			obj:{},
+			get:function(){return ""},
+			put:function(){return ""},
+			focus:function(){return ""}
+		}
+	}
 }
 
-function getIntro(){
-  return $('#editor_intro').val();
-}
-
-function setContent(s){
-  $('#editor_content').val(s);
-}
-
-function setIntro(s){
-  $('#editor_intro').val(s);
-}
 
 $(document).click(function (event){$('#ulTag').slideUp("fast");});  
 
 //文章内容或摘要变动提示保存
 window.onbeforeunload = function(){
-  if (!isSubmit && getContent()) return "<?php echo $zbp->lang['error'][71];?>";
+  if (!isSubmit && editor_api.editor.content.get()) return "<?php echo $zbp->lang['error'][71];?>";
 }
 
 
 function checkArticleInfo(){
   document.getElementById("edit").action="../cmd.php?act=ArticlePst";
 
-  if(!getContent()){
+  if(!editor_api.editor.content.get()){
     alert('<?php echo $zbp->lang['error'][70];?>');
     return false
   }
@@ -307,14 +307,14 @@ function DelKey(i) {
 
 //提取摘要
 function AutoIntro() {
-  var s=getContent();
+  var s=editor_api.editor.content.get();
   if(s.indexOf("<hr class=\"more\" />")>-1){
-    setIntro(s.split("<hr class=\"more\" />")[0]);
+    editor_api.editor.intro.put(s.split("<hr class=\"more\" />")[0]);
   }else{
 	if(s.indexOf("<hr class=\"more\"/>")>-1){
-	    setIntro(s.split("<hr class=\"more\"/>")[0]);
+	    editor_api.editor.intro.put(s.split("<hr class=\"more\"/>")[0]);
 	}else{
-		setIntro(s.substring(0,250));
+		editor_api.editor.intro.put(s.substring(0,250));
 	}
   }
   $("#divIntro").show();
@@ -344,6 +344,17 @@ function selectlogtemplatesub(a){
   $("#cmbTemplate").find("option[value='"+a+"']").attr("selected","selected");
 }
 
+function editor_init(){
+editor_api.editor.content.obj=$('#editor_content');
+editor_api.editor.intro.obj=$('#editor_intro');
+editor_api.editor.content.get=function(){return this.obj.val()};
+editor_api.editor.content.put=function(str){return this.obj.val(str)};
+editor_api.editor.content.focus=function(){return this.obj.focus()};
+editor_api.editor.intro.get=function(){return this.obj.val()};
+editor_api.editor.intro.put=function(str){return this.obj.val(str)};
+editor_api.editor.intro.focus=function(){return this.obj.focus()};
+}
+
 
 </script>
 
@@ -351,6 +362,7 @@ function selectlogtemplatesub(a){
 foreach ($GLOBALS['Filter_Plugin_Edit_End'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 
+<script type="text/javascript">editor_init();</script>
 </div>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';

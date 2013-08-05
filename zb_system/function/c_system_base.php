@@ -110,6 +110,8 @@ $actions=array(
 	'TagPst'=>3,
 	'TagDel'=>1,	
 
+	'PluginEnable'=>1,
+	'PluginDisable'=>1,
 
 	'UploadSnd'=>3,
 	'UploadDel'=>3,

@@ -42,8 +42,47 @@ class App
 	public $advanced_rewritefunctions;
 	public $advanced_conflict;
 
-	public function CanStop(){
+	public function CanDel(){
+		global $zbp;
+		return false;
+	}
+	public function CanManage(){
+		if($this->path){return true;}
+		return false;
+	}
+	public function IsUsed(){
+		global $zbp;
 
+		if($this->type=='plugin'){
+			$s='|' . $zbp->option['ZC_USING_PLUGIN_LIST'] . '|';
+			$t='|' . $this->id. '|';
+			if(stripos($s,$t)===false){
+				return false;
+			}else{
+				return true;
+			}
+		}else{
+			if($zbp->option['ZC_BLOG_THEME']==$this->id){
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+	}
+	public function HasPlugin(){
+		if($this->path || $this->include){return true;}
+		return false;
+	}
+
+	public function GetHash(){
+		global $zbp;
+		return 't' . crc32($this->id);
+	}
+
+	public function GetManageUrl(){
+		global $zbp;
+		return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/' . $this->path;
 	}
 
 	public function GetLogo(){
@@ -51,13 +90,18 @@ class App
 		if($this->type=='plugin'){
 			return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/logo.png';
 		}else{
-			return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png.png';
+			return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
 		}
-
 	}
+	public function GetScreenshot(){
+		global $zbp;
+		return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
+	}
+
 	public function LoadInfoByXml($type,$id){
 		global $zbp;
 		$path=$zbp->path . 'zb_users/' . $type . '/' . $id . '/' . $type . '.xml';
+		if(!file_exists($path)){return;}
 		$xml = simplexml_load_file($path);
 		$appver = $xml->attributes();
 		if($appver <> 'php'){return false;}
