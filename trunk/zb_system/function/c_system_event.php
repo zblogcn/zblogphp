@@ -143,27 +143,13 @@ function PostCategory(){
 
 function EnablePlugin($name){
 	global $zbp;
-	$pl=$zbp->option['ZC_USING_PLUGIN_LIST'];
-	$apl=explode('|',$pl);
-	if(in_array($name,$apl)==false){
-		$apl[]=$name;
-	}
-	$pl=trim(implode('|',$apl),'|');
-	$zbp->option['ZC_USING_PLUGIN_LIST']=$pl;
+	$zbp->option['ZC_USING_PLUGIN_LIST']=AddNameInString($zbp->option['ZC_USING_PLUGIN_LIST'],$name);
 	$zbp->SaveOption();
 }
 
 function DisablePlugin($name){
 	global $zbp;
-	$pl=$zbp->option['ZC_USING_PLUGIN_LIST'];
-	$apl=explode('|',$pl);
-	for ($i=0; $i <= Count($apl)-1; $i++) { 
-		if($apl[$i]==$name){
-			unset($apl[$i]);
-		}
-	}
-	$pl=trim(implode('|',$apl),'|');
-	$zbp->option['ZC_USING_PLUGIN_LIST']=$pl;
+	$zbp->option['ZC_USING_PLUGIN_LIST']=DelNameInString($zbp->option['ZC_USING_PLUGIN_LIST'],$name);
 	$zbp->SaveOption();
 }
 

@@ -81,7 +81,8 @@ class DbSql #extends AnotherClass
 					$c='';
 					$sql_array='';
 					foreach ($w[1] as $x=>$y) {
-						$sql_array .= $c . " $y[0]=$y[1] ";
+						$y[1]=$zbp->db->EscapeString($y[1]);
+						$sql_array .= $c . " $y[0]='$y[1]' ";
 						$c='OR';
 					}
 					$sqlw .= $comma .  '(' . $sql_array . ')';
@@ -151,19 +152,54 @@ class DbSql #extends AnotherClass
 		return $sqlc . $sqlw;
 	}
 	
-	public function Update()
+	public function Update($type,$keyvalue,$where)
 	{
+		global $zbp;
 
+		$sql="UPDATE {$zbp->table[$type]} SET ";
+
+		$comma = '';
+		foreach ($keyvalue as $k => $v) {
+			$v=$zbp->db->EscapeString($v);
+			$sql.= $comma . "$k = '$v'";
+			$comma = ' , ';
+		}
+
+		$sql.=$this->ParseWhere($where);
+		return $sql;
 	}
 
-	public function Insert()
+	public function Insert($type,$keyvalue)
 	{
+		global $zbp;
 
+		$sql="INSERT INTO {$zbp->table[$type]} ";
+
+		$sql.='(';
+		$comma = '';
+		foreach($keyvalue as $k => $v) {
+			$sql.= $comma . "$k";
+			$comma = ',';
+		}
+		$sql.=')VALUES(';
+
+		$comma = '';
+		foreach($keyvalue as $k => $v) {
+			$v=$zbp->db->EscapeString($v);
+			$sql.= $comma . "'$v'";
+			$comma = ',';
+		}
+		$sql.=')';
+		return  $sql;
 	}
 
-	public function Delete()
+	public function Delete($type,$where)
 	{
+		global $zbp;
 
+		$sql="DELETE FROM {$zbp->table[$type]} ";
+		$sql.=$this->ParseWhere($where);
+		return $sql;
 	}
 
 }
@@ -186,6 +222,10 @@ $table=array(
 
 
 $datainfo=array(
+'Config'=>array(
+	'Name'=>array('conf_Name','string',250,''),
+	'Value'=>array('conf_Name','string','',''),
+),
 'Post'=> array(
 	'ID'=>array('log_ID','integer','',0),
 	'CateID'=>array('log_CateID','integer','',0),
