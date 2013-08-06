@@ -18,7 +18,7 @@ global $zbp;
 $article = new Post;
 $article->Title='搜索“' . GetVars('q','GET') . '”';
 $article->IsLock=true;
-
+$article->Type=ZC_POST_TYPE_PAGE;
 
 
 $w=array();
@@ -28,6 +28,7 @@ if(GetVars('q','GET')){
 }
 
 $array=$zbp->GetArticleList(
+	'',
 	$w,
 	array('log_PostTime'=>'DESC'),
 	array(50),

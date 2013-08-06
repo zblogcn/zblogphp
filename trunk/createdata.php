@@ -136,7 +136,7 @@ function getTagStr($tagcount) {
 
 }
 
-
+/*
 
 echo "生成分类!<br/>";
 cate();
@@ -149,6 +149,22 @@ page();
 
 echo "tag!<br/>";
 tag();
+
+
+
+foreach ($zbp->tags as $key => $value) {
+	$value->Count=$zbp->CountTag($key);
+	$value->Save();
+}
+*/
+$zbp->LoadTags();
+//for ($i=1; $i < 1000; $i++) { 
+	$zbp->tags[991]->Count=$zbp->Counttag(991);
+	$zbp->tags[991]->Save();
+
+
+//}
+
 
 $zbp->Terminate();
 

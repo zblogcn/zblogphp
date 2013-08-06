@@ -54,7 +54,6 @@ function misc_statistic(){
 	global $zbp;
 
 	$r=null;
-	
 
 	$zbp->BuildTemplate();
 
@@ -71,7 +70,7 @@ function misc_statistic(){
 	$current_theme=$zbp->theme;
 	$current_style=$zbp->style;
 
-	$system_environment=(getenv('OS')?getenv('OS'):getenv('XAMPP_OS')) . ';' . current(explode('/',GetVars('SERVER_SOFTWARE','SERVER'))) . ';' . 'PHP ' . phpversion();
+	$system_environment=(getenv('OS')?getenv('OS'):getenv('XAMPP_OS')) . ';' . current(explode('/',GetVars('SERVER_SOFTWARE','SERVER'))) . ';' . 'PHP ' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'] . ';';
 
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}</td><td class='td30'>{$current_member}</td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_artiles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categorys}</td></tr>";

@@ -54,11 +54,11 @@ class DbSql #extends AnotherClass
 		if(!empty($where)) {
 			$sqlw .= ' WHERE ';
 			$comma = '';
-			foreach($where as $eq => $w) {
-
+			foreach($where as $k => $w) {
+				$eq=$w[0];
 				if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'){
-					$x = (string)$w[0];
-					$y = (string)$w[1];
+					$x = (string)$w[1];
+					$y = (string)$w[2];
 					$y = $zbp->db->EscapeString($y);
 					$sqlw .= $comma . " $x $eq '$y' ";
 				}
@@ -66,7 +66,7 @@ class DbSql #extends AnotherClass
 					$j=count($w);
 					$sql_search='';
 					$c='';
-					for ($i=0; $i <= $j-1-1; $i++) { 
+					for ($i=1; $i <= $j-1-1; $i++) { 
 						$x=(string)$w[$i];
 						$y=(string)$w[$j-1];
 						$y=$zbp->db->EscapeString($y);
@@ -80,7 +80,7 @@ class DbSql #extends AnotherClass
 				if($eq=='array'){
 					$c='';
 					$sql_array='';
-					foreach ($w as $x=>$y) {
+					foreach ($w[1] as $x=>$y) {
 						$sql_array .= $c . " $y[0]=$y[1] ";
 						$c='OR';
 					}
@@ -89,7 +89,6 @@ class DbSql #extends AnotherClass
 				$comma = 'AND';
 			}
 		}
-		logs($sqlw);
 		return $sqlw;
 	}
 
