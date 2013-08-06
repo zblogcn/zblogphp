@@ -688,10 +688,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="导航栏";
   $t->FileName="navbar";
-  $t->IsHidden=0;
   $t->Source="system";
   $t->SidebarID=0;
-  $t->Order=1;
   $t->Content='<li><a href="{#ZC_BLOG_HOST#}">首页</a></li><li><a href="{#ZC_BLOG_HOST#}tags.php">标签</a></li><li id="menu-page-2"><a href="{#ZC_BLOG_HOST#}view.php?id=2">留言本</a></li>';
   $t->HtmlID="divNavBar";
   $t->Type="ul";
@@ -701,10 +699,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="日历";
   $t->FileName="calendar";
-  $t->IsHidden=false;
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Order=2;
   $t->Content="";
   $t->HtmlID="divCalendar";
   $t->Type="div";
@@ -717,10 +713,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="控制面板";
   $t->FileName="controlpanel";
-  $t->IsHidden=false;
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Order=3;
   $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">[用户登录]</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">[查看权限]</a></span>';
   $t->HtmlID="divContorPanel";
   $t->Type="div";
@@ -732,10 +726,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="网站分类";
   $t->FileName="catalog";
-  $t->IsHidden=false;
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Order=4;
   $t->Content="";
   $t->HtmlID="divCatalog";
   $t->Type="ul";
@@ -745,10 +737,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="搜索";
   $t->FileName="searchpanel";
-  $t->IsHidden=false;
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Order=5;
   $t->Content='<form name="search" method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=search"><input type="text" name="q" size="12" /> <input type="submit" value="搜索" /></form>';
   $t->HtmlID="divSearchPanel";
   $t->Type="div";
@@ -758,10 +748,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="最新留言";
   $t->FileName="comments";
-  $t->IsHidden=false;
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Order=6;
   $t->Content="";
   $t->HtmlID="divComments";
   $t->Type="ul";
@@ -773,10 +761,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="文章归档";
   $t->FileName="archives";
-  $t->IsHidden=true;
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Order=7;
   $t->Content="";
   $t->HtmlID="divArchives";
   $t->Type="ul";
@@ -787,10 +773,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="站点统计";
   $t->FileName="statistics";
-  $t->IsHidden=false;
   $t->Source="system";
   $t->SidebarID=0;
-  $t->Order=8;
   $t->Content="";
   $t->HtmlID="divStatistics";
   $t->Type="ul";
@@ -802,10 +786,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="网站收藏";
   $t->FileName="favorite";
-  $t->IsHidden=false;
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Order=9;
   $t->Content='<li><a href="http://bbs.rainbowsoft.org/" target="_blank">ZBlogger社区</a></li><li><a href="http://download.rainbowsoft.org/" target="_blank">菠萝的海</a></li><li><a href="http://t.qq.com/zblogcn" target="_blank">Z-Blog微博</a></li>';
   $t->HtmlID="divFavorites";
   $t->Type="ul";
@@ -817,10 +799,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="友情链接";
   $t->FileName="link";
-  $t->IsHidden=false;
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Order=10;
   $t->Content='<li><a href="http://www.dbshost.cn/" target="_blank" title="独立博客服务 Z-Blog官方主机">DBS主机</a></li><li><a href="http://www.dutory.com/blog/" target="_blank">Dutory官方博客</a></li>';
   $t->HtmlID="divLinkage";
   $t->Type="ul";
@@ -831,10 +811,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="图标汇集";
   $t->FileName="misc";
-  $t->IsHidden=false;
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Order=11;
   $t->Content='<li><a href="http://www.rainbowsoft.org/" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/zblog.gif" height="31" width="88" alt="RainbowSoft Studio Z-Blog" /></a></li><li><a href="{#ZC_BLOG_HOST#}feed.php" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/rss.png" height="31" width="88" alt="订阅本站的 RSS 2.0 新闻聚合" /></a></li>';
   $t->HtmlID="divMisc";
   $t->Type="ul";
@@ -846,10 +824,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="作者列表";
   $t->FileName="authors";
-  $t->IsHidden=false;
   $t->Source="system";
   $t->SidebarID=0;
-  $t->Order=12;
   $t->Content="";
   $t->HtmlID="divAuthors";
   $t->Type="ul";
@@ -861,10 +837,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="最近发表";
   $t->FileName="previous";
-  $t->IsHidden=false;
   $t->Source="system";
   $t->SidebarID=0;
-  $t->Order=13;
   $t->Content="";
   $t->HtmlID="divPrevious";
   $t->Type="ul";
@@ -875,10 +849,8 @@ function InsertInfo(){
   $t=new Module();
   $t->Name="Tags列表";
   $t->FileName="tags";
-  $t->IsHidden=false;
   $t->Source="system";
   $t->SidebarID=0;
-  $t->Order=14;
   $t->Content="";
   $t->HtmlID="divTags";
   $t->Type="ul";
@@ -890,8 +862,8 @@ function InsertInfo(){
   $a->CateID=1;
   $a->AuthorID=1;
   $a->Tag='';
-  $a->Status=ZC_LOG_STATUS_PUBLIC;
-  $a->Type=ZC_LOG_TYPE_ARTICLE;
+  $a->Status=ZC_POST_STATUS_PUBLIC;
+  $a->Type=ZC_POST_TYPE_ARTICLE;
   $a->Alias='';
   $a->IsTop=false;
   $a->IsLock=false;
@@ -911,8 +883,8 @@ function InsertInfo(){
   $a->CateID=0;
   $a->AuthorID=1;
   $a->Tag='';
-  $a->Status=ZC_LOG_STATUS_PUBLIC;
-  $a->Type=ZC_LOG_TYPE_PAGE;
+  $a->Status=ZC_POST_STATUS_PUBLIC;
+  $a->Type=ZC_POST_TYPE_PAGE;
   $a->Alias='';
   $a->IsTop=false;
   $a->IsLock=false;
@@ -956,6 +928,13 @@ function SaveConfig(){
   }
 
   $GLOBALS['zbp']->option['ZC_BLOG_VERSION']='1.0 Alpha Build 130707';
+  
+  
+  $GLOBALS['zbp']->option['ZC_SIDEBAR_ORDER'] ='calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc';
+  $GLOBALS['zbp']->option['ZC_SIDEBAR_ORDER2']='';
+  $GLOBALS['zbp']->option['ZC_SIDEBAR_ORDER3']='';
+  $GLOBALS['zbp']->option['ZC_SIDEBAR_ORDER4']='';
+  $GLOBALS['zbp']->option['ZC_SIDEBAR_ORDER5']='';
 
   $GLOBALS['zbp']->SaveOption();
   $GLOBALS['zbp']->BuildTemplate();

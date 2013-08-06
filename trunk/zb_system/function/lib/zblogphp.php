@@ -48,6 +48,9 @@ class ZBlogPHP{
 
 	public $themes = array();
 	public $plugins = array();
+
+	public $theme = null;
+	public $style = null;
 	
 	static public function GetInstance(){
 		if(!isset(self::$_zbp)){
@@ -83,6 +86,9 @@ class ZBlogPHP{
 		$this->title=&$GLOBALS['blogtitle'];
 		$this->name=&$GLOBALS['blogname'];
 		$this->subname=&$GLOBALS['blogsubname'];
+
+		$this->theme=&$GLOBALS['blogtheme'];
+		$this->style=&$GLOBALS['blogstyle'];
 
 	}
 
@@ -269,6 +275,13 @@ class ZBlogPHP{
 
 		$this->option['ZC_BLOG_CLSID']=$this->guid;
 
+		$this->option['ZC_BLOG_NAME'] = $this->name;
+		$this->option['ZC_BLOG_SUBNAME'] = $this->subname;
+		$this->option['ZC_BLOG_THEME'] = $this->theme;
+		$this->option['ZC_BLOG_CSS'] = $this->style;
+
+		$this->option['ZC_BLOG_HOST'] = $this->host;
+
 		$s="<?php\r\n";
 		$s.="return ";
 		$s.=var_export($this->option,true);
@@ -346,7 +359,7 @@ class ZBlogPHP{
 			$this->modulesbyfilename[$m->FileName]=$m;
 		}
 
-		$dir=$this->path .'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/include/';
+		$dir=$this->path .'zb_users/theme/' . $this->theme . '/include/';
 		$files=GetFilesInDir($dir,'html');
 		foreach ($files as $sortname => $fullname) {
 			$m=new Module();
@@ -396,20 +409,20 @@ class ZBlogPHP{
 		unset($option['ZC_MYSQL_PASSWORD']);
 		unset($option['ZC_MYSQL_NAME']);
 
-		$this->templatetags['option']=&$option;
-		$this->templatetags['title']=&$this->title;
-		$this->templatetags['host']=&$this->host;	
-		$this->templatetags['path']=&$this->path;
-		$this->templatetags['cookiespath']=&$this->cookiespath;
-		$this->templatetags['name']=&$this->name;	
-		$this->templatetags['subname']=&$this->subname;
-		$this->templatetags['theme']=&$this->option['ZC_BLOG_THEME'];
-		$this->templatetags['style']=&$this->option['ZC_BLOG_STYLE'];
-		$this->templatetags['language']=&$this->option['ZC_BLOG_LANGUAGE'];
-		$this->templatetags['copyright']=&$this->option['ZC_BLOG_COPYRIGHT'];		
-		$this->templatetags['zblogphp']=&$this->option['ZC_BLOG_PRODUCT_FULL'];		
-		$this->templatetags['zblogphphtml']=&$this->option['ZC_BLOG_PRODUCT_FULLHTML'];
-
+		$this->templatetags['option']=$option;
+		$this->templatetags['title']=$this->title;
+		$this->templatetags['host']=$this->host;	
+		$this->templatetags['path']=$this->path;
+		$this->templatetags['cookiespath']=$this->cookiespath;
+		$this->templatetags['name']=$this->name;	
+		$this->templatetags['subname']=$this->subname;
+		$this->templatetags['theme']=$this->theme;
+		$this->templatetags['style']=$this->style;
+		$this->templatetags['language']=$this->option['ZC_BLOG_LANGUAGE'];
+		$this->templatetags['copyright']=$this->option['ZC_BLOG_COPYRIGHT'];		
+		$this->templatetags['zblogphp']=$this->option['ZC_BLOG_PRODUCT_FULL'];
+		$this->templatetags['zblogphphtml']=$this->option['ZC_BLOG_PRODUCT_FULLHTML'];
+		$this->templatetags['feedurl']=$this->host . 'feed.php';
 		$this->templatetags['modules']=&$this->modulesbyfilename;
 
 		$s=array(
@@ -420,7 +433,7 @@ class ZBlogPHP{
 			$option['ZC_SIDEBAR_ORDER5']
 		);
 		foreach ($s as $k =>$v) {
-			$a=explode(':', $v);
+			$a=explode('|', $v);
 			$ms=array();
 			foreach ($a as $v2) {
 				if(isset($this->modulesbyfilename[$v2])){
@@ -468,7 +481,7 @@ class ZBlogPHP{
 			$this->templates[$sortname]=file_get_contents($fullname);
 		}
 		#再读当前的
-		$dir=$this->path .'zb_users/theme/' . $this->option['ZC_BLOG_THEME'] . '/template/';
+		$dir=$this->path .'zb_users/theme/' . $this->theme . '/template/';
 		$files=GetFilesInDir($dir,'php');
 		foreach ($files as $sortname => $fullname) {
 			$this->templates[$sortname]=file_get_contents($fullname);
@@ -517,25 +530,38 @@ class ZBlogPHP{
 		return $tagstring;
 	}
 	function LoadTagsByString($s){
+		if($s=='')return array();
 		$s=str_replace('}{', '|', $s);
 		$s=str_replace('{', '', $s);
 		$s=str_replace('}', '', $s);
 		$a=explode('|', $s);
-		$t=array();
-		foreach ($a as $v) {
-			$t[$v]=$v;
-		}
-		$a=null;
+		$t=array_unique($a);
+
+		if(count($t)==0)return array();
+
+		$a=array();
 		foreach ($t as $v) {
-			$a[]=array('tag_ID',$v);
+			if(isset($this->tags[$v])==false){
+				$a[]=array('tag_ID',$v);
+			}
 		}
 
-		$array=$this->GetTagList('',array('array'=>$a),'','','');
-		foreach ($array as $t) {
-			$this->tags[$t->ID]=$t;
-			$this->tagsbyname[$t->Name]=&$this->tags[$t->ID];
+		if(count($a)==0){
+			$a=array();
+			foreach ($t as $v) {
+				$a[$v]=&$this->tags[$v];
+			}
+			return $a;
+		}else{
+			$t=array();
+			$array=$this->GetTagList('',array('array'=>$a),'','','');
+			foreach ($array as $v) {
+				$this->tags[$v->ID]=$v;
+				$this->tagsbyname[$v->Name]=&$this->tags[$v->ID];
+				$t[$v->ID]=&$this->tags[$v->ID];
+			}
+			return $t;
 		}
-
 	}
 
 	function GetList($type,$sql){

@@ -47,6 +47,8 @@ $lang = require($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK
 $blogtitle = $option['ZC_BLOG_SUBNAME'];
 $blogname = $option['ZC_BLOG_NAME'];
 $blogsubname = $option['ZC_BLOG_SUBNAME'];
+$blogtheme = $option['ZC_BLOG_THEME'];
+$blogstyle = $option['ZC_BLOG_CSS'];
 
 require $blogpath.'zb_system/function/c_system_debug.php';
 require $blogpath.'zb_system/function/c_system_common.php';
@@ -73,11 +75,11 @@ foreach ($lib_array as $f) {
 
 
 #定义常量
-define('ZC_LOG_TYPE_ARTICLE', 0);
-define('ZC_LOG_TYPE_PAGE', 1);
-define('ZC_LOG_STATUS_PUBLIC', 0);
-define('ZC_LOG_STATUS_PRIVATE', 1);
-define('ZC_LOG_STATUS_DRAFT', 2);
+define('ZC_POST_TYPE_ARTICLE', 0);
+define('ZC_POST_TYPE_PAGE', 1);
+define('ZC_POST_STATUS_PUBLIC', 0);
+define('ZC_POST_STATUS_PRIVATE', 1);
+define('ZC_POST_STATUS_DRAFT', 2);
 
 #定义命令
 $actions=array(
@@ -116,6 +118,8 @@ $actions=array(
 	'UploadSnd'=>3,
 	'UploadDel'=>3,
 
+	'ThemeSet'=>3,	
+
 	'ArticleMng'=>3,
 	'CategoryMng'=>2,
 	'SettingMng'=>1,
@@ -147,7 +151,7 @@ $zbp->user=new Member();
 /*include plugin*/
 
 #加载主题插件
-if (file_exists($filename=$blogpath.'zb_users/theme/'.$option['ZC_BLOG_THEME'].'/include.php')) {
+if (file_exists($filename=$blogpath.'zb_users/theme/'.$blogtheme.'/include.php')) {
 	require $filename;
 }
 

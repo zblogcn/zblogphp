@@ -1,5 +1,5 @@
 {template:header}
-	<link rel="alternate" type="application/rss+xml" href="{$host}feed.php" title="{$name}" />
+	<link rel="alternate" type="application/rss+xml" href="{$feedurl}" title="{$name}" />
 </head>
 <body class="multi default">
 <div id="divAll">
@@ -15,9 +15,11 @@
 </ul>
 		</div>
 		<div id="divMain">
-
+{if $article->Type==ZC_POST_TYPE_ARTICLE}
 {template:post-single}
-
+{else}
+{template:post-page}
+{/if}
 		</div>
 		<div id="divSidebar">
 {template:sidebar}

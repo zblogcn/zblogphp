@@ -99,16 +99,13 @@ CREATE TABLE %pre%module (
   mod_ID integer primary key autoincrement,
   mod_Name varchar(50) NOT NULL DEFAULT '',
   mod_FileName varchar(50) NOT NULL DEFAULT '',
-  mod_Order integer NOT NULL DEFAULT 0,
   mod_Content Meta text NOT NULL DEFAULT '',
-  mod_IsHidden bit NOT NULL DEFAULT b0,
   mod_SidebarID integer NOT NULL DEFAULT 0,
   mod_HtmlID varchar(50) NOT NULL DEFAULT '',
   mod_Type varchar(5) NOT NULL DEFAULT '',
   mod_MaxLi integer NOT NULL DEFAULT 0,
   mod_Source varchar(50) NOT NULL DEFAULT '',
-  mod_ViewType varchar(50) NOT NULL DEFAULT '',
-  mod_IsHideTitle bit NOT NULL DEFAULT b0,
+  mod_IsHideTitle bit NOT NULL DEFAULT 0,
   mod_Meta Meta text NOT NULL DEFAULT ''
 );
 

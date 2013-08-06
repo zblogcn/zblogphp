@@ -30,6 +30,9 @@ class Category extends Base{
 	public function __set($name, $value)
 	{
         global $zbp;
+		if ($name=='Url') {
+			return null;
+		}
 		if ($name=='Symbol') {
 			return null;
 		}
@@ -45,6 +48,9 @@ class Category extends Base{
 	public function __get($name)
 	{
         global $zbp;
+		if ($name=='Url') {
+			return '';
+		}
 		if ($name=='Symbol') {
 			if($this->ParentID==0){
 				return ;

@@ -453,40 +453,29 @@ function Admin_ThemeMng(){
 		$fpname();
 	}	
 	echo '</div>';
-	echo '<div id="divMain2"><form id="frmTheme" method="post" action="../cmd.asp?act=ThemeSav">';
-
+	echo '<div id="divMain2"><form id="frmTheme" method="post" action="../cmd.php?act=ThemeSet">';
+	echo '<input type="hidden" name="theme" id="theme" value="" />';
+	echo '<input type="hidden" name="style" id="style" value="" />';
 
 	foreach ($zbp->themes as $theme) {
-echo <<<theme
-<div id="theme-default" class="theme theme-now">
-<div class="theme-name">
-<img width='16' title='' alt='' src='../IMAGE/ADMIN/layout.png'/>
-<a  target="_blank" href="http://www.rainbowsoft.org/"  title="">
-<strong style='display:none;'>default</strong>
-<b>$theme->name</b></a>
-</div>
-<div>
-<a id="mylinkc21f96" href="\$divc21f96tip?width=320" class="betterTip" title="默认主题" >
-<img src="{$theme->GetScreenshot()}" alt="ScreenShot" width="200" height="150" /></a>
-</div>
-<div id="divc21f96tip" style="display:none;">
-<table border="0" cellspacing="0" cellpadding="0" align="center" width="100%" class="tableBorder"><tbody>
-<tr><th colspan="2">ID : default</th></tr>
-<tr><td width="60px">作者</td><td>zx.asd</td></tr>
-<tr><td>网站链接</td><td>http://www.zdevo.com/</td></tr>
-<tr><td>原作</td><td>jiaojiao</td></tr>
-<tr><td>网站链接</td><td>http://imjiao.com/</td>
-</tr><tr><td>发布</td><td>2005-2-18</td></tr>
-<tr><td>最后更新</td><td>2013-7-15</td></tr>
-<tr><td>简介</td><td>Z-Blog的默认主题.模板由zx制作,娇娇设计.新增了Table日历的支持.</tr>
-</tbody></table>
-</div>
-<div class="theme-author">作者: <a target="_blank" href="http://www.zdevo.com/">zx.asd</a></div>
-<div class="theme-style">样式: 
-<select class="edit" size="1" id="catec21f96" name="catec21f96" style="width:110px;">
-<option selected="selected" value="default">default.css</option></select>
-<input type="button" class="theme-activate button" value="启用" onclick=''></div></div>
-theme;
+
+echo '<div class="theme '.($theme->IsUsed()?'theme-now':'theme-other').'">';
+echo '<div class="theme-name">';
+echo '<img width="16" title="" alt="" src="../image/admin/layout.png"/>';
+echo '<a target="_blank" href="'.$theme->url.'" title="">';
+echo '<strong style="display:none;">default</strong><b>'.$theme->name.'</b></a></div>';
+echo '<div><img src="'.$theme->GetScreenshot().'" title="'.$theme->name.'" alt="'.$theme->name.'" width="200" height="150" /></div>';
+echo '<div class="theme-author">'.$zbp->lang['msg']['author'].': <a target="_blank" href="'.$theme->author_url.'">'.$theme->author_name.'</a></div>';
+echo '<div class="theme-style">'.$zbp->lang['msg']['style'].': ';
+echo '<select class="edit" size="1" style="width:110px;">';
+foreach ($theme->GetCssFiles() as $key => $value) {
+	echo '<option value="'.$key.'" '.($theme->IsUsed()?($key==$zbp->style?'selected="selected"':''):'').'>'.basename($value).'</option>';
+}
+echo '</select>';
+echo '<input type="button" onclick="$(\'#style\').val($(this).prev().val());$(\'#theme\').val(\''.$theme->id.'\');$(\'#frmTheme\').submit();" class="theme-activate button" value="'.$zbp->lang['msg']['enable'].'">';
+echo '</div>';
+echo '</div>';
+
 	}
 
 	echo '</form></div>';
@@ -536,7 +525,7 @@ function Admin_PluginMng(){
 $plugins=array();
 
 $app = new App;
-if($app->LoadInfoByXml('theme',$zbp->option['ZC_BLOG_THEME'])==true){
+if($app->LoadInfoByXml('theme',$zbp->theme)==true){
 	if($app->HasPlugin()){
 		array_unshift($plugins,$app);
 	}

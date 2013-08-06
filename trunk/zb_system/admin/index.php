@@ -29,7 +29,7 @@ if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 $f=null;
 switch ($action) {
 	case 'ArticleMng':
-		if(GetVars('type','GET')==ZC_LOG_TYPE_PAGE){
+		if(GetVars('type','GET')==ZC_POST_TYPE_PAGE){
 			$f='Admin_PageMng';
 			$blogtitle=$lang['msg']['page_manage'];	
 		}else{

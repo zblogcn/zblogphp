@@ -62,7 +62,7 @@ class App
 				return true;
 			}
 		}else{
-			if($zbp->option['ZC_BLOG_THEME']==$this->id){
+			if($zbp->theme==$this->id){
 				return true;
 			}else{
 				return false;
@@ -77,7 +77,7 @@ class App
 
 	public function GetHash(){
 		global $zbp;
-		return 't' . crc32($this->id);
+		return crc32($this->id);
 	}
 
 	public function GetManageUrl(){
@@ -97,7 +97,11 @@ class App
 		global $zbp;
 		return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
 	}
-
+	public function GetCssFiles(){
+		global $zbp;
+		$dir = $zbp->path . 'zb_users/theme/' . $this->id . '/style/';
+		return GetFilesInDir($dir,'css');
+	}
 	public function LoadInfoByXml($type,$id){
 		global $zbp;
 		$path=$zbp->path . 'zb_users/' . $type . '/' . $id . '/' . $type . '.xml';
