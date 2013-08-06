@@ -27,15 +27,36 @@ $array=$zbp->GetTagList(
 	array(100),
 	null
 );
+if(count($array)>0){
 
-foreach ($array as $tag) {
+	$t=array();
+	foreach ($array as $tag) {
+		$t[]=$tag->Count;
+	}
+	rsort($t);
+	$i=$t[0];
+	if($i>1000){$i=300;}
+	elseif($i>700){$i=250;}
+	elseif($i>500){$i=200;}
+	elseif($i>300){$i=150;}
+	elseif($i>200){$i=100;}
+	elseif($i>100){$i=90;}
+	elseif($i>80){$i=40;}
+	elseif($i>50){$i=20;}
+	elseif($i>20){$i=10;}
+	elseif($i>10){$i=5;}	
+	$t=array();	
+	foreach ($array as $tag) {
 
-	$article->Content .='<a href="">' . $tag->Name . '</a>&nbsp;&nbsp;';
+		//$article->Content .='<a href="' .  $tag->Url . '">' . $tag->Name . '</a>&nbsp;&nbsp;';
+		$t[]='<a href="' .  $tag->Url . '" style="font-size:' . $tag->Count/$i . 'em;margin:0.5em 0;">' . $tag->Name . '</a>&nbsp;&nbsp;';
+
+	}
+	shuffle($t);
+
+	$article->Content ='<p>' . implode(' ',$t) . '</p>';
 
 }
-
-
-
 
 
 $zbp->template->SetTags('title',$article->Title);

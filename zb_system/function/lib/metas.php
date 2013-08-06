@@ -22,11 +22,13 @@ class Metas {
 
 	public function serialize() 
 	{
+		if(count($this->Data)==0)return '';
 		return serialize($this->Data);
 	}
 
 	public function unserialize($s) 
 	{
+		if($s=='')return;
 		$this->Data=unserialize($s);
 	}	
 

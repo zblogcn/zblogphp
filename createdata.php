@@ -16,9 +16,9 @@ register_shutdown_function(create_function('',''));
 $zbp->Initialize();
 
 function article(){
-	for ($i=0; $i < 2000; $i++) { 
+	for ($i=0; $i < 10000; $i++) { 
 		$a=new Post();
-		$a->CateID=rand(1,20);
+		$a->CateID=rand(1,100);
 		$a->AuthorID=1;
 		$a->Tag=getTagStr(rand(0,19));
 		$a->Status=ZC_POST_STATUS_PUBLIC;
@@ -130,14 +130,14 @@ function getRandStr($len) {
 function getTagStr($tagcount) {
  $str = '';
  for($i=0;$i<$tagcount;$i++) {
-  $str = $str . '{' . rand(1,1000) . '}';
+  $str = $str . '{' . rand(1,5000) . '}';
  }
  return $str;
 
 }
 
-/*
 
+/*
 echo "生成分类!<br/>";
 cate();
 
@@ -150,21 +150,20 @@ page();
 echo "tag!<br/>";
 tag();
 
+*/
 
 
+
+$zbp->LoadTags();
 foreach ($zbp->tags as $key => $value) {
 	$value->Count=$zbp->CountTag($key);
 	$value->Save();
 }
-*/
-$zbp->LoadTags();
-//for ($i=1; $i < 1000; $i++) { 
-	$zbp->tags[991]->Count=$zbp->Counttag(991);
-	$zbp->tags[991]->Save();
 
-
-//}
-
+foreach ($zbp->categorys as $key => $value) {
+	$value->Count=$zbp->CountCategory($key);
+	$value->Save();
+}
 
 $zbp->Terminate();
 

@@ -26,6 +26,23 @@ class Tag extends Base{
 
 	}
 
+	public function __set($name, $value)
+	{
+        global $zbp;
+		if ($name=='Url') {
+			return null;
+		}
+		parent::__set($name, $value);
+	}
+
+	public function __get($name)
+	{
+        global $zbp;
+		if ($name=='Url') {
+			return $zbp->host . '?tag=' . $this->ID;
+		}
+		return parent::__get($name);
+	}
 
 }
 
