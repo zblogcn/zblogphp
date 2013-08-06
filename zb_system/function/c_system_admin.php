@@ -173,13 +173,13 @@ $p->UrlRule='{%host%}zb_system/cmd.php?act=ArticleMng&amp;page={%page%}';
 
 $w=array();
 if(GetVars('search','POST')){
-	$w+=array('search'=>array('log_Content','log_Intro','log_Title',GetVars('search','POST')));
+	$w[]=array('search','log_Content','log_Intro','log_Title',GetVars('search','POST'));
 }
 if(GetVars('istop','POST')){
-	$w+=array('='=>array('log_Istop','1'));
+	$w[]=array('=','log_Istop','1');
 }
 if(GetVars('status','POST')){
-	$w+=array('='=>array('log_Status',GetVars('status','POST')));
+	$w[]=array('=','log_Status',GetVars('status','POST'));
 }
 
 $array=$zbp->GetArticleList(
@@ -461,7 +461,7 @@ function Admin_ThemeMng(){
 
 echo '<div class="theme '.($theme->IsUsed()?'theme-now':'theme-other').'">';
 echo '<div class="theme-name">';
-echo '<img width="16" title="" alt="" src="../image/admin/layout.png"/>';
+echo '<img width="16" title="" alt="" src="../image/admin/layout.png"/>&nbsp;';
 echo '<a target="_blank" href="'.$theme->url.'" title="">';
 echo '<strong style="display:none;">default</strong><b>'.$theme->name.'</b></a></div>';
 echo '<div><img src="'.$theme->GetScreenshot().'" title="'.$theme->name.'" alt="'.$theme->name.'" width="200" height="150" /></div>';
@@ -557,9 +557,9 @@ foreach ($plugins as $plugin) {
 
 	if($plugin->type=='plugin'){
 		if($plugin->IsUsed()){
-			echo '<a href="../cmd.php?act=PluginDisable&amp;name=' . htmlspecialchars($plugin->id) . '" title="' . $zbp->lang['msg']['disable'] . '"><img width="16" alt="' . $zbp->lang['msg']['disable'] . '" src="../IMAGE/ADMIN/control-power-off.png"/></a>';
+			echo '<a href="../cmd.php?act=PluginDisable&amp;name=' . htmlspecialchars($plugin->id) . '" title="' . $zbp->lang['msg']['disable'] . '"><img width="16" alt="' . $zbp->lang['msg']['disable'] . '" src="../IMAGE/ADMIN/control-power.png"/></a>';
 		}else{
-			echo '<a href="../cmd.php?act=PluginEnable&amp;name=' . htmlspecialchars($plugin->id) . '" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../IMAGE/ADMIN/control-power.png"/></a>';
+			echo '<a href="../cmd.php?act=PluginEnable&amp;name=' . htmlspecialchars($plugin->id) . '" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../IMAGE/ADMIN/control-power-off.png"/></a>';
 		}
 	}
 	if($plugin->CanManage()){

@@ -41,10 +41,6 @@ class Dbpdo_MySQL implements iDataBase
 		$this->db = $db_link;	
 		$this->dbpre=$array[4];
 		return true;
-		
-
-
-
 	}
 
 	function Close(){
@@ -62,9 +58,8 @@ class Dbpdo_MySQL implements iDataBase
 	function Query($query){
 
 		$query=str_replace('%pre%', $this->dbpre, $query);
+		// 遍历出来		
 		$results = $this->db->query($query);
-		// 遍历出来
-
 		//fetch || fetchAll
 		if($results){
 			return $results->fetchAll();

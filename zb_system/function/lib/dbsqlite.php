@@ -52,9 +52,8 @@ class DbSQLite implements iDataBase
 	function Query($query){
 
 		$query=str_replace('%pre%', $this->dbpre, $query);
-
-		$results = sqlite_query($this->db,$query);
 		// 遍历出来
+		$results = sqlite_query($this->db,$query);
 		$data = array();
 		if($results){
 			while($row = sqlite_fetch_array($results)){

@@ -129,7 +129,7 @@ class ZBlogPHP{
 		$this->OpenConnect();
 		$this->LoadMembers();
 		$this->LoadCategorys();
-		#$this->LoadTags();		
+		#$this->LoadTags();
 		$this->LoadModules();
 		$this->LoadConfigs();
 
@@ -260,8 +260,8 @@ class ZBlogPHP{
 			$db=DbFactory::Create('sqlite3');
 			$this->db=&$db;
 			if($db->Open(array(
-				$this->path . $this->option['ZC_SQLITE3_NAME'],
-				$this->option['ZC_SQLITE3_PRE']
+				$this->path . $this->option['ZC_SQLITE_NAME'],
+				$this->option['ZC_SQLITE_PRE']
 				))==false){
 				throw new Exception($this->lang['error'][69]);
 			}
@@ -554,7 +554,7 @@ class ZBlogPHP{
 			return $a;
 		}else{
 			$t=array();
-			$array=$this->GetTagList('',array('array'=>$a),'','','');
+			$array=$this->GetTagList('',array(array('array',$a)),'','','');
 			foreach ($array as $v) {
 				$this->tags[$v->ID]=$v;
 				$this->tagsbyname[$v->Name]=&$this->tags[$v->ID];
@@ -582,7 +582,7 @@ class ZBlogPHP{
 
 		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
-		$where += array('='=>array('log_Type','0'));
+		$where[]= array('=','log_Type','0');
 		$sql = $this->db->sql->Select('Post',$select,$where,$order,$limit,$option);
 		$array = $this->GetList('Post',$sql);
 		foreach ($array as $a) {
@@ -598,7 +598,7 @@ class ZBlogPHP{
 
 		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
-		$where += array('='=>array('log_Type','1'));
+		$where[]= array('=','log_Type','1');
 		$sql = $this->db->sql->Select('Post',$select,$where,$order,$limit,$option);
 		return $this->GetList('Post',$sql);
 
@@ -662,16 +662,18 @@ class ZBlogPHP{
 
 
 
-	function CountCategory($postid){
+	function CountCategory($id){
 
 	}
 	function CountComment($postid){
 
 	}
-	function CountTag($postid){
-
+	function CountTag($id){
+		$s=$this->db->sql->Count('Post',array('Log_ID'=>'num'),array(array('LIKE','log_Tag','%{'.$id.'}%')));
+		$num=GetValueInArray(current($this->db->Query($s)),'num');
+		return $num;
 	}
-	function CountAuthor($postid){
+	function CountAuthor($id){
 
 	}
 
