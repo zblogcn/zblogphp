@@ -15,7 +15,7 @@
           <div class="terms">
 		  <ul class="links inline"><li class="first last taxonomy_term_2">
 {foreach $article->Tags as $tag}
-<a href=''>{$tag->Name}</a>&nbsp;
+<a href="{$tag->Url}">{$tag->Name}</a>&nbsp;
 {/foreach}
 		  </li>
           </ul>

@@ -380,11 +380,10 @@ class ZBlogPHP{
 		$s='SELECT * FROM %pre%Config';
 		$array=$this->db->Query($s);
 		foreach ($array as $c) {
-			$this->configs[$c['conf_Name']]=$c['conf_Value'];
-			$this->_configs[$c['conf_Name']]=$c['conf_Value'];			
+			$this->configs[$c['conf_Name']]=unserialize($c['conf_Value']);	
 		}
 	}
-
+/*
 	public function SaveConfigs(){
 
 		foreach ($this->configs as $name => $value) {
@@ -397,7 +396,17 @@ class ZBlogPHP{
 
 		$this->_configs=$this->configs;
 	}
+*/
+	public function DelConfig($name){
+		
+	}
+	public function SaveConfig($name){
 
+	}
+
+	public function GetConfig($name){
+		return array();
+	}
 
 	function MakeTemplatetags(){
 
@@ -663,7 +672,9 @@ class ZBlogPHP{
 
 
 	function CountCategory($id){
-
+		$s=$this->db->sql->Count('Post',array('Log_ID'=>'num'),array(array('LIKE','log_CateID',$id)));
+		$num=GetValueInArray(current($this->db->Query($s)),'num');
+		return $num;
 	}
 	function CountComment($postid){
 
