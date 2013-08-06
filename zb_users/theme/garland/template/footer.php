@@ -1,10 +1,10 @@
-﻿<span class="clear"></span>
-<div id="footer"><p>Powered By <a href="http://www.rainbowsoft.org/zblog/" title="RainbowSoft Studio Z-Blog">Z-Blog</a>.Theme By <a href="http://drupal.org/" target="_blank">Drupal</a>.<#ZC_BLOG_COPYRIGHT#></p>
+<span class="clear"></span>
+<div id="footer"><p>Powered By {$zblogphphtml}. Theme By <a href="http://drupal.org/" target="_blank">Drupal</a>. {$copyright}</p>
 </div>
       </div></div></div></div> <!-- /.left-corner, /.right-corner, /#squeeze, /#center -->
 
               <div id="sidebar-right" class="sidebar">
-				<#template:sidebar#>
+				{template:sidebar}
         	  </div>
       
     </div> <!-- /container -->

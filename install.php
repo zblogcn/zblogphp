@@ -55,11 +55,12 @@ div{
 <p><img src="http://update.rainbowsoft.org/zblog2/loading.gif" alt=""></p>
 
 <?php
-
+install0();
 
 if(strpos($_SERVER['QUERY_STRING'],'begin') !== false){
 
-install();
+
+install1();
 install2();
 install3();
 
@@ -76,7 +77,18 @@ install3();
 
 $s=null;
 
-function install(){
+function install0(){
+
+	$d=dirname(__FILE__);
+
+	if(substr((string)decoct(fileperms($d)),-3)<>'777'){
+		echo "<p>警告:安装目录权限" . $d . "不是777,可能无法运行在线安装程序.</p>";
+	}
+
+}
+
+
+function install1(){
 
 	echo "<p>正在努力地下载数据包...</p>";
 	ob_flush();
@@ -97,7 +109,7 @@ function install2(){
 		foreach ($xml->file as $f) {
 			$filename=str_replace('\\','/',$f->attributes());
 			$dirname= dirname($filename);
-			mkdir($dirname,'0777',true);
+			mkdir($dirname,0777,true);
 			file_put_contents(iconv("UTF-8","GBK",$filename),base64_decode($f));
 		}
 		umask($old);

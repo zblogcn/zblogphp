@@ -82,6 +82,10 @@ switch ($action) {
 	case 'ThemeMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
+	case 'ThemeSet':
+		SetTheme(GetVars('theme','POST'),GetVars('style','POST'));
+		redirect('cmd.php?act=ThemeMng');
+		break;		
 	case 'ModuleMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;

@@ -68,8 +68,8 @@ function misc_statistic(){
 	$all_views=GetValueInArray(current($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post'])),'num');
 	$all_tags=GetValueInArray(current($zbp->db->Query('SELECT COUNT(tag_ID) as num FROM ' . $GLOBALS['table']['Tag'])),'num');
 	$all_members=GetValueInArray(current($zbp->db->Query('SELECT COUNT(mem_ID) AS num FROM ' . $GLOBALS['table']['Member'])),'num');
-	$current_theme=$zbp->option['ZC_BLOG_THEME'];
-	$current_style=$zbp->option['ZC_BLOG_CSS'];
+	$current_theme=$zbp->theme;
+	$current_style=$zbp->style;
 
 	$system_environment=(getenv('OS')?getenv('OS'):getenv('XAMPP_OS')) . ';' . current(explode('/',GetVars('SERVER_SOFTWARE','SERVER'))) . ';' . 'PHP ' . phpversion();
 

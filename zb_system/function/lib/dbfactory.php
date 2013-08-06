@@ -81,7 +81,7 @@ class DbSql #extends AnotherClass
 					$c='';
 					$sql_array='';
 					foreach ($w as $x=>$y) {
-						$sql_array .= $c . " $x=$y ";
+						$sql_array .= $c . " $y[0]=$y[1] ";
 						$c='OR';
 					}
 					$sqlw .= $comma .  '(' . $sql_array . ')';
@@ -89,6 +89,7 @@ class DbSql #extends AnotherClass
 				$comma = 'AND';
 			}
 		}
+		logs($sqlw);
 		return $sqlw;
 	}
 
@@ -251,15 +252,12 @@ $datainfo=array(
 	'ID'=>array('mod_ID','integer','',0),
 	'Name'=>array('mod_Name','string',50,''),
 	'FileName'=>array('mod_FileName','string',50,''),
-	'Order'=>array('mod_Order','integer','',0),
 	'Content'=>array('mod_Content','string','',''),
-	'IsHidden'=>array('mod_IsHidden','boolean','',0),
 	'SidebarID'=>array('mod_SidebarID','integer','',0),
 	'HtmlID'=>array('mod_HtmlID','string',50,''),
 	'Type'=>array('mod_Type','string',5,''),
 	'MaxLi'=>array('mod_MaxLi','integer','',0),
 	'Source'=>array('mod_Source','string',50,''),
-	'ViewType'=>array('mod_ViewType','string',50,''),
 	'IsHideTitle'=>array('mod_IsHideTitle','boolean','',0),
 	'Meta'=>array('mod_Meta','string','',''),
 ),

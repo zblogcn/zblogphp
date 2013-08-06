@@ -21,8 +21,8 @@ function article(){
 		$a->CateID=rand(1,20);
 		$a->AuthorID=1;
 		$a->Tag=getTagStr(rand(0,19));
-		$a->Status=ZC_LOG_STATUS_PUBLIC;
-		$a->Type=ZC_LOG_TYPE_ARTICLE;
+		$a->Status=ZC_POST_STATUS_PUBLIC;
+		$a->Type=ZC_POST_TYPE_ARTICLE;
 		$a->Alias='';
 		$a->IsTop=false;
 		$a->IsLock=false;
@@ -45,8 +45,8 @@ function page(){
 		$a->CateID=0;
 		$a->AuthorID=1;
 		$a->Tag='';
-		$a->Status=ZC_LOG_STATUS_PUBLIC;
-		$a->Type=ZC_LOG_TYPE_PAGE;
+		$a->Status=ZC_POST_STATUS_PUBLIC;
+		$a->Type=ZC_POST_TYPE_PAGE;
 		$a->Alias='';
 		$a->IsTop=false;
 		$a->IsLock=false;

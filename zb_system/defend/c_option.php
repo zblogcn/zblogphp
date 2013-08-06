@@ -181,7 +181,7 @@ return array(
 
 	'ZC_HTTP_LASTMODIFIED' => false,
 
-	'ZC_SIDEBAR_ORDER' => 'calendar:comments:controlpanel:searchpanel:archives:favorite:catalog:statistics:previous:tags:link:misc',
+	'ZC_SIDEBAR_ORDER' => '',
 
 	'ZC_SIDEBAR_ORDER2' => '',
 
@@ -196,6 +196,6 @@ return array(
 	'ZC_INDEX_DEFAULT_TEMPLATE' => 'default',
 	'ZC_CATALOG_DEFAULT_TEMPLATE' => 'default',
 	'ZC_ARTICLE_DEFAULT_TEMPLATE' => 'single',
-	'ZC_PAGE_DEFAULT_TEMPLATE' => 'page',
-
+	'ZC_PAGE_DEFAULT_TEMPLATE' => 'single',
+)
 ?>

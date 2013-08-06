@@ -82,6 +82,8 @@ return array(
 	'all_views'=>'浏览总数',	
 	'current_theme'=>'当前主题',
 	'current_style'=>'当前样式',
+	'style'=>'样式',
+	'theme'=>'主题',
 	'xmlrpc_address'=>'XML-RPC地址',
 	'system_environment'=>'系统环境',
 	'view_rights'=>'查看权限',

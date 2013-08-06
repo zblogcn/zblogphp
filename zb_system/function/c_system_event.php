@@ -167,4 +167,19 @@ function DisablePlugin($name){
 	$zbp->SaveOption();
 }
 
+
+
+
+function SetTheme($theme,$style){
+	global $zbp;
+
+	$zbp->theme=$theme;
+	$zbp->style=$style;
+	$zbp->SaveOption();
+
+	$zbp->LoadTemplates();
+	$zbp->BuildTemplate();
+}
+
+
 ?>

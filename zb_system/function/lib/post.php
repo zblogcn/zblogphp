@@ -64,7 +64,10 @@ class Post extends Base{
 				break;
 			case 'Url':
 				return $zbp->host . 'view.php?id=' . $this->ID ;
-				break;	
+				break;
+			case 'Tags':
+				return $zbp->LoadTagsByString($this->Tag);
+				break;				
 			default:
 				return parent::__get($name);
 				break;

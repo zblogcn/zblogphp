@@ -28,14 +28,11 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <script type="text/javascript" src="../script/jquery.tagto.js"></script>
 <script type="text/javascript" src="../script/jquery-ui-timepicker-addon.js"></script>
-
 <?php
 foreach ($GLOBALS['Filter_Plugin_Edit_Begin'] as $fpname => &$fpsignal) {$fpname();}
 ?>
-
 <?php
 require $blogpath . 'zb_system/admin/admin_top.php';
-
 ?>
 <div id="divMain">
 <div class="divHeader2"><?php echo $ispage?$lang['msg']['page_edit']:$lang['msg']['article_edit'];?></div>

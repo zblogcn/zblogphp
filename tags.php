@@ -18,9 +18,10 @@ global $zbp;
 $article = new Post;
 $article->Title='标签';
 $article->IsLock=true;
-
+$article->Type=ZC_POST_TYPE_PAGE;
 
 $array=$zbp->GetTagList(
+	null,
 	null,
 	array('tag_Count'=>'DESC','tag_ID'=>'ASC'),
 	array(100),
