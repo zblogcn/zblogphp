@@ -17,13 +17,13 @@ abstract class Base
 
 	public $Metas = null;
 
-	public $Data = array();
+	protected $Data = array();
 	
 	public function __set($name, $value) 
 	{
 		global $zbp;
 		if ($name=='Meta') {
-			$this->Metas->unserialize($value);
+			$this->Metas->Unserialize($value);
 			return ;
 		}
 		$this->Data[$name]  =  $value;
@@ -33,7 +33,7 @@ abstract class Base
 	{
 		global $zbp;
 		if ($name=='Meta') {
-			return $this->Metas->serialize();
+			return $this->Metas->Serialize();
 		}
 		return $this->Data[$name];
 	}
@@ -84,51 +84,30 @@ abstract class Base
 	function Save(){
 		global $zbp;
 		
-		if ($this->ID  ==  0) {
-			$s="INSERT INTO " . $this->table . " (";
-			$a = array();
-			foreach ($this->datainfo as $key => $value) {
-				if ($value[0] == $this->datainfo['ID'][0]) {continue;}
-				$a[]=$value[0];
-			}
-			$s .= implode(',', $a);
-			$s .= ") VALUES (";
-			$a = array();
-			foreach ($this->datainfo as $key => $value) {
-				if ($value[0] == $this->datainfo['ID'][0]) {continue;}
-				if ($value[1] == 'string') {
-					$a[]='\'' . $zbp->db->EscapeString(str_replace($zbp->host,'{#ZC_BLOG_HOST#}' , $this->$key)) . '\'';	
-				}elseif ($value[1] == 'boolean') {
-					$a[]=(integer)$this->$key;
-				}else{
-					$a[] = (integer)$this->$key;		
-				}
-			}
-			$s .= implode(',', $a);
-			$s .= ")";
-			$this->ID = $zbp->db->Insert($s);
-		} else {
-			$s="UPDATE " . $this->table . " SET ";
-			$a = array();
-			foreach ($this->datainfo as $key => $value) {
-				if ($value[0] == $this->datainfo['ID'][0]) {continue;}
-				if ($value[1] == 'string') {
-					$a[]=$value[0] . '=\'' . $zbp->db->EscapeString(str_replace($zbp->host,'{#ZC_BLOG_HOST#}' , $this->$key)) . '\'';
-				}elseif ($value[1] == 'boolean') {
-					$a[]=$value[0] . '=' . (integer)$this->$key;
-				}else{
-					$a[]=$value[0] . '=' . (integer)$this->$key;	
-				}
-			}
-			$s .= implode(', ', $a);
-			$s .= " WHERE " . $this->datainfo['ID'][0] . "=" . $this->ID;
-			return $zbp->db->Update($s);
+		$keys=array();
+		foreach ($this->datainfo as $key => $value) {
+			$keys[]=$value[0];
 		}
+		$keyvalue=array_fill_keys($keys, '');
 
+		foreach ($this->datainfo as $key => $value) {
+			$keyvalue[$value[0]]=$this->$key;
+		}
+		array_shift($keyvalue);
+
+		if ($this->ID  ==  0) {
+			$sql = $zbp->db->sql->Insert(get_class($this),$keyvalue);
+			$this->ID = $zbp->db->Insert($sql);
+		} else {
+			$sql = $zbp->db->sql->Update(get_class($this),$keyvalue,array(array('=',$this->datainfo['ID'][0],$this->ID)));
+			return $zbp->db->Update($sql);
+		}
 
 	}
 
-
+	function Del(){
+		
+	}
 }
 
 

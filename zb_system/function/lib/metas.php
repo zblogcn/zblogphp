@@ -8,25 +8,30 @@
 
 class Metas {
 
-	public $Data=array();
+	protected $Data=array();
 
-	public function __set($name, $value) 
+	public function __set($name, $value)
 	{
 		$this->Data[$name] = $value;
 	}
 
-	public function __get($name) 
+	public function __get($name)
 	{
 		return $this->Data[$name];
 	}
 
-	public function serialize() 
+	public function Del($name)
+	{
+		unset($Data[$name]);
+	}
+
+	public function Serialize()
 	{
 		if(count($this->Data)==0)return '';
 		return serialize($this->Data);
 	}
 
-	public function unserialize($s) 
+	public function Unserialize($s)
 	{
 		if($s=='')return;
 		$this->Data=unserialize($s);

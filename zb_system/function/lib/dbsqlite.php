@@ -70,7 +70,8 @@ class DbSQLite implements iDataBase
 	}
 
 	function Delete($query){
-		
+		$query=str_replace('%pre%', $this->dbpre, $query);
+		return sqlite_query($this->db,$query);
 	}
 
 	function Insert($query){

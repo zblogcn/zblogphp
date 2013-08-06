@@ -209,6 +209,26 @@ function GetFilePerms($f){
 }
 
 
+function AddNameInString($s,$name){
+	$pl=$s;
+	$apl=explode('|',$pl);
+	if(in_array($name,$apl)==false){
+		$apl[]=$name;
+	}
+	$pl=trim(implode('|',$apl),'|');
+	return $pl;
+}
 
+function DelNameInString($s,$name){
+	$pl=$s;
+	$apl=explode('|',$pl);
+	for ($i=0; $i <= Count($apl)-1; $i++) { 
+		if($apl[$i]==$name){
+			unset($apl[$i]);
+		}
+	}
+	$pl=trim(implode('|',$apl),'|');
+	return $pl;
+}
 
 ?>

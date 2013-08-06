@@ -40,7 +40,7 @@ function article(){
 }
 
 function page(){
-	for ($i=0; $i < 500; $i++) { 
+	for ($i=0; $i < 1000; $i++) { 
 		$a=new Post();
 		$a->CateID=0;
 		$a->AuthorID=1;
@@ -64,7 +64,7 @@ function page(){
 }
 
 function cate(){
-	for ($i=0; $i < 20; $i++) { 
+	for ($i=0; $i < 100; $i++) { 
 		$cate = new Category();
 		$cate->LoadInfobyArray(array(
 		0,
@@ -84,7 +84,7 @@ function cate(){
 }
 
 function tag(){
-	for ($i=0; $i < 1000; $i++) { 
+	for ($i=0; $i < 5000; $i++) { 
 		$tag = new Tag();
 		$tag->LoadInfobyArray(array(
 		0,
@@ -138,6 +138,9 @@ function getTagStr($tagcount) {
 
 
 /*
+
+
+
 echo "生成分类!<br/>";
 cate();
 
@@ -150,7 +153,7 @@ page();
 echo "tag!<br/>";
 tag();
 
-*/
+
 
 
 
@@ -159,7 +162,7 @@ foreach ($zbp->tags as $key => $value) {
 	$value->Count=$zbp->CountTag($key);
 	$value->Save();
 }
-
+*/
 foreach ($zbp->categorys as $key => $value) {
 	$value->Count=$zbp->CountCategory($key);
 	$value->Save();

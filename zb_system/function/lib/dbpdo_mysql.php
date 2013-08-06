@@ -76,7 +76,8 @@ class Dbpdo_MySQL implements iDataBase
 	}
 
 	function Delete($query){
-
+		$query=str_replace('%pre%', $this->dbpre, $query);
+		return mysql_query($query);
 	}
 
 	function Insert($query){

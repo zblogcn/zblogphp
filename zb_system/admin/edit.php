@@ -83,6 +83,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
        <div id='introheader' class='editmod'><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
        <textarea id="editor_intro" name="Intro"></textarea>
        <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Watting...</div>
+	   <hr/>
     </div>
     
     <!-- 2号输出接口 -->
