@@ -41,10 +41,10 @@ if(count($array)>0){
 	elseif($i>300){$i=150;}
 	elseif($i>200){$i=100;}
 	elseif($i>100){$i=90;}
-	elseif($i>80){$i=40;}
-	elseif($i>50){$i=20;}
-	elseif($i>20){$i=10;}
-	elseif($i>10){$i=5;}	
+	elseif($i>80){$i=60;}
+	elseif($i>50){$i=35;}
+	elseif($i>20){$i=15;}
+	elseif($i>10){$i=8;}	
 	$t=array();	
 	foreach ($array as $tag) {
 

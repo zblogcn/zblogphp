@@ -65,7 +65,7 @@ function checkCateInfo(){
   document.getElementById("edit").action="../cmd.php?act=TagPst";
 
   if(!$("#edtName").val()){
-    alert("名称不能为空");
+    alert("<?php echo $lang['error']['72']?>");
     return false
   }
 

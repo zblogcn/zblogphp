@@ -58,7 +58,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     
     <div id="divContent" style="clear:both;">
 		<div id='cheader' class='editmod'><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
-		<div id='carea' class='editmod'><textarea id="editor_content" name="Content"></textarea></div>
+		<div id='carea' class='editmod'><textarea id="editor_content" name="Content"><?php echo $article->Content;?></textarea></div>
 		<div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Watting...</div>
 
       <!-- alias( -->
@@ -81,7 +81,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 		</div>   
 		<div id="divIntro" style="display:none;">
        <div id='introheader' class='editmod'><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
-       <textarea id="editor_intro" name="Intro"></textarea>
+       <textarea id="editor_intro" name="Intro"><?php echo $article->Intro;?></textarea>
        <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Watting...</div>
 	   <hr/>
     </div>
@@ -100,7 +100,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
           </div>
           
           <!-- cate --><?php if(!$ispage){ ?>
-          <div id='cate' class='editmod'>
+          <div id='cate' class='editmod'> <label for="cmbTemplate" class="editinputname" ><?php echo $lang['msg']['category']?></label>
             <select style="width:180px;" class="edit" size="1" id="edtCate">
 <?php
 foreach ($zbp->categorysbyorder as $id => $cate) {
@@ -116,13 +116,13 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
 
           <div id='template' class='editmod'> <label for="cmbTemplate" class="editinputname" ><?php echo $lang['msg']['template']?></label>
             <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate" onChange="edtTemplate.value=this.options[this.selectedIndex].value">
-              <option value="PAGE">PAGE</option><option value="SINGLE" selected="selected">SINGLE(<?php echo $lang['msg']['default_template']?>)</option><option value="TOP">TOP</option>
+<?php echo $zbp->CreateOptoinsOfTemplate($article->Template);?>
             </select>
           </div>
           <!-- )template --> 
           
           <!-- level -->
-          <div id='level' class='editmod'> <label for="cmbArticleLevel" class="editinputname" ><?php echo $lang['msg']['status']?></label>
+          <div id='level' class='editmod'> <label for="cmbArticleStatus" class="editinputname" ><?php echo $lang['msg']['status']?></label>
             <select class="edit" style="width:180px;" size="1" name="Status" id="cmbArticleLevel" onChange="edtLevel.value=this.options[this.selectedIndex].value">
               <option value="0" ><?php echo $lang['post_status_name']['0']?></option><option value="1" ><?php echo $lang['post_status_name']['1']?></option><option value="2" ><?php echo $lang['post_status_name']['2']?></option>
             </select>

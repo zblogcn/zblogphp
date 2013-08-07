@@ -86,7 +86,7 @@ function misc_statistic(){
 	$zbp->SetCache('reload_statistic',$r);
 	$zbp->SaveCache(true);
 
-	$zbp->SetCache('refesh_time',time());
+	$zbp->SetCache('refesh',time());
 	$zbp->SaveCache(true);
 	echo $r;
 
