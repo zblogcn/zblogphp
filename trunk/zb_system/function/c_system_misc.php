@@ -25,7 +25,11 @@ switch (GetVars('type','GET')) {
 	case 'vrs':
 		if (!$zbp->CheckRights(5)) {throw new Exception($lang['error'][6]);}
 		misc_viewrights();
-		break;		
+		break;
+	case 'autoinfo':
+		if (!$zbp->CheckRights(5)) {die();}
+		misc_autoinfo();
+		break;
 	default:
 		break;
 }
@@ -132,9 +136,24 @@ foreach ($GLOBALS['actions']  as $key => $value) {
 </body>
 </html>
 <?php
-
 }
 
 
+function misc_autoinfo(){
+	global $zbp;
+
+	header('Content-Type: application/x-javascript; Charset=utf8');  
+
+	echo "$('#inpName').val('" . $zbp->user->Name . "');";
+	echo "$('#inpEmail').val('" . $zbp->user->Email . "');";
+	echo "$('#inpHomePage').val('" . $zbp->user->HomePage . "');";
+	echo "$('.cp-hello').html('" . $zbp->lang['msg']['welcome'] . ' ' . $zbp->user->Name .  " ("  . $zbp->user->LevelName  . ")');";
+	echo "$('.cp-login').find('a').html('[" . $zbp->lang['msg']['admin'] . "]');";
+	if ($zbp->CheckRights(4)){
+		echo "$('.cp-vrs').find('a').html('[" . $zbp->lang['msg']['new_article'] . "]');";
+		echo "$('.cp-vrs').find('a').attr('href','" . $zbp->host . "zb_system/cmd.php?act=ArticleEdt');";
+	}
+
+}
 
 ?>

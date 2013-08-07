@@ -6,11 +6,28 @@
  * @version 2.0 2013-06-14
  */
 
+function zbp_addpagesubmenu(){
+	echo '<a href="../cmd.php?act=ArticleEdt&amp;type=1"><span class="m-left">' . $GLOBALS['lang']['msg']['new_page'] . '</span></a>';
+}
+
+function zbp_addtagsubmenu(){
+	echo '<a href="../cmd.php?act=TagEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_tag'] . '</span></a>';
+}
+
+function zbp_addcatesubmenu(){
+	echo '<a href="../cmd.php?act=CategoryEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_category'] . '</span></a>';
+}
+
+
+Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','zbp_addpagesubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','zbp_addtagsubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','zbp_addcatesubmenu');
+
+$zbp->LoadTemplates();
 
 $topmenus=array();
 
 $leftmenus=array();
-
 
 
 function ResponseAdmin_LeftMenu(){
@@ -166,9 +183,9 @@ function Admin_ArticleMng(){
 	</tr>';
 
 $p=new Pagebar();
-$p->PageCount=20;
+$p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
-$p->PageBarCount=10;
+$p->PageBarCount=$zbp->pagebarcount;
 $p->UrlRule='{%host%}zb_system/cmd.php?act=ArticleMng&amp;page={%page%}';
 
 $w=array();
@@ -244,9 +261,9 @@ function Admin_PageMng(){
 	</tr>';
 
 $p=new Pagebar();
-$p->PageCount=20;
+$p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
-$p->PageBarCount=10;
+$p->PageBarCount=$zbp->pagebarcount;
 $p->UrlRule='{%host%}zb_system/cmd.php?act=ArticleMng&amp;type=1&amp;page={%page%}';
 
 $array=$zbp->GetPageList(
@@ -403,15 +420,15 @@ function Admin_TagMng(){
 	</tr>';
 
 $p=new Pagebar();
-$p->PageCount=50;
+$p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
-$p->PageBarCount=10;
+$p->PageBarCount=$zbp->pagebarcount;
 $p->UrlRule='{%host%}zb_system/cmd.php?act=TagMng&amp;type=1&amp;page={%page%}';
 
 $array=$zbp->GetTagList(
 	'',
 	'',
-	array('tag_Count'=>'DESC','tag_ID'=>'ASC'),
+	array('tag_Name'=>'ASC','tag_ID'=>'ASC'),
 	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
 	array('pagebar'=>$p)
 );
@@ -423,7 +440,7 @@ foreach ($array as $tag) {
 	echo '<td class="td20">' . $tag->Alias . '</td>';
 	echo '<td class="td10">' . $tag->Count . '</td>';	
 	echo '<td class="td10 tdCenter">';
-	echo '<a href="../cmd.php?act=ArticleEdt&amp;id='. $tag->ID .'"><img src="../image/admin/tag_blue_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+	echo '<a href="../cmd.php?act=TagEdt&amp;id='. $tag->ID .'"><img src="../image/admin/tag_blue_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=TagDel&amp;id='. $tag->ID .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
 	echo '</td>';

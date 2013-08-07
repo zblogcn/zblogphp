@@ -15,6 +15,14 @@ function ActivePlugin_UEditor() {
 }
 
 
+function InstallPlugin_UEditor(){
+
+}
+
+function UninstallPlugin_UEditor(){
+
+}
+
 function ueditor_addscript_begin(){
 	global $zbp;
 	echo '<script type="text/javascript" src="' . $zbp->host . 'zb_users/plugin/UEditor/ueditor.config.php"></script>';

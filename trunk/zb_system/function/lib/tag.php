@@ -32,6 +32,10 @@ class Tag extends Base{
 		if ($name=='Url') {
 			return null;
 		}
+		if ($name=='Template') {
+			if($value==$zbp->option['ZC_CATALOG_DEFAULT_TEMPLATE'])$value='';
+			return $this->Data[$name]  =  $value;
+		}
 		parent::__set($name, $value);
 	}
 
@@ -40,6 +44,11 @@ class Tag extends Base{
         global $zbp;
 		if ($name=='Url') {
 			return $zbp->host . '?tag=' . $this->ID;
+		}
+		if ($name=='Template') {
+			$value=$this->Data[$name];
+			if($value=='')$value=$zbp->option['ZC_CATALOG_DEFAULT_TEMPLATE'];
+			return $value;
 		}
 		return parent::__get($name);
 	}

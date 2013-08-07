@@ -16,7 +16,7 @@ global $zbp;
 
 
 $article = new Post;
-$article->Title='搜索“' . GetVars('q','GET') . '”';
+$article->Title=$lang['msg']['search'] . '“' . GetVars('q','GET') . '”';
 $article->IsLock=true;
 $article->Type=ZC_POST_TYPE_PAGE;
 
