@@ -154,9 +154,9 @@ function ChangeCheckValue(obj){
 	$(obj).toggleClass('imgcheck-on');
 
 	if($(obj).hasClass('imgcheck-on')){
-		$(obj).prev('input').val('True');
+		$(obj).prev('input').val('1');
 	}else{
-		$(obj).prev('input').val('False');
+		$(obj).prev('input').val('0');
 	}
 
 }
@@ -251,12 +251,12 @@ $(document).ready(function(){
 	//checkbox
 	if(!(($.browser.msie)&&($.browser.version)=='6.0')){
 		$('input.checkbox').css("display","none");
-		$('input.checkbox[value="True"]').after('<span class="imgcheck imgcheck-on"></span>');
-		$('input.checkbox[value!="True"]').after('<span class="imgcheck"></span>');
+		$('input.checkbox[value="1"]').after('<span class="imgcheck imgcheck-on"></span>');
+		$('input.checkbox[value!="1"]').after('<span class="imgcheck"></span>');
 	}else{
 		$('input.checkbox').attr('readonly','readonly');
 		$('input.checkbox').css('cursor','pointer');
-		$('input.checkbox').click(function(){  if($(this).val().toLowerCase()=='true'){$(this).val('false')}else{$(this).val('true')} })
+		$('input.checkbox').click(function(){  if($(this).val().toLowerCase()=='1'){$(this).val('0')}else{$(this).val('0')} })
 	}
 
 	$('span.imgcheck').click(function(){ChangeCheckValue(this)})

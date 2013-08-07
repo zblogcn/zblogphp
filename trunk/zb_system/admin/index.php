@@ -18,13 +18,12 @@ if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 $f=null;
 switch ($action) {
 	case 'ArticleMng':
-		if(GetVars('type','GET')==ZC_POST_TYPE_PAGE){
-			$f='Admin_PageMng';
-			$blogtitle=$lang['msg']['page_manage'];	
-		}else{
-			$f='Admin_ArticleMng';
-			$blogtitle=$lang['msg']['article_manage'];			
-		}
+		$f='Admin_ArticleMng';
+		$blogtitle=$lang['msg']['article_manage'];	
+		break;
+	case 'PageMng':
+		$f='Admin_PageMng';
+		$blogtitle=$lang['msg']['page_manage'];	
 		break;
 	case 'CategoryMng':
 		$f='Admin_CategoryMng';

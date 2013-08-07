@@ -124,7 +124,7 @@ function Redirect($url){
 
 function Http404(){
 	header('HTTP/1.1 404 Not Found');
-	header("status: 404 Not Found");
+	header("Status: 404 Not Found");
 }
 
 function Logs($s){

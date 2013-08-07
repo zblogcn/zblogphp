@@ -9,7 +9,7 @@
 
 class ZBlogPHP{
 
-	static private $zbp=null;
+	static private $_zbp=null;
 
 	public $db = null;
 	public $option = array();
@@ -58,9 +58,9 @@ class ZBlogPHP{
 	
 	static public function GetInstance(){
 		if(!isset(self::$zbp)){
-			self::$zbp=new ZBlogPHP;
+			self::$_zbp=new ZBlogPHP;
 		}
-		return self::$zbp;
+		return self::$_zbp;
 	}
 	
 	function __construct() {
@@ -75,14 +75,11 @@ class ZBlogPHP{
 		$this->table=&$GLOBALS['table'];
 		$this->datainfo=&$GLOBALS['datainfo'];
 
-		if (trim($this->option['ZC_BLOG_CLSID'])=='')
-		{
-			$this->guid=GetGuid();
+		if (trim($this->option['ZC_BLOG_CLSID'])==''){
+			$this->option['ZC_BLOG_CLSID']=GetGuid();
 		}
-		else
-		{
-			$this->guid=&$this->option['ZC_BLOG_CLSID'];
-		}
+		$this->guid=&$this->option['ZC_BLOG_CLSID'];
+
 
 		$this->option['ZC_BLOG_HOST']=&$GLOBALS['bloghost'];
 		//define();
@@ -174,12 +171,6 @@ class ZBlogPHP{
 		$this->Verify();
 
 		$this->MakeTemplatetags();
-
-		//创建模板类
-		$this->template = new Template();
-		$this->template->path = $this->path . 'zb_users/template/';
-		$this->template->tags = &$this->templatetags;
-
 
 		$this->isinitialize=true;
 
@@ -290,7 +281,7 @@ class ZBlogPHP{
 		{
 			$s=$this->path . 'zb_users/cache/' . $this->guid . '.cache';
 			$c=serialize($this->cache);
-			file_put_contents($s, $c);
+			@file_put_contents($s, $c);
 			$this->isdelay_savecache=false;
 		}
 
@@ -328,6 +319,10 @@ class ZBlogPHP{
 		$s.="\r\n?>";
 
 		@file_put_contents($this->path . 'zb_users/c_option.php',$s);
+
+		$this->SetCache('refesh',time());
+		$this->SaveCache(true);
+
 	}	
 
 
@@ -508,6 +503,8 @@ class ZBlogPHP{
 
 	function MakeTemplatetags(){
 
+		$this->templatetags=array();
+
 		$option=$this->option;
 		unset($option['ZC_BLOG_CLSID']);
 		unset($option['ZC_SQLITE_NAME']);
@@ -516,7 +513,8 @@ class ZBlogPHP{
 		unset($option['ZC_MYSQL_PASSWORD']);
 		unset($option['ZC_MYSQL_NAME']);
 
-		$this->templatetags['option']=$option;
+		$this->templatetags['option']=&$option;
+		$this->templatetags['modules']=&$this->modulesbyfilename;		
 		$this->templatetags['title']=$this->title;
 		$this->templatetags['host']=$this->host;	
 		$this->templatetags['path']=$this->path;
@@ -530,7 +528,6 @@ class ZBlogPHP{
 		$this->templatetags['zblogphp']=$this->option['ZC_BLOG_PRODUCT_FULL'];
 		$this->templatetags['zblogphphtml']=$this->option['ZC_BLOG_PRODUCT_FULLHTML'];
 		$this->templatetags['feedurl']=$this->host . 'feed.php';
-		$this->templatetags['modules']=&$this->modulesbyfilename;
 
 		$s=array(
 			$option['ZC_SIDEBAR_ORDER'],
@@ -553,6 +550,11 @@ class ZBlogPHP{
 			$ms=null;
 
 		}
+
+		//创建模板类
+		$this->template = new Template();
+		$this->template->path = $this->path . 'zb_users/template/';
+		$this->template->tags = $this->templatetags;
 
 	}
 
@@ -594,16 +596,11 @@ class ZBlogPHP{
 		foreach ($files as $fullname) {
 			@unlink($fullname);
 		}
-		
-		
-		//编译&Save模板
-		if($this->template == null){
-			$this->template = new Template();
-			$this->template->path = $dir;
-		}
 
 		$this->template->CompileFiles($this->templates);
 
+		$this->SetCache('refesh',time());
+		$this->SaveCache(true);
 
 	}
 

@@ -96,6 +96,10 @@ $actions=array(
 	'ArticlePst'=>4,
 	'ArticleDel'=>4,
 
+	'PageEdt'=>4,
+	'PagePst'=>4,
+	'PageDel'=>4,
+
 	'CategoryEdt'=>2,
 	'CategoryPst'=>2,
 	'CategoryDel'=>2,
@@ -121,6 +125,7 @@ $actions=array(
 	'ThemeSet'=>3,	
 
 	'ArticleMng'=>3,
+	'PageMng'=>2,
 	'CategoryMng'=>2,
 	'SettingMng'=>1,
 	'TagMng'=>2,
@@ -136,7 +141,7 @@ $actions=array(
 	'CommentAll'=>2,
 	'MemberAll'=>1,
 	'TagAll'=>2,
-	'UpdateAll'=>2,
+	'UploadAll'=>2,
 );
 
 
@@ -184,8 +189,8 @@ function zbp_default_cache_write(){
 	$zbp->SaveCache(true);
 }
 
-Add_Filter_Plugin('Filter_Plugin_Index_PreInitialize','zbp_default_cache_read');
-Add_Filter_Plugin('Filter_Plugin_Index_End','zbp_default_cache_write');
+#Add_Filter_Plugin('Filter_Plugin_Index_PreInitialize','zbp_default_cache_read');
+#Add_Filter_Plugin('Filter_Plugin_Index_End','zbp_default_cache_write');
 
 
 /*autoload*/

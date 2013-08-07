@@ -22,7 +22,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 
 	$articles=$zbp->GetArticleList(
 		array('*'),
-		array(array('=','log_Istop',0)),
+		array(array('=','log_Istop',0),array('=','log_Status',0)),
 		array('log_PostTime'=>'DESC'),
 		array(($pagebar->PageNow-1) * $pagebar->PageCount,$pagebar->PageCount),
 		array('pagebar'=>$pagebar)
@@ -31,6 +31,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	$zbp->template->SetTags('title',$pagebar->PageNow);
 	$zbp->template->SetTags('articles',$articles);
 	$zbp->template->SetTags('pagebar',$pagebar);
+	$zbp->template->SetTags('type','index');
 
 	$zbp->template->display($zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']);
 
@@ -39,12 +40,24 @@ function ViewList($page,$cate,$auth,$date,$tags){
 function ViewPost($id,$alias){
 	global $zbp;
 
+	$articles=$zbp->GetArticleList(
+		array('*'),
+		array(array('=','log_ID',$id),array('=','log_Status',0)),
+		null,
+		array(1),
+		null
+	);
 
-	$article = new Post;
-	$article->LoadInfoByID($id);
+	if(count($articles)==0){
+		Http404();
+		throw new Exception($zbp->lang['error'][9], 1);
+	}
+
+	$article =$articles[0];
 
 	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);
+	$zbp->template->SetTags('type',$article->type=0?'article':'page');
 
 	$zbp->template->display($zbp->option['ZC_ARTICLE_DEFAULT_TEMPLATE']);
 }
@@ -120,6 +133,27 @@ function PostArticle(){
 }
 
 
+function DelArticle(){
+	global $zbp;
+
+	$id=(int)GetVars('id','GET');
+	$article = new Post();
+	$article->LoadInfoByID($id);
+	if($article->ID>0){
+		$article->Del();
+	}
+
+}
+
+
+function PostPage(){
+	PostArticle();
+}
+
+function DelPage(){
+	DelArticle();
+}
+
 
 function PostCategory(){
 	global $zbp;
@@ -146,6 +180,19 @@ function PostCategory(){
 	if(isset($_POST['LogTemplate'])) $cate->LogTemplate = GetVars('LogTemplate','POST');
 
 	$cate->Save();
+
+}
+
+
+
+function DelCategory(){
+	global $zbp;
+
+	$id=(int)GetVars('id','GET');
+	$cate=$zbp->GetCategoryByID($id);
+	if($cate->ID>0){
+		$cate->Del();
+	}
 
 }
 
@@ -203,10 +250,11 @@ function SetTheme($theme,$style){
 
 	$zbp->theme=$theme;
 	$zbp->style=$style;
-	$zbp->SaveOption();
 
 	$zbp->LoadTemplates();
 	$zbp->BuildTemplate();
+
+	$zbp->SaveOption();
 }
 
 

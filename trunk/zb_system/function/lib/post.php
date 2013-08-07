@@ -28,7 +28,7 @@ class Post extends Base{
 	}
 
 
-	public function Time($s='Y-m-d h:i:s'){
+	public function Time($s='Y-m-d H:i:s'){
 		return date($s,$this->PostTime);
 	}
 
