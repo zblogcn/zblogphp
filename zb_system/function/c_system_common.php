@@ -231,4 +231,22 @@ function DelNameInString($s,$name){
 	return $pl;
 }
 
+function HasNameInString($s,$name){
+	$pl=$s;
+	$apl=explode('|',$pl);
+	return in_array($name,$apl);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 ?>

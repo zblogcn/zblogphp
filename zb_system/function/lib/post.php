@@ -40,7 +40,8 @@ class Post extends Base{
 			case 'Category':
 			case 'Author':
 			case 'TypeName':
-			case 'Url':			
+			case 'Url':
+			case 'Tags':
 				return null;
 				break;
 			default:

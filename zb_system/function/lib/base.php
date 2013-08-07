@@ -106,7 +106,7 @@ abstract class Base
 	}
 
 	function Del(){
-		
+		global $zbp;
 	}
 }
 

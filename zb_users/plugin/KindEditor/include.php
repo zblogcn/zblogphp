@@ -15,8 +15,14 @@ function ActivePlugin_KindEditor() {
 }
 
 
-//Response_Plugin_Html_Js_Add_CodeHighLight_JS="document.writeln(""<script src='"&BlogHost&"zb_users/plugin/kindeditor/kindeditor/plugins/code/prettify.js' type='text/javascript'></script><link rel='stylesheet' type='text/css' href='"&BlogHost&"zb_users/plugin/kindeditor/kindeditor/plugins/code/prettify.css'/>"");"
-//Response_Plugin_Html_Js_Add_CodeHighLight_Action="prettyPrint();"
+function InstallPlugin_KindEditor(){
+
+}
+
+function UninstallPlugin_KindEditor(){
+
+}
+
 
 function KindEditor_addscript_begin(){
 	global $zbp;

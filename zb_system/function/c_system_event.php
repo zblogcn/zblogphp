@@ -21,8 +21,8 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	$pagebar->UrlRule='{%host%}?page={%page%}';
 
 	$articles=$zbp->GetArticleList(
-		'',
-		'',
+		array('*'),
+		array(array('=','log_Istop',0)),
 		array('log_PostTime'=>'DESC'),
 		array(($pagebar->PageNow-1) * $pagebar->PageCount,$pagebar->PageCount),
 		array('pagebar'=>$pagebar)
@@ -145,6 +145,7 @@ function EnablePlugin($name){
 	global $zbp;
 	$zbp->option['ZC_USING_PLUGIN_LIST']=AddNameInString($zbp->option['ZC_USING_PLUGIN_LIST'],$name);
 	$zbp->SaveOption();
+	return $name;
 }
 
 function DisablePlugin($name){

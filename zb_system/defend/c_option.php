@@ -74,7 +74,7 @@ return array(
 	'ZC_DISPLAY_COUNT' => 5,
 	'ZC_RSS2_COUNT' => 10,
 	'ZC_SEARCH_COUNT' => 25,
-	'ZC_PAGEBAR_COUNT' => 15,
+	'ZC_PAGEBAR_COUNT' => 10,
 	'ZC_MUTUALITY_COUNT' => 10,
 	'ZC_COMMENTS_DISPLAY_COUNT' => 3,
 
@@ -84,20 +84,6 @@ return array(
 
 	// '后台管理
 	'ZC_MANAGE_COUNT' => 50,
-
-	// 'UBB转换
-	'ZC_UBB_ENABLE' => true,
-	'ZC_UBB_LINK_ENABLE' => false,
-	'ZC_UBB_FONT_ENABLE' => true,
-	'ZC_UBB_CODE_ENABLE' => true,
-	'ZC_UBB_FACE_ENABLE' => true,
-	'ZC_UBB_IMAGE_ENABLE' => true,
-	'ZC_UBB_MEDIA_ENABLE' => true,
-	'ZC_UBB_FLASH_ENABLE' => true,
-	'ZC_UBB_TYPESET_ENABLE' => true,
-	'ZC_UBB_AUTOLINK_ENABLE' => false,
-	'ZC_UBB_AUTOKEY_ENABLE' => false,
-
 
 	// '表情相关
 	'ZC_EMOTICONS_FILENAME' => 'face',
@@ -130,6 +116,11 @@ return array(
 
 	'ZC_CONTENT_MAX' => 1000,
 
+	// '自动摘要字数
+	'ZC_ARTICLE_EXCERPT_MAX' => 250,
+
+	// '侧栏评论最大字数
+	'ZC_COMMENT_EXCERPT_MAX' => 20,
 
 	// '---------------------------------静态化配置-----------------------------------
 	// '静态文件名{asp html shtml}
@@ -137,42 +128,32 @@ return array(
 
 	'ZC_STATIC_DIRECTORY' => 'post',
 
-	// '文章,页面类的静态模式ACTIVE or STATIC or REWRITE
+	// '文章,页面类的静态模式ACTIVE or REWRITE
 	'ZC_POST_STATIC_MODE' => 'ACTIVE',
 
-	// '列表页的静态模式ACTIVE or MIX or REWRITE
-	'ZC_STATIC_MODE' => 'ACTIVE',
+	// '列表页的静态模式ACTIVE or REWRITE
+	'ZC_LIST_STATIC_MODE' => 'ACTIVE',
 
 	'ZC_ARTICLE_REGEX' => '{%host%}/view.php?id={%id%}',
 
 	'ZC_PAGE_REGEX' => '{%host%}/view.php?id={%id%}',
 
-	'ZC_CATEGORY_REGEX' => '{%host%}/catalog.php?cate={%id%}',
+	'ZC_CATEGORY_REGEX' => '{%host%}/?cate={%id%}',
 
-	'ZC_USER_REGEX' => '{%host%}/catalog.php?auth={%id%}',
+	'ZC_USER_REGEX' => '{%host%}/?auth={%id%}',
 
-	'ZC_TAGS_REGEX' => '{%host%}/catalog.php?tags={%alias%}',
+	'ZC_TAGS_REGEX' => '{%host%}/?tags={%alias%}',
 
-	'ZC_DATE_REGEX' => '{%host%}/catalog.php?date={%date%}',
+	'ZC_DATE_REGEX' => '{%host%}/?date={%date%}',
 
-	'ZC_DEFAULT_REGEX' => '{%host%}/catalog.php',
+	'ZC_DEFAULT_REGEX' => '{%host%}/',
 
-	// '--------------------------其它----------------------------------------
-	// '代码高亮
-	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
-
-	// '源码编辑高亮
-	'ZC_CODEMIRROR_ENABLE' => true,
-
-	// '自动摘要字数
-	'ZC_ARTICLE_EXCERPT_MAX' => 250,
-
-	// '侧栏评论最大字数
-	'ZC_COMMENT_EXCERPT_MAX' => 20,
-
-
-	'ZC_HTTP_LASTMODIFIED' => false,
-
+	#首页，分类页，文章页，页面页的默认模板
+	'ZC_INDEX_DEFAULT_TEMPLATE' => 'default',
+	'ZC_CATALOG_DEFAULT_TEMPLATE' => 'default',
+	'ZC_ARTICLE_DEFAULT_TEMPLATE' => 'single',
+	'ZC_PAGE_DEFAULT_TEMPLATE' => 'single',
+	
 	'ZC_SIDEBAR_ORDER' => '',
 
 	'ZC_SIDEBAR_ORDER2' => '',
@@ -182,12 +163,15 @@ return array(
 	'ZC_SIDEBAR_ORDER4' => '',
 
 	'ZC_SIDEBAR_ORDER5' => '',
-	
-	'ZC_TEMPLATE_DIRECTORY' => 'template',
-	#首页，分类页，文章页，页面页的默认模板
-	'ZC_INDEX_DEFAULT_TEMPLATE' => 'default',
-	'ZC_CATALOG_DEFAULT_TEMPLATE' => 'default',
-	'ZC_ARTICLE_DEFAULT_TEMPLATE' => 'single',
-	'ZC_PAGE_DEFAULT_TEMPLATE' => 'single',
+	// '--------------------------其它----------------------------------------
+	// '代码高亮
+	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
+
+	// '源码编辑高亮
+	'ZC_CODEMIRROR_ENABLE' => true,
+
+
+	'ZC_HTTP_LASTMODIFIED' => false,
+
 )
 ?>

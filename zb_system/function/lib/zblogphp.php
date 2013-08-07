@@ -29,7 +29,6 @@ class ZBlogPHP{
 	public $modulesbyfilename=array();
 	public $templates=array();
 	public $configs=array();
-	public $_configs=array();	
 
 	public $templatetags=array();	
 	public $title=null;
@@ -53,6 +52,8 @@ class ZBlogPHP{
 
 	public $theme = null;
 	public $style = null;
+	public $managecount = 50;
+	public $pagebarcount = 10;
 	
 	static public function GetInstance(){
 		if(!isset(self::$zbp)){
@@ -92,6 +93,8 @@ class ZBlogPHP{
 		$this->theme=&$GLOBALS['blogtheme'];
 		$this->style=&$GLOBALS['blogstyle'];
 
+		$this->managecount=$this->option['ZC_MANAGE_COUNT'];
+		$this->pagebarcount=$this->option['ZC_PAGEBAR_COUNT'];
 	}
 
 
@@ -173,7 +176,7 @@ class ZBlogPHP{
 
 		//创建模板类
 		$this->template = new Template();
-		$this->template->path = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
+		$this->template->path = $this->path . 'zb_users/template/';
 		$this->template->tags = &$this->templatetags;
 
 	}
@@ -582,7 +585,7 @@ class ZBlogPHP{
 		$this->LoadTemplates();
 
 		//清空目标目录
-		$dir = $this->path . 'zb_users/' . $this->option['ZC_TEMPLATE_DIRECTORY'] . '/';
+		$dir = $this->path . 'zb_users/template/';
 		$files = GetFilesInDir($dir,'php');
 		foreach ($files as $fullname) {
 			@unlink($fullname);
@@ -606,48 +609,6 @@ class ZBlogPHP{
 
 ################################################################################################################
 #加载数据对像List函数
-
-
-
-	function AddTagsString($s=''){
-		static $tagstring;
-		$tagstring .= $s;
-		return $tagstring;
-	}
-	function LoadTagsByString($s){
-		if($s=='')return array();
-		$s=str_replace('}{', '|', $s);
-		$s=str_replace('{', '', $s);
-		$s=str_replace('}', '', $s);
-		$a=explode('|', $s);
-		$t=array_unique($a);
-
-		if(count($t)==0)return array();
-
-		$a=array();
-		foreach ($t as $v) {
-			if(isset($this->tags[$v])==false){
-				$a[]=array('tag_ID',$v);
-			}
-		}
-
-		if(count($a)==0){
-			$a=array();
-			foreach ($t as $v) {
-				$a[$v]=&$this->tags[$v];
-			}
-			return $a;
-		}else{
-			$t=array();
-			$array=$this->GetTagList('',array(array('array',$a)),'','','');
-			foreach ($array as $v) {
-				$this->tags[$v->ID]=$v;
-				$this->tagsbyname[$v->Name]=&$this->tags[$v->ID];
-				$t[$v->ID]=&$this->tags[$v->ID];
-			}
-			return $t;
-		}
-	}
 
 
 	function GetList($type,$sql){
@@ -753,9 +714,59 @@ class ZBlogPHP{
 		}
 	}	
 
+	function GetTagByID($id){
+		if(isset($this->tags[$id])){
+			return $this->tags[$id];
+		}else{
+			$array=$this->LoadTagsByString('{'.$id.'}');
+			if(count($array)==0){
+				return new Tag;
+			}else{
+				return $this->tags[$id];
+			}
 
+		}
+	}
 
+	function AddTagsString($s=''){
+		static $tagstring;
+		$tagstring .= $s;
+		return $tagstring;
+	}
+	function LoadTagsByString($s){
+		if($s=='')return array();
+		$s=str_replace('}{', '|', $s);
+		$s=str_replace('{', '', $s);
+		$s=str_replace('}', '', $s);
+		$a=explode('|', $s);
+		$t=array_unique($a);
 
+		if(count($t)==0)return array();
+
+		$a=array();
+		foreach ($t as $v) {
+			if(isset($this->tags[$v])==false){
+				$a[]=array('tag_ID',$v);
+			}
+		}
+
+		if(count($a)==0){
+			$a=array();
+			foreach ($t as $v) {
+				$a[$v]=&$this->tags[$v];
+			}
+			return $a;
+		}else{
+			$t=array();
+			$array=$this->GetTagList('',array(array('array',$a)),'','','');
+			foreach ($array as $v) {
+				$this->tags[$v->ID]=$v;
+				$this->tagsbyname[$v->Name]=&$this->tags[$v->ID];
+				$t[$v->ID]=&$this->tags[$v->ID];
+			}
+			return $t;
+		}
+	}
 
 
 ################################################################################################################
@@ -782,6 +793,37 @@ class ZBlogPHP{
 		$s=$this->db->sql->Count('Post',array('Log_ID'=>'num'),array(array('LIKE','log_AuthID','%{'.$id.'}%')));
 		$num=GetValueInArray(current($this->db->Query($s)),'num');
 		return $num;
+	}
+
+
+
+
+
+
+################################################################################################################
+#杂项
+
+	function CreateOptoinsOfTemplate($default){
+		$s=null;
+		$s .= '<option value="" >' . $this->lang['msg']['none'] . '</option>';
+		foreach ($this->templates as $key => $value) {
+			if(substr($key,0,2)=='b_')continue;
+			if(substr($key,0,2)=='c_')continue;
+			if(substr($key,0,5)=='post-')continue;
+			if(substr($key,0,6)=='module')continue;
+			if(substr($key,0,6)=='header')continue;
+			if(substr($key,0,6)=='footer')continue;	
+			if(substr($key,0,7)=='comment')continue;
+			if(substr($key,0,7)=='sidebar')continue;
+			if(substr($key,0,7)=='pagebar')continue;
+			if($default==$key){
+				$s .= '<option value="' . $key . '" selected="selected">' . $key . '</option>';
+			}else{
+				$s .= '<option value="' . $key . '" >' . $key . '</option>';
+			}
+		}
+
+		return $s;
 	}
 
 }

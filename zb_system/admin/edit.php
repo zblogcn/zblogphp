@@ -64,7 +64,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       <!-- alias( -->
       <div id='alias' class='editmod'><label for="edtAlias" class="editinputname" ><?php echo $lang['msg']['alias']?></label>
         <input type="text" name="Alias" id="edtAlias" maxlength="250" value="" />
-        .html </div>
+      </div>
       <!-- )alias --> 
 
 	    <!-- tags( --><?php if(!$ispage){?>
