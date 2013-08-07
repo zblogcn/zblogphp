@@ -122,9 +122,9 @@ CREATE TABLE IF NOT EXISTS %pre%module (
 CREATE TABLE IF NOT EXISTS %pre%tag (
   tag_ID int(11) NOT NULL AUTO_INCREMENT,
   tag_Name varchar(255) NOT NULL DEFAULT '',
-  tag_Alias varchar(255) NOT NULL DEFAULT '',
   tag_Order int(11) NOT NULL DEFAULT '0',
   tag_Count int(11) NOT NULL DEFAULT '0',
+  tag_Alias varchar(255) NOT NULL DEFAULT '', 
   tag_Intro text NOT NULL,  
   tag_Template varchar(50) NOT NULL DEFAULT '',
   tag_Meta text NOT NULL,

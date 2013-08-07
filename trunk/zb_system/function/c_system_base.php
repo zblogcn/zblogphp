@@ -93,7 +93,7 @@ $actions=array(
 	'feed'=>5,
 
 	'ArticleEdt'=>3,
-	'ArticlePst'=>2,
+	'ArticlePst'=>3,
 	'ArticleDel'=>3,
 
 	'CategoryEdt'=>2,
@@ -108,9 +108,9 @@ $actions=array(
 	'MemberPst'=>4,
 	'MemberDel'=>1,
 	
-	'TagEdt'=>3,
-	'TagPst'=>3,
-	'TagDel'=>1,	
+	'TagEdt'=>2,
+	'TagPst'=>2,
+	'TagDel'=>2,	
 
 	'PluginEnable'=>1,
 	'PluginDisable'=>1,
@@ -163,11 +163,33 @@ foreach (explode("|", $option['ZC_USING_PLUGIN_LIST']) as $plugin) {
 }
 
 
+/*system plugin*/
+function zbp_default_cache_read(){
+	global $zbp;
+	$zbp->LoadCache();
+	if($zbp->HasCache('default_html')){
+		if((integer)$zbp->GetCacheTime('default_html') < (integer)$zbp->GetCache('refesh_time'))return;
+		echo $zbp->GetCache('default_html');
+		RunTime();
+		die();
+	}
+}
+
+function zbp_default_cache_write(){
+	global $zbp;
+	$s=ob_get_clean();
+	echo $s;
+	$zbp->SetCache('default_html',$s);
+	$zbp->SetCache('refesh_time',time());
+	$zbp->SaveCache(true);
+}
+
+Add_Filter_Plugin('Filter_Plugin_Index_PreInitialize','zbp_default_cache_read');
+Add_Filter_Plugin('Filter_Plugin_Index_End','zbp_default_cache_write');
 
 
+/*autoload*/
 function __autoload($classname) {
      require $GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php';
 }
-
-
 ?>

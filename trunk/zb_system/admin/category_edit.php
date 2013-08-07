@@ -39,7 +39,7 @@ foreach ($zbp->categorysbyorder as $k => $v) {
 		$p .='<option ' . ($v->ID==$cate->ParentID?'selected="selected"':'') . ' value="'. $v->ID .'">' . $v->SymbolName . '</option>';
 	}
 }
-#var_dump($cate);
+
 ?>
 
 <div id="divMain">
@@ -62,7 +62,7 @@ foreach ($zbp->categorysbyorder as $k => $v) {
 		<input id="edtOrder" class="edit" size="40" name="Order" type="text" value="<?php echo $cate->Order;?>" />
 	  </p>
 	  <p>
-		<span class="title">父分类:</span><br />
+		<span class="title"><?php echo $lang['msg']['parent_category']?>:</span><br />
 		<select id="edtParentID" name="ParentID" class="edit" size="1">
 			<?php echo $p;?>
 		</select>
@@ -70,20 +70,20 @@ foreach ($zbp->categorysbyorder as $k => $v) {
 	  <p>
 		<span class="title"><?php echo $lang['msg']['template']?>:</span><br />
 		<select class="edit" size="1" name="Template" id="cmbTemplate">
-		  <option value="CATALOG" selected="selected">CATALOG (默认模板)</option>
+<?php echo $zbp->CreateOptoinsOfTemplate($cate->Template);?>
 		</select><input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $cate->Template;?>" />
 	  </p>
 	  <p>
-		<span class="title">目录内文章的默认模板:</span><br />
+		<span class="title"><?php echo $lang['msg']['category_aritles_default_template']?>:</span><br />
 		<select class="edit" size="1" name="LogTemplate" id="cmbLogTemplate">
-		  <option value="SINGLE" selected="selected">SINGLE (默认模板)</option>
+<?php echo $zbp->CreateOptoinsOfTemplate($cate->LogTemplate);?>
 		</select><input type="hidden" name="edtLogTemplate" id="edtLogTemplate" value="<?php echo $cate->LogTemplate;?>" />
 	  </p>
 	  <p>
 		<label><input type="checkbox" name="AddNavbar" id="edtAddNavbar" value="True" />  <span class="title"><?php echo $lang['msg']['add_to_navbar']?></span></label>
 	  </p>
 	  <p>
-		<input type="submit" class="button" value="提交" id="btnPost" onclick="return checkCateInfo();" />
+		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkCateInfo();" />
 	  </p>
 	</form>
 	<script type="text/javascript">
@@ -91,7 +91,7 @@ function checkCateInfo(){
   document.getElementById("edit").action="../cmd.php?act=CategoryPst";
 
   if(!$("#edtName").val()){
-    alert("名称不能为空");
+    alert("<?php echo $lang['error']['72']?>");
     return false
   }
 

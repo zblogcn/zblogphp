@@ -38,7 +38,7 @@ switch ($action) {
 	case 'ArticleMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 	case 'ArticlePst':
-		echo var_dump($_POST);
+		PostArticle();
 		break;
 	case 'CategoryMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
@@ -68,9 +68,11 @@ switch ($action) {
 	case 'TagPst':
 		PostTag();
 		redirect('cmd.php?act=TagMng');
+		break;
 	case 'TagDel':
 		DelTag();
-		redirect('cmd.php?act=TagMng');		
+		redirect('cmd.php?act=TagMng');
+		break;
 	case 'PluginMng':
 		if(GetVars('install','GET')){
 			$f='InstallPlugin_' . GetVars('install','GET');

@@ -138,11 +138,11 @@ function Admin_SiteInfo(){
 
 
 	echo '<table class="tableFull tableBorder" id="tbStatistic"><tr><th colspan="4">&nbsp;' . $zbp->lang['msg']['site_analyze'] . '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');">[' . $zbp->lang['msg']['refresh_cache'] . ']</a> <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
-	echo $zbp->GetCacheValue('reload_statistic');
+	echo $zbp->GetCache('reload_statistic');
 	echo '</table>';
 
 	echo '<table class="tableFull tableBorder" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a> <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
-	echo $zbp->GetCacheValue('reload_updateinfo');
+	echo $zbp->GetCache('reload_updateinfo');
 	echo '</table>';
 
 	echo '</div>';

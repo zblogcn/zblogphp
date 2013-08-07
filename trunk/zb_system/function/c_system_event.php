@@ -93,6 +93,7 @@ function Logout(){
 function PostArticle(){
 	global $zbp;
 	$article = new Post();
+	die();
 }
 
 
@@ -100,30 +101,21 @@ function PostArticle(){
 function PostCategory(){
 	global $zbp;
 
-	$parentid=(int)GetVars('edtPareID','POST');
+	$parentid=(int)GetVars('ParentID','POST');
 	if($parentid>0){
 		if($zbp->categorys[$parentid]->Level>2){
-			$_POST['edtPareID']='0';
+			$_POST['ParentID']='0';
 		}
 	}
 
 	$cate = new Category();
 	if(GetVars('ID','POST') == 0){
-		$cate->LoadInfobyArray(
-			array(
-				GetVars('ID','POST'),
-				GetVars('Name','POST'),
-				GetVars('Order','POST'),
-				0,
-				GetVars('Alias','POST'),
-				'',
-				0,
-				GetVars('ParentID','POST'),
-				GetVars('Template','POST'),
-				GetVars('LogTemplate','POST'),
-				''
-			)
-		);
+		$cate->Name = GetVars('Name','POST');
+		$cate->Order = GetVars('Order','POST');
+		$cate->Alias = GetVars('Alias','POST');
+		$cate->ParentID = GetVars('ParentID','POST');
+		$cate->Template = GetVars('Template','POST');
+		$cate->LogTemplate = GetVars('LogTemplate','POST');
 		$cate->Save();
 	}else{
 		$cate->LoadInfoByID(GetVars('ID','POST'));
@@ -138,6 +130,36 @@ function PostCategory(){
 }
 
 
+
+function PostTag(){
+	global $zbp;
+
+	$tag = new Tag();
+	if(GetVars('ID','POST') == 0){
+		$tag->Name = GetVars('Name','POST');
+		$tag->Alias = GetVars('Alias','POST');
+		$tag->Template = GetVars('Template','POST');
+		$tag->Save();
+	}else{
+		$tag->LoadInfoByID(GetVars('ID','POST'));
+		$tag->Name = GetVars('Name','POST');
+		$tag->Alias = GetVars('Alias','POST');
+		$tag->Template = GetVars('Template','POST');
+		$tag->Save();
+	}
+
+}
+
+
+function DelTag(){
+	global $zbp;
+	$tagid=(int)GetVars('id','GET');
+	$tag=$zbp->GetTagByID($tagid);
+	if($tag->ID>0){
+		$tag->Del();
+	}
+
+}
 
 
 
