@@ -44,6 +44,10 @@ class Post extends Base{
 			case 'Tags':
 				return null;
 				break;
+			case 'Template':
+				if($value==$zbp->option['ZC_ARTICLE_DEFAULT_TEMPLATE'])$value='';
+				return $this->Data[$name]  =  $value;
+				break;
 			default:
 				parent::__set($name, $value);
 				break;
@@ -68,7 +72,11 @@ class Post extends Base{
 				break;
 			case 'Tags':
 				return $zbp->LoadTagsByString($this->Tag);
-				break;				
+				break;
+			case 'Template':
+				$value=$this->Data[$name];
+				if($value=='')$value=$zbp->option['ZC_ARTICLE_DEFAULT_TEMPLATE'];
+				return $value;
 			default:
 				return parent::__get($name);
 				break;

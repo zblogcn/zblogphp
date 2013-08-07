@@ -180,7 +180,7 @@ function zbp_default_cache_write(){
 	$s=ob_get_clean();
 	echo $s;
 	$zbp->SetCache('default_html',$s);
-	$zbp->SetCache('refesh_time',time());
+	$zbp->SetCache('refesh',time());
 	$zbp->SaveCache(true);
 }
 

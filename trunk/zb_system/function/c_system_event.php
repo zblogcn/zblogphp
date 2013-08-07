@@ -93,6 +93,7 @@ function Logout(){
 function PostArticle(){
 	global $zbp;
 	$article = new Post();
+	var_dump($_POST);
 	die();
 }
 

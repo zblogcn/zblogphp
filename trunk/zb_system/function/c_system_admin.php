@@ -210,7 +210,7 @@ $array=$zbp->GetArticleList(
 foreach ($array as $article) {
 	echo '<tr>';
 	echo '<td class="td5">' . $article->ID .  '</td>';
-	echo '<td class="td10">' . $article->CateID . '</td>';
+	echo '<td class="td10">' . $article->Category->Name . '</td>';
 	echo '<td class="td10">' . $article->Author->Name . '</td>';
 	echo '<td>' . $article->Title . '</td>';
 	echo '<td class="td20">' . date('Y-m-d h:i:s',$article->PostTime) . '</td>';

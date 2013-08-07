@@ -646,43 +646,18 @@ function InsertInfo(){
   $mem = new Member();
   $guid=GetGuid();
 
-  $mem->LoadInfobyArray(array(
-      0,
-      $guid,
-      1,
-      0,
-      GetVars('username','POST'),
-      GetPassWordByGuid(GetVars('password','POST'),$guid),
-      '',
-      '',
-      GetGuestIP(),
-      time(),
-      '',
-      '',
-      0,
-      0,
-      0,
-      0,
-      '',
-      ''
-    ));
+  $mem->Guid=$guid;
+  $mem->Level=1;
+  $mem->Name=GetVars('username','POST');
+  $mem->Password=GetPassWordByGuid(GetVars('password','POST'),$guid);
+  $mem->IP=GetGuestIP();
+  $mem->PostTime=time();
+
   $mem->Save();
 
 
   $cate = new Category();
-  $cate->LoadInfobyArray(array(
-    0,
-    '未分类',
-    0,
-    0,
-    '',
-    '',
-    0,
-    0,
-    '',
-    '',
-    '',
-  ));
+  $cate->Name='未分类';
   $cate->Save();
   
   $t=new Module();
@@ -965,10 +940,6 @@ $f=$GLOBALS['zbp']->path . 'zb_users/emotion/index.html';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/emotion/'目录成功!<br/>";}
 
-$f=$GLOBALS['zbp']->path . 'zb_users/include/index.html';
-if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-echo "读写'zb_users/include/'目录成功!<br/>";
-
 $f=$GLOBALS['zbp']->path . 'zb_users/language/SimpChinese.php';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/language/'目录成功!<br/>";}
@@ -990,7 +961,7 @@ if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/theme/'目录成功!<br/>";}
 
 $f=$GLOBALS['zbp']->path . 'zb_users/upload/index.html';
-file_put_contents($f,file_get_contents($f));
+if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/upload/'目录成功!<br/>";}
 
 }

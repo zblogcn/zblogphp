@@ -66,19 +66,7 @@ function page(){
 function cate(){
 	for ($i=0; $i < 100; $i++) { 
 		$cate = new Category();
-		$cate->LoadInfobyArray(array(
-		0,
-		getRandStr(rand(2,4)),
-		0,
-		0,
-		'',
-		'',
-		0,
-		0,
-		'',
-		'',
-		'',
-		));
+		$cate->Name=getRandStr(rand(2,4));
 		$cate->Save();
   	}
 }
@@ -86,16 +74,7 @@ function cate(){
 function tag(){
 	for ($i=0; $i < 5000; $i++) { 
 		$tag = new Tag();
-		$tag->LoadInfobyArray(array(
-		0,
-		getRandStr(rand(2,5)),
-		'',
-		0,
-		0,
-		'',
-		'',
-		'',
-		));
+		$tag->Name=getRandStr(rand(2,5));
 		$tag->Save();
   	}
 }
@@ -137,7 +116,8 @@ function getTagStr($tagcount) {
 }
 
 
-/*
+
+
 
 
 
@@ -153,8 +133,7 @@ page();
 echo "tag!<br/>";
 tag();
 
-
-
+/*
 
 
 $zbp->LoadTags();
@@ -162,14 +141,15 @@ foreach ($zbp->tags as $key => $value) {
 	$value->Count=$zbp->CountTag($key);
 	$value->Save();
 }
-*/
+
 foreach ($zbp->categorys as $key => $value) {
 	$value->Count=$zbp->CountCategory($key);
 	$value->Save();
 }
+*/
+
 
 $zbp->Terminate();
-
 
 
 RunTime();
