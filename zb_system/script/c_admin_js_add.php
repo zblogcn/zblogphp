@@ -256,7 +256,7 @@ $(document).ready(function(){
 	}else{
 		$('input.checkbox').attr('readonly','readonly');
 		$('input.checkbox').css('cursor','pointer');
-		$('input.checkbox').click(function(){  if($(this).val()=='True'){$(this).val('False')}else{$(this).val('True')} })
+		$('input.checkbox').click(function(){  if($(this).val().toLowerCase()=='true'){$(this).val('false')}else{$(this).val('true')} })
 	}
 
 	$('span.imgcheck').click(function(){ChangeCheckValue(this)})

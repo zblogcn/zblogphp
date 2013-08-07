@@ -24,7 +24,6 @@ class Member extends Base{
 
 		$this->ID = 0;
 		$this->Count = 0;
-		$this->Level = 5;
 		$this->Name = $zbp->lang['msg']['anonymous'];
 
 	}
