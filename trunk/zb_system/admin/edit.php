@@ -43,8 +43,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <form id="edit" name="edit" method="post" action="#">
   <div id="divEditLeft">
     <div id="divEditTitle">
-      <input type="hidden" name="ID" id="edtID" value="0" />
-      <input type="hidden" name="Type" id="edtType" value="0" />
+      <input type="hidden" name="ID" id="edtID" value="<?php echo $article->ID;?>" />
+      <input type="hidden" name="Type" id="edtType" value="<?php echo $article->Type;?>" />
       <!-- title( -->
 		<div id='titleheader' class='editmod'>
 			<label for="edtTitle" class="editinputname" ><?php echo $lang['msg']['title']?></label>
@@ -69,7 +69,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 	    <!-- tags( --><?php if(!$ispage){?>
       <div id='tags' class='editmod'><label  for="edtTag"  class='editinputname'><?php echo $lang['msg']['tags']?></label>
-        <input type="text"  name="Tag" id="edtTag" value="" />
+        <input type="text"  name="Tag" id="edtTag" value="<?php echo $article->Tag;?>" />
         (<?php echo $lang['msg']['use_commas_to_separate']?>) <a href="#" id="showtags"><?php echo $lang['msg']['show_common_tags']?></a></div>
       <!-- Tags -->
       <div id="ulTag" style="display:none;">
@@ -101,14 +101,13 @@ require $blogpath . 'zb_system/admin/admin_top.php';
           
           <!-- cate --><?php if(!$ispage){ ?>
           <div id='cate' class='editmod'> <label for="cmbTemplate" class="editinputname" ><?php echo $lang['msg']['category']?></label>
-            <select style="width:180px;" class="edit" size="1" id="edtCate">
+            <select style="width:180px;" class="edit" size="1" name="CateID" id="cmbCateID">
 <?php
 foreach ($zbp->categorysbyorder as $id => $cate) {
   echo '<option ' . ($article->CateID==$cate->ID?'selected="selected"':'') . ' value="'. $cate->ID .'">' . $cate->SymbolName . '</option>';
 }
 ?>
             </select>
-            <input type="hidden" name="CateID" id="edtCateID" value="0" />
           </div>
           <!-- cate --><?php } ?>
           
@@ -147,7 +146,7 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
           <!-- Istop( --><?php if(!$ispage){?>
           <div id='istop' class='editmod'>    
             <label for="edtIstop" class="editinputname" ><?php echo $lang['msg']['top']?></label>
-            <input type="checkbox" name="Istop" id="edtIstop" value="True"/>
+            <input id="IsTop" name="IsTop" style="" type="text" value="<?php echo (boolean)$article->IsTop;?>" class="checkbox"/>
           </div><?php }?>
 
           <!-- )Istop --> 
@@ -157,7 +156,7 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
           <div id='islock' class='editmod'>
             
             <label for="edtIslock" class='editinputname'><?php echo $lang['msg']['disable_comment']?></label>
-             <input type="checkbox" name="Islock" id="edtIslock" value="True"/>
+             <input id="IsLock" name="IsLock" style="" type="text" value="<?php echo (boolean)$article->IsLock;?>" class="checkbox"/>
          </div>
           <!-- )IsLock --> 
 
@@ -214,7 +213,7 @@ $(document).click(function (event){$('#ulTag').slideUp("fast");});
 
 //文章内容或摘要变动提示保存
 window.onbeforeunload = function(){
-  if (!isSubmit && editor_api.editor.content.get()) return "<?php echo $zbp->lang['error'][71];?>";
+  if (!isSubmit && (editor_api.editor.content.get()!=sContent)) return "<?php echo $zbp->lang['error'][71];?>";
 }
 
 
@@ -351,6 +350,7 @@ editor_api.editor.content.focus=function(){return this.obj.focus()};
 editor_api.editor.intro.get=function(){return this.obj.val()};
 editor_api.editor.intro.put=function(str){return this.obj.val(str)};
 editor_api.editor.intro.focus=function(){return this.obj.focus()};
+sContent=editor_api.editor.content.get();
 }
 
 

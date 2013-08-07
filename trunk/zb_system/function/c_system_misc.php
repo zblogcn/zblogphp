@@ -11,23 +11,23 @@ ob_clean();
 
 switch (GetVars('type','GET')) {
 	case 'statistic':
-		if (!$zbp->CheckRights(4)) {throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights('admin')) {throw new Exception($lang['error'][6]);}
 		misc_statistic();
 		break;
 	case 'updateinfo':
-		if (!$zbp->CheckRights(4)) {throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights('admin')) {throw new Exception($lang['error'][6]);}
 		misc_updateinfo();
 		break;
 	case 'commontags':
-		if (!$zbp->CheckRights(4)) {throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights('ArticleEdt')) {throw new Exception($lang['error'][6]);}
 		misc_commontags();
 		break;
 	case 'vrs':
-		if (!$zbp->CheckRights(5)) {throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights('misc')) {throw new Exception($lang['error'][6]);}
 		misc_viewrights();
 		break;
 	case 'autoinfo':
-		if (!$zbp->CheckRights(5)) {die();}
+		if (!$zbp->CheckRights('misc')) {die();}
 		misc_autoinfo();
 		break;
 	default:
@@ -150,8 +150,10 @@ function misc_autoinfo(){
 	echo "$('#inpEmail').val('" . $zbp->user->Email . "');";
 	echo "$('#inpHomePage').val('" . $zbp->user->HomePage . "');";
 	echo "$('.cp-hello').html('" . $zbp->lang['msg']['welcome'] . ' ' . $zbp->user->Name .  " ("  . $zbp->user->LevelName  . ")');";
-	echo "$('.cp-login').find('a').html('[" . $zbp->lang['msg']['admin'] . "]');";
-	if ($zbp->CheckRights(4)){
+	if ($zbp->CheckRights('admin')){
+		echo "$('.cp-login').find('a').html('[" . $zbp->lang['msg']['admin'] . "]');";
+	}
+	if ($zbp->CheckRights('ArticleEdt')){
 		echo "$('.cp-vrs').find('a').html('[" . $zbp->lang['msg']['new_article'] . "]');";
 		echo "$('.cp-vrs').find('a').attr('href','" . $zbp->host . "zb_system/cmd.php?act=ArticleEdt');";
 	}

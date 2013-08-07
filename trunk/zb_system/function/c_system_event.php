@@ -86,21 +86,44 @@ function Logout(){
 
 	setcookie('username', '',time() - 3600,$zbp->cookiespath);
 	setcookie('password', '',time() - 3600,$zbp->cookiespath);
+
 }
 
 
 
 function PostArticle(){
 	global $zbp;
+	if(!isset($_POST['ID']))return ;
+
 	$article = new Post();
-	var_dump($_POST);
-	die();
+
+	if(GetVars('ID','POST') == 0){
+	}else{
+		$article->LoadInfoByID(GetVars('ID','POST'));
+	}
+
+	if(isset($_POST['Type'])    ) $article->Type     = GetVars('Type','POST');
+	if(isset($_POST['Title'])   ) $article->Title    = GetVars('Title','POST');
+	if(isset($_POST['Content']) ) $article->Content  = GetVars('Content','POST');
+	if(isset($_POST['Alias'])   ) $article->Alias    = GetVars('Alias','POST');
+	if(isset($_POST['Tag'])     ) $article->Tag      = GetVars('Tag','POST');
+	if(isset($_POST['Intro'])   ) $article->Intro    = GetVars('Intro','POST');
+	if(isset($_POST['CateID'])  ) $article->CateID   = GetVars('CateID','POST');
+	if(isset($_POST['Template'])) $article->Template = GetVars('Template','POST');
+	if(isset($_POST['Status'])  ) $article->Status   = GetVars('Status','POST');
+	if(isset($_POST['AuthorID'])) $article->AuthorID = GetVars('AuthorID','POST');
+	if(isset($_POST['PostTime'])) $article->PostTime = strtotime(GetVars('PostTime','POST'));
+	if(isset($_POST['IsTop'])   ) $article->IsTop    = GetVars('IsTop','POST');
+	if(isset($_POST['IsLock'])  ) $article->IsLock   = GetVars('IsLock','POST');
+
+	$article->Save();
 }
 
 
 
 function PostCategory(){
 	global $zbp;
+	if(!isset($_POST['ID']))return ;
 
 	$parentid=(int)GetVars('ParentID','POST');
 	if($parentid>0){
@@ -111,49 +134,44 @@ function PostCategory(){
 
 	$cate = new Category();
 	if(GetVars('ID','POST') == 0){
-		$cate->Name = GetVars('Name','POST');
-		$cate->Order = GetVars('Order','POST');
-		$cate->Alias = GetVars('Alias','POST');
-		$cate->ParentID = GetVars('ParentID','POST');
-		$cate->Template = GetVars('Template','POST');
-		$cate->LogTemplate = GetVars('LogTemplate','POST');
-		$cate->Save();
 	}else{
 		$cate->LoadInfoByID(GetVars('ID','POST'));
-		$cate->Name = GetVars('Name','POST');
-		$cate->Order = GetVars('Order','POST');
-		$cate->Alias = GetVars('Alias','POST');
-		$cate->ParentID = GetVars('ParentID','POST');
-		$cate->Template = GetVars('Template','POST');
-		$cate->LogTemplate = GetVars('LogTemplate','POST');
-		$cate->Save();
 	}
+
+	if(isset($_POST['Name'])       ) $cate->Name        = GetVars('Name','POST');
+	if(isset($_POST['Order'])      ) $cate->Order       = GetVars('Order','POST');
+	if(isset($_POST['Alias'])      ) $cate->Alias       = GetVars('Alias','POST');
+	if(isset($_POST['ParentID'])   ) $cate->ParentID    = GetVars('ParentID','POST');
+	if(isset($_POST['Template'])   ) $cate->Template    = GetVars('Template','POST');
+	if(isset($_POST['LogTemplate'])) $cate->LogTemplate = GetVars('LogTemplate','POST');
+
+	$cate->Save();
+
 }
 
 
 
 function PostTag(){
 	global $zbp;
+	if(!isset($_POST['ID']))return ;
 
 	$tag = new Tag();
 	if(GetVars('ID','POST') == 0){
-		$tag->Name = GetVars('Name','POST');
-		$tag->Alias = GetVars('Alias','POST');
-		$tag->Template = GetVars('Template','POST');
-		$tag->Save();
 	}else{
 		$tag->LoadInfoByID(GetVars('ID','POST'));
-		$tag->Name = GetVars('Name','POST');
-		$tag->Alias = GetVars('Alias','POST');
-		$tag->Template = GetVars('Template','POST');
-		$tag->Save();
 	}
+	if(isset($_POST['Name'])    ) $tag->Name     = GetVars('Name','POST');
+	if(isset($_POST['Alias'])   ) $tag->Alias    = GetVars('Alias','POST');
+	if(isset($_POST['Template'])) $tag->Template = GetVars('Template','POST');
+
+	$tag->Save();
 
 }
 
 
 function DelTag(){
 	global $zbp;
+
 	$tagid=(int)GetVars('id','GET');
 	$tag=$zbp->GetTagByID($tagid);
 	if($tag->ID>0){
