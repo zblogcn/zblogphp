@@ -7,7 +7,7 @@
  */
 
 function zbp_addpagesubmenu(){
-	echo '<a href="../cmd.php?act=ArticleEdt&amp;type=1"><span class="m-left">' . $GLOBALS['lang']['msg']['new_page'] . '</span></a>';
+	echo '<a href="../cmd.php?act=PageEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_page'] . '</span></a>';
 }
 
 function zbp_addtagsubmenu(){
@@ -37,7 +37,7 @@ function ResponseAdmin_LeftMenu(){
 
 	$leftmenus[]=MakeLeftMenu("ArticleEdt",$zbp->lang['msg']['new_article'],$zbp->host . "zb_system/cmd.php?act=ArticleEdt","nav_new","aArticleEdt","");
 	$leftmenus[]=MakeLeftMenu("ArticleMng",$zbp->lang['msg']['article_manage'],$zbp->host . "zb_system/cmd.php?act=ArticleMng","nav_article","aArticleMng","");
-	$leftmenus[]=MakeLeftMenu("ArticleMng",$zbp->lang['msg']['page_manage'],$zbp->host . "zb_system/cmd.php?act=ArticleMng&amp;type=1","nav_page","aPageMng","");
+	$leftmenus[]=MakeLeftMenu("PageMng",$zbp->lang['msg']['page_manage'],$zbp->host . "zb_system/cmd.php?act=PageMng","nav_page","aPageMng","");
 
 	$leftmenus[]="<li class='split'><hr/></li>";
 
@@ -213,7 +213,7 @@ foreach ($array as $article) {
 	echo '<td class="td10">' . $article->Category->Name . '</td>';
 	echo '<td class="td10">' . $article->Author->Name . '</td>';
 	echo '<td>' . $article->Title . '</td>';
-	echo '<td class="td20">' . date('Y-m-d h:i:s',$article->PostTime) . '</td>';
+	echo '<td class="td20">' .$article->Time() . '</td>';
 	echo '<td class="td5">' . $article->CommNums . '</td>';
 	echo '<td class="td5">' . $article->StatusName . '</td>';
 	echo '<td class="td10 tdCenter">';
@@ -279,13 +279,13 @@ foreach ($array as $article) {
 	echo '<td class="td5">' . $article->ID . '</td>';
 	echo '<td class="td10">' . $article->Author->Name . '</td>';
 	echo '<td>' . $article->Title . '</td>';
-	echo '<td class="td20">' . date('Y-m-d h:i:s',$article->PostTime) . '</td>';
+	echo '<td class="td20">' . $article->Time() . '</td>';
 	echo '<td class="td5">' . $article->CommNums . '</td>';
 	echo '<td class="td5">' . $article->StatusName . '</td>';
 	echo '<td class="td10 tdCenter">';
-	echo '<a href="../cmd.php?act=ArticleEdt&amp;id='. $article->ID .'&amp;type=1"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+	echo '<a href="../cmd.php?act=PageEdt&amp;id='. $article->ID .'"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ArticleDel&amp;id='. $article->ID .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
+	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=PageDel&amp;id='. $article->ID .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
 	echo '</td>';
 
 	echo '</tr>';

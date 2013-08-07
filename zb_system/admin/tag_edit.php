@@ -54,7 +54,7 @@ $p .='<option value="0">' . $lang['msg']['none'] . '</option>';
 		</select><input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $tag->Template;?>" />
 	  </p>
 	  <p>
-		<label><input type="checkbox" name="AddNavbar" id="edtAddNavbar" value="True" />  <span class="title"><?php echo $lang['msg']['add_to_navbar']?></span></label>
+		<label><span class="title"><?php echo $lang['msg']['add_to_navbar']?>:</span>   <input type="text" name="AddNavbar" id="edtAddNavbar" value="0" class="checkbox" /></label>
 	  </p>
 	  <p>
 		<input type="submit" class="button" value="提交" id="btnPost" onclick="return checkCateInfo();" />

@@ -11,17 +11,22 @@ require '../function/c_system_admin.php';
 
 $zbp->Initialize();
 
-$action='ArticleEdt';
+$action=GetVars('act','GET');
 if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
 $blogtitle=$lang['msg']['article_edit'];
 
 $ispage=false;
-if(GetVars('type','GET')=='1'){$ispage=true;}
+if($action=='PageEdt'){$ispage=true;}
 
 $article=new Post;
 if((GetVars('id','GET')!='')){
   $article->LoadInfoByID((integer)(GetVars('id','GET')));
+}
+if($ispage){
+  $article->Type=1;
+}else{
+  $article->Type=0;
 }
 
 require $blogpath . 'zb_system/admin/admin_header.php';
@@ -131,7 +136,12 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
           <!-- user( -->
           <div id='user' class='editmod'> <label for="cmbUser" class="editinputname" ><?php echo $lang['msg']['author']?></label>
             <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
-              <option value="1" selected="selected">zblogger</option>
+<?php
+foreach ($zbp->members as $key => $value) {
+echo '<option value="'. $value->ID .'" '. ($article->AuthorID==$value->ID?'selected="selected"':'') .'>' . $value->Name . '</option>';
+}
+?>
+
             </select>
           </div>
           <!-- )user --> 
@@ -146,22 +156,24 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
           <!-- Istop( --><?php if(!$ispage){?>
           <div id='istop' class='editmod'>    
             <label for="edtIstop" class="editinputname" ><?php echo $lang['msg']['top']?></label>
-            <input id="IsTop" name="IsTop" style="" type="text" value="<?php echo (boolean)$article->IsTop;?>" class="checkbox"/>
+            <input id="IsTop" name="IsTop" style="" type="text" value="<?php echo (int)$article->IsTop;?>" class="checkbox"/>
           </div><?php }?>
 
           <!-- )Istop --> 
-	  
+
           <!-- IsLock( -->
 
           <div id='islock' class='editmod'>
-            
             <label for="edtIslock" class='editinputname'><?php echo $lang['msg']['disable_comment']?></label>
-             <input id="IsLock" name="IsLock" style="" type="text" value="<?php echo (boolean)$article->IsLock;?>" class="checkbox"/>
-         </div>
+             <input id="IsLock" name="IsLock" style="" type="text" value="<?php echo (int)$article->IsLock;?>" class="checkbox"/>
+          </div>
           <!-- )IsLock --> 
 
-          <!-- Navbar( -->
-          
+          <!-- Navbar( --><?php if($ispage){?>
+          <div id='AddNavbar' class='editmod'>
+          <label for="edtAddNavbar" class='editinputname'><?php echo $lang['msg']['add_to_navbar']?></label>
+          <input type="text" name="AddNavbar" id="edtAddNavbar" value="0" class="checkbox" />
+          </div><?php }?>
           <!-- )Navbar --> 
           
           <!-- 3号输出接口 -->
@@ -218,7 +230,7 @@ window.onbeforeunload = function(){
 
 
 function checkArticleInfo(){
-  document.getElementById("edit").action="../cmd.php?act=ArticlePst";
+  document.getElementById("edit").action="<?php echo $ispage?'../cmd.php?act=PagePst':'../cmd.php?act=ArticlePst'?>";
 
   if(!editor_api.editor.content.get()){
     alert('<?php echo $zbp->lang['error'][70];?>');
@@ -277,7 +289,7 @@ $('#showtags').click(function (event) {
   var offset = $(event.target).offset();  
   $('#ulTag').css({ top: offset.top + $(event.target).height()+20+ "px", left: offset.left});  
   $('#ulTag').slideDown("fast");    
-  if(tag_loaded==false){$.getScript('../function/c_admin_js.asp?act=tags');tag_loaded=true;}
+  if(tag_loaded==false){$.getScript('../cmd.php?act=misc&amp;type=');tag_loaded=true;}
 });  
 
 
