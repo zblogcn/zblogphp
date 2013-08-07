@@ -113,9 +113,9 @@ CREATE TABLE %pre%module (
 CREATE TABLE %pre%tag (
   tag_ID integer primary key autoincrement,
   tag_Name varchar(255) NOT NULL DEFAULT '',
-  tag_Alias varchar(255) NOT NULL DEFAULT '',
   tag_Order integer NOT NULL DEFAULT 0,
   tag_Count integer NOT NULL DEFAULT 0,
+  tag_Alias varchar(255) NOT NULL DEFAULT '',  
   tag_Intro Meta text NOT NULL DEFAULT '',
   tag_Template varchar(50) NOT NULL DEFAULT '',
   tag_Meta Meta text NOT NULL DEFAULT ''

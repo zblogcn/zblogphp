@@ -50,7 +50,7 @@ $p .='<option value="0">' . $lang['msg']['none'] . '</option>';
 	  <p>
 		<span class="title"><?php echo $lang['msg']['template']?>:</span><br />
 		<select class="edit" size="1" name="Template" id="cmbTemplate">
-<?php echo $zbp->CreateOptoinsOfTemplate('default');?>
+<?php echo $zbp->CreateOptoinsOfTemplate($tag->Template);?>
 		</select><input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $tag->Template;?>" />
 	  </p>
 	  <p>

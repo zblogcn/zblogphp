@@ -91,7 +91,7 @@ abstract class Base
 		$keyvalue=array_fill_keys($keys, '');
 
 		foreach ($this->datainfo as $key => $value) {
-			$keyvalue[$value[0]]=$this->$key;
+			$keyvalue[$value[0]]=$this->Data[$key];
 		}
 		array_shift($keyvalue);
 
@@ -107,6 +107,8 @@ abstract class Base
 
 	function Del(){
 		global $zbp;
+		$sql = $zbp->db->sql->Delete(get_class($this),array(array('=',$this->datainfo['ID'][0],$this->ID)));
+		$zbp->db->Delete($sql);
 	}
 }
 

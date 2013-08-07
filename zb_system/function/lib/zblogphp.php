@@ -42,6 +42,7 @@ class ZBlogPHP{
 	public $table=null;
 	public $datainfo=null;
 
+	public $isinitialize=false;
 	public $isconnect=false;
 	public $isdelay_savecache=false;	
 
@@ -179,6 +180,9 @@ class ZBlogPHP{
 		$this->template->path = $this->path . 'zb_users/template/';
 		$this->template->tags = &$this->templatetags;
 
+
+		$this->isinitialize=true;
+
 	}
 
 
@@ -246,35 +250,34 @@ class ZBlogPHP{
 ################################################################################################################
 #Cache相关
 
+	public function HasCache($name){
+		if(array_key_exists($name,$this->cache)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 	public function GetCache($name){
-		if(array_key_exists($name,$this->cache))
-		{
+		if(array_key_exists($name,$this->cache)){
 			return $this->cache[$name];
 		}
 	}
 
-	public function GetCacheValue($name){
-		if(array_key_exists($name,$this->cache))
-		{
-
-			return $this->cache[$name]['value'];
-		}
-	}
-
 	public function GetCacheTime($name){
-		if(array_key_exists($name,$this->cache))
-		{
-			return $this->cache[$name]['time'];
+		if(array_key_exists($name,$this->cache)){
+			return $this->cache[$name . '_time'];
 		}
 	}
 
 	public function SetCache($name,$value){
-		$time=time();
-		$this->cache[$name]=array('value'=>$value,'time'=>$time);
+		$this->cache[$name]=$value;
+		$this->cache[$name . '_time']=time();		
 	}
 
 	public function DelCache($name){
 		unset($this->cache[$name]);
+		unset($this->cache[$name . '_time']);
 	}
 
 	public function SaveCache($delay=false){
@@ -467,6 +470,7 @@ class ZBlogPHP{
 		$sql = $this->db->sql->Delete('Config',array(array('=','conf_Name',$name)));
 		$this->db->Delete($sql);
 	}
+
 	public function SaveConfig($name){
 		if(!isset($this->configs[$name]))return false;
 
@@ -817,7 +821,7 @@ class ZBlogPHP{
 			if(substr($key,0,7)=='sidebar')continue;
 			if(substr($key,0,7)=='pagebar')continue;
 			if($default==$key){
-				$s .= '<option value="' . $key . '" selected="selected">' . $key . '</option>';
+				$s .= '<option value="' . $key . '" selected="selected">' . $key . ' ('.$this->lang['msg']['default_template'].')' . '</option>';
 			}else{
 				$s .= '<option value="' . $key . '" >' . $key . '</option>';
 			}
@@ -825,6 +829,15 @@ class ZBlogPHP{
 
 		return $s;
 	}
+
+
+	function AddItemToNavbar($type,$id,$url,$name){
+
+	}
+	function DelItemToNavbar($type,$id){
+
+	}
+
 
 }
 

@@ -41,7 +41,15 @@ class Category extends Base{
 		}
 		if ($name=='SymbolName') {
 			return null;
-		}			
+		}
+		if ($name=='Template') {
+			if($value==$zbp->option['ZC_CATALOG_DEFAULT_TEMPLATE'])$value='';
+			return $this->Data[$name]  =  $value;
+		}
+		if ($name=='Template') {
+			if($value==$zbp->option['ZC_ARTICLE_DEFAULT_TEMPLATE'])$value='';
+			return $this->Data[$name]  =  $value;
+		}
 		parent::__set($name, $value);
 	}
 
@@ -88,6 +96,16 @@ class Category extends Base{
 		}
 		if ($name=='SymbolName') {
 			return $this->Symbol . htmlspecialchars($this->Name);
+		}
+		if ($name=='Template') {
+			$value=$this->Data[$name];
+			if($value=='')$value=$zbp->option['ZC_CATALOG_DEFAULT_TEMPLATE'];
+			return $value;
+		}
+		if ($name=='LogTemplate') {
+			$value=$this->Data[$name];
+			if($value=='')$value=$zbp->option['ZC_ARTICLE_DEFAULT_TEMPLATE'];
+			return $value;
 		}
 		return parent::__get($name);
 	}

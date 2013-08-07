@@ -43,6 +43,7 @@ return array(
 	'welcome'=>'欢迎',
 	'logout'=>'退出登录',	
 	'view_permissions'=>'查看权限',
+	'parent_category'=>'父分类',
 	'password'=>'密码',
 	'username'=>'用户名',
 	'return_to_site'=>'返回网站',
@@ -102,6 +103,7 @@ return array(
 	'help_generate_summary'=>'在正文插入分隔符&quot;&lt;hr class=&quot;more&quot; /&gt;&quot;可以让系统识别摘要内容。如需另外指定摘要内容，请点击',	
 	'use_commas_to_separate'=>'逗号分割',
 	'show_common_tags'=>'显示常用标签',
+	'category_aritles_default_template'=>'目录内文章的默认模板',
 	'confirm_operating'=>'单击“确定”继续。单击“取消”停止。',
 	'batch_operation'=>'批量操作',
 	'batch_operation_in_progress'=>'批量操作进行中...',
@@ -253,6 +255,7 @@ return array(
 '69'=>'SQLite3数据库打不开啦！',
 '70'=>'正文不能为空！',
 '71'=>'当前的编辑内容还未保存！',
+'72'=>'名称不能为空！',
 ),
 
 
