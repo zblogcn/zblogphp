@@ -32,6 +32,28 @@ class Post extends Base{
 		return date($s,$this->PostTime);
 	}
 
+	function TagsToNameString(){
+		global $zbp;
+		$s=$this->Tag;
+		if($s=='')return array();
+		$s=str_replace('}{', '|', $s);
+		$s=str_replace('{', '', $s);
+		$s=str_replace('}', '', $s);
+		$b=explode('|', $s);
+		$b=array_unique($b);
+
+		$a=$zbp->LoadTagsByIDString($this->Tag);
+		$s='';
+		$c='';
+		foreach ($b as $key) {
+			if(isset($zbp->tags[$key])){
+				$c[] = $zbp->tags[$key]->Name;
+			}
+		}
+		if(!$c)return '';
+		$s=implode(',', $c);
+		return $s;
+	}
 
 	public function __set($name, $value) 
 	{
@@ -71,7 +93,7 @@ class Post extends Base{
 				return $zbp->host . 'view.php?id=' . $this->ID ;
 				break;
 			case 'Tags':
-				return $zbp->LoadTagsByString($this->Tag);
+				return $zbp->LoadTagsByIDString($this->Tag);
 				break;
 			case 'Template':
 				$value=$this->Data[$name];

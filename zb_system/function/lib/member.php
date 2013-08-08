@@ -38,6 +38,10 @@ class Member extends Base{
 		if ($name=='LevelName') {
 			return null;
 		}
+		if ($name=='Template') {
+			if($value==$zbp->option['ZC_CATALOG_DEFAULT_TEMPLATE'])$value='';
+			return $this->Data[$name]  =  $value;
+		}
 		parent::__set($name, $value);
 	}
 
@@ -52,6 +56,11 @@ class Member extends Base{
 		}
 		if ($name=='Meta') {
 			return $this->Metas->serialize();
+		}
+		if ($name=='Template') {
+			$value=$this->Data[$name];
+			if($value=='')$value=$zbp->option['ZC_CATALOG_DEFAULT_TEMPLATE'];
+			return $value;
 		}
 		return parent::__get($name);
 	}

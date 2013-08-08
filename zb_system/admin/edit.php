@@ -74,7 +74,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 	    <!-- tags( --><?php if(!$ispage){?>
       <div id='tags' class='editmod'><label  for="edtTag"  class='editinputname'><?php echo $lang['msg']['tags']?></label>
-        <input type="text"  name="Tag" id="edtTag" value="<?php echo $article->Tag;?>" />
+        <input type="text"  name="Tag" id="edtTag" value="<?php echo $article->TagsToNameString();?>" />
         (<?php echo $lang['msg']['use_commas_to_separate']?>) <a href="#" id="showtags"><?php echo $lang['msg']['show_common_tags']?></a></div>
       <!-- Tags -->
       <div id="ulTag" style="display:none;">
@@ -127,7 +127,7 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
           
           <!-- level -->
           <div id='level' class='editmod'> <label for="cmbArticleStatus" class="editinputname" ><?php echo $lang['msg']['status']?></label>
-            <select class="edit" style="width:180px;" size="1" name="Status" id="cmbArticleLevel" onChange="edtLevel.value=this.options[this.selectedIndex].value">
+            <select class="edit" style="width:180px;" size="1" name="Status" id="cmbArticleStatus" onChange="edtLevel.value=this.options[this.selectedIndex].value">
               <option value="0" ><?php echo $lang['post_status_name']['0']?></option><option value="1" ><?php echo $lang['post_status_name']['1']?></option><option value="2" ><?php echo $lang['post_status_name']['2']?></option>
             </select>
           </div>
@@ -156,7 +156,7 @@ echo '<option value="'. $value->ID .'" '. ($article->AuthorID==$value->ID?'selec
           <!-- Istop( --><?php if(!$ispage){?>
           <div id='istop' class='editmod'>    
             <label for="edtIstop" class="editinputname" ><?php echo $lang['msg']['top']?></label>
-            <input id="IsTop" name="IsTop" style="" type="text" value="<?php echo (int)$article->IsTop;?>" class="checkbox"/>
+            <input id="edtIstop" name="IsTop" style="" type="text" value="<?php echo (int)$article->IsTop;?>" class="checkbox"/>
           </div><?php }?>
 
           <!-- )Istop --> 
@@ -165,7 +165,7 @@ echo '<option value="'. $value->ID .'" '. ($article->AuthorID==$value->ID?'selec
 
           <div id='islock' class='editmod'>
             <label for="edtIslock" class='editinputname'><?php echo $lang['msg']['disable_comment']?></label>
-             <input id="IsLock" name="IsLock" style="" type="text" value="<?php echo (int)$article->IsLock;?>" class="checkbox"/>
+             <input id="edtIslock" name="IsLock" style="" type="text" value="<?php echo (int)$article->IsLock;?>" class="checkbox"/>
           </div>
           <!-- )IsLock --> 
 
@@ -289,7 +289,7 @@ $('#showtags').click(function (event) {
   var offset = $(event.target).offset();  
   $('#ulTag').css({ top: offset.top + $(event.target).height()+20+ "px", left: offset.left});  
   $('#ulTag').slideDown("fast");    
-  if(tag_loaded==false){$.getScript('../cmd.php?act=misc&amp;type=');tag_loaded=true;}
+  if(tag_loaded==false){$.getScript('../cmd.php?act=misc&type=showtags');tag_loaded=true;}
 });  
 
 

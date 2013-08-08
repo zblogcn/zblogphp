@@ -68,7 +68,7 @@ if($option['ZC_DATABASE_TYPE']){
 }
 
 #加载对象
-$lib_array = array('base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','app');
+$lib_array = array('base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','app','rss2');
 foreach ($lib_array as $f) {
 	require $blogpath.'zb_system/function/lib/' . $f . '.php';
 }
@@ -96,9 +96,9 @@ $actions=array(
 	'ArticlePst'=>4,
 	'ArticleDel'=>4,
 
-	'PageEdt'=>4,
-	'PagePst'=>4,
-	'PageDel'=>4,
+	'PageEdt'=>2,
+	'PagePst'=>2,
+	'PageDel'=>2,
 
 	'CategoryEdt'=>2,
 	'CategoryPst'=>2,
@@ -111,10 +111,12 @@ $actions=array(
 	'MemberEdt'=>5,
 	'MemberPst'=>5,
 	'MemberDel'=>1,
+	'MemberNew'=>1,	
 	
 	'TagEdt'=>2,
 	'TagPst'=>2,
-	'TagDel'=>2,	
+	'TagDel'=>2,
+	'TagNew'=>2,
 
 	'PluginEnable'=>1,
 	'PluginDisable'=>1,
@@ -129,7 +131,7 @@ $actions=array(
 	'CategoryMng'=>2,
 	'SettingMng'=>1,
 	'TagMng'=>2,
-	'CommentMng'=>4,
+	'CommentMng'=>5,
 	'UploadMng'=>2,
 	'MemberMng'=>5,
 	'ThemeMng'=>1,

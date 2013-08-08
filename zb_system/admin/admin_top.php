@@ -2,7 +2,7 @@
 <body>
 <header>
     <div class="logo"><a href="http://www.rainbowsoft.org/" title="<?php echo $option['ZC_BLOG_PRODUCT'];?>" target="_blank"><img src="<?php echo $bloghost?>zb_system/image/admin/logo.png" alt="Z-Blog"/></a></div>
-    <div class="user"> <a href="<?php echo $bloghost?>zb_system/cmd.php?act=UserEdt&amp;id=<?php echo $zbp->user->ID?>" title="<?php echo $lang['msg']['edit']?>"><img src="<?php echo $bloghost?>zb_system/image/admin/avatar.png" width="40" height="40" id="avatar" alt="Avatar" /></a>
+    <div class="user"> <a href="<?php echo $bloghost?>zb_system/cmd.php?act=MemberEdt&amp;id=<?php echo $zbp->user->ID?>" title="<?php echo $lang['msg']['edit']?>"><img src="<?php echo $bloghost?>zb_system/image/admin/avatar.png" width="40" height="40" id="avatar" alt="Avatar" /></a>
       <div class="username"><?php echo $zbp->user->LevelName?>：<?php echo $zbp->user->Name?></div>
       <div class="userbtn"><a class="profile" href="<?php echo $bloghost?>" title="" target="_blank"><?php echo $lang['msg']['return_to_site']?></a>&nbsp;&nbsp;<a class="logout" href="<?php echo $bloghost?>zb_system/cmd.php?act=logout" title=""><?php echo $lang['msg']['logout']?></a></div>
     </div>
@@ -38,4 +38,5 @@ if(GetVars('batch','COOKIE')>0){
 	setcookie("batchorder", 0);
 }
 
+$zbp->GetHint();
 ?>

@@ -11,16 +11,16 @@ ob_clean();
 
 switch (GetVars('type','GET')) {
 	case 'statistic':
-		if (!$zbp->CheckRights('admin')) {throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights('root')) {Http404();throw new Exception($lang['error'][6]);}
 		misc_statistic();
 		break;
 	case 'updateinfo':
-		if (!$zbp->CheckRights('admin')) {throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights('root')) {Http404();throw new Exception($lang['error'][6]);}
 		misc_updateinfo();
 		break;
-	case 'commontags':
-		if (!$zbp->CheckRights('ArticleEdt')) {throw new Exception($lang['error'][6]);}
-		misc_commontags();
+	case 'showtags':
+		if (!$zbp->CheckRights('ArticleEdt')) {Http404();throw new Exception($lang['error'][6]);}
+		misc_showtags();
 		break;
 	case 'vrs':
 		if (!$zbp->CheckRights('misc')) {throw new Exception($lang['error'][6]);}
@@ -91,7 +91,29 @@ function misc_statistic(){
 }
 
 
-function misc_commontags(){
+function misc_showtags(){
+	global $zbp;
+
+	header('Content-Type: application/x-javascript; Charset=utf8');
+
+echo '$("#ajaxtags").html("';
+
+
+$array=$zbp->GetTagList(
+	null,
+	null,
+	array('tag_Count'=>'DESC','tag_ID'=>'ASC'),
+	array(100),
+	null
+);
+if(count($array)>0){
+	$t=array();
+	foreach ($array as $tag) {
+		echo '<a href=\"#\">' . $tag->Name . '</a>';
+	}
+}
+
+echo '");$("#ulTag").tagTo("#edtTag");';
 
 }
 
@@ -142,7 +164,7 @@ foreach ($GLOBALS['actions']  as $key => $value) {
 function misc_autoinfo(){
 	global $zbp;
 
-	header('Content-Type: application/x-javascript; Charset=utf8');  
+	header('Content-Type: application/x-javascript; Charset=utf8');
 
 	echo "$('#inpName').val('" . $zbp->user->Name . "');";
 	echo "$('#inpEmail').val('" . $zbp->user->Email . "');";

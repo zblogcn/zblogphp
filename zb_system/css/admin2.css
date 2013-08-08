@@ -362,20 +362,16 @@ div.hint font{
 	color:black;
 }
 
-div.hint p.hint_green{
+div.hint p.hint_good{
 	background:#d5ffce url(../image/admin/ok.png) no-repeat 8px center;
 }
 
-div.hint p.hint_red{
+div.hint p.hint_bad{
 	background:#ffcece url(../image/admin/exclamation.png) no-repeat 8px center;
 }
 
-div.hint p.hint_blue{
+div.hint p.hint_tips{
 	background:#dbe3ff url(../image/admin/information.png) no-repeat 8px center;
-}
-
-div.hint p.hint_teal{
-	background:#fffbcc url(../image/admin/error.png) no-repeat 8px center;
 }
 
 
