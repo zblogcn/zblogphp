@@ -22,8 +22,6 @@ class Counter extends Base{
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->ID = 0;
-
 	}
 
 

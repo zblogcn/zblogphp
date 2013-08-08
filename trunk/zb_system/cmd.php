@@ -5,7 +5,7 @@ $zbp->Initialize();
 
 $action=GetVars('act','GET');
 
-if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
+if(!$zbp->CheckRights($action)){throw new Exception($lang['error'][6]);}
 
 switch ($action) {
 	case 'login':
@@ -33,6 +33,7 @@ switch ($action) {
 		break;
 	case 'ArticleDel':
 		DelArticle();
+		$zbp->SetHint('good');
 		redirect('cmd.php?act=ArticleMng');
 		break;
 	case 'ArticleMng':
@@ -40,6 +41,7 @@ switch ($action) {
 		break;
 	case 'ArticlePst':
 		PostArticle();
+		$zbp->SetHint('good');
 		redirect('cmd.php?act=ArticleMng');
 		break;
 	case 'PageEdt':
@@ -47,6 +49,7 @@ switch ($action) {
 		break;
 	case 'PageDel':
 		DelPage();
+		$zbp->SetHint('good');
 		redirect('cmd.php?act=PageMng');
 		break;
 	case 'PageMng':
@@ -54,6 +57,7 @@ switch ($action) {
 		break;
 	case 'PagePst':
 		PostPage();
+		$zbp->SetHint('good');
 		redirect('cmd.php?act=PageMng');
 		break;
 	case 'CategoryMng':
@@ -64,6 +68,7 @@ switch ($action) {
 		break;
 	case 'CategoryPst':
 		PostCategory();
+		$zbp->SetHint('good');
 		redirect('cmd.php?act=CategoryMng');
 		break;
 	case 'CommentMng':
@@ -78,6 +83,11 @@ switch ($action) {
 	case 'MemberNew':
 		redirect('admin/member_edit.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
+	case 'MemberPst':
+		PostMember();
+		$zbp->SetHint('good');
+		redirect('cmd.php?act=MemberMng');
+		break;
 	case 'UploadMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
@@ -89,10 +99,12 @@ switch ($action) {
 		break;
 	case 'TagPst':
 		PostTag();
+		$zbp->SetHint('good');
 		redirect('cmd.php?act=TagMng');
 		break;
 	case 'TagDel':
 		DelTag();
+		$zbp->SetHint('good');
 		redirect('cmd.php?act=TagMng');
 		break;
 	case 'PluginMng':

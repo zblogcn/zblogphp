@@ -18,17 +18,17 @@ $zbp->Initialize();
 function article(){
 	for ($i=0; $i < 10000; $i++) { 
 		$a=new Post();
-		$a->CateID=rand(1,100);
+		$a->CateID=mt_rand(1,100);
 		$a->AuthorID=1;
-		$a->Tag=getTagStr(rand(0,19));
+		$a->Tag=getTagStr(mt_rand(0,19));
 		$a->Status=ZC_POST_STATUS_PUBLIC;
 		$a->Type=ZC_POST_TYPE_ARTICLE;
 		$a->Alias='';
 		$a->IsTop=false;
 		$a->IsLock=false;
-		$a->Title=getRandStr(rand(8,14));
-		$a->Intro=getRandStr(rand(50,150)) . GetGuid();
-		$a->Content=getRandStr(rand(200,300)) . GetGuid() . '<br/>' . GetGuid();
+		$a->Title=getRandStr(mt_rand(8,14));
+		$a->Intro=getRandStr(mt_rand(50,150)) . GetGuid();
+		$a->Content=getRandStr(mt_rand(200,300)) . GetGuid() . '<br/>' . GetGuid();
 		$a->IP=GetGuestIP();
 		$a->PostTime=time();
 		$a->CommNums=0;
@@ -50,9 +50,9 @@ function page(){
 		$a->Alias='';
 		$a->IsTop=false;
 		$a->IsLock=false;
-		$a->Title=getRandStr(rand(6,10));
+		$a->Title=getRandStr(mt_rand(6,10));
 		$a->Intro='';
-		$a->Content=getRandStr(rand(200,300)) . GetGuid() . '<br/>' . GetGuid();
+		$a->Content=getRandStr(mt_rand(200,300)) . GetGuid() . '<br/>' . GetGuid();
 		$a->IP=GetGuestIP();
 		$a->PostTime=time();
 		$a->CommNums=0;
@@ -66,7 +66,7 @@ function page(){
 function cate(){
 	for ($i=0; $i < 100; $i++) { 
 		$cate = new Category();
-		$cate->Name=getRandStr(rand(2,4));
+		$cate->Name=getRandStr(mt_rand(2,4));
 		$cate->Save();
   	}
 }
@@ -74,13 +74,13 @@ function cate(){
 function tag(){
 	for ($i=0; $i < 5000; $i++) { 
 		$tag = new Tag();
-		$tag->Name=getRandStr(rand(2,5));
+		$tag->Name=getRandStr(mt_rand(2,5));
 		$tag->Save();
   	}
 }
 
 function getChineseChar2() {
- $unidec = rand(hexdec('4e00'), hexdec('9fa5'));
+ $unidec = mt_rand(hexdec('4e00'), hexdec('9fa5'));
  $unichr = '&#' . $unidec . ';';
  $zhcnchr = mb_convert_encoding($unichr, "UTF-8", "HTML-ENTITIES");
  return $zhcnchr;
@@ -88,8 +88,8 @@ function getChineseChar2() {
 
 function getChineseChar() {
 
-$i= rand(0xb0, 0xd7);
-$j= rand(0xa1, 0xfe);
+$i= mt_rand(0xb0, 0xd7);
+$j= mt_rand(0xa1, 0xfe);
 $s=  chr($i).chr($j);
 $s=@iconv('GB2312', 'UTF-8//IGNORE', $s);
 
@@ -109,7 +109,7 @@ function getRandStr($len) {
 function getTagStr($tagcount) {
  $str = '';
  for($i=0;$i<$tagcount;$i++) {
-  $str = $str . '{' . rand(1,5000) . '}';
+  $str = $str . '{' . mt_rand(1,5000) . '}';
  }
  return $str;
 
@@ -119,7 +119,7 @@ function getTagStr($tagcount) {
 
 
 
-
+/*
 
 echo "生成分类!<br/>";
 cate();
@@ -133,7 +133,7 @@ page();
 echo "tag!<br/>";
 tag();
 
-/*
+
 
 
 $zbp->LoadTags();
@@ -146,8 +146,8 @@ foreach ($zbp->categorys as $key => $value) {
 	$value->Count=$zbp->CountCategory($key);
 	$value->Save();
 }
-*/
 
+*/
 
 $zbp->Terminate();
 

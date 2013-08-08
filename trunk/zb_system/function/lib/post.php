@@ -35,7 +35,7 @@ class Post extends Base{
 	function TagsToNameString(){
 		global $zbp;
 		$s=$this->Tag;
-		if($s=='')return array();
+		if($s=='')return '';
 		$s=str_replace('}{', '|', $s);
 		$s=str_replace('{', '', $s);
 		$s=str_replace('}', '', $s);

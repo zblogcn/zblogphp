@@ -190,27 +190,31 @@ function Admin_ArticleMng(){
 	<th></th>
 	</tr>';
 
-$p=new Pagebar();
+$p=new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&page=%page%}{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}');
 $p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=$zbp->pagebarcount;
-$p->UrlRule='{%host%}zb_system/cmd.php?act=ArticleMng&amp;page={%page%}';
+
+$p->UrlRule->Rules['{%category%}']=GetVars('category');
+$p->UrlRule->Rules['{%search%}']=urlencode(GetVars('search'));
+$p->UrlRule->Rules['{%status%}']=GetVars('status');
+$p->UrlRule->Rules['{%istop%}']=(boolean)GetVars('istop');
 
 $w=array();
 if(!$zbp->CheckRights('ArticleAll')){
 	$w[]=array('=','log_AuthID',$zbp->user->ID);
 }
-if(GetVars('search','POST')){
-	$w[]=array('search','log_Content','log_Intro','log_Title',GetVars('search','POST'));
+if(GetVars('search')){
+	$w[]=array('search','log_Content','log_Intro','log_Title',GetVars('search'));
 }
-if(GetVars('istop','POST')){
+if(GetVars('istop')){
 	$w[]=array('=','log_Istop','1');
 }
-if(GetVars('status','POST')){
-	$w[]=array('=','log_Status',GetVars('status','POST'));
+if(GetVars('status')){
+	$w[]=array('=','log_Status',GetVars('status'));
 }
-if(GetVars('category','POST')){
-	$w[]=array('=','log_CateID',GetVars('category','POST'));
+if(GetVars('category')){
+	$w[]=array('=','log_CateID',GetVars('category'));
 }
 
 $array=$zbp->GetArticleList(
@@ -274,11 +278,10 @@ function Admin_PageMng(){
 	<th></th>
 	</tr>';
 
-$p=new Pagebar();
+$p=new Pagebar('{%host%}zb_system/cmd.php?act=PageMng{&page=%page%}');
 $p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=$zbp->pagebarcount;
-$p->UrlRule='{%host%}zb_system/cmd.php?act=PageMng&amp;page={%page%}';
 
 $array=$zbp->GetPageList(
 	'',
@@ -400,11 +403,12 @@ function Admin_MemberMng(){
 	<th></th>
 	</tr>';
 
-$p=new Pagebar();
+$p=new Pagebar('{%host%}zb_system/cmd.php?act=MemberMng{&page=%page%}');
 $p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=$zbp->pagebarcount;
-$p->UrlRule='{%host%}zb_system/cmd.php?act=MemberMng&amp;page={%page%}';
+
+
 $w=array();
 if(!$zbp->CheckRights('MemberAll')){
 	$w[]=array('=','mem_ID',$zbp->user->ID);
@@ -484,11 +488,10 @@ function Admin_TagMng(){
 	<th></th>
 	</tr>';
 
-$p=new Pagebar();
+$p=new Pagebar('{%host%}zb_system/cmd.php?act=TagMng{&page=%page%}');
 $p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=$zbp->pagebarcount;
-$p->UrlRule='{%host%}zb_system/cmd.php?act=TagMng&amp;type=1&amp;page={%page%}';
 
 $array=$zbp->GetTagList(
 	'',

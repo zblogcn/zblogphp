@@ -21,9 +21,7 @@ require $blogpath . 'zb_system/admin/admin_left.php';
 <section class="main">
 <?php
 
-if(GetVars('batch','COOKIE')>0){
-	if(GetVars('batch','COOKIE') == GetVars('batchorder','COOKIE')){
-		#Session("batchtime")=0
+if(GetVars('batch','COOKIE')){
 ?>
 <div id="batch">
 <iframe style="width:20px;height:20px;" frameborder="0" scrolling="no" src="<?php echo $bloghost?>zb_system/cmd.php?act=batch"></iframe><p><?php echo $lang['msg']['batch_operation']?>...</p>
@@ -31,11 +29,8 @@ if(GetVars('batch','COOKIE')>0){
 <?php
 	}else{
 ?>
-<div id="batch"><img src="<?php echo $bloghost?>zb_system/image/admin/error.png" width="16"/><p><?php echo $lang['msg']['previous_operation_not_finished']?></p></div>
+<!--<div id="batch"><img src="<?php echo $bloghost?>zb_system/image/admin/error.png" width="16"/><p><?php echo $lang['msg']['previous_operation_not_finished']?></p></div>-->
 <?php
-	}
-}else{
-	setcookie("batchorder", 0);
 }
 
 $zbp->GetHint();

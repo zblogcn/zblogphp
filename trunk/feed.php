@@ -10,6 +10,10 @@ require './zb_system/function/c_system_base.php';
 
 $zbp->Initialize();
 
+$action='feed';
+
+if(!$zbp->CheckRights($action)){Http404();die();}
+
 $rss2 = new Rss2($zbp->name,$zbp->host,$zbp->subname);
 
 $articles=$zbp->GetArticleList(

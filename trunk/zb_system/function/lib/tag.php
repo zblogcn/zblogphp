@@ -22,8 +22,6 @@ class Tag extends Base{
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->ID = 0;
-
 	}
 
 	public function __set($name, $value)

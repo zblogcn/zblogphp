@@ -51,7 +51,7 @@ $p .='<option value="0">' . $lang['msg']['none'] . '</option>';
 		<span class="title"><?php echo $lang['msg']['template']?>:</span><br />
 		<select class="edit" size="1" name="Template" id="cmbTemplate">
 <?php echo $zbp->CreateOptoinsOfTemplate($tag->Template);?>
-		</select><input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $tag->Template;?>" />
+		</select>
 	  </p>
 	  <p>
 		<label><span class="title"><?php echo $lang['msg']['add_to_navbar']?>:</span>   <input type="text" name="AddNavbar" id="edtAddNavbar" value="0" class="checkbox" /></label>

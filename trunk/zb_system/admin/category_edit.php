@@ -77,7 +77,7 @@ foreach ($zbp->categorysbyorder as $k => $v) {
 		<span class="title"><?php echo $lang['msg']['category_aritles_default_template']?>:</span><br />
 		<select class="edit" size="1" name="LogTemplate" id="cmbLogTemplate">
 <?php echo $zbp->CreateOptoinsOfTemplate($cate->LogTemplate);?>
-		</select><input type="hidden" name="edtLogTemplate" id="edtLogTemplate" value="<?php echo $cate->LogTemplate;?>" />
+		</select>
 	  </p>
 	  <p>
 		<label><span class="title"><?php echo $lang['msg']['add_to_navbar']?>:</span>   <input type="text" name="AddNavbar" id="edtAddNavbar" value="0" class="checkbox" /></label>
