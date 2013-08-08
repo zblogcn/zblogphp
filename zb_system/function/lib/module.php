@@ -22,8 +22,6 @@ class Module extends Base{
 			$this->Data[$key]=$value[3];
 		}
 
-		$this->ID = 0;
-		$this->Order = 0;
 	}
 
 

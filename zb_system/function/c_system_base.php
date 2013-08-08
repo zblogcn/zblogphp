@@ -68,7 +68,7 @@ if($option['ZC_DATABASE_TYPE']){
 }
 
 #加载对象
-$lib_array = array('base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','app','rss2');
+$lib_array = array('base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','urlrule','app','rss2');
 foreach ($lib_array as $f) {
 	require $blogpath.'zb_system/function/lib/' . $f . '.php';
 }
@@ -121,7 +121,7 @@ $actions=array(
 	'PluginEnable'=>1,
 	'PluginDisable'=>1,
 
-	'UploadSnd'=>3,
+	'UploadPst'=>3,
 	'UploadDel'=>3,
 
 	'ThemeSet'=>3,	

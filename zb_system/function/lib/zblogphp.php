@@ -740,7 +740,9 @@ class ZBlogPHP{
 		if(isset($this->members[$id])){
 			return $this->members[$id];
 		}else{
-			return new Member;
+			$m = new Member;
+			$m->Guid=GetGuid();
+			return $m;
 		}
 	}	
 
@@ -927,6 +929,16 @@ class ZBlogPHP{
 		return $s;
 	}
 
+	function CreateOptoinsOfMemberLevel($default){
+		$s=null;
+		if(!$this->CheckRights('MemberAll')){
+			return '<option value="' . $default . '" selected="selected" >' . $this->lang['user_level_name'][$default] . '</option>';;
+		}
+		for ($i=1; $i <7 ; $i++) {
+			$s .= '<option value="' . $i . '" ' . ($default==$i?'selected="selected"':'') . ' >' . $this->lang['user_level_name'][$i] . '</option>';
+		}
+		return $s;
+	}
 
 	function AddItemToNavbar($type,$id,$name,$url){
 
@@ -941,7 +953,7 @@ class ZBlogPHP{
 			if($signal=='good')$content=$this->lang['msg']['operation_succeed'];
 			if($signal=='bad')$content=$this->lang['msg']['operation_failed'];				
 		}
-		setcookie("hint_signal", $signal . '|' . $content,time()+2,$this->cookiespath);
+		setcookie("hint_signal", $signal . '|' . $content,time()+3600,$this->cookiespath);
 	}
 
 	function GetHint(){
@@ -949,6 +961,7 @@ class ZBlogPHP{
 		if($signal){
 			$a=explode('|', $signal);
 			echo "<div class='hint'><p class='hint hint_$a[0]'><font color='blue'>$a[1]</font></p></div>";
+			setcookie("hint_signal", '',time()-3600,$this->cookiespath);
 		}
 	}
 

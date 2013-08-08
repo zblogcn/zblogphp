@@ -7,9 +7,9 @@
  */
 
 /**
-* Pagebar
+* PageBar
 */
-class Pagebar
+class PageBar
 {
 #内容总数
 public $Count = 0;
@@ -31,9 +31,13 @@ public $PageLast  = 0;
 public $PagePrevious  = 0;
 public $PageNext  = 0;
 
-public $UrlRule  = '';
+public $UrlRule  = null;
 
-public function make(){
+public function __construct($url){
+	$this->UrlRule=new UrlRule($url);
+}
+
+public function Make(){
 	global $zbp;
 
 	$this->PageAll = ceil($this->Count / $this->PageCount);
@@ -46,9 +50,11 @@ public function make(){
 	$this->PageNext=$this->PageNow+1;
 	if($this->PageNext>$this->PageAll){$this->PageNext=$this->PageAll;}
 
-	$this->buttons['‹‹']=str_replace(array('{%host%}','{%page%}'), array($zbp->host,$this->PageFirst), $this->UrlRule);
+	$this->UrlRule->Rules['{%page%}']=$this->PageFirst;
+	$this->buttons['‹‹']=$this->UrlRule->Make();
 	if($this->PageNow <> $this->PageFirst){
-		$this->buttons['‹'] = str_replace(array('{%host%}','{%page%}'), array($zbp->host,$this->PagePrevious), $this->UrlRule);		
+		$this->UrlRule->Rules['{%page%}']=$this->PagePrevious;
+		$this->buttons['‹'] = $this->UrlRule->Make();
 	}
 
 	$j=$this->PageNow;
@@ -59,12 +65,16 @@ public function make(){
 
 	for ($i=$j; $i < $j+$this->PageBarCount; $i++) { 
 		if($i > $this->PageAll){break;}
-		$this->buttons[$i]=str_replace(array('{%host%}','{%page%}'), array($zbp->host,$i), $this->UrlRule);
+		$this->UrlRule->Rules['{%page%}']=$i;
+		$this->buttons[$i]=$this->UrlRule->Make();
 	}
 	if($this->PageNow <> $this->PageNext){
-		$this->buttons['›']=str_replace(array('{%host%}','{%page%}'), array($zbp->host,$this->PageNext), $this->UrlRule);
+		$this->UrlRule->Rules['{%page%}']=$this->PageNext;
+		$this->buttons['›']=$this->UrlRule->Make();
 	}
-	$this->buttons['››']=str_replace(array('{%host%}','{%page%}'), array($zbp->host,$this->PageLast), $this->UrlRule);
+
+	$this->UrlRule->Rules['{%page%}']=$this->PageLast;
+	$this->buttons['››']=$this->UrlRule->Make();
 
 }
 

@@ -37,6 +37,13 @@ $member=$zbp->GetMemberByID($memberid);
   <div id="divMain2" class="edit tag_edit">
 	<form id="edit" name="edit" method="post" action="#">
 	  <input id="edtID" name="ID" type="hidden" value="<?php echo $member->ID;?>" />
+	  <input id="edtGuid" name="Guid" type="hidden" value="<?php echo $member->Guid;?>" />	  
+	  <p>
+		<span class="title"><?php echo $lang['msg']['member_level']?>:</span><br />
+		<select class="edit" size="1" name="Level" id="cmbTemplate">
+<?php echo $zbp->CreateOptoinsOfMemberLevel($member->Level);?>
+		</select>
+	  </p>	  
 	  <p>
 		<span class="title"><?php echo $lang['msg']['name']?>:</span><span class="star">(*)</span><br />
 		<input id="edtName" class="edit" size="40" name="Name" maxlength="50" type="text" value="<?php echo $member->Name;?>" />
@@ -46,10 +53,18 @@ $member=$zbp->GetMemberByID($memberid);
 		<input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $member->Alias;?>" />
 	  </p>
 	  <p>
+		<span class="title"><?php echo $lang['msg']['email']?>:</span><br />
+		<input id="edtEmail" class="edit" size="40" name="Email" type="text" value="<?php echo $member->Email;?>" />
+	  </p>
+	  <p>
+		<span class="title"><?php echo $lang['msg']['homepage']?>:</span><br />
+		<input id="edtHomePage" class="edit" size="40" name="HomePage" type="text" value="<?php echo $member->HomePage;?>" />
+	  </p>
+	  <p>
 		<span class="title"><?php echo $lang['msg']['template']?>:</span><br />
 		<select class="edit" size="1" name="Template" id="cmbTemplate">
 <?php echo $zbp->CreateOptoinsOfTemplate($member->Template);?>
-		</select><input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $member->Template;?>" />
+		</select>
 	  </p>
 	  <p>
 		<input type="submit" class="button" value="提交" id="btnPost" onclick="return checkCateInfo();" />
@@ -57,7 +72,7 @@ $member=$zbp->GetMemberByID($memberid);
 	</form>
 	<script type="text/javascript">
 function checkCateInfo(){
-  document.getElementById("edit").action="../cmd.php?act=TagPst";
+  document.getElementById("edit").action="../cmd.php?act=MemberPst";
 
   if(!$("#edtName").val()){
     alert("<?php echo $lang['error']['72']?>");

@@ -30,11 +30,11 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	}
 
 
-	$pagebar=new Pagebar();
+	$pagebar=new Pagebar('{%host%}{?page=%page%}');
 	$pagebar->PageCount=5;
 	$pagebar->PageNow=$page;
 	$pagebar->PageBarCount=10;
-	$pagebar->UrlRule='{%host%}?page={%page%}';
+	$pagebar->UrlRule->Rules['{%page%}']=$page;
 
 	$articles=$zbp->GetArticleList(
 		array('*'),
@@ -274,6 +274,26 @@ function DelTag(){
 
 }
 
+
+function PostMember(){
+	global $zbp;
+	if(!isset($_POST['ID']))return ;
+
+	$mem = new Member();
+	if(GetVars('ID','POST') == 0){
+	}else{
+		$mem->LoadInfoByID(GetVars('ID','POST'));
+	}
+	if(isset($_POST['Name'])    ) $mem->Name     = GetVars('Name','POST');
+	if(isset($_POST['Alias'])   ) $mem->Alias    = GetVars('Alias','POST');
+	if(isset($_POST['Guid'])    ) $mem->Guid     = GetVars('Guid','POST');
+	if(isset($_POST['Email'])   ) $mem->Email    = GetVars('Email','POST');
+	if(isset($_POST['HomePage'])) $mem->HomePage = GetVars('HomePage','POST');
+	if(isset($_POST['Template'])) $mem->Template = GetVars('Template','POST');
+
+	$mem->Save();
+
+}
 
 
 function EnablePlugin($name){
