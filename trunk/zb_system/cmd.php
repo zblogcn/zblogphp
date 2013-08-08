@@ -72,6 +72,12 @@ switch ($action) {
 	case 'MemberMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
+	case 'MemberEdt':
+		redirect('admin/member_edit.php?' . GetVars('QUERY_STRING','SERVER'));
+		break;
+	case 'MemberNew':
+		redirect('admin/member_edit.php?' . GetVars('QUERY_STRING','SERVER'));
+		break;
 	case 'UploadMng':
 		redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
@@ -100,11 +106,13 @@ switch ($action) {
 		$f='UninstallPlugin_' . GetVars('name','GET');
 		if(function_exists($f)){$f();}
 		DisablePlugin(GetVars('name','GET'));
+		$zbp->SetHint('good');
 		redirect('cmd.php?act=PluginMng');
 		break;
 	case 'PluginEnable':
 		$install='&install=';
 		$install .= EnablePlugin(GetVars('name','GET'));
+		$zbp->SetHint('good');
 		redirect('cmd.php?act=PluginMng' . $install);
 		break;
 	case 'ThemeMng':
@@ -112,6 +120,7 @@ switch ($action) {
 		break;
 	case 'ThemeSet':
 		SetTheme(GetVars('theme','POST'),GetVars('style','POST'));
+		$zbp->SetHint('good');
 		redirect('cmd.php?act=ThemeMng');
 		break;		
 	case 'ModuleMng':

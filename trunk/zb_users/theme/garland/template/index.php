@@ -5,9 +5,11 @@
 {template:c_top}
 		<div id="mission"></div><ins></ins>
 {foreach $articles as $article}
-
+{if $article->IsTop}
+{template:post-istop}
+{else}
 {template:post-multi}
-
+{/if}
 {/foreach}
 		<div class="pager"><span class="pager-list">{template:pagebar}</span></div> 
 

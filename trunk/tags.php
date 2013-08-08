@@ -12,9 +12,6 @@ if (!$zbp->option['ZC_DATABASE_TYPE']) {Redirect('./zb_install');}
 
 $zbp->Initialize();
 
-global $zbp;
-
-
 $article = new Post;
 $article->Title='标签';
 $article->IsLock=true;

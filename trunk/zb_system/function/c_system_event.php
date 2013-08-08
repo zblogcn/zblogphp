@@ -13,10 +13,26 @@ function ViewList($page,$cate,$auth,$date,$tags){
 		$fpreturn=$fpname($page,$cate,$auth,$date,$tags);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
-	
+
+	$type='index';
+	$page=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+	$articles_top=array();
+	$articles=array();
+
+	if($type=='index' && $page==1){
+		$articles_top=$zbp->GetArticleList(
+			array('*'),
+			array(array('=','log_Istop',1),array('=','log_Status',0)),
+			array('log_PostTime'=>'DESC'),
+			null,
+			null
+		);
+	}
+
+
 	$pagebar=new Pagebar();
 	$pagebar->PageCount=5;
-	$pagebar->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+	$pagebar->PageNow=$page;
 	$pagebar->PageBarCount=10;
 	$pagebar->UrlRule='{%host%}?page={%page%}';
 
@@ -29,9 +45,10 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	);
 
 	$zbp->template->SetTags('title',$pagebar->PageNow);
-	$zbp->template->SetTags('articles',$articles);
+	$zbp->template->SetTags('articles',array_merge($articles_top,$articles));
 	$zbp->template->SetTags('pagebar',$pagebar);
-	$zbp->template->SetTags('type','index');
+	$zbp->template->SetTags('type',$type);
+	$zbp->template->SetTags('page',$page);
 
 	$zbp->template->display($zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']);
 
@@ -58,6 +75,7 @@ function ViewPost($id,$alias){
 	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);
 	$zbp->template->SetTags('type',$article->type=0?'article':'page');
+	$zbp->template->SetTags('page',1);
 
 	$zbp->template->display($zbp->option['ZC_ARTICLE_DEFAULT_TEMPLATE']);
 }
@@ -108,14 +126,20 @@ function PostArticle(){
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
 
-	$article = new Post();
+	if(isset($_POST['Tag'])){
+		$_POST['Tag']=$zbp->CheckUnsetTagAndConvertIDString($_POST['Tag']);
+	}
+	if(isset($_POST['PostTime'])){
+		$_POST['PostTime']=strtotime($_POST['PostTime']);
+	}	
 
+	$article = new Post();
 	if(GetVars('ID','POST') == 0){
 	}else{
 		$article->LoadInfoByID(GetVars('ID','POST'));
 	}
+	$article->Type = ZC_POST_TYPE_ARTICLE;
 
-	if(isset($_POST['Type'])    ) $article->Type     = GetVars('Type','POST');
 	if(isset($_POST['Title'])   ) $article->Title    = GetVars('Title','POST');
 	if(isset($_POST['Content']) ) $article->Content  = GetVars('Content','POST');
 	if(isset($_POST['Alias'])   ) $article->Alias    = GetVars('Alias','POST');
@@ -125,7 +149,7 @@ function PostArticle(){
 	if(isset($_POST['Template'])) $article->Template = GetVars('Template','POST');
 	if(isset($_POST['Status'])  ) $article->Status   = GetVars('Status','POST');
 	if(isset($_POST['AuthorID'])) $article->AuthorID = GetVars('AuthorID','POST');
-	if(isset($_POST['PostTime'])) $article->PostTime = strtotime(GetVars('PostTime','POST'));
+	if(isset($_POST['PostTime'])) $article->PostTime = GetVars('PostTime','POST');
 	if(isset($_POST['IsTop'])   ) $article->IsTop    = GetVars('IsTop','POST');
 	if(isset($_POST['IsLock'])  ) $article->IsLock   = GetVars('IsLock','POST');
 
@@ -147,7 +171,30 @@ function DelArticle(){
 
 
 function PostPage(){
-	PostArticle();
+	global $zbp;
+	if(!isset($_POST['ID']))return ;
+
+	if(isset($_POST['PostTime'])){
+		$_POST['PostTime']=strtotime($_POST['PostTime']);
+	}	
+
+	$article = new Post();
+	if(GetVars('ID','POST') == 0){
+	}else{
+		$article->LoadInfoByID(GetVars('ID','POST'));
+	}
+	$article->Type = ZC_POST_TYPE_PAGE;
+
+	if(isset($_POST['Title'])   ) $article->Title    = GetVars('Title','POST');
+	if(isset($_POST['Content']) ) $article->Content  = GetVars('Content','POST');
+	if(isset($_POST['Alias'])   ) $article->Alias    = GetVars('Alias','POST');
+	if(isset($_POST['Template'])) $article->Template = GetVars('Template','POST');
+	if(isset($_POST['Status'])  ) $article->Status   = GetVars('Status','POST');
+	if(isset($_POST['AuthorID'])) $article->AuthorID = GetVars('AuthorID','POST');
+	if(isset($_POST['PostTime'])) $article->PostTime = strtotime(GetVars('PostTime','POST'));
+	if(isset($_POST['IsLock'])  ) $article->IsLock   = GetVars('IsLock','POST');
+
+	$article->Save();
 }
 
 function DelPage(){

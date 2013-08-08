@@ -114,7 +114,6 @@ class ZBlogPHP{
 
 
 
-
 	function CheckRights($action){
 
 		if(is_int($action)){
@@ -133,14 +132,31 @@ class ZBlogPHP{
 
 	}
 
-
 	public function Verify(){
-		if (isset($this->membersbyname[GetVars('username','COOKIE')]))
-		{
-			$m=$this->membersbyname[GetVars('username','COOKIE')];
-			if($m->Password == md5(GetVars('password','COOKIE') . $m->Guid))
-			{
+		return $this->Verify_MD5(GetVars('username','COOKIE'),GetVars('password','COOKIE'));
+	}
+
+	public function Verify_MD5($name,$md5pw){
+		if (isset($this->membersbyname[$name])){
+			$m=$this->membersbyname[$name];
+			return $this->Verify_Final($name,md5($md5pw . $m->Guid));
+		}else{
+			return false;
+		}
+	}
+
+	public function Verify_Original($name,$originalpw){
+		return $this->Verify_MD5($name,md5($originalpw));
+	}
+
+	public function Verify_Final($name,$password){
+		if (isset($this->membersbyname[$name])){
+			$m=$this->membersbyname[$name];
+			if($m->Password == $password){
 				$this->user=$m;
+				return true;
+			}else{
+				return false;
 			}
 		}
 	}
@@ -149,9 +165,9 @@ class ZBlogPHP{
 
 
 
-
-
 ################################################################################################################
+
+
 
 
 	#初始化连接
@@ -238,8 +254,12 @@ class ZBlogPHP{
 
 
 
+
+
 ################################################################################################################
 #Cache相关
+
+
 
 	public function HasCache($name){
 		if(array_key_exists($name,$this->cache)){
@@ -300,6 +320,7 @@ class ZBlogPHP{
 
 ################################################################################################################
 #保存zbp设置函数
+
 
 
 	public function SaveOption(){
@@ -450,6 +471,8 @@ class ZBlogPHP{
 #插件用Configs表相关设置函数
 
 
+
+
 	public function LoadConfigs(){
 
 		$sql = $this->db->sql->Select('Config',array('*'),'','','','');
@@ -499,6 +522,8 @@ class ZBlogPHP{
 
 ################################################################################################################
 #模板相关函数
+
+
 
 
 	function MakeTemplatetags(){
@@ -612,6 +637,8 @@ class ZBlogPHP{
 #加载数据对像List函数
 
 
+
+
 	function GetList($type,$sql){
 
 		$array=null;
@@ -634,10 +661,10 @@ class ZBlogPHP{
 		$sql = $this->db->sql->Select('Post',$select,$where,$order,$limit,$option);
 		$array = $this->GetList('Post',$sql);
 		foreach ($array as $a) {
-			$this->AddTagsString($a->Tag);
+			$this->AddTagsIDString($a->Tag);
 		}
 
-		$this->LoadTagsByString($this->AddTagsString());
+		$this->LoadTagsByIDString($this->AddTagsIDString());
 
 		return $array;
 	}
@@ -694,8 +721,10 @@ class ZBlogPHP{
 
 
 
+
 ################################################################################################################
 #读取对象函数
+
 
 
 
@@ -719,7 +748,7 @@ class ZBlogPHP{
 		if(isset($this->tags[$id])){
 			return $this->tags[$id];
 		}else{
-			$array=$this->LoadTagsByString('{'.$id.'}');
+			$array=$this->LoadTagsByIDString('{'.$id.'}');
 			if(count($array)==0){
 				return new Tag;
 			}else{
@@ -729,12 +758,12 @@ class ZBlogPHP{
 		}
 	}
 
-	function AddTagsString($s=''){
+	function AddTagsIDString($s=''){
 		static $tagstring;
 		$tagstring .= $s;
 		return $tagstring;
 	}
-	function LoadTagsByString($s){
+	function LoadTagsByIDString($s){
 		if($s=='')return array();
 		$s=str_replace('}{', '|', $s);
 		$s=str_replace('{', '', $s);
@@ -745,18 +774,17 @@ class ZBlogPHP{
 		if(count($t)==0)return array();
 
 		$a=array();
+		$b=array();
 		foreach ($t as $v) {
 			if(isset($this->tags[$v])==false){
 				$a[]=array('tag_ID',$v);
+			}else{
+				$b[$v]=&$this->tags[$v];
 			}
 		}
 
 		if(count($a)==0){
-			$a=array();
-			foreach ($t as $v) {
-				$a[$v]=&$this->tags[$v];
-			}
-			return $a;
+			return $b;
 		}else{
 			$t=array();
 			$array=$this->GetTagList('',array(array('array',$a)),'','','');
@@ -765,9 +793,78 @@ class ZBlogPHP{
 				$this->tagsbyname[$v->Name]=&$this->tags[$v->ID];
 				$t[$v->ID]=&$this->tags[$v->ID];
 			}
-			return $t;
+			return $b+$t;
 		}
 	}
+
+	function LoadTagsByNameString($s){
+		if($s=='')return array();
+		$a=explode(',', $s);
+		$t=array_unique($a);
+
+		if(count($t)==0)return array();
+
+		$a=array();
+		$b=array();
+		foreach ($t as $v) {
+			if(isset($this->tagsbyname[$v])==false){
+				$a[]=array('tag_Name',$v);
+			}else{
+				$b[$v]=&$this->tagsbyname[$v];
+			}
+		}
+
+		if(count($a)==0){
+			return $b;
+		}else{
+			$t=array();
+			$array=$this->GetTagList('',array(array('array',$a)),'','','');
+			foreach ($array as $v) {
+				$this->tags[$v->ID]=$v;
+				$this->tagsbyname[$v->Name]=&$this->tags[$v->ID];
+				$t[$v->Name]=&$this->tags[$v->ID];
+			}
+			return $b+$t;
+		}
+	}
+
+	function CheckUnsetTagAndConvertIDString($tagnamestring){
+		$s='';
+		$tagnamestring=str_replace(';', ',', $tagnamestring);
+		$tagnamestring=str_replace('，', ',', $tagnamestring);
+		$tagnamestring=str_replace('、', ',', $tagnamestring);
+		$tagnamestring=trim($tagnamestring);
+		if($tagnamestring=='')return array();
+		if($tagnamestring==',')return array();		
+		$a=explode(',', $tagnamestring);
+		$b=array_unique($a);
+		$b=array_slice($b, 0, 20);
+		$c=array();
+
+		$t=$this->LoadTagsByNameString(GetVars('Tag','POST'));
+		foreach ($t as $key => $value) {
+			$c[]=$key;
+		}
+		$d=array_diff($b,$c);
+		if($this->CheckRights('TagNew')){
+			foreach ($d as $key) {
+				$tag = new Tag;
+				$tag->Name = $key;
+				$tag->Save();
+				$this->tags[$tag->ID]=$tag;
+				$this->tagsbyname[$tag->Name]=&$this->tags[$tag->ID];
+			}
+		}
+
+		foreach ($a as $key) {
+			if(!isset($this->tagsbyname[$key]))continue;
+			$s .= '{' . $this->tagsbyname[$key]->ID . '}';
+		}
+		return $s;
+	}
+
+
+
 
 
 ################################################################################################################
@@ -804,6 +901,9 @@ class ZBlogPHP{
 ################################################################################################################
 #杂项
 
+
+
+
 	function CreateOptoinsOfTemplate($default){
 		$s=null;
 		$s .= '<option value="" >' . $this->lang['msg']['none'] . '</option>';
@@ -828,13 +928,29 @@ class ZBlogPHP{
 	}
 
 
-	function AddItemToNavbar($type,$id,$url,$name){
+	function AddItemToNavbar($type,$id,$name,$url){
 
 	}
 	function DelItemToNavbar($type,$id){
 
 	}
 
+	#$signal = good,bad,tips
+	function SetHint($signal,$content=''){
+		if($content==''){
+			if($signal=='good')$content=$this->lang['msg']['operation_succeed'];
+			if($signal=='bad')$content=$this->lang['msg']['operation_failed'];				
+		}
+		setcookie("hint_signal", $signal . '|' . $content,time()+2,$this->cookiespath);
+	}
+
+	function GetHint(){
+		$signal=GetVars('hint_signal','COOKIE');
+		if($signal){
+			$a=explode('|', $signal);
+			echo "<div class='hint'><p class='hint hint_$a[0]'><font color='blue'>$a[1]</font></p></div>";
+		}
+	}
 
 }
 

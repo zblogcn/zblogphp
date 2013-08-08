@@ -18,10 +18,15 @@ function zbp_addcatesubmenu(){
 	echo '<a href="../cmd.php?act=CategoryEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_category'] . '</span></a>';
 }
 
+function zbp_addmemsubmenu(){
+	echo '<a href="../cmd.php?act=MemberNew"><span class="m-left">' . $GLOBALS['lang']['msg']['new_member'] . '</span></a>';
+}
 
 Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','zbp_addpagesubmenu');
 Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','zbp_addtagsubmenu');
 Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','zbp_addcatesubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu','zbp_addmemsubmenu');
+
 
 $zbp->LoadTemplates();
 
@@ -165,10 +170,13 @@ function Admin_ArticleMng(){
 	echo '<div id="divMain2">';
 	echo '<form class="search" id="edit" method="post" action="#">';
 
-	echo '<p>搜索:&nbsp;&nbsp;分类 <select class="edit" size="1" name="cate" style="width:100px;" ><option value="">任意</option></select>&nbsp;&nbsp;&nbsp;&nbsp;
-	类型 <select class="edit" size="1" name="status" style="width:80px;" ><option value="">任意</option> <option value="0" >公开</option><option value="2" >私人</option><option value="4" >草稿</option></select>&nbsp;&nbsp;&nbsp;&nbsp;
-	<label><input type="checkbox" name="istop" value="True"/>&nbsp;置顶</label>&nbsp;&nbsp;&nbsp;&nbsp;
-	<input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="提交"/></p>';
+	echo '<p>' . $zbp->lang['msg']['search'] . ':&nbsp;&nbsp;' . $zbp->lang['msg']['category'] . ' <select class="edit" size="1" name="category" style="width:150px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option>';
+	foreach ($zbp->categorysbyorder as $id => $cate) {
+	  echo '<option value="'. $cate->ID .'">' . $cate->SymbolName . '</option>';
+	}
+	echo'</select>&nbsp;&nbsp;&nbsp;&nbsp;' . $zbp->lang['msg']['type'] . ' <select class="edit" size="1" name="status" style="width:80px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option> <option value="0" >' . $zbp->lang['post_status_name']['0'] . '</option><option value="1" >' . $zbp->lang['post_status_name']['1'] . '</option><option value="2" >' . $zbp->lang['post_status_name']['2'] . '</option></select>&nbsp;&nbsp;&nbsp;&nbsp;
+	<label><input type="checkbox" name="istop" value="True"/>&nbsp;' . $zbp->lang['msg']['top'] . '</label>&nbsp;&nbsp;&nbsp;&nbsp;
+	<input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
 	echo '</form>';
 	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
 	echo '<tr>
@@ -189,6 +197,9 @@ $p->PageBarCount=$zbp->pagebarcount;
 $p->UrlRule='{%host%}zb_system/cmd.php?act=ArticleMng&amp;page={%page%}';
 
 $w=array();
+if(!$zbp->CheckRights('ArticleAll')){
+	$w[]=array('=','log_AuthID',$zbp->user->ID);
+}
 if(GetVars('search','POST')){
 	$w[]=array('search','log_Content','log_Intro','log_Title',GetVars('search','POST'));
 }
@@ -197,6 +208,9 @@ if(GetVars('istop','POST')){
 }
 if(GetVars('status','POST')){
 	$w[]=array('=','log_Status',GetVars('status','POST'));
+}
+if(GetVars('category','POST')){
+	$w[]=array('=','log_CateID',GetVars('category','POST'));
 }
 
 $array=$zbp->GetArticleList(
@@ -264,7 +278,7 @@ $p=new Pagebar();
 $p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=$zbp->pagebarcount;
-$p->UrlRule='{%host%}zb_system/cmd.php?act=ArticleMng&amp;type=1&amp;page={%page%}';
+$p->UrlRule='{%host%}zb_system/cmd.php?act=PageMng&amp;page={%page%}';
 
 $array=$zbp->GetPageList(
 	'',
@@ -373,8 +387,59 @@ function Admin_MemberMng(){
 	}	
 	echo '</div>';
 	echo '<div id="divMain2">';
+	echo '<!--<form class="search" id="edit" method="post" action="#"></form>-->';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<tr>
+	<th>' . $zbp->lang['msg']['id'] . '</th>
+	<th>' . '' . '</th>
+	<th>' . $zbp->lang['msg']['name'] . '</th>
+	<th>' . $zbp->lang['msg']['alias'] . '</th>
+	<th>' . $zbp->lang['msg']['all_artiles'] . '</th>
+	<th>' . $zbp->lang['msg']['all_comments'] . '</th>
+	<th>' . $zbp->lang['msg']['all_uploads'] . '</th>
+	<th></th>
+	</tr>';
 
-	echo '</div>';
+$p=new Pagebar();
+$p->PageCount=$zbp->managecount;
+$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+$p->PageBarCount=$zbp->pagebarcount;
+$p->UrlRule='{%host%}zb_system/cmd.php?act=MemberMng&amp;page={%page%}';
+$w=array();
+if(!$zbp->CheckRights('MemberAll')){
+	$w[]=array('=','mem_ID',$zbp->user->ID);
+}
+$array=$zbp->GetMemberList(
+	'',
+	$w,
+	array('mem_ID'=>'ASC'),
+	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
+	array('pagebar'=>$p)
+);
+
+foreach ($array as $member) {
+	echo '<tr>';
+	echo '<td class="td5">' . $member->ID . '</td>';
+	echo '<td class="td10">' . $member->LevelName . '</td>';
+	echo '<td>' . $member->Name . '</td>';
+	echo '<td class="td20">' . $member->Alias . '</td>';
+	echo '<td class="td10">' . $member->Articles . '</td>';
+	echo '<td class="td10">' . $member->Comments . '</td>';
+	echo '<td class="td10">' . $member->Uploads . '</td>';
+	echo '<td class="td10 tdCenter">';
+	echo '<a href="../cmd.php?act=MemberEdt&amp;id='. $member->ID .'"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=MemberDel&amp;id='. $member->ID .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
+	echo '</td>';
+
+	echo '</tr>';
+}
+	echo '</table>';
+	echo '<hr/><p class="pagebar">';
+foreach ($p->buttons as $key => $value) {
+	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
+}	
+	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aMemberMng");</script>';
 	
 }

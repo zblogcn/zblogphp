@@ -17,7 +17,11 @@
 		<div id="divMain">
 {foreach $articles as $article}
 
+{if $article->IsTop}
+{template:post-istop}
+{else}
 {template:post-multi}
+{/if}
 
 {/foreach}
 <div class="post pagebar">{template:pagebar}</div>
