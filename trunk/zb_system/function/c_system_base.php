@@ -61,7 +61,7 @@ $bloghost = GetCurrentHost($cookiespath);
 require $blogpath.'zb_system/function/lib/zblogphp.php';
 
 #加载数据库类
-require $blogpath.'zb_system/function/lib/dbfactory.php';
+require $blogpath.'zb_system/function/lib/dbsql.php';
 if($option['ZC_DATABASE_TYPE']){
 	require $blogpath.'zb_system/function/lib/db' . $option['ZC_DATABASE_TYPE'] . '.php';
 }

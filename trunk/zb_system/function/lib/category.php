@@ -44,7 +44,7 @@ class Category extends Base{
 			if($value==$zbp->option['ZC_CATALOG_DEFAULT_TEMPLATE'])$value='';
 			return $this->Data[$name]  =  $value;
 		}
-		if ($name=='Template') {
+		if ($name=='LogTemplate') {
 			if($value==$zbp->option['ZC_ARTICLE_DEFAULT_TEMPLATE'])$value='';
 			return $this->Data[$name]  =  $value;
 		}

@@ -218,7 +218,7 @@ class ZBlogPHP{
 		switch ($this->option['ZC_DATABASE_TYPE']) {
 		case 'mysql':
 		case 'pdo_mysql':
-			$db=DbFactory::Create($this->option['ZC_DATABASE_TYPE']);
+			$db=CreateDB($this->option['ZC_DATABASE_TYPE']);
 			$this->db=&$db;
 			if($db->Open(array(
 					$this->option['ZC_MYSQL_SERVER'],
@@ -232,7 +232,7 @@ class ZBlogPHP{
 
 			break;
 		case 'sqlite':
-			$db=DbFactory::Create('sqlite');
+			$db=CreateDB('sqlite');
 			$this->db=&$db;
 			if($db->Open(array(
 				$this->path . $this->option['ZC_SQLITE_NAME'],
@@ -242,7 +242,7 @@ class ZBlogPHP{
 			}
 			break;
 		case 'sqlite3':
-			$db=DbFactory::Create('sqlite3');
+			$db=CreateDB('sqlite3');
 			$this->db=&$db;
 			if($db->Open(array(
 				$this->path . $this->option['ZC_SQLITE_NAME'],

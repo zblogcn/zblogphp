@@ -478,7 +478,7 @@ FileWriteTest();
 
 $dbtype=GetVars('dbtype','POST');
 #echo $dbtype;
-$db=DbFactory::Create($dbtype);
+$db=CreateDB($dbtype);
 $GLOBALS['zbp']->db=&$db;
 switch ($dbtype) {
   case 'mysql':

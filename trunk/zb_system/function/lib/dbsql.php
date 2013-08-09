@@ -26,19 +26,11 @@ interface iDataBase
 /**
 * DbFactory
 */
-class DbFactory #extends AnotherClass
-{
-
-	public $dbtype = null;
-
-	public static function Create($type)
-	{
-		$newtype='Db'.$type;
-		$db=new $newtype();
-		$db->sql=new DbSql;
-		return $db;
-	}
-
+function CreateDB($type){
+	$newtype='Db'.$type;
+	$db=new $newtype();
+	$db->sql=new DbSql;
+	return $db;
 }
 
 
