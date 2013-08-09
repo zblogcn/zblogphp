@@ -1,3 +1,3 @@
-{foreach $sidebars as $module}
+{foreach $sidebar as $module}
 {template:module}
 {/foreach}

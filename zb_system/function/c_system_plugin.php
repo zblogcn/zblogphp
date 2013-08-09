@@ -141,6 +141,18 @@ Function Add_Response_Plugin($plugname,$functionname){
 
 
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_ViewList_Begin
+'参数:
+'说明:定义列表输出接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_CheckRights_Begin=array();
+
+
 
 
 

@@ -22,10 +22,19 @@ function zbp_addmemsubmenu(){
 	echo '<a href="../cmd.php?act=MemberNew"><span class="m-left">' . $GLOBALS['lang']['msg']['new_member'] . '</span></a>';
 }
 
+function zbp_addmodsubmenu(){
+	echo '<a href="../cmd.php?act=ModuleEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_module'] . '</span></a>';
+	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=navbar"><span class="m-left">' . $GLOBALS['lang']['msg']['module_navbar'] . '</span></a>';
+	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=link"><span class="m-left">' . $GLOBALS['lang']['msg']['module_link'] . '</span></a>';
+	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=favorite"><span class="m-left">' . $GLOBALS['lang']['msg']['module_favorite'] . '</span></a>';
+	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=misc"><span class="m-left">' . $GLOBALS['lang']['msg']['module_misc'] . '</span></a>';
+}
+
 Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','zbp_addpagesubmenu');
 Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','zbp_addtagsubmenu');
 Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','zbp_addcatesubmenu');
 Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu','zbp_addmemsubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','zbp_addmodsubmenu');
 
 
 $zbp->LoadTemplates();
@@ -215,6 +224,22 @@ function CreateOptoinsOfPostStatus($default){
 
 
 
+function CreateModuleDiv($m,$button=true){
+	global $zbp;
+
+	echo '<div class="widget widget_source_' . $m->SourceType . ' widget_id_' . $m->FileName . '">';
+	echo '<div class="widget-title"><img class="more-action" width="16" src="../image/admin/brick.png" alt="" />' . ($m->SourceType!='theme'?$m->Name:$m->FileName) . '';
+if($button){
+	echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;id=' . $m->ID . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="" title="" width="16" /></a>';
+if($m->SourceType!='system'){
+	echo '&nbsp;<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ModuleDel&amp;id=' . $m->ID .'"><img src="../image/admin/delete.png" alt="" title="" width="16" /></a>';
+}
+	echo '</span>';
+}
+	echo '</div>';
+	echo '<div class="funid" style="display:none">' . $m->FileName . '</div>';	
+	echo '</div>';
+}
 
 
 function Admin_SiteInfo(){
@@ -551,10 +576,10 @@ function Admin_UploadMng(){
 
 
 	echo '<form class="search" name="upload" id="upload" method="post" enctype="multipart/form-data" action="../cmd.php?act=UploadPst">';
-	echo '<p>上传图片、影音及其它类型的文件: </p>';
+	echo '<p>' . $zbp->lang['msg']['upload_file'] . ': </p>';
 	echo '<p><input type="file" name="file" size="60" />&nbsp;&nbsp;';
-	echo '<input type="submit" class="button" value="提交" onclick="" />&nbsp;&nbsp;';
-	echo '<input class="button" type="reset" value="重置" /></p>';
+	echo '<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '" onclick="" />&nbsp;&nbsp;';
+	echo '<input class="button" type="reset" value="' . $zbp->lang['msg']['reset'] . '" /></p>';
 	echo '</form>';
 
 	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
@@ -725,9 +750,229 @@ function Admin_ModuleMng(){
 	echo '</div>';
 	echo '<div id="divMain2">';
 
+$sm=array();
+$um=array();
+$tm=array();
+$pm=array();
+
+foreach ($zbp->modules as $m) {
+	if($m->Source=='system'){
+		$sm[]=$m;
+	}elseif($m->Source=='user'){
+		$um[]=$m;
+	}elseif($m->Source=='theme'){
+		$tm[]=$m;
+	}else{
+		$pm[]=$m;
+	}
+}
+	#widget-list begin
+	echo '<div class="widget-left">';
+	echo '<div class="widget-list">';
+
+	echo '<script type="text/javascript">';
+	echo 'var functions = {';
+foreach ($zbp->modules as $key => $value) {
+	echo "'" . $value->FileName . "':'" . $value->Source . "' ,";
+}
+	echo "'':''};";
+	echo '</script>';
+	echo "\r\n";
+	echo '<div class="widget-list-header">'. $zbp->lang['msg']['system_module'] .'</div>';
+	echo '<div class="widget-list-note">'. $zbp->lang['msg']['drag_module_to_sidebar'] .'</div>';
+	echo "\r\n";
+foreach ($sm as $m) {
+	CreateModuleDiv($m);
+}
+
+	echo '<div class="widget-list-header">'. $zbp->lang['msg']['user_module'] .'</div>';
+	echo "\r\n";
+foreach ($um as $m) {
+	CreateModuleDiv($m);
+}
+
+	echo '<div class="widget-list-header">'. $zbp->lang['msg']['theme_module'] .'</div>';
+	echo "\r\n";
+foreach ($tm as $m) {
+	CreateModuleDiv($m);
+}
+
+	echo '<div class="widget-list-header">'. $zbp->lang['msg']['plugin_module'] .'</div>';
+	echo "\r\n";
+foreach ($pm as $m) {
+	CreateModuleDiv($m);
+}
+
+	echo '<hr/>';
+	echo "\r\n";
+	echo '<form id="edit" method="post" action="../cmd.php?act=SidebarSet">';
+	echo '<input type="hidden" id="strsidebar" name="edtSidebar" value="'. $zbp->option['ZC_SIDEBAR_ORDER'] .'"/>';
+	echo '<input type="hidden" id="strsidebar2" name="edtSidebar2" value="'. $zbp->option['ZC_SIDEBAR2_ORDER'] .'"/>';
+	echo '<input type="hidden" id="strsidebar3" name="edtSidebar3" value="'. $zbp->option['ZC_SIDEBAR3_ORDER'] .'"/>';
+	echo '<input type="hidden" id="strsidebar4" name="edtSidebar4" value="'. $zbp->option['ZC_SIDEBAR4_ORDER'] .'"/>';
+	echo '<input type="hidden" id="strsidebar5" name="edtSidebar5" value="'. $zbp->option['ZC_SIDEBAR5_ORDER'] .'"/>';
+	echo '</form>';
+	echo "\r\n";
+	echo '<div class="clear"></div></div>';
 	echo '</div>';
-	echo '<script type="text/javascript">ActiveLeftMenu("aModuleMng");</script>';
+	#widget-list end
+	echo "\r\n";
+	#siderbar-list begin
+	echo '<div class="siderbar-list">';
+	echo '<div class="siderbar-drop" id="siderbar"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+	echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar),$zbp->lang['msg']['sidebar_module_count']) . '</div>';
+foreach ($zbp->sidebar as $m) {
+	CreateModuleDiv($m,false);
+}
+	echo '</div></div>';
+	echo "\r\n";
+
+	echo '<div class="siderbar-drop" id="siderbar2"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar2'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+	echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar2),$zbp->lang['msg']['sidebar_module_count']) . '</div>';
+foreach ($zbp->sidebar2 as $m) {
+	CreateModuleDiv($m,false);
+}
+	echo '</div></div>';
+	echo "\r\n";
+
+	echo '<div class="siderbar-drop" id="siderbar3"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar3'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+	echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar3),$zbp->lang['msg']['sidebar_module_count']) . '</div>';
+foreach ($zbp->sidebar3 as $m) {
+	CreateModuleDiv($m,false);
+}
+	echo '</div></div>';
+	echo "\r\n";
+
+	echo '<div class="siderbar-drop" id="siderbar4"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar4'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+	echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar4),$zbp->lang['msg']['sidebar_module_count']) . '</div>';
+foreach ($zbp->sidebar4 as $m) {
+	CreateModuleDiv($m,false);
+}
+	echo '</div></div>';
+	echo "\r\n";
 	
+	echo '<div class="siderbar-drop" id="siderbar5"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar5'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+	echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar5),$zbp->lang['msg']['sidebar_module_count']) . '</div>';
+foreach ($zbp->sidebar5 as $m) {
+	CreateModuleDiv($m,false);
+}
+	echo '</div></div>';
+	echo "\r\n";
+
+	echo '<div class="clear"></div></div>';
+	#siderbar-list end
+	echo "\r\n";
+	echo '<div class="clear"></div>';
+
+	echo '</div>';
+	echo "\r\n";
+
+	echo '<script type="text/javascript">ActiveLeftMenu("aModuleMng");</script>';
+?>
+<script type="text/javascript">
+	$(function() {
+
+		function sortFunction(){
+			var s1="";
+			$("#siderbar").find("div.funid").each(function(i){
+			   s1 += $(this).html() +"|";
+			 });
+
+			 var s2="";
+			$("#siderbar2").find("div.funid").each(function(i){
+			   s2 += $(this).html() +"|";
+			 });
+
+			 var s3="";
+			$("#siderbar3").find("div.funid").each(function(i){
+			   s3 += $(this).html() +"|";
+			 });
+
+			 var s4="";
+			$("#siderbar4").find("div.funid").each(function(i){
+			   s4 += $(this).html() +"|";
+			 });
+
+			 var s5="";
+			$("#siderbar5").find("div.funid").each(function(i){
+			   s5 += $(this).html() +"|";
+			 });
+
+			$("#strsidebar" ).val(s1);
+			$("#strsidebar2").val(s2);
+			$("#strsidebar3").val(s3);
+			$("#strsidebar4").val(s4);
+			$("#strsidebar5").val(s5);
+
+
+			$.post($("#edit").attr("action"),
+				{
+				"sidebar": s1,
+				"sidebar2": s2,
+				"sidebar3": s3,
+				"sidebar4": s4,
+				"sidebar5": s5
+				},
+			   function(data){
+				 //alert("Data Loaded: " + data);
+			   });
+
+		};
+
+		var t;
+		function hideWidget(item){
+				item.find(".ui-icon").removeClass("ui-icon-triangle-1-s").addClass("ui-icon-triangle-1-w");
+				t=item.next();
+				t.find(".widget").hide("fast").end().show();
+				t.find(".siderbar-note>span").text(t.find(".widget").length);
+		}
+		function showWidget(item){
+				item.find(".ui-icon").removeClass("ui-icon-triangle-1-w").addClass("ui-icon-triangle-1-s");
+				t=item.next();
+				t.find(".widget").show("fast");
+				t.find(".siderbar-note>span").text(t.find(".widget").length);
+		}
+
+		$(".siderbar-header").toggle( function () {
+				hideWidget($(this));
+			  },
+			  function () {
+				showWidget($(this));
+			  });
+
+ 		$( ".siderbar-sort-list" ).sortable({
+ 			items:'.widget',
+			start:function(event, ui){
+				showWidget(ui.item.parent().prev());
+				 var c=ui.item.find(".funid").html();
+				 if(ui.item.parent().find(".widget:contains("+c+")").length>1){
+					ui.item.remove();
+				 };
+			} ,			
+			stop:function(event, ui){$(this).parent().find(".roll").show("slow");sortFunction();$(this).parent().find(".roll").hide("slow");
+				showWidget($(this).parent().prev());
+			}
+ 		}).disableSelection(); 
+
+		$( ".widget-list>.widget" ).draggable({
+            connectToSortable: ".siderbar-sort-list",
+            revert: "invalid", 
+            containment: "document",
+            helper: "clone",
+            cursor: "move"
+        }).disableSelection();
+
+		$( ".widget-list" ).droppable({
+			accept:".siderbar-sort-list>.widget",
+            drop: function( event, ui ) {
+            	ui.draggable.remove();
+            }
+        });
+
+});
+
+</script>
+<?php
 }
 
 function Admin_PluginMng(){
@@ -792,7 +1037,7 @@ foreach ($plugins as $plugin) {
 			echo '<a href="../cmd.php?act=PluginEnable&amp;name=' . htmlspecialchars($plugin->id) . '" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../IMAGE/ADMIN/control-power-off.png"/></a>';
 		}
 	}
-	if($plugin->CanManage()){
+	if($plugin->IsUsed() && $plugin->CanManage()){
 		echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 		echo '<a href="' . $plugin->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><img width="16" alt="' . $zbp->lang['msg']['manage'] . '" src="../IMAGE/ADMIN/setting_tools.png"/></a>';
 	}	
