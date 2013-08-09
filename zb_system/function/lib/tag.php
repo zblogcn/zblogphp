@@ -41,7 +41,10 @@ class Tag extends Base{
 	{
         global $zbp;
 		if ($name=='Url') {
-			return $zbp->host . '?tag=' . $this->ID;
+			$u = new UrlRule($zbp->option['ZC_TAGS_REGEX']);
+			$u->Rules['{%id%}']=$this->ID;
+			$u->Rules['{%alias%}']=$this->Alias;
+			return $u->Make();
 		}
 		if ($name=='Template') {
 			$value=$this->Data[$name];

@@ -135,10 +135,13 @@ CREATE TABLE IF NOT EXISTS %pre%tag (
 CREATE TABLE IF NOT EXISTS %pre%upload (
   ul_ID int(11) NOT NULL AUTO_INCREMENT,
   ul_AuthorID int(11) NOT NULL DEFAULT '0',
-  ul_FileSize int(11) NOT NULL DEFAULT '0',
-  ul_FileName varchar(255) NOT NULL DEFAULT '',
+  ul_Size integer NOT NULL DEFAULT 0,
+  ul_Name varchar(255) NOT NULL DEFAULT '',
+  ul_SourceName varchar(255) NOT NULL DEFAULT '',
+  ul_MimeType varchar(50) NOT NULL DEFAULT '',
   ul_PostTime int(11) NOT NULL DEFAULT '0',
-  ul_DownNum int(11) NOT NULL DEFAULT '0',
+  ul_DownNums int(11) NOT NULL DEFAULT '0',
+  ul_LogID int(11) NOT NULL DEFAULT '0',  
   ul_Intro text NOT NULL,
   ul_Meta text NOT NULL,
   PRIMARY KEY (ul_ID)

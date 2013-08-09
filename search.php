@@ -23,8 +23,11 @@ $article->Type=ZC_POST_TYPE_PAGE;
 
 $w=array();
 $w[]=array('=','log_Type','0');
-if(GetVars('q','GET')){
-	$w[]=array('search','log_Content','log_Intro','log_Title',GetVars('q','GET'));
+$s=trim(GetVars('q','GET'));
+if($s){
+	$w[]=array('search','log_Content','log_Intro','log_Title',$s);
+}else{
+	Redirect('./');
 }
 
 $array=$zbp->GetArticleList(

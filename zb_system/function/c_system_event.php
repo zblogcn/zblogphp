@@ -30,7 +30,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	}
 
 
-	$pagebar=new Pagebar('{%host%}{?page=%page%}');
+	$pagebar=new Pagebar($zbp->option['ZC_INDEX_REGEX']);
 	$pagebar->PageCount=5;
 	$pagebar->PageNow=$page;
 	$pagebar->PageBarCount=10;
@@ -279,8 +279,22 @@ function PostMember(){
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
 
+	if(!$zbp->CheckRights('MemberAll')){
+		unset($_POST['Level']);
+	}
+	if(isset($_POST['Password'])){
+		if($_POST['Password']==''){
+			unset($_POST['Password']);
+		}else{
+			$_POST['Password']=md5(md5($_POST['Password']) . $_POST['Guid']);
+		}
+	}
+
 	$mem = new Member();
 	if(GetVars('ID','POST') == 0){
+		if(isset($_POST['Password'])==false||$_POST['Password']==''){
+			throw new Exception($zbp->lang['error'][73]);
+		}
 	}else{
 		$mem->LoadInfoByID(GetVars('ID','POST'));
 	}
@@ -290,10 +304,39 @@ function PostMember(){
 	if(isset($_POST['Email'])   ) $mem->Email    = GetVars('Email','POST');
 	if(isset($_POST['HomePage'])) $mem->HomePage = GetVars('HomePage','POST');
 	if(isset($_POST['Template'])) $mem->Template = GetVars('Template','POST');
-
+	if(isset($_POST['Level'])   ) $mem->Level    = GetVars('Level','POST');
+	if(isset($_POST['Intro'])   ) $mem->Intro    = GetVars('Intro','POST');	
+	if(isset($_POST['Password'])   ) $mem->Password    = GetVars('Password','POST');
 	$mem->Save();
 
 }
+
+
+function PostUpload(){
+	global $zbp;
+
+	foreach ($_FILES as $key => $value) {
+		if($_FILES[$key]['error']==0){
+			if (is_uploaded_file($_FILES[$key]['tmp_name'])) {
+				$tmp_name = $_FILES[$key]['tmp_name'];
+				$name = $_FILES[$key]['name'];
+
+				$upload = new Upload;
+				$upload->Name = $_FILES[$key]['name'];
+				$upload->SourceName = $_FILES[$key]['name'];
+				$upload->MimeType = $_FILES[$key]['type'];
+				$upload->Size = $_FILES[$key]['size'];
+				$upload->AuthorID = $zbp->user->ID;
+
+				$upload->SaveFile($_FILES[$key]['tmp_name']);
+				$upload->Save();
+			}
+		}
+
+	}
+
+}
+
 
 
 function EnablePlugin($name){

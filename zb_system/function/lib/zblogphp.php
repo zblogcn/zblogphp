@@ -55,6 +55,8 @@ class ZBlogPHP{
 	public $style = null;
 	public $managecount = 50;
 	public $pagebarcount = 10;
+
+	public $usersdir = null;
 	
 	static public function GetInstance(){
 		if(!isset(self::$zbp)){
@@ -71,6 +73,7 @@ class ZBlogPHP{
 		$this->path = &$GLOBALS['blogpath'];
 		$this->host = &$GLOBALS['bloghost'];
 		$this->cookiespath = &$GLOBALS['cookiespath'];
+		$this->usersdir = &$GLOBALS['usersdir'];
 
 		$this->table=&$GLOBALS['table'];
 		$this->datainfo=&$GLOBALS['datainfo'];
@@ -621,6 +624,11 @@ class ZBlogPHP{
 		foreach ($files as $fullname) {
 			@unlink($fullname);
 		}
+		
+		//创建模板类
+		$this->template = new Template();
+		$this->template->path = $this->path . 'zb_users/template/';
+		$this->template->tags = $this->templatetags;
 
 		$this->template->CompileFiles($this->templates);
 
@@ -718,7 +726,12 @@ class ZBlogPHP{
 		return $this->GetList('Module',$sql);
 	}
 
+	function GetUploadList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
+		if(empty($select)){$select = array('*');}
+		$sql = $this->db->sql->Select('Upload',$select,$where,$order,$limit,$option);
+		return $this->GetList('Upload',$sql);
+	}
 
 
 
@@ -836,8 +849,8 @@ class ZBlogPHP{
 		$tagnamestring=str_replace('，', ',', $tagnamestring);
 		$tagnamestring=str_replace('、', ',', $tagnamestring);
 		$tagnamestring=trim($tagnamestring);
-		if($tagnamestring=='')return array();
-		if($tagnamestring==',')return array();		
+		if($tagnamestring=='')return '';
+		if($tagnamestring==',')return '';		
 		$a=explode(',', $tagnamestring);
 		$b=array_unique($a);
 		$b=array_slice($b, 0, 20);
@@ -904,41 +917,6 @@ class ZBlogPHP{
 #杂项
 
 
-
-
-	function CreateOptoinsOfTemplate($default){
-		$s=null;
-		$s .= '<option value="" >' . $this->lang['msg']['none'] . '</option>';
-		foreach ($this->templates as $key => $value) {
-			if(substr($key,0,2)=='b_')continue;
-			if(substr($key,0,2)=='c_')continue;
-			if(substr($key,0,5)=='post-')continue;
-			if(substr($key,0,6)=='module')continue;
-			if(substr($key,0,6)=='header')continue;
-			if(substr($key,0,6)=='footer')continue;	
-			if(substr($key,0,7)=='comment')continue;
-			if(substr($key,0,7)=='sidebar')continue;
-			if(substr($key,0,7)=='pagebar')continue;
-			if($default==$key){
-				$s .= '<option value="' . $key . '" selected="selected">' . $key . ' ('.$this->lang['msg']['default_template'].')' . '</option>';
-			}else{
-				$s .= '<option value="' . $key . '" >' . $key . '</option>';
-			}
-		}
-
-		return $s;
-	}
-
-	function CreateOptoinsOfMemberLevel($default){
-		$s=null;
-		if(!$this->CheckRights('MemberAll')){
-			return '<option value="' . $default . '" selected="selected" >' . $this->lang['user_level_name'][$default] . '</option>';;
-		}
-		for ($i=1; $i <7 ; $i++) {
-			$s .= '<option value="' . $i . '" ' . ($default==$i?'selected="selected"':'') . ' >' . $this->lang['user_level_name'][$i] . '</option>';
-		}
-		return $s;
-	}
 
 	function AddItemToNavbar($type,$id,$name,$url){
 

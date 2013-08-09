@@ -55,7 +55,10 @@ class Category extends Base{
 	{
         global $zbp;
 		if ($name=='Url') {
-			return '';
+			$u = new UrlRule($zbp->option['ZC_CATEGORY_REGEX']);
+			$u->Rules['{%id%}']=$this->ID;
+			$u->Rules['{%alias%}']=$this->Alias;
+			return $u->Make();
 		}
 		if ($name=='Symbol') {
 			if($this->ParentID==0){
