@@ -151,13 +151,13 @@ return array(
 	
 	'ZC_SIDEBAR_ORDER' => '',
 
-	'ZC_SIDEBAR_ORDER2' => '',
+	'ZC_SIDEBAR2_ORDER' => '',
 
-	'ZC_SIDEBAR_ORDER3' => '',
+	'ZC_SIDEBAR3_ORDER' => '',
 
-	'ZC_SIDEBAR_ORDER4' => '',
+	'ZC_SIDEBAR4_ORDER' => '',
 
-	'ZC_SIDEBAR_ORDER5' => '',
+	'ZC_SIDEBAR5_ORDER' => '',
 	// '--------------------------其它----------------------------------------
 	// '代码高亮
 	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,

@@ -82,7 +82,6 @@ define('ZC_POST_STATUS_AUDITING', 2);
 
 #定义命令
 $actions=array(
-	'root'=>1,
 	'login'=>6,
 	'logout'=>6,
 	'verify'=>6,
@@ -126,7 +125,12 @@ $actions=array(
 	'UploadPst'=>3,
 	'UploadDel'=>3,
 
-	'ThemeSet'=>3,	
+	'ModuleEdt'=>3,
+	'ModulePst'=>3,
+	'ModuleDel'=>3,
+
+	'ThemeSet'=>1,
+	'SidebarSet'=>1,
 
 	'ArticleMng'=>4,
 	'PageMng'=>2,
@@ -146,6 +150,8 @@ $actions=array(
 	'MemberAll'=>1,
 	'TagAll'=>2,
 	'UploadAll'=>2,
+
+	'root'=>1,
 );
 
 

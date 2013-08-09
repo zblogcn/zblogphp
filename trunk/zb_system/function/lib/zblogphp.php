@@ -25,7 +25,7 @@ class ZBlogPHP{
 	public $categorysbyorder=array();	
 	public $tags=array();
 	public $tagsbyname=array();	
-	#public $modules=array();
+	public $modules=array();
 	public $modulesbyfilename=array();
 	public $templates=array();
 	public $configs=array();
@@ -55,6 +55,12 @@ class ZBlogPHP{
 	public $style = null;
 	public $managecount = 50;
 	public $pagebarcount = 10;
+
+	public $sidebar =array();
+	public $sidebar2=array();
+	public $sidebar3=array();
+	public $sidebar4=array();
+	public $sidebar5=array();
 
 	public $usersdir = null;
 	
@@ -118,6 +124,11 @@ class ZBlogPHP{
 
 
 	function CheckRights($action){
+
+		foreach ($GLOBALS['Filter_Plugin_CheckRights_Begin'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($action);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
 
 		if(is_int($action)){
 			if ($GLOBALS['zbp']->user->Level > $action) {
@@ -422,22 +433,21 @@ class ZBlogPHP{
 
 		$array=$this->GetModuleList();
 		foreach ($array as $m) {
-			#$this->modules[$m->ID]=$m;
-			#$this->modulesbyfilename[$m->FileName]=&$this->modules[$m->ID];
+			$this->modules[]=$m;
+
 			$this->modulesbyfilename[$m->FileName]=$m;
 		}
 
 		$dir=$this->path .'zb_users/theme/' . $this->theme . '/include/';
-		$files=GetFilesInDir($dir,'html');
+		$files=GetFilesInDir($dir,'php');
 		foreach ($files as $sortname => $fullname) {
 			$m=new Module();
 			$m->FileName=$sortname;
 			$m->Content=file_get_contents($fullname);
 			$m->Type='div';
-			#$this->template_includes[$sortname]=file_get_contents($fullname);
+			$m->Source='theme';
+			$this->modules[]=$m;
 
-			#$this->modules[$m->ID]=$m;
-			#$this->modulesbyfilename[$m->FileName]=&$this->modules[$m->ID];
 			$this->modulesbyfilename[$m->FileName]=$m;
 		}
 
@@ -510,7 +520,7 @@ class ZBlogPHP{
 		}
 	}
 
-	public function GetConfig($name){
+	public function Config($name){
 		if(!isset($this->configs[$name])){
 			$m=new Metas;
 			$this->configs[$name]=$m;
@@ -559,10 +569,10 @@ class ZBlogPHP{
 
 		$s=array(
 			$option['ZC_SIDEBAR_ORDER'],
-			$option['ZC_SIDEBAR_ORDER2'],
-			$option['ZC_SIDEBAR_ORDER3'],
-			$option['ZC_SIDEBAR_ORDER4'],
-			$option['ZC_SIDEBAR_ORDER5']
+			$option['ZC_SIDEBAR2_ORDER'],
+			$option['ZC_SIDEBAR3_ORDER'],
+			$option['ZC_SIDEBAR4_ORDER'],
+			$option['ZC_SIDEBAR5_ORDER']
 		);
 		foreach ($s as $k =>$v) {
 			$a=explode('|', $v);
@@ -570,14 +580,19 @@ class ZBlogPHP{
 			foreach ($a as $v2) {
 				if(isset($this->modulesbyfilename[$v2])){
 					$m=$this->modulesbyfilename[$v2];
+					$ms[]=$m;
 				}
-				$ms[]=$m ;
 			}
-			reset($ms);
-			$this->templatetags['sidebars' . ($k==0?'':$k+1)]=$ms;
+			//reset($ms);
+			$s='sidebar' . ($k==0?'':$k+1);
+			$this->$s=$ms;
 			$ms=null;
-
 		}
+		$this->templatetags['sidebar']=$this->sidebar;
+		$this->templatetags['sidebar2']=$this->sidebar2;
+		$this->templatetags['sidebar3']=$this->sidebar3;
+		$this->templatetags['sidebar4']=$this->sidebar4;
+		$this->templatetags['sidebar5']=$this->sidebar5;
 
 		//创建模板类
 		$this->template = new Template();
@@ -600,16 +615,16 @@ class ZBlogPHP{
 			$this->templates[$sortname]=file_get_contents($fullname);
 		}
 		if(!isset($this->templates['sidebar2'])){
-			$this->templates['sidebar2']=str_replace('$sidebars', '$sidebars2', $this->templates['sidebar']);
+			$this->templates['sidebar2']=str_replace('$sidebar', '$sidebar2', $this->templates['sidebar']);
 		}
 		if(!isset($this->templates['sidebar3'])){
-			$this->templates['sidebar3']=str_replace('$sidebars', '$sidebars3', $this->templates['sidebar']);
+			$this->templates['sidebar3']=str_replace('$sidebar', '$sidebar3', $this->templates['sidebar']);
 		}
 		if(!isset($this->templates['sidebar4'])){
-			$this->templates['sidebar4']=str_replace('$sidebars', '$sidebars4', $this->templates['sidebar']);
+			$this->templates['sidebar4']=str_replace('$sidebar', '$sidebar4', $this->templates['sidebar']);
 		}
 		if(!isset($this->templates['sidebar5'])){
-			$this->templates['sidebar5']=str_replace('$sidebars', '$sidebars5', $this->templates['sidebar']);
+			$this->templates['sidebar5']=str_replace('$sidebar', '$sidebar5', $this->templates['sidebar']);
 		}
 	}
 
@@ -922,6 +937,9 @@ class ZBlogPHP{
 
 	}
 	function DelItemToNavbar($type,$id){
+
+	}
+	function CheckItemToNavbar($type,$id){
 
 	}
 

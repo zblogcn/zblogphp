@@ -24,6 +24,31 @@ class Module extends Base{
 
 	}
 
+	public function __set($name, $value)
+	{
+        global $zbp;
+		if ($name=='SourceType') {
+			return null;
+		}
+		parent::__set($name, $value);
+	}
+
+	public function __get($name)
+	{
+        global $zbp;
+		if ($name=='SourceType') {
+			if($this->Source=='system'){
+				return 'system';
+			}elseif($this->Source=='user'){
+				return 'user';
+			}elseif($this->Source=='theme'){
+				return 'theme';
+			}else{
+				return 'plugin';
+			}
+		}
+		return parent::__get($name);
+	}
 
 }
 
