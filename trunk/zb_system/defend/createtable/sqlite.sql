@@ -125,10 +125,13 @@ CREATE TABLE %pre%tag (
 CREATE TABLE %pre%upload (
   ul_ID integer primary key,
   ul_AuthorID integer NOT NULL DEFAULT 0,
-  ul_FileSize integer NOT NULL DEFAULT 0,
-  ul_FileName varchar(255) NOT NULL DEFAULT '',
+  ul_Size integer NOT NULL DEFAULT 0,
+  ul_Name varchar(255) NOT NULL DEFAULT '',
+  ul_SourceName varchar(255) NOT NULL DEFAULT '',
+  ul_MimeType varchar(50) NOT NULL DEFAULT '',
   ul_PostTime integer NOT NULL DEFAULT 0,
-  ul_DownNum integer NOT NULL DEFAULT 0,
+  ul_DownNums integer NOT NULL DEFAULT 0,
+  ul_LogID int(11) NOT NULL DEFAULT '0',  
   ul_Intro text NOT NULL DEFAULT '',
   ul_Meta text NOT NULL DEFAULT ''
 );

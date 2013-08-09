@@ -128,6 +128,95 @@ function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUr
 
 
 
+
+
+
+
+
+
+
+
+function CreateOptoinsOfTemplate($default){
+	global $zbp;
+
+	$s=null;
+	$s .= '<option value="" >' . $zbp->lang['msg']['none'] . '</option>';
+	foreach ($zbp->templates as $key => $value) {
+		if(substr($key,0,2)=='b_')continue;
+		if(substr($key,0,2)=='c_')continue;
+		if(substr($key,0,5)=='post-')continue;
+		if(substr($key,0,6)=='module')continue;
+		if(substr($key,0,6)=='header')continue;
+		if(substr($key,0,6)=='footer')continue;	
+		if(substr($key,0,7)=='comment')continue;
+		if(substr($key,0,7)=='sidebar')continue;
+		if(substr($key,0,7)=='pagebar')continue;
+		if($default==$key){
+			$s .= '<option value="' . $key . '" selected="selected">' . $key . ' ('.$zbp->lang['msg']['default_template'].')' . '</option>';
+		}else{
+			$s .= '<option value="' . $key . '" >' . $key . '</option>';
+		}
+	}
+
+	return $s;
+}
+
+
+
+function CreateOptoinsOfMemberLevel($default){
+	global $zbp;
+
+	$s=null;
+	if(!$zbp->CheckRights('MemberAll')){
+		return '<option value="' . $default . '" selected="selected" >' . $zbp->lang['user_level_name'][$default] . '</option>';
+	}
+	if($zbp->user->ID==$default){
+		return '<option value="' . $default . '" selected="selected" >' . $zbp->members[$default]->Name . '</option>';
+	}
+	for ($i=1; $i <7 ; $i++) {
+		$s .= '<option value="' . $i . '" ' . ($default==$i?'selected="selected"':'') . ' >' . $zbp->lang['user_level_name'][$i] . '</option>';
+	}
+	return $s;
+}
+
+
+
+function CreateOptoinsOfMember($default){
+	global $zbp;
+
+	$s=null;
+	if(!$zbp->CheckRights('ArticleAll')){
+		return '<option value="' . $default . '" selected="selected" >' . $zbp->members[$default]->Name . '</option>';
+	}
+	foreach ($zbp->members as $key => $value) {
+		$s .= '<option value="' . $key . '" ' . ($default==$key?'selected="selected"':'') . ' >' . $zbp->members[$key]->Name . '</option>';
+	}
+	return $s;
+}
+
+
+function CreateOptoinsOfPostStatus($default){
+	global $zbp;
+
+	$s=null;
+	if(!$zbp->CheckRights('ArticlePub')&&$default==2){
+		return '<option value="2" ' . ($default==2?'selected="selected"':'') . ' >' . $zbp->lang['post_status_name']['2'] . '</option>';
+	}
+	if(!$zbp->CheckRights('ArticleAll')&&$default==2){
+		return '<option value="2" ' . ($default==2?'selected="selected"':'') . ' >' . $zbp->lang['post_status_name']['2'] . '</option>';
+	}
+	$s .= '<option value="0" ' . ($default==0?'selected="selected"':'') . ' >' . $zbp->lang['post_status_name']['0'] . '</option>';
+	$s .= '<option value="1" ' . ($default==1?'selected="selected"':'') . ' >' . $zbp->lang['post_status_name']['1'] . '</option>';
+	if($zbp->CheckRights('ArticleAll')){
+		$s .= '<option value="2" ' . ($default==2?'selected="selected"':'') . ' >' . $zbp->lang['post_status_name']['2'] . '</option>';
+	}
+	return $s;
+}
+
+
+
+
+
 function Admin_SiteInfo(){
 
 	global $zbp;
@@ -168,7 +257,7 @@ function Admin_ArticleMng(){
 	}	
 	echo '</div>';
 	echo '<div id="divMain2">';
-	echo '<form class="search" id="edit" method="post" action="#">';
+	echo '<form class="search" id="search" method="post" action="#">';
 
 	echo '<p>' . $zbp->lang['msg']['search'] . ':&nbsp;&nbsp;' . $zbp->lang['msg']['category'] . ' <select class="edit" size="1" name="category" style="width:150px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option>';
 	foreach ($zbp->categorysbyorder as $id => $cate) {
@@ -202,7 +291,7 @@ $p->UrlRule->Rules['{%istop%}']=(boolean)GetVars('istop');
 
 $w=array();
 if(!$zbp->CheckRights('ArticleAll')){
-	$w[]=array('=','log_AuthID',$zbp->user->ID);
+	$w[]=array('=','log_AuthorID',$zbp->user->ID);
 }
 if(GetVars('search')){
 	$w[]=array('search','log_Content','log_Intro','log_Title',GetVars('search'));
@@ -266,7 +355,7 @@ function Admin_PageMng(){
 	}	
 	echo '</div>';
 	echo '<div id="divMain2">';
-	echo '<!--<form class="search" id="edit" method="post" action="#"></form>-->';
+	echo '<!--<form class="search" id="search" method="post" action="#"></form>-->';
 	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
 	echo '<tr>
 	<th>' . $zbp->lang['msg']['id'] . '</th>
@@ -460,7 +549,63 @@ function Admin_UploadMng(){
 	echo '</div>';
 	echo '<div id="divMain2">';
 
-	echo '</div>';
+
+	echo '<form class="search" name="upload" id="upload" method="post" enctype="multipart/form-data" action="../cmd.php?act=UploadPst">';
+	echo '<p>上传图片、影音及其它类型的文件: </p>';
+	echo '<p><input type="file" name="file" size="60" />&nbsp;&nbsp;';
+	echo '<input type="submit" class="button" value="提交" onclick="" />&nbsp;&nbsp;';
+	echo '<input class="button" type="reset" value="重置" /></p>';
+	echo '</form>';
+
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<tr>
+	<th>' . $zbp->lang['msg']['id'] . '</th>
+	<th>' . $zbp->lang['msg']['author'] . '</th>
+	<th>' . $zbp->lang['msg']['name'] . '</th>
+	<th>' . $zbp->lang['msg']['date'] . '</th>
+	<th>' . $zbp->lang['msg']['size'] . '</th>
+	<th>' . $zbp->lang['msg']['type'] . '</th>
+	<th></th>
+	</tr>';
+
+$w=array();
+if(!$zbp->CheckRights('UploadAll')){
+	$w[]=array('=','ul_AuthorID',$zbp->user->ID);
+}
+
+$p=new Pagebar('{%host%}zb_system/cmd.php?act=UploadMng{&page=%page%}');
+$p->PageCount=$zbp->managecount;
+$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+$p->PageBarCount=$zbp->pagebarcount;
+
+$array=$zbp->GetUploadList(
+	'',
+	$w,
+	array('ul_PostTime'=>'DESC'),
+	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
+	array('pagebar'=>$p)
+);
+
+foreach ($array as $upload) {
+	echo '<tr>';
+	echo '<td class="td5">' . $upload->ID . '</td>';
+	echo '<td class="td10">' . $upload->Author->Name . '</td>';
+	echo '<td><a href="' . $upload->Url . '">' . $upload->Name . '</a></td>';
+	echo '<td class="td15">' . $upload->Time() . '</td>';
+	echo '<td class="td10">' . $upload->Size . '</td>';
+	echo '<td class="td20">' . $upload->MimeType . '</td>';
+	echo '<td class="td10 tdCenter">';
+	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=UploadDel&amp;id='. $upload->ID .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
+	echo '</td>';
+
+	echo '</tr>';
+}
+	echo '</table>';
+	echo '<hr/><p class="pagebar">';
+foreach ($p->buttons as $key => $value) {
+	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
+}	
+	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aUploadMng");</script>';
 	
 }

@@ -123,30 +123,25 @@ return array(
 	'ZC_COMMENT_EXCERPT_MAX' => 20,
 
 	// '---------------------------------静态化配置-----------------------------------
-	// '静态文件名{asp html shtml}
-	'ZC_STATIC_TYPE' => 'html',
-
-	'ZC_STATIC_DIRECTORY' => 'post',
-
 	// '文章,页面类的静态模式ACTIVE or REWRITE
 	'ZC_POST_STATIC_MODE' => 'ACTIVE',
 
 	// '列表页的静态模式ACTIVE or REWRITE
 	'ZC_LIST_STATIC_MODE' => 'ACTIVE',
 
-	'ZC_ARTICLE_REGEX' => '{%host%}/view.php?id={%id%}',
+	'ZC_ARTICLE_REGEX' => '{%host%}view.php?id={%id%}',
 
-	'ZC_PAGE_REGEX' => '{%host%}/view.php?id={%id%}',
+	'ZC_PAGE_REGEX' => '{%host%}view.php?id={%id%}',
 
-	'ZC_CATEGORY_REGEX' => '{%host%}/?cate={%id%}',
+	'ZC_CATEGORY_REGEX' => '{%host%}?cate={%id%}{&page=%page%}',
 
-	'ZC_USER_REGEX' => '{%host%}/?auth={%id%}',
+	'ZC_AUTHOR_REGEX' => '{%host%}?auth={%id%}{&page=%page%}',
 
-	'ZC_TAGS_REGEX' => '{%host%}/?tags={%alias%}',
+	'ZC_TAGS_REGEX' => '{%host%}?tags={%alias%}{&page=%page%}',
 
-	'ZC_DATE_REGEX' => '{%host%}/?date={%date%}',
+	'ZC_DATE_REGEX' => '{%host%}?date={%date%}{&page=%page%}',
 
-	'ZC_DEFAULT_REGEX' => '{%host%}/',
+	'ZC_INDEX_REGEX' => '{%host%}{?page=%page%}',
 
 	#首页，分类页，文章页，页面页的默认模板
 	'ZC_INDEX_DEFAULT_TEMPLATE' => 'index',

@@ -20,9 +20,16 @@ $ispage=false;
 if($action=='PageEdt'){$ispage=true;}
 
 $article=new Post;
+$article->AuthorID=$zbp->user->ID;
+
+if(!$zbp->CheckRights('ArticlePub')){
+  $article->Status=ZC_POST_STATUS_AUDITING;
+}
+
 if((GetVars('id','GET')!='')){
   $article->LoadInfoByID((integer)(GetVars('id','GET')));
 }
+
 if($ispage){
   $article->Type=1;
 }else{
@@ -120,15 +127,15 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
 
           <div id='template' class='editmod'> <label for="cmbTemplate" class="editinputname" ><?php echo $lang['msg']['template']?></label>
             <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate" onChange="edtTemplate.value=this.options[this.selectedIndex].value">
-<?php echo $zbp->CreateOptoinsOfTemplate($article->Template);?>
+<?php echo CreateOptoinsOfTemplate($article->Template);?>
             </select>
           </div>
           <!-- )template --> 
           
           <!-- level -->
-          <div id='level' class='editmod'> <label for="cmbArticleStatus" class="editinputname" ><?php echo $lang['msg']['status']?></label>
-            <select class="edit" style="width:180px;" size="1" name="Status" id="cmbArticleStatus" onChange="edtLevel.value=this.options[this.selectedIndex].value">
-              <option value="0" ><?php echo $lang['post_status_name']['0']?></option><option value="1" ><?php echo $lang['post_status_name']['1']?></option><option value="2" ><?php echo $lang['post_status_name']['2']?></option>
+          <div id='level' class='editmod'> <label for="cmbPostStatus" class="editinputname" ><?php echo $lang['msg']['status']?></label>
+            <select class="edit" style="width:180px;" size="1" name="Status" id="cmbPostStatus" onChange="edtLevel.value=this.options[this.selectedIndex].value">
+<?php echo CreateOptoinsOfPostStatus($article->Status);?>
             </select>
           </div>
           <!-- )level --> 
@@ -136,11 +143,7 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
           <!-- user( -->
           <div id='user' class='editmod'> <label for="cmbUser" class="editinputname" ><?php echo $lang['msg']['author']?></label>
             <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
-<?php
-foreach ($zbp->members as $key => $value) {
-echo '<option value="'. $value->ID .'" '. ($article->AuthorID==$value->ID?'selected="selected"':'') .'>' . $value->Name . '</option>';
-}
-?>
+<?php echo CreateOptoinsOfMember($article->AuthorID);?>
 
             </select>
           </div>
@@ -153,7 +156,7 @@ echo '<option value="'. $value->ID .'" '. ($article->AuthorID==$value->ID?'selec
 
           <!-- )newdatetime --> 
           
-          <!-- Istop( --><?php if(!$ispage){?>
+          <!-- Istop( --><?php if(!$ispage&&$zbp->CheckRights('ArticleAll')){?>
           <div id='istop' class='editmod'>    
             <label for="edtIstop" class="editinputname" ><?php echo $lang['msg']['top']?></label>
             <input id="edtIstop" name="IsTop" style="" type="text" value="<?php echo (int)$article->IsTop;?>" class="checkbox"/>

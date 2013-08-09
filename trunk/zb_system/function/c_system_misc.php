@@ -11,11 +11,11 @@ ob_clean();
 
 switch (GetVars('type','GET')) {
 	case 'statistic':
-		if (!$zbp->CheckRights('root')) {Http404();throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights('root')) {echo $lang['error'][6];die();throw new Exception($lang['error'][6]);}
 		misc_statistic();
 		break;
 	case 'updateinfo':
-		if (!$zbp->CheckRights('root')) {Http404();throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights('root')) {echo $lang['error'][6];die();throw new Exception($lang['error'][6]);}
 		misc_updateinfo();
 		break;
 	case 'showtags':

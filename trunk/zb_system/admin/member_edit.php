@@ -41,12 +41,18 @@ $member=$zbp->GetMemberByID($memberid);
 	  <p>
 		<span class="title"><?php echo $lang['msg']['member_level']?>:</span><br />
 		<select class="edit" size="1" name="Level" id="cmbTemplate">
-<?php echo $zbp->CreateOptoinsOfMemberLevel($member->Level);?>
+<?php echo CreateOptoinsOfMemberLevel($member->Level);?>
 		</select>
 	  </p>	  
 	  <p>
 		<span class="title"><?php echo $lang['msg']['name']?>:</span><span class="star">(*)</span><br />
 		<input id="edtName" class="edit" size="40" name="Name" maxlength="50" type="text" value="<?php echo $member->Name;?>" />
+	  </p>
+	  <p>
+	    <span class='title'><?php echo $lang['msg']['password']?>:</span><br/><input id="edtPassword" class="edit" size="40" name="Password"  type="password" value="" />
+	  </p>
+	  <p>
+	    <span class='title'><?php echo $lang['msg']['re_password']?>:</span><br/><input id="edtPasswordRe" class="edit" size="40" name="PasswordRe"  type="password" value="" />
 	  </p>
 	  <p>
 		<span class="title"><?php echo $lang['msg']['alias']?>:</span><br />
@@ -60,10 +66,13 @@ $member=$zbp->GetMemberByID($memberid);
 		<span class="title"><?php echo $lang['msg']['homepage']?>:</span><br />
 		<input id="edtHomePage" class="edit" size="40" name="HomePage" type="text" value="<?php echo $member->HomePage;?>" />
 	  </p>
+	  <p><span class='title'><?php echo $lang['msg']['intro']?>:</span><br/>
+	    <textarea  cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;"><?php echo htmlspecialchars($member->Intro);?></textarea>
+	  </p>
 	  <p>
 		<span class="title"><?php echo $lang['msg']['template']?>:</span><br />
 		<select class="edit" size="1" name="Template" id="cmbTemplate">
-<?php echo $zbp->CreateOptoinsOfTemplate($member->Template);?>
+<?php echo CreateOptoinsOfTemplate($member->Template);?>
 		</select>
 	  </p>
 	  <p>
@@ -78,6 +87,11 @@ function checkCateInfo(){
     alert("<?php echo $lang['error']['72']?>");
     return false
   }
+
+  if(!$("#edtPassword").val()==$("#edtPasswordRe").val()){
+    alert("<?php echo $lang['error']['73']?>");
+    return false
+  } 
 
 }
 	</script>

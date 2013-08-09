@@ -22,13 +22,14 @@ class UrlRule
 
 		$this->Rules['{%host%}']=$zbp->host;
 		if(isset($this->Rules['{%page%}'])){
-			if($this->Rules['{%page%}']=='1'){$this->Rules['{%page%}']='';}
+			if($this->Rules['{%page%}']=='1'||$this->Rules['{%page%}']=='0'){$this->Rules['{%page%}']='';}
 		}
 		$s=$this->PreUrl;
 		foreach ($this->Rules as $key => $value) {
 			$s=preg_replace($key, $value, $s);
 		}
 		$s=preg_replace('/\{[\?\/&a-z0-9]*=\}/', '', $s);
+		$s=preg_replace('/\{\/?}/', '', $s);
 		$s=str_replace(array('{','}'), array('',''), $s);
 		$this->Url=htmlspecialchars($s);
 		#echo nl2br($s,true);

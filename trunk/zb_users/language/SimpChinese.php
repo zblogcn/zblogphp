@@ -33,6 +33,7 @@ return array(
 	'homepage'=>'主页',
 	'anonymous'=>'无名氏',
 	'unnamed'=>'未命名',
+	'size'=>'大小',
 	'none'=>'无',
 	'any'=>'任意',
 	'edit'=>'编辑',
@@ -48,6 +49,7 @@ return array(
 	'view_permissions'=>'查看权限',
 	'parent_category'=>'父分类',
 	'password'=>'密码',
+	're_password'=>'确认密码',
 	'username'=>'用户名',
 	'return_to_site'=>'返回网站',
 	'dashboard'=>'后台首页',
@@ -270,6 +272,7 @@ return array(
 '70'=>'正文不能为空！',
 '71'=>'当前的编辑内容还未保存！',
 '72'=>'名称不能为空！',
+'73'=>'请设置和确认密码！',
 ),
 
 

@@ -90,7 +90,14 @@ class Post extends Base{
 				return $zbp->lang['post_status_name'][$this->Status];
 				break;
 			case 'Url':
-				return $zbp->host . 'view.php?id=' . $this->ID ;
+				if($this->Type==ZC_POST_TYPE_ARTICLE){
+					$u = new UrlRule($zbp->option['ZC_ARTICLE_REGEX']);
+				}else{
+					$u = new UrlRule($zbp->option['ZC_PAGE_REGEX']);
+				}
+				$u->Rules['{%id%}']=$this->ID;
+				$u->Rules['{%alias%}']=$this->Alias;
+				return $u->Make();
 				break;
 			case 'Tags':
 				return $zbp->LoadTagsByIDString($this->Tag);

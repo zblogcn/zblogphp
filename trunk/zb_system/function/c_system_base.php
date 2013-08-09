@@ -10,9 +10,6 @@
 error_reporting(0);
 @ini_set("display_errors",0);
 
-@ini_set('magic_quotes_runtime',0);
-@ini_set('magic_quotes_gpc',0);
-
 ob_start();
 
 $action=null;
@@ -20,6 +17,8 @@ $action=null;
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $cookiespath = null;
 $bloghost = null;
+
+$usersdir = 'zb_users/';
 
 $option_zbusers=null;
 if(file_exists($blogpath . 'zb_users/c_option.php')){
@@ -33,7 +32,7 @@ if(is_array($option_zbusers)){
 
 if($option['ZC_DEBUG_MODE']==true){
     error_reporting(-1);
-    ini_set("display_errors",1);
+    @ini_set("display_errors",1);
 }
 
 $option['ZC_BLOG_PRODUCT_FULL']=$option['ZC_BLOG_PRODUCT'] . ' ' . $option['ZC_BLOG_VERSION'];
@@ -78,8 +77,8 @@ foreach ($lib_array as $f) {
 define('ZC_POST_TYPE_ARTICLE', 0);
 define('ZC_POST_TYPE_PAGE', 1);
 define('ZC_POST_STATUS_PUBLIC', 0);
-define('ZC_POST_STATUS_PRIVATE', 1);
-define('ZC_POST_STATUS_DRAFT', 2);
+define('ZC_POST_STATUS_DRAFT', 1);
+define('ZC_POST_STATUS_AUDITING', 2);
 
 #定义命令
 $actions=array(
@@ -91,10 +90,13 @@ $actions=array(
 	'search'=>6,
 	'misc'=>6,
 	'feed'=>6,
+	'cmt'=>6,
+	'getcmt'=>6,
 
 	'ArticleEdt'=>4,
 	'ArticlePst'=>4,
 	'ArticleDel'=>4,
+	'ArticlePub'=>3,	
 
 	'PageEdt'=>2,
 	'PagePst'=>2,
@@ -126,13 +128,13 @@ $actions=array(
 
 	'ThemeSet'=>3,	
 
-	'ArticleMng'=>3,
+	'ArticleMng'=>4,
 	'PageMng'=>2,
 	'CategoryMng'=>2,
 	'SettingMng'=>1,
 	'TagMng'=>2,
 	'CommentMng'=>5,
-	'UploadMng'=>2,
+	'UploadMng'=>3,
 	'MemberMng'=>5,
 	'ThemeMng'=>1,
 	'PluginMng'=>1,
