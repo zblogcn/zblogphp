@@ -44,7 +44,9 @@ function ViewList($page,$cate,$auth,$date,$tags){
 		array('pagebar'=>$pagebar)
 	);
 
-	$zbp->template->SetTags('title',$pagebar->PageNow);
+	if($type=='index'&&$page==1){$zbp->title=$zbp->subname;}
+
+	$zbp->template->SetTags('title',$zbp->title);
 	$zbp->template->SetTags('articles',array_merge($articles_top,$articles));
 	$zbp->template->SetTags('pagebar',$pagebar);
 	$zbp->template->SetTags('type',$type);
@@ -57,20 +59,22 @@ function ViewList($page,$cate,$auth,$date,$tags){
 function ViewPost($id,$alias){
 	global $zbp;
 
-	$articles=$zbp->GetArticleList(
+	$articles=$zbp->GetPostList(
 		array('*'),
 		array(array('=','log_ID',$id),array('=','log_Status',0)),
 		null,
 		array(1),
 		null
 	);
-
 	if(count($articles)==0){
 		Http404();
 		throw new Exception($zbp->lang['error'][9], 1);
 	}
 
 	$article =$articles[0];
+	if($article->Type==0){
+		$zbp->LoadTagsByIDString($article->Tag);
+	}
 
 	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);
@@ -87,12 +91,11 @@ function ViewPost($id,$alias){
 
 
 
-function Login(){
+function VerifyLogin(){
 	global $zbp;
 
 	if (isset($zbp->membersbyname[GetVars('username','POST')])) {
-		$m=$zbp->membersbyname[GetVars('username','POST')];
-		if($m->Password == md5(GetVars('password','POST') . $m->Guid)){
+		if($zbp->Verify_MD5(GetVars('username','POST'),GetVars('password','POST'))){
 			if(GetVars('savedate')==0){
 				setcookie("username", GetVars('username','POST'),0,$zbp->cookiespath);
 				setcookie("password", GetVars('password','POST'),0,$zbp->cookiespath);
@@ -100,15 +103,13 @@ function Login(){
 				setcookie("username", GetVars('username','POST'), time()+3600*24*GetVars('savedate','POST'),$zbp->cookiespath);
 				setcookie("password", GetVars('password','POST'), time()+3600*24*GetVars('savedate','POST'),$zbp->cookiespath);
 			}
-			header('Location:admin/');
+			return true;
 		}else{
 			throw new Exception($GLOBALS['lang']['error'][8]);
 		}
 	}else{
 		throw new Exception($GLOBALS['lang']['error'][8]);
-		
 	}
-
 }
 
 
@@ -154,6 +155,7 @@ function PostArticle(){
 	if(isset($_POST['IsLock'])  ) $article->IsLock   = GetVars('IsLock','POST');
 
 	$article->Save();
+	return true;
 }
 
 
@@ -166,7 +168,7 @@ function DelArticle(){
 	if($article->ID>0){
 		$article->Del();
 	}
-
+	return true;
 }
 
 
@@ -195,10 +197,11 @@ function PostPage(){
 	if(isset($_POST['IsLock'])  ) $article->IsLock   = GetVars('IsLock','POST');
 
 	$article->Save();
+	return true;
 }
 
 function DelPage(){
-	DelArticle();
+	return DelArticle();
 }
 
 
@@ -227,7 +230,7 @@ function PostCategory(){
 	if(isset($_POST['LogTemplate'])) $cate->LogTemplate = GetVars('LogTemplate','POST');
 
 	$cate->Save();
-
+	return true;
 }
 
 
@@ -240,7 +243,7 @@ function DelCategory(){
 	if($cate->ID>0){
 		$cate->Del();
 	}
-
+	return true;
 }
 
 
@@ -259,7 +262,7 @@ function PostTag(){
 	if(isset($_POST['Template'])) $tag->Template = GetVars('Template','POST');
 
 	$tag->Save();
-
+	return true;
 }
 
 
@@ -271,7 +274,7 @@ function DelTag(){
 	if($tag->ID>0){
 		$tag->Del();
 	}
-
+	return true;
 }
 
 
@@ -308,7 +311,20 @@ function PostMember(){
 	if(isset($_POST['Intro'])   ) $mem->Intro    = GetVars('Intro','POST');	
 	if(isset($_POST['Password'])   ) $mem->Password    = GetVars('Password','POST');
 	$mem->Save();
+	return true;
+}
 
+function DelMember(){
+	global $zbp;
+
+	$id=(int)GetVars('id','GET');
+	$m=$zbp->GetMemberByID($id);
+	if($m->ID>0 && $m->ID<>$zbp->user->ID){
+		$m->Del();
+	}else{
+		return false;
+	}
+	return true;
 }
 
 
@@ -337,7 +353,9 @@ function PostUpload(){
 
 }
 
+function DelUpload(){
 
+}
 
 function EnablePlugin($name){
 	global $zbp;

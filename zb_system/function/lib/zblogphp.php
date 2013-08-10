@@ -246,6 +246,7 @@ class ZBlogPHP{
 	public function OpenConnect(){
 
 		if($this->isconnect)return false;
+		if(!$this->option['ZC_DATABASE_TYPE'])return false;
 		switch ($this->option['ZC_DATABASE_TYPE']) {
 		case 'mysql':
 		case 'pdo_mysql':
@@ -406,16 +407,13 @@ class ZBlogPHP{
 		$this->option['ZC_BLOG_CSS'] = $this->style;
 
 		$this->option['ZC_BLOG_HOST'] = $this->host;
-/*
-		#$s="<?php\r\n";
-		#$s.="return ";
-		#$s.=var_export($this->option,true);
-		#s.="\r\n?>";
-
-		#@file_put_contents($this->usersdir . 'c_option.php',$s);
-		#$this->SetCache('refesh',time());
-		#$this->SaveCache();
-*/
+		if(!$this->option['ZC_YUN_SITE']){
+			$s="<?php\r\n";
+			$s.="return ";
+			$s.=var_export($this->option,true);
+			$s.="\r\n?>";
+			@file_put_contents($this->usersdir . 'c_option.php',$s);
+		}
 
 		foreach ($this->option as $key => $value) {
 			$this->Config('system')->$key = $value;
@@ -465,6 +463,7 @@ class ZBlogPHP{
 		$lv2=array();
 		$lv3=array();	
 		$array=$this->GetCategoryList(null,null,array('cate_Order'=>'ASC'),null,null);
+		if(count($array)==0)return false;
 		foreach ($array as $c) {
 			$this->categorys[$c->ID]=$c;
 		}
@@ -703,6 +702,15 @@ class ZBlogPHP{
 		return $list;
 	}
 
+	function GetPostList($select=null,$where=null,$order=null,$limit=null,$option=null){
+
+		if(empty($select)){$select = array('*');}
+		if(empty($where)){$where = array();}
+		$sql = $this->db->sql->Select('Post',$select,$where,$order,$limit,$option);
+		return $this->GetList('Post',$sql);
+
+	}
+
 	function GetArticleList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
@@ -789,6 +797,14 @@ class ZBlogPHP{
 		}else{
 			return new Category;
 		}
+	}
+
+	function GetModuleByID($id){
+		$m = new Module;
+		if($id>0){
+			$m->LoadInfoByID($id);
+		}
+		return $m;		
 	}
 
 	function GetMemberByID($id){

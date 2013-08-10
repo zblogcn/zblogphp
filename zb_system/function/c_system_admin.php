@@ -39,6 +39,15 @@ Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','zbp_addmodsubmenu');
 
 $zbp->LoadTemplates();
 
+
+
+
+
+
+
+
+
+################################################################################################################
 $topmenus=array();
 
 $leftmenus=array();
@@ -142,9 +151,7 @@ function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUr
 
 
 
-
-
-
+################################################################################################################
 function CreateOptoinsOfTemplate($default){
 	global $zbp;
 
@@ -229,17 +236,26 @@ function CreateModuleDiv($m,$button=true){
 
 	echo '<div class="widget widget_source_' . $m->SourceType . ' widget_id_' . $m->FileName . '">';
 	echo '<div class="widget-title"><img class="more-action" width="16" src="../image/admin/brick.png" alt="" />' . ($m->SourceType!='theme'?$m->Name:$m->FileName) . '';
-if($button){
-	echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;id=' . $m->ID . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="" title="" width="16" /></a>';
-if($m->SourceType!='system'){
-	echo '&nbsp;<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ModuleDel&amp;id=' . $m->ID .'"><img src="../image/admin/delete.png" alt="" title="" width="16" /></a>';
-}
-	echo '</span>';
-}
+
+	if($button){
+		if($m->SourceType!='theme'){
+			echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;id=' . $m->ID . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="" title="" width="16" /></a>';
+		}else{
+			echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;filename=' . $m->FileName . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="" title="" width="16" /></a>';
+		}
+		if($m->SourceType!='system'&&$m->SourceType!='theme'){
+			echo '&nbsp;<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ModuleDel&amp;id=' . $m->ID .'"><img src="../image/admin/delete.png" alt="" title="" width="16" /></a>';
+		}
+		echo '</span>';
+	}
+
 	echo '</div>';
 	echo '<div class="funid" style="display:none">' . $m->FileName . '</div>';	
 	echo '</div>';
 }
+
+
+
 
 
 
@@ -272,6 +288,12 @@ function Admin_SiteInfo(){
 }
 
 
+
+
+
+
+
+################################################################################################################
 function Admin_ArticleMng(){
 
 	global $zbp;
@@ -370,6 +392,14 @@ foreach ($p->buttons as $key => $value) {
 
 }
 
+
+
+
+
+
+
+
+################################################################################################################
 function Admin_PageMng(){
 
 	global $zbp;
@@ -433,6 +463,12 @@ foreach ($p->buttons as $key => $value) {
 	
 }
 
+
+
+
+
+
+################################################################################################################
 function Admin_CategoryMng(){
 
 	global $zbp;
@@ -478,6 +514,13 @@ foreach ($zbp->categorysbyorder as $category) {
 	
 }
 
+
+
+
+
+
+
+################################################################################################################
 function Admin_CommentMng(){
 
 	global $zbp;
@@ -495,6 +538,13 @@ function Admin_CommentMng(){
 	
 }
 
+
+
+
+
+
+
+################################################################################################################
 function Admin_MemberMng(){
 
 	global $zbp;
@@ -564,6 +614,14 @@ foreach ($p->buttons as $key => $value) {
 	
 }
 
+
+
+
+
+
+
+
+################################################################################################################
 function Admin_UploadMng(){
 
 	global $zbp;
@@ -637,6 +695,15 @@ foreach ($p->buttons as $key => $value) {
 	
 }
 
+
+
+
+
+
+
+
+
+################################################################################################################
 function Admin_TagMng(){
 
 	global $zbp;
@@ -698,6 +765,15 @@ foreach ($p->buttons as $key => $value) {
 	
 }
 
+
+
+
+
+
+
+
+
+################################################################################################################
 function Admin_ThemeMng(){
 
 	global $zbp;
@@ -740,6 +816,15 @@ echo '</div>';
 	
 }
 
+
+
+
+
+
+
+
+
+################################################################################################################
 function Admin_ModuleMng(){
 
 	global $zbp;
@@ -977,6 +1062,11 @@ foreach ($zbp->sidebar5 as $m) {
 <?php
 }
 
+
+
+
+
+################################################################################################################
 function Admin_PluginMng(){
 
 	global $zbp;
@@ -1054,6 +1144,13 @@ foreach ($plugins as $plugin) {
 	
 }
 
+
+
+
+
+
+
+################################################################################################################
 function Admin_SettingMng(){
 
 	global $zbp;

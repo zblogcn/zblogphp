@@ -22,12 +22,11 @@ $option_zbusers=null;
 if(file_exists($usersdir . 'c_option.php')){
 	$option_zbusers = require($usersdir . 'c_option.php');
 }
+if(!is_array($option_zbusers))$option_zbusers=array();
 $option = require($blogpath . 'zb_system/defend/c_option.php');
 foreach ($option_zbusers as $key => $value) {
 	$option[$key]=$value;
 }
-
-
 
 
 $lang = null;

@@ -15,7 +15,7 @@ $upload_dir = $blogpath . $upload_dir;
 
 #echo '/*' . $upload_dir . '*/' ;
 
-$output_js="(function(){var URL;URL = '{$bloghost}zb_users/plugin/ueditor/';window.UEDITOR_CONFIG = {";
+$output_js="(function(){var URL;URL = '{$bloghost}zb_users/plugin/UEditor/';window.UEDITOR_CONFIG = {";
 
 $array_config = array(
 	'UEDITOR_HOME_URL' => 'URL',

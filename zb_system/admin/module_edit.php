@@ -45,7 +45,8 @@ if(isset($_GET['filename'])){
 	//'$mod=
 }else{
 	if(isset($_GET['id'])){$modid = (integer)$_GET['id'];}else{$modid = 0;}
-	$mod=$zbp->GetTagByID($tagid);
+
+	$mod=$zbp->GetModuleByID($modid);
 }
 
 
@@ -64,12 +65,24 @@ if(isset($_GET['filename'])){
 	  </p>
 	  <p>
 		<span class="title"><?php echo $lang['msg']['filename']?>:</span><br />
-		<input id="edtAlias" class="edit" size="40" name="FileName" type="text" value="<?php echo $mod->FileName;?>" />
+		<input id="edtFileName" class="edit" size="40" name="FileName" type="text" value="<?php echo $mod->FileName;?>" />
 	  </p>
 	  <p>
 		<span class="title"><?php echo $lang['msg']['htmlid']?>:</span><br />
-		<input id="edtAlias" class="edit" size="40" name="FileName" type="text" value="<?php echo $mod->HtmlID;?>" />
+		<input id="edtFileName" class="edit" size="40" name="FileName" type="text" value="<?php echo $mod->HtmlID;?>" />
 	  </p>
+
+<p><span class='title'><?php echo $lang['msg']['type']?>:</span><br/>
+<label><input name="Type" type="radio" value="div" onclick="$('#pMaxLi').css('display','none');" />&nbsp;DIV </label>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<label><input type="radio" name="Type" value="ul" onclick="$('#pMaxLi').css('display','block');" />&nbsp;UL</label>
+</p>
+<p id="pMaxLi" >
+		<span class='title'>UL内LI的最大行数:</span><br/>
+		<input type="text" name="MaxLi" value="" size="40"  />
+</p>
+
+
 	  <p>
 		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkCateInfo();" />
 	  </p>
