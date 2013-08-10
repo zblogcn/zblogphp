@@ -165,5 +165,6 @@ return array(
 
 	'ZC_HTTP_LASTMODIFIED' => false,
 
+	'ZC_YUN_SITE'=>false,
 )
 ?>

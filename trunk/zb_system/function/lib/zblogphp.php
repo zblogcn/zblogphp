@@ -31,9 +31,12 @@ class ZBlogPHP{
 	public $configs=array();
 
 	public $templatetags=array();	
+
 	public $title=null;
 	public $name=null;
 	public $subname=null;
+	public $theme = null;
+	public $style = null;	
 
 	public $user=null;
 	public $cache=null;
@@ -50,8 +53,6 @@ class ZBlogPHP{
 	public $themes = array();
 	public $plugins = array();
 
-	public $theme = null;
-	public $style = null;
 	public $managecount = 50;
 	public $pagebarcount = 10;
 
@@ -95,7 +96,6 @@ class ZBlogPHP{
 		$this->title=&$GLOBALS['blogtitle'];
 		$this->name=&$GLOBALS['blogname'];
 		$this->subname=&$GLOBALS['blogsubname'];
-
 		$this->theme=&$GLOBALS['blogtheme'];
 		$this->style=&$GLOBALS['blogstyle'];
 
@@ -105,7 +105,7 @@ class ZBlogPHP{
 
 
 	function __destruct(){
-		$db = null;
+		$this->Terminate();
 	}
 
 	function __call($method, $args) {
@@ -184,11 +184,36 @@ class ZBlogPHP{
 	#初始化连接
 	public function Initialize(){
 
-		ActivePlugin();
+		if(!$this->OpenConnect())return false;
 
-		$this->OpenConnect();
+
 		$this->LoadConfigs();
 		$this->LoadCache();
+		$this->LoadOption();
+
+		if($this->option['ZC_DEBUG_MODE']==true){
+			error_reporting(-1);
+			@ini_set("display_errors",1);
+		}
+
+		$this->option['ZC_BLOG_PRODUCT_FULL']=$this->option['ZC_BLOG_PRODUCT'] . ' ' . $this->option['ZC_BLOG_VERSION'];
+		$this->option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title="RainbowSoft Z-BlogPHP">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
+
+		date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
+		header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
+
+		$this->lang = require($this->usersdir . 'language/' . $this->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+
+		#创建User类
+		$this->user=new Member();
+
+		$this->isinitialize=true;
+
+	}
+
+
+	public function LoadData(){
+		if(!$this->isconnect)return false;
 
 		$this->LoadMembers();
 		$this->LoadCategorys();
@@ -200,31 +225,31 @@ class ZBlogPHP{
 
 		$this->MakeTemplatetags();
 
-		$this->isinitialize=true;
-
 	}
-
 
 
 	#终止连接，释放资源
 	public function Terminate(){
-		$this->CloseConnect();
+		if($this->isinitialize){
+			$this->CloseConnect();
+		}
 	}
 
 	
 	function CreateDB($type){
-		$newtype='Db'.$type;
+		if(!trim($type))return false;
+		$newtype='Db'.trim($type);
 		$this->db=new $newtype();
 		$this->db->sql=new DbSql;
 	}
 
 	public function OpenConnect(){
 
-		if($this->isconnect){return;}
+		if($this->isconnect)return false;
 		switch ($this->option['ZC_DATABASE_TYPE']) {
 		case 'mysql':
 		case 'pdo_mysql':
-			$this->CreateDB($this->option['ZC_DATABASE_TYPE']);
+			if($this->CreateDB($this->option['ZC_DATABASE_TYPE']))return false;
 			if($this->db->Open(array(
 					$this->option['ZC_MYSQL_SERVER'],
 					$this->option['ZC_MYSQL_USERNAME'],
@@ -247,7 +272,9 @@ class ZBlogPHP{
 			}
 			break;
 		}
-		$this->isconnect=true;	
+		$this->isconnect=true;
+		return true;
+
 	}
 
 	public function CloseConnect(){
@@ -394,8 +421,7 @@ class ZBlogPHP{
 		$s.=var_export($this->option,true);
 		$s.="\r\n?>";
 
-		@file_put_contents($this->usersdir . 'c_option.php',$s);
-
+		#@file_put_contents($this->usersdir . 'c_option.php',$s);
 		//$this->SetCache('refesh',time());
 		//$this->SaveCache();
 
@@ -408,7 +434,11 @@ class ZBlogPHP{
 
 	public function LoadOption(){
 
-		$this->option=unserialize($this->Config('zbp')->option);
+		$array=unserialize($this->Config('zbp')->option);
+
+		foreach ($array as $key => $value) {
+			$this->option[$key]=$value;
+		}
 
 	}
 
@@ -630,6 +660,7 @@ class ZBlogPHP{
 
 	function BuildTemplate()
 	{
+		if($this->option['ZC_YUN_SITE'])return false;
 		//初始化模板
 		$this->LoadTemplates();
 

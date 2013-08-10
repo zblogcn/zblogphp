@@ -8,7 +8,7 @@ header("Content-type: application/x-javascript; charset=utf-8");
 //Somecode here.
     
 
-$zbp->Initialize();
+$zbp->LoadData();
 
 ob_clean();
 

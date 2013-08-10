@@ -9,7 +9,7 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
-$zbp->Initialize();
+$zbp->LoadData();
 
 $action=GetVars('act','GET');
 if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
@@ -379,8 +379,6 @@ foreach ($GLOBALS['Filter_Plugin_Edit_End'] as $fpname => &$fpsignal) {$fpname()
 </div>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
-
-$zbp->Terminate();
 
 RunTime();
 ?>

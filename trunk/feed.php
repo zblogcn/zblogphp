@@ -8,7 +8,7 @@
 
 require './zb_system/function/c_system_base.php';
 
-$zbp->Initialize();
+$zbp->LoadData();
 
 $action='feed';
 
@@ -31,8 +31,6 @@ foreach ($articles as $article) {
 header("Content-type:text/xml; Charset=utf8");
 
 echo $rss2->saveXML();
-
-$zbp->Terminate();
 
 RunTime();
 ?>

@@ -17,38 +17,26 @@ $action=null;
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $usersdir = $blogpath . 'zb_users/';
 
-$cookiespath = null;
-$bloghost = null;
-
 
 $option_zbusers=null;
 if(file_exists($usersdir . 'c_option.php')){
 	$option_zbusers = require($usersdir . 'c_option.php');
 }
-if(is_array($option_zbusers)){
-    $option = $option_zbusers;
-}else{
-    $option = require($blogpath . 'zb_system/defend/c_option.php');
+$option = require($blogpath . 'zb_system/defend/c_option.php');
+foreach ($option_zbusers as $key => $value) {
+	$option[$key]=$value;
 }
 
-if($option['ZC_DEBUG_MODE']==true){
-    error_reporting(-1);
-    @ini_set("display_errors",1);
-}
 
-$option['ZC_BLOG_PRODUCT_FULL']=$option['ZC_BLOG_PRODUCT'] . ' ' . $option['ZC_BLOG_VERSION'];
-$option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title="RainbowSoft Z-BlogPHP">' . $option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
 
-date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
-header('Product:' . $option['ZC_BLOG_PRODUCT_FULL']);
 
-$lang = require($usersdir . 'language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+$lang = null;
 
-$blogtitle = $option['ZC_BLOG_SUBNAME'];
-$blogname = $option['ZC_BLOG_NAME'];
-$blogsubname = $option['ZC_BLOG_SUBNAME'];
-$blogtheme = $option['ZC_BLOG_THEME'];
-$blogstyle = $option['ZC_BLOG_CSS'];
+$blogtitle = &$option['ZC_BLOG_SUBNAME'];
+$blogname = &$option['ZC_BLOG_NAME'];
+$blogsubname = &$option['ZC_BLOG_SUBNAME'];
+$blogtheme = &$option['ZC_BLOG_THEME'];
+$blogstyle = &$option['ZC_BLOG_CSS'];
 
 require $blogpath.'zb_system/function/c_system_debug.php';
 require $blogpath.'zb_system/function/c_system_common.php';
@@ -159,13 +147,10 @@ $actions=array(
 
 
 $zbp=ZBlogPHP::GetInstance();
-
-#创建User类
-$zbp->user=new Member();	
+$zbp->Initialize();
 
 
 /*include plugin*/
-
 #加载主题插件
 if (file_exists($filename = $usersdir . 'theme/'.$blogtheme.'/include.php')) {
 	require $filename;
@@ -177,6 +162,11 @@ foreach (explode("|", $option['ZC_USING_PLUGIN_LIST']) as $plugin) {
 		require $filename;
 	}
 }
+
+ActivePlugin();	
+
+
+
 
 
 /*system plugin*/
@@ -200,8 +190,12 @@ function zbp_default_cache_write(){
 	$zbp->SaveCache();
 }
 
-#Add_Filter_Plugin('Filter_Plugin_Index_PreInitialize','zbp_default_cache_read');
+#Add_Filter_Plugin('Filter_Plugin_Index_Begin','zbp_default_cache_read');
 #Add_Filter_Plugin('Filter_Plugin_Index_End','zbp_default_cache_write');
+
+
+
+
 
 
 /*autoload*/
