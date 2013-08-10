@@ -3,7 +3,7 @@
 </head>
 <body class="multi default">
 {template:c_top}
-		<div id="mission"></div><ins></ins>
+		<div id="mission">{$modules['new'].Content}</div><ins></ins>
 {if $article->Type==ZC_POST_TYPE_ARTICLE}
 {template:post-single}
 {else}

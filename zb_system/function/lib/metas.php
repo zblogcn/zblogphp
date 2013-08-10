@@ -17,6 +17,7 @@ class Metas {
 
 	public function __get($name)
 	{
+		if(!isset($this->Data[$name]))return '';
 		return $this->Data[$name];
 	}
 

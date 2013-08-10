@@ -37,12 +37,12 @@ return array(
 	'ZC_MYSQL_CHARSET' => 'utf8',				
 	'ZC_MYSQL_PRE' => 'zbp_',							
 	'ZC_MYSQL_ENGINE'=>'MyISAM',
-
+    'ZC_MYSQL_PORT' => '3306', 
 	// '---------------------------------插件----------------------------------------
 	'ZC_USING_PLUGIN_LIST' => '',
 
 	// '-------------------------------全局配置-----------------------------------
-	'ZC_DEBUG_MODE' => false,
+	'ZC_DEBUG_MODE' => true,
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE' => '+0800',
 	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
@@ -97,9 +97,6 @@ return array(
 	'ZC_UPLOAD_FILETYPE' => 'jpg|gif|png|jpeg|bmp|psd|wmf|ico|rpm|deb|tar|gz|sit|7z|bz2|zip|rar|xml|xsl|svg|svgz|doc|xls|wps|chm|txt|pdf|mp3|avi|mpg|rm|ra|rmvb|mov|wmv|wma|swf|fla|torrent|zpi|zti|zba',
 
 	'ZC_UPLOAD_FILESIZE' => 10485760,
-
-	'ZC_UPLOAD_DIRECTORY' => 'zb_users/upload',
-
 
 	// '用户名,密码,评论长度等限制
 	'ZC_USERNAME_MIN' => 4,

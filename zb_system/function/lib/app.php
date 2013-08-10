@@ -99,12 +99,12 @@ class App
 	}
 	public function GetCssFiles(){
 		global $zbp;
-		$dir = $zbp->path . 'zb_users/theme/' . $this->id . '/style/';
+		$dir = $zbp->usersdir . 'theme/' . $this->id . '/style/';
 		return GetFilesInDir($dir,'css');
 	}
 	public function LoadInfoByXml($type,$id){
 		global $zbp;
-		$path=$zbp->path . 'zb_users/' . $type . '/' . $id . '/' . $type . '.xml';
+		$path=$zbp->usersdir . $type . '/' . $id . '/' . $type . '.xml';
 		if(!file_exists($path)){return;}
 		$xml = simplexml_load_file($path);
 		$appver = $xml->attributes();

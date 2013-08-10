@@ -29,8 +29,8 @@ class Upload extends Base{
 	function SaveFile($tmp){
 		global $zbp;
 		echo $this->FullFile;
-		if(!file_exists($zbp->path . $zbp->usersdir . $this->Dir)){
-			@mkdir($zbp->path . $zbp->usersdir . $this->Dir, 0777,true);	
+		if(!file_exists($zbp->usersdir . $this->Dir)){
+			@mkdir($zbp->usersdir . $this->Dir, 0777,true);	
 		}
 		@move_uploaded_file($tmp, $this->FullFile);			
 	}
@@ -61,13 +61,13 @@ class Upload extends Base{
 	{
         global $zbp;
 		if ($name=='Url') {
-			return $zbp->host . $zbp->usersdir . $this->Dir . $this->Name;
+			return $zbp->host . 'zb_users/' . $this->Dir . $this->Name;
 		}
 		if ($name=='Dir') {
 			return 'upload/' .date('m',$this->PostTime) . '/' . date('d',$this->PostTime) . '/';
 		}
 		if ($name=='FullFile') {
-			return  $zbp->path . $zbp->usersdir . $this->Dir . $this->Name;
+			return  $zbp->usersdir . $this->Dir . $this->Name;
 		}
 		if ($name=='Author') {
 			return $zbp->GetMemberByID($this->AuthorID);

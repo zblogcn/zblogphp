@@ -76,7 +76,7 @@ $member=$zbp->GetMemberByID($memberid);
 		</select>
 	  </p>
 	  <p>
-		<input type="submit" class="button" value="提交" id="btnPost" onclick="return checkCateInfo();" />
+		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkCateInfo();" />
 	  </p>
 	</form>
 	<script type="text/javascript">

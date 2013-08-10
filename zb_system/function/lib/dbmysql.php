@@ -33,7 +33,7 @@ class DbMySQL implements iDataBase
 
 	function Open($array){
 
-		$db_link = @mysql_connect($array[0], $array[1], $array[2]);
+		$db_link = @mysql_connect($array[0] . ':' . $array[5], $array[1], $array[2]);
 
 		if(!$db_link){
 			return false;
