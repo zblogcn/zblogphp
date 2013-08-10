@@ -19,7 +19,11 @@ switch ($action) {
 		Redirect('admin/');
 		break;	
 	case 'verify':
-		Login();
+		if(VerifyLogin()){
+			header('Location:admin/');
+		}else{
+			Redirect('../');
+		}
 		break;
 	case 'search':
 		Redirect('../search.php?q=' . urlencode(trim(GetVars('q','POST'))));	
@@ -89,8 +93,11 @@ switch ($action) {
 		Redirect('cmd.php?act=MemberMng');
 		break;
 	case 'MemberDel':
-		DelMember();
-		$zbp->SetHint('good');
+		if(DelMember()){
+			$zbp->SetHint('good');
+		}else{
+			$zbp->SetHint('bad');			
+		}
 		Redirect('cmd.php?act=MemberMng');
 		break;
 	case 'UploadMng':

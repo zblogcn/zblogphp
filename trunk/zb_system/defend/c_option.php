@@ -146,7 +146,7 @@ return array(
 	'ZC_ARTICLE_DEFAULT_TEMPLATE' => 'single',
 	'ZC_PAGE_DEFAULT_TEMPLATE' => 'single',
 	
-	'ZC_SIDEBAR_ORDER' => '',
+	'ZC_SIDEBAR_ORDER' => 'calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc',
 
 	'ZC_SIDEBAR2_ORDER' => '',
 
@@ -165,6 +165,6 @@ return array(
 
 	'ZC_HTTP_LASTMODIFIED' => false,
 
-	'ZC_YUN_SITE'=>false,
+	'ZC_YUN_SITE'=>'',
 )
 ?>

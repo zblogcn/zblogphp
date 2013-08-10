@@ -467,8 +467,7 @@ $("input[name='fdbtype']:visible").get(0).click();
 function Setup4(){
 
   global $zbp;
-  #加载默认的c_option.php
-  $zbp->option = require($zbp->path . 'zb_system/defend/c_option.php');
+
 ?>
 <dl>
   <dt></dt>
@@ -481,9 +480,7 @@ function Setup4(){
     <div id="title">安装结果</div>
     <div id="content">
       <?php
-
-FileWriteTest();
-
+if(!$zbp->option['ZC_YUN_SITE'])FileWriteTest();
 
 $zbp->option['ZC_DATABASE_TYPE']=GetVars('dbtype','POST');
 
@@ -866,10 +863,10 @@ function SaveConfig(){
   
   
   $zbp->option['ZC_SIDEBAR_ORDER'] ='calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc';
-  $zbp->option['ZC_SIDEBAR_ORDER2']='';
-  $zbp->option['ZC_SIDEBAR_ORDER3']='';
-  $zbp->option['ZC_SIDEBAR_ORDER4']='';
-  $zbp->option['ZC_SIDEBAR_ORDER5']='';
+  $zbp->option['ZC_SIDEBAR2_ORDER']='';
+  $zbp->option['ZC_SIDEBAR3_ORDER']='';
+  $zbp->option['ZC_SIDEBAR4_ORDER']='';
+  $zbp->option['ZC_SIDEBAR5_ORDER']='';
 
   $zbp->SaveOption();
   $zbp->BuildTemplate();
