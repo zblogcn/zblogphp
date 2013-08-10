@@ -9,8 +9,7 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
-$zbp->Initialize();
-#$zbp->BuildTemplate();
+$zbp->LoadData();
 
 $action=(GetVars('act','GET')=='') ? 'admin' : GetVars('act','GET') ;
 if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
@@ -78,8 +77,6 @@ $f();
 </div>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
-
-$zbp->Terminate();
 
 RunTime();
 ?>

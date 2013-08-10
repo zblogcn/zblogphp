@@ -1,7 +1,7 @@
 <?php
 require './function/c_system_base.php';
 
-$zbp->Initialize();
+$zbp->LoadData();
 
 $action=GetVars('act','GET');
 
@@ -169,7 +169,5 @@ switch ($action) {
 		# code...
 		break;
 }
-
-$zbp->Terminate();
 
 ?>

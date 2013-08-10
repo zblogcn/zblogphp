@@ -13,7 +13,7 @@ set_error_handler(create_function('',''));
 set_exception_handler(create_function('',''));
 register_shutdown_function(create_function('',''));
 
-$zbp->Initialize();
+$zbp->LoadData();
 
 function article(){
 	for ($i=0; $i < 10000; $i++) { 
@@ -148,9 +148,5 @@ foreach ($zbp->categorys as $key => $value) {
 }
 
 */
-
-$zbp->Terminate();
-
-
 RunTime();
 ?>

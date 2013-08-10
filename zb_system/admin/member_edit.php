@@ -9,7 +9,7 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
-$zbp->Initialize();
+$zbp->LoadData();
 
 $action='';
 if(GetVars('act','GET')=='MemberEdt')$action='MemberEdt';
@@ -102,8 +102,6 @@ function checkCateInfo(){
 
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
-
-$zbp->Terminate();
 
 RunTime();
 ?>

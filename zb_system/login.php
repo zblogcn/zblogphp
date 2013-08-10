@@ -1,7 +1,7 @@
 <?php
 require './function/c_system_base.php';
 
-$zbp->Initialize();
+$zbp->LoadData();
 
 if ($zbp->CheckRights('admin')) {
 	redirect('cmd.php?act=admin');
@@ -85,8 +85,6 @@ $("#chkRemember").click(function(){
 </body>
 </html>
 <?php
-
-$zbp->Terminate();
 
 RunTime();
 ?>
