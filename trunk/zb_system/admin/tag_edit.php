@@ -27,10 +27,6 @@ if(isset($_GET['id'])){$tagid = $_GET['id'];}else{$tagid = 0;}
 
 $tag=$zbp->GetTagByID($tagid);
 
-$p=null;
-
-$p .='<option value="0">' . $lang['msg']['none'] . '</option>';
-
 ?>
 
 <div id="divMain">
@@ -57,7 +53,7 @@ $p .='<option value="0">' . $lang['msg']['none'] . '</option>';
 		<label><span class="title"><?php echo $lang['msg']['add_to_navbar']?>:</span>   <input type="text" name="AddNavbar" id="edtAddNavbar" value="0" class="checkbox" /></label>
 	  </p>
 	  <p>
-		<input type="submit" class="button" value="提交" id="btnPost" onclick="return checkCateInfo();" />
+		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkCateInfo();" />
 	  </p>
 	</form>
 	<script type="text/javascript">

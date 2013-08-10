@@ -46,8 +46,8 @@ function misc_updateinfo(){
 	$r = '<tr><td>' . $r . '</td></tr>';
 
 	$zbp->SetCache('reload_updateinfo',$r);
-	$zbp->SaveCache(true);
-	
+	$zbp->SaveCache();
+
 	echo $r;
 }
 
@@ -84,7 +84,7 @@ function misc_statistic(){
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";		
 
 	$zbp->SetCache('reload_statistic',$r);
-	$zbp->SaveCache(true);
+	$zbp->SaveCache();
 
 	echo $r;
 

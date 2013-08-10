@@ -117,6 +117,7 @@ function Setup0(){
 }
 
 function Setup1(){
+  global $zbp;
 ?>
 <dl>
   <dt></dt>
@@ -126,7 +127,7 @@ function Setup1(){
     <p><b>安装协议</b>» 环境检查 » 数据库建立与设置 » 安装结果</p>
   </dd>
   <dd id="ddright">
-    <div id="title">Z-BlogPHP <?php echo $GLOBALS['zbp']->option['ZC_BLOG_VERSION']?>安装协议</div>
+    <div id="title">Z-BlogPHP <?php echo $zbp->option['ZC_BLOG_VERSION']?>安装协议</div>
     <div id="content">
       <textarea readonly>
 Z-BlogPHP  最终用户授权协议 
@@ -459,8 +460,15 @@ $("input[name='fdbtype']:visible").get(0).click();
 <?php
 }
 
+
+
+################################################################################################################
+#4
 function Setup4(){
 
+  global $zbp;
+  #加载默认的c_option.php
+  $zbp->option = require($zbp->path . 'zb_system/defend/c_option.php');
 ?>
 <dl>
   <dt></dt>
@@ -476,64 +484,32 @@ function Setup4(){
 
 FileWriteTest();
 
-$dbtype=GetVars('dbtype','POST');
-#echo $dbtype;
-$db=CreateDB($dbtype);
-$GLOBALS['zbp']->db=&$db;
-switch ($dbtype) {
-  case 'mysql':
-    $array=array(GetVars('dbmysql_server','POST'),GetVars('dbmysql_username','POST'),GetVars('dbmysql_password','POST'),GetVars('dbmysql_name','POST'),GetVars('dbmysql_pre','POST'));
-    if($db->Open($array)){
-        $db->CreateTable($GLOBALS["zbp"]->path);
-        echo "连接数据库并创建表和索引成功!<br/>";
-    } else {
-      echo 'MySQL服务器连接失败，或数据库不存在。<br/>
-            请确认：<br/>
-            <ul>
-            <li> 您的MySQL帐号密码是否正确？ </li>
-            <li> 是否创建了'.GetVars('dbmysql_name','POST').'数据库？</li>
-            </ul>
-      ';
-    }
-    break; 
-  case 'pdo_mysql':
-    $array=array(GetVars('dbmysql_server','POST'),GetVars('dbmysql_username','POST'),GetVars('dbmysql_password','POST'),GetVars('dbmysql_name','POST'),GetVars('dbmysql_pre','POST'));
-    if($db->Open($array)){
-        $db->CreateTable($GLOBALS["zbp"]->path);
-        echo "连接数据库并创建表和索引成功!<br/>";
-    } else {
-      echo 'MySQL服务器连接失败，或数据库不存在。<br/>
-            请确认：<br/>
-            <ul>
-            <li> 您的MySQL帐号密码是否正确？ </li>
-            <li> 是否创建了'.GetVars('dbpdo_mysql_name','POST').'数据库？</li>
-            </ul>
-      ';
-    }
-    break;
-  case 'sqlite':
-    $array=array($GLOBALS["zbp"]->path . GetVars('dbsqlite_name','POST'),GetVars('dbsqlite_pre','POST'));
-    if($db->Open($array)){
-        $db->CreateTable($GLOBALS["zbp"]->path);
-        echo "建立数据库并创建表和索引成功!<br/>";
-      } else {
-      echo 'SQLite数据库创建失败。';
-    }
-    break;
-  case 'sqlite3':
-    $array=array($GLOBALS["zbp"]->path . GetVars('dbsqlite_name','POST'),GetVars('dbsqlite_pre','POST'));
-    if($db->Open($array)){
-        $db->CreateTable($GLOBALS["zbp"]->path);
-        echo "建立数据库并创建表和索引成功!<br/>";
-    } else {
-        echo 'SQLite数据库创建失败。';
-    }
-    break;
+
+$zbp->option['ZC_DATABASE_TYPE']=GetVars('dbtype','POST');
+
+switch ($zbp->option['ZC_DATABASE_TYPE']) {
+case 'mysql':
+case 'pdo_mysql':     
+  $zbp->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
+  $zbp->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
+  $zbp->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
+  $zbp->option['ZC_MYSQL_NAME']=GetVars('dbmysql_name','POST');
+  $zbp->option['ZC_MYSQL_PRE']=GetVars('dbmysql_pre','POST');
+  break;
+case 'sqlite':
+case 'sqlite3':    
+  $zbp->option['ZC_SQLITE_NAME']=GetVars('dbsqlite_name','POST');
+  $zbp->option['ZC_SQLITE_PRE']=GetVars('dbsqlite_pre','POST');
+  break;
 }
 
+$zbp->OpenConnect();
+$zbp->db->CreateTable($zbp->path);
 InsertInfo();
+
 SaveConfig();
-$db->Close();
+
+$zbp->CloseConnect();
 
 ?>
       
@@ -549,8 +525,8 @@ $db->Close();
 }
 
 function Setup5(){
-
-  header('Location: '.$GLOBALS['zbp']->host);
+  global $zbp;
+  header('Location: '.$zbp->host);
 
 }
 
@@ -558,13 +534,14 @@ function Setup5(){
 $CheckResult=null;
 
 function CheckServer(){
-
+global $zbp;
 global $CheckResult;
+
 $CheckResult=array(
  //服务器 
   'server' => array(GetVars('SERVER_SOFTWARE','SERVER'),''), 
   'phpver' => array(phpversion(),''), 
-  'zbppath' => array($GLOBALS['zbp']->path,''), 
+  'zbppath' => array($zbp->path,''), 
  //组件
   'mysql' => array('',''), 
   'pdo_mysql' => array('',''),
@@ -631,8 +608,9 @@ $CheckResult=array(
 }
 
 function getRightsAndExport($folderparent,$folder){
-  $s=GetFilePerms($GLOBALS['zbp']->path.$folderparent.$folder);
-  $o=GetFilePermsOct($GLOBALS['zbp']->path.$folderparent.$folder);
+  global $zbp;
+  $s=GetFilePerms($zbp->path.$folderparent.$folder);
+  $o=GetFilePermsOct($zbp->path.$folderparent.$folder);
   $GLOBALS['CheckResult'][$folder][0]=$s . ' | ' . $o;
   if(substr($s,0,1)=='-'){
     $GLOBALS['CheckResult'][$folder][1]=substr($s,1,2)=='rw'&&substr($s,-3,2)=='rw'?bingo:error;  
@@ -642,7 +620,8 @@ function getRightsAndExport($folderparent,$folder){
 }
 
 function InsertInfo(){
-
+  global $zbp;
+	
   $mem = new Member();
   $guid=GetGuid();
 
@@ -881,87 +860,69 @@ function InsertInfo(){
 
 
 function SaveConfig(){
+	global $zbp;
 
-  #加载默认的c_option.php
-  $GLOBALS['zbp']->option = require($GLOBALS['zbp']->path . 'zb_system/defend/c_option.php');
-
-  $GLOBALS['zbp']->option['ZC_DATABASE_TYPE']=GetVars('dbtype','POST');
-
-  switch ($GLOBALS['zbp']->option['ZC_DATABASE_TYPE']) {
-    case 'mysql':
-    case 'pdo_mysql':     
-      $GLOBALS['zbp']->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
-      $GLOBALS['zbp']->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
-      $GLOBALS['zbp']->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
-      $GLOBALS['zbp']->option['ZC_MYSQL_NAME']=GetVars('dbmysql_name','POST');
-      $GLOBALS['zbp']->option['ZC_MYSQL_PRE']=GetVars('dbmysql_pre','POST');
-      break;
-    case 'sqlite':
-    case 'sqlite3':    
-      $GLOBALS['zbp']->option['ZC_SQLITE_NAME']=GetVars('dbsqlite_name','POST');
-      $GLOBALS['zbp']->option['ZC_SQLITE_PRE']=GetVars('dbsqlite_pre','POST');
-      break;
-  }
-
-  $GLOBALS['zbp']->option['ZC_BLOG_VERSION']='1.0 Alpha Build 130707';
+  $zbp->option['ZC_BLOG_VERSION']='1.0 Alpha Build 130707';
   
   
-  $GLOBALS['zbp']->option['ZC_SIDEBAR_ORDER'] ='calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc';
-  $GLOBALS['zbp']->option['ZC_SIDEBAR_ORDER2']='';
-  $GLOBALS['zbp']->option['ZC_SIDEBAR_ORDER3']='';
-  $GLOBALS['zbp']->option['ZC_SIDEBAR_ORDER4']='';
-  $GLOBALS['zbp']->option['ZC_SIDEBAR_ORDER5']='';
+  $zbp->option['ZC_SIDEBAR_ORDER'] ='calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc';
+  $zbp->option['ZC_SIDEBAR_ORDER2']='';
+  $zbp->option['ZC_SIDEBAR_ORDER3']='';
+  $zbp->option['ZC_SIDEBAR_ORDER4']='';
+  $zbp->option['ZC_SIDEBAR_ORDER5']='';
 
-  $GLOBALS['zbp']->SaveOption();
-  $GLOBALS['zbp']->BuildTemplate();
+  $zbp->SaveOption();
+  $zbp->BuildTemplate();
   
   echo "保存设置,编译模板成功!<br/>";
 
 }
 
-function FileWriteTest(){
 
-$f=$GLOBALS['zbp']->path . 'zb_users/c_option.php';
+function FileWriteTest(){
+	global $zbp;
+	
+$f=$zbp->path . 'zb_users/c_option.php';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/c_option.php'成功!<br/>";}
 
-$f=$GLOBALS['zbp']->path . 'zb_users/avatar/0.png';
+$f=$zbp->path . 'zb_users/avatar/0.png';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/avatar/'目录成功!<br/>";}
 
-$f=$GLOBALS['zbp']->path . 'zb_users/cache/index.html';
+$f=$zbp->path . 'zb_users/cache/index.html';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/cache/'目录成功!<br/>";}
 
-$f=$GLOBALS['zbp']->path . 'zb_users/data/index.html';
+$f=$zbp->path . 'zb_users/data/index.html';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/data/'目录成功!<br/>";}
 
-$f=$GLOBALS['zbp']->path . 'zb_users/emotion/index.html';
+$f=$zbp->path . 'zb_users/emotion/index.html';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/emotion/'目录成功!<br/>";}
 
-$f=$GLOBALS['zbp']->path . 'zb_users/language/SimpChinese.php';
+$f=$zbp->path . 'zb_users/language/SimpChinese.php';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/language/'目录成功!<br/>";}
 
-$f=$GLOBALS['zbp']->path . 'zb_users/logs/index.html';
+$f=$zbp->path . 'zb_users/logs/index.html';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/logs/'目录成功!<br/>";}
 
-$f=$GLOBALS['zbp']->path . 'zb_users/plugin/index.html';
+$f=$zbp->path . 'zb_users/plugin/index.html';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/plugin/'目录成功!<br/>";}
 
-$f=$GLOBALS['zbp']->path . 'zb_users/template/index.html';
+$f=$zbp->path . 'zb_users/template/index.html';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/template/'目录成功!<br/>";}
 
-$f=$GLOBALS['zbp']->path . 'zb_users/theme/index.html';
+$f=$zbp->path . 'zb_users/theme/index.html';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/theme/'目录成功!<br/>";}
 
-$f=$GLOBALS['zbp']->path . 'zb_users/upload/index.html';
+$f=$zbp->path . 'zb_users/upload/index.html';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/upload/'目录成功!<br/>";}
 

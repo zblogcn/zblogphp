@@ -242,6 +242,10 @@ if($m->SourceType!='system'){
 }
 
 
+
+
+
+################################################################################################################
 function Admin_SiteInfo(){
 
 	global $zbp;
@@ -253,8 +257,6 @@ function Admin_SiteInfo(){
 	}	
 	echo '</div>';
 	echo '<div id="divMain2">';
-
-
 
 	echo '<table class="tableFull tableBorder" id="tbStatistic"><tr><th colspan="4">&nbsp;' . $zbp->lang['msg']['site_analyze'] . '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');">[' . $zbp->lang['msg']['refresh_cache'] . ']</a> <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 	echo $zbp->GetCache('reload_statistic');

@@ -23,16 +23,6 @@ interface iDataBase
 }
 
 
-/**
-* DbFactory
-*/
-function CreateDB($type){
-	$newtype='Db'.$type;
-	$db=new $newtype();
-	$db->sql=new DbSql;
-	return $db;
-}
-
 
 /**
 * DbSql
@@ -226,8 +216,8 @@ $datainfo=array(
 	'Status'=>array('log_Status','integer','',0),
 	'Type'=>array('log_Type','integer','',0),
 	'Alias'=>array('log_Alias','string',250,''),
-	'IsTop'=>array('log_IsTop','boolean','',0),
-	'IsLock'=>array('log_IsLock','boolean','',0),
+	'IsTop'=>array('log_IsTop','boolean','',false),
+	'IsLock'=>array('log_IsLock','boolean','',false),
 	'Title'=>array('log_Title','string',250,''),
 	'Intro'=>array('log_Intro','string','',''),
 	'Content'=>array('log_Content','string','',''),
@@ -254,7 +244,7 @@ $datainfo=array(
 'Comment'=> array(
 	'ID'=>array('comm_ID','integer','',0),
 	'LogID'=>array('comm_LogID','integer','',0),
-	'IsCheck'=>array('comm_IsCheck','boolean','',0),
+	'IsCheck'=>array('comm_IsCheck','boolean','',false),
 	'RootID'=>array('comm_RootID','integer','',0),
 	'ParentID'=>array('comm_ParentID','integer','',0),
 	'AuthorID'=>array('comm_AuthorID','integer','',0),
@@ -289,7 +279,7 @@ $datainfo=array(
 	'Type'=>array('mod_Type','string',5,''),
 	'MaxLi'=>array('mod_MaxLi','integer','',0),
 	'Source'=>array('mod_Source','string',50,''),
-	'IsHideTitle'=>array('mod_IsHideTitle','boolean','',0),
+	'IsHideTitle'=>array('mod_IsHideTitle','boolean','',false),
 	'Meta'=>array('mod_Meta','string','',''),
 ),
 'Member'=> array(

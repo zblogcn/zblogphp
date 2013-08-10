@@ -15,14 +15,15 @@ ob_start();
 $action=null;
 
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
+$usersdir = $blogpath . 'zb_users/';
+
 $cookiespath = null;
 $bloghost = null;
 
-$usersdir = 'zb_users/';
 
 $option_zbusers=null;
-if(file_exists($blogpath . 'zb_users/c_option.php')){
-	$option_zbusers = require($blogpath . 'zb_users/c_option.php');
+if(file_exists($usersdir . 'c_option.php')){
+	$option_zbusers = require($usersdir . 'c_option.php');
 }
 if(is_array($option_zbusers)){
     $option = $option_zbusers;
@@ -41,7 +42,7 @@ $option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title
 date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 header('Product:' . $option['ZC_BLOG_PRODUCT_FULL']);
 
-$lang = require($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+$lang = require($usersdir . 'language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 
 $blogtitle = $option['ZC_BLOG_SUBNAME'];
 $blogname = $option['ZC_BLOG_NAME'];
@@ -166,13 +167,13 @@ $zbp->user=new Member();
 /*include plugin*/
 
 #加载主题插件
-if (file_exists($filename=$blogpath.'zb_users/theme/'.$blogtheme.'/include.php')) {
+if (file_exists($filename = $usersdir . 'theme/'.$blogtheme.'/include.php')) {
 	require $filename;
 }
 
 #加载激活插件
 foreach (explode("|", $option['ZC_USING_PLUGIN_LIST']) as $plugin) {
-	if ($filename&&file_exists($filename=$blogpath.'zb_users/plugin/'.$plugin.'/include.php')) {
+	if ($filename&&file_exists($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
 		require $filename;
 	}
 }
@@ -196,7 +197,7 @@ function zbp_default_cache_write(){
 	echo $s;
 	$zbp->SetCache('default_html',$s);
 	$zbp->SetCache('refesh',time());
-	$zbp->SaveCache(true);
+	$zbp->SaveCache();
 }
 
 #Add_Filter_Plugin('Filter_Plugin_Index_PreInitialize','zbp_default_cache_read');

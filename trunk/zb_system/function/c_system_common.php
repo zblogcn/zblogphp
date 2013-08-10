@@ -36,7 +36,7 @@ function GetVars($name,$type='REQUEST'){
 
 function GetDbName(){
 
-	return 'zb_users/data/' . str_replace('-','','#%20' . strtolower(GetGuid())) . '.db';
+	return str_replace('-','','#%20' . strtolower(GetGuid())) . '.db';
 }
 
 
@@ -128,7 +128,7 @@ function Http404(){
 }
 
 function Logs($s){
-	$f=$GLOBALS['blogpath'] . 'zb_users/logs/'. $GLOBALS['option']['ZC_BLOG_CLSID'] .'-log' . date("Ymd"). '.txt';
+	$f=$GLOBALS['usersdir'] . 'logs/'. $GLOBALS['option']['ZC_BLOG_CLSID'] .'-log' . date("Ymd"). '.txt';
 	$handle = @fopen($f, 'a+');
 	@fwrite($handle,"[" . date('c') . "~" . current(explode(" ", microtime()))  . "]" . $s . "\r\n");
 	@fclose($handle);	

@@ -191,7 +191,7 @@ function PostPage(){
 	if(isset($_POST['Template'])) $article->Template = GetVars('Template','POST');
 	if(isset($_POST['Status'])  ) $article->Status   = GetVars('Status','POST');
 	if(isset($_POST['AuthorID'])) $article->AuthorID = GetVars('AuthorID','POST');
-	if(isset($_POST['PostTime'])) $article->PostTime = strtotime(GetVars('PostTime','POST'));
+	if(isset($_POST['PostTime'])) $article->PostTime = GetVars('PostTime','POST');
 	if(isset($_POST['IsLock'])  ) $article->IsLock   = GetVars('IsLock','POST');
 
 	$article->Save();

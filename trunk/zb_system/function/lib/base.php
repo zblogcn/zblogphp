@@ -91,11 +91,11 @@ abstract class Base
 		$keyvalue=array_fill_keys($keys, '');
 
 		foreach ($this->datainfo as $key => $value) {
-			#if($value[2]=='boolean'){
-			#	$keyvalue[$value[0]]=(integer)$this->Data[$key];
-			#}else{
+			if($value[1]=='boolean'){
+				$keyvalue[$value[0]]=(integer)$this->Data[$key];
+			}else{
 				$keyvalue[$value[0]]=$this->Data[$key];
-			#}
+			}
 		}
 		array_shift($keyvalue);
 

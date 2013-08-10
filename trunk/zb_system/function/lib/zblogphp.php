@@ -36,7 +36,7 @@ class ZBlogPHP{
 	public $subname=null;
 
 	public $user=null;
-	public $cache=array();
+	public $cache=null;
 	#cache={name,value,time}
 
 	public $table=null;
@@ -44,7 +44,6 @@ class ZBlogPHP{
 
 	public $isinitialize=false;
 	public $isconnect=false;
-	public $isdelay_savecache=false;	
 
 	public $template = null;
 
@@ -182,21 +181,20 @@ class ZBlogPHP{
 ################################################################################################################
 
 
-
-
 	#初始化连接
 	public function Initialize(){
 
 		ActivePlugin();
 
+		$this->OpenConnect();
+		$this->LoadConfigs();
 		$this->LoadCache();
 
-		$this->OpenConnect();
 		$this->LoadMembers();
 		$this->LoadCategorys();
 		#$this->LoadTags();
 		$this->LoadModules();
-		$this->LoadConfigs();
+
 
 		$this->Verify();
 
@@ -210,53 +208,39 @@ class ZBlogPHP{
 
 	#终止连接，释放资源
 	public function Terminate(){
-		if($this->isconnect)
-		{
-			$this->db->Close();
-		}
-		if($this->isdelay_savecache)
-		{
-			$this->SaveCache();
-		}		
-
+		$this->CloseConnect();
 	}
 
+	
+	function CreateDB($type){
+		$newtype='Db'.$type;
+		$this->db=new $newtype();
+		$this->db->sql=new DbSql;
+	}
 
 	public function OpenConnect(){
 
 		if($this->isconnect){return;}
-
 		switch ($this->option['ZC_DATABASE_TYPE']) {
 		case 'mysql':
 		case 'pdo_mysql':
-			$db=CreateDB($this->option['ZC_DATABASE_TYPE']);
-			$this->db=&$db;
-			if($db->Open(array(
+			$this->CreateDB($this->option['ZC_DATABASE_TYPE']);
+			if($this->db->Open(array(
 					$this->option['ZC_MYSQL_SERVER'],
 					$this->option['ZC_MYSQL_USERNAME'],
 					$this->option['ZC_MYSQL_PASSWORD'],
 					$this->option['ZC_MYSQL_NAME'],
-					$this->option['ZC_MYSQL_PRE']
+					$this->option['ZC_MYSQL_PRE'],
+					$this->option['ZC_MYSQL_PORT']					
 				))==false){
 				throw new Exception($this->lang['error'][67]);
 			}
-
 			break;
 		case 'sqlite':
-			$db=CreateDB('sqlite');
-			$this->db=&$db;
-			if($db->Open(array(
-				$this->path . $this->option['ZC_SQLITE_NAME'],
-				$this->option['ZC_SQLITE_PRE']
-				))==false){
-				throw new Exception($this->lang['error'][68]);
-			}
-			break;
 		case 'sqlite3':
-			$db=CreateDB('sqlite3');
-			$this->db=&$db;
-			if($db->Open(array(
-				$this->path . $this->option['ZC_SQLITE_NAME'],
+			$this->CreateDB($this->option['ZC_DATABASE_TYPE']);
+			if($this->db->Open(array(
+				$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
 				$this->option['ZC_SQLITE_PRE']
 				))==false){
 				throw new Exception($this->lang['error'][69]);
@@ -266,9 +250,11 @@ class ZBlogPHP{
 		$this->isconnect=true;	
 	}
 
-
-
-
+	public function CloseConnect(){
+		if($this->isconnect){
+			$this->db->Close();
+		}
+	}
 
 ################################################################################################################
 #Cache相关
@@ -284,12 +270,16 @@ class ZBlogPHP{
 	}
 
 	public function GetCache($name){
+		if($this->cache==null){return null;}
+		if(count($this->cache)==0){return null;}
 		if(array_key_exists($name,$this->cache)){
 			return $this->cache[$name];
 		}
 	}
 
 	public function GetCacheTime($name){
+		if($this->cache==null){return time();}
+		if(count($this->cache)==0){return null;}
 		if(array_key_exists($name,$this->cache)){
 			return $this->cache[$name . '_time'];
 		}
@@ -305,29 +295,80 @@ class ZBlogPHP{
 		unset($this->cache[$name . '_time']);
 	}
 
-	public function SaveCache($delay=false){
+	public function SaveCache(){
 
-		if($delay==true)
-		{
-			$this->isdelay_savecache=true;
-		}
-		else
-		{
-			$s=$this->path . 'zb_users/cache/' . $this->guid . '.cache';
-			$c=serialize($this->cache);
-			@file_put_contents($s, $c);
-			$this->isdelay_savecache=false;
-		}
+		#$s=$this->usersdir . 'cache/' . $this->guid . '.cache';
+		#$c=serialize($this->cache);
+		#@file_put_contents($s, $c);
+
+		$this->Config('zbp')->cache=serialize($this->cache);
+		$this->SaveConfig('zbp');
 
 	}
 
 	public function LoadCache(){
-		$s=$this->path . 'zb_users/cache/' . $this->guid . '.cache';
-		if (file_exists($s))
-		{
-			$this->cache=unserialize(file_get_contents($s));
+		#$s=$this->usersdir . 'cache/' . $this->guid . '.cache';
+		#if (file_exists($s))
+		#{
+		#	$this->cache=unserialize(@file_get_contents($s));
+		#}
+		$this->cache=unserialize($this->Config('zbp')->cache);
+	}
+
+
+
+
+
+################################################################################################################
+#插件用Configs表相关设置函数
+
+
+
+
+	public function LoadConfigs(){
+
+		$sql = $this->db->sql->Select('Config',array('*'),'','','','');
+		$array=$this->db->Query($sql);
+		foreach ($array as $c) {
+			$m=new Metas;
+			$m->Unserialize($c['conf_Value']);
+			$this->configs[$c['conf_Name']]=$m;	
 		}
 	}
+
+	public function DelConfig($name){
+		$sql = $this->db->sql->Delete('Config',array(array('=','conf_Name',$name)));
+		$this->db->Delete($sql);
+	}
+
+	public function SaveConfig($name){
+
+		if(!isset($this->configs[$name]))return false;
+
+		$kv=array('conf_Name'=>$name,'conf_Value'=>$this->configs[$name]->Serialize());
+		$sql = $this->db->sql->Select('Config',array('*'),array(array('=','conf_Name',$name)),'','','');
+		$array=$this->db->Query($sql);
+
+		if(count($array)==0){
+			$k=array('conf_Name','conf_Value');
+			$v=array($name,$this->configs[$name]->Serialize());		
+			$sql = $this->db->sql->Insert('Config',$kv);
+			$this->db->Insert($sql);
+		}else{
+			array_shift($kv);
+			$sql = $this->db->sql->Update('Config',$kv,array(array('=','conf_Name',$name)));
+			$this->db->Update($sql);
+		}
+	}
+
+	public function Config($name){
+		if(!isset($this->configs[$name])){
+			$m=new Metas;
+			$this->configs[$name]=$m;
+		}
+		return $this->configs[$name];
+	}
+
 
 
 
@@ -353,12 +394,23 @@ class ZBlogPHP{
 		$s.=var_export($this->option,true);
 		$s.="\r\n?>";
 
-		@file_put_contents($this->path . 'zb_users/c_option.php',$s);
+		@file_put_contents($this->usersdir . 'c_option.php',$s);
 
-		$this->SetCache('refesh',time());
-		$this->SaveCache(true);
+		//$this->SetCache('refesh',time());
+		//$this->SaveCache();
+
+		$this->Config('zbp')->option=serialize($this->option);
+		$this->SaveConfig('zbp');
 
 	}	
+
+
+
+	public function LoadOption(){
+
+		$this->option=unserialize($this->Config('zbp')->option);
+
+	}
 
 
 
@@ -438,7 +490,7 @@ class ZBlogPHP{
 			$this->modulesbyfilename[$m->FileName]=$m;
 		}
 
-		$dir=$this->path .'zb_users/theme/' . $this->theme . '/include/';
+		$dir=$this->usersdir . 'theme/' . $this->theme . '/include/';
 		$files=GetFilesInDir($dir,'php');
 		foreach ($files as $sortname => $fullname) {
 			$m=new Module();
@@ -454,7 +506,7 @@ class ZBlogPHP{
 	}
 
 	public function LoadThemes(){
-		$dirs=GetDirsInDir($this->path . 'zb_users/theme/');
+		$dirs=GetDirsInDir($this->usersdir . 'theme/');
 
 		foreach ($dirs as $id) {
 			$app = new App;
@@ -466,7 +518,7 @@ class ZBlogPHP{
 	}
 
 	public function LoadPlugins(){
-		$dirs=GetDirsInDir($this->path . 'zb_users/plugin/');
+		$dirs=GetDirsInDir($this->usersdir . 'plugin/');
 
 		foreach ($dirs as $id) {
 			$app = new App;
@@ -476,58 +528,6 @@ class ZBlogPHP{
 		}
 
 	}
-
-
-
-
-################################################################################################################
-#插件用Configs表相关设置函数
-
-
-
-
-	public function LoadConfigs(){
-
-		$sql = $this->db->sql->Select('Config',array('*'),'','','','');
-		$array=$this->db->Query($sql);
-		foreach ($array as $c) {
-			$m=new Metas;
-			$m->Unserialize($c['conf_Value']);
-			$this->configs[$c['conf_Name']]=$m;	
-		}
-	}
-
-	public function DelConfig($name){
-		$sql = $this->db->sql->Delete('Config',array(array('=','conf_Name',$name)));
-		$this->db->Delete($sql);
-	}
-
-	public function SaveConfig($name){
-		if(!isset($this->configs[$name]))return false;
-
-		$kv=array('conf_Name'=>$name,'conf_Value'=>$this->configs[$name]->Serialize());
-		$sql = $this->db->sql->Select('Config',array('*'),array(array('=','conf_Name',$name)),'','','');
-		$array=$this->db->Query($sql);
-
-		if(count($array)==0){
-			$k=array('conf_Name','conf_Value');
-			$v=array($name,$this->configs[$name]->Serialize());		
-			$sql = $this->db->sql->Insert('Config',$kv);
-			$this->db->Insert($sql);
-		}else{
-			$sql = $this->db->sql->Update('Config',$kv,array(array('=','conf_Name',$name)));
-			$this->db->Update($sql);
-		}
-	}
-
-	public function Config($name){
-		if(!isset($this->configs[$name])){
-			$m=new Metas;
-			$this->configs[$name]=$m;
-		}
-		return $this->configs[$name];
-	}
-
 
 
 
@@ -596,7 +596,7 @@ class ZBlogPHP{
 
 		//创建模板类
 		$this->template = new Template();
-		$this->template->path = $this->path . 'zb_users/template/';
+		$this->template->path = $this->usersdir . 'template/';
 		$this->template->tags = $this->templatetags;
 
 	}
@@ -609,7 +609,7 @@ class ZBlogPHP{
 			$this->templates[$sortname]=file_get_contents($fullname);
 		}
 		#再读当前的
-		$dir=$this->path .'zb_users/theme/' . $this->theme . '/template/';
+		$dir=$this->usersdir .'theme/' . $this->theme . '/template/';
 		$files=GetFilesInDir($dir,'php');
 		foreach ($files as $sortname => $fullname) {
 			$this->templates[$sortname]=file_get_contents($fullname);
@@ -634,7 +634,7 @@ class ZBlogPHP{
 		$this->LoadTemplates();
 
 		//清空目标目录
-		$dir = $this->path . 'zb_users/template/';
+		$dir = $this->usersdir . 'template/';
 		$files = GetFilesInDir($dir,'php');
 		foreach ($files as $fullname) {
 			@unlink($fullname);
@@ -642,13 +642,13 @@ class ZBlogPHP{
 		
 		//创建模板类
 		$this->template = new Template();
-		$this->template->path = $this->path . 'zb_users/template/';
+		$this->template->path = $this->usersdir . 'template/';
 		$this->template->tags = $this->templatetags;
 
 		$this->template->CompileFiles($this->templates);
 
-		$this->SetCache('refesh',time());
-		$this->SaveCache(true);
+		#$this->SetCache('refesh',time());
+		#$this->SaveCache();
 
 	}
 

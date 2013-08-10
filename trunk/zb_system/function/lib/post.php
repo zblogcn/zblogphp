@@ -29,7 +29,7 @@ class Post extends Base{
 
 
 	public function Time($s='Y-m-d H:i:s'){
-		return date($s,$this->PostTime);
+		return date($s,(int)$this->PostTime);
 	}
 
 	function TagsToNameString(){
