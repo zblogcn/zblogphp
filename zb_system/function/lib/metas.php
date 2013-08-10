@@ -8,7 +8,7 @@
 
 class Metas {
 
-	protected $Data=array();
+	public $Data=array();
 
 	public function __set($name, $value)
 	{
@@ -19,6 +19,11 @@ class Metas {
 	{
 		if(!isset($this->Data[$name]))return '';
 		return $this->Data[$name];
+	}
+
+	public function HasKey($name)
+	{
+		array_key_exists($Data[$name]);
 	}
 
 	public function Del($name)
