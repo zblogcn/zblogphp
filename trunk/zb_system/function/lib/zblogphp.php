@@ -289,37 +289,28 @@ class ZBlogPHP{
 
 
 	public function HasCache($name){
-		if(array_key_exists($name,$this->cache)){
-			return true;
-		}else{
-			return false;
-		}
+		return $this->cache->HasKey($name);
 	}
 
 	public function GetCache($name){
-		if($this->cache==null){return null;}
-		if(count($this->cache)==0){return null;}
-		if(array_key_exists($name,$this->cache)){
-			return $this->cache[$name];
-		}
+		return $this->cache->$name;
 	}
 
 	public function GetCacheTime($name){
-		if($this->cache==null){return time();}
-		if(count($this->cache)==0){return null;}
-		if(array_key_exists($name,$this->cache)){
-			return $this->cache[$name . '_time'];
-		}
+		$name=$name . '_time';
+		return $this->cache->$name;
 	}
 
 	public function SetCache($name,$value){
-		$this->cache[$name]=$value;
-		$this->cache[$name . '_time']=time();		
+		$this->cache->$name=$value;
+		$name=$name . '_time';
+		$this->cache->$name=time();		
 	}
 
 	public function DelCache($name){
-		unset($this->cache[$name]);
-		unset($this->cache[$name . '_time']);
+		$this->cache->Del($name);
+		$name=$name . '_time';
+		$this->cache->Del($name);
 	}
 
 	public function SaveCache(){
@@ -328,8 +319,8 @@ class ZBlogPHP{
 		#$c=serialize($this->cache);
 		#@file_put_contents($s, $c);
 
-		$this->Config('zbp')->cache=serialize($this->cache);
-		$this->SaveConfig('zbp');
+		$this->configs['cache']=$this->cache;
+		$this->SaveConfig('cache');
 
 	}
 
@@ -339,7 +330,7 @@ class ZBlogPHP{
 		#{
 		#	$this->cache=unserialize(@file_get_contents($s));
 		#}
-		$this->cache=unserialize($this->Config('zbp')->cache);
+		$this->cache=$this->Config('cache');
 	}
 
 
@@ -415,18 +406,21 @@ class ZBlogPHP{
 		$this->option['ZC_BLOG_CSS'] = $this->style;
 
 		$this->option['ZC_BLOG_HOST'] = $this->host;
-
-		$s="<?php\r\n";
-		$s.="return ";
-		$s.=var_export($this->option,true);
-		$s.="\r\n?>";
+/*
+		#$s="<?php\r\n";
+		#$s.="return ";
+		#$s.=var_export($this->option,true);
+		#s.="\r\n?>";
 
 		#@file_put_contents($this->usersdir . 'c_option.php',$s);
-		//$this->SetCache('refesh',time());
-		//$this->SaveCache();
+		#$this->SetCache('refesh',time());
+		#$this->SaveCache();
+*/
 
-		$this->Config('zbp')->option=serialize($this->option);
-		$this->SaveConfig('zbp');
+		foreach ($this->option as $key => $value) {
+			$this->Config('system')->$key = $value;
+		}
+		$this->SaveConfig('system');
 
 	}	
 
@@ -434,8 +428,10 @@ class ZBlogPHP{
 
 	public function LoadOption(){
 
-		$array=unserialize($this->Config('zbp')->option);
+		$array=$this->Config('system')->Data;
 
+		if(empty($array))return false;
+		if(!is_array($array))return false;
 		foreach ($array as $key => $value) {
 			$this->option[$key]=$value;
 		}

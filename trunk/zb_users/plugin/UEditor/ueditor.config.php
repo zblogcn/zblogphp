@@ -6,17 +6,10 @@ require '../../../zb_system/function/c_system_admin.php';
 
 header("Content-type: application/x-javascript; charset=utf-8"); 
 //Somecode here.
-    
-
-$zbp->LoadData();
 
 ob_clean();
 
-$action='ArticleEdt';
-if (!$zbp->CheckRights($action)) {die();}
-
-
-$upload_dir = str_replace('\\','/',$zbp->option['ZC_UPLOAD_DIRECTORY']."/".date('Y/m')) . '/';
+$upload_dir = 'zb_users/upload/' . date('Y/m') . '/';
 $upload_path = $bloghost . $upload_dir;
 $upload_dir = $blogpath . $upload_dir;
 
