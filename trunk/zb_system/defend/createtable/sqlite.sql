@@ -38,7 +38,7 @@ CREATE TABLE %pre%category (
 CREATE TABLE %pre%comment (
   comm_ID integer primary key,
   comm_LogID integer NOT NULL DEFAULT 0,
-  comm_IsCheck bit NOT NULL DEFAULT 0,
+  comm_IsChecking bit NOT NULL DEFAULT 0,
   comm_RootID integer NOT NULL DEFAULT 0,
   comm_ParentID integer NOT NULL DEFAULT 0,
   comm_AuthorID integer NOT NULL DEFAULT 0,
@@ -98,7 +98,7 @@ CREATE TABLE %pre%member (
 CREATE TABLE %pre%module (
   mod_ID integer primary key,
   mod_Name varchar(50) NOT NULL DEFAULT '',
-  mod_FileName varchar(50) NOT NULL DEFAULT '',
+  mod_FileName varchar(100) NOT NULL DEFAULT '',
   mod_Content text NOT NULL DEFAULT '',
   mod_SidebarID integer NOT NULL DEFAULT 0,
   mod_HtmlID varchar(50) NOT NULL DEFAULT '',

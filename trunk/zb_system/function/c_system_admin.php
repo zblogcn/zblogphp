@@ -29,13 +29,17 @@ function zbp_addmodsubmenu(){
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=favorite"><span class="m-left">' . $GLOBALS['lang']['msg']['module_favorite'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=misc"><span class="m-left">' . $GLOBALS['lang']['msg']['module_misc'] . '</span></a>';
 }
+function zbp_addcmtsubmenu(){
+	echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left">' . $GLOBALS['lang']['msg']['check_comment'] . '</span></a>';
+}
+
 
 Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','zbp_addpagesubmenu');
 Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','zbp_addtagsubmenu');
 Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','zbp_addcatesubmenu');
 Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu','zbp_addmemsubmenu');
 Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','zbp_addmodsubmenu');
-
+Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','zbp_addcmtsubmenu');
 
 $zbp->LoadTemplates();
 

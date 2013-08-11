@@ -164,8 +164,15 @@ switch ($action) {
 		Redirect('admin/module_edit.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'ModulePst':
+		PostModule();
+		$zbp->SetHint('good');
 		Redirect('cmd.php?act=ModuleMng');
-		break;		
+		break;
+	case 'ModuleDel':
+		DelModule();
+		$zbp->SetHint('good');
+		Redirect('cmd.php?act=ModuleMng');
+		break;
 	case 'ModuleMng':
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;

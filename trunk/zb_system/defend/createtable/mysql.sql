@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS %pre%category (
 CREATE TABLE IF NOT EXISTS %pre%comment (
   comm_ID int(11) NOT NULL AUTO_INCREMENT,
   comm_LogID int(11) NOT NULL DEFAULT '0',
-  comm_IsCheck tinyint(1) NOT NULL DEFAULT '0',
+  comm_IsChecking tinyint(1) NOT NULL DEFAULT '0',
   comm_RootID int(11) NOT NULL DEFAULT '0',
   comm_ParentID int(11) NOT NULL DEFAULT '0',
   comm_AuthorID int(11) NOT NULL DEFAULT '0',
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS %pre%member (
 
 CREATE TABLE IF NOT EXISTS %pre%module (
   mod_ID int(11) NOT NULL AUTO_INCREMENT,
-  mod_Name varchar(50) NOT NULL DEFAULT '',
+  mod_Name varchar(100) NOT NULL DEFAULT '',
   mod_FileName varchar(50) NOT NULL DEFAULT '',
   mod_Content text NOT NULL,
   mod_SidebarID int(11) NOT NULL DEFAULT '0',

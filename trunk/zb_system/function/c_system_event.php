@@ -328,6 +328,61 @@ function DelMember(){
 }
 
 
+function PostModule(){
+	global $zbp;
+	if(!isset($_POST['ID']))return ;
+	if(!GetVars('FileName','POST')){
+		$_POST['FileName']='mod' . rand(1000,2000);
+	}else{
+		$_POST['FileName']=strtolower($_POST['FileName']);
+	}
+	if(!GetVars('HtmlID','POST')){
+		$_POST['HtmlID']=$_POST['FileName'];
+	}
+	if(isset($_POST['MaxLi'])){
+		$_POST['MaxLi']=(integer)$_POST['MaxLi'];
+	}
+	if(!isset($_POST['Type'])){
+		$_POST['Type']='div';
+	}	
+	if(isset($_POST['Content'])){
+		if($_POST['Type']!='div'){
+			$_POST['Content']=str_replace(array("\r","\n"), array('',''), $_POST['Content']);
+		}
+	}
+	if(isset($_POST['Source'])){
+		if($_POST['Source']=='theme'){
+			$c=GetVars('Content','POST');
+			$f=$zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . GetVars('FileName','POST') . '.php';
+			@file_put_contents($f, $c);
+			return true;
+		}
+	}
+	$mod = new Module();
+	if(GetVars('ID','POST') == 0){
+
+	}else{
+		$mod->LoadInfoByID(GetVars('ID','POST'));
+	}
+	if(isset($_POST['Name'])          ) $mod->Name          = GetVars('Name','POST');
+	if(isset($_POST['Type'])          ) $mod->Type          = GetVars('Type','POST');	
+	if(isset($_POST['FileName'])      ) $mod->FileName      = GetVars('FileName','POST');
+	if(isset($_POST['HtmlID'])        ) $mod->HtmlID        = GetVars('HtmlID','POST');
+	if(isset($_POST['MaxLi'])         ) $mod->MaxLi         = GetVars('MaxLi','POST');
+	if(isset($_POST['Content'])       ) $mod->Content       = GetVars('Content','POST');
+	if(isset($_POST['Source'])        ) $mod->Source        = GetVars('Source','POST');
+	if(isset($_POST['IsHiddenTitle']) ) $mod->IsHiddenTitle = GetVars('IsHiddenTitle','POST');
+
+	$mod->Save();
+	return true;
+}
+
+function DelModule(){
+	global $zbp;
+}
+
+
+
 function PostUpload(){
 	global $zbp;
 

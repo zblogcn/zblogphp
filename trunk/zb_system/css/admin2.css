@@ -736,7 +736,7 @@ a.button:hover{
 .siderbar-sort-list .widget{position: relative;z-index: 2;}
 
 .widget_source_system .widget-title{background: #e3e4e4;}
-.widget_source_users .widget-title{background: #c6d4e5;}
+.widget_source_user .widget-title{background: #c6d4e5;}
 .widget_source_theme .widget-title{background: #d7e3bc;}
 .widget_source_plugin .widget-title{background: #d4cddd;}
 .widget_source_other .widget-title{background: #ded9c0;}
