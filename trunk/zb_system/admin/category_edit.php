@@ -83,11 +83,11 @@ foreach ($zbp->categorysbyorder as $k => $v) {
 		<label><span class="title"><?php echo $lang['msg']['add_to_navbar']?>:</span>   <input type="text" name="AddNavbar" id="edtAddNavbar" value="0" class="checkbox" /></label>
 	  </p>
 	  <p>
-		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkCateInfo();" />
+		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" />
 	  </p>
 	</form>
 	<script type="text/javascript">
-function checkCateInfo(){
+function checkInfo(){
   document.getElementById("edit").action="../cmd.php?act=CategoryPst";
 
   if(!$("#edtName").val()){
@@ -98,6 +98,7 @@ function checkCateInfo(){
 }
 	</script>
 	<script type="text/javascript">ActiveLeftMenu("aCategoryMng");</script>
+	<script type="text/javascript">AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/category_32.png';?>");</script>
   </div>
 </div>
 

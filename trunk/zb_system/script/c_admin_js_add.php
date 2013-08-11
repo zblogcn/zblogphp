@@ -213,6 +213,9 @@ function updateinfo(s){
 }
 
 
+function AddHeaderIcon(s){
+$("div.divHeader,div.divHeader2").first().css({"background":"url('"+s+"') no-repeat 0 3px","background-size":"30px","padding-left":"34px"});
+}
 
 
 

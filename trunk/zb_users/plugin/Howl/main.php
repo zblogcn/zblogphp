@@ -8,6 +8,8 @@ $zbp->Load();
 $action='root';
 if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
 
+if (!$zbp->CheckPlugin('Howl')) {throw new Exception($lang['error'][48]);}
+
 $blogtitle='Z-Blog角色分配器';
 
 if(count($_POST)>0){
@@ -105,6 +107,7 @@ echo '</tr>';
 
 	</script>
 	<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
+	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Howl/logo.png';?>");</script>	
   </div>
 </div>
 

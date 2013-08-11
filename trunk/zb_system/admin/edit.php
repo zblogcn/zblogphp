@@ -198,6 +198,7 @@ if($ispage){
 }else{
   echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
 }
+  echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/new_32.png' . '");</script>';
 ?>
 
 <script type="text/javascript">

@@ -978,7 +978,10 @@ class ZBlogPHP{
 ################################################################################################################
 #杂项
 
-
+	function CheckPlugin($name){
+		$s=$this->option['ZC_USING_PLUGIN_LIST'] . '|' . $this->option['ZC_USING_PLUGIN_LIST'];
+		return HasNameInString($s,$name);
+	}
 
 	function AddItemToNavbar($type,$id,$name,$url){
 
