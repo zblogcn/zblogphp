@@ -45,17 +45,9 @@ require $blogpath.'zb_system/function/c_system_event.php';
 $cookiespath = null;
 $bloghost = GetCurrentHost($cookiespath);
 
-#加载zbp
-require $blogpath.'zb_system/function/lib/zblogphp.php';
 
-#加载数据库类
-require $blogpath.'zb_system/function/lib/dbsql.php';
-if($option['ZC_DATABASE_TYPE']){
-	require $blogpath.'zb_system/function/lib/db' . $option['ZC_DATABASE_TYPE'] . '.php';
-}
-
-#加载对象
-$lib_array = array('base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','urlrule','app','rss2');
+#加载zbp 数据库类 对象
+$lib_array = array('zblogphp','dbsql','base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','urlrule','app','rss2');
 foreach ($lib_array as $f) {
 	require $blogpath.'zb_system/function/lib/' . $f . '.php';
 }
@@ -162,6 +154,7 @@ foreach (explode("|", $option['ZC_USING_PLUGIN_LIST']) as $plugin) {
 	}
 }
 
+
 ActivePlugin();	
 
 
@@ -171,7 +164,6 @@ ActivePlugin();
 /*system plugin*/
 function zbp_default_cache_read(){
 	global $zbp;
-	$zbp->LoadCache();
 	if($zbp->HasCache('default_html')){
 		if((integer)$zbp->GetCacheTime('default_html') < (integer)$zbp->GetCache('refesh_time'))return;
 		echo $zbp->GetCache('default_html');
@@ -201,4 +193,8 @@ function zbp_default_cache_write(){
 function __autoload($classname) {
      require $GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php';
 }
+
+
+
+
 ?>

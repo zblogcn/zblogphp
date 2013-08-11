@@ -9,7 +9,7 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
-$zbp->LoadData();
+$zbp->Load();
 
 $action='ModuleEdt';
 if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
@@ -64,11 +64,11 @@ if(isset($_GET['filename'])){
 		<input id="edtName" class="edit" size="40" name="Name" maxlength="50" type="text" value="<?php echo $mod->Name;?>" />
 	  </p>
 	  <p>
-		<span class="title"><?php echo $lang['msg']['filename']?>:</span><br />
+		<span class="title"><?php echo $lang['msg']['filename']?>:</span><span class="star">(*)</span><br />
 		<input id="edtFileName" class="edit" size="40" name="FileName" type="text" value="<?php echo $mod->FileName;?>" />
 	  </p>
 	  <p>
-		<span class="title"><?php echo $lang['msg']['htmlid']?>:</span><br />
+		<span class="title"><?php echo $lang['msg']['htmlid']?>:</span><span class="star">(*)</span><br />
 		<input id="edtFileName" class="edit" size="40" name="FileName" type="text" value="<?php echo $mod->HtmlID;?>" />
 	  </p>
 

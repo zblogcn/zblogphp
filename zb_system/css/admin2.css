@@ -653,7 +653,7 @@ span.note{
 
 /*checkbox*/
 .imgcheck{
-	background:url(../IMAGE/ADMIN/checkbox.png) no-repeat 0 bottom;
+	background:url(../image/admin/checkbox.png) no-repeat 0 bottom;
 	width:40px;
 	height:17px;
 	display:inline-block;
@@ -663,7 +663,7 @@ span.note{
 	margin-left:5px;
 }
 .imgcheck-on{
-	background:url(../IMAGE/ADMIN/checkbox.png) no-repeat 0 top;
+	background:url(../image/admin/checkbox.png) no-repeat 0 top;
 }
 
 
@@ -671,7 +671,7 @@ span.note{
 #batch p{float:left;}
 #batch img{float:left;margin:7px 5px 0 9px;}
 #batch a,p.hint a{
-	background:url(../IMAGE/ADMIN/bullet_go.png) no-repeat 4px 1px;
+	background:url(../image/admin/bullet_go.png) no-repeat 4px 1px;
 	padding-left:20px;
 	font-weight:bold;
 }

@@ -13,7 +13,7 @@ if (!$option['ZC_DATABASE_TYPE']){Redirect('./zb_install/');}
 
 foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
-$zbp->LoadData();
+$zbp->Load();
 
 ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('tags','GET'),GetVars('date','GET'));
 

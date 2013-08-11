@@ -1,7 +1,7 @@
 <?php
 require './function/c_system_base.php';
 
-$zbp->LoadData();
+$zbp->Load();
 
 $action=GetVars('act','GET');
 

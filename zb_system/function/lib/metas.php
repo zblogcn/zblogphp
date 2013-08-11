@@ -23,7 +23,7 @@ class Metas {
 
 	public function HasKey($name)
 	{
-		array_key_exists($Data[$name]);
+		return array_key_exists($name,$this->Data);
 	}
 
 	public function Del($name)
