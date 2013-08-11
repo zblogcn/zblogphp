@@ -275,7 +275,7 @@ $(document).ready(function(){
 	$("img[width='16']").each(function(){if($(this).parent().is("a")){$(this).parent().addClass("button")}});
 
 	if($("p.hint:visible").length>0){
-		$("p.hint:visible").eq(0).delay(1500).hide(1500,function(){});
+		$("p.hint:visible").eq(0).delay(3500).hide(1500,function(){});
 	}
 
 	$("input[type='file']").click(function(){

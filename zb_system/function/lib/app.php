@@ -52,9 +52,7 @@ class App
 	}
 	public function IsUsed(){
 		global $zbp;
-
 		return $zbp->CheckPlugin($this->id);
-
 	}
 	public function HasPlugin(){
 		if($this->path || $this->include){return true;}
