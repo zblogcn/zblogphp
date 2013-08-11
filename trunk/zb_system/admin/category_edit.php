@@ -9,7 +9,7 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
-$zbp->LoadData();
+$zbp->Load();
 
 $action='CategoryEdt';
 if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}

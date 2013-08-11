@@ -8,9 +8,7 @@
 
 require './zb_system/function/c_system_base.php';
 
-if (!$zbp->option['ZC_DATABASE_TYPE']) {Redirect('./zb_install');}
-
-$zbp->LoadData();
+$zbp->Load();
 
 ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
 

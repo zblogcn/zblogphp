@@ -1,7 +1,7 @@
 <?php
 require './function/c_system_base.php';
 
-$zbp->LoadData();
+$zbp->Load();
 
 if ($zbp->CheckRights('admin')) {
 	redirect('cmd.php?act=admin');
@@ -75,6 +75,11 @@ $("#btnPost").click(function(){
 $(document).ready(function(){ 
 	if($.browser.msie){
 		$(":checkbox").css("margin-top","4px");
+		
+		if ( $.browser.version-9<0 ){
+			alert("<?php echo $lang['error']['74']?>");
+		}
+		
 	}
 });
 

@@ -8,11 +8,11 @@
 
 require './zb_system/function/c_system_base.php';
 
-if (!$zbp->option['ZC_DATABASE_TYPE']) {Redirect('./zb_install');}
+$zbp->Load();
 
-$zbp->LoadData();
+$action='search';
 
-global $zbp;
+if(!$zbp->CheckRights($action)){Redirect('./');}
 
 
 $article = new Post;

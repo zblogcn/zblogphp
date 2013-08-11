@@ -40,7 +40,6 @@ class ZBlogPHP{
 
 	public $user=null;
 	public $cache=null;
-	#cache={name,value,time}
 
 	public $table=null;
 	public $datainfo=null;
@@ -212,7 +211,7 @@ class ZBlogPHP{
 	}
 
 
-	public function LoadData(){
+	public function Load(){
 		if(!$this->isconnect)return false;
 
 		$this->LoadMembers();
@@ -236,7 +235,7 @@ class ZBlogPHP{
 	}
 
 	
-	function CreateDB($type){
+	function InitializeDB($type){
 		if(!trim($type))return false;
 		$newtype='Db'.trim($type);
 		$this->db=new $newtype();
@@ -250,7 +249,7 @@ class ZBlogPHP{
 		switch ($this->option['ZC_DATABASE_TYPE']) {
 		case 'mysql':
 		case 'pdo_mysql':
-			if($this->CreateDB($this->option['ZC_DATABASE_TYPE']))return false;
+			if($this->InitializeDB($this->option['ZC_DATABASE_TYPE']))return false;
 			if($this->db->Open(array(
 					$this->option['ZC_MYSQL_SERVER'],
 					$this->option['ZC_MYSQL_USERNAME'],
@@ -283,6 +282,10 @@ class ZBlogPHP{
 			$this->db->Close();
 		}
 	}
+
+
+
+
 
 ################################################################################################################
 #Cache相关
@@ -357,6 +360,7 @@ class ZBlogPHP{
 
 	public function DelConfig($name){
 		$sql = $this->db->sql->Delete('Config',array(array('=','conf_Name',$name)));
+		logs($sql);
 		$this->db->Delete($sql);
 	}
 

@@ -241,7 +241,7 @@ function CreateModuleDiv($m,$button=true){
 		if($m->SourceType!='theme'){
 			echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;id=' . $m->ID . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="" title="" width="16" /></a>';
 		}else{
-			echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;filename=' . $m->FileName . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="" title="" width="16" /></a>';
+			echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;source=theme&amp;filename=' . $m->FileName . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="" title="" width="16" /></a>';
 		}
 		if($m->SourceType!='system'&&$m->SourceType!='theme'){
 			echo '&nbsp;<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ModuleDel&amp;id=' . $m->ID .'"><img src="../image/admin/delete.png" alt="" title="" width="16" /></a>';
@@ -1075,7 +1075,7 @@ function Admin_PluginMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['plugin_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_MemberMng_SubMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Admin_PluginMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}	
 	echo '</div>';

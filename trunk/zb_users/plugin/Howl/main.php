@@ -1,3 +1,116 @@
 <?php
 require '../../../zb_system/function/c_system_base.php';
+
+require '../../../zb_system/function/c_system_admin.php';
+
+$zbp->Load();
+
+$action='root';
+if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
+
+$blogtitle='Z-Blog角色分配器';
+
+if(count($_POST)>0){
+
+	if(GetVars('reset' ,'POST')=='1'){
+
+		$zbp->DelConfig('Howl');
+		$zbp->SetHint('good','已删除所有的配置!');
+		Redirect('./main.php');
+		die();
+	}
+
+	$a=array();
+	$a[1]=array();
+	$a[2]=array();
+	$a[3]=array();
+	$a[4]=array();
+	$a[5]=array();
+	$a[6]=array();
+
+	for ($i=1; $i < 7 ; $i++) {
+		foreach ($actions as $key => $value) {
+			$check=GetVars('Group' . $i . '_' . $key ,'POST');
+			$a[$i][$key]=(int)$check;
+		}
+	}
+	$zbp->Config('Howl')->Group1=$a[1];
+	$zbp->Config('Howl')->Group2=$a[2];
+	$zbp->Config('Howl')->Group3=$a[3];
+	$zbp->Config('Howl')->Group4=$a[4];
+	$zbp->Config('Howl')->Group5=$a[5];
+	$zbp->Config('Howl')->Group6=$a[6];
+	$zbp->SaveConfig('Howl');
+
+	$zbp->SetHint('good');
+	Redirect('./main.php');
+}
+
+require $blogpath . 'zb_system/admin/admin_header.php';
+require $blogpath . 'zb_system/admin/admin_top.php';
+
+?>
+<div id="divMain">
+  <div class="divHeader2"><?php echo $blogtitle;?></div>
+  <div class="SubMenu"></div>
+  <div id="divMain2" class="edit category_edit">
+	<form id="edit" name="edit" method="post" action="#">
+<input id="reset" name="reset" type="hidden" value="" />
+<table border="1" class="tableFull tableBorder tableBorder-thcenter">
+<tr>
+	<th class="td10">权限</th>
+	<th class="td10">管理组</th>
+	<th class="td10">网站编辑组</th>
+	<th class="td10">作者组</th>
+	<th class="td10">协作者组</th>
+	<th class="td10">注册会员组</th>
+	<th class="td10">游客组</th>
+	<th class="td10">权限</th>
+</tr>
+<?php
+
+function MakeInput($group,$key){
+global $zbp;
+$zbp->user->Level=$group;
+$check=(int)$zbp->CheckRights($key);
+return '<input name="Group'.$group.'_' . $key .'" style="" type="text" value="'.$check.'" class="checkbox"/>';
+}
+
+
+foreach ($actions as $key => $value) {
+echo '<tr>';
+echo '<td>' . $key . '</td>';
+echo '<td class="tdCenter">' . MakeInput(1,$key) . '</td>';
+echo '<td class="tdCenter">' . MakeInput(2,$key) . '</td>';
+echo '<td class="tdCenter">' . MakeInput(3,$key) . '</td>';
+echo '<td class="tdCenter">' . MakeInput(4,$key) . '</td>';
+echo '<td class="tdCenter">' . MakeInput(5,$key) . '</td>';
+echo '<td class="tdCenter">' . MakeInput(6,$key) . '</td>';
+echo '<td>' . $key . '</td>';
+echo '</tr>';
+}
+
+
+?>
+</table>
+	  <hr/>
+	  <p>
+		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="submit" class="button" value="恢复系统默认配置" onclick="$('#reset').val(1);" />
+	  </p>
+
+	</form>
+	<script type="text/javascript">
+
+	</script>
+	<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
+  </div>
+</div>
+
+
+<?php
+require $blogpath . 'zb_system/admin/admin_footer.php';
+
+RunTime();
 ?>

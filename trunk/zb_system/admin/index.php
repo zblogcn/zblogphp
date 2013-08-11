@@ -9,7 +9,7 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
-$zbp->LoadData();
+$zbp->Load();
 
 $action=(GetVars('act','GET')=='') ? 'admin' : GetVars('act','GET') ;
 if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
