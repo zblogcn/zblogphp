@@ -53,21 +53,7 @@ class App
 	public function IsUsed(){
 		global $zbp;
 
-		if($this->type=='plugin'){
-			$s='|' . $zbp->option['ZC_USING_PLUGIN_LIST'] . '|';
-			$t='|' . $this->id. '|';
-			if(stripos($s,$t)===false){
-				return false;
-			}else{
-				return true;
-			}
-		}else{
-			if($zbp->theme==$this->id){
-				return true;
-			}else{
-				return false;
-			}
-		}
+		return $zbp->CheckPlugin($this->id);
 
 	}
 	public function HasPlugin(){

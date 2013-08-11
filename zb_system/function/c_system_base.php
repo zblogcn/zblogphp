@@ -37,13 +37,14 @@ $blogsubname = &$option['ZC_BLOG_SUBNAME'];
 $blogtheme = &$option['ZC_BLOG_THEME'];
 $blogstyle = &$option['ZC_BLOG_CSS'];
 
-require $blogpath.'zb_system/function/c_system_debug.php';
 require $blogpath.'zb_system/function/c_system_common.php';
-require $blogpath.'zb_system/function/c_system_plugin.php';
-require $blogpath.'zb_system/function/c_system_event.php';
 
 $cookiespath = null;
 $bloghost = GetCurrentHost($cookiespath);
+
+require $blogpath.'zb_system/function/c_system_debug.php';
+require $blogpath.'zb_system/function/c_system_plugin.php';
+require $blogpath.'zb_system/function/c_system_event.php';
 
 
 #加载zbp 数据库类 对象

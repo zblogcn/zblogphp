@@ -285,6 +285,7 @@ function Admin_SiteInfo(){
 	echo '</div>';
 	include $zbp->path . "zb_system/defend/thanks.html";
 	echo '<script type="text/javascript">ActiveTopMenu("topmenu1");</script>';
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/home_32.png' . '");</script>';	
 }
 
 
@@ -389,6 +390,7 @@ foreach ($p->buttons as $key => $value) {
 
 	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/article_32.png' . '");</script>';	
 
 }
 
@@ -460,7 +462,8 @@ foreach ($p->buttons as $key => $value) {
 }	
 	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
-	
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/page_32.png' . '");</script>';
+
 }
 
 
@@ -510,7 +513,7 @@ foreach ($zbp->categorysbyorder as $category) {
 	echo '</table>';
 	echo '</div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aCategoryMng");</script>';
-
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/category_32.png' . '");</script>';
 	
 }
 
@@ -535,7 +538,7 @@ function Admin_CommentMng(){
 
 	echo '</div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aCommentMng");</script>';
-	
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/comments_32.png' . '");</script>';
 }
 
 
@@ -611,7 +614,7 @@ foreach ($p->buttons as $key => $value) {
 }	
 	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aMemberMng");</script>';
-	
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/user_32.png' . '");</script>';
 }
 
 
@@ -692,7 +695,7 @@ foreach ($p->buttons as $key => $value) {
 }	
 	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aUploadMng");</script>';
-	
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/accessories_32.png' . '");</script>';
 }
 
 
@@ -762,7 +765,7 @@ foreach ($p->buttons as $key => $value) {
 	echo '</p></div>';
 
 	echo '<script type="text/javascript">ActiveLeftMenu("aTagMng");</script>';
-	
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/tag_32.png' . '");</script>';
 }
 
 
@@ -813,6 +816,7 @@ echo '</div>';
 
 	echo '</form></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aThemeMng");</script>';
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/themes_32.png' . '");</script>';
 	
 }
 
@@ -1060,6 +1064,7 @@ foreach ($zbp->sidebar5 as $m) {
 
 </script>
 <?php
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/link_32.png' . '");</script>';
 }
 
 
@@ -1141,6 +1146,7 @@ foreach ($plugins as $plugin) {
 	echo '</table>';
 	echo '</div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>';
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/plugin_32.png' . '");</script>';
 	
 }
 
@@ -1165,6 +1171,7 @@ function Admin_SettingMng(){
 
 	echo '</div>';
 	echo '<script type="text/javascript">ActiveTopMenu("topmenu2");</script>';
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/setting_32.png' . '");</script>';
 }
 
 ?>
