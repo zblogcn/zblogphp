@@ -47,6 +47,16 @@ require $blogpath.'zb_system/function/c_system_plugin.php';
 require $blogpath.'zb_system/function/c_system_event.php';
 
 
+/*autoload*/
+function __autoload($classname) {
+	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($classname);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+	}
+	require $GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php';
+}
+
+
 #加载zbp 数据库类 对象
 $lib_array = array('zblogphp','dbsql','base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','urlrule','app','rss2');
 foreach ($lib_array as $f) {
@@ -57,9 +67,15 @@ foreach ($lib_array as $f) {
 #定义常量
 define('ZC_POST_TYPE_ARTICLE', 0);
 define('ZC_POST_TYPE_PAGE', 1);
+
 define('ZC_POST_STATUS_PUBLIC', 0);
 define('ZC_POST_STATUS_DRAFT', 1);
 define('ZC_POST_STATUS_AUDITING', 2);
+
+define('ZC_MEMBER_STATUS_NORMAL', 0);
+define('ZC_MEMBER_STATUS_AUDITING', 1);
+define('ZC_MEMBER_STATUS_LOCKED', 2);
+
 
 #定义命令
 $actions=array(
@@ -160,14 +176,12 @@ ActivePlugin();
 
 
 
-
-
 /*system plugin*/
 function zbp_default_cache_read(){
 	global $zbp;
-	if($zbp->HasCache('default_html')){
-		if((integer)$zbp->GetCacheTime('default_html') < (integer)$zbp->GetCache('refesh_time'))return;
-		echo $zbp->GetCache('default_html');
+	if($zbp->cache->HasKey('default_html')){
+		if((integer)$zbp->cache->default_html_time < (integer)$zbp->cache->refesh )return;
+		echo $zbp->cache->default_html;
 		RunTime();
 		die();
 	}
@@ -177,24 +191,13 @@ function zbp_default_cache_write(){
 	global $zbp;
 	$s=ob_get_clean();
 	echo $s;
-	$zbp->SetCache('default_html',$s);
-	$zbp->SetCache('refesh',time());
+	$zbp->cache->default_html=$s;
+	$zbp->cache->default_html_time=time();
 	$zbp->SaveCache();
 }
 
 #Add_Filter_Plugin('Filter_Plugin_Index_Begin','zbp_default_cache_read');
 #Add_Filter_Plugin('Filter_Plugin_Index_End','zbp_default_cache_write');
-
-
-
-
-
-
-/*autoload*/
-function __autoload($classname) {
-     require $GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php';
-}
-
 
 
 

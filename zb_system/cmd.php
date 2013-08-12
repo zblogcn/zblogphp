@@ -5,10 +5,13 @@ $zbp->Load();
 
 $action=GetVars('act','GET');
 
-if(!$zbp->CheckRights($action)){throw new Exception($lang['error'][6]);}
+if(!$zbp->CheckRights($action)){$zbp->ShowError(6);die();}
 
 switch ($action) {
 	case 'login':
+		if ($zbp->CheckRights('admin')) {
+			Redirect('cmd.php?act=admin');
+		}
 		Redirect('login.php');
 		break;
 	case 'logout':
@@ -31,6 +34,17 @@ switch ($action) {
 	case 'misc':
 		require './function/c_system_misc.php';
 		#echo Reload(GetVars('QUERY_STRING','SERVER'));
+		break;
+	case 'cmt':
+		//echo 123;
+		//logs(123);
+		if(GetVars('isajax','POST')){
+			Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','RespondError',PLUGIN_EXITSIGNAL_RETURN);
+		}
+		PostComment();
+		if(GetVars('isajax','POST')){
+			die();
+		}
 		break;
 	case 'ArticleEdt':
 		Redirect('admin/edit.php?' . GetVars('QUERY_STRING','SERVER'));

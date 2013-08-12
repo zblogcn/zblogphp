@@ -123,7 +123,7 @@ class ZBlogPHP{
 
 	function CheckRights($action){
 
-		foreach ($GLOBALS['Filter_Plugin_CheckRights_Begin'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckRights'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($action);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
@@ -258,7 +258,7 @@ class ZBlogPHP{
 					$this->option['ZC_MYSQL_PRE'],
 					$this->option['ZC_MYSQL_PORT']					
 				))==false){
-				throw new Exception($this->lang['error'][67]);
+				$zbp->ShowError(67);
 			}
 			break;
 		case 'sqlite':
@@ -268,7 +268,7 @@ class ZBlogPHP{
 				$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
 				$this->option['ZC_SQLITE_PRE']
 				))==false){
-				throw new Exception($this->lang['error'][69]);
+				$zbp->ShowError(69);
 			}
 			break;
 		}
@@ -281,60 +281,6 @@ class ZBlogPHP{
 		if($this->isconnect){
 			$this->db->Close();
 		}
-	}
-
-
-
-
-
-################################################################################################################
-#Cache相关
-
-
-
-	public function HasCache($name){
-		return $this->cache->HasKey($name);
-	}
-
-	public function GetCache($name){
-		return $this->cache->$name;
-	}
-
-	public function GetCacheTime($name){
-		$name=$name . '_time';
-		return $this->cache->$name;
-	}
-
-	public function SetCache($name,$value){
-		$this->cache->$name=$value;
-		$name=$name . '_time';
-		$this->cache->$name=time();		
-	}
-
-	public function DelCache($name){
-		$this->cache->Del($name);
-		$name=$name . '_time';
-		$this->cache->Del($name);
-	}
-
-	public function SaveCache(){
-
-		#$s=$this->usersdir . 'cache/' . $this->guid . '.cache';
-		#$c=serialize($this->cache);
-		#@file_put_contents($s, $c);
-
-		$this->configs['cache']=$this->cache;
-		$this->SaveConfig('cache');
-
-	}
-
-	public function LoadCache(){
-		#$s=$this->usersdir . 'cache/' . $this->guid . '.cache';
-		#if (file_exists($s))
-		#{
-		#	$this->cache=unserialize(@file_get_contents($s));
-		#}
-		$this->cache=$this->Config('cache');
 	}
 
 
@@ -391,6 +337,37 @@ class ZBlogPHP{
 		}
 		return $this->configs[$name];
 	}
+
+
+
+
+
+
+################################################################################################################
+#Cache相关
+
+
+	public function SaveCache(){
+
+		#$s=$this->usersdir . 'cache/' . $this->guid . '.cache';
+		#$c=serialize($this->cache);
+		#@file_put_contents($s, $c);
+
+		$this->configs['cache']=$this->cache;
+		$this->SaveConfig('cache');
+
+	}
+
+	public function LoadCache(){
+		#$s=$this->usersdir . 'cache/' . $this->guid . '.cache';
+		#if (file_exists($s))
+		#{
+		#	$this->cache=unserialize(@file_get_contents($s));
+		#}
+		$this->cache=$this->Config('cache');
+	}
+
+
 
 
 
@@ -580,6 +557,7 @@ class ZBlogPHP{
 		unset($option['ZC_MYSQL_PASSWORD']);
 		unset($option['ZC_MYSQL_NAME']);
 
+		$this->templatetags['user']=&$this->user;
 		$this->templatetags['option']=&$option;
 		$this->templatetags['modules']=&$this->modulesbyfilename;		
 		$this->templatetags['title']=$this->title;
@@ -673,12 +651,14 @@ class ZBlogPHP{
 		//创建模板类
 		$this->template = new Template();
 		$this->template->path = $this->usersdir . 'template/';
-		$this->template->tags = $this->templatetags;
+
+		//模板接口
+		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {$fpname();}
 
 		$this->template->CompileFiles($this->templates);
 
-		#$this->SetCache('refesh',time());
-		#$this->SaveCache();
+		$this->cache->refesh=time();
+		$this->SaveCache();
 
 	}
 
@@ -702,7 +682,7 @@ class ZBlogPHP{
 			$l=new $type();
 			$l->LoadInfoByAssoc($a);
 			$list[]=$l;
-		}		
+		}
 		return $list;
 	}
 
@@ -1006,11 +986,30 @@ class ZBlogPHP{
 		$signal=GetVars('hint_signal','COOKIE');
 		if($signal){
 			$a=explode('|', $signal);
-			echo "<div class='hint'><p class='hint hint_$a[0]'><font color='blue'>$a[1]</font></p></div>";
+			$this->ShowHint($a[0],$a[1]);
 			setcookie("hint_signal", '',time()-3600,$this->cookiespath);
 		}
 	}
 
+	function ShowHint($signal,$content=''){
+		if($content==''){
+			if($signal=='good')$content=$this->lang['msg']['operation_succeed'];
+			if($signal=='bad')$content=$this->lang['msg']['operation_failed'];				
+		}
+		echo "<div class='hint'><p class='hint hint_$signal'><font color='blue'>$content</font></p></div>";
+	}
+
+
+	function ShowError($idortext){
+		if(is_numeric($idortext))$idortext=$this->lang['error'][$idortext];
+
+		foreach ($GLOBALS['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($idortext);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+
+		throw new Exception($idortext);
+	}
 }
 
 ?>

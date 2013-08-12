@@ -14,17 +14,17 @@ $zbp->Load();
 $action='';
 if(GetVars('act','GET')=='MemberEdt')$action='MemberEdt';
 if(GetVars('act','GET')=='MemberNew')$action='MemberNew';
-if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 $blogtitle=$lang['msg']['member_edit'];
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 
 $memberid=null;
-if(isset($_GET['id'])){$memberid = $_GET['id'];}else{$memberid = 0;}
+if(isset($_GET['id'])){$memberid = (integer)GetVars('id','GET');}else{$memberid = 0;}
 
 if(!$zbp->CheckRights('MemberAll')){
-	if((int)$memberid<>(int)$zbp->user->ID) {throw new Exception($lang['error'][6]);}
+	if((int)$memberid<>(int)$zbp->user->ID) {$zbp->ShowError(6);}
 }
 
 $member=$zbp->GetMemberByID($memberid);

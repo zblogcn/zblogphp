@@ -68,18 +68,30 @@ function ViewPost($id,$alias){
 	);
 	if(count($articles)==0){
 		Http404();
-		throw new Exception($zbp->lang['error'][9], 1);
+		$zbp->ShowError(9);
 	}
 
 	$article =$articles[0];
+
 	if($article->Type==0){
 		$zbp->LoadTagsByIDString($article->Tag);
 	}
+
+	$comments=array();
+
+	$comments=$zbp->GetCommentList(
+		array('*'),
+		array(array('=','comm_LogID',$article->ID),array('=','comm_IsChecking',0)),
+		array('comm_PostTime'=>'DESC'),
+		null,
+		null
+	);
 
 	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);
 	$zbp->template->SetTags('type',$article->type=0?'article':'page');
 	$zbp->template->SetTags('page',1);
+	$zbp->template->SetTags('comments',$comments);	
 
 	$zbp->template->display($zbp->option['ZC_ARTICLE_DEFAULT_TEMPLATE']);
 }
@@ -91,6 +103,9 @@ function ViewPost($id,$alias){
 
 
 
+
+
+################################################################################################################
 function VerifyLogin(){
 	global $zbp;
 
@@ -105,10 +120,10 @@ function VerifyLogin(){
 			}
 			return true;
 		}else{
-			throw new Exception($GLOBALS['lang']['error'][8]);
+			$zbp->ShowError(8);
 		}
 	}else{
-		throw new Exception($GLOBALS['lang']['error'][8]);
+		$zbp->ShowError(8);
 	}
 }
 
@@ -123,6 +138,11 @@ function Logout(){
 
 
 
+
+
+
+
+################################################################################################################
 function PostArticle(){
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
@@ -172,6 +192,13 @@ function DelArticle(){
 }
 
 
+
+
+
+
+
+
+################################################################################################################
 function PostPage(){
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
@@ -205,6 +232,76 @@ function DelPage(){
 }
 
 
+
+
+
+
+
+
+
+
+################################################################################################################
+function PostComment(){
+	global $zbp;
+
+	$_POST['LogID'] = $_GET['postid'];
+
+	$replyid=(integer)GetVars('replyid','POST');
+
+	if($replyid==0){
+		$_POST['RootID'] = 0;
+		$_POST['ParentID'] = 0;
+	}
+
+
+	$_POST['AuthorID'] = $zbp->user->ID;
+
+	$_POST['Author'] = $_POST['author'];
+	$_POST['Content'] = $_POST['content'];
+	$_POST['Email'] = $_POST['email'];	
+	$_POST['HomePage'] = $_POST['homepage'];
+
+
+
+	$_POST['PostTime'] = Time();
+	$_POST['IP'] = GetGuestIP();	
+	$_POST['Agent'] = GetGuestAgent();
+
+	$cmt = new Comment();
+
+	$cmt->LogID        = GetVars('LogID','POST');
+	$cmt->RootID       = GetVars('RootID','POST');
+	$cmt->ParentID     = GetVars('ParentID','POST');
+	$cmt->AuthorID     = GetVars('AuthorID','POST');
+	$cmt->Author       = GetVars('Author','POST');
+	$cmt->Content      = GetVars('Content','POST');
+	$cmt->Email        = GetVars('Email','POST');
+	$cmt->HomePage     = GetVars('HomePage','POST');
+	$cmt->PostTime     = GetVars('PostTime','POST');
+	$cmt->IP           = GetVars('IP','POST');
+	$cmt->Agent        = GetVars('Agent','POST');	
+
+
+
+	$cmt->Save();
+	return true;
+
+
+}
+
+function DelComment(){
+
+}
+
+
+
+
+
+
+
+
+
+################################################################################################################
 function PostCategory(){
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
@@ -248,6 +345,13 @@ function DelCategory(){
 
 
 
+
+
+
+
+
+
+################################################################################################################
 function PostTag(){
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
@@ -278,6 +382,12 @@ function DelTag(){
 }
 
 
+
+
+
+
+
+################################################################################################################
 function PostMember(){
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
@@ -296,7 +406,7 @@ function PostMember(){
 	$mem = new Member();
 	if(GetVars('ID','POST') == 0){
 		if(isset($_POST['Password'])==false||$_POST['Password']==''){
-			throw new Exception($zbp->lang['error'][73]);
+			$zbp->ShowError(73);
 		}
 	}else{
 		$mem->LoadInfoByID(GetVars('ID','POST'));
@@ -328,6 +438,13 @@ function DelMember(){
 }
 
 
+
+
+
+
+
+
+################################################################################################################
 function PostModule(){
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
@@ -383,6 +500,12 @@ function DelModule(){
 
 
 
+
+
+
+
+
+################################################################################################################
 function PostUpload(){
 	global $zbp;
 
@@ -412,6 +535,14 @@ function DelUpload(){
 
 }
 
+
+
+
+
+
+
+
+################################################################################################################
 function EnablePlugin($name){
 	global $zbp;
 	$zbp->option['ZC_USING_PLUGIN_LIST']=AddNameInString($zbp->option['ZC_USING_PLUGIN_LIST'],$name);
@@ -425,16 +556,12 @@ function DisablePlugin($name){
 	$zbp->SaveOption();
 }
 
-
-
-
 function SetTheme($theme,$style){
 	global $zbp;
 
 	$zbp->theme=$theme;
 	$zbp->style=$style;
 
-	$zbp->LoadTemplates();
 	$zbp->BuildTemplate();
 
 	$zbp->SaveOption();

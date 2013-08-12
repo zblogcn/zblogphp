@@ -3,9 +3,9 @@ require './function/c_system_base.php';
 
 $zbp->Load();
 
-if ($zbp->CheckRights('admin')) {
-	redirect('cmd.php?act=admin');
-}
+//if ($zbp->CheckRights('admin')) {
+//	Redirect('cmd.php?act=admin');
+//}
 
 ?><!DOCTYPE HTML>
 <html>
@@ -15,7 +15,7 @@ if ($zbp->CheckRights('admin')) {
 	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 <?php }?>
 	<meta name="robots" content="none" />
-	<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']?>" />
+	<meta name="generator" content="<?php echo $option['ZC_BLOG_PRODUCT_FULL']?>" />
 	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
 	<script src="script/common.js" type="text/javascript"></script>
 	<script src="script/md5.js" type="text/javascript"></script>

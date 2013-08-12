@@ -64,6 +64,7 @@ class Post extends Base{
 			case 'TypeName':
 			case 'Url':
 			case 'Tags':
+			case 'CommentPostUrl':		
 				return null;
 				break;
 			case 'Template':
@@ -106,6 +107,9 @@ class Post extends Base{
 				$value=$this->Data[$name];
 				if($value=='')$value=$zbp->option['ZC_ARTICLE_DEFAULT_TEMPLATE'];
 				return $value;
+			case 'CommentPostUrl':
+				return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID;
+				break;
 			default:
 				return parent::__get($name);
 				break;

@@ -12,7 +12,7 @@ require '../function/c_system_admin.php';
 $zbp->Load();
 
 $action='ModuleEdt';
-if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 $blogtitle=$lang['msg']['module_edit'];
 
@@ -38,14 +38,14 @@ if(isset($_GET['source'])){
 
 	$array=$zbp->GetModuleList(
 		array('*'),
-		array(array('=','mod_FileName',$_GET['filename'])),
+		array(array('=','mod_FileName',GetVars('filename','GET'))),
 		null,
 		array(1),
 		null
 	);
 
 	if(count($array)==0){
-		throw new Exception($zbp->lang['error'][69], 1);
+		$zbp->ShowError(69);
 	}
 
 	$mod =$array[0];
@@ -53,7 +53,7 @@ if(isset($_GET['source'])){
 
 	//'$mod=
 }else{
-	if(isset($_GET['id'])){$modid = (integer)$_GET['id'];}else{$modid = 0;}
+	if(isset($_GET['id'])){$modid = (integer)GetVars('id','GET');}else{$modid = 0;}
 
 	$mod=$zbp->GetModuleByID($modid);
 }

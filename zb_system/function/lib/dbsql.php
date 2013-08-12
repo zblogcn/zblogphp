@@ -56,7 +56,6 @@ class DbSql #extends AnotherClass
 						$sql_search .= $c . " ($x LIKE '%$y%') ";
 						$c='OR';
 					}
-					logs($sql_search);
 					$sqlw .= $comma .  '(' . $sql_search . ')';
 				}
 				if($eq=='array'){
@@ -114,7 +113,7 @@ class DbSql #extends AnotherClass
 				$option['pagebar']->make();
 			}
 		}
-
+logs($sqls . $sqlw . $sqlo . $sqll);
 		return $sqls . $sqlw . $sqlo . $sqll;
 	}
 
@@ -324,6 +323,6 @@ $datainfo=array(
 	'Intro'=>array('ul_Intro','string','',''),
 	'Meta'=>array('ul_Meta','string','',''),
 ),
-
 );
+
 ?>

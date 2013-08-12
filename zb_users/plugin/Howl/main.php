@@ -6,9 +6,9 @@ require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 
 $action='root';
-if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
-if (!$zbp->CheckPlugin('Howl')) {throw new Exception($lang['error'][48]);}
+if (!$zbp->CheckPlugin('Howl')) {$zbp->ShowError(68);die();}
 
 $blogtitle='Z-Blog角色分配器';
 
@@ -53,6 +53,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
+<?php
+$zbp->ShowHint('bad','本插件配置不当可能会造成被黑，挂马，删除整站等严重后果，请慎用！');
+?>
   <div class="divHeader2"><?php echo $blogtitle;?></div>
   <div class="SubMenu"></div>
   <div id="divMain2" class="edit category_edit">
