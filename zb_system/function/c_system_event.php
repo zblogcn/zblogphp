@@ -15,6 +15,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	}
 
 	$type='index';
+	$template=$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
 	$page=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 	$articles_top=array();
 	$articles=array();
@@ -52,7 +53,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	$zbp->template->SetTags('type',$type);
 	$zbp->template->SetTags('page',$page);
 
-	$zbp->template->display($zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']);
+	$zbp->template->display($template);
 
 }
 
@@ -81,7 +82,18 @@ function ViewPost($id,$alias){
 
 	$comments=$zbp->GetCommentList(
 		array('*'),
-		array(array('=','comm_LogID',$article->ID),array('=','comm_IsChecking',0)),
+		array(array('=','comm_LogID',$article->ID),array('=','comm_RootID',0),array('=','comm_IsChecking',0)),
+		array('comm_PostTime'=>'DESC'),
+		array(0,5),
+		null
+	);
+	$rootid=array();
+	foreach ($comments as $comment) {
+		$rootid[]=array('comm_RootID',$comment->ID);
+	}
+	$comments2=$zbp->GetCommentList(
+		array('*'),
+		array(array('array',$rootid),array('=','comm_IsChecking',0)),
 		array('comm_PostTime'=>'DESC'),
 		null,
 		null
@@ -93,7 +105,7 @@ function ViewPost($id,$alias){
 	$zbp->template->SetTags('page',1);
 	$zbp->template->SetTags('comments',$comments);	
 
-	$zbp->template->display($zbp->option['ZC_ARTICLE_DEFAULT_TEMPLATE']);
+	$zbp->template->display($article->Template);
 }
 
 
@@ -251,15 +263,27 @@ function PostComment(){
 	if($replyid==0){
 		$_POST['RootID'] = 0;
 		$_POST['ParentID'] = 0;
+	}else{
+		$_POST['ParentID'] = $replyid;
+		$c = new Comment();
+		$c->LoadInfoByID($replyid);
+		if($c->Level==3){
+			$zbp->ShowError(52);
+		}
+		if($c->RootID==0){
+			$_POST['RootID'] = $c->ID;
+		}else{
+			$_POST['RootID'] = $c->RootID;
+		}
 	}
 
 
 	$_POST['AuthorID'] = $zbp->user->ID;
 
-	$_POST['Author'] = $_POST['author'];
-	$_POST['Content'] = $_POST['content'];
+	$_POST['Name'] = $_POST['name'];
 	$_POST['Email'] = $_POST['email'];	
 	$_POST['HomePage'] = $_POST['homepage'];
+	$_POST['Content'] = $_POST['content'];	
 
 
 
@@ -273,10 +297,10 @@ function PostComment(){
 	$cmt->RootID       = GetVars('RootID','POST');
 	$cmt->ParentID     = GetVars('ParentID','POST');
 	$cmt->AuthorID     = GetVars('AuthorID','POST');
-	$cmt->Author       = GetVars('Author','POST');
-	$cmt->Content      = GetVars('Content','POST');
+	$cmt->Name         = GetVars('Name','POST');
 	$cmt->Email        = GetVars('Email','POST');
 	$cmt->HomePage     = GetVars('HomePage','POST');
+	$cmt->Content      = GetVars('Content','POST');	
 	$cmt->PostTime     = GetVars('PostTime','POST');
 	$cmt->IP           = GetVars('IP','POST');
 	$cmt->Agent        = GetVars('Agent','POST');	

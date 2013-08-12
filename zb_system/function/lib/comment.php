@@ -24,6 +24,56 @@ class Comment extends Base{
 
 	}
 
+	public function Time($s='Y-m-d H:i:s'){
+		return date($s,(int)$this->PostTime);
+	}
+
+	public function __set($name, $value)
+	{
+        global $zbp;
+		if ($name=='Author') {
+			return null;
+		}
+		if ($name=='Comments') {
+			return null;
+		}
+		if ($name=='Level') {
+			return null;
+		}
+		parent::__set($name, $value);
+	}
+
+	public function __get($name)
+	{
+        global $zbp;
+		if ($name=='Author') {
+			return $zbp->GetMemberByID($this->AuthorID);
+		}
+		if ($name=='Comments') {
+			$array=array();
+			foreach ($zbp->comments as $comment) {
+				if($comment->ParentID==$this->ID){
+					$array[]=&$zbp->comments[$comment->ID];
+				}
+			}
+			return $array;
+		}
+		if ($name=='Level') {
+			if($this->ParentID==0){return 0;}
+
+			$c1=$zbp->GetCommentByID($this->ParentID);
+			if($c1->ParentID==0){return 1;}
+
+			$c2=$zbp->GetCommentByID($c1->ParentID);
+			if($c2->ParentID==0){return 2;}
+
+			$c3=$zbp->GetCommentByID($c2->ParentID);
+			if($c3->ParentID==0){return 3;}
+
+			return 4;
+		}
+		return parent::__get($name);
+	}
 
 }
 

@@ -70,7 +70,7 @@ function GetCookie(sName) {
 
 function VerifyMessage() {
 
-	var strName=$("#author").val();
+	var strName=$("#name").val();
 	var strEmail=$("#email").val();
 	var strHomePage=$("#homepage").val();
 	var strVerify=$("#verify").val();
