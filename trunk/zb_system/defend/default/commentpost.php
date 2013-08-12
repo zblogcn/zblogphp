@@ -5,7 +5,7 @@
 	<input type="hidden" name="replyid" id="replyid" value="0" />
 	<input type="hidden" name="verify" id="verify" value="" />	
 {if $user->ID>0}
-	<input type="hidden" name="author" id="author" value="{$user->Name}" />
+	<input type="hidden" name="name" id="name" value="{$user->Name}" />
 	<input type="hidden" name="email" id="email" value="{$user->Email}" />
 	<input type="hidden" name="homepage" id="homepage" value="{$user->HomePage}" />	
 {else}
@@ -17,7 +17,7 @@
 	<!--verify-->
 	<p><label for="content">正文(*)</label></p>
 	<p><textarea name="content" id="content" class="text" cols="50" rows="4" tabindex="5" ></textarea></p>
-	<p><input name="sumbit" type="submit" tabindex="6" value="提交" onclick123="return VerifyMessage()" class="button" /></p>
+	<p><input name="sumbit" type="submit" tabindex="6" value="提交" onclick="return VerifyMessage()" class="button" /></p>
 	</form>
 	<p class="postbottom">◎欢迎参与讨论，请在这里发表您的看法、交流您的观点。</p>
 </div>

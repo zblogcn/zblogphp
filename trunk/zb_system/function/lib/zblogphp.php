@@ -62,7 +62,8 @@ class ZBlogPHP{
 	public $sidebar5=array();
 
 	public $usersdir = null;
-	
+	public $comments = array();
+
 	static public function GetInstance(){
 		if(!isset(self::$zbp)){
 			self::$_zbp=new ZBlogPHP;
@@ -725,7 +726,11 @@ class ZBlogPHP{
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select('Comment',$select,$where,$order,$limit,$option);
-		return $this->GetList('Comment',$sql);
+		$array=$this->GetList('Comment',$sql);
+		foreach ($array as $comment) {
+			$this->comments[$comment->ID]=$comment;
+		}
+		return $array;
 
 	}
 
@@ -799,7 +804,21 @@ class ZBlogPHP{
 			$m->Guid=GetGuid();
 			return $m;
 		}
-	}	
+	}
+
+	function GetCommentByID($id){
+		if(isset($this->comments[$id])){
+			return $this->comments[$id];
+		}else{
+			$c = new Comment;
+			if($id==0){
+				return $c;
+			}else{
+				$c->LoadInfoByID($id);
+				return $c;
+			}
+		}
+	}
 
 	function GetTagByID($id){
 		if(isset($this->tags[$id])){

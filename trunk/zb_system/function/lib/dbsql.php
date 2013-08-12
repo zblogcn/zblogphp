@@ -205,7 +205,7 @@ $table=array(
 $datainfo=array(
 'Config'=>array(
 	'Name'=>array('conf_Name','string',250,''),
-	'Value'=>array('conf_Name','string','',''),
+	'Value'=>array('conf_Value','string','',''),
 ),
 'Post'=> array(
 	'ID'=>array('log_ID','integer','',0),
@@ -247,7 +247,7 @@ $datainfo=array(
 	'RootID'=>array('comm_RootID','integer','',0),
 	'ParentID'=>array('comm_ParentID','integer','',0),
 	'AuthorID'=>array('comm_AuthorID','integer','',0),
-	'Author'=>array('comm_Author','string',20,''),
+	'Name'=>array('comm_Name','string',20,''),
 	'Content'=>array('comm_Content','string','',''),
 	'Email'=>array('comm_Email','string',50,''),
 	'HomePage'=>array('comm_HomePage','string',250,''),

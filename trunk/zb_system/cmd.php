@@ -36,14 +36,14 @@ switch ($action) {
 		#echo Reload(GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'cmt':
-		//echo 123;
-		//logs(123);
 		if(GetVars('isajax','POST')){
 			Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','RespondError',PLUGIN_EXITSIGNAL_RETURN);
 		}
 		PostComment();
 		if(GetVars('isajax','POST')){
 			die();
+		}else{
+			Redirect(GetVars('HTTP_REFERER','SERVER'));
 		}
 		break;
 	case 'ArticleEdt':
