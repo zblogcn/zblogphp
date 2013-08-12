@@ -9,7 +9,7 @@ header('Content-Type: application/x-javascript; Charset=utf8');
 
 require '../function/c_system_base.php';
 
-Http304(__FILE__,$zbp->cache->refesh);
+//Http304(__FILE__,$zbp->cache->refesh);
 ?>
 var bloghost="<?php echo $bloghost; ?>";
 var cookiespath="<?php echo $cookiespath; ?>";
@@ -22,18 +22,7 @@ var cookiespath="<?php echo $cookiespath; ?>";
 // 返回：    无
 //*********************************************************
 function BatchSelectAll() {
-	var aryChecks = document.getElementsByTagName("input");
-
-	for (var i = 0; i < aryChecks.length; i++){
-		if((aryChecks[i].type=="checkbox")&&(aryChecks[i].id.indexOf("edt")!==-1)){
-			if(aryChecks[i].checked==true){
-				aryChecks[i].checked=false;
-			}
-			else{
-				aryChecks[i].checked=true;
-			};
-		}
-	}
+	$("input[name='id[]']").click();
 }
 //*********************************************************
 

@@ -103,8 +103,10 @@ $actions=array(
 	'CategoryDel'=>2,
 
 	'CommentEdt'=>5,
-	'CommentPst'=>5,
+	'CommentSav'=>5,
 	'CommentDel'=>5,
+	'CommentChk'=>5,
+	'CommentBat'=>5,	
 
 	'MemberEdt'=>5,
 	'MemberPst'=>5,

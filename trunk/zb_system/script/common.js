@@ -131,8 +131,8 @@ function VerifyMessage() {
 		"isajax":true,
 		"postid":intPostID,
 		"verify":strVerify,
+		"name":strName,		
 		"email":strEmail,
-		"author":strName,
 		"content":strArticle,
 		"homepage":strHomePage,
 		"replyid":intReplyID
