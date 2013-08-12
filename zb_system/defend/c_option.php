@@ -134,7 +134,7 @@ return array(
 
 	'ZC_AUTHOR_REGEX' => '{%host%}?auth={%id%}{&page=%page%}',
 
-	'ZC_TAGS_REGEX' => '{%host%}?tags={%alias%}{&page=%page%}',
+	'ZC_TAGS_REGEX' => '{%host%}?tags={%id%}{&page=%page%}',
 
 	'ZC_DATE_REGEX' => '{%host%}?date={%date%}{&page=%page%}',
 

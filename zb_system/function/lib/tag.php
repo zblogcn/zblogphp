@@ -44,6 +44,7 @@ class Tag extends Base{
 			$u = new UrlRule($zbp->option['ZC_TAGS_REGEX']);
 			$u->Rules['{%id%}']=$this->ID;
 			$u->Rules['{%alias%}']=$this->Alias;
+			$u->Rules['{%page%}']='';
 			return $u->Make();
 		}
 		if ($name=='Template') {

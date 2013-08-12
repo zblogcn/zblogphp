@@ -89,6 +89,9 @@ switch ($action) {
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=CategoryMng');
 		break;
+	case 'CommentBat':
+		var_dump($_POST['id']);
+		break;
 	case 'CommentMng':
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;

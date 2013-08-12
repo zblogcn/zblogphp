@@ -279,14 +279,10 @@ function PostComment(){
 
 
 	$_POST['AuthorID'] = $zbp->user->ID;
-
 	$_POST['Name'] = $_POST['name'];
 	$_POST['Email'] = $_POST['email'];	
 	$_POST['HomePage'] = $_POST['homepage'];
 	$_POST['Content'] = $_POST['content'];	
-
-
-
 	$_POST['PostTime'] = Time();
 	$_POST['IP'] = GetGuestIP();	
 	$_POST['Agent'] = GetGuestAgent();
@@ -305,18 +301,15 @@ function PostComment(){
 	$cmt->IP           = GetVars('IP','POST');
 	$cmt->Agent        = GetVars('Agent','POST');	
 
-
-
 	$cmt->Save();
 	return true;
 
-
 }
+
 
 function DelComment(){
 
 }
-
 
 
 

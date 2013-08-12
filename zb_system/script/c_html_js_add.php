@@ -13,7 +13,7 @@ require '../function/c_system_base.php';
 
 <%If ZC_SYNTAXHIGHLIGHTER_ENABLE Then Response.Write Response_Plugin_Html_Js_Add_CodeHighLight_Action%>
 */
-Http304(__FILE__,$zbp->cache->refesh);
+//Http304(__FILE__,$zbp->cache->refesh);
 
 ob_clean();
 ?>

@@ -544,6 +544,83 @@ function Admin_CommentMng(){
 	echo '</div>';
 	echo '<div id="divMain2">';
 
+
+
+	echo '<form class="search" id="search" method="post" action="#">';
+	echo '<p>' . $zbp->lang['msg']['search'] . '&nbsp;&nbsp;&nbsp;&nbsp;<input name="search" style="width:450px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
+	echo '</form>';
+	echo '<form method="post" action="'.$zbp->host.'zb_system/cmd.php?act=CommentBat">';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<tr>
+	<th>' . $zbp->lang['msg']['id'] . '</th>
+	<th>' . $zbp->lang['msg']['parend_id'] . '</th>
+	<th>' . $zbp->lang['msg']['name'] . '</th>
+	<th>' . $zbp->lang['msg']['content'] . '</th>
+	<th>' . $zbp->lang['msg']['date'] . '</th>
+	<th>' . ''. '</th>
+	<th><a href="" onclick="BatchSelectAll();return false;">' . $zbp->lang['msg']['select_all'] . '</a></th>
+	</tr>';
+
+$p=new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&page=%page%}{&ischecking=%ischecking%}{&search=%search%}');
+$p->PageCount=$zbp->managecount;
+$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+$p->PageBarCount=$zbp->pagebarcount;
+
+$p->UrlRule->Rules['{%search%}']=urlencode(GetVars('search'));
+$p->UrlRule->Rules['{%ischecking%}']=(boolean)GetVars('ischecking');
+
+$w=array();
+if(!$zbp->CheckRights('CommentAll')){
+	$w[]=array('=','comm_AuthorID',$zbp->user->ID);
+}
+if(GetVars('search')){
+	$w[]=array('search','comm_Content','comm_Name',GetVars('search'));
+}
+if(GetVars('ischecking')){
+	$w[]=array('=','comm_Ischecking','1');
+}
+
+
+$array=$zbp->GetCommentList(
+	'',
+	$w,
+	array('comm_PostTime'=>'DESC'),
+	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
+	array('pagebar'=>$p)
+);
+
+foreach ($array as $cmt) {
+	echo '<tr>';
+	echo '<td class="td5">' . $cmt->ID .  '</td>';
+	echo '<td class="td5">' . $cmt->ParentID . '</td>';
+	echo '<td class="td10">' . $cmt->Author->Name . '</td>';
+	echo '<td>' . $cmt->Content . '</td>';
+	echo '<td class="td15">' .$cmt->Time() . '</td>';
+	echo '<td class="td10 tdCenter">';
+	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=CommentDel&amp;id='. $cmt->ID .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+	echo '<a href="../cmd.php?act=CommentChk&amp;id='. $cmt->ID .'"><img src="../image/admin/minus-shield.png" alt="'.$zbp->lang['msg']['audit'] .'" title="'.$zbp->lang['msg']['audit'] .'" width="16" /></a>';
+	echo '</td>';
+	echo '<td class="td5 tdCenter">' . '<input type="checkbox" id="id'.$cmt->ID.'" name="id[]" value="'.$cmt->ID.'"/>' . '</td>';
+
+	echo '</tr>';
+}
+	echo '</table>';
+	echo '<hr/><p class="pagebar">';
+
+foreach ($p->buttons as $key => $value) {
+	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
+}
+
+	echo '</p><p>';
+
+	echo '<input type="submit" onclick="" value="删除所选评论"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+	echo '<input type="submit" onclick="" value="审核所选评论"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+	echo '</p><hr/></form>';
+
+
+
 	echo '</div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aCommentMng");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/comments_32.png' . '");</script>';
