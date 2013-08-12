@@ -19,7 +19,10 @@ function zbp_addcatesubmenu(){
 }
 
 function zbp_addmemsubmenu(){
-	echo '<a href="../cmd.php?act=MemberNew"><span class="m-left">' . $GLOBALS['lang']['msg']['new_member'] . '</span></a>';
+	global $zbp;
+	if($zbp->CheckRights('MemberNew')){
+		echo '<a href="../cmd.php?act=MemberNew"><span class="m-left">' . $GLOBALS['lang']['msg']['new_member'] . '</span></a>';
+	}
 }
 
 function zbp_addmodsubmenu(){
@@ -30,7 +33,10 @@ function zbp_addmodsubmenu(){
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=misc"><span class="m-left">' . $GLOBALS['lang']['msg']['module_misc'] . '</span></a>';
 }
 function zbp_addcmtsubmenu(){
-	echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left">' . $GLOBALS['lang']['msg']['check_comment'] . '</span></a>';
+	global $zbp;
+	if($zbp->CheckRights('CommentAll')){
+		echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left">' . $GLOBALS['lang']['msg']['check_comment'] . '</span></a>';
+	}
 }
 
 
@@ -190,9 +196,6 @@ function CreateOptoinsOfMemberLevel($default){
 	if(!$zbp->CheckRights('MemberAll')){
 		return '<option value="' . $default . '" selected="selected" >' . $zbp->lang['user_level_name'][$default] . '</option>';
 	}
-	if($zbp->user->ID==$default){
-		return '<option value="' . $default . '" selected="selected" >' . $zbp->members[$default]->Name . '</option>';
-	}
 	for ($i=1; $i <7 ; $i++) {
 		$s .= '<option value="' . $i . '" ' . ($default==$i?'selected="selected"':'') . ' >' . $zbp->lang['user_level_name'][$i] . '</option>';
 	}
@@ -206,6 +209,7 @@ function CreateOptoinsOfMember($default){
 
 	$s=null;
 	if(!$zbp->CheckRights('ArticleAll')){
+		if(!isset($zbp->members[$default]))return '<option value="0" selected="selected" ></option>';
 		return '<option value="' . $default . '" selected="selected" >' . $zbp->members[$default]->Name . '</option>';
 	}
 	foreach ($zbp->members as $key => $value) {
@@ -279,11 +283,11 @@ function Admin_SiteInfo(){
 	echo '<div id="divMain2">';
 
 	echo '<table class="tableFull tableBorder" id="tbStatistic"><tr><th colspan="4">&nbsp;' . $zbp->lang['msg']['site_analyze'] . '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');">[' . $zbp->lang['msg']['refresh_cache'] . ']</a> <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
-	echo $zbp->GetCache('reload_statistic');
+	echo $zbp->cache->reload_statistic;
 	echo '</table>';
 
 	echo '<table class="tableFull tableBorder" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a> <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
-	echo $zbp->GetCache('reload_updateinfo');
+	echo $zbp->cache->reload_updateinfo;
 	echo '</table>';
 
 	echo '</div>';

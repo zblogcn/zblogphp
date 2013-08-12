@@ -11,19 +11,19 @@ ob_clean();
 
 switch (GetVars('type','GET')) {
 	case 'statistic':
-		if (!$zbp->CheckRights('root')) {echo $lang['error'][6];die();throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights('root')) {echo $lang['error'][6];die();$zbp->ShowError(6);}
 		misc_statistic();
 		break;
 	case 'updateinfo':
-		if (!$zbp->CheckRights('root')) {echo $lang['error'][6];die();throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights('root')) {echo $lang['error'][6];die();$zbp->ShowError(6);}
 		misc_updateinfo();
 		break;
 	case 'showtags':
-		if (!$zbp->CheckRights('ArticleEdt')) {Http404();throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights('ArticleEdt')) {Http404();}
 		misc_showtags();
 		break;
 	case 'vrs':
-		if (!$zbp->CheckRights('misc')) {throw new Exception($lang['error'][6]);}
+		if (!$zbp->CheckRights('misc')) {$zbp->ShowError(6);}
 		misc_viewrights();
 		break;
 	case 'autoinfo':
@@ -45,7 +45,7 @@ function misc_updateinfo(){
 	#$r = file_get_contents('http://www.baidu.com/robots.txt');
 	$r = '<tr><td>' . $r . '</td></tr>';
 
-	$zbp->SetCache('reload_updateinfo',$r);
+	$zbp->cache->reload_updateinfo=$r;
 	$zbp->SaveCache();
 
 	echo $r;
@@ -83,7 +83,7 @@ function misc_statistic(){
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";		
 
-	$zbp->SetCache('reload_statistic',$r);
+	$zbp->cache->reload_statistic=$r;
 	$zbp->SaveCache();
 
 	echo $r;

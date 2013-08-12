@@ -7,7 +7,7 @@ RegisterPlugin("Howl","ActivePlugin_Howl");
 
 function ActivePlugin_Howl() {
 
-	Add_Filter_Plugin('Filter_Plugin_CheckRights_Begin','Howl_CheckRights');
+	Add_Filter_Plugin('Filter_Plugin_Zbp_CheckRights','Howl_CheckRights');
 
 }
 
@@ -19,7 +19,7 @@ function InstallPlugin_Howl(){
 
 function UninstallPlugin_Howl(){
 	global $zbp;
-	$zbp->DelConfig('Howl');
+	//$zbp->DelConfig('Howl');
 }
 
 

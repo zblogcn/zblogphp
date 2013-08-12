@@ -12,7 +12,7 @@ require '../function/c_system_admin.php';
 $zbp->Load();
 
 $action='TagEdt';
-if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 $blogtitle=$lang['msg']['tag_edit'];
 
@@ -23,7 +23,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <?php
 
 $tagid=null;
-if(isset($_GET['id'])){$tagid = $_GET['id'];}else{$tagid = 0;}
+if(isset($_GET['id'])){$tagid = (integer)GetVars('id','GET');}else{$tagid = 0;}
 
 $tag=$zbp->GetTagByID($tagid);
 

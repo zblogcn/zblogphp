@@ -11,8 +11,10 @@ require '../function/c_system_admin.php';
 
 $zbp->Load();
 
-$action=GetVars('act','GET');
-if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
+$action='';
+if(GetVars('act','GET')=='PageEdt')$action='PageEdt';
+if(GetVars('act','GET')=='ArticleEdt')$action='ArticleEdt';
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 $blogtitle=$lang['msg']['article_edit'];
 
@@ -26,8 +28,8 @@ if(!$zbp->CheckRights('ArticlePub')){
   $article->Status=ZC_POST_STATUS_AUDITING;
 }
 
-if((GetVars('id','GET')!='')){
-  $article->LoadInfoByID((integer)(GetVars('id','GET')));
+if(isset($_GET['id'])){
+  $article->LoadInfoByID((integer)GetVars('id','GET'));
 }
 
 if($ispage){
@@ -144,7 +146,6 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
           <div id='user' class='editmod'> <label for="cmbUser" class="editinputname" ><?php echo $lang['msg']['author']?></label>
             <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
 <?php echo CreateOptoinsOfMember($article->AuthorID);?>
-
             </select>
           </div>
           <!-- )user --> 

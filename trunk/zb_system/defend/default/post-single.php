@@ -8,10 +8,6 @@
 	</h6>
 </div>
 
-{if $article->CommNums>0}
-<#评论输出#>
-{/if}
-
 {if !$article->IsLock}
-<#评论框#>
+{template:comments}
 {/if}

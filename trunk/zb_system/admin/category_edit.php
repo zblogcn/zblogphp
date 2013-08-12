@@ -12,7 +12,7 @@ require '../function/c_system_admin.php';
 $zbp->Load();
 
 $action='CategoryEdt';
-if (!$zbp->CheckRights($action)) {throw new Exception($lang['error'][6]);}
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 $blogtitle=$lang['msg']['category_edit'];
 
@@ -23,7 +23,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <?php
 
 $cateid=null;
-if(isset($_GET['id'])){$cateid = $_GET['id'];}else{$cateid = 0;}
+if(isset($_GET['id'])){$cateid = (integer)GetVars('id','GET');}else{$cateid = 0;}
 
 $cate=$zbp->GetCategoryByID($cateid);
 

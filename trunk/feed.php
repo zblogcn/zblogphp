@@ -12,7 +12,7 @@ $zbp->Load();
 
 $action='feed';
 
-if(!$zbp->CheckRights($action)){Http404();die();}
+if(!$zbp->CheckRights($action)){Http404();}
 
 $rss2 = new Rss2($zbp->name,$zbp->host,$zbp->subname);
 

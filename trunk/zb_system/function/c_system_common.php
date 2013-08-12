@@ -119,12 +119,27 @@ function GetFilesInDir($dir,$type){
 function Redirect($url){
 	header("HTTP/1.1 302 Found");
 	header('Location: '.$url);
+	die();
 }
 
 
 function Http404(){
 	header('HTTP/1.1 404 Not Found');
 	header("Status: 404 Not Found");
+	die();
+}
+
+
+function Http304($filename,$time){
+	$url = $filename;
+	$md5 = md5($url . $time);
+	$etag = '"' . $md5 . '"';
+	header('Last-Modified: '.gmdate('D, d M Y H:i:s',$time ).' GMT');
+	header("ETag: $etag");
+	if((isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag)){
+		header("HTTP/1.1 304 Not Modified"); 
+		die();
+	}
 }
 
 function Logs($s){
@@ -136,6 +151,10 @@ function Logs($s){
 
 function GetGuestIP(){
 	return $_SERVER["REMOTE_ADDR"];
+}
+
+function GetGuestAgent(){
+	return $_SERVER["HTTP_USER_AGENT"];
 }
 
 function GetValueInArray($array,$name){
@@ -242,11 +261,27 @@ function HasNameInString($s,$name){
 
 
 
+#*********************************************************
+# 目的：    XML-RPC显示错误页面
+#'*********************************************************
+function RespondError($faultString){
+
+	$strXML='<?xml version="1.0" encoding="UTF-8"?><methodResponse><fault><value><struct><member><name>faultCode</name><value><int>$1</int></value></member><member><name>faultString</name><value><string>$2</string></value></member></struct></value></fault></methodResponse>';
+	$faultCode=time();
+	$strError=$strXML;
+	$strError=str_replace("$1",TransferHTML($faultCode,"[html-format]"),$strError);
+	$strError=str_replace("$2",TransferHTML($faultString,"[html-format]"),$strError);
+
+	ob_clean();
+	echo $strError;
+	die();
+
+}
 
 
-
-
-
+function TransferHTML(&$source,$para){
+	return $source;
+}
 
 
 ?>

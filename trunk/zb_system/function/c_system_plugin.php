@@ -141,16 +141,60 @@ Function Add_Response_Plugin($plugname,$functionname){
 
 
 
+
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_ViewList_Begin
+'名称:Filter_Plugin_Autoload
 '参数:
-'说明:定义列表输出接口
+'说明:定义autoload
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_CheckRights_Begin=array();
+$Filter_Plugin_Autoload=array();
+
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_CheckRights
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_CheckRights=array();
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_ShowError
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_ShowError=array();
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_BuildTemplate
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_BuildTemplate=array();
 
 
 
