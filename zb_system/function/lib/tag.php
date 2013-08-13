@@ -43,8 +43,7 @@ class Tag extends Base{
 		if ($name=='Url') {
 			$u = new UrlRule($zbp->option['ZC_TAGS_REGEX']);
 			$u->Rules['{%id%}']=$this->ID;
-			$u->Rules['{%alias%}']=$this->Alias;
-			$u->Rules['{%page%}']='';
+			$u->Rules['{%alias%}']=$this->Alias==''?urlencode($this->Name):$this->Alias;
 			return $u->Make();
 		}
 		if ($name=='Template') {

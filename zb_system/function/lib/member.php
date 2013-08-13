@@ -31,7 +31,10 @@ class Member extends Base{
 	{
         global $zbp;
 		if ($name=='Url') {
-			return null;
+			$u = new UrlRule($zbp->option['ZC_AUTHOR_REGEX']);
+			$u->Rules['{%id%}']=$this->ID;
+			$u->Rules['{%alias%}']=$this->Alias==''?urlencode($this->Name):$this->Alias;
+			return $u->Make();
 		}
 		if ($name=='Avatar') {
 			return null;

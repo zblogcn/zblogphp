@@ -22,17 +22,24 @@ class UrlRule
 
 		$this->Rules['{%host%}']=$zbp->host;
 		if(isset($this->Rules['{%page%}'])){
-			if($this->Rules['{%page%}']=='1'||$this->Rules['{%page%}']=='0'){$this->Rules['{%page%}']='';}
+			if($this->Rules['{%page%}']=='1'||$this->Rules['{%page%}']=='0'){
+				$this->Rules['{%page%}']='%page%';
+			}
+		}else{
+			$this->Rules['{%page%}']='%page%';
 		}
+		$this->Rules['%page%']=$this->Rules['{%page%}'];
 		$s=$this->PreUrl;
 		foreach ($this->Rules as $key => $value) {
-			$s=preg_replace($key, $value, $s);
+			//$s=preg_replace($key, $value, $s);
+			$s=str_replace($key, $value, $s);
 		}
-		$s=preg_replace('/\{[\?\/&a-z0-9]*=\}/', '', $s);
-		$s=preg_replace('/\{\/?}/', '', $s);
-		$s=str_replace(array('{','}'), array('',''), $s);
+		$s2=$s;
+		preg_match('/\{.*%page%.*\}/i', $s2, $matches);
+		if(isset($matches[0])){
+			$s=str_replace($matches[0],'',$s);
+		}
 		$this->Url=htmlspecialchars($s);
-		#echo nl2br($s,true);
 		return $this->Url;
 	}
 }
