@@ -42,6 +42,7 @@ return array(
 	'ZC_USING_PLUGIN_LIST' => '',
 
 	// '-------------------------------全局配置-----------------------------------
+	'ZC_YUN_SITE'=>'',
 	'ZC_DEBUG_MODE' => true,
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE' => '+0800',
@@ -120,11 +121,8 @@ return array(
 	'ZC_COMMENT_EXCERPT_MAX' => 20,
 
 	// '---------------------------------静态化配置-----------------------------------
-	// '文章,页面类的静态模式ACTIVE or REWRITE
-	'ZC_POST_STATIC_MODE' => 'ACTIVE',
-
-	// '列表页的静态模式ACTIVE or REWRITE
-	'ZC_LIST_STATIC_MODE' => 'ACTIVE',
+	// '文章,页面类,列表页的静态模式ACTIVE or REWRITE
+	'ZC_STATIC_MODE' => 'ACTIVE',
 
 	'ZC_ARTICLE_REGEX' => '{%host%}view.php?id={%id%}',
 
@@ -164,7 +162,5 @@ return array(
 
 
 	'ZC_HTTP_LASTMODIFIED' => false,
-
-	'ZC_YUN_SITE'=>'',
 )
 ?>

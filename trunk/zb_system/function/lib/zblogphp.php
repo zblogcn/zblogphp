@@ -307,7 +307,6 @@ class ZBlogPHP{
 
 	public function DelConfig($name){
 		$sql = $this->db->sql->Delete('Config',array(array('=','conf_Name',$name)));
-		logs($sql);
 		$this->db->Delete($sql);
 	}
 
@@ -604,7 +603,7 @@ class ZBlogPHP{
 
 		//创建模板类
 		$this->template = new Template();
-		$this->template->path = $this->usersdir . 'template/';
+		$this->template->path = $this->usersdir . 'theme/'. $this->theme .'/php/';
 		$this->template->tags = $this->templatetags;
 
 	}
@@ -642,8 +641,13 @@ class ZBlogPHP{
 		//初始化模板
 		$this->LoadTemplates();
 
+		$dir=$this->usersdir . 'theme/'. $this->theme .'/php/';
+
+		if(!file_exists($dir)){
+			@mkdir($dir, 0777,true);
+		}
+
 		//清空目标目录
-		$dir = $this->usersdir . 'template/';
 		$files = GetFilesInDir($dir,'php');
 		foreach ($files as $fullname) {
 			@unlink($fullname);
@@ -651,7 +655,7 @@ class ZBlogPHP{
 		
 		//创建模板类
 		$this->template = new Template();
-		$this->template->path = $this->usersdir . 'template/';
+		$this->template->path = $dir;
 
 		//模板接口
 		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {$fpname();}

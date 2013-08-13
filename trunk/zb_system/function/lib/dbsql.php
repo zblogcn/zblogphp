@@ -113,7 +113,6 @@ class DbSql #extends AnotherClass
 				$option['pagebar']->make();
 			}
 		}
-logs($sqls . $sqlw . $sqlo . $sqll);
 		return $sqls . $sqlw . $sqlo . $sqll;
 	}
 

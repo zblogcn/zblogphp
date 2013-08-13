@@ -31,7 +31,7 @@ foreach ($option_zbusers as $key => $value) {
 
 $lang = null;
 
-$blogtitle = &$option['ZC_BLOG_SUBNAME'];
+$blogtitle = $option['ZC_BLOG_SUBNAME'];
 $blogname = &$option['ZC_BLOG_NAME'];
 $blogsubname = &$option['ZC_BLOG_SUBNAME'];
 $blogtheme = &$option['ZC_BLOG_THEME'];

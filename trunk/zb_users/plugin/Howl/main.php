@@ -54,7 +54,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
 <?php
-$zbp->ShowHint('bad','本插件配置不当可能会造成被黑，挂马，删除整站等严重后果，请慎用！');
+$zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重后果，请慎用！');
 ?>
   <div class="divHeader2"><?php echo $blogtitle;?></div>
   <div class="SubMenu"></div>
