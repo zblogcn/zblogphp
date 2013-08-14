@@ -627,7 +627,7 @@ function SaveSetting(){
 			$zbp->option[$key]=(integer)$value;
 			continue;
 		}		
-		$zbp->option[$key]=$value;
+		$zbp->option[$key]=trim(str_replace(array("\r","\n"),array("",""),$value));
 	}
 	$zbp->SaveOption();
 }

@@ -46,6 +46,7 @@ class ZBlogPHP{
 
 	public $isinitialize=false;
 	public $isconnect=false;
+	public $isload=false;	
 
 	public $template = null;
 
@@ -106,6 +107,8 @@ class ZBlogPHP{
 		$this->searchcount = $this->option['ZC_SEARCH_COUNT'];
 		$this->displaycount = $this->option['ZC_DISPLAY_COUNT'];
 		$this->commentdisplycount = $this->option['ZC_COMMENTS_DISPLAY_COUNT'];
+		
+		$this->cache=new Metas;
 
 	}
 
@@ -142,7 +145,9 @@ class ZBlogPHP{
 
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){
 			$this->host=$this->option['ZC_BLOG_HOST'];
-		}		
+		}else{
+			$this->option['ZC_BLOG_HOST']=$this->host;
+		}
 
 		$this->option['ZC_BLOG_PRODUCT_FULL']=$this->option['ZC_BLOG_PRODUCT'] . ' ' . $this->option['ZC_BLOG_VERSION'];
 		$this->option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title="RainbowSoft Z-BlogPHP">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
@@ -164,15 +169,16 @@ class ZBlogPHP{
 		if(!$this->isconnect)return false;
 
 		$this->LoadMembers();
+		
 		$this->LoadCategorys();
 		#$this->LoadTags();
 		$this->LoadModules();
-
 
 		$this->Verify();
 
 		$this->MakeTemplatetags();
 
+		$this->isload=true;
 	}
 
 
@@ -510,6 +516,7 @@ class ZBlogPHP{
 		}
 
 		$dir=$this->usersdir . 'theme/' . $this->theme . '/include/';
+		if(!file_exists($dir))return null;
 		$files=GetFilesInDir($dir,'php');
 		foreach ($files as $sortname => $fullname) {
 			$m=new Module();

@@ -285,11 +285,6 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['upload'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">zb_users/template</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['template'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['template'][1];?></td>
-        </tr>
-        <tr>
           <td scope="row">zb_users/c_option.php</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option.php'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option.php'][1];?></td>
@@ -594,7 +589,6 @@ $CheckResult=array(
   getRightsAndExport('zb_users/','theme');
   getRightsAndExport('zb_users/','plugin');
   getRightsAndExport('zb_users/','upload');
-  getRightsAndExport('zb_users/','template');
   getRightsAndExport('zb_users/','c_option.php');
 
   $CheckResult['file_get_contents'][1]=function_exists('file_get_contents')?bingo:error;
@@ -910,10 +904,6 @@ echo "读写'zb_users/logs/'目录成功!<br/>";}
 $f=$zbp->path . 'zb_users/plugin/index.html';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/plugin/'目录成功!<br/>";}
-
-$f=$zbp->path . 'zb_users/template/index.html';
-if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-echo "读写'zb_users/template/'目录成功!<br/>";}
 
 $f=$zbp->path . 'zb_users/theme/index.html';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
