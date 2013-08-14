@@ -412,6 +412,7 @@ class ZBlogPHP{
 		if(empty($array))return false;
 		if(!is_array($array))return false;
 		foreach ($array as $key => $value) {
+			if($key=='ZC_BLOG_HOST')continue;
 			$this->option[$key]=$value;
 		}
 

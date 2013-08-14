@@ -46,38 +46,39 @@ $ua=array(
 
 
 'ZC_INDEX_REGEX' => array(
-'{%host%}{?page=%page%}',
-'{%host%}{page_%page%}.html',
-'{%host%}{page_%page%/}',
+'{%host%}?page={%page%}',
+'{%host%}page_{%page%}.html',
+'{%host%}page_{%page%}/',
+'{%host%}page_{%page%}',
 ),
 
 
 'ZC_CATEGORY_REGEX' =>array(
- '{%host%}?cate={%id%}{&page=%page%}',
- '{%host%}category-{%id%}{_%page%}.html',
- '{%host%}category/{%id%}/{%page%/}',
- '{%host%}category-{%alias%}{_%page%}.html',
+ '{%host%}?cate={%id%}&page={%page%}',
+ '{%host%}category-{%id%}_{%page%}.html',
+ '{%host%}category/{%id%}/{%page%}/',
+ '{%host%}category-{%alias%}_{%page%}.html',
 ),
 
 
  
 'ZC_TAGS_REGEX' => array(
- '{%host%}?tags={%alias%}{&page=%page%}',
- '{%host%}tags-{%id%}{_%page%}.html',
- '{%host%}tags-{%alias%}{_%page%}.html',
+ '{%host%}?tags={%alias%}&page={%page%}',
+ '{%host%}tags-{%id%}_{%page%}.html',
+ '{%host%}tags-{%alias%}_{%page%}.html',
 ),
 
 
 'ZC_DATE_REGEX' =>array(
- '{%host%}?date={%date%}{&page=%page%}',
- '{%host%}date-{%date%}{_%page%}.html',
- '{%host%}post/{%date%}{_%page%}.html',
+ '{%host%}?date={%date%}&page={%page%}',
+ '{%host%}date-{%date%}_{%page%}.html',
+ '{%host%}post/{%date%}_{%page%}.html',
 ),
 
 
 'ZC_AUTHOR_REGEX' =>array(
- '{%host%}?auth={%id%}{&page=%page%}',
- '{%host%}author-{%id%}{_%page%}.html',
+ '{%host%}?auth={%id%}&page={%page%}',
+ '{%host%}author-{%id%}_{%page%}.html',
  '{%host%}author/{%id%}/{%page%/}',
 ),
 

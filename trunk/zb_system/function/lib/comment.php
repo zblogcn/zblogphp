@@ -47,7 +47,13 @@ class Comment extends Base{
 	{
         global $zbp;
 		if ($name=='Author') {
-			return $zbp->GetMemberByID($this->AuthorID);
+			$m=$zbp->GetMemberByID($this->AuthorID);
+			if($m->ID==0){
+				$m->Name=$this->Name;
+				$m->Email=$this->Email;
+				$m->HomePage=$this->HomePage;
+			}
+			return $m;
 		}
 		if ($name=='Comments') {
 			$array=array();

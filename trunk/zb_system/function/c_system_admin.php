@@ -1252,9 +1252,77 @@ function Admin_SettingMng(){
 		$fpname();
 	}	
 	echo '</div>';
-	echo '<div id="divMain">';
 
+?>
+
+          <form method="post" action="../cmd.php?act=SettingSav">
+            <div id="divMain2">
+              <div class="content-box"><!-- Start Content Box -->
+                
+                <div class="content-box-header">
+                  <ul class="content-box-tabs">
+                    <li><a href="#tab1" class="default-tab"><span>基础设置</span></a></li>
+                    <li><a href="#tab2"><span>全局设置</span></a></li>
+                    <li><a href="#tab3"><span>页面设置</span></a></li>
+                    <li><a href="#tab4"><span>评论设置</span></a></li>
+                  </ul>
+                  <div class="clear"></div>
+                </div>
+                <!-- End .content-box-header -->
+                
+                <div class="content-box-content">
+<?php
+
+	echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
+	echo '<table style="padding:0px;margin:0px;width:100%;">';
+	echo '<tr><td class="td25"><p><b>网站地址</b><br/><span class="note">&nbsp;默认自动读取当前网址,如果固化网站域名请输入域名并锁定.</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="'.$zbp->option['ZC_BLOG_HOST'].'" '.($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']?'':'readonly="readonly"').' />';
+	echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="'.$zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'].'"/></label>&nbsp;&nbsp;固化网站域名并锁定</p></td></tr>';
+	echo '<tr><td><p><b>网站标题</b></p></td><td><p><input id="ZC_BLOG_NAME" name="ZC_BLOG_NAME" style="width:600px;" type="text" value="'.$zbp->option['ZC_BLOG_NAME'].'" /></p></td></tr>';
+	echo '<tr><td><p><b>网站副标题</b></p></td><td><p><input id="ZC_BLOG_SUBNAME" name="ZC_BLOG_SUBNAME" style="width:600px;"  type="text" value="'.$zbp->option['ZC_BLOG_SUBNAME'].'" /></p></td></tr>';
+	echo '<tr><td><p><b>版权说明</b><br/><span class="note">&nbsp;可放入站点统计等js代码.</span></p></td><td><p><textarea cols="3" rows="6" id="ZC_BLOG_COPYRIGHT" name="ZC_BLOG_COPYRIGHT" style="width:600px;">'.htmlentities($zbp->option['ZC_BLOG_COPYRIGHT']).'</textarea></p></td></tr>';
+	echo '<tr><td><p><b>调试模式</b></p></td><td><p><input id="ZC_DEBUG_MODE" name="ZC_DEBUG_MODE" type="text" value="'.$zbp->option['ZC_DEBUG_MODE'].'" class="checkbox"/></p></td></tr>';
+
+	echo '</table>';
 	echo '</div>';
+
+
+
+	echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab2">';
+	echo '<table style="padding:0px;margin:0px;width:100%;">';
+
+
+
+
+
+	echo '</table>';
+	echo '</div>';
+	echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab3">';
+	echo '<table style="padding:0px;margin:0px;width:100%;">';
+
+
+
+
+	echo '</table>';
+	echo '</div>';
+	echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab4">';
+	echo '<table style="padding:0px;margin:0px;width:100%;">';
+
+
+
+
+	echo '</table>';
+	echo '</div>';
+?>
+                </div>
+                <!-- End .content-box-content --> 
+                
+              </div>
+              <hr/>
+			  <p><input type="submit" class="button" value="提交" id="btnPost" onclick="" /></p>
+            </div>
+          </form>
+<?php
+
 	echo '<script type="text/javascript">ActiveTopMenu("topmenu2");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/setting_32.png' . '");</script>';
 }

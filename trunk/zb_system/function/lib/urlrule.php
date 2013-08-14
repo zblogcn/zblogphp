@@ -21,29 +21,31 @@ class UrlRule
 
 	public function Make(){
 		global $zbp;
+		$s=$this->PreUrl;
 
-		$this->Rules['{%host%}']=$zbp->host;
+
 		if(isset($this->Rules['{%page%}'])){
 			if($this->Rules['{%page%}']=='1'||$this->Rules['{%page%}']=='0'){
-				$this->Rules['{%page%}']='%page%';
+				$this->Rules['{%page%}']='';
 			}
 		}else{
-			$this->Rules['{%page%}']='%page%';
+			$this->Rules['{%page%}']='';
 		}
-		$this->Rules['%page%']=$this->Rules['{%page%}'];
-		$s=$this->PreUrl;
+		if($this->Rules['{%page%}']==''){
+			if(substr_count($s,'{%page%}')==1&&substr_count($s,'{')==2){
+				$s=$zbp->host;
+			}
+			preg_match('/(?<=\})[^\{\}]+(?=\{%page%\})/i', $s, $matches);
+			if(isset($matches[0])){
+				$s=str_replace($matches[0],'',$s);
+			}
+		}
+
+		$this->Rules['{%host%}']=$zbp->host;
 		foreach ($this->Rules as $key => $value) {
-			//$s=preg_replace($key, $value, $s);
 			$s=str_replace($key, $value, $s);
 		}
-		$s2=$s;
-		preg_match('/\{.*%page%.*\}/i', $s2, $matches);
-		if(isset($matches[0])){
-			$s=str_replace($matches[0],'',$s);
-		}
-		$s=str_replace('{', '', $s);
-		$s=str_replace('}', '', $s);
-		$s=
+
 		$this->Url=htmlspecialchars($s);
 		return $this->Url;
 	}
@@ -65,16 +67,25 @@ class UrlRule
 	}
 
 	public function Rewrite_htaccess($url,$type){
+		$s=$url;
 		$url='RewriteRule ' . $url;
 		$url=str_replace('{%host%}', '^', $url);
 		$url=str_replace('.', '\\.', $url);
 		if($type=='index'){
+			preg_match('/[^\{\}]+(?=\{%page%\})/i', $s, $matches);
+			if(isset($matches[0])){
+				$url=str_replace($matches[0],'(?:'.$matches[0].')?',$url);
+			}
 			$url = $url . '$ index.php\?page=$1';
 			$url=str_replace('%page%', '([0-9]+)', $url);
 		}
 		if($type=='cate'||$type=='tags'||$type=='date'||$type=='auth'){
+			preg_match('/(?<=\})[^\{\}]+(?=\{%page%\})/i', $s, $matches);
+			if(isset($matches[0])){
+				$url=str_replace($matches[0],'(?:'.$matches[0].')?',$url);
+			}
 			$url = $url . '$ index.php\?'. $type .'=$1&page=$2';
-			$url=str_replace('%page%', '([0-9]+)', $url);
+			$url=str_replace('%page%', '([0-9]?)', $url);
 			$url=str_replace('%id%', '([0-9]+)', $url);
 			$url=str_replace('%alias%', '(.+)', $url);
 			$url=str_replace('%date%', '([0-9\-]+)', $url);
@@ -82,7 +93,7 @@ class UrlRule
 		if($type=='page'||$type=='article'){
 			if(strpos($url, '%alias%')===false){
 				$url = $url . '$ view.php\?id=$1';
-				$url=str_replace('%id%', '([0-9]+)', $url);				
+				$url=str_replace('%id%', '([0-9]+)', $url);
 			}else{
 				$url = $url . '$ view.php\?alias=$1';
 				$url=str_replace('%alias%', '(.+)', $url);
@@ -98,9 +109,6 @@ class UrlRule
 		return $url . ' [NC]';
 	}
 
-	public function Rewrite_httpini($url,$type){
-
-	}
 
 	public function Make_webconfig(){
 		global $zbp;
@@ -110,7 +118,7 @@ class UrlRule
 		$s .=' <system.webServer>' . "\r\n";
 
 		$s .='  <rewrite>' . "\r\n";
-
+		$s .='   <rules>' . "\r\n";
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_ARTICLE_REGEX'],'article') . "\r\n";
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_PAGE_REGEX'],'page') . "\r\n";
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_INDEX_REGEX'],'index') . "\r\n";
@@ -118,7 +126,7 @@ class UrlRule
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_TAGS_REGEX'],'tags') . "\r\n";
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_DATE_REGEX'],'date') . "\r\n";
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_AUTHOR_REGEX'],'auth') . "\r\n";
-
+		$s .='   </rules>' . "\r\n";
 		$s .='  </rewrite>' . "\r\n";
 		$s .=' </system.webServer>' . "\r\n";
 		$s .='</configuration>' . "\r\n";
@@ -128,8 +136,9 @@ class UrlRule
 
 
 	public function Rewrite_webconfig($url,$type){
+		$t = $url;
 		$s ='     <rule name="Imported Rule {$0}" stopProcessing="true">' . "\r\n";
-		$s.='       <match url="{$1}" ignoreCase="false" />' . "\r\n";
+		$s.='       <match url="{$1}" ignoreCase="true" />' . "\r\n";
 		$s.='       <action type="Rewrite" url="{$2}" />' . "\r\n";
 		$s.='     </rule>';
 
@@ -137,19 +146,27 @@ class UrlRule
 		$url=str_replace('{%host%}', '^', $url);
 		$url=str_replace('.', '\\.', $url);
 		if($type=='index'){
-			$s2 = 'index.php\?page={R:1}';
+			preg_match('/[^\{\}]+(?=\{%page%\})/i', $t, $matches);
+			if(isset($matches[0])){
+				$url=str_replace($matches[0],'(?:'.$matches[0].')?',$url);
+			}
+			$s2 = 'index.php?page={R:1}';
 			$url=str_replace('%page%', '([0-9]+)', $url);
 		}
 		if($type=='cate'||$type=='tags'||$type=='date'||$type=='auth'){
-			$s2 = 'index.php\?'. $type .'={R:1}&page={R:2}';
-			$url=str_replace('%page%', '([0-9]+)', $url);
+			preg_match('/(?<=\})[^\{\}]+(?=\{%page%\})/i', $t, $matches);
+			if(isset($matches[0])){
+				$url=str_replace($matches[0],'(?:'.$matches[0].')?',$url);
+			}
+			$s2 = 'index.php?'. $type .'={R:1}&page={R:2}';
+			$url=str_replace('%page%', '([0-9]?)', $url);
 			$url=str_replace('%id%', '([0-9]+)', $url);
 			$url=str_replace('%alias%', '(.+)', $url);
 			$url=str_replace('%date%', '([0-9\-]+)', $url);			
 		}
 		if($type=='page'||$type=='article'){
 			if(strpos($url, '%alias%')===false){
-				$s2 = 'view.php\?id={R:1}';
+				$s2 = 'view.php?id={R:1}';
 				$url=str_replace('%id%', '([0-9]+)', $url);				
 			}else{
 				$s2 = 'view.php\?alias={R:1}';
@@ -167,8 +184,70 @@ class UrlRule
 		return str_replace(array('{$0}','{$1}','{$2}'), array($type,htmlentities($url),htmlentities($s2)), $s);
 	}
 
+	
+	public function Make_httpini(){
+		global $zbp;
+
+		$s  ='[ISAPI_Rewrite]' . "\r\n";
+		$s .="\r\n";
+
+		$s .= $this->Rewrite_httpini($zbp->option['ZC_ARTICLE_REGEX'],'article') . "\r\n";
+		$s .= $this->Rewrite_httpini($zbp->option['ZC_PAGE_REGEX'],'page') . "\r\n";
+		$s .= $this->Rewrite_httpini($zbp->option['ZC_INDEX_REGEX'],'index') . "\r\n";
+		$s .= $this->Rewrite_httpini($zbp->option['ZC_CATEGORY_REGEX'],'cate') . "\r\n";
+		$s .= $this->Rewrite_httpini($zbp->option['ZC_TAGS_REGEX'],'tags') . "\r\n";
+		$s .= $this->Rewrite_httpini($zbp->option['ZC_DATE_REGEX'],'date') . "\r\n";
+		$s .= $this->Rewrite_httpini($zbp->option['ZC_AUTHOR_REGEX'],'auth') . "\r\n";
 
 
+		return $s;
+	}
+
+	public function Rewrite_httpini($url,$type){
+		global $zbp;
+
+		$s=$url;
+		$url='RewriteRule ' . $url;
+		$url=str_replace('{%host%}', $zbp->cookiespath, $url);
+		$url=str_replace('.', '\\.', $url);
+		if($type=='index'){
+			preg_match('/[^\{\}]+(?=\{%page%\})/i', $s, $matches);
+			if(isset($matches[0])){
+				$url=str_replace($matches[0],'(?:'.$matches[0].')?',$url);
+			}
+			$url = $url .' '.$zbp->cookiespath .'index\.php\?page=$1';
+			$url=str_replace('%page%', '([0-9]+)', $url);
+		}
+		if($type=='cate'||$type=='tags'||$type=='date'||$type=='auth'){
+			preg_match('/(?<=\})[^\{\}]+(?=\{%page%\})/i', $s, $matches);
+			if(isset($matches[0])){
+				$url=str_replace($matches[0],'(?:'.$matches[0].')?',$url);
+			}
+			$url = $url .' '.$zbp->cookiespath . 'index\.php\?'. $type .'=$1&page=$2';
+			$url=str_replace('%page%', '([0-9]?)', $url);
+			$url=str_replace('%id%', '([0-9]+)', $url);
+			$url=str_replace('%alias%', '(.+)', $url);
+			$url=str_replace('%date%', '([0-9\-]+)', $url);
+		}
+		if($type=='page'||$type=='article'){
+			if(strpos($url, '%alias%')===false){
+				$url = $url .' '.$zbp->cookiespath .'view\.php\?id=$1';
+				$url=str_replace('%id%', '([0-9]+)', $url);				
+			}else{
+				$url = $url .' '.$zbp->cookiespath .'view\.php\?alias=$1';
+				$url=str_replace('%alias%', '(.+)', $url);
+			}
+			$url=str_replace('%category%', '.+', $url);
+			$url=str_replace('%author%', '.+', $url);
+			$url=str_replace('%year%', '[0-9]{4}', $url);
+			$url=str_replace('%month%', '[0-9]{1,2}', $url);	
+			$url=str_replace('%day%', '[0-9]{1,2}', $url);
+		}
+		$url=str_replace('{', '', $url);
+		$url=str_replace('}', '', $url);
+		return $url;
+
+	}
 
 
 }
