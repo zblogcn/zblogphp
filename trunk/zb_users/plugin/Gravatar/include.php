@@ -14,13 +14,14 @@ Add_Filter_Plugin('Filter_Plugin_Mebmer_Avatar','Gravatar_Url');
 function InstallPlugin_Gravatar(){
 	global $zbp;
 	$zbp->Config('Gravatar')->default_url='http://cn.gravatar.com/avatar/{%emailmd5%}?s=40&d={%source%}';
-	$zbp->Config('Gravatar')->source='{%host%}zb_users/avatar/0.png';	
+	$zbp->Config('Gravatar')->source='{%host%}zb_users/avatar/0.png';
+	$zbp->Config('Gravatar')->local_priority=0;	
 	$zbp->SaveConfig('Gravatar');	
 }
 
 function UninstallPlugin_Gravatar(){
 	global $zbp;
-
+	$zbp->DelConfig('Gravatar');
 }
 
 
@@ -30,6 +31,16 @@ function Gravatar_Url(&$member){
 	$source=$zbp->Config('Gravatar')->source;
 	$source=str_replace('{%host%}', $zbp->host, $source);
 	
+	if($zbp->Config('Gravatar')->local_priority && $member->ID>0){
+		if(file_exists($zbp->usersdir . 'avatar/' . $member->ID . '.png')){
+			//$GLOBALS['Filter_Plugin_Mebmer_Avatar']['Gravatar_Url']=PLUGIN_EXITSIGNAL_BREAK;
+			//return null;			
+			$GLOBALS['Filter_Plugin_Mebmer_Avatar']['Gravatar_Url']=PLUGIN_EXITSIGNAL_RETURN;
+			$s=$zbp->host . 'zb_users/avatar/' . $member->ID . '.png';
+			return $s;
+		}
+	}
+
 	if($member->Email!==''){
 		$GLOBALS['Filter_Plugin_Mebmer_Avatar']['Gravatar_Url']=PLUGIN_EXITSIGNAL_RETURN;
 		$s=$default_url;

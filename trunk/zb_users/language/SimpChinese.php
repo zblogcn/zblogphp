@@ -103,7 +103,7 @@ return array(
 	'comment_setting'=>'评论设置',
 	'other_setting'=>'其它设置',
 	'blog_host'=>'网站地址',
-	'blog_host_add'=>'默认自动读取当前网址,如果固化网站域名请点击按钮并输入域名.',	
+	'blog_host_add'=>'默认自动读取当前网址,如需固化网站域名请点击按钮并输入域名.',	
 	'copyright'=>'版权说明',
 	'copyright_add'=>'可放入站点统计等js代码.',
 	'blog_name'=>'网站标题',

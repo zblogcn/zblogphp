@@ -16,6 +16,7 @@ if(count($_POST)>0){
 
 	$zbp->Config('Gravatar')->default_url=$_POST['default_url'];
 	$zbp->Config('Gravatar')->source=$_POST['source'];
+	$zbp->Config('Gravatar')->local_priority=$_POST['local_priority'];	
 	$zbp->SaveConfig('Gravatar');
 
 	$zbp->SetHint('good');
@@ -53,6 +54,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <td><span class='note'>默认值: </span></td>
 <td><p>{%host%}zb_users/avatar/0.png</p></td>
 </tr>
+<tr>
+<td><p align='left'><b>·注册会员优先查找本地头像</b><br/><span class='note'></span></p></td>
+<td><p><input id='local_priority' name='local_priority' class="checkbox" type='text' value='<?php echo $zbp->Config('Gravatar')->local_priority?>' /></p></td>
+</tr>
+
 </table>
 	  <hr/>
 	  <p>

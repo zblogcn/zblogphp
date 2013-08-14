@@ -76,7 +76,7 @@ $member=$zbp->GetMemberByID($memberid);
 		</select>
 	  </p>
 	  <p>
-		<span class="title"><?php echo $lang['msg']['default_avatar']?>:</span>&nbsp;<?php echo $member->Avatar;?>
+		<span class="title"><?php echo $lang['msg']['default_avatar']?>:</span>&nbsp;<br /><?php echo $member->Avatar;?>
 	  </p>	  
 	  <p>
 		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" />

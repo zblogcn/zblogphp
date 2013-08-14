@@ -1320,7 +1320,7 @@ function Admin_SettingMng(){
 	echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="'.$zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'].'"/></label>&nbsp;&nbsp;'.$zbp->lang['msg']['permanent_domain'].'</p></td></tr>';
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['blog_name'].'</b></p></td><td><p><input id="ZC_BLOG_NAME" name="ZC_BLOG_NAME" style="width:600px;" type="text" value="'.$zbp->option['ZC_BLOG_NAME'].'" /></p></td></tr>';
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['blog_subname'].'</b></p></td><td><p><input id="ZC_BLOG_SUBNAME" name="ZC_BLOG_SUBNAME" style="width:600px;"  type="text" value="'.$zbp->option['ZC_BLOG_SUBNAME'].'" /></p></td></tr>';
-	echo '<tr><td><p><b>'.$zbp->lang['msg']['copyright'].'</b><br/><span class="note">&nbsp;'.$zbp->lang['msg']['copyright_add'].'</span></p></td><td><p><textarea cols="3" rows="6" id="ZC_BLOG_COPYRIGHT" name="ZC_BLOG_COPYRIGHT" style="width:600px;">'.htmlentities($zbp->option['ZC_BLOG_COPYRIGHT']).'</textarea></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['copyright'].'</b><br/><span class="note">&nbsp;'.$zbp->lang['msg']['copyright_add'].'</span></p></td><td><p><textarea cols="3" rows="6" id="ZC_BLOG_COPYRIGHT" name="ZC_BLOG_COPYRIGHT" style="width:600px;">'.htmlspecialchars($zbp->option['ZC_BLOG_COPYRIGHT']).'</textarea></p></td></tr>';
 
 	echo '</table>';
 	echo '</div>';
