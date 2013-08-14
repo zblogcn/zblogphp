@@ -111,6 +111,7 @@ return array(
 	'all_uploads'=>'附件总数',
 	'current_theme'=>'当前主题',
 	'current_style'=>'当前样式',
+	'default_avatar'=>'默认头像',
 	'style'=>'样式',
 	'theme'=>'主题',
 	'system_module'=>'系统模块',

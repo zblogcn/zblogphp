@@ -130,6 +130,8 @@ $actions=array(
 
 	'ThemeSet'=>1,
 	'SidebarSet'=>1,
+	
+	'SettingSav'=>1,	
 
 	'ArticleMng'=>4,
 	'PageMng'=>2,

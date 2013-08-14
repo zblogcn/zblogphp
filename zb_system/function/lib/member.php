@@ -59,6 +59,14 @@ class Member extends Base{
 			return $u->Make();
 		}
 		if ($name=='Avatar') {
+			foreach ($GLOBALS['Filter_Plugin_Mebmer_Avatar'] as $fpname => &$fpsignal) {
+				$fpreturn=$fpname($class);
+				if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			}
+			$s=$zbp->usersdir . 'avatar/' . $this->ID . '.png';
+			if(file_exists($s)){
+				return $zbp->host . 'zb_users/avatar/' . $this->ID . '.png';
+			}
 			return $zbp->host . 'zb_users/avatar/0.png';
 		}
 		if ($name=='LevelName') {

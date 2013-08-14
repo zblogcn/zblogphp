@@ -148,14 +148,12 @@ switch ($action) {
 		break;
 	case 'PluginMng':
 		if(GetVars('install','GET')){
-			$f='InstallPlugin_' . GetVars('install','GET');
-			if(function_exists($f)){$f();}
+			InstallPlugin(GetVars('install','GET'));
 		}
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'PluginDisable':
-		$f='UninstallPlugin_' . GetVars('name','GET');
-		if(function_exists($f)){$f();}
+		UninstallPlugin(GetVars('name','GET'));
 		DisablePlugin(GetVars('name','GET'));
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=PluginMng');
@@ -195,7 +193,12 @@ switch ($action) {
 		break;
 	case 'SettingMng':
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
-		break;		
+		break;	
+	case 'SettingSav':
+		SaveSetting();
+		$zbp->SetHint('good');
+		Redirect('cmd.php?act=SettingMng');
+		break;	
 	default:
 		# code...
 		break;

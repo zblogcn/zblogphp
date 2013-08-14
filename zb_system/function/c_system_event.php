@@ -59,7 +59,11 @@ function ViewList($page,$cate,$auth,$date,$tags){
 
 function ViewPost($id,$alias){
 	global $zbp;
-
+	foreach ($GLOBALS['Filter_Plugin_ViewPost'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($id,$alias);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+	}
+	
 	$articles=$zbp->GetPostList(
 		array('*'),
 		array(array('=','log_ID',$id),array('=','log_Status',0)),
@@ -592,6 +596,26 @@ function SetSidebar(){
 	$zbp->option['ZC_SIDEBAR3_ORDER']=trim(GetVars('sidebar3','POST'),'|');
 	$zbp->option['ZC_SIDEBAR4_ORDER']=trim(GetVars('sidebar4','POST'),'|');
 	$zbp->option['ZC_SIDEBAR5_ORDER']=trim(GetVars('sidebar5','POST'),'|');	
+	$zbp->SaveOption();
+}
+
+
+function SaveSetting(){
+	global $zbp;
+
+	foreach ($_POST as $key => $value) {
+		if(substr($key,0,2)!=='ZC')continue;
+		if($key=='ZC_PERMANENT_DOMAIN_ENABLE'
+		 ||$key=='ZC_DEBUG_MODE'){
+			$zbp->option[$key]=(boolean)$value;
+			continue;
+		}
+		if($key=='ZC_RSS2_COUNT'){
+			$zbp->option[$key]=(integer)$value;
+			continue;
+		}		
+		$zbp->option[$key]=$value;
+	}
 	$zbp->SaveOption();
 }
 ?>

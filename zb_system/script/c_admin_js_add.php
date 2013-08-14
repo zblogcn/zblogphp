@@ -277,5 +277,7 @@ $(document).ready(function(){
 
 
 
-
-<?php die(); ?>
+<?php
+foreach ($GLOBALS['Filter_Plugin_Admin_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
+die();
+?>
