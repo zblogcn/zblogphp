@@ -45,7 +45,6 @@ return array(
 	'ZC_YUN_SITE'=>'',
 	'ZC_DEBUG_MODE' => true,
 	'ZC_BLOG_CLSID' => '',
-	'ZC_TIME_ZONE' => '+0800',
 	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
 	'ZC_UPDATE_INFO_URL' => 'http://update.rainbowsoft.org/info/',
 	// '固定域名,默认为false,如启用则'ZC_BLOG_HOST生效而'ZC_MULTI_DOMAIN_SUPPORT无效
@@ -64,7 +63,7 @@ return array(
 	'ZC_COMMENT_TURNOFF' => false,
 	'ZC_COMMENT_VERIFY_ENABLE' => true,
 	'ZC_COMMENT_REVERSE_ORDER_EXPORT' => false,
-	'ZC_COMMNET_MAXFLOOR' => 8,
+
 
 	// '验证码
 	'ZC_VERIFYCODE_STRING' => '0123456789',
@@ -73,15 +72,15 @@ return array(
 
 	// '页面各项列数
 	'ZC_DISPLAY_COUNT' => 5,
-	'ZC_RSS2_COUNT' => 10,
 	'ZC_SEARCH_COUNT' => 25,
 	'ZC_PAGEBAR_COUNT' => 10,
 	'ZC_MUTUALITY_COUNT' => 10,
 	'ZC_COMMENTS_DISPLAY_COUNT' => 3,
 
 	// '杂项
-	'ZC_USE_NAVIGATE_ARTICLE' => true,
+	'ZC_RSS2_COUNT' => 10,
 	'ZC_RSS_EXPORT_WHOLE' => true,
+	'ZC_USE_NAVIGATE_ARTICLE' => true,
 
 	// '后台管理
 	'ZC_MANAGE_COUNT' => 50,

@@ -580,8 +580,8 @@ function DisablePlugin($name){
 function SetTheme($theme,$style){
 	global $zbp;
 
-	$zbp->theme=$theme;
-	$zbp->style=$style;
+	$zbp->option['ZC_BLOG_THEME']=$theme;
+	$zbp->option['ZC_BLOG_CSS']=$style;
 
 	$zbp->BuildTemplate();
 
@@ -606,11 +606,14 @@ function SaveSetting(){
 	foreach ($_POST as $key => $value) {
 		if(substr($key,0,2)!=='ZC')continue;
 		if($key=='ZC_PERMANENT_DOMAIN_ENABLE'
-		 ||$key=='ZC_DEBUG_MODE'){
+		 ||$key=='ZC_DEBUG_MODE'
+		){
 			$zbp->option[$key]=(boolean)$value;
 			continue;
 		}
-		if($key=='ZC_RSS2_COUNT'){
+		if($key=='ZC_RSS2_COUNT'
+		 ||$key=='ZC_UPLOAD_FILESIZE'			
+		){
 			$zbp->option[$key]=(integer)$value;
 			continue;
 		}		

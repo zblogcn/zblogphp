@@ -7,3 +7,12 @@ D:\baiducloud\程序作品\AT2PT\ASP2PHP\ASP2PHP\obj\Debug\ASP2PHP.Properties.Re
 D:\baiducloud\程序作品\AT2PT\ASP2PHP\ASP2PHP\obj\Debug\ASP2PHP.csproj.GenerateResource.Cache
 D:\baiducloud\程序作品\AT2PT\ASP2PHP\ASP2PHP\obj\Debug\ASP2PHP.exe
 D:\baiducloud\程序作品\AT2PT\ASP2PHP\ASP2PHP\obj\Debug\ASP2PHP.pdb
+D:\inetpub\zbphp\AT2PT\ASP2PHP\ASP2PHP\bin\Debug\ASP2PHP.exe.config
+D:\inetpub\zbphp\AT2PT\ASP2PHP\ASP2PHP\obj\Debug\ASP2PHP.exe
+D:\inetpub\zbphp\AT2PT\ASP2PHP\ASP2PHP\obj\Debug\ASP2PHP.pdb
+D:\inetpub\zbphp\AT2PT\ASP2PHP\ASP2PHP\bin\Debug\ASP2PHP.exe
+D:\inetpub\zbphp\AT2PT\ASP2PHP\ASP2PHP\bin\Debug\ASP2PHP.pdb
+D:\inetpub\zbphp\AT2PT\ASP2PHP\ASP2PHP\obj\Debug\ASP2PHP.csprojResolveAssemblyReference.cache
+D:\inetpub\zbphp\AT2PT\ASP2PHP\ASP2PHP\obj\Debug\ASP2PHP.frmMain.resources
+D:\inetpub\zbphp\AT2PT\ASP2PHP\ASP2PHP\obj\Debug\ASP2PHP.Properties.Resources.resources
+D:\inetpub\zbphp\AT2PT\ASP2PHP\ASP2PHP\obj\Debug\ASP2PHP.csproj.GenerateResource.Cache
