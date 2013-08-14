@@ -260,8 +260,6 @@ $(document).ready(function(){
 	$(".SubMenu span.m-right").parent().css({"float":"right"});
 
 
-
-	$("#avatar").attr("src","<?php echo $zbp->user->Avatar?>");
 	$("img[width='16']").each(function(){if($(this).parent().is("a")){$(this).parent().addClass("button")}});
 
 	if($("p.hint:visible").length>0){

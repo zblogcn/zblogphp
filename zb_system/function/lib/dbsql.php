@@ -102,7 +102,9 @@ class DbSql #extends AnotherClass
 			if(!isset($limit[1])){
 				$sqll .= " LIMIT $limit[0]";
 			}else{
-				$sqll .= " LIMIT $limit[0], $limit[1]";
+				if($limit[1]>0){
+					$sqll .= " LIMIT $limit[0], $limit[1]";
+				}
 			}
 		}
 

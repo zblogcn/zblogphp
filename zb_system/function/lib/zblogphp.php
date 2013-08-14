@@ -54,6 +54,9 @@ class ZBlogPHP{
 
 	public $managecount = 50;
 	public $pagebarcount = 10;
+	public $searchcount = 10;
+	public $displaycount = 10;
+	public $commentdisplycount = 10;
 
 	public $sidebar =array();
 	public $sidebar2=array();
@@ -100,6 +103,10 @@ class ZBlogPHP{
 
 		$this->managecount=$this->option['ZC_MANAGE_COUNT'];
 		$this->pagebarcount=$this->option['ZC_PAGEBAR_COUNT'];
+		$this->searchcount = $this->option['ZC_SEARCH_COUNT'];
+		$this->displaycount = $this->option['ZC_DISPLAY_COUNT'];
+		$this->commentdisplycount = $this->option['ZC_COMMENTS_DISPLAY_COUNT'];
+
 	}
 
 
@@ -109,68 +116,6 @@ class ZBlogPHP{
 
 	function __call($method, $args) {
 		throw new Exception('zbp不存在方法：'.$method);
-	}
-
-
-
-
-
-################################################################################################################
-#权限及验证类
-
-
-
-
-	function CheckRights($action){
-
-		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckRights'] as $fpname => &$fpsignal) {
-			$fpreturn=$fpname($action);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-		}
-
-		if(is_int($action)){
-			if ($GLOBALS['zbp']->user->Level > $action) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-
-		if ($GLOBALS['zbp']->user->Level > $GLOBALS['actions'][$action]) {
-			return false;
-		} else {
-			return true;
-		}	
-
-	}
-
-	public function Verify(){
-		return $this->Verify_MD5(GetVars('username','COOKIE'),GetVars('password','COOKIE'));
-	}
-
-	public function Verify_MD5($name,$md5pw){
-		if (isset($this->membersbyname[$name])){
-			$m=$this->membersbyname[$name];
-			return $this->Verify_Final($name,md5($md5pw . $m->Guid));
-		}else{
-			return false;
-		}
-	}
-
-	public function Verify_Original($name,$originalpw){
-		return $this->Verify_MD5($name,md5($originalpw));
-	}
-
-	public function Verify_Final($name,$password){
-		if (isset($this->membersbyname[$name])){
-			$m=$this->membersbyname[$name];
-			if($m->Password == $password){
-				$this->user=$m;
-				return true;
-			}else{
-				return false;
-			}
-		}
 	}
 
 
@@ -419,6 +364,70 @@ class ZBlogPHP{
 			$this->option[$key]=$value;
 		}
 
+	}
+
+
+
+
+
+
+
+################################################################################################################
+#权限及验证类
+
+
+
+
+	function CheckRights($action){
+
+		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckRights'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($action);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+
+		if(is_int($action)){
+			if ($GLOBALS['zbp']->user->Level > $action) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		if ($GLOBALS['zbp']->user->Level > $GLOBALS['actions'][$action]) {
+			return false;
+		} else {
+			return true;
+		}	
+
+	}
+
+	public function Verify(){
+		return $this->Verify_MD5(GetVars('username','COOKIE'),GetVars('password','COOKIE'));
+	}
+
+	public function Verify_MD5($name,$md5pw){
+		if (isset($this->membersbyname[$name])){
+			$m=$this->membersbyname[$name];
+			return $this->Verify_Final($name,md5($md5pw . $m->Guid));
+		}else{
+			return false;
+		}
+	}
+
+	public function Verify_Original($name,$originalpw){
+		return $this->Verify_MD5($name,md5($originalpw));
+	}
+
+	public function Verify_Final($name,$password){
+		if (isset($this->membersbyname[$name])){
+			$m=$this->membersbyname[$name];
+			if($m->Password == $password){
+				$this->user=$m;
+				return true;
+			}else{
+				return false;
+			}
+		}
 	}
 
 

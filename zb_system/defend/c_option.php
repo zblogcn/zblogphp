@@ -61,8 +61,8 @@ return array(
 
 	// '留言评论
 	'ZC_COMMENT_TURNOFF' => false,
-	'ZC_COMMENT_VERIFY_ENABLE' => true,
-	'ZC_COMMENT_REVERSE_ORDER_EXPORT' => false,
+	'ZC_COMMENT_VERIFY_ENABLE' => false,
+	'ZC_COMMENT_REVERSE_ORDER' => false,
 
 
 	// '验证码
@@ -71,16 +71,14 @@ return array(
 	'ZC_VERIFYCODE_HEIGHT' => 20,
 
 	// '页面各项列数
-	'ZC_DISPLAY_COUNT' => 5,
+	'ZC_DISPLAY_COUNT' => 10,
 	'ZC_SEARCH_COUNT' => 25,
 	'ZC_PAGEBAR_COUNT' => 10,
-	'ZC_MUTUALITY_COUNT' => 10,
-	'ZC_COMMENTS_DISPLAY_COUNT' => 3,
+	'ZC_COMMENTS_DISPLAY_COUNT' => 20,
 
 	// '杂项
 	'ZC_RSS2_COUNT' => 10,
 	'ZC_RSS_EXPORT_WHOLE' => true,
-	'ZC_USE_NAVIGATE_ARTICLE' => true,
 
 	// '后台管理
 	'ZC_MANAGE_COUNT' => 50,
