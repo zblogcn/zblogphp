@@ -90,7 +90,6 @@ class ZBlogPHP{
 		$this->guid=&$this->option['ZC_BLOG_CLSID'];
 
 
-		$this->option['ZC_BLOG_HOST']=&$GLOBALS['bloghost'];
 		//define();
 
 		$this->title=&$GLOBALS['blogtitle'];
@@ -195,6 +194,10 @@ class ZBlogPHP{
 			error_reporting(-1);
 			@ini_set("display_errors",1);
 		}
+
+		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){
+			$this->host=$this->option['ZC_BLOG_HOST'];
+		}		
 
 		$this->option['ZC_BLOG_PRODUCT_FULL']=$this->option['ZC_BLOG_PRODUCT'] . ' ' . $this->option['ZC_BLOG_VERSION'];
 		$this->option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title="RainbowSoft Z-BlogPHP">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
@@ -382,12 +385,12 @@ class ZBlogPHP{
 
 		$this->option['ZC_BLOG_CLSID']=$this->guid;
 
-		$this->option['ZC_BLOG_NAME'] = $this->name;
-		$this->option['ZC_BLOG_SUBNAME'] = $this->subname;
-		$this->option['ZC_BLOG_THEME'] = $this->theme;
-		$this->option['ZC_BLOG_CSS'] = $this->style;
+		//$this->option['ZC_BLOG_NAME'] = $this->name;
+		//$this->option['ZC_BLOG_SUBNAME'] = $this->subname;
+		//$this->option['ZC_BLOG_THEME'] = $this->theme;
+		//$this->option['ZC_BLOG_CSS'] = $this->style;
+		//$this->option['ZC_BLOG_HOST'] = $this->host;
 
-		$this->option['ZC_BLOG_HOST'] = $this->host;
 		if(!$this->option['ZC_YUN_SITE']){
 			$s="<?php\r\n";
 			$s.="return ";
