@@ -34,7 +34,7 @@ $array=$zbp->GetArticleList(
 	'',
 	$w,
 	array('log_PostTime'=>'DESC'),
-	array(50),
+	array($zbp->searchcount),
 	null
 );
 

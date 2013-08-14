@@ -28,23 +28,16 @@ if(count($array)>0){
 	foreach ($array as $tag) {
 		$t[]=$tag->Count;
 	}
-	rsort($t);
+	$j=$t[count($array)-1];
 	$i=$t[0];
-	if($i>1000){$i=300;}
-	elseif($i>700){$i=250;}
-	elseif($i>500){$i=200;}
-	elseif($i>300){$i=150;}
-	elseif($i>200){$i=100;}
-	elseif($i>100){$i=90;}
-	elseif($i>80){$i=60;}
-	elseif($i>50){$i=35;}
-	elseif($i>20){$i=15;}
-	elseif($i>10){$i=8;}	
+	$i=($i-$j)/count($array);
 	$t=array();	
-	foreach ($array as $tag) {
+	$j=20;
 
+	foreach ($array as $tag) {
+		$j-=0.2;
 		//$article->Content .='<a href="' .  $tag->Url . '">' . $tag->Name . '</a>&nbsp;&nbsp;';
-		$t[]='<a href="' .  $tag->Url . '" style="font-size:' . $tag->Count/$i . 'em;margin:0.5em 0;">' . $tag->Name . '</a>&nbsp;&nbsp;';
+		$t[]='<a href="' .  $tag->Url . '" style="font-size:' . ($j+$i) . 'pt;margin:0.5pt 0;">' . $tag->Name . '</a>&nbsp;&nbsp;';
 
 	}
 	shuffle($t);

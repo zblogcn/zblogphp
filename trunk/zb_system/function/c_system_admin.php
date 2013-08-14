@@ -1302,10 +1302,10 @@ function Admin_SettingMng(){
                 
                 <div class="content-box-header">
                   <ul class="content-box-tabs">
-                    <li><a href="#tab1" class="default-tab"><span>基础设置</span></a></li>
-                    <li><a href="#tab2"><span>全局设置</span></a></li>
-                    <li><a href="#tab3"><span>页面设置</span></a></li>
-                    <li><a href="#tab4"><span>评论设置</span></a></li>
+                    <li><a href="#tab1" class="default-tab"><span><?php echo $zbp->lang['msg']['basic_setting']?></span></a></li>
+                    <li><a href="#tab2"><span><?php echo $zbp->lang['msg']['global_setting']?></span></a></li>
+                    <li><a href="#tab3"><span><?php echo $zbp->lang['msg']['page_setting']?></span></a></li>
+                    <li><a href="#tab4"><span><?php echo $zbp->lang['msg']['comment_setting']?></span></a></li>
                   </ul>
                   <div class="clear"></div>
                 </div>
@@ -1316,11 +1316,11 @@ function Admin_SettingMng(){
 
 	echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
 	echo '<table style="padding:0px;margin:0px;width:100%;">';
-	echo '<tr><td class="td25"><p><b>网站地址</b><br/><span class="note">&nbsp;默认自动读取当前网址,如果固化网站域名请点击按钮并输入域名.</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="'.$zbp->option['ZC_BLOG_HOST'].'" '.($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']?'':'readonly="readonly"').' />';
-	echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="'.$zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'].'"/></label>&nbsp;&nbsp;固化网站域名</p></td></tr>';
-	echo '<tr><td><p><b>网站标题</b></p></td><td><p><input id="ZC_BLOG_NAME" name="ZC_BLOG_NAME" style="width:600px;" type="text" value="'.$zbp->option['ZC_BLOG_NAME'].'" /></p></td></tr>';
-	echo '<tr><td><p><b>网站副标题</b></p></td><td><p><input id="ZC_BLOG_SUBNAME" name="ZC_BLOG_SUBNAME" style="width:600px;"  type="text" value="'.$zbp->option['ZC_BLOG_SUBNAME'].'" /></p></td></tr>';
-	echo '<tr><td><p><b>版权说明</b><br/><span class="note">&nbsp;可放入站点统计等js代码.</span></p></td><td><p><textarea cols="3" rows="6" id="ZC_BLOG_COPYRIGHT" name="ZC_BLOG_COPYRIGHT" style="width:600px;">'.htmlentities($zbp->option['ZC_BLOG_COPYRIGHT']).'</textarea></p></td></tr>';
+	echo '<tr><td class="td25"><p><b>'.$zbp->lang['msg']['blog_host'].'</b><br/><span class="note">&nbsp;'.$zbp->lang['msg']['blog_host_add'].'</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="'.$zbp->option['ZC_BLOG_HOST'].'" '.($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']?'':'readonly="readonly"').' />';
+	echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="'.$zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'].'"/></label>&nbsp;&nbsp;'.$zbp->lang['msg']['permanent_domain'].'</p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['blog_name'].'</b></p></td><td><p><input id="ZC_BLOG_NAME" name="ZC_BLOG_NAME" style="width:600px;" type="text" value="'.$zbp->option['ZC_BLOG_NAME'].'" /></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['blog_subname'].'</b></p></td><td><p><input id="ZC_BLOG_SUBNAME" name="ZC_BLOG_SUBNAME" style="width:600px;"  type="text" value="'.$zbp->option['ZC_BLOG_SUBNAME'].'" /></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['copyright'].'</b><br/><span class="note">&nbsp;'.$zbp->lang['msg']['copyright_add'].'</span></p></td><td><p><textarea cols="3" rows="6" id="ZC_BLOG_COPYRIGHT" name="ZC_BLOG_COPYRIGHT" style="width:600px;">'.htmlentities($zbp->option['ZC_BLOG_COPYRIGHT']).'</textarea></p></td></tr>';
 
 	echo '</table>';
 	echo '</div>';
@@ -1330,33 +1330,33 @@ function Admin_SettingMng(){
 	echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab2">';
 	echo '<table style="padding:0px;margin:0px;width:100%;">';
 
-	echo '<tr><td class="td25"><p><b>网站所在时区名</b></p></td><td><p><select id="ZC_TIME_ZONE_NAME" name="ZC_TIME_ZONE_NAME" style="width:600px;" >';
+	echo '<tr><td class="td25"><p><b>'.$zbp->lang['msg']['blog_timezone'].'</b></p></td><td><p><select id="ZC_TIME_ZONE_NAME" name="ZC_TIME_ZONE_NAME" style="width:600px;" >';
 	echo CreateOptionsOfTimeZone($zbp->option['ZC_TIME_ZONE_NAME']);
 	echo '</select></p></td></tr>';
-	echo '<tr><td><p><b>网站语言</b></p></td><td><p><input id="ZC_BLOG_LANGUAGE" name="ZC_BLOG_LANGUAGE" style="width:600px;" type="text" value="'.$zbp->option['ZC_BLOG_LANGUAGE'].'" /></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['blog_language'].'</b></p></td><td><p><input id="ZC_BLOG_LANGUAGE" name="ZC_BLOG_LANGUAGE" style="width:600px;" type="text" value="'.$zbp->option['ZC_BLOG_LANGUAGE'].'" /></p></td></tr>';
 
-	echo '<tr><td><p><b>允许上传文件的类型</b></p></td><td><p><input id="ZC_UPLOAD_FILETYPE" name="ZC_UPLOAD_FILETYPE" style="width:600px;" type="text" value="'.$zbp->option['ZC_UPLOAD_FILETYPE'].'" /></p></td></tr>';
-	echo '<tr><td><p><b>允许上传文件的尺寸</b></p></td><td><p><input id="ZC_UPLOAD_FILESIZE" name="ZC_UPLOAD_FILESIZE" style="width:600px;" type="text" value="'.$zbp->option['ZC_UPLOAD_FILESIZE'].'" /></p></td></tr>';
-	echo '<tr><td><p><b>调试模式</b></p></td><td><p><input id="ZC_DEBUG_MODE" name="ZC_DEBUG_MODE" type="text" value="'.$zbp->option['ZC_DEBUG_MODE'].'" class="checkbox"/></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['allow_upload_type'].'</b></p></td><td><p><input id="ZC_UPLOAD_FILETYPE" name="ZC_UPLOAD_FILETYPE" style="width:600px;" type="text" value="'.$zbp->option['ZC_UPLOAD_FILETYPE'].'" /></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['allow_upload_size'].'</b></p></td><td><p><input id="ZC_UPLOAD_FILESIZE" name="ZC_UPLOAD_FILESIZE" style="width:600px;" type="text" value="'.$zbp->option['ZC_UPLOAD_FILESIZE'].'" /></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['debug_mode'].'</b></p></td><td><p><input id="ZC_DEBUG_MODE" name="ZC_DEBUG_MODE" type="text" value="'.$zbp->option['ZC_DEBUG_MODE'].'" class="checkbox"/></p></td></tr>';
 
 	echo '</table>';
 	echo '</div>';
 	echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab3">';
 	echo '<table style="padding:0px;margin:0px;width:100%;">';
 
-	echo '<tr><td><p><b>列表页显示文章数量</b></p></td><td><p><input id="ZC_DISPLAY_COUNT" name="ZC_DISPLAY_COUNT" style="width:600px;" type="text" value="'.$zbp->option['ZC_DISPLAY_COUNT'].'" /></p></td></tr>';
-	echo '<tr><td><p><b>翻页条显示翻页数量</b></p></td><td><p><input id="ZC_PAGEBAR_COUNT" name="ZC_PAGEBAR_COUNT" style="width:600px;" type="text" value="'.$zbp->option['ZC_PAGEBAR_COUNT'].'" /></p></td></tr>';
-	echo '<tr><td><p><b>显示搜索文章的数量</b></p></td><td><p><input id="ZC_SEARCH_COUNT" name="ZC_SEARCH_COUNT" style="width:600px;" type="text" value="'.$zbp->option['ZC_SEARCH_COUNT'].'" /></p></td></tr>';
-
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['display_count'].'</b></p></td><td><p><input id="ZC_DISPLAY_COUNT" name="ZC_DISPLAY_COUNT" style="width:600px;" type="text" value="'.$zbp->option['ZC_DISPLAY_COUNT'].'" /></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['pagebar_count'].'</b></p></td><td><p><input id="ZC_PAGEBAR_COUNT" name="ZC_PAGEBAR_COUNT" style="width:600px;" type="text" value="'.$zbp->option['ZC_PAGEBAR_COUNT'].'" /></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['search_count'].'</b></p></td><td><p><input id="ZC_SEARCH_COUNT" name="ZC_SEARCH_COUNT" style="width:600px;" type="text" value="'.$zbp->option['ZC_SEARCH_COUNT'].'" /></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['manage_count'].'</b></p></td><td><p><input id="ZC_MANAGE_COUNT" name="ZC_MANAGE_COUNT" style="width:600px;" type="text" value="'.$zbp->option['ZC_MANAGE_COUNT'].'" /></p></td></tr>';
 	echo '</table>';
 	echo '</div>';
 	echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab4">';
 	echo '<table style="padding:0px;margin:0px;width:100%;">';
 
 
-	echo '<tr><td class="td25"><p><b>关闭评论功能</b></p></td><td><p><input id="ZC_COMMENT_TURNOFF" name="ZC_COMMENT_TURNOFF" type="text" value="'.$zbp->option['ZC_COMMENT_TURNOFF'].'" class="checkbox"/></p></td></tr>';
-	echo '<tr><td><p><b>启用评论倒序输出</b></p></td><td><p><input id="ZC_COMMENT_REVERSE_ORDER_EXPORT" name="ZC_COMMENT_REVERSE_ORDER_EXPORT" type="text" value="'.$zbp->option['ZC_COMMENT_REVERSE_ORDER_EXPORT'].'" class="checkbox"/></p></td></tr>';
-	echo '<tr><td><p><b>每页输出评论数量</b></p></td><td><p><input id="ZC_COMMENTS_DISPLAY_COUNT" name="ZC_COMMENTS_DISPLAY_COUNT" type="text" value="'.$zbp->option['ZC_COMMENTS_DISPLAY_COUNT'].'"  style="width:600px;" /></p></td></tr>';
+	echo '<tr><td class="td25"><p><b>'.$zbp->lang['msg']['comment_turnoff'].'</b></p></td><td><p><input id="ZC_COMMENT_TURNOFF" name="ZC_COMMENT_TURNOFF" type="text" value="'.$zbp->option['ZC_COMMENT_TURNOFF'].'" class="checkbox"/></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['comment_reverse_order'].'</b></p></td><td><p><input id="ZC_COMMENT_REVERSE_ORDER" name="ZC_COMMENT_REVERSE_ORDER" type="text" value="'.$zbp->option['ZC_COMMENT_REVERSE_ORDER'].'" class="checkbox"/></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['comments_display_count'].'</b></p></td><td><p><input id="ZC_COMMENTS_DISPLAY_COUNT" name="ZC_COMMENTS_DISPLAY_COUNT" type="text" value="'.$zbp->option['ZC_COMMENTS_DISPLAY_COUNT'].'"  style="width:600px;" /></p></td></tr>';
 
 
 

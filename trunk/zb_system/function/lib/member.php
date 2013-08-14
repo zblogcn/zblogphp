@@ -60,7 +60,7 @@ class Member extends Base{
 		}
 		if ($name=='Avatar') {
 			foreach ($GLOBALS['Filter_Plugin_Mebmer_Avatar'] as $fpname => &$fpsignal) {
-				$fpreturn=$fpname($class);
+				$fpreturn=$fpname($this);
 				if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 			}
 			$s=$zbp->usersdir . 'avatar/' . $this->ID . '.png';

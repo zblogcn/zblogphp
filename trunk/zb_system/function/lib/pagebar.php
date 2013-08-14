@@ -39,6 +39,7 @@ public function __construct($url){
 
 public function Make(){
 	global $zbp;
+	if($this->PageCount==0)return null;
 
 	$this->PageAll = ceil($this->Count / $this->PageCount);
 	$this->PageFirst = 1;

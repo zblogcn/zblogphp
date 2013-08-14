@@ -32,9 +32,9 @@ function ViewList($page,$cate,$auth,$date,$tags){
 
 
 	$pagebar=new Pagebar($zbp->option['ZC_INDEX_REGEX']);
-	$pagebar->PageCount=5;
+	$pagebar->PageCount=$zbp->displaycount;
 	$pagebar->PageNow=$page;
-	$pagebar->PageBarCount=10;
+	$pagebar->PageBarCount=$zbp->pagebarcount;
 	$pagebar->UrlRule->Rules['{%page%}']=$page;
 
 	$articles=$zbp->GetArticleList(
@@ -76,7 +76,10 @@ function ViewPost($id,$alias){
 		$zbp->ShowError(9);
 	}
 
-	$article =$articles[0];
+	$article = $articles[0];
+	if($zbp->option['ZC_COMMENT_TURNOFF']){
+		$article->IsLock = true;
+	}
 
 	if($article->Type==0){
 		$zbp->LoadTagsByIDString($article->Tag);
@@ -87,8 +90,8 @@ function ViewPost($id,$alias){
 	$comments=$zbp->GetCommentList(
 		array('*'),
 		array(array('=','comm_LogID',$article->ID),array('=','comm_RootID',0),array('=','comm_IsChecking',0)),
-		array('comm_PostTime'=>'DESC'),
-		array(0,5),
+		array('comm_ID'=>($zbp->option['ZC_COMMENT_REVERSE_ORDER_EXPORT']?'DESC':'ASC')),
+		array(0,$zbp->commentdisplycount),
 		null
 	);
 	$rootid=array();
@@ -98,7 +101,7 @@ function ViewPost($id,$alias){
 	$comments2=$zbp->GetCommentList(
 		array('*'),
 		array(array('array',$rootid),array('=','comm_IsChecking',0)),
-		array('comm_PostTime'=>'DESC'),
+		array('comm_ID'=>($zbp->option['ZC_COMMENT_REVERSE_ORDER']?'DESC':'ASC')),
 		null,
 		null
 	);
@@ -607,12 +610,19 @@ function SaveSetting(){
 		if(substr($key,0,2)!=='ZC')continue;
 		if($key=='ZC_PERMANENT_DOMAIN_ENABLE'
 		 ||$key=='ZC_DEBUG_MODE'
+		 ||$key=='ZC_COMMENT_TURNOFF'
+		 ||$key=='ZC_COMMENT_REVERSE_ORDER_EXPORT'
 		){
 			$zbp->option[$key]=(boolean)$value;
 			continue;
 		}
 		if($key=='ZC_RSS2_COUNT'
-		 ||$key=='ZC_UPLOAD_FILESIZE'			
+		 ||$key=='ZC_UPLOAD_FILESIZE'
+		 ||$key=='ZC_DISPLAY_COUNT'
+		 ||$key=='ZC_SEARCH_COUNT'
+		 ||$key=='ZC_PAGEBAR_COUNT'
+		 ||$key=='ZC_COMMENTS_DISPLAY_COUNT'
+		 ||$key=='ZC_MANAGE_COUNT'
 		){
 			$zbp->option[$key]=(integer)$value;
 			continue;
