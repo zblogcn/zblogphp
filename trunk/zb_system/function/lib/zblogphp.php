@@ -580,12 +580,12 @@ class ZBlogPHP{
 		$this->templatetags['user']=&$this->user;
 		$this->templatetags['option']=&$option;
 		$this->templatetags['modules']=&$this->modulesbyfilename;		
-		$this->templatetags['title']=$this->title;
+		$this->templatetags['title']=htmlspecialchars($this->title);
 		$this->templatetags['host']=$this->host;	
 		$this->templatetags['path']=$this->path;
 		$this->templatetags['cookiespath']=$this->cookiespath;
-		$this->templatetags['name']=$this->name;	
-		$this->templatetags['subname']=$this->subname;
+		$this->templatetags['name']=htmlspecialchars($this->name);	
+		$this->templatetags['subname']=htmlspecialchars($this->subname);
 		$this->templatetags['theme']=$this->theme;
 		$this->templatetags['style']=$this->style;
 		$this->templatetags['language']=$this->option['ZC_BLOG_LANGUAGE'];
@@ -593,6 +593,8 @@ class ZBlogPHP{
 		$this->templatetags['zblogphp']=$this->option['ZC_BLOG_PRODUCT_FULL'];
 		$this->templatetags['zblogphphtml']=$this->option['ZC_BLOG_PRODUCT_FULLHTML'];
 		$this->templatetags['feedurl']=$this->host . 'feed.php';
+		$this->templatetags['type']='';
+		$this->templatetags['page']='';
 
 		$s=array(
 			$option['ZC_SIDEBAR_ORDER'],

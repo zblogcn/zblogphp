@@ -149,7 +149,7 @@ return array(
 	'sidebar5'=>'侧栏 5',
 	'drag_module_to_sidebar'=>'请拖动需要的模块到右侧区域指定侧栏。侧栏中的模块可排序，也可拖至左侧区域移除。',
 	'sidebar_module_count'=>'内置有%s个模块',
-	'xmlrpc_address'=>'XML-RPC地址',
+	'xmlrpc_address'=>'离线客户端地址',
 	'system_environment'=>'系统环境',
 	'view_rights'=>'查看权限',
 	'member_level'=>'用户级别',

@@ -35,6 +35,10 @@ class Upload extends Base{
 		@move_uploaded_file($tmp, $this->FullFile);			
 	}
 
+	function SaveBase64File($str64){
+
+	}
+
 	public function Time($s='Y-m-d H:i:s'){
 		return date($s,$this->PostTime);
 	}

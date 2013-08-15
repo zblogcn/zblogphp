@@ -64,7 +64,8 @@ class Post extends Base{
 			case 'TypeName':
 			case 'Url':
 			case 'Tags':
-			case 'CommentPostUrl':		
+			case 'TagsName':
+			case 'CommentPostUrl':
 				return null;
 				break;
 			case 'Template':
@@ -103,6 +104,8 @@ class Post extends Base{
 			case 'Tags':
 				return $zbp->LoadTagsByIDString($this->Tag);
 				break;
+			case 'TagsName':
+				return $this->TagsToNameString;
 			case 'Template':
 				$value=$this->Data[$name];
 				if($value=='')$value=$zbp->option['ZC_ARTICLE_DEFAULT_TEMPLATE'];
