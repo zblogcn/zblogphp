@@ -168,6 +168,7 @@ function zbp_getRecentPosts($n){
 <member><name>mt_excerpt</name><value><string>$%#11#%$</string></value></member>
 <member><name>mt_text_more</name><value><string>$%#12#%$</string></value></member>
 <member><name>wp_more_text</name><value><string>$%#13#%$</string></value></member>
+<member><name>mt_basname</name><value><string>$%#14#%$</string></value></member>
 </struct></value>';
 
 
@@ -196,6 +197,7 @@ function zbp_getRecentPosts($n){
 		$s=str_replace("$%#11#%$",htmlspecialchars($value->Intro),$s);
 		$s=str_replace("$%#12#%$",htmlspecialchars($value->Intro),$s);
 		$s=str_replace("$%#13#%$",htmlspecialchars($value->Intro),$s);
+		$s=str_replace("$%#14#%$",htmlspecialchars($value->Alias),$s);
 		$strAll .= $s;
 
 	}
@@ -240,6 +242,7 @@ function zbp_getPost($id){
 <member><name>mt_excerpt</name><value><string>$%#11#%$</string></value></member>
 <member><name>mt_text_more</name><value><string>$%#12#%$</string></value></member>
 <member><name>wp_more_text</name><value><string>$%#13#%$</string></value></member>
+<member><name>mt_basname</name><value><string>$%#14#%$</string></value></member>
 </struct></value>';
 
 	$strAll='';
@@ -265,6 +268,7 @@ function zbp_getPost($id){
 		$s=str_replace("$%#11#%$",htmlspecialchars($value->Intro),$s);
 		$s=str_replace("$%#12#%$",htmlspecialchars($value->Intro),$s);
 		$s=str_replace("$%#13#%$",htmlspecialchars($value->Intro),$s);
+		$s=str_replace("$%#14#%$",htmlspecialchars($value->Alias),$s);
 		$strAll .= $s;
 
 	}

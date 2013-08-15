@@ -10,6 +10,8 @@
 	<supportsPageParent>No</supportsPageParent>
 	<supportsPageOrder>No</supportsPageOrder>
 	<supportsPingPolicy>No</supportsPingPolicy>
+	<maxCategoryNameLength>20</maxCategoryNameLength>
+	<supportsPassword>No</supportsPassword>	
   </options>
   
   <weblog>
