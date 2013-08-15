@@ -28,7 +28,7 @@ class Upload extends Base{
 
 	function SaveFile($tmp){
 		global $zbp;
-		echo $this->FullFile;
+		//echo $this->FullFile;
 		if(!file_exists($zbp->usersdir . $this->Dir)){
 			@mkdir($zbp->usersdir . $this->Dir, 0777,true);	
 		}
@@ -68,7 +68,7 @@ class Upload extends Base{
 			return $zbp->host . 'zb_users/' . $this->Dir . $this->Name;
 		}
 		if ($name=='Dir') {
-			return 'upload/' .date('m',$this->PostTime) . '/' . date('d',$this->PostTime) . '/';
+			return 'upload/' .date('Y',$this->PostTime) . '/' . date('m',$this->PostTime) . '/';
 		}
 		if ($name=='FullFile') {
 			return  $zbp->usersdir . $this->Dir . $this->Name;
