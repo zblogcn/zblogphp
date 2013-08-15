@@ -69,7 +69,6 @@ function zbp_getCategories(){
 	}
 
 	$strXML=str_replace("$%#1#%$",$strAll,$strXML);
-	logs($strXML);
 	echo $strXML;
 
 }
@@ -113,7 +112,6 @@ function zbp_getTags(){
 	}
 
 	$strXML=str_replace("$%#1#%$",$strAll,$strXML);
-	logs($strXML);
 	echo $strXML;
 
 }
@@ -142,7 +140,6 @@ function zbp_getAuthors(){
 	}
 
 	$strXML=str_replace("$%#1#%$",$strAll,$strXML);
-	logs($strXML);
 	echo $strXML;
 
 }
@@ -167,8 +164,7 @@ function zbp_getRecentPosts($n){
 <member><name>wp_slug</name><value><string>$%#10#%$</string></value></member>
 <member><name>mt_excerpt</name><value><string>$%#11#%$</string></value></member>
 <member><name>mt_text_more</name><value><string>$%#12#%$</string></value></member>
-<member><name>wp_more_text</name><value><string>$%#13#%$</string></value></member>
-<member><name>mt_basname</name><value><string>$%#14#%$</string></value></member>
+<member><name>mt_basname</name><value><string>$%#13#%$</string></value></member>
 </struct></value>';
 
 
@@ -184,8 +180,20 @@ function zbp_getRecentPosts($n){
 
 	foreach ($array as $key => $value) {
 		$s=$strSingle;
+		$description='';
+		$mt_excerpt='';
+		$mt_text_more='';
+		if(strpos($value->Content, '<!--more-->')!==false){
+			$description=GetValueInArray(explode('<!--more-->',$value->Content),1);
+			$mt_text_more=GetValueInArray(explode('<!--more-->',$value->Content),0);
+			//$description=$value->Content;
+		}else{
+			$description=$value->Content;
+			$mt_excerpt=$value->Intro;
+		}
+
 		$s=str_replace("$%#1#%$",htmlspecialchars($value->Title),$s);
-		$s=str_replace("$%#2#%$",htmlspecialchars($value->Content),$s);
+		$s=str_replace("$%#2#%$",htmlspecialchars($description),$s);
 		$s=str_replace("$%#3#%$",htmlspecialchars($value->Time('c')),$s);
 		$s=str_replace("$%#4#%$",htmlspecialchars($value->Category->Name),$s);
 		$s=str_replace("$%#5#%$",htmlspecialchars($value->ID),$s);
@@ -194,16 +202,13 @@ function zbp_getRecentPosts($n){
 		$s=str_replace("$%#8#%$",htmlspecialchars($value->Url),$s);
 		$s=str_replace("$%#9#%$",htmlspecialchars($value->TagsToNameString()),$s);
 		$s=str_replace("$%#10#%$",htmlspecialchars($value->Alias),$s);
-		$s=str_replace("$%#11#%$",htmlspecialchars($value->Intro),$s);
-		$s=str_replace("$%#12#%$",htmlspecialchars($value->Intro),$s);
-		$s=str_replace("$%#13#%$",htmlspecialchars($value->Intro),$s);
-		$s=str_replace("$%#14#%$",htmlspecialchars($value->Alias),$s);
+		$s=str_replace("$%#11#%$",htmlspecialchars($mt_excerpt),$s);
+		$s=str_replace("$%#12#%$",htmlspecialchars($mt_text_more),$s);
+		$s=str_replace("$%#13#%$",htmlspecialchars($value->Alias),$s);
 		$strAll .= $s;
-
 	}
 
 	$strXML=str_replace("$%#1#%$",$strAll,$strXML);
-	logs($strXML);
 	echo $strXML;
 
 }
@@ -241,8 +246,7 @@ function zbp_getPost($id){
 <member><name>wp_slug</name><value><string>$%#10#%$</string></value></member>
 <member><name>mt_excerpt</name><value><string>$%#11#%$</string></value></member>
 <member><name>mt_text_more</name><value><string>$%#12#%$</string></value></member>
-<member><name>wp_more_text</name><value><string>$%#13#%$</string></value></member>
-<member><name>mt_basname</name><value><string>$%#14#%$</string></value></member>
+<member><name>mt_basname</name><value><string>$%#13#%$</string></value></member>
 </struct></value>';
 
 	$strAll='';
@@ -255,8 +259,20 @@ function zbp_getPost($id){
 
 	foreach ($array as $key => $value) {
 		$s=$strSingle;
+		$description='';
+		$mt_excerpt='';
+		$mt_text_more='';
+		if(strpos($value->Content, '<!--more-->')!==false){
+			$description=GetValueInArray(explode('<!--more-->',$value->Content),1);
+			$mt_text_more=GetValueInArray(explode('<!--more-->',$value->Content),0);
+			//$description=$value->Content;
+		}else{
+			$description=$value->Content;
+			$mt_excerpt=$value->Intro;
+		}
+
 		$s=str_replace("$%#1#%$",htmlspecialchars($value->Title),$s);
-		$s=str_replace("$%#2#%$",htmlspecialchars($value->Content),$s);
+		$s=str_replace("$%#2#%$",htmlspecialchars($description),$s);
 		$s=str_replace("$%#3#%$",htmlspecialchars($value->Time('c')),$s);
 		$s=str_replace("$%#4#%$",htmlspecialchars($value->Category->Name),$s);
 		$s=str_replace("$%#5#%$",htmlspecialchars($value->ID),$s);
@@ -265,16 +281,13 @@ function zbp_getPost($id){
 		$s=str_replace("$%#8#%$",htmlspecialchars($value->Url),$s);
 		$s=str_replace("$%#9#%$",htmlspecialchars($value->TagsToNameString()),$s);
 		$s=str_replace("$%#10#%$",htmlspecialchars($value->Alias),$s);
-		$s=str_replace("$%#11#%$",htmlspecialchars($value->Intro),$s);
-		$s=str_replace("$%#12#%$",htmlspecialchars($value->Intro),$s);
-		$s=str_replace("$%#13#%$",htmlspecialchars($value->Intro),$s);
-		$s=str_replace("$%#14#%$",htmlspecialchars($value->Alias),$s);
+		$s=str_replace("$%#11#%$",htmlspecialchars($mt_excerpt),$s);
+		$s=str_replace("$%#12#%$",htmlspecialchars($mt_text_more),$s);
+		$s=str_replace("$%#13#%$",htmlspecialchars($value->Alias),$s);
 		$strAll .= $s;
-
 	}
 
 	$strXML=str_replace("$%#1#%$",$strAll,$strXML);
-	logs($strXML);
 	echo $strXML;
 
 
@@ -282,7 +295,6 @@ function zbp_getPost($id){
 
 
 function zbp_getPostCategories($id){
-
 	global $zbp;
 
 	$strXML='<methodResponse><params><param><value><array><data>$%#1#%$</data></array></value></param></params></methodResponse>';
@@ -312,12 +324,67 @@ function zbp_getPostCategories($id){
 	}
 
 	$strXML=str_replace("$%#1#%$",$strAll,$strXML);
-	logs($strXML);
 	echo $strXML;
 
 }
 
 
+function zbp_editPost($id,$xmlstring){
+	global $zbp;
+
+	$xml = simplexml_load_string($xmlstring);
+
+	if($xml){
+
+		$post=array();
+		foreach ($xml->children() as $x) {
+			$a=(string)$x->name;
+			$b=$x->value->children()->asXML();
+			$b=str_replace(array('<string>','</string>','<dateTime.iso8601>','</dateTime.iso8601>','<int>','</int>','<array>','</array>','<data>','</data>'),array(''),$b);
+			$post[$a]=$b;
+		}
+
+		$_POST['ID']=$id;
+
+		$_POST['Title']=$post['title'];
+
+		if(isset($post['mt_basename'])){
+			$_POST['Alias']=$post['mt_basename'];
+		}
+		if(isset($post['dateCreated'])){
+			$_POST['PostTime']=$post['dateCreated'];
+		}
+		if(isset($post['wp_author_id'])){
+			$_POST['AuthorID']=$post['wp_author_id'];
+		}
+		if(isset($post['mt_keywords'])){
+			$_POST['Tags']=$post['mt_keywords'];
+		}
+		if(isset($post['mt_allow_comments'])){
+			if($post['mt_allow_comments']>0){
+				$_POST['IsLock']=$post['mt_allow_comments']-1;
+			}else{
+				$_POST['IsLock']=$post['mt_allow_comments'];
+			}
+		}
+		if(isset($post['categories'])){
+			$post['categories']=str_replace('<value>', '', $post['categories']);
+			$catename=trim(GetValueInArray(explode('</value>',$post['categories']),0));
+			$_POST['CateID']=$zbp->GetCategoryByName($catename)->ID;
+		}
+
+		$strXML='<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
+
+		if(PostArticle()==true){
+			$strXML=str_replace("$%#1#%$",1,$strXML);
+			echo $strXML;
+		}else{
+			$zbp->ShowError(0);
+		}
+
+	}
+
+}
 
 
 
@@ -412,6 +479,16 @@ if($xml){
 			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
 			if($zbp->CheckRights('ArticleEdt')){
 				zbp_getPostCategories((integer)$xml->params->param[0]->value->string);
+			}else{
+				$zbp->ShowError(6);
+			}
+			break;
+		case 'metaWeblog.editPost':
+			$username=(string)$xml->params->param[1]->value->string;
+			$password=(string)$xml->params->param[2]->value->string;
+			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if($zbp->CheckRights('ArticlePst')){
+				zbp_editPost((integer)$xml->params->param[0]->value->string,$xml->params->param[3]->value->struct->asXML());
 			}else{
 				$zbp->ShowError(6);
 			}
