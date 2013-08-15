@@ -35,7 +35,8 @@ function KindEditor_addscript_begin(){
 
 
 function KindEditor_addscript_end(){
-
+global $zbp;
+$zbphost = $zbp->host;
 $s=<<<script
 <script type="text/javascript">
 
@@ -71,7 +72,7 @@ function editor_init(){
 	editor_api.editor.intro.put=function(str){return this.obj.html(str)};
 	editor_api.editor.intro.focus=function(){return this.obj.focus()};
 	KindEditor.ready(function(K) {\$('#contentready').hide();
-		editor_api.editor.content.obj = K.create('#editor_content',{uploadJson:'"&BlogHost & "zb_users/plugin/kindeditor/kindeditor/php/upload_json.php',fileManagerJson:'"&BlogHost & "zb_users/plugin/kindeditor/kindeditor/php/file_manager_json.php',allowFileManager : true,formatUploadUrl : false,width : '100%',height : '450px',emoticonsPath :'"&BlogHost & "zb_users/EMOTION/',	allowPreviewEmoticons : false,items : [ 'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste','plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright','justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript','superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/','formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold','italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage','flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak','anchor', 'link', 'unlink', '|', 'about']});
+		editor_api.editor.content.obj = K.create('#editor_content',{uploadJson:'{$zbphost}zb_users/plugin/KindEditor/kindeditor/php/upload.php',fileManagerJson:'{$zbphost}zb_users/plugin/KindEditor/kindeditor/php/file_manager_json.php',allowFileManager : true,formatUploadUrl : false,width : '100%',height : '450px',emoticonsPath :'"&BlogHost & "zb_users/EMOTION/',	allowPreviewEmoticons : false,items : [ 'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste','plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright','justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript','superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/','formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold','italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage','flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak','anchor', 'link', 'unlink', '|', 'about']});
 		$('#editor_txt').prev().removeAttr('style');
 		sContent=editor_api.editor.content.get();
 		$('#introready').hide();
