@@ -38,6 +38,15 @@ if($ispage){
   $article->Type=0;
 }
 
+if($article->Intro){
+  if(strpos($article->Content, '<!--more-->')!==false){
+    $article->Intro='';
+    $article->Content=str_replace('<!--more-->', '<hr class="more" />', $article->Content);
+  }elseif(strpos($article->Content,$article->Intro)===0){
+    $article->Intro='';
+  }
+}
+
 require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <script type="text/javascript" src="../script/jquery.tagto.js"></script>
@@ -93,7 +102,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
        <div id='insertintro' class='editmod'><span><?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
        <?php }?>
 		</div>   
-		<div id="divIntro" style="display:none;">
+		<div id="divIntro" <?php if(!$article->Intro){echo 'style="display:none;"';}?>>
        <div id='introheader' class='editmod'><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
        <textarea id="editor_intro" name="Intro"><?php echo $article->Intro;?></textarea>
        <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Watting...</div>

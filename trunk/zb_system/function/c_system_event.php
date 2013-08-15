@@ -163,15 +163,32 @@ function Logout(){
 
 ################################################################################################################
 function PostArticle(){
+	logs('到这里了！');
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
 
 	if(isset($_POST['Tag'])){
 		$_POST['Tag']=$zbp->CheckUnsetTagAndConvertIDString($_POST['Tag']);
 	}
+	if(isset($_POST['Content'])){
+		$_POST['Content']=str_replace('<hr class="more" />', '<!--more-->', $_POST['Content']);
+		$_POST['Content']=str_replace('<hr class="more"/>', '<!--more-->', $_POST['Content']);
+		if(strpos($_POST['Content'], '<!--more-->')!==false){
+			$_POST['Intro']=GetValueInArray(explode('<!--more-->',$_POST['Content']),0);
+		}else{
+			if(isset($_POST['Intro'])&&$_POST['Intro']==''){
+				$_POST['Intro']=substr($_POST['Content'], 0,250);
+				if(strpos($_POST['Intro'],'<')!==false){
+					$_POST['Intro']=CloseTags($_POST['Intro']);
+				}
+			}
+		}
+	}
+
 	if(isset($_POST['PostTime'])){
 		$_POST['PostTime']=strtotime($_POST['PostTime']);
 	}	
+	logs('到这里了2222！');
 
 	$article = new Post();
 	if(GetVars('ID','POST') == 0){
@@ -192,8 +209,9 @@ function PostArticle(){
 	if(isset($_POST['PostTime'])) $article->PostTime = GetVars('PostTime','POST');
 	if(isset($_POST['IsTop'])   ) $article->IsTop    = GetVars('IsTop','POST');
 	if(isset($_POST['IsLock'])  ) $article->IsLock   = GetVars('IsLock','POST');
-
+	logs('到这里了3333！');
 	$article->Save();
+	logs('到这里了4444！');
 	return true;
 }
 

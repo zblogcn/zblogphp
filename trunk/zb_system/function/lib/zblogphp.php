@@ -814,6 +814,16 @@ class ZBlogPHP{
 		}
 	}
 
+	function GetCategoryByName($name){
+		$name=trim($name);
+		foreach ($this->categorys as $key => &$value) {
+			if($value->Name==$name){
+				return $value;
+			}
+		}
+		return new Category;
+	}
+
 	function GetModuleByID($id){
 		$m = new Module;
 		if($id>0){
