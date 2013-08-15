@@ -1,37 +1,19 @@
 <?php
 /**
- * KindEditor PHP
- *
- * 本PHP程序是演示程序，建议不要直接在实际项目中使用。
- * 如果您确定直接使用本程序，使用之前请仔细确认相关安全设置。
- *
+ * KindEditor for Z-BlogPHP
+ * @author 未寒
+ * @copyright (C) RainbowSoft Studio
  */
-
-require_once 'JSON.php';
-
-$php_path = dirname(__FILE__) . '/';
-$php_url = dirname($_SERVER['PHP_SELF']) . '/';
+require '../../../../../zb_system/function/c_system_base.php';
+global $zbp;
+$zbp->Load();
 
 //根目录路径，可以指定绝对路径，比如 /var/www/attached/
-$root_path = $php_path . '../attached/';
+$root_path = $zbp->usersdir . 'upload/';
 //根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
-$root_url = $php_url . '../attached/';
+$root_url = $zbp->host . 'zb_users/upload/';
 //图片扩展名
-$ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
-
-//目录名
-$dir_name = empty($_GET['dir']) ? '' : trim($_GET['dir']);
-if (!in_array($dir_name, array('', 'image', 'flash', 'media', 'file'))) {
-	echo "Invalid Directory name.";
-	exit;
-}
-if ($dir_name !== '') {
-	$root_path .= $dir_name . "/";
-	$root_url .= $dir_name . "/";
-	if (!file_exists($root_path)) {
-		mkdir($root_path);
-	}
-}
+$ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'GIF', 'JPG', 'JPEG', 'PNG', 'BMP');
 
 //根据path参数，设置各路径和URL
 if (empty($_GET['path'])) {
@@ -45,7 +27,7 @@ if (empty($_GET['path'])) {
 	$current_dir_path = $_GET['path'];
 	$moveup_dir_path = preg_replace('/(.*?)[^\/]+\/$/', '$1', $current_dir_path);
 }
-echo realpath($root_path);
+//echo realpath($root_path);
 //排序形式，name or size or type
 $order = empty($_GET['order']) ? 'name' : strtolower($_GET['order']);
 
@@ -130,8 +112,8 @@ $result['current_url'] = $current_url;
 $result['total_count'] = count($file_list);
 //文件列表数组
 $result['file_list'] = $file_list;
-
+//echo $result['current_url'];
 //输出JSON字符串
 header('Content-type: application/json; charset=UTF-8');
-$json = new Services_JSON();
-echo $json->encode($result);
+//$json = new Services_JSON();
+echo json_encode($result);
