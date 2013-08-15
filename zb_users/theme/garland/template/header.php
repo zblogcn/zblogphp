@@ -8,6 +8,11 @@
 	<link rel="stylesheet" rev="stylesheet" href="{$host}zb_users/theme/{$theme}/style.css.php" type="text/css" media="screen" />
 	<script src="{$host}zb_system/script/common.js" type="text/javascript"></script>
 	<script src="{$host}zb_system/script/c_html_js_add.php" type="text/javascript"></script>
+{if $type=='index'&&$page=='1'}
+	<link rel="alternate" type="application/rss+xml" href="{$feedurl}" title="{$name}" />
+	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="{$host}zb_system/xml-rpc/?rsd" />
+	<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="{$host}zb_system/xml-rpc/wlwmanifest.xml" /> 
+{/if}
 	<!--[if lt IE 7]>
 	<style type="text/css" media="all"> @import "{$host}zb_users/themes/{$theme}/style/{$style}/fix-ie.css";</style>
 	<![endif]-->

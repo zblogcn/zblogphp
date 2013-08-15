@@ -202,10 +202,13 @@ function DelArticle(){
 	global $zbp;
 
 	$id=(int)GetVars('id','GET');
+
 	$article = new Post();
 	$article->LoadInfoByID($id);
 	if($article->ID>0){
 		$article->Del();
+	}else{
+		$zbp->ShowError(9);
 	}
 	return true;
 }
