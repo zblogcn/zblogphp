@@ -90,7 +90,7 @@ function ViewPost($id,$alias){
 	$comments=$zbp->GetCommentList(
 		array('*'),
 		array(array('=','comm_LogID',$article->ID),array('=','comm_RootID',0),array('=','comm_IsChecking',0)),
-		array('comm_ID'=>($zbp->option['ZC_COMMENT_REVERSE_ORDER_EXPORT']?'DESC':'ASC')),
+		array('comm_ID'=>($zbp->option['ZC_COMMENT_REVERSE_ORDER']?'DESC':'ASC')),
 		array(0,$zbp->commentdisplycount),
 		null
 	);
