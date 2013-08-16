@@ -1,33 +1,57 @@
-﻿<%@LANGUAGE="VBSCRIPT" CODEPAGE="65001"%>
-<% Option Explicit %>
-<% On Error Resume Next %>
-<% Response.Charset="UTF-8" %>
-<% Response.Buffer=True %>
-<%' Response.ContentType="text/json" %>
-<!-- #include file="../../../../../c_option.asp" -->
-<!-- #include file="../../../../../../zb_system/function/c_function.asp" -->
-<!-- #include file="../../../../../../zb_system/function/c_system_base.asp" -->
+﻿<?php
+/**
+ * KindEditor for Z-BlogPHP
+ * @author 未寒
+ * @copyright (C) RainbowSoft Studio
+ */
+require '../../../../../../zb_system/function/c_system_base.php';
+global $zbp;
+$zbp->Load();
+
+$root_path = $zbp->usersdir . 'emotion/';
+$root_url = $zbp->host . 'zb_users/emotion/';
+$emot_ext = explode("|", $zbp->option['ZC_EMOTICONS_FILETYPE']);
+
+if ($handle = opendir($root_path)) {
+    while (false !== ($filename = readdir($handle))) {
+		if ($filename{0} == '.') continue;
+		$file = $root_path . $filename;
+		if (is_dir($file)) {
+			$emot_dir[] = $filename;
+		}else{
+			continue;
+		}
+		if ($emot = opendir($root_path . $filename . '/')) {
+			while (false !== ($emotname = readdir($emot))) {
+				if ($emotname{0} == '.') continue;
+				$emotpath = $root_path . $emotname . '/' . $emotname;
+				if (!is_dir($emotpath)) {
+					$temp_arr = explode(".", $emotname);
+					$file_ext = array_pop($temp_arr);
+					$file_ext = trim($file_ext);
+					$file_ext = strtolower($file_ext);
+					if (in_array($file_ext, $emot_ext) === true) {
+						$emot_name[$filename][] = $emotname;
+					}
+				}
+			}
+		}
+    }
+
+    closedir($handle);
+	
+	//print_r($emot_dir);
+	//print_r($emot_name);
+}
+
+
+
+?>
 /*******************************************************************************
 * @author panderman <panderman@163.com>
 * @site http://www.xunwee.com/
 * @licence http://www.kindsoft.net/license.php
 *******************************************************************************/
-	<%	
-	Dim fso,f(),f1,fb,fc
-	Dim aryFileList,a,i,j,e,x,y,p
-
-	'f=Split(ZC_EMOTICONS_FILENAME,"|")
-	Set fso = CreateObject("Scripting.FileSystemObject")
-	Set fb = fso.GetFolder(BlogPath & "zb_users\emotion" & "\")
-	
-	Set fc = fb.SubFolders
-		i=0
-	For Each f1 in fc	
-		ReDim Preserve f(i)
-		f(i)=f1.name
-		i=i+1
-	Next
-	%>
 KindEditor.plugin('emoticons', function (K) {
     var self = this, name = 'emoticons',arrEmots=[],
 		path = (self.emoticonsPath || self.pluginsPath + 'emoticons/images/'),
@@ -42,14 +66,19 @@ KindEditor.plugin('emoticons', function (K) {
             html = '<div class="ke-plugin-emoticons">\
                         <link rel="stylesheet" type="text/css" href="' + emoticonspluginsPath + 'emoticon.css" />\
                         <div id="tabPanel" class="neweditor-tab">\
-                            <div id="tabMenu" class="neweditor-tab-h">\
-                                <%For x=0 To i-1%><div><%=f(x)%></div><%Next%>\
-                            </div>\
+						<div id="tabMenu" class="neweditor-tab-h">\
+						<?php 
+						for ($i = 0; $i < count($emot_dir); $i++) {echo '<div>'.$emot_dir[$i].'</div>';}
+						?>
+						</div>\
+
                             <div id="tabContent" class="neweditor-tab-b">\
-                                <%For x=0 To i-1%><div id="tab<%=x%>"></div><%Next%>\
+						<?php 
+						for ($i = 0; $i < count($emot_dir); $i++) {echo '<div>'.$i.'</div>';}
+						?>
                             </div>\
                         </div>\
-                    <div id="tabIconReview"><img id="faceReview" class="review" src="<%=GetCurrentHost()%>zb_system/image/admin/none.gif" /></div></div>\
+                    <div id="tabIconReview"><img id="faceReview" class="review" src="<?php echo $zbp->host;?>zb_system/image/admin/none.gif" /></div></div>\
                     </div>';
         menu.div.append(K(html));
         function removeEvent() {
@@ -58,9 +87,7 @@ KindEditor.plugin('emoticons', function (K) {
             });
         }
 
-		
-			
-        /*******************************************表情方法开始******************************************************/
+        /*******************************************表情方法开始*****************************************/
         function initImgBox(box, str, len) {
             if (box.length) return;
             var tmpStr = "", i = 1;
@@ -115,21 +142,18 @@ KindEditor.plugin('emoticons', function (K) {
         }
         var emotion = {};
         emotion.SmileyPath = path;
-        emotion.SmileyBox = {<%For x=0 To i-1%> tab<%=x%>: [<%
-		e=""
-		aryFileList=LoadIncludeFiles("zb_users\emotion\"&f(x)) 
-		If IsArray(aryFileList) Then
-			j=UBound(aryFileList)
-			For f1=1 to j
-				If InStr(ZC_EMOTICONS_FILETYPE,Right(aryFileList(f1),3))>0 Then 
-					e =e&"'"&Replace(Replace(Server.URLEncode(aryFileList(f1)),"+","%20"),"%2E",".")&"'" & IIf(f1=j,"",",")
-					p=i
-				End If 
-			Next
-			'e=Left(e,Len(e)-1)
-		End If 
-		Response.Write e
-		%>]<%=IIf(x=i-1,"",",")%><%Next%>};
+        emotion.SmileyBox = {
+		<?php 
+		for ($i = 0; $i < count($emot_dir); $i++) {
+			echo 'tab'.$i.':[';
+			$emot_char = '';
+			if($i == (count($emot_dir)-1)){echo ']';continue;}
+			foreach($emot_name[$emot_dir[$i]] as $v){
+				$emot_char .= "'$v',";
+			}
+			echo $emot_char.'],';
+		}
+		?>};		
         emotion.SmileyInfor = emotion.SmileyBox;
         var faceBox = emotion.SmileyBox;
         var inforBox = emotion.SmileyInfor;
@@ -139,14 +163,15 @@ KindEditor.plugin('emoticons', function (K) {
    
         //大对象
         FaceHandler = {
-            imageFolders: {<%For x=0 To i-1%> tab<%=x%>: '<%=f(x)%>/'<%=IIf(x=i-1,"",",")%><%Next%>},
-            imageWidth: {<%For x=0 To i-1%> tab<%=x%>: 30<%=IIf(x=i-1,"",",")%><%Next%>},
-            imageCols: {<%For x=0 To i-1%> tab<%=x%>: 11<%=IIf(x=i-1,"",",")%><%Next%> },
-            imageColWidth: {<%For x=0 To i-1%> tab<%=x%>: 3<%=IIf(x=i-1,"",",")%><%Next%>},
-            imageCss: {<%For x=0 To i-1%> tab<%=x%>: '<%=f(x)%>'<%=IIf(x=i-1,"",",")%><%Next%>},
-            imageCssOffset: {<%For x=0 To i-1%> tab<%=x%>: 30<%=IIf(x=i-1,"",",")%><%Next%>},
-            tabExist: [<%For x=0 To i-1%>0<%=IIf(x=i-1,"",",")%><%Next%>]
+            imageFolders: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab'.$i.':\''.$emot_dir[$i].'/\',';}?>},
+            imageWidth: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab'.$i.':30,';}?>},
+            imageCols: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab'.$i.':11,';}?>},
+            imageColWidth: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab'.$i.':3,';}?>},
+            imageCss: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab'.$i.':\''.$emot_dir[$i].'\',';}?>},
+            imageCssOffset: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab'.$i.':30,';}?>},
+            tabExist: [<?php for ($i = 0; $i < count($emot_dir); $i++) {echo $i.',';}?>]
         };
+		
         function switchTab(index) {
             if (FaceHandler.tabExist[index] == 0) {
                 FaceHandler.tabExist[index] = 1;
@@ -224,6 +249,3 @@ KindEditor.plugin('emoticons', function (K) {
         /**********************************************表情方法结束*****************************************************/
     });
 });
-
-
-<%Response.End(): Response.Clear %>
