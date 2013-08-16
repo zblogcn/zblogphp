@@ -117,8 +117,22 @@ function ViewPost($id,$alias){
 
 
 
+function ViewComment($id){
+	global $zbp;
+	$template='comment';
+	$cmt=$zbp->GetCommentByID($id);
+	$post=new Post;
+	$post->LoadInfoByID($cmt->LogID);
+	
+	$zbp->template->SetTags('title',$zbp->title);
+	$zbp->template->SetTags('comment',cmt);
+	$zbp->template->SetTags('article',post);
+	$zbp->template->SetTags('type','comment');
+	$zbp->template->SetTags('page',1);
 
+	$zbp->template->display($template);
 
+}
 
 
 
@@ -186,7 +200,7 @@ function PostArticle(){
 
 	if(isset($_POST['PostTime'])){
 		$_POST['PostTime']=strtotime($_POST['PostTime']);
-	}	
+	}
 
 	$article = new Post();
 	if(GetVars('ID','POST') == 0){
@@ -303,7 +317,6 @@ function PostComment(){
 		}
 	}
 
-
 	$_POST['AuthorID'] = $zbp->user->ID;
 	$_POST['Name'] = $_POST['name'];
 	$_POST['Email'] = $_POST['email'];	
@@ -328,6 +341,13 @@ function PostComment(){
 	$cmt->Agent        = GetVars('Agent','POST');	
 
 	$cmt->Save();
+	
+	$zbp->comments[$cmt->ID]=$cmt;
+	
+	if(GetVars('isajax','POST')){
+		ViewComment($cmt->ID);
+	}
+
 	return true;
 
 }
