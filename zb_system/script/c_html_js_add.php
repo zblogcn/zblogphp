@@ -18,7 +18,7 @@ var str02="<?php echo $lang['error']['29']; ?>";
 var str03="<?php echo $lang['error']['46']; ?>";
 
 $(document).ready(function(){ 
-	if(GetCookie("username")!=""&&GetCookie("password")!=""){$.getScript(bloghost + "zb_system/cmd.php?act=misc&type=autoinfo",function(){AutoinfoComplete();})}
+	if(GetCookie("username")!=""&&GetCookie("password")!=""){$.getScript(bloghost + "zb_system/cmd.php?act=misc&type=autoinfo",function(){})}
 });
 
 <?php

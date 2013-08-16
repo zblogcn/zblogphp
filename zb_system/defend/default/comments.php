@@ -1,9 +1,14 @@
 <!--评论输出-->
-<label style="display:none;" id="AjaxCommentBegin"></label>
-{foreach $comments as $comment}
+{foreach $comments as $key => $comment}
 {template:comment}
 {/foreach}
-<label style="display:none;" id="AjaxCommentEnd"></label>
+
+<!--评论翻页条输出-->
+<div class="pagebar commentpagebar">
+{if $pagebar}
+{template:pagebar}
+{/if}
+</div>
 
 <!--评论框-->
 {template:commentpost}

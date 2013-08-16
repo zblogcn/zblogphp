@@ -23,7 +23,7 @@
 {/if}
 
 {/foreach}
-<div class="post pagebar">{template:pagebar}</div>
+<div class="pagebar">{template:pagebar}</div>
 		</div>
 		<div id="divSidebar">
 {template:sidebar}

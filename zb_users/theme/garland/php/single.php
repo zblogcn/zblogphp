@@ -1,4 +1,4 @@
-﻿<?php  include $this->GetTemplate('header');  ?>
+<?php  include $this->GetTemplate('header');  ?>
 	<link rel="alternate" type="application/rss+xml" href="<?php  echo $feedurl;  ?>" title="<?php  echo $name;  ?>" />
 </head>
 <body class="multi default">

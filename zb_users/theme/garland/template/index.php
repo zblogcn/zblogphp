@@ -1,4 +1,4 @@
-﻿{template:header}
+{template:header}
 </head>
 <body class="multi default">
 {template:c_top}

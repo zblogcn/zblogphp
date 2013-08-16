@@ -331,7 +331,6 @@ div.istop-post{
 }
 
 div.pagebar{
-	border-top:2px solid #dbe0e6;
 	padding:30px 1% 5px 1%;
 }
 
@@ -430,20 +429,6 @@ div.post-body p{
 	text-indent:2em;
 }
 
-/*----------tagcloud------*/
-
-div.post-body .tags-cloud{
-	margin:10px 0 15px 0;
-}
-.tags-cloud .tag-name{margin:0 5px;line-height: 1.2;}
-.tags-cloud .tag-name-size-0{font-size: 1.1em;}
-.tags-cloud .tag-name-size-1{font-size: 1.3em;}
-.tags-cloud .tag-name-size-2{font-size: 1.6em;}
-.tags-cloud .tag-name-size-3{font-size: 2.0em;}
-.tags-cloud .tag-name-size-4{font-size: 2.5em;}
-.tags-cloud .tag-name-size-5{font-size: 3.1em;}
-.tags-cloud .tag-name-size-6{font-size: 3.8em;}
-.tags-cloud .tag-name-size-7{font-size: 4.6em;}
 
 /*----------文章中引用code------*/
 

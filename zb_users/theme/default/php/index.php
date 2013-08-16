@@ -23,7 +23,7 @@
 <?php } ?>
 
 <?php  }   ?>
-<div class="post pagebar"><?php  include $this->GetTemplate('pagebar');  ?></div>
+<div class="pagebar"><?php  include $this->GetTemplate('pagebar');  ?></div>
 		</div>
 		<div id="divSidebar">
 <?php  include $this->GetTemplate('sidebar');  ?>
