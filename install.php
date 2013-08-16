@@ -1,10 +1,10 @@
-<?php
+﻿<?php
 #///////////////////////////////////////////////////////////////////////////////
 #//              Z-BlogPHP 在线安装程序
 #///////////////////////////////////////////////////////////////////////////////
 
-error_reporting(0);
-ob_start();
+//error_reporting(0);
+//ob_start();
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
@@ -32,7 +32,7 @@ h1,h2,h3,h4,h5,h6{
 h1{
 font-size:28px;
 }
-button{
+input{
 	padding:15px 80px;
 }
 div{
@@ -53,26 +53,26 @@ div{
 <div>
 <h1>Z-BlogPHP 在线安装</h1>
 <p><img src="http://update.rainbowsoft.org/zblogphp/loading.png" alt=""/></p>
-
+<form method="post" action="#">
 <?php
-install0();
 
-if(strpos($_SERVER['QUERY_STRING'],'begin') !== false){
-
-
-install1();
-install2();
-install3();
-
-}else{
-?>
-<p><button onclick="location='?begin'" value="" >开始安装</button></p>
-<?php
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+	install1();
+	install2();
+	install3();
+	die();
 }
+
+
+//install0();
+?>
+<p><input type="submit" value="开始安装" /></p>
+</form>
+<?php
+
 ?>
 
 <?php
-
 
 
 $s=null;

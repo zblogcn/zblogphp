@@ -213,7 +213,7 @@ class ZBlogPHP{
 					$this->option['ZC_MYSQL_PRE'],
 					$this->option['ZC_MYSQL_PORT']					
 				))==false){
-				$zbp->ShowError(67);
+				$this->ShowError(67);
 			}
 			break;
 		case 'sqlite':
@@ -223,7 +223,7 @@ class ZBlogPHP{
 				$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
 				$this->option['ZC_SQLITE_PRE']
 				))==false){
-				$zbp->ShowError(69);
+				$this->ShowError(69);
 			}
 			break;
 		}
