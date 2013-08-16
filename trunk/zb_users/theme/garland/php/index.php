@@ -1,4 +1,4 @@
-﻿<?php  include $this->GetTemplate('header');  ?>
+<?php  include $this->GetTemplate('header');  ?>
 </head>
 <body class="multi default">
 <?php  include $this->GetTemplate('c_top');  ?>

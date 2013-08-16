@@ -85,14 +85,68 @@ function ViewPost($id,$alias){
 		$zbp->LoadTagsByIDString($article->Tag);
 	}
 
+
+	$pagebar=new Pagebar('javascript:GetComments(\''.$article->ID.'\',\'{%page%}\')');
+	$pagebar->PageCount=$zbp->commentdisplaycount;
+	$pagebar->PageNow=1;
+	$pagebar->PageBarCount=$zbp->pagebarcount;
+
 	$comments=array();
 
 	$comments=$zbp->GetCommentList(
 		array('*'),
 		array(array('=','comm_LogID',$article->ID),array('=','comm_RootID',0),array('=','comm_IsChecking',0)),
 		array('comm_ID'=>($zbp->option['ZC_COMMENT_REVERSE_ORDER']?'DESC':'ASC')),
-		array(0,$zbp->commentdisplycount),
+		array(($pagebar->PageNow-1) * $pagebar->PageCount,$pagebar->PageCount),
+		array('pagebar'=>$pagebar)
+	);
+	$rootid=array();
+	foreach ($comments as &$comment) {
+		$rootid[]=array('comm_RootID',$comment->ID);
+	}
+	$comments2=$zbp->GetCommentList(
+		array('*'),
+		array(array('array',$rootid),array('=','comm_IsChecking',0)),
+		array('comm_ID'=>($zbp->option['ZC_COMMENT_REVERSE_ORDER']?'DESC':'ASC')),
+		null,
 		null
+	);
+
+	foreach ($comments as &$comment) $comment->Content.='<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+	foreach ($comments2 as &$comment) $comment->Content.='<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+
+	$zbp->template->SetTags('title',$article->Title);
+	$zbp->template->SetTags('article',$article);
+	$zbp->template->SetTags('type',$article->type=0?'article':'page');
+	$zbp->template->SetTags('page',1);
+	if($pagebar->PageAll==0||$pagebar->PageAll==1)$pagebar=null;
+	$zbp->template->SetTags('pagebar',$pagebar);
+	$zbp->template->SetTags('comments',$comments);
+
+	$zbp->template->display($article->Template);
+}
+
+function ViewComments($postid,$page){
+	global $zbp;
+
+	$post = New Post;
+	$post->LoadInfoByID($postid);
+	$page=$page==0?1:$page;
+	$template='comments';
+
+	$pagebar=new Pagebar('javascript:GetComments(\''.$post->ID.'\',\'{%page%}\')');
+	$pagebar->PageCount=$zbp->commentdisplaycount;
+	$pagebar->PageNow=$page;
+	$pagebar->PageBarCount=$zbp->pagebarcount;
+
+	$comments=array();
+
+	$comments=$zbp->GetCommentList(
+		array('*'),
+		array(array('=','comm_LogID',$post->ID),array('=','comm_RootID',0),array('=','comm_IsChecking',0)),
+		array('comm_ID'=>($zbp->option['ZC_COMMENT_REVERSE_ORDER']?'DESC':'ASC')),
+		array(($pagebar->PageNow-1) * $pagebar->PageCount,$pagebar->PageCount),
+		array('pagebar'=>$pagebar)
 	);
 	$rootid=array();
 	foreach ($comments as $comment) {
@@ -105,28 +159,32 @@ function ViewPost($id,$alias){
 		null,
 		null
 	);
+	foreach ($comments as &$comment) $comment->Content.='<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+	foreach ($comments2 as &$comment) $comment->Content.='<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
 
-	$zbp->template->SetTags('title',$article->Title);
-	$zbp->template->SetTags('article',$article);
-	$zbp->template->SetTags('type',$article->type=0?'article':'page');
-	$zbp->template->SetTags('page',1);
-	$zbp->template->SetTags('comments',$comments);	
+	$zbp->template->SetTags('title',$post->Title);
+	$zbp->template->SetTags('article',$post);
+	$zbp->template->SetTags('type','comment');
+	$zbp->template->SetTags('page',$page);
+	if($pagebar->PageAll==1)$pagebar=null;
+	$zbp->template->SetTags('pagebar',$pagebar);
+	$zbp->template->SetTags('comments',$comments);
 
-	$zbp->template->display($article->Template);
+	$zbp->template->display($template);
+
 }
-
-
 
 function ViewComment($id){
 	global $zbp;
+
 	$template='comment';
 	$cmt=$zbp->GetCommentByID($id);
 	$post=new Post;
 	$post->LoadInfoByID($cmt->LogID);
 	
 	$zbp->template->SetTags('title',$zbp->title);
-	$zbp->template->SetTags('comment',cmt);
-	$zbp->template->SetTags('article',post);
+	$zbp->template->SetTags('comment',$cmt);
+	$zbp->template->SetTags('article',$post);
 	$zbp->template->SetTags('type','comment');
 	$zbp->template->SetTags('page',1);
 

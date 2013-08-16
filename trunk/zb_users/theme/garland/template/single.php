@@ -1,4 +1,4 @@
-﻿{template:header}
+{template:header}
 	<link rel="alternate" type="application/rss+xml" href="{$feedurl}" title="{$name}" />
 </head>
 <body class="multi default">

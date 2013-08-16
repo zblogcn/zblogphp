@@ -57,7 +57,7 @@ class ZBlogPHP{
 	public $pagebarcount = 10;
 	public $searchcount = 10;
 	public $displaycount = 10;
-	public $commentdisplycount = 10;
+	public $commentdisplaycount = 10;
 
 	public $sidebar =array();
 	public $sidebar2=array();
@@ -106,7 +106,7 @@ class ZBlogPHP{
 		$this->pagebarcount=$this->option['ZC_PAGEBAR_COUNT'];
 		$this->searchcount = $this->option['ZC_SEARCH_COUNT'];
 		$this->displaycount = $this->option['ZC_DISPLAY_COUNT'];
-		$this->commentdisplycount = $this->option['ZC_COMMENTS_DISPLAY_COUNT'];
+		$this->commentdisplaycount = $this->option['ZC_COMMENTS_DISPLAY_COUNT'];
 		
 		$this->cache=new Metas;
 
@@ -662,6 +662,9 @@ class ZBlogPHP{
 		if($this->option['ZC_YUN_SITE'])return false;
 		//初始化模板
 		$this->LoadTemplates();
+		$this->templates['comments']='<label style="display:none;" id="AjaxCommentBegin"></label>' . $this->templates['comments'] . '<label style="display:none;" id="AjaxCommentEnd"></label>';
+
+
 
 		$dir=$this->usersdir . 'theme/'. $this->theme .'/php/';
 

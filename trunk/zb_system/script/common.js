@@ -22,8 +22,6 @@
 
 
 
-
-
 //*********************************************************
 // 目的：    设置Cookie
 // 输入：    sName, sValue,iExpireDays
@@ -144,15 +142,14 @@ function VerifyMessage() {
 				alert(s.match("<string>.+?</string>")[0].replace("<string>","").replace("</string>",""))
 			}
 			else{
-				var i=Math.round(Math.random()*1000);
 				var s =data;
+				var cmt=s.match(/cmt\d+/);
 				if(intReplyID==0){
-					$(s).insertBefore("#AjaxCommentEnd");
+					$(s).insertAfter("#AjaxCommentBegin");
 				}else{
-					$(s).insertBefore("#AjaxComment"+intReplyID);
-					window.location="#cmt"+intReplyID
+					$(s).insertAfter("#AjaxComment"+intReplyID);
 				}
-				$("#content").val("");
+				window.location="#"+cmt;
 			}
 
 			$("#commentform :submit").removeClass("loading");
@@ -160,6 +157,7 @@ function VerifyMessage() {
 			$("#commentform :submit").val(strSubmit);
 			
 			SaveRememberInfo();
+			CommentComplete();
 		}
 	);
 
@@ -243,13 +241,20 @@ function RevertComment(i) {
 // 目的：    
 //*********************************************************
 function GetComments(postid,page){
-
-	 $('span.commentspage').html("Waiting...");
-
 	$.get(bloghost+"zb_system/cmd.php?act=getcmt&postid="+postid+"&page="+page, function(data){
 	  $('#AjaxCommentBegin').nextUntil('#AjaxCommentEnd').remove();
 	  $('#AjaxCommentBegin').after(data);
 	});
 
+}
+//*********************************************************
+
+
+
+
+//*********************************************************
+// 目的：  预留空函数,留给主题或插件用  
+//*********************************************************
+function CommentComplete(){
 }
 //*********************************************************

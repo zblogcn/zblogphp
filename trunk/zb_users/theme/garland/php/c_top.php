@@ -1,4 +1,4 @@
-﻿<!-- Layout -->
+<!-- Layout -->
 <div id="header-region" class="clear-block"></div>
     <div id="wrapper">
     <div id="container" class="clear-block">

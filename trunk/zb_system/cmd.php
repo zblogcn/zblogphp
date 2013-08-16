@@ -46,6 +46,10 @@ switch ($action) {
 			Redirect(GetVars('HTTP_REFERER','SERVER'));
 		}
 		break;
+	case 'getcmt':
+		ViewComments((int)GetVars('postid','GET'),(int)GetVars('page','GET'));
+		die();
+		break;
 	case 'ArticleEdt':
 		Redirect('admin/edit.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
