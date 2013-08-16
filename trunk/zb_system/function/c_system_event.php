@@ -163,7 +163,6 @@ function Logout(){
 
 ################################################################################################################
 function PostArticle(){
-	logs('到这里了！');
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
 
@@ -188,7 +187,6 @@ function PostArticle(){
 	if(isset($_POST['PostTime'])){
 		$_POST['PostTime']=strtotime($_POST['PostTime']);
 	}	
-	logs('到这里了2222！');
 
 	$article = new Post();
 	if(GetVars('ID','POST') == 0){
@@ -209,9 +207,9 @@ function PostArticle(){
 	if(isset($_POST['PostTime'])) $article->PostTime = GetVars('PostTime','POST');
 	if(isset($_POST['IsTop'])   ) $article->IsTop    = GetVars('IsTop','POST');
 	if(isset($_POST['IsLock'])  ) $article->IsLock   = GetVars('IsLock','POST');
-	logs('到这里了3333！');
+
 	$article->Save();
-	logs('到这里了4444！');
+
 	return true;
 }
 

@@ -28,7 +28,6 @@ class Upload extends Base{
 
 	function SaveFile($tmp){
 		global $zbp;
-		//echo $this->FullFile;
 		if(!file_exists($zbp->usersdir . $this->Dir)){
 			@mkdir($zbp->usersdir . $this->Dir, 0777,true);	
 		}
@@ -36,7 +35,13 @@ class Upload extends Base{
 	}
 
 	function SaveBase64File($str64){
-
+		global $zbp;
+		if(!file_exists($zbp->usersdir . $this->Dir)){
+			@mkdir($zbp->usersdir . $this->Dir, 0777,true);	
+		}
+		$s=base64_decode($str64);
+		$this->Size=strlen($s);
+		file_put_contents($zbp->usersdir . $this->Dir . $this->Name, $s);
 	}
 
 	public function Time($s='Y-m-d H:i:s'){

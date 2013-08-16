@@ -139,8 +139,8 @@ class ZBlogPHP{
 		$this->LoadOption();
 
 		if($this->option['ZC_DEBUG_MODE']==true){
-			error_reporting(-1);
-			@ini_set("display_errors",1);
+			//error_reporting(-1);
+			//@ini_set("display_errors",1);
 		}
 
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){

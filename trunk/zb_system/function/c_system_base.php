@@ -8,7 +8,21 @@
  */
 
 error_reporting(0);
-@ini_set("display_errors",0);
+//@ini_set("display_errors",0);
+//@ini_set('magic_quotes_runtime',0);
+//@ini_set('magic_quotes_gpc',0);
+
+function _stripslashes(&$val) {
+	if(!is_array($val)) return stripslashes($val);
+	foreach($val as $k => &$v) $val[$k] = _stripslashes($v);
+	return $val;
+}
+
+if(get_magic_quotes_gpc()){
+	_stripslashes($_GET);
+	_stripslashes($_POST);
+	_stripslashes($_COOKIE);
+}
 
 ob_start();
 
