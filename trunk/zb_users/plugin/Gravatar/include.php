@@ -46,7 +46,7 @@ function Gravatar_Url(&$member){
 		$s=$default_url;
 		$s=str_replace('{%source%}', urlencode($source), $s);
 		$s=str_replace('{%emailmd5%}',md5($member->Email), $s);		
-		return $s;
+		return htmlspecialchars($s);
 	}else{
 		return $source;
 	}

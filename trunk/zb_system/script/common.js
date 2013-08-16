@@ -149,11 +149,10 @@ function VerifyMessage() {
 				if(intReplyID==0){
 					$(s).insertBefore("#AjaxCommentEnd");
 				}else{
-					$(s).insertBefore("#AjaxCommentEnd"+intReplyID);
+					$(s).insertBefore("#AjaxComment"+intReplyID);
 					window.location="#cmt"+intReplyID
 				}
-				$("#divAjaxComment"+i).fadeIn("slow");
-				$("#txaArticle").val("");
+				$("#content").val("");
 			}
 
 			$("#commentform :submit").removeClass("loading");
