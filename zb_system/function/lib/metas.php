@@ -17,8 +17,16 @@ class Metas {
 
 	public function __get($name)
 	{
-		if(!isset($this->Data[$name]))return '';
+		if(!isset($this->Data[$name]))return null;
 		return $this->Data[$name];
+	}
+
+	public static function ConvertArray($a){
+		$m = new Metas;		
+		if(is_array($a)){
+			$m->Data=$a;
+		}
+		return $m;
 	}
 
 	public function HasKey($name)

@@ -144,10 +144,101 @@ function zbp_getAuthors(){
 
 }
 
+function zbp_getPages($n){
+	global $zbp;
+
+	$strXML='<methodResponse><params><param><value><array><data>$%#1#%$</data></array></value></param></params></methodResponse>';
+	$strSingle='<value><struct>
+<member><name>dateCreated</name><value><dateTime.iso8601>$%#1#%$</dateTime.iso8601></value></member>
+<member><name>userid</name><value><string>$%#2#%$</string></value></member>
+<member><name>page_id</name><value><int>$%#3#%$</int></value></member>
+<member><name>page_status</name><value><string>$%#4#%$</string></value></member>
+<member><name>description</name><value><string>$%#5#%$</string></value></member>
+<member><name>title</name><value><string>$%#6#%$</string></value></member>
+<member><name>link</name><value><string>$%#7#%$</string></value></member>
+<member><name>permaLink</name><value><string>$%#8#%$</string></value></member>
+<member><name>mt_allow_comments</name><value><int>$%#9#%$</int></value></member>
+<member><name>wp_slug</name><value><string>$%#10#%$</string></value></member>
+</struct></value>';
+
+	$strAll='';
+
+	$array=$zbp->GetPageList(
+		'',
+		'',
+		array('log_PostTime'=>'DESC'),
+		array($n),
+		''
+	);
+
+	foreach ($array as $key => $value) {
+		$s=$strSingle;
+		$s=str_replace("$%#1#%$",htmlspecialchars($value->Time('c')),$s);
+		$s=str_replace("$%#2#%$",htmlspecialchars($value->AuthorID),$s);
+		$s=str_replace("$%#3#%$",htmlspecialchars($value->ID),$s);
+		$s=str_replace("$%#4#%$",htmlspecialchars($value->Status==0?'publish':'draft'),$s);
+		$s=str_replace("$%#5#%$",htmlspecialchars($value->Content),$s);
+		$s=str_replace("$%#6#%$",htmlspecialchars($value->Title),$s);
+		$s=str_replace("$%#7#%$",htmlspecialchars($value->Url),$s);
+		$s=str_replace("$%#8#%$",htmlspecialchars($value->Url),$s);
+		$s=str_replace("$%#9#%$",htmlspecialchars($value->IsLock?'2':'1'),$s);
+		$s=str_replace("$%#10#%$",htmlspecialchars($value->Alias),$s);
+
+		$strAll .= $s;
+	}
+
+	$strXML=str_replace("$%#1#%$",$strAll,$strXML);
+	echo $strXML;
+
+}
+
+function zbp_getPage($id){
+	global $zbp;
+
+	$strXML='<methodResponse><params><param>$%#1#%$</param></params></methodResponse>';
+	$strSingle='<value><struct>
+<member><name>dateCreated</name><value><dateTime.iso8601>$%#1#%$</dateTime.iso8601></value></member>
+<member><name>userid</name><value><string>$%#2#%$</string></value></member>
+<member><name>page_id</name><value><int>$%#3#%$</int></value></member>
+<member><name>page_status</name><value><string>$%#4#%$</string></value></member>
+<member><name>description</name><value><string>$%#5#%$</string></value></member>
+<member><name>title</name><value><string>$%#6#%$</string></value></member>
+<member><name>link</name><value><string>$%#7#%$</string></value></member>
+<member><name>permaLink</name><value><string>$%#8#%$</string></value></member>
+<member><name>mt_allow_comments</name><value><int>$%#9#%$</int></value></member>
+<member><name>wp_slug</name><value><string>$%#10#%$</string></value></member>
+</struct></value>';
+
+	$strAll='';
+
+	$article= new Post;
+	$article->LoadInfoByID($id);
+
+	$array=array();
+	$array[]=$article;
+
+	foreach ($array as $key => $value) {
+		$s=$strSingle;
+		$s=str_replace("$%#1#%$",htmlspecialchars($value->Time('c')),$s);
+		$s=str_replace("$%#2#%$",htmlspecialchars($value->AuthorID),$s);
+		$s=str_replace("$%#3#%$",htmlspecialchars($value->ID),$s);
+		$s=str_replace("$%#4#%$",htmlspecialchars($value->Status==0?'publish':'draft'),$s);
+		$s=str_replace("$%#5#%$",htmlspecialchars($value->Content),$s);
+		$s=str_replace("$%#6#%$",htmlspecialchars($value->Title),$s);
+		$s=str_replace("$%#7#%$",htmlspecialchars($value->Url),$s);
+		$s=str_replace("$%#8#%$",htmlspecialchars($value->Url),$s);
+		$s=str_replace("$%#9#%$",htmlspecialchars($value->IsLock?'2':'1'),$s);
+		$s=str_replace("$%#10#%$",htmlspecialchars($value->Alias),$s);
+
+		$strAll .= $s;
+	}
+
+	$strXML=str_replace("$%#1#%$",$strAll,$strXML);
+	echo $strXML;
+
+}
 
 function zbp_getRecentPosts($n){
-
-
 	global $zbp;
 
 	$strXML='<methodResponse><params><param><value><array><data>$%#1#%$</data></array></value></param></params></methodResponse>';
@@ -165,6 +256,8 @@ function zbp_getRecentPosts($n){
 <member><name>mt_excerpt</name><value><string>$%#11#%$</string></value></member>
 <member><name>mt_text_more</name><value><string>$%#12#%$</string></value></member>
 <member><name>mt_basname</name><value><string>$%#13#%$</string></value></member>
+<member><name>mt_allow_comments</name><value><int>$%#14#%$</int></value></member>
+<member><name>page_status</name><value><string>$%#15#%$</string></value></member>
 </struct></value>';
 
 
@@ -205,6 +298,8 @@ function zbp_getRecentPosts($n){
 		$s=str_replace("$%#11#%$",htmlspecialchars($mt_excerpt),$s);
 		$s=str_replace("$%#12#%$",htmlspecialchars($mt_text_more),$s);
 		$s=str_replace("$%#13#%$",htmlspecialchars($value->Alias),$s);
+		$s=str_replace("$%#14#%$",htmlspecialchars($value->IsLock?'2':'1'),$s);
+		$s=str_replace("$%#15#%$",htmlspecialchars($value->Status==0?'publish':'draft'),$s);
 		$strAll .= $s;
 	}
 
@@ -213,6 +308,20 @@ function zbp_getRecentPosts($n){
 
 }
 
+function zbp_delPage($id){
+
+	$strXML='<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
+
+	$_GET['id']=$id;
+
+	if(DelPage()==true){
+		$strXML=str_replace("$%#1#%$",1,$strXML);
+		echo $strXML;
+	}else{
+		$zbp->ShowError(0);
+	}
+
+}
 
 function zbp_deletePost($id){
 
@@ -247,6 +356,8 @@ function zbp_getPost($id){
 <member><name>mt_excerpt</name><value><string>$%#11#%$</string></value></member>
 <member><name>mt_text_more</name><value><string>$%#12#%$</string></value></member>
 <member><name>mt_basname</name><value><string>$%#13#%$</string></value></member>
+<member><name>mt_allow_comments</name><value><int>$%#14#%$</int></value></member>
+<member><name>page_status</name><value><string>$%#15#%$</string></value></member>
 </struct></value>';
 
 	$strAll='';
@@ -284,12 +395,13 @@ function zbp_getPost($id){
 		$s=str_replace("$%#11#%$",htmlspecialchars($mt_excerpt),$s);
 		$s=str_replace("$%#12#%$",htmlspecialchars($mt_text_more),$s);
 		$s=str_replace("$%#13#%$",htmlspecialchars($value->Alias),$s);
+		$s=str_replace("$%#14#%$",htmlspecialchars($value->IsLock?'2':'1'),$s);
+		$s=str_replace("$%#15#%$",htmlspecialchars($value->Status==0?'publish':'draft'),$s);
 		$strAll .= $s;
 	}
 
 	$strXML=str_replace("$%#1#%$",$strAll,$strXML);
 	echo $strXML;
-
 
 }
 
@@ -329,7 +441,7 @@ function zbp_getPostCategories($id){
 }
 
 
-function zbp_editPost($id,$xmlstring){
+function zbp_editPost($id,$xmlstring,$publish){
 	global $zbp;
 
 	$xml = simplexml_load_string($xmlstring);
@@ -339,8 +451,12 @@ function zbp_editPost($id,$xmlstring){
 		$post=array();
 		foreach ($xml->children() as $x) {
 			$a=(string)$x->name;
-			$b=$x->value->children()->asXML();
-			$b=str_replace(array('<string>','</string>','<dateTime.iso8601>','</dateTime.iso8601>','<int>','</int>','<array>','</array>','<data>','</data>'),array(''),$b);
+			if($a=='categories'){
+				$b=$x->value->children()->asXML();
+			}else{
+				$b=$x->value->children();
+			}
+			$b=str_replace(array('<array>','</array>','<data>','</data>','<string>','</string>'),array(''),$b);
 			$post[$a]=$b;
 		}
 
@@ -348,11 +464,20 @@ function zbp_editPost($id,$xmlstring){
 
 		$_POST['Title']=$post['title'];
 
+		if($publish){
+			$_POST['Status']=0;
+		}else{
+			$_POST['Status']=1;
+		}
+
 		if(isset($post['mt_basename'])){
 			$_POST['Alias']=$post['mt_basename'];
 		}
 		if(isset($post['dateCreated'])){
-			$_POST['PostTime']=$post['dateCreated'];
+			date_default_timezone_set('GMT');			
+			$_POST['PostTime']=strtotime($post['dateCreated']);
+			date_default_timezone_set($zbp->option['ZC_TIME_ZONE_NAME']);
+			$_POST['PostTime']=date('c',$_POST['PostTime']);
 		}
 		if(isset($post['wp_author_id'])){
 			$_POST['AuthorID']=$post['wp_author_id'];
@@ -372,6 +497,17 @@ function zbp_editPost($id,$xmlstring){
 			$catename=trim(GetValueInArray(explode('</value>',$post['categories']),0));
 			$_POST['CateID']=$zbp->GetCategoryByName($catename)->ID;
 		}
+		if(isset($post['mt_excerpt'])){
+			$_POST['Intro']=$post['mt_excerpt'];
+		}
+		if(isset($post['mt_text_more'])){
+			if($post['mt_text_more']!=''){
+				$_POST['Content']=$post['description'] . '<!--more-->' .$post['mt_text_more'];
+			}else{
+				$_POST['Content']=$post['description'];
+			}
+		}
+
 
 		$strXML='<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
 
@@ -386,13 +522,108 @@ function zbp_editPost($id,$xmlstring){
 
 }
 
+function zbp_setPostCategories(){
+	$strXML='<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
+	$strXML=str_replace("$%#1#%$",1,$strXML);
+	echo $strXML;	
+}
 
 
+function zbp_editPage($id,$xmlstring,$publish){
+	global $zbp;
+
+	$xml = simplexml_load_string($xmlstring);
+
+	if($xml){
+
+		$post=array();
+		foreach ($xml->children() as $x) {
+			$a=(string)$x->name;
+			if($a=='categories'){
+				$b=$x->value->children()->asXML();
+			}else{
+				$b=$x->value->children();
+			}
+			$b=str_replace(array('<array>','</array>','<data>','</data>','<string>','</string>'),array(''),$b);
+			$post[$a]=$b;
+		}
+
+		$_POST['ID']=$id;
+
+		$_POST['Title']=$post['title'];
+
+		$_POST['Content']=$post['description'];
+
+		$_POST['AuthorID']=$zbp->user->ID;
+
+		if($publish){
+			$_POST['Status']=0;
+		}else{
+			$_POST['Status']=1;
+		}
+
+		if(isset($post['mt_basename'])){
+			$_POST['Alias']=$post['mt_basename'];
+		}
+		if(isset($post['wp_author_id'])){
+			$_POST['AuthorID']=$post['wp_author_id'];
+		}
+		if(isset($post['mt_allow_comments'])){
+			if($post['mt_allow_comments']>0){
+				$_POST['IsLock']=$post['mt_allow_comments']-1;
+			}else{
+				$_POST['IsLock']=$post['mt_allow_comments'];
+			}
+		}
+
+		$strXML='<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
+
+		if(PostPage()==true){
+			$strXML=str_replace("$%#1#%$",1,$strXML);
+			echo $strXML;
+		}else{
+			$zbp->ShowError(0);
+		}
+
+	}
+
+}
+
+function zbp_newMediaObject($xmlstring){
+	global $zbp;
+
+	$xml = simplexml_load_string($xmlstring);
+
+	if($xml){
+		$post=array();
+		foreach ($xml->children() as $x) {
+			$a=(string)$x->name;
+			$b=$x->value->children();
+			$post[$a]=$b;
+		}
+		$upload = new Upload;
+		$f=GetGuid() . strrchr ($post['name'],'.');
+		$upload->Name = $f;
+		$upload->SourceName = $post['name'];
+		$upload->MimeType = $post['type'];
+		$upload->Size = 0;
+		$upload->AuthorID = $zbp->user->ID;
+		$upload->SaveBase64File($post['bits']);
+		$upload->Save();
+
+		$strXML='<methodResponse><params><param><value><struct><member><name>url</name><value><string>$%#1#%$</string></value></member></struct></value></param></params></methodResponse>';
+		$strXML=str_replace("$%#1#%$",htmlspecialchars($upload->Url),$strXML);
+		echo $strXML;
+
+	}
+
+
+}
 
 $zbp->Load();
 
 $xmlstring = file_get_contents( 'php://input' );
-logs($xmlstring);
+//logs($xmlstring);
 $xml = simplexml_load_string($xmlstring);
 
 Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','RespondError',PLUGIN_EXITSIGNAL_RETURN);
@@ -418,6 +649,26 @@ if($xml){
 			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
 			if($zbp->CheckRights('ArticleEdt')){
 				zbp_getCategories();
+			}else{
+				$zbp->ShowError(6);
+			}
+			break;
+		case 'mt.setPostCategories':
+			$username=(string)$xml->params->param[1]->value->string;
+			$password=(string)$xml->params->param[2]->value->string;
+			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if($zbp->CheckRights('ArticleEdt')){
+				zbp_setPostCategories();
+			}else{
+				$zbp->ShowError(6);
+			}
+			break;
+		case 'mt.getPostCategories':	
+			$username=(string)$xml->params->param[1]->value->string;
+			$password=(string)$xml->params->param[2]->value->string;
+			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if($zbp->CheckRights('ArticleEdt')){
+				zbp_getPostCategories((integer)$xml->params->param[0]->value->string);
 			}else{
 				$zbp->ShowError(6);
 			}
@@ -452,16 +703,6 @@ if($xml){
 				$zbp->ShowError(6);
 			}
 			break;
-		case 'blogger.deletePost':
-			$username=(string)$xml->params->param[2]->value->string;
-			$password=(string)$xml->params->param[3]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
-			if($zbp->CheckRights('ArticleDel')){
-				zbp_deletePost((integer)$xml->params->param[1]->value->string);
-			}else{
-				$zbp->ShowError(6);
-			}
-			break;
 		case 'metaWeblog.getPost':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
@@ -472,13 +713,12 @@ if($xml){
 				$zbp->ShowError(6);
 			}
 			break;
-
-		case 'mt.getPostCategories':	
-			$username=(string)$xml->params->param[1]->value->string;
-			$password=(string)$xml->params->param[2]->value->string;
+		case 'blogger.deletePost':
+			$username=(string)$xml->params->param[2]->value->string;
+			$password=(string)$xml->params->param[3]->value->string;
 			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
-			if($zbp->CheckRights('ArticleEdt')){
-				zbp_getPostCategories((integer)$xml->params->param[0]->value->string);
+			if($zbp->CheckRights('ArticleDel')){
+				zbp_deletePost((integer)$xml->params->param[1]->value->string);
 			}else{
 				$zbp->ShowError(6);
 			}
@@ -488,13 +728,91 @@ if($xml){
 			$password=(string)$xml->params->param[2]->value->string;
 			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
 			if($zbp->CheckRights('ArticlePst')){
-				zbp_editPost((integer)$xml->params->param[0]->value->string,$xml->params->param[3]->value->struct->asXML());
+				zbp_editPost((integer)$xml->params->param[0]->value->string,
+							 $xml->params->param[3]->value->struct->asXML(),
+							 (boolean)$xml->params->param[4]->value->boolean->asXML());
 			}else{
 				$zbp->ShowError(6);
 			}
 			break;
+		case 'metaWeblog.newPost':
+			$username=(string)$xml->params->param[1]->value->string;
+			$password=(string)$xml->params->param[2]->value->string;
+			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if($zbp->CheckRights('ArticlePst')){
+				zbp_editPost(0,
+							 $xml->params->param[3]->value->struct->asXML(),
+							 (boolean)$xml->params->param[4]->value->boolean->asXML());
+			}else{
+				$zbp->ShowError(6);
+			}
+			break;
+		case 'wp.newPage':
+			$username=(string)$xml->params->param[1]->value->string;
+			$password=(string)$xml->params->param[2]->value->string;
+			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if($zbp->CheckRights('PagePst')){
+				zbp_editPage(0,
+							 $xml->params->param[3]->value->struct->asXML(),
+							 (boolean)$xml->params->param[4]->value->boolean->asXML());
+			}else{
+				$zbp->ShowError(6);
+			}
+			break;
+		case 'wp.editPage':
+			$username=(string)$xml->params->param[2]->value->string;
+			$password=(string)$xml->params->param[3]->value->string;
+			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if($zbp->CheckRights('PagePst')){
+				zbp_editPage((integer)$xml->params->param[1]->value->string,
+							 $xml->params->param[4]->value->struct->asXML(),
+							 (boolean)$xml->params->param[5]->value->boolean->asXML());
+			}else{
+				$zbp->ShowError(6);
+			}
+			break;
+		case 'wp.getPages':
+			$username=(string)$xml->params->param[1]->value->string;
+			$password=(string)$xml->params->param[2]->value->string;
+			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if($zbp->CheckRights('PageEdt')){
+				zbp_getPages((integer)$xml->params->param[3]->value->int);
+			}else{
+				$zbp->ShowError(6);
+			}
+			break;
+		case 'wp.getPage':
+			$username=(string)$xml->params->param[2]->value->string;
+			$password=(string)$xml->params->param[3]->value->string;
+			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if($zbp->CheckRights('PageEdt')){
+				zbp_getPage((integer)$xml->params->param[1]->value->string);
+			}else{
+				$zbp->ShowError(6);
+			}
+			break;
+		case 'wp.deletePage':
+			$username=(string)$xml->params->param[1]->value->string;
+			$password=(string)$xml->params->param[2]->value->string;
+			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if($zbp->CheckRights('PageDel')){
+				zbp_delPage((integer)$xml->params->param[3]->value->string);
+			}else{
+				$zbp->ShowError(6);
+			}
+			break;
+		case 'metaWeblog.newMediaObject':
+			$username=(string)$xml->params->param[1]->value->string;
+			$password=(string)$xml->params->param[2]->value->string;
+			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if($zbp->CheckRights('UploadPst')){
+				zbp_newMediaObject($xml->params->param[3]->value->struct->asXML());
+			}else{
+				$zbp->ShowError(6);
+			}
+			break;		
 		default:
-			logs($xmlstring);
+			//logs($xmlstring);
 			$zbp->ShowError(1);
 			break;
 	}
