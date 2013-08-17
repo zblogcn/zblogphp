@@ -11,7 +11,7 @@ class Rss2 extends DOMDocument {
 	private $channel;
 
 	public function __construct($title,$link,$description){
-		parent::__construct();
+		parent::__construct('1.0', 'utf-8');
 		$this->formatOutput = true;
 
 		$root = $this->appendChild($this->createElement('rss'));

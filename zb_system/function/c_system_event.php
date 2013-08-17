@@ -7,6 +7,47 @@
  */
 
 
+
+
+
+function VerifyLogin(){
+	global $zbp;
+
+	if (isset($zbp->membersbyname[GetVars('username','POST')])) {
+		if($zbp->Verify_MD5(GetVars('username','POST'),GetVars('password','POST'))){
+			$un=GetVars('username','POST');
+			$ps=md5($zbp->user->Password . $zbp->path);
+			if(GetVars('savedate')==0){
+				setcookie("username", $un,0,$zbp->cookiespath);
+				setcookie("password", $ps,0,$zbp->cookiespath);
+			}else{
+				setcookie("username", $un, time()+3600*24*GetVars('savedate','POST'),$zbp->cookiespath);
+				setcookie("password", $ps, time()+3600*24*GetVars('savedate','POST'),$zbp->cookiespath);
+			}
+			return true;
+		}else{
+			$zbp->ShowError(8);
+		}
+	}else{
+		$zbp->ShowError(8);
+	}
+}
+
+
+function Logout(){
+	global $zbp;
+
+	setcookie('username', '',time() - 3600,$zbp->cookiespath);
+	setcookie('password', '',time() - 3600,$zbp->cookiespath);
+
+}
+
+
+
+
+
+
+################################################################################################################
 function ViewList($page,$cate,$auth,$date,$tags){
 	global $zbp;
 	foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
@@ -63,10 +104,23 @@ function ViewPost($id,$alias){
 		$fpreturn=$fpname($id,$alias);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
-	
+
+	$w=array();
+
+	if($id!==null){
+		$w[]=array('=','log_ID',$id);
+	}elseif($alias!==null){
+		$w[]=array('array',array(array('log_Alias',$alias),array('log_Title',$alias)));
+	}else{
+		Http404();
+		$zbp->ShowError(9);
+		die();
+	}
+
+	$w[]=array('=','log_Status',0);
 	$articles=$zbp->GetPostList(
 		array('*'),
-		array(array('=','log_ID',$id),array('=','log_Status',0)),
+		$w,
 		null,
 		array(1),
 		null
@@ -74,6 +128,7 @@ function ViewPost($id,$alias){
 	if(count($articles)==0){
 		Http404();
 		$zbp->ShowError(9);
+		die();
 	}
 
 	$article = $articles[0];
@@ -112,8 +167,12 @@ function ViewPost($id,$alias){
 		null
 	);
 
-	foreach ($comments as &$comment) $comment->Content.='<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
-	foreach ($comments2 as &$comment) $comment->Content.='<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+	foreach ($comments as &$comment){
+		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+	}
+	foreach ($comments2 as &$comment){
+		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+	}
 
 	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);
@@ -159,10 +218,15 @@ function ViewComments($postid,$page){
 		null,
 		null
 	);
-	foreach ($comments as &$comment) $comment->Content.='<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
-	foreach ($comments2 as &$comment) $comment->Content.='<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
 
-	$zbp->template->SetTags('title',$post->Title);
+	foreach ($comments as &$comment){
+		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+	}
+	foreach ($comments2 as &$comment){
+		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+	}
+
+	$zbp->template->SetTags('title',$zbp->title);
 	$zbp->template->SetTags('article',$post);
 	$zbp->template->SetTags('type','comment');
 	$zbp->template->SetTags('page',$page);
@@ -178,52 +242,19 @@ function ViewComment($id){
 	global $zbp;
 
 	$template='comment';
-	$cmt=$zbp->GetCommentByID($id);
+	$comment=$zbp->GetCommentByID($id);
 	$post=new Post;
-	$post->LoadInfoByID($cmt->LogID);
-	
+	$post->LoadInfoByID($comment->LogID);
+
+	$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+
 	$zbp->template->SetTags('title',$zbp->title);
-	$zbp->template->SetTags('comment',$cmt);
+	$zbp->template->SetTags('comment',$comment);
 	$zbp->template->SetTags('article',$post);
 	$zbp->template->SetTags('type','comment');
 	$zbp->template->SetTags('page',1);
 
 	$zbp->template->display($template);
-
-}
-
-
-
-
-
-################################################################################################################
-function VerifyLogin(){
-	global $zbp;
-
-	if (isset($zbp->membersbyname[GetVars('username','POST')])) {
-		if($zbp->Verify_MD5(GetVars('username','POST'),GetVars('password','POST'))){
-			if(GetVars('savedate')==0){
-				setcookie("username", GetVars('username','POST'),0,$zbp->cookiespath);
-				setcookie("password", GetVars('password','POST'),0,$zbp->cookiespath);
-			}else{
-				setcookie("username", GetVars('username','POST'), time()+3600*24*GetVars('savedate','POST'),$zbp->cookiespath);
-				setcookie("password", GetVars('password','POST'), time()+3600*24*GetVars('savedate','POST'),$zbp->cookiespath);
-			}
-			return true;
-		}else{
-			$zbp->ShowError(8);
-		}
-	}else{
-		$zbp->ShowError(8);
-	}
-}
-
-
-function Logout(){
-	global $zbp;
-
-	setcookie('username', '',time() - 3600,$zbp->cookiespath);
-	setcookie('password', '',time() - 3600,$zbp->cookiespath);
 
 }
 
@@ -256,14 +287,25 @@ function PostArticle(){
 		}
 	}
 
+	if(!isset($_POST['AuthorID'])){
+		$_POST['AuthorID']=$zbp->user->ID;
+	}else{
+		if(($_POST['AuthorID']!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){
+			$_POST['AuthorID']=$zbp->user->ID;
+		}
+	}
+
 	if(isset($_POST['PostTime'])){
 		$_POST['PostTime']=strtotime($_POST['PostTime']);
 	}
 
 	$article = new Post();
 	if(GetVars('ID','POST') == 0){
+		if(!$zbp->CheckRights('ArticlePub')){$article->Status=ZC_POST_STATUS_AUDITING;}
 	}else{
 		$article->LoadInfoByID(GetVars('ID','POST'));
+		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){$zbp->ShowError(11);}
+		if((!$zbp->CheckRights('ArticlePub'))&&($article->Status==ZC_POST_STATUS_AUDITING)){unset($_POST['Status']);}
 	}
 	$article->Type = ZC_POST_TYPE_ARTICLE;
 
@@ -279,6 +321,9 @@ function PostArticle(){
 	if(isset($_POST['PostTime'])) $article->PostTime = GetVars('PostTime','POST');
 	if(isset($_POST['IsTop'])   ) $article->IsTop    = GetVars('IsTop','POST');
 	if(isset($_POST['IsLock'])  ) $article->IsLock   = GetVars('IsLock','POST');
+
+
+	FilterArticle($article);
 
 	$article->Save();
 
@@ -317,10 +362,19 @@ function PostPage(){
 		$_POST['PostTime']=strtotime($_POST['PostTime']);
 	}	
 
+	if(!isset($_POST['AuthorID'])){
+		$_POST['AuthorID']=$zbp->user->ID;
+	}else{
+		if(($_POST['AuthorID']!=$zbp->user->ID )&&(!$zbp->CheckRights('PageAll'))){
+			$_POST['AuthorID']=$zbp->user->ID;
+		}
+	}
+
 	$article = new Post();
 	if(GetVars('ID','POST') == 0){
 	}else{
 		$article->LoadInfoByID(GetVars('ID','POST'));
+		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('PageAll'))){$zbp->ShowError(11);}
 	}
 	$article->Type = ZC_POST_TYPE_PAGE;
 
@@ -332,6 +386,8 @@ function PostPage(){
 	if(isset($_POST['AuthorID'])) $article->AuthorID = GetVars('AuthorID','POST');
 	if(isset($_POST['PostTime'])) $article->PostTime = GetVars('PostTime','POST');
 	if(isset($_POST['IsLock'])  ) $article->IsLock   = GetVars('IsLock','POST');
+
+	FilterArticle($article);
 
 	$article->Save();
 	return true;
@@ -397,6 +453,9 @@ function PostComment(){
 	$cmt->PostTime     = GetVars('PostTime','POST');
 	$cmt->IP           = GetVars('IP','POST');
 	$cmt->Agent        = GetVars('Agent','POST');	
+
+
+	FilterComment($cmt);
 
 	$cmt->Save();
 	
@@ -727,5 +786,57 @@ function SaveSetting(){
 		$zbp->option[$key]=trim(str_replace(array("\r","\n"),array("",""),$value));
 	}
 	$zbp->SaveOption();
+}
+
+
+
+
+
+
+
+
+
+################################################################################################################
+function FilterComment(&$comment){
+	global $zbp;
+
+	if(!CheckRegExp($comment->Name,'[username]')){
+		$zbp->ShowError(15);
+	}
+	if($comment->Email && (!CheckRegExp($comment->Email,'[email]'))){
+		$zbp->ShowError(29);
+	}
+	if($comment->HomePage && (!CheckRegExp($comment->HomePage,'[homepage]'))){
+		$zbp->ShowError(30);
+	}
+
+	$comment->Name=substr($comment->Name, 0,20);
+	$comment->Email=substr($comment->Email, 0,50);
+	$comment->HomePage=substr($comment->HomePage, 0,250);
+
+	$comment->Content=TransferHTML($comment->Content,'[nohtml]');
+
+	$comment->Content=substr($comment->Content, 0,1000);
+	$comment->Content=trim($comment->Content);
+	if(strlen($comment->Content)==0){
+		$zbp->ShowError(46);
+	}
+}
+
+
+function FilterArticle(&$article){
+	global $zbp;
+
+	if($article->Type == ZC_POST_TYPE_ARTICLE){
+		if(!$zbp->CheckRights('ArticleAll')){
+			$article->Content=TransferHTML($article->Content,'[noscript]');
+			$article->Intro=TransferHTML($article->Intro,'[noscript]');
+		}
+	}elseif($article->Type == ZC_POST_TYPE_PAGE){
+		if(!$zbp->CheckRights('PageAll')){
+			$article->Content=TransferHTML($article->Content,'[noscript]');
+			$article->Intro=TransferHTML($article->Intro,'[noscript]');
+		}
+	}
 }
 ?>

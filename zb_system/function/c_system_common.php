@@ -79,35 +79,68 @@ function GetPassWordByGuid($ps,$guid){
 function GetDirsInDir($dir){
 	$dirs=array();
 
-	foreach (scandir($dir) as $d) {
-		if (is_dir($dir .  $d)) {
-			if( ($d<>'.') && ($d<>'..') ){
-				$dirs[]=$d;
+
+	if(function_exists('scandir')){
+		foreach (scandir($dir) as $d) {
+			if (is_dir($dir .  $d)) {
+				if( ($d<>'.') && ($d<>'..') ){
+					$dirs[]=$d;
+				}
 			}
+		}
+	}else{
+		if ($handle = opendir($dir)) {
+			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != "..") {
+					if (is_dir($dir .  $file)) {
+						$dirs[]=$file;
+					}
+				}
+			}
+			closedir($handle);
 		}
 	}
 
 	return $dirs;
-
 }
 
 
 function GetFilesInDir($dir,$type){
 
 	$files=array();
+	if(function_exists('scandir')){
+		foreach (scandir($dir) as $f) {
+			if (is_file($dir . $f)) {
+				foreach (explode("|",$type) as $t) {
+					$t='.' . $t;
+					$i=strlen($t);
+					if (substr($f,-$i,$i)==$t) {
+						$sortname=substr($f,0,strlen($f)-$i);
+						$files[$sortname]=$dir . $f;
+						break;
+					}
+				}
 
-	foreach (scandir($dir) as $f) {
-		if (is_file($dir . $f)) {
-			foreach (explode("|",$type) as $t) {
-				$t='.' . $t;
-				$i=strlen($t);
-				if (substr($f,-$i,$i)==$t) {
-					$sortname=substr($f,0,strlen($f)-$i);
-					$files[$sortname]=$dir . $f;
-					break;
+			}
+		}
+	}else{
+		if ($handle = opendir($dir)) {
+			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != "..") {
+					if (is_file($dir .  $file)) {
+						foreach (explode("|",$type) as $t) {
+							$t='.' . $t;
+							$i=strlen($t);
+							if (substr($file,-$i,$i)==$t) {
+								$sortname=substr($file,0,strlen($file)-$i);
+								$files[$sortname]=$dir . $file;
+								break;
+							}
+						}
+					}
 				}
 			}
-
+			closedir($handle);
 		}
 	}
 
@@ -278,8 +311,50 @@ function RespondError($faultString){
 
 }
 
+function CheckRegExp($source,$para){
+	if(strpos($para, '[username]')!==false){
+		$para="/^[\.\_A-Za-z0-9\x{4e00}-\x{9fa5}]+$/u";
+	}
+	if(strpos($para, '[password]')!==false){
+		$para="/^[A-Za-z0-9`~!@#\$%\^&\*\-_]+$/u";
+	}
+	if(strpos($para, '[email]')!==false){
+		$para="/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*\.)+[a-zA-Z]*)$/u";
+	}
+	if(strpos($para, '[homepage]')!==false){
+		$para="/^[a-zA-Z]+:\/\/[a-zA-Z0-9\_\-\.\&\?\/:=#\x{4e00}-\x{9fa5}]+$/u";
+	}
+	if(!$para)return false;
+	return (bool)preg_match($para,$source);
+}
 
-function TransferHTML(&$source,$para){
+
+function TransferHTML($source,$para){
+
+	if(strpos($para, '[nohtml]')!==false){
+		$source=preg_replace("/<(\/?html.*?)>/si","",$source);
+	}
+
+	if(strpos($para, '[noscript]')!==false){
+		$source=preg_replace("/<(script.*?)>(.*?)<(\/script.*?)>/si","",$source);
+		$source=preg_replace("/<(\/?script.*?)>/si","",$source); 
+		$source=preg_replace("/javascript/si","",$source);
+		$source=preg_replace("/vbscript/si","",$source);
+		$source=preg_replace("/on([a-z]+)\s*=/si","on\\=",$source);
+	}
+	if(strpos($para, '[enter]')!==false){
+		$source=str_replace("\r\n","<br/>",$source);
+		$source=str_replace("\n","<br/>",$source);
+		$source=str_replace("\r","<br/>",$source);
+		$source=preg_replace("/(<br\/>)+/", "<br/>", $source);
+	}
+	if(strpos($para, '[filename]')!==false){
+		$source=str_replace(array("/","\\",":","?","*","\"","<",">","|"," "),array(""),$source);
+	}
+	if(strpos($para, '[normalname]')!==false){
+		$source=str_replace(array("$","(","*","+",",","[","]","{","}","?","\\","^","|",":","'","\""),array(""),$source);
+	}
+
 	return $source;
 }
 

@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS %pre%module (
   mod_Type varchar(5) NOT NULL DEFAULT '',
   mod_MaxLi int(11) NOT NULL DEFAULT '0',
   mod_Source varchar(50) NOT NULL DEFAULT '',
-  mod_IsHideTitle tinyint(1) NOT NULL DEFAULT b'0',
+  mod_IsHideTitle tinyint(1) NOT NULL DEFAULT '0',
   mod_Meta text NOT NULL,
   PRIMARY KEY (mod_ID)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
