@@ -67,6 +67,9 @@ class ZBlogPHP{
 
 	public $usersdir = null;
 	public $comments = array();
+	
+	public $header = null;
+	public $footer = null;
 
 	static public function GetInstance(){
 		if(!isset(self::$zbp)){
@@ -367,6 +370,7 @@ class ZBlogPHP{
 		if(!is_array($array))return false;
 		foreach ($array as $key => $value) {
 			if($key=='ZC_BLOG_HOST')continue;
+			if($key=='ZC_YUN_SITE')continue;
 			$this->option[$key]=$value;
 		}
 
@@ -1076,6 +1080,13 @@ class ZBlogPHP{
 
 
 	function ShowError($idortext){
+
+		if($idortext==2){
+			Http404();
+		}else{
+			Http500();
+		}
+
 		if(is_numeric($idortext))$idortext=$this->lang['error'][$idortext];
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {

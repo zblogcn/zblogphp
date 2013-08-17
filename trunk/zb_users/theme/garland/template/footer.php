@@ -11,5 +11,6 @@
   </div>
 <!-- /layout -->
 <div id="overlay" style="display: none;"/></div>
+{$footer}
 </body>
 </html>

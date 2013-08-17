@@ -185,24 +185,24 @@ class UrlRule
 	}
 
 	
-	public function Make_httpini(){
+	public function Make_httpdini(){
 		global $zbp;
 
 		$s  ='[ISAPI_Rewrite]' . "\r\n";
 		$s .="\r\n";
 
-		$s .= $this->Rewrite_httpini($zbp->option['ZC_ARTICLE_REGEX'],'article') . "\r\n";
-		$s .= $this->Rewrite_httpini($zbp->option['ZC_INDEX_REGEX'],'index') . "\r\n";
-		$s .= $this->Rewrite_httpini($zbp->option['ZC_CATEGORY_REGEX'],'cate') . "\r\n";
-		$s .= $this->Rewrite_httpini($zbp->option['ZC_TAGS_REGEX'],'tags') . "\r\n";
-		$s .= $this->Rewrite_httpini($zbp->option['ZC_DATE_REGEX'],'date') . "\r\n";
-		$s .= $this->Rewrite_httpini($zbp->option['ZC_AUTHOR_REGEX'],'auth') . "\r\n";
-		$s .= $this->Rewrite_httpini($zbp->option['ZC_PAGE_REGEX'],'page') . "\r\n";
+		$s .= $this->Rewrite_httpdini($zbp->option['ZC_ARTICLE_REGEX'],'article') . "\r\n";
+		$s .= $this->Rewrite_httpdini($zbp->option['ZC_INDEX_REGEX'],'index') . "\r\n";
+		$s .= $this->Rewrite_httpdini($zbp->option['ZC_CATEGORY_REGEX'],'cate') . "\r\n";
+		$s .= $this->Rewrite_httpdini($zbp->option['ZC_TAGS_REGEX'],'tags') . "\r\n";
+		$s .= $this->Rewrite_httpdini($zbp->option['ZC_DATE_REGEX'],'date') . "\r\n";
+		$s .= $this->Rewrite_httpdini($zbp->option['ZC_AUTHOR_REGEX'],'auth') . "\r\n";
+		$s .= $this->Rewrite_httpdini($zbp->option['ZC_PAGE_REGEX'],'page') . "\r\n";
 
 		return $s;
 	}
 
-	public function Rewrite_httpini($url,$type){
+	public function Rewrite_httpdini($url,$type){
 		global $zbp;
 
 		$s=$url;

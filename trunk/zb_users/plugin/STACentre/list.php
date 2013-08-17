@@ -19,7 +19,7 @@ if(count($_GET)>0){
 	}elseif(GetVars('mak','GET')=='2'){
 		@file_put_contents($zbp->path . 'web.config',show_webconfig());
 	}elseif(GetVars('mak','GET')=='3'){
-		@file_put_contents($zbp->path . 'http.ini',iconv('UTF-8', 'ASCII//IGNORE', show_httpini()));
+		@file_put_contents($zbp->path . 'httpd.ini',iconv('UTF-8', 'ASCII//IGNORE', show_httpini()));
 	}
 
 	if(GetVars('del','GET')=='1'){
@@ -27,7 +27,7 @@ if(count($_GET)>0){
 	}elseif(GetVars('del','GET')=='2'){
 		@unlink($zbp->path . 'web.config');
 	}elseif(GetVars('del','GET')=='3'){
-		@unlink($zbp->path . 'http.ini');
+		@unlink($zbp->path . 'httpd.ini');
 	}
 
 	$zbp->SetHint('good');
@@ -43,7 +43,7 @@ function show_htaccess(){
 
 function show_httpini(){
 	$ur=new UrlRule("");
-	return $ur->Make_httpini();
+	return $ur->Make_httpdini();
 }
 
 function show_webconfig(){
