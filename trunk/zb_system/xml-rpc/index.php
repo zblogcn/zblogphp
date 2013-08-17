@@ -163,9 +163,14 @@ function zbp_getPages($n){
 
 	$strAll='';
 
+	$w=array();
+	if(!$zbp->CheckRights('PageAll')){
+		$w[]=array('=','log_AuthorID',$zbp->user->ID);
+	}
+
 	$array=$zbp->GetPageList(
 		'',
-		'',
+		$w,
 		array('log_PostTime'=>'DESC'),
 		array($n),
 		''
@@ -213,6 +218,7 @@ function zbp_getPage($id){
 
 	$article= new Post;
 	$article->LoadInfoByID($id);
+		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('PageAll'))){$zbp->ShowError(11);}
 
 	$array=array();
 	$array[]=$article;
@@ -263,9 +269,14 @@ function zbp_getRecentPosts($n){
 
 	$strAll='';
 
+	$w=array();
+	if(!$zbp->CheckRights('ArticleAll')){
+		$w[]=array('=','log_AuthorID',$zbp->user->ID);
+	}
+
 	$array=$zbp->GetArticleList(
 		'',
-		'',
+		$w,
 		array('log_PostTime'=>'DESC'),
 		array($n),
 		''
@@ -364,6 +375,7 @@ function zbp_getPost($id){
 
 	$article= new Post;
 	$article->LoadInfoByID($id);
+	if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){$zbp->ShowError(11);}
 
 	$array=array();
 	$array[]=$article;
@@ -481,9 +493,11 @@ function zbp_editPost($id,$xmlstring,$publish){
 		}
 		if(isset($post['wp_author_id'])){
 			$_POST['AuthorID']=$post['wp_author_id'];
+		}else{
+			$_POST['AuthorID']=$zbp->user->ID;
 		}
 		if(isset($post['mt_keywords'])){
-			$_POST['Tags']=$post['mt_keywords'];
+			$_POST['Tag']=$post['mt_keywords'];
 		}
 		if(isset($post['mt_allow_comments'])){
 			if($post['mt_allow_comments']>0){

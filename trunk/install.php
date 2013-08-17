@@ -3,7 +3,7 @@
 #//              Z-BlogPHP 在线安装程序
 #///////////////////////////////////////////////////////////////////////////////
 
-//error_reporting(0);
+//error_reporting(E_ALL);
 //ob_start();
 ?>
 <!DOCTYPE html>

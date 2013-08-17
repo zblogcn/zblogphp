@@ -24,7 +24,7 @@ class Post extends Base{
 
 		$this->ID = 0;
 		$this->Title	= $GLOBALS['lang']['msg']['unnamed'];
-		$this->PostTime	= time();		
+		$this->PostTime	= time();
 	}
 
 
@@ -65,6 +65,7 @@ class Post extends Base{
 			case 'Url':
 			case 'Tags':
 			case 'TagsName':
+			case 'TagsCount':
 			case 'CommentPostUrl':
 				return null;
 				break;
@@ -98,12 +99,19 @@ class Post extends Base{
 					$u = new UrlRule($zbp->option['ZC_PAGE_REGEX']);
 				}
 				$u->Rules['{%id%}']=$this->ID;
-				$u->Rules['{%alias%}']=$this->Alias;
+				if($this->Alias){
+					$u->Rules['{%alias%}']=$this->Alias;
+				}else{
+					$u->Rules['{%alias%}']=urlencode($this->Title);
+				}
 				return $u->Make();
 				break;
 			case 'Tags':
 				return $zbp->LoadTagsByIDString($this->Tag);
 				break;
+			case 'TagsCount':
+				return substr_count($this->Tag, '{');
+				break;				
 			case 'TagsName':
 				return $this->TagsToNameString;
 			case 'Template':

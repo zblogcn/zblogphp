@@ -408,7 +408,19 @@ class ZBlogPHP{
 	}
 
 	public function Verify(){
-		return $this->Verify_MD5(GetVars('username','COOKIE'),GetVars('password','COOKIE'));
+		return $this->Verify_MD5Path(GetVars('username','COOKIE'),GetVars('password','COOKIE'));
+	}
+
+	public function Verify_MD5Path($name,$ps_and_path){
+		if (isset($this->membersbyname[$name])){
+			$m=$this->membersbyname[$name];
+			if(md5($m->Password . $this->path) == $ps_and_path){
+				$this->user=$m;
+				return true;
+			}else{
+				return false;
+			}
+		}
 	}
 
 	public function Verify_MD5($name,$md5pw){
@@ -662,9 +674,14 @@ class ZBlogPHP{
 		if($this->option['ZC_YUN_SITE'])return false;
 		//初始化模板
 		$this->LoadTemplates();
-		$this->templates['comments']='<label style="display:none;" id="AjaxCommentBegin"></label>' . $this->templates['comments'] . '<label style="display:none;" id="AjaxCommentEnd"></label>';
 
-
+		//
+		$this->templates['comments']='<label id="AjaxCommentBegin"></label>' .
+									 	$this->templates['comments'] . 
+									 	'<label id="AjaxCommentEnd"></label>';
+		if(strpos($this->templates['comment'], 'id="cmt{$comment->ID}"')===false&&strpos($this->templates['comment'], 'id=\'cmt{$comment->ID}\'')===false){
+			$this->templates['comment']='<label id="cmt{$comment->ID}"></label>'. $this->templates['comment'];
+		}
 
 		$dir=$this->usersdir . 'theme/'. $this->theme .'/php/';
 

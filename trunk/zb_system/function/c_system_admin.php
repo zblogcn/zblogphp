@@ -323,7 +323,7 @@ function Admin_SiteInfo(){
 	echo '</div>';
 	echo '<div id="divMain2">';
 
-	echo '<table class="tableFull tableBorder" id="tbStatistic"><tr><th colspan="4">&nbsp;' . $zbp->lang['msg']['site_analyze'] . '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');">[' . $zbp->lang['msg']['refresh_cache'] . ']</a> <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+	echo '<table class="tableFull tableBorder" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');">[' . $zbp->lang['msg']['refresh_cache'] . ']</a> <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 	echo $zbp->cache->reload_statistic;
 	echo '</table>';
 
@@ -480,9 +480,14 @@ $p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=$zbp->pagebarcount;
 
+$w=array();
+if(!$zbp->CheckRights('PageAll')){
+	$w[]=array('=','log_AuthorID',$zbp->user->ID);
+}
+
 $array=$zbp->GetPageList(
 	'',
-	'',
+	$w,
 	array('log_PostTime'=>'DESC'),
 	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
 	array('pagebar'=>$p)
@@ -727,8 +732,10 @@ foreach ($array as $member) {
 	echo '<td class="td10">' . $member->Uploads . '</td>';
 	echo '<td class="td10 tdCenter">';
 	echo '<a href="../cmd.php?act=MemberEdt&amp;id='. $member->ID .'"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+if($zbp->CheckRights('MemberDel')){
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=MemberDel&amp;id='. $member->ID .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] ." title=".$zbp->lang['msg']['del'] .'" width="16" /></a>';
+}
 	echo '</td>';
 
 	echo '</tr>';

@@ -47,6 +47,9 @@ abstract class Base
 		$array = $zbp->db->Query($s);
 		if (count($array)>0) {
 			$this->LoadInfoByAssoc($array[0]);
+			return true;
+		}else{
+			return false;
 		}
 
 	}
@@ -63,6 +66,7 @@ abstract class Base
 				$this->Data[$key]=$array[$value[0]];
 			}			
 		}
+		return true;
 	}
 
 	function LoadInfoByArray($array){
@@ -79,6 +83,7 @@ abstract class Base
 			}
 			$i += 1;
 		}
+		return true;
 	}	
 
 	function Save(){
@@ -107,12 +112,15 @@ abstract class Base
 			return $zbp->db->Update($sql);
 		}
 
+		return true;
+
 	}
 
 	function Del(){
 		global $zbp;
 		$sql = $zbp->db->sql->Delete(get_class($this),array(array('=',$this->datainfo['ID'][0],$this->ID)));
 		$zbp->db->Delete($sql);
+		return true;
 	}
 }
 

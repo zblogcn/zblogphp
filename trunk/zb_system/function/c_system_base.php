@@ -160,6 +160,7 @@ $actions=array(
 	'ModuleMng'=>1,
 
 	'ArticleAll'=>2,
+	'PageAll'=>2,
 	'CategoryAll'=>2,
 	'CommentAll'=>2,
 	'MemberAll'=>1,

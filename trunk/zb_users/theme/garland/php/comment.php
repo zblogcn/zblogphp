@@ -1,4 +1,4 @@
-﻿<div class="comment even" id="cmt<#article/comment/id#>">
+<label id="cmt<?php  echo $comment->ID;  ?>"></label>﻿<div class="comment even" id="cmt<#article/comment/id#>">
 	<div class="clear-block">
 		<span class="submitted"><?php  echo $comment->Time();  ?> — <a href="<?php  echo $comment->Author->HomePage;  ?>" title="<?php  echo $comment->Author->HomePage;  ?>"  rel="nofollow" ><?php  echo $comment->Author->Name;  ?></a>  <a href="#cmt<?php  echo $comment->ID;  ?>" onclick="RevertComment('<?php  echo $comment->ID;  ?>')" class="comment_reply" title="回复<?php  echo $comment->Author->Name;  ?>">回复</a></span>
 		<h3><a href="#cmt<?php  echo $comment->ID;  ?>" class="active"><?php  echo $key+1;  ?></a> .</h3>
