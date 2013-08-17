@@ -19,7 +19,7 @@ switch (GetVars('type','GET')) {
 		misc_updateinfo();
 		break;
 	case 'showtags':
-		if (!$zbp->CheckRights('ArticleEdt')) {Http404();}
+		if (!$zbp->CheckRights('ArticleEdt')) {Http404();die();}
 		misc_showtags();
 		break;
 	case 'vrs':

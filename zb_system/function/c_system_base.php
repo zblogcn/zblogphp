@@ -77,8 +77,12 @@ foreach ($lib_array as $f) {
 	require $blogpath.'zb_system/function/lib/' . $f . '.php';
 }
 
+$zbpvers=array();
+$zbpvers[]='1.0 Alpha Build 130707';
 
 #定义常量
+define('ZC_BLOG_VERSION', '1.0 Alpha Build 130707');
+
 define('ZC_POST_TYPE_ARTICLE', 0);
 define('ZC_POST_TYPE_PAGE', 1);
 
@@ -198,21 +202,25 @@ ActivePlugin();
 /*system plugin*/
 function zbp_default_cache_read(){
 	global $zbp;
-	if($zbp->cache->HasKey('default_html')){
-		if((integer)$zbp->cache->default_html_time < (integer)$zbp->cache->refesh )return;
-		echo $zbp->cache->default_html;
-		RunTime();
-		die();
+	if(count($_GET)==0){
+		if($zbp->cache->HasKey('default_html')){
+			if((integer)$zbp->cache->default_html_time < (integer)$zbp->cache->refesh )return;
+			echo $zbp->cache->default_html;
+			RunTime();
+			die();
+		}
 	}
 }
 
 function zbp_default_cache_write(){
 	global $zbp;
-	$s=ob_get_clean();
-	echo $s;
-	$zbp->cache->default_html=$s;
-	$zbp->cache->default_html_time=time();
-	$zbp->SaveCache();
+	if(count($_GET)==0){
+		$s=ob_get_clean();
+		echo $s;
+		$zbp->cache->default_html=$s;
+		$zbp->cache->default_html_time=time();
+		$zbp->SaveCache();
+	}
 }
 
 #Add_Filter_Plugin('Filter_Plugin_Index_Begin','zbp_default_cache_read');

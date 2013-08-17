@@ -93,10 +93,16 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	$zbp->template->SetTags('pagebar',$pagebar);
 	$zbp->template->SetTags('type',$type);
 	$zbp->template->SetTags('page',$page);
+	$zbp->template->SetTags('header',$zbp->header);
+	$zbp->template->SetTags('footer',$zbp->footer);
 
 	$zbp->template->display($template);
 
 }
+
+
+
+
 
 function ViewPost($id,$alias){
 	global $zbp;
@@ -112,8 +118,7 @@ function ViewPost($id,$alias){
 	}elseif($alias!==null){
 		$w[]=array('array',array(array('log_Alias',$alias),array('log_Title',$alias)));
 	}else{
-		Http404();
-		$zbp->ShowError(9);
+		$zbp->ShowError(2);
 		die();
 	}
 
@@ -126,8 +131,7 @@ function ViewPost($id,$alias){
 		null
 	);
 	if(count($articles)==0){
-		Http404();
-		$zbp->ShowError(9);
+		$zbp->ShowError(2);
 		die();
 	}
 
@@ -168,10 +172,10 @@ function ViewPost($id,$alias){
 	);
 
 	foreach ($comments as &$comment){
-		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
 	}
 	foreach ($comments2 as &$comment){
-		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
 	}
 
 	$zbp->template->SetTags('title',$article->Title);
@@ -181,9 +185,15 @@ function ViewPost($id,$alias){
 	if($pagebar->PageAll==0||$pagebar->PageAll==1)$pagebar=null;
 	$zbp->template->SetTags('pagebar',$pagebar);
 	$zbp->template->SetTags('comments',$comments);
+	$zbp->template->SetTags('header',$zbp->header);
+	$zbp->template->SetTags('footer',$zbp->footer);
 
 	$zbp->template->display($article->Template);
 }
+
+
+
+
 
 function ViewComments($postid,$page){
 	global $zbp;
@@ -220,10 +230,10 @@ function ViewComments($postid,$page){
 	);
 
 	foreach ($comments as &$comment){
-		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
 	}
 	foreach ($comments2 as &$comment){
-		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
 	}
 
 	$zbp->template->SetTags('title',$zbp->title);
@@ -238,6 +248,10 @@ function ViewComments($postid,$page){
 
 }
 
+
+
+
+
 function ViewComment($id){
 	global $zbp;
 
@@ -246,7 +260,7 @@ function ViewComment($id){
 	$post=new Post;
 	$post->LoadInfoByID($comment->LogID);
 
-	$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label style="display:none;" id="AjaxComment'.$comment->ID.'"></label>';
+	$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
 
 	$zbp->template->SetTags('title',$zbp->title);
 	$zbp->template->SetTags('comment',$comment);
@@ -409,7 +423,7 @@ function DelPage(){
 ################################################################################################################
 function PostComment(){
 	global $zbp;
-
+$zbp->ShowError(0);
 	$_POST['LogID'] = $_GET['postid'];
 
 	$replyid=(integer)GetVars('replyid','POST');

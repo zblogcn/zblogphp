@@ -18,16 +18,21 @@ define('bingo','<span class="bingo"></span>');
 define('error','<span class="error"></span>');
 
 
-$zblogstep=GetVars('step')<>'' ? intval(GetVars('step')) : 0;
-if($zblogstep=="") { $zblogstep=1;}
+$zblogstep=(int)GetVars('step');
+if($zblogstep=="")$zblogstep=1;
 
+if($zbp->option['ZC_DATABASE_TYPE']&&(!$zbp->option['ZC_YUN_SITE']))$zblogstep=0;
+if($zbp->option['ZC_DATABASE_TYPE']&&($zbp->option['ZC_YUN_SITE'])){
+	$zbp->Initialize();
+	if(count($zbp->members)>=0)$zblogstep=0;
+}
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-<meta name="generator" content="Z-Blog <?php echo $zbp->option['ZC_BLOG_VERSION']?>" />
+<meta name="generator" content="Z-BlogPHP" />
 <meta name="robots" content="noindex,nofollow"/>
 <script src="../zb_system/script/common.js" type="text/javascript"></script>
 <script src="../zb_system/script/c_admin_js_add.php" type="text/javascript"></script>
@@ -35,7 +40,7 @@ if($zblogstep=="") { $zblogstep=1;}
 <script src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css"  type="text/css" media="screen" />
 <link rel="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
-<title>Z-BlogPHP<?php echo $zbp->option['ZC_BLOG_VERSION']?>安装程序</title>
+<title>Z-BlogPHP <?php echo ZC_BLOG_VERSION?>安装程序</title>
 </head>
 <body>
 <div class="setup">
@@ -109,7 +114,7 @@ function Setup0(){
     <div id="title">安装提示</div>
     <div id="content">通过配置文件的检验,您已经安装并配置好Z-BlogPHP了,不能再重复使用安装程序.</div>
     <div id="bottom">
-      <input type="button" name="next" onClick="window.location.href='<%=BlogHost%>'" id="netx" value="退出" />
+      <input type="button" name="next" onclick="window.location.href='../'" id="netx" value="退出" />
     </div>
   </dd>
 </dl>
@@ -127,7 +132,7 @@ function Setup1(){
     <p><b>安装协议</b>» 环境检查 » 数据库建立与设置 » 安装结果</p>
   </dd>
   <dd id="ddright">
-    <div id="title">Z-BlogPHP <?php echo $zbp->option['ZC_BLOG_VERSION']?>安装协议</div>
+    <div id="title">Z-BlogPHP <?php echo ZC_BLOG_VERSION?>安装协议</div>
     <div id="content">
       <textarea readonly>
 Z-BlogPHP  最终用户授权协议 
@@ -635,7 +640,7 @@ function InsertInfo(){
   $t->FileName="navbar";
   $t->Source="system";
   $t->SidebarID=0;
-  $t->Content='<li><a href="{#ZC_BLOG_HOST#}">首页</a></li><li><a href="{#ZC_BLOG_HOST#}tags.php">标签</a></li><li id="menu-page-2"><a href="{#ZC_BLOG_HOST#}view.php?id=2">留言本</a></li>';
+  $t->Content='<li><a id="nvabar-index" href="{#ZC_BLOG_HOST#}">首页</a></li><li id="nvabar-tags"><a href="{#ZC_BLOG_HOST#}tags.php">标签</a></li><li id="nvabar-page-2"><a href="{#ZC_BLOG_HOST#}view.php?id=2">留言本</a></li>';
   $t->HtmlID="divNavBar";
   $t->Type="ul";
   $t->Save();
@@ -853,7 +858,7 @@ function InsertInfo(){
 function SaveConfig(){
 	global $zbp;
 
-  $zbp->option['ZC_BLOG_VERSION']='1.0 Alpha Build 130707';
+  $zbp->option['ZC_BLOG_VERSION']=ZC_BLOG_VERSION;
   
   
   $zbp->option['ZC_SIDEBAR_ORDER'] ='calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc';
@@ -863,7 +868,7 @@ function SaveConfig(){
   $zbp->option['ZC_SIDEBAR5_ORDER']='';
 
   $zbp->SaveOption();
-  $zbp->BuildTemplate();
+  //$zbp->BuildTemplate();
   
   echo "保存设置,编译模板成功!<br/>";
 

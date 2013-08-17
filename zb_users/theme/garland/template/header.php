@@ -5,9 +5,10 @@
 	<meta http-equiv="Content-Language" content="{$language}" />
 	<title>{$name}-{$title}</title>
 	<meta name="generator" content="{$zblogphp}" />
-	<link rel="stylesheet" rev="stylesheet" href="{$host}zb_users/theme/{$theme}/style.css.php" type="text/css" media="screen" />
+	<link rel="stylesheet" rev="stylesheet" href="{$host}zb_users/theme/{$theme}/style.css.php" type="text/css" media="all" />
 	<script src="{$host}zb_system/script/common.js" type="text/javascript"></script>
 	<script src="{$host}zb_system/script/c_html_js_add.php" type="text/javascript"></script>
+{$header}
 {if $type=='index'&&$page=='1'}
 	<link rel="alternate" type="application/rss+xml" href="{$feedurl}" title="{$name}" />
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="{$host}zb_system/xml-rpc/?rsd" />

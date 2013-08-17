@@ -159,9 +159,11 @@ function Redirect($url){
 function Http404(){
 	header('HTTP/1.1 404 Not Found');
 	header("Status: 404 Not Found");
-	die();
 }
 
+function Http500(){
+	header('HTTP/1.1 500 Internal Server Error');
+}
 
 function Http304($filename,$time){
 	$url = $filename;
