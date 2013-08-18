@@ -19,22 +19,21 @@ abstract class Base
 
 	protected $Data = array();
 	
-	public function __set($name, $value) 
+	public function __set($name, $value)
 	{
 		global $zbp;
-		if ($name=='Meta') {
-			$this->Metas->Unserialize($value);
-			return ;
-		}
+		//if ($name=='Meta') {
+		//	$this->Metas->Unserialize($value);
+		//}
 		$this->Data[$name]  =  $value;
 	}
 
 	public function __get($name) 
 	{
 		global $zbp;
-		if ($name=='Meta') {
-			return $this->Metas->Serialize();
-		}
+		//if ($name=='Meta') {
+		//	$this->Data['Meta'] = $this->Metas->Serialize();
+		//}
 		return $this->Data[$name];
 	}
 
@@ -66,6 +65,7 @@ abstract class Base
 				$this->Data[$key]=$array[$value[0]];
 			}			
 		}
+		$this->Metas->Unserialize($this->Data['Meta']);
 		return true;
 	}
 
@@ -83,12 +83,15 @@ abstract class Base
 			}
 			$i += 1;
 		}
+		$this->Metas->Unserialize($this->Data['Meta']);
 		return true;
 	}	
 
 	function Save(){
 		global $zbp;
-		
+
+		$this->Data['Meta'] = $this->Metas->Serialize();
+
 		$keys=array();
 		foreach ($this->datainfo as $key => $value) {
 			$keys[]=$value[0];

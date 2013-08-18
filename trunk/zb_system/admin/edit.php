@@ -77,7 +77,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   
     </div>
     
-    <!-- 1号输出接口 -->
+
     
     <div id="divContent" style="clear:both;">
 		<div id='cheader' class='editmod'><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
@@ -99,6 +99,14 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         <div id="ajaxtags">Watting...</div>
       </div>
       <!-- )tags -->
+	  
+    <!-- 1号输出接口 -->
+       <div id='response' class='editmod'>
+<?php
+foreach ($GLOBALS['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
+?>
+	   </div>
+
        <div id='insertintro' class='editmod'><span><?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
        <?php }?>
 		</div>   
@@ -108,8 +116,13 @@ require $blogpath . 'zb_system/admin/admin_top.php';
        <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Watting...</div>
 	   <hr/>
     </div>
-    
     <!-- 2号输出接口 -->
+       <div id='response2' class='editmod'>
+<?php
+foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fpname();}
+?>
+	   </div>
+
     
   </div>
   <!-- divEditLeft -->
@@ -190,7 +203,11 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
           <!-- )Navbar --> 
           
           <!-- 3号输出接口 -->
-          
+          <div id='response3' class='editmod'>
+<?php
+foreach ($GLOBALS['Filter_Plugin_Edit_Response3'] as $fpname => &$fpsignal) {$fpname();}
+?>
+	      </div>
         </div>
       </div>
     </div>

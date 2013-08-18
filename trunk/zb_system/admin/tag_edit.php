@@ -52,6 +52,11 @@ $tag=$zbp->GetTagByID($tagid);
 	  <p>
 		<label><span class="title"><?php echo $lang['msg']['add_to_navbar']?>:</span>   <input type="text" name="AddNavbar" id="edtAddNavbar" value="0" class="checkbox" /></label>
 	  </p>
+       <div id='response' class='editmod'>
+<?php
+foreach ($GLOBALS['Filter_Plugin_Tag_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
+?>
+	   </div>
 	  <p>
 		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" />
 	  </p>

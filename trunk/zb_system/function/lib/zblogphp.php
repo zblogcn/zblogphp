@@ -1081,17 +1081,19 @@ class ZBlogPHP{
 
 	function ShowError($idortext){
 
-		if($idortext==2){
-			Http404();
-		}else{
-			Http500();
-		}
+		$id=(int)$idortext;
 
 		if(is_numeric($idortext))$idortext=$this->lang['error'][$idortext];
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($idortext);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+
+		if($id==2){
+			Http404();
+		}else{
+			Http500();
 		}
 
 		throw new Exception($idortext);

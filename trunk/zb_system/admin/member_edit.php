@@ -75,9 +75,14 @@ $member=$zbp->GetMemberByID($memberid);
 <?php echo CreateOptoinsOfTemplate($member->Template);?>
 		</select>
 	  </p>
+       <div id='response' class='editmod'>
+<?php
+foreach ($GLOBALS['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
+?>
+	   </div>
 	  <p>
 		<span class="title"><?php echo $lang['msg']['default_avatar']?>:</span>&nbsp;<br /><?php echo $member->Avatar;?>
-	  </p>	  
+	  </p>
 	  <p>
 		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" />
 	  </p>

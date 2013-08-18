@@ -334,7 +334,7 @@ function CheckRegExp($source,$para){
 function TransferHTML($source,$para){
 
 	if(strpos($para, '[nohtml]')!==false){
-		$source=preg_replace("/<(\/?html.*?)>/si","",$source);
+		$source=preg_replace("/<([^<>]*)>/si","",$source);
 	}
 
 	if(strpos($para, '[noscript]')!==false){
