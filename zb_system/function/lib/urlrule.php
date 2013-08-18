@@ -14,6 +14,7 @@ class UrlRule
 	public $Rules=array();
 	public $Url='';
 	private $PreUrl='';
+	public $IsRemoveFirstPage=true;
 
 	public function __construct($url){
 		$this->PreUrl=$url;
@@ -23,21 +24,22 @@ class UrlRule
 		global $zbp;
 		$s=$this->PreUrl;
 
-
-		if(isset($this->Rules['{%page%}'])){
-			if($this->Rules['{%page%}']=='1'||$this->Rules['{%page%}']=='0'){
+		if($this->IsRemoveFirstPage){
+			if(isset($this->Rules['{%page%}'])){
+				if($this->Rules['{%page%}']=='1'||$this->Rules['{%page%}']=='0'){
+					$this->Rules['{%page%}']='';
+				}
+			}else{
 				$this->Rules['{%page%}']='';
 			}
-		}else{
-			$this->Rules['{%page%}']='';
-		}
-		if($this->Rules['{%page%}']==''){
-			if(substr_count($s,'{%page%}')==1&&substr_count($s,'{')==2){
-				$s=$zbp->host;
-			}
-			preg_match('/(?<=\})[^\{\}]+(?=\{%page%\})/i', $s, $matches);
-			if(isset($matches[0])){
-				$s=str_replace($matches[0],'',$s);
+			if($this->Rules['{%page%}']==''){
+				if(substr_count($s,'{%page%}')==1&&substr_count($s,'{')==2){
+					$s=$zbp->host;
+				}
+				preg_match('/(?<=\})[^\{\}]+(?=\{%page%\})/i', $s, $matches);
+				if(isset($matches[0])){
+					$s=str_replace($matches[0],'',$s);
+				}
 			}
 		}
 

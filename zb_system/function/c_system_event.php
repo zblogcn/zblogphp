@@ -338,6 +338,7 @@ function PostArticle(){
 
 
 	FilterArticle($article);
+	FilterMeta($article);
 
 	$article->Save();
 
@@ -402,6 +403,7 @@ function PostPage(){
 	if(isset($_POST['IsLock'])  ) $article->IsLock   = GetVars('IsLock','POST');
 
 	FilterArticle($article);
+	FilterMeta($article);
 
 	$article->Save();
 	return true;
@@ -423,7 +425,7 @@ function DelPage(){
 ################################################################################################################
 function PostComment(){
 	global $zbp;
-$zbp->ShowError(0);
+
 	$_POST['LogID'] = $_GET['postid'];
 
 	$replyid=(integer)GetVars('replyid','POST');
@@ -520,6 +522,8 @@ function PostCategory(){
 	if(isset($_POST['Template'])   ) $cate->Template    = GetVars('Template','POST');
 	if(isset($_POST['LogTemplate'])) $cate->LogTemplate = GetVars('LogTemplate','POST');
 
+	FilterMeta($cate);
+
 	$cate->Save();
 	return true;
 }
@@ -559,6 +563,7 @@ function PostTag(){
 	if(isset($_POST['Alias'])   ) $tag->Alias    = GetVars('Alias','POST');
 	if(isset($_POST['Template'])) $tag->Template = GetVars('Template','POST');
 
+	FilterMeta($tag);
 	$tag->Save();
 	return true;
 }
@@ -614,6 +619,8 @@ function PostMember(){
 	if(isset($_POST['Level'])   ) $mem->Level    = GetVars('Level','POST');
 	if(isset($_POST['Intro'])   ) $mem->Intro    = GetVars('Intro','POST');	
 	if(isset($_POST['Password'])   ) $mem->Password    = GetVars('Password','POST');
+
+	FilterMeta($mem);
 	$mem->Save();
 	return true;
 }
@@ -811,6 +818,24 @@ function SaveSetting(){
 
 
 ################################################################################################################
+function FilterMeta(&$object){
+
+	//$type=strtolower(get_class($object));
+
+	foreach ($_POST as $key => $value) {
+		if(substr($key,0,5)=='meta_'){
+			$name=substr($key,5-strlen($key));
+			$object->Metas->$name=$value;
+		}
+	}
+
+	foreach ($object->Metas->Data as $key => $value) {
+		if($value=="")unset($object->Metas->Data[$key]);
+	}
+
+}
+
+
 function FilterComment(&$comment){
 	global $zbp;
 

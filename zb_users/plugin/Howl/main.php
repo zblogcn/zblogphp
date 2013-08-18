@@ -8,7 +8,7 @@ $zbp->Load();
 $action='root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
-if (!$zbp->CheckPlugin('Howl')) {$zbp->ShowError(68);die();}
+if (!$zbp->CheckPlugin('Howl')) {$zbp->ShowError(48);die();}
 
 $blogtitle='Z-Blog角色分配器';
 
