@@ -33,9 +33,9 @@ public $PageNext  = 0;
 
 public $UrlRule  = null;
 
-public function __construct($url,$isremovefirstpage=true){
+public function __construct($url,$makereplace=true){
 	$this->UrlRule=new UrlRule($url);
-	$this->UrlRule->IsRemoveFirstPage=$isremovefirstpage;
+	$this->UrlRule->MakeReplace=$makereplace;
 }
 
 public function Make(){

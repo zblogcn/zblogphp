@@ -142,7 +142,7 @@ return array(
 	'system_module'=>'系统模块',
 	'user_module'=>'用户自定义模块',
 	'theme_module'=>'主题自带模块',
-	'plugin_module'=>'插件定义模块',
+	'plugin_module'=>'插件创建模块',
 	'sidebar'=>'默认侧栏 ',
 	'sidebar2'=>'侧栏 2',
 	'sidebar3'=>'侧栏 3',

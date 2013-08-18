@@ -144,6 +144,10 @@ function ViewPost($id,$alias){
 		$zbp->LoadTagsByIDString($article->Tag);
 	}
 
+	$article->ViewNums +=1;
+	$sql = $zbp->db->sql->Update("Post",array('log_ViewNums'=>$article->ViewNums),array(array('=','log_ID',$article->ID)));
+	$zbp->db->Update($sql);
+
 
 	$pagebar=new Pagebar('javascript:GetComments(\''.$article->ID.'\',\'{%page%}\')',false);
 	$pagebar->PageCount=$zbp->commentdisplaycount;
@@ -284,7 +288,7 @@ function PostArticle(){
 	if(!isset($_POST['ID']))return ;
 
 	if(isset($_POST['Tag'])){
-		$_POST['Tag']=$zbp->CheckUnsetTagAndConvertIDString($_POST['Tag']);
+		$_POST['Tag']=CheckUnsetTagAndConvertIDString($_POST['Tag']);
 	}
 	if(isset($_POST['Content'])){
 		$_POST['Content']=str_replace('<hr class="more" />', '<!--more-->', $_POST['Content']);
@@ -314,12 +318,18 @@ function PostArticle(){
 	}
 
 	$article = new Post();
+	$pre_author=null;
+	$pre_tag=null;
+	$pre_category=null;
 	if(GetVars('ID','POST') == 0){
 		if(!$zbp->CheckRights('ArticlePub')){$article->Status=ZC_POST_STATUS_AUDITING;}
 	}else{
 		$article->LoadInfoByID(GetVars('ID','POST'));
 		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){$zbp->ShowError(11);}
 		if((!$zbp->CheckRights('ArticlePub'))&&($article->Status==ZC_POST_STATUS_AUDITING)){unset($_POST['Status']);}
+		$pre_author=$article->AuthorID;
+		$pre_tag=$article->Tag;
+		$pre_category=$article->CateID;
 	}
 	$article->Type = ZC_POST_TYPE_ARTICLE;
 
@@ -342,6 +352,10 @@ function PostArticle(){
 
 	$article->Save();
 
+	CountCategoryArrayString($pre_tag . $article->Tag);
+	CountMemberArray(array($pre_author,$article->AuthorID));
+	CountCategoryArray(array($pre_category,$article->CateID));
+
 	return true;
 }
 
@@ -354,16 +368,62 @@ function DelArticle(){
 	$article = new Post();
 	$article->LoadInfoByID($id);
 	if($article->ID>0){
+
+		if(!$zbp->CheckRights('ArticleAll')&&$article->AuthorID!=$zbp->user->ID)$zbp->ShowError(22);
+
+		$pre_author=$article->AuthorID;
+		$pre_tag=$article->Tag;
+		$pre_category=$article->CateID;
+
 		$article->Del();
+
+		CountCategoryArrayString($pre_tag);
+		CountMemberArray(array($pre_author));
+		CountCategoryArray(array($pre_category));
+
 	}else{
-		$zbp->ShowError(9);
+		
 	}
 	return true;
 }
 
 
 
+function CheckUnsetTagAndConvertIDString($tagnamestring){
+	global $zbp;
+	$s='';
+	$tagnamestring=str_replace(';', ',', $tagnamestring);
+	$tagnamestring=str_replace('，', ',', $tagnamestring);
+	$tagnamestring=str_replace('、', ',', $tagnamestring);
+	$tagnamestring=trim($tagnamestring);
+	if($tagnamestring=='')return '';
+	if($tagnamestring==',')return '';		
+	$a=explode(',', $tagnamestring);
+	$b=array_unique($a);
+	$b=array_slice($b, 0, 20);
+	$c=array();
 
+	$t=$zbp->LoadTagsByNameString(GetVars('Tag','POST'));
+	foreach ($t as $key => $value) {
+		$c[]=$key;
+	}
+	$d=array_diff($b,$c);
+	if($zbp->CheckRights('TagNew')){
+		foreach ($d as $key) {
+			$tag = new Tag;
+			$tag->Name = $key;
+			$tag->Save();
+			$zbp->tags[$tag->ID]=$tag;
+			$zbp->tagsbyname[$tag->Name]=&$zbp->tags[$tag->ID];
+		}
+	}
+
+	foreach ($a as $key) {
+		if(!isset($zbp->tagsbyname[$key]))continue;
+		$s .= '{' . $zbp->tagsbyname[$key]->ID . '}';
+	}
+	return $s;
+}
 
 
 
@@ -386,10 +446,12 @@ function PostPage(){
 	}
 
 	$article = new Post();
+	$pre_author=null;
 	if(GetVars('ID','POST') == 0){
 	}else{
 		$article->LoadInfoByID(GetVars('ID','POST'));
 		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('PageAll'))){$zbp->ShowError(11);}
+		$pre_author=$article->AuthorID;
 	}
 	$article->Type = ZC_POST_TYPE_PAGE;
 
@@ -406,11 +468,33 @@ function PostPage(){
 	FilterMeta($article);
 
 	$article->Save();
+
+	CountMemberArray(array($pre_author,$article->AuthorID));
+
 	return true;
 }
 
 function DelPage(){
-	return DelArticle();
+	global $zbp;
+
+	$id=(int)GetVars('id','GET');
+
+	$article = new Post();
+	$article->LoadInfoByID($id);
+	if($article->ID>0){
+
+		if(!$zbp->CheckRights('PageAll')&&$article->AuthorID!=$zbp->user->ID)$zbp->ShowError(22);
+
+		$pre_author=$article->AuthorID;
+
+		$article->Del();
+
+		CountMemberArray(array($pre_author));
+
+	}else{
+		
+	}
+	return true;
 }
 
 
@@ -474,7 +558,9 @@ function PostComment(){
 	FilterComment($cmt);
 
 	$cmt->Save();
-	
+
+	CountPostArray(array($cmt->LogID));
+
 	$zbp->comments[$cmt->ID]=$cmt;
 	
 	if(GetVars('isajax','POST')){
@@ -482,7 +568,6 @@ function PostComment(){
 	}
 
 	return true;
-
 }
 
 
@@ -490,14 +575,18 @@ function DelComment(){
 
 }
 
+function DelComment_Children($id){
+
+}
+
 
 function CheckComment(){
+	global $zbp;
 
 	$id=(int)GetVars('id','GET');
 	$ischecking=(bool)GetVars('ischecking','GET');
 
-	$cmt = new Comment();
-	$cmt->LoadInfoByID($id);
+	$cmt = $zbp->GetCommentByID($id);
 	$cmt->IsChecking=$ischecking;
 
 	$cmt->Save();
@@ -533,6 +622,8 @@ function PostCategory(){
 	if(isset($_POST['LogTemplate'])) $cate->LogTemplate = GetVars('LogTemplate','POST');
 
 	FilterMeta($cate);
+
+	CountCategory($cate);
 
 	$cate->Save();
 	return true;
@@ -574,7 +665,11 @@ function PostTag(){
 	if(isset($_POST['Template'])) $tag->Template = GetVars('Template','POST');
 
 	FilterMeta($tag);
+
+	CountTag($tag);
+
 	$tag->Save();
+
 	return true;
 }
 
@@ -608,7 +703,7 @@ function PostMember(){
 		if($_POST['Password']==''){
 			unset($_POST['Password']);
 		}else{
-			$_POST['Password']=md5(md5($_POST['Password']) . $_POST['Guid']);
+			$_POST['Password']=Member::GetPassWordByGuid($_POST['Password'],$_POST['Guid']);
 		}
 	}
 
@@ -631,6 +726,10 @@ function PostMember(){
 	if(isset($_POST['Password'])   ) $mem->Password    = GetVars('Password','POST');
 
 	FilterMeta($mem);
+	FilterMember($mem);
+
+	CountMember($mem);
+
 	$mem->Save();
 	return true;
 }
@@ -642,6 +741,7 @@ function DelMember(){
 	$m=$zbp->GetMemberByID($id);
 	if($m->ID>0 && $m->ID<>$zbp->user->ID){
 		$m->Del();
+		DelMember_AllData($id);
 	}else{
 		return false;
 	}
@@ -649,7 +749,9 @@ function DelMember(){
 }
 
 
+function DelMember_AllData($id){
 
+}
 
 
 
@@ -701,12 +803,23 @@ function PostModule(){
 	if(isset($_POST['Source'])        ) $mod->Source        = GetVars('Source','POST');
 	if(isset($_POST['IsHiddenTitle']) ) $mod->IsHiddenTitle = GetVars('IsHiddenTitle','POST');
 
+	FilterModule($mod);
+
 	$mod->Save();
 	return true;
 }
 
 function DelModule(){
 	global $zbp;
+
+	$id=(int)GetVars('id','GET');
+	$m=$zbp->GetModuleByID($id);
+	if($m->Source<>'system'){
+		$m->Del();
+	}else{
+		return false;
+	}
+	return true;
 }
 
 
@@ -740,12 +853,24 @@ function PostUpload(){
 
 	}
 
+	CountMemberArray(array($upload->AuthorID));
+
 }
 
 function DelUpload(){
+	global $zbp;
 
+	$id=(int)GetVars('id','GET');
+	$u=$zbp->GetUploadByID($id);
+	if($zbp->CheckRights('UploadAll')||(!$zbp->CheckRights('UploadAll')&&$u->AuthorID==$zbp->user->ID)){
+		$u->Del();
+		CountMemberArray(array($u->AuthorID));
+		@unlink($u->FullFile);
+	}else{
+		return false;
+	}
+	return true;
 }
-
 
 
 
@@ -888,4 +1013,119 @@ function FilterArticle(&$article){
 		}
 	}
 }
+
+
+function FilterMember(&$member){
+	global $zbp;
+	$member->Intro=TransferHTML($member->Intro,'[noscript]');
+}
+
+
+function FilterModule(&$module){
+	global $zbp;
+	$module->FileName=TransferHTML($module->FileName,'[filename]');
+	$module->HtmlID=TransferHTML($module->HtmlID,'[normalname]');	
+}
+
+
+
+################################################################################################################
+#统计函数
+function CountPost(&$article){
+	global $zbp;
+
+	$id=$article->ID;
+
+	$s=$zbp->db->sql->Count('Comment',array('comm_ID'=>'num'),array(array('=','comm_LogID',$id),array('=','comm_IsChecking',0)));
+	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
+
+	$article->CommNums=$num;
+}
+
+function CountPostArray($array){
+	global $zbp;
+	$array=array_unique($array);
+	foreach ($array as $value) {
+		if($value==0)continue;
+		$article=new Post;
+		$article->LoadInfoByID($value);
+		CountPost($article);
+		$article->Save();
+	}
+}
+
+function CountCategory(&$category){
+	global $zbp;
+
+	$id=$category->ID;
+
+	$s=$zbp->db->sql->Count('Post',array('log_ID'=>'num'),array(array('=','log_CateID',$id)));
+	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
+
+	$category->Count=$num;
+}
+
+function CountCategoryArray($array){
+	global $zbp;
+	$array=array_unique($array);
+	foreach ($array as $value) {
+		if($value==0)continue;
+		CountMember($zbp->categorys[$value]);
+		$zbp->categorys[$value]->Save();
+	}
+}
+
+function CountTag(&$tag){
+	global $zbp;
+
+	$id=$tag->ID;
+
+	$s=$zbp->db->sql->Count('Post',array('log_ID'=>'num'),array(array('LIKE','log_Tag','%{'.$id.'}%')));
+	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
+
+	$tag->Count=$num;
+}
+
+function CountCategoryArrayString($string){
+	global $zbp;
+	$array=$zbp->LoadTagsByIDString($string);
+	foreach ($array as &$tag) {
+		CountTag($tag);
+		$tag->Save();
+	}	
+}
+
+function CountMember(&$member){
+	global $zbp;
+
+	$id=$member->ID;
+
+	$s=$zbp->db->sql->Count('Post',array('log_ID'=>'num'),array(array('=','log_AuthorID',$id),array('=','log_Type',0)));
+	$member_Articles=GetValueInArray(current($zbp->db->Query($s)),'num');
+
+	$s=$zbp->db->sql->Count('Post',array('log_ID'=>'num'),array(array('=','log_AuthorID',$id),array('=','log_Type',1)));
+	$member_Pages=GetValueInArray(current($zbp->db->Query($s)),'num');
+
+	$s=$zbp->db->sql->Count('Comment',array('comm_ID'=>'num'),array(array('=','comm_AuthorID',$id)));
+	$member_Comments=GetValueInArray(current($zbp->db->Query($s)),'num');
+
+	$s=$zbp->db->sql->Count('Upload',array('ul_ID'=>'num'),array(array('=','ul_AuthorID',$id)));
+	$member_Uploads=GetValueInArray(current($zbp->db->Query($s)),'num');
+
+	$member->Articles=$member_Articles;
+	$member->Pages=$member_Pages;
+	$member->Comments=$member_Comments;
+	$member->Uploads=$member_Uploads;
+}
+
+function CountMemberArray($array){
+	global $zbp;
+	$array=array_unique($array);
+	foreach ($array as $value) {
+		if($value==0)continue;
+		CountMember($zbp->members[$value]);
+		$zbp->members[$value]->Save();
+	}	
+}
+
 ?>

@@ -35,7 +35,7 @@ function zbp_addmodsubmenu(){
 function zbp_addcmtsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('CommentAll')){
-		echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left">' . $GLOBALS['lang']['msg']['check_comment'] . '</span></a>';
+		echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left '.(GetVars('ischecking')?'m-now':'').'">' . $GLOBALS['lang']['msg']['check_comment'] . '</span></a>';
 	}
 }
 
@@ -378,7 +378,7 @@ function Admin_ArticleMng(){
 	<th></th>
 	</tr>';
 
-$p=new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng&status={%status%}&istop={%istop%}&category={%category%}&search={%search%}&page={%page%}',false);
+$p=new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&page=%page%}{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}',false);
 $p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=$zbp->pagebarcount;
@@ -475,7 +475,7 @@ function Admin_PageMng(){
 	<th></th>
 	</tr>';
 
-$p=new Pagebar('{%host%}zb_system/cmd.php?act=PageMng&page={%page%}',false);
+$p=new Pagebar('{%host%}zb_system/cmd.php?act=PageMng{&page=%page%}',false);
 $p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=$zbp->pagebarcount;
@@ -607,7 +607,7 @@ function Admin_CommentMng(){
 	<th><a href="" onclick="BatchSelectAll();return false;">' . $zbp->lang['msg']['select_all'] . '</a></th>
 	</tr>';
 
-$p=new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng&ischecking={%ischecking%}&search={%search%}&page={%page%}',false);
+$p=new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&page=%page%}{&ischecking=%ischecking%}{&search=%search%}',false);
 $p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=$zbp->pagebarcount;
@@ -702,12 +702,13 @@ function Admin_MemberMng(){
 	<th>' . $zbp->lang['msg']['name'] . '</th>
 	<th>' . $zbp->lang['msg']['alias'] . '</th>
 	<th>' . $zbp->lang['msg']['all_artiles'] . '</th>
+	<th>' . $zbp->lang['msg']['all_pages'] . '</th>
 	<th>' . $zbp->lang['msg']['all_comments'] . '</th>
 	<th>' . $zbp->lang['msg']['all_uploads'] . '</th>
 	<th></th>
 	</tr>';
 
-$p=new Pagebar('{%host%}zb_system/cmd.php?act=MemberMng&page={%page%}',false);
+$p=new Pagebar('{%host%}zb_system/cmd.php?act=MemberMng{&page=%page%}',false);
 $p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=$zbp->pagebarcount;
@@ -730,8 +731,9 @@ foreach ($array as $member) {
 	echo '<td class="td5">' . $member->ID . '</td>';
 	echo '<td class="td10">' . $member->LevelName . '</td>';
 	echo '<td>' . $member->Name . '</td>';
-	echo '<td class="td20">' . $member->Alias . '</td>';
+	echo '<td class="td15">' . $member->Alias . '</td>';
 	echo '<td class="td10">' . $member->Articles . '</td>';
+	echo '<td class="td10">' . $member->Pages . '</td>';
 	echo '<td class="td10">' . $member->Comments . '</td>';
 	echo '<td class="td10">' . $member->Uploads . '</td>';
 	echo '<td class="td10 tdCenter">';
@@ -748,7 +750,7 @@ if($zbp->CheckRights('MemberDel')){
 	echo '<hr/><p class="pagebar">';
 foreach ($p->buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
-}	
+}
 	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aMemberMng");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/user_32.png' . '");</script>';
@@ -798,7 +800,7 @@ if(!$zbp->CheckRights('UploadAll')){
 	$w[]=array('=','ul_AuthorID',$zbp->user->ID);
 }
 
-$p=new Pagebar('{%host%}zb_system/cmd.php?act=UploadMng{&page=%page%}');
+$p=new Pagebar('{%host%}zb_system/cmd.php?act=UploadMng{&page=%page%}',false);
 $p->PageCount=$zbp->managecount;
 $p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 $p->PageBarCount=$zbp->pagebarcount;
@@ -875,7 +877,7 @@ $p->PageBarCount=$zbp->pagebarcount;
 $array=$zbp->GetTagList(
 	'',
 	'',
-	array('tag_Name'=>'ASC','tag_ID'=>'ASC'),
+	array('tag_ID'=>'ASC'),
 	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
 	array('pagebar'=>$p)
 );

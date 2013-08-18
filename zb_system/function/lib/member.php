@@ -83,6 +83,11 @@ class Member extends Base{
 		return parent::__get($name);
 	}
 
+	static function GetPassWordByGuid($ps,$guid){
+
+		return md5(md5($ps). $guid);
+
+	}
 
 }
 

@@ -6,11 +6,25 @@
  * @version 2.0 2013-06-14
  */
 
+function Logs($s){
+	$f=$GLOBALS['usersdir'] . 'logs/'. $GLOBALS['option']['ZC_BLOG_CLSID'] .'-log' . date("Ymd"). '.txt';
+	$handle = @fopen($f, 'a+');
+	@fwrite($handle,"[" . date('c') . "~" . current(explode(" ", microtime()))  . "]" . $s . "\r\n");
+	@fclose($handle);	
+}
+
 $_SERVER['_start_time'] = microtime(1); //RunTime
 function RunTime(){
 	echo '<!--'. (1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6)) .'ms-->';
 }
 
+function GetValueInArray($array,$name){
+	if(is_array($array)){
+		if(array_key_exists($name,$array)){
+			return $array[$name];
+		}
+	}
+}
 
 function GetGuid(){
 	$s=str_replace('.','',trim(uniqid('zbp',true),'zbp'));
@@ -70,15 +84,9 @@ function GetCurrentHost(&$cookiespath){
 }
 
 
-function GetPassWordByGuid($ps,$guid){
-
-	return md5(md5($ps).$guid);
-
-}
 
 function GetDirsInDir($dir){
 	$dirs=array();
-
 
 	if(function_exists('scandir')){
 		foreach (scandir($dir) as $d) {
@@ -149,20 +157,47 @@ function GetFilesInDir($dir,$type){
 }
 
 
+
+function SetHttpStatusCode($number){
+	static $status='';
+	if($status!='')return false;
+	switch ($number) {
+		case 200:
+			header("HTTP/1.1 200 OK");
+			break;
+		case 301:
+			header("HTTP/1.1 301 Moved Permanently");
+			break;			
+		case 302:
+			header("HTTP/1.1 302 Found");
+			break;
+		case 304:
+			header("HTTP/1.1 304 Not Modified"); 
+			break;
+		case 404:
+			header('HTTP/1.1 404 Not Found');
+			break;
+		case 500:
+			header('HTTP/1.1 500 Internal Server Error');
+			break;
+	}
+	$status=$number;
+	return true;
+}
+
 function Redirect($url){
-	header("HTTP/1.1 302 Found");
+	SetHttpStatusCode(302);
 	header('Location: '.$url);
 	die();
 }
 
-
 function Http404(){
-	header('HTTP/1.1 404 Not Found');
+	SetHttpStatusCode(404);
 	header("Status: 404 Not Found");
 }
 
 function Http500(){
-	header('HTTP/1.1 500 Internal Server Error');
+	SetHttpStatusCode(500);
 }
 
 function Http304($filename,$time){
@@ -172,17 +207,11 @@ function Http304($filename,$time){
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s',$time ).' GMT');
 	header("ETag: $etag");
 	if((isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag)){
-		header("HTTP/1.1 304 Not Modified"); 
+		SetHttpStatusCode(304);
 		die();
 	}
 }
 
-function Logs($s){
-	$f=$GLOBALS['usersdir'] . 'logs/'. $GLOBALS['option']['ZC_BLOG_CLSID'] .'-log' . date("Ymd"). '.txt';
-	$handle = @fopen($f, 'a+');
-	@fwrite($handle,"[" . date('c') . "~" . current(explode(" ", microtime()))  . "]" . $s . "\r\n");
-	@fclose($handle);	
-}
 
 function GetGuestIP(){
 	return $_SERVER["REMOTE_ADDR"];
@@ -192,19 +221,13 @@ function GetGuestAgent(){
 	return $_SERVER["HTTP_USER_AGENT"];
 }
 
-function GetValueInArray($array,$name){
-	if(is_array($array)){
-		if(array_key_exists($name,$array)){
-			return $array[$name];
-		}
-	}
-}
+
+
 
 function GetFilePermsOct($f){
     if(!file_exists($f)){return null;}
     return substr(sprintf('%o', fileperms($f)), -4);
 }
-
 
 function GetFilePerms($f){
 
@@ -252,7 +275,7 @@ function GetFilePerms($f){
                 (($perms & 0x0400) ? 's' : 'x' ) :
                 (($perms & 0x0400) ? 'S' : '-'));
 
-    // World
+    // Other
     $info .= (($perms & 0x0004) ? 'r' : '-');
     $info .= (($perms & 0x0002) ? 'w' : '-');
     $info .= (($perms & 0x0001) ?
@@ -351,10 +374,10 @@ function TransferHTML($source,$para){
 		$source=preg_replace("/(<br\/>)+/", "<br/>", $source);
 	}
 	if(strpos($para, '[filename]')!==false){
-		$source=str_replace(array("/","\\",":","?","*","\"","<",">","|"," "),array(""),$source);
+		$source=str_replace(array("/","#","$","\\",":","?","*","\"","<",">","|"," "),array(""),$source);
 	}
 	if(strpos($para, '[normalname]')!==false){
-		$source=str_replace(array("$","(","*","+",",","[","]","{","}","?","\\","^","|",":","'","\""),array(""),$source);
+		$source=str_replace(array("#","$","(",")","*","+",",","[","]","{","}","?","\\","^","|",":","'","\""),array(""),$source);
 	}
 
 	return $source;

@@ -717,8 +717,12 @@ class ZBlogPHP{
 
 
 
+
+
 ################################################################################################################
 #加载数据对像List函数
+
+
 
 
 
@@ -753,11 +757,12 @@ class ZBlogPHP{
 		$where[]= array('=','log_Type','0');
 		$sql = $this->db->sql->Select('Post',$select,$where,$order,$limit,$option);
 		$array = $this->GetList('Post',$sql);
+		$tagstring = '';
 		foreach ($array as $a) {
-			$this->AddTagsIDString($a->Tag);
+			$tagstring .= $a->Tag;
 		}
 
-		$this->LoadTagsByIDString($this->AddTagsIDString());
+		$this->LoadTagsByIDString($tagstring);
 
 		return $array;
 	}
@@ -824,8 +829,15 @@ class ZBlogPHP{
 
 
 
+
+
+
+
 ################################################################################################################
 #读取对象函数
+
+
+
 
 
 
@@ -853,7 +865,7 @@ class ZBlogPHP{
 		if($id>0){
 			$m->LoadInfoByID($id);
 		}
-		return $m;		
+		return $m;
 	}
 
 	function GetMemberByID($id){
@@ -880,6 +892,14 @@ class ZBlogPHP{
 		}
 	}
 
+	function GetUploadByID($id){
+		$m = new Upload;
+		if($id>0){
+			$m->LoadInfoByID($id);
+		}
+		return $m;
+	}
+
 	function GetTagByID($id){
 		if(isset($this->tags[$id])){
 			return $this->tags[$id];
@@ -894,11 +914,7 @@ class ZBlogPHP{
 		}
 	}
 
-	function AddTagsIDString($s=''){
-		static $tagstring;
-		$tagstring .= $s;
-		return $tagstring;
-	}
+	#load tags '{1}{2}{3}{4}{4}'
 	function LoadTagsByIDString($s){
 		if($s=='')return array();
 		$s=str_replace('}{', '|', $s);
@@ -932,7 +948,7 @@ class ZBlogPHP{
 			return $b+$t;
 		}
 	}
-
+	#load tags 'aaa,bbb,ccc,ddd'
 	function LoadTagsByNameString($s){
 		if($s=='')return array();
 		$a=explode(',', $s);
@@ -964,70 +980,6 @@ class ZBlogPHP{
 		}
 	}
 
-	function CheckUnsetTagAndConvertIDString($tagnamestring){
-		$s='';
-		$tagnamestring=str_replace(';', ',', $tagnamestring);
-		$tagnamestring=str_replace('，', ',', $tagnamestring);
-		$tagnamestring=str_replace('、', ',', $tagnamestring);
-		$tagnamestring=trim($tagnamestring);
-		if($tagnamestring=='')return '';
-		if($tagnamestring==',')return '';		
-		$a=explode(',', $tagnamestring);
-		$b=array_unique($a);
-		$b=array_slice($b, 0, 20);
-		$c=array();
-
-		$t=$this->LoadTagsByNameString(GetVars('Tag','POST'));
-		foreach ($t as $key => $value) {
-			$c[]=$key;
-		}
-		$d=array_diff($b,$c);
-		if($this->CheckRights('TagNew')){
-			foreach ($d as $key) {
-				$tag = new Tag;
-				$tag->Name = $key;
-				$tag->Save();
-				$this->tags[$tag->ID]=$tag;
-				$this->tagsbyname[$tag->Name]=&$this->tags[$tag->ID];
-			}
-		}
-
-		foreach ($a as $key) {
-			if(!isset($this->tagsbyname[$key]))continue;
-			$s .= '{' . $this->tagsbyname[$key]->ID . '}';
-		}
-		return $s;
-	}
-
-
-
-
-
-################################################################################################################
-#统计函数
-
-
-
-	function CountCategory($id){
-		$s=$this->db->sql->Count('Post',array('Log_ID'=>'num'),array(array('LIKE','log_CateID',$id)));
-		$num=GetValueInArray(current($this->db->Query($s)),'num');
-		return $num;
-	}
-	function CountComment($postid){
-		$s=$this->db->sql->Count('Comment',array('comm_ID'=>'num'),array(array('LIKE','comm_LogID','%{'.$id.'}%')));
-		$num=GetValueInArray(current($this->db->Query($s)),'num');
-		return $num;
-	}
-	function CountTag($id){
-		$s=$this->db->sql->Count('Post',array('Log_ID'=>'num'),array(array('LIKE','log_Tag','%{'.$id.'}%')));
-		$num=GetValueInArray(current($this->db->Query($s)),'num');
-		return $num;
-	}
-	function CountAuthor($id){
-		$s=$this->db->sql->Count('Post',array('Log_ID'=>'num'),array(array('LIKE','log_AuthID','%{'.$id.'}%')));
-		$num=GetValueInArray(current($this->db->Query($s)),'num');
-		return $num;
-	}
 
 
 
@@ -1081,19 +1033,15 @@ class ZBlogPHP{
 
 	function ShowError($idortext){
 
-		$id=(int)$idortext;
+		if((int)$idortext==2){
+			Http404();
+		}
 
 		if(is_numeric($idortext))$idortext=$this->lang['error'][$idortext];
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($idortext);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-		}
-
-		if($id==2){
-			Http404();
-		}else{
-			Http500();
 		}
 
 		throw new Exception($idortext);

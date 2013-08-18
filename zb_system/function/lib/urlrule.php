@@ -14,32 +14,49 @@ class UrlRule
 	public $Rules=array();
 	public $Url='';
 	private $PreUrl='';
-	public $IsRemoveFirstPage=true;
+	public $MakeReplace=true;
 
 	public function __construct($url){
 		$this->PreUrl=$url;
 	}
 
-	public function Make(){
+	private function Make_Preg(){
+		global $zbp;
+
+		$this->Rules['{%host%}']=$zbp->host;
+		if(isset($this->Rules['{%page%}'])){
+			if($this->Rules['{%page%}']=='1'||$this->Rules['{%page%}']=='0'){$this->Rules['{%page%}']='';}
+		}
+		$s=$this->PreUrl;
+		foreach ($this->Rules as $key => $value) {
+			$s=preg_replace($key, $value, $s);
+		}
+		$s=preg_replace('/\{[\?\/&a-z0-9]*=\}/', '', $s);
+		$s=preg_replace('/\{\/?}/', '', $s);
+		$s=str_replace(array('{','}'), array('',''), $s);
+
+		$this->Url=htmlspecialchars($s);
+		return $this->Url;
+	}
+
+	private function Make_Replace(){
 		global $zbp;
 		$s=$this->PreUrl;
 
-		if($this->IsRemoveFirstPage){
-			if(isset($this->Rules['{%page%}'])){
-				if($this->Rules['{%page%}']=='1'||$this->Rules['{%page%}']=='0'){
-					$this->Rules['{%page%}']='';
-				}
-			}else{
+		if(isset($this->Rules['{%page%}'])){
+			if($this->Rules['{%page%}']=='1'||$this->Rules['{%page%}']=='0'){
 				$this->Rules['{%page%}']='';
 			}
-			if($this->Rules['{%page%}']==''){
-				if(substr_count($s,'{%page%}')==1&&substr_count($s,'{')==2){
-					$s=$zbp->host;
-				}
-				preg_match('/(?<=\})[^\{\}]+(?=\{%page%\})/i', $s, $matches);
-				if(isset($matches[0])){
-					$s=str_replace($matches[0],'',$s);
-				}
+		}else{
+			$this->Rules['{%page%}']='';
+		}
+		if($this->Rules['{%page%}']==''){
+			if(substr_count($s,'{%page%}')==1&&substr_count($s,'{')==2){
+				$s=$zbp->host;
+			}
+			preg_match('/(?<=\})[^\{\}]+(?=\{%page%\})/i', $s, $matches);
+			if(isset($matches[0])){
+				$s=str_replace($matches[0],'',$s);
 			}
 		}
 
@@ -50,6 +67,14 @@ class UrlRule
 
 		$this->Url=htmlspecialchars($s);
 		return $this->Url;
+	}
+
+	public function Make(){
+		if($this->MakeReplace){
+			return $this->Make_Replace();
+		}else{
+			return $this->Make_Preg();
+		}
 	}
 
 
