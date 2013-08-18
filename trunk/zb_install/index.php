@@ -624,7 +624,7 @@ function InsertInfo(){
   $mem->Guid=$guid;
   $mem->Level=1;
   $mem->Name=GetVars('username','POST');
-  $mem->Password=GetPassWordByGuid(GetVars('password','POST'),$guid);
+  $mem->Password=Member::GetPassWordByGuid(GetVars('password','POST'),$guid);
   $mem->IP=GetGuestIP();
   $mem->PostTime=time();
 
