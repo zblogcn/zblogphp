@@ -155,6 +155,8 @@ function VerifyMessage() {
 			$("#commentform :submit").removeClass("loading");
 			$("#commentform :submit").removeAttr("disabled");
 			$("#commentform :submit").val(strSubmit);
+
+			$("#content").val("");
 			
 			SaveRememberInfo();
 			CommentComplete();

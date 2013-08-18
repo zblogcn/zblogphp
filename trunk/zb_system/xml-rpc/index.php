@@ -636,11 +636,11 @@ function zbp_newMediaObject($xmlstring){
 
 $zbp->Load();
 
+Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','RespondError',PLUGIN_EXITSIGNAL_RETURN);
+
 $xmlstring = file_get_contents( 'php://input' );
 //logs($xmlstring);
 $xml = simplexml_load_string($xmlstring);
-
-Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','RespondError',PLUGIN_EXITSIGNAL_RETURN);
 
 if($xml){
 	$method=(string)$xml->methodName;

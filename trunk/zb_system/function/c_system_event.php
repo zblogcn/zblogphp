@@ -145,7 +145,7 @@ function ViewPost($id,$alias){
 	}
 
 
-	$pagebar=new Pagebar('javascript:GetComments(\''.$article->ID.'\',\'{%page%}\')');
+	$pagebar=new Pagebar('javascript:GetComments(\''.$article->ID.'\',\'{%page%}\')',false);
 	$pagebar->PageCount=$zbp->commentdisplaycount;
 	$pagebar->PageNow=1;
 	$pagebar->PageBarCount=$zbp->pagebarcount;
@@ -491,7 +491,17 @@ function DelComment(){
 }
 
 
+function CheckComment(){
 
+	$id=(int)GetVars('id','GET');
+	$ischecking=(bool)GetVars('ischecking','GET');
+
+	$cmt = new Comment();
+	$cmt->LoadInfoByID($id);
+	$cmt->IsChecking=$ischecking;
+
+	$cmt->Save();
+}
 
 
 
