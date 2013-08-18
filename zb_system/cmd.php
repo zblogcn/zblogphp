@@ -93,6 +93,11 @@ switch ($action) {
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=CategoryMng');
 		break;
+	case 'CommentChk':
+		CheckComment();
+		$zbp->SetHint('good');
+		Redirect('cmd.php?act=CommentMng');
+		break;
 	case 'CommentBat':
 		var_dump($_POST['id']);
 		break;

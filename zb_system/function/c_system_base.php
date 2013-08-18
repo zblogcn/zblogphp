@@ -124,7 +124,7 @@ $actions=array(
 	'CommentSav'=>5,
 	'CommentDel'=>5,
 	'CommentChk'=>5,
-	'CommentBat'=>5,	
+	'CommentBat'=>5,
 
 	'MemberEdt'=>5,
 	'MemberPst'=>5,
