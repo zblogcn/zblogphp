@@ -418,7 +418,7 @@ foreach ($array as $article) {
 	echo '<td class="td5">' . $article->ID .  '</td>';
 	echo '<td class="td10">' . $article->Category->Name . '</td>';
 	echo '<td class="td10">' . $article->Author->Name . '</td>';
-	echo '<td>' . $article->Title . '</td>';
+	echo '<td><a href="'.$article->Url.'"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title . '</td>';
 	echo '<td class="td20">' .$article->Time() . '</td>';
 	echo '<td class="td5">' . $article->CommNums . '</td>';
 	echo '<td class="td5">' . $article->StatusName . '</td>';
@@ -497,7 +497,7 @@ foreach ($array as $article) {
 	echo '<tr>';
 	echo '<td class="td5">' . $article->ID . '</td>';
 	echo '<td class="td10">' . $article->Author->Name . '</td>';
-	echo '<td>' . $article->Title . '</td>';
+	echo '<td><a href="'.$article->Url.'"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title . '</td>';
 	echo '<td class="td20">' . $article->Time() . '</td>';
 	echo '<td class="td5">' . $article->CommNums . '</td>';
 	echo '<td class="td5">' . $article->StatusName . '</td>';
@@ -553,7 +553,7 @@ foreach ($zbp->categorysbyorder as $category) {
 	echo '<tr>';
 	echo '<td class="td5">' . $category->ID . '</td>';
 	echo '<td class="td5">' . $category->Order . '</td>';
-	echo '<td class="td25">' . $category->Symbol . $category->Name . '</td>';
+	echo '<td class="td25"><a href="'.$category->Url.'"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $category->Symbol . $category->Name . '</td>';
 	echo '<td class="td20">' . $category->Alias . '</td>';
 	echo '<td class="td10">' . $category->Count . '</td>';
 	echo '<td class="td10 tdCenter">';
@@ -887,7 +887,7 @@ $array=$zbp->GetTagList(
 foreach ($array as $tag) {
 	echo '<tr>';
 	echo '<td class="td5">' . $tag->ID . '</td>';
-	echo '<td class="td25">' . $tag->Name . '</td>';
+	echo '<td class="td25"><a href="'.$tag->Url.'"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $tag->Name . '</td>';
 	echo '<td class="td20">' . $tag->Alias . '</td>';
 	echo '<td class="td10">' . $tag->Count . '</td>';	
 	echo '<td class="td10 tdCenter">';

@@ -934,6 +934,16 @@ function BuildModule_Del($modfilename){
 		return new Category;
 	}
 
+	function GetCategoryByAliasOrName($name){
+		$name=trim($name);
+		foreach ($this->categorys as $key => &$value) {
+			if(($value->Name==$name)||($value->Alias==$name)){
+				return $value;
+			}
+		}
+		return new Category;
+	}
+
 	function GetModuleByID($id){
 		$m = new Module;
 		if($id>0){
@@ -950,6 +960,16 @@ function BuildModule_Del($modfilename){
 			$m->Guid=GetGuid();
 			return $m;
 		}
+	}
+
+	function GetMemberByAliasOrName($name){
+		$name=trim($name);
+		foreach ($this->members as $key => &$value) {
+			if(($value->Name==$name)||($value->Alias==$name)){
+				return $value;
+			}
+		}
+		return new Member;
 	}
 
 	function GetCommentByID($id){
@@ -972,6 +992,18 @@ function BuildModule_Del($modfilename){
 			$m->LoadInfoByID($id);
 		}
 		return $m;
+	}
+
+	function GetTagByAliasOrName($name){
+		$a=array();
+		$a[]=array('tag_Name',$name);
+		$a[]=array('tag_Alias',$name);
+		$array=$this->GetTagList('',array(array('array',$a)),'',array(1),'');
+		if(count($array)==0){
+			return new Tag;
+		}else{
+			return $array[0];
+		}
 	}
 
 	function GetTagByID($id){

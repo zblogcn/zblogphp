@@ -222,16 +222,16 @@ h1,h2,h3,h4,h5,h6{
 .function li{
 	font-size:1em;
 	margin:0 0 0 0;
-	padding:8px 0 8px 0.9em;
-	background:url("default/pointblue.gif") no-repeat 0 16px;
+	padding:0.4em 0 0.4em 0.9em;
+	background:url("default/pointblue.gif") no-repeat 0 12px;
 	width:auto;
 }
 .function .function_c{
 	padding:0em;
 }
 .function .function_c div{
-	padding:0.5em 0 0.5em 1em;
-	line-height:2em;
+	padding:0.8em 0 0.5em 1em;
+	line-height:1.5em;
 }
 
 .function a{
@@ -311,6 +311,7 @@ h1,h2,h3,h4,h5,h6{
 #divCalendar table{
 	width:96%;
 	padding:0 2% 0 2%;
+	text-align:center;
 }
 
 /*------------------------------文章模块---------------------------*/

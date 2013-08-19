@@ -255,14 +255,43 @@ $Filter_Plugin_ViewList_Begin=array();
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_ViewPost_Begin
+'参数:
+'说明:定义列表输出接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_ViewPost_Begin=array();
+
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_ViewList_Begin
 '参数:
 '说明:定义列表输出接口
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_ViewPost=array();
+$Filter_Plugin_ViewList_Template=array();
 
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_ViewPost_Begin
+'参数:
+'说明:定义列表输出接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_ViewPost_Template=array();
 
 
 

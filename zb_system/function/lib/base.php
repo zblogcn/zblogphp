@@ -37,6 +37,9 @@ abstract class Base
 		return $this->Data[$name];
 	}
 
+	function GetDataArray(){
+		return $this->Data;
+	}
 
 	function LoadInfoByID($id){
 		global $zbp;
