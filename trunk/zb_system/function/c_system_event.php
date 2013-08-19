@@ -288,7 +288,7 @@ function PostArticle(){
 	if(!isset($_POST['ID']))return ;
 
 	if(isset($_POST['Tag'])){
-		$_POST['Tag']=CheckUnsetTagAndConvertIDString($_POST['Tag']);
+		$_POST['Tag']=PostArticle_CheckTagAndConvertIDtoString($_POST['Tag']);
 	}
 	if(isset($_POST['Content'])){
 		$_POST['Content']=str_replace('<hr class="more" />', '<!--more-->', $_POST['Content']);
@@ -355,6 +355,12 @@ function PostArticle(){
 	CountCategoryArrayString($pre_tag . $article->Tag);
 	CountMemberArray(array($pre_author,$article->AuthorID));
 	CountCategoryArray(array($pre_category,$article->CateID));
+	CountPostArray(array($article->ID));
+
+	$zbp->BuildModule_Add('previous');
+	$zbp->BuildModule_Add('calendar');
+	$zbp->BuildModule_Add('comments');
+	$zbp->BuildModule_Add('archives');
 
 	return true;
 }
@@ -377,9 +383,16 @@ function DelArticle(){
 
 		$article->Del();
 
+		DelArticle_Comments($article->ID);
+
 		CountCategoryArrayString($pre_tag);
 		CountMemberArray(array($pre_author));
 		CountCategoryArray(array($pre_category));
+
+		$zbp->BuildModule_Add('previous');
+		$zbp->BuildModule_Add('calendar');
+		$zbp->BuildModule_Add('comments');
+		$zbp->BuildModule_Add('archives');
 
 	}else{
 		
@@ -389,7 +402,7 @@ function DelArticle(){
 
 
 
-function CheckUnsetTagAndConvertIDString($tagnamestring){
+function PostArticle_CheckTagAndConvertIDtoString($tagnamestring){
 	global $zbp;
 	$s='';
 	$tagnamestring=str_replace(';', ',', $tagnamestring);
@@ -425,6 +438,14 @@ function CheckUnsetTagAndConvertIDString($tagnamestring){
 	return $s;
 }
 
+
+
+function DelArticle_Comments($id){
+	global $zbp;
+
+	$sql = $zbp->db->sql->Delete("Comment",array(array('=','comm_LogID',$id)));
+	$zbp->db->Delete($sql);
+}
 
 
 
@@ -470,6 +491,9 @@ function PostPage(){
 	$article->Save();
 
 	CountMemberArray(array($pre_author,$article->AuthorID));
+	CountPostArray(array($article->ID));
+
+	$zbp->BuildModule_Add('comments');
 
 	return true;
 }
@@ -489,7 +513,11 @@ function DelPage(){
 
 		$article->Del();
 
+		DelArticle_Comments($article->ID);
+
 		CountMemberArray(array($pre_author));
+
+		$zbp->BuildModule_Add('comments');
 
 	}else{
 		
@@ -561,6 +589,8 @@ function PostComment(){
 
 	CountPostArray(array($cmt->LogID));
 
+	$zbp->BuildModule_Add('comments');
+
 	$zbp->comments[$cmt->ID]=$cmt;
 	
 	if(GetVars('isajax','POST')){
@@ -572,10 +602,40 @@ function PostComment(){
 
 
 function DelComment(){
+	global $zbp;
 
+	$id=(int)GetVars('id','GET');
+	$cmt=$zbp->GetCommentByID($id);
+	if($cmt->ID>0){
+
+		$comments=$zbp->GetCommentList(
+			array('*'),
+			array(array('=','comm_LogID',$cmt->LogID)),
+			null,
+			null,
+			null
+		);
+
+		DelComment_Children($cmt->ID);
+
+		$cmt->Del();
+
+		$zbp->BuildModule_Add('comments');
+	}
+	return true;
 }
 
 function DelComment_Children($id){
+	global $zbp;
+
+	$cmt=$zbp->GetCommentByID($id);
+
+	foreach ($cmt->Comments as $comment) {
+		if(Count($comment->Comments)>0){
+			DelComment_Children($comment->ID);
+		}
+		$comment->Del();
+	}
 
 }
 
@@ -590,6 +650,9 @@ function CheckComment(){
 	$cmt->IsChecking=$ischecking;
 
 	$cmt->Save();
+
+	CountPostArray(array($cmt->LogID));
+	$zbp->BuildModule_Add('comments');
 }
 
 
@@ -626,6 +689,9 @@ function PostCategory(){
 	CountCategory($cate);
 
 	$cate->Save();
+
+	$zbp->BuildModule_Add('catalog');
+
 	return true;
 }
 
@@ -637,14 +703,20 @@ function DelCategory(){
 	$id=(int)GetVars('id','GET');
 	$cate=$zbp->GetCategoryByID($id);
 	if($cate->ID>0){
+		DelCategory_Articles($cate->ID);		
 		$cate->Del();
+		$zbp->BuildModule_Add('catalog');
 	}
 	return true;
 }
 
 
+function DelCategory_Articles($id){
+	global $zbp;
 
-
+	$sql = $zbp->db->sql->Update("Post",array('log_CateID'=>0),array(array('=','log_CateID',$id)));
+	$zbp->db->Update($sql);
+}
 
 
 
@@ -740,8 +812,8 @@ function DelMember(){
 	$id=(int)GetVars('id','GET');
 	$m=$zbp->GetMemberByID($id);
 	if($m->ID>0 && $m->ID<>$zbp->user->ID){
+		DelMember_AllData($id);		
 		$m->Del();
-		DelMember_AllData($id);
 	}else{
 		return false;
 	}
@@ -1029,6 +1101,12 @@ function FilterModule(&$module){
 
 
 
+
+
+
+
+
+
 ################################################################################################################
 #统计函数
 function CountPost(&$article){
@@ -1126,6 +1204,121 @@ function CountMemberArray($array){
 		CountMember($zbp->members[$value]);
 		$zbp->members[$value]->Save();
 	}	
+}
+
+
+
+
+
+
+
+################################################################################################################
+#BuildModule 
+function BuildModule_catalog(){
+	global $zbp;
+	$s='';
+	foreach ($zbp->categorysbyorder as $key => $value) {
+		$s .='<li><a href="'.$value->Url.'">' . $value->SymbolName . '</a></li>';
+	}
+
+	return $s;
+}
+
+function BuildModule_calendar($date=''){
+	global $zbp;
+return '';
+
+}
+
+function BuildModule_comments(){
+	global $zbp;
+
+	$comments=$zbp->GetCommentList(
+		array('*'),
+		array(array('=','comm_IsChecking',0)),
+		array('comm_PostTime'=>'DESC'),
+		array(10),
+		null
+	);
+
+	$s='';
+	foreach ($comments as $comment) {
+		$s .='<li><a href="'.$comment->Post->Url.'#cmt'.$comment->ID.'">' . TransferHTML($comment->Content,'[noenter]') . '</a></li>';
+	}
+	return $s;
+}
+
+function BuildModule_previous(){
+	global $zbp;
+
+	$articles=$zbp->GetArticleList(
+		array('*'),
+		array(array('=','log_Type',0),array('=','log_Status',0)),
+		array('log_PostTime'=>'DESC'),
+		array(10),
+		null
+	);
+	$s='';
+	foreach ($articles as $article) {
+		$s .='<li><a href="'.$article->Url.'">' . $article->Title . '</a></li>';
+	}
+	return $s;
+}
+
+function BuildModule_archives(){
+	global $zbp;
+
+	$fdate;
+	$ldate;
+
+$sql = $zbp->db->sql->Select('Post',array('log_PostTime'),null,array('log_PostTime'=>'DESC'),array(1),null);
+
+$array=$zbp->db->Query($sql);
+
+if(count($array)==0)return '';
+
+$ldate=array(date('Y',$array[0]['log_PostTime']),date('m',$array[0]['log_PostTime']));
+
+
+$sql = $zbp->db->sql->Select('Post',array('log_PostTime'),null,array('log_PostTime'=>'ASC'),array(1),null);
+
+$array=$zbp->db->Query($sql);
+
+if(count($array)==0)return '';
+
+$fdate=array(date('Y',$array[0]['log_PostTime']),date('m',$array[0]['log_PostTime']));
+
+//$ldate=array(2013,8);
+//$fdate=array(2012,8);
+
+$arraydate=array();
+
+for ($i=$fdate[0]; $i < $ldate[0]+1; $i++) { 
+	for ($j=1; $j<13 ; $j++) { 
+		$arraydate[]=strtotime($i . '-' . $j);
+	}
+}
+
+foreach ($arraydate as $key => $value) {
+
+if( $value - strtotime($ldate[0] . '-' . $ldate[1]) >0)unset($arraydate[$key]);
+if( $value - strtotime($fdate[0] . '-' . $fdate[1]) <0)unset($arraydate[$key]);
+	//echo date('c',$value) . "<br/>";
+}
+
+$arraydate=array_reverse($arraydate);
+
+$s='';
+foreach ($arraydate as $key => $value) {
+	$fdate = $value;
+	$ldate = (strtotime(date('Y-m-t',$value))+60*60*24);
+	$sql = $zbp->db->sql->Count('Post',array('log_ID'=>'num'),array(array('BETWEEN','log_PostTime',$fdate,$ldate)));
+	$n=GetValueInArray(current($zbp->db->Query($sql)),'num');
+	$s.='<li><a href="">'.date('Y',$fdate) .'-'. $zbp->lang['month_abbr'][date('n',$fdate)].' (' . $n  . ')</a></li>';
+}
+
+return $s;
+
 }
 
 ?>

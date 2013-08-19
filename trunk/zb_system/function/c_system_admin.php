@@ -559,7 +559,7 @@ foreach ($zbp->categorysbyorder as $category) {
 	echo '<td class="td10 tdCenter">';
 	echo '<a href="../cmd.php?act=CategoryEdt&amp;id='. $category->ID .'"><img src="../image/admin/folder_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=CategoryDel&amp;id=26"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
+	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=CategoryDel&amp;id='. $category->ID .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
 	echo '</td>';
 
 	echo '</tr>';
@@ -602,6 +602,7 @@ function Admin_CommentMng(){
 	<th>' . $zbp->lang['msg']['parend_id'] . '</th>
 	<th>' . $zbp->lang['msg']['name'] . '</th>
 	<th>' . $zbp->lang['msg']['content'] . '</th>
+	<th>' . $zbp->lang['msg']['article'] . '</th>	
 	<th>' . $zbp->lang['msg']['date'] . '</th>
 	<th>' . ''. '</th>
 	<th><a href="" onclick="BatchSelectAll();return false;">' . $zbp->lang['msg']['select_all'] . '</a></th>
@@ -641,6 +642,7 @@ foreach ($array as $cmt) {
 	echo '<td class="td5">' . $cmt->ParentID . '</td>';
 	echo '<td class="td10">' . $cmt->Author->Name . '</td>';
 	echo '<td>' . $cmt->Content . '</td>';
+	echo '<td class="td5">' . $cmt->LogID .  '</td>';	
 	echo '<td class="td15">' .$cmt->Time() . '</td>';
 	echo '<td class="td10 tdCenter">';
 	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=CommentDel&amp;id='. $cmt->ID .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
@@ -1268,9 +1270,9 @@ foreach ($plugins as $plugin) {
 
 	if($plugin->type=='plugin'){
 		if($plugin->IsUsed()){
-			echo '<a href="../cmd.php?act=PluginDisable&amp;name=' . htmlspecialchars($plugin->id) . '" title="' . $zbp->lang['msg']['disable'] . '"><img width="16" alt="' . $zbp->lang['msg']['disable'] . '" src="../image/admin/control-power.png"/></a>';
+			echo '<a href="../cmd.php?act=PluginDis&amp;name=' . htmlspecialchars($plugin->id) . '" title="' . $zbp->lang['msg']['disable'] . '"><img width="16" alt="' . $zbp->lang['msg']['disable'] . '" src="../image/admin/control-power.png"/></a>';
 		}else{
-			echo '<a href="../cmd.php?act=PluginEnable&amp;name=' . htmlspecialchars($plugin->id) . '" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../image/admin/control-power-off.png"/></a>';
+			echo '<a href="../cmd.php?act=PluginEnb&amp;name=' . htmlspecialchars($plugin->id) . '" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../image/admin/control-power-off.png"/></a>';
 		}
 	}
 	if($plugin->IsUsed() && $plugin->CanManage()){

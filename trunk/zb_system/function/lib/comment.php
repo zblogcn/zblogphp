@@ -40,6 +40,9 @@ class Comment extends Base{
 		if ($name=='Level') {
 			return null;
 		}
+		if ($name=='Post') {
+			return null;
+		}
 		parent::__set($name, $value);
 	}
 
@@ -77,6 +80,10 @@ class Comment extends Base{
 			if($c3->ParentID==0){return 3;}
 
 			return 4;
+		}
+		if ($name=='Post') {
+			$p=$zbp->GetPostByID($this->LogID);
+			return $p;
 		}
 		return parent::__get($name);
 	}

@@ -373,6 +373,11 @@ function TransferHTML($source,$para){
 		$source=str_replace("\r","<br/>",$source);
 		$source=preg_replace("/(<br\/>)+/", "<br/>", $source);
 	}
+	if(strpos($para, '[noenter]')!==false){
+		$source=str_replace("\r\n","",$source);
+		$source=str_replace("\n","",$source);
+		$source=str_replace("\r","",$source);
+	}
 	if(strpos($para, '[filename]')!==false){
 		$source=str_replace(array("/","#","$","\\",":","?","*","\"","<",">","|"," "),array(""),$source);
 	}

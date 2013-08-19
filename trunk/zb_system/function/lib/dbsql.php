@@ -44,6 +44,12 @@ class DbSql #extends AnotherClass
 					$y = $zbp->db->EscapeString($y);
 					$sqlw .= $comma . " $x $eq '$y' ";
 				}
+				if($eq=='BETWEEN'){
+					$b1 = (string)$w[1];
+					$b2 = (string)$w[2];
+					$b3 = (string)$w[3];
+					$sqlw .= $comma . " $b1 BETWEEN '$b2' AND '$b3' ";
+				}
 				if($eq=='search'){
 					$j=count($w);
 					$sql_search='';

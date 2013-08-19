@@ -29,6 +29,7 @@ class ZBlogPHP{
 	public $modulesbyfilename=array();
 	public $templates=array();
 	public $configs=array();
+	public $posts=array();	
 
 	public $templatetags=array();	
 
@@ -70,6 +71,9 @@ class ZBlogPHP{
 	
 	public $header = null;
 	public $footer = null;
+
+	private $modulefunc=array();
+	private $readymodules=array();
 
 	static public function GetInstance(){
 		if(!isset(self::$zbp)){
@@ -180,6 +184,16 @@ class ZBlogPHP{
 		$this->Verify();
 
 		$this->MakeTemplatetags();
+
+		$this->BuildModule_Reg('catalog','BuildModule_catalog');
+
+		$this->BuildModule_Reg('calendar','BuildModule_calendar');
+
+		$this->BuildModule_Reg('comments','BuildModule_comments');
+
+		$this->BuildModule_Reg('previous','BuildModule_previous');
+
+		$this->BuildModule_Reg('archives','BuildModule_archives');
 
 		$this->isload=true;
 	}
@@ -339,12 +353,6 @@ class ZBlogPHP{
 
 		$this->option['ZC_BLOG_CLSID']=$this->guid;
 
-		//$this->option['ZC_BLOG_NAME'] = $this->name;
-		//$this->option['ZC_BLOG_SUBNAME'] = $this->subname;
-		//$this->option['ZC_BLOG_THEME'] = $this->theme;
-		//$this->option['ZC_BLOG_CSS'] = $this->style;
-		//$this->option['ZC_BLOG_HOST'] = $this->host;
-
 		if(!$this->option['ZC_YUN_SITE']){
 			$s="<?php\r\n";
 			$s.="return ";
@@ -358,6 +366,8 @@ class ZBlogPHP{
 		}
 		$this->SaveConfig('system');
 
+		$this->cache->refesh=time();
+		$this->SaveCache();
 	}	
 
 
@@ -451,6 +461,57 @@ class ZBlogPHP{
 			}
 		}
 	}
+
+
+
+
+
+
+
+
+
+################################################################################################################
+#
+function BuildCache(){
+
+	foreach ($GLOBALS['Filter_Plugin_BuildCache'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($idortext);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+	}
+
+	foreach ($this->readymodules as $modfilename) {
+		if(isset($this->modulesbyfilename[$modfilename])){
+			if(isset($this->modulefunc[$modfilename])){
+				$m=&$this->modulesbyfilename[$modfilename];
+				$m->Content=call_user_func($this->modulefunc[$modfilename]);
+
+	$sql = $this->db->sql->Update("Module",array('mod_Content'=>$m->Content),array(array('=','mod_ID',$m->ID)));
+	$this->db->Update($sql);
+
+				unset($m);
+			}
+		}
+	}
+
+}
+
+function BuildModule_Reg($modfilename,$userfunc){
+
+	$this->modulefunc[$modfilename]=$userfunc;
+
+}
+
+function BuildModule_Add($modfilename){
+
+	$this->readymodules[]=$modfilename;
+}
+
+function BuildModule_Del($modfilename){
+
+	unset($this->readymodules[$modfilename]);
+}
+
+
 
 
 
@@ -760,11 +821,13 @@ class ZBlogPHP{
 		$tagstring = '';
 		foreach ($array as $a) {
 			$tagstring .= $a->Tag;
+			$this->posts[$a->ID]=$a;
 		}
 
 		$this->LoadTagsByIDString($tagstring);
 
 		return $array;
+
 	}
 
 	function GetPageList($select=null,$where=null,$order=null,$limit=null,$option=null){
@@ -773,7 +836,11 @@ class ZBlogPHP{
 		if(empty($where)){$where = array();}
 		$where[]= array('=','log_Type','1');
 		$sql = $this->db->sql->Select('Post',$select,$where,$order,$limit,$option);
-		return $this->GetList('Post',$sql);
+		$array = $this->GetList('Post',$sql);
+		foreach ($array as $a) {
+			$this->posts[$a->ID]=$a;
+		}
+		return $array;
 
 	}
 
@@ -837,10 +904,17 @@ class ZBlogPHP{
 #读取对象函数
 
 
-
-
-
-
+	function GetPostByID($id){
+		if($id==0)return new Post;
+		if(isset($this->posts[$id])){
+			return $this->posts[$id];
+		}else{
+			$p = new Post;
+			$p->LoadInfoByID($id);
+			$this->posts[$id]=$p;
+			return $p;
+		}
+	}
 
 	function GetCategoryByID($id){
 		if(isset($this->categorys[$id])){
