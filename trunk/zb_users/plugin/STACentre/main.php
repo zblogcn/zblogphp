@@ -24,6 +24,13 @@ if(count($_POST)>0){
 	$zbp->option['ZC_AUTHOR_REGEX']=trim(GetVars('ZC_AUTHOR_REGEX','POST'));	
 	$zbp->SaveOption();
 
+	$zbp->BuildModule_Add('previous');
+	$zbp->BuildModule_Add('calendar');
+	$zbp->BuildModule_Add('comments');
+	$zbp->BuildModule_Add('catalog');
+	$zbp->BuildModule_Add('authors');
+	$zbp->BuildCache();
+	$zbp->SetHint('good');
 	Redirect('./list.php');
 }
 
@@ -56,8 +63,9 @@ $ua=array(
 'ZC_CATEGORY_REGEX' =>array(
  '{%host%}?cate={%id%}&page={%page%}',
  '{%host%}category-{%id%}_{%page%}.html',
- '{%host%}category/{%id%}/{%page%}/',
  '{%host%}category-{%alias%}_{%page%}.html',
+ '{%host%}category/{%id%}/{%page%}/',
+ '{%host%}category/{%alias%}/{%page%}',
 ),
 
 

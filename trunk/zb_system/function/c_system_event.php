@@ -56,11 +56,18 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	}
 
 	$type='index';
-	$template=$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
-	$page=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+	if($cate!==null)$type='category';
+	if($auth!==null)$type='author';
+	if($date!==null)$type='date';
+	if($tags!==null)$type='tag';
+
+	$category=null;
+	$author=null;
+	$datetime=null;
+	$tag=null;
+
 	$articles_top=array();
 	$articles=array();
-
 	if($type=='index' && $page==1){
 		$articles_top=$zbp->GetArticleList(
 			array('*'),
@@ -71,8 +78,119 @@ function ViewList($page,$cate,$auth,$date,$tags){
 		);
 	}
 
+	$w=array();
+	$w[]=array('=','log_Istop',0);
+	$w[]=array('=','log_Status',0);
 
+	$page=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+
+	switch ($type) {
+		########################################################################################################
+		case 'index':
 	$pagebar=new Pagebar($zbp->option['ZC_INDEX_REGEX']);
+	$category=new Metas;
+	$author=new Metas;
+	$datetime=new Metas;
+	$tag=new Metas;
+	$template=$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+	if($page==1){
+		$zbp->title=$zbp->subname;
+	}else{
+		$zbp->title=str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
+	}
+			break;
+		########################################################################################################
+		case 'category':
+	$pagebar=new Pagebar($zbp->option['ZC_CATEGORY_REGEX']);
+	$author=new Metas;
+	$datetime=new Metas;
+	$tag=new Metas;
+
+	$category=new Category;
+	if(strpos($zbp->option['ZC_CATEGORY_REGEX'],'{%id%}')!==false){
+		$category=$zbp->GetCategoryByID($cate);
+	}
+	if(strpos($zbp->option['ZC_CATEGORY_REGEX'],'{%alias%}')!==false){
+		$category=$zbp->GetCategoryByAliasOrName($cate);
+	}
+	if($category->ID==0)$zbp->ShowError(2);
+	if($page==1){
+		$zbp->title=$category->Name;
+	}else{
+		$zbp->title=$category->Name . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
+	}
+	$template=$category->Template;
+	$w[]=array('=','log_CateID',$category->ID);
+	$pagebar->UrlRule->Rules['{%id%}']=$category->ID;
+	$pagebar->UrlRule->Rules['{%alias%}']=$category->Alias==''?urlencode($category->Name):$category->Alias;
+			break;
+		########################################################################################################
+		case 'author':
+	$pagebar=new Pagebar($zbp->option['ZC_AUTHOR_REGEX']);
+	$category=new Metas;
+	$datetime=new Metas;
+	$tag=new Metas;
+
+	$author=new Member;
+	if(strpos($zbp->option['ZC_AUTHOR_REGEX'],'{%id%}')!==false){
+		$author=$zbp->GetMemberByID($auth);
+	}
+	if(strpos($zbp->option['ZC_AUTHOR_REGEX'],'{%alias%}')!==false){
+		$author=$zbp->GetMemberByAliasOrName($auth);
+	}
+	if($author->ID==0)$zbp->ShowError(2);
+	if($page==1){
+		$zbp->title=$author->Name;
+	}else{
+		$zbp->title=$author->Name . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
+	}
+	$template=$author->Template;
+	$w[]=array('=','log_AuthorID',$author->ID);
+	$pagebar->UrlRule->Rules['{%id%}']=$author->ID;
+	$pagebar->UrlRule->Rules['{%alias%}']=$author->Alias==''?urlencode($author->Name):$author->Alias;
+			break;
+		########################################################################################################
+		case 'date':
+	$pagebar=new Pagebar($zbp->option['ZC_DATE_REGEX']);
+	$category=new Metas;
+	$author=new Metas;
+	$tag=new Metas;
+	$datetime=strtotime($date);
+
+	$datetitle=str_replace(array('%y%','%m%'), array(date('Y',$datetime),date('n',$datetime)), $zbp->lang['msg']['year_month']);
+	if($page==1){
+		$zbp->title=$datetitle;
+	}else{
+		$zbp->title=$datetitle . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
+	}
+
+	$template=$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+	$w[]=array('BETWEEN','log_PostTime',$datetime,strtotime('+1 month',$datetime));
+	$pagebar->UrlRule->Rules['{%date%}']=$date;
+	$datetime=Metas::ConvertArray(getdate($datetime));
+			break;
+		########################################################################################################
+		case 'tag':
+	$pagebar=new Pagebar($zbp->option['ZC_TAGS_REGEX']);
+	$category=new Metas;
+	$author=new Metas;
+	$datetime=new Metas;
+	$tag=new Tag;
+	if(strpos($zbp->option['ZC_TAGS_REGEX'],'{%id%}')!==false){
+		$tag=$zbp->GetTagByID($tags);
+	}
+	if(strpos($zbp->option['ZC_TAGS_REGEX'],'{%alias%}')!==false){
+		$tag=$zbp->GetTagByAliasOrName($tags);
+	}
+	if($tag->ID==0)$zbp->ShowError(2);
+
+	$template=$tag->Template;
+	$w[]=array('LIKE','log_Tag','%{'.$tag->ID.'}%');
+	$pagebar->UrlRule->Rules['{%id%}']=$tag->ID;
+	$pagebar->UrlRule->Rules['{%alias%}']=$tag->Alias==''?urlencode($tag->Name):$tag->Alias;
+			break;
+	}
+
 	$pagebar->PageCount=$zbp->displaycount;
 	$pagebar->PageNow=$page;
 	$pagebar->PageBarCount=$zbp->pagebarcount;
@@ -80,13 +198,11 @@ function ViewList($page,$cate,$auth,$date,$tags){
 
 	$articles=$zbp->GetArticleList(
 		array('*'),
-		array(array('=','log_Istop',0),array('=','log_Status',0)),
+		$w,
 		array('log_PostTime'=>'DESC'),
 		array(($pagebar->PageNow-1) * $pagebar->PageCount,$pagebar->PageCount),
 		array('pagebar'=>$pagebar)
 	);
-
-	if($type=='index'&&$page==1){$zbp->title=$zbp->subname;}
 
 	$zbp->template->SetTags('title',$zbp->title);
 	$zbp->template->SetTags('articles',array_merge($articles_top,$articles));
@@ -95,6 +211,16 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	$zbp->template->SetTags('page',$page);
 	$zbp->template->SetTags('header',$zbp->header);
 	$zbp->template->SetTags('footer',$zbp->footer);
+
+
+	$zbp->template->SetTags('date',$datetime);
+	$zbp->template->SetTags('tag',$tag);
+	$zbp->template->SetTags('author',$type);
+	$zbp->template->SetTags('category',$category);
+
+	foreach ($GLOBALS['Filter_Plugin_ViewList_Template'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname();
+	}
 
 	$zbp->template->display($template);
 
@@ -106,7 +232,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 
 function ViewPost($id,$alias){
 	global $zbp;
-	foreach ($GLOBALS['Filter_Plugin_ViewPost'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($id,$alias);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
@@ -191,6 +317,10 @@ function ViewPost($id,$alias){
 	$zbp->template->SetTags('comments',$comments);
 	$zbp->template->SetTags('header',$zbp->header);
 	$zbp->template->SetTags('footer',$zbp->footer);
+
+	foreach ($GLOBALS['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname();
+	}
 
 	$zbp->template->display($article->Template);
 }
@@ -1218,7 +1348,7 @@ function BuildModule_catalog(){
 	global $zbp;
 	$s='';
 	foreach ($zbp->categorysbyorder as $key => $value) {
-		$s .='<li><a href="'.$value->Url.'">' . $value->SymbolName . '</a></li>';
+		$s .='<li><a href="'.$value->Url.'">' . $value->Name . '</a></li>';
 	}
 
 	return $s;
@@ -1226,7 +1356,99 @@ function BuildModule_catalog(){
 
 function BuildModule_calendar($date=''){
 	global $zbp;
-return '';
+
+	if($date=='')$date=date('Y-m',time());
+
+	$s='<table id="tbCalendar"><caption>';
+
+	$url=new UrlRule($zbp->option['ZC_DATE_REGEX']);
+	$value=strtotime('-1 month',strtotime($date));
+	$url->Rules['{%date%}']=date('Y-n',$value);
+	$url->Rules['{%year%}']=date('Y',$value);
+	$url->Rules['{%month%}']=date('n',$value);
+
+	$url->Rules['{%day%}']=1;
+	$s.='<a href="'.$url->Make().'">«</a>';
+
+	$value=strtotime($date);
+	$url->Rules['{%date%}']=date('Y-n',$value);
+	$url->Rules['{%year%}']=date('Y',$value);
+	$url->Rules['{%month%}']=date('n',$value);
+	$s.='&nbsp;&nbsp;&nbsp;<a href="'.$url->Make().'">'.
+		str_replace(array('%y%','%m%'), array(date('Y',$value),date('n',$value)), $zbp->lang['msg']['year_month'])
+		.'</a>&nbsp;&nbsp;&nbsp;';
+
+	$value=strtotime('+1 month',strtotime($date));
+	$url->Rules['{%date%}']=date('Y-n',$value);
+	$url->Rules['{%year%}']=date('Y',$value);
+	$url->Rules['{%month%}']=date('n',$value);
+	$s.='<a href="'.$url->Make().'">»</a></caption>';
+
+	$s.='<thead><tr>';
+	for ($i=1; $i < 8; $i++) { 
+		$s.='<th title="'.$zbp->lang['week'][$i].'" scope="col" abbr="'.$zbp->lang['week'][$i].'"><small>'.$zbp->lang['week_abbr'][$i].'</small></th>';
+	}
+
+	$s.='</tr></thead>';
+	$s.='<tbody>';
+	$s.='<tr>';
+
+	$a=1;
+	$b=date('t',strtotime($date));
+	$j=date('N',strtotime($date.'-1'));
+	$k=7-date('N',strtotime($date.'-'.date('t',strtotime($date))));
+
+	if($j>1){
+		$s.='<td class="pad" colspan="'.($j-1).'"> </td>';
+	}elseif($j=1){
+		$s.='<td class="pad"> </td>';
+	}
+
+	$l=$j-1;
+	for ($i=$a; $i < $b+1; $i++) { 
+		$s.='<td>'.$i.'</td>';
+
+		$l=$l+1;
+		if($l % 7==0)$s.='</tr><tr>';
+	}
+
+	if($k>1){
+		$s.='<td class="pad" colspan="'.($k-1).'"> </td>';
+	}elseif($k=1){
+		$s.='<td class="pad"> </td>';
+	}
+
+	$s.='</tr></tbody>';
+	$s.='</table>';
+
+	$fdate = strtotime($date);
+	$ldate = (strtotime(date('Y-m-t',strtotime($date)))+60*60*24);
+	$sql = $zbp->db->sql->Select(
+		'Post',
+		array('log_ID','log_PostTime'),
+		array(array('=','log_Type','0'),array('=','log_Status','0'),array('BETWEEN','log_PostTime',$fdate,$ldate)),
+		null,
+		null,
+		null
+		);
+	$array=$zbp->db->Query($sql);
+	$arraydate=array();
+	$arrayid=array();
+	foreach ($array as $key => $value) {
+		$arraydate[date('j',$value['log_PostTime'])]=$value['log_ID'];
+	}
+	if(count($arraydate)>0){
+		foreach ($arraydate as $key => $value) {
+			$arrayid[]=array('log_ID',$value);
+		}
+		$articles=$zbp->GetArticleList('',array(array('array',$arrayid)),'','','');
+		foreach ($arraydate as $key => $value) {
+			$a=$zbp->GetPostByID($value);
+			$s=str_replace('<td>'.$key.'</td>', '<td><a href="'.$a->Url.'">'.$key.'</a></td>', $s);
+		}
+	}
+
+	return $s;
 
 }
 
@@ -1271,53 +1493,57 @@ function BuildModule_archives(){
 	$fdate;
 	$ldate;
 
-$sql = $zbp->db->sql->Select('Post',array('log_PostTime'),null,array('log_PostTime'=>'DESC'),array(1),null);
+	$sql = $zbp->db->sql->Select('Post',array('log_PostTime'),null,array('log_PostTime'=>'DESC'),array(1),null);
 
-$array=$zbp->db->Query($sql);
+	$array=$zbp->db->Query($sql);
 
-if(count($array)==0)return '';
+	if(count($array)==0)return '';
 
-$ldate=array(date('Y',$array[0]['log_PostTime']),date('m',$array[0]['log_PostTime']));
+	$ldate=array(date('Y',$array[0]['log_PostTime']),date('m',$array[0]['log_PostTime']));
 
 
-$sql = $zbp->db->sql->Select('Post',array('log_PostTime'),null,array('log_PostTime'=>'ASC'),array(1),null);
+	$sql = $zbp->db->sql->Select('Post',array('log_PostTime'),null,array('log_PostTime'=>'ASC'),array(1),null);
 
-$array=$zbp->db->Query($sql);
+	$array=$zbp->db->Query($sql);
 
-if(count($array)==0)return '';
+	if(count($array)==0)return '';
 
-$fdate=array(date('Y',$array[0]['log_PostTime']),date('m',$array[0]['log_PostTime']));
+	$fdate=array(date('Y',$array[0]['log_PostTime']),date('m',$array[0]['log_PostTime']));
 
-//$ldate=array(2013,8);
-//$fdate=array(2012,8);
+	$arraydate=array();
 
-$arraydate=array();
-
-for ($i=$fdate[0]; $i < $ldate[0]+1; $i++) { 
-	for ($j=1; $j<13 ; $j++) { 
-		$arraydate[]=strtotime($i . '-' . $j);
+	for ($i=$fdate[0]; $i < $ldate[0]+1; $i++) { 
+		for ($j=1; $j<13 ; $j++) { 
+			$arraydate[]=strtotime($i . '-' . $j);
+		}
 	}
-}
 
-foreach ($arraydate as $key => $value) {
+	foreach ($arraydate as $key => $value) {
+		if( $value - strtotime($ldate[0] . '-' . $ldate[1]) >0)unset($arraydate[$key]);
+		if( $value - strtotime($fdate[0] . '-' . $fdate[1]) <0)unset($arraydate[$key]);
+	}
 
-if( $value - strtotime($ldate[0] . '-' . $ldate[1]) >0)unset($arraydate[$key]);
-if( $value - strtotime($fdate[0] . '-' . $fdate[1]) <0)unset($arraydate[$key]);
-	//echo date('c',$value) . "<br/>";
-}
+	$arraydate=array_reverse($arraydate);
 
-$arraydate=array_reverse($arraydate);
+	$s='';
 
-$s='';
-foreach ($arraydate as $key => $value) {
-	$fdate = $value;
-	$ldate = (strtotime(date('Y-m-t',$value))+60*60*24);
-	$sql = $zbp->db->sql->Count('Post',array('log_ID'=>'num'),array(array('BETWEEN','log_PostTime',$fdate,$ldate)));
-	$n=GetValueInArray(current($zbp->db->Query($sql)),'num');
-	$s.='<li><a href="">'.date('Y',$fdate) .'-'. $zbp->lang['month_abbr'][date('n',$fdate)].' (' . $n  . ')</a></li>';
-}
+	foreach ($arraydate as $key => $value) {
+		$url=new UrlRule($zbp->option['ZC_DATE_REGEX']);
+		$url->Rules['{%date%}']=date('Y-n',$value);
+		$url->Rules['{%year%}']=date('Y',$value);
+		$url->Rules['{%month%}']=date('n',$value);
+		$url->Rules['{%day%}']=1;
 
-return $s;
+		$fdate = $value;
+		$ldate = (strtotime(date('Y-m-t',$value))+60*60*24);
+		$sql = $zbp->db->sql->Count('Post',array('log_ID'=>'num'),array(array('=','log_Type','0'),array('=','log_Status','0'),array('BETWEEN','log_PostTime',$fdate,$ldate)));
+		$n=GetValueInArray(current($zbp->db->Query($sql)),'num');
+		$s.='<li><a href="'.$url->Make().'">'.
+			str_replace(array('%y%','%m%'), array(date('Y',$fdate),date('n',$fdate)), $zbp->lang['msg']['year_month'])
+			.' (' . $n  . ')</a></li>';
+	}
+
+	return $s;
 
 }
 

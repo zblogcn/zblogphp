@@ -90,7 +90,12 @@ class DbSql #extends AnotherClass
 		$sqll='';
 
 		if(!empty($select)) {
-			$sqls="SELECT $select[0] FROM {$zbp->table[$type]} ";
+			if(is_array($select)){
+				$selectstr=implode($select,',');
+				$sqls="SELECT $selectstr FROM {$zbp->table[$type]} ";			
+			}else{
+				$sqls="SELECT $select FROM {$zbp->table[$type]} ";	
+			}
 		}
 
 		$sqlw=$this->ParseWhere($where);
