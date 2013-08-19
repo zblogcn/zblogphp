@@ -40,6 +40,7 @@ switch ($action) {
 			Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','RespondError',PLUGIN_EXITSIGNAL_RETURN);
 		}
 		PostComment();
+		$zbp->BuildCache();
 		if(GetVars('isajax','POST')){
 			die();
 		}else{
@@ -55,6 +56,7 @@ switch ($action) {
 		break;
 	case 'ArticleDel':
 		DelArticle();
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=ArticleMng');
 		break;
@@ -63,6 +65,7 @@ switch ($action) {
 		break;
 	case 'ArticlePst':
 		PostArticle();
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=ArticleMng');
 		break;
@@ -71,6 +74,7 @@ switch ($action) {
 		break;
 	case 'PageDel':
 		DelPage();
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=PageMng');
 		break;
@@ -79,6 +83,7 @@ switch ($action) {
 		break;
 	case 'PagePst':
 		PostPage();
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=PageMng');
 		break;
@@ -90,16 +95,31 @@ switch ($action) {
 		break;
 	case 'CategoryPst':
 		PostCategory();
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=CategoryMng');
 		break;
+	case 'CategoryDel':
+		DelCategory();
+		$zbp->BuildCache();
+		$zbp->SetHint('good');
+		Redirect('cmd.php?act=CategoryMng');
+		break;	
+	case 'CommentDel':
+		DelComment();
+		$zbp->BuildCache();
+		$zbp->SetHint('good');
+		Redirect('cmd.php?act=CommentMng');
+		break;	
 	case 'CommentChk':
 		CheckComment();
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=CommentMng');
 		break;
 	case 'CommentBat':
 		var_dump($_POST['id']);
+		$zbp->BuildCache();
 		break;
 	case 'CommentMng':
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
@@ -115,11 +135,13 @@ switch ($action) {
 		break;
 	case 'MemberPst':
 		PostMember();
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=MemberMng');
 		break;
 	case 'MemberDel':
 		if(DelMember()){
+			$zbp->BuildCache();
 			$zbp->SetHint('good');
 		}else{
 			$zbp->SetHint('bad');			
@@ -147,11 +169,13 @@ switch ($action) {
 		break;
 	case 'TagPst':
 		PostTag();
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=TagMng');
 		break;
 	case 'TagDel':
 		DelTag();
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=TagMng');
 		break;
@@ -161,15 +185,17 @@ switch ($action) {
 		}
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
-	case 'PluginDisable':
+	case 'PluginDis':
 		UninstallPlugin(GetVars('name','GET'));
 		DisablePlugin(GetVars('name','GET'));
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=PluginMng');
 		break;
-	case 'PluginEnable':
+	case 'PluginEnb':
 		$install='&install=';
 		$install .= EnablePlugin(GetVars('name','GET'));
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=PluginMng' . $install);
 		break;
@@ -178,10 +204,12 @@ switch ($action) {
 		break;
 	case 'ThemeSet':
 		SetTheme(GetVars('theme','POST'),GetVars('style','POST'));
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=ThemeMng');
 		break;
 	case 'SidebarSet':
+		$zbp->BuildCache();
 		SetSidebar();
 		break;
 	case 'ModuleEdt':
@@ -189,11 +217,13 @@ switch ($action) {
 		break;
 	case 'ModulePst':
 		PostModule();
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=ModuleMng');
 		break;
 	case 'ModuleDel':
 		DelModule();
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=ModuleMng');
 		break;
@@ -205,6 +235,7 @@ switch ($action) {
 		break;	
 	case 'SettingSav':
 		SaveSetting();
+		$zbp->BuildCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=SettingMng');
 		break;	

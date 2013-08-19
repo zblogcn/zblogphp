@@ -214,6 +214,16 @@ $Filter_Plugin_Zbp_BuildTemplate=array();
 
 
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_BuildTemplate
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_BuildCache=array();
 
 
 

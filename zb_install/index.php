@@ -721,13 +721,13 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="站点统计";
+  $t->Name="站点信息";
   $t->FileName="statistics";
   $t->Source="system";
   $t->SidebarID=0;
   $t->Content="";
   $t->HtmlID="divStatistics";
-  $t->Type="ul";
+  $t->Type="div";
   $t->Save();
 
 
