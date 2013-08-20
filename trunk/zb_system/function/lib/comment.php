@@ -9,6 +9,7 @@
 
 class Comment extends Base{
 
+	public $IsThrow=false;
 
 	function __construct()
 	{

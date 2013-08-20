@@ -11,7 +11,7 @@ require './zb_system/function/c_system_base.php';
 $zbp->Load();
 
 $article = new Post;
-$article->Title='标签';
+$article->Title=$zbp->lang['msg']['tags'];
 $article->IsLock=true;
 $article->Type=ZC_POST_TYPE_PAGE;
 
@@ -32,7 +32,7 @@ if(count($array)>0){
 	$i=$t[0];
 	$i=($i-$j)/count($array);
 	$t=array();	
-	$j=20;
+	$j=16;
 
 	foreach ($array as $tag) {
 		$j-=0.2;

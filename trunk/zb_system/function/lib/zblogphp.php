@@ -23,12 +23,12 @@ class ZBlogPHP{
 	public $membersbyname=array();
 	public $categorys=array();
 	public $categorysbyorder=array();	
-	public $tags=array();
-	public $tagsbyname=array();	
 	public $modules=array();
 	public $modulesbyfilename=array();
 	public $templates=array();
 	public $configs=array();
+	public $tags=array();
+	public $tagsbyname=array();	
 	public $posts=array();	
 
 	public $templatetags=array();	
@@ -125,7 +125,7 @@ class ZBlogPHP{
 	}
 
 	function __call($method, $args) {
-		throw new Exception('zbp不存在方法：'.$method);
+		$this->ShowError(0);
 	}
 
 
@@ -235,7 +235,7 @@ class ZBlogPHP{
 			break;
 		case 'sqlite':
 		case 'sqlite3':
-			$this->CreateDB($this->option['ZC_DATABASE_TYPE']);
+			$this->InitializeDB($this->option['ZC_DATABASE_TYPE']);
 			if($this->db->Open(array(
 				$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
 				$this->option['ZC_SQLITE_PRE']
@@ -996,13 +996,15 @@ function BuildModule_Del($modfilename){
 
 	function GetTagByAliasOrName($name){
 		$a=array();
+		$a[]=array('tag_Alias',$name);		
 		$a[]=array('tag_Name',$name);
-		$a[]=array('tag_Alias',$name);
 		$array=$this->GetTagList('',array(array('array',$a)),'',array(1),'');
 		if(count($array)==0){
 			return new Tag;
 		}else{
-			return $array[0];
+			$this->tags[$array[0]->ID]=$array[0];
+			$this->tagsbyname[$array[0]->ID]=&$this->tags[$array[0]->ID];
+			return $this->tags[$array[0]->ID];
 		}
 	}
 
@@ -1010,11 +1012,13 @@ function BuildModule_Del($modfilename){
 		if(isset($this->tags[$id])){
 			return $this->tags[$id];
 		}else{
-			$array=$this->LoadTagsByIDString('{'.$id.'}');
+			$array=$this->GetTagList('',array(array('=','tag_ID',$id)),'',array(1),'');
 			if(count($array)==0){
 				return new Tag;
 			}else{
-				return $this->tags[$id];
+				$this->tags[$array[0]->ID]=$array[0];
+				$this->tagsbyname[$array[0]->ID]=&$this->tags[$array[0]->ID];
+				return $this->tags[$array[0]->ID];
 			}
 
 		}
