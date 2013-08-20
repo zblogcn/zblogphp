@@ -58,7 +58,7 @@ class UrlRule
 			if(isset($matches[0])){
 				$s=str_replace($matches[0],'',$s);
 			}
-			if(substr($s,-1)=='/')$s=substr($s,0,strlen($s)-1);
+			if(substr($s,-9)=='{%page%}/')$s=substr($s,0,strlen($s)-1);
 		}
 
 		$this->Rules['{%host%}']=$zbp->host;

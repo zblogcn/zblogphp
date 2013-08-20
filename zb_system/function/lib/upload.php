@@ -26,6 +26,10 @@ class Upload extends Base{
 		$this->PostTime = time();
 	}
 
+	function DelFile(){
+		@unlink($this->FullFile);
+	}
+
 	function SaveFile($tmp){
 		global $zbp;
 		if(!file_exists($zbp->usersdir . $this->Dir)){

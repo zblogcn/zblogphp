@@ -289,11 +289,13 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['upload'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['upload'][1];?></td>
         </tr>
+<?php if(file_exists('../zb_users/c_option.php')){?>
         <tr>
           <td scope="row">zb_users/c_option.php</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option.php'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option.php'][1];?></td>
-        </tr>        
+        </tr>  
+<?php }?>
         <tr>
           <th colspan="3" scope="row">函数检查</th>
         </tr>

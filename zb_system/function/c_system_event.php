@@ -164,6 +164,8 @@ function ViewList($page,$cate,$auth,$date,$tags){
 		$zbp->title=$datetitle . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
 	}
 
+	$zbp->modulesbyfilename['calendar']->Content=BuildModule_calendar(date('Y',$datetime).'-'.date('n',$datetime));
+
 	$template=$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
 	$w[]=array('BETWEEN','log_PostTime',$datetime,strtotime('+1 month',$datetime));
 	$pagebar->UrlRule->Rules['{%date%}']=$date;
@@ -480,6 +482,10 @@ function PostArticle(){
 	FilterArticle($article);
 	FilterMeta($article);
 
+	foreach ($GLOBALS['Filter_Plugin_PostArticle_Core'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($cmt);
+	}
+
 	$article->Save();
 
 	CountCategoryArrayString($pre_tag . $article->Tag);
@@ -618,6 +624,10 @@ function PostPage(){
 	FilterArticle($article);
 	FilterMeta($article);
 
+	foreach ($GLOBALS['Filter_Plugin_PostPage_Core'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($cmt);
+	}
+
 	$article->Save();
 
 	CountMemberArray(array($pre_author,$article->AuthorID));
@@ -712,22 +722,31 @@ function PostComment(){
 	$cmt->IP           = GetVars('IP','POST');
 	$cmt->Agent        = GetVars('Agent','POST');	
 
+	foreach ($GLOBALS['Filter_Plugin_PostComment_Core'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($cmt);
+	}
 
 	FilterComment($cmt);
 
-	$cmt->Save();
+	if($cmt->IsThrow==false){
 
-	CountPostArray(array($cmt->LogID));
+		$cmt->Save();
 
-	$zbp->BuildModule_Add('comments');
+		CountPostArray(array($cmt->LogID));
 
-	$zbp->comments[$cmt->ID]=$cmt;
-	
-	if(GetVars('isajax','POST')){
-		ViewComment($cmt->ID);
+		$zbp->BuildModule_Add('comments');
+
+		$zbp->comments[$cmt->ID]=$cmt;
+		
+		if(GetVars('isajax','POST')){
+			ViewComment($cmt->ID);
+		}
+
+		return true;
+
+	}else{
+		$zbp->ShowError(14);
 	}
-
-	return true;
 }
 
 
@@ -1067,7 +1086,7 @@ function DelUpload(){
 	if($zbp->CheckRights('UploadAll')||(!$zbp->CheckRights('UploadAll')&&$u->AuthorID==$zbp->user->ID)){
 		$u->Del();
 		CountMemberArray(array($u->AuthorID));
-		@unlink($u->FullFile);
+		$u->DelFile();		
 	}else{
 		return false;
 	}
@@ -1401,7 +1420,7 @@ function BuildModule_calendar($date=''){
 	if($j>1){
 		$s.='<td class="pad" colspan="'.($j-1).'"> </td>';
 	}elseif($j=1){
-		$s.='<td class="pad"> </td>';
+		$s.='';
 	}
 
 	$l=$j-1;
@@ -1415,11 +1434,12 @@ function BuildModule_calendar($date=''){
 	if($k>1){
 		$s.='<td class="pad" colspan="'.($k-1).'"> </td>';
 	}elseif($k=1){
-		$s.='<td class="pad"> </td>';
+		$s.='';
 	}
 
 	$s.='</tr></tbody>';
 	$s.='</table>';
+	$s=str_replace('<tr></tr>', '', $s);
 
 	$fdate = strtotime($date);
 	$ldate = (strtotime(date('Y-m-t',strtotime($date)))+60*60*24);
@@ -1427,7 +1447,7 @@ function BuildModule_calendar($date=''){
 		'Post',
 		array('log_ID','log_PostTime'),
 		array(array('=','log_Type','0'),array('=','log_Status','0'),array('BETWEEN','log_PostTime',$fdate,$ldate)),
-		null,
+		array('log_PostTime'=>'ASC'),
 		null,
 		null
 		);

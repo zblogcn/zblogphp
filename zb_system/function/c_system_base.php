@@ -78,7 +78,7 @@ foreach ($lib_array as $f) {
 }
 
 $zbpvers=array();
-$zbpvers[]='1.0 Alpha Build 130707';
+$zbpvers['130707']='1.0 Alpha Build 130707';
 
 #定义常量
 define('ZC_BLOG_VERSION', '1.0 Alpha Build 130707');
