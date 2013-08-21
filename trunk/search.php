@@ -8,6 +8,8 @@
 
 require './zb_system/function/c_system_base.php';
 
+foreach ($GLOBALS['Filter_Plugin_Search_Begin'] as $fpname => &$fpsignal) {$fpname();}
+
 $zbp->Load();
 
 $action='search';
