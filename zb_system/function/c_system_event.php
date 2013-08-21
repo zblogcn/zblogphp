@@ -221,7 +221,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	$zbp->template->SetTags('category',$category);
 
 	foreach ($GLOBALS['Filter_Plugin_ViewList_Template'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname();
+		$fpreturn=$fpname($zbp->template);
 	}
 
 	$zbp->template->display($template);
@@ -321,7 +321,7 @@ function ViewPost($id,$alias){
 	$zbp->template->SetTags('footer',$zbp->footer);
 
 	foreach ($GLOBALS['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname();
+		$fpreturn=$fpname($zbp->template);
 	}
 
 	$zbp->template->display($article->Template);
@@ -379,6 +379,10 @@ function ViewComments($postid,$page){
 	if($pagebar->PageAll==1)$pagebar=null;
 	$zbp->template->SetTags('pagebar',$pagebar);
 	$zbp->template->SetTags('comments',$comments);
+
+	foreach ($GLOBALS['Filter_Plugin_ViewComments_Template'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($zbp->template);
+	}
 
 	$zbp->template->display($template);
 
@@ -732,20 +736,30 @@ function PostComment(){
 
 		$cmt->Save();
 
-		CountPostArray(array($cmt->LogID));
+		if($cmt->IsChecking==false){
 
-		$zbp->BuildModule_Add('comments');
+			CountPostArray(array($cmt->LogID));
 
-		$zbp->comments[$cmt->ID]=$cmt;
-		
-		if(GetVars('isajax','POST')){
-			ViewComment($cmt->ID);
+			$zbp->BuildModule_Add('comments');
+
+			$zbp->comments[$cmt->ID]=$cmt;
+			
+			if(GetVars('isajax','POST')){
+				ViewComment($cmt->ID);
+			}
+
+			return true;
+
+		}else{
+
+			$zbp->ShowError(53);
+
 		}
 
-		return true;
-
 	}else{
+
 		$zbp->ShowError(14);
+
 	}
 }
 

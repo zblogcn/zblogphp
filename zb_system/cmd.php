@@ -5,6 +5,8 @@ $zbp->Load();
 
 $action=GetVars('act','GET');
 
+foreach ($GLOBALS['Filter_Plugin_Cmd_Begin'] as $fpname => &$fpsignal) {$fpname();}
+
 if(!$zbp->CheckRights($action)){$zbp->ShowError(6);die();}
 
 switch ($action) {
@@ -109,13 +111,13 @@ switch ($action) {
 		DelComment();
 		$zbp->BuildCache();
 		$zbp->SetHint('good');
-		Redirect('cmd.php?act=CommentMng');
+		Redirect($_SERVER["HTTP_REFERER"]);
 		break;	
 	case 'CommentChk':
 		CheckComment();
 		$zbp->BuildCache();
 		$zbp->SetHint('good');
-		Redirect('cmd.php?act=CommentMng');
+		Redirect($_SERVER["HTTP_REFERER"]);
 		break;
 	case 'CommentBat':
 		var_dump($_POST['id']);

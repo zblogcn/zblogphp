@@ -35,7 +35,9 @@ function zbp_addmodsubmenu(){
 function zbp_addcmtsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('CommentAll')){
-		echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left '.(GetVars('ischecking')?'m-now':'').'">' . $GLOBALS['lang']['msg']['check_comment'] . '</span></a>';
+		$n=GetValueInArray(current($zbp->db->Query('SELECT COUNT(comm_ID) AS num FROM ' . $GLOBALS['table']['Comment'] . ' WHERE comm_Ischecking=1')),'num');
+		if($n!=0){$n=' ('.$n.')';}else{$n='';}
+		echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left '.(GetVars('ischecking')?'m-now':'').'">' . $GLOBALS['lang']['msg']['check_comment']  . $n . '</span></a>';
 	}
 }
 
@@ -145,7 +147,7 @@ function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUr
 
 	$AdminLeftMenuCount=$AdminLeftMenuCount+1;
 	$tmp=null;
-	if($strImgUrl==""){
+	if($strImgUrl!=""){
 		$tmp="<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\"><span style=\"background-image:url('" . $strImgUrl . "')\">" . $strName . "</span></a></li>";
 	}else{
 		$tmp="<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\"><span>" . $strName . "</span></a></li>";
@@ -666,8 +668,8 @@ foreach ($p->buttons as $key => $value) {
 
 	echo '</p><p>';
 
-	echo '<input type="submit" onclick="" value="删除所选评论"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-	echo '<input type="submit" onclick="" value="审核所选评论"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+	//echo '<input type="submit" onclick="" value="删除所选评论"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+	//echo '<input type="submit" onclick="" value="审核所选评论"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 
 	echo '</p><hr/></form>';
 
