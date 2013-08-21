@@ -28,7 +28,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
-  <div class="divHeader2"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle;?></div>
   <div class="SubMenu"></div>
   <div id="divMain2" class="edit category_edit">
 	<form id="edit" name="edit" method="post" action="#">

@@ -1,3 +1,6 @@
+{if $socialcomment}
+{$socialcomment}
+{else}
 <!--评论输出-->
 {foreach $comments as $key => $comment}
 {template:comment}
@@ -12,3 +15,5 @@
 
 <!--评论框-->
 {template:commentpost}
+
+{/if}
