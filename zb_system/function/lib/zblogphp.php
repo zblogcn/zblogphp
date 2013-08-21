@@ -22,22 +22,23 @@ class ZBlogPHP{
 	public $members=array();
 	public $membersbyname=array();
 	public $categorys=array();
-	public $categorysbyorder=array();	
+	public $categorysbyorder=array();
 	public $modules=array();
 	public $modulesbyfilename=array();
 	public $templates=array();
 	public $configs=array();
-	public $tags=array();
-	public $tagsbyname=array();	
-	public $posts=array();	
 
-	public $templatetags=array();	
+	private $tags=array();
+	private $tagsbyname=array();
+	private $posts=array();
+
+	public $templatetags=array();
 
 	public $title=null;
 	public $name=null;
 	public $subname=null;
 	public $theme = null;
-	public $style = null;	
+	public $style = null;
 
 	public $user=null;
 	public $cache=null;
@@ -47,7 +48,7 @@ class ZBlogPHP{
 
 	public $isinitialize=false;
 	public $isconnect=false;
-	public $isload=false;	
+	public $isload=false;
 
 	public $template = null;
 
@@ -74,6 +75,7 @@ class ZBlogPHP{
 
 	private $modulefunc=array();
 	private $readymodules=array();
+	public $socialcomment = null;
 
 	static public function GetInstance(){
 		if(!isset(self::$zbp)){
@@ -672,6 +674,7 @@ function BuildModule_Del($modfilename){
 		$this->templatetags['feedurl']=$this->host . 'feed.php';
 		$this->templatetags['type']='';
 		$this->templatetags['page']='';
+		$this->templatetags['socialcomment']=&$this->socialcomment;
 
 		$s=array(
 			$option['ZC_SIDEBAR_ORDER'],

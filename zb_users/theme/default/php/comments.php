@@ -1,4 +1,7 @@
-<label id="AjaxCommentBegin"></label><!--评论输出-->
+<label id="AjaxCommentBegin"></label><?php if ($socialcomment) { ?>
+<?php  echo $socialcomment;  ?>
+<?php }else{  ?>
+<!--评论输出-->
 <?php  foreach ( $comments as $key => $comment) { ?> 
 <?php  include $this->GetTemplate('comment');  ?>
 <?php  }   ?>
@@ -11,4 +14,6 @@
 </div>
 
 <!--评论框-->
-<?php  include $this->GetTemplate('commentpost');  ?><label id="AjaxCommentEnd"></label>
+<?php  include $this->GetTemplate('commentpost');  ?>
+
+<?php } ?><label id="AjaxCommentEnd"></label>

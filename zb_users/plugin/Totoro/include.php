@@ -46,8 +46,8 @@ function Totoro_Core_BlackWord(&$cmt){
 	$array=array_unique($array);
 	$i=count($array[0]);
 
-	if($i>=$BlackWord_Audit)	$cmt->IsChecking=true;
-	if($i>=$BlackWord_Throw)	$cmt->IsThrow=true;
+	if($i>=$BlackWord_Audit) $cmt->IsChecking=true;
+	if($i>=$BlackWord_Throw) $cmt->IsThrow=true;
 
 }
 
