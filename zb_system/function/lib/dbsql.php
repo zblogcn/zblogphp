@@ -18,8 +18,8 @@ interface iDataBase
 	public function Insert($query);
 	public function Update($query);
 	public function Delete($query);
-	public function CreateTable($path);
-	public function EscapeString($s);	
+	public function QueryMulit($s);
+	public function EscapeString($s);
 }
 
 
@@ -29,6 +29,109 @@ interface iDataBase
 */
 class DbSql #extends AnotherClass
 {
+	public $type=null;
+
+	public function CreateTable($tablename,$datainfo){
+
+	$s='';
+
+	if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'){
+		$s.='CREATE TABLE IF NOT EXISTS '.$tablename.' (';
+
+		$i=0;
+		foreach ($datainfo as $key => $value) {
+			if($value[1]=='integer'){
+				if($i==0){
+					$s.=$value[0] .' int(11) NOT NULL AUTO_INCREMENT' . ',';
+				}else{
+					$s.=$value[0] .' int(11) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+				}
+			}
+			if($value[1]=='boolean'){
+				$s.=$value[0] . ' tinyint(1) NOT NULL DEFAULT \''.(int)$value[3].'\'' . ',';
+			}
+			if($value[1]=='string'){
+				if($value[2]!=''){
+					$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \'\'' . ',';
+				}else{
+					$s.=$value[0] . ' text NOT NULL ' . ',';	
+				}
+			}
+			$i +=1;
+		}
+		reset($datainfo);
+		$s.='PRIMARY KEY ('.GetValueInArray(current($datainfo),0).'),';
+		$s=substr($s,0,strlen($s)-1);
+		$s.=') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
+	}
+
+	if($this->type=='DbSQLite'){
+		$s.='CREATE TABLE '.$tablename.' (';
+
+		$i=0;
+		foreach ($datainfo as $key => $value) {
+			if($value[1]=='integer'){
+				if($i==0){
+					$s.=$value[0] .' integer primary key' . ',';
+				}else{
+					$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+				}
+			}
+			if($value[1]=='boolean'){
+				$s.=$value[0] . ' bit NOT NULL DEFAULT \''.(int)$value[3].'\'' . ',';
+			}
+			if($value[1]=='string'){
+				if($value[2]!=''){
+					$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \'\'' . ',';
+				}else{
+					$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';	
+				}
+			}
+			$i +=1;
+		}
+		$s=substr($s,0,strlen($s)-1);
+
+		$s.=');';
+		reset($datainfo);
+		$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArray(current($datainfo),0).' on '.$tablename.' ('.GetValueInArray(current($datainfo),0).');';
+
+	}
+
+	if($this->type=='DbSQLite3'){
+		$s.='CREATE TABLE '.$tablename.' (';
+
+		$i=0;
+		foreach ($datainfo as $key => $value) {
+			if($value[1]=='integer'){
+				if($i==0){
+					$s.=$value[0] .' integer primary key autoincrement' . ',';
+				}else{
+					$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+				}
+			}
+			if($value[1]=='boolean'){
+				$s.=$value[0] . ' bit NOT NULL DEFAULT \''.(int)$value[3].'\'' . ',';
+			}
+			if($value[1]=='string'){
+				if($value[2]!=''){
+					$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \'\'' . ',';
+				}else{
+					$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';	
+				}
+			}
+			$i +=1;
+		}
+		$s=substr($s,0,strlen($s)-1);
+
+		$s.=');';
+		reset($datainfo);
+		$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArray(current($datainfo),0).' on '.$tablename.' ('.GetValueInArray(current($datainfo),0).');';
+	}
+
+	return $s;
+}
+
+
 	public function ParseWhere($where){
 		global $zbp;
 
@@ -38,7 +141,7 @@ class DbSql #extends AnotherClass
 			$comma = '';
 			foreach($where as $k => $w) {
 				$eq=$w[0];
-				if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'){
+				if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='!='){
 					$x = (string)$w[1];
 					$y = (string)$w[2];
 					$y = $zbp->db->EscapeString($y);
@@ -80,7 +183,7 @@ class DbSql #extends AnotherClass
 		return $sqlw;
 	}
 
-	public function Select($type,$select,$where,$order,$limit,$option)
+	public function Select($table,$select,$where,$order,$limit,$option)
 	{
 		global $zbp;
 
@@ -92,9 +195,9 @@ class DbSql #extends AnotherClass
 		if(!empty($select)) {
 			if(is_array($select)){
 				$selectstr=implode($select,',');
-				$sqls="SELECT $selectstr FROM {$zbp->table[$type]} ";			
+				$sqls="SELECT $selectstr FROM $table ";			
 			}else{
-				$sqls="SELECT $select FROM {$zbp->table[$type]} ";	
+				$sqls="SELECT $select FROM $table ";	
 			}
 		}
 
@@ -121,7 +224,7 @@ class DbSql #extends AnotherClass
 
 		if(!empty($option)){
 			if(isset($option['pagebar'])){
-				$s2 = $this->Count($type,array($zbp->datainfo[$type]['ID'][0]=>'num'),$where);
+				$s2 = $this->Count($table,array('*'=>'num'),$where);
 				$option['pagebar']->Count = GetValueInArray(current($zbp->db->Query($s2)),'num');
 				$option['pagebar']->make();
 			}
@@ -129,14 +232,14 @@ class DbSql #extends AnotherClass
 		return $sqls . $sqlw . $sqlo . $sqll;
 	}
 
-	public function Count($type,$count,$where)
+	public function Count($table,$count,$where)
 	{
 		global $zbp;
 		$sqlc=null;
 
 		if(!empty($count)) {
 			foreach ($count as $key => $value) {
-				$sqlc="SELECT COUNT($key) AS $value FROM {$zbp->table[$type]} ";
+				$sqlc="SELECT COUNT($key) AS $value FROM $table ";
 			}
 		}
 
@@ -145,11 +248,11 @@ class DbSql #extends AnotherClass
 		return $sqlc . $sqlw;
 	}
 	
-	public function Update($type,$keyvalue,$where)
+	public function Update($table,$keyvalue,$where)
 	{
 		global $zbp;
 
-		$sql="UPDATE {$zbp->table[$type]} SET ";
+		$sql="UPDATE $table SET ";
 
 		$comma = '';
 		foreach ($keyvalue as $k => $v) {
@@ -162,11 +265,11 @@ class DbSql #extends AnotherClass
 		return $sql;
 	}
 
-	public function Insert($type,$keyvalue)
+	public function Insert($table,$keyvalue)
 	{
 		global $zbp;
 
-		$sql="INSERT INTO {$zbp->table[$type]} ";
+		$sql="INSERT INTO $table ";
 
 		$sql.='(';
 		$comma = '';
@@ -186,11 +289,11 @@ class DbSql #extends AnotherClass
 		return  $sql;
 	}
 
-	public function Delete($type,$where)
+	public function Delete($table,$where)
 	{
 		global $zbp;
 
-		$sql="DELETE FROM {$zbp->table[$type]} ";
+		$sql="DELETE FROM $table ";
 		$sql.=$this->ParseWhere($where);
 		return $sql;
 	}

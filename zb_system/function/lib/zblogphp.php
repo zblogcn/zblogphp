@@ -27,9 +27,9 @@ class ZBlogPHP{
 	public $modulesbyfilename=array();
 	public $templates=array();
 	public $configs=array();
-
-	private $tags=array();
-	private $tagsbyname=array();
+	public $tags=array();
+	public $tagsbyname=array();
+	public $comments = array();
 	private $posts=array();
 
 	public $templatetags=array();
@@ -43,6 +43,9 @@ class ZBlogPHP{
 	public $user=null;
 	public $cache=null;
 
+	private $modulefunc=array();
+	private $readymodules=array();
+
 	public $table=null;
 	public $datainfo=null;
 
@@ -51,6 +54,9 @@ class ZBlogPHP{
 	public $isload=false;
 
 	public $template = null;
+	public $socialcomment = null;
+	public $header = null;
+	public $footer = null;
 
 	public $themes = array();
 	public $plugins = array();
@@ -68,15 +74,7 @@ class ZBlogPHP{
 	public $sidebar5=array();
 
 	public $usersdir = null;
-	public $comments = array();
 	
-	public $header = null;
-	public $footer = null;
-
-	private $modulefunc=array();
-	private $readymodules=array();
-	public $socialcomment = null;
-
 	static public function GetInstance(){
 		if(!isset(self::$zbp)){
 			self::$_zbp=new ZBlogPHP;
@@ -148,8 +146,8 @@ class ZBlogPHP{
 		$this->LoadOption();
 
 		if($this->option['ZC_DEBUG_MODE']==true){
-			//error_reporting(-1);
-			//@ini_set("display_errors",1);
+			error_reporting(-1);
+			@ini_set("display_errors",1);
 		}
 
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){
@@ -213,7 +211,6 @@ class ZBlogPHP{
 		if(!trim($type))return false;
 		$newtype='Db'.trim($type);
 		$this->db=new $newtype();
-		$this->db->sql=new DbSql;
 	}
 
 	public function OpenConnect(){
@@ -269,7 +266,7 @@ class ZBlogPHP{
 
 	public function LoadConfigs(){
 
-		$sql = $this->db->sql->Select('Config',array('*'),'','','','');
+		$sql = $this->db->sql->Select($this->table['Config'],array('*'),'','','','');
 		$array=$this->db->Query($sql);
 		foreach ($array as $c) {
 			$m=new Metas;
@@ -279,7 +276,7 @@ class ZBlogPHP{
 	}
 
 	public function DelConfig($name){
-		$sql = $this->db->sql->Delete('Config',array(array('=','conf_Name',$name)));
+		$sql = $this->db->sql->Delete($this->table['Config'],array(array('=','conf_Name',$name)));
 		$this->db->Delete($sql);
 	}
 
@@ -288,17 +285,17 @@ class ZBlogPHP{
 		if(!isset($this->configs[$name]))return false;
 
 		$kv=array('conf_Name'=>$name,'conf_Value'=>$this->configs[$name]->Serialize());
-		$sql = $this->db->sql->Select('Config',array('*'),array(array('=','conf_Name',$name)),'','','');
+		$sql = $this->db->sql->Select($this->table['Config'],array('*'),array(array('=','conf_Name',$name)),'','','');
 		$array=$this->db->Query($sql);
 
 		if(count($array)==0){
 			$k=array('conf_Name','conf_Value');
 			$v=array($name,$this->configs[$name]->Serialize());		
-			$sql = $this->db->sql->Insert('Config',$kv);
+			$sql = $this->db->sql->Insert($this->table['Config'],$kv);
 			$this->db->Insert($sql);
 		}else{
 			array_shift($kv);
-			$sql = $this->db->sql->Update('Config',$kv,array(array('=','conf_Name',$name)));
+			$sql = $this->db->sql->Update($this->table['Config'],$kv,array(array('=','conf_Name',$name)));
 			$this->db->Update($sql);
 		}
 	}
@@ -487,7 +484,7 @@ function BuildCache(){
 				$m=&$this->modulesbyfilename[$modfilename];
 				$m->Content=call_user_func($this->modulefunc[$modfilename]);
 
-	$sql = $this->db->sql->Update("Module",array('mod_Content'=>$m->Content),array(array('=','mod_ID',$m->ID)));
+	$sql = $this->db->sql->Update($this->table['Module'],array('mod_Content'=>$m->Content),array(array('=','mod_ID',$m->ID)));
 	$this->db->Update($sql);
 
 				unset($m);
@@ -787,7 +784,19 @@ function BuildModule_Del($modfilename){
 #加载数据对像List函数
 
 
+	function GetListCustom($table,$datainfo,$sql){
 
+		$array=null;
+		$list=array();
+		$array=$this->db->Query($sql);
+		if(!isset($array)){return array();}
+		foreach ($array as $a) {
+			$l=new Base($table,$datainfo);
+			$l->LoadInfoByAssoc($a);
+			$list[]=$l;
+		}
+		return $list;
+	}
 
 
 
@@ -809,7 +818,7 @@ function BuildModule_Del($modfilename){
 
 		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
-		$sql = $this->db->sql->Select('Post',$select,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
 		return $this->GetList('Post',$sql);
 
 	}
@@ -819,7 +828,7 @@ function BuildModule_Del($modfilename){
 		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
 		$where[]= array('=','log_Type','0');
-		$sql = $this->db->sql->Select('Post',$select,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
 		$array = $this->GetList('Post',$sql);
 		$tagstring = '';
 		foreach ($array as $a) {
@@ -838,7 +847,7 @@ function BuildModule_Del($modfilename){
 		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
 		$where[]= array('=','log_Type','1');
-		$sql = $this->db->sql->Select('Post',$select,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
 		$array = $this->GetList('Post',$sql);
 		foreach ($array as $a) {
 			$this->posts[$a->ID]=$a;
@@ -850,7 +859,7 @@ function BuildModule_Del($modfilename){
 	function GetCommentList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
-		$sql = $this->db->sql->Select('Comment',$select,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select($this->table['Comment'],$select,$where,$order,$limit,$option);
 		$array=$this->GetList('Comment',$sql);
 		foreach ($array as $comment) {
 			$this->comments[$comment->ID]=$comment;
@@ -862,7 +871,7 @@ function BuildModule_Del($modfilename){
 	function GetMemberList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
-		$sql = $this->db->sql->Select('Member',$select,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select($this->table['Member'],$select,$where,$order,$limit,$option);
 		return $this->GetList('Member',$sql);
 
 	}
@@ -870,7 +879,7 @@ function BuildModule_Del($modfilename){
 	function GetTagList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
-		$sql = $this->db->sql->Select('Tag',$select,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select($this->table['Tag'],$select,$where,$order,$limit,$option);
 		return $this->GetList('Tag',$sql);
 
 	}
@@ -878,7 +887,7 @@ function BuildModule_Del($modfilename){
 	function GetCategoryList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
-		$sql = $this->db->sql->Select('Category',$select,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select($this->table['Category'],$select,$where,$order,$limit,$option);
 		return $this->GetList('Category',$sql);
 
 	}
@@ -886,14 +895,14 @@ function BuildModule_Del($modfilename){
 	function GetModuleList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
-		$sql = $this->db->sql->Select('Module',$select,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select($this->table['Module'],$select,$where,$order,$limit,$option);
 		return $this->GetList('Module',$sql);
 	}
 
 	function GetUploadList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
-		$sql = $this->db->sql->Select('Upload',$select,$where,$order,$limit,$option);
+		$sql = $this->db->sql->Select($this->table['Upload'],$select,$where,$order,$limit,$option);
 		return $this->GetList('Upload',$sql);
 	}
 

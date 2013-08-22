@@ -9,14 +9,14 @@ CREATE TABLE %pre%post (
   log_IsTop bit NOT NULL DEFAULT 0,
   log_IsLock bit NOT NULL DEFAULT 0,
   log_Title varchar(255) NOT NULL DEFAULT '',
-  log_Intro Meta text NOT NULL DEFAULT '',
-  log_Content Meta text NOT NULL DEFAULT '',
+  log_Intro text NOT NULL DEFAULT '',
+  log_Content text NOT NULL DEFAULT '',
   log_IP varchar(15) NOT NULL DEFAULT '',
   log_PostTime integer NOT NULL DEFAULT 0,
   log_CommNums integer NOT NULL DEFAULT 0,
   log_ViewNums integer NOT NULL DEFAULT 0,
   log_Template varchar(50) NOT NULL DEFAULT '',
-  log_Meta Meta text NOT NULL DEFAULT ''
+  log_Meta text NOT NULL DEFAULT ''
 );
 
 
@@ -26,12 +26,12 @@ CREATE TABLE %pre%category (
   cate_Order integer NOT NULL DEFAULT 0,
   cate_Count integer NOT NULL DEFAULT 0,
   cate_Alias varchar(255) NOT NULL DEFAULT '',
-  cate_Intro Meta text NOT NULL DEFAULT '',
+  cate_Intro text NOT NULL DEFAULT '',
   cate_RootID integer NOT NULL DEFAULT 0,
   cate_ParentID integer NOT NULL DEFAULT 0,
   cate_Template varchar(50) NOT NULL DEFAULT '',
   cate_LogTemplate varchar(50) NOT NULL DEFAULT '',
-  cate_Meta Meta text NOT NULL DEFAULT ''
+  cate_Meta text NOT NULL DEFAULT ''
 );
 
 
@@ -45,11 +45,11 @@ CREATE TABLE %pre%comment (
   comm_Name varchar(20) NOT NULL DEFAULT '',
   comm_Email varchar(50) NOT NULL DEFAULT '',
   comm_HomePage varchar(255) NOT NULL DEFAULT '',
-  comm_Content Meta text NOT NULL DEFAULT '',
+  comm_Content text NOT NULL DEFAULT '',
   comm_PostTime integer NOT NULL DEFAULT 0,
   comm_IP varchar(15) NOT NULL DEFAULT '',
-  comm_Agent Meta text NOT NULL DEFAULT '',
-  comm_Meta Meta text NOT NULL DEFAULT ''
+  comm_Agent text NOT NULL DEFAULT '',
+  comm_Meta text NOT NULL DEFAULT ''
 );
 
 
@@ -63,12 +63,12 @@ CREATE TABLE %pre%counter (
   coun_ID integer primary key autoincrement,
   coun_MemID integer NOT NULL DEFAULT 0,
   coun_IP varchar(15) NOT NULL DEFAULT '',
-  coun_Agent Meta text NOT NULL DEFAULT '',
+  coun_Agent text NOT NULL DEFAULT '',
   coun_Refer varchar(255) NOT NULL DEFAULT '',
   coun_Title varchar(255) NOT NULL DEFAULT '',
   coun_PostTime integer NOT NULL DEFAULT 0,
-  coun_Description Meta text NOT NULL DEFAULT '',
-  coun_PostData Meta text NOT NULL DEFAULT '',
+  coun_Description text NOT NULL DEFAULT '',
+  coun_PostData text NOT NULL DEFAULT '',
   coun_AllRequestHeader text
 );
 
@@ -85,13 +85,13 @@ CREATE TABLE %pre%member (
   mem_IP varchar(15) NOT NULL DEFAULT '',
   mem_PostTime integer NOT NULL DEFAULT 0,
   mem_Alias varchar(255) NOT NULL DEFAULT '',
-  mem_Intro Meta text NOT NULL DEFAULT '',
+  mem_Intro text NOT NULL DEFAULT '',
   mem_Articles integer NOT NULL DEFAULT 0,
   mem_Pages integer NOT NULL DEFAULT 0,
   mem_Comments integer NOT NULL DEFAULT 0,
   mem_Uploads integer NOT NULL DEFAULT 0,
   mem_Template varchar(50) NOT NULL DEFAULT '',  
-  mem_Meta Meta text NOT NULL DEFAULT ''
+  mem_Meta text NOT NULL DEFAULT ''
 );
 
 
@@ -99,14 +99,14 @@ CREATE TABLE %pre%module (
   mod_ID integer primary key autoincrement,
   mod_Name varchar(100) NOT NULL DEFAULT '',
   mod_FileName varchar(50) NOT NULL DEFAULT '',
-  mod_Content Meta text NOT NULL DEFAULT '',
+  mod_Content text NOT NULL DEFAULT '',
   mod_SidebarID integer NOT NULL DEFAULT 0,
   mod_HtmlID varchar(50) NOT NULL DEFAULT '',
   mod_Type varchar(5) NOT NULL DEFAULT '',
   mod_MaxLi integer NOT NULL DEFAULT 0,
   mod_Source varchar(50) NOT NULL DEFAULT '',
   mod_IsHideTitle bit NOT NULL DEFAULT 0,
-  mod_Meta Meta text NOT NULL DEFAULT ''
+  mod_Meta text NOT NULL DEFAULT ''
 );
 
 
@@ -116,9 +116,9 @@ CREATE TABLE %pre%tag (
   tag_Order integer NOT NULL DEFAULT 0,
   tag_Count integer NOT NULL DEFAULT 0,
   tag_Alias varchar(255) NOT NULL DEFAULT '',  
-  tag_Intro Meta text NOT NULL DEFAULT '',
+  tag_Intro text NOT NULL DEFAULT '',
   tag_Template varchar(50) NOT NULL DEFAULT '',
-  tag_Meta Meta text NOT NULL DEFAULT ''
+  tag_Meta text NOT NULL DEFAULT ''
 );
 
 
@@ -132,8 +132,8 @@ CREATE TABLE %pre%upload (
   ul_PostTime integer NOT NULL DEFAULT 0,
   ul_DownNums integer NOT NULL DEFAULT 0,
   ul_LogID int(11) NOT NULL DEFAULT '0',  
-  ul_Intro Meta text NOT NULL DEFAULT '',
-  ul_Meta Meta text NOT NULL DEFAULT ''
+  ul_Intro text NOT NULL DEFAULT '',
+  ul_Meta text NOT NULL DEFAULT ''
 );
 
 CREATE INDEX %pre%log_PostTime on %pre%post (log_PostTime);

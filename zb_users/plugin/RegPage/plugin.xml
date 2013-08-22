@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<plugin version="php">
+	<id>RegPage</id>
+	<name>注册组件</name>
+	<url>http://www.rainbowsoft.org/</url>
+	<note>注册组件</note>
+	<path>main.php</path>
+	<include>include.php</include>
+	<level>1</level>
+	<author>
+		<name>zsx</name>
+		<url>http://www.zsxsoft.com/</url>
+		<email> zsx@zsxsoft.com</email>
+	</author>
+	<version>1.0</version>
+	<adapted>130707</adapted>
+	<pubdate>2013-7-7</pubdate>
+	<modified>2013-7-7</modified>
+</plugin>

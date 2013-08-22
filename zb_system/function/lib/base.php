@@ -9,7 +9,7 @@
 /**
 * BaseClass
 */
-abstract class Base
+class Base
 {
 
 	public $table='';
@@ -19,9 +19,24 @@ abstract class Base
 
 	protected $Data = array();
 	
+	function __construct($table,$datainfo)
+	{
+        global $zbp;
+
+        $this->table=$table;
+        $this->datainfo=$datainfo;
+
+		$this->Metas=new Metas;
+
+		foreach ($this->datainfo as $key => $value) {
+			$this->Data[$key]=$value[3];
+		}
+
+	}
+
 	public function __set($name, $value)
 	{
-		global $zbp;
+		//global $zbp;
 		//if ($name=='Meta') {
 		//	$this->Metas->Unserialize($value);
 		//}
@@ -30,7 +45,7 @@ abstract class Base
 
 	public function __get($name) 
 	{
-		global $zbp;
+		//global $zbp;
 		//if ($name=='Meta') {
 		//	$this->Data['Meta'] = $this->Metas->Serialize();
 		//}
@@ -68,7 +83,7 @@ abstract class Base
 				$this->Data[$key]=$array[$value[0]];
 			}			
 		}
-		$this->Metas->Unserialize($this->Data['Meta']);
+		if(isset($this->Data['Meta']))$this->Metas->Unserialize($this->Data['Meta']);
 		return true;
 	}
 
@@ -86,14 +101,14 @@ abstract class Base
 			}
 			$i += 1;
 		}
-		$this->Metas->Unserialize($this->Data['Meta']);
+		if(isset($this->Data['Meta']))$this->Metas->Unserialize($this->Data['Meta']);
 		return true;
 	}	
 
 	function Save(){
 		global $zbp;
 
-		$this->Data['Meta'] = $this->Metas->Serialize();
+		if(isset($this->Data['Meta']))$this->Data['Meta'] = $this->Metas->Serialize();
 
 		$keys=array();
 		foreach ($this->datainfo as $key => $value) {
@@ -111,10 +126,10 @@ abstract class Base
 		array_shift($keyvalue);
 
 		if ($this->ID  ==  0) {
-			$sql = $zbp->db->sql->Insert(get_class($this),$keyvalue);
+			$sql = $zbp->db->sql->Insert($this->table,$keyvalue);
 			$this->ID = $zbp->db->Insert($sql);
 		} else {
-			$sql = $zbp->db->sql->Update(get_class($this),$keyvalue,array(array('=',$this->datainfo['ID'][0],$this->ID)));
+			$sql = $zbp->db->sql->Update($this->table,$keyvalue,array(array('=',$this->datainfo['ID'][0],$this->ID)));
 			return $zbp->db->Update($sql);
 		}
 
@@ -124,7 +139,7 @@ abstract class Base
 
 	function Del(){
 		global $zbp;
-		$sql = $zbp->db->sql->Delete(get_class($this),array(array('=',$this->datainfo['ID'][0],$this->ID)));
+		$sql = $zbp->db->sql->Delete($this->table,array(array('=',$this->datainfo['ID'][0],$this->ID)));
 		$zbp->db->Delete($sql);
 		return true;
 	}

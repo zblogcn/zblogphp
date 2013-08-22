@@ -24,7 +24,8 @@ class DbMySQL implements iDataBase
 
 	function __construct()
 	{
-		# code...
+		$this->sql=new DbSql;
+		$this->sql->type=__CLASS__;
 	}
 	
 	public function EscapeString($s){
@@ -57,10 +58,11 @@ class DbMySQL implements iDataBase
 
 	}
 
-	function CreateTable($path){
-		$a=explode(';',str_replace('%pre%', $this->dbpre, file_get_contents($path.'zb_system/defend/createtable/mysql.sql')));
+	function QueryMulit($s){
+		$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
 		foreach ($a as $s) {
 			mysql_query($s);
+								echo $s .'<br/>';
 		}
 	}
 

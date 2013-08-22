@@ -420,7 +420,7 @@ foreach ($array as $article) {
 	echo '<td class="td5">' . $article->ID .  '</td>';
 	echo '<td class="td10">' . $article->Category->Name . '</td>';
 	echo '<td class="td10">' . $article->Author->Name . '</td>';
-	echo '<td><a href="'.$article->Url.'"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title . '</td>';
+	echo '<td><a href="'.$article->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title . '</td>';
 	echo '<td class="td20">' .$article->Time() . '</td>';
 	echo '<td class="td5">' . $article->CommNums . '</td>';
 	echo '<td class="td5">' . $article->StatusName . '</td>';
@@ -499,7 +499,7 @@ foreach ($array as $article) {
 	echo '<tr>';
 	echo '<td class="td5">' . $article->ID . '</td>';
 	echo '<td class="td10">' . $article->Author->Name . '</td>';
-	echo '<td><a href="'.$article->Url.'"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title . '</td>';
+	echo '<td><a href="'.$article->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title . '</td>';
 	echo '<td class="td20">' . $article->Time() . '</td>';
 	echo '<td class="td5">' . $article->CommNums . '</td>';
 	echo '<td class="td5">' . $article->StatusName . '</td>';
@@ -555,7 +555,7 @@ foreach ($zbp->categorysbyorder as $category) {
 	echo '<tr>';
 	echo '<td class="td5">' . $category->ID . '</td>';
 	echo '<td class="td5">' . $category->Order . '</td>';
-	echo '<td class="td25"><a href="'.$category->Url.'"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $category->Symbol . $category->Name . '</td>';
+	echo '<td class="td25"><a href="'.$category->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $category->Symbol . $category->Name . '</td>';
 	echo '<td class="td20">' . $category->Alias . '</td>';
 	echo '<td class="td10">' . $category->Count . '</td>';
 	echo '<td class="td10 tdCenter">';
@@ -734,7 +734,7 @@ foreach ($array as $member) {
 	echo '<tr>';
 	echo '<td class="td5">' . $member->ID . '</td>';
 	echo '<td class="td10">' . $member->LevelName . '</td>';
-	echo '<td>' . $member->Name . '</td>';
+	echo '<td><a href="'.$member->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $member->Name . '</td>';
 	echo '<td class="td15">' . $member->Alias . '</td>';
 	echo '<td class="td10">' . $member->Articles . '</td>';
 	echo '<td class="td10">' . $member->Pages . '</td>';
@@ -821,7 +821,7 @@ foreach ($array as $upload) {
 	echo '<tr>';
 	echo '<td class="td5">' . $upload->ID . '</td>';
 	echo '<td class="td10">' . $upload->Author->Name . '</td>';
-	echo '<td><a href="' . $upload->Url . '">' . $upload->Name . '</a></td>';
+	echo '<td><a href="'.$upload->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $upload->Name . '</td>';
 	echo '<td class="td15">' . $upload->Time() . '</td>';
 	echo '<td class="td10">' . $upload->Size . '</td>';
 	echo '<td class="td20">' . $upload->MimeType . '</td>';
@@ -889,7 +889,7 @@ $array=$zbp->GetTagList(
 foreach ($array as $tag) {
 	echo '<tr>';
 	echo '<td class="td5">' . $tag->ID . '</td>';
-	echo '<td class="td25"><a href="'.$tag->Url.'"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $tag->Name . '</td>';
+	echo '<td class="td25"><a href="'.$tag->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $tag->Name . '</td>';
 	echo '<td class="td20">' . $tag->Alias . '</td>';
 	echo '<td class="td10">' . $tag->Count . '</td>';	
 	echo '<td class="td10 tdCenter">';

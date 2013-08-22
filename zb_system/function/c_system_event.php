@@ -273,7 +273,7 @@ function ViewPost($id,$alias){
 	}
 
 	$article->ViewNums +=1;
-	$sql = $zbp->db->sql->Update("Post",array('log_ViewNums'=>$article->ViewNums),array(array('=','log_ID',$article->ID)));
+	$sql = $zbp->db->sql->Update($zbp->table['Post'],array('log_ViewNums'=>$article->ViewNums),array(array('=','log_ID',$article->ID)));
 	$zbp->db->Update($sql);
 
 
@@ -469,19 +469,13 @@ function PostArticle(){
 	}
 	$article->Type = ZC_POST_TYPE_ARTICLE;
 
-	if(isset($_POST['Title'])   ) $article->Title    = GetVars('Title','POST');
-	if(isset($_POST['Content']) ) $article->Content  = GetVars('Content','POST');
-	if(isset($_POST['Alias'])   ) $article->Alias    = GetVars('Alias','POST');
-	if(isset($_POST['Tag'])     ) $article->Tag      = GetVars('Tag','POST');
-	if(isset($_POST['Intro'])   ) $article->Intro    = GetVars('Intro','POST');
-	if(isset($_POST['CateID'])  ) $article->CateID   = GetVars('CateID','POST');
-	if(isset($_POST['Template'])) $article->Template = GetVars('Template','POST');
-	if(isset($_POST['Status'])  ) $article->Status   = GetVars('Status','POST');
-	if(isset($_POST['AuthorID'])) $article->AuthorID = GetVars('AuthorID','POST');
-	if(isset($_POST['PostTime'])) $article->PostTime = GetVars('PostTime','POST');
-	if(isset($_POST['IsTop'])   ) $article->IsTop    = GetVars('IsTop','POST');
-	if(isset($_POST['IsLock'])  ) $article->IsLock   = GetVars('IsLock','POST');
-
+	foreach ($zbp->datainfo['Post'] as $key => $value) {
+		if($key=='ID')continue;
+		if($key=='Meta')continue;
+		if( isset($_POST[$key]) ){
+			$article->$key    = GetVars($key,'POST');
+		}
+	}
 
 	FilterArticle($article);
 	FilterMeta($article);
@@ -583,7 +577,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring){
 function DelArticle_Comments($id){
 	global $zbp;
 
-	$sql = $zbp->db->sql->Delete("Comment",array(array('=','comm_LogID',$id)));
+	$sql = $zbp->db->sql->Delete($zbp->table['Comment'],array(array('=','comm_LogID',$id)));
 	$zbp->db->Delete($sql);
 }
 
@@ -616,14 +610,13 @@ function PostPage(){
 	}
 	$article->Type = ZC_POST_TYPE_PAGE;
 
-	if(isset($_POST['Title'])   ) $article->Title    = GetVars('Title','POST');
-	if(isset($_POST['Content']) ) $article->Content  = GetVars('Content','POST');
-	if(isset($_POST['Alias'])   ) $article->Alias    = GetVars('Alias','POST');
-	if(isset($_POST['Template'])) $article->Template = GetVars('Template','POST');
-	if(isset($_POST['Status'])  ) $article->Status   = GetVars('Status','POST');
-	if(isset($_POST['AuthorID'])) $article->AuthorID = GetVars('AuthorID','POST');
-	if(isset($_POST['PostTime'])) $article->PostTime = GetVars('PostTime','POST');
-	if(isset($_POST['IsLock'])  ) $article->IsLock   = GetVars('IsLock','POST');
+	foreach ($zbp->datainfo['Post'] as $key => $value) {
+		if($key=='ID')continue;
+		if($key=='Meta')continue;
+		if( isset($_POST[$key]) ){
+			$article->$key    = GetVars($key,'POST');
+		}
+	}
 
 	FilterArticle($article);
 	FilterMeta($article);
@@ -714,17 +707,13 @@ function PostComment(){
 
 	$cmt = new Comment();
 
-	$cmt->LogID        = GetVars('LogID','POST');
-	$cmt->RootID       = GetVars('RootID','POST');
-	$cmt->ParentID     = GetVars('ParentID','POST');
-	$cmt->AuthorID     = GetVars('AuthorID','POST');
-	$cmt->Name         = GetVars('Name','POST');
-	$cmt->Email        = GetVars('Email','POST');
-	$cmt->HomePage     = GetVars('HomePage','POST');
-	$cmt->Content      = GetVars('Content','POST');	
-	$cmt->PostTime     = GetVars('PostTime','POST');
-	$cmt->IP           = GetVars('IP','POST');
-	$cmt->Agent        = GetVars('Agent','POST');	
+	foreach ($zbp->datainfo['Comment'] as $key => $value) {
+		if($key=='ID')continue;
+		if($key=='Meta')continue;
+		if( isset($_POST[$key]) ){
+			$cmt->$key    = GetVars($key,'POST');
+		}
+	}
 
 	foreach ($GLOBALS['Filter_Plugin_PostComment_Core'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($cmt);
@@ -840,12 +829,13 @@ function PostCategory(){
 		$cate->LoadInfoByID(GetVars('ID','POST'));
 	}
 
-	if(isset($_POST['Name'])       ) $cate->Name        = GetVars('Name','POST');
-	if(isset($_POST['Order'])      ) $cate->Order       = GetVars('Order','POST');
-	if(isset($_POST['Alias'])      ) $cate->Alias       = GetVars('Alias','POST');
-	if(isset($_POST['ParentID'])   ) $cate->ParentID    = GetVars('ParentID','POST');
-	if(isset($_POST['Template'])   ) $cate->Template    = GetVars('Template','POST');
-	if(isset($_POST['LogTemplate'])) $cate->LogTemplate = GetVars('LogTemplate','POST');
+	foreach ($zbp->datainfo['Category'] as $key => $value) {
+		if($key=='ID')continue;
+		if($key=='Meta')continue;
+		if( isset($_POST[$key]) ){
+			$cate->$key    = GetVars($key,'POST');
+		}
+	}
 
 	FilterMeta($cate);
 
@@ -877,7 +867,7 @@ function DelCategory(){
 function DelCategory_Articles($id){
 	global $zbp;
 
-	$sql = $zbp->db->sql->Update("Post",array('log_CateID'=>0),array(array('=','log_CateID',$id)));
+	$sql = $zbp->db->sql->Update($zbp->table['Post'],array('log_CateID'=>0),array(array('=','log_CateID',$id)));
 	$zbp->db->Update($sql);
 }
 
@@ -895,9 +885,14 @@ function PostTag(){
 	}else{
 		$tag->LoadInfoByID(GetVars('ID','POST'));
 	}
-	if(isset($_POST['Name'])    ) $tag->Name     = GetVars('Name','POST');
-	if(isset($_POST['Alias'])   ) $tag->Alias    = GetVars('Alias','POST');
-	if(isset($_POST['Template'])) $tag->Template = GetVars('Template','POST');
+
+	foreach ($zbp->datainfo['Tag'] as $key => $value) {
+		if($key=='ID')continue;
+		if($key=='Meta')continue;
+		if( isset($_POST[$key]) ){
+			$tag->$key    = GetVars($key,'POST');
+		}
+	}
 
 	FilterMeta($tag);
 
@@ -947,18 +942,18 @@ function PostMember(){
 		if(isset($_POST['Password'])==false||$_POST['Password']==''){
 			$zbp->ShowError(73);
 		}
+		$_POST['IP']=GetGuestIP();
 	}else{
 		$mem->LoadInfoByID(GetVars('ID','POST'));
 	}
-	if(isset($_POST['Name'])    ) $mem->Name     = GetVars('Name','POST');
-	if(isset($_POST['Alias'])   ) $mem->Alias    = GetVars('Alias','POST');
-	if(isset($_POST['Guid'])    ) $mem->Guid     = GetVars('Guid','POST');
-	if(isset($_POST['Email'])   ) $mem->Email    = GetVars('Email','POST');
-	if(isset($_POST['HomePage'])) $mem->HomePage = GetVars('HomePage','POST');
-	if(isset($_POST['Template'])) $mem->Template = GetVars('Template','POST');
-	if(isset($_POST['Level'])   ) $mem->Level    = GetVars('Level','POST');
-	if(isset($_POST['Intro'])   ) $mem->Intro    = GetVars('Intro','POST');	
-	if(isset($_POST['Password'])   ) $mem->Password    = GetVars('Password','POST');
+
+	foreach ($zbp->datainfo['Member'] as $key => $value) {
+		if($key=='ID')continue;
+		if($key=='Meta')continue;
+		if( isset($_POST[$key]) ){
+			$mem->$key    = GetVars($key,'POST');
+		}
+	}
 
 	FilterMeta($mem);
 	FilterMember($mem);
@@ -1029,14 +1024,14 @@ function PostModule(){
 	}else{
 		$mod->LoadInfoByID(GetVars('ID','POST'));
 	}
-	if(isset($_POST['Name'])          ) $mod->Name          = GetVars('Name','POST');
-	if(isset($_POST['Type'])          ) $mod->Type          = GetVars('Type','POST');	
-	if(isset($_POST['FileName'])      ) $mod->FileName      = GetVars('FileName','POST');
-	if(isset($_POST['HtmlID'])        ) $mod->HtmlID        = GetVars('HtmlID','POST');
-	if(isset($_POST['MaxLi'])         ) $mod->MaxLi         = GetVars('MaxLi','POST');
-	if(isset($_POST['Content'])       ) $mod->Content       = GetVars('Content','POST');
-	if(isset($_POST['Source'])        ) $mod->Source        = GetVars('Source','POST');
-	if(isset($_POST['IsHiddenTitle']) ) $mod->IsHiddenTitle = GetVars('IsHiddenTitle','POST');
+
+	foreach ($zbp->datainfo['Module'] as $key => $value) {
+		if($key=='ID')continue;
+		if($key=='Meta')continue;
+		if( isset($_POST[$key]) ){
+			$mod->$key    = GetVars($key,'POST');
+		}
+	}
 
 	FilterModule($mod);
 
@@ -1277,7 +1272,7 @@ function CountPost(&$article){
 
 	$id=$article->ID;
 
-	$s=$zbp->db->sql->Count('Comment',array('comm_ID'=>'num'),array(array('=','comm_LogID',$id),array('=','comm_IsChecking',0)));
+	$s=$zbp->db->sql->Count($zbp->table['Comment'],array('comm_ID'=>'num'),array(array('=','comm_LogID',$id),array('=','comm_IsChecking',0)));
 	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
 
 	$article->CommNums=$num;
@@ -1300,7 +1295,7 @@ function CountCategory(&$category){
 
 	$id=$category->ID;
 
-	$s=$zbp->db->sql->Count('Post',array('log_ID'=>'num'),array(array('=','log_CateID',$id)));
+	$s=$zbp->db->sql->Count($zbp->table['Post'],array('log_ID'=>'num'),array(array('=','log_CateID',$id)));
 	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
 
 	$category->Count=$num;
@@ -1321,7 +1316,7 @@ function CountTag(&$tag){
 
 	$id=$tag->ID;
 
-	$s=$zbp->db->sql->Count('Post',array('log_ID'=>'num'),array(array('LIKE','log_Tag','%{'.$id.'}%')));
+	$s=$zbp->db->sql->Count($zbp->table['Post'],array('log_ID'=>'num'),array(array('LIKE','log_Tag','%{'.$id.'}%')));
 	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
 
 	$tag->Count=$num;
@@ -1341,16 +1336,16 @@ function CountMember(&$member){
 
 	$id=$member->ID;
 
-	$s=$zbp->db->sql->Count('Post',array('log_ID'=>'num'),array(array('=','log_AuthorID',$id),array('=','log_Type',0)));
+	$s=$zbp->db->sql->Count($zbp->table['Post'],array('log_ID'=>'num'),array(array('=','log_AuthorID',$id),array('=','log_Type',0)));
 	$member_Articles=GetValueInArray(current($zbp->db->Query($s)),'num');
 
-	$s=$zbp->db->sql->Count('Post',array('log_ID'=>'num'),array(array('=','log_AuthorID',$id),array('=','log_Type',1)));
+	$s=$zbp->db->sql->Count($zbp->table['Post'],array('log_ID'=>'num'),array(array('=','log_AuthorID',$id),array('=','log_Type',1)));
 	$member_Pages=GetValueInArray(current($zbp->db->Query($s)),'num');
 
-	$s=$zbp->db->sql->Count('Comment',array('comm_ID'=>'num'),array(array('=','comm_AuthorID',$id)));
+	$s=$zbp->db->sql->Count($zbp->table['Comment'],array('comm_ID'=>'num'),array(array('=','comm_AuthorID',$id)));
 	$member_Comments=GetValueInArray(current($zbp->db->Query($s)),'num');
 
-	$s=$zbp->db->sql->Count('Upload',array('ul_ID'=>'num'),array(array('=','ul_AuthorID',$id)));
+	$s=$zbp->db->sql->Count($zbp->table['Upload'],array('ul_ID'=>'num'),array(array('=','ul_AuthorID',$id)));
 	$member_Uploads=GetValueInArray(current($zbp->db->Query($s)),'num');
 
 	$member->Articles=$member_Articles;
@@ -1458,7 +1453,7 @@ function BuildModule_calendar($date=''){
 	$fdate = strtotime($date);
 	$ldate = (strtotime(date('Y-m-t',strtotime($date)))+60*60*24);
 	$sql = $zbp->db->sql->Select(
-		'Post',
+		$zbp->table['Post'],
 		array('log_ID','log_PostTime'),
 		array(array('=','log_Type','0'),array('=','log_Status','0'),array('BETWEEN','log_PostTime',$fdate,$ldate)),
 		array('log_PostTime'=>'ASC'),
@@ -1527,7 +1522,7 @@ function BuildModule_archives(){
 	$fdate;
 	$ldate;
 
-	$sql = $zbp->db->sql->Select('Post',array('log_PostTime'),null,array('log_PostTime'=>'DESC'),array(1),null);
+	$sql = $zbp->db->sql->Select($zbp->table['Post'],array('log_PostTime'),null,array('log_PostTime'=>'DESC'),array(1),null);
 
 	$array=$zbp->db->Query($sql);
 
@@ -1536,7 +1531,7 @@ function BuildModule_archives(){
 	$ldate=array(date('Y',$array[0]['log_PostTime']),date('m',$array[0]['log_PostTime']));
 
 
-	$sql = $zbp->db->sql->Select('Post',array('log_PostTime'),null,array('log_PostTime'=>'ASC'),array(1),null);
+	$sql = $zbp->db->sql->Select($zbp->table['Post'],array('log_PostTime'),null,array('log_PostTime'=>'ASC'),array(1),null);
 
 	$array=$zbp->db->Query($sql);
 
@@ -1570,7 +1565,7 @@ function BuildModule_archives(){
 
 		$fdate = $value;
 		$ldate = (strtotime(date('Y-m-t',$value))+60*60*24);
-		$sql = $zbp->db->sql->Count('Post',array('log_ID'=>'num'),array(array('=','log_Type','0'),array('=','log_Status','0'),array('BETWEEN','log_PostTime',$fdate,$ldate)));
+		$sql = $zbp->db->sql->Count($zbp->table['Post'],array('log_ID'=>'num'),array(array('=','log_Type','0'),array('=','log_Status','0'),array('BETWEEN','log_PostTime',$fdate,$ldate)));
 		$n=GetValueInArray(current($zbp->db->Query($sql)),'num');
 		$s.='<li><a href="'.$url->Make().'">'.
 			str_replace(array('%y%','%m%'), array(date('Y',$fdate),date('n',$fdate)), $zbp->lang['msg']['year_month'])
