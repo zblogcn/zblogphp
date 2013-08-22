@@ -8,20 +8,15 @@ $zbp->Load();
 $action='root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
-if (!$zbp->CheckPlugin('Totoro')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
 
-$blogtitle='Totoro反垃圾评论';
+$blogtitle='应用中心';
 
 if(count($_POST)>0){
 
 
-	$zbp->Config('Totoro')->BlackWord_List=Trim(Trim(GetVars('BlackWord_List','POST')),'|');
-	$zbp->Config('Totoro')->Op_BlackWord_Audit=GetVars('Op_BlackWord_Audit','POST');
-	$zbp->Config('Totoro')->Op_BlackWord_Throw=GetVars('Op_BlackWord_Throw','POST');
-	$zbp->Config('Totoro')->Op_Chinese_None=GetVars('Op_Chinese_None','POST');
-	$zbp->SaveConfig('Totoro');
 
-	$zbp->SetHint('good','Totoro已保存设置');
+	$zbp->SetHint('good');
 	Redirect('./main.php');
 }
 
@@ -39,27 +34,27 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <input id="reset" name="reset" type="hidden" value="" />
 <table border="1" class="tableFull tableBorder">
 <tr>
-	<th class="td25"><p align='left'><b>选项</b><br><span class='note'></span></p></th>
+	<th class="td30"><p align='left'><b>选项</b><br><span class='note'></span></p></th>
 	<th>
 	</th>
 </tr>
 <tr>
-	<td><p align='left'><b>没有中文字符直接进入审核</b></p></td>
+	<td class="td30"><p align='left'><b>没有中文字符直接进入审核</b></p></td>
 	<td><input type="text" name="Op_Chinese_None" value="<?php echo $zbp->Config('Totoro')->Op_Chinese_None;?>" class="checkbox" />
 	</td>
 </tr>
 <tr>
-	<td><p align='left'><b>有N个黑词直接进入审核</b></p></td>
+	<td class="td30"><p align='left'><b>有N个黑词直接进入审核</b></p></td>
 	<td>N=<input type="text" name="Op_BlackWord_Audit" value="<?php echo $zbp->Config('Totoro')->Op_BlackWord_Audit;?>" /> 个黑词
 	</td>
 </tr>
 <tr>
-	<td><p align='left'><b>有N个黑词直接丢掉</b></p></td>
+	<td class="td30"><p align='left'><b>有N个黑词直接丢掉</b></p></td>
 	<td>N=<input type="text" name="Op_BlackWord_Throw" value="<?php echo $zbp->Config('Totoro')->Op_BlackWord_Throw;?>" /> 个黑词
 	</td
 </tr>
 <tr>
-	<td><p align='left'><b>黑词列表</b><br><span class='note'>黑词间用|分隔.列表为正则表达式,请谨慎修改,如果修改的格式不正确,会造成程序错误.</span></p></td>
+	<td class="td30"><p align='left'><b>黑词列表</b><br><span class='note'>列表为正则表达则,黑词间用|分隔.</span></p></td>
 	<td><textarea name="BlackWord_List" style="width:95%;height:400px"><?php echo $zbp->Config('Totoro')->BlackWord_List;?></textarea>
 	</td>
 </tr>
@@ -87,8 +82,8 @@ function changeOptions(i){
 
 }
 	</script>
-	<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Totoro/logo.png';?>");</script>	
+	<script type="text/javascript">ActiveLeftMenu("aAppCentre");</script>
+	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>	
   </div>
 </div>
 

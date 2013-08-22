@@ -21,7 +21,8 @@ class DbSQLite3 implements iDataBase
 
 	function __construct()
 	{
-		# code...
+		$this->sql=new DbSql;
+		$this->sql->type=__CLASS__;
 	}
 	
 	public function EscapeString($s){
@@ -41,8 +42,8 @@ class DbSQLite3 implements iDataBase
 		$this->db->close();
 	}
 
-	function CreateTable($path){
-		$a=explode(';',str_replace('%pre%', $this->dbpre, file_get_contents($path.'zb_system/defend/createtable/sqlite3.sql')));
+	function QueryMulit($s){
+		$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		foreach ($a as $s) {
 			$this->db->query($s);
 		}

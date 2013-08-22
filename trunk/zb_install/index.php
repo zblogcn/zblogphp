@@ -486,9 +486,12 @@ if(!$zbp->option['ZC_YUN_SITE'])FileWriteTest();
 
 $zbp->option['ZC_DATABASE_TYPE']=GetVars('dbtype','POST');
 
+$cts='';
+
 switch ($zbp->option['ZC_DATABASE_TYPE']) {
 case 'mysql':
-case 'pdo_mysql':     
+case 'pdo_mysql': 
+  $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/mysql.sql');
   $zbp->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
   $zbp->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
   $zbp->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
@@ -496,14 +499,20 @@ case 'pdo_mysql':
   $zbp->option['ZC_MYSQL_PRE']=GetVars('dbmysql_pre','POST');
   break;
 case 'sqlite':
-case 'sqlite3':    
+  $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');
+  $zbp->option['ZC_SQLITE_NAME']=GetVars('dbsqlite_name','POST');
+  $zbp->option['ZC_SQLITE_PRE']=GetVars('dbsqlite_pre','POST');
+  break;
+case 'sqlite3':
+  $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite3.sql');
   $zbp->option['ZC_SQLITE_NAME']=GetVars('dbsqlite_name','POST');
   $zbp->option['ZC_SQLITE_PRE']=GetVars('dbsqlite_pre','POST');
   break;
 }
 
 $zbp->OpenConnect();
-$zbp->db->CreateTable($zbp->path);
+$zbp->db->QueryMulit($cts);
+
 InsertInfo();
 
 SaveConfig();

@@ -19,7 +19,8 @@ class Dbpdo_MySQL implements iDataBase
 
 	function __construct()
 	{
-		# code...
+		$this->sql=new DbSql;
+		$this->sql->type=__CLASS__;
 	}
 	
 	public function EscapeString($s){
@@ -39,7 +40,7 @@ class Dbpdo_MySQL implements iDataBase
 		//new PDO(DB_TYPE.':host='.DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASSWD);
 		$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',); 
 		$db_link = new PDO('mysql:host=' . $array[0] . ';port=' . $array[5] . ';dbname=' . $array[3],$array[1],$array[2],$options);
-		$this->db = $db_link;	
+		$this->db = $db_link;
 		$this->dbpre=$array[4];
 		return true;
 	}
@@ -48,8 +49,8 @@ class Dbpdo_MySQL implements iDataBase
 
 	}
 
-	function CreateTable($path){
-		$a=explode(';',str_replace('%pre%', $this->dbpre, file_get_contents($path.'zb_system/defend/createtable/mysql.sql')));
+	function QueryMulit($s){
+		$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		foreach ($a as $s) {
 			$s=trim($s);
 			if($s<>''){$this->db->exec($s);}
