@@ -1,8 +1,7 @@
 ﻿div.heart-vote p{
 	padding:0 0 0 0;
-	margin:-5px 0 0 10px;
+	margin:-4px 0 0 10px;
 	float: left;
-	width:100px;
 }
 div.heart-vote ul{
 	float: left;
@@ -27,7 +26,8 @@ div.heart-vote i{
 	width:80px;
 }
 div.heart-vote {
-	width:420px;
+	max-width:450px;
+	min-width:420px;
 	height:32px;
 	background-color:#DC143C;
 	margin:0 0 0 0;

@@ -73,10 +73,10 @@ $sql=$zbp->db->sql->Count($zbp->table['HeartVote'],array(array('SUM','vote_Score
 $array=$zbp->db->Query($sql);
 $alluser=GetValueInArray(current($array),'alluser');
 $allvote=GetValueInArray(current($array),'allvote');
-
+$allvote=substr($allvote/$alluser,0,3);
 $s.="<script type=\"text/javascript\">showVote('{$allvote}','{$alluser}')</script>";
 
-//$s.="<script src=\"{$zbp->host}zb_users/plugin/HeartVote/getvote.asp?id={$id}\" type=\"text/javascript\"></script>";
+//$s.="<script src=\"{$zbp->host}zb_users/plugin/HeartVote/getvote.php?id={$id}\" type=\"text/javascript\"></script>";
 
 $template->SetTags('HeartVote',$s);
 
