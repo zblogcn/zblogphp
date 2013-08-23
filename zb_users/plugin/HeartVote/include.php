@@ -7,6 +7,7 @@ RegisterPlugin("HeartVote","ActivePlugin_HeartVote");
 
 function ActivePlugin_HeartVote() {
 
+	Add_Filter_Plugin('Filter_Plugin_Zbp_MakeTemplatetags','HeartVote_Pre');
 	Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','HeartVote_Main');
 }
 
@@ -45,6 +46,9 @@ function HeartVote_CreateTable(){
 	$zbp->db->QueryMulit($s);
 }
 
+function HeartVote_Pre(&$template){
+	$template->SetTags('HeartVote','');
+}
 
 function HeartVote_Main(&$template){
 	global $zbp;

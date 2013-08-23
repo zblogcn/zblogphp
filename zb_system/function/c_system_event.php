@@ -209,6 +209,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 
 	$zbp->template->SetTags('title',$zbp->title);
 	$zbp->template->SetTags('articles',array_merge($articles_top,$articles));
+	if($pagebar->PageAll==0)$pagebar=null;
 	$zbp->template->SetTags('pagebar',$pagebar);
 	$zbp->template->SetTags('type',$type);
 	$zbp->template->SetTags('page',$page);

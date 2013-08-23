@@ -643,7 +643,7 @@ foreach ($array as $cmt) {
 	echo '<td class="td5">' . $cmt->ID .  '</td>';
 	echo '<td class="td5">' . $cmt->ParentID . '</td>';
 	echo '<td class="td10">' . $cmt->Author->Name . '</td>';
-	echo '<td>' . $cmt->Content . '</td>';
+	echo '<td><div style="overflow:hidden;max-width:500px;">' . $cmt->Content . '<div></td>';
 	echo '<td class="td5">' . $cmt->LogID .  '</td>';	
 	echo '<td class="td15">' .$cmt->Time() . '</td>';
 	echo '<td class="td10 tdCenter">';
