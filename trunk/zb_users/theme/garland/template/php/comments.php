@@ -8,9 +8,7 @@
 
 <!--评论翻页条输出-->
 <div class="pagebar commentpagebar">
-<?php if ($pagebar) { ?>
 <?php  include $this->GetTemplate('pagebar');  ?>
-<?php } ?>
 </div>
 
 <!--评论框-->

@@ -57,6 +57,9 @@ class DbSql #extends AnotherClass
 					$s.=$value[0] . ' text NOT NULL ' . ',';	
 				}
 			}
+			if($value[1]=='double'||$value[1]=='float'){
+				$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
+			}
 			$i +=1;
 		}
 		reset($datainfo);
@@ -86,6 +89,9 @@ class DbSql #extends AnotherClass
 				}else{
 					$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';	
 				}
+			}
+			if($value[1]=='double'||$value[1]=='float'){
+				$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
 			}
 			$i +=1;
 		}
@@ -118,6 +124,9 @@ class DbSql #extends AnotherClass
 				}else{
 					$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';	
 				}
+			}
+			if($value[1]=='double'||$value[1]=='float'){
+				$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
 			}
 			$i +=1;
 		}

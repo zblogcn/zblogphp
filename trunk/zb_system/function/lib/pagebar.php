@@ -81,7 +81,7 @@ public function Make(){
 }
 
 
-public $buttons = null;
+public $buttons = array();
 
 public $prevbutton = null;
 

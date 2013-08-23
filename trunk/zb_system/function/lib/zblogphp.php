@@ -473,7 +473,7 @@ class ZBlogPHP{
 #
 function BuildModule(){
 
-	foreach ($GLOBALS['Filter_Plugin_BuildModule'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_Zbp_BuildModule'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($idortext);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
@@ -708,8 +708,12 @@ function AddBuildModuleAll(){
 
 		//创建模板类
 		$this->template = new Template();
-		$this->template->path = $this->usersdir . 'theme/'. $this->theme .'/php/';
+		$this->template->path = $this->usersdir . 'theme/'. $this->theme .'/template/php/';
 		$this->template->tags = $this->templatetags;
+
+		foreach ($GLOBALS['Filter_Plugin_Zbp_MakeTemplatetags'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($this->template);
+		}
 
 	}
 
@@ -754,7 +758,7 @@ function AddBuildModuleAll(){
 			$this->templates['comment']='<label id="cmt{$comment->ID}"></label>'. $this->templates['comment'];
 		}
 
-		$dir=$this->usersdir . 'theme/'. $this->theme .'/php/';
+		$dir=$this->usersdir . 'theme/'. $this->theme .'/template/php/';
 
 		if(!file_exists($dir)){
 			@mkdir($dir, 0777,true);
