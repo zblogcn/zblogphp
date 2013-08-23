@@ -223,7 +223,7 @@ $Filter_Plugin_Zbp_BuildTemplate=array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_BuildCache=array();
+$Filter_Plugin_BuildModule=array();
 
 
 
@@ -380,35 +380,6 @@ $Filter_Plugin_Search_Begin=array();
 */
 $Filter_Plugin_Tags_Begin=array();
 
-
-
-
-
-/*
-'**************************************************<
-'类型:Filter
-'名称:
-'参数:
-'说明:
-'调用:
-'**************************************************>
-*/
-$Filter_Plugin_View_Begin=array();
-
-
-
-
-
-/*
-'**************************************************<
-'类型:Filter
-'名称:
-'参数:
-'说明:
-'调用:
-'**************************************************>
-*/
-$Filter_Plugin_View_End=array();
 
 
 

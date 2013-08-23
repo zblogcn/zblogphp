@@ -224,7 +224,7 @@ class DbSql #extends AnotherClass
 
 		if(!empty($option)){
 			if(isset($option['pagebar'])){
-				$s2 = $this->Count($table,array('*'=>'num'),$where);
+				$s2 = $this->Count($table,array(array('COUNT','*','num')),$where);
 				$option['pagebar']->Count = GetValueInArray(current($zbp->db->Query($s2)),'num');
 				$option['pagebar']->make();
 			}
@@ -235,13 +235,17 @@ class DbSql #extends AnotherClass
 	public function Count($table,$count,$where)
 	{
 		global $zbp;
-		$sqlc=null;
+
+		$sqlc="SELECT ";
 
 		if(!empty($count)) {
 			foreach ($count as $key => $value) {
-				$sqlc="SELECT COUNT($key) AS $value FROM $table ";
+				$sqlc.=" $value[0]($value[1]) AS $value[2],";
 			}
 		}
+		$sqlc=substr($sqlc, 0,strlen($sqlc)-1);
+
+ 		$sqlc.=" FROM $table ";
 
 		$sqlw=$this->ParseWhere($where);
 
