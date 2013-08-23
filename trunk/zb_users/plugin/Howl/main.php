@@ -70,7 +70,7 @@ $zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重�
 	<th class="td10">协作者组</th>
 	<th class="td10">注册会员组</th>
 	<th class="td10">游客组</th>
-	<th class="td10">权限</th>
+	<!-- <th class="td10">权限</th> -->
 </tr>
 <?php
 
@@ -84,14 +84,14 @@ return '<input name="Group'.$group.'_' . $key .'" style="" type="text" value="'.
 
 foreach ($actions as $key => $value) {
 echo '<tr>';
-echo '<td>' . $key . '</td>';
+echo '<td class="tdCenter">' . $key . '</td>';
 echo '<td class="tdCenter">' . MakeInput(1,$key) . '</td>';
 echo '<td class="tdCenter">' . MakeInput(2,$key) . '</td>';
 echo '<td class="tdCenter">' . MakeInput(3,$key) . '</td>';
 echo '<td class="tdCenter">' . MakeInput(4,$key) . '</td>';
 echo '<td class="tdCenter">' . MakeInput(5,$key) . '</td>';
 echo '<td class="tdCenter">' . MakeInput(6,$key) . '</td>';
-echo '<td>' . $key . '</td>';
+//echo '<td class="tdCenter">' . $key . '</td>';
 echo '</tr>';
 }
 
