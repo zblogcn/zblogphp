@@ -75,12 +75,15 @@ function RegPage_Main(){
 function RegPage_Page(){
 
 	global $zbp;
+	
+	$zbp->header .='<script src="'.$zbp->host.'zb_users/plugin/RegPage/reg.js" type="text/javascript"></script>' . "\r\n";
+
 	$article = new Post;
 	$article->Title='会员注册';
 	$article->IsLock=true;
 	$article->Type=ZC_POST_TYPE_PAGE;
 
-	$article->Content .='<dl style="font-size:1.2em;line-height:1.5em;">';
+	$article->Content .='<dl style="font-size:1.1em;line-height:1.5em;">';
 	$article->Content .='<dt>以下带星号为必填选项.</dt>';
 	$article->Content .='<dt>&nbsp;</dt>';
 	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)名称：<input type="text" name="name" style="width:200px;font-size:1.2em;" </p></dd>';
@@ -90,15 +93,13 @@ function RegPage_Page(){
 	$article->Content .='<dd><p style="width:350px;text-align:right;">网站：<input type="text" name="homepage" style="width:200px;font-size:1.2em;" /></p></dd>';
 	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)邀请码：<input type="text" name="invitecode" style="width:200px;font-size:1.2em;" /></p></dd>';
 	
-	$article->Content .='<dd><p style="width:350px;text-align:right;"><input type="submit" style="width:100px;font-size:1.1em;" value="提交" onclick="return RegPage()" /></p></dd>';
+	$article->Content .='<dd><p style="width:350px;text-align:right;"><input type="submit" style="width:100px;font-size:1.0em;padding:0.2em" value="提交" onclick="return RegPage()" /></p></dd>';
 	$article->Content .='</dl>';
-
 
 	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);
 	$zbp->template->SetTags('type',$article->type=0?'article':'page');
-	$zbp->template->SetTags('header',$zbp->header .'<script src="'.$zbp->host.'zb_users/plugin/RegPage/reg.js" type="text/javascript"></script>' . "\r\n");
-	$zbp->template->SetTags('footer',$zbp->footer);
+
 
 	$zbp->template->display($zbp->option['ZC_PAGE_DEFAULT_TEMPLATE']);
 }

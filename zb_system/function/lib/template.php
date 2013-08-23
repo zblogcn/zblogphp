@@ -19,12 +19,9 @@ class Template{
 	function __construct(){
 	}
 
-	//public function __get($name) 
-	//{
-	//	return $this->tags[$name];
-	//}
-
-
+	function GetTags($name){
+		return $this->tags[$name];
+	}
 
 	function SetTags($name,$value){
 		$this->tags[$name]=$value;

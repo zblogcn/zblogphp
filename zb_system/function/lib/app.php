@@ -17,6 +17,7 @@ class App
 	public $name;
 	public $url;
 	public $note;
+	public $description;
 
 	public $path;
 	public $include;
@@ -35,12 +36,17 @@ class App
 	public $version;
 	public $pubdate;
 	public $modified;
-	public $description;
 	public $price;
 
 	public $advanced_dependency;
 	public $advanced_rewritefunctions;
 	public $advanced_conflict;
+
+	public $sidebars_sidebar1;
+	public $sidebars_sidebar2;
+	public $sidebars_sidebar3;
+	public $sidebars_sidebar4;
+	public $sidebars_sidebar5;
 
 	public function CanDel(){
 		global $zbp;

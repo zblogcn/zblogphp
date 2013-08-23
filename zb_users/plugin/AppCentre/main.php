@@ -38,27 +38,6 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 	<th>
 	</th>
 </tr>
-<tr>
-	<td class="td30"><p align='left'><b>没有中文字符直接进入审核</b></p></td>
-	<td><input type="text" name="Op_Chinese_None" value="<?php echo $zbp->Config('Totoro')->Op_Chinese_None;?>" class="checkbox" />
-	</td>
-</tr>
-<tr>
-	<td class="td30"><p align='left'><b>有N个黑词直接进入审核</b></p></td>
-	<td>N=<input type="text" name="Op_BlackWord_Audit" value="<?php echo $zbp->Config('Totoro')->Op_BlackWord_Audit;?>" /> 个黑词
-	</td>
-</tr>
-<tr>
-	<td class="td30"><p align='left'><b>有N个黑词直接丢掉</b></p></td>
-	<td>N=<input type="text" name="Op_BlackWord_Throw" value="<?php echo $zbp->Config('Totoro')->Op_BlackWord_Throw;?>" /> 个黑词
-	</td
-</tr>
-<tr>
-	<td class="td30"><p align='left'><b>黑词列表</b><br><span class='note'>列表为正则表达则,黑词间用|分隔.</span></p></td>
-	<td><textarea name="BlackWord_List" style="width:95%;height:400px"><?php echo $zbp->Config('Totoro')->BlackWord_List;?></textarea>
-	</td>
-</tr>
-
 </table>
 	  <hr/>
 	  <p>
@@ -66,22 +45,6 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 	  </p>
 
 	</form>
-	<script type="text/javascript">
-function changeOptions(i){
-	$('input[name^=ZC_]').each(function(){
-		var s='radio' + $(this).prop('name');
-		$(this).val( $("input[type='radio'][name='"+s+"']").eq(i).val() );
-	});
-	if(i=='0'){
-		$("input[name^='radio']").prop('disabled',true);
-		$("input[name='ZC_STATIC_MODE']").val('ACTIVE');
-	}else{
-		$("input[name^='radio']").prop('disabled',false);
-		$("input[name='ZC_STATIC_MODE']").val('REWRITE');
-	}
-
-}
-	</script>
 	<script type="text/javascript">ActiveLeftMenu("aAppCentre");</script>
 	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>	
   </div>

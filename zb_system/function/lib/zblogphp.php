@@ -185,15 +185,15 @@ class ZBlogPHP{
 
 		$this->MakeTemplatetags();
 
-		$this->BuildModule_Reg('catalog','BuildModule_catalog');
+		$this->RegBuildModule('catalog','BuildModule_catalog');
 
-		$this->BuildModule_Reg('calendar','BuildModule_calendar');
+		$this->RegBuildModule('calendar','BuildModule_calendar');
 
-		$this->BuildModule_Reg('comments','BuildModule_comments');
+		$this->RegBuildModule('comments','BuildModule_comments');
 
-		$this->BuildModule_Reg('previous','BuildModule_previous');
+		$this->RegBuildModule('previous','BuildModule_previous');
 
-		$this->BuildModule_Reg('archives','BuildModule_archives');
+		$this->RegBuildModule('archives','BuildModule_archives');
 
 		$this->isload=true;
 	}
@@ -471,9 +471,9 @@ class ZBlogPHP{
 
 ################################################################################################################
 #
-function BuildCache(){
+function BuildModule(){
 
-	foreach ($GLOBALS['Filter_Plugin_BuildCache'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['Filter_Plugin_BuildModule'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($idortext);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
@@ -494,23 +494,27 @@ function BuildCache(){
 
 }
 
-function BuildModule_Reg($modfilename,$userfunc){
+function RegBuildModule($modfilename,$userfunc){
 
 	$this->modulefunc[$modfilename]=$userfunc;
 
 }
 
-function BuildModule_Add($modfilename){
+function AddBuildModule($modfilename){
 
 	$this->readymodules[]=$modfilename;
 }
 
-function BuildModule_Del($modfilename){
+function DelBuildModule($modfilename){
 
 	unset($this->readymodules[$modfilename]);
 }
 
-
+function AddBuildModuleAll(){
+	foreach ($this->modulesbyfilename as $key => $value) {
+		$this->readymodules[]=$key;
+	}
+}
 
 
 
@@ -672,6 +676,8 @@ function BuildModule_Del($modfilename){
 		$this->templatetags['type']='';
 		$this->templatetags['page']='';
 		$this->templatetags['socialcomment']=&$this->socialcomment;
+		$this->templatetags['header']=&$this->header;
+		$this->templatetags['footer']=&$this->footer;
 
 		$s=array(
 			$option['ZC_SIDEBAR_ORDER'],

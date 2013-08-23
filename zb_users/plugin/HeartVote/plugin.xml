@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<plugin version="php">
+	<id>HeartVote</id>
+	<name>用“心”打分</name>
+	<note>自定义CSS和图片，还有JS，可以有很多种变化。</note>
+	<path>main.php</path>
+	<include>include.php</include>
+	<level>1</level>
+	<author>
+		<name>zx.asd</name>
+		<url>http://www.rainbowsoft.org/zblog/</url>
+		<email></email>
+	</author>
+	<version>1.0</version>
+	<modified>2013-7-7</modified>
+	<pubdate>2013-7-7</pubdate>
+	<adapted>130707</adapted>
+</plugin>

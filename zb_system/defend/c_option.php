@@ -121,19 +121,19 @@ return array(
 	// '文章,页面类,列表页的静态模式ACTIVE or REWRITE
 	'ZC_STATIC_MODE' => 'ACTIVE',
 
-	'ZC_ARTICLE_REGEX' => '{%host%}view.php?id={%id%}',
+	'ZC_ARTICLE_REGEX' => '{%host%}?id={%id%}',
 
-	'ZC_PAGE_REGEX' => '{%host%}view.php?id={%id%}',
+	'ZC_PAGE_REGEX' => '{%host%}?id={%id%}',
 
-	'ZC_CATEGORY_REGEX' => '{%host%}?cate={%id%}{&page=%page%}',
+	'ZC_CATEGORY_REGEX' => '{%host%}?cate={%id%}&page={%page%}',
 
-	'ZC_AUTHOR_REGEX' => '{%host%}?auth={%id%}{&page=%page%}',
+	'ZC_AUTHOR_REGEX' => '{%host%}?auth={%id%}&page={%page%}',
 
-	'ZC_TAGS_REGEX' => '{%host%}?tags={%id%}{&page=%page%}',
+	'ZC_TAGS_REGEX' => '{%host%}?tags={%id%}&page={%page%}',
 
-	'ZC_DATE_REGEX' => '{%host%}?date={%date%}{&page=%page%}',
+	'ZC_DATE_REGEX' => '{%host%}?date={%date%}&page={%page%}',
 
-	'ZC_INDEX_REGEX' => '{%host%}{?page=%page%}',
+	'ZC_INDEX_REGEX' => '{%host%}?page={%page%}',
 
 	#首页，分类页，文章页，页面页的默认模板
 	'ZC_INDEX_DEFAULT_TEMPLATE' => 'index',
