@@ -3,7 +3,7 @@ function heartVote(vote,id){
 	var t=$("div.heart-vote").find("i").text();
 	$("div.heart-vote").find("i").text("打分中.....");
 	$("div.heart-vote").find("b").css("visibility","hidden");
-	$.post(str00 + "zb_users/plugin/heartvote/vote.asp",
+	$.post(bloghost + "zb_users/plugin/heartvote/vote.php",
 		{
 		"vote":vote,
 		"id":id
@@ -11,7 +11,7 @@ function heartVote(vote,id){
 		function(data){
 			if(data.indexOf("|")==-1){
 				alert(data);
-				$("div.heart-vote").find("b").text(s);
+				$("div.heart-vote").find("i").text(s);
 				$("div.heart-vote").find("i").text(t);
 			}
 			else{
@@ -19,6 +19,7 @@ function heartVote(vote,id){
 				var j=data.split("|")[1];
 				showVote(i,j);
 			}
+			$("div.heart-vote").find("b").css("visibility","visible");
 		}
 	);
 }

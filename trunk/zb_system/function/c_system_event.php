@@ -66,6 +66,13 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	$datetime=null;
 	$tag=null;
 
+
+	$w=array();
+	$w[]=array('=','log_Istop',0);
+	$w[]=array('=','log_Status',0);
+
+	$page=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+
 	$articles_top=array();
 	$articles=array();
 	if($type=='index' && $page==1){
@@ -77,12 +84,6 @@ function ViewList($page,$cate,$auth,$date,$tags){
 			null
 		);
 	}
-
-	$w=array();
-	$w[]=array('=','log_Istop',0);
-	$w[]=array('=','log_Status',0);
-
-	$page=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
 
 	switch ($type) {
 		########################################################################################################
@@ -1562,9 +1563,11 @@ function BuildModule_archives(){
 		$ldate = (strtotime(date('Y-m-t',$value))+60*60*24);
 		$sql = $zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type','0'),array('=','log_Status','0'),array('BETWEEN','log_PostTime',$fdate,$ldate)));
 		$n=GetValueInArray(current($zbp->db->Query($sql)),'num');
-		$s.='<li><a href="'.$url->Make().'">'.
-			str_replace(array('%y%','%m%'), array(date('Y',$fdate),date('n',$fdate)), $zbp->lang['msg']['year_month'])
-			.' (' . $n  . ')</a></li>';
+		if($n>0){
+			$s.='<li><a href="'.$url->Make().'">'.
+				str_replace(array('%y%','%m%'), array(date('Y',$fdate),date('n',$fdate)), $zbp->lang['msg']['year_month'])
+				.' (' . $n  . ')</a></li>';
+		}
 	}
 
 	return $s;

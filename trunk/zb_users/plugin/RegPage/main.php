@@ -26,7 +26,9 @@ if(count($_POST)>0){
 		RegPage_DelUsedCode();
 	}
 
-	$zbp->Config('RegPage')->default_level=$_POST['default_level'];
+	
+	$zbp->Config('RegPage')->open_reg=(int)$_POST['open_reg'];	
+	$zbp->Config('RegPage')->default_level=(int)$_POST['default_level'];
 	$zbp->SaveConfig('RegPage');
 	$zbp->SetHint('good');
 	Redirect('./main.php');
@@ -59,6 +61,10 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 		<option value='3' <?php if($zbp->Config('RegPage')->default_level==3)echo 'selected="selected"';?>><?php echo $zbp->lang['user_level_name'][3] ;?></option>
 	</select>
 	</td>
+</tr>
+<tr>
+	<td class="td30"><p align='left'><b>开放注册</b></p></td>
+	<td><input type="text" class="checkbox" name="open_reg" value="<?php echo $zbp->Config('RegPage')->open_reg;?>" /></td>
 </tr>
 <tr>
 	<td class="td30"><p align='left'><b>将注册链接加入导航栏</b></p></td>
