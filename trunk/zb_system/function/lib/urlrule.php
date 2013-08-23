@@ -120,10 +120,10 @@ class UrlRule
 		}
 		if($type=='page'||$type=='article'){
 			if(strpos($url, '%alias%')===false){
-				$url = $url . '$ view.php?id=$1';
+				$url = $url . '$ index.php?id=$1';
 				$url=str_replace('%id%', '([0-9]+)', $url);
 			}else{
-				$url = $url . '$ view.php?alias=$1';
+				$url = $url . '$ index.php?alias=$1';
 				$url=str_replace('%alias%', '(.+)', $url);
 			}
 			$url=str_replace('%category%', '[^\/_]+', $url);
@@ -194,10 +194,10 @@ class UrlRule
 		}
 		if($type=='page'||$type=='article'){
 			if(strpos($url, '%alias%')===false){
-				$s2 = 'view.php?id={R:1}';
+				$s2 = 'index.php?id={R:1}';
 				$url=str_replace('%id%', '([0-9]+)', $url);				
 			}else{
-				$s2 = 'view.php?alias={R:1}';
+				$s2 = 'index.php?alias={R:1}';
 				$url=str_replace('%alias%', '(.+)', $url);
 			}
 			$url=str_replace('%category%', '[^\/_]+', $url);
@@ -258,10 +258,10 @@ class UrlRule
 		}
 		if($type=='page'||$type=='article'){
 			if(strpos($url, '%alias%')===false){
-				$url = $url .' '.$zbp->cookiespath .'view\.php\?id=$1';
+				$url = $url .' '.$zbp->cookiespath .'index\.php\?id=$1';
 				$url=str_replace('%id%', '([0-9]+)', $url);				
 			}else{
-				$url = $url .' '.$zbp->cookiespath .'view\.php\?alias=$1';
+				$url = $url .' '.$zbp->cookiespath .'index\.php\?alias=$1';
 				$url=str_replace('%alias%', '(.+)', $url);
 			}
 			$url=str_replace('%category%', '[^\/_]+', $url);
