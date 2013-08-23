@@ -241,8 +241,8 @@ padding-right:10px;
 #divMain a,#divMain2 a{color:#1d4c7d;}
 #divMain a:hover,#divMain2  a:hover{color:#d60000;}
 #divMain2 { padding:0px;margin:0px;}
-.divHeader { height:1.8em; line-height:1.8em; font-size:1.5em; padding: 6px 0; padding-left: 36px; }
-.divHeader2 { height:1.8em; line-height:1.8em; font-size:1.5em; padding: 6px 0; padding-left: 36px; border-bottom:5px solid #e0e0e0; }
+.divHeader { height:1.8em; line-height:1.8em; font-size:1.5em; padding: 6px 0; padding-left: 38px; }
+.divHeader2 { height:1.8em; line-height:1.8em; font-size:1.5em; padding: 6px 0; padding-left: 38px; border-bottom:5px solid #e0e0e0; }
 
 
 
