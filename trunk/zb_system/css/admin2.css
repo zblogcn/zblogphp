@@ -241,8 +241,8 @@ padding-right:10px;
 #divMain a,#divMain2 a{color:#1d4c7d;}
 #divMain a:hover,#divMain2  a:hover{color:#d60000;}
 #divMain2 { padding:0px;margin:0px;}
-.divHeader { height:1.8em; line-height:1.8em; font-size:1.5em; padding:0; background:;}
-.divHeader2 { height:1.8em; line-height:1.8em; font-size:1.5em; padding:0; background:;border-bottom:5px solid #e0e0e0;}
+.divHeader { height:1.8em; line-height:1.8em; font-size:1.5em; padding: 6px 0; padding-left: 36px; }
+.divHeader2 { height:1.8em; line-height:1.8em; font-size:1.5em; padding: 6px 0; padding-left: 36px; border-bottom:5px solid #e0e0e0; }
 
 
 
@@ -307,7 +307,6 @@ select{
 }
 
 textarea{
-	padding: 0.15em 0.25em 0.20em 0.25em;
 	border: 1px double #aaaaaa;
 	background-position: bottom;
 	background:#fff;
@@ -344,8 +343,8 @@ input.edit{
 	width:300px;
 }
 
-#editor_content {width:100%;height:300px;}
-#editor_intro{width:100%;height:150px;}
+#editor_content {width:100%;height:300px;	margin:0 3px;}
+#editor_intro{width:100%;height:150px;	margin:0 3px;}
 
 /*提示DIV*/
 div.hint{
@@ -419,6 +418,9 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 .editmod{
 	margin:1em 0;
 }
+#cheader,#carea{
+	margin:.5em 0;
+}
 .editinputname{
 	padding:0 2px 0 3px;
 	line-height:1em;
@@ -427,11 +429,12 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 	display: inline-block;
 }
 div.post_edit input#edtTitle{
-	margin-top: 5px;
+	margin: 5px 3px 0 3px;
 	padding: 3px;
-	line-height: 1.6;
+	line-height: 1.8;
 	font-size: 1.2em;
-	width: 100%;
+	width: 99%;
+	color:#333;
 }
 div.post_edit input#edtAlias, input#edtTag{
 	margin-top: 5px;

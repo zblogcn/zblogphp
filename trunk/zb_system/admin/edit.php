@@ -167,7 +167,7 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
           <!-- user( -->
           <div id='user' class='editmod'> <label for="cmbUser" class="editinputname" ><?php echo $lang['msg']['author']?></label>
             <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
-<?php echo CreateOptoinsOfMember($article->AuthorID);?>
+				<?php echo CreateOptoinsOfMember($article->AuthorID);?>
             </select>
           </div>
           <!-- )user --> 
@@ -251,14 +251,10 @@ var editor_api={
 	}
 }
 
-
-$(document).click(function (event){$('#ulTag').slideUp("fast");});  
-
 //文章内容或摘要变动提示保存
 window.onbeforeunload = function(){
   if (!isSubmit && (editor_api.editor.content.get()!=sContent)) return "<?php echo $zbp->lang['error'][71];?>";
 }
-
 
 function checkArticleInfo(){
   document.getElementById("edit").action="<?php echo $ispage?'../cmd.php?act=PagePst':'../cmd.php?act=ArticlePst'?>";
@@ -270,8 +266,6 @@ function checkArticleInfo(){
 
   isSubmit=1;
 }
-
-
 
 //日期时间控件
 $.datepicker.regional['zh-cn'] = {
@@ -285,7 +279,7 @@ $.datepicker.regional['zh-cn'] = {
   dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
   dayNamesMin: ['日','一','二','三','四','五','六'],
   weekHeader: '周',
-  dateFormat: 'yy-m-d',
+  dateFormat: 'yy-mm-dd',
   firstDay: 1,
   isRTL: false,
   showMonthAfterYear: true,
@@ -301,7 +295,7 @@ $.timepicker.regional['zh-cn'] = {
   millisecText: '毫秒',
   currentText: '现在',
   closeText: '完成',
-  timeFormat: 'h:m:s',
+  timeFormat: 'hh:mm:ss',
   ampm: false
 };
 $.timepicker.setDefaults($.timepicker.regional['zh-cn']);
@@ -312,9 +306,9 @@ $('#edtDateTime').datetimepicker({
 });
 
 
-
-
 //显示tags
+$(document).click(function (event){$('#ulTag').slideUp("fast");});  
+
 $('#showtags').click(function (event) {  
   event.stopPropagation();  
   var offset = $(event.target).offset();  
@@ -322,9 +316,6 @@ $('#showtags').click(function (event) {
   $('#ulTag').slideDown("fast");    
   if(tag_loaded==false){$.getScript('../cmd.php?act=misc&type=showtags');tag_loaded=true;}
 });  
-
-
-
 function AddKey(i) {
   var strKey=$('#edtTag').val();
   var strNow=","+i
@@ -357,10 +348,9 @@ function AutoIntro() {
 		editor_api.editor.intro.put(s.substring(0,250));
 	}
   }
-  $("#divIntro").show();
-  $('html,body').animate({scrollTop:$('#divIntro').offset().top},'fast');
+	$("#divIntro").show();
+	$('html,body').animate({scrollTop:$('#divIntro').offset().top},'fast');
 }
-
 
 //文章编辑提交区随动JS开始
 var oDiv=document.getElementById("divFloat");
@@ -372,7 +362,7 @@ $(window).bind("scroll resize",function(){
     $("#divFloat").addClass("boxfloat");
   }
   else{
-    $("#divFloat").removeClass("boxfloat");
+	$("#divFloat").removeClass("boxfloat");
   }   
 });
 
@@ -381,21 +371,20 @@ function selectlogtemplate(c){
 
 }
 function selectlogtemplatesub(a){
-  $("#cmbTemplate").find("option[value='"+a+"']").attr("selected","selected");
+	$("#cmbTemplate").find("option[value='"+a+"']").attr("selected","selected");
 }
 
 function editor_init(){
-editor_api.editor.content.obj=$('#editor_content');
-editor_api.editor.intro.obj=$('#editor_intro');
-editor_api.editor.content.get=function(){return this.obj.val()};
-editor_api.editor.content.put=function(str){return this.obj.val(str)};
-editor_api.editor.content.focus=function(){return this.obj.focus()};
-editor_api.editor.intro.get=function(){return this.obj.val()};
-editor_api.editor.intro.put=function(str){return this.obj.val(str)};
-editor_api.editor.intro.focus=function(){return this.obj.focus()};
-sContent=editor_api.editor.content.get();
+	editor_api.editor.content.obj=$('#editor_content');
+	editor_api.editor.intro.obj=$('#editor_intro');
+	editor_api.editor.content.get=function(){return this.obj.val()};
+	editor_api.editor.content.put=function(str){return this.obj.val(str)};
+	editor_api.editor.content.focus=function(){return this.obj.focus()};
+	editor_api.editor.intro.get=function(){return this.obj.val()};
+	editor_api.editor.intro.put=function(str){return this.obj.val(str)};
+	editor_api.editor.intro.focus=function(){return this.obj.focus()};
+	sContent=editor_api.editor.content.get();
 }
-
 
 </script>
 

@@ -204,7 +204,7 @@ function updateinfo(s){
 
 
 function AddHeaderIcon(s){
-$("div.divHeader,div.divHeader2").first().css({"background":"url('"+s+"') no-repeat 0 3px","background-size":"30px","padding-left":"34px"});
+$("div.divHeader,div.divHeader2").first().css({"background":"url('"+s+"') 1px 8px no-repeat","background-size":"32px"});
 }
 
 
