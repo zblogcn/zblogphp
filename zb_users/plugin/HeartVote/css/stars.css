@@ -10,6 +10,7 @@ div.heart-vote b{
 	padding:0 0 0 0px;
 	margin:0 0 0 10px;
 	font-style:normal;
+	line-height:32px;
 }
 div.heart-vote i{
 	color:white;

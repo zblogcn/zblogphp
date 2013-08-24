@@ -119,6 +119,8 @@ class Base
 		foreach ($this->datainfo as $key => $value) {
 			if($value[1]=='boolean'){
 				$keyvalue[$value[0]]=(integer)$this->Data[$key];
+			}elseif($value[1] == 'string'){
+				$keyvalue[$value[0]]=str_replace($zbp->host,'{#ZC_BLOG_HOST#}',$this->Data[$key]);
 			}else{
 				$keyvalue[$value[0]]=$this->Data[$key];
 			}

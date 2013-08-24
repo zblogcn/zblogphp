@@ -22,8 +22,6 @@ input, textarea, select{font-family:"微软雅黑","宋体", Arial, Helvetica, s
 table{border-collapse:collapse;}
 a { text-decoration: none;color: #333333;}
 a:hover { color:#d60000;}
-ul { padding:0; margin:0;}
-li { list-style-type: none;}
 .clear { clear: both;}
 img { border: none;}
 h1,
@@ -66,19 +64,12 @@ h6 {
 	margin: 2.33em 0;
 }
 
-ul,
-ol {
-	padding: 0;
-}
+ul,ol,dl {padding:0;margin:0;}
+dd{padding:0;margin:0;}
+ul {list-style: none;}
+li {list-style-type: none;}
+ol {list-style-type: decimal;margin-left: 2em;}
 
-ul {
-	list-style: none;
-}
-
-ol {
-	list-style-type: decimal;
-	margin-left: 2em;
-}
 label{
 	cursor:pointer;
 }
