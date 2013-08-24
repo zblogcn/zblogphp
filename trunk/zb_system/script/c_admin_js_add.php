@@ -104,13 +104,13 @@ function ActiveTopMenu(name){
 //*********************************************************
 function bmx2table(){
 	var class_=new Array("color2","color3","color4");
-	var j=$("table tr:has(th)").addClass("color1");
-    $("table").each(function(){
+	var j=$("table[class!='nobmx'] tr:has(th)").addClass("color1");
+    $("table[class!='nobmx']").each(function(){
  		if(j.length==0){class_[1]="color2";class_[0]="color3";} 
 		$(this).find("tr:not(:has(th)):even").removeClass(class_[0]).addClass(class_[1]);
 		$(this).find("tr:not(:has(th)):odd").removeClass(class_[1]).addClass(class_[0]);
 	})
-	$("tr:not(:has(th))").mouseover(function(){$(this).addClass(class_[2])}).mouseout(function(){$(this).removeClass(class_[2])}); 
+	$("table[class!='nobmx']").find("tr:not(:has(th))").mouseover(function(){$(this).addClass(class_[2])}).mouseout(function(){$(this).removeClass(class_[2])}); 
 }; 
 //*********************************************************
 

@@ -105,7 +105,7 @@ function RegPage_Page(){
 	$zbp->template->SetTags('type',$article->type=0?'article':'page');
 
 
-	$zbp->template->display($zbp->option['ZC_PAGE_DEFAULT_TEMPLATE']);
+	$zbp->template->display($article->Template);
 }
 
 

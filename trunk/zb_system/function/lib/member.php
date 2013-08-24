@@ -43,7 +43,7 @@ class Member extends Base{
 			return null;
 		}
 		if ($name=='Template') {
-			if($value==$zbp->option['ZC_CATALOG_DEFAULT_TEMPLATE'])$value='';
+			if($value==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$value='';
 			return $this->Data[$name]  =  $value;
 		}
 		parent::__set($name, $value);
@@ -77,7 +77,7 @@ class Member extends Base{
 		}
 		if ($name=='Template') {
 			$value=$this->Data[$name];
-			if($value=='')$value=$zbp->option['ZC_CATALOG_DEFAULT_TEMPLATE'];
+			if($value=='')$value=$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
 			return $value;
 		}
 		return parent::__get($name);
@@ -87,6 +87,12 @@ class Member extends Base{
 
 		return md5(md5($ps). $guid);
 
+	}
+	
+	function Save(){
+        global $zbp;
+		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->Data['Template'] = '';
+		parent::Save();
 	}
 
 }

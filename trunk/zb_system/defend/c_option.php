@@ -137,9 +137,7 @@ return array(
 
 	#首页，分类页，文章页，页面页的默认模板
 	'ZC_INDEX_DEFAULT_TEMPLATE' => 'index',
-	'ZC_CATALOG_DEFAULT_TEMPLATE' => 'index',
-	'ZC_ARTICLE_DEFAULT_TEMPLATE' => 'single',
-	'ZC_PAGE_DEFAULT_TEMPLATE' => 'single',
+	'ZC_POST_DEFAULT_TEMPLATE' => 'single',
 	
 	'ZC_SIDEBAR_ORDER' => 'calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc',
 
