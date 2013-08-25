@@ -71,13 +71,17 @@ $s.="<li><a href=\"javascript:heartVote('7','{$id}')\" title=\"打7分\" class=\
 $s.="<li><a href=\"javascript:heartVote('8','{$id}')\" title=\"打8分\" class=\"r8-unit\">8</a></li>";
 $s.="<li><a href=\"javascript:heartVote('9','{$id}')\" title=\"打9分\" class=\"r9-unit\">9</a></li>";
 $s.="<li><a href=\"javascript:heartVote('10','{$id}')\" title=\"打10分\" class=\"r10-unit\">10</a></li>";
-$s.="</ul><p><b>0</b><i>分/0个投票</i></p></div>";
+$s.="</ul><b>0</b><i>分/0个投票</i></div>";
 
 $sql=$zbp->db->sql->Count($zbp->table['HeartVote'],array(array('SUM','vote_Score','allvote'),array('COUNT','*','alluser')),array(array('=','vote_LogID',$id)));
 $array=$zbp->db->Query($sql);
 $alluser=GetValueInArray(current($array),'alluser');
 $allvote=GetValueInArray(current($array),'allvote');
-$allvote=substr($allvote/$alluser,0,3);
+if($alluser==0){
+	$allvote=0;
+}else{
+	$allvote=substr($allvote/$alluser,0,3);
+}
 $s.="<script type=\"text/javascript\">showVote('{$allvote}','{$alluser}')</script>";
 
 //$s.="<script src=\"{$zbp->host}zb_users/plugin/HeartVote/getvote.php?id={$id}\" type=\"text/javascript\"></script>";

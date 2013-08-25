@@ -323,10 +323,26 @@ $Filter_Plugin_ViewComments_Template=array();
 
 
 
+
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_ViewList_Begin
+'名称:
+'参数:
+'说明:定义index.php接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Index_Pre=array();
+
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:
 '参数:
 '说明:定义index.php接口
 '调用:
@@ -340,7 +356,7 @@ $Filter_Plugin_Index_Begin=array();
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_ViewList_End
+'名称:
 '参数:
 '说明:定义index.php接口
 '调用:

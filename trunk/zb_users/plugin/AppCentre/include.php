@@ -1,9 +1,8 @@
 <?php
-
-
 #注册插件
 RegisterPlugin("AppCentre","ActivePlugin_AppCentre");
 
+define('APPCENTRE_URL','http://192.168.1.54/client/');
 
 function ActivePlugin_AppCentre() {
 
