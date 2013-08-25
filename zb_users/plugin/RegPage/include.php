@@ -65,7 +65,6 @@ function RegPage_Main(){
 	global $zbp;
 
 	if(isset($_GET['reg'])){
-		$zbp->Load();
 		RegPage_Page();
 		die();
 	}

@@ -223,6 +223,13 @@ function zbp_default_cache_write(){
 	}
 }
 
+function  zbp_default_redirect_install(){
+	global $zbp;
+	if (!$zbp->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/');}
+}
+
+Add_Filter_Plugin('Filter_Plugin_Index_Pre','zbp_default_redirect_install');
+
 #Add_Filter_Plugin('Filter_Plugin_Index_Begin','zbp_default_cache_read');
 #Add_Filter_Plugin('Filter_Plugin_Index_End','zbp_default_cache_write');
 

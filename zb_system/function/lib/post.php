@@ -116,7 +116,12 @@ class Post extends Base{
 				return $this->TagsToNameString;
 			case 'Template':
 				$value=$this->Data[$name];
-				if($value=='')$value=$zbp->option['ZC_POST_DEFAULT_TEMPLATE'];
+				if($value==''){
+					$value=GetValueInArray($this->Category->GetDataArray(),'LogTemplate');
+					if($value==''){
+						$value=$zbp->option['ZC_POST_DEFAULT_TEMPLATE'];
+					}
+				}
 				return $value;
 			case 'CommentPostUrl':
 				return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID;

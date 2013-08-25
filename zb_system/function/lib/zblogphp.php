@@ -378,6 +378,7 @@ class ZBlogPHP{
 		if(empty($array))return false;
 		if(!is_array($array))return false;
 		foreach ($array as $key => $value) {
+			if($key=='ZC_BLOG_CLSID')continue;
 			if($key=='ZC_BLOG_HOST')continue;
 			if($key=='ZC_YUN_SITE')continue;
 			$this->option[$key]=$value;
@@ -481,13 +482,12 @@ function BuildModule(){
 	foreach ($this->readymodules as $modfilename) {
 		if(isset($this->modulesbyfilename[$modfilename])){
 			if(isset($this->modulefunc[$modfilename])){
-				$m=&$this->modulesbyfilename[$modfilename];
+				$m=$this->modulesbyfilename[$modfilename];
 				$m->Content=call_user_func($this->modulefunc[$modfilename]);
 
-	$sql = $this->db->sql->Update($this->table['Module'],array('mod_Content'=>$m->Content),array(array('=','mod_ID',$m->ID)));
-	$this->db->Update($sql);
-
-				unset($m);
+	//$sql = $this->db->sql->Update($this->table['Module'],array('mod_Content'=>$m->Content),array(array('=','mod_ID',$m->ID)));
+	//$this->db->Update($sql);
+				$m->Save();
 			}
 		}
 	}
