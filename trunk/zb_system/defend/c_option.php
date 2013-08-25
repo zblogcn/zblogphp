@@ -97,13 +97,13 @@ return array(
 	'ZC_UPLOAD_FILESIZE' => 10485760,
 
 	// '用户名,密码,评论长度等限制
-	'ZC_USERNAME_MIN' => 4,
+	'ZC_USERNAME_MIN' => 3,
 
-	'ZC_USERNAME_MAX' => 14,
+	'ZC_USERNAME_MAX' => 20,
 
 	'ZC_PASSWORD_MIN' => 8,
 
-	'ZC_PASSWORD_MAX' => 14,
+	'ZC_PASSWORD_MAX' => 20,
 
 	'ZC_EMAIL_MAX' => 30,
 

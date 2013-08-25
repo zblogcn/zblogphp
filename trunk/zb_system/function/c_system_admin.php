@@ -6,33 +6,33 @@
  * @version 2.0 2013-06-14
  */
 
-function zbp_addpagesubmenu(){
+function zbp_admin_addpagesubmenu(){
 	echo '<a href="../cmd.php?act=PageEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_page'] . '</span></a>';
 }
 
-function zbp_addtagsubmenu(){
+function zbp_admin_addtagsubmenu(){
 	echo '<a href="../cmd.php?act=TagEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_tag'] . '</span></a>';
 }
 
-function zbp_addcatesubmenu(){
+function zbp_admin_addcatesubmenu(){
 	echo '<a href="../cmd.php?act=CategoryEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_category'] . '</span></a>';
 }
 
-function zbp_addmemsubmenu(){
+function zbp_admin_addmemsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('MemberNew')){
 		echo '<a href="../cmd.php?act=MemberNew"><span class="m-left">' . $GLOBALS['lang']['msg']['new_member'] . '</span></a>';
 	}
 }
 
-function zbp_addmodsubmenu(){
+function zbp_admin_addmodsubmenu(){
 	echo '<a href="../cmd.php?act=ModuleEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_module'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=navbar"><span class="m-left">' . $GLOBALS['lang']['msg']['module_navbar'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=link"><span class="m-left">' . $GLOBALS['lang']['msg']['module_link'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=favorite"><span class="m-left">' . $GLOBALS['lang']['msg']['module_favorite'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=misc"><span class="m-left">' . $GLOBALS['lang']['msg']['module_misc'] . '</span></a>';
 }
-function zbp_addcmtsubmenu(){
+function zbp_admin_addcmtsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('CommentAll')){
 		$n=GetValueInArray(current($zbp->db->Query('SELECT COUNT(comm_ID) AS num FROM ' . $GLOBALS['table']['Comment'] . ' WHERE comm_Ischecking=1')),'num');
@@ -42,12 +42,12 @@ function zbp_addcmtsubmenu(){
 }
 
 
-Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','zbp_addpagesubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','zbp_addtagsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','zbp_addcatesubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu','zbp_addmemsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','zbp_addmodsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','zbp_addcmtsubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','zbp_admin_addpagesubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','zbp_admin_addtagsubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','zbp_admin_addcatesubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu','zbp_admin_addmemsubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','zbp_admin_addmodsubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','zbp_admin_addcmtsubmenu');
 
 $zbp->LoadTemplates();
 
@@ -423,7 +423,7 @@ foreach ($array as $article) {
 	echo '<td><a href="'.$article->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title . '</td>';
 	echo '<td class="td20">' .$article->Time() . '</td>';
 	echo '<td class="td5">' . $article->CommNums . '</td>';
-	echo '<td class="td5">' . $article->StatusName . '</td>';
+	echo '<td class="td5">' . ($article->IsTop?$zbp->lang['msg']['top'].'|':'').$article->StatusName . '</td>';
 	echo '<td class="td10 tdCenter">';
 	echo '<a href="../cmd.php?act=ArticleEdt&amp;id='. $article->ID .'"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -941,8 +941,8 @@ function Admin_ThemeMng(){
 echo '<div class="theme '.($theme->IsUsed()?'theme-now':'theme-other').'">';
 echo '<div class="theme-name">';
 echo '<img width="16" title="" alt="" src="../image/admin/layout.png"/>&nbsp;';
-echo '<a target="_blank" href="'.$theme->url.'" title="">';
-echo '<strong style="display:none;">default</strong><b>'.$theme->name.'</b></a></div>';
+echo '<a target="_blank" href="'.$theme->url.'" title=""><strong style="display:none;">'.$theme->id.'</strong>';
+echo '<b>'.$theme->name.'</b></a></div>';
 echo '<div><img src="'.$theme->GetScreenshot().'" title="'.$theme->name.'" alt="'.$theme->name.'" width="200" height="150" /></div>';
 echo '<div class="theme-author">'.$zbp->lang['msg']['author'].': <a target="_blank" href="'.$theme->author_url.'">'.$theme->author_name.'</a></div>';
 echo '<div class="theme-style">'.$zbp->lang['msg']['style'].': ';
@@ -1264,7 +1264,7 @@ foreach ($zbp->plugins as $plugin) {
 
 foreach ($plugins as $plugin) {
 	echo '<tr>';
-	echo '<td class="td5 tdCenter"><img ' . ($plugin->IsUsed()?'':'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" /></td>';
+	echo '<td class="td5 tdCenter'.($plugin->type=='plugin'?' plugin':'').($plugin->IsUsed()?' plugin-on':'').'"><strong style="display:none;">'.$plugin->id.'</strong><img ' . ($plugin->IsUsed()?'':'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" /></td>';
 	echo '<td class="td25">' . $plugin->name . '</td>';
 	echo '<td class="td20">' . $plugin->author_name . '</td>';
 	echo '<td class="td20">' . $plugin->modified . '</td>';

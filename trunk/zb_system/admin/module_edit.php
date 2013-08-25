@@ -32,7 +32,9 @@ if(isset($_GET['source'])){
 		$mod->FileName=GetVars('filename','GET');
 		$mod->HtmlID=GetVars('filename','GET');
 		$mod->Source='theme';
-		$mod->Content=file_get_contents($zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $mod->FileName . '.php');
+		if($mod->FileName){
+			$mod->Content=file_get_contents($zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $mod->FileName . '.php');
+		}
 	}
 }elseif(isset($_GET['filename'])){
 
@@ -64,6 +66,11 @@ if($mod->Type=='ul'){
 $islock='';
 if($mod->Source=='system'||$mod->Source=='theme'){
 	$islock='readonly="readonly"';
+}
+if($mod->Source=='theme'&&$mod->FileName==''){
+	$islock='';
+	$mod->Name='newmodule';
+	$mod->HtmlID='newmodule';
 }
 $ishide='';
 if($mod->Source=='theme'){

@@ -46,7 +46,7 @@ $member=$zbp->GetMemberByID($memberid);
 	  </p>	  
 	  <p>
 		<span class="title"><?php echo $lang['msg']['name']?>:</span><span class="star">(*)</span><br />
-		<input id="edtName" class="edit" size="40" name="Name" maxlength="50" type="text" value="<?php echo $member->Name;?>" />
+		<input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name;?>" <?php if(!$zbp->CheckRights('MemberAll'))echo 'readonly="readonly"';?> />
 	  </p>
 	  <p>
 	    <span class='title'><?php echo $lang['msg']['password']?>:</span><br/><input id="edtPassword" class="edit" size="40" name="Password"  type="password" value="" />

@@ -50,8 +50,8 @@ if(isset($zbp->membersbyname[$name])){
 
 $member->Name=$name;
 
-if(strlen($password)<8){
-	$zbp->ShowError('密码必须大于8位.');die();
+if(strlen($password)<8||strlen($password)>20){
+	$zbp->ShowError('密码必须在8位-20位间.');die();
 }
 
 if($password!=$repassword){

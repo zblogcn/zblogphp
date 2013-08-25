@@ -200,7 +200,7 @@ ActivePlugin();
 
 
 /*system plugin*/
-function zbp_default_cache_read(){
+function zbp_index_cache_read(){
 	global $zbp;
 	if(count($_GET)==0){
 		if($zbp->cache->HasKey('default_html')){
@@ -212,7 +212,7 @@ function zbp_default_cache_read(){
 	}
 }
 
-function zbp_default_cache_write(){
+function zbp_index_cache_write(){
 	global $zbp;
 	if(count($_GET)==0){
 		$s=ob_get_clean();
@@ -223,14 +223,14 @@ function zbp_default_cache_write(){
 	}
 }
 
-function  zbp_default_redirect_install(){
+function  zbp_index_redirect_install(){
 	global $zbp;
 	if (!$zbp->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/');}
 }
 
-Add_Filter_Plugin('Filter_Plugin_Index_Pre','zbp_default_redirect_install');
+Add_Filter_Plugin('Filter_Plugin_Index_Pre','zbp_index_redirect_install');
 
-#Add_Filter_Plugin('Filter_Plugin_Index_Begin','zbp_default_cache_read');
+#Add_Filter_Plugin('Filter_Plugin_Index_Pre','zbp_default_cache_read');
 #Add_Filter_Plugin('Filter_Plugin_Index_End','zbp_default_cache_write');
 
 
