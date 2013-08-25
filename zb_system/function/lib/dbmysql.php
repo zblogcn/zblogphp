@@ -67,7 +67,7 @@ class DbMySQL implements iDataBase
 	}
 
 	function Query($query){
-
+//logs($query);
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		// 遍历出来print_r($query);die();
 		$results = mysql_query($query);

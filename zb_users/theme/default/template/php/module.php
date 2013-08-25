@@ -1,5 +1,5 @@
 <dl class="function" id="<?php  echo $module->HtmlID;  ?>">
-<?php if (!$module->IsHideTitle) { ?><dt class="function_t"><?php  echo $module->Name;  ?></dt><?php }else{  ?> <?php } ?>
+<?php if ((!$module->IsHideTitle)&&($module->Name)) { ?><dt class="function_t"><?php  echo $module->Name;  ?></dt><?php }else{  ?> <?php } ?>
 <dd class="function_c">
 
 <?php if ($module->Type=='div') { ?>

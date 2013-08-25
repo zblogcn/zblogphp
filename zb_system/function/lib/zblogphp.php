@@ -837,7 +837,7 @@ function AddBuildModuleAll(){
 
 		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
-		$where[]= array('=','log_Type','0');
+		array_unshift($where,array('=','log_Type','0'));
 		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
 		$array = $this->GetList('Post',$sql);
 		$tagstring = '';
@@ -856,7 +856,7 @@ function AddBuildModuleAll(){
 
 		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
-		$where[]= array('=','log_Type','1');
+		array_unshift($where,array('=','log_Type','1'));
 		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
 		$array = $this->GetList('Post',$sql);
 		foreach ($array as $a) {

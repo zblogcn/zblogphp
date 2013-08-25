@@ -86,12 +86,12 @@ function RegPage_Page(){
 	$article->Content .='<dl style="font-size:1.1em;line-height:1.5em;">';
 	$article->Content .='<dt>以下带星号为必填选项.</dt>';
 	$article->Content .='<dt>&nbsp;</dt>';
-	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)名称：<input type="text" name="name" style="width:200px;font-size:1.2em;" </p></dd>';
-	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)密码：<input type="password" name="password" style="width:200px;font-size:1.2em;" /></p></dd>';
-	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)确认密码：<input type="password" name="repassword" style="width:200px;font-size:1.2em;" /></p></dd>';
+	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)名称：<input required="required" type="text" name="name" style="width:200px;font-size:1.2em;" </p></dd>';
+	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)密码：<input required="required" type="password" name="password" style="width:200px;font-size:1.2em;" /></p></dd>';
+	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)确认密码：<input required="required" type="password" name="repassword" style="width:200px;font-size:1.2em;" /></p></dd>';
 	$article->Content .='<dd><p style="width:350px;text-align:right;">邮箱：<input type="text" name="email" style="width:200px;font-size:1.2em;" /></p></dd>';
 	$article->Content .='<dd><p style="width:350px;text-align:right;">网站：<input type="text" name="homepage" style="width:200px;font-size:1.2em;" /></p></dd>';
-	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)邀请码：<input type="text" name="invitecode" style="width:200px;font-size:1.2em;" /></p></dd>';
+	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)邀请码：<input required="required" type="text" name="invitecode" style="width:200px;font-size:1.2em;" /></p></dd>';
 
 	if($zbp->Config('RegPage')->open_reg){
 		$article->Content .='<dd><p style="width:350px;text-align:right;">点击<a href="'.$zbp->host.'zb_users/plugin/RegPage/getinvitecode.php" target="_blank">这里</a>获取邀请码.</p></dd>';

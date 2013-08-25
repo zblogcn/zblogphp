@@ -450,6 +450,10 @@ function PostArticle(){
 		$_POST['PostTime']=strtotime($_POST['PostTime']);
 	}
 
+	if(!$zbp->CheckRights('ArticleAll')){
+		unset($_POST['IsTop']);
+	}
+
 	$article = new Post();
 	$pre_author=null;
 	$pre_tag=null;
@@ -459,7 +463,7 @@ function PostArticle(){
 	}else{
 		$article->LoadInfoByID(GetVars('ID','POST'));
 		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){$zbp->ShowError(11);}
-		if((!$zbp->CheckRights('ArticlePub'))&&($article->Status==ZC_POST_STATUS_AUDITING)){unset($_POST['Status']);}
+		if((!$zbp->CheckRights('ArticlePub'))&&($article->Status==ZC_POST_STATUS_AUDITING)){$_POST['Status']=ZC_POST_STATUS_AUDITING;}
 		$pre_author=$article->AuthorID;
 		$pre_tag=$article->Tag;
 		$pre_category=$article->CateID;
@@ -925,12 +929,27 @@ function PostMember(){
 
 	if(!$zbp->CheckRights('MemberAll')){
 		unset($_POST['Level']);
+		unset($_POST['Name']);
 	}
 	if(isset($_POST['Password'])){
 		if($_POST['Password']==''){
 			unset($_POST['Password']);
 		}else{
+			if(strlen($_POST['Password'])<$zbp->option['ZC_PASSWORD_MIN']||strlen($_POST['Password'])>$zbp->option['ZC_PASSWORD_MAX']){
+				$zbp->ShowError(54);
+			}
+			if(!CheckRegExp($_POST['Password'],'[password]')){
+				$zbp->ShowError(54);
+			}
 			$_POST['Password']=Member::GetPassWordByGuid($_POST['Password'],$_POST['Guid']);
+		}
+	}
+
+	if(isset($_POST['Name'])){
+		if(isset($zbp->membersbyname[$_POST['Name']])){
+			if($zbp->membersbyname[$_POST['Name']]->ID<>$_POST['ID']){
+				$zbp->ShowError(62);
+			}
 		}
 	}
 
@@ -1212,8 +1231,8 @@ function FilterComment(&$comment){
 	}
 
 	$comment->Name=substr($comment->Name, 0,20);
-	$comment->Email=substr($comment->Email, 0,50);
-	$comment->HomePage=substr($comment->HomePage, 0,250);
+	$comment->Email=substr($comment->Email, 0,30);
+	$comment->HomePage=substr($comment->HomePage, 0,100);
 
 	$comment->Content=TransferHTML($comment->Content,'[nohtml]');
 
@@ -1245,6 +1264,35 @@ function FilterArticle(&$article){
 function FilterMember(&$member){
 	global $zbp;
 	$member->Intro=TransferHTML($member->Intro,'[noscript]');
+
+	if(strlen($member->Name)<$zbp->option['ZC_USERNAME_MIN']||strlen($member->Name)>$zbp->option['ZC_USERNAME_MAX']){
+		$zbp->ShowError(77);
+	}
+
+	if(!CheckRegExp($member->Name,'[username]')){
+		$zbp->ShowError(77);
+	}
+
+	if(!CheckRegExp($member->Email,'[email]')){
+		$member->Email='';
+	}
+
+	if(substr($member->HomePage,0,4)!='http'){
+		$member->HomePage='http://' . $member->HomePage;
+	}
+
+	if(!CheckRegExp($member->HomePage,'[homepage]')){
+		$member->HomePage='';
+	}
+
+	if(strlen($member->Email)>$zbp->option['ZC_EMAIL_MAX']){
+		$zbp->ShowError(29);
+	}
+
+	if(strlen($member->HomePage)>$zbp->option['ZC_HOMEPAGE_MAX']){
+		$zbp->ShowError(30);
+	}
+
 }
 
 
