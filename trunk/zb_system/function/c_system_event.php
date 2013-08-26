@@ -1096,7 +1096,6 @@ function PostUpload(){
 				$upload->Save();
 			}
 		}
-
 	}
 
 	CountMemberArray(array($upload->AuthorID));

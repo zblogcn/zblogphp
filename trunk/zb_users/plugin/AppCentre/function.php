@@ -4,7 +4,7 @@ function AppCentre_SubMenus($id){
 //m-now
 
 echo '<a href="main.php"><span class="m-left '.($id==1?'m-now':'').'">浏览在线应用</span></a>';
-echo '<a href="main.php"><span class="m-left '.($id==2?'m-now':'').'">检查应用更新</span></a>';
+echo '<a href="app_check.php"><span class="m-left '.($id==2?'m-now':'').'">检查应用更新</span></a>';
 echo '<a href="update.php"><span class="m-left '.($id==3?'m-now':'').'">系统更新与校验</span></a>';
 
 
@@ -15,14 +15,29 @@ echo '<a href="theme_edit.php"><span class="m-right '.($id==6?'m-now':'').'">新
 
 
 function Server_Open($method){
-
 	global $zbp;
+
 	switch ($method) {
 		case 'view':
 			$s=Server_SendRequest(APPCENTRE_URL .'?'. $_SERVER['QUERY_STRING']);
 			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
 			break;
+		case 'check':
+			$check= '';
+			$app=new app;			
+			if($app->LoadInfoByXml('theme', $zbp->theme)==true){
+				$check.=$app->id . ':' .$app->modified . ';';
+			}
+			foreach (explode('|',$zbp->option['ZC_USING_PLUGIN_LIST']) as  $id) {
+				$app=new app;
+				if($app->LoadInfoByXml('plugin', $id)==true){
+					$check.=$app->id . ':' .$app->modified . ';';
+				}
+			}
 
+			$s=Server_SendRequest(APPCENTRE_URL .'?check=' . urlencode($check));
+			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
+			break;
 		default:
 			# code...
 			break;
