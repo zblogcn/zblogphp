@@ -186,6 +186,9 @@ class DbSql #extends AnotherClass
 					}
 					$sqlw .= $comma .  '(' . $sql_array . ')';
 				}
+				if($eq=='custom'){
+					$sqlw .= $comma .  '(' . $w[1] . ')';
+				}
 				$comma = 'AND';
 			}
 		}

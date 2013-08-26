@@ -75,6 +75,11 @@ class App
 		return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/' . $this->path;
 	}
 
+	public function GetDir(){
+		global $zbp;
+		return $zbp->path . 'zb_users/' . $this->type . '/' . $this->id . '/';
+	}
+
 	public function GetLogo(){
 		global $zbp;
 		if($this->type=='plugin'){
@@ -83,15 +88,18 @@ class App
 			return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
 		}
 	}
+
 	public function GetScreenshot(){
 		global $zbp;
 		return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
 	}
+
 	public function GetCssFiles(){
 		global $zbp;
 		$dir = $zbp->usersdir . 'theme/' . $this->id . '/style/';
 		return GetFilesInDir($dir,'css');
 	}
+
 	public function LoadInfoByXml($type,$id){
 		global $zbp;
 		$path=$zbp->usersdir . $type . '/' . $id . '/' . $type . '.xml';
@@ -134,17 +142,138 @@ class App
 		return true;
 	}
 
+	private $dirs=array();
+	private $files=array();
 
-	static public function ZipApp($type,$name){
-		$s=null;
+	private function GetAllFileDir($dir){
+
+		if(function_exists('scandir')){
+			foreach (scandir($dir) as $d) {
+				if (is_dir($dir .  $d)) {
+					if( ($d<>'.') && ($d<>'..') ){
+						$this->GetAllFileDir($dir . $d . '/');
+						$this->dirs[]=$dir . $d . '/';
+					}
+				}else{
+					$this->files[]=$dir . $d;
+				}
+			}
+		}else{
+			if ($handle = opendir($dir)) {
+				while (false !== ($file = readdir($handle))) {
+					if ($file != "." && $file != "..") {
+						if (is_dir($dir .  $file)) {
+							$this->dirs[]=$dir . $file  . '/';
+							$this->GetAllFileDir($dir . $file . '/');
+						}else{
+							$this->files[]=$dir . $file;
+						}
+					}
+				}
+				closedir($handle);
+			}
+		}
+
+	}
+
+
+	public function Pack(){
+		global $zbp;
+
+		$dir=$this->GetDir();
+		$this->GetAllFileDir($dir);
+
+		$s='<?xml version="1.0" encoding="utf-8"?>';
+		$s.='<app version="php" type="'.$this->type.'">';
+
+		$s.='<id>'.htmlspecialchars($this->id).'</id>';
+		$s.='<name>'.htmlspecialchars($this->name).'</name>';
+		$s.='<url>'.htmlspecialchars($this->url).'</url>';
+		$s.='<note>'.htmlspecialchars($this->note).'</note>';
+		$s.='<description>'.htmlspecialchars($this->description).'</description>';
+
+		$s.='<path>'.htmlspecialchars($this->path).'</path>';
+		$s.='<include>'.htmlspecialchars($this->include).'</include>';
+		$s.='<level>'.htmlspecialchars($this->level).'</level>';
+
+		$s.='<author>';
+		$s.='<name>'.htmlspecialchars($this->author_name).'</name>';
+		$s.='<email>'.htmlspecialchars($this->author_email).'</email>';
+		$s.='<url>'.htmlspecialchars($this->author_url).'</url>';
+		$s.='</author>';
+
+		$s.='<source>';
+		$s.='<name>'.htmlspecialchars($this->source_name).'</name>';
+		$s.='<email>'.htmlspecialchars($this->source_email).'</email>';
+		$s.='<url>'.htmlspecialchars($this->source_url).'</url>';
+		$s.='</source>';
+
+		$s.='<adapted>'.htmlspecialchars($this->adapted).'</adapted>';
+		$s.='<version>'.htmlspecialchars($this->version).'</version>';
+		$s.='<pubdate>'.htmlspecialchars($this->pubdate).'</pubdate>';
+		$s.='<modified>'.htmlspecialchars($this->modified).'</modified>';
+		$s.='<price>'.htmlspecialchars($this->price).'</price>';
+
+		$s.='<advanced>';
+		$s.='<dependency>'.htmlspecialchars($this->advanced_dependency).'</dependency>';
+		$s.='<rewritefunctions>'.htmlspecialchars($this->advanced_rewritefunctions).'</rewritefunctions>';
+		$s.='<conflict>'.htmlspecialchars($this->advanced_conflict).'</conflict>';
+		$s.='</advanced>';
+
+
+		$s.='<sidebars>';
+		$s.='<sidebar1>'.htmlspecialchars($this->sidebars_sidebar1).'</sidebar1>';
+		$s.='<sidebar2>'.htmlspecialchars($this->sidebars_sidebar2).'</sidebar2>';
+		$s.='<sidebar3>'.htmlspecialchars($this->sidebars_sidebar3).'</sidebar3>';
+		$s.='<sidebar4>'.htmlspecialchars($this->sidebars_sidebar4).'</sidebar4>';
+		$s.='<sidebar5>'.htmlspecialchars($this->sidebars_sidebar5).'</sidebar5>';
+		$s.='</sidebars>';
+
+
+		foreach ($this->dirs as $key => $value) {
+			$d=str_replace($dir,'',$value);
+			$s.='<folder><path>'.htmlspecialchars($d).'</path></folder>';
+		}
+		foreach ($this->files as $key => $value) {
+			$d=str_replace($dir,'',$value);
+			$c=base64_encode(file_get_contents($value));
+			$s.='<file><path>'.$d.'</path><stream>'.$c.'</stream></file>';
+		}
+
+
+
+		$s.='</app>';
+		
 		return $s;
 	}
 
-	static public function UnzipApp($xml){
-		return null;
+	static public function UnPack($xml){
+		global $zbp;
+		$xml = simplexml_load_string($xml);
+		if(!$xml)return false;
+		if($xml['version']!='php')return $zbp->ShowError(78);
+		$type=$xml['type'];
+		$id=$xml->id;
+		$dir=$zbp->path . 'zb_users/' . $type . '/' . $id . '/';
+
+		if(!file_exists($dir))@mkdir($dir);
+
+		foreach ($xml->folder as $folder) {
+			$f=$dir . $folder->path;
+			if(!file_exists($f)){
+				@mkdir($f,0777,true);
+			}
+		}
+
+		foreach ($xml->file as $file) {
+			$f=$dir . $file->path;
+			@file_put_contents($f, base64_decode($file->stream));
+		}
+
+		return true;
 	}
 
-	public function SaveXml(){
+	public function SaveInfo(){
 
 	}
 }

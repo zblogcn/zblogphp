@@ -6,7 +6,7 @@ $("#divMain2").prepend("<form class='search' name='edit' id='edit' method='post'
 
 
 $("tr").each(function(){
-	$(this).append("<td class='td15' align='center'></td>");
+	$(this).append("<td class='td10' align='center'></td>");
 });
 $("tr").first().children().last().append("<b>开发者模式</b>");
 
@@ -18,7 +18,7 @@ $(".plugin").each(function(){
 	s=s+"<a class=\"button\"  href='"+bloghost+"zb_users/plugin/AppCentre/plugin_edit.php?id="+t+"' title='编辑该插件信息'><img height='16' width='16' src='"+bloghost+"zb_users/plugin/AppCentre/images/application_edit.png'/></a>";
 
 
-	s=s+"&nbsp;&nbsp;&nbsp;&nbsp;<a class=\"button\"  href='"+bloghost+"zb_users/plugin/AppCentre/app_pack.php?id="+t+"' title='导出该插件' target='_blank'><img height='16' width='16' src='"+bloghost+"zb_users/plugin/AppCentre/images/download.png'/></a>";
+	s=s+"&nbsp;&nbsp;&nbsp;&nbsp;<a class=\"button\"  href='"+bloghost+"zb_users/plugin/AppCentre/app_pack.php?type=plugin&id="+t+"' title='导出该插件' target='_blank'><img height='16' width='16' src='"+bloghost+"zb_users/plugin/AppCentre/images/download.png'/></a>";
 
 
 	$(this).parent().children().last().append(s);
