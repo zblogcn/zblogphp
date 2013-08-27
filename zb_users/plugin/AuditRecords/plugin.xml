@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <plugin version="php">
-	<id>HeartVote</id>
-	<name>用“心”打分</name>
-	<note>自定义CSS和图片，还有JS，可以有很多种变化。</note>
-	<path>main.php</path>
+	<id>AuditRecords</id>
+	<name>审核日志记录插件</name>
+	<note>记录发布文章时的审核及回复</note>
+	<path></path>
 	<include>include.php</include>
 	<level>1</level>
 	<author>

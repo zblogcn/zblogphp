@@ -335,7 +335,12 @@ function RespondError($faultString){
 	die();
 
 }
-
+function ScriptError($faultString){
+	header('Content-type: application/x-javascript; Charset=utf8');
+	ob_clean();
+	echo 'alert("'.str_replace('"', '\"', $faultString).'")';
+	die();
+}
 function CheckRegExp($source,$para){
 	if(strpos($para, '[username]')!==false){
 		$para="/^[\.\_A-Za-z0-9\x{4e00}-\x{9fa5}]+$/u";
