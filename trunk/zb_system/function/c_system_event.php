@@ -482,7 +482,7 @@ function PostArticle(){
 	FilterMeta($article);
 
 	foreach ($GLOBALS['Filter_Plugin_PostArticle_Core'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($cmt);
+		$fpreturn=$fpname($article);
 	}
 
 	$article->Save();

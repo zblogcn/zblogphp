@@ -33,10 +33,13 @@ function Server_Open($method){
 
 	switch ($method) {
 		case 'down':
+			Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ScriptError',PLUGIN_EXITSIGNAL_RETURN);
 			header('Content-type: application/x-javascript; Charset=utf8');
 			ob_clean();
 			$s=Server_SendRequest(APPCENTRE_URL .'?down=' . GetVars('id','GET'));
-			//echo 'alert(123)';
+			if(App::UnPack($s)){
+				$zbp->SetHint('good','下载APP并解压安装成功!');
+			};
 			die();
 			break;		
 		case 'search':
