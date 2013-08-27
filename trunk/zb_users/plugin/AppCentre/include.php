@@ -11,6 +11,7 @@ function ActivePlugin_AppCentre() {
 	Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu','AppCentre_AddMenu');
 	Add_Filter_Plugin('Filter_Plugin_Admin_ThemeMng_SubMenu','AppCentre_AddThemeMenu');
 	Add_Filter_Plugin('Filter_Plugin_Admin_PluginMng_SubMenu','AppCentre_AddPluginMenu');
+	Add_Filter_Plugin('Filter_Plugin_Admin_SiteInfo_SubMenu','AppCentre_AddSiteInfoMenu');
 }
 
 function InstallPlugin_AppCentre(){
@@ -23,6 +24,11 @@ function InstallPlugin_AppCentre(){
 function AppCentre_AddMenu(&$m){
 	global $zbp;
 	$m[]=MakeLeftMenu("root","应用中心",$zbp->host . "zb_users/plugin/AppCentre/main.php","nav_AppCentre","aAppCentre",$zbp->host . "zb_users/plugin/AppCentre/images/Cube1.png");	
+}
+
+function AppCentre_AddSiteInfoMenu(){
+	global $zbp;
+	echo "<script type='text/javascript'>$(document).ready(function(){  $.getScript('{$zbp->host}zb_users/plugin/AppCentre/main.php?method=checksilent&rnd='); });</script>";
 }
 
 function AppCentre_AddThemeMenu(){

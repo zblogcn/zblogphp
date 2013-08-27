@@ -32,6 +32,13 @@ class Post extends Base{
 		return date($s,(int)$this->PostTime);
 	}
 
+	public function PrevPost(){
+
+	}
+	public function NextPost(){
+
+	}
+
 	function TagsToNameString(){
 		global $zbp;
 		$s=$this->Tag;

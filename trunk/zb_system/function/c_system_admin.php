@@ -633,7 +633,7 @@ $w[]=array('=','comm_Ischecking',(int)GetVars('ischecking'));
 $array=$zbp->GetCommentList(
 	'',
 	$w,
-	array('comm_PostTime'=>'DESC'),
+	array('comm_ID'=>'DESC'),
 	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
 	array('pagebar'=>$p)
 );

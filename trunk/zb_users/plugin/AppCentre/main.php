@@ -20,7 +20,6 @@ if(count($_POST)>0){
 	Redirect('./main.php');
 }
 
-
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 
@@ -28,11 +27,13 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <div id="divMain">
 
   <div class="divHeader"><?php echo $blogtitle;?></div>
-<div class="SubMenu"><?php AppCentre_SubMenus(1);?></div>
+<div class="SubMenu"><?php AppCentre_SubMenus(GetVars('method','GET')=='check'?2:1);?></div>
   <div id="divMain2" class="edit category_edit">
 
 <?php
-Server_Open('view');
+$method=GetVars('method','GET');
+if(!$method)$method='view';
+Server_Open($method);
 ?>
 
 	<script type="text/javascript">ActiveLeftMenu("aAppCentre");</script>

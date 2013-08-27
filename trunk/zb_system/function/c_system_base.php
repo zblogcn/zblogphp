@@ -42,6 +42,7 @@ foreach ($option_zbusers as $key => $value) {
 	$option[$key]=$value;
 }
 
+date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 
 $lang = null;
 
