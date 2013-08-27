@@ -1159,7 +1159,7 @@ function AddBuildModuleAll(){
 			if($signal=='good')$content=$this->lang['msg']['operation_succeed'];
 			if($signal=='bad')$content=$this->lang['msg']['operation_failed'];				
 		}
-		echo "<div class='hint'><p class='hint hint_$signal'><font color='blue'>$content</font></p></div>";
+		echo "<div class='hint'><p class='hint hint_$signal'>$content</p></div>";
 	}
 
 
