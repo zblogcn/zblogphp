@@ -1,17 +1,18 @@
 <?php
-//Response_Plugin_Html_Js_Add_CodeHighLight_JS="document.writeln(""<script src='"&BlogHost&"zb_users/plugin/CKEditor/ckeditor/prettify/prettify.js' type='text/javascript'></script><link rel='stylesheet' type='text/css' href='"&BlogHost&"zb_users/plugin/CKEditor/ckeditor/prettify/prettify.css'/>"");"
-//Response_Plugin_Html_Js_Add_CodeHighLight_Action="prettyPrint();"
 
-
-#注册插件
+Add_Filter_Plugin('Filter_Plugin_Html_Js_Add','CodeHighLight_print_CKEditor');
+function CodeHighLight_print_CKEditor(){
+	global $zbp;
+	echo 'document.writeln("<script src=\'' . $zbp->host .'zb_users/plugin/CKEditor/ckeditor/prettify/prettify.js\' type=\'text/javascript\'></script><link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host .'zb_users/plugin/CKEditor/ckeditor/prettify/prettify.css\'/>");'."\n";
+	echo "$(document).ready(function(){prettyPrint();});\n";
+}
+//注册插件
 RegisterPlugin("CKEditor","ActivePlugin_CKEditor");
 function ActivePlugin_CKEditor() {
 	Add_Filter_Plugin('Filter_Plugin_Edit_Begin','CKEditor_addscript_begin');
 	Add_Filter_Plugin('Filter_Plugin_Edit_End','CKEditor_addscript_end');
 }
 
-function InstallPlugin_CKEditor(){}
-function UninstallPlugin_CKEditor(){}
 function CKEditor_addscript_begin(){
 	global $zbp;
 	echo '<script type="text/javascript" src="' . $zbp->host .'zb_users/plugin/CKEditor/ckeditor/ckeditor.js"></script>';

@@ -8,13 +8,15 @@ $zbp->Load();
 //Http304(__FILE__,$zbp->cache->refesh);
 
 ob_clean();
+
+foreach ($GLOBALS['Filter_Plugin_Html_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
+
 ?>
 var bloghost="<?php echo $bloghost; ?>";
 var cookiespath="<?php echo $cookiespath; ?>";
 var str01="<?php echo $lang['error']['72']; ?>";
 var str02="<?php echo $lang['error']['29']; ?>";
 var str03="<?php echo $lang['error']['46']; ?>";
-
 
 <?php
 echo '$(document).ready(function(){';
@@ -29,7 +31,6 @@ if ($zbp->CheckRights('ArticleEdt')){
 }
 echo '});';
 
-
-foreach ($GLOBALS['Filter_Plugin_Html_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
 die();
+
 ?>
