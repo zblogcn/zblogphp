@@ -65,7 +65,7 @@ $zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重�
 		foreach($file_list['file'] as $k=>$v){
 			echo "<tbody><tr>";
 			echo "<td>$k</td>";
-			echo "<td><img src='".$zbp->host."zb_system/image/filetype/".GetFileimg($v['filetype']).".png'><a href='$current_url$v[filename]' target='_blank'>$v[filename]</a></td>";
+			echo "<td><img src='".$zbp->host."zb_system/image/filetype/".GetFileimg($v['filetype']).".png'><a href='$current_url$v[filename]' target='_blank'> $v[filename]</a></td>";
 			echo "<td>$v[fileperms]</td>";
 			echo "<td>$v[filesize]</td>";
 			echo "<td>$v[datetime]</td>";

@@ -26,7 +26,6 @@ body{
 h1,h2,h3,h4,h5,h6{
 	font-size:18px;
 	padding:0;
-	margin:0;
 	color:#3a6ea5;
 }
 h1{
