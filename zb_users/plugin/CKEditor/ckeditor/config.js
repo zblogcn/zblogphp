@@ -6,7 +6,6 @@
 CKEDITOR.editorConfig = function( config ) {
 	//config.height = 600;
 	config.filebrowserUploadUrl="../../zb_users/plugin/CKEditor/ckeditor/php/upload.php";
-	//config.smiley_columns = 4;
-	config.smiley_path = "../../zb_users/EMOTION/";
+	config.smiley_path = "../../zb_users/emotion/";
 	config.extraPlugins = 'insertpre';
 };
