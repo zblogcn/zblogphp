@@ -15,7 +15,7 @@
 </ul>
 		</div>
 		<div id="divMain">
-{if $article->Type==ZC_POST_TYPE_ARTICLE}
+{if $article.Type==ZC_POST_TYPE_ARTICLE}
 {template:post-single}
 {else}
 {template:post-page}

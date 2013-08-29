@@ -1,31 +1,29 @@
 <?php  include $this->GetTemplate('header');  ?>
-</head>
 <body class="multi default">
-<div id="divAll">
-	<div id="divPage">
-	<div id="divMiddle">
-		<div id="divTop">
-			<h1 id="BlogTitle"><a href="<?php  echo $host;  ?>"><?php  echo $name;  ?></a></h1>
-			<h3 id="BlogSubTitle"><?php  echo $subname;  ?></h3>
-		</div>
-		<div id="divNavBar">
-<ul>
-<?php  echo $modules['navbar']->Content;  ?>
-</ul>
-		</div>
-		<div id="divMain">
-<?php  foreach ( $articles as $article) { ?> 
-
-<?php if ($article->IsTop) { ?>
-<?php  include $this->GetTemplate('post-istop');  ?>
-<?php }else{  ?>
-<?php  include $this->GetTemplate('post-multi');  ?>
-<?php } ?>
-
-<?php  }   ?>
-<div class="pagebar"><?php  include $this->GetTemplate('pagebar');  ?></div>
-		</div>
-		<div id="divSidebar">
-<?php  include $this->GetTemplate('sidebar');  ?>
-		</div>
+<?php  include $this->GetTemplate('top');  ?>
+<div class="nevbarbg">
+  <div class="navbar">
+    <ul>
+      <?php  echo $modules['navbar']->Content;  ?>
+    </ul>
+  </div>
+</div>
+<div id="content">  
+  <div id="main">
+    <?php  foreach ( $articles as $article) { ?> 
+		<?php if ($article->IsTop) { ?>
+		<?php  include $this->GetTemplate('post-istop');  ?>
+		<?php }else{  ?>
+		<?php  include $this->GetTemplate('post-multi');  ?>
+		<?php } ?>
+	<?php  }   ?>
+    <div class="pagebar">
+      <?php  include $this->GetTemplate('pagebar');  ?>
+    </div>   
+  </div> 
+  <div id="sidebar">
+    <?php  include $this->GetTemplate('sidebar');  ?>
+  </div>
+  <div class="clear"></div>
+</div>
 <?php  include $this->GetTemplate('footer');  ?>

@@ -1,5 +1,5 @@
-<div class="post" id="divCommentPost">
-	<p class="posttop"><a name="comment"><?php if ($user->ID>0) { ?><?php  echo $user->Name#;  ?><?php } ?>发表评论:</a><small><a rel="nofollow" id="cancel-reply" href="#divCommentPost" style="display:none;">取消回复</a></small></p>
+<div class="commentpost" id="comment">
+    <h4>发表评论:</h4><?php if ($user->ID>0) { ?><?php  echo $user->Name#;  ?><?php } ?><small><a rel="nofollow" id="cancel-reply" href="#divCommentPost" style="display:none;">取消回复</a></small>
 	<form id="commentform" target="_self" method="post" action="<?php  echo $article->CommentPostUrl#;  ?>" >
 	<input type="hidden" name="postid" id="postid" value="<?php  echo $article->ID#;  ?>" />
 	<input type="hidden" name="replyid" id="replyid" value="0" />
