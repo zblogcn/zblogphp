@@ -12,7 +12,7 @@ if(isset($_GET['setcolor'])){
 	die();
 }
 
-$id=$zbp->Config('AdminColor')->color;
+$id=(int)$zbp->Config('AdminColor')->color;
 $c='';
 
 $c .="header{background-color:#3a6ea5;}". "\r\n";
@@ -82,9 +82,9 @@ $c=str_replace($c5,$AntiColor[$id],$c);
 $c .="\r\n" . "/*AdminColor*/" . "\r\n" . "#admin_color{float:right;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
 
 if($id==10){
-$c.='header {background:url(header.jpg) no-repeat 0 0;}';
-$c.='body{background:url(body.jpg) no-repeat 0 0;background-attachment:fixed;}';
-$c.='#topmenu{opacity:0.8;}*/';
+$c.='header {background:url(header.jpg) no-repeat 0 0;}'. "\r\n";
+$c.='body{background:url(body.jpg) no-repeat 0 0;background-attachment:fixed;}'. "\r\n";
+$c.='#topmenu{opacity:0.8;}'. "\r\n";
 }
 
 echo $c;

@@ -67,7 +67,7 @@ class Member extends Base{
 			if($_avatar)return $_avatar;
 			$s=$zbp->usersdir . 'avatar/' . $this->ID . '.png';
 			if(file_exists($s)){
-				$_avatar = $s;
+				$_avatar = $zbp->host . 'zb_users/avatar/' . $this->ID . '.png';
 				return $_avatar;
 			}
 			$_avatar = $zbp->host . 'zb_users/avatar/0.png';
