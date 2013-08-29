@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS %pre%post (
   log_ID int(11) NOT NULL AUTO_INCREMENT,
-  log_CateID int(11) NOT NULL DEFAULT '0',
+  log_CateID smallint(6) NOT NULL DEFAULT '0',
   log_AuthorID int(11) NOT NULL DEFAULT '0',
   log_Tag varchar(255) NOT NULL DEFAULT '',
-  log_Status int(11) NOT NULL DEFAULT '0',
-  log_Type int(11) NOT NULL DEFAULT '0',
+  log_Status tinyint(4) NOT NULL DEFAULT '0',
+  log_Type tinyint(4) NOT NULL DEFAULT '0',
   log_Alias varchar(255) NOT NULL DEFAULT '',
   log_IsTop tinyint(1) NOT NULL DEFAULT '0',
   log_IsLock tinyint(1) NOT NULL DEFAULT '0',
@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS %pre%post (
   log_Template varchar(50) NOT NULL DEFAULT '',
   log_Meta text NOT NULL,
   PRIMARY KEY (log_ID),
-  KEY %pre%log_PTISC (log_PostTime,log_Type,log_IsTop,log_Status,log_CateID)
+  KEY %pre%log_PT (log_PostTime),
+  KEY %pre%log_TISC (log_Type,log_IsTop,log_Status,log_CateID)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
@@ -81,8 +82,8 @@ CREATE TABLE IF NOT EXISTS %pre%counter (
 CREATE TABLE IF NOT EXISTS %pre%member (
   mem_ID int(11) NOT NULL AUTO_INCREMENT,
   mem_Guid varchar(36) NOT NULL DEFAULT '',
-  mem_Level int(11) NOT NULL DEFAULT '0',
-  mem_Status int(11) NOT NULL DEFAULT '0',
+  mem_Level tinyint(4) NOT NULL DEFAULT '0',
+  mem_Status tinyint(4) NOT NULL DEFAULT '0',
   mem_Name varchar(20) NOT NULL DEFAULT '',
   mem_Password varchar(32) NOT NULL DEFAULT '',
   mem_Email varchar(50) NOT NULL DEFAULT '',
