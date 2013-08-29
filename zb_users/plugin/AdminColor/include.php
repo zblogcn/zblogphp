@@ -2,15 +2,10 @@
 #注册插件
 RegisterPlugin("AdminColor","ActivePlugin_AdminColor");
 
-
-
 function ActivePlugin_AdminColor() {
 
-	//Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu','AppCentre_AddMenu');
-	//Call Add_Response_Plugin("Response_Plugin_Admin_SiteInfo","<script type='text/javascript'>$('.divHeader').append(""<div id='admin_color'>"&s&"</div>"");</script>")
-
+	Add_Filter_Plugin('Filter_Plugin_Admin_SiteInfo_SubMenu','AdminColor_ColorButton');
 	Add_Filter_Plugin('Filter_Plugin_Admin_Header','AdminColor_Css');
-
 }
 
 function AdminColor_Css(){
@@ -20,18 +15,16 @@ function AdminColor_Css(){
 
 function AdminColor_ColorButton(){
 	global $zbp;
+	
+	$s='';
 
-	for ($i=1; $i < 9; $i++) { 
-		$s.="&nbsp;&nbsp;<a href='". $zbp->host ."zb_users/plugin/AdminColor/css.php?color=".$i."'>
-		<span style='height:16px;width:16px;background:".$NormalColor[$i]."'>
-		<img src='". $zbp->host ."zb_system/image/admin/none.gif' width='16' height='16' alt='' /></span></a>&nbsp;&nbsp;";
+	for ($i=0; $i < 9; $i++) { 
+		$s.="&nbsp;&nbsp;<a href='". $zbp->host ."zb_users/plugin/AdminColor/css.php?setcolor=".$i."'><span style='height:16px;width:16px;background:".$GLOBALS['NormalColor'][$i]."'><img src='". $zbp->host ."zb_system/image/admin/none.gif' width='16' height='16' alt='' /></span></a>&nbsp;&nbsp;";
 	}
 
-	$s.="&nbsp;&nbsp;<a href='". $zbp->host ."zb_users/plugin/AdminColor/css.php?color=art' title='文艺范'>
-	<span style='height:16px;width:16px;background:#eee;'>
-	<img src='". $zbp->host ."zb_system/image/admin/none.gif' width='16' alt=''/></span></a>&nbsp;&nbsp;";
+	$s.="&nbsp;&nbsp;<a href='". $zbp->host ."zb_users/plugin/AdminColor/css.php?setcolor=10' title='文艺范'><span style='height:16px;width:16px;background:#eee;'><img src='". $zbp->host ."zb_system/image/admin/none.gif' width='16' alt=''/></span></a>&nbsp;&nbsp;";
 
-	echo $s;
+	echo "<script type='text/javascript'>$('.divHeader').append(\"<div id='admin_color'>". $s ."</div>\");</script>";
 }
 
 

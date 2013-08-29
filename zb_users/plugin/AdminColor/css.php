@@ -5,7 +5,14 @@ require '../../../zb_system/function/c_system_admin.php';
 
 header('Content-Type: text/css; Charset=utf8');  
 
-$id=10;
+if(isset($_GET['setcolor'])){
+	$zbp->Config('AdminColor')->color=(int)$_GET['setcolor'];
+	$zbp->SaveConfig('AdminColor');
+	Redirect($zbp->host . 'zb_system/admin/');
+	die();
+}
+
+$id=$zbp->Config('AdminColor')->color;
 $c='';
 
 $c .="header{background-color:#3a6ea5;}". "\r\n";
@@ -75,7 +82,7 @@ $c=str_replace($c5,$AntiColor[$id],$c);
 $c .="\r\n" . "/*AdminColor*/" . "\r\n" . "#admin_color{float:right;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
 
 if($id==10){
-$c.='header {background:url(header.jpg) repeat-x 0 0;}';
+$c.='header {background:url(header.jpg) no-repeat 0 0;}';
 $c.='body{background:url(body.jpg) no-repeat 0 0;background-attachment:fixed;}';
 $c.='#topmenu{opacity:0.8;}*/';
 }
