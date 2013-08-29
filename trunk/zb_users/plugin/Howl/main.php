@@ -56,7 +56,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <?php
 $zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重后果，请慎用！');
 ?>
-  <div class="divHeader2"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle;?></div>
   <div class="SubMenu"></div>
   <div id="divMain2" class="edit category_edit">
 	<form id="edit" name="edit" method="post" action="#">

@@ -16,7 +16,9 @@ function ActivePlugin_AppCentre() {
 
 function InstallPlugin_AppCentre(){
 	global $zbp;
-
+	$zbp->Config('AppCentre')->enabledcheck=1;
+	$zbp->Config('AppCentre')->checkbeta=0;
+	$zbp->Config('AppCentre')->enabledevelop=0;
 	$zbp->SaveConfig('AppCentre');
 }
 
@@ -28,16 +30,22 @@ function AppCentre_AddMenu(&$m){
 
 function AppCentre_AddSiteInfoMenu(){
 	global $zbp;
-	echo "<script type='text/javascript'>$(document).ready(function(){  $.getScript('{$zbp->host}zb_users/plugin/AppCentre/main.php?method=checksilent&rnd='); });</script>";
+	if($zbp->Config('AppCentre')->enabledcheck){
+		echo "<script type='text/javascript'>$(document).ready(function(){  $.getScript('{$zbp->host}zb_users/plugin/AppCentre/main.php?method=checksilent&rnd='); });</script>";
+	}
 }
 
 function AppCentre_AddThemeMenu(){
 	global $zbp;
+	echo "<script type='text/javascript'>var app_enabledevelop=".(int)$zbp->Config('AppCentre')->enabledevelop.";</script>";
+	echo "<script type='text/javascript'>var app_username='".$zbp->Config('AppCentre')->username."';</script>";
 	echo "<script src='{$zbp->host}zb_users/plugin/AppCentre/theme.js' type='text/javascript'></script>";
 }
 
 function AppCentre_AddPluginMenu(){
 	global $zbp;
+	echo "<script type='text/javascript'>var app_enabledevelop=".(int)$zbp->Config('AppCentre')->enabledevelop.";</script>";
+	echo "<script type='text/javascript'>var app_username='".$zbp->Config('AppCentre')->username."';</script>";
 	echo "<script src='{$zbp->host}zb_users/plugin/AppCentre/plugin.js' type='text/javascript'></script>";
 }
 ?>

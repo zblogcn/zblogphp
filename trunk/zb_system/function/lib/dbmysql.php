@@ -62,7 +62,7 @@ class DbMySQL implements iDataBase
 		$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
 		foreach ($a as $s) {
 			mysql_query($s);
-								echo $s .'<br/>';
+//echo $s .'<br/>';
 		}
 	}
 

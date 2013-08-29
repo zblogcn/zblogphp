@@ -11,7 +11,6 @@ CREATE TABLE IF NOT EXISTS %pre%post (
   log_Title varchar(255) NOT NULL DEFAULT '',
   log_Intro text NOT NULL,
   log_Content text NOT NULL,
-  log_IP varchar(15) NOT NULL DEFAULT '',
   log_PostTime int(11) NOT NULL DEFAULT '0',
   log_CommNums int(11) NOT NULL DEFAULT '0',
   log_ViewNums int(11) NOT NULL DEFAULT '0',

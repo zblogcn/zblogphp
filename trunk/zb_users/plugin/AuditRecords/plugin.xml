@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <plugin version="php">
 	<id>AuditRecords</id>
-	<name>审核日志记录插件</name>
+	<name>审核文章日志插件</name>
 	<note>记录发布文章时的审核及回复</note>
 	<path></path>
 	<include>include.php</include>

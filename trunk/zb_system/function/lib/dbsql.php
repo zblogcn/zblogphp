@@ -351,7 +351,6 @@ $datainfo=array(
 	'Title'=>array('log_Title','string',250,''),
 	'Intro'=>array('log_Intro','string','',''),
 	'Content'=>array('log_Content','string','',''),
-	'IP'=>array('log_IP','string',15,''),
 	'PostTime'=>array('log_PostTime','integer','',0),
 	'CommNums'=>array('log_CommNums','integer','',0),
 	'ViewNums'=>array('log_ViewNums','integer','',0),

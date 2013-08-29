@@ -63,7 +63,23 @@ function Server_Open($method){
 				echo '$(".main").prepend("<div class=\'hint\'><p class=\'hint hint_tips\'>提示:有'.$s.'个应用需要更新,请在应用中心更新.</p></div>")';
 			}
 			die();
-			break;			
+			break;
+		case 'vaild':
+			$data=array();
+			$data["username"]=GetVars("app_username");
+			$data["password"]=md5(GetVars("app_password"));
+			$s=Server_SendRequest(APPCENTRE_URL .'?vaild',$data);
+			return $s;
+			break;
+		case 'submitpre':
+			$s=Server_SendRequest(APPCENTRE_URL .'?submitpre=' . urlencode(GetVars('id')));
+			return $s;
+		case 'submit':
+			$app=New App;
+			$app->LoadInfoByXml($_GET['type'],$_GET['id']);
+			$data["zba"]=$app->Pack();
+			$s=Server_SendRequest(APPCENTRE_URL .'?submit=' . urlencode(GetVars('id')),$data);
+			return $s;
 		default:
 			# code...
 			break;
@@ -73,23 +89,40 @@ function Server_Open($method){
 
 
 
-function Server_SendRequest($url){
+function Server_SendRequest($url,$data=array()){
+	global $zbp;
 
-	$data=array();
-	$data=http_build_query($data);
-	$opts=array(
-		'http'=>array(
-			'method'=>'POST',
-			'header'=>"Content-Type:application/x-www-form-urlencoded\r\n".
-				'Content-Length: '.strlen($data)."\r\n".
-				"Cookie: \r\n".
-				"User-Agent: ZBlogPHP/" . substr(ZC_BLOG_VERSION,-6,6),
-			'content'=>$data
-		)
-	);
-	$content=stream_context_create($opts);
+	$un=$zbp->Config('AppCentre')->username;
+	$ps=$zbp->Config('AppCentre')->password;
+	$c='';
+	if($un&&$ps){
+		$c="username=".urlencode($un) ."; password=".urlencode($ps);
+	}
 
-	return @file_get_contents($url,false,$content);
+	if($data){//POST
+		$data=http_build_query($data);
+		$opts=array(
+			'http'=>array(
+				'method'=>'POST',
+				'header'=>"Content-Type:application/x-www-form-urlencoded\r\n".
+					'Content-Length: '.strlen($data)."\r\n".
+					"Cookie: ".$c."\r\n".
+					"User-Agent: ZBlogPHP/" . substr(ZC_BLOG_VERSION,-6,6),
+				'content'=>$data
+			)
+		);
+		$content=stream_context_create($opts);
+	}else{//GET
+		$opts=array(
+			'http'=>array(
+				'method'=>'GET',
+				'header'=>"Cookie: ".$c."\r\n" . "User-Agent: ZBlogPHP/" . substr(ZC_BLOG_VERSION,-6,6)
+			)
+		);
+		$content=stream_context_create($opts);
+	}
+
+	return file_get_contents($url,false,$content);
 
 }
 
