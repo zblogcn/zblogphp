@@ -1,13 +1,13 @@
 <div id="footer">
   <div class="copyright">
-    <p>Powered By <?php  echo $zblogphphtml;  ?></p>
-    <p><?php  echo $copyright;  ?></p>
+    <p>Powered By {$zblogphphtml}</p>
+    <p>{$copyright}</p>
   </div>
   <div id="goTopBtn">
     <a onclick="pageScroll()"><span>·µ»Ø¶¥²¿</span></a>
   </div>
   <div class="clear"></div>
 </div>
-<?php  echo $footer;  ?>
+{$footer}
 </body>
 </html>

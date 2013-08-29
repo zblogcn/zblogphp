@@ -1,27 +1,24 @@
-﻿<#TEMPLATE_HEADER#>
+{template:header}
 <body class="single">
-<#TEMPLATE_TOP#>
-
+{template:top}
 <div class="nevbarbg">
   <div class="navbar">
     <ul>
-      <#CACHE_INCLUDE_NAVBAR#>
+      {$modules['navbar'].Content}
     </ul>
   </div>
 </div>
-
 <div id="content">
-  
   <div id="main">
-    <#template:article-single#>
+    {if $article.Type==ZC_POST_TYPE_ARTICLE}
+		{template:post-single}
+		{else}
+		{template:post-page}
+	{/if}
   </div>
-    
   <div id="sidebar">
-    <#template:sidebar#>
+    {template:sidebar}
   </div>
-  
   <div class="clear"></div>
-
 </div>
-
-<#TEMPLATE_FOOTER#>
+{template:footer}

@@ -105,18 +105,6 @@ img { border: none;}
 #divPrevious .function_t { background: url(images/icon/Previous.png) no-repeat 10px 5px;} /*最新文章*/
 #divTags .function_t { background: url(images/icon/Tags.png) no-repeat 10px 5px;} /*标签云集*/
 #divSearchPanel .function_t { background: url(images/icon/Search.png) no-repeat 10px 5px;} /*搜索*/
-/*旧版日历*/
-#divCalendar { width:235px; padding:0 0 15px 0px; text-align:center;}
-#divCalendar .function_t { display:none;}
-#divCalendar .function_c { width:240px; padding:0 0 0 0;}
-p.y { text-align:center; height:24px; margin:0; padding:0; font-size:12px; font-weight:bold;}
-p.y a { padding:0 20px;}
-p.w,p.d,p.yd,p.nd,p.cd { float:left; border:1px solid #E0E1E2; width:32px;  height:24px; margin:0 0 -1px -1px; padding:3px 0 0 0; text-align:center; vertical-align :middle;}
-p.d { background:#F0F0F0;}
-p.yd { background:#5EAAE4; color:#FFFFFF;}
-p.yd a { color:#FFFFFF;}
-p.cd { font-weight:bold;}
-p.w { background:#A9B8C5; padding:3px 0 2px 0; height:1.7em; color:#FFFFFF; text-transform: uppercase;}
 /*新版表格日历*/
 #divCalendar .function_t { display:none;}
 #divCalendar .function_c { width:232px; padding:0 4px 15px 4px;}
@@ -129,8 +117,8 @@ p.w { background:#A9B8C5; padding:3px 0 2px 0; height:1.7em; color:#FFFFFF; text
 #divCalendar td a{display:block;line-height:30px;background:#5EAAE4; color:#FFFFFF;}
 #today{font-weight:bold;}/*这个today真的不该有！*/
 /*侧边搜索*/
-.function #edtSearch { float:left; width:110px; padding:6px 10px; border:1px solid #FFFFFF;}
-.function #btnPost { float:left; background:#5EAAE4; border:none; width:50px; height:29px; font-weight:bold;color:#FFFFFF;}
+#divSearchPanel  input[type="text"]{ float:left; width:110px; padding:5px 10px; border:1px solid #FFFFFF;}
+#divSearchPanel  input[type="submit"]{ float:left; background:#5EAAE4; border:none; width:50px; height:28px; font-weight:bold;color:#FFFFFF;}
 /*侧边分类*/
 #divCatalog .li-subcate { padding-left:15px; background:url(images/li-subcate.png) no-repeat left top;}
 #divComments li,divPrevious li{ white-space:nowrap; word-break:keep-all; overflow:hidden; text-overflow:ellipsis;}
@@ -159,8 +147,8 @@ p.w { background:#A9B8C5; padding:3px 0 2px 0; height:1.7em; color:#FFFFFF; text
 .commentpost p { margin-bottom:10px;}.commentpost img{ margin-bottom: -6px;}
 li.msgarticle div.quote{ margin:10px 0 0 0; padding:10px; background:#FFFFFF; border:1px solid #F4F4F4;}
 li.msgarticle div.quote-title{ margin:0; padding:0; font-size:1em; color:#CC0000;}
-#inpName, #inpEmail, #inpHomePage, #inpVerify { width:200px; padding:6px 10px; border:1px solid #CCCCCC;}
-#txaArticle { padding:5px; width:95%; height:120px; border:1px solid #CCCCCC;}
+.commentpost input { width:200px; padding:6px 10px; border:1px solid #CCCCCC;}
+.commentpost #content{ padding:5px; width:95%; height:120px; border:1px solid #CCCCCC;background:none;}
 .button { background:#5EAAE4; border:none; width:100px; height:30px; font-weight:bold; color:#FFFFFF; }
 /*分页*/
 .pagebar { padding:5px 10px; text-align:right;}

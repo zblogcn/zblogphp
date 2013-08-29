@@ -1,27 +1,24 @@
 <?php  include $this->GetTemplate('header');  ?>
-	<link rel="alternate" type="application/rss+xml" href="<?php  echo $feedurl;  ?>" title="<?php  echo $name;  ?>" />
-</head>
-<body class="multi default">
-<div id="divAll">
-	<div id="divPage">
-	<div id="divMiddle">
-		<div id="divTop">
-			<h1 id="BlogTitle"><a href="<?php  echo $host;  ?>"><?php  echo $name;  ?></a></h1>
-			<h3 id="BlogSubTitle"><?php  echo $subname;  ?></h3>
-		</div>
-		<div id="divNavBar">
-<ul>
-<?php  echo $modules['navbar']->Content;  ?>
-</ul>
-		</div>
-		<div id="divMain">
-<?php if ($article->Type==ZC_POST_TYPE_ARTICLE) { ?>
-<?php  include $this->GetTemplate('post-single');  ?>
-<?php }else{  ?>
-<?php  include $this->GetTemplate('post-page');  ?>
-<?php } ?>
-		</div>
-		<div id="divSidebar">
-<?php  include $this->GetTemplate('sidebar');  ?>
-		</div>
+<body class="single">
+<?php  include $this->GetTemplate('top');  ?>
+<div class="nevbarbg">
+  <div class="navbar">
+    <ul>
+      <?php  echo $modules['navbar']->Content;  ?>
+    </ul>
+  </div>
+</div>
+<div id="content">
+  <div id="main">
+    <?php if ($article->Type==ZC_POST_TYPE_ARTICLE) { ?>
+		<?php  include $this->GetTemplate('post-single');  ?>
+		<?php }else{  ?>
+		<?php  include $this->GetTemplate('post-page');  ?>
+	<?php } ?>
+  </div>
+  <div id="sidebar">
+    <?php  include $this->GetTemplate('sidebar');  ?>
+  </div>
+  <div class="clear"></div>
+</div>
 <?php  include $this->GetTemplate('footer');  ?>
