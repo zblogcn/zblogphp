@@ -77,6 +77,19 @@ class DbMySQL implements iDataBase
 				$data[] = $row;
 			}
 		}
+
+//$b=true;
+$b=false;
+if($b){
+	$query="EXPLAIN " . $query;
+	$results2 = mysql_query($query);
+	if($results2){
+		while($row = mysql_fetch_assoc($results2)){
+			$explain[] = $row;
+		}
+	}
+	logs("\r\n" . $query . "\r\n" . var_export($explain,true));
+}
 		return $data;
 
 	}
