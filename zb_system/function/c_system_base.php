@@ -188,9 +188,12 @@ if (file_exists($filename = $usersdir . 'theme/'.$blogtheme.'/include.php')) {
 	require $filename;
 }
 
+
 #加载激活插件
-foreach (explode("|", $option['ZC_USING_PLUGIN_LIST']) as $plugin) {
-	if ($filename&&file_exists($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
+$ap=explode("|", $option['ZC_USING_PLUGIN_LIST']);
+$ap=array_unique($ap);
+foreach ($ap as $plugin) {
+	if (file_exists($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
 		require $filename;
 	}
 }

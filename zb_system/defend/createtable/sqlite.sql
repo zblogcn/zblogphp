@@ -11,7 +11,6 @@ CREATE TABLE %pre%post (
   log_Title varchar(255) NOT NULL DEFAULT '',
   log_Intro text NOT NULL DEFAULT '',
   log_Content text NOT NULL DEFAULT '',
-  log_IP varchar(15) NOT NULL DEFAULT '',
   log_PostTime integer NOT NULL DEFAULT 0,
   log_CommNums integer NOT NULL DEFAULT 0,
   log_ViewNums integer NOT NULL DEFAULT 0,

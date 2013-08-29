@@ -63,11 +63,15 @@ class Member extends Base{
 				$fpreturn=$fpname($this);
 				if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 			}
+			static $_avatar = '';
+			if($_avatar)return $_avatar;
 			$s=$zbp->usersdir . 'avatar/' . $this->ID . '.png';
 			if(file_exists($s)){
-				return $zbp->host . 'zb_users/avatar/' . $this->ID . '.png';
+				$_avatar = $s;
+				return $_avatar;
 			}
-			return $zbp->host . 'zb_users/avatar/0.png';
+			$_avatar = $zbp->host . 'zb_users/avatar/0.png';
+			return $_avatar;
 		}
 		if ($name=='LevelName') {
 			return $zbp->lang['user_level_name'][$this->Level];

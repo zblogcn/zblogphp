@@ -139,6 +139,12 @@ class App
 		$this->advanced_rewritefunctions = (string)$xml->advanced->rewritefunctions;
 		$this->advanced_conflict = (string)$xml->advanced->conflict;
 
+		$this->sidebars_sidebar1 = (string)$xml->sidebars->sidebar1;
+		$this->sidebars_sidebar2 = (string)$xml->sidebars->sidebar2;
+		$this->sidebars_sidebar3 = (string)$xml->sidebars->sidebar3;
+		$this->sidebars_sidebar4 = (string)$xml->sidebars->sidebar4;
+		$this->sidebars_sidebar5 = (string)$xml->sidebars->sidebar5;
+
 		return true;
 	}
 
@@ -231,11 +237,11 @@ class App
 
 
 		foreach ($this->dirs as $key => $value) {
-			$d=str_replace($dir,'',$value);
+			$d=$this->id .'/'. str_replace($dir,'',$value);
 			$s.='<folder><path>'.htmlspecialchars($d).'</path></folder>';
 		}
 		foreach ($this->files as $key => $value) {
-			$d=str_replace($dir,'',$value);
+			$d=$this->id .'/'. str_replace($dir,'',$value);
 			$c=base64_encode(file_get_contents($value));
 			$s.='<file><path>'.$d.'</path><stream>'.$c.'</stream></file>';
 		}
@@ -254,9 +260,9 @@ class App
 		if($xml['version']!='php')return $zbp->ShowError(78);
 		$type=$xml['type'];
 		$id=$xml->id;
-		$dir=$zbp->path . 'zb_users/' . $type . '/' . $id . '/';
+		$dir=$zbp->path . 'zb_users/' . $type . '/';# . $id . '/';
 
-		if(!file_exists($dir))@mkdir($dir);
+		if(!file_exists($dir . $id . '/'))@mkdir($dir . $id . '/');
 
 		foreach ($xml->folder as $folder) {
 			$f=$dir . $folder->path;
@@ -277,5 +283,6 @@ class App
 
 	}
 }
+
 
 ?>
