@@ -236,8 +236,11 @@ class DbSql #extends AnotherClass
 
 		if(!empty($option)){
 			if(isset($option['pagebar'])){
-				$s2 = $this->Count($table,array(array('COUNT','*','num')),$where);
-				$option['pagebar']->Count = GetValueInArray(current($zbp->db->Query($s2)),'num');
+				if($option['pagebar']->Count===null){
+					$s2 = $this->Count($table,array(array('COUNT','*','num')),$where);
+					$option['pagebar']->Count = GetValueInArray(current($zbp->db->Query($s2)),'num');
+				}
+				$option['pagebar']->Count=(int)$option['pagebar']->Count;
 				$option['pagebar']->make();
 			}
 		}

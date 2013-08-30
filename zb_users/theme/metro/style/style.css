@@ -66,7 +66,7 @@ img { border: none;}
 /**/
 .postistop {margin-bottom:15px; }
 .postistop .post_time{ height:32px; line-height:40px; margin-bottom:10px; background: #5EAAE4 url(images/icon/up_right.png) no-repeat left top;}
-.postistop h2 { font-size:20px;margin-bottom: 2px;}
+.postistop h2 { font-size:18px;margin-bottom: 2px;}
 /*tagcloud*/
 .tags-cloud .tag-name{margin:0 5px;line-height: 1.2;}
 .tags-cloud .tag-name-size-0{font-size: 1.1em;}
@@ -123,7 +123,8 @@ img { border: none;}
 #divCatalog .li-subcate { padding-left:15px; background:url(images/li-subcate.png) no-repeat left top;}
 #divComments li,divPrevious li{ white-space:nowrap; word-break:keep-all; overflow:hidden; text-overflow:ellipsis;}
 /*评论列表*/
-.commentlist { padding:15px; background:#FFFFFF; margin-bottom:5px;}
+.commentlist { padding:0 15px; background:#FFFFFF;}
+.commentlist h4{ margin-top:15px;}
 .commentlist .msg { margin-top:10px; border-top:1px solid #CCCCCC; padding:5px 0 0 0;}
 .commentlist .msg .msgimg { float:left; width:48px; height:48px; padding-top:5px;}
 .commentlist .msg .msgimg .avatar { width:48px; height:48px;}
@@ -148,8 +149,9 @@ img { border: none;}
 li.msgarticle div.quote{ margin:10px 0 0 0; padding:10px; background:#FFFFFF; border:1px solid #F4F4F4;}
 li.msgarticle div.quote-title{ margin:0; padding:0; font-size:1em; color:#CC0000;}
 .commentpost input { width:200px; padding:6px 10px; border:1px solid #CCCCCC;}
-.commentpost #content{ padding:5px; width:95%; height:120px; border:1px solid #CCCCCC;background:none;}
+.commentpost #txaArticle{ padding:5px; width:95%; height:120px; border:1px solid #CCCCCC;background:none;}
 .button { background:#5EAAE4; border:none; width:100px; height:30px; font-weight:bold; color:#FFFFFF; }
+#cancel-reply{float:right;margin-right: 2em;}
 /*分页*/
 .pagebar { padding:5px 10px; text-align:right;}
 .pagebar span.page{ color:#FFFFFF; padding:2px 8px; background:#5EAAE4; margin:4px;}

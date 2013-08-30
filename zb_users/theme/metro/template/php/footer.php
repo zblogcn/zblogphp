@@ -4,7 +4,7 @@
     <p><?php  echo $copyright;  ?></p>
   </div>
   <div id="goTopBtn">
-    <a onclick="pageScroll()"><span>·µ»Ø¶¥²¿</span></a>
+    <a onclick="pageScroll()"><span>è¿”å›žé¡¶éƒ¨</span></a>
   </div>
   <div class="clear"></div>
 </div>

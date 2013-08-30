@@ -1,7 +1,7 @@
 <label id="cmt<?php  echo $comment->ID;  ?>"></label><div class="msg" id="cmt<?php  echo $comment->ID;  ?>">
             <div class="msgtxt">
               <div class="msgtxtbogy">
-              <div class="msgname"><a href="<?php  echo $comment->Author->HomePage;  ?>" rel="nofollow" target="_blank"><?php  echo $key+1;  ?><span class="dot">.</span><?php  echo $comment->Author->Name;  ?></a>&nbsp;&nbsp;<span><?php  echo $comment->Time();  ?>&nbsp;<a href="#cmt<?php  echo $comment->ID;  ?>" onclick="ReComment('cmt<?php  echo $comment->ID;  ?>','msg','msgarticle','comment','<?php  echo $comment->ID;  ?>')">回复该评论</a></span></div>
+              <div class="msgname"><a href="<?php  echo $comment->Author->HomePage;  ?>" rel="nofollow" target="_blank"><span class="dot"><?php  echo $key+1;  ?>.</span><?php  echo $comment->Author->Name;  ?></a>&nbsp;&nbsp;<span><?php  echo $comment->Time();  ?>&nbsp;<a href="#comment" onclick="RevertComment('<?php  echo $comment->ID;  ?>')">回复该评论</a></span></div>
               <div class="msgarticle"><?php  echo $comment->Content;  ?>
 <?php  foreach ( $comment->Comments as $comment) { ?> 
 	<?php  include $this->GetTemplate('comment');  ?>

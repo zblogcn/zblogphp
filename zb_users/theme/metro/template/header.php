@@ -14,5 +14,5 @@
 	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="{$host}zb_system/xml-rpc/?rsd" />
 	<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="{$host}zb_system/xml-rpc/wlwmanifest.xml" /> 
 {/if}
-    <script src="{$host}zb_users/theme/{$theme}/SCRIPT/top.js" type="text/javascript"></script>
+    <script src="{$host}zb_users/theme/{$theme}/script/top.js" type="text/javascript"></script>
 </head>

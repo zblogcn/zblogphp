@@ -12,7 +12,7 @@
 class PageBar
 {
 #内容总数
-public $Count = 0;
+public $Count = null;
 
 #Pagebar长度数量
 public $PageBarCount=0;

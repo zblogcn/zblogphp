@@ -74,6 +74,8 @@ class Post extends Base{
 			case 'TagsName':
 			case 'TagsCount':
 			case 'CommentPostUrl':
+			case 'Prev':
+			case 'Next':
 				return null;
 				break;
 			case 'Template':
@@ -132,6 +134,40 @@ class Post extends Base{
 				return $value;
 			case 'CommentPostUrl':
 				return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID;
+				break;
+			case 'Prev':
+				static $_prev=null;
+				if($_prev!==null)return $_prev;
+				$articles=$zbp->GetPostList(
+					array('*'),
+					array(array('=','log_Type',0),array('=','log_Status',0),array('<','log_PostTime',$this->PostTime)),
+					array('log_PostTime'=>'DESC'),
+					array(1),
+					null
+				);
+				if(count($articles)==1){
+					$_prev=$articles[0];
+				}else{
+					$_prev='';
+				}
+				return $_prev;
+				break;
+			case 'Next':
+				static $_next=null;
+				if($_next!==null)return $_next;
+				$articles=$zbp->GetPostList(
+					array('*'),
+					array(array('=','log_Type',0),array('=','log_Status',0),array('>','log_PostTime',$this->PostTime)),
+					array('log_PostTime'=>'DESC'),
+					array(1),
+					null
+				);
+				if(count($articles)==1){
+					$_next=$articles[0];
+				}else{
+					$_next='';
+				}
+				return $_next;
 				break;
 			default:
 				return parent::__get($name);
