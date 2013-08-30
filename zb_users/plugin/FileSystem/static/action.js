@@ -311,13 +311,24 @@ entry_list['entry6'] = new entry('main2.php', 'file', 147812, false);
 			}
 		}
 		function show_phpinfo(){
-				document.form_action.cmd_arg.value = 888;
-				document.form_action.target = '_blank';
-				document.form_action.action.value = 1;
-				document.form_action.submit();
+			document.form_action.cmd_arg.value = 888;
+			document.form_action.target = '_blank';
+			document.form_action.action.value = 1;
+			document.form_action.submit();
 		}
-		
-		
+		function del_file(filename){
+			document.form_action.selected_file_list.value = filename
+			document.form_action.cmd_arg.value = 3;
+			document.form_action.action.value = 1;
+			document.form_action.submit();
+		}
+		function down_file(filename){
+			document.form_action.cmd_data.value = filename
+			document.form_action.cmd_arg.value = 4;
+			document.form_action.action.value = 1;
+			document.form_action.target = '_blank';
+			document.form_action.submit();
+		}
 		
         function test_prompt(arg){
             var erro='';

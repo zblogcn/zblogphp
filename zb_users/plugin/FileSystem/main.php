@@ -34,11 +34,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
 <?php
-if (empty($_GET['path'])) {
-$zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重后果，请慎用！');
-}
+
 if (!empty($_GET['error'])) {
 $zbp->ShowHint('bad',$_GET['error']);
+}elseif (empty($_GET['path'])) {
+$zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重后果，请慎用！');
 }
 ?>
 <link href="static/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -54,9 +54,9 @@ $zbp->ShowHint('bad',$_GET['error']);
 	<input type="button" onclick="show_phpinfo()" value="服务器信息">
 	<input type="button" onclick="create_file()" value="新建文件">
 	<input type="button" onclick="create_dir()" value="新建文件夹">
-	<input type="button" value="上传文件">
-	<input type="button" value="执行命令">
-	<input type="button" value="运行Shell">
+	<input type="button" onclick="upload_file()" value="上传文件">
+	<input type="button" onclick="run_cmd()" value="执行命令">
+	<input type="button" onclick="run_shell()" value="运行Shell">
 </nobr>
 <div id="divMain2" class="edit category_edit">
 <?php
@@ -65,6 +65,10 @@ $zbp->ShowHint('bad',$_GET['error']);
 </div>
 <table class="table table-condensed">
 <?php
+	if(count($file_list)==0){
+		echo '<thead><tr class="success"><th>#</th><th>文件名</th><th>权限</th><th>文件大小</th><th>修改时间</th><th>文件类型</th><th>操作</th></tr></thead><tbody>';
+		
+	}
 	if(isset($file_list['dir'])){
 		echo '<thead><tr class="success"><th>#</th><th>文件名</th><th>权限</th><th>文件大小</th><th>修改时间</th><th>文件类型</th><th>操作</th></tr></thead><tbody>';
 		foreach($file_list['dir'] as $k=>$v){
@@ -75,7 +79,7 @@ $zbp->ShowHint('bad',$_GET['error']);
 			echo "<td></td>";
 			echo "<td>$v[datetime]</td>";
 			echo "<td>文件夹</td>";
-			echo "<td><img src='".$zbp->host."zb_system/image/admin/document-rename.png'>&nbsp;&nbsp;<img src='".$zbp->host."zb_system/image/admin/delete.png'></td>";
+			echo "<td>".command_panel(str_replace($root_path, "", $current_path), $v['filename'], $zbp->host, $zbp->host, 1, 0)."</td>";
 			echo "</tr></tbody>";
 		}
 	}
@@ -89,7 +93,7 @@ $zbp->ShowHint('bad',$_GET['error']);
 			echo "<td>$v[filesize]</td>";
 			echo "<td>$v[datetime]</td>";
 			echo "<td>$v[filetype]</td>";
-			echo "<td><img src='".$zbp->host."zb_system/image/admin/download.png'>&nbsp;&nbsp;<img src='".$zbp->host."zb_system/image/admin/document-rename.png'>&nbsp;&nbsp;<img src='".$zbp->host."zb_system/image/admin/page_edit.png'>&nbsp;&nbsp;<img src='".$zbp->host."zb_system/image/admin/delete.png'></td>";
+			echo "<td>".command_panel(str_replace($root_path, "", $current_path), $v['filename'], $zbp->host, $zbp->host, 0, $v['filetype'])."</td>";
 			echo "</tr></tbody>";
 		}
 	}
