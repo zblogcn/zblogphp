@@ -89,6 +89,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 		########################################################################################################
 		case 'index':
 	$pagebar=new Pagebar($zbp->option['ZC_INDEX_REGEX']);
+	$pagebar->Count=1000;
 	$category=new Metas;
 	$author=new Metas;
 	$datetime=new Metas;
@@ -487,7 +488,7 @@ function PostArticle(){
 
 	$article->Save();
 
-	CountCategoryArrayString($pre_tag . $article->Tag);
+	CountTagArrayString($pre_tag . $article->Tag);
 	CountMemberArray(array($pre_author,$article->AuthorID));
 	CountCategoryArray(array($pre_category,$article->CateID));
 	CountPostArray(array($article->ID));
@@ -1366,7 +1367,7 @@ function CountTag(&$tag){
 	$tag->Count=$num;
 }
 
-function CountCategoryArrayString($string){
+function CountTagArrayString($string){
 	global $zbp;
 	$array=$zbp->LoadTagsByIDString($string);
 	foreach ($array as &$tag) {

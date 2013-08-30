@@ -12,7 +12,7 @@
   <div id="main">
     <?php if ($article->Type==ZC_POST_TYPE_ARTICLE) { ?>
 		<?php  include $this->GetTemplate('post-single');  ?>
-		<?php }else{  ?>
+	<?php }else{  ?>
 		<?php  include $this->GetTemplate('post-page');  ?>
 	<?php } ?>
   </div>

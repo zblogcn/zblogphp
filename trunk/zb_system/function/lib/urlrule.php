@@ -85,12 +85,12 @@ class UrlRule
 		$s .= "RewriteBase " . $zbp->cookiespath . "\r\n";
 
 		$s .= $this->Rewrite_htaccess($zbp->option['ZC_ARTICLE_REGEX'],'article') . "\r\n";
+		$s .= $this->Rewrite_htaccess($zbp->option['ZC_PAGE_REGEX'],'page') . "\r\n";
 		$s .= $this->Rewrite_htaccess($zbp->option['ZC_INDEX_REGEX'],'index') . "\r\n";
 		$s .= $this->Rewrite_htaccess($zbp->option['ZC_CATEGORY_REGEX'],'cate') . "\r\n";
 		$s .= $this->Rewrite_htaccess($zbp->option['ZC_DATE_REGEX'],'date') . "\r\n";
 		$s .= $this->Rewrite_htaccess($zbp->option['ZC_AUTHOR_REGEX'],'auth') . "\r\n";
 		$s .= $this->Rewrite_htaccess($zbp->option['ZC_TAGS_REGEX'],'tags') . "\r\n";
-		$s .= $this->Rewrite_htaccess($zbp->option['ZC_PAGE_REGEX'],'page') . "\r\n";
 		return $s;
 	}
 
@@ -148,12 +148,12 @@ class UrlRule
 		$s .='  <rewrite>' . "\r\n";
 		$s .='   <rules>' . "\r\n";
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_ARTICLE_REGEX'],'article') . "\r\n";
+		$s .= $this->Rewrite_webconfig($zbp->option['ZC_PAGE_REGEX'],'page') . "\r\n";
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_INDEX_REGEX'],'index') . "\r\n";
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_CATEGORY_REGEX'],'cate') . "\r\n";
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_DATE_REGEX'],'date') . "\r\n";
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_AUTHOR_REGEX'],'auth') . "\r\n";
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_TAGS_REGEX'],'tags') . "\r\n";
-		$s .= $this->Rewrite_webconfig($zbp->option['ZC_PAGE_REGEX'],'page') . "\r\n";
 		$s .='   </rules>' . "\r\n";
 		$s .='  </rewrite>' . "\r\n";
 		$s .=' </system.webServer>' . "\r\n";
@@ -220,12 +220,12 @@ class UrlRule
 		$s .="\r\n";
 
 		$s .= $this->Rewrite_httpdini($zbp->option['ZC_ARTICLE_REGEX'],'article') . "\r\n";
+		$s .= $this->Rewrite_httpdini($zbp->option['ZC_PAGE_REGEX'],'page') . "\r\n";
 		$s .= $this->Rewrite_httpdini($zbp->option['ZC_INDEX_REGEX'],'index') . "\r\n";
 		$s .= $this->Rewrite_httpdini($zbp->option['ZC_CATEGORY_REGEX'],'cate') . "\r\n";
 		$s .= $this->Rewrite_httpdini($zbp->option['ZC_DATE_REGEX'],'date') . "\r\n";
 		$s .= $this->Rewrite_httpdini($zbp->option['ZC_AUTHOR_REGEX'],'auth') . "\r\n";
 		$s .= $this->Rewrite_httpdini($zbp->option['ZC_TAGS_REGEX'],'tags') . "\r\n";
-		$s .= $this->Rewrite_httpdini($zbp->option['ZC_PAGE_REGEX'],'page') . "\r\n";
 
 		return $s;
 	}

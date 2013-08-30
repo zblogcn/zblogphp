@@ -68,14 +68,14 @@ function GetCookie(sName) {
 
 function VerifyMessage() {
 
-	var strName=$("#name").val();
-	var strEmail=$("#email").val();
-	var strHomePage=$("#homepage").val();
-	var strVerify=$("#verify").val();
-	var strArticle=$("#content").val();
-	var strFormAction=$("#commentform").attr("action");
-	var intReplyID=$("#replyid").val();
-	var intPostID=$("#postid").val();
+	var strFormAction=$("#inpId").parent("form").attr("action");
+	var strName=$("#inpName").val();
+	var strEmail=$("#inpEmail").val();
+	var strHomePage=$("#inpHomepage").val();
+	var strVerify=$("#inpVerify").val();
+	var strArticle=$("#txaArticle").val();
+	var intReplyID=$("#inpRevID").val();
+	var intPostID=$("#inpId").val();
 	var intMaxLen=1000;
 
 	if(strName==""){
@@ -224,13 +224,13 @@ function SaveRememberInfo() {
 // 返回：    无
 //*********************************************************
 function RevertComment(i) {
-	if($("#replyid").length==0){
+	if($("#inpRevID").length==0){
 		intReplyID=i;
 	}else{
-		$("#replyid").val(i);
+		$("#inpRevID").val(i);
 	}
 	
-	$("#cancel-reply").show().bind("click", function(){ if($("#replyid").length==0){intReplyID=0;}else{$("#replyid").val(0);};$(this).hide();window.location.hash="#comment";return false; });
+	$("#cancel-reply").show().bind("click", function(){ if($("#inpRevID").length==0){intReplyID=0;}else{$("#inpRevID").val(0);};$(this).hide();window.location.hash="#comment";return false; });
 
 	window.location.hash="#comment";
 }

@@ -14,10 +14,32 @@
           </div>
         </div>       
         <div class="post_nav">
-          <#template:article_navbar_l#><#template:article_navbar_r#>
+{if $article.Prev}
+<a class="l" href="{$article.Prev.Url}" title="{$article.Prev.Title}">« 上一篇</a>
+{/if}
+{if $article.Next}
+<a class="r" href="{$article.Next.Url}" title="{$article.Next.Title}"> 下一篇 »</a>
+{/if}
         </div>
 		{if !$article.IsLock}
-		{template:comments}
+
+{if $socialcomment}
+{$socialcomment}
+{else}
+
+<div class="commentlist" style="overflow:hidden;">
+{if $article.CommNums>0}
+<h4>评论列表:</h4>
+{/if}
+{template:comments}		
+</div>
+
+
+<!--评论框-->
+{template:commentpost}
+
+{/if}
+		
 		{/if}
      </div>
      <div class="clear"></div>

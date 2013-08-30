@@ -12,7 +12,7 @@
   <div id="main">
     {if $article.Type==ZC_POST_TYPE_ARTICLE}
 		{template:post-single}
-		{else}
+	{else}
 		{template:post-page}
 	{/if}
   </div>
