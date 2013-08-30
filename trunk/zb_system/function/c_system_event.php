@@ -89,7 +89,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 		########################################################################################################
 		case 'index':
 	$pagebar=new Pagebar($zbp->option['ZC_INDEX_REGEX']);
-	$pagebar->Count=1000;
+	$pagebar->Count=$zbp->cache->normal_article_nums;
 	$category=new Metas;
 	$author=new Metas;
 	$datetime=new Metas;
@@ -123,6 +123,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	}
 	$template=$category->Template;
 	$w[]=array('=','log_CateID',$category->ID);
+	$pagebar->Count=$category->Count;
 	$pagebar->UrlRule->Rules['{%id%}']=$category->ID;
 	$pagebar->UrlRule->Rules['{%alias%}']=$category->Alias==''?urlencode($category->Name):$category->Alias;
 			break;
@@ -148,6 +149,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	}
 	$template=$author->Template;
 	$w[]=array('=','log_AuthorID',$author->ID);
+	$pagebar->Count=$author->Articles;
 	$pagebar->UrlRule->Rules['{%id%}']=$author->ID;
 	$pagebar->UrlRule->Rules['{%alias%}']=$author->Alias==''?urlencode($author->Name):$author->Alias;
 			break;
@@ -492,6 +494,7 @@ function PostArticle(){
 	CountMemberArray(array($pre_author,$article->AuthorID));
 	CountCategoryArray(array($pre_category,$article->CateID));
 	CountPostArray(array($article->ID));
+	CountNormalArticleNums();
 
 	$zbp->AddBuildModule('previous');
 	$zbp->AddBuildModule('calendar');
@@ -524,6 +527,7 @@ function DelArticle(){
 		CountCategoryArrayString($pre_tag);
 		CountMemberArray(array($pre_author));
 		CountCategoryArray(array($pre_category));
+		CountNormalArticleNums();
 
 		$zbp->AddBuildModule('previous');
 		$zbp->AddBuildModule('calendar');
@@ -1312,6 +1316,15 @@ function FilterModule(&$module){
 
 ################################################################################################################
 #统计函数
+function CountNormalArticleNums(){
+	global $zbp;
+	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type',0),array('=','log_IsTop',0),array('=','log_Status',0)));
+	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
+
+	$zbp->cache->normal_article_nums=$num;
+	$zbp->SaveCache();
+}
+
 function CountPost(&$article){
 	global $zbp;
 
@@ -1340,7 +1353,7 @@ function CountCategory(&$category){
 
 	$id=$category->ID;
 
-	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_CateID',$id)));
+	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type',0),array('=','log_IsTop',0),array('=','log_Status',0),array('=','log_CateID',$id)));
 	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
 
 	$category->Count=$num;
@@ -1351,7 +1364,7 @@ function CountCategoryArray($array){
 	$array=array_unique($array);
 	foreach ($array as $value) {
 		if($value==0)continue;
-		CountMember($zbp->categorys[$value]);
+		CountCategory($zbp->categorys[$value]);
 		$zbp->categorys[$value]->Save();
 	}
 }
@@ -1381,10 +1394,10 @@ function CountMember(&$member){
 
 	$id=$member->ID;
 
-	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_AuthorID',$id),array('=','log_Type',0)));
+	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type',0),array('=','log_IsTop',0),array('=','log_Status',0),array('=','log_AuthorID',$id)));
 	$member_Articles=GetValueInArray(current($zbp->db->Query($s)),'num');
 
-	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_AuthorID',$id),array('=','log_Type',1)));
+	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type',0),array('=','log_IsTop',0),array('=','log_Status',0),array('=','log_AuthorID',$id)));
 	$member_Pages=GetValueInArray(current($zbp->db->Query($s)),'num');
 
 	$s=$zbp->db->sql->Count($zbp->table['Comment'],array(array('COUNT','*','num')),array(array('=','comm_AuthorID',$id)));
