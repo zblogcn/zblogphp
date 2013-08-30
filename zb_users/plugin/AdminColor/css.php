@@ -3,14 +3,19 @@ require '../../../zb_system/function/c_system_base.php';
 
 require '../../../zb_system/function/c_system_admin.php';
 
-header('Content-Type: text/css; Charset=utf8');  
 
 if(isset($_GET['setcolor'])){
-	$zbp->Config('AdminColor')->color=(int)$_GET['setcolor'];
-	$zbp->SaveConfig('AdminColor');
-	Redirect($zbp->host . 'zb_system/admin/');
-	die();
+	$zbp->Load();
+	$action='root';
+	if ($zbp->CheckRights($action)) {
+		$zbp->Config('AdminColor')->color=(int)$_GET['setcolor'];
+		$zbp->SaveConfig('AdminColor');
+		Redirect($zbp->host . 'zb_system/admin/');
+		die();
+	}
 }
+
+header('Content-Type: text/css; Charset=utf8');  
 
 $id=(int)$zbp->Config('AdminColor')->color;
 $c='';

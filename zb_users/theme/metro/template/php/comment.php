@@ -3,13 +3,12 @@
               <div class="msgtxtbogy">
               <div class="msgname"><a href="<?php  echo $comment->Author->HomePage;  ?>" rel="nofollow" target="_blank"><?php  echo $key+1;  ?><span class="dot">.</span><?php  echo $comment->Author->Name;  ?></a>&nbsp;&nbsp;<span><?php  echo $comment->Time();  ?>&nbsp;<a href="#cmt<?php  echo $comment->ID;  ?>" onclick="ReComment('cmt<?php  echo $comment->ID;  ?>','msg','msgarticle','comment','<?php  echo $comment->ID;  ?>')">回复该评论</a></span></div>
               <div class="msgarticle"><?php  echo $comment->Content;  ?>
-              <?php  foreach ( $comment->Comments as $comment) { ?> 
-								<?php  include $this->GetTemplate('comment');  ?>
-							<?php  }   ?>	
+<?php  foreach ( $comment->Comments as $comment) { ?> 
+	<?php  include $this->GetTemplate('comment');  ?>
+<?php  }   ?>	
               </div>
             </div>
           </div>
           <div class="msgimg"><a name="cmt<?php  echo $comment->ID;  ?>"><img class="avatar" src="<?php  echo $comment->Author->Avatar;  ?>" alt=""/></a></div>
           <div class="clear"></div>
 </div>
-          

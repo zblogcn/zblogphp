@@ -10,7 +10,7 @@ function ActivePlugin_AdminColor() {
 
 function AdminColor_Css(){
 	global $zbp;
-	echo '<link rel="stylesheet" type="text/css" href="'. $zbp->host .'zb_users/plugin/AdminColor/css.php"/>';
+	echo '<link rel="stylesheet" type="text/css" href="'. $zbp->host .'zb_users/plugin/AdminColor/css.php"/>' . "\r\n";
 }
 
 function AdminColor_ColorButton(){

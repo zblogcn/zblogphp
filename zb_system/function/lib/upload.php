@@ -77,7 +77,7 @@ class Upload extends Base{
 			return $zbp->host . 'zb_users/' . $this->Dir . $this->Name;
 		}
 		if ($name=='Dir') {
-			return 'upload/' .date('Y',$this->PostTime) . '/' . date('m',$this->PostTime) . '/';
+			return 'upload/' .date('Y',$this->PostTime) . '/' . date('n',$this->PostTime) . '/';
 		}
 		if ($name=='FullFile') {
 			return  $zbp->usersdir . $this->Dir . $this->Name;

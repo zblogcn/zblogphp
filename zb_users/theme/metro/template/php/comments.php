@@ -1,4 +1,8 @@
-<label id="AjaxCommentBegin"></label><?php if ($socialcomment) { ?>
+<label id="AjaxCommentBegin"></label>
+       <div class="commentlist" style="overflow:hidden;">
+       <h4>评论列表:</h4>
+
+<?php if ($socialcomment) { ?>
 <?php  echo $socialcomment;  ?>
 <?php }else{  ?>
 <!--评论输出-->
@@ -14,4 +18,6 @@
 <!--评论框-->
 <?php  include $this->GetTemplate('commentpost');  ?>
 
-<?php } ?><label id="AjaxCommentEnd"></label>
+<?php } ?>
+
+</div><label id="AjaxCommentEnd"></label>

@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS %pre%comment (
 
 
 CREATE TABLE IF NOT EXISTS %pre%config (
-  conf_Name varchar(255) NOT NULL NOT NULL DEFAULT '',
+  conf_Name varchar(255) NOT NULL DEFAULT '',
   conf_Value text
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
