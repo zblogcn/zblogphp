@@ -524,7 +524,7 @@ function DelArticle(){
 
 		DelArticle_Comments($article->ID);
 
-		CountCategoryArrayString($pre_tag);
+		CountTagArrayString($pre_tag);
 		CountMemberArray(array($pre_author));
 		CountCategoryArray(array($pre_category));
 		CountNormalArticleNums();
