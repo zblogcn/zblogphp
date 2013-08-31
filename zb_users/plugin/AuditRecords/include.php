@@ -56,7 +56,7 @@ function AuditRecords_Edit_Response(){
 	if($article->ID==0)return ;
 
 	if($zbp->CheckRights('ArticleAll')){
-		echo '<p><b>审核者意见：</b><textarea name="AuditRecords_logs" style="width:100%;height:40px;"></textarea></p>';
+		echo '<p><b>审核者意见：</b><textarea name="AuditRecords_logs" style="width:100%;height:50px;"></textarea></p>';
 	}else{
 		if($zbp->user->ID==$article->AuthorID)
 			echo '<p><b>发布者意见：</b><textarea name="AuditRecords_logs" style="width:100%;height:40px;"></textarea></p>';

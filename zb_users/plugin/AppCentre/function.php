@@ -106,8 +106,8 @@ function Server_SendRequest($url,$data=array()){
 				'method'=>'POST',
 				'header'=>"Content-Type:application/x-www-form-urlencoded\r\n".
 					'Content-Length: '.strlen($data)."\r\n".
-					"Cookie: ".$c."\r\n".
-					"User-Agent: ZBlogPHP/" . substr(ZC_BLOG_VERSION,-6,6),
+					"Cookie: ".$c."\r\n",
+				'user_agent'=> 'ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent(),
 				'content'=>$data
 			)
 		);
@@ -116,7 +116,8 @@ function Server_SendRequest($url,$data=array()){
 		$opts=array(
 			'http'=>array(
 				'method'=>'GET',
-				'header'=>"Cookie: ".$c."\r\n" . "User-Agent: ZBlogPHP/" . substr(ZC_BLOG_VERSION,-6,6)
+				'header'=>"Cookie: ".$c."\r\n",
+				'user_agent'=> 'ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent(),
 			)
 		);
 		$content=stream_context_create($opts);

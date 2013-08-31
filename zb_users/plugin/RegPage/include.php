@@ -10,7 +10,7 @@ function ActivePlugin_RegPage() {
 	Add_Filter_Plugin('Filter_Plugin_Index_Begin','RegPage_Main');
 }
 
-$RegPage_Table='%pre%regpage';
+$RegPage_Table='%pre%RegPage';
 
 $RegPage_DataInfo=array(
 	'ID'=>array('reg_ID','integer','',0),
