@@ -16,6 +16,61 @@ $blogtitle='SitemapXML生成器';
 
 if(count($_POST)>0){
 
+$xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><urlset />');
+$xml->addAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+$url = $xml->addChild('url');
+$url->addChild('loc', $zbp->host);
+
+if(GetVars('category')){
+	foreach ($zbp->categorys as $c) {
+		$url = $xml->addChild('url');
+		$url->addChild('loc', $c->Url);
+	}
+}
+
+if(GetVars('article')){
+	$array=$zbp->GetArticleList(
+		null,
+		array(array('=','log_Status',0)),
+		null,
+		null,
+		null,
+		false
+		);
+
+	foreach ($array as $key => $value) {
+		$url = $xml->addChild('url');
+		$url->addChild('loc', $value->Url);
+	}
+}
+
+if(GetVars('page')){
+	$array=$zbp->GetPageList(
+		null,
+		array(array('=','log_Status',0)),
+		null,
+		null,
+		null
+		);
+
+	foreach ($array as $key => $value) {
+		$url = $xml->addChild('url');
+		$url->addChild('loc', $value->Url);
+	}
+}
+
+if(GetVars('tag')){
+	$array=$zbp->GetTagList();
+
+	foreach ($array as $key => $value) {
+		$url = $xml->addChild('url');
+		$url->addChild('loc', $value->Url);
+	}
+}
+
+
+file_put_contents($zbp->path . 'sitemap.xml',$xml->asXML());
+
 
 	$zbp->SetHint('good');
 	Redirect($_SERVER["HTTP_REFERER"]);
@@ -41,11 +96,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <tr>
 	<td>选项</td>
 	<td>
-<p>首页<input type="checkbox" class="checkbox" value="1" /></p>
-<p>分类<input type="checkbox" class="checkbox" value="1" /></p>
-<p>文章<input type="checkbox" class="checkbox" value="1" /></p>
-<p>页面<input type="checkbox" class="checkbox" value="1" /></p>
-<p>标签<input type="checkbox" class="checkbox" value="0" /></p>
+<p>首页<input type="text" class="checkbox" value="1" /></p>
+<p>分类<input type="text" name="category" class="checkbox" value="1" /></p>
+<p>文章<input type="text" name="article" class="checkbox" value="1" /></p>
+<p>页面<input type="text" name="page" class="checkbox" value="1" /></p>
+<p>标签<input type="text" name="tag" class="checkbox" value="0" /></p>
 	</td>
 </tr>
 
