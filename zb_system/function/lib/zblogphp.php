@@ -833,20 +833,22 @@ function AddBuildModuleAll(){
 
 	}
 
-	function GetArticleList($select=null,$where=null,$order=null,$limit=null,$option=null){
+	function GetArticleList($select=null,$where=null,$order=null,$limit=null,$option=null,$readtags=true){
 
 		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
 		array_unshift($where,array('=','log_Type','0'));
 		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
 		$array = $this->GetList('Post',$sql);
-		$tagstring = '';
-		foreach ($array as $a) {
-			$tagstring .= $a->Tag;
-			$this->posts[$a->ID]=$a;
-		}
 
-		$this->LoadTagsByIDString($tagstring);
+		if($readtags){
+			$tagstring = '';
+			foreach ($array as $a) {
+				$tagstring .= $a->Tag;
+				$this->posts[$a->ID]=$a;
+			}
+			$this->LoadTagsByIDString($tagstring);
+		}
 
 		return $array;
 
