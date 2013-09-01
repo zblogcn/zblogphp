@@ -76,7 +76,7 @@ class ZBlogPHP{
 	public $usersdir = null;
 	
 	static public function GetInstance(){
-		if(!isset(self::$zbp)){
+		if(!isset(self::$_zbp)){
 			self::$_zbp=new ZBlogPHP;
 		}
 		return self::$_zbp;
