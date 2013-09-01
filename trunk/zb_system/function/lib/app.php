@@ -148,6 +148,62 @@ class App
 		return true;
 	}
 
+	public function SaveInfoByXml(){
+		global $zbp;
+		$s='<?xml version="1.0" encoding="utf-8"?>' . "\r\n";
+		$s.='<'.$this->type.' version="php">' . "\r\n";
+
+		$s.='<id>'.htmlspecialchars($this->id).'</id>' . "\r\n";
+		$s.='<name>'.htmlspecialchars($this->name).'</name>' . "\r\n";
+		$s.='<url>'.htmlspecialchars($this->url).'</url>' . "\r\n";
+		$s.='<note>'.htmlspecialchars($this->note).'</note>' . "\r\n";
+		$s.='<description>'.htmlspecialchars($this->description).'</description>' . "\r\n";
+
+		$s.='<path>'.htmlspecialchars($this->path).'</path>' . "\r\n";
+		$s.='<include>'.htmlspecialchars($this->include).'</include>' . "\r\n";
+		$s.='<level>'.htmlspecialchars($this->level).'</level>' . "\r\n";
+
+		$s.='<author>' . "\r\n";
+		$s.='  <name>'.htmlspecialchars($this->author_name).'</name>' . "\r\n";
+		$s.='  <email>'.htmlspecialchars($this->author_email).'</email>' . "\r\n";
+		$s.='  <url>'.htmlspecialchars($this->author_url).'</url>' . "\r\n";
+		$s.='</author>' . "\r\n";
+
+		$s.='<source>' . "\r\n";
+		$s.='  <name>'.htmlspecialchars($this->source_name).'</name>' . "\r\n";
+		$s.='  <email>'.htmlspecialchars($this->source_email).'</email>' . "\r\n";
+		$s.='  <url>'.htmlspecialchars($this->source_url).'</url>' . "\r\n";
+		$s.='</source>' . "\r\n";
+
+		$s.='<adapted>'.htmlspecialchars($this->adapted).'</adapted>' . "\r\n";
+		$s.='<version>'.htmlspecialchars($this->version).'</version>' . "\r\n";
+		$s.='<pubdate>'.htmlspecialchars($this->pubdate).'</pubdate>' . "\r\n";
+		$s.='<modified>'.htmlspecialchars($this->modified).'</modified>' . "\r\n";
+		$s.='<price>'.htmlspecialchars($this->price).'</price>' . "\r\n";
+
+		$s.='<advanced>' . "\r\n";
+		$s.='  <dependency>'.htmlspecialchars($this->advanced_dependency).'</dependency>' . "\r\n";
+		$s.='  <rewritefunctions>'.htmlspecialchars($this->advanced_rewritefunctions).'</rewritefunctions>' . "\r\n";
+		$s.='  <conflict>'.htmlspecialchars($this->advanced_conflict).'</conflict>' . "\r\n";
+		$s.='</advanced>' . "\r\n";
+
+
+		$s.='<sidebars>' . "\r\n";
+		$s.='  <sidebar1>'.htmlspecialchars($this->sidebars_sidebar1).'</sidebar1>' . "\r\n";
+		$s.='  <sidebar2>'.htmlspecialchars($this->sidebars_sidebar2).'</sidebar2>' . "\r\n";
+		$s.='  <sidebar3>'.htmlspecialchars($this->sidebars_sidebar3).'</sidebar3>' . "\r\n";
+		$s.='  <sidebar4>'.htmlspecialchars($this->sidebars_sidebar4).'</sidebar4>' . "\r\n";
+		$s.='  <sidebar5>'.htmlspecialchars($this->sidebars_sidebar5).'</sidebar5>' . "\r\n";
+		$s.='</sidebars>' . "\r\n";
+
+		$s.='</'.$this->type.'>';
+		
+		$path=$zbp->usersdir . $this->type . '/' . $this->id . '/' . $this->type . '.xml';
+		
+		@file_put_contents($path, $s);
+
+	}
+
 	private $dirs=array();
 	private $files=array();
 

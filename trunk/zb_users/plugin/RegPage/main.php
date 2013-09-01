@@ -15,7 +15,7 @@ $blogtitle='注册组件';
 if(count($_POST)>0){
 
 	if(GetVars('addnavbar')){
-		die();
+		$zbp->AddItemToNavbar('item','regpage','会员注册',$zbp->host.'?reg');
 	}
 
 	if(GetVars('reset','POST')=='add'){
@@ -68,7 +68,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td class="td30"><p align='left'><b>将注册链接加入导航栏</b></p></td>
-	<td><input type="checkbox" name="addnavbar" value="ok" /></td>
+	<td><input type="checkbox" name="addnavbar" value="ok" <?php if($zbp->CheckItemToNavbar('item','regpage')){?>checked="checked"<?php }?> /></td>
 </tr>
 </table>
 	  <hr/>

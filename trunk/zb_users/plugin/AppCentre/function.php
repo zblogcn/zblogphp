@@ -127,6 +127,14 @@ function Server_SendRequest($url,$data=array()){
 
 }
 
+function CreateOptoinsOfVersion($default){
+	global $zbp;
 
+	$s=null;
+	foreach ($GLOBALS['zbpvers'] as $key => $value) {
+		$s .= '<option value="' . $key . '" ' . ($default==$key?'selected="selected"':'') . ' >' . $value . '</option>';
+	}
+	return $s;
+}
 
 ?>

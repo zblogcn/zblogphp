@@ -1,1 +1,38 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?><plugin version="php"><id>STACentre</id><name>静态管理中心</name><url>http://www.rainbowsoft.org/</url><note>控制ZBLOG的伪静态化设置,将博客, 分类页, 标签页, 作者页伪静态化成 HTML 页面.</note><path>main.php</path><include>include.php</include><level>1</level><author><name>zx.asd</name><email></email><url>http://www.rainbowsoft.org/</url></author><adapted>130707</adapted><version>1.0</version><pubdate>2013-7-7</pubdate><modified>2013-7-7</modified><description><![CDATA[ZSX和月上之木对插件有修改.]]></description><price>0</price><advanced><dependency></dependency><rewritefunctions></rewritefunctions><conflict></conflict></advanced></plugin>
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="php">
+<id>STACentre</id>
+<name>静态管理中心</name>
+<url>http://www.rainbowsoft.org/</url>
+<note>控制ZBLOG的伪静态化设置,将博客, 分类页, 标签页, 作者页伪静态化成 HTML 页面.</note>
+<description>ZSX和月上之木对插件有修改.</description>
+<path>main.php</path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>zx.asd</name>
+  <email>rainbowsoft@gmail.com</email>
+  <url>http://www.rainbowsoft.org/</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>130707</adapted>
+<version>1.0</version>
+<pubdate>2013-07-07</pubdate>
+<modified>2013-09-02</modified>
+<price>0</price>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+</sidebars>
+</plugin>

@@ -102,9 +102,9 @@ function RegPage_Page(){
 	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);
 	$zbp->template->SetTags('type',$article->type=0?'article':'page');
+	$zbp->template->SetTemplate($article->Template);
 
-
-	$zbp->template->display($article->Template);
+	$zbp->template->display();
 }
 
 

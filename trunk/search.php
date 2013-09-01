@@ -41,7 +41,6 @@ $array=$zbp->GetArticleList(
 );
 
 foreach ($array as $a) {
-
 	$article->Content .= '<p><br/>' . $a->Title . '<br/>';
 	$article->Content .= '<a href="' . $a->Url . '">' . $a->Url . '</a></p>';
 }
@@ -50,8 +49,9 @@ foreach ($array as $a) {
 $zbp->template->SetTags('title',$article->Title);
 $zbp->template->SetTags('article',$article);
 $zbp->template->SetTags('type',$article->type=0?'article':'page');
+$zbp->template->SetTemplate($article->Template);
 
-$zbp->template->display($article->Template);
+$zbp->template->display();
 
 RunTime();
 ?>

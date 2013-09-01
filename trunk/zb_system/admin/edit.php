@@ -198,7 +198,7 @@ foreach ($zbp->categorysbyorder as $id => $cate) {
           <!-- Navbar( --><?php if($ispage){?>
           <div id='AddNavbar' class='editmod'>
           <label for="edtAddNavbar" class='editinputname'><?php echo $lang['msg']['add_to_navbar']?></label>
-          <input type="text" name="AddNavbar" id="edtAddNavbar" value="0" class="checkbox" />
+          <input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int)$zbp->CheckItemToNavbar('page',$article->ID)?>" class="checkbox" />
           </div><?php }?>
           <!-- )Navbar --> 
           

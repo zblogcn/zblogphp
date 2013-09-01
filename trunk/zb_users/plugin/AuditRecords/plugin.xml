@@ -1,18 +1,38 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
-	<id>AuditRecords</id>
-	<name>审核文章日志插件</name>
-	<note>记录发布文章时的审核及回复</note>
-	<path></path>
-	<include>include.php</include>
-	<level>1</level>
-	<author>
-		<name>zx.asd</name>
-		<url>http://www.rainbowsoft.org/</url>
-		<email></email>
-	</author>
-	<version>1.0</version>
-	<modified>2013-7-7</modified>
-	<pubdate>2013-7-7</pubdate>
-	<adapted>130707</adapted>
+<id>AuditRecords</id>
+<name>审核文章日志插件</name>
+<url></url>
+<note>记录发布文章时的审核及回复</note>
+<description></description>
+<path></path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>zx.asd</name>
+  <email></email>
+  <url>http://www.rainbowsoft.org/</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>130707</adapted>
+<version>1.0</version>
+<pubdate>2013-07-07</pubdate>
+<modified>2013-09-02</modified>
+<price>0</price>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+</sidebars>
 </plugin>

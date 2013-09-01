@@ -40,11 +40,6 @@ Server_Open($method);
 	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>	
   </div>
 </div>
-
-<?php if($zbp->Config('AppCentre')->username<>""){?>
-<script type='text/javascript'>$('div.footer_nav p').html('&nbsp;&nbsp;&nbsp;<b><?php echo $zbp->Config('AppCentre')->username;?></b>您好,欢迎来到APP应用中心!<a href=\'setting.php?act=logout\'>[退出登录]</a>').css('visibility','inherit');</script>
-<?php } ?>
-
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 

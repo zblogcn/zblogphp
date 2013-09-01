@@ -221,12 +221,14 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	$zbp->template->SetTags('tag',$tag);
 	$zbp->template->SetTags('author',$type);
 	$zbp->template->SetTags('category',$category);
+	
+	$zbp->template->SetTemplate($template);
 
 	foreach ($GLOBALS['Filter_Plugin_ViewList_Template'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($zbp->template);
 	}
 
-	$zbp->template->display($template);
+	$zbp->template->display();
 
 }
 
@@ -319,12 +321,14 @@ function ViewPost($id,$alias){
 	if($pagebar->PageAll==0||$pagebar->PageAll==1)$pagebar=null;
 	$zbp->template->SetTags('pagebar',$pagebar);
 	$zbp->template->SetTags('comments',$comments);
+	
+	$zbp->template->SetTemplate($article->Template);
 
 	foreach ($GLOBALS['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($zbp->template);
 	}
 
-	$zbp->template->display($article->Template);
+	$zbp->template->display();
 }
 
 
@@ -379,12 +383,14 @@ function ViewComments($postid,$page){
 	if($pagebar->PageAll==1)$pagebar=null;
 	$zbp->template->SetTags('pagebar',$pagebar);
 	$zbp->template->SetTags('comments',$comments);
+	
+	$zbp->template->SetTemplate($template);
 
 	foreach ($GLOBALS['Filter_Plugin_ViewComments_Template'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($zbp->template);
 	}
 
-	$zbp->template->display($template);
+	$zbp->template->display();
 
 }
 
@@ -407,8 +413,9 @@ function ViewComment($id){
 	$zbp->template->SetTags('article',$post);
 	$zbp->template->SetTags('type','comment');
 	$zbp->template->SetTags('page',1);
+	$zbp->template->SetTemplate($template);
 
-	$zbp->template->display($template);
+	$zbp->template->display();
 
 }
 
@@ -638,6 +645,9 @@ function PostPage(){
 
 	$zbp->AddBuildModule('comments');
 
+	if(GetVars('AddNavbar')==0)$zbp->DelItemToNavbar('page',$article->ID);
+	if(GetVars('AddNavbar')==1)$zbp->AddItemToNavbar('page',$article->ID,$article->Title,$article->Url);
+
 	return true;
 }
 
@@ -851,6 +861,9 @@ function PostCategory(){
 
 	$zbp->AddBuildModule('catalog');
 
+	if(GetVars('AddNavbar')==0)$zbp->DelItemToNavbar('category',$cate->ID);
+	if(GetVars('AddNavbar')==1)$zbp->AddItemToNavbar('category',$cate->ID,$cate->Name,$cate->Url);
+
 	return true;
 }
 
@@ -865,6 +878,7 @@ function DelCategory(){
 		DelCategory_Articles($cate->ID);		
 		$cate->Del();
 		$zbp->AddBuildModule('catalog');
+		$zbp->DelItemToNavbar('category',$cate->ID);
 	}
 	return true;
 }
@@ -906,6 +920,9 @@ function PostTag(){
 
 	$tag->Save();
 
+	if(GetVars('AddNavbar')==0)$zbp->DelItemToNavbar('tag',$tag->ID);
+	if(GetVars('AddNavbar')==1)$zbp->AddItemToNavbar('tag',$tag->ID,$tag->Name,$tag->Url);
+
 	return true;
 }
 
@@ -917,6 +934,7 @@ function DelTag(){
 	$tag=$zbp->GetTagByID($tagid);
 	if($tag->ID>0){
 		$tag->Del();
+		$zbp->DelItemToNavbar('tag',$tag->ID);
 	}
 	return true;
 }

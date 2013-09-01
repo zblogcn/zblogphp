@@ -121,8 +121,8 @@ function VerifyMessage() {
 
 
 	//ajax comment begin
-	var strSubmit=$("#commentform :submit").val();
-	$("#commentform :submit").val("Waiting...").attr("disabled","disabled").addClass("loading");
+	var strSubmit=$("#inpId").parent("form").find(":submit").val();
+	$("#inpId").parent("form").find(":submit").val("Waiting...").attr("disabled","disabled").addClass("loading");
 
 	$.post(strFormAction,
 		{
@@ -152,11 +152,11 @@ function VerifyMessage() {
 				window.location="#"+cmt;
 			}
 
-			$("#commentform :submit").removeClass("loading");
-			$("#commentform :submit").removeAttr("disabled");
-			$("#commentform :submit").val(strSubmit);
+			$("#inpId").parent("form").find(":submit").removeClass("loading");
+			$("#inpId").parent("form").find(":submit").removeAttr("disabled");
+			$("#inpId").parent("form").find(":submit").val(strSubmit);
 
-			$("#content").val("");
+			$("#txaArticle").val("");
 			
 			SaveRememberInfo();
 			CommentComplete();
