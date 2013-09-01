@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
-<id>AdminColor</id>
-<name>后台配色器</name>
+<id>Wap</id>
+<name>Wap插件</name>
 <url>http://www.rainbowsoft.org/</url>
-<note>给Z-Blog 2.1换后台配色的小工具.</note>
-<description>给Z-BlogPHP换后台配色的小工具</description>
-<path></path>
-<include>include.asp</include>
+<note>Z-BlogPHP的Wap插件</note>
+<description>Pad版支持安卓,WP和IOS。</description>
+<path>main.php</path>
+<include>include.php</include>
 <level>1</level>
 <author>
-  <name>zx.asd</name>
-  <email>rainbowsoft@gmail.com</email>
-  <url>http://www.zdevo.com/</url>
+  <name>月上之木</name>
+  <email>jie2520@gmail.com</email>
+  <url></url>
 </author>
 <source>
   <name></name>
@@ -19,9 +19,9 @@
   <url></url>
 </source>
 <adapted>130707</adapted>
-<version>1.0</version>
+<version>1</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2013-09-02</modified>
+<modified>2013-09-01</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

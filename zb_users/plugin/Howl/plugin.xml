@@ -1,1 +1,38 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?><plugin version="php"><id>Howl</id><name>Z-Blog角色分配器</name><url>http://www.rainbowsoft.org/</url><note>Z-Blog Php版的用户权限角色分配插件</note><path>main.php</path><include>include.asp</include><level>1</level><author><name>zx.asd</name><email>rainbowsoft@gmail.com</email><url>http://www.zdev.com/</url></author><adapted>130707</adapted><version>1.0</version><pubdate>2013-7-7</pubdate><modified>2013-7-7</modified><description>一个很黄很暴力的插件，用错了会让你后悔！</description><price>0</price><advanced><dependency></dependency><rewritefunctions></rewritefunctions><conflict></conflict></advanced></plugin>
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="php">
+<id>Howl</id>
+<name>Z-Blog角色分配器</name>
+<url>http://www.rainbowsoft.org/</url>
+<note>Z-Blog Php版的用户权限角色分配插件</note>
+<description>一个很黄很暴力的插件，用错了会让你后悔！</description>
+<path>main.php</path>
+<include>include.asp</include>
+<level>1</level>
+<author>
+  <name>zx.asd</name>
+  <email>rainbowsoft@gmail.com</email>
+  <url>http://www.zdev.com/</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>130707</adapted>
+<version>1.0</version>
+<pubdate>2013-07-07</pubdate>
+<modified>2013-09-02</modified>
+<price>0</price>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+</sidebars>
+</plugin>

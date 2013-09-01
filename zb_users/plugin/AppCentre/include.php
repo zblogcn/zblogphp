@@ -2,7 +2,7 @@
 #注册插件
 RegisterPlugin("AppCentre","ActivePlugin_AppCentre");
 
-define('APPCENTRE_URL','http://192.168.1.54/client/');
+define('APPCENTRE_URL','http://zdevo.com/client/');
 
 define('APPCENTRE_SYSTEM_UPDATE','http://update.rainbowsoft.org/zblogphp/');
 

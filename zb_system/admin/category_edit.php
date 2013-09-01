@@ -80,7 +80,7 @@ foreach ($zbp->categorysbyorder as $k => $v) {
 		</select>
 	  </p>
 	  <p>
-		<label><span class="title"><?php echo $lang['msg']['add_to_navbar']?>:</span>   <input type="text" name="AddNavbar" id="edtAddNavbar" value="0" class="checkbox" /></label>
+		<label><span class="title"><?php echo $lang['msg']['add_to_navbar']?>:</span>   <input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int)$zbp->CheckItemToNavbar('category',$cate->ID)?>" class="checkbox" /></label>
 	  </p>
     <!-- 1号输出接口 -->
        <div id='response' class='editmod'>

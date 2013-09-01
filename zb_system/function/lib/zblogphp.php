@@ -635,7 +635,11 @@ function AddBuildModuleAll(){
 
 	}
 
-
+	public function LoadApp($type,$id){
+		$app = new App;
+		$app->LoadInfoByXml($type,$id);
+		return $app;
+	}
 
 
 
@@ -708,7 +712,7 @@ function AddBuildModuleAll(){
 
 		//创建模板类
 		$this->template = new Template();
-		$this->template->path = $this->usersdir . 'theme/'. $this->theme .'/template/php/';
+		$this->template->SetPath($this->usersdir . 'theme/'. $this->theme .'/template/php/');
 		$this->template->tags = $this->templatetags;
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_MakeTemplatetags'] as $fpname => &$fpsignal) {
@@ -772,7 +776,7 @@ function AddBuildModuleAll(){
 		
 		//创建模板类
 		$this->template = new Template();
-		$this->template->path = $dir;
+		$this->template->SetPath($dir);
 
 		//模板接口
 		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {$fpname();}
@@ -1128,14 +1132,47 @@ function AddBuildModuleAll(){
 		return HasNameInString($s,$name);
 	}
 
-	function AddItemToNavbar($type,$id,$name,$url){
+	#$type=category,article,page,item
+	function AddItemToNavbar($type='item',$id,$name,$url){
+
+		if(!$type)$type='item';
+		$m=$this->modulesbyfilename['navbar'];
+		$s=$m->Content;
+
+		$a='<li id="navbar-'.$type.'-'.$id.'"><a href="'.$url.'">'.$name.'</a></li>';
+
+		if($this->CheckItemToNavbar($type,$id)){
+			$s=preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*<\/li>/', $a, $s);
+		}else{
+			$s.='<li id="navbar-'.$type.'-'.$id.'"><a href="'.$url.'">'.$name.'</a></li>';
+		}
+
+
+		$m->Content=$s;
+		$m->Save();
 
 	}
-	function DelItemToNavbar($type,$id){
+
+	function DelItemToNavbar($type='item',$id){
+
+		if(!$type)$type='item';
+		$m=$this->modulesbyfilename['navbar'];
+		$s=$m->Content;
+
+		$s=preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*<\/li>/', '', $s);
+
+		$m->Content=$s;
+		$m->Save();
 
 	}
-	function CheckItemToNavbar($type,$id){
 
+	function CheckItemToNavbar($type='item',$id){
+
+		if(!$type)$type='item';
+		$m=$this->modulesbyfilename['navbar'];
+		$s=$m->Content;
+		return (bool)strpos($s,'id="navbar-'.$type.'-'.$id.'"');
+	
 	}
 
 	#$signal = good,bad,tips

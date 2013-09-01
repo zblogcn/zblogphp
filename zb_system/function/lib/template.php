@@ -18,6 +18,11 @@ class Template{
 
 	function __construct(){
 	}
+	
+	public function SetPath($path)
+	{
+		 $this->path= $path;
+	}
 
 	function GetTags($name){
 		return $this->tags[$name];
@@ -86,7 +91,7 @@ class Template{
 
 	private function parse_vars(&$content)
 	{
-		$content = preg_replace_callback('#\{\$([^\}]+)\}#',array($this,'parse_vars_replace_dot'), $content);
+		$content = preg_replace_callback('#\{\$(?!\()([^\}]+)\}#',array($this,'parse_vars_replace_dot'), $content);
 	}
 
 	private function parse_if(&$content)
@@ -165,18 +170,22 @@ class Template{
 		return str_replace('.','->',$content);
 	}
 
+	
+
 	public function GetTemplate($name)
 	{
 		return $this->path . $name . '.php';
 	}
 
-	//public function IncludeCompiled($name)
-	//{
-	//	include $this->path . $name . '.php';
-	//}
+	
+	private $templatename=null;
+	public function SetTemplate( $templatename)
+	{
+		 $this->templatename= $templatename;
+	}
 
 	#模板入口
-	public function Display($templatename)
+	public function Display()
 	{
 		#强制撤除所有错误监控
 		if($GLOBALS['option']['ZC_DEBUG_MODE']==false){
@@ -188,14 +197,14 @@ class Template{
 		foreach ($this->tags as $key => &$value) {
 			$$key=&$value;
 		}
-		include $this->path . $templatename . '.php';
+		include $this->path .  $this->templatename . '.php';
 	}
 
-	public function Output($templatename)
+	public function Output()
 	{
 
 		ob_start();
-		$this->Display($templatename);
+		$this->Display($this->templatename);
 		$data = ob_get_contents();
 		ob_end_clean();
 		return $data;
