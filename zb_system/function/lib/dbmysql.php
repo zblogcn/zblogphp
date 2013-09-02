@@ -50,8 +50,12 @@ class DbMySQL implements iDataBase
 			}	
 		}
 
-
-
+	}
+	
+	function CreateDB($dbmysql_server,$dbmysql_port,$dbmysql_username,$dbmysql_password,$dbmysql_name){
+		$db_link = @mysql_connect($dbmysql_server . ':' . $dbmysql_port, $dbmysql_username, $dbmysql_password);
+		$this->db = $db_link;
+		mysql_query('CREATE DATABASE ' . $dbmysql_name);
 	}
 
 	function Close(){

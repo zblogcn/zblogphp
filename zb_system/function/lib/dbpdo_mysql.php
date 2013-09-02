@@ -45,6 +45,13 @@ class Dbpdo_MySQL implements iDataBase
 		return true;
 	}
 
+	function CreateDB($dbmysql_server,$dbmysql_port,$dbmysql_username,$dbmysql_password,$dbmysql_name){
+		$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',); 
+		$db_link = new PDO('mysql:host=' . $dbmysql_server . ';port=' . $dbmysql_port,$dbmysql_username,$dbmysql_password,$options);
+		$this->db = $db_link;
+		$this->db->exec('CREATE DATABASE ' . $dbmysql_name);
+	}
+	
 	function Close(){
 
 	}
