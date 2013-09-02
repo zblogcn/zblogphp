@@ -40,29 +40,6 @@ $zbphost = $zbp->host;
 $s=<<<script
 <script type="text/javascript">
 
-var editor_api={
-	editor:	{
-		content:{
-			obj:{},
-			get:function(){return ""},
-			put:function(){return ""},
-			focus:function(){return ""}
-		},
-		intro:{
-			obj:{},
-			get:function(){return ""},
-			put:function(){return ""},
-			focus:function(){return ""}
-		}
-	}
-}
-
-var EditorIntroOption = {
-	toolbars:[['Source', 'bold', 'italic','link','insertimage','Undo', 'Redo']],
-	autoHeightEnabled:false,
-	initialFrameHeight:200
-}
-
 function editor_init(){
 	editor_api.editor.content.get=function(){return this.obj.html()};
 	editor_api.editor.content.put=function(str){return this.obj.html(str)};

@@ -28,7 +28,7 @@ $(".theme").each(function(){
 	}
 
 	if(app_enabledevelop&&app_username){
-		s=s+"<a class=\"button\" href='"+bloghost+"zb_users/plugin/appcentre/submit.php?type=theme&amp;id="+t+"' title='上传应用到官方网站应用中心' target='_blank'><img height='16' width='16' src='"+bloghost+"zb_users/plugin/appcentre/images/drive-upload.png'/></a>";
+		s=s+"<a class=\"button\" href='"+bloghost+"zb_users/plugin/AppCentre/submit.php?type=theme&amp;id="+t+"' title='上传应用到官方网站应用中心' target='_blank'><img height='16' width='16' src='"+bloghost+"zb_users/plugin/AppCentre/images/drive-upload.png'/></a>";
 	}
 
 	s=s+"</p>";

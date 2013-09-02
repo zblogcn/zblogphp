@@ -35,22 +35,6 @@ function ueditor_addscript_end(){
 
 $s=<<<js
 <script type="text/javascript">
-var editor_api={
-	editor:	{
-		content:{
-			obj:{},
-			get:function(){return ""},
-			put:function(){return ""},
-			focus:function(){return ""}
-		},
-		intro:{
-			obj:{},
-			get:function(){return ""},
-			put:function(){return ""},
-			focus:function(){return ""}
-		}
-	}
-}
 
 var EditorIntroOption = {
 	toolbars:[['Source', 'bold', 'italic','link','insertimage','Undo', 'Redo']],
@@ -85,9 +69,10 @@ editor_api.editor.content.focus=function(){return this.obj.focus()};
 editor_api.editor.intro.get=function(){return this.obj.getContent()};
 editor_api.editor.intro.put=function(str){return this.obj.setContent(str)};
 editor_api.editor.intro.focus=function(){return this.obj.focus()};
-editor_api.editor.content.obj.ready(function(){\$('#contentready').hide();$('#editor_content').prev().show();sContent=editor_api.editor.content.get();});
 
-editor_api.editor.intro.obj.ready(function(){\$('#introready').hide();$('#editor_intro').prev().show();sIntro=editor_api.editor.intro.get();});
+
+editor_api.editor.content.obj.ready(function(){sContent=editor_api.editor.content.get();});
+editor_api.editor.intro.obj.ready(function(){sIntro=editor_api.editor.intro.get();});
 
 $(document).ready(function(){
 	$('#edit').submit(function(){if(editor_api.editor.content.obj.queryCommandState('source')==1) editor_api.editor.content.obj.execCommand('source');

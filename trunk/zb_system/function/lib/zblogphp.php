@@ -207,7 +207,7 @@ class ZBlogPHP{
 	}
 
 	
-	function InitializeDB($type){
+	public function InitializeDB($type){
 		if(!trim($type))return false;
 		$newtype='Db'.trim($type);
 		$this->db=new $newtype();
