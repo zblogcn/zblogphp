@@ -228,7 +228,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 		$fpreturn=$fpname($zbp->template);
 	}
 
-	$zbp->template->display();
+	$zbp->template->Display();
 
 }
 
@@ -328,7 +328,7 @@ function ViewPost($id,$alias){
 		$fpreturn=$fpname($zbp->template);
 	}
 
-	$zbp->template->display();
+	$zbp->template->Display();
 }
 
 
@@ -390,7 +390,14 @@ function ViewComments($postid,$page){
 		$fpreturn=$fpname($zbp->template);
 	}
 
-	$zbp->template->display();
+	$s=$zbp->template->Output();
+
+	$a=explode('<label id="AjaxCommentBegin"></label>', $s);
+	$s=$a[1];
+	$a=explode('<label id="AjaxCommentEnd"></label>', $s);
+	$s=$a[0];
+	
+	echo $s;
 
 }
 
@@ -415,7 +422,7 @@ function ViewComment($id){
 	$zbp->template->SetTags('page',1);
 	$zbp->template->SetTemplate($template);
 
-	$zbp->template->display();
+	$zbp->template->Display();
 
 }
 
@@ -716,7 +723,7 @@ function PostComment(){
 	$_POST['Name'] = $_POST['name'];
 	$_POST['Email'] = $_POST['email'];	
 	$_POST['HomePage'] = $_POST['homepage'];
-	$_POST['Content'] = $_POST['content'];	
+	$_POST['Content'] = $_POST['content'];
 	$_POST['PostTime'] = Time();
 	$_POST['IP'] = GetGuestIP();	
 	$_POST['Agent'] = GetGuestAgent();
@@ -1490,7 +1497,7 @@ function BuildModule_calendar($date=''){
 
 	$s.='<thead><tr>';
 	for ($i=1; $i < 8; $i++) { 
-		$s.='<th title="'.$zbp->lang['week'][$i].'" scope="col" abbr="'.$zbp->lang['week'][$i].'"><small>'.$zbp->lang['week_abbr'][$i].'</small></th>';
+		$s.='<th title="'.$zbp->lang['week'][$i].'" scope="col"><small>'.$zbp->lang['week_abbr'][$i].'</small></th>';
 	}
 
 	$s.='</tr></thead>';
@@ -1517,7 +1524,7 @@ function BuildModule_calendar($date=''){
 	}
 
 	if($k>1){
-		$s.='<td class="pad" colspan="'.($k-1).'"> </td>';
+		$s.='<td class="pad" colspan="'.($k).'"> </td>';
 	}elseif($k=1){
 		$s.='';
 	}

@@ -1,9 +1,14 @@
-<div class="post multi">
-	<h4 class="post-date"><?php  echo $article->Time('Y年m月d日');  ?></h4>
-	<h2 class="post-title"><a href="<?php  echo $article->Url;  ?>"><?php  echo $article->Title;  ?></a></h2>
-	<div class="post-body"><?php  echo $article->Intro;  ?></div>
-	<h5 class="post-tags"></h5>
-	<h6 class="post-footer">
-		作者:<?php  echo $article->Author->Name;  ?> | 分类:<?php  echo $article->Category->Name;  ?> | 浏览:<?php  echo $article->ViewNums;  ?> | 评论:<?php  echo $article->CommNums;  ?>
-	</h6>
-</div>
+<article id="log<?php  echo $article->ID;  ?>" class="top cate<?php  echo $article->Category->ID;  ?> auth<?php  echo $article->Author->ID;  ?>">
+  <header>
+    <time><?php  echo $article->Time('Y年m月d日');  ?></time>
+    <h3><a href="<?php  echo $article->Url;  ?>"><?php  echo $article->Title;  ?></a></h3>
+  </header>
+  <section><?php  echo $article->Intro;  ?></section>
+  <footer>
+<?php if ($article->Tags) { ?>
+    <h4>标签: <?php  foreach ( $article->Tags as $tag) { ?> <a href="<?php  echo $tag->Url;  ?>"><?php  echo $tag->Name;  ?></a><?php  }   ?></h4>
+<?php } ?>
+    <h5><em>作者:<?php  echo $article->Author->Name;  ?></em> <em>分类:<?php  echo $article->Category->Name;  ?></em> <em>浏览:<?php  echo $article->ViewNums;  ?></em> <em>评论:<?php  echo $article->CommNums;  ?></em></h5>
+  </footer>
+</article>
+
