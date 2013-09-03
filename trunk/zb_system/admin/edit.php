@@ -239,6 +239,7 @@ var editor_api={
 		content:{
 			obj:{},
 			get:function(){return ""},
+			insert:function(){return ""},
 			put:function(){return ""},
 			focus:function(){return ""}
 		},

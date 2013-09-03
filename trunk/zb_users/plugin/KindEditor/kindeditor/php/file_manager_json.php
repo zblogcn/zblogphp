@@ -7,7 +7,7 @@
 require '../../../../../zb_system/function/c_system_base.php';
 global $zbp;
 $zbp->Load();
-
+if(!$zbp->CheckRights('UploadPst'))die();
 //根目录路径，可以指定绝对路径，比如 /var/www/attached/
 $root_path = $zbp->usersdir . 'upload/';
 //根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
