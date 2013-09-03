@@ -562,6 +562,8 @@ function zbp_editPage($id,$xmlstring,$publish){
 			$post[$a]=$b;
 		}
 
+		if($zbp->CheckItemToNavbar('page',$id))$_POST['AddNavbar']=1;
+
 		$_POST['ID']=$id;
 
 		$_POST['Title']=$post['title'];
