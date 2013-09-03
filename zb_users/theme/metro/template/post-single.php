@@ -21,26 +21,9 @@
 <a class="r" href="{$article.Next.Url}" title="{$article.Next.Title}"> 下一篇 »</a>
 {/if}
         </div>
-		{if !$article.IsLock}
-
-{if $socialcomment}
-{$socialcomment}
-{else}
-
-<div class="commentlist" style="overflow:hidden;">
-{if $article.CommNums>0}
-<h4>评论列表:</h4>
-{/if}
+{if !$article.IsLock}
 {template:comments}		
-</div>
-
-
-<!--评论框-->
-{template:commentpost}
-
 {/if}
-		
-		{/if}
      </div>
      <div class="clear"></div>
 </div>

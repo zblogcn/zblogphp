@@ -1,28 +1,23 @@
-
-
-
 {if $socialcomment}
 {$socialcomment}
 {else}
-
-<div class="commentlist" style="overflow:hidden;">
-{if $article.CommNums>0}
-<h4>评论列表:</h4>
-{/if}
-
-<label id="AjaxCommentBegin"></label>
 <!--评论输出-->
+
+<dl id="comment">
+  <dt>留言列表</dt>
+  <dd>
+<label id="AjaxCommentBegin"></label>
 {foreach $comments as $key => $comment}
 {template:comment}
 {/foreach}
 
 <!--评论翻页条输出-->
-<div class="pagebar commentpagebar">
+<nav>
 {template:pagebar}
-</div>
+</nav>
 <label id="AjaxCommentEnd"></label>
-
-</div>
+  </dd>
+</dl>
 
 
 <!--评论框-->

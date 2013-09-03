@@ -1,12 +1,24 @@
-<div class="post single">
-	<h4 class="post-date"><?php  echo $article->Time('Y年m月d日');  ?></h4>
-	<h2 class="post-title"><?php  echo $article->Title;  ?></h2>
-	<div class="post-body"><?php  echo $article->Content;  ?></div>
-	<h5 class="post-tags"></h5>
-	<h6 class="post-footer">
-		作者:<?php  echo $article->Author->Name;  ?> | 分类:<?php  echo $article->Category->Name;  ?> | 浏览:<?php  echo $article->ViewNums;  ?> | 评论:<?php  echo $article->CommNums;  ?>
-	</h6>
-</div>
+<article id="log<?php  echo $article->ID;  ?>" class="top cate<?php  echo $article->Category->ID;  ?> auth<?php  echo $article->Author->ID;  ?>">
+  <header>
+    <time><?php  echo $article->Time('Y年m月d日 H:i:s');  ?></time>
+    <h1><?php  echo $article->Title;  ?></h1>
+  </header>
+  <section><?php  echo $article->Content;  ?></section>
+  <footer>
+<?php if ($article->Tags) { ?>
+    <h4>标签: <?php  foreach ( $article->Tags as $tag) { ?> <a href="<?php  echo $tag->Url;  ?>"><?php  echo $tag->Name;  ?></a><?php  }   ?></h4>
+<?php } ?>
+    <h5><em>作者:<?php  echo $article->Author->Name;  ?></em> <em>分类:<?php  echo $article->Category->Name;  ?></em> <em>浏览:<?php  echo $article->ViewNums;  ?></em> <em>评论:<?php  echo $article->CommNums;  ?></em></h5>
+  </footer>
+  <nav>
+<?php if ($article->Prev) { ?>
+<a class="l" href="<?php  echo $article->Prev->Url;  ?>" title="<?php  echo $article->Prev->Title;  ?>">« 上一篇</a>
+<?php } ?>
+<?php if ($article->Next) { ?>
+<a class="r" href="<?php  echo $article->Next->Url;  ?>" title="<?php  echo $article->Next->Title;  ?>"> 下一篇 »</a>
+<?php } ?>
+  </nav>
+</article>
 
 <?php if (!$article->IsLock) { ?>
 <?php  include $this->GetTemplate('comments');  ?>

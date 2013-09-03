@@ -754,10 +754,12 @@ function AddBuildModuleAll(){
 		//初始化模板
 		$this->LoadTemplates();
 
-		//
-		$this->templates['comments']='<label id="AjaxCommentBegin"></label>' .
-									 	$this->templates['comments'] . 
-									 	'<label id="AjaxCommentEnd"></label>';
+		if(strpos($this->templates['comments'], 'AjaxCommentBegin')===false)
+			$this->templates['comments']='<label id="AjaxCommentBegin"></label>' . $this->templates['comments'];
+
+		if(strpos($this->templates['comments'], 'AjaxCommentEnd')===false)
+			$this->templates['comments']=$this->templates['comments'] . '<label id="AjaxCommentEnd"></label>';
+
 		if(strpos($this->templates['comment'], 'id="cmt{$comment->ID}"')===false&&strpos($this->templates['comment'], 'id=\'cmt{$comment->ID}\'')===false){
 			$this->templates['comment']='<label id="cmt{$comment->ID}"></label>'. $this->templates['comment'];
 		}

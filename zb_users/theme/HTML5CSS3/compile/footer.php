@@ -1,10 +1,7 @@
-		<div id="divBottom">
-			<h4 id="BlogPowerBy">Powered By <?php  echo $zblogphphtml;  ?></h4>
-			<h3 id="BlogCopyRight"><?php  echo $copyright;  ?></h3>
-		</div><div class="clear"></div>
-	</div><div class="clear"></div>
-	</div><div class="clear"></div>
-</div>
+<footer>
+  <h4><?php  echo $copyright;  ?></h4>
+  <h5>Powered By <?php  echo $zblogphphtml;  ?></h5>
+</footer>
 <?php  echo $footer;  ?>
 </body>
 </html>

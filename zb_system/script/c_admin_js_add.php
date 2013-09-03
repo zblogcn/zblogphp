@@ -242,15 +242,10 @@ $(document).ready(function(){
 	}
 	
 	//checkbox
-	if(!(($.browser.msie)&&($.browser.version)=='6.0')){
-		$('input.checkbox').css("display","none");
-		$('input.checkbox[value="1"]').after('<span class="imgcheck imgcheck-on"></span>');
-		$('input.checkbox[value!="1"]').after('<span class="imgcheck"></span>');
-	}else{
-		$('input.checkbox').attr('readonly','readonly');
-		$('input.checkbox').css('cursor','pointer');
-		$('input.checkbox').click(function(){  if($(this).val().toLowerCase()=='1'){$(this).val('0')}else{$(this).val('0')} })
-	}
+	$('input.checkbox').css("display","none");
+	$('input.checkbox[value="1"]').after('<span class="imgcheck imgcheck-on"></span>');
+	$('input.checkbox[value!="1"]').after('<span class="imgcheck"></span>');
+
 
 	$('span.imgcheck').click(function(){ChangeCheckValue(this)})
 

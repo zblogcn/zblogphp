@@ -21,26 +21,9 @@
 <a class="r" href="<?php  echo $article->Next->Url;  ?>" title="<?php  echo $article->Next->Title;  ?>"> 下一篇 »</a>
 <?php } ?>
         </div>
-		<?php if (!$article->IsLock) { ?>
-
-<?php if ($socialcomment) { ?>
-<?php  echo $socialcomment;  ?>
-<?php }else{  ?>
-
-<div class="commentlist" style="overflow:hidden;">
-<?php if ($article->CommNums>0) { ?>
-<h4>评论列表:</h4>
-<?php } ?>
+<?php if (!$article->IsLock) { ?>
 <?php  include $this->GetTemplate('comments');  ?>		
-</div>
-
-
-<!--评论框-->
-<?php  include $this->GetTemplate('commentpost');  ?>
-
 <?php } ?>
-		
-		<?php } ?>
      </div>
      <div class="clear"></div>
 </div>

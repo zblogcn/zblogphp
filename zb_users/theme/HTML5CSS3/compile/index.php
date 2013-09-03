@@ -1,19 +1,14 @@
 <?php  include $this->GetTemplate('header');  ?>
-</head>
-<body class="multi default">
-<div id="divAll">
-	<div id="divPage">
-	<div id="divMiddle">
-		<div id="divTop">
-			<h1 id="BlogTitle"><a href="<?php  echo $host;  ?>"><?php  echo $name;  ?></a></h1>
-			<h3 id="BlogSubTitle"><?php  echo $subname;  ?></h3>
-		</div>
-		<div id="divNavBar">
-<ul>
-<?php  echo $modules['navbar']->Content;  ?>
-</ul>
-		</div>
-		<div id="divMain">
+<body class="multi">
+<header>
+<h2><a href="<?php  echo $host;  ?>"><?php  echo $name;  ?></a> <sup><?php  echo $subname;  ?></sup></h2>
+<nav>
+<ul><?php  echo $modules['navbar']->Content;  ?></ul>
+</nav>
+</header>
+<section>
+  <section id="main">
+    <section>
 <?php  foreach ( $articles as $article) { ?> 
 
 <?php if ($article->IsTop) { ?>
@@ -23,9 +18,14 @@
 <?php } ?>
 
 <?php  }   ?>
-<div class="pagebar"><?php  include $this->GetTemplate('pagebar');  ?></div>
-		</div>
-		<div id="divSidebar">
-<?php  include $this->GetTemplate('sidebar');  ?>
-		</div>
+      <nav><?php  include $this->GetTemplate('pagebar');  ?></nav>
+    </section>
+    <aside>
+      <?php  include $this->GetTemplate('sidebar');  ?>
+    </aside>
+  </section>
+  <aside id="extra">
+    <?php  include $this->GetTemplate('sidebar2');  ?>
+  </aside>
+</section>
 <?php  include $this->GetTemplate('footer');  ?>
