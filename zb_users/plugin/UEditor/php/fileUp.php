@@ -1,34 +1,40 @@
 <?php
-    /**
-     * Created by JetBrains PhpStorm.
-     * User: taoqili
-     * Date: 12-7-26
-     * Time: 上午10:32
-     */
-    header("Content-Type: text/html; charset=utf-8");
-    error_reporting( E_ERROR | E_WARNING );
-    include "Uploader.class.php";
+
+require '../../../../zb_system/function/c_system_base.php';
+
+$zbp->Load();
+
+if(!$zbp->CheckRights('UploadPst'))die();
+
+
     //上传配置
     $config = array(
-        "savePath" => "upload/" , //保存路径
-        "allowFiles" => array( ".rar" , ".doc" , ".docx" , ".zip" , ".pdf" , ".txt" , ".swf" , ".wmv" ) , //文件允许格式
-        "maxSize" => 100000 //文件大小限制，单位KB
+        "savePath" => $zbp->usersdir . 'upload/',
+        "maxSize" => $zbp->option['ZC_UPLOAD_FILESIZE'],
+        "allowFiles" => $zbp->option['ZC_UPLOAD_FILETYPE']
     );
-    //生成上传实例对象并完成上传
-    $up = new Uploader( "upfile" , $config );
 
-    /**
-     * 得到上传文件所对应的各个参数,数组结构
-     * array(
-     *     "originalName" => "",   //原始文件名
-     *     "name" => "",           //新文件名
-     *     "url" => "",            //返回的地址
-     *     "size" => "",           //文件大小
-     *     "type" => "" ,          //文件类型
-     *     "state" => ""           //上传状态，上传成功时必须返回"SUCCESS"
-     * )
-     */
-    $info = $up->getFileInfo();
+	
+foreach ($_FILES as $key => $value) {
+	if($_FILES[$key]['error']==0){
+		if (is_uploaded_file($_FILES[$key]['tmp_name'])) {
+
+
+	$upload = new Upload;
+	$upload->Name = date("YmdHis") . '_' . rand(10000, 99999) . '.' . GetFileExt($_FILES[$key]['name']);
+	$upload->SourceName = $_FILES[$key]['name'];
+	$upload->MimeType = $_FILES[$key]['type'];
+	$upload->Size =$_FILES[$key]['size'];
+	$upload->AuthorID = $zbp->user->ID;
+
+	$upload->SaveFile($_FILES[$key]['tmp_name']);
+	$upload->Save();
+	
+	$info=array();
+	$info["url"]=$upload->Name;
+	$info["type"]='.' . GetFileExt($_FILES[$key]['name']);	
+	$info["originalName"]=$upload->SourceName;
+	$info["state"]='SUCCESS';
 
     /**
      * 向浏览器返回数据json数据
@@ -40,4 +46,10 @@
      * }
      */
     echo '{"url":"' .$info[ "url" ] . '","fileType":"' . $info[ "type" ] . '","original":"' . $info[ "originalName" ] . '","state":"' . $info["state"] . '"}';
+		
 
+		
+		
+		}
+	}
+}

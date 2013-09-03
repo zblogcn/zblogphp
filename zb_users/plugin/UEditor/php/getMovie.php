@@ -1,4 +1,11 @@
 <?php
+
+require '../../../../zb_system/function/c_system_base.php';
+
+$zbp->Load();
+
+if(!$zbp->CheckRights('ArticleEdt'))die();
+
     /**
      * Created by JetBrains PhpStorm.
      * User: taoqili

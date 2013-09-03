@@ -5,8 +5,10 @@
  * @copyright (C) RainbowSoft Studio
  */
 require '../../../../../zb_system/function/c_system_base.php';
-global $zbp;
+
 $zbp->Load();
+
+if(!$zbp->CheckRights('UploadPst'))die();
 
 //格式化允许上传的文件扩展名
 $ext_arr = explode("|", $zbp->option['ZC_UPLOAD_FILETYPE']);
