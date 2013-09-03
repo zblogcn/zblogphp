@@ -712,7 +712,7 @@ function AddBuildModuleAll(){
 
 		//创建模板类
 		$this->template = new Template();
-		$this->template->SetPath($this->usersdir . 'theme/'. $this->theme .'/template/php/');
+		$this->template->SetPath($this->usersdir . 'theme/'. $this->theme .'/compile/');
 		$this->template->tags = $this->templatetags;
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_MakeTemplatetags'] as $fpname => &$fpsignal) {
@@ -762,7 +762,7 @@ function AddBuildModuleAll(){
 			$this->templates['comment']='<label id="cmt{$comment->ID}"></label>'. $this->templates['comment'];
 		}
 
-		$dir=$this->usersdir . 'theme/'. $this->theme .'/template/php/';
+		$dir=$this->usersdir . 'theme/'. $this->theme .'/compile/';
 
 		if(!file_exists($dir)){
 			@mkdir($dir, 0777,true);

@@ -11,11 +11,11 @@ ob_clean();
 
 switch (GetVars('type','GET')) {
 	case 'statistic':
-		if (!$zbp->CheckRights('root')) {echo $lang['error'][6];die();$zbp->ShowError(6);}
+		if (!$zbp->CheckRights('root')) {echo $zbp->ShowError(6);die();}
 		misc_statistic();
 		break;
 	case 'updateinfo':
-		if (!$zbp->CheckRights('root')) {echo $lang['error'][6];die();$zbp->ShowError(6);}
+		if (!$zbp->CheckRights('root')) {echo $zbp->ShowError(6);die();}
 		misc_updateinfo();
 		break;
 	case 'showtags':
@@ -42,6 +42,7 @@ function misc_updateinfo(){
 	$r = '<tr><td>' . $r . '</td></tr>';
 
 	$zbp->cache->reload_updateinfo=$r;
+	$zbp->cache->reload_updateinfo_time=time();
 	$zbp->SaveCache();
 
 	echo $r;
@@ -80,6 +81,13 @@ function misc_statistic(){
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";		
 
 	$zbp->cache->reload_statistic=$r;
+	$zbp->cache->reload_statistic_time=time();
+	
+	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type',0),array('=','log_IsTop',0),array('=','log_Status',0)));
+	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
+
+	$zbp->cache->normal_article_nums=$num;
+	
 	$zbp->SaveCache();
 
 	echo $r;

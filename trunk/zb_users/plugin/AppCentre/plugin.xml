@@ -3,7 +3,7 @@
 <id>AppCentre</id>
 <name>应用中心</name>
 <url>http://www.rainbowsoft.org/</url>
-<note>Z-Blog资源大本营</note>
+<note>Z-BlogPHP版的资源大本营</note>
 <description></description>
 <path>main.php</path>
 <include>include.php</include>

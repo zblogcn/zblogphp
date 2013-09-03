@@ -325,18 +325,31 @@ function Admin_SiteInfo(){
 	echo '</div>';
 	echo '<div id="divMain2">';
 
-	echo '<table class="tableFull tableBorder" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');">[' . $zbp->lang['msg']['refresh_cache'] . ']</a> <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
-	echo $zbp->cache->reload_statistic;
+	echo '<table class="tableFull tableBorder" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a> <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+
+	if((time()-(int)$zbp->cache->reload_statistic_time) > (23*60*60)){
+		echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'?act=misc&type=statistic\'); });</script>';
+	}else{
+		echo $zbp->cache->reload_statistic;
+	}
+
 	echo '</table>';
 
 	echo '<table class="tableFull tableBorder" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a> <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
-	echo $zbp->cache->reload_updateinfo;
+	
+	if((time()-(int)$zbp->cache->reload_updateinfo_time) > (23*60*60)){
+		echo '<script type="text/javascript">$(document).ready(function(){ updateinfo(\'?act=misc&type=updateinfo\'); });</script>';
+	}else{
+		echo $zbp->cache->reload_updateinfo;
+	}
+
 	echo '</table>';
 
 	echo '</div>';
 	include $zbp->path . "zb_system/defend/thanks.html";
 	echo '<script type="text/javascript">ActiveTopMenu("topmenu1");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/home_32.png' . '");</script>';	
+
 }
 
 

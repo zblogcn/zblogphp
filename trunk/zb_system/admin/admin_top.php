@@ -20,7 +20,7 @@ require $blogpath . 'zb_system/admin/admin_left.php';
 ?>
 <section class="main">
 <?php
-
+/*
 if(GetVars('batch','COOKIE')){
 ?>
 <div id="batch">
@@ -32,6 +32,6 @@ if(GetVars('batch','COOKIE')){
 <!--<div id="batch"><img src="<?php echo $bloghost?>zb_system/image/admin/error.png" width="16"/><p><?php echo $lang['msg']['previous_operation_not_finished']?></p></div>-->
 <?php
 }
-
+*/
 $zbp->GetHint();
 ?>
