@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
-<id>Wap</id>
-<name>Wap插件</name>
+<id>Pad</id>
+<name>Pad插件</name>
 <url>http://www.rainbowsoft.org/</url>
-<note>Z-BlogPHP的Wap插件</note>
+<note>Z-BlogPHP的Pad版插件</note>
 <description>Pad版支持安卓,WP和IOS。</description>
 <path>main.php</path>
 <include>include.php</include>

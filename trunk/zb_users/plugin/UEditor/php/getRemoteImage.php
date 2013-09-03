@@ -1,4 +1,11 @@
 <?php
+
+require '../../../../zb_system/function/c_system_base.php';
+
+$zbp->Load();
+
+if(!$zbp->CheckRights('ArticleEdt'))die();
+
     /**
      * Created by JetBrains PhpStorm.
      * User: taoqili
@@ -6,6 +13,7 @@
      * Time: 上午9:54
      * To change this template use File | Settings | File Templates.
      */
+
     header("Content-Type: text/html; charset=utf-8");
     error_reporting(E_ERROR|E_WARNING);
     //远程抓取图片配置
