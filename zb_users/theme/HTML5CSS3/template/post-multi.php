@@ -1,7 +1,7 @@
 <article id="log{$article.ID}" class="top cate{$article.Category.ID} auth{$article.Author.ID}">
   <header>
     <time>{$article.Time('Y年m月d日')}</time>
-    <h3><a href="{$article.Url}">{$article.Title}</a></h3>
+    <h2><a href="{$article.Url}">{$article.Title}</a></h2>
   </header>
   <section>{$article.Intro}</section>
   <footer>

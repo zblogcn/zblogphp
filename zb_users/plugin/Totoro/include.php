@@ -41,7 +41,7 @@ function Totoro_Core_BlackWord(&$cmt){
 	if(!$BlackWord_List)return null;
 
 	$array=array();
-	preg_match_all('/'.$BlackWord_List.'/u',$cmt->Content,$array);
+	preg_match_all('/'.$BlackWord_List.'/ui',$cmt->Content,$array);
 	
 	$array=array_unique($array);
 	$i=count($array[0]);

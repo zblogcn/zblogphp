@@ -3,8 +3,8 @@
   <dd>
   <h5><!--◎欢迎参与讨论，请在这里发表您的看法、交流您的观点。--></h5>
 <figure><img src="{$user.Avatar}" alt="来宾的头像" border="0"></figure>
-  <form target="_self" method="post" action="{$article.CommentPostUrl#}">
-	<input type="hidden" name="inpId" id="inpId" value="{$article.ID#}" />
+  <form target="_self" method="post" action="{$article.CommentPostUrl}">
+	<input type="hidden" name="inpId" id="inpId" value="{$article.ID}" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
 	<input type="hidden" name="inpVerify" id="inpVerify" value="" />
     <p>

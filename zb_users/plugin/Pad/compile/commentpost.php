@@ -2,8 +2,7 @@
   <dt>发表评论</dt>
   <dd>
   <h5><!--◎欢迎参与讨论，请在这里发表您的看法、交流您的观点。--></h5>
-<figure><img src="<?php  echo $user->Avatar;  ?>" alt="来宾的头像" border="0"></figure>
-  <form target="_self" method="post" action="<?php  echo $article->CommentPostUrl;  ?>">
+  <form target="_self" method="post" action="<?php  echo $article->CommentPostUrl;  ?>&amp;mod=pad">
 	<input type="hidden" name="inpId" id="inpId" value="<?php  echo $article->ID;  ?>" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
 	<input type="hidden" name="inpVerify" id="inpVerify" value="" />
