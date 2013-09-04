@@ -1,6 +1,3 @@
-
-
-
 <?php if ($socialcomment) { ?>
 <?php  echo $socialcomment;  ?>
 <?php }else{  ?>

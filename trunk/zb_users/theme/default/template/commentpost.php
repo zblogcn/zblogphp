@@ -1,7 +1,7 @@
 <div class="post" id="divCommentPost">
 	<p class="posttop"><a name="comment">{if $user.ID>0}{$user.Name#}{/if}发表评论:</a><a rel="nofollow" id="cancel-reply" href="#divCommentPost" style="display:none;"><small>取消回复</small></a></p>
-	<form id="commentform" target="_self" method="post" action="{$article.CommentPostUrl#}" >
-	<input type="hidden" name="inpId" id="inpId" value="{$article.ID#}" />
+	<form id="commentform" target="_self" method="post" action="{$article.CommentPostUrl}" >
+	<input type="hidden" name="inpId" id="inpId" value="{$article.ID}" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
 	<input type="hidden" name="inpVerify" id="inpVerify" value="" />	
 {if $user.ID>0}
