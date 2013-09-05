@@ -14,10 +14,11 @@ if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
 
 $blogtitle='应用中心-系统';
 
-if(count($_POST)>0){
-
-	$zbp->SetHint('good');
-	Redirect('./update.php');
+if(GetVars('check','GET')=='now'){
+  $r = file_get_contents('http://update.rainbowsoft.org/zblog2/130801.xml');
+  file_put_contents($zbp->usersdir . 'cache/now.xml', $r);
+	//$zbp->SetHint('good');
+	//Redirect('./update.php');
 }
 
 
@@ -54,7 +55,20 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                   <th width='78%'>文件名</th>
                   <th id="_s">状态</th>
                 </tr>
+<?php
+if (file_exists($zbp->usersdir . 'cache/now.xml')) {
 
+  $xml=simplexml_load_file($zbp->usersdir . 'cache/now.xml');
+
+  foreach ($xml->children() as $file) {
+    echo '<tr><td><b>' . $file['name'] . '</b><s>' . $file['crc32'] . '</s></td><td></td></tr>';
+  }
+
+}
+
+
+
+?>
 
               </table>
               <p> </p>
