@@ -58,7 +58,7 @@ $zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重�
 ?>
   <div class="divHeader"><?php echo $blogtitle;?></div>
   <div class="SubMenu"></div>
-  <div id="divMain2" class="edit category_edit">
+  <div id="divMain2">
 	<form id="edit" name="edit" method="post" action="#">
 <input id="reset" name="reset" type="hidden" value="" />
 <table border="1" class="tableFull tableBorder tableBorder-thcenter">

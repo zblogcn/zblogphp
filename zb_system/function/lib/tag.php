@@ -24,6 +24,13 @@ class Tag extends Base{
 
 	}
 
+	function __call($method, $args) {
+		foreach ($GLOBALS['Filter_Plugin_Tag_Call'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($this,$method, $args);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+	}
+
 	public function __set($name, $value)
 	{
         global $zbp;

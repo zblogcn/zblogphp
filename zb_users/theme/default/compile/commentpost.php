@@ -7,11 +7,11 @@
 <?php if ($user->ID>0) { ?>
 	<input type="hidden" name="inpName" id="inpName" value="<?php  echo $user->Name;  ?>" />
 	<input type="hidden" name="inpEmail" id="inpEmail" value="<?php  echo $user->Email;  ?>" />
-	<input type="hidden" name="inpHomePage" id="inpHomePage" value="<?php  echo $user->HomePage;  ?>" />	
+	<input type="hidden" name="inpHomepage" id="inpHomepage" value="<?php  echo $user->HomePage;  ?>" />	
 <?php }else{  ?>
 	<p><input type="text" name="inpName" id="inpName" class="text" value="<?php  echo $user->Name;  ?>" size="28" tabindex="1" /> <label for="name">名称(*)</label></p>
 	<p><input type="text" name="inpEmail" id="inpEmail" class="text" value="<?php  echo $user->Email;  ?>" size="28" tabindex="2" /> <label for="email">邮箱</label></p>
-	<p><input type="text" name="inpHomePage" id="inpHomePage" class="text" value="<?php  echo $user->HomePage;  ?>" size="28" tabindex="3" /> <label for="homepage">网址</label></p>
+	<p><input type="text" name="inpHomepage" id="inpHomepage" class="text" value="<?php  echo $user->HomePage;  ?>" size="28" tabindex="3" /> <label for="homepage">网址</label></p>
 
 <?php } ?>
 	<!--verify-->

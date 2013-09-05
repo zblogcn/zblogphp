@@ -394,7 +394,7 @@ function TransferHTML($source,$para){
 		$source=str_replace(array("/","#","$","\\",":","?","*","\"","<",">","|"," "),array(""),$source);
 	}
 	if(strpos($para, '[normalname]')!==false){
-		$source=str_replace(array("#","$","(",")","*","+",",","[","]","{","}","?","\\","^","|",":","'","\""),array(""),$source);
+		$source=str_replace(array("#","$","(",")","*","+","[","]","{","}","?","\\","^","|",":","'","\"",";","@","~","=","%","&"),array(""),$source);
 	}
 
 	return $source;

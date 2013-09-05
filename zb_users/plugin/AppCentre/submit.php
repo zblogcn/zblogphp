@@ -49,7 +49,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
   <div class="divHeader"><?php echo $blogtitle;?></div>
 <div class="SubMenu"><?php AppCentre_SubMenus('');?></div>
-  <div id="divMain2" class="edit category_edit">
+  <div id="divMain2">
 
 
 <form method="post" action="">

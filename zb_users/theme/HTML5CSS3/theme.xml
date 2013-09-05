@@ -21,7 +21,7 @@
 <adapted>130707</adapted>
 <version>1.0</version>
 <pubdate>2012-10-31</pubdate>
-<modified>2013-09-02</modified>
+<modified>2013-09-05</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>
@@ -29,8 +29,8 @@
   <conflict></conflict>
 </advanced>
 <sidebars>
-  <sidebar1>calendar|controlpanel|catalog|searchpanel|archives|previous|comments|favorite|misc</sidebar1>
-  <sidebar2></sidebar2>
+  <sidebar1>calendar|controlpanel|searchpanel|comments|archives</sidebar1>
+  <sidebar2>catalog|previous|favorite|link|misc</sidebar2>
   <sidebar3></sidebar3>
   <sidebar4></sidebar4>
   <sidebar5></sidebar5>

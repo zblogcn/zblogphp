@@ -4,7 +4,7 @@
 <body class="multi default">
 {template:c_top}
 		<div id="mission">{$modules['new'].Content}</div><ins></ins>
-{if $article->Type==ZC_POST_TYPE_ARTICLE}
+{if $article.Type==ZC_POST_TYPE_ARTICLE}
 {template:post-single}
 {else}
 {template:post-page}

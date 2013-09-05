@@ -76,7 +76,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
   <div class="divHeader"><?php echo $blogtitle;?></div>
 <div class="SubMenu"><?php AppCentre_SubMenus(GetVars('id','GET')==''?5:'');?></div>
-  <div id="divMain2" class="edit category_edit">
+  <div id="divMain2">
 
 <form method="post" action="">
   <table border="1" width="100%" cellspacing="0" cellpadding="0" class="tableBorder tableBorder-thcenter">

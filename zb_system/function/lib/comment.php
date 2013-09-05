@@ -25,6 +25,13 @@ class Comment extends Base{
 
 	}
 
+	function __call($method, $args) {
+		foreach ($GLOBALS['Filter_Plugin_Comment_Call'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($this,$method, $args);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+	}
+
 	public function Time($s='Y-m-d H:i:s'){
 		return date($s,(int)$this->PostTime);
 	}

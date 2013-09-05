@@ -5,7 +5,7 @@
 <url>http://www.rainbowsoft.org/</url>
 <note>Z-BlogPHP的Pad版插件</note>
 <description>Pad版支持安卓,WP和IOS。</description>
-<path>main.php</path>
+<path></path>
 <include>include.php</include>
 <level>1</level>
 <author>

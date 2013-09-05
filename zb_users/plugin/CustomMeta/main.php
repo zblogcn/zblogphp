@@ -49,7 +49,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
  <a href="?type=tag"><span class="m-left <?php if($_GET['type']=='tag')echo 'm-now';?>">标签类自定义</span></a>
  <a href="?type=member"><span class="m-left <?php if($_GET['type']=='member')echo 'm-now';?>">会员类自定义</span></a>
   </div>
-  <div id="divMain2" class="edit category_edit">
+  <div id="divMain2">
 	<form id="edit" name="edit" method="post" action="#">
 <input id="reset" name="reset" type="hidden" value="" />
 <table border="1" class="tableFull tableBorder tableBorder-thcenter">

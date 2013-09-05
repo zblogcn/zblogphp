@@ -29,7 +29,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
   <div class="divHeader"><?php echo $blogtitle;?></div>
 <div class="SubMenu"> <a href="main.php"><span class="m-left">配置页面</span></a><a href="list.php"><span class="m-left">ReWrite规则</span></a><a href="help.php"><span class="m-right m-now">帮助</span></a> </div>
-  <div id="divMain2" class="edit category_edit">
+  <div id="divMain2">
           <table width="100%" border="1">
             <tr height="32">
               <td>1. 本插件只能实现Z-Blog的伪静态配置，而无法实现完全静态。</td>

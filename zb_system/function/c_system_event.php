@@ -562,6 +562,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring){
 	$tagnamestring=str_replace(';', ',', $tagnamestring);
 	$tagnamestring=str_replace('，', ',', $tagnamestring);
 	$tagnamestring=str_replace('、', ',', $tagnamestring);
+	$tagnamestring=strip_tags($tagnamestring);
 	$tagnamestring=trim($tagnamestring);
 	if($tagnamestring=='')return '';
 	if($tagnamestring==',')return '';		
@@ -579,6 +580,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring){
 		foreach ($d as $key) {
 			$tag = new Tag;
 			$tag->Name = $key;
+			FilterTag($tag);
 			$tag->Save();
 			$zbp->tags[$tag->ID]=$tag;
 			$zbp->tagsbyname[$tag->Name]=&$zbp->tags[$tag->ID];
@@ -862,6 +864,8 @@ function PostCategory(){
 
 	FilterMeta($cate);
 
+	FilterCategory($cate);
+
 	CountCategory($cate);
 
 	$cate->Save();
@@ -922,6 +926,8 @@ function PostTag(){
 	}
 
 	FilterMeta($tag);
+
+	FilterTag($tag);
 
 	CountTag($tag);
 
@@ -1169,6 +1175,43 @@ function DisablePlugin($name){
 
 function SetTheme($theme,$style){
 	global $zbp;
+	$oldtheme=$zbp->option['ZC_BLOG_THEME'];
+
+	if($oldtheme!=$theme){
+		$app=$zbp->LoadApp('theme',$theme);
+if($app->sidebars_sidebar1|$app->sidebars_sidebar2|$app->sidebars_sidebar3|$app->sidebars_sidebar4|$app->sidebars_sidebar5){
+	$s1=$zbp->option['ZC_SIDEBAR_ORDER'];
+	$s2=$zbp->option['ZC_SIDEBAR2_ORDER'];
+	$s3=$zbp->option['ZC_SIDEBAR3_ORDER'];
+	$s4=$zbp->option['ZC_SIDEBAR4_ORDER'];
+	$s5=$zbp->option['ZC_SIDEBAR5_ORDER'];
+	$zbp->option['ZC_SIDEBAR_ORDER']=$app->sidebars_sidebar1;
+	$zbp->option['ZC_SIDEBAR2_ORDER']=$app->sidebars_sidebar2;
+	$zbp->option['ZC_SIDEBAR3_ORDER']=$app->sidebars_sidebar3;
+	$zbp->option['ZC_SIDEBAR4_ORDER']=$app->sidebars_sidebar4;
+	$zbp->option['ZC_SIDEBAR5_ORDER']=$app->sidebars_sidebar5;
+	$zbp->cache->ZC_SIDEBAR_ORDER1=$s1;
+	$zbp->cache->ZC_SIDEBAR_ORDER2=$s2;
+	$zbp->cache->ZC_SIDEBAR_ORDER3=$s3;
+	$zbp->cache->ZC_SIDEBAR_ORDER4=$s4;
+	$zbp->cache->ZC_SIDEBAR_ORDER5=$s5;
+}else{
+	if($zbp->cache->ZC_SIDEBAR_ORDER1|$zbp->cache->ZC_SIDEBAR_ORDER2|$zbp->cache->ZC_SIDEBAR_ORDER3|$zbp->cache->ZC_SIDEBAR_ORDER4|$zbp->cache->ZC_SIDEBAR_ORDER5){
+		$zbp->option['ZC_SIDEBAR_ORDER'] =$zbp->cache->ZC_SIDEBAR_ORDER1;
+		$zbp->option['ZC_SIDEBAR2_ORDER']=$zbp->cache->ZC_SIDEBAR_ORDER2;
+		$zbp->option['ZC_SIDEBAR3_ORDER']=$zbp->cache->ZC_SIDEBAR_ORDER3;
+		$zbp->option['ZC_SIDEBAR4_ORDER']=$zbp->cache->ZC_SIDEBAR_ORDER4;
+		$zbp->option['ZC_SIDEBAR5_ORDER']=$zbp->cache->ZC_SIDEBAR_ORDER5;
+		$zbp->cache->ZC_SIDEBAR_ORDER1='';
+		$zbp->cache->ZC_SIDEBAR_ORDER2='';
+		$zbp->cache->ZC_SIDEBAR_ORDER3='';
+		$zbp->cache->ZC_SIDEBAR_ORDER4='';
+		$zbp->cache->ZC_SIDEBAR_ORDER5='';
+		$zbp->SaveCache();
+	}
+}
+
+	}
 
 	$zbp->option['ZC_BLOG_THEME']=$theme;
 	$zbp->option['ZC_BLOG_CSS']=$style;
@@ -1276,6 +1319,9 @@ function FilterComment(&$comment){
 function FilterArticle(&$article){
 	global $zbp;
 
+	$article->Title=strip_tags($article->Title);
+	$article->Alias=TransferHTML($article->Alias,'[normalname]');	
+
 	if($article->Type == ZC_POST_TYPE_ARTICLE){
 		if(!$zbp->CheckRights('ArticleAll')){
 			$article->Content=TransferHTML($article->Content,'[noscript]');
@@ -1293,6 +1339,7 @@ function FilterArticle(&$article){
 function FilterMember(&$member){
 	global $zbp;
 	$member->Intro=TransferHTML($member->Intro,'[noscript]');
+	$member->Alias=TransferHTML($member->Alias,'[normalname]');	
 
 	if(strlen($member->Name)<$zbp->option['ZC_USERNAME_MIN']||strlen($member->Name)>$zbp->option['ZC_USERNAME_MAX']){
 		$zbp->ShowError(77);
@@ -1333,10 +1380,18 @@ function FilterModule(&$module){
 
 
 
+function FilterCategory(&$category){
+	global $zbp;
+	$category->Name=strip_tags($category->Name);
+	$category->Alias=TransferHTML($category->Alias,'[normalname]');	
+}
 
 
-
-
+function FilterTag(&$tag){
+	global $zbp;
+	$tag->Name=strip_tags($tag->Name);
+	$tag->Alias=TransferHTML($tag->Alias,'[normalname]');	
+}
 
 
 ################################################################################################################
