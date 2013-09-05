@@ -21,11 +21,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
   <div class="divHeader2"><?php echo $blogtitle;?></div>
 <div class="SubMenu"></div>
-  <div id="divMain2" class="edit category_edit">
+  <div id="divMain2">
 	<form id="edit" name="edit" method="post" action="#">
 <p>使用说明：</p>
 	  <p>
-将<b>{$HeartVote}<b>标签放入你当前主题的<b>post-single.php<b>模板里的合适的位置，并在后台点[更新缓存]编译模板即可生效。
+将 <b style="font-size:1.5em;">{$article.HeartVote()}</b> 标签放入你当前主题的<b>post-single.php<b>模板里的合适的位置，并在后台点[更新缓存]编译模板即可生效。
 	  </p>
 
 	</form>

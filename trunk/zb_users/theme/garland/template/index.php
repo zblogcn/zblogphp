@@ -4,7 +4,7 @@
 {template:c_top}
 		<div id="mission">{$modules['new'].Content}</div><ins></ins>
 {foreach $articles as $article}
-{if $article->IsTop}
+{if $article.IsTop}
 {template:post-istop}
 {else}
 {template:post-multi}

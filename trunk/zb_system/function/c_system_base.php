@@ -37,14 +37,14 @@ if(file_exists($usersdir . 'c_option.php')){
 	$option_zbusers = require($usersdir . 'c_option.php');
 }
 if(!is_array($option_zbusers))$option_zbusers=array();
-$option = require($blogpath . 'zb_system/defend/c_option.php');
+$option = require($blogpath . 'zb_system/defend/option.php');
 foreach ($option_zbusers as $key => $value) {
 	$option[$key]=$value;
 }
 
 date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 
-$lang = null;
+$lang = require($blogpath . 'zb_system/defend/language.php');
 
 $blogtitle = $option['ZC_BLOG_SUBNAME'];
 $blogname = &$option['ZC_BLOG_NAME'];

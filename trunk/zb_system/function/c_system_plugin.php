@@ -93,9 +93,9 @@ function UninstallPlugin($strPluginName){
 		'actioncode:要执行的语句，要转义为Execute可执行语句
 '*********************************************************
 */
-function Add_Action_Plugin($plugname,$actioncode){
-	$GLOBALS[$plugname][]=$actioncode;
-}
+//function Add_Action_Plugin($plugname,$actioncode){
+//	$GLOBALS[$plugname][]=$actioncode;
+//}
 
 
 
@@ -122,9 +122,9 @@ function Add_Filter_Plugin($plugname,$functionname,$exitsignal=PLUGIN_EXITSIGNAL
 		'parameter:要写入的内容
 '*********************************************************
 */
-function Add_Response_Plugin($plugname,$functionname){
-	$GLOBALS[$plugname][]=$functionname;
-}
+//function Add_Response_Plugin($plugname,$functionname){
+//	$GLOBALS[$plugname][]=$functionname;
+//}
 
 
 
@@ -868,8 +868,71 @@ $Filter_Plugin_PostPage_Core=array();
 
 
 ################################################################################################################
-#后台里的接口
+#类里的接口
 
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Post_Call=array();
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Comment_Call=array();
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Tag_Call=array();
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Category_Call=array();
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:
+'参数:
+'说明:
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Member_Call=array();
 
 
 

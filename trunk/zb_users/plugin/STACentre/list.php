@@ -59,7 +59,10 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
   <div class="divHeader"><?php echo $blogtitle;?></div>
 <div class="SubMenu"> <a href="main.php"><span class="m-left">配置页面</span></a><a href="list.php"><span class="m-left m-now">ReWrite规则</span></a><a href="help.php"><span class="m-right">帮助</span></a> </div>
-  <div id="divMain2" class="edit category_edit">
+  <div id="divMain2">
+<?php if($zbp->option['ZC_STATIC_MODE']=='ACTIVE'){?>
+<p>动态模式下不生成静态规则.</p>
+<?php }else{ ?>
 	<form id="edit" name="edit" method="post" action="#">
 <input id="reset" name="reset" type="hidden" value="" />
 
@@ -130,6 +133,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 	  <hr/>
 	</form>
+<?php } ?>
 	<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
 	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/STACentre/logo.png';?>");</script>	
   </div>

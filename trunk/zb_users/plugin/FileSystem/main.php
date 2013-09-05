@@ -58,7 +58,7 @@ $zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重�
 	<input type="button" onclick="run_cmd()" value="执行命令">
 	<input type="button" onclick="run_shell()" value="运行Shell">
 </nobr>
-<div id="divMain2" class="edit category_edit">
+<div id="divMain2">
 <?php
 	format_dir($current_path, $root_path);
 ?>

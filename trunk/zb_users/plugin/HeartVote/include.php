@@ -8,7 +8,7 @@ RegisterPlugin("HeartVote","ActivePlugin_HeartVote");
 function ActivePlugin_HeartVote() {
 
 	Add_Filter_Plugin('Filter_Plugin_Zbp_MakeTemplatetags','HeartVote_Pre');
-	Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','HeartVote_Main');
+	Add_Filter_Plugin('Filter_Plugin_Post_Call','HeartVote_Main');
 }
 
 $table['HeartVote']='%pre%HeartVote';
@@ -47,18 +47,21 @@ function HeartVote_CreateTable(){
 }
 
 function HeartVote_Pre(&$template){
-	$template->SetTags('HeartVote','');
+	global $zbp;
+	$zbp->header .= "<script type=\"text/javascript\" src=\"{$zbp->host}zb_users/plugin/HeartVote/js/vote.js\"></script>\r\n";	
+	$zbp->header .= "<link rel=\"stylesheet\" href=\"{$zbp->host}zb_users/plugin/HeartVote/css/stars.css\" type=\"text/css\" />\r\n";	
 }
 
-function HeartVote_Main(&$template){
+function HeartVote_Main(&$post,$method,$args){
 	global $zbp;
 
-$zbp->header .= "<script type=\"text/javascript\" src=\"{$zbp->host}zb_users/plugin/HeartVote/js/vote.js\"></script>\r\n";	
-$zbp->header .= "<link rel=\"stylesheet\" href=\"{$zbp->host}zb_users/plugin/HeartVote/css/stars.css\" type=\"text/css\" />\r\n";	
-	
-$id=$template->GetTags('article')->ID;
-	
-$s="<div class=\"heart-vote\" id=\"HeartVote_{$id}\">";
+if($method!='HeartVote')return null;
+
+
+//$id=$template->GetTags('article')->ID;
+$id=$post->ID;
+
+$s="<!--hvbegin--><div class=\"heart-vote\" id=\"HeartVote_{$id}\">";
 $s.="<ul class=\"unit-rating\">";
 $s.="<li class='current-rating' style=\"width:0px;\"></li>";
 $s.="<li><a href=\"javascript:heartVote('1','{$id}')\" title=\"打1分\" class=\"r1-unit\">1</a></li>";
@@ -82,11 +85,15 @@ if($alluser==0){
 }else{
 	$allvote=substr($allvote/$alluser,0,3);
 }
-$s.="<script type=\"text/javascript\">showVote('{$allvote}','{$alluser}')</script>";
+$s.="<script type=\"text/javascript\">showVote('{$allvote}','{$alluser}')</script><!--hvend-->";
 
 //$s.="<script src=\"{$zbp->host}zb_users/plugin/HeartVote/getvote.php?id={$id}\" type=\"text/javascript\"></script>";
 
-$template->SetTags('HeartVote',$s);
+//$template->SetTags('HeartVote',$s);
+
+echo $s;
+
+$GLOBALS['Filter_Plugin_Post_Call']['HeartVote_Main']=PLUGIN_EXITSIGNAL_RETURN;
 
 }
 

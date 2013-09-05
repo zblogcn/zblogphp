@@ -162,7 +162,7 @@ class ZBlogPHP{
 		date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
 		header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
 
-		$this->lang = require($this->usersdir . 'language/' . $this->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+		if(file_exists($s=$this->usersdir . 'language/' . $this->option['ZC_BLOG_LANGUAGEPACK'] . '.php'))$this->lang = require($s);
 
 		#创建User类
 		$this->user=new Member();
@@ -220,26 +220,34 @@ class ZBlogPHP{
 		switch ($this->option['ZC_DATABASE_TYPE']) {
 		case 'mysql':
 		case 'pdo_mysql':
-			if($this->InitializeDB($this->option['ZC_DATABASE_TYPE']))return false;
-			if($this->db->Open(array(
-					$this->option['ZC_MYSQL_SERVER'],
-					$this->option['ZC_MYSQL_USERNAME'],
-					$this->option['ZC_MYSQL_PASSWORD'],
-					$this->option['ZC_MYSQL_NAME'],
-					$this->option['ZC_MYSQL_PRE'],
-					$this->option['ZC_MYSQL_PORT']					
-				))==false){
-				$this->ShowError(67);
+			try {
+				if($this->InitializeDB($this->option['ZC_DATABASE_TYPE']))return false;
+				if($this->db->Open(array(
+						$this->option['ZC_MYSQL_SERVER'],
+						$this->option['ZC_MYSQL_USERNAME'],
+						$this->option['ZC_MYSQL_PASSWORD'],
+						$this->option['ZC_MYSQL_NAME'],
+						$this->option['ZC_MYSQL_PRE'],
+						$this->option['ZC_MYSQL_PORT']					
+					))==false){
+					$this->ShowError(67);
+				}			
+			} catch (Exception $e) {
+				throw new Exception("MySQL DateBase Connection Error.");
 			}
 			break;
 		case 'sqlite':
 		case 'sqlite3':
-			$this->InitializeDB($this->option['ZC_DATABASE_TYPE']);
-			if($this->db->Open(array(
-				$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
-				$this->option['ZC_SQLITE_PRE']
-				))==false){
-				$this->ShowError(69);
+			try {
+				$this->InitializeDB($this->option['ZC_DATABASE_TYPE']);
+				if($this->db->Open(array(
+					$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
+					$this->option['ZC_SQLITE_PRE']
+					))==false){
+					$this->ShowError(69);
+				}
+			} catch (Exception $e) {
+				throw new Exception("SQLite DateBase Connection Error.");
 			}
 			break;
 		}
