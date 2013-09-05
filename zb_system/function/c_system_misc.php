@@ -41,6 +41,8 @@ function misc_updateinfo(){
 	#$r = file_get_contents('http://www.baidu.com/robots.txt');
 	$r = '<tr><td>' . $r . '</td></tr>';
 
+	$zbp->LoadConfigs();
+	$zbp->LoadCache();
 	$zbp->cache->reload_updateinfo=$r;
 	$zbp->cache->reload_updateinfo_time=time();
 	$zbp->SaveCache();
@@ -80,6 +82,8 @@ function misc_statistic(){
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";		
 
+	$zbp->LoadConfigs();
+	$zbp->LoadCache();
 	$zbp->cache->reload_statistic=$r;
 	$zbp->cache->reload_statistic_time=time();
 	
