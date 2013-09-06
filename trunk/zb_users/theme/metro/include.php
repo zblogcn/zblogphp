@@ -3,22 +3,25 @@
 RegisterPlugin("metro","ActivePlugin_metro");
 
 function ActivePlugin_metro() {
-		//配置初始化
-		global $zbp;
-		if(!$zbp->Config('metro')->HasKey('version')){
-			$zbp->Config('metro')->version='1.0';
-			$zbp->Config('metro')->custom_layout="r";
-			$zbp->Config('metro')->custom_bodybg="#EEEEEE|zb_users/theme/metro/images/bg.jpg|repeat|2|top|";
-			$zbp->Config('metro')->custom_hdbg="|zb_users/theme/metro/images/headbg.jpg|repeat  fixed|1|top|120|";
-			$zbp->Config('metro')->custom_color="#5EAAE4| #A3D0F2| #222222| #333333| #FFFFFF";	
-			$zbp->SaveConfig('metro');
-		}
+	Add_Filter_Plugin('Filter_Plugin_Admin_TopMenu','metro_AddMenu');
+}
+
+function metro_AddMenu(&$m){
+	global $zbp;
+	$m[]=MakeTopMenu("root",'Metro主题配置',$zbp->host . "zb_users/theme/metro/editor.php","","topmenu_metro");
 }
 
 function InstallPlugin_metro(){
 	global $zbp;
-	$zbp->Config('metro')->version='1.0';
-	$zbp->SaveConfig('metro');
+	//配置初始化	
+	if(!$zbp->Config('metro')->HasKey('version')){
+		$zbp->Config('metro')->version='1.0';
+		$zbp->Config('metro')->custom_layout="r";
+		$zbp->Config('metro')->custom_bodybg="#EEEEEE|zb_users/theme/metro/images/bg.jpg|repeat|2|top|";
+		$zbp->Config('metro')->custom_hdbg="|zb_users/theme/metro/images/headbg.jpg|repeat  fixed|1|top|120|";
+		$zbp->Config('metro')->custom_color="#5EAAE4| #A3D0F2| #222222| #333333| #FFFFFF";	
+		$zbp->SaveConfig('metro');
+	}
 }
 
 function UninstallPlugin_metro(){
