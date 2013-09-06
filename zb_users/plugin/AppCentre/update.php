@@ -14,11 +14,19 @@ if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
 
 $blogtitle='应用中心-系统';
 
+$checkbegin=false;
+
+if(GetVars('restore','GET')!=''){
+  echo base64_decode(GetVars('restore','GET'));
+  die();
+}
+
+
+
 if(GetVars('check','GET')=='now'){
-  $r = file_get_contents('http://update.rainbowsoft.org/zblog2/130801.xml');
+  $r = file_get_contents(APPCENTRE_SYSTEM_UPDATE . array_search(ZC_BLOG_VERSION,$zbpvers) .'.xml');
   file_put_contents($zbp->usersdir . 'cache/now.xml', $r);
-	//$zbp->SetHint('good');
-	//Redirect('./update.php');
+  $checkbegin=true;
 }
 
 
@@ -49,7 +57,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 			  <hr/>
 
               <div class="divHeader">校验系统核心文件&nbsp;&nbsp;<span id="checknow"><a href="?check=now" title="开始校验"><img src="images/refresh.png" width="16" alt="校验" /></a></span></div>
-			  <div>进度<span id="status">0</span>%；已发现<span id="count">0</span>个修改过的系统文件。<div id="bar"></div></div>
+			  <!--<div>进度<span id="status">0</span>%；已发现<span id="count">0</span>个修改过的系统文件。<div id="bar"></div></div>-->
               <table border="1" width="100%" cellspacing="0" cellpadding="0" class="tableBorder tableBorder-thcenter">
                 <tr>
                   <th width='78%'>文件名</th>
@@ -61,24 +69,29 @@ if (file_exists($zbp->usersdir . 'cache/now.xml')) {
   $xml=simplexml_load_file($zbp->usersdir . 'cache/now.xml');
 
   foreach ($xml->children() as $file) {
-    echo '<tr><td><b>' . $file['name'] . '</b><s>' . $file['crc32'] . '</s></td><td></td></tr>';
+    echo '<tr><td><b>' . str_replace('\\','/',$file['name']) . '</b></td>';
+    $newcrc32=strtoupper(dechex(crc32(file_get_contents($zbp->path . str_replace('\\','/',$file['name'])))));
+    if($newcrc32 == $file['crc32']){
+    	$s='<img src="'.$zbp->host.'zb_system/image/admin/ok.png" width="16" alt="" />';
+    }else{
+    	$s='<a href="javascript:void(0)" onclick="restore(\''.base64_encode($file['name']).'\')" class="button" title="还原系统文件"><img src="'.$zbp->host.'zb_system/image/admin/exclamation.png" width="16" alt=""></a>';
+    }
+    echo '<td class="tdCenter" id="file' . md5($file['name']) . '">' . $s . '</td></tr>';
   }
 
 }
-
-
-
 ?>
 
               </table>
               <p> </p>
             </form>
-  
-
-<?php
-
-?>
-
+<script type="text/javascript">
+function restore(f){
+	$.get(bloghost+"zb_users/plugin/AppCentre/update.php?restore="+f, function(data){
+		alert(data);
+	});
+}
+</script>            
 	<script type="text/javascript">ActiveLeftMenu("aAppCentre");</script>
 	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>	
   </div>

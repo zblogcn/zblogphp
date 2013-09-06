@@ -156,9 +156,7 @@ table .button{padding: 2px 12px 5px 12px; margin: 0.25em 0;}
 </div>
 <!--#include file="..\..\..\..\zb_system\admin\admin_footer.asp"-->
 <script type="text/javascript">
-var ZC_BLOG_HOST=" ";
-var imagePath=ZC_BLOG_HOST+" ";
-ActiveTopMenu("ametroManage");
+ActiveTopMenu("topmenu_metro");
 </script> 
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';

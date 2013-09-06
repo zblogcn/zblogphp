@@ -111,7 +111,7 @@ function ResponseAdmin_TopMenu(){
 		$fpname($topmenus);
 	}
 
-	$topmenus[]=MakeTopMenu("misc",$zbp->lang['msg']['official_website'],"http://www.rainbowsoft.org/","","_blank");
+	$topmenus[]=MakeTopMenu("misc",$zbp->lang['msg']['official_website'],"http://www.rainbowsoft.org/","_blank","");
 
 	foreach ($topmenus as $m) {
 		echo $m;
@@ -120,7 +120,7 @@ function ResponseAdmin_TopMenu(){
 }
 
 
-function MakeTopMenu($requireAction,$strName,$strUrl,$strLiId,$strTarget){
+function MakeTopMenu($requireAction,$strName,$strUrl,$strTarget,$strLiId){
 	global $zbp;
 
 	static $AdminTopMenuCount=0;
