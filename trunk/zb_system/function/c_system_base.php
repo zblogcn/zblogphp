@@ -44,7 +44,7 @@ foreach ($option_zbusers as $key => $value) {
 
 date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 
-$lang = require($blogpath . 'zb_system/defend/language.php');
+$lang = require($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 
 $blogtitle = $option['ZC_BLOG_SUBNAME'];
 $blogname = &$option['ZC_BLOG_NAME'];

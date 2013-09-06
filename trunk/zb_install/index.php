@@ -872,8 +872,7 @@ function SaveConfig(){
 	global $zbp;
 
   $zbp->option['ZC_BLOG_VERSION']=ZC_BLOG_VERSION;
-  
-  
+  $zbp->option['ZC_USING_PLUGIN_LIST']='AppCentre|UEditor|Totoro';  
   $zbp->option['ZC_SIDEBAR_ORDER'] ='calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc';
   $zbp->option['ZC_SIDEBAR2_ORDER']='';
   $zbp->option['ZC_SIDEBAR3_ORDER']='';

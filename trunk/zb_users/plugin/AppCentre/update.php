@@ -70,7 +70,11 @@ if (file_exists($zbp->usersdir . 'cache/now.xml')) {
 
   foreach ($xml->children() as $file) {
     echo '<tr><td><b>' . str_replace('\\','/',$file['name']) . '</b></td>';
-    $newcrc32=strtoupper(dechex(crc32(file_get_contents($zbp->path . str_replace('\\','/',$file['name'])))));
+	if(file_exists($zbp->path . str_replace('\\','/',$file['name']))){
+		$newcrc32=strtoupper(dechex(crc32(file_get_contents($zbp->path . str_replace('\\','/',$file['name'])))));
+	}else{
+		$newcrc32='';
+	}
     if($newcrc32 == $file['crc32']){
     	$s='<img src="'.$zbp->host.'zb_system/image/admin/ok.png" width="16" alt="" />';
     }else{
@@ -78,7 +82,7 @@ if (file_exists($zbp->usersdir . 'cache/now.xml')) {
     }
     echo '<td class="tdCenter" id="file' . md5($file['name']) . '">' . $s . '</td></tr>';
   }
-
+  unlink($zbp->usersdir . 'cache/now.xml');
 }
 ?>
 
