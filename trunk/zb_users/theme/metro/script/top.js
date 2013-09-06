@@ -10,5 +10,8 @@
 }
 
 $(document).ready(function(){ 
-	//if($(".commentlist .msg").length==0){$(".commentlist").hide()} //隐藏空评论
+	var s=document.location;
+	$(".navbar a").each(function(){
+		if(this.href==s.toString().split("#")[0]){$(this).addClass("on");return false;}
+	});
 });

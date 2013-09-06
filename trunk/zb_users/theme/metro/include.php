@@ -93,7 +93,7 @@ function metro_savetofile($stylefile){
 	for ($i=1; $i<count($aryHdBg); $i++){
 		$strContent = str_replace("{%aryHdBg(" . $i . ")%}",$aryHdBg[$i],$strContent);
 	}
-	for ($i=1; $i<count($aryColor); $i++) {
+	for ($i=0; $i<count($aryColor); $i++) {
 		$strContent = str_replace("{%aryColor(" . $i . ")%}",$aryColor[$i],$strContent);
 	}
 
