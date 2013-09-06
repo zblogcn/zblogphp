@@ -479,7 +479,7 @@ function PostArticle(){
 		if(!$zbp->CheckRights('ArticlePub')){$article->Status=ZC_POST_STATUS_AUDITING;}
 	}else{
 		$article->LoadInfoByID(GetVars('ID','POST'));
-		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){$zbp->ShowError(11);}
+		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){$zbp->ShowError(6);}
 		if((!$zbp->CheckRights('ArticlePub'))&&($article->Status==ZC_POST_STATUS_AUDITING)){$_POST['Status']=ZC_POST_STATUS_AUDITING;}
 		$pre_author=$article->AuthorID;
 		$pre_tag=$article->Tag;
@@ -528,7 +528,7 @@ function DelArticle(){
 	$article->LoadInfoByID($id);
 	if($article->ID>0){
 
-		if(!$zbp->CheckRights('ArticleAll')&&$article->AuthorID!=$zbp->user->ID)$zbp->ShowError(22);
+		if(!$zbp->CheckRights('ArticleAll')&&$article->AuthorID!=$zbp->user->ID)$zbp->ShowError(6);
 
 		$pre_author=$article->AuthorID;
 		$pre_tag=$article->Tag;
@@ -627,7 +627,7 @@ function PostPage(){
 	if(GetVars('ID','POST') == 0){
 	}else{
 		$article->LoadInfoByID(GetVars('ID','POST'));
-		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('PageAll'))){$zbp->ShowError(11);}
+		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('PageAll'))){$zbp->ShowError(6);}
 		$pre_author=$article->AuthorID;
 	}
 	$article->Type = ZC_POST_TYPE_PAGE;
@@ -669,7 +669,7 @@ function DelPage(){
 	$article->LoadInfoByID($id);
 	if($article->ID>0){
 
-		if(!$zbp->CheckRights('PageAll')&&$article->AuthorID!=$zbp->user->ID)$zbp->ShowError(22);
+		if(!$zbp->CheckRights('PageAll')&&$article->AuthorID!=$zbp->user->ID)$zbp->ShowError(6);
 
 		$pre_author=$article->AuthorID;
 
