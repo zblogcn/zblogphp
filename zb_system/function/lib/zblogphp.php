@@ -162,8 +162,6 @@ class ZBlogPHP{
 		date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
 		header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
 
-		if(file_exists($s=$this->usersdir . 'language/' . $this->option['ZC_BLOG_LANGUAGEPACK'] . '.php'))$this->lang = require($s);
-
 		#创建User类
 		$this->user=new Member();
 
@@ -389,6 +387,19 @@ class ZBlogPHP{
 			if($key=='ZC_BLOG_CLSID')continue;
 			if($key=='ZC_BLOG_HOST')continue;
 			if($key=='ZC_YUN_SITE')continue;
+			if($key=='ZC_BLOG_LANGUAGEPACK')continue;			
+			if($key=='ZC_DEBUG_MODE')continue;
+			if($key=='ZC_DATABASE_TYPE')continue;
+			if($key=='ZC_SQLITE_NAME')continue;
+			if($key=='ZC_SQLITE_PRE')continue;
+			if($key=='ZC_MYSQL_SERVER')continue;
+			if($key=='ZC_MYSQL_USERNAME')continue;
+			if($key=='ZC_MYSQL_PASSWORD')continue;
+			if($key=='ZC_MYSQL_NAME')continue;
+			if($key=='ZC_MYSQL_CHARSET')continue;
+			if($key=='ZC_MYSQL_PRE')continue;
+			if($key=='ZC_MYSQL_ENGINE')continue;
+			if($key=='ZC_MYSQL_PORT')continue;
 			$this->option[$key]=$value;
 		}
 
