@@ -27,6 +27,15 @@ foreach ($_FILES as $key => $value) {
 	$upload->Size =$_FILES[$key]['size'];
 	$upload->AuthorID = $zbp->user->ID;
 
+	if(!$upload->CheckExtName()){
+		echo "{'url':'','title':'','original':'','state':'" . $lang['error'][26] . "'}";
+		die();
+	}
+	if(!$upload->CheckSize()){
+		echo "{'url':'','title':'','original':'','state':'" . $lang['error'][27] . "'}";
+		die();
+	}
+
 	$upload->SaveFile($_FILES[$key]['tmp_name']);
 	$upload->Save();
 	

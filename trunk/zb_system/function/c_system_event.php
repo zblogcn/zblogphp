@@ -1128,13 +1128,15 @@ function PostUpload(){
 				$upload->Size = $_FILES[$key]['size'];
 				$upload->AuthorID = $zbp->user->ID;
 
+				if(!$upload->CheckExtName())$zbp->ShowError(26);
+				if(!$upload->CheckSize())$zbp->ShowError(27);
+
 				$upload->SaveFile($_FILES[$key]['tmp_name']);
 				$upload->Save();
 			}
 		}
 	}
-
-	CountMemberArray(array($upload->AuthorID));
+	if(isset($upload))CountMemberArray(array($upload->AuthorID));
 
 }
 

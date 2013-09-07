@@ -225,7 +225,7 @@ function GetGuestAgent(){
 function GetFileExt($f){
 	if(strpos($f,'.')===false)return '';
 	$a=explode('.', $f);
-	return $a[count($a)-1];
+	return strtolower($a[count($a)-1]);
 }
 
 

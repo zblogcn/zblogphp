@@ -26,6 +26,26 @@ class Upload extends Base{
 		$this->PostTime = time();
 	}
 
+	function CheckExtName(){
+		global $zbp;
+		$e=GetFileExt($this->Name);
+		if(HasNameInString($zbp->option['ZC_UPLOAD_FILETYPE'],$e)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	function CheckSize(){
+		global $zbp;
+		$n=1024*1024*(int)$zbp->option['ZC_UPLOAD_FILESIZE'];
+		if($n>=$this->Size){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 	function DelFile(){
 		@unlink($this->FullFile);
 	}

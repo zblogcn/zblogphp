@@ -8,9 +8,9 @@
 
 require './zb_system/function/c_system_base.php';
 
-foreach ($GLOBALS['Filter_Plugin_Search_Begin'] as $fpname => &$fpsignal) {$fpname();}
-
 $zbp->Load();
+
+foreach ($GLOBALS['Filter_Plugin_Search_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
 $action='search';
 
@@ -45,7 +45,7 @@ foreach ($array as $a) {
 	$article->Content .= '<a href="' . $a->Url . '">' . $a->Url . '</a></p>';
 }
 
-
+$zbp->header .= '<meta name="robots" content="none" />' . "\r\n";
 $zbp->template->SetTags('title',$article->Title);
 $zbp->template->SetTags('article',$article);
 $zbp->template->SetTags('type',$article->type=0?'article':'page');
