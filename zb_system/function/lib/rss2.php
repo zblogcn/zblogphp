@@ -30,7 +30,7 @@ class Rss2 extends DOMDocument {
 		$item = $this->createElement('item');
 		$item->appendChild($this->createElement('title',$title));
 		$item->appendChild($this->createElement('link',$link));
-		$item->appendChild($this->createElement('description',$description));
+		$item->appendChild($this->createElement('description',"<![CDATA[".$description."]]>"));
 		$item->appendChild($this->createElement('pubDate',date(DATE_RSS,$date)));
 
 		$this->channel->appendChild($item);
