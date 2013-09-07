@@ -66,22 +66,27 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <?php
 if (file_exists($zbp->usersdir . 'cache/now.xml')) {
 
+  $i=0;
   $xml=simplexml_load_file($zbp->usersdir . 'cache/now.xml');
 
   foreach ($xml->children() as $file) {
-    echo '<tr><td><b>' . str_replace('\\','/',$file['name']) . '</b></td>';
-	if(file_exists($zbp->path . str_replace('\\','/',$file['name']))){
-		$newcrc32=strtoupper(dechex(crc32(file_get_contents($zbp->path . str_replace('\\','/',$file['name'])))));
-	}else{
-		$newcrc32='';
-	}
+
+  	if(file_exists($zbp->path . str_replace('\\','/',$file['name']))){
+	  	$newcrc32=strtoupper(dechex(crc32(file_get_contents($zbp->path . str_replace('\\','/',$file['name'])))));
+  	}else{
+  		$newcrc32='';
+  	}
     if($newcrc32 == $file['crc32']){
+      echo '<tr style="display:none;"><td><b>' . str_replace('\\','/',$file['name']) . '</b></td>';
     	$s='<img src="'.$zbp->host.'zb_system/image/admin/ok.png" width="16" alt="" />';
     }else{
+      $i+=1;
+      echo '<tr><td><b>' . str_replace('\\','/',$file['name']) . '</b></td>';
     	$s='<a href="javascript:void(0)" onclick="restore(\''.base64_encode($file['name']).'\')" class="button" title="还原系统文件"><img src="'.$zbp->host.'zb_system/image/admin/exclamation.png" width="16" alt=""></a>';
     }
     echo '<td class="tdCenter" id="file' . md5($file['name']) . '">' . $s . '</td></tr>';
   }
+  echo '<tr><th colspan="2">'.$i.'个文件不同或被修改过.</tr>';
   unlink($zbp->usersdir . 'cache/now.xml');
 }
 ?>
