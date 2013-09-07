@@ -568,7 +568,7 @@ foreach ($zbp->categorysbyorder as $category) {
 	echo '<tr>';
 	echo '<td class="td5">' . $category->ID . '</td>';
 	echo '<td class="td5">' . $category->Order . '</td>';
-	echo '<td class="td25"><a href="'.$category->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $category->Symbol . $category->Name . '</td>';
+	echo '<td class="td25"><a href="'.$category->Url .'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $category->Symbol . $category->Name . '</td>';
 	echo '<td class="td20">' . $category->Alias . '</td>';
 	echo '<td class="td10">' . $category->Count . '</td>';
 	echo '<td class="td10 tdCenter">';
