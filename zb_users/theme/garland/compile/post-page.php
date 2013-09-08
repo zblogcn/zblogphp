@@ -3,10 +3,6 @@
 	<div class="post-body"><?php  echo $article->Content;  ?></div>
 </div>
 
-<?php if ($article->CommNums>0) { ?>
-<#评论输出#>
-<?php } ?>
-
 <?php if (!$article->IsLock) { ?>
-<#评论框#>
+<?php  include $this->GetTemplate('comments');  ?>
 <?php } ?>

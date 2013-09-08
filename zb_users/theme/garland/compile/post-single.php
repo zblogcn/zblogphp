@@ -7,6 +7,7 @@
 		作者:<?php  echo $article->Author->Name;  ?> | 分类:<?php  echo $article->Category->Name;  ?> | 浏览:<?php  echo $article->ViewNums;  ?> | 评论:<?php  echo $article->CommNums;  ?>
 	</h6>
 </div>
+
 <?php if (!$article->IsLock) { ?>
 <?php  include $this->GetTemplate('comments');  ?>
 <?php } ?>
