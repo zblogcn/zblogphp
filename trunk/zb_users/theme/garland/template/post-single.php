@@ -7,6 +7,7 @@
 		作者:{$article.Author.Name} | 分类:{$article.Category.Name} | 浏览:{$article.ViewNums} | 评论:{$article.CommNums}
 	</h6>
 </div>
+
 {if !$article.IsLock}
 {template:comments}
 {/if}
