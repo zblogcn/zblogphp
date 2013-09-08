@@ -32,7 +32,10 @@ class Rss2 extends DOMDocument {
 		$item = $this->createElement('item');
 		$item->appendChild($this->createElement('title',str_replace('&nbsp','&#160',$title)));
 		$item->appendChild($this->createElement('link',$link));
-		$item->appendChild($this->createElement('description',str_replace('&nbsp','&#160',$description)));
+		$cdata=$this->createCDATASection($description);
+		$d=$this->createElement('description');
+		$d->appendChild($cdata);
+		$item->appendChild($d);
 		$item->appendChild($this->createElement('pubDate',date(DATE_RSS,$date)));
 
 		$this->channel->appendChild($item);

@@ -5,7 +5,7 @@ require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 $action='root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('Howl')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckPlugin('metro')) {$zbp->ShowError(48);die();}
 $blogtitle='Metro主题配置';
 
 If ($zbp->Config('metro')->HasKey('version')){
