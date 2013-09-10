@@ -66,12 +66,10 @@ class DbMySQL implements iDataBase
 		$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
 		foreach ($a as $s) {
 			mysql_query($s);
-//echo $s .'<br/>';
 		}
 	}
 
 	function Query($query){
-//logs($query);
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		// 遍历出来print_r($query);die();
 		$results = mysql_query($query);
@@ -81,7 +79,6 @@ class DbMySQL implements iDataBase
 				$data[] = $row;
 			}
 		}
-
 //$b=true;
 $b=false;
 if($b){
