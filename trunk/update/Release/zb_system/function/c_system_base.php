@@ -238,8 +238,7 @@ function  zbp_index_redirect_install(){
 	if (!$zbp->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/');}
 }
 
-Add_Filter_Plugin('Filter_Plugin_Index_Pre','zbp_index_redirect_install');
-
+#Add_Filter_Plugin('Filter_Plugin_Index_Pre','zbp_index_redirect_install');
 #Add_Filter_Plugin('Filter_Plugin_Index_Pre','zbp_default_cache_read');
 #Add_Filter_Plugin('Filter_Plugin_Index_End','zbp_default_cache_write');
 

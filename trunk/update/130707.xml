@@ -1,6 +1,6 @@
 ﻿<files build='130707'>
 	<file name='feed.php' crc32='60F118FD'/>
-	<file name='index.php' crc32='E645B1C4'/>
+	<file name='index.php' crc32='BA5D7360'/>
 	<file name='search.php' crc32='A1A30DCD'/>
 	<file name='zb_system\cmd.php' crc32='DD1C61D7'/>
 	<file name='zb_system\login.php' crc32='AD9DE36D'/>
@@ -40,10 +40,10 @@
 	<file name='zb_system\defend\default\sidebar.php' crc32='FF17917'/>
 	<file name='zb_system\defend\default\single.php' crc32='69E4A1A2'/>
 	<file name='zb_system\function\c_system_admin.php' crc32='BE522B29'/>
-	<file name='zb_system\function\c_system_base.php' crc32='5051C631'/>
+	<file name='zb_system\function\c_system_base.php' crc32='CD6567F'/>
 	<file name='zb_system\function\c_system_common.php' crc32='E9EA7A2A'/>
 	<file name='zb_system\function\c_system_debug.php' crc32='51A58341'/>
-	<file name='zb_system\function\c_system_event.php' crc32='D685C96C'/>
+	<file name='zb_system\function\c_system_event.php' crc32='707A8713'/>
 	<file name='zb_system\function\c_system_misc.php' crc32='98F7CE32'/>
 	<file name='zb_system\function\c_system_plugin.php' crc32='2F582BA9'/>
 	<file name='zb_system\function\lib\app.php' crc32='66E743A0'/>
@@ -51,7 +51,7 @@
 	<file name='zb_system\function\lib\category.php' crc32='917918D'/>
 	<file name='zb_system\function\lib\comment.php' crc32='C1D15FA3'/>
 	<file name='zb_system\function\lib\counter.php' crc32='D264E55'/>
-	<file name='zb_system\function\lib\dbmysql.php' crc32='E674C5D1'/>
+	<file name='zb_system\function\lib\dbmysql.php' crc32='EC73CED'/>
 	<file name='zb_system\function\lib\dbpdo_mysql.php' crc32='DBD58F90'/>
 	<file name='zb_system\function\lib\dbsql.php' crc32='7E88EE59'/>
 	<file name='zb_system\function\lib\dbsqlite.php' crc32='C3EDEA26'/>

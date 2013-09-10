@@ -337,8 +337,8 @@ function ViewPost($id,$alias){
 	$zbp->template->SetTags('pagebar',$pagebar);
 	$zbp->template->SetTags('comments',$comments);
 	
-	if(isset($zbp->templates[$template])){
-		$zbp->template->SetTemplate($template);
+	if(isset($zbp->templates[$article->Template])){
+		$zbp->template->SetTemplate($article->Template);
 	}else{
 		$zbp->template->SetTemplate('single');
 	}

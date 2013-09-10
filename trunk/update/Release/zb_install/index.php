@@ -21,10 +21,11 @@ define('error','<span class="error"></span>');
 $zblogstep=(int)GetVars('step');
 if($zblogstep=="")$zblogstep=1;
 
-if($zbp->option['ZC_DATABASE_TYPE']&&(!$zbp->option['ZC_YUN_SITE']))$zblogstep=0;
-if($zbp->option['ZC_DATABASE_TYPE']&&($zbp->option['ZC_YUN_SITE'])){
+if($zbp->option['ZC_DATABASE_TYPE']&&(!$zbp->option['ZC_YUN_SITE'])){
+	$zblogstep=0;
+}elseif($zbp->option['ZC_DATABASE_TYPE']&&($zbp->option['ZC_YUN_SITE'])){
 	$zbp->Initialize();
-	if(count($zbp->members)>=0)$zblogstep=0;
+	if(count($zbp->members)>0)$zblogstep=0;
 }
 ?>
 <!DOCTYPE HTML>
@@ -334,7 +335,7 @@ CheckServer();
 
 function Setup3(){
 
-  global $CheckResult;
+  global $CheckResult,$option;
   CheckServer();
 
   $hasMysql=false;
@@ -380,19 +381,19 @@ function Setup3(){
       <?php if($hasMysql){?>
       <div class="dbdetail" id="mysql">
         <p><b>数据库主机:</b>
-          <input type="text" name="dbmysql_server" id="dbmysql_server" value="localhost" style="width:350px;" />
+          <input type="text" name="dbmysql_server" id="dbmysql_server" value="<?php echo $option['ZC_MYSQL_SERVER'];?>" style="width:350px;" />
         </p>
         <p><b>用户名称:</b>
-          <input type="text" name="dbmysql_username" id="dbmysql_username" value="" style="width:350px;" />
+          <input type="text" name="dbmysql_username" id="dbmysql_username" value="<?php echo $option['ZC_MYSQL_USERNAME'];?>" style="width:350px;" />
         </p>
         <p><b>用户密码:</b>
-          <input type="text" name="dbmysql_password" id="dbmysql_password" value="" style="width:350px;" />
+          <input type="text" name="dbmysql_password" id="dbmysql_password" value="<?php echo $option['ZC_MYSQL_PASSWORD'];?>" style="width:350px;" />
         </p>
         <p><b>数据库名称:</b>
-          <input type="text" name="dbmysql_name" id="dbmysql_name" value="" style="width:350px;" />
+          <input type="text" name="dbmysql_name" id="dbmysql_name" value="<?php echo $option['ZC_MYSQL_NAME'];?>" style="width:350px;" />
         </p>
         <p><b>表&nbsp;前&nbsp;缀:</b>
-          <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="zbp_" style="width:350px;" />
+          <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="<?php echo $option['ZC_MYSQL_PRE'];?>" style="width:350px;" />
         </p>
       <p><b>连接选择:</b> 
         <?php if($CheckResult['mysql'][0]){?>
@@ -499,6 +500,7 @@ case 'pdo_mysql':
   $zbp->option['ZC_MYSQL_PRE']=GetVars('dbmysql_pre','POST');
   $zbp->InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
   $zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'],$zbp->option['ZC_MYSQL_PORT'],$zbp->option['ZC_MYSQL_USERNAME'],$zbp->option['ZC_MYSQL_PASSWORD'],$zbp->option['ZC_MYSQL_NAME']);
+  $zbp->db->dbpre=$zbp->option['ZC_MYSQL_PRE'];
   break;
 case 'sqlite':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');
