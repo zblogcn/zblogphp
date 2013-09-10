@@ -55,6 +55,14 @@ function RegPage_DelUsedCode(){
 	$zbp->db->Delete($sql);
 }
 
+
+function RegPage_EmptyCode(){
+	global $zbp;
+
+	$sql = $zbp->db->sql->Delete($GLOBALS['RegPage_Table'],null);
+	$zbp->db->Delete($sql);
+}
+
 function RegPage_CreateTable(){
 	global $zbp;
 	$s=$zbp->db->sql->CreateTable($GLOBALS['RegPage_Table'],$GLOBALS['RegPage_DataInfo']);
@@ -96,7 +104,11 @@ function RegPage_Page(){
 	if($zbp->Config('RegPage')->open_reg){
 		$article->Content .='<dd><p style="width:350px;text-align:right;">点击<a href="'.$zbp->host.'zb_users/plugin/RegPage/getinvitecode.php" target="_blank">这里</a>获取邀请码.</p></dd>';
 	}
+	
+	$article->Content .='<dd><p style="width:350px;text-align:right;">'.$zbp->Config('RegPage')->readme_text.'</dd>';
+	
 	$article->Content .='<dd><p style="width:350px;text-align:right;"><input type="submit" style="width:100px;font-size:1.0em;padding:0.2em" value="提交" onclick="return RegPage()" /></p></dd>';
+
 	$article->Content .='</dl>';
 
 	$zbp->template->SetTags('title',$article->Title);

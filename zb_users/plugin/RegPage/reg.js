@@ -1,7 +1,4 @@
 function RegPage(){
-	//alert(123);
-	//return false;
-
 	
 	$.post(bloghost+'zb_users/plugin/RegPage/reg.php',
 		{
@@ -25,6 +22,5 @@ function RegPage(){
 			}
 		}
 	);
-	
 	
 }

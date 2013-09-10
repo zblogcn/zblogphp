@@ -26,9 +26,13 @@ if(count($_POST)>0){
 		RegPage_DelUsedCode();
 	}
 
+	if(GetVars('reset','POST')=='ept'){
+		RegPage_EmptyCode();
+	}
 	
 	$zbp->Config('RegPage')->open_reg=(int)$_POST['open_reg'];	
 	$zbp->Config('RegPage')->default_level=(int)$_POST['default_level'];
+	$zbp->Config('RegPage')->readme_text=$_POST['readme_text'];		
 	$zbp->SaveConfig('RegPage');
 	$zbp->SetHint('good');
 	Redirect('./main.php');
@@ -70,6 +74,10 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 	<td class="td30"><p align='left'><b>将注册链接加入导航栏</b></p></td>
 	<td><input type="checkbox" name="addnavbar" value="ok" <?php if($zbp->CheckItemToNavbar('item','regpage')){?>checked="checked"<?php }?> /></td>
 </tr>
+<tr>
+	<td class="td30"><p align='left'><b>注册相关说明文字</b></p></td>
+	<td><textarea name="readme_text" style="width:90%;height:100px;" /><?php echo htmlspecialchars($zbp->Config('RegPage')->readme_text);?></textarea></td>
+</tr>
 </table>
 	  <hr/>
 	  <p>
@@ -102,6 +110,8 @@ foreach ($array as $key => $reg) {
 		<input type="submit" class="button" onclick="$('#reset').val('add');" value="生成100个邀请码" />
 
 		<input type="submit" class="button" onclick="$('#reset').val('del');" value="删除已使用过的邀请码" />
+		
+		<input type="submit" class="button" onclick="$('#reset').val('ept');" value="清空所有邀请码" />
 	  </p>
 
 	</form>
