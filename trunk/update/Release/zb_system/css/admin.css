@@ -1,0 +1,48 @@
+@charset "utf-8";
+/*  
+作者：新鲜人
+地址：http://www.htmlit.com.cn
+邮箱：u2lei@yahoo.com.cn
+     xinxr@msn.com
+*/
+body{ padding:0;margin:0;font-family:"微软雅黑","宋体", Arial, Helvetica, sans-serif;background:#ffffff;color:#444444;font-size: 14px;line-height: 20px;}
+* { font-size:14px ;padding:0; margin:0;}
+div, h1, h2, h3, h4, p, form, ul, label, input, textarea, img, span{margin:0; padding:0;}
+table{border-collapse:collapse;}
+a { text-decoration : none ;color: #003399;}
+a:hover { color:#990000;}
+ul { padding:0; margin:0;}
+li { list-style-type: none;}
+.clear { clear: both;}
+img { border: none;}
+
+/*=======================================================*/
+.bg {position:absolute;top:0;left:0;z-index:-1000;height:260px;width:100%;background:#3a6ea5;}
+#wrapper {width:100%;padding:0; margin:0 auto;}
+.logo { width:200px; height:70px; margin:170px auto 60px auto;}
+.logo img{width:200px;height:70px; background:url("../image/admin/logo.png");}
+input { float:left;vertical-align:middle;}
+input[type="text"],input[type="password"] {border:1px solid #3a6ea5;}
+.login { width:520px; height:100px; margin:0 auto; padding-left:0px;}
+.login dl { height:50px;}
+.login dd { width:260px; float:left;}
+.loginw { width:700px;margin-bottom:120px;}
+.loginw .content>div>p{font-weight:bold;font-size:1.2em;padding:10px;background:#eee;margin-bottom:10px;}
+.loginw .content>div{padding-bottom:20px;}
+.loginw>form>p{padding:10px 10px 50px 10px;}
+.loginw>form>p>a{font-size:1.1em;}
+.loginw .content>div>div{padding:0 10px;}
+dd.checkbox { padding-left:60px; width:210px;text-align :left;}
+label { line-height:30px; float:left;vertical-align:text-bottom;padding:0 5px 0 5px;}
+input[type="checkbox"]{margin:8px 0 0 0;padding:0;}
+#edtUserName, #edtPassWord { float:left; width:173px; height:25px; padding:2px 5px; line-height:27px; }
+dd.submit { width:220px; }
+.button { float:right;color:#ffffff; font-size:14px; width:70px; height:32px; background:#3a6ea5; border:1px solid #3399CC;cursor: pointer;}
+.button:hover{color:#ffffff;background:#3399cc;cursor: pointer;}
+
+.divHeader { height:1.5em;font-weight:blod; line-height:1.5em; font-size:1.5em; padding:0 0 10px 0; background:#FFF;text-align:center;}
+
+
+body.short .bg {height:150px;}
+body.short .logo {height:50px;margin:60px auto 60px auto;}
+

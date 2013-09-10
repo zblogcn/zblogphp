@@ -63,7 +63,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 }
 
 
-//install0();
+install0();
 ?>
 <p><input type="submit" value="开始安装" /></p>
 </form>
