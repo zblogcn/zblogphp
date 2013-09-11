@@ -17,7 +17,14 @@ $blogtitle='应用中心-系统';
 $checkbegin=false;
 
 if(GetVars('restore','GET')!=''){
-  echo base64_decode(GetVars('restore','GET'));
+  $file=base64_decode(GetVars('restore','GET'));
+  $url=APPCENTRE_SYSTEM_UPDATE . '?' . substr(ZC_BLOG_VERSION,-6,6) . '\\' . $file;
+  $f=file_get_contents($url);
+  $file=$zbp->path . str_replace('\\','/',$file);
+  $dir=dirname($file);
+  if(!file_exists($dir.'/'))@mkdir($dir,0777,true);
+  @file_put_contents($file,$f);
+  echo '<img src="'.$zbp->host.'zb_system/image/admin/ok.png" width="16" alt="" />';
   die();
 }
 
@@ -32,6 +39,9 @@ if(GetVars('check','GET')=='now'){
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
+
+
+$newversion=file_get_contents(APPCENTRE_SYSTEM_UPDATE . ($zbp->Config('AppCentre')->checkbeta==true?'?beta':'') );
 
 ?>
 <div id="divMain">
@@ -48,11 +58,20 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                 </tr>
                 <tr>
                   <td align='center' id='now'>Z-BlogPHP <?php echo ZC_BLOG_VERSION?></td>
-                  <td align='center' id='last'>Z-BlogPHP <?php echo file_get_contents(APPCENTRE_SYSTEM_UPDATE);?></td>
+                  <td align='center' id='last'>Z-BlogPHP <?php echo $newversion;?></td>
                 </tr>
               </table>
               <p>
-                <input id="updatenow" type="button" onClick="update();return false;" style="visibility:hidden;" value="升级新版程序" />
+                
+<?php
+
+$nowbuild=(int)substr(ZC_BLOG_VERSION,-6,6);
+$newbuild=(int)substr($newversion,-6,6);
+
+if($newbuild-$nowbuild>0){
+	echo '<input id="updatenow" type="button" onclick="location.href=\'?update='.$newbuild.'\'" value="升级新版程序" />';
+}
+?>
               </p>
 			  <hr/>
 
@@ -76,13 +95,14 @@ if (file_exists($zbp->usersdir . 'cache/now.xml')) {
   	}else{
   		$newcrc32='';
   	}
+	
     if($newcrc32 == $file['crc32']){
       echo '<tr style="display:none;"><td><b>' . str_replace('\\','/',$file['name']) . '</b></td>';
     	$s='<img src="'.$zbp->host.'zb_system/image/admin/ok.png" width="16" alt="" />';
     }else{
       $i+=1;
       echo '<tr><td><b>' . str_replace('\\','/',$file['name']) . '</b></td>';
-    	$s='<a href="javascript:void(0)" onclick="restore(\''.base64_encode($file['name']).'\')" class="button" title="还原系统文件"><img src="'.$zbp->host.'zb_system/image/admin/exclamation.png" width="16" alt=""></a>';
+    	$s='<a href="javascript:void(0)" onclick="restore(\''.base64_encode($file['name']).'\',\'file'.md5($file['name']) .'\')" class="button" title="还原系统文件"><img src="'.$zbp->host.'zb_system/image/admin/exclamation.png" width="16" alt=""></a>';
     }
     echo '<td class="tdCenter" id="file' . md5($file['name']) . '">' . $s . '</td></tr>';
   }
@@ -95,9 +115,10 @@ if (file_exists($zbp->usersdir . 'cache/now.xml')) {
               <p> </p>
             </form>
 <script type="text/javascript">
-function restore(f){
+function restore(f,id){
 	$.get(bloghost+"zb_users/plugin/AppCentre/update.php?restore="+f, function(data){
-		alert(data);
+		//alert(data);
+		$('#'+id).html(data);
 	});
 }
 </script>            

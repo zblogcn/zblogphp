@@ -24,7 +24,7 @@ $(".theme").each(function(){
 
 
 	if($(this).hasClass("theme-other")){
-		s=s+"<a class=\"button\" href='"+bloghost+"zb_users/plugin/AppCentre/app_del.php?id="+t+"' title='删除该主题' onclick='return window.confirm(\"单击“确定”继续。单击“取消”停止。\");'><img height='16' width='16' src='"+bloghost+"zb_users/plugin/AppCentre/images/delete.png'/></a>&nbsp;&nbsp;&nbsp;&nbsp;";
+		s=s+"<a class=\"button\" href='"+bloghost+"zb_users/plugin/AppCentre/app_del.php?type=theme&id="+t+"' title='删除该主题' onclick='return window.confirm(\"单击“确定”继续。单击“取消”停止。\");'><img height='16' width='16' src='"+bloghost+"zb_users/plugin/AppCentre/images/delete.png'/></a>&nbsp;&nbsp;&nbsp;&nbsp;";
 	}
 
 	if(app_enabledevelop&&app_username){
