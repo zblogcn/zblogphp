@@ -1,26 +1,26 @@
 ﻿<files build='130707'>
 	<file name='feed.php' crc32='60F118FD'/>
 	<file name='index.php' crc32='BA5D7360'/>
-	<file name='search.php' crc32='A1A30DCD'/>
+	<file name='search.php' crc32='61B52BA8'/>
 	<file name='zb_system\cmd.php' crc32='DD1C61D7'/>
 	<file name='zb_system\login.php' crc32='AD9DE36D'/>
 	<file name='zb_system\admin\admin_footer.php' crc32='39217893'/>
 	<file name='zb_system\admin\admin_header.php' crc32='4E5EA5C'/>
-	<file name='zb_system\admin\admin_left.php' crc32='84895FEF'/>
+	<file name='zb_system\admin\admin_left.php' crc32='EB3825D5'/>
 	<file name='zb_system\admin\admin_top.php' crc32='5620710C'/>
-	<file name='zb_system\admin\category_edit.php' crc32='ADB1A6F3'/>
-	<file name='zb_system\admin\edit.php' crc32='AEC875CD'/>
-	<file name='zb_system\admin\index.php' crc32='4AAF6F93'/>
-	<file name='zb_system\admin\member_edit.php' crc32='DB0B600B'/>
-	<file name='zb_system\admin\module_edit.php' crc32='22A63B3D'/>
-	<file name='zb_system\admin\tag_edit.php' crc32='D1DDE775'/>
+	<file name='zb_system\admin\category_edit.php' crc32='9DF5EAC2'/>
+	<file name='zb_system\admin\edit.php' crc32='1652F1F4'/>
+	<file name='zb_system\admin\index.php' crc32='C5C58367'/>
+	<file name='zb_system\admin\member_edit.php' crc32='1CA66018'/>
+	<file name='zb_system\admin\module_edit.php' crc32='99A3B304'/>
+	<file name='zb_system\admin\tag_edit.php' crc32='E35C06B8'/>
 	<file name='zb_system\css\admin.css' crc32='BA7C4156'/>
 	<file name='zb_system\css\admin2.css' crc32='660FE449'/>
 	<file name='zb_system\css\admin3.css' crc32='32FCB22A'/>
 	<file name='zb_system\css\jquery-ui.custom.css' crc32='18708206'/>
 	<file name='zb_system\css\jquery.bettertip.css' crc32='DDF8486F'/>
-	<file name='zb_system\defend\error.html' crc32='6F754289'/>
-	<file name='zb_system\defend\option.php' crc32='B9D1EC0D'/>
+	<file name='zb_system\defend\error.html' crc32='EAB000DA'/>
+	<file name='zb_system\defend\option.php' crc32='4F605940'/>
 	<file name='zb_system\defend\thanks.html' crc32='81AA49B'/>
 	<file name='zb_system\defend\createtable\mysql.sql' crc32='75A05062'/>
 	<file name='zb_system\defend\createtable\sqlite.sql' crc32='DE148D51'/>
@@ -40,22 +40,22 @@
 	<file name='zb_system\defend\default\sidebar.php' crc32='FF17917'/>
 	<file name='zb_system\defend\default\single.php' crc32='69E4A1A2'/>
 	<file name='zb_system\function\c_system_admin.php' crc32='BE522B29'/>
-	<file name='zb_system\function\c_system_base.php' crc32='CD6567F'/>
-	<file name='zb_system\function\c_system_common.php' crc32='E9EA7A2A'/>
-	<file name='zb_system\function\c_system_debug.php' crc32='51A58341'/>
+	<file name='zb_system\function\c_system_base.php' crc32='E2D662D7'/>
+	<file name='zb_system\function\c_system_common.php' crc32='CCB5B894'/>
+	<file name='zb_system\function\c_system_debug.php' crc32='78297AC9'/>
 	<file name='zb_system\function\c_system_event.php' crc32='707A8713'/>
 	<file name='zb_system\function\c_system_misc.php' crc32='98F7CE32'/>
-	<file name='zb_system\function\c_system_plugin.php' crc32='2F582BA9'/>
+	<file name='zb_system\function\c_system_plugin.php' crc32='684EEB31'/>
 	<file name='zb_system\function\lib\app.php' crc32='66E743A0'/>
 	<file name='zb_system\function\lib\base.php' crc32='BBA06CED'/>
 	<file name='zb_system\function\lib\category.php' crc32='917918D'/>
 	<file name='zb_system\function\lib\comment.php' crc32='C1D15FA3'/>
 	<file name='zb_system\function\lib\counter.php' crc32='D264E55'/>
-	<file name='zb_system\function\lib\dbmysql.php' crc32='EC73CED'/>
-	<file name='zb_system\function\lib\dbpdo_mysql.php' crc32='DBD58F90'/>
-	<file name='zb_system\function\lib\dbsql.php' crc32='7E88EE59'/>
-	<file name='zb_system\function\lib\dbsqlite.php' crc32='C3EDEA26'/>
-	<file name='zb_system\function\lib\dbsqlite3.php' crc32='CE1C37C'/>
+	<file name='zb_system\function\lib\dbmysql.php' crc32='5C2CA682'/>
+	<file name='zb_system\function\lib\dbpdo_mysql.php' crc32='E0D1B571'/>
+	<file name='zb_system\function\lib\dbsql.php' crc32='C705B7CF'/>
+	<file name='zb_system\function\lib\dbsqlite.php' crc32='86C026DC'/>
+	<file name='zb_system\function\lib\dbsqlite3.php' crc32='BB64556E'/>
 	<file name='zb_system\function\lib\member.php' crc32='4FE944E6'/>
 	<file name='zb_system\function\lib\metas.php' crc32='A27EBF98'/>
 	<file name='zb_system\function\lib\module.php' crc32='BCA23252'/>
@@ -69,7 +69,7 @@
 	<file name='zb_system\function\lib\template.php' crc32='FC367344'/>
 	<file name='zb_system\function\lib\upload.php' crc32='8868772D'/>
 	<file name='zb_system\function\lib\urlrule.php' crc32='A5D6BD07'/>
-	<file name='zb_system\function\lib\zblogphp.php' crc32='FDFE8D0F'/>
+	<file name='zb_system\function\lib\zblogphp.php' crc32='90616713'/>
 	<file name='zb_system\image\admin\app-logo.png' crc32='7D5E99CC'/>
 	<file name='zb_system\image\admin\arrow-3-right.png' crc32='9613739F'/>
 	<file name='zb_system\image\admin\arrow_turn_right.png' crc32='CF39218A'/>
