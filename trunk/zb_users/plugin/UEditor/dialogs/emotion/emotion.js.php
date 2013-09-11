@@ -1,66 +1,61 @@
-﻿<%@ CODEPAGE=65001 %>
-<% Option Explicit %>
-<% On Error Resume Next %>
-<% Response.Charset="UTF-8" %>
-<% Response.Buffer=True %>
-<% Response.ContentType="application/x-javascript" %>
-<!-- #include file="../../../../../zb_users/c_option.asp" -->
-<!-- #include file="../../../../../zb_system/function/c_function.asp" -->
-<!-- #include file="../../../../../zb_system/function/c_system_base.asp" -->
-<% Response.Clear %>
+<?php
+require '../../../../../zb_system/function/c_system_base.php';
+?>
 window.onload = function () {
     editor.setOpt({
         emotionLocalization:false
     });
 
-    emotion.SmileyPath = editor.options.emotionLocalization === true ? 'images/' : "<%=GetCurrentHost()%>zb_users/emotion/";
-	<%	
-	Dim fso,f(),f1,fb,fc
-	Dim aryFileList,a,i,j,e,x,y,p
+    emotion.SmileyPath = editor.options.emotionLocalization === true ? 'images/' : "<?php echo $bloghost; ?>zb_users/emotion/";
+<?php
+function scansubdir($dir)
+{
+     $files = array();
+     if ( $handle = opendir($dir) ) {
+         while ( ($file = readdir($handle)) !== false ) {
+             if ( $file != ".." && $file != "." ) {
+                 if ( is_dir($dir . "/" . $file) ) {
+                     $f= scandir($dir . "/" . $file);
+                     $files[$file] = preg_grep("/(.*).gif|png|jpg$/",$f);
+                 }else {
+                     //$files[] = $file;
+                 }
+             }
+         }
+         closedir($handle);
+         return $files;
+     }
+}
 
-	'f=Split(ZC_EMOTICONS_FILENAME,"|")
-	Set fso = CreateObject("Scripting.FileSystemObject")
-	Set fb = fso.GetFolder(BlogPath & "zb_users/emotion" & "/")
-	Set fc = fb.SubFolders
-		i=0
-	For Each f1 in fc	
-		ReDim Preserve f(i)
-		f(i)=f1.name
-		i=i+1
-	Next
-	'f=LoadIncludeFiles("zb_users\emotion\")
-	y=UBound(f)
-	For x=0 To y
-		aryFileList=LoadIncludeFiles("zb_users\emotion\"&f(x)) 
-		If IsArray(aryFileList) Then
-			j=UBound(aryFileList)
-			For i=1 to j
-				If InStr("jpg|png|gif",Right(aryFileList(i),3))>0 Then 
-					e="'"&Replace(Server.URLEncode(aryFileList(i)),"+","%20")&"',"& e 
-					p=i
-				End If 
-			Next
-			e=Left(e,Len(e)-1)
-		End If 
-	%>
+$d = $blogpath."zb_users/emotion";
+
+$f = scansubdir($d);
+
+$x=0;
+?>
+<?php
+while (list($key, $i) = each($f)) {
+	$e = implode("','",$i);
+	$en =$key;
+?>
 	emotion.tabNum++;
-	emotion.SmilmgName["tab<%=(x)%>"]=['<%=Right(aryFileList(p),3)%>',<%=j%>];
-	emotion.imageFolders["tab<%=(x)%>"]='<%=f(x)%>/';
-	emotion.imageCss["tab<%=(x)%>"]='<%=f(x)%>';
-	emotion.imageCssOffset["tab<%=(x)%>"]=35;
-	emotion.SmileyInfor["tab<%=(x)%>"]=[<%=e%>];
+	emotion.SmilmgName["tab<?php echo $x; ?>"]=['<?php echo substr($i[2],strlen($i[2])-3); ?>',<?php echo count($i); ?>];
+	emotion.imageFolders["tab<?php echo $x; ?>"]='<?php echo $en;?>/';
+	emotion.imageCss["tab<?php echo $x; ?>"]='<?php echo $en; ?>';
+	emotion.imageCssOffset["tab<?php echo $x; ?>"]=35;
+	emotion.SmileyInfor["tab<?php echo $x; ?>"]=['<?php echo $e; ?>'];
 	var tp=$G('tabHeads'),tc=$G('tabBodys');
 	var dtp=document.createElement("span");
-        dtp.innerHTML  ="<%=f(x)%>";
+        dtp.innerHTML  ="<?php echo $en; ?>";
 		tp.appendChild(dtp);
 		tp.innerHTML = tp.innerHTML+" \n";
 	var dtc=document.createElement("div");
-		dtc.id='tab<%=(x)%>';
+		dtc.id='tab<?php echo $x; ?>';
 		tc.appendChild(dtc);
-	<%
-		e=""
-	Next
-	%>
+
+<?php 	
+	$x++;
+}?>
 
     emotion.SmileyBox = createTabList( emotion.tabNum );
     emotion.tabExist = createArr( emotion.tabNum );
@@ -181,7 +176,7 @@ function createTab( tabName ) {
 function over( td, srcPath, posFlag ) {
     td.style.backgroundColor = "#ACCD3C";
     $G( 'faceReview' ).style.backgroundImage = "url('" + srcPath + "')";
-	$G( 'faceReview' ).src = "<%=GetCurrentHost()%>zb_system\/IMAGE\/ADMIN\/none.gif";
+	$G( 'faceReview' ).src = "<?php echo $bloghost;?>zb_system/image/admin/none.gif";
     if ( posFlag == 1 ) $G( "tabIconReview" ).className = "show";
     $G( "tabIconReview" ).style.display = 'block';
 }
