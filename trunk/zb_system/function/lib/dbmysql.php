@@ -71,7 +71,6 @@ class DbMySQL implements iDataBase
 
 	function Query($query){
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		// 遍历出来print_r($query);die();
 		$results = mysql_query($query);
 		$data = array();
 		if($results){
@@ -92,7 +91,6 @@ if($b){
 	logs("\r\n" . $query . "\r\n" . var_export($explain,true));
 }
 		return $data;
-
 	}
 
 	function Update($query){

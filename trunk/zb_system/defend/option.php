@@ -30,12 +30,12 @@ return array(
 	'ZC_SQLITE_NAME' => '',
 	'ZC_SQLITE_PRE' => 'zbp_',
 		
-	'ZC_MYSQL_SERVER' => 'localhost',								
-	'ZC_MYSQL_USERNAME' => 'root',				
-	'ZC_MYSQL_PASSWORD' => '',				
-	'ZC_MYSQL_NAME' => '',				
-	'ZC_MYSQL_CHARSET' => 'utf8',				
-	'ZC_MYSQL_PRE' => 'zbp_',							
+	'ZC_MYSQL_SERVER' => 'localhost',
+	'ZC_MYSQL_USERNAME' => 'root',
+	'ZC_MYSQL_PASSWORD' => '',
+	'ZC_MYSQL_NAME' => '',
+	'ZC_MYSQL_CHARSET' => 'utf8',
+	'ZC_MYSQL_PRE' => 'zbp_',
 	'ZC_MYSQL_ENGINE'=>'MyISAM',
     'ZC_MYSQL_PORT' => '3306', 
 	// '---------------------------------插件----------------------------------------
