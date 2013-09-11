@@ -833,9 +833,9 @@ function InsertInfo(){
   $a->Alias='';
   $a->IsTop=false;
   $a->IsLock=false;
-  $a->Title='欢迎使用Z-BlogPHP';
-  $a->Intro='欢迎使用Z-BlogPHP';
-  $a->Content='欢迎使用Z-BlogPHP';
+  $a->Title='欢迎使用Z-BlogPHP！';
+  $a->Intro='<p>欢迎使用Z-Blog,这是程序自动生成的文章.您可以删除或是编辑它:)</p><p>系统总共生成了一个&quot;留言本&quot;页面,和一个&quot;欢迎使用Z-BlogPHP!&quot;文章,祝您使用愉快!</p>';
+  $a->Content='<p>欢迎使用Z-Blog,这是程序自动生成的文章.您可以删除或是编辑它:)</p><p>系统总共生成了一个&quot;留言本&quot;页面,和一个&quot;欢迎使用Z-BlogPHP!&quot;文章,祝您使用愉快!</p>';
   $a->IP=GetGuestIP();
   $a->PostTime=time();
   $a->CommNums=0;
@@ -856,7 +856,7 @@ function InsertInfo(){
   $a->IsLock=false;
   $a->Title='留言本';
   $a->Intro='';
-  $a->Content='这是一个留言本.';
+  $a->Content='这是一个留言本,是由程序自动生成,您可以编辑修改.';
   $a->IP=GetGuestIP();
   $a->PostTime=time();
   $a->CommNums=0;
