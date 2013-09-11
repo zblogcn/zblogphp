@@ -34,7 +34,7 @@ $(".plugin").each(function(){
 	}
 
 	if(!$(this).hasClass("plugin-on")){
-		$(this).parent().children().eq(4).append("&nbsp;&nbsp;&nbsp;&nbsp;<a class=\"button\"  href='"+bloghost+"zb_users/plugin/AppCentre/app_del.asp?id="+t+"' title='删除该插件' onclick='return window.confirm(\"单击“确定”继续。单击“取消”停止。\");'><img height='16' width='16' src='"+bloghost+"zb_users/plugin/AppCentre/images/delete.png'/></a>");
+		$(this).parent().children().eq(4).append("&nbsp;&nbsp;&nbsp;&nbsp;<a class=\"button\"  href='"+bloghost+"zb_users/plugin/AppCentre/app_del.php?id="+t+"' title='删除该插件' onclick='return window.confirm(\"单击“确定”继续。单击“取消”停止。\");'><img height='16' width='16' src='"+bloghost+"zb_users/plugin/AppCentre/images/delete.png'/></a>");
 	}else{
 	};
 
@@ -43,7 +43,3 @@ $(".plugin").each(function(){
 
 
 });
-
-function checkApp(id){
-$.get(bloghost+"zb_users/plugin/AppCentre/plugin_update.asp?id="+id,function(data){alert(data);});
-}

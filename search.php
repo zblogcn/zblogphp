@@ -10,12 +10,11 @@ require './zb_system/function/c_system_base.php';
 
 $zbp->Load();
 
-foreach ($GLOBALS['Filter_Plugin_Search_Begin'] as $fpname => &$fpsignal) {$fpname();}
-
 $action='search';
 
 if(!$zbp->CheckRights($action)){Redirect('./');}
 
+foreach ($GLOBALS['Filter_Plugin_Search_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
 $article = new Post;
 $article->Title=$lang['msg']['search'] . '“' . GetVars('q','GET') . '”';

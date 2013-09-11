@@ -176,6 +176,7 @@ class ZBlogPHP{
 		$this->Verify();
 		
 		$this->LoadTemplates();
+		$this->CheckTemplate();
 		
 		$this->MakeTemplatetags();
 
@@ -737,6 +738,9 @@ function AddBuildModuleAll(){
 	}
 
 	public function LoadTemplates(){
+
+		$this->templates=array();
+
 		#先读默认的
 		$dir=$this->path .'zb_system/defend/default/';
 		$files=GetFilesInDir($dir,'php');
@@ -763,7 +767,7 @@ function AddBuildModuleAll(){
 		}
 	}
 
-	function BuildTemplate()
+	public function BuildTemplate()
 	{
 		if($this->option['ZC_YUN_SITE'])return false;
 		//初始化模板
@@ -805,7 +809,15 @@ function AddBuildModuleAll(){
 
 	}
 
-
+	public function CheckTemplate(){
+		$s=implode($this->templates);
+		$md5=md5($s);
+		if($md5!=$this->cache->templates_md5){
+			$this->BuildTemplate();
+			$this->cache->templates_md5=$md5;
+			$this->SaveCache();
+		}
+	}
 
 
 
