@@ -896,9 +896,9 @@ $f=$zbp->path . 'zb_users/c_option.php';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/c_option.php'成功!<br/>";}
 
-$f=$zbp->path . 'zb_users/avatar/0.png';
-if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-echo "读写'zb_users/avatar/'目录成功!<br/>";}
+//$f=$zbp->path . 'zb_users/avatar/0.png';
+//if(file_exists($f)){file_put_contents($f,file_get_contents($f));
+//echo "读写'zb_users/avatar/'目录成功!<br/>";}
 
 $f=$zbp->path . 'zb_users/cache/index.html';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
@@ -908,9 +908,9 @@ $f=$zbp->path . 'zb_users/data/index.html';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));
 echo "读写'zb_users/data/'目录成功!<br/>";}
 
-$f=$zbp->path . 'zb_users/emotion/index.html';
-if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-echo "读写'zb_users/emotion/'目录成功!<br/>";}
+//$f=$zbp->path . 'zb_users/emotion/index.html';
+//if(file_exists($f)){file_put_contents($f,file_get_contents($f));
+//echo "读写'zb_users/emotion/'目录成功!<br/>";}
 
 $f=$zbp->path . 'zb_users/language/SimpChinese.php';
 if(file_exists($f)){file_put_contents($f,file_get_contents($f));

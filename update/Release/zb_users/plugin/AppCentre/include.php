@@ -31,7 +31,12 @@ function AppCentre_AddMenu(&$m){
 function AppCentre_AddSiteInfoMenu(){
 	global $zbp;
 	if($zbp->Config('AppCentre')->enabledcheck){
-		echo "<script type='text/javascript'>$(document).ready(function(){  $.getScript('{$zbp->host}zb_users/plugin/AppCentre/main.php?method=checksilent&rnd='); });</script>";
+		$last=(int)$zbp->Config('AppCentre')->lastchecktime;
+		if( (time()-$last) > 11*60*60 ){
+			echo "<script type='text/javascript'>$(document).ready(function(){  $.getScript('{$zbp->host}zb_users/plugin/AppCentre/main.php?method=checksilent&rnd='); });</script>";
+			$zbp->Config('AppCentre')->lastchecktime=time();
+			$zbp->SaveConfig('AppCentre');
+		}
 	}
 }
 
