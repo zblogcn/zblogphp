@@ -1032,6 +1032,12 @@ function PostMember(){
 	CountMember($mem);
 
 	$mem->Save();
+	
+	foreach ($GLOBALS['Filter_Plugin_PostMember_End'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($_POST);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+	}
+	
 	return true;
 }
 

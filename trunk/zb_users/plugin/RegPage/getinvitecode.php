@@ -5,7 +5,7 @@ require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
-
+header("Content-type: text/html; charset=utf-8");
 
 if (!$zbp->CheckPlugin('RegPage')) {$zbp->ShowError(48);die();}
 
