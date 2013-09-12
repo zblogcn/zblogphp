@@ -12,6 +12,23 @@ error_reporting(0);
 //@ini_set('magic_quotes_runtime',0);
 //@ini_set('magic_quotes_gpc',0);
 
+$zbpvers=array();
+$zbpvers['130707']='1.0 Beta Build 130707';
+
+#定义常量
+define('ZC_BLOG_VERSION', '1.0 Beta Build 130707');
+
+define('ZC_POST_TYPE_ARTICLE', 0);
+define('ZC_POST_TYPE_PAGE', 1);
+
+define('ZC_POST_STATUS_PUBLIC', 0);
+define('ZC_POST_STATUS_DRAFT', 1);
+define('ZC_POST_STATUS_AUDITING', 2);
+
+define('ZC_MEMBER_STATUS_NORMAL', 0);
+define('ZC_MEMBER_STATUS_AUDITING', 1);
+define('ZC_MEMBER_STATUS_LOCKED', 2);
+
 function _stripslashes(&$val) {
 	if(!is_array($val)) return stripslashes($val);
 	foreach($val as $k => &$v) $val[$k] = _stripslashes($v);
@@ -57,6 +74,7 @@ $blogname = &$option['ZC_BLOG_NAME'];
 $blogsubname = &$option['ZC_BLOG_SUBNAME'];
 $blogtheme = &$option['ZC_BLOG_THEME'];
 $blogstyle = &$option['ZC_BLOG_CSS'];
+$blogversion = substr(ZC_BLOG_VERSION,-6,6);
 
 require $blogpath.'zb_system/function/c_system_common.php';
 
@@ -83,23 +101,6 @@ $lib_array = array('zblogphp','dbsql','base','metas','post','category','comment'
 foreach ($lib_array as $f) {
 	require $blogpath.'zb_system/function/lib/' . $f . '.php';
 }
-
-$zbpvers=array();
-$zbpvers['130707']='1.0 Alpha Build 130707';
-
-#定义常量
-define('ZC_BLOG_VERSION', '1.0 Alpha Build 130707');
-
-define('ZC_POST_TYPE_ARTICLE', 0);
-define('ZC_POST_TYPE_PAGE', 1);
-
-define('ZC_POST_STATUS_PUBLIC', 0);
-define('ZC_POST_STATUS_DRAFT', 1);
-define('ZC_POST_STATUS_AUDITING', 2);
-
-define('ZC_MEMBER_STATUS_NORMAL', 0);
-define('ZC_MEMBER_STATUS_AUDITING', 1);
-define('ZC_MEMBER_STATUS_LOCKED', 2);
 
 
 #定义命令

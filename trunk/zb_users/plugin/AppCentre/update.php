@@ -16,6 +16,23 @@ $blogtitle='应用中心-系统';
 
 $checkbegin=false;
 
+
+if(GetVars('update','GET')!=''){
+$url=APPCENTRE_SYSTEM_UPDATE . '?' . GetVars('update','GET') . '.xml';
+$f=file_get_contents($url);
+//echo $f;
+  $xml=simplexml_load_string($f);
+  foreach ($xml->children() as $file){
+  	$full=$zbp->path . str_replace('\\','/',$file['name']);
+	$dir=dirname($full);
+	if(!file_exists($dir . '/'))@mkdir($dir,0777,true);
+	$f=base64_decode($file);
+	@file_put_contents($full,$f);
+  }
+  $zbp->SetHint('good');
+  Redirect('./update.php');
+}
+
 if(GetVars('restore','GET')!=''){
   $file=base64_decode(GetVars('restore','GET'));
   $url=APPCENTRE_SYSTEM_UPDATE . '?' . substr(ZC_BLOG_VERSION,-6,6) . '\\' . $file;
@@ -27,7 +44,6 @@ if(GetVars('restore','GET')!=''){
   echo '<img src="'.$zbp->host.'zb_system/image/admin/ok.png" width="16" alt="" />';
   die();
 }
-
 
 
 if(GetVars('check','GET')=='now'){
@@ -65,11 +81,11 @@ $newversion=file_get_contents(APPCENTRE_SYSTEM_UPDATE . ($zbp->Config('AppCentre
                 
 <?php
 
-$nowbuild=(int)substr(ZC_BLOG_VERSION,-6,6);
+$nowbuild=(int)$blogversion;
 $newbuild=(int)substr($newversion,-6,6);
 
 if($newbuild-$nowbuild>0){
-	echo '<input id="updatenow" type="button" onclick="location.href=\'?update='.$newbuild.'\'" value="升级新版程序" />';
+	echo '<input id="updatenow" type="button" onclick="location.href=\'?update='.$nowbuild.'-'.$newbuild.'\'" value="升级新版程序" />';
 }
 ?>
               </p>

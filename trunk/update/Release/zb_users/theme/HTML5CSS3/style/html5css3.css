@@ -20,6 +20,7 @@ input:focus,
 textarea:focus{border-color:#39C;background:#fff;color:#123}
 input.err,
 textarea.err{border-color:#C33;box-shadow:0 0 3px 3px #FFEEF7 inset;}
+input[type='text']{height:30px;}
 input[type='checkbox'],
 input[type='radio']{border:none;background:none;}
 select{padding:5px 5px 5px 1px;}

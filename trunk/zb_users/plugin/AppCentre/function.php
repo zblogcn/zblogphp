@@ -29,7 +29,7 @@ function GetCheckQueryString(){
 }
 
 function Server_Open($method){
-	global $zbp;
+	global $zbp,$blogversion;
 
 	switch ($method) {
 		case 'down':
@@ -58,7 +58,14 @@ function Server_Open($method){
 		case 'checksilent':
 			header('Content-type: application/x-javascript; Charset=utf8');
 			ob_clean();
-			$s=Server_SendRequest(APPCENTRE_URL .'?silent=1&check=' . urlencode(GetCheckQueryString())) . '';
+			$s=Server_SendRequest(APPCENTRE_URL .'?blogsilent=1&check=' . urlencode(GetCheckQueryString())) . '';
+			if(strpos($s,';')!==false){
+				$newversion=substr($s,0,6);
+				$s=str_replace(($newversion.';'),'',$s);
+				if((int)$newversion>(int)$blogversion){
+					echo '$(".main").prepend("<div class=\'hint\'><p class=\'hint hint_tips\'>提示:Z-BlogPHP有新版本,请用APP应用中心插件的“系统更新与校验”升级'.$newversion.'版.</p></div>")';
+				}
+			}
 			if($s!=0){
 				echo '$(".main").prepend("<div class=\'hint\'><p class=\'hint hint_tips\'>提示:有'.$s.'个应用需要更新,请在应用中心更新.</p></div>")';
 			}
