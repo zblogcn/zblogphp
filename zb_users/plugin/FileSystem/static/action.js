@@ -329,6 +329,21 @@ entry_list['entry6'] = new entry('main2.php', 'file', 147812, false);
 			document.form_action.target = '_blank';
 			document.form_action.submit();
 		}
+		function selectfile(filename){
+			document.form_action.selected_file_list.value = filename
+		}
+		function upload_file(filename){
+			 var w = 600;
+            var h = 250;
+            window.open('".addslashes($path_info["basename"])."?action=10&current_dir=".addslashes($current_dir)."', '', 'width='+w+',height='+h+',fullscreen=no,scrollbars=no,resizable=yes,status=no,toolbar=no,menubar=no,location=no');
+			
+
+			//$("#file").click();
+			//document.form_action.cmd_arg.value = 4;
+			//document.form_action.action.value = 1;
+			//document.form_action.target = '_blank';
+			//document.form_action.submit();
+		}
 		
         function test_prompt(arg){
             var erro='';

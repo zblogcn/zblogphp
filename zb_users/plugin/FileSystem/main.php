@@ -55,8 +55,8 @@ $zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重�
 	<input type="button" onclick="create_file()" value="新建文件">
 	<input type="button" onclick="create_dir()" value="新建文件夹">
 	<input type="button" onclick="upload_file()" value="上传文件">
-	<input type="button" onclick="run_cmd()" value="执行命令">
-	<input type="button" onclick="run_shell()" value="运行Shell">
+<!--	<input type="button" onclick="run_cmd()" value="执行命令">
+	<input type="button" onclick="run_shell()" value="运行Shell">-->
 </nobr>
 <div id="divMain2">
 <?php
@@ -66,14 +66,14 @@ $zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重�
 <table class="table table-condensed">
 <?php
 	if(count($file_list)==0){
-		echo '<thead><tr class="success"><th>#</th><th>文件名</th><th>权限</th><th>文件大小</th><th>修改时间</th><th>文件类型</th><th>操作</th></tr></thead><tbody>';
+		echo '<thead><tr class="success"><th>#</th><th>文件名</th><th>权限</th><th>文件大小</th><th>修改时间</th><th>文件夹类型</th><th>操作</th></tr></thead><tbody>';
 		
 	}
 	if(isset($file_list['dir'])){
-		echo '<thead><tr class="success"><th>#</th><th>文件名</th><th>权限</th><th>文件大小</th><th>修改时间</th><th>文件类型</th><th>操作</th></tr></thead><tbody>';
+		echo '<thead><tr class="success"><th>#</th><th>文件名</th><th>权限</th><th>文件大小</th><th>修改时间</th><th>文件夹类型</th><th>操作</th></tr></thead><tbody>';
 		foreach($file_list['dir'] as $k=>$v){
 			echo "<tbody><tr>";
-			echo "<td>$k</td>";
+			echo "<td><input type='checkbox' name='$v[filename]' onclicl='selectfile($v[filename])'></td>";
 			echo "<td><img src='".$zbp->host."zb_system/image/filetype/folder.png'><a href='".$zbp->host."zb_users/plugin/FileSystem/main.php?path=".urlencode($current_dir_path.$v['filename']."/")."'> $v[filename]</a></td>";
 			echo "<td>$v[fileperms]</td>";
 			echo "<td></td>";
