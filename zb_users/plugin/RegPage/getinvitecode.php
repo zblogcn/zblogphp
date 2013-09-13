@@ -5,9 +5,10 @@ require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
-header("Content-type: text/html; charset=utf-8");
 
 if (!$zbp->CheckPlugin('RegPage')) {$zbp->ShowError(48);die();}
+
+header('Content-Type: text/html; Charset=utf-8');  
 
 if(!$zbp->Config('RegPage')->open_reg){
 	echo '本网站不开放会员注册.';

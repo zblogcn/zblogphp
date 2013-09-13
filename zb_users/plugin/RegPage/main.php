@@ -14,10 +14,6 @@ $blogtitle='注册组件';
 
 if(count($_POST)>0){
 
-	if(GetVars('addnavbar')){
-		$zbp->AddItemToNavbar('item','regpage','会员注册',$zbp->host.'?reg');
-	}
-
 	if(GetVars('reset','POST')=='add'){
 		RegPage_CreateCode(100);
 	}
@@ -32,8 +28,14 @@ if(count($_POST)>0){
 	
 	$zbp->Config('RegPage')->open_reg=(int)$_POST['open_reg'];	
 	$zbp->Config('RegPage')->default_level=(int)$_POST['default_level'];
-	$zbp->Config('RegPage')->readme_text=$_POST['readme_text'];		
+	$zbp->Config('RegPage')->readme_text=$_POST['readme_text'];
+	$zbp->Config('RegPage')->title_text=$_POST['title_text'];	
 	$zbp->SaveConfig('RegPage');
+	
+	if(GetVars('addnavbar')){
+		$zbp->AddItemToNavbar('item','regpage',$zbp->Config('RegPage')->title_text,$zbp->host.'?reg');
+	}
+	
 	$zbp->SetHint('good');
 	Redirect('./main.php');
 }
@@ -73,6 +75,10 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <tr>
 	<td class="td30"><p align='left'><b>将注册链接加入导航栏</b></p></td>
 	<td><input type="checkbox" name="addnavbar" value="ok" <?php if($zbp->CheckItemToNavbar('item','regpage')){?>checked="checked"<?php }?> /></td>
+</tr>
+<tr>
+	<td class="td30"><p align='left'><b>注册页面标题</b></p></td>
+	<td><input type="text" name="title_text" value="<?php echo htmlspecialchars($zbp->Config('RegPage')->title_text);?>" style="width:89%;" /></td>
 </tr>
 <tr>
 	<td class="td30"><p align='left'><b>注册相关说明文字</b></p></td>

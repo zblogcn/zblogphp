@@ -11,7 +11,7 @@ if (!$zbp->CheckPlugin('HeartVote')) {$zbp->ShowError(48);die();}
 $mode=null;
 if(!isset($_POST['vote'])){
 	$mode='script';
-	header('Content-type: application/x-javascript; Charset=utf8');
+	header('Content-type: application/x-javascript; Charset=utf-8');
 }
 $vote=GetVars("vote");
 $id=GetVars("id");

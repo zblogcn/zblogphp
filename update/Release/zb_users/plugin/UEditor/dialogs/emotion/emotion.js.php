@@ -1,7 +1,7 @@
 <?php
 require '../../../../../zb_system/function/c_system_base.php';
 
-header('Content-Type: application/x-javascript; Charset=utf8');
+header('Content-Type: application/x-javascript; Charset=utf-8');
 ?>
 window.onload = function () {
     editor.setOpt({

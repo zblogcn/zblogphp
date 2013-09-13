@@ -2,7 +2,7 @@
 <plugin version="php">
 <id>HeartVote</id>
 <name>用“心”打分</name>
-<url></url>
+<url>http://www.rainbowsoft.org/</url>
 <note>自定义CSS和图片，还有JS，可以有很多种变化。</note>
 <description></description>
 <path>main.php</path>
@@ -21,7 +21,7 @@
 <adapted>130707</adapted>
 <version>1.0</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2013-09-02</modified>
+<modified>2013-09-13</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

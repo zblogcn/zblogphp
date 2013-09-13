@@ -34,7 +34,7 @@ function Server_Open($method){
 	switch ($method) {
 		case 'down':
 			Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ScriptError',PLUGIN_EXITSIGNAL_RETURN);
-			header('Content-type: application/x-javascript; Charset=utf8');
+			header('Content-type: application/x-javascript; Charset=utf-8');
 			ob_clean();
 			$s=Server_SendRequest(APPCENTRE_URL .'?down=' . GetVars('id','GET'));
 			if(App::UnPack($s)){
@@ -56,7 +56,7 @@ function Server_Open($method){
 			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
 			break;
 		case 'checksilent':
-			header('Content-type: application/x-javascript; Charset=utf8');
+			header('Content-type: application/x-javascript; Charset=utf-8');
 			ob_clean();
 			$s=Server_SendRequest(APPCENTRE_URL .'?blogsilent=1&check=' . urlencode(GetCheckQueryString())) . '';
 			if(strpos($s,';')!==false){

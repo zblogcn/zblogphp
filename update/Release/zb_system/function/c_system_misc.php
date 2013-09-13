@@ -102,7 +102,7 @@ function misc_statistic(){
 function misc_showtags(){
 	global $zbp;
 
-	header('Content-Type: application/x-javascript; Charset=utf8');
+	header('Content-Type: application/x-javascript; Charset=utf-8');
 
 echo '$("#ajaxtags").html("';
 

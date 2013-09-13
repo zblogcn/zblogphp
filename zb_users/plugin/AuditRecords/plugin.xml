@@ -2,7 +2,7 @@
 <plugin version="php">
 <id>AuditRecords</id>
 <name>审核文章日志插件</name>
-<url></url>
+<url>http://www.rainbowsoft.org/</url>
 <note>记录发布文章时的审核及回复</note>
 <description></description>
 <path></path>
@@ -21,7 +21,7 @@
 <adapted>130707</adapted>
 <version>1.0</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2013-09-02</modified>
+<modified>2013-09-13</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>
