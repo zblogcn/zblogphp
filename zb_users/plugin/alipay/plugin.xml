@@ -5,8 +5,8 @@
 <url></url>
 <note>接入支付宝在线支付</note>
 <description></description>
-<path>main.asp</path>
-<include></include>
+<path>main.php</path>
+<include>include.php</include>
 <level>1</level>
 <author>
   <name>未寒</name>
