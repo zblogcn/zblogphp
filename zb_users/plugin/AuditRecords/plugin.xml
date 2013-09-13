@@ -5,7 +5,7 @@
 <url>http://www.rainbowsoft.org/</url>
 <note>记录发布文章时的审核及回复</note>
 <description></description>
-<path></path>
+<path>main.php</path>
 <include>include.php</include>
 <level>1</level>
 <author>
