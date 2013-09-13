@@ -1,5 +1,5 @@
 ﻿<files build='130707'>
-	<file name='feed.php' crc32='60F118FD'/>
+	<file name='feed.php' crc32='788825AB'/>
 	<file name='index.php' crc32='BA5D7360'/>
 	<file name='search.php' crc32='61B52BA8'/>
 	<file name='zb_system\cmd.php' crc32='DD1C61D7'/>
@@ -41,10 +41,10 @@
 	<file name='zb_system\defend\default\single.php' crc32='69E4A1A2'/>
 	<file name='zb_system\function\c_system_admin.php' crc32='BE522B29'/>
 	<file name='zb_system\function\c_system_base.php' crc32='784ED95D'/>
-	<file name='zb_system\function\c_system_common.php' crc32='CCB5B894'/>
+	<file name='zb_system\function\c_system_common.php' crc32='7AD2B586'/>
 	<file name='zb_system\function\c_system_debug.php' crc32='78297AC9'/>
 	<file name='zb_system\function\c_system_event.php' crc32='707A8713'/>
-	<file name='zb_system\function\c_system_misc.php' crc32='98F7CE32'/>
+	<file name='zb_system\function\c_system_misc.php' crc32='7E28B498'/>
 	<file name='zb_system\function\c_system_plugin.php' crc32='684EEB31'/>
 	<file name='zb_system\function\lib\app.php' crc32='66E743A0'/>
 	<file name='zb_system\function\lib\base.php' crc32='BBA06CED'/>
@@ -53,7 +53,7 @@
 	<file name='zb_system\function\lib\counter.php' crc32='D264E55'/>
 	<file name='zb_system\function\lib\dbmysql.php' crc32='5C2CA682'/>
 	<file name='zb_system\function\lib\dbpdo_mysql.php' crc32='E0D1B571'/>
-	<file name='zb_system\function\lib\dbsql.php' crc32='C705B7CF'/>
+	<file name='zb_system\function\lib\dbsql.php' crc32='59199D5A'/>
 	<file name='zb_system\function\lib\dbsqlite.php' crc32='86C026DC'/>
 	<file name='zb_system\function\lib\dbsqlite3.php' crc32='BB64556E'/>
 	<file name='zb_system\function\lib\member.php' crc32='4FE944E6'/>
@@ -198,8 +198,8 @@
 	<file name='zb_system\image\logo\rss.png' crc32='DD040EF2'/>
 	<file name='zb_system\image\logo\zblog.gif' crc32='3F36A692'/>
 	<file name='zb_system\script\common.js' crc32='CC780DAF'/>
-	<file name='zb_system\script\c_admin_js_add.php' crc32='B14F6315'/>
-	<file name='zb_system\script\c_html_js_add.php' crc32='8DEE2FC3'/>
+	<file name='zb_system\script\c_admin_js_add.php' crc32='1DCAB05B'/>
+	<file name='zb_system\script\c_html_js_add.php' crc32='A3C797AA'/>
 	<file name='zb_system\script\jquery-ui-timepicker-addon.js' crc32='6FB5233'/>
 	<file name='zb_system\script\jquery-ui.custom.min.js' crc32='262EB68A'/>
 	<file name='zb_system\script\jquery.bettertip.pack.js' crc32='E80D90DB'/>

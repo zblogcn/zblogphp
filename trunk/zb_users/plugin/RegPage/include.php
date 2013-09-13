@@ -1,6 +1,8 @@
 <?php
 
 
+$Filter_Plugin_RegPage_RegSucceed=array();
+
 #注册插件
 RegisterPlugin("RegPage","ActivePlugin_RegPage");
 
@@ -27,6 +29,7 @@ function InstallPlugin_RegPage(){
 	if(!$zbp->Config('RegPage')->default_level){
 		$zbp->Config('RegPage')->default_level=5;
 		$zbp->Config('RegPage')->open_reg=0;
+		$zbp->Config('RegPage')->title_text='会员注册';
 		$zbp->SaveConfig('RegPage');
 
 		RegPage_CreateTable();
@@ -87,14 +90,13 @@ function RegPage_Page(){
 	$zbp->header .='<script src="'.$zbp->host.'zb_users/plugin/RegPage/reg.js" type="text/javascript"></script>' . "\r\n";
 
 	$article = new Post;
-	$article->Title='会员注册';
+	$article->Title=$zbp->Config('RegPage')->title_text;
 	$article->IsLock=true;
 	$article->Type=ZC_POST_TYPE_PAGE;
 
 	$article->Content .='<dl style="font-size:1.1em;line-height:1.5em;">';
-	$article->Content .='<dt>以下带星号为必填选项.</dt>';
-	$article->Content .='<dt>&nbsp;</dt>';
-	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)名称：<input required="required" type="text" name="name" style="width:200px;font-size:1.2em;" </p></dd>';
+	$article->Content .='<dt><p>'.$zbp->Config('RegPage')->readme_text.'</p></dt>';
+	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)名称：<input required="required" type="text" name="name" style="width:200px;font-size:1.2em;" /></p></dd>';
 	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)密码：<input required="required" type="password" name="password" style="width:200px;font-size:1.2em;" /></p></dd>';
 	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)确认密码：<input required="required" type="password" name="repassword" style="width:200px;font-size:1.2em;" /></p></dd>';
 	$article->Content .='<dd><p style="width:350px;text-align:right;">邮箱：<input type="text" name="email" style="width:200px;font-size:1.2em;" /></p></dd>';
@@ -105,11 +107,13 @@ function RegPage_Page(){
 		$article->Content .='<dd><p style="width:350px;text-align:right;">点击<a href="'.$zbp->host.'zb_users/plugin/RegPage/getinvitecode.php" target="_blank">这里</a>获取邀请码.</p></dd>';
 	}
 	
-	$article->Content .='<dd><p style="width:350px;text-align:right;">'.$zbp->Config('RegPage')->readme_text.'</dd>';
+
 	
 	$article->Content .='<dd><p style="width:350px;text-align:right;"><input type="submit" style="width:100px;font-size:1.0em;padding:0.2em" value="提交" onclick="return RegPage()" /></p></dd>';
 
 	$article->Content .='</dl>';
+	$article->Content .='<p>带星号为必填选项.</p>';
+	
 
 	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);

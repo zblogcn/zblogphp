@@ -28,7 +28,7 @@ foreach ($articles as $article) {
 	$rss2->addItem($article->Title,$article->Url,$article->Content,$article->PostTime);
 }
 
-header("Content-type:text/xml; Charset=utf8");
+header("Content-type:text/xml; Charset=utf-8");
 
 echo $rss2->saveXML();
 

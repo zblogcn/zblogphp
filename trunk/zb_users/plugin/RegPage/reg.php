@@ -74,6 +74,8 @@ if(CheckRegExp($homepage,'[homepage]')){
 
 $member->Save();
 
+foreach ($GLOBALS['Filter_Plugin_RegPage_RegSucceed'] as $fpname => &$fpsignal) $fpname($member);
+
 $keyvalue=array();
 $keyvalue['reg_AuthorID']=$member->ID;
 

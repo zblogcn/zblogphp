@@ -1,5 +1,5 @@
 <?php
-header('Content-type: application/x-javascript; Charset=utf8');  
+header('Content-type: application/x-javascript; Charset=utf-8');  
 
 require '../function/c_system_base.php';
 

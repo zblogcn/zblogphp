@@ -341,7 +341,7 @@ function RespondError($faultString){
 
 }
 function ScriptError($faultString){
-	header('Content-type: application/x-javascript; Charset=utf8');
+	header('Content-type: application/x-javascript; Charset=utf-8');
 	ob_clean();
 	echo 'alert("'.str_replace('"', '\"', $faultString).'")';
 	die();

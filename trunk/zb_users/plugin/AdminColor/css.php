@@ -15,7 +15,7 @@ if(isset($_GET['setcolor'])){
 	}
 }
 
-header('Content-Type: text/css; Charset=utf8');  
+header('Content-Type: text/css; Charset=utf-8');  
 
 $id=(int)$zbp->Config('AdminColor')->color;
 $c='';
