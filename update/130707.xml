@@ -43,9 +43,9 @@
 	<file name='zb_system\function\c_system_base.php' crc32='784ED95D'/>
 	<file name='zb_system\function\c_system_common.php' crc32='7AD2B586'/>
 	<file name='zb_system\function\c_system_debug.php' crc32='78297AC9'/>
-	<file name='zb_system\function\c_system_event.php' crc32='707A8713'/>
+	<file name='zb_system\function\c_system_event.php' crc32='FE33B52B'/>
 	<file name='zb_system\function\c_system_misc.php' crc32='7E28B498'/>
-	<file name='zb_system\function\c_system_plugin.php' crc32='684EEB31'/>
+	<file name='zb_system\function\c_system_plugin.php' crc32='49C2BE63'/>
 	<file name='zb_system\function\lib\app.php' crc32='66E743A0'/>
 	<file name='zb_system\function\lib\base.php' crc32='BBA06CED'/>
 	<file name='zb_system\function\lib\category.php' crc32='917918D'/>

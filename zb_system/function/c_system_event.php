@@ -533,6 +533,8 @@ function PostArticle(){
 	$zbp->AddBuildModule('calendar');
 	$zbp->AddBuildModule('comments');
 	$zbp->AddBuildModule('archives');
+	
+	foreach ($GLOBALS['Filter_Plugin_PostArticle_Succeed'] as $fpname => &$fpsignal) $fpname($article);
 
 	return true;
 }
@@ -675,6 +677,8 @@ function PostPage(){
 
 	if(GetVars('AddNavbar','POST')==0)$zbp->DelItemToNavbar('page',$article->ID);
 	if(GetVars('AddNavbar','POST')==1)$zbp->AddItemToNavbar('page',$article->ID,$article->Title,$article->Url);
+	
+	foreach ($GLOBALS['Filter_Plugin_PostPage_Succeed'] as $fpname => &$fpsignal) $fpname($article);
 
 	return true;
 }
@@ -781,6 +785,8 @@ function PostComment(){
 				ViewComment($cmt->ID);
 			}
 
+			foreach ($GLOBALS['Filter_Plugin_PostComment_Succeed'] as $fpname => &$fpsignal) $fpname($cmt);
+			
 			return true;
 
 		}else{
@@ -893,6 +899,8 @@ function PostCategory(){
 
 	if(GetVars('AddNavbar','POST')==0)$zbp->DelItemToNavbar('category',$cate->ID);
 	if(GetVars('AddNavbar','POST')==1)$zbp->AddItemToNavbar('category',$cate->ID,$cate->Name,$cate->Url);
+	
+	foreach ($GLOBALS['Filter_Plugin_PostCategory_Succeed'] as $fpname => &$fpsignal) $fpname($cate);
 
 	return true;
 }
@@ -954,6 +962,8 @@ function PostTag(){
 
 	if(GetVars('AddNavbar','POST')==0)$zbp->DelItemToNavbar('tag',$tag->ID);
 	if(GetVars('AddNavbar','POST')==1)$zbp->AddItemToNavbar('tag',$tag->ID,$tag->Name,$tag->Url);
+	
+	foreach ($GLOBALS['Filter_Plugin_PostTag_Succeed'] as $fpname => &$fpsignal) $fpname($tag);
 
 	return true;
 }
@@ -1032,6 +1042,9 @@ function PostMember(){
 	CountMember($mem);
 
 	$mem->Save();
+	
+	foreach ($GLOBALS['Filter_Plugin_PostMember_Succeed'] as $fpname => &$fpsignal) $fpname($mem);
+	
 	return true;
 }
 

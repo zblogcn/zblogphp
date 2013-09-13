@@ -73,7 +73,7 @@ $num=count($array);
 	echo '<td class="td10">' . $article->Author->Name . '</td>';
 	echo '<td><a href="'.$article->Url.'" target="_blank"><img src="'.$bloghost.'zb_system/image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title;
 	if($num>0){
-		echo '<p><i>最后一次审核或回复记录：</i></p><blockquote><p><b>'.$zbp->members[$array[0]->AuthorID]->Name.'</b>记录于'.date('c',$array[0]->PostTime).'</p><p>'.$array[0]->Logs.'</p></blockquote>';
+		echo '<p><i style="font-size:0.8em">最后一次审核或回复记录：</i></p><blockquote><p><b>'.$zbp->members[$array[0]->AuthorID]->Name.'</b>记录于'.date('c',$array[0]->PostTime).'</p><p>'.htmlspecialchars($array[0]->Logs).'</p></blockquote>';
 	}
 	echo '</td>';
 	echo '<td class="td20">' .$article->Time() . '</td>';
