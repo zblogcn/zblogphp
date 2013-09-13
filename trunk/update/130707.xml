@@ -53,7 +53,7 @@
 	<file name='zb_system\function\lib\counter.php' crc32='D264E55'/>
 	<file name='zb_system\function\lib\dbmysql.php' crc32='5C2CA682'/>
 	<file name='zb_system\function\lib\dbpdo_mysql.php' crc32='E0D1B571'/>
-	<file name='zb_system\function\lib\dbsql.php' crc32='59199D5A'/>
+	<file name='zb_system\function\lib\dbsql.php' crc32='C705B7CF'/>
 	<file name='zb_system\function\lib\dbsqlite.php' crc32='86C026DC'/>
 	<file name='zb_system\function\lib\dbsqlite3.php' crc32='BB64556E'/>
 	<file name='zb_system\function\lib\member.php' crc32='4FE944E6'/>

@@ -65,7 +65,7 @@ class DbSql #extends AnotherClass
 		reset($datainfo);
 		$s.='PRIMARY KEY ('.GetValueInArray(current($datainfo),0).'),';
 		$s=substr($s,0,strlen($s)-1);
-		$s.=') ENGINE=MyISAM DEFAULT Charset=utf-8 AUTO_INCREMENT=1 ;';
+		$s.=') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
 	}
 
 	if($this->type=='DbSQLite'){
