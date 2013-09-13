@@ -61,12 +61,6 @@ foreach ($option_zbusers as $key => $value) {
 
 date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 
-if($option['ZC_DEBUG_MODE']==true){
-	error_reporting(-1);
-}else{
-	error_reporting(0);
-}
-
 $lang = require($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 
 $blogtitle = $option['ZC_BLOG_SUBNAME'];

@@ -143,6 +143,12 @@ class ZBlogPHP{
 		$this->LoadConfigs();
 		$this->LoadCache();
 		$this->LoadOption();
+		
+		if($this->option['ZC_DEBUG_MODE']==true){
+			error_reporting(-1);
+		}else{
+			error_reporting(0);
+		}
 
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){
 			$this->host=$this->option['ZC_BLOG_HOST'];
@@ -382,11 +388,11 @@ class ZBlogPHP{
 		if(empty($array))return false;
 		if(!is_array($array))return false;
 		foreach ($array as $key => $value) {
+			if($key=='ZC_PERMANENT_DOMAIN_ENABLE')continue;
+			if($key=='ZC_BLOG_HOST')continue;			
 			if($key=='ZC_BLOG_CLSID')continue;
-			if($key=='ZC_BLOG_HOST')continue;
 			if($key=='ZC_YUN_SITE')continue;
 			if($key=='ZC_BLOG_LANGUAGEPACK')continue;			
-			if($key=='ZC_DEBUG_MODE')continue;
 			if($key=='ZC_DATABASE_TYPE')continue;
 			if($key=='ZC_SQLITE_NAME')continue;
 			if($key=='ZC_SQLITE_PRE')continue;
