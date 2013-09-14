@@ -72,6 +72,7 @@ function misc_statistic(){
 	$all_members=GetValueInArray(current($zbp->db->Query('SELECT COUNT(mem_ID) AS num FROM ' . $GLOBALS['table']['Member'])),'num');
 	$current_theme=$zbp->theme;
 	$current_style=$zbp->style;
+	$current_member='{$zbp->user->Name}';
 
 	$system_environment=(getenv('OS')?getenv('OS'):getenv('XAMPP_OS')) . ';' . current(explode('/',GetVars('SERVER_SOFTWARE','SERVER'))) . ';' . 'PHP ' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'] . ';';
 
@@ -82,17 +83,18 @@ function misc_statistic(){
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";		
 
+	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type',0),array('=','log_IsTop',0),array('=','log_Status',0)));
+	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
+
 	$zbp->LoadConfigs();
 	$zbp->LoadCache();
 	$zbp->cache->reload_statistic=$r;
 	$zbp->cache->reload_statistic_time=time();
-	
-	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type',0),array('=','log_IsTop',0),array('=','log_Status',0)));
-	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
-
 	$zbp->cache->normal_article_nums=$num;
 	
 	$zbp->SaveCache();
+
+	$r=str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
 
 	echo $r;
 

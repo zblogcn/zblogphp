@@ -330,7 +330,9 @@ function Admin_SiteInfo(){
 	if((time()-(int)$zbp->cache->reload_statistic_time) > (23*60*60)){
 		echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'?act=misc&type=statistic\'); });</script>';
 	}else{
-		echo $zbp->cache->reload_statistic;
+		$r=$zbp->cache->reload_statistic;
+		$r=str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
+		echo $r;
 	}
 
 	echo '</table>';

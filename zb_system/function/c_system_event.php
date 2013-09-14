@@ -1044,6 +1044,12 @@ function PostMember(){
 	$mem->Save();
 	
 	foreach ($GLOBALS['Filter_Plugin_PostMember_Succeed'] as $fpname => &$fpsignal) $fpname($mem);
+
+	if(isset($_POST['Password'])){
+		if($mem->ID==$zbp->user->ID){
+			Redirect($zbp->host . 'zb_system/cmd.php?act=login');
+		}
+	}
 	
 	return true;
 }
