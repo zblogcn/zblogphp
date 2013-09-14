@@ -222,13 +222,10 @@ function SaveRememberInfo() {
 // 返回：    无
 //*********************************************************
 function RevertComment(i) {
-	if($("#inpRevID").length==0){
-		intReplyID=i;
-	}else{
-		$("#inpRevID").val(i);
-	}
+
+	$("#inpRevID").val(i);
 	
-	$("#cancel-reply").show().bind("click", function(){ if($("#inpRevID").length==0){intReplyID=0;}else{$("#inpRevID").val(0);};$(this).hide();window.location.hash="#comment";return false; });
+	$("#cancel-reply").show().bind("click", function(){ $("#inpRevID").val(0);$(this).hide();window.location.hash="#comment";return false; });
 
 	window.location.hash="#comment";
 }

@@ -1,9 +1,8 @@
 <div class="commentpost" id="comment">
     <h4>发表评论:</h4><?php if ($user->ID>0) { ?><?php  echo $user->Name#;  ?><?php } ?><a rel="nofollow" id="cancel-reply" href="#comment" style="display:none;"><small>取消回复</small></a>
-	<form id="commentform" target="_self" method="post" action="<?php  echo $article->CommentPostUrl;  ?>" >
+	<form id="frmSumbit" target="_self" method="post" action="<?php  echo $article->CommentPostUrl;  ?>" >
 	<input type="hidden" name="inpId" id="inpId" value="<?php  echo $article->ID;  ?>" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
-	<input type="hidden" name="inpVerify" id="inpVerify" value="" />	
 <?php if ($user->ID>0) { ?>
 	<input type="hidden" name="inpName" id="inpName" value="<?php  echo $user->Name;  ?>" />
 	<input type="hidden" name="inpEmail" id="inpEmail" value="<?php  echo $user->Email;  ?>" />

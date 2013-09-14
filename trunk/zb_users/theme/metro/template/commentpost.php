@@ -1,9 +1,8 @@
 <div class="commentpost" id="comment">
     <h4>发表评论:</h4>{if $user.ID>0}{$user.Name#}{/if}<a rel="nofollow" id="cancel-reply" href="#comment" style="display:none;"><small>取消回复</small></a>
-	<form id="commentform" target="_self" method="post" action="{$article.CommentPostUrl}" >
+	<form id="frmSumbit" target="_self" method="post" action="{$article.CommentPostUrl}" >
 	<input type="hidden" name="inpId" id="inpId" value="{$article.ID}" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
-	<input type="hidden" name="inpVerify" id="inpVerify" value="" />	
 {if $user.ID>0}
 	<input type="hidden" name="inpName" id="inpName" value="{$user.Name}" />
 	<input type="hidden" name="inpEmail" id="inpEmail" value="{$user.Email}" />

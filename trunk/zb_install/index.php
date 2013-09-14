@@ -387,7 +387,7 @@ function Setup3(){
           <input type="text" name="dbmysql_username" id="dbmysql_username" value="<?php echo $option['ZC_MYSQL_USERNAME'];?>" style="width:350px;" />
         </p>
         <p><b>用户密码:</b>
-          <input type="text" name="dbmysql_password" id="dbmysql_password" value="<?php echo $option['ZC_MYSQL_PASSWORD'];?>" style="width:350px;" />
+          <input type="password" name="dbmysql_password" id="dbmysql_password" value="<?php echo $option['ZC_MYSQL_PASSWORD'];?>" style="width:350px;" />
         </p>
         <p><b>数据库名称:</b>
           <input type="text" name="dbmysql_name" id="dbmysql_name" value="<?php echo $option['ZC_MYSQL_NAME'];?>" style="width:350px;" />
@@ -655,7 +655,7 @@ function InsertInfo(){
   $t->FileName="navbar";
   $t->Source="system";
   $t->SidebarID=0;
-  $t->Content='<li><a id="nvabar-index" href="{#ZC_BLOG_HOST#}">首页</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">留言本</a></li>';
+  $t->Content='<li><a id="nvabar-item-index" href="{#ZC_BLOG_HOST#}">首页</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">留言本</a></li>';
   $t->HtmlID="divNavBar";
   $t->Type="ul";
   $t->Save();

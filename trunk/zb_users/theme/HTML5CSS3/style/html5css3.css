@@ -144,13 +144,15 @@ form[action*='act=cmt'] p img{right:0;position:absolute;margin:-24px -5px 0 0;z-
 form[action*='act=cmt'] p sup{color:#F36;position:absolute}
 form[action*='act=cmt'] input{height:32px;width:100%;display:block;background:none;margin:0 0 -29px -10px;text-indent:60px;}
 form[action*='act=cmt'] textarea,
-form[action*='act=cmt'] span[class^='xhe_']{height:96px;position:absolute;top:0;left:0;background:none;width:100%!important;}
+form[action*='act=cmt'] span[class^='xhe_']{height:96px;position:absolute;top:0;left:0;background:none;width:100%;}
 form[action*='act=cmt'] textarea:focus{background:#fff!important;}
 form[action*='act=cmt'] button{}
 #postcmt figure{position:absolute;left:-100px;top:0;margin:0;padding:0;width:80px;}
 #postcmt figure img{width:80px;height:80px;display:block;margin:0 0 3px}
 #postcmt figure b{margin:0 5px 0 0 }
 #postcmt figure ins{color:#789;font-size:12px;position:relative;top:-1px;white-space:nowrap}
+blockquote textarea{background:white!important;position:relative!important;width:95%!important;}
+blockquote input{background:white!important;width:95%!important;}
 /*=side extra*/
 aside{width:240px;margin:0 -260px 0 0;float:right;}
 aside:after{width:140px;height:30px;overflow:hidden;display:block;clear:both;content:".";box-shadow:0 0 15px 10px rgba(0,0,0,.4);border-radius:50px;z-index:-1;position:absolute;margin:-40px 0 0 50px}

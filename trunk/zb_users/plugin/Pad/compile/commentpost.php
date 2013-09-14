@@ -1,11 +1,9 @@
 <dl id="postcmt">
-  <dt>发表评论</dt>
+  <dt><a name="comment">发表评论</a><a rel="nofollow" id="cancel-reply" href="#comment" style="display:none;"><small>取消回复</small></a></dt>
   <dd>
-  <h5><!--◎欢迎参与讨论，请在这里发表您的看法、交流您的观点。--></h5>
-  <form target="_self" method="post" action="<?php  echo $article->CommentPostUrl;  ?>&amp;mod=pad">
+  <form id="commentform" target="_self" method="post" action="<?php  echo $article->CommentPostUrl;  ?>&amp;mod=pad">
 	<input type="hidden" name="inpId" id="inpId" value="<?php  echo $article->ID;  ?>" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
-	<input type="hidden" name="inpVerify" id="inpVerify" value="" />
     <p>
       <label>
         <input type="text" id="inpName" name="inpName" size="28" tabindex="2" required value="<?php  echo $user->Name;  ?>" />
