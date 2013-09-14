@@ -1667,7 +1667,7 @@ function BuildModule_comments(){
 
 	$s='';
 	foreach ($comments as $comment) {
-		$s .='<li><a href="'.$comment->Post->Url.'#cmt'.$comment->ID.'">' . TransferHTML($comment->Content,'[noenter]') . '</a></li>';
+		$s .='<li><a href="'.$comment->Post->Url.'#cmt'.$comment->ID.'" title="'.htmlspecialchars($comment->Author->ID . ' @ ' . $comment->Time()).'">' . TransferHTML($comment->Content,'[noenter]') . '</a></li>';
 	}
 	return $s;
 }
