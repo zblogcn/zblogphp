@@ -55,6 +55,10 @@ function ViewList($page,$cate,$auth,$date,$tags){
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
 
+	if($cate=='index.php'|$auth=='index.php'|$date=='index.php'|$tags=='index.php'){
+		$cate=$auth=$date=$tags=null;
+	}
+
 	$type='index';
 	if($cate!==null)$type='category';
 	if($auth!==null)$type='author';
