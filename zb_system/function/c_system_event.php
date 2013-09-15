@@ -1263,6 +1263,11 @@ if($app->sidebars_sidebar1|$app->sidebars_sidebar2|$app->sidebars_sidebar3|$app-
 	$zbp->BuildTemplate();
 
 	$zbp->SaveOption();
+
+	if($oldtheme!=$theme){
+		UninstallPlugin($oldtheme);
+		return $theme;
+	}
 }
 
 function SetSidebar(){
