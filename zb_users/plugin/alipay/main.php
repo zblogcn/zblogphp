@@ -25,7 +25,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <div id="divMain">
 
   <div class="divHeader"><?php echo $blogtitle;?></div>
-<div class="SubMenu"><?php alipay_SubMenus(1);?></div>
+<div class="SubMenu"><?php alipay_SubMenu(0);?></div>
   <div id="divMain2">
 
 <form method="post" action="">
