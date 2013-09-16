@@ -14,10 +14,14 @@ $zbp->Load();
 
 foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
-if(isset($_GET['id'])||isset($_GET['alias'])){
+if($_SERVER['REQUEST_URI']=='/'||$_SERVER['REQUEST_URI']=='/index.php'){
+	ViewList(null,null,null,null,null);
+}elseif(isset($_GET['id'])||isset($_GET['alias'])){
 	ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
-}else{
+}elseif(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])){
 	ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('date','GET'),GetVars('tags','GET'));
+}else{
+	ViewAuto($_SERVER['REQUEST_URI']);
 }
 
 foreach ($GLOBALS['Filter_Plugin_Index_End'] as $fpname => &$fpsignal) {$fpname();}

@@ -36,7 +36,7 @@ class Metas {
 
 	public function Del($name)
 	{
-		unset($Data[$name]);
+		 unset($this->Data[$name]); 
 	}
 
 	public function Serialize()

@@ -202,13 +202,17 @@ switch ($action) {
 		Redirect('cmd.php?act=PluginMng' . $install);
 		break;
 	case 'ThemeMng':
+		if(GetVars('install','GET')){
+			InstallPlugin(GetVars('install','GET'));
+		}
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'ThemeSet':
-		SetTheme(GetVars('theme','POST'),GetVars('style','POST'));
+		$install='&install=';
+		$install .=SetTheme(GetVars('theme','POST'),GetVars('style','POST'));
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
-		Redirect('cmd.php?act=ThemeMng');
+		Redirect('cmd.php?act=ThemeMng' . $install);
 		break;
 	case 'SidebarSet':
 		$zbp->BuildModule();
