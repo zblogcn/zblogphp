@@ -51,6 +51,12 @@ function show_webconfig(){
 	return $ur->Make_webconfig();
 }
 
+function show_nginx(){
+	$ur=new UrlRule("");
+	if(method_exists('UrlRule','Make_nginx'))
+		return $ur->Make_nginx();
+}
+
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 
@@ -74,6 +80,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                   <li><a href="#tab1" class="default-tab" ><span>Apache + .htaccess</span></a></li>
                   <li><a href="#tab2"><span>IIS7,8 + URL Rewrite Module</span></a></li>
                   <li><a href="#tab3"><span>IIS6 + ISAPI Rewrite 2.X</span></a></li>
+                  <li><a href="#tab4"><span>Nginx</span></a></li>				  
                 </ul>
                 <div class="clear"></div>
               </div>
@@ -83,7 +90,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 			  
                 <div class="tab-content default-tab" style='border:none;padding:0px;margin:0;' id="tab1">
-<textarea style="width:99%;height:400px" readonly>
+<textarea style="width:99%;height:200px" readonly>
 <?php echo htmlentities(show_htaccess())?>
 </textarea>
                   <hr/>
@@ -91,7 +98,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                     <input type="button" onclick="window.location.href='?mak=1'" value="创建.htaccess" />
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="button" onclick="window.location.href='?del=1'" value="删除.htaccess" />
-                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="star">请在网站<u>"当前目录"</u>创建.htaccess文件并把相关内容复制进去,也可以点击按钮生成..</span></p>
+                    <hr/><span class="star">请在网站<u>"当前目录"</u>创建.htaccess文件并把相关内容复制进去,也可以点击按钮生成..</span></p>
                 </div>
 
 				
@@ -105,14 +112,14 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                     <input type="button" onclick="window.location.href='?mak=2'" value="创建web.config" />
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="button" onclick="window.location.href='?del=2'" value="删除web.config" />
-                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="star">请在网站<u>"当前目录"</u>创建web.config文件并把相关内容复制进去,也可以点击按钮生成..</span></p>
+                    <hr/><span class="star">请在网站<u>"当前目录"</u>创建web.config文件并把相关内容复制进去,也可以点击按钮生成..</span></p>
                 </div>
 			  
 
 			  
 			  
                 <div class="tab-content" style='border:none;padding:0px;margin:0;' id="tab3">
-<textarea style="width:99%;height:400px" readonly>
+<textarea style="width:99%;height:200px" readonly>
 <?php echo htmlentities(show_httpini())?>
 </textarea>
                   <hr/>
@@ -120,9 +127,18 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                     <input type="button" onclick="window.location.href='?mak=3'" value="创建httpd.ini" />
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="button" onclick="window.location.href='?del=3'" value="删除httpd.ini" />
-                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="star">请在网站根目录创建httpd.ini文件并把相关内容复制进去,httpd.ini文件必须为ANSI编码,也可以点击按钮生成.</span></p>
+                    <hr/><span class="star">请在网站根目录创建httpd.ini文件并把相关内容复制进去,httpd.ini文件必须为ANSI编码,也可以点击按钮生成.</span></p>
                 </div>
-
+				
+				
+                <div class="tab-content" style='border:none;padding:0px;margin:0;' id="tab4">
+<textarea style="width:99%;height:200px" readonly>
+<?php echo htmlentities(show_nginx())?>
+</textarea>
+                  <hr/>
+                  <p>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="star">修改nginx.conf,在 location / { }节点间加入上述规则.</span></p>
+                </div>
 				
               </div>
               <!-- End .content-box-content --> 

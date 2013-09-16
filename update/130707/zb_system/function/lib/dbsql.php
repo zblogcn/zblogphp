@@ -54,7 +54,7 @@ class DbSql #extends AnotherClass
 				if($value[2]!=''){
 					$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \'\'' . ',';
 				}else{
-					$s.=$value[0] . ' text NOT NULL ' . ',';	
+					$s.=$value[0] . ' longtext NOT NULL ' . ',';	
 				}
 			}
 			if($value[1]=='double'||$value[1]=='float'){

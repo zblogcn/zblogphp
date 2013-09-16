@@ -48,6 +48,78 @@ function Logout(){
 
 
 ################################################################################################################
+function ViewAuto($url){
+	global $zbp;
+
+	if(isset($_SERVER['SERVER_SOFTWARE'])){
+		if(strpos($_SERVER['SERVER_SOFTWARE'],'Microsoft-IIS')!==false)
+			$url=iconv('GBK','UTF-8//TRANSLIT//IGNORE',$url);
+	}
+	$url=urldecode(trim($url,'/'));
+
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_ARTICLE_REGEX'],'article');
+	$m=array();
+	if(preg_match($r,$url,$m)==1){
+	if(strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%id%}')!==false){
+		ViewPost($m[1],null);
+	}else{
+		ViewPost(null,$m[1]);
+	}
+	return null;
+	}
+
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_PAGE_REGEX'],'page');
+	$m=array();
+	if(preg_match($r,$url,$m)==1){
+	if(strpos($zbp->option['ZC_PAGE_REGEX'],'{%id%}')!==false){
+		ViewPost($m[1],null);
+	}else{
+		ViewPost(null,$m[1]);
+	}
+	return null;
+	}
+
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_INDEX_REGEX'],'index');
+	$m=array();
+	if(preg_match($r,$url,$m)==1){
+	ViewList($m[1],null,null,null,null);
+	return null;
+	}
+
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_DATE_REGEX'],'date');
+	$m=array();
+	if(preg_match($r,$url,$m)==1){
+	ViewList($m[2],null,null,$m[1],null);
+	return null;
+	}
+
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_AUTHOR_REGEX'],'auth');
+	$m=array();
+	if(preg_match($r,$url,$m)==1){
+	ViewList($m[2],null,$m[1],null,null);
+	return null;
+	}
+
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_TAGS_REGEX'],'tags');
+	$m=array();
+	if(preg_match($r,$url,$m)==1){
+	ViewList($m[2],null,null,null,$m[1]);
+	return null;
+	}
+
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_CATEGORY_REGEX'],'cate');
+	$m=array();
+	if(preg_match($r,$url,$m)==1){
+	ViewList($m[2],$m[1],null,null,null);
+	return null;
+	}
+
+}
+
+
+
+
+
 function ViewList($page,$cate,$auth,$date,$tags){
 	global $zbp;
 	foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
@@ -55,9 +127,9 @@ function ViewList($page,$cate,$auth,$date,$tags){
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
 
-	if($cate=='index.php'|$auth=='index.php'|$date=='index.php'|$tags=='index.php'){
-		$cate=$auth=$date=$tags=null;
-	}
+	//if($cate=='index.php'|$auth=='index.php'|$date=='index.php'|$tags=='index.php'){
+	//	$cate=$auth=$date=$tags=null;
+	//}
 
 	$type='index';
 	if($cate!==null)$type='category';
@@ -75,7 +147,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	$w[]=array('=','log_Istop',0);
 	$w[]=array('=','log_Status',0);
 
-	$page=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+	$page=(int)$page==0?1:(int)$page;
 
 	$articles_top=array();
 	$articles=array();
