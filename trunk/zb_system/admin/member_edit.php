@@ -59,7 +59,7 @@ $member=$zbp->GetMemberByID($memberid);
 		<input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $member->Alias;?>" />
 	  </p>
 	  <p>
-		<span class="title"><?php echo $lang['msg']['email']?>:</span><br />
+		<span class="title"><?php echo $lang['msg']['email']?>:</span></span><span class="star">(*)</span><br />
 		<input id="edtEmail" class="edit" size="40" name="Email" type="text" value="<?php echo $member->Email;?>" />
 	  </p>
 	  <p>
@@ -91,6 +91,13 @@ foreach ($GLOBALS['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal
 function checkInfo(){
   document.getElementById("edit").action="../cmd.php?act=MemberPst";
 
+  
+  if(!$("#edtEmail").val()){
+    alert("<?php echo $lang['error']['29']?>");
+    return false
+  }
+  
+  
   if(!$("#edtName").val()){
     alert("<?php echo $lang['error']['72']?>");
     return false

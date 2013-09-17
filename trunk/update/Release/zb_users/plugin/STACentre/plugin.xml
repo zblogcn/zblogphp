@@ -3,8 +3,9 @@
 <id>STACentre</id>
 <name>静态管理中心</name>
 <url>http://www.rainbowsoft.org/</url>
-<note>控制ZBLOG的伪静态化设置,将博客, 分类页, 标签页, 作者页伪静态化成 HTML 页面.</note>
-<description>ZSX和月上之木对插件有修改.</description>
+<note>控制ZBLOG的伪静态化设置.</note>
+<description>控制ZBLOG的伪静态化设置,将文章，页面, 分类页, 标签页, 作者页伪静态化成 HTML 页面.
+增加Nginx的规则配置；</description>
 <path>main.php</path>
 <include>include.php</include>
 <level>1</level>
@@ -21,7 +22,7 @@
 <adapted>130707</adapted>
 <version>1.0</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2013-09-02</modified>
+<modified>2013-09-16</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

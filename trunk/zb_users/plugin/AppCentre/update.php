@@ -20,16 +20,17 @@ $checkbegin=false;
 if(GetVars('update','GET')!=''){
 $url=APPCENTRE_SYSTEM_UPDATE . '?' . GetVars('update','GET') . '.xml';
 $f=file_get_contents($url);
-//echo $f;
   $xml=simplexml_load_string($f);
-  foreach ($xml->children() as $file){
-  	$full=$zbp->path . str_replace('\\','/',$file['name']);
-	$dir=dirname($full);
-	if(!file_exists($dir . '/'))@mkdir($dir,0777,true);
-	$f=base64_decode($file);
-	@file_put_contents($full,$f);
+  if($xml){
+	  foreach ($xml->children() as $file){
+		$full=$zbp->path . str_replace('\\','/',$file['name']);
+		$dir=dirname($full);
+		if(!file_exists($dir . '/'))@mkdir($dir,0777,true);
+		$f=base64_decode($file);
+		@file_put_contents($full,$f);
+	  }
+	  $zbp->SetHint('good');
   }
-  $zbp->SetHint('good');
   Redirect('./update.php');
 }
 

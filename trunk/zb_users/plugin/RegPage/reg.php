@@ -64,8 +64,15 @@ $member->PostTime=time();
 
 $member->IP=GetGuestIP();
 
+
+if(strlen($name)<5||strlen($name)>50){
+	$zbp->ShowError('邮箱不能过长或过短.');die();
+}
+
 if(CheckRegExp($email,'[email]')){
 	$member->Email=$email;
+}else{
+	$zbp->ShowError('邮箱格式不正确.');die();
 }
 
 if(CheckRegExp($homepage,'[homepage]')){

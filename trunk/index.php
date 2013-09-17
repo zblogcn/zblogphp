@@ -14,7 +14,7 @@ $zbp->Load();
 
 foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
-if($_SERVER['REQUEST_URI']=='/'||$_SERVER['REQUEST_URI']=='/index.php'){
+if($_SERVER['REQUEST_URI']==$cookiespath||$_SERVER['REQUEST_URI']==$cookiespath . 'index.php'){
 	ViewList(null,null,null,null,null);
 }elseif(isset($_GET['id'])||isset($_GET['alias'])){
 	ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
