@@ -74,11 +74,10 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <p><br/>
     <input type="submit" class="button" value="提交" id="btnPost" onclick='' />
     <a href="api.php" target="_blank"><input type="button" class="button" value="交易测试" /></a>
+	 <a href="auth/api.php" target="_blank"><input type="button" class="button" value="登陆测试" /></a>
   </p>
   <p>&nbsp;</p>
 </form>
-	<script type="text/javascript">ActiveLeftMenu("aalipay");</script>
-	
   </div>
 </div>
 <?php
