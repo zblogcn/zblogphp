@@ -50,12 +50,18 @@ function Logout(){
 ################################################################################################################
 function ViewAuto($url){
 	global $zbp;
+	
+	if($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE'){
+		ViewList(null,null,null,null,null);
+		return null;
+	}
 
 	if(isset($_SERVER['SERVER_SOFTWARE'])){
 		if(strpos($_SERVER['SERVER_SOFTWARE'],'Microsoft-IIS')!==false)
 			$url=iconv('GBK','UTF-8//TRANSLIT//IGNORE',$url);
 	}
-	$url=urldecode(trim($url,'/'));
+	$url=substr($url,strlen($zbp->cookiespath));
+	$url=urldecode($url);
 
 	$r=UrlRule::Rewrite_url($zbp->option['ZC_ARTICLE_REGEX'],'article');
 	$m=array();
@@ -114,6 +120,7 @@ function ViewAuto($url){
 	return null;
 	}
 
+	ViewList(null,null,null,null,null);
 }
 
 
@@ -1472,7 +1479,7 @@ function FilterMember(&$member){
 	}
 
 	if(!CheckRegExp($member->Email,'[email]')){
-		$member->Email='';
+		$member->Email='null@null.com';
 	}
 
 	if(substr($member->HomePage,0,4)!='http'){

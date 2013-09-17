@@ -139,7 +139,7 @@ class UrlRule
 
 		$s .= 'RewriteCond %{REQUEST_FILENAME} !-f' . "\r\n";
 		$s .= 'RewriteCond %{REQUEST_FILENAME} !-d' . "\r\n";
-		$s .= 'RewriteRule . /index.php [L]' . "\r\n";
+		$s .= 'RewriteRule . '.$zbp->cookiespath.'index.php [L]' . "\r\n";
 
 		return $s;
 	}
@@ -206,7 +206,7 @@ class UrlRule
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_TAGS_REGEX'],'tags') . "\r\n";
 		$s .= $this->Rewrite_webconfig($zbp->option['ZC_CATEGORY_REGEX'],'cate') . "\r\n";
 */
-		$s .='    <rule name="Imported Rule 1" stopProcessing="true">' . "\r\n";
+		$s .='    <rule name="'.$zbp->cookiespath.'Imported Rule 1" stopProcessing="true">' . "\r\n";
 		$s .='     <match url="^" ignoreCase="false" />' . "\r\n";
 		$s .='      <conditions logicalGrouping="MatchAny">' . "\r\n";
 		$s .='       <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="true" />' . "\r\n";
@@ -215,7 +215,7 @@ class UrlRule
 		$s .='      <action type="None" />' . "\r\n";
 		$s .='    </rule>' . "\r\n";
 
-		$s .='    <rule name="Imported Rule 2" stopProcessing="true">' . "\r\n";
+		$s .='    <rule name="'.$zbp->cookiespath.'Imported Rule 2" stopProcessing="true">' . "\r\n";
 		$s .='     <match url="^" ignoreCase="false" />' . "\r\n";
 		$s .='     <action type="Rewrite" url="index.php" />' . "\r\n";
 		$s .='    </rule>' . "\r\n";

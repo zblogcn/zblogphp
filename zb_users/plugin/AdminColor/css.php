@@ -10,6 +10,11 @@ if(isset($_GET['setcolor'])){
 	if ($zbp->CheckRights($action)) {
 		$zbp->Config('AdminColor')->color=(int)$_GET['setcolor'];
 		$zbp->SaveConfig('AdminColor');
+		setcookie("admincolor", (int)$_GET['setcolor'], time()+3600*24*365,$zbp->cookiespath);
+		Redirect($zbp->host . 'zb_system/admin/');
+		die();
+	}else{
+		setcookie("admincolor", (int)$_GET['setcolor'], time()+3600*24*365,$zbp->cookiespath);
 		Redirect($zbp->host . 'zb_system/admin/');
 		die();
 	}
@@ -18,6 +23,9 @@ if(isset($_GET['setcolor'])){
 header('Content-Type: text/css; Charset=utf-8');  
 
 $id=(int)$zbp->Config('AdminColor')->color;
+if(isset($_COOKIE['admincolor'])){
+	$id=(int)$_COOKIE['admincolor'];
+}
 $c='';
 
 $c .="header{background-color:#3a6ea5;}". "\r\n";

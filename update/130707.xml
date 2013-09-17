@@ -1,6 +1,6 @@
 ﻿<files build='130707'>
 	<file name='feed.php' crc32='788825AB'/>
-	<file name='index.php' crc32='FE71E997'/>
+	<file name='index.php' crc32='8DDB07F6'/>
 	<file name='search.php' crc32='61B52BA8'/>
 	<file name='zb_system\cmd.php' crc32='76FCFE67'/>
 	<file name='zb_system\login.php' crc32='D1B1009F'/>
@@ -11,7 +11,7 @@
 	<file name='zb_system\admin\category_edit.php' crc32='9DF5EAC2'/>
 	<file name='zb_system\admin\edit.php' crc32='1652F1F4'/>
 	<file name='zb_system\admin\index.php' crc32='C5C58367'/>
-	<file name='zb_system\admin\member_edit.php' crc32='1CA66018'/>
+	<file name='zb_system\admin\member_edit.php' crc32='57528640'/>
 	<file name='zb_system\admin\module_edit.php' crc32='99A3B304'/>
 	<file name='zb_system\admin\tag_edit.php' crc32='E35C06B8'/>
 	<file name='zb_system\css\admin.css' crc32='BA7C4156'/>
@@ -43,7 +43,7 @@
 	<file name='zb_system\function\c_system_base.php' crc32='2F296601'/>
 	<file name='zb_system\function\c_system_common.php' crc32='7AD2B586'/>
 	<file name='zb_system\function\c_system_debug.php' crc32='78297AC9'/>
-	<file name='zb_system\function\c_system_event.php' crc32='571D503'/>
+	<file name='zb_system\function\c_system_event.php' crc32='9217D4E5'/>
 	<file name='zb_system\function\c_system_misc.php' crc32='6C2125A2'/>
 	<file name='zb_system\function\c_system_plugin.php' crc32='49C2BE63'/>
 	<file name='zb_system\function\lib\app.php' crc32='66E743A0'/>
@@ -68,7 +68,7 @@
 	<file name='zb_system\function\lib\tag.php' crc32='91E2C76'/>
 	<file name='zb_system\function\lib\template.php' crc32='C551B756'/>
 	<file name='zb_system\function\lib\upload.php' crc32='8868772D'/>
-	<file name='zb_system\function\lib\urlrule.php' crc32='490452B7'/>
+	<file name='zb_system\function\lib\urlrule.php' crc32='DC0A219E'/>
 	<file name='zb_system\function\lib\zblogphp.php' crc32='CC826618'/>
 	<file name='zb_system\image\admin\app-logo.png' crc32='7D5E99CC'/>
 	<file name='zb_system\image\admin\arrow-3-right.png' crc32='9613739F'/>

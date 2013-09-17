@@ -88,7 +88,10 @@ function RegPage_Page(){
 	global $zbp;
 	
 	$zbp->header .='<script src="'.$zbp->host.'zb_users/plugin/RegPage/reg.js" type="text/javascript"></script>' . "\r\n";
+	$zbp->header .='<script src="'.$zbp->host.'zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>' . "\r\n";
+	$zbp->header .='<link rel="stylesheet" type="text/css" href="'.$zbp->host.'zb_system/css/jquery-ui.custom.css"/>' . "\r\n";
 
+	
 	$article = new Post;
 	$article->Title=$zbp->Config('RegPage')->title_text;
 	$article->IsLock=true;
@@ -99,12 +102,12 @@ function RegPage_Page(){
 	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)名称：<input required="required" type="text" name="name" style="width:200px;font-size:1.2em;" /></p></dd>';
 	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)密码：<input required="required" type="password" name="password" style="width:200px;font-size:1.2em;" /></p></dd>';
 	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)确认密码：<input required="required" type="password" name="repassword" style="width:200px;font-size:1.2em;" /></p></dd>';
-	$article->Content .='<dd><p style="width:350px;text-align:right;">邮箱：<input type="text" name="email" style="width:200px;font-size:1.2em;" /></p></dd>';
+	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)邮箱：<input type="text" name="email" style="width:200px;font-size:1.2em;" /></p></dd>';
 	$article->Content .='<dd><p style="width:350px;text-align:right;">网站：<input type="text" name="homepage" style="width:200px;font-size:1.2em;" /></p></dd>';
 	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)邀请码：<input required="required" type="text" name="invitecode" style="width:200px;font-size:1.2em;" /></p></dd>';
 
 	if($zbp->Config('RegPage')->open_reg){
-		$article->Content .='<dd><p style="width:350px;text-align:right;">点击<a href="'.$zbp->host.'zb_users/plugin/RegPage/getinvitecode.php" target="_blank">这里</a>获取邀请码.</p></dd>';
+		$article->Content .='<dd><p style="width:350px;text-align:right;">点击<a onclick="$(\'#dialog-message\').dialog(\'open\');return false;" href="'.$zbp->host.'zb_users/plugin/RegPage/getinvitecode.php" target="_blank">这里</a>获取邀请码.</p></dd>';
 	}
 	
 
@@ -115,6 +118,28 @@ function RegPage_Page(){
 	$article->Content .='<p>带星号为必填选项.</p>';
 	
 
+$s=	<<<js
+<script type="text/javascript">
+  $(function() {
+    $( "#dialog-message" ).dialog({
+      autoOpen: false,
+      modal: true,
+      buttons: {
+        Ok: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+  });
+</script>
+
+<div id="dialog-message" title="{$article->Title}">
+<iframe src ="{$zbp->host}zb_users/plugin/RegPage/getinvitecode.php?{microtime()}" style="border:none;width:250px;"></iframe>
+</div>
+js;
+
+	$article->Content .=$s;	
+	
 	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);
 	$zbp->template->SetTags('type',$article->type=0?'article':'page');
