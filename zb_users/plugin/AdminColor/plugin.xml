@@ -3,8 +3,8 @@
 <id>AdminColor</id>
 <name>后台配色器</name>
 <url>http://www.rainbowsoft.org/</url>
-<note>给Z-Blog 2.1换后台配色的小工具.</note>
-<description>给Z-BlogPHP换后台配色的小工具</description>
+<note>给Z-BlogPHP版换后台配色的小工具.</note>
+<description>给Z-BlogPHP版换后台配色的小工具.</description>
 <path></path>
 <include>include.asp</include>
 <level>1</level>
@@ -21,7 +21,7 @@
 <adapted>130707</adapted>
 <version>1.0</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2013-09-13</modified>
+<modified>2013-09-18</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

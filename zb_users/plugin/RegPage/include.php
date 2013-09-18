@@ -115,9 +115,9 @@ function RegPage_Page(){
 	$article->Content .='<dd><p style="width:350px;text-align:right;"><input type="submit" style="width:100px;font-size:1.0em;padding:0.2em" value="提交" onclick="return RegPage()" /></p></dd>';
 
 	$article->Content .='</dl>';
-	$article->Content .='<p>带星号为必填选项.</p>';
+	//$article->Content .='<p>带星号为必填选项.</p>';
 	
-
+$mt=microtime();
 $s=	<<<js
 <script type="text/javascript">
   $(function() {
@@ -134,7 +134,7 @@ $s=	<<<js
 </script>
 
 <div id="dialog-message" title="{$article->Title}">
-<iframe src ="{$zbp->host}zb_users/plugin/RegPage/getinvitecode.php?{microtime()}" style="border:none;width:250px;"></iframe>
+<iframe src ="{$zbp->host}zb_users/plugin/RegPage/getinvitecode.php?{$mt}" style="border:none;width:250px;"></iframe>
 </div>
 js;
 
