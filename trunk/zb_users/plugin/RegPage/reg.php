@@ -65,7 +65,7 @@ $member->PostTime=time();
 $member->IP=GetGuestIP();
 
 
-if(strlen($name)<5||strlen($name)>50){
+if(strlen($email)<5||strlen($email)>50){
 	$zbp->ShowError('邮箱不能过长或过短.');die();
 }
 

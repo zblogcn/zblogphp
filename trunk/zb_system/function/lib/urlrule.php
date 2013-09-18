@@ -289,7 +289,7 @@ class UrlRule
 		$s .='	rewrite (.*) $1/index.php;' . "\r\n";
 		$s .='}' . "\r\n";
 		$s .='if (!-f $request_filename){' . "\r\n";
-		$s .='	rewrite (.*) /index.php;' . "\r\n";
+		$s .='	rewrite (.*) '.$zbp->cookiespath.'index.php;' . "\r\n";
 		$s .='}' . "\r\n";
 		return $s;
 	}
