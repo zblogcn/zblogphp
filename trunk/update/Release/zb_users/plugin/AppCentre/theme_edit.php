@@ -38,6 +38,19 @@ if(count($_POST)>0){
     @mkdir($zbp->usersdir . 'theme/' . $app->id . '/style/');
     @copy($zbp->usersdir . 'plugin/AppCentre/images/theme.png',$zbp->usersdir . 'theme/' . $app->id . '/screenshot.png');
     @file_put_contents($zbp->usersdir . 'theme/' . $app->id . '/style/style.css','');
+
+    if(trim($_POST['app_path'])){
+      $file = file_get_contents('tpl/main.php');
+      $file = str_replace("<%appid%>", $app->id, $file);
+      $path=$zbp->usersdir . 'theme/' . $app->id . '/' . trim($_POST['app_path']);
+      @file_put_contents($path, $file);
+    }
+    if(trim($_POST['app_include'])){
+      $file = file_get_contents('tpl/include.php');
+      $file = str_replace("<%appid%>", $app->id, $file);
+      $path=$zbp->usersdir . 'theme/' . $app->id . '/include.php';
+      @file_put_contents($path, $file);
+    }
   }
 
 $app->name=trim($_POST['app_name']);
@@ -207,14 +220,14 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     </tr>
     <tr>
       <td><p><b>· 内置插件管理页</b> (可选)<br/>
-          <span class="note">&nbsp;&nbsp;默认为main.asp</span></p></td>
+          <span class="note">&nbsp;&nbsp;习惯命名为main.php</span></p></td>
       <td><p>&nbsp;
           <input id="app_path" name="app_path" style="width:550px;"  type="text" value="<?php echo $app->path;?>" />
         </p></td>
     </tr>
     <tr>
       <td><p><b>· 内置插件嵌入页</b> (可选)<br/>
-          <span class="note">&nbsp;&nbsp;默认为include.asp</span></p></td>
+          <span class="note">&nbsp;&nbsp;只能命名为include.php</span></p></td>
       <td><p>&nbsp;
           <input id="app_include" name="app_include" style="width:550px;"  type="text" value="<?php echo $app->include;?>" />
         </p></td>
