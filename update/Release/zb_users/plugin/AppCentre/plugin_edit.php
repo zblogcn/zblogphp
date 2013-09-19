@@ -37,7 +37,7 @@ if(count($_POST)>0){
     @mkdir($zbp->usersdir . 'plugin/' . $app->id . '/');
     @copy($zbp->usersdir . 'plugin/AppCentre/images/plugin.png',$zbp->usersdir . 'plugin/' . $app->id . '/logo.png');
 
-    if(!trim($_POST['app_path'])){
+    if(trim($_POST['app_path'])){
       $file = file_get_contents('tpl/main.php');
       $file = str_replace("<%appid%>", $app->id, $file);
       $path=$zbp->usersdir . 'plugin/' . $app->id . '/' . trim($_POST['app_path']);
@@ -170,14 +170,14 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     </tr>
     <tr>
       <td><p><b>· 插件管理页</b> (可选)<br/>
-          <span class="note">&nbsp;&nbsp;习惯命名为main.asp</span></p></td>
+          <span class="note">&nbsp;&nbsp;习惯命名为main.php</span></p></td>
       <td><p>&nbsp;
           <input id="app_path" name="app_path" style="width:550px;"  type="text" value="<?php echo $app->path;?>" />
         </p></td>
     </tr>
     <tr>
       <td><p><b>· 插件嵌入页</b> (可选)<br/>
-          <span class="note">&nbsp;&nbsp;只能命名为include.asp</span></p></td>
+          <span class="note">&nbsp;&nbsp;只能命名为include.php</span></p></td>
       <td><p>&nbsp;
           <input id="app_include" name="app_include" style="width:550px;"  type="text" value="<?php echo $app->include;?>" />
         </p></td>
