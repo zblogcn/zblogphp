@@ -180,16 +180,13 @@ class DbSql #extends AnotherClass
 					$c='';
 					$sql_array='';
 					if(!is_array($w[1]))continue;
-					if(count($w[1])>0){
-						foreach ($w[1] as $x=>$y) {
-							$y[1]=$zbp->db->EscapeString($y[1]);
-							$sql_array .= $c . " $y[0]='$y[1]' ";
-							$c='OR';
-						}
-						$sqlw .= $comma .  '(' . $sql_array . ')';
-					}else{
-						continue;
+					if(count($w[1])==0)continue;
+					foreach ($w[1] as $x=>$y) {
+						$y[1]=$zbp->db->EscapeString($y[1]);
+						$sql_array .= $c . " $y[0]='$y[1]' ";
+						$c='OR';
 					}
+					$sqlw .= $comma .  '(' . $sql_array . ')';
 				}
 				if($eq=='custom'){
 					$sqlw .= $comma .  '(' . $w[1] . ')';

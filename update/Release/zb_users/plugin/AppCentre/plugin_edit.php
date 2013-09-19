@@ -36,6 +36,19 @@ if(count($_POST)>0){
     if($app2->id) {$zbp->ShowError('已存在同名的APP应用.');die();}
     @mkdir($zbp->usersdir . 'plugin/' . $app->id . '/');
     @copy($zbp->usersdir . 'plugin/AppCentre/images/plugin.png',$zbp->usersdir . 'plugin/' . $app->id . '/logo.png');
+
+    if(!trim($_POST['app_path'])){
+      $file = file_get_contents('tpl/main.php');
+      $file = str_replace("<%appid%>", $app->id, $file);
+      $path=$zbp->usersdir . 'plugin/' . $app->id . '/' . trim($_POST['app_path']);
+      @file_put_contents($path, $file);
+    }
+    if(trim($_POST['app_include'])){
+      $file = file_get_contents('tpl/include.php');
+      $file = str_replace("<%appid%>", $app->id, $file);
+      $path=$zbp->usersdir . 'plugin/' . $app->id . '/include.php';
+      @file_put_contents($path, $file);
+    }
   }
 
 $app->name=trim($_POST['app_name']);
@@ -157,14 +170,14 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     </tr>
     <tr>
       <td><p><b>· 插件管理页</b> (可选)<br/>
-          <span class="note">&nbsp;&nbsp;默认为main.asp</span></p></td>
+          <span class="note">&nbsp;&nbsp;习惯命名为main.asp</span></p></td>
       <td><p>&nbsp;
           <input id="app_path" name="app_path" style="width:550px;"  type="text" value="<?php echo $app->path;?>" />
         </p></td>
     </tr>
     <tr>
       <td><p><b>· 插件嵌入页</b> (可选)<br/>
-          <span class="note">&nbsp;&nbsp;默认为include.asp</span></p></td>
+          <span class="note">&nbsp;&nbsp;只能命名为include.asp</span></p></td>
       <td><p>&nbsp;
           <input id="app_include" name="app_include" style="width:550px;"  type="text" value="<?php echo $app->include;?>" />
         </p></td>
