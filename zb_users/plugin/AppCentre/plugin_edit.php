@@ -64,6 +64,18 @@ $app->description=trim($_POST['app_description']);
 
 $app-> SaveInfoByXml();
 
+
+$file = file_get_contents('plugin_tpl/function.php');
+$file = str_replace("<%appid%>", $app->id, $file);
+$path=$zbp->usersdir . 'plugin/' . $app->id . '/function.php';
+@file_put_contents($path, $file);
+
+$file = file_get_contents('plugin_tpl/include.php');
+$file = str_replace("<%appid%>", $app->id, $file);
+$path=$zbp->usersdir . 'plugin/' . $app->id . '/include.php';
+@file_put_contents($path, $file);
+
+
 	$zbp->SetHint('good');
   Redirect($_SERVER["HTTP_REFERER"]);
 }
