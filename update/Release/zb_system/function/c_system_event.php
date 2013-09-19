@@ -748,7 +748,7 @@ function PostPage(){
 	FilterMeta($article);
 
 	foreach ($GLOBALS['Filter_Plugin_PostPage_Core'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($cmt);
+		$fpreturn=$fpname($article);
 	}
 
 	$article->Save();
