@@ -1180,7 +1180,7 @@ function AddBuildModuleAll(){
 		$a='<li id="navbar-'.$type.'-'.$id.'"><a href="'.$url.'">'.$name.'</a></li>';
 
 		if($this->CheckItemToNavbar($type,$id)){
-			$s=preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*<\/li>/', $a, $s);
+			$s=preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*?<\/li>/', $a, $s);
 		}else{
 			$s.='<li id="navbar-'.$type.'-'.$id.'"><a href="'.$url.'">'.$name.'</a></li>';
 		}
@@ -1195,9 +1195,9 @@ function AddBuildModuleAll(){
 
 		if(!$type)$type='item';
 		$m=$this->modulesbyfilename['navbar'];
-		$s=$m->Content;
+		$s=$m->Content . '<';
 
-		$s=preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*<\/li>/', '', $s);
+		$s=preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*?<\/li>/', '', $s);
 
 		$m->Content=$s;
 		$m->Save();

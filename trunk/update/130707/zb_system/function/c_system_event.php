@@ -787,6 +787,8 @@ function DelPage(){
 
 		$zbp->AddBuildModule('comments');
 
+		$zbp->DelItemToNavbar('page',$article->ID);
+
 	}else{
 		
 	}
@@ -1191,12 +1193,8 @@ function PostModule(){
 			return true;
 		}
 	}
-	$mod = new Module();
-	if(GetVars('ID','POST') == 0){
 
-	}else{
-		$mod->LoadInfoByID(GetVars('ID','POST'));
-	}
+	$mod=$zbp->GetModuleByID(GetVars('ID','POST'));
 
 	foreach ($zbp->datainfo['Module'] as $key => $value) {
 		if($key=='ID')continue;
@@ -1209,6 +1207,9 @@ function PostModule(){
 	FilterModule($mod);
 
 	$mod->Save();
+
+	$zbp->AddBuildModule($mod->FileName);
+
 	return true;
 }
 
@@ -1843,6 +1844,60 @@ function BuildModule_archives(){
 
 	return $s;
 
+}
+
+function BuildModule_navbar(){
+	global $zbp;
+
+	$s=$zbp->modulesbyfilename['navbar']->Content;
+
+	$a=array();
+	preg_match_all('/<li id="navbar-(page|category|tag)-(\d+)">/',$s,$a);
+
+	$b=$a[1];
+	$c=$a[2];
+	foreach ($b as $key => $value) {
+
+		if($b[$key]=='page'){
+
+			$type='page';
+			$id=$c[$key];
+			$o=$zbp->GetPostByID($id);
+			$url=$o->Url;
+			$name=$o->Title;
+
+			$a='<li id="navbar-'.$type.'-'.$id.'"><a href="'.$url.'">'.$name.'</a></li>';
+			$s=preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*?<\/a><\/li>/', $a, $s);
+
+		}
+		if($b[$key]=='category'){
+
+			$type='category';
+			$id=$c[$key];
+			$o=$zbp->GetCategoryByID($id);
+			$url=$o->Url;
+			$name=$o->Name;
+
+			$a='<li id="navbar-'.$type.'-'.$id.'"><a href="'.$url.'">'.$name.'</a></li>';
+			$s=preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*?<\/a><\/li>/', $a, $s);
+
+		}
+		if($b[$key]=='tag'){
+
+
+			$type='tag';
+			$id=$c[$key];
+			$o=$zbp->GetTagByID($id);
+			$url=$o->Url;
+			$name=$o->Name;
+
+			$a='<li id="navbar-'.$type.'-'.$id.'"><a href="'.$url.'">'.$name.'</a></li>';
+			$s=preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*?<\/a><\/li>/', $a, $s);
+
+		}
+	}
+
+	return $s;
 }
 
 ?>

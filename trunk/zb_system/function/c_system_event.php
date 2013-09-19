@@ -1852,10 +1852,51 @@ function BuildModule_navbar(){
 	$s=$zbp->modulesbyfilename['navbar']->Content;
 
 	$a=array();
-	preg_match_all('/<li id="navbar-(page|category|tag)-(\d)+">/',$s,$a);
+	preg_match_all('/<li id="navbar-(page|category|tag)-(\d+)">/',$s,$a);
 
-	var_dump($a);
-//die;
+	$b=$a[1];
+	$c=$a[2];
+	foreach ($b as $key => $value) {
+
+		if($b[$key]=='page'){
+
+			$type='page';
+			$id=$c[$key];
+			$o=$zbp->GetPostByID($id);
+			$url=$o->Url;
+			$name=$o->Title;
+
+			$a='<li id="navbar-'.$type.'-'.$id.'"><a href="'.$url.'">'.$name.'</a></li>';
+			$s=preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*?<\/a><\/li>/', $a, $s);
+
+		}
+		if($b[$key]=='category'){
+
+			$type='category';
+			$id=$c[$key];
+			$o=$zbp->GetCategoryByID($id);
+			$url=$o->Url;
+			$name=$o->Name;
+
+			$a='<li id="navbar-'.$type.'-'.$id.'"><a href="'.$url.'">'.$name.'</a></li>';
+			$s=preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*?<\/a><\/li>/', $a, $s);
+
+		}
+		if($b[$key]=='tag'){
+
+
+			$type='tag';
+			$id=$c[$key];
+			$o=$zbp->GetTagByID($id);
+			$url=$o->Url;
+			$name=$o->Name;
+
+			$a='<li id="navbar-'.$type.'-'.$id.'"><a href="'.$url.'">'.$name.'</a></li>';
+			$s=preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*?<\/a><\/li>/', $a, $s);
+
+		}
+	}
+
 	return $s;
 }
 

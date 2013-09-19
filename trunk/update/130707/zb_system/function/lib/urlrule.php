@@ -126,7 +126,8 @@ class UrlRule
 
 	public function Make_htaccess(){
 		global $zbp;
-		$s='RewriteEngine On' . "\r\n";
+		$s='<IfModule mod_rewrite.c>' . "\r\n";
+		$s .='RewriteEngine On' . "\r\n";
 		$s .= "RewriteBase " . $zbp->cookiespath . "\r\n";
 /*
 		$s .= $this->Rewrite_htaccess($zbp->option['ZC_ARTICLE_REGEX'],'article') . "\r\n";
@@ -142,7 +143,7 @@ class UrlRule
 		$s .= 'RewriteCond %{REQUEST_FILENAME} !-f' . "\r\n";
 		$s .= 'RewriteCond %{REQUEST_FILENAME} !-d' . "\r\n";
 		$s .= 'RewriteRule . '.$zbp->cookiespath.'index.php [L]' . "\r\n";
-
+		$s .= '</IfModule>';
 		return $s;
 	}
 /*
