@@ -114,6 +114,19 @@ class Post extends Base{
 				}else{
 					$u->Rules['{%alias%}']=urlencode($this->Title);
 				}
+				$u->Rules['{%year%}']=$this->Time('Y');
+				$u->Rules['{%month%}']=$this->Time('m');
+				$u->Rules['{%day%}']=$this->Time('d');
+				if($this->Category->Alias){
+					$u->Rules['{%category%}']=$this->Category->Alias;
+				}else{
+					$u->Rules['{%category%}']=urlencode($this->Category->Name);
+				}
+				if($this->Author->Alias){
+					$u->Rules['{%author%}']=$this->Author->Alias;
+				}else{
+					$u->Rules['{%author%}']=urlencode($this->Author->Name);
+				}
 				return $u->Make();
 				break;
 			case 'Tags':

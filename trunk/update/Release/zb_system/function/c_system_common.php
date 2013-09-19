@@ -26,6 +26,13 @@ function GetValueInArray($array,$name){
 	}
 }
 
+function GetValueInArrayByCurrent($array,$name){
+	if(is_array($array)){
+		$array=current($array);
+		return GetValueInArray($array,$name);
+	}
+}
+
 function GetGuid(){
 	$s=str_replace('.','',trim(uniqid('zbp',true),'zbp'));
 	return $s;

@@ -63,7 +63,7 @@ class DbSql #extends AnotherClass
 			$i +=1;
 		}
 		reset($datainfo);
-		$s.='PRIMARY KEY ('.GetValueInArray(current($datainfo),0).'),';
+		$s.='PRIMARY KEY ('.GetValueInArrayByCurrent($datainfo,0).'),';
 		$s=substr($s,0,strlen($s)-1);
 		$s.=') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
 	}
@@ -99,7 +99,7 @@ class DbSql #extends AnotherClass
 
 		$s.=');';
 		reset($datainfo);
-		$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArray(current($datainfo),0).' on '.$tablename.' ('.GetValueInArray(current($datainfo),0).');';
+		$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$tablename.' ('.GetValueInArrayByCurrent($datainfo,0).');';
 
 	}
 
@@ -134,7 +134,7 @@ class DbSql #extends AnotherClass
 
 		$s.=');';
 		reset($datainfo);
-		$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArray(current($datainfo),0).' on '.$tablename.' ('.GetValueInArray(current($datainfo),0).');';
+		$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArray($datainfo,0).' on '.$tablename.' ('.GetValueInArray($datainfo,0).');';
 	}
 
 	return $s;
@@ -179,12 +179,17 @@ class DbSql #extends AnotherClass
 				if($eq=='array'){
 					$c='';
 					$sql_array='';
-					foreach ($w[1] as $x=>$y) {
-						$y[1]=$zbp->db->EscapeString($y[1]);
-						$sql_array .= $c . " $y[0]='$y[1]' ";
-						$c='OR';
+					if(!is_array($w[1]))continue;
+					if(count($w[1])>0){
+						foreach ($w[1] as $x=>$y) {
+							$y[1]=$zbp->db->EscapeString($y[1]);
+							$sql_array .= $c . " $y[0]='$y[1]' ";
+							$c='OR';
+						}
+						$sqlw .= $comma .  '(' . $sql_array . ')';
+					}else{
+						continue;
 					}
-					$sqlw .= $comma .  '(' . $sql_array . ')';
 				}
 				if($eq=='custom'){
 					$sqlw .= $comma .  '(' . $w[1] . ')';
@@ -238,7 +243,7 @@ class DbSql #extends AnotherClass
 			if(isset($option['pagebar'])){
 				if($option['pagebar']->Count===null){
 					$s2 = $this->Count($table,array(array('COUNT','*','num')),$where);
-					$option['pagebar']->Count = GetValueInArray(current($zbp->db->Query($s2)),'num');
+					$option['pagebar']->Count = GetValueInArrayByCurrent($zbp->db->Query($s2),'num');
 				}
 				$option['pagebar']->Count=(int)$option['pagebar']->Count;
 				$option['pagebar']->make();

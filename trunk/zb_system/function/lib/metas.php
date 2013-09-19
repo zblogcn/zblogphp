@@ -29,27 +29,37 @@ class Metas {
 		return $m;
 	}
 
-	public function HasKey($name)
-	{
+	public function HasKey($name){
 		return array_key_exists($name,$this->Data);
 	}
 
-	public function Del($name)
-	{
+	public function Del($name){
+
 		 unset($this->Data[$name]); 
 	}
 
-	public function Serialize()
-	{
+	public function Serialize(){
+		global $zbp;
 		if(count($this->Data)==0)return '';
+		foreach ($this->Data as $key => $value) {
+			if(is_string($value)){
+				$this->Data[$key]=str_replace($zbp->host,'{#ZC_BLOG_HOST#}',$value);
+			}
+		}
 		return serialize($this->Data);
 	}
 
-	public function Unserialize($s)
-	{
-		if($s=='')return;
+	public function Unserialize($s){
+		global $zbp;
+		if($s=='')return false;
 		$this->Data=unserialize($s);
-	}	
+		if(count($this->Data)==0)return false;
+		foreach ($this->Data as $key => $value) {
+			if(is_string($value)){
+				$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$value);
+			}
+		}
+	}
 
 
 }

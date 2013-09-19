@@ -35,7 +35,7 @@ function zbp_admin_addmodsubmenu(){
 function zbp_admin_addcmtsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('CommentAll')){
-		$n=GetValueInArray(current($zbp->db->Query('SELECT COUNT(comm_ID) AS num FROM ' . $GLOBALS['table']['Comment'] . ' WHERE comm_Ischecking=1')),'num');
+		$n=GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(comm_ID) AS num FROM ' . $GLOBALS['table']['Comment'] . ' WHERE comm_Ischecking=1'),'num');
 		if($n!=0){$n=' ('.$n.')';}else{$n='';}
 		echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left '.(GetVars('ischecking')?'m-now':'').'">' . $GLOBALS['lang']['msg']['check_comment']  . $n . '</span></a>';
 	}

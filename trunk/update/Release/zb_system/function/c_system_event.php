@@ -1528,7 +1528,7 @@ function FilterTag(&$tag){
 function CountNormalArticleNums(){
 	global $zbp;
 	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type',0),array('=','log_IsTop',0),array('=','log_Status',0)));
-	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
+	$num=GetValueInArrayByCurrent($zbp->db->Query($s),'num');
 
 	$zbp->cache->normal_article_nums=$num;
 	$zbp->SaveCache();
@@ -1540,7 +1540,7 @@ function CountPost(&$article){
 	$id=$article->ID;
 
 	$s=$zbp->db->sql->Count($zbp->table['Comment'],array(array('COUNT','*','num')),array(array('=','comm_LogID',$id),array('=','comm_IsChecking',0)));
-	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
+	$num=GetValueInArrayByCurrent($zbp->db->Query($s),'num');
 
 	$article->CommNums=$num;
 }
@@ -1563,7 +1563,7 @@ function CountCategory(&$category){
 	$id=$category->ID;
 
 	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type',0),array('=','log_IsTop',0),array('=','log_Status',0),array('=','log_CateID',$id)));
-	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
+	$num=GetValueInArrayByCurrent($zbp->db->Query($s),'num');
 
 	$category->Count=$num;
 }
@@ -1584,7 +1584,7 @@ function CountTag(&$tag){
 	$id=$tag->ID;
 
 	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('LIKE','log_Tag','%{'.$id.'}%')));
-	$num=GetValueInArray(current($zbp->db->Query($s)),'num');
+	$num=GetValueInArrayByCurrent($zbp->db->Query($s),'num');
 
 	$tag->Count=$num;
 }
@@ -1604,16 +1604,16 @@ function CountMember(&$member){
 	$id=$member->ID;
 
 	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type',0),array('=','log_IsTop',0),array('=','log_Status',0),array('=','log_AuthorID',$id)));
-	$member_Articles=GetValueInArray(current($zbp->db->Query($s)),'num');
+	$member_Articles=GetValueInArrayByCurrent($zbp->db->Query($s),'num');
 
 	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type',0),array('=','log_IsTop',0),array('=','log_Status',0),array('=','log_AuthorID',$id)));
-	$member_Pages=GetValueInArray(current($zbp->db->Query($s)),'num');
+	$member_Pages=GetValueInArrayByCurrent($zbp->db->Query($s),'num');
 
 	$s=$zbp->db->sql->Count($zbp->table['Comment'],array(array('COUNT','*','num')),array(array('=','comm_AuthorID',$id)));
-	$member_Comments=GetValueInArray(current($zbp->db->Query($s)),'num');
+	$member_Comments=GetValueInArrayByCurrent($zbp->db->Query($s),'num');
 
 	$s=$zbp->db->sql->Count($zbp->table['Upload'],array(array('COUNT','*','num')),array(array('=','ul_AuthorID',$id)));
-	$member_Uploads=GetValueInArray(current($zbp->db->Query($s)),'num');
+	$member_Uploads=GetValueInArrayByCurrent($zbp->db->Query($s),'num');
 
 	$member->Articles=$member_Articles;
 	$member->Pages=$member_Pages;
@@ -1761,7 +1761,7 @@ function BuildModule_comments(){
 
 	$s='';
 	foreach ($comments as $comment) {
-		$s .='<li><a href="'.$comment->Post->Url.'#cmt'.$comment->ID.'" title="'.htmlspecialchars($comment->Author->ID . ' @ ' . $comment->Time()).'">' . TransferHTML($comment->Content,'[noenter]') . '</a></li>';
+		$s .='<li><a href="'.$comment->Post->Url.'#cmt'.$comment->ID.'" title="'.htmlspecialchars($comment->Author->Name . ' @ ' . $comment->Time()).'">' . TransferHTML($comment->Content,'[noenter]') . '</a></li>';
 	}
 	return $s;
 }
@@ -1833,7 +1833,7 @@ function BuildModule_archives(){
 		$fdate = $value;
 		$ldate = (strtotime(date('Y-m-t',$value))+60*60*24);
 		$sql = $zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type','0'),array('=','log_Status','0'),array('BETWEEN','log_PostTime',$fdate,$ldate)));
-		$n=GetValueInArray(current($zbp->db->Query($sql)),'num');
+		$n=GetValueInArrayByCurrent($zbp->db->Query($sql),'num');
 		if($n>0){
 			$s.='<li><a href="'.$url->Make().'">'.
 				str_replace(array('%y%','%m%'), array(date('Y',$fdate),date('n',$fdate)), $zbp->lang['msg']['year_month'])

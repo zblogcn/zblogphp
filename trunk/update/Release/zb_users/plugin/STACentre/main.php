@@ -38,6 +38,8 @@ $ua=array(
 '{%host%}?id={%id%}',
 '{%host%}post/{%id%}.html',
 '{%host%}post/{%alias%}.html',
+'{%host%}{%year%}/{%month%}/{%id%}/',
+'{%host%}{%category%}/{%alias%}',
 ),
 
 
@@ -45,6 +47,8 @@ $ua=array(
 '{%host%}?id={%id%}',
 '{%host%}{%id%}.html',
 '{%host%}{%alias%}.html',
+'{%host%}{%alias%}/',
+'{%host%}{%alias%}',
 ),
 
 
@@ -98,7 +102,7 @@ function CreateOptoinsOfUrl($type){
 	}else{
 		$r='';
 	}
-$r='';
+
 	foreach ($ua[$type] as $key => $value) {
 		$s .= '<p '.$d.'><label><input '.$r.' type="radio" name="radio'.$type.'" value="'.$value.'" onclick="$(\'#'.$type.'\').val($(this).val())" />&nbsp;' . $value . '</label></p>';
 		$d='';
@@ -189,6 +193,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 </table>
 	  <hr/>
+	  <p>
+		规则可以自定义，请注意如果规则解析过于广泛会覆盖之后的规则，浏览页面时就会出现故障.
+	  </p>
 	  <p>
 		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" />
 	  </p>

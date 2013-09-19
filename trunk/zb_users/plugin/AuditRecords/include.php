@@ -18,7 +18,7 @@ function ActivePlugin_AuditRecords() {
 function AuditRecords_AddMenu(&$m){
 	global $zbp;
 	array_unshift($m,'');
-	$n=GetValueInArray(current($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=0 AND log_Status=2')),'num');
+	$n=GetValueInArray($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=0 AND log_Status=2'),'num');
 	$m[0]=$m[1];
 	$m[1]=MakeLeftMenu("ArticleAll","(".$n.")审核管理",$zbp->host . "zb_users/plugin/AuditRecords/main.php","nav_AuditRecords","aAuditRecords","");
 }
