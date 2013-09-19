@@ -787,6 +787,8 @@ function DelPage(){
 
 		$zbp->AddBuildModule('comments');
 
+		$zbp->DelItemToNavbar('page',$article->ID);
+
 	}else{
 		
 	}
@@ -1191,12 +1193,8 @@ function PostModule(){
 			return true;
 		}
 	}
-	$mod = new Module();
-	if(GetVars('ID','POST') == 0){
 
-	}else{
-		$mod->LoadInfoByID(GetVars('ID','POST'));
-	}
+	$mod=$zbp->GetModuleByID(GetVars('ID','POST'));
 
 	foreach ($zbp->datainfo['Module'] as $key => $value) {
 		if($key=='ID')continue;
@@ -1209,6 +1207,9 @@ function PostModule(){
 	FilterModule($mod);
 
 	$mod->Save();
+
+	$zbp->AddBuildModule($mod->FileName);
+
 	return true;
 }
 
@@ -1843,6 +1844,19 @@ function BuildModule_archives(){
 
 	return $s;
 
+}
+
+function BuildModule_navbar(){
+	global $zbp;
+
+	$s=$zbp->modulesbyfilename['navbar']->Content;
+
+	$a=array();
+	preg_match_all('/<li id="navbar-(page|category|tag)-(\d)+">/',$s,$a);
+
+	var_dump($a);
+//die;
+	return $s;
 }
 
 ?>

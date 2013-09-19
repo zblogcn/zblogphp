@@ -197,6 +197,8 @@ class ZBlogPHP{
 
 		$this->RegBuildModule('archives','BuildModule_archives');
 
+		$this->RegBuildModule('navbar','BuildModule_navbar');
+
 		$this->isload=true;
 	}
 
@@ -503,7 +505,9 @@ function BuildModule(){
 		if(isset($this->modulesbyfilename[$modfilename])){
 			if(isset($this->modulefunc[$modfilename])){
 				$m=$this->modulesbyfilename[$modfilename];
-				$m->Content=call_user_func($this->modulefunc[$modfilename]);
+				if(function_exists($this->modulefunc[$modfilename])){
+					$m->Content=call_user_func($this->modulefunc[$modfilename]);
+				}
 				$m->Save();
 			}
 		}
@@ -628,7 +632,6 @@ function AddBuildModuleAll(){
 			$m->Type='div';
 			$m->Source='theme';
 			$this->modules[]=$m;
-
 			$this->modulesbyfilename[$m->FileName]=$m;
 		}
 
@@ -1009,21 +1012,20 @@ function AddBuildModuleAll(){
 	}
 
 	function GetModuleByID($id){
-		$m = new Module;
-		if($id>0){
-			$m->LoadInfoByID($id);
+		foreach ($this->modules as $key => $value) {
+			if($value->ID==$id)return $value;
 		}
+		$m = new Module;
 		return $m;
 	}
 
 	function GetMemberByID($id){
 		if(isset($this->members[$id])){
 			return $this->members[$id];
-		}else{
-			$m = new Member;
-			$m->Guid=GetGuid();
-			return $m;
 		}
+		$m = new Member;
+		$m->Guid=GetGuid();
+		return $m;
 	}
 
 	function GetMemberByAliasOrName($name){
@@ -1168,7 +1170,7 @@ function AddBuildModuleAll(){
 		return HasNameInString($s,$name);
 	}
 
-	#$type=category,article,page,item
+	#$type=category,tag,page,item
 	function AddItemToNavbar($type='item',$id,$name,$url){
 
 		if(!$type)$type='item';
