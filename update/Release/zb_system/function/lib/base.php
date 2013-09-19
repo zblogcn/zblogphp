@@ -70,7 +70,11 @@ class Base
 			if($value[1] == 'boolean'){
 				$this->Data[$key]=(boolean)$array[$value[0]];
 			}elseif($value[1] == 'string'){
-				$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$value[0]]);
+				if($key=='Meta'){
+					$this->Data[$key]=$array[$value[0]];
+				}else{
+					$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$value[0]]);
+				}
 			}else{
 				$this->Data[$key]=$array[$value[0]];
 			}			
@@ -87,7 +91,11 @@ class Base
 			if($value[1] == 'boolean'){
 				$this->Data[$key]=(boolean)$array[$i];
 			}elseif($value[1] == 'string'){
-				$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$i]);
+				if($key=='Meta'){
+					$this->Data[$key]=$array[$value[0]];
+				}else{
+					$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$value[0]]);
+				}
 			}else{
 				$this->Data[$key]=$array[$i];
 			}
@@ -112,7 +120,11 @@ class Base
 			if($value[1]=='boolean'){
 				$keyvalue[$value[0]]=(integer)$this->Data[$key];
 			}elseif($value[1] == 'string'){
-				$keyvalue[$value[0]]=str_replace($zbp->host,'{#ZC_BLOG_HOST#}',$this->Data[$key]);
+				if($key=='Meta'){
+					$keyvalue[$value[0]]=$this->Data[$key];
+				}else{
+					$keyvalue[$value[0]]=str_replace($zbp->host,'{#ZC_BLOG_HOST#}',$this->Data[$key]);
+				}
 			}else{
 				$keyvalue[$value[0]]=$this->Data[$key];
 			}
