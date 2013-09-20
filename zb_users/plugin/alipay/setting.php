@@ -1,8 +1,9 @@
 <?php
-require '../../../zb_system/function/c_system_base.php';
-require '../../../zb_system/function/c_system_admin.php';
+require_once '../../../zb_system/function/c_system_base.php';
+require_once '../../../zb_system/function/c_system_admin.php';
 
-require 'function.php';
+require_once 'function.php';
+require_once 'api.php';
 
 $zbp->Load();
 
@@ -22,8 +23,31 @@ if(count($_POST)>0){
 	
 	$zbp->SetHint('good');
 	Redirect($_SERVER["HTTP_REFERER"]);
+}elseif(count($_GET)>0){
+	if($_GET['type'] == 'pay'){
+		$parameter = array(
+				"service" => "create_direct_pay_by_user",
+				"payment_type"	=> "1",
+				"notify_url"	=> $blogpath."/zb_users/plugin/alipay/pay_notify_url.php",
+				"return_url"	=> $blogpath."/zb_users/plugin/alipay/pay_return_url.php",
+				"seller_email"	=> $zbp->Config('alipay')->alipayaccount,
+				"out_trade_no"	=>  "12345678",	//订单号
+				"subject"	=> "订单名称",
+				"total_fee"	=> "111",	//金额
+				"body"	=> "订单描述",
+				"show_url"	=> "http://www.xxx.com/myorder.html",
+		);
+		AlipayAPI_Start($parameter);
+	}elseif($_GET['type'] == 'login'){
+		$parameter = array(
+				"service" => "alipay.auth.authorize",
+				"target_service"	=> "user.auth.quick.login",
+				"return_url"	=> $bloghost."zb_users/plugin/alipay/login_return_url.php",
+		);
+		AlipayAPI_Start($parameter);
+	}
 }
-
+//print_r($_SERVER['Filter_Plugin_AlipayAPI_Start']);
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
@@ -73,8 +97,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   </table>
   <p><br/>
     <input type="submit" class="button" value="提交" id="btnPost" onclick='' />
-    <a href="api.php" target="_blank"><input type="button" class="button" value="交易测试" /></a>
-	 <a href="auth/api.php" target="_blank"><input type="button" class="button" value="登陆测试" /></a>
+    <a href="?type=pay" target="_blank"><input type="button" class="button" value="交易测试" /></a>
+	 <a href="?type=login" target="_blank"><input type="button" class="button" value="登陆测试" /></a>
   </p>
   <p>&nbsp;</p>
 </form>

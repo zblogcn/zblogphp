@@ -4,9 +4,7 @@
  * 版本：3.3
  * 日期：2012-07-23
  */
-
-header('Content-Type: text/html; Charset=utf-8');
-require_once("alipay.config.php");
+require_once("alipay.aconfig.php");
 require_once("lib/alipay_notify.class.php");
 //计算得出通知验证结果
 $alipayNotify = new AlipayNotify($alipay_config);
