@@ -102,7 +102,7 @@ class Member extends Base{
 	function Save(){
         global $zbp;
 		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->Data['Template'] = '';
-		parent::Save();
+		return parent::Save();
 	}
 
 }

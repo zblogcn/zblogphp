@@ -32,6 +32,18 @@ class Comment extends Base{
 		}
 	}
 
+	static public function GetRootID($parentid){
+		global $zbp;
+		if($parentid==0)return 0;
+		$c = $zbp->GetCommentByID($parentid);
+		if($c->RootID==0){
+			return $c->ID;
+		}else{
+			return $c->RootID;
+		}
+	}
+
+
 	public function Time($s='Y-m-d H:i:s'){
 		return date($s,(int)$this->PostTime);
 	}

@@ -1,6 +1,6 @@
 <?php  include $this->GetTemplate('header');  ?>
 </head>
-<body class="multi default">
+<body class="multi <?php  echo $type;  ?>">
 <div id="divAll">
 	<div id="divPage">
 	<div id="divMiddle">

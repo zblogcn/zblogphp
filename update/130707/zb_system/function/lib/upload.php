@@ -48,24 +48,39 @@ class Upload extends Base{
 
 	function DelFile(){
 		@unlink($this->FullFile);
+		return true;
 	}
 
 	function SaveFile($tmp){
 		global $zbp;
+
+		foreach ($GLOBALS['Filter_Plugin_Upload_SaveFile'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($tmp);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+
 		if(!file_exists($zbp->usersdir . $this->Dir)){
 			@mkdir($zbp->usersdir . $this->Dir, 0777,true);	
 		}
-		@move_uploaded_file($tmp, $this->FullFile);			
+		@move_uploaded_file($tmp, $this->FullFile);
+		return true;
 	}
 
 	function SaveBase64File($str64){
 		global $zbp;
+
+		foreach ($GLOBALS['Filter_Plugin_Upload_SaveBase64File'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($str64);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+
 		if(!file_exists($zbp->usersdir . $this->Dir)){
 			@mkdir($zbp->usersdir . $this->Dir, 0777,true);	
 		}
 		$s=base64_decode($str64);
 		$this->Size=strlen($s);
 		file_put_contents($zbp->usersdir . $this->Dir . $this->Name, $s);
+		return true;
 	}
 
 	public function Time($s='Y-m-d H:i:s'){

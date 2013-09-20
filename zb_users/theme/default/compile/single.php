@@ -1,7 +1,7 @@
 <?php  include $this->GetTemplate('header');  ?>
 	<link rel="alternate" type="application/rss+xml" href="<?php  echo $feedurl;  ?>" title="<?php  echo $name;  ?>" />
 </head>
-<body class="multi default">
+<body class="single <?php  echo $type;  ?>">
 <div id="divAll">
 	<div id="divPage">
 	<div id="divMiddle">
