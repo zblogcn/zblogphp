@@ -193,7 +193,7 @@ class Post extends Base{
 	function Save(){
         global $zbp;
 		if($this->Template==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->Data['Template'] = '';
-		parent::Save();
+		return parent::Save();
 	}
 	
 }

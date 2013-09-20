@@ -3,6 +3,12 @@
 <?php }else{  ?>
 
 <label id="AjaxCommentBegin"></label>
+<?php if ($article->CommNums>0) { ?>
+<ul class="msg msghead">
+	<li class="tbname">评论列表:</li>
+</ul>
+<?php } ?>
+
 <!--评论输出-->
 <?php  foreach ( $comments as $key => $comment) { ?> 
 <?php  include $this->GetTemplate('comment');  ?>

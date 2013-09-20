@@ -1,7 +1,7 @@
 {template:header}
 	<link rel="alternate" type="application/rss+xml" href="{$feedurl}" title="{$name}" />
 </head>
-<body class="multi default">
+<body class="single {$type}">
 <div id="divAll">
 	<div id="divPage">
 	<div id="divMiddle">

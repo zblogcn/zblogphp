@@ -50,7 +50,11 @@ function Logout(){
 ################################################################################################################
 function ViewAuto($url){
 	global $zbp;
-	
+	foreach ($GLOBALS['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($page,$cate,$auth,$date,$tags);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+	}
+
 	if($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE'){
 		ViewList(null,null,null,null,null);
 		return null;
@@ -540,6 +544,7 @@ function PostArticle(){
 	if(!isset($_POST['ID']))return ;
 
 	if(isset($_POST['Tag'])){
+		$_POST['Tag']=TransferHTML($_POST['Tag'],'[noscript]');
 		$_POST['Tag']=PostArticle_CheckTagAndConvertIDtoString($_POST['Tag']);
 	}
 	if(isset($_POST['Content'])){
@@ -563,6 +568,10 @@ function PostArticle(){
 		if(($_POST['AuthorID']!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){
 			$_POST['AuthorID']=$zbp->user->ID;
 		}
+	}
+
+	if(isset($_POST['Alias'])){
+		$_POST['Alias']=TransferHTML($_POST['Alias'],'[noscript]');
 	}
 
 	if(isset($_POST['PostTime'])){
@@ -724,6 +733,10 @@ function PostPage(){
 		if(($_POST['AuthorID']!=$zbp->user->ID )&&(!$zbp->CheckRights('PageAll'))){
 			$_POST['AuthorID']=$zbp->user->ID;
 		}
+	}
+
+	if(isset($_POST['Alias'])){
+		$_POST['Alias']=TransferHTML($_POST['Alias'],'[noscript]');
 	}
 
 	$article = new Post();
@@ -951,6 +964,10 @@ function PostCategory(){
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
 
+	if(isset($_POST['Alias'])){
+		$_POST['Alias']=TransferHTML($_POST['Alias'],'[noscript]');
+	}
+
 	$parentid=(int)GetVars('ParentID','POST');
 	if($parentid>0){
 		if($zbp->categorys[$parentid]->Level>2){
@@ -1022,6 +1039,10 @@ function DelCategory_Articles($id){
 function PostTag(){
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
+
+	if(isset($_POST['Alias'])){
+		$_POST['Alias']=TransferHTML($_POST['Alias'],'[noscript]');
+	}
 
 	$tag = new Tag();
 	if(GetVars('ID','POST') == 0){
@@ -1101,6 +1122,10 @@ function PostMember(){
 				$zbp->ShowError(62);
 			}
 		}
+	}
+
+	if(isset($_POST['Alias'])){
+		$_POST['Alias']=TransferHTML($_POST['Alias'],'[noscript]');
 	}
 
 	$mem = new Member();
@@ -1450,7 +1475,7 @@ function FilterArticle(&$article){
 	global $zbp;
 
 	$article->Title=strip_tags($article->Title);
-	$article->Alias=TransferHTML($article->Alias,'[normalname]');	
+	$article->Alias=TransferHTML($article->Alias,'[normalname]');
 
 	if($article->Type == ZC_POST_TYPE_ARTICLE){
 		if(!$zbp->CheckRights('ArticleAll')){

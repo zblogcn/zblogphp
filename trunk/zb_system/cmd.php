@@ -35,7 +35,6 @@ switch ($action) {
 		break;
 	case 'misc':
 		require './function/c_system_misc.php';
-		#echo Reload(GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'cmt':
 		if(GetVars('isajax','POST')){

@@ -123,7 +123,7 @@ class Category extends Base{
         global $zbp;
 		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->Data['Template'] = '';
 		if($this->LogTemplate==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->Data['LogTemplate'] = '';
-		parent::Save();
+		return parent::Save();
 	}
 
 }

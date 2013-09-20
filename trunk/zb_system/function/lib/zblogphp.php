@@ -1047,6 +1047,7 @@ function AddBuildModuleAll(){
 				return $c;
 			}else{
 				$c->LoadInfoByID($id);
+				$this->comments[$id]=$c;
 				return $c;
 			}
 		}

@@ -12,6 +12,9 @@ require '../function/c_system_admin.php';
 $zbp->Load();
 
 $action=(GetVars('act','GET')=='') ? 'admin' : GetVars('act','GET') ;
+
+foreach ($GLOBALS['Filter_Plugin_Admin_Begin'] as $fpname => &$fpsignal) {$fpname();}
+
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 $f=null;
