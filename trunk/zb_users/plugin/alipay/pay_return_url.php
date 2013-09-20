@@ -9,8 +9,7 @@
  * 可放入HTML等美化页面的代码、商户业务逻辑程序代码
  * 该页面可以使用PHP开发工具调试，也可以使用写文本函数logResult，该函数已被默认关闭，见alipay_notify_class.php中的函数verifyReturn
  */
-header('Content-Type: text/html; Charset=utf-8');
-require_once("alipay.config.php");
+require_once("alipay.aconfig.php");
 require_once("lib/alipay_notify.class.php");
 //计算得出通知验证结果
 $alipayNotify = new AlipayNotify($alipay_config);
@@ -24,12 +23,12 @@ if($verify_result) {//验证成功
 	$trade_status = $_GET['trade_status'];
 
     if($_GET['trade_status'] == 'TRADE_FINISHED' || $_GET['trade_status'] == 'TRADE_SUCCESS') {
-		foreach ($GLOBALS['Filter_Plugin_AlipayPayNotice_Succeed'] as $fpname => &$fpsignal) $fpname($_GET);
+		foreach ($GLOBALS['Filter_Plugin_AlipayPayReturn_Succeed'] as $fpname => &$fpsignal) $fpname($_GET);
     }
     else {
-      echo "trade_status=".$_GET['trade_status'];
+      foreach ($GLOBALS['Filter_Plugin_AlipayPayReturn_Failed'] as $fpname => &$fpsignal) $fpname($_GET);
     }
-		
+
 }else {
     //验证失败
     foreach ($GLOBALS['Filter_Plugin_AlipayPayReturn_Failed'] as $fpname => &$fpsignal) $fpname($_GET);

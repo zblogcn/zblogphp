@@ -1,5 +1,4 @@
 <?php
-
 $Filter_Plugin_AlipayLogin_Succeed=array();
 $Filter_Plugin_AlipayLogin_Failed=array();
 $Filter_Plugin_AlipayPayReturn_Succeed=array();
@@ -12,5 +11,4 @@ RegisterPlugin("alipay","ActivePlugin_alipay");
 function ActivePlugin_alipay() {
 
 }
-
 ?>
