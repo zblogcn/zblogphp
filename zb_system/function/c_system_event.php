@@ -991,7 +991,8 @@ function PostCategory(){
 	CountCategory($cate);
 
 	$cate->Save();
-
+	
+	$zbp->LoadCategorys();
 	$zbp->AddBuildModule('catalog');
 
 	if(GetVars('AddNavbar','POST')==0)$zbp->DelItemToNavbar('category',$cate->ID);
@@ -1012,6 +1013,8 @@ function DelCategory(){
 	if($cate->ID>0){
 		DelCategory_Articles($cate->ID);		
 		$cate->Del();
+		
+		$zbp->LoadCategorys();
 		$zbp->AddBuildModule('catalog');
 		$zbp->DelItemToNavbar('category',$cate->ID);
 	}
