@@ -32,8 +32,9 @@ if(count($array)==0){
 
 	$sql=$zbp->db->sql->Count($zbp->table['HeartVote'],array(array('SUM','vote_Score','allvote'),array('COUNT','*','alluser')),array(array('=','vote_LogID',$id)));
 	$array=$zbp->db->Query($sql);
-	$alluser=GetValueInArrayByCurrent($array,'alluser');
-	$allvote=GetValueInArrayByCurrent($array,'allvote');
+	$array=current($array);
+	$alluser=GetValueInArray($array,'alluser');
+	$allvote=GetValueInArray($array,'allvote');
 	if($alluser==0){
 		$allvote=0;
 	}else{

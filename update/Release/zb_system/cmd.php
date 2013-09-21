@@ -31,7 +31,8 @@ switch ($action) {
 		}
 		break;
 	case 'search':
-		Redirect('../search.php?q=' . urlencode(trim(GetVars('q','POST'))));	
+		$q=urlencode(trim(strip_tags(GetVars('q','POST'))));
+		Redirect('../search.php?q=' . $q);	
 		break;
 	case 'misc':
 		require './function/c_system_misc.php';

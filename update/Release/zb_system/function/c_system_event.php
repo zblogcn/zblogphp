@@ -418,7 +418,7 @@ function ViewPost($id,$alias){
 
 	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);
-	$zbp->template->SetTags('type',$article->type=0?'article':'page');
+	$zbp->template->SetTags('type',($article->Type==0?'article':'page'));
 	$zbp->template->SetTags('page',1);
 	if($pagebar->PageAll==0||$pagebar->PageAll==1)$pagebar=null;
 	$zbp->template->SetTags('pagebar',$pagebar);
@@ -830,25 +830,20 @@ function PostComment(){
 		$_POST['ParentID'] = 0;
 	}else{
 		$_POST['ParentID'] = $replyid;
-		$c = new Comment();
-		$c->LoadInfoByID($replyid);
+		$c = $zbp->GetCommentByID($replyid);
 		if($c->Level==3){
 			$zbp->ShowError(52);
 		}
-		if($c->RootID==0){
-			$_POST['RootID'] = $c->ID;
-		}else{
-			$_POST['RootID'] = $c->RootID;
-		}
+		$_POST['RootID']=Comment::GetRootID($c->ID);
 	}
 
 	$_POST['AuthorID'] = $zbp->user->ID;
 	$_POST['Name'] = $_POST['name'];
-	$_POST['Email'] = $_POST['email'];	
+	$_POST['Email'] = $_POST['email'];
 	$_POST['HomePage'] = $_POST['homepage'];
 	$_POST['Content'] = $_POST['content'];
 	$_POST['PostTime'] = Time();
-	$_POST['IP'] = GetGuestIP();	
+	$_POST['IP'] = GetGuestIP();
 	$_POST['Agent'] = GetGuestAgent();
 
 	$cmt = new Comment();
