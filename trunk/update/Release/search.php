@@ -16,17 +16,17 @@ if(!$zbp->CheckRights($action)){Redirect('./');}
 
 foreach ($GLOBALS['Filter_Plugin_Search_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
+$q=trim(strip_tags(GetVars('q','GET')));
+
 $article = new Post;
-$article->Title=$lang['msg']['search'] . '“' . GetVars('q','GET') . '”';
+$article->Title=$lang['msg']['search'] . '“' . $q . '”';
 $article->IsLock=true;
 $article->Type=ZC_POST_TYPE_PAGE;
 
-
 $w=array();
 $w[]=array('=','log_Type','0');
-$s=trim(GetVars('q','GET'));
-if($s){
-	$w[]=array('search','log_Content','log_Intro','log_Title',$s);
+if($q){
+	$w[]=array('search','log_Content','log_Intro','log_Title',$q);
 }else{
 	Redirect('./');
 }

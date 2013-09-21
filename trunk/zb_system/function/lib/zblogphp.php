@@ -1196,7 +1196,7 @@ function AddBuildModuleAll(){
 
 		if(!$type)$type='item';
 		$m=$this->modulesbyfilename['navbar'];
-		$s=$m->Content . '<';
+		$s=$m->Content;
 
 		$s=preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*?<\/li>/', '', $s);
 

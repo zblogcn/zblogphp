@@ -64,8 +64,8 @@ $ua=array(
  '{%host%}?cate={%id%}&page={%page%}',
  '{%host%}category-{%id%}_{%page%}.html',
  '{%host%}category-{%alias%}_{%page%}.html',
- '{%host%}category/{%id%}/{%page%}/',
- '{%host%}category/{%alias%}/{%page%}',
+ '{%host%}category/{%alias%}/{%page%}/', 
+ '{%host%}category/{%id%}/{%page%}',
 ),
 
 
@@ -87,7 +87,7 @@ $ua=array(
 'ZC_AUTHOR_REGEX' =>array(
  '{%host%}?auth={%id%}&page={%page%}',
  '{%host%}author-{%id%}_{%page%}.html',
- '{%host%}author/{%id%}/{%page%/}',
+ '{%host%}author/{%id%}/{%page%}/',
 ),
 
 
