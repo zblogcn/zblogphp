@@ -9,16 +9,20 @@ function RevertComment(i) {
 
 	$("#inpRevID").val(i);
 
-	$("#AjaxComment"+i).next().after("<dl id=\"reply\" style=\"background-color:#f0f0f0;padding:5px;border-radius: 5px;\">"+$("#postcmt").html()+"</dl>");
+	$("#AjaxComment"+i).next().after("<dl id=\"reply\">"+$("#postcmt").html()+"</dl>");
+	
+	$("#postcmt").hide("slow");
 	
 	$("#postcmt").html("");
 	
 	$("#cancel-reply").show();
 	
-	$("#cancel-reply").prev().hide();
+	$("#cancel-reply").prev().hide("");
 	
-	$("#cancel-reply").bind("click", function(){ $("#inpRevID").val(0);$(this).hide();$(this).prev().show();$("#postcmt").html($("#reply").html());$("#reply").remove();window.location.hash="#comment";return false; });
+	$("#cancel-reply").bind("click", function(){ $("#inpRevID").val(0);$(this).hide();$(this).prev().show();$("#postcmt").html($("#reply").html());$("#reply").remove();$("#postcmt").show("slow");window.location.hash="#comment";return false; });
 
+	$("#reply").show("slow");
+	
 	window.location.hash="#reply";
 }
 //*********************************************************

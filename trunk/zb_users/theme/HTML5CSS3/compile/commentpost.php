@@ -2,10 +2,15 @@
   <dt><a name="comment">发表评论</a><a rel="nofollow" id="cancel-reply" href="#comment" style="display:none;"><small>取消回复</small></a></dt>
   <dd>
   <h5><!--◎欢迎参与讨论，请在这里发表您的看法、交流您的观点。--></h5>
-<figure><img src="<?php  echo $user->Avatar;  ?>" alt="来宾的头像" border="0"></figure>
+<figure><img src="<?php  echo $user->Avatar;  ?>" alt="来宾的头像" border="0"><?php if ($user->ID>0) { ?><b><?php  echo $user->Name;  ?></b><?php } ?></figure>
   <form id="frmSumbit" target="_self" method="post" action="<?php  echo $article->CommentPostUrl;  ?>">
 	<input type="hidden" name="inpId" id="inpId" value="<?php  echo $article->ID;  ?>" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
+<?php if ($user->ID>0) { ?>
+	<input type="hidden" name="inpName" id="inpName" value="<?php  echo $user->Name;  ?>" />
+	<input type="hidden" name="inpEmail" id="inpEmail" value="<?php  echo $user->Email;  ?>" />
+	<input type="hidden" name="inpHomePage" id="inpHomePage" value="<?php  echo $user->HomePage;  ?>" />	
+<?php }else{  ?>
     <p>
       <label>
         <input type="text" id="inpName" name="inpName" size="28" tabindex="2" required value="<?php  echo $user->Name;  ?>" />
@@ -21,6 +26,7 @@
         <input type="text" id="inpHomePage" name="inpHomePage" size="28" tabindex="4" value="<?php  echo $user->HomePage;  ?>" />
         网址</label>
     </p>
+<?php } ?>
 	<!--verify-->
     <p>
       <textarea name="txaArticle" id="txaArticle" class="txt" cols="50" rows="4" tabindex="1" required></textarea>
