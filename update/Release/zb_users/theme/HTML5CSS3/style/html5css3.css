@@ -128,13 +128,8 @@ article~dl:last-child{border-bottom:none}
 #comment blockquote blockquote cite b,
 #comment blockquote blockquote cite time{float:none;margin:0 5px 0 0}
 /*=reply*/
-#comment q ins{margin:0 0 0 10px;color:#abc;cursor:pointer}
-#comment q ins:hover{color:#3A6EA5}
-#postreply{clear:both;position:relative;padding:66px 20px 8px 8px;}
-#postreply form{position:relative;}
-#postreply textarea,
-#postreply span[class^='xhe_']{height:48px;left:0;top:-70px}
-#cancelreply{margin:0 0 0 10px;cursor:pointer;color:#3A6EA5}
+#reply{background-color:#f0f0f0;padding:5px;border-radius: 5px;display:none;}
+#reply figure{display:none;}
 /*=pstcmt*/
 #postcmt dd{position:relative;padding:108px 0 0 0;margin:0 12px 0 100px;}
 #postcmt dd h5{font-size:14px;font-weight:100;position:absolute;left:10px;top:5px;margin:0;}
@@ -147,7 +142,7 @@ form[action*='act=cmt'] textarea,
 form[action*='act=cmt'] span[class^='xhe_']{height:96px;position:absolute;top:0;left:0;background:none;width:100%;}
 form[action*='act=cmt'] textarea:focus{background:#fff!important;}
 form[action*='act=cmt'] button{}
-#postcmt figure{position:absolute;left:-100px;top:0;margin:0;padding:0;width:80px;}
+#postcmt figure{position:absolute;left:-100px;top:0;margin:0;padding:0;width:80px;text-align:center;}
 #postcmt figure img{width:80px;height:80px;display:block;margin:0 0 3px}
 #postcmt figure b{margin:0 5px 0 0 }
 #postcmt figure ins{color:#789;font-size:12px;position:relative;top:-1px;white-space:nowrap}
