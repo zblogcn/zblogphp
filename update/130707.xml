@@ -19,7 +19,7 @@
 	<file name='zb_system\css\admin3.css' crc32='32FCB22A'/>
 	<file name='zb_system\css\jquery-ui.custom.css' crc32='18708206'/>
 	<file name='zb_system\css\jquery.bettertip.css' crc32='DDF8486F'/>
-	<file name='zb_system\defend\error.html' crc32='EAB000DA'/>
+	<file name='zb_system\defend\error.html' crc32='39FB2966'/>
 	<file name='zb_system\defend\option.php' crc32='476C8085'/>
 	<file name='zb_system\defend\thanks.html' crc32='81AA49B'/>
 	<file name='zb_system\defend\createtable\mysql.sql' crc32='5D78A4FC'/>
@@ -69,7 +69,7 @@
 	<file name='zb_system\function\lib\template.php' crc32='C551B756'/>
 	<file name='zb_system\function\lib\upload.php' crc32='A71600E6'/>
 	<file name='zb_system\function\lib\urlrule.php' crc32='B6D8A59C'/>
-	<file name='zb_system\function\lib\zblogphp.php' crc32='D25A2ADB'/>
+	<file name='zb_system\function\lib\zblogphp.php' crc32='B429954E'/>
 	<file name='zb_system\image\admin\app-logo.png' crc32='7D5E99CC'/>
 	<file name='zb_system\image\admin\arrow-3-right.png' crc32='9613739F'/>
 	<file name='zb_system\image\admin\arrow_turn_right.png' crc32='CF39218A'/>
