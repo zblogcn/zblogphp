@@ -799,12 +799,20 @@ function AddBuildModuleAll(){
 			@mkdir($dir, 0777,true);
 		}
 
+		$files2=array();
+		foreach ($this->templates as $name=>$file) {
+			$files2[]=$dir . $name . '.php';
+		}
+
 		//清空目标目录
 		$files = GetFilesInDir($dir,'php');
-		foreach ($files as $fullname) {
+
+		$files3 = array_diff($files,$files2);
+
+		foreach ($files3 as $fullname) {
 			@unlink($fullname);
 		}
-		
+
 		//创建模板类
 		$this->template = new Template();
 		$this->template->SetPath($dir);
