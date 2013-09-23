@@ -955,7 +955,12 @@ function Admin_ThemeMng(){
 
 echo '<div class="theme '.($theme->IsUsed()?'theme-now':'theme-other').'">';
 echo '<div class="theme-name">';
-echo '<img width="16" title="" alt="" src="../image/admin/layout.png"/>&nbsp;';
+
+if($theme->IsUsed() && $theme->path){
+echo '<a href="'.$theme->GetManageUrl().'" title="管理" class="button"><img width="16" title="" alt="" src="../image/admin/setting_tools.png"/></a>&nbsp;&nbsp;';
+}else{
+echo '<img width="16" title="" alt="" src="../image/admin/layout.png"/>&nbsp;&nbsp;';
+}
 echo '<a target="_blank" href="'.$theme->url.'" title=""><strong style="display:none;">'.$theme->id.'</strong>';
 echo '<b>'.$theme->name.'</b></a></div>';
 echo '<div><img src="'.$theme->GetScreenshot().'" title="'.$theme->name.'" alt="'.$theme->name.'" width="200" height="150" /></div>';
