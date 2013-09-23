@@ -1,26 +1,26 @@
-{if $socialcomment}
-{$socialcomment}
-{else}
+<?php if ($socialcomment) { ?>
+<?php  echo $socialcomment;  ?>
+<?php }else{  ?>
 
-<label id="AjaxCommentBegin"></label>
-{if $article.CommNums>0}
+<?php if ($article->CommNums>0) { ?>
 <ul class="msg msghead">
 	<li class="tbname">评论列表:</li>
 </ul>
-{/if}
+<?php } ?>
 
+<label id="AjaxCommentBegin"></label>
 <!--评论输出-->
-{foreach $comments as $key => $comment}
-{template:comment}
-{/foreach}
+<?php  foreach ( $comments as $key => $comment) { ?> 
+<?php  include $this->GetTemplate('comment');  ?>
+<?php  }   ?>
 
 <!--评论翻页条输出-->
 <div class="pagebar commentpagebar">
-{template:pagebar}
+<?php  include $this->GetTemplate('pagebar');  ?>
 </div>
 <label id="AjaxCommentEnd"></label>
 
 <!--评论框-->
-{template:commentpost}
+<?php  include $this->GetTemplate('commentpost');  ?>
 
-{/if}
+<?php } ?>

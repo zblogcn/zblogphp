@@ -38,7 +38,7 @@ div{
 	position:absolute;
 	left: 50%;
 	top: 50%;
-	margin: -150px 0px 0px -150px;
+	margin: -200px 0px 0px -150px;
 	padding:0;
 	overflow:hidden;
 	width:300px;

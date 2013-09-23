@@ -1,6 +1,6 @@
 ﻿<files build='130707'>
 	<file name='feed.php' crc32='788825AB'/>
-	<file name='index.php' crc32='8DDB07F6'/>
+	<file name='index.php' crc32='165862BC'/>
 	<file name='search.php' crc32='F3697366'/>
 	<file name='zb_system\cmd.php' crc32='9D3F8673'/>
 	<file name='zb_system\login.php' crc32='D1B1009F'/>
@@ -27,7 +27,7 @@
 	<file name='zb_system\defend\createtable\sqlite3.sql' crc32='ACE9B368'/>
 	<file name='zb_system\defend\default\comment.php' crc32='BA0B9E4D'/>
 	<file name='zb_system\defend\default\commentpost.php' crc32='AFDDF175'/>
-	<file name='zb_system\defend\default\comments.php' crc32='EC951D14'/>
+	<file name='zb_system\defend\default\comments.php' crc32='782F3597'/>
 	<file name='zb_system\defend\default\footer.php' crc32='59A81EEC'/>
 	<file name='zb_system\defend\default\header.php' crc32='4D6A0A9E'/>
 	<file name='zb_system\defend\default\index.php' crc32='A31734EF'/>
@@ -39,8 +39,8 @@
 	<file name='zb_system\defend\default\post-single.php' crc32='9DB48C85'/>
 	<file name='zb_system\defend\default\sidebar.php' crc32='FF17917'/>
 	<file name='zb_system\defend\default\single.php' crc32='21B132D7'/>
-	<file name='zb_system\function\c_system_admin.php' crc32='BC26F1BF'/>
-	<file name='zb_system\function\c_system_base.php' crc32='2F296601'/>
+	<file name='zb_system\function\c_system_admin.php' crc32='A8649D23'/>
+	<file name='zb_system\function\c_system_base.php' crc32='826CD5BA'/>
 	<file name='zb_system\function\c_system_common.php' crc32='EB44B2E8'/>
 	<file name='zb_system\function\c_system_debug.php' crc32='78297AC9'/>
 	<file name='zb_system\function\c_system_event.php' crc32='E993C321'/>
@@ -53,7 +53,7 @@
 	<file name='zb_system\function\lib\counter.php' crc32='D264E55'/>
 	<file name='zb_system\function\lib\dbmysql.php' crc32='5C2CA682'/>
 	<file name='zb_system\function\lib\dbpdo_mysql.php' crc32='E0D1B571'/>
-	<file name='zb_system\function\lib\dbsql.php' crc32='A5E4DAF8'/>
+	<file name='zb_system\function\lib\dbsql.php' crc32='5B1A5988'/>
 	<file name='zb_system\function\lib\dbsqlite.php' crc32='86C026DC'/>
 	<file name='zb_system\function\lib\dbsqlite3.php' crc32='BB64556E'/>
 	<file name='zb_system\function\lib\member.php' crc32='7FC7A4AB'/>
