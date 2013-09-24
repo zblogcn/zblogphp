@@ -1173,6 +1173,13 @@ function AddBuildModuleAll(){
 
 ################################################################################################################
 #杂项
+	function VerifyCmtKey($id,$key){
+		$nowkey=md5($this->guid . $id . date('Y-m-d'));
+		$nowkey2=md5($this->guid . $id . date('Y-m-d',time()-(3600*24)));
+		if($key==$nowkey||$key==$nowkey2){
+			return true;
+		}
+	}
 
 	function CheckPlugin($name){
 		$s=$this->option['ZC_BLOG_THEME'] . '|' . $this->option['ZC_USING_PLUGIN_LIST'];

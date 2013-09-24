@@ -156,7 +156,9 @@ $blogtitle=$zbp->name . '-' . $zbp->lang['msg']['view_rights'];
 <?php
 
 foreach ($GLOBALS['actions']  as $key => $value) {
-	echo '<dd><b>' . $key . '</b> : ' . ($GLOBALS['zbp']->CheckRights($key)?'<span style="color:green">true</span>':'<span style="color:red">false</span>') . '</dd>';
+	if($GLOBALS['zbp']->CheckRights($key)){
+		echo '<dd><b>' . $key . '</b> : ' . ($GLOBALS['zbp']->CheckRights($key)?'<span style="color:green">true</span>':'<span style="color:red">false</span>') . '</dd>';
+	}
 }
 
 ?>

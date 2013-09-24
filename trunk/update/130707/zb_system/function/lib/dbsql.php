@@ -65,9 +65,9 @@ class DbSql #extends AnotherClass
 			if($value[1]=='string'){
 				if($value[2]!=''){
 					if(strpos($value[2],'char')!==false){
-						$s.=$value[0] . ' char('.str_replace('char','',$value[2]).') NOT NULL DEFAULT \'\'' . ',';
+						$s.=$value[0] . ' char('.str_replace('char','',$value[2]).') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
 					}elseif(is_int($value[2])){
-						$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \'\'' . ',';
+						$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
 					}elseif($value[2]=='tinytext'){
 						$s.=$value[0] . ' tinytext NOT NULL ' . ',';
 					}elseif($value[2]=='text'){
@@ -109,7 +109,13 @@ class DbSql #extends AnotherClass
 			}
 			if($value[1]=='string'){
 				if($value[2]!=''){
-					$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \'\'' . ',';
+					if(strpos($value[2],'char')!==false){
+						$s.=$value[0] . ' char('.str_replace('char','',$value[2]).') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+					}elseif(is_int($value[2])){
+						$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+					}else{
+						$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
+					}
 				}else{
 					$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';	
 				}
@@ -144,7 +150,13 @@ class DbSql #extends AnotherClass
 			}
 			if($value[1]=='string'){
 				if($value[2]!=''){
-					$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \'\'' . ',';
+					if(strpos($value[2],'char')!==false){
+						$s.=$value[0] . ' char('.str_replace('char','',$value[2]).') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+					}elseif(is_int($value[2])){
+						$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+					}else{
+						$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
+					}
 				}else{
 					$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';	
 				}
@@ -194,7 +206,6 @@ class DbSql #extends AnotherClass
 						$x=(string)$w[$i];
 						$y=(string)$w[$j-1];
 						$y=$zbp->db->EscapeString($y);
-						$y=$w[$j-1];
 						$sql_search .= $c . " ($x LIKE '%$y%') ";
 						$c='OR';
 					}

@@ -109,6 +109,9 @@ class Upload extends Base{
 	{
         global $zbp;
 		if ($name=='Url') {
+			foreach ($GLOBALS['Filter_Plugin_Upload_Url'] as $fpname => &$fpsignal) {
+				return $fpname($this);
+			}
 			return $zbp->host . 'zb_users/' . $this->Dir . $this->Name;
 		}
 		if ($name=='Dir') {

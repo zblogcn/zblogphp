@@ -476,10 +476,10 @@ function ViewComments($postid,$page){
 	);
 
 	foreach ($comments as &$comment){
-		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
+		$comment->Content=TransferHTML(htmlspecialchars($comment->Content),'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
 	}
 	foreach ($comments2 as &$comment){
-		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
+		$comment->Content=TransferHTML(htmlspecialchars($comment->Content),'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
 	}
 
 	$zbp->template->SetTags('title',$zbp->title);
@@ -519,7 +519,7 @@ function ViewComment($id){
 	$post=new Post;
 	$post->LoadInfoByID($comment->LogID);
 
-	$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
+	$comment->Content=TransferHTML(htmlspecialchars($comment->Content),'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
 
 	$zbp->template->SetTags('title',$zbp->title);
 	$zbp->template->SetTags('comment',$comment);
@@ -822,6 +822,8 @@ function PostComment(){
 	global $zbp;
 
 	$_POST['LogID'] = $_GET['postid'];
+	
+	if($zbp->VerifyCmtKey($_GET['postid'],$_GET['key'])==false)$zbp->ShowError(43);
 
 	$replyid=(integer)GetVars('replyid','POST');
 
@@ -1785,7 +1787,7 @@ function BuildModule_comments(){
 
 	$s='';
 	foreach ($comments as $comment) {
-		$s .='<li><a href="'.$comment->Post->Url.'#cmt'.$comment->ID.'" title="'.htmlspecialchars($comment->Author->Name . ' @ ' . $comment->Time()).'">' . TransferHTML($comment->Content,'[noenter]') . '</a></li>';
+		$s .='<li><a href="'.$comment->Post->Url.'#cmt'.$comment->ID.'" title="'.htmlspecialchars($comment->Author->Name . ' @ ' . $comment->Time()).'">' . TransferHTML(htmlspecialchars($comment->Content),'[noenter]') . '</a></li>';
 	}
 	return $s;
 }

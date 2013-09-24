@@ -65,12 +65,12 @@ class Member extends Base{
 			return $u->Make();
 		}
 		if ($name=='Avatar') {
-			foreach ($GLOBALS['Filter_Plugin_Mebmer_Avatar'] as $fpname => &$fpsignal) {
-				$fpreturn=$fpname($this);
-				if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-			}
 			static $_avatar = '';
 			if($_avatar)return $_avatar;
+			foreach ($GLOBALS['Filter_Plugin_Mebmer_Avatar'] as $fpname => &$fpsignal) {
+				$_avatar = $fpname($this);
+				return $_avatar;
+			}
 			$s=$zbp->usersdir . 'avatar/' . $this->ID . '.png';
 			if(file_exists($s)){
 				$_avatar = $zbp->host . 'zb_users/avatar/' . $this->ID . '.png';
