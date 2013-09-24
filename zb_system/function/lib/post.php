@@ -147,7 +147,8 @@ class Post extends Base{
 				}
 				return $value;
 			case 'CommentPostUrl':
-				return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID;
+				$key='&amp;key=' . md5($zbp->guid . $this->ID . date('Y-m-d'));
+				return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
 				break;
 			case 'Prev':
 				static $_prev=null;
