@@ -9,6 +9,7 @@
 
 class Member extends Base{
 
+	private $_avatar='';
 
 	function __construct()
 	{
@@ -65,19 +66,18 @@ class Member extends Base{
 			return $u->Make();
 		}
 		if ($name=='Avatar') {
-			static $_avatar = '';
-			if($_avatar)return $_avatar;
 			foreach ($GLOBALS['Filter_Plugin_Mebmer_Avatar'] as $fpname => &$fpsignal) {
-				$_avatar = $fpname($this);
-				return $_avatar;
+				$fpreturn=$fpname($this);
+				if($fpreturn)return $fpreturn;
 			}
+			if($this->_avatar)return $this->_avatar;
 			$s=$zbp->usersdir . 'avatar/' . $this->ID . '.png';
 			if(file_exists($s)){
-				$_avatar = $zbp->host . 'zb_users/avatar/' . $this->ID . '.png';
-				return $_avatar;
+				$this->_avatar = $zbp->host . 'zb_users/avatar/' . $this->ID . '.png';
+				return $this->_avatar;
 			}
-			$_avatar = $zbp->host . 'zb_users/avatar/0.png';
-			return $_avatar;
+			$this->_avatar = $zbp->host . 'zb_users/avatar/0.png';
+			return $this->_avatar;
 		}
 		if ($name=='LevelName') {
 			return $zbp->lang['user_level_name'][$this->Level];
