@@ -476,10 +476,10 @@ function ViewComments($postid,$page){
 	);
 
 	foreach ($comments as &$comment){
-		$comment->Content=TransferHTML(htmlspecialchars($comment->Content),'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
+		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
 	}
 	foreach ($comments2 as &$comment){
-		$comment->Content=TransferHTML(htmlspecialchars($comment->Content),'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
+		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
 	}
 
 	$zbp->template->SetTags('title',$zbp->title);
@@ -606,12 +606,12 @@ function PostArticle(){
 		}
 	}
 
-	FilterArticle($article);
-	FilterMeta($article);
-
 	foreach ($GLOBALS['Filter_Plugin_PostArticle_Core'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($article);
 	}
+
+	FilterArticle($article);
+	FilterMeta($article);
 
 	$article->Save();
 
@@ -661,6 +661,7 @@ function DelArticle(){
 		$zbp->AddBuildModule('comments');
 		$zbp->AddBuildModule('archives');
 
+		foreach ($GLOBALS['Filter_Plugin_DelArticle_Succeed'] as $fpname => &$fpsignal) $fpname($article);
 	}else{
 		
 	}
@@ -757,12 +758,12 @@ function PostPage(){
 		}
 	}
 
-	FilterArticle($article);
-	FilterMeta($article);
-
 	foreach ($GLOBALS['Filter_Plugin_PostPage_Core'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($article);
 	}
+
+	FilterArticle($article);
+	FilterMeta($article);
 
 	$article->Save();
 
@@ -778,6 +779,7 @@ function PostPage(){
 
 	return true;
 }
+
 
 function DelPage(){
 	global $zbp;
@@ -802,6 +804,7 @@ function DelPage(){
 
 		$zbp->DelItemToNavbar('page',$article->ID);
 
+		foreach ($GLOBALS['Filter_Plugin_DelPage_Succeed'] as $fpname => &$fpsignal) $fpname($article);
 	}else{
 		
 	}
@@ -918,6 +921,8 @@ function DelComment(){
 		$cmt->Del();
 
 		$zbp->AddBuildModule('comments');
+
+		foreach ($GLOBALS['Filter_Plugin_DelComment_Succeed'] as $fpname => &$fpsignal) $fpname($cmt);
 	}
 	return true;
 }
@@ -986,9 +991,12 @@ function PostCategory(){
 		}
 	}
 
-	FilterMeta($cate);
+	foreach ($GLOBALS['Filter_Plugin_PostCategory_Core'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($cate);
+	}
 
 	FilterCategory($cate);
+	FilterMeta($cate);
 
 	CountCategory($cate);
 
@@ -1019,6 +1027,8 @@ function DelCategory(){
 		$zbp->LoadCategorys();
 		$zbp->AddBuildModule('catalog');
 		$zbp->DelItemToNavbar('category',$cate->ID);
+
+		foreach ($GLOBALS['Filter_Plugin_DelCategory_Succeed'] as $fpname => &$fpsignal) $fpname($cate);
 	}
 	return true;
 }
@@ -1058,9 +1068,12 @@ function PostTag(){
 		}
 	}
 
-	FilterMeta($tag);
+	foreach ($GLOBALS['Filter_Plugin_PostTag_Core'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($tag);
+	}
 
 	FilterTag($tag);
+	FilterMeta($tag);
 
 	CountTag($tag);
 
@@ -1083,6 +1096,7 @@ function DelTag(){
 	if($tag->ID>0){
 		$tag->Del();
 		$zbp->DelItemToNavbar('tag',$tag->ID);
+		foreach ($GLOBALS['Filter_Plugin_DelTag_Succeed'] as $fpname => &$fpsignal) $fpname($tag);
 	}
 	return true;
 }
@@ -1146,8 +1160,12 @@ function PostMember(){
 		}
 	}
 
-	FilterMeta($mem);
+	foreach ($GLOBALS['Filter_Plugin_PostMember_Core'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($mem);
+	}
+
 	FilterMember($mem);
+	FilterMeta($mem);
 
 	CountMember($mem);
 
@@ -1172,6 +1190,7 @@ function DelMember(){
 	if($m->ID>0 && $m->ID<>$zbp->user->ID){
 		DelMember_AllData($id);		
 		$m->Del();
+		foreach ($GLOBALS['Filter_Plugin_DelMember_Succeed'] as $fpname => &$fpsignal) $fpname($mem);
 	}else{
 		return false;
 	}
@@ -1229,11 +1248,17 @@ function PostModule(){
 		}
 	}
 
+	foreach ($GLOBALS['Filter_Plugin_PostModule_Core'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($mod);
+	}
+
 	FilterModule($mod);
 
 	$mod->Save();
 
 	$zbp->AddBuildModule($mod->FileName);
+
+	foreach ($GLOBALS['Filter_Plugin_PostModule_Succeed'] as $fpname => &$fpsignal) $fpname($mod);
 
 	return true;
 }
@@ -1245,6 +1270,7 @@ function DelModule(){
 	$m=$zbp->GetModuleByID($id);
 	if($m->Source<>'system'){
 		$m->Del();
+		foreach ($GLOBALS['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal) $fpname($m);
 	}else{
 		return false;
 	}
@@ -1787,7 +1813,7 @@ function BuildModule_comments(){
 
 	$s='';
 	foreach ($comments as $comment) {
-		$s .='<li><a href="'.$comment->Post->Url.'#cmt'.$comment->ID.'" title="'.htmlspecialchars($comment->Author->Name . ' @ ' . $comment->Time()).'">' . TransferHTML(htmlspecialchars($comment->Content),'[noenter]') . '</a></li>';
+		$s .='<li><a href="'.$comment->Post->Url.'#cmt'.$comment->ID.'" title="'.htmlspecialchars($comment->Author->Name . ' @ ' . $comment->Time()).'">' . TransferHTML($comment->Content,'[noenter]') . '</a></li>';
 	}
 	return $s;
 }

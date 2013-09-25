@@ -125,7 +125,11 @@ class ZBlogPHP{
 	}
 
 	function __call($method, $args) {
-		$this->ShowError(0);
+		foreach ($GLOBALS['Filter_Plugin_Zbp_Call'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($this,$method, $args);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+		//$this->ShowError(0);
 	}
 
 
@@ -199,12 +203,16 @@ class ZBlogPHP{
 
 		$this->RegBuildModule('navbar','BuildModule_navbar');
 
+		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
+
 		$this->isload=true;
 	}
 
 
 	#终止连接，释放资源
 	public function Terminate(){
+		foreach ($GLOBALS['Filter_Plugin_Zbp_Terminate'] as $fpname => &$fpsignal) $fpname();
+
 		if($this->isinitialize){
 			$this->CloseConnect();
 		}
