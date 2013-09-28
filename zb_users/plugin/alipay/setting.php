@@ -28,12 +28,14 @@ if(count($_POST)>0){
 		$parameter = array(
 				"service" => "create_direct_pay_by_user",
 				"payment_type"	=> "1",
-				"notify_url"	=> $blogpath."/zb_users/plugin/alipay/pay_notify_url.php",
-				"return_url"	=> $blogpath."/zb_users/plugin/alipay/pay_return_url.php",
+				"notify_url"	=> $zbp->host ."/zb_users/plugin/alipay/pay_notify_url.php",
+				"return_url"	=> $zbp->host ."/zb_users/plugin/alipay/pay_return_url.php",
 				"seller_email"	=> $zbp->Config('alipay')->alipayaccount,
-				"out_trade_no"	=>  "12345678",	//订单号
+				"out_trade_no"	=>  "12345601",	//订单号
 				"subject"	=> "订单名称",
-				"total_fee"	=> "111",	//金额
+				"total_fee"	=> "1",	//金额
+				"royalty_type" => "10",//提成类型
+				"royalty_parameters" => "nbfhzj19901101@126.com^0.1^[名称]分润备注啊啊啊|",
 				"body"	=> "订单描述",
 				"show_url"	=> "http://www.xxx.com/myorder.html",
 		);

@@ -35,10 +35,8 @@ function misc_updateinfo(){
 
 	global $zbp;
 
-	$r=null;
+	$r=GetHttpContent($zbp->option['ZC_UPDATE_INFO_URL']);
 
-	$r = file_get_contents($zbp->option['ZC_UPDATE_INFO_URL']);
-	#$r = file_get_contents('http://www.baidu.com/robots.txt');
 	$r = '<tr><td>' . $r . '</td></tr>';
 
 	$zbp->LoadConfigs();

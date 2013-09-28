@@ -90,7 +90,18 @@ function GetCurrentHost(&$cookiespath){
 	return $host . $z;
 }
 
-
+function GetHttpContent($url){
+	$r=null;
+	if(function_exists("curl_init")){
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$r = curl_exec($ch);
+		curl_close($ch);
+	}elseif(ini_get("allow_url_fopen")){
+		$r=file_get_contents($url);
+	}
+	return $r;
+}
 
 function GetDirsInDir($dir){
 	$dirs=array();
@@ -228,6 +239,15 @@ function GetGuestAgent(){
 	return $_SERVER["HTTP_USER_AGENT"];
 }
 
+function GetRequestUri(){
+	$url='';
+	if(isset($_SERVER['REQUEST_URI'])){
+		$url=$_SERVER['REQUEST_URI'];
+	}else{
+		$url=$_SERVER['PHP_SELF'] . ($_SERVER['QUERY_STRING']? '?'.$_SERVER['QUERY_STRING'] : '');
+	}
+	return $url;
+}
 
 function GetFileExt($f){
 	if(strpos($f,'.')===false)return '';
