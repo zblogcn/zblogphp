@@ -266,6 +266,10 @@ $(document).ready(function(){
 			alert('<?php echo $lang['error'][65]?>')
 		}
 	})
+	
+	if (!$.support.leadingWhitespace) {
+		alert("<?php echo $lang['error']['74']?>");
+	}
 });
 
 

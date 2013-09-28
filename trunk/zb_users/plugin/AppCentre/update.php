@@ -19,7 +19,7 @@ $checkbegin=false;
 
 if(GetVars('update','GET')!=''){
 $url=APPCENTRE_SYSTEM_UPDATE . '?' . GetVars('update','GET') . '.xml';
-$f=file_get_contents($url);
+$f=AppCentre_GetHttpContent($url);
   $xml=simplexml_load_string($f);
   if($xml){
 	  foreach ($xml->children() as $file){
@@ -37,7 +37,7 @@ $f=file_get_contents($url);
 if(GetVars('restore','GET')!=''){
   $file=base64_decode(GetVars('restore','GET'));
   $url=APPCENTRE_SYSTEM_UPDATE . '?' . substr(ZC_BLOG_VERSION,-6,6) . '\\' . $file;
-  $f=file_get_contents($url);
+  $f=AppCentre_GetHttpContent($url);
   $file=$zbp->path . str_replace('\\','/',$file);
   $dir=dirname($file);
   if(!file_exists($dir.'/'))@mkdir($dir,0777,true);
@@ -48,7 +48,7 @@ if(GetVars('restore','GET')!=''){
 
 
 if(GetVars('check','GET')=='now'){
-  $r = file_get_contents(APPCENTRE_SYSTEM_UPDATE . array_search(ZC_BLOG_VERSION,$zbpvers) .'.xml');
+  $r = AppCentre_GetHttpContent(APPCENTRE_SYSTEM_UPDATE . array_search(ZC_BLOG_VERSION,$zbpvers) .'.xml');
   file_put_contents($zbp->usersdir . 'cache/now.xml', $r);
   $checkbegin=true;
 }
@@ -58,7 +58,7 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 
 
-$newversion=file_get_contents(APPCENTRE_SYSTEM_UPDATE . ($zbp->Config('AppCentre')->checkbeta==true?'?beta':'') );
+$newversion=AppCentre_GetHttpContent(APPCENTRE_SYSTEM_UPDATE . ($zbp->Config('AppCentre')->checkbeta==true?'?beta':''));
 
 ?>
 <div id="divMain">
@@ -103,10 +103,10 @@ if($newbuild-$nowbuild>0){
 if (file_exists($zbp->usersdir . 'cache/now.xml')) {
 
   $i=0;
+  libxml_use_internal_errors(true);
   $xml=simplexml_load_file($zbp->usersdir . 'cache/now.xml');
-
+  if($xml){
   foreach ($xml->children() as $file) {
-
   	if(file_exists($zbp->path . str_replace('\\','/',$file['name']))){
 	  	$newcrc32=strtoupper(dechex(crc32(file_get_contents($zbp->path . str_replace('\\','/',$file['name'])))));
   	}else{
@@ -122,6 +122,7 @@ if (file_exists($zbp->usersdir . 'cache/now.xml')) {
     	$s='<a href="javascript:void(0)" onclick="restore(\''.base64_encode($file['name']).'\',\'file'.md5($file['name']) .'\')" class="button" title="还原系统文件"><img src="'.$zbp->host.'zb_system/image/admin/exclamation.png" width="16" alt=""></a>';
     }
     echo '<td class="tdCenter" id="file' . md5($file['name']) . '">' . $s . '</td></tr>';
+  }
   }
   echo '<tr><th colspan="2">'.$i.'个文件不同或被修改过.</tr>';
   unlink($zbp->usersdir . 'cache/now.xml');

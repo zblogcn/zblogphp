@@ -71,12 +71,8 @@ $("#btnPost").click(function(){
 })
 
 $(document).ready(function(){ 
-	if($.browser.msie){
-
-		if ( $.browser.version<9 ){
-			alert("<?php echo $lang['error']['74']?>");
-		}
-		
+	if (!$.support.leadingWhitespace) {
+		alert("<?php echo $lang['error']['74']?>");
 	}
 });
 
