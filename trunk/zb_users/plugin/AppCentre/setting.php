@@ -4,6 +4,7 @@ require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 
 require 'function.php';
+include "shop.class.lib.php";
 
 $zbp->Load();
 
@@ -25,6 +26,7 @@ if(GetVars('act')=='save'){
 	Redirect('./setting.php');
 
 }
+
 if(GetVars('act')=='login'){
 
 	$s=Server_Open('vaild');
@@ -42,21 +44,48 @@ if(GetVars('act')=='login'){
 		Redirect('./setting.php');
 		die;
 	}
-}
-if(GetVars('act')=='logout'){
-		$zbp->Config('AppCentre')->username='';
-		$zbp->Config('AppCentre')->password='';
+}elseif(GetVars('act')=='shoplogin'){
+	$pw = md5(md5($_POST["shopid"]).md5($_POST["shopalipayid"]));
+	AppCentre_Shop::init($_POST["shopid"], $pw);
+	$userinfo = AppCentre_Shop::userinfo();
+	if($userinfo){
+		$zbp->Config('AppCentre')->shopid = $_POST["shopid"];
+		$zbp->Config('AppCentre')->shoppassword = $pw;
 		$zbp->SaveConfig('AppCentre');
-		$zbp->SetHint('good','您已退出APP应用中心.');
+		//print_r($userinfo);	
+	}else{
+		$zbp->Config('AppCentre')->shopid = '';
+		$zbp->Config('AppCentre')->shoppassword = '';
+		$zbp->SaveConfig('AppCentre');
+		$zbp->SetHint('bad','ID或者支付宝ID错误.');
 		Redirect('./setting.php');
 		die;
+	}
 }
 
+if(GetVars('act')=='logout'){
+	$zbp->Config('AppCentre')->username='';
+	$zbp->Config('AppCentre')->password='';
+	$zbp->SaveConfig('AppCentre');
+	$zbp->SetHint('good','您已退出APP应用中心.');
+	Redirect('./setting.php');
+	die;
+}elseif(GetVars('act')=='shoplogout'){
+	$zbp->Config('AppCentre')->shopid='';
+	$zbp->Config('AppCentre')->shoppassword='';
+	$zbp->SaveConfig('AppCentre');
+	$zbp->SetHint('good','您已退出APP应用中心商城.');
+	Redirect('./setting.php');
+	die;
+}
 
+if(!$zbp->Config('AppCentre')->shopid){
+	AppCentre_Shop::init($zbp->Config('AppCentre')->shopid, $zbp->Config('AppCentre')->shoppassword);
+	$userinfo = AppCentre_Shop::userinfo();
+}
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
-
 ?>
 <div id="divMain">
 
@@ -92,6 +121,68 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               </p>
               <hr/>
             </form>
+
+
+            <div class="divHeader2">应用中心商城用户登录</div>
+<?php if(!$zbp->Config('AppCentre')->shopid){ ?>
+            <form action="?act=shoplogin" method="post">
+              <table style="line-height:3em;" width="100%" border="0">
+                <tr height="32">
+                  <th  align="center">请填写您在"<a href="http://app.rainbowsoft.org/?shop&type=account" target="_blank">APP应用中心</a>"的ID和支付宝ID
+                    </td>
+                </tr>
+                <tr height="32">
+                  <td align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID:
+                    <input type="text" name="shopid" value="" style="width:35%"/></td>
+                </tr>
+                <tr height="32">
+                  <td align="center">支付宝ID(16位):
+                    <input type="password" name="shopalipayid" value="" style="width:35%" /></td>
+                </tr>
+                <tr height="32" align="center">
+                  <td align="center"><input type="submit" value="登陆" class="button" /></td>
+                </tr>
+              </table>
+            </form>
+<?php }else{ 
+	AppCentre_Shop::init($zbp->Config('AppCentre')->shopid, $zbp->Config('AppCentre')->shoppassword);
+	$userinfo = AppCentre_Shop::userinfo();
+	$orderlist = AppCentre_Shop::orderlist();
+?>
+<table border="1" class="tableFull tableBorder tableBorder-thcenter">
+		<tbody> 
+		<tr class="color1"> 
+			<th class="td5 tdCenter">编号</th> 
+			<th class="td15 tdCenter">订单号</th> 
+			<th class="td10 tdCenter">应用ID</th> 
+			<th class="td15 tdCenter">应用名称</th> 
+			<th class="td5">金额</th> 
+			<th class="td15 tdCenter">购买时间</th>
+		</tr> 
+		<?php
+		if(count($orderlist['data']) > 0){
+			foreach($orderlist['data'] as $k=>$v){
+				echo '<tr class="color3">';
+				echo '<td>'. ($k+1) ."</td>\n\r";
+				echo '<td>'. $v['tradenum'] ."</td>\n\r";
+				echo '<td>'. $v['appid'] ."</td>\n\r";
+				echo '<td>'. $v['saleid'] ."</td>\n\r";
+				echo '<td>￥'. $v['price'] ."</td>\n\r";
+				echo '<td>'. date("Y-m-d H:i:s", $v['paytime']). "</tr>\n\r";
+			}
+		}
+		?>
+		</tbody>
+	</table>
+            <form action="?act=shoplogout" method="post">
+              <p><b><?php echo $userinfo['data']['alipayname']; ?></b> 您好,您已经在当前应用中心客户端登录Z-BlogPHP官方应用商城.</p>
+              <p>
+                <input name="submit" type="submit" value="退出登录" class="button" />
+              </p>
+            </form>
+<?php }?>
+
+
 
 
             <div class="divHeader2">开发者登录</div>
