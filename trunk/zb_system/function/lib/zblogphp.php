@@ -803,8 +803,8 @@ function AddBuildModuleAll(){
 
 		$dir=$this->usersdir . 'theme/'. $this->theme .'/compile/';
 
-		if(!file_exists($dir)){
-			@mkdir($dir, 0777,true);
+		if(!file_exists(dirname($dir))){
+			@mkdir(dirname($dir), 0777,true);
 		}
 
 		$files2=array();
