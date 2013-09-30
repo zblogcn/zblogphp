@@ -82,7 +82,7 @@ function metro_savetofile($stylefile){
 	
 	//替换模版标签
 	//strContent=LoadFromFile(BlogPath  .  "zb_users\theme\metro\plugin\style.css.html" ,"utf-8");
-	$strContent = @file_get_contents('source\style.css.html');
+	$strContent = @file_get_contents($zbp->usersdir . 'theme/metro/source/style.css.html');
 
 	$strContent = str_replace("{%strlayoutl%}",$sLeft,$strContent);
 	$strContent = str_replace("{%strlayoutr%}",$sRight,$strContent);
@@ -101,7 +101,7 @@ function metro_savetofile($stylefile){
 	}
 
 	//Call SaveToFile(BlogPath  .  "zb_users\theme\metro\style\" . stylefile,strContent,"utf-8",False);
-	@file_put_contents("style\style.css", $strContent);
+	@file_put_contents($zbp->usersdir . 'theme/metro/style/style.css', $strContent);
 }
 
 ?>

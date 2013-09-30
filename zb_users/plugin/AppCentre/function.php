@@ -132,7 +132,7 @@ function Server_SendRequest($url,$data=array()){
 		$content=stream_context_create($opts);
 	}
 
-	ini_set('default_socket_timeout',10);
+	ini_set('default_socket_timeout',120);
 	return file_get_contents($url,false,$content);
 
 }
@@ -149,7 +149,7 @@ function Server_SendRequest_CUrl($url,$data=array()){
 	
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 120);
 	curl_setopt($ch, CURLOPT_USERAGENT, 'ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent());
 	if($c)curl_setopt($ch,CURLOPT_COOKIE,$c);
 	
@@ -180,11 +180,11 @@ function AppCentre_GetHttpContent($url){
 	if(function_exists("curl_init")){
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 60);
 		$r = curl_exec($ch);
 		curl_close($ch);
 	}elseif(ini_get("allow_url_fopen")){
-		ini_set('default_socket_timeout',10);
+		ini_set('default_socket_timeout',60);
 		$r=file_get_contents($url);
 	}
 	return $r;
