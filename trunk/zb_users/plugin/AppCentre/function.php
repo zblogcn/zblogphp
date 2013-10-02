@@ -6,6 +6,7 @@ function AppCentre_SubMenus($id){
 	echo '<a href="main.php"><span class="m-left '.($id==1?'m-now':'').'">浏览在线应用</span></a>';
 	echo '<a href="main.php?method=check"><span class="m-left '.($id==2?'m-now':'').'">检查应用更新</span></a>';
 	echo '<a href="update.php"><span class="m-left '.($id==3?'m-now':'').'">系统更新与校验</span></a>';
+	echo '<a href="client.php"><span class="m-left '.($id==9?'m-now':'').'">应用中心商城</span></a>';
 
 	echo '<a href="setting.php"><span class="m-right '.($id==4?'m-now':'').'">设置</span></a>';
 	echo '<a href="plugin_edit.php"><span class="m-right '.($id==5?'m-now':'').'">新建插件</span></a>';
