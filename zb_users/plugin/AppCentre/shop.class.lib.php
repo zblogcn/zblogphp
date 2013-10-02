@@ -8,22 +8,22 @@
 class AppCentre_Shop
 {
     /**
-     * $id,$password,$apiurl
+     * $email,$password,$apiurl
      * @var string
      */
-    protected static $id = '';
+    protected static $email = '';
     protected static $password = '';
 	protected static $apiurl = 'http://app.rainbowsoft.org/zb_users/plugin/AppBuy/api/index.php?api=';
 
     /**
      * 初始化配置
-     * @param string $id
+     * @param string $email
      * @param string $password
 	 * @param string $apiurl
      */
-    public static function init($id,$password)
+    public static function init($email,$password)
     {
-        self::$id = $id;
+        self::$email = $email;
         self::$password = $password;
     }
 
@@ -34,7 +34,7 @@ class AppCentre_Shop
 	public static function userinfo()
     {
 		$postdata = array(
-			'id' => self::$id,
+			'email' => self::$email,
 			'password' => self::$password,
 		);
 		$results = json_decode(self::create_curl('userinfo',$postdata),true);
@@ -50,7 +50,7 @@ class AppCentre_Shop
 	public static function orderlist()
     {
 		$postdata = array(
-			'id' => self::$id,
+			'email' => self::$email,
 			'password' => self::$password,
 		);
 		$results = json_decode(self::create_curl('orderlist',$postdata),true);
@@ -66,7 +66,7 @@ class AppCentre_Shop
 	public static function orderdetail($orderid)
     {
 		$postdata = array(
-			'id' => self::$id,
+			'email' => self::$email,
 			'password' => self::$password,
 			'orderid' => $orderid,
 		);
