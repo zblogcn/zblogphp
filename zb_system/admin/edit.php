@@ -317,6 +317,7 @@ $('#showtags').click(function (event) {
   $('#ulTag').css({ top: offset.top + $(event.target).height()+20+ "px", left: offset.left});  
   $('#ulTag').slideDown("fast");    
   if(tag_loaded==false){$.getScript('../cmd.php?act=misc&type=showtags');tag_loaded=true;}
+  return false;
 });  
 function AddKey(i) {
   var strKey=$('#edtTag').val();

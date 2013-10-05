@@ -51,7 +51,7 @@ function Logout(){
 function ViewAuto($url){
 	global $zbp;
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($page,$cate,$auth,$date,$tags);
+		$fpreturn=$fpname($url);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
 
@@ -1186,10 +1186,10 @@ function DelMember(){
 	global $zbp;
 
 	$id=(int)GetVars('id','GET');
-	$m=$zbp->GetMemberByID($id);
-	if($m->ID>0 && $m->ID<>$zbp->user->ID){
+	$mem=$zbp->GetMemberByID($id);
+	if($mem->ID>0 && $mem->ID<>$zbp->user->ID){
 		DelMember_AllData($id);		
-		$m->Del();
+		$mem->Del();
 		foreach ($GLOBALS['Filter_Plugin_DelMember_Succeed'] as $fpname => &$fpsignal) $fpname($mem);
 	}else{
 		return false;
@@ -1267,10 +1267,10 @@ function DelModule(){
 	global $zbp;
 
 	$id=(int)GetVars('id','GET');
-	$m=$zbp->GetModuleByID($id);
-	if($m->Source<>'system'){
-		$m->Del();
-		foreach ($GLOBALS['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal) $fpname($m);
+	$mod=$zbp->GetModuleByID($id);
+	if($mod->Source<>'system'){
+		$mod->Del();
+		foreach ($GLOBALS['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal) $fpname($mod);
 	}else{
 		return false;
 	}
