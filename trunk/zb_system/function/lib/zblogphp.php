@@ -126,7 +126,7 @@ class ZBlogPHP{
 
 	function __call($method, $args) {
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Call'] as $fpname => &$fpsignal) {
-			$fpreturn=$fpname($this,$method, $args);
+			$fpreturn=$fpname($method, $args);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		//$this->ShowError(0);
@@ -803,8 +803,8 @@ function AddBuildModuleAll(){
 
 		$dir=$this->usersdir . 'theme/'. $this->theme .'/compile/';
 
-		if(!file_exists(dirname($dir))){
-			@mkdir(dirname($dir), 0777,true);
+		if(!file_exists($dir)){
+			@mkdir($dir,0777,true);
 		}
 
 		$files2=array();
@@ -826,7 +826,7 @@ function AddBuildModuleAll(){
 		$this->template->SetPath($dir);
 
 		//模板接口
-		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {$fpname();}
+		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {$fpname($this->template);}
 
 		$this->template->CompileFiles($this->templates);
 

@@ -125,7 +125,7 @@ if (file_exists($zbp->usersdir . 'cache/now.xml')) {
   }
   }
   echo '<tr><th colspan="2">'.$i.'个文件不同或被修改过.</tr>';
-  unlink($zbp->usersdir . 'cache/now.xml');
+  @unlink($zbp->usersdir . 'cache/now.xml');
 }
 ?>
 
