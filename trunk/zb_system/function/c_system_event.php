@@ -317,7 +317,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 
 	$zbp->template->SetTags('date',$datetime);
 	$zbp->template->SetTags('tag',$tag);
-	$zbp->template->SetTags('author',$type);
+	$zbp->template->SetTags('author',$author);
 	$zbp->template->SetTags('category',$category);
 
 	if(isset($zbp->templates[$template])){
