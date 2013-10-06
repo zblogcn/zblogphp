@@ -48,6 +48,9 @@ class Category extends Base{
 		if ($name=='SymbolName') {
 			return null;
 		}
+		if ($name=='Parent') {
+			return null;
+		}		
 		if ($name=='Template') {
 			if($value==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$value='';
 			return $this->Data[$name]  =  $value;
@@ -106,6 +109,13 @@ class Category extends Base{
 		if ($name=='SymbolName') {
 			return $this->Symbol . htmlspecialchars($this->Name);
 		}
+		if ($name=='Parent') {
+			if($this->ParentID==0){
+				return null;
+			}else{
+				return $zbp->categorys[$this->ParentID];
+			}
+		}	
 		if ($name=='Template') {
 			$value=$this->Data[$name];
 			if($value=='')$value=$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
