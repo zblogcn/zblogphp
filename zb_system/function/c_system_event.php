@@ -568,6 +568,7 @@ function PostArticle(){
 		if(($_POST['AuthorID']!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){
 			$_POST['AuthorID']=$zbp->user->ID;
 		}
+		if($_POST['AuthorID']==0)$_POST['AuthorID']=$zbp->user->ID;
 	}
 
 	if(isset($_POST['Alias'])){
@@ -587,7 +588,7 @@ function PostArticle(){
 	$pre_tag=null;
 	$pre_category=null;
 	if(GetVars('ID','POST') == 0){
-		if(!$zbp->CheckRights('ArticlePub')){$article->Status=ZC_POST_STATUS_AUDITING;}
+		if(!$zbp->CheckRights('ArticlePub')){$_POST['Status']=ZC_POST_STATUS_AUDITING;}
 	}else{
 		$article->LoadInfoByID(GetVars('ID','POST'));
 		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){$zbp->ShowError(6);}
@@ -607,7 +608,7 @@ function PostArticle(){
 	}
 
 	foreach ($GLOBALS['Filter_Plugin_PostArticle_Core'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($article);
+		$fpname($article);
 	}
 
 	FilterArticle($article);
@@ -759,7 +760,7 @@ function PostPage(){
 	}
 
 	foreach ($GLOBALS['Filter_Plugin_PostPage_Core'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($article);
+		$fpname($article);
 	}
 
 	FilterArticle($article);
@@ -862,7 +863,7 @@ function PostComment(){
 	}
 
 	foreach ($GLOBALS['Filter_Plugin_PostComment_Core'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($cmt);
+		$fpname($cmt);
 	}
 
 	FilterComment($cmt);
@@ -992,7 +993,7 @@ function PostCategory(){
 	}
 
 	foreach ($GLOBALS['Filter_Plugin_PostCategory_Core'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($cate);
+		$fpname($cate);
 	}
 
 	FilterCategory($cate);
@@ -1069,7 +1070,7 @@ function PostTag(){
 	}
 
 	foreach ($GLOBALS['Filter_Plugin_PostTag_Core'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($tag);
+		$fpname($tag);
 	}
 
 	FilterTag($tag);
@@ -1161,7 +1162,7 @@ function PostMember(){
 	}
 
 	foreach ($GLOBALS['Filter_Plugin_PostMember_Core'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($mem);
+		$fpname($mem);
 	}
 
 	FilterMember($mem);
@@ -1249,7 +1250,7 @@ function PostModule(){
 	}
 
 	foreach ($GLOBALS['Filter_Plugin_PostModule_Core'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($mod);
+		$fpname($mod);
 	}
 
 	FilterModule($mod);

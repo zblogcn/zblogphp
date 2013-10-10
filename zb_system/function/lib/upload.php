@@ -62,7 +62,8 @@ class Upload extends Base{
 		if(!file_exists($zbp->usersdir . $this->Dir)){
 			@mkdir($zbp->usersdir . $this->Dir, 0777,true);	
 		}
-		@move_uploaded_file($tmp, $this->FullFile);
+		$fn=iconv("UTF-8","GBK",$this->Name);
+		@move_uploaded_file($tmp, $zbp->usersdir . $this->Dir . $fn);
 		return true;
 	}
 
@@ -79,7 +80,8 @@ class Upload extends Base{
 		}
 		$s=base64_decode($str64);
 		$this->Size=strlen($s);
-		file_put_contents($zbp->usersdir . $this->Dir . $this->Name, $s);
+		$fn=iconv("UTF-8","GBK",$this->Name);
+		file_put_contents($zbp->usersdir . $this->Dir . $fn, $s);
 		return true;
 	}
 

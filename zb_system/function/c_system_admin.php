@@ -215,7 +215,9 @@ function CreateOptoinsOfMember($default){
 		return '<option value="' . $default . '" selected="selected" >' . $zbp->members[$default]->Name . '</option>';
 	}
 	foreach ($zbp->members as $key => $value) {
-		$s .= '<option value="' . $key . '" ' . ($default==$key?'selected="selected"':'') . ' >' . $zbp->members[$key]->Name . '</option>';
+		if($zbp->CheckRightsByLevel($zbp->members[$key]->Level,'ArticleEdt')){
+			$s .= '<option value="' . $key . '" ' . ($default==$key?'selected="selected"':'') . ' >' . $zbp->members[$key]->Name . '</option>';
+		}
 	}
 	return $s;
 }

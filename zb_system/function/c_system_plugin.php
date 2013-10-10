@@ -189,12 +189,26 @@ $Filter_Plugin_Zbp_Call=array();
 '类型:Filter
 '名称:Filter_Plugin_Zbp_CheckRights
 '参数:$action
-'说明:Zbp类的检查权限接口
+'说明:Zbp类的检查权限接口(检查当前用户)
 '调用:
 '**************************************************>
 */
 $Filter_Plugin_Zbp_CheckRights=array();
 
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_CheckRightsByLevel
+'参数:$level,$action
+'说明:Zbp类的检查权限接口(检查指定level)
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_CheckRightsByLevel=array();
 
 
 

@@ -439,14 +439,37 @@ class ZBlogPHP{
 		}
 
 		if(is_int($action)){
-			if ($GLOBALS['zbp']->user->Level > $action) {
+			if ($this->user->Level > $action) {
 				return false;
 			} else {
 				return true;
 			}
 		}
 
-		if ($GLOBALS['zbp']->user->Level > $GLOBALS['actions'][$action]) {
+		if ($this->user->Level > $GLOBALS['actions'][$action]) {
+			return false;
+		} else {
+			return true;
+		}	
+
+	}
+
+	function CheckRightsByLevel($level,$action){
+
+		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckRightsByLevel'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($level,$action);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+
+		if(is_int($action)){
+			if ($level > $action) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		if ($level > $GLOBALS['actions'][$action]) {
 			return false;
 		} else {
 			return true;
