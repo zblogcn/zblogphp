@@ -134,6 +134,9 @@ function GetDirsInDir($dir){
 function GetFilesInDir($dir,$type){
 
 	$files=array();
+	
+	if(!file_exists($dir))return $files;
+	
 	if(function_exists('scandir')){
 		foreach (scandir($dir) as $f) {
 			if (is_file($dir . $f)) {
