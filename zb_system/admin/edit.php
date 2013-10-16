@@ -16,13 +16,11 @@ if(GetVars('act','GET')=='PageEdt')$action='PageEdt';
 if(GetVars('act','GET')=='ArticleEdt')$action='ArticleEdt';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
-$blogtitle=$lang['msg']['article_edit'];
-
-$ispage=false;
-if($action=='PageEdt'){$ispage=true;}
-
 $article=new Post;
 $article->AuthorID=$zbp->user->ID;
+
+$ispage=false;
+if($action=='PageEdt'){$ispage=true;$article->Type=1;}
 
 if(!$zbp->CheckRights('ArticlePub')){
   $article->Status=ZC_POST_STATUS_AUDITING;
@@ -33,9 +31,11 @@ if(isset($_GET['id'])){
 }
 
 if($ispage){
-  $article->Type=1;
+  $blogtitle=$lang['msg']['page_edit'];
+  if(!$zbp->CheckRights('PageAll')&&$article->AuthorID!=$zbp->user->ID){$zbp->ShowError(6);die();}
 }else{
-  $article->Type=0;
+  $blogtitle=$lang['msg']['article_edit']; 
+  if(!$zbp->CheckRights('ArticleAll')&&$article->AuthorID!=$zbp->user->ID){$zbp->ShowError(6);die();}
 }
 
 if($article->Intro){
@@ -345,11 +345,11 @@ function AutoIntro() {
   if(s.indexOf("<hr class=\"more\" />")>-1){
     editor_api.editor.intro.put(s.split("<hr class=\"more\" />")[0]);
   }else{
-	if(s.indexOf("<hr class=\"more\"/>")>-1){
-	    editor_api.editor.intro.put(s.split("<hr class=\"more\"/>")[0]);
-	}else{
-		editor_api.editor.intro.put(s.substring(0,250));
-	}
+	  if(s.indexOf("<hr class=\"more\"/>")>-1){
+      editor_api.editor.intro.put(s.split("<hr class=\"more\"/>")[0]);
+  	}else{
+	  	editor_api.editor.intro.put(s.substring(0,250));
+  	}
   }
 	$("#divIntro").show();
 	$('html,body').animate({scrollTop:$('#divIntro').offset().top},'fast');
@@ -366,16 +366,10 @@ $(window).bind("scroll resize",function(){
   }
   else{
 	$("#divFloat").removeClass("boxfloat");
-  }   
+  }
 });
 
-//选择模板
-function selectlogtemplate(c){
 
-}
-function selectlogtemplatesub(a){
-	$("#cmbTemplate").find("option[value='"+a+"']").attr("selected","selected");
-}
 
 function editor_init(){
 	editor_api.editor.content.obj=$('#editor_content');

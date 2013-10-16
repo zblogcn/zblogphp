@@ -551,12 +551,16 @@ function PostArticle(){
 		$_POST['Content']=str_replace('<hr class="more" />', '<!--more-->', $_POST['Content']);
 		$_POST['Content']=str_replace('<hr class="more"/>', '<!--more-->', $_POST['Content']);
 		if(strpos($_POST['Content'], '<!--more-->')!==false){
-			$_POST['Intro']=GetValueInArray(explode('<!--more-->',$_POST['Content']),0);
+			if(isset($_POST['Intro'])){
+				$_POST['Intro']=GetValueInArray(explode('<!--more-->',$_POST['Content']),0);
+			}
 		}else{
-			if(isset($_POST['Intro'])&&$_POST['Intro']==''){
-				$_POST['Intro']=substr($_POST['Content'], 0,250);
-				if(strpos($_POST['Intro'],'<')!==false){
-					$_POST['Intro']=CloseTags($_POST['Intro']);
+			if(isset($_POST['Intro'])){
+				if($_POST['Intro']==''){
+					$_POST['Intro']=substr($_POST['Content'], 0,250);
+					if(strpos($_POST['Intro'],'<')!==false){
+						$_POST['Intro']=CloseTags($_POST['Intro']);
+					}
 				}
 			}
 		}
@@ -597,7 +601,6 @@ function PostArticle(){
 		$pre_tag=$article->Tag;
 		$pre_category=$article->CateID;
 	}
-	$article->Type = ZC_POST_TYPE_ARTICLE;
 
 	foreach ($zbp->datainfo['Post'] as $key => $value) {
 		if($key=='ID')continue;
@@ -607,11 +610,13 @@ function PostArticle(){
 		}
 	}
 
+	$article->Type = ZC_POST_TYPE_ARTICLE;
+
 	foreach ($GLOBALS['Filter_Plugin_PostArticle_Core'] as $fpname => &$fpsignal) {
 		$fpname($article);
 	}
 
-	FilterArticle($article);
+	FilterPost($article);
 	FilterMeta($article);
 
 	$article->Save();
@@ -749,7 +754,6 @@ function PostPage(){
 		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('PageAll'))){$zbp->ShowError(6);}
 		$pre_author=$article->AuthorID;
 	}
-	$article->Type = ZC_POST_TYPE_PAGE;
 
 	foreach ($zbp->datainfo['Post'] as $key => $value) {
 		if($key=='ID')continue;
@@ -759,11 +763,13 @@ function PostPage(){
 		}
 	}
 
+	$article->Type = ZC_POST_TYPE_PAGE;
+
 	foreach ($GLOBALS['Filter_Plugin_PostPage_Core'] as $fpname => &$fpsignal) {
 		$fpname($article);
 	}
 
-	FilterArticle($article);
+	FilterPost($article);
 	FilterMeta($article);
 
 	$article->Save();
@@ -1498,7 +1504,7 @@ function FilterComment(&$comment){
 }
 
 
-function FilterArticle(&$article){
+function FilterPost(&$article){
 	global $zbp;
 
 	$article->Title=strip_tags($article->Title);
