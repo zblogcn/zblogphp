@@ -3,7 +3,6 @@
 
 嵌入模块内容{module:xxxxxx}
 
-
 2.变量
 {$article.name}
 
@@ -12,10 +11,14 @@
 
 4.if
 
-
 5.for
-
-
 
 6.注释
 {* Smarty这里是注释 *}
+
+7.直接写PHP
+{php}
+      global $actions;
+      print_r($actions);
+{/php}
+
