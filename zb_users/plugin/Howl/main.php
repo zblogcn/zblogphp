@@ -64,12 +64,12 @@ $zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重�
 <table border="1" class="tableFull tableBorder tableBorder-thcenter">
 <tr>
 	<th class="td10">权限</th>
-	<th class="td10">管理组</th>
-	<th class="td10">网站编辑组</th>
-	<th class="td10">作者组</th>
-	<th class="td10">协作者组</th>
-	<th class="td10">注册会员组</th>
-	<th class="td10">游客组</th>
+	<th class="td10"><?php echo $zbp->lang['user_level_name']['1'];?>组</th>
+	<th class="td10"><?php echo $zbp->lang['user_level_name']['2'];?>组</th>
+	<th class="td10"><?php echo $zbp->lang['user_level_name']['3'];?>组</th>
+	<th class="td10"><?php echo $zbp->lang['user_level_name']['4'];?>组</th>
+	<th class="td10"><?php echo $zbp->lang['user_level_name']['5'];?>组</th>
+	<th class="td10"><?php echo $zbp->lang['user_level_name']['6'];?>组</th>
 	<!-- <th class="td10">权限</th> -->
 </tr>
 <?php
@@ -84,7 +84,7 @@ return '<input name="Group'.$group.'_' . $key .'" style="" type="text" value="'.
 
 foreach ($actions as $key => $value) {
 echo '<tr>';
-echo '<td class="tdCenter">' . $key . '</td>';
+echo '<td class="tdCenter">' . $key . '(<b>'.(isset($actions_name_howl[$key])?$actions_name_howl[$key]:'未知权限').'</b>)</td>';
 echo '<td class="tdCenter">' . MakeInput(1,$key) . '</td>';
 echo '<td class="tdCenter">' . MakeInput(2,$key) . '</td>';
 echo '<td class="tdCenter">' . MakeInput(3,$key) . '</td>';
