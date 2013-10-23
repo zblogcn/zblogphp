@@ -1,0 +1,1 @@
+﻿<a href="#AjaxCommentEnd"  onclick="<#article/comment_pagebar_r/url#>" class="ds-current"><#ZC_MSG193#></a>
