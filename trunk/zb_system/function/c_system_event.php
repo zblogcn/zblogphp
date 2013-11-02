@@ -288,6 +288,12 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	}
 	if($tag->ID==0)$zbp->ShowError(2);
 
+	if($page==1){
+		$zbp->title=$tag->Name;
+	}else{
+		$zbp->title=$tag->Name . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
+	}
+
 	$template=$tag->Template;
 	$w[]=array('LIKE','log_Tag','%{'.$tag->ID.'}%');
 	$pagebar->UrlRule->Rules['{%id%}']=$tag->ID;
@@ -356,7 +362,10 @@ function ViewPost($id,$alias){
 		die();
 	}
 
-	$w[]=array('=','log_Status',0);
+	if(!($zbp->CheckRights('ArticleAll')&&$zbp->CheckRights('PageAll'))){
+		$w[]=array('=','log_Status',0);
+	}
+
 	$articles=$zbp->GetPostList(
 		array('*'),
 		$w,
@@ -416,7 +425,7 @@ function ViewPost($id,$alias){
 		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
 	}
 
-	$zbp->template->SetTags('title',$article->Title);
+	$zbp->template->SetTags('title',($article->Status==0?'':'['.$zbp->lang['post_status_name'][$article->Status].']') . $article->Title);
 	$zbp->template->SetTags('article',$article);
 	$zbp->template->SetTags('type',($article->Type==0?'article':'page'));
 	$zbp->template->SetTags('page',1);
