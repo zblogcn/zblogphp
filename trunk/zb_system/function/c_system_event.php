@@ -872,6 +872,7 @@ function PostComment(){
 	foreach ($zbp->datainfo['Comment'] as $key => $value) {
 		if($key=='ID')continue;
 		if($key=='Meta')continue;
+		if($key=='IsChecking')continue;	
 		if( isset($_POST[$key]) ){
 			$cmt->$key    = GetVars($key,'POST');
 		}
@@ -1966,5 +1967,3 @@ function BuildModule_navbar(){
 
 	return $s;
 }
-
-?>

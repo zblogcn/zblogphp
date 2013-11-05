@@ -132,6 +132,3 @@ class Networkfile_get_contents implements iNetwork
 		$this->responseHeader = array();
 	}
 }
-
-
-?>

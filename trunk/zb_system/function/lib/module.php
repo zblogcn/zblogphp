@@ -51,7 +51,3 @@ class Module extends Base{
 	}
 
 }
-
-
-
-?>

@@ -42,6 +42,3 @@ class Rss2 extends DOMDocument {
 	}
 
 }
-
-
-?>

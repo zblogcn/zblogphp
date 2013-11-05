@@ -88,5 +88,3 @@ public $prevbutton = null;
 public $nextbutton = null;
 
 }
-
-?>

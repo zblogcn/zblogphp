@@ -173,4 +173,3 @@ class Networkfsockopen implements iNetwork
 		
 	}
 }
-?>

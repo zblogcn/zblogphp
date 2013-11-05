@@ -249,5 +249,3 @@ switch ($action) {
 		# code...
 		break;
 }
-
-?>

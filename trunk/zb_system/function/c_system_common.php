@@ -480,6 +480,3 @@ function CloseTags($html){
 	return $html;
 
 }
-
-
-?>

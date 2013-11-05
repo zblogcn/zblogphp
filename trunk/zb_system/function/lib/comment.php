@@ -109,6 +109,3 @@ class Comment extends Base{
 	}
 
 }
-
-
-?>

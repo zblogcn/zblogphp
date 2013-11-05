@@ -129,4 +129,3 @@ class Upload extends Base{
 	}
 
 }
-?>

@@ -119,6 +119,12 @@ class Base
 		foreach ($this->datainfo as $key => $value) {
 			if($value[1]=='boolean'){
 				$keyvalue[$value[0]]=(integer)$this->Data[$key];
+			}elseif($value[1] == 'integer'){
+				$keyvalue[$value[0]]=(integer)$this->Data[$key];
+			}elseif($value[1] == 'float'){
+				$keyvalue[$value[0]]=(float)$this->Data[$key];
+			}elseif($value[1] == 'double'){
+				$keyvalue[$value[0]]=(double)$this->Data[$key];
 			}elseif($value[1] == 'string'){
 				if($key=='Meta'){
 					$keyvalue[$value[0]]=$this->Data[$key];
@@ -150,8 +156,3 @@ class Base
 		return true;
 	}
 }
-
-
-
-
-?>
