@@ -34,5 +34,3 @@ class NetworkFactory
 		return $network;
 	}
 }
-
-?>

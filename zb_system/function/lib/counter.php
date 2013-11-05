@@ -26,6 +26,3 @@ class Counter extends Base{
 
 
 }
-
-
-?>

@@ -1366,6 +1366,3 @@ $Filter_Plugin_Upload_Url=array();
 
 
 
-
-
-?>

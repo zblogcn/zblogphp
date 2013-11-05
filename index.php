@@ -29,4 +29,3 @@ if($url==$cookiespath||$url==$cookiespath . 'index.php'){
 foreach ($GLOBALS['Filter_Plugin_Index_End'] as $fpname => &$fpsignal) {$fpname();}
 
 RunTime();
-?>

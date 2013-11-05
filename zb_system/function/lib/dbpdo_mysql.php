@@ -96,5 +96,3 @@ class Dbpdo_MySQL implements iDataBase
 	}
 
 }
-
-?>

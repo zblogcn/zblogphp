@@ -80,5 +80,3 @@ class DbSQLite3 implements iDataBase
 	}
 
 }
-
-?>

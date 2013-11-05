@@ -1417,5 +1417,3 @@ function Admin_SettingMng(){
 	echo '<script type="text/javascript">ActiveTopMenu("topmenu2");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/setting_32.png' . '");</script>';
 }
-
-?>

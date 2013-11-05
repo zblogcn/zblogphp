@@ -376,6 +376,3 @@ function __autoload($classname) {
 	}
 	require $GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php';
 }
-
-
-?>

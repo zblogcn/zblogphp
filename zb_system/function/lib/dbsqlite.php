@@ -82,5 +82,3 @@ class DbSQLite implements iDataBase
 	}
 
 }
-
-?>

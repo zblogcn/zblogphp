@@ -68,6 +68,3 @@ class Tag extends Base{
 	}
 	
 }
-
-
-?>

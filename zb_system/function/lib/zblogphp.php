@@ -1303,5 +1303,3 @@ function AddBuildModuleAll(){
 		throw new Exception($idortext);
 	}
 }
-
-?>

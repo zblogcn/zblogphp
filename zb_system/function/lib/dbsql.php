@@ -355,5 +355,3 @@ class DbSql #extends AnotherClass
 	}
 
 }
-
-?>
