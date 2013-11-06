@@ -9,7 +9,7 @@
 function Logs($s){
 	$f=$GLOBALS['usersdir'] . 'logs/'. $GLOBALS['option']['ZC_BLOG_CLSID'] .'-log' . date("Ymd"). '.txt';
 	$handle = @fopen($f, 'a+');
-	@fwrite($handle,"[" . date('c') . "~" . current(explode(" ", microtime()))  . "]" . $s . "\r\n");
+	@fwrite($handle,"[" . date('c') . "~" . current(explode(" ", microtime()))  . "]" . "\r\n" . $s . "\r\n");
 	@fclose($handle);	
 }
 
