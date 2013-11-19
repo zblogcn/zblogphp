@@ -14,9 +14,10 @@ error_reporting(0);
 
 $zbpvers=array();
 $zbpvers['130707']='1.0 Beta Build 130707';
+$zbpvers['131111']='1.0 Beta Build 131111';
 
 #定义常量
-define('ZC_BLOG_VERSION', '1.0 Beta Build 130707');
+define('ZC_BLOG_VERSION', $zbpvers['131111']);
 
 define('ZC_POST_TYPE_ARTICLE', 0);
 define('ZC_POST_TYPE_PAGE', 1);
@@ -79,15 +80,6 @@ require $blogpath.'zb_system/function/c_system_debug.php';
 require $blogpath.'zb_system/function/c_system_plugin.php';
 require $blogpath.'zb_system/function/c_system_event.php';
 
-
-/*autoload*/
-function __autoload($classname) {
-	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($classname);
-		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-	}
-	require $GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php';
-}
 
 
 #加载zbp 数据库类 对象
@@ -342,7 +334,7 @@ ActivePlugin();
 
 
 
-/*system plugin*/
+/*system plugin
 function zbp_index_cache_read(){
 	global $zbp;
 	if(count($_GET)==0){
@@ -365,16 +357,22 @@ function zbp_index_cache_write(){
 		$zbp->SaveCache();
 	}
 }
-
+*/
 function  zbp_index_redirect_install(){
 	global $zbp;
 	if (!$zbp->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/');}
 }
 
-#Add_Filter_Plugin('Filter_Plugin_Index_Pre','zbp_index_redirect_install');
-#Add_Filter_Plugin('Filter_Plugin_Index_Pre','zbp_default_cache_read');
+#Add_Filter_Plugin('Filter_Plugin_Index_Begin','zbp_index_redirect_install');
+#Add_Filter_Plugin('Filter_Plugin_Index_Begin','zbp_default_cache_read');
 #Add_Filter_Plugin('Filter_Plugin_Index_End','zbp_default_cache_write');
 
 
-
-?>
+/*autoload*/
+function __autoload($classname) {
+	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($classname);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+	}
+	require $GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php';
+}

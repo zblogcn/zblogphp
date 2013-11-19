@@ -4,7 +4,6 @@ require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 
 require 'function.php';
-
 $zbp->Load();
 
 $action='root';
@@ -25,6 +24,7 @@ if(GetVars('act')=='save'){
 	Redirect('./setting.php');
 
 }
+
 if(GetVars('act')=='login'){
 
 	$s=Server_Open('vaild');
@@ -43,20 +43,18 @@ if(GetVars('act')=='login'){
 		die;
 	}
 }
+
 if(GetVars('act')=='logout'){
-		$zbp->Config('AppCentre')->username='';
-		$zbp->Config('AppCentre')->password='';
-		$zbp->SaveConfig('AppCentre');
-		$zbp->SetHint('good','您已退出APP应用中心.');
-		Redirect('./setting.php');
-		die;
+	$zbp->Config('AppCentre')->username='';
+	$zbp->Config('AppCentre')->password='';
+	$zbp->SaveConfig('AppCentre');
+	$zbp->SetHint('good','您已退出APP应用中心.');
+	Redirect('./setting.php');
+	die;
 }
-
-
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
-
 ?>
 <div id="divMain">
 
@@ -92,7 +90,6 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               </p>
               <hr/>
             </form>
-
 
             <div class="divHeader2">开发者登录</div>
 <?php if(!$zbp->Config('AppCentre')->username){ ?>

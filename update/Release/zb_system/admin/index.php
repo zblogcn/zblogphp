@@ -11,7 +11,9 @@ require '../function/c_system_admin.php';
 
 $zbp->Load();
 
-$action=(GetVars('act','GET')=='') ? 'admin' : GetVars('act','GET') ;
+$action=GetVars('act','GET');
+
+if(($action=='')||($action==null)){$action='admin';}
 
 foreach ($GLOBALS['Filter_Plugin_Admin_Begin'] as $fpname => &$fpsignal) {$fpname();}
 

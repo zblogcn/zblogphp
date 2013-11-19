@@ -1,0 +1,104 @@
+#BT_main {
+	position: relative;
+	z-index:101;
+	background-color: #fff;
+}
+#BT_main div{
+	border: 1px solid #e0e0e0;
+	border-top:none;
+}
+#BT_main table{
+	padding:0;
+	margin:0 auto;
+}
+div #BT_arrow_left{
+	position: absolute;
+	z-index:101;
+	left:-12px;
+	height:23px;
+	width:10px;
+    top:-3px;
+	border:none;
+}
+div #BT_arrow_right{
+	position: absolute;
+	z-index:101;
+	height:23px;
+	width:11px;
+    top:-2px;
+	margin-left:0px;
+	padding-left:0px;
+	border:none;
+}
+div #BT_arrow_title_left{
+	position: absolute;
+	z-index:101;
+	left:-12px;
+	height:23px;
+	width:10px;
+    top:-3px;
+	border:none;
+}
+div #BT_arrow_title_right{
+	position: absolute;
+	z-index:101;
+	height:23px;
+	width:11px;
+    top:-2px;
+	margin-left:0px;
+	padding-left:0px;
+	border:none;
+}
+#BT_copy{
+	padding:10px 10px 10px 10px;
+	color:#333333;
+	border:none;
+}
+.BT_loader{
+	background-image: url(../image/bettertip/loader.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+	width:100%;
+	height:12px;
+	border:none;
+}
+div #BT_title{
+	color:#fff;
+	background-color: #3399cc;
+	text-align: left;
+	padding-left: 8px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	font-weight:bold;
+	font-size:14px;
+	border: 1px solid #3399cc;
+}
+div #BT_content{
+	border: none;
+}
+#BT_text p{
+	margin:3px 0;
+}
+#BT_text img{
+	padding: 1px;
+	border: 1px solid #fff;
+}
+.betterTip{
+	cursor:default;
+	text-decoration:none;
+	color:black;
+}
+.BT_shadow0 {
+	background:transparent url(../image/bettertip/corner_tr.png) no-repeat scroll right top;
+	position:absolute;
+}
+.BT_shadow1 {
+	background:transparent url(../image/bettertip/corner_bl.png) no-repeat scroll left bottom;
+	display:block;
+	padding-left:8px;
+	padding-top:8px;
+}
+.BT_shadow2 {
+	background:transparent url(../image/bettertip/shadow.png) no-repeat scroll right bottom;
+	display:block;
+}

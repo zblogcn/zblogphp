@@ -6,6 +6,7 @@ function AppCentre_SubMenus($id){
 	echo '<a href="main.php"><span class="m-left '.($id==1?'m-now':'').'">浏览在线应用</span></a>';
 	echo '<a href="main.php?method=check"><span class="m-left '.($id==2?'m-now':'').'">检查应用更新</span></a>';
 	echo '<a href="update.php"><span class="m-left '.($id==3?'m-now':'').'">系统更新与校验</span></a>';
+	echo '<a href="client.php"><span class="m-left '.($id==9?'m-now':'').'">应用中心商城</span></a>';
 
 	echo '<a href="setting.php"><span class="m-right '.($id==4?'m-now':'').'">设置</span></a>';
 	echo '<a href="plugin_edit.php"><span class="m-right '.($id==5?'m-now':'').'">新建插件</span></a>';
@@ -95,10 +96,12 @@ function Server_Open($method){
 }
 
 
-
 function Server_SendRequest($url,$data=array()){
 	global $zbp;
 
+	if(function_exists("curl_init"))return  Server_SendRequest_CUrl($url,$data);
+	if(!ini_get("allow_url_fopen"))return "";	
+	
 	$un=$zbp->Config('AppCentre')->username;
 	$ps=$zbp->Config('AppCentre')->password;
 	$c='';
@@ -130,8 +133,37 @@ function Server_SendRequest($url,$data=array()){
 		$content=stream_context_create($opts);
 	}
 
+	ini_set('default_socket_timeout',120);
 	return file_get_contents($url,false,$content);
 
+}
+
+function Server_SendRequest_CUrl($url,$data=array()){
+	global $zbp;
+
+	$un=$zbp->Config('AppCentre')->username;
+	$ps=$zbp->Config('AppCentre')->password;
+	$c='';
+	if($un&&$ps){
+		$c="username=".urlencode($un) ."; password=".urlencode($ps);
+	}
+	
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+	curl_setopt($ch, CURLOPT_USERAGENT, 'ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent());
+	if($c)curl_setopt($ch,CURLOPT_COOKIE,$c);
+	
+	if($data){//POST
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+	}else{//GET
+	}
+	
+	$r = curl_exec($ch);
+	curl_close($ch);
+	
+	return $r;
 }
 
 function CreateOptoinsOfVersion($default){
@@ -144,4 +176,18 @@ function CreateOptoinsOfVersion($default){
 	return $s;
 }
 
+function AppCentre_GetHttpContent($url){
+	$r=null;
+	if(function_exists("curl_init")){
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+		$r = curl_exec($ch);
+		curl_close($ch);
+	}elseif(ini_get("allow_url_fopen")){
+		ini_set('default_socket_timeout',60);
+		$r=file_get_contents($url);
+	}
+	return $r;
+}
 ?>
