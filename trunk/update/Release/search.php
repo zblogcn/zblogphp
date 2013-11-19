@@ -53,4 +53,3 @@ $zbp->template->SetTemplate($article->Template);
 $zbp->template->Display();
 
 RunTime();
-?>

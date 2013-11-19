@@ -14,11 +14,7 @@ $zbp->Load();
 
 foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
-if(isset($_SERVER['REQUEST_URI'])){
-	$url=$_SERVER['REQUEST_URI'];
-}else{
-	$url=$_SERVER['PHP_SELF'] . ($_SERVER['QUERY_STRING']? '?'.$_SERVER['QUERY_STRING'] : '');
-}
+$url=GetRequestUri();
 
 if($url==$cookiespath||$url==$cookiespath . 'index.php'){
 	ViewList(null,null,null,null,null);
@@ -33,4 +29,3 @@ if($url==$cookiespath||$url==$cookiespath . 'index.php'){
 foreach ($GLOBALS['Filter_Plugin_Index_End'] as $fpname => &$fpsignal) {$fpname();}
 
 RunTime();
-?>
