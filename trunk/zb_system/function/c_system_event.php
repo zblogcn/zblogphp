@@ -566,7 +566,7 @@ function PostArticle(){
 		}else{
 			if(isset($_POST['Intro'])){
 				if($_POST['Intro']==''){
-					$_POST['Intro']=substr($_POST['Content'], 0,250);
+					$_POST['Intro']=substr($_POST['Content'], 0,$zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
 					if(strpos($_POST['Intro'],'<')!==false){
 						$_POST['Intro']=CloseTags($_POST['Intro']);
 					}
