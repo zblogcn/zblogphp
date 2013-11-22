@@ -54,9 +54,11 @@ public function Make(){
 
 	$this->UrlRule->Rules['{%page%}']=$this->PageFirst;
 	$this->buttons['‹‹']=$this->UrlRule->Make();
+
 	if($this->PageNow <> $this->PageFirst){
 		$this->UrlRule->Rules['{%page%}']=$this->PagePrevious;
 		$this->buttons['‹'] = $this->UrlRule->Make();
+		$this->prevbutton=$this->buttons['‹'];
 	}
 
 	$j=$this->PageNow;
@@ -73,6 +75,7 @@ public function Make(){
 	if($this->PageNow <> $this->PageNext){
 		$this->UrlRule->Rules['{%page%}']=$this->PageNext;
 		$this->buttons['›']=$this->UrlRule->Make();
+		$this->nextbutton=$this->buttons['›'];
 	}
 
 	$this->UrlRule->Rules['{%page%}']=$this->PageLast;
