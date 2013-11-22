@@ -15,9 +15,10 @@ error_reporting(0);
 $zbpvers=array();
 $zbpvers['130707']='1.0 Beta Build 130707';
 $zbpvers['131111']='1.0 Beta Build 131111';
+$zbpvers['131212']='1.1 Taichi Build 131212';
 
 #定义常量
-define('ZC_BLOG_VERSION', $zbpvers['131111']);
+define('ZC_BLOG_VERSION', $zbpvers['131212']);
 
 define('ZC_POST_TYPE_ARTICLE', 0);
 define('ZC_POST_TYPE_PAGE', 1);
