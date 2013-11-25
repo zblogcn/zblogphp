@@ -107,8 +107,8 @@ background:#ffffdd;
 
 
 /*后台顶部*/
-header {margin-bottom:5px;height:85px; padding:0; background:#3a6ea5; position: relative;}
-header .top { }
+.header {margin-bottom:5px;height:85px; padding:0; background:#3a6ea5; position: relative;}
+.header .top { }
 
 /**/
 .logo { width:190px; height:62px; padding:10px 0 0 0; left:20px;}
