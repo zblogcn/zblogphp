@@ -52,6 +52,7 @@ class ZBlogPHP{
 	public $isinitialize=false;
 	public $isconnect=false;
 	public $isload=false;
+	public $issession=false;
 
 	public $template = null;
 	public $socialcomment = null;
@@ -204,10 +205,19 @@ class ZBlogPHP{
 		$this->RegBuildModule('navbar','BuildModule_navbar');
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
+		
+		if($GLOBALS['manage']==true) $this->LoadManage();
 
 		$this->isload=true;
 	}
+	
+	public function LoadManage(){
 
+		if($this->user->Status==ZC_MEMBER_STATUS_AUDITING) $this->ShowError(79);
+		if($this->user->Status==ZC_MEMBER_STATUS_LOCKED) $this->ShowError(79);
+		
+		foreach ($GLOBALS['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) $fpname();
+	}
 
 	#终止连接，释放资源
 	public function Terminate(){
@@ -275,7 +285,12 @@ class ZBlogPHP{
 	}
 
 
-
+	public function StartSession(){
+		if($this->issession)return false;
+		session_start();
+		$this->issession=true;
+		return true;
+	}
 
 
 ################################################################################################################

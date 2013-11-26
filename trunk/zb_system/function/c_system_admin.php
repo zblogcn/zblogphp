@@ -51,7 +51,7 @@ Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','zbp_admin_addcmtsubm
 
 $zbp->LoadTemplates();
 
-
+$manage=true; 
 
 
 

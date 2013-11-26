@@ -87,5 +87,7 @@ $f();
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 
+foreach ($GLOBALS['Filter_Plugin_Admin_End'] as $fpname => &$fpsignal) {$fpname();}
+
 RunTime();
 ?>
