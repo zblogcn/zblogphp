@@ -287,6 +287,19 @@ $Filter_Plugin_Zbp_Load=array();
 
 
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_LoadManage
+'参数:
+'说明:Zbp类的后台管理初始加载接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_LoadManage=array();
+
+
+
 
 /*
 '**************************************************<
@@ -426,6 +439,19 @@ $Filter_Plugin_Cmd_Begin=array();
 */
 $Filter_Plugin_Admin_Begin=array();
 
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_End
+'参数:
+'说明:后台管理页的终结接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Admin_End=array();
 
 
 

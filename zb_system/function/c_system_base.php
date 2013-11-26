@@ -50,6 +50,7 @@ $action=null;
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $usersdir = $blogpath . 'zb_users/';
 
+$manage=false;
 
 $option_zbusers=null;
 if(file_exists($usersdir . 'c_option.php')){
