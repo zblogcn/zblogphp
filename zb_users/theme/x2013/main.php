@@ -78,7 +78,7 @@ p{line-height:1.5em;padding:0.5em 0;}
     <td><p align="left"><input id="DisplayFeed" name="DisplayFeed" style="display:none;" type="text" value="<?php echo $zbp->Config('x2013')->DisplayFeed;?>" class="checkbox"></p></td>
   </tr>
   <tr>
-    <td><b><label for="SetMailKey"><p align="center">QQMail邮件订阅key</p></label></b></td>
+    <td><b><label for="SetMailKey"><p align="center"><a href="http://list.qq.com/" target="_black">QQMail邮件订阅key</a></p></label></b></td>
     <td><p align="left"><input name="SetMailKey" type="text" id="SetMailKey" size="100%" value="<?php echo $zbp->Config('x2013')->SetMailKey;?>" /></p></td>
   </tr>  
 </table>
