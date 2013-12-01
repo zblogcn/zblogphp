@@ -85,7 +85,7 @@ require $blogpath.'zb_system/function/c_system_event.php';
 
 
 #加载zbp 数据库类 对象
-$lib_array = array('zblogphp','dbsql','base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','urlrule','app','rss2');
+$lib_array = array('zblogphp','dbsql','base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','urlrule','app','rss2','validcode');
 foreach ($lib_array as $f) {
 	require $blogpath.'zb_system/function/lib/' . $f . '.php';
 }

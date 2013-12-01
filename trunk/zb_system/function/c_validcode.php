@@ -1,9 +1,8 @@
 <?php
-header('Content-Type: image/jpeg');
 require 'c_system_base.php';
 $zbp->Load();
 ob_clean();
 
-
-die();
-?>
+$_vc = new ValidateCode();
+$_vc->GetImg();
+setcookie("ZBPValidCode", $_vc->GetCode(), time()+60);
