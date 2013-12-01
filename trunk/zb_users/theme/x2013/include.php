@@ -49,7 +49,7 @@ function InstallPlugin_x2013(){
 		$zbp->Config('x2013')->SetWeiboQQ = 'http://t.qq.com/involvements';
 		$zbp->Config('x2013')->DisplayFeed = '1';
 		$zbp->Config('x2013')->SetMailKey = '4e54e0008863773ff0f44e54eb9c1805cf165e63a0601789';
-		$zbp->Config('x2013')->PostAdHeader = '<embed src="http://www.xiami.com/widget/2600062_1770561920/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed>';
+		$zbp->Config('x2013')->PostAdHeader = '<embed src="http://www.xiami.com/widget/0_1771097510/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed>';
 		$zbp->Config('x2013')->PostAdFooter = '<img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif">';
 		$zbp->Config('x2013')->FirstInstall = '1';
 		$zbp->Config('x2013')->NavBar = '<li class="menu-item" style="position: relative;"><a href="{$host}">{$name}</a></li>';
