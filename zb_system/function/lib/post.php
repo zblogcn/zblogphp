@@ -150,6 +150,9 @@ class Post extends Base{
 				$key='&amp;key=' . md5($zbp->guid . $this->ID . date('Y-m-d'));
 				return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
 				break;
+			case 'ValidCodeUrl':
+				return $zbp->host . 'zb_system/script/c_validcode.php?id=cmt';
+				break;
 			case 'Prev':
 				static $_prev=null;
 				if($_prev!==null)return $_prev;

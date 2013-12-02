@@ -22,6 +22,9 @@ class ValidateCode extends Base{
 	public function __construct() {
 		global $zbp;
 		$this->font = $zbp->usersdir .'../zb_system/defend/arial.ttf';
+		$this->charset = $zbp->option['ZC_VERIFYCODE_STRING'];
+		$this->width = $zbp->option['ZC_VERIFYCODE_WIDTH'];
+		$this->height = $zbp->option['ZC_VERIFYCODE_HEIGHT'];
 	}
 
 	//生成随机码
