@@ -13,7 +13,7 @@ if(isset($tips)){$zbp->ShowHint('good', $tips);}
 ?>
 <div id="divMain">
 <?php
-echo $zbp->CheckValidCode(GetVars('SetWeiboSina'));
+echo $zbp->CheckValidCode(GetVars('SetWeiboSina'),'theme');
 ?>
 	<div class="divHeader"><?php echo $blogtitle;?></div>
 	<div id="divMain2">
@@ -25,7 +25,7 @@ echo $zbp->CheckValidCode(GetVars('SetWeiboSina'));
     
   </tr>
   <tr>
-    <td><b><label for="SetWeiboSina"><p align="center">验证码<label><img src="../../zb_system/script/c_validcode.php" onclick="javascript:this.src='../../zb_system/script/c_validcode.php?tm='+Math.random();" /></label> </p></label></b></td>
+    <td><b><label for="SetWeiboSina"><p align="center">验证码<label><img src="../../zb_system/script/c_validcode.php?id=theme&amp;" onclick="javascript:this.src='../../zb_system/script/c_validcode.php?id=theme&amp;tm='+Math.random();" /></label> </p></label></b></td>
     <td><p align="left"><input name="SetWeiboSina" type="text" id="SetWeiboSina" size="100%" value="" /></p></td>
     
   </tr>

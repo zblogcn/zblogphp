@@ -1319,24 +1319,24 @@ function AddBuildModuleAll(){
 	}
 
 
-	function ShowValidCode($factor=''){
+	function ShowValidCode($id=''){
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_ShowValidCode'] as $fpname => &$fpsignal) {
-			return $fpname($factor);//*
+			return $fpname($id);//*
 		}
 
 		$_vc = new ValidateCode();
 		$_vc->GetImg();
-		setcookie('zbpvalidcode' . md5($factor), md5( $this->guid . date("Ymd") . $_vc->GetCode() ), time()+1800,$this->cookiespath);
+		setcookie('zbpvalidcode' . md5($this->guid . $id), md5( $this->guid . date("Ymd") . $_vc->GetCode() ), null,$this->cookiespath);
 	}
 
-	function CheckValidCode($vaidcode,$factor=''){
+	function CheckValidCode($vaidcode,$id=''){
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckValidCode'] as $fpname => &$fpsignal) {
-			return $fpname($vaidcode,$factor);//*
+			return $fpname($vaidcode,$id);//*
 		}
 
-		$original=GetVars('zbpvalidcode' . md5($factor),'COOKIE');
+		$original=GetVars('zbpvalidcode' . md5($this->guid . $id),'COOKIE');
 		if(md5( $this->guid . date("Ymd") . $vaidcode)==$original) return true;
 	}
 }
