@@ -12,6 +12,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 if(isset($tips)){$zbp->ShowHint('good', $tips);}
 ?>
 <div id="divMain">
+<?php
+echo $zbp->CheckValidCode(GetVars('SetWeiboSina'));
+?>
 	<div class="divHeader"><?php echo $blogtitle;?></div>
 	<div id="divMain2">
 	<form id="form1" name="form1" method="post">
@@ -22,7 +25,7 @@ if(isset($tips)){$zbp->ShowHint('good', $tips);}
     
   </tr>
   <tr>
-    <td><b><label for="SetWeiboSina"><p align="center">验证码<label><img src="../../zb_system/function/c_validcode.php" onclick="javascript:this.src='../../zb_system/function/c_validcode.php?tm='+Math.random();" /></label> </p></label></b></td>
+    <td><b><label for="SetWeiboSina"><p align="center">验证码<label><img src="../../zb_system/script/c_validcode.php" onclick="javascript:this.src='../../zb_system/script/c_validcode.php?tm='+Math.random();" /></label> </p></label></b></td>
     <td><p align="left"><input name="SetWeiboSina" type="text" id="SetWeiboSina" size="100%" value="" /></p></td>
     
   </tr>

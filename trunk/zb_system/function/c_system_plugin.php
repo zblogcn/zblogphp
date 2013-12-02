@@ -227,6 +227,36 @@ $Filter_Plugin_Zbp_ShowError=array();
 
 
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_ShowValidCode
+'参数$vaidcode,$factor
+'说明:Zbp类的显示验证码接口，具有唯一性；
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_ShowValidCode=array();
+
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_CheckValidCode
+'参数:$vaidcode,$factor
+'说明:Zbp类的比对验证码接口，具有唯一性；
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_CheckValidCode=array();
+
+
+
+
+
 
 /*
 '**************************************************<
