@@ -259,14 +259,14 @@ window.onbeforeunload = function(){
 }
 
 function checkArticleInfo(){
+  if(isSubmit)return false;
   document.getElementById("edit").action="<?php echo $ispage?'../cmd.php?act=PagePst':'../cmd.php?act=ArticlePst'?>";
 
   if(!editor_api.editor.content.get()){
     alert('<?php echo $zbp->lang['error'][70];?>');
-    return false
+    return false;
   }
-
-  isSubmit=1;
+  isSubmit=true;
 }
 
 //日期时间控件

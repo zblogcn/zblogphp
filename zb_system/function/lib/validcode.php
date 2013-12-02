@@ -8,20 +8,20 @@
 
 //验证码类
 class ValidateCode extends Base{
-	private $charset = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ0123456789';
+	private $charset = 'ABCDEFGHKMNPRSTUVWXYZ123456789';
 	private $code;//验证码
-	private $codelen = 6;//位数
+	private $codelen = 5;//位数
 	private $width = 90;//宽度
 	private $height = 30;//高度
 	private $img;//图形
 	private $font;//字体
-	private $fontsize = 20;//字体大小
+	private $fontsize = 15;//字体大小
 	private $fontcolor;//字体颜色
 
 	//构造方法初始化
 	public function __construct() {
 		global $zbp;
-		$this->font = $zbp->usersdir .'../zb_system/defend/monofont.ttf';
+		$this->font = $zbp->usersdir .'../zb_system/defend/arial.ttf';
 	}
 
 	//生成随机码

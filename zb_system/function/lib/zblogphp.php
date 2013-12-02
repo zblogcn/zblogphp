@@ -1317,4 +1317,26 @@ function AddBuildModuleAll(){
 
 		throw new Exception($idortext);
 	}
+
+
+	function ShowValidCode($factor=''){
+
+		foreach ($GLOBALS['Filter_Plugin_Zbp_ShowValidCode'] as $fpname => &$fpsignal) {
+			return $fpname($factor);//*
+		}
+
+		$_vc = new ValidateCode();
+		$_vc->GetImg();
+		setcookie('zbpvalidcode' . md5($factor), md5( $this->guid . date("Ymd") . $_vc->GetCode() ), time()+1800,$this->cookiespath);
+	}
+
+	function CheckValidCode($vaidcode,$factor=''){
+
+		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckValidCode'] as $fpname => &$fpsignal) {
+			return $fpname($vaidcode,$factor);//*
+		}
+
+		$original=GetVars('zbpvalidcode' . md5($factor),'COOKIE');
+		if(md5( $this->guid . date("Ymd") . $vaidcode)==$original) return true;
+	}
 }
