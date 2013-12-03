@@ -738,17 +738,17 @@ function AddBuildModuleAll(){
 
 		$this->templatetags['user']=&$this->user;
 		$this->templatetags['option']=&$option;
-		$this->templatetags['modules']=&$this->modulesbyfilename;		
+		$this->templatetags['modules']=&$this->modulesbyfilename;
 		$this->templatetags['title']=htmlspecialchars($this->title);
-		$this->templatetags['host']=$this->host;	
+		$this->templatetags['host']=$this->host;
 		$this->templatetags['path']=$this->path;
 		$this->templatetags['cookiespath']=$this->cookiespath;
-		$this->templatetags['name']=htmlspecialchars($this->name);	
+		$this->templatetags['name']=htmlspecialchars($this->name);
 		$this->templatetags['subname']=htmlspecialchars($this->subname);
-		$this->templatetags['theme']=$this->theme;
-		$this->templatetags['style']=$this->style;
+		$this->templatetags['theme']=&$this->theme;
+		$this->templatetags['style']=&$this->style;
 		$this->templatetags['language']=$this->option['ZC_BLOG_LANGUAGE'];
-		$this->templatetags['copyright']=$this->option['ZC_BLOG_COPYRIGHT'];		
+		$this->templatetags['copyright']=$this->option['ZC_BLOG_COPYRIGHT'];
 		$this->templatetags['zblogphp']=$this->option['ZC_BLOG_PRODUCT_FULL'];
 		$this->templatetags['zblogphphtml']=$this->option['ZC_BLOG_PRODUCT_FULLHTML'];
 		$this->templatetags['feedurl']=$this->host . 'feed.php';
@@ -757,7 +757,7 @@ function AddBuildModuleAll(){
 		$this->templatetags['socialcomment']=&$this->socialcomment;
 		$this->templatetags['header']=&$this->header;
 		$this->templatetags['footer']=&$this->footer;
-		$this->templatetags['validcodeurl']=&$this->validcodeurl;		
+		$this->templatetags['validcodeurl']=&$this->validcodeurl;
 
 		$s=array(
 			$option['ZC_SIDEBAR_ORDER'],
@@ -780,11 +780,11 @@ function AddBuildModuleAll(){
 			$this->$s=$ms;
 			$ms=null;
 		}
-		$this->templatetags['sidebar']=$this->sidebar;
-		$this->templatetags['sidebar2']=$this->sidebar2;
-		$this->templatetags['sidebar3']=$this->sidebar3;
-		$this->templatetags['sidebar4']=$this->sidebar4;
-		$this->templatetags['sidebar5']=$this->sidebar5;
+		$this->templatetags['sidebar']=&$this->sidebar;
+		$this->templatetags['sidebar2']=&$this->sidebar2;
+		$this->templatetags['sidebar3']=&$this->sidebar3;
+		$this->templatetags['sidebar4']=&$this->sidebar4;
+		$this->templatetags['sidebar5']=&$this->sidebar5;
 
 		//创建模板类
 		$this->template = new Template();
