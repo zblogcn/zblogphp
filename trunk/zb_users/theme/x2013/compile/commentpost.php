@@ -23,9 +23,13 @@
 			<div class="comt-comterinfo" id="comment-author-info" >
 				<h4>Hi，您需要填写昵称和邮箱！</h4>
 				<ul>
-					<li><label for="author">昵称</label><input class="ipt" type="text" name="inpName" id="inpName" value="" size="28" tabindex="1"><span>必填项</span></li>
-					<li><label for="email">邮箱</label><input class="ipt" type="mail" name="inpEmail" id="inpEmail" value="" size="28" tabindex="2"></li>
-					<li class="comt-comterinfo-url"><label for="url">链接</label><input class="ipt" type="url" name="inpHomePage" id="inpHomePage" value="" size="42" tabindex="3"></li>
+					<li><label for="inpName">昵称</label><input class="ipt" type="text" name="inpName" id="inpName" value="" size="28" tabindex="1"><span>必填项</span></li>
+					<li><label for="inpEmail">邮箱</label><input class="ipt" type="mail" name="inpEmail" id="inpEmail" value="" size="28" tabindex="2"></li>
+					<li class="comt-comterinfo-url"><label for="inpHomePage">链接</label><input class="ipt" type="url" name="inpHomePage" id="inpHomePage" value="" size="42" tabindex="3"></li>
+<?php if ($option['ZC_COMMENT_VERIFY_ENABLE']) { ?>
+					<li><label for="inpVerify">验证</label><input type="text" name="inpVerify" id="inpVerify" class="ipt" value="" size="28" tabindex="4" /> 
+					<img style="width:<?php  echo $option['ZC_VERIFYCODE_WIDTH'];  ?>px;height:<?php  echo $option['ZC_VERIFYCODE_HEIGHT'];  ?>px;cursor:pointer;" src="<?php  echo $article->ValidCodeUrl;  ?>" alt="" title="" onclick="javascript:this.src='<?php  echo $article->ValidCodeUrl;  ?>&amp;tm='+Math.random();"/><span>必填项</span></li>
+<?php } ?>
 				</ul>
 			</div>
 				<?php } ?>

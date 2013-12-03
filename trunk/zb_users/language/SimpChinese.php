@@ -182,6 +182,7 @@ return array(
 	'request_data'=>'请求数据',
 	'include_file'=>'引用文件',
 	'back'=>'返回',	
+	'validcode'=>'验证码',
 	''=>'',
 ),
 

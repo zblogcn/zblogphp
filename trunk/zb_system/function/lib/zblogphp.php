@@ -75,6 +75,7 @@ class ZBlogPHP{
 	public $sidebar5=array();
 
 	public $usersdir = null;
+	public $validcodeurl = null;
 	
 	static public function GetInstance(){
 		if(!isset(self::$_zbp)){
@@ -167,6 +168,8 @@ class ZBlogPHP{
 
 		date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
 		header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
+		
+		$this->validcodeurl=$this->host . 'zb_system/script/c_validcode.php';
 
 		#创建User类
 		$this->user=new Member();
@@ -754,6 +757,7 @@ function AddBuildModuleAll(){
 		$this->templatetags['socialcomment']=&$this->socialcomment;
 		$this->templatetags['header']=&$this->header;
 		$this->templatetags['footer']=&$this->footer;
+		$this->templatetags['validcodeurl']=&$this->validcodeurl;		
 
 		$s=array(
 			$option['ZC_SIDEBAR_ORDER'],
@@ -837,6 +841,19 @@ function AddBuildModuleAll(){
 
 		if(strpos($this->templates['comment'], 'id="cmt{$comment->ID}"')===false&&strpos($this->templates['comment'], 'id=\'cmt{$comment->ID}\'')===false){
 			$this->templates['comment']='<label id="cmt{$comment->ID}"></label>'. $this->templates['comment'];
+		}
+
+		if(strpos($this->templates['commentpost'], 'inpVerify')===false){
+			$verify='{if $option[\'ZC_COMMENT_VERIFY_ENABLE\']}<p><input type="text" name="inpVerify" id="inpVerify" class="text" value="" size="28" tabindex="4" /> <label for="inpVerify">'.$this->lang['msg']['validcode'].'(*)</label><img style="width:{$option[\'ZC_VERIFYCODE_WIDTH\']}px;height:{$option[\'ZC_VERIFYCODE_HEIGHT\']}px;cursor:pointer;" src="{$article.ValidCodeUrl}" alt="" title="" onclick="javascript:this.src=\'{$article.ValidCodeUrl}&amp;tm=\'+Math.random();"/></p>{/if}';
+			
+			if(strpos($this->templates['commentpost'], '<!--verify-->')!==false){
+				$this->templates['commentpost']=str_replace('<!--verify-->',$verify,$this->templates['commentpost']);
+			}elseif(strpos($this->templates['commentpost'], '</form>')!==false){
+				$this->templates['commentpost']=str_replace('</form>',$verify.'</form>',$this->templates['commentpost']);
+			}
+			else{
+				$this->templates['commentpost'] .= $verify;
+			}
 		}
 
 		$dir=$this->usersdir . 'theme/'. $this->theme .'/compile/';

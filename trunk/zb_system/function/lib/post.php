@@ -151,7 +151,7 @@ class Post extends Base{
 				return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
 				break;
 			case 'ValidCodeUrl':
-				return $zbp->host . 'zb_system/script/c_validcode.php?id=cmt';
+				return $zbp->validcodeurl . '?id=cmt';
 				break;
 			case 'Prev':
 				static $_prev=null;

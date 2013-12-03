@@ -135,7 +135,7 @@ article~dl:last-child{border-bottom:none}
 #postcmt dd h5{font-size:14px;font-weight:100;position:absolute;left:10px;top:5px;margin:0;}
 form[action*='act=cmt'] p{margin:12px 0 0;}
 form[action*='act=cmt'] p label{margin:0 -10px 0 10px;display:block}
-form[action*='act=cmt'] p img{right:0;position:absolute;margin:-24px -5px 0 0;z-index:2}
+form[action*='act=cmt'] p img{right:0;position:absolute;margin:-2px -2px 0 0;z-index:2}
 form[action*='act=cmt'] p sup{color:#F36;position:absolute}
 form[action*='act=cmt'] input{height:32px;width:100%;display:block;background:none;margin:0 0 -29px -10px;text-indent:60px;}
 form[action*='act=cmt'] textarea,
