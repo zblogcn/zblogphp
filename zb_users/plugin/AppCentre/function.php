@@ -13,7 +13,7 @@ function AppCentre_SubMenus($id){
 	if($zbp->Config('AppCentre')->shop_username&&$zbp->Config('AppCentre')->shop_password){
 		echo '<a href="client.php"><span class="m-left '.($id==9?'m-now':'').'">我的应用仓库</span></a>';
 	}else{
-		echo '<a href="client.php"><span class="m-left '.($id==9?'m-now':'').'">登录商城</span></a>';
+		echo '<a href="client.php"><span class="m-left '.($id==9?'m-now':'').'">登录应用商城</span></a>';
 	}
 	
 	echo '<a href="setting.php"><span class="m-right '.($id==4?'m-now':'').'">设置</span></a>';
@@ -101,6 +101,10 @@ function Server_Open($method){
 			$data["shop_username"]=GetVars("shop_username");
 			$data["shop_password"]=md5(GetVars("shop_password"));
 			$s=Server_SendRequest(APPCENTRE_URL .'?shopvaild',$data);
+			return $s;
+			break;
+		case 'shoplist':
+			$s=Server_SendRequest(APPCENTRE_URL .'?shoplist');
 			return $s;
 			break;
 		default:

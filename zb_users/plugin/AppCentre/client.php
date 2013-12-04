@@ -40,11 +40,6 @@ if(GetVars('act')=='shoplogout'){
 	die;
 }
 
-if(!$zbp->Config('AppCentre')->shop_username){
-	//AppCentre_Shop::init($zbp->Config('AppCentre')->shop_username, $zbp->Config('AppCentre')->shop_password);
-	//$userinfo = AppCentre_Shop::userinfo();
-}
-
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
@@ -53,7 +48,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div class="divHeader"><?php echo $blogtitle;?></div>
 <div class="SubMenu"><?php AppCentre_SubMenus(9);?></div>
   <div id="divMain2">
-<?php if(!$zbp->Config('AppCentre')->shop_username){ ?>
+<?php if(!$zbp->Config('AppCentre')->shop_username||!$zbp->Config('AppCentre')->shop_password){ ?>
             <form action="?act=shoplogin" method="post">
               <table style="line-height:3em;" width="100%" border="0">
                 <tr height="32">
@@ -76,6 +71,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <?php }else{ 
 
 //已登录
+$s=Server_Open('shoplist');
+echo $s;
 
       }?>
 
