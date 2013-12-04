@@ -58,7 +58,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               <table style="line-height:3em;" width="100%" border="0">
                 <tr height="32">
                   <th  align="center">请填写您在"<a href="http://app.rainbowsoft.org/?shop&type=account" target="_blank">应用中心</a>"的购买者账号(Email)和密码
-                    </td>
+                    </th>
                 </tr>
                 <tr height="32">
                   <td align="center">&nbsp;&nbsp;账号:

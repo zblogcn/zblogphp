@@ -12,7 +12,7 @@ if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
 
-$blogtitle='应用中心-系统';
+$blogtitle='应用中心-系统更新与校验';
 
 $checkbegin=false;
 
