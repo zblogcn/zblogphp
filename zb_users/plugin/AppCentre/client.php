@@ -8,7 +8,12 @@ $action='root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
 
-$blogtitle='应用中心-登录商城';
+if(!$zbp->Config('AppCentre')->shop_username||!$zbp->Config('AppCentre')->shop_password){
+	$blogtitle='应用中心-登录应用商城';
+}else{
+	$blogtitle='应用中心-我的应用仓库';
+}
+
 
 if(GetVars('act')=='shoplogin'){
 
@@ -35,7 +40,7 @@ if(GetVars('act')=='shoplogout'){
 	$zbp->Config('AppCentre')->shop_username='';
 	$zbp->Config('AppCentre')->shop_password='';
 	$zbp->SaveConfig('AppCentre');
-	$zbp->SetHint('good','您已退出APP应用中心商城.');
+	$zbp->SetHint('good','您已退出"应用中心"商城.');
 	Redirect('./main.php');
 	die;
 }
@@ -71,8 +76,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <?php }else{ 
 
 //已登录
-$s=Server_Open('shoplist');
-echo $s;
+Server_Open('shoplist');
 
       }?>
 

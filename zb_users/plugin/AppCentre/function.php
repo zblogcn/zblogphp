@@ -105,7 +105,7 @@ function Server_Open($method){
 			break;
 		case 'shoplist':
 			$s=Server_SendRequest(APPCENTRE_URL .'?shoplist');
-			return $s;
+			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
 			break;
 		default:
 			# code...
