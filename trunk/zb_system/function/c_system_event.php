@@ -845,8 +845,10 @@ function PostComment(){
 	if($zbp->VerifyCmtKey($_GET['postid'],$_GET['key'])==false)$zbp->ShowError(43);
 
 	if($zbp->option['ZC_COMMENT_VERIFY_ENABLE']){
-		$zbp->LoadTemplates();
-		if($zbp->user->ID==0 && strpos($zbp->templates['commentpost'],'inpVerify')){
+		if(file_exists($zbp->usersdir . 'theme/'. $zbp->theme .'/compile/commentpost.php')){
+			$commentpost=file_get_contents($zbp->usersdir . 'theme/'. $zbp->theme .'/compile/commentpost.php');
+		}		
+		if($zbp->user->ID==0 && strpos($commentpost,'inpVerify')){
 			if($zbp->CheckValidCode($_POST['verify'],'cmt')==false)$zbp->ShowError(38);
 		}
 	}

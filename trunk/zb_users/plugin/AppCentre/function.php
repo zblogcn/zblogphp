@@ -206,7 +206,9 @@ function CreateOptoinsOfVersion($default){
 	global $zbp;
 
 	$s=null;
-	foreach ($GLOBALS['zbpvers'] as $key => $value) {
+	$array=$GLOBALS['zbpvers'];
+	krsort($array);
+	foreach ($array as $key => $value) {
 		$s .= '<option value="' . $key . '" ' . ($default==$key?'selected="selected"':'') . ' >' . $value . '</option>';
 	}
 	return $s;
