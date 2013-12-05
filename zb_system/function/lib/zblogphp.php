@@ -131,10 +131,26 @@ class ZBlogPHP{
 			$fpreturn=$fpname($method, $args);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		//$this->ShowError(0);
+		$this->ShowError(81);
 	}
 
+	function __set($name, $value)
+	{
+		foreach ($GLOBALS['Filter_Plugin_Zbp_Set'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($name, $value);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+		$this->ShowError(81);
+	}
 
+	function __get($name) 
+	{
+		foreach ($GLOBALS['Filter_Plugin_Zbp_Get'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($name);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+		$this->ShowError(81);
+	}
 
 
 
@@ -289,11 +305,20 @@ class ZBlogPHP{
 
 
 	public function StartSession(){
-		if($this->issession)return false;
+		if($this->issession==true)return false;
 		session_start();
 		$this->issession=true;
 		return true;
 	}
+
+
+	public function EndSession(){
+		if($this->issession==false)return false;
+		session_unset();
+		session_destroy();
+		$this->issession=false;
+		return true;
+	}	
 
 
 ################################################################################################################
@@ -844,7 +869,7 @@ function AddBuildModuleAll(){
 		}
 
 		if(strpos($this->templates['commentpost'], 'inpVerify')===false){
-			$verify='{if $option[\'ZC_COMMENT_VERIFY_ENABLE\']}<p><input type="text" name="inpVerify" id="inpVerify" class="text" value="" size="28" tabindex="4" /> <label for="inpVerify">'.$this->lang['msg']['validcode'].'(*)</label><img style="width:{$option[\'ZC_VERIFYCODE_WIDTH\']}px;height:{$option[\'ZC_VERIFYCODE_HEIGHT\']}px;cursor:pointer;" src="{$article.ValidCodeUrl}" alt="" title="" onclick="javascript:this.src=\'{$article.ValidCodeUrl}&amp;tm=\'+Math.random();"/></p>{/if}';
+			$verify='{if $option[\'ZC_COMMENT_VERIFY_ENABLE\'] && !$user.ID}<p><input type="text" name="inpVerify" id="inpVerify" class="text" value="" size="28" tabindex="4" /> <label for="inpVerify">'.$this->lang['msg']['validcode'].'(*)</label><img style="width:{$option[\'ZC_VERIFYCODE_WIDTH\']}px;height:{$option[\'ZC_VERIFYCODE_HEIGHT\']}px;cursor:pointer;" src="{$article.ValidCodeUrl}" alt="" title="" onclick="javascript:this.src=\'{$article.ValidCodeUrl}&amp;tm=\'+Math.random();"/></p>{/if}';
 			
 			if(strpos($this->templates['commentpost'], '<!--verify-->')!==false){
 				$this->templates['commentpost']=str_replace('<!--verify-->',$verify,$this->templates['commentpost']);

@@ -182,6 +182,34 @@ $Filter_Plugin_Zbp_Call=array();
 
 
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_Get
+'参数:$name
+'说明:Zbp类的魔术方法接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_Get=array();
+
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_Set
+'参数:$name,$value
+'说明:Zbp类的魔术方法接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_Set=array();
+
+
+
 
 
 /*
@@ -1302,6 +1330,19 @@ $Filter_Plugin_DelModule_Succeed=array();
 '**************************************************>
 */
 $Filter_Plugin_Post_Call=array();
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Post_CommentPostUrl
+'参数:$post
+'说明:Post类的CommentPostUrl接口
+'调用:返回CommentPostUrl值.
+'**************************************************>
+*/
+$Filter_Plugin_Post_CommentPostUrl=array();
 
 
 

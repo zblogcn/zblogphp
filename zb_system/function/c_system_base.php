@@ -335,39 +335,10 @@ foreach ($ap as $plugin) {
 ActivePlugin();	
 
 
-
-/*system plugin
-function zbp_index_cache_read(){
-	global $zbp;
-	if(count($_GET)==0){
-		if($zbp->cache->HasKey('default_html')){
-			if((integer)$zbp->cache->default_html_time < (integer)$zbp->cache->refesh )return;
-			echo $zbp->cache->default_html;
-			RunTime();
-			die();
-		}
-	}
-}
-
-function zbp_index_cache_write(){
-	global $zbp;
-	if(count($_GET)==0){
-		$s=ob_get_clean();
-		echo $s;
-		$zbp->cache->default_html=$s;
-		$zbp->cache->default_html_time=time();
-		$zbp->SaveCache();
-	}
-}
-*/
 function  zbp_index_redirect_install(){
 	global $zbp;
 	if (!$zbp->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/');}
 }
-
-#Add_Filter_Plugin('Filter_Plugin_Index_Begin','zbp_index_redirect_install');
-#Add_Filter_Plugin('Filter_Plugin_Index_Begin','zbp_default_cache_read');
-#Add_Filter_Plugin('Filter_Plugin_Index_End','zbp_default_cache_write');
 
 
 /*autoload*/

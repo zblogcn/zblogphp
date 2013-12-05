@@ -147,6 +147,10 @@ class Post extends Base{
 				}
 				return $value;
 			case 'CommentPostUrl':
+				foreach ($GLOBALS['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
+					$fpreturn=$fpname($this);
+					if($fpreturn)return $fpreturn;
+				}			
 				$key='&amp;key=' . md5($zbp->guid . $this->ID . date('Y-m-d'));
 				return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
 				break;
