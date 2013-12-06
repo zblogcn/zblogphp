@@ -14,7 +14,7 @@ error_reporting(0);
 
 $zbpvers=array();
 $zbpvers['130707']='1.0 Beta Build 130707';
-$zbpvers['131111']='1.0 Beta Build 131111';
+$zbpvers['131111']='1.0 Beta2 Build 131111';
 $zbpvers['131212']='1.1 Taichi Build 131212';
 
 #定义常量
