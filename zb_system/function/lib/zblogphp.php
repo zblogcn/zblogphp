@@ -763,6 +763,7 @@ function AddBuildModuleAll(){
 
 		$this->templatetags['user']=&$this->user;
 		$this->templatetags['option']=&$option;
+		$this->templatetags['categorys']=&$this->categorys;
 		$this->templatetags['modules']=&$this->modulesbyfilename;
 		$this->templatetags['title']=htmlspecialchars($this->title);
 		$this->templatetags['host']=$this->host;
