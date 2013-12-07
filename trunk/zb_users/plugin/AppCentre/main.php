@@ -14,6 +14,13 @@ if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
 
 $blogtitle='应用中心';
 
+if(!$zbp->Config('AppCentre')->HasKey('enabledcheck')){
+	$zbp->Config('AppCentre')->enabledcheck=1;
+	$zbp->Config('AppCentre')->checkbeta=0;
+	$zbp->Config('AppCentre')->enabledevelop=0;
+	$zbp->SaveConfig('AppCentre');
+}
+
 if(count($_POST)>0){
 
 	$zbp->SetHint('good');

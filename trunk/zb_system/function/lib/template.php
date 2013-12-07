@@ -62,6 +62,8 @@ class Template{
 		$this->parse_foreach($content);
 		//Step7:解析for
 		$this->parse_for($content);
+		//Step8:解析module
+		$this->parse_module($content);
 		//StepN:解析PHP
 		$this->parsePHP($content);
 
@@ -81,6 +83,11 @@ class Template{
 		$content = preg_replace('/\{template:([^\}]+)\}/', '{php} include $this->GetTemplate(\'$1\'); {/php}', $content);
 		//$content = preg_replace('/\{include:([^\}]+)\}/', '{php} $this->IncludeCompiled(\'$1\'); {/php}', $content);
 	}
+	
+	private function parse_module(&$content)
+	{
+		$content = preg_replace('/\{module:([^\}]+)\}/', '{php} echo $modules[\'$1\']->Content; {/php}', $content);
+	}	
 
 	private function parse_option(&$content)
 	{
