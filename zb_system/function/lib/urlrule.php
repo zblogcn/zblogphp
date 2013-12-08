@@ -100,7 +100,7 @@ class UrlRule
 			$url=str_replace('%id%', '([0-9]+)', $url);
 			//$url=str_replace('%alias%', '([^/_]+)', $url);
 			$url=str_replace('%date%', '([0-9\-]+)', $url);
-			$url=str_replace('%alias%', '([^./_]+|[^./_]+/[^./_]+|[^./_]+/[^./_]+/[^./_]|[^./_]+/[^./_]+/[^./_]+/[^./_])', $url);
+			$url=str_replace('%alias%', '([^\./]+?|[^\./]+?/[^\./]+?|[^\./]+?/[^\./]+?/[^\./]+?|[^\./]+/[^\./]+?/[^\./]+?/[^\./]+?)', $url);
 		}
 		if($type=='page'||$type=='article'){
 			if(strpos($url, '%alias%')===false){
@@ -108,10 +108,10 @@ class UrlRule
 				$url=str_replace('%id%', '([0-9]+)', $url);
 			}else{
 				$url = $url . '$';
-				$url=str_replace('%alias%', '(.+)', $url);
+				$url=str_replace('%alias%', '([^/]+)', $url);
 			}
-			$url=str_replace('%category%', '[^/_]+', $url);
-			$url=str_replace('%author%', '[^/_]+', $url);
+			$url=str_replace('%category%', '(?:[^\./]+?|[^\./]+?/[^\./]+?|[^\./]+?/[^\./]+?/[^\./]+?|[^\./]+/[^\./]+?/[^\./]+?/[^\./]+?)', $url);
+			$url=str_replace('%author%', '[^\./]+', $url);
 			$url=str_replace('%year%', '[0-9]<:4:>', $url);
 			$url=str_replace('%month%', '[0-9]<:1,2:>', $url);	
 			$url=str_replace('%day%', '[0-9]<:1,2:>', $url);
@@ -338,7 +338,7 @@ class UrlRule
 			$url=str_replace('%page%', '([0-9]*)', $url);
 			$url=str_replace('%id%', '([0-9]+)', $url);
 			//$url=str_replace('%alias%', '([^\/_]+)', $url);
-			$url=str_replace('%alias%', '([^./_]+|[^./_]+/[^./_]+|[^./_]+/[^./_]+/[^./_]|[^./_]+/[^./_]+/[^./_]+/[^./_])', $url);
+			$url=str_replace('%alias%', '([^\./]+?|[^\./]+?/[^\./]+?|[^\./]+?/[^\./]+?/[^\./]+?|[^\./]+/[^\./]+?/[^\./]+?/[^\./]+?)', $url);
 			$url=str_replace('%date%', '([0-9\-]+)', $url);
 		}
 		if($type=='page'||$type=='article'){
@@ -347,11 +347,11 @@ class UrlRule
 				$url=str_replace('%id%', '([0-9]+)', $url);				
 			}else{
 				$url = $url .' '.$zbp->cookiespath .'index\.php\?alias=$1';
-				$url=str_replace('%alias%', '(.+)', $url);
+				$url=str_replace('%alias%', '([^/]+)', $url);
 			}
-			//$url=str_replace('%category%', '(?:[^\/_]+)', $url);
-			$url=str_replace('%category%', '(?:[^./_]+|[^./_]+/[^./_]+|[^./_]+/[^./_]+/[^./_]|[^./_]+/[^./_]+/[^./_]+/[^./_])', $url);
-			$url=str_replace('%author%', '(?:[^\/_]+)', $url);
+			//$url=str_replace('%category%', '(?:[^\./]+)', $url);
+			$url=str_replace('%category%', '(?:[^\./]+?|[^\./]+?/[^\./]+?|[^\./]+?/[^\./]+?/[^\./]+?|[^\./]+/[^\./]+?/[^\./]+?/[^\./]+?)', $url);
+			$url=str_replace('%author%', '(?:[^\./]+)', $url);
 			$url=str_replace('%year%', '(?:[0-9]{4})', $url);
 			$url=str_replace('%month%', '(?:[0-9]{1,2})', $url);	
 			$url=str_replace('%day%', '(?:[0-9]{1,2})', $url);
