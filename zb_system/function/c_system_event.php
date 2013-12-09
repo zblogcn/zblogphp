@@ -50,6 +50,8 @@ function Logout(){
 ################################################################################################################
 function ViewAuto($url){
 	global $zbp;
+	$rewrite_go_on=true;
+
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($url);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
@@ -61,67 +63,69 @@ function ViewAuto($url){
 	}
 
 	if(isset($_SERVER['SERVER_SOFTWARE'])){
-		if(strpos($_SERVER['SERVER_SOFTWARE'],'Microsoft-IIS')!==false)
+		if( (strpos($_SERVER['SERVER_SOFTWARE'],'Microsoft-IIS')!==false) && (isset($_GET['rewrite'])!==true) )
 			$url=iconv('GBK','UTF-8//TRANSLIT//IGNORE',$url);
 	}
 	$url=substr($url,strlen($zbp->cookiespath));
 	$url=urldecode($url);
 
-	$r=UrlRule::Rewrite_url($zbp->option['ZC_ARTICLE_REGEX'],'article');
-	$m=array();
-	if(preg_match($r,$url,$m)==1){
-	if(strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%id%}')!==false){
-		ViewPost($m[1],null);
-	}else{
-		ViewPost(null,$m[1]);
-	}
-	return null;
-	}
-
-	$r=UrlRule::Rewrite_url($zbp->option['ZC_PAGE_REGEX'],'page');
-	$m=array();
-	if(preg_match($r,$url,$m)==1){
-	if(strpos($zbp->option['ZC_PAGE_REGEX'],'{%id%}')!==false){
-		ViewPost($m[1],null);
-	}else{
-		ViewPost(null,$m[1]);
-	}
-	return null;
-	}
 
 	$r=UrlRule::Rewrite_url($zbp->option['ZC_INDEX_REGEX'],'index');
 	$m=array();
 	if(preg_match($r,$url,$m)==1){
-	ViewList($m[1],null,null,null,null);
-	return null;
+		ViewList($m[1],null,null,null,null,$rewrite_go_on);
+		return null;
 	}
 
 	$r=UrlRule::Rewrite_url($zbp->option['ZC_DATE_REGEX'],'date');
 	$m=array();
 	if(preg_match($r,$url,$m)==1){
-	ViewList($m[2],null,null,$m[1],null);
-	return null;
+		ViewList($m[2],null,null,$m[1],null,$rewrite_go_on);
+		return null;
 	}
 
 	$r=UrlRule::Rewrite_url($zbp->option['ZC_AUTHOR_REGEX'],'auth');
 	$m=array();
 	if(preg_match($r,$url,$m)==1){
-	ViewList($m[2],null,$m[1],null,null);
-	return null;
+		ViewList($m[2],null,$m[1],null,null,$rewrite_go_on);
+		return null;
 	}
 
 	$r=UrlRule::Rewrite_url($zbp->option['ZC_TAGS_REGEX'],'tags');
 	$m=array();
 	if(preg_match($r,$url,$m)==1){
-	ViewList($m[2],null,null,null,$m[1]);
-	return null;
+		ViewList($m[2],null,null,null,$m[1],$rewrite_go_on);
+		return null;
 	}
 
 	$r=UrlRule::Rewrite_url($zbp->option['ZC_CATEGORY_REGEX'],'cate');
 	$m=array();
 	if(preg_match($r,$url,$m)==1){
-	ViewList($m[2],$m[1],null,null,null);
-	return null;
+		$result=ViewList($m[2],$m[1],null,null,null,$rewrite_go_on);
+		if($result<>ZC_REWRITE_GO_ON)
+			return null;
+	}
+
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_ARTICLE_REGEX'],'article');
+	$m=array();
+	if(preg_match($r,$url,$m)==1){
+		if(strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%id%}')!==false){
+			ViewPost($m[1],null,$rewrite_go_on);
+		}else{
+			ViewPost(null,$m[1],$rewrite_go_on);
+		}
+		return null;
+	}
+
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_PAGE_REGEX'],'page');
+	$m=array();
+	if(preg_match($r,$url,$m)==1){
+		if(strpos($zbp->option['ZC_PAGE_REGEX'],'{%id%}')!==false){
+			ViewPost($m[1],null);
+		}else{
+			ViewPost(null,$m[1]);
+		}
+		return null;
 	}
 
 	ViewList(null,null,null,null,null);
@@ -131,7 +135,7 @@ function ViewAuto($url){
 
 
 
-function ViewList($page,$cate,$auth,$date,$tags){
+function ViewList($page,$cate,$auth,$date,$tags,$isrewrite=false){
 	global $zbp;
 	foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($page,$cate,$auth,$date,$tags);
@@ -202,7 +206,10 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	if(strpos($zbp->option['ZC_CATEGORY_REGEX'],'{%alias%}')!==false){
 		$category=$zbp->GetCategoryByAliasOrName($cate);
 	}
-	if($category->ID==0)$zbp->ShowError(2);
+	if($category->ID==0){
+		if($isrewrite==true)return ZC_REWRITE_GO_ON;
+		$zbp->ShowError(2);
+	}
 	if($page==1){
 		$zbp->title=$category->Name;
 	}else{
@@ -239,7 +246,10 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	if(strpos($zbp->option['ZC_AUTHOR_REGEX'],'{%alias%}')!==false){
 		$author=$zbp->GetMemberByAliasOrName($auth);
 	}
-	if($author->ID==0)$zbp->ShowError(2);
+	if($author->ID==0){
+		if($isrewrite==true)return ZC_REWRITE_GO_ON;
+		$zbp->ShowError(2);
+	}
 	if($page==1){
 		$zbp->title=$author->Name;
 	}else{
@@ -286,7 +296,10 @@ function ViewList($page,$cate,$auth,$date,$tags){
 	if(strpos($zbp->option['ZC_TAGS_REGEX'],'{%alias%}')!==false){
 		$tag=$zbp->GetTagByAliasOrName($tags);
 	}
-	if($tag->ID==0)$zbp->ShowError(2);
+	if($tag->ID==0){
+		if($isrewrite==true)return ZC_REWRITE_GO_ON;
+		$zbp->ShowError(2);
+	}
 
 	if($page==1){
 		$zbp->title=$tag->Name;
@@ -344,7 +357,7 @@ function ViewList($page,$cate,$auth,$date,$tags){
 
 
 
-function ViewPost($id,$alias){
+function ViewPost($id,$alias,$isrewrite=false){
 	global $zbp;
 	foreach ($GLOBALS['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($id,$alias);
@@ -374,8 +387,8 @@ function ViewPost($id,$alias){
 		null
 	);
 	if(count($articles)==0){
+		if($isrewrite==true)return ZC_REWRITE_GO_ON;
 		$zbp->ShowError(2);
-		die();
 	}
 
 	$article = $articles[0];
