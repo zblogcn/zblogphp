@@ -31,6 +31,8 @@ define('ZC_MEMBER_STATUS_NORMAL', 0);
 define('ZC_MEMBER_STATUS_AUDITING', 1);
 define('ZC_MEMBER_STATUS_LOCKED', 2);
 
+define('ZC_REWRITE_GO_ON', 'go on');
+
 function _stripslashes(&$val) {
 	if(!is_array($val)) return stripslashes($val);
 	foreach($val as $k => &$v) $val[$k] = _stripslashes($v);
