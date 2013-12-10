@@ -25,10 +25,29 @@ if(count($_POST)>0){
 		if(trim($value)<>''){
 			if(CheckRegExp(trim($value),'/^[a-zA-Z][a-zA-Z0-9_]{0,30}$/')){
 				$array2[]=trim($value);
+
+	$name_meta_intro=$type . '_' . $value . '_intro';
+	$name_meta_type=$type . '_' . $value . '_type';
+	$name_meta_option=$type . '_' . $value . '_option';
+
+	if(isset($_POST['meta_intro'][$key])){
+		$single_meta_intro=$_POST['meta_intro'][$key];
+		$zbp->Config('CustomMeta')->$name_meta_intro=$single_meta_intro;
+	}
+	if(isset($_POST['meta_type'][$key])){
+		$single_meta_type=$_POST['meta_type'][$key];
+		$zbp->Config('CustomMeta')->$name_meta_type=$single_meta_type;
+	}
+	if(isset($_POST['meta_option'][$key])){
+		$single_meta_option=$_POST['meta_option'][$key];
+		$zbp->Config('CustomMeta')->$name_meta_option=$single_meta_option;
+	}
+
 			}
 		}
 	}
 	$array2=array_unique($array2);
+
 
 	$zbp->Config('CustomMeta')->$type=$array2;
 	$zbp->SaveConfig('CustomMeta');
@@ -66,21 +85,39 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 if(is_array($array)){
 foreach ($array as $key => $value) {
-
+	$single_meta_intro=$type . '_' . $value . '_intro';
+	$single_meta_intro=$zbp->Config('CustomMeta')->$single_meta_intro;
+	$single_meta_type=$type . '_' . $value . '_type';
+	if(!$single_meta_type){
+		$single_meta_type='text';
+	}else{
+		$single_meta_type=$zbp->Config('CustomMeta')->$single_meta_type;
+	}
+	$single_meta_option=$type . '_' . $value . '_option';
+	$single_meta_option=$zbp->Config('CustomMeta')->$single_meta_option;
 	echo '<tr>';
-	echo '<td><p><input type="text" style="width:95%" name="meta[]" value="'.$value.'" /></p></td>';
+	echo '<td style=\'width:65%\'><p><input type="text" style="width:98%" name="meta[]" value="'.$value.'" /></p>';
+	echo '<p>说明：<input type="text" style="width:84%" name="meta_intro[]" value="'. $single_meta_intro .'" /></p>';
+	echo '<p>类型：<select style="width:85%" name="meta_type[]">';
+	echo '<option value="text"     '.($single_meta_type=='text'    ?'selected="selected"':'').'>单行文本框（默认）</option>';
+	echo '<option value="textarea" '.($single_meta_type=='textarea'?'selected="selected"':'').'>多行文本框</option>';
+	echo '<option value="radio"    '.($single_meta_type=='radio'   ?'selected="selected"':'').'>单选框</option>';
+	echo '<option value="checkbox" '.($single_meta_type=='checkbox'?'selected="selected"':'').'>多选框</option>';
+	echo '</select></p>';
+	echo '<p>附加：<textarea style="width:85%" name="meta_option[]" ></textarea></p>';
+	echo '</td>';
 	echo '<td><p>';
 if($type=='post'){
-	echo '{$article.Metas.'.$value.'}';
+	echo '{$article.Metas.'.$value.'}<br/>php代码:<br/>$article->Metas->'.$value.';';
 }
 if($type=='category'){
-	echo '{$article.Category.Metas.'.$value.'}';
+	echo '{$article.Category.Metas.'.$value.'}<br/>php代码:<br/>$article->Category->Metas->'.$value.';<br/>$zbp->categorys[???]->Metas->'.$value.';';
 }
 if($type=='tag'){
-	echo '{tag.Metas.'.$value.'}';
+	echo '{tag.Metas.'.$value.'}<br/>php代码:<br/>$tag->Metas->'.$value.';';
 }
 if($type=='member'){
-	echo '{$article.Author.Metas.'.$value.'}';
+	echo '{$article.Author.Metas.'.$value.'}<br/>php代码:<br/>$article->Author->Metas->'.$value.';<br/>$zbp->member->Metas->'.$value.';<br/>';
 }
 	echo '</p></td>';
 	echo '<td><p><input type="submit" value="删除" onclick="$(this).parent().parent().parent().remove();" /></p></td>';

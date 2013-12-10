@@ -37,7 +37,8 @@ return array(
 	'ZC_MYSQL_CHARSET' => 'utf8',
 	'ZC_MYSQL_PRE' => 'zbp_',
 	'ZC_MYSQL_ENGINE'=>'MyISAM',
-    'ZC_MYSQL_PORT' => '3306', 
+    'ZC_MYSQL_PORT' => '3306',
+    'ZC_MYSQL_PERSISTENT' => false,
 	// '---------------------------------插件----------------------------------------
 	'ZC_USING_PLUGIN_LIST' => '',
 

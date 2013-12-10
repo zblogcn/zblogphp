@@ -34,11 +34,14 @@ class Dbpdo_MySQL implements iDataBase
 		GetVars('dbmysql_password','POST'),
 		GetVars('dbmysql_name','POST'),
 		GetVars('dbmysql_pre','POST'));
-		GetVars('dbmysql_port','POST'));		
+		GetVars('dbmysql_port','POST'));			
 		*/
-
-		//new PDO(DB_TYPE.':host='.DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASSWD);
-		$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',); 
+		if($array[6]==false){
+			$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'); 
+		}else{
+			$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',PDO::ATTR_PERSISTENT => true); 
+		}
+		$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',PDO::ATTR_PERSISTENT => true); 
 		$db_link = new PDO('mysql:host=' . $array[0] . ';port=' . $array[5] . ';dbname=' . $array[3],$array[1],$array[2],$options);
 		$this->db = $db_link;
 		$this->dbpre=$array[4];
