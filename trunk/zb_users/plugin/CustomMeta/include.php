@@ -22,49 +22,55 @@ function UninstallPlugin_CustomMeta(){
 	global $zbp;
 }
 
-function CustomMeta_Edit_Response(){
-	global $zbp,$article;
-	$array=$zbp->Config('CustomMeta')->post;
+function CustomMeta_Response($type,&$object){
+
+	global $zbp;
+	$array=$zbp->Config('CustomMeta')->$type;
 	if(is_array($array)==false)return null;
 	if(count($array)==0)return null;
 	echo '<label for="cmbTemplate" class="editinputname" >自定义作用域:</label>';
 	foreach ($array as $key => $value) {
-		echo '<p><input type="text" readonly="readonly" style="width:32%;border:none;" value="Metas.' . $value . '"/><input type="text" name="meta_' . $value . '" value="'.htmlspecialchars($article->Metas->$value).'" style="width:65%;"/></p>';
+
+$name_meta_intro=$type . '_' . $value . '_intro';
+$name_meta_type=$type . '_' . $value . '_type';
+$name_meta_option=$type . '_' . $value . '_option';
+
+$single_meta_intro=$zbp->Config('CustomMeta')->$name_meta_intro;
+$single_meta_type=$zbp->Config('CustomMeta')->$name_meta_type;
+$single_meta_option=$zbp->Config('CustomMeta')->$name_meta_option;
+
+if(!$single_meta_intro)$single_meta_intro='Metas.' . $value;
+
+if(!$single_meta_type)$single_meta_type='text';
+
+switch ($single_meta_type){
+	case 'textarea':
+		echo '<p><input type="text" readonly="readonly" style="width:98%;border:none;" value="'. $single_meta_intro .'"/><br><textarea style="width:98%;height:80px;" name="meta_' . $value . '" >'.htmlspecialchars($object->Metas->$value).'</textarea></p>';	
+		break;
+	default :
+		echo '<p><input type="text" readonly="readonly" style="width:32%;border:none;" value="'. $single_meta_intro .'"/><input type="text" name="meta_' . $value . '" value="'.htmlspecialchars($object->Metas->$value).'" style="width:65%;"/></p>';	
+		break;
+}
+
 	}
 
+}
+
+function CustomMeta_Edit_Response(){
+	global $zbp,$article;
+	CustomMeta_Response('post',$article);
 }
 function CustomMeta_Category_Edit_Response(){
 	global $zbp,$cate;
-	$array=$zbp->Config('CustomMeta')->category;
-	if(is_array($array)==false)return null;
-	if(count($array)==0)return null;
-	echo '<label for="cmbTemplate" class="editinputname" >自定义作用域:</label>';
-	foreach ($array as $key => $value) {
-		echo '<p style="width:70%"><input type="text" readonly="readonly" style="width:32%;border:none;" value="Metas.' . $value . '"/><input type="text" name="meta_' . $value . '" value="'.htmlspecialchars($cate->Metas->$value).'"  style="width:65%;"/></p>';
-	}
-
+	CustomMeta_Response('category',$cate);
 }
 function CustomMeta_Tag_Edit_Response(){
 	global $zbp,$tag;
-	$array=$zbp->Config('CustomMeta')->tag;
-	if(is_array($array)==false)return null;
-	if(count($array)==0)return null;
-	echo '<label for="cmbTemplate" class="editinputname" >自定义作用域:</label>';
-	foreach ($array as $key => $value) {
-		echo '<p style="width:70%"><input type="text" readonly="readonly" style="width:32%;border:none;" value="Metas.' . $value . '"/><input type="text" name="meta_' . $value . '" value="'.htmlspecialchars($tag->Metas->$value).'"  style="width:65%;"/></p>';
-	}
-
+	CustomMeta_Response('tag',$tag);
 }
 function CustomMeta_Member_Edit_Response(){
 	global $zbp,$member;
-	$array=$zbp->Config('CustomMeta')->member;
-	if(is_array($array)==false)return null;
-	if(count($array)==0)return null;
-	echo '<label for="cmbTemplate" class="editinputname" >自定义作用域:</label>';
-	foreach ($array as $key => $value) {
-		echo '<p style="width:70%"><input type="text" readonly="readonly" style="width:32%;border:none;" value="Metas.' . $value . '"/><input type="text" name="meta_' . $value . '" value="'.htmlspecialchars($member->Metas->$value).'"  style="width:65%;"/></p>';
-	}
-
+	CustomMeta_Response('member',$member);
 }
 
 

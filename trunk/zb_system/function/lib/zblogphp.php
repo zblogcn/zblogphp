@@ -23,6 +23,7 @@ class ZBlogPHP{
 	public $membersbyname=array();
 	public $categorys=array();
 	public $categorysbyorder=array();
+	public $categorylayer=0;
 	public $modules=array();
 	public $modulesbyfilename=array();
 	public $templates=array();
@@ -269,7 +270,8 @@ class ZBlogPHP{
 						$this->option['ZC_MYSQL_PASSWORD'],
 						$this->option['ZC_MYSQL_NAME'],
 						$this->option['ZC_MYSQL_PRE'],
-						$this->option['ZC_MYSQL_PORT']					
+						$this->option['ZC_MYSQL_PORT'],
+						$this->option['ZC_MYSQL_PERSISTENT']
 					))==false){
 					$this->ShowError(67);
 				}			
@@ -457,6 +459,7 @@ class ZBlogPHP{
 			if($key=='ZC_MYSQL_PRE')continue;
 			if($key=='ZC_MYSQL_ENGINE')continue;
 			if($key=='ZC_MYSQL_PORT')continue;
+			if($key=='ZC_MYSQL_PERSISTENT')continue;			
 			$this->option[$key]=$value;
 		}
 
@@ -636,7 +639,7 @@ function AddBuildModuleAll(){
 		$lv0=array();
 		$lv1=array();
 		$lv2=array();
-		$lv3=array();	
+		$lv3=array();
 		$array=$this->GetCategoryList(null,null,array('cate_Order'=>'ASC'),null,null);
 		if(count($array)==0)return false;
 		foreach ($array as $c) {
@@ -646,7 +649,11 @@ function AddBuildModuleAll(){
 			$l='lv' . $c->Level;
 			${$l}[$c->ParentID][]=$id;
 		}
-
+		
+		if(count($lv0)>0)$this->categorylayer=1;
+		if(count($lv1)>0)$this->categorylayer=2;
+		if(count($lv2)>0)$this->categorylayer=3;
+		if(count($lv3)>0)$this->categorylayer=4;
 
 		foreach ($lv0[0] as $id0) {
 			$this->categorysbyorder[$id0]=&$this->categorys[$id0];
