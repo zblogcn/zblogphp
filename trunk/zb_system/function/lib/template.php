@@ -86,7 +86,7 @@ class Template{
 	
 	private function parse_module(&$content)
 	{
-		$content = preg_replace('/\{module:([^\}]+)\}/', '{php} echo $modules[\'$1\']->Content; {/php}', $content);
+		$content = preg_replace('/\{module:([^\}]+)\}/', '{php} if(isset($modules[\'$1\'])){echo $modules[\'$1\']->Content;} {/php}', $content);
 	}	
 
 	private function parse_option(&$content)

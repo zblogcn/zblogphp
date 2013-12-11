@@ -132,7 +132,94 @@ function ViewAuto($url){
 }
 
 
+function GetList($count=10,$cate=null,$auth=null,$date=null,$tags=null,$search=null,$option=null){
+	global $zbp;
+	
+	if(!is_array($option)){
+		$option=array();
+	}
 
+	if(!isset($option['only_ontop']))$option['only_ontop']=false;
+	if(!isset($option['only_not_ontop']))$option['only_not_ontop']=false;
+	if(!isset($option['has_subcate']))$option['only_ontop']=false;
+
+	if($option['only_ontop']==true){
+		$w[]=array('=','log_Istop',0);
+	}elseif($option['only_not_ontop']==true){
+		$w[]=array('=','log_Istop',1);
+	}
+	
+	$w=array();
+	$w[]=array('=','log_Status',0);
+	
+	$articles=array();
+
+	if($cate){
+		$category=new Category;
+		$category=$zbp->GetCategoryByID($cate);
+
+		if($category->ID>0){
+
+			if(!$zbp->option['ZC_DISPLAY_SUBCATEGORYS']){
+				$w[]=array('=','log_CateID',$category->ID);
+			}else{
+				$arysubcate=array();
+				$arysubcate[]=array('log_CateID',$category->ID);
+				foreach ($zbp->categorys[$category->ID]->SubCategorys as $subcate) {
+					$arysubcate[]=array('log_CateID',$subcate->ID);
+				}
+				$w[]=array('array',$arysubcate);
+
+			}
+
+		}
+	}
+	
+	if($auth){
+		$author=new Member;
+		$author=$zbp->GetMemberByID($auth);
+
+		if($author->ID>0){
+			$w[]=array('=','log_AuthorID',$author->ID);
+		}
+	}
+
+	if($date){
+		$datetime=strtotime($date);
+		if($datetime){
+			$datetitle=str_replace(array('%y%','%m%'), array(date('Y',$datetime),date('n',$datetime)), $zbp->lang['msg']['year_month']);
+			$w[]=array('BETWEEN','log_PostTime',$datetime,strtotime('+1 month',$datetime));
+		}
+	}
+
+	if($tags){
+		$tag=new Tag;
+		if(is_int($tags)){
+			$tag=$zbp->GetTagByID($tags);
+		}else{
+			$tag=$zbp->GetTagByAliasOrName($tags);
+		}
+		if($tag->ID>0){
+			$w[]=array('LIKE','log_Tag','%{'.$tag->ID.'}%');
+		}
+	}
+	
+	if($search){
+		$w[]=array('search','log_Content','log_Intro','log_Title',$search);
+	}
+	
+	$articles=$zbp->GetArticleList(
+		array('*'),
+		$w,
+		array('log_PostTime'=>'DESC'),
+		array($count),
+		null,
+		false
+	);
+	
+	return $articles;
+
+}
 
 
 function ViewList($page,$cate,$auth,$date,$tags,$isrewrite=false){
