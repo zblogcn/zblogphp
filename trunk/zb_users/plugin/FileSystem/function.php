@@ -91,13 +91,13 @@ function command_panel($current_path, $filename, $bloghost, $blogpath, $isdir, $
 				break;
 			}
 		}
-		if(!isset($str)) $str ="<img src='".$bloghost."zb_system/image/admin/document-rename.png'>&nbsp;&nbsp;<a href='#' onclick=\"del_file('$filename')\"><img src='".$bloghost."zb_system/image/admin/delete.png'></a>";
+		if(!isset($str)) $str ="<a href='#' onclick=\"rename_file('$filename')\" title='重命名'><img src='".$bloghost."zb_system/image/admin/document-rename.png'></a>&nbsp;&nbsp;<a href='#' onclick=\"del_file('$filename')\" title='删除'><img src='".$bloghost."zb_system/image/admin/delete.png'></a>";
 
 		return $str;
 	
 	}else{
-		$str = "<a href='#' onclick=\"down_file('$filename')\"><img src='".$bloghost."zb_system/image/admin/download.png'></a>";
-		if(in_array($type, $edit_file)) $str = $str."&nbsp;&nbsp;<img src='".$bloghost."zb_system/image/admin/page_edit.png'>";	
+		$str = "<a href='#' onclick=\"down_file('$filename')\" title='下载'><img src='".$bloghost."zb_system/image/admin/download.png'></a>";
+		if(in_array($type, $edit_file)) $str = $str."&nbsp;&nbsp;<a href='#' onclick=\"edit_file('$filename')\" title='在线编辑'><img src='".$bloghost."zb_system/image/admin/page_edit.png'></a>";	
 
 		foreach($zbsys_file as $v){
 			if ($current_path == $v){
@@ -105,13 +105,10 @@ function command_panel($current_path, $filename, $bloghost, $blogpath, $isdir, $
 				break;
 			}
 		}
-		if(!isset($sstr)) $str = $str."&nbsp;&nbsp<img src='".$bloghost."zb_system/image/admin/document-rename.png'>&nbsp;&nbsp;<a href='#' onclick=\"del_file('$filename')\"><img src='".$bloghost."zb_system/image/admin/delete.png'></a>";
+		if(!isset($sstr)) $str = $str."&nbsp;&nbsp<a href='#' onclick=\"rename_file('$filename')\" title='重命名'><img src='".$bloghost."zb_system/image/admin/document-rename.png'></a>&nbsp;&nbsp;<a href='#' onclick=\"del_file('$filename')\" title='删除'><img src='".$bloghost."zb_system/image/admin/delete.png'></a>";
 
 		return $str;	
 	}
-
-
-	
 }
 
 

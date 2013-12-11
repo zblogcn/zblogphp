@@ -5,11 +5,12 @@
  * @copyright (C) 
  */
 require '../../../zb_system/function/c_system_base.php';
+require '../../../zb_system/function/c_system_admin.php';
 global $zbp;
 $zbp->Load();
 if (!$zbp->CheckRights('root')) {$zbp->ShowError(6);die();}
-
-//print_r($_POST);
+if (!$zbp->CheckPlugin('FileSystem')) {$zbp->ShowError(48);die();}
+//print_r($_POST);die();
 
 $cmd_arg = $_POST['cmd_arg'];
 $cmd_data = $_POST['cmd_data'];
@@ -29,12 +30,38 @@ switch ($cmd_arg) {
 	case 4://下载文件
 		download();
 		break;
+	case 5://重命名
+		renamefile();
+		break;
+	case 6://重命名
+		edit_file();
+		break;
 	case 10://上传文件
 		upload_form();
 		break;
 	case 888://phpinfo
 		phpinfo();
 		break;
+}
+
+function edit_file(){
+	global $cmd_data, $current_path, $selected_file_list;
+	$file = iconv('UTF-8','GB2312',$current_path.$selected_file_list);
+    if(file_exists($oldfile)){
+		$error_msg = 0;
+		if (!rename($oldfile, $newfile)) $error_msg = '重命名失败，请重试。';
+		back_url($error_msg);
+    }
+}
+function renamefile(){
+	global $cmd_data, $current_path, $selected_file_list;
+	$oldfile = iconv('UTF-8','GB2312',$current_path.$selected_file_list);
+	$newfile = iconv('UTF-8','GB2312',$current_path.$cmd_data);
+    if(file_exists($oldfile)){
+		$error_msg = 0;
+		if (!rename($oldfile, $newfile)) $error_msg = '重命名失败，请重试。';
+		back_url($error_msg);
+    }
 }
 
 function download(){

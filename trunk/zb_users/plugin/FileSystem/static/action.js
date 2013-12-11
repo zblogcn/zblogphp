@@ -288,6 +288,8 @@ entry_list['entry6'] = new entry('main2.php', 'file', 147812, false);
         }
 		
 		
+		
+		
         function test_action(){
             if (document.form_action.action.value != 0) return true;
             else return false;
@@ -329,6 +331,29 @@ entry_list['entry6'] = new entry('main2.php', 'file', 147812, false);
 			document.form_action.target = '_blank';
 			document.form_action.submit();
 		}
+		function rename_file(filename){
+			document.form_action.cmd_data.value = prompt('输入文件(夹)名称：', filename)
+			if(document.form_action.cmd_data.value.length>0) {
+				document.form_action.selected_file_list.value = filename;
+				document.form_action.cmd_arg.value = 5;
+				document.form_action.action.value = 1;
+				document.form_action.submit();
+			}
+		}
+		function edit_file(filename){
+			document.form_action.cmd_data.value = filename
+			document.form_action.cmd_arg.value = 6;
+			document.form_action.action = "editingcode.php";
+			document.form_action.action.value = 1;
+			//document.form_action.target = '_blank';
+			document.form_action.submit();
+		}
+		
+		
+		
+		
+		
+		
 		function selectfile(filename){
 			document.form_action.selected_file_list.value = filename
 		}
@@ -344,6 +369,9 @@ entry_list['entry6'] = new entry('main2.php', 'file', 147812, false);
 			//document.form_action.target = '_blank';
 			//document.form_action.submit();
 		}
+		
+		
+		
 		
         function test_prompt(arg){
             var erro='';

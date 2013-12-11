@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Cloud Explorer ——云,在线资源管理平台</title>
+	<link rel="stylesheet" type="text/css" href="<?php echo STATIC_PATH;?>style/login.css">
+</head>
+<body>
+   <div class="loginbox">
+		<div class="content">
+			<h1 class="title">后台登录</h1>
+			<form method="post" action="./?user/loginSubmit">
+				<div class="inputs">
+					<div><span>用户名：</span><input id="username" name='name' type="text" placeholder="用户名" autofocus required> </div> 
+					<div><span>密码：</span><input id="password" name='password' type="password" placeholder="密码" required></div>	
+					
+				</div>
+				
+				<div class="actions">
+					<input type="submit" id="submit" value="登录">
+					<span style="padding-left:0px;color:#f90;"><?php echo $value['msg'];?></span>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
