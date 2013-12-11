@@ -186,13 +186,13 @@ class DbSql #extends AnotherClass
 			$comma = '';
 			foreach($where as $k => $w) {
 				$eq=$w[0];
-				if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='!='){
+				if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='!='|$eq=='like'){
 					$x = (string)$w[1];
 					$y = (string)$w[2];
 					$y = $zbp->db->EscapeString($y);
 					$sqlw .= $comma . " $x $eq '$y' ";
 				}
-				if($eq=='BETWEEN'){
+				if($eq=='BETWEEN'||$eq=='between'){
 					$b1 = (string)$w[1];
 					$b2 = (string)$w[2];
 					$b3 = (string)$w[3];
@@ -219,6 +219,18 @@ class DbSql #extends AnotherClass
 					foreach ($w[1] as $x=>$y) {
 						$y[1]=$zbp->db->EscapeString($y[1]);
 						$sql_array .= $c . " $y[0]='$y[1]' ";
+						$c='OR';
+					}
+					$sqlw .= $comma .  '(' . $sql_array . ')';
+				}
+				if($eq=='array_like'){
+					$c='';
+					$sql_array='';
+					if(!is_array($w[1]))continue;
+					if(count($w[1])==0)continue;
+					foreach ($w[1] as $x=>$y) {
+						$y[1]=$zbp->db->EscapeString($y[1]);
+						$sql_array .= $c . " ($y[0] LIKE '%$y[1]%') ";
 						$c='OR';
 					}
 					$sqlw .= $comma .  '(' . $sql_array . ')';
