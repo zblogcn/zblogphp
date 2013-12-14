@@ -648,6 +648,7 @@ function InsertInfo(){
 
   $cate = new Category();
   $cate->Name='未分类';
+  $cate->Alias='uncategorized';
   $cate->Save();
   
   $t=new Module();
