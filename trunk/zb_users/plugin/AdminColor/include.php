@@ -2,10 +2,13 @@
 #注册插件
 RegisterPlugin("AdminColor","ActivePlugin_AdminColor");
 
+$Filter_Plugin_AdminColor_CSS_Pre=array();
+
 function ActivePlugin_AdminColor() {
 
 	Add_Filter_Plugin('Filter_Plugin_Admin_SiteInfo_SubMenu','AdminColor_ColorButton');
 	Add_Filter_Plugin('Filter_Plugin_Admin_Header','AdminColor_Css');
+	Add_Filter_Plugin('Filter_Plugin_Login_Header','AdminColor_Css');
 }
 
 function AdminColor_Css(){

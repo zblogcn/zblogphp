@@ -76,6 +76,10 @@ $c .="#divMain .DIVBlogConfigtop {background-color: #3399cc!important;}". "\r\n"
 $c .="#divMain .DIVBlogConfig {background-color: #ededed!important;}". "\r\n";
 
 
+$c .="div.bg {background: #3a6ea5;!important;}". "\r\n";
+$c .="div.bg input[type=\"text\"], input[type=\"password\"] {border-color:#3a6ea5!important;}". "\r\n";
+
+
 //$c .=Response_Plugin_AdminColor_Css
 
 
@@ -85,11 +89,23 @@ $c3="#b0cdee";
 $c4="#3399cc";
 $c5="#d60000";
 
-$c=str_replace($c1,$BlodColor[$id],$c);
-$c=str_replace($c2,$NormalColor[$id],$c);
-$c=str_replace($c3,$LightColor[$id],$c);
-$c=str_replace($c4,$HighColor[$id],$c);
-$c=str_replace($c5,$AntiColor[$id],$c);
+$Colors=array();
+
+$Colors['Blod']  =$BlodColor[$id];
+$Colors['Normal']=$NormalColor[$id];
+$Colors['Light'] =$LightColor[$id];
+$Colors['High']  =$HighColor[$id];
+$Colors['Anti']  =$BlodColor[$id];
+
+foreach ($GLOBALS['Filter_Plugin_AdminColor_CSS_Pre'] as $fpname => &$fpsignal) {
+	$fpname($Colors);
+}
+
+$c=str_replace($c1,$Colors['Blod'],$c);
+$c=str_replace($c2,$Colors['Normal'],$c);
+$c=str_replace($c3,$Colors['Light'],$c);
+$c=str_replace($c4,$Colors['High'],$c);
+$c=str_replace($c5,$Colors['Anti'],$c);
 
 
 $c .="\r\n" . "/*AdminColor*/" . "\r\n" . "#admin_color{float:right;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";

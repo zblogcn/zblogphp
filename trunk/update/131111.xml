@@ -1,4 +1,7 @@
 ﻿<files build='131111'>
+	<file name='feed.php' crc32='B14E262'/>
+	<file name='index.php' crc32='122841F9'/>
+	<file name='search.php' crc32='7E62515D'/>
 	<file name='zb_system\cmd.php' crc32='B261103A'/>
 	<file name='zb_system\login.php' crc32='168565CF'/>
 	<file name='zb_system\admin\admin_footer.php' crc32='39217893'/>
