@@ -220,6 +220,8 @@ class ZBlogPHP{
 		$this->RegBuildModule('archives','BuildModule_archives');
 
 		$this->RegBuildModule('navbar','BuildModule_navbar');
+		
+		$this->RegBuildModule('tags','BuildModule_tags');
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 		
