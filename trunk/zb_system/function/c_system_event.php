@@ -744,6 +744,7 @@ function PostArticle(){
 	$zbp->AddBuildModule('calendar');
 	$zbp->AddBuildModule('comments');
 	$zbp->AddBuildModule('archives');
+	$zbp->AddBuildModule('tags');
 	
 	foreach ($GLOBALS['Filter_Plugin_PostArticle_Succeed'] as $fpname => &$fpsignal) $fpname($article);
 
@@ -779,6 +780,7 @@ function DelArticle(){
 		$zbp->AddBuildModule('calendar');
 		$zbp->AddBuildModule('comments');
 		$zbp->AddBuildModule('archives');
+		$zbp->AddBuildModule('tags');
 
 		foreach ($GLOBALS['Filter_Plugin_DelArticle_Succeed'] as $fpname => &$fpsignal) $fpname($article);
 	}else{
@@ -1209,6 +1211,8 @@ function PostTag(){
 	if(GetVars('AddNavbar','POST')==0)$zbp->DelItemToNavbar('tag',$tag->ID);
 	if(GetVars('AddNavbar','POST')==1)$zbp->AddItemToNavbar('tag',$tag->ID,$tag->Name,$tag->Url);
 	
+	$zbp->AddBuildModule('tags');
+	
 	foreach ($GLOBALS['Filter_Plugin_PostTag_Succeed'] as $fpname => &$fpsignal) $fpname($tag);
 
 	return true;
@@ -1223,6 +1227,7 @@ function DelTag(){
 	if($tag->ID>0){
 		$tag->Del();
 		$zbp->DelItemToNavbar('tag',$tag->ID);
+		$zbp->AddBuildModule('tags');
 		foreach ($GLOBALS['Filter_Plugin_DelTag_Succeed'] as $fpname => &$fpsignal) $fpname($tag);
 	}
 	return true;
@@ -2075,5 +2080,29 @@ function BuildModule_navbar(){
 		}
 	}
 
+	return $s;
+}
+
+function BuildModule_tags(){
+	global $zbp;
+	$s='';
+	$i=$zbp->modulesbyfilename['tags']->MaxLi;
+	if($i==0)$i=25;
+	$array=$zbp->GetTagList(
+		'',
+		'',
+		array('tag_Count'=>'DESC'),
+		array($i),
+		null
+	);
+	$array2=array();
+	foreach ($array as $tag) {
+		$array2[$tag->ID]=$tag;
+	}
+	ksort($array2);
+	
+	foreach ($array2 as $tag) {
+		$s.='<li><a href="'. $tag->Url .'">'. $tag->Name .'</a> <span class="tag-count">('. $tag->Count .')</span></a></li>';
+	}
 	return $s;
 }
