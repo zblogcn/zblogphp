@@ -186,7 +186,7 @@ class DbSql #extends AnotherClass
 			$comma = '';
 			foreach($where as $k => $w) {
 				$eq=$w[0];
-				if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='!='|$eq=='like'){
+				if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='|$eq=='like'){
 					$x = (string)$w[1];
 					$y = (string)$w[2];
 					$y = $zbp->db->EscapeString($y);

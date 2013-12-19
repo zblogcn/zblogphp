@@ -97,24 +97,26 @@ function RegPage_Page(){
 	$article->IsLock=true;
 	$article->Type=ZC_POST_TYPE_PAGE;
 
-	$article->Content .='<dl style="font-size:1.1em;line-height:1.5em;">';
-	$article->Content .='<dt><p>'.$zbp->Config('RegPage')->readme_text.'</p></dt>';
-	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)名称：<input required="required" type="text" name="name" style="width:200px;font-size:1.2em;" /></p></dd>';
-	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)密码：<input required="required" type="password" name="password" style="width:200px;font-size:1.2em;" /></p></dd>';
-	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)确认密码：<input required="required" type="password" name="repassword" style="width:200px;font-size:1.2em;" /></p></dd>';
-	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)邮箱：<input type="text" name="email" style="width:200px;font-size:1.2em;" /></p></dd>';
-	$article->Content .='<dd><p style="width:350px;text-align:right;">网站：<input type="text" name="homepage" style="width:200px;font-size:1.2em;" /></p></dd>';
-	$article->Content .='<dd><p style="width:350px;text-align:right;">(*)邀请码：<input required="required" type="text" name="invitecode" style="width:200px;font-size:1.2em;" /></p></dd>';
+	$article->Content .='<table style="width:90%;border:none;font-size:1.1em;line-height:2.5em;">';
+	$article->Content .='<tr style=""><th style="border:none;" colspan="2" scope="col"><p>'.$zbp->Config('RegPage')->readme_text.'</p></th></tr>';
+	$article->Content .='<tr><td style="text-align:right;border:none;">(*)名称：</td><td  style="border:none;" ><input required="required" type="text" name="name" style="width:250px;font-size:1.2em;" /></td></tr>';
+	$article->Content .='<tr><td style="text-align:right;border:none;">(*)密码：</td><td  style="border:none;" ><input required="required" type="password" name="password" style="width:250px;font-size:1.2em;" /></td></tr>';
+	$article->Content .='<tr><td style="text-align:right;border:none;">(*)确认密码：</td><td  style="border:none;" ><input required="required" type="password" name="repassword" style="width:250px;font-size:1.2em;" /></td></tr>';
+	$article->Content .='<tr><td style="text-align:right;border:none;">(*)邮箱：</td><td  style="border:none;" ><input type="text" name="email" style="width:250px;font-size:1.2em;" /></td></tr>';
+	$article->Content .='<tr><td style="text-align:right;border:none;">网站：</td><td  style="border:none;" ><input type="text" name="homepage" style="width:250px;font-size:1.2em;" /></td></tr>';
+	$article->Content .='<tr><td style="text-align:right;border:none;">(*)邀请码：</td><td  style="border:none;" ><input required="required" type="text" name="invitecode" style="width:250px;font-size:1.2em;" />';
 
 	if($zbp->Config('RegPage')->open_reg){
-		$article->Content .='<dd><p style="width:350px;text-align:right;">点击<a onclick="$(\'#dialog-message\').dialog(\'open\');return false;" href="'.$zbp->host.'zb_users/plugin/RegPage/getinvitecode.php" target="_blank">这里</a>获取邀请码.</p></dd>';
+		$article->Content .='&nbsp;&nbsp;<a onclick="$(\'#dialog-message\').dialog(\'open\');return false;" href="'.$zbp->host.'zb_users/plugin/RegPage/getinvitecode.php" target="_blank">点击这里获取邀请码</a>.';
 	}
 	
+	$article->Content .='</td></tr>';
 
+	$article->Content .='<tr><td style="text-align:right;border:none;">(*)</td><td  style="border:none;" ><input required="required" type="text" name="verifycode" style="width:150px;font-size:1.2em;" />&nbsp;&nbsp;<img style="border:none;vertical-align:middle;width:'.$zbp->option['ZC_VERIFYCODE_WIDTH']. 'px;height:' . $zbp->option['ZC_VERIFYCODE_HEIGHT'] . 'px;cursor:pointer;" src="' .$zbp->validcodeurl . '" alt="" title="" onclick="javascript:this.src=\'' . $zbp->validcodeurl . '?id=RegPage&amp;tm=\'+Math.random();"/></td></tr>';
 	
-	$article->Content .='<dd><p style="width:350px;text-align:right;"><input type="submit" style="width:100px;font-size:1.0em;padding:0.2em" value="提交" onclick="return RegPage()" /></p></dd>';
+	$article->Content .='<tr><td  style="border:none;" ></td><td  style="border:none;" ><input type="submit" style="width:100px;font-size:1.0em;padding:0.2em" value="提交" onclick="return RegPage()" /></td></tr>';
 
-	$article->Content .='</dl>';
+	$article->Content .='</table>';
 	//$article->Content .='<p>带星号为必填选项.</p>';
 	
 $mt=microtime();
@@ -144,7 +146,14 @@ js;
 	$zbp->template->SetTags('article',$article);
 	$zbp->template->SetTags('type',$article->type=0?'article':'page');
 	$zbp->template->SetTemplate($article->Template);
-
+	$zbp->template->SetTags('page',1);
+	$zbp->template->SetTags('pagebar',null);
+	$zbp->template->SetTags('comments',array());
+	
+	foreach ($GLOBALS['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($zbp->template);
+	}
+	
 	$zbp->template->Display();
 }
 

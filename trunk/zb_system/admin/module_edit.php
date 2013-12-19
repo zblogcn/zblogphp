@@ -88,6 +88,7 @@ if($mod->Source=='theme'){
 	  <p <?php echo $ishide?>>
 		<span class="title"><?php echo $lang['msg']['name']?>:</span><span class="star">(*)</span><br />
 		<input id="edtName" class="edit" size="40" name="Name" maxlength="50" type="text" value="<?php echo $mod->Name;?>" />
+		 (<?php echo $lang['msg']['hide_title']?>:<input type="text" id="IsHideTitle" name="IsHideTitle" class="checkbox" value="<?php echo $mod->IsHideTitle;?>"/>)
 	  </p>
 	  <p>
 		<span class="title"><?php echo $lang['msg']['filename']?>:</span><span class="star">(*)</span><br />
@@ -97,7 +98,6 @@ if($mod->Source=='theme'){
 		<span class="title"><?php echo $lang['msg']['htmlid']?>:</span><span class="star">(*)</span><br />
 		<input id="edtHtmlID" class="edit" size="40" name="HtmlID" type="text" value="<?php echo $mod->HtmlID;?>" />
 	  </p>
-
 	  <p <?php echo $ishide?>>
 	  	<span class='title'><?php echo $lang['msg']['type']?>:</span><br/>
 	    <label><input name="Type" type="radio" value="div" <?php echo $mod->Type=='div'?'checked="checked"':'';?> onclick="$('#pMaxLi').css('display','none');" />&nbsp;DIV </label>
@@ -108,6 +108,19 @@ if($mod->Source=='theme'){
 	    <span class='title'>UL内LI的最大行数:</span><br/>
 	    <input type="text" name="MaxLi" value="<?php echo $mod->MaxLi;?>" size="40"  />
 	  </p>
+<?php
+if($mod->FileName=='catalog'){
+?>
+<p><span class='title'><?php echo $lang['msg']['style']?>:</span>&nbsp;&nbsp;
+
+<label><input name="catalog_style" type="radio" value="0" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE']=='0'?'checked="checked"':'';?> />&nbsp;<?php echo $lang['msg']['catalog_style_normal']?> </label>&nbsp;&nbsp;
+<label><input name="catalog_style" type="radio" value="1" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE']=='1'?'checked="checked"':'';?> />&nbsp;<?php echo $lang['msg']['catalog_style_tree']?> </label>&nbsp;&nbsp;
+<label><input name="catalog_style" type="radio" value="2" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE']=='2'?'checked="checked"':'';?> />&nbsp;<?php echo $lang['msg']['catalog_style_ul']?> </label>&nbsp;&nbsp;
+
+</p>
+<?php
+}
+?>
 	  <p >
 		<span class="title"><?php echo $lang['msg']['content']?>:</span><br />
 		<textarea name="Content" id="Content"  cols="80" rows="12"  ><?php echo htmlspecialchars($mod->Content);?></textarea>

@@ -743,7 +743,7 @@ function InsertInfo(){
   $t->SidebarID=0;
   $t->Content="";
   $t->HtmlID="divStatistics";
-  $t->Type="div";
+  $t->Type="ul";
   $t->Save();
 
 

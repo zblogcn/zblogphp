@@ -91,6 +91,9 @@ function misc_statistic(){
 	$zbp->cache->normal_article_nums=$num;
 	
 	$zbp->SaveCache();
+	
+	$zbp->AddBuildModule('statistics',array($all_artiles,$all_pages,$all_categorys,$all_tags,$all_views,$all_comments));
+	$zbp->BuildModule();
 
 	$r=str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
 

@@ -8,6 +8,7 @@ function RegPage(){
 		"email":$("input[name='email']").val(),
 		"homepage":$("input[name='homepage']").val(),
 		"invitecode":$("input[name='invitecode']").val(),
+		"verifycode":$("input[name='verifycode']").val(),
 		},
 		function(data){
 			var s =data;

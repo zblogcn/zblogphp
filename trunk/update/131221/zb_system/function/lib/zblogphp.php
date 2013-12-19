@@ -46,6 +46,7 @@ class ZBlogPHP{
 
 	private $modulefunc=array();
 	private $readymodules=array();
+	private $readymodules_parameters=array();
 
 	public $table=null;
 	public $datainfo=null;
@@ -220,6 +221,12 @@ class ZBlogPHP{
 		$this->RegBuildModule('archives','BuildModule_archives');
 
 		$this->RegBuildModule('navbar','BuildModule_navbar');
+		
+		$this->RegBuildModule('tags','BuildModule_tags');
+		
+		$this->RegBuildModule('statistics','BuildModule_statistics');
+		
+		$this->RegBuildModule('authors','BuildModule_authors');		
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 		
@@ -583,7 +590,11 @@ function BuildModule(){
 			if(isset($this->modulefunc[$modfilename])){
 				$m=$this->modulesbyfilename[$modfilename];
 				if(function_exists($this->modulefunc[$modfilename])){
-					$m->Content=call_user_func($this->modulefunc[$modfilename]);
+					if(!isset($this->readymodules_parameters[$modfilename])){
+						$m->Content=call_user_func($this->modulefunc[$modfilename]);
+					}else{
+						$m->Content=call_user_func($this->modulefunc[$modfilename],$this->readymodules_parameters[$modfilename]);
+					}
 				}
 				$m->Save();
 			}
@@ -593,24 +604,22 @@ function BuildModule(){
 }
 
 function RegBuildModule($modfilename,$userfunc){
-
 	$this->modulefunc[$modfilename]=$userfunc;
-
 }
 
-function AddBuildModule($modfilename){
-
-	$this->readymodules[]=$modfilename;
+function AddBuildModule($modfilename,$parameters=null){
+	$this->readymodules[$modfilename]=$modfilename;
+	$this->readymodules_parameters[$modfilename]=$parameters;
 }
 
 function DelBuildModule($modfilename){
-
 	unset($this->readymodules[$modfilename]);
+	unset($this->readymodules_parameters[$modfilename]);
 }
 
 function AddBuildModuleAll(){
 	foreach ($this->modulesbyfilename as $key => $value) {
-		$this->readymodules[]=$key;
+		$this->readymodules[$key]=$key;
 	}
 }
 

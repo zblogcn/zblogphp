@@ -77,11 +77,11 @@ class Category extends Base{
 			}else{
 				$l=$this->Level;
 				if($l==1){
-					return '└';	
+					return '&nbsp;└';	
 				}elseif($l==2){
-					return '&nbsp;&nbsp;└';	
+					return '&nbsp;&nbsp;&nbsp;└';	
 				}elseif($l==3){
-					return '&nbsp;&nbsp;&nbsp;&nbsp;└';	
+					return '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└';	
 				}
 				return ;
 			}
