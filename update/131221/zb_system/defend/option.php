@@ -158,8 +158,7 @@ return array(
 
 	// '源码编辑高亮
 	'ZC_CODEMIRROR_ENABLE' => true,
-
-
 	'ZC_HTTP_LASTMODIFIED' => false,
+	'ZC_MODULE_CATALOG_STYLE'=>0,
 )
 ?>

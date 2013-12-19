@@ -183,6 +183,10 @@ return array(
 	'include_file'=>'引用文件',
 	'back'=>'返回',	
 	'validcode'=>'验证码',
+	'hide_title'=>'隐藏标题',
+	'catalog_style_normal'=>'普通型',
+	'catalog_style_tree'=>'树型',
+	'catalog_style_ul'=>'UL嵌套型',
 	''=>'',
 ),
 

@@ -106,10 +106,10 @@ function ViewAuto($url){
 			return null;
 	}
 
-	$r=UrlRule::Rewrite_url($zbp->option['ZC_ARTICLE_REGEX'],'article');
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_PAGE_REGEX'],'page');
 	$m=array();
 	if(preg_match($r,$url,$m)==1){
-		if(strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%id%}')!==false){
+		if(strpos($zbp->option['ZC_PAGE_REGEX'],'{%id%}')!==false){
 			$result=ViewPost($m[1],null,$rewrite_go_on);
 		}else{
 			$result=ViewPost(null,$m[1],$rewrite_go_on);
@@ -118,11 +118,11 @@ function ViewAuto($url){
 			$zbp->ShowError(2);//return null;
 		return null;
 	}
-
-	$r=UrlRule::Rewrite_url($zbp->option['ZC_PAGE_REGEX'],'page');
+	
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_ARTICLE_REGEX'],'article');
 	$m=array();
 	if(preg_match($r,$url,$m)==1){
-		if(strpos($zbp->option['ZC_PAGE_REGEX'],'{%id%}')!==false){
+		if(strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%id%}')!==false){
 			$result=ViewPost($m[1],null,$rewrite_go_on);
 		}else{
 			$result=ViewPost(null,$m[1],$rewrite_go_on);
@@ -744,6 +744,8 @@ function PostArticle(){
 	$zbp->AddBuildModule('calendar');
 	$zbp->AddBuildModule('comments');
 	$zbp->AddBuildModule('archives');
+	$zbp->AddBuildModule('tags');
+	$zbp->AddBuildModule('authors');
 	
 	foreach ($GLOBALS['Filter_Plugin_PostArticle_Succeed'] as $fpname => &$fpsignal) $fpname($article);
 
@@ -779,6 +781,8 @@ function DelArticle(){
 		$zbp->AddBuildModule('calendar');
 		$zbp->AddBuildModule('comments');
 		$zbp->AddBuildModule('archives');
+		$zbp->AddBuildModule('tags');
+		$zbp->AddBuildModule('authors');
 
 		foreach ($GLOBALS['Filter_Plugin_DelArticle_Succeed'] as $fpname => &$fpsignal) $fpname($article);
 	}else{
@@ -1209,6 +1213,8 @@ function PostTag(){
 	if(GetVars('AddNavbar','POST')==0)$zbp->DelItemToNavbar('tag',$tag->ID);
 	if(GetVars('AddNavbar','POST')==1)$zbp->AddItemToNavbar('tag',$tag->ID,$tag->Name,$tag->Url);
 	
+	$zbp->AddBuildModule('tags');
+	
 	foreach ($GLOBALS['Filter_Plugin_PostTag_Succeed'] as $fpname => &$fpsignal) $fpname($tag);
 
 	return true;
@@ -1223,6 +1229,7 @@ function DelTag(){
 	if($tag->ID>0){
 		$tag->Del();
 		$zbp->DelItemToNavbar('tag',$tag->ID);
+		$zbp->AddBuildModule('tags');
 		foreach ($GLOBALS['Filter_Plugin_DelTag_Succeed'] as $fpname => &$fpsignal) $fpname($tag);
 	}
 	return true;
@@ -1336,6 +1343,12 @@ function DelMember_AllData($id){
 ################################################################################################################
 function PostModule(){
 	global $zbp;
+	
+	if(isset($_POST['catalog_style'])){
+		$zbp->option['ZC_MODULE_CATALOG_STYLE']=$_POST['catalog_style'];
+		$zbp->SaveOption();
+	}
+	
 	if(!isset($_POST['ID']))return ;
 	if(!GetVars('FileName','POST')){
 		$_POST['FileName']='mod' . rand(1000,2000);
@@ -1347,6 +1360,9 @@ function PostModule(){
 	}
 	if(isset($_POST['MaxLi'])){
 		$_POST['MaxLi']=(integer)$_POST['MaxLi'];
+	}
+	if(isset($_POST['IsHideTitle'])){
+		$_POST['IsHideTitle']=(integer)$_POST['IsHideTitle'];
 	}
 	if(!isset($_POST['Type'])){
 		$_POST['Type']='div';
@@ -1629,6 +1645,7 @@ function FilterPost(&$article){
 
 	$article->Title=strip_tags($article->Title);
 	$article->Alias=TransferHTML($article->Alias,'[normalname]');
+	$article->Alias=str_replace(' ','',$article->Alias);
 
 	if($article->Type == ZC_POST_TYPE_ARTICLE){
 		if(!$zbp->CheckRights('ArticleAll')){
@@ -1648,7 +1665,9 @@ function FilterMember(&$member){
 	global $zbp;
 	$member->Intro=TransferHTML($member->Intro,'[noscript]');
 	$member->Alias=TransferHTML($member->Alias,'[normalname]');	
-
+	$member->Alias=str_replace('/','',$member->Alias);
+	$member->Alias=str_replace('.','',$member->Alias);
+	$member->Alias=str_replace(' ','',$member->Alias);
 	if(strlen($member->Name)<$zbp->option['ZC_USERNAME_MIN']||strlen($member->Name)>$zbp->option['ZC_USERNAME_MAX']){
 		$zbp->ShowError(77);
 	}
@@ -1692,6 +1711,9 @@ function FilterCategory(&$category){
 	global $zbp;
 	$category->Name=strip_tags($category->Name);
 	$category->Alias=TransferHTML($category->Alias,'[normalname]');	
+	$category->Alias=str_replace('/','',$category->Alias);
+	$category->Alias=str_replace('.','',$category->Alias);
+	$category->Alias=str_replace(' ','',$category->Alias);
 }
 
 
@@ -1821,8 +1843,47 @@ function CountMemberArray($array){
 function BuildModule_catalog(){
 	global $zbp;
 	$s='';
-	foreach ($zbp->categorysbyorder as $key => $value) {
-		$s .='<li><a href="'.$value->Url.'">' . $value->Name . '</a></li>';
+	
+	if($zbp->option['ZC_MODULE_CATALOG_STYLE']=='2'){
+
+		foreach ($zbp->categorysbyorder as $key => $value) {
+			if($value->Level==0){
+				$s .='<li class="li-cate"><a href="'.$value->Url.'">' . $value->Name . '</a><!--'.$value->ID.'begin--><!--'.$value->ID.'end--></li>';
+			}
+		}
+		foreach ($zbp->categorysbyorder as $key => $value) {
+			if($value->Level==1){
+				$s =str_replace('<!--'.$value->ParentID.'end-->','<li class="li-subcate"><a href="'.$value->Url.'">' . $value->Name . '</a><!--'.$value->ID.'begin--><!--'.$value->ID.'end--></li><!--'.$value->ParentID.'end-->',$s);
+			}
+		}
+		foreach ($zbp->categorysbyorder as $key => $value) {
+			if($value->Level==2){
+				$s =str_replace('<!--'.$value->ParentID.'end-->','<li class="li-subcate"><a href="'.$value->Url.'">' . $value->Name . '</a><!--'.$value->ID.'begin--><!--'.$value->ID.'end--></li><!--'.$value->ParentID.'end-->',$s);
+			}
+		}
+		foreach ($zbp->categorysbyorder as $key => $value) {
+			if($value->Level==3){
+				$s =str_replace('<!--'.$value->ParentID.'end-->','<li class="li-subcate"><a href="'.$value->Url.'">' . $value->Name . '</a><!--'.$value->ID.'begin--><!--'.$value->ID.'end--></li><!--'.$value->ParentID.'end-->',$s);
+			}
+		}
+		
+		foreach ($zbp->categorysbyorder as $key => $value) {
+			$s=str_replace('<!--'.$value->ID.'begin--><!--'.$value->ID.'end-->','',$s);
+		}
+		foreach ($zbp->categorysbyorder as $key => $value) {
+			$s=str_replace('<!--'.$value->ID.'begin-->','<ul class="ul-subcates">',$s);
+			$s=str_replace('<!--'.$value->ID.'end-->','</ul>',$s);
+		}
+		
+	
+	}elseif($zbp->option['ZC_MODULE_CATALOG_STYLE']=='1'){
+		foreach ($zbp->categorysbyorder as $key => $value) {
+			$s .='<li>' . $value->Symbol . '<a href="'.$value->Url.'">' . $value->Name . '</a></li>';
+		}
+	}else{
+		foreach ($zbp->categorysbyorder as $key => $value) {
+			$s .='<li><a href="'.$value->Url.'">' . $value->Name . '</a></li>';
+		}
 	}
 
 	return $s;
@@ -2077,3 +2138,91 @@ function BuildModule_navbar(){
 
 	return $s;
 }
+
+function BuildModule_tags(){
+	global $zbp;
+	$s='';
+	$i=$zbp->modulesbyfilename['tags']->MaxLi;
+	if($i==0)$i=25;
+	$array=$zbp->GetTagList(
+		'',
+		'',
+		array('tag_Count'=>'DESC'),
+		array($i),
+		null
+	);
+	$array2=array();
+	foreach ($array as $tag) {
+		$array2[$tag->ID]=$tag;
+	}
+	ksort($array2);
+	
+	foreach ($array2 as $tag) {
+		$s.='<li><a href="'. $tag->Url .'">'. $tag->Name .'</a> <span class="tag-count">('. $tag->Count .')</span></a></li>';
+	}
+	return $s;
+}
+
+function BuildModule_authors($level=4){
+	global $zbp;
+	$s='';
+	
+	$w=array();
+	$w[]=array('<=','mem_Level',$level);
+
+	$array=$zbp->GetMemberList(
+		'',
+		$w,
+		array('mem_ID'=>'ASC'),
+		null,
+		null
+	);
+
+	foreach ($array as $member) {
+		$s.= '<li><a href="'. $member->Url .'">' . $member->Name . '<span class="article-nums"> ('. $member->Articles .')</span></li>';
+	}
+	return $s;
+}
+
+function BuildModule_statistics($array=array()){
+	global $zbp;
+	$all_artiles=0;
+	$all_pages=0;
+	$all_categorys=0;
+	$all_tags=0;
+	$all_views=0;
+	$all_comments=0;
+	
+	if(count($array)==0){return $zbp->modulesbyfilename['statistics']->Content;}
+	
+	if(isset($array[0]))$all_artiles=$array[0];
+	if(isset($array[1]))$all_pages=$array[1];
+	if(isset($array[2]))$all_categorys=$array[2];	
+	if(isset($array[3]))$all_tags=$array[3];
+	if(isset($array[4]))$all_views=$array[4];
+	if(isset($array[5]))$all_comments=$array[5];
+	
+	$s="";
+	$s.="<li>{$zbp->lang['msg']['all_artiles']}:{$all_artiles}</li>";
+	$s.="<li>{$zbp->lang['msg']['all_pages']}:{$all_pages}</li>";
+	$s.="<li>{$zbp->lang['msg']['all_categorys']}:{$all_categorys}</li>";
+	$s.="<li>{$zbp->lang['msg']['all_tags']}:{$all_tags}</li>";
+	$s.="<li>{$zbp->lang['msg']['all_views']}:{$all_views}</li>";
+	$s.="<li>{$zbp->lang['msg']['all_comments']}:{$all_comments}</li>";
+	
+	$zbp->modulesbyfilename['statistics']->Type="ul";
+	
+	return $s;
+
+}
+
+
+
+
+
+
+
+
+
+
+

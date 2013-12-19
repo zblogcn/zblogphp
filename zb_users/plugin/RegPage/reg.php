@@ -2,8 +2,6 @@
 
 require '../../../zb_system/function/c_system_base.php';
 
-require '../../../zb_system/function/c_system_admin.php';
-
 $zbp->Load();
 
 Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','RespondError',PLUGIN_EXITSIGNAL_RETURN);
@@ -17,7 +15,11 @@ $repassword=trim($_POST['repassword']);
 $email=trim($_POST['email']);
 $homepage=trim($_POST['homepage']);
 $invitecode=trim($_POST['invitecode']);
+$verifycode=trim($_POST['verifycode']);
 
+if(!$zbp->CheckValidCode($verifycode,'RegPage')){
+	$zbp->ShowError('验证码错误，请重新输入.');die();
+}
 
 $member=new Member;
 

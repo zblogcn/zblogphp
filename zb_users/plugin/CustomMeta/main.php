@@ -131,7 +131,7 @@ if($type=='member'){
 <tr>
 <td><p><input type="text" style="width:95%" name="meta[]" value="" /></p></td>
 <td><p></p></td>
-<td><p><!--<input type="submit" value="添加" />--></p></td>
+<td><p>填入新增字段</p></td>
 </tr>
 
 </table>

@@ -34,6 +34,8 @@ if(count($_POST)>0){
 	
 	if(GetVars('addnavbar')){
 		$zbp->AddItemToNavbar('item','regpage',$zbp->Config('RegPage')->title_text,$zbp->host.'?reg');
+	}else{
+		$zbp->DelItemToNavbar('item','regpage');
 	}
 	
 	$zbp->SetHint('good');
