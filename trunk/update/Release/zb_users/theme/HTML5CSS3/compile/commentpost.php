@@ -26,6 +26,16 @@
         <input type="text" id="inpHomePage" name="inpHomePage" size="28" tabindex="4" value="<?php  echo $user->HomePage;  ?>" />
         网址</label>
     </p>
+	
+<?php if ($option['ZC_COMMENT_VERIFY_ENABLE']) { ?>
+	<p>
+	  <label>
+	    <input type="text" name="inpVerify" id="inpVerify" class="text" value="" size="28" tabindex="4" />
+	    <img style="width:<?php  echo $option['ZC_VERIFYCODE_WIDTH'];  ?>px;height:<?php  echo $option['ZC_VERIFYCODE_HEIGHT'];  ?>px;cursor:pointer;" src="<?php  echo $article->ValidCodeUrl;  ?>" alt="" title="" onclick="javascript:this.src='<?php  echo $article->ValidCodeUrl;  ?>&amp;tm='+Math.random();"/>
+		验证码(*)</label>
+	</p>
+<?php } ?>
+
 <?php } ?>
 	<!--verify-->
     <p>

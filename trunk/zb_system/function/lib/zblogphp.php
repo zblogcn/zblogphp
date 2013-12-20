@@ -201,7 +201,7 @@ class ZBlogPHP{
 		if(!$this->isconnect)return false;
 
 		$this->LoadMembers();
-		
+
 		$this->LoadCategorys();
 		#$this->LoadTags();
 		$this->LoadModules();
@@ -221,15 +221,15 @@ class ZBlogPHP{
 		$this->RegBuildModule('archives','BuildModule_archives');
 
 		$this->RegBuildModule('navbar','BuildModule_navbar');
-		
+
 		$this->RegBuildModule('tags','BuildModule_tags');
-		
+
 		$this->RegBuildModule('statistics','BuildModule_statistics');
-		
+
 		$this->RegBuildModule('authors','BuildModule_authors');		
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
-		
+
 		if($GLOBALS['manage']==true) $this->LoadManage();
 
 		$this->isload=true;
@@ -424,7 +424,7 @@ class ZBlogPHP{
 
 		$this->option['ZC_BLOG_CLSID']=$this->guid;
 
-		if(!$this->option['ZC_YUN_SITE']){
+		if($this->option['ZC_YUN_SITE']!='SAE'&&$this->option['ZC_YUN_SITE']!='BAE2'){
 			$s="<?php\r\n";
 			$s.="return ";
 			$s.=var_export($this->option,true);
@@ -450,11 +450,11 @@ class ZBlogPHP{
 		if(empty($array))return false;
 		if(!is_array($array))return false;
 		foreach ($array as $key => $value) {
-			if($key=='ZC_PERMANENT_DOMAIN_ENABLE')continue;
-			if($key=='ZC_BLOG_HOST')continue;			
-			if($key=='ZC_BLOG_CLSID')continue;
+			//if($key=='ZC_PERMANENT_DOMAIN_ENABLE')continue;
+			//if($key=='ZC_BLOG_HOST')continue;			
+			//if($key=='ZC_BLOG_CLSID')continue;
 			if($key=='ZC_YUN_SITE')continue;
-			if($key=='ZC_BLOG_LANGUAGEPACK')continue;			
+			if($key=='ZC_BLOG_LANGUAGEPACK')continue;
 			if($key=='ZC_DATABASE_TYPE')continue;
 			if($key=='ZC_SQLITE_NAME')continue;
 			if($key=='ZC_SQLITE_PRE')continue;
@@ -872,7 +872,7 @@ function AddBuildModuleAll(){
 
 	public function BuildTemplate()
 	{
-		if($this->option['ZC_YUN_SITE'])return false;
+		if($this->option['ZC_YUN_SITE']!='SAE'&&$this->option['ZC_YUN_SITE']!='BAE2')return false;
 		//初始化模板
 		$this->LoadTemplates();
 

@@ -51,7 +51,7 @@ Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','zbp_admin_addcmtsubm
 
 $zbp->LoadTemplates();
 
-
+$manage=true; 
 
 
 
@@ -1397,7 +1397,7 @@ function Admin_SettingMng(){
 	echo '<tr><td class="td25"><p><b>'.$zbp->lang['msg']['comment_turnoff'].'</b></p></td><td><p><input id="ZC_COMMENT_TURNOFF" name="ZC_COMMENT_TURNOFF" type="text" value="'.$zbp->option['ZC_COMMENT_TURNOFF'].'" class="checkbox"/></p></td></tr>';
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['comment_reverse_order'].'</b></p></td><td><p><input id="ZC_COMMENT_REVERSE_ORDER" name="ZC_COMMENT_REVERSE_ORDER" type="text" value="'.$zbp->option['ZC_COMMENT_REVERSE_ORDER'].'" class="checkbox"/></p></td></tr>';
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['comments_display_count'].'</b></p></td><td><p><input id="ZC_COMMENTS_DISPLAY_COUNT" name="ZC_COMMENTS_DISPLAY_COUNT" type="text" value="'.$zbp->option['ZC_COMMENTS_DISPLAY_COUNT'].'"  style="width:600px;" /></p></td></tr>';
-
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['comment_verify_enable'].'</b></p></td><td><p><input id="ZC_COMMENT_VERIFY_ENABLE" name="ZC_COMMENT_VERIFY_ENABLE" type="text" value="'.$zbp->option['ZC_COMMENT_VERIFY_ENABLE'].'" class="checkbox"/></p></td></tr>';
 
 
 

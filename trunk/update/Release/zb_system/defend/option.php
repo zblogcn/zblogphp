@@ -37,7 +37,8 @@ return array(
 	'ZC_MYSQL_CHARSET' => 'utf8',
 	'ZC_MYSQL_PRE' => 'zbp_',
 	'ZC_MYSQL_ENGINE'=>'MyISAM',
-    'ZC_MYSQL_PORT' => '3306', 
+    'ZC_MYSQL_PORT' => '3306',
+    'ZC_MYSQL_PERSISTENT' => false,
 	// '---------------------------------插件----------------------------------------
 	'ZC_USING_PLUGIN_LIST' => '',
 
@@ -66,9 +67,9 @@ return array(
 
 
 	// '验证码
-	'ZC_VERIFYCODE_STRING' => '0123456789',
-	'ZC_VERIFYCODE_WIDTH' => 60,
-	'ZC_VERIFYCODE_HEIGHT' => 20,
+	'ZC_VERIFYCODE_STRING' => 'ABCDEFGHKMNPRSTUVWXYZ123456789',
+	'ZC_VERIFYCODE_WIDTH' => 90,
+	'ZC_VERIFYCODE_HEIGHT' => 30,
 
 	// '页面各项列数
 	'ZC_DISPLAY_COUNT' => 10,
@@ -151,13 +152,13 @@ return array(
 
 	'ZC_SIDEBAR5_ORDER' => '',
 	// '--------------------------其它----------------------------------------
+	'ZC_ADMIN_HTML5_ENABLE'=>true,
 	// '代码高亮
 	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
 
 	// '源码编辑高亮
 	'ZC_CODEMIRROR_ENABLE' => true,
-
-
 	'ZC_HTTP_LASTMODIFIED' => false,
+	'ZC_MODULE_CATALOG_STYLE'=>0,
 )
 ?>

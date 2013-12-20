@@ -8,6 +8,8 @@
 
 return array(
 
+'lang'=>'zh-CN',
+
 #Front-End & Back-End
 'msg'=>array(
 	'id'=>'ID',
@@ -125,7 +127,8 @@ return array(
 	'manage_count'=>'后台管理每页显示数量',
 	'comment_turnoff'=>'关闭评论功能',	
 	'comment_reverse_order'=>'启用评论倒序输出',
-	'comments_display_count'=>'每页输出评论数量',	
+	'comments_display_count'=>'每页输出评论数量',
+	'comment_verify_enable'=>'启用评论验证码功能',	
 	'stay_signed_in'=>'保持登录',
 	'notify'=>'通知',
 	'current_member'=>'当前用户',
@@ -179,6 +182,11 @@ return array(
 	'request_data'=>'请求数据',
 	'include_file'=>'引用文件',
 	'back'=>'返回',	
+	'validcode'=>'验证码',
+	'hide_title'=>'隐藏标题',
+	'catalog_style_normal'=>'普通型',
+	'catalog_style_tree'=>'树型',
+	'catalog_style_ul'=>'UL嵌套型',
 	''=>'',
 ),
 
@@ -335,11 +343,14 @@ return array(
 '71'=>'当前的编辑内容还未保存！',
 '72'=>'名称不能为空！',
 '73'=>'请设置和确认密码！',
-'74'=>'骚年,你还在用IE6,7,8么?关了IE洗洗睡吧!\r\n要不要换个Chrome,Firefox试试(—.—||||',
+'74'=>'骚年,你还在用IE6,7,8么?请升级至支持html5的IE9吧!\r\n要不咱换个Chrome,Firefox试试(—.—||||',
 '75'=>'文件名不能为空！',
 '76'=>'HtmlID不能为空！',
 '77'=>'用户名只能用中文,数字,字母和.与_,且字符长度在3-20位',
 '78'=>'上传文件不是Z-BlogPHP版本',
+'79'=>'用户账户未审核',
+'80'=>'用户账户已锁定',
+'81'=>'未知方法或属性',
 ),
 
 );

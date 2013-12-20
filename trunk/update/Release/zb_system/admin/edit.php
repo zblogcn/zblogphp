@@ -259,14 +259,14 @@ window.onbeforeunload = function(){
 }
 
 function checkArticleInfo(){
+  if(isSubmit)return false;
   document.getElementById("edit").action="<?php echo $ispage?'../cmd.php?act=PagePst':'../cmd.php?act=ArticlePst'?>";
 
   if(!editor_api.editor.content.get()){
     alert('<?php echo $zbp->lang['error'][70];?>');
-    return false
+    return false;
   }
-
-  isSubmit=1;
+  isSubmit=true;
 }
 
 //日期时间控件
@@ -348,7 +348,7 @@ function AutoIntro() {
 	  if(s.indexOf("<hr class=\"more\"/>")>-1){
       editor_api.editor.intro.put(s.split("<hr class=\"more\"/>")[0]);
   	}else{
-	  	editor_api.editor.intro.put(s.substring(0,250));
+	  	editor_api.editor.intro.put(s.substring(0,<?php echo $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];?>));
   	}
   }
 	$("#divIntro").show();

@@ -23,6 +23,7 @@ class ZBlogPHP{
 	public $membersbyname=array();
 	public $categorys=array();
 	public $categorysbyorder=array();
+	public $categorylayer=0;
 	public $modules=array();
 	public $modulesbyfilename=array();
 	public $templates=array();
@@ -45,6 +46,7 @@ class ZBlogPHP{
 
 	private $modulefunc=array();
 	private $readymodules=array();
+	private $readymodules_parameters=array();
 
 	public $table=null;
 	public $datainfo=null;
@@ -52,6 +54,7 @@ class ZBlogPHP{
 	public $isinitialize=false;
 	public $isconnect=false;
 	public $isload=false;
+	public $issession=false;
 
 	public $template = null;
 	public $socialcomment = null;
@@ -74,6 +77,7 @@ class ZBlogPHP{
 	public $sidebar5=array();
 
 	public $usersdir = null;
+	public $validcodeurl = null;
 	
 	static public function GetInstance(){
 		if(!isset(self::$_zbp)){
@@ -129,10 +133,26 @@ class ZBlogPHP{
 			$fpreturn=$fpname($method, $args);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		//$this->ShowError(0);
+		$this->ShowError(81);
 	}
 
+	function __set($name, $value)
+	{
+		foreach ($GLOBALS['Filter_Plugin_Zbp_Set'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($name, $value);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+		$this->ShowError(81);
+	}
 
+	function __get($name) 
+	{
+		foreach ($GLOBALS['Filter_Plugin_Zbp_Get'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($name);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+		$this->ShowError(81);
+	}
 
 
 
@@ -166,6 +186,8 @@ class ZBlogPHP{
 
 		date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
 		header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
+		
+		$this->validcodeurl=$this->host . 'zb_system/script/c_validcode.php';
 
 		#创建User类
 		$this->user=new Member();
@@ -179,16 +201,13 @@ class ZBlogPHP{
 		if(!$this->isconnect)return false;
 
 		$this->LoadMembers();
-		
+
 		$this->LoadCategorys();
 		#$this->LoadTags();
 		$this->LoadModules();
 
 		$this->Verify();
-		
-		$this->LoadTemplates();
-		$this->CheckTemplate();
-		
+
 		$this->MakeTemplatetags();
 
 		$this->RegBuildModule('catalog','BuildModule_catalog');
@@ -203,11 +222,29 @@ class ZBlogPHP{
 
 		$this->RegBuildModule('navbar','BuildModule_navbar');
 
+		$this->RegBuildModule('tags','BuildModule_tags');
+
+		$this->RegBuildModule('statistics','BuildModule_statistics');
+
+		$this->RegBuildModule('authors','BuildModule_authors');		
+
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
+
+		if($GLOBALS['manage']==true) $this->LoadManage();
 
 		$this->isload=true;
 	}
+	
+	public function LoadManage(){
 
+		if($this->user->Status==ZC_MEMBER_STATUS_AUDITING) $this->ShowError(79);
+		if($this->user->Status==ZC_MEMBER_STATUS_LOCKED) $this->ShowError(79);
+		
+		$this->LoadTemplates();
+		$this->CheckTemplate();
+
+		foreach ($GLOBALS['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) $fpname();
+	}
 
 	#终止连接，释放资源
 	public function Terminate(){
@@ -240,7 +277,8 @@ class ZBlogPHP{
 						$this->option['ZC_MYSQL_PASSWORD'],
 						$this->option['ZC_MYSQL_NAME'],
 						$this->option['ZC_MYSQL_PRE'],
-						$this->option['ZC_MYSQL_PORT']					
+						$this->option['ZC_MYSQL_PORT'],
+						$this->option['ZC_MYSQL_PERSISTENT']
 					))==false){
 					$this->ShowError(67);
 				}			
@@ -275,7 +313,21 @@ class ZBlogPHP{
 	}
 
 
+	public function StartSession(){
+		if($this->issession==true)return false;
+		session_start();
+		$this->issession=true;
+		return true;
+	}
 
+
+	public function EndSession(){
+		if($this->issession==false)return false;
+		session_unset();
+		session_destroy();
+		$this->issession=false;
+		return true;
+	}	
 
 
 ################################################################################################################
@@ -372,7 +424,7 @@ class ZBlogPHP{
 
 		$this->option['ZC_BLOG_CLSID']=$this->guid;
 
-		if(!$this->option['ZC_YUN_SITE']){
+		if($this->option['ZC_YUN_SITE']!='SAE'&&$this->option['ZC_YUN_SITE']!='BAE2'){
 			$s="<?php\r\n";
 			$s.="return ";
 			$s.=var_export($this->option,true);
@@ -398,11 +450,11 @@ class ZBlogPHP{
 		if(empty($array))return false;
 		if(!is_array($array))return false;
 		foreach ($array as $key => $value) {
-			if($key=='ZC_PERMANENT_DOMAIN_ENABLE')continue;
-			if($key=='ZC_BLOG_HOST')continue;			
-			if($key=='ZC_BLOG_CLSID')continue;
+			//if($key=='ZC_PERMANENT_DOMAIN_ENABLE')continue;
+			//if($key=='ZC_BLOG_HOST')continue;			
+			//if($key=='ZC_BLOG_CLSID')continue;
 			if($key=='ZC_YUN_SITE')continue;
-			if($key=='ZC_BLOG_LANGUAGEPACK')continue;			
+			if($key=='ZC_BLOG_LANGUAGEPACK')continue;
 			if($key=='ZC_DATABASE_TYPE')continue;
 			if($key=='ZC_SQLITE_NAME')continue;
 			if($key=='ZC_SQLITE_PRE')continue;
@@ -414,6 +466,7 @@ class ZBlogPHP{
 			if($key=='ZC_MYSQL_PRE')continue;
 			if($key=='ZC_MYSQL_ENGINE')continue;
 			if($key=='ZC_MYSQL_PORT')continue;
+			if($key=='ZC_MYSQL_PERSISTENT')continue;			
 			$this->option[$key]=$value;
 		}
 
@@ -437,21 +490,21 @@ class ZBlogPHP{
 			$fpreturn=$fpname($action);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-
-		if(is_int($action)){
-			if ($this->user->Level > $action) {
+		if(!isset($GLOBALS['actions'][$action])){
+			if(is_numeric($action)){
+				if ($this->user->Level > $action) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+		}else{
+			if ($this->user->Level > $GLOBALS['actions'][$action]) {
 				return false;
 			} else {
 				return true;
-			}
+			}	
 		}
-
-		if ($this->user->Level > $GLOBALS['actions'][$action]) {
-			return false;
-		} else {
-			return true;
-		}	
-
 	}
 
 	function CheckRightsByLevel($level,$action){
@@ -537,7 +590,11 @@ function BuildModule(){
 			if(isset($this->modulefunc[$modfilename])){
 				$m=$this->modulesbyfilename[$modfilename];
 				if(function_exists($this->modulefunc[$modfilename])){
-					$m->Content=call_user_func($this->modulefunc[$modfilename]);
+					if(!isset($this->readymodules_parameters[$modfilename])){
+						$m->Content=call_user_func($this->modulefunc[$modfilename]);
+					}else{
+						$m->Content=call_user_func($this->modulefunc[$modfilename],$this->readymodules_parameters[$modfilename]);
+					}
 				}
 				$m->Save();
 			}
@@ -547,24 +604,22 @@ function BuildModule(){
 }
 
 function RegBuildModule($modfilename,$userfunc){
-
 	$this->modulefunc[$modfilename]=$userfunc;
-
 }
 
-function AddBuildModule($modfilename){
-
-	$this->readymodules[]=$modfilename;
+function AddBuildModule($modfilename,$parameters=null){
+	$this->readymodules[$modfilename]=$modfilename;
+	$this->readymodules_parameters[$modfilename]=$parameters;
 }
 
 function DelBuildModule($modfilename){
-
 	unset($this->readymodules[$modfilename]);
+	unset($this->readymodules_parameters[$modfilename]);
 }
 
 function AddBuildModuleAll(){
 	foreach ($this->modulesbyfilename as $key => $value) {
-		$this->readymodules[]=$key;
+		$this->readymodules[$key]=$key;
 	}
 }
 
@@ -593,7 +648,7 @@ function AddBuildModuleAll(){
 		$lv0=array();
 		$lv1=array();
 		$lv2=array();
-		$lv3=array();	
+		$lv3=array();
 		$array=$this->GetCategoryList(null,null,array('cate_Order'=>'ASC'),null,null);
 		if(count($array)==0)return false;
 		foreach ($array as $c) {
@@ -603,7 +658,11 @@ function AddBuildModuleAll(){
 			$l='lv' . $c->Level;
 			${$l}[$c->ParentID][]=$id;
 		}
-
+		
+		if(count($lv0)>0)$this->categorylayer=1;
+		if(count($lv1)>0)$this->categorylayer=2;
+		if(count($lv2)>0)$this->categorylayer=3;
+		if(count($lv3)>0)$this->categorylayer=4;
 
 		foreach ($lv0[0] as $id0) {
 			$this->categorysbyorder[$id0]=&$this->categorys[$id0];
@@ -717,20 +776,22 @@ function AddBuildModuleAll(){
 		unset($option['ZC_MYSQL_USERNAME']);
 		unset($option['ZC_MYSQL_PASSWORD']);
 		unset($option['ZC_MYSQL_NAME']);
-
+		
+		$this->templatetags['zbp']=&$this;
 		$this->templatetags['user']=&$this->user;
 		$this->templatetags['option']=&$option;
-		$this->templatetags['modules']=&$this->modulesbyfilename;		
+		$this->templatetags['categorys']=&$this->categorys;
+		$this->templatetags['modules']=&$this->modulesbyfilename;
 		$this->templatetags['title']=htmlspecialchars($this->title);
-		$this->templatetags['host']=$this->host;	
+		$this->templatetags['host']=$this->host;
 		$this->templatetags['path']=$this->path;
 		$this->templatetags['cookiespath']=$this->cookiespath;
-		$this->templatetags['name']=htmlspecialchars($this->name);	
+		$this->templatetags['name']=htmlspecialchars($this->name);
 		$this->templatetags['subname']=htmlspecialchars($this->subname);
-		$this->templatetags['theme']=$this->theme;
-		$this->templatetags['style']=$this->style;
+		$this->templatetags['theme']=&$this->theme;
+		$this->templatetags['style']=&$this->style;
 		$this->templatetags['language']=$this->option['ZC_BLOG_LANGUAGE'];
-		$this->templatetags['copyright']=$this->option['ZC_BLOG_COPYRIGHT'];		
+		$this->templatetags['copyright']=$this->option['ZC_BLOG_COPYRIGHT'];
 		$this->templatetags['zblogphp']=$this->option['ZC_BLOG_PRODUCT_FULL'];
 		$this->templatetags['zblogphphtml']=$this->option['ZC_BLOG_PRODUCT_FULLHTML'];
 		$this->templatetags['feedurl']=$this->host . 'feed.php';
@@ -739,6 +800,7 @@ function AddBuildModuleAll(){
 		$this->templatetags['socialcomment']=&$this->socialcomment;
 		$this->templatetags['header']=&$this->header;
 		$this->templatetags['footer']=&$this->footer;
+		$this->templatetags['validcodeurl']=&$this->validcodeurl;
 
 		$s=array(
 			$option['ZC_SIDEBAR_ORDER'],
@@ -761,11 +823,11 @@ function AddBuildModuleAll(){
 			$this->$s=$ms;
 			$ms=null;
 		}
-		$this->templatetags['sidebar']=$this->sidebar;
-		$this->templatetags['sidebar2']=$this->sidebar2;
-		$this->templatetags['sidebar3']=$this->sidebar3;
-		$this->templatetags['sidebar4']=$this->sidebar4;
-		$this->templatetags['sidebar5']=$this->sidebar5;
+		$this->templatetags['sidebar']=&$this->sidebar;
+		$this->templatetags['sidebar2']=&$this->sidebar2;
+		$this->templatetags['sidebar3']=&$this->sidebar3;
+		$this->templatetags['sidebar4']=&$this->sidebar4;
+		$this->templatetags['sidebar5']=&$this->sidebar5;
 
 		//创建模板类
 		$this->template = new Template();
@@ -810,7 +872,7 @@ function AddBuildModuleAll(){
 
 	public function BuildTemplate()
 	{
-		if($this->option['ZC_YUN_SITE'])return false;
+		if($this->option['ZC_YUN_SITE']!='SAE'&&$this->option['ZC_YUN_SITE']!='BAE2')return false;
 		//初始化模板
 		$this->LoadTemplates();
 
@@ -822,6 +884,19 @@ function AddBuildModuleAll(){
 
 		if(strpos($this->templates['comment'], 'id="cmt{$comment->ID}"')===false&&strpos($this->templates['comment'], 'id=\'cmt{$comment->ID}\'')===false){
 			$this->templates['comment']='<label id="cmt{$comment->ID}"></label>'. $this->templates['comment'];
+		}
+
+		if(strpos($this->templates['commentpost'], 'inpVerify')===false){
+			$verify='{if $option[\'ZC_COMMENT_VERIFY_ENABLE\'] && !$user.ID}<p><input type="text" name="inpVerify" id="inpVerify" class="text" value="" size="28" tabindex="4" /> <label for="inpVerify">'.$this->lang['msg']['validcode'].'(*)</label><img style="width:{$option[\'ZC_VERIFYCODE_WIDTH\']}px;height:{$option[\'ZC_VERIFYCODE_HEIGHT\']}px;cursor:pointer;" src="{$article.ValidCodeUrl}" alt="" title="" onclick="javascript:this.src=\'{$article.ValidCodeUrl}&amp;tm=\'+Math.random();"/></p>{/if}';
+			
+			if(strpos($this->templates['commentpost'], '<!--verify-->')!==false){
+				$this->templates['commentpost']=str_replace('<!--verify-->',$verify,$this->templates['commentpost']);
+			}elseif(strpos($this->templates['commentpost'], '</form>')!==false){
+				$this->templates['commentpost']=str_replace('</form>',$verify.'</form>',$this->templates['commentpost']);
+			}
+			else{
+				$this->templates['commentpost'] .= $verify;
+			}
 		}
 
 		$dir=$this->usersdir . 'theme/'. $this->theme .'/compile/';
@@ -1301,5 +1376,27 @@ function AddBuildModuleAll(){
 		}
 
 		throw new Exception($idortext);
+	}
+
+
+	function ShowValidCode($id=''){
+
+		foreach ($GLOBALS['Filter_Plugin_Zbp_ShowValidCode'] as $fpname => &$fpsignal) {
+			return $fpname($id);//*
+		}
+
+		$_vc = new ValidateCode();
+		$_vc->GetImg();
+		setcookie('zbpvalidcode' . md5($this->guid . $id), md5( $this->guid . date("Ymd") . $_vc->GetCode() ), null,$this->cookiespath);
+	}
+
+	function CheckValidCode($vaidcode,$id=''){
+
+		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckValidCode'] as $fpname => &$fpsignal) {
+			return $fpname($vaidcode,$id);//*
+		}
+
+		$original=GetVars('zbpvalidcode' . md5($this->guid . $id),'COOKIE');
+		if(md5( $this->guid . date("Ymd") . $vaidcode)==$original) return true;
 	}
 }

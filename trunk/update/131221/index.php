@@ -12,6 +12,8 @@ zbp_index_redirect_install();
 
 $zbp->Load();
 
+zbp_index_redirect_install(true);
+
 foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
 $url=GetRequestUri();

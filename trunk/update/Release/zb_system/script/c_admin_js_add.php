@@ -268,7 +268,13 @@ $(document).ready(function(){
 	})
 	
 	if (!$.support.leadingWhitespace) {
-		alert("<?php echo $lang['error']['74']?>");
+		<?php
+			if($option['ZC_ADMIN_HTML5_ENABLE']){
+				echo 'alert("' . $lang['error']['74'] . '");';
+			}else{
+				echo 'if($("div.divHeader,div.divHeader2").first().css("background").indexOf("zb_system")==-1){AddHeaderIcon("'. $bloghost .'zb_system/image/common/plugin_32.png");}';
+			}
+		?>
 	}
 });
 

@@ -1,6 +1,6 @@
 ﻿<files build='131221'>
 	<file name='feed.php' crc32='B14E262'/>
-	<file name='index.php' crc32='62E15CD1'/>
+	<file name='index.php' crc32='A0129152'/>
 	<file name='search.php' crc32='D3DAEAD6'/>
 	<file name='zb_system\cmd.php' crc32='DD40C46A'/>
 	<file name='zb_system\login.php' crc32='FA6C9489'/>
@@ -41,7 +41,7 @@
 	<file name='zb_system\defend\default\sidebar.php' crc32='FF17917'/>
 	<file name='zb_system\defend\default\single.php' crc32='21B132D7'/>
 	<file name='zb_system\function\c_system_admin.php' crc32='4EDE4396'/>
-	<file name='zb_system\function\c_system_base.php' crc32='2E9DA7CD'/>
+	<file name='zb_system\function\c_system_base.php' crc32='1E085D02'/>
 	<file name='zb_system\function\c_system_common.php' crc32='14ADFCE1'/>
 	<file name='zb_system\function\c_system_debug.php' crc32='855D255F'/>
 	<file name='zb_system\function\c_system_event.php' crc32='DBE7D489'/>
@@ -58,7 +58,7 @@
 	<file name='zb_system\function\lib\dbsqlite.php' crc32='47DA2EB9'/>
 	<file name='zb_system\function\lib\dbsqlite3.php' crc32='71DC921F'/>
 	<file name='zb_system\function\lib\member.php' crc32='B6101698'/>
-	<file name='zb_system\function\lib\metas.php' crc32='CA305A0'/>
+	<file name='zb_system\function\lib\metas.php' crc32='66F785ED'/>
 	<file name='zb_system\function\lib\module.php' crc32='76906D3'/>
 	<file name='zb_system\function\lib\network.php' crc32='3467161B'/>
 	<file name='zb_system\function\lib\networkfile_get_contents.php' crc32='19C7906E'/>
@@ -71,7 +71,7 @@
 	<file name='zb_system\function\lib\upload.php' crc32='AA609A65'/>
 	<file name='zb_system\function\lib\urlrule.php' crc32='A26A1246'/>
 	<file name='zb_system\function\lib\validcode.php' crc32='70965904'/>
-	<file name='zb_system\function\lib\zblogphp.php' crc32='9F06A238'/>
+	<file name='zb_system\function\lib\zblogphp.php' crc32='30F498BE'/>
 	<file name='zb_system\image\admin\app-logo.png' crc32='7D5E99CC'/>
 	<file name='zb_system\image\admin\arrow-3-right.png' crc32='9613739F'/>
 	<file name='zb_system\image\admin\arrow_turn_right.png' crc32='CF39218A'/>
@@ -211,5 +211,5 @@
 	<file name='zb_system\script\md5.js' crc32='4945A867'/>
 	<file name='zb_system\xml-rpc\index.php' crc32='818C122A'/>
 	<file name='zb_system\xml-rpc\wlwmanifest.xml' crc32='E5F264BA'/>
-	<file name='zb_users\language\SimpChinese.php' crc32='2CAE7CA7'/>
+	<file name='zb_users\language\SimpChinese.php' crc32='3445634C'/>
 </files>

@@ -14,10 +14,11 @@ error_reporting(0);
 
 $zbpvers=array();
 $zbpvers['130707']='1.0 Beta Build 130707';
-$zbpvers['131111']='1.0 Beta Build 131111';
+$zbpvers['131111']='1.0 Beta2 Build 131111';
+$zbpvers['131221']='1.1 Taichi Build 131221';
 
 #定义常量
-define('ZC_BLOG_VERSION', $zbpvers['131111']);
+define('ZC_BLOG_VERSION', $zbpvers['131221']);
 
 define('ZC_POST_TYPE_ARTICLE', 0);
 define('ZC_POST_TYPE_PAGE', 1);
@@ -29,6 +30,8 @@ define('ZC_POST_STATUS_AUDITING', 2);
 define('ZC_MEMBER_STATUS_NORMAL', 0);
 define('ZC_MEMBER_STATUS_AUDITING', 1);
 define('ZC_MEMBER_STATUS_LOCKED', 2);
+
+define('ZC_REWRITE_GO_ON', 'go on');
 
 function _stripslashes(&$val) {
 	if(!is_array($val)) return stripslashes($val);
@@ -49,6 +52,7 @@ $action=null;
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $usersdir = $blogpath . 'zb_users/';
 
+$manage=false;
 
 $option_zbusers=null;
 if(file_exists($usersdir . 'c_option.php')){
@@ -83,7 +87,7 @@ require $blogpath.'zb_system/function/c_system_event.php';
 
 
 #加载zbp 数据库类 对象
-$lib_array = array('zblogphp','dbsql','base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','urlrule','app','rss2');
+$lib_array = array('zblogphp','dbsql','base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','urlrule','app','rss2','validcode');
 foreach ($lib_array as $f) {
 	require $blogpath.'zb_system/function/lib/' . $f . '.php';
 }
@@ -333,39 +337,11 @@ foreach ($ap as $plugin) {
 ActivePlugin();	
 
 
-
-/*system plugin
-function zbp_index_cache_read(){
+function  zbp_index_redirect_install($yun=false){
 	global $zbp;
-	if(count($_GET)==0){
-		if($zbp->cache->HasKey('default_html')){
-			if((integer)$zbp->cache->default_html_time < (integer)$zbp->cache->refesh )return;
-			echo $zbp->cache->default_html;
-			RunTime();
-			die();
-		}
-	}
+	if(!$zbp->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/');}
+	if($yun&&$zbp->Config('system')->CountItem()==0){Redirect('./zb_install/');}
 }
-
-function zbp_index_cache_write(){
-	global $zbp;
-	if(count($_GET)==0){
-		$s=ob_get_clean();
-		echo $s;
-		$zbp->cache->default_html=$s;
-		$zbp->cache->default_html_time=time();
-		$zbp->SaveCache();
-	}
-}
-*/
-function  zbp_index_redirect_install(){
-	global $zbp;
-	if (!$zbp->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/');}
-}
-
-#Add_Filter_Plugin('Filter_Plugin_Index_Begin','zbp_index_redirect_install');
-#Add_Filter_Plugin('Filter_Plugin_Index_Begin','zbp_default_cache_read');
-#Add_Filter_Plugin('Filter_Plugin_Index_End','zbp_default_cache_write');
 
 
 /*autoload*/

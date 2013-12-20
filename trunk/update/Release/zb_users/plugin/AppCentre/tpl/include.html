@@ -1,0 +1,10 @@
+<?php
+
+#注册插件
+RegisterPlugin("<%appid%>","ActivePlugin_<%appid%>");
+
+function ActivePlugin_<%appid%>() {}
+function InstallPlugin_<%appid%>() {}
+function UninstallPlugin_<%appid%>() {}
+
+?>

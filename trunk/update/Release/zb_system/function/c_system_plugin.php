@@ -182,6 +182,34 @@ $Filter_Plugin_Zbp_Call=array();
 
 
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_Get
+'参数:$name
+'说明:Zbp类的魔术方法接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_Get=array();
+
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_Set
+'参数:$name,$value
+'说明:Zbp类的魔术方法接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_Set=array();
+
+
+
 
 
 /*
@@ -223,6 +251,36 @@ $Filter_Plugin_Zbp_CheckRightsByLevel=array();
 '**************************************************>
 */
 $Filter_Plugin_Zbp_ShowError=array();
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_ShowValidCode
+'参数:$id
+'说明:Zbp类的显示验证码接口，具有唯一性；
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_ShowValidCode=array();
+
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_CheckValidCode
+'参数:$vaidcode,$id
+'说明:Zbp类的比对验证码接口，具有唯一性；
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_CheckValidCode=array();
+
 
 
 
@@ -284,6 +342,19 @@ $Filter_Plugin_Zbp_BuildModule=array();
 */
 $Filter_Plugin_Zbp_Load=array();
 
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_LoadManage
+'参数:
+'说明:Zbp类的后台管理初始加载接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Zbp_LoadManage=array();
 
 
 
@@ -418,6 +489,23 @@ $Filter_Plugin_Cmd_Begin=array();
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Login_Header
+'参数:
+'说明:定义Login.php首页header接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Login_Header=array();
+
+
+
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Admin_Begin
 '参数:
 '说明:后台管理页的启动接口,可以拦截后台管理请求实现自己的管理
@@ -426,6 +514,19 @@ $Filter_Plugin_Cmd_Begin=array();
 */
 $Filter_Plugin_Admin_Begin=array();
 
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_End
+'参数:
+'说明:后台管理页的终结接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Admin_End=array();
 
 
 
@@ -1246,6 +1347,19 @@ $Filter_Plugin_DelModule_Succeed=array();
 '**************************************************>
 */
 $Filter_Plugin_Post_Call=array();
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Post_CommentPostUrl
+'参数:$post
+'说明:Post类的CommentPostUrl接口
+'调用:返回CommentPostUrl值.
+'**************************************************>
+*/
+$Filter_Plugin_Post_CommentPostUrl=array();
 
 
 

@@ -62,7 +62,7 @@ class Upload extends Base{
 		if(!file_exists($zbp->usersdir . $this->Dir)){
 			@mkdir($zbp->usersdir . $this->Dir, 0777,true);	
 		}
-		$fn=iconv("UTF-8","GBK",$this->Name);
+		$fn=iconv("UTF-8","GBK//IGNORE",$this->Name);
 		@move_uploaded_file($tmp, $zbp->usersdir . $this->Dir . $fn);
 		return true;
 	}

@@ -4,15 +4,18 @@ require '../../../../zb_system/function/c_system_base.php';
 
 $zbp->Load();
 
-if(!$zbp->CheckRights('UploadPst'))die();
+if(!$zbp->CheckRights('UploadPst')){
+	echo "{'url':'','title':'','original':'','state':'" . $lang['error'][6] . "'}";
+	die();
+}
 
 
-    //上传配置
-    $config = array(
-        "savePath" => $zbp->usersdir . 'upload/',
-        "maxSize" => $zbp->option['ZC_UPLOAD_FILESIZE'],
-        "allowFiles" => $zbp->option['ZC_UPLOAD_FILETYPE']
-    );
+//上传配置
+$config = array(
+	"savePath" => $zbp->usersdir . 'upload/',
+	"maxSize" => $zbp->option['ZC_UPLOAD_FILESIZE'],
+	"allowFiles" => $zbp->option['ZC_UPLOAD_FILETYPE']
+);
 
 	
 foreach ($_FILES as $key => $value) {
