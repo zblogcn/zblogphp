@@ -147,8 +147,15 @@ class Post extends Base{
 				}
 				return $value;
 			case 'CommentPostUrl':
+				foreach ($GLOBALS['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
+					$fpreturn=$fpname($this);
+					if($fpreturn)return $fpreturn;
+				}			
 				$key='&amp;key=' . md5($zbp->guid . $this->ID . date('Y-m-d'));
 				return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
+				break;
+			case 'ValidCodeUrl':
+				return $zbp->validcodeurl . '?id=cmt';
 				break;
 			case 'Prev':
 				static $_prev=null;
@@ -173,7 +180,7 @@ class Post extends Base{
 				$articles=$zbp->GetPostList(
 					array('*'),
 					array(array('=','log_Type',0),array('=','log_Status',0),array('>','log_PostTime',$this->PostTime)),
-					array('log_PostTime'=>'DESC'),
+					array('log_PostTime'=>'ASC'),
 					array(1),
 					null
 				);

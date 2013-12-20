@@ -318,7 +318,7 @@ class App
 		$id=$xml->id;
 		$dir=$zbp->path . 'zb_users/' . $type . '/';# . $id . '/';
 
-		if(!file_exists($dir . $id . '/'))@mkdir($dir . $id . '/');
+		if(!file_exists($dir . $id . '/'))@mkdir($dir . $id . '/',0777,true);
 
 		foreach ($xml->folder as $folder) {
 			$f=$dir . $folder->path;
@@ -330,6 +330,7 @@ class App
 		foreach ($xml->file as $file) {
 			$f=$dir . $file->path;
 			@file_put_contents($f, base64_decode($file->stream));
+			@chmod($f,0777);
 		}
 
 		return true;

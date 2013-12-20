@@ -12,12 +12,16 @@ zbp_index_redirect_install();
 
 $zbp->Load();
 
+zbp_index_redirect_install(true);
+
 foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
 $url=GetRequestUri();
 
 if($url==$cookiespath||$url==$cookiespath . 'index.php'){
 	ViewList(null,null,null,null,null);
+}elseif(isset($_GET['rewrite'])){
+	ViewAuto($_GET['rewrite']);
 }elseif(isset($_GET['id'])||isset($_GET['alias'])){
 	ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
 }elseif(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])){

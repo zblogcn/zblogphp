@@ -38,13 +38,13 @@ if(count($_POST)>0){
     @copy($zbp->usersdir . 'plugin/AppCentre/images/plugin.png',$zbp->usersdir . 'plugin/' . $app->id . '/logo.png');
 
     if(trim($_POST['app_path'])){
-      $file = file_get_contents('tpl/main.php');
+      $file = file_get_contents('tpl/main.html');
       $file = str_replace("<%appid%>", $app->id, $file);
       $path=$zbp->usersdir . 'plugin/' . $app->id . '/' . trim($_POST['app_path']);
       @file_put_contents($path, $file);
     }
     if(trim($_POST['app_include'])){
-      $file = file_get_contents('tpl/include.php');
+      $file = file_get_contents('tpl/include.html');
       $file = str_replace("<%appid%>", $app->id, $file);
       $path=$zbp->usersdir . 'plugin/' . $app->id . '/include.php';
       @file_put_contents($path, $file);

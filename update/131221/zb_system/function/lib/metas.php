@@ -32,6 +32,10 @@ class Metas {
 	public function HasKey($name){
 		return array_key_exists($name,$this->Data);
 	}
+	
+	public function CountItem(){
+		return count($this->Data);
+	}
 
 	public function Del($name){
 

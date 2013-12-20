@@ -107,11 +107,12 @@ background:#ffffdd;
 
 
 /*后台顶部*/
-header {margin-bottom:5px;height:85px; padding:0; background:#3a6ea5; position: relative;}
-header .top { }
+.header {margin-bottom:5px;height:85px; padding:0; background:#3a6ea5; position: relative;}
+.header .top { }
 
 /**/
-.logo { width:190px; height:62px; padding:10px 0 0 0; left:20px;}
+.logo { width:200px; height:70px; padding:10px 0 0 0; left:20px;}
+.logo img{ width:200px; height:70px; padding:0 0 0 0;background:url("../image/admin/logo.png") center center no-repeat ;}
 /**/
 .user { position: absolute; right:13px; top:10px; width:400px; height:40px; text-align:right; color:#ffffff;}
 .user #avatar { float:right; width:40px; height:40px; margin-left:10px;margin-top:0px;}

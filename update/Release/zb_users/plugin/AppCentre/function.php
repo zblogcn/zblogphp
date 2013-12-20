@@ -2,12 +2,20 @@
 
 function AppCentre_SubMenus($id){
 	//m-now
+	global $zbp;
 
+	
 	echo '<a href="main.php"><span class="m-left '.($id==1?'m-now':'').'">浏览在线应用</span></a>';
 	echo '<a href="main.php?method=check"><span class="m-left '.($id==2?'m-now':'').'">检查应用更新</span></a>';
 	echo '<a href="update.php"><span class="m-left '.($id==3?'m-now':'').'">系统更新与校验</span></a>';
-	echo '<a href="client.php"><span class="m-left '.($id==9?'m-now':'').'">应用中心商城</span></a>';
 
+
+	if($zbp->Config('AppCentre')->shop_username&&$zbp->Config('AppCentre')->shop_password){
+		echo '<a href="client.php"><span class="m-left '.($id==9?'m-now':'').'">我的应用仓库</span></a>';
+	}else{
+		echo '<a href="client.php"><span class="m-left '.($id==9?'m-now':'').'">登录应用商城</span></a>';
+	}
+	
 	echo '<a href="setting.php"><span class="m-right '.($id==4?'m-now':'').'">设置</span></a>';
 	echo '<a href="plugin_edit.php"><span class="m-right '.($id==5?'m-now':'').'">新建插件</span></a>';
 	echo '<a href="theme_edit.php"><span class="m-right '.($id==6?'m-now':'').'">新建主题</span></a>';
@@ -59,16 +67,16 @@ function Server_Open($method){
 		case 'checksilent':
 			header('Content-type: application/x-javascript; Charset=utf-8');
 			ob_clean();
-			$s=Server_SendRequest(APPCENTRE_URL .'?blogsilent=1&check=' . urlencode(GetCheckQueryString())) . '';
+			$s=Server_SendRequest(APPCENTRE_URL .'?blogsilent=1'. ($zbp->Config('AppCentre')->checkbeta?'&betablog=1':'') .'&check=' . urlencode(GetCheckQueryString())) . '';
 			if(strpos($s,';')!==false){
 				$newversion=substr($s,0,6);
 				$s=str_replace(($newversion.';'),'',$s);
 				if((int)$newversion>(int)$blogversion){
-					echo '$(".main").prepend("<div class=\'hint\'><p class=\'hint hint_tips\'>提示:Z-BlogPHP有新版本,请用APP应用中心插件的“系统更新与校验”升级'.$newversion.'版.</p></div>")';
+					echo '$(".main").prepend("<div class=\'hint\'><p class=\'hint hint_tips\'>提示:Z-BlogPHP有新版本,请用APP应用中心插件的<a href=\'../../zb_users/plugin/AppCentre/update.php\'>“系统更新与校验”</a>升级'.$newversion.'版('. ($zbp->Config('AppCentre')->checkbeta?'Beta':'') .').</p></div>");';
 				}
 			}
 			if($s!=0){
-				echo '$(".main").prepend("<div class=\'hint\'><p class=\'hint hint_tips\'>提示:有'.$s.'个应用需要更新,请在应用中心更新.</p></div>")';
+				echo '$(".main").prepend("<div class=\'hint\'><p class=\'hint hint_tips\'>提示:有'.$s.'个应用需要更新,请在应用中心的<a href=\'../../zb_users/plugin/AppCentre/main.php?method=check\'>“检查应用更新”</a>页升级.</p></div>");';
 			}
 			die();
 			break;
@@ -88,6 +96,17 @@ function Server_Open($method){
 			$data["zba"]=$app->Pack();
 			$s=Server_SendRequest(APPCENTRE_URL .'?submit=' . urlencode(GetVars('id')),$data);
 			return $s;
+		case 'shopvaild':
+			$data=array();
+			$data["shop_username"]=GetVars("shop_username");
+			$data["shop_password"]=md5(GetVars("shop_password"));
+			$s=Server_SendRequest(APPCENTRE_URL .'?shopvaild',$data);
+			return $s;
+			break;
+		case 'shoplist':
+			$s=Server_SendRequest(APPCENTRE_URL .'?shoplist');
+			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
+			break;
 		default:
 			# code...
 			break;
@@ -108,7 +127,16 @@ function Server_SendRequest($url,$data=array()){
 	if($un&&$ps){
 		$c="username=".urlencode($un) ."; password=".urlencode($ps);
 	}
+	
+	$shopun=$zbp->Config('AppCentre')->shop_username;
+	$shopps=$zbp->Config('AppCentre')->shop_password;
 
+	if($shopun&&$shopps){
+		if($c!=='')$c.='; ';
+		$c.="shop_username=".urlencode($shopun) ."; shop_password=".urlencode($shopps);
+	}
+
+	
 	if($data){//POST
 		$data=http_build_query($data);
 		$opts=array(
@@ -148,6 +176,14 @@ function Server_SendRequest_CUrl($url,$data=array()){
 		$c="username=".urlencode($un) ."; password=".urlencode($ps);
 	}
 	
+	$shopun=$zbp->Config('AppCentre')->shop_username;
+	$shopps=$zbp->Config('AppCentre')->shop_password;
+
+	if($shopun&&$shopps){
+		if($c!=='')$c.='; ';
+		$c.="shop_username=".urlencode($shopun) ."; shop_password=".urlencode($shopps);
+	}
+	
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 120);
@@ -170,7 +206,9 @@ function CreateOptoinsOfVersion($default){
 	global $zbp;
 
 	$s=null;
-	foreach ($GLOBALS['zbpvers'] as $key => $value) {
+	$array=$GLOBALS['zbpvers'];
+	krsort($array);
+	foreach ($array as $key => $value) {
 		$s .= '<option value="' . $key . '" ' . ($default==$key?'selected="selected"':'') . ' >' . $value . '</option>';
 	}
 	return $s;

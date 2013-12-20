@@ -134,6 +134,11 @@ function VerifyMessage() {
 		"replyid":intReplyID
 		},
 		function(data){
+		
+			$("#inpId").parent("form").find(":submit").removeClass("loading");
+			$("#inpId").parent("form").find(":submit").removeAttr("disabled");
+			$("#inpId").parent("form").find(":submit").val(strSubmit);
+		
 			var s =data;
 			if((s.search("faultCode")>0)&&(s.search("faultString")>0))
 			{
@@ -148,16 +153,12 @@ function VerifyMessage() {
 					$(s).insertAfter("#AjaxComment"+intReplyID);
 				}
 				window.location="#"+cmt;
+				$("#txaArticle").val("");
+				
+				SaveRememberInfo();
+				CommentComplete();
 			}
 
-			$("#inpId").parent("form").find(":submit").removeClass("loading");
-			$("#inpId").parent("form").find(":submit").removeAttr("disabled");
-			$("#inpId").parent("form").find(":submit").val(strSubmit);
-
-			$("#txaArticle").val("");
-			
-			SaveRememberInfo();
-			CommentComplete();
 		}
 	);
 

@@ -31,6 +31,10 @@ if($q){
 	Redirect('./');
 }
 
+if(!($zbp->CheckRights('ArticleAll')&&$zbp->CheckRights('PageAll'))){
+	$w[]=array('=','log_Status',0);
+}
+
 $array=$zbp->GetArticleList(
 	'',
 	$w,

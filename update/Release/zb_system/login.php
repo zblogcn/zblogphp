@@ -19,7 +19,13 @@ $zbp->Load();
 	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
 	<script src="script/common.js" type="text/javascript"></script>
 	<script src="script/md5.js" type="text/javascript"></script>
+	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 	<title><?php echo $blogname . '-' . $lang['msg']['login']?></title>
+<?php
+
+foreach ($GLOBALS['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {$fpname();}
+
+?>
 </head>
 <body>
 <div class="bg">

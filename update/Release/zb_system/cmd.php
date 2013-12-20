@@ -21,11 +21,11 @@ switch ($action) {
 		Redirect('../');
 		break;
 	case 'admin':
-		Redirect('admin/');
+		Redirect('admin/?act=admin');
 		break;	
 	case 'verify':
 		if(VerifyLogin()){
-			header('Location:admin/');
+			header('Location:admin/?act=admin');
 		}else{
 			Redirect('../');
 		}

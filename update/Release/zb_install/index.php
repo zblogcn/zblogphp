@@ -21,11 +21,10 @@ define('error','<span class="error"></span>');
 $zblogstep=(int)GetVars('step');
 if($zblogstep=="")$zblogstep=1;
 
-if($zbp->option['ZC_DATABASE_TYPE']&&(!$zbp->option['ZC_YUN_SITE'])){
+if( ($zbp->option['ZC_DATABASE_TYPE']!=='') && ($zbp->option['ZC_YUN_SITE']=='') ){
 	$zblogstep=0;
-}elseif($zbp->option['ZC_DATABASE_TYPE']&&($zbp->option['ZC_YUN_SITE'])){
-	$zbp->Initialize();
-	if(count($zbp->members)>0)$zblogstep=0;
+}elseif( ($zbp->option['ZC_DATABASE_TYPE']) && ($zbp->option['ZC_YUN_SITE']) ){
+	if($zbp->Config('system')->CountItem()>0)$zblogstep=0;
 }
 ?>
 <!DOCTYPE HTML>
@@ -648,6 +647,7 @@ function InsertInfo(){
 
   $cate = new Category();
   $cate->Name='未分类';
+  $cate->Alias='uncategorized';
   $cate->Save();
   
   $t=new Module();
@@ -742,7 +742,7 @@ function InsertInfo(){
   $t->SidebarID=0;
   $t->Content="";
   $t->HtmlID="divStatistics";
-  $t->Type="div";
+  $t->Type="ul";
   $t->Save();
 
 
@@ -753,7 +753,7 @@ function InsertInfo(){
   $t->FileName="favorite";
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Content='<li><a href="http://bbs.rainbowsoft.org/" target="_blank">ZBlogger社区</a></li><li><a href="http://app.rainbowsoft.org/" target="_blank">Z-Blog应用中心</a></li><li><a href="http://t.qq.com/zblogcn" target="_blank">Z-Blog微博</a></li>';
+  $t->Content='<li><a href="http://bbs.rainbowsoft.org/" target="_blank">ZBlogger社区</a></li><li><a href="http://app.rainbowsoft.org/" target="_blank">Z-Blog应用中心</a></li><li><a href="http://weibo.com/zblogcn" target="_blank">Z-Blog新浪官微</a></li><li><a href="http://t.qq.com/zblogcn" target="_blank">Z-Blog腾讯官微</a></li>';
   $t->HtmlID="divFavorites";
   $t->Type="ul";
   $t->Save();
