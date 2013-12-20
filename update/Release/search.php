@@ -19,6 +19,7 @@ foreach ($GLOBALS['Filter_Plugin_Search_Begin'] as $fpname => &$fpsignal) {$fpna
 $q=trim(strip_tags(GetVars('q','GET')));
 
 $article = new Post;
+$article->ID=0;
 $article->Title=$lang['msg']['search'] . '“' . $q . '”';
 $article->IsLock=true;
 $article->Type=ZC_POST_TYPE_PAGE;
@@ -52,7 +53,14 @@ $zbp->header .= '<meta name="robots" content="none" />' . "\r\n";
 $zbp->template->SetTags('title',$article->Title);
 $zbp->template->SetTags('article',$article);
 $zbp->template->SetTags('type',$article->type=0?'article':'page');
+$zbp->template->SetTags('page',1);
+$zbp->template->SetTags('pagebar',null);
+$zbp->template->SetTags('comments',array());
 $zbp->template->SetTemplate($article->Template);
+
+foreach ($GLOBALS['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
+	$fpreturn=$fpname($zbp->template);
+}
 
 $zbp->template->Display();
 
