@@ -15,6 +15,7 @@ if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
 $blogtitle='应用中心-系统更新与校验';
 
 $checkbegin=false;
+$nowxml='';
 
 
 if(GetVars('update','GET')!=''){
@@ -49,7 +50,8 @@ if(GetVars('restore','GET')!=''){
 
 if(GetVars('check','GET')=='now'){
   $r = AppCentre_GetHttpContent(APPCENTRE_SYSTEM_UPDATE . array_search(ZC_BLOG_VERSION,$zbpvers) .'.xml');
-  file_put_contents($zbp->usersdir . 'cache/now.xml', $r);
+  //file_put_contents($zbp->usersdir . 'cache/now.xml', $r);
+  $nowxml=$r;
   $checkbegin=true;
 }
 
@@ -100,11 +102,13 @@ if($newbuild-$nowbuild>0){
                   <th id="_s">状态</th>
                 </tr>
 <?php
-if (file_exists($zbp->usersdir . 'cache/now.xml')) {
+//if (file_exists($zbp->usersdir . 'cache/now.xml')) {
+if ($nowxml!=''){
 
   $i=0;
   libxml_use_internal_errors(true);
-  $xml=simplexml_load_file($zbp->usersdir . 'cache/now.xml');
+  //$xml=simplexml_load_file($zbp->usersdir . 'cache/now.xml');
+  $xml=simplexml_load_string($nowxml);
   if($xml){
   foreach ($xml->children() as $file) {
   	if(file_exists($zbp->path . str_replace('\\','/',$file['name']))){
@@ -125,7 +129,7 @@ if (file_exists($zbp->usersdir . 'cache/now.xml')) {
   }
   }
   echo '<tr><th colspan="2">'.$i.'个文件不同或被修改过.</tr>';
-  @unlink($zbp->usersdir . 'cache/now.xml');
+  //@unlink($zbp->usersdir . 'cache/now.xml');
 }
 ?>
 

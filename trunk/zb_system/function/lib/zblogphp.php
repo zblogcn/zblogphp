@@ -872,7 +872,7 @@ function AddBuildModuleAll(){
 
 	public function BuildTemplate()
 	{
-		if($this->option['ZC_YUN_SITE']!='SAE'&&$this->option['ZC_YUN_SITE']!='BAE2')return false;
+		if($this->option['ZC_YUN_SITE']=='SAE'||$this->option['ZC_YUN_SITE']=='BAE2')return false;
 		//初始化模板
 		$this->LoadTemplates();
 
