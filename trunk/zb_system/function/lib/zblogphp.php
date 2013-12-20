@@ -424,7 +424,7 @@ class ZBlogPHP{
 
 		$this->option['ZC_BLOG_CLSID']=$this->guid;
 
-		if($this->option['ZC_YUN_SITE']!='SAE'&&$this->option['ZC_YUN_SITE']!='BAE2'){
+		if( strpos('|SAE|BAE2|ACE|', '|'.$this->option['ZC_YUN_SITE'].'|')===false ){
 			$s="<?php\r\n";
 			$s.="return ";
 			$s.=var_export($this->option,true);
@@ -870,9 +870,9 @@ function AddBuildModuleAll(){
 		}
 	}
 
-	public function BuildTemplate()
-	{
-		if($this->option['ZC_YUN_SITE']=='SAE'||$this->option['ZC_YUN_SITE']=='BAE2')return false;
+	public function BuildTemplate(){
+	
+		if( strpos('|SAE|BAE2|ACE|', '|'.$this->option['ZC_YUN_SITE'].'|')>0 )return false;
 		//初始化模板
 		$this->LoadTemplates();
 
