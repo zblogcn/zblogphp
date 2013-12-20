@@ -22,7 +22,7 @@
 	<file name='zb_system\defend\arial.ttf' crc32='590DC6C3'/>
 	<file name='zb_system\defend\error.html' crc32='39FB2966'/>
 	<file name='zb_system\defend\option.php' crc32='CC05956A'/>
-	<file name='zb_system\defend\thanks.html' crc32='F9AD1E51'/>
+	<file name='zb_system\defend\thanks.html' crc32='8734E023'/>
 	<file name='zb_system\defend\createtable\mysql.sql' crc32='5D78A4FC'/>
 	<file name='zb_system\defend\createtable\sqlite.sql' crc32='DE148D51'/>
 	<file name='zb_system\defend\createtable\sqlite3.sql' crc32='ACE9B368'/>
@@ -41,11 +41,11 @@
 	<file name='zb_system\defend\default\sidebar.php' crc32='FF17917'/>
 	<file name='zb_system\defend\default\single.php' crc32='21B132D7'/>
 	<file name='zb_system\function\c_system_admin.php' crc32='4EDE4396'/>
-	<file name='zb_system\function\c_system_base.php' crc32='1E085D02'/>
+	<file name='zb_system\function\c_system_base.php' crc32='C9A587AD'/>
 	<file name='zb_system\function\c_system_common.php' crc32='14ADFCE1'/>
 	<file name='zb_system\function\c_system_debug.php' crc32='855D255F'/>
 	<file name='zb_system\function\c_system_event.php' crc32='DBE7D489'/>
-	<file name='zb_system\function\c_system_misc.php' crc32='AEF266BF'/>
+	<file name='zb_system\function\c_system_misc.php' crc32='2413A7C8'/>
 	<file name='zb_system\function\c_system_plugin.php' crc32='BEC5384F'/>
 	<file name='zb_system\function\lib\app.php' crc32='7A773CF3'/>
 	<file name='zb_system\function\lib\base.php' crc32='EDE91E6F'/>
@@ -211,5 +211,5 @@
 	<file name='zb_system\script\md5.js' crc32='4945A867'/>
 	<file name='zb_system\xml-rpc\index.php' crc32='818C122A'/>
 	<file name='zb_system\xml-rpc\wlwmanifest.xml' crc32='E5F264BA'/>
-	<file name='zb_users\language\SimpChinese.php' crc32='3445634C'/>
+	<file name='zb_users\language\SimpChinese.php' crc32='8E1B628B'/>
 </files>
