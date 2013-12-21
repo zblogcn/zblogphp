@@ -4,7 +4,7 @@
 <div class="nevbarbg">
   <div class="navbar">
     <ul>
-      <?php  echo $modules['navbar']->Content;  ?>
+      <?php  if(isset($modules['navbar'])){echo $modules['navbar']->Content;}  ?>
     </ul>
   </div>
 </div>

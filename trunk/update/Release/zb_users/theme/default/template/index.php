@@ -10,7 +10,7 @@
 		</div>
 		<div id="divNavBar">
 <ul>
-{$modules['navbar'].Content}
+{module:navbar}
 </ul>
 		</div>
 		<div id="divMain">

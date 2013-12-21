@@ -491,10 +491,13 @@ function ViewPost($id,$alias,$isrewrite=false){
 		$zbp->LoadTagsByIDString($article->Tag);
 	}
 
-	$article->ViewNums +=1;
-	$sql = $zbp->db->sql->Update($zbp->table['Post'],array('log_ViewNums'=>$article->ViewNums),array(array('=','log_ID',$article->ID)));
-	$zbp->db->Update($sql);
-
+	if(isset($zbp->option['ZC_VIEWNUMS_TURNOFF'])){
+		if(!$zbp->option['ZC_VIEWNUMS_TURNOFF']){
+			$article->ViewNums +=1;
+			$sql = $zbp->db->sql->Update($zbp->table['Post'],array('log_ViewNums'=>$article->ViewNums),array(array('=','log_ID',$article->ID)));
+			$zbp->db->Update($sql);
+		}
+	}
 
 	$pagebar=new Pagebar('javascript:GetComments(\''.$article->ID.'\',\'{%page%}\')',false);
 	$pagebar->PageCount=$zbp->commentdisplaycount;
