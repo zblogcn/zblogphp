@@ -519,7 +519,7 @@ function ViewPost($id,$alias,$isrewrite=false){
 	}
 	$comments2=$zbp->GetCommentList(
 		array('*'),
-		array(array('array',$rootid),array('=','comm_IsChecking',0)),
+		array(array('array',$rootid),array('=','comm_IsChecking',0),array('=','comm_LogID',$article->ID)),
 		array('comm_ID'=>($zbp->option['ZC_COMMENT_REVERSE_ORDER']?'DESC':'ASC')),
 		null,
 		null
@@ -2161,7 +2161,7 @@ function BuildModule_tags(){
 	ksort($array2);
 	
 	foreach ($array2 as $tag) {
-		$s.='<li><a href="'. $tag->Url .'">'. $tag->Name .'</a> <span class="tag-count">('. $tag->Count .')</span></a></li>';
+		$s.='<li><a href="'. $tag->Url .'">'. $tag->Name .'<span class="tag-count"> ('. $tag->Count .')</span></a></li>';
 	}
 	return $s;
 }
@@ -2182,7 +2182,7 @@ function BuildModule_authors($level=4){
 	);
 
 	foreach ($array as $member) {
-		$s.= '<li><a href="'. $member->Url .'">' . $member->Name . '<span class="article-nums"> ('. $member->Articles .')</span></li>';
+		$s.= '<li><a href="'. $member->Url .'">' . $member->Name . '<span class="article-nums"> ('. $member->Articles .')</span></a></li>';
 	}
 	return $s;
 }

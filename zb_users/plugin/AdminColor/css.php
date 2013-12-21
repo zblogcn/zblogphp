@@ -11,11 +11,11 @@ if(isset($_GET['setcolor'])){
 		$zbp->Config('AdminColor')->color=(int)$_GET['setcolor'];
 		$zbp->SaveConfig('AdminColor');
 		setcookie("admincolor", (int)$_GET['setcolor'], time()+3600*24*365,$zbp->cookiespath);
-		Redirect($zbp->host . 'zb_system/admin/');
+		Redirect($zbp->host . 'zb_system/cmd.php?act=admin');
 		die();
 	}else{
 		setcookie("admincolor", (int)$_GET['setcolor'], time()+3600*24*365,$zbp->cookiespath);
-		Redirect($zbp->host . 'zb_system/admin/');
+		Redirect($zbp->host . 'zb_system/cmd.php?act=admin');
 		die();
 	}
 }

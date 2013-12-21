@@ -44,7 +44,7 @@
 	<file name='zb_system\function\c_system_base.php' crc32='C9A587AD'/>
 	<file name='zb_system\function\c_system_common.php' crc32='14ADFCE1'/>
 	<file name='zb_system\function\c_system_debug.php' crc32='855D255F'/>
-	<file name='zb_system\function\c_system_event.php' crc32='24F88E38'/>
+	<file name='zb_system\function\c_system_event.php' crc32='C701A560'/>
 	<file name='zb_system\function\c_system_misc.php' crc32='2413A7C8'/>
 	<file name='zb_system\function\c_system_plugin.php' crc32='BEC5384F'/>
 	<file name='zb_system\function\lib\app.php' crc32='7A773CF3'/>
@@ -71,7 +71,7 @@
 	<file name='zb_system\function\lib\upload.php' crc32='AA609A65'/>
 	<file name='zb_system\function\lib\urlrule.php' crc32='A26A1246'/>
 	<file name='zb_system\function\lib\validcode.php' crc32='70965904'/>
-	<file name='zb_system\function\lib\zblogphp.php' crc32='CF925D89'/>
+	<file name='zb_system\function\lib\zblogphp.php' crc32='CCE5E4C5'/>
 	<file name='zb_system\image\admin\app-logo.png' crc32='7D5E99CC'/>
 	<file name='zb_system\image\admin\arrow-3-right.png' crc32='9613739F'/>
 	<file name='zb_system\image\admin\arrow_turn_right.png' crc32='CF39218A'/>
