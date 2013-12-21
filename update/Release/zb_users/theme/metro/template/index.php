@@ -4,7 +4,7 @@
 <div class="nevbarbg">
   <div class="navbar">
     <ul>
-      {$modules['navbar'].Content}
+      {module:navbar}
     </ul>
   </div>
 </div>

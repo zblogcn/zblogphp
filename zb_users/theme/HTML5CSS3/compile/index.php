@@ -3,7 +3,7 @@
 <header>
 <h2><a href="<?php  echo $host;  ?>"><?php  echo $name;  ?></a> <sup><?php  echo $subname;  ?></sup></h2>
 <nav>
-<ul><?php  echo $modules['navbar']->Content;  ?></ul>
+<ul><?php  if(isset($modules['navbar'])){echo $modules['navbar']->Content;}  ?></ul>
 </nav>
 </header>
 <section>

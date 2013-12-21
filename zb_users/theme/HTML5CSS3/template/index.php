@@ -3,7 +3,7 @@
 <header>
 <h2><a href="{$host}">{$name}</a> <sup>{$subname}</sup></h2>
 <nav>
-<ul>{$modules['navbar'].Content}</ul>
+<ul>{module:navbar}</ul>
 </nav>
 </header>
 <section>

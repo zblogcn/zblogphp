@@ -160,5 +160,6 @@ return array(
 	'ZC_CODEMIRROR_ENABLE' => true,
 	'ZC_HTTP_LASTMODIFIED' => false,
 	'ZC_MODULE_CATALOG_STYLE'=>0,
+	'ZC_VIEWNUMS_TURNOFF' => false,
 )
 ?>

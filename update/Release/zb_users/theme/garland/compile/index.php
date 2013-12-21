@@ -2,7 +2,7 @@
 </head>
 <body class="multi default">
 <?php  include $this->GetTemplate('c_top');  ?>
-		<div id="mission"><?php  echo $modules['new']->Content;  ?></div><ins></ins>
+		<div id="mission"><?php  if(isset($modules['new'])){echo $modules['new']->Content;}  ?></div><ins></ins>
 <?php  foreach ( $articles as $article) { ?> 
 <?php if ($article->IsTop) { ?>
 <?php  include $this->GetTemplate('post-istop');  ?>
