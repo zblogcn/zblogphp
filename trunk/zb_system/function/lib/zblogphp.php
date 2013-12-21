@@ -872,7 +872,7 @@ function AddBuildModuleAll(){
 
 	public function BuildTemplate(){
 	
-		if( strpos('|SAE|BAE2|ACE|', '|'.$this->option['ZC_YUN_SITE'].'|')>0 )return false;
+		if( strpos('|SAE|BAE2|ACE|', '|'.$this->option['ZC_YUN_SITE'].'|')!==false )return false;
 		//初始化模板
 		$this->LoadTemplates();
 
