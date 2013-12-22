@@ -200,6 +200,9 @@ class Post extends Base{
 
 	function Save(){
         global $zbp;
+		if($this->Type==ZC_POST_TYPE_ARTICLE){
+			if($this->Template==GetValueInArray($this->Category->GetDataArray(),'LogTemplate'))$this->Data['Template'] = '';
+		}
 		if($this->Template==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->Data['Template'] = '';
 		return parent::Save();
 	}

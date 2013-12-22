@@ -106,10 +106,10 @@ function ViewAuto($url){
 			return null;
 	}
 
-	$r=UrlRule::Rewrite_url($zbp->option['ZC_PAGE_REGEX'],'page');
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_ARTICLE_REGEX'],'article');
 	$m=array();
 	if(preg_match($r,$url,$m)==1){
-		if(strpos($zbp->option['ZC_PAGE_REGEX'],'{%id%}')!==false){
+		if(strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%id%}')!==false){
 			$result=ViewPost($m[1],null,$rewrite_go_on);
 		}else{
 			$result=ViewPost(null,$m[1],$rewrite_go_on);
@@ -119,10 +119,10 @@ function ViewAuto($url){
 		return null;
 	}
 	
-	$r=UrlRule::Rewrite_url($zbp->option['ZC_ARTICLE_REGEX'],'article');
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_PAGE_REGEX'],'page');
 	$m=array();
 	if(preg_match($r,$url,$m)==1){
-		if(strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%id%}')!==false){
+		if(strpos($zbp->option['ZC_PAGE_REGEX'],'{%id%}')!==false){
 			$result=ViewPost($m[1],null,$rewrite_go_on);
 		}else{
 			$result=ViewPost(null,$m[1],$rewrite_go_on);
@@ -539,7 +539,7 @@ function ViewPost($id,$alias,$isrewrite=false){
 	if($pagebar->PageAll==0||$pagebar->PageAll==1)$pagebar=null;
 	$zbp->template->SetTags('pagebar',$pagebar);
 	$zbp->template->SetTags('comments',$comments);
-	
+
 	if(isset($zbp->templates[$article->Template])){
 		$zbp->template->SetTemplate($article->Template);
 	}else{

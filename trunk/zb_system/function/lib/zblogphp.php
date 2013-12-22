@@ -209,6 +209,8 @@ class ZBlogPHP{
 		$this->Verify();
 
 		$this->MakeTemplatetags();
+		
+		$this->LoadTemplates();
 
 		$this->RegBuildModule('catalog','BuildModule_catalog');
 
@@ -239,8 +241,7 @@ class ZBlogPHP{
 
 		if($this->user->Status==ZC_MEMBER_STATUS_AUDITING) $this->ShowError(79);
 		if($this->user->Status==ZC_MEMBER_STATUS_LOCKED) $this->ShowError(79);
-		
-		$this->LoadTemplates();
+
 		$this->CheckTemplate();
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) $fpname();

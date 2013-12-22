@@ -55,7 +55,7 @@ class Upload extends Base{
 		global $zbp;
 
 		foreach ($GLOBALS['Filter_Plugin_Upload_SaveFile'] as $fpname => &$fpsignal) {
-			$fpreturn=$fpname($tmp);
+			$fpreturn=$fpname($tmp,$this);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 
@@ -71,7 +71,7 @@ class Upload extends Base{
 		global $zbp;
 
 		foreach ($GLOBALS['Filter_Plugin_Upload_SaveBase64File'] as $fpname => &$fpsignal) {
-			$fpreturn=$fpname($str64);
+			$fpreturn=$fpname($str64,$this);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 
