@@ -1,4 +1,4 @@
-1.修改zb_system/c_option.php文件
+1.修改zb_users/c_option.php文件
 
 a)使用MySQL数据库
 

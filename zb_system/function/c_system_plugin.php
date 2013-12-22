@@ -1437,7 +1437,7 @@ $Filter_Plugin_Mebmer_Avatar=array();
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Upload_SaveFile
-'参数:$tmp
+'参数:$tmp,$this
 '说明:Upload类的SaveFile方法接口
 '调用:对$tmp临时文件进行拦截
 '**************************************************>
@@ -1454,7 +1454,7 @@ $Filter_Plugin_Upload_SaveFile=array();
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Upload_SaveBase64File=
-'参数:$str64
+'参数:$str64,$this
 '说明:Upload类的SaveBase64File方法接口
 '调用:
 '**************************************************>
