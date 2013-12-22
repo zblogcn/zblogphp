@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
-<id>baidu_push</id>
-<name>百度云推送</name>
+<id>asp2php</id>
+<name>ASP转换PHP数据导入</name>
 <url></url>
-<note></note>
-<description></description>
+<note>ASP转换PHP数据导入</note>
+<description>不解释</description>
 <path>main.php</path>
-<include>include.php</include>
+<include></include>
 <level>1</level>
 <author>
   <name>未寒</name>
@@ -18,10 +18,10 @@
   <email></email>
   <url></url>
 </source>
-<adapted>130707</adapted>
+<adapted>131221</adapted>
 <version>1.0</version>
-<pubdate>2013-09-12</pubdate>
-<modified>2013-09-12</modified>
+<pubdate>2013-12-13</pubdate>
+<modified>2013-12-21</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>
