@@ -47,8 +47,14 @@ class Upload extends Base{
 	}
 
 	function DelFile(){
+	
+		foreach ($GLOBALS['Filter_Plugin_Upload_DelFile'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($this);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
 		if (file_exists($this->FullFile)) { @unlink($this->FullFile);}
 		return true;
+
 	}
 
 	function SaveFile($tmp){
