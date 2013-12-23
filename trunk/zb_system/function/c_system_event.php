@@ -1714,7 +1714,7 @@ function FilterCategory(&$category){
 	global $zbp;
 	$category->Name=strip_tags($category->Name);
 	$category->Alias=TransferHTML($category->Alias,'[normalname]');	
-	$category->Alias=str_replace('/','',$category->Alias);
+	//$category->Alias=str_replace('/','',$category->Alias);
 	$category->Alias=str_replace('.','',$category->Alias);
 	$category->Alias=str_replace(' ','',$category->Alias);
 }

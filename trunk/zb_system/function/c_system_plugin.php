@@ -1465,6 +1465,20 @@ $Filter_Plugin_Upload_SaveBase64File=array();
 
 
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Upload_DelFile
+'参数:$this
+'说明:Upload类的DelFile方法接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Upload_DelFile=array();
+
+
+
+
 
 /*
 '**************************************************<
