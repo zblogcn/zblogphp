@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -47,7 +47,7 @@ class Upload extends Base{
 	}
 
 	function DelFile(){
-		@unlink($this->FullFile);
+		if (file_exists($this->FullFile)) { @unlink($this->FullFile);}
 		return true;
 	}
 
