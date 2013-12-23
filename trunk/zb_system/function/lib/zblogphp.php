@@ -925,7 +925,7 @@ function AddBuildModuleAll(){
 		$this->template->SetPath($dir);
 
 		//模板接口
-		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {$fpname($this->template);}
+		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {$fpname($this->templates);}
 
 		$this->template->CompileFiles($this->templates);
 
