@@ -146,7 +146,6 @@ class BaiduBCS {
 		//set common param into opt
 		$opt [self::AK] = $this->ak;
 		$opt [self::SK] = $this->sk;
-		
 		// Validate the S3 bucket name, only list_bucket didnot need validate_bucket
 		if (! ('/' == $opt [self::OBJECT] && '' == $opt [self::BUCKET] && 'GET' == $opt [self::METHOD] && ! isset ( $opt [self::QUERY_STRING] [self::ACL] )) && ! self::validate_bucket ( $opt [self::BUCKET] )) {
 			throw new BCS_Exception ( $opt [self::BUCKET] . 'is not valid, please check!' );
@@ -161,12 +160,12 @@ class BaiduBCS {
 			throw new BCS_Exception ( 'Can not format url, please check your param!', - 1 );
 		}
 		$opt ['url'] = $url;
-		$this->log ( "[method:" . $opt [self::METHOD] . "][url:$url]", $opt );
+		//var_dump($opt);die();
+		//$this->log ( "[method:" . $opt [self::METHOD] . "][url:$url]", $opt );	//未寒2013.12.24
 		//build request
 		$request = new BCS_RequestCore ( $opt ['url'] );
 		$headers = array (
 				'Content-Type' => 'application/x-www-form-urlencoded' );
-		
 		$request->set_method ( $opt [self::METHOD] );
 		//Write get_object content to fileWriteTo
 		if (isset ( $opt ['fileWriteTo'] )) {
@@ -858,7 +857,7 @@ class BaiduBCS {
 		$opt [self::METHOD] = 'DELETE';
 		$opt [self::OBJECT] = $object;
 		$response = $this->authenticate ( $opt );
-		$this->log ( $response->isOK () ? "Delete object success!" : "Delete object failed! Response: [" . $response->body . "]", $opt );
+		//$this->log ( $response->isOK () ? "Delete object success!" : "Delete object failed! Response: [" . $response->body . "]", $opt );
 		return $response;
 	}
 
@@ -901,7 +900,7 @@ class BaiduBCS {
 		$opt [self::METHOD] = 'HEAD';
 		$opt [self::OBJECT] = $object;
 		$response = $this->authenticate ( $opt );
-		$this->log ( $response->isOK () ? "Get object info success!" : "Get object info failed! Response: [" . $response->body . "]", $opt );
+		//$this->log ( $response->isOK () ? "Get object info success!" : "Get object info failed! Response: [" . $response->body . "]", $opt );
 		return $response;
 	}
 
