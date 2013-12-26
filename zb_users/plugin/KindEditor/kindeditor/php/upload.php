@@ -13,7 +13,7 @@ if(!$zbp->CheckRights('UploadPst'))die();
 //格式化允许上传的文件扩展名
 $ext_arr = explode("|", $zbp->option['ZC_UPLOAD_FILETYPE']);
 //最大文件大小
-$max_size = $zbp->option['ZC_UPLOAD_FILESIZE'];
+$max_size = 1024*1024*(int)$zbp->option['ZC_UPLOAD_FILESIZE'];
 
 //PHP上传失败
 if (!empty($_FILES['imgFile']['error'])) {
@@ -88,9 +88,9 @@ if (empty($_FILES) === false) {
 
 	$upload->SaveFile($tmp_name);
 	$upload->Save();
-	
+
 	$file_url = $upload->Url ;
-	
+
 	header('Content-type: text/html; charset=UTF-8');
 	echo json_encode(array('error' => 0, 'url' => $file_url));
 	exit;

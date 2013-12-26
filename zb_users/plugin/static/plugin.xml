@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<theme version="php">
-<id>x2013</id>
-<name>X2013</name>
-<url>http://app.rainbowsoft.org/view.asp?id=190</url>
-<note>Z-BlogPHP 超级简洁HTML5主题</note>
+<plugin version="php">
+<id>static</id>
+<name>全站静态化</name>
+<url></url>
+<note></note>
 <description></description>
 <path>main.php</path>
 <include>include.php</include>
 <level>1</level>
 <author>
-  <name>未寒</name>
-  <email>im@imzhou.com</email>
-  <url>http://imzhou.com/</url>
+  <name></name>
+  <email></email>
+  <url></url>
 </author>
 <source>
-  <name>李思章</name>
+  <name></name>
   <email></email>
-  <url>http://lisizhang.com/</url>
+  <url></url>
 </source>
-<adapted>130707</adapted>
-<version>1.5</version>
-<pubdate>2013-01-31</pubdate>
-<modified>2013-12-01</modified>
+<adapted>131221</adapted>
+<version>1.0</version>
+<pubdate>2013-12-26</pubdate>
+<modified>2013-12-26</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>
@@ -35,4 +35,4 @@
   <sidebar4></sidebar4>
   <sidebar5></sidebar5>
 </sidebars>
-</theme>
+</plugin>

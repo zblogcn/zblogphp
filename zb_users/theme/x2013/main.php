@@ -62,7 +62,7 @@ p{line-height:1.5em;padding:0.5em 0;}
   <tr>
     <th width='20%'><p align="center">设置</p></th>
     <th width='70%'><p align="center">内容</p></th>
-    
+
   </tr>
   <tr>
     <td><b><label for="SetWeiboSina"><p align="center">新浪微博</p></label></b></td>

@@ -79,7 +79,7 @@ class UrlRule
 	}
 
 	static public function Rewrite_url($url,$type){
-		global $zbp;	
+		global $zbp;
 		switch ($zbp->categorylayer) {
 			case 4:
 				$fullcategory='[^\./]+?|[^\./]+?/[^\./]+?|[^\./]+?/[^\./]+?/[^\./]+?|[^\./]+/[^\./]+?/[^\./]+?/[^\./]+?';

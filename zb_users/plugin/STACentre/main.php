@@ -19,9 +19,9 @@ if(count($_POST)>0){
 	$zbp->option['ZC_PAGE_REGEX']=trim(GetVars('ZC_PAGE_REGEX','POST'));
 	$zbp->option['ZC_INDEX_REGEX']=trim(GetVars('ZC_INDEX_REGEX','POST'));
 	$zbp->option['ZC_CATEGORY_REGEX']=trim(GetVars('ZC_CATEGORY_REGEX','POST'));
-	$zbp->option['ZC_TAGS_REGEX']=trim(GetVars('ZC_TAGS_REGEX','POST'));	
+	$zbp->option['ZC_TAGS_REGEX']=trim(GetVars('ZC_TAGS_REGEX','POST'));
 	$zbp->option['ZC_DATE_REGEX']=trim(GetVars('ZC_DATE_REGEX','POST'));
-	$zbp->option['ZC_AUTHOR_REGEX']=trim(GetVars('ZC_AUTHOR_REGEX','POST'));	
+	$zbp->option['ZC_AUTHOR_REGEX']=trim(GetVars('ZC_AUTHOR_REGEX','POST'));
 	$zbp->SaveOption();
 
 	$zbp->AddBuildModuleAll();
