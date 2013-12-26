@@ -118,7 +118,7 @@ function ViewAuto($url){
 			$zbp->ShowError(2);//return null;
 		return null;
 	}
-	
+
 	$r=UrlRule::Rewrite_url($zbp->option['ZC_PAGE_REGEX'],'page');
 	$m=array();
 	if(preg_match($r,$url,$m)==1){
@@ -138,7 +138,7 @@ function ViewAuto($url){
 
 function GetList($count=10,$cate=null,$auth=null,$date=null,$tags=null,$search=null,$option=null){
 	global $zbp;
-	
+
 	if(!is_array($option)){
 		$option=array();
 	}
@@ -1012,13 +1012,13 @@ function PostComment(){
 			$zbp->AddBuildModule('comments');
 
 			$zbp->comments[$cmt->ID]=$cmt;
-			
+
 			if(GetVars('isajax','POST')){
 				ViewComment($cmt->ID);
 			}
 
 			foreach ($GLOBALS['Filter_Plugin_PostComment_Succeed'] as $fpname => &$fpsignal) $fpname($cmt);
-			
+
 			return true;
 
 		}else{
