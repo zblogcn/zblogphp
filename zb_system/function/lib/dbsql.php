@@ -256,9 +256,9 @@ class DbSql #extends AnotherClass
 		if(!empty($select)) {
 			if(is_array($select)){
 				$selectstr=implode($select,',');
-				$sqls="SELECT $selectstr FROM $table ";			
+				$sqls="SELECT $selectstr FROM $table ";
 			}else{
-				$sqls="SELECT $select FROM $table ";	
+				$sqls="SELECT $select FROM $table ";
 			}
 		}
 

@@ -881,6 +881,7 @@ function SaveConfig(){
   $zbp->option['ZC_SIDEBAR3_ORDER']='';
   $zbp->option['ZC_SIDEBAR4_ORDER']='';
   $zbp->option['ZC_SIDEBAR5_ORDER']='';
+  $zbp->option['ZC_DEBUG_MODE']=false;
 
   $zbp->SaveOption();
   //$zbp->BuildTemplate();
