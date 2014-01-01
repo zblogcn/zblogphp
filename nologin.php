@@ -21,6 +21,7 @@ if(isset($_GET['uid'])){
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache,must-revalidate">
 	<meta http-equiv="expires" content="0">
+	<meta name="robots" content="none" />
 	<title>Z-BlogPHP密码重置工具</title>
 <style type="text/css">
 <!--

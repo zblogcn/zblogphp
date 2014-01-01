@@ -655,7 +655,7 @@ function InsertInfo(){
   $t->FileName="navbar";
   $t->Source="system";
   $t->SidebarID=0;
-  $t->Content='<li><a id="nvabar-item-index" href="{#ZC_BLOG_HOST#}">首页</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">留言本</a></li>';
+  $t->Content='<li id="nvabar-item-index"><a href="{#ZC_BLOG_HOST#}">首页</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">留言本</a></li>';
   $t->HtmlID="divNavBar";
   $t->Type="ul";
   $t->Save();

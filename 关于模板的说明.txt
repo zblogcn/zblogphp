@@ -10,8 +10,19 @@
 {#ZC_BLOG_HOST#}
 
 4.if
+{if $i==1}
+
+{elseif $i==2}
+
+{else}
+
+{/if}
 
 5.for
+
+{foreach $articles as $article}
+
+{/foreach}
 
 6.◊¢ Õ
 {* Smarty’‚¿Ô «◊¢ Õ *}
