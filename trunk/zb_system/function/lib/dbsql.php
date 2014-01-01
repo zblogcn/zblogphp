@@ -179,7 +179,7 @@ class DbSql #extends AnotherClass
 
 		$s.=');';
 		reset($datainfo);
-		$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArray($datainfo,0).' on '.$tablename.' ('.GetValueInArray($datainfo,0).');';
+		$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$tablename.' ('.GetValueInArrayByCurrent($datainfo,0).');';
 	}
 
 	return $s;

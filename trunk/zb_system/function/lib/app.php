@@ -330,7 +330,10 @@ class App
 		foreach ($xml->file as $file) {
 			$f=$dir . $file->path;
 			@file_put_contents($f, base64_decode($file->stream));
-			@chmod($f,0777);
+			if(function_exists('chmod')){
+				@chmod($f,0777);
+			}
+
 		}
 
 		return true;
