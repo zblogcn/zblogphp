@@ -1601,7 +1601,7 @@ function SaveSetting(){
 function FilterMeta(&$object){
 
 	//$type=strtolower(get_class($object));
-
+//var_dump($_POST);die;
 	foreach ($_POST as $key => $value) {
 		if(substr($key,0,5)=='meta_'){
 			$name=substr($key,5-strlen($key));

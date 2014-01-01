@@ -101,17 +101,18 @@ foreach ($array as $key => $value) {
 	echo '<p>类型：<select style="width:85%" name="meta_type[]">';
 	echo '<option value="text"     '.($single_meta_type=='text'    ?'selected="selected"':'').'>单行文本框（默认）</option>';
 	echo '<option value="textarea" '.($single_meta_type=='textarea'?'selected="selected"':'').'>多行文本框</option>';
+	echo '<option value="bool"     '.($single_meta_type=='bool'    ?'selected="selected"':'').'>On/Off按钮</option>';
 	echo '<option value="radio"    '.($single_meta_type=='radio'   ?'selected="selected"':'').'>单选框</option>';
 	echo '<option value="checkbox" '.($single_meta_type=='checkbox'?'selected="selected"':'').'>多选框</option>';
 	echo '</select></p>';
-	echo '<p>附加：<textarea style="width:85%" name="meta_option[]" ></textarea></p>';
+	echo '<p>附加：<textarea style="width:85%;height:2em;" name="meta_option[]" >'.htmlspecialchars($single_meta_option).'</textarea><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多选，单选的项目值用“|”做分隔</p>';
 	echo '</td>';
 	echo '<td><p>';
 if($type=='post'){
 	echo '{$article.Metas.'.$value.'}<br/>php代码:<br/>$article->Metas->'.$value.';';
 }
 if($type=='category'){
-	echo '{$article.Category.Metas.'.$value.'}<br/>php代码:<br/>$article->Category->Metas->'.$value.';<br/>$zbp->categorys[???]->Metas->'.$value.';';
+	echo '{$article.Category.Metas.'.$value.'}<br/>php代码:<br/>$article->Category->Metas->'.$value.';<br/>$zbp->categorys[?]->Metas->'.$value.';';
 }
 if($type=='tag'){
 	echo '{tag.Metas.'.$value.'}<br/>php代码:<br/>$tag->Metas->'.$value.';';
