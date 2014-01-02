@@ -123,6 +123,12 @@ class DbSql #extends AnotherClass
 			if($value[1]=='double'||$value[1]=='float'){
 				$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
 			}
+			if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'){
+				$s.=$value[0] . ' $value[1] NOT NULL,';
+			}
+			if($value[1]=='timestamp'){
+				$s.=$value[0] . ' $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP,';
+			}
 			$i +=1;
 		}
 		$s=substr($s,0,strlen($s)-1);
@@ -164,13 +170,16 @@ class DbSql #extends AnotherClass
 			if($value[1]=='double'||$value[1]=='float'){
 				$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
 			}
+			if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'||$value[1]=='timestamp'){
+				$s.=$value[0] . ' $value[1] NOT NULL,';
+			}
 			$i +=1;
 		}
 		$s=substr($s,0,strlen($s)-1);
 
 		$s.=');';
 		reset($datainfo);
-		$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArray($datainfo,0).' on '.$tablename.' ('.GetValueInArray($datainfo,0).');';
+		$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$tablename.' ('.GetValueInArrayByCurrent($datainfo,0).');';
 	}
 
 	return $s;
@@ -256,9 +265,9 @@ class DbSql #extends AnotherClass
 		if(!empty($select)) {
 			if(is_array($select)){
 				$selectstr=implode($select,',');
-				$sqls="SELECT $selectstr FROM $table ";			
+				$sqls="SELECT $selectstr FROM $table ";
 			}else{
-				$sqls="SELECT $select FROM $table ";	
+				$sqls="SELECT $select FROM $table ";
 			}
 		}
 

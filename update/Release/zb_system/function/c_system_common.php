@@ -261,7 +261,7 @@ function GetRequestUri(){
 function GetFileExt($f){
 	if(strpos($f,'.')===false)return '';
 	$a=explode('.', $f);
-	return strtolower($a[count($a)-1]);
+	return strtolower(end($a));
 }
 
 

@@ -811,7 +811,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring){
 	$b=array_slice($b, 0, 20);
 	$c=array();
 
-	$t=$zbp->LoadTagsByNameString(GetVars('Tag','POST'));
+	$t=$zbp->LoadTagsByNameString($tagnamestring);
 	foreach ($t as $key => $value) {
 		$c[]=$key;
 	}
