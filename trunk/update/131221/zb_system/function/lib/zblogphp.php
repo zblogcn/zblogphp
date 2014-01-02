@@ -925,7 +925,7 @@ function AddBuildModuleAll(){
 		$this->template->SetPath($dir);
 
 		//模板接口
-		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {$fpname($this->template);}
+		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {$fpname($this->templates);}
 
 		$this->template->CompileFiles($this->templates);
 
@@ -1242,7 +1242,13 @@ function AddBuildModuleAll(){
 	}
 	#load tags 'aaa,bbb,ccc,ddd'
 	function LoadTagsByNameString($s){
+		$s=str_replace(';', ',', $s);
+		$s=str_replace('，', ',', $s);
+		$s=str_replace('、', ',', $s);
+		$s=trim($s);
+		$s=strip_tags($s);	
 		if($s=='')return array();
+		if($s==',')return array();
 		$a=explode(',', $s);
 		$t=array_unique($a);
 

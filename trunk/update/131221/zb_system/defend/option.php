@@ -44,7 +44,7 @@ return array(
 
 	// '-------------------------------全局配置-----------------------------------
 	'ZC_YUN_SITE'=>'',
-	'ZC_DEBUG_MODE' => false,
+	'ZC_DEBUG_MODE' => true,
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
 	'ZC_UPDATE_INFO_URL' => 'http://update.rainbowsoft.org/info/',
