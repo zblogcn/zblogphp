@@ -81,4 +81,20 @@ class DbSQLite implements iDataBase
 		return sqlite_last_insert_rowid($this->db);
 	}
 
+	function CreateTable($tablename,$datainfo){
+		$this->QueryMulit($this->sql->CreateTable($tablename,$datainfo));
+	}
+	
+	function DelTable($tablename){
+		$this->Query($this->sql->DelTable($tablename));
+	}
+
+	function ExistTable($tablename){
+		$a=$this->Query($this->sql->ExistTable($tablename));
+		if($a){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }

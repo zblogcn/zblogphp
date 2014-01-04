@@ -79,4 +79,20 @@ class DbSQLite3 implements iDataBase
 		return $this->db->lastInsertRowID();
 	}
 
+	function CreateTable($tablename,$datainfo){
+		$this->QueryMulit($this->sql->CreateTable($tablename,$datainfo));
+	}
+	
+	function DelTable($tablename){
+		$this->Query($this->sql->DelTable($tablename));
+	}
+
+	function ExistTable($tablename){
+		$a=$this->Query($this->sql->ExistTable($tablename));
+		if($a){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }

@@ -113,4 +113,21 @@ if($b){
 		return mysql_insert_id();
 	}
 
+	function CreateTable($tablename,$datainfo){
+		$this->QueryMulit($this->sql->CreateTable($tablename,$datainfo));
+	}
+
+	function DelTable($tablename){
+		$this->Query($this->sql->DelTable($tablename));
+	}
+
+	function ExistTable($tablename){
+		$zbp=ZBlogPHP::GetInstance();
+		$a=$this->Query($this->sql->ExistTable($tablename,$zbp->option['ZC_MYSQL_NAME']));
+		if($a){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }
