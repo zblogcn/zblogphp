@@ -20,6 +20,9 @@ interface iDataBase
 	public function Delete($query);
 	public function QueryMulit($s);
 	public function EscapeString($s);
+	public function CreateTable($tablename,$datainfo);
+	public function DelTable($tablename);
+	public function ExistTable($tablename);
 }
 
 
@@ -31,159 +34,175 @@ class DbSql #extends AnotherClass
 {
 	public $type=null;
 
+	public function DelTable($tablename){
+	}
+
+	public function ExistTable($tablename,$dbname=''){
+	
+		$s='';
+		if($this->type=='DbSQLite'||$this->type=='DbSQLite3'){
+			$s="SELECT count(*) FROM sqlite_master WHERE type='table' AND name='$tablename'";
+		}
+		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbPostgreSQL'){
+			$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$tablename'";
+		}
+
+		return $s;
+	}
+	
 	public function CreateTable($tablename,$datainfo){
 
-	$s='';
+		$s='';
+		
+		if($this->type=='DbSQLite'){
+			$s.='CREATE TABLE '.$tablename.' (';
 
-	if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'){
-		$s.='CREATE TABLE IF NOT EXISTS '.$tablename.' (';
-
-		$i=0;
-		foreach ($datainfo as $key => $value) {
-			if($value[1]=='integer'){
-				if($i==0){
-					$s.=$value[0] .' int(11) NOT NULL AUTO_INCREMENT' . ',';
-				}else{
-					if($value[2]==''){
-						$s.=$value[0] .' int(11) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
-					}elseif($value[2]=='tinyint'){
-						$s.=$value[0] .' tinyint(4) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
-					}elseif($value[2]=='smallint'){
-						$s.=$value[0] .' smallint(6) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
-					}elseif($value[2]=='mediumint'){
-						$s.=$value[0] .' mediumint(9) NOT NULL DEFAULT \''.$value[3].'\'' . ',';	
-					}elseif($value[2]=='int'){
-						$s.=$value[0] .' int(11) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
-					}elseif($value[2]=='bigint'){
-						$s.=$value[0] .' bigint(20) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
-					}
-				}
-			}
-			if($value[1]=='boolean'){
-				$s.=$value[0] . ' tinyint(1) NOT NULL DEFAULT \''.(int)$value[3].'\'' . ',';
-			}
-			if($value[1]=='string'){
-				if($value[2]!=''){
-					if(strpos($value[2],'char')!==false){
-						$s.=$value[0] . ' char('.str_replace('char','',$value[2]).') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
-					}elseif(is_int($value[2])){
-						$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
-					}elseif($value[2]=='tinytext'){
-						$s.=$value[0] . ' tinytext NOT NULL ' . ',';
-					}elseif($value[2]=='text'){
-						$s.=$value[0] . ' text NOT NULL ' . ',';
-					}elseif($value[2]=='mediumtext'){
-						$s.=$value[0] . ' mediumtext NOT NULL ' . ',';
-					}elseif($value[2]=='longtext'){
-						$s.=$value[0] . ' longtext NOT NULL ' . ',';
-					}
-				}else{
-					$s.=$value[0] . ' longtext NOT NULL ' . ',';	
-				}
-			}
-			if($value[1]=='double'||$value[1]=='float'){
-				$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
-			}
-			$i +=1;
-		}
-		reset($datainfo);
-		$s.='PRIMARY KEY ('.GetValueInArrayByCurrent($datainfo,0).'),';
-		$s=substr($s,0,strlen($s)-1);
-		$s.=') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
-	}
-
-	if($this->type=='DbSQLite'){
-		$s.='CREATE TABLE '.$tablename.' (';
-
-		$i=0;
-		foreach ($datainfo as $key => $value) {
-			if($value[1]=='integer'){
-				if($i==0){
-					$s.=$value[0] .' integer primary key' . ',';
-				}else{
-					$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
-				}
-			}
-			if($value[1]=='boolean'){
-				$s.=$value[0] . ' bit NOT NULL DEFAULT \''.(int)$value[3].'\'' . ',';
-			}
-			if($value[1]=='string'){
-				if($value[2]!=''){
-					if(strpos($value[2],'char')!==false){
-						$s.=$value[0] . ' char('.str_replace('char','',$value[2]).') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
-					}elseif(is_int($value[2])){
-						$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+			$i=0;
+			foreach ($datainfo as $key => $value) {
+				if($value[1]=='integer'){
+					if($i==0){
+						$s.=$value[0] .' integer primary key' . ',';
 					}else{
-						$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
+						$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
 					}
-				}else{
-					$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';	
 				}
-			}
-			if($value[1]=='double'||$value[1]=='float'){
-				$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
-			}
-			if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'){
-				$s.=$value[0] . ' $value[1] NOT NULL,';
-			}
-			if($value[1]=='timestamp'){
-				$s.=$value[0] . ' $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP,';
-			}
-			$i +=1;
-		}
-		$s=substr($s,0,strlen($s)-1);
-
-		$s.=');';
-		reset($datainfo);
-		$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$tablename.' ('.GetValueInArrayByCurrent($datainfo,0).');';
-
-	}
-
-	if($this->type=='DbSQLite3'){
-		$s.='CREATE TABLE '.$tablename.' (';
-
-		$i=0;
-		foreach ($datainfo as $key => $value) {
-			if($value[1]=='integer'){
-				if($i==0){
-					$s.=$value[0] .' integer primary key autoincrement' . ',';
-				}else{
-					$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+				if($value[1]=='boolean'){
+					$s.=$value[0] . ' bit NOT NULL DEFAULT \''.(int)$value[3].'\'' . ',';
 				}
-			}
-			if($value[1]=='boolean'){
-				$s.=$value[0] . ' bit NOT NULL DEFAULT \''.(int)$value[3].'\'' . ',';
-			}
-			if($value[1]=='string'){
-				if($value[2]!=''){
-					if(strpos($value[2],'char')!==false){
-						$s.=$value[0] . ' char('.str_replace('char','',$value[2]).') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
-					}elseif(is_int($value[2])){
-						$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+				if($value[1]=='string'){
+					if($value[2]!=''){
+						if(strpos($value[2],'char')!==false){
+							$s.=$value[0] . ' char('.str_replace('char','',$value[2]).') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif(is_int($value[2])){
+							$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}else{
+							$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
+						}
 					}else{
-						$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
+						$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';	
 					}
-				}else{
-					$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';	
 				}
+				if($value[1]=='double'||$value[1]=='float'){
+					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
+				}
+				if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'){
+					$s.=$value[0] . ' $value[1] NOT NULL,';
+				}
+				if($value[1]=='timestamp'){
+					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP,';
+				}
+				$i +=1;
 			}
-			if($value[1]=='double'||$value[1]=='float'){
-				$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
-			}
-			if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'||$value[1]=='timestamp'){
-				$s.=$value[0] . ' $value[1] NOT NULL,';
-			}
-			$i +=1;
+			$s=substr($s,0,strlen($s)-1);
+
+			$s.=');';
+			reset($datainfo);
+			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$tablename.' ('.GetValueInArrayByCurrent($datainfo,0).');';
+
 		}
-		$s=substr($s,0,strlen($s)-1);
 
-		$s.=');';
-		reset($datainfo);
-		$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$tablename.' ('.GetValueInArrayByCurrent($datainfo,0).');';
+		if($this->type=='DbSQLite3'){
+			$s.='CREATE TABLE '.$tablename.' (';
+
+			$i=0;
+			foreach ($datainfo as $key => $value) {
+				if($value[1]=='integer'){
+					if($i==0){
+						$s.=$value[0] .' integer primary key autoincrement' . ',';
+					}else{
+						$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+					}
+				}
+				if($value[1]=='boolean'){
+					$s.=$value[0] . ' bit NOT NULL DEFAULT \''.(int)$value[3].'\'' . ',';
+				}
+				if($value[1]=='string'){
+					if($value[2]!=''){
+						if(strpos($value[2],'char')!==false){
+							$s.=$value[0] . ' char('.str_replace('char','',$value[2]).') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif(is_int($value[2])){
+							$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}else{
+							$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
+						}
+					}else{
+						$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';	
+					}
+				}
+				if($value[1]=='double'||$value[1]=='float'){
+					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
+				}
+				if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'||$value[1]=='timestamp'){
+					$s.=$value[0] . ' $value[1] NOT NULL,';
+				}
+				$i +=1;
+			}
+			$s=substr($s,0,strlen($s)-1);
+
+			$s.=');';
+			reset($datainfo);
+			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$tablename.' ('.GetValueInArrayByCurrent($datainfo,0).');';
+		}
+
+		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type<>''){
+			$s.='CREATE TABLE IF NOT EXISTS '.$tablename.' (';
+
+			$i=0;
+			foreach ($datainfo as $key => $value) {
+				if($value[1]=='integer'){
+					if($i==0){
+						$s.=$value[0] .' int(11) NOT NULL AUTO_INCREMENT' . ',';
+					}else{
+						if($value[2]==''){
+							$s.=$value[0] .' int(11) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif($value[2]=='tinyint'){
+							$s.=$value[0] .' tinyint(4) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif($value[2]=='smallint'){
+							$s.=$value[0] .' smallint(6) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif($value[2]=='mediumint'){
+							$s.=$value[0] .' mediumint(9) NOT NULL DEFAULT \''.$value[3].'\'' . ',';	
+						}elseif($value[2]=='int'){
+							$s.=$value[0] .' int(11) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif($value[2]=='bigint'){
+							$s.=$value[0] .' bigint(20) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}
+					}
+				}
+				if($value[1]=='boolean'){
+					$s.=$value[0] . ' tinyint(1) NOT NULL DEFAULT \''.(int)$value[3].'\'' . ',';
+				}
+				if($value[1]=='string'){
+					if($value[2]!=''){
+						if(strpos($value[2],'char')!==false){
+							$s.=$value[0] . ' char('.str_replace('char','',$value[2]).') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif(is_int($value[2])){
+							$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif($value[2]=='tinytext'){
+							$s.=$value[0] . ' tinytext NOT NULL ' . ',';
+						}elseif($value[2]=='text'){
+							$s.=$value[0] . ' text NOT NULL ' . ',';
+						}elseif($value[2]=='mediumtext'){
+							$s.=$value[0] . ' mediumtext NOT NULL ' . ',';
+						}elseif($value[2]=='longtext'){
+							$s.=$value[0] . ' longtext NOT NULL ' . ',';
+						}
+					}else{
+						$s.=$value[0] . ' longtext NOT NULL ' . ',';	
+					}
+				}
+				if($value[1]=='double'||$value[1]=='float'){
+					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
+				}
+				$i +=1;
+			}
+			reset($datainfo);
+			$s.='PRIMARY KEY ('.GetValueInArrayByCurrent($datainfo,0).'),';
+			$s=substr($s,0,strlen($s)-1);
+			$s.=') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
+		}
+
+		return $s;
 	}
-
-	return $s;
-}
 
 
 	public function ParseWhere($where){
@@ -287,7 +306,8 @@ class DbSql #extends AnotherClass
 				$sqll .= " LIMIT $limit[0]";
 			}else{
 				if($limit[1]>0){
-					$sqll .= " LIMIT $limit[0], $limit[1]";
+					//$sqll .= " LIMIT $limit[0], $limit[1]";
+					$sqll .= " LIMIT $limit[1] OFFSET $limit[0]";
 				}
 			}
 		}

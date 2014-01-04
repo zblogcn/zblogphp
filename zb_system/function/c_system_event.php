@@ -807,7 +807,12 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring){
 	if($tagnamestring=='')return '';
 	if($tagnamestring==',')return '';		
 	$a=explode(',', $tagnamestring);
-	$b=array_unique($a);
+	$b=array();
+	foreach ($a as &$value) {
+		$value = trim($value);
+		if($value)$b[]=$value;
+	}
+	$b=array_unique($b);
 	$b=array_slice($b, 0, 20);
 	$c=array();
 
@@ -827,7 +832,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring){
 		}
 	}
 
-	foreach ($a as $key) {
+	foreach ($b as $key) {
 		if(!isset($zbp->tagsbyname[$key]))continue;
 		$s .= '{' . $zbp->tagsbyname[$key]->ID . '}';
 	}

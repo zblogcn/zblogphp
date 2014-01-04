@@ -97,5 +97,22 @@ class Dbpdo_MySQL implements iDataBase
 		$this->db->exec($query);
 		return $this->db->lastInsertId();
 	}
+	
+	function CreateTable($tablename,$datainfo){
+		$this->QueryMulit($this->sql->CreateTable($tablename,$datainfo));
+	}
 
+	function DelTable($tablename){
+		$this->Query($this->sql->DelTable($tablename));
+	}
+
+	function ExistTable($tablename){
+		$zbp=ZBlogPHP::GetInstance();
+		$a=$this->Query($this->sql->ExistTable($tablename,$zbp->option['ZC_MYSQL_NAME']));
+		if($a[0][0]>0){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }

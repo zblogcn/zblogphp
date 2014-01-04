@@ -1213,7 +1213,12 @@ function AddBuildModuleAll(){
 		$s=str_replace('{', '', $s);
 		$s=str_replace('}', '', $s);
 		$a=explode('|', $s);
-		$t=array_unique($a);
+		$b=array();
+		foreach ($a as &$value) {
+			$value = trim($value);
+			if($value)$b[]=$value;
+		}
+		$t=array_unique($b);
 
 		if(count($t)==0)return array();
 
