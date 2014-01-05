@@ -124,7 +124,7 @@ if($b){
 	function ExistTable($tablename){
 		$zbp=ZBlogPHP::GetInstance();
 		$a=$this->Query($this->sql->ExistTable($tablename,$zbp->option['ZC_MYSQL_NAME']));
-		if($a){
+		if($a[0][0]>0){
 			return true;
 		}else{
 			return false;

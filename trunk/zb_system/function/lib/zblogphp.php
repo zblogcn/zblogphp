@@ -287,25 +287,6 @@ class ZBlogPHP{
 				throw new Exception("MySQL DateBase Connection Error.");
 			}
 			break;
-		case 'pgsql':
-		case 'pdo_pgsql':
-			try {
-				if($this->InitializeDB($this->option['ZC_DATABASE_TYPE']))return false;
-				if($this->db->Open(array(
-						$this->option['ZC_PGSQL_SERVER'],
-						$this->option['ZC_PGSQL_USERNAME'],
-						$this->option['ZC_PGSQL_PASSWORD'],
-						$this->option['ZC_PGSQL_NAME'],
-						$this->option['ZC_PGSQL_PRE'],
-						$this->option['ZC_PGSQL_PORT'],
-						$this->option['ZC_PGSQL_PERSISTENT']
-					))==false){
-					$this->ShowError(67);
-				}			
-			} catch (Exception $e) {
-				throw new Exception("PostgreSQL DateBase Connection Error.");
-			}
-			break;
 		case 'sqlite':
 		case 'sqlite3':
 			try {
@@ -487,14 +468,6 @@ class ZBlogPHP{
 			if($key=='ZC_MYSQL_ENGINE')continue;
 			if($key=='ZC_MYSQL_PORT')continue;
 			if($key=='ZC_MYSQL_PERSISTENT')continue;
-			if($key=='ZC_PGSQL_SERVER')continue;
-			if($key=='ZC_PGSQL_USERNAME')continue;
-			if($key=='ZC_PGSQL_PASSWORD')continue;
-			if($key=='ZC_PGSQL_NAME')continue;
-			if($key=='ZC_PGSQL_CHARSET')continue;
-			if($key=='ZC_PGSQL_PRE')continue;
-			if($key=='ZC_PGSQL_PORT')continue;
-			if($key=='ZC_PGSQL_PERSISTENT')continue;
 			$this->option[$key]=$value;
 		}
 

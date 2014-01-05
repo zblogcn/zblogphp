@@ -144,7 +144,7 @@ class DbSql #extends AnotherClass
 			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$tablename.' ('.GetValueInArrayByCurrent($datainfo,0).');';
 		}
 
-		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type<>''){
+		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'){
 			$s.='CREATE TABLE IF NOT EXISTS '.$tablename.' (';
 
 			$i=0;
