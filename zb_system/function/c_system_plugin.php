@@ -918,11 +918,26 @@ $Filter_Plugin_Admin_Js_Add=array();
 '类型:Filter
 '名称:Filter_Plugin_ViewAuto_Begin
 '参数:&$url
-'说明:定义列表输出接口
+'说明:定义列表输出接口Begin
 '调用:
 '**************************************************>
 */
 $Filter_Plugin_ViewAuto_Begin=array();
+
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_ViewAuto_End
+'参数:&$url
+'说明:定义列表输出接口End
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_ViewAuto_End=array();
 
 
 

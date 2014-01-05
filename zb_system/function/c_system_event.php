@@ -53,7 +53,7 @@ function ViewAuto($url){
 	$rewrite_go_on=true;
 
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($url);
+		$fpreturn=$fpname($url,$rewrite_go_on);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
 
@@ -115,7 +115,7 @@ function ViewAuto($url){
 			$result=ViewPost(null,$m[1],$rewrite_go_on);
 		}
 		if($result==ZC_REWRITE_GO_ON)
-			$zbp->ShowError(2);//return null;
+			$zbp->ShowError(2);
 		return null;
 	}
 
@@ -128,11 +128,18 @@ function ViewAuto($url){
 			$result=ViewPost(null,$m[1],$rewrite_go_on);
 		}
 		if($result==ZC_REWRITE_GO_ON)
-			$zbp->ShowError(2);//return null;
+			$zbp->ShowError(2);
 		return null;
 	}
 
-	ViewList(null,null,null,null,null);
+	//ViewList(null,null,null,null,null);
+	foreach ($GLOBALS['Filter_Plugin_ViewAuto_End'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($url,$rewrite_go_on);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+	}
+	
+	$zbp->ShowError(2);
+	
 }
 
 

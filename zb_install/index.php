@@ -257,16 +257,6 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">PostgreSQL</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][1];?></td>
-        </tr>
-        <tr>
-          <td scope="row">PDO_PostgreSQL</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_pgsql'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_pgsql'][1];?></td>
-        </tr>
-        <tr>
           <th colspan="3" scope="row">权限检查</th>
         </tr>
         <tr>
@@ -389,14 +379,6 @@ function Setup3(){
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         }
         ?>
-        <?php
-        if($hasPgsql){
-        ?>
-          <label class="dbselect" id="pgsql_radio">
-          <input type="radio" name="fdbtype"/>PostgreSQL数据库</label>
-        <?php
-        }
-        ?>
         </p>
       </div>
       <?php if($hasMysql){?>
@@ -453,35 +435,6 @@ function Setup3(){
       </div>
       <?php } ?>
 
-      <?php if($hasPgsql){?>
-      <div class="dbdetail" id="pgsql">
-        <p><b>数据库主机:</b>
-          <input type="text" name="dbpgsql_server" id="dbpgsql_server" value="<?php echo $option['ZC_PGSQL_SERVER'];?>" style="width:350px;" />
-        </p>
-        <p><b>用户名称:</b>
-          <input type="text" name="dbpgsql_username" id="dbpgsql_username" value="<?php echo $option['ZC_PGSQL_USERNAME'];?>" style="width:350px;" />
-        </p>
-        <p><b>用户密码:</b>
-          <input type="password" name="dbpgsql_password" id="dbpgsql_password" value="<?php echo $option['ZC_PGSQL_PASSWORD'];?>" style="width:350px;" />
-        </p>
-        <p><b>数据库名称:</b>
-          <input type="text" name="dbpgsql_name" id="dbpgsql_name" value="<?php echo $option['ZC_PGSQL_NAME'];?>" style="width:350px;" />
-        </p>
-        <p><b>表&nbsp;前&nbsp;缀:</b>
-          <input type="text" name="dbpgsql_pre" id="dbpgsql_pre" value="<?php echo $option['ZC_PGSQL_PRE'];?>" style="width:350px;" />
-        </p>
-      <p><b>连接选择:</b> 
-        <?php if($CheckResult['pgsql'][0]){?>
-        <label>
-          <input value="pgsql" type="radio" name="dbtype"/>PostgreSQL原生连接</label>
-        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
-        <?php if($CheckResult['pdo_pgsql'][0]){?>
-        <label>
-          <input value="pdo_pgsql" type="radio" name="dbtype"/>PDO_PostgreSQL连接</label>
-        <?php } ?>
-      </p>
-      </div>
-      <?php } ?>
       <p class="title">网站设置</p>
       <p><b>网站名称:</b>
         <input type="text" name="blogtitle" id="blogtitle" value="" style="width:250px;" />
@@ -553,18 +506,6 @@ case 'pdo_mysql':
   $zbp->InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
   $zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'],$zbp->option['ZC_MYSQL_PORT'],$zbp->option['ZC_MYSQL_USERNAME'],$zbp->option['ZC_MYSQL_PASSWORD'],$zbp->option['ZC_MYSQL_NAME']);
   $zbp->db->dbpre=$zbp->option['ZC_MYSQL_PRE'];
-  break;
-case 'pgsql':
-case 'pdo_pgsql':
-  $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/pgsql.sql');
-  $zbp->option['ZC_PGSQL_SERVER']=GetVars('dbpgsql_server','POST');
-  $zbp->option['ZC_PGSQL_USERNAME']=GetVars('dbpgsql_username','POST');
-  $zbp->option['ZC_PGSQL_PASSWORD']=GetVars('dbpgsql_password','POST');
-  $zbp->option['ZC_PGSQL_NAME']=GetVars('dbpgsql_name','POST');
-  $zbp->option['ZC_PGSQL_PRE']=GetVars('dbpgsql_pre','POST');
-  $zbp->InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
-  //$zbp->db->CreateDB($zbp->option['ZC_PGSQL_SERVER'],$zbp->option['ZC_PGSQL_PORT'],$zbp->option['ZC_PGSQL_USERNAME'],$zbp->option['ZC_PGSQL_PASSWORD'],$zbp->option['ZC_PGSQL_NAME']);
-  $zbp->db->dbpre=$zbp->option['ZC_PGSQL_PRE'];
   break;
 case 'sqlite':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');

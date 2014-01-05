@@ -91,7 +91,7 @@ class DbSQLite implements iDataBase
 
 	function ExistTable($tablename){
 		$a=$this->Query($this->sql->ExistTable($tablename));
-		if($a){
+		if($a[0][0]>0){
 			return true;
 		}else{
 			return false;
