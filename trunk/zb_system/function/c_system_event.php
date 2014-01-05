@@ -148,9 +148,9 @@ function GetList($count=10,$cate=null,$auth=null,$date=null,$tags=null,$search=n
 	if(!isset($option['has_subcate']))$option['only_ontop']=false;
 
 	if($option['only_ontop']==true){
-		$w[]=array('=','log_Istop',0);
+		$w[]=array('=','log_IsTop',0);
 	}elseif($option['only_not_ontop']==true){
-		$w[]=array('=','log_Istop',1);
+		$w[]=array('=','log_IsTop',1);
 	}
 	
 	$w=array();
@@ -250,7 +250,7 @@ function ViewList($page,$cate,$auth,$date,$tags,$isrewrite=false){
 
 
 	$w=array();
-	$w[]=array('=','log_Istop',0);
+	$w[]=array('=','log_IsTop',0);
 	$w[]=array('=','log_Status',0);
 
 	$page=(int)$page==0?1:(int)$page;
@@ -260,7 +260,7 @@ function ViewList($page,$cate,$auth,$date,$tags,$isrewrite=false){
 	if($type=='index' && $page==1){
 		$articles_top=$zbp->GetArticleList(
 			array('*'),
-			array(array('=','log_Istop',1),array('=','log_Status',0)),
+			array(array('=','log_IsTop',1),array('=','log_Status',0)),
 			array('log_PostTime'=>'DESC'),
 			null,
 			null

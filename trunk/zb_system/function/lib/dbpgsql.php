@@ -64,7 +64,8 @@ class DbPgSQL implements iDataBase
 	function QueryMulit($s){
 		$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
 		foreach ($a as $s) {
-			pg_query($s);
+			$s=trim($s);
+			if($s)pg_query($s);
 		}
 	}
 
@@ -92,8 +93,8 @@ class DbPgSQL implements iDataBase
 
 	function Insert($query){
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		pg_query($query);
-		return pg_insert_id();
+		$results=pg_query($query);
+		return pg_last_oid($results);
 	}
 
 	function CreateTable($tablename,$datainfo){
