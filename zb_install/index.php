@@ -580,7 +580,7 @@ case 'sqlite3':
 
 $zbp->OpenConnect();
 $zbp->db->QueryMulit($cts);
-die;
+
 InsertInfo();
 
 SaveConfig();
