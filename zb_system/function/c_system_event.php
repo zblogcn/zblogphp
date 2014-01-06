@@ -1598,6 +1598,9 @@ function SaveSetting(){
 		}		
 		$zbp->option[$key]=trim(str_replace(array("\r","\n"),array("",""),$value));
 	}
+	
+	$zbp->option['ZC_BLOG_HOST']=trim($zbp->option['ZC_BLOG_HOST']);
+	$zbp->option['ZC_BLOG_HOST']=trim($zbp->option['ZC_BLOG_HOST'],'/') . '/';
 	$zbp->SaveOption();
 }
 
