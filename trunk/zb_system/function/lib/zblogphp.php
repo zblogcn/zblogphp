@@ -176,6 +176,7 @@ class ZBlogPHP{
 
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){
 			$this->host=$this->option['ZC_BLOG_HOST'];
+			$this->cookiespath=substr($this->host,strpos($this->host,'/',8));
 		}else{
 			$this->option['ZC_BLOG_HOST']=$this->host;
 		}
