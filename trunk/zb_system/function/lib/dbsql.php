@@ -35,6 +35,9 @@ class DbSql #extends AnotherClass
 	public $type=null;
 
 	public function DelTable($tablename){
+		$s='';
+		$s="DROP TABLE $tablename";
+		return $s;
 	}
 
 	public function ExistTable($tablename,$dbname=''){
