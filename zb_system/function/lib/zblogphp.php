@@ -88,30 +88,33 @@ class ZBlogPHP{
 	
 	function __construct() {
 
+		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,$datainfo;
+		global $blogtitle,$blogname,$blogsubname,$blogtheme,$blogstyle;
+	
 		//基本配置加载到$zbp内
-		$this->option = &$GLOBALS['option'];
-		$this->lang = &$GLOBALS['lang'];
-		$this->path = &$GLOBALS['blogpath'];
-		$this->host = &$GLOBALS['bloghost'];
-		$this->cookiespath = &$GLOBALS['cookiespath'];
-		$this->usersdir = &$GLOBALS['usersdir'];
+		$this->option = &$option;
+		$this->lang = &$lang;
+		$this->path = &$blogpath;
+		$this->host = &$bloghost;
+		$this->cookiespath = &$cookiespath;
+		$this->usersdir = &$usersdir;
 
-		$this->table=&$GLOBALS['table'];
-		$this->datainfo=&$GLOBALS['datainfo'];
+		$this->table=&$table;
+		$this->datainfo=&$datainfo;
 
 		if (trim($this->option['ZC_BLOG_CLSID'])==''){
 			$this->option['ZC_BLOG_CLSID']=GetGuid();
 		}
-		$this->guid=&$this->option['ZC_BLOG_CLSID'];
+		$this->guid=$this->option['ZC_BLOG_CLSID'];
 
 
 		//define();
 
-		$this->title=&$GLOBALS['blogtitle'];
-		$this->name=&$GLOBALS['blogname'];
-		$this->subname=&$GLOBALS['blogsubname'];
-		$this->theme=&$GLOBALS['blogtheme'];
-		$this->style=&$GLOBALS['blogstyle'];
+		$this->title=&$blogtitle;
+		$this->name=&$blogname;
+		$this->subname=&$blogsubname;
+		$this->theme=&$blogtheme;
+		$this->style=&$blogstyle;
 
 		$this->managecount=$this->option['ZC_MANAGE_COUNT'];
 		$this->pagebarcount=$this->option['ZC_PAGEBAR_COUNT'];
@@ -345,7 +348,7 @@ class ZBlogPHP{
 		foreach ($array as $c) {
 			$m=new Metas;
 			$m->Unserialize($c['conf_Value']);
-			$this->configs[$c['conf_Name']]=$m;	
+			$this->configs[$c['conf_Name']]=$m;
 		}
 	}
 
@@ -435,6 +438,7 @@ class ZBlogPHP{
 		}
 
 		foreach ($this->option as $key => $value) {
+			//if($key=='ZC_BLOG_HOST')$value=urlencode($value);
 			$this->Config('system')->$key = $value;
 		}
 		$this->SaveConfig('system');
@@ -455,6 +459,7 @@ class ZBlogPHP{
 			//if($key=='ZC_PERMANENT_DOMAIN_ENABLE')continue;
 			//if($key=='ZC_BLOG_HOST')continue;			
 			//if($key=='ZC_BLOG_CLSID')continue;
+			//if($key=='ZC_BLOG_HOST')$value=urldecode($value);
 			if($key=='ZC_YUN_SITE')continue;
 			if($key=='ZC_BLOG_LANGUAGEPACK')continue;
 			if($key=='ZC_DATABASE_TYPE')continue;

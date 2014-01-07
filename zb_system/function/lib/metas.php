@@ -47,7 +47,7 @@ class Metas {
 		if(count($this->Data)==0)return '';
 		foreach ($this->Data as $key => $value) {
 			if(is_string($value)){
-				$this->Data[$key]=str_replace($zbp->host,'{#ZC_BLOG_HOST#}',$value);
+				$this->Data[$key]=str_replace(($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']==false?$zbp->host:$zbp->option['ZC_BLOG_HOST']),'{#ZC_BLOG_HOST#}',$value);
 			}
 		}
 		return serialize($this->Data);
@@ -60,7 +60,7 @@ class Metas {
 		if(count($this->Data)==0)return false;
 		foreach ($this->Data as $key => $value) {
 			if(is_string($value)){
-				$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$value);
+				$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']==false?$zbp->host:$zbp->option['ZC_BLOG_HOST']),$value);
 			}
 		}
 	}
