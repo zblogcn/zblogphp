@@ -16,7 +16,7 @@ function VerifyLogin(){
 	if (isset($zbp->membersbyname[GetVars('username','POST')])) {
 		if($zbp->Verify_MD5(GetVars('username','POST'),GetVars('password','POST'))){
 			$un=GetVars('username','POST');
-			$ps=md5($zbp->user->Password . $zbp->path);
+			$ps=md5($zbp->user->Password . $zbp->guid);
 			if(GetVars('savedate')==0){
 				setcookie("username", $un,0,$zbp->cookiespath);
 				setcookie("password", $ps,0,$zbp->cookiespath);
@@ -1601,6 +1601,8 @@ function SaveSetting(){
 	
 	$zbp->option['ZC_BLOG_HOST']=trim($zbp->option['ZC_BLOG_HOST']);
 	$zbp->option['ZC_BLOG_HOST']=trim($zbp->option['ZC_BLOG_HOST'],'/') . '/';
+	$lang=require($zbp->usersdir . 'language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+	$zbp->option['ZC_BLOG_LANGUAGE']=$lang['lang'];
 	$zbp->SaveOption();
 }
 

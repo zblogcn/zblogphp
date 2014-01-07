@@ -107,9 +107,6 @@ class ZBlogPHP{
 		}
 		$this->guid=$this->option['ZC_BLOG_CLSID'];
 
-
-		//define();
-
 		$this->title=&$blogtitle;
 		$this->name=&$blogname;
 		$this->subname=&$blogsubname;
@@ -544,7 +541,7 @@ class ZBlogPHP{
 	public function Verify_MD5Path($name,$ps_and_path){
 		if (isset($this->membersbyname[$name])){
 			$m=$this->membersbyname[$name];
-			if(md5($m->Password . $this->path) == $ps_and_path){
+			if(md5($m->Password . $this->guid) == $ps_and_path){
 				$this->user=$m;
 				return true;
 			}else{
@@ -905,7 +902,29 @@ function AddBuildModuleAll(){
 				$this->templates['commentpost'] .= $verify;
 			}
 		}
+		
+		if(strpos($this->templates['header'], '{$header}')===false){
+			if(strpos($this->templates['header'], '</head>')!==false){
+				$this->templates['header']=str_replace('</head>','</head>' . '{$header}',$this->templates['header']);
+			}elseif(strpos($this->templates['header'], '</ head>')!==false){
+				$this->templates['header']=str_replace('</ head>','</ head>' . '{$header}',$this->templates['header']);
+			}else{
+				$this->templates['header'] .= '{$header}';
+			}
+		}
 
+		if(strpos($this->templates['footer'], '{$footer}')===false){
+			if(strpos($this->templates['footer'], '</body>')!==false){
+				$this->templates['footer']=str_replace('</body>','{$header}' . '</body>',$this->templates['footer']);
+			}elseif(strpos($this->templates['footer'], '</ body>')!==false){
+				$this->templates['footer']=str_replace('</ head>','{$header}' . '</ body>',$this->templates['footer']);
+			}elseif(strpos($this->templates['footer'], '</html>')!==false){
+				$this->templates['footer']=str_replace('</html>','{$header}' . '</html>',$this->templates['footer']);
+			}else{
+				$this->templates['footer'] = '{$header}' . $this->templates['footer'];
+			}
+		}
+		
 		$dir=$this->usersdir . 'theme/'. $this->theme .'/compile/';
 
 		if(!file_exists($dir)){

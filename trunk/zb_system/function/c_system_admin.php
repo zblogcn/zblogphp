@@ -310,7 +310,18 @@ $tz=array
 
 
 
-
+function CreateOptionsOfLang($default){
+	global $zbp;
+	$s='';
+	$dir=$zbp->usersdir . 'language/';
+	$files=GetFilesInDir($dir,'php');
+	foreach($files as $f){
+		$n=basename($f,'.php');
+		$t= require($f);
+		$s.= '<option value="' . $n . '" ' . ($default==$n?'selected="selected"':'') . ' >' . $t['lang'] .' ('. $n .')'. '</option>';
+	}
+	return $s;
+}
 
 
 
@@ -1372,7 +1383,9 @@ function Admin_SettingMng(){
 	echo '<tr><td class="td25"><p><b>'.$zbp->lang['msg']['blog_timezone'].'</b></p></td><td><p><select id="ZC_TIME_ZONE_NAME" name="ZC_TIME_ZONE_NAME" style="width:600px;" >';
 	echo CreateOptionsOfTimeZone($zbp->option['ZC_TIME_ZONE_NAME']);
 	echo '</select></p></td></tr>';
-	echo '<tr><td><p><b>'.$zbp->lang['msg']['blog_language'].'</b></p></td><td><p><input id="ZC_BLOG_LANGUAGE" name="ZC_BLOG_LANGUAGE" style="width:600px;" type="text" value="'.$zbp->option['ZC_BLOG_LANGUAGE'].'" /></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['blog_language'].'</b></p></td><td><p><select id="ZC_BLOG_LANGUAGEPACK" name="ZC_BLOG_LANGUAGEPACK" style="width:600px;" >';
+	echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']);
+	echo '</select></p></td></tr>';
 
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['allow_upload_type'].'</b></p></td><td><p><input id="ZC_UPLOAD_FILETYPE" name="ZC_UPLOAD_FILETYPE" style="width:600px;" type="text" value="'.$zbp->option['ZC_UPLOAD_FILETYPE'].'" /></p></td></tr>';
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['allow_upload_size'].'</b></p></td><td><p><input id="ZC_UPLOAD_FILESIZE" name="ZC_UPLOAD_FILESIZE" style="width:600px;" type="text" value="'.$zbp->option['ZC_UPLOAD_FILESIZE'].'" /></p></td></tr>';

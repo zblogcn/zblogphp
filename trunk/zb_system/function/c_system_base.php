@@ -31,7 +31,7 @@ define('ZC_MEMBER_STATUS_NORMAL', 0);
 define('ZC_MEMBER_STATUS_AUDITING', 1);
 define('ZC_MEMBER_STATUS_LOCKED', 2);
 
-define('ZC_REWRITE_GO_ON', 'go on');
+define('ZC_REWRITE_GO_ON', 'go_on');
 
 function _stripslashes(&$val) {
 	if(!is_array($val)) return stripslashes($val);
