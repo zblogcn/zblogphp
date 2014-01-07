@@ -3,7 +3,7 @@ function heartVote(vote,id){
 	var t=$("div.heart-vote").find("i").text();
 	$("div.heart-vote").find("i").text("打分中.....");
 	$("div.heart-vote").find("b").css("visibility","hidden");
-	$.post(bloghost + "zb_users/plugin/heartvote/vote.php",
+	$.post(bloghost + "zb_users/plugin/HeartVote/vote.php",
 		{
 		"vote":vote,
 		"id":id

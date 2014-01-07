@@ -11,7 +11,7 @@ function ActivePlugin_HeartVote() {
 	Add_Filter_Plugin('Filter_Plugin_Post_Call','HeartVote_Main');
 }
 
-$table['HeartVote']='%pre%HeartVote';
+$table['HeartVote']='%pre%heartvote';
 
 $datainfo['HeartVote']=array(
 	'ID'=>array('vote_ID','integer','',0),

@@ -24,7 +24,7 @@ function AuditRecords_AddMenu(&$m){
 }
 
 
-$table['AuditRecords']='%pre%AuditRecords';
+$table['AuditRecords']='%pre%auditrecords';
 
 $datainfo['AuditRecords']=array(
 	'ID'=>array('ar_ID','integer','',0),
