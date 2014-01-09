@@ -6,7 +6,7 @@ $zbp->Load();
 if(isset($_GET['uid'])){
 	$m=$zbp->members[$_GET['uid']];
 	$un=$m->Name;
-	$ps=md5($m->Password . $zbp->path);
+	$ps=md5($m->Password . $zbp->guid);
 	setcookie("username", $un,0,$zbp->cookiespath);
 	setcookie("password", $ps,0,$zbp->cookiespath);
 	Redirect('zb_system/admin/?act=admin');

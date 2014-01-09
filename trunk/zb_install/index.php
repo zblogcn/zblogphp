@@ -488,7 +488,7 @@ function Setup4(){
     <div id="title">安装结果</div>
     <div id="content">
       <?php
-if(!$zbp->option['ZC_YUN_SITE'])FileWriteTest();
+//if(!$zbp->option['ZC_YUN_SITE'])FileWriteTest();
 
 $zbp->option['ZC_DATABASE_TYPE']=GetVars('dbtype','POST');
 

@@ -11,8 +11,14 @@ if(!$zbp->CheckRights($action)){$zbp->ShowError(6);die();}
 
 switch ($action) {
 	case 'login':
+		if ($zbp->user->ID>0 && GetVars('redirect','GET')) {
+			Redirect(GetVars('redirect','GET'));
+		}
 		if ($zbp->CheckRights('admin')) {
 			Redirect('cmd.php?act=admin');
+		}
+		if ($zbp->user->ID==0 && GetVars('redirect','GET')) {
+			setcookie("redirect", GetVars('redirect','GET'),0,$zbp->cookiespath);
 		}
 		Redirect('login.php');
 		break;
@@ -25,7 +31,10 @@ switch ($action) {
 		break;	
 	case 'verify':
 		if(VerifyLogin()){
-			header('Location:admin/?act=admin');
+			if ($zbp->user->ID>0 && GetVars('redirect','COOKIE')) {
+				Redirect(GetVars('redirect','COOKIE'));
+			}
+			Redirect('admin/?act=admin');
 		}else{
 			Redirect('../');
 		}
