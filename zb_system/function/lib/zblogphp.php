@@ -1373,20 +1373,38 @@ function AddBuildModuleAll(){
 	}
 
 	#$signal = good,bad,tips
+	private $hint1=null,$hint2=null,$hint3=null,$hint4=null,$hint5=null;
 	function SetHint($signal,$content=''){
 		if($content==''){
 			if($signal=='good')$content=$this->lang['msg']['operation_succeed'];
 			if($signal=='bad')$content=$this->lang['msg']['operation_failed'];				
 		}
-		setcookie("hint_signal", $signal . '|' . $content,time()+3600,$this->cookiespath);
+		if($this->hint1==null){
+			$this->hint1=$signal . '|' . $content;
+			setcookie("hint_signal1", $signal . '|' . $content,time()+3600,$this->cookiespath);
+		}elseif($this->hint2==null){
+			$this->hint2=$signal . '|' . $content;
+			setcookie("hint_signal2", $signal . '|' . $content,time()+3600,$this->cookiespath);
+		}elseif($this->hint3==null){
+			$this->hint3=$signal . '|' . $content;
+			setcookie("hint_signal3", $signal . '|' . $content,time()+3600,$this->cookiespath);
+		}elseif($this->hint4==null){
+			$this->hint4=$signal . '|' . $content;
+			setcookie("hint_signal4", $signal . '|' . $content,time()+3600,$this->cookiespath);
+		}elseif($this->hint5==null){
+			$this->hint5=$signal . '|' . $content;
+			setcookie("hint_signal5", $signal . '|' . $content,time()+3600,$this->cookiespath);
+		}
 	}
 
 	function GetHint(){
-		$signal=GetVars('hint_signal','COOKIE');
-		if($signal){
-			$a=explode('|', $signal);
-			$this->ShowHint($a[0],$a[1]);
-			setcookie("hint_signal", '',time()-3600,$this->cookiespath);
+		for ($i = 1; $i <= 5; $i++) {
+			$signal=GetVars('hint_signal' . $i,'COOKIE');
+			if($signal){
+				$a=explode('|', $signal);
+				$this->ShowHint($a[0],$a[1]);
+				setcookie("hint_signal" . $i , '',time()-3600,$this->cookiespath);
+			}
 		}
 	}
 

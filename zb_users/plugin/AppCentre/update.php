@@ -116,7 +116,7 @@ if ($nowxml!=''){
   	}else{
   		$newcrc32='';
   	}
-	
+	//echo PHP_INT_SIZE;
     if($newcrc32 == $file['crc32']){
       echo '<tr style="display:none;"><td><b>' . str_replace('\\','/',$file['name']) . '</b></td>';
     	$s='<img src="'.$zbp->host.'zb_system/image/admin/ok.png" width="16" alt="" />';
