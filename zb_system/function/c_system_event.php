@@ -1088,6 +1088,21 @@ function DelComment_Children($id){
 }
 
 
+function DelComment_Children_NoDel($id,&$array){
+	global $zbp;
+
+	$cmt=$zbp->GetCommentByID($id);
+
+	foreach ($cmt->Comments as $comment) {
+		$array[]=$comment->ID;
+		if(Count($comment->Comments)>0){
+			DelComment_Children_NoDel($comment->ID,$array);
+		}
+	}
+
+}
+
+
 function CheckComment(){
 	global $zbp;
 
@@ -1104,6 +1119,57 @@ function CheckComment(){
 }
 
 
+function BatchComment(){
+	global $zbp;
+	if(isset($_POST['all_del'])){$type='all_del';}
+	if(isset($_POST['all_pass'])){$type='all_pass';}
+	if(isset($_POST['all_audit'])){$type='all_audit';}
+	$array=array();
+	$array=$_POST['id'];
+	if($type=='all_del'){
+		$arrpost=array();
+		foreach($array as $i=>$id){
+			$cmt=$zbp->GetCommentByID($id);
+			if($cmt->ID==0)continue;
+			$arrpost[]=$cmt->LogID;
+		}
+		$arrpost=array_unique($arrpost);
+		foreach($arrpost as $i=>$id)
+			$comments=$zbp->GetCommentList(
+				array('*'),
+				array(array('=','comm_LogID',$id)),
+				null,
+				null,
+				null
+			);
+
+		$arrdel=array();
+		foreach($array as $i=>$id){
+			$cmt=$zbp->GetCommentByID($id);
+			if($cmt->ID==0)continue;
+			$arrdel[]=$cmt->ID;
+			DelComment_Children_NoDel($cmt->ID,$arrdel);
+		}
+		foreach($arrdel as $i=>$id){
+			$cmt=$zbp->GetCommentByID($id);
+			$cmt->Del();
+		}
+	}
+	if($type=='all_pass')
+	foreach($array as $i=>$id){
+		$cmt=$zbp->GetCommentByID($id);
+		if($cmt->ID==0)continue;
+		$cmt->IsChecking=false;
+		$cmt->Save();
+	}
+	if($type=='all_audit')
+	foreach($array as $i=>$id){
+		$cmt=$zbp->GetCommentByID($id);
+		if($cmt->ID==0)continue;
+		$cmt->IsChecking=true;
+		$cmt->Save();
+	}
+}
 
 
 

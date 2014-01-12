@@ -688,18 +688,30 @@ if(!GetVars('ischecking','GET')){
 	echo '</tr>';
 }
 	echo '</table>';
-	echo '<hr/><p class="pagebar">';
+	echo '<hr/>';
+
+	echo'<p style="float:right;">';
+	
+	if((boolean)GetVars('ischecking')){
+		echo '<input type="submit" name="all_del"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		echo '<input type="submit" name="all_pass"  value="' . $zbp->lang['msg']['all_pass'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+	}else{
+		echo '<input type="submit" name="all_del"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		echo '<input type="submit" name="all_audit"  value="' . $zbp->lang['msg']['all_audit'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+	}
+	
+	echo '</p>';
+	
+	echo'<p class="pagebar">';
 
 foreach ($p->buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 
-	echo '</p><p>';
+	echo '</p>';
 
-	//echo '<input type="submit" onclick="" value="删除所选评论"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-	//echo '<input type="submit" onclick="" value="审核所选评论"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-
-	echo '</p><hr/></form>';
+	
+	echo '<hr/></form>';
 
 
 
