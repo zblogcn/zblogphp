@@ -187,6 +187,9 @@ return array(
 	'catalog_style_normal'=>'普通型',
 	'catalog_style_tree'=>'树型',
 	'catalog_style_ul'=>'UL嵌套型',
+	'all_del'=>'所选全部删除',
+	'all_pass'=>'所选全部通过',
+	'all_audit'=>'所选全部审核',	
 	''=>'',
 ),
 

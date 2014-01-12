@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>Totoro</id>
 <name>Totoro</name>
@@ -21,7 +21,7 @@
 <adapted>130707</adapted>
 <version>1.0</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2013-09-02</modified>
+<modified>2014-01-12</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

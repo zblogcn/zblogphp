@@ -129,8 +129,11 @@ switch ($action) {
 		Redirect($_SERVER["HTTP_REFERER"]);
 		break;
 	case 'CommentBat':
-		var_dump($_POST['id']);
+		if(isset($_POST['id'])==false)Redirect($_SERVER["HTTP_REFERER"]);
+		BatchComment();
 		$zbp->BuildModule();
+		$zbp->SetHint('good');
+		Redirect($_SERVER["HTTP_REFERER"]);
 		break;
 	case 'CommentMng':
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));

@@ -26,7 +26,7 @@ function InstallPlugin_Totoro(){
 
 function Totoro_AddMenu(){
 	global $zbp;
-	echo '<a href="'. $zbp->host .'zb_users/plugin/Totoro/main.php"><span class="m-left">Totoro设置</span></a>';
+	echo '<a href="'. $zbp->host .'zb_users/plugin/Totoro/main.php"><span class="m-right">Totoro设置</span></a>';
 
 }
 
