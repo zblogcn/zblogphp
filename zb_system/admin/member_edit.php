@@ -104,7 +104,7 @@ function checkInfo(){
     return false
   }
 
-  if(!$("#edtPassword").val()==$("#edtPasswordRe").val()){
+  if($("#edtPassword").val()!==$("#edtPasswordRe").val()){
     alert("<?php echo $lang['error']['73']?>");
     return false
   } 
