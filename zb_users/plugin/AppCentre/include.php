@@ -53,4 +53,3 @@ function AppCentre_AddPluginMenu(){
 	echo "<script type='text/javascript'>var app_username='".$zbp->Config('AppCentre')->username."';</script>";
 	echo "<script src='{$zbp->host}zb_users/plugin/AppCentre/plugin.js' type='text/javascript'></script>";
 }
-?>

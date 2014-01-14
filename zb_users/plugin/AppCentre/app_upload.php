@@ -29,5 +29,3 @@ foreach ($_FILES as $key => $value) {
 }
 
 Redirect($_SERVER["HTTP_REFERER"]);
-
-?>

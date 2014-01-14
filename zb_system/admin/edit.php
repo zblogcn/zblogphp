@@ -139,11 +139,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <!-- cate --><?php if(!$ispage){ ?>
           <div id='cate' class='editmod'> <label for="cmbTemplate" class="editinputname" ><?php echo $lang['msg']['category']?></label>
             <select style="width:180px;" class="edit" size="1" name="CateID" id="cmbCateID">
-<?php
-foreach ($zbp->categorysbyorder as $id => $cate) {
-  echo '<option ' . ($article->CateID==$cate->ID?'selected="selected"':'') . ' value="'. $cate->ID .'">' . $cate->SymbolName . '</option>';
-}
-?>
+<?php echo CreateOptoinsOfCategorys($article->CateID);?>
             </select>
           </div>
           <!-- cate --><?php } ?>

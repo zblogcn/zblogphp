@@ -29,4 +29,3 @@ function rrmdir($dir) {
 rrmdir($zbp->usersdir . $_GET['type'] . '/' . $_GET['id']);
 
 Redirect($_SERVER["HTTP_REFERER"]);
-?>

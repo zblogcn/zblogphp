@@ -485,7 +485,6 @@ $Filter_Plugin_Cmd_Begin=array();
 
 
 
-
 /*
 '**************************************************<
 '类型:Filter
@@ -496,9 +495,6 @@ $Filter_Plugin_Cmd_Begin=array();
 '**************************************************>
 */
 $Filter_Plugin_Login_Header=array();
-
-
-
 
 
 
@@ -902,6 +898,20 @@ $Filter_Plugin_Member_Edit_Response=array();
 */
 $Filter_Plugin_Admin_Js_Add=array();
 
+
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Login_Header
+'参数:
+'说明:定义Login.php首页header接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_CreateOptoinsOfCategorys=array();
 
 
 

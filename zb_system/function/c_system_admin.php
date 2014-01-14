@@ -168,6 +168,24 @@ function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUr
 
 
 ################################################################################################################
+function CreateOptoinsOfCategorys($default){
+	global $zbp;
+	
+	foreach ($GLOBALS['Filter_Plugin_CreateOptoinsOfCategorys'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($default);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+	}
+	
+	$s=null;
+	foreach ($zbp->categorysbyorder as $id => $cate) {
+	  $s.='<option ' . ($default==$cate->ID?'selected="selected"':'') . ' value="'. $cate->ID .'">' . $cate->SymbolName . '</option>';
+	}
+	
+	return $s;
+}
+
+
+
 function CreateOptoinsOfTemplate($default){
 	global $zbp;
 

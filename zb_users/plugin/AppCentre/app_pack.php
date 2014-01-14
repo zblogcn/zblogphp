@@ -20,10 +20,10 @@ $app=new App;
 
 if($app->LoadInfoByXml($type,$id)==false)die;
 
+ob_clean();
+
 header('Content-Type: application/octet-stream');
 
 header('Content-Disposition:attachment;filename='. $id .'.zba');
 
 echo $app->Pack();
-
-?>
