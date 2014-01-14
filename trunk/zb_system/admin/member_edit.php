@@ -10,6 +10,7 @@ require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
 $zbp->Load();
+$zbp->CheckGzip();
 
 $action='';
 if(GetVars('act','GET')=='MemberEdt')$action='MemberEdt';

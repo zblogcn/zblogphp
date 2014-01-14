@@ -1646,7 +1646,8 @@ function SaveSetting(){
 		 ||$key=='ZC_DEBUG_MODE'
 		 ||$key=='ZC_COMMENT_TURNOFF'
 		 ||$key=='ZC_COMMENT_REVERSE_ORDER_EXPORT'
-		 ||$key=='ZC_DISPLAY_SUBCATEGORYS'		 
+		 ||$key=='ZC_DISPLAY_SUBCATEGORYS'
+		 ||$key=='ZC_GZIP_ENABLE'		 
 		){
 			$zbp->option[$key]=(boolean)$value;
 			continue;

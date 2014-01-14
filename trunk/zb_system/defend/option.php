@@ -153,6 +153,7 @@ return array(
 
 	'ZC_SIDEBAR5_ORDER' => '',
 	// '--------------------------其它----------------------------------------
+	'ZC_GZIP_ENABLE'=>false,
 	'ZC_ADMIN_HTML5_ENABLE'=>true,
 	// '代码高亮
 	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,

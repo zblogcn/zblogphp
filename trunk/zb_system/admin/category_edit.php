@@ -10,6 +10,7 @@ require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
 $zbp->Load();
+$zbp->CheckGzip();
 
 $action='CategoryEdt';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}

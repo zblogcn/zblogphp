@@ -9,7 +9,8 @@ header('Content-Type: application/x-javascript; Charset=utf-8');
 
 require '../function/c_system_base.php';
 
-//Http304(__FILE__,$zbp->cache->refesh);
+$zbp->CheckGzip();
+
 ?>
 var bloghost="<?php echo $bloghost; ?>";
 var cookiespath="<?php echo $cookiespath; ?>";

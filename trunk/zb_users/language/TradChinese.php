@@ -189,7 +189,8 @@ return array(
 	'catalog_style_ul'=>'UL巢狀型',
 	'all_del'=>'所选全部删除',
 	'all_pass'=>'所选全部通过',
-	'all_audit'=>'所选全部审核',	
+	'all_audit'=>'所选全部审核',
+	'gzip_compress'=>'GZip压缩',
 	''=>'',
 ),
 
