@@ -235,4 +235,3 @@ function AppCentre_GetHttpContent($url){
 	}
 	return $r;
 }
-?>

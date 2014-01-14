@@ -8,12 +8,10 @@
 
 require './zb_system/function/c_system_base.php';
 
-zbp_redirect_install();
-
+$zbp->RedirectInstall();
 $zbp->Load();
 $zbp->CheckGzip();
-
-zbp_redirect_install(true);
+$zbp->RedirectInstall(true);
 
 foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {$fpname();}
 

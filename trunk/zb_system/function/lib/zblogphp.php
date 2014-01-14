@@ -1446,6 +1446,7 @@ function AddBuildModuleAll(){
 		setcookie('zbpvalidcode' . md5($this->guid . $id), md5( $this->guid . date("Ymd") . $_vc->GetCode() ), null,$this->cookiespath);
 	}
 
+
 	function CheckValidCode($vaidcode,$id=''){
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckValidCode'] as $fpname => &$fpsignal) {
@@ -1455,7 +1456,8 @@ function AddBuildModuleAll(){
 		$original=GetVars('zbpvalidcode' . md5($this->guid . $id),'COOKIE');
 		if(md5( $this->guid . date("Ymd") . $vaidcode)==$original) return true;
 	}
-	
+
+
 	function CheckGzip(){
 		if(isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE'])
 		if(!headers_sent()&&extension_loaded("zlib")&&isset($_SERVER["HTTP_ACCEPT_ENCODING"])&&strstr($_SERVER["HTTP_ACCEPT_ENCODING"],"gzip")){
@@ -1464,4 +1466,16 @@ function AddBuildModuleAll(){
 			//ini_set('zlib.output_compression_level', '9');
 		}
 	}
+
+
+	function  RedirectInstall($yun=false){
+		if(!$yun){
+			if(!$this->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/');}
+		}else{
+			if($this->option['ZC_YUN_SITE']){
+				if($this->Config('system')->CountItem()==0){Redirect('./zb_install/');}
+			}
+		}
+	}
+
 }
