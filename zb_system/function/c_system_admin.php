@@ -6,6 +6,22 @@
  * @version 2.0 2013-06-14
  */
 
+Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','zbp_admin_addpagesubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','zbp_admin_addtagsubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','zbp_admin_addcatesubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu','zbp_admin_addmemsubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','zbp_admin_addmodsubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','zbp_admin_addcmtsubmenu');
+
+
+$zbp->LoadTemplates();
+
+$manage=true; 
+
+
+
+
+################################################################################################################ 
 function zbp_admin_addpagesubmenu(){
 	echo '<a href="../cmd.php?act=PageEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_page'] . '</span></a>';
 }
@@ -40,18 +56,6 @@ function zbp_admin_addcmtsubmenu(){
 		echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left '.(GetVars('ischecking')?'m-now':'').'">' . $GLOBALS['lang']['msg']['check_comment']  . $n . '</span></a>';
 	}
 }
-
-
-Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','zbp_admin_addpagesubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','zbp_admin_addtagsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','zbp_admin_addcatesubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu','zbp_admin_addmemsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','zbp_admin_addmodsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','zbp_admin_addcmtsubmenu');
-
-$zbp->LoadTemplates();
-
-$manage=true; 
 
 
 
@@ -1402,6 +1406,7 @@ function Admin_SettingMng(){
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['allow_upload_type'].'</b></p></td><td><p><input id="ZC_UPLOAD_FILETYPE" name="ZC_UPLOAD_FILETYPE" style="width:600px;" type="text" value="'.$zbp->option['ZC_UPLOAD_FILETYPE'].'" /></p></td></tr>';
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['allow_upload_size'].'</b></p></td><td><p><input id="ZC_UPLOAD_FILESIZE" name="ZC_UPLOAD_FILESIZE" style="width:600px;" type="text" value="'.$zbp->option['ZC_UPLOAD_FILESIZE'].'" /></p></td></tr>';
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['debug_mode'].'</b></p></td><td><p><input id="ZC_DEBUG_MODE" name="ZC_DEBUG_MODE" type="text" value="'.$zbp->option['ZC_DEBUG_MODE'].'" class="checkbox"/></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['gzip_compress'].'</b></p></td><td><p><input id="ZC_GZIP_ENABLE" name="ZC_GZIP_ENABLE" type="text" value="'.$zbp->option['ZC_GZIP_ENABLE'].'" class="checkbox"/></p></td></tr>';
 
 	echo '</table>';
 	echo '</div>';

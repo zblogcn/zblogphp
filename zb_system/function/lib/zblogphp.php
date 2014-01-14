@@ -199,7 +199,8 @@ class ZBlogPHP{
 
 
 	public function Load(){
-		if(!$this->isconnect)return false;
+
+		if(!$this->isinitialize)return false;
 
 		$this->LoadMembers();
 
@@ -1453,5 +1454,14 @@ function AddBuildModuleAll(){
 
 		$original=GetVars('zbpvalidcode' . md5($this->guid . $id),'COOKIE');
 		if(md5( $this->guid . date("Ymd") . $vaidcode)==$original) return true;
+	}
+	
+	function CheckGzip(){
+		if(isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE'])
+		if(!headers_sent()&&extension_loaded("zlib")&&isset($_SERVER["HTTP_ACCEPT_ENCODING"])&&strstr($_SERVER["HTTP_ACCEPT_ENCODING"],"gzip")){
+			ob_start('ob_gzhandler');
+			//ini_set('zlib.output_compression', 'On');
+			//ini_set('zlib.output_compression_level', '9');
+		}
 	}
 }

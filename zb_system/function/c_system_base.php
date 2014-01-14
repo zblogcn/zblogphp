@@ -337,7 +337,7 @@ foreach ($ap as $plugin) {
 ActivePlugin();	
 
 
-function  zbp_index_redirect_install($yun=false){
+function  zbp_redirect_install($yun=false){
 	global $zbp;
 	if(!$yun){
 		if(!$zbp->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/');}
