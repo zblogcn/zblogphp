@@ -39,6 +39,7 @@
 		 			<td><?php echo $sData?></td>
 		 		</tr>
 		 	<?php
+		 		$post_data = $_COOKIE;unset($post_data['username']);unset($post_data['password']);
 		 		}
 		 	?>
 		</tbody>
@@ -47,7 +48,7 @@
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['request_data']; ?></p><div>
 	 	<pre><?php echo '$_GET = '.print_r($_GET, 1) ?></pre>
 	 	<pre><?php echo '$_POST = '.print_r($_POST, 1) ?></pre>
-		<pre><?php echo '$_COOKIE = '.print_r($_COOKIE, 1) ?></pre>
+		<pre><?php echo '$_COOKIE = '.print_r($post_data, 1) ?></pre>
 	 	</div></div>
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['include_file']; ?></p><div>
 	 	<table style='width:100%'>
