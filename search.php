@@ -25,6 +25,10 @@ $article->Title=$lang['msg']['search'] . '“' . $q . '”';
 $article->IsLock=true;
 $article->Type=ZC_POST_TYPE_PAGE;
 
+if(isset($zbp->templates['search'])){
+	$article->Template='search';
+}
+
 $w=array();
 $w[]=array('=','log_Type','0');
 if($q){

@@ -20,7 +20,7 @@ $url=GetRequestUri();
 if($url==$cookiespath||$url==$cookiespath . 'index.php'){
 	ViewList(null,null,null,null,null);
 }elseif(isset($_GET['rewrite'])){
-	ViewAuto($_GET['rewrite']);
+	ViewAuto(GetVars('rewrite','GET'));
 }elseif(isset($_GET['id'])||isset($_GET['alias'])){
 	ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
 }elseif(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])){
