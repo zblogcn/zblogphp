@@ -795,7 +795,7 @@ $array=$zbp->GetMemberList(
 foreach ($array as $member) {
 	echo '<tr>';
 	echo '<td class="td5">' . $member->ID . '</td>';
-	echo '<td class="td10">' . $member->LevelName . '</td>';
+	echo '<td class="td10">' . $member->LevelName . ($member->Status>0?'('.$zbp->lang['user_status_name'][$member->Status].')':'') .'</td>';
 	echo '<td><a href="'.$member->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $member->Name . '</td>';
 	echo '<td class="td15">' . $member->Alias . '</td>';
 	echo '<td class="td10">' . $member->Articles . '</td>';

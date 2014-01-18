@@ -1330,6 +1330,7 @@ function PostMember(){
 	if(!$zbp->CheckRights('MemberAll')){
 		unset($_POST['Level']);
 		unset($_POST['Name']);
+		unset($_POST['Status']);
 	}
 	if(isset($_POST['Password'])){
 		if($_POST['Password']==''){
@@ -1365,6 +1366,13 @@ function PostMember(){
 		$_POST['IP']=GetGuestIP();
 	}else{
 		$mem->LoadInfoByID(GetVars('ID','POST'));
+	}
+	
+	if($zbp->CheckRights('MemberAll')){
+		if($mem->ID==$zbp->user->ID){
+			unset($_POST['Level']);
+			unset($_POST['Status']);
+		}
 	}
 
 	foreach ($zbp->datainfo['Member'] as $key => $value) {
@@ -1414,6 +1422,31 @@ function DelMember(){
 
 
 function DelMember_AllData($id){
+	global $zbp;
+	
+	$w=array();
+	$w[]=array('=','log_AuthorID',$id);
+	
+	$articles=$zbp->GetPostList(array('*'),$w);
+	foreach($articles as $a){
+		$a->Del();
+	}
+	
+	$w=array();
+	$w[]=array('=','comm_AuthorID',$id);
+	$comments=$zbp->GetCommentList(array('*'),$w);
+	foreach($comments as $c){
+		$c->AuthorID=0;
+		$c->Save();
+	}
+
+	$w=array();
+	$w[]=array('=','ul_AuthorID',$id);
+	$uploads=$zbp->GetUploadList(array('*'),$w);	
+	foreach($uploads as $u){
+		$u->Del();
+		$u->DelFile();
+	}
 
 }
 
@@ -1545,7 +1578,7 @@ function DelUpload(){
 	if($zbp->CheckRights('UploadAll')||(!$zbp->CheckRights('UploadAll')&&$u->AuthorID==$zbp->user->ID)){
 		$u->Del();
 		CountMemberArray(array($u->AuthorID));
-		$u->DelFile();		
+		$u->DelFile();
 	}else{
 		return false;
 	}
@@ -1685,7 +1718,7 @@ function SaveSetting(){
 function FilterMeta(&$object){
 
 	//$type=strtolower(get_class($object));
-//var_dump($_POST);die;
+
 	foreach ($_POST as $key => $value) {
 		if(substr($key,0,5)=='meta_'){
 			$name=substr($key,5-strlen($key));
