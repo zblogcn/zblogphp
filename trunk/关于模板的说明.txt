@@ -25,11 +25,12 @@
 {/foreach}
 
 6.注释
-{* Smarty这里是注释 *}
+{* 这里是注释 *}
 
 7.直接写PHP
 {php}
-      global $actions;
-      print_r($actions);
+  global $actions;
+  print_r($actions);
+  echo '12345';
 {/php}
 
