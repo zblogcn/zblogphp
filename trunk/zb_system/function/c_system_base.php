@@ -332,7 +332,8 @@ foreach ($ap as $plugin) {
 		require $filename;
 	}
 }
-
+unset($ap);
+unset($filename);
 
 ActivePlugin();	
 

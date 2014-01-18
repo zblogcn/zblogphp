@@ -41,9 +41,16 @@ $member=$zbp->GetMemberByID($memberid);
 	  <input id="edtGuid" name="Guid" type="hidden" value="<?php echo $member->Guid;?>" />	  
 	  <p>
 		<span class="title"><?php echo $lang['msg']['member_level']?>:</span><br />
-		<select class="edit" size="1" name="Level" id="cmbTemplate">
+		<select class="edit" size="1" name="Level" id="cmbLevel">
 <?php echo CreateOptoinsOfMemberLevel($member->Level);?>
 		</select>
+<?php if($zbp->CheckRights('MemberAll') && $zbp->user->ID<>$member->ID){?>
+		&nbsp;(<span class="title"><?php echo $lang['msg']['status']?>:</span>
+		<label><input name="Status" type="radio" value="0" <?php echo $member->Status==0?'checked="checked"':''; ?> />&nbsp;<?php echo $lang['user_status_name'][0]?></label>&nbsp;&nbsp;
+		<label><input name="Status" type="radio" value="1" <?php echo $member->Status==1?'checked="checked"':''; ?> />&nbsp;<?php echo $lang['user_status_name'][1]?></label>&nbsp;&nbsp;
+		<label><input name="Status" type="radio" value="2" <?php echo $member->Status==2?'checked="checked"':''; ?> />&nbsp;<?php echo $lang['user_status_name'][2]?></label>
+		)
+<?php }?>
 	  </p>	  
 	  <p>
 		<span class="title"><?php echo $lang['msg']['name']?>:</span><span class="star">(*)</span><br />
@@ -60,7 +67,7 @@ $member=$zbp->GetMemberByID($memberid);
 		<input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $member->Alias;?>" />
 	  </p>
 	  <p>
-		<span class="title"><?php echo $lang['msg']['email']?>:</span></span><span class="star">(*)</span><br />
+		<span class="title"><?php echo $lang['msg']['email']?>:</span><span class="star">(*)</span><br />
 		<input id="edtEmail" class="edit" size="40" name="Email" type="text" value="<?php echo $member->Email;?>" />
 	  </p>
 	  <p>
