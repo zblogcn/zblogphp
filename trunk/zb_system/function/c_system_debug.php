@@ -107,6 +107,7 @@ class ZBlogException
 	function Display(){
 
 		Http500();
+		ob_end_clean();
 		include $GLOBALS['blogpath'] . 'zb_system/defend/error.html';
 
 	}
