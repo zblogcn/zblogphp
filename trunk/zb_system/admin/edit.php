@@ -9,8 +9,8 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
-$zbp->Load();
 $zbp->CheckGzip();
+$zbp->Load();
 
 $action='';
 if(GetVars('act','GET')=='PageEdt')$action='PageEdt';

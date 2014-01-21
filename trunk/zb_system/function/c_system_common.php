@@ -329,6 +329,7 @@ function GetFilePerms($f){
 
 function AddNameInString($s,$name){
 	$pl=$s;
+	$name=(string)$name;
 	$apl=explode('|',$pl);
 	if(in_array($name,$apl)==false){
 		$apl[]=$name;
@@ -339,6 +340,7 @@ function AddNameInString($s,$name){
 
 function DelNameInString($s,$name){
 	$pl=$s;
+	$name=(string)$name;
 	$apl=explode('|',$pl);
 	for ($i=0; $i <= Count($apl)-1; $i++) { 
 		if($apl[$i]==$name){
@@ -351,6 +353,7 @@ function DelNameInString($s,$name){
 
 function HasNameInString($s,$name){
 	$pl=$s;
+	$name=(string)$name;
 	$apl=explode('|',$pl);
 	return in_array($name,$apl);
 }

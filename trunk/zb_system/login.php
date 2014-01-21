@@ -1,8 +1,8 @@
 <?php
 require './function/c_system_base.php';
 
-$zbp->Load();
 $zbp->CheckGzip();
+$zbp->Load();
 
 ?><!DOCTYPE HTML>
 <html>
