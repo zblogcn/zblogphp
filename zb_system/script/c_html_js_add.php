@@ -9,9 +9,8 @@ header('Content-Type: application/x-javascript; Charset=utf-8');
 
 require '../function/c_system_base.php';
 
-$zbp->Load();
-ob_clean();
 $zbp->CheckGzip();
+$zbp->Load();
 ?>
 var bloghost="<?php echo $bloghost; ?>";
 var cookiespath="<?php echo $cookiespath; ?>";
