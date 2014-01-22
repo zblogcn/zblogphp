@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="php">
+<id>AutoPublic</id>
+<name>定时发布</name>
+<url></url>
+<note>文章定时发布</note>
+<description>文章定时发布</description>
+<path></path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>未寒</name>
+  <email>im@imzhou.com</email>
+  <url>http://imzhou.com/</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>131221</adapted>
+<version>1.0</version>
+<pubdate>2014-01-22</pubdate>
+<modified>2014-01-22</modified>
+<price>0</price>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+</sidebars>
+</plugin>
