@@ -163,5 +163,6 @@ return array(
 	'ZC_HTTP_LASTMODIFIED' => false,
 	'ZC_MODULE_CATALOG_STYLE'=>0,
 	'ZC_VIEWNUMS_TURNOFF' => false,
+	'ZC_UTC_TIMEZONE_FIX' => false,
 )
 ?>

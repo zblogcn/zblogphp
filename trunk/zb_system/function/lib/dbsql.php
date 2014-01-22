@@ -62,7 +62,7 @@ class DbSql #extends AnotherClass
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
-				if($value[1]=='integer'){
+				if($value[1]=='integer'||$value[1]=='timeinteger'){
 					if($i==0){
 						$s.=$value[0] .' integer primary key' . ',';
 					}else{
@@ -109,7 +109,7 @@ class DbSql #extends AnotherClass
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
-				if($value[1]=='integer'){
+				if($value[1]=='integer'||$value[1]=='timeinteger'){
 					if($i==0){
 						$s.=$value[0] .' integer primary key autoincrement' . ',';
 					}else{
@@ -152,7 +152,7 @@ class DbSql #extends AnotherClass
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
-				if($value[1]=='integer'){
+				if($value[1]=='integer'||$value[1]=='timeinteger'){
 					if($i==0){
 						$s.=$value[0] .' int(11) NOT NULL AUTO_INCREMENT' . ',';
 					}else{
@@ -195,6 +195,12 @@ class DbSql #extends AnotherClass
 				}
 				if($value[1]=='double'||$value[1]=='float'){
 					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
+				}
+				if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'){
+					$s.=$value[0] . ' $value[1] NOT NULL,';
+				}
+				if($value[1]=='timestamp'){
+					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP,';
 				}
 				$i +=1;
 			}

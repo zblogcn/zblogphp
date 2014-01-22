@@ -894,7 +894,7 @@ function SaveConfig(){
   $zbp->option['ZC_SIDEBAR4_ORDER']='';
   $zbp->option['ZC_SIDEBAR5_ORDER']='';
   $zbp->option['ZC_DEBUG_MODE']=false;
-
+  $zbp->option['ZC_UTC_TIMEZONE_FIX']=true;
   $zbp->SaveOption();
   //$zbp->BuildTemplate();
   

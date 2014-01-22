@@ -79,8 +79,9 @@ class ZBlogPHP{
 	public $usersdir = null;
 	public $validcodeurl = null;
 	
-	private $isgzip=false;	
-	
+	private $isgzip=false;
+	public $timezone_diff=0;
+
 	static public function GetInstance(){
 		if(!isset(self::$_zbp)){
 			self::$_zbp=new ZBlogPHP;
@@ -188,6 +189,8 @@ class ZBlogPHP{
 		$this->option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
 
 		date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
+		$this->timezone_diff=3600*(int)date('O')/100;
+
 		header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
 		
 		$this->validcodeurl=$this->host . 'zb_system/script/c_validcode.php';
@@ -1106,7 +1109,12 @@ function AddBuildModuleAll(){
 		return $this->GetList('Upload',$sql);
 	}
 
+	function GetCounterList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
+		if(empty($select)){$select = array('*');}
+		$sql = $this->db->sql->Select($this->table['Counter'],$select,$where,$order,$limit,$option);
+		return $this->GetList('Counter',$sql);
+	}
 
 
 
@@ -1200,6 +1208,14 @@ function AddBuildModuleAll(){
 
 	function GetUploadByID($id){
 		$m = new Upload;
+		if($id>0){
+			$m->LoadInfoByID($id);
+		}
+		return $m;
+	}
+
+	function GetCounterByID($id){
+		$m = new Counter;
 		if($id>0){
 			$m->LoadInfoByID($id);
 		}
