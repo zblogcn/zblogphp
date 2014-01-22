@@ -116,7 +116,7 @@ return array(
 	'blog_name'=>'网站标题',
 	'blog_subname'=>'网站副标题',
 	'permanent_domain'=>'固化网站域名',	
-	'blog_timezone'=>'网站所在时区',		
+	'blog_timezone'=>'网站时区',		
 	'blog_language'=>'网站语言',		
 	'allow_upload_type'=>'允许上传文件的类型',	
 	'allow_upload_size'=>'允许上传文件的尺寸(单位MB)',

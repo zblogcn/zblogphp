@@ -19,7 +19,7 @@ function error_handler($errno, $errstr, $errfile, $errline ){
 	#throw new ErrorException($errstr,0,$errno, $errfile, $errline);
 	//die();
 
-	ob_clean();		
+	//ob_clean();
 	$zbe=ZBlogException::GetInstance();
 	$zbe->ParseError($errno, $errstr, $errfile, $errline);
 	$zbe->Display();
@@ -32,7 +32,7 @@ function error_handler($errno, $errstr, $errfile, $errline ){
 
 function exception_handler($exception){
 
-	ob_clean();
+	//ob_clean();
 	$zbe=ZBlogException::GetInstance();
 	$zbe->ParseException($exception);
 	$zbe->Display();
@@ -45,7 +45,7 @@ function exception_handler($exception){
 function shutdown_error_handler(){
 	if ($error = error_get_last()) {
 
-		ob_clean();
+		//ob_clean();
 		$zbe=ZBlogException::GetInstance();
 		$zbe->ParseShutdown($error);
 		$zbe->Display();
@@ -79,10 +79,12 @@ class ZBlogException
 
 
 	function ParseError($type,$message,$file,$line){
+
 		$this->type=$type;
 		$this->message=$message;
 		$this->file=$file;
 		$this->line=$line;	
+
 	}	
 
 	function ParseShutdown($error){
@@ -100,6 +102,7 @@ class ZBlogException
 		$this->type=$exception->getCode();
 		$this->file=$exception->getFile();
 		$this->line=$exception->getLine();
+
 	}
 
 
@@ -108,7 +111,9 @@ class ZBlogException
 
 		Http500();
 		ob_end_clean();
-		include $GLOBALS['blogpath'] . 'zb_system/defend/error.html';
+		$zbp=ZBlogPHP::GetInstance();
+		$zbp->StartGzip();
+		require $GLOBALS['blogpath'] . 'zb_system/defend/error.html';
 
 	}
 

@@ -75,6 +75,8 @@ class Base
 				}else{
 					$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$value[0]]);
 				}
+			}elseif($value[1] == 'timeinteger'){
+				$this->Data[$key]=$array[$value[0]]+$zbp->timezone_diff;
 			}else{
 				$this->Data[$key]=$array[$value[0]];
 			}			
@@ -96,6 +98,8 @@ class Base
 				}else{
 					$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$value[0]]);
 				}
+			}elseif($value[1] == 'timeinteger'){
+				$this->Data[$key]=$array[$i]+$zbp->timezone_diff;
 			}else{
 				$this->Data[$key]=$array[$i];
 			}
@@ -121,6 +125,8 @@ class Base
 				$keyvalue[$value[0]]=(integer)$this->Data[$key];
 			}elseif($value[1] == 'integer'){
 				$keyvalue[$value[0]]=(integer)$this->Data[$key];
+			}elseif($value[1] == 'timeinteger'){
+				$keyvalue[$value[0]]=(integer)$this->Data[$key]-$zbp->timezone_diff;
 			}elseif($value[1] == 'float'){
 				$keyvalue[$value[0]]=(float)$this->Data[$key];
 			}elseif($value[1] == 'double'){

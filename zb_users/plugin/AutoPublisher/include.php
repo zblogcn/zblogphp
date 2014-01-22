@@ -14,6 +14,7 @@ function ActivePlugin_AutoPublisher() {
 function AutoPublisher_Begin(){
 	global $zbp;
 	$s=$zbp->Config('AutoPublisher')->idstring;
+	if(!$s)return ;
 	$s2=$s;
 	$array=explode('|',$s);
 	foreach($array as $aid){
