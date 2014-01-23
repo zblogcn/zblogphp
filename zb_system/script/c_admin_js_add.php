@@ -277,6 +277,8 @@ $(document).ready(function(){
 			}
 		?>
 	}
+	
+	SetCookie("timezone",(new Date().getTimezoneOffset()/60)*(-1));
 });
 
 
