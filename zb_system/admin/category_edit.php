@@ -13,7 +13,7 @@ $zbp->CheckGzip();
 $zbp->Load();
 
 $action='CategoryEdt';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
 
 $blogtitle=$lang['msg']['category_edit'];
 

@@ -11,11 +11,11 @@ ob_clean();
 
 switch (GetVars('type','GET')) {
 	case 'statistic':
-		if (!$zbp->CheckRights('root')) {echo $zbp->ShowError(6);die();}
+		if (!$zbp->CheckRights('root')) {echo $zbp->ShowError(6,__FILE__,__LINE__);die();}
 		misc_statistic();
 		break;
 	case 'updateinfo':
-		if (!$zbp->CheckRights('root')) {echo $zbp->ShowError(6);die();}
+		if (!$zbp->CheckRights('root')) {echo $zbp->ShowError(6,__FILE__,__LINE__);die();}
 		misc_updateinfo();
 		break;
 	case 'showtags':
@@ -23,7 +23,7 @@ switch (GetVars('type','GET')) {
 		misc_showtags();
 		break;
 	case 'vrs':
-		if (!$zbp->CheckRights('misc')) {$zbp->ShowError(6);}
+		if (!$zbp->CheckRights('misc')) {$zbp->ShowError(6,__FILE__,__LINE__);}
 		misc_viewrights();
 		break;
 	default:
@@ -112,7 +112,13 @@ function msic_fixutctimezone(){
 		
 			$zbp->option['ZC_UTC_TIMEZONE_FIX']=true;
 			$zbp->SaveOption();
-			
+
+			$array=$zbp->GetPostList();
+			foreach($array as $a){
+				$a->PostTime-=$zbp->timezone_diff;
+				$a->Save();
+			}
+
 			$array=$zbp->GetUploadList();
 			foreach($array as $a){
 				$a->PostTime-=$zbp->timezone_diff;
@@ -130,13 +136,7 @@ function msic_fixutctimezone(){
 				$a->PostTime-=$zbp->timezone_diff;
 				$a->Save();
 			}
-			
-			$array=$zbp->GetPostList();
-			foreach($array as $a){
-				$a->PostTime-=$zbp->timezone_diff;
-				$a->Save();
-			}
-		
+	
 		}	
 	}
 

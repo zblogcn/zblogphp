@@ -201,6 +201,8 @@ function SetHttpStatusCode($number){
 		case 500:
 			header('HTTP/1.1 500 Internal Server Error');
 			break;
+		case 503:
+			header('HTTP/1.1 503 Service Unavailable');
 	}
 	$status=$number;
 	return true;
@@ -225,6 +227,10 @@ function Http404(){
 
 function Http500(){
 	SetHttpStatusCode(500);
+}
+
+function Http503(){
+	SetHttpStatusCode(503);
 }
 
 function Http304($filename,$time){

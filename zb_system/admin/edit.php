@@ -15,7 +15,7 @@ $zbp->Load();
 $action='';
 if(GetVars('act','GET')=='PageEdt')$action='PageEdt';
 if(GetVars('act','GET')=='ArticleEdt')$action='ArticleEdt';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
 
 $article=new Post;
 $article->AuthorID=$zbp->user->ID;
@@ -33,10 +33,10 @@ if(isset($_GET['id'])){
 
 if($ispage){
   $blogtitle=$lang['msg']['page_edit'];
-  if(!$zbp->CheckRights('PageAll')&&$article->AuthorID!=$zbp->user->ID){$zbp->ShowError(6);die();}
+  if(!$zbp->CheckRights('PageAll')&&$article->AuthorID!=$zbp->user->ID){$zbp->ShowError(6,__FILE__,__LINE__);die();}
 }else{
   $blogtitle=$lang['msg']['article_edit']; 
-  if(!$zbp->CheckRights('ArticleAll')&&$article->AuthorID!=$zbp->user->ID){$zbp->ShowError(6);die();}
+  if(!$zbp->CheckRights('ArticleAll')&&$article->AuthorID!=$zbp->user->ID){$zbp->ShowError(6,__FILE__,__LINE__);die();}
 }
 
 if($article->Intro){

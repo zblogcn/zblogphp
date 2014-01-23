@@ -26,10 +26,10 @@ function VerifyLogin(){
 			}
 			return true;
 		}else{
-			$zbp->ShowError(8);
+			$zbp->ShowError(8,__FILE__,__LINE__);
 		}
 	}else{
-		$zbp->ShowError(8);
+		$zbp->ShowError(8,__FILE__,__LINE__);
 	}
 }
 
@@ -57,7 +57,7 @@ function ViewAuto($url){
 	}
 
 	if($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE'){
-		$zbp->ShowError(2);
+		$zbp->ShowError(2,__FILE__,__LINE__);
 		return null;
 	}
 
@@ -114,7 +114,7 @@ function ViewAuto($url){
 			$result=ViewPost(null,$m[1],true);
 		}
 		if($result==ZC_REWRITE_GO_ON)
-			$zbp->ShowError(2);
+			$zbp->ShowError(2,__FILE__,__LINE__);
 		return null;
 	}
 
@@ -127,7 +127,7 @@ function ViewAuto($url){
 			$result=ViewPost(null,$m[1],true);
 		}
 		if($result==ZC_REWRITE_GO_ON)
-			$zbp->ShowError(2);
+			$zbp->ShowError(2,__FILE__,__LINE__);
 		return null;
 	}
 
@@ -137,7 +137,7 @@ function ViewAuto($url){
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
 	
-	$zbp->ShowError(2);
+	$zbp->ShowError(2,__FILE__,__LINE__);
 	
 }
 
@@ -329,7 +329,7 @@ function ViewList($page,$cate,$auth,$date,$tags,$isrewrite=false){
 	}
 	if($category->ID==0){
 		if($isrewrite==true)return ZC_REWRITE_GO_ON;
-		$zbp->ShowError(2);
+		$zbp->ShowError(2,__FILE__,__LINE__);
 	}
 	if($page==1){
 		$zbp->title=$category->Name;
@@ -369,7 +369,7 @@ function ViewList($page,$cate,$auth,$date,$tags,$isrewrite=false){
 	}
 	if($author->ID==0){
 		if($isrewrite==true)return ZC_REWRITE_GO_ON;
-		$zbp->ShowError(2);
+		$zbp->ShowError(2,__FILE__,__LINE__);
 	}
 	if($page==1){
 		$zbp->title=$author->Name;
@@ -419,7 +419,7 @@ function ViewList($page,$cate,$auth,$date,$tags,$isrewrite=false){
 	}
 	if($tag->ID==0){
 		if($isrewrite==true)return ZC_REWRITE_GO_ON;
-		$zbp->ShowError(2);
+		$zbp->ShowError(2,__FILE__,__LINE__);
 	}
 
 	if($page==1){
@@ -492,7 +492,7 @@ function ViewPost($id,$alias,$isrewrite=false){
 	}elseif($alias!==null){
 		$w[]=array('array',array(array('log_Alias',$alias),array('log_Title',$alias)));
 	}else{
-		$zbp->ShowError(2);
+		$zbp->ShowError(2,__FILE__,__LINE__);
 		die();
 	}
 
@@ -509,7 +509,7 @@ function ViewPost($id,$alias,$isrewrite=false){
 	);
 	if(count($articles)==0){
 		if($isrewrite==true)return ZC_REWRITE_GO_ON;
-		$zbp->ShowError(2);
+		$zbp->ShowError(2,__FILE__,__LINE__);
 	}
 
 	$article = $articles[0];
@@ -741,7 +741,7 @@ function PostArticle(){
 		if(!$zbp->CheckRights('ArticlePub')){$_POST['Status']=ZC_POST_STATUS_AUDITING;}
 	}else{
 		$article->LoadInfoByID(GetVars('ID','POST'));
-		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){$zbp->ShowError(6);}
+		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){$zbp->ShowError(6,__FILE__,__LINE__);}
 		if((!$zbp->CheckRights('ArticlePub'))&&($article->Status==ZC_POST_STATUS_AUDITING)){$_POST['Status']=ZC_POST_STATUS_AUDITING;}
 		$pre_author=$article->AuthorID;
 		$pre_tag=$article->Tag;
@@ -795,7 +795,7 @@ function DelArticle(){
 	$article->LoadInfoByID($id);
 	if($article->ID>0){
 
-		if(!$zbp->CheckRights('ArticleAll')&&$article->AuthorID!=$zbp->user->ID)$zbp->ShowError(6);
+		if(!$zbp->CheckRights('ArticleAll')&&$article->AuthorID!=$zbp->user->ID)$zbp->ShowError(6,__FILE__,__LINE__);
 
 		$pre_author=$article->AuthorID;
 		$pre_tag=$article->Tag;
@@ -906,7 +906,7 @@ function PostPage(){
 	if(GetVars('ID','POST') == 0){
 	}else{
 		$article->LoadInfoByID(GetVars('ID','POST'));
-		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('PageAll'))){$zbp->ShowError(6);}
+		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('PageAll'))){$zbp->ShowError(6,__FILE__,__LINE__);}
 		$pre_author=$article->AuthorID;
 	}
 
@@ -952,7 +952,7 @@ function DelPage(){
 	$article->LoadInfoByID($id);
 	if($article->ID>0){
 
-		if(!$zbp->CheckRights('PageAll')&&$article->AuthorID!=$zbp->user->ID)$zbp->ShowError(6);
+		if(!$zbp->CheckRights('PageAll')&&$article->AuthorID!=$zbp->user->ID)$zbp->ShowError(6,__FILE__,__LINE__);
 
 		$pre_author=$article->AuthorID;
 
@@ -988,11 +988,11 @@ function PostComment(){
 
 	$_POST['LogID'] = $_GET['postid'];
 	
-	if($zbp->VerifyCmtKey($_GET['postid'],$_GET['key'])==false)$zbp->ShowError(43);
+	if($zbp->VerifyCmtKey($_GET['postid'],$_GET['key'])==false)$zbp->ShowError(43,__FILE__,__LINE__);
 
 	if($zbp->option['ZC_COMMENT_VERIFY_ENABLE']){
 		if($zbp->user->ID==0){
-			if($zbp->CheckValidCode($_POST['verify'],'cmt')==false)$zbp->ShowError(38);
+			if($zbp->CheckValidCode($_POST['verify'],'cmt')==false)$zbp->ShowError(38,__FILE__,__LINE__);
 		}
 	}
 	
@@ -1005,7 +1005,7 @@ function PostComment(){
 		$_POST['ParentID'] = $replyid;
 		$c = $zbp->GetCommentByID($replyid);
 		if($c->Level==3){
-			$zbp->ShowError(52);
+			$zbp->ShowError(52,__FILE__,__LINE__);
 		}
 		$_POST['RootID']=Comment::GetRootID($c->ID);
 	}
@@ -1058,13 +1058,13 @@ function PostComment(){
 
 		}else{
 
-			$zbp->ShowError(53);
+			$zbp->ShowError(53,__FILE__,__LINE__);
 
 		}
 
 	}else{
 
-		$zbp->ShowError(14);
+		$zbp->ShowError(14,__FILE__,__LINE__);
 
 	}
 }
@@ -1360,10 +1360,10 @@ function PostMember(){
 			unset($_POST['Password']);
 		}else{
 			if(strlen($_POST['Password'])<$zbp->option['ZC_PASSWORD_MIN']||strlen($_POST['Password'])>$zbp->option['ZC_PASSWORD_MAX']){
-				$zbp->ShowError(54);
+				$zbp->ShowError(54,__FILE__,__LINE__);
 			}
 			if(!CheckRegExp($_POST['Password'],'[password]')){
-				$zbp->ShowError(54);
+				$zbp->ShowError(54,__FILE__,__LINE__);
 			}
 			$_POST['Password']=Member::GetPassWordByGuid($_POST['Password'],$_POST['Guid']);
 		}
@@ -1372,7 +1372,7 @@ function PostMember(){
 	if(isset($_POST['Name'])){
 		if(isset($zbp->membersbyname[$_POST['Name']])){
 			if($zbp->membersbyname[$_POST['Name']]->ID<>$_POST['ID']){
-				$zbp->ShowError(62);
+				$zbp->ShowError(62,__FILE__,__LINE__);
 			}
 		}
 	}
@@ -1384,7 +1384,7 @@ function PostMember(){
 	$mem = new Member();
 	if(GetVars('ID','POST') == 0){
 		if(isset($_POST['Password'])==false||$_POST['Password']==''){
-			$zbp->ShowError(73);
+			$zbp->ShowError(73,__FILE__,__LINE__);
 		}
 		$_POST['IP']=GetGuestIP();
 	}else{
@@ -1581,8 +1581,8 @@ function PostUpload(){
 				$upload->Size = $_FILES[$key]['size'];
 				$upload->AuthorID = $zbp->user->ID;
 
-				if(!$upload->CheckExtName())$zbp->ShowError(26);
-				if(!$upload->CheckSize())$zbp->ShowError(27);
+				if(!$upload->CheckExtName())$zbp->ShowError(26,__FILE__,__LINE__);
+				if(!$upload->CheckSize())$zbp->ShowError(27,__FILE__,__LINE__);
 
 				$upload->SaveFile($_FILES[$key]['tmp_name']);
 				$upload->Save();
@@ -1760,13 +1760,13 @@ function FilterComment(&$comment){
 	global $zbp;
 
 	if(!CheckRegExp($comment->Name,'[username]')){
-		$zbp->ShowError(15);
+		$zbp->ShowError(15,__FILE__,__LINE__);
 	}
 	if($comment->Email && (!CheckRegExp($comment->Email,'[email]'))){
-		$zbp->ShowError(29);
+		$zbp->ShowError(29,__FILE__,__LINE__);
 	}
 	if($comment->HomePage && (!CheckRegExp($comment->HomePage,'[homepage]'))){
-		$zbp->ShowError(30);
+		$zbp->ShowError(30,__FILE__,__LINE__);
 	}
 
 	$comment->Name=substr($comment->Name, 0,20);
@@ -1778,7 +1778,7 @@ function FilterComment(&$comment){
 	$comment->Content=substr($comment->Content, 0,1000);
 	$comment->Content=trim($comment->Content);
 	if(strlen($comment->Content)==0){
-		$zbp->ShowError(46);
+		$zbp->ShowError(46,__FILE__,__LINE__);
 	}
 }
 
@@ -1812,11 +1812,11 @@ function FilterMember(&$member){
 	$member->Alias=str_replace('.','',$member->Alias);
 	$member->Alias=str_replace(' ','',$member->Alias);
 	if(strlen($member->Name)<$zbp->option['ZC_USERNAME_MIN']||strlen($member->Name)>$zbp->option['ZC_USERNAME_MAX']){
-		$zbp->ShowError(77);
+		$zbp->ShowError(77,__FILE__,__LINE__);
 	}
 
 	if(!CheckRegExp($member->Name,'[username]')){
-		$zbp->ShowError(77);
+		$zbp->ShowError(77,__FILE__,__LINE__);
 	}
 
 	if(!CheckRegExp($member->Email,'[email]')){
@@ -1832,11 +1832,11 @@ function FilterMember(&$member){
 	}
 
 	if(strlen($member->Email)>$zbp->option['ZC_EMAIL_MAX']){
-		$zbp->ShowError(29);
+		$zbp->ShowError(29,__FILE__,__LINE__);
 	}
 
 	if(strlen($member->HomePage)>$zbp->option['ZC_HOMEPAGE_MAX']){
-		$zbp->ShowError(30);
+		$zbp->ShowError(30,__FILE__,__LINE__);
 	}
 
 }

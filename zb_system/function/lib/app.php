@@ -313,7 +313,7 @@ class App
 		global $zbp;
 		$xml = simplexml_load_string($xml);
 		if(!$xml)return false;
-		if($xml['version']!='php')return $zbp->ShowError(78);
+		if($xml['version']!='php')return false;
 		$type=$xml['type'];
 		$id=$xml->id;
 		$dir=$zbp->path . 'zb_users/' . $type . '/';# . $id . '/';
