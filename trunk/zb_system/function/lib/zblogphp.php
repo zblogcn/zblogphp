@@ -199,6 +199,15 @@ class ZBlogPHP{
 
 		date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
 		$this->timezone_diff=3600*(int)date('O')/100;
+		
+		if(isset($_COOKIE['timezone'])){
+			$tz=GetVars('timezone','COOKIE');
+			if(is_numeric($tz)){
+				$tz=sprintf('%+d',-$tz);
+				date_default_timezone_set('Etc/GMT' . $tz);
+				$this->timezone_diff=3600*(int)date('O')/100;
+			}
+		}
 
 		header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
 		
