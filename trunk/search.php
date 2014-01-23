@@ -21,7 +21,7 @@ $q=trim(strip_tags(GetVars('q','GET')));
 
 $article = new Post;
 $article->ID=0;
-$article->Title=$lang['msg']['search'] . '“' . $q . '”';
+$article->Title=$lang['msg']['search'] . ' &quot;' . $q . '&quot;';
 $article->IsLock=true;
 $article->Type=ZC_POST_TYPE_PAGE;
 

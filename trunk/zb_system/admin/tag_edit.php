@@ -13,7 +13,7 @@ $zbp->CheckGzip();
 $zbp->Load();
 
 $action='TagEdt';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
 
 $blogtitle=$lang['msg']['tag_edit'];
 

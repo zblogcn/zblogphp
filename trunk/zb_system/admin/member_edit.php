@@ -15,7 +15,7 @@ $zbp->Load();
 $action='';
 if(GetVars('act','GET')=='MemberEdt')$action='MemberEdt';
 if(GetVars('act','GET')=='MemberNew')$action='MemberNew';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
 $blogtitle=$lang['msg']['member_edit'];
 
 require $blogpath . 'zb_system/admin/admin_header.php';
@@ -25,7 +25,7 @@ $memberid=null;
 if(isset($_GET['id'])){$memberid = (integer)GetVars('id','GET');}else{$memberid = 0;}
 
 if(!$zbp->CheckRights('MemberAll')){
-	if((int)$memberid<>(int)$zbp->user->ID) {$zbp->ShowError(6);}
+	if((int)$memberid<>(int)$zbp->user->ID) {$zbp->ShowError(6,__FILE__,__LINE__);}
 }
 
 $member=$zbp->GetMemberByID($memberid);

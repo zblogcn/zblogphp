@@ -7,7 +7,7 @@ $action=GetVars('act','GET');
 
 foreach ($GLOBALS['Filter_Plugin_Cmd_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
-if(!$zbp->CheckRights($action)){$zbp->ShowError(6);die();}
+if(!$zbp->CheckRights($action)){$zbp->ShowError(6,__FILE__,__LINE__);die();}
 
 switch ($action) {
 	case 'login':

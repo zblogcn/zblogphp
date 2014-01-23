@@ -18,7 +18,7 @@ if(($action=='')||($action==null)){$action='admin';}
 
 foreach ($GLOBALS['Filter_Plugin_Admin_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
 
 $f=null;
 switch ($action) {
@@ -71,7 +71,7 @@ switch ($action) {
 		$blogtitle=$lang['msg']['dashboard'];
 		break;
 	default:
-		$zbp->ShowError(6);
+		$zbp->ShowError(6,__FILE__,__LINE__);
 		die();
 		break;
 }

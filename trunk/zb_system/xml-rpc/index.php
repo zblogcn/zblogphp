@@ -218,7 +218,7 @@ function zbp_getPage($id){
 
 	$article= new Post;
 	$article->LoadInfoByID($id);
-		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('PageAll'))){$zbp->ShowError(11);}
+		if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('PageAll'))){$zbp->ShowError(11,__FILE__,__LINE_);}
 
 	$array=array();
 	$array[]=$article;
@@ -329,7 +329,7 @@ function zbp_delPage($id){
 		$strXML=str_replace("$%#1#%$",1,$strXML);
 		echo $strXML;
 	}else{
-		$zbp->ShowError(0);
+		$zbp->ShowError(0,__FILE__,__LINE_);
 	}
 
 }
@@ -344,7 +344,7 @@ function zbp_deletePost($id){
 		$strXML=str_replace("$%#1#%$",1,$strXML);
 		echo $strXML;
 	}else{
-		$zbp->ShowError(0);
+		$zbp->ShowError(0,__FILE__,__LINE_);
 	}
 
 }
@@ -375,7 +375,7 @@ function zbp_getPost($id){
 
 	$article= new Post;
 	$article->LoadInfoByID($id);
-	if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){$zbp->ShowError(11);}
+	if(($article->AuthorID!=$zbp->user->ID )&&(!$zbp->CheckRights('ArticleAll'))){$zbp->ShowError(11,__FILE__,__LINE_);}
 
 	$array=array();
 	$array[]=$article;
@@ -529,7 +529,7 @@ function zbp_editPost($id,$xmlstring,$publish){
 			$strXML=str_replace("$%#1#%$",1,$strXML);
 			echo $strXML;
 		}else{
-			$zbp->ShowError(0);
+			$zbp->ShowError(0,__FILE__,__LINE_);
 		}
 
 	}
@@ -598,7 +598,7 @@ function zbp_editPage($id,$xmlstring,$publish){
 			$strXML=str_replace("$%#1#%$",1,$strXML);
 			echo $strXML;
 		}else{
-			$zbp->ShowError(0);
+			$zbp->ShowError(0,__FILE__,__LINE_);
 		}
 
 	}
@@ -651,185 +651,185 @@ if($xml){
 		case 'blogger.getUsersBlogs':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('admin')){
 				zbp_getUsersBlogs();
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'wp.getCategories':
 		case 'metaWeblog.getCategories':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('ArticleEdt')){
 				zbp_getCategories();
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'mt.setPostCategories':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('ArticleEdt')){
 				zbp_setPostCategories();
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'mt.getPostCategories':	
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('ArticleEdt')){
 				zbp_getPostCategories((integer)$xml->params->param[0]->value->string);
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'wp.getTags':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('ArticleEdt')){
 				zbp_getTags();
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'wp.getAuthors':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('ArticleEdt')){
 				zbp_getAuthors();
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'metaWeblog.getRecentPosts':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('ArticleEdt')){
 				zbp_getRecentPosts((integer)$xml->params->param[3]->value->int);
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'metaWeblog.getPost':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('ArticleEdt')){
 				zbp_getPost((integer)$xml->params->param[0]->value->string);
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'blogger.deletePost':
 			$username=(string)$xml->params->param[2]->value->string;
 			$password=(string)$xml->params->param[3]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('ArticleDel')){
 				zbp_deletePost((integer)$xml->params->param[1]->value->string);
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'metaWeblog.editPost':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('ArticlePst')){
 				zbp_editPost((integer)$xml->params->param[0]->value->string,
 							 $xml->params->param[3]->value->struct->asXML(),
 							 (boolean)$xml->params->param[4]->value->boolean->asXML());
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'metaWeblog.newPost':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('ArticlePst')){
 				zbp_editPost(0,
 							 $xml->params->param[3]->value->struct->asXML(),
 							 (boolean)$xml->params->param[4]->value->boolean->asXML());
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'wp.newPage':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('PagePst')){
 				zbp_editPage(0,
 							 $xml->params->param[3]->value->struct->asXML(),
 							 (boolean)$xml->params->param[4]->value->boolean->asXML());
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'wp.editPage':
 			$username=(string)$xml->params->param[2]->value->string;
 			$password=(string)$xml->params->param[3]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('PagePst')){
 				zbp_editPage((integer)$xml->params->param[1]->value->string,
 							 $xml->params->param[4]->value->struct->asXML(),
 							 (boolean)$xml->params->param[5]->value->boolean->asXML());
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'wp.getPages':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('PageEdt')){
 				zbp_getPages((integer)$xml->params->param[3]->value->int);
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'wp.getPage':
 			$username=(string)$xml->params->param[2]->value->string;
 			$password=(string)$xml->params->param[3]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('PageEdt')){
 				zbp_getPage((integer)$xml->params->param[1]->value->string);
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'wp.deletePage':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('PageDel')){
 				zbp_delPage((integer)$xml->params->param[3]->value->string);
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
 		case 'metaWeblog.newMediaObject':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
-			if(!$zbp->Verify_Original($username,$password)){$zbp->ShowError(8);}
+			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
 			if($zbp->CheckRights('UploadPst')){
 				zbp_newMediaObject($xml->params->param[3]->value->struct->asXML());
 			}else{
-				$zbp->ShowError(6);
+				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;		
 		default:
 			//logs($xmlstring);
-			$zbp->ShowError(1);
+			$zbp->ShowError(1,__FILE__,__LINE_);
 			break;
 	}
 }

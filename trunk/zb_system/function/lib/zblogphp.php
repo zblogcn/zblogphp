@@ -9,8 +9,11 @@
 
 class ZBlogPHP{
 
-	static private $_zbp=null;
-
+	private static $_zbp=null;
+	public static $error_id=0;
+	public static $error_file=null;
+	public static $error_line=null;
+	
 	public $db = null;
 	public $option = array();
 	public $lang = array();
@@ -81,7 +84,7 @@ class ZBlogPHP{
 	
 	private $isgzip=false;
 	public $timezone_diff=0;
-
+	
 	static public function GetInstance(){
 		if(!isset(self::$_zbp)){
 			self::$_zbp=new ZBlogPHP;
@@ -136,7 +139,7 @@ class ZBlogPHP{
 			$fpreturn=$fpname($method, $args);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		$this->ShowError(81);
+		$this->ShowError(81,__FILE__,__LINE__);
 	}
 
 	function __set($name, $value)
@@ -145,7 +148,7 @@ class ZBlogPHP{
 			$fpreturn=$fpname($name, $value);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		$this->ShowError(81);
+		$this->ShowError(81,__FILE__,__LINE__);
 	}
 
 	function __get($name) 
@@ -154,7 +157,7 @@ class ZBlogPHP{
 			$fpreturn=$fpname($name);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		$this->ShowError(81);
+		$this->ShowError(81,__FILE__,__LINE__);
 	}
 
 
@@ -164,6 +167,12 @@ class ZBlogPHP{
 
 	#初始化连接
 	public function Initialize(){
+	
+		if($this->option['ZC_SITE_TURNOFF']==true){
+			Http503();
+			$this->ShowError(82,__FILE__,__LINE__);
+			return false;
+		}
 
 		if(!$this->OpenConnect())return false;
 
@@ -248,8 +257,8 @@ class ZBlogPHP{
 	
 	public function LoadManage(){
 
-		if($this->user->Status==ZC_MEMBER_STATUS_AUDITING) $this->ShowError(79);
-		if($this->user->Status==ZC_MEMBER_STATUS_LOCKED) $this->ShowError(80);
+		if($this->user->Status==ZC_MEMBER_STATUS_AUDITING) $this->ShowError(79,__FILE__,__LINE__);
+		if($this->user->Status==ZC_MEMBER_STATUS_LOCKED) $this->ShowError(80,__FILE__,__LINE__);
 
 		$this->CheckTemplate();
 
@@ -290,7 +299,7 @@ class ZBlogPHP{
 						$this->option['ZC_MYSQL_PORT'],
 						$this->option['ZC_MYSQL_PERSISTENT']
 					))==false){
-					$this->ShowError(67);
+					$this->ShowError(67,__FILE__,__LINE__);
 				}			
 			} catch (Exception $e) {
 				throw new Exception("MySQL DateBase Connection Error.");
@@ -304,7 +313,7 @@ class ZBlogPHP{
 					$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
 					$this->option['ZC_SQLITE_PRE']
 					))==false){
-					$this->ShowError(69);
+					$this->ShowError(69,__FILE__,__LINE__);
 				}
 			} catch (Exception $e) {
 				throw new Exception("SQLite DateBase Connection Error.");
@@ -1437,17 +1446,20 @@ function AddBuildModuleAll(){
 		echo "<div class='hint'><p class='hint hint_$signal'>$content</p></div>";
 	}
 
-
-	function ShowError($idortext){
+	function ShowError($idortext,$file=null,$line=null){
 
 		if((int)$idortext==2){
 			Http404();
 		}
 
+		self::$error_id=(int)$idortext;
+		self::$error_file=$file;
+		self::$error_line=$line;
+		
 		if(is_numeric($idortext))$idortext=$this->lang['error'][$idortext];
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
-			$fpreturn=$fpname($idortext);
+			$fpreturn=$fpname($idortext,$file,$line);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 

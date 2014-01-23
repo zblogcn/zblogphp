@@ -103,6 +103,9 @@ class ZBlogException
 		$this->file=$exception->getFile();
 		$this->line=$exception->getLine();
 
+		if(ZBlogPHP::$error_file!==null)$this->file=ZBlogPHP::$error_file;
+		if(ZBlogPHP::$error_line!==null)$this->line=ZBlogPHP::$error_line;
+		
 	}
 
 
