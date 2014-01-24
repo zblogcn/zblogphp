@@ -14,9 +14,12 @@ if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
 
 $blogtitle='应用中心-插件编辑';
 
-if(GetVars('id')){
+if (GetVars('id'))
+{
   $app = $zbp->LoadApp('plugin',GetVars('id'));
-}else{
+}
+else
+{
   $app = new App;
   $app->price=0;
   $app->version='1.0';
@@ -25,6 +28,12 @@ if(GetVars('id')){
   $v=array_keys($zbpvers);
   $app->adapted=(string)end($v);
   $app->type='plugin';
+  $app->author_name = $zbp->user->Name;
+  $app->author_email = $zbp->user->Email;
+  $app->author_url = $zbp->user->HomePage;
+  $app->path = 'main.php';
+  $app->include = 'include.php';
+
 }
 
 if(count($_POST)>0){
