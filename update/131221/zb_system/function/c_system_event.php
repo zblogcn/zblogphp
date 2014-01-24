@@ -106,10 +106,10 @@ function ViewAuto($url){
 			return null;
 	}
 
-	$r=UrlRule::Rewrite_url($zbp->option['ZC_ARTICLE_REGEX'],'article');
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_PAGE_REGEX'],'page');
 	$m=array();
 	if(preg_match($r,$url,$m)==1){
-		if(strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%id%}')!==false){
+		if(strpos($zbp->option['ZC_PAGE_REGEX'],'{%id%}')!==false){
 			$result=ViewPost($m[1],null,$rewrite_go_on);
 		}else{
 			$result=ViewPost(null,$m[1],$rewrite_go_on);
@@ -118,11 +118,11 @@ function ViewAuto($url){
 			$zbp->ShowError(2);//return null;
 		return null;
 	}
-
-	$r=UrlRule::Rewrite_url($zbp->option['ZC_PAGE_REGEX'],'page');
+	
+	$r=UrlRule::Rewrite_url($zbp->option['ZC_ARTICLE_REGEX'],'article');
 	$m=array();
 	if(preg_match($r,$url,$m)==1){
-		if(strpos($zbp->option['ZC_PAGE_REGEX'],'{%id%}')!==false){
+		if(strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%id%}')!==false){
 			$result=ViewPost($m[1],null,$rewrite_go_on);
 		}else{
 			$result=ViewPost(null,$m[1],$rewrite_go_on);
@@ -138,7 +138,7 @@ function ViewAuto($url){
 
 function GetList($count=10,$cate=null,$auth=null,$date=null,$tags=null,$search=null,$option=null){
 	global $zbp;
-
+	
 	if(!is_array($option)){
 		$option=array();
 	}
@@ -519,7 +519,7 @@ function ViewPost($id,$alias,$isrewrite=false){
 	}
 	$comments2=$zbp->GetCommentList(
 		array('*'),
-		array(array('array',$rootid),array('=','comm_IsChecking',0),array('=','comm_LogID',$article->ID)),
+		array(array('array',$rootid),array('=','comm_IsChecking',0)),
 		array('comm_ID'=>($zbp->option['ZC_COMMENT_REVERSE_ORDER']?'DESC':'ASC')),
 		null,
 		null
@@ -539,7 +539,7 @@ function ViewPost($id,$alias,$isrewrite=false){
 	if($pagebar->PageAll==0||$pagebar->PageAll==1)$pagebar=null;
 	$zbp->template->SetTags('pagebar',$pagebar);
 	$zbp->template->SetTags('comments',$comments);
-
+	
 	if(isset($zbp->templates[$article->Template])){
 		$zbp->template->SetTemplate($article->Template);
 	}else{
@@ -811,7 +811,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring){
 	$b=array_slice($b, 0, 20);
 	$c=array();
 
-	$t=$zbp->LoadTagsByNameString($tagnamestring);
+	$t=$zbp->LoadTagsByNameString(GetVars('Tag','POST'));
 	foreach ($t as $key => $value) {
 		$c[]=$key;
 	}
@@ -1012,13 +1012,13 @@ function PostComment(){
 			$zbp->AddBuildModule('comments');
 
 			$zbp->comments[$cmt->ID]=$cmt;
-
+			
 			if(GetVars('isajax','POST')){
 				ViewComment($cmt->ID);
 			}
 
 			foreach ($GLOBALS['Filter_Plugin_PostComment_Succeed'] as $fpname => &$fpsignal) $fpname($cmt);
-
+			
 			return true;
 
 		}else{
@@ -1601,7 +1601,7 @@ function SaveSetting(){
 function FilterMeta(&$object){
 
 	//$type=strtolower(get_class($object));
-//var_dump($_POST);die;
+
 	foreach ($_POST as $key => $value) {
 		if(substr($key,0,5)=='meta_'){
 			$name=substr($key,5-strlen($key));
@@ -1714,7 +1714,7 @@ function FilterCategory(&$category){
 	global $zbp;
 	$category->Name=strip_tags($category->Name);
 	$category->Alias=TransferHTML($category->Alias,'[normalname]');	
-	//$category->Alias=str_replace('/','',$category->Alias);
+	$category->Alias=str_replace('/','',$category->Alias);
 	$category->Alias=str_replace('.','',$category->Alias);
 	$category->Alias=str_replace(' ','',$category->Alias);
 }
@@ -2161,7 +2161,7 @@ function BuildModule_tags(){
 	ksort($array2);
 	
 	foreach ($array2 as $tag) {
-		$s.='<li><a href="'. $tag->Url .'">'. $tag->Name .'<span class="tag-count"> ('. $tag->Count .')</span></a></li>';
+		$s.='<li><a href="'. $tag->Url .'">'. $tag->Name .'</a> <span class="tag-count">('. $tag->Count .')</span></a></li>';
 	}
 	return $s;
 }
@@ -2182,7 +2182,7 @@ function BuildModule_authors($level=4){
 	);
 
 	foreach ($array as $member) {
-		$s.= '<li><a href="'. $member->Url .'">' . $member->Name . '<span class="article-nums"> ('. $member->Articles .')</span></a></li>';
+		$s.= '<li><a href="'. $member->Url .'">' . $member->Name . '<span class="article-nums"> ('. $member->Articles .')</span></li>';
 	}
 	return $s;
 }

@@ -1546,6 +1546,15 @@ function PostModule(){
 function DelModule(){
 	global $zbp;
 
+	if(GetVars('source','GET')=='theme'){
+		if(GetVars('filename','GET')){
+			$f=$zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . GetVars('filename','GET') . '.php';
+			if(file_exists($f))@unlink($f);
+			return true;
+		}
+		return false;
+	}
+	
 	$id=(int)GetVars('id','GET');
 	$mod=$zbp->GetModuleByID($id);
 	if($mod->Source<>'system'){
