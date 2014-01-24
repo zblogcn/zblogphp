@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author
+ * @author 
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -47,21 +47,15 @@ class Upload extends Base{
 	}
 
 	function DelFile(){
-	
-		foreach ($GLOBALS['Filter_Plugin_Upload_DelFile'] as $fpname => &$fpsignal) {
-			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-		}
-		if (file_exists($this->FullFile)) { @unlink($this->FullFile);}
+		@unlink($this->FullFile);
 		return true;
-
 	}
 
 	function SaveFile($tmp){
 		global $zbp;
 
 		foreach ($GLOBALS['Filter_Plugin_Upload_SaveFile'] as $fpname => &$fpsignal) {
-			$fpreturn=$fpname($tmp,$this);
+			$fpreturn=$fpname($tmp);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 
@@ -77,7 +71,7 @@ class Upload extends Base{
 		global $zbp;
 
 		foreach ($GLOBALS['Filter_Plugin_Upload_SaveBase64File'] as $fpname => &$fpsignal) {
-			$fpreturn=$fpname($str64,$this);
+			$fpreturn=$fpname($str64);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 

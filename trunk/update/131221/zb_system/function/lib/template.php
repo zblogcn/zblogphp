@@ -37,7 +37,7 @@ class Template{
 
 		foreach ($filesarray as $name => $content) {
 			@file_put_contents($this->path . $name . '.php', $this->Compiling($content));
-			//if(function_exists('chmod')){
+			//if(function_exists('chmod ')){
 			//	@chmod($this->path . $name . '.php',0777);
 			//}
 		}

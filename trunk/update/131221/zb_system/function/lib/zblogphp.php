@@ -209,8 +209,6 @@ class ZBlogPHP{
 		$this->Verify();
 
 		$this->MakeTemplatetags();
-		
-		$this->LoadTemplates();
 
 		$this->RegBuildModule('catalog','BuildModule_catalog');
 
@@ -241,7 +239,8 @@ class ZBlogPHP{
 
 		if($this->user->Status==ZC_MEMBER_STATUS_AUDITING) $this->ShowError(79);
 		if($this->user->Status==ZC_MEMBER_STATUS_LOCKED) $this->ShowError(79);
-
+		
+		$this->LoadTemplates();
 		$this->CheckTemplate();
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) $fpname();
@@ -873,7 +872,7 @@ function AddBuildModuleAll(){
 
 	public function BuildTemplate(){
 	
-		if( strpos('|SAE|BAE2|ACE|', '|'.$this->option['ZC_YUN_SITE'].'|')!==false )return false;
+		if( strpos('|SAE|BAE2|ACE|', '|'.$this->option['ZC_YUN_SITE'].'|')>0 )return false;
 		//初始化模板
 		$this->LoadTemplates();
 
@@ -925,7 +924,7 @@ function AddBuildModuleAll(){
 		$this->template->SetPath($dir);
 
 		//模板接口
-		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {$fpname($this->templates);}
+		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {$fpname($this->template);}
 
 		$this->template->CompileFiles($this->templates);
 
@@ -1242,13 +1241,7 @@ function AddBuildModuleAll(){
 	}
 	#load tags 'aaa,bbb,ccc,ddd'
 	function LoadTagsByNameString($s){
-		$s=str_replace(';', ',', $s);
-		$s=str_replace('，', ',', $s);
-		$s=str_replace('、', ',', $s);
-		$s=trim($s);
-		$s=strip_tags($s);	
 		if($s=='')return array();
-		if($s==',')return array();
 		$a=explode(',', $s);
 		$t=array_unique($a);
 
