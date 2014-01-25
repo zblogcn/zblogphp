@@ -555,7 +555,10 @@ function ViewPost($id,$alias,$isrewrite=false){
 		null
 	);
 
+	$floorid=($pagebar->PageNow-1) * $pagebar->PageCount;
 	foreach ($comments as &$comment){
+		$floorid+=1;
+		$comment->FloorID=$floorid;
 		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
 	}
 	foreach ($comments2 as &$comment){
@@ -621,7 +624,10 @@ function ViewComments($postid,$page){
 		null
 	);
 
+	$floorid=($pagebar->PageNow-1) * $pagebar->PageCount;
 	foreach ($comments as &$comment){
+		$floorid+=1;
+		$comment->FloorID=$floorid;
 		$comment->Content=TransferHTML($comment->Content,'[enter]') . '<label id="AjaxComment'.$comment->ID.'"></label>';
 	}
 	foreach ($comments2 as &$comment){

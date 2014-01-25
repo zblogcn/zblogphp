@@ -10,6 +10,7 @@
 class Comment extends Base{
 
 	public $IsThrow=false;
+	public $FloorID=0;
 
 	function __construct()
 	{
