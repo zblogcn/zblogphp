@@ -6,6 +6,11 @@
 2.变量
 {$article.name}
 
+定义变量?
+
+定义变量并赋值???
+
+
 3.zblog传统的常量型
 {#ZC_BLOG_HOST#}
 
@@ -24,10 +29,12 @@
 
 {/foreach}
 
-6.注释
+6.函数调用
+
+7.注释
 {* 这里是注释 *}
 
-7.直接写PHP
+8.直接写PHP
 {php}
   global $actions;
   print_r($actions);
