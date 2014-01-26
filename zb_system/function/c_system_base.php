@@ -20,7 +20,7 @@ $zbpvers=array();
 $zbpvers['130707']='1.0 Beta Build 130707';
 $zbpvers['131111']='1.0 Beta2 Build 131111';
 $zbpvers['131221']='1.1 Taichi Build 131221';
-$zbpvers['140202']='1.2 Boshi Build 140202';
+$zbpvers['140220']='1.2 Boshi Build 140220';
 
 #定义常量
 define('ZC_BLOG_VERSION', $zbpvers['131221']);
