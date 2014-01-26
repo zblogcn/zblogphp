@@ -35,8 +35,15 @@ function blogconfig_exportlist($id)
 	$data = $zbp->configs[$id]->Data;
 	foreach ($data as $name => $value)
 	{
-		$name = TransferHTML($name,'[html-format]');
-		$value = TransferHTML($value,'[html-format]');
+		$arr_val = false;
+		$name = TransferHTML((string)$name,'[html-format]');
+		if(gettype($value)=='array')
+		{
+			$value = '[array][' . implode(",", $value) . ']' ;  
+			$arr_val = true;
+		}
+		else
+			$value = TransferHTML((string)$value,'[html-format]');
 		//echo $value;
 		//echo "\n";
 		$html .= '<tr height="32">';
@@ -45,9 +52,13 @@ function blogconfig_exportlist($id)
 		$html .= '</span></td><td onclick="$(\'#ta' . $i . '\').show();$(\'#show' . $i . '\').hide()">';
 		$html .= '<span id="show' . $i . '">' . $value .'</span>';
 		$html .= '<textarea id="ta' . $i . '" style="display:none;width:100%">' . $value . '</textarea></td>';
-		$html .= '<td><a href="javascript:;" onclick="run2(\'edit\',\'' . $i . '\',\''. $id . '\')">';
-		$html .= '<img src="../../../../../zb_system/image/admin/page_edit.png" alt="编辑" title="编辑" width="16" /></a>';
-		$html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		$html .= '<td>';
+		if(!$arr_val)
+		{
+			$html .= '<a href="javascript:;" onclick="run2(\'edit\',\'' . $i . '\',\''. $id . '\')">';
+			$html .= '<img src="../../../../../zb_system/image/admin/page_edit.png" alt="编辑" title="编辑" width="16" /></a>';
+			$html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		}
 		$html .= '<a onclick="if(window.confirm(\'单击“确定”继续。单击“取消”停止。\')){run2(\'del\',\''. $i . '\',\'' . $id . '\')};"';
 		$html .= 'href="javascript:;" onclick="run2(\'del\',\'' . $i . '\',\'' . $id . '\')">';
 		$html .= '<img src="../../../../../zb_system/image/admin/delete.png" alt="删除" title="删除" width="16" /></a></td></tr>';
