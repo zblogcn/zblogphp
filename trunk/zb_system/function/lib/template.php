@@ -172,12 +172,21 @@ class Template{
 
 	private function parse_vars_replace_dot($matches)
 	{
-		return '{php} echo $' . $this->replace_dot($matches[1]) . '; {/php}';
+		if(strpos($matches[1],'=')===false){
+			return '{php} echo $' . $this->replace_dot($matches[1]) . '; {/php}';
+		}else{
+			return '{php} $' . $this->replace_dot($matches[1]) . '; {/php}';
+		}
 	}
 
 	private function replace_dot($content)
 	{
-		return str_replace('.','->',$content);
+		$content=str_replace(' . ',' {%dot%} ',$content);
+		$content=str_replace('. ',' {%dot%} ',$content);
+		$content=str_replace(' .',' {%dot%} ',$content);
+		$content=str_replace('.','->',$content);
+		$content=str_replace(' {%dot%} ',' . ',$content);
+		return $content;
 	}
 
 	

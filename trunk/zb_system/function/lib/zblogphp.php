@@ -83,8 +83,7 @@ class ZBlogPHP{
 	public $validcodeurl = null;
 	
 	private $isgzip=false;
-	public $timezone_diff=0;
-	
+
 	static public function GetInstance(){
 		if(!isset(self::$_zbp)){
 			self::$_zbp=new ZBlogPHP;
@@ -198,16 +197,15 @@ class ZBlogPHP{
 		$this->option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
 
 		date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
-		$this->timezone_diff=3600*(int)date('O')/100;
-		
-		if(isset($_COOKIE['timezone'])){
+
+		/*if(isset($_COOKIE['timezone'])){
 			$tz=GetVars('timezone','COOKIE');
 			if(is_numeric($tz)){
 				$tz=sprintf('%+d',-$tz);
 				date_default_timezone_set('Etc/GMT' . $tz);
-				$this->timezone_diff=3600*(int)date('O')/100;
+				$this->timezone=date_default_timezone_get();
 			}
-		}
+		}*/
 
 		header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
 		

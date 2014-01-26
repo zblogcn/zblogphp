@@ -694,6 +694,14 @@ function ViewComment($id){
 function PostArticle(){
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
+	
+	if(isset($_COOKIE['timezone'])){
+		$tz=GetVars('timezone','COOKIE');
+		if(is_numeric($tz)){
+			date_default_timezone_set('Etc/GMT' . sprintf('%+d',-$tz));
+		}
+		unset($tz);
+	}
 
 	if(isset($_POST['Tag'])){
 		$_POST['Tag']=TransferHTML($_POST['Tag'],'[noscript]');

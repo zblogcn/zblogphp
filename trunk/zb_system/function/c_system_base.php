@@ -8,14 +8,19 @@
  */
 
 error_reporting(0);
-//@ini_set("display_errors",0);
-//@ini_set('magic_quotes_runtime',0);
-//@ini_set('magic_quotes_gpc',0);
+
+ob_start();
+
+require 'c_system_common.php';
+require 'c_system_debug.php';
+require 'c_system_plugin.php';
+require 'c_system_event.php';
 
 $zbpvers=array();
 $zbpvers['130707']='1.0 Beta Build 130707';
 $zbpvers['131111']='1.0 Beta2 Build 131111';
 $zbpvers['131221']='1.1 Taichi Build 131221';
+$zbpvers['140202']='1.2 Boshi Build 140202';
 
 #定义常量
 define('ZC_BLOG_VERSION', $zbpvers['131221']);
@@ -33,11 +38,6 @@ define('ZC_MEMBER_STATUS_LOCKED', 2);
 
 define('ZC_REWRITE_GO_ON', 'go_on');
 
-function _stripslashes(&$val) {
-	if(!is_array($val)) return stripslashes($val);
-	foreach($val as $k => &$v) $val[$k] = _stripslashes($v);
-	return $val;
-}
 
 if(get_magic_quotes_gpc()){
 	_stripslashes($_GET);
@@ -45,14 +45,14 @@ if(get_magic_quotes_gpc()){
 	_stripslashes($_COOKIE);
 }
 
-ob_start();
 
 $action=null;
+$manage=false;
+
 
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $usersdir = $blogpath . 'zb_users/';
 
-$manage=false;
 
 $option_zbusers=null;
 if(file_exists($usersdir . 'c_option.php')){
@@ -63,6 +63,7 @@ $option = require($blogpath . 'zb_system/defend/option.php');
 foreach ($option_zbusers as $key => $value) {
 	$option[$key]=$value;
 }
+unset($option_zbusers);
 
 date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
 
@@ -75,15 +76,8 @@ $blogtheme = &$option['ZC_BLOG_THEME'];
 $blogstyle = &$option['ZC_BLOG_CSS'];
 $blogversion = substr(ZC_BLOG_VERSION,-6,6);
 
-require $blogpath.'zb_system/function/c_system_common.php';
-
 $cookiespath = null;
 $bloghost = GetCurrentHost($cookiespath);
-
-require $blogpath.'zb_system/function/c_system_debug.php';
-require $blogpath.'zb_system/function/c_system_plugin.php';
-require $blogpath.'zb_system/function/c_system_event.php';
-
 
 
 #加载zbp 数据库类 对象
@@ -91,7 +85,7 @@ $lib_array = array('zblogphp','dbsql','base','metas','post','category','comment'
 foreach ($lib_array as $f) {
 	require $blogpath.'zb_system/function/lib/' . $f . '.php';
 }
-
+unset($lib_array);
 
 #定义命令
 $actions=array(
@@ -207,7 +201,7 @@ $datainfo=array(
 	'Title'=>array('log_Title','string',250,''),
 	'Intro'=>array('log_Intro','string','',''),
 	'Content'=>array('log_Content','string','',''),
-	'PostTime'=>array('log_PostTime','timeinteger','',0),
+	'PostTime'=>array('log_PostTime','integer','',0),
 	'CommNums'=>array('log_CommNums','integer','',0),
 	'ViewNums'=>array('log_ViewNums','integer','',0),
 	'Template'=>array('log_Template','string',50,''),
@@ -237,7 +231,7 @@ $datainfo=array(
 	'Content'=>array('comm_Content','string','',''),
 	'Email'=>array('comm_Email','string',50,''),
 	'HomePage'=>array('comm_HomePage','string',250,''),
-	'PostTime'=>array('comm_PostTime','timeinteger','',0),
+	'PostTime'=>array('comm_PostTime','integer','',0),
 	'IP'=>array('comm_IP','string',15,''),
 	'Agent'=>array('comm_Agent','string','',''),
 	'Meta'=>array('comm_Meta','string','',''),
@@ -249,7 +243,7 @@ $datainfo=array(
 	'Agent'=>array('coun_Agent','string','',''),
 	'Refer'=>array('coun_Refer','string',250,''),
 	'Title'=>array('coun_Title','string',250,''),
-	'PostTime'=>array('coun_PostTime','timeinteger','',0),
+	'PostTime'=>array('coun_PostTime','integer','',0),
 	'Description'=>array('coun_Description','string','',''),
 	'PostData'=>array('coun_PostData','string','',''),
 	'AllRequestHeader'=>array('coun_AllRequestHeader','string','',''),
@@ -276,7 +270,7 @@ $datainfo=array(
 	'Email'=>array('mem_Email','string',50,''),
 	'HomePage'=>array('mem_HomePage','string',250,''),
 	'IP'=>array('mem_IP','string',15,''),
-	'PostTime'=>array('mem_PostTime','timeinteger','',0),
+	'PostTime'=>array('mem_PostTime','integer','',0),
 	'Alias'=>array('mem_Alias','string',250,''),
 	'Intro'=>array('mem_Intro','string','',''),
 	'Articles'=>array('mem_Articles','integer','',0),
@@ -303,7 +297,7 @@ $datainfo=array(
 	'Name'=>array('ul_Name','string',250,''),
 	'SourceName'=>array('ul_SourceName','string',250,''),
 	'MimeType'=>array('ul_MimeType','string',50,''),
-	'PostTime'=>array('ul_PostTime','timeinteger','',0),
+	'PostTime'=>array('ul_PostTime','integer','',0),
 	'DownNums'=>array('ul_DownNums','integer','',0),
 	'LogID'=>array('ul_LogID','integer','',0),	
 	'Intro'=>array('ul_Intro','string','',''),
@@ -312,7 +306,7 @@ $datainfo=array(
 );
 
 
-
+#实例化zbp
 $zbp=ZBlogPHP::GetInstance();
 $zbp->Initialize();
 
@@ -345,4 +339,9 @@ function __autoload($classname) {
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
 	require $GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php';
+}
+
+function _stripslashes(&$val) {
+	if(!is_array($val)) return stripslashes($val);
+	foreach($val as $k => &$v) $val[$k] = _stripslashes($v);
 }

@@ -98,47 +98,6 @@ function misc_statistic(){
 	$r=str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
 
 	echo $r;
-	
-	msic_fixutctimezone();
-
-}
-
-
-function msic_fixutctimezone(){
-
-	global $zbp;
-	if(isset($zbp->option['ZC_UTC_TIMEZONE_FIX'])){
-		if($zbp->option['ZC_UTC_TIMEZONE_FIX']==false){
-		
-			$zbp->option['ZC_UTC_TIMEZONE_FIX']=true;
-			$zbp->SaveOption();
-
-			$array=$zbp->GetPostList();
-			foreach($array as $a){
-				$a->PostTime-=$zbp->timezone_diff;
-				$a->Save();
-			}
-
-			$array=$zbp->GetUploadList();
-			foreach($array as $a){
-				$a->PostTime-=$zbp->timezone_diff;
-				$a->Save();
-			}
-			
-			$array=$zbp->GetCommentList();
-			foreach($array as $a){
-				$a->PostTime-=$zbp->timezone_diff;
-				$a->Save();
-			}
-			
-			$array=$zbp->GetMemberList();
-			foreach($array as $a){
-				$a->PostTime-=$zbp->timezone_diff;
-				$a->Save();
-			}
-	
-		}	
-	}
 
 }
 
