@@ -17,6 +17,14 @@ if(GetVars('act','GET')=='PageEdt')$action='PageEdt';
 if(GetVars('act','GET')=='ArticleEdt')$action='ArticleEdt';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
 
+if(isset($_COOKIE['timezone'])){
+	$tz=GetVars('timezone','COOKIE');
+	if(is_numeric($tz)){
+		date_default_timezone_set('Etc/GMT' . sprintf('%+d',-$tz));
+	}
+	unset($tz);
+}
+
 $article=new Post;
 $article->AuthorID=$zbp->user->ID;
 

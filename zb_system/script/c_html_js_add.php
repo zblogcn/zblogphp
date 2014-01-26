@@ -29,6 +29,8 @@ if ($zbp->CheckRights('ArticleEdt')){
 	echo "$('.cp-vrs').find('a').html('[" . $zbp->lang['msg']['new_article'] . "]');";
 	echo "$('.cp-vrs').find('a').attr('href','" . $zbp->host . "zb_system/cmd.php?act=ArticleEdt');";
 }
+
+	echo "SetCookie('timezone',(new Date().getTimezoneOffset()/60)*(-1));";
 echo '});';
 
 foreach ($GLOBALS['Filter_Plugin_Html_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
