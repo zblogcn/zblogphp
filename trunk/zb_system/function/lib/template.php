@@ -56,6 +56,8 @@ class Template{
 		$this->parse_option($content);
 		//Step4:替换标签
 		$this->parse_vars($content);
+		//Step?:替换函数
+		$this->parse_function($content);
 		//Step5:解析If
 		$this->parse_if($content);
 		//Step6:解析foreach
@@ -67,9 +69,7 @@ class Template{
 		//StepN:解析PHP
 		$this->parsePHP($content);
 
-		#正则替换{$变量}
-		/*$content = preg_replace('#\{\$([^\}]+)\}#', '<?php echo $this->\\1; ?>', $content);*/
-        
+      
 		return $content;
 	}
 
@@ -102,6 +102,11 @@ class Template{
 	private function parse_vars(&$content)
 	{
 		$content = preg_replace_callback('#\{\$(?!\()([^\}]+)\}#',array($this,'parse_vars_replace_dot'), $content);
+	}
+
+	private function parse_function(&$content)
+	{
+		$content = preg_replace_callback('/\{([^ ()\/]+?)\((.+?)\)\}/',array($this,'parse_funtion_replace_dot'), $content);
 	}
 
 	private function parse_if(&$content)
@@ -179,6 +184,11 @@ class Template{
 		}
 	}
 
+	private function parse_funtion_replace_dot($matches)
+	{
+		return '{php} echo ' . $this->replace_dot($matches[1]) . '(' . $this->replace_dot($matches[2]) . '); {/php}';
+	}
+	
 	private function replace_dot($content)
 	{
 		$content=str_replace(' . ',' {%dot%} ',$content);
