@@ -95,6 +95,8 @@ class ZBlogPHP{
 
 		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,$datainfo;
 		global $blogtitle,$blogname,$blogsubname,$blogtheme,$blogstyle;
+		
+		ZBlogException::SetErrorHook();
 	
 		//基本配置加载到$zbp内
 		$this->option = &$option;

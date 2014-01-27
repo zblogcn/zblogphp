@@ -316,9 +316,11 @@ class App
 		if($xml['version']!='php')return false;
 		$type=$xml['type'];
 		$id=$xml->id;
-		$dir=$zbp->path . 'zb_users/' . $type . '/';# . $id . '/';
+		$dir=$zbp->path . 'zb_users/' . $type . '/';
 
 		if(!file_exists($dir . $id . '/'))@mkdir($dir . $id . '/',0777,true);
+		
+		set_error_handler(create_function('',''));
 
 		foreach ($xml->folder as $folder) {
 			$f=$dir . $folder->path;
@@ -331,7 +333,7 @@ class App
 			$f=$dir . $file->path;
 			@file_put_contents($f, base64_decode($file->stream));
 			if(function_exists('chmod')){
-				@chmod($f,0777);
+				@chmod($f,0755);
 			}
 
 		}
