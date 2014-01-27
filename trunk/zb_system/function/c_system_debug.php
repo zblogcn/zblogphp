@@ -7,17 +7,7 @@
  */
 
 
-set_error_handler('error_handler');
-set_exception_handler('exception_handler');
-register_shutdown_function('shutdown_error_handler');
-
-
-
- 
 function error_handler($errno, $errstr, $errfile, $errline ){
-
-	#throw new ErrorException($errstr,0,$errno, $errfile, $errline);
-	//die();
 
 	//ob_clean();
 	$zbe=ZBlogException::GetInstance();
@@ -73,8 +63,23 @@ class ZBlogException
 	}
 
 
-	static public function Trace($s){
+	static public function SetErrorHook(){
+		set_error_handler('error_handler');
+		set_exception_handler('exception_handler');
+		register_shutdown_function('shutdown_error_handler');
+	}
 
+	static public function ClearErrorHook(){
+		set_error_handler('error_handler');
+		set_exception_handler('exception_handler');
+		register_shutdown_function('shutdown_error_handler');
+	}
+
+	
+	static public function Trace($s){
+		set_error_handler(create_function('',''));
+		set_exception_handler(create_function('',''));
+		register_shutdown_function(create_function('',''));
 	}
 
 
