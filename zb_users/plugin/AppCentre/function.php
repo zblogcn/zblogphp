@@ -235,3 +235,13 @@ function AppCentre_GetHttpContent($url){
 	}
 	return $r;
 }
+
+function crc32_signed($num){ 
+    $crc = crc32($num); 
+    if($crc & 0x80000000){ 
+        $crc ^= 0xffffffff; 
+        $crc += 1; 
+        $crc = -$crc; 
+    } 
+    return $crc; 
+} 
