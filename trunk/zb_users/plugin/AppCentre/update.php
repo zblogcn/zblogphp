@@ -112,7 +112,7 @@ if ($nowxml!=''){
   if($xml){
   foreach ($xml->children() as $file) {
   	if(file_exists($zbp->path . str_replace('\\','/',$file['name']))){
-	  	$newcrc32=strtoupper(dechex(crc32(file_get_contents($zbp->path . str_replace('\\','/',$file['name'])))));
+	  	$newcrc32=strtoupper(dechex(crc32_signed(file_get_contents($zbp->path . str_replace('\\','/',$file['name'])))));
   	}else{
   		$newcrc32='';
   	}
