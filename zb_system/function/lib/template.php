@@ -38,7 +38,7 @@ class Template{
 		foreach ($filesarray as $name => $content) {
 			@file_put_contents($this->path . $name . '.php', $this->Compiling($content));
 			//if(function_exists('chmod')){
-			//	@chmod($this->path . $name . '.php',0777);
+			//	@chmod($this->path . $name . '.php',0755);
 			//}
 		}
 
@@ -81,7 +81,6 @@ class Template{
 	private function parse_template(&$content)
 	{
 		$content = preg_replace('/\{template:([^\}]+)\}/', '{php} include $this->GetTemplate(\'$1\'); {/php}', $content);
-		//$content = preg_replace('/\{include:([^\}]+)\}/', '{php} $this->IncludeCompiled(\'$1\'); {/php}', $content);
 	}
 	
 	private function parse_module(&$content)
@@ -106,7 +105,7 @@ class Template{
 
 	private function parse_function(&$content)
 	{
-		$content = preg_replace_callback('/\{([^ ()\/]+?)\((.+?)\)\}/',array($this,'parse_funtion_replace_dot'), $content);
+		$content = preg_replace_callback('/\{([^\n ()\/]+?)\((.+?)\)\}/',array($this,'parse_funtion_replace_dot'), $content);
 	}
 
 	private function parse_if(&$content)
@@ -186,26 +185,34 @@ class Template{
 
 	private function parse_funtion_replace_dot($matches)
 	{
-		return '{php} echo ' . $this->replace_dot($matches[1]) . '(' . $this->replace_dot($matches[2]) . '); {/php}';
+		return '{php} echo ' . $matches[1] . '(' . $this->replace_dot($matches[2]) . '); {/php}';
 	}
 	
 	private function replace_dot($content)
 	{
-		$content=str_replace(' . ',' {%dot%} ',$content);
-		$content=str_replace('. ',' {%dot%} ',$content);
-		$content=str_replace(' .',' {%dot%} ',$content);
+		$array=array();
+		preg_match_all('/".+?"|\'.+?\'/', $content,$array,PREG_SET_ORDER);
+		if(count($array)>0){
+			foreach($array as $a){
+				$a=$a[0];
+				if(strstr($a,'.')!=false){
+					$b=str_replace('.','{%_dot_%}',$a);
+					$content=str_replace($a,$b,$content);
+				}
+			}
+		}
+		$content=str_replace(' . ',' {%_dot_%} ',$content);
+		$content=str_replace('. ',' {%_dot_%} ',$content);
+		$content=str_replace(' .',' {%_dot_%} ',$content);
 		$content=str_replace('.','->',$content);
-		$content=str_replace(' {%dot%} ',' . ',$content);
+		$content=str_replace('{%_dot_%}','.',$content);
 		return $content;
 	}
-
-	
 
 	public function GetTemplate($name)
 	{
 		return $this->path . $name . '.php';
 	}
-
 	
 	private $templatename=null;
 	public function SetTemplate( $templatename)
