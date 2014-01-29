@@ -107,7 +107,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <li class="rename"> <a href="#rename">重命名</a> </li>
   <li class="del"> <a href="#del">删除</a> </li>
 </ul>
-
+<script>ActiveTopMenu('zbpdk');</script>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 RunTime();

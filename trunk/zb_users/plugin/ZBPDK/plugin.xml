@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>ZBPDK</id>
-<name>Z-Blog PHP Development Kit</name>
+<name>Z-Blog PHP Development Kit(Beta)</name>
 <url>http://www.zsxsoft.com</url>
 <note>Z-Blog PHP的开发套件</note>
 <description></description>
@@ -20,8 +20,8 @@
 </source>
 <adapted>131221</adapted>
 <version>1.0</version>
-<pubdate>2014-01-24</pubdate>
-<modified>2014-01-24</modified>
+<pubdate>2014-01-29</pubdate>
+<modified>2014-01-29</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>
