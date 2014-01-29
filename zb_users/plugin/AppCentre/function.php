@@ -57,7 +57,8 @@ function Server_Open($method){
 			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
 			break;
 		case 'view':
-			$s=Server_SendRequest(APPCENTRE_URL .'?'. $_SERVER['QUERY_STRING']);
+			$QUERY_STRING = (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : '' ;
+			$s=Server_SendRequest(APPCENTRE_URL .'?'. $QUERY_STRING);
 			if(strpos($s,'<!--developer-nologin-->')!==false){
 				if($zbp->Config('AppCentre')->username){
 					$zbp->Config('AppCentre')->username='';
