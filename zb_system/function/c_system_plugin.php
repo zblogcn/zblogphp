@@ -1516,6 +1516,35 @@ $Filter_Plugin_Upload_DelFile=array();
 */
 $Filter_Plugin_Upload_Url=array();
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Template_Compiling_Begin
+'参数:$this,$content
+'说明:Template类编译一个模板前的接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Template_Compiling_Begin=array();
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Template_Compiling_End
+'参数:$this,$content
+'说明:Template类编译一个模板后的接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Template_Compiling_End=array();
 
-
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Template_GetTemplate
+'参数:$this,$name
+'说明:Template类读取一个模板前的接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Template_GetTemplate=array();
