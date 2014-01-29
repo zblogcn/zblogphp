@@ -46,9 +46,12 @@ function plugininterface_filterexit($filter)
 
 function plugininterface_outputfunc($interface_name,$closure) {
 	$str = '';
-	try {
+	try
+	{
 		$func = new ReflectionFunction($closure);
-	} catch (ReflectionException $e) {
+	}
+	catch (ReflectionException $e)
+	{
 		echo $e->getMessage();
 		return;
 	}
