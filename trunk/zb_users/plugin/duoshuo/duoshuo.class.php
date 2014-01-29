@@ -73,14 +73,6 @@ class duoshuo_class
 		return 'http://duoshuo.com/connect-site/?' . $str;
 	}
 	
-	
-	//plugin interface
-	function view_post_template(&$template)
-	{
-		if (!$this->is_init) $this->init();
-		$s = $zbp->config('duoshuo')->commoncode;
-		$template->SetTags('socialcomment',$s);
-	}
 }
 
 
