@@ -765,7 +765,7 @@ function Admin_MemberMng(){
 	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
 	echo '<tr>
 	<th>' . $zbp->lang['msg']['id'] . '</th>
-	<th>' . '' . '</th>
+	<th>' . $zbp->lang['msg']['member_level'] . '</th>
 	<th>' . $zbp->lang['msg']['name'] . '</th>
 	<th>' . $zbp->lang['msg']['alias'] . '</th>
 	<th>' . $zbp->lang['msg']['all_artiles'] . '</th>
