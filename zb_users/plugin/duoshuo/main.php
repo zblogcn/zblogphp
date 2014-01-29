@@ -45,7 +45,7 @@ else
 	}
 }
 ?>
-    <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script> 
+    <script type="text/javascript">ActiveLeftMenu("a<?php echo !isset($_GET['act'])?'Comment':'Plugin' ?>Mng");</script> 
     <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/duoshuo/logo.png';?>");</script> 
   </div>
 </div>

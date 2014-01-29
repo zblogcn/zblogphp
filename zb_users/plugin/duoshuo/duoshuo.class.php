@@ -7,6 +7,8 @@ class duoshuo_class
 	public $system_version = '';
 	public $duoshuo_path = '';
 	public $token = '';
+	public $db = array();
+	public $cc_thread_key = '';
 	
 	function init()
 	{
@@ -20,6 +22,8 @@ class duoshuo_class
 			'user_key' => $zbp->user->ID,
 			'name' => $zbp->user->Name
 		),$this->cfg->secret,'HS256');
+		$this->db['comment'] = '%pre%plugin_duoshuo_comment';
+		$this->db['members'] = '%pre%plugin_duoshuo_members';
 		$is_init = true;
 		 
 	}
@@ -73,6 +77,33 @@ class duoshuo_class
 		return 'http://duoshuo.com/connect-site/?' . $str;
 	}
 	
+	
+	function check_spider()
+	{
+		if (!$this->is_init) $this->init();
+		if(!$this->cfg->seo_enabled) return false;
+		$spider="/(baidu|google|bing|soso|360|Yahoo|msn|Yandex|youdao|mj12|Jike|Ahrefs|ezooms|Easou|sogou)(bot|spider|Transcoder|slurp)/i";
+		return (bool)preg_match($spider,GetVars("HTTP_USER_AGENT","SERVER"));
+	}
+	
+	function get_footer_js()
+	{
+		if (!$this->is_init) $this->init();
+		$data = '';
+		if($this->cfg->cron_sync_enabled=='async')
+			$data .= '<script language="javascript" type="text/javascript" src="'.$this->duoshuo_path.'event.php?act=api_async&'.rand().'"></script>';
+		if($this->cc_thread_key!="") 
+		{
+			$data .= '<script type="text/javascript" src="http://api.duoshuo.com/threads/counts.jsonp';
+			$data .= '?short_name=' . urlencode($this->cfg->short_name) . '&threads=' . urlencode($this->cc_thread_key);
+			$data .= '&callback=duoshuo_callback"></script>';
+			//评论数修正		 批量获取
+		}
+	
+		$data = '<script type="text/javascript">function duoshuo_callback(data){if(data.response){for(var i in data.response){jQuery("[duoshuo_id=\"+i+\"]").html(data.response[i].comments);}}};var duoshuoQuery = {short_name:"'. $this->cfg->short_name . '"};</script><script type="text/javascript" src="http://static.duoshuo.com/embed.js"></script>' . $data;
+		
+		return $data;
+	}
 }
 
 
