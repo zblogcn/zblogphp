@@ -47,7 +47,12 @@ class Template{
 	public function Compiling($content)
 	{
 
-
+		foreach ($GLOBALS['Filter_Plugin_Template_Compiling_Begin'] as $fpname => &$fpsignal)
+		{
+			$fpreturn = $fpname($this,$content);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+		
 		//Step1:替换<?php块
 		$this->replacePHP($content);
 		//Step2:引入主题
@@ -68,7 +73,12 @@ class Template{
 		$this->parse_module($content);
 		//StepN:解析PHP
 		$this->parsePHP($content);
-
+		
+		foreach ($GLOBALS['Filter_Plugin_Template_Compiling_End'] as $fpname => &$fpsignal)
+		{
+			$fpreturn=$fpname($this,$content);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
       
 		return $content;
 	}
@@ -210,7 +220,12 @@ class Template{
 	}
 
 	public function GetTemplate($name)
-	{
+	{		
+		foreach ($GLOBALS['Filter_Plugin_Template_GetTemplate'] as $fpname => &$fpsignal)
+		{
+			$fpreturn=$fpname($this,$name);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
 		return $this->path . $name . '.php';
 	}
 	
