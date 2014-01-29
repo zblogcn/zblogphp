@@ -13,7 +13,9 @@ class ZBlogPHP{
 	public static $error_id=0;
 	public static $error_file=null;
 	public static $error_line=null;
-	
+
+	public $version=null;
+
 	public $db = null;
 	public $option = array();
 	public $lang = array();
@@ -94,11 +96,12 @@ class ZBlogPHP{
 	function __construct() {
 
 		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,$datainfo;
-		global $blogtitle,$blogname,$blogsubname,$blogtheme,$blogstyle;
+		global $blogversion,$blogtitle,$blogname,$blogsubname,$blogtheme,$blogstyle;
 		
 		ZBlogException::SetErrorHook();
 	
 		//基本配置加载到$zbp内
+		$this->version=&$blogversion;
 		$this->option = &$option;
 		$this->lang = &$lang;
 		$this->path = &$blogpath;
