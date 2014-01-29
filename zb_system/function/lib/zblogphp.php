@@ -1476,6 +1476,21 @@ function AddBuildModuleAll(){
 	}
 
 
+	function GetToken(){
+		return md5($this->guid . date('Ymd') . $this->user->Name . $this->user->Password);
+	}
+
+	function ValidToken($t){
+		if($t==md5($this->guid . date('Ymd') . $this->user->Name . $this->user->Password)){
+			return true;
+		}
+		if($t==md5($this->guid . date('Ymd',strtotime("-1 day")) . $this->user->Name . $this->user->Password)){
+			return true;
+		}
+		return false;
+	}
+	
+
 	function ShowValidCode($id=''){
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_ShowValidCode'] as $fpname => &$fpsignal) {

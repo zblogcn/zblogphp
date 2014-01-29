@@ -66,6 +66,7 @@ switch ($action) {
 		Redirect('admin/edit.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'ArticleDel':
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelArticle();
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
@@ -84,6 +85,7 @@ switch ($action) {
 		Redirect('admin/edit.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'PageDel':
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelPage();
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
@@ -111,18 +113,21 @@ switch ($action) {
 		Redirect('cmd.php?act=CategoryMng');
 		break;
 	case 'CategoryDel':
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelCategory();
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=CategoryMng');
 		break;	
 	case 'CommentDel':
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelComment();
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
 		Redirect($_SERVER["HTTP_REFERER"]);
 		break;	
 	case 'CommentChk':
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		CheckComment();
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
@@ -154,6 +159,7 @@ switch ($action) {
 		Redirect('cmd.php?act=MemberMng');
 		break;
 	case 'MemberDel':
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		if(DelMember()){
 			$zbp->BuildModule();
 			$zbp->SetHint('good');
@@ -171,6 +177,7 @@ switch ($action) {
 		Redirect('cmd.php?act=UploadMng');
 		break;
 	case 'UploadDel':
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelUpload();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=UploadMng');
@@ -188,6 +195,7 @@ switch ($action) {
 		Redirect('cmd.php?act=TagMng');
 		break;
 	case 'TagDel':
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelTag();
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
@@ -200,6 +208,7 @@ switch ($action) {
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'PluginDis':
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		UninstallPlugin(GetVars('name','GET'));
 		DisablePlugin(GetVars('name','GET'));
 		$zbp->BuildModule();
@@ -207,6 +216,7 @@ switch ($action) {
 		Redirect('cmd.php?act=PluginMng');
 		break;
 	case 'PluginEnb':
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		$install='&install=';
 		$install .= EnablePlugin(GetVars('name','GET'));
 		$zbp->BuildModule();
@@ -227,8 +237,8 @@ switch ($action) {
 		Redirect('cmd.php?act=ThemeMng' . $install);
 		break;
 	case 'SidebarSet':
-		$zbp->BuildModule();
 		SetSidebar();
+		$zbp->BuildModule();
 		break;
 	case 'ModuleEdt':
 		Redirect('admin/module_edit.php?' . GetVars('QUERY_STRING','SERVER'));
@@ -240,6 +250,7 @@ switch ($action) {
 		Redirect('cmd.php?act=ModuleMng');
 		break;
 	case 'ModuleDel':
+
 		DelModule();
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
