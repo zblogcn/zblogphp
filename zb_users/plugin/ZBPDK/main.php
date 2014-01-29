@@ -47,6 +47,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     </table>
   </div>
 </div>
+<script>ActiveTopMenu('zbpdk');</script>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 RunTime();
