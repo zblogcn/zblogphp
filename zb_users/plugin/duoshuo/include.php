@@ -20,9 +20,16 @@ function duoshuo_view_post_template(&$template)
 {
 
 	$r = '<!-- Duoshuo Comment BEGIN -->';
-	$r .= '<div class="ds-thread" data-category="<?php echo article->category->id ?>" data-thread-key="<#article/id#>" ';
+	$r .= '<div class="ds-thread" data-category="<#article/category/id#>" data-thread-key="<#article/id#>" ';
 	$r .= 'data-title="<#article/title#>" data-author-key="<#article/author/id#>" data-url=""></div>';
 	$r .= '<!-- Duoshuo Comment END -->';
+
+	$post=&$template->GetTags('article');
+
+	$r=str_replace('<#article/category/id#>',$post->Category->ID,$r);
+	$r=str_replace('<#article/id#>',$post->ID,$r);
+	$r=str_replace('<#article/title#>',htmlspecialchars($post->Title),$r);
+	$r=str_replace('<#article/author/id#>',$post->Author->ID,$r);
 	
 	$template->SetTags('socialcomment',$r);
 }

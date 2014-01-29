@@ -24,7 +24,7 @@ class Template{
 		 $this->path= $path;
 	}
 
-	function GetTags($name){
+	function &GetTags($name){
 		return $this->tags[$name];
 	}
 
