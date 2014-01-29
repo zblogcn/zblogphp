@@ -6,6 +6,14 @@ if (!$zbp->CheckRights('root')) {$zbp->ShowError(6);exit();}
 if (!$zbp->CheckPlugin('duoshuo')) {$zbp->ShowError(48);exit();}
 $blogtitle='多说社会化评论';
 require $blogpath . 'zb_system/admin/admin_header.php';
+?>
+<style type="text/css">
+tr {height: 32px;}
+#divMain2 ul li {margin-top: 6px;margin-bottom: 6px}
+.bold {font-weight: bold;}
+.note {margin-left: 10px}
+</style>
+<?php
 require $blogpath . 'zb_system/admin/admin_top.php';
 $duoshuo->init();
 ?>
@@ -27,6 +35,9 @@ else
 		case "users":
 		case "statistics":
 			echo '<iframe id="duoshuo-remote-window" src="' . $duoshuo->export_admin(GetVars("act","GET")) . '" style="border:0; width:100%; height:580px;"></iframe>';
+		break;
+		case "setting":
+			require '_setting.inc';
 		break;
 		default:
 			echo '<iframe id="duoshuo-remote-window" src="' . $duoshuo->export_admin(GetVars("act","GET")) . '" style="border:0; width:100%; height:580px;"></iframe>';

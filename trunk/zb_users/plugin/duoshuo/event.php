@@ -71,4 +71,21 @@ function callback()
 	echo "<script>top.location.href='export.php?firstrun'</script>";
 }
 
+function save()
+{
+	global $duoshuo;
+	global $zbp;
+	foreach($_POST as $name => $value)
+	{
+		if(substr($name,0,7)=='duoshuo')
+		{
+			$name = substr($name,8);
+			$duoshuo->cfg->$name = $value;
+		}
+	}
+	$zbp->SaveConfig('duoshuo');
+	$zbp->SetHint('good');
+	header('Location: main.php?act=setting');
+}
+
 ?>
