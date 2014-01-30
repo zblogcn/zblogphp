@@ -8,13 +8,13 @@ $table['plugin_duoshuo_members']='%pre%plugin_duoshuo_members';
 $datainfo['plugin_duoshuo_comment']=array(
 	'ID'=>array('ds_ID','integer','',0),
 	'key'=>array('ds_key','string',128,''),
-	'cmtid'=>array('ds_cmtid','int','',0)
+	'cmtid'=>array('ds_cmtid','integer','',0)
 );
 
 $datainfo['plugin_duoshuo_members']=array(
 	'ID'=>array('ds_ID','integer','',0),
 	'key'=>array('ds_key','string',128,''),
-	'memid'=>array('ds_memid','int','',0),
+	'memid'=>array('ds_memid','integer','',0),
 	'accesstoken'=>array('ds_accesstoken','string',128,''),
 );
 
