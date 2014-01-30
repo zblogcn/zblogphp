@@ -10,6 +10,12 @@ function event_init()
 	if (!$zbp->CheckRights($right)) {$zbp->ShowError(6);exit();}
 	if (!$zbp->CheckPlugin('duoshuo')) {$zbp->ShowError(48);exit();}
 	$duoshuo->init();
+	set_error_handler(create_function('',''));
+	set_exception_handler(create_function('',''));
+	register_shutdown_function(create_function('',''));
+	set_error_handler('ds_error_handler');
+	set_exception_handler('ds_exception_handler');
+	register_shutdown_function('ds_shutdown_error_handler');
 }
 
 switch(GetVars('act','GET'))
@@ -55,6 +61,48 @@ function api()
 	echo '多说 for Z-Blog PHP插件暂不支持Ping请求，请静待版本更新';
 }
 
+function api_async()
+{
+	//header('Content-Type: application/javascript');
+	
+	global $zbp;
+	global $duoshuo;
+	$result = array();
+	$duoshuo->init();
+	$_last = (int)$duoshuo->cfg->lastpub;
+	$_now = time();
+	/*
+	if (($_now-$_last)/1000<60*20)
+	{
+		$result['last'] = $_last;
+		$result['now'] = $_now;
+		$result['status'] = 'waiting...';
+		echo json_encode($result);
+		exit();
+	}
+	*/
+	$_last = $_now;
+	$duoshuo->cfg->lastpub = $_now;
+	$zbp->SaveConfig('duoshuo');
+	$return_string = '';
+	
+	if($duoshuo->cfg->cron_sync_enabled != "async")
+	{
+		$return_string = 'noasync';
+	}
+	else
+	{
+		$duoshuo->api->sync();
+		$zbp->AddBuildModule('comments');
+		$zbp->AddBuildModule('statistics');
+		$zbp->BuildModule();
+		$return_string = 'success';
+	}
+	$result['status'] = $return_string;
+	echo json_encode($result);
+	exit();
+}
+
 function callback()
 {
 	global $zbp;
@@ -90,17 +138,11 @@ function save()
 
 function export()
 {
-	set_error_handler(create_function('',''));
-	set_exception_handler(create_function('',''));
-	register_shutdown_function(create_function('',''));
-	set_error_handler('ds_error_handler');
-	set_exception_handler('ds_exception_handler');
-	register_shutdown_function('ds_shutdown_error_handler');
+
 	
 	$intmin = 0; $intmax = 0;
 	$http = new NetworkFactory();
-	$http = $http->Create('curl');
-	if(!$http) $http = $http->Create('fsockopen');
+	$http = $http->Create();
 	if(!$http) throw new Exception('主机没有开启网络功能');
 	
 	$startTime = microtime_float();
@@ -160,7 +202,7 @@ function ds_error_handler($errno, $errstr, $errfile, $errline ){
 	$zbe->ParseError($errno, $errstr, $errfile, $errline);
 	Http500();
 	$code = $zbe->get_code($zbe->file,$zbe->line);
-	$code = TransferHTML($code[$zbe->line-1],'[html-format]');
+	$code = $code[$zbe->line-1];
 	echo '<br/>Message: ' . $zbe->message . '<br/>File: ' . $zbe->file . '<br/>Line: ' . $zbe->line . '<br/>Code: ' . $code;
 	die();
 }
@@ -172,7 +214,7 @@ function ds_exception_handler($exception){
 	$zbe->ParseException($exception);
 	Http500();
 	$code = $zbe->get_code($zbe->file,$zbe->line);
-	$code = TransferHTML($code[$zbe->line-1],'[html-format]');
+	$code = $code[$zbe->line-1];
 	echo '<br/>Message: ' . $zbe->message . '<br/>File:' . $zbe->file . '<br/>Line:' . $zbe->line . '<br/>Code:' . $code;
 	die();
 }
@@ -184,7 +226,7 @@ function ds_shutdown_error_handler(){
 		$zbe->ParseShutdown($error);
 		Http500();
 		$code = $zbe->get_code($zbe->file,$zbe->line);
-		$code = TransferHTML($code[$zbe->line-1],'[html-format]');
+		$code = $code[$zbe->line-1];
 		echo '<br/>Message: ' . $zbe->message . '<br/>File:' . $zbe->file . '<br/>Line:' . $zbe->line . '<br/>Code:' . $code;
 		die();
 	}

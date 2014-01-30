@@ -1,17 +1,18 @@
 <?php
 require 'jwt.php';
 require 'duoshuo.class.php';
+require 'duoshuo.api.php';
 
-$table['plugin_duoshuo_comment']='%pre%plugin_duoshuo_comment';
-$table['plugin_duoshuo_members']='%pre%plugin_duoshuo_members';
+$table['plugin_duoshuo_comment'] = '%pre%plugin_duoshuo_comment';
+$table['plugin_duoshuo_members'] = '%pre%plugin_duoshuo_members';
 
-$datainfo['plugin_duoshuo_comment']=array(
+$datainfo['plugin_duoshuo_comment'] = array(
 	'ID'=>array('ds_ID','integer','',0),
 	'key'=>array('ds_key','string',128,''),
 	'cmtid'=>array('ds_cmtid','integer','',0)
 );
 
-$datainfo['plugin_duoshuo_members']=array(
+$datainfo['plugin_duoshuo_members'] = array(
 	'ID'=>array('ds_ID','integer','',0),
 	'key'=>array('ds_key','string',128,''),
 	'memid'=>array('ds_memid','integer','',0),
