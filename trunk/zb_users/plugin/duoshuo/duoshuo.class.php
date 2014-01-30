@@ -12,6 +12,7 @@ class duoshuo_class
 	
 	function init()
 	{
+		if($this->is_init) return true;
 		global $zbp;
 		global $blogversion;
 		$this->system_version = $blogversion;
@@ -25,7 +26,7 @@ class duoshuo_class
 		$this->db['comment'] = '%pre%plugin_duoshuo_comment';
 		$this->db['members'] = '%pre%plugin_duoshuo_members';
 		$is_init = true;
-		 
+		return true;
 	}
 	
 	function export_admin($type)
@@ -96,11 +97,11 @@ class duoshuo_class
 		{
 			$data .= '<script type="text/javascript" src="http://api.duoshuo.com/threads/counts.jsonp';
 			$data .= '?short_name=' . urlencode($this->cfg->short_name) . '&threads=' . urlencode($this->cc_thread_key);
-			$data .= '&callback=duoshuo_callback"></script>';
+			$data .= '&callback=duoshuo_callback&rnd=' . rand() .'"></script>';
 			//评论数修正		 批量获取
 		}
 	
-		$data = '<script type="text/javascript">function duoshuo_callback(data){if(data.response){for(var i in data.response){jQuery("[duoshuo_id=\"+i+\"]").html(data.response[i].comments);}}};var duoshuoQuery = {short_name:"'. $this->cfg->short_name . '"};</script><script type="text/javascript" src="http://static.duoshuo.com/embed.js"></script>' . $data;
+		$data = '<script type="text/javascript">function duoshuo_callback(data){if(data.response){for(var i in data.response){jQuery("[duoshuo_id="+i+"]").html(data.response[i].comments);}}};var duoshuoQuery = {short_name:"'. $this->cfg->short_name . '"};</script><script type="text/javascript" src="http://static.duoshuo.com/embed.js"></script>' . $data;
 		
 		return $data;
 	}

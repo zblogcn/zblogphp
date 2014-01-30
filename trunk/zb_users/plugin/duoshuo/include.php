@@ -29,11 +29,11 @@ function ActivePlugin_duoshuo()
 	//“评论管理”转向
 	Add_Filter_Plugin('Filter_Plugin_Admin_Begin','duoshuo_admin_begin');
 	//文章页插入多说
-	Add_Filter_Plugin('Filter_Plugin_Template_Compiling_Begin','duoshuo_template_compiling_begin');
 	Add_Filter_Plugin('Filter_Plugin_Template_GetTemplate','duoshuo_template_gettemplate');
 	//重写系统自带评论
 	Add_Filter_Plugin('Filter_Plugin_ViewPost_Begin','duoshuo_view_post_begin');
 	Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','duoshuo_view_post_template');
+	Add_Filter_Plugin('Filter_Plugin_ViewList_Template','duoshuo_view_list_template');
 }
 function InstallPlugin_duoshuo()
 {
@@ -66,14 +66,7 @@ function duoshuo_admin_begin()
 		header('Location: '. $duoshuo->duoshuo_path . 'main.php');
 	}
 }
-function duoshuo_template_compiling_begin(&$obj,&$content)
-{
-	global $duoshuo;
-	if(strpos($content,'{$copyright}')>0)
-	{
-		$content = preg_replace('/\{\$copyright\}/i','{\$copyright}' . $duoshuo->get_footer_js() ,$content);
-	}
-}
+
 
 function duoshuo_template_gettemplate(&$obj,$name)
 {
@@ -88,7 +81,6 @@ function duoshuo_template_gettemplate(&$obj,$name)
 	else if($name == 'comment')
 	{
 		$duoshuo->init();
-		
 	}
 	$GLOBALS['Filter_Plugin_Template_GetTemplate']['duoshuo_template_gettemplate'] = PLUGIN_EXITSIGNAL_NONE;
 }
@@ -106,6 +98,30 @@ function duoshuo_view_post_template(&$template)
 	$zbp->option['ZC_COMMENT_TURNOFF'] = true;
 	$post = &$template->GetTags('article');
 	$post->IsLock = false;
+	
+	if($duoshuo->cfg->cc_fix)
+	{
+		$post->CommNums = '<span id="duoshuo_comment'.$post->ID.'" duoshuo_id="'.$post->ID.'"></span>';
+		$duoshuo->cc_thread_key .= $post->ID.',';
+	}
+	$template->SetTags('footer',$duoshuo->get_footer_js());
+	
+}
+function duoshuo_view_list_template(&$template)
+{
+	global $zbp;
+	global $duoshuo;
+	$duoshuo->init();
+	$posts = &$template->GetTags('articles');
+	foreach($posts as $post)
+	{
+		if($duoshuo->cfg->cc_fix)
+		{
+			$post->CommNums = '<span id="duoshuo_comment'.$post->ID.'" duoshuo_id="'.$post->ID.'"></span>';
+			$duoshuo->cc_thread_key .= $post->ID.',';
+		}
+	}
+	$template->SetTags('footer',$duoshuo->get_footer_js());
 }
 
 function duoshuo_view_post_begin($id,$alias)
