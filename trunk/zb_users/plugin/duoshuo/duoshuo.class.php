@@ -9,6 +9,7 @@ class duoshuo_class
 	public $token = '';
 	public $db = array();
 	public $cc_thread_key = '';
+	public $url = array();
 	
 	function init()
 	{
@@ -25,6 +26,28 @@ class duoshuo_class
 		),$this->cfg->secret,'HS256');
 		$this->db['comment'] = '%pre%plugin_duoshuo_comment';
 		$this->db['members'] = '%pre%plugin_duoshuo_members';
+		$this->url = array(
+			'posts' => array(
+				'import' => 'posts/import.json',
+				'create' => 'posts/create.json'
+			),
+			'threads' => array(
+				'import' => 'threads/import.json',
+				'count' => 'threads/counts.json'
+			),
+			'users' => array(
+				'import' => 'users/import.json',
+				'profile' => 'users/profile.json'
+			),
+			'sites' => array(
+				'join' => 'sites/join.json',
+				'listTopThreads' => 'sites/listTopThreads.json'
+			),
+			'log' => array(
+				'list' => 'log/list.json'
+			)
+			
+		);
 		$is_init = true;
 		return true;
 	}
