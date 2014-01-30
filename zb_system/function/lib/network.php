@@ -34,22 +34,25 @@ class NetworkFactory
 	{
 		if (function_exists('curl_init'))
 		{
-			$network_list[] = 'curl';
+			$this->network_list[] = 'curl';
 			$this->curl = true;
 		}
 		
 		if ((bool)ini_get('allow_url_fopen'))
 		{
-			if(function_exists('file_get_contents')) $network_list[] = 'file_get_contents';
-			if(function_exists('fsockopen')) $network_list[] = 'fsockopen';
+			if(function_exists('file_get_contents')) $this->network_list[] = 'file_get_contents';
+			if(function_exists('fsockopen')) $this->network_list[] = 'fsockopen';
 			$this->fso = true;
 		}
-		
+	}
+	
+	function Create($extension = '')
+	{
 		if ((!$this->fso) && (!$this->curl)) return false;
-		$type = 'network'.$network_list[0];
+		$extension = ($extension == '' ? $this->network_list[0] : $extension);
+		$type = 'network' . $extension;
 		$network = New $type();
 		return $network;
-		
 	}
 	
 	
