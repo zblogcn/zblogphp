@@ -29,7 +29,7 @@ class NetworkFactory
 
 	public static function Create($type)
 	{
-		$newtype='Network'.$type;
+		$newtype='network'.$type;
 		$network=New $newtype();
 		return $network;
 	}

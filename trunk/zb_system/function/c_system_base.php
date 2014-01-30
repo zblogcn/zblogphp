@@ -81,7 +81,7 @@ $bloghost = GetCurrentHost($cookiespath);
 
 
 #加载zbp 数据库类 对象
-$lib_array = array('zblogphp','dbsql','base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','urlrule','app','rss2','validcode');
+$lib_array = array('zblogphp','dbsql','base','metas','post','category','comment','counter','member','module','tag','template','upload','pagebar','urlrule','app','rss2','validcode','network');
 foreach ($lib_array as $f) {
 	require $blogpath.'zb_system/function/lib/' . $f . '.php';
 }
