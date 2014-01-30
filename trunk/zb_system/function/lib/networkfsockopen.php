@@ -141,7 +141,7 @@ class Networkfsockopen implements iNetwork
 				
 	}
 	public function setRequestHeader($bstrHeader, $bstrValue){
-		array_push($this->header,$bstrHeader.': '.$bstrValue);
+		array_push($this->httpheader,$bstrHeader.': '.$bstrValue);
 		return true;
 	}
 	
@@ -170,6 +170,9 @@ class Networkfsockopen implements iNetwork
 		$this->timeout = 30;
 		$this->errstr = '';
 		$this->errno = 0;
+		
+		$this->setRequestHeader('User-Agent','Z-Blog PHP http_fso module');
+
 		
 	}
 }

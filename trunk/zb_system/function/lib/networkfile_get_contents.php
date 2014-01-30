@@ -106,7 +106,7 @@ class Networkfile_get_contents implements iNetwork
 		
 	}
 	public function setRequestHeader($bstrHeader, $bstrValue){
-		array_push($this->header,$bstrHeader.': '.$bstrValue);
+		array_push($this->httpheader,$bstrHeader.': '.$bstrValue);
 		return true;
 	}
 	
@@ -130,5 +130,6 @@ class Networkfile_get_contents implements iNetwork
 		$this->postdata = array();
 		$this->httpheader = array();
 		$this->responseHeader = array();
+		$this->setRequestHeader('User-Agent','Z-Blog PHP http_fso module');
 	}
 }

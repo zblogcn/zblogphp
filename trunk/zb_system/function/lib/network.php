@@ -50,8 +50,8 @@ class NetworkFactory
 	
 	public function Create($type)
 	{
-		if((!$this->fso) && ($type == 'file_get_contents' || $type == 'fsockopen')) throw new Exception('function '.$type.' not allowed');
-		if((!$this->curl) && ($type == 'curl')) throw new Exception('function '.$type.' not allowed');
+		if((!$this->fso) && ($type == 'file_get_contents' || $type == 'fsockopen')) return false;
+		if((!$this->curl) && ($type == 'curl')) return false;
 		$newtype='network'.$type;
 		$network=New $newtype();
 		return $network;

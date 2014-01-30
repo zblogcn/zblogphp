@@ -72,23 +72,29 @@ class Networkcurl implements iNetwork
 	
 	public function open($bstrMethod, $bstrUrl, $varAsync=true, $bstrUser='', $bstrPassword=''){ //Async无用
 		$this->reinit();
-		$method=strtoupper($bstrMethod);
+		$method = strtoupper($bstrMethod);
 		$this->option['method'] = $method;
 		$this->parsed_url = parse_url($bstrUrl);
-		if(!$this->parsed_url) throw new Exception('URL Syntax Error!');
+		if (!$this->parsed_url) throw new Exception('URL Syntax Error!');
 		
 		curl_setopt($this->ch, CURLOPT_URL, $bstrUrl);
 		curl_setopt($this->ch, CURLOPT_HEADER, 1);
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($this->ch, CURLOPT_POST, ($method=='POST'?1:0));
+		curl_setopt($this->ch, CURLOPT_POST, ($method == 'POST' ? 1 : 0));
 		return true;
 	}
 	
-	public function send($varBody=''){
+	public function setTimeOuts($resolveTimeout,$connectTimeout,$sendTimeout,$receiveTimeout)
+	{
+		curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+		curl_setopt($this->ch, CURLOPT_TIMEOUT, $resolveTimeout);
+	}
+	
+	public function send($varBody = ''){
 		
-		$data=$varBody;
+		$data = $varBody;
 		
-		if($this->option['method']=='POST')
+		if($this->option['method'] == 'POST')
 		{
 			if($data=='') $data = http_build_query($this->postdata);
 			curl_setopt($this->ch, CURLOPT_POSTFIELDS,$data);
@@ -104,7 +110,7 @@ class Networkcurl implements iNetwork
 				
 	}
 	public function setRequestHeader($bstrHeader, $bstrValue){
-		array_push($this->header,$bstrHeader.': '.$bstrValue);
+		array_push($this->httpheader,$bstrHeader.': '.$bstrValue);
 		return true;
 	}
 	
@@ -135,6 +141,7 @@ class Networkcurl implements iNetwork
 		$this->errno = 0;
 		
 		$this->ch = curl_init();
+		$this->setRequestHeader('User-Agent','Z-Blog PHP curl module');
 		
 	}
 }
