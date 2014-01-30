@@ -10,6 +10,7 @@ class duoshuo_class
 	public $db = array();
 	public $cc_thread_key = '';
 	public $url = array();
+	public $api = null;
 	
 	function init()
 	{
@@ -49,6 +50,7 @@ class duoshuo_class
 			
 		);
 		$is_init = true;
+		$this->api = new duoshuo_api();
 		return true;
 	}
 	
