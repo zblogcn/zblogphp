@@ -156,8 +156,8 @@ $duoshuo->init();
 		}
 		function stepbystep_main() {
 			stepbystep_member()
-			 stepbystep_article(parseInt($("#articlemin").val()), parseInt($("#articlemax").val()))
-			 stepbystep_comment(parseInt($("#commentmin").val()), parseInt($("#commentmax").val()))
+			stepbystep_article(parseInt($("#articlemin").val()), parseInt($("#articlemax").val()))
+			stepbystep_comment(parseInt($("#commentmin").val()), parseInt($("#commentmax").val()))
 		}
 		function stepbystep_log(data) {
 			$("#_hint").append("<li>" + data + "</li>");

@@ -88,4 +88,106 @@ function save()
 	header('Location: main.php?act=setting');
 }
 
+function export()
+{
+	set_error_handler(create_function('',''));
+	set_exception_handler(create_function('',''));
+	register_shutdown_function(create_function('',''));
+	set_error_handler('ds_error_handler');
+	set_exception_handler('ds_exception_handler');
+	register_shutdown_function('ds_shutdown_error_handler');
+	
+	$intmin = 0; $intmax = 0;
+	$http = new NetworkFactory();
+	$http = $http->Create('curl');
+	if(!$http) $http = $http->Create('fsockopen');
+	if(!$http) throw new Exception('主机没有开启网络功能');
+	
+	$startTime = microtime_float();
+	
+	require 'export.article.php';
+	require 'export.comment.php';
+	require 'export.member.php';
+	
+	switch(GetVars("type",'POST'))
+	{
+		case 'all':
+			export_post_article($http,$intmin,$intmax);
+			export_post_comment($http,$intmin,$intmax);
+			export_post_member($http,$intmin,$intmax);
+			$strSuccess='全部导出完成';
+		break;
+		case 'article':	
+			$intmin=(int)GetVars('articlemin','POST');
+			$intmax=(int)GetVars('articlemax','POST');
+			export_post_article($http,$intmin,$intmax);
+			$strSuccess="文章数据(".$intmin." - ".$intmax.")导出完成";
+		break;
+		case 'comment':
+			$intmin=(int)GetVars('commentmin','POST');
+			$intmax=(int)GetVars('commentmax','POST');
+			export_post_comment($http,$intmin,$intmax);
+			$strSuccess="评论数据(".$intmin." - ".$intmax.")导出完成";
+		break;
+		case 'member':
+			export_post_member($http,$intmin,$intmax);
+			$strSuccess="用户数据导出完成";
+		break;
+		case 'backup':
+			$strSuccess = Api_Run();
+			$strSuccess = $strSuccess['succeed'];
+			if($strSuccess=='success') $strSuccess="数据从多说备份到本地完成";
+		break;
+	}
+	$result = array(
+		'success' => $strSuccess  . '，用时' . (microtime_float()-$startTime) . 'ms'
+	);
+	
+	echo json_encode($result);
+}
+
+function microtime_float()
+{
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
+}
+
+
+function ds_error_handler($errno, $errstr, $errfile, $errline ){
+
+	//ob_clean();
+	$zbe=ZBlogException::GetInstance();
+	$zbe->ParseError($errno, $errstr, $errfile, $errline);
+	Http500();
+	$code = $zbe->get_code($zbe->file,$zbe->line);
+	$code = TransferHTML($code[$zbe->line-1],'[html-format]');
+	echo '<br/>Message: ' . $zbe->message . '<br/>File: ' . $zbe->file . '<br/>Line: ' . $zbe->line . '<br/>Code: ' . $code;
+	die();
+}
+
+function ds_exception_handler($exception){
+
+	//ob_clean();
+	$zbe=ZBlogException::GetInstance();
+	$zbe->ParseException($exception);
+	Http500();
+	$code = $zbe->get_code($zbe->file,$zbe->line);
+	$code = TransferHTML($code[$zbe->line-1],'[html-format]');
+	echo '<br/>Message: ' . $zbe->message . '<br/>File:' . $zbe->file . '<br/>Line:' . $zbe->line . '<br/>Code:' . $code;
+	die();
+}
+function ds_shutdown_error_handler(){
+	if ($error = error_get_last()) {
+
+		//ob_clean();
+		$zbe=ZBlogException::GetInstance();
+		$zbe->ParseShutdown($error);
+		Http500();
+		$code = $zbe->get_code($zbe->file,$zbe->line);
+		$code = TransferHTML($code[$zbe->line-1],'[html-format]');
+		echo '<br/>Message: ' . $zbe->message . '<br/>File:' . $zbe->file . '<br/>Line:' . $zbe->line . '<br/>Code:' . $code;
+		die();
+	}
+}
+
 ?>
