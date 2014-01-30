@@ -32,6 +32,12 @@ class NetworkFactory
 	
 	function __construct()
 	{
+		if (function_exists('curl_init'))
+		{
+			$network_list[] = 'curl';
+			$this->curl = true;
+		}
+		
 		if ((bool)ini_get('allow_url_fopen'))
 		{
 			if(function_exists('file_get_contents')) $network_list[] = 'file_get_contents';
@@ -39,21 +45,12 @@ class NetworkFactory
 			$this->fso = true;
 		}
 		
-		if (function_exists('curl_init'))
-		{
-			$network_list[] = 'curl';
-			$this->curl = true;
-		}
-		
+		if ((!$this->fso) && (!$this->curl)) return false;
+		$type = 'network'.$network_list[0];
+		$network = New $type();
+		return $network;
 		
 	}
 	
-	public function Create($type)
-	{
-		if((!$this->fso) && ($type == 'file_get_contents' || $type == 'fsockopen')) return false;
-		if((!$this->curl) && ($type == 'curl')) return false;
-		$newtype='network'.$type;
-		$network=New $newtype();
-		return $network;
-	}
+	
 }
