@@ -19,7 +19,7 @@ class Counter extends Base{
 		$this->Metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
-			$this->Data[$key]=$value[3];
+			$this->data[$key]=$value[3];
 		}
 
 	}

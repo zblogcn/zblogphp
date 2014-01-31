@@ -29,7 +29,8 @@ class HeartVote extends Base{
 		$this->datainfo=&$zbp->datainfo['HeartVote'];
 
 		foreach ($this->datainfo as $key => $value) {
-			$this->Data[$key]=$value[3];
+			if(isset($this->Data))$this->Data[$key]=$value[3];
+			if(isset($this->data))$this->data[$key]=$value[3];
 		}
 
 	}

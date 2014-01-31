@@ -19,7 +19,7 @@ class Post extends Base{
 		$this->Metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
-			$this->Data[$key]=$value[3];
+			$this->data[$key]=$value[3];
 		}
 
 		$this->ID = 0;
@@ -81,7 +81,7 @@ class Post extends Base{
 				break;
 			case 'Template':
 				if($value==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$value='';
-				return $this->Data[$name]  =  $value;
+				return $this->data[$name]  =  $value;
 				break;
 			default:
 				parent::__set($name, $value);
@@ -138,7 +138,7 @@ class Post extends Base{
 			case 'TagsName':
 				return $this->TagsToNameString;
 			case 'Template':
-				$value=$this->Data[$name];
+				$value=$this->data[$name];
 				if($value==''){
 					$value=GetValueInArray($this->Category->GetDataArray(),'LogTemplate');
 					if($value==''){
@@ -201,9 +201,9 @@ class Post extends Base{
 	function Save(){
         global $zbp;
 		if($this->Type==ZC_POST_TYPE_ARTICLE){
-			if($this->Template==GetValueInArray($this->Category->GetDataArray(),'LogTemplate'))$this->Data['Template'] = '';
+			if($this->Template==GetValueInArray($this->Category->GetDataArray(),'LogTemplate'))$this->data['Template'] = '';
 		}
-		if($this->Template==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->Data['Template'] = '';
+		if($this->Template==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
 		return parent::Save();
 	}
 	
