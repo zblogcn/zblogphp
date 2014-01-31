@@ -19,7 +19,7 @@ class Tag extends Base{
 		$this->Metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
-			$this->Data[$key]=$value[3];
+			$this->data[$key]=$value[3];
 		}
 
 	}
@@ -39,7 +39,7 @@ class Tag extends Base{
 		}
 		if ($name=='Template') {
 			if($value==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$value='';
-			return $this->Data[$name]  =  $value;
+			return $this->data[$name]  =  $value;
 		}
 		parent::__set($name, $value);
 	}
@@ -54,7 +54,7 @@ class Tag extends Base{
 			return $u->Make();
 		}
 		if ($name=='Template') {
-			$value=$this->Data[$name];
+			$value=$this->data[$name];
 			if($value=='')$value=$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
 			return $value;
 		}
@@ -63,7 +63,7 @@ class Tag extends Base{
 
 	function Save(){
         global $zbp;
-		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->Data['Template'] = '';
+		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
 		return parent::Save();
 	}
 	

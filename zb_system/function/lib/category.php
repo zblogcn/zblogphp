@@ -20,7 +20,7 @@ class Category extends Base{
 		$this->Metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
-			$this->Data[$key]=$value[3];
+			$this->data[$key]=$value[3];
 		}
 
 		$this->Name	= $GLOBALS['lang']['msg']['unnamed'];
@@ -53,11 +53,11 @@ class Category extends Base{
 		}		
 		if ($name=='Template') {
 			if($value==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$value='';
-			return $this->Data[$name]  =  $value;
+			return $this->data[$name]  =  $value;
 		}
 		if ($name=='LogTemplate') {
 			if($value==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$value='';
-			return $this->Data[$name]  =  $value;
+			return $this->data[$name]  =  $value;
 		}
 		parent::__set($name, $value);
 	}
@@ -117,12 +117,12 @@ class Category extends Base{
 			}
 		}	
 		if ($name=='Template') {
-			$value=$this->Data[$name];
+			$value=$this->data[$name];
 			if($value=='')$value=$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
 			return $value;
 		}
 		if ($name=='LogTemplate') {
-			$value=$this->Data[$name];
+			$value=$this->data[$name];
 			if($value=='')$value=$zbp->option['ZC_POST_DEFAULT_TEMPLATE'];
 			return $value;
 		}
@@ -131,8 +131,8 @@ class Category extends Base{
 
 	function Save(){
         global $zbp;
-		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->Data['Template'] = '';
-		if($this->LogTemplate==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->Data['LogTemplate'] = '';
+		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
+		if($this->LogTemplate==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->data['LogTemplate'] = '';
 		return parent::Save();
 	}
 

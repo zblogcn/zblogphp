@@ -12,12 +12,11 @@
 class Base
 {
 
-	public $table='';
-	public $datainfo = array();
+	protected $table='';
+	protected $datainfo = array();
+	protected $data = array();
 
 	public $Metas = null;
-
-	protected $Data = array();
 	
 	function __construct($table,$datainfo)
 	{
@@ -29,23 +28,23 @@ class Base
 		$this->Metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
-			$this->Data[$key]=$value[3];
+			$this->data[$key]=$value[3];
 		}
 
 	}
 
 	public function __set($name, $value)
 	{
-		$this->Data[$name]  =  $value;
+		$this->data[$name]  =  $value;
 	}
 
 	public function __get($name) 
 	{
-		return $this->Data[$name];
+		return $this->data[$name];
 	}
 
 	function GetDataArray(){
-		return $this->Data;
+		return $this->data;
 	}
 
 	function LoadInfoByID($id){
@@ -68,18 +67,18 @@ class Base
 
 		foreach ($this->datainfo as $key => $value) {
 			if($value[1] == 'boolean'){
-				$this->Data[$key]=(boolean)$array[$value[0]];
+				$this->data[$key]=(boolean)$array[$value[0]];
 			}elseif($value[1] == 'string'){
 				if($key=='Meta'){
-					$this->Data[$key]=$array[$value[0]];
+					$this->data[$key]=$array[$value[0]];
 				}else{
-					$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$value[0]]);
+					$this->data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$value[0]]);
 				}
 			}else{
-				$this->Data[$key]=$array[$value[0]];
+				$this->data[$key]=$array[$value[0]];
 			}			
 		}
-		if(isset($this->Data['Meta']))$this->Metas->Unserialize($this->Data['Meta']);
+		if(isset($this->data['Meta']))$this->Metas->Unserialize($this->data['Meta']);
 		return true;
 	}
 
@@ -89,26 +88,26 @@ class Base
 		$i = 0;
 		foreach ($this->datainfo as $key => $value) {
 			if($value[1] == 'boolean'){
-				$this->Data[$key]=(boolean)$array[$i];
+				$this->data[$key]=(boolean)$array[$i];
 			}elseif($value[1] == 'string'){
 				if($key=='Meta'){
-					$this->Data[$key]=$array[$value[0]];
+					$this->data[$key]=$array[$value[0]];
 				}else{
-					$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$value[0]]);
+					$this->data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$value[0]]);
 				}
 			}else{
-				$this->Data[$key]=$array[$i];
+				$this->data[$key]=$array[$i];
 			}
 			$i += 1;
 		}
-		if(isset($this->Data['Meta']))$this->Metas->Unserialize($this->Data['Meta']);
+		if(isset($this->data['Meta']))$this->Metas->Unserialize($this->data['Meta']);
 		return true;
 	}	
 
 	function Save(){
 		global $zbp;
 
-		if(isset($this->Data['Meta']))$this->Data['Meta'] = $this->Metas->Serialize();
+		if(isset($this->data['Meta']))$this->data['Meta'] = $this->Metas->Serialize();
 
 		$keys=array();
 		foreach ($this->datainfo as $key => $value) {
@@ -118,21 +117,21 @@ class Base
 
 		foreach ($this->datainfo as $key => $value) {
 			if($value[1]=='boolean'){
-				$keyvalue[$value[0]]=(integer)$this->Data[$key];
+				$keyvalue[$value[0]]=(integer)$this->data[$key];
 			}elseif($value[1] == 'integer'){
-				$keyvalue[$value[0]]=(integer)$this->Data[$key];
+				$keyvalue[$value[0]]=(integer)$this->data[$key];
 			}elseif($value[1] == 'float'){
-				$keyvalue[$value[0]]=(float)$this->Data[$key];
+				$keyvalue[$value[0]]=(float)$this->data[$key];
 			}elseif($value[1] == 'double'){
-				$keyvalue[$value[0]]=(double)$this->Data[$key];
+				$keyvalue[$value[0]]=(double)$this->data[$key];
 			}elseif($value[1] == 'string'){
 				if($key=='Meta'){
-					$keyvalue[$value[0]]=$this->Data[$key];
+					$keyvalue[$value[0]]=$this->data[$key];
 				}else{
-					$keyvalue[$value[0]]=str_replace($zbp->host,'{#ZC_BLOG_HOST#}',$this->Data[$key]);
+					$keyvalue[$value[0]]=str_replace($zbp->host,'{#ZC_BLOG_HOST#}',$this->data[$key]);
 				}
 			}else{
-				$keyvalue[$value[0]]=$this->Data[$key];
+				$keyvalue[$value[0]]=$this->data[$key];
 			}
 		}
 		array_shift($keyvalue);
