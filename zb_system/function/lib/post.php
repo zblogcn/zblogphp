@@ -133,7 +133,7 @@ class Post extends Base{
 			case 'Template':
 				$value=$this->data[$name];
 				if($value==''){
-					$value=GetValueInArray($this->Category->GetDataArray(),'LogTemplate');
+					$value=GetValueInArray($this->Category->GetData(),'LogTemplate');
 					if($value==''){
 						$value=$zbp->option['ZC_POST_DEFAULT_TEMPLATE'];
 					}
@@ -194,7 +194,7 @@ class Post extends Base{
 	function Save(){
         global $zbp;
 		if($this->Type==ZC_POST_TYPE_ARTICLE){
-			if($this->Template==GetValueInArray($this->Category->GetDataArray(),'LogTemplate'))$this->data['Template'] = '';
+			if($this->Template==GetValueInArray($this->Category->GetData(),'LogTemplate'))$this->data['Template'] = '';
 		}
 		if($this->Template==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
 		return parent::Save();
