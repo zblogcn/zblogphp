@@ -18,8 +18,7 @@ class Base
 
 	public $Metas = null;
 
-	function __construct(&$table,&$datainfo)
-	{
+	function __construct(&$table,&$datainfo){
         global $zbp;
 
         $this->table=$table;
@@ -30,21 +29,26 @@ class Base
 		foreach ($this->datainfo as $key => $value) {
 			$this->data[$key]=$value[3];
 		}
-
 	}
 
-	public function __set($name, $value)
-	{
+	public function __set($name, $value){
 		$this->data[$name]  =  $value;
 	}
 
-	public function __get($name)
-	{
+	public function __get($name){
 		return $this->data[$name];
 	}
 
-	function GetDataArray(){
+	function GetData(){
 		return $this->data;
+	}
+	
+	function GetTable(){
+		return $this->table;
+	}
+	
+	function GetDataInfo(){
+		return $this->datainfo;
 	}
 
 	function LoadInfoByID($id){
@@ -60,7 +64,6 @@ class Base
 		}else{
 			return false;
 		}
-
 	}
 
 	function LoadInfoByAssoc($array){
@@ -148,7 +151,6 @@ class Base
 		}
 
 		return true;
-
 	}
 
 	function Del(){

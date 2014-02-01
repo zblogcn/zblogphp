@@ -36,7 +36,7 @@ class ZBlogPHP{
 	public $tags=array();
 	public $tagsbyname=array();
 	public $comments = array();
-	private $posts=array();
+	public $posts=array();
 
 	public $templatetags=array();
 

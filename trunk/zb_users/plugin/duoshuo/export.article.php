@@ -5,7 +5,13 @@ function export_post_article($http,$intmin,$intmax)
 	global $duoshuo;
 	$where = array();
 	if($intmax>0) $where[] = array('between','log_ID',$intmin,$intmax);
-	$return = $zbp->GetPostList('*',$where,null,null,null);
+	$select=array();
+	foreach ($zbp->datainfo['Post'] as $key => $value) {
+		if($value[1] == 'string'&&$value[2] == '')continue;
+		$select[]=$value[0];
+	}
+	$select=implode(',',$select);
+	$return = $zbp->GetPostList($select,$where,null,null,null);
 	$data = export_article($return);
 	$http->open("POST","http://" . $duoshuo->cfg->api_hostname . '/'. $duoshuo->url['threads']['import']);
 	$http->send('short_name=' . urlencode($duoshuo->cfg->short_name) . '&secret=' . urlencode($duoshuo->cfg->secret) . '&' . $data);
