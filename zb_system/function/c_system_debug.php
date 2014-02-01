@@ -15,10 +15,7 @@ function error_handler($errno, $errstr, $errfile, $errline ){
 	$zbe->Display();
 	die();
 
- }
-
-
-
+}
 
 function exception_handler($exception){
 
@@ -28,9 +25,6 @@ function exception_handler($exception){
 	$zbe->Display();
 	die();
 }
-
-
-
 
 function shutdown_error_handler(){
 	if ($error = error_get_last()) {
@@ -43,10 +37,6 @@ function shutdown_error_handler(){
 	}
 }
 
-
-/**
-* 
-*/
 class ZBlogException
 {
 	static private $_zbe=null;
@@ -62,7 +52,6 @@ class ZBlogException
 		return self::$_zbe;
 	}
 
-
 	static public function SetErrorHook(){
 		set_error_handler('error_handler');
 		set_exception_handler('exception_handler');
@@ -75,30 +64,27 @@ class ZBlogException
 		register_shutdown_function('shutdown_error_handler');
 	}
 
-	
 	static public function Trace($s){
 		set_error_handler(create_function('',''));
 		set_exception_handler(create_function('',''));
 		register_shutdown_function(create_function('',''));
 	}
 
-
 	function ParseError($type,$message,$file,$line){
 
 		$this->type=$type;
 		$this->message=$message;
 		$this->file=$file;
-		$this->line=$line;	
+		$this->line=$line;
 
-	}	
+	}
 
 	function ParseShutdown($error){
 
 		$this->type=$error['type'];
 		$this->message=$error['message'];
 		$this->file=$error['file'];
-		$this->line=$error['line'];	
-
+		$this->line=$error['line'];
 	}
 
 	function ParseException($exception){
@@ -110,10 +96,8 @@ class ZBlogException
 
 		if(ZBlogPHP::$error_file!==null)$this->file=ZBlogPHP::$error_file;
 		if(ZBlogPHP::$error_line!==null)$this->line=ZBlogPHP::$error_line;
-		
+
 	}
-
-
 
 	function Display(){
 
@@ -122,7 +106,6 @@ class ZBlogException
 		$zbp=ZBlogPHP::GetInstance();
 		$zbp->StartGzip();
 		require $GLOBALS['blogpath'] . 'zb_system/defend/error.html';
-
 	}
 
 	function get_code($file, $line) {
@@ -133,6 +116,5 @@ class ZBlogException
 		unset($sData);
 		return $aFile;
 	}
-
 
 }

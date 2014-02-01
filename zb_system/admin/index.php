@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-07-05
  */
@@ -24,11 +24,11 @@ $f=null;
 switch ($action) {
 	case 'ArticleMng':
 		$f='Admin_ArticleMng';
-		$blogtitle=$lang['msg']['article_manage'];	
+		$blogtitle=$lang['msg']['article_manage'];
 		break;
 	case 'PageMng':
 		$f='Admin_PageMng';
-		$blogtitle=$lang['msg']['page_manage'];	
+		$blogtitle=$lang['msg']['page_manage'];
 		break;
 	case 'CategoryMng':
 		$f='Admin_CategoryMng';

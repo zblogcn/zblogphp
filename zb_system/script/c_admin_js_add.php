@@ -1,11 +1,11 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
-header('Content-Type: application/x-javascript; Charset=utf-8');  
+header('Content-Type: application/x-javascript; Charset=utf-8');
 
 require '../function/c_system_base.php';
 
@@ -31,7 +31,7 @@ function BatchSelectAll() {
 
 
 //*********************************************************
-// 目的：    
+// 目的：
 // 输入：    无
 // 返回：    无
 //*********************************************************
@@ -107,12 +107,12 @@ function bmx2table(){
 	var class_=new Array("color2","color3","color4");
 	var j=$("table[class!='nobmx'] tr:has(th)").addClass("color1");
     $("table[class!='nobmx']").each(function(){
- 		if(j.length==0){class_[1]="color2";class_[0]="color3";} 
+ 		if(j.length==0){class_[1]="color2";class_[0]="color3";}
 		$(this).find("tr:not(:has(th)):even").removeClass(class_[0]).addClass(class_[1]);
 		$(this).find("tr:not(:has(th)):odd").removeClass(class_[1]).addClass(class_[0]);
 	})
-	$("table[class!='nobmx']").find("tr:not(:has(th))").mouseover(function(){$(this).addClass(class_[2])}).mouseout(function(){$(this).removeClass(class_[2])}); 
-}; 
+	$("table[class!='nobmx']").find("tr:not(:has(th))").mouseover(function(){$(this).addClass(class_[2])}).mouseout(function(){$(this).removeClass(class_[2])});
+};
 //*********************************************************
 
 
@@ -172,7 +172,7 @@ function notify(s){
 		} else {
 			window.webkitNotifications.requestPermission(notify);
 		}
-	} 
+	}
 }
 //*********************************************************
 
@@ -211,9 +211,9 @@ $("div.divHeader,div.divHeader2").first().css({"padding-left":"38px","background
 
 
 //*********************************************************
-// 目的：    
+// 目的：
 //*********************************************************
-$(document).ready(function(){ 
+$(document).ready(function(){
 
 	// Content box tabs:
 	$('.content-box .content-box-content div.tab-content').hide(); // Hide the content divs
@@ -221,13 +221,13 @@ $(document).ready(function(){
 	$('.content-box-content div.default-tab').show(); // Show the div with class "default-tab"
 
 	$('.content-box ul.content-box-tabs li a').click( // When a tab is clicked...
-		function() { 
+		function() {
 			$(this).parent().siblings().find("a").removeClass('current'); // Remove "current" class from all tabs
 			$(this).addClass('current'); // Add class "current" to clicked tab
 			var currentTab = $(this).attr('href'); // Set variable "currentTab" to the value of href of clicked tab
 			$(currentTab).siblings().hide(); // Hide all content divs
 			$(currentTab).show(); // Show the content div with the id equal to the id of clicked tab
-			return false; 
+			return false;
 		}
 	);
 
@@ -241,7 +241,7 @@ $(document).ready(function(){
 			$('.SubMenu').show();
 		//}
 	}
-	
+
 	//checkbox
 	$('input.checkbox').css("display","none");
 	$('input.checkbox[value="1"]').after('<span class="imgcheck imgcheck-on"></span>');
@@ -267,7 +267,7 @@ $(document).ready(function(){
 			alert('<?php echo $lang['error'][65]?>')
 		}
 	})
-	
+
 	if (!$.support.leadingWhitespace) {
 		<?php
 			if($option['ZC_ADMIN_HTML5_ENABLE']){
@@ -277,7 +277,7 @@ $(document).ready(function(){
 			}
 		?>
 	}
-	
+
 	SetCookie("timezone",(new Date().getTimezoneOffset()/60)*(-1));
 });
 

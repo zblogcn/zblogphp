@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -9,11 +9,11 @@
 
 
 /**
-* 
+*
 */
 class DbSQLite3 implements iDataBase
 {
-	
+
 	public $dbpre = null;
 	private $db = null;
 
@@ -24,7 +24,7 @@ class DbSQLite3 implements iDataBase
 		$this->sql=new DbSql;
 		$this->sql->type=__CLASS__;
 	}
-	
+
 	public function EscapeString($s){
 		return SQLite3::escapeString($s);
 	}
@@ -82,7 +82,7 @@ class DbSQLite3 implements iDataBase
 	function CreateTable($tablename,$datainfo){
 		$this->QueryMulit($this->sql->CreateTable($tablename,$datainfo));
 	}
-	
+
 	function DelTable($tablename){
 		$this->Query($this->sql->DelTable($tablename));
 	}

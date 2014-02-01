@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-07-05
  */
@@ -38,7 +38,7 @@ $member=$zbp->GetMemberByID($memberid);
   <div id="divMain2" class="edit tag_edit">
 	<form id="edit" name="edit" method="post" action="#">
 	  <input id="edtID" name="ID" type="hidden" value="<?php echo $member->ID;?>" />
-	  <input id="edtGuid" name="Guid" type="hidden" value="<?php echo $member->Guid;?>" />	  
+	  <input id="edtGuid" name="Guid" type="hidden" value="<?php echo $member->Guid;?>" />
 	  <p>
 		<span class="title"><?php echo $lang['msg']['member_level']?>:</span><br />
 		<select class="edit" size="1" name="Level" id="cmbLevel">
@@ -51,7 +51,7 @@ $member=$zbp->GetMemberByID($memberid);
 		<label><input name="Status" type="radio" value="2" <?php echo $member->Status==2?'checked="checked"':''; ?> />&nbsp;<?php echo $lang['user_status_name'][2]?></label>
 		)
 <?php }?>
-	  </p>	  
+	  </p>
 	  <p>
 		<span class="title"><?php echo $lang['msg']['name']?>:</span><span class="star">(*)</span><br />
 		<input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name;?>" <?php if(!$zbp->CheckRights('MemberAll'))echo 'readonly="readonly"';?> />
@@ -99,13 +99,13 @@ foreach ($GLOBALS['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal
 function checkInfo(){
   document.getElementById("edit").action="../cmd.php?act=MemberPst";
 
-  
+
   if(!$("#edtEmail").val()){
     alert("<?php echo $lang['error']['29']?>");
     return false
   }
-  
-  
+
+
   if(!$("#edtName").val()){
     alert("<?php echo $lang['error']['72']?>");
     return false
@@ -114,7 +114,7 @@ function checkInfo(){
   if($("#edtPassword").val()!==$("#edtPasswordRe").val()){
     alert("<?php echo $lang['error']['73']?>");
     return false
-  } 
+  }
 
 }
 	</script>

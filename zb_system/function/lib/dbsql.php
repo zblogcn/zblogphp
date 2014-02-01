@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -41,7 +41,7 @@ class DbSql #extends AnotherClass
 	}
 
 	public function ExistTable($tablename,$dbname=''){
-	
+
 		$s='';
 		if($this->type=='DbSQLite'||$this->type=='DbSQLite3'){
 			$s="SELECT count(*) FROM sqlite_master WHERE type='table' AND name='$tablename'";
@@ -52,11 +52,11 @@ class DbSql #extends AnotherClass
 
 		return $s;
 	}
-	
+
 	public function CreateTable($tablename,$datainfo){
 
 		$s='';
-		
+
 		if($this->type=='DbSQLite'){
 			$s.='CREATE TABLE '.$tablename.' (';
 
@@ -82,7 +82,7 @@ class DbSql #extends AnotherClass
 							$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
 						}
 					}else{
-						$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';	
+						$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
 					}
 				}
 				if($value[1]=='double'||$value[1]=='float'){
@@ -129,7 +129,7 @@ class DbSql #extends AnotherClass
 							$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
 						}
 					}else{
-						$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';	
+						$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
 					}
 				}
 				if($value[1]=='double'||$value[1]=='float'){
@@ -163,7 +163,7 @@ class DbSql #extends AnotherClass
 						}elseif($value[2]=='smallint'){
 							$s.=$value[0] .' smallint(6) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
 						}elseif($value[2]=='mediumint'){
-							$s.=$value[0] .' mediumint(9) NOT NULL DEFAULT \''.$value[3].'\'' . ',';	
+							$s.=$value[0] .' mediumint(9) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
 						}elseif($value[2]=='int'){
 							$s.=$value[0] .' int(11) NOT NULL DEFAULT \''.$value[3].'\'' . ',';
 						}elseif($value[2]=='bigint'){
@@ -190,7 +190,7 @@ class DbSql #extends AnotherClass
 							$s.=$value[0] . ' longtext NOT NULL ' . ',';
 						}
 					}else{
-						$s.=$value[0] . ' longtext NOT NULL ' . ',';	
+						$s.=$value[0] . ' longtext NOT NULL ' . ',';
 					}
 				}
 				if($value[1]=='double'||$value[1]=='float'){
@@ -239,7 +239,7 @@ class DbSql #extends AnotherClass
 					$j=count($w);
 					$sql_search='';
 					$c='';
-					for ($i=1; $i <= $j-1-1; $i++) { 
+					for ($i=1; $i <= $j-1-1; $i++) {
 						$x=(string)$w[$i];
 						$y=(string)$w[$j-1];
 						$y=$zbp->db->EscapeString($y);
@@ -353,7 +353,7 @@ class DbSql #extends AnotherClass
 
 		return $sqlc . $sqlw;
 	}
-	
+
 	public function Update($table,$keyvalue,$where)
 	{
 		global $zbp;

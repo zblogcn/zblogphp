@@ -16,7 +16,5 @@
 <script src="<?php echo $bloghost?>zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $bloghost?>zb_system/css/jquery-ui.custom.css"/>
 <?php
-
-foreach ($GLOBALS['Filter_Plugin_Admin_Header'] as $fpname => &$fpsignal) {$fpname();}
-
+	foreach ($GLOBALS['Filter_Plugin_Admin_Header'] as $fpname => &$fpsignal) {$fpname();}
 ?>

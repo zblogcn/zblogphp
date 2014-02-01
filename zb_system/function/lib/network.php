@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -9,7 +9,7 @@
 interface iNetwork
 {
 
-	
+
 	public function abort();
 	public function getAllResponseHeaders();
 	public function getResponseHeader($bstrHeader);
@@ -22,14 +22,14 @@ interface iNetwork
 /**
 * NetworkFactory
 */
-class NetworkFactory 
+class NetworkFactory
 {
 
 	public $networktype = null;
 	public $network_list = array();
 	public $curl = false;
 	public $fso = false;
-	
+
 	function __construct()
 	{
 		if (function_exists('curl_init'))
@@ -37,7 +37,7 @@ class NetworkFactory
 			$this->network_list[] = 'curl';
 			$this->curl = true;
 		}
-		
+
 		if ((bool)ini_get('allow_url_fopen'))
 		{
 			if(function_exists('file_get_contents')) $this->network_list[] = 'file_get_contents';
@@ -45,7 +45,7 @@ class NetworkFactory
 			$this->fso = true;
 		}
 	}
-	
+
 	function Create($extension = '')
 	{
 		if ((!$this->fso) && (!$this->curl)) return false;
@@ -54,6 +54,6 @@ class NetworkFactory
 		$network = New $type();
 		return $network;
 	}
-	
-	
+
+
 }

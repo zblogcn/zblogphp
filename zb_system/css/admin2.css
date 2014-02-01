@@ -1,5 +1,5 @@
 @charset "utf-8";
-/*  
+/*
 作者：新鲜人
 地址：http://www.htmlit.com.cn
 邮箱：u2lei@yahoo.com.cn
@@ -305,13 +305,13 @@ textarea{
 	font-size:1em;
 }
 
-input.button,input[type="submit"],input[type="button"] { 
-	color:#ffffff; 
-	font-size:1.1em; 
+input.button,input[type="submit"],input[type="button"] {
+	color:#ffffff;
+	font-size:1.1em;
 	height:29px;
 	padding: 2px 18px 3px 18px;
-	margin:0 0.5em; 
-	background:#3a6ea5; 
+	margin:0 0.5em;
+	background:#3a6ea5;
 	border:1px solid #3399cc;
 	cursor: pointer;
 }
@@ -448,7 +448,7 @@ div.post_edit input#edtAlias, input#edtTag{
 	color: black;
 	background: #F8F889;
 }
-#editor_txt{	
+#editor_txt{
 	width:100%;
 	height:300px;
 }
@@ -480,13 +480,13 @@ div.theme-other a{
 }
 div.theme-other .theme-name img{opacity:0.50;}
 
-div.theme-now .betterTip img{	
+div.theme-now .betterTip img{
 	box-shadow: 0 0 10px #3a6ea5;
 }
 div.theme-now .betterTip img,div.theme-other .betterTip img{
 	border:2px solid #f6f6f6;
 }
-div.theme-other .betterTip img{	
+div.theme-other .betterTip img{
 	box-shadow: 0 0 10px #aaa;
 }
 div.theme-other .betterTip img:hover{
@@ -582,12 +582,12 @@ span.note{
 
 .SubMenu a:hover {
 	background:#b0cdee;
-	text-decoration : none; 
+	text-decoration : none;
 	color:black;
 }
 .SubMenu a{
 	color:black;
-	background:#e0e1e2; 
+	background:#e0e1e2;
 	margin:0 5px 0 0;
 	float:left;
 }
@@ -633,7 +633,7 @@ span.note{
 
 
 
-.totoro { padding:10px;} 
+.totoro { padding:10px;}
 .totoro dd { line-height:28px; margin-bottom:5px;}
 .totoro .totorotxt { font-size:12px;}
 #totorobox textarea { background:#ffffff; padding:10px 0; border:none;}
@@ -712,7 +712,7 @@ a.button:hover{
 .widget img{margin:3px;margin-bottom: -3px;}
 
 .widget-title {margin:0px;padding:6px;color: #333;cursor: move;}
-.widget-title span{display:inline-block;} 
+.widget-title span{display:inline-block;}
 .widget_ishidden_true img.more-action{opacity:0.40;}
 .widget-action{float:right;}
 

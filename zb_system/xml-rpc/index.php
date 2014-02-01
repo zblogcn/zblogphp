@@ -3,29 +3,25 @@ require '../function/c_system_base.php';
 
 if(isset($_GET['rsd'])){
 
-header('Content-Type: text/xml; charset=UTF-8');
-echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-echo '<rsd version="1.0" xmlns="http://archipelago.phrasewise.com/rsd">'."\n";
-echo '  <service>'."\n";
-echo '    <engineName>Z-Blog PHP</engineName>'."\n";
-echo '    <engineLink>http://www.rainbowsoft.org/</engineLink>'."\n";
-echo '    <homePageLink>'.$zbp->host.'</homePageLink>'."\n";
-echo '    <apis>'."\n";
-echo '      <api name="WordPress" blogID="1" preferred="true" apiLink="'.$zbp->host.'zb_system/xml-rpc/" />'."\n";
-echo '      <api name="Movable Type" blogID="1" preferred="false" apiLink="'.$zbp->host.'zb_system/xml-rpc/" />'."\n";
-echo '      <api name="MetaWeblog" blogID="1" preferred="false" apiLink="'.$zbp->host.'zb_system/xml-rpc/" />'."\n";
-echo '      <api name="Blogger" blogID="1" preferred="false" apiLink="'.$zbp->host.'zb_system/xml-rpc/" />'."\n";
-echo '    </apis>'."\n";
-echo '  </service>'."\n";
-echo '</rsd>'."\n";
+	header('Content-Type: text/xml; charset=UTF-8');
+	echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+	echo '<rsd version="1.0" xmlns="http://archipelago.phrasewise.com/rsd">'."\n";
+	echo '  <service>'."\n";
+	echo '    <engineName>Z-Blog PHP</engineName>'."\n";
+	echo '    <engineLink>http://www.rainbowsoft.org/</engineLink>'."\n";
+	echo '    <homePageLink>'.$zbp->host.'</homePageLink>'."\n";
+	echo '    <apis>'."\n";
+	echo '      <api name="WordPress" blogID="1" preferred="true" apiLink="'.$zbp->host.'zb_system/xml-rpc/" />'."\n";
+	echo '      <api name="Movable Type" blogID="1" preferred="false" apiLink="'.$zbp->host.'zb_system/xml-rpc/" />'."\n";
+	echo '      <api name="MetaWeblog" blogID="1" preferred="false" apiLink="'.$zbp->host.'zb_system/xml-rpc/" />'."\n";
+	echo '      <api name="Blogger" blogID="1" preferred="false" apiLink="'.$zbp->host.'zb_system/xml-rpc/" />'."\n";
+	echo '    </apis>'."\n";
+	echo '  </service>'."\n";
+	echo '</rsd>'."\n";
 
-die();
+	die();
 
 }
-
-
-
-
 
 
 function zbp_getUsersBlogs(){
@@ -486,7 +482,7 @@ function zbp_editPost($id,$xmlstring,$publish){
 			$_POST['Alias']=$post['mt_basename'];
 		}
 		if(isset($post['dateCreated'])){
-			date_default_timezone_set('GMT');			
+			date_default_timezone_set('GMT');
 			$_POST['PostTime']=strtotime($post['dateCreated']);
 			date_default_timezone_set($zbp->option['ZC_TIME_ZONE_NAME']);
 			$_POST['PostTime']=date('c',$_POST['PostTime']);
@@ -539,7 +535,7 @@ function zbp_editPost($id,$xmlstring,$publish){
 function zbp_setPostCategories(){
 	$strXML='<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
 	$strXML=str_replace("$%#1#%$",1,$strXML);
-	echo $strXML;	
+	echo $strXML;
 }
 
 
@@ -679,7 +675,7 @@ if($xml){
 				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
 			break;
-		case 'mt.getPostCategories':	
+		case 'mt.getPostCategories':
 			$username=(string)$xml->params->param[1]->value->string;
 			$password=(string)$xml->params->param[2]->value->string;
 			if(!$zbp->Verify_Original($username,$password)){ShowError(8,__FILE__,__LINE__);}
@@ -826,7 +822,7 @@ if($xml){
 			}else{
 				$zbp->ShowError(6,__FILE__,__LINE__);
 			}
-			break;		
+			break;
 		default:
 			//logs($xmlstring);
 			$zbp->ShowError(1,__FILE__,__LINE_);

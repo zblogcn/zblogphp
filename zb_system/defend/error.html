@@ -53,7 +53,7 @@
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['include_file']; ?></p><div>
 	 	<table style='width:100%'>
 	 	<tbody>
-		<?php foreach(get_included_files() as $iInt => $sData) {?>	
+		<?php foreach(get_included_files() as $iInt => $sData) {?>
 			<tr><td style='width:30px'><?php echo $iInt?></td><td><?php echo $sData;?></td></tr>
 		<?php }	?>
 		</tbody>

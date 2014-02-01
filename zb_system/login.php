@@ -73,7 +73,7 @@ $("#btnPost").click(function(){
 	$("#savedate").val(strSaveDate);
 })
 
-$(document).ready(function(){ 
+$(document).ready(function(){
 	if (!$.support.leadingWhitespace) {
 		alert("<?php echo $lang['error']['74']?>");
 	}
