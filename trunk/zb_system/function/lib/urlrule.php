@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -133,7 +133,7 @@ class UrlRule
 			$url=str_replace('%category%', '(?:'.$fullcategory.')', $url);
 			$url=str_replace('%author%', '[^\./]+', $url);
 			$url=str_replace('%year%', '[0-9]<:4:>', $url);
-			$url=str_replace('%month%', '[0-9]<:1,2:>', $url);	
+			$url=str_replace('%month%', '[0-9]<:1,2:>', $url);
 			$url=str_replace('%day%', '[0-9]<:1,2:>', $url);
 		}
 		$url=str_replace('{', '', $url);
@@ -191,7 +191,7 @@ class UrlRule
 		return $s;
 	}
 
-	public function Make_nginx(){	
+	public function Make_nginx(){
 		global $zbp;
 		$s ='';
 		$s .='if (-f $request_filename/index.html){' . "\r\n";
@@ -205,7 +205,7 @@ class UrlRule
 		$s .='}' . "\r\n";
 		return $s;
 	}
-	
+
 	public function Make_httpdini(){
 		global $zbp;
 
@@ -224,7 +224,7 @@ class UrlRule
 	}
 
 	public function Rewrite_httpdini($url,$type){
-		global $zbp;	
+		global $zbp;
 		switch ($zbp->categorylayer) {
 			case 4:
 				$fullcategory='[^\./]+?|[^\./]+?/[^\./]+?|[^\./]+?/[^\./]+?/[^\./]+?|[^\./]+/[^\./]+?/[^\./]+?/[^\./]+?';
@@ -266,7 +266,7 @@ class UrlRule
 		if($type=='page'||$type=='article'){
 			if(strpos($url, '%alias%')===false){
 				$url = $url .' '.$zbp->cookiespath .'index\.php\?id=$1&rewrite=$0';
-				$url=str_replace('%id%', '([0-9]+)', $url);				
+				$url=str_replace('%id%', '([0-9]+)', $url);
 			}else{
 				$url = $url .' '.$zbp->cookiespath .'index\.php\?alias=$1&rewrite=$0';
 				$url=str_replace('%alias%', '([^/]+)', $url);
@@ -275,7 +275,7 @@ class UrlRule
 			$url=str_replace('%category%', '(?:'.$fullcategory.')', $url);
 			$url=str_replace('%author%', '(?:[^\./]+)', $url);
 			$url=str_replace('%year%', '(?:[0-9]{4})', $url);
-			$url=str_replace('%month%', '(?:[0-9]{1,2})', $url);	
+			$url=str_replace('%month%', '(?:[0-9]{1,2})', $url);
 			$url=str_replace('%day%', '(?:[0-9]{1,2})', $url);
 		}
 		$url=str_replace('{', '', $url);

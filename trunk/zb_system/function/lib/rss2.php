@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -16,8 +16,8 @@ class Rss2 extends DOMDocument {
 
 		$root = $this->appendChild($this->createElement('rss'));
 		$root->setAttribute('version','2.0');
-		
-		$root->setAttribute('xmlns:dc','http://purl.org/dc/elements/1.1/');		
+
+		$root->setAttribute('xmlns:dc','http://purl.org/dc/elements/1.1/');
 
 		$channel = $root->appendChild($this->createElement('channel'));
 

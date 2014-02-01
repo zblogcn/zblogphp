@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version
  */
@@ -16,7 +16,7 @@ register_shutdown_function(create_function('',''));
 $zbp->Load();
 
 function article(){
-	for ($i=0; $i < 10000; $i++) { 
+	for ($i=0; $i < 10000; $i++) {
 		$a=new Post();
 		$a->CateID=mt_rand(1,100);
 		$a->AuthorID=1;
@@ -40,7 +40,7 @@ function article(){
 }
 
 function page(){
-	for ($i=0; $i < 1000; $i++) { 
+	for ($i=0; $i < 1000; $i++) {
 		$a=new Post();
 		$a->CateID=0;
 		$a->AuthorID=1;
@@ -59,12 +59,12 @@ function page(){
 		$a->ViewNums=0;
 		$a->Template='';
 		$a->Meta='';
-		$a->Save();  
+		$a->Save();
 	}
 }
 
 function cate(){
-	for ($i=0; $i < 100; $i++) { 
+	for ($i=0; $i < 100; $i++) {
 		$cate = new Category();
 		$cate->Name=getRandStr(mt_rand(2,4));
 		$cate->Save();
@@ -72,7 +72,7 @@ function cate(){
 }
 
 function tag(){
-	for ($i=0; $i < 5000; $i++) { 
+	for ($i=0; $i < 5000; $i++) {
 		$tag = new Tag();
 		$tag->Name=getRandStr(mt_rand(2,5));
 		$tag->Save();

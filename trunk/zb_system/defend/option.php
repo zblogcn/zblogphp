@@ -1,14 +1,14 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
- 
+
 /**
  * 返回配置
- * @param 
+ * @param
  * @return array
  */
 return array(
@@ -32,7 +32,7 @@ return array(
 
 	'ZC_SQLITE_NAME' => '',
 	'ZC_SQLITE_PRE' => 'zbp_',
-		
+
 	'ZC_MYSQL_SERVER' => 'localhost',
 	'ZC_MYSQL_USERNAME' => 'root',
 	'ZC_MYSQL_PASSWORD' => '',
@@ -57,7 +57,7 @@ return array(
 	'ZC_MULTI_DOMAIN_SUPPORT' => false,
 
 	// '当前 Z-Blog 版本
-	
+
 	'ZC_BLOG_PRODUCT' => 'Z-BlogPHP',
 	'ZC_BLOG_VERSION' => '',
 	'ZC_BLOG_PRODUCT_FULL' => '',
@@ -80,7 +80,7 @@ return array(
 	'ZC_SEARCH_COUNT' => 25,
 	'ZC_PAGEBAR_COUNT' => 10,
 	'ZC_COMMENTS_DISPLAY_COUNT' => 100,
-	
+
 	'ZC_DISPLAY_SUBCATEGORYS' => false,
 
 	// '杂项
@@ -145,7 +145,7 @@ return array(
 	#首页，分类页，文章页，页面页的默认模板
 	'ZC_INDEX_DEFAULT_TEMPLATE' => 'index',
 	'ZC_POST_DEFAULT_TEMPLATE' => 'single',
-	
+
 	'ZC_SIDEBAR_ORDER' => 'calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc',
 
 	'ZC_SIDEBAR2_ORDER' => '',

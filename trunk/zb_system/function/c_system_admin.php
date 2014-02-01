@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -16,12 +16,10 @@ Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','zbp_admin_addcmtsubm
 
 $zbp->LoadTemplates();
 
-$manage=true; 
+$manage=true;
 
 
-
-
-################################################################################################################ 
+################################################################################################################
 function zbp_admin_addpagesubmenu(){
 	echo '<a href="../cmd.php?act=PageEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_page'] . '</span></a>';
 }
@@ -58,16 +56,10 @@ function zbp_admin_addcmtsubmenu(){
 }
 
 
-
-
-
-
-
 ################################################################################################################
 $topmenus=array();
 
 $leftmenus=array();
-
 
 function ResponseAdmin_LeftMenu(){
 
@@ -157,7 +149,7 @@ function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUr
 		$tmp="<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\"><span>" . $strName . "</span></a></li>";
 	}
 	return $tmp;
-	
+
 }
 
 
@@ -170,17 +162,17 @@ function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUr
 ################################################################################################################
 function CreateOptoinsOfCategorys($default){
 	global $zbp;
-	
+
 	foreach ($GLOBALS['Filter_Plugin_CreateOptoinsOfCategorys'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($default);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
-	
+
 	$s=null;
 	foreach ($zbp->categorysbyorder as $id => $cate) {
 	  $s.='<option ' . ($default==$cate->ID?'selected="selected"':'') . ' value="'. $cate->ID .'">' . $cate->SymbolName . '</option>';
 	}
-	
+
 	return $s;
 }
 
@@ -197,7 +189,7 @@ function CreateOptoinsOfTemplate($default){
 		if(substr($key,0,5)=='post-')continue;
 		if(substr($key,0,6)=='module')continue;
 		if(substr($key,0,6)=='header')continue;
-		if(substr($key,0,6)=='footer')continue;	
+		if(substr($key,0,6)=='footer')continue;
 		if(substr($key,0,7)=='comment')continue;
 		if(substr($key,0,7)=='sidebar')continue;
 		if(substr($key,0,7)=='pagebar')continue;
@@ -285,7 +277,7 @@ function CreateModuleDiv($m,$button=true){
 	}
 
 	echo '</div>';
-	echo '<div class="funid" style="display:none">' . $m->FileName . '</div>';	
+	echo '<div class="funid" style="display:none">' . $m->FileName . '</div>';
 	echo '</div>';
 }
 
@@ -357,7 +349,7 @@ function Admin_SiteInfo(){
 	echo '<div class="SubMenu">';
 	foreach ($GLOBALS['Filter_Plugin_Admin_SiteInfo_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
-	}	
+	}
 	echo '</div>';
 	echo '<div id="divMain2">';
 
@@ -374,7 +366,7 @@ function Admin_SiteInfo(){
 	echo '</table>';
 
 	echo '<table class="tableFull tableBorder" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a> <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
-	
+
 	if((time()-(int)$zbp->cache->reload_updateinfo_time) > (23*60*60) && $zbp->CheckRights('root')){
 		echo '<script type="text/javascript">$(document).ready(function(){ updateinfo(\'?act=misc&type=updateinfo\'); });</script>';
 	}else{
@@ -386,7 +378,7 @@ function Admin_SiteInfo(){
 	echo '</div>';
 	include $zbp->path . "zb_system/defend/thanks.html";
 	echo '<script type="text/javascript">ActiveTopMenu("topmenu1");</script>';
-	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/home_32.png' . '");</script>';	
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/home_32.png' . '");</script>';
 
 }
 
@@ -406,7 +398,7 @@ function Admin_ArticleMng(){
 	echo '<div class="SubMenu">';
 	foreach ($GLOBALS['Filter_Plugin_Admin_ArticleMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
-	}	
+	}
 	echo '</div>';
 	echo '<div id="divMain2">';
 	echo '<form class="search" id="search" method="post" action="#">';
@@ -492,7 +484,7 @@ foreach ($p->buttons as $key => $value) {
 
 	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
-	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/article_32.png' . '");</script>';	
+	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/article_32.png' . '");</script>';
 
 }
 
@@ -513,7 +505,7 @@ function Admin_PageMng(){
 	echo '<div class="SubMenu">';
 	foreach ($GLOBALS['Filter_Plugin_Admin_PageMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
-	}	
+	}
 	echo '</div>';
 	echo '<div id="divMain2">';
 	echo '<!--<form class="search" id="search" method="post" action="#"></form>-->';
@@ -566,7 +558,7 @@ foreach ($array as $article) {
 	echo '<hr/><p class="pagebar">';
 foreach ($p->buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
-}	
+}
 	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/page_32.png' . '");</script>';
@@ -587,7 +579,7 @@ function Admin_CategoryMng(){
 	echo '<div class="SubMenu">';
 	foreach ($GLOBALS['Filter_Plugin_Admin_CategoryMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
-	}	
+	}
 	echo '</div>';
 	echo '<div id="divMain2">';
 	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
@@ -621,7 +613,7 @@ foreach ($zbp->categorysbyorder as $category) {
 	echo '</div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aCategoryMng");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/category_32.png' . '");</script>';
-	
+
 }
 
 
@@ -639,7 +631,7 @@ function Admin_CommentMng(){
 	echo '<div class="SubMenu">';
 	foreach ($GLOBALS['Filter_Plugin_Admin_CommentMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
-	}	
+	}
 	echo '</div>';
 	echo '<div id="divMain2">';
 
@@ -655,7 +647,7 @@ function Admin_CommentMng(){
 	<th>' . $zbp->lang['msg']['parend_id'] . '</th>
 	<th>' . $zbp->lang['msg']['name'] . '</th>
 	<th>' . $zbp->lang['msg']['content'] . '</th>
-	<th>' . $zbp->lang['msg']['article'] . '</th>	
+	<th>' . $zbp->lang['msg']['article'] . '</th>
 	<th>' . $zbp->lang['msg']['date'] . '</th>
 	<th>' . ''. '</th>
 	<th><a href="" onclick="BatchSelectAll();return false;">' . $zbp->lang['msg']['select_all'] . '</a></th>
@@ -695,7 +687,7 @@ foreach ($array as $cmt) {
 	echo '<td class="td5">' . $cmt->ParentID . '</td>';
 	echo '<td class="td10">' . $cmt->Author->Name . '</td>';
 	echo '<td><div style="overflow:hidden;max-width:500px;">' . $cmt->Content . '<div></td>';
-	echo '<td class="td5">' . $cmt->LogID .  '</td>';	
+	echo '<td class="td5">' . $cmt->LogID .  '</td>';
 	echo '<td class="td15">' .$cmt->Time() . '</td>';
 	echo '<td class="td10 tdCenter">';
 	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=CommentDel&amp;id='. $cmt->ID .'&token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
@@ -714,7 +706,7 @@ if(!GetVars('ischecking','GET')){
 	echo '<hr/>';
 
 	echo'<p style="float:right;">';
-	
+
 	if((boolean)GetVars('ischecking')){
 		echo '<input type="submit" name="all_del"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 		echo '<input type="submit" name="all_pass"  value="' . $zbp->lang['msg']['all_pass'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -722,9 +714,9 @@ if(!GetVars('ischecking','GET')){
 		echo '<input type="submit" name="all_del"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 		echo '<input type="submit" name="all_audit"  value="' . $zbp->lang['msg']['all_audit'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 	}
-	
+
 	echo '</p>';
-	
+
 	echo'<p class="pagebar">';
 
 foreach ($p->buttons as $key => $value) {
@@ -733,7 +725,7 @@ foreach ($p->buttons as $key => $value) {
 
 	echo '</p>';
 
-	
+
 	echo '<hr/></form>';
 
 
@@ -758,7 +750,7 @@ function Admin_MemberMng(){
 	echo '<div class="SubMenu">';
 	foreach ($GLOBALS['Filter_Plugin_Admin_MemberMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
-	}	
+	}
 	echo '</div>';
 	echo '<div id="divMain2">';
 	echo '<!--<form class="search" id="edit" method="post" action="#"></form>-->';
@@ -839,7 +831,7 @@ function Admin_UploadMng(){
 	echo '<div class="SubMenu">';
 	foreach ($GLOBALS['Filter_Plugin_Admin_UploadMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
-	}	
+	}
 	echo '</div>';
 	echo '<div id="divMain2">';
 
@@ -898,7 +890,7 @@ foreach ($array as $upload) {
 	echo '<hr/><p class="pagebar">';
 foreach ($p->buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
-}	
+}
 	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aUploadMng");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/accessories_32.png' . '");</script>';
@@ -921,7 +913,7 @@ function Admin_TagMng(){
 	echo '<div class="SubMenu">';
 	foreach ($GLOBALS['Filter_Plugin_Admin_TagMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
-	}	
+	}
 	echo '</div>';
 
 
@@ -932,7 +924,7 @@ function Admin_TagMng(){
 	<th>' . $zbp->lang['msg']['id'] . '</th>
 	<th>' . $zbp->lang['msg']['name'] . '</th>
 	<th>' . $zbp->lang['msg']['alias'] . '</th>
-	<th>' . $zbp->lang['msg']['post_count'] . '</th>	
+	<th>' . $zbp->lang['msg']['post_count'] . '</th>
 	<th></th>
 	</tr>';
 
@@ -954,7 +946,7 @@ foreach ($array as $tag) {
 	echo '<td class="td5">' . $tag->ID . '</td>';
 	echo '<td class="td25"><a href="'.$tag->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $tag->Name . '</td>';
 	echo '<td class="td20">' . $tag->Alias . '</td>';
-	echo '<td class="td10">' . $tag->Count . '</td>';	
+	echo '<td class="td10">' . $tag->Count . '</td>';
 	echo '<td class="td10 tdCenter">';
 	echo '<a href="../cmd.php?act=TagEdt&amp;id='. $tag->ID .'"><img src="../image/admin/tag_blue_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -967,7 +959,7 @@ foreach ($array as $tag) {
 	echo '<hr/><p class="pagebar">';
 foreach ($p->buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
-}	
+}
 	echo '</p></div>';
 
 	echo '<script type="text/javascript">ActiveLeftMenu("aTagMng");</script>';
@@ -993,7 +985,7 @@ function Admin_ThemeMng(){
 	echo '<div class="SubMenu">';
 	foreach ($GLOBALS['Filter_Plugin_Admin_ThemeMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
-	}	
+	}
 	echo '</div>';
 	echo '<div id="divMain2"><form id="frmTheme" method="post" action="../cmd.php?act=ThemeSet">';
 	echo '<input type="hidden" name="theme" id="theme" value="" />';
@@ -1028,7 +1020,7 @@ echo '</div>';
 	echo '</form></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aThemeMng");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/themes_32.png' . '");</script>';
-	
+
 }
 
 
@@ -1048,7 +1040,7 @@ function Admin_ModuleMng(){
 	echo '<div class="SubMenu">';
 	foreach ($GLOBALS['Filter_Plugin_Admin_ModuleMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
-	}	
+	}
 	echo '</div>';
 	echo '<div id="divMain2">';
 
@@ -1152,7 +1144,7 @@ foreach ($zbp->sidebar4 as $m) {
 }
 	echo '</div></div>';
 	echo "\r\n";
-	
+
 	echo '<div class="siderbar-drop" id="siderbar5"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar5'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
 	echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar5),$zbp->lang['msg']['sidebar_module_count']) . '</div>';
 foreach ($zbp->sidebar5 as $m) {
@@ -1250,15 +1242,15 @@ foreach ($zbp->sidebar5 as $m) {
 				 if(ui.item.parent().find(".widget:contains("+c+")").length>1){
 					ui.item.remove();
 				 };
-			} ,			
+			} ,
 			stop:function(event, ui){$(this).parent().find(".roll").show("slow");sortFunction();$(this).parent().find(".roll").hide("slow");
 				showWidget($(this).parent().prev());
 			}
- 		}).disableSelection(); 
+ 		}).disableSelection();
 
 		$( ".widget-list>.widget" ).draggable({
             connectToSortable: ".siderbar-sort-list",
-            revert: "invalid", 
+            revert: "invalid",
             containment: "document",
             helper: "clone",
             cursor: "move"
@@ -1286,14 +1278,14 @@ foreach ($zbp->sidebar5 as $m) {
 function Admin_PluginMng(){
 
 	global $zbp;
-	
+
 	$zbp->LoadPlugins();
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['plugin_manage'] . '</div>';
 	echo '<div class="SubMenu">';
 	foreach ($GLOBALS['Filter_Plugin_Admin_PluginMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
-	}	
+	}
 	echo '</div>';
 	echo '<div id="divMain2">';
 	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
@@ -1348,7 +1340,7 @@ foreach ($plugins as $plugin) {
 	if($plugin->IsUsed() && $plugin->CanManage()){
 		echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 		echo '<a href="' . $plugin->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><img width="16" alt="' . $zbp->lang['msg']['manage'] . '" src="../image/admin/setting_tools.png"/></a>';
-	}	
+	}
 
 	echo '</td>';
 
@@ -1358,7 +1350,7 @@ foreach ($plugins as $plugin) {
 	echo '</div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/plugin_32.png' . '");</script>';
-	
+
 }
 
 
@@ -1376,7 +1368,7 @@ function Admin_SettingMng(){
 	echo '<div class="SubMenu">';
 	foreach ($GLOBALS['Filter_Plugin_Admin_SettingMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
-	}	
+	}
 	echo '</div>';
 
 ?>
@@ -1384,7 +1376,7 @@ function Admin_SettingMng(){
           <form method="post" action="../cmd.php?act=SettingSav">
             <div id="divMain2">
               <div class="content-box"><!-- Start Content Box -->
-                
+
                 <div class="content-box-header">
                   <ul class="content-box-tabs">
                     <li><a href="#tab1" class="default-tab"><span><?php echo $zbp->lang['msg']['basic_setting']?></span></a></li>
@@ -1395,7 +1387,7 @@ function Admin_SettingMng(){
                   <div class="clear"></div>
                 </div>
                 <!-- End .content-box-header -->
-                
+
                 <div class="content-box-content">
 <?php
 
@@ -1433,7 +1425,7 @@ function Admin_SettingMng(){
 	echo '<table style="padding:0px;margin:0px;width:100%;">';
 
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['display_count'].'</b></p></td><td><p><input id="ZC_DISPLAY_COUNT" name="ZC_DISPLAY_COUNT" style="width:600px;" type="text" value="'.$zbp->option['ZC_DISPLAY_COUNT'].'" /></p></td></tr>';
-	echo '<tr><td><p><b>'.$zbp->lang['msg']['display_subcategorys'].'</b></p></td><td><p><input id="ZC_DISPLAY_SUBCATEGORYS" name="ZC_DISPLAY_SUBCATEGORYS" type="text" value="'.$zbp->option['ZC_DISPLAY_SUBCATEGORYS'].'" class="checkbox"/></p></td></tr>';	
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['display_subcategorys'].'</b></p></td><td><p><input id="ZC_DISPLAY_SUBCATEGORYS" name="ZC_DISPLAY_SUBCATEGORYS" type="text" value="'.$zbp->option['ZC_DISPLAY_SUBCATEGORYS'].'" class="checkbox"/></p></td></tr>';
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['pagebar_count'].'</b></p></td><td><p><input id="ZC_PAGEBAR_COUNT" name="ZC_PAGEBAR_COUNT" style="width:600px;" type="text" value="'.$zbp->option['ZC_PAGEBAR_COUNT'].'" /></p></td></tr>';
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['search_count'].'</b></p></td><td><p><input id="ZC_SEARCH_COUNT" name="ZC_SEARCH_COUNT" style="width:600px;" type="text" value="'.$zbp->option['ZC_SEARCH_COUNT'].'" /></p></td></tr>';
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['manage_count'].'</b></p></td><td><p><input id="ZC_MANAGE_COUNT" name="ZC_MANAGE_COUNT" style="width:600px;" type="text" value="'.$zbp->option['ZC_MANAGE_COUNT'].'" /></p></td></tr>';
@@ -1454,8 +1446,8 @@ function Admin_SettingMng(){
 	echo '</div>';
 ?>
                 </div>
-                <!-- End .content-box-content --> 
-                
+                <!-- End .content-box-content -->
+
               </div>
               <hr/>
 			  <p><input type="submit" class="button" value="提交" id="btnPost" onclick="" /></p>

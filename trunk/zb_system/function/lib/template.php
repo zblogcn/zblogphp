@@ -1,24 +1,19 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
 
-
-
-
 class Template{
-
-
 	public $templates = array();
-	public $tags = array();	
+	public $tags = array();
 	public $path = null;
 
 	function __construct(){
 	}
-	
+
 	public function SetPath($path)
 	{
 		 $this->path= $path;
@@ -30,7 +25,7 @@ class Template{
 
 	function SetTags($name,$value){
 		$this->tags[$name]=$value;
-	}	
+	}
 
 
 	function CompileFiles($filesarray){
@@ -52,7 +47,7 @@ class Template{
 			$fpreturn = $fpname($this,$content);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		
+
 		//Step1:替换<?php块
 		$this->replacePHP($content);
 		//Step2:引入主题
@@ -73,13 +68,13 @@ class Template{
 		$this->parse_module($content);
 		//StepN:解析PHP
 		$this->parsePHP($content);
-		
+
 		foreach ($GLOBALS['Filter_Plugin_Template_Compiling_End'] as $fpname => &$fpsignal)
 		{
 			$fpreturn=$fpname($this,$content);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-      
+
 		return $content;
 	}
 
@@ -92,11 +87,11 @@ class Template{
 	{
 		$content = preg_replace('/\{template:([^\}]+)\}/', '{php} include $this->GetTemplate(\'$1\'); {/php}', $content);
 	}
-	
+
 	private function parse_module(&$content)
 	{
 		$content = preg_replace('/\{module:([^\}]+)\}/', '{php} if(isset($modules[\'$1\'])){echo $modules[\'$1\']->Content;} {/php}', $content);
-	}	
+	}
 
 	private function parse_option(&$content)
 	{
@@ -160,7 +155,7 @@ class Template{
 				$content
 			);
 	}
-	
+
 	private function parse_foreach_sub($matches)
 	{
 		$exp = $this->replace_dot($matches[1]);
@@ -176,13 +171,13 @@ class Template{
 				$content
 			);
 	}
-	
+
 	private function parse_for_sub($matches)
 	{
 		$exp = $this->replace_dot($matches[1]);
 		$code = $matches[2];
 		return "{php} for($exp) {{/php} $code{php} }  {/php}";
-	}	
+	}
 
 	private function parse_vars_replace_dot($matches)
 	{
@@ -197,7 +192,7 @@ class Template{
 	{
 		return '{php} echo ' . $matches[1] . '(' . $this->replace_dot($matches[2]) . '); {/php}';
 	}
-	
+
 	private function replace_dot($content)
 	{
 		$array=array();
@@ -220,7 +215,7 @@ class Template{
 	}
 
 	public function GetTemplate($name)
-	{		
+	{
 		foreach ($GLOBALS['Filter_Plugin_Template_GetTemplate'] as $fpname => &$fpsignal)
 		{
 			$fpreturn=$fpname($this,$name);
@@ -228,7 +223,7 @@ class Template{
 		}
 		return $this->path . $name . '.php';
 	}
-	
+
 	private $templatename=null;
 	public function SetTemplate( $templatename)
 	{

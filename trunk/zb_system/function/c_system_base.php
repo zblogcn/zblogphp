@@ -2,7 +2,7 @@
 
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -102,7 +102,7 @@ $actions=array(
 	'ArticleEdt'=>4,
 	'ArticlePst'=>4,
 	'ArticleDel'=>4,
-	'ArticlePub'=>3,	
+	'ArticlePub'=>3,
 
 	'PageEdt'=>2,
 	'PagePst'=>2,
@@ -121,8 +121,8 @@ $actions=array(
 	'MemberEdt'=>5,
 	'MemberPst'=>5,
 	'MemberDel'=>1,
-	'MemberNew'=>1,	
-	
+	'MemberNew'=>1,
+
 	'TagEdt'=>2,
 	'TagPst'=>2,
 	'TagDel'=>2,
@@ -140,8 +140,8 @@ $actions=array(
 
 	'ThemeSet'=>1,
 	'SidebarSet'=>1,
-	
-	'SettingSav'=>1,	
+
+	'SettingSav'=>1,
 
 	'ArticleMng'=>4,
 	'PageMng'=>2,
@@ -263,7 +263,7 @@ $datainfo=array(
 'Member'=> array(
 	'ID'=>array('mem_ID','integer','',0),
 	'Guid'=>array('mem_Guid','string',36,''),
-	'Level'=>array('mem_Level','integer','',6),	
+	'Level'=>array('mem_Level','integer','',6),
 	'Status'=>array('mem_Status','integer','',0),
 	'Name'=>array('mem_Name','string',20,''),
 	'Password'=>array('mem_Password','string',32,''),
@@ -285,7 +285,7 @@ $datainfo=array(
 	'Name'=>array('tag_Name','string',250,''),
 	'Order'=>array('tag_Order','integer','',0),
 	'Count'=>array('tag_Count','integer','',0),
-	'Alias'=>array('tag_Alias','string',250,''),	
+	'Alias'=>array('tag_Alias','string',250,''),
 	'Intro'=>array('tag_Intro','string','',''),
 	'Template'=>array('tag_Template','string',50,''),
 	'Meta'=>array('tag_Meta','string','',''),
@@ -299,7 +299,7 @@ $datainfo=array(
 	'MimeType'=>array('ul_MimeType','string',50,''),
 	'PostTime'=>array('ul_PostTime','integer','',0),
 	'DownNums'=>array('ul_DownNums','integer','',0),
-	'LogID'=>array('ul_LogID','integer','',0),	
+	'LogID'=>array('ul_LogID','integer','',0),
 	'Intro'=>array('ul_Intro','string','',''),
 	'Meta'=>array('ul_Meta','string','',''),
 ),
@@ -329,7 +329,7 @@ foreach ($ap as $plugin) {
 unset($ap);
 unset($filename);
 
-ActivePlugin();	
+ActivePlugin();
 
 
 /*autoload*/

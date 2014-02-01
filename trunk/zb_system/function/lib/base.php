@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -17,7 +17,7 @@ class Base
 	protected $data = array();
 
 	public $Metas = null;
-	
+
 	function __construct(&$table,&$datainfo)
 	{
         global $zbp;
@@ -38,7 +38,7 @@ class Base
 		$this->data[$name]  =  $value;
 	}
 
-	public function __get($name) 
+	public function __get($name)
 	{
 		return $this->data[$name];
 	}
@@ -78,7 +78,7 @@ class Base
 				}
 			}else{
 				$this->data[$key]=$array[$value[0]];
-			}			
+			}
 		}
 		if(isset($this->data['Meta']))$this->Metas->Unserialize($this->data['Meta']);
 		return true;
@@ -105,7 +105,7 @@ class Base
 		}
 		if(isset($this->data['Meta']))$this->Metas->Unserialize($this->data['Meta']);
 		return true;
-	}	
+	}
 
 	function Save(){
 		global $zbp;

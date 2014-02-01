@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -83,7 +83,7 @@ class ZBlogPHP{
 
 	public $usersdir = null;
 	public $validcodeurl = null;
-	
+
 	private $isgzip=false;
 
 	static public function GetInstance(){
@@ -92,14 +92,14 @@ class ZBlogPHP{
 		}
 		return self::$_zbp;
 	}
-	
+
 	function __construct() {
 
 		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,$datainfo;
 		global $blogversion,$blogtitle,$blogname,$blogsubname,$blogtheme,$blogstyle;
-		
+
 		ZBlogException::SetErrorHook();
-	
+
 		//基本配置加载到$zbp内
 		$this->version=&$blogversion;
 		$this->option = &$option;
@@ -128,7 +128,7 @@ class ZBlogPHP{
 		$this->searchcount = $this->option['ZC_SEARCH_COUNT'];
 		$this->displaycount = $this->option['ZC_DISPLAY_COUNT'];
 		$this->commentdisplaycount = $this->option['ZC_COMMENTS_DISPLAY_COUNT'];
-		
+
 		$this->cache=new Metas;
 
 	}
@@ -155,7 +155,7 @@ class ZBlogPHP{
 		$this->ShowError(81,__FILE__,__LINE__);
 	}
 
-	function __get($name) 
+	function __get($name)
 	{
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Get'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($name);
@@ -171,7 +171,7 @@ class ZBlogPHP{
 
 	#初始化连接
 	public function Initialize(){
-	
+
 		if($this->option['ZC_SITE_TURNOFF']==true){
 			Http503();
 			$this->ShowError(82,__FILE__,__LINE__);
@@ -183,7 +183,7 @@ class ZBlogPHP{
 		$this->LoadConfigs();
 		$this->LoadCache();
 		$this->LoadOption();
-		
+
 		if($this->option['ZC_DEBUG_MODE']==true){
 			error_reporting(-1);
 		}else{
@@ -213,7 +213,7 @@ class ZBlogPHP{
 		}*/
 
 		header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
-		
+
 		$this->validcodeurl=$this->host . 'zb_system/script/c_validcode.php';
 
 		#创建User类
@@ -227,7 +227,7 @@ class ZBlogPHP{
 	public function Load(){
 
 		if(!$this->isinitialize)return false;
-		
+
 		$this->StartGzip();
 
 		$this->LoadMembers();
@@ -239,7 +239,7 @@ class ZBlogPHP{
 		$this->Verify();
 
 		$this->MakeTemplatetags();
-		
+
 		$this->LoadTemplates();
 
 		$this->RegBuildModule('catalog','BuildModule_catalog');
@@ -258,7 +258,7 @@ class ZBlogPHP{
 
 		$this->RegBuildModule('statistics','BuildModule_statistics');
 
-		$this->RegBuildModule('authors','BuildModule_authors');		
+		$this->RegBuildModule('authors','BuildModule_authors');
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 
@@ -266,7 +266,7 @@ class ZBlogPHP{
 
 		$this->isload=true;
 	}
-	
+
 	public function LoadManage(){
 
 		if($this->user->Status==ZC_MEMBER_STATUS_AUDITING) $this->ShowError(79,__FILE__,__LINE__);
@@ -286,7 +286,7 @@ class ZBlogPHP{
 		}
 	}
 
-	
+
 	public function InitializeDB($type){
 		if(!trim($type))return false;
 		$newtype='Db'.trim($type);
@@ -312,7 +312,7 @@ class ZBlogPHP{
 						$this->option['ZC_MYSQL_PERSISTENT']
 					))==false){
 					$this->ShowError(67,__FILE__,__LINE__);
-				}			
+				}
 			} catch (Exception $e) {
 				throw new Exception("MySQL DateBase Connection Error.");
 			}
@@ -358,7 +358,7 @@ class ZBlogPHP{
 		session_destroy();
 		$this->issession=false;
 		return true;
-	}	
+	}
 
 
 ################################################################################################################
@@ -393,7 +393,7 @@ class ZBlogPHP{
 
 		if(count($array)==0){
 			$k=array('conf_Name','conf_Value');
-			$v=array($name,$this->configs[$name]->Serialize());		
+			$v=array($name,$this->configs[$name]->Serialize());
 			$sql = $this->db->sql->Insert($this->table['Config'],$kv);
 			$this->db->Insert($sql);
 		}else{
@@ -471,7 +471,7 @@ class ZBlogPHP{
 
 		$this->cache->refesh=time();
 		$this->SaveCache();
-	}	
+	}
 
 
 
@@ -483,7 +483,7 @@ class ZBlogPHP{
 		if(!is_array($array))return false;
 		foreach ($array as $key => $value) {
 			//if($key=='ZC_PERMANENT_DOMAIN_ENABLE')continue;
-			//if($key=='ZC_BLOG_HOST')continue;			
+			//if($key=='ZC_BLOG_HOST')continue;
 			//if($key=='ZC_BLOG_CLSID')continue;
 			//if($key=='ZC_BLOG_HOST')$value=urldecode($value);
 			if($key=='ZC_YUN_SITE')continue;
@@ -536,7 +536,7 @@ class ZBlogPHP{
 				return false;
 			} else {
 				return true;
-			}	
+			}
 		}
 	}
 
@@ -559,7 +559,7 @@ class ZBlogPHP{
 			return false;
 		} else {
 			return true;
-		}	
+		}
 
 	}
 
@@ -691,7 +691,7 @@ function AddBuildModuleAll(){
 			$l='lv' . $c->Level;
 			${$l}[$c->ParentID][]=$id;
 		}
-		
+
 		if(count($lv0)>0)$this->categorylayer=1;
 		if(count($lv1)>0)$this->categorylayer=2;
 		if(count($lv2)>0)$this->categorylayer=3;
@@ -720,7 +720,7 @@ function AddBuildModuleAll(){
 								}
 							}
 						}
-					}		
+					}
 				}
 			}
 		}
@@ -809,7 +809,7 @@ function AddBuildModuleAll(){
 		unset($option['ZC_MYSQL_USERNAME']);
 		unset($option['ZC_MYSQL_PASSWORD']);
 		unset($option['ZC_MYSQL_NAME']);
-		
+
 		$this->templatetags['zbp']=&$this;
 		$this->templatetags['user']=&$this->user;
 		$this->templatetags['option']=&$option;
@@ -904,7 +904,7 @@ function AddBuildModuleAll(){
 	}
 
 	public function BuildTemplate(){
-	
+
 		if( strpos('|SAE|BAE2|ACE|', '|'.$this->option['ZC_YUN_SITE'].'|')!==false )return false;
 		//初始化模板
 		$this->LoadTemplates();
@@ -921,7 +921,7 @@ function AddBuildModuleAll(){
 
 		if(strpos($this->templates['commentpost'], 'inpVerify')===false){
 			$verify='{if $option[\'ZC_COMMENT_VERIFY_ENABLE\'] && !$user.ID}<p><input type="text" name="inpVerify" id="inpVerify" class="text" value="" size="28" tabindex="4" /> <label for="inpVerify">'.$this->lang['msg']['validcode'].'(*)</label><img style="width:{$option[\'ZC_VERIFYCODE_WIDTH\']}px;height:{$option[\'ZC_VERIFYCODE_HEIGHT\']}px;cursor:pointer;" src="{$article.ValidCodeUrl}" alt="" title="" onclick="javascript:this.src=\'{$article.ValidCodeUrl}&amp;tm=\'+Math.random();"/></p>{/if}';
-			
+
 			if(strpos($this->templates['commentpost'], '<!--verify-->')!==false){
 				$this->templates['commentpost']=str_replace('<!--verify-->',$verify,$this->templates['commentpost']);
 			}elseif(strpos($this->templates['commentpost'], '</form>')!==false){
@@ -931,7 +931,7 @@ function AddBuildModuleAll(){
 				$this->templates['commentpost'] .= $verify;
 			}
 		}
-		
+
 		if(strpos($this->templates['header'], '{$header}')===false){
 			if(strpos($this->templates['header'], '</head>')!==false){
 				$this->templates['header']=str_replace('</head>','</head>' . '{$header}',$this->templates['header']);
@@ -953,7 +953,7 @@ function AddBuildModuleAll(){
 				$this->templates['footer'] = '{$header}' . $this->templates['footer'];
 			}
 		}
-		
+
 		$dir=$this->usersdir . 'theme/'. $this->theme .'/compile/';
 
 		if(!file_exists($dir)){
@@ -1245,7 +1245,7 @@ function AddBuildModuleAll(){
 
 	function GetTagByAliasOrName($name){
 		$a=array();
-		$a[]=array('tag_Alias',$name);		
+		$a[]=array('tag_Alias',$name);
 		$a[]=array('tag_Name',$name);
 		$array=$this->GetTagList('',array(array('array',$a)),'',array(1),'');
 		if(count($array)==0){
@@ -1318,7 +1318,7 @@ function AddBuildModuleAll(){
 		$s=str_replace('，', ',', $s);
 		$s=str_replace('、', ',', $s);
 		$s=trim($s);
-		$s=strip_tags($s);	
+		$s=strip_tags($s);
 		if($s=='')return array();
 		if($s==',')return array();
 		$a=explode(',', $s);
@@ -1411,7 +1411,7 @@ function AddBuildModuleAll(){
 		$m=$this->modulesbyfilename['navbar'];
 		$s=$m->Content;
 		return (bool)strpos($s,'id="navbar-'.$type.'-'.$id.'"');
-	
+
 	}
 
 	#$signal = good,bad,tips
@@ -1419,7 +1419,7 @@ function AddBuildModuleAll(){
 	function SetHint($signal,$content=''){
 		if($content==''){
 			if($signal=='good')$content=$this->lang['msg']['operation_succeed'];
-			if($signal=='bad')$content=$this->lang['msg']['operation_failed'];				
+			if($signal=='bad')$content=$this->lang['msg']['operation_failed'];
 		}
 		if($this->hint1==null){
 			$this->hint1=$signal . '|' . $content;
@@ -1453,7 +1453,7 @@ function AddBuildModuleAll(){
 	function ShowHint($signal,$content=''){
 		if($content==''){
 			if($signal=='good')$content=$this->lang['msg']['operation_succeed'];
-			if($signal=='bad')$content=$this->lang['msg']['operation_failed'];				
+			if($signal=='bad')$content=$this->lang['msg']['operation_failed'];
 		}
 		echo "<div class='hint'><p class='hint hint_$signal'>$content</p></div>";
 	}
@@ -1467,7 +1467,7 @@ function AddBuildModuleAll(){
 		self::$error_id=(int)$idortext;
 		self::$error_file=$file;
 		self::$error_line=$line;
-		
+
 		if(is_numeric($idortext))$idortext=$this->lang['error'][$idortext];
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
@@ -1492,7 +1492,7 @@ function AddBuildModuleAll(){
 		}
 		return false;
 	}
-	
+
 
 	function ShowValidCode($id=''){
 

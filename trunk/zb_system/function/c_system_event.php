@@ -6,10 +6,6 @@
  * @version 2.0 2013-06-14
  */
 
-
-
-
-
 function VerifyLogin(){
 	global $zbp;
 
@@ -136,9 +132,9 @@ function ViewAuto($url){
 		$fpreturn=$fpname($url);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
-	
+
 	$zbp->ShowError(2,__FILE__,__LINE__);
-	
+
 }
 
 
@@ -153,7 +149,7 @@ function GetList($count=10,$cate=null,$auth=null,$date=null,$tags=null,$search=n
 	if(!isset($option['only_not_ontop']))$option['only_not_ontop']=false;
 	if(!isset($option['has_subcate']))$option['has_subcate']=false;
 	if(!isset($option['is_related']))$option['is_related']=false;
-	
+
 	if($option['is_related']){
 		$at=$zbp->GetPostByID($option['is_related']);
 		$tags=$at->Tags;
@@ -166,10 +162,10 @@ function GetList($count=10,$cate=null,$auth=null,$date=null,$tags=null,$search=n
 	}elseif($option['only_not_ontop']==true){
 		$w[]=array('=','log_IsTop',1);
 	}
-	
+
 	$w=array();
 	$w[]=array('=','log_Status',0);
-	
+
 	$articles=array();
 
 	if($cate){
@@ -192,7 +188,7 @@ function GetList($count=10,$cate=null,$auth=null,$date=null,$tags=null,$search=n
 
 		}
 	}
-	
+
 	if($auth){
 		$author=new Member;
 		$author=$zbp->GetMemberByID($auth);
@@ -209,7 +205,7 @@ function GetList($count=10,$cate=null,$auth=null,$date=null,$tags=null,$search=n
 			$w[]=array('BETWEEN','log_PostTime',$datetime,strtotime('+1 month',$datetime));
 		}
 	}
-	
+
 	if($tags){
 		$tag=new Tag;
 		if(is_array($tags)){
@@ -230,11 +226,11 @@ function GetList($count=10,$cate=null,$auth=null,$date=null,$tags=null,$search=n
 			}
 		}
 	}
-	
+
 	if($search){
 		$w[]=array('search','log_Content','log_Intro','log_Title',$search);
 	}
-	
+
 	$articles=$zbp->GetArticleList(
 		array('*'),
 		$w,
@@ -641,7 +637,7 @@ function ViewComments($postid,$page){
 	if($pagebar->PageAll==1)$pagebar=null;
 	$zbp->template->SetTags('pagebar',$pagebar);
 	$zbp->template->SetTags('comments',$comments);
-	
+
 	$zbp->template->SetTemplate($template);
 
 	foreach ($GLOBALS['Filter_Plugin_ViewComments_Template'] as $fpname => &$fpsignal) {
@@ -654,7 +650,7 @@ function ViewComments($postid,$page){
 	$s=$a[1];
 	$a=explode('<label id="AjaxCommentEnd"></label>', $s);
 	$s=$a[0];
-	
+
 	echo $s;
 
 }
@@ -694,7 +690,7 @@ function ViewComment($id){
 function PostArticle(){
 	global $zbp;
 	if(!isset($_POST['ID']))return ;
-	
+
 	if(isset($_COOKIE['timezone'])){
 		$tz=GetVars('timezone','COOKIE');
 		if(is_numeric($tz)){
@@ -793,7 +789,7 @@ function PostArticle(){
 	$zbp->AddBuildModule('archives');
 	$zbp->AddBuildModule('tags');
 	$zbp->AddBuildModule('authors');
-	
+
 	foreach ($GLOBALS['Filter_Plugin_PostArticle_Succeed'] as $fpname => &$fpsignal) $fpname($article);
 
 	return true;
@@ -833,7 +829,7 @@ function DelArticle(){
 
 		foreach ($GLOBALS['Filter_Plugin_DelArticle_Succeed'] as $fpname => &$fpsignal) $fpname($article);
 	}else{
-		
+
 	}
 	return true;
 }
@@ -849,7 +845,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring){
 	$tagnamestring=strip_tags($tagnamestring);
 	$tagnamestring=trim($tagnamestring);
 	if($tagnamestring=='')return '';
-	if($tagnamestring==',')return '';		
+	if($tagnamestring==',')return '';
 	$a=explode(',', $tagnamestring);
 	$b=array();
 	foreach ($a as &$value) {
@@ -901,7 +897,7 @@ function PostPage(){
 
 	if(isset($_POST['PostTime'])){
 		$_POST['PostTime']=strtotime($_POST['PostTime']);
-	}	
+	}
 
 	if(!isset($_POST['AuthorID'])){
 		$_POST['AuthorID']=$zbp->user->ID;
@@ -950,7 +946,7 @@ function PostPage(){
 
 	if(GetVars('AddNavbar','POST')==0)$zbp->DelItemToNavbar('page',$article->ID);
 	if(GetVars('AddNavbar','POST')==1)$zbp->AddItemToNavbar('page',$article->ID,$article->Title,$article->Url);
-	
+
 	foreach ($GLOBALS['Filter_Plugin_PostPage_Succeed'] as $fpname => &$fpsignal) $fpname($article);
 
 	return true;
@@ -982,7 +978,7 @@ function DelPage(){
 
 		foreach ($GLOBALS['Filter_Plugin_DelPage_Succeed'] as $fpname => &$fpsignal) $fpname($article);
 	}else{
-		
+
 	}
 	return true;
 }
@@ -1001,7 +997,7 @@ function PostComment(){
 	global $zbp;
 
 	$_POST['LogID'] = $_GET['postid'];
-	
+
 	if($zbp->VerifyCmtKey($_GET['postid'],$_GET['key'])==false)$zbp->ShowError(43,__FILE__,__LINE__);
 
 	if($zbp->option['ZC_COMMENT_VERIFY_ENABLE']){
@@ -1009,7 +1005,7 @@ function PostComment(){
 			if($zbp->CheckValidCode($_POST['verify'],'cmt')==false)$zbp->ShowError(38,__FILE__,__LINE__);
 		}
 	}
-	
+
 	$replyid=(integer)GetVars('replyid','POST');
 
 	if($replyid==0){
@@ -1038,7 +1034,7 @@ function PostComment(){
 	foreach ($zbp->datainfo['Comment'] as $key => $value) {
 		if($key=='ID')continue;
 		if($key=='Meta')continue;
-		if($key=='IsChecking')continue;	
+		if($key=='IsChecking')continue;
 		if( isset($_POST[$key]) ){
 			$cmt->$key    = GetVars($key,'POST');
 		}
@@ -1250,13 +1246,13 @@ function PostCategory(){
 	CountCategory($cate);
 
 	$cate->Save();
-	
+
 	$zbp->LoadCategorys();
 	$zbp->AddBuildModule('catalog');
 
 	if(GetVars('AddNavbar','POST')==0)$zbp->DelItemToNavbar('category',$cate->ID);
 	if(GetVars('AddNavbar','POST')==1)$zbp->AddItemToNavbar('category',$cate->ID,$cate->Name,$cate->Url);
-	
+
 	foreach ($GLOBALS['Filter_Plugin_PostCategory_Succeed'] as $fpname => &$fpsignal) $fpname($cate);
 
 	return true;
@@ -1270,9 +1266,9 @@ function DelCategory(){
 	$id=(int)GetVars('id','GET');
 	$cate=$zbp->GetCategoryByID($id);
 	if($cate->ID>0){
-		DelCategory_Articles($cate->ID);		
+		DelCategory_Articles($cate->ID);
 		$cate->Del();
-		
+
 		$zbp->LoadCategorys();
 		$zbp->AddBuildModule('catalog');
 		$zbp->DelItemToNavbar('category',$cate->ID);
@@ -1330,9 +1326,9 @@ function PostTag(){
 
 	if(GetVars('AddNavbar','POST')==0)$zbp->DelItemToNavbar('tag',$tag->ID);
 	if(GetVars('AddNavbar','POST')==1)$zbp->AddItemToNavbar('tag',$tag->ID,$tag->Name,$tag->Url);
-	
+
 	$zbp->AddBuildModule('tags');
-	
+
 	foreach ($GLOBALS['Filter_Plugin_PostTag_Succeed'] as $fpname => &$fpsignal) $fpname($tag);
 
 	return true;
@@ -1404,7 +1400,7 @@ function PostMember(){
 	}else{
 		$mem->LoadInfoByID(GetVars('ID','POST'));
 	}
-	
+
 	if($zbp->CheckRights('MemberAll')){
 		if($mem->ID==$zbp->user->ID){
 			unset($_POST['Level']);
@@ -1430,7 +1426,7 @@ function PostMember(){
 	CountMember($mem);
 
 	$mem->Save();
-	
+
 	foreach ($GLOBALS['Filter_Plugin_PostMember_Succeed'] as $fpname => &$fpsignal) $fpname($mem);
 
 	if(isset($_POST['Password'])){
@@ -1438,7 +1434,7 @@ function PostMember(){
 			Redirect($zbp->host . 'zb_system/cmd.php?act=login');
 		}
 	}
-	
+
 	return true;
 }
 
@@ -1448,7 +1444,7 @@ function DelMember(){
 	$id=(int)GetVars('id','GET');
 	$mem=$zbp->GetMemberByID($id);
 	if($mem->ID>0 && $mem->ID<>$zbp->user->ID){
-		DelMember_AllData($id);		
+		DelMember_AllData($id);
 		$mem->Del();
 		foreach ($GLOBALS['Filter_Plugin_DelMember_Succeed'] as $fpname => &$fpsignal) $fpname($mem);
 	}else{
@@ -1460,15 +1456,15 @@ function DelMember(){
 
 function DelMember_AllData($id){
 	global $zbp;
-	
+
 	$w=array();
 	$w[]=array('=','log_AuthorID',$id);
-	
+
 	$articles=$zbp->GetPostList(array('*'),$w);
 	foreach($articles as $a){
 		$a->Del();
 	}
-	
+
 	$w=array();
 	$w[]=array('=','comm_AuthorID',$id);
 	$comments=$zbp->GetCommentList(array('*'),$w);
@@ -1479,7 +1475,7 @@ function DelMember_AllData($id){
 
 	$w=array();
 	$w[]=array('=','ul_AuthorID',$id);
-	$uploads=$zbp->GetUploadList(array('*'),$w);	
+	$uploads=$zbp->GetUploadList(array('*'),$w);
 	foreach($uploads as $u){
 		$u->Del();
 		$u->DelFile();
@@ -1494,12 +1490,12 @@ function DelMember_AllData($id){
 ################################################################################################################
 function PostModule(){
 	global $zbp;
-	
+
 	if(isset($_POST['catalog_style'])){
 		$zbp->option['ZC_MODULE_CATALOG_STYLE']=$_POST['catalog_style'];
 		$zbp->SaveOption();
 	}
-	
+
 	if(!isset($_POST['ID']))return ;
 	if(!GetVars('FileName','POST')){
 		$_POST['FileName']='mod' . rand(1000,2000);
@@ -1517,7 +1513,7 @@ function PostModule(){
 	}
 	if(!isset($_POST['Type'])){
 		$_POST['Type']='div';
-	}	
+	}
 	if(isset($_POST['Content'])){
 		if($_POST['Type']!='div'){
 			$_POST['Content']=str_replace(array("\r","\n"), array('',''), $_POST['Content']);
@@ -1568,7 +1564,7 @@ function DelModule(){
 		}
 		return false;
 	}
-	
+
 	$id=(int)GetVars('id','GET');
 	$mod=$zbp->GetModuleByID($id);
 	if($mod->Source<>'system'){
@@ -1711,7 +1707,7 @@ function SetSidebar(){
 	$zbp->option['ZC_SIDEBAR2_ORDER']=trim(GetVars('sidebar2','POST'),'|');
 	$zbp->option['ZC_SIDEBAR3_ORDER']=trim(GetVars('sidebar3','POST'),'|');
 	$zbp->option['ZC_SIDEBAR4_ORDER']=trim(GetVars('sidebar4','POST'),'|');
-	$zbp->option['ZC_SIDEBAR5_ORDER']=trim(GetVars('sidebar5','POST'),'|');	
+	$zbp->option['ZC_SIDEBAR5_ORDER']=trim(GetVars('sidebar5','POST'),'|');
 	$zbp->SaveOption();
 }
 
@@ -1726,7 +1722,7 @@ function SaveSetting(){
 		 ||$key=='ZC_COMMENT_TURNOFF'
 		 ||$key=='ZC_COMMENT_REVERSE_ORDER_EXPORT'
 		 ||$key=='ZC_DISPLAY_SUBCATEGORYS'
-		 ||$key=='ZC_GZIP_ENABLE'		 
+		 ||$key=='ZC_GZIP_ENABLE'
 		){
 			$zbp->option[$key]=(boolean)$value;
 			continue;
@@ -1741,10 +1737,10 @@ function SaveSetting(){
 		){
 			$zbp->option[$key]=(integer)$value;
 			continue;
-		}		
+		}
 		$zbp->option[$key]=trim(str_replace(array("\r","\n"),array("",""),$value));
 	}
-	
+
 	$zbp->option['ZC_BLOG_HOST']=trim($zbp->option['ZC_BLOG_HOST']);
 	$zbp->option['ZC_BLOG_HOST']=trim($zbp->option['ZC_BLOG_HOST'],'/') . '/';
 	$lang=require($zbp->usersdir . 'language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
@@ -1830,7 +1826,7 @@ function FilterPost(&$article){
 function FilterMember(&$member){
 	global $zbp;
 	$member->Intro=TransferHTML($member->Intro,'[noscript]');
-	$member->Alias=TransferHTML($member->Alias,'[normalname]');	
+	$member->Alias=TransferHTML($member->Alias,'[normalname]');
 	$member->Alias=str_replace('/','',$member->Alias);
 	$member->Alias=str_replace('.','',$member->Alias);
 	$member->Alias=str_replace(' ','',$member->Alias);
@@ -1868,7 +1864,7 @@ function FilterMember(&$member){
 function FilterModule(&$module){
 	global $zbp;
 	$module->FileName=TransferHTML($module->FileName,'[filename]');
-	$module->HtmlID=TransferHTML($module->HtmlID,'[normalname]');	
+	$module->HtmlID=TransferHTML($module->HtmlID,'[normalname]');
 }
 
 
@@ -1876,7 +1872,7 @@ function FilterModule(&$module){
 function FilterCategory(&$category){
 	global $zbp;
 	$category->Name=strip_tags($category->Name);
-	$category->Alias=TransferHTML($category->Alias,'[normalname]');	
+	$category->Alias=TransferHTML($category->Alias,'[normalname]');
 	//$category->Alias=str_replace('/','',$category->Alias);
 	$category->Alias=str_replace('.','',$category->Alias);
 	$category->Alias=str_replace(' ','',$category->Alias);
@@ -1886,7 +1882,7 @@ function FilterCategory(&$category){
 function FilterTag(&$tag){
 	global $zbp;
 	$tag->Name=strip_tags($tag->Name);
-	$tag->Alias=TransferHTML($tag->Alias,'[normalname]');	
+	$tag->Alias=TransferHTML($tag->Alias,'[normalname]');
 }
 
 
@@ -1962,7 +1958,7 @@ function CountTagArrayString($string){
 	foreach ($array as &$tag) {
 		CountTag($tag);
 		$tag->Save();
-	}	
+	}
 }
 
 function CountMember(&$member){
@@ -1995,7 +1991,7 @@ function CountMemberArray($array){
 		if($value==0)continue;
 		CountMember($zbp->members[$value]);
 		$zbp->members[$value]->Save();
-	}	
+	}
 }
 
 
@@ -2005,11 +2001,11 @@ function CountMemberArray($array){
 
 
 ################################################################################################################
-#BuildModule 
+#BuildModule
 function BuildModule_catalog(){
 	global $zbp;
 	$s='';
-	
+
 	if($zbp->option['ZC_MODULE_CATALOG_STYLE']=='2'){
 
 		foreach ($zbp->categorysbyorder as $key => $value) {
@@ -2032,7 +2028,7 @@ function BuildModule_catalog(){
 				$s =str_replace('<!--'.$value->ParentID.'end-->','<li class="li-subcate"><a href="'.$value->Url.'">' . $value->Name . '</a><!--'.$value->ID.'begin--><!--'.$value->ID.'end--></li><!--'.$value->ParentID.'end-->',$s);
 			}
 		}
-		
+
 		foreach ($zbp->categorysbyorder as $key => $value) {
 			$s=str_replace('<!--'.$value->ID.'begin--><!--'.$value->ID.'end-->','',$s);
 		}
@@ -2040,8 +2036,8 @@ function BuildModule_catalog(){
 			$s=str_replace('<!--'.$value->ID.'begin-->','<ul class="ul-subcates">',$s);
 			$s=str_replace('<!--'.$value->ID.'end-->','</ul>',$s);
 		}
-		
-	
+
+
 	}elseif($zbp->option['ZC_MODULE_CATALOG_STYLE']=='1'){
 		foreach ($zbp->categorysbyorder as $key => $value) {
 			$s .='<li>' . $value->Symbol . '<a href="'.$value->Url.'">' . $value->Name . '</a></li>';
@@ -2086,7 +2082,7 @@ function BuildModule_calendar($date=''){
 	$s.='<a href="'.$url->Make().'">»</a></caption>';
 
 	$s.='<thead><tr>';
-	for ($i=1; $i < 8; $i++) { 
+	for ($i=1; $i < 8; $i++) {
 		$s.='<th title="'.$zbp->lang['week'][$i].'" scope="col"><small>'.$zbp->lang['week_abbr'][$i].'</small></th>';
 	}
 
@@ -2106,7 +2102,7 @@ function BuildModule_calendar($date=''){
 	}
 
 	$l=$j-1;
-	for ($i=$a; $i < $b+1; $i++) { 
+	for ($i=$a; $i < $b+1; $i++) {
 		$s.='<td>'.$i.'</td>';
 
 		$l=$l+1;
@@ -2214,8 +2210,8 @@ function BuildModule_archives(){
 
 	$arraydate=array();
 
-	for ($i=$fdate[0]; $i < $ldate[0]+1; $i++) { 
-		for ($j=1; $j<13 ; $j++) { 
+	for ($i=$fdate[0]; $i < $ldate[0]+1; $i++) {
+		for ($j=1; $j<13 ; $j++) {
 			$arraydate[]=strtotime($i . '-' . $j);
 		}
 	}
@@ -2322,7 +2318,7 @@ function BuildModule_tags(){
 		$array2[$tag->ID]=$tag;
 	}
 	ksort($array2);
-	
+
 	foreach ($array2 as $tag) {
 		$s.='<li><a href="'. $tag->Url .'">'. $tag->Name .'<span class="tag-count"> ('. $tag->Count .')</span></a></li>';
 	}
@@ -2332,7 +2328,7 @@ function BuildModule_tags(){
 function BuildModule_authors($level=4){
 	global $zbp;
 	$s='';
-	
+
 	$w=array();
 	$w[]=array('<=','mem_Level',$level);
 
@@ -2358,16 +2354,16 @@ function BuildModule_statistics($array=array()){
 	$all_tags=0;
 	$all_views=0;
 	$all_comments=0;
-	
+
 	if(count($array)==0){return $zbp->modulesbyfilename['statistics']->Content;}
-	
+
 	if(isset($array[0]))$all_artiles=$array[0];
 	if(isset($array[1]))$all_pages=$array[1];
-	if(isset($array[2]))$all_categorys=$array[2];	
+	if(isset($array[2]))$all_categorys=$array[2];
 	if(isset($array[3]))$all_tags=$array[3];
 	if(isset($array[4]))$all_views=$array[4];
 	if(isset($array[5]))$all_comments=$array[5];
-	
+
 	$s="";
 	$s.="<li>{$zbp->lang['msg']['all_artiles']}:{$all_artiles}</li>";
 	$s.="<li>{$zbp->lang['msg']['all_pages']}:{$all_pages}</li>";
@@ -2375,9 +2371,9 @@ function BuildModule_statistics($array=array()){
 	$s.="<li>{$zbp->lang['msg']['all_tags']}:{$all_tags}</li>";
 	$s.="<li>{$zbp->lang['msg']['all_views']}:{$all_views}</li>";
 	$s.="<li>{$zbp->lang['msg']['all_comments']}:{$all_comments}</li>";
-	
+
 	$zbp->modulesbyfilename['statistics']->Type="ul";
-	
+
 	return $s;
 
 }

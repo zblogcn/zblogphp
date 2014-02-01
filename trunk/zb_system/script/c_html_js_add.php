@@ -1,11 +1,11 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
-header('Content-Type: application/x-javascript; Charset=utf-8');  
+header('Content-Type: application/x-javascript; Charset=utf-8');
 
 require '../function/c_system_base.php';
 
@@ -22,7 +22,7 @@ var str03="<?php echo $lang['error']['46']; ?>";
 echo '$(document).ready(function(){';
 
 if ($zbp->CheckRights('admin')){
-	echo "$('.cp-hello').html('" . $zbp->lang['msg']['welcome'] . ' ' . $zbp->user->Name .  " ("  . $zbp->user->LevelName  . ")');";	
+	echo "$('.cp-hello').html('" . $zbp->lang['msg']['welcome'] . ' ' . $zbp->user->Name .  " ("  . $zbp->user->LevelName  . ")');";
 	echo "$('.cp-login').find('a').html('[" . $zbp->lang['msg']['admin'] . "]');";
 }
 if ($zbp->CheckRights('ArticleEdt')){

@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -12,11 +12,11 @@
 // http://php.net/manual/zh/function.mysql-connect.php
 
 /**
-* 
+*
 */
 class DbMySQL implements iDataBase
 {
-	
+
 	public $dbpre = null;
 	private $db = null;
 
@@ -27,7 +27,7 @@ class DbMySQL implements iDataBase
 		$this->sql=new DbSql;
 		$this->sql->type=__CLASS__;
 	}
-	
+
 	public function EscapeString($s){
 		return addslashes($s);
 	}
@@ -51,11 +51,11 @@ class DbMySQL implements iDataBase
 			} else {
 				$this->Close();
 				return false;
-			}	
+			}
 		}
 
 	}
-	
+
 	function CreateDB($dbmysql_server,$dbmysql_port,$dbmysql_username,$dbmysql_password,$dbmysql_name){
 		$db_link = @mysql_connect($dbmysql_server . ':' . $dbmysql_port, $dbmysql_username, $dbmysql_password);
 		$this->db = $db_link;

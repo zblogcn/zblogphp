@@ -10,9 +10,9 @@ $matchs=$matchs[0];
 
 foreach ($matchs as $key => $value) {
 	$t=$value;
-	$t=str_replace('\'', '', $t);	
+	$t=str_replace('\'', '', $t);
 	$t=str_replace('**************************************************<', '', $t);
-	$t=str_replace('**************************************************>', '', $t);	
+	$t=str_replace('**************************************************>', '', $t);
 	$t=str_replace("类型:Filter\r\n", '', $t);
 	$t=str_replace("名称:", '====', $t);
 	$t=str_replace("\r\n参数", "====\r\n参数", $t);

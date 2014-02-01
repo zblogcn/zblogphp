@@ -28,7 +28,7 @@ switch ($action) {
 		break;
 	case 'admin':
 		Redirect('admin/?act=admin');
-		break;	
+		break;
 	case 'verify':
 		if(VerifyLogin()){
 			if ($zbp->user->ID>0 && GetVars('redirect','COOKIE')) {
@@ -41,7 +41,7 @@ switch ($action) {
 		break;
 	case 'search':
 		$q=urlencode(trim(strip_tags(GetVars('q','POST'))));
-		Redirect('../search.php?q=' . $q);	
+		Redirect('../search.php?q=' . $q);
 		break;
 	case 'misc':
 		require './function/c_system_misc.php';
@@ -118,14 +118,14 @@ switch ($action) {
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=CategoryMng');
-		break;	
+		break;
 	case 'CommentDel':
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelComment();
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
 		Redirect($_SERVER["HTTP_REFERER"]);
-		break;	
+		break;
 	case 'CommentChk':
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		CheckComment();
@@ -164,7 +164,7 @@ switch ($action) {
 			$zbp->BuildModule();
 			$zbp->SetHint('good');
 		}else{
-			$zbp->SetHint('bad');			
+			$zbp->SetHint('bad');
 		}
 		Redirect('cmd.php?act=MemberMng');
 		break;
@@ -181,7 +181,7 @@ switch ($action) {
 		DelUpload();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=UploadMng');
-		break;		
+		break;
 	case 'TagMng':
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
@@ -261,13 +261,13 @@ switch ($action) {
 		break;
 	case 'SettingMng':
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
-		break;	
+		break;
 	case 'SettingSav':
 		SaveSetting();
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=SettingMng');
-		break;	
+		break;
 	default:
 		# code...
 		break;

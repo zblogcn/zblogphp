@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -197,9 +197,9 @@ class App
 		$s.='</sidebars>' . "\r\n";
 
 		$s.='</'.$this->type.'>';
-		
+
 		$path=$zbp->usersdir . $this->type . '/' . $this->id . '/' . $this->type . '.xml';
-		
+
 		@file_put_contents($path, $s);
 
 	}
@@ -305,7 +305,7 @@ class App
 
 
 		$s.='</app>';
-		
+
 		return $s;
 	}
 
@@ -319,7 +319,7 @@ class App
 		$dir=$zbp->path . 'zb_users/' . $type . '/';
 
 		if(!file_exists($dir . $id . '/'))@mkdir($dir . $id . '/',0777,true);
-		
+
 		set_error_handler(create_function('',''));
 
 		foreach ($xml->folder as $folder) {

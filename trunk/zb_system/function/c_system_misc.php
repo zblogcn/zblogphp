@@ -1,11 +1,10 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
-
 
 ob_clean();
 
@@ -30,7 +29,6 @@ switch (GetVars('type','GET')) {
 		break;
 }
 
-
 function misc_updateinfo(){
 
 	global $zbp;
@@ -48,8 +46,6 @@ function misc_updateinfo(){
 	echo $r;
 }
 
-
-
 function misc_statistic(){
 
 	global $zbp;
@@ -62,7 +58,7 @@ function misc_statistic(){
 	$current_member=$zbp->user->Name;
 	$current_version=$zbp->option['ZC_BLOG_VERSION'];
 	$all_artiles=GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=0'),'num');
-	$all_pages=GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=1'),'num');	
+	$all_pages=GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=1'),'num');
 	$all_categorys=GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(cate_ID) AS num FROM ' . $GLOBALS['table']['Category']),'num');
 	$all_comments=GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(comm_ID) AS num FROM ' . $GLOBALS['table']['Comment']),'num');
 	$all_views=GetValueInArrayByCurrent($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post']),'num');
@@ -79,7 +75,7 @@ function misc_statistic(){
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
-	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";		
+	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";
 
 	$s=$zbp->db->sql->Count($zbp->table['Post'],array(array('COUNT','*','num')),array(array('=','log_Type',0),array('=','log_IsTop',0),array('=','log_Status',0)));
 	$num=GetValueInArrayByCurrent($zbp->db->Query($s),'num');
@@ -89,16 +85,15 @@ function misc_statistic(){
 	$zbp->cache->reload_statistic=$r;
 	$zbp->cache->reload_statistic_time=time();
 	$zbp->cache->normal_article_nums=$num;
-	
+
 	$zbp->SaveCache();
-	
+
 	$zbp->AddBuildModule('statistics',array($all_artiles,$all_pages,$all_categorys,$all_tags,$all_views,$all_comments));
 	$zbp->BuildModule();
 
 	$r=str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
 
 	echo $r;
-
 }
 
 
@@ -107,25 +102,23 @@ function misc_showtags(){
 
 	header('Content-Type: application/x-javascript; Charset=utf-8');
 
-echo '$("#ajaxtags").html("';
+	echo '$("#ajaxtags").html("';
 
-
-$array=$zbp->GetTagList(
-	null,
-	null,
-	array('tag_Count'=>'DESC','tag_ID'=>'ASC'),
-	array(100),
-	null
-);
-if(count($array)>0){
-	$t=array();
-	foreach ($array as $tag) {
-		echo '<a href=\"#\">' . $tag->Name . '</a>';
+	$array=$zbp->GetTagList(
+		null,
+		null,
+		array('tag_Count'=>'DESC','tag_ID'=>'ASC'),
+		array(100),
+		null
+	);
+	if(count($array)>0){
+		$t=array();
+		foreach ($array as $tag) {
+			echo '<a href=\"#\">' . $tag->Name . '</a>';
+		}
 	}
-}
 
-echo '");$("#ulTag").tagTo("#edtTag");';
-
+	echo '");$("#ulTag").tagTo("#edtTag");';
 }
 
 

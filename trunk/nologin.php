@@ -138,7 +138,7 @@ form{
 
 #divMain_Top{
 	padding:8px;
-	padding-bottom:0;	
+	padding-bottom:0;
 }
 #divMain_Center{
 	padding:5px;

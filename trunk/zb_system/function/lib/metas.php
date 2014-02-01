@@ -1,7 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
@@ -22,7 +22,7 @@ class Metas {
 	}
 
 	public static function ConvertArray($a){
-		$m = new Metas;		
+		$m = new Metas;
 		if(is_array($a)){
 			$m->Data=$a;
 		}
@@ -32,14 +32,14 @@ class Metas {
 	public function HasKey($name){
 		return array_key_exists($name,$this->Data);
 	}
-	
+
 	public function CountItem(){
 		return count($this->Data);
 	}
 
 	public function Del($name){
 
-		 unset($this->Data[$name]); 
+		 unset($this->Data[$name]);
 	}
 
 	public function Serialize(){

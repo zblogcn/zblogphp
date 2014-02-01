@@ -10,7 +10,7 @@
 
 <label id="AjaxCommentBegin"></label>
 <!--评论输出-->
-<?php  foreach ( $comments as $key => $comment) { ?> 
+<?php  foreach ( $comments as $key => $comment) { ?>
 <?php  include $this->GetTemplate('comment');  ?>
 <?php  }   ?>
 
