@@ -14,16 +14,8 @@ class Comment extends Base{
 
 	function __construct()
 	{
-        global $zbp;
-		$this->table=&$zbp->table['Comment'];	
-		$this->datainfo=&$zbp->datainfo['Comment'];
-
-		$this->Metas=new Metas;
-
-		foreach ($this->datainfo as $key => $value) {
-			$this->data[$key]=$value[3];
-		}
-
+		global $zbp;
+		parent::__construct($zbp->table['Post'],$zbp->datainfo['Comment']);
 	}
 
 	function __call($method, $args) {

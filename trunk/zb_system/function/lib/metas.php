@@ -63,6 +63,7 @@ class Metas {
 				$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']==false?$zbp->host:$zbp->option['ZC_BLOG_HOST']),$value);
 			}
 		}
+		return true;
 	}
 
 

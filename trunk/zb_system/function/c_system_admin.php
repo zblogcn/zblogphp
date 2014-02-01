@@ -1340,9 +1340,9 @@ foreach ($plugins as $plugin) {
 
 	if($plugin->type=='plugin'){
 		if($plugin->IsUsed()){
-			echo '<a href="../cmd.php?act=PluginDis&amp;name=' . htmlspecialchars($plugin->id) . '&token='. $zbp->GetToken() .'" title="' . $zbp->lang['msg']['disable'] . '"><img width="16" alt="' . $zbp->lang['msg']['disable'] . '" src="../image/admin/control-power-off.png"/></a>';
+			echo '<a href="../cmd.php?act=PluginDis&amp;name=' . htmlspecialchars($plugin->id) . '&token='. $zbp->GetToken() .'" title="' . $zbp->lang['msg']['disable'] . '"><img width="16" alt="' . $zbp->lang['msg']['disable'] . '" src="../image/admin/control-power.png"/></a>';
 		}else{
-			echo '<a href="../cmd.php?act=PluginEnb&amp;name=' . htmlspecialchars($plugin->id) . '&token='. $zbp->GetToken() .'" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../image/admin/control-power.png"/></a>';
+			echo '<a href="../cmd.php?act=PluginEnb&amp;name=' . htmlspecialchars($plugin->id) . '&token='. $zbp->GetToken() .'" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../image/admin/control-power-off.png"/></a>';
 		}
 	}
 	if($plugin->IsUsed() && $plugin->CanManage()){

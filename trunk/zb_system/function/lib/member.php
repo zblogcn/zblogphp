@@ -13,18 +13,10 @@ class Member extends Base{
 
 	function __construct()
 	{
-        global $zbp;
-		$this->table=&$zbp->table['Member'];	
-		$this->datainfo=&$zbp->datainfo['Member'];
-
-		$this->Metas=new Metas;
-
-		foreach ($this->datainfo as $key => $value) {
-			$this->data[$key]=$value[3];
-		}
+		global $zbp;
+		parent::__construct($zbp->table['Post'],$zbp->datainfo['Member']);
 
 		$this->Name = $zbp->lang['msg']['anonymous'];
-
 	}
 
 	function __call($method, $args) {

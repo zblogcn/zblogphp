@@ -24,15 +24,8 @@ class HeartVote extends Base{
 
 	function __construct()
 	{
-        global $zbp;
-		$this->table=&$zbp->table['HeartVote'];	
-		$this->datainfo=&$zbp->datainfo['HeartVote'];
-
-		foreach ($this->datainfo as $key => $value) {
-			if(isset($this->Data))$this->Data[$key]=$value[3];
-			if(isset($this->data))$this->data[$key]=$value[3];
-		}
-
+		global $zbp;
+		parent::__construct($zbp->table['Post'],$zbp->datainfo['HeartVote']);
 	}
 }
 
@@ -43,8 +36,10 @@ function InstallPlugin_HeartVote(){
 
 function HeartVote_CreateTable(){
 	global $zbp;
-	$s=$zbp->db->sql->CreateTable($GLOBALS['table']['HeartVote'],$GLOBALS['datainfo']['HeartVote']);
-	$zbp->db->QueryMulit($s);
+	if($zbp->db->ExistTable($GLOBALS['table']['HeartVote'])==false){
+		$s=$zbp->db->sql->CreateTable($GLOBALS['table']['HeartVote'],$GLOBALS['datainfo']['HeartVote']);
+		$zbp->db->QueryMulit($s);
+	}
 }
 
 function HeartVote_Pre(&$template){

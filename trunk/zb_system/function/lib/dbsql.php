@@ -290,7 +290,7 @@ class DbSql #extends AnotherClass
 		$sqlo='';
 		$sqll='';
 
-		if(!empty($select)) {
+		if(!empty($select)){
 			if(is_array($select)){
 				$selectstr=implode($select,',');
 				$sqls="SELECT $selectstr FROM $table ";
@@ -301,7 +301,7 @@ class DbSql #extends AnotherClass
 
 		$sqlw=$this->ParseWhere($where);
 
-		if(!empty($order)) {
+		if(!empty($order)){
 			$sqlo .= ' ORDER BY ';
 			$comma = '';
 			foreach($order as $k=>$v) {

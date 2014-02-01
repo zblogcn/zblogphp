@@ -18,7 +18,7 @@ class Base
 
 	public $Metas = null;
 	
-	function __construct($table,$datainfo)
+	function __construct(&$table,&$datainfo)
 	{
         global $zbp;
 
@@ -50,7 +50,8 @@ class Base
 	function LoadInfoByID($id){
 		global $zbp;
 
-		$s="SELECT * FROM " . $this->table . " WHERE " . $this->datainfo['ID'][0] . "=$id";
+		//$s="SELECT * FROM " . $this->table . " WHERE " . $this->datainfo['ID'][0] . "=$id";
+		$s = $zbp->db->sql->Select($this->table,array('*'),array(array('=',$this->datainfo['ID'][0],$id)),null,null,null);
 
 		$array = $zbp->db->Query($s);
 		if (count($array)>0) {
@@ -66,6 +67,7 @@ class Base
 		global $zbp;
 
 		foreach ($this->datainfo as $key => $value) {
+			if(!isset($array[$value[0]]))continue;
 			if($value[1] == 'boolean'){
 				$this->data[$key]=(boolean)$array[$value[0]];
 			}elseif($value[1] == 'string'){
@@ -87,13 +89,14 @@ class Base
 
 		$i = 0;
 		foreach ($this->datainfo as $key => $value) {
+			if(count($array)==$i)continue;
 			if($value[1] == 'boolean'){
 				$this->data[$key]=(boolean)$array[$i];
 			}elseif($value[1] == 'string'){
 				if($key=='Meta'){
-					$this->data[$key]=$array[$value[0]];
+					$this->data[$key]=$array[$i];
 				}else{
-					$this->data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$value[0]]);
+					$this->data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$i]);
 				}
 			}else{
 				$this->data[$key]=$array[$i];
