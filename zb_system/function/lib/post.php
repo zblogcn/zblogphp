@@ -12,15 +12,8 @@ class Post extends Base{
 
 	function __construct()
 	{
-        global $zbp;
-		$this->table=&$zbp->table['Post'];	
-		$this->datainfo=&$zbp->datainfo['Post'];
-
-		$this->Metas=new Metas;
-
-		foreach ($this->datainfo as $key => $value) {
-			$this->data[$key]=$value[3];
-		}
+		global $zbp;
+		parent::__construct($zbp->table['Post'],$zbp->datainfo['Post']);
 
 		$this->ID = 0;
 		$this->Title	= $GLOBALS['lang']['msg']['unnamed'];

@@ -12,16 +12,8 @@ class Tag extends Base{
 
 	function __construct()
 	{
-        global $zbp;
-		$this->table=&$zbp->table['Tag'];	
-		$this->datainfo=&$zbp->datainfo['Tag'];
-
-		$this->Metas=new Metas;
-
-		foreach ($this->datainfo as $key => $value) {
-			$this->data[$key]=$value[3];
-		}
-
+		global $zbp;
+		parent::__construct($zbp->table['Post'],$zbp->datainfo['Tag']);
 	}
 
 	function __call($method, $args) {

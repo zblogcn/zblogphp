@@ -13,15 +13,8 @@ class Category extends Base{
 
 	function __construct()
 	{
-        global $zbp;
-		$this->table=&$zbp->table['Category'];	
-		$this->datainfo=&$zbp->datainfo['Category'];
-
-		$this->Metas=new Metas;
-
-		foreach ($this->datainfo as $key => $value) {
-			$this->data[$key]=$value[3];
-		}
+		global $zbp;
+		parent::__construct($zbp->table['Post'],$zbp->datainfo['Category']);
 
 		$this->Name	= $GLOBALS['lang']['msg']['unnamed'];
 	}

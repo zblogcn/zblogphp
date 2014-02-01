@@ -46,15 +46,8 @@ class AuditRecords extends Base{
 
 	function __construct()
 	{
-        global $zbp;
-		$this->table=&$zbp->table['AuditRecords'];	
-		$this->datainfo=&$zbp->datainfo['AuditRecords'];
-
-		foreach ($this->datainfo as $key => $value) {
-			if(isset($this->Data))$this->Data[$key]=$value[3];
-			if(isset($this->data))$this->data[$key]=$value[3];
-		}
-
+		global $zbp;
+		parent::__construct($zbp->table['Post'],$zbp->datainfo['AuditRecords']);
 	}
 }
 
@@ -65,8 +58,10 @@ function InstallPlugin_AuditRecords(){
 
 function AuditRecords_CreateTable(){
 	global $zbp;
-	$s=$zbp->db->sql->CreateTable($GLOBALS['table']['AuditRecords'],$GLOBALS['datainfo']['AuditRecords']);
-	$zbp->db->QueryMulit($s);
+	if($zbp->db->ExistTable($GLOBALS['table']['AuditRecords'])==false){
+		$s=$zbp->db->sql->CreateTable($GLOBALS['table']['AuditRecords'],$GLOBALS['datainfo']['AuditRecords']);
+		$zbp->db->QueryMulit($s);
+	}
 }
 
 

@@ -88,8 +88,11 @@ class DbSQLite3 implements iDataBase
 	}
 
 	function ExistTable($tablename){
+		$zbp=ZBlogPHP::GetInstance();
 		$a=$this->Query($this->sql->ExistTable($tablename));
-		if($a[0][0]>0){
+		$b=(array)$a;
+		$c=current($b);
+		if((int)$c>0){
 			return true;
 		}else{
 			return false;

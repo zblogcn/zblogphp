@@ -12,16 +12,8 @@ class Counter extends Base{
 
 	function __construct()
 	{
-        global $zbp;
-		$this->table=&$zbp->table['Counter'];	
-		$this->datainfo=&$zbp->datainfo['Counter'];
-
-		$this->Metas=new Metas;
-
-		foreach ($this->datainfo as $key => $value) {
-			$this->data[$key]=$value[3];
-		}
-
+		global $zbp;
+		parent::__construct($zbp->table['Post'],$zbp->datainfo['Counter']);
 	}
 
 

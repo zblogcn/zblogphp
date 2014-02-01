@@ -38,7 +38,10 @@ function ActivePlugin_duoshuo()
 }
 function InstallPlugin_duoshuo()
 {
+	global $zbp;
 	@duoshuo_create_database();
+	$zbp->Config('duoshuo')->short_name='';
+	$zbp->SaveConfig('duoshuo');
 }
 function UninstallPlugin_duoshuo()
 {
@@ -51,10 +54,14 @@ function duoshuo_cmd_begin()
 function duoshuo_create_database()
 {
 	global $zbp;
-	$s = $zbp->db->sql->CreateTable($GLOBALS['table']['plugin_duoshuo_comment'],$GLOBALS['datainfo']['plugin_duoshuo_comment']);
-	$zbp->db->QueryMulit($s);
-	$s = $zbp->db->sql->CreateTable($GLOBALS['table']['plugin_duoshuo_members'],$GLOBALS['datainfo']['plugin_duoshuo_members']);
-	$zbp->db->QueryMulit($s);	
+	if($zbp->db->ExistTable($GLOBALS['table']['plugin_duoshuo_comment'])==false){
+		$s = $zbp->db->sql->CreateTable($GLOBALS['table']['plugin_duoshuo_comment'],$GLOBALS['datainfo']['plugin_duoshuo_comment']);
+		$zbp->db->QueryMulit($s);
+	}
+	if($zbp->db->ExistTable($GLOBALS['table']['plugin_duoshuo_comment'])==false){
+		$s = $zbp->db->sql->CreateTable($GLOBALS['table']['plugin_duoshuo_members'],$GLOBALS['datainfo']['plugin_duoshuo_members']);
+		$zbp->db->QueryMulit($s);
+	}
 }
 
 
