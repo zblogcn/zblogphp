@@ -10,7 +10,6 @@ function export_post_article($http,$intmin,$intmax)
 		if($value[1] == 'string'&&$value[2] == '')continue;
 		$select[]=$value[0];
 	}
-	$select=implode(',',$select);
 	$return = $zbp->GetPostList($select,$where,null,null,null);
 	$data = export_article($return);
 	$http->open("POST","http://" . $duoshuo->cfg->api_hostname . '/'. $duoshuo->url['threads']['import']);

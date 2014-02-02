@@ -135,8 +135,11 @@ class DbSql #extends AnotherClass
 				if($value[1]=='double'||$value[1]=='float'){
 					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
 				}
-				if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'||$value[1]=='timestamp'){
+				if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'){
 					$s.=$value[0] . ' $value[1] NOT NULL,';
+				}
+				if($value[1]=='timestamp'){
+					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP,';
 				}
 				$i +=1;
 			}
@@ -200,7 +203,7 @@ class DbSql #extends AnotherClass
 					$s.=$value[0] . ' $value[1] NOT NULL,';
 				}
 				if($value[1]=='timestamp'){
-					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP,';
+					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,';
 				}
 				$i +=1;
 			}
@@ -293,10 +296,14 @@ class DbSql #extends AnotherClass
 		if(!empty($select)){
 			if(is_array($select)){
 				$selectstr=implode($select,',');
+				if(trim($selectstr)=='')$selectstr='*';
 				$sqls="SELECT $selectstr FROM $table ";
 			}else{
+				if(trim($sqls)=='')$sqls='*';
 				$sqls="SELECT $select FROM $table ";
 			}
+		}else{
+				$sqls="SELECT * FROM $table ";
 		}
 
 		$sqlw=$this->ParseWhere($where);
