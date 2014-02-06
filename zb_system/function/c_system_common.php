@@ -3,123 +3,140 @@
  * Z-Blog with PHP
  * @author
  * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * @version       2.0 2013-06-14
  */
 
-function Logs($s){
-	$f=$GLOBALS['usersdir'] . 'logs/'. $GLOBALS['option']['ZC_BLOG_CLSID'] .'-log' . date("Ymd"). '.txt';
+function Logs($s) {
+	$f = $GLOBALS['usersdir'] . 'logs/' . $GLOBALS['option']['ZC_BLOG_CLSID'] . '-log' . date("Ymd") . '.txt';
 	$handle = @fopen($f, 'a+');
-	@fwrite($handle,"[" . date('c') . "~" . current(explode(" ", microtime()))  . "]" . "\r\n" . $s . "\r\n");
+	@fwrite($handle, "[" . date('c') . "~" . current(explode(" ", microtime())) . "]" . "\r\n" . $s . "\r\n");
 	@fclose($handle);
 }
 
 $_SERVER['_start_time'] = microtime(1); //RunTime
-function RunTime(){
-	echo '<!--'. (1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6)) .'ms-->';
+function RunTime() {
+	echo '<!--' . (1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6)) . 'ms-->';
 }
 
-function GetValueInArray($array,$name){
-	if(is_array($array)){
-		if(array_key_exists($name,$array)){
+function GetValueInArray($array, $name) {
+	if (is_array($array)) {
+		if (array_key_exists($name, $array)) {
 			return $array[$name];
 		}
 	}
 }
 
-function GetValueInArrayByCurrent($array,$name){
-	if(is_array($array)){
-		$array=current($array);
-		return GetValueInArray($array,$name);
+function GetValueInArrayByCurrent($array, $name) {
+	if (is_array($array)) {
+		$array = current($array);
+
+		return GetValueInArray($array, $name);
 	}
 }
 
-function GetGuid(){
-	$s=str_replace('.','',trim(uniqid('zbp',true),'zbp'));
+function GetGuid() {
+	$s = str_replace('.', '', trim(uniqid('zbp', true), 'zbp'));
+
 	return $s;
 }
 
-function GetVars($name,$type='REQUEST'){
-	if ($type=='ENV') {$array=&$_ENV;}
-	if ($type=='GET') {$array=&$_GET;}
-	if ($type=='POST') {$array=&$_POST;}
-	if ($type=='COOKIE') {$array=&$_COOKIE;}
-	if ($type=='REQUEST') {$array=&$_REQUEST;}
-	if ($type=='SERVER') {$array=&$_SERVER;}
-	if ($type=='SESSION') {$array=&$_SESSION;}
-	if ($type=='FILES') {$array=&$_FILES;}
+function GetVars($name, $type = 'REQUEST') {
+	if ($type == 'ENV') {
+		$array =& $_ENV;
+	}
+	if ($type == 'GET') {
+		$array =& $_GET;
+	}
+	if ($type == 'POST') {
+		$array =& $_POST;
+	}
+	if ($type == 'COOKIE') {
+		$array =& $_COOKIE;
+	}
+	if ($type == 'REQUEST') {
+		$array =& $_REQUEST;
+	}
+	if ($type == 'SERVER') {
+		$array =& $_SERVER;
+	}
+	if ($type == 'SESSION') {
+		$array =& $_SESSION;
+	}
+	if ($type == 'FILES') {
+		$array =& $_FILES;
+	}
 
-	if(isset($array[$name])){
+	if (isset($array[$name])) {
 		return $array[$name];
-	}else{
+	} else {
 		return null;
 	}
 }
 
-function GetDbName(){
+function GetDbName() {
 
-	return str_replace('-','','#%20' . strtolower(GetGuid())) . '.db';
+	return str_replace('-', '', '#%20' . strtolower(GetGuid())) . '.db';
 }
 
-
-function GetCurrentHost(&$cookiespath){
-	if (array_key_exists('HTTPS',$_SERVER)) {
-		if ($_SERVER['HTTPS']=='off') {
-			$host='http://';
+function GetCurrentHost(&$cookiespath) {
+	if (array_key_exists('HTTPS', $_SERVER)) {
+		if ($_SERVER['HTTPS'] == 'off') {
+			$host = 'http://';
 		} else {
-			$host='https://';
+			$host = 'https://';
 		}
 	} else {
-		$host='http://';
+		$host = 'http://';
 	}
 
+	$host .= $_SERVER['HTTP_HOST'];
 
-	$host.=$_SERVER['HTTP_HOST'];
+	$y = strtolower($GLOBALS['blogpath']);
+	$x = strtolower($_SERVER['SCRIPT_NAME']);
 
-	$y=strtolower($GLOBALS['blogpath']);
-	$x=strtolower($_SERVER['SCRIPT_NAME']);
-
-	for ($i=strlen($x); $i >0 ; $i--) {
-		$z=substr($x,0,$i);
-		if(substr($y,strlen($y)-$i)==$z){
+	for ($i = strlen($x); $i > 0; $i--) {
+		$z = substr($x, 0, $i);
+		if (substr($y, strlen($y) - $i) == $z) {
 			break;
 		}
 	}
 
-	$cookiespath=$z;
+	$cookiespath = $z;
 
 	return $host . $z;
 }
 
-function GetHttpContent($url){
-	$r=null;
-	if(function_exists("curl_init")){
+function GetHttpContent($url) {
+	$r = null;
+	if (function_exists("curl_init")) {
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		$r = curl_exec($ch);
 		curl_close($ch);
-	}elseif(ini_get("allow_url_fopen")){
-		$r=file_get_contents($url);
+	} elseif (ini_get("allow_url_fopen")) {
+		$r = file_get_contents($url);
 	}
+
 	return $r;
 }
 
-function GetDirsInDir($dir){
-	$dirs=array();
+function GetDirsInDir($dir) {
+	$dirs = array();
 
-	if(function_exists('scandir')){
+	if (function_exists('scandir')) {
 		foreach (scandir($dir) as $d) {
-			if (is_dir($dir .  $d)) {
-				if( ($d<>'.') && ($d<>'..') ){
-					$dirs[]=$d;
+			if (is_dir($dir . $d)) {
+				if (($d <> '.') && ($d <> '..')) {
+					$dirs[] = $d;
 				}
 			}
 		}
-	}else{
+	} else {
 		if ($handle = opendir($dir)) {
 			while (false !== ($file = readdir($handle))) {
 				if ($file != "." && $file != "..") {
-					if (is_dir($dir .  $file)) {
-						$dirs[]=$file;
+					if (is_dir($dir . $file)) {
+						$dirs[] = $file;
 					}
 				}
 			}
@@ -130,39 +147,39 @@ function GetDirsInDir($dir){
 	return $dirs;
 }
 
+function GetFilesInDir($dir, $type) {
 
-function GetFilesInDir($dir,$type){
+	$files = array();
 
-	$files=array();
+	if (!file_exists($dir))
+		return $files;
 
-	if(!file_exists($dir))return $files;
-
-	if(function_exists('scandir')){
+	if (function_exists('scandir')) {
 		foreach (scandir($dir) as $f) {
 			if (is_file($dir . $f)) {
-				foreach (explode("|",$type) as $t) {
-					$t='.' . $t;
-					$i=strlen($t);
-					if (substr($f,-$i,$i)==$t) {
-						$sortname=substr($f,0,strlen($f)-$i);
-						$files[$sortname]=$dir . $f;
+				foreach (explode("|", $type) as $t) {
+					$t = '.' . $t;
+					$i = strlen($t);
+					if (substr($f, -$i, $i) == $t) {
+						$sortname = substr($f, 0, strlen($f) - $i);
+						$files[$sortname] = $dir . $f;
 						break;
 					}
 				}
 
 			}
 		}
-	}else{
+	} else {
 		if ($handle = opendir($dir)) {
 			while (false !== ($file = readdir($handle))) {
 				if ($file != "." && $file != "..") {
-					if (is_file($dir .  $file)) {
-						foreach (explode("|",$type) as $t) {
-							$t='.' . $t;
-							$i=strlen($t);
-							if (substr($file,-$i,$i)==$t) {
-								$sortname=substr($file,0,strlen($file)-$i);
-								$files[$sortname]=$dir . $file;
+					if (is_file($dir . $file)) {
+						foreach (explode("|", $type) as $t) {
+							$t = '.' . $t;
+							$i = strlen($t);
+							if (substr($file, -$i, $i) == $t) {
+								$sortname = substr($file, 0, strlen($file) - $i);
+								$files[$sortname] = $dir . $file;
 								break;
 							}
 						}
@@ -177,11 +194,10 @@ function GetFilesInDir($dir,$type){
 
 }
 
-
-
-function SetHttpStatusCode($number){
-	static $status='';
-	if($status!='')return false;
+function SetHttpStatusCode($number) {
+	static $status = '';
+	if ($status != '')
+		return false;
 	switch ($number) {
 		case 200:
 			header("HTTP/1.1 200 OK");
@@ -204,263 +220,260 @@ function SetHttpStatusCode($number){
 		case 503:
 			header('HTTP/1.1 503 Service Unavailable');
 	}
-	$status=$number;
+	$status = $number;
+
 	return true;
 }
 
-function Redirect($url){
+function Redirect($url) {
 	SetHttpStatusCode(302);
-	header('Location: '.$url);
+	header('Location: ' . $url);
 	die();
 }
 
-function Redirect301($url){
+function Redirect301($url) {
 	SetHttpStatusCode(301);
-	header('Location: '.$url);
+	header('Location: ' . $url);
 	die();
 }
 
-function Http404(){
+function Http404() {
 	SetHttpStatusCode(404);
 	header("Status: 404 Not Found");
 }
 
-function Http500(){
+function Http500() {
 	SetHttpStatusCode(500);
 }
 
-function Http503(){
+function Http503() {
 	SetHttpStatusCode(503);
 }
 
-function Http304($filename,$time){
+function Http304($filename, $time) {
 	$url = $filename;
 	$md5 = md5($url . $time);
 	$etag = '"' . $md5 . '"';
-	header('Last-Modified: '.gmdate('D, d M Y H:i:s',$time ).' GMT');
+	header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $time) . ' GMT');
 	header("ETag: $etag");
-	if((isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag)){
+	if ((isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag)) {
 		SetHttpStatusCode(304);
 		die();
 	}
 }
 
-
-function GetGuestIP(){
+function GetGuestIP() {
 	return $_SERVER["REMOTE_ADDR"];
 }
 
-function GetGuestAgent(){
+function GetGuestAgent() {
 	return $_SERVER["HTTP_USER_AGENT"];
 }
 
-function GetRequestUri(){
-	$url='';
-	if(isset($_SERVER['REQUEST_URI'])){
-		$url=$_SERVER['REQUEST_URI'];
-	}else{
-		$url=$_SERVER['PHP_SELF'] . ($_SERVER['QUERY_STRING']? '?'.$_SERVER['QUERY_STRING'] : '');
+function GetRequestUri() {
+	$url = '';
+	if (isset($_SERVER['REQUEST_URI'])) {
+		$url = $_SERVER['REQUEST_URI'];
+	} else {
+		$url = $_SERVER['PHP_SELF'] . ($_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] : '');
 	}
+
 	return $url;
 }
 
-function GetFileExt($f){
-	if(strpos($f,'.')===false)return '';
-	$a=explode('.', $f);
+function GetFileExt($f) {
+	if (strpos($f, '.') === false)
+		return '';
+	$a = explode('.', $f);
+
 	return strtolower(end($a));
 }
 
-
-function GetFilePermsOct($f){
-    if(!file_exists($f)){return null;}
-    return substr(sprintf('%o', fileperms($f)), -4);
-}
-
-function GetFilePerms($f){
-
-    if(!file_exists($f)){return null;}
-
-    $perms = fileperms($f);
-
-    if (($perms & 0xC000) == 0xC000) {
-        // Socket
-        $info = 's';
-    } elseif (($perms & 0xA000) == 0xA000) {
-        // Symbolic Link
-        $info = 'l';
-    } elseif (($perms & 0x8000) == 0x8000) {
-        // Regular
-        $info = '-';
-    } elseif (($perms & 0x6000) == 0x6000) {
-        // Block special
-        $info = 'b';
-    } elseif (($perms & 0x4000) == 0x4000) {
-        // Directory
-        $info = 'd';
-    } elseif (($perms & 0x2000) == 0x2000) {
-        // Character special
-        $info = 'c';
-    } elseif (($perms & 0x1000) == 0x1000) {
-        // FIFO pipe
-        $info = 'p';
-    } else {
-        // Unknown
-        $info = 'u';
-    }
-
-    // Owner
-    $info .= (($perms & 0x0100) ? 'r' : '-');
-    $info .= (($perms & 0x0080) ? 'w' : '-');
-    $info .= (($perms & 0x0040) ?
-                (($perms & 0x0800) ? 's' : 'x' ) :
-                (($perms & 0x0800) ? 'S' : '-'));
-
-    // Group
-    $info .= (($perms & 0x0020) ? 'r' : '-');
-    $info .= (($perms & 0x0010) ? 'w' : '-');
-    $info .= (($perms & 0x0008) ?
-                (($perms & 0x0400) ? 's' : 'x' ) :
-                (($perms & 0x0400) ? 'S' : '-'));
-
-    // Other
-    $info .= (($perms & 0x0004) ? 'r' : '-');
-    $info .= (($perms & 0x0002) ? 'w' : '-');
-    $info .= (($perms & 0x0001) ?
-                (($perms & 0x0200) ? 't' : 'x' ) :
-                (($perms & 0x0200) ? 'T' : '-'));
-
-    return $info;
-}
-
-
-function AddNameInString($s,$name){
-	$pl=$s;
-	$name=(string)$name;
-	$apl=explode('|',$pl);
-	if(in_array($name,$apl)==false){
-		$apl[]=$name;
+function GetFilePermsOct($f) {
+	if (!file_exists($f)) {
+		return null;
 	}
-	$pl=trim(implode('|',$apl),'|');
+
+	return substr(sprintf('%o', fileperms($f)), -4);
+}
+
+function GetFilePerms($f) {
+
+	if (!file_exists($f)) {
+		return null;
+	}
+
+	$perms = fileperms($f);
+
+	if (($perms & 0xC000) == 0xC000) {
+		// Socket
+		$info = 's';
+	} elseif (($perms & 0xA000) == 0xA000) {
+		// Symbolic Link
+		$info = 'l';
+	} elseif (($perms & 0x8000) == 0x8000) {
+		// Regular
+		$info = '-';
+	} elseif (($perms & 0x6000) == 0x6000) {
+		// Block special
+		$info = 'b';
+	} elseif (($perms & 0x4000) == 0x4000) {
+		// Directory
+		$info = 'd';
+	} elseif (($perms & 0x2000) == 0x2000) {
+		// Character special
+		$info = 'c';
+	} elseif (($perms & 0x1000) == 0x1000) {
+		// FIFO pipe
+		$info = 'p';
+	} else {
+		// Unknown
+		$info = 'u';
+	}
+
+	// Owner
+	$info .= (($perms & 0x0100) ? 'r' : '-');
+	$info .= (($perms & 0x0080) ? 'w' : '-');
+	$info .= (($perms & 0x0040) ? (($perms & 0x0800) ? 's' : 'x') : (($perms & 0x0800) ? 'S' : '-'));
+
+	// Group
+	$info .= (($perms & 0x0020) ? 'r' : '-');
+	$info .= (($perms & 0x0010) ? 'w' : '-');
+	$info .= (($perms & 0x0008) ? (($perms & 0x0400) ? 's' : 'x') : (($perms & 0x0400) ? 'S' : '-'));
+
+	// Other
+	$info .= (($perms & 0x0004) ? 'r' : '-');
+	$info .= (($perms & 0x0002) ? 'w' : '-');
+	$info .= (($perms & 0x0001) ? (($perms & 0x0200) ? 't' : 'x') : (($perms & 0x0200) ? 'T' : '-'));
+
+	return $info;
+}
+
+function AddNameInString($s, $name) {
+	$pl = $s;
+	$name = (string)$name;
+	$apl = explode('|', $pl);
+	if (in_array($name, $apl) == false) {
+		$apl[] = $name;
+	}
+	$pl = trim(implode('|', $apl), '|');
+
 	return $pl;
 }
 
-function DelNameInString($s,$name){
-	$pl=$s;
-	$name=(string)$name;
-	$apl=explode('|',$pl);
-	for ($i=0; $i <= Count($apl)-1; $i++) {
-		if($apl[$i]==$name){
+function DelNameInString($s, $name) {
+	$pl = $s;
+	$name = (string)$name;
+	$apl = explode('|', $pl);
+	for ($i = 0; $i <= Count($apl) - 1; $i++) {
+		if ($apl[$i] == $name) {
 			unset($apl[$i]);
 		}
 	}
-	$pl=trim(implode('|',$apl),'|');
+	$pl = trim(implode('|', $apl), '|');
+
 	return $pl;
 }
 
-function HasNameInString($s,$name){
-	$pl=$s;
-	$name=(string)$name;
-	$apl=explode('|',$pl);
-	return in_array($name,$apl);
+function HasNameInString($s, $name) {
+	$pl = $s;
+	$name = (string)$name;
+	$apl = explode('|', $pl);
+
+	return in_array($name, $apl);
 }
-
-
-
-
-
 
 #*********************************************************
 # 目的：    XML-RPC显示错误页面
 #'*********************************************************
-function RespondError($faultString){
+function RespondError($faultString) {
 
-	$strXML='<?xml version="1.0" encoding="UTF-8"?><methodResponse><fault><value><struct><member><name>faultCode</name><value><int>$1</int></value></member><member><name>faultString</name><value><string>$2</string></value></member></struct></value></fault></methodResponse>';
-	$faultCode=time();
-	$strError=$strXML;
-	$strError=str_replace("$1",TransferHTML($faultCode,"[html-format]"),$strError);
-	$strError=str_replace("$2",TransferHTML($faultString,"[html-format]"),$strError);
+	$strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><fault><value><struct><member><name>faultCode</name><value><int>$1</int></value></member><member><name>faultString</name><value><string>$2</string></value></member></struct></value></fault></methodResponse>';
+	$faultCode = time();
+	$strError = $strXML;
+	$strError = str_replace("$1", TransferHTML($faultCode, "[html-format]"), $strError);
+	$strError = str_replace("$2", TransferHTML($faultString, "[html-format]"), $strError);
 
 	ob_clean();
 	echo $strError;
 	die();
 
 }
-function ScriptError($faultString){
+
+function ScriptError($faultString) {
 	header('Content-type: application/x-javascript; Charset=utf-8');
 	ob_clean();
-	echo 'alert("'.str_replace('"', '\"', $faultString).'")';
+	echo 'alert("' . str_replace('"', '\"', $faultString) . '")';
 	die();
 }
 
+function CheckRegExp($source, $para) {
+	if (strpos($para, '[username]') !== false) {
+		$para = "/^[\.\_A-Za-z0-9\x{4e00}-\x{9fa5}]+$/u";
+	}
+	if (strpos($para, '[password]') !== false) {
+		$para = "/^[A-Za-z0-9`~!@#\$%\^&\*\-_]+$/u";
+	}
+	if (strpos($para, '[email]') !== false) {
+		$para = "/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*\.)+[a-zA-Z]*)$/u";
+	}
+	if (strpos($para, '[homepage]') !== false) {
+		$para = "/^[a-zA-Z]+:\/\/[a-zA-Z0-9\_\-\.\&\?\/:=#\x{4e00}-\x{9fa5}]+$/u";
+	}
+	if (!$para)
+		return false;
 
-function CheckRegExp($source,$para){
-	if(strpos($para, '[username]')!==false){
-		$para="/^[\.\_A-Za-z0-9\x{4e00}-\x{9fa5}]+$/u";
-	}
-	if(strpos($para, '[password]')!==false){
-		$para="/^[A-Za-z0-9`~!@#\$%\^&\*\-_]+$/u";
-	}
-	if(strpos($para, '[email]')!==false){
-		$para="/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*\.)+[a-zA-Z]*)$/u";
-	}
-	if(strpos($para, '[homepage]')!==false){
-		$para="/^[a-zA-Z]+:\/\/[a-zA-Z0-9\_\-\.\&\?\/:=#\x{4e00}-\x{9fa5}]+$/u";
-	}
-	if(!$para)return false;
-	return (bool)preg_match($para,$source);
+	return (bool)preg_match($para, $source);
 }
 
+function TransferHTML($source, $para) {
 
-function TransferHTML($source,$para){
-
-	if(strpos($para, '[html-format]')!==false){
-		$source=htmlspecialchars($source);
-	}
-
-	if(strpos($para, '[nohtml]')!==false){
-		$source=preg_replace("/<([^<>]*)>/si","",$source);
-		$source=str_replace("<","˂",$source);
-		$source=str_replace(">","˃",$source);
+	if (strpos($para, '[html-format]') !== false) {
+		$source = htmlspecialchars($source);
 	}
 
-	if(strpos($para, '[noscript]')!==false){
-		$source=preg_replace("/<(script.*?)>(.*?)<(\/script.*?)>/si","",$source);
-		$source=preg_replace("/<(\/?script.*?)>/si","",$source);
-		$source=preg_replace("/javascript/si","",$source);
-		$source=preg_replace("/vbscript/si","",$source);
-		$source=preg_replace("/on([a-z]+)\s*=/si","on\\=",$source);
+	if (strpos($para, '[nohtml]') !== false) {
+		$source = preg_replace("/<([^<>]*)>/si", "", $source);
+		$source = str_replace("<", "˂", $source);
+		$source = str_replace(">", "˃", $source);
 	}
-	if(strpos($para, '[enter]')!==false){
-		$source=str_replace("\r\n","<br/>",$source);
-		$source=str_replace("\n","<br/>",$source);
-		$source=str_replace("\r","<br/>",$source);
-		$source=preg_replace("/(<br\/>)+/", "<br/>", $source);
+
+	if (strpos($para, '[noscript]') !== false) {
+		$source = preg_replace("/<(script.*?)>(.*?)<(\/script.*?)>/si", "", $source);
+		$source = preg_replace("/<(\/?script.*?)>/si", "", $source);
+		$source = preg_replace("/javascript/si", "", $source);
+		$source = preg_replace("/vbscript/si", "", $source);
+		$source = preg_replace("/on([a-z]+)\s*=/si", "on\\=", $source);
 	}
-	if(strpos($para, '[noenter]')!==false){
-		$source=str_replace("\r\n","",$source);
-		$source=str_replace("\n","",$source);
-		$source=str_replace("\r","",$source);
+	if (strpos($para, '[enter]') !== false) {
+		$source = str_replace("\r\n", "<br/>", $source);
+		$source = str_replace("\n", "<br/>", $source);
+		$source = str_replace("\r", "<br/>", $source);
+		$source = preg_replace("/(<br\/>)+/", "<br/>", $source);
 	}
-	if(strpos($para, '[filename]')!==false){
-		$source=str_replace(array("/","#","$","\\",":","?","*","\"","<",">","|"," "),array(""),$source);
+	if (strpos($para, '[noenter]') !== false) {
+		$source = str_replace("\r\n", "", $source);
+		$source = str_replace("\n", "", $source);
+		$source = str_replace("\r", "", $source);
 	}
-	if(strpos($para, '[normalname]')!==false){
-		$source=str_replace(array("#","$","(",")","*","+","[","]","{","}","?","\\","^","|",":","'","\"",";","@","~","=","%","&"),array(""),$source);
+	if (strpos($para, '[filename]') !== false) {
+		$source = str_replace(array("/", "#", "$", "\\", ":", "?", "*", "\"", "<", ">", "|", " "), array(""), $source);
+	}
+	if (strpos($para, '[normalname]') !== false) {
+		$source = str_replace(array("#", "$", "(", ")", "*", "+", "[", "]", "{", "}", "?", "\\", "^", "|", ":", "'", "\"", ";", "@", "~", "=", "%", "&"), array(""), $source);
 	}
 
 	return $source;
 }
 
-
-function CloseTags($html){
+function CloseTags($html) {
 
 	// strip fraction of open or close tag from end (e.g. if we take first x characters, we might cut off a tag at the end!)
-	$html = preg_replace('/<[^>]*$/','',$html); // ending with fraction of open tag
+	$html = preg_replace('/<[^>]*$/', '', $html); // ending with fraction of open tag
 
 	// put open tags into an array
 	preg_match_all('#<([a-z]+)(?: .*)?(?<![/|/ ])>#iU', $html, $result);
 	$opentags = $result[1];
-
 
 	// put all closed tags into an array
 	preg_match_all('#</([a-z]+)>#iU', $html, $result);
@@ -477,17 +490,16 @@ function CloseTags($html){
 	$opentags = array_reverse($opentags);
 
 	// self closing tags
-	$sc = array('br','input','img','hr','meta','link');
+	$sc = array('br', 'input', 'img', 'hr', 'meta', 'link');
 	// ,'frame','iframe','param','area','base','basefont','col'
 	// should not skip tags that can have content inside!
 
-	for ($i=0; $i < $len_opened; $i++)
-	{
+	for ($i = 0; $i < $len_opened; $i++) {
 		$ot = strtolower($opentags[$i]);
 
-		if (!in_array($opentags[$i], $closetags) && !in_array($ot,$sc)){
-			$html .= '</'.$opentags[$i].'>';
-		}else{
+		if (!in_array($opentags[$i], $closetags) && !in_array($ot, $sc)) {
+			$html .= '</' . $opentags[$i] . '>';
+		} else {
 			unset($closetags[array_search($opentags[$i], $closetags)]);
 		}
 	}
@@ -496,54 +508,48 @@ function CloseTags($html){
 
 }
 
+function SubStrUTF8($sourcestr, $cutlength) {
 
+	$returnstr = '';
+	$i = 0;
+	$n = 0;
 
-function SubStrUTF8($sourcestr,$cutlength){
+	$str_length = strlen($sourcestr); //字符串的字节数
 
-   $returnstr='';
-   $i=0;
-   $n=0;
+	while (($n < $cutlength) and ($i <= $str_length)) {
+		$temp_str = substr($sourcestr, $i, 1);
+		$ascnum = Ord($temp_str); //得到字符串中第$i位字符的ascii码
+		if ($ascnum >= 224) //如果ASCII位高与224，
+		{
 
-   $str_length=strlen($sourcestr);//字符串的字节数
+			$returnstr = $returnstr . substr($sourcestr, $i, 3); //根据UTF-8编码规范，将3个连续的字符计为单个字符
+			$i = $i + 3; //实际Byte计为3
+			$n++; //字串长度计1
+		} elseif ($ascnum >= 192) //如果ASCII位高与192，
+		{
+			$returnstr = $returnstr . substr($sourcestr, $i, 2); //根据UTF-8编码规范，将2个连续的字符计为单个字符
+			$i = $i + 2; //实际Byte计为2
+			$n++; //字串长度计1
+		} elseif ($ascnum >= 65 && $ascnum <= 90) //如果是大写字母，
+		{
 
-   while (($n<$cutlength) and ($i<=$str_length))
-   {
-	  $temp_str=substr($sourcestr,$i,1);
-      $ascnum=Ord($temp_str);//得到字符串中第$i位字符的ascii码
-      if ($ascnum>=224)    //如果ASCII位高与224，
-      {
+			$returnstr = $returnstr . substr($sourcestr, $i, 1);
+			$i = $i + 1; //实际的Byte数仍计1个
+			$n++; //但考虑整体美观，大写字母计成一个高位字符
 
-         $returnstr=$returnstr.substr($sourcestr,$i,3); //根据UTF-8编码规范，将3个连续的字符计为单个字符
-         $i=$i+3;            //实际Byte计为3
-         $n++;            //字串长度计1
-      }
-      elseif ($ascnum>=192) //如果ASCII位高与192，
-      {
-         $returnstr=$returnstr.substr($sourcestr,$i,2); //根据UTF-8编码规范，将2个连续的字符计为单个字符
-         $i=$i+2;            //实际Byte计为2
-         $n++;            //字串长度计1
-      }
-	  elseif ($ascnum>=65 && $ascnum<=90) //如果是大写字母，
-      {
+		} else //其他情况下，包括小写字母和半角标点符号，
+		{
 
-         $returnstr=$returnstr.substr($sourcestr,$i,1);
-         $i=$i+1;            //实际的Byte数仍计1个
-         $n++;            //但考虑整体美观，大写字母计成一个高位字符
+			$returnstr = $returnstr . substr($sourcestr, $i, 1);
+			$i = $i + 1; //实际的Byte数计1个
+			$n = $n + 0.5; //小写字母和半角标点等与半个高位字符宽...
 
-      }
-      else                //其他情况下，包括小写字母和半角标点符号，
-      {
+		}
+	}
+	if ($str_length > $cutlength) {
+		$returnstr = $returnstr;
+	}
 
-         $returnstr=$returnstr.substr($sourcestr,$i,1);
-         $i=$i+1;            //实际的Byte数计1个
-         $n=$n+0.5;        //小写字母和半角标点等与半个高位字符宽...
-
-      }
-    }
-    if ($str_length>$cutlength){
-       $returnstr = $returnstr;
-    }
-
-    return $returnstr;
+	return $returnstr;
 
 }
