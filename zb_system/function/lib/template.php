@@ -110,7 +110,7 @@ class Template{
 
 	private function parse_function(&$content)
 	{
-		$content = preg_replace_callback('/\{([^\n ()\/]+?)\((.+?)\)\}/',array($this,'parse_funtion_replace_dot'), $content);
+		$content = preg_replace_callback('/\{([a-zA-Z0-9_]+?)\((.+?)\)\}/',array($this,'parse_funtion_replace_dot'), $content);
 	}
 
 	private function parse_if(&$content)
@@ -207,8 +207,8 @@ class Template{
 			}
 		}
 		$content=str_replace(' . ',' {%_dot_%} ',$content);
-		$content=str_replace('. ',' {%_dot_%} ',$content);
-		$content=str_replace(' .',' {%_dot_%} ',$content);
+		$content=str_replace('. ','{%_dot_%} ',$content);
+		$content=str_replace(' .',' {%_dot_%}',$content);
 		$content=str_replace('.','->',$content);
 		$content=str_replace('{%_dot_%}','.',$content);
 		return $content;

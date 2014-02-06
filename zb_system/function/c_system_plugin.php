@@ -43,7 +43,7 @@ function RegisterPlugin($strPluginName,$strPluginActiveFunction){
 function ActivePlugin(){
 
 	foreach ($GLOBALS['plugins'] as &$sPluginActiveFunctions) {
-		$sPluginActiveFunctions();
+		if(function_exists($sPluginActiveFunctions))$sPluginActiveFunctions();
 	}
 
 }
