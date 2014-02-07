@@ -43,7 +43,7 @@ foreach ($_FILES as $key => $value) {
 	$upload->Save();
 	
 	$info=array();
-	$info["url"]=$upload->Name;
+	$info["url"]=$upload->Url;
 	$info["type"]='.' . GetFileExt($_FILES[$key]['name']);	
 	$info["originalName"]=$upload->SourceName;
 	$info["state"]='SUCCESS';
