@@ -9,7 +9,8 @@ header("Content-type: application/x-javascript; charset=utf-8");
 ob_clean();
 
 $upload_dir = 'zb_users/upload/' . date('Y/m') . '/';
-$upload_path = $bloghost . $upload_dir;
+//$upload_path = $bloghost . $upload_dir;
+$upload_path = '';
 $upload_dir = $blogpath . $upload_dir;
 
 #echo '/*' . $upload_dir . '*/' ;

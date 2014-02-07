@@ -46,7 +46,7 @@ if ( $action == "tmpImg" ) { // 背景上传
 		$upload->Save();
 		
 		$info=array();
-		$info["url"]=$upload->Name;
+		$info["url"]=$upload->Url;
 		$info["state"]='SUCCESS';
 
 		echo "<script>parent.ue_callback('" . $info[ "url" ] . "','" . $info[ "state" ] . "')</script>";
@@ -70,7 +70,7 @@ if ( $action == "tmpImg" ) { // 背景上传
 	$upload->Save();
 	
 	$info=array();
-	$info["url"]=$upload->Name;
+	$info["url"]=$upload->Url;
 	$info["state"]='SUCCESS';
 
 	echo "{'url':'" . $info[ "url" ] . "',state:'" . $info[ "state" ] . "'}";
