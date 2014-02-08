@@ -13,16 +13,18 @@ class Upload extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Post'],$zbp->datainfo['Upload']);
+		parent::__construct($zbp->table['Upload'],$zbp->datainfo['Upload']);
 
 		$this->ID = 0;
 		$this->PostTime = time();
 	}
 
-	function CheckExtName(){
+	function CheckExtName($extlist=''){
 		global $zbp;
 		$e=GetFileExt($this->Name);
-		if(HasNameInString($zbp->option['ZC_UPLOAD_FILETYPE'],$e)){
+		$extlist=strtolower($extlist);
+		if(trim($extlist)=='')$extlist=$zbp->option['ZC_UPLOAD_FILETYPE'];
+		if(HasNameInString($extlist,$e)){
 			return true;
 		}else{
 			return false;

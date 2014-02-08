@@ -14,7 +14,7 @@ class Member extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Post'],$zbp->datainfo['Member']);
+		parent::__construct($zbp->table['Member'],$zbp->datainfo['Member']);
 
 		$this->Name = $zbp->lang['msg']['anonymous'];
 	}

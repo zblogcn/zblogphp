@@ -13,7 +13,7 @@ class Tag extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Post'],$zbp->datainfo['Tag']);
+		parent::__construct($zbp->table['Tag'],$zbp->datainfo['Tag']);
 	}
 
 	function __call($method, $args) {

@@ -13,7 +13,7 @@ class Counter extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Post'],$zbp->datainfo['Counter']);
+		parent::__construct($zbp->table['Counter'],$zbp->datainfo['Counter']);
 	}
 
 
