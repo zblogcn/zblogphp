@@ -76,7 +76,7 @@ if (empty($_FILES) === false) {
 	$file_ext = strtolower($file_ext);
 	//检查扩展名
 	if (in_array($file_ext, $ext_arr) === false) {
-		alert("上传文件扩展名是不允许的扩展名。\n只允许" . implode(",", $ext_arr) . "格式。");
+		alert("上传文件扩展名是不允许的扩展名。\n\r只允许" . implode(",", $ext_arr) . "格式。");
 	}
 
 	$upload = new Upload;

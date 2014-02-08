@@ -13,7 +13,7 @@ $root_path = $zbp->usersdir . 'upload/';
 //根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
 $root_url = $zbp->host . 'zb_users/upload/';
 //图片扩展名
-$ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'GIF', 'JPG', 'JPEG', 'PNG', 'BMP');
+$ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'GIF', 'JPG', 'JPEG', 'PNG', 'BMP', 'Gif', 'Jpg', 'Jpeg', 'Png', 'Bmp');
 
 //根据path参数，设置各路径和URL
 if (empty($_GET['path'])) {
@@ -70,7 +70,7 @@ if ($handle = opendir($current_path)) {
 			$file_list[$i]['filetype'] = $file_ext;
 		}
 		$file_list[$i]['filename'] = $filename; //文件名，包含扩展名
-		$file_list[$i]['datetime'] = date('Y-m-d H:i:s', filemtime($file)); //文件最后修改时间
+		$file_list[$i]['datetime'] = date('Y年m月d日 H:i:s', filemtime($file)); //文件最后修改时间
 		$i++;
 	}
 	closedir($handle);
