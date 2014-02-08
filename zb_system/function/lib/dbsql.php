@@ -278,12 +278,15 @@ class DbSql #extends AnotherClass
 				if($eq=='IN'||$eq=='in'){
 					$c='';
 					$sql_array='';
-					if(!is_array($w[2]))continue;
-					if(count($w[2])==0)continue;
-					foreach ($w[2] as $x=>$y) {
-						$y=$zbp->db->EscapeString($y);
-						$sql_array .= $c . " '$y' ";
-						$c=',';
+					if(!is_array($w[2])){
+						$sql_array=$w[2];
+					}else{
+						if(count($w[2])==0)continue;
+						foreach ($w[2] as $x=>$y) {
+							$y=$zbp->db->EscapeString($y);
+							$sql_array .= $c . " '$y' ";
+							$c=',';
+						}
 					}
 					$sqlw .= $comma .  '('. $w[1] .' IN (' . $sql_array . '))';
 				}
