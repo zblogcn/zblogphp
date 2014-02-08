@@ -2,9 +2,9 @@
 <plugin version="php">
 <id>KindEditor</id>
 <name>KindEditor编辑器</name>
-<url>http://app.rainbowsoft.org/catalog.asp?user=4</url>
-<note>替换默认的Ueditor编辑器为KindEditor编辑器</note>
-<description>用KindEditor编辑器替换默认的Ueditor编辑器。
+<url>http://app.rainbowsoft.org/?auth=4</url>
+<note>KindEditor富文本编辑器</note>
+<description>KindEditor富文本编辑器
 启用插件后新建或者编辑文章（页面）将会使用KindEditor编辑器</description>
 <path></path>
 <include>include.asp</include>
@@ -19,10 +19,10 @@
   <email></email>
   <url></url>
 </source>
-<adapted>130707</adapted>
-<version>1.0</version>
+<adapted>131221</adapted>
+<version>1.2</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2013-12-23</modified>
+<modified>2014-02-08</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

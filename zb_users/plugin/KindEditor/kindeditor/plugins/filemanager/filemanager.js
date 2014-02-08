@@ -80,8 +80,8 @@ KindEditor.plugin('filemanager', function(K) {
 		var elList = [];
 		function bindEvent(el, result, data, createFunc) {
 			//var fileUrl = K.formatUrl(result.current_url + data.filename, 'absolute'),
-			var fileUrl = result.current_url + data.filename,
-				dirPath = encodeURIComponent(result.current_dir_path + data.filename + '/');
+				var fileUrl = result.current_url + data.filename,
+					dirPath = encodeURIComponent(result.current_dir_path + data.filename + '/');
 			if (data.is_dir) {
 				el.click(function(e) {
 					reloadPage(dirPath, orderTypeBox.val(), createFunc);
