@@ -14,7 +14,7 @@ class Category extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Post'],$zbp->datainfo['Category']);
+		parent::__construct($zbp->table['Category'],$zbp->datainfo['Category']);
 
 		$this->Name	= $GLOBALS['lang']['msg']['unnamed'];
 	}

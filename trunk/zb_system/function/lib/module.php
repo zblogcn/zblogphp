@@ -13,7 +13,7 @@ class Module extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Post'],$zbp->datainfo['Module']);
+		parent::__construct($zbp->table['Module'],$zbp->datainfo['Module']);
 	}
 
 	public function __set($name, $value)
