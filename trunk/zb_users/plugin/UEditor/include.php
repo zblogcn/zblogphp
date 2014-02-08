@@ -11,17 +11,25 @@ function ActivePlugin_UEditor() {
 	Add_Filter_Plugin('Filter_Plugin_Edit_Begin','ueditor_addscript_begin');
 
 	Add_Filter_Plugin('Filter_Plugin_Edit_End','ueditor_addscript_end');
-	Add_Filter_Plugin('Filter_Plugin_Zbp_Load','ueditor_SyntaxHighlighter_print');
+	Add_Filter_Plugin('Filter_Plugin_Zbp_Load','ueditor_SyntaxHighlighter_header');
+	Add_Filter_Plugin('Filter_Plugin_Html_Js_Add','ueditor_SyntaxHighlighter_print');
 
 }
 
 function ueditor_SyntaxHighlighter_print(){
+
 	global $zbp;
-	//echo "\n".'document.writeln("<script src=\'' . $zbp->host .'zb_users/plugin/UEditor/third-party/SyntaxHighlighter/shCore.pack.js\' type=\'text/javascript\'></script><link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host .'zb_users/plugin/UEditor/third-party/SyntaxHighlighter/shCoreDefault.pack.css\'/>");'."\n";
-	//echo "$(document).ready(function(){SyntaxHighlighter.highlight();for(var i=0,di;di=SyntaxHighlighter.highlightContainers[i++];){var tds = di.getElementsByTagName('td');for(var j=0,li,ri;li=tds[0].childNodes[j];j++){ri = tds[1].firstChild.childNodes[j];ri.style.height = li.style.height = ri.offsetHeight + 'px';}}});\n";
+	echo "$(document).ready(function(){SyntaxHighlighter.highlight();for(var i=0,di;di=SyntaxHighlighter.highlightContainers[i++];){var tds = di.getElementsByTagName('td');for(var j=0,li,ri;li=tds[0].childNodes[j];j++){ri = tds[1].firstChild.childNodes[j];ri.style.height = li.style.height = ri.offsetHeight + 'px';}}});\n";
+
+}
+
+
+function ueditor_SyntaxHighlighter_header(){
+	global $zbp;
+
 	$zbp->header.='<script src=\'' . $zbp->host .'zb_users/plugin/UEditor/third-party/SyntaxHighlighter/shCore.pack.js\' type=\'text/javascript\'></script>' . "\n\r";
 	$zbp->header.='<link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host .'zb_users/plugin/UEditor/third-party/SyntaxHighlighter/shCoreDefault.pack.css\'/>' . "\n\r";
-	$zbp->header.='<script type=\'text/javascript\'>$(document).ready(function(){SyntaxHighlighter.highlight();for(var i=0,di;di=SyntaxHighlighter.highlightContainers[i++];){var tds = di.getElementsByTagName(\'td\');for(var j=0,li,ri;li=tds[0].childNodes[j];j++){ri = tds[1].firstChild.childNodes[j];ri.style.height = li.style.height = ri.offsetHeight + \'px\';}}});</script>' . "\n\r";
+	//$zbp->header.='<script type=\'text/javascript\'>$(document).ready(function(){SyntaxHighlighter.highlight();for(var i=0,di;di=SyntaxHighlighter.highlightContainers[i++];){var tds = di.getElementsByTagName(\'td\');for(var j=0,li,ri;li=tds[0].childNodes[j];j++){ri = tds[1].firstChild.childNodes[j];ri.style.height = li.style.height = ri.offsetHeight + \'px\';}}});</script>' . "\n\r";
 	
 }
 
