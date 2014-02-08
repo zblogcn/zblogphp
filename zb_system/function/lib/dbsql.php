@@ -275,6 +275,18 @@ class DbSql #extends AnotherClass
 					}
 					$sqlw .= $comma .  '(' . $sql_array . ')';
 				}
+				if($eq=='IN'||$eq=='in'){
+					$c='';
+					$sql_array='';
+					if(!is_array($w[2]))continue;
+					if(count($w[2])==0)continue;
+					foreach ($w[2] as $x=>$y) {
+						$y=$zbp->db->EscapeString($y);
+						$sql_array .= $c . " '$y' ";
+						$c=',';
+					}
+					$sqlw .= $comma .  '('. $w[1] .' IN (' . $sql_array . '))';
+				}
 				if($eq=='custom'){
 					$sqlw .= $comma .  '(' . $w[1] . ')';
 				}
