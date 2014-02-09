@@ -340,11 +340,14 @@ function Setup3(){
   $hasMysql=false;
 
   $hasSqlite=false;
+  
+  $hasPgsql=false;
 
   $hasMysql=(boolean)((boolean)($CheckResult['mysql'][0]) or (boolean)($CheckResult['pdo_mysql'][0]));
 
   $hasSqlite=(boolean)((boolean)($CheckResult['sqlite3'][0]) or (boolean)($CheckResult['sqlite'][0]));
 
+  $hasPgsql=(boolean)((boolean)($CheckResult['pgsql'][0]) or (boolean)($CheckResult['pdo_pgsql'][0]));
 ?>
 <dl>
   <dt></dt>
@@ -373,6 +376,7 @@ function Setup3(){
           <label class="dbselect" id="sqlite_radio">
           <input type="radio" name="fdbtype"/>SQLite数据库</label>
         <?php
+          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         }
         ?>
         </p>
@@ -406,6 +410,7 @@ function Setup3(){
       </p>
       </div>
       <?php } ?>
+
       <?php if($hasSqlite){?>
       <div class="dbdetail" id="sqlite">
         <p><b>数据库:</b>
@@ -429,6 +434,7 @@ function Setup3(){
       </p>
       </div>
       <?php } ?>
+
       <p class="title">网站设置</p>
       <p><b>网站名称:</b>
         <input type="text" name="blogtitle" id="blogtitle" value="" style="width:250px;" />
@@ -482,7 +488,7 @@ function Setup4(){
     <div id="title">安装结果</div>
     <div id="content">
       <?php
-if(!$zbp->option['ZC_YUN_SITE'])FileWriteTest();
+//if(!$zbp->option['ZC_YUN_SITE'])FileWriteTest();
 
 $zbp->option['ZC_DATABASE_TYPE']=GetVars('dbtype','POST');
 
@@ -558,7 +564,9 @@ $CheckResult=array(
   'pdo_mysql' => array('',''),
   'sqlite' => array('',''),
   'sqlite3' => array('',''),
-  'gd2' => array('',''), 
+  'gd2' => array('',''),
+  'pgsql' => array('',''), 
+  'pdo_pgsql' => array('',''),
  //权限  
   'zb_users'=>array('',''), 
   'cache'=>array('',''), 
@@ -593,6 +601,10 @@ $CheckResult=array(
   }
   if( class_exists("PDO",false) ){
     $CheckResult['pdo_mysql'][0]=PDO::ATTR_DRIVER_NAME;
+    $CheckResult['pdo_pgsql'][0]=PDO::ATTR_DRIVER_NAME;
+  }
+  if( defined("PGSQL_STATUS_STRING") ){
+    $CheckResult['pgsql'][0]=PGSQL_STATUS_STRING;
   }
   if( function_exists("sqlite_libversion") ){
     $CheckResult['sqlite'][0]=sqlite_libversion();
@@ -655,7 +667,7 @@ function InsertInfo(){
   $t->FileName="navbar";
   $t->Source="system";
   $t->SidebarID=0;
-  $t->Content='<li><a id="nvabar-item-index" href="{#ZC_BLOG_HOST#}">首页</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">留言本</a></li>';
+  $t->Content='<li id="nvabar-item-index"><a href="{#ZC_BLOG_HOST#}">首页</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">留言本</a></li>';
   $t->HtmlID="divNavBar";
   $t->Type="ul";
   $t->Save();
@@ -881,7 +893,7 @@ function SaveConfig(){
   $zbp->option['ZC_SIDEBAR3_ORDER']='';
   $zbp->option['ZC_SIDEBAR4_ORDER']='';
   $zbp->option['ZC_SIDEBAR5_ORDER']='';
-
+  $zbp->option['ZC_DEBUG_MODE']=false;
   $zbp->SaveOption();
   //$zbp->BuildTemplate();
   
