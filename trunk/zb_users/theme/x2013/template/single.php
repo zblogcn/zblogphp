@@ -29,8 +29,8 @@
           </li>
         </ul>
         <form method="post" class="search-form" action="{$host}zb_system/cmd.php?act=search">
-          <input class="search-input" name="edtSearch" type="text" placeholder="输入关键字搜索" autofocus="" x-webkit-speech="" />
-          <input class="btn btn-primary search-submit" type="submit" name="btnPost" value="搜索" />
+          <input class="search-input" name="q" type="text" placeholder="输入关键字搜索" autofocus="" x-webkit-speech="" />
+          <input class="btn btn-primary search-submit" type="submit" value="搜索" />
         </form>
       </div>
     </header>
@@ -40,7 +40,7 @@
 			<div class="toptip">
 			<strong>当前位置:&nbsp;&nbsp;</strong>
 			<strong><a href="{$host}">网站首页</a></strong> 
-			{if $article.Category.ParentID > 0}{template:post-nav}{/if}
+			{if $article.Category.ParentID > 0}{template:post-nav}{else}>>  <a href="{$article.Category.Url}" title="查看' {$article.Category.Name} '中的全部文章">{$article.Category.Name}</a>{/if}
 			</div>
 		  </div>
 		</section>
