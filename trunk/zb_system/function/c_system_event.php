@@ -6,6 +6,152 @@
  * @version       2.0 2013-06-14
  */
 
+################################################################################################################
+function GetPost($idorname, $option = null) {
+	global $zbp;
+
+	if (!is_array($option)) {
+		$option = array();
+	}
+
+	if (!isset($option['only_article']))
+		$option['only_article'] = false;
+	if (!isset($option['only_page']))
+		$option['only_page'] = false;
+
+	if(is_string($idorname)){
+		$w[] = array('array', array(array('log_Alias', $idorname), array('log_Title', $idorname)));
+		if($option['only_article']==true){
+			$w[]=array('=','log_Type','0');
+		}
+		elseif($option['only_page']==true){
+			$w[]=array('=','log_Type','1');
+		}
+		$articles = $zbp->GetPostList('*', $w, null, array(1), null);
+		if (count($articles) == 0) {
+			return new Post;
+		}
+		return $articles[0];
+	}
+	if(is_integer($idorname)){
+		return $zbp->GetPostByID($idorname);
+	}
+}
+
+function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = null, $search = null, $option = null) {
+	global $zbp;
+
+	if (!is_array($option)) {
+		$option = array();
+	}
+
+	if (!isset($option['only_ontop']))
+		$option['only_ontop'] = false;
+	if (!isset($option['only_not_ontop']))
+		$option['only_not_ontop'] = false;
+	if (!isset($option['has_subcate']))
+		$option['has_subcate'] = false;
+	if (!isset($option['is_related']))
+		$option['is_related'] = false;
+
+	if ($option['is_related']) {
+		$at = $zbp->GetPostByID($option['is_related']);
+		$tags = $at->Tags;
+		if (!$tags)
+			return array();
+		$count = $count + 1;
+	}
+
+	if ($option['only_ontop'] == true) {
+		$w[] = array('=', 'log_IsTop', 0);
+	} elseif ($option['only_not_ontop'] == true) {
+		$w[] = array('=', 'log_IsTop', 1);
+	}
+
+	$w = array();
+	$w[] = array('=', 'log_Status', 0);
+
+	$articles = array();
+
+	if ($cate) {
+		$category = new Category;
+		$category = $zbp->GetCategoryByID($cate);
+
+		if ($category->ID > 0) {
+
+			if (!$option['has_subcate']) {
+				$w[] = array('=', 'log_CateID', $category->ID);
+			} else {
+				$arysubcate = array();
+				$arysubcate[] = array('log_CateID', $category->ID);
+				foreach ($zbp->categorys[$category->ID]->SubCategorys as $subcate) {
+					$arysubcate[] = array('log_CateID', $subcate->ID);
+				}
+				$w[] = array('array', $arysubcate);
+
+			}
+
+		}
+	}
+
+	if ($auth) {
+		$author = new Member;
+		$author = $zbp->GetMemberByID($auth);
+
+		if ($author->ID > 0) {
+			$w[] = array('=', 'log_AuthorID', $author->ID);
+		}
+	}
+
+	if ($date) {
+		$datetime = strtotime($date);
+		if ($datetime) {
+			$datetitle = str_replace(array('%y%', '%m%'), array(date('Y', $datetime), date('n', $datetime)), $zbp->lang['msg']['year_month']);
+			$w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 month', $datetime));
+		}
+	}
+
+	if ($tags) {
+		$tag = new Tag;
+		if (is_array($tags)) {
+			$ta = array();
+			foreach ($tags as $t) {
+				$ta[] = array('log_Tag', '%{' . $t->ID . '}%');
+			}
+			$w[] = array('array_like', $ta);
+			unset($ta);
+		} else {
+			if (is_int($tags)) {
+				$tag = $zbp->GetTagByID($tags);
+			} else {
+				$tag = $zbp->GetTagByAliasOrName($tags);
+			}
+			if ($tag->ID > 0) {
+				$w[] = array('LIKE', 'log_Tag', '%{' . $tag->ID . '}%');
+			}
+		}
+	}
+
+	if ($search) {
+		$w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $search);
+	}
+
+	$articles = $zbp->GetArticleList(array('*'), $w, array('log_PostTime' => 'DESC'), array($count), null, false);
+
+	if ($option['is_related']) {
+		foreach ($articles as $k => $a) {
+			if ($a->ID == $option['is_related'])
+				unset($articles[$k]);
+		}
+		if (count($articles) == $count)
+			$articles = array_pop($articles);
+	}
+
+	return $articles;
+
+}
+
+################################################################################################################
 function VerifyLogin() {
 	global $zbp;
 
@@ -139,119 +285,6 @@ function ViewAuto($url) {
 	}
 
 	$zbp->ShowError(2, __FILE__, __LINE__);
-
-}
-
-function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = null, $search = null, $option = null) {
-	global $zbp;
-
-	if (!is_array($option)) {
-		$option = array();
-	}
-
-	if (!isset($option['only_ontop']))
-		$option['only_ontop'] = false;
-	if (!isset($option['only_not_ontop']))
-		$option['only_not_ontop'] = false;
-	if (!isset($option['has_subcate']))
-		$option['has_subcate'] = false;
-	if (!isset($option['is_related']))
-		$option['is_related'] = false;
-
-	if ($option['is_related']) {
-		$at = $zbp->GetPostByID($option['is_related']);
-		$tags = $at->Tags;
-		if (!$tags)
-			return array();
-		$count = $count + 1;
-	}
-
-	if ($option['only_ontop'] == true) {
-		$w[] = array('=', 'log_IsTop', 0);
-	} elseif ($option['only_not_ontop'] == true) {
-		$w[] = array('=', 'log_IsTop', 1);
-	}
-
-	$w = array();
-	$w[] = array('=', 'log_Status', 0);
-
-	$articles = array();
-
-	if ($cate) {
-		$category = new Category;
-		$category = $zbp->GetCategoryByID($cate);
-
-		if ($category->ID > 0) {
-
-			if (!$option['has_subcate']) {
-				$w[] = array('=', 'log_CateID', $category->ID);
-			} else {
-				$arysubcate = array();
-				$arysubcate[] = array('log_CateID', $category->ID);
-				foreach ($zbp->categorys[$category->ID]->SubCategorys as $subcate) {
-					$arysubcate[] = array('log_CateID', $subcate->ID);
-				}
-				$w[] = array('array', $arysubcate);
-
-			}
-
-		}
-	}
-
-	if ($auth) {
-		$author = new Member;
-		$author = $zbp->GetMemberByID($auth);
-
-		if ($author->ID > 0) {
-			$w[] = array('=', 'log_AuthorID', $author->ID);
-		}
-	}
-
-	if ($date) {
-		$datetime = strtotime($date);
-		if ($datetime) {
-			$datetitle = str_replace(array('%y%', '%m%'), array(date('Y', $datetime), date('n', $datetime)), $zbp->lang['msg']['year_month']);
-			$w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 month', $datetime));
-		}
-	}
-
-	if ($tags) {
-		$tag = new Tag;
-		if (is_array($tags)) {
-			$ta = array();
-			foreach ($tags as $t) {
-				$ta[] = array('log_Tag', '%{' . $t->ID . '}%');
-			}
-			$w[] = array('array_like', $ta);
-			unset($ta);
-		} else {
-			if (is_int($tags)) {
-				$tag = $zbp->GetTagByID($tags);
-			} else {
-				$tag = $zbp->GetTagByAliasOrName($tags);
-			}
-			if ($tag->ID > 0) {
-				$w[] = array('LIKE', 'log_Tag', '%{' . $tag->ID . '}%');
-			}
-		}
-	}
-
-	if ($search) {
-		$w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $search);
-	}
-
-	$articles = $zbp->GetArticleList(array('*'), $w, array('log_PostTime' => 'DESC'), array($count), null, false);
-
-	if ($option['is_related']) {
-		foreach ($articles as $k => $a) {
-			if ($a->ID == $option['is_related'])
-				unset($articles[$k]);
-		}
-		if (count($articles) == $count)
-			$articles = array_pop($articles);
-	}
-
-	return $articles;
 
 }
 
