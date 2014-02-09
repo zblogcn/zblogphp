@@ -1,1 +1,0 @@
-﻿<a class="l" href="<#article/nav_l/url#>" title="<#article/nav_l/name#>"><#ZC_MSG146#></a>
