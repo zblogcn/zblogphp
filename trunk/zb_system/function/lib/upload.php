@@ -63,7 +63,11 @@ class Upload extends Base{
 		if(!file_exists($zbp->usersdir . $this->Dir)){
 			@mkdir($zbp->usersdir . $this->Dir, 0777,true);	
 		}
-		$fn=iconv("UTF-8","GBK//IGNORE",$this->Name);
+		if(PHP_OS=='WINNT'||PHP_OS=='WIN32'||PHP_OS=='Windows'){
+			$fn=iconv("UTF-8","GBK//IGNORE",$this->Name);
+		}else{
+			$fn=$this->Name;
+		}
 		@move_uploaded_file($tmp, $zbp->usersdir . $this->Dir . $fn);
 		return true;
 	}
@@ -81,7 +85,11 @@ class Upload extends Base{
 		}
 		$s=base64_decode($str64);
 		$this->Size=strlen($s);
-		$fn=iconv("UTF-8","GBK",$this->Name);
+		if(PHP_OS=='WINNT'||PHP_OS=='WIN32'||PHP_OS=='Windows'){
+			$fn=iconv("UTF-8","GBK//IGNORE",$this->Name);
+		}else{
+			$fn=$this->Name;
+		}
 		file_put_contents($zbp->usersdir . $this->Dir . $fn, $s);
 		return true;
 	}
