@@ -107,7 +107,12 @@ function install2(){
 			$filename=str_replace('\\','/',$f->attributes());
 			$dirname= dirname($filename);
 			mkdir($dirname,0777,true);
-			file_put_contents(iconv("UTF-8","GBK",$filename),base64_decode($f));
+			if(PHP_OS=='WINNT'||PHP_OS=='WIN32'||PHP_OS=='Windows'){
+				$fn=iconv("UTF-8","GBK//IGNORE",$filename);
+			}else{
+				$fn=$filename;
+			}
+			file_put_contents($fn,base64_decode($f));
 		}
 		umask($old);
 	} else {
