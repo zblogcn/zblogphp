@@ -116,7 +116,7 @@ return array(
 	'blog_name'=>'网站标题',
 	'blog_subname'=>'网站副标题',
 	'permanent_domain'=>'固化网站域名',	
-	'blog_timezone'=>'网站所在时区',		
+	'blog_timezone'=>'网站时区',		
 	'blog_language'=>'网站语言',		
 	'allow_upload_type'=>'允许上传文件的类型',	
 	'allow_upload_size'=>'允许上传文件的尺寸(单位MB)',
@@ -187,6 +187,10 @@ return array(
 	'catalog_style_normal'=>'普通型',
 	'catalog_style_tree'=>'树型',
 	'catalog_style_ul'=>'UL嵌套型',
+	'all_del'=>'所选全部删除',
+	'all_pass'=>'所选全部通过',
+	'all_audit'=>'所选全部审核',
+	'gzip_compress'=>'GZip压缩',
 	''=>'',
 ),
 
@@ -351,6 +355,7 @@ return array(
 '79'=>'用户账户未审核',
 '80'=>'用户账户已锁定',
 '81'=>'未知方法或属性',
+'82'=>'网站已关闭',
 ),
 
 );
