@@ -1,0 +1,775 @@
+﻿/*--------------------------全--局-------------------------------*/
+body{
+	margin:0;
+	padding:0;
+	color:#555;
+	font-size:14px;
+    	font-family: "微软雅黑","宋体","Trebuchet MS", Tahoma, Arial, sans-serif;
+	background:url("default/bg-top.png") repeat-x 0 0;
+    
+}
+a{
+	text-decoration: none;
+}
+a:link {
+	color: #0273C6;
+}
+a:visited {
+	color: #0273C6;
+}
+a:hover {
+	color: red;
+	text-decoration: none;
+}
+a:active {
+	color: red;
+	text-decoration: none;
+}
+
+ol,ul,dl{
+	list-style-type:none;
+	list-style-position : outside;
+	margin:0 0 0 0;
+	padding:0 0 0 0;
+}
+li{
+	margin:0 0 0 0;
+	padding:0 0 0 0;
+}
+
+img{
+	border:0;
+}
+
+p{
+	margin:0 0 0 0;
+	padding:0 0 0 0;
+}
+
+dl{
+	margin:0 0 0 0;
+	padding:0 0 0 0;
+}
+dd{
+	margin:0 0 0 0;
+	padding:0 0 0 0;
+}
+dt{
+	margin:0 0 0 0;
+	padding:0 0 0 0;
+}
+h1,h2,h3,h4,h5,h6{
+	font-weight:normal;
+}
+.clear{
+    clear:both;
+}
+
+
+/*---------------------------各模块设定-------------------------------*/
+#divAll{
+	width:100%;
+	margin:0 auto;
+	padding:0 0 0 0;
+	text-align:center;
+	background:url("default/bg-nav.jpg") no-repeat center 84px;
+}
+
+#divPage{
+	width:100%;
+	margin:0 auto;
+	padding:0 0 0 0;
+	text-align:center;
+	text-align:center;
+	background:url("default/bg-bottom.png") repeat-x 0 bottom;
+}
+
+#divMiddle{
+	width:980px;
+	margin:0 auto 0 auto;
+	padding:0 0 0 0;
+	text-align:left;
+}
+
+
+
+#divTop{
+	width:980px;
+	margin:0 auto;
+	padding:30px 0 0 0;
+	text-align:left;
+	float:left;
+	height:234px;
+    clear:both;
+}
+
+#divSidebar{
+    width:230px;
+	margin:10px 0 0 0;
+	padding:0 0 0 0;
+	text-align:left;
+	float:right;
+
+}
+
+#divMain{
+	width:720px;
+	margin:10px 0 0 0;
+	padding:0 0 30px 10px;
+	text-align:left;
+	float:left;
+
+}
+
+
+#divBottom{
+	width:100%;
+	margin:0 0 0 0;
+	padding:45px 0 0 0;
+	text-align:center;
+    clear:both;
+    height:75px;
+}
+
+
+
+/*-------------------------------导航栏--------------------------------*/
+#divNavBar{
+	float:right;
+	width:100%;
+	height:36px;
+	color:#fff;
+}
+
+
+#divNavBar h3{
+	display:none;
+}
+
+#divNavBar ul{
+	margin:0;
+	padding:0 0 0 0;
+	float:left;
+}
+
+#divNavBar li{
+	float:left;
+	padding:0 0 0 0;
+	margin:0 0 0 0;
+	font-size:1em;
+}
+
+#divNavBar a{
+	float:left;
+	margin:0 0 0px 0px;
+	padding:7px 25px 7px 25px;
+	text-decoration: none;
+	line-height:22px;
+}
+
+#divNavBar a.on{
+	color: white;
+	background:#226bb8;
+}
+
+#divNavBar a:link {
+	color: white;
+}
+#divNavBar a:visited {
+	color: white;
+}
+#divNavBar a:hover {
+	color:white;
+	background: #226bb8;
+}
+
+#divNavBar a:active {
+	color:white;
+	background: #226bb8;
+}
+
+
+
+/*------------------------------侧边栏定义---------------------------*/
+.function {
+	float:left;
+	width:100%;
+	margin:0 0 10px 0;
+	padding:0;
+	text-align:left;
+}
+.function .function_t{
+	font-size:1.15em;
+	height:24px;
+	line-height:24px;
+	margin:0 0 2px 0;
+	padding:5px 0 5px 1em;
+	color:#444;
+	background:#fbfbfb;
+	border:1px solid #eeeeee;
+}
+
+
+.function ul{
+	text-align:left;
+	width:95%;
+	margin:0 0 0 0;
+	padding:0 0 0 5%;
+    border-top:1px solid #FFFFFF;
+	list-style-position:outside;
+	list-style-type:none;
+}
+.function li{
+	font-size:1em;
+	margin:0 0 0 0;
+	padding:0.4em 0 0.4em 0.9em;
+	background:url("default/pointblue.gif") no-repeat 0 center;
+	width:auto;
+}
+.function .function_c{
+	padding:0em;
+}
+.function .function_c div{
+	padding:0.8em 0 0.5em 1em;
+	line-height:1.5em;
+}
+
+.function a{
+	color:gray;
+}
+.function a:hover{
+	color:red;
+}
+
+/*------------------------------网站目录定义---------------------------*/
+
+#divMisc li{
+	padding-left:0em;
+	background:none;
+}
+
+
+#divCatalog li span.feed-icon{
+	display:none;
+}
+
+#divCatalog li.li-subcate{
+	margin:0 0 0 1em;
+}
+
+#divSearchPanel input[type="text"]{
+	border:1px solid #bfd0d7;
+	height:24px;
+	line-height:24px;
+	width:150px;
+}
+#divSearchPanel input[type="submit"]{
+	border:1px solid #bfd0d7;
+	height:28px;
+	line-height:24px;
+	width:50px;
+	margin-left:0px;
+	background:#e5f0f6;
+}
+#divTags {
+	padding:0 0 0 0;
+}
+#divTags .tag-count{
+	display:none;
+}
+#divTags li{
+	float:left;
+	background:none;
+	padding-left:0;
+	padding-right:0.5em;
+	padding: 5px 8px 5px 0;
+	display: inline;
+	clear : none;
+}
+#divComments li,divPrevious li{
+	width:200px;
+    white-space:nowrap;
+    word-break:keep-all;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+/*-----------------------------日历-----------------------------*/
+#divCalendar{
+    width:100%;
+	padding:0 0 0 0;
+}
+
+
+#divCalendar div{
+    width:225px;
+	margin:0 0 0 0;
+	padding:5px 0 5px 5px;
+	float:left;
+}
+
+#divCalendar table{
+	width:96%;
+	padding:0 2% 0 2%;
+	text-align:center;
+}
+
+/*------------------------------文章模块---------------------------*/
+
+
+div.post {
+	width:98%;
+	margin:0 0 0 0;
+	padding:20px 1% 2px 1%;
+	text-align:left;
+	clear:both; 
+	word-break:break-all;
+}
+
+div.istop-post{
+	padding-top:0px;
+	padding-bottom:35px;
+}
+
+div.pagebar{
+	padding:30px 1% 5px 1%;
+}
+
+/*---------------------------文章上下翻条------------------------*/
+div.post-nav {
+	width:100%;
+    height:20px;
+    margin:0 0 10px 0;
+	clear:both;
+    font-size:1em;
+}
+
+
+
+
+/*---------------------------文章内容------------------------*/
+
+
+div.post .post-title{
+    margin:0 0 0 0;
+    padding:0 0 5px 0;
+    font-size:1.4em;
+    line-height:1.4em; 
+	color: #284259;
+    text-align:left;
+	background:#FFF;
+	width:80%;
+	float:left;
+
+}
+
+div.istop-post .post-title{
+    text-align:left;
+	border-bottom:none;
+    margin:0 0 0 0;
+	padding-bottom:0px;
+}
+
+div.post .post-date{
+    height:1em;
+	line-height:1em;
+	margin:0 0 0 0;
+	padding:10px 0 0 0;
+	font-size:0.9em;
+	font-weight: normal;
+    text-align:right;
+	width:20%;
+	float:right;
+	color:#666;
+}
+
+
+div.post .post-footer{
+	width:100%;
+	margin:30px 0 40px 0;
+	padding:0 0 5px 0;
+	font-size:0.9em;
+    font-weight: normal;
+	color:#aaa;
+	text-align:right;
+}
+
+
+div.post .post-tags{
+	width:100%;
+	margin:0 0 0 0;
+	padding:2px 0 0 0;
+	font-size:1em;
+    font-weight: normal;
+	color:gray;
+	height:20px;
+	text-align:left;
+    text-indent:0em;
+}
+
+div.post div.post-body{
+	width:100%;
+	margin:0 0 15px 0;
+	padding:0 0 0 0;
+	font-size:1em;
+    text-align:justify;
+	line-height:180%;
+	clear:both;
+	border-top:1px solid #dbe0e6;
+	word-break:break-all;
+}
+
+div.post-body a{
+	text-decoration:none;         
+}
+
+
+div.post-body p{
+	margin:10px 0 15px 0;
+	padding:0;
+	text-indent:2em;
+}
+
+
+/*----------文章中引用code------*/
+
+div.post-body div.syntaxhighlighter{
+	margin: .5em 1em .5em 2em!important;
+	width:auto!important;
+}
+
+div.post-body li p{
+	overflow:visible;
+	text-indent: 0;
+	margin: 3px 0;
+}
+div.post-body ul,div.post-body ol{
+	margin-left:3.5em;
+}
+div.post-body code{
+	width: 93%;
+	padding:5px;
+	background:#f8f8f8;
+    border:1px #F4F4F4 solid;
+}
+
+div.post-body blockquote {
+	width: 93%;
+	background:#F4F4F4;
+	border-left:10px solid #ececec;
+	margin:15px 5px;
+	padding:5px;
+}
+
+div.post-body img{
+   max-width:600px;
+   width: expression(this.width > 600 ? 600: true);   /*IE6*/ 
+   height: auto;
+}
+
+div.post-body table {
+	border-collapse: collapse;
+	background:#ffffff;
+	line-height:140%;
+}
+div.post-body td,th{
+	margin:0;
+	padding:3px;
+	text-indent:0.25em;
+}
+
+div.post-body h1{
+	color: #000000;
+	margin:0;
+	padding:0;
+	font-size:1.2em;
+}
+div.post-body h2{
+	color: #000000;
+	margin:0;
+	padding:0;
+	font-size:1.1em;
+}
+div.post-body h3{
+	color: #000000;
+	margin:0;
+	padding:0;
+	font-size:1em;
+}
+div.post-body h4{
+	color: #000000;
+	margin:0;
+	padding:0;
+	font-size:1em;
+}
+div.post-body h5{
+	color: #000000;
+	margin:0;
+	padding:0;
+	font-size:0.9em;
+}
+div.post-body h6{
+	color: #000000;
+	margin:0;
+	padding:0;
+	font-size:0.8em;
+}
+
+
+
+/*----------------------隐藏最近文章前的日期---------------------------------*/
+.article-date {
+        display: none;
+}
+
+
+/*---------------------------blog标题-----------------------------*/
+
+#BlogTitle{
+	font-size:2.2em;
+	margin:0 0 0 0;
+	padding:0 0 0 0;
+	font-weight:normal;
+	float:left;
+	line-height:1.6em;
+}
+#BlogTitle a{
+	color:#3a6da4; 
+}
+#BlogTitle a:hover {
+	color: red;
+	text-decoration: none;
+}
+#BlogTitle a:active {
+	color: red;
+	text-decoration: none;
+}
+#BlogSubTitle{
+	color:gray; 
+	font-size:1.2em;
+    font-weight:normal;
+	margin:18px 0 0 10px;
+	padding:0;
+	float:left;
+	line-height:1.6em;
+}
+
+/*---------------------------版权-----------------------------*/
+
+#BlogPowerBy{
+	font-size:0.9em;
+	height:25px;
+	margin:0;
+	padding:0;
+	text-align:left;
+	font-weight:normal;
+}
+#BlogCopyRight{
+	font-size:0.9em;
+	height:20px;
+	margin:0;
+	padding:0;
+	text-align:left;
+	font-weight:normal;
+}
+#BlogPowerBy a,#BlogCopyRight a{
+	color:#666;
+}
+#BlogPowerBy a:hover,#BlogCopyRight a:hover{
+	color:red;
+}
+
+
+
+/*---------------------------文章和评论翻页条------------------------*/
+a.l{
+	text-align:left;
+	float:left;
+}
+
+a.r{
+	text-align:right;
+	float:right;
+}
+
+
+/*---------------------------引用\评论----------------------------------*/
+ul.msg{
+	width:98%;
+	margin:10px 0 20px 0;
+	padding:5px 1% 5px 1%;
+	text-align:left;
+	list-style-position : outside;
+    table-layout: fixed;
+    word-wrap:break-word;
+}
+
+li.msgname{
+	padding:0 0 10px 5px;
+	margin:0px;   
+	font-weight: bold;
+    font-size:1em;
+}
+
+li.msgname *{
+
+}
+
+li.msgurl{
+	text-align:right;
+	padding:2px 10px 2px 10px;
+	margin:0;
+    font-size:1em;
+}
+
+
+li.msggravatar{
+	display:block;
+	float:left;
+	margin-right:5px;
+}
+
+li.msgarticle{
+	list-style-position : outside;
+	padding:10px;
+	margin:0;
+	line-height:160%; 
+    background:#FFF;
+	padding-left:55px;
+    border-bottom:1px solid #eaeaea;
+}
+li.msgtime{
+	padding:5px 0 0 0;
+	font-weight: normal; 
+	font-size:0.8em;
+}
+img.avatar{
+	width:40px;
+	height:40px;
+	float:left;
+	padding:4px;
+	border:1px solid #eaeaea;
+}
+ul.msg ul.msg{
+	padding:10px 0 0 0;
+	margin:20px 0 0 0;
+    border-top:1px solid #eaeaea;
+    border-bottom:none;
+}
+ul.msg ul.msg li.msgarticle{
+	padding-bottom:0px;
+    border-bottom:0px solid #eaeaea;
+}
+
+ul.msg ul.msg li.msgname{
+	padding:0px;
+}
+
+
+
+/*---------------------------相关文章----------------------------------*/
+ul.mutuality,ul.pagebar,ul.msghead{
+	border:none;
+}
+ul.mutuality li.tbname,ul.msghead li.tbname{
+	color:#3c6da7;
+	padding-bottom:10px;
+	border-bottom:1px solid #dbe0e6;
+}
+ul.mutuality li.msgarticle{
+	padding-left:0px;
+	border:none;
+}
+
+
+
+
+/*-------------------留言回复------------------------------*/
+li.msgarticle div.quote{
+	margin:10px 0 0 0;
+    padding:10px;
+	background:#FFFFFF;
+    border:1px #F4F4F4 solid;
+}
+li.msgarticle div.quote-title{
+	margin:0;
+	padding:0;
+	font-size:1em;
+    color: red;
+}
+
+
+
+
+
+/************评论发表用的样式*************/
+#divCommentPost{
+	width:98%;
+	margin:0 0 0 0;
+	padding:5px 1% 15px 1%;
+}
+
+#divCommentPost p{margin-top:10px;}
+#divCommentPost label{margin-top:5px;}
+
+#divCommentPost p.posttop{
+color:#3c6da7;
+}
+
+#divCommentPost img{margin-bottom:-0.5em;}
+#cancel-reply{float:right;margin-right: 2em;}
+div.reply-frm{
+	background:#f0f0f0;
+	box-shadow: 0 0 15px #666;
+	margin:1em 1% !important;
+	padding:.3em .8em !important;
+	min-width:330px;
+}
+
+input.text{
+border:1px solid #d7d7d7;
+line-height:20px;
+height:24px;
+padding:2px 5px 2px 5px;
+}
+#txaArticle{padding:5px;width:95%;height:150px;border:1px solid #d7d7d7;}
+input.button {color:#FFFFFF; font-size:14px; width:100px; height:32px; background:#3a6ea5; border:1px solid #3399CC;cursor: pointer;}
+
+
+
+/*--------------------------分页条-------------------------------*/
+span.page{
+	color:#666;
+	font-weight:bolder;
+	padding:2px 5px 2px 5px;
+	margin:4px;
+	border:1px solid #cccccc;
+}
+
+span.now-page{
+	color:#666;
+	font-weight:bolder;
+	padding:2px 5px 2px 5px;
+	margin:5px;
+	border:1px solid #666;
+}
+
+a:hover span.page{
+	color:red;
+	border:1px solid red;
+}
+
+ul.ul-subcates{
+	padding: 8px 0 0 0;
+	margin-bottom:-8px;
+}
+span.sh{
+	border:1px solid #CCC;
+	padding:0 3px;
+	margin-right:5px;
+	font-size:.5em;
+	font-family:monospace;
+	cursor:pointer;
+	color:#666;
+}
+

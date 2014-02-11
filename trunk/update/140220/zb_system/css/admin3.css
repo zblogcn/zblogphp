@@ -1,0 +1,35 @@
+*{padding:0; margin:0;font-size: 14px;}
+body{ padding:0;margin:0;font-family:"微软雅黑","宋体", Arial, Helvetica, sans-serif;background:#FFFFFF;color:#444444;font-size: 14px;line-height: 20px;}
+.setup{width:1000px; height:400px; padding:60px 0 0 0;margin:0 auto;}
+font[color='#3D69AA']{background: #3D69AA;}
+#ddleft{float:left;width:360px;height:400px;font-family:Arial,Helvetica,sans-serif;font-size: 14px;}
+#ddright{float:left;width:600px;height:400px;}
+input[type="text"],input[type="password"]{padding:3px 5px;}input[readonly]{background:#eee;border:1px solid #ccc;}
+input[type="submit"],input[type="button"]{ color:#FFFFFF; font-size:1.1em; height:1.8em;padding: 0.15em 2em 0.20em 2em;padding: 0.15em 1em 0.20em 1em\9;margin:0.2em 0.5em; background:#3a6ea5; border:1px solid #3a6ea5;cursor: pointer;}
+input[disabled]{background:#eee;color:#999;border:1px solid #ddd;}
+#title{color:#3d69aa;border-bottom:1px solid #3d69aa;font-size:20px;font-weight:bolder;padding-bottom:5px;margin-bottom:5px;}
+.title{color:#3d69aa;border-bottom:1px solid #fff;font-size:18px;font-weight:bolder;padding-top:10px;}
+#content{padding:15px 0}
+#bottom{text-align:right;}
+textarea{height:360px;width:600px;border:none;}
+#ddleft img{width:320px;height:100px;margin-top:80px;}
+#ddleft b{color:#3d69aa;}
+#ddleft span{border:1px solid gray;padding-bottom:1px\9;}
+p{line-height:2.5em;clear:both;}
+#content b{font-weight:normal;}
+label{cursor: pointer;}
+/*表   格*/
+table {border-collapse: collapse;border:1px solid #E1E1E1;background:#ffffff;line-height:120%;}
+td,th{border:1px solid #E1E1E1;margin:0;padding:3px 5px;vertical-align:middle;}
+tr.color1{background:#ededed;}
+tr.color2{background:#F4F4F4;}
+tr.color3{background:#FFFFFF;}
+tr.color4{background:#ffffdd;}
+.bingo,.error{display: inline-block;width:16px;height:16px;}
+.bingo{color:green;background: url(../image/admin/ok.png) no-repeat left center}
+.error{color:red;background: url(../image/admin/exclamation.png) no-repeat left center}
+/*进 度 条*/
+.left{float:left;margin:12px 0;}
+.ui-progressbar{width:256px;height:18px;}
+.ui-widget-header{background:#3d69aa;}
+#content b{width:90px;float:left;}

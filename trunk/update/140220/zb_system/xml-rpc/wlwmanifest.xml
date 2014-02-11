@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<manifest xmlns="http://schemas.microsoft.com/wlw/manifest/weblog">
+
+  <options>
+    <clientType>WordPress</clientType>
+	<supportsPostAsDraft>Yes</supportsPostAsDraft>
+	<supportsKeywords>Yes</supportsKeywords>
+	<supportsGetTags>Yes</supportsGetTags>
+	<supportsTrackbacks>No</supportsTrackbacks>
+	<supportsPageParent>No</supportsPageParent>
+	<supportsPageOrder>No</supportsPageOrder>
+	<supportsPingPolicy>No</supportsPingPolicy>
+	<maxCategoryNameLength>50</maxCategoryNameLength>
+	<supportsPassword>No</supportsPassword>	
+  </options>
+  
+  <weblog>
+    <serviceName>WordPress</serviceName>
+    <imageUrl>../image/admin/logo-16.png</imageUrl>
+    <watermarkImageUrl>images/admin/logo.png</watermarkImageUrl>
+    <homepageLinkText>查看网站</homepageLinkText>
+    <adminLinkText>后台管理</adminLinkText>
+    <adminUrl>
+      <![CDATA[ 
+			{blog-postapi-url}/../../admin/ 
+		]]>
+    </adminUrl>
+    <postEditingUrl>
+      <![CDATA[ 
+			{blog-postapi-url}/../../cmd.php?act=ArticleEdt&id={post-id} 
+		]]>
+    </postEditingUrl>
+  </weblog>
+
+</manifest>
