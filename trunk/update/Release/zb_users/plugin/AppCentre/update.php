@@ -111,13 +111,17 @@ if ($nowxml!=''){
   $xml=simplexml_load_string($nowxml);
   if($xml){
   foreach ($xml->children() as $file) {
-  	if(file_exists($zbp->path . str_replace('\\','/',$file['name']))){
-	  	$newcrc32=strtoupper(dechex(crc32_signed(file_get_contents($zbp->path . str_replace('\\','/',$file['name'])))));
+  	if(file_exists($f=$zbp->path . str_replace('\\','/',$file['name']))){
+		$f=file_get_contents($f);
+	  	$newcrc32=substr(strtoupper(dechex(crc32_signed($f))),-8);
+		$f=str_replace("\n","\r\n",$f);
+		$newcrc32_2=substr(strtoupper(dechex(crc32_signed($f))),-8);
   	}else{
   		$newcrc32='';
+		$newcrc32_2='';
   	}
 	//echo PHP_INT_SIZE;
-    if($newcrc32 == $file['crc32']){
+    if( ($newcrc32 == $file['crc32']) || ($newcrc32_2 == $file['crc32']) ){
       echo '<tr style="display:none;"><td><b>' . str_replace('\\','/',$file['name']) . '</b></td>';
     	$s='<img src="'.$zbp->host.'zb_system/image/admin/ok.png" width="16" alt="" />';
     }else{

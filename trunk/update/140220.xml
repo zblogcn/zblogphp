@@ -41,14 +41,14 @@
 	<file name='zb_system\defend\default\sidebar.php' md5='5C6B556F708D0FA9F5820C8DF4BAEF9C' crc32='FF17917'/>
 	<file name='zb_system\defend\default\single.php' md5='E24A81A1BF3334DC25FD30174E459A32' crc32='21B132D7'/>
 	<file name='zb_system\function\c_system_admin.php' md5='24EC4FC35958D31B3CB093D194086545' crc32='D5B6A109'/>
-	<file name='zb_system\function\c_system_base.php' md5='10E5092D5A1681B84810F849F4336FC8' crc32='97FBE5B8'/>
+	<file name='zb_system\function\c_system_base.php' md5='575646B2D807B59E925D0FBF4DF17DA8' crc32='30B8CA21'/>
 	<file name='zb_system\function\c_system_common.php' md5='91107E96FB4E3A7CA392C287AD3B0FBA' crc32='2421F38'/>
 	<file name='zb_system\function\c_system_debug.php' md5='5792AD8ADD6AF51FBE7439CE6CBCB8A2' crc32='9F4DE4EE'/>
 	<file name='zb_system\function\c_system_event.php' md5='7EE2D97C194A23E20EB17B8121A39A7C' crc32='1532F0C2'/>
 	<file name='zb_system\function\c_system_misc.php' md5='09C88C0B1BA620E04E7D29EB8CADBE82' crc32='8B2C0058'/>
 	<file name='zb_system\function\c_system_plugin.php' md5='5F1E4625D91286C8D69E61FB6E2A6AB6' crc32='4DA80C9B'/>
 	<file name='zb_system\function\lib\app.php' md5='732098C78D48915DCFF9A809FF4DC513' crc32='9E672DFF'/>
-	<file name='zb_system\function\lib\base.php' md5='18701696B80F1CA18C8D00F34B85BEC5' crc32='C9C60758'/>
+	<file name='zb_system\function\lib\base.php' md5='4372069D41B067E25B3360514278ED8E' crc32='7188496C'/>
 	<file name='zb_system\function\lib\category.php' md5='2F5ED02848D96D9E29374E0ED2BFDDF9' crc32='7379AAD6'/>
 	<file name='zb_system\function\lib\comment.php' md5='AD7AC139A9E600486FE291144996C5FC' crc32='3CB601AD'/>
 	<file name='zb_system\function\lib\counter.php' md5='820197067072C90C526A69CA3C5A1952' crc32='C397C65D'/>

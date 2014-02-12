@@ -54,7 +54,7 @@ class Base
 	function LoadInfoByID($id){
 		global $zbp;
 
-		//$s="SELECT * FROM " . $this->table . " WHERE " . $this->datainfo['ID'][0] . "=$id";
+		$id=(int)$id;
 		$s = $zbp->db->sql->Select($this->table,array('*'),array(array('=',$this->datainfo['ID'][0],$id)),null,null,null);
 
 		$array = $zbp->db->Query($s);
