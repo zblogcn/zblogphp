@@ -39,7 +39,7 @@ define('ZC_MEMBER_STATUS_LOCKED', 2);
 define('ZC_REWRITE_GO_ON', 'go_on');
 
 
-if(get_magic_quotes_gpc()){
+if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()){
 	_stripslashes($_GET);
 	_stripslashes($_POST);
 	_stripslashes($_COOKIE);
