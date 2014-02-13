@@ -55,7 +55,6 @@ class Base
 		global $zbp;
 
 		$id=(int)$id;
-		//$s="SELECT * FROM " . $this->table . " WHERE " . $this->datainfo['ID'][0] . "=$id";
 		$s = $zbp->db->sql->Select($this->table,array('*'),array(array('=',$this->datainfo['ID'][0],$id)),null,null,null);
 
 		$array = $zbp->db->Query($s);

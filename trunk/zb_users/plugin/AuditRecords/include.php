@@ -47,7 +47,7 @@ class AuditRecords extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Post'],$zbp->datainfo['AuditRecords']);
+		parent::__construct($zbp->table['AuditRecords'],$zbp->datainfo['AuditRecords']);
 	}
 }
 

@@ -25,7 +25,7 @@ class HeartVote extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Post'],$zbp->datainfo['HeartVote']);
+		parent::__construct($zbp->table['HeartVote'],$zbp->datainfo['HeartVote']);
 	}
 }
 
