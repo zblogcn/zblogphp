@@ -23,7 +23,7 @@
 	<file name='zb_system\defend\error.html' md5='E2FFDC2FD4A169FF5091DE4DE9225AD7' crc32='397A1BDE'/>
 	<file name='zb_system\defend\option.php' md5='64C9BD23623D4C19643E27150E8B67F0' crc32='B51FFFE5'/>
 	<file name='zb_system\defend\thanks.html' md5='1E44A5EB4141E15409F88C196A57B001' crc32='CA1A68CD'/>
-	<file name='zb_system\defend\createtable\mysql.sql' md5='4FBABB1ABB5BEA1C43D4FF1850B10362' crc32='5D78A4FC'/>
+	<file name='zb_system\defend\createtable\mysql.sql' md5='92D80B8B624ACA1A24AE5B843F19B83E' crc32='EE02FDB0'/>
 	<file name='zb_system\defend\createtable\sqlite.sql' md5='4319F8E9AB1F9A1C3942318D8F7C12FB' crc32='DE148D51'/>
 	<file name='zb_system\defend\createtable\sqlite3.sql' md5='7C662BE1DD914A066A3FFEA042F17A3E' crc32='ACE9B368'/>
 	<file name='zb_system\defend\default\comment.php' md5='4EB0F30FA8196247F0BB0BD1DC3F1CE3' crc32='BA0B9E4D'/>
@@ -44,7 +44,7 @@
 	<file name='zb_system\function\c_system_base.php' md5='575646B2D807B59E925D0FBF4DF17DA8' crc32='30B8CA21'/>
 	<file name='zb_system\function\c_system_common.php' md5='91107E96FB4E3A7CA392C287AD3B0FBA' crc32='2421F38'/>
 	<file name='zb_system\function\c_system_debug.php' md5='5792AD8ADD6AF51FBE7439CE6CBCB8A2' crc32='9F4DE4EE'/>
-	<file name='zb_system\function\c_system_event.php' md5='7EE2D97C194A23E20EB17B8121A39A7C' crc32='1532F0C2'/>
+	<file name='zb_system\function\c_system_event.php' md5='5377F7DACB6D0E303487E4980EE737D6' crc32='D30B0447'/>
 	<file name='zb_system\function\c_system_misc.php' md5='09C88C0B1BA620E04E7D29EB8CADBE82' crc32='8B2C0058'/>
 	<file name='zb_system\function\c_system_plugin.php' md5='5F1E4625D91286C8D69E61FB6E2A6AB6' crc32='4DA80C9B'/>
 	<file name='zb_system\function\lib\app.php' md5='732098C78D48915DCFF9A809FF4DC513' crc32='9E672DFF'/>

@@ -1695,15 +1695,31 @@ function SaveSetting() {
 
 	foreach ($_POST as $key => $value) {
 		if (substr($key, 0, 2) !== 'ZC') continue;
-		if ($key == 'ZC_PERMANENT_DOMAIN_ENABLE' || $key == 'ZC_DEBUG_MODE' || $key == 'ZC_COMMENT_TURNOFF' || $key == 'ZC_COMMENT_REVERSE_ORDER_EXPORT' || $key == 'ZC_DISPLAY_SUBCATEGORYS' || $key == 'ZC_GZIP_ENABLE'
+		if ($key == 'ZC_PERMANENT_DOMAIN_ENABLE' || 
+			$key == 'ZC_DEBUG_MODE' || 
+			$key == 'ZC_COMMENT_TURNOFF' || 
+			$key == 'ZC_COMMENT_REVERSE_ORDER_EXPORT' || 
+			$key == 'ZC_DISPLAY_SUBCATEGORYS' || 
+			$key == 'ZC_GZIP_ENABLE'
 		) {
 			$zbp->option[$key] = (boolean)$value;
 			continue;
 		}
-		if ($key == 'ZC_RSS2_COUNT' || $key == 'ZC_UPLOAD_FILESIZE' || $key == 'ZC_DISPLAY_COUNT' || $key == 'ZC_SEARCH_COUNT' || $key == 'ZC_PAGEBAR_COUNT' || $key == 'ZC_COMMENTS_DISPLAY_COUNT' || $key == 'ZC_MANAGE_COUNT'
+		if ($key == 'ZC_RSS2_COUNT' || 
+			$key == 'ZC_UPLOAD_FILESIZE' || 
+			$key == 'ZC_DISPLAY_COUNT' || 
+			$key == 'ZC_SEARCH_COUNT' || 
+			$key == 'ZC_PAGEBAR_COUNT' || 
+			$key == 'ZC_COMMENTS_DISPLAY_COUNT' || 
+			$key == 'ZC_MANAGE_COUNT'
 		) {
 			$zbp->option[$key] = (integer)$value;
 			continue;
+		}
+		if ($key == 'ZC_UPLOAD_FILETYPE'){
+			$value = strtolower($value);
+			$value = DelNameInString($value, 'php');
+			$value = DelNameInString($value, 'asp');
 		}
 		$zbp->option[$key] = trim(str_replace(array("\r", "\n"), array("", ""), $value));
 	}
