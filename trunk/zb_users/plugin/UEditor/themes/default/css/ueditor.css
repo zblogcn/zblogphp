@@ -177,15 +177,13 @@ div.edui-box {
 .edui-default .edui-editor-iframeholder {
     position: relative;
     /*for fix ie6 toolbarmsg under iframe bug. relative -> static */
-    /*_position: static !important;*/
-	width:auto !important;
+    /*_position: static !important;*
 }
 
 .edui-default .edui-editor-iframeholder textarea {
     font-family: consolas, "Courier New", "lucida console", monospace;
     font-size: 12px;
     line-height: 18px;
-	width:100% !important;
 }
 
 .edui-default .edui-editor-bottombar {
@@ -314,7 +312,7 @@ div.edui-box {
 }
 
 .edui-default .edui-for-fontfamily .edui-listitem-label {
-    min-width: 120px;
+    min-width: 130px;
     _width: 120px;
     font-size: 12px;
     height: 22px;
@@ -847,14 +845,6 @@ div.edui-box {
     background-position: -360px -40px;
 }
 
-.edui-default  .edui-for-highlightcode .edui-icon {
-    background-position: -440px -40px;
-}
-
-.edui-default  .edui-for-deletehighlightcode .edui-icon {
-    background-position: -360px -40px;
-}
-
 .edui-default  .edui-for-attachment .edui-icon {
     background-position: -620px -40px;
 }
@@ -925,6 +915,22 @@ div.edui-box {
 
 .edui-default  .edui-for-tablealignment-right  .edui-icon {
     background-position: -480px 0;
+}
+
+.edui-default  .edui-for-drafts  .edui-icon {
+    background-position: -560px 0;
+}
+
+.edui-default  .edui-for-charts  .edui-icon {
+    background: url( ../images/charts.png ) no-repeat 2px 3px!important;
+}
+
+.edui-default  .edui-for-inserttitlecol  .edui-icon {
+    background-position: -673px -76px;
+}
+
+.edui-default  .edui-for-deletetitlecol  .edui-icon {
+    background-position: -698px -76px;
 }
 /*splitbutton*/
 .edui-default .edui-toolbar .edui-splitbutton-body .edui-arrow,
@@ -1089,11 +1095,19 @@ div.edui-box {
     margin-bottom: 6px;
 }
 
+.edui-default .edui-dialog-fullscreen-flag {
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
 .edui-default .edui-dialog-body {
     position: relative;
-
     padding:2px 0 0 2px;
     _zoom: 1;
+}
+
+.edui-default .edui-dialog-fullscreen-flag .edui-dialog-body {
+    padding: 0;
 }
 
 .edui-default .edui-dialog-shadow {
@@ -1253,6 +1267,7 @@ div.edui-box {
 .edui-default .edui-for-spechars .edui-dialog-content {
     width: 620px;
     height: 500px;
+    *width: 630px;
     *height: 570px;
 }
 
@@ -1291,12 +1306,6 @@ div.edui-box {
     overflow: hidden;
 }
 
-/*code-dialog*/
-.edui-default .edui-for-highlightcode .edui-dialog-content {
-    width: 550px;
-    height: 360px;
-    overflow: hidden;
-}
 
 /*map-dialog*/
 .edui-default .edui-for-map .edui-dialog-content {
@@ -1326,7 +1335,7 @@ div.edui-box {
 /*searchreplace-dialog*/
 .edui-default .edui-for-searchreplace .edui-dialog-content {
     width: 400px;
-    height: 180px;
+    height: 220px;
 }
 
 /*help-dialog*/
@@ -1339,7 +1348,7 @@ div.edui-box {
 .edui-default .edui-for-edittable .edui-dialog-content {
     width: 540px;
     _width:590px;
-    height: 285px;
+    height: 335px;
 }
 
 /*edittip-dialog*/
@@ -1363,6 +1372,14 @@ div.edui-box {
 .edui-default .edui-for-music .edui-dialog-content {
     width: 515px;
     height: 360px;
+}
+
+/*preview-dialog*/
+.edui-default .edui-for-preview .edui-dialog-content {
+    width: 620px;
+    height: 500px;
+    *width: 630px;
+    *height: 570px;
 }
 /*段落弹出菜单*/
 .edui-default .edui-for-paragraph .edui-listitem-label {
@@ -1636,7 +1653,7 @@ div.edui-box {
 
 .edui-default .edui-cellalignpicker-body td.edui-cellalign-selected .edui-left {
     background-position: -146px 0;
-    backgroun-color: #f1f4f5;
+    background-color: #f1f4f5;
 }
 
 .edui-default .edui-cellalignpicker-body td.edui-cellalign-selected .edui-center {
