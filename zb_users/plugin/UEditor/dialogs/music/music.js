@@ -13,6 +13,7 @@ function Music() {
 
         init:function () {
             var me = this;
+	    switchTab("musicTab");
             domUtils.on($G("J_searchName"), "keyup", function (event) {
                 var e = window.event || event;
                 if (e.keyCode == 13) {
@@ -90,9 +91,19 @@ function Music() {
             var param = 'from=tiebasongwidget&url=&name=' + encodeURIComponent(me._removeHtml(selectedItem.title)) + '&artist='
                 + encodeURIComponent(me._removeHtml(selectedItem.author)) + '&extra='
                 + encodeURIComponent(me._removeHtml(selectedItem.album_title))
-                + '&autoPlay='+isTryListen+'' + '&loop=true';
+                + '&autoPlay='+isTryListen+ '&loop=true';
             return  me.playerUrl + "?" + param;
         },
+		_getUrl2:function(json,isTryListen){
+			var me=this;
+            var param = 'from=tiebasongwidget&url='
+				+ encodeURIComponent(me._removeHtml(json.url)) + '&name=' 
+				+ encodeURIComponent(me._removeHtml(json.title)) + '&artist='
+                + encodeURIComponent(me._removeHtml(json.author)) + '&extra='
+                + encodeURIComponent(me._removeHtml(json.album_title))
+                + '&autoPlay='+isTryListen+ '&loop=true';
+			return  me.playerUrl + "?" + param;
+		},
         _getTryingElem:function () {
             var s = $G('J_listPanel').getElementsByTagName('span');
 
@@ -106,6 +117,14 @@ function Music() {
             var html = '<embed class="BDE_try_Music" allowfullscreen="false" pluginspage="http://www.macromedia.com/go/getflashplayer"';
             html += ' src="' + playerUrl + '"';
             html += ' width="1" height="1" style="position:absolute;left:-2000px;"';
+            html += ' type="application/x-shockwave-flash" wmode="transparent" play="true" loop="false"';
+            html += ' menu="false" allowscriptaccess="never" scale="noborder">';
+            return html;
+        },
+        _buildMusicHtmlPreview:function (playerUrl) {
+            var html = '<embed class="BDE_try_Music" allowfullscreen="false" pluginspage="http://www.macromedia.com/go/getflashplayer"';
+            html += ' src="' + playerUrl + '"';
+            html += ' style="width:100%" ';
             html += ' type="application/x-shockwave-flash" wmode="transparent" play="true" loop="false"';
             html += ' menu="false" allowscriptaccess="never" scale="noborder">';
             return html;
@@ -177,10 +196,19 @@ function Music() {
         },
         exec:function () {
             var me = this;
-            if (selectedItem == null)   return;
+			var o=$G("local_").className=="focus";
+			var url2param={
+				url:$G("songurl").value,
+				title:$G("songname").value,
+				author:$G("authorname").value,
+				album_title:$G("songalbum").value
+			};
+			
+            if ((!o)&&selectedItem == null)   return;
             $G('J_preview').innerHTML = "";
+	    $G("J_preview2").innerHTML ="";
             editor.execCommand('music', {
-                url:me._getUrl(false),
+                url:(o?me._getUrl2(url2param,false):me._getUrl(false)),
                 width:400,
                 height:95
             });
@@ -189,4 +217,43 @@ function Music() {
 })();
 
 
+    /**
+     * tabÇÐ»»
+     * @param tabParentId
+     * @param keepFocus   µ±´ËÖµÎªÕæÊ±£¬ÇÐ»»°´Å¥ÉÏ»á±£ÁôfocusµÄÑùÊ½
+     */
+    function switchTab( tabParentId,keepFocus ) {
+        var tabElements = $G( tabParentId ).children,
+                tabHeads = tabElements[0].children,
+                tabBodys = tabElements[1].children;
+        for ( var i = 0, length = tabHeads.length; i < length; i++ ) {
+            var head = tabHeads[i];
+            domUtils.on( head, "click", function () {
+                //headÑùÊ½¸ü¸Ä
+                for ( var k = 0, len = tabHeads.length; k < len; k++ ) {
+                    if(!keepFocus)tabHeads[k].className = "";
+                }
+                this.className = "focus";
+                //bodyÏÔÒþ
+                var tabSrc = this.getAttribute( "tabSrc" );
+                for ( var j = 0, length = tabBodys.length; j < length; j++ ) {
+                    var body = tabBodys[j],
+                        id = body.getAttribute( "id" );
+
+                    if ( id == tabSrc ) {
+                        body.style.display = "";
+                        /*if(id=="videoSearch"){
+                            selectTxt($G("videoSearchTxt"));
+                        }
+                        if(id=="video"){
+                            selectTxt($G("videoUrl"));
+                        }*/
+
+                    } else {
+                        body.style.display = "none";
+                    }
+                }
+            } );
+        }
+    }
 
