@@ -97,7 +97,7 @@ foreach ($GLOBALS['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal
 	</form>
 	<script type="text/javascript">
 function checkInfo(){
-  document.getElementById("edit").action="../cmd.php?act=MemberPst";
+  document.getElementById("edit").action="../cmd.php?act=MemberPst<?php echo '&token='. $zbp->GetToken();?>";
 
 
   if(!$("#edtEmail").val()){
