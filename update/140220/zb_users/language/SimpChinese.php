@@ -191,6 +191,7 @@ return array(
 	'all_pass'=>'所选全部通过',
 	'all_audit'=>'所选全部审核',
 	'gzip_compress'=>'GZip压缩',
+	'syntax_high_lighter'=>'语法高亮',
 	''=>'',
 ),
 

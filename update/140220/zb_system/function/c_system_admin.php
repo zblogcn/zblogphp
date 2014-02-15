@@ -1372,7 +1372,7 @@ function Admin_SettingMng(){
 
 ?>
 
-          <form method="post" action="../cmd.php?act=SettingSav">
+          <form method="post" action="../cmd.php?act=SettingSav<?php echo '&token='. $zbp->GetToken();?>">
             <div id="divMain2">
               <div class="content-box"><!-- Start Content Box -->
 
@@ -1417,6 +1417,7 @@ function Admin_SettingMng(){
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['allow_upload_size'].'</b></p></td><td><p><input id="ZC_UPLOAD_FILESIZE" name="ZC_UPLOAD_FILESIZE" style="width:600px;" type="text" value="'.$zbp->option['ZC_UPLOAD_FILESIZE'].'" /></p></td></tr>';
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['debug_mode'].'</b></p></td><td><p><input id="ZC_DEBUG_MODE" name="ZC_DEBUG_MODE" type="text" value="'.$zbp->option['ZC_DEBUG_MODE'].'" class="checkbox"/></p></td></tr>';
 	echo '<tr><td><p><b>'.$zbp->lang['msg']['gzip_compress'].'</b></p></td><td><p><input id="ZC_GZIP_ENABLE" name="ZC_GZIP_ENABLE" type="text" value="'.$zbp->option['ZC_GZIP_ENABLE'].'" class="checkbox"/></p></td></tr>';
+	echo '<tr><td><p><b>'.$zbp->lang['msg']['syntax_high_lighter'].'</b></p></td><td><p><input id="ZC_SYNTAXHIGHLIGHTER_ENABLE" name="ZC_SYNTAXHIGHLIGHTER_ENABLE" type="text" value="'.$zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE'].'" class="checkbox"/></p></td></tr>';
 
 	echo '</table>';
 	echo '</div>';

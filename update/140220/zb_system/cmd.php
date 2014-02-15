@@ -153,6 +153,7 @@ switch ($action) {
 		Redirect('admin/member_edit.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'MemberPst':
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		PostMember();
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
@@ -263,6 +264,7 @@ switch ($action) {
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'SettingSav':
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		SaveSetting();
 		$zbp->BuildModule();
 		$zbp->SetHint('good');

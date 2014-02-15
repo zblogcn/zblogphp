@@ -11,7 +11,7 @@ if(!$zbp->CheckRights('UploadPst')){
 }
 
 
-$title = $_POST['pictitle'];
+$title = (isset($_POST['pictitle']) ? $_POST['pictitle'] : time());
 
 //上传配置
 $config = array(
@@ -45,10 +45,10 @@ foreach ($_FILES as $key => $value) {
 	$upload->SaveFile($_FILES[$key]['tmp_name']);
 	$upload->Save();
 	
-	$info=array();
-	$info["url"]=$upload->Url;
-	$info["title"]=$title;	
-	$info["originalName"]=$upload->SourceName;
+	$info = array();
+	$info["url"] = $upload->Url;
+	$info["title"] = $title;
+	$info["originalName"] = $upload->SourceName;
 	$info["state"]='SUCCESS';
 	
     /**
