@@ -1700,7 +1700,8 @@ function SaveSetting() {
 			$key == 'ZC_COMMENT_TURNOFF' || 
 			$key == 'ZC_COMMENT_REVERSE_ORDER_EXPORT' || 
 			$key == 'ZC_DISPLAY_SUBCATEGORYS' || 
-			$key == 'ZC_GZIP_ENABLE'
+			$key == 'ZC_GZIP_ENABLE' ||
+			$key == 'ZC_SYNTAXHIGHLIGHTER_ENABLE'		
 		) {
 			$zbp->option[$key] = (boolean)$value;
 			continue;
