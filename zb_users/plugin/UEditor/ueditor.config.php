@@ -56,7 +56,7 @@ $array_config = array(
 	'langPath' => 'URL+"lang/"',
 	'codeMirrorJsUrl' => 'URL+ "third-party/codemirror/codemirror.js"',
 	'codeMirrorCssUrl' => 'URL+ "third-party/codemirror/codemirror.css"',
-	"maxUpFileSize" => $zbp->option['ZC_UPLOAD_FILESIZE']/(1024*1024),
+	"maxUpFileSize" => $zbp->option['ZC_UPLOAD_FILESIZE'],
 	"allowDivTransToP" => 'false'
 );
 
