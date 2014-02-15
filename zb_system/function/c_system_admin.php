@@ -1372,7 +1372,7 @@ function Admin_SettingMng(){
 
 ?>
 
-          <form method="post" action="../cmd.php?act=SettingSav">
+          <form method="post" action="../cmd.php?act=SettingSav<?php echo '&token='. $zbp->GetToken();?>">
             <div id="divMain2">
               <div class="content-box"><!-- Start Content Box -->
 
