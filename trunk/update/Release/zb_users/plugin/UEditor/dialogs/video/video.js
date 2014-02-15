@@ -5,26 +5,65 @@
  * Time: 上午11:19
  * To change this template use File | Settings | File Templates.
  */
-var video = {};
 
 (function(){
-    video.init = function(){
-       // switchTab("videoTab");
-        createAlignButton( ["videoFloat"] );
+
+    editor.setOpt({
+        videoFieldName:"upfile"
+    });
+
+    var video = {},
+        uploadVideoList = [],
+        isModifyUploadVideo = false;
+
+    window.onload = function(){
+        $focus($G("videoUrl"));
+        initTabs();
+        initVideo();
+        initUpload();
+    };
+
+    /* 初始化tab标签 */
+    function initTabs(){
+        var tabs = $G('tabHeads').children;
+        for (var i = 0; i < tabs.length; i++) {
+            domUtils.on(tabs[i], "click", function (e) {
+                var target = e.target || e.srcElement;
+                for (var j = 0; j < tabs.length; j++) {
+                    if(tabs[j] == target){
+                        tabs[j].className = "focus";
+                        $G(tabs[j].getAttribute('data-content-id')).style.display = "block";
+                    }else {
+                        tabs[j].className = "";
+                        $G(tabs[j].getAttribute('data-content-id')).style.display = "none";
+                    }
+                }
+            });
+        }
+    }
+
+    function initVideo(){
+        createAlignButton( ["videoFloat", "upload_alignment"] );
         addUrlChangeListener($G("videoUrl"));
         addOkListener();
-
 
         //编辑视频时初始化相关信息
         (function(){
             var img = editor.selection.getRange().getClosedNode(),url;
-            if(img && img.className == "edui-faked-video"){
-                $G("videoUrl").value = url = img.getAttribute("_url");
-                $G("videoWidth").value = img.width;
-                $G("videoHeight").value = img.height;
-                var align = domUtils.getComputedStyle(img,"float"),
-                    parentAlign = domUtils.getComputedStyle(img.parentNode,"text-align");
-                updateAlignButton(parentAlign==="center"?"center":align);
+            if(img && img.className){
+                var hasFakedClass = (img.className == "edui-faked-video"),
+                    hasUploadClass = img.className.indexOf("edui-upload-video")!=-1;
+                if(hasFakedClass || hasUploadClass) {
+                    $G("videoUrl").value = url = img.getAttribute("_url");
+                    $G("videoWidth").value = img.width;
+                    $G("videoHeight").value = img.height;
+                    var align = domUtils.getComputedStyle(img,"float"),
+                        parentAlign = domUtils.getComputedStyle(img.parentNode,"text-align");
+                    updateAlignButton(parentAlign==="center"?"center":align);
+                }
+                if(hasUploadClass) {
+                    isModifyUploadVideo = true;
+                }
             }
             createPreviewVideo(url);
         })();
@@ -40,9 +79,12 @@ var video = {};
                 case "video":
                     return insertSingle();
                     break;
-//                case "videoSearch":
-//                    return insertSearch("searchList");
-//                    break;
+                case "videoSearch":
+                    return insertSearch("searchList");
+                    break;
+                case "upload":
+                    return insertUpload();
+                    break;
             }
         };
         dialog.oncancel = function(){
@@ -93,7 +135,7 @@ var video = {};
             width: width.value,
             height: height.value,
             align: align
-        });
+        }, isModifyUploadVideo ? 'upload':null);
     }
 
     /**
@@ -166,45 +208,6 @@ var video = {};
         return /(0|^[1-9]\d*$)/.test( value );
     }
 
-    /**
-     * tab切换
-     * @param tabParentId
-     * @param keepFocus   当此值为真时，切换按钮上会保留focus的样式
-     */
-    function switchTab( tabParentId,keepFocus ) {
-        var tabElements = $G( tabParentId ).children,
-                tabHeads = tabElements[0].children,
-                tabBodys = tabElements[1].children;
-        for ( var i = 0, length = tabHeads.length; i < length; i++ ) {
-            var head = tabHeads[i];
-            domUtils.on( head, "click", function () {
-                //head样式更改
-                for ( var k = 0, len = tabHeads.length; k < len; k++ ) {
-                    if(!keepFocus)tabHeads[k].className = "";
-                }
-                this.className = "focus";
-                //body显隐
-                var tabSrc = this.getAttribute( "tabSrc" );
-                for ( var j = 0, length = tabBodys.length; j < length; j++ ) {
-                    var body = tabBodys[j],
-                        id = body.getAttribute( "id" );
-
-                    if ( id == tabSrc ) {
-                        body.style.display = "";
-                        if(id=="videoSearch"){
-                            selectTxt($G("videoSearchTxt"));
-                        }
-                        if(id=="video"){
-                            selectTxt($G("videoUrl"));
-                        }
-
-                    } else {
-                        body.style.display = "none";
-                    }
-                }
-            } );
-        }
-    }
     /**
       * 创建图片浮动选择按钮
       * @param ids
@@ -366,7 +369,6 @@ var video = {};
             o.style.cssText = "filter:alpha(Opacity=50);-moz-opacity:0.5;opacity: 0.5;border:2px solid blue;";
         }
     }
-
 
 
 })();

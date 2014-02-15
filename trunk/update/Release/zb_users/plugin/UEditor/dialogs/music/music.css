@@ -28,3 +28,6 @@
 
 .loading{width:95px;height:7px;font-size:7px;margin:60px auto;background:url(http://static.tieba.baidu.com/tb/editor/images/loading.gif) no-repeat}
 .empty{width:300px;height:40px;padding:2px;margin:50px auto;line-height:40px; color:#006699;text-align:center;}
+
+table{font-size: 12px;margin: 10px;line-height: 30px}
+.txt{width:360px;height:21px;line-height:21px;border:1px solid #d7d7d7;}
