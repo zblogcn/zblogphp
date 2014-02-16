@@ -109,9 +109,11 @@ class Dbpdo_MySQL implements iDataBase
 	function ExistTable($tablename){
 		$zbp=ZBlogPHP::GetInstance();
 		$a=$this->Query($this->sql->ExistTable($tablename,$zbp->option['ZC_MYSQL_NAME']));
-		$b=(array)$a;
-		$c=current($b);
-		if((int)$c>0){
+		if(!is_array($a))return false;
+		$b=current($a);
+		if(!is_array($b))return false;
+		$c=(int)current($b);
+		if($c>0){
 			return true;
 		}else{
 			return false;
