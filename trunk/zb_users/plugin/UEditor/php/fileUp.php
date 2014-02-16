@@ -1,12 +1,17 @@
 <?php
-
 require '../../../../zb_system/function/c_system_base.php';
-
 $zbp->Load();
 
+$result = array(
+	'url' => '',
+	'title' => '',
+	'original' => '',
+	'state' => ''
+);
+
 if(!$zbp->CheckRights('UploadPst')){
-	echo "{'url':'','title':'','original':'','state':'" . $lang['error'][6] . "'}";
-	die();
+	$result['state'] = $lang['error'][6];
+	exit_output();
 }
 
 
@@ -19,49 +24,45 @@ $config = array(
 
 	
 foreach ($_FILES as $key => $value) {
-	if($_FILES[$key]['error']==0){
+	if($_FILES[$key]['error'] == 0){
 		if (is_uploaded_file($_FILES[$key]['tmp_name'])) {
 
+			$upload = new Upload;
+			$upload->Name = date("YmdHis") . '_' . rand(10000, 99999) . '.' . GetFileExt($_FILES[$key]['name']);
+			$upload->SourceName = $_FILES[$key]['name'];
+			$upload->MimeType = $_FILES[$key]['type'];
+			$upload->Size =$_FILES[$key]['size'];
+			$upload->AuthorID = $zbp->user->ID;
 
-	$upload = new Upload;
-	$upload->Name = date("YmdHis") . '_' . rand(10000, 99999) . '.' . GetFileExt($_FILES[$key]['name']);
-	$upload->SourceName = $_FILES[$key]['name'];
-	$upload->MimeType = $_FILES[$key]['type'];
-	$upload->Size =$_FILES[$key]['size'];
-	$upload->AuthorID = $zbp->user->ID;
+			if(!$upload->CheckExtName())
+			{
+				$result['state'] = $lang['error'][26];
+				exit_output();
+			}
+			
+			if(!$upload->CheckSize())
+			{
+				$result['state'] = $lang['error'][27];
+				exit_output();
+			}
 
-	if(!$upload->CheckExtName()){
-		echo "{'url':'','title':'','original':'','state':'" . $lang['error'][26] . "'}";
-		die();
-	}
-	if(!$upload->CheckSize()){
-		echo "{'url':'','title':'','original':'','state':'" . $lang['error'][27] . "'}";
-		die();
-	}
-
-	$upload->SaveFile($_FILES[$key]['tmp_name']);
-	$upload->Save();
-	
-	$info=array();
-	$info["url"]=$upload->Url;
-	$info["type"]='.' . GetFileExt($_FILES[$key]['name']);	
-	$info["originalName"]=$upload->SourceName;
-	$info["state"]='SUCCESS';
-
-    /**
-     * 向浏览器返回数据json数据
-     * {
-     *   'url'      :'a.rar',        //保存后的文件路径
-     *   'fileType' :'.rar',         //文件描述，对图片来说在前端会添加到title属性上
-     *   'original' :'编辑器.jpg',   //原始文件名
-     *   'state'    :'SUCCESS'       //上传状态，成功时返回SUCCESS,其他任何值将原样返回至图片上传框中
-     * }
-     */
-    echo '{"url":"' .$info[ "url" ] . '","fileType":"' . $info[ "type" ] . '","original":"' . $info[ "originalName" ] . '","state":"' . $info["state"] . '"}';
+			$upload->SaveFile($_FILES[$key]['tmp_name']);
+			$upload->Save();
+			
+			$result["url"] = $upload->Url;
+			$result["type"] = '.' . GetFileExt($_FILES[$key]['name']) ;	
+			$result["original"] = $upload->SourceName ;
+			$result["state"] = 'SUCCESS' ;
 		
-
-		
-		
+			exit_output();		
 		}
 	}
+}
+
+
+function exit_output()
+{
+	global $result;
+	echo json_encode($result);
+	exit();
 }
