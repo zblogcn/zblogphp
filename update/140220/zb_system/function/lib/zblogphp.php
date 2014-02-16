@@ -464,7 +464,6 @@ class ZBlogPHP{
 		}
 
 		foreach ($this->option as $key => $value) {
-			//if($key=='ZC_BLOG_HOST')$value=urlencode($value);
 			$this->Config('system')->$key = $value;
 		}
 		$this->SaveConfig('system');
@@ -485,7 +484,6 @@ class ZBlogPHP{
 			//if($key=='ZC_PERMANENT_DOMAIN_ENABLE')continue;
 			//if($key=='ZC_BLOG_HOST')continue;
 			//if($key=='ZC_BLOG_CLSID')continue;
-			//if($key=='ZC_BLOG_HOST')$value=urldecode($value);
 			if($key=='ZC_YUN_SITE')continue;
 			if($key=='ZC_BLOG_LANGUAGEPACK')continue;
 			if($key=='ZC_DATABASE_TYPE')continue;
