@@ -125,7 +125,7 @@ function Server_Open($method){
 function Server_SendRequest($url,$data=array()){
 	global $zbp;
 
-	if(function_exists("curl_init"))return  Server_SendRequest_CUrl($url,$data);
+	if(function_exists("curl_init"))return Server_SendRequest_CUrl($url,$data);
 	if(!ini_get("allow_url_fopen"))return "";	
 	
 	$un=$zbp->Config('AppCentre')->username;
@@ -169,7 +169,7 @@ function Server_SendRequest($url,$data=array()){
 	}
 
 	ini_set('default_socket_timeout',120);
-	return file_get_contents($url,false,$content);
+	return file_get_contents('compress.zlib://' . $url,false,$content);
 
 }
 
@@ -192,6 +192,7 @@ function Server_SendRequest_CUrl($url,$data=array()){
 	}
 	
 	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 120);
 	curl_setopt($ch, CURLOPT_USERAGENT, 'ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent());

@@ -225,20 +225,20 @@ class DbSql #extends AnotherClass
 			$sqlw .= ' WHERE ';
 			$comma = '';
 			foreach($where as $k => $w) {
-				$eq=$w[0];
-				if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='|$eq=='like'){
+				$eq=strtoupper($w[0]);
+				if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='){
 					$x = (string)$w[1];
 					$y = (string)$w[2];
 					$y = $zbp->db->EscapeString($y);
 					$sqlw .= $comma . " $x $eq '$y' ";
 				}
-				if($eq=='BETWEEN'||$eq=='between'){
+				if($eq=='BETWEEN'){
 					$b1 = (string)$w[1];
 					$b2 = (string)$w[2];
 					$b3 = (string)$w[3];
 					$sqlw .= $comma . " $b1 BETWEEN '$b2' AND '$b3' ";
 				}
-				if($eq=='search'){
+				if($eq=='SEARCH'){
 					$j=count($w);
 					$sql_search='';
 					$c='';
@@ -251,7 +251,7 @@ class DbSql #extends AnotherClass
 					}
 					$sqlw .= $comma .  '(' . $sql_search . ')';
 				}
-				if($eq=='array'){
+				if($eq=='ARRAY'){
 					$c='';
 					$sql_array='';
 					if(!is_array($w[1]))continue;
@@ -263,7 +263,7 @@ class DbSql #extends AnotherClass
 					}
 					$sqlw .= $comma .  '(' . $sql_array . ')';
 				}
-				if($eq=='array_like'){
+				if($eq=='ARRAY_LIKE'){
 					$c='';
 					$sql_array='';
 					if(!is_array($w[1]))continue;
@@ -275,7 +275,7 @@ class DbSql #extends AnotherClass
 					}
 					$sqlw .= $comma .  '(' . $sql_array . ')';
 				}
-				if($eq=='IN'||$eq=='in'){
+				if($eq=='IN'){
 					$c='';
 					$sql_array='';
 					if(!is_array($w[2])){
@@ -290,7 +290,7 @@ class DbSql #extends AnotherClass
 					}
 					$sqlw .= $comma .  '('. $w[1] .' IN (' . $sql_array . '))';
 				}
-				if($eq=='custom'){
+				if($eq=='CUSTOM'){
 					$sqlw .= $comma .  '(' . $w[1] . ')';
 				}
 				$comma = 'AND';
@@ -326,14 +326,20 @@ class DbSql #extends AnotherClass
 		if(!empty($order)){
 			$sqlo .= ' ORDER BY ';
 			$comma = '';
-			foreach($order as $k=>$v) {
-				$sqlo .= $comma ."$k $v";
-				$comma = ',';
+			if(!is_array($order)){
+				$sqlo .= $order;
+			}else{
+				foreach($order as $k=>$v) {
+					$sqlo .= $comma ."$k $v";
+					$comma = ',';
+				}
 			}
 		}
 
 		if(!empty($limit)){
-			if(!isset($limit[1])){
+			if(!is_array($limit)){
+				$sqll .= " LIMIT $limit";
+			}elseif(!isset($limit[1])){
 				$sqll .= " LIMIT $limit[0]";
 			}else{
 				if($limit[1]>0){

@@ -27,7 +27,7 @@ function GetPost($idorname, $option = null) {
 		elseif($option['only_page']==true){
 			$w[]=array('=','log_Type','1');
 		}
-		$articles = $zbp->GetPostList('*', $w, null, array(1), null);
+		$articles = $zbp->GetPostList('*', $w, null, 1, null);
 		if (count($articles) == 0) {
 			return new Post;
 		}
@@ -136,7 +136,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 		$w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $search);
 	}
 
-	$articles = $zbp->GetArticleList(array('*'), $w, array('log_PostTime' => 'DESC'), array($count), null, false);
+	$articles = $zbp->GetArticleList('*', $w, array('log_PostTime' => 'DESC'), $count, null, false);
 
 	if ($option['is_related']) {
 		foreach ($articles as $k => $a) {
@@ -322,10 +322,13 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 
 	$page = (int)$page == 0 ? 1 : (int)$page;
 
-	$articles_top = array();
 	$articles = array();
-	if ($type == 'index' && $page == 1) {
-		$articles_top = $zbp->GetArticleList(array('*'), array(array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), null, null);
+	$articles_top = array();
+
+	if(isset($zbp->option['ZC_LISTONTOP_TURNOFF'])&&$zbp->option['ZC_LISTONTOP_TURNOFF']==false){
+		if ($type == 'index' && $page == 1) {
+			$articles_top = $zbp->GetArticleList('*', array(array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), null, null);
+		}
 	}
 
 	switch ($type) {
@@ -527,7 +530,7 @@ function ViewPost($id, $alias, $isrewrite = false) {
 		$w[] = array('=', 'log_Status', 0);
 	}
 
-	$articles = $zbp->GetPostList(array('*'), $w, null, array(1), null);
+	$articles = $zbp->GetPostList('*', $w, null, 1, null);
 	if (count($articles) == 0) {
 		if ($isrewrite == true)
 			return ZC_REWRITE_GO_ON;
@@ -558,12 +561,12 @@ function ViewPost($id, $alias, $isrewrite = false) {
 
 	$comments = array();
 
-	$comments = $zbp->GetCommentList(array('*'), array(array('=', 'comm_RootID', 0), array('=', 'comm_IsChecking', 0), array('=', 'comm_LogID', $article->ID)), array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')), array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount), array('pagebar' => $pagebar));
+	$comments = $zbp->GetCommentList('*', array(array('=', 'comm_RootID', 0), array('=', 'comm_IsChecking', 0), array('=', 'comm_LogID', $article->ID)), array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')), array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount), array('pagebar' => $pagebar));
 	$rootid = array();
 	foreach ($comments as &$comment) {
 		$rootid[] = array('comm_RootID', $comment->ID);
 	}
-	$comments2 = $zbp->GetCommentList(array('*'), array(array('array', $rootid), array('=', 'comm_IsChecking', 0), array('=', 'comm_LogID', $article->ID)), array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')), null, null);
+	$comments2 = $zbp->GetCommentList('*', array(array('array', $rootid), array('=', 'comm_IsChecking', 0), array('=', 'comm_LogID', $article->ID)), array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')), null, null);
 
 	$floorid = ($pagebar->PageNow - 1) * $pagebar->PageCount;
 	foreach ($comments as &$comment) {
@@ -612,12 +615,12 @@ function ViewComments($postid, $page) {
 
 	$comments = array();
 
-	$comments = $zbp->GetCommentList(array('*'), array(array('=', 'comm_RootID', 0), array('=', 'comm_IsChecking', 0), array('=', 'comm_LogID', $post->ID)), array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')), array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount), array('pagebar' => $pagebar));
+	$comments = $zbp->GetCommentList('*', array(array('=', 'comm_RootID', 0), array('=', 'comm_IsChecking', 0), array('=', 'comm_LogID', $post->ID)), array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')), array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount), array('pagebar' => $pagebar));
 	$rootid = array();
 	foreach ($comments as $comment) {
 		$rootid[] = array('comm_RootID', $comment->ID);
 	}
-	$comments2 = $zbp->GetCommentList(array('*'), array(array('array', $rootid), array('=', 'comm_IsChecking', 0)), array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')), null, null);
+	$comments2 = $zbp->GetCommentList('*', array(array('array', $rootid), array('=', 'comm_IsChecking', 0)), array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')), null, null);
 
 	$floorid = ($pagebar->PageNow - 1) * $pagebar->PageCount;
 	foreach ($comments as &$comment) {
@@ -1081,7 +1084,7 @@ function DelComment() {
 	$cmt = $zbp->GetCommentByID($id);
 	if ($cmt->ID > 0) {
 
-		$comments = $zbp->GetCommentList(array('*'), array(array('=', 'comm_LogID', $cmt->LogID)), null, null, null);
+		$comments = $zbp->GetCommentList('*', array(array('=', 'comm_LogID', $cmt->LogID)), null, null, null);
 
 		DelComment_Children($cmt->ID);
 
@@ -1162,7 +1165,7 @@ function BatchComment() {
 		}
 		$arrpost = array_unique($arrpost);
 		foreach ($arrpost as $i => $id)
-			$comments = $zbp->GetCommentList(array('*'), array(array('=', 'comm_LogID', $id)), null, null, null);
+			$comments = $zbp->GetCommentList('*', array(array('=', 'comm_LogID', $id)), null, null, null);
 
 		$arrdel = array();
 		foreach ($array as $i => $id) {
@@ -1444,14 +1447,14 @@ function DelMember_AllData($id) {
 	$w = array();
 	$w[] = array('=', 'log_AuthorID', $id);
 
-	$articles = $zbp->GetPostList(array('*'), $w);
+	$articles = $zbp->GetPostList('*', $w);
 	foreach ($articles as $a) {
 		$a->Del();
 	}
 
 	$w = array();
 	$w[] = array('=', 'comm_AuthorID', $id);
-	$comments = $zbp->GetCommentList(array('*'), $w);
+	$comments = $zbp->GetCommentList('*', $w);
 	foreach ($comments as $c) {
 		$c->AuthorID = 0;
 		$c->Save();
@@ -1459,7 +1462,7 @@ function DelMember_AllData($id) {
 
 	$w = array();
 	$w[] = array('=', 'ul_AuthorID', $id);
-	$uploads = $zbp->GetUploadList(array('*'), $w);
+	$uploads = $zbp->GetUploadList('*', $w);
 	foreach ($uploads as $u) {
 		$u->Del();
 		$u->DelFile();
@@ -2094,7 +2097,7 @@ function BuildModule_calendar($date = '') {
 		foreach ($arraydate as $key => $value) {
 			$arrayid[] = array('log_ID', $value);
 		}
-		$articles = $zbp->GetArticleList('', array(array('array', $arrayid)), '', '', '');
+		$articles = $zbp->GetArticleList('*', array(array('array', $arrayid)));
 		foreach ($arraydate as $key => $value) {
 			$a = $zbp->GetPostByID($value);
 			$s = str_replace('<td>' . $key . '</td>', '<td><a href="' . $a->Url . '">' . $key . '</a></td>', $s);
@@ -2108,7 +2111,9 @@ function BuildModule_calendar($date = '') {
 function BuildModule_comments() {
 	global $zbp;
 
-	$comments = $zbp->GetCommentList(array('*'), array(array('=', 'comm_IsChecking', 0)), array('comm_PostTime' => 'DESC'), array(10), null);
+	$i = $zbp->modulesbyfilename['comments']->MaxLi;
+	if ($i == 0) $i = 10;
+	$comments = $zbp->GetCommentList('*', array(array('=', 'comm_IsChecking', 0)), array('comm_PostTime' => 'DESC'), $i, null);
 
 	$s = '';
 	foreach ($comments as $comment) {
@@ -2121,7 +2126,9 @@ function BuildModule_comments() {
 function BuildModule_previous() {
 	global $zbp;
 
-	$articles = $zbp->GetArticleList(array('*'), array(array('=', 'log_Type', 0), array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), array(10), null);
+	$i = $zbp->modulesbyfilename['previous']->MaxLi;
+	if ($i == 0) $i = 10;
+	$articles = $zbp->GetArticleList('*', array(array('=', 'log_Type', 0), array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), $i, null);
 	$s = '';
 	foreach ($articles as $article) {
 		$s .= '<li><a href="' . $article->Url . '">' . $article->Title . '</a></li>';
@@ -2251,7 +2258,7 @@ function BuildModule_tags() {
 	$s = '';
 	$i = $zbp->modulesbyfilename['tags']->MaxLi;
 	if ($i == 0) $i = 25;
-	$array = $zbp->GetTagList('', '', array('tag_Count' => 'DESC'), array($i), null);
+	$array = $zbp->GetTagList('*', '', array('tag_Count' => 'DESC'), $i, null);
 	$array2 = array();
 	foreach ($array as $tag) {
 		$array2[$tag->ID] = $tag;
@@ -2272,7 +2279,7 @@ function BuildModule_authors($level = 4) {
 	$w = array();
 	$w[] = array('<=', 'mem_Level', $level);
 
-	$array = $zbp->GetMemberList('', $w, array('mem_ID' => 'ASC'), null, null);
+	$array = $zbp->GetMemberList('*', $w, array('mem_ID' => 'ASC'), null, null);
 
 	foreach ($array as $member) {
 		$s .= '<li><a href="' . $member->Url . '">' . $member->Name . '<span class="article-nums"> (' . $member->Articles . ')</span></a></li>';
@@ -2306,8 +2313,8 @@ function BuildModule_statistics($array = array()) {
 	$s .= "<li>{$zbp->lang['msg']['all_pages']}:{$all_pages}</li>";
 	$s .= "<li>{$zbp->lang['msg']['all_categorys']}:{$all_categorys}</li>";
 	$s .= "<li>{$zbp->lang['msg']['all_tags']}:{$all_tags}</li>";
-	$s .= "<li>{$zbp->lang['msg']['all_views']}:{$all_views}</li>";
 	$s .= "<li>{$zbp->lang['msg']['all_comments']}:{$all_comments}</li>";
+	$s .= "<li>{$zbp->lang['msg']['all_views']}:{$all_views}</li>";
 
 	$zbp->modulesbyfilename['statistics']->Type = "ul";
 
