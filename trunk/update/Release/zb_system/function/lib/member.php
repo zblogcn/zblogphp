@@ -41,6 +41,9 @@ class Member extends Base{
 		if ($name=='LevelName') {
 			return null;
 		}
+		if ($name=='EmailMD5') {
+			return null;
+		}
 		if ($name=='Template') {
 			if($value==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$value='';
 			return $this->data[$name]  =  $value;
@@ -73,6 +76,9 @@ class Member extends Base{
 		}
 		if ($name=='LevelName') {
 			return $zbp->lang['user_level_name'][$this->Level];
+		}
+		if ($name=='EmailMD5') {
+			return md5($this->Email);
 		}
 		if ($name=='Meta') {
 			return $this->Metas->serialize();

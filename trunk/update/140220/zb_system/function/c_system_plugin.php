@@ -1005,6 +1005,17 @@ $Filter_Plugin_Post_CommentPostUrl = array();
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Post_RelatedList
+'参数:$post
+'说明:Post类的RelatedList 接口
+'调用:返回RelatedList Array.
+'**************************************************>
+*/
+$Filter_Plugin_Post_RelatedList = array();
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Comment_Call
 '参数:&$comment,$method,$args
 '说明:Comment类的魔术方法接口

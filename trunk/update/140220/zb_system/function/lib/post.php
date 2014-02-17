@@ -70,6 +70,7 @@ class Post extends Base{
 			case 'CommentPostUrl':
 			case 'Prev':
 			case 'Next':
+			case 'RelatedList':
 				return null;
 				break;
 			case 'Template':
@@ -142,8 +143,8 @@ class Post extends Base{
 			case 'CommentPostUrl':
 				foreach ($GLOBALS['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
 					$fpreturn=$fpname($this);
-					if($fpreturn)return $fpreturn;
-				}			
+					if($fpsignal == PLUGIN_EXITSIGNAL_RETURN)return $fpreturn;
+				}
 				$key='&amp;key=' . md5($zbp->guid . $this->ID . date('Y-m-d'));
 				return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
 				break;
@@ -184,6 +185,12 @@ class Post extends Base{
 				}
 				return $_next;
 				break;
+			case 'RelatedList':
+				foreach ($GLOBALS['Filter_Plugin_Post_RelatedList'] as $fpname => &$fpsignal) {
+					$fpreturn=$fpname($this);
+					if($fpsignal == PLUGIN_EXITSIGNAL_RETURN)return $fpreturn;
+				}
+				return GetList($zbp->option['ZC_RELATEDLIST_COUNT'],null,null,null,null,null,array('is_related'=>$this->ID));
 			default:
 				return parent::__get($name);
 				break;

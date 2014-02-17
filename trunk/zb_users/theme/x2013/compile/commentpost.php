@@ -11,7 +11,7 @@
 				<textarea class="comt-area" name="txaArticle" id="txaArticle" cols="100%" rows="3" tabindex="5" onkeydown="if(event.ctrlKey&amp;&amp;event.keyCode==13){document.getElementById('submit').click();};"></textarea>
 				<div class="comt-ctrl">
 <?php if ($option['ZC_COMMENT_VERIFY_ENABLE']) { ?>
-&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="inpVerify" id="inpVerify" value="" tabindex="4"/><span style="color:#F00;">验证码(*)</span><img style="border:1px solid #746969;height:18px;vertical-align:middle;margin-left: 10px;" src="<?php  echo $article->ValidCodeUrl;  ?>" onclick="javascript:this.src='<?php  echo $article->ValidCodeUrl;  ?>&amp;tm='+Math.random();"/>
+					&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="inpVerify" id="inpVerify" value="" tabindex="4"/><span style="color:#F00;">验证码(*)</span><img style="border:1px solid #746969;height:18px;vertical-align:middle;margin-left: 10px;" src="<?php  echo $article->ValidCodeUrl;  ?>" onclick="javascript:this.src='<?php  echo $article->ValidCodeUrl;  ?>&amp;tm='+Math.random();"/>
 <?php } ?>
 					<input class="comt-submit" type="submit" name="submit" id="submit" tabindex="6" onclick="return VerifyMessage()" value="发布评论" />
 				</div>
