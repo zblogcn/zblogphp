@@ -477,7 +477,13 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	$pagebar->PageBarCount = $zbp->pagebarcount;
 	$pagebar->UrlRule->Rules['{%page%}'] = $page;
 
-	$articles = $zbp->GetArticleList(array('*'), $w, array('log_PostTime' => 'DESC'), array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount), array('pagebar' => $pagebar));
+	$articles = $zbp->GetArticleList(
+		'*', 
+		$w,
+		array('log_PostTime' => 'DESC'), array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
+		array('pagebar' => $pagebar),
+		true
+	);
 
 	$zbp->template->SetTags('title', $zbp->title);
 	$zbp->template->SetTags('articles', array_merge($articles_top, $articles));
@@ -546,12 +552,10 @@ function ViewPost($id, $alias, $isrewrite = false) {
 		$zbp->LoadTagsByIDString($article->Tag);
 	}
 
-	if (isset($zbp->option['ZC_VIEWNUMS_TURNOFF'])) {
-		if (!$zbp->option['ZC_VIEWNUMS_TURNOFF']) {
-			$article->ViewNums += 1;
-			$sql = $zbp->db->sql->Update($zbp->table['Post'], array('log_ViewNums' => $article->ViewNums), array(array('=', 'log_ID', $article->ID)));
-			$zbp->db->Update($sql);
-		}
+	if (isset($zbp->option['ZC_VIEWNUMS_TURNOFF']) && $zbp->option['ZC_VIEWNUMS_TURNOFF']==false) {
+		$article->ViewNums += 1;
+		$sql = $zbp->db->sql->Update($zbp->table['Post'], array('log_ViewNums' => $article->ViewNums), array(array('=', 'log_ID', $article->ID)));
+		$zbp->db->Update($sql);
 	}
 
 	$pagebar = new Pagebar('javascript:GetComments(\'' . $article->ID . '\',\'{%page%}\')', false);
@@ -561,13 +565,32 @@ function ViewPost($id, $alias, $isrewrite = false) {
 
 	$comments = array();
 
-	$comments = $zbp->GetCommentList('*', array(array('=', 'comm_RootID', 0), array('=', 'comm_IsChecking', 0), array('=', 'comm_LogID', $article->ID)), array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')), array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount), array('pagebar' => $pagebar));
+	$comments = $zbp->GetCommentList(
+		'*', 
+		array(
+			array('=', 'comm_RootID', 0),
+			array('=', 'comm_IsChecking', 0),
+			array('=', 'comm_LogID', $article->ID)
+		),
+		array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
+		array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
+		array('pagebar' => $pagebar)
+	);
 	$rootid = array();
 	foreach ($comments as &$comment) {
 		$rootid[] = array('comm_RootID', $comment->ID);
 	}
-	$comments2 = $zbp->GetCommentList('*', array(array('array', $rootid), array('=', 'comm_IsChecking', 0), array('=', 'comm_LogID', $article->ID)), array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')), null, null);
-
+	$comments2 = $zbp->GetCommentList(
+		'*', 
+		array(
+			array('array', $rootid),
+			array('=', 'comm_IsChecking', 0),
+			array('=', 'comm_LogID', $article->ID)
+		),
+		array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
+		null,
+		null
+	);
 	$floorid = ($pagebar->PageNow - 1) * $pagebar->PageCount;
 	foreach ($comments as &$comment) {
 		$floorid += 1;
@@ -615,12 +638,32 @@ function ViewComments($postid, $page) {
 
 	$comments = array();
 
-	$comments = $zbp->GetCommentList('*', array(array('=', 'comm_RootID', 0), array('=', 'comm_IsChecking', 0), array('=', 'comm_LogID', $post->ID)), array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')), array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount), array('pagebar' => $pagebar));
+	$comments = $zbp->GetCommentList(
+		'*',
+		array(
+			array('=', 'comm_RootID', 0),
+			array('=', 'comm_IsChecking', 0),
+			array('=', 'comm_LogID', $post->ID)
+		),
+		array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
+		array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
+		array('pagebar' => $pagebar)
+	);
 	$rootid = array();
 	foreach ($comments as $comment) {
 		$rootid[] = array('comm_RootID', $comment->ID);
 	}
-	$comments2 = $zbp->GetCommentList('*', array(array('array', $rootid), array('=', 'comm_IsChecking', 0)), array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')), null, null);
+	$comments2 = $zbp->GetCommentList(
+		'*',
+		array(
+			array('array', $rootid),
+			array('=', 'comm_IsChecking', 0),
+			array('=', 'comm_LogID', $post->ID)
+		),
+		array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
+		null,
+		null
+	);
 
 	$floorid = ($pagebar->PageNow - 1) * $pagebar->PageCount;
 	foreach ($comments as &$comment) {
@@ -1938,10 +1981,10 @@ function CountMember(&$member) {
 
 	$id = $member->ID;
 
-	$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 0), array('=', 'log_Status', 0), array('=', 'log_AuthorID', $id)));
+	$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_AuthorID', $id), array('=', 'log_Type', 0)));
 	$member_Articles = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 
-	$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 0), array('=', 'log_Status', 0), array('=', 'log_AuthorID', $id)));
+	$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_AuthorID', $id), array('=', 'log_Type', 1)));
 	$member_Pages = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 
 	$s = $zbp->db->sql->Count($zbp->table['Comment'], array(array('COUNT', '*', 'num')), array(array('=', 'comm_AuthorID', $id)));
@@ -2086,7 +2129,18 @@ function BuildModule_calendar($date = '') {
 
 	$fdate = strtotime($date);
 	$ldate = (strtotime(date('Y-m-t', strtotime($date))) + 60 * 60 * 24);
-	$sql = $zbp->db->sql->Select($zbp->table['Post'], array('log_ID', 'log_PostTime'), array(array('=', 'log_Type', '0'), array('=', 'log_Status', '0'), array('BETWEEN', 'log_PostTime', $fdate, $ldate)), array('log_PostTime' => 'ASC'), null, null);
+	$sql = $zbp->db->sql->Select(
+		$zbp->table['Post'],
+		array('log_ID', 'log_PostTime'),
+		array(
+			array('=', 'log_Type', '0'),
+			array('=', 'log_Status', '0'),
+			array('BETWEEN', 'log_PostTime', $fdate, $ldate)
+		),
+		array('log_PostTime' => 'ASC'),
+		null,
+		null
+	);
 	$array = $zbp->db->Query($sql);
 	$arraydate = array();
 	$arrayid = array();
@@ -2097,7 +2151,7 @@ function BuildModule_calendar($date = '') {
 		foreach ($arraydate as $key => $value) {
 			$arrayid[] = array('log_ID', $value);
 		}
-		$articles = $zbp->GetArticleList('*', array(array('array', $arrayid)));
+		$articles = $zbp->GetArticleList('*', array(array('array', $arrayid)),null,null,null,false);
 		foreach ($arraydate as $key => $value) {
 			$a = $zbp->GetPostByID($value);
 			$s = str_replace('<td>' . $key . '</td>', '<td><a href="' . $a->Url . '">' . $key . '</a></td>', $s);
@@ -2128,7 +2182,7 @@ function BuildModule_previous() {
 
 	$i = $zbp->modulesbyfilename['previous']->MaxLi;
 	if ($i == 0) $i = 10;
-	$articles = $zbp->GetArticleList('*', array(array('=', 'log_Type', 0), array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), $i, null);
+	$articles = $zbp->GetArticleList('*', array(array('=', 'log_Type', 0), array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), $i, null,false);
 	$s = '';
 	foreach ($articles as $article) {
 		$s .= '<li><a href="' . $article->Url . '">' . $article->Title . '</a></li>';
@@ -2139,6 +2193,9 @@ function BuildModule_previous() {
 
 function BuildModule_archives() {
 	global $zbp;
+
+	$i = $zbp->modulesbyfilename['archives']->MaxLi;
+	if($i<0)return '';
 
 	$fdate;
 	$ldate;
@@ -2314,7 +2371,9 @@ function BuildModule_statistics($array = array()) {
 	$s .= "<li>{$zbp->lang['msg']['all_categorys']}:{$all_categorys}</li>";
 	$s .= "<li>{$zbp->lang['msg']['all_tags']}:{$all_tags}</li>";
 	$s .= "<li>{$zbp->lang['msg']['all_comments']}:{$all_comments}</li>";
-	$s .= "<li>{$zbp->lang['msg']['all_views']}:{$all_views}</li>";
+	if($zbp->option['ZC_VIEWNUMS_TURNOFF']==false){
+		$s .= "<li>{$zbp->lang['msg']['all_views']}:{$all_views}</li>";
+	}
 
 	$zbp->modulesbyfilename['statistics']->Type = "ul";
 

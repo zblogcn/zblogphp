@@ -36,7 +36,7 @@ $member->Level=$reg->Level;
 
 
 
-if(strlen($name)<3||strlen($name)>20){
+if(strlen($name)<$zbp->option['ZC_USERNAME_MIN']||strlen($name)>$zbp->option['ZC_USERNAME_MAX']){
 	$zbp->ShowError('用户名不能过长或过短.');die();
 }
 
@@ -52,8 +52,8 @@ if(isset($zbp->membersbyname[$name])){
 
 $member->Name=$name;
 
-if(strlen($password)<8||strlen($password)>20){
-	$zbp->ShowError('密码必须在8位-20位间.');die();
+if(strlen($password)<$zbp->option['ZC_PASSWORD_MIN']||strlen($password)>$zbp->option['ZC_PASSWORD_MAX']){
+	$zbp->ShowError('密码必须在'.$zbp->option['ZC_PASSWORD_MIN'].'位-'.$zbp->option['ZC_PASSWORD_MAX'].'位间.');die();
 }
 
 if($password!=$repassword){
@@ -67,7 +67,7 @@ $member->PostTime=time();
 $member->IP=GetGuestIP();
 
 
-if(strlen($email)<5||strlen($email)>50){
+if(strlen($email)<5||strlen($email)>$zbp->option['ZC_EMAIL_MAX']){
 	$zbp->ShowError('邮箱不能过长或过短.');die();
 }
 
@@ -75,6 +75,10 @@ if(CheckRegExp($email,'[email]')){
 	$member->Email=$email;
 }else{
 	$zbp->ShowError('邮箱格式不正确.');die();
+}
+
+if(strlen($homepage)>$zbp->option['ZC_HOMEPAGE_MAX']){
+	$zbp->ShowError('网址不能过长.');die();
 }
 
 if(CheckRegExp($homepage,'[homepage]')){
