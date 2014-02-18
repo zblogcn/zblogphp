@@ -455,7 +455,8 @@ $array=$zbp->GetArticleList(
 	$w,
 	array('log_PostTime'=>'DESC'),
 	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
-	array('pagebar'=>$p)
+	array('pagebar'=>$p),
+	false
 );
 
 foreach ($array as $article) {

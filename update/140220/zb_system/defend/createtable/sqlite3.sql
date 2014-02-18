@@ -77,7 +77,7 @@ CREATE TABLE %pre%member (
   mem_Guid varchar(36) NOT NULL DEFAULT '',
   mem_Level integer NOT NULL DEFAULT 0,
   mem_Status integer NOT NULL DEFAULT 0,
-  mem_Name varchar(20) NOT NULL DEFAULT '',
+  mem_Name varchar(50) NOT NULL DEFAULT '',
   mem_Password varchar(32) NOT NULL DEFAULT '',
   mem_Email varchar(50) NOT NULL DEFAULT '',
   mem_HomePage varchar(255) NOT NULL DEFAULT '',

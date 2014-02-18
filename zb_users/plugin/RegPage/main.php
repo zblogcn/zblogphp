@@ -8,7 +8,7 @@ $zbp->Load();
 $action='root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
-if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckPlugin('RegPage')) {$zbp->ShowError(48);die();}
 
 $blogtitle='注册组件';
 

@@ -426,7 +426,7 @@ class ZBlogPHP{
 		#$c=serialize($this->cache);
 		#@file_put_contents($s, $c);
 
-		$this->configs['cache']=$this->cache;
+		//$this->configs['cache']=$this->cache;
 		$this->SaveConfig('cache');
 
 	}
@@ -1289,9 +1289,11 @@ function AddBuildModuleAll(){
 
 		$a=array();
 		$b=array();
+		$c=array();
 		foreach ($t as $v) {
 			if(isset($this->tags[$v])==false){
 				$a[]=array('tag_ID',$v);
+				$c[]=$v;
 			}else{
 				$b[$v]=&$this->tags[$v];
 			}
@@ -1301,7 +1303,8 @@ function AddBuildModuleAll(){
 			return $b;
 		}else{
 			$t=array();
-			$array=$this->GetTagList('',array(array('array',$a)),'','','');
+			//$array=$this->GetTagList('',array(array('array',$a)),'','','');
+			$array=$this->GetTagList('',array(array('IN','tag_ID',$c)),'','','');
 			foreach ($array as $v) {
 				$this->tags[$v->ID]=$v;
 				$this->tagsbyname[$v->Name]=&$this->tags[$v->ID];

@@ -106,13 +106,13 @@ return array(
 	// '用户名,密码,评论长度等限制
 	'ZC_USERNAME_MIN' => 3,
 
-	'ZC_USERNAME_MAX' => 20,
+	'ZC_USERNAME_MAX' => 50,
 
 	'ZC_PASSWORD_MIN' => 8,
 
 	'ZC_PASSWORD_MAX' => 20,
 
-	'ZC_EMAIL_MAX' => 30,
+	'ZC_EMAIL_MAX' => 50,
 
 	'ZC_HOMEPAGE_MAX' => 100,
 

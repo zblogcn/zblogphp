@@ -249,7 +249,7 @@ class DbSql #extends AnotherClass
 						$sql_search .= $c . " ($x LIKE '%$y%') ";
 						$c='OR';
 					}
-					$sqlw .= $comma .  '(' . $sql_search . ')';
+					$sqlw .= $comma .  '(' . $sql_search . ') ';
 				}
 				if($eq=='ARRAY'){
 					$c='';
@@ -261,7 +261,7 @@ class DbSql #extends AnotherClass
 						$sql_array .= $c . " $y[0]='$y[1]' ";
 						$c='OR';
 					}
-					$sqlw .= $comma .  '(' . $sql_array . ')';
+					$sqlw .= $comma .  '(' . $sql_array . ') ';
 				}
 				if($eq=='ARRAY_LIKE'){
 					$c='';
@@ -273,7 +273,7 @@ class DbSql #extends AnotherClass
 						$sql_array .= $c . " ($y[0] LIKE '%$y[1]%') ";
 						$c='OR';
 					}
-					$sqlw .= $comma .  '(' . $sql_array . ')';
+					$sqlw .= $comma .  '(' . $sql_array . ') ';
 				}
 				if($eq=='IN'){
 					$c='';
@@ -288,10 +288,10 @@ class DbSql #extends AnotherClass
 							$c=',';
 						}
 					}
-					$sqlw .= $comma .  '('. $w[1] .' IN (' . $sql_array . '))';
+					$sqlw .= $comma .  '('. $w[1] .' IN (' . $sql_array . ')) ';
 				}
 				if($eq=='CUSTOM'){
-					$sqlw .= $comma .  '(' . $w[1] . ')';
+					$sqlw .= $comma .  '(' . $w[1] . ') ';
 				}
 				$comma = 'AND';
 			}

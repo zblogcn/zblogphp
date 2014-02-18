@@ -68,13 +68,13 @@ function misc_statistic() {
 	$xmlrpc_address = $zbp->host . 'zb_system/xml-rpc/';
 	$current_member = $zbp->user->Name;
 	$current_version = $zbp->option['ZC_BLOG_VERSION'];
-	$all_artiles = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=0'), 'num');
-	$all_pages = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(log_ID) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=1'), 'num');
-	$all_categorys = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(cate_ID) AS num FROM ' . $GLOBALS['table']['Category']), 'num');
-	$all_comments = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(comm_ID) AS num FROM ' . $GLOBALS['table']['Comment']), 'num');
-	$all_views = GetValueInArrayByCurrent($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post']), 'num');
-	$all_tags = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(tag_ID) as num FROM ' . $GLOBALS['table']['Tag']), 'num');
-	$all_members = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(mem_ID) AS num FROM ' . $GLOBALS['table']['Member']), 'num');
+	$all_artiles = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=0'), 'num');
+	$all_pages = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=1'), 'num');
+	$all_categorys = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Category']), 'num');
+	$all_comments = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Comment']), 'num');
+	$all_views = $zbp->option['ZC_VIEWNUMS_TURNOFF']==true?0:GetValueInArrayByCurrent($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post']), 'num');
+	$all_tags = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) as num FROM ' . $GLOBALS['table']['Tag']), 'num');
+	$all_members = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Member']), 'num');
 	$current_theme = $zbp->theme;
 	$current_style = $zbp->style;
 	$current_member = '{$zbp->user->Name}';
@@ -88,16 +88,13 @@ function misc_statistic() {
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";
 
-	$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 0), array('=', 'log_Status', 0)));
-	$num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 
 	$zbp->LoadConfigs();
 	$zbp->LoadCache();
 	$zbp->cache->reload_statistic = $r;
 	$zbp->cache->reload_statistic_time = time();
-	$zbp->cache->normal_article_nums = $num;
-
-	$zbp->SaveCache();
+	//$zbp->SaveCache();
+	CountNormalArticleNums();
 
 	$zbp->AddBuildModule('statistics', array($all_artiles, $all_pages, $all_categorys, $all_tags, $all_views, $all_comments));
 	$zbp->BuildModule();
