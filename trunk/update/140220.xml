@@ -71,7 +71,7 @@
 	<file name='zb_system\function\lib\template.php' md5='EE0DDEAB711DC8B114EA5C990A58D08A' crc32='5243D71E'/>
 	<file name='zb_system\function\lib\upload.php' md5='97F475C6792707AD2FDC5BCDE5A038E1' crc32='35458BD6'/>
 	<file name='zb_system\function\lib\urlrule.php' md5='9F34662B287FFF984F8A3A416D3954D7' crc32='1C3FA949'/>
-	<file name='zb_system\function\lib\validcode.php' md5='D577D30DFFCAB0D1443E75CEA149E379' crc32='CB395421'/>
+	<file name='zb_system\function\lib\validatecode.php' md5='D577D30DFFCAB0D1443E75CEA149E379' crc32='CB395421'/>
 	<file name='zb_system\function\lib\zblogphp.php' md5='B26932B06D37FC5000CAD70D25FBC1BE' crc32='71B449A4'/>
 	<file name='zb_system\image\admin\app-logo.png' md5='C8B4141B48DFE3415EE2F9668E9BAD17' crc32='7D5E99CC'/>
 	<file name='zb_system\image\admin\arrow-3-right.png' md5='BA3545574C07C5146A7CA472B37191DB' crc32='9613739F'/>
@@ -213,5 +213,5 @@
 	<file name='zb_system\xml-rpc\index.php' md5='CB25612AF3C3E2A96F1698E566A0C2CB' crc32='A7889629'/>
 	<file name='zb_system\xml-rpc\wlwmanifest.xml' md5='CE9B374446699C245A489105DB6E7D06' crc32='E5F264BA'/>
 	<file name='zb_users\language\SimpChinese.php' md5='904425ED8D53F65084F77DD64F6C47BC' crc32='1450AC59'/>
-	<file name='zb_users\language\TradChinese.php' md5='F0C6C6DBDFC2C449B43F4DA9FE737B18' crc32='6289966B'/>
+	<file name='zb_users\language\TradChinese.php' md5='A2C14408AE59589672768D3B98CC5A25' crc32='4E67FDFA'/>
 </files>
