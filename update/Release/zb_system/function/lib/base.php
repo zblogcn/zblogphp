@@ -39,6 +39,14 @@ class Base
 		return $this->data[$name];
 	}
 
+	public function __isset($name){
+		return isset($this->data[$name]);
+	}
+
+	public function  __unset($name){
+		unset($this->data[$name]);
+	}
+	
 	function GetData(){
 		return $this->data;
 	}
@@ -117,11 +125,13 @@ class Base
 
 		$keys=array();
 		foreach ($this->datainfo as $key => $value) {
+			if(!is_array($value) || count($value)!=4)continue;
 			$keys[]=$value[0];
 		}
 		$keyvalue=array_fill_keys($keys, '');
 
 		foreach ($this->datainfo as $key => $value) {
+			if(!is_array($value)|| count($value)!=4)continue;
 			if($value[1]=='boolean'){
 				$keyvalue[$value[0]]=(integer)$this->data[$key];
 			}elseif($value[1] == 'integer'){

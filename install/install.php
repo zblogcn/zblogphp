@@ -3,7 +3,7 @@
 #//              Z-BlogPHP 在线安装程序
 #///////////////////////////////////////////////////////////////////////////////
 
-//error_reporting(E_ALL);
+error_reporting(0);
 //ob_start();
 ?>
 <!DOCTYPE html>
@@ -65,7 +65,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 install0();
 ?>
-<p><input type="submit" value="开始安装" /></p>
+<p><input type="submit" value="开始安装" onclick="this.style.display='none';" /></p>
 </form>
 <?php
 

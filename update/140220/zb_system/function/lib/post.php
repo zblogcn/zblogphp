@@ -204,6 +204,10 @@ class Post extends Base{
 			if($this->Template==GetValueInArray($this->Category->GetData(),'LogTemplate'))$this->data['Template'] = '';
 		}
 		if($this->Template==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
+		foreach ($GLOBALS['Filter_Plugin_Post_Save'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($this);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
 		return parent::Save();
 	}
 	

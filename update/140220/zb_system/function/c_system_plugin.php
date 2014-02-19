@@ -983,17 +983,6 @@ $Filter_Plugin_DelModule_Succeed = array();
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Post_Call
-'参数:&$post,$method,$args
-'说明:Post类的魔术方法接口
-'调用:
-'**************************************************>
-*/
-$Filter_Plugin_Post_Call = array();
-
-/*
-'**************************************************<
-'类型:Filter
 '名称:Filter_Plugin_Post_CommentPostUrl
 '参数:$post
 '说明:Post类的CommentPostUrl接口
@@ -1012,6 +1001,17 @@ $Filter_Plugin_Post_CommentPostUrl = array();
 '**************************************************>
 */
 $Filter_Plugin_Post_RelatedList = array();
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Post_Call
+'参数:&$post,$method,$args
+'说明:Post类的魔术方法接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Post_Call = array();
 
 /*
 '**************************************************<
@@ -1049,13 +1049,57 @@ $Filter_Plugin_Category_Call = array();
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Member_Call
-'参数:&$member,$method,$args
-'说明:Member类的魔术方法接口
+'名称:Filter_Plugin_Post_Save
+'参数:&$post,$method,$args
+'说明:Post类的Save方法接口
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Member_Call = array();
+$Filter_Plugin_Post_Save = array();
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Comment_Save
+'参数:&$comment,$method,$args
+'说明:Comment类的Save方法接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Comment_Save = array();
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Tag_Save
+'参数:&$tag,$method,$args
+'说明:Tag类的Save方法接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Tag_Save = array();
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Category_Save
+'参数:&$category,$method,$args
+'说明:Category类的Save方法接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Category_Save = array();
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Member_Save
+'参数:&$member,$method,$args
+'说明:Member类的Save方法接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Member_Save = array();
 
 /*
 '**************************************************<

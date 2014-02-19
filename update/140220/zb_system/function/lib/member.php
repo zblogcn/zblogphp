@@ -100,6 +100,10 @@ class Member extends Base{
 	function Save(){
         global $zbp;
 		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
+		foreach ($GLOBALS['Filter_Plugin_Member_Save'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($this);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
 		return parent::Save();
 	}
 
