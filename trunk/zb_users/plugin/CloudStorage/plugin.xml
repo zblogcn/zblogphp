@@ -2,9 +2,9 @@
 <plugin version="php">
 <id>CloudStorage</id>
 <name>云存储</name>
-<url></url>
-<note></note>
-<description>CloudStorage</description>
+<url>http://app.rainbowsoft.org/?auth=4</url>
+<note>使用云空间存储博客附件，支持阿里云、百度云、七牛云</note>
+<description>使用云空间存储博客附件，支持阿里云、百度云、七牛云</description>
 <path>main.php</path>
 <include>include.php</include>
 <level>1</level>
@@ -18,10 +18,10 @@
   <email></email>
   <url></url>
 </source>
-<adapted>131221</adapted>
+<adapted>140220</adapted>
 <version>1.0</version>
-<pubdate>2013-12-22</pubdate>
-<modified>2013-12-22</modified>
+<pubdate>2014-02-19</pubdate>
+<modified>2014-02-19</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>
