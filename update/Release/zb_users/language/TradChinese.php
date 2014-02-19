@@ -1,7 +1,7 @@
 ﻿<?php
 //<language>正體中文</language>
 //The second line of this file is the name of the language
-
+//author:楊懿軒​(sen@yangyixuan.com)
 
 //'Custom Information
 //'Don't delete %s and ()
