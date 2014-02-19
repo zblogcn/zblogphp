@@ -101,4 +101,13 @@ class Comment extends Base{
 		return parent::__get($name);
 	}
 
+	function Save(){
+        global $zbp;
+		foreach ($GLOBALS['Filter_Plugin_Comment_Save'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($this);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+		return parent::Save();
+	}
+	
 }

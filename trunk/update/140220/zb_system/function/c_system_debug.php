@@ -58,15 +58,13 @@ class ZBlogException {
 	}
 
 	static public function ClearErrorHook() {
-		set_error_handler('error_handler');
-		set_exception_handler('exception_handler');
-		register_shutdown_function('shutdown_error_handler');
-	}
-
-	static public function Trace($s) {
 		set_error_handler(create_function('', ''));
 		set_exception_handler(create_function('', ''));
 		register_shutdown_function(create_function('', ''));
+	}
+
+	static public function Trace($s) {
+		Logs($s);
 	}
 
 	function ParseError($type, $message, $file, $line) {
