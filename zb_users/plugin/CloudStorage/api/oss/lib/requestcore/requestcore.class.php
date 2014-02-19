@@ -622,12 +622,12 @@ class RequestCore
 		if ($this->ssl_verification)
 		{
 			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, true);
-			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, true);
+			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, 2);//未寒
 		}
 		else
 		{
 			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, false);
+			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, 2);//未寒
 		}
 
 		// chmod the file as 0755

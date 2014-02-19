@@ -3,6 +3,9 @@
 #注册插件
 RegisterPlugin("CloudStorage","ActivePlugin_CloudStorage");
 
+/**
+ *
+ */
 function ActivePlugin_CloudStorage() {
 	Add_Filter_Plugin('Filter_Plugin_Upload_Url','CS_Return_Url');
 	Add_Filter_Plugin('Filter_Plugin_Upload_SaveFile','CloudStorage');
@@ -10,6 +13,10 @@ function ActivePlugin_CloudStorage() {
 	// Add_Filter_Plugin('Filter_Plugin_Upload_SaveBase64File','CloudStorage');
 }
 
+/**
+ * @param $tmp
+ * @param $upload
+ */
 function CloudStorage($tmp, &$upload){
 	global $zbp;
 	$bucket = $zbp->Config('CloudStorage')->CS_Bucket;//云文件夹
@@ -64,6 +71,9 @@ function CloudStorage($tmp, &$upload){
 	$GLOBALS['Filter_Plugin_Upload_SaveFile']['CloudStorage'] = PLUGIN_EXITSIGNAL_RETURN;
 }
 
+/**
+ * @param $upload
+ */
 function CloudStorage_Del(&$upload){
 	global $zbp;
 	$bucket = $zbp->Config('CloudStorage')->CS_Bucket;
@@ -101,6 +111,10 @@ function CloudStorage_Del(&$upload){
 	$GLOBALS['Filter_Plugin_Upload_DelFile']['CloudStorage_Del'] = PLUGIN_EXITSIGNAL_RETURN;
 }
 
+/**
+ * @param $upload
+ * @return null
+ */
 function CS_Return_Url($upload){
 	global $zbp;
 	$file = new Upload;
