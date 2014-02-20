@@ -101,7 +101,7 @@ function install2(){
 	echo "<p>正在解压和安装文件...</p>";
 	ob_flush();
 	if ($GLOBALS['s']) {
-		$xml = simplexml_load_string($GLOBALS['s']);
+		$xml = simplexml_load_string($GLOBALS['s'],'SimpleXMLElement');
 		$old = umask(0);
 		foreach ($xml->file as $f) {
 			$filename=str_replace('\\','/',$f->attributes());
