@@ -11,6 +11,21 @@ error_reporting(0);
 
 ob_start();
 
+if (version_compare(PHP_VERSION, '5.1.2', '>=')) {
+    //SPL autoloading was introduced in PHP 5.1.2
+    if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+        spl_autoload_register('AutoloadClass', true, true);
+    } else {
+        spl_autoload_register('AutoloadClass');
+    }
+} else {
+    /*autoload*/
+    function __autoload($classname)
+    {
+        AutoloadClass($classname);
+    }
+}
+
 require 'c_system_common.php';
 require 'c_system_debug.php';
 require 'c_system_plugin.php';
@@ -332,8 +347,7 @@ unset($filename);
 ActivePlugin();
 
 
-/*autoload*/
-function __autoload($classname) {
+function AutoloadClass($classname){
 	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($classname);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}

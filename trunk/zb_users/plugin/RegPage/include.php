@@ -35,7 +35,7 @@ function InstallPlugin_RegPage(){
 		RegPage_CreateTable();
 		RegPage_CreateCode(100);
 	}
-	
+
 }
 
 function RegPage_CreateCode($n){
@@ -68,6 +68,7 @@ function RegPage_EmptyCode(){
 
 function RegPage_CreateTable(){
 	global $zbp;
+	if($zbp->db->ExistTable($GLOBALS['RegPage_Table'])==true)return;
 	$s=$zbp->db->sql->CreateTable($GLOBALS['RegPage_Table'],$GLOBALS['RegPage_DataInfo']);
 	$zbp->db->QueryMulit($s);
 }
