@@ -1,4 +1,6 @@
 <?php
+define('DUOSHUO_DEBUG',TRUE);
+
 require 'jwt.php';
 require 'duoshuo.class.php';
 require 'duoshuo.api.php';
@@ -35,6 +37,9 @@ function ActivePlugin_duoshuo()
 	Add_Filter_Plugin('Filter_Plugin_ViewPost_Begin','duoshuo_view_post_begin');
 	Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','duoshuo_view_post_template');
 	Add_Filter_Plugin('Filter_Plugin_ViewList_Template','duoshuo_view_list_template');
+	//同步到多说
+	Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed',"duoshuo_post_article_succeed");
+
 }
 function InstallPlugin_duoshuo()
 {
@@ -139,4 +144,29 @@ function duoshuo_view_post_begin($id,$alias)
 	if(!$duoshuo->check_spider()) $zbp->option['ZC_COMMENT_TURNOFF'] = true;
 }
 
+function duoshuo_post_article_succeed(&$article)
+{
+	global $duoshuo;
+	$duoshuo->init();
+	
+	$odata = array();
+	$odata[0] = 'threads[0][thread_key]=' . $article->ID;
+	$odata[1] = 'threads[0][title]=' . urlencode($article->Title);
+	$odata[2] = 'threads[0][url]=' . urlencode($article->Url);
+	$odata[3] = 'threads[0][content]=' ;	
+	$odata[4] = 'threads[0][author_key]=' . $article->AuthorID;
+	$odata[5] = 'threads[0][excerpt]=' . urlencode($article->Intro);
+	$odata[6] = 'threads[0][comment_status]=open';
+	$odata[7] = 'threads[0][likes]=0';
+	$odata[8] = 'threads[0][views]=' . $article->ViewNums;
+	
+	$ajax = new NetworkFactory();
+	$ajax = $ajax->Create();
+	if(!$ajax) throw new Exception('主机没有开启网络功能');
+	
+	$ajax->open('POST','http://' . $duoshuo->cfg->api_hostname . '/' . $duoshuo->url['threads']['import']);
+	$ajax->send('short_name=' . urlencode($duoshuo->cfg->short_name) . "&secret=" . urlencode($duoshuo->cfg->secret) . '&' . implode('&',$odata));
+	
+	$ajax = null;
+}
 ?>

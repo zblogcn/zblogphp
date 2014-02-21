@@ -8,10 +8,19 @@ $blogtitle='多说社会化评论';
 require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <style type="text/css">
-tr {height: 32px;}
-#divMain2 ul li {margin-top: 6px;margin-bottom: 6px}
-.bold {font-weight: bold;}
-.note {margin-left: 10px}
+tr {
+	height: 32px;
+}
+#divMain2 ul li {
+	margin-top: 6px;
+	margin-bottom: 6px
+}
+.bold {
+	font-weight: bold;
+}
+.note {
+	margin-left: 10px
+}
 </style>
 <?php
 require $blogpath . 'zb_system/admin/admin_top.php';
@@ -22,7 +31,7 @@ $duoshuo->init();
   <div class="divHeader"><?php echo $blogtitle;?></div>
   <div class="SubMenu"><?php echo $duoshuo->export_submenu(GetVars("act","GET"));?></div>
   <div id="divMain2">
-<?php
+    <?php
 if ($zbp->config('duoshuo')->short_name=="")
 {
 	echo '<iframe id="duoshuo-remote-window" src="' . $duoshuo->export_connect_url() . '" style="border:0; width:100%; height:580px;"></iframe>';
@@ -47,6 +56,7 @@ else
 ?>
     <script type="text/javascript">ActiveLeftMenu("a<?php echo !isset($_GET['act'])?'Comment':'Plugin' ?>Mng");</script> 
     <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/duoshuo/logo.png';?>");</script> 
+    <script type='text/javascript'>$(function(){var w=$('#duoshuo-remote-window');if(w.length>0){$('.divHeader').append('<span style="font-size:12px;padding: 3px 8px;background: #f1f1f1;margin-left: 4px;color: #21759b;-webkit-border-radius: 3px;border-radius: 3px;border-width: 1px;border-style: solid;"><a href='+w.attr("src")+' target="_blank">新窗口打开</a></span>')}})</script>
   </div>
 </div>
 <?php

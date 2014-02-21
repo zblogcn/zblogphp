@@ -58,7 +58,7 @@ class duoshuo_api
 				array('ds_cmtid'),
 				array(array('=','ds_key',$meta->meta->parent_id)),
 				null,
-				1,
+				array(1),
 				null
 			);
 			
@@ -66,16 +66,22 @@ class duoshuo_api
 			if(count($result)>0) $c->ParentID = $result[0]['ds_cmtid'];
 			$sql = $zbp->db->sql->Select('%pre%comment',array('comm_RootID'),array(array('=','comm_ID',$c->ParentID)),null,null,null);
 			$result = $zbp->db->Query($sql);
-			if(count($result)>0) $c->RootID = $result[0]['comm_RootID'];
+			if(count($result)>0)
+			{
+				$c->RootID = $result[0]['comm_RootID'];
+				if ((int)$c->RootID == 0) $c->RootID = $c->ParentID;
+			}
 			
 		}
 
-		if ($c->Save()) {
+		if ($c->Save())
+		{
 			$sql = $zbp->db->sql->Insert(
 				$duoshuo->db['comment'],
 				array('ds_key'=>$meta->meta->post_id , 'ds_cmtid'=>$c->ID)
 			);
-			}
+			$zbp->db->Insert($sql);
+		}
 		
 		$c = NULL; 
 		return $meta->log_id;
@@ -165,9 +171,12 @@ class duoshuo_api
 		$bol_cc_fix = $duoshuo->cfg->cc_fix;
 		$ajax->open('GET', $url);
 		$ajax->send();
+		
 		$json = json_decode($ajax->responseText);
+		//var_dump($json);exit;
 		foreach($json->response as $i)
 		{
+			
 			$func_name = str_replace('-','_',$i->action);
 			if($func_name == 'delete') $func_name = 'spam';
 			if($func_name == 'update') $func_name = 'delete_forever';
