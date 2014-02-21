@@ -270,7 +270,14 @@ function CreateModuleDiv($m,$button=true){
 			echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;source=theme&amp;filename=' . $m->FileName . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="'.$zbp->lang['msg']['edit'].'" title="'.$zbp->lang['msg']['edit'].'" width="16" /></a>';
 			echo '&nbsp;<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ModuleDel&amp;source=theme&amp;filename=' . $m->FileName . '&token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
 		}
-		if($m->SourceType!='system'&&$m->SourceType!='theme'){
+		if( $m->SourceType != 'system'
+			&& $m->SourceType != 'theme'
+			&& !(
+				$m->SourceType == 'plugin' && 
+				CheckRegExp($m->Source, '/plugin_(' . $zbp->option['ZC_USING_PLUGIN_LIST'] . ')/i')
+			)
+		)
+		{
 			echo '&nbsp;<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ModuleDel&amp;id=' . $m->ID .'&token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
 		}
 		echo '</span>';
