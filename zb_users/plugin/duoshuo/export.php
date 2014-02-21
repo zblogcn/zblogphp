@@ -41,13 +41,11 @@ $duoshuo->init();
           </tr>
         </thead>
         <tbody>
-          <?php if(isset($_GET['firstrun'])) { ?>
           <tr>
             <td><p><span class="bold"> · 立即进行数据同步</span><br/>
-                <span class="note"></span></p></td>
+                <span class="note">从多说导入评论</span></p></td>
             <td><input name="" type="submit" class="button" onClick="$('#type').val('backup')" value="立即从多说备份数据" /></td>
           </tr>
-          <?php } ?>
           <tr>
             <td><p><span class="bold"> · 一键导出</span><br/>
                 <span class="note">如您的站点数据过多，请选择下面的分块导出</span></p></td>

@@ -157,7 +157,7 @@ class duoshuo_api
 		global $duoshuo;
 		global $zbp;
 		$duoshuo->init();
-		$ajax = new NetworkFactory();
+		$ajax = new Network();
 		$ajax = $ajax->Create();
 		if(!$ajax) throw new Exception('主机没有开启网络功能');
 

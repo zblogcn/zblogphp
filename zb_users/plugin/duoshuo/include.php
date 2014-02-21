@@ -1,24 +1,26 @@
 <?php
 define('DUOSHUO_DEBUG',FALSE);
+define('DUOSHUO_PATH',dirname(__FILE__));
 
-require 'jwt.php';
-require 'duoshuo.class.php';
-require 'duoshuo.api.php';
+
+require DUOSHUO_PATH . '/jwt.php';
+require DUOSHUO_PATH . '/duoshuo.class.php';
+require DUOSHUO_PATH . '/duoshuo.api.php';
 
 $table['plugin_duoshuo_comment'] = '%pre%plugin_duoshuo_comment';
 $table['plugin_duoshuo_members'] = '%pre%plugin_duoshuo_members';
 
 $datainfo['plugin_duoshuo_comment'] = array(
-	'ID'=>array('ds_ID','integer','',0),
-	'key'=>array('ds_key','string',128,''),
-	'cmtid'=>array('ds_cmtid','integer','',0)
+	'ID' => array('ds_ID','integer','',0),
+	'key' => array('ds_key','string',128,''),
+	'cmtid' => array('ds_cmtid','integer','',0)
 );
 
 $datainfo['plugin_duoshuo_members'] = array(
-	'ID'=>array('ds_ID','integer','',0),
-	'key'=>array('ds_key','string',128,''),
-	'memid'=>array('ds_memid','integer','',0),
-	'accesstoken'=>array('ds_accesstoken','string',128,''),
+	'ID' => array('ds_ID','integer','',0),
+	'key' => array('ds_key','string',128,''),
+	'memid' => array('ds_memid','integer','',0),
+	'accesstoken' => array('ds_accesstoken','string',128,''),
 );
 
 $duoshuo = new duoshuo_class();
@@ -39,6 +41,7 @@ function ActivePlugin_duoshuo()
 	Add_Filter_Plugin('Filter_Plugin_ViewList_Template','duoshuo_view_list_template');
 	//同步到多说
 	Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed',"duoshuo_post_article_succeed");
+
 
 }
 
@@ -109,11 +112,13 @@ function duoshuo_create_functions()
 function duoshuo_create_database()
 {
 	global $zbp;
-	if($zbp->db->ExistTable($GLOBALS['table']['plugin_duoshuo_comment'])==false){
+	if($zbp->db->ExistTable($GLOBALS['table']['plugin_duoshuo_comment'])==false)
+	{
 		$s = $zbp->db->sql->CreateTable($GLOBALS['table']['plugin_duoshuo_comment'],$GLOBALS['datainfo']['plugin_duoshuo_comment']);
 		$zbp->db->QueryMulit($s);
 	}
-	if($zbp->db->ExistTable($GLOBALS['table']['plugin_duoshuo_comment'])==false){
+	if($zbp->db->ExistTable($GLOBALS['table']['plugin_duoshuo_comment'])==false)
+	{
 		$s = $zbp->db->sql->CreateTable($GLOBALS['table']['plugin_duoshuo_members'],$GLOBALS['datainfo']['plugin_duoshuo_members']);
 		$zbp->db->QueryMulit($s);
 	}
@@ -156,11 +161,14 @@ function duoshuo_view_post_template(&$template)
 	$template->SetTags('duoshuo_comments_wrapper_intro',$duoshuo->cfg->comments_wrapper_intro);
 	$template->SetTags('duoshuo_comments_wrapper_outro',$duoshuo->cfg->comments_wrapper_outro);
 	
-	if(!$duoshuo->check_spider()) 
+	$spider = $duoshuo->check_spider();
+	
+	if(!$spider) 
 	{
 		$comment = &$template->GetTags('comments');
 		$comment = array();
 	}
+	
 	$zbp->option['ZC_COMMENT_TURNOFF'] = true;
 	$post = &$template->GetTags('article');
 	$post->IsLock = false;
@@ -195,7 +203,8 @@ function duoshuo_view_post_begin($id,$alias)
 {
 	global $zbp;
 	global $duoshuo;
-	if(!$duoshuo->check_spider()) $zbp->option['ZC_COMMENT_TURNOFF'] = true;
+	$duoshuo_spider = $duoshuo->check_spider();
+	if(!$duoshuo_spider) $zbp->option['ZC_COMMENT_TURNOFF'] = true;
 }
 
 function duoshuo_post_article_succeed(&$article)
@@ -214,7 +223,7 @@ function duoshuo_post_article_succeed(&$article)
 	$odata[7] = 'threads[0][likes]=0';
 	$odata[8] = 'threads[0][views]=' . $article->ViewNums;
 	
-	$ajax = new NetworkFactory();
+	$ajax = new Network();
 	$ajax = $ajax->Create();
 	if(!$ajax) throw new Exception('主机没有开启网络功能');
 	
