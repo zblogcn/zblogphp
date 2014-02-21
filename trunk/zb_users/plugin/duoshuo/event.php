@@ -71,16 +71,19 @@ function api_async()
 	$duoshuo->init();
 	$_last = (int)$duoshuo->cfg->lastpub;
 	$_now = time();
-	/*
-	if (($_now-$_last)/1000<60*20)
+	
+	if(!DUOSHUO_DEBUG)
 	{
-		$result['last'] = $_last;
-		$result['now'] = $_now;
-		$result['status'] = 'waiting...';
-		echo json_encode($result);
-		exit();
+		if (($_now-$_last)/1000<60*20)
+		{
+			$result['last'] = $_last;
+			$result['now'] = $_now;
+			$result['status'] = 'waiting...';
+			echo json_encode($result);
+			exit();
+		}
 	}
-	*/
+	
 	$_last = $_now;
 	$duoshuo->cfg->lastpub = $_now;
 	$zbp->SaveConfig('duoshuo');
