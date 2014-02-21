@@ -22,7 +22,7 @@ interface iNetwork
 /**
 * NetworkFactory
 */
-class NetworkFactory
+class Network
 {
 
 	public $networktype = null;
