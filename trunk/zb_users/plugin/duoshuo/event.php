@@ -71,13 +71,13 @@ function api_async()
 	$duoshuo->init();
 	$_last = (int)$duoshuo->cfg->lastpub;
 	$_now = time();
+	$result['last'] = $_last;
+	$result['now'] = $_now;
 	
 	if(!DUOSHUO_DEBUG)
 	{
 		if (($_now-$_last)/1000<60*20)
 		{
-			$result['last'] = $_last;
-			$result['now'] = $_now;
 			$result['status'] = 'waiting...';
 			echo json_encode($result);
 			exit();
@@ -95,15 +95,26 @@ function api_async()
 	}
 	else
 	{
-		$duoshuo->api->sync();
-		$zbp->AddBuildModule('comments');
-		$zbp->AddBuildModule('statistics');
-		$zbp->BuildModule();
-		$return_string = 'success';
+		$return_string = api_run();
 	}
+
+	$result['last'] = $_last;
+	$result['now'] = $_now;
 	$result['status'] = $return_string;
 	echo json_encode($result);
 	exit();
+}
+
+function api_run()
+{
+	global $duoshuo;
+	global $zbp;
+	$duoshuo->init();
+	$duoshuo->api->sync();
+	$zbp->AddBuildModule('comments');
+	$zbp->AddBuildModule('statistics');
+	$zbp->BuildModule();
+	return 'success';
 }
 
 function callback()
@@ -144,15 +155,15 @@ function export()
 
 	
 	$intmin = 0; $intmax = 0;
-	$http = new NetworkFactory();
+	$http = new Network();
 	$http = $http->Create();
 	if(!$http) throw new Exception('主机没有开启网络功能');
 	
 	$startTime = microtime_float();
 	
-	require 'export.article.php';
-	require 'export.comment.php';
-	require 'export.member.php';
+	require DUOSHUO_PATH . '/export.article.php';
+	require DUOSHUO_PATH . '/export.comment.php';
+	require DUOSHUO_PATH . '/export.member.php';
 	
 	switch(GetVars("type",'POST'))
 	{
@@ -179,9 +190,8 @@ function export()
 			$strSuccess="用户数据导出完成";
 		break;
 		case 'backup':
-			$strSuccess = Api_Run();
-			$strSuccess = $strSuccess['succeed'];
-			if($strSuccess=='success') $strSuccess="数据从多说备份到本地完成";
+			$strSuccess = api_run();
+			if($strSuccess=='success') $strSuccess = "数据从多说备份到本地完成";
 		break;
 	}
 	$result = array(
