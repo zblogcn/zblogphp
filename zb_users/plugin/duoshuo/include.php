@@ -1,5 +1,5 @@
 <?php
-define('DUOSHUO_DEBUG',TRUE);
+define('DUOSHUO_DEBUG',FALSE);
 
 require 'jwt.php';
 require 'duoshuo.class.php';
@@ -41,21 +41,71 @@ function ActivePlugin_duoshuo()
 	Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed',"duoshuo_post_article_succeed");
 
 }
+
 function InstallPlugin_duoshuo()
 {
 	global $zbp;
 	@duoshuo_create_database();
-	$zbp->Config('duoshuo')->short_name='';
-	$zbp->SaveConfig('duoshuo');
+	duoshuo_create_functions();
+	//Init Config
+	if(!isset($zbp->Config('duoshuo')->short_name))
+	{
+		$zbp->Config('duoshuo')->short_name = '';
+		$zbp->Config('duoshuo')->secret = '';
+		$zbp->Config('duoshuo')->api_hostname = 'api.duoshuo.com';
+		$zbp->Config('duoshuo')->cron_sync_enabled = 'async';
+		$zbp->Config('duoshuo')->cc_fix = '1';
+		$zbp->Config('duoshuo')->comments_wrapper_intro = '';
+		$zbp->Config('duoshuo')->comments_wrapper_outro	= '';
+		$zbp->Config('duoshuo')->seo_enabled = 1;
+		$zbp->Config('duoshuo')->lastpub = 0;
+		$zbp->Config('duoshuo')->log_id = 0;
+		$zbp->SaveConfig('duoshuo');
+	}
 }
+
 function UninstallPlugin_duoshuo()
 {
 }
+
 function duoshuo_cmd_begin()
 {
 	global $action;
 	if($action == 'cmt') exit;
 }
+
+function duoshuo_create_functions()
+{
+	global $zbp;
+	//global $duoshuo;
+	if(!isset($zbp->modulesbyfilename['duoshuo_recentcomments']))
+	{
+		$t = new Module();
+		$t->Name = "多说最新评论";
+		$t->FileName = "Duoshuo_RecentComments";
+		$t->Source = "plugin_duoshuo";
+		$t->SidebarID = 0;
+		$t->Content = "";
+		$t->HtmlID = "Duoshuo_RecentComments";
+ 		$t->Type = "div";
+		$t->Content = '<ul class="ds-recent-comments" data-num-items="10"></ul>';
+		$t->Save();
+	}
+	if(!isset($zbp->modulesbyfilename['duoshuo_topthreads']))
+	{
+		$t = new Module();
+		$t->Name = "多说最热文章";
+		$t->FileName = "Duoshuo_TopThreads";
+		$t->Source = "plugin_duoshuo";
+		$t->SidebarID = 0;
+		$t->Content = "";
+		$t->HtmlID = "Duoshuo_TopThreads";
+ 		$t->Type = "div";
+		$t->Content = '<ul class="ds-top-threads" data-range="weekly" data-num-items="10"></ul>';
+		$t->Save();
+	}
+}
+
 function duoshuo_create_database()
 {
 	global $zbp;
@@ -103,6 +153,9 @@ function duoshuo_view_post_template(&$template)
 	global $zbp;
 	global $duoshuo;
 	
+	$template->SetTags('duoshuo_comments_wrapper_intro',$duoshuo->cfg->comments_wrapper_intro);
+	$template->SetTags('duoshuo_comments_wrapper_outro',$duoshuo->cfg->comments_wrapper_outro);
+	
 	if(!$duoshuo->check_spider()) 
 	{
 		$comment = &$template->GetTags('comments');
@@ -117,6 +170,7 @@ function duoshuo_view_post_template(&$template)
 		$post->CommNums = '<span id="duoshuo_comment'.$post->ID.'" duoshuo_id="'.$post->ID.'"></span>';
 		$duoshuo->cc_thread_key .= $post->ID.',';
 	}
+	
 	$template->SetTags('footer',$duoshuo->get_footer_js());
 	
 }
@@ -169,4 +223,7 @@ function duoshuo_post_article_succeed(&$article)
 	
 	$ajax = null;
 }
+
+
+
 ?>
