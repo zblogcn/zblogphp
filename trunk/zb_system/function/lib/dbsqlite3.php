@@ -71,7 +71,8 @@ class DbSQLite3 implements iDataBase
 		return $this->db->query($query);
 	}
 
-	function Delete($query
+	function Delete($query)
+	{
 		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		return $this->db->query($query);
