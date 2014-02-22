@@ -298,8 +298,24 @@ class ZBlogPHP{
 		if($this->isconnect)return false;
 		if(!$this->option['ZC_DATABASE_TYPE'])return false;
 		switch ($this->option['ZC_DATABASE_TYPE']) {
+		case 'sqlite':
+		case 'sqlite3':
+			try {
+				$this->InitializeDB($this->option['ZC_DATABASE_TYPE']);
+				if($this->db->Open(array(
+					$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
+					$this->option['ZC_SQLITE_PRE']
+					))==false){
+					$this->ShowError(69,__FILE__,__LINE__);
+				}
+			} catch (Exception $e) {
+				throw new Exception("SQLite DateBase Connection Error.");
+			}
+			break;
 		case 'mysql':
+		case 'mysqli':
 		case 'pdo_mysql':
+		default:
 			try {
 				if($this->InitializeDB($this->option['ZC_DATABASE_TYPE']))return false;
 				if($this->db->Open(array(
@@ -315,20 +331,6 @@ class ZBlogPHP{
 				}
 			} catch (Exception $e) {
 				throw new Exception("MySQL DateBase Connection Error.");
-			}
-			break;
-		case 'sqlite':
-		case 'sqlite3':
-			try {
-				$this->InitializeDB($this->option['ZC_DATABASE_TYPE']);
-				if($this->db->Open(array(
-					$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
-					$this->option['ZC_SQLITE_PRE']
-					))==false){
-					$this->ShowError(69,__FILE__,__LINE__);
-				}
-			} catch (Exception $e) {
-				throw new Exception("SQLite DateBase Connection Error.");
 			}
 			break;
 		}
@@ -1245,7 +1247,7 @@ function AddBuildModuleAll(){
 		$a=array();
 		$a[]=array('tag_Alias',$name);
 		$a[]=array('tag_Name',$name);
-		$array=$this->GetTagList('',array(array('array',$a)),'',array(1),'');
+		$array=$this->GetTagList('*',array(array('array',$a)),'',1,'');
 		if(count($array)==0){
 			return new Tag;
 		}else{

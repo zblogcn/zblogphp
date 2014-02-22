@@ -242,6 +242,11 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][1];?></td>
         </tr>
         <tr>
+          <td scope="row">MySQLi</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysqli'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysqli'][1];?></td>
+        </tr>
+        <tr>
           <td scope="row">PDO_MySQL</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][1];?></td>
@@ -401,7 +406,11 @@ function Setup3(){
       <p><b>连接选择:</b> 
         <?php if($CheckResult['mysql'][0]){?>
         <label>
-          <input value="mysql" type="radio" name="dbtype"/>MySQL原生连接</label>
+          <input value="mysql" type="radio" name="dbtype"/>MySQL连接</label>
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+        <?php if($CheckResult['mysqli'][0]){?>
+        <label>
+          <input value="mysqli" type="radio" name="dbtype"/>MySQLi连接</label>
         <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php if($CheckResult['pdo_mysql'][0]){?>
         <label>
@@ -496,7 +505,8 @@ $cts='';
 
 switch ($zbp->option['ZC_DATABASE_TYPE']) {
 case 'mysql':
-case 'pdo_mysql': 
+case 'mysqli':
+case 'pdo_mysql':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/mysql.sql');
   $zbp->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
   $zbp->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
@@ -560,7 +570,8 @@ $CheckResult=array(
   'phpver' => array(phpversion(),''), 
   'zbppath' => array($zbp->path,''), 
  //组件
-  'mysql' => array('',''), 
+  'mysql' => array('',''),
+  'mysqli' => array('',''),
   'pdo_mysql' => array('',''),
   'sqlite' => array('',''),
   'sqlite3' => array('',''),
@@ -599,6 +610,9 @@ $CheckResult=array(
   if( function_exists("mysql_get_client_info") ){
     $CheckResult['mysql'][0]=mysql_get_client_info();
   }
+  if( function_exists("mysqli_get_client_info") ){
+    $CheckResult['mysqli'][0]=mysqli_get_client_info();
+  }  
   if( class_exists("PDO",false) ){
     $CheckResult['pdo_mysql'][0]=PDO::ATTR_DRIVER_NAME;
     $CheckResult['pdo_pgsql'][0]=PDO::ATTR_DRIVER_NAME;
