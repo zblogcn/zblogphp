@@ -114,9 +114,13 @@ class UrlRule
 			$url = $url . '$';
 			$url=str_replace('%page%', '([0-9]*)', $url);
 			$url=str_replace('%id%', '([0-9]+)', $url);
-			//$url=str_replace('%alias%', '([^/_]+)', $url);
+
 			$url=str_replace('%date%', '([0-9\-]+)', $url);
-			$url=str_replace('%alias%', '('.$fullcategory.')', $url);
+			if($type=='cate'){
+				$url=str_replace('%alias%', '('.$fullcategory.')', $url);
+			}else{
+				$url=str_replace('%alias%', '([^/_]+)', $url);
+			}
 		}
 		if($type=='page'||$type=='article'){
 			if(strpos($url, '%alias%')===false){
