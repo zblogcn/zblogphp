@@ -63,10 +63,11 @@ class DbMySQL implements iDataBase
 	}
 
 	function Close(){
-
+		mysql_close($this->db);
 	}
 
 	function QueryMulit($s){
+		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
 		foreach ($a as $s) {
 			mysql_query($s);
@@ -74,6 +75,7 @@ class DbMySQL implements iDataBase
 	}
 
 	function Query($query){
+		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		$results = mysql_query($query);
 		$data = array();
@@ -98,16 +100,19 @@ if($b){
 	}
 
 	function Update($query){
+		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		return mysql_query($query);
 	}
 
 	function Delete($query){
+		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		return mysql_query($query);
 	}
 
 	function Insert($query){
+		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		mysql_query($query);
 		return mysql_insert_id();

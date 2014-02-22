@@ -2,6 +2,11 @@
 define('DUOSHUO_DEBUG',FALSE);
 define('DUOSHUO_PATH',dirname(__FILE__));
 
+//ZBP1.3之前临时使用
+require DUOSHUO_PATH . '/network.php';
+require DUOSHUO_PATH . '/networkcurl.php';
+require DUOSHUO_PATH . '/networkfile_get_contents.php';
+require DUOSHUO_PATH . '/networkfsockopen.php';
 
 require DUOSHUO_PATH . '/jwt.php';
 require DUOSHUO_PATH . '/duoshuo.class.php';

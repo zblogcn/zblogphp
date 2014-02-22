@@ -43,6 +43,7 @@ class DbSQLite implements iDataBase
 	}
 
 	function QueryMulit($s){
+		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		foreach ($a as $s) {
 			$s=trim($s);
@@ -51,7 +52,7 @@ class DbSQLite implements iDataBase
 	}
 
 	function Query($query){
-
+		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		// 遍历出来
 		$results = sqlite_query($this->db,$query);
@@ -66,16 +67,19 @@ class DbSQLite implements iDataBase
 	}
 
 	function Update($query){
+		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		return sqlite_query($this->db,$query);
 	}
 
 	function Delete($query){
+		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		return sqlite_query($this->db,$query);
 	}
 
 	function Insert($query){
+		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		sqlite_query($this->db,$query);
 		return sqlite_last_insert_rowid($this->db);
