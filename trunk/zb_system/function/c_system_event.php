@@ -544,9 +544,6 @@ function ViewPost($id, $alias, $isrewrite = false) {
 	}
 
 	$article = $articles[0];
-	if ($zbp->option['ZC_COMMENT_TURNOFF']) {
-		$article->IsLock = true;
-	}
 
 	if ($article->Type == 0) {
 		$zbp->LoadTagsByIDString($article->Tag);
@@ -563,44 +560,50 @@ function ViewPost($id, $alias, $isrewrite = false) {
 	$pagebar->PageNow = 1;
 	$pagebar->PageBarCount = $zbp->pagebarcount;
 
+	if ($zbp->option['ZC_COMMENT_TURNOFF']) {
+		$article->IsLock = true;
+	}
+	
 	$comments = array();
 
-	$comments = $zbp->GetCommentList(
-		'*', 
-		array(
-			array('=', 'comm_RootID', 0),
-			array('=', 'comm_IsChecking', 0),
-			array('=', 'comm_LogID', $article->ID)
-		),
-		array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
-		array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
-		array('pagebar' => $pagebar)
-	);
-	$rootid = array();
-	foreach ($comments as &$comment) {
-		$rootid[] = array('comm_RootID', $comment->ID);
+	if($article->IsLock==false && $zbp->socialcomment==null){
+		$comments = $zbp->GetCommentList(
+			'*', 
+			array(
+				array('=', 'comm_RootID', 0),
+				array('=', 'comm_IsChecking', 0),
+				array('=', 'comm_LogID', $article->ID)
+			),
+			array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
+			array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
+			array('pagebar' => $pagebar)
+		);
+		$rootid = array();
+		foreach ($comments as &$comment) {
+			$rootid[] = array('comm_RootID', $comment->ID);
+		}
+		$comments2 = $zbp->GetCommentList(
+			'*', 
+			array(
+				array('array', $rootid),
+				array('=', 'comm_IsChecking', 0),
+				array('=', 'comm_LogID', $article->ID)
+			),
+			array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
+			null,
+			null
+		);
+		$floorid = ($pagebar->PageNow - 1) * $pagebar->PageCount;
+		foreach ($comments as &$comment) {
+			$floorid += 1;
+			$comment->FloorID = $floorid;
+			$comment->Content = TransferHTML($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+		}
+		foreach ($comments2 as &$comment) {
+			$comment->Content = TransferHTML($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+		}
 	}
-	$comments2 = $zbp->GetCommentList(
-		'*', 
-		array(
-			array('array', $rootid),
-			array('=', 'comm_IsChecking', 0),
-			array('=', 'comm_LogID', $article->ID)
-		),
-		array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
-		null,
-		null
-	);
-	$floorid = ($pagebar->PageNow - 1) * $pagebar->PageCount;
-	foreach ($comments as &$comment) {
-		$floorid += 1;
-		$comment->FloorID = $floorid;
-		$comment->Content = TransferHTML($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
-	}
-	foreach ($comments2 as &$comment) {
-		$comment->Content = TransferHTML($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
-	}
-
+	
 	$zbp->template->SetTags('title', ($article->Status == 0 ? '' : '[' . $zbp->lang['post_status_name'][$article->Status] . ']') . $article->Title);
 	$zbp->template->SetTags('article', $article);
 	$zbp->template->SetTags('type', ($article->Type == 0 ? 'article' : 'page'));

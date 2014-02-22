@@ -12,18 +12,13 @@ error_reporting(0);
 ob_start();
 
 if (version_compare(PHP_VERSION, '5.1.2', '>=')) {
-    //SPL autoloading was introduced in PHP 5.1.2
-    if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
-        spl_autoload_register('AutoloadClass', true, true);
-    } else {
-        spl_autoload_register('AutoloadClass');
-    }
+	//SPL autoloading was introduced in PHP 5.1.2
+	spl_autoload_register('AutoloadClass');
 } else {
-    /*autoload*/
-    function __autoload($classname)
-    {
-        AutoloadClass($classname);
-    }
+	/*autoload*/
+	function __autoload($classname){
+		AutoloadClass($classname);
+	}
 }
 
 require 'c_system_common.php';
@@ -70,8 +65,8 @@ $usersdir = $blogpath . 'zb_users/';
 
 
 $option_zbusers=null;
-if(file_exists($usersdir . 'c_option.php')){
-	$option_zbusers = require($usersdir . 'c_option.php');
+if(is_readable($filename = $usersdir . 'c_option.php')){
+	$option_zbusers = require($filename);
 }
 if(!is_array($option_zbusers))$option_zbusers=array();
 $option = require($blogpath . 'zb_system/defend/option.php');
@@ -328,7 +323,7 @@ $zbp->Initialize();
 
 /*include plugin*/
 #加载主题插件
-if (file_exists($filename = $usersdir . 'theme/'.$blogtheme.'/include.php')) {
+if (is_readable($filename = $usersdir . 'theme/'.$blogtheme.'/include.php')) {
 	require $filename;
 }
 
@@ -337,7 +332,7 @@ if (file_exists($filename = $usersdir . 'theme/'.$blogtheme.'/include.php')) {
 $ap=explode("|", $option['ZC_USING_PLUGIN_LIST']);
 $ap=array_unique($ap);
 foreach ($ap as $plugin) {
-	if (file_exists($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
+	if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
 		require $filename;
 	}
 }
@@ -352,7 +347,8 @@ function AutoloadClass($classname){
 		$fpreturn=$fpname($classname);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
-	require $GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php';
+	if (is_readable($f=$GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php'))
+		require $f;
 }
 
 function _stripslashes(&$val) {

@@ -14,8 +14,9 @@ function Logs($s) {
 }
 
 $_SERVER['_start_time'] = microtime(1); //RunTime
+$_SERVER['_query_count'] = 0;
 function RunTime() {
-	echo '<!--' . (1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6)) . 'ms-->';
+	echo '<!--' . (1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6)) . 'ms , ' . $_SERVER['_query_count'] . 'query-->';
 }
 
 function GetValueInArray($array, $name) {
