@@ -40,8 +40,8 @@ class Network
 
 		if ((bool)ini_get('allow_url_fopen'))
 		{
-			if(function_exists('file_get_contents')) $this->network_list[] = 'file_get_contents';
 			if(function_exists('fsockopen')) $this->network_list[] = 'fsockopen';
+			if(function_exists('file_get_contents')) $this->network_list[] = 'file_get_contents';
 			$this->fso = true;
 		}
 	}

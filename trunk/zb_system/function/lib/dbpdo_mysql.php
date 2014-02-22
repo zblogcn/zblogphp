@@ -107,7 +107,7 @@ class Dbpdo_MySQL implements iDataBase
 	}
 
 	function DelTable($tablename){
-		$this->Query($this->sql->DelTable($tablename));
+		$this->QueryMulit($this->sql->DelTable($tablename));
 	}
 
 	function ExistTable($tablename){

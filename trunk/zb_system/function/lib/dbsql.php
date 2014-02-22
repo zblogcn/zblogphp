@@ -46,7 +46,7 @@ class DbSql #extends AnotherClass
 		if($this->type=='DbSQLite'||$this->type=='DbSQLite3'){
 			$s="SELECT count(*) FROM sqlite_master WHERE type='table' AND name='$tablename'";
 		}
-		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbPostgreSQL'){
+		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
 			$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$tablename'";
 		}
 
@@ -150,7 +150,7 @@ class DbSql #extends AnotherClass
 			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$tablename.' ('.GetValueInArrayByCurrent($datainfo,0).');';
 		}
 
-		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'){
+		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
 			$s.='CREATE TABLE IF NOT EXISTS '.$tablename.' (';
 
 			$i=0;
