@@ -101,9 +101,11 @@ class Networkcurl implements iNetwork
 		{
 			if($data=='') $data = http_build_query($this->postdata);
 			curl_setopt($this->ch, CURLOPT_POSTFIELDS,$data);
+			curl_setopt($ch, CURLOPT_POST, 1);
 		}
 
 		curl_setopt($this->ch,CURLOPT_HTTPHEADER,$this->httpheader);
+		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
 
 		$result = curl_exec($this->ch);
 		$header_size = curl_getinfo($this->ch,CURLINFO_HEADER_SIZE);
@@ -112,11 +114,16 @@ class Networkcurl implements iNetwork
 		curl_close($this->ch);
 
 	}
+
 	public function setRequestHeader($bstrHeader, $bstrValue, $append=false){
-		if($append || isset($this->httpheader[$bstrHeader])==false){
-			array_push($this->httpheader,$bstrHeader.': '.$bstrValue);
+		if($append==false){
+			$this->httpheader[$bstrHeader]=$bstrHeader.': '.$bstrValue;
 		}else{
-			$this->httpheader[$bstrHeader] = $this->httpheader[$bstrHeader].$bstrValue;
+			if(isset($this->httpheader[$bstrHeader])){
+				$this->httpheader[$bstrHeader] = $this->httpheader[$bstrHeader].$bstrValue;
+			}else{
+				$this->httpheader[$bstrHeader]=$bstrHeader.': '.$bstrValue;
+			}
 		}
 		return true;
 	}

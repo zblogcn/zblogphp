@@ -65,6 +65,10 @@ class Networkfsockopen implements iNetwork
 		}
 		return '';
 	}
+	
+	public function setTimeOuts($resolveTimeout,$connectTimeout,$sendTimeout,$receiveTimeout){
+
+	}
 
 	public function open($bstrMethod, $bstrUrl, $varAsync=true, $bstrUser='', $bstrPassword=''){ //Async无用
 		//初始化变量
@@ -127,8 +131,10 @@ class Networkfsockopen implements iNetwork
 	    );
 		fwrite($socket,$this->option['header']."\r\n");
 		fwrite($socket,"\r\n");
-		fwrite($socket,$this->option['content']."\r\n");
-		fwrite($socket,"\r\n");
+		if(isset($this->option['content'])){
+			fwrite($socket,$this->option['content']."\r\n");
+			fwrite($socket,"\r\n");
+		}
 
 		while ($str = trim(fgets($socket,4096)))
 		{
@@ -144,10 +150,14 @@ class Networkfsockopen implements iNetwork
 
 	}
 	public function setRequestHeader($bstrHeader, $bstrValue, $append=false){
-		if($append || isset($this->httpheader[$bstrHeader])==false){
-			array_push($this->httpheader,$bstrHeader.': '.$bstrValue);
+		if($append==false){
+			$this->httpheader[$bstrHeader]=$bstrHeader.': '.$bstrValue;
 		}else{
-			$this->httpheader[$bstrHeader] = $this->httpheader[$bstrHeader].$bstrValue;
+			if(isset($this->httpheader[$bstrHeader])){
+				$this->httpheader[$bstrHeader] = $this->httpheader[$bstrHeader].$bstrValue;
+			}else{
+				$this->httpheader[$bstrHeader]=$bstrHeader.': '.$bstrValue;
+			}
 		}
 		return true;
 	}
