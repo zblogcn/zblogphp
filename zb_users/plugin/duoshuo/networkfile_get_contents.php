@@ -84,6 +84,9 @@ class Networkfile_get_contents implements iNetwork
 
 	public function send($varBody=''){
 		$data=$varBody;
+		if(is_array($data)){
+			$data=http_build_query($data);
+		}
 
 		if($this->option['method']=='POST')
 		{
@@ -105,8 +108,12 @@ class Networkfile_get_contents implements iNetwork
 		$this->responseHeader = $http_response_header;
 
 	}
-	public function setRequestHeader($bstrHeader, $bstrValue){
-		array_push($this->httpheader,$bstrHeader.': '.$bstrValue);
+	public function setRequestHeader($bstrHeader, $bstrValue, $append=false){
+		if($append || isset($this->httpheader[$bstrHeader])==false){
+			array_push($this->httpheader,$bstrHeader.': '.$bstrValue);
+		}else{
+			$this->httpheader[$bstrHeader] = $this->httpheader[$bstrHeader].$bstrValue;
+		}
 		return true;
 	}
 
