@@ -120,11 +120,45 @@ function Server_Open($method){
 	}
 
 }
+function Server_SendRequest_Network($url,$data=array()){
+	global $zbp;
 
+	$ajax = new Network();
+	$ajax = $ajax->Create();
+	if(!$ajax) throw new Exception('主机没有开启网络功能');
+
+	$un=$zbp->Config('AppCentre')->username;
+	$ps=$zbp->Config('AppCentre')->password;
+	$c='';
+	if($un&&$ps){
+		$c="username=".urlencode($un) ."; password=".urlencode($ps);
+	}
+	
+	$shopun=$zbp->Config('AppCentre')->shop_username;
+	$shopps=$zbp->Config('AppCentre')->shop_password;
+
+	if($shopun&&$shopps){
+		if($c!=='')$c.='; ';
+		$c.="shop_username=".urlencode($shopun) ."; shop_password=".urlencode($shopps);
+	}
+	
+	$ajax->setRequestHeader('User-Agent','ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent());
+	if($data){//POST
+		$ajax->open('POST',$url);
+		$ajax->send($data);
+	}else{
+		$ajax->open('GET',$url);
+		$ajax->send();
+	}
+	
+	return $ajax->responseText;
+}
 
 function Server_SendRequest($url,$data=array()){
 	global $zbp;
 
+	if(class_exists('Network'))return Server_SendRequest_Network($url,$data);
+	
 	if(function_exists("curl_init"))return Server_SendRequest_CUrl($url,$data);
 	if(!ini_get("allow_url_fopen"))return "";	
 	
