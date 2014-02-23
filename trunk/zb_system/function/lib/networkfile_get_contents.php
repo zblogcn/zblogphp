@@ -60,6 +60,10 @@ class Networkfile_get_contents implements iNetwork
 		}
 		return '';
 	}
+	
+	public function setTimeOuts($resolveTimeout,$connectTimeout,$sendTimeout,$receiveTimeout){
+
+	}
 
 	public function open($bstrMethod, $bstrUrl, $varAsync=true, $bstrUser='', $bstrPassword=''){ //Async无用
 		//初始化变量
@@ -109,10 +113,14 @@ class Networkfile_get_contents implements iNetwork
 
 	}
 	public function setRequestHeader($bstrHeader, $bstrValue, $append=false){
-		if($append || isset($this->httpheader[$bstrHeader])==false){
-			array_push($this->httpheader,$bstrHeader.': '.$bstrValue);
+		if($append==false){
+			$this->httpheader[$bstrHeader]=$bstrHeader.': '.$bstrValue;
 		}else{
-			$this->httpheader[$bstrHeader] = $this->httpheader[$bstrHeader].$bstrValue;
+			if(isset($this->httpheader[$bstrHeader])){
+				$this->httpheader[$bstrHeader] = $this->httpheader[$bstrHeader].$bstrValue;
+			}else{
+				$this->httpheader[$bstrHeader]=$bstrHeader.': '.$bstrValue;
+			}
 		}
 		return true;
 	}

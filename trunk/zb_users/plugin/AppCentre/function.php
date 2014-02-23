@@ -120,48 +120,10 @@ function Server_Open($method){
 	}
 
 }
-function Server_SendRequest_Network($url,$data=array()){
-	global $zbp;
-
-	$ajax = new Network();
-	$ajax = $ajax->Create();
-	if(!$ajax) throw new Exception('主机没有开启网络功能');
-
-	$un=$zbp->Config('AppCentre')->username;
-	$ps=$zbp->Config('AppCentre')->password;
-	$c='';
-	if($un&&$ps){
-		$c="username=".urlencode($un) ."; password=".urlencode($ps);
-	}
-	
-	$shopun=$zbp->Config('AppCentre')->shop_username;
-	$shopps=$zbp->Config('AppCentre')->shop_password;
-
-	if($shopun&&$shopps){
-		if($c!=='')$c.='; ';
-		$c.="shop_username=".urlencode($shopun) ."; shop_password=".urlencode($shopps);
-	}
-	
-	$ajax->setRequestHeader('User-Agent','ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent());
-	if($data){//POST
-		$ajax->open('POST',$url);
-		$ajax->send($data);
-	}else{
-		$ajax->open('GET',$url);
-		$ajax->send();
-	}
-	
-	return $ajax->responseText;
-}
 
 function Server_SendRequest($url,$data=array()){
 	global $zbp;
 
-	if(class_exists('Network'))return Server_SendRequest_Network($url,$data);
-	
-	if(function_exists("curl_init"))return Server_SendRequest_CUrl($url,$data);
-	if(!ini_get("allow_url_fopen"))return "";	
-	
 	$un=$zbp->Config('AppCentre')->username;
 	$ps=$zbp->Config('AppCentre')->password;
 	$c='';
@@ -176,7 +138,13 @@ function Server_SendRequest($url,$data=array()){
 		if($c!=='')$c.='; ';
 		$c.="shop_username=".urlencode($shopun) ."; shop_password=".urlencode($shopps);
 	}
-
+	
+	$u='ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent();
+	
+	
+	if(class_exists('Network'))return Server_SendRequest_Network($url,$data,$u,$c);
+	if(function_exists("curl_init"))return Server_SendRequest_CUrl($url,$data,$u,$c);
+	if(!ini_get("allow_url_fopen"))return "";	
 	
 	if($data){//POST
 		$data=http_build_query($data);
@@ -186,7 +154,7 @@ function Server_SendRequest($url,$data=array()){
 				'header'=>"Content-Type:application/x-www-form-urlencoded\r\n".
 					'Content-Length: '.strlen($data)."\r\n".
 					"Cookie: ".$c."\r\n",
-				'user_agent'=> 'ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent(),
+				'user_agent'=> $u,
 				'content'=>$data
 			)
 		);
@@ -196,7 +164,7 @@ function Server_SendRequest($url,$data=array()){
 			'http'=>array(
 				'method'=>'GET',
 				'header'=>"Cookie: ".$c."\r\n",
-				'user_agent'=> 'ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent(),
+				'user_agent'=> $u,
 			)
 		);
 		$content=stream_context_create($opts);
@@ -207,29 +175,14 @@ function Server_SendRequest($url,$data=array()){
 
 }
 
-function Server_SendRequest_CUrl($url,$data=array()){
+function Server_SendRequest_CUrl($url,$data=array(),$u,$c){
 	global $zbp;
 
-	$un=$zbp->Config('AppCentre')->username;
-	$ps=$zbp->Config('AppCentre')->password;
-	$c='';
-	if($un&&$ps){
-		$c="username=".urlencode($un) ."; password=".urlencode($ps);
-	}
-	
-	$shopun=$zbp->Config('AppCentre')->shop_username;
-	$shopps=$zbp->Config('AppCentre')->shop_password;
-
-	if($shopun&&$shopps){
-		if($c!=='')$c.='; ';
-		$c.="shop_username=".urlencode($shopun) ."; shop_password=".urlencode($shopps);
-	}
-	
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 120);
-	curl_setopt($ch, CURLOPT_USERAGENT, 'ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent());
+	curl_setopt($ch, CURLOPT_USERAGENT, $u);
 	if($c)curl_setopt($ch,CURLOPT_COOKIE,$c);
 	
 	if($data){//POST
@@ -242,6 +195,31 @@ function Server_SendRequest_CUrl($url,$data=array()){
 	curl_close($ch);
 	
 	return $r;
+}
+
+function Server_SendRequest_Network($url,$data=array(),$u,$c){
+	global $zbp;
+
+	
+	$ajax = new Network();
+	$ajax = $ajax->Create();
+	if(!$ajax) throw new Exception('主机没有开启访问外部网络功能');
+
+	if($data){//POST
+		$ajax->open('POST',$url);
+		$ajax->setTimeOuts(120,120,0,0);
+		$ajax->setRequestHeader('User-Agent',$u);
+		$ajax->setRequestHeader('Cookie',$c);
+		$ajax->send($data);
+	}else{
+		$ajax->open('GET',$url);
+		$ajax->setTimeOuts(120,120,0,0);
+		$ajax->setRequestHeader('User-Agent',$u);
+		$ajax->setRequestHeader('Cookie',$c);
+		$ajax->send();
+	}
+	
+	return $ajax->responseText;
 }
 
 function CreateOptoinsOfVersion($default){
