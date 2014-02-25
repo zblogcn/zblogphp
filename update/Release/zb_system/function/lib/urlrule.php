@@ -114,9 +114,12 @@ class UrlRule
 			$url = $url . '$';
 			$url=str_replace('%page%', '([0-9]*)', $url);
 			$url=str_replace('%id%', '([0-9]+)', $url);
-			//$url=str_replace('%alias%', '([^/_]+)', $url);
 			$url=str_replace('%date%', '([0-9\-]+)', $url);
-			$url=str_replace('%alias%', '('.$fullcategory.')', $url);
+			if($type=='cate'){
+				$url=str_replace('%alias%', '('.$fullcategory.')', $url);
+			}else{
+				$url=str_replace('%alias%', '([^/_]+)', $url);
+			}
 		}
 		if($type=='page'||$type=='article'){
 			if(strpos($url, '%alias%')===false){
@@ -259,9 +262,12 @@ class UrlRule
 			$url = $url .' '.$zbp->cookiespath . 'index\.php\?'. $type .'=$1&page=$2&rewrite=$0';
 			$url=str_replace('%page%', '([0-9]*)', $url);
 			$url=str_replace('%id%', '([0-9]+)', $url);
-			//$url=str_replace('%alias%', '([^\/_]+)', $url);
-			$url=str_replace('%alias%', '('.$fullcategory.')', $url);
 			$url=str_replace('%date%', '([0-9\-]+)', $url);
+			if($type=='cate'){
+				$url=str_replace('%alias%', '('.$fullcategory.')', $url);
+			}else{
+				$url=str_replace('%alias%', '([^/_]+)', $url);
+			}
 		}
 		if($type=='page'||$type=='article'){
 			if(strpos($url, '%alias%')===false){

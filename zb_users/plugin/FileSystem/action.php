@@ -89,7 +89,7 @@ function del_file($arg){
 
 function delfile($arg){
 	if (file_exists($arg)) {
-        @chmod($arg,0777);
+        @chmod($arg,0755);
         if (is_dir($arg)) {
             $handle = opendir($arg);
             while(false !== ($aux = readdir($handle))) {
@@ -122,8 +122,7 @@ function create_dir(){
 	$cmd_data = iconv('UTF-8','GB2312',$current_path.$cmd_data);
 	if (strlen($cmd_data)){
 		if (!file_exists($cmd_data)){
-			mkdir($cmd_data,0777);
-			chmod($cmd_data,0777);
+			mkdir($cmd_data,0755);
 			$error_msg = 0;
 		} else $error_msg = '文件夹已存在。';
 	}

@@ -80,8 +80,8 @@ function install0(){
 
 	$d=dirname(__FILE__);
 
-	if(substr((string)decoct(fileperms($d)),-3)<>'777'){
-		echo "<p>警告:安装目录权限" . $d . "不是777,可能无法运行在线安装程序.</p>";
+	if(substr((string)decoct(fileperms($d)),-3)<>'755'&&substr((string)decoct(fileperms($d)),-3)<>'777'){
+		echo "<p>警告:安装目录权限" . $d . "不是755,可能无法运行在线安装程序.</p>";
 	}
 
 }
@@ -106,7 +106,7 @@ function install2(){
 		foreach ($xml->file as $f) {
 			$filename=str_replace('\\','/',$f->attributes());
 			$dirname= dirname($filename);
-			mkdir($dirname,0777,true);
+			mkdir($dirname,0755,true);
 			if(PHP_OS=='WINNT'||PHP_OS=='WIN32'||PHP_OS=='Windows'){
 				$fn=iconv("UTF-8","GBK//IGNORE",$filename);
 			}else{

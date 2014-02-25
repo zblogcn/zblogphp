@@ -61,7 +61,7 @@ class Upload extends Base{
 		}
 
 		if(!file_exists($zbp->usersdir . $this->Dir)){
-			@mkdir($zbp->usersdir . $this->Dir, 0777,true);	
+			@mkdir($zbp->usersdir . $this->Dir, 0755,true);	
 		}
 		if(PHP_OS=='WINNT'||PHP_OS=='WIN32'||PHP_OS=='Windows'){
 			$fn=iconv("UTF-8","GBK//IGNORE",$this->Name);
@@ -81,7 +81,7 @@ class Upload extends Base{
 		}
 
 		if(!file_exists($zbp->usersdir . $this->Dir)){
-			@mkdir($zbp->usersdir . $this->Dir, 0777,true);	
+			@mkdir($zbp->usersdir . $this->Dir, 0755,true);	
 		}
 		$s=base64_decode($str64);
 		$this->Size=strlen($s);

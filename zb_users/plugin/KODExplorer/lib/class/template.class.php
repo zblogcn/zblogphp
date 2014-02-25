@@ -416,7 +416,7 @@ class Template {
 	 * 
 	 * @var $directory,$mode
 	 */
-	function makeDir($directory, $mode = 0777)
+	function makeDir($directory, $mode = 0755)
 	{
 		if (@opendir($directory)) {
 			return true;

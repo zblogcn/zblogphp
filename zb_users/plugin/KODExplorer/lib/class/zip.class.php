@@ -423,12 +423,12 @@ class unZip {
 			if (!$pth[$i]) continue;
 			$mydir .= $pth[$i] . "/";
 			if (
-				(!is_dir($mydir) && mkdir($mydir, 0777)) ||
+				(!is_dir($mydir) && mkdir($mydir, 0755)) ||
 				(($mydir == $to . $header['filename'] || 
 				($mydir == $to && $this -> total_folders == 0)
 				)&& is_dir($mydir))
 			){
-				chmod($mydir, 0777);
+				chmod($mydir, 0755);
 				$this -> total_folders ++;
 				//echo "<li>dir: {$this->iconv_out($mydir)}</li>";
 			} 

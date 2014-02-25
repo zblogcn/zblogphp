@@ -29,10 +29,9 @@ class Networkfsockopen implements iNetwork
 	private $timeout = 30;
 	private $errstr = '';
 	private $errno = 0;
+	private $isgzip = false;
 
 	public function __set($property_name, $value){
-		#$var = strtolower($property_name);
-		#$readonly = array('readystate','responsebody');
 		throw new Exception($property_name.' readonly');
 	}
 
@@ -49,7 +48,7 @@ class Networkfsockopen implements iNetwork
 	}
 
 	public function abort(){
-		throw new Exception('fsockopen cannot abort.');
+
 	}
 
 	public function getAllResponseHeaders(){
@@ -109,6 +108,22 @@ class Networkfsockopen implements iNetwork
 
 		$this->httpheader[] = 'Host: ' . $this->parsed_url['host'];
 		$this->httpheader[] = 'Connection: close';
+		
+		if(!isset($this->httpheader['Accept'])){
+			if(isset($_SERVER['HTTP_ACCEPT'])){
+				$this->httpheader['Accept']=$_SERVER['HTTP_ACCEPT'];
+			}
+		}
+		
+		if(!isset($this->httpheader['Accept-Language'])){
+			if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
+				$this->httpheader['Accept-Language']=$_SERVER['HTTP_ACCEPT_LANGUAGE'];
+			}
+		}
+
+		if($this->isgzip == true){
+			$this->httpheader['Accept-Encoding']='gzip';
+		}
 
 		$this->option['header'] = implode("\r\n",$this->httpheader);
 
@@ -136,14 +151,29 @@ class Networkfsockopen implements iNetwork
 			fwrite($socket,"\r\n");
 		}
 
-		while ($str = trim(fgets($socket,4096)))
-		{
-			$this->responseHeader.=$str;
-		}
-
 		while (!feof($socket))
 		{
-			$this->responseText .= fgets($socket,4096);
+			$this->responseText .= fgets($socket,128);
+		}
+
+		$this->responseHeader = substr($this->responseText,0,strpos($this->responseText, "\r\n\r\n"));
+	
+		$this->responseText = substr($this->responseText, strpos($this->responseText, "\r\n\r\n") + 4);
+		
+		if(strpos($this->responseHeader,'Transfer-Encoding: chunked')!==false){
+			if(!function_exists('http_chunked_decode')){
+				$this->responseText=$this->http_chunked_decode($this->responseText);
+			}else{
+				$this->responseText=http_chunked_decode($this->responseText);
+			}
+		}
+
+		if(strpos($this->responseHeader,'Content-Encoding: gzip')!==false){
+			if(!function_exists('gzdecode')){
+				$this->responseText=$this->gzdecode($this->responseText);
+			}else{
+				$this->responseText=gzdecode($this->responseText);
+			}
 		}
 
 		fclose($socket);
@@ -188,8 +218,50 @@ class Networkfsockopen implements iNetwork
 		$this->errstr = '';
 		$this->errno = 0;
 
-		$this->setRequestHeader('User-Agent','Z-Blog PHP http_fso module');
+		$this->setRequestHeader('User-Agent','Mozilla/5.0');
+	}
+	
+    private function http_chunked_decode($chunk) { 
+        $pos = 0; 
+        $len = strlen($chunk); 
+        $dechunk = null; 
+
+        while(($pos < $len) 
+            && ($chunkLenHex = substr($chunk,$pos, ($newlineAt = strpos($chunk,"\n",$pos+1))-$pos)))
+        { 
+            if (! $this->is_hex($chunkLenHex)) { 
+                trigger_error('Value is not properly chunk encoded', E_USER_WARNING);
+                return $chunk; 
+            } 
+
+            $pos = $newlineAt + 1; 
+            $chunkLen = hexdec(rtrim($chunkLenHex,"\r\n")); 
+            $dechunk .= substr($chunk, $pos, $chunkLen); 
+            $pos = strpos($chunk, "\n", $pos + $chunkLen) + 1; 
+        } 
+        return $dechunk; 
+    } 
 
 
+    /** 
+     * determine if a string can represent a number in hexadecimal 
+     * 
+     * @param string $hex 
+     * @return boolean true if the string is a hex, otherwise false 
+     */ 
+	private function is_hex($hex) { 
+		// regex is for weenies 
+		$hex = strtolower(trim(ltrim($hex,"0"))); 
+		if (empty($hex)) { $hex = 0; }; 
+		$dec = hexdec($hex); 
+		return ($hex == dechex($dec)); 
+	} 
+	
+	private function gzdecode($string) {// no support for 2nd argument
+        return file_get_contents('compress.zlib://data:zbp/ths;base64,'. base64_encode($string));
+    }
+	
+	public function enableGzip(){
+		$this->isgzip = true;
 	}
 }
