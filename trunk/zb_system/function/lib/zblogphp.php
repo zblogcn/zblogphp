@@ -957,7 +957,7 @@ function AddBuildModuleAll(){
 		$dir=$this->usersdir . 'theme/'. $this->theme .'/compile/';
 
 		if(!file_exists($dir)){
-			@mkdir($dir,0777,true);
+			@mkdir($dir,0755,true);
 		}
 
 		$files2=array();

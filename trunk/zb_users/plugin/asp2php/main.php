@@ -43,12 +43,12 @@ foreach ($aspdata['cata'] as $a) {
 	if($o->ID == 0){
 		$o->ID=$a['cate_ID'];
 		$keys=array();
-		foreach ($o->datainfo as $key => $value) {
+		foreach ($o->GetDataInfo() as $key => $value) {
 			$keys[]=$value[0];
 		}
 		$keyvalue=array_fill_keys($keys, '');
 		
-		foreach ($o->datainfo as $key => $value) {
+		foreach ($o->GetDataInfo() as $key => $value) {
 			if($value[1]=='boolean'){
 				$keyvalue[$value[0]]=(integer)$o->$key;
 			}else{
@@ -77,12 +77,12 @@ foreach ($aspdata['tag'] as $a) {
 	if($o->ID == 0){
 		$o->ID=$a['tag_ID'];
 		$keys=array();
-		foreach ($o->datainfo as $key => $value) {
+		foreach ($o->GetDataInfo() as $key => $value) {
 			$keys[]=$value[0];
 		}
 		$keyvalue=array_fill_keys($keys, '');
 		
-		foreach ($o->datainfo as $key => $value) {
+		foreach ($o->GetDataInfo() as $key => $value) {
 			if($value[1]=='boolean'){
 				$keyvalue[$value[0]]=(integer)$o->$key;
 			}else{
@@ -132,12 +132,12 @@ foreach ($aspdata['post'] as $a) {
 	if($o->ID == 0){
 		$o->ID=$a['log_ID'];
 		$keys=array();
-		foreach ($o->datainfo as $key => $value) {
+		foreach ($o->GetDataInfo() as $key => $value) {
 			$keys[]=$value[0];
 		}
 		$keyvalue=array_fill_keys($keys, '');
 		
-		foreach ($o->datainfo as $key => $value) {
+		foreach ($o->GetDataInfo() as $key => $value) {
 			if($value[1]=='boolean'){
 				$keyvalue[$value[0]]=(integer)$o->$key;
 			}else{
@@ -174,12 +174,12 @@ foreach ($aspdata['comm'] as $a) {
 	if($o->ID == 0){
 		$o->ID=$a['comm_ID'];	
 		$keys=array();
-		foreach ($o->datainfo as $key => $value) {
+		foreach ($o->GetDataInfo() as $key => $value) {
 			$keys[]=$value[0];
 		}
 		$keyvalue=array_fill_keys($keys, '');
 		
-		foreach ($o->datainfo as $key => $value) {
+		foreach ($o->GetDataInfo() as $key => $value) {
 			if($value[1]=='boolean'){
 				$keyvalue[$value[0]]=(integer)$o->$key;
 			}else{
@@ -210,12 +210,12 @@ foreach ($aspdata['upload'] as $a) {
 	if($o->ID == 0){
 		$o->ID=$a['ul_ID'];	
 		$keys=array();
-		foreach ($o->datainfo as $key => $value) {
+		foreach ($o->GetDataInfo() as $key => $value) {
 			$keys[]=$value[0];
 		}
 		$keyvalue=array_fill_keys($keys, '');
 		
-		foreach ($o->datainfo as $key => $value) {
+		foreach ($o->GetDataInfo() as $key => $value) {
 			if($value[1]=='boolean'){
 				$keyvalue[$value[0]]=(integer)$o->$key;
 			}else{
@@ -251,12 +251,12 @@ foreach ($aspdata['mem'] as $a) {
 	if($o->ID == 0){
 		$mem->ID=$a['mem_ID'];
 		$keys=array();
-		foreach ($o->datainfo as $key => $value) {
+		foreach ($o->GetDataInfo() as $key => $value) {
 			$keys[]=$value[0];
 		}
 		$keyvalue=array_fill_keys($keys, '');
 		
-		foreach ($o->datainfo as $key => $value) {
+		foreach ($o->GetDataInfo() as $key => $value) {
 			if($value[1]=='boolean'){
 				$keyvalue[$value[0]]=(integer)$o->$key;
 			}else{

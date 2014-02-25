@@ -30,6 +30,7 @@ class Networkcurl implements iNetwork
 	private $errstr = '';
 	private $errno = 0;
 	private $ch = NULL;
+	private $isgzip = false;
 
 	function __construct()
 	{
@@ -106,6 +107,10 @@ class Networkcurl implements iNetwork
 
 		curl_setopt($this->ch,CURLOPT_HTTPHEADER,$this->httpheader);
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
+		
+		if($this->isgzip == true){
+			curl_setopt($this->ch, CURLOPT_ENCODING, 'gzip');
+		}
 
 		$result = curl_exec($this->ch);
 		$header_size = curl_getinfo($this->ch,CURLINFO_HEADER_SIZE);
@@ -155,7 +160,11 @@ class Networkcurl implements iNetwork
 		$this->errno = 0;
 
 		$this->ch = curl_init();
-		$this->setRequestHeader('User-Agent','Z-Blog PHP curl module');
+		$this->setRequestHeader('User-Agent','Mozilla/5.0');
 
+	}
+	
+	public function enableGzip(){
+		$this->isgzip = true;
 	}
 }

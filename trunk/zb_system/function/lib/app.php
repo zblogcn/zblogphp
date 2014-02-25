@@ -318,14 +318,14 @@ class App
 		$id=$xml->id;
 		$dir=$zbp->path . 'zb_users/' . $type . '/';
 
-		if(!file_exists($dir . $id . '/'))@mkdir($dir . $id . '/',0777,true);
+		if(!file_exists($dir . $id . '/'))@mkdir($dir . $id . '/',0755,true);
 
 		set_error_handler(create_function('',''));
 
 		foreach ($xml->folder as $folder) {
 			$f=$dir . $folder->path;
 			if(!file_exists($f)){
-				@mkdir($f,0777,true);
+				@mkdir($f,0755,true);
 			}
 		}
 

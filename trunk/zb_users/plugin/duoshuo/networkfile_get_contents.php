@@ -24,10 +24,9 @@ class Networkfile_get_contents implements iNetwork
 	private $postdata = array();
 	private $httpheader = array();
 	private $responseHeader = array();
+	private $isgzip = false;
 
 	public function __set($property_name, $value){
-		#$var = strtolower($property_name);
-		#$readonly = array('readystate','responsebody');
 		throw new Exception($property_name.' readonly');
 	}
 
@@ -44,7 +43,7 @@ class Networkfile_get_contents implements iNetwork
 	}
 
 	public function abort(){
-		throw new Exception('file_get_contents cannot abort.');
+
 	}
 
 	public function getAllResponseHeaders(){
@@ -107,7 +106,7 @@ class Networkfile_get_contents implements iNetwork
 
 		$this->option['header'] = implode("\r\n",$this->httpheader);
 
-		$this->responseText = file_get_contents($this->url, false, stream_context_create(array('http' => $this->option)));
+		$this->responseText = file_get_contents(($this->isgzip==true?'compress.zlib://':'') . $this->url, false, stream_context_create(array('http' => $this->option)));
 
 		$this->responseHeader = $http_response_header;
 
@@ -145,6 +144,10 @@ class Networkfile_get_contents implements iNetwork
 		$this->postdata = array();
 		$this->httpheader = array();
 		$this->responseHeader = array();
-		$this->setRequestHeader('User-Agent','Z-Blog PHP http_fso module');
+		$this->setRequestHeader('User-Agent','Mozilla/5.0');
+	}
+	
+	public function enableGzip(){
+		$this->isgzip = true;
 	}
 }

@@ -63,7 +63,9 @@ class Base
 		global $zbp;
 
 		$id=(int)$id;
-		$s = $zbp->db->sql->Select($this->table,array('*'),array(array('=',$this->datainfo['ID'][0],$id)),null,null,null);
+		$id_field=reset($this->datainfo);
+		$id_field=$id_field[0];
+		$s = $zbp->db->sql->Select($this->table,array('*'),array(array('=',$id_field,$id)),null,null,null);
 
 		$array = $zbp->db->Query($s);
 		if (count($array)>0) {
@@ -156,7 +158,9 @@ class Base
 			$sql = $zbp->db->sql->Insert($this->table,$keyvalue);
 			$this->ID = $zbp->db->Insert($sql);
 		} else {
-			$sql = $zbp->db->sql->Update($this->table,$keyvalue,array(array('=',$this->datainfo['ID'][0],$this->ID)));
+			$id_field=reset($this->datainfo);
+			$id_field=$id_field[0];
+			$sql = $zbp->db->sql->Update($this->table,$keyvalue,array(array('=',$id_field,$this->ID)));
 			return $zbp->db->Update($sql);
 		}
 
@@ -165,7 +169,9 @@ class Base
 
 	function Del(){
 		global $zbp;
-		$sql = $zbp->db->sql->Delete($this->table,array(array('=',$this->datainfo['ID'][0],$this->ID)));
+		$id_field=reset($this->datainfo);
+		$id_field=$id_field[0];
+		$sql = $zbp->db->sql->Delete($this->table,array(array('=',$id_field,$this->ID)));
 		$zbp->db->Delete($sql);
 		return true;
 	}

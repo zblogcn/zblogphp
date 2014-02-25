@@ -11,7 +11,7 @@
  * 删除文件			del_file($file)
  * 递归删除文件夹		del_dir($dir)
  * 递归复制文件夹		copy_dir($source, $dest)
- * 创建目录			mk_dir($dir, $mode = 0777)
+ * 创建目录			mk_dir($dir, $mode = 0755)
  * 文件大小格式化		size_format($bytes, $precision = 2)
  * 判断是否绝对路径		path_is_absolute( $path ) 
  * 扩展名的文件类型		ext_type($ext)
@@ -296,7 +296,7 @@ function get_path_father($path){
  */
 function del_file($fullpath){
 	if (!unlink($fullpath)) { // 删除不了，尝试修改文件权限
-		chmod($fullpath, 0777);
+		chmod($fullpath, 0755);
 		if (!unlink($fullpath)) {
 			return false;
 		} 
@@ -315,14 +315,14 @@ function del_dir($dir){
 			$fullpath = $dir . '/' . $file;
 			if (!is_dir($fullpath)) {
 				if (!unlink($fullpath)) { // 删除不了，尝试修改文件权限
-					chmod($fullpath, 0777);
+					chmod($fullpath, 0755);
 					if (!unlink($fullpath)) {
 						return false;
 					} 
 				} 
 			} else {
 				if (!del_dir($fullpath)) {
-					chmod($fullpath, 0777);
+					chmod($fullpath, 0755);
 					if (!del_dir($fullpath)) return false;
 				} 
 			} 
@@ -390,7 +390,7 @@ function copy_dir($source, $dest){
  * @param int $mode 
  * @return bool 
  */
-function mk_dir($dir, $mode = 0777){
+function mk_dir($dir, $mode = 0755){
 	if (is_dir($dir) || mkdir($dir, $mode))
 		return true;
 	if (! mk_dir(dirname($dir), $mode))

@@ -15,6 +15,7 @@ interface iNetwork
 	public function open($bstrMethod, $bstrUrl, $varAsync=true, $bstrUser='', $bstrPassword='');
 	public function send($varBody='');
 	public function setRequestHeader($bstrHeader, $bstrValue);
+	public function enableGzip();
 
 }
 
@@ -41,7 +42,6 @@ class Network
 			$this->network_list[] = 'curl';
 			$this->curl = true;
 		}
-
 		if ((bool)ini_get('allow_url_fopen'))
 		{
 			if(function_exists('file_get_contents')) $this->network_list[] = 'file_get_contents';

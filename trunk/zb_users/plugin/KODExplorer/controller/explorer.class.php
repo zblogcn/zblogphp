@@ -278,7 +278,7 @@ class explorer extends Controller{
     }
     function mkdir(){
         $newfolder=iconv_system(urldecode($this->in['path']));
-        if(mkdir($newfolder,0777)){
+        if(mkdir($newfolder,0755)){
             echo "新建成功！";
         }else{
             echo "新建失败,请检查目录权限！";
@@ -485,7 +485,7 @@ class explorer extends Controller{
         $image_thum = $this->config['pic_thumb'].$image_md5.'.png';
 
         if (!is_dir($this->config['pic_thumb'])){
-            mkdir($this->config['pic_thumb'],0777);
+            mkdir($this->config['pic_thumb'],0755);
         }
 
         if (!file_exists($image_thum)){//如果拼装成的url不存在则没有生成过
