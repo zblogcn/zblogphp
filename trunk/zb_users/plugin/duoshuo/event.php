@@ -155,8 +155,7 @@ function export()
 
 	
 	$intmin = 0; $intmax = 0;
-	$http = new Network();
-	$http = $http->Create();
+	$http = Network::Create();
 	if(!$http) throw new Exception('主机没有开启网络功能');
 	
 	$startTime = microtime_float();

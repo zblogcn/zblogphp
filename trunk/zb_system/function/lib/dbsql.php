@@ -263,6 +263,18 @@ class DbSql #extends AnotherClass
 					}
 					$sqlw .= $comma .  '(' . $sql_array . ') ';
 				}
+				if($eq=='ARRAY_NOT'){
+					$c='';
+					$sql_array='';
+					if(!is_array($w[1]))continue;
+					if(count($w[1])==0)continue;
+					foreach ($w[1] as $x=>$y) {
+						$y[1]=$zbp->db->EscapeString($y[1]);
+						$sql_array .= $c . " $y[0]<>'$y[1]' ";
+						$c='OR';
+					}
+					$sqlw .= $comma .  '(' . $sql_array . ') ';
+				}
 				if($eq=='ARRAY_LIKE'){
 					$c='';
 					$sql_array='';
@@ -270,12 +282,12 @@ class DbSql #extends AnotherClass
 					if(count($w[1])==0)continue;
 					foreach ($w[1] as $x=>$y) {
 						$y[1]=$zbp->db->EscapeString($y[1]);
-						$sql_array .= $c . " ($y[0] LIKE '%$y[1]%') ";
+						$sql_array .= $c . " ($y[0] LIKE '$y[1]') ";
 						$c='OR';
 					}
 					$sqlw .= $comma .  '(' . $sql_array . ') ';
 				}
-				if($eq=='IN'){
+				if($eq=='IN'|$eq=='NOT IN'|$eq=='EXISTS'|$eq=='NOT EXISTS'){
 					$c='';
 					$sql_array='';
 					if(!is_array($w[2])){

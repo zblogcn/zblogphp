@@ -143,7 +143,8 @@ class ZBlogPHP{
 			$fpreturn=$fpname($method, $args);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		$this->ShowError(81,__FILE__,__LINE__);
+		if($this->option['ZC_DEBUG_MODE']==true)
+			$this->ShowError(81,__FILE__,__LINE__);
 	}
 
 	function __set($name, $value)
@@ -152,7 +153,8 @@ class ZBlogPHP{
 			$fpreturn=$fpname($name, $value);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		$this->ShowError(81,__FILE__,__LINE__);
+		if($this->option['ZC_DEBUG_MODE']==true)
+			$this->ShowError(81,__FILE__,__LINE__);
 	}
 
 	function __get($name)
@@ -161,7 +163,8 @@ class ZBlogPHP{
 			$fpreturn=$fpname($name);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		$this->ShowError(81,__FILE__,__LINE__);
+		if($this->option['ZC_DEBUG_MODE']==true)
+			$this->ShowError(81,__FILE__,__LINE__);
 	}
 
 

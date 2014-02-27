@@ -56,7 +56,7 @@ foreach ($aspdata['cata'] as $a) {
 			}
 		}
 		
-		$sql = $zbp->db->sql->Insert($o->table,$keyvalue);
+		$sql = $zbp->db->sql->Insert($o->GetTable(),$keyvalue);
 		$zbp->db->Insert($sql);
 	}else{
 		$o->Save();
@@ -90,7 +90,7 @@ foreach ($aspdata['tag'] as $a) {
 			}
 		}
 		
-		$sql = $zbp->db->sql->Insert($o->table,$keyvalue);
+		$sql = $zbp->db->sql->Insert($o->GetTable(),$keyvalue);
 		$zbp->db->Insert($sql);
 	}else{
 		$o->Save();
@@ -145,7 +145,7 @@ foreach ($aspdata['post'] as $a) {
 			}
 		}
 		
-		$sql = $zbp->db->sql->Insert($o->table,$keyvalue);
+		$sql = $zbp->db->sql->Insert($o->GetTable(),$keyvalue);
 		$zbp->db->Insert($sql);
 	}else{
 		$o->Save();
@@ -187,7 +187,7 @@ foreach ($aspdata['comm'] as $a) {
 			}
 		}
 		
-		$sql = $zbp->db->sql->Insert($o->table,$keyvalue);
+		$sql = $zbp->db->sql->Insert($o->GetTable(),$keyvalue);
 		$zbp->db->Insert($sql);
 	}else{
 		$o->Save();
@@ -223,7 +223,7 @@ foreach ($aspdata['upload'] as $a) {
 			}
 		}
 		
-		$sql = $zbp->db->sql->Insert($o->table,$keyvalue);
+		$sql = $zbp->db->sql->Insert($o->GetTable(),$keyvalue);
 		$zbp->db->Insert($sql);
 	}else{
 		$o->Save();
@@ -264,7 +264,7 @@ foreach ($aspdata['mem'] as $a) {
 			}
 		}
 		
-		$sql = $zbp->db->sql->Insert($o->table,$keyvalue);
+		$sql = $zbp->db->sql->Insert($o->GetTable(),$keyvalue);
 		$zbp->db->Insert($sql);
 	}else{
 		$mem->Save();

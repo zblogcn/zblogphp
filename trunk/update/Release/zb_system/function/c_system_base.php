@@ -345,4 +345,5 @@ function __autoload($classname) {
 function _stripslashes(&$val) {
 	if(!is_array($val)) return stripslashes($val);
 	foreach($val as $k => &$v) $val[$k] = _stripslashes($v);
+	return $val;
 }

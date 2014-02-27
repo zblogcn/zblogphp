@@ -228,8 +228,7 @@ function duoshuo_post_article_succeed(&$article)
 	$odata[7] = 'threads[0][likes]=0';
 	$odata[8] = 'threads[0][views]=' . $article->ViewNums;
 	
-	$ajax = new Network();
-	$ajax = $ajax->Create();
+	$ajax = Network::Create();
 	if(!$ajax) throw new Exception('主机没有开启网络功能');
 	
 	$ajax->open('POST','http://' . $duoshuo->cfg->api_hostname . '/' . $duoshuo->url['threads']['import']);
