@@ -29,6 +29,8 @@ class Network
 	public $network_list = array();
 	public $curl = false;
 	public $fso = false;
+	
+	static private $_network = null;
 
 	function __construct()
 	{
@@ -49,10 +51,13 @@ class Network
 		}
 	}
 
-	function Create($extension = '')
+	static function Create($extension = '')
 	{
-		if ((!$this->fso) && (!$this->curl)) return false;
-		$extension = ($extension == '' ? $this->network_list[0] : $extension);
+		if(!isset(self::$_network)){
+			self::$_network=new Network;
+		}	
+		if ((!self::$_network->fso) && (!self::$_network->curl)) return false;
+		$extension = ($extension == '' ? self::$_network->network_list[0] : $extension);
 		$type = 'network' . $extension;
 		$network = New $type();
 		return $network;

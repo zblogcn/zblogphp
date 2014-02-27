@@ -111,18 +111,18 @@ class Networkfsockopen implements iNetwork
 		
 		if(!isset($this->httpheader['Accept'])){
 			if(isset($_SERVER['HTTP_ACCEPT'])){
-				$this->httpheader['Accept']=$_SERVER['HTTP_ACCEPT'];
+				$this->httpheader['Accept']='Accept:' . $_SERVER['HTTP_ACCEPT'];
 			}
 		}
 		
 		if(!isset($this->httpheader['Accept-Language'])){
 			if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
-				$this->httpheader['Accept-Language']=$_SERVER['HTTP_ACCEPT_LANGUAGE'];
+				$this->httpheader['Accept-Language']='Accept-Language: ' . $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 			}
 		}
 
 		if($this->isgzip == true){
-			$this->httpheader['Accept-Encoding']='gzip';
+			$this->httpheader['Accept-Encoding']='Accept-Encoding: gzip';
 		}
 
 		$this->option['header'] = implode("\r\n",$this->httpheader);
@@ -160,7 +160,9 @@ class Networkfsockopen implements iNetwork
 	
 		$this->responseText = substr($this->responseText, strpos($this->responseText, "\r\n\r\n") + 4);
 		
-		if(strpos($this->responseHeader,'Transfer-Encoding: chunked')!==false){
+		$this->responseHeader = explode("\r\n",$this->responseHeader);
+
+		if($this->getResponseHeader('Transfer-Encoding')=='chunked'){
 			if(!function_exists('http_chunked_decode')){
 				$this->responseText=$this->http_chunked_decode($this->responseText);
 			}else{
@@ -168,7 +170,7 @@ class Networkfsockopen implements iNetwork
 			}
 		}
 
-		if(strpos($this->responseHeader,'Content-Encoding: gzip')!==false){
+		if($this->getResponseHeader('Content-Encoding')=='gzip'){
 			if(!function_exists('gzdecode')){
 				$this->responseText=$this->gzdecode($this->responseText);
 			}else{
@@ -241,7 +243,6 @@ class Networkfsockopen implements iNetwork
         } 
         return $dechunk; 
     } 
-
 
     /** 
      * determine if a string can represent a number in hexadecimal 

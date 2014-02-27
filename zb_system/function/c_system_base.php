@@ -21,6 +21,12 @@ if (version_compare(PHP_VERSION, '5.1.2', '>=')) {
 	}
 }
 
+$_SERVER['_start_time'] = microtime(1); //RunTime
+$_SERVER['_query_count'] = 0;
+$_SERVER['_memory_usage'] = 0;
+if(function_exists('memory_get_usage'))$_SERVER['_memory_usage'] = memory_get_usage(true);
+
+
 require 'c_system_common.php';
 require 'c_system_debug.php';
 require 'c_system_plugin.php';
@@ -53,25 +59,26 @@ if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()){
 	_stripslashes($_GET);
 	_stripslashes($_POST);
 	_stripslashes($_COOKIE);
+	_stripslashes($_REQUEST);
 }
 
 
-$action=null;
-$manage=false;
-
+$action = null;
+$manage = false;
+$url = GetRequestUri();
 
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $usersdir = $blogpath . 'zb_users/';
 
 
-$option_zbusers=null;
+$option_zbusers = null;
 if(is_readable($filename = $usersdir . 'c_option.php')){
 	$option_zbusers = require($filename);
 }
 if(!is_array($option_zbusers))$option_zbusers=array();
 $option = require($blogpath . 'zb_system/defend/option.php');
 foreach ($option_zbusers as $key => $value) {
-	$option[$key]=$value;
+	$option[$key] = $value;
 }
 unset($option_zbusers);
 
@@ -351,7 +358,12 @@ function AutoloadClass($classname){
 		require $f;
 }
 
-function _stripslashes(&$val) {
-	if(!is_array($val)) return stripslashes($val);
-	foreach($val as $k => &$v) $val[$k] = _stripslashes($v);
+function _stripslashes(&$var) {
+	if(is_array($var)) {
+		foreach($var as $k=>&$v) {
+			_stripslashes($v);
+		}
+	} else {
+		$var = stripslashes($var);
+	}
 }

@@ -114,7 +114,8 @@ class Networkcurl implements iNetwork
 
 		$result = curl_exec($this->ch);
 		$header_size = curl_getinfo($this->ch,CURLINFO_HEADER_SIZE);
-		$this->responseHeader = explode("\n",substr($result,0,$header_size));
+		$this->responseHeader = explode("\r\n",substr($result,0,$header_size-4));
+
 		$this->responseText = substr($result,$header_size);
 		curl_close($this->ch);
 

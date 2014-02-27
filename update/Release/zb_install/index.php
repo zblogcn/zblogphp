@@ -242,6 +242,11 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][1];?></td>
         </tr>
         <tr>
+          <td scope="row">MySQLi</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysqli'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysqli'][1];?></td>
+        </tr>
+        <tr>
           <td scope="row">PDO_MySQL</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][1];?></td>
@@ -289,13 +294,6 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['upload'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['upload'][1];?></td>
         </tr>
-<?php if(file_exists('../zb_users/c_option.php')){?>
-        <tr>
-          <td scope="row">zb_users/c_option.php</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option.php'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['c_option.php'][1];?></td>
-        </tr>  
-<?php }?>
         <tr>
           <th colspan="3" scope="row">函数检查</th>
         </tr>
@@ -401,7 +399,11 @@ function Setup3(){
       <p><b>连接选择:</b> 
         <?php if($CheckResult['mysql'][0]){?>
         <label>
-          <input value="mysql" type="radio" name="dbtype"/>MySQL原生连接</label>
+          <input value="mysql" type="radio" name="dbtype"/>MySQL连接</label>
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+        <?php if($CheckResult['mysqli'][0]){?>
+        <label>
+          <input value="mysqli" type="radio" name="dbtype"/>MySQLi连接</label>
         <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php if($CheckResult['pdo_mysql'][0]){?>
         <label>
@@ -496,7 +498,8 @@ $cts='';
 
 switch ($zbp->option['ZC_DATABASE_TYPE']) {
 case 'mysql':
-case 'pdo_mysql': 
+case 'mysqli':
+case 'pdo_mysql':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/mysql.sql');
   $zbp->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
   $zbp->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
@@ -560,7 +563,8 @@ $CheckResult=array(
   'phpver' => array(phpversion(),''), 
   'zbppath' => array($zbp->path,''), 
  //组件
-  'mysql' => array('',''), 
+  'mysql' => array('',''),
+  'mysqli' => array('',''),
   'pdo_mysql' => array('',''),
   'sqlite' => array('',''),
   'sqlite3' => array('',''),
@@ -599,6 +603,9 @@ $CheckResult=array(
   if( function_exists("mysql_get_client_info") ){
     $CheckResult['mysql'][0]=mysql_get_client_info();
   }
+  if( function_exists("mysqli_get_client_info") ){
+    $CheckResult['mysqli'][0]=mysqli_get_client_info();
+  }  
   if( class_exists("PDO",false) ){
     $CheckResult['pdo_mysql'][0]=PDO::ATTR_DRIVER_NAME;
     $CheckResult['pdo_pgsql'][0]=PDO::ATTR_DRIVER_NAME;
@@ -620,7 +627,7 @@ $CheckResult=array(
   getRightsAndExport('zb_users/','theme');
   getRightsAndExport('zb_users/','plugin');
   getRightsAndExport('zb_users/','upload');
-  getRightsAndExport('zb_users/','c_option.php');
+  //getRightsAndExport('zb_users/','c_option.php');
 
   $CheckResult['file_get_contents'][1]=function_exists('file_get_contents')?bingo:error;
   $CheckResult['gethostbyname'][1]=function_exists('gethostbyname')?bingo:error;
@@ -634,10 +641,11 @@ function getRightsAndExport($folderparent,$folder){
   $s=GetFilePerms($zbp->path.$folderparent.$folder);
   $o=GetFilePermsOct($zbp->path.$folderparent.$folder);
   $GLOBALS['CheckResult'][$folder][0]=$s . ' | ' . $o;
+
   if(substr($s,0,1)=='-'){
-    $GLOBALS['CheckResult'][$folder][1]=substr($s,1,2)=='rw'&&substr($s,-3,2)=='rw'?bingo:error;  
+    $GLOBALS['CheckResult'][$folder][1]=(substr($s,1,1)=='r'&&substr($s,2,1)=='w'&&substr($s,4,1)=='r'&&substr($s,7,1)=='r')?bingo:error;  
   }else{
-    $GLOBALS['CheckResult'][$folder][1]=substr($s,1,3)=='rwx'&&substr($s,-3,2)=='rw'?bingo:error;  
+    $GLOBALS['CheckResult'][$folder][1]=(substr($s,1,1)=='r'&&substr($s,2,1)=='w'&&substr($s,3,1)=='x'&&substr($s,4,1)=='r'&&substr($s,7,1)=='r'&&substr($s,6,1)=='x'&&substr($s,9,1)=='x')?bingo:error;
   }
 }
 

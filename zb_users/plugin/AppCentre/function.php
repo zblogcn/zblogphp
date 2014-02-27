@@ -200,9 +200,7 @@ function Server_SendRequest_CUrl($url,$data=array(),$u,$c){
 function Server_SendRequest_Network($url,$data=array(),$u,$c){
 	global $zbp;
 
-	
-	$ajax = new Network();
-	$ajax = $ajax->Create();
+	$ajax = Network::Create();
 	if(!$ajax) throw new Exception('主机没有开启访问外部网络功能');
 
 	if($data){//POST

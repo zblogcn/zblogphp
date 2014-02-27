@@ -168,5 +168,6 @@ return array(
 	'ZC_VIEWNUMS_TURNOFF' => false,
 	'ZC_LISTONTOP_TURNOFF' => false,
 	'ZC_RELATEDLIST_COUNT'=>10,
+	'ZC_RUNINFO_DISPLAY' => true,
 )
 ?>

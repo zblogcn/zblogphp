@@ -6,18 +6,6 @@
  * @version       2.0 2013-06-14
  */
 
-function Logs($s) {
-	$f = $GLOBALS['usersdir'] . 'logs/' . $GLOBALS['option']['ZC_BLOG_CLSID'] . '-log' . date("Ymd") . '.txt';
-	$handle = @fopen($f, 'a+');
-	@fwrite($handle, "[" . date('c') . "~" . current(explode(" ", microtime())) . "]" . "\r\n" . $s . "\r\n");
-	@fclose($handle);
-}
-
-$_SERVER['_start_time'] = microtime(1); //RunTime
-$_SERVER['_query_count'] = 0;
-function RunTime() {
-	echo '<!--' . (1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6)) . 'ms , ' . $_SERVER['_query_count'] . 'query-->';
-}
 
 function GetValueInArray($array, $name) {
 	if (is_array($array)) {

@@ -7,6 +7,58 @@
  */
 
 ################################################################################################################
+function Logs($s) {
+	global $zbp;
+	$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
+	$handle = @fopen($f, 'a+');
+	@fwrite($handle, "[" . date('c') . "~" . current(explode(" ", microtime())) . "]" . "\r\n" . $s . "\r\n");
+	@fclose($handle);
+}
+
+function RunTime() {
+	global $zbp;
+	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false)return ;
+	echo '<!--' . (1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6)) . 'ms , ';
+	echo $_SERVER['_query_count'] . 'query';
+	if(function_exists('memory_get_usage'))
+		echo ' , ' . ((memory_get_usage(true)-$_SERVER['_memory_usage'])/1024) . 'kb memory';
+	echo '-->';
+}
+
+################################################################################################################
+function VerifyLogin() {
+	global $zbp;
+
+	if (isset($zbp->membersbyname[GetVars('username', 'POST')])) {
+		if ($zbp->Verify_MD5(GetVars('username', 'POST'), GetVars('password', 'POST'))) {
+			$un = GetVars('username', 'POST');
+			$ps = md5($zbp->user->Password . $zbp->guid);
+			if (GetVars('savedate') == 0) {
+				setcookie("username", $un, 0, $zbp->cookiespath);
+				setcookie("password", $ps, 0, $zbp->cookiespath);
+			} else {
+				setcookie("username", $un, time() + 3600 * 24 * GetVars('savedate', 'POST'), $zbp->cookiespath);
+				setcookie("password", $ps, time() + 3600 * 24 * GetVars('savedate', 'POST'), $zbp->cookiespath);
+			}
+
+			return true;
+		} else {
+			$zbp->ShowError(8, __FILE__, __LINE__);
+		}
+	} else {
+		$zbp->ShowError(8, __FILE__, __LINE__);
+	}
+}
+
+function Logout() {
+	global $zbp;
+
+	setcookie('username', '', time() - 3600, $zbp->cookiespath);
+	setcookie('password', '', time() - 3600, $zbp->cookiespath);
+
+}
+
+################################################################################################################
 function GetPost($idorname, $option = null) {
 	global $zbp;
 
@@ -152,35 +204,100 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 }
 
 ################################################################################################################
-function VerifyLogin() {
+function ViewIndex(){
+	global $zbp,$url;
+
+	if($url==$zbp->cookiespath||$url==$zbp->cookiespath . 'index.php'){
+		ViewList(null,null,null,null,null);
+	}elseif(isset($_GET['rewrite'])){
+		ViewAuto(GetVars('rewrite','GET'));
+	}elseif(isset($_GET['id'])||isset($_GET['alias'])){
+		ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
+	}elseif(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])){
+		ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('date','GET'),GetVars('tags','GET'));
+	}else{
+		ViewAuto($url);
+	}
+
+}
+ 
+function ViewFeed(){
 	global $zbp;
 
-	if (isset($zbp->membersbyname[GetVars('username', 'POST')])) {
-		if ($zbp->Verify_MD5(GetVars('username', 'POST'), GetVars('password', 'POST'))) {
-			$un = GetVars('username', 'POST');
-			$ps = md5($zbp->user->Password . $zbp->guid);
-			if (GetVars('savedate') == 0) {
-				setcookie("username", $un, 0, $zbp->cookiespath);
-				setcookie("password", $ps, 0, $zbp->cookiespath);
-			} else {
-				setcookie("username", $un, time() + 3600 * 24 * GetVars('savedate', 'POST'), $zbp->cookiespath);
-				setcookie("password", $ps, time() + 3600 * 24 * GetVars('savedate', 'POST'), $zbp->cookiespath);
-			}
+	$rss2 = new Rss2($zbp->name,$zbp->host,$zbp->subname);
 
-			return true;
-		} else {
-			$zbp->ShowError(8, __FILE__, __LINE__);
-		}
-	} else {
-		$zbp->ShowError(8, __FILE__, __LINE__);
+	$articles=$zbp->GetArticleList(
+		'*',
+		array(array('=','log_Status',0)),
+		array('log_PostTime'=>'DESC'),
+		$zbp->option['ZC_RSS2_COUNT'],
+		null
+	);
+
+	foreach ($articles as $article) {
+		$rss2->addItem($article->Title,$article->Url,($zbp->option['ZC_RSS_EXPORT_WHOLE']==true?$article->Content:$article->Intro),$article->PostTime);
 	}
+
+	header("Content-type:text/xml; Charset=utf-8");
+
+	echo $rss2->saveXML();
+
 }
 
-function Logout() {
+function ViewSearch(){
 	global $zbp;
 
-	setcookie('username', '', time() - 3600, $zbp->cookiespath);
-	setcookie('password', '', time() - 3600, $zbp->cookiespath);
+	$q=trim(strip_tags(GetVars('q','GET')));
+
+	$article = new Post;
+	$article->ID=0;
+	$article->Title=$zbp->lang['msg']['search'] . ' &quot;' . $q . '&quot;';
+	$article->IsLock=true;
+	$article->Type=ZC_POST_TYPE_PAGE;
+
+	if(isset($zbp->templates['search'])){
+		$article->Template='search';
+	}
+
+	$w=array();
+	$w[]=array('=','log_Type','0');
+	if($q){
+		$w[]=array('search','log_Content','log_Intro','log_Title',$q);
+	}else{
+		Redirect('./');
+	}
+
+	if(!($zbp->CheckRights('ArticleAll')&&$zbp->CheckRights('PageAll'))){
+		$w[]=array('=','log_Status',0);
+	}
+
+	$array=$zbp->GetArticleList(
+		'',
+		$w,
+		array('log_PostTime'=>'DESC'),
+		array($zbp->searchcount),
+		null
+	);
+
+	foreach ($array as $a) {
+		$article->Content .= '<p><br/>' . $a->Title . '<br/>';
+		$article->Content .= '<a href="' . $a->Url . '">' . $a->Url . '</a></p>';
+	}
+
+	$zbp->header .= '<meta name="robots" content="none" />' . "\r\n";
+	$zbp->template->SetTags('title',$article->Title);
+	$zbp->template->SetTags('article',$article);
+	$zbp->template->SetTags('type',$article->type=0?'article':'page');
+	$zbp->template->SetTags('page',1);
+	$zbp->template->SetTags('pagebar',null);
+	$zbp->template->SetTags('comments',array());
+	$zbp->template->SetTemplate($article->Template);
+
+	foreach ($GLOBALS['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($zbp->template);
+	}
+
+	$zbp->template->Display();
 
 }
 
