@@ -25,6 +25,10 @@ function RunTime() {
 	echo '-->';
 }
 
+function Plugin_Dir_Url() {
+
+}
+
 ################################################################################################################
 function VerifyLogin() {
 	global $zbp;
