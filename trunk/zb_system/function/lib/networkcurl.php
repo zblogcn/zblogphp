@@ -102,7 +102,7 @@ class Networkcurl implements iNetwork
 		{
 			if($data=='') $data = http_build_query($this->postdata);
 			curl_setopt($this->ch, CURLOPT_POSTFIELDS,$data);
-			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($this->ch, CURLOPT_POST, 1);
 		}
 
 		curl_setopt($this->ch,CURLOPT_HTTPHEADER,$this->httpheader);
