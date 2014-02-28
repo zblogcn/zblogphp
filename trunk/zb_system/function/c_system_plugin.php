@@ -668,13 +668,45 @@ $Filter_Plugin_CreateOptoinsOfCategorys = array();
 
 ################################################################################################################
 #Event里的接口
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_ViewIndex_Begin
+'参数:&$url
+'说明:定义ViewIndex输出接口Begin
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_ViewIndex_Begin = array();
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_ViewFeed_Begin
+'参数:&$url
+'说明:定义ViewFeed输出接口Begin
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_ViewFeed_Begin = array();
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_ViewSearch_Begin
+'参数:&$url
+'说明:定义ViewSearch输出接口Begin
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_ViewSearch_Begin = array();
 
 /*
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_ViewAuto_Begin
 '参数:&$url
-'说明:定义列表输出接口Begin
+'说明:定义ViewAuto输出接口Begin
 '调用:
 '**************************************************>
 */
@@ -685,7 +717,7 @@ $Filter_Plugin_ViewAuto_Begin = array();
 '类型:Filter
 '名称:Filter_Plugin_ViewAuto_End
 '参数:&$url
-'说明:定义列表输出接口End
+'说明:定义ViewAuto输出接口End
 '调用:
 '**************************************************>
 */

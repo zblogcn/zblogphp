@@ -34,11 +34,6 @@ class Network
 
 	function __construct()
 	{
-		if ((bool)ini_get('allow_url_fopen'))
-		{
-			if(function_exists('fsockopen')) $this->network_list[] = 'fsockopen';	
-			$this->fso = true;
-		}
 		if (function_exists('curl_init'))
 		{
 			$this->network_list[] = 'curl';
@@ -47,6 +42,11 @@ class Network
 		if ((bool)ini_get('allow_url_fopen'))
 		{
 			if(function_exists('file_get_contents')) $this->network_list[] = 'file_get_contents';
+			$this->fso = true;
+		}
+		if ((bool)ini_get('allow_url_fopen'))
+		{
+			if(function_exists('fsockopen')) $this->network_list[] = 'fsockopen';	
 			$this->fso = true;
 		}
 	}

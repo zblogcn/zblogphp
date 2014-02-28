@@ -254,7 +254,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
           <input id="app_advanced_dependency" name="app_advanced_dependency" style="width:550px;"  type="text" value="<?php echo $app->advanced_dependency;?>" />
         </p></td>
     </tr>
-    <tr>
+    <tr style="display:none;">
       <td><p><b>· 【高级】内置插件重写系统函数列表（以|分隔）</b>(可选)</p></td>
       <td><p>&nbsp;
           <input id="app_advanced_rewritefunctions" name="app_advanced_rewritefunctions" style="width:550px;"  type="text" value="<?php echo $app->advanced_rewritefunctions;?>" />

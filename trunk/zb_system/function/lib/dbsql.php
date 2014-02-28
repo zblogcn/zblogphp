@@ -232,6 +232,13 @@ class DbSql #extends AnotherClass
 					$y = $zbp->db->EscapeString($y);
 					$sqlw .= $comma . " $x $eq '$y' ";
 				}
+				if($eq=='EXISTS'|$eq=='NOT EXISTS'){
+					if(!isset($w[2])){
+						$sqlw .= $comma .  ' ' . $eq . ' (' . $w[1] . ') ';
+					}else{
+						$sqlw .= $comma .  '('. $w[1] .' ' . $eq . ' (' . $w[2] . ')) ';
+					}
+				}
 				if($eq=='BETWEEN'){
 					$b1 = (string)$w[1];
 					$b2 = (string)$w[2];
@@ -287,7 +294,7 @@ class DbSql #extends AnotherClass
 					}
 					$sqlw .= $comma .  '(' . $sql_array . ') ';
 				}
-				if($eq=='IN'|$eq=='NOT IN'|$eq=='EXISTS'|$eq=='NOT EXISTS'){
+				if($eq=='IN'|$eq=='NOT IN'){
 					$c='';
 					$sql_array='';
 					if(!is_array($w[2])){
@@ -300,7 +307,7 @@ class DbSql #extends AnotherClass
 							$c=',';
 						}
 					}
-					$sqlw .= $comma .  '('. $w[1] .' IN (' . $sql_array . ')) ';
+					$sqlw .= $comma .  '('. $w[1] .' '. $eq .' (' . $sql_array . ')) ';
 				}
 				if($eq=='CUSTOM'){
 					$sqlw .= $comma .  '(' . $w[1] . ') ';

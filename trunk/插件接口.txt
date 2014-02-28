@@ -1,5 +1,3 @@
-
-
 ====Filter_Plugin_Autoload====
 参数:$classname\\
 说明:定义autoload魔术方法\\
@@ -250,14 +248,29 @@
 说明:定义Login.php首页header接口\\
 调用:\\
 
+====Filter_Plugin_ViewIndex_Begin====
+参数:&$url\\
+说明:定义ViewIndex输出接口Begin\\
+调用:\\
+
+====Filter_Plugin_ViewFeed_Begin====
+参数:&$url\\
+说明:定义ViewFeed输出接口Begin\\
+调用:\\
+
+====Filter_Plugin_ViewSearch_Begin====
+参数:&$url\\
+说明:定义ViewSearch输出接口Begin\\
+调用:\\
+
 ====Filter_Plugin_ViewAuto_Begin====
 参数:&$url\\
-说明:定义列表输出接口Begin\\
+说明:定义ViewAuto输出接口Begin\\
 调用:\\
 
 ====Filter_Plugin_ViewAuto_End====
 参数:&$url\\
-说明:定义列表输出接口End\\
+说明:定义ViewAuto输出接口End\\
 调用:\\
 
 ====Filter_Plugin_ViewList_Begin====
@@ -390,15 +403,20 @@
 说明:模块删除成功的接口\\
 调用:\\
 
-====Filter_Plugin_Post_Call====
-参数:&$post,$method,$args\\
-说明:Post类的魔术方法接口\\
-调用:\\
-
 ====Filter_Plugin_Post_CommentPostUrl====
 参数:$post\\
 说明:Post类的CommentPostUrl接口\\
 调用:\\返回CommentPostUrl值.
+
+====Filter_Plugin_Post_RelatedList====
+参数:$post\\
+说明:Post类的RelatedList 接口\\
+调用:\\返回RelatedList Array.
+
+====Filter_Plugin_Post_Call====
+参数:&$post,$method,$args\\
+说明:Post类的魔术方法接口\\
+调用:\\
 
 ====Filter_Plugin_Comment_Call====
 参数:&$comment,$method,$args\\
@@ -415,9 +433,29 @@
 说明:Category类的魔术方法接口\\
 调用:\\
 
-====Filter_Plugin_Member_Call====
+====Filter_Plugin_Post_Save====
+参数:&$post,$method,$args\\
+说明:Post类的Save方法接口\\
+调用:\\
+
+====Filter_Plugin_Comment_Save====
+参数:&$comment,$method,$args\\
+说明:Comment类的Save方法接口\\
+调用:\\
+
+====Filter_Plugin_Tag_Save====
+参数:&$tag,$method,$args\\
+说明:Tag类的Save方法接口\\
+调用:\\
+
+====Filter_Plugin_Category_Save====
+参数:&$category,$method,$args\\
+说明:Category类的Save方法接口\\
+调用:\\
+
+====Filter_Plugin_Member_Save====
 参数:&$member,$method,$args\\
-说明:Member类的魔术方法接口\\
+说明:Member类的Save方法接口\\
 调用:\\
 
 ====Filter_Plugin_Mebmer_Avatar====
