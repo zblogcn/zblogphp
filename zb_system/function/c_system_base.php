@@ -24,7 +24,7 @@ if (version_compare(PHP_VERSION, '5.1.2', '>=')) {
 $_SERVER['_start_time'] = microtime(1); //RunTime
 $_SERVER['_query_count'] = 0;
 $_SERVER['_memory_usage'] = 0;
-if(function_exists('memory_get_usage'))$_SERVER['_memory_usage'] = memory_get_usage(true);
+if(function_exists('memory_get_usage'))$_SERVER['_memory_usage'] = memory_get_usage();
 
 
 require 'c_system_common.php';

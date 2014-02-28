@@ -21,7 +21,7 @@ function RunTime() {
 	echo '<!--' . (1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6)) . 'ms , ';
 	echo $_SERVER['_query_count'] . 'query';
 	if(function_exists('memory_get_usage'))
-		echo ' , ' . ((memory_get_usage(true)-$_SERVER['_memory_usage'])/1024) . 'kb memory';
+		echo ' , ' . (int)((memory_get_usage()-$_SERVER['_memory_usage'])/1024) . 'kb memory';
 	echo '-->';
 }
 
@@ -206,6 +206,13 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 ################################################################################################################
 function ViewIndex(){
 	global $zbp,$url;
+	
+	foreach ($GLOBALS['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
+		$fpreturn = $fpname($url);
+		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+			return $fpreturn;
+		}
+	}
 
 	if($url==$zbp->cookiespath||$url==$zbp->cookiespath . 'index.php'){
 		ViewList(null,null,null,null,null);
@@ -223,6 +230,13 @@ function ViewIndex(){
  
 function ViewFeed(){
 	global $zbp;
+	
+	foreach ($GLOBALS['Filter_Plugin_ViewFeed_Begin'] as $fpname => &$fpsignal) {
+		$fpreturn = $fpname($url);
+		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+			return $fpreturn;
+		}
+	}
 
 	$rss2 = new Rss2($zbp->name,$zbp->host,$zbp->subname);
 
@@ -246,6 +260,13 @@ function ViewFeed(){
 
 function ViewSearch(){
 	global $zbp;
+	
+	foreach ($GLOBALS['Filter_Plugin_ViewSearch_Begin'] as $fpname => &$fpsignal) {
+		$fpreturn = $fpname($url);
+		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+			return $fpreturn;
+		}
+	}
 
 	$q=trim(strip_tags(GetVars('q','GET')));
 

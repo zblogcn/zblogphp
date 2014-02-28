@@ -7,7 +7,7 @@ $matchs=array();
 $i=preg_match_all("/[\*]{50}<.*?[\*]{50}>/s",$s,$matchs);
 
 $matchs=$matchs[0];
-
+echo '<pre>';
 foreach ($matchs as $key => $value) {
 	$t=$value;
 	$t=str_replace('\'', '', $t);
@@ -21,5 +21,5 @@ foreach ($matchs as $key => $value) {
 	$t=str_replace("调用:", "调用:\\\\", $t);
 	echo $t;
 }
-
+echo '</pre>';
 ?>
