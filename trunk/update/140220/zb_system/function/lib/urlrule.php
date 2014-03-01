@@ -280,9 +280,9 @@ class UrlRule
 			//$url=str_replace('%category%', '(?:[^\./]+)', $url);
 			$url=str_replace('%category%', '(?:'.$fullcategory.')', $url);
 			$url=str_replace('%author%', '(?:[^\./]+)', $url);
-			$url=str_replace('%year%', '(?:[0-9]{4})', $url);
-			$url=str_replace('%month%', '(?:[0-9]{1,2})', $url);
-			$url=str_replace('%day%', '(?:[0-9]{1,2})', $url);
+			$url=str_replace('%year%', '(?:[0-9]<:4:>)', $url);
+			$url=str_replace('%month%', '(?:[0-9]<:1,2:>)', $url);
+			$url=str_replace('%day%', '(?:[0-9]<:1,2:>)', $url);
 		}
 		$url=str_replace('{', '', $url);
 		$url=str_replace('}', '', $url);
