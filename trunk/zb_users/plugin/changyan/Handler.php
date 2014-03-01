@@ -62,14 +62,16 @@ class Changyan_Handler
 
     public function delOption($option)
     {
-        return delete_option($option);
+		global $zbp;
+		$zbp->Config('changyan')->Del($option);
+		$zbp->SaveConfig('changyan');
+		return true;
+        //return delete_option($option);
     }
 
     public function showCommentsNotice()
     {
-        echo '<div class="updated">'
-            . '请访问<a color = red href="http://changyan.sohu.com/manage" target="blank"><font color="red">畅言站长管理后台</font></a>进行评论管理，当前页面的管理操作不能被同步到畅言管理服务器。</p>'
-            . '</div>';
+        $zbp->SetHint('tips','请访问<a color = red href="http://changyan.sohu.com/manage" target="blank"><font color="red">畅言站长管理后台</font></a>进行评论管理，当前页面的管理操作不能被同步到畅言管理服务器。');
     }
 
     //return a template to be used for comment
@@ -161,6 +163,11 @@ class Changyan_Handler
 
         die($aScript);
     }
+	
+	public function saveAppIDKey(){
+		$this->saveAppID();
+		$this->saveAppKey();
+	}
 
     public function saveAppID()
     {
@@ -188,8 +195,9 @@ s.src =  'http://assets.changyan.sohu.com/upload/changyan.js?conf='+ conf +'&app
 h.insertBefore(s,h.firstChild);
 })()</script>";
         $script = $scriptPart0 . $appID . $scriptPart1 . $conf . $scriptPart2;
+        $this->setOption('changyan_appID', $appID);
         $this->setOption('changyan_script', $script);
-        die($appID);
+
     }
 
     public function saveAppKey()
@@ -200,7 +208,6 @@ h.insertBefore(s,h.firstChild);
         //save
         $this->setOption('changyan_appKey', $appKey);
 
-        die($appKey);
     }
 
     public function setCron()

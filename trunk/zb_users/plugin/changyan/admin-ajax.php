@@ -24,6 +24,10 @@ if(isset($_POST['action'])){
 	if($_POST['action']=='changyan_saveScript'){
 		$changyanPlugin->saveScript();
 	}
+	
+	if($_POST['action']=='changyan_saveAppIDKey'){
+		$changyanPlugin->saveAppIDKey();
+	}
 
 	if($_POST['action']=='changyan_saveAppID'){
 		$changyanPlugin->saveAppID();
