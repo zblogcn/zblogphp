@@ -374,6 +374,7 @@ class ZBlogPHP{
 
 	public function LoadConfigs(){
 
+		$this->configs=array();
 		$sql = $this->db->sql->Select($this->table['Config'],array('*'),'','','','');
 		$array=$this->db->Query($sql);
 		foreach ($array as $c) {

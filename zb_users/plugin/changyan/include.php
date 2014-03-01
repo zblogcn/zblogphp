@@ -24,6 +24,8 @@ function ActivePlugin_changyan() {
 
 	//add_action('init', 'changyan_init');
 	Add_Filter_Plugin('Filter_Plugin_Zbp_Load','changyan_init');
+	Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu','changyan_AddMenu');
+	Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','changyan_socialcomment');
 
 }
 
@@ -74,6 +76,44 @@ function UninstallPlugin_changyan(){
 
 }
 
+function changyan_AddMenu(&$m){
+	global $zbp;
+	$b=false;
+	$i=0;
+	$s=MakeLeftMenu("root","畅言评论",$zbp->host . "zb_users/plugin/changyan/main.php","nav_changyan","aChangYan",$zbp->host . "zb_users/plugin/changyan/cy.png");
+	foreach($m as $key=>$value){
+		if($key==='nav_comment'){
+			$m[$key]=$s;
+			$b=true;
+		}
+	}
+	if(!$b){
+		reset($m);
+		foreach($m as $key=>$value){
+			if(strpos($value,'act=CommentMng')!==false){
+				$b=true;
+				break;
+			}
+			$i=$i+1;
+		}
+		if($b){
+			array_splice($m,$i,1,array('nav_changyan'=>$s));
+		}
+	}
+	if(!$b){$m["nav_changyan"]=$s;}
+}
+
+function changyan_socialcomment(&$template){
+    global $zbp,$changyanPlugin;
+    $script = $changyanPlugin->getOption('changyan_script');
+    if (!empty($script)) {
+		$a=$template->tags['article'];
+		$s='sid="'.$a->ID.'"';
+		$script=str_replace('id="SOHUCS"','id="SOHUCS" ' . $s,$script);
+		$template->SetTags('socialcomment',$script);
+	}
+}
+
 function changyan_init()
 {
     global $changyanPlugin;
@@ -102,54 +142,17 @@ function changyan_base_init()
 }
 
 
-function changyan_add_menu_items()
+function changyan_SubMenus()
 {
-    global $changyanPlugin;
+	global $zbp;
+	$id=1;
+	$url = GetRequestUri();
+	if(strpos($url,'analysis.php')!==false)$id=2;
+	if(strpos($url,'settings.php')!==false)$id=3;
+	echo '<a href="main.php"><span class="m-left '.($id==1?'m-now':'').'">评论管理</span></a>';
+	echo '<a href="analysis.php"><span class="m-left '.($id==2?'m-now':'').'">统计分析</span></a>';
+	echo '<a href="settings.php"><span class="m-left '.($id==3?'m-now':'').'">设置与初始化</span></a>';
 
-    $changyan_appKey = $changyanPlugin->getOption('changyan_appKey');
-    $changyan_script = $changyanPlugin->getOption('changyan_script');
-    if (empty($changyan_appKey) || empty($changyan_script)) {
-        add_object_page(
-            '初始化',
-            '畅言评论',
-            'moderate_comments',
-            'changyan',
-            array($changyanPlugin, 'setup'),
-            //icon set
-            $changyanPlugin->PluginURL . 'logo.png'
-        );
-    } else {
-        //installed and enabled
-        if (current_user_can('moderate_comments')) {
-            add_object_page(
-                '畅言评论',
-                '畅言评论',
-                'moderate_comments',
-                'changyan',
-                array($changyanPlugin, 'configure'),
-                //icon set
-                $changyanPlugin->PluginURL . 'logo.png'
-            );
-
-            add_submenu_page(
-                'changyan',
-                '统计分析',
-                '统计分析',
-                'manage_options',
-                'changyan_analysis',
-                array($changyanPlugin, 'analysis')
-            );
-
-            add_submenu_page(
-                'changyan',
-                '高级选项',
-                '高级选项',
-                'manage_options',
-                'changyan_settings',
-                array($changyanPlugin, 'settings')
-            );
-        }
-    }
 }
 
 function changyan_deactivate()

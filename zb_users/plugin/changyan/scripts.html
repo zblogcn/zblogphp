@@ -117,6 +117,27 @@
         return 0;
     }
 
+	function saveAppIDKey() {
+        var $ = jQuery;
+
+        var appID = $('#appID').val();
+        if (appID.length != 9) {
+            return -1;
+        }
+
+        var appKey = $('#appKey').val();
+        if (appKey.length != 32) {
+            return -1;
+        }
+        var data = {
+            action: 'changyan_saveAppIDKey',
+            appID: appID,
+            appKey: appKey
+        };
+        $.post(ajaxurl, data, function (response) {});
+        return 0;
+	}
+
     jQuery('#changyanCron').click(function () {
         var $ = jQuery;
         var isChecked = !!($(this).attr('checked'));
@@ -142,12 +163,8 @@
         var $appButton = $('#appButton');
         var buttonName = $appButton.val();
         if (buttonName == "提交") {
-            if (-1 == saveAppID()) {
-                alert("请输入正确的APP ID");
-                return;
-            }
-            if (-1 == saveAppKey()) {
-                alert("请输入正确的APP KEY");
+            if (-1 == saveAppIDKey()) {
+                alert("请输入正确的APP ID和APP KEY");
                 return;
             }
             $('#appID').attr('disabled', true);
