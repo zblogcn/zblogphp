@@ -5,6 +5,7 @@
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
+if ( !interface_exists ( 'iNetwork' )) {
 
 interface iNetwork
 {
@@ -19,6 +20,7 @@ interface iNetwork
 
 }
 
+}
 /**
 * NetworkFactory
 */

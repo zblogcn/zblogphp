@@ -53,7 +53,11 @@ class Changyan_Handler
 
     public function setOption($option, $value)
     {
-        return update_option($option, $value);
+		global $zbp;
+		$zbp->Config('changyan')->$option=$value;
+		$zbp->SaveConfig('changyan');
+		return true;
+        //return update_option($option, $value);
     }
 
     public function delOption($option)

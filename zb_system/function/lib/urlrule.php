@@ -96,23 +96,26 @@ class UrlRule
 		}
 
 		$s=$url;
+		$s=str_replace('%page%', '%poaogoe%', $s);
 		$url=str_replace('{%host%}', '^', $url);
 		$url=str_replace('.', '\\.', $url);
 		if($type=='index'){
-			preg_match('/[^\{\}]+(?=\{%page%\})/i', $s, $matches);
+			$url=str_replace('%page%', '%poaogoe%', $url);
+			preg_match('/[^\{\}]+(?=\{%poaogoe%\})/i', $s, $matches);
 			if(isset($matches[0])){
 				$url=str_replace($matches[0],'(?:'.$matches[0].')<:1:>',$url);
 			}
 			$url = $url . '$';
-			$url=str_replace('%page%', '([0-9]*)', $url);
+			$url=str_replace('%poaogoe%', '([0-9]*)', $url);
 		}
 		if($type=='cate'||$type=='tags'||$type=='date'||$type=='auth'){
-			preg_match('/(?<=\})[^\{\}]+(?=\{%page%\})/i', $s, $matches);
+			$url=str_replace('%page%', '%poaogoe%', $url);
+			preg_match('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', $s, $matches);
 			if(isset($matches[0])){
 				$url=str_replace($matches[0],'(?:'.$matches[0].')?',$url);
 			}
 			$url = $url . '$';
-			$url=str_replace('%page%', '([0-9]*)', $url);
+			$url=str_replace('%poaogoe%', '([0-9]*)', $url);
 			$url=str_replace('%id%', '([0-9]+)', $url);
 			$url=str_replace('%date%', '([0-9\-]+)', $url);
 			if($type=='cate'){
@@ -244,23 +247,27 @@ class UrlRule
 		}
 
 		$s=$url;
+		$s=str_replace('%page%', '%poaogoe%', $s);
 		$url=str_replace('{%host%}', '', $url);
 		$url=str_replace('.', '\\.', $url);
 		if($type=='index'){
-			preg_match('/[^\{\}]+(?=\{%page%\})/i', $s, $matches);
+			$url=str_replace('%page%', '%poaogoe%', $url);
+			preg_match('/[^\{\}]+(?=\{%%poaogoe%%\})/i', $s, $matches);
 			if(isset($matches[0])){
+				$r=0;
 				$url=str_replace($matches[0],'(?:'.$matches[0].')<:1:>',$url);
 			}
 			$url = $url .' '.$zbp->cookiespath .'index\.php\?page=$1&rewrite=$0';
-			$url=str_replace('%page%', '([0-9]*)', $url);
+			$url=str_replace('%poaogoe%', '([0-9]*)', $url);
 		}
 		if($type=='cate'||$type=='tags'||$type=='date'||$type=='auth'){
-			preg_match('/(?<=\})[^\{\}]+(?=\{%page%\})/i', $s, $matches);
+			$url=str_replace('%page%', '%poaogoe%', $url);
+			preg_match('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', $s, $matches);
 			if(isset($matches[0])){
 				$url=str_replace($matches[0],'(?:'.$matches[0].')?',$url);
 			}
 			$url = $url .' '.$zbp->cookiespath . 'index\.php\?'. $type .'=$1&page=$2&rewrite=$0';
-			$url=str_replace('%page%', '([0-9]*)', $url);
+			$url=str_replace('%poaogoe%', '([0-9]*)', $url);
 			$url=str_replace('%id%', '([0-9]+)', $url);
 			$url=str_replace('%date%', '([0-9\-]+)', $url);
 			if($type=='cate'){
@@ -280,9 +287,9 @@ class UrlRule
 			//$url=str_replace('%category%', '(?:[^\./]+)', $url);
 			$url=str_replace('%category%', '(?:'.$fullcategory.')', $url);
 			$url=str_replace('%author%', '(?:[^\./]+)', $url);
-			$url=str_replace('%year%', '(?:[0-9]{4})', $url);
-			$url=str_replace('%month%', '(?:[0-9]{1,2})', $url);
-			$url=str_replace('%day%', '(?:[0-9]{1,2})', $url);
+			$url=str_replace('%year%', '(?:[0-9]<:4:>)', $url);
+			$url=str_replace('%month%', '(?:[0-9]<:1,2:>)', $url);
+			$url=str_replace('%day%', '(?:[0-9]<:1,2:>)', $url);
 		}
 		$url=str_replace('{', '', $url);
 		$url=str_replace('}', '', $url);
@@ -291,6 +298,5 @@ class UrlRule
 		return 'RewriteRule ' . $zbp->cookiespath . $url . ' [I,L]';
 
 	}
-
 
 }

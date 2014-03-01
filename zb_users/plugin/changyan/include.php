@@ -6,6 +6,14 @@ ini_set('max_execution_time', '0');
 define('CHANGYAN_PLUGIN_PATH', dirname(__FILE__));
 require CHANGYAN_PLUGIN_PATH . '/Handler.php';
 
+if(!class_exists('Network')){
+//ZBP1.3之前临时使用
+require CHANGYAN_PLUGIN_PATH . '/network.php';
+require CHANGYAN_PLUGIN_PATH . '/networkcurl.php';
+require CHANGYAN_PLUGIN_PATH . '/networkfile_get_contents.php';
+require CHANGYAN_PLUGIN_PATH . '/networkfsockopen.php';
+}
+
 $changyanPlugin = null;
 
 #注册插件函数
@@ -14,11 +22,8 @@ function ActivePlugin_changyan() {
     global $changyanPlugin;
 	$changyanPlugin = Changyan_Handler::getInstance();
 
-//add_action('init', 'changyan_init');
-
-
-Add_Filter_Plugin('Filter_Plugin_Zbp_Load','changyan_init');
-
+	//add_action('init', 'changyan_init');
+	Add_Filter_Plugin('Filter_Plugin_Zbp_Load','changyan_init');
 
 }
 
@@ -61,14 +66,6 @@ function InstallPlugin_changyan(){
 
     //add_action('admin_head-edit-comments.php', array($changyanPlugin, 'showCommentsNotice'));
 
-    //use ajax on wordpress
-    //add_action('wp_ajax_changyan_sync2WordPress', array($changyanPlugin, 'sync2Wordpress'));
-    //add_action('wp_ajax_changyan_sync2Changyan', array($changyanPlugin, 'sync2Changyan'));
-    //add_action('wp_ajax_changyan_saveScript', array($changyanPlugin, 'saveScript'));
-    //add_action('wp_ajax_changyan_saveAppID', array($changyanPlugin, 'saveAppID'));
-    //add_action('wp_ajax_changyan_saveAppKey', array($changyanPlugin, 'saveAppKey'));
-    //add_action('wp_ajax_changyan_cron', array($changyanPlugin, 'setCron'));
-
     changyan_base_init();
 	
 }
@@ -90,7 +87,7 @@ function changyan_base_init()
     $script = $changyanPlugin->getOption('changyan_script');
     
     if (!empty($script)) {
-        add_filter('comments_template', array($changyanPlugin, 'getCommentsTemplate'));
+        //add_filter('comments_template', array($changyanPlugin, 'getCommentsTemplate'));
     }
     //ini_set('display_errors', '1');
     //schedule synchronization

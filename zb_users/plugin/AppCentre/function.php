@@ -171,7 +171,7 @@ function Server_SendRequest($url,$data=array(),$u='',$c=''){
 	}
 
 	ini_set('default_socket_timeout',120);
-	return file_get_contents('compress.zlib://' . $url,false,$content);
+	return file_get_contents($url,false,$content);
 
 }
 
@@ -205,14 +205,14 @@ function Server_SendRequest_Network($url,$data=array(),$u,$c){
 
 	if($data){//POST
 		$ajax->open('POST',$url);
-		$ajax->enableGzip();
+		if(get_class($ajax)<>'Networkfile_get_contents')$ajax->enableGzip();
 		$ajax->setTimeOuts(120,120,0,0);
 		$ajax->setRequestHeader('User-Agent',$u);
 		$ajax->setRequestHeader('Cookie',$c);
 		$ajax->send($data);
 	}else{
 		$ajax->open('GET',$url);
-		$ajax->enableGzip();
+		if(get_class($ajax)<>'Networkfile_get_contents')$ajax->enableGzip();
 		$ajax->setTimeOuts(120,120,0,0);
 		$ajax->setRequestHeader('User-Agent',$u);
 		$ajax->setRequestHeader('Cookie',$c);

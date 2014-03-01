@@ -6,11 +6,14 @@ if (!$zbp->CheckRights('root')) {$zbp->ShowError(6);exit();}
 if (!$zbp->CheckPlugin('changyan')) {$zbp->ShowError(48);exit();}
 $blogtitle='畅言评论系统';
 require $blogpath . 'zb_system/admin/admin_header.php';
+?>
+<script type="text/javascript">
+function bmx2table(){}
+var ajaxurl = 'admin-ajax.php';
+</script>
+<?php
 include_once dirname(__FILE__) . '/scripts.html';
 include_once dirname(__FILE__) . '/header.html';
-?>
-
-<?php
 require $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
@@ -37,7 +40,7 @@ if($changyanPlugin->getOption('changyan_script')){
 <div class="margin heiti" style="width: 800px">
     <table class="tableFull tableBorder">
         <tr>
-            <td>
+            <td style="width:10px;">
                 <p class="start">&nbsp;</p>
             </td>
             <td>
@@ -48,15 +51,14 @@ if($changyanPlugin->getOption('changyan_script')){
             <td />
             <td>
                 <span class="high">请按照提示<a
-                        href="http://changyan.sohu.com/register" target="blank">注册</a>账号。
+                        href="http://changyan.sohu.com/register" target="blank"><u>注册账号</u></a>。
                 </span>
             </td>
         </tr>
     </table>
-    <br />
-    <table class="tableFull tableBorder">
+   <table class="tableFull tableBorder">
         <tr>
-            <td>
+            <td style="width:10px;">
                 <p class="start">&nbsp;</p>
             </td>
             <td>
@@ -75,7 +77,7 @@ if($changyanPlugin->getOption('changyan_script')){
 
         <tr>
             <td />
-            <td>
+            <td style="padding-bottom:10px;">
                 <table>
                     <tr>
                         <td style="color: SteelBlue">APP ID:</td>
@@ -118,10 +120,9 @@ if($changyanPlugin->getOption('changyan_script')){
             </td>
         </tr>
     </table>
-    <br />
     <table class="tableFull tableBorder">
         <tr>
-            <td>
+            <td style="width:10px;">
                 <p class="start">&nbsp;</p>
             </td>
             <td>
@@ -135,7 +136,7 @@ if($changyanPlugin->getOption('changyan_script')){
         </tr>
         <tr>
             <td />
-            <td>
+            <td style="padding-bottom:10px;">
                 <div id="cyan-WP2cyan">
                     <p class="message-start">
                         <br/><input type="button" id="appButton"
