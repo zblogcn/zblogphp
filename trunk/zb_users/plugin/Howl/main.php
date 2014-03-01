@@ -23,12 +23,12 @@ if(count($_POST)>0){
 	}
 
 	$a=array();
-	$a[1]=array();
-	$a[2]=array();
-	$a[3]=array();
-	$a[4]=array();
-	$a[5]=array();
-	$a[6]=array();
+	$a[1] = array();
+	$a[2] = array();
+	$a[3] = array();
+	$a[4] = array();
+	$a[5] = array();
+	$a[6] = array();
 
 	for ($i=1; $i < 7 ; $i++) {
 		foreach ($actions as $key => $value) {
@@ -36,12 +36,12 @@ if(count($_POST)>0){
 			$a[$i][$key]=(int)$check;
 		}
 	}
-	$zbp->Config('Howl')->Group1=$a[1];
-	$zbp->Config('Howl')->Group2=$a[2];
-	$zbp->Config('Howl')->Group3=$a[3];
-	$zbp->Config('Howl')->Group4=$a[4];
-	$zbp->Config('Howl')->Group5=$a[5];
-	$zbp->Config('Howl')->Group6=$a[6];
+	$zbp->Config('Howl')->Group1 = $a[1];
+	$zbp->Config('Howl')->Group2 = $a[2];
+	$zbp->Config('Howl')->Group3 = $a[3];
+	$zbp->Config('Howl')->Group4 = $a[4];
+	$zbp->Config('Howl')->Group5 = $a[5];
+	$zbp->Config('Howl')->Group6 = $a[6];
 	$zbp->SaveConfig('Howl');
 
 	$zbp->SetHint('good');
@@ -70,6 +70,7 @@ $zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重�
 	<th class="td10"><?php echo $zbp->lang['user_level_name']['4'];?>组</th>
 	<th class="td10"><?php echo $zbp->lang['user_level_name']['5'];?>组</th>
 	<th class="td10"><?php echo $zbp->lang['user_level_name']['6'];?>组</th>
+    <th class="td10">单独用户分配</th>
 	<!-- <th class="td10">权限</th> -->
 </tr>
 <?php
@@ -83,16 +84,19 @@ return '<input name="Group'.$group.'_' . $key .'" style="" type="text" value="'.
 
 
 foreach ($actions as $key => $value) {
-echo '<tr>';
-echo '<td class="tdCenter">' . $key . '(<b>'.(isset($actions_name_howl[$key])?$actions_name_howl[$key]:'未知权限').'</b>)</td>';
-echo '<td class="tdCenter">' . MakeInput(1,$key) . '</td>';
-echo '<td class="tdCenter">' . MakeInput(2,$key) . '</td>';
-echo '<td class="tdCenter">' . MakeInput(3,$key) . '</td>';
-echo '<td class="tdCenter">' . MakeInput(4,$key) . '</td>';
-echo '<td class="tdCenter">' . MakeInput(5,$key) . '</td>';
-echo '<td class="tdCenter">' . MakeInput(6,$key) . '</td>';
-//echo '<td class="tdCenter">' . $key . '</td>';
-echo '</tr>';
+?>
+
+<tr>
+<td class="tdCenter"><?php echo $key?>(<b><?php echo (isset($actions_name_howl[$key])?$actions_name_howl[$key]:'未知权限');?></b>)</td>
+<td class="tdCenter"><?php echo MakeInput(1,$key);?></td>
+<td class="tdCenter"><?php echo MakeInput(2,$key);?></td>
+<td class="tdCenter"><?php echo MakeInput(3,$key);?></td>
+<td class="tdCenter"><?php echo MakeInput(4,$key);?></td>
+<td class="tdCenter"><?php echo MakeInput(5,$key);?></td>
+<td class="tdCenter"><?php echo MakeInput(6,$key);?></td>
+<td class="tdCenter"><a href="javascript:void(0)" onclick="window.open('set_user.php?key=<?php echo $key?>','','width=500,height=500')">设置</a></td>
+</tr>
+<?php
 }
 
 
