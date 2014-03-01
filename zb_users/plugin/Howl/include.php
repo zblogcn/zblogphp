@@ -120,7 +120,8 @@ function Howl_CheckRights(&$action){
 		)
 		*/
 	}
-	else if(array_key_exists($action, $a[$g])){
+	
+	if(array_key_exists($action, $a[$g])){
 		$GLOBALS['Filter_Plugin_Zbp_CheckRights']['Howl_CheckRights'] = PLUGIN_EXITSIGNAL_RETURN;
 		return (boolean)$a[$g][$action];
 	}
