@@ -217,104 +217,112 @@ class DbSql #extends AnotherClass
 	}
 
 
-	public function ParseWhere($where){
+	public function ParseWhere($where,$changewhere=''){
 		global $zbp;
 
 		$sqlw=null;
-		if(!empty($where)) {
+		if(empty($where))return null;
+
+		if(!empty($changewhere)){
+			$sqlw .= " $changewhere ";
+		}else{
 			$sqlw .= ' WHERE ';
-			$comma = '';
-			foreach($where as $k => $w) {
-				$eq=strtoupper($w[0]);
-				if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='){
-					$x = (string)$w[1];
-					$y = (string)$w[2];
-					$y = $zbp->db->EscapeString($y);
-					$sqlw .= $comma . " $x $eq '$y' ";
-				}
-				if($eq=='EXISTS'|$eq=='NOT EXISTS'){
-					if(!isset($w[2])){
-						$sqlw .= $comma .  ' ' . $eq . ' (' . $w[1] . ') ';
-					}else{
-						$sqlw .= $comma .  '('. $w[1] .' ' . $eq . ' (' . $w[2] . ')) ';
-					}
-				}
-				if($eq=='BETWEEN'){
-					$b1 = (string)$w[1];
-					$b2 = (string)$w[2];
-					$b3 = (string)$w[3];
-					$sqlw .= $comma . " $b1 BETWEEN '$b2' AND '$b3' ";
-				}
-				if($eq=='SEARCH'){
-					$j=count($w);
-					$sql_search='';
-					$c='';
-					for ($i=1; $i <= $j-1-1; $i++) {
-						$x=(string)$w[$i];
-						$y=(string)$w[$j-1];
-						$y=$zbp->db->EscapeString($y);
-						$sql_search .= $c . " ($x LIKE '%$y%') ";
-						$c='OR';
-					}
-					$sqlw .= $comma .  '(' . $sql_search . ') ';
-				}
-				if($eq=='ARRAY'){
-					$c='';
-					$sql_array='';
-					if(!is_array($w[1]))continue;
-					if(count($w[1])==0)continue;
-					foreach ($w[1] as $x=>$y) {
-						$y[1]=$zbp->db->EscapeString($y[1]);
-						$sql_array .= $c . " $y[0]='$y[1]' ";
-						$c='OR';
-					}
-					$sqlw .= $comma .  '(' . $sql_array . ') ';
-				}
-				if($eq=='ARRAY_NOT'){
-					$c='';
-					$sql_array='';
-					if(!is_array($w[1]))continue;
-					if(count($w[1])==0)continue;
-					foreach ($w[1] as $x=>$y) {
-						$y[1]=$zbp->db->EscapeString($y[1]);
-						$sql_array .= $c . " $y[0]<>'$y[1]' ";
-						$c='OR';
-					}
-					$sqlw .= $comma .  '(' . $sql_array . ') ';
-				}
-				if($eq=='ARRAY_LIKE'){
-					$c='';
-					$sql_array='';
-					if(!is_array($w[1]))continue;
-					if(count($w[1])==0)continue;
-					foreach ($w[1] as $x=>$y) {
-						$y[1]=$zbp->db->EscapeString($y[1]);
-						$sql_array .= $c . " ($y[0] LIKE '$y[1]') ";
-						$c='OR';
-					}
-					$sqlw .= $comma .  '(' . $sql_array . ') ';
-				}
-				if($eq=='IN'|$eq=='NOT IN'){
-					$c='';
-					$sql_array='';
-					if(!is_array($w[2])){
-						$sql_array=$w[2];
-					}else{
-						if(count($w[2])==0)continue;
-						foreach ($w[2] as $x=>$y) {
-							$y=$zbp->db->EscapeString($y);
-							$sql_array .= $c . " '$y' ";
-							$c=',';
-						}
-					}
-					$sqlw .= $comma .  '('. $w[1] .' '. $eq .' (' . $sql_array . ')) ';
-				}
-				if($eq=='CUSTOM'){
-					$sqlw .= $comma .  '(' . $w[1] . ') ';
-				}
-				$comma = 'AND';
-			}
 		}
+		
+		if(!is_array($where))return $sqlw . $where;
+		
+		$comma = '';
+		foreach($where as $k => $w) {
+			$eq=strtoupper($w[0]);
+			if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='){
+				$x = (string)$w[1];
+				$y = (string)$w[2];
+				$y = $zbp->db->EscapeString($y);
+				$sqlw .= $comma . " $x $eq '$y' ";
+			}
+			if($eq=='EXISTS'|$eq=='NOT EXISTS'){
+				if(!isset($w[2])){
+					$sqlw .= $comma .  ' ' . $eq . ' (' . $w[1] . ') ';
+				}else{
+					$sqlw .= $comma .  '('. $w[1] .' ' . $eq . ' (' . $w[2] . ')) ';
+				}
+			}
+			if($eq=='BETWEEN'){
+				$b1 = (string)$w[1];
+				$b2 = (string)$w[2];
+				$b3 = (string)$w[3];
+				$sqlw .= $comma . " $b1 BETWEEN '$b2' AND '$b3' ";
+			}
+			if($eq=='SEARCH'){
+				$j=count($w);
+				$sql_search='';
+				$c='';
+				for ($i=1; $i <= $j-1-1; $i++) {
+					$x=(string)$w[$i];
+					$y=(string)$w[$j-1];
+					$y=$zbp->db->EscapeString($y);
+					$sql_search .= $c . " ($x LIKE '%$y%') ";
+					$c='OR';
+				}
+				$sqlw .= $comma .  '(' . $sql_search . ') ';
+			}
+			if($eq=='ARRAY'){
+				$c='';
+				$sql_array='';
+				if(!is_array($w[1]))continue;
+				if(count($w[1])==0)continue;
+				foreach ($w[1] as $x=>$y) {
+					$y[1]=$zbp->db->EscapeString($y[1]);
+					$sql_array .= $c . " $y[0]='$y[1]' ";
+					$c='OR';
+				}
+				$sqlw .= $comma .  '(' . $sql_array . ') ';
+			}
+			if($eq=='ARRAY_NOT'){
+				$c='';
+				$sql_array='';
+				if(!is_array($w[1]))continue;
+				if(count($w[1])==0)continue;
+				foreach ($w[1] as $x=>$y) {
+					$y[1]=$zbp->db->EscapeString($y[1]);
+					$sql_array .= $c . " $y[0]<>'$y[1]' ";
+					$c='OR';
+				}
+				$sqlw .= $comma .  '(' . $sql_array . ') ';
+			}
+			if($eq=='ARRAY_LIKE'){
+				$c='';
+				$sql_array='';
+				if(!is_array($w[1]))continue;
+				if(count($w[1])==0)continue;
+				foreach ($w[1] as $x=>$y) {
+					$y[1]=$zbp->db->EscapeString($y[1]);
+					$sql_array .= $c . " ($y[0] LIKE '$y[1]') ";
+					$c='OR';
+				}
+				$sqlw .= $comma .  '(' . $sql_array . ') ';
+			}
+			if($eq=='IN'|$eq=='NOT IN'){
+				$c='';
+				$sql_array='';
+				if(!is_array($w[2])){
+					$sql_array=$w[2];
+				}else{
+					if(count($w[2])==0)continue;
+					foreach ($w[2] as $x=>$y) {
+						$y=$zbp->db->EscapeString($y);
+						$sql_array .= $c . " '$y' ";
+						$c=',';
+					}
+				}
+				$sqlw .= $comma .  '('. $w[1] .' '. $eq .' (' . $sql_array . ')) ';
+			}
+			if($eq=='CUSTOM'){
+				$sqlw .= $comma . $w[1] . ' ';
+			}
+			$comma = 'AND';
+		}
+
 		return $sqlw;
 	}
 

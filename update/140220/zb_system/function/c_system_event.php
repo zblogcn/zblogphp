@@ -187,6 +187,8 @@ function Logout() {
 ################################################################################################################
 function ViewAuto($url) {
 	global $zbp;
+	
+	$url=GetValueInArray(explode('?',$url),'0');
 
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($url);
@@ -276,6 +278,10 @@ function ViewAuto($url) {
 		return null;
 	}
 
+	if($url==''){
+		return ViewList(null,null,null,null,null);
+	}
+	
 	//ViewList(null,null,null,null,null);
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_End'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($url);

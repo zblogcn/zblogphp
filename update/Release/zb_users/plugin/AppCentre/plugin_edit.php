@@ -107,7 +107,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       <th>&nbsp;</th>
     </tr>
     <tr>
-      <td><p><b>· 主题ID</b><br/>
+      <td><p><b>· 插件ID</b><br/>
           <span class="note">&nbsp;&nbsp;插件ID为插件的目录名,且不能重复.ID名只能用字母数字和下划线的组合.</span></p></td>
       <td><p>&nbsp;
           <input id="app_id" name="app_id" style="width:550px;"  type="text" value="<?php echo $app->id;?>" <?php if($app->id)echo 'readonly="readonly"';?>  />

@@ -42,7 +42,10 @@ $method=GetVars('method','GET');
 if(!$method)$method='view';
 Server_Open($method);
 ?>
-
+	<script type="text/javascript">
+		window.plug_list = "<?php echo AddNameInString($option['ZC_USING_PLUGIN_LIST'],$option['ZC_BLOG_THEME'])?>";
+		window.signkey = '<?php echo $zbp->GetToken()?>';
+	</script>
 	<script type="text/javascript">ActiveLeftMenu("aAppCentre");</script>
 	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>	
   </div>

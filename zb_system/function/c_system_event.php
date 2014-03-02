@@ -329,6 +329,8 @@ function ViewSearch(){
 ################################################################################################################
 function ViewAuto($url) {
 	global $zbp;
+	
+	$url=GetValueInArray(explode('?',$url),'0');
 
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($url);
@@ -416,6 +418,10 @@ function ViewAuto($url) {
 			$zbp->ShowError(2, __FILE__, __LINE__);
 
 		return null;
+	}
+
+	if($url==''){
+		return ViewList(null,null,null,null,null);
 	}
 
 	//ViewList(null,null,null,null,null);

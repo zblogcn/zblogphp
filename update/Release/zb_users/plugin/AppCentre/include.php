@@ -25,7 +25,7 @@ function InstallPlugin_AppCentre(){
 
 function AppCentre_AddMenu(&$m){
 	global $zbp;
-	$m[]=MakeLeftMenu("root","应用中心",$zbp->host . "zb_users/plugin/AppCentre/main.php","nav_AppCentre","aAppCentre",$zbp->host . "zb_users/plugin/AppCentre/images/Cube1.png");	
+	$m['nav_AppCentre']=MakeLeftMenu("root","应用中心",$zbp->host . "zb_users/plugin/AppCentre/main.php","nav_AppCentre","aAppCentre",$zbp->host . "zb_users/plugin/AppCentre/images/Cube1.png");
 }
 
 function AppCentre_AddSiteInfoMenu(){
