@@ -125,18 +125,48 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         <tr>
             <td />
             <td style="padding-bottom:10px;">
-                <div id="cyan-WP2cyan">
-                    <p class="message-start">
-                        <br/><input type="button" id="appButton"
-                               class="button button-rounded button-primary" value="同步本地评论到畅言"
-                               onclick="sync2Cyan('T');"
-                               style="width: 160px; text-align: center; vertical-align: middle" />
-                    </p>
+                <table>
+                    <tr>
+                        <td style="padding:10px 0;">
+                            <div id="cyan-WP2cyan">
+                                <p class="message-start">
+                                    <input type="button" id="appButton"
+                                           class="button button-rounded button-primary" value="同步本地评论到畅言"
+                                           onclick="sync2Cyan('F');"
+                                           style="width: 160px; text-align: center; vertical-align: middle" />
+                                </p>
 
-                    <p class="status"></p>
+                                <p class="status"></p>
 
-                    <p class="message-complete">同步完成</p>
-                </div>
+                                <p class="message-complete">同步完成</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px 0;">
+                            <div id="cyan-export">
+                                <p class="message-start">
+                                    <input type="button" id="appButton"
+                                           class="button button-rounded button-primary" value="同步畅言评论到本地"
+                                           onClick="sync2WPress();return false;"
+                                           style="width: 160px; text-align: center; vertical-align: middle" />
+                                </p>
+
+                                <p class="status"></p>
+
+                                <p class="message-complete">同步完成</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px 0;">
+                            <label>
+                                <input type="checkbox" id="changyanCron" name="changyanCronCheckbox" value="1"
+                                    <?php if ($changyanPlugin->getOption('changyan_isCron')) echo 'checked'; ?> /> 定时从畅言同步评论到本地
+                            </label>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>

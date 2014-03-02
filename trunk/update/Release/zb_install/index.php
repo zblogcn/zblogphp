@@ -401,10 +401,10 @@ function Setup3(){
         <label>
           <input value="mysql" type="radio" name="dbtype"/>MySQL连接</label>
         <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
-        <?php if($CheckResult['mysqli'][0]){?>
+        <!--<?php if($CheckResult['mysqli'][0]){?>
         <label>
           <input value="mysqli" type="radio" name="dbtype"/>MySQLi连接</label>
-        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;-->
         <?php if($CheckResult['pdo_mysql'][0]){?>
         <label>
           <input value="pdo_mysql" type="radio" name="dbtype"/>PDO_MySQL连接</label>

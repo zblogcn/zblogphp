@@ -26,7 +26,7 @@ $f=AppCentre_GetHttpContent($url);
 	  foreach ($xml->children() as $file){
 		$full=$zbp->path . str_replace('\\','/',$file['name']);
 		$dir=dirname($full);
-		if(!file_exists($dir . '/'))@mkdir($dir,0777,true);
+		if(!file_exists($dir . '/'))@mkdir($dir,0755,true);
 		$f=base64_decode($file);
 		@file_put_contents($full,$f);
 	  }
@@ -41,7 +41,7 @@ if(GetVars('restore','GET')!=''){
   $f=AppCentre_GetHttpContent($url);
   $file=$zbp->path . str_replace('\\','/',$file);
   $dir=dirname($file);
-  if(!file_exists($dir.'/'))@mkdir($dir,0777,true);
+  if(!file_exists($dir.'/'))@mkdir($dir,0755,true);
   @file_put_contents($file,$f);
   echo '<img src="'.$zbp->host.'zb_system/image/admin/ok.png" width="16" alt="" />';
   die();
