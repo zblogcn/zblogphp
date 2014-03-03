@@ -44,7 +44,7 @@ if( ($zbp->option['ZC_DATABASE_TYPE']!=='') && ($zbp->option['ZC_YUN_SITE']=='')
 </head>
 <body>
 <div class="setup">
-  <form method="post" action="?step=<?php echo $zblogstep+1;?>">
+  <form method="post" action="./index.php?step=<?php echo $zblogstep+1;?>">
     <?php
 
 switch ($zblogstep) {
@@ -560,7 +560,7 @@ global $CheckResult;
 $CheckResult=array(
  //服务器 
   'server' => array(GetVars('SERVER_SOFTWARE','SERVER'),''), 
-  'phpver' => array(phpversion(),''), 
+  'phpver' => array(PHP_VERSION,''), 
   'zbppath' => array($zbp->path,''), 
  //组件
   'mysql' => array('',''),
@@ -588,7 +588,7 @@ $CheckResult=array(
 
 );
 
-  if((float)(substr(phpversion(),0,3))>=5.2){
+  if(version_compare(PHP_VERSION,'5.2.0')>=0){
     $CheckResult['phpver'][1]=bingo;
   }
   else{

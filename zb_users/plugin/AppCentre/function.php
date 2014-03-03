@@ -142,9 +142,11 @@ function Server_SendRequest($url,$data=array(),$u='',$c=''){
 	$u='ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent();
 	
 	
-	if(class_exists('Network'))return Server_SendRequest_Network($url,$data,$u,$c);
+	if(!class_exists('NetworkFactory',false))
+		if(class_exists('Network'))
+			return Server_SendRequest_Network($url,$data,$u,$c);
 	if(function_exists("curl_init"))return Server_SendRequest_CUrl($url,$data,$u,$c);
-	if(!ini_get("allow_url_fopen"))return "";	
+	if(!ini_get("allow_url_fopen"))return "";
 	
 	if($data){//POST
 		$data=http_build_query($data);
