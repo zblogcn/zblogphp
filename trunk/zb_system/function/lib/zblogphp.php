@@ -49,8 +49,8 @@ class ZBlogPHP{
 	public $user=null;
 	public $cache=null;
 
-	private $modulefunc=array();
 	private $readymodules=array();
+	private $readymodules_function=array();	
 	private $readymodules_parameters=array();
 
 	public $table=null;
@@ -624,13 +624,13 @@ function BuildModule(){
 
 	foreach ($this->readymodules as $modfilename) {
 		if(isset($this->modulesbyfilename[$modfilename])){
-			if(isset($this->modulefunc[$modfilename])){
+			if(isset($this->readymodules_function[$modfilename])){
 				$m=$this->modulesbyfilename[$modfilename];
-				if(function_exists($this->modulefunc[$modfilename])){
+				if(function_exists($this->readymodules_function[$modfilename])){
 					if(!isset($this->readymodules_parameters[$modfilename])){
-						$m->Content=call_user_func($this->modulefunc[$modfilename]);
+						$m->Content=call_user_func($this->readymodules_function[$modfilename]);
 					}else{
-						$m->Content=call_user_func($this->modulefunc[$modfilename],$this->readymodules_parameters[$modfilename]);
+						$m->Content=call_user_func($this->readymodules_function[$modfilename],$this->readymodules_parameters[$modfilename]);
 					}
 				}
 				$m->Save();
@@ -641,7 +641,7 @@ function BuildModule(){
 }
 
 function RegBuildModule($modfilename,$userfunc){
-	$this->modulefunc[$modfilename]=$userfunc;
+	$this->readymodules_function[$modfilename]=$userfunc;
 }
 
 function AddBuildModule($modfilename,$parameters=null){
@@ -1541,10 +1541,10 @@ function AddBuildModuleAll(){
 
 	function  RedirectInstall($yun=false){
 		if(!$yun){
-			if(!$this->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/');}
+			if(!$this->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/index.php');}
 		}else{
 			if($this->option['ZC_YUN_SITE']){
-				if($this->Config('system')->CountItem()==0){Redirect('./zb_install/');}
+				if($this->Config('system')->CountItem()==0){Redirect('./zb_install/index.php');}
 			}
 		}
 	}

@@ -17,12 +17,23 @@ function Logs($s) {
 
 function RunTime() {
 	global $zbp;
-	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false)return ;
-	echo '<!--' . (1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6)) . 'ms , ';
-	echo $_SERVER['_query_count'] . 'query';
+
+	$rt=array();
+	$rt[]=(1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6));
+	$rt[]=$_SERVER['_query_count'];
+	$rt[]=$_SERVER['_memory_usage'];
+	if(function_exists('memory_get_usage')){
+		$rt[2]=(int)((memory_get_usage()-$_SERVER['_memory_usage'])/1024);
+	}
+	
+	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false)return $rt;
+
+	echo '<!--' . $rt[0] . 'ms , ';
+	echo  $rt[1] . 'query';
 	if(function_exists('memory_get_usage'))
-		echo ' , ' . (int)((memory_get_usage()-$_SERVER['_memory_usage'])/1024) . 'kb memory';
+		echo ' , ' . $rt[2] . 'kb memory';
 	echo '-->';
+	return $rt;
 }
 
 function Plugin_Dir_Url() {

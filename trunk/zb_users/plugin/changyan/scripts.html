@@ -138,7 +138,9 @@
         return 0;
 	}
 
-    jQuery('#changyanCron').click(function () {
+$(document).ready(function(){
+
+    $('#changyanCron').click(function () {
         var $ = jQuery;
         var isChecked = !!($(this).attr('checked'));
         var data = {
@@ -157,6 +159,18 @@
                 }
         );
     });
+	
+	
+    $(function () {
+        var $ = jQuery;
+        var iframe = $('#rightBar_1');
+        var resetIframeHeight = function () {
+            iframe.height($(window).height() - iframe.offset().top - 70);
+        };
+        resetIframeHeight();
+        $(window).resize(resetIframeHeight);
+    });
+})
 
     function saveAppKey_AppID() {
         var $ = jQuery;
@@ -181,13 +195,4 @@
         }
     }
 
-    jQuery(function () {
-        var $ = jQuery;
-        var iframe = $('#rightBar_1');
-        var resetIframeHeight = function () {
-            iframe.height($(window).height() - iframe.offset().top - 70);
-        };
-        resetIframeHeight();
-        $(window).resize(resetIframeHeight);
-    });
 </script>
