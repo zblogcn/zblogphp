@@ -18,7 +18,8 @@ class Networkcurl implements iNetwork
 	private $responseXML = NULL;    #尝试把responseText格式化为XMLDom
 	private $status = 0;            #状态码
 	private $statusText = '';       #状态码文本
-
+	private $responseVersion = '';  #返回的HTTP版体
+	
 	private $option = array();
 	private $url = '';
 	private $postdata = array();
@@ -118,6 +119,13 @@ class Networkcurl implements iNetwork
 
 		$this->responseText = substr($result,$header_size);
 		curl_close($this->ch);
+		if(isset($this->responseHeader[0])){
+			$this->statusText=$this->responseHeader[0];
+			$a=explode(' ',$this->statusText);
+			if(isset($a[0]))$this->responseVersion=$a[0];
+			if(isset($a[1]))$this->status=$a[1];
+			unset($this->responseHeader[0]);
+		}
 
 	}
 
