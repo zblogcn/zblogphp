@@ -220,16 +220,16 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 
 ################################################################################################################
 function ViewIndex(){
-	global $zbp,$url;
+	global $zbp,$currenturl;
 	
 	foreach ($GLOBALS['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
-		$fpreturn = $fpname($url);
+		$fpreturn = $fpname();
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			return $fpreturn;
 		}
 	}
 
-	if($url==$zbp->cookiespath||$url==$zbp->cookiespath . 'index.php'){
+	if($currenturl==$zbp->cookiespath||$currenturl==$zbp->cookiespath . 'index.php'){
 		ViewList(null,null,null,null,null);
 	}elseif(isset($_GET['rewrite'])){
 		ViewAuto(GetVars('rewrite','GET'));
@@ -238,16 +238,16 @@ function ViewIndex(){
 	}elseif(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])){
 		ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('date','GET'),GetVars('tags','GET'));
 	}else{
-		ViewAuto($url);
+		ViewAuto($currenturl);
 	}
 
 }
  
 function ViewFeed(){
-	global $zbp;
+	global $zbp,$currenturl;
 	
 	foreach ($GLOBALS['Filter_Plugin_ViewFeed_Begin'] as $fpname => &$fpsignal) {
-		$fpreturn = $fpname($url);
+		$fpreturn = $fpname();
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			return $fpreturn;
 		}
@@ -274,10 +274,10 @@ function ViewFeed(){
 }
 
 function ViewSearch(){
-	global $zbp;
+	global $zbp,$currenturl;
 	
 	foreach ($GLOBALS['Filter_Plugin_ViewSearch_Begin'] as $fpname => &$fpsignal) {
-		$fpreturn = $fpname($url);
+		$fpreturn = $fpname();
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			return $fpreturn;
 		}
@@ -357,6 +357,8 @@ function ViewAuto($url) {
 	}
 
 	if (isset($_SERVER['SERVER_SOFTWARE'])) {
+		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (strpos($url,'/index.php/') === 0))
+			$url = str_replace('/index.php/','/',$url);
 		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) !== true))
 			$url = iconv('GBK', 'UTF-8//TRANSLIT//IGNORE', $url);
 	}

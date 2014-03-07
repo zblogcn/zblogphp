@@ -672,7 +672,7 @@ $Filter_Plugin_CreateOptoinsOfCategorys = array();
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_ViewIndex_Begin
-'参数:&$url
+'参数:
 '说明:定义ViewIndex输出接口Begin
 '调用:
 '**************************************************>
@@ -683,7 +683,7 @@ $Filter_Plugin_ViewIndex_Begin = array();
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_ViewFeed_Begin
-'参数:&$url
+'参数:
 '说明:定义ViewFeed输出接口Begin
 '调用:
 '**************************************************>
@@ -694,7 +694,7 @@ $Filter_Plugin_ViewFeed_Begin = array();
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_ViewSearch_Begin
-'参数:&$url
+'参数:
 '说明:定义ViewSearch输出接口Begin
 '调用:
 '**************************************************>
