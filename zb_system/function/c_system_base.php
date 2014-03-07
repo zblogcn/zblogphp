@@ -11,6 +11,16 @@ error_reporting(0);
 
 ob_start();
 
+
+function AutoloadClass($classname){
+	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($classname);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+	}
+	if (is_readable($f=$GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php'))
+		require $f;
+}
+
 if (version_compare(PHP_VERSION, '5.1.2', '>=')) {
 	//SPL autoloading was introduced in PHP 5.1.2
 	spl_autoload_register('AutoloadClass');
@@ -31,6 +41,7 @@ require 'c_system_common.php';
 require 'c_system_debug.php';
 require 'c_system_plugin.php';
 require 'c_system_event.php';
+
 
 $zbpvers=array();
 $zbpvers['130707']='1.0 Beta Build 130707';
@@ -56,6 +67,17 @@ define('ZC_REWRITE_GO_ON', 'go_on');
 
 
 if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()){
+
+	function _stripslashes(&$var) {
+		if(is_array($var)) {
+			foreach($var as $k=>&$v) {
+				_stripslashes($v);
+			}
+		} else {
+			$var = stripslashes($var);
+		}
+	}
+
 	_stripslashes($_GET);
 	_stripslashes($_POST);
 	_stripslashes($_COOKIE);
@@ -64,8 +86,7 @@ if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()){
 
 
 $action = null;
-$manage = false;
-$url = GetRequestUri();
+$currenturl = GetRequestUri();
 
 $blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
 $usersdir = $blogpath . 'zb_users/';
@@ -347,23 +368,3 @@ unset($ap);
 unset($filename);
 
 ActivePlugin();
-
-
-function AutoloadClass($classname){
-	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($classname);
-		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-	}
-	if (is_readable($f=$GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php'))
-		require $f;
-}
-
-function _stripslashes(&$var) {
-	if(is_array($var)) {
-		foreach($var as $k=>&$v) {
-			_stripslashes($v);
-		}
-	} else {
-		$var = stripslashes($var);
-	}
-}

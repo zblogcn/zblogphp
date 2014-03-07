@@ -142,9 +142,11 @@ function Server_SendRequest($url,$data=array(),$u='',$c=''){
 	$u='ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent();
 	
 	
-	if(class_exists('Network'))return Server_SendRequest_Network($url,$data,$u,$c);
+	if(!class_exists('NetworkFactory',false))
+		if(class_exists('Network'))
+			return Server_SendRequest_Network($url,$data,$u,$c);
 	if(function_exists("curl_init"))return Server_SendRequest_CUrl($url,$data,$u,$c);
-	if(!ini_get("allow_url_fopen"))return "";	
+	if(!ini_get("allow_url_fopen"))return "";
 	
 	if($data){//POST
 		$data=http_build_query($data);
@@ -171,8 +173,12 @@ function Server_SendRequest($url,$data=array(),$u='',$c=''){
 	}
 
 	ini_set('default_socket_timeout',120);
-	return file_get_contents($url,false,$content);
-
+	
+	if( version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0 ){
+		return file_get_contents('compress.zlib://'.$url,false,$content);
+	}else{
+		return file_get_contents($url,false,$content);
+	}
 }
 
 function Server_SendRequest_CUrl($url,$data=array(),$u,$c){
@@ -205,14 +211,18 @@ function Server_SendRequest_Network($url,$data=array(),$u,$c){
 
 	if($data){//POST
 		$ajax->open('POST',$url);
-		if(get_class($ajax)<>'Networkfile_get_contents')$ajax->enableGzip();
+		if( (get_class($ajax)<>'Networkfile_get_contents') || (version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0) ){
+			$ajax->enableGzip();
+		}
 		$ajax->setTimeOuts(120,120,0,0);
 		$ajax->setRequestHeader('User-Agent',$u);
 		$ajax->setRequestHeader('Cookie',$c);
 		$ajax->send($data);
 	}else{
 		$ajax->open('GET',$url);
-		if(get_class($ajax)<>'Networkfile_get_contents')$ajax->enableGzip();
+		if( (get_class($ajax)<>'Networkfile_get_contents') || (version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0) ){
+			$ajax->enableGzip();
+		}
 		$ajax->setTimeOuts(120,120,0,0);
 		$ajax->setRequestHeader('User-Agent',$u);
 		$ajax->setRequestHeader('Cookie',$c);

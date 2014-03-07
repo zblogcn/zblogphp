@@ -82,16 +82,16 @@ class UrlRule
 		global $zbp;
 		switch ($zbp->categorylayer) {
 			case 4:
-				$fullcategory='[^\./]+?|[^\./]+?/[^\./]+?|[^\./]+?/[^\./]+?/[^\./]+?|[^\./]+/[^\./]+?/[^\./]+?/[^\./]+?';
+				$fullcategory='[^\./]*|[^\./]*/[^\./]*|[^\./]*/[^\./]*/[^\./]*|[^\./]+/[^\./]*/[^\./]*/[^\./]*';
 				break;
 			case 3:
-				$fullcategory='[^\./]+?|[^\./]+?/[^\./]+?|[^\./]+?/[^\./]+?/[^\./]+?';
+				$fullcategory='[^\./]*|[^\./]*/[^\./]*|[^\./]*/[^\./]*/[^\./]*';
 				break;
 			case 2:
-				$fullcategory='[^\./]+?|[^\./]+?/[^\./]+?';
+				$fullcategory='[^\./]*|[^\./]*/[^\./]*';
 				break;
 			default:
-				$fullcategory='[^\./]+?';
+				$fullcategory='[^\./]*';
 				break;
 		}
 
@@ -185,8 +185,8 @@ class UrlRule
 		$s .='    </rule>' . "\r\n";
 
 		$s .='    <rule name="'.$zbp->cookiespath.'Imported Rule 2" stopProcessing="true">' . "\r\n";
-		$s .='     <match url="^" ignoreCase="false" />' . "\r\n";
-		$s .='     <action type="Rewrite" url="index.php" />' . "\r\n";
+		$s .='     <match url="^(.*)?" ignoreCase="false" />' . "\r\n";
+		$s .='     <action type="Rewrite" url="index.php/{R:0}" />' . "\r\n";
 		$s .='    </rule>' . "\r\n";
 
 		$s .='   </rules>' . "\r\n";
@@ -233,16 +233,16 @@ class UrlRule
 		global $zbp;
 		switch ($zbp->categorylayer) {
 			case 4:
-				$fullcategory='[^\./]+?|[^\./]+?/[^\./]+?|[^\./]+?/[^\./]+?/[^\./]+?|[^\./]+/[^\./]+?/[^\./]+?/[^\./]+?';
+				$fullcategory='[^\./]*|[^\./]*/[^\./]*|[^\./]*/[^\./]*/[^\./]*|[^\./]+/[^\./]*/[^\./]*/[^\./]*';
 				break;
 			case 3:
-				$fullcategory='[^\./]+?|[^\./]+?/[^\./]+?|[^\./]+?/[^\./]+?/[^\./]+?';
+				$fullcategory='[^\./]*|[^\./]*/[^\./]*|[^\./]*/[^\./]*/[^\./]*';
 				break;
 			case 2:
-				$fullcategory='[^\./]+?|[^\./]+?/[^\./]+?';
+				$fullcategory='[^\./]*|[^\./]*/[^\./]*';
 				break;
 			default:
-				$fullcategory='[^\./]+?';
+				$fullcategory='[^\./]*';
 				break;
 		}
 

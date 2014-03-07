@@ -23,6 +23,7 @@ class ZBlogPHP{
 	public $host = null;
 	public $cookiespath=null;
 	public $guid=null;
+	public $currenturl=null;
 
 	public $members=array();
 	public $membersbyname=array();
@@ -60,6 +61,7 @@ class ZBlogPHP{
 	public $isconnect=false;
 	public $isload=false;
 	public $issession=false;
+	public $ismanage=false;
 
 	public $template = null;
 	public $socialcomment = null;
@@ -96,7 +98,7 @@ class ZBlogPHP{
 	function __construct() {
 
 		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,$datainfo;
-		global $blogversion,$blogtitle,$blogname,$blogsubname,$blogtheme,$blogstyle;
+		global $blogversion,$blogtitle,$blogname,$blogsubname,$blogtheme,$blogstyle,$currenturl;
 
 		ZBlogException::SetErrorHook();
 
@@ -111,6 +113,7 @@ class ZBlogPHP{
 
 		$this->table=&$table;
 		$this->datainfo=&$datainfo;
+		$this->currenturl=&$currenturl;
 
 		if (trim($this->option['ZC_BLOG_CLSID'])==''){
 			$this->option['ZC_BLOG_CLSID']=GetGuid();
@@ -241,10 +244,6 @@ class ZBlogPHP{
 
 		$this->Verify();
 
-		$this->MakeTemplatetags();
-
-		$this->LoadTemplates();
-
 		$this->RegBuildModule('catalog','BuildModule_catalog');
 
 		$this->RegBuildModule('calendar','BuildModule_calendar');
@@ -262,10 +261,14 @@ class ZBlogPHP{
 		$this->RegBuildModule('statistics','BuildModule_statistics');
 
 		$this->RegBuildModule('authors','BuildModule_authors');
+		
+		$this->LoadTemplates();
+		
+		$this->MakeTemplatetags();
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 
-		if($GLOBALS['manage']==true) $this->LoadManage();
+		if($this->ismanage==true) $this->LoadManage();
 
 		$this->isload=true;
 	}

@@ -14,9 +14,7 @@ Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','zbp_admin_addmodsubme
 Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','zbp_admin_addcmtsubmenu');
 
 
-$zbp->LoadTemplates();
-
-$manage=true;
+$zbp->ismanage=true;
 
 
 ################################################################################################################

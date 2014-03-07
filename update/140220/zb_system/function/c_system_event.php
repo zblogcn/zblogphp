@@ -204,6 +204,8 @@ function ViewAuto($url) {
 	}
 
 	if (isset($_SERVER['SERVER_SOFTWARE'])) {
+		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (strpos($url,'/index.php/') === 0) )
+			$url = str_replace('/index.php/','/',$url);
 		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) !== true))
 			$url = iconv('GBK', 'UTF-8//TRANSLIT//IGNORE', $url);
 	}
