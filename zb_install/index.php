@@ -298,9 +298,14 @@ CheckServer();
           <th colspan="3" scope="row">函数检查</th>
         </tr>
         <tr>
-          <td scope="row">file_get_contents</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['file_get_contents'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['file_get_contents'][1];?></td>
+          <td scope="row">curl</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['curl'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['curl'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">allow_url_fopen</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['allow_url_fopen'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['allow_url_fopen'][1];?></td>
         </tr>
         <tr>
           <td scope="row">gethostbyname</td>
@@ -311,11 +316,6 @@ CheckServer();
           <td scope="row">xml_parser_create</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['xml_parser_create'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['xml_parser_create'][1];?></td>
-        </tr>
-        <tr>
-          <td scope="row">fsockopen</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['fsockopen'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['fsockopen'][1];?></td>
         </tr>
       </table>
     </div>
@@ -559,9 +559,9 @@ global $CheckResult;
 
 $CheckResult=array(
  //服务器 
-  'server' => array(GetVars('SERVER_SOFTWARE','SERVER'),''), 
+  'server' => array(GetVars('SERVER_SOFTWARE','SERVER'),bingo), 
   'phpver' => array(PHP_VERSION,''), 
-  'zbppath' => array($zbp->path,''), 
+  'zbppath' => array($zbp->path,bingo), 
  //组件
   'mysql' => array('',''),
   'mysqli' => array('',''),
@@ -581,10 +581,10 @@ $CheckResult=array(
   'upload'=>array('',''), 
   'c_option.php'=>array('',''), 
   //函数
-  'file_get_contents'=>array('用于连接应用中心',''),
+  'curl'=>array('用于连接应用中心',''), 
+  'allow_url_fopen'=>array('用于连接应用中心',''),
   'gethostbyname'=>array('用于解析DNS',''),
   'xml_parser_create'=>array('用于处理XML',''),
-  'fsockopen'=>array('用于打开文件','')
 
 );
 
@@ -599,26 +599,35 @@ $CheckResult=array(
   if( function_exists("gd_info") ){
     $info = gd_info();
     $CheckResult['gd2'][0]=$info['GD Version'];
+	$CheckResult['gd2'][1]=$CheckResult['gd2'][0]?bingo:error;
   }
   if( function_exists("mysql_get_client_info") ){
     $CheckResult['mysql'][0]=mysql_get_client_info();
+	$CheckResult['mysql'][1]=$CheckResult['mysql'][0]?bingo:error;
   }
   if( function_exists("mysqli_get_client_info") ){
     $CheckResult['mysqli'][0]=mysqli_get_client_info();
+	$CheckResult['mysqli'][1]=$CheckResult['mysqli'][0]?bingo:error;
   }  
   if( class_exists("PDO",false) ){
-    $CheckResult['pdo_mysql'][0]=PDO::ATTR_DRIVER_NAME;
-    $CheckResult['pdo_pgsql'][0]=PDO::ATTR_DRIVER_NAME;
+	if (extension_loaded('pdo_mysql')){
+		$CheckResult['pdo_mysql'][0]=PDO::ATTR_DRIVER_NAME;
+		$CheckResult['pdo_mysql'][1]=$CheckResult['pdo_mysql'][0]?bingo:error;
+	}
+    //$CheckResult['pdo_pgsql'][0]=PDO::ATTR_DRIVER_NAME;
   }
   if( defined("PGSQL_STATUS_STRING") ){
     $CheckResult['pgsql'][0]=PGSQL_STATUS_STRING;
+	$CheckResult['pgsql'][1]=$CheckResult['pgsql'][0]?bingo:error;
   }
   if( function_exists("sqlite_libversion") ){
     $CheckResult['sqlite'][0]=sqlite_libversion();
+	$CheckResult['sqlite'][1]=$CheckResult['sqlite'][0]?bingo:error;
   }
   if( class_exists('SQLite3',false) ){
     $info = SQLite3::version();
     $CheckResult['sqlite3'][0]=$info['versionString'];
+	$CheckResult['sqlite3'][1]=$CheckResult['sqlite3'][0]?bingo:error;
   }
 
   getRightsAndExport('','zb_users');
@@ -629,10 +638,10 @@ $CheckResult=array(
   getRightsAndExport('zb_users/','upload');
   //getRightsAndExport('zb_users/','c_option.php');
 
-  $CheckResult['file_get_contents'][1]=function_exists('file_get_contents')?bingo:error;
+  $CheckResult['curl'][1]=function_exists('curl_init')?bingo:error; 
+  $CheckResult['allow_url_fopen'][1]=(bool)ini_get('allow_url_fopen')?bingo:error;
   $CheckResult['gethostbyname'][1]=function_exists('gethostbyname')?bingo:error;
   $CheckResult['xml_parser_create'][1]=function_exists('xml_parser_create')?bingo:error;
-  $CheckResult['fsockopen'][1]=function_exists('fsockopen')?bingo:error;
 
 }
 
@@ -895,7 +904,7 @@ function SaveConfig(){
 
   $zbp->option['ZC_BLOG_VERSION']=ZC_BLOG_VERSION;
   $zbp->option['ZC_BLOG_NAME']=GetVars('blogtitle','POST');
-  $zbp->option['ZC_USING_PLUGIN_LIST']='AppCentre|UEditor|Totoro';  
+  $zbp->option['ZC_USING_PLUGIN_LIST']='AppCentre|UEditor';  
   $zbp->option['ZC_SIDEBAR_ORDER'] ='calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc';
   $zbp->option['ZC_SIDEBAR2_ORDER']='';
   $zbp->option['ZC_SIDEBAR3_ORDER']='';

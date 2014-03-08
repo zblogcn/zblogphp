@@ -6,8 +6,6 @@
  * @version 2.0 2013-06-14
  */
 
-
-
 /**
 *
 */
@@ -16,13 +14,13 @@ class DbSQLite implements iDataBase
 
 	public $dbpre = null;
 	private $db = null;
-
+	public $dbname = null;
+	
 	public $sql=null;
 
 	function __construct()
 	{
-		$this->sql=new DbSql;
-		$this->sql->type=__CLASS__;
+		$this->sql=new DbSql($this);
 	}
 
 	public function EscapeString($s){
@@ -32,6 +30,7 @@ class DbSQLite implements iDataBase
 	function Open($array){
 		if ($this->db = sqlite_open($array[0], 0666, $sqliteerror)) {
 			$this->dbpre=$array[1];
+			$this->dbname=$array[0];
 			return true;
 		} else {
 			return false;
@@ -94,7 +93,7 @@ class DbSQLite implements iDataBase
 	}
 
 	function ExistTable($tablename){
-		$zbp=ZBlogPHP::GetInstance();
+
 		$a=$this->Query($this->sql->ExistTable($tablename));
 		if(!is_array($a))return false;
 		$b=current($a);

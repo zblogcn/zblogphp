@@ -14,13 +14,13 @@ class Dbpdo_MySQL implements iDataBase
 
 	public $dbpre = null;
 	private $db = null;
+	public $dbname = null;
 
 	public $sql=null;
 
 	function __construct()
 	{
-		$this->sql=new DbSql;
-		$this->sql->type=__CLASS__;
+		$this->sql=new DbSql($this);
 	}
 
 	public function EscapeString($s){
@@ -45,6 +45,7 @@ class Dbpdo_MySQL implements iDataBase
 		$db_link = new PDO('mysql:host=' . $array[0] . ';port=' . $array[5] . ';dbname=' . $array[3],$array[1],$array[2],$options);
 		$this->db = $db_link;
 		$this->dbpre=$array[4];
+		$this->dbname=$array[3];
 		return true;
 	}
 
@@ -52,11 +53,12 @@ class Dbpdo_MySQL implements iDataBase
 		$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',);
 		$db_link = new PDO('mysql:host=' . $dbmysql_server . ';port=' . $dbmysql_port,$dbmysql_username,$dbmysql_password,$options);
 		$this->db = $db_link;
+		$this->dbname=$dbmysql_name;
 		$this->db->exec('CREATE DATABASE ' . $dbmysql_name);
 	}
 
 	function Close(){
-
+		$this->db=null;
 	}
 
 	function QueryMulit($s){
@@ -111,8 +113,8 @@ class Dbpdo_MySQL implements iDataBase
 	}
 
 	function ExistTable($tablename){
-		$zbp=ZBlogPHP::GetInstance();
-		$a=$this->Query($this->sql->ExistTable($tablename,$zbp->option['ZC_MYSQL_NAME']));
+
+		$a=$this->Query($this->sql->ExistTable($tablename,$this->dbname));
 		if(!is_array($a))return false;
 		$b=current($a);
 		if(!is_array($b))return false;

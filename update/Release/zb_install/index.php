@@ -44,7 +44,7 @@ if( ($zbp->option['ZC_DATABASE_TYPE']!=='') && ($zbp->option['ZC_YUN_SITE']=='')
 </head>
 <body>
 <div class="setup">
-  <form method="post" action="?step=<?php echo $zblogstep+1;?>">
+  <form method="post" action="./index.php?step=<?php echo $zblogstep+1;?>">
     <?php
 
 switch ($zblogstep) {
@@ -559,9 +559,9 @@ global $CheckResult;
 
 $CheckResult=array(
  //服务器 
-  'server' => array(GetVars('SERVER_SOFTWARE','SERVER'),''), 
-  'phpver' => array(phpversion(),''), 
-  'zbppath' => array($zbp->path,''), 
+  'server' => array(GetVars('SERVER_SOFTWARE','SERVER'),bingo), 
+  'phpver' => array(PHP_VERSION,''), 
+  'zbppath' => array($zbp->path,bingo), 
  //组件
   'mysql' => array('',''),
   'mysqli' => array('',''),
@@ -588,7 +588,7 @@ $CheckResult=array(
 
 );
 
-  if((float)(substr(phpversion(),0,3))>=5.2){
+  if(version_compare(PHP_VERSION,'5.2.0')>=0){
     $CheckResult['phpver'][1]=bingo;
   }
   else{
@@ -599,26 +599,35 @@ $CheckResult=array(
   if( function_exists("gd_info") ){
     $info = gd_info();
     $CheckResult['gd2'][0]=$info['GD Version'];
+	$CheckResult['gd2'][1]=$CheckResult['gd2'][0]?bingo:error;
   }
   if( function_exists("mysql_get_client_info") ){
     $CheckResult['mysql'][0]=mysql_get_client_info();
+	$CheckResult['mysql'][1]=$CheckResult['mysql'][0]?bingo:error;
   }
   if( function_exists("mysqli_get_client_info") ){
     $CheckResult['mysqli'][0]=mysqli_get_client_info();
+	$CheckResult['mysqli'][1]=$CheckResult['mysqli'][0]?bingo:error;
   }  
   if( class_exists("PDO",false) ){
-    $CheckResult['pdo_mysql'][0]=PDO::ATTR_DRIVER_NAME;
-    $CheckResult['pdo_pgsql'][0]=PDO::ATTR_DRIVER_NAME;
+	if (extension_loaded('pdo_mysql')){
+		$CheckResult['pdo_mysql'][0]=PDO::ATTR_DRIVER_NAME;
+		$CheckResult['pdo_mysql'][1]=$CheckResult['pdo_mysql'][0]?bingo:error;
+	}
+    //$CheckResult['pdo_pgsql'][0]=PDO::ATTR_DRIVER_NAME;
   }
   if( defined("PGSQL_STATUS_STRING") ){
     $CheckResult['pgsql'][0]=PGSQL_STATUS_STRING;
+	$CheckResult['pgsql'][1]=$CheckResult['pgsql'][0]?bingo:error;
   }
   if( function_exists("sqlite_libversion") ){
     $CheckResult['sqlite'][0]=sqlite_libversion();
+	$CheckResult['sqlite'][1]=$CheckResult['sqlite'][0]?bingo:error;
   }
   if( class_exists('SQLite3',false) ){
     $info = SQLite3::version();
     $CheckResult['sqlite3'][0]=$info['versionString'];
+	$CheckResult['sqlite3'][1]=$CheckResult['sqlite3'][0]?bingo:error;
   }
 
   getRightsAndExport('','zb_users');
@@ -895,7 +904,7 @@ function SaveConfig(){
 
   $zbp->option['ZC_BLOG_VERSION']=ZC_BLOG_VERSION;
   $zbp->option['ZC_BLOG_NAME']=GetVars('blogtitle','POST');
-  $zbp->option['ZC_USING_PLUGIN_LIST']='AppCentre|UEditor|Totoro';  
+  $zbp->option['ZC_USING_PLUGIN_LIST']='AppCentre|UEditor';  
   $zbp->option['ZC_SIDEBAR_ORDER'] ='calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc';
   $zbp->option['ZC_SIDEBAR2_ORDER']='';
   $zbp->option['ZC_SIDEBAR3_ORDER']='';

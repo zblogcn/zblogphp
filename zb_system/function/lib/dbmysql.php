@@ -6,11 +6,6 @@
  * @version 2.0 2013-06-14
  */
 
-// TODO:
-// mysql_connect将被替换
-// 需要添加mysqli或PDO_mysql
-// http://php.net/manual/zh/function.mysql-connect.php
-
 /**
 *
 */
@@ -19,13 +14,13 @@ class DbMySQL implements iDataBase
 
 	public $dbpre = null;
 	private $db = null;
+	public $dbname = null;
 
 	public $sql=null;
 
 	function __construct()
 	{
-		$this->sql=new DbSql;
-		$this->sql->type=__CLASS__;
+		$this->sql=new DbSql($this);
 	}
 
 	public function EscapeString($s){
@@ -47,6 +42,7 @@ class DbMySQL implements iDataBase
 			mysql_query("SET NAMES 'utf8'",$db_link);
 			if(mysql_select_db($array[3], $this->db)){
 				$this->dbpre=$array[4];
+				$this->dbname=$array[3];
 				return true;
 			} else {
 				$this->Close();
@@ -59,6 +55,7 @@ class DbMySQL implements iDataBase
 	function CreateDB($dbmysql_server,$dbmysql_port,$dbmysql_username,$dbmysql_password,$dbmysql_name){
 		$db_link = @mysql_connect($dbmysql_server . ':' . $dbmysql_port, $dbmysql_username, $dbmysql_password);
 		$this->db = $db_link;
+		$this->dbname=$dbmysql_name;
 		mysql_query('CREATE DATABASE ' . $dbmysql_name);
 	}
 
@@ -127,8 +124,8 @@ if($b){
 	}
 
 	function ExistTable($tablename){
-		$zbp=ZBlogPHP::GetInstance();
-		$a=$this->Query($this->sql->ExistTable($tablename,$zbp->option['ZC_MYSQL_NAME']));
+
+		$a=$this->Query($this->sql->ExistTable($tablename,$this->dbname));
 		if(!is_array($a))return false;
 		$b=current($a);
 		if(!is_array($b))return false;
