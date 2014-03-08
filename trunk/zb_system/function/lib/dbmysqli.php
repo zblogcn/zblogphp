@@ -14,13 +14,13 @@ class DbMySQLi implements iDataBase
 
 	public $dbpre = null;
 	private $db = null;
+	public $dbname = null;
 
 	public $sql=null;
 
 	function __construct()
 	{
-		$this->sql=new DbSql;
-		$this->sql->type=__CLASS__;
+		$this->sql=new DbSql($this);
 	}
 
 	public function EscapeString($s){
@@ -46,6 +46,7 @@ class DbMySQLi implements iDataBase
 		mysqli_real_connect($db,$array[0], $array[1], $array[2],$array[3],$array[5]);
 		mysqli_set_charset($db,'utf8');
 		$this->db=$db;
+		$this->dbname=$array[3];
 		$this->dbpre=$array[4];
 		return true;
 	}
@@ -53,6 +54,7 @@ class DbMySQLi implements iDataBase
 	function CreateDB($dbmysql_server,$dbmysql_port,$dbmysql_username,$dbmysql_password,$dbmysql_name){
 		$db = @mysqli_connect($dbmysql_server, $dbmysql_username, $dbmysql_password, null,$dbmysql_port);
 		$this->db = $db;
+		$this->dbname=$dbmysql_name;
 		mysqli_query($this->db,'CREATE DATABASE ' . $dbmysql_name);
 	}
 
@@ -112,8 +114,8 @@ class DbMySQLi implements iDataBase
 	}
 
 	function ExistTable($tablename){
-		$zbp=ZBlogPHP::GetInstance();
-		$a=$this->Query($this->sql->ExistTable($tablename,$zbp->option['ZC_MYSQL_NAME']));
+
+		$a=$this->Query($this->sql->ExistTable($tablename,$this->dbname));
 		if(!is_array($a))return false;
 		$b=current($a);
 		if(!is_array($b))return false;

@@ -19,25 +19,55 @@ function RunTime() {
 	global $zbp;
 
 	$rt=array();
-	$rt[]=(1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6));
-	$rt[]=$_SERVER['_query_count'];
-	$rt[]=$_SERVER['_memory_usage'];
+	$rt['time']=(1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6));
+	$rt['query']=$_SERVER['_query_count'];
+	$rt['memory']=$_SERVER['_memory_usage'];
 	if(function_exists('memory_get_usage')){
-		$rt[2]=(int)((memory_get_usage()-$_SERVER['_memory_usage'])/1024);
+		$rt['memory']=(int)((memory_get_usage()-$_SERVER['_memory_usage'])/1024);
 	}
 	
 	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false)return $rt;
 
-	echo '<!--' . $rt[0] . 'ms , ';
-	echo  $rt[1] . 'query';
+	echo '<!--' . $rt['time'] . 'ms , ';
+	echo  $rt['query'] . 'query';
 	if(function_exists('memory_get_usage'))
-		echo ' , ' . $rt[2] . 'kb memory';
+		echo ' , ' . $rt['memory'] . 'kb memory';
 	echo '-->';
 	return $rt;
 }
 
-function Plugin_Dir_Url() {
+function Plugin_Dir_Url($file) {
+	global $zbp;
+	$s1=$zbp->path;
+	$s2=str_replace('\\','/',dirname($file).'/');
+	$s3='';
+	$s=substr($s2,strspn($s1,$s2,0));
+	if(strpos($s,'zb_users/plugin/')!==false){
+		$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
+	}else{
+		$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
+	}
+	$a=explode('/',$s);
+	$s=$a[0];
+	$s=$zbp->host . $s3 . $s . '/';
+	return $s;
+}
 
+function Plugin_Dir_Path($file) {
+	global $zbp;
+	$s1=$zbp->path;
+	$s2=str_replace('\\','/',dirname($file).'/');
+	$s3='';
+	$s=substr($s2,strspn($s1,$s2,0));
+	if(strpos($s,'zb_users/plugin/')!==false){
+		$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
+	}else{
+		$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
+	}
+	$a=explode('/',$s);
+	$s=$a[0];
+	$s=$zbp->path . $s3 . $s . '/';
+	return $s;
 }
 
 ################################################################################################################

@@ -33,6 +33,13 @@ interface iDataBase
 class DbSql #extends AnotherClass
 {
 	public $type=null;
+	protected $db=null;
+	
+	function __construct($db=null)
+	{
+		$this->db=$db;
+		$this->type=get_class($db);
+	}
 
 	public function DelTable($tablename){
 		$s='';
@@ -218,7 +225,6 @@ class DbSql #extends AnotherClass
 
 
 	public function ParseWhere($where,$changewhere=''){
-		global $zbp;
 
 		$sqlw=null;
 		if(empty($where))return null;
@@ -237,7 +243,7 @@ class DbSql #extends AnotherClass
 			if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='){
 				$x = (string)$w[1];
 				$y = (string)$w[2];
-				$y = $zbp->db->EscapeString($y);
+				$y = $this->db->EscapeString($y);
 				$sqlw .= $comma . " $x $eq '$y' ";
 			}
 			if($eq=='EXISTS'|$eq=='NOT EXISTS'){
@@ -260,7 +266,7 @@ class DbSql #extends AnotherClass
 				for ($i=1; $i <= $j-1-1; $i++) {
 					$x=(string)$w[$i];
 					$y=(string)$w[$j-1];
-					$y=$zbp->db->EscapeString($y);
+					$y=$this->db->EscapeString($y);
 					$sql_search .= $c . " ($x LIKE '%$y%') ";
 					$c='OR';
 				}
@@ -272,7 +278,7 @@ class DbSql #extends AnotherClass
 				if(!is_array($w[1]))continue;
 				if(count($w[1])==0)continue;
 				foreach ($w[1] as $x=>$y) {
-					$y[1]=$zbp->db->EscapeString($y[1]);
+					$y[1]=$this->db->EscapeString($y[1]);
 					$sql_array .= $c . " $y[0]='$y[1]' ";
 					$c='OR';
 				}
@@ -284,7 +290,7 @@ class DbSql #extends AnotherClass
 				if(!is_array($w[1]))continue;
 				if(count($w[1])==0)continue;
 				foreach ($w[1] as $x=>$y) {
-					$y[1]=$zbp->db->EscapeString($y[1]);
+					$y[1]=$this->db->EscapeString($y[1]);
 					$sql_array .= $c . " $y[0]<>'$y[1]' ";
 					$c='OR';
 				}
@@ -296,7 +302,7 @@ class DbSql #extends AnotherClass
 				if(!is_array($w[1]))continue;
 				if(count($w[1])==0)continue;
 				foreach ($w[1] as $x=>$y) {
-					$y[1]=$zbp->db->EscapeString($y[1]);
+					$y[1]=$this->db->EscapeString($y[1]);
 					$sql_array .= $c . " ($y[0] LIKE '$y[1]') ";
 					$c='OR';
 				}
@@ -310,7 +316,7 @@ class DbSql #extends AnotherClass
 				}else{
 					if(count($w[2])==0)continue;
 					foreach ($w[2] as $x=>$y) {
-						$y=$zbp->db->EscapeString($y);
+						$y=$this->db->EscapeString($y);
 						$sql_array .= $c . " '$y' ";
 						$c=',';
 					}
@@ -328,8 +334,6 @@ class DbSql #extends AnotherClass
 
 	public function Select($table,$select,$where,$order,$limit,$option)
 	{
-		global $zbp;
-
 		$sqls='';
 		$sqlw='';
 		$sqlo='';
@@ -380,7 +384,7 @@ class DbSql #extends AnotherClass
 			if(isset($option['pagebar'])){
 				if($option['pagebar']->Count===null){
 					$s2 = $this->Count($table,array(array('COUNT','*','num')),$where);
-					$option['pagebar']->Count = GetValueInArrayByCurrent($zbp->db->Query($s2),'num');
+					$option['pagebar']->Count = GetValueInArrayByCurrent($this->db->Query($s2),'num');
 				}
 				$option['pagebar']->Count=(int)$option['pagebar']->Count;
 				$option['pagebar']->make();
@@ -391,8 +395,6 @@ class DbSql #extends AnotherClass
 
 	public function Count($table,$count,$where)
 	{
-		global $zbp;
-
 		$sqlc="SELECT ";
 
 		if(!empty($count)) {
@@ -411,13 +413,11 @@ class DbSql #extends AnotherClass
 
 	public function Update($table,$keyvalue,$where)
 	{
-		global $zbp;
-
 		$sql="UPDATE $table SET ";
 
 		$comma = '';
 		foreach ($keyvalue as $k => $v) {
-			$v=$zbp->db->EscapeString($v);
+			$v=$this->db->EscapeString($v);
 			$sql.= $comma . "$k = '$v'";
 			$comma = ' , ';
 		}
@@ -428,8 +428,6 @@ class DbSql #extends AnotherClass
 
 	public function Insert($table,$keyvalue)
 	{
-		global $zbp;
-
 		$sql="INSERT INTO $table ";
 
 		$sql.='(';
@@ -442,7 +440,7 @@ class DbSql #extends AnotherClass
 
 		$comma = '';
 		foreach($keyvalue as $k => $v) {
-			$v=$zbp->db->EscapeString($v);
+			$v=$this->db->EscapeString($v);
 			$sql.= $comma . "'$v'";
 			$comma = ',';
 		}
@@ -452,8 +450,6 @@ class DbSql #extends AnotherClass
 
 	public function Delete($table,$where)
 	{
-		global $zbp;
-
 		$sql="DELETE FROM $table ";
 		$sql.=$this->ParseWhere($where);
 		return $sql;
