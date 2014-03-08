@@ -24,8 +24,78 @@ class Changyan_Synchronizer
         return self::$instance;
     }
 
+    public function sync2Wordpress(){
+        global $zbp;
+	
+        @set_time_limit(0);
+        @ini_set('memory_limit', '256M');
+
+        $script = $this->getOption('changyan_script');
+        $appID = explode("'", $script);
+        //Now we get the appID from the script
+        $appID = $appID[1];
+
+        //not site_url: the folder of wp installed, see http://www.andelse.com/wordpress-url-strategy-url-function-list.html
+        //echo "<br/>".home_url();//it is right
+        //get post list from
+        $nextID2CY = $this->getOption('changyan_sync2CY');
+        $nextID2WP = $this->getOption('changyan_sync2WP');
+
+        if (empty($nextID2CY)) {
+			$cmts = $zbp->GetCommentList('*', null, array('comm_PostTime' => 'ASC'), 1, null);
+			if(count($cmts)>0){
+				$nextID2CY=$cmts[0]->ID;
+			}else{
+				$nextID2CY = 1;
+			}
+        }
+        if (empty($nextID2WP)) {
+			$cmts = $zbp->GetCommentList('*', null, array('comm_PostTime' => 'ASC'), 1, null);
+			if(count($cmts)>0){
+				$nextID2CY=$cmts[0]->ID;
+			}else{
+				$nextID2WP = 1;
+			}
+        }
+        //make sure $nextID2WP is the largest
+        if ($nextID2CY > $nextID2WP) {
+            $nextID2WP = $nextID2CY;
+        }
+		
+		$cmt=$zbp->GetCommentByID($nextID2WP);
+        if ($cmt->ID==0) {
+            die("同步成功，没有需要同步的评论");
+        }else{
+			$time = date ( "Y-m-d H:i:s",$cmt->PostTime );
+		}
+		
+        $params = array(
+            'appId' => $appID,
+            'date' => $time
+        );
+
+        $URL = "http://changyan.sohu.com/admin/api/recent-comment-topics";
+        $URL = $this->buildURL($params, $URL);
+        //echo current_time( 'mysql' ).'<br/>';//xcv
+        //echo "URL:<br/>"; print_r($URL); echo "<br/>";//xcv
+        $data = $this->getContents_curl($URL);
+        $data = json_decode($data);
+        //echo current_time( 'mysql' ).'<br/>';//xcv
+        //echo "data<br/>"; print_r($data); echo "<br/>";//xcv
+        if (empty($data->success)) {
+            die("同步失败:服务器返回空值");
+        }
+        if ('false' === $data->success) {
+            die("同步失败:" . ($data->success));
+        }
+		
+		$postGroup = $data->topics;
+		
+		var_dump($data->topics);
+	}
+	
     #region 'Synchronize to WordPress'
-    public function sync2Wordpress()
+    public function sync2Wordpress1()
     {
         global $wpdb;
         @set_time_limit(0);
@@ -594,17 +664,27 @@ class Changyan_Synchronizer
 
     private function getOption($option)
     {
-        return get_option($option);
+		global $zbp;
+		return $zbp->Config('changyan')->$option;
+        //return get_option($option);
     }
 
     private function setOption($option, $value)
     {
-        update_option($option, $value);
+		global $zbp;
+		$zbp->Config('changyan')->$option=$value;
+		$zbp->SaveConfig('changyan');
+		return true;
+        //return update_option($option, $value);
     }
 
     private function delOption($option)
     {
-        return delete_option($option);
+		global $zbp;
+		$zbp->Config('changyan')->Del($option);
+		$zbp->SaveConfig('changyan');
+		return true;
+        //return delete_option($option);
     }
 
     private function showAllComments()

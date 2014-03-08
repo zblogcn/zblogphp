@@ -10,7 +10,7 @@ class Changyan_Handler
     public $PluginURL = 'xcv';
     //the singleton instance of this class
     private static $instance = null;
-    private $changyanSynchronizer = 'xcv';
+    public $changyanSynchronizer = 'xcv';
 
     private function __construct()
     {
