@@ -368,10 +368,10 @@ function ViewSearch(){
 }
 
 ################################################################################################################
-function ViewAuto($url) {
+function ViewAuto($inpurl) {
 	global $zbp;
 	
-	$url=GetValueInArray(explode('?',$url),'0');
+	$url=GetValueInArray(explode('?',$inpurl),'0');
 
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($url);
@@ -389,8 +389,20 @@ function ViewAuto($url) {
 	if (isset($_SERVER['SERVER_SOFTWARE'])) {
 		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (strpos($url,'/index.php/') === 0))
 			$url = str_replace('/index.php/','/',$url);
-		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) !== true))
+		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) == true)){
+			if(strpos($inpurl,'?')!==false){
+				$get=GetValueInArray(explode('?',$inpurl),'1');
+				$getn=GetValueInArray(explode('=',$get),'0');
+				$getv=GetValueInArray(explode('=',$get),'1');
+				if($getn){
+					$_GET[$getn]=(string)$getv;
+					$_REQUEST[$getn]=(string)$getv;
+				}
+			}
+		}
+		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) !== true)){
 			$url = iconv('GBK', 'UTF-8//TRANSLIT//IGNORE', $url);
+		}
 	}
 	$url = substr($url, strlen($zbp->cookiespath));
 	$url = urldecode($url);
@@ -463,7 +475,7 @@ function ViewAuto($url) {
 		return null;
 	}
 
-	if($url==''){
+	if($url==''||$url=='index.php'){
 		return ViewList(null,null,null,null,null);
 	}
 

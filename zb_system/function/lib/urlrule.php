@@ -278,10 +278,10 @@ class UrlRule
 		}
 		if($type=='page'||$type=='article'){
 			if(strpos($url, '%alias%')===false){
-				$url = $url .' '.$zbp->cookiespath .'index\.php\?id=$1&rewrite=$0';
+				$url = $url .'(\?.*)? '.$zbp->cookiespath .'index\.php\?id=$1&rewrite=$0';
 				$url=str_replace('%id%', '([0-9]+)', $url);
 			}else{
-				$url = $url .' '.$zbp->cookiespath .'index\.php\?alias=$1&rewrite=$0';
+				$url = $url .'(\?.*)? '.$zbp->cookiespath .'index\.php\?alias=$1&rewrite=$0';
 				$url=str_replace('%alias%', '([^/]+)', $url);
 			}
 			//$url=str_replace('%category%', '(?:[^\./]+)', $url);

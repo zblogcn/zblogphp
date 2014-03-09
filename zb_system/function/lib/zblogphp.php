@@ -265,6 +265,8 @@ class ZBlogPHP{
 		$this->LoadTemplates();
 		
 		$this->MakeTemplatetags();
+		
+		$this->template=$this->PrepareTemplate();
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 
@@ -477,8 +479,8 @@ class ZBlogPHP{
 		}
 		$this->SaveConfig('system');
 
-		$this->cache->refesh=time();
-		$this->SaveCache();
+		//$this->cache->refesh=time();
+		//$this->SaveCache();
 	}
 
 
@@ -869,15 +871,18 @@ function AddBuildModuleAll(){
 		$this->templatetags['sidebar4']=&$this->sidebar4;
 		$this->templatetags['sidebar5']=&$this->sidebar5;
 
-		//创建模板类
-		$this->template = new Template();
-		$this->template->SetPath($this->usersdir . 'theme/'. $this->theme .'/compile/');
-		$this->template->tags = $this->templatetags;
-
 		foreach ($GLOBALS['Filter_Plugin_Zbp_MakeTemplatetags'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this->template);
 		}
 
+	}
+	
+	public function PrepareTemplate(){
+		//创建模板类
+		$template = new Template();
+		$template->SetPath($this->usersdir . 'theme/'. $this->theme .'/compile/');
+		$template->SetTagsAll($this->templatetags);
+		return $template;
 	}
 
 	public function LoadTemplates(){
@@ -982,16 +987,13 @@ function AddBuildModuleAll(){
 		}
 
 		//创建模板类
-		$this->template = new Template();
-		$this->template->SetPath($dir);
+		$template = new Template();
+		$template->SetPath($dir);
 
 		//模板接口
 		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {$fpname($this->templates);}
 
-		$this->template->CompileFiles($this->templates);
-
-		$this->cache->refesh=time();
-		$this->SaveCache();
+		$template->CompileFiles($this->templates);
 
 	}
 
