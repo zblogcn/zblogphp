@@ -7,16 +7,38 @@
  */
 
 class Template{
-	public $templates = array();
-	public $tags = array();
-	public $path = null;
 
-	function __construct(){
+	private $tags = array();
+	private $path = null;
+	private $startpage=null;
+
+	function __construct()
+	{
 	}
 
 	public function SetPath($path)
 	{
-		 $this->path= $path;
+		$this->path = $path;
+	}
+	
+	public function GetPath()
+	{
+		return $this->path;
+	}
+	
+	public function GetTemplate($name)
+	{
+		foreach ($GLOBALS['Filter_Plugin_Template_GetTemplate'] as $fpname => &$fpsignal)
+		{
+			$fpreturn=$fpname($this,$name);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+		return $this->path . $name . '.php';
+	}
+
+	public function SetTemplate($templatename)
+	{
+		$this->startpage = $templatename;
 	}
 
 	function &GetTags($name){
@@ -27,7 +49,14 @@ class Template{
 		$this->tags[$name]=$value;
 	}
 
-
+	function &GetTagsAll(){
+		return $this->tags;
+	}
+	
+	function SetTagsAll($array){
+		$this->tags=$array;
+	}
+	
 	function CompileFiles($filesarray){
 
 		foreach ($filesarray as $name => $content) {
@@ -214,21 +243,6 @@ class Template{
 		return $content;
 	}
 
-	public function GetTemplate($name)
-	{
-		foreach ($GLOBALS['Filter_Plugin_Template_GetTemplate'] as $fpname => &$fpsignal)
-		{
-			$fpreturn=$fpname($this,$name);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-		}
-		return $this->path . $name . '.php';
-	}
-
-	private $templatename=null;
-	public function SetTemplate( $templatename)
-	{
-		 $this->templatename= $templatename;
-	}
 
 	#模板入口
 	public function Display()
@@ -241,14 +255,14 @@ class Template{
 		foreach ($this->tags as $key => &$value) {
 			$$key=&$value;
 		}
-		include $this->path .  $this->templatename . '.php';
+		include $this->path .  $this->startpage . '.php';
 	}
 
 	public function Output()
 	{
 
 		ob_start();
-		$this->Display($this->templatename);
+		$this->Display($this->startpage);
 		$data = ob_get_contents();
 		ob_end_clean();
 		return $data;

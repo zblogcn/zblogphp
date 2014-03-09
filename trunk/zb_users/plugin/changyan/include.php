@@ -107,7 +107,7 @@ function changyan_socialcomment(&$template){
     global $zbp,$changyanPlugin;
     $script = $changyanPlugin->getOption('changyan_script');
     if (!empty($script)) {
-		$a=$template->tags['article'];
+		$a=$template->GetTags('article');
 		$s='sid="'.$a->ID.'"';
 		$script=str_replace('id="SOHUCS"','id="SOHUCS" ' . $s,$script);
 		$template->SetTags('socialcomment',$script);
