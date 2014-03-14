@@ -313,9 +313,9 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gethostbyname'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">xml_parser_create</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['xml_parser_create'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['xml_parser_create'][1];?></td>
+          <td scope="row">simplexml_import_dom</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['simplexml_import_dom'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['simplexml_import_dom'][1];?></td>
         </tr>
       </table>
     </div>
@@ -584,7 +584,7 @@ $CheckResult=array(
   'curl'=>array('用于连接应用中心',''), 
   'allow_url_fopen'=>array('用于连接应用中心',''),
   'gethostbyname'=>array('用于解析DNS',''),
-  'xml_parser_create'=>array('用于处理XML',''),
+  'simplexml_import_dom'=>array('用于处理XML',''),
 
 );
 
@@ -641,7 +641,7 @@ $CheckResult=array(
   $CheckResult['curl'][1]=function_exists('curl_init')?bingo:error; 
   $CheckResult['allow_url_fopen'][1]=(bool)ini_get('allow_url_fopen')?bingo:error;
   $CheckResult['gethostbyname'][1]=function_exists('gethostbyname')?bingo:error;
-  $CheckResult['xml_parser_create'][1]=function_exists('xml_parser_create')?bingo:error;
+  $CheckResult['simplexml_import_dom'][1]=function_exists('simplexml_import_dom')?bingo:error;
 
 }
 

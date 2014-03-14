@@ -108,6 +108,7 @@ class Networkcurl implements iNetwork
 
 		curl_setopt($this->ch,CURLOPT_HTTPHEADER,$this->httpheader);
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION,true);
 		
 		if($this->isgzip == true){
 			curl_setopt($this->ch, CURLOPT_ENCODING, 'gzip');

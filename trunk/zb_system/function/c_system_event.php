@@ -259,7 +259,7 @@ function ViewIndex(){
 		}
 	}
 
-	if($currenturl==$zbp->cookiespath||$currenturl==$zbp->cookiespath . 'index.php'){
+	if($currenturl==$zbp->cookiespath||$currenturl==$zbp->cookiespath . 'index.php'||strpos($currenturl,$zbp->cookiespath . 'index.php?')===0){
 		ViewList(null,null,null,null,null);
 	}elseif(isset($_GET['rewrite'])){
 		ViewAuto(GetVars('rewrite','GET'));
@@ -370,8 +370,6 @@ function ViewSearch(){
 ################################################################################################################
 function ViewAuto($inpurl) {
 	global $zbp;
-	
-	$url=GetValueInArray(explode('?',$inpurl),'0');
 
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($url);
@@ -379,12 +377,16 @@ function ViewAuto($inpurl) {
 			return $fpreturn;
 		}
 	}
-
+	
 	if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') {
 		$zbp->ShowError(2, __FILE__, __LINE__);
-
 		return null;
 	}
+	
+	$url=GetValueInArray(explode('?',$inpurl),'0');
+	
+	if($zbp->cookiespath === substr($url, 0 , strlen($zbp->cookiespath)))
+		$url = substr($url, strlen($zbp->cookiespath));
 
 	if (isset($_SERVER['SERVER_SOFTWARE'])) {
 		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (strpos($url,'/index.php/') === 0))
@@ -404,7 +406,7 @@ function ViewAuto($inpurl) {
 			$url = iconv('GBK', 'UTF-8//TRANSLIT//IGNORE', $url);
 		}
 	}
-	$url = substr($url, strlen($zbp->cookiespath));
+
 	$url = urldecode($url);
 
 	$r = UrlRule::Rewrite_url($zbp->option['ZC_INDEX_REGEX'], 'index');

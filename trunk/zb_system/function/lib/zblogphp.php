@@ -24,7 +24,9 @@ class ZBlogPHP{
 	public $cookiespath=null;
 	public $guid=null;
 	public $currenturl=null;
-
+	public $usersdir = null;
+	public $validcodeurl = null;
+	
 	public $members=array();
 	public $membersbyname=array();
 	public $categorys=array();
@@ -32,14 +34,11 @@ class ZBlogPHP{
 	public $categorylayer=0;
 	public $modules=array();
 	public $modulesbyfilename=array();
-	public $templates=array();
 	public $configs=array();
 	public $tags=array();
 	public $tagsbyname=array();
 	public $comments = array();
 	public $posts=array();
-
-	public $templatetags=array();
 
 	public $title=null;
 	public $name=null;
@@ -62,8 +61,11 @@ class ZBlogPHP{
 	public $isload=false;
 	public $issession=false;
 	public $ismanage=false;
+	public $isgzip=false;
 
 	public $template = null;
+	public $templates = array();
+	public $templatetags = array();
 	public $socialcomment = null;
 	public $header = null;
 	public $footer = null;
@@ -83,10 +85,6 @@ class ZBlogPHP{
 	public $sidebar4=array();
 	public $sidebar5=array();
 
-	public $usersdir = null;
-	public $validcodeurl = null;
-
-	private $isgzip=false;
 
 	static public function GetInstance(){
 		if(!isset(self::$_zbp)){
@@ -205,7 +203,7 @@ class ZBlogPHP{
 
 		$this->option['ZC_BLOG_VERSION']=ZC_BLOG_VERSION;
 		$this->option['ZC_BLOG_PRODUCT_FULL']=$this->option['ZC_BLOG_PRODUCT'] . ' ' . $this->option['ZC_BLOG_VERSION'];
-		$this->option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.rainbowsoft.org/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
+		$this->option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.zblogcn.com/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
 
 		date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
 
@@ -262,7 +260,7 @@ class ZBlogPHP{
 
 		$this->RegBuildModule('authors','BuildModule_authors');
 		
-		$this->LoadTemplates();
+		$this->LoadTemplate();
 		
 		$this->MakeTemplatetags();
 		
@@ -283,6 +281,7 @@ class ZBlogPHP{
 		$this->CheckTemplate();
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) $fpname();
+
 	}
 
 	#终止连接，释放资源
@@ -291,7 +290,9 @@ class ZBlogPHP{
 
 		if($this->isinitialize){
 			$this->CloseConnect();
+			$this->isinitialize=false;
 		}
+
 	}
 
 
@@ -350,6 +351,7 @@ class ZBlogPHP{
 	public function CloseConnect(){
 		if($this->isconnect){
 			$this->db->Close();
+			$this->isconnect=false;
 		}
 	}
 
@@ -872,7 +874,7 @@ function AddBuildModuleAll(){
 		$this->templatetags['sidebar5']=&$this->sidebar5;
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_MakeTemplatetags'] as $fpname => &$fpsignal) {
-			$fpreturn=$fpname($this->template);
+			$fpreturn=$fpname($this->templatetags);
 		}
 
 	}
@@ -882,10 +884,14 @@ function AddBuildModuleAll(){
 		$template = new Template();
 		$template->SetPath($this->usersdir . 'theme/'. $this->theme .'/compile/');
 		$template->SetTagsAll($this->templatetags);
+		
+		foreach ($GLOBALS['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($template);
+		}
 		return $template;
 	}
 
-	public function LoadTemplates(){
+	public function LoadTemplate(){
 
 		$this->templates=array();
 
@@ -913,13 +919,17 @@ function AddBuildModuleAll(){
 		if(!isset($this->templates['sidebar5'])){
 			$this->templates['sidebar5']=str_replace('$sidebar', '$sidebar5', $this->templates['sidebar']);
 		}
+		
+		foreach ($GLOBALS['Filter_Plugin_Zbp_LoadTemplate'] as $fpname => &$fpsignal) {
+			$fpname($this->templates);
+		}
 	}
 
 	public function BuildTemplate(){
 
 		if( strpos('|SAE|BAE2|ACE|', '|'.$this->option['ZC_YUN_SITE'].'|')!==false )return false;
 		//初始化模板
-		$this->LoadTemplates();
+		$this->LoadTemplate();
 
 		if(strpos($this->templates['comments'], 'AjaxCommentBegin')===false)
 			$this->templates['comments']='<label id="AjaxCommentBegin"></label>' . $this->templates['comments'];
@@ -991,7 +1001,9 @@ function AddBuildModuleAll(){
 		$template->SetPath($dir);
 
 		//模板接口
-		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {$fpname($this->templates);}
+		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {
+			$fpname($this->templates);
+		}
 
 		$template->CompileFiles($this->templates);
 

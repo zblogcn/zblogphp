@@ -53,6 +53,16 @@
 说明:Zbp类的生成模板标签接口\\
 调用:\\
 
+====Filter_Plugin_Zbp_PrepareTemplate====
+参数:$template\\
+说明:Zbp类的模板准备接口\\
+调用:\\
+
+====Filter_Plugin_Zbp_LoadTemplate====
+参数:$template\\
+说明:Zbp类的模板加载接口\\
+调用:\\
+
 ====Filter_Plugin_Zbp_BuildModule====
 参数:\\
 说明:Zbp类的生成模块内容的接口\\
@@ -249,17 +259,17 @@
 调用:\\
 
 ====Filter_Plugin_ViewIndex_Begin====
-参数:&$url\\
+参数:\\
 说明:定义ViewIndex输出接口Begin\\
 调用:\\
 
 ====Filter_Plugin_ViewFeed_Begin====
-参数:&$url\\
+参数:\\
 说明:定义ViewFeed输出接口Begin\\
 调用:\\
 
 ====Filter_Plugin_ViewSearch_Begin====
-参数:&$url\\
+参数:\\
 说明:定义ViewSearch输出接口Begin\\
 调用:\\
 

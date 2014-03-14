@@ -105,7 +105,7 @@ function ResponseAdmin_TopMenu(){
 		$fpname($topmenus);
 	}
 
-	$topmenus[]=MakeTopMenu("misc",$zbp->lang['msg']['official_website'],"http://www.rainbowsoft.org/","_blank","");
+	$topmenus[]=MakeTopMenu("misc",$zbp->lang['msg']['official_website'],"http://www.zblogcn.com/","_blank","");
 
 	foreach ($topmenus as $m) {
 		echo $m;
