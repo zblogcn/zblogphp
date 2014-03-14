@@ -94,6 +94,13 @@ class Changyan_Synchronizer
 		var_dump($data->topics);
 	}
 	
+    //get comment list through cURL
+    //return Array
+    private function getCommentList_curl($appID, $aPost)
+    {
+	
+	}
+	
     #region 'Synchronize to WordPress'
     public function sync2Wordpress1()
     {
@@ -212,7 +219,7 @@ class Changyan_Synchronizer
 
     //get comment list through cURL
     //return Array
-    private function getCommentList_curl($appID, $aPost)
+    private function getCommentList_curl1($appID, $aPost)
     {
         #region 'Using api/open/topic/load to get topic_id in Changyan'
         //generate the params

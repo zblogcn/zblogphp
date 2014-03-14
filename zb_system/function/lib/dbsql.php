@@ -352,7 +352,11 @@ class DbSql #extends AnotherClass
 				$sqls="SELECT * FROM $table ";
 		}
 
-		$sqlw=$this->ParseWhere($where);
+		if(isset($option['changewhere'])){
+			$sqlw=$this->ParseWhere($where,$option['changewhere']);
+		}else{
+			$sqlw=$this->ParseWhere($where);
+		}
 
 		if(!empty($order)){
 			$sqlo .= ' ORDER BY ';
