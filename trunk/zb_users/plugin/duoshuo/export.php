@@ -78,11 +78,12 @@ $duoshuo->init();
           <?php
 	      $sql = $zbp->db->sql->Select('%pre%comment','max(comm_ID)',array(array('=','comm_IsChecking',0)),null,null,null);
 		  $sql = $zbp->db->Query($sql);
-          $commid = $sql[0]['max(comm_ID)'];
+		  $commid = (int)$sql[0]['max(comm_ID)'];
 	      $sql = $zbp->db->sql->Select('%pre%plugin_duoshuo_comment','max(ds_cmtid)',null,null,null,null);
 		  $sql = $zbp->db->Query($sql);
-          $ds_comid = $sql[0]['max(ds_cmtid)'];
+          $ds_comid = (int)$sql[0]['max(ds_cmtid)'];
 		  $pl = $commid - $ds_comid;
+		  
 		  ?>
                       <td><p><span class="bold"> · 评论数据导出</span><br/>
                 <span class="note">只同步未向多说同步的评论，还有<?php echo $pl ?>条未同步</span></p></td>
