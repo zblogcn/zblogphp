@@ -50,13 +50,18 @@ class Metas {
 				$this->Data[$key]=str_replace(($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']==false?$zbp->host:$zbp->option['ZC_BLOG_HOST']),'{#ZC_BLOG_HOST#}',$value);
 			}
 		}
+		//return json_encode($this->Data);
 		return serialize($this->Data);
 	}
 
 	public function Unserialize($s){
 		global $zbp;
 		if($s=='')return false;
-		$this->Data=unserialize($s);
+		if(strpos($s,'{')===0){
+			$this->Data=json_decode($s,true);
+		}else{
+			$this->Data=unserialize($s);
+		}
 		if(count($this->Data)==0)return false;
 		foreach ($this->Data as $key => $value) {
 			if(is_string($value)){
