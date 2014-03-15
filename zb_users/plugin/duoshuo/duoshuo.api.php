@@ -93,16 +93,26 @@ class duoshuo_api
 		global $duoshuo;
 		global $table;
 		$sql = $zbp->db->sql->Update(
-			'%pre%Comment,' . $duoshuo->db['comment'],
-			array('%pre%Comment.comm_IsChecking' => 0),
+			'%pre%Comment',
+			array('comm_IsChecking' => 0),
 			array(
-				array('custom', $duoshuo->db['comment'] . '.ds_cmtid = ' . $table['Comment'] . '.comm_ID '),
-				array('custom','(('.$duoshuo->db['comment'].'.ds_key) In (' . $this->implode2(array(
-					'ary' => $meta->meta,
-					'before' => "'",
-					'after' => "'",
-					'split_tag' => ','
-				)) . '))')
+				array('custom', 'comm_ID = (' .
+					$zbp->db->sql->Select(
+						$duoshuo->db['comment'],
+						array('ds_cmtid'),
+						array(array('custom',
+							'ds_key In (' . $this->implode2(array(
+								'ary' => $meta->meta,
+								'before' => "'",
+								'after' => "'",
+								'split_tag' => ','
+							)) . ' )',
+						)),
+						null,
+						null,
+						null
+					). ' )',
+				),
 			)
 		);
 		$zbp->db->Update($sql);
@@ -114,18 +124,29 @@ class duoshuo_api
 		global $duoshuo;
 		global $table;
 		$sql = $zbp->db->sql->Update(
-			'%pre%Comment,' . $duoshuo->db['comment'],
-			array('%pre%Comment.comm_IsChecking' => 1),
+			'%pre%Comment',
+			array('comm_IsChecking' => 1),
 			array(
-				array('custom', $duoshuo->db['comment'] . '.ds_cmtid = ' . $table['Comment'] . '.comm_ID '),
-				array('custom','(('.$duoshuo->db['comment'].'.ds_key) In (' . $this->implode2(array(
-					'ary' => $meta->meta,
-					'before' => "'",
-					'after' => "'",
-					'split_tag' => ','
-				)) . '))')
+				array('custom', 'comm_ID = (' .
+					$zbp->db->sql->Select(
+						$duoshuo->db['comment'],
+						array('ds_cmtid'),
+						array(array('custom',
+							'ds_key In (' . $this->implode2(array(
+								'ary' => $meta->meta,
+								'before' => "'",
+								'after' => "'",
+								'split_tag' => ','
+							)) . ' )',
+						)),
+						null,
+						null,
+						null
+					). ' )',
+				),
 			)
 		);
+		//var_dump($sql);exit;
 		$zbp->db->Update($sql);
 	}
 	
@@ -149,7 +170,7 @@ class duoshuo_api
 		{
 			foreach($result as $rs) $ary_cmtid[] = $rs['ds_cmtid'];
 			$zbp->db->Delete($zbp->db->sql->Delete('%pre%Comment',array(array('custom','comm_ID In (' .$this->implode2(array('ary' => $ary_cmtid,'before' => "'",'after' => "'",'split_tag' => ',')) . ')'))));
-			$zbp->db->Delete($zbp->db->sql->Delete($duoshuo->db['comment'],array('custom','ds_key In (' . $ds_keylist . ')')));
+			$zbp->db->Delete($zbp->db->sql->Delete($duoshuo->db['comment'],array(array('custom','ds_key In (' . $ds_keylist . ')'))));
 		}
 		
 	}
@@ -174,7 +195,6 @@ class duoshuo_api
 		$ajax->send();
 		
 		$json = json_decode($ajax->responseText);
-		//var_dump($json);exit;
 		foreach($json->response as $i)
 		{
 			
@@ -187,11 +207,9 @@ class duoshuo_api
 			{
 //				if($i->meta->thread_key) 
 			}
-			//var_dump( $i);
+			
 		}
 		
-		
-		//exit;
 		$zbp->SaveConfig('duoshuo');
 		if(count($json->response)>=49) $this->sync();
 	}

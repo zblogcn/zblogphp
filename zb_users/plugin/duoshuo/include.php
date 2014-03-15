@@ -122,12 +122,12 @@ function duoshuo_create_functions()
 function duoshuo_create_database()
 {
 	global $zbp;
-	if($zbp->db->ExistTable($GLOBALS['table']['plugin_duoshuo_comment'])==false)
+	if(!$zbp->db->ExistTable($GLOBALS['table']['plugin_duoshuo_comment']))
 	{
 		$s = $zbp->db->sql->CreateTable($GLOBALS['table']['plugin_duoshuo_comment'],$GLOBALS['datainfo']['plugin_duoshuo_comment']);
 		$zbp->db->QueryMulit($s);
 	}
-	if($zbp->db->ExistTable($GLOBALS['table']['plugin_duoshuo_comment'])==false)
+	if(!$zbp->db->ExistTable($GLOBALS['table']['plugin_duoshuo_members']))
 	{
 		$s = $zbp->db->sql->CreateTable($GLOBALS['table']['plugin_duoshuo_members'],$GLOBALS['datainfo']['plugin_duoshuo_members']);
 		$zbp->db->QueryMulit($s);
