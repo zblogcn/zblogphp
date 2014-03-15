@@ -324,7 +324,7 @@ class DbSql #extends AnotherClass
 				$sqlw .= $comma .  '('. $w[1] .' '. $eq .' (' . $sql_array . ')) ';
 			}
 			if($eq=='CUSTOM'){
-				$sqlw .= $comma . $w[1] . ' ';
+				$sqlw .= $comma . ' (' . $w[1] . ') ';
 			}
 			$comma = 'AND';
 		}
