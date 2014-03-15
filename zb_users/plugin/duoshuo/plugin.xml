@@ -3,10 +3,10 @@
 <id>duoshuo</id>
 <name>多说社会化评论</name>
 <url>http://duoshuo.com/</url>
-<note>多说让评论更活跃、互动性更强的评论系统，永久免费且容易安装。它能智能识别垃圾评论、稳步提升网站流量。</note>
-<description>多说让评论更活跃、互动性更强的评论系统，永久免费且容易安装。它能智能识别垃圾评论、稳步提升网站流量。</description>
+<note>多说让评论更活跃、互动性更强，永久免费且容易安装。它能智能识别垃圾评论、稳步提升网站流量。</note>
+<description>多说让评论更活跃、互动性更强，永久免费且容易安装。它能智能识别垃圾评论、稳步提升网站流量。</description>
 <path>main.php</path>
-<include>include.asp</include>
+<include>include.php</include>
 <level>1</level>
 <author>
   <name>zsx</name>
@@ -21,7 +21,7 @@
 <adapted>140220</adapted>
 <version>1.0</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2014-02-08</modified>
+<modified>2014-03-15</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>
