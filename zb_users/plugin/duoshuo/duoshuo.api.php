@@ -180,7 +180,7 @@ class duoshuo_api
 			
 			$func_name = str_replace('-','_',$i->action);
 			if($func_name == 'delete') $func_name = 'spam';
-			if($func_name == 'update' || $func_name == 'delete_forever') $func_name = 'delete_forever';
+			if($func_name == 'update' || $func_name == 'delete-forever') $func_name = 'delete_forever';
 			$log_id = $this->$func_name($i);
 			if($log_id) $duoshuo->cfg->log_id = $log_id;
 			if(!$bol_cc_fix)
