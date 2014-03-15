@@ -168,6 +168,8 @@ function duoshuo_view_post_template(&$template)
 	global $zbp;
 	global $duoshuo;
 	
+	$duoshuo->init();
+	
 	$template->SetTags('duoshuo_comments_wrapper_intro',$duoshuo->cfg->comments_wrapper_intro);
 	$template->SetTags('duoshuo_comments_wrapper_outro',$duoshuo->cfg->comments_wrapper_outro);
 	
