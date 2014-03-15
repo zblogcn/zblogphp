@@ -188,24 +188,24 @@ function export()
 			$strSuccess='全部导出完成';
 		break;
 		case 'article':	
-			$intmin=(int)GetVars('articlemin','POST');
-			$intmax=(int)GetVars('articlemax','POST');
+			$intmin = (int)GetVars('articlemin','POST');
+			$intmax = (int)GetVars('articlemax','POST');
 			export_post_article($http,$intmin,$intmax);
-			$strSuccess="文章数据(".$intmin." - ".$intmax.")导出完成";
+			$strSuccess = "文章数据(" . $intmin . " - " . $intmax . ")导出完成";
 		break;
 		case 'comment':
-			$intmin=(int)GetVars('commentmin','POST');
-			$intmax=(int)GetVars('commentmax','POST');
+			$intmin = (int)GetVars('commentmin','POST');
+			$intmax = (int)GetVars('commentmax','POST');
 			export_post_comment($http,$intmin,$intmax);
-			$strSuccess="评论数据(".$intmin." - ".$intmax.")导出完成";
+			$strSuccess = "评论数据(" . $intmin . " - " . $intmax . ")导出完成";
 		break;
 		case 'member':
 			export_post_member($http,$intmin,$intmax);
-			$strSuccess="用户数据导出完成";
+			$strSuccess = "用户数据导出完成";
 		break;
 		case 'backup':
 			$strSuccess = api_run();
-			if($strSuccess=='success') $strSuccess = "数据从多说备份到本地完成";
+			if($strSuccess == 'success') $strSuccess = "数据从多说备份到本地完成";
 		break;
 	}
 	$result = array(
