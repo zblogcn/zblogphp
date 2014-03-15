@@ -20,11 +20,19 @@ class duoshuo_class
 		$this->system_version = $blogversion;
 		$this->duoshuo_path = $zbp->host . 'zb_users/plugin/duoshuo/';
 		$this->cfg = &$zbp->configs['duoshuo'];
-		$this->token = JWT::encode(array(
-			'short_name' => $this->cfg->short_name,
-			'user_key' => $zbp->user->ID,
-			'name' => $zbp->user->Name
-		),$this->cfg->secret,'HS256');
+		
+		if(isset($this->cfg))
+		{
+			$this->token = JWT::encode(array(
+				'short_name' => $this->cfg->short_name,
+				'user_key' => $zbp->user->ID,
+				'name' => $zbp->user->Name
+			),$this->cfg->secret,'HS256');
+		}
+		else
+		{
+			
+		}
 		$this->db['comment'] = '%pre%plugin_duoshuo_comment';
 		$this->db['members'] = '%pre%plugin_duoshuo_members';
 		$this->url = array(
