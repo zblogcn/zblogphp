@@ -89,7 +89,7 @@ function getChecked($name,$value)
         <td><p><span class="bold"> · 其它</span></p></td>
         <td><p> </p>
           <p>
-            <input name="" type="button" class="button" onClick="if(confirm('你确定要继续吗？')){location.href='noresponse.php?act=fac'}" value="清空插件配置" />
+            <input name="" type="button" class="button" onClick="if(confirm('你确定要继续吗？')){location.href='event.php?act=fac'}" value="清空插件配置" />
           </p></td>
       </tr>
     </tbody>

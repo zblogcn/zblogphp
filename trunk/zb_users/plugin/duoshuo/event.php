@@ -133,6 +133,21 @@ function callback()
 	echo "<script>top.location.href='export.php?firstrun'</script>";
 }
 
+
+function fac()
+{
+	global $zbp;
+	global $duoshuo;
+	global $table;
+	$zbp->DelConfig('duoshuo');
+	$zbp->db->DelTable($table['plugin_duoshuo_comment']);
+	$zbp->db->DelTable($table['plugin_duoshuo_members']);
+	InstallPlugin_duoshuo();
+	$zbp->SetHint('good','初始化成功');
+	echo '<script>location.href="main.php";</script>';
+}
+
+
 function save()
 {
 	global $duoshuo;

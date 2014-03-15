@@ -91,17 +91,18 @@ class duoshuo_api
 	{
 		global $zbp;
 		global $duoshuo;
+		global $table;
 		$sql = $zbp->db->sql->Update(
 			'%pre%Comment,' . $duoshuo->db['comment'],
-			array('comm_IsChecking' => 0),
+			array('%pre%Comment.comm_IsChecking' => 0),
 			array(
-				array('=',$duoshuo->db['comment'].'.ds_cmtid','%pre%comment.comm_id'),
-				array('custom','('.$duoshuo->db['comment'].'.ds_key) In ' . $this->implode2(array(
+				array('custom', $duoshuo->db['comment'] . '.ds_cmtid = ' . $table['Comment'] . '.comm_ID '),
+				array('custom','(('.$duoshuo->db['comment'].'.ds_key) In (' . $this->implode2(array(
 					'ary' => $meta->meta,
 					'before' => "'",
 					'after' => "'",
 					'split_tag' => ','
-				)) . ')')
+				)) . '))')
 			)
 		);
 		$zbp->db->Update($sql);
@@ -111,17 +112,18 @@ class duoshuo_api
 	{
 		global $zbp;
 		global $duoshuo;
+		global $table;
 		$sql = $zbp->db->sql->Update(
 			'%pre%Comment,' . $duoshuo->db['comment'],
-			array('comm_IsChecking' => 1),
+			array('%pre%Comment.comm_IsChecking' => 1),
 			array(
-				array('=',$duoshuo->db['comment'].'.ds_cmtid','%pre%comment.comm_id'),
-				array('custom','('.$duoshuo->db['comment'].'.ds_key) In ' . $this->implode2(array(
+				array('custom', $duoshuo->db['comment'] . '.ds_cmtid = ' . $table['Comment'] . '.comm_ID '),
+				array('custom','(('.$duoshuo->db['comment'].'.ds_key) In (' . $this->implode2(array(
 					'ary' => $meta->meta,
 					'before' => "'",
 					'after' => "'",
 					'split_tag' => ','
-				)) . ')')
+				)) . '))')
 			)
 		);
 		$zbp->db->Update($sql);
@@ -137,7 +139,7 @@ class duoshuo_api
 		$sql = $zbp->db->sql->Select(
 			$duoshuo->db['comment'],
 			'ds_cmtid',
-			array('custom','ds_key In (' . $ds_keylist . ')'),
+			array(array('custom','ds_key In (' . $ds_keylist . ')')),
 			null,
 			null,
 			null
@@ -145,8 +147,8 @@ class duoshuo_api
 		$result = $zbp->db->Query($sql);
 		if(count($result)>0)
 		{
-			foreach($rs as $result) $ary_cmtid[] = $rs['ds_cmtid'];
-			$zbp->db->Delete($zbp->db->sql->Delete('%pre%Comment',array('custom','comm_ID In (' .$this->implode2(array('ary' => $ary_cmtid,'before' => "'",'after' => "'",'split_tag' => ',')) . ')')));
+			foreach($result as $rs) $ary_cmtid[] = $rs['ds_cmtid'];
+			$zbp->db->Delete($zbp->db->sql->Delete('%pre%Comment',array(array('custom','comm_ID In (' .$this->implode2(array('ary' => $ary_cmtid,'before' => "'",'after' => "'",'split_tag' => ',')) . ')'))));
 			$zbp->db->Delete($zbp->db->sql->Delete($duoshuo->db['comment'],array('custom','ds_key In (' . $ds_keylist . ')')));
 		}
 		
@@ -178,15 +180,18 @@ class duoshuo_api
 			
 			$func_name = str_replace('-','_',$i->action);
 			if($func_name == 'delete') $func_name = 'spam';
-			if($func_name == 'update') $func_name = 'delete_forever';
+			if($func_name == 'update' || $func_name == 'delete_forever') $func_name = 'delete_forever';
 			$log_id = $this->$func_name($i);
 			if($log_id) $duoshuo->cfg->log_id = $log_id;
 			if(!$bol_cc_fix)
 			{
 //				if($i->meta->thread_key) 
 			}
+			//var_dump( $i);
 		}
 		
+		
+		//exit;
 		$zbp->SaveConfig('duoshuo');
 		if(count($json->response)>=49) $this->sync();
 	}
