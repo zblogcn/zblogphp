@@ -658,6 +658,7 @@ function AddBuildModule($modfilename,$parameters=null){
 
 function DelBuildModule($modfilename){
 	unset($this->readymodules[$modfilename]);
+	unset($this->readymodules_function[$modfilename]);
 	unset($this->readymodules_parameters[$modfilename]);
 }
 
@@ -1159,7 +1160,12 @@ function AddBuildModuleAll(){
 	}
 
 
+################################################################################################################
+#wp类似
 
+	function get_results($sql){
+		return $this->db->Query($sql);
+	}
 
 
 ################################################################################################################

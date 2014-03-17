@@ -4,6 +4,7 @@ RegisterPlugin("changyan","ActivePlugin_changyan");
 
 ini_set('max_execution_time', '0');
 define('CHANGYAN_PLUGIN_PATH', dirname(__FILE__));
+require CHANGYAN_PLUGIN_PATH . '/Synchronizer.php';
 require CHANGYAN_PLUGIN_PATH . '/Handler.php';
 
 if(!class_exists('Network')){
@@ -14,19 +15,86 @@ require CHANGYAN_PLUGIN_PATH . '/networkfile_get_contents.php';
 require CHANGYAN_PLUGIN_PATH . '/networkfsockopen.php';
 }
 
+if(!function_exists('plugin_dir_url')){
+//ZBP1.3之前临时使用
+	function plugin_dir_url($file) {
+		global $zbp;
+		$s1=$zbp->path;
+		$s2=str_replace('\\','/',dirname($file).'/');
+		$s3='';
+		$s=substr($s2,strspn($s1,$s2,0));
+		if(strpos($s,'zb_users/plugin/')!==false){
+			$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
+		}else{
+			$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
+		}
+		$a=explode('/',$s);
+		$s=$a[0];
+		$s=$zbp->host . $s3 . $s . '/';
+		return $s;
+	}
+}
+if(!function_exists('plugin_dir_path')){
+//ZBP1.3之前临时使用
+	function plugin_dir_path($file) {
+		global $zbp;
+		$s1=$zbp->path;
+		$s2=str_replace('\\','/',dirname($file).'/');
+		$s3='';
+		$s=substr($s2,strspn($s1,$s2,0));
+		if(strpos($s,'zb_users/plugin/')!==false){
+			$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
+		}else{
+			$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
+		}
+		$a=explode('/',$s);
+		$s=$a[0];
+		$s=$zbp->path . $s3 . $s . '/';
+		return $s;
+	}
+}
+
 $changyanPlugin = null;
 
 #注册插件函数
 function ActivePlugin_changyan() {
 
-    global $changyanPlugin;
+    global $changyanPlugin,$zbp;
 	$changyanPlugin = Changyan_Handler::getInstance();
 
 	//add_action('init', 'changyan_init');
 	Add_Filter_Plugin('Filter_Plugin_Zbp_Load','changyan_init');
 	Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu','changyan_AddMenu');
 	Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','changyan_socialcomment');
+	Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','changyan_view_post_template');
+	Add_Filter_Plugin('Filter_Plugin_ViewList_Template','changyan_view_list_template');
+	Add_Filter_Plugin('Filter_Plugin_Html_Js_Add','changyan_html_js_add');	
+	
+}
 
+function changyan_html_js_add(){
+    global $changyanPlugin,$zbp;
+	if(!$changyanPlugin->getOption('changyan_script'))return;
+	if(!$changyanPlugin->getOption('changyan_isCron'))return;	
+	if(time()-$changyanPlugin->getOption('changyan_lastSyncTime')>3600){
+		$changyanPlugin->sync2Wordpress();
+	}
+	$zbp->AddBuildModule('comments');
+	$zbp->BuildModule();
+}
+
+function changyan_view_list_template(&$template){
+    global $changyanPlugin,$zbp;
+	$posts = &$template->GetTags('articles');
+	foreach($posts as $post)
+	{
+		$post->CommNums = '<span id = "sourceId::'. $post->ID .'" class = "cy_cmt_count" ></span>';
+	}
+}
+function changyan_view_post_template(&$template){
+    global $changyanPlugin,$zbp;
+	$post = &$template->GetTags('article');
+	$post->CommNums = '<a href="#SOHUCS" id="changyan_count_unit"></a>';
 }
 
 function InstallPlugin_changyan(){
@@ -40,8 +108,7 @@ function InstallPlugin_changyan(){
 		//$zbp->SaveConfig('changyan');
 	}
 
-
-    global $wp_version, $changyanPlugin, $plugin_page;
+    global $changyanPlugin;
 
     //See http://wordpress.stackexchange.com/questions/20327/plugin-action-links-filter-hook-deprecated
     //See also http://stackoverflow.com/questions/1580378/plugin-action-links-not-working-in-wordpress-2-8
@@ -57,17 +124,10 @@ function InstallPlugin_changyan(){
         }
 
         //if the admin left menu item is not changyan currently, show links to the changyan item page
-        if ($plugin_page !== 'changyan') {
-            changyan_config_notice();
-        }
+        changyan_config_notice();
     }
 
     //See http://wordpress.stackexchange.com/questions/14973/row-actions-for-custom-post-types
-    //add_filter('post_row_actions', array($changyanPlugin, 'filterActions'));
-
-
-    //add_action('admin_head-edit-comments.php', array($changyanPlugin, 'showCommentsNotice'));
-
     changyan_base_init();
 	
 }
@@ -131,7 +191,6 @@ function changyan_base_init()
     }
     //ini_set('display_errors', '1');
     //schedule synchronization
-    //$isCron = $zbp->Config('changyan')->changyan_isCron;
 	$isCron = $changyanPlugin->getOption('changyan_script');
     if ($isCron == true || $isCron == 'true') {
         //add_action('changyanCron', array($changyanPlugin, 'cronSync'));
@@ -139,6 +198,8 @@ function changyan_base_init()
         //    wp_schedule_event(time(), 'hourly', 'changyanCron');
         //}
     }
+	$zbp->header .= '<script type="text/javascript" src="http://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>' . "\r\n";
+	$zbp->footer .= '<script id="cy_cmt_num" src="http://assets.changyan.sohu.com/upload/tools/cy_cmt_count.js?clientId='. $changyanPlugin->getOption('changyan_appID') .'"></script>' . "\r\n";
 }
 
 
