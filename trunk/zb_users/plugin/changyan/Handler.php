@@ -1,7 +1,6 @@
 <?php
 ini_set('max_execution_time', '0');
 
-require_once CHANGYAN_PLUGIN_PATH . '/Synchronizer.php';
 class Changyan_Handler
 {
     const version = '1.0';

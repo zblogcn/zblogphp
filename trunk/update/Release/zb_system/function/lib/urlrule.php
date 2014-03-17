@@ -175,17 +175,12 @@ class UrlRule
 		$s .='  <rewrite>' . "\r\n";
 		$s .='   <rules>' . "\r\n";
 
-		$s .='    <rule name="'.$zbp->cookiespath.'Imported Rule 1" stopProcessing="true">' . "\r\n";
-		$s .='     <match url="^" ignoreCase="false" />' . "\r\n";
-		$s .='      <conditions logicalGrouping="MatchAny">' . "\r\n";
-		$s .='       <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="true" />' . "\r\n";
-		$s .='       <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="true" />' . "\r\n";
-		$s .='      </conditions>' . "\r\n";
-		$s .='      <action type="None" />' . "\r\n";
-		$s .='    </rule>' . "\r\n";
-
-		$s .='    <rule name="'.$zbp->cookiespath.'Imported Rule 2" stopProcessing="true">' . "\r\n";
+		$s .='    <rule name="'.$zbp->cookiespath.' Z-BlogPHP Imported Rule" stopProcessing="true">' . "\r\n";
 		$s .='     <match url="^(.*)?" ignoreCase="false" />' . "\r\n";
+		$s .='      <conditions logicalGrouping="MatchAll">' . "\r\n";
+		$s .='       <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />' . "\r\n";
+		$s .='       <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />' . "\r\n";
+		$s .='      </conditions>' . "\r\n";
 		$s .='     <action type="Rewrite" url="index.php/{R:0}" />' . "\r\n";
 		$s .='    </rule>' . "\r\n";
 

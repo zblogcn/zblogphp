@@ -240,7 +240,7 @@ class DbSql #extends AnotherClass
 		$comma = '';
 		foreach($where as $k => $w) {
 			$eq=strtoupper($w[0]);
-			if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='){
+			if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='|$eq=='NOT LIKE'){
 				$x = (string)$w[1];
 				$y = (string)$w[2];
 				$y = $this->db->EscapeString($y);
@@ -332,7 +332,7 @@ class DbSql #extends AnotherClass
 		return $sqlw;
 	}
 
-	public function Select($table,$select,$where,$order,$limit,$option)
+	public function Select($table,$select,$where,$order,$limit,$option=null)
 	{
 		$sqls='';
 		$sqlw='';
@@ -397,7 +397,7 @@ class DbSql #extends AnotherClass
 		return $sqls . $sqlw . $sqlo . $sqll;
 	}
 
-	public function Count($table,$count,$where)
+	public function Count($table,$count,$where,$option=null)
 	{
 		$sqlc="SELECT ";
 
@@ -410,12 +410,16 @@ class DbSql #extends AnotherClass
 
  		$sqlc.=" FROM $table ";
 
-		$sqlw=$this->ParseWhere($where);
+		if(isset($option['changewhere'])){
+			$sqlw=$this->ParseWhere($where,$option['changewhere']);
+		}else{
+			$sqlw=$this->ParseWhere($where);
+		}
 
 		return $sqlc . $sqlw;
 	}
 
-	public function Update($table,$keyvalue,$where)
+	public function Update($table,$keyvalue,$where,$option=null)
 	{
 		$sql="UPDATE $table SET ";
 
@@ -426,7 +430,11 @@ class DbSql #extends AnotherClass
 			$comma = ' , ';
 		}
 
-		$sql.=$this->ParseWhere($where);
+		if(isset($option['changewhere'])){
+			$sql.=$this->ParseWhere($where,$option['changewhere']);
+		}else{
+			$sql.=$this->ParseWhere($where);
+		}
 		return $sql;
 	}
 
@@ -452,10 +460,14 @@ class DbSql #extends AnotherClass
 		return  $sql;
 	}
 
-	public function Delete($table,$where)
+	public function Delete($table,$where,$option=null)
 	{
 		$sql="DELETE FROM $table ";
-		$sql.=$this->ParseWhere($where);
+		if(isset($option['changewhere'])){
+			$sql.=$this->ParseWhere($where,$option['changewhere']);
+		}else{
+			$sql.=$this->ParseWhere($where);
+		}
 		return $sql;
 	}
 

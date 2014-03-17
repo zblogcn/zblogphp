@@ -36,39 +36,6 @@ function RunTime() {
 	return $rt;
 }
 
-function Plugin_Dir_Url($file) {
-	global $zbp;
-	$s1=$zbp->path;
-	$s2=str_replace('\\','/',dirname($file).'/');
-	$s3='';
-	$s=substr($s2,strspn($s1,$s2,0));
-	if(strpos($s,'zb_users/plugin/')!==false){
-		$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
-	}else{
-		$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
-	}
-	$a=explode('/',$s);
-	$s=$a[0];
-	$s=$zbp->host . $s3 . $s . '/';
-	return $s;
-}
-
-function Plugin_Dir_Path($file) {
-	global $zbp;
-	$s1=$zbp->path;
-	$s2=str_replace('\\','/',dirname($file).'/');
-	$s3='';
-	$s=substr($s2,strspn($s1,$s2,0));
-	if(strpos($s,'zb_users/plugin/')!==false){
-		$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
-	}else{
-		$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
-	}
-	$a=explode('/',$s);
-	$s=$a[0];
-	$s=$zbp->path . $s3 . $s . '/';
-	return $s;
-}
 
 ################################################################################################################
 function VerifyLogin() {
@@ -389,7 +356,7 @@ function ViewAuto($inpurl) {
 		$url = substr($url, strlen($zbp->cookiespath));
 
 	if (isset($_SERVER['SERVER_SOFTWARE'])) {
-		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (strpos($url,'/index.php/') === 0))
+		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (strpos($url,'/index.php/') !== false))
 			$url = str_replace('/index.php/','/',$url);
 		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) == true)){
 			if(strpos($inpurl,'?')!==false){
@@ -2589,13 +2556,37 @@ function BuildModule_statistics($array = array()) {
 
 }
 
+################################################################################################################
+function plugin_dir_url($file) {
+	global $zbp;
+	$s1=$zbp->path;
+	$s2=str_replace('\\','/',dirname($file).'/');
+	$s3='';
+	$s=substr($s2,strspn($s1,$s2,0));
+	if(strpos($s,'zb_users/plugin/')!==false){
+		$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
+	}else{
+		$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
+	}
+	$a=explode('/',$s);
+	$s=$a[0];
+	$s=$zbp->host . $s3 . $s . '/';
+	return $s;
+}
 
-
-
-
-
-
-
-
-
-
+function plugin_dir_path($file) {
+	global $zbp;
+	$s1=$zbp->path;
+	$s2=str_replace('\\','/',dirname($file).'/');
+	$s3='';
+	$s=substr($s2,strspn($s1,$s2,0));
+	if(strpos($s,'zb_users/plugin/')!==false){
+		$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
+	}else{
+		$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
+	}
+	$a=explode('/',$s);
+	$s=$a[0];
+	$s=$zbp->path . $s3 . $s . '/';
+	return $s;
+}

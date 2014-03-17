@@ -38,37 +38,18 @@ class Changyan_Synchronizer
         //not site_url: the folder of wp installed, see http://www.andelse.com/wordpress-url-strategy-url-function-list.html
         //echo "<br/>".home_url();//it is right
         //get post list from
-        $nextID2CY = $this->getOption('changyan_sync2CY');
-        $nextID2WP = $this->getOption('changyan_sync2WP');
+        $nextID2CY = (int)$this->getOption('changyan_sync2CY');
+        $nextID2WP = (int)$this->getOption('changyan_sync2WP');
 
-        if (empty($nextID2CY)) {
-			$cmts = $zbp->GetCommentList('*', null, array('comm_PostTime' => 'ASC'), 1, null);
-			if(count($cmts)>0){
-				$nextID2CY=$cmts[0]->ID;
-			}else{
-				$nextID2CY = 1;
-			}
-        }
-        if (empty($nextID2WP)) {
-			$cmts = $zbp->GetCommentList('*', null, array('comm_PostTime' => 'ASC'), 1, null);
-			if(count($cmts)>0){
-				$nextID2CY=$cmts[0]->ID;
-			}else{
-				$nextID2WP = 1;
-			}
-        }
-        //make sure $nextID2WP is the largest
-        if ($nextID2CY > $nextID2WP) {
-            $nextID2WP = $nextID2CY;
-        }
-		
 		$cmt=$zbp->GetCommentByID($nextID2WP);
+		date_default_timezone_set('Etc/GMT-8');
         if ($cmt->ID==0) {
-            die("同步成功，没有需要同步的评论");
+			$time = date ( "Y-m-d H:i:s",0 );
         }else{
 			$time = date ( "Y-m-d H:i:s",$cmt->PostTime );
 		}
-		
+		date_default_timezone_set($zbp->option['ZC_TIME_ZONE_NAME']);
+
         $params = array(
             'appId' => $appID,
             'date' => $time
@@ -76,12 +57,10 @@ class Changyan_Synchronizer
 
         $URL = "http://changyan.sohu.com/admin/api/recent-comment-topics";
         $URL = $this->buildURL($params, $URL);
-        //echo current_time( 'mysql' ).'<br/>';//xcv
-        //echo "URL:<br/>"; print_r($URL); echo "<br/>";//xcv
+
         $data = $this->getContents_curl($URL);
         $data = json_decode($data);
-        //echo current_time( 'mysql' ).'<br/>';//xcv
-        //echo "data<br/>"; print_r($data); echo "<br/>";//xcv
+
         if (empty($data->success)) {
             die("同步失败:服务器返回空值");
         }
@@ -90,161 +69,35 @@ class Changyan_Synchronizer
         }
 		
 		$postGroup = $data->topics;
-		
-		var_dump($data->topics);
-	}
-	
-    //get comment list through cURL
-    //return Array
-    private function getCommentList_curl($appID, $aPost)
-    {
-	
-	}
-	
-    #region 'Synchronize to WordPress'
-    public function sync2Wordpress1()
-    {
-        global $wpdb;
-        @set_time_limit(0);
-        @ini_set('memory_limit', '256M');
-
-        $script = $this->getOption('changyan_script');
-        $appID = explode("'", $script);
-        //Now we get the appID from the script
-        $appID = $appID[1];
-
-        //not site_url: the folder of wp installed, see http://www.andelse.com/wordpress-url-strategy-url-function-list.html
-        //echo "<br/>".home_url();//it is right
-        //get post list from
-        $nextID2CY = $this->getOption('changyan_sync2CY');
-        $nextID2WP = $this->getOption('changyan_sync2WP');
-
-        if (empty($nextID2CY)) {
-            $nextID2CY = 1;
-        }
-        if (empty($nextID2WP)) {
-            $nextID2WP = 1;
-        }
-        //make sure $nextID2WP is the largest
-        if ($nextID2CY > $nextID2WP) {
-            $nextID2WP = $nextID2CY;
-        }
-
-        $time = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT comment_date AS time FROM $wpdb->comments WHERE comment_ID = %s",
-                $nextID2WP
-            )
-        );
-        //echo current_time( 'mysql' ).'<br/>';//xcv
-        //echo "nextid2wp: ".$nextID2WP."<br/>";//xcv
-        //echo "Time is ";print_r($time);echo "<br/>";//xcv
-        if (empty($time)) {
-            die("同步成功，没有需要同步的评论");
-        }
-        $time = $time[0]->time;
-
-        $params = array(
-            'appId' => $appID,
-            'date' => $time
-        );
-
-        $URL = "http://changyan.sohu.com/admin/api/recent-comment-topics";
-        $URL = $this->buildURL($params, $URL);
-        //echo current_time( 'mysql' ).'<br/>';//xcv
-        //echo "URL:<br/>"; print_r($URL); echo "<br/>";//xcv
-        $data = $this->getContents_curl($URL);
-        $data = json_decode($data);
-        //echo current_time( 'mysql' ).'<br/>';//xcv
-        //echo "data<br/>"; print_r($data); echo "<br/>";//xcv
-        if (empty($data->success)) {
-            die("同步失败:服务器返回空值");
-        }
-        if ('false' === $data->success) {
-            die("同步失败:" . ($data->success));
-        }
-
-        $postGroup = $data->topics;
-        //echo current_time( 'mysql' ).'<br/>';//xcv
-        //echo "服务器返回的topic列表<br/>";print_r($postGroup);echo "<br/>";//xcv
-
-        $postAll = $wpdb->get_results(
-            "SELECT ID AS ID, post_title AS title
-                FROM $wpdb->posts
-                WHERE post_type NOT IN ('attachment', 'nav_menu_item', 'revision')
-                AND post_status NOT IN ('future', 'auto-draft', 'draft', 'trash', 'inherit')
-                ORDER BY ID DESC"
-        );
-        //echo "PostAll: <br/>";print_r($postAll);echo "<br/>";//xcv
-        $postArray = array();
-        foreach ($postGroup as $aPG) {
-            foreach ($postAll as $aPost) {
-                $aPostUrl = get_permalink($aPost->ID);
-                if (strcasecmp($aPostUrl, $aPG->topic_url) == 0) {
-                    $postArray[] = array(
-                        'ID' => $aPost->ID,
-                        'post_title' => $aPost->title
-                    );
-                }
-            }
-        }
-
+		//die(var_dump($postGroup));
         $lastCommentID = $this->getOption('changyan_sync2WP');
         if (empty($lastCommentID)) {
             $lastCommentID = 0;
         }
-        //echo current_time( 'mysql' ).'<br/>';//xcv
-        //echo "postArray: <br/>";print_r($postArray);echo "<br/>";//xcv
-        foreach ($postArray as $aPost) {
-            //cyanCommentList is array of comment pages
-            //echo '> '.current_time( 'mysql' ).'<br/>';//xcv
-            $cyanCommentList = $this->getCommentList_curl($appID, $aPost);
-            //echo "cyanCMTList:<br/>";//xcv
-            //print_r($cyanCommentList);//xcv
-            //get comment informations object generated by Changyan server
-            //echo '>> '.current_time( 'mysql' ).'<br/>';//xcv
-            $commentID = $this->insertComments($cyanCommentList, $aPost['ID']);
-            //echo '>>> '.current_time( 'mysql' ).'<br/>';//xcv
+
+        foreach ($postGroup as $aPost) {
+
+            $cyanCommentList = $this->getCommentList_curl($appID, $aPost->topic_id);
+
+            $commentID = $this->insertComments($cyanCommentList, $aPost->topic_source_id);
+
             if ($commentID > $lastCommentID) {
                 $lastCommentID = $commentID;
             }
-        }
-        //echo '*** '.current_time( 'mysql' ).'<br/>';//xcv
-        //recode the latest synchronization time
-        $this->setOption('changyan_lastSyncTime', date("Y-m-d G:i:s", time() + get_option('gmt_offset') * 3600));
-        $this->setOption('changyan_sync2WP', $lastCommentID);
-        //echo $lastCommentID;//xcv
-        die("同步成功");
-    }
+			
+			//recode the latest synchronization time
+			$this->setOption('changyan_lastSyncTime', time());
+			$this->setOption('changyan_sync2WP', $lastCommentID);
 
+        }
+
+        die("同步成功");
+	}
+	
     //get comment list through cURL
     //return Array
-    private function getCommentList_curl1($appID, $aPost)
+    private function getCommentList_curl($appID, $aPostID)
     {
-        #region 'Using api/open/topic/load to get topic_id in Changyan'
-        //generate the params
-        $data = array(
-            'client_id' => $appID,
-            'topic_url' => get_permalink($aPost['ID']),
-            'topic_title' => $aPost['post_title'],
-            'style' => 'terrace'
-        );
-        $data = http_build_query($data);
-
-        //append the params behind the url
-        $sUrl = 'https://changyan.sohu.com/api/open/topic/load';
-        $sUrl .= ("?" . $data);
-
-        //execute GET through cURL
-        $data = $this->getContents_curl($sUrl);
-        $data = json_decode($data);
-        // echo "xx<br/>";print_r($data);//xcv
-        if (!empty($data->error_code)) {
-            die("同步失败：" . ($data->error_code));
-        }
-        $topic_id = $data->topic_id;
-        #endregion
-
         #region 'Using api/open/comment/list to get comment list in Changyan'
         //page_no is the current comment page number
         $page_no = 1;
@@ -259,7 +112,7 @@ class Changyan_Synchronizer
             //generate the params
             $data = array(
                 'client_id' => $appID,
-                'topic_id' => $topic_id,
+                'topic_id' => $aPostID,
                 'outer_page_no' => $page_no,
                 'style' => 'terrace'
             );
@@ -281,8 +134,8 @@ class Changyan_Synchronizer
         }
         #endregion
         return $commentPageArray;
-    }
-
+	}
+	
     //build GET URL by data array and base url
     public function buildURL($dataArray, $baseURL)
     {
@@ -327,6 +180,35 @@ class Changyan_Synchronizer
         return $data;
     }
 
+	function findCommentInDB($aComment,$postID){
+		global $zbp;
+		$date=$aComment->create_time;
+		$ip=$aComment->ip;
+		$w[] = array('=', 'comm_LogID', $postID);
+		$w[] = array('=', 'comm_PostTime', $date);
+		$w[] = array('=', 'comm_IP', $ip);
+		$comments = $zbp->GetCommentList('*', $w, null, null, null);
+		if(count($comments)==0){
+			$cmt = New Comment;
+			
+            $cmt->LogID = $postID;
+            $cmt->IsChecking = (bool)$aComment->status;
+			$cmt->AuthorID = 0;
+            $cmt->Name = $aComment->passport->nickname;
+            $cmt->Email = '';
+            $cmt->HomePage = $aComment->passport->profile_url;
+            $cmt->IP = $aComment->ip;
+
+            $cmt->PostTime = $aComment->create_time;
+            $cmt->Content = $aComment->content;
+            $cmt->Agent = "Changyan_" . $aComment->comment_id;
+			
+			return $cmt;
+		}else{
+			return $comments[0];
+		}
+	}
+	
     /**
      * get comment information object generated by changyan server
      *
@@ -336,98 +218,59 @@ class Changyan_Synchronizer
      */
     private function insertComments($cmts, $postID)
     {
-        //the list of the raw comments retrieved from $cmts
-        $commentsArray = array();
-        //the list of the comments of WPDB format to be inserted
-        //$commentsList = array();
-        //the map of the comment, map(key = $comment.'_'.$time, value = $comment_id); Assuming that no wordpress site will synchronize more than 256MB comments
-        $commentsMap = array();
-        global $wpdb;
+		global $zbp;
+		$commentsArray = array();
 
-        //transform comments in object array $cmts to $commentsArray one by one
-        foreach ($cmts as $cmt) {
-            foreach (($cmt->comments) as $aComment) {
-                $commentsArray[] = $aComment;
-            }
-        }
+		foreach ($cmts as $cmt) {
+			foreach (($cmt->comments) as $aComment) {
+				$commentsArray[] = $aComment;
+			}
+		}
+		$commentsArray = array_reverse($commentsArray);
 
-        //make sure the comments in this array is in ascend order by create_time
-        $commentsArray = array_reverse($commentsArray);
-        usort($commentsArray, array($this, 'cmtAscend'));
-        //limit of the commentmMap is 100000 comments
-        $countMap = 0;
-        $commentID = 0;
-        //print_r($commentsArray[5]);//xcv
-        //print_r($commentsArray[555]);//xcv
-        for ($i = 0; $i < count($commentsArray); $i++) {
-            $replyto = "";
-            $commentParent = "";
-            if (is_array($commentsArray[$i]->comments) && !empty($commentsArray[$i]->comments)) {
-                //ensure the parent comment index is 0
-                usort($commentsArray[$i]->comments, array($this, 'cmtDescend'));
-                //replyto uses gmt time
-                if(!empty($commentsArray[$i]->comments[0])) {
-                    $replyto = ($commentsArray[$i]->comments[0]->passport->nickname) . "_" . ($commentsArray[$i]->comments[0]->content) . "_" . (date("Y-m-d G:i:s", ($commentsArray[$i]->comments[0]->create_time) / 1000));
-                }
-            }
-            //if this comment has a parent comment
-            if (!empty($replyto)) {
-                //echo "replyto ".$replyto."<br/>";//xcv
-                if (array_key_exists($replyto, $commentsMap)) {
-                    $commentParent = $commentsMap[$replyto];
-                } else { // the parent comment not in this map, e.g. in the wpdb
-                    $str = explode("_", $replyto);
-                    $commentParent = $wpdb->get_results(
-                        $wpdb->prepare(
-                            "SELECT comment_ID FROM $wpdb->comments
-                                WHERE comment_post_ID = %s
-                                AND comment_date_gmt = %s
-                                AND comment_content = %s
-                                AND comment_author = %s",
-                            $postID,
-                            $str[2],
-                            $str[1],
-                            $str[0]
-                        )
-                    );
-                    if (is_array($commentParent) && !empty($commentParent)) {
-                        $commentParent = $commentParent[0]->comment_ID;
-                    } else {
-                        $commentParent = "";
-                    }
-                }
-            }
+		$comments = array();
+		$commentscy = array();
 
-            $comment = array(
-                'comment_post_ID' => $postID, //0
-                'comment_author' => $commentsArray[$i]->passport->nickname, //1
-                'comment_author_email' => '', //2
-                'comment_author_url' => $commentsArray[$i]->passport->profile_url, //3
-                'comment_author_IP' => $commentsArray[$i]->ip_location, //4
-                'comment_date' => date("Y-m-d G:i:s", (($commentsArray[$i]->create_time) / 1000 + get_option('gmt_offset') * 3600)), //5
-                'comment_date_gmt' => date("Y-m-d G:i:s", ($commentsArray[$i]->create_time) / 1000), //6
-                'comment_content' => addslashes($commentsArray[$i]->content), //7
-                'comment_karma' => "0", //8
-                'comment_approved' => "1", //9
-                'comment_agent' => "Changyan_" . $commentsArray[$i]->comment_id, //10
-                'comment_type' => "", //11
-                'comment_parent' => $commentParent, //12
-                'user_id' => "", //13
-            );
+		foreach ($commentsArray as &$aComment) {
+			if(count($aComment->comments)>3){
+				continue;
+			}
+			$aComment->create_time=(int)substr($aComment->create_time,0,-3);
+			$comments[$aComment->comment_id]=$aComment;
+			$commentscy[$aComment->comment_id]=$aComment;
 
-            if (true === $this->isCommentExits($postID, $comment['comment_author'], $comment['comment_content'], $comment['comment_date_gmt'])) {
-                continue;
-            }
+		}
+		
+		foreach ($comments as $aComment) {
+			$cmt = $this->findCommentInDB($aComment,$postID);
 
-            $commentID = wp_insert_comment($comment);
-            if ($countMap < 100000) {
-                $commentsMap[$comment['comment_author'] . "_" . $comment['comment_content'] . "_" . $comment['comment_date_gmt']] = $commentID;
-                $countMap += 1;
-            }
-        }
-
-        return $commentID;
-    }
+			if($cmt->ID==0){
+				//echo $cmt->ID;
+				if(isset($aComment->comments[0])){
+					if(isset($commentscy[$aComment->comments[0]->comment_id])){
+						if(isset($commentscy[$aComment->comments[0]->comment_id]->ID))
+							$cmt->ParentID = $commentscy[$aComment->comments[0]->comment_id]->ID;
+					}
+				}else{
+					$cmt->ParentID = 0;
+				}
+				$cmt->RootID = Comment::GetRootID($cmt->ParentID);
+				$cmt->Save();
+				$commentscy[$aComment->comment_id]=$cmt;
+				$zbp->comments[$aComment->comment_id]=$cmt;
+			}else{
+				$commentscy[$aComment->comment_id]=$cmt;
+			}
+			unset($cmt);
+		}
+		$commentLastID=0;
+		foreach ($commentscy as $aComment) {
+			if(isset($aComment->ID))
+				if($aComment->ID > $commentLastID)$commentLastID = $aComment->ID;
+		}
+		return $commentLastID;
+	}
+	
 
     //This is a comparation function used by usort in function insertComments()
     private function cmtAscend($x, $y)
@@ -469,8 +312,163 @@ class Changyan_Synchronizer
     #endregion
 
     #region 'Synchronize to Changyan'
-
     public function sync2Changyan($isSetup = false)
+    {
+        global $zbp;
+        @set_time_limit(0);
+        @ini_set('memory_limit', '256M');
+
+        $nextID2CY = $this->getOption('changyan_sync2CY');
+
+        if ($nextID2CY==0) {
+            $nextID2CY = 1;
+        }
+
+        $maxID = $zbp->db->Query(
+			$zbp->db->sql->Select(
+				'%pre%comment',
+				'MAX(comm_ID)',
+				array(
+					array('CUSTOM',"comm_Agent NOT LIKE 'Changyan_%'")
+				),
+				null,
+				null,
+				null
+			)
+		);
+
+        $maxID = $maxID[0]['MAX(comm_ID)'];
+		
+        $postIDList = $zbp->db->Query(
+			$zbp->db->sql->Select(
+				'%pre%comment',
+				'DISTINCT comm_LogID',
+				array(
+					array('CUSTOM',"comm_ID > $nextID2CY AND comm_ID <= $maxID")
+				),
+				null,
+				null,
+				null
+			)
+		);
+		$postIDList2=array();
+		foreach($postIDList as $id){
+			$postIDList2[]=(int)$id['comm_LogID'];
+		}
+
+        //flag of response
+        $flag = true;
+        $response = "";
+		
+        foreach ($postIDList2 as $aPostID) {
+            //in case of bug of duoshuo or other plugins: postID larger than maxPostID
+            //echo ($aPost -> comment_post_ID)."  ";//////////////////xcv
+            $postInfo = $zbp->GetPostByID($aPostID);
+			if($postInfo->ID==0)continue;
+
+            //build the comments to be synchronized
+            $topic_id = $postInfo->ID;
+            $topic_url = $postInfo->Url;
+            $topic_title = $postInfo->Title;
+			
+			date_default_timezone_set('Etc/GMT-8');
+			$topic_time = date ( "Y-m-d H:i:s",$postInfo->PostTime );
+			
+            $topic_parents = ""; //$postInfo[0]->post_parents;
+            $script = $this->getOption('changyan_script');
+            $appID = explode("'", $script);
+            //get the appID from the script
+            $appID = $appID[1];
+            //echo $topic_title."<br/>";//////////////////////xcv
+            if ($isSetup == true) {            } else {            }
+            $comments = array();
+			
+			$commentsList = $zbp->GetCommentList(
+					'*',
+					array(
+						array('=', 'comm_IsChecking', 0),
+						array('=', 'comm_LogID', $aPostID)
+					)
+				);
+            $comments = array();
+            //insert comments into the commentsArray
+            foreach ($commentsList as $comment) {
+				if(strpos($comment->Agent,'Changyan_')===0)continue;
+                $user = array(
+                    'userid' => $comment->AuthorID,
+                    'nickname' => $comment->Name,
+                    'usericon' => '',
+                    'userurl' => $comment->HomePage
+                );
+                $comments[] = array(
+                    'cmtid' => $comment->ID,
+                    'ctime' => $comment->Time(),
+                    'content' => $comment->Content,
+                    'replyid' => $comment->ParentID,
+                    'user' => $user,
+                    'ip' => $comment->IP,
+                    'useragent' => $comment->Agent,
+                    'channeltype' => '1',
+                    'from' => '',
+                    'spcount' => '',
+                    'opcount' => ''
+                );
+            }
+			date_default_timezone_set($zbp->option['ZC_TIME_ZONE_NAME']);
+
+            //comments under a post to be synchronized
+            $postComments = array(
+                'title' => $topic_title,
+                'url' => $topic_url,
+                'ttime' => $topic_time,
+                'sourceid' => $topic_id,
+                'parentid' => $topic_parents,
+                'categoryid' => '',
+                'ownerid' => '',
+                'metadata' => '',
+                'comments' => $comments
+            );
+
+            if (empty($comments)) {
+                continue;
+            }
+
+            //get the appID from the script
+            $script = $this->getOption('changyan_script');
+            $appID = explode("'", $script);
+            $appID = $appID[1];
+
+            $postComments = json_encode($postComments);
+
+            //hmac encode
+            $appKey = $this->getOption('changyan_appKey');
+            $appKey = trim($appKey);
+            $md5 = hash_hmac('sha1', $postComments, $appKey);
+
+            $postData = "appid=" . $appID . "&md5=" . $md5 . "&jsondata=" . $postComments;
+            //print_r($postData);////////////xcv//////////
+            $response = $this->postContents_curl("http://changyan.sohu.com/admin/api/import/comment", $postData);
+            $regex = '/success":true/';
+            //if "true" not found
+            //echo "Response is ".$response;//xcv
+            if (!preg_match($regex, $response)) {
+                $flag = false;
+                break;
+            }
+		}
+        if ($flag === true) {
+            //recode the latest synchronization time
+            $this->setOption('changyan_lastSyncTimeCY', time());
+            $this->setOption('changyan_sync2CY', $maxID);
+            die("同步成功");
+        } else {
+            die("同步失败:" . $response);
+        }
+    }
+	
+	
+	
+    public function sync2Changyan1($isSetup = false)
     {
         global $wpdb;
         @set_time_limit(0);
