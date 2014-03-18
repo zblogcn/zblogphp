@@ -189,7 +189,10 @@ function Server_SendRequest_CUrl($url,$data=array(),$u,$c){
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 120);
 	curl_setopt($ch, CURLOPT_USERAGENT, $u);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
+	if(ini_get("safe_mode")==false && ini_get("open_basedir")==false){
+		curl_setopt($this->ch, CURLOPT_MAXREDIRS, 10);
+		curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION,true);
+	}
 	if($c)curl_setopt($ch,CURLOPT_COOKIE,$c);
 	
 	if($data){//POST

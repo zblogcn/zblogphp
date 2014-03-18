@@ -159,7 +159,7 @@ class Changyan_Synchronizer
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $aUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        if (ini_get('open_basedir') == '' && ini_get('safe_mode' == 'Off')) {
+        if (ini_get('open_basedir') == false && ini_get('safe_mode') == false) {
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         }
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -395,7 +395,7 @@ class Changyan_Synchronizer
             foreach ($commentsList as $comment) {
 				if(strpos($comment->Agent,'Changyan_')===0)continue;
                 $user = array(
-                    'userid' => $comment->AuthorID,
+                    'userid' => $comment->Author->Name,
                     'nickname' => $comment->Name,
                     'usericon' => '',
                     'userurl' => $comment->HomePage
@@ -465,169 +465,7 @@ class Changyan_Synchronizer
             die("同步失败:" . $response);
         }
     }
-	
-	
-	
-    public function sync2Changyan1($isSetup = false)
-    {
-        global $wpdb;
-        @set_time_limit(0);
-        @ini_set('memory_limit', '256M');
 
-        $nextID2CY = $this->getOption('changyan_sync2CY');
-
-        if (empty($nextID2CY)) {
-            $nextID2CY = 1;
-        }
-
-        $maxID = $wpdb->get_results(
-            "SELECT MAX(comment_ID) AS maxID FROM $wpdb->comments
-                WHERE comment_agent NOT LIKE '%%Changyan%%'"
-        );
-        $maxID = $maxID[0]->maxID;
-
-        $postIDList = $wpdb->get_results($wpdb->prepare(
-            "SELECT DISTINCT comment_post_ID FROM $wpdb->comments
-                WHERE comment_ID > %s
-                AND comment_ID <= %s",
-            $nextID2CY,
-            $maxID
-        ));
-        //echo "nextID2CY is ".$nextID2CY.";maxID is ".$maxID."<br/>";//xcv
-        //echo "postIDlist: <br/>";print_r($postIDList);echo "<br/>";//xcv
-        $maxPostID = $wpdb->get_results("SELECT MAX(ID) AS maxPostID FROM $wpdb->posts"); //
-        $maxPostID = $maxPostID[0]->maxPostID; //
-        //flag of response
-        $flag = true;
-        $response = "";
-
-        foreach ($postIDList as $aPost) {
-            //in case of bug of duoshuo or other plugins: postID larger than maxPostID
-            //echo ($aPost -> comment_post_ID)."  ";//////////////////xcv
-            if ($aPost->comment_post_ID > $maxPostID) {
-                continue;
-            }
-            $postInfo = $wpdb->get_results(
-                $wpdb->prepare(
-                    "SELECT ID AS post_ID,
-                        post_title AS post_title,
-                        post_date AS post_time,
-                        post_parent AS post_parents
-                        FROM $wpdb->posts
-                        WHERE post_type NOT IN ('attachment', 'nav_menu_item', 'revision')
-                        AND post_status NOT IN ('future', 'auto-draft', 'draft', 'trash', 'inherit')
-                        AND ID = %s",
-                    $aPost->comment_post_ID
-                )
-            );
-            //build the comments to be synchronized
-            $topic_url = get_permalink($postInfo[0]->post_ID);
-            $topic_title = $postInfo[0]->post_title;
-            $topic_time = $postInfo[0]->post_time;
-            $topic_id = $postInfo[0]->post_ID;
-            $topic_parents = ""; //$postInfo[0]->post_parents;
-            $script = $this->getOption('changyan_script');
-            $appID = explode("'", $script);
-            //get the appID from the script
-            $appID = $appID[1];
-            //echo $topic_title."<br/>";//////////////////////xcv
-            if ($isSetup == true) {
-                $commentsList = $wpdb->get_results(
-                    $wpdb->prepare(
-                        "SELECT * FROM  $wpdb->comments
-                            WHERE comment_post_ID = %s
-                            AND comment_ID BETWEEN %s AND %s",
-                        $postInfo[0]->post_ID,
-                        $nextID2CY,
-                        $maxID
-                    )
-                );
-            } else {
-                $commentsList = $wpdb->get_results(
-                    $wpdb->prepare(
-                        "SELECT * FROM $wpdb->comments
-                            WHERE comment_post_ID = %s
-                            AND comment_agent NOT LIKE '%%Changyan%%'
-                            AND comment_ID BETWEEN %s AND %s",
-                        $postInfo[0]->post_ID,
-                        $nextID2CY,
-                        $maxID
-                    )
-                );
-                //echo "postID: ".$postInfo[0]->post_ID." :<br/>";print_r($commentsList);echo "<br/>";//xcv
-            }
-            $comments = array();
-            //insert comments into the commentsArray
-            foreach ($commentsList as $comment) {
-                $user = array(
-                    'userid' => $comment->user_id,
-                    'nickname' => $comment->comment_author,
-                    'usericon' => '',
-                    'userurl' => $comment->comment_author_url
-                );
-                $comments[] = array(
-                    'cmtid' => $comment->comment_ID,
-                    'ctime' => $comment->comment_date,
-                    'content' => $comment->comment_content,
-                    'replyid' => $comment->comment_parent,
-                    'user' => $user,
-                    'ip' => $comment->comment_author_IP,
-                    'useragent' => $comment->comment_agent,
-                    'channeltype' => '1',
-                    'from' => '',
-                    'spcount' => '',
-                    'opcount' => ''
-                );
-            }
-            //comments under a post to be synchronized
-            $postComments = array(
-                'title' => $topic_title,
-                'url' => $topic_url,
-                'ttime' => $topic_time,
-                'sourceid' => "",
-                'parentid' => $topic_parents,
-                'categoryid' => '',
-                'ownerid' => '',
-                'metadata' => '',
-                'comments' => $comments
-            );
-
-            if (empty($comments)) {
-                continue;
-            }
-
-            //get the appID from the script
-            $script = $this->getOption('changyan_script');
-            $appID = explode("'", $script);
-            $appID = $appID[1];
-
-            $postComments = json_encode($postComments);
-
-            //hmac encode
-            $appKey = $this->getOption('changyan_appKey');
-            $appKey = trim($appKey);
-            $md5 = hash_hmac('sha1', $postComments, $appKey);
-
-            $postData = "appid=" . $appID . "&md5=" . $md5 . "&jsondata=" . $postComments;
-            //print_r($postData);////////////xcv//////////
-            $response = $this->postContents_curl("http://changyan.sohu.com/admin/api/import/comment", $postData);
-            $regex = '/success":true/';
-            //if "true" not found
-            //echo "Response is ".$response;//xcv
-            if (!preg_match($regex, $response)) {
-                $flag = false;
-                break;
-            }
-        }
-        if ($flag === true) {
-            //recode the latest synchronization time
-            $this->setOption('changyan_lastSyncTime', date("Y-m-d G:i:s", time() + get_option('gmt_offset') * 3600));
-            $this->setOption('changyan_sync2CY', $maxID);
-            die("同步成功");
-        } else {
-            die("同步失败:" . $response);
-        }
-    }
 
     //execute POST function using cURL and return JSON array containing comment_ids in Changyan
     private function postContents_curl($aUrl, $aCommentsArray, $headerPart = array())
@@ -646,7 +484,9 @@ class Changyan_Synchronizer
         curl_setopt($ch, CURLOPT_TIMEOUT, 900);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $aCommentsArray);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        if (ini_get('open_basedir') == false && ini_get('safe_mode') == false) {
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        }
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         //to do a HTTP POST of over 1024 characters
