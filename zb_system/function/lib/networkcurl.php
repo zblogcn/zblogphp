@@ -116,6 +116,9 @@ class Networkcurl implements iNetwork
 		if($this->isgzip == true){
 			curl_setopt($this->ch, CURLOPT_ENCODING, 'gzip');
 		}
+		
+		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
 
 		$result = curl_exec($this->ch);
 		$header_size = curl_getinfo($this->ch,CURLINFO_HEADER_SIZE);

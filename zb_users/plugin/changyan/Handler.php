@@ -3,7 +3,7 @@ ini_set('max_execution_time', '0');
 
 class Changyan_Handler
 {
-    const version = '1.0';
+    const version = '1.1';
     public $value;
     //changyan URL
     public $PluginURL = 'xcv';

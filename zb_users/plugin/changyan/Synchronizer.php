@@ -151,33 +151,22 @@ class Changyan_Synchronizer
      */
     public function getContents_curl($aUrl)
     {
-        //check if exits
-        if (!function_exists('curl_init')) {
-            throw new Exception('server not install curl');
-        }
-        //curl intialization and execution
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $aUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        if (ini_get('open_basedir') == false && ini_get('safe_mode') == false) {
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        }
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 900);
+		global $zbp;
 
-        $data = curl_exec($ch);
+		$ajax = Network::Create();
+		if(!$ajax) throw new Exception('主机没有开启访问外部网络功能');
 
-        $error = curl_error($ch);
-        //close
-        if ($data == false || !empty($error)) {
-            curl_close($ch);
-            die("同步失败: " . $error);
-        }
-        @curl_close($ch);
+		$ajax->open('GET',$aUrl);
+		if( (get_class($ajax)<>'Networkfile_get_contents') || (version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0) ){
+			$ajax->enableGzip();
+		}
 
-        return $data;
+		$ajax->setTimeOuts(360,20,0,0);
+		$ajax->setRequestHeader('User-Agent','Z-BlogPHP/' . ZC_BLOG_VERSION . '|ChangYan/'. ChangYan_Handler::version);
+		$ajax->send();
+
+		return $ajax->responseText;
+
     }
 
 	function findCommentInDB($aComment,$postID){
@@ -470,39 +459,21 @@ class Changyan_Synchronizer
     //execute POST function using cURL and return JSON array containing comment_ids in Changyan
     private function postContents_curl($aUrl, $aCommentsArray, $headerPart = array())
     {
-        //check if exits
-        if (!function_exists('curl_init')) {
-            throw new Exception('server not install curl');
-        }
+		global $zbp;
 
-        //curl intialization and execution
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $aUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 900);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $aCommentsArray);
-        if (ini_get('open_basedir') == false && ini_get('safe_mode') == false) {
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        }
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        //to do a HTTP POST of over 1024 characters
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Expect:'));
+		$ajax = Network::Create();
+		if(!$ajax) throw new Exception('主机没有开启访问外部网络功能');
 
-        $data = curl_exec($ch);
+		$ajax->open('POST',$aUrl);
+		if( (get_class($ajax)<>'Networkfile_get_contents') || (version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0) ){
+			$ajax->enableGzip();
+		}
+		$ajax->setTimeOuts(360,20,0,0);
+		$ajax->setRequestHeader('User-Agent','Z-BlogPHP/' . ZC_BLOG_VERSION . '|ChangYan/'. ChangYan_Handler::version);
+		$ajax->send($aCommentsArray);
+		
+		return $ajax->responseText;
 
-        $error = curl_error($ch);
-        //close
-        if ($data == false || !empty($error)) {
-            curl_close($ch);
-            die("Error: " . $error);
-        }
-        @curl_close($ch);
-
-        return $data;
     }
 
     #endregion
@@ -523,26 +494,6 @@ class Changyan_Synchronizer
         //return update_option($option, $value);
     }
 
-    private function delOption($option)
-    {
-		global $zbp;
-		$zbp->Config('changyan')->Del($option);
-		$zbp->SaveConfig('changyan');
-		return true;
-        //return delete_option($option);
-    }
-
-    private function showAllComments()
-    {
-        global $wpdb;
-        $cmtlist = $wpdb->get_results("SELECT * FROM $wpdb->comments", ARRAY_A);
-        foreach ($cmtlist as $aCmt) {
-            foreach ($aCmt as $v) {
-                echo $v . ";  ";
-            }
-            echo "<br/>";
-        }
-    }
 }
 
 ?>

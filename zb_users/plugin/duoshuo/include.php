@@ -4,13 +4,10 @@ define('DUOSHUO_PATH',dirname(__FILE__));
 
 if(!class_exists('Network')){
 	//ZBP1.3之前临时使用
-	if($zbp->version <= 140220)
-	{
-		require DUOSHUO_PATH . '/class_network/network.php';
-		require DUOSHUO_PATH . '/class_network/networkcurl.php';
-		require DUOSHUO_PATH . '/class_network/networkfile_get_contents.php';
-		require DUOSHUO_PATH . '/class_network/networkfsockopen.php';
-	}
+	require DUOSHUO_PATH . '/class_network/network.php';
+	require DUOSHUO_PATH . '/class_network/networkcurl.php';
+	require DUOSHUO_PATH . '/class_network/networkfile_get_contents.php';
+	require DUOSHUO_PATH . '/class_network/networkfsockopen.php';
 }
 
 require DUOSHUO_PATH . '/jwt.php';

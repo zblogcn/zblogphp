@@ -317,7 +317,7 @@ function ViewSearch(){
 		$article->Content .= '<a href="' . $a->Url . '">' . $a->Url . '</a></p>';
 	}
 
-	$zbp->header .= '<meta name="robots" content="none" />' . "\r\n";
+	$zbp->header .= '<meta name="robots" content="noindex,follow" />' . "\r\n";
 	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);
 	$zbp->template->SetTags('type',$article->type=0?'article':'page');
