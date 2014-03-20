@@ -8,11 +8,11 @@ require CHANGYAN_PLUGIN_PATH . '/Synchronizer.php';
 require CHANGYAN_PLUGIN_PATH . '/Handler.php';
 
 if(!class_exists('Network')){
-//ZBP1.3之前临时使用
-require CHANGYAN_PLUGIN_PATH . '/network.php';
-require CHANGYAN_PLUGIN_PATH . '/networkcurl.php';
-require CHANGYAN_PLUGIN_PATH . '/networkfile_get_contents.php';
-require CHANGYAN_PLUGIN_PATH . '/networkfsockopen.php';
+	//ZBP1.3之前临时使用
+	require CHANGYAN_PLUGIN_PATH . '/network.php';
+	require CHANGYAN_PLUGIN_PATH . '/networkcurl.php';
+	require CHANGYAN_PLUGIN_PATH . '/networkfile_get_contents.php';
+	require CHANGYAN_PLUGIN_PATH . '/networkfsockopen.php';
 }
 
 if(!function_exists('plugin_dir_url')){
