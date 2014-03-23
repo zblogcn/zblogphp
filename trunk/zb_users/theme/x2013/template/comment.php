@@ -10,7 +10,7 @@
 			<p>{$comment.Content}
 {foreach $comment.Comments as $key => $comment}
 	{template:comment}
-{/foreach}	
+{/foreach}
 			</p>
 		</div>
 	</li>
