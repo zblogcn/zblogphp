@@ -10,7 +10,7 @@
 			<p><?php  echo $comment->Content;  ?>
 <?php  foreach ( $comment->Comments as $key => $comment) { ?> 
 	<?php  include $this->GetTemplate('comment');  ?>
-<?php  }   ?>	
+<?php  }   ?>
 			</p>
 		</div>
 	</li>
