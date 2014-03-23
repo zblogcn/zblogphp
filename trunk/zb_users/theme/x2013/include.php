@@ -44,7 +44,7 @@ function x2013_tags_set(&$template){
 function InstallPlugin_x2013(){
 	global $zbp;
 	if(!$zbp->Config('x2013')->HasKey('Version')){
-		$zbp->Config('x2013')->Version = '1.6';
+		$zbp->Config('x2013')->Version = '1.7';
 		$zbp->Config('x2013')->SetWeiboSina = 'http://weibo.com/810888188';
 		$zbp->Config('x2013')->SetWeiboQQ = 'http://t.qq.com/involvements';
 		$zbp->Config('x2013')->DisplayFeed = '1';
@@ -55,7 +55,7 @@ function InstallPlugin_x2013(){
 		$zbp->Config('x2013')->NavBar = '<li class="menu-item" style="position: relative;"><a href="{$host}">{$name}</a></li>';
 		$zbp->SaveConfig('x2013');
 	}
-	$zbp->Config('x2013')->Version = '1.6';
+	$zbp->Config('x2013')->Version = '1.7';
 	$zbp->SaveConfig('x2013');
 	//Call SetBlogHint_Custom("<span style='color:#ff0000'>x2013主题</span>已经激活，点击<a href='" +BlogHost+"zb_users/theme/x2013/plugin/main.asp'>[主题设置]</a>去配置主题")
 }
