@@ -370,7 +370,7 @@ function ViewAuto($inpurl) {
 			}
 		}
 		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) !== true)){
-			$url = iconv('GBK', 'UTF-8//TRANSLIT//IGNORE', $url);
+			$url = iconv('GBK', 'UTF-8//IGNORE//TRANSLIT', $url);
 		}
 	}
 
