@@ -397,14 +397,16 @@ function Setup3(){
           <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="<?php echo $option['ZC_MYSQL_PRE'];?>" style="width:350px;" />
         </p>
       <p><b>连接选择:</b> 
-        <?php if($CheckResult['mysql'][0]){?>
-        <label>
-          <input value="mysql" type="radio" name="dbtype"/>MySQL连接</label>
-        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php if($CheckResult['mysqli'][0]){?>
         <label>
           <input value="mysqli" type="radio" name="dbtype"/>MySQLi连接</label>
         <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+<?php if ( version_compare ( PHP_VERSION ,  '5.5.0' ,  '<' )) { ?>
+        <?php if($CheckResult['mysql'][0]){?>
+        <label>
+          <input value="mysql" type="radio" name="dbtype"/>MySQL连接</label>
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+<?php } ?>
         <?php if($CheckResult['pdo_mysql'][0]){?>
         <label>
           <input value="pdo_mysql" type="radio" name="dbtype"/>PDO_MySQL连接</label>
