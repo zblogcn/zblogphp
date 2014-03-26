@@ -525,11 +525,11 @@ case 'sqlite3':
 }
 
 $zbp->OpenConnect();
-$zbp->db->QueryMulit($cts);
 
-InsertInfo();
-
-SaveConfig();
+if(CreateTable($cts)){
+  InsertInfo();
+  SaveConfig();
+}
 
 $zbp->CloseConnect();
 
@@ -658,6 +658,18 @@ function getRightsAndExport($folderparent,$folder){
   }else{
     $GLOBALS['CheckResult'][$folder][1]=(substr($s,1,1)=='r'&&substr($s,2,1)=='w'&&substr($s,3,1)=='x'&&substr($s,4,1)=='r'&&substr($s,7,1)=='r'&&substr($s,6,1)=='x'&&substr($s,9,1)=='x')?bingo:error;
   }
+}
+
+function CreateTable($sql){
+  global $zbp;
+
+  if($zbp->db->ExistTable($GLOBALS['table']['Config'])==true){
+    echo "该数据库里已存在相关的表和数据,请更改表前缀或是更换清空数据库再安装.";
+	return false;
+  }
+
+  $zbp->db->QueryMulit($sql);
+  return true;
 }
 
 function InsertInfo(){
