@@ -51,7 +51,7 @@ class DbSql #extends AnotherClass
 
 		$s='';
 		if($this->type=='DbSQLite'||$this->type=='DbSQLite3'){
-			$s="SELECT count(*) FROM sqlite_master WHERE type='table' AND name='$tablename'";
+			$s="SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='$tablename'";
 		}
 		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
 			$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$tablename'";

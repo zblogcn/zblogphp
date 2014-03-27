@@ -29,12 +29,13 @@ class DbMySQLi implements iDataBase
 
 	function Open($array){
 		/*$array=array(
-		GetVars('dbmysql_server','POST'),
-		GetVars('dbmysql_username','POST'),
-		GetVars('dbmysql_password','POST'),
-		GetVars('dbmysql_name','POST'),
-		GetVars('dbmysql_pre','POST'));
-		GetVars('dbmysql_port','POST'));
+			'dbmysql_server',
+			'dbmysql_username',
+			'dbmysql_password',
+			'dbmysql_name',
+			'dbmysql_pre',
+			'dbmysql_port',
+			'persistent'
 		*/
 		$db = mysqli_init(); 
 
