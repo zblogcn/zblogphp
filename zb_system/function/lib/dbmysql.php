@@ -28,7 +28,15 @@ class DbMySQL implements iDataBase
 	}
 
 	function Open($array){
-
+		/*$array=array(
+			'dbmysql_server',
+			'dbmysql_username',
+			'dbmysql_password',
+			'dbmysql_name',
+			'dbmysql_pre',
+			'dbmysql_port',
+			'persistent'
+		*/
 		if($array[6]==false){
 			$db_link = @mysql_connect($array[0] . ':' . $array[5], $array[1], $array[2]);
 		}else{
