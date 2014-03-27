@@ -103,7 +103,7 @@ function GetHttpContent($url) {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 		if(ini_get("safe_mode")==false && ini_get("open_basedir")==false){
-			curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+			curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
 		}
 		$r = curl_exec($ch);

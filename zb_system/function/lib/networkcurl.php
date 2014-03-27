@@ -32,10 +32,11 @@ class Networkcurl implements iNetwork
 	private $errno = 0;
 	private $ch = NULL;
 	private $isgzip = false;
+	private $maxredirs = 0;
 
 	function __construct()
 	{
-		$this->ch = curl_init();
+		//$this->ch = curl_init();
 	}
 
 	public function __set($property_name, $value){
@@ -108,9 +109,12 @@ class Networkcurl implements iNetwork
 
 		curl_setopt($this->ch,CURLOPT_HTTPHEADER,$this->httpheader);
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
-		if(ini_get("safe_mode")==false && ini_get("open_basedir")==false){
-			curl_setopt($this->ch, CURLOPT_MAXREDIRS, 10);
-			curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION,true);
+
+		if($this->maxredirs>0){
+			if(ini_get("safe_mode")==false && ini_get("open_basedir")==false){
+				curl_setopt($this->ch, CURLOPT_MAXREDIRS, $this->maxredirs);
+				curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION,true);
+			}
 		}
 		
 		if($this->isgzip == true){
@@ -177,10 +181,13 @@ class Networkcurl implements iNetwork
 
 		$this->ch = curl_init();
 		$this->setRequestHeader('User-Agent','Mozilla/5.0');
-
+		$this->setMaxRedirs(1);
 	}
 	
 	public function enableGzip(){
 		$this->isgzip = true;
+	}
+	public function setMaxRedirs($n=0){
+		$this->maxredirs=(int)$n;
 	}
 }
