@@ -17,6 +17,7 @@ interface iNetwork
 	public function send($varBody='');
 	public function setRequestHeader($bstrHeader, $bstrValue);
 	public function enableGzip();
+	public function setMaxRedirs($n=0);
 
 }
 
@@ -30,8 +31,9 @@ class Network
 	public $networktype = null;
 	public $network_list = array();
 	public $curl = false;
-	public $fso = false;
-	
+	public $fsockopen = false;
+	public $file_get_contents = false;
+
 	static private $_network = null;
 
 	function __construct()
@@ -43,14 +45,13 @@ class Network
 		}
 		if ((bool)ini_get('allow_url_fopen'))
 		{
-			if(extension_loaded("openssl")){
-				if(function_exists('file_get_contents')) $this->network_list[] = 'file_get_contents';
-				if(function_exists('fsockopen')) $this->network_list[] = 'fsockopen';
-			}else{
-				if(function_exists('fsockopen')) $this->network_list[] = 'fsockopen';
-				if(function_exists('file_get_contents')) $this->network_list[] = 'file_get_contents';
-			}
-			$this->fso = true;
+			if(function_exists('fsockopen')) $this->network_list[] = 'fsockopen';
+			$this->fsockopen = true;
+		}
+		if ((bool)ini_get('allow_url_fopen'))
+		{
+			if(function_exists('file_get_contents')) $this->network_list[] = 'file_get_contents';
+			$this->file_get_contents = true;
 		}
 	}
 
@@ -59,12 +60,11 @@ class Network
 		if(!isset(self::$_network)){
 			self::$_network=new Network;
 		}	
-		if ((!self::$_network->fso) && (!self::$_network->curl)) return false;
+		if ((!self::$_network->file_get_contents) && (!self::$_network->fsockopen) && (!self::$_network->curl)) return false;
 		$extension = ($extension == '' ? self::$_network->network_list[0] : $extension);
 		$type = 'network' . $extension;
 		$network = New $type();
 		return $network;
 	}
-
 
 }

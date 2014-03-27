@@ -31,6 +31,7 @@ class Networkfsockopen implements iNetwork
 	private $errstr = '';
 	private $errno = 0;
 	private $isgzip = false;
+	private $maxredirs = 0;
 
 	public function __set($property_name, $value){
 		throw new Exception($property_name.' readonly');
@@ -158,9 +159,11 @@ class Networkfsockopen implements iNetwork
 		}
 
 		$this->responseHeader = substr($this->responseText,0,strpos($this->responseText, "\r\n\r\n"));
-	
+if($this->maxredirs>0){
+
+}
 		$this->responseText = substr($this->responseText, strpos($this->responseText, "\r\n\r\n") + 4);
-		
+
 		$this->responseHeader = explode("\r\n",$this->responseHeader);
 
 		if($this->getResponseHeader('Transfer-Encoding')=='chunked'){
@@ -230,6 +233,7 @@ class Networkfsockopen implements iNetwork
 		$this->errno = 0;
 
 		$this->setRequestHeader('User-Agent','Mozilla/5.0');
+		$this->setMaxRedirs(1);
 	}
 	
     private function http_chunked_decode($chunk) { 
@@ -273,5 +277,9 @@ class Networkfsockopen implements iNetwork
 	
 	public function enableGzip(){
 		$this->isgzip = true;
+	}
+
+	public function setMaxRedirs($n=0){
+		$this->maxredirs=$n;
 	}
 }

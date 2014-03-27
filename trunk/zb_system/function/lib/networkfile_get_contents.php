@@ -26,6 +26,7 @@ class Networkfile_get_contents implements iNetwork
 	private $httpheader = array();
 	private $responseHeader = array();
 	private $isgzip = false;
+	private $maxredirs = 0;
 
 	public function __set($property_name, $value){
 		throw new Exception($property_name.' readonly');
@@ -92,8 +93,7 @@ class Networkfile_get_contents implements iNetwork
 			$data=http_build_query($data);
 		}
 
-		if($this->option['method']=='POST')
-		{
+		if($this->option['method']=='POST'){
 
 			if($data==''){
 				$data=http_build_query($this->postdata);
@@ -106,6 +106,14 @@ class Networkfile_get_contents implements iNetwork
 		}
 
 		$this->option['header'] = implode("\r\n",$this->httpheader);
+
+		if($this->maxredirs>0){
+			$this->option['follow_location']=1;
+			$this->option['max_redirects']=$this->maxredirs;
+		}else{
+			$this->option['follow_location']=0;
+			$this->option['max_redirects']=0;
+		}
 
 		$this->responseText = file_get_contents(($this->isgzip==true?'compress.zlib://':'') . $this->url, false, stream_context_create(array('http' => $this->option)));
 
@@ -155,9 +163,14 @@ class Networkfile_get_contents implements iNetwork
 		$this->httpheader = array();
 		$this->responseHeader = array();
 		$this->setRequestHeader('User-Agent','Mozilla/5.0');
+		$this->setMaxRedirs(1);
 	}
 	
 	public function enableGzip(){
 		$this->isgzip = true;
+	}
+
+	public function setMaxRedirs($n=0){
+		$this->maxredirs=$n;
 	}
 }
