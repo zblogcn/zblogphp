@@ -8,6 +8,7 @@
 
 function error_handler($errno, $errstr, $errfile, $errline) {
 
+	if(ZBlogException::$isdisable==true)return true;
 	//ob_clean();
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseError($errno, $errstr, $errfile, $errline);
@@ -18,6 +19,7 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 
 function exception_handler($exception) {
 
+	if(ZBlogException::$isdisable==true)return true;
 	//ob_clean();
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseException($exception);
@@ -28,16 +30,19 @@ function exception_handler($exception) {
 function shutdown_error_handler() {
 	if ($error = error_get_last()) {
 
+		if(ZBlogException::$isdisable==true)return true;
 		//ob_clean();
 		$zbe = ZBlogException::GetInstance();
 		$zbe->ParseShutdown($error);
 		$zbe->Display();
+		
 		die();
 	}
 }
 
 class ZBlogException {
 	static private $_zbe = null;
+	static public $isdisable = false;
 	public $type;
 	public $message;
 	public $file;
@@ -58,9 +63,18 @@ class ZBlogException {
 	}
 
 	static public function ClearErrorHook() {
-		set_error_handler(create_function('', ''));
-		set_exception_handler(create_function('', ''));
-		register_shutdown_function(create_function('', ''));
+		#set_error_handler(create_function('', ''));
+		#set_exception_handler(create_function('', ''));
+		#register_shutdown_function(create_function('', ''));
+		self::$isdisable = true;
+	}
+
+	static public function DisableErrorHook() {
+		self::$isdisable = true;
+	}
+
+	static public function EnableErrorHook() {
+		self::$isdisable = false;
 	}
 
 	static public function Trace($s) {
