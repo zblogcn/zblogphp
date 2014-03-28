@@ -60,7 +60,9 @@ class Metas {
 		if(strpos($s,'{')===0){
 			$this->Data=json_decode($s,true);
 		}else{
-			$this->Data=unserialize($s);
+			ZBlogException::DisableErrorHook();
+			$this->Data=@unserialize($s);
+			ZBlogException::EnableErrorHook();
 		}
 		if(count($this->Data)==0)return false;
 		foreach ($this->Data as $key => $value) {
