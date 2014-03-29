@@ -26,7 +26,6 @@ class Networkcurl implements iNetwork
 	private $httpheader = array();
 	private $responseHeader = array();
 	private $parsed_url = array();
-	private $port = 80;
 	private $timeout = 30;
 	private $errstr = '';
 	private $errno = 0;
@@ -44,13 +43,20 @@ class Networkcurl implements iNetwork
 	}
 
 	public function __get($property_name){
-		if(strtolower($property_name)=='responsexml')
-		{
+		if(strtolower($property_name)=='responsexml'){
 			$w = new DOMDocument();
 			return $w->loadXML($this->responseText);
+		}elseif(strtolower($property_name)=='scheme'||
+				strtolower($property_name)=='host'||
+				strtolower($property_name)=='port'||
+				strtolower($property_name)=='user'||
+				strtolower($property_name)=='pass'||
+				strtolower($property_name)=='path'||
+				strtolower($property_name)=='query'||
+				strtolower($property_name)=='fragment'){
+			if(isset($this->parsed_url[strtolower($property_name)]))return $this->parsed_url[strtolower($property_name)];
 		}
-		else
-		{
+		else{
 			return $this->$property_name;
 		}
 	}
@@ -79,6 +85,13 @@ class Networkcurl implements iNetwork
 		$this->option['method'] = $method;
 		$this->parsed_url = parse_url($bstrUrl);
 		if (!$this->parsed_url) throw new Exception('URL Syntax Error!');
+		if(!isset($this->parsed_url['port'])){
+			if($this->parsed_url['scheme']=='https'){
+				$this->parsed_url['port'] = 443;
+			}else{
+				$this->parsed_url['port'] = 80;
+			}
+		}
 
 		curl_setopt($this->ch, CURLOPT_URL, $bstrUrl);
 		curl_setopt($this->ch, CURLOPT_HEADER, 1);
@@ -174,7 +187,6 @@ class Networkcurl implements iNetwork
 		$this->httpheader = array();
 		$this->responseHeader = array();
 		$this->parsed_url = array();
-		$this->port = 80;
 		$this->timeout = 30;
 		$this->errstr = '';
 		$this->errno = 0;

@@ -26,7 +26,6 @@ class Networkfsockopen implements iNetwork
 	private $httpheader = array();
 	private $responseHeader = array();
 	private $parsed_url = array();
-	private $port = 80;
 	private $timeout = 30;
 	private $errstr = '';
 	private $errno = 0;
@@ -39,13 +38,20 @@ class Networkfsockopen implements iNetwork
 	}
 
 	public function __get($property_name){
-		if(strtolower($property_name)=='responsexml')
-		{
+		if(strtolower($property_name)=='responsexml'){
 			$w = new DOMDocument();
 			return $w->loadXML($this->responseText);
+		}elseif(strtolower($property_name)=='scheme'||
+				strtolower($property_name)=='host'||
+				strtolower($property_name)=='port'||
+				strtolower($property_name)=='user'||
+				strtolower($property_name)=='pass'||
+				strtolower($property_name)=='path'||
+				strtolower($property_name)=='query'||
+				strtolower($property_name)=='fragment'){
+			if(isset($this->parsed_url[strtolower($property_name)]))return $this->parsed_url[strtolower($property_name)];
 		}
-		else
-		{
+		else{
 			return $this->$property_name;
 		}
 	}
@@ -85,6 +91,13 @@ class Networkfsockopen implements iNetwork
 		}
 		else{
 			//bstrUser & bstrPassword ?
+			if(!isset($this->parsed_url['port'])){
+				if($this->parsed_url['scheme']=='https'){
+					$this->parsed_url['port'] = 443;
+				}else{
+					$this->parsed_url['port'] = 80;
+				}
+			}
 		}
 
 		return true;
@@ -131,7 +144,7 @@ class Networkfsockopen implements iNetwork
 		$this->option['header'] = implode("\r\n",$this->httpheader);
 
 		$socket = fsockopen(
-					$this->parsed_url['host'],
+					($this->scheme=='https'?'ssl://':'') . $this->parsed_url['host'],
 					$this->port,
 					$this->errno,
 					$this->errstr,
@@ -170,8 +183,10 @@ class Networkfsockopen implements iNetwork
 			if (strstr($this->responseHeader[0],' 301 ') || strstr($this->responseHeader[0],' 302 ')){
 				fclose($socket);
 				$url = $this->getResponseHeader('Location');
+				$this->canreinit=false;
 				$this->open('Get',$url);
 				$this->setMaxRedirs($i-1);
+				$this->canreinit=true;
 				return $this->send();
 			}
 		}
@@ -223,6 +238,9 @@ class Networkfsockopen implements iNetwork
 	}
 
 	private function reinit(){
+
+		$this->httpheader = array();
+	
 		if(!$this->canreinit)return;
 		$this->readyState = 0;        #状态
 		$this->responseBody = NULL;   #返回的二进制
@@ -235,10 +253,8 @@ class Networkfsockopen implements iNetwork
 		$this->option = array();
 		$this->url = '';
 		$this->postdata = array();
-		$this->httpheader = array();
 		$this->responseHeader = array();
 		$this->parsed_url = array();
-		$this->port = 80;
 		$this->timeout = 30;
 		$this->errstr = '';
 		$this->errno = 0;

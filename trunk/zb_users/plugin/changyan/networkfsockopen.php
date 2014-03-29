@@ -26,24 +26,32 @@ class Networkfsockopen implements iNetwork
 	private $httpheader = array();
 	private $responseHeader = array();
 	private $parsed_url = array();
-	private $port = 80;
 	private $timeout = 30;
 	private $errstr = '';
 	private $errno = 0;
 	private $isgzip = false;
+	private $maxredirs = 0;
+	private $canreinit = true;
 
 	public function __set($property_name, $value){
 		throw new Exception($property_name.' readonly');
 	}
 
 	public function __get($property_name){
-		if(strtolower($property_name)=='responsexml')
-		{
+		if(strtolower($property_name)=='responsexml'){
 			$w = new DOMDocument();
 			return $w->loadXML($this->responseText);
+		}elseif(strtolower($property_name)=='scheme'||
+				strtolower($property_name)=='host'||
+				strtolower($property_name)=='port'||
+				strtolower($property_name)=='user'||
+				strtolower($property_name)=='pass'||
+				strtolower($property_name)=='path'||
+				strtolower($property_name)=='query'||
+				strtolower($property_name)=='fragment'){
+			if(isset($this->parsed_url[strtolower($property_name)]))return $this->parsed_url[strtolower($property_name)];
 		}
-		else
-		{
+		else{
 			return $this->$property_name;
 		}
 	}
@@ -83,6 +91,13 @@ class Networkfsockopen implements iNetwork
 		}
 		else{
 			//bstrUser & bstrPassword ?
+			if(!isset($this->parsed_url['port'])){
+				if($this->parsed_url['scheme']=='https'){
+					$this->parsed_url['port'] = 443;
+				}else{
+					$this->parsed_url['port'] = 80;
+				}
+			}
 		}
 
 		return true;
@@ -129,7 +144,7 @@ class Networkfsockopen implements iNetwork
 		$this->option['header'] = implode("\r\n",$this->httpheader);
 
 		$socket = fsockopen(
-					$this->parsed_url['host'],
+					($this->scheme=='https'?'ssl://':'') . $this->parsed_url['host'],
 					$this->port,
 					$this->errno,
 					$this->errstr,
@@ -158,10 +173,23 @@ class Networkfsockopen implements iNetwork
 		}
 
 		$this->responseHeader = substr($this->responseText,0,strpos($this->responseText, "\r\n\r\n"));
-	
+
 		$this->responseText = substr($this->responseText, strpos($this->responseText, "\r\n\r\n") + 4);
-		
+
 		$this->responseHeader = explode("\r\n",$this->responseHeader);
+
+		$i=$this->maxredirs;
+		if($this->maxredirs>0){
+			if (strstr($this->responseHeader[0],' 301 ') || strstr($this->responseHeader[0],' 302 ')){
+				fclose($socket);
+				$url = $this->getResponseHeader('Location');
+				$this->canreinit=false;
+				$this->open('Get',$url);
+				$this->setMaxRedirs($i-1);
+				$this->canreinit=true;
+				return $this->send();
+			}
+		}
 
 		if($this->getResponseHeader('Transfer-Encoding')=='chunked'){
 			if(!function_exists('http_chunked_decode')){
@@ -210,6 +238,10 @@ class Networkfsockopen implements iNetwork
 	}
 
 	private function reinit(){
+
+		$this->httpheader = array();
+	
+		if(!$this->canreinit)return;
 		$this->readyState = 0;        #状态
 		$this->responseBody = NULL;   #返回的二进制
 		$this->responseStream = NULL; #返回的数据流
@@ -221,15 +253,14 @@ class Networkfsockopen implements iNetwork
 		$this->option = array();
 		$this->url = '';
 		$this->postdata = array();
-		$this->httpheader = array();
 		$this->responseHeader = array();
 		$this->parsed_url = array();
-		$this->port = 80;
 		$this->timeout = 30;
 		$this->errstr = '';
 		$this->errno = 0;
 
 		$this->setRequestHeader('User-Agent','Mozilla/5.0');
+		$this->setMaxRedirs(1);
 	}
 	
     private function http_chunked_decode($chunk) { 
@@ -273,5 +304,9 @@ class Networkfsockopen implements iNetwork
 	
 	public function enableGzip(){
 		$this->isgzip = true;
+	}
+
+	public function setMaxRedirs($n=0){
+		$this->maxredirs=$n;
 	}
 }
