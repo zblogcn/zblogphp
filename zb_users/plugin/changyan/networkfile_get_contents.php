@@ -26,19 +26,28 @@ class Networkfile_get_contents implements iNetwork
 	private $httpheader = array();
 	private $responseHeader = array();
 	private $isgzip = false;
+	private $maxredirs = 0;
+	private $parsed_url = array();
 
 	public function __set($property_name, $value){
 		throw new Exception($property_name.' readonly');
 	}
 
 	public function __get($property_name){
-		if(strtolower($property_name)=='responsexml')
-		{
+		if(strtolower($property_name)=='responsexml'){
 			$w = new DOMDocument();
 			return $w->loadXML($this->responseText);
+		}elseif(strtolower($property_name)=='scheme'||
+				strtolower($property_name)=='host'||
+				strtolower($property_name)=='port'||
+				strtolower($property_name)=='user'||
+				strtolower($property_name)=='pass'||
+				strtolower($property_name)=='path'||
+				strtolower($property_name)=='query'||
+				strtolower($property_name)=='fragment'){
+			if(isset($this->parsed_url[strtolower($property_name)]))return $this->parsed_url[strtolower($property_name)];
 		}
-		else
-		{
+		else{
 			return $this->$property_name;
 		}
 	}
@@ -70,8 +79,9 @@ class Networkfile_get_contents implements iNetwork
 		$this->reinit();
 		$method=strtoupper($bstrMethod);
 		$this->option['method'] = $method;
+		$this->parsed_url = parse_url($bstrUrl);
 
-		if(!parse_url($bstrUrl))
+		if(!$this->parsed_url)
 		{
 			throw new Exception('URL Syntax Error!');
 		}
@@ -81,6 +91,13 @@ class Networkfile_get_contents implements iNetwork
 				$bstrUrl = substr($bstrUrl,0,strpos($bstrUrl,':')) . '://' . $bstrUser . ':' . $bstrPassword . '@' . substr($bstrUrl,strpos($bstrUrl,'/')+2);
 			}
 			$this->url=$bstrUrl;
+			if(!isset($this->parsed_url['port'])){
+				if($this->parsed_url['scheme']=='https'){
+					$this->parsed_url['port'] = 443;
+				}else{
+					$this->parsed_url['port'] = 80;
+				}
+			}
 		}
 
 		return true;
@@ -92,8 +109,7 @@ class Networkfile_get_contents implements iNetwork
 			$data=http_build_query($data);
 		}
 
-		if($this->option['method']=='POST')
-		{
+		if($this->option['method']=='POST'){
 
 			if($data==''){
 				$data=http_build_query($this->postdata);
@@ -106,6 +122,14 @@ class Networkfile_get_contents implements iNetwork
 		}
 
 		$this->option['header'] = implode("\r\n",$this->httpheader);
+
+		if($this->maxredirs>0){
+			$this->option['follow_location']=1;
+			$this->option['max_redirects']=$this->maxredirs;
+		}else{
+			$this->option['follow_location']=0;
+			$this->option['max_redirects']=0;
+		}
 
 		$this->responseText = file_get_contents(($this->isgzip==true?'compress.zlib://':'') . $this->url, false, stream_context_create(array('http' => $this->option)));
 
@@ -155,9 +179,14 @@ class Networkfile_get_contents implements iNetwork
 		$this->httpheader = array();
 		$this->responseHeader = array();
 		$this->setRequestHeader('User-Agent','Mozilla/5.0');
+		$this->setMaxRedirs(1);
 	}
 	
 	public function enableGzip(){
 		$this->isgzip = true;
+	}
+
+	public function setMaxRedirs($n=0){
+		$this->maxredirs=$n;
 	}
 }
