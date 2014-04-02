@@ -217,7 +217,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 
 ################################################################################################################
 function ViewIndex(){
-	global $zbp,$currenturl;
+	global $zbp;
 	
 	foreach ($GLOBALS['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
@@ -226,7 +226,7 @@ function ViewIndex(){
 		}
 	}
 
-	if($currenturl==$zbp->cookiespath||$currenturl==$zbp->cookiespath . 'index.php'||strpos($currenturl,$zbp->cookiespath . 'index.php?')===0){
+	if($zbp->currenturl==$zbp->cookiespath||$zbp->currenturl==$zbp->cookiespath . 'index.php'||strpos($zbp->currenturl,$zbp->cookiespath . 'index.php?')===0){
 		ViewList(null,null,null,null,null);
 	}elseif(isset($_GET['rewrite'])){
 		ViewAuto(GetVars('rewrite','GET'));
@@ -235,13 +235,13 @@ function ViewIndex(){
 	}elseif(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])){
 		ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('date','GET'),GetVars('tags','GET'));
 	}else{
-		ViewAuto($currenturl);
+		ViewAuto($zbp->currenturl);
 	}
 
 }
  
 function ViewFeed(){
-	global $zbp,$currenturl;
+	global $zbp;
 	
 	foreach ($GLOBALS['Filter_Plugin_ViewFeed_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
@@ -271,7 +271,7 @@ function ViewFeed(){
 }
 
 function ViewSearch(){
-	global $zbp,$currenturl;
+	global $zbp;
 	
 	foreach ($GLOBALS['Filter_Plugin_ViewSearch_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
