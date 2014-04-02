@@ -173,7 +173,7 @@ class ZBlogPHP{
 ################################################################################################################
 
 
-	#初始化连接
+	#初始化$zbp
 	public function Initialize(){
 
 		if($this->option['ZC_SITE_TURNOFF']==true){
