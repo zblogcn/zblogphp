@@ -2153,6 +2153,7 @@ function CountTagArrayString($string) {
 
 function CountMember(&$member) {
 	global $zbp;
+	if(!($member  instanceof  Member))return;
 
 	$id = $member->ID;
 
@@ -2179,8 +2180,10 @@ function CountMemberArray($array) {
 	$array = array_unique($array);
 	foreach ($array as $value) {
 		if ($value == 0) continue;
-		CountMember($zbp->members[$value]);
-		$zbp->members[$value]->Save();
+		if(isset($zbp->members[$value])){
+			CountMember($zbp->members[$value]);
+			$zbp->members[$value]->Save();
+		}
 	}
 }
 
