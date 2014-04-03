@@ -154,13 +154,16 @@ class Base
 		}
 		array_shift($keyvalue);
 
-		if ($this->ID  ==  0) {
+		$id_field=reset($this->datainfo);
+		$id_name=key($this->datainfo);
+		$id_field=$id_field[0];
+		
+		if ($this->$id_name  ==  0) {
 			$sql = $zbp->db->sql->Insert($this->table,$keyvalue);
-			$this->ID = $zbp->db->Insert($sql);
+			$this->$id_name = $zbp->db->Insert($sql);
 		} else {
-			$id_field=reset($this->datainfo);
-			$id_field=$id_field[0];
-			$sql = $zbp->db->sql->Update($this->table,$keyvalue,array(array('=',$id_field,$this->ID)));
+
+			$sql = $zbp->db->sql->Update($this->table,$keyvalue,array(array('=',$id_field,$this->$id_name)));
 			return $zbp->db->Update($sql);
 		}
 
@@ -170,8 +173,9 @@ class Base
 	function Del(){
 		global $zbp;
 		$id_field=reset($this->datainfo);
+		$id_name=key($this->datainfo);
 		$id_field=$id_field[0];
-		$sql = $zbp->db->sql->Delete($this->table,array(array('=',$id_field,$this->ID)));
+		$sql = $zbp->db->sql->Delete($this->table,array(array('=',$id_field,$this->$id_name)));
 		$zbp->db->Delete($sql);
 		return true;
 	}
