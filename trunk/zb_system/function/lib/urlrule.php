@@ -304,7 +304,11 @@ class UrlRule
 				$url=str_replace('%id%', '([0-9]+)', $url);
 			}else{
 				$url = $url .'(\?.*)? '.$zbp->cookiespath .'index\.php\?alias=$1&rewrite=$0';
-				$url=str_replace('%alias%', '([^/]+)', $url);
+				if($type=='article'){
+					$url=str_replace('%alias%', '(?!zb_)([^/]+)', $url);
+				}else{
+					$url=str_replace('%alias%', '(?!zb_)(.+)', $url);
+				}
 			}
 			//$url=str_replace('%category%', '(?:[^\./]+)', $url);
 			$url=str_replace('%category%', '(?:'.$fullcategory.')', $url);
