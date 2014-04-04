@@ -269,6 +269,8 @@ class ZBlogPHP{
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 
 		if($this->ismanage==true) $this->LoadManage();
+		
+		if(isset($this->templates['404']))Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
 
 		$this->isload=true;
 	}
@@ -1571,5 +1573,5 @@ function AddBuildModuleAll(){
 			}
 		}
 	}
-
+	
 }
