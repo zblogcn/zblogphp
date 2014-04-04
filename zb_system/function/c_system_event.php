@@ -226,7 +226,9 @@ function ViewIndex(){
 		}
 	}
 
-	if($zbp->currenturl==$zbp->cookiespath||$zbp->currenturl==$zbp->cookiespath . 'index.php'||strpos($zbp->currenturl,$zbp->cookiespath . 'index.php?')===0){
+	if( $zbp->currenturl==$zbp->cookiespath||
+		$zbp->currenturl==$zbp->cookiespath . 'index.php'||
+		strpos($zbp->currenturl,$zbp->cookiespath . 'index.php?')===0){
 		ViewList(null,null,null,null,null);
 	}elseif(isset($_GET['rewrite'])){
 		ViewAuto(GetVars('rewrite','GET'));
@@ -368,6 +370,12 @@ function ViewAuto($inpurl) {
 					$_REQUEST[$getn]=(string)$getv;
 				}
 			}
+			//iis+httpd.ini下如果存在真实文件
+			$realurl = $zbp->path . urldecode($url);
+			if(is_readable($realurl)){
+				die(file_get_contents($realurl));
+			}
+			unset($realurl);
 		}
 		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) !== true)){
 			$url = iconv('GBK', 'UTF-8//IGNORE//TRANSLIT', $url);
@@ -448,7 +456,6 @@ function ViewAuto($inpurl) {
 		return ViewList(null,null,null,null,null);
 	}
 
-	//ViewList(null,null,null,null,null);
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_End'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($url);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {

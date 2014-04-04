@@ -223,6 +223,16 @@ function ViewAuto($inpurl) {
 	}
 	$url = substr($url, strlen($zbp->cookiespath));
 	$url = urldecode($url);
+	
+	if (isset($_SERVER['SERVER_SOFTWARE'])) {
+		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) == true)){
+			$surl = $zbp->path . urldecode($url);
+			if(is_readable($surl)){
+				die(file_get_contents($surl));
+			}
+			unset($surl);
+		}
+	}
 
 	$r = UrlRule::Rewrite_url($zbp->option['ZC_INDEX_REGEX'], 'index');
 	$m = array();
