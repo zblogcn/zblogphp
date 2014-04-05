@@ -139,7 +139,7 @@ Z-BlogPHP  最终用户授权协议
 
 感谢您选择Z-BlogPHP。 Z-BlogPHP基于 PHP 的技术开发，采用MySQL 和 SQLite 作为数据库，全部源码开放。希望我们的努力能为您提供一个高效快速、强大的站点解决方案。
 
-Z-BlogPHP官方网址：http://www.rainbowsoft.org/
+Z-BlogPHP官方网址：http://www.zblogcn.com/
 
 为了使您正确并合法的使用本软件，请您在使用前务必阅读清楚下面的协议条款： 
 
@@ -155,7 +155,7 @@ Z-BlogPHP官方网址：http://www.rainbowsoft.org/
 
 三、协议规定的约束和限制
 
-1. 无论如何，即无论用途如何、是否经过修改或美化、修改程度如何，只要使用Z-BlogPHP 的整体或任何部分，未经书面许可，页面页脚处的版权标识（Powered by Z-BlogPHP） 和Z-BlogPHP官方网站（http://www.rainbowsoft.org）的链接都必须保留，而不能清除或修改。
+1. 无论如何，即无论用途如何、是否经过修改或美化、修改程度如何，只要使用Z-BlogPHP 的整体或任何部分，未经书面许可，页面页脚处的版权标识（Powered by Z-BlogPHP） 和Z-BlogPHP官方网站（http://www.zblogcn.com）的链接都必须保留，而不能清除或修改。
 2.您从应用中心下载的应用程序，未经应用程序开发者/所有者的书面许可，不得对其进行反向工程、反向汇编、反向编译等，不得擅自复制、修改、链接、转载、汇编、发表、出版、发展与之有关的衍生产品、作品等。
 3.如果您未能遵守本协议的条款，您的授权将被终止，所被许可的权利将被收回，并承担相应法律责任。
 
@@ -166,8 +166,8 @@ Z-BlogPHP官方网址：http://www.rainbowsoft.org/
 3.电子文本形式的授权协议如同双方书面签署的协议一样，具有完全的和等同的法律效力。您一旦开始确认本协议并安装Z-BlogPHP，即被视为完全理解并接受本协议的各项条款，在享有上述条款授予的权力的同时，受到相关的约束和限制。协议许可范围以外的行为，将直接违反本授权协议并构成侵权，我们有权随时终止授权，责令停止损害，并保留追究相关责任的权力。
 4.如果本软件带有其它软件的整合API示范例子包，这些文件版权不属于本软件官方，并且这些文件是没经过授权发布的，请参考相关软件的使用许可合法的使用。
 
-版权所有 ©2005-2013，rainbowsoft.org 保留所有权利。 
-协议发布时间：2013年8月1 日 版本最新更新：2013年8月1日 By rainbowsoft.org
+版权所有 ©2005-2013，RainbowSoft Studio 保留所有权利。 
+协议发布时间：2013年8月1 日 版本最新更新：2013年8月1日 By RainbowSoft Studio
 
 
   </textarea>
@@ -782,7 +782,7 @@ function InsertInfo(){
   $t->FileName="favorite";
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Content='<li><a href="http://bbs.rainbowsoft.org/" target="_blank">ZBlogger社区</a></li><li><a href="http://app.rainbowsoft.org/" target="_blank">Z-Blog应用中心</a></li><li><a href="http://weibo.com/zblogcn" target="_blank">Z-Blog新浪官微</a></li><li><a href="http://t.qq.com/zblogcn" target="_blank">Z-Blog腾讯官微</a></li>';
+  $t->Content='<li><a href="http://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li><li><a href="http://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="http://weibo.com/zblogcn" target="_blank">Z-Blog新浪官微</a></li><li><a href="http://t.qq.com/zblogcn" target="_blank">Z-Blog腾讯官微</a></li>';
   $t->HtmlID="divFavorites";
   $t->Type="ul";
   $t->Save();
@@ -807,7 +807,7 @@ function InsertInfo(){
   $t->FileName="misc";
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Content='<li><a href="http://www.rainbowsoft.org/" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/zblog.gif" height="31" width="88" alt="RainbowSoft Studio Z-Blog" /></a></li><li><a href="{#ZC_BLOG_HOST#}feed.php" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/rss.png" height="31" width="88" alt="订阅本站的 RSS 2.0 新闻聚合" /></a></li>';
+  $t->Content='<li><a href="http://www.zblogcn.com/" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/zblog.gif" height="31" width="88" alt="RainbowSoft Studio Z-Blog" /></a></li><li><a href="{#ZC_BLOG_HOST#}feed.php" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/rss.png" height="31" width="88" alt="订阅本站的 RSS 2.0 新闻聚合" /></a></li>';
   $t->HtmlID="divMisc";
   $t->Type="ul";
   $t->IsHideTitle=true;

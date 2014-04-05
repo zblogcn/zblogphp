@@ -7,7 +7,7 @@
 	<file name='zb_system\admin\admin_footer.php' md5='CC8436BB9D980D04754EA3380482897E' crc32='B281EEAC'/>
 	<file name='zb_system\admin\admin_header.php' md5='7BC27E1427FF889825D918E5D54639AB' crc32='900BBCC5'/>
 	<file name='zb_system\admin\admin_left.php' md5='CBCFE7D814DEC4DC7EA6B019272BF3E4' crc32='FBCF02FA'/>
-	<file name='zb_system\admin\admin_top.php' md5='DD09088610F7E3346E445905B22426F5' crc32='7C923CCA'/>
+	<file name='zb_system\admin\admin_top.php' md5='3DC9E03B2B876E4DCD399B999FB68E6E' crc32='C8B40D6F'/>
 	<file name='zb_system\admin\category_edit.php' md5='A5408DC1F2DCFD544CA31E7251B29558' crc32='2C6A7766'/>
 	<file name='zb_system\admin\edit.php' md5='915C64590115F9566F60C05B7E567E0C' crc32='74D4E1DC'/>
 	<file name='zb_system\admin\index.php' md5='CBB401FC650A346037F141AE4B0C1E31' crc32='198E79A8'/>
@@ -40,7 +40,7 @@
 	<file name='zb_system\defend\default\post-single.php' md5='93D48A3FD521167F6D509A336AD10E48' crc32='9DB48C85'/>
 	<file name='zb_system\defend\default\sidebar.php' md5='5C6B556F708D0FA9F5820C8DF4BAEF9C' crc32='FF17917'/>
 	<file name='zb_system\defend\default\single.php' md5='E24A81A1BF3334DC25FD30174E459A32' crc32='21B132D7'/>
-	<file name='zb_system\function\c_system_admin.php' md5='4A12B078F1B1795C26EA94167EDF5C6B' crc32='B6ABEA25'/>
+	<file name='zb_system\function\c_system_admin.php' md5='5E1A8D280B875ECA611E8E41FEFD984D' crc32='638B49C7'/>
 	<file name='zb_system\function\c_system_base.php' md5='9F7F964FA5B598EB7A98CC0828D1DDDD' crc32='A5E6922B'/>
 	<file name='zb_system\function\c_system_common.php' md5='91107E96FB4E3A7CA392C287AD3B0FBA' crc32='2421F38'/>
 	<file name='zb_system\function\c_system_debug.php' md5='9D853AC520D01B28E41CF475706A795A' crc32='15DAF51F'/>
@@ -72,7 +72,7 @@
 	<file name='zb_system\function\lib\upload.php' md5='06782DCE23A438628546FD6302819F86' crc32='F03A85C8'/>
 	<file name='zb_system\function\lib\urlrule.php' md5='235B5AE16544312855E08FDAF7E9360C' crc32='DE465FD6'/>
 	<file name='zb_system\function\lib\validatecode.php' md5='D577D30DFFCAB0D1443E75CEA149E379' crc32='CB395421'/>
-	<file name='zb_system\function\lib\zblogphp.php' md5='B26932B06D37FC5000CAD70D25FBC1BE' crc32='71B449A4'/>
+	<file name='zb_system\function\lib\zblogphp.php' md5='EC36096CCF29D5CAADA161B5B0CD7543' crc32='4A02242D'/>
 	<file name='zb_system\image\admin\app-logo.png' md5='C8B4141B48DFE3415EE2F9668E9BAD17' crc32='7D5E99CC'/>
 	<file name='zb_system\image\admin\arrow-3-right.png' md5='BA3545574C07C5146A7CA472B37191DB' crc32='9613739F'/>
 	<file name='zb_system\image\admin\arrow_turn_right.png' md5='B01390AFF834F6050F92E7501D2515D4' crc32='CF39218A'/>
