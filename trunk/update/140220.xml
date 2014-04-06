@@ -43,7 +43,7 @@
 	<file name='zb_system\function\c_system_admin.php' md5='5E1A8D280B875ECA611E8E41FEFD984D' crc32='638B49C7'/>
 	<file name='zb_system\function\c_system_base.php' md5='9F7F964FA5B598EB7A98CC0828D1DDDD' crc32='A5E6922B'/>
 	<file name='zb_system\function\c_system_common.php' md5='91107E96FB4E3A7CA392C287AD3B0FBA' crc32='2421F38'/>
-	<file name='zb_system\function\c_system_debug.php' md5='9D853AC520D01B28E41CF475706A795A' crc32='15DAF51F'/>
+	<file name='zb_system\function\c_system_debug.php' md5='236599C4C1CF9C73CE78BFEFCF0FBEFE' crc32='13AC45B5'/>
 	<file name='zb_system\function\c_system_event.php' md5='E9E9CA5911A0DBABB6B7C048CC821C46' crc32='F84EA965'/>
 	<file name='zb_system\function\c_system_misc.php' md5='420CB9C9EE5FAAA5E251ECE4D6B66D74' crc32='581F4F91'/>
 	<file name='zb_system\function\c_system_plugin.php' md5='7CDA19014B5568CF6E67964EACB09D4C' crc32='D94E3A93'/>
