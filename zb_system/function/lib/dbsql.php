@@ -224,12 +224,12 @@ class DbSql #extends AnotherClass
 	}
 
 
-	public function ParseWhere($where,$changewhere=''){
+	public function ParseWhere($where,$changewhere=null){
 
 		$sqlw=null;
 		if(empty($where))return null;
 
-		if(!empty($changewhere)){
+		if(!is_null($changewhere)){
 			$sqlw .= " $changewhere ";
 		}else{
 			$sqlw .= ' WHERE ';

@@ -108,6 +108,8 @@ class ZBlogException {
 	}
 
 	function get_code($file, $line) {
+		if(strcasecmp($file,'Unknown')==0)return array();
+		if(!is_readable($file))return array();
 		$aFile = array_slice(file($file), max(0, $line - 5), 10, true);
 		foreach ($aFile as &$sData) { //&$ = ByRef
 			$sData = htmlspecialchars($sData);
