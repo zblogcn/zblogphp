@@ -202,6 +202,7 @@ class App
 
 		@file_put_contents($path, $s);
 
+		return true;
 	}
 
 	private $dirs=array();
@@ -303,7 +304,6 @@ class App
 		}
 
 
-
 		$s.='</app>';
 
 		return $s;
@@ -341,7 +341,4 @@ class App
 		return true;
 	}
 
-	public function SaveInfo(){
-
-	}
 }
