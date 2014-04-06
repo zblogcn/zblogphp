@@ -133,7 +133,7 @@ if($mod->FileName=='catalog'){
 	</form>
 	<script type="text/javascript">
 function checkInfo(){
-  document.getElementById("edit").action="../cmd.php?act=ModulePst";
+  document.getElementById("edit").action="../cmd.php?act=ModulePst<?php echo '&token='. $zbp->GetToken();?>";
 
   if(!$("#edtName").val()){
     alert("<?php echo $lang['error']['72']?>");

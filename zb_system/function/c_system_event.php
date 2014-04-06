@@ -372,7 +372,7 @@ function ViewAuto($inpurl) {
 			}
 			//iis+httpd.ini下如果存在真实文件
 			$realurl = $zbp->path . urldecode($url);
-			if(is_readable($realurl)){
+			if(is_readable($realurl)&&is_file($realurl)){
 				die(file_get_contents($realurl));
 			}
 			unset($realurl);
