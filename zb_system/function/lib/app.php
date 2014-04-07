@@ -103,8 +103,9 @@ class App
 	public function LoadInfoByXml($type,$id){
 		global $zbp;
 		$path=$zbp->usersdir . $type . '/' . $id . '/' . $type . '.xml';
-		if(!is_readable($path)){return;}
-		$xml = simplexml_load_file($path);
+		if(!is_readable($path))return false;
+		$xml = @simplexml_load_file($path);
+		if(!$xml)return false;
 		$appver = $xml->attributes();
 		if($appver <> 'php'){return false;}
 
