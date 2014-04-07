@@ -91,7 +91,11 @@ function install1(){
 
 	echo "<p>正在努力地下载数据包...</p>";
 	ob_flush();
-	$GLOBALS['s']=file_get_contents('compress.zlib://' . 'http://update.rainbowsoft.org/zblogphp/?install');
+	if( version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0 ){
+		$GLOBALS['s']=file_get_contents('compress.zlib://' . 'http://update.rainbowsoft.org/zblogphp/?install');
+	}else{
+		$GLOBALS['s']=file_get_contents('http://update.rainbowsoft.org/zblogphp/?install');
+	}
 	//file_put_contents('release.xml',$GLOBALS['s']);
 
 }
