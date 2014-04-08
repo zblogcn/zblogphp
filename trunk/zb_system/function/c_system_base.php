@@ -358,7 +358,7 @@ $zbp->Initialize();
 
 
 #加载主题内置的插件
-if (is_readable($filename = $usersdir . 'theme/'.$blogtheme.'/include.php')) {
+if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php')) {
 	require $filename;
 }
 
@@ -375,5 +375,5 @@ unset($ap);
 unset($filename);
 
 
-#激活所有已加载的 插件
+#激活所有已加载的插件
 ActivePlugin();
