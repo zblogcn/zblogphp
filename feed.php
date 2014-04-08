@@ -13,8 +13,6 @@ $zbp->Load();
 
 $action='feed';
 
-if(!$zbp->CheckRights($action)){Http404();die;}
-
 foreach ($GLOBALS['Filter_Plugin_Feed_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
 ViewFeed();

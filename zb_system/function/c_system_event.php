@@ -251,6 +251,8 @@ function ViewFeed(){
 			return $fpreturn;
 		}
 	}
+	
+	if(!$zbp->CheckRights($GLOBALS['action'])){Http404();die;}
 
 	$rss2 = new Rss2($zbp->name,$zbp->host,$zbp->subname);
 
@@ -281,6 +283,8 @@ function ViewSearch(){
 			return $fpreturn;
 		}
 	}
+	
+	if(!$zbp->CheckRights($GLOBALS['action'])){Redirect('./');}
 
 	$q=trim(strip_tags(GetVars('q','GET')));
 
@@ -469,16 +473,13 @@ function ViewAuto($inpurl) {
 
 function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	global $zbp;
+
 	foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($page, $cate, $auth, $date, $tags);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			return $fpreturn;
 		}
 	}
-
-	//if($cate=='index.php'|$auth=='index.php'|$date=='index.php'|$tags=='index.php'){
-	//	$cate=$auth=$date=$tags=null;
-	//}
 
 	$type = 'index';
 	if ($cate !== null)

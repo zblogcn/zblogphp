@@ -116,7 +116,6 @@ class ZBlogPHP{
 		if (trim($this->option['ZC_BLOG_CLSID'])==''){
 			$this->option['ZC_BLOG_CLSID']=GetGuid();
 		}
-		$this->guid=$this->option['ZC_BLOG_CLSID'];
 
 		$this->title=&$blogtitle;
 		$this->name=&$blogname;
@@ -124,6 +123,7 @@ class ZBlogPHP{
 		$this->theme=&$blogtheme;
 		$this->style=&$blogstyle;
 
+		$this->guid=$this->option['ZC_BLOG_CLSID'];
 		$this->managecount=$this->option['ZC_MANAGE_COUNT'];
 		$this->pagebarcount=$this->option['ZC_PAGEBAR_COUNT'];
 		$this->searchcount = $this->option['ZC_SEARCH_COUNT'];
@@ -262,6 +262,8 @@ class ZBlogPHP{
 		
 		$this->LoadTemplate();
 		
+		if(isset($this->templates['404']))Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
+		
 		$this->MakeTemplatetags();
 		
 		$this->template=$this->PrepareTemplate();
@@ -270,8 +272,6 @@ class ZBlogPHP{
 
 		if($this->ismanage==true) $this->LoadManage();
 		
-		if(isset($this->templates['404']))Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
-
 		$this->isload=true;
 	}
 
@@ -396,6 +396,7 @@ class ZBlogPHP{
 	public function DelConfig($name){
 		$sql = $this->db->sql->Delete($this->table['Config'],array(array('=','conf_Name',$name)));
 		$this->db->Delete($sql);
+		return true;
 	}
 
 	public function SaveConfig($name){
@@ -416,6 +417,8 @@ class ZBlogPHP{
 			$sql = $this->db->sql->Update($this->table['Config'],$kv,array(array('=','conf_Name',$name)));
 			$this->db->Update($sql);
 		}
+
+		return true;
 	}
 
 	public function Config($name){
@@ -436,14 +439,12 @@ class ZBlogPHP{
 
 
 	public function SaveCache(){
-
 		#$s=$this->usersdir . 'cache/' . $this->guid . '.cache';
 		#$c=serialize($this->cache);
 		#@file_put_contents($s, $c);
-
 		//$this->configs['cache']=$this->cache;
 		$this->SaveConfig('cache');
-
+		return true;
 	}
 
 	public function LoadCache(){
@@ -453,6 +454,7 @@ class ZBlogPHP{
 		#	$this->cache=unserialize(@file_get_contents($s));
 		#}
 		$this->cache=$this->Config('cache');
+		return true;
 	}
 
 
@@ -482,9 +484,7 @@ class ZBlogPHP{
 			$this->Config('system')->$key = $value;
 		}
 		$this->SaveConfig('system');
-
-		//$this->cache->refesh=time();
-		//$this->SaveCache();
+		return true;
 	}
 
 
@@ -515,7 +515,7 @@ class ZBlogPHP{
 			if($key=='ZC_MYSQL_PERSISTENT')continue;
 			$this->option[$key]=$value;
 		}
-
+		return true;
 	}
 
 
