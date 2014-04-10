@@ -180,7 +180,11 @@ class Networkfsockopen implements iNetwork
 
 		$i=$this->maxredirs;
 		if($this->maxredirs>0){
-			if (strstr($this->responseHeader[0],' 301 ') || strstr($this->responseHeader[0],' 302 ')){
+			if (strstr($this->responseHeader[0],' 301 ') ||
+				strstr($this->responseHeader[0],' 302 ') ||
+				strstr($this->responseHeader[0],' 303 ') ||
+				strstr($this->responseHeader[0],' 307 ')
+				){
 				fclose($socket);
 				$url = $this->getResponseHeader('Location');
 				$this->canreinit=false;

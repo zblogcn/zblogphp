@@ -69,7 +69,7 @@ $zbpvers['130707']='1.0 Beta Build 130707';
 $zbpvers['131111']='1.0 Beta2 Build 131111';
 $zbpvers['131221']='1.1 Taichi Build 131221';
 $zbpvers['140220']='1.2 Hippo Build 140220';
-$zbpvers['140606']='1.3 Hummer Build 140606';
+$zbpvers['140606']='1.3 Hobbit Build 140606';
 
 
 #定义常量

@@ -50,24 +50,26 @@ class Template{
 
 		//Step1:替换<?php块
 		$this->replacePHP($content);
-		//Step2:引入主题
+		//Step2:解析PHP
+		$this->parsePHP($content);	
+		//Step3:引入主题
 		$this->parse_template($content);
-		//Step3:替换配置
+		//Step4:解析module
+		$this->parse_module($content);	
+		//Step5:替换配置
 		$this->parse_option($content);
-		//Step4:替换标签
+		//Step6:替换标签
 		$this->parse_vars($content);
-		//Step?:替换函数
+		//Step6:替换函数
 		$this->parse_function($content);
-		//Step5:解析If
+		//Step7:解析If
 		$this->parse_if($content);
-		//Step6:解析foreach
+		//Step8:解析foreach
 		$this->parse_foreach($content);
-		//Step7:解析for
+		//Step9:解析for
 		$this->parse_for($content);
-		//Step8:解析module
-		$this->parse_module($content);
 		//StepN:解析PHP
-		$this->parsePHP($content);
+		$this->parsePHP2($content);
 
 		foreach ($GLOBALS['Filter_Plugin_Template_Compiling_End'] as $fpname => &$fpsignal)
 		{
@@ -80,7 +82,29 @@ class Template{
 
 	private function replacePHP(&$content)
 	{
-		$content = preg_replace("/\<\?php[\d\D]+?\?\>/si", '', $content);
+		$content = preg_replace("/\<\?php[\d\D]+?\?\>/", '', $content);
+	}
+
+	private $parsephpcodes=array();
+	private function parsePHP(&$content)
+	{
+		$this->parsephpcodes=array();
+		$matches=array();
+		if($i=preg_match_all ( '/\{php\}([\D\d]+?)\{\/php\}/si' ,  $content ,  $matches )>0){
+			if(isset($matches[1]))
+				foreach($matches[1] as $j=>$p) {
+					$content = str_replace($p,'<!--'.$j.'-->',$content);
+					$this->parsephpcodes[$j]=$p;
+				}
+		}
+	}
+	private function parsePHP2(&$content)
+	{
+		foreach($this->parsephpcodes as $j=>$p) {
+			$content = str_replace('{php}<!--'.$j.'-->{/php}','<'.'?php '.$p.' ?'.'>',$content);
+		}
+		$content = preg_replace('/\{php\}([\D\d]+?)\{\/php\}/', '<'.'?php $1 ?'.'>', $content);
+		$this->parsephpcodes=array();
 	}
 
 	private function parse_template(&$content)
@@ -96,11 +120,6 @@ class Template{
 	private function parse_option(&$content)
 	{
 		$content = preg_replace('#\{\#([^\}]+)\#\}#', '<?php echo $option[\'\\1\']; ?>', $content);
-	}
-
-	private function parsePHP(&$content)
-	{
-		$content = preg_replace('/\{php\}([\D\d]+?)\{\/php\}/', '<?php $1 ?>', $content);
 	}
 
 	private function parse_vars(&$content)
