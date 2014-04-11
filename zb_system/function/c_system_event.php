@@ -231,7 +231,7 @@ function ViewIndex(){
 		strpos($zbp->currenturl,$zbp->cookiespath . 'index.php?')===0){
 		ViewList(null,null,null,null,null);
 	}elseif(isset($_GET['rewrite'])){
-		ViewAuto(GetVars('rewrite','GET'));
+		ViewAuto($zbp->currenturl);
 	}elseif(isset($_GET['id'])||isset($_GET['alias'])){
 		ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
 	}elseif(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])){
@@ -355,34 +355,20 @@ function ViewAuto($inpurl) {
 		$zbp->ShowError(2, __FILE__, __LINE__);
 		return null;
 	}
-	
+
 	$url=GetValueInArray(explode('?',$inpurl),'0');
 	
 	if($zbp->cookiespath === substr($url, 0 , strlen($zbp->cookiespath)))
 		$url = substr($url, strlen($zbp->cookiespath));
 
 	if (isset($_SERVER['SERVER_SOFTWARE'])) {
-		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (strpos($url,'/index.php/') !== false))
-			$url = str_replace('/index.php/','/',$url);
 		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) == true)){
-			if(strpos($inpurl,'?')!==false){
-				$get=GetValueInArray(explode('?',$inpurl),'1');
-				$getn=GetValueInArray(explode('=',$get),'0');
-				$getv=GetValueInArray(explode('=',$get),'1');
-				if($getn){
-					$_GET[$getn]=(string)$getv;
-					$_REQUEST[$getn]=(string)$getv;
-				}
-			}
 			//iis+httpd.ini下如果存在真实文件
 			$realurl = $zbp->path . urldecode($url);
 			if(is_readable($realurl)&&is_file($realurl)){
 				die(file_get_contents($realurl));
 			}
 			unset($realurl);
-		}
-		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) !== true)){
-			$url = iconv('GBK', 'UTF-8//IGNORE//TRANSLIT', $url);
 		}
 	}
 
