@@ -176,10 +176,18 @@ class UrlRule
 		$s .='   <rules>' . "\r\n";
 
 		$s .='    <rule name="'.$zbp->cookiespath.' Z-BlogPHP Imported Rule" stopProcessing="true">' . "\r\n";
-		$s .='     <match url="^(.*)?" ignoreCase="false" />' . "\r\n";
+		$s .='     <match url="^.*?" ignoreCase="false" />' . "\r\n";
 		$s .='      <conditions logicalGrouping="MatchAll">' . "\r\n";
 		$s .='       <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />' . "\r\n";
 		$s .='       <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />' . "\r\n";
+		$s .='      </conditions>' . "\r\n";
+		$s .='     <action type="Rewrite" url="index.php/{R:0}" />' . "\r\n";
+		$s .='    </rule>' . "\r\n";
+		
+		$s .='    <rule name="'.$zbp->cookiespath.' Z-BlogPHP Imported Rule index.php" stopProcessing="true">' . "\r\n";
+		$s .='     <match url="^index.php/.*?" ignoreCase="false" />' . "\r\n";
+		$s .='      <conditions logicalGrouping="MatchAll">' . "\r\n";
+		$s .='       <add input="{REQUEST_FILENAME}" matchType="IsFile" />' . "\r\n";
 		$s .='      </conditions>' . "\r\n";
 		$s .='     <action type="Rewrite" url="index.php/{R:0}" />' . "\r\n";
 		$s .='    </rule>' . "\r\n";
@@ -206,6 +214,33 @@ class UrlRule
 		$s .='}' . "\r\n";
 		return $s;
 	}
+	
+	public function Make_lighttpd(){
+		global $zbp;
+		$s ='';
+
+		//$s .='# Handle 404 errors' . "\r\n";
+		//$s .='server.error-handler-404 = "/index.php"' . "\r\n";
+		//$s .='' . "\r\n";
+		
+		$s .='# Rewrite rules' . "\r\n";
+		$s .='url.rewrite-if-not-file = (' . "\r\n";
+ 
+		$s .='' . "\r\n";
+		$s .='"^'.$zbp->cookiespath.'(zb_install|zb_system|zb_users)/(.*)" => "$0",' . "\r\n";
+ 
+		$s .='' . "\r\n";
+		$s .='"^'.$zbp->cookiespath.'(.*.php)" => "$0",' . "\r\n";
+ 
+		$s .='' . "\r\n";
+		$s .='"^'.$zbp->cookiespath.'(.*)$" => "'.$zbp->cookiespath.'index.php/$0"' . "\r\n";
+
+		$s .='' . "\r\n";
+		$s .=')' . "\r\n";
+		
+		
+		return $s;
+	}	
 
 	public function Make_httpdini(){
 		global $zbp;
@@ -252,7 +287,7 @@ class UrlRule
 				$r=0;
 				$url=str_replace($matches[0],'(?:'.$matches[0].')<:1:>',$url);
 			}
-			$url = $url .' '.$zbp->cookiespath .'index\.php\?page=$1&rewrite=$0';
+			$url = $url .' '.$zbp->cookiespath .'index\.php\?page=$1&rewrite=1';
 			$url=str_replace('%poaogoe%', '([0-9]*)', $url);
 		}
 		if($type=='cate'||$type=='tags'||$type=='date'||$type=='auth'){
@@ -261,7 +296,7 @@ class UrlRule
 			if(isset($matches[0])){
 				$url=str_replace($matches[0],'(?:'.$matches[0].')?',$url);
 			}
-			$url = $url .' '.$zbp->cookiespath . 'index\.php\?'. $type .'=$1&page=$2&rewrite=$0';
+			$url = $url .' '.$zbp->cookiespath . 'index\.php\?'. $type .'=$1&page=$2&rewrite=1';
 			$url=str_replace('%poaogoe%', '([0-9]*)', $url);
 			$url=str_replace('%id%', '([0-9]+)', $url);
 			$url=str_replace('%date%', '([0-9\-]+)', $url);
@@ -273,10 +308,10 @@ class UrlRule
 		}
 		if($type=='page'||$type=='article'){
 			if(strpos($url, '%alias%')===false){
-				$url = $url .'(\?.*)? '.$zbp->cookiespath .'index\.php\?id=$1&rewrite=$0';
+				$url = $url .'(\?.*)? '.$zbp->cookiespath .'index\.php\?id=$1&rewrite=1';
 				$url=str_replace('%id%', '([0-9]+)', $url);
 			}else{
-				$url = $url .'(\?.*)? '.$zbp->cookiespath .'index\.php\?alias=$1&rewrite=$0';
+				$url = $url .'(\?.*)? '.$zbp->cookiespath .'index\.php\?alias=$1&rewrite=1';
 				if($type=='article'){
 					$url=str_replace('%alias%', '(?!zb_)([^/]+)', $url);
 				}else{
@@ -298,5 +333,5 @@ class UrlRule
 
 	}
 
-
+	
 }

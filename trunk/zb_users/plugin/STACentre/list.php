@@ -19,7 +19,7 @@ if(count($_GET)>0){
 	}elseif(GetVars('mak','GET')=='2'){
 		@file_put_contents($zbp->path . 'web.config',show_webconfig());
 	}elseif(GetVars('mak','GET')=='3'){
-		@file_put_contents($zbp->path . 'httpd.ini',iconv('UTF-8', 'ASCII//IGNORE', GetVars('ta_httpini')?GetVars('ta_httpini'):show_httpini()));
+		@file_put_contents($zbp->path . 'httpd.ini',show_httpini());
 	}
 
 	if(GetVars('del','GET')=='1'){
@@ -128,12 +128,12 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 			  
 			  
                 <div class="tab-content" style='border:none;padding:0px;margin:0;' id="tab3">
-<textarea id="ta_httpini" style="width:99%;height:200px">
+<textarea id="ta_httpini" style="width:99%;height:200px" readonly>
 <?php echo htmlentities(show_httpini())?>
 </textarea>
                   <hr/>
                   <p>
-                    <input type="button" onclick="window.location.href='?mak=3&ta_httpini='+escape($(&quot;#ta_httpini&quot;).val());" value="创建httpd.ini" />
+                    <input type="button" onclick="window.location.href='?mak=3'" value="创建httpd.ini" />
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="button" onclick="window.location.href='?del=3'" value="删除httpd.ini" />
                     <hr/><span class="star">请在网站根目录创建httpd.ini文件并把相关内容复制进去,httpd.ini文件必须为ANSI编码,也可以点击按钮生成.</span>

@@ -188,51 +188,28 @@ function Logout() {
 function ViewAuto($inpurl) {
 	global $zbp;
 	
-	$url=GetValueInArray(explode('?',$inpurl),'0');
-
-	foreach ($GLOBALS['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
-		$fpreturn = $fpname($url);
-		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			return $fpreturn;
-		}
-	}
-
 	if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') {
 		$zbp->ShowError(2, __FILE__, __LINE__);
-
 		return null;
 	}
 
-	if (isset($_SERVER['SERVER_SOFTWARE'])) {
-		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (strpos($url,'/index.php/') === 0))
-			$url = str_replace('/index.php/','/',$url);
-		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) == true)){
-			if(strpos($inpurl,'?')!==false){
-				$get=GetValueInArray(explode('?',$inpurl),'1');
-				$getn=GetValueInArray(explode('=',$get),'0');
-				$getv=GetValueInArray(explode('=',$get),'1');
-				if($getn){
-					$_GET[$getn]=(string)$getv;
-					$_REQUEST[$getn]=(string)$getv;
-				}
-			}
-		}
-		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) !== true)){
-			$url = iconv('GBK', 'UTF-8//TRANSLIT//IGNORE', $url);
-		}
-	}
-	$url = substr($url, strlen($zbp->cookiespath));
-	$url = urldecode($url);
+	$url=GetValueInArray(explode('?',$inpurl),'0');
 	
+	if($zbp->cookiespath === substr($url, 0 , strlen($zbp->cookiespath)))
+		$url = substr($url, strlen($zbp->cookiespath));
+
 	if (isset($_SERVER['SERVER_SOFTWARE'])) {
 		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) == true)){
-			$surl = $zbp->path . urldecode($url);
-			if(is_readable($surl)){
-				die(file_get_contents($surl));
+			//iis+httpd.ini下如果存在真实文件
+			$realurl = $zbp->path . urldecode($url);
+			if(is_readable($realurl)&&is_file($realurl)){
+				die(file_get_contents($realurl));
 			}
-			unset($surl);
+			unset($realurl);
 		}
 	}
+
+	$url = urldecode($url);
 
 	$r = UrlRule::Rewrite_url($zbp->option['ZC_INDEX_REGEX'], 'index');
 	$m = array();
@@ -305,8 +282,7 @@ function ViewAuto($inpurl) {
 	if($url==''||$url=='index.php'){
 		return ViewList(null,null,null,null,null);
 	}
-	
-	//ViewList(null,null,null,null,null);
+
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_End'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($url);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
