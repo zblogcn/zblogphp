@@ -227,15 +227,14 @@ function ViewIndex(){
 	}
 
 	if( $zbp->currenturl==$zbp->cookiespath||
-		$zbp->currenturl==$zbp->cookiespath . 'index.php'||
-		strpos($zbp->currenturl,$zbp->cookiespath . 'index.php?')===0){
+		$zbp->currenturl==$zbp->cookiespath . 'index.php' ){
 		ViewList(null,null,null,null,null);
-	}elseif(isset($_GET['rewrite'])){
-		ViewAuto($zbp->currenturl);
 	}elseif(isset($_GET['id'])||isset($_GET['alias'])){
 		ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
 	}elseif(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])){
 		ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('date','GET'),GetVars('tags','GET'));
+	//}elseif(isset($_GET['rewrite'])){
+	//	ViewAuto($zbp->currenturl);
 	}else{
 		ViewAuto($zbp->currenturl);
 	}
