@@ -115,7 +115,8 @@ class ZBlogPHP{
 		if (trim($this->option['ZC_BLOG_CLSID'])==''){
 			$this->option['ZC_BLOG_CLSID']=GetGuid();
 		}
-		$this->guid=$this->option['ZC_BLOG_CLSID'];
+
+		$this->guid=&$this->option['ZC_BLOG_CLSID'];
 
 		$this->title=&$blogtitle;
 		$this->name=&$blogname;

@@ -116,6 +116,7 @@ class ZBlogPHP{
 		if (trim($this->option['ZC_BLOG_CLSID'])==''){
 			$this->option['ZC_BLOG_CLSID']=GetGuid();
 		}
+		$this->guid=&$this->option['ZC_BLOG_CLSID'];
 
 		$this->title=&$blogtitle;
 		$this->name=&$blogname;
@@ -123,7 +124,6 @@ class ZBlogPHP{
 		$this->theme=&$blogtheme;
 		$this->style=&$blogstyle;
 
-		$this->guid=$this->option['ZC_BLOG_CLSID'];
 		$this->managecount=$this->option['ZC_MANAGE_COUNT'];
 		$this->pagebarcount=$this->option['ZC_PAGEBAR_COUNT'];
 		$this->searchcount = $this->option['ZC_SEARCH_COUNT'];
@@ -472,7 +472,7 @@ class ZBlogPHP{
 
 		$this->option['ZC_BLOG_CLSID']=$this->guid;
 
-		if( strpos('|SAE|BAE2|ACE|', '|'.$this->option['ZC_YUN_SITE'].'|')===false ){
+		if( strpos('|SAE|BAE2|ACE|TXY|', '|'.$this->option['ZC_YUN_SITE'].'|')===false ){
 			$s="<?php\r\n";
 			$s.="return ";
 			$s.=var_export($this->option,true);
@@ -665,8 +665,11 @@ function DelBuildModule($modfilename){
 }
 
 function AddBuildModuleAll(){
-	foreach ($this->modulesbyfilename as $key => $value) {
-		$this->readymodules[$key]=$key;
+
+	$m=array('catalog','calendar','comments','previous','archives','navbar','tags','authors');
+
+	foreach ($m as $key => $value) {
+		$this->readymodules[$value]=$value;
 	}
 }
 
@@ -930,7 +933,7 @@ function AddBuildModuleAll(){
 
 	public function BuildTemplate(){
 
-		if( strpos('|SAE|BAE2|ACE|', '|'.$this->option['ZC_YUN_SITE'].'|')!==false )return false;
+		if( strpos('|SAE|BAE2|ACE|TXY|', '|'.$this->option['ZC_YUN_SITE'].'|')!==false )return false;
 		//初始化模板
 		$this->LoadTemplate();
 
