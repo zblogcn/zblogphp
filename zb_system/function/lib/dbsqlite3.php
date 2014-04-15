@@ -56,10 +56,12 @@ class DbSQLite3 implements iDataBase
 		// 遍历出来
 		$results =$this->db->query($query);
 		$data = array();
-		if($results){
+		if($results->numColumns()>0){
 			while($row = $results->fetchArray()){
 				$data[] = $row;
 			}
+		}else{
+			$data[] = $results->numColumns();
 		}
 		return $data;
 	}

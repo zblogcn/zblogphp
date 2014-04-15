@@ -79,11 +79,27 @@ class DbMySQLi implements iDataBase
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		$results = mysqli_query($this->db,$query);
 		$data = array();
-		if($results){
+		if(is_object($results)){
 			while($row = mysqli_fetch_assoc($results)){
 				$data[] = $row;
 			}
+		}else{
+			$data[]=$results;
 		}
+
+		if(true==true){
+		//if(true!==true){
+			$query="EXPLAIN " . $query;
+			$results2 = mysqli_query($this->db,$query);
+			$explain=array();
+			if($results2){
+				while($row = mysqli_fetch_assoc($results2)){
+					$explain[] = $row;
+				}
+			}
+			logs("\r\n" . $query . "\r\n" . var_export($explain,true));
+		}
+
 		return $data;
 	}
 

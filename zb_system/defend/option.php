@@ -13,6 +13,9 @@
  */
 return array(
 
+	// '---------------------------------关闭网站-----------------------------------
+	'ZC_SITE_TURNOFF'=>false,
+
 	// '---------------------------------网站基本设置-----------------------------------
 	'ZC_BLOG_HOST' => 'http://localhost/',
 	'ZC_BLOG_NAME' => '我的网站',
@@ -22,9 +25,6 @@ return array(
 	'ZC_BLOG_COPYRIGHT' => 'Copyright Your WebSite.Some Rights Reserved.',
 	'ZC_BLOG_LANGUAGE' => 'zh-CN',
 	'ZC_BLOG_LANGUAGEPACK' => 'SimpChinese',
-
-	// '---------------------------------关闭网站-----------------------------------
-	'ZC_SITE_TURNOFF'=>false,
 
 	// '----------------------------数据库配置---------------------------------------
 	//mysql|sqlite|sqlite3|pdo_mysql

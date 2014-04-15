@@ -84,23 +84,13 @@ class DbMySQL implements iDataBase
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		$results = mysql_query($query);
 		$data = array();
-		if($results){
+		if(is_resource($results)){
 			while($row = mysql_fetch_assoc($results)){
 				$data[] = $row;
 			}
+		}else{
+			$data[] = $results;
 		}
-//$b=true;
-$b=false;
-if($b){
-	$query="EXPLAIN " . $query;
-	$results2 = mysql_query($query);
-	if($results2){
-		while($row = mysql_fetch_assoc($results2)){
-			$explain[] = $row;
-		}
-	}
-	logs("\r\n" . $query . "\r\n" . var_export($explain,true));
-}
 		return $data;
 	}
 

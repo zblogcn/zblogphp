@@ -101,7 +101,7 @@ class ZBlogPHP{
 		ZBlogException::SetErrorHook();
 
 		//基本配置加载到$zbp内
-		$this->version=&$blogversion;
+		$this->version = &$blogversion;
 		$this->option = &$option;
 		$this->lang = &$lang;
 		$this->path = &$blogpath;
@@ -109,26 +109,26 @@ class ZBlogPHP{
 		$this->cookiespath = &$cookiespath;
 		$this->usersdir = &$usersdir;
 
-		$this->table=&$table;
-		$this->datainfo=&$datainfo;
-		$this->currenturl=&$currenturl;
+		$this->table = &$table;
+		$this->datainfo = &$datainfo;
+		$this->currenturl = &$currenturl;
 
-		if (trim($this->option['ZC_BLOG_CLSID'])==''){
-			$this->option['ZC_BLOG_CLSID']=GetGuid();
+		if (trim($this->option['ZC_BLOG_CLSID']) == ''){
+			$this->option['ZC_BLOG_CLSID'] = GetGuid();
 		}
-		$this->guid=&$this->option['ZC_BLOG_CLSID'];
+		$this->guid = &$this->option['ZC_BLOG_CLSID'];
 
-		$this->title=&$blogtitle;
-		$this->name=&$blogname;
-		$this->subname=&$blogsubname;
-		$this->theme=&$blogtheme;
-		$this->style=&$blogstyle;
+		$this->title = &$blogtitle;
+		$this->name = &$blogname;
+		$this->subname = &$blogsubname;
+		$this->theme = &$blogtheme;
+		$this->style = &$blogstyle;
 
-		$this->managecount=$this->option['ZC_MANAGE_COUNT'];
-		$this->pagebarcount=$this->option['ZC_PAGEBAR_COUNT'];
-		$this->searchcount = $this->option['ZC_SEARCH_COUNT'];
-		$this->displaycount = $this->option['ZC_DISPLAY_COUNT'];
-		$this->commentdisplaycount = $this->option['ZC_COMMENTS_DISPLAY_COUNT'];
+		$this->managecount = &$this->option['ZC_MANAGE_COUNT'];
+		$this->pagebarcount = &$this->option['ZC_PAGEBAR_COUNT'];
+		$this->searchcount = &$this->option['ZC_SEARCH_COUNT'];
+		$this->displaycount = &$this->option['ZC_DISPLAY_COUNT'];
+		$this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
 
 		$this->cache=new Metas;
 
@@ -148,24 +148,20 @@ class ZBlogPHP{
 			$this->ShowError(81,__FILE__,__LINE__);
 	}
 
-	function __set($name, $value)
-	{
+	function __set($name, $value){
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Set'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($name, $value);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		if($this->option['ZC_DEBUG_MODE']==true)
-			$this->ShowError(81,__FILE__,__LINE__);
+		if($this->option['ZC_DEBUG_MODE']==true) $this->ShowError(81,__FILE__,__LINE__);
 	}
 
-	function __get($name)
-	{
+	function __get($name){
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Get'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($name);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		if($this->option['ZC_DEBUG_MODE']==true)
-			$this->ShowError(81,__FILE__,__LINE__);
+		if($this->option['ZC_DEBUG_MODE']==true) $this->ShowError(81,__FILE__,__LINE__);
 	}
 
 
@@ -259,7 +255,7 @@ class ZBlogPHP{
 		$this->RegBuildModule('statistics','BuildModule_statistics');
 
 		$this->RegBuildModule('authors','BuildModule_authors');
-		
+
 		$this->LoadTemplate();
 		
 		if(isset($this->templates['404']))Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');

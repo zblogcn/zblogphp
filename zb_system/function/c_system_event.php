@@ -490,12 +490,6 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	$articles = array();
 	$articles_top = array();
 
-	if(isset($zbp->option['ZC_LISTONTOP_TURNOFF'])&&$zbp->option['ZC_LISTONTOP_TURNOFF']==false){
-		if ($type == 'index' && $page == 1) {
-			$articles_top = $zbp->GetArticleList('*', array(array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), null, null);
-		}
-	}
-
 	switch ($type) {
 		########################################################################################################
 		case 'index':
@@ -641,6 +635,16 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	$pagebar->PageNow = $page;
 	$pagebar->PageBarCount = $zbp->pagebarcount;
 	$pagebar->UrlRule->Rules['{%page%}'] = $page;
+
+	foreach ($GLOBALS['Filter_Plugin_ViewList_Core'] as $fpname => &$fpsignal) {
+		$fpname($type, $page, $category, $author, $datetime, $tag, $w, $pagebar);
+	}
+
+	if(isset($zbp->option['ZC_LISTONTOP_TURNOFF'])&&$zbp->option['ZC_LISTONTOP_TURNOFF']==false){
+		if ($type == 'index' && $page == 1) {
+			$articles_top = $zbp->GetArticleList('*', array(array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), null, null);
+		}
+	}
 
 	$articles = $zbp->GetArticleList(
 		'*', 
