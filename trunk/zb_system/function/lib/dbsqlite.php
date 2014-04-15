@@ -56,10 +56,12 @@ class DbSQLite implements iDataBase
 		// 遍历出来
 		$results = sqlite_query($this->db,$query);
 		$data = array();
-		if($results){
+		if(is_resource($results)){
 			while($row = sqlite_fetch_array($results)){
 				$data[] = $row;
 			}
+		}else{
+			$data[] = $results;
 		}
 		return $data;
 

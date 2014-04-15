@@ -38,7 +38,7 @@ div{
 	position:absolute;
 	left: 50%;
 	top: 50%;
-	margin: -200px 0px 0px -150px;
+	margin: -220px 0px 0px -150px;
 	padding:0;
 	overflow:hidden;
 	width:300px;
@@ -51,6 +51,7 @@ div{
 <body>
 <div>
 <h1>Z-BlogPHP 在线安装</h1>
+<p><?php echo (($v=file_get_contents('http://update.rainbowsoft.org/zblogphp/'))=='')?'不能联网获取Z-BlogPHP！':'最新版本：'.$v;?></p>
 <p><img src="http://update.rainbowsoft.org/zblogphp/loading.png" alt=""/></p>
 <form method="post" action="#">
 <?php

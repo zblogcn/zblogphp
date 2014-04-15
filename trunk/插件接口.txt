@@ -288,6 +288,11 @@
 说明:定义列表输出接口\\
 调用:\\
 
+====Filter_Plugin_ViewList_Core====
+参数:&$type,&$page,&$category,&$author,&$datetime,&$tag,&$w,&$pagebar\\
+说明:定义列表核心接口\\
+调用:\\
+
 ====Filter_Plugin_ViewPost_Begin====
 参数:&$id,&$alias\\
 说明:定义列表输出接口\\

@@ -77,11 +77,10 @@ class Dbpdo_MySQL implements iDataBase
 		// 遍历出来
 		$results = $this->db->query($query);
 		//fetch || fetchAll
-		if($results){
+		if(is_object($results)){
 			return $results->fetchAll();
-		}
-		else{
-			return array();
+		}else{
+			return array($results);
 		}
 
 	}
