@@ -61,6 +61,7 @@ return array(
 	'ZC_BLOG_PRODUCT' => 'Z-BlogPHP',
 	'ZC_BLOG_VERSION' => '',
 	'ZC_BLOG_PRODUCT_FULL' => '',
+	'ZC_BLOG_PRODUCT_HTML' => '',
 	'ZC_BLOG_PRODUCT_FULLHTML' => '',
 
 

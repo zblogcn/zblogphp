@@ -5,6 +5,35 @@
 
 error_reporting(0);
 //ob_start();
+
+function GetHttpContent($url) {
+	$r = null;
+	if (function_exists("curl_init")) {
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		if(ini_get("safe_mode")==false && ini_get("open_basedir")==false){
+			curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
+		}
+		$r = curl_exec($ch);
+		curl_close($ch);
+	} elseif (ini_get("allow_url_fopen")) {
+		ini_set('default_socket_timeout',120);
+		if( version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0 ){
+			$r = file_get_contents('compress.zlib://'.$url);
+		}else{
+			$r = file_get_contents($url);
+		}
+	}
+
+	return $r;
+}
+
+
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
@@ -38,7 +67,7 @@ div{
 	position:absolute;
 	left: 50%;
 	top: 50%;
-	margin: -220px 0px 0px -150px;
+	margin: -185px 0px 0px -150px;
 	padding:0;
 	overflow:hidden;
 	width:300px;
@@ -51,8 +80,8 @@ div{
 <body>
 <div>
 <h1>Z-BlogPHP 在线安装</h1>
-<p><?php echo (($v=file_get_contents('http://update.rainbowsoft.org/zblogphp/'))=='')?'不能联网获取Z-BlogPHP！':'最新版本：'.$v;?></p>
-<p><img src="http://update.rainbowsoft.org/zblogphp/loading.png" alt=""/></p>
+<p><?php echo (($v=GetHttpContent('http://update.rainbowsoft.org/zblogphp/'))=='')?'不能联网获取Z-BlogPHP！':'最新版本：'.$v;?></p>
+<p><img src="http://update.rainbowsoft.org/zblogphp/loading.png" alt="Z-BlogPHP在线安装" title="Z-BlogPHP在线安装"/></p>
 <form method="post" action="#">
 <?php
 
@@ -92,11 +121,9 @@ function install1(){
 
 	echo "<p>正在努力地下载数据包...</p>";
 	ob_flush();
-	if( version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0 ){
-		$GLOBALS['s']=file_get_contents('compress.zlib://' . 'http://update.rainbowsoft.org/zblogphp/?install');
-	}else{
-		$GLOBALS['s']=file_get_contents('http://update.rainbowsoft.org/zblogphp/?install');
-	}
+
+	$GLOBALS['s']=GetHttpContent('http://update.rainbowsoft.org/zblogphp/?install');
+
 	//file_put_contents('release.xml',$GLOBALS['s']);
 
 }
@@ -113,7 +140,8 @@ function install2(){
 			$dirname= dirname($filename);
 			mkdir($dirname,0755,true);
 			if(PHP_OS=='WINNT'||PHP_OS=='WIN32'||PHP_OS=='Windows'){
-				$fn=iconv("UTF-8","GBK//IGNORE",$filename);
+				//$fn=iconv("UTF-8","GBK//IGNORE",$filename);
+				$fn=$filename;
 			}else{
 				$fn=$filename;
 			}
@@ -130,7 +158,7 @@ function install3(){
 
 	#unlink('release.xml');
 	unlink('install.php');
-	echo '<script type="text/javascript">location="./zb_install/"</script>';
+	echo '<script type="text/javascript">window.location="./zb_install/"</script>';
 	
 }
 
