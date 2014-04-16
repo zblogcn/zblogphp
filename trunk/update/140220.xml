@@ -20,7 +20,7 @@
 	<file name='zb_system\css\jquery-ui.custom.css' md5='3C4FAB57981FEAFC86D58FF617A77E52' crc32='EC896EC4'/>
 	<file name='zb_system\css\jquery.bettertip.css' md5='52BFF27900CC8538B6AA73EE0F81B54E' crc32='DDF8486F'/>
 	<file name='zb_system\defend\arial.ttf' md5='687432B29CB07E7E1D2644F333A672D5' crc32='590DC6C3'/>
-	<file name='zb_system\defend\error.html' md5='E2FFDC2FD4A169FF5091DE4DE9225AD7' crc32='397A1BDE'/>
+	<file name='zb_system\defend\error.html' md5='6610644482370F0EC55AD6C08135C1F7' crc32='CE14477'/>
 	<file name='zb_system\defend\option.php' md5='26CA2A932E5B15485222A281AF02440C' crc32='B823382E'/>
 	<file name='zb_system\defend\thanks.html' md5='62663825603590C793B886ECE854596E' crc32='D61D2F8A'/>
 	<file name='zb_system\defend\createtable\mysql.sql' md5='E0D134D197A6B2F5E0F0F67BBDA73977' crc32='F81E56A1'/>
@@ -43,7 +43,7 @@
 	<file name='zb_system\function\c_system_admin.php' md5='5E1A8D280B875ECA611E8E41FEFD984D' crc32='638B49C7'/>
 	<file name='zb_system\function\c_system_base.php' md5='9F7F964FA5B598EB7A98CC0828D1DDDD' crc32='A5E6922B'/>
 	<file name='zb_system\function\c_system_common.php' md5='88E2075D836FAD87AE88CA3F18C4F9F0' crc32='32FADDB1'/>
-	<file name='zb_system\function\c_system_debug.php' md5='236599C4C1CF9C73CE78BFEFCF0FBEFE' crc32='13AC45B5'/>
+	<file name='zb_system\function\c_system_debug.php' md5='02FFD22D4805B54AFC8124D4A68235EA' crc32='A60D96F7'/>
 	<file name='zb_system\function\c_system_event.php' md5='EA613DC4A2534097360BE7CAD010388C' crc32='A4CB49B8'/>
 	<file name='zb_system\function\c_system_misc.php' md5='420CB9C9EE5FAAA5E251ECE4D6B66D74' crc32='581F4F91'/>
 	<file name='zb_system\function\c_system_plugin.php' md5='7CDA19014B5568CF6E67964EACB09D4C' crc32='D94E3A93'/>

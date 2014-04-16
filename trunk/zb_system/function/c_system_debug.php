@@ -29,7 +29,9 @@ function exception_handler($exception) {
 
 function shutdown_error_handler() {
 	if ($error = error_get_last()) {
-
+		if( $error['type'] == E_NOTICE )return true;
+		if( $error['type'] == E_STRICT )return true;
+		if( defined('E_DEPRECATED') && $error['type']== E_DEPRECATED )return true;
 		if(ZBlogException::$isdisable==true)return true;
 		//ob_clean();
 		$zbe = ZBlogException::GetInstance();
