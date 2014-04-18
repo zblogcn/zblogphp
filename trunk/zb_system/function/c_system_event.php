@@ -225,6 +225,8 @@ function ViewIndex(){
 			return $fpreturn;
 		}
 	}
+	
+	if(isset($zbp->templates['404']))Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
 
 	if( $zbp->currenturl==$zbp->cookiespath||
 		$zbp->currenturl==$zbp->cookiespath . 'index.php' ){
@@ -2567,7 +2569,7 @@ function ShowError404($idortext,$file,$line){
 	$zbp->template->SetTemplate('404');
 
 	$zbp->template->Display();
-	
+
 	$GLOBALS['Filter_Plugin_Zbp_ShowError']['ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
 }
 
