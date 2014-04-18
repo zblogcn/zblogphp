@@ -23,7 +23,7 @@
 	  <div class="divHeader"><?php echo $GLOBALS['lang']['msg']['error_tips']; ?></div>
   	  <div class="content">
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p><div>
-		<?php echo '(' . $this->type . ')     ' . htmlspecialchars($this->message); ?>
+		<?php echo '(' . $this->type . ')' . $this->typeName . ' :     ' . htmlspecialchars($this->message); ?>
 		</div></div>
 	 	<?php if($GLOBALS['option']['ZC_DEBUG_MODE']){?>
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['file_line']; ?></p><div>

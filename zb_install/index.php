@@ -504,6 +504,13 @@ case 'mysqli':
 case 'pdo_mysql':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/mysql.sql');
   $zbp->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
+  if(strpos($zbp->option['ZC_MYSQL_SERVER'],':')!==false){
+    $servers=explode(':',$zbp->option['ZC_MYSQL_SERVER']);
+	$zbp->option['ZC_MYSQL_SERVER']=$servers[0];
+	$zbp->option['ZC_MYSQL_PORT']=(int)$servers[1];
+	if($zbp->option['ZC_MYSQL_PORT']==0)$zbp->option['ZC_MYSQL_PORT']=3306;
+	unset($servers);
+  }
   $zbp->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
   $zbp->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
   $zbp->option['ZC_MYSQL_NAME']=GetVars('dbmysql_name','POST');

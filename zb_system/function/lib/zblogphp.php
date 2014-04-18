@@ -259,8 +259,6 @@ class ZBlogPHP{
 
 		$this->LoadTemplate();
 		
-		if(isset($this->templates['404']))Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
-		
 		$this->MakeTemplatetags();
 		
 		$this->template=$this->PrepareTemplate();
