@@ -263,7 +263,7 @@ $(document).ready(function(){
 	}
 
 	$("input[type='file']").click(function(){
-		if(/IEMobile|WPDesktop/g.test(navigator.userAgent)&&$(this).val()==""){
+		if(/(MSIE (10|9).+?WPDesktop)|(IEMobile\/(10|9))/g.test(navigator.userAgent)&&$(this).val()==""){
 			alert('<?php echo $lang['error'][65]?>')
 		}
 	})
