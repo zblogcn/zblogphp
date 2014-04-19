@@ -85,7 +85,7 @@ function GetCurrentHost(&$cookiespath) {
 
 	for ($i = strlen($x); $i > 0; $i--) {
 		$z = substr($x, 0, $i);
-		if (substr($y, strlen($y) - $i) == $z) {
+		if (strtolower(substr($y, strlen($y) - $i)) == strtolower($z)) {
 			break;
 		}
 	}
