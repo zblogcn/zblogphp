@@ -54,7 +54,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 <form method="post" action="">
 <table class="tableFull tableBorder tableBorder-thcenter">
-<tr><th colspan="2">&nbsp;拟提交发布或更新的应用信息</th></tr>
+<tr><th colspan="2">&nbsp;拟提交发布或更新的应用信息<a href="<?php echo GetVars('type', 'GET') == 'plugin' ? 'plugin' : 'theme' ?>_edit.php?id=<?php  echo $app->id?>">[编辑]</a></th></tr>
 
 <tr><td class="td30"><p><b>· 应用ID</b></p></td><td><p>&nbsp;<input id="local_app_id" name="local_app_id" style="width:550px;"  type="text" value="" readonly /></p></td></tr>
 <tr><td><p><b>· 应用文件名</b></p></td><td><p>&nbsp;<input id="local_app_user" name="local_app_user" style="width:550px;"  type="text" value="" readonly /></p></td></tr>
