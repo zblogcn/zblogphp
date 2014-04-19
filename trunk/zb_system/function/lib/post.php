@@ -130,7 +130,7 @@ class Post extends Base{
 				return substr_count($this->Tag, '{');
 				break;				
 			case 'TagsName':
-				return $this->TagsToNameString;
+				return $this->TagsToNameString();
 			case 'Template':
 				$value=$this->data[$name];
 				if($value==''){
