@@ -425,6 +425,7 @@ class DbSql #extends AnotherClass
 
 		$comma = '';
 		foreach ($keyvalue as $k => $v) {
+			if(is_null($v))continue;
 			$v=$this->db->EscapeString($v);
 			$sql.= $comma . "$k = '$v'";
 			$comma = ' , ';
@@ -445,6 +446,7 @@ class DbSql #extends AnotherClass
 		$sql.='(';
 		$comma = '';
 		foreach($keyvalue as $k => $v) {
+			if(is_null($v))continue;
 			$sql.= $comma . "$k";
 			$comma = ',';
 		}
@@ -452,6 +454,7 @@ class DbSql #extends AnotherClass
 
 		$comma = '';
 		foreach($keyvalue as $k => $v) {
+			if(is_null($v))continue;
 			$v=$this->db->EscapeString($v);
 			$sql.= $comma . "'$v'";
 			$comma = ',';

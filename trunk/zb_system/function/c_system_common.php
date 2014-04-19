@@ -80,8 +80,8 @@ function GetCurrentHost(&$cookiespath) {
 
 	$host .= $_SERVER['HTTP_HOST'];
 
-	$y = strtolower($GLOBALS['blogpath']);
-	$x = strtolower($_SERVER['SCRIPT_NAME']);
+	$y = $GLOBALS['blogpath'];
+	$x = $_SERVER['SCRIPT_NAME'];
 
 	for ($i = strlen($x); $i > 0; $i--) {
 		$z = substr($x, 0, $i);
