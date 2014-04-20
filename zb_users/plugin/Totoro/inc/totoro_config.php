@@ -87,7 +87,7 @@ return array(
 			'DESC' => '将把正体中文转为简化字再进行反SPAM测试，不影响实际显示的评论',
 			'DEFAULT' => TRUE
 		),
-		'PM' => array(
+		'FILTERPUNCT' => array(
 			'VALUE' => TRUE,
 			'NAME' => '标点过滤',
 			'DESC' => '把大部分标点和HTML代码过滤再进行反SPAM测试，不影响实际显示的评论',

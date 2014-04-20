@@ -2,6 +2,7 @@
 
 RegisterPlugin("Totoro","ActivePlugin_Totoro");
 define('TOTORO_PATH', dirname(__FILE__));
+define('TOTORO_INCPATH', TOTORO_PATH . '/inc/');
 
 
 function Totoro_init()
