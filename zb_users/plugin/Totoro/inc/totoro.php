@@ -11,15 +11,17 @@ class Totoro_Class
 		$this->init_config();
 	}
 	
+	
 	function init_config()
 	{
 		return true;
 	}
 	
-	function output_config($name)
+	function output_config($type, $name, $convert = TRUE)
 	{
 		global $zbp;
-		return TransferHTML($zbp->Config('Totoro')->$name, '[html-format]');
+		$content = $this->config_array[$type][$name]['VALUE'];
+		return $convert ? TransferHTML($content, '[html-format]') : $content;
 	}
 	
 	function build_content(&$comment)

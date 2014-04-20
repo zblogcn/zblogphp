@@ -1,5 +1,17 @@
 <?php
-
+/*  TODO:
+ *  原有配置不考虑进行转移或升级
+ *  1. 初始化配置并写入系统
+ 	   相关页面：include.php totoro.php
+	   相关函数：InstallPlugin_Totoro()  Totoro_Class::init_config()
+ *  2. 保存配置页面
+       相关页面：save_setting.php
+ *  3. 与系统挂钩进行审核
+       相关页面：include.php
+	   相关函数：Totoro_PostComment_Core
+ *  4. 黑词测试页面和正则测试界面
+       详见ASP Totoro
+ */
 RegisterPlugin("Totoro","ActivePlugin_Totoro");
 define('TOTORO_PATH', dirname(__FILE__));
 define('TOTORO_INCPATH', TOTORO_PATH . '/inc/');
@@ -17,7 +29,6 @@ function ActivePlugin_Totoro()
 	Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','Totoro_Admin_CommentMng_SubMenu');
 	Add_Filter_Plugin('Filter_Plugin_PostComment_Core','Totoro_PostComment_Core');
 }
-
 
 
 function InstallPlugin_Totoro(){

@@ -94,14 +94,14 @@ return array(
 			'DEFAULT' => TRUE
 		),
 	),
-	'CONFIG' => array(
-		'DEL_DIRECTLY' => array(
+	/*'DEL_DIRECTLY' => array(
 			'TYPE' => 'BOOL',
 			'VALUE' => TRUE,
 			'NAME' => '后台审核',
 			'DESC' => '点击【加入审核】提取域名后直接删除评论（关闭则为加入审核列表）',
 			'DEFAULT' => TRUE
-		),
+	),*/
+	'STRING_BACK' => array(
 		'CHECKSTR' => array(
 			'TYPE' => 'STRING',
 			'VALUE' => '',
