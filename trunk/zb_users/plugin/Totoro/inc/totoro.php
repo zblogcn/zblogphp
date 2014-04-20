@@ -7,7 +7,7 @@ class Totoro_Class
 	
 	function __construct()
 	{
-		$this->config_array = include(TOTORO_PATH . '/inc/config.php');
+		$this->config_array = include(TOTORO_INCPATH . 'totoro_config.php');
 		$this->init_config();
 	}
 	
@@ -31,19 +31,26 @@ class Totoro_Class
 		
 		foreach($this->config_array['BUILD_CONFIG'] as $name => $value)
 		{
-			$low_name = strtolower($name);
-			if($value['VALUE'])
+			if ($value['VALUE'])
 			{
-				$func = include(TOTORO_PATH . '/inc/config_' . $low_name . '.php');
-				$func($content);
+				$low_name = strtolower($name);
+				$file = TOTORO_INCPATH . 'build_' . $low_name . '.php';
+				if (file_exists($file))
+				{
+					$func = include($file);
+					$func($content);
+				}
 			}
 		}
 		
 		return array(
-			'name' => $comment->Name,
-			'ip' => $comment->IP,
-			'email' => $comment->Email,
-			'url' => $comment->HomePage,
+			'author' => array(
+				'id' => $comment->AuthorID,
+				'name' => $comment->Name,
+				'ip' => $comment->IP,
+				'email' => $comment->Email,
+				'url' => $comment->HomePage
+			),
 			'content' => $content
 		);
 		
@@ -56,8 +63,12 @@ class Totoro_Class
 		foreach($this->config_array['SV_RULE'] as $name => $value)
 		{
 			$low_name = strtolower($name);
-			$func = include(TOTORO_PATH . '/inc/rule_' . $low_name . '.php');
-			$func($build['name'], $build['ip'], $build['email'], $build['url'], $build['content'], $this->sv, $value['VALUE']);
+			$file = TOTORO_INCPATH . 'rule_' . $low_name . '.php';
+			if (file_exists($file))
+			{
+				$func = include($file);
+				$func($build['author'], $build['content'], $this->sv, $value['VALUE']);
+			}
 		}
 		
 		return $this->sv;
