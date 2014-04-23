@@ -1330,8 +1330,8 @@ foreach ($zbp->plugins as $plugin) {
 foreach ($plugins as $plugin) {
 	echo '<tr>';
 	echo '<td class="td5 tdCenter'.($plugin->type=='plugin'?' plugin':'').($plugin->IsUsed()?' plugin-on':'').'"><strong style="display:none;">'.$plugin->id.'</strong><img ' . ($plugin->IsUsed()?'':'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" height="32" /></td>';
-	echo '<td class="td25">' . $plugin->name .' '. $plugin->version . '</td>';
-	echo '<td class="td20">' . $plugin->author_name . '</td>';
+	echo '<td class="td25"><a id="mylink'.$plugin->id.'" href="$div'.$plugin->id.'tip?width=300" class="betterTip" title>' . $plugin->name .'&nbsp;&nbsp;&nbsp;'. $plugin->version . '</a><div id="div'.$plugin->id.'tip" style="display:none;">'.$plugin->note.'</div></td>';
+	echo '<td class="td20"><a href="' . $plugin->author_url . '" target="_blank">' . $plugin->author_name . '</a></td>';
 	echo '<td class="td20">' . $plugin->modified . '</td>';
 	echo '<td class="td10 tdCenter">';
 
