@@ -1306,6 +1306,8 @@ function DelComment() {
 		DelComment_Children($cmt->ID);
 
 		$cmt->Del();
+		
+		CountPostArray(array($cmt->LogID));
 
 		$zbp->AddBuildModule('comments');
 

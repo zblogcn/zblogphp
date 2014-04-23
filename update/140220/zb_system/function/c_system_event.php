@@ -1139,6 +1139,8 @@ function DelComment() {
 
 		$cmt->Del();
 
+		CountPostArray(array($cmt->LogID));
+
 		$zbp->AddBuildModule('comments');
 
 		foreach ($GLOBALS['Filter_Plugin_DelComment_Succeed'] as $fpname => &$fpsignal)
