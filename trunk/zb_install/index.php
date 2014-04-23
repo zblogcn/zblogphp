@@ -676,6 +676,7 @@ function CreateTable($sql){
   }
 
   $zbp->db->QueryMulit($sql);
+  echo "连接数据库并创建数据表成功!<br/>";
   return true;
 }
 
