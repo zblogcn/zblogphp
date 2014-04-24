@@ -53,6 +53,7 @@ if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()){
 $_SERVER['_start_time'] = microtime(1); //RunTime
 $_SERVER['_query_count'] = 0;
 $_SERVER['_memory_usage'] = 0;
+$_SERVER['_error_count'] = 0;
 if(function_exists('memory_get_usage'))$_SERVER['_memory_usage'] = memory_get_usage();
 
 

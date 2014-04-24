@@ -7,7 +7,7 @@
  */
 
 function error_handler($errno, $errstr, $errfile, $errline) {
-
+	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
 	if(ZBlogException::$isdisable==true)return true;
 	//ob_clean();
 	$zbe = ZBlogException::GetInstance();
@@ -18,7 +18,7 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 }
 
 function exception_handler($exception) {
-
+	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
 	if(ZBlogException::$isdisable==true)return true;
 	//ob_clean();
 	$zbe = ZBlogException::GetInstance();
@@ -28,6 +28,7 @@ function exception_handler($exception) {
 }
 
 function shutdown_error_handler() {
+	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
 	if ($error = error_get_last()) {
 		if( $error['type'] == E_NOTICE )return true;
 		if( $error['type'] == E_STRICT )return true;
@@ -153,6 +154,7 @@ class ZBlogException {
 		$zbp = ZBlogPHP::GetInstance();
 		$zbp->StartGzip();
 		require $GLOBALS['blogpath'] . 'zb_system/defend/error.html';
+		RunTime();
 	}
 
 	function get_code($file, $line) {

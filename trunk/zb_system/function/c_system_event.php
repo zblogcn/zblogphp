@@ -22,6 +22,7 @@ function RunTime() {
 	$rt['time']=(1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6));
 	$rt['query']=$_SERVER['_query_count'];
 	$rt['memory']=$_SERVER['_memory_usage'];
+	$rt['error']=$_SERVER['_error_count'];
 	if(function_exists('memory_get_usage')){
 		$rt['memory']=(int)((memory_get_usage()-$_SERVER['_memory_usage'])/1024);
 	}
@@ -29,9 +30,10 @@ function RunTime() {
 	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false)return $rt;
 
 	echo '<!--' . $rt['time'] . 'ms , ';
-	echo  $rt['query'] . 'query';
+	echo  $rt['query'] . ' query';
 	if(function_exists('memory_get_usage'))
 		echo ' , ' . $rt['memory'] . 'kb memory';
+	echo  ' , ' . $rt['error'] . ' error';
 	echo '-->';
 	return $rt;
 }
