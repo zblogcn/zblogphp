@@ -14,8 +14,27 @@ class Totoro_Class
 	
 	function init_config()
 	{
+		global $zbp;
+		$config_save = FALSE;
+		foreach($this->config_array as $type_name => &$type_value)
+		{
+			foreach($type_value as $name => &$value)
+			{
+				$config_name = $type_name . '_' . $name;
+				$config_value = $zbp->Config('Totoro')->$config_name;
+				if(!isset($config_value))
+				{
+					$zbp->Config('Totoro')->$config_name = $value['DEFAULT'];
+					$config_save = TRUE;
+				}
+				$value['VALUE'] = $zbp->Config('Totoro')->$config_name;
+			}
+		}
+		
+		if($config_save) $zbp->SaveConfig('Totoro');		
 		return true;
 	}
+	
 	
 	function output_config($type, $name, $convert = TRUE)
 	{
@@ -23,6 +42,8 @@ class Totoro_Class
 		$content = $this->config_array[$type][$name]['VALUE'];
 		return $convert ? TransferHTML($content, '[html-format]') : $content;
 	}
+	
+	
 	
 	function build_content(&$comment)
 	{

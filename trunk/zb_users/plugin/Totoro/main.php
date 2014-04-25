@@ -39,7 +39,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div class="divHeader"><?php echo $blogtitle;?></div>
   <div class="SubMenu"></div>
   <div id="divMain2">
-    <form id="edit" name="edit" method="post" action="#">
+    <form id="edit" name="edit" method="post" action="save_setting.php">
       <input id="reset" name="reset" type="hidden" value="" />
       <div class="content-box"> 
         <!-- Start Content Box -->
@@ -71,7 +71,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               <tr>
                 <td><?php echo $i?></td>
                 <td><p align="left"><b><?php echo $value['NAME']?></b></p></td>
-                <td><input type="text" class="text-config" name="TOTORO_<?php echo $name?>" value="<?php echo $Totoro->output_config('SV_RULE', $name)?>"/></td>
+                <td><input type="text" class="text-config" name="TOTORO_SV_RULE_<?php echo $name?>" value="<?php echo $Totoro->output_config('SV_RULE', $name)?>"/></td>
                 <td>(默认：<?php echo $value['DEFAULT']?>) <?php echo $value['DESC']?></td>
               </tr>
               <?php
@@ -82,7 +82,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               <tr>
                 <td><?php echo $i?></td>
                 <td><p align="left"><b><?php echo $value['NAME']?></b></p></td>
-                <td><input type="text" class="text-config" name="TOTORO_<?php echo $name?>" value="<?php echo $Totoro->output_config('SV_SETTING', $name)?>"/></td>
+                <td><input type="text" class="text-config" name="TOTORO_SV_SETTING_<?php echo $name?>" value="<?php echo $Totoro->output_config('SV_SETTING', $name)?>"/></td>
                 <td>(默认：<?php echo $value['DEFAULT']?>) <?php echo $value['DESC']?></td>
               </tr>
               <?php
@@ -104,8 +104,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               <tr>
                 <td><p align="left"><b><?php echo $value['NAME']?></b><br/>
                     · <?php echo $value['DESC']?></p></td>
-                <td><textarea class="escape-textarea" name="TOTORO_<?php echo $name?>" style="display:none" id="TOTORO_<?php echo $name?>" data-tag="TOTORO_<?php echo $name?>"><?php echo urlencode($Totoro->output_config('BLACK_LIST', $name, FALSE))?></textarea>
-                  <textarea class="unescape-textarea" rows="6" style="width:95%" id="TOTORO_<?php echo $name?>">数据读取中</textarea></td>
+                <td><textarea class="escape-textarea" name="TOTORO_BLACK_LIST_<?php echo $name?>" style="display:none" id="TOTORO_BLACK_LIST_<?php echo $name?>" data-tag="TOTORO_BLACK_LIST_UNESCAPE_<?php echo $name?>"><?php echo urlencode($Totoro->output_config('BLACK_LIST', $name, FALSE))?></textarea>
+                  <textarea class="unescape-textarea" rows="6" style="width:95%" data-tag="TOTORO_BLACK_LIST_<?php echo $name?>" id="TOTORO_BLACK_LIST_UNESCAPE_<?php echo $name?>">数据读取中</textarea></td>
               </tr>
               <?php
 			  }
@@ -124,7 +124,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 			  ?>
               <tr>
                 <td><p align="left"><b><?php echo $value['NAME']?></b></p></td>
-                <td><textarea class="unescape-textarea" name="TOTORO_<?php echo $name?>" rows="6" style="width:95%"><?php echo urlencode($Totoro->output_config('STRING_BACK', $name, FALSE))?></textarea></td>
+                <td><textarea class="unescape-textarea" name="TOTORO_STRING_BACK_<?php echo $name?>" rows="6" style="width:95%"><?php echo $Totoro->output_config('STRING_BACK', $name, FALSE)?></textarea></td>
               </tr>
               <?php
 			  }
@@ -144,7 +144,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               <tr>
                 <td><p align="left"><b><?php echo $value['NAME']?></b><br/>
                     · <?php echo $value['DESC']?></p></td>
-                <td><input type="text" class="checkbox" name="TOTORO_<?php echo $name?>" value="<?php echo $Totoro->output_config('BUILD_CONFIG', $name)?>"/></td>
+                <td><input type="text" class="checkbox" name="TOTORO_BUILD_CONFIG_<?php echo $name?>" value="<?php echo $Totoro->output_config('BUILD_CONFIG', $name)?>"/></td>
               </tr>
               <?php
 			  }
@@ -177,20 +177,21 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       </p>
     </form>
     <script type="text/javascript">
-function changeOptions(i){
-	$('input[name^=ZC_]').each(function(){
-		var s='radio' + $(this).prop('name');
-		$(this).val( $("input[type='radio'][name='"+s+"']").eq(i).val() );
-	});
-	if(i=='0'){
-		$("input[name^='radio']").prop('disabled',true);
-		$("input[name='ZC_STATIC_MODE']").val('ACTIVE');
-	}else{
-		$("input[name^='radio']").prop('disabled',false);
-		$("input[name='ZC_STATIC_MODE']").val('REWRITE');
-	}
-
-}
+		$(document).ready(function(){
+			$(".escape-textarea").each(function(){
+				var self = $(this);
+				$("#" + self.attr("data-tag")).text(decodeURIComponent(self.val()));
+			});
+			
+			$("#edit").submit(function(){
+				$(".unescape-textarea").each(function(){
+					var self = $(this);
+					$("#" + self.attr("data-tag")).text(encodeURIComponent(self.val()));
+				});	
+			});
+			
+		});
+		
 	</script> 
     <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script> 
     <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Totoro/logo.png';?>");</script> 
