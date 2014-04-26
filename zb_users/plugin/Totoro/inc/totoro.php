@@ -135,14 +135,14 @@ class Totoro_Class
 				)
 				{
 					$comment->IsChecking = TRUE;
-					$zbp->Config('Totoro')->CHECK_INT = $zbp->Config('Totoro')->CHECK_INT + 1;
+					$zbp->Config('Totoro')->CHECK_INT = (int)$zbp->Config('Totoro')->CHECK_INT + 1;
 					$zbp->SaveConfig('Totoro');
 					$this->filter_ip($comment->IP, FALSE);
 				}
 				elseif ($this->config_array['SV_SETTING']['SV_THRESHOLD2']['VALUE'] <= $this->sv)
 				{
 					$comment->IsThrow = TRUE;
-					$zbp->Config('Totoro')->THROW_INT = $zbp->Config('Totoro')->THROW_INT + 1;
+					$zbp->Config('Totoro')->THROW_INT = (int)$zbp->Config('Totoro')->THROW_INT + 1;
 					$zbp->SaveConfig('Totoro');
 					$this->filter_ip($comment->IP, TRUE);
 				}
