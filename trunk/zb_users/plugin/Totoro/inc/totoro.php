@@ -82,6 +82,7 @@ class Totoro_Class
 	function get_score(&$comment, $debug = FALSE)
 	{
 		$build = $this->build_content($comment);
+		if ($debug) echo 'BUILD COMMENT: ' . $build['content'] . "\n";
 		
 		foreach($this->config_array['SV_RULE'] as $name => $value)
 		{
