@@ -136,8 +136,14 @@ return array(
 			'NAME' => '敏感词列表',
 			'DESC' => '使用正则表达式，最后一个字符不能是“|”',
 			'DEFAULT' => ''
+		),
+		'IPFILTER_LIST' => array(
+			'VALUE' => '',
+			'NAME' => 'IP过滤列表',
+			'DESC' => '用|分隔，支持*屏蔽IP段',
+			'DEFAULT' => ''
 		)
-	)
+	),
 );
 
 

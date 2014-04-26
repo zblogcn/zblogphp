@@ -8,21 +8,6 @@ if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('Totoro')) {$zbp->ShowError(48);die();}
 Totoro_init();
 $blogtitle='Totoro反垃圾评论';
-/*
-if(count($_POST)>0){
-
-
-	$zbp->Config('Totoro')->BlackWord_List=Trim(Trim(GetVars('BlackWord_List','POST')),'|');
-	$zbp->Config('Totoro')->Op_BlackWord_Audit=GetVars('Op_BlackWord_Audit','POST');
-	$zbp->Config('Totoro')->Op_BlackWord_Throw=GetVars('Op_BlackWord_Throw','POST');
-	$zbp->Config('Totoro')->Op_Chinese_None=GetVars('Op_Chinese_None','POST');
-	$zbp->SaveConfig('Totoro');
-
-	$zbp->SetHint('good','Totoro已保存设置');
-	Redirect('./main.php');
-}
-*/
-
 require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <style type="text/css">
