@@ -30,7 +30,16 @@ class Totoro_Class
 				$value['VALUE'] = $zbp->Config('Totoro')->$config_name;
 			}
 		}
-		
+		if (!isset($zbp->Config('Totoro')->THROW_INT))
+		{
+			$zbp->Config('Totoro')->THROW_INT = 0;
+			$config_save = TRUE;		
+		}
+		if (!isset($zbp->Config('Totoro')->CHECK_INT))
+		{
+			$zbp->Config('Totoro')->CHECK_INT = 0;
+			$config_save = TRUE;		
+		}
 		if($config_save) $zbp->SaveConfig('Totoro');		
 		return true;
 	}
@@ -99,11 +108,148 @@ class Totoro_Class
 		return $this->sv;
 	}
 	
-	function edit_comment(&$comment)
+	function check_comment(&$comment)
 	{
 		
+		global $zbp;
+		$zbp->lang['error'][53] = $this->config_array['STRING_BACK']['CHECKSTR']['VALUE'];
+		$zbp->lang['error'][14] = $this->config_array['STRING_BACK']['THROWSTR']['VALUE'];
+		
+		if($this->check_ip($comment->IP))
+		{
+			$comment->IsThrow = TRUE;
+			$zbp->lang['error'][14] = $this->config_array['STRING_BACK']['KILLIPSTR']['VALUE'];
+			
+		}
+		
+		if (!$comment->IsThrow)
+		{
+			$this->get_score($comment);
+			if ($this->sv >= $this->config_array['SV_SETTING']['SV_THRESHOLD']['VALUE'])
+			{
+				
+				if(
+					$this->sv < $this->config_array['SV_SETTING']['SV_THRESHOLD2']['VALUE']
+					||
+					$this->config_array['SV_SETTING']['SV_THRESHOLD2']['VALUE'] <= 0
+				)
+				{
+					$comment->IsChecking = TRUE;
+					$zbp->Config('Totoro')->CHECK_INT = $zbp->Config('Totoro')->CHECK_INT + 1;
+					$zbp->SaveConfig('Totoro');
+					$this->filter_ip($comment->IP, FALSE);
+				}
+				elseif ($this->config_array['SV_SETTING']['SV_THRESHOLD2']['VALUE'] <= $this->sv)
+				{
+					$comment->IsThrow = TRUE;
+					$zbp->Config('Totoro')->THROW_INT = $zbp->Config('Totoro')->THROW_INT + 1;
+					$zbp->SaveConfig('Totoro');
+					$this->filter_ip($comment->IP, TRUE);
+				}
+				
+
+			}
+			
+			
+		}
+		//if ($this->sv >=)
 	}
 	
+	function check_ip($ip)
+	{
+		$ip_str = explode('|', $this->config_array['BLACK_LIST']['IPFILTER_LIST']['VALUE']);
+		//if (in_array($ip, $ip_str)) return true;
+		for($i = 0;$i < count($ip_str); $i++)
+		{
+			$ip_begin = ip2long(str_replace('*', '0', $ip_str[$i]));
+			$ip_end   = ip2long(str_replace('*', '255', $ip_str[$i]));
+			$ip = ip2long($ip);
+			if ($ip >= $ip_begin && $ip <= $ip_end) return true;
+		}
+		return false;
+	}
+	
+	function filter_ip($ip, $kill)
+	{
+		global $zbp;
+		if ($this->config_array['SV_SETTING']['KILLIP']['VALUE'] == 0) return ;
+		$sql = $zbp->db->sql->Select(
+			'%pre%comment',
+			array(
+				'COUNT(`comm_id`) AS c',
+			),
+			array(
+				array('=', 'comm_IP', $ip),
+				array('>', 'comm_PostTime', time() - 24 * 60 * 60),
+			),
+			null,
+			null,
+			null
+		);
+		$result = $zbp->db->Query($sql);
+		if (count($result) > 0)
+		{
+			if ((int)$result[0]['c'] > $this->config_array['SV_SETTING']['KILLIP']['VALUE'] || $kill)
+			{
+				if($kill)
+				{
+					$FILTERIP = $this->config_array['BLACK_LIST']['IPFILTER_LIST']['VALUE'];
+					$FILTERIP = ($FILTERIP == '' ? $ip : $FILTERIP . '|' . $ip);
+					$zbp->Config('Totoro')->BLACK_LIST_IPFILTER_LIST = $FILTERIP;
+					$zbp->SaveConfig('Totoro');
+				}
+				$this->kill_ip($ip, $kill);
+			}
+		}
+	}
+	
+	function kill_ip($ip, $kill)
+	{
+		global $zbp;
+		$logid = array();
+		$cmtid = array();
+		$sql = $zbp->db->sql->Select(
+			'%pre%comment',
+			array(
+				'comm_ID',
+				'comm_logID',
+			),
+			array(
+				array('=', 'comm_IP', $ip),
+				array('=', 'comm_IsChecking', 0),
+				array('>', 'comm_PostTime', time() - 24 * 60 * 60),
+			),
+			null,
+			null,
+			null
+		);
+		$result = $zbp->db->Query($sql);
+		if(count($result) > 0)
+		{
+			for($i = 0;$i < count($result); $i++)
+			{
+				$cmtid[] = $result[$i]['comm_ID'];
+				$logid[] = $result[$i]['comm_logID'];
+			}
+		}
+		CountPostArray($logid);
+		$zbp->AddBuildModule('comments');
+		
+		$sql = $zbp->db->sql->Update(
+			'%pre%comment',
+			array(
+				'comm_IsChecking' => 1
+			),
+			array(
+				array('=', 'comm_IP', $ip),
+				array('=', 'comm_IsChecking', 0),
+				array('>', 'comm_PostTime', time() - 24 * 60 * 60),
+			)
+		);
+		$zbp->db->Update($sql);
+		
+	}
+		
 	function export_submenu($action)
 	{
 		$array = array(
