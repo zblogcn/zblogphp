@@ -79,7 +79,7 @@ class Totoro_Class
 		
 	}
 	
-	function get_score(&$comment)
+	function get_score(&$comment, $debug = FALSE)
 	{
 		$build = $this->build_content($comment);
 		
@@ -87,10 +87,11 @@ class Totoro_Class
 		{
 			$low_name = strtolower($name);
 			$file = TOTORO_INCPATH . 'rule_' . $low_name . '.php';
-			if (file_exists($file))
+			if (file_exists($file) && $value['VALUE'] > 0)
 			{
 				$func = include($file);
-				$func($build['author'], $build['content'], $this->sv, $value['VALUE']);
+				$func($build['author'], $build['content'], $this->sv, $value['VALUE'], $this->config_array);
+				if ($debug) echo 'AFTER ' . $value['NAME'] . ': ' . $this->sv . "\n"; 
 			}
 		}
 		
@@ -100,5 +101,44 @@ class Totoro_Class
 	function edit_comment(&$comment)
 	{
 		
+	}
+	
+	function export_submenu($action)
+	{
+		$array = array(
+			array(
+				'action' => 'main',
+				'url' => 'main.php',
+				'target' => '_self',
+				'float' => 'left',
+				'title' => '设置页面'
+			),
+			array(
+				'action' => 'regex_test',
+				'url' => 'regex_test.php',
+				'target' => '_self',
+				'float' => 'right',
+				'title' => '正则测试'
+			),
+			array(
+				'action' => 'online_test',
+				'url' => 'online_test.php',
+				'target' => '_self',
+				'float' => 'right',
+				'title' => '配置测试'
+			),
+		);
+		$str = '';
+		$template = '<a href="$url" target="$target"><span class="m-$float$light">$title</span></a>';
+		for($i = 0;$i < count($array);$i++)
+		{
+			$str .= $template;
+			$str = str_replace('$url', $array[$i]['url'], $str);
+			$str = str_replace('$target', $array[$i]['target'], $str);
+			$str = str_replace('$float', $array[$i]['float'], $str);
+			$str = str_replace('$title', $array[$i]['title'], $str);
+			$str = str_replace('$light', ($action == $array[$i]['action']? ' m-now' : ''), $str);
+		}
+		return $str;
 	}
 }
