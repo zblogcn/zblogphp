@@ -27,7 +27,7 @@ function Totoro_init()
 function ActivePlugin_Totoro()
 {
 	Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','Totoro_Admin_CommentMng_SubMenu');
-	Add_Filter_Plugin('Filter_Plugin_PostComment_Core','Totoro_PostComment_Core');
+	//Add_Filter_Plugin('Filter_Plugin_PostComment_Core','Totoro_PostComment_Core');
 }
 
 

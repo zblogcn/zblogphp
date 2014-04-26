@@ -37,7 +37,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 <div id="divMain">
   <div class="divHeader"><?php echo $blogtitle;?></div>
-  <div class="SubMenu"></div>
+  <div class="SubMenu"><?php echo $Totoro->export_submenu('main');?></div>
   <div id="divMain2">
     <form id="edit" name="edit" method="post" action="save_setting.php">
       <input id="reset" name="reset" type="hidden" value="" />
