@@ -33,12 +33,11 @@ class Rss2 {
 		$this->xml .= $this->createElement('link',$link);
 		$this->xml .= $this->createElement('description',$description);
 		$this->xml .= $this->createElement('pubDate',date(DATE_RSS,$date));
-
 		$this->xml .= '</item>';
 	}
 	
 	public function saveXML(){
-		$this->xml .= '</rss>';
+		if(substr($this->xml,-6)!=='</rss>')$this->xml .= '</rss>';
 		return $this->xml;
 	}
 

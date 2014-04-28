@@ -203,8 +203,8 @@ function LoadRememberInfo() {
 //*********************************************************
 function SaveRememberInfo() {
 
-	var strName=$("inpName").val();
-	var strEmail=$("inpEmail").val();
+	var strName=$("#inpName").val();
+	var strEmail=$("#inpEmail").val();
 	var strHomePage=$("#inpHomePage").val();
 
 	SetCookie("name",strName,365);
