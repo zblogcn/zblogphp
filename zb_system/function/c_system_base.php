@@ -125,14 +125,6 @@ $cookiespath = null;
 $bloghost = GetCurrentHost($cookiespath);
 
 
-#加载zbp 数据库类 基础对象
-$lib_array = array('zblogphp','dbsql','base');
-foreach ($lib_array as $f) {
-	require $blogpath.'zb_system/function/lib/' . $f . '.php';
-}
-unset($lib_array);
-
-
 #定义命令
 $actions=array(
 	'login'=>6,
@@ -351,6 +343,12 @@ $datainfo=array(
 	'Meta'=>array('ul_Meta','string','',''),
 ),
 );
+
+
+#加载zbp 数据库类 基础对象
+AutoloadClass('ZBlogPHP');
+AutoloadClass('DbSql');
+AutoloadClass('Base');
 
 
 #实例化zbp
