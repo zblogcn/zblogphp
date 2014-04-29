@@ -22,15 +22,10 @@ function AutoloadClass($classname){
 		require $f;
 }
 
-if (version_compare(PHP_VERSION, '5.1.2', '>=')) {
-	//SPL autoloading was introduced in PHP 5.1.2
-	spl_autoload_register('AutoloadClass');
-} else {
-	/*autoload*/
-	function __autoload($classname){
-		AutoloadClass($classname);
-	}
-}
+
+//SPL autoloading was introduced in PHP 5.1.2
+spl_autoload_register('AutoloadClass');
+
 
 if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()){
 	function _stripslashes(&$var) {
@@ -108,6 +103,8 @@ $option = require($blogpath . 'zb_system/defend/option.php');
 foreach ($option_zbusers as $key => $value) {
 	$option[$key] = $value;
 }
+unset($key);
+unset($value);
 unset($option_zbusers);
 
 date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
@@ -370,6 +367,7 @@ foreach ($ap as $plugin) {
 		require $filename;
 	}
 }
+unset($plugin);
 unset($ap);
 unset($filename);
 

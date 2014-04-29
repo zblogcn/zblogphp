@@ -139,7 +139,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 
 	$articles = array();
 
-	if ($cate) {
+	if (!is_null($cate)) {
 		$category = new Category;
 		$category = $zbp->GetCategoryByID($cate);
 
@@ -160,7 +160,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 		}
 	}
 
-	if ($auth) {
+	if (!is_null($auth)) {
 		$author = new Member;
 		$author = $zbp->GetMemberByID($auth);
 
@@ -169,7 +169,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 		}
 	}
 
-	if ($date) {
+	if (!is_null($date)) {
 		$datetime = strtotime($date);
 		if ($datetime) {
 			$datetitle = str_replace(array('%y%', '%m%'), array(date('Y', $datetime), date('n', $datetime)), $zbp->lang['msg']['year_month']);
@@ -177,7 +177,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 		}
 	}
 
-	if ($tags) {
+	if (!is_null($tags)) {
 		$tag = new Tag;
 		if (is_array($tags)) {
 			$ta = array();
@@ -198,8 +198,11 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 		}
 	}
 
-	if ($search) {
-		$w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $search);
+	if (is_string($search)) {
+		$search=trim($search);
+		if ($search!=='') {
+			$w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $search);
+		}
 	}
 
 	$articles = $zbp->GetArticleList('*', $w, array('log_PostTime' => 'DESC'), $count, null, false);
