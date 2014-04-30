@@ -11,12 +11,12 @@ error_reporting(0);
 
 ob_start();
 
-
 #引入必备
-require 'c_system_common.php';
-require 'c_system_debug.php';
-require 'c_system_plugin.php';
-require 'c_system_event.php';
+$basepath = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+require $basepath . 'c_system_common.php';
+require $basepath . 'c_system_debug.php';
+require $basepath . 'c_system_plugin.php';
+require $basepath . 'c_system_event.php';
 
 
 #系统预处理
@@ -78,9 +78,9 @@ $zbp = null;
 $action = null;
 $currenturl = GetRequestUri();
 
-$blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
+$blogpath = str_replace('\\','/',realpath($basepath . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR)) . '/';
 $usersdir = $blogpath . 'zb_users/';
-
+unset($basepath);
 
 $option_zbusers = null;
 if(is_readable($filename = $usersdir . 'c_option.php')){
