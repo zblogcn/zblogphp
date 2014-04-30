@@ -7,6 +7,15 @@
  */
 
 ################################################################################################################
+function AutoloadClass($classname){
+	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($classname);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+	}
+	if (is_readable($f=$GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php'))
+		require $f;
+}
+
 function Logs($s) {
 	global $zbp;
 	$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
@@ -47,12 +56,13 @@ function VerifyLogin() {
 		if ($zbp->Verify_MD5(GetVars('username', 'POST'), GetVars('password', 'POST'))) {
 			$un = GetVars('username', 'POST');
 			$ps = md5($zbp->user->Password . $zbp->guid);
-			if (GetVars('savedate') == 0) {
+			$sd = (int)GetVars('savedate');
+			if ( $sd == 0) {
 				setcookie("username", $un, 0, $zbp->cookiespath);
 				setcookie("password", $ps, 0, $zbp->cookiespath);
 			} else {
-				setcookie("username", $un, time() + 3600 * 24 * GetVars('savedate', 'POST'), $zbp->cookiespath);
-				setcookie("password", $ps, time() + 3600 * 24 * GetVars('savedate', 'POST'), $zbp->cookiespath);
+				setcookie("username", $un, time() + 3600 * 24 * $sd, $zbp->cookiespath);
+				setcookie("password", $ps, time() + 3600 * 24 * $sd, $zbp->cookiespath);
 			}
 
 			return true;

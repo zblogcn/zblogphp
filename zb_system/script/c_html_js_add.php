@@ -31,6 +31,11 @@ if ($zbp->CheckRights('ArticleEdt')){
 }
 
 	echo "SetCookie('timezone',(new Date().getTimezoneOffset()/60)*(-1));";
+
+if ($zbp->user->ID==0){
+	echo "LoadRememberInfo();";
+}	
+
 echo '});' . "\r\n";
 
 foreach ($GLOBALS['Filter_Plugin_Html_Js_Add'] as $fpname => &$fpsignal) {$fpname();}

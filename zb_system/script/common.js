@@ -183,12 +183,9 @@ function LoadRememberInfo() {
 	var strHomePage=GetCookie("homepage");
 
 
-
-		if(strName&&(!$("#inpName").val())){$("#inpName").val(strName);}
-		if(strEmail&&(!$("#inpEmail").val())){$("#inpEmail").val(strEmail);}
-		if(strHomePage&&(!$("#inpHomePage").val())){$("#inpHomePage").val(strHomePage);}
-
-
+	if(strName){$("#inpName").val(strName);}
+	if(strEmail){$("#inpEmail").val(strEmail);}
+	if(strHomePage){$("#inpHomePage").val(strHomePage);}
 
 }
 //*********************************************************
