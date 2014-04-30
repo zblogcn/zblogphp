@@ -55,6 +55,8 @@ class ZBlogPHP{
 
 	public $table=null;
 	public $datainfo=null;
+	public $actions=null;
+	public $action=null;
 
 	public $isinitialize=false;
 	public $isconnect=false;
@@ -95,7 +97,7 @@ class ZBlogPHP{
 
 	function __construct() {
 
-		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,$datainfo;
+		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,$datainfo,$actions,$action;
 		global $blogversion,$blogtitle,$blogname,$blogsubname,$blogtheme,$blogstyle,$currenturl;
 
 		ZBlogException::SetErrorHook();
@@ -111,7 +113,9 @@ class ZBlogPHP{
 
 		$this->table = &$table;
 		$this->datainfo = &$datainfo;
+		$this->actions = &$actions;
 		$this->currenturl = &$currenturl;
+		$this->action = &$action;
 
 		if (trim($this->option['ZC_BLOG_CLSID']) == ''){
 			$this->option['ZC_BLOG_CLSID'] = GetGuid();
@@ -531,7 +535,7 @@ class ZBlogPHP{
 			$fpreturn=$fpname($action);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		if(!isset($GLOBALS['actions'][$action])){
+		if(!isset($this->actions[$action])){
 			if(is_numeric($action)){
 				if ($this->user->Level > $action) {
 					return false;
@@ -540,7 +544,7 @@ class ZBlogPHP{
 				}
 			}
 		}else{
-			if ($this->user->Level > $GLOBALS['actions'][$action]) {
+			if ($this->user->Level > $this->actions[$action]) {
 				return false;
 			} else {
 				return true;
@@ -563,7 +567,7 @@ class ZBlogPHP{
 			}
 		}
 
-		if ($level > $GLOBALS['actions'][$action]) {
+		if ($level > $this->actions[$action]) {
 			return false;
 		} else {
 			return true;

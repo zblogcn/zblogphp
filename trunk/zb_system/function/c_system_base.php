@@ -12,20 +12,15 @@ error_reporting(0);
 ob_start();
 
 
+#引入必备
+require 'c_system_common.php';
+require 'c_system_debug.php';
+require 'c_system_plugin.php';
+require 'c_system_event.php';
+
+
 #系统预处理
-function AutoloadClass($classname){
-	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($classname);
-		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-	}
-	if (is_readable($f=$GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php'))
-		require $f;
-}
-
-
-//SPL autoloading was introduced in PHP 5.1.2
 spl_autoload_register('AutoloadClass');
-
 
 if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()){
 	function _stripslashes(&$var) {
@@ -50,13 +45,6 @@ $_SERVER['_query_count'] = 0;
 $_SERVER['_memory_usage'] = 0;
 $_SERVER['_error_count'] = 0;
 if(function_exists('memory_get_usage'))$_SERVER['_memory_usage'] = memory_get_usage();
-
-
-#引入必备
-require 'c_system_common.php';
-require 'c_system_debug.php';
-require 'c_system_plugin.php';
-require 'c_system_event.php';
 
 
 #定义版本号列

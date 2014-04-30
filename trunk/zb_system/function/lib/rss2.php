@@ -28,6 +28,7 @@ class Rss2 {
 	}
 
 	public function addItem($title,$link,$description,$date){
+		if(substr($this->xml,-6)=='</rss>')return ;
 		$this->xml .= '<item>';
 		$this->xml .= $this->createElement('title',$title);
 		$this->xml .= $this->createElement('link',$link);
