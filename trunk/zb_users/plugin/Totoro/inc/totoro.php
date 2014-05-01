@@ -54,6 +54,33 @@ class Totoro_Class
 	
 	
 	
+	function add_black_list($id)
+	{
+		global $zbp;
+		$comment = $zbp->GetCommentByID($id);
+		$content = $comment->HomePage . ' ' . $comment->Content;
+		$black_list = $this->config_array['BLACK_LIST']['BADWORD_LIST']['VALUE']; $tmp_list = '';
+		$matches = array();
+		$regex = "/(([\w\d]+\.)+\w{2,})/si";
+		preg_match_all($regex, $content, $matches);
+	
+		if (substr($black_list, strlen($black_list) - 1, 1) != '|') $black_list .= '|';
+		
+		foreach($matches[0] as $value)
+		{
+			$value = str_replace('.', '\\.', $value);
+			$tmp_list .= $value . '|';
+		}
+		
+		$zbp->SetHint('good', '新黑词被加入：' . $tmp_list);
+		$black_list .= $tmp_list;
+		if (substr($black_list, strlen($black_list) - 1, 1) == '|') $black_list = substr($black_list, 0, strlen($black_list) - 1);
+		
+		$zbp->Config('Totoro')->BLACK_LIST_BADWORD_LIST = $black_list;
+		$zbp->SaveConfig('Totoro');
+
+	}
+	
 	function build_content(&$comment)
 	{
 		$content = '';
