@@ -155,10 +155,16 @@ class Totoro_Class
 		//if ($this->sv >=)
 	}
 	
+	function replace_comment(&$comment)
+	{
+		$replace_str = $this->config_array['SV_SETTING']['REPLACE_KEYWORD']['VALUE'];
+		$replace_reg = "/" . $this->config_array['BLACK_LIST']['REPLACE_LIST']['VALUE'] . "/si";
+		$comment->Content = preg_replace($replace_reg, $replace_str, $comment->Content);
+	}
+	
 	function check_ip($ip)
 	{
 		$ip_str = explode('|', $this->config_array['BLACK_LIST']['IPFILTER_LIST']['VALUE']);
-		//if (in_array($ip, $ip_str)) return true;
 		for($i = 0;$i < count($ip_str); $i++)
 		{
 			$ip_begin = ip2long(str_replace('*', '0', $ip_str[$i]));
