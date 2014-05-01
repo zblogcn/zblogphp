@@ -17,6 +17,7 @@ $blogtitle='应用中心-插件编辑';
 if (GetVars('id'))
 {
   $app = $zbp->LoadApp('plugin',GetVars('id'));
+  $app->modified = date('Y-m-d', filemtime($zbp->path . '/zb_users/plugin/' . $app->id . '/' . $app->include));
 }
 else
 {
@@ -154,9 +155,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     </tr>
     <tr>
       <td><p><b>· 插件最后修改时间</b><br/>
-          <span class="note">&nbsp;&nbsp;系统自动检查目录内文件的最后修改日期</span></p></td>
+          <span class="note">&nbsp;&nbsp;系统自动检查include.php的最后修改日期</span></p></td>
       <td><p>&nbsp;
-          <input id="app_modified" name="app_modified" style="width:550px;"  type="text" value="<?php echo $app->modified;?>" readonly="readonly" />
+          <input id="app_modified" name="app_modified" style="width:550px;"  type="text" value="<?php echo $app->modified;?>" readonly />
         </p></td>
     </tr>
     <tr>
