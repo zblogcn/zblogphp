@@ -1,8 +1,7 @@
 <?php
 /*  TODO:
  *  原有配置不考虑进行转移或升级
- *  1. 敏感词替换
- *  2. 提取IP和网址
+ *  1. 提取IP和网址
  */
 RegisterPlugin("Totoro","ActivePlugin_Totoro");
 define('TOTORO_PATH', dirname(__FILE__));
@@ -28,16 +27,22 @@ function InstallPlugin_Totoro()
 }
 
 
-function Totoro_Admin_CommentMng_SubMenu(){
+function Totoro_Admin_CommentMng_SubMenu()
+{
 	global $zbp;
 	echo '<a href="'. $zbp->host .'zb_users/plugin/Totoro/main.php"><span class="m-right">Totoro设置</span></a>';
 }
 
 
-function Totoro_PostComment_Core(&$comment){
+function Totoro_PostComment_Core(&$comment)
+{
 	global $zbp;
 	Totoro_init();
 	global $Totoro;
 	$Totoro->check_comment($comment);
+	if (!$comment->IsChecking && !$comment->IsThrow)
+	{
+		$Totoro->replace_comment($comment);
+	}
 }
 
