@@ -1,22 +1,12 @@
 <?php
 
-Add_Filter_Plugin('Filter_Plugin_Html_Js_Add','CodeHighLight_print_KindEditor');
-function CodeHighLight_print_KindEditor(){
-	global $zbp;
-	echo 'document.writeln("<script src=\'' . $zbp->host .'zb_users/plugin/KindEditor/kindeditor/plugins/code/prettify.js\' type=\'text/javascript\'></script><link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host .'zb_users/plugin/KindEditor/kindeditor/plugins/code/prettify.css\'/>");'."\n";
-	echo "$(document).ready(function(){prettyPrint();});\n";
-}
 #注册插件
 RegisterPlugin("KindEditor","ActivePlugin_KindEditor");
 
-
 function ActivePlugin_KindEditor() {
-
 	Add_Filter_Plugin('Filter_Plugin_Edit_Begin','KindEditor_addscript_begin');
-
 	Add_Filter_Plugin('Filter_Plugin_Edit_End','KindEditor_addscript_end');
-
-
+	Add_Filter_Plugin('Filter_Plugin_Html_Js_Add','CodeHighLight_print_KindEditor');
 }
 
 function KindEditor_addscript_begin(){
@@ -27,14 +17,19 @@ function KindEditor_addscript_begin(){
 
 }
 
-
+function CodeHighLight_print_KindEditor(){
+	global $zbp;
+	if($zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE']){
+		echo 'document.writeln("<script src=\'' . $zbp->host .'zb_users/plugin/KindEditor/kindeditor/plugins/code/prettify.js\' type=\'text/javascript\'></script><link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host .'zb_users/plugin/KindEditor/kindeditor/plugins/code/prettify.css\'/>");'."\n";
+		echo "$(document).ready(function(){prettyPrint();});\n";
+	}
+}
 
 function KindEditor_addscript_end(){
 global $zbp;
 $zbphost = $zbp->host;
 $s=<<<script
 <script type="text/javascript">
-
 function editor_init(){
 	editor_api.editor.content.get=function(){return this.obj.html()};
 	editor_api.editor.content.put=function(str){return this.obj.html(str)};
@@ -56,7 +51,6 @@ function editor_init(){
 script;
 
 echo $s;
-
 }
 
 ?>
