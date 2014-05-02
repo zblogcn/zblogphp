@@ -10,9 +10,6 @@
 class ZBlogPHP{
 
 	private static $_zbp=null;
-	public static $error_id=0;
-	public static $error_file=null;
-	public static $error_line=null;
 
 	public $version=null;
 
@@ -176,6 +173,12 @@ class ZBlogPHP{
 	#初始化$zbp
 	public function Initialize(){
 
+		$oldzone=$this->option['ZC_TIME_ZONE_NAME'];
+		date_default_timezone_set($oldzone);
+
+		$oldlang=$this->option['ZC_BLOG_LANGUAGEPACK'];
+		$this->lang = require($this->path . 'zb_users/language/' . $oldlang . '.php');
+
 		if($this->option['ZC_SITE_TURNOFF']==true){
 			Http503();
 			$this->ShowError(82,__FILE__,__LINE__);
@@ -187,6 +190,10 @@ class ZBlogPHP{
 		$this->LoadConfigs();
 		$this->LoadCache();
 		$this->LoadOption();
+		
+		if($oldlang!=$this->option['ZC_BLOG_LANGUAGEPACK']){
+			$this->lang = require($this->path . 'zb_users/language/' . $this->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+		}
 
 		if($this->option['ZC_DEBUG_MODE']==true){
 			error_reporting(-1);
@@ -206,7 +213,9 @@ class ZBlogPHP{
 		$this->option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.zblogcn.com/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
 		$this->option['ZC_BLOG_PRODUCT_HTML']='<a href="http://www.zblogcn.com/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT'] . '</a>';
 
-		date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
+		if($oldzone!=$this->option['ZC_TIME_ZONE_NAME']){
+			date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
+		}
 
 		/*if(isset($_COOKIE['timezone'])){
 			$tz=GetVars('timezone','COOKIE');
@@ -498,8 +507,8 @@ class ZBlogPHP{
 			//if($key=='ZC_PERMANENT_DOMAIN_ENABLE')continue;
 			//if($key=='ZC_BLOG_HOST')continue;
 			//if($key=='ZC_BLOG_CLSID')continue;
+			//if($key=='ZC_BLOG_LANGUAGEPACK')continue;
 			if($key=='ZC_YUN_SITE')continue;
-			if($key=='ZC_BLOG_LANGUAGEPACK')continue;
 			if($key=='ZC_DATABASE_TYPE')continue;
 			if($key=='ZC_SQLITE_NAME')continue;
 			if($key=='ZC_SQLITE_PRE')continue;
@@ -1498,9 +1507,9 @@ function AddBuildModuleAll(){
 			Http404();
 		}
 
-		self::$error_id=(int)$idortext;
-		self::$error_file=$file;
-		self::$error_line=$line;
+		ZBlogException::$error_id=(int)$idortext;
+		ZBlogException::$error_file=$file;
+		ZBlogException::$error_line=$line;
 
 		if(is_numeric($idortext))$idortext=$this->lang['error'][$idortext];
 

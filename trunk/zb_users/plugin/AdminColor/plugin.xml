@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>AdminColor</id>
 <name>后台配色器</name>
@@ -6,7 +6,7 @@
 <note>给Z-BlogPHP版换后台配色的小工具.</note>
 <description>给Z-BlogPHP版换后台配色的小工具.</description>
 <path></path>
-<include>include.asp</include>
+<include>include.php</include>
 <level>1</level>
 <author>
   <name>zx.asd</name>

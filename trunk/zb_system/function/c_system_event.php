@@ -12,7 +12,7 @@ function AutoloadClass($classname){
 		$fpreturn=$fpname($classname);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
-	if (is_readable($f=$GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php'))
+	if (is_readable($f=dirname(__FILE__) . '/lib/' . strtolower($classname) .'.php'))
 		require $f;
 }
 

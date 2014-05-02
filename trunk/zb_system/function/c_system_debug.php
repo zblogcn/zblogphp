@@ -48,6 +48,9 @@ function shutdown_error_handler() {
 class ZBlogException {
 	static private $_zbe = null;
 	static public $isdisable = false;
+	public static $error_id=0;
+	public static $error_file=null;
+	public static $error_line=null;
 	public $type;
 	public $message;
 	public $file;
@@ -55,22 +58,24 @@ class ZBlogException {
 	public $errarray=array();
 
 	function __construct(){
-		$this->errarray[0]='UNKNOWN';
-		$this->errarray[1]='E_ERROR';
-		$this->errarray[2]='E_WARNING';
-		$this->errarray[4]='E_PARSE';
-		$this->errarray[8]='E_NOTICE';
-		$this->errarray[16]='E_CORE_ERROR';
-		$this->errarray[32]='E_CORE_WARNING';
-		$this->errarray[64]='E_COMPILE_ERROR';
-		$this->errarray[128]='E_COMPILE_WARNING';
-		$this->errarray[256]='E_USER_ERROR';
-		$this->errarray[512]='E_USER_WARNING';
-		$this->errarray[1024]='E_USER_NOTICE';
-		$this->errarray[2048]='E_STRICT';
-		$this->errarray[4096]='E_RECOVERABLE_ERROR';	
-		$this->errarray[8192]='E_DEPRECATED';
-		$this->errarray[16384]='E_USER_DEPRECATED';
+		$this->errarray=array(
+			0=>'UNKNOWN',
+			1=>'E_ERROR',
+			2=>'E_WARNING',
+			4=>'E_PARSE',
+			8=>'E_NOTICE',
+			16=>'E_CORE_ERROR',
+			32=>'E_CORE_WARNING',
+			64=>'E_COMPILE_ERROR',
+			128=>'E_COMPILE_WARNING',
+			256=>'E_USER_ERROR',
+			512=>'E_USER_WARNING',
+			1024=>'E_USER_NOTICE',
+			2048=>'E_STRICT',
+			4096=>'E_RECOVERABLE_ERROR',
+			8192=>'E_DEPRECATED',
+			16384=>'E_USER_DEPRECATED',
+		);
 	}
 
 	public function __get($name){
@@ -140,10 +145,10 @@ class ZBlogException {
 		$this->file = $exception->getFile();
 		$this->line = $exception->getLine();
 
-		if (ZBlogPHP::$error_file !== null)
-			$this->file = ZBlogPHP::$error_file;
-		if (ZBlogPHP::$error_line !== null)
-			$this->line = ZBlogPHP::$error_line;
+		if (self::$error_file !== null)
+			$this->file = self::$error_file;
+		if (self::$error_line !== null)
+			$this->line = self::$error_line;
 
 	}
 
