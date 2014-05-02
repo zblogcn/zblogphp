@@ -11,6 +11,7 @@ error_reporting(0);
 
 ob_start();
 
+
 #引入必备
 $basepath = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 require $basepath . 'c_system_common.php';
@@ -44,7 +45,7 @@ $_SERVER['_start_time'] = microtime(1); //RunTime
 $_SERVER['_query_count'] = 0;
 $_SERVER['_memory_usage'] = 0;
 $_SERVER['_error_count'] = 0;
-if(function_exists('memory_get_usage'))$_SERVER['_memory_usage'] = memory_get_usage();
+if(function_exists('memory_get_usage'))$_SERVER['_memory_usage'] = memory_get_usage(true);
 
 
 #定义版本号列
@@ -77,10 +78,10 @@ define('ZC_REWRITE_GO_ON', 'go_on');
 $zbp = null;
 $action = null;
 $currenturl = GetRequestUri();
+$lang = array();
 
 $blogpath = str_replace('\\','/',realpath($basepath . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR)) . '/';
 $usersdir = $blogpath . 'zb_users/';
-unset($basepath);
 
 $option_zbusers = null;
 if(is_readable($filename = $usersdir . 'c_option.php')){
@@ -91,13 +92,7 @@ $option = require($blogpath . 'zb_system/defend/option.php');
 foreach ($option_zbusers as $key => $value) {
 	$option[$key] = $value;
 }
-unset($key);
-unset($value);
-unset($option_zbusers);
-
-date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
-
-$lang = require($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+unset($basepath,$key,$value,$option_zbusers);
 
 $blogtitle = $option['ZC_BLOG_SUBNAME'];
 $blogname = &$option['ZC_BLOG_NAME'];
@@ -107,7 +102,7 @@ $blogstyle = &$option['ZC_BLOG_CSS'];
 $blogversion = substr(ZC_BLOG_VERSION,-6,6);
 
 $cookiespath = null;
-$bloghost = GetCurrentHost($cookiespath);
+$bloghost = GetCurrentHost($blogpath,$cookiespath);
 
 
 #定义命令
@@ -355,9 +350,7 @@ foreach ($ap as $plugin) {
 		require $filename;
 	}
 }
-unset($plugin);
-unset($ap);
-unset($filename);
+unset($plugin,$ap,$filename);
 
 
 #激活所有已加载的插件

@@ -67,7 +67,7 @@ function GetDbName() {
 	return str_replace('-', '', '#%20' . strtolower(GetGuid())) . '.db';
 }
 
-function GetCurrentHost(&$cookiespath) {
+function GetCurrentHost($blogpath,&$cookiespath) {
 	if (array_key_exists('HTTPS', $_SERVER)) {
 		if ($_SERVER['HTTPS'] == 'off') {
 			$host = 'http://';
@@ -80,7 +80,7 @@ function GetCurrentHost(&$cookiespath) {
 
 	$host .= $_SERVER['HTTP_HOST'];
 
-	$y = $GLOBALS['blogpath'];
+	$y = $blogpath;
 	$x = $_SERVER['SCRIPT_NAME'];
 
 	for ($i = strlen($x); $i > 0; $i--) {
