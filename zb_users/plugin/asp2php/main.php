@@ -357,7 +357,14 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle;?>	<?php
+	  $app = new App;
+	  $app->LoadInfoByXml('plugin','asp2php');
+	  $version = $app->version;
+	  if($version >= '1.2'){
+		  echo '<a href="upgrade_comment.php" class="button" style="color:red;">升级ASP导入评论数据</a>';
+	  }
+	  ?></div>
   <div class="SubMenu">
   </div>
 <div id="divMain2">
