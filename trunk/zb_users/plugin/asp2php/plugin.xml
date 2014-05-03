@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>asp2php</id>
 <name>ASP转换PHP数据导入</name>
@@ -19,9 +19,9 @@
   <url></url>
 </source>
 <adapted>140220</adapted>
-<version>1.1</version>
+<version>1.2</version>
 <pubdate>2013-12-13</pubdate>
-<modified>2014-02-27</modified>
+<modified>2014-05-03</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>
