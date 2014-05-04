@@ -185,8 +185,16 @@ class Totoro_Class
 	function replace_comment(&$comment)
 	{
 		$replace_str = $this->config_array['SV_SETTING']['REPLACE_KEYWORD']['VALUE'];
-		$replace_reg = "/" . $this->config_array['BLACK_LIST']['REPLACE_LIST']['VALUE'] . "/si";
-		$comment->Content = preg_replace($replace_reg, '', $comment->Content);
+		
+		$replace_list = $this->config_array['BLACK_LIST']['REPLACE_LIST']['VALUE'];
+		$badword_list = $this->config_array['BLACK_LIST']['BADWORD_LIST']['VALUE'];
+		
+		$replace_reg = "/" . 
+						($replace_list != '' ? $replace_list . '|' : '') . 
+						($badword_list != '' ? $badword_list       : '') . 
+					  "/si";
+					  
+		if ($replace_reg != "//si") $comment->Content = preg_replace($replace_reg, $replace_str, $comment->Content);
 	}
 	
 	function check_ip($ip)
