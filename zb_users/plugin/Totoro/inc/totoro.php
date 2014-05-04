@@ -186,7 +186,7 @@ class Totoro_Class
 	{
 		$replace_str = $this->config_array['SV_SETTING']['REPLACE_KEYWORD']['VALUE'];
 		$replace_reg = "/" . $this->config_array['BLACK_LIST']['REPLACE_LIST']['VALUE'] . "/si";
-		$comment->Content = preg_replace($replace_reg, $replace_str, $comment->Content);
+		$comment->Content = preg_replace($replace_reg, '', $comment->Content);
 	}
 	
 	function check_ip($ip)
