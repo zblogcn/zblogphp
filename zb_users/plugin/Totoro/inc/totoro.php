@@ -190,8 +190,9 @@ class Totoro_Class
 		$badword_list = $this->config_array['BLACK_LIST']['BADWORD_LIST']['VALUE'];
 		
 		$replace_reg = "/" . 
-						($replace_list != '' ? $replace_list . '|' : '') . 
-						($badword_list != '' ? $badword_list       : '') . 
+						($replace_list != '' ? $replace_list : '') .
+						(($replace_list != '' && $badword_list != '') ? '|' : '') .  
+						($badword_list != '' ? $badword_list : '') . 
 					  "/si";
 					  
 		if ($replace_reg != "//si") $comment->Content = preg_replace($replace_reg, $replace_str, $comment->Content);
