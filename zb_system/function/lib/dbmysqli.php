@@ -56,7 +56,7 @@ class DbMySQLi implements iDataBase
 		$db = @mysqli_connect($dbmysql_server, $dbmysql_username, $dbmysql_password, null,$dbmysql_port);
 		$this->db = $db;
 		$this->dbname=$dbmysql_name;
-		mysqli_query($this->db,'CREATE DATABASE ' . $dbmysql_name);
+		mysqli_query($this->db,$this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
 	}
 
 	function Close(){
@@ -64,20 +64,18 @@ class DbMySQLi implements iDataBase
 	}
 
 	function QueryMulit($s){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		foreach ($a as $s) {
 			$s=trim($s);
 			if($s<>''){
-				mysqli_query($this->db,$s);
+				mysqli_query($this->db,$this->sql->Filter($s));
 			}
 		}
 	}
 
 	function Query($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		$results = mysqli_query($this->db,$query);
+		$results = mysqli_query($this->db,$this->sql->Filter($query));
 		$data = array();
 		if(is_object($results)){
 			while($row = mysqli_fetch_assoc($results)){
@@ -87,10 +85,10 @@ class DbMySQLi implements iDataBase
 			$data[]=$results;
 		}
 
-		if(true==true){
-		//if(true!==true){
+		//if(true==true){
+		if(true!==true){
 			$query="EXPLAIN " . $query;
-			$results2 = mysqli_query($this->db,$query);
+			$results2 = mysqli_query($this->db,$this->sql->Filter($query));
 			$explain=array();
 			if($results2){
 				while($row = mysqli_fetch_assoc($results2)){
@@ -104,21 +102,18 @@ class DbMySQLi implements iDataBase
 	}
 
 	function Update($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		return mysqli_query($this->db,$query);
+		return mysqli_query($this->db,$this->sql->Filter($query));
 	}
 
 	function Delete($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		return mysqli_query($this->db,$query);
+		return mysqli_query($this->db,$this->sql->Filter($query));
 	}
 
 	function Insert($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		mysqli_query($this->db,$query);
+		mysqli_query($this->db,$this->sql->Filter($query));
 		return mysqli_insert_id($this->db);
 	}
 

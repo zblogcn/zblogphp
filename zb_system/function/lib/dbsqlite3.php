@@ -42,19 +42,20 @@ class DbSQLite3 implements iDataBase
 	}
 
 	function QueryMulit($s){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		foreach ($a as $s) {
-			$this->db->query($s);
+			$s=trim($s);
+			if($s<>''){
+				$this->db->query($this->sql->Filter($s));
+			}
 		}
 
 	}
 
 	function Query($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		// 遍历出来
-		$results =$this->db->query($query);
+		$results =$this->db->query($this->sql->Filter($query));
 		$data = array();
 		if($results->numColumns()>0){
 			while($row = $results->fetchArray()){
@@ -67,22 +68,18 @@ class DbSQLite3 implements iDataBase
 	}
 
 	function Update($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		return $this->db->query($query);
+		return $this->db->query($this->sql->Filter($query));
 	}
 
-	function Delete($query)
-	{
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
+	function Delete($query){
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		return $this->db->query($query);
+		return $this->db->query($this->sql->Filter($query));
 	}
 
 	function Insert($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;	
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		$this->db->query($query);
+		$this->db->query($this->sql->Filter($query));
 		return $this->db->lastInsertRowID();
 	}
 

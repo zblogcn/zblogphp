@@ -3,6 +3,11 @@
 说明:定义autoload魔术方法\\
 调用:\\
 
+====Filter_Plugin_DbSql_Filter====
+参数:$method, $args\\
+说明:DbSql类的SQL过滤和统计方法接口\\
+调用:\\
+
 ====Filter_Plugin_Zbp_Call====
 参数:$method, $args\\
 说明:Zbp类的魔术方法接口\\

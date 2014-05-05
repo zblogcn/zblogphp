@@ -64,7 +64,7 @@ class DbMySQL implements iDataBase
 		$db_link = @mysql_connect($dbmysql_server . ':' . $dbmysql_port, $dbmysql_username, $dbmysql_password);
 		$this->db = $db_link;
 		$this->dbname=$dbmysql_name;
-		mysql_query('CREATE DATABASE ' . $dbmysql_name);
+		mysql_query($this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
 	}
 
 	function Close(){
@@ -72,17 +72,18 @@ class DbMySQL implements iDataBase
 	}
 
 	function QueryMulit($s){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
 		foreach ($a as $s) {
-			mysql_query($s);
+			$s=trim($s);
+			if($s<>''){
+				mysql_query($this->sql->Filter($s));				
+			}
 		}
 	}
 
 	function Query($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		$results = mysql_query($query);
+		$results = mysql_query($this->sql->Filter($query));
 		$data = array();
 		if(is_resource($results)){
 			while($row = mysql_fetch_assoc($results)){
@@ -95,21 +96,18 @@ class DbMySQL implements iDataBase
 	}
 
 	function Update($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		return mysql_query($query);
+		return mysql_query($this->sql->Filter($query));
 	}
 
 	function Delete($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		return mysql_query($query);
+		return mysql_query($this->sql->Filter($query));
 	}
 
 	function Insert($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		mysql_query($query);
+		mysql_query($this->sql->Filter($query));
 		return mysql_insert_id();
 	}
 
