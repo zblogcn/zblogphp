@@ -55,7 +55,7 @@ class Dbpdo_MySQL implements iDataBase
 		$db_link = new PDO('mysql:host=' . $dbmysql_server . ';port=' . $dbmysql_port,$dbmysql_username,$dbmysql_password,$options);
 		$this->db = $db_link;
 		$this->dbname=$dbmysql_name;
-		$this->db->exec('CREATE DATABASE ' . $dbmysql_name);
+		$this->db->exec($this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
 	}
 
 	function Close(){
@@ -63,19 +63,19 @@ class Dbpdo_MySQL implements iDataBase
 	}
 
 	function QueryMulit($s){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		foreach ($a as $s) {
 			$s=trim($s);
-			if($s<>''){$this->db->exec($s);}
+			if($s<>''){
+				$this->db->exec($this->sql->Filter($s));
+			}
 		}
 	}
 
 	function Query($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
 		// 遍历出来
-		$results = $this->db->query($query);
+		$results = $this->db->query($this->sql->Filter($query));
 		//fetch || fetchAll
 		if(is_object($results)){
 			return $results->fetchAll();
@@ -86,21 +86,18 @@ class Dbpdo_MySQL implements iDataBase
 	}
 
 	function Update($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		return $this->db->query($query);
+		return $this->db->query($this->sql->Filter($query));
 	}
 
 	function Delete($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		return $this->db->query($query);
+		return $this->db->query($this->sql->Filter($query));
 	}
 
 	function Insert($query){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
 		$query=str_replace('%pre%', $this->dbpre, $query);
-		$this->db->exec($query);
+		$this->db->exec($this->sql->Filter($query));
 		return $this->db->lastInsertId();
 	}
 

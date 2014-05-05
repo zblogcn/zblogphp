@@ -116,6 +116,21 @@ function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSI
 $Filter_Plugin_Autoload = array();
 
 ################################################################################################################
+#DbSql类里的接口
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_DbSql_Filter
+'参数:$method, $args
+'说明:DbSql类的SQL过滤和统计方法接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_DbSql_Filter = array();
+
+
+
 #ZBP类里的接口
 
 /*

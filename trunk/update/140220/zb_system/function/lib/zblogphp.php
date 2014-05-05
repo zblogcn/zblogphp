@@ -1185,11 +1185,16 @@ function AddBuildModuleAll(){
 	}
 
 	function GetModuleByID($id){
-		foreach ($this->modules as $key => $value) {
-			if($value->ID==$id)return $value;
+		if($id==0){
+			$m = new Module;
+			return $m;
+		}else{
+			foreach ($this->modules as $key => $value) {
+				if($value->ID==$id)return $value;
+			}
+			$m = new Module;
+			return $m;
 		}
-		$m = new Module;
-		return $m;
 	}
 
 	function GetMemberByID($id){

@@ -474,4 +474,14 @@ class DbSql #extends AnotherClass
 		return $sql;
 	}
 
+	public function Filter($sql){
+		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
+		
+		foreach ($GLOBALS['Filter_Plugin_DbSql_Filter'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($sql);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+		//Logs($sql);
+		return $sql;
+	}
 }
