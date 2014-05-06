@@ -28,7 +28,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 		{
 			while (($filename = readdir($handle)))
 			{
-				if (!is_dir($filename))
+				if (!is_dir($filename) && preg_match("/\d+_zbp_.+?\.php/", $filename))
 				{
 					$format_filename = htmlspecialchars($filename);
 	  ?>
@@ -60,6 +60,7 @@ RunTime();
 function format_size($bytes)
 {
 	$units = array('Bytes', 'KB', 'MB', 'GB', 'TB', 'PB');
+	$units[-1] = '';
 	$i = 0;
     while($bytes >= pow(1024, $i)) $i++;
 	return round($bytes / pow(1024, $i-1) * 100) / 100 . ' ' . $units[$i-1];
