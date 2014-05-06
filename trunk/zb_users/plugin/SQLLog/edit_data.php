@@ -14,7 +14,8 @@ switch (GetVars('act', 'GET'))
 {
 	case 'delete_all':
 		while (($filename_in_while = readdir($handle)))
-			if(!is_dir(SQLLOG_LOGPATH . $filename_in_while)) unlink(SQLLOG_LOGPATH . $filename_in_while);
+			if(!is_dir(SQLLOG_LOGPATH . $filename_in_while) && preg_match("/\d+_zbp_.+?\.php/", $filename_in_while))
+				unlink(SQLLOG_LOGPATH . $filename_in_while);
 		$zbp->SetHint('good');
 		Redirect('main.php');
 	break;
