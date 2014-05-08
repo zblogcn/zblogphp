@@ -166,6 +166,7 @@ $blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights'];
 </body>
 </html>
 <?php
+RunTime();
 }
 
 ?>
