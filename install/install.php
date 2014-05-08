@@ -4,6 +4,9 @@
 #///////////////////////////////////////////////////////////////////////////////
 
 error_reporting(0);
+
+header('Content-type: text/html; charset=utf-8');
+
 //ob_start();
 
 $xml=null;
@@ -104,7 +107,7 @@ function install3(){
 body{margin:0;padding:0;color: #000000;background:#fff;}
 h1,h2,h3,h4,h5,h6{font-size:18px;padding:0;color:#3a6ea5;}
 h1{font-size:28px;}
-input{padding:15px 80px;}
+input{padding:15px 82px;}
 div{position:absolute;left: 50%;top: 50%;margin: -190px 0px 0px -150px;padding:0;overflow:hidden;width:300px;background-color:white;text-align:center;}
 --></style>
 </head>

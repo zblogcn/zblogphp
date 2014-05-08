@@ -82,7 +82,7 @@ $num=count($array);
 	echo '<td class="td10 tdCenter">';
 	echo '<a href="'.$bloghost.'zb_system/cmd.php?act=ArticleEdt&amp;id='. $article->ID .'"><img src="'.$bloghost.'zb_system/image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="'.$bloghost.'zb_system/cmd.php?act=ArticleDel&amp;id='. $article->ID .'"><img src="'.$bloghost.'zb_system/image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
+	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="'.$bloghost.'zb_system/cmd.php?act=ArticleDel&amp;id='. $article->ID  . '&amp;token='. $zbp->GetToken() .'"><img src="'.$bloghost.'zb_system/image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
 	echo '</td>';
 
 	echo '</tr>';

@@ -243,6 +243,8 @@ class ZBlogPHP{
 		if(!$this->isinitialize)return false;
 
 		$this->StartGzip();
+		
+		header('Content-type: text/html; charset=utf-8');
 
 		$this->LoadMembers();
 
@@ -279,7 +281,7 @@ class ZBlogPHP{
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 
 		if($this->ismanage==true) $this->LoadManage();
-		
+
 		$this->isload=true;
 	}
 
@@ -838,6 +840,7 @@ function AddBuildModuleAll(){
 		$this->templatetags['zbp']=&$this;
 		$this->templatetags['user']=&$this->user;
 		$this->templatetags['option']=&$option;
+		$this->templatetags['lang']=&$this->lang;
 		$this->templatetags['categorys']=&$this->categorys;
 		$this->templatetags['modules']=&$this->modulesbyfilename;
 		$this->templatetags['title']=htmlspecialchars($this->title);
