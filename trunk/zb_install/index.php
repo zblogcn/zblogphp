@@ -14,6 +14,8 @@
 
 require '../zb_system/function/c_system_base.php';
 
+header('Content-type: text/html; charset=utf-8');
+
 define('bingo','<span class="bingo"></span>');
 define('error','<span class="error"></span>');
 

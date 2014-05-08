@@ -5,12 +5,12 @@
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-06-14
  */
-header('Content-Type: application/x-javascript; Charset=utf-8');
-
 require '../function/c_system_base.php';
 
 $zbp->CheckGzip();
 $zbp->StartGzip();
+
+header('Content-Type: application/x-javascript; charset=utf-8');
 ?>
 var bloghost="<?php echo $bloghost; ?>";
 var cookiespath="<?php echo $cookiespath; ?>";
@@ -118,7 +118,7 @@ function bmx2table(){
 
 
 
-
+<!--
 //*********************************************************
 // 目的：    批量操作提醒
 // 输入：    无
@@ -131,7 +131,7 @@ function BatchEnd(){};
 function BatchNotify(){notify($("#batch p").html())}
 function BatchCancel(){$("#batch iframe").remove();$("#batch p").before("<iframe style='width:20px;height:20px;' frameborder='0' scrolling='no' src='<?php echo $bloghost ?>zb_system/cmd.php?act=batch&cancel=true'></iframe>");};
 //*********************************************************
-
+-->
 
 
 

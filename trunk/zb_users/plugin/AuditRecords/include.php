@@ -140,7 +140,7 @@ function AuditRecords_Edit_Response3(){
 		}
 		
 		echo '<b>'.$zbp->GetMemberByID($ar->AuthorID)->Name .'</b>于'.date('Y-m-d',$ar->PostTime).'发布意见:';
-		echo '<br/>'.htmlspecialchars($ar->Logs);
+		echo '<br/>'.htmlspecialchars(str_replace(PHP_EOL,'<br/>',$ar->Logs));
 		echo '</dd>';
 	}
 

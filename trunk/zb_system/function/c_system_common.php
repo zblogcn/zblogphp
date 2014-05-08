@@ -524,6 +524,11 @@ function CloseTags($html) {
 
 function SubStrUTF8($sourcestr, $cutlength) {
 
+	if( function_exists('mb_substr') && function_exists('mb_internal_encoding') ){
+		mb_internal_encoding('UTF-8');
+		return mb_substr($sourcestr, 0, $cutlength);
+	}
+
 	$returnstr = '';
 	$i = 0;
 	$n = 0;
@@ -566,4 +571,15 @@ function SubStrUTF8($sourcestr, $cutlength) {
 
 	return $returnstr;
 
+}
+
+function RemoveBOM($s){
+	$charset=array();
+	$charset[1] = substr($s, 0, 1);
+	$charset[2] = substr($s, 1, 1);
+	$charset[3] = substr($s, 2, 1);
+	if (ord($charset[1]) == 239 && ord($charset[2]) == 187 && ord($charset[3]) == 191) {
+		$s = substr($s, 3);
+	}
+	return $s;
 }

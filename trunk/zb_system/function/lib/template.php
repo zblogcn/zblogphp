@@ -61,7 +61,8 @@ class Template{
 	function CompileFiles($filesarray){
 
 		foreach ($filesarray as $name => $content) {
-			@file_put_contents($this->path . $name . '.php', $this->Compiling($content));
+			$s=RemoveBOM($this->Compiling($content));
+			@file_put_contents($this->path . $name . '.php', $s);
 			//if(function_exists('chmod')){
 			//	@chmod($this->path . $name . '.php',0755);
 			//}
