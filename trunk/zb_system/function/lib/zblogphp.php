@@ -298,13 +298,11 @@ class ZBlogPHP{
 
 	#终止连接，释放资源
 	public function Terminate(){
-		foreach ($GLOBALS['Filter_Plugin_Zbp_Terminate'] as $fpname => &$fpsignal) $fpname();
-
 		if($this->isinitialize){
+			foreach ($GLOBALS['Filter_Plugin_Zbp_Terminate'] as $fpname => &$fpsignal) $fpname();
 			$this->CloseConnect();
 			$this->isinitialize=false;
 		}
-
 	}
 
 
@@ -983,13 +981,15 @@ function AddBuildModuleAll(){
 
 		if(strpos($this->templates['footer'], '{$footer}')===false){
 			if(strpos($this->templates['footer'], '</body>')!==false){
-				$this->templates['footer']=str_replace('</body>','{$header}' . '</body>',$this->templates['footer']);
+				$this->templates['footer']=str_replace('</body>','{$footer}' . '</body>',$this->templates['footer']);
 			}elseif(strpos($this->templates['footer'], '</ body>')!==false){
-				$this->templates['footer']=str_replace('</ head>','{$header}' . '</ body>',$this->templates['footer']);
+				$this->templates['footer']=str_replace('</ body>','{$footer}' . '</ body>',$this->templates['footer']);
 			}elseif(strpos($this->templates['footer'], '</html>')!==false){
-				$this->templates['footer']=str_replace('</html>','{$header}' . '</html>',$this->templates['footer']);
+				$this->templates['footer']=str_replace('</html>','{$footer}' . '</html>',$this->templates['footer']);
+			}elseif(strpos($this->templates['footer'], '</ html>')!==false){
+				$this->templates['footer']=str_replace('</ html>','{$footer}' . '</ html>',$this->templates['footer']);
 			}else{
-				$this->templates['footer'] = '{$header}' . $this->templates['footer'];
+				$this->templates['footer'] = '{$footer}' . $this->templates['footer'];
 			}
 		}
 
