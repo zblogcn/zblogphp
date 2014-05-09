@@ -55,7 +55,7 @@ function install1(){
 	echo "<p>正在努力地下载数据包...</p>";
 	ob_flush();
 
-	$GLOBALS['xml']=GetHttpContent('http://update.rainbowsoft.org/zblogphp/?install');
+	$GLOBALS['xml']=GetHttpContent('http://update.zblogcn.com/zblogphp/?install');
 
 	//file_put_contents('release.xml',$GLOBALS['xml']);
 
@@ -114,8 +114,8 @@ div{position:absolute;left: 50%;top: 50%;margin: -190px 0px 0px -150px;padding:0
 <body>
 <div>
 <h1>Z-BlogPHP 在线安装</h1>
-<p><?php echo (($v=GetHttpContent('http://update.rainbowsoft.org/zblogphp/'))=='')?'不能联网获取Z-BlogPHP！':'最新版本：'.$v;?></p>
-<p><img src="http://update.rainbowsoft.org/zblogphp/loading.png" alt="Z-BlogPHP在线安装" title="Z-BlogPHP在线安装"/></p>
+<p><?php echo (($v=GetHttpContent('http://update.zblogcn.com/zblogphp/'))=='')?'不能联网获取Z-BlogPHP！':'最新版本：'.$v;?></p>
+<p><img src="http://update.zblogcn.com/zblogphp/loading.png" alt="Z-BlogPHP在线安装" title="Z-BlogPHP在线安装"/></p>
 <form method="post" action="#">
 <?php
 

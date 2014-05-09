@@ -4,7 +4,7 @@ RegisterPlugin("AppCentre","ActivePlugin_AppCentre");
 
 define('APPCENTRE_URL','http://app.rainbowsoft.org/client/');
 
-define('APPCENTRE_SYSTEM_UPDATE','http://update.rainbowsoft.org/zblogphp/');
+define('APPCENTRE_SYSTEM_UPDATE','http://update.zblogcn.com/zblogphp/');
 
 function ActivePlugin_AppCentre() {
 

@@ -41,7 +41,7 @@ if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()){
 
 
 #初始化统计信息
-$_SERVER['_start_time'] = microtime(1); //RunTime
+$_SERVER['_start_time'] = microtime(true); //RunTime
 $_SERVER['_query_count'] = 0;
 $_SERVER['_memory_usage'] = 0;
 $_SERVER['_error_count'] = 0;
