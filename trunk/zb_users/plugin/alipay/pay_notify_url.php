@@ -12,16 +12,18 @@
  */
 
 require_once("alipay.aconfig.php");
-require_once("lib/alipay_submit.class.php");
+require_once("lib/alipay_notify.class.php");
 
 //计算得出通知验证结果
 $alipayNotify = new AlipayNotify($alipay_config);
 $verify_result = $alipayNotify->verifyNotify();
 
 if($verify_result) {//验证成功
-	//商户订单号	$out_trade_no = $_POST['out_trade_no'];
+	//商户订单号
+	$out_trade_no = $_POST['out_trade_no'];
 
-	//支付宝交易号	$trade_no = $_POST['trade_no'];
+	//支付宝交易号
+	$trade_no = $_POST['trade_no'];
 
 	//交易状态
 	$trade_status = $_POST['trade_status'];
