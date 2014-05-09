@@ -839,6 +839,7 @@ function AddBuildModuleAll(){
 		$this->templatetags['user']=&$this->user;
 		$this->templatetags['option']=&$option;
 		$this->templatetags['lang']=&$this->lang;
+		$this->templatetags['version']=&$this->version;
 		$this->templatetags['categorys']=&$this->categorys;
 		$this->templatetags['modules']=&$this->modulesbyfilename;
 		$this->templatetags['title']=htmlspecialchars($this->title);
@@ -853,6 +854,7 @@ function AddBuildModuleAll(){
 		$this->templatetags['copyright']=$this->option['ZC_BLOG_COPYRIGHT'];
 		$this->templatetags['zblogphp']=$this->option['ZC_BLOG_PRODUCT_FULL'];
 		$this->templatetags['zblogphphtml']=$this->option['ZC_BLOG_PRODUCT_FULLHTML'];
+		$this->templatetags['zblogphpabbrhtml']=$this->option['ZC_BLOG_PRODUCT_HTML'];
 		$this->templatetags['feedurl']=$this->host . 'feed.php';
 		$this->templatetags['type']='';
 		$this->templatetags['page']='';
