@@ -41,7 +41,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               <td>3. ISAPI_Rewrite 2.x和3.x是由Helicon出品的伪静态组件，均分Lite和Full两个版本。Lite版本免费，Full版本收费。URL Rewrite为微软官方出品的免费的应用于IIS7+的伪静态组件。</td>
             </tr>
             <tr height="32">
-              <td>4. Windows Server 2003(r2)一般使用IIS6+ISAPI Rewrite 2.x或3.x ， Windows Server 2008(r2)及2012一般使用IIS7、7.5、8+URL Rewrite组件。虚拟主机用户请咨询你的空间商。<a href="http://host.rainbowsoft.org" target="_blank">DBS主机</a>目前使用ISAPI Rewrite 2.x。</a></td>
+              <td>4. Windows Server 2003(r2)一般使用IIS6+ISAPI Rewrite 2.x或3.x ， Windows Server 2008(r2)及2012一般使用IIS7、7.5、8+URL Rewrite组件。虚拟主机用户请咨询你的空间商。<a href="http://www.dbshost.cn/" target="_blank">DBS主机</a>目前使用ISAPI Rewrite 2.x。</a></td>
             </tr>
             <tr height="32">
               <td>5. VPS、独立服务器若未安装组件，可点击右边链接下载。 <a href="http://www.helicontech.com/download-isapi_rewrite.htm" target="_blank">ISAPI_Rewrite 2.x </a> &nbsp; &nbsp; <a href="http://www.helicontech.com/download-isapi_rewrite3.htm" target="_blank">ISAPI_Rewrite 3.x </a> &nbsp; &nbsp; <a href="http://www.iis.net/downloads/microsoft/url-rewrite" target="_blank">URL Rewrite（需安装Microsoft Web Platform）</td>

@@ -51,7 +51,7 @@ return array(
 	'ZC_DEBUG_MODE' => true,
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
-	'ZC_UPDATE_INFO_URL' => 'http://update.rainbowsoft.org/info/',
+	'ZC_UPDATE_INFO_URL' => 'http://update.zblogcn.com/info/',
 	// '固定域名,默认为false,如启用则'ZC_BLOG_HOST生效而'ZC_MULTI_DOMAIN_SUPPORT无效
 	'ZC_PERMANENT_DOMAIN_ENABLE' => false,
 	'ZC_MULTI_DOMAIN_SUPPORT' => false,
