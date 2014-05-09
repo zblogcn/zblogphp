@@ -49,7 +49,7 @@ function CloudStorage($tmp, &$upload){
 			//$putExtra = new Qiniu_PutExtra();
 			//$putExtra->Crc32 = 1;
 			list($ret, $err) = Qiniu_PutFile($upToken, $object, $file_path, null);
-			$upload->Metas->CS_URL = 'http://'.$bucket.'.u.qiniudn.com/'.$ret['key'];
+			$upload->Metas->CS_URL = 'http://'.$bucket.'.qiniudn.com/'.$ret['key'];//20140509更新V1.1:删除u
 			break;
 		case '3':
 			define ( 'BCS_AK', $zbp->Config('CloudStorage')->CS_Baidu_KeyID);//AK 公钥
@@ -137,5 +137,7 @@ function InstallPlugin_CloudStorage() {
 		$zbp->Config('CloudStorage')->CS_Baidu_KeySecret = '';
 		$zbp->SaveConfig('CloudStorage');
 	}
+	$zbp->Config('CloudStorage')->Version = '1.1';
+	$zbp->SaveConfig('CloudStorage');
 }
 function UninstallPlugin_CloudStorage() {}
