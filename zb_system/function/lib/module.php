@@ -35,6 +35,8 @@ class Module extends Base{
 				return 'user';
 			}elseif($this->Source=='theme'){
 				return 'theme';
+			}elseif($this->Source=='plugin_' . $zbp->theme){
+				return 'theme';
 			}else{
 				return 'plugin';
 			}
