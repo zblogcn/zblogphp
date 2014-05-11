@@ -19,7 +19,7 @@
 				{if $user.ID>0}
 					<input type="hidden" name="inpName" id="inpName" value="{$user.Name}" />
 					<input type="hidden" name="inpEmail" id="inpEmail" value="{$user.Email}" />
-					<input type="hidden" name="inpHomePage" id="inpHomePage" value="{$user.HomePage}" />	
+					<input type="hidden" name="inpHomePage" id="inpHomePage" value="{$user.HomePage}"/>
 				{else}
 			<div class="comt-comterinfo" id="comment-author-info" >
 				<h4>Hi，您需要填写昵称和邮箱！</h4>
@@ -27,10 +27,8 @@
 					<li><label for="inpName">昵称</label><input class="ipt" type="text" name="inpName" id="inpName" value="" size="28" tabindex="1"><span>必填项</span></li>
 					<li><label for="inpEmail">邮箱</label><input class="ipt" type="mail" name="inpEmail" id="inpEmail" value="" size="28" tabindex="2"></li>
 					<li class="comt-comterinfo-url"><label for="inpHomePage">链接</label><input class="ipt" type="url" name="inpHomePage" id="inpHomePage" value="" size="42" tabindex="3"></li>
-{if $option['ZC_COMMENT_VERIFY_ENABLE']}
-					<li><label for="inpVerify">验证</label><input type="text" name="inpVerify" id="inpVerify" class="ipt" value="" size="28" tabindex="4" /> 
-					<img style="width:{$option['ZC_VERIFYCODE_WIDTH']}px;height:{$option['ZC_VERIFYCODE_HEIGHT']}px;cursor:pointer;" src="{$article.ValidCodeUrl}" alt="" title="" onclick="javascript:this.src='{$article.ValidCodeUrl}&amp;tm='+Math.random();"/><span>必填项</span></li>
-{/if}
+					<script type="text/javascript">LoadRememberInfo();</script>
+
 				</ul>
 			</div>
 				{/if}
