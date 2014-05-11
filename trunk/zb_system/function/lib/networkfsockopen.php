@@ -263,7 +263,7 @@ class Networkfsockopen implements iNetwork
 		$this->errstr = '';
 		$this->errno = 0;
 
-		$this->setRequestHeader('User-Agent','Mozilla/5.0');
+		$this->setRequestHeader('User-Agent','Mozilla/5.0 ('.PHP_OS . ';' . GetValueInArray(explode('/', GetVars('SERVER_SOFTWARE', 'SERVER')), 0) . ';' . 'PHP ' . phpversion() .') Z-BlogPHP/' . ZC_BLOG_VERSION);
 		$this->setMaxRedirs(1);
 	}
 	
