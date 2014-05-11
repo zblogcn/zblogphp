@@ -74,6 +74,12 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <div id="divMain2" class="edit post_edit">
 <form id="edit" name="edit" method="post" action="#">
   <div id="divEditLeft">
+    <!-- 4号输出接口 -->
+       <div id='response4' class='editmod'>
+<?php
+foreach ($GLOBALS['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsignal) {$fpname();}
+?>
+	   </div>
     <div id="divEditTitle">
       <input type="hidden" name="ID" id="edtID" value="<?php echo $article->ID;?>" />
       <input type="hidden" name="Type" id="edtType" value="<?php echo $article->Type;?>" />
@@ -86,20 +92,33 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
     </div>
 
-
+    <!-- 5号输出接口 -->
+       <div id='response5' class='editmod'>
+<?php
+foreach ($GLOBALS['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsignal) {$fpname();}
+?>
+	   </div>
 
     <div id="divContent" style="clear:both;">
 		<div id='cheader' class='editmod'><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
 		<div id='carea' class='editmod'><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content,'[html-format]');?></textarea></div>
 		<div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Waiting...</div>
+	</div>
+
+    <!-- 1号输出接口 -->
+       <div id='response' class='editmod'>
+<?php
+foreach ($GLOBALS['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
+?>
+	   </div>	
 
       <!-- alias( -->
       <div id='alias' class='editmod'><label for="edtAlias" class="editinputname" ><?php echo $lang['msg']['alias']?></label>
         <input type="text" name="Alias" id="edtAlias" maxlength="250" value="<?php echo $article->Alias;?>" />
       </div>
       <!-- )alias -->
-
-	    <!-- tags( --><?php if(!$ispage){?>
+<?php if(!$ispage){?>
+	    <!-- tags( -->
       <div id='tags' class='editmod'><label  for="edtTag"  class='editinputname'><?php echo $lang['msg']['tags']?></label>
         <input type="text"  name="Tag" id="edtTag" value="<?php echo $article->TagsToNameString();?>" />
         (<?php echo $lang['msg']['use_commas_to_separate']?>) <a href="#" id="showtags"><?php echo $lang['msg']['show_common_tags']?></a></div>
@@ -109,16 +128,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       </div>
       <!-- )tags -->
 
-    <!-- 1号输出接口 -->
-       <div id='response' class='editmod'>
-<?php
-foreach ($GLOBALS['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
-?>
-	   </div>
-
        <div id='insertintro' class='editmod'><span><?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
-       <?php }?>
-		</div>
+<?php }?>
+
 		<div id="divIntro" <?php if(!$article->Intro){echo 'style="display:none;"';}?>>
        <div id='introheader' class='editmod'><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
        <textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro,'[html-format]');?></textarea>
