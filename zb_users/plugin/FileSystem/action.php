@@ -33,7 +33,7 @@ switch ($cmd_arg) {
 	case 5://重命名
 		renamefile();
 		break;
-	case 6://重命名
+	case 6://编辑文件
 		edit_file();
 		break;
 	case 10://上传文件

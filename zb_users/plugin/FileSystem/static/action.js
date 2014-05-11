@@ -290,6 +290,8 @@ entry_list['entry6'] = new entry('main2.php', 'file', 147812, false);
 		
 		
 		
+
+        
         function test_action(){
             if (document.form_action.action.value != 0) return true;
             else return false;

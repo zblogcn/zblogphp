@@ -22,7 +22,7 @@ function Get_Filelist($current_path){
 				$file_ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 				$file_list['file'][] = array(
 					'filesize' => format_size(filesize($file)),//文件大小
-					'filetype' => strtolower($file_ext), //文件类别，用扩展名判断); 
+					'filetype' => strtolower($file_ext), //文件类别，用扩展名判断);
 					'filename' => iconv('GB2312','UTF-8',$filename), //文件名，包含扩展名
 					'fileperms' => substr(sprintf('%o', fileperms($current_path . $filename)), -4), //文件权限
 					'datetime' => date('Y-m-d H:i:s', filemtime($file)), //文件最后修改时间
@@ -76,7 +76,7 @@ function GetFileimg($arg) {
 	if(in_array($arg, $type_ary)) {
 		return $arg;
 	} else {
-		return 'no';	
+		return 'no';
 	}
 }
 
