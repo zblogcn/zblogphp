@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-require '../../../zb_system/function/c_system_base.php';
-require '../../../zb_system/function/c_system_admin.php';
-include 'function.php';
+require_once '../../../zb_system/function/c_system_base.php';
+require_once '../../../zb_system/function/c_system_admin.php';
+require_once 'function.php';
 
 $zbp->Load();
 
