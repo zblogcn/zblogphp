@@ -15,6 +15,6 @@ $action='feed';
 
 foreach ($GLOBALS['Filter_Plugin_Feed_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
-ViewFeed();
+ViewIndex();
 
 RunTime();

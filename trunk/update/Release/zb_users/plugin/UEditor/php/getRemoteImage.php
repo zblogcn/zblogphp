@@ -83,7 +83,7 @@ if(!$zbp->CheckRights('ArticleEdt'))die();
             //创建保存位置
             $savePath = $config[ 'savePath' ];
             if ( !file_exists( $savePath ) ) {
-                mkdir( "$savePath" , 0777 );
+                mkdir( "$savePath" , 0755 );
             }
             //写入文件
             $tmpName = $savePath . rand( 1 , 10000 ) . time() . strrchr( $imgUrl , '.' );

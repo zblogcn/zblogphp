@@ -2,12 +2,17 @@
 require '../../../../zb_system/function/c_system_base.php';
 $zbp->Load();
 
+if(isset($_POST['username']) && isset($_POST['password'])){
+	$zbp->Verify_MD5Path(GetVars('username','POST'),GetVars('password','POST'));
+}
+
 $result = array(
 	'url' => '',
-	'title' => '',
+	'fileType' => '',
 	'original' => '',
 	'state' => ''
 );
+
 
 if(!$zbp->CheckRights('UploadPst')){
 	$result['state'] = $lang['error'][6];
@@ -50,11 +55,11 @@ foreach ($_FILES as $key => $value) {
 			$upload->Save();
 			
 			$result["url"] = $upload->Url;
-			$result["type"] = '.' . GetFileExt($_FILES[$key]['name']) ;	
+			$result["fileType"] ='.' . GetFileExt($_FILES[$key]['name']) ;	
 			$result["original"] = $upload->SourceName ;
 			$result["state"] = 'SUCCESS' ;
 		
-			exit_output();		
+			exit_output();
 		}
 	}
 }

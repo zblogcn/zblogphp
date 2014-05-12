@@ -232,7 +232,9 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 
 ################################################################################################################
 function ViewIndex(){
-	global $zbp;
+	global $zbp,$action;
+	
+	if(isset($zbp->templates['404']))Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
 	
 	foreach ($GLOBALS['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
@@ -240,22 +242,29 @@ function ViewIndex(){
 			return $fpreturn;
 		}
 	}
-	
-	if(isset($zbp->templates['404']))Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
 
-	if( $zbp->currenturl==$zbp->cookiespath||
-		$zbp->currenturl==$zbp->cookiespath . 'index.php' ){
-		ViewList(null,null,null,null,null);
-	}elseif(isset($_GET['id'])||isset($_GET['alias'])){
-		ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
-	}elseif(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])){
-		ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('date','GET'),GetVars('tags','GET'));
-	//}elseif(isset($_GET['rewrite'])){
-	//	ViewAuto($zbp->currenturl);
-	}else{
-		ViewAuto($zbp->currenturl);
+	switch ($action) {
+	case 'feed':
+		ViewFeed();
+		break;
+	case 'search':
+		ViewSearch();
+		break;
+	case '':
+	default:
+		if( $zbp->currenturl==$zbp->cookiespath||
+			$zbp->currenturl==$zbp->cookiespath . 'index.php' ){
+			ViewList(null,null,null,null,null);
+		}elseif(isset($_GET['id'])||isset($_GET['alias'])){
+			ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
+		}elseif(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])){
+			ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('date','GET'),GetVars('tags','GET'));
+		//}elseif(isset($_GET['rewrite'])){
+		//	ViewAuto($zbp->currenturl);
+		}else{
+			ViewAuto($zbp->currenturl);
+		}
 	}
-
 }
  
 function ViewFeed(){

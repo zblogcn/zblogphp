@@ -76,7 +76,7 @@ define('ZC_REWRITE_GO_ON', 'go_on');
 
 #定义全局变量
 $zbp = null;
-$action = null;
+$action = '';
 $currenturl = GetRequestUri();
 $lang = array();
 
