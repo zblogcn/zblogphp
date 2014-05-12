@@ -11,7 +11,7 @@ function ActivePlugin_UEditor() {
 	Add_Filter_Plugin('Filter_Plugin_Edit_Begin','ueditor_addscript_begin');
 
 	Add_Filter_Plugin('Filter_Plugin_Edit_End','ueditor_addscript_end');
-	Add_Filter_Plugin('Filter_Plugin_Zbp_Load','ueditor_SyntaxHighlighter_header');
+
 	Add_Filter_Plugin('Filter_Plugin_Html_Js_Add','ueditor_SyntaxHighlighter_print');
 
 }
@@ -20,18 +20,11 @@ function ueditor_SyntaxHighlighter_print(){
 
 	global $zbp;
 	if(!$zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE'])return ;
+	echo "\r\n".'document.writeln("<script src=\'' . $zbp->host .'zb_users/plugin/UEditor/third-party/SyntaxHighlighter/shCore.pack.js\' type=\'text/javascript\'></script><link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host .'zb_users/plugin/UEditor/third-party/SyntaxHighlighter/shCoreDefault.pack.css\'/>");'."\r\n";
 	echo "\r\n$(document).ready(function(){SyntaxHighlighter.highlight();for(var i=0,di;di=SyntaxHighlighter.highlightContainers[i++];){var tds = di.getElementsByTagName('td');for(var j=0,li,ri;li=tds[0].childNodes[j];j++){ri = tds[1].firstChild.childNodes[j];ri.style.height = li.style.height = ri.offsetHeight + 'px';}}});\r\n";
 
 }
 
-
-function ueditor_SyntaxHighlighter_header(){
-	global $zbp;
-	if(!$zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE'])return ;
-	$zbp->header.='<script src=\'' . $zbp->host .'zb_users/plugin/UEditor/third-party/SyntaxHighlighter/shCore.pack.js\' type=\'text/javascript\'></script>' . "\r\n";
-	$zbp->header.='<link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host .'zb_users/plugin/UEditor/third-party/SyntaxHighlighter/shCoreDefault.pack.css\'/>' . "\r\n";
-	
-}
 
 function InstallPlugin_UEditor(){
 
