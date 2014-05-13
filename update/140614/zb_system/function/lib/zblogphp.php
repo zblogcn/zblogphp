@@ -281,6 +281,10 @@ class ZBlogPHP{
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 
 		if($this->ismanage==true) $this->LoadManage();
+		
+		foreach($this->table as &$tb){
+			$tb=str_replace('%pre%', $this->db->dbpre, $tb);
+		}
 
 		$this->isload=true;
 	}

@@ -20,9 +20,9 @@ interface iDataBase
 	public function Delete($query);
 	public function QueryMulit($s);
 	public function EscapeString($s);
-	public function CreateTable($tablename,$datainfo);
-	public function DelTable($tablename);
-	public function ExistTable($tablename);
+	public function CreateTable($table,$datainfo);
+	public function DelTable($table);
+	public function ExistTable($table);
 }
 
 
@@ -40,32 +40,40 @@ class DbSql #extends AnotherClass
 		$this->db=$db;
 		$this->type=get_class($db);
 	}
-
-	public function DelTable($tablename){
-		$s='';
-		$s="DROP TABLE $tablename";
+	
+	public function ReplacePre(&$s){
+		$s=str_replace('%pre%', $this->db->dbpre, $s);
 		return $s;
 	}
 
-	public function ExistTable($tablename,$dbname=''){
+	public function DelTable($table){
+		$this->ReplacePre($table);
+
+		$s='';
+		$s="DROP TABLE $table";
+		return $s;
+	}
+
+	public function ExistTable($table,$dbname=''){
+		$this->ReplacePre($table);
 
 		$s='';
 		if($this->type=='DbSQLite'||$this->type=='DbSQLite3'){
-			$s="SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='$tablename'";
+			$s="SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='$table'";
 		}
 		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
-			$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$tablename'";
+			$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$table'";
 		}
 
 		return $s;
 	}
 
-	public function CreateTable($tablename,$datainfo){
+	public function CreateTable($table,$datainfo){
 
 		$s='';
 
 		if($this->type=='DbSQLite'){
-			$s.='CREATE TABLE '.$tablename.' (';
+			$s.='CREATE TABLE '.$table.' (';
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
@@ -107,12 +115,12 @@ class DbSql #extends AnotherClass
 
 			$s.=');';
 			reset($datainfo);
-			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$tablename.' ('.GetValueInArrayByCurrent($datainfo,0).');';
+			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$table.' ('.GetValueInArrayByCurrent($datainfo,0).');';
 
 		}
 
 		if($this->type=='DbSQLite3'){
-			$s.='CREATE TABLE '.$tablename.' (';
+			$s.='CREATE TABLE '.$table.' (';
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
@@ -154,11 +162,11 @@ class DbSql #extends AnotherClass
 
 			$s.=');';
 			reset($datainfo);
-			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$tablename.' ('.GetValueInArrayByCurrent($datainfo,0).');';
+			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$table.' ('.GetValueInArrayByCurrent($datainfo,0).');';
 		}
 
 		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
-			$s.='CREATE TABLE IF NOT EXISTS '.$tablename.' (';
+			$s.='CREATE TABLE IF NOT EXISTS '.$table.' (';
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
@@ -220,6 +228,7 @@ class DbSql #extends AnotherClass
 			$s.=') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
 		}
 
+		$this->ReplacePre($s);
 		return $s;
 	}
 
@@ -332,8 +341,9 @@ class DbSql #extends AnotherClass
 		return $sqlw;
 	}
 
-	public function Select($table,$select,$where,$order,$limit,$option=null)
-	{
+	public function Select($table,$select,$where,$order,$limit,$option=null){
+		$this->ReplacePre($table);
+	
 		$sqls='';
 		$sqlw='';
 		$sqlo='';
@@ -397,8 +407,9 @@ class DbSql #extends AnotherClass
 		return $sqls . $sqlw . $sqlo . $sqll;
 	}
 
-	public function Count($table,$count,$where,$option=null)
-	{
+	public function Count($table,$count,$where,$option=null){
+		$this->ReplacePre($table);
+
 		$sqlc="SELECT ";
 
 		if(!empty($count)) {
@@ -419,8 +430,9 @@ class DbSql #extends AnotherClass
 		return $sqlc . $sqlw;
 	}
 
-	public function Update($table,$keyvalue,$where,$option=null)
-	{
+	public function Update($table,$keyvalue,$where,$option=null){
+		$this->ReplacePre($table);
+	
 		$sql="UPDATE $table SET ";
 
 		$comma = '';
@@ -439,8 +451,9 @@ class DbSql #extends AnotherClass
 		return $sql;
 	}
 
-	public function Insert($table,$keyvalue)
-	{
+	public function Insert($table,$keyvalue){
+		$this->ReplacePre($table);
+
 		$sql="INSERT INTO $table ";
 
 		$sql.='(';
@@ -463,8 +476,9 @@ class DbSql #extends AnotherClass
 		return  $sql;
 	}
 
-	public function Delete($table,$where,$option=null)
-	{
+	public function Delete($table,$where,$option=null){
+		$this->ReplacePre($table);
+
 		$sql="DELETE FROM $table ";
 		if(isset($option['changewhere'])){
 			$sql.=$this->ParseWhere($where,$option['changewhere']);
@@ -475,7 +489,7 @@ class DbSql #extends AnotherClass
 	}
 
 	public function Filter($sql){
-		$_SERVER['_query_count'] = $_SERVER['_query_count'] +1;
+		$_SERVER['_query_count'] = $_SERVER['_query_count'] + 1;
 		
 		foreach ($GLOBALS['Filter_Plugin_DbSql_Filter'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($sql);

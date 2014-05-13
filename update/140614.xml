@@ -22,7 +22,7 @@
 	<file name='zb_system\defend\arial.ttf' md5='687432B29CB07E7E1D2644F333A672D5' crc32='590DC6C3'/>
 	<file name='zb_system\defend\error.html' md5='BB528F740A51BFE0297059AC76D51A98' crc32='B7EC2BC1'/>
 	<file name='zb_system\defend\option.php' md5='C12F31444318A35AEC1CCC8A4F61F537' crc32='EB7AB1CC'/>
-	<file name='zb_system\defend\thanks.html' md5='189F33FF241F31EE65082707D9DD1091' crc32='A9C82369'/>
+	<file name='zb_system\defend\thanks.html' md5='9F0FC84C42131B386EFF3764D4FEA733' crc32='77BAEB57'/>
 	<file name='zb_system\defend\createtable\mysql.sql' md5='E0D134D197A6B2F5E0F0F67BBDA73977' crc32='F81E56A1'/>
 	<file name='zb_system\defend\createtable\sqlite.sql' md5='49361248478E91005795DECF18D769AC' crc32='C7A475DE'/>
 	<file name='zb_system\defend\createtable\sqlite3.sql' md5='1E8089C2E5119B017FFC23420B548153' crc32='852B657E'/>
@@ -52,12 +52,12 @@
 	<file name='zb_system\function\lib\category.php' md5='BF341553BDE11A3D2F526E4A2FBF978F' crc32='C48553A6'/>
 	<file name='zb_system\function\lib\comment.php' md5='B20B80B37F7111738E7273F51FD934FB' crc32='DD79481E'/>
 	<file name='zb_system\function\lib\counter.php' md5='820197067072C90C526A69CA3C5A1952' crc32='C397C65D'/>
-	<file name='zb_system\function\lib\dbmysql.php' md5='AB99C96D2404C020D936B246B6683FE4' crc32='4788D585'/>
-	<file name='zb_system\function\lib\dbmysqli.php' md5='369F1B73767531B4EDF88D04B7653D6E' crc32='F796FACF'/>
-	<file name='zb_system\function\lib\dbpdo_mysql.php' md5='D83A81BC58FC62A83FA16D73D391838D' crc32='5ABE5302'/>
-	<file name='zb_system\function\lib\dbsql.php' md5='A50B843DEFBEB3EB18E7E5A877115D9B' crc32='986B27B0'/>
-	<file name='zb_system\function\lib\dbsqlite.php' md5='40B9753C79B38A820123C24A525657C0' crc32='C7355BD4'/>
-	<file name='zb_system\function\lib\dbsqlite3.php' md5='12BEADFE63E0420FE49DAC9928393520' crc32='AE6D42DF'/>
+	<file name='zb_system\function\lib\dbmysql.php' md5='DC6BAE39658871FF68B69F31A7655612' crc32='4A98A6FC'/>
+	<file name='zb_system\function\lib\dbmysqli.php' md5='F30FEC1C2A587FD7D52459EF6B2A19AD' crc32='C24FD81B'/>
+	<file name='zb_system\function\lib\dbpdo_mysql.php' md5='F67CC38BB6002FD972450B6D60C7C0A8' crc32='4BB33AFD'/>
+	<file name='zb_system\function\lib\dbsql.php' md5='329EA6FBE9603F45D2A37F1BEC0CF330' crc32='78017C8A'/>
+	<file name='zb_system\function\lib\dbsqlite.php' md5='AD6058386A295D6AFC9643046E293163' crc32='6BB11296'/>
+	<file name='zb_system\function\lib\dbsqlite3.php' md5='E1796B3FACC940A51F329BA13C15141D' crc32='9D704B35'/>
 	<file name='zb_system\function\lib\member.php' md5='03131FC81B526D76DCCABA91C5528C50' crc32='9A479512'/>
 	<file name='zb_system\function\lib\metas.php' md5='9F12E71DE1E5FB0CBB8F8DC74A0A9E47' crc32='64075D9E'/>
 	<file name='zb_system\function\lib\module.php' md5='485730B5929FC545C8B2B9CB388C3636' crc32='E3CC2E5'/>
@@ -73,7 +73,7 @@
 	<file name='zb_system\function\lib\upload.php' md5='7D4AFFFFA3FDF57111A9CDDB9582F272' crc32='C6C7024A'/>
 	<file name='zb_system\function\lib\urlrule.php' md5='DB5EFB7E88CD2654072024666500B18D' crc32='CB1D5778'/>
 	<file name='zb_system\function\lib\validatecode.php' md5='D577D30DFFCAB0D1443E75CEA149E379' crc32='CB395421'/>
-	<file name='zb_system\function\lib\zblogphp.php' md5='2D4E7D1F4A97DE9968A8B435B7A5224C' crc32='2572CCD5'/>
+	<file name='zb_system\function\lib\zblogphp.php' md5='0191FA4A04BDF9A350DF2755D8930D86' crc32='D482D334'/>
 	<file name='zb_system\image\admin\app-logo.png' md5='C8B4141B48DFE3415EE2F9668E9BAD17' crc32='7D5E99CC'/>
 	<file name='zb_system\image\admin\arrow-3-right.png' md5='BA3545574C07C5146A7CA472B37191DB' crc32='9613739F'/>
 	<file name='zb_system\image\admin\arrow_turn_right.png' md5='B01390AFF834F6050F92E7501D2515D4' crc32='CF39218A'/>

@@ -676,8 +676,10 @@ function CreateTable($sql){
     echo "该数据库里已存在相关的表和数据,请更改表前缀或是更换清空数据库再安装.";
 	return false;
   }
-
+  
+  $sql=$zbp->db->sql->ReplacePre($sql);
   $zbp->db->QueryMulit($sql);
+
   echo "连接数据库并创建数据表成功!<br/>";
   return true;
 }
