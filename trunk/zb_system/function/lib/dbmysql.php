@@ -72,7 +72,8 @@ class DbMySQL implements iDataBase
 	}
 
 	function QueryMulit($s){
-		$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
+		//$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
+		$a=explode(';',$s);
 		foreach ($a as $s) {
 			$s=trim($s);
 			if($s<>''){
@@ -82,7 +83,7 @@ class DbMySQL implements iDataBase
 	}
 
 	function Query($query){
-		$query=str_replace('%pre%', $this->dbpre, $query);
+		//$query=str_replace('%pre%', $this->dbpre, $query);
 		$results = mysql_query($this->sql->Filter($query));
 		$data = array();
 		if(is_resource($results)){
@@ -96,32 +97,32 @@ class DbMySQL implements iDataBase
 	}
 
 	function Update($query){
-		$query=str_replace('%pre%', $this->dbpre, $query);
+		//$query=str_replace('%pre%', $this->dbpre, $query);
 		return mysql_query($this->sql->Filter($query));
 	}
 
 	function Delete($query){
-		$query=str_replace('%pre%', $this->dbpre, $query);
+		//$query=str_replace('%pre%', $this->dbpre, $query);
 		return mysql_query($this->sql->Filter($query));
 	}
 
 	function Insert($query){
-		$query=str_replace('%pre%', $this->dbpre, $query);
+		//$query=str_replace('%pre%', $this->dbpre, $query);
 		mysql_query($this->sql->Filter($query));
 		return mysql_insert_id();
 	}
 
-	function CreateTable($tablename,$datainfo){
-		$this->QueryMulit($this->sql->CreateTable($tablename,$datainfo));
+	function CreateTable($table,$datainfo){
+		$this->QueryMulit($this->sql->CreateTable($table,$datainfo));
 	}
 
-	function DelTable($tablename){
-		$this->QueryMulit($this->sql->DelTable($tablename));
+	function DelTable($table){
+		$this->QueryMulit($this->sql->DelTable($table));
 	}
 
-	function ExistTable($tablename){
+	function ExistTable($table){
 
-		$a=$this->Query($this->sql->ExistTable($tablename,$this->dbname));
+		$a=$this->Query($this->sql->ExistTable($table,$this->dbname));
 		if(!is_array($a))return false;
 		$b=current($a);
 		if(!is_array($b))return false;
