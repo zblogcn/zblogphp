@@ -14,9 +14,9 @@ ob_start();
 
 #引入必备
 $basepath = dirname(__FILE__) . DIRECTORY_SEPARATOR;
-require $basepath . 'c_system_common.php';
-require $basepath . 'c_system_debug.php';
 require $basepath . 'c_system_plugin.php';
+require $basepath . 'c_system_debug.php';
+require $basepath . 'c_system_common.php';
 require $basepath . 'c_system_event.php';
 
 

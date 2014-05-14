@@ -32,7 +32,7 @@ class Template{
 		foreach ($GLOBALS['Filter_Plugin_Template_GetTemplate'] as $fpname => &$fpsignal)
 		{
 			$fpreturn=$fpname($this,$name);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 		return $this->path . $name . '.php';
 	}
@@ -76,7 +76,7 @@ class Template{
 		foreach ($GLOBALS['Filter_Plugin_Template_Compiling_Begin'] as $fpname => &$fpsignal)
 		{
 			$fpreturn = $fpname($this,$content);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 
 		//Step1:替换<?php块
@@ -105,7 +105,7 @@ class Template{
 		foreach ($GLOBALS['Filter_Plugin_Template_Compiling_End'] as $fpname => &$fpsignal)
 		{
 			$fpreturn=$fpname($this,$content);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 
 		return $content;

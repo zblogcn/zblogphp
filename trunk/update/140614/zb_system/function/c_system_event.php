@@ -10,7 +10,7 @@
 function AutoloadClass($classname){
 	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($classname);
-		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 	}
 	if (is_readable($f=dirname(__FILE__) . '/lib/' . strtolower($classname) .'.php'))
 		require $f;
@@ -239,7 +239,7 @@ function ViewIndex(){
 	foreach ($GLOBALS['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			return $fpreturn;
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
 		}
 	}
 
@@ -273,7 +273,7 @@ function ViewFeed(){
 	foreach ($GLOBALS['Filter_Plugin_ViewFeed_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			return $fpreturn;
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
 		}
 	}
 	
@@ -305,7 +305,7 @@ function ViewSearch(){
 	foreach ($GLOBALS['Filter_Plugin_ViewSearch_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			return $fpreturn;
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
 		}
 	}
 	
@@ -372,7 +372,7 @@ function ViewAuto($inpurl) {
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($url);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			return $fpreturn;
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
 		}
 	}
 	
@@ -474,7 +474,7 @@ function ViewAuto($inpurl) {
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_End'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($url);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			return $fpreturn;
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
 		}
 	}
 
@@ -488,7 +488,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($page, $cate, $auth, $date, $tags);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			return $fpreturn;
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
 		}
 	}
 
@@ -712,7 +712,7 @@ function ViewPost($id, $alias, $isrewrite = false) {
 	foreach ($GLOBALS['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($id, $alias);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			return $fpreturn;
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
 		}
 	}
 

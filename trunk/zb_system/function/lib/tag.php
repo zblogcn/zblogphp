@@ -19,7 +19,7 @@ class Tag extends Base{
 	function __call($method, $args) {
 		foreach ($GLOBALS['Filter_Plugin_Tag_Call'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this,$method, $args);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 	}
 
@@ -58,7 +58,7 @@ class Tag extends Base{
 		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
 		foreach ($GLOBALS['Filter_Plugin_Tag_Save'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 		return parent::Save();
 	}

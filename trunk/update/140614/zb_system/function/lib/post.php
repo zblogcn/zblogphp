@@ -24,7 +24,7 @@ class Post extends Base{
 	function __call($method, $args) {
 		foreach ($GLOBALS['Filter_Plugin_Post_Call'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this,$method,$args);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 	}
 
@@ -143,7 +143,7 @@ class Post extends Base{
 			case 'CommentPostUrl':
 				foreach ($GLOBALS['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
 					$fpreturn=$fpname($this);
-					if($fpsignal == PLUGIN_EXITSIGNAL_RETURN)return $fpreturn;
+					if($fpsignal == PLUGIN_EXITSIGNAL_RETURN){$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 				}
 				$key='&amp;key=' . md5($zbp->guid . $this->ID . date('Y-m-d'));
 				return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
@@ -188,7 +188,7 @@ class Post extends Base{
 			case 'RelatedList':
 				foreach ($GLOBALS['Filter_Plugin_Post_RelatedList'] as $fpname => &$fpsignal) {
 					$fpreturn=$fpname($this);
-					if($fpsignal == PLUGIN_EXITSIGNAL_RETURN)return $fpreturn;
+					if($fpsignal == PLUGIN_EXITSIGNAL_RETURN){$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 				}
 				return GetList($zbp->option['ZC_RELATEDLIST_COUNT'],null,null,null,null,null,array('is_related'=>$this->ID));
 			default:
@@ -206,7 +206,7 @@ class Post extends Base{
 		if($this->Template==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
 		foreach ($GLOBALS['Filter_Plugin_Post_Save'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 		return parent::Save();
 	}
