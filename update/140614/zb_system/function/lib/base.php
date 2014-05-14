@@ -21,8 +21,8 @@ class Base
 	function __construct(&$table,&$datainfo){
         global $zbp;
 
-        $this->table=$table;
-        $this->datainfo=$datainfo;
+        $this->table=&$table;
+        $this->datainfo=&$datainfo;
 
 		$this->Metas=new Metas;
 

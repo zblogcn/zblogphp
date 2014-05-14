@@ -143,7 +143,7 @@ class ZBlogPHP{
 	function __call($method, $args) {
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Call'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($method, $args);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 		if($this->option['ZC_DEBUG_MODE']==true)
 			$this->ShowError(81,__FILE__,__LINE__);
@@ -152,7 +152,7 @@ class ZBlogPHP{
 	function __set($name, $value){
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Set'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($name, $value);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 		if($this->option['ZC_DEBUG_MODE']==true) $this->ShowError(81,__FILE__,__LINE__);
 	}
@@ -160,7 +160,7 @@ class ZBlogPHP{
 	function __get($name){
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Get'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($name);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 		if($this->option['ZC_DEBUG_MODE']==true) $this->ShowError(81,__FILE__,__LINE__);
 	}
@@ -242,6 +242,10 @@ class ZBlogPHP{
 
 		if(!$this->isinitialize)return false;
 
+		foreach($this->table as &$tb){
+			$tb=str_replace('%pre%', $this->db->dbpre, $tb);
+		}
+
 		$this->StartGzip();
 		
 		header('Content-type: text/html; charset=utf-8');
@@ -281,10 +285,6 @@ class ZBlogPHP{
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 
 		if($this->ismanage==true) $this->LoadManage();
-		
-		foreach($this->table as &$tb){
-			$tb=str_replace('%pre%', $this->db->dbpre, $tb);
-		}
 
 		$this->isload=true;
 	}
@@ -546,7 +546,7 @@ class ZBlogPHP{
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckRights'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($action);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 		if(!isset($this->actions[$action])){
 			if(is_numeric($action)){
@@ -569,7 +569,7 @@ class ZBlogPHP{
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckRightsByLevel'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($level,$action);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 
 		if(is_int($action)){
@@ -1529,7 +1529,7 @@ function AddBuildModuleAll(){
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($idortext,$file,$line);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 
 		throw new Exception($idortext);

@@ -44,7 +44,7 @@
 	<file name='zb_system\function\c_system_base.php' md5='9F7F964FA5B598EB7A98CC0828D1DDDD' crc32='A5E6922B'/>
 	<file name='zb_system\function\c_system_common.php' md5='88E2075D836FAD87AE88CA3F18C4F9F0' crc32='32FADDB1'/>
 	<file name='zb_system\function\c_system_debug.php' md5='02FFD22D4805B54AFC8124D4A68235EA' crc32='A60D96F7'/>
-	<file name='zb_system\function\c_system_event.php' md5='BEE7109FDF64F59C56255CCF8ED45D20' crc32='1C933834'/>
+	<file name='zb_system\function\c_system_event.php' md5='D4781D6253BA71200C22E5160BCAC900' crc32='98232DEE'/>
 	<file name='zb_system\function\c_system_misc.php' md5='420CB9C9EE5FAAA5E251ECE4D6B66D74' crc32='581F4F91'/>
 	<file name='zb_system\function\c_system_plugin.php' md5='7CDA19014B5568CF6E67964EACB09D4C' crc32='D94E3A93'/>
 	<file name='zb_system\function\lib\app.php' md5='C3A7B9F54163DC2E50FF0CB55E3CC174' crc32='8937B826'/>

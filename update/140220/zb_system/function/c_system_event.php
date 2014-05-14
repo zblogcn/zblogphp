@@ -1701,6 +1701,7 @@ function SetTheme($theme, $style) {
 			$zbp->cache->ZC_SIDEBAR_ORDER3 = $s3;
 			$zbp->cache->ZC_SIDEBAR_ORDER4 = $s4;
 			$zbp->cache->ZC_SIDEBAR_ORDER5 = $s5;
+			$zbp->SaveCache();
 		} else {
 			if ($zbp->cache->ZC_SIDEBAR_ORDER1 | $zbp->cache->ZC_SIDEBAR_ORDER2 | $zbp->cache->ZC_SIDEBAR_ORDER3 | $zbp->cache->ZC_SIDEBAR_ORDER4 | $zbp->cache->ZC_SIDEBAR_ORDER5) {
 				$zbp->option['ZC_SIDEBAR_ORDER'] = $zbp->cache->ZC_SIDEBAR_ORDER1;
