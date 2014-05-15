@@ -17,11 +17,13 @@ $blogtitle='应用中心-插件编辑';
 if (GetVars('id'))
 {
   $app = $zbp->LoadApp('plugin',GetVars('id'));
-  $mt1=filemtime($zbp->path . '/zb_users/plugin/' . $app->id . '/' . $app->include);
-  $mt2=filemtime($zbp->path . '/zb_users/plugin/' . $app->id . '/' . $app->path);
-  $mt3=filemtime($zbp->path . '/zb_users/plugin/' . $app->id . '/' . 'plugin.xml');
-  $mt=array($mt1,$mt2,$mt3);
+  $mt=array();
+  $ft=GetFilesInDir($zbp->path . '/zb_users/plugin/' . $app->id . '/','php|inc|png');
+  foreach($ft as $f){
+    $mt[]=filemtime($f);
+  }
   rsort($mt);
+  if(count($mt)==0)$mt[]=time();
   $app->modified = date('Y-m-d', reset($mt));
 }
 else
