@@ -16,6 +16,14 @@ $blogtitle='应用中心-主题编辑';
 
 if(GetVars('id')){
   $app = $zbp->LoadApp('theme',GetVars('id'));
+  $mt=array();
+  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/','php|inc|png');
+  foreach($ft as $f){
+    $mt[]=filemtime($f);
+  }
+  rsort($mt);
+  if(count($mt)==0)$mt[]=time();
+  $app->modified = date('Y-m-d', reset($mt));
 }else{
   $app = new App;
   $app->price=0;
