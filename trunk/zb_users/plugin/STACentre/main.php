@@ -28,6 +28,7 @@ if(count($_POST)>0){
 	$zbp->BuildModule();
 	$zbp->SetHint('good');
 	if($zbp->option['ZC_STATIC_MODE']=='REWRITE'  && strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%host%}index.php')===false) Redirect('./list.php');
+	 Redirect('./main.php');
 }
 
 
