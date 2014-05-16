@@ -27,7 +27,7 @@ foreach ($GLOBALS['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {$fpna
 <body>
 <div class="bg">
 <div id="wrapper">
-  <div class="logo"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></div>
+  <div class="logo"><img src="image/admin/none.gif" title="<?php echo htmlspecialchars($blogname)?>" alt="<?php echo htmlspecialchars($blogname)?>"/></div>
   <div class="login">
     <form method="post" action="#">
     <dl>

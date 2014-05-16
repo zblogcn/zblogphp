@@ -118,23 +118,6 @@ function bmx2table(){
 
 
 
-<!--
-//*********************************************************
-// 目的：    批量操作提醒
-// 输入：    无
-// 返回：    无
-//*********************************************************
-function Batch2Tip(s){$("#batch p").html(s)}
-function BatchContinue(){$("#batch p").before("<iframe style='width:20px;height:20px;' frameborder='0' scrolling='no' src='<?php echo $bloghost ?>zb_system/cmd.php?act=batch'></iframe>");$("#batch img").remove();}
-function BatchBegin(){};
-function BatchEnd(){};
-function BatchNotify(){notify($("#batch p").html())}
-function BatchCancel(){$("#batch iframe").remove();$("#batch p").before("<iframe style='width:20px;height:20px;' frameborder='0' scrolling='no' src='<?php echo $bloghost ?>zb_system/cmd.php?act=batch&cancel=true'></iframe>");};
-//*********************************************************
--->
-
-
-
 //*********************************************************
 // 目的：    CheckBox
 // 输入：    无

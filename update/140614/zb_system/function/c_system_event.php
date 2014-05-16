@@ -28,7 +28,7 @@ function RunTime() {
 	global $zbp;
 
 	$rt=array();
-	$rt['time']=(1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6));
+	$rt['time']=number_format(1000 * (microtime(1) - $_SERVER['_start_time']), 2);
 	$rt['query']=$_SERVER['_query_count'];
 	$rt['memory']=$_SERVER['_memory_usage'];
 	$rt['error']=$_SERVER['_error_count'];
@@ -259,8 +259,6 @@ function ViewIndex(){
 			ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
 		}elseif(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])){
 			ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('date','GET'),GetVars('tags','GET'));
-		//}elseif(isset($_GET['rewrite'])){
-		//	ViewAuto($zbp->currenturl);
 		}else{
 			ViewAuto($zbp->currenturl);
 		}
@@ -376,13 +374,8 @@ function ViewAuto($inpurl) {
 		}
 	}
 	
-	if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') {
-		$zbp->ShowError(2, __FILE__, __LINE__);
-		return null;
-	}
-
 	$url=GetValueInArray(explode('?',$inpurl),'0');
-	
+
 	if($zbp->cookiespath === substr($url, 0 , strlen($zbp->cookiespath)))
 		$url = substr($url, strlen($zbp->cookiespath));
 
@@ -398,6 +391,15 @@ function ViewAuto($inpurl) {
 	}
 
 	$url = urldecode($url);
+
+	if($url==''||$url=='index.php'){
+		return ViewList(null,null,null,null,null);
+	}
+	
+	if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') {
+		$zbp->ShowError(2, __FILE__, __LINE__);
+		return null;
+	}
 
 	$r = UrlRule::Rewrite_url($zbp->option['ZC_INDEX_REGEX'], 'index');
 	$m = array();
@@ -418,17 +420,17 @@ function ViewAuto($inpurl) {
 	$r = UrlRule::Rewrite_url($zbp->option['ZC_AUTHOR_REGEX'], 'auth');
 	$m = array();
 	if (preg_match($r, $url, $m) == 1) {
-		ViewList($m[2], null, $m[1], null, null, true);
-
-		return null;
+		$result = ViewList($m[2], null, $m[1], null, null, true);
+		if ($result <> ZC_REWRITE_GO_ON)
+			return null;
 	}
 
 	$r = UrlRule::Rewrite_url($zbp->option['ZC_TAGS_REGEX'], 'tags');
 	$m = array();
 	if (preg_match($r, $url, $m) == 1) {
-		ViewList($m[2], null, null, null, $m[1], true);
-
-		return null;
+		$result = ViewList($m[2], null, null, null, $m[1], true);
+		if ($result <> ZC_REWRITE_GO_ON)
+			return null;
 	}
 
 	$r = UrlRule::Rewrite_url($zbp->option['ZC_CATEGORY_REGEX'], 'cate');
@@ -465,10 +467,6 @@ function ViewAuto($inpurl) {
 			$zbp->ShowError(2, __FILE__, __LINE__);
 
 		return null;
-	}
-
-	if($url==''||$url=='index.php'){
-		return ViewList(null,null,null,null,null);
 	}
 
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_End'] as $fpname => &$fpsignal) {
