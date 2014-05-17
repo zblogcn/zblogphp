@@ -55,7 +55,18 @@ class Dbpdo_MySQL implements iDataBase
 		$db_link = new PDO('mysql:host=' . $dbmysql_server . ';port=' . $dbmysql_port,$dbmysql_username,$dbmysql_password,$options);
 		$this->db = $db_link;
 		$this->dbname=$dbmysql_name;
-		$this->db->exec($this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
+		$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbmysql_name'";
+		$a=$this->Query($s);
+		$c=0;
+		if(is_array($a)){
+			$b=current($a);
+			if(is_array($b)){
+				$c=(int)current($b);
+			}
+		}
+		if($c==0){
+			$this->db->exec($this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
+		}
 	}
 
 	function Close(){

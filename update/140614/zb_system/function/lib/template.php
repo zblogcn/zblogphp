@@ -54,7 +54,7 @@ class Template{
 		return $this->tags;
 	}
 	
-	function SetTagsAll($array){
+	function SetTagsAll(&$array){
 		$this->tags=$array;
 	}
 	

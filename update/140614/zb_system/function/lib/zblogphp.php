@@ -23,7 +23,9 @@ class ZBlogPHP{
 	public $currenturl=null;
 	public $usersdir = null;
 	public $validcodeurl = null;
-	
+	public $feedurl = null;
+	public $searchurl = null;
+
 	public $members=array();
 	public $membersbyname=array();
 	public $categorys=array();
@@ -229,6 +231,8 @@ class ZBlogPHP{
 		header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
 
 		$this->validcodeurl=$this->host . 'zb_system/script/c_validcode.php';
+		$this->feedurl=$this->host . 'feed.php';
+		$this->searchurl=$this->host . 'search.php';		
 
 		#创建User类
 		$this->user=new Member();
@@ -305,6 +309,7 @@ class ZBlogPHP{
 		if($this->isinitialize){
 			foreach ($GLOBALS['Filter_Plugin_Zbp_Terminate'] as $fpname => &$fpsignal) $fpname();
 			$this->CloseConnect();
+			unset($this->db);
 			$this->isinitialize=false;
 		}
 	}
@@ -340,7 +345,7 @@ class ZBlogPHP{
 		case 'pdo_mysql':
 		default:
 			try {
-				if($this->InitializeDB($this->option['ZC_DATABASE_TYPE']))return false;
+				$this->InitializeDB($this->option['ZC_DATABASE_TYPE']);
 				if($this->db->Open(array(
 						$this->option['ZC_MYSQL_SERVER'],
 						$this->option['ZC_MYSQL_USERNAME'],
@@ -847,9 +852,9 @@ function AddBuildModuleAll(){
 		$this->templatetags['categorys']=&$this->categorys;
 		$this->templatetags['modules']=&$this->modulesbyfilename;
 		$this->templatetags['title']=htmlspecialchars($this->title);
-		$this->templatetags['host']=$this->host;
-		$this->templatetags['path']=$this->path;
-		$this->templatetags['cookiespath']=$this->cookiespath;
+		$this->templatetags['host']=&$this->host;
+		$this->templatetags['path']=&$this->path;
+		$this->templatetags['cookiespath']=&$this->cookiespath;
 		$this->templatetags['name']=htmlspecialchars($this->name);
 		$this->templatetags['subname']=htmlspecialchars($this->subname);
 		$this->templatetags['theme']=&$this->theme;
@@ -859,13 +864,14 @@ function AddBuildModuleAll(){
 		$this->templatetags['zblogphp']=$this->option['ZC_BLOG_PRODUCT_FULL'];
 		$this->templatetags['zblogphphtml']=$this->option['ZC_BLOG_PRODUCT_FULLHTML'];
 		$this->templatetags['zblogphpabbrhtml']=$this->option['ZC_BLOG_PRODUCT_HTML'];
-		$this->templatetags['feedurl']=$this->host . 'feed.php';
 		$this->templatetags['type']='';
 		$this->templatetags['page']='';
 		$this->templatetags['socialcomment']=&$this->socialcomment;
 		$this->templatetags['header']=&$this->header;
 		$this->templatetags['footer']=&$this->footer;
 		$this->templatetags['validcodeurl']=&$this->validcodeurl;
+		$this->templatetags['feedurl']=&$this->feedurl;
+		$this->templatetags['searchurl']=&$this->searchurl;
 
 		$s=array(
 			$option['ZC_SIDEBAR_ORDER'],

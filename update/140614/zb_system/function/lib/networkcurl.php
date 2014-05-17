@@ -173,6 +173,7 @@ class Networkcurl implements iNetwork
 	}
 
 	private function reinit(){
+		global $zbp;
 		$this->readyState = 0;        #状态
 		$this->responseBody = NULL;   #返回的二进制
 		$this->responseStream = NULL; #返回的数据流
@@ -192,7 +193,7 @@ class Networkcurl implements iNetwork
 		$this->errno = 0;
 
 		$this->ch = curl_init();
-		$this->setRequestHeader('User-Agent','Mozilla/5.0 ('.PHP_OS . ';' . GetValueInArray(explode('/', GetVars('SERVER_SOFTWARE', 'SERVER')), 0) . ';' . 'PHP ' . phpversion() .') Z-BlogPHP/' . ZC_BLOG_VERSION);
+		$this->setRequestHeader('User-Agent','Mozilla/5.0 ('.$zbp->cache->system_environment.') Z-BlogPHP/' . ZC_BLOG_VERSION);
 		$this->setMaxRedirs(1);
 	}
 	

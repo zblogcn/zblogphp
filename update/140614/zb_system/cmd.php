@@ -41,7 +41,7 @@ switch ($action) {
 		break;
 	case 'search':
 		$q=urlencode(trim(strip_tags(GetVars('q','POST'))));
-		Redirect('../search.php?q=' . $q);
+		Redirect($zbp->searchurl . '?q=' . $q);
 		break;
 	case 'misc':
 		require './function/c_system_misc.php';

@@ -309,6 +309,7 @@ class ZBlogPHP{
 		if($this->isinitialize){
 			foreach ($GLOBALS['Filter_Plugin_Zbp_Terminate'] as $fpname => &$fpsignal) $fpname();
 			$this->CloseConnect();
+			unset($this->db);
 			$this->isinitialize=false;
 		}
 	}
@@ -344,7 +345,7 @@ class ZBlogPHP{
 		case 'pdo_mysql':
 		default:
 			try {
-				if($this->InitializeDB($this->option['ZC_DATABASE_TYPE']))return false;
+				$this->InitializeDB($this->option['ZC_DATABASE_TYPE']);
 				if($this->db->Open(array(
 						$this->option['ZC_MYSQL_SERVER'],
 						$this->option['ZC_MYSQL_USERNAME'],

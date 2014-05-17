@@ -8,10 +8,11 @@
 	<title><?php echo $GLOBALS['blogname'] . '-' . $GLOBALS['lang']['msg']['error']; ?></title>
 	<link rel="stylesheet" href="<?php echo $GLOBALS['bloghost'];?>zb_system/css/admin.css" type="text/css" media="screen" />
 	<script type="text/javascript" src="<?php echo $GLOBALS['bloghost'];?>zb_system/script/common.js"></script>
-	<style type="text/css">
-	.content div{
-	}
-	</style>
+<?php
+
+foreach ($GLOBALS['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {$fpname();}
+
+?>
 </head>
 <body class="short">
 

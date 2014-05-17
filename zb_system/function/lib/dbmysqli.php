@@ -56,7 +56,18 @@ class DbMySQLi implements iDataBase
 		$db = @mysqli_connect($dbmysql_server, $dbmysql_username, $dbmysql_password, null,$dbmysql_port);
 		$this->db = $db;
 		$this->dbname=$dbmysql_name;
-		mysqli_query($this->db,$this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
+		$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbmysql_name'";
+		$a=$this->Query($s);
+		$c=0;
+		if(is_array($a)){
+			$b=current($a);
+			if(is_array($b)){
+				$c=(int)current($b);
+			}
+		}
+		if($c==0){
+			mysqli_query($this->db,$this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
+		}
 	}
 
 	function Close(){

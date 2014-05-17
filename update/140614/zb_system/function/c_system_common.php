@@ -598,3 +598,9 @@ function RemoveBOM($s){
 	}
 	return $s;
 }
+
+function Debug_PrintGlobals(){
+	foreach($GLOBALS as $n=>$v){
+		echo $n . '<br/>';
+	}
+}
