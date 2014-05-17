@@ -79,7 +79,13 @@ function misc_statistic() {
 	$current_style = $zbp->style;
 	$current_member = '{$zbp->user->Name}';
 
-	$system_environment = PHP_OS . ';' . GetValueInArray(explode('/', GetVars('SERVER_SOFTWARE', 'SERVER')), 0) . ';' . 'PHP ' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'];
+	$ajax = Network::Create();
+	if($ajax) $ajax=substr(get_class($ajax),7);
+	
+	$system_environment = PHP_OS . ';' . 
+							GetValueInArray(explode('/', GetVars('SERVER_SOFTWARE', 'SERVER')), 0) . ';' .
+							'PHP ' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'] . ';' .
+							$ajax ;
 
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}</td><td class='td30'>{$current_member}</td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_artiles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categorys}</td></tr>";
@@ -93,12 +99,14 @@ function misc_statistic() {
 	$zbp->LoadCache();
 	$zbp->cache->reload_statistic = $r;
 	$zbp->cache->reload_statistic_time = time();
+	$zbp->cache->system_environment = $system_environment;
 	//$zbp->SaveCache();
 	CountNormalArticleNums();
 
 	$zbp->AddBuildModule('statistics', array($all_artiles, $all_pages, $all_categorys, $all_tags, $all_views, $all_comments));
 	$zbp->BuildModule();
 
+	$r = str_replace('{#ZC_BLOG_HOST#}', $zbp->host, $r);
 	$r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
 
 	echo $r;
@@ -138,6 +146,13 @@ $blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights'];
 	<meta name="robots" content="none"/>
 	<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL'] ?>"/>
 	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen"/>
+	<script src="script/common.js" type="text/javascript"></script>
+	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
+<?php
+
+foreach ($GLOBALS['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {$fpname();}
+
+?>
 	<title><?php echo $blogtitle; ?></title>
 </head>
 <body class="short">

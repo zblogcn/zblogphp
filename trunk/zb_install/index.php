@@ -515,11 +515,12 @@ case 'pdo_mysql':
   }
   $zbp->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
   $zbp->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
-  $zbp->option['ZC_MYSQL_NAME']=GetVars('dbmysql_name','POST');
-  $zbp->option['ZC_MYSQL_PRE']=GetVars('dbmysql_pre','POST');
+  $zbp->option['ZC_MYSQL_NAME']=str_replace(array('\'','"'),array('',''),GetVars('dbmysql_name','POST'));
+  $zbp->option['ZC_MYSQL_PRE']=str_replace(array('\'','"'),array('',''),GetVars('dbmysql_pre','POST'));
   $zbp->InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
   $zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'],$zbp->option['ZC_MYSQL_PORT'],$zbp->option['ZC_MYSQL_USERNAME'],$zbp->option['ZC_MYSQL_PASSWORD'],$zbp->option['ZC_MYSQL_NAME']);
   $zbp->db->dbpre=$zbp->option['ZC_MYSQL_PRE'];
+  $zbp->db->Close();
   break;
 case 'sqlite':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');
