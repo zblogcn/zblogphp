@@ -66,6 +66,7 @@ class Comment extends Base{
 			$m=$zbp->GetMemberByID($this->AuthorID);
 			if($m->ID==0){
 				$m->Name=$this->Name;
+				$m->Alias=$this->Name;
 				$m->Email=$this->Email;
 				$m->HomePage=$this->HomePage;
 			}

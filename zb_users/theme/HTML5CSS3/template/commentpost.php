@@ -2,7 +2,7 @@
   <dt><a name="comment">发表评论</a><a rel="nofollow" id="cancel-reply" href="#comment" style="display:none;"><small>取消回复</small></a></dt>
   <dd>
   <h5><!--◎欢迎参与讨论，请在这里发表您的看法、交流您的观点。--></h5>
-<figure><img src="{$user.Avatar}" alt="来宾的头像" border="0">{if $user.ID>0}<b>{$user.Name}</b>{/if}</figure>
+<figure><img src="{$user.Avatar}" alt="来宾的头像" border="0">{if $user.ID>0}<b>{$user.StaticName}</b>{/if}</figure>
   <form id="frmSumbit" target="_self" method="post" action="{$article.CommentPostUrl}">
 	<input type="hidden" name="inpId" id="inpId" value="{$article.ID}" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />

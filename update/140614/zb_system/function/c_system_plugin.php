@@ -87,7 +87,9 @@ function UninstallPlugin($strPluginName) {
 '*********************************************************
 */
 function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSIGNAL_NONE) {
-	$GLOBALS[$plugname][$functionname] = $exitsignal;
+	if( isset($GLOBALS[$plugname]) ){
+		$GLOBALS[$plugname][$functionname] = $exitsignal;
+	}
 }
 
 /*
@@ -394,6 +396,17 @@ $Filter_Plugin_Cmd_Begin = array();
 '**************************************************>
 */
 $Filter_Plugin_Login_Header = array();
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Other_Header
+'参数:
+'说明:定义其它页的header接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Other_Header = array();
 
 /*
 '**************************************************<

@@ -591,9 +591,9 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 				$zbp->ShowError(2, __FILE__, __LINE__);
 			}
 			if ($page == 1) {
-				$zbp->title = $author->Name;
+				$zbp->title = $author->StaticName;
 			} else {
-				$zbp->title = $author->Name . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
+				$zbp->title = $author->StaticName . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
 			}
 			$template = $author->Template;
 			$w[] = array('=', 'log_AuthorID', $author->ID);
@@ -1259,6 +1259,7 @@ function PostComment() {
 
 	$_POST['AuthorID'] = $zbp->user->ID;
 	$_POST['Name'] = $_POST['name'];
+	if($zbp->user->ID > 0)$_POST['Name'] = $zbp->user->Name;
 	$_POST['Email'] = $_POST['email'];
 	$_POST['HomePage'] = $_POST['homepage'];
 	$_POST['Content'] = $_POST['content'];
@@ -2373,7 +2374,7 @@ function BuildModule_comments() {
 
 	$s = '';
 	foreach ($comments as $comment) {
-		$s .= '<li><a href="' . $comment->Post->Url . '#cmt' . $comment->ID . '" title="' . htmlspecialchars($comment->Author->Name . ' @ ' . $comment->Time()) . '">' . TransferHTML($comment->Content, '[noenter]') . '</a></li>';
+		$s .= '<li><a href="' . $comment->Post->Url . '#cmt' . $comment->ID . '" title="' . htmlspecialchars($comment->Author->StaticName . ' @ ' . $comment->Time()) . '">' . TransferHTML($comment->Content, '[noenter]') . '</a></li>';
 	}
 
 	return $s;
