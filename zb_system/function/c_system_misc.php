@@ -150,7 +150,7 @@ $blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights'];
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 <?php
 
-foreach ($GLOBALS['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
 
 ?>
 	<title><?php echo $blogtitle; ?></title>

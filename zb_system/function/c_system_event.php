@@ -1259,6 +1259,7 @@ function PostComment() {
 
 	$_POST['AuthorID'] = $zbp->user->ID;
 	$_POST['Name'] = $_POST['name'];
+	if($zbp->user->ID > 0)$_POST['Name'] = $zbp->user->Name;
 	$_POST['Email'] = $_POST['email'];
 	$_POST['HomePage'] = $_POST['homepage'];
 	$_POST['Content'] = $_POST['content'];
