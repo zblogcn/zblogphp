@@ -80,8 +80,9 @@ class Member extends Base{
 		if ($name=='EmailMD5') {
 			return md5($this->Email);
 		}
-		if ($name=='Meta') {
-			return $this->Metas->serialize();
+		if ($name=='StaticName') {
+			if($this->Alias)return $this->Alias;
+			return $this->Name;
 		}
 		if ($name=='Template') {
 			$value=$this->data[$name];

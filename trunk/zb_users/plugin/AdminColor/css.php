@@ -1,8 +1,6 @@
 <?php
 require '../../../zb_system/function/c_system_base.php';
 
-require '../../../zb_system/function/c_system_admin.php';
-
 
 if(isset($_GET['setcolor'])){
 	$zbp->Load();
@@ -89,23 +87,23 @@ $c3="#b0cdee";
 $c4="#3399cc";
 $c5="#d60000";
 
-$Colors=array();
+$AdminColor_Colors=array();
 
-$Colors['Blod']  =$BlodColor[$id];
-$Colors['Normal']=$NormalColor[$id];
-$Colors['Light'] =$LightColor[$id];
-$Colors['High']  =$HighColor[$id];
-$Colors['Anti']  =$BlodColor[$id];
+$AdminColor_Colors['Blod']  =$AdminColor_BlodColor[$id];
+$AdminColor_Colors['Normal']=$AdminColor_NormalColor[$id];
+$AdminColor_Colors['Light'] =$AdminColor_LightColor[$id];
+$AdminColor_Colors['High']  =$AdminColor_HighColor[$id];
+$AdminColor_Colors['Anti']  =$AdminColor_BlodColor[$id];
 
 foreach ($GLOBALS['Filter_Plugin_AdminColor_CSS_Pre'] as $fpname => &$fpsignal) {
-	$fpname($Colors);
+	$fpname($AdminColor_Colors);
 }
 
-$c=str_replace($c1,$Colors['Blod'],$c);
-$c=str_replace($c2,$Colors['Normal'],$c);
-$c=str_replace($c3,$Colors['Light'],$c);
-$c=str_replace($c4,$Colors['High'],$c);
-$c=str_replace($c5,$Colors['Anti'],$c);
+$c=str_replace($c1,$AdminColor_Colors['Blod'],$c);
+$c=str_replace($c2,$AdminColor_Colors['Normal'],$c);
+$c=str_replace($c3,$AdminColor_Colors['Light'],$c);
+$c=str_replace($c4,$AdminColor_Colors['High'],$c);
+$c=str_replace($c5,$AdminColor_Colors['Anti'],$c);
 
 
 $c .="\r\n" . "/*AdminColor*/" . "\r\n" . "#admin_color{float:right;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
