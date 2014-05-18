@@ -10,7 +10,7 @@
           </div>
 			<div class="post_tags"></div>
           <div class="post_info">
-            作者:{$article.Author.Name} | 分类:{$article.Category.Name} | 浏览:{$article.ViewNums} | 评论:{$article.CommNums}
+            作者:{$article.Author.StaticName} | 分类:{$article.Category.Name} | 浏览:{$article.ViewNums} | 评论:{$article.CommNums}
           </div>
         </div>       
         <div class="post_nav">

@@ -44,6 +44,9 @@ class Member extends Base{
 		if ($name=='EmailMD5') {
 			return null;
 		}
+		if ($name=='StaticName') {
+			return null;
+		}
 		if ($name=='Template') {
 			if($value==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$value='';
 			return $this->data[$name]  =  $value;
@@ -80,8 +83,9 @@ class Member extends Base{
 		if ($name=='EmailMD5') {
 			return md5($this->Email);
 		}
-		if ($name=='Meta') {
-			return $this->Metas->serialize();
+		if ($name=='StaticName') {
+			if($this->Alias)return $this->Alias;
+			return $this->Name;
 		}
 		if ($name=='Template') {
 			$value=$this->data[$name];

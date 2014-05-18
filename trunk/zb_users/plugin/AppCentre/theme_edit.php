@@ -21,6 +21,22 @@ if(GetVars('id')){
   foreach($ft as $f){
     $mt[]=filemtime($f);
   }
+  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/include/','php|inc|png');
+  foreach($ft as $f){
+    $mt[]=filemtime($f);
+  }
+  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/style/','php|inc|png');
+  foreach($ft as $f){
+    $mt[]=filemtime($f);
+  }
+  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/template/','php|inc|png');
+  foreach($ft as $f){
+    $mt[]=filemtime($f);
+  }
+  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/source/','php|inc|png');
+  foreach($ft as $f){
+    $mt[]=filemtime($f);
+  }  
   rsort($mt);
   if(count($mt)==0)$mt[]=time();
   $app->modified = date('Y-m-d', reset($mt));

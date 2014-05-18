@@ -9,7 +9,7 @@
 				<?php  echo $article->Intro;  ?>
           </div>
           <div class="post_info">
-				作者:<?php  echo $article->Author->Name;  ?> | 分类:<?php  echo $article->Category->Name;  ?> | 浏览:<?php  echo $article->ViewNums;  ?> | 评论:<?php  echo $article->CommNums;  ?>
+				作者:<?php  echo $article->Author->StaticName;  ?> | 分类:<?php  echo $article->Category->Name;  ?> | 浏览:<?php  echo $article->ViewNums;  ?> | 评论:<?php  echo $article->CommNums;  ?>
           </div>
         </div>
       </div>

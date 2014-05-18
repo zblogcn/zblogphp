@@ -1,5 +1,5 @@
 <div class="post" id="divCommentPost">
-	<p class="posttop"><a name="comment"><?php if ($user->ID>0) { ?><?php  echo $user->Name;  ?><?php } ?>发表评论:</a><a rel="nofollow" id="cancel-reply" href="#divCommentPost" style="display:none;"><small>取消回复</small></a></p>
+	<p class="posttop"><a name="comment"><?php if ($user->ID>0) { ?><?php  echo $user->StaticName;  ?><?php } ?>发表评论:</a><a rel="nofollow" id="cancel-reply" href="#divCommentPost" style="display:none;"><small>取消回复</small></a></p>
 	<form id="frmSumbit" target="_self" method="post" action="<?php  echo $article->CommentPostUrl;  ?>" >
 	<input type="hidden" name="inpId" id="inpId" value="<?php  echo $article->ID;  ?>" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
