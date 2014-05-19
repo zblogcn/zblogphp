@@ -102,6 +102,7 @@ if($newbuild-$nowbuild>0){
                   <th id="_s">状态</th>
                 </tr>
 <?php
+  $i=0;
 //if (file_exists($zbp->usersdir . 'cache/now.xml')) {
 if ($nowxml!=''){
 
@@ -140,16 +141,21 @@ if ($nowxml!=''){
               </table>
 <?php if($i>0){?>
               <p>
-                <input name="submit" type="button" onclick="restoreauto();" value="自动依次更新文件" class="button" />
+                <input name="submit" type="button" onclick="restoreauto();$(this).hide();" value="自动依次更新文件" class="button" />
               </p>
 <?php }?>
               <p> </p>
             </form>
 <script type="text/javascript">
 function restoreauto(){
-  $("a.resotrefile").each(function(){
-    $(this).click();
-  });
+  restoresingle();
+}
+
+function restoresingle(){
+  if($("a.resotrefile").get(0)){
+    $("a.resotrefile").get(0).click();
+    setTimeout("restoresingle()",1000);
+  }
 }
 
 
