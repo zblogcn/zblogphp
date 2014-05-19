@@ -72,13 +72,13 @@ $("#btnPost").click(function(){
 	$("#password").val(strPassWord);
 	$("#savedate").val(strSaveDate);
 })
-
+<?php if($zbp->option['ZC_ADMIN_HTML5_ENABLE']){?>
 $(document).ready(function(){
 	if (!$.support.leadingWhitespace) {
 		alert("<?php echo $lang['error']['74']?>");
 	}
 });
-
+<?php }?>
 $("#chkRemember").click(function(){
 	$("#savedate").attr("value",$("#chkRemember").attr("checked")=="checked"?30:0);
 })
