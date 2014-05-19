@@ -127,7 +127,7 @@ if ($nowxml!=''){
     }else{
       $i+=1;
       echo '<tr><td><b>' . str_replace('\\','/',$file['name']) . '</b></td>';
-    	$s='<a href="javascript:void(0)" onclick="restore(\''.base64_encode($file['name']).'\',\'file'.md5($file['name']) .'\')" class="button" title="还原系统文件"><img src="'.$zbp->host.'zb_system/image/admin/exclamation.png" width="16" alt=""></a>';
+    	$s='<a href="javascript:void(0)" onclick="restore(\''.base64_encode($file['name']).'\',\'file'.md5($file['name']) .'\')" class="resotrefile button" title="还原系统文件"><img src="'.$zbp->host.'zb_system/image/admin/exclamation.png" width="16" alt=""></a>';
     }
     echo '<td class="tdCenter" id="file' . md5($file['name']) . '">' . $s . '</td></tr>';
   }
@@ -138,9 +138,21 @@ if ($nowxml!=''){
 ?>
 
               </table>
+<?php if($i>0){?>
+              <p>
+                <input name="submit" type="button" onclick="restoreauto();" value="自动依次更新文件" class="button" />
+              </p>
+<?php }?>
               <p> </p>
             </form>
 <script type="text/javascript">
+function restoreauto(){
+  $("a.resotrefile").each(function(){
+    $(this).click();
+  });
+}
+
+
 function restore(f,id){
 	$.get(bloghost+"zb_users/plugin/AppCentre/update.php?restore="+f, function(data){
 		//alert(data);
