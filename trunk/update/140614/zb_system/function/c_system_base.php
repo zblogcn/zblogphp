@@ -14,6 +14,7 @@ ob_start();
 
 #引入必备
 $basepath = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+define('ZBP_PATH',str_replace('\\','/',realpath($basepath . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR)) . '/');
 require $basepath . 'c_system_plugin.php';
 require $basepath . 'c_system_debug.php';
 require $basepath . 'c_system_common.php';
@@ -80,7 +81,7 @@ $action = '';
 $currenturl = GetRequestUri();
 $lang = array();
 
-$blogpath = str_replace('\\','/',realpath($basepath . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR)) . '/';
+$blogpath = ZBP_PATH;
 $usersdir = $blogpath . 'zb_users/';
 
 $option_zbusers = null;

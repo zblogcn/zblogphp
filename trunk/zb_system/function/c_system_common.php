@@ -604,3 +604,36 @@ function Debug_PrintGlobals(){
 		echo $n . '<br/>';
 	}
 }
+
+function GetTimeZonebyGMT($z){
+	$timezones = array(  
+		-12 => 'Etc/GMT+12',
+		-11 => 'Pacific/Midway',
+		-10 => 'Pacific/Honolulu',
+		-9 => 'America/Anchorage',
+		-8 => 'America/Los_Angeles',
+		-7 => 'America/Denver',
+		-6 => 'America/Tegucigalpa',
+		-5 => 'America/New_York',
+		-4 => 'America/Halifax',
+		-3 => 'America/Argentina/Buenos_Aires',
+		-2 => 'Atlantic/South_Georgia',
+		-1 => 'Atlantic/Azores',
+		0 => 'UTC',
+		1 => 'Europe/Berlin',
+		2 => 'Europe/Sofia',
+		3 => 'Africa/Nairobi',
+		4 => 'Europe/Moscow',
+		5 => 'Asia/Karachi',
+		6 => 'Asia/Dhaka',
+		7 => 'Asia/Bangkok',
+		8 => 'Asia/Shanghai',
+		9 => 'Asia/Tokyo',
+		10 => 'Pacific/Guam',
+		11 => 'Australia/Sydney',
+		12 => 'Pacific/Fiji',
+		13 => 'Pacific/Tongatapu',
+	);
+	if(!isset($timezones[$z]))return 'UTC';
+	return $timezones[$z];
+}

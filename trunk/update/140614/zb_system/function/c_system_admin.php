@@ -286,8 +286,6 @@ function CreateModuleDiv($m,$button=true){
 	echo '</div>';
 }
 
-
-
 function CreateOptionsOfTimeZone($default){
 	global $zbp;
 	$s='';

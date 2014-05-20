@@ -1,5 +1,6 @@
 <?php
-return function($author, $content, &$sv, $config_sv, $config_array){
+return 'number_value';
+function number_value($author, $content, &$sv, $config_sv, $config_array){
 	$matches = array();
 	preg_match_all("/\d/si", $content, $matches);
 

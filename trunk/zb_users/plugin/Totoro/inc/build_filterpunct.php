@@ -1,5 +1,6 @@
 <?php
-return function(&$content){
+return 'filterpunct';
+function filterpunct(&$content){
 	$regex = "/\~|\!|\@|\#|\\$|\%|\^|\&|\*|\(|\)|_|\\\|\\+|\||\-|\=|\||\{|\}|\[|\]|\;|\'|\:|\"|\<|\>|\?|\/|\.|\,|\！|\＃|\￥|\…|\（|\）|\—|\、|\【|\】|\｛|\｝|\；|\：|\‘|\’|\“|\”|\《|\》|\＼|\，|\。|\、|\？/si";
 	$content = preg_replace($regex, '', $content);
 };

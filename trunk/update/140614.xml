@@ -1,10 +1,10 @@
 ﻿<files build='140614'>
 	<file name='zb_system\function\c_system_plugin.php' md5='1E4CBD5C87100FCB1B24D232746A9358' crc32='E2F13D89'/>
 	<file name='zb_system\function\c_system_debug.php' md5='35BF0EA154F04A4CC8F10D5410E663F8' crc32='372CB528'/>
-	<file name='zb_system\function\c_system_common.php' md5='6C4C46620F4CAFB580099E168BB9BF61' crc32='8C0A919D'/>
+	<file name='zb_system\function\c_system_common.php' md5='9582C5A2A6BB16B7C9B61E9C3ADC91D1' crc32='CECD6090'/>
 	<file name='zb_system\function\c_system_event.php' md5='F6D98F21A72C1B1B7CE63281F5CEF2AE' crc32='14D4265D'/>
-	<file name='zb_system\function\c_system_base.php' md5='58FC8E24A851E970107FFD7CD598BFC6' crc32='75F116AE'/>
-	<file name='zb_system\function\c_system_admin.php' md5='267C0653EB5ACFA7F07600B27956DFAA' crc32='7F4C234E'/>
+	<file name='zb_system\function\c_system_base.php' md5='423605E8697DD7A35ECCDEC120F2C798' crc32='EE156E'/>
+	<file name='zb_system\function\c_system_admin.php' md5='345C2D230A941BAC984D35F73CD62AAC' crc32='B60D20B6'/>
 	<file name='zb_system\function\lib\base.php' md5='7DB770C89B48ECF5C11198002D4FED64' crc32='A47C96BD'/>
 	<file name='zb_system\function\lib\dbsql.php' md5='8F07DC63EBFB44C363E2EA8558FA4F52' crc32='4FCCF07D'/>
 	<file name='zb_system\function\lib\metas.php' md5='9F12E71DE1E5FB0CBB8F8DC74A0A9E47' crc32='64075D9E'/>
@@ -21,7 +21,7 @@
 	<file name='zb_system\admin\admin_left.php' md5='CBCFE7D814DEC4DC7EA6B019272BF3E4' crc32='FBCF02FA'/>
 	<file name='zb_system\admin\admin_top.php' md5='E8351D325C14839DFA024DA03592278D' crc32='E70767FA'/>
 	<file name='zb_system\admin\category_edit.php' md5='A5408DC1F2DCFD544CA31E7251B29558' crc32='2C6A7766'/>
-	<file name='zb_system\admin\edit.php' md5='203DFB0CE72F5136DCD14F1D9CC8F3E3' crc32='F179115A'/>
+	<file name='zb_system\admin\edit.php' md5='4F61763DF58A899FCD34242B72E32AB0' crc32='2097DD43'/>
 	<file name='zb_system\admin\index.php' md5='CBB401FC650A346037F141AE4B0C1E31' crc32='198E79A8'/>
 	<file name='zb_system\admin\member_edit.php' md5='A11418EE931954936A18D5F79599B286' crc32='C03FC662'/>
 	<file name='zb_system\admin\module_edit.php' md5='4B1721850BD0D532AEFA4D838F1BEC37' crc32='8B357D90'/>
