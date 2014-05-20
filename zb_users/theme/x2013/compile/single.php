@@ -1,4 +1,4 @@
-﻿<?php  include $this->GetTemplate('header');  ?>
+<?php  include $this->GetTemplate('header');  ?>
 <meta name="Keywords" content="<#article/tagtoname#>">
 </head>
   <body class="home blog" id="hasfixed">
