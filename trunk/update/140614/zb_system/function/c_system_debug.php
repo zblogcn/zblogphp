@@ -6,10 +6,20 @@
  * @version       2.0 2013-06-14
  */
 
-function error_handler($errno, $errstr, $errfile, $errline) {
+function debug_error_handler($errno, $errstr, $errfile, $errline) {
 	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
+	if(ZBlogException::$iswarning==false){
+		if( $errno == E_WARNING )return true;
+	}
+	if(ZBlogException::$isstrict==false){
+		if( $errno == E_NOTICE )return true;
+		if( $errno == E_STRICT )return true;
+		if( $errno == E_USER_NOTICE )return true;
+		if( defined('E_DEPRECATED') && $errno== E_DEPRECATED )return true;
+		if( defined('E_USER_DEPRECATED ') && $errno== E_USER_DEPRECATED )return true;
+	}
 	if(ZBlogException::$isdisable==true)return true;
-	//ob_clean();
+
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseError($errno, $errstr, $errfile, $errline);
 	$zbe->Display();
@@ -17,26 +27,34 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 
 }
 
-function exception_handler($exception) {
+function debug_exception_handler($exception) {
 	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
 	if(ZBlogException::$isdisable==true)return true;
-	//ob_clean();
+
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseException($exception);
 	$zbe->Display();
 	die();
 }
 
-function shutdown_error_handler() {
-	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
+function debug_shutdown_handler() {
+	foreach ($GLOBALS['Filter_Plugin_Debug_Shutdown_Handler'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($classname);
+	}
 	if ($error = error_get_last()) {
-		if( $error['type'] == E_NOTICE )return true;
-		if( $error['type'] == E_STRICT )return true;
-		if( $error['type'] == E_USER_NOTICE )return true;
-		if( defined('E_DEPRECATED') && $error['type']== E_DEPRECATED )return true;
-		if( defined('E_USER_DEPRECATED ') && $error['type']== E_USER_DEPRECATED )return true;
+		$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
+		if(ZBlogException::$iswarning==false){
+			if( $error['type'] == E_WARNING )return true;
+		}
+		if(ZBlogException::$isstrict==false){
+			if( $error['type'] == E_NOTICE )return true;
+			if( $error['type'] == E_STRICT )return true;
+			if( $error['type'] == E_USER_NOTICE )return true;
+			if( defined('E_DEPRECATED') && $error['type']== E_DEPRECATED )return true;
+			if( defined('E_USER_DEPRECATED ') && $error['type']== E_USER_DEPRECATED )return true;
+		}
 		if(ZBlogException::$isdisable==true)return true;
-		//ob_clean();
+
 		$zbe = ZBlogException::GetInstance();
 		$zbe->ParseShutdown($error);
 		$zbe->Display();
@@ -46,8 +64,10 @@ function shutdown_error_handler() {
 }
 
 class ZBlogException {
-	static private $_zbe = null;
-	static public $isdisable = false;
+	private static $_zbe = null;
+	public static $isdisable = false;
+	public static $isstrict = false;
+	public static $iswarning = true;
 	public static $error_id=0;
 	public static $error_file=null;
 	public static $error_line=null;
@@ -97,9 +117,9 @@ class ZBlogException {
 	}
 
 	static public function SetErrorHook() {
-		set_error_handler('error_handler');
-		set_exception_handler('exception_handler');
-		register_shutdown_function('shutdown_error_handler');
+		set_error_handler('debug_error_handler');
+		set_exception_handler('debug_exception_handler');
+		register_shutdown_function('debug_shutdown_handler');
 	}
 
 	static public function ClearErrorHook() {
@@ -117,12 +137,27 @@ class ZBlogException {
 		self::$isdisable = false;
 	}
 
+	static public function DisableStrict() {
+		self::$isstrict = false;
+	}
+
+	static public function EnableStrict() {
+		self::$isstrict = true;
+	}
+	
+	static public function DisableWarning() {
+		self::$iswarning = false;
+	}
+
+	static public function EnableWarning() {
+		self::$iswarning = true;
+	}
+	
 	static public function Trace($s) {
 		Logs($s);
 	}
 
 	function ParseError($type, $message, $file, $line) {
-
 		$this->type = $type;
 		$this->message = $message;
 		$this->file = $file;

@@ -57,13 +57,14 @@ class Metas {
 	public function Unserialize($s){
 		global $zbp;
 		if($s=='')return false;
-		if(strpos($s,'{')===0){
-			$this->Data=json_decode($s,true);
-		}else{
-			ZBlogException::DisableErrorHook();
-			$this->Data=@unserialize($s);
-			ZBlogException::EnableErrorHook();
-		}
+		//if(strpos($s,'{')===0){
+			//$this->Data=json_decode($s,true);
+		//}else{
+		$b=false;
+		if(ZBlogException::$isstrict==true){$b=true;ZBlogException::$isstrict=false;}
+		$this->Data=@unserialize($s);
+		if($b==true){$b=false;ZBlogException::$isstrict=true;}
+		//}
 		if(count($this->Data)==0)return false;
 		foreach ($this->Data as $key => $value) {
 			if(is_string($value)){

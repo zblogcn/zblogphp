@@ -600,9 +600,19 @@ function RemoveBOM($s){
 }
 
 function Debug_PrintGlobals(){
+	$a=array();
 	foreach($GLOBALS as $n=>$v){
-		echo $n . '<br/>';
+		$a[] = $n;
 	}
+	return print_r($a,true);
+}
+
+function Debug_PrintIncludefiles(){
+	$a=array();
+	foreach(get_included_files() as $n=>$v){
+		$a[] = $v;
+	}
+	return print_r($a,true);
 }
 
 function GetTimeZonebyGMT($z){

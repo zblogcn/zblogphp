@@ -268,9 +268,9 @@ class Template{
 	public function Display()
 	{
 		#强制撤除所有错误监控
-		if($GLOBALS['option']['ZC_DEBUG_MODE']==false){
-			ZBlogException::ClearErrorHook();
-		}
+		//if($GLOBALS['option']['ZC_DEBUG_MODE']==false){
+		//	ZBlogException::ClearErrorHook();
+		//}
 		#入口处将tags里的变量提升全局!!!
 		foreach ($this->tags as $key => &$value) {
 			$$key=&$value;

@@ -5,6 +5,7 @@
 	<file name='zb_system\function\c_system_event.php' md5='D4781D6253BA71200C22E5160BCAC900' crc32='98232DEE'/>
 	<file name='zb_system\function\c_system_base.php' md5='9F7F964FA5B598EB7A98CC0828D1DDDD' crc32='A5E6922B'/>
 	<file name='zb_system\function\c_system_admin.php' md5='5E1A8D280B875ECA611E8E41FEFD984D' crc32='638B49C7'/>
+	<file name='zb_system\defend\option.php' md5='26CA2A932E5B15485222A281AF02440C' crc32='B823382E'/>
 	<file name='zb_system\function\lib\base.php' md5='13DE31CD4662922CDA3DCCE1DB04B503' crc32='B5DCD39'/>
 	<file name='zb_system\function\lib\dbsql.php' md5='FCC10A39BB03B9BA050098F444CFE0A8' crc32='7E75F44'/>
 	<file name='zb_system\function\lib\metas.php' md5='B466F432622D6F3EEE4613FBE5ED9D77' crc32='658663D3'/>
@@ -33,7 +34,6 @@
 	<file name='zb_system\css\jquery.bettertip.css' md5='52BFF27900CC8538B6AA73EE0F81B54E' crc32='DDF8486F'/>
 	<file name='zb_system\defend\arial.ttf' md5='687432B29CB07E7E1D2644F333A672D5' crc32='590DC6C3'/>
 	<file name='zb_system\defend\error.html' md5='6610644482370F0EC55AD6C08135C1F7' crc32='CE14477'/>
-	<file name='zb_system\defend\option.php' md5='26CA2A932E5B15485222A281AF02440C' crc32='B823382E'/>
 	<file name='zb_system\defend\thanks.html' md5='62663825603590C793B886ECE854596E' crc32='D61D2F8A'/>
 	<file name='zb_system\defend\createtable\mysql.sql' md5='E0D134D197A6B2F5E0F0F67BBDA73977' crc32='F81E56A1'/>
 	<file name='zb_system\defend\createtable\sqlite.sql' md5='49361248478E91005795DECF18D769AC' crc32='C7A475DE'/>
