@@ -197,10 +197,10 @@ class ZBlogPHP{
 			$this->lang = require($this->path . 'zb_users/language/' . $this->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 		}
 
-		if($this->option['ZC_DEBUG_MODE']==true){
-			error_reporting(-1);
+		if(isset($this->option['ZC_DEBUG_MODE_STRICT']) && $this->option['ZC_DEBUG_MODE_STRICT']==true){
+			ZBlogException::EnableStrict();
 		}else{
-			error_reporting(0);
+			ZBlogException::DisableStrict();
 		}
 
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){

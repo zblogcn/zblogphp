@@ -104,14 +104,25 @@ function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSI
 //}
 
 ################################################################################################################
-#base里的
+#dubug里的
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Debug_Shutdown_Handler
+'参数:无
+'说明:定义debug_shutdown_handler函数的接口
+'调用:
+'**************************************************>
+*/
+$Filter_Plugin_Debug_Shutdown_Handler = array();
 
 /*
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Autoload
 '参数:$classname
-'说明:定义autoload魔术方法
+'说明:监控autoload魔术方法
 '调用:
 '**************************************************>
 */
