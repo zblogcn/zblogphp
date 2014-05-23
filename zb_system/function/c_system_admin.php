@@ -686,11 +686,20 @@ $array=$zbp->GetCommentList(
 );
 
 foreach ($array as $cmt) {
+	
+	$article = new Post;
+	if (!$article->LoadInfoById($cmt->LogID)) $article = NULL;
+	
 	echo '<tr>';
 	echo '<td class="td5">' . $cmt->ID .  '</td>';
 	echo '<td class="td5">' . $cmt->ParentID . '</td>';
 	echo '<td class="td10">' . $cmt->Author->Name . '</td>';
-	echo '<td><div style="overflow:hidden;max-width:500px;">' . $cmt->Content . '<div></td>';
+	echo '<td><div style="overflow:hidden;max-width:500px;">';
+	if ($article)
+		echo '<a href="'. $article->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ';
+	else
+		echo '<a href="javascript:void(0)"><img src="../image/admin/delete.png" alt="no exists" title="no exists" width="16" /></a>';
+	echo $cmt->Content . '<div></td>';
 	echo '<td class="td5">' . $cmt->LogID .  '</td>';
 	echo '<td class="td15">' .$cmt->Time() . '</td>';
 	echo '<td class="td10 tdCenter">';
