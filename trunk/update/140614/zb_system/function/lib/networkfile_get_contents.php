@@ -184,7 +184,9 @@ class Networkfile_get_contents implements iNetwork
 	}
 	
 	public function enableGzip(){
-		$this->isgzip = true;
+		if( version_compare ( PHP_VERSION ,  '5.3.0' ) >= 0 ){
+			$this->isgzip = true;
+		}
 	}
 
 	public function setMaxRedirs($n=0){

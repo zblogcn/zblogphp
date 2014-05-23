@@ -66,6 +66,7 @@ class Dbpdo_MySQL implements iDataBase
 		}
 		if($c==0){
 			$this->db->exec($this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
+			return true;
 		}
 	}
 

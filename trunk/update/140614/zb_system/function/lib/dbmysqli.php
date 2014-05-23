@@ -67,6 +67,7 @@ class DbMySQLi implements iDataBase
 		}
 		if($c==0){
 			mysqli_query($this->db,$this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
+			return true;
 		}
 	}
 

@@ -6,7 +6,7 @@
  * @version       2.0 2013-06-14
  */
 
-function debug_error_handler($errno, $errstr, $errfile, $errline) {
+function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
 	if(ZBlogException::$iswarning==false){
 		if( $errno == E_WARNING )return true;
@@ -27,7 +27,7 @@ function debug_error_handler($errno, $errstr, $errfile, $errline) {
 
 }
 
-function debug_exception_handler($exception) {
+function Debug_Exception_Handler($exception) {
 	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
 	if(ZBlogException::$isdisable==true)return true;
 
@@ -37,9 +37,9 @@ function debug_exception_handler($exception) {
 	die();
 }
 
-function debug_shutdown_handler() {
+function Debug_Shutdown_Handler() {
 	foreach ($GLOBALS['Filter_Plugin_Debug_Shutdown_Handler'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($classname);
+		$fpreturn=$fpname();
 	}
 	if ($error = error_get_last()) {
 		$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
@@ -117,9 +117,9 @@ class ZBlogException {
 	}
 
 	static public function SetErrorHook() {
-		set_error_handler('debug_error_handler');
-		set_exception_handler('debug_exception_handler');
-		register_shutdown_function('debug_shutdown_handler');
+		set_error_handler('Debug_Error_Handler');
+		set_exception_handler('Debug_Exception_Handler');
+		register_shutdown_function('Debug_Shutdown_Handler');
 	}
 
 	static public function ClearErrorHook() {

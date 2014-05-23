@@ -435,7 +435,6 @@ class ZBlogPHP{
 			$this->db->Update($sql);
 		}
 
-		$this->configs[$name]->UnSerialize($kv['conf_Value']);
 		return true;
 	}
 

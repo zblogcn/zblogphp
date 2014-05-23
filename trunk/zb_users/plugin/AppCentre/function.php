@@ -217,18 +217,14 @@ function Server_SendRequest_Network($url,$data=array(),$u,$c){
 
 	if($data){//POST
 		$ajax->open('POST',$url);
-		if( (get_class($ajax)<>'Networkfile_get_contents') || (version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0) ){
-			$ajax->enableGzip();
-		}
+		$ajax->enableGzip();
 		$ajax->setTimeOuts(120,120,0,0);
 		$ajax->setRequestHeader('User-Agent',$u);
 		$ajax->setRequestHeader('Cookie',$c);
 		$ajax->send($data);
 	}else{
 		$ajax->open('GET',$url);
-		if( (get_class($ajax)<>'Networkfile_get_contents') || (version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0) ){
-			$ajax->enableGzip();
-		}
+		$ajax->enableGzip();
 		$ajax->setTimeOuts(120,120,0,0);
 		$ajax->setRequestHeader('User-Agent',$u);
 		$ajax->setRequestHeader('Cookie',$c);

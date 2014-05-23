@@ -205,6 +205,7 @@ switch ($action) {
 	case 'PluginMng':
 		if(GetVars('install','GET')){
 			InstallPlugin(GetVars('install','GET'));
+			$zbp->BuildModule();
 		}
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;

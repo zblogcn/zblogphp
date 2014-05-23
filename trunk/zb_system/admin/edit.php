@@ -75,16 +75,16 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <form id="edit" name="edit" method="post" action="#">
   <div id="divEditLeft">
     <!-- 4号输出接口 -->
-       <div id='response4' class='editmod'>
+       <div id="response4" class="editmod2">
 <?php
 foreach ($GLOBALS['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	   </div>
-    <div id="divEditTitle">
+    <div id="divEditTitle" class="editmod2">
       <input type="hidden" name="ID" id="edtID" value="<?php echo $article->ID;?>" />
       <input type="hidden" name="Type" id="edtType" value="<?php echo $article->Type;?>" />
       <!-- title( -->
-		<div id='titleheader' class='editmod'>
+		<div id="titleheader" class="editmod">
 			<label for="edtTitle" class="editinputname" ><?php echo $lang['msg']['title']?></label>
 			<div><input type="text" name="Title" id="edtTitle"  maxlength="100" onBlur="if(this.value=='') this.value='<?php echo $lang['msg']['unnamed']?>'" onFocus="if(this.value=='<?php echo $lang['msg']['unnamed']?>') this.value=''" value="<?php echo $article->Title;?>" /></div>
       </div>
@@ -93,52 +93,52 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsignal) {$fp
     </div>
 
     <!-- 5号输出接口 -->
-       <div id='response5' class='editmod'>
+       <div id="response5" class="editmod2">
 <?php
 foreach ($GLOBALS['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	   </div>
 
-    <div id="divContent" style="clear:both;">
-		<div id='cheader' class='editmod'><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
-		<div id='carea' class='editmod'><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content,'[html-format]');?></textarea></div>
+    <div id="divContent"  class="editmod2" style="clear:both;">
+		<div id='cheader' class="editmod"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
+		<div id='carea' class="editmod"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content,'[html-format]');?></textarea></div>
 		<div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Waiting...</div>
 	</div>
 
     <!-- 1号输出接口 -->
-       <div id='response' class='editmod'>
+       <div id="response" class="editmod2">
 <?php
 foreach ($GLOBALS['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	   </div>	
 
       <!-- alias( -->
-      <div id='alias' class='editmod'><label for="edtAlias" class="editinputname" ><?php echo $lang['msg']['alias']?></label>
+      <div id="alias" class="editmod2"><label for="edtAlias" class="editinputname" ><?php echo $lang['msg']['alias']?></label>
         <input type="text" name="Alias" id="edtAlias" maxlength="250" value="<?php echo $article->Alias;?>" />
       </div>
       <!-- )alias -->
 <?php if(!$ispage){?>
 	    <!-- tags( -->
-      <div id='tags' class='editmod'><label  for="edtTag"  class='editinputname'><?php echo $lang['msg']['tags']?></label>
+      <div id="tags" class="editmod2"><label  for="edtTag"  class='editinputname'><?php echo $lang['msg']['tags']?></label>
         <input type="text"  name="Tag" id="edtTag" value="<?php echo $article->TagsToNameString();?>" />
         (<?php echo $lang['msg']['use_commas_to_separate']?>) <a href="#" id="showtags"><?php echo $lang['msg']['show_common_tags']?></a></div>
       <!-- Tags -->
-      <div id="ulTag" style="display:none;">
+      <div id="ulTag" class="editmod2" style="display:none;">
         <div id="ajaxtags">Waiting...</div>
       </div>
       <!-- )tags -->
 
-       <div id='insertintro' class='editmod'><span><?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
+       <div id="insertintro" class="editmod2"><span><?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
 <?php }?>
 
-		<div id="divIntro" <?php if(!$article->Intro){echo 'style="display:none;"';}?>>
-       <div id='introheader' class='editmod'><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
+		<div id="divIntro" class="editmod2" <?php if(!$article->Intro){echo 'style="display:none;"';}?>>
+       <div id="introheader" class="editmod"><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
        <textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro,'[html-format]');?></textarea>
        <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Waiting...</div>
 	   <hr/>
     </div>
     <!-- 2号输出接口 -->
-       <div id='response2' class='editmod'>
+       <div id="response2" class="editmod2">
 <?php
 foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fpname();}
 ?>
@@ -152,12 +152,12 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
     <div id="divEditPost">
       <div id="divBox">
         <div id="divFloat">
-          <div id='post' class='editmod'>
+          <div id='post' class="editmod">
             <input class="button" style="width:180px;height:38px;" type="submit" value="提交" id="btnPost" onclick='return checkArticleInfo();' />
           </div>
 
           <!-- cate --><?php if(!$ispage){ ?>
-          <div id='cate' class='editmod'> <label for="cmbTemplate" class="editinputname" ><?php echo $lang['msg']['category']?></label>
+          <div id='cate' class="editmod"> <label for="cmbCateID" class="editinputname" ><?php echo $lang['msg']['category']?></label>
             <select style="width:180px;" class="edit" size="1" name="CateID" id="cmbCateID">
 <?php echo CreateOptoinsOfCategorys($article->CateID);?>
             </select>
@@ -165,7 +165,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <!-- cate --><?php } ?>
 
           <!-- level -->
-          <div id='level' class='editmod'> <label for="cmbPostStatus" class="editinputname" ><?php echo $lang['msg']['status']?></label>
+          <div id='level' class="editmod"> <label for="cmbPostStatus" class="editinputname" ><?php echo $lang['msg']['status']?></label>
             <select class="edit" style="width:180px;" size="1" name="Status" id="cmbPostStatus" onChange="edtLevel.value=this.options[this.selectedIndex].value">
 <?php echo CreateOptoinsOfPostStatus($article->Status);?>
             </select>
@@ -174,7 +174,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
 
           <!-- template( -->
 
-          <div id='template' class='editmod'> <label for="cmbTemplate" class="editinputname" ><?php echo $lang['msg']['template']?></label>
+          <div id='template' class="editmod"> <label for="cmbTemplate" class="editinputname" ><?php echo $lang['msg']['template']?></label>
             <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate" onChange="edtTemplate.value=this.options[this.selectedIndex].value">
 <?php echo CreateOptoinsOfTemplate($article->Template);?>
             </select>
@@ -182,7 +182,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <!-- )template -->
 
           <!-- user( -->
-          <div id='user' class='editmod'> <label for="cmbUser" class="editinputname" ><?php echo $lang['msg']['author']?></label>
+          <div id='user' class="editmod"> <label for="cmbUser" class="editinputname" ><?php echo $lang['msg']['author']?></label>
             <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
 				<?php echo CreateOptoinsOfMember($article->AuthorID);?>
             </select>
@@ -190,14 +190,14 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <!-- )user -->
 
           <!-- newdatetime( -->
-          <div id='newdatetime' class='editmod'> <label for="edtDateTime" class="editinputname" ><?php echo $lang['msg']['date']?></label>
+          <div id='newdatetime' class="editmod"> <label for="edtDateTime" class="editinputname" ><?php echo $lang['msg']['date']?></label>
             <input type="text" name="PostTime" id="edtDateTime"  value="<?php echo $article->Time();?>" style="width:171px;"/>
             </div>
 
           <!-- )newdatetime -->
 
           <!-- Istop( --><?php if(!$ispage&&$zbp->CheckRights('ArticleAll')){?>
-          <div id='istop' class='editmod'>
+          <div id='istop' class="editmod">
             <label for="edtIstop" class="editinputname" ><?php echo $lang['msg']['top']?></label>
             <input id="edtIstop" name="IsTop" style="" type="text" value="<?php echo (int)$article->IsTop;?>" class="checkbox"/>
           </div><?php }?>
@@ -206,21 +206,21 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
 
           <!-- IsLock( -->
 
-          <div id='islock' class='editmod'>
+          <div id='islock' class="editmod">
             <label for="edtIslock" class='editinputname'><?php echo $lang['msg']['disable_comment']?></label>
              <input id="edtIslock" name="IsLock" style="" type="text" value="<?php echo (int)$article->IsLock;?>" class="checkbox"/>
           </div>
           <!-- )IsLock -->
 
           <!-- Navbar( --><?php if($ispage){?>
-          <div id='AddNavbar' class='editmod'>
+          <div id='AddNavbar' class="editmod">
           <label for="edtAddNavbar" class='editinputname'><?php echo $lang['msg']['add_to_navbar']?></label>
           <input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int)$zbp->CheckItemToNavbar('page',$article->ID)?>" class="checkbox" />
           </div><?php }?>
           <!-- )Navbar -->
 
           <!-- 3号输出接口 -->
-          <div id='response3' class='editmod'>
+          <div id="response3" class="editmod">
 <?php
 foreach ($GLOBALS['Filter_Plugin_Edit_Response3'] as $fpname => &$fpsignal) {$fpname();}
 ?>

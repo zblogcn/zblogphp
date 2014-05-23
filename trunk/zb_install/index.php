@@ -398,17 +398,17 @@ function Setup3(){
         <p><b>表&nbsp;前&nbsp;缀:</b>
           <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="<?php echo $option['ZC_MYSQL_PRE'];?>" style="width:350px;" />
         </p>
-      <p><b>连接选择:</b> 
-        <?php if($CheckResult['mysqli'][0]){?>
-        <label>
-          <input value="mysqli" type="radio" name="dbtype"/>MySQLi连接</label>
-        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+      <p><b>连接选择:</b>
 <?php if ( version_compare ( PHP_VERSION ,  '5.5.0' ,  '<' )) { ?>
         <?php if($CheckResult['mysql'][0]){?>
         <label>
           <input value="mysql" type="radio" name="dbtype"/>MySQL连接</label>
         <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
 <?php } ?>
+        <?php if($CheckResult['mysqli'][0]){?>
+        <label>
+          <input value="mysqli" type="radio" name="dbtype"/>MySQLi连接</label>
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php if($CheckResult['pdo_mysql'][0]){?>
         <label>
           <input value="pdo_mysql" type="radio" name="dbtype"/>PDO_MySQL连接</label>
@@ -518,7 +518,9 @@ case 'pdo_mysql':
   $zbp->option['ZC_MYSQL_NAME']=str_replace(array('\'','"'),array('',''),GetVars('dbmysql_name','POST'));
   $zbp->option['ZC_MYSQL_PRE']=str_replace(array('\'','"'),array('',''),GetVars('dbmysql_pre','POST'));
   $zbp->InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
-  $zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'],$zbp->option['ZC_MYSQL_PORT'],$zbp->option['ZC_MYSQL_USERNAME'],$zbp->option['ZC_MYSQL_PASSWORD'],$zbp->option['ZC_MYSQL_NAME']);
+  if($zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'],$zbp->option['ZC_MYSQL_PORT'],$zbp->option['ZC_MYSQL_USERNAME'],$zbp->option['ZC_MYSQL_PASSWORD'],$zbp->option['ZC_MYSQL_NAME'])==true){
+    echo "创建数据库". $zbp->option['ZC_MYSQL_NAME'] ."成功!<br/>";
+  }
   $zbp->db->dbpre=$zbp->option['ZC_MYSQL_PRE'];
   $zbp->db->Close();
   break;
