@@ -102,9 +102,7 @@ function GetHttpContent($url) {
 		if(!$ajax) return null;
 
 		$ajax->open('GET',$url);
-		if( (get_class($ajax)<>'Networkfile_get_contents') || (version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0) ){
-			$ajax->enableGzip();
-		}
+		$ajax->enableGzip();
 		$ajax->setTimeOuts(60,60,0,0);
 		$ajax->send();
 

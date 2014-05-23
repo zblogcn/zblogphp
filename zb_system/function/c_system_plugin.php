@@ -46,8 +46,7 @@ function ActivePlugin() {
 */
 function InstallPlugin($strPluginName) {
 
-	if (function_exists('InstallPlugin_' . $strPluginName) == true) {
-		$f = 'InstallPlugin_' . $strPluginName;
+	if (function_exists($f = 'InstallPlugin_' . $strPluginName) == true) {
 		$f();
 	}
 
@@ -60,8 +59,7 @@ function InstallPlugin($strPluginName) {
 */
 function UninstallPlugin($strPluginName) {
 
-	if (function_exists('UninstallPlugin_' . $strPluginName) == true) {
-		$f = 'UninstallPlugin_' . $strPluginName;
+	if (function_exists($f = 'UninstallPlugin_' . $strPluginName) == true) {
 		$f();
 	}
 

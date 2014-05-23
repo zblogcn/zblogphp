@@ -45,13 +45,14 @@ class Metas {
 	public function Serialize(){
 		global $zbp;
 		if(count($this->Data)==0)return '';
-		foreach ($this->Data as $key => $value) {
+		$data=$this->Data;
+		foreach ($data as $key => $value) {
 			if(is_string($value)){
-				$this->Data[$key]=str_replace(($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']==false?$zbp->host:$zbp->option['ZC_BLOG_HOST']),'{#ZC_BLOG_HOST#}',$value);
+				$data[$key]=str_replace(($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']==false?$zbp->host:$zbp->option['ZC_BLOG_HOST']),'{#ZC_BLOG_HOST#}',$value);
 			}
 		}
-		//return json_encode($this->Data);
-		return serialize($this->Data);
+		//return json_encode($data);
+		return serialize($data);
 	}
 
 	public function Unserialize($s){

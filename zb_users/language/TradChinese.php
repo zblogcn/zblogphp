@@ -2,9 +2,9 @@
 //<language>正體字</language>
 //The second line of this file is the name of the language
 //Author:楊懿軒
-//WebSite:http://www.yangyixuan.com
+//Author URI:http://www.yangyixuan.com
 //E-mail:sen@yangyixuan.com
-//Date:20140518
+//Date:20140522
 
 //'Custom Information
 //'Don't delete %s and ()
@@ -43,10 +43,10 @@ return array(
 	'htmlid'=>'HTML ID',
 	'size'=>'大小',
 	'none'=>'無',
-	'any'=>'任意',
+	'any'=>'不拘',
 	'edit'=>'編輯',
 	'del'=>'刪除',
-	'any'=>'任意',
+	'any'=>'不拘',
 	'login'=>'登入',
 	'enable'=>'啟用',
 	'disable'=>'停用',
@@ -91,7 +91,7 @@ return array(
 	'tag_edit'=>'標籤編輯',
 	'member_edit'=>'帳號編輯',
 	'module_edit'=>'模組編輯',
-	'module_navbar'=>'導航欄',	
+	'module_navbar'=>'導覽',	
 	'module_misc'=>'標誌',
 	'module_link'=>'連結',
 	'module_favorite'=>'書籤',
@@ -168,7 +168,7 @@ return array(
 	'disable_comment'=>'禁止迴響',
 	'default_template'=>'默認模板',
 	'generate_summary'=>'手動生成摘要',
-	'add_to_navbar'=>'加入導航欄選單',
+	'add_to_navbar'=>'加入導覽選單',
 	'help_generate_summary'=>'在正文裡插入分隔符&quot;&lt;hr class=&quot;more&quot; /&gt;&quot;可以讓系統識別摘要內容。如需另外指定摘要內容，請點選',	
 	'use_commas_to_separate'=>'逗號隔開',
 	'show_common_tags'=>'顯示常用標籤',
