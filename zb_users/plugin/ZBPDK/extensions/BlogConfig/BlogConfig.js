@@ -5,6 +5,10 @@ function read(e, d, f) {
 	$.get("main.php", f,
 	function(a) {
 		$("#content").html(a);
+		$('#content input.checkbox').css("display","none");
+		$('#content input.checkbox[value="1"]').after('<span class="imgcheck imgcheck-on"></span>');
+		$('#content input.checkbox[value!="1"]').after('<span class="imgcheck"></span>');
+		$('#content span.imgcheck').click(function(){ChangeCheckValue(this)})
 		bmx2table();
 	});
 	window.setTimeout(function(){readleft();},1000);
@@ -40,6 +44,10 @@ function run2(e, d, h) {
 		$.post("main.php", g,
 		function(a) {
 			$("#content").html(a);
+			$('#content input.checkbox').css("display","none");
+			$('#content input.checkbox[value="1"]').after('<span class="imgcheck imgcheck-on"></span>');
+			$('#content input.checkbox[value!="1"]').after('<span class="imgcheck"></span>');
+			$('#content span.imgcheck').click(function(){ChangeCheckValue(this)})
 			bmx2table();
 		});
 		break
