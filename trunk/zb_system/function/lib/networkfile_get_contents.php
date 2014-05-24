@@ -184,7 +184,7 @@ class Networkfile_get_contents implements iNetwork
 	}
 	
 	public function enableGzip(){
-		if( version_compare ( PHP_VERSION ,  '5.3.0' ) >= 0 ){
+		if( extension_loaded('zlib') ){
 			$this->isgzip = true;
 		}
 	}
