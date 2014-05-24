@@ -100,7 +100,7 @@ return array(
 	'module_manage'=>'模块管理',
 	'site_analyze'=>'站内统计摘要',	
 	'info_intro'=>'网站摘要',
-	'refresh_cache'=>'更新缓存',
+	'refresh_cache'=>'更新缓存和编译模板',
 	'latest_news'=>'最新动态信息',
 	'refresh'=>'刷新',
 	'post_count'=>'文章数量',

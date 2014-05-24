@@ -1747,9 +1747,12 @@ function PostModule() {
 	if (isset($_POST['Source'])) {
 		if ($_POST['Source'] == 'theme') {
 			$c = GetVars('Content', 'POST');
-			$f = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . GetVars('FileName', 'POST') . '.php';
+			$d = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/';
+			$f = $d . GetVars('FileName', 'POST') . '.php';
+			if(!file_exists($d)){
+				@mkdir($d,0755);
+			}
 			@file_put_contents($f, $c);
-
 			return true;
 		}
 	}

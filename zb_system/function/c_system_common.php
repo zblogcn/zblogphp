@@ -119,10 +119,13 @@ function GetHttpContent($url) {
 			curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
 		}
+		if(extension_loaded('zlib')){
+			curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
+		}
 		$r = curl_exec($ch);
 		curl_close($ch);
 	} elseif (ini_get("allow_url_fopen")) {
-		$r = file_get_contents($url);
+		$r = file_get_contents((extension_loaded('zlib')?'compress.zlib://':'') . $url);
 	}
 
 	return $r;
