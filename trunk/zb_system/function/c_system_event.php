@@ -1756,7 +1756,7 @@ function PostModule() {
 			return true;
 		}
 	}
-
+	
 	$mod = $zbp->GetModuleByID(GetVars('ID', 'POST'));
 
 	foreach ($zbp->datainfo['Module'] as $key => $value) {
@@ -1766,6 +1766,10 @@ function PostModule() {
 		}
 	}
 
+	if (isset($_POST['NoRefresh'])) {
+		$mod->NoRefresh = (bool)$_POST['NoRefresh'];
+	}
+	
 	foreach ($GLOBALS['Filter_Plugin_PostModule_Core'] as $fpname => &$fpsignal) {
 		$fpname($mod);
 	}

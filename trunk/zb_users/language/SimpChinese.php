@@ -192,6 +192,8 @@ return array(
 	'all_audit'=>'所选全部审核',
 	'gzip_compress'=>'GZip压缩',
 	'syntax_high_lighter'=>'语法高亮',
+	'max_li_in_ul'=>'UL内LI的最大行数',
+	'no_refresh_content'=>'禁止系统更新正文内容',
 	''=>'',
 ),
 
