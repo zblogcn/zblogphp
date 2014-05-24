@@ -195,6 +195,8 @@ return array(
 	'all_audit'=>'批次駁回',
 	'gzip_compress'=>'GZip壓縮',
 	'syntax_high_lighter'=>'語法突顯',
+	'max_li_in_ul'=>'UL内LI元素的最大行数',
+	'no_refresh_content'=>'禁止系统更新正文',
 	''=>'',
 ),
 
