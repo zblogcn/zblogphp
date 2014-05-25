@@ -51,7 +51,7 @@ switch ($single_meta_type){
 		echo '<p><input type="text" readonly="readonly" style="width:32%;border:none;" value="'. $single_meta_intro .'"/>';
 		$ar=explode('|',$single_meta_option);
 		foreach ($ar as $r) {
-			echo '<label><input name="meta_' . $value . '" value="'.htmlspecialchars($r).'" type="radio" '.($object->Metas->$value==$r?' checked="checked"':'').'/>&nbsp;&nbsp;'.$r.'</label>&nbsp;&nbsp;';
+			echo '&nbsp;<label><input name="meta_' . $value . '" value="'.htmlspecialchars($r).'" type="radio" '.($object->Metas->$value==$r?' checked="checked"':'').'/>'.$r.'</label>&nbsp;&nbsp;';
 		}
 		echo '<label onclick="$(&quot;:radio[name=\'meta_' . $value . '\']&quot;).prop(&quot;checked&quot;, false);$(&quot;:text[name=\'meta_' . $value . '\']&quot;).prop(&quot;disabled&quot;, false);"><input type="text" name="meta_' . $value . '" value="" disabled="disabled" style="display:none;"/>【全不选】<label>';
 		echo '</p>';	
@@ -61,7 +61,7 @@ switch ($single_meta_type){
 		$ar=explode('|',$single_meta_option);
 		if(!is_array($object->Metas->$value))$object->Metas->$value=array();
 		foreach ($ar as $r) {
-			echo '<label><input name="meta_' . $value . '[]" value="'.htmlspecialchars($r).'" type="checkbox" '.(in_array($r,$object->Metas->$value)?' checked="checked"':'').'/>&nbsp;&nbsp;'.$r.'</label>&nbsp;&nbsp;';
+			echo '&nbsp;<label><input name="meta_' . $value . '[]" value="'.htmlspecialchars($r).'" type="checkbox" '.(in_array($r,$object->Metas->$value)?' checked="checked"':'').'/>'.$r.'</label>&nbsp;&nbsp;';
 			
 		}
 		echo '<label onclick="$(&quot;:checkbox[name=\'meta_' . $value . '[]\']&quot;).prop(&quot;checked&quot;, false);$(&quot;:text[name=\'meta_' . $value . '\']&quot;).prop(&quot;disabled&quot;, false);"><input type="text" name="meta_' . $value . '" value="" disabled="disabled" style="display:none;"/>【全不选】<label>';
