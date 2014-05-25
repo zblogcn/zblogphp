@@ -15,7 +15,6 @@ class Upload extends Base{
 		global $zbp;
 		parent::__construct($zbp->table['Upload'],$zbp->datainfo['Upload']);
 
-		$this->ID = 0;
 		$this->PostTime = time();
 	}
 

@@ -1951,10 +1951,11 @@ function SaveSetting() {
 		if ($key == 'ZC_PERMANENT_DOMAIN_ENABLE' || 
 			$key == 'ZC_DEBUG_MODE' || 
 			$key == 'ZC_COMMENT_TURNOFF' || 
-			$key == 'ZC_COMMENT_REVERSE_ORDER_EXPORT' || 
+			$key == 'ZC_COMMENT_REVERSE_ORDER' || 
 			$key == 'ZC_DISPLAY_SUBCATEGORYS' || 
 			$key == 'ZC_GZIP_ENABLE' ||
-			$key == 'ZC_SYNTAXHIGHLIGHTER_ENABLE'		
+			$key == 'ZC_SYNTAXHIGHLIGHTER_ENABLE' ||
+			$key == 'ZC_COMMENT_VERIFY_ENABLE'
 		) {
 			$zbp->option[$key] = (boolean)$value;
 			continue;
@@ -1982,6 +1983,7 @@ function SaveSetting() {
 	$zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST'], '/') . '/';
 	$lang = require($zbp->usersdir . 'language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 	$zbp->option['ZC_BLOG_LANGUAGE'] = $lang['lang'];
+	$zbp->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';	
 	$zbp->SaveOption();
 }
 

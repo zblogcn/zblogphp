@@ -141,7 +141,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <label><input type="radio" <?php echo !($zbp->option['ZC_STATIC_MODE']=='REWRITE'  && strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%host%}index.php')===false)?'':'checked="checked"' ?>  value="REWRITE"  name="ZC_STATIC_MODE" onchange="changeOptions(2);" />&nbsp;&nbsp;伪静态</label>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<label><input type="radio" <?php echo !($zbp->option['ZC_STATIC_MODE']=='REWRITE'  && strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%host%}index.php')!==false)?'':'checked="checked"' ?>  value="REWRITE"  name="ZC_STATIC_MODE" onchange="changeOptions(1);" />&nbsp;&nbsp;index.php/式仿伪静态</label>
+<label><input type="radio" <?php echo !($zbp->option['ZC_STATIC_MODE']=='REWRITE'  && strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%host%}index.php')!==false)?'':'checked="checked"' ?>  value="REWRITE"  name="ZC_STATIC_MODE" onchange="changeOptions(1);" />&nbsp;&nbsp;index.php式仿伪静态</label>
 
 </p>
 	</th>
