@@ -174,7 +174,7 @@ function Server_SendRequest($url,$data=array(),$u='',$c=''){
 
 	ini_set('default_socket_timeout',120);
 	
-	if( version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0 ){
+	if(extension_loaded('zlib')){
 		return file_get_contents('compress.zlib://'.$url,false,$content);
 	}else{
 		return file_get_contents($url,false,$content);
@@ -185,7 +185,9 @@ function Server_SendRequest_CUrl($url,$data=array(),$u,$c){
 	global $zbp;
 
 	$ch = curl_init($url);
-	curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
+	if(extension_loaded('zlib')){
+		curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
+	}
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 120);
 	curl_setopt($ch, CURLOPT_USERAGENT, $u);

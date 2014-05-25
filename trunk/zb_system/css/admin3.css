@@ -10,7 +10,7 @@ input[disabled]{background:#eee;color:#999;border:1px solid #ddd;}
 #title{color:#3d69aa;border-bottom:1px solid #3d69aa;font-size:20px;font-weight:bolder;padding-bottom:5px;margin-bottom:5px;}
 .title{color:#3d69aa;border-bottom:1px solid #fff;font-size:18px;font-weight:bolder;padding-top:10px;}
 #content{padding:15px 0}
-#bottom{text-align:right;}
+#bottom{text-align:right;padding:5px 0 20px 0;}
 textarea{height:360px;width:600px;border:none;}
 #ddleft img{width:320px;height:100px;margin-top:80px;}
 #ddleft b{color:#3d69aa;}

@@ -6,7 +6,7 @@
 {if $user.ID>0}
 	<input type="hidden" name="inpName" id="inpName" value="{$user.Name}" />
 	<input type="hidden" name="inpEmail" id="inpEmail" value="{$user.Email}" />
-	<input type="hidden" name="inpHomePage" id="inpHomePage" value="{$user.HomePage}" />	
+	<input type="hidden" name="inpHomePage" id="inpHomePage" value="{$user.HomePage}" />
 {else}
 	<p><input type="text" name="inpName" id="inpName" class="text" value="{$user.Name}" size="28" tabindex="1" /> <label for="inpName">名称(*)</label></p>
 	<p><input type="text" name="inpEmail" id="inpEmail" class="text" value="{$user.Email}" size="28" tabindex="2" /> <label for="inpEmail">邮箱</label></p>
