@@ -198,8 +198,11 @@ class Networkcurl implements iNetwork
 	}
 	
 	public function enableGzip(){
-		$this->isgzip = true;
+		if( extension_loaded('zlib') ){
+			$this->isgzip = true;
+		}
 	}
+
 	public function setMaxRedirs($n=0){
 		$this->maxredirs=(int)$n;
 	}

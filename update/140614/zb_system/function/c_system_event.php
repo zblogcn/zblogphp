@@ -1747,13 +1747,16 @@ function PostModule() {
 	if (isset($_POST['Source'])) {
 		if ($_POST['Source'] == 'theme') {
 			$c = GetVars('Content', 'POST');
-			$f = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . GetVars('FileName', 'POST') . '.php';
+			$d = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/';
+			$f = $d . GetVars('FileName', 'POST') . '.php';
+			if(!file_exists($d)){
+				@mkdir($d,0755);
+			}
 			@file_put_contents($f, $c);
-
 			return true;
 		}
 	}
-
+	
 	$mod = $zbp->GetModuleByID(GetVars('ID', 'POST'));
 
 	foreach ($zbp->datainfo['Module'] as $key => $value) {
@@ -1763,6 +1766,10 @@ function PostModule() {
 		}
 	}
 
+	if (isset($_POST['NoRefresh'])) {
+		$mod->NoRefresh = (bool)$_POST['NoRefresh'];
+	}
+	
 	foreach ($GLOBALS['Filter_Plugin_PostModule_Core'] as $fpname => &$fpsignal) {
 		$fpname($mod);
 	}

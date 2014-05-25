@@ -95,8 +95,6 @@ function misc_statistic() {
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";
 
 
-	$zbp->LoadConfigs();
-	$zbp->LoadCache();
 	$zbp->cache->reload_statistic = $r;
 	$zbp->cache->reload_statistic_time = time();
 	$zbp->cache->system_environment = $system_environment;

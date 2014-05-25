@@ -13,6 +13,7 @@
  */
 
 require '../zb_system/function/c_system_base.php';
+require '../zb_system/function/c_system_admin.php';
 
 header('Content-type: text/html; charset=utf-8');
 
@@ -413,6 +414,7 @@ function Setup3(){
         <label>
           <input value="pdo_mysql" type="radio" name="dbtype"/>PDO_MySQL连接</label>
         <?php } ?>
+		<br/><small>(端口号默认3306，如需要修改请在'数据库主机'里追加':端口号'。)</small>
       </p>
       </div>
       <?php } ?>
@@ -454,6 +456,9 @@ function Setup3(){
       <p><b>确认密码:</b>
         <input type="password" name="repassword" id="repassword" value="" style="width:250px;" />
       </p>
+      <p><b>语&nbsp;言&nbsp;包:</b><select id="language" name="language" style="width:260px;" >
+<?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']); ?>
+      </select></p>
     </div>
     <div id="bottom">
       <input type="submit" name="next" id="netx" onClick="return Setup3()" value="下一步" />
@@ -537,6 +542,10 @@ case 'sqlite3':
 }
 
 $zbp->OpenConnect();
+
+$zbp->option['ZC_BLOG_LANGUAGEPACK']=GetVars('language','POST');
+$zbp->lang = require($zbp->path . 'zb_users/language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+$zbp->option['ZC_BLOG_LANGUAGE'] = $zbp->lang ['lang'];
 
 if(CreateTable($cts)){
   InsertInfo();
@@ -704,12 +713,12 @@ function InsertInfo(){
 
 
   $cate = new Category();
-  $cate->Name='未分类';
+  $cate->Name=$zbp->lang['msg']['uncategory'];
   $cate->Alias='uncategorized';
   $cate->Save();
   
   $t=new Module();
-  $t->Name="导航栏";
+  $t->Name=$zbp->lang['msg']['module_navbar'];
   $t->FileName="navbar";
   $t->Source="system";
   $t->SidebarID=0;
@@ -720,7 +729,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="日历";
+  $t->Name=$zbp->lang['msg']['calendar'];
   $t->FileName="calendar";
   $t->Source="system";
   $t->SidebarID=1;
@@ -734,11 +743,11 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="控制面板";
+  $t->Name=$zbp->lang['msg']['control_panel'];
   $t->FileName="controlpanel";
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">[用户登录]</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">[查看权限]</a></span>';
+  $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">['.$zbp->lang['msg']['admin_login'].']</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">['.$zbp->lang['msg']['view_rights'].']</a></span>';
   $t->HtmlID="divContorPanel";
   $t->Type="div";
   $t->Save();
@@ -747,7 +756,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="网站分类";
+  $t->Name=$zbp->lang['msg']['module_catalog'];
   $t->FileName="catalog";
   $t->Source="system";
   $t->SidebarID=1;
@@ -758,18 +767,18 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="搜索";
+  $t->Name=$zbp->lang['msg']['search'];
   $t->FileName="searchpanel";
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Content='<form name="search" method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=search"><input type="text" name="q" size="11" /> <input type="submit" value="搜索" /></form>';
+  $t->Content='<form name="search" method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=search"><input type="text" name="q" size="11" /> <input type="submit" value="'.$zbp->lang['msg']['search'].'" /></form>';
   $t->HtmlID="divSearchPanel";
   $t->Type="div";
   $t->Save();
 
 
   $t=new Module();
-  $t->Name="最新留言";
+  $t->Name=$zbp->lang['msg']['module_comments'];
   $t->FileName="comments";
   $t->Source="system";
   $t->SidebarID=1;
@@ -782,7 +791,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="文章归档";
+  $t->Name=$zbp->lang['msg']['module_archives'];
   $t->FileName="archives";
   $t->Source="system";
   $t->SidebarID=1;
@@ -794,7 +803,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="站点信息";
+  $t->Name=$zbp->lang['msg']['module_statistics'];
   $t->FileName="statistics";
   $t->Source="system";
   $t->SidebarID=0;
@@ -807,7 +816,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="网站收藏";
+  $t->Name=$zbp->lang['msg']['module_favorite'];
   $t->FileName="favorite";
   $t->Source="system";
   $t->SidebarID=1;
@@ -820,7 +829,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="友情链接";
+  $t->Name=$zbp->lang['msg']['module_link'];
   $t->FileName="link";
   $t->Source="system";
   $t->SidebarID=1;
@@ -832,7 +841,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="图标汇集";
+  $t->Name=$zbp->lang['msg']['module_misc'];
   $t->FileName="misc";
   $t->Source="system";
   $t->SidebarID=1;
@@ -846,7 +855,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="作者列表";
+  $t->Name=$zbp->lang['msg']['module_authors'];
   $t->FileName="authors";
   $t->Source="system";
   $t->SidebarID=0;
@@ -859,7 +868,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="最近发表";
+  $t->Name=$zbp->lang['msg']['module_previous'];
   $t->FileName="previous";
   $t->Source="system";
   $t->SidebarID=0;
@@ -871,7 +880,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="Tags列表";
+  $t->Name=$zbp->lang['msg']['module_tags'];
   $t->FileName="tags";
   $t->Source="system";
   $t->SidebarID=0;

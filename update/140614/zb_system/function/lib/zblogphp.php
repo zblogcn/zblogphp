@@ -425,8 +425,6 @@ class ZBlogPHP{
 		$array=$this->db->Query($sql);
 
 		if(count($array)==0){
-			$k=array('conf_Name','conf_Value');
-			$v=array($name,$this->configs[$name]->Serialize());
 			$sql = $this->db->sql->Insert($this->table['Config'],$kv);
 			$this->db->Insert($sql);
 		}else{
@@ -652,6 +650,7 @@ function BuildModule(){
 		if(isset($this->modulesbyfilename[$modfilename])){
 			if(isset($this->readymodules_function[$modfilename])){
 				$m=$this->modulesbyfilename[$modfilename];
+				if($m->NoRefresh==true)continue;
 				if(function_exists($this->readymodules_function[$modfilename])){
 					if(!isset($this->readymodules_parameters[$modfilename])){
 						$m->Content=call_user_func($this->readymodules_function[$modfilename]);
