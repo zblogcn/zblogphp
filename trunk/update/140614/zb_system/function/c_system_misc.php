@@ -83,7 +83,7 @@ function misc_statistic() {
 	if($ajax) $ajax=substr(get_class($ajax),7);
 	
 	$system_environment = PHP_OS . ';' . 
-							GetValueInArray(explode('/', GetVars('SERVER_SOFTWARE', 'SERVER')), 0) . ';' .
+							GetValueInArray(explode(' ',str_replace(array('Microsoft-','/'),array('',''),GetVars('SERVER_SOFTWARE', 'SERVER'))),0) . ';' .
 							'PHP ' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'] . ';' .
 							$ajax ;
 

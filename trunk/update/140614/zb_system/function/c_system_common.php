@@ -292,8 +292,9 @@ function GetRequestUri() {
 			foreach (explode('&',$querys) as $query){
 				$name=GetValueInArray(explode('=',$query),'0');
 				$value=GetValueInArray(explode('=',$query),'1');
-				$_GET[$name]=(string)$value;
-				$_REQUEST[$name]=(string)$value;
+				$value=urldecode($value);
+				if(!isset($_GET[$name]))$_GET[$name]=$value;
+				if(!isset($_GET[$name]))$_REQUEST[$name]=$value;
 				$name='';
 				$value='';
 			}
