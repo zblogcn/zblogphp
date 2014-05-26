@@ -163,7 +163,7 @@ class Post extends Base{
 				if(count($articles)==1){
 					$_prev=$articles[0];
 				}else{
-					$_prev='';
+					$_prev=null;
 				}
 				return $_prev;
 				break;
@@ -180,7 +180,7 @@ class Post extends Base{
 				if(count($articles)==1){
 					$_next=$articles[0];
 				}else{
-					$_next='';
+					$_next=null;
 				}
 				return $_next;
 				break;
