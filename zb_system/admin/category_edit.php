@@ -84,7 +84,7 @@ foreach ($zbp->categorysbyorder as $k => $v) {
 		<label><span class="title"><?php echo $lang['msg']['add_to_navbar']?>:</span>   <input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int)$zbp->CheckItemToNavbar('category',$cate->ID)?>" class="checkbox" /></label>
 	  </p>
     <!-- 1号输出接口 -->
-       <div id='response' class='editmod'>
+       <div id='response' class='editmod2'>
 <?php
 foreach ($GLOBALS['Filter_Plugin_Category_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
 ?>

@@ -192,7 +192,7 @@ return array(
 	'gzip_compress'=>'GZip压缩',
 	'syntax_high_lighter'=>'语法高亮',
 	'max_li_in_ul'=>'UL内LI的最大行数',
-	'no_refresh_content'=>'禁止系统更新正文内容',
+	'no_refresh_content'=>'禁止系统更新模块内容',
 	'uncategory'=>'未分类',
 	'calendar'=>'日历',
 	'control_panel'=>'控制面板',

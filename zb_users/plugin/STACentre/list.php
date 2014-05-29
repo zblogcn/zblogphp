@@ -66,6 +66,18 @@ function show_lighttpd(){
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 
+$default_tab=strtolower($_SERVER["SERVER_SOFTWARE"]);
+if(strpos($default_tab,'apache')!==false){
+	$default_tab=1;
+}elseif(strpos($default_tab,'iis/6')!==false){
+	$default_tab=3;
+}elseif(strpos($default_tab,'nginx')!==false){
+	$default_tab=4;
+}elseif(strpos($default_tab,'lighttpd')!==false){
+	$default_tab=5;
+}else{
+	$default_tab=2;
+}
 ?>
 <div id="divMain">
 
@@ -83,11 +95,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               
               <div class="content-box-header">
                 <ul class="content-box-tabs">
-                  <li><a href="#tab1" class="default-tab" ><span>Apache + .htaccess</span></a></li>
-                  <li><a href="#tab2"><span>IIS7,8 + URL Rewrite Module</span></a></li>
-                  <li><a href="#tab3"><span>IIS6 + ISAPI Rewrite 2.X</span></a></li>
-                  <li><a href="#tab4"><span>Nginx</span></a></li>
-                  <li><a href="#tab5"><span>Lighttpd</span></a></li>
+                  <li><a href="#tab1" <?php if($default_tab==1)echo 'class="default-tab"'; ?> ><span>Apache + .htaccess</span></a></li>
+                  <li><a href="#tab2" <?php if($default_tab==2)echo 'class="default-tab"'; ?> ><span>IIS7,8 + URL Rewrite Module</span></a></li>
+                  <li><a href="#tab3" <?php if($default_tab==3)echo 'class="default-tab"'; ?> ><span>IIS6 + ISAPI Rewrite 2.X</span></a></li>
+                  <li><a href="#tab4" <?php if($default_tab==4)echo 'class="default-tab"'; ?> ><span>Nginx</span></a></li>
+                  <li><a href="#tab5" <?php if($default_tab==5)echo 'class="default-tab"'; ?> ><span>Lighttpd</span></a></li>
                 </ul>
                 <div class="clear"></div>
               </div>
@@ -96,7 +108,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               <div class="content-box-content">
 
 			  
-                <div class="tab-content default-tab" style='border:none;padding:0px;margin:0;' id="tab1">
+                <div class="tab-content <?php if($default_tab==1)echo 'default-tab'; ?> " style='border:none;padding:0px;margin:0;' id="tab1">
 <textarea style="width:99%;height:200px" readonly>
 <?php echo htmlentities(show_htaccess())?>
 </textarea>
@@ -112,7 +124,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 				
 				
-                <div class="tab-content" style='border:none;padding:0px;margin:0;' id="tab2">
+                <div class="tab-content <?php if($default_tab==2)echo 'default-tab'; ?> " style='border:none;padding:0px;margin:0;' id="tab2">
 <textarea style="width:99%;height:400px" readonly>
 <?php echo htmlentities(show_webconfig())?>
 </textarea>
@@ -127,7 +139,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 			  
 			  
-                <div class="tab-content" style='border:none;padding:0px;margin:0;' id="tab3">
+                <div class="tab-content <?php if($default_tab==3)echo 'default-tab'; ?> " style='border:none;padding:0px;margin:0;' id="tab3">
 <textarea id="ta_httpini" style="width:99%;height:200px" readonly>
 <?php echo htmlentities(show_httpini())?>
 </textarea>
@@ -138,11 +150,12 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                     <input type="button" onclick="window.location.href='?del=3'" value="删除httpd.ini" />
                     <hr/><span class="star">请在网站根目录创建httpd.ini文件并把相关内容复制进去,httpd.ini文件必须为ANSI编码,也可以点击按钮生成.</span>
 					<hr/>提示:本规则用户可以加入自定义规则,将自己的目录或是文件排除过于广泛的重写之外.	
+					<hr/>提示:ISAPI Rewrite 3请按Apache规则生成.						
 				  </p>
                 </div>
 				
 				
-                <div class="tab-content" style='border:none;padding:0px;margin:0;' id="tab4">
+                <div class="tab-content <?php if($default_tab==4)echo 'default-tab'; ?> " style='border:none;padding:0px;margin:0;' id="tab4">
 <textarea style="width:99%;height:200px" readonly>
 <?php echo htmlentities(show_nginx())?>
 </textarea>
@@ -151,7 +164,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                     &nbsp;&nbsp;&nbsp;&nbsp;<span class="star">修改nginx.conf,在 location / { }节点间加入上述规则.</span></p>
                 </div>
 				
-                <div class="tab-content" style='border:none;padding:0px;margin:0;' id="tab5">
+                <div class="tab-content <?php if($default_tab==5)echo 'default-tab'; ?> " style='border:none;padding:0px;margin:0;' id="tab5">
 <textarea style="width:99%;height:250px" readonly>
 <?php echo htmlentities(show_lighttpd())?>
 </textarea>

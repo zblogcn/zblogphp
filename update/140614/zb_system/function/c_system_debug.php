@@ -66,6 +66,7 @@ function Debug_Shutdown_Handler() {
 class ZBlogException {
 	private static $_zbe = null;
 	public static $isdisable = false;
+	private static $_isdisable = null;
 	public static $isstrict = false;
 	public static $iswarning = true;
 	public static $error_id=0;
@@ -132,7 +133,18 @@ class ZBlogException {
 	static public function DisableErrorHook() {
 		self::$isdisable = true;
 	}
-
+	
+	static public function SuspendErrorHook() {
+		if(self::$_isdisable !== null)return;
+		self::$_isdisable = self::$isdisable;
+		self::$isdisable = true;
+	}
+	static public function ResumeErrorHook() {
+		if(self::$_isdisable === null)return;
+		self::$isdisable = self::$_isdisable;
+		self::$_isdisable = null;
+	}
+	
 	static public function EnableErrorHook() {
 		self::$isdisable = false;
 	}
