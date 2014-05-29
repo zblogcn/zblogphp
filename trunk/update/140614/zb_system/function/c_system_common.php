@@ -292,6 +292,7 @@ function GetRequestUri() {
 			foreach (explode('&',$querys) as $query){
 				$name=GetValueInArray(explode('=',$query),'0');
 				$value=GetValueInArray(explode('=',$query),'1');
+				$name=urldecode($name);
 				$value=urldecode($value);
 				if(!isset($_GET[$name]))$_GET[$name]=$value;
 				if(!isset($_GET[$name]))$_REQUEST[$name]=$value;
@@ -544,6 +545,12 @@ function SubStrUTF8($sourcestr, $cutlength) {
 	if( function_exists('mb_substr') && function_exists('mb_internal_encoding') ){
 		mb_internal_encoding('UTF-8');
 		return mb_substr($sourcestr, 0, $cutlength);
+	}
+
+	if( function_exists('iconv_substr') && function_exists('iconv_set_encoding') ){
+		iconv_set_encoding ( "internal_encoding" ,  "UTF-8" );
+		iconv_set_encoding ( "output_encoding" ,  "UTF-8" );
+		return iconv_substr($sourcestr, 0, $cutlength);
 	}
 
 	$returnstr = '';

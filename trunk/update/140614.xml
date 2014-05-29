@@ -1,14 +1,14 @@
 ﻿<files build='140614'>
 	<file name='zb_system\function\c_system_plugin.php' md5='E696226C57B93AB6EC8E0040993D09DE' crc32='A0D72D7D'/>
-	<file name='zb_system\function\c_system_debug.php' md5='3FD59CF9FB5DA43A82E3B393B8AE3DD2' crc32='68A38D56'/>
-	<file name='zb_system\function\c_system_common.php' md5='499728595F244EB3A98E1EB4368ACC93' crc32='6BDD9972'/>
-	<file name='zb_system\function\c_system_event.php' md5='2009EB4E3AAC3B84FEC65F6B9EFFA84A' crc32='4509E2B4'/>
-	<file name='zb_system\function\c_system_base.php' md5='423605E8697DD7A35ECCDEC120F2C798' crc32='EE156E'/>
+	<file name='zb_system\function\c_system_debug.php' md5='E83B87FB23F35569DEA05F31CCE0F134' crc32='F1B59420'/>
+	<file name='zb_system\function\c_system_common.php' md5='4C653F3765EBA3290C0B2395862D009A' crc32='889CFA12'/>
+	<file name='zb_system\function\c_system_event.php' md5='9BB8C5A33D1508857CCDAA55B15D8958' crc32='BECEB08E'/>
+	<file name='zb_system\function\c_system_base.php' md5='D262AF3301F92CBC186A819C336FB390' crc32='F7F360'/>
 	<file name='zb_system\function\c_system_admin.php' md5='16CE14B2D03AA884D829073572941BBB' crc32='10D20704'/>
-	<file name='zb_system\defend\option.php' md5='FFBA3B5E8781FC052D059F0311C20C8C' crc32='27CD818D'/>
+	<file name='zb_system\defend\option.php' md5='7B94E938D5E2299C3446C46398FA4EE1' crc32='EDE60C6'/>
 	<file name='zb_system\function\lib\base.php' md5='7DB770C89B48ECF5C11198002D4FED64' crc32='A47C96BD'/>
-	<file name='zb_system\function\lib\dbsql.php' md5='BB95311DD1C7D6E44E68241DAA9D3927' crc32='9936B8D3'/>
-	<file name='zb_system\function\lib\metas.php' md5='9299CF2D85A61DBAEE282A999C552FC9' crc32='FFE93FFF'/>
+	<file name='zb_system\function\lib\dbsql.php' md5='E09DD713C736B62F0A13B68B00BE55DB' crc32='7D4B5235'/>
+	<file name='zb_system\function\lib\metas.php' md5='BB322DF6B282D738FEB8716CD9338849' crc32='AB54D712'/>
 	<file name='zb_system\function\lib\template.php' md5='AF686AFF44213B1C290EBF17E2791992' crc32='E1992A8E'/>
 	<file name='zb_system\function\lib\network.php' md5='088BE97BA51BD6AA6367B85691793DBC' crc32='78980F3C'/>
 	<file name='zb_system\function\lib\zblogphp.php' md5='003E46C4A1215AFCF67BE3A5126D8337' crc32='324538C3'/>
@@ -21,20 +21,20 @@
 	<file name='zb_system\admin\admin_header.php' md5='7BC27E1427FF889825D918E5D54639AB' crc32='900BBCC5'/>
 	<file name='zb_system\admin\admin_left.php' md5='CBCFE7D814DEC4DC7EA6B019272BF3E4' crc32='FBCF02FA'/>
 	<file name='zb_system\admin\admin_top.php' md5='E8351D325C14839DFA024DA03592278D' crc32='E70767FA'/>
-	<file name='zb_system\admin\category_edit.php' md5='A5408DC1F2DCFD544CA31E7251B29558' crc32='2C6A7766'/>
+	<file name='zb_system\admin\category_edit.php' md5='2677781721AF26D9EF402C1D93A84426' crc32='C8A24A68'/>
 	<file name='zb_system\admin\edit.php' md5='DDE8CE830E05270674C64664CEDB8AC1' crc32='82709723'/>
 	<file name='zb_system\admin\index.php' md5='CBB401FC650A346037F141AE4B0C1E31' crc32='198E79A8'/>
-	<file name='zb_system\admin\member_edit.php' md5='A11418EE931954936A18D5F79599B286' crc32='C03FC662'/>
+	<file name='zb_system\admin\member_edit.php' md5='D7AF751D400E47F3FF0FC581E70038F1' crc32='E7E5B75F'/>
 	<file name='zb_system\admin\module_edit.php' md5='C0CAA464D78232C7453558D94EC42FD1' crc32='3E8DE8A9'/>
-	<file name='zb_system\admin\tag_edit.php' md5='784FF583487758CC2AD1787CBEA7A2C5' crc32='FAD32AF7'/>
+	<file name='zb_system\admin\tag_edit.php' md5='D7EE2FD2D85F56C02F0FC7D2AA8A96E7' crc32='41A55F7'/>
 	<file name='zb_system\css\admin.css' md5='ADF35F422ABB4FDF4F8DFE24EA938DFD' crc32='A05FA7A5'/>
 	<file name='zb_system\css\admin2.css' md5='9AE9A60D847E6AC8E99970C3B493DD45' crc32='2C93B8C8'/>
 	<file name='zb_system\css\admin3.css' md5='89A23717AD30AE3E8BEFCD143F93749B' crc32='6EE86A46'/>
 	<file name='zb_system\css\jquery-ui.custom.css' md5='3C4FAB57981FEAFC86D58FF617A77E52' crc32='EC896EC4'/>
 	<file name='zb_system\css\jquery.bettertip.css' md5='52BFF27900CC8538B6AA73EE0F81B54E' crc32='DDF8486F'/>
 	<file name='zb_system\defend\arial.ttf' md5='687432B29CB07E7E1D2644F333A672D5' crc32='590DC6C3'/>
-	<file name='zb_system\defend\error.html' md5='3563B0201C1018C23899599FBE716082' crc32='FB0495D'/>
-	<file name='zb_system\defend\thanks.html' md5='1B7D878E5AF6922FA5F57A959ABE4D1A' crc32='18CCDCE6'/>
+	<file name='zb_system\defend\error.html' md5='94835A86C8069E90B3B29550CB0BE0EF' crc32='D74DFA8E'/>
+	<file name='zb_system\defend\thanks.html' md5='F06F6F08D2C9DC473B353681867D2BA6' crc32='D7AC056C'/>
 	<file name='zb_system\defend\createtable\mysql.sql' md5='E0D134D197A6B2F5E0F0F67BBDA73977' crc32='F81E56A1'/>
 	<file name='zb_system\defend\createtable\sqlite.sql' md5='49361248478E91005795DECF18D769AC' crc32='C7A475DE'/>
 	<file name='zb_system\defend\createtable\sqlite3.sql' md5='1E8089C2E5119B017FFC23420B548153' crc32='852B657E'/>
@@ -73,7 +73,7 @@
 	<file name='zb_system\function\lib\tag.php' md5='258DF6F5BB8F3DE4EE1D72199C626549' crc32='3998A5A8'/>
 	<file name='zb_system\function\lib\upload.php' md5='954299C6A0A0DDE35A40E02EC68ABB1D' crc32='53937A97'/>
 	<file name='zb_system\function\lib\urlrule.php' md5='DB5EFB7E88CD2654072024666500B18D' crc32='CB1D5778'/>
-	<file name='zb_system\function\lib\validatecode.php' md5='D577D30DFFCAB0D1443E75CEA149E379' crc32='CB395421'/>
+	<file name='zb_system\function\lib\validatecode.php' md5='DFDBE017C1543F0D19ED593ABF3911E2' crc32='3217045C'/>
 	<file name='zb_system\image\admin\app-logo.png' md5='C8B4141B48DFE3415EE2F9668E9BAD17' crc32='7D5E99CC'/>
 	<file name='zb_system\image\admin\arrow-3-right.png' md5='BA3545574C07C5146A7CA472B37191DB' crc32='9613739F'/>
 	<file name='zb_system\image\admin\arrow_turn_right.png' md5='B01390AFF834F6050F92E7501D2515D4' crc32='CF39218A'/>
@@ -213,6 +213,6 @@
 	<file name='zb_system\script\md5.js' md5='096F445AB5F7C71095467348BEEC876E' crc32='4945A867'/>
 	<file name='zb_system\xml-rpc\index.php' md5='4E6A7291118032EB2100E84B94FE4EEF' crc32='121A7318'/>
 	<file name='zb_system\xml-rpc\wlwmanifest.xml' md5='CE9B374446699C245A489105DB6E7D06' crc32='E5F264BA'/>
-	<file name='zb_users\language\SimpChinese.php' md5='BA50B02A5D8260575428D4AD8AB6501A' crc32='3A01460'/>
-	<file name='zb_users\language\TradChinese.php' md5='8D5A905E19119D112FF9A18F129BEF34' crc32='96896160'/>
+	<file name='zb_users\language\SimpChinese.php' md5='1B8D521FBF765CB828A9F1056C1FE3E7' crc32='342106C4'/>
+	<file name='zb_users\language\TradChinese.php' md5='AFFD53DC513F3381FF034C36C14BCDC1' crc32='75D4DF6A'/>
 </files>

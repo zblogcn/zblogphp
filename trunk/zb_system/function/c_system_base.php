@@ -72,8 +72,6 @@ define('ZC_MEMBER_STATUS_NORMAL', 0);
 define('ZC_MEMBER_STATUS_AUDITING', 1);
 define('ZC_MEMBER_STATUS_LOCKED', 2);
 
-define('ZC_REWRITE_GO_ON', 'go_on');
-
 
 #定义全局变量
 $zbp = null;

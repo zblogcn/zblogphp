@@ -76,6 +76,7 @@ return array(
 	'ZC_VERIFYCODE_STRING' => 'ABCDEFGHKMNPRSTUVWXYZ123456789',
 	'ZC_VERIFYCODE_WIDTH' => 90,
 	'ZC_VERIFYCODE_HEIGHT' => 30,
+	'ZC_VERIFYCODE_FONT' => 'zb_system/defend/arial.ttf',
 
 	// '页面各项列数
 	'ZC_DISPLAY_COUNT' => 10,

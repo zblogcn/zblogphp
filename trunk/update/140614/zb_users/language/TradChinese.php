@@ -4,7 +4,7 @@
 //Author:楊懿軒
 //Author URI:http://www.yangyixuan.com
 //E-mail:sen@yangyixuan.com
-//Date:20140522
+//Date:20140526
 
 //'Custom Information
 //'Don't delete %s and ()
@@ -194,19 +194,19 @@ return array(
 	'all_audit'=>'批次駁回',
 	'gzip_compress'=>'GZip壓縮',
 	'syntax_high_lighter'=>'語法突顯',
-	'max_li_in_ul'=>'UL内LI元素的最大行数',
-	'no_refresh_content'=>'禁止系统更新正文',
-	'uncategory'=>'未分类',
-	'calendar'=>'日历',
-	'control_panel'=>'控制面板',
-	'module_catalog'=>'网站分类',
-	'module_comments'=>'最新留言',
-	'module_archives'=>'文章归档',
-	'module_statistics'=>'站点信息',
-	'module_authors'=>'作者列表',
-	'module_previous'=>'最近发表',
-	'module_tags'=>'标签列表',
-	'admin_login'=>'管理登陆',
+	'max_li_in_ul'=>'UL內LI元素的最大行數',
+	'no_refresh_content'=>'禁止系統更新正文',
+	'uncategory'=>'未分類',
+	'calendar'=>'日曆',
+	'control_panel'=>'控制台',
+	'module_catalog'=>'分類',
+	'module_comments'=>'近期迴響',
+	'module_archives'=>'彙整',
+	'module_statistics'=>'站點資訊',
+	'module_authors'=>'作者群',
+	'module_previous'=>'近期文章',
+	'module_tags'=>'標籤集',
+	'admin_login'=>'管理登入',
 	''=>'',
 ),
 

@@ -61,12 +61,18 @@ class Metas {
 		//if(strpos($s,'{')===0){
 			//$this->Data=json_decode($s,true);
 		//}else{
-		$b=false;
-		if(ZBlogException::$isstrict==true){$b=true;ZBlogException::$isstrict=false;}
+
+		ZBlogException::SuspendErrorHook();
 		$this->Data=@unserialize($s);
-		if($b==true){$b=false;ZBlogException::$isstrict=true;}
+		ZBlogException::ResumeErrorHook();
+
 		//}
-		if(count($this->Data)==0)return false;
+		if(is_array($this->Data)){
+			if(count($this->Data)==0)return false;
+		}else{
+			$this->Data=array();
+			return false;
+		}
 		foreach ($this->Data as $key => $value) {
 			if(is_string($value)){
 				$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']==false?$zbp->host:$zbp->option['ZC_BLOG_HOST']),$value);

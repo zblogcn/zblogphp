@@ -209,7 +209,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 	  <hr/>
 	  <p>
 		1· 规则可以自定义，请注意如果规则解析过于广泛会覆盖之后的规则，浏览页面时就会出现故障.
-		<br/>2· index.php/式仿伪静态可以不用生成伪静态规则.
+		<br/>2· index.php式仿伪静态在Apache,IIS下可以不用生成伪静态规则.
 	  </p>
 	  <p>
 		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" />

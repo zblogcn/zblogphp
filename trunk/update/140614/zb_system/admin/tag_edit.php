@@ -53,7 +53,7 @@ $tag=$zbp->GetTagByID($tagid);
 	  <p>
 		<label><span class="title"><?php echo $lang['msg']['add_to_navbar']?>:</span>   <input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int)$zbp->CheckItemToNavbar('tag',$tag->ID)?>" class="checkbox" /></label>
 	  </p>
-       <div id='response' class='editmod'>
+       <div id='response' class='editmod2'>
 <?php
 foreach ($GLOBALS['Filter_Plugin_Tag_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
 ?>

@@ -393,7 +393,8 @@ function ViewAuto($inpurl) {
 	$url = urldecode($url);
 
 	if($url==''||$url=='index.php'){
-		return ViewList(null,null,null,null,null);
+		ViewList(null,null,null,null,null);
+		return null;
 	}
 	
 	if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') {
@@ -421,7 +422,7 @@ function ViewAuto($inpurl) {
 	$m = array();
 	if (preg_match($r, $url, $m) == 1) {
 		$result = ViewList($m[2], null, $m[1], null, null, true);
-		if ($result <> ZC_REWRITE_GO_ON)
+		if ($result == true)
 			return null;
 	}
 
@@ -429,7 +430,7 @@ function ViewAuto($inpurl) {
 	$m = array();
 	if (preg_match($r, $url, $m) == 1) {
 		$result = ViewList($m[2], null, null, null, $m[1], true);
-		if ($result <> ZC_REWRITE_GO_ON)
+		if ($result == true)
 			return null;
 	}
 
@@ -437,7 +438,7 @@ function ViewAuto($inpurl) {
 	$m = array();
 	if (preg_match($r, $url, $m) == 1) {
 		$result = ViewList($m[2], $m[1], null, null, null, true);
-		if ($result <> ZC_REWRITE_GO_ON)
+		if ($result == true)
 			return null;
 	}
 
@@ -449,7 +450,7 @@ function ViewAuto($inpurl) {
 		} else {
 			$result = ViewPost(null, $m[1], true);
 		}
-		if ($result == ZC_REWRITE_GO_ON)
+		if ($result == false)
 			$zbp->ShowError(2, __FILE__, __LINE__);
 
 		return null;
@@ -463,7 +464,7 @@ function ViewAuto($inpurl) {
 		} else {
 			$result = ViewPost(null, $m[1], true);
 		}
-		if ($result == ZC_REWRITE_GO_ON)
+		if ($result == false)
 			$zbp->ShowError(2, __FILE__, __LINE__);
 
 		return null;
@@ -546,7 +547,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 			}
 			if ($category->ID == 0) {
 				if ($isrewrite == true)
-					return ZC_REWRITE_GO_ON;
+					return false;
 				$zbp->ShowError(2, __FILE__, __LINE__);
 			}
 			if ($page == 1) {
@@ -587,7 +588,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 			}
 			if ($author->ID == 0) {
 				if ($isrewrite == true)
-					return ZC_REWRITE_GO_ON;
+					return false;
 				$zbp->ShowError(2, __FILE__, __LINE__);
 			}
 			if ($page == 1) {
@@ -638,7 +639,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 			}
 			if ($tag->ID == 0) {
 				if ($isrewrite == true)
-					return ZC_REWRITE_GO_ON;
+					return false;
 				$zbp->ShowError(2, __FILE__, __LINE__);
 			}
 
@@ -702,7 +703,8 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	}
 
 	$zbp->template->Display();
-
+	
+	return true;
 }
 
 function ViewPost($id, $alias, $isrewrite = false) {
@@ -732,7 +734,7 @@ function ViewPost($id, $alias, $isrewrite = false) {
 	$articles = $zbp->GetPostList('*', $w, null, 1, null);
 	if (count($articles) == 0) {
 		if ($isrewrite == true)
-			return ZC_REWRITE_GO_ON;
+			return false;
 		$zbp->ShowError(2, __FILE__, __LINE__);
 	}
 
@@ -817,6 +819,8 @@ function ViewPost($id, $alias, $isrewrite = false) {
 	}
 
 	$zbp->template->Display();
+
+	return true;
 }
 
 function ViewComments($postid, $page) {
@@ -895,6 +899,7 @@ function ViewComments($postid, $page) {
 
 	echo $s;
 
+	return true;
 }
 
 function ViewComment($id) {
@@ -916,6 +921,7 @@ function ViewComment($id) {
 
 	$zbp->template->Display();
 
+	return true;
 }
 
 ################################################################################################################
