@@ -94,7 +94,7 @@ if($newbuild-$nowbuild>0){
               </p>
 			  <hr/>
 
-              <div class="divHeader">校验系统核心文件&nbsp;&nbsp;<span id="checknow"><a href="?check=now" title="开始校验"><img src="images/refresh.png" width="16" alt="校验" /></a></span></div>
+              <div class="divHeader">校验当前版本的系统核心文件&nbsp;&nbsp;<span id="checknow"><a href="?check=now" title="开始校验"><img src="images/refresh.png" width="16" alt="校验" /></a></span></div>
 			  <!--<div>进度<span id="status">0</span>%；已发现<span id="count">0</span>个修改过的系统文件。<div id="bar"></div></div>-->
               <table border="1" width="100%" cellspacing="0" cellpadding="0" class="tableBorder tableBorder-thcenter">
                 <tr>
@@ -141,15 +141,14 @@ if ($nowxml!=''){
               </table>
 <?php if($i>0){?>
               <p>
-                <input name="submit" type="button" onclick="restoreauto();$(this).hide();" value="自动依次更新文件" class="button" />
+                <input name="submit" type="button" id="autorestor" onclick="restoreauto();$(this).hide();" value="自动依次更新文件" class="button" />
               </p>
 <?php }?>
               <p> </p>
             </form>
 <script type="text/javascript">
-function restoreauto(){
-  restoresingle();
-}
+
+$("#autorestor").bind('click', function(){restoresingle();$(this).hide()});
 
 function restoresingle(){
   if($("a.resotrefile").get(0)){

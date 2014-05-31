@@ -272,6 +272,11 @@ switch ($action) {
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=SettingMng');
 		break;
+	case 'ajax':
+		foreach ($GLOBALS['Filter_Plugin_Cmd_Ajax'] as $fpname => &$fpsignal) {
+			$fpname(GetVars('src','GET'));
+		}
+		break;
 	default:
 		# code...
 		break;

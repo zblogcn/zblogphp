@@ -15,6 +15,9 @@ define('PLUGIN_EXITSIGNAL_BREAK', 'break');
 #定义总插件激活函数列表
 $plugins = array();
 
+#定义总接口列表，暂未启用
+$filters = array();
+
 /*
 '*********************************************************
 ' 目的： 注册插件函数，由每个插件主动调用
@@ -34,7 +37,8 @@ function RegisterPlugin($strPluginName, $strPluginActiveFunction) {
 function ActivePlugin() {
 
 	foreach ($GLOBALS['plugins'] as &$sPluginActiveFunctions) {
-		if(function_exists($sPluginActiveFunctions))$sPluginActiveFunctions();
+		if(function_exists($sPluginActiveFunctions))
+			$sPluginActiveFunctions();
 	}
 
 }
@@ -46,9 +50,8 @@ function ActivePlugin() {
 */
 function InstallPlugin($strPluginName) {
 
-	if (function_exists($f = 'InstallPlugin_' . $strPluginName) == true) {
+	if (function_exists($f = 'InstallPlugin_' . $strPluginName))
 		$f();
-	}
 
 }
 
@@ -64,6 +67,41 @@ function UninstallPlugin($strPluginName) {
 	}
 
 }
+
+/*
+'*********************************************************
+' 目的： 创建插件接口
+'*********************************************************
+*/
+function DefinePluginFilter($strPluginFilter) {
+	if(!isset($GLOBALS[$strPluginFilter])){
+		$GLOBALS[$strPluginFilter] = array();
+		return true;
+	}
+}
+
+/*
+'*********************************************************
+' 目的： 检查插件接口
+'*********************************************************
+*/
+function ExistsPluginFilter($strPluginFilter) {
+	return isset($GLOBALS[$strPluginFilter]);
+}
+
+/*
+'*********************************************************
+' 目的： 调用插件接口
+'*********************************************************
+*/
+function & UsingPluginFilter($strPluginFilter) {
+	if(isset($GLOBALS[$strPluginFilter]))
+		return $GLOBALS[$strPluginFilter];
+	return array();
+}
+
+
+
 
 /*
 '*********************************************************
@@ -113,7 +151,7 @@ function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSI
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Debug_Shutdown_Handler = array();
+DefinePluginFilter('Filter_Plugin_Debug_Shutdown_Handler');
 
 /*
 '**************************************************<
@@ -124,7 +162,7 @@ $Filter_Plugin_Debug_Shutdown_Handler = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Autoload = array();
+DefinePluginFilter('Filter_Plugin_Autoload');
 
 ################################################################################################################
 #DbSql类里的接口
@@ -138,7 +176,7 @@ $Filter_Plugin_Autoload = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_DbSql_Filter = array();
+DefinePluginFilter('Filter_Plugin_DbSql_Filter');
 
 
 
@@ -153,7 +191,7 @@ $Filter_Plugin_DbSql_Filter = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_Call = array();
+DefinePluginFilter('Filter_Plugin_Zbp_Call');
 
 /*
 '**************************************************<
@@ -164,7 +202,7 @@ $Filter_Plugin_Zbp_Call = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_Get = array();
+DefinePluginFilter('Filter_Plugin_Zbp_Get');
 
 /*
 '**************************************************<
@@ -175,7 +213,7 @@ $Filter_Plugin_Zbp_Get = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_Set = array();
+DefinePluginFilter('Filter_Plugin_Zbp_Set');
 
 /*
 '**************************************************<
@@ -186,7 +224,7 @@ $Filter_Plugin_Zbp_Set = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_CheckRights = array();
+DefinePluginFilter('Filter_Plugin_Zbp_CheckRights');
 
 /*
 '**************************************************<
@@ -197,7 +235,7 @@ $Filter_Plugin_Zbp_CheckRights = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_CheckRightsByLevel = array();
+DefinePluginFilter('Filter_Plugin_Zbp_CheckRightsByLevel');
 
 /*
 '**************************************************<
@@ -208,7 +246,7 @@ $Filter_Plugin_Zbp_CheckRightsByLevel = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_ShowError = array();
+DefinePluginFilter('Filter_Plugin_Zbp_ShowError');
 
 /*
 '**************************************************<
@@ -219,7 +257,7 @@ $Filter_Plugin_Zbp_ShowError = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_ShowValidCode = array();
+DefinePluginFilter('Filter_Plugin_Zbp_ShowValidCode');
 
 /*
 '**************************************************<
@@ -230,7 +268,7 @@ $Filter_Plugin_Zbp_ShowValidCode = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_CheckValidCode = array();
+DefinePluginFilter('Filter_Plugin_Zbp_CheckValidCode');
 
 /*
 '**************************************************<
@@ -241,7 +279,7 @@ $Filter_Plugin_Zbp_CheckValidCode = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_BuildTemplate = array();
+DefinePluginFilter('Filter_Plugin_Zbp_BuildTemplate');
 
 /*
 '**************************************************<
@@ -252,7 +290,7 @@ $Filter_Plugin_Zbp_BuildTemplate = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_MakeTemplatetags = array();
+DefinePluginFilter('Filter_Plugin_Zbp_MakeTemplatetags');
 
 /*
 '**************************************************<
@@ -263,7 +301,7 @@ $Filter_Plugin_Zbp_MakeTemplatetags = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_PrepareTemplate = array();
+DefinePluginFilter('Filter_Plugin_Zbp_PrepareTemplate');
 
 /*
 '**************************************************<
@@ -274,7 +312,7 @@ $Filter_Plugin_Zbp_PrepareTemplate = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_LoadTemplate = array();
+DefinePluginFilter('Filter_Plugin_Zbp_LoadTemplate');
 
 /*
 '**************************************************<
@@ -285,7 +323,7 @@ $Filter_Plugin_Zbp_LoadTemplate = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_BuildModule = array();
+DefinePluginFilter('Filter_Plugin_Zbp_BuildModule');
 
 /*
 '**************************************************<
@@ -296,7 +334,7 @@ $Filter_Plugin_Zbp_BuildModule = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_Load = array();
+DefinePluginFilter('Filter_Plugin_Zbp_Load');
 
 /*
 '**************************************************<
@@ -307,7 +345,7 @@ $Filter_Plugin_Zbp_Load = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_LoadManage = array();
+DefinePluginFilter('Filter_Plugin_Zbp_LoadManage');
 
 /*
 '**************************************************<
@@ -318,7 +356,7 @@ $Filter_Plugin_Zbp_LoadManage = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Zbp_Terminate = array();
+DefinePluginFilter('Filter_Plugin_Zbp_Terminate');
 
 ################################################################################################################
 #前台view,index
@@ -332,7 +370,7 @@ $Filter_Plugin_Zbp_Terminate = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Index_Begin = array();
+DefinePluginFilter('Filter_Plugin_Index_Begin');
 
 /*
 '**************************************************<
@@ -343,7 +381,7 @@ $Filter_Plugin_Index_Begin = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Index_End = array();
+DefinePluginFilter('Filter_Plugin_Index_End');
 
 /*
 '**************************************************<
@@ -354,7 +392,7 @@ $Filter_Plugin_Index_End = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Html_Js_Add = array();
+DefinePluginFilter('Filter_Plugin_Html_Js_Add');
 
 /*
 '**************************************************<
@@ -365,7 +403,7 @@ $Filter_Plugin_Html_Js_Add = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Search_Begin = array();
+DefinePluginFilter('Filter_Plugin_Search_Begin');
 
 /*
 '**************************************************<
@@ -376,7 +414,7 @@ $Filter_Plugin_Search_Begin = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Feed_Begin = array();
+DefinePluginFilter('Filter_Plugin_Feed_Begin');
 
 ################################################################################################################
 #CMD里的接口
@@ -390,7 +428,18 @@ $Filter_Plugin_Feed_Begin = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Cmd_Begin = array();
+DefinePluginFilter('Filter_Plugin_Cmd_Begin');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Cmd_Ajax
+'参数:
+'说明:cmd.php的Ajax命令专用接口
+'调用:
+'**************************************************>
+*/
+DefinePluginFilter('Filter_Plugin_Cmd_Ajax');
 
 ################################################################################################################
 #后台里的接口
@@ -404,7 +453,7 @@ $Filter_Plugin_Cmd_Begin = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Login_Header = array();
+DefinePluginFilter('Filter_Plugin_Login_Header');
 
 /*
 '**************************************************<
@@ -415,7 +464,7 @@ $Filter_Plugin_Login_Header = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Other_Header = array();
+DefinePluginFilter('Filter_Plugin_Other_Header');
 
 /*
 '**************************************************<
@@ -426,7 +475,7 @@ $Filter_Plugin_Other_Header = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_Begin = array();
+DefinePluginFilter('Filter_Plugin_Admin_Begin');
 
 /*
 '**************************************************<
@@ -437,7 +486,7 @@ $Filter_Plugin_Admin_Begin = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_End = array();
+DefinePluginFilter('Filter_Plugin_Admin_End');
 
 /*
 '**************************************************<
@@ -448,7 +497,7 @@ $Filter_Plugin_Admin_End = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_Header = array();
+DefinePluginFilter('Filter_Plugin_Admin_Header');
 
 /*
 '**************************************************<
@@ -459,7 +508,7 @@ $Filter_Plugin_Admin_Header = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_Footer = array();
+DefinePluginFilter('Filter_Plugin_Admin_Footer');
 
 /*
 '**************************************************<
@@ -470,7 +519,7 @@ $Filter_Plugin_Admin_Footer = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_LeftMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_LeftMenu');
 
 /*
 '**************************************************<
@@ -481,7 +530,7 @@ $Filter_Plugin_Admin_LeftMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_TopMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_TopMenu');
 
 /*
 '**************************************************<
@@ -492,7 +541,7 @@ $Filter_Plugin_Admin_TopMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_SiteInfo_SubMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_SiteInfo_SubMenu');
 
 /*
 '**************************************************<
@@ -503,7 +552,7 @@ $Filter_Plugin_Admin_SiteInfo_SubMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_ArticleMng_SubMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_ArticleMng_SubMenu');
 
 /*
 '**************************************************<
@@ -514,7 +563,7 @@ $Filter_Plugin_Admin_ArticleMng_SubMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_PageMng_SubMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_PageMng_SubMenu');
 
 /*
 '**************************************************<
@@ -525,7 +574,7 @@ $Filter_Plugin_Admin_PageMng_SubMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_CategoryMng_SubMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_CategoryMng_SubMenu');
 
 /*
 '**************************************************<
@@ -536,7 +585,7 @@ $Filter_Plugin_Admin_CategoryMng_SubMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_CommentMng_SubMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_CommentMng_SubMenu');
 
 /*
 '**************************************************<
@@ -547,7 +596,7 @@ $Filter_Plugin_Admin_CommentMng_SubMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_MemberMng_SubMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_MemberMng_SubMenu');
 
 /*
 '**************************************************<
@@ -558,7 +607,7 @@ $Filter_Plugin_Admin_MemberMng_SubMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_UploadMng_SubMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_UploadMng_SubMenu');
 
 /*
 '**************************************************<
@@ -569,7 +618,7 @@ $Filter_Plugin_Admin_UploadMng_SubMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_TagMng_SubMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_TagMng_SubMenu');
 
 /*
 '**************************************************<
@@ -580,7 +629,7 @@ $Filter_Plugin_Admin_TagMng_SubMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_PluginMng_SubMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_PluginMng_SubMenu');
 
 /*
 '**************************************************<
@@ -591,7 +640,7 @@ $Filter_Plugin_Admin_PluginMng_SubMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_ThemeMng_SubMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_ThemeMng_SubMenu');
 
 /*
 '**************************************************<
@@ -602,7 +651,7 @@ $Filter_Plugin_Admin_ThemeMng_SubMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_ModuleMng_SubMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_ModuleMng_SubMenu');
 
 /*
 '**************************************************<
@@ -613,7 +662,7 @@ $Filter_Plugin_Admin_ModuleMng_SubMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_SettingMng_SubMenu = array();
+DefinePluginFilter('Filter_Plugin_Admin_SettingMng_SubMenu');
 
 /*
 '**************************************************<
@@ -624,7 +673,7 @@ $Filter_Plugin_Admin_SettingMng_SubMenu = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Edit_Begin = array();
+DefinePluginFilter('Filter_Plugin_Edit_Begin');
 
 /*
 '**************************************************<
@@ -635,7 +684,7 @@ $Filter_Plugin_Edit_Begin = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Edit_End = array();
+DefinePluginFilter('Filter_Plugin_Edit_End');
 
 /*
 '**************************************************<
@@ -646,7 +695,7 @@ $Filter_Plugin_Edit_End = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Edit_Response = array();
+DefinePluginFilter('Filter_Plugin_Edit_Response');
 
 /*
 '**************************************************<
@@ -657,7 +706,7 @@ $Filter_Plugin_Edit_Response = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Edit_Response2 = array();
+DefinePluginFilter('Filter_Plugin_Edit_Response2');
 
 /*
 '**************************************************<
@@ -668,7 +717,7 @@ $Filter_Plugin_Edit_Response2 = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Edit_Response4 = array();
+DefinePluginFilter('Filter_Plugin_Edit_Response4');
 
 /*
 '**************************************************<
@@ -679,7 +728,7 @@ $Filter_Plugin_Edit_Response4 = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Edit_Response5 = array();
+DefinePluginFilter('Filter_Plugin_Edit_Response5');
 
 /*
 '**************************************************<
@@ -690,7 +739,7 @@ $Filter_Plugin_Edit_Response5 = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Edit_Response3 = array();
+DefinePluginFilter('Filter_Plugin_Edit_Response3');
 
 /*
 '**************************************************<
@@ -701,7 +750,7 @@ $Filter_Plugin_Edit_Response3 = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Category_Edit_Response = array();
+DefinePluginFilter('Filter_Plugin_Category_Edit_Response');
 
 /*
 '**************************************************<
@@ -712,7 +761,7 @@ $Filter_Plugin_Category_Edit_Response = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Tag_Edit_Response = array();
+DefinePluginFilter('Filter_Plugin_Tag_Edit_Response');
 
 /*
 '**************************************************<
@@ -723,7 +772,7 @@ $Filter_Plugin_Tag_Edit_Response = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Member_Edit_Response = array();
+DefinePluginFilter('Filter_Plugin_Member_Edit_Response');
 
 /*
 '**************************************************<
@@ -734,7 +783,7 @@ $Filter_Plugin_Member_Edit_Response = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Admin_Js_Add = array();
+DefinePluginFilter('Filter_Plugin_Admin_Js_Add');
 
 /*
 '**************************************************<
@@ -745,7 +794,7 @@ $Filter_Plugin_Admin_Js_Add = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_CreateOptoinsOfCategorys = array();
+DefinePluginFilter('Filter_Plugin_CreateOptoinsOfCategorys');
 
 ################################################################################################################
 #Event里的接口
@@ -758,7 +807,7 @@ $Filter_Plugin_CreateOptoinsOfCategorys = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_ViewIndex_Begin = array();
+DefinePluginFilter('Filter_Plugin_ViewIndex_Begin');
 
 /*
 '**************************************************<
@@ -769,7 +818,7 @@ $Filter_Plugin_ViewIndex_Begin = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_ViewFeed_Begin = array();
+DefinePluginFilter('Filter_Plugin_ViewFeed_Begin');
 
 /*
 '**************************************************<
@@ -780,7 +829,7 @@ $Filter_Plugin_ViewFeed_Begin = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_ViewSearch_Begin = array();
+DefinePluginFilter('Filter_Plugin_ViewSearch_Begin');
 
 /*
 '**************************************************<
@@ -791,7 +840,7 @@ $Filter_Plugin_ViewSearch_Begin = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_ViewAuto_Begin = array();
+DefinePluginFilter('Filter_Plugin_ViewAuto_Begin');
 
 /*
 '**************************************************<
@@ -802,7 +851,7 @@ $Filter_Plugin_ViewAuto_Begin = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_ViewAuto_End = array();
+DefinePluginFilter('Filter_Plugin_ViewAuto_End');
 
 /*
 '**************************************************<
@@ -813,7 +862,7 @@ $Filter_Plugin_ViewAuto_End = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_ViewList_Begin = array();
+DefinePluginFilter('Filter_Plugin_ViewList_Begin');
 
 /*
 '**************************************************<
@@ -824,7 +873,7 @@ $Filter_Plugin_ViewList_Begin = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_ViewList_Core = array();
+DefinePluginFilter('Filter_Plugin_ViewList_Core');
 
 /*
 '**************************************************<
@@ -835,7 +884,7 @@ $Filter_Plugin_ViewList_Core = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_ViewPost_Begin = array();
+DefinePluginFilter('Filter_Plugin_ViewPost_Begin');
 
 /*
 '**************************************************<
@@ -846,7 +895,7 @@ $Filter_Plugin_ViewPost_Begin = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_ViewList_Template = array();
+DefinePluginFilter('Filter_Plugin_ViewList_Template');
 
 /*
 '**************************************************<
@@ -857,7 +906,7 @@ $Filter_Plugin_ViewList_Template = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_ViewPost_Template = array();
+DefinePluginFilter('Filter_Plugin_ViewPost_Template');
 
 /*
 '**************************************************<
@@ -868,7 +917,7 @@ $Filter_Plugin_ViewPost_Template = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_ViewComments_Template = array();
+DefinePluginFilter('Filter_Plugin_ViewComments_Template');
 
 /*
 '**************************************************<
@@ -879,7 +928,7 @@ $Filter_Plugin_ViewComments_Template = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostModule_Core = array();
+DefinePluginFilter('Filter_Plugin_PostModule_Core');
 
 /*
 '**************************************************<
@@ -890,7 +939,7 @@ $Filter_Plugin_PostModule_Core = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostMember_Core = array();
+DefinePluginFilter('Filter_Plugin_PostMember_Core');
 
 /*
 '**************************************************<
@@ -901,7 +950,7 @@ $Filter_Plugin_PostMember_Core = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostTag_Core = array();
+DefinePluginFilter('Filter_Plugin_PostTag_Core');
 
 /*
 '**************************************************<
@@ -912,7 +961,7 @@ $Filter_Plugin_PostTag_Core = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostCategory_Core = array();
+DefinePluginFilter('Filter_Plugin_PostCategory_Core');
 
 /*
 '**************************************************<
@@ -923,7 +972,7 @@ $Filter_Plugin_PostCategory_Core = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostComment_Core = array();
+DefinePluginFilter('Filter_Plugin_PostComment_Core');
 
 /*
 '**************************************************<
@@ -934,7 +983,7 @@ $Filter_Plugin_PostComment_Core = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostArticle_Core = array();
+DefinePluginFilter('Filter_Plugin_PostArticle_Core');
 
 /*
 '**************************************************<
@@ -945,7 +994,7 @@ $Filter_Plugin_PostArticle_Core = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostPage_Core = array();
+DefinePluginFilter('Filter_Plugin_PostPage_Core');
 
 /*
 '**************************************************<
@@ -956,7 +1005,7 @@ $Filter_Plugin_PostPage_Core = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostMember_Succeed = array();
+DefinePluginFilter('Filter_Plugin_PostMember_Succeed');
 
 /*
 '**************************************************<
@@ -967,7 +1016,7 @@ $Filter_Plugin_PostMember_Succeed = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostTag_Succeed = array();
+DefinePluginFilter('Filter_Plugin_PostTag_Succeed');
 
 /*
 '**************************************************<
@@ -978,7 +1027,7 @@ $Filter_Plugin_PostTag_Succeed = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostCategory_Succeed = array();
+DefinePluginFilter('Filter_Plugin_PostCategory_Succeed');
 
 /*
 '**************************************************<
@@ -989,7 +1038,7 @@ $Filter_Plugin_PostCategory_Succeed = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostComment_Succeed = array();
+DefinePluginFilter('Filter_Plugin_PostComment_Succeed');
 
 /*
 '**************************************************<
@@ -1000,7 +1049,7 @@ $Filter_Plugin_PostComment_Succeed = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostPage_Succeed = array();
+DefinePluginFilter('Filter_Plugin_PostPage_Succeed');
 
 /*
 '**************************************************<
@@ -1011,7 +1060,7 @@ $Filter_Plugin_PostPage_Succeed = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostArticle_Succeed = array();
+DefinePluginFilter('Filter_Plugin_PostArticle_Succeed');
 
 /*
 '**************************************************<
@@ -1022,7 +1071,7 @@ $Filter_Plugin_PostArticle_Succeed = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_PostModule_Succeed = array();
+DefinePluginFilter('Filter_Plugin_PostModule_Succeed');
 
 /*
 '**************************************************<
@@ -1033,7 +1082,7 @@ $Filter_Plugin_PostModule_Succeed = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_DelMember_Succeed = array();
+DefinePluginFilter('Filter_Plugin_DelMember_Succeed');
 
 /*
 '**************************************************<
@@ -1044,7 +1093,7 @@ $Filter_Plugin_DelMember_Succeed = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_DelTag_Succeed = array();
+DefinePluginFilter('Filter_Plugin_DelTag_Succeed');
 
 /*
 '**************************************************<
@@ -1055,7 +1104,7 @@ $Filter_Plugin_DelTag_Succeed = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_DelCategory_Succeed = array();
+DefinePluginFilter('Filter_Plugin_DelCategory_Succeed');
 
 /*
 '**************************************************<
@@ -1066,7 +1115,7 @@ $Filter_Plugin_DelCategory_Succeed = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_DelComment_Succeed = array();
+DefinePluginFilter('Filter_Plugin_DelComment_Succeed');
 
 /*
 '**************************************************<
@@ -1077,7 +1126,7 @@ $Filter_Plugin_DelComment_Succeed = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_DelPage_Succeed = array();
+DefinePluginFilter('Filter_Plugin_DelPage_Succeed');
 
 /*
 '**************************************************<
@@ -1088,7 +1137,7 @@ $Filter_Plugin_DelPage_Succeed = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_DelArticle_Succeed = array();
+DefinePluginFilter('Filter_Plugin_DelArticle_Succeed');
 
 /*
 '**************************************************<
@@ -1099,7 +1148,7 @@ $Filter_Plugin_DelArticle_Succeed = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_DelModule_Succeed = array();
+DefinePluginFilter('Filter_Plugin_DelModule_Succeed');
 
 ################################################################################################################
 #类里的接口
@@ -1113,7 +1162,7 @@ $Filter_Plugin_DelModule_Succeed = array();
 '调用:返回CommentPostUrl值.
 '**************************************************>
 */
-$Filter_Plugin_Post_CommentPostUrl = array();
+DefinePluginFilter('Filter_Plugin_Post_CommentPostUrl');
 
 /*
 '**************************************************<
@@ -1124,7 +1173,7 @@ $Filter_Plugin_Post_CommentPostUrl = array();
 '调用:返回RelatedList Array.
 '**************************************************>
 */
-$Filter_Plugin_Post_RelatedList = array();
+DefinePluginFilter('Filter_Plugin_Post_RelatedList');
 
 /*
 '**************************************************<
@@ -1135,7 +1184,7 @@ $Filter_Plugin_Post_RelatedList = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Post_Call = array();
+DefinePluginFilter('Filter_Plugin_Post_Call');
 
 /*
 '**************************************************<
@@ -1146,7 +1195,7 @@ $Filter_Plugin_Post_Call = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Comment_Call = array();
+DefinePluginFilter('Filter_Plugin_Comment_Call');
 
 /*
 '**************************************************<
@@ -1157,7 +1206,7 @@ $Filter_Plugin_Comment_Call = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Tag_Call = array();
+DefinePluginFilter('Filter_Plugin_Tag_Call');
 
 /*
 '**************************************************<
@@ -1168,7 +1217,7 @@ $Filter_Plugin_Tag_Call = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Category_Call = array();
+DefinePluginFilter('Filter_Plugin_Category_Call');
 
 /*
 '**************************************************<
@@ -1179,7 +1228,7 @@ $Filter_Plugin_Category_Call = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Post_Save = array();
+DefinePluginFilter('Filter_Plugin_Post_Save');
 
 /*
 '**************************************************<
@@ -1190,7 +1239,7 @@ $Filter_Plugin_Post_Save = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Comment_Save = array();
+DefinePluginFilter('Filter_Plugin_Comment_Save');
 
 /*
 '**************************************************<
@@ -1201,7 +1250,7 @@ $Filter_Plugin_Comment_Save = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Tag_Save = array();
+DefinePluginFilter('Filter_Plugin_Tag_Save');
 
 /*
 '**************************************************<
@@ -1212,7 +1261,7 @@ $Filter_Plugin_Tag_Save = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Category_Save = array();
+DefinePluginFilter('Filter_Plugin_Category_Save');
 
 /*
 '**************************************************<
@@ -1223,7 +1272,7 @@ $Filter_Plugin_Category_Save = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Member_Save = array();
+DefinePluginFilter('Filter_Plugin_Member_Save');
 
 /*
 '**************************************************<
@@ -1234,7 +1283,7 @@ $Filter_Plugin_Member_Save = array();
 '调用:返回Avatar值,可以返回null.
 '**************************************************>
 */
-$Filter_Plugin_Mebmer_Avatar = array();
+DefinePluginFilter('Filter_Plugin_Mebmer_Avatar');
 
 /*
 '**************************************************<
@@ -1245,7 +1294,7 @@ $Filter_Plugin_Mebmer_Avatar = array();
 '调用:对$tmp临时文件进行拦截
 '**************************************************>
 */
-$Filter_Plugin_Upload_SaveFile = array();
+DefinePluginFilter('Filter_Plugin_Upload_SaveFile');
 
 /*
 '**************************************************<
@@ -1256,7 +1305,7 @@ $Filter_Plugin_Upload_SaveFile = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Upload_SaveBase64File = array();
+DefinePluginFilter('Filter_Plugin_Upload_SaveBase64File');
 
 /*
 '**************************************************<
@@ -1267,7 +1316,7 @@ $Filter_Plugin_Upload_SaveBase64File = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Upload_DelFile = array();
+DefinePluginFilter('Filter_Plugin_Upload_DelFile');
 
 /*
 '**************************************************<
@@ -1278,7 +1327,7 @@ $Filter_Plugin_Upload_DelFile = array();
 '调用:返回Url的值,可以返回null.
 '**************************************************>
 */
-$Filter_Plugin_Upload_Url = array();
+DefinePluginFilter('Filter_Plugin_Upload_Url');
 
 /*
 '**************************************************<
@@ -1289,7 +1338,7 @@ $Filter_Plugin_Upload_Url = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Template_Compiling_Begin = array();
+DefinePluginFilter('Filter_Plugin_Template_Compiling_Begin');
 
 /*
 '**************************************************<
@@ -1300,7 +1349,7 @@ $Filter_Plugin_Template_Compiling_Begin = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Template_Compiling_End = array();
+DefinePluginFilter('Filter_Plugin_Template_Compiling_End');
 
 /*
 '**************************************************<
@@ -1311,4 +1360,4 @@ $Filter_Plugin_Template_Compiling_End = array();
 '调用:
 '**************************************************>
 */
-$Filter_Plugin_Template_GetTemplate = array();
+DefinePluginFilter('Filter_Plugin_Template_GetTemplate');
