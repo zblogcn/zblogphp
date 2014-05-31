@@ -12,8 +12,9 @@ $zbp->Load();
 
 header('Content-Type: application/x-javascript; charset=utf-8');
 ?>
-var bloghost="<?php echo $bloghost; ?>";
-var cookiespath="<?php echo $cookiespath; ?>";
+var bloghost="<?php echo $zbp->host; ?>";
+var cookiespath="<?php echo $zbp->cookiespath; ?>";
+var ajaxurl="<?php echo $zbp->ajaxurl; ?>";
 var str01="<?php echo $lang['error']['72']; ?>";
 var str02="<?php echo $lang['error']['29']; ?>";
 var str03="<?php echo $lang['error']['46']; ?>";

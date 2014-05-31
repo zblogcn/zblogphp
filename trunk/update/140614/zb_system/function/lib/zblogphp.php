@@ -25,7 +25,8 @@ class ZBlogPHP{
 	public $validcodeurl = null;
 	public $feedurl = null;
 	public $searchurl = null;
-
+	public $ajaxurl = null;
+	
 	public $members=array();
 	public $membersbyname=array();
 	public $categorys=array();
@@ -232,7 +233,8 @@ class ZBlogPHP{
 
 		$this->validcodeurl=$this->host . 'zb_system/script/c_validcode.php';
 		$this->feedurl=$this->host . 'feed.php';
-		$this->searchurl=$this->host . 'search.php';		
+		$this->searchurl=$this->host . 'search.php';
+		$this->ajaxurl=$this->host . 'zb_system/cmd.php?act=ajax&src=';
 
 		#创建User类
 		$this->user=new Member();
@@ -871,7 +873,7 @@ function AddBuildModuleAll(){
 		$this->templatetags['validcodeurl']=&$this->validcodeurl;
 		$this->templatetags['feedurl']=&$this->feedurl;
 		$this->templatetags['searchurl']=&$this->searchurl;
-
+		$this->templatetags['ajaxurl']=&$this->ajaxurl;
 		$s=array(
 			$option['ZC_SIDEBAR_ORDER'],
 			$option['ZC_SIDEBAR2_ORDER'],

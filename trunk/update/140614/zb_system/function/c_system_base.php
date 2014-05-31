@@ -115,6 +115,7 @@ $actions=array(
 	'feed'=>6,
 	'cmt'=>6,
 	'getcmt'=>6,
+	'ajax'=>6,
 
 	'ArticleEdt'=>4,
 	'ArticlePst'=>4,

@@ -12,8 +12,9 @@ $zbp->StartGzip();
 
 header('Content-Type: application/x-javascript; charset=utf-8');
 ?>
-var bloghost="<?php echo $bloghost; ?>";
-var cookiespath="<?php echo $cookiespath; ?>";
+var bloghost="<?php echo $zbp->host; ?>";
+var cookiespath="<?php echo $zbp->cookiespath; ?>";
+var ajaxurl="<?php echo $zbp->ajaxurl; ?>";
 
 
 
