@@ -435,7 +435,7 @@ DefinePluginFilter('Filter_Plugin_Cmd_Begin');
 '类型:Filter
 '名称:Filter_Plugin_Cmd_Ajax
 '参数:
-'说明:cmd.php的Ajax命令专用接口
+'说明:cmd.php的Ajax命令专用接口，插件需要自行判断权限
 '调用:
 '**************************************************>
 */

@@ -6,45 +6,38 @@
  * @version 2.0 2013-06-14
  */
 
-Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','zbp_admin_addpagesubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','zbp_admin_addtagsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','zbp_admin_addcatesubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu','zbp_admin_addmemsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','zbp_admin_addmodsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','zbp_admin_addcmtsubmenu');
-
 
 $zbp->ismanage=true;
 
 
 ################################################################################################################
-function zbp_admin_addpagesubmenu(){
+function Zbp_Admin_Addpagesubmenu(){
 	echo '<a href="../cmd.php?act=PageEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_page'] . '</span></a>';
 }
 
-function zbp_admin_addtagsubmenu(){
+function Zbp_Admin_Addtagsubmenu(){
 	echo '<a href="../cmd.php?act=TagEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_tag'] . '</span></a>';
 }
 
-function zbp_admin_addcatesubmenu(){
+function Zbp_Admin_Addcatesubmenu(){
 	echo '<a href="../cmd.php?act=CategoryEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_category'] . '</span></a>';
 }
 
-function zbp_admin_addmemsubmenu(){
+function Zbp_Admin_Addmemsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('MemberNew')){
 		echo '<a href="../cmd.php?act=MemberNew"><span class="m-left">' . $GLOBALS['lang']['msg']['new_member'] . '</span></a>';
 	}
 }
 
-function zbp_admin_addmodsubmenu(){
+function Zbp_Admin_Addmodsubmenu(){
 	echo '<a href="../cmd.php?act=ModuleEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_module'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=navbar"><span class="m-left">' . $GLOBALS['lang']['msg']['module_navbar'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=link"><span class="m-left">' . $GLOBALS['lang']['msg']['module_link'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=favorite"><span class="m-left">' . $GLOBALS['lang']['msg']['module_favorite'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=misc"><span class="m-left">' . $GLOBALS['lang']['msg']['module_misc'] . '</span></a>';
 }
-function zbp_admin_addcmtsubmenu(){
+function Zbp_Admin_Addcmtsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('CommentAll')){
 		$n=GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(comm_ID) AS num FROM ' . $GLOBALS['table']['Comment'] . ' WHERE comm_Ischecking=1'),'num');
@@ -52,6 +45,13 @@ function zbp_admin_addcmtsubmenu(){
 		echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left '.(GetVars('ischecking')?'m-now':'').'">' . $GLOBALS['lang']['msg']['check_comment']  . $n . '</span></a>';
 	}
 }
+
+Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','Zbp_Admin_Addpagesubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','Zbp_Admin_Addtagsubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','Zbp_Admin_Addcatesubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu','Zbp_Admin_Addmemsubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','Zbp_Admin_Addmodsubmenu');
+Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','Zbp_Admin_Addcmtsubmenu');
 
 
 ################################################################################################################
