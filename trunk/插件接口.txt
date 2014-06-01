@@ -123,6 +123,11 @@
 说明:cmd.php的启动接口,可以在这里拦截各种action\\
 调用:\\
 
+====Filter_Plugin_Cmd_Ajax====
+参数:\\
+说明:cmd.php的Ajax命令专用接口，插件需要自行判断权限\\
+调用:\\
+
 ====Filter_Plugin_Login_Header====
 参数:\\
 说明:定义Login.php首页header接口\\

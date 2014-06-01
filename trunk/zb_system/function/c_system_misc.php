@@ -84,7 +84,7 @@ function misc_statistic() {
 	
 	$system_environment = PHP_OS . ';' . 
 							GetValueInArray(explode(' ',str_replace(array('Microsoft-','/'),array('',''),GetVars('SERVER_SOFTWARE', 'SERVER'))),0) . ';' .
-							'PHP ' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'] . ';' .
+							'PHP' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'] . ';' .
 							$ajax ;
 
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}</td><td class='td30'>{$current_member}</td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";

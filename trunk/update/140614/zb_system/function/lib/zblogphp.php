@@ -58,13 +58,14 @@ class ZBlogPHP{
 	public $actions=null;
 	public $action=null;
 
-	public $isinitialize=false;
-	public $isconnect=false;
-	public $isload=false;
-	public $issession=false;
+	private $isinitialize=false;
+	private $isconnect=false;
+	private $isload=false;
+	private $issession=false;
 	public $ismanage=false;
-	public $isgzip=false;
-
+	private $isgzip=false;
+	private $isgziped=false;
+	
 	public $template = null;
 	public $templates = array();
 	public $templatetags = array();
@@ -148,8 +149,7 @@ class ZBlogPHP{
 			$fpreturn=$fpname($method, $args);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
-		if($this->option['ZC_DEBUG_MODE']==true)
-			$this->ShowError(81,__FILE__,__LINE__);
+		if($this->option['ZC_DEBUG_MODE']==true) $this->ShowError(81,__FILE__,__LINE__);
 	}
 
 	function __set($name, $value){
@@ -248,6 +248,8 @@ class ZBlogPHP{
 
 		if(!$this->isinitialize)return false;
 
+		if($this->isload)return false;
+		
 		foreach($this->table as &$tb){
 			$tb=str_replace('%pre%', $this->db->dbpre, $tb);
 		}
@@ -283,16 +285,18 @@ class ZBlogPHP{
 		$this->RegBuildModule('authors','BuildModule_authors');
 
 		$this->LoadTemplate();
-		
+
 		$this->MakeTemplatetags();
-		
+
 		$this->template=$this->PrepareTemplate();
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 
-		if($this->ismanage==true) $this->LoadManage();
+		if($this->ismanage) $this->LoadManage();
 
 		$this->isload=true;
+
+		return true;
 	}
 
 	public function LoadManage(){
@@ -1586,12 +1590,17 @@ function AddBuildModuleAll(){
 	}
 
 	function StartGzip(){
-		if($this->isgzip&&isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE'])
-		if(!headers_sent()&&extension_loaded("zlib")&&isset($_SERVER["HTTP_ACCEPT_ENCODING"])&&strstr($_SERVER["HTTP_ACCEPT_ENCODING"],"gzip")){
-			ob_clean();
-			ob_start('ob_gzhandler');
-			//ini_set('zlib.output_compression', 'On');
-			//ini_set('zlib.output_compression_level', '9');
+		if($this->isgziped)return false;
+
+		if($this->isgzip&&isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE']){
+			if(!headers_sent()&&extension_loaded("zlib")&&isset($_SERVER["HTTP_ACCEPT_ENCODING"])&&strstr($_SERVER["HTTP_ACCEPT_ENCODING"],"gzip")){
+				ob_clean();
+				ini_set('zlib.output_compression', 'On');
+				ini_set('zlib.output_compression_level', '5');
+				header('Content-Encoding: gzip');
+				$this->isgziped=true;
+				return true;
+			}
 		}
 	}
 

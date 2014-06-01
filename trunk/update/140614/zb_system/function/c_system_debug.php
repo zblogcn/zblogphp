@@ -200,13 +200,11 @@ class ZBlogException {
 	}
 
 	function Display() {
-
 		Http500();
-		ob_end_clean();
-		$zbp = ZBlogPHP::GetInstance();
-		$zbp->StartGzip();
-		require $GLOBALS['blogpath'] . 'zb_system/defend/error.html';
+		ob_clean();
+		require dirname(__FILE__) . '/../defend/error.html';
 		RunTime();
+		die();
 	}
 
 	function get_code($file, $line) {
