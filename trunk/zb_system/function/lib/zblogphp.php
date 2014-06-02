@@ -1594,7 +1594,6 @@ function AddBuildModuleAll(){
 
 		if($this->isgzip&&isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE']){
 			if(!headers_sent()&&extension_loaded("zlib")&&isset($_SERVER["HTTP_ACCEPT_ENCODING"])&&strstr($_SERVER["HTTP_ACCEPT_ENCODING"],"gzip")){
-				ob_clean();
 				ini_set('zlib.output_compression', 'On');
 				ini_set('zlib.output_compression_level', '5');
 				header('Content-Encoding: gzip');
