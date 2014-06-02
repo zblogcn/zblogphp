@@ -45,7 +45,14 @@ function GetDbName() {
 }
 
 function GetCurrentHost($blogpath,&$cookiespath) {
-	if (array_key_exists('HTTPS', $_SERVER)) {
+
+	if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
+		if ($_SERVER['REQUEST_SCHEME'] == 'https') {
+			$host = 'https://';
+		} else {
+			$host = 'http://';
+		}
+	}elseif (array_key_exists('HTTPS', $_SERVER)) {
 		if ($_SERVER['HTTPS'] == 'off') {
 			$host = 'http://';
 		} else {
