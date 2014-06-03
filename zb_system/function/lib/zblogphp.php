@@ -1592,6 +1592,10 @@ function AddBuildModuleAll(){
 	function StartGzip(){
 		if($this->isgziped)return false;
 
+		if(in_array('default output handler',ob_list_handlers())){
+			ob_end_clean();
+		}
+		
 		if($this->isgzip&&isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE']){
 			if(!headers_sent()&&extension_loaded("zlib")&&isset($_SERVER["HTTP_ACCEPT_ENCODING"])&&strstr($_SERVER["HTTP_ACCEPT_ENCODING"],"gzip")){
 				ini_set('zlib.output_compression', 'On');
@@ -1601,6 +1605,8 @@ function AddBuildModuleAll(){
 				return true;
 			}
 		}
+
+		ob_start();
 	}
 
 
