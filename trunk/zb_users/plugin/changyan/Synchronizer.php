@@ -28,7 +28,7 @@ class Changyan_Synchronizer
         global $zbp;
 	
         @set_time_limit(0);
-        @ini_set('memory_limit', '256M');
+        if(function_exists('ini_get'))ini_set('memory_limit', '256M');
 
         $script = $this->getOption('changyan_script');
         $appID = explode("'", $script);
@@ -305,7 +305,7 @@ class Changyan_Synchronizer
     {
         global $zbp;
         @set_time_limit(0);
-        @ini_set('memory_limit', '256M');
+        if(function_exists('ini_get'))ini_set('memory_limit', '256M');
 
         $nextID2CY = $this->getOption('changyan_sync2CY');
 
