@@ -425,7 +425,7 @@ function ScriptError($faultString) {
 
 function CheckRegExp($source, $para) {
 	if (strpos($para, '[username]') !== false) {
-		$para = "/^[\.\_A-Za-z0-9\x{4e00}-\x{9fa5}]+$/u";
+		$para = "/^[\.\_A-Za-z0-9·\x{4e00}-\x{9fa5}]+$/u";
 	}
 	if (strpos($para, '[password]') !== false) {
 		$para = "/^[A-Za-z0-9`~!@#\$%\^&\*\-_]+$/u";
