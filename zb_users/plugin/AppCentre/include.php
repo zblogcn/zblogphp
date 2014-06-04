@@ -2,7 +2,7 @@
 #注册插件
 RegisterPlugin("AppCentre","ActivePlugin_AppCentre");
 
-define('APPCENTRE_URL','http://app.rainbowsoft.org/client/');
+define('APPCENTRE_URL','http://app.zblogcn.com/client/');
 
 define('APPCENTRE_SYSTEM_UPDATE','http://update.zblogcn.com/zblogphp/');
 
