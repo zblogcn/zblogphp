@@ -1,7 +1,7 @@
 ﻿<files build='140614'>
 	<file name='zb_system\function\c_system_plugin.php' md5='41DFCD2EDEB5E3F40CF15CF507B74206' crc32='B429F9CC'/>
 	<file name='zb_system\function\c_system_debug.php' md5='85BF2BE60DF1F77791A1111937F828D9' crc32='256816F8'/>
-	<file name='zb_system\function\c_system_common.php' md5='A22F3A2DAE8A35BF6FA04C019E9D96A4' crc32='519D24BE'/>
+	<file name='zb_system\function\c_system_common.php' md5='9C5B2F2ECC6062D99872BA522EDCDFF7' crc32='6E0A0C51'/>
 	<file name='zb_system\function\c_system_event.php' md5='9BB8C5A33D1508857CCDAA55B15D8958' crc32='BECEB08E'/>
 	<file name='zb_system\function\c_system_base.php' md5='A340A6C69DD9B44D29E3ABF9D1D15E4F' crc32='CD0094D5'/>
 	<file name='zb_system\function\c_system_admin.php' md5='BA207F3154A44BE70F3B2AE747F54CB4' crc32='E29684A5'/>
