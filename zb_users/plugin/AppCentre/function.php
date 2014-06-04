@@ -172,7 +172,7 @@ function Server_SendRequest($url,$data=array(),$u='',$c=''){
 		$content=stream_context_create($opts);
 	}
 
-	if(function_exists('ini_get'))ini_set('default_socket_timeout',120);
+	if(function_exists('ini_set'))ini_set('default_socket_timeout',120);
 	
 	if(extension_loaded('zlib')){
 		return file_get_contents('compress.zlib://'.$url,false,$content);
