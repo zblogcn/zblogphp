@@ -31,7 +31,7 @@ function GetHttpContent($url) {
 		$r = curl_exec($ch);
 		curl_close($ch);
 	} elseif (ini_get("allow_url_fopen")) {
-		ini_set('default_socket_timeout',300);
+		if(function_exists('ini_get'))ini_set('default_socket_timeout',300);
 		$r = file_get_contents((extension_loaded('zlib')?'compress.zlib://':'') . $url);
 	}
 

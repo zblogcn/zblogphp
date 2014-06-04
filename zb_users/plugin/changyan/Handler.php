@@ -1,5 +1,5 @@
 <?php
-ini_set('max_execution_time', '0');
+if(function_exists('ini_get'))ini_set('max_execution_time', '0');
 
 class Changyan_Handler
 {
