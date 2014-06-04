@@ -1600,6 +1600,7 @@ function AddBuildModuleAll(){
 				}else{
 					ob_start('ob_gzhandler');
 				}
+				ob_start();
 				header('Content-Encoding: gzip');
 				$this->isgziped=true;
 				return true;
