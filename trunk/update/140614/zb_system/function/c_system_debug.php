@@ -201,11 +201,9 @@ class ZBlogException {
 
 	function Display() {
 		Http500();
-		if(function_exists('ini_get')){
-			ob_clean();
-		}else{
-			ob_end_clean();
-		}
+
+		ob_clean();
+
 		require dirname(__FILE__) . '/../defend/error.html';
 		RunTime();
 		die();

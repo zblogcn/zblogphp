@@ -1,5 +1,5 @@
 <?php
-ini_set('max_execution_time', '0');
+if(function_exists('ini_set'))ini_set('max_execution_time', '0');
 class Changyan_Synchronizer
 {
     private static $instance = null;
@@ -28,7 +28,7 @@ class Changyan_Synchronizer
         global $zbp;
 	
         @set_time_limit(0);
-        if(function_exists('ini_get'))ini_set('memory_limit', '256M');
+        if(function_exists('ini_set'))ini_set('memory_limit', '256M');
 
         $script = $this->getOption('changyan_script');
         $appID = explode("'", $script);

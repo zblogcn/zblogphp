@@ -2,7 +2,7 @@
 #注册插件
 RegisterPlugin("changyan","ActivePlugin_changyan");
 
-if(function_exists('ini_get')) ini_set('max_execution_time', '0');
+if(function_exists('ini_set')) ini_set('max_execution_time', '0');
 define('CHANGYAN_PLUGIN_PATH', dirname(__FILE__));
 require CHANGYAN_PLUGIN_PATH . '/Synchronizer.php';
 require CHANGYAN_PLUGIN_PATH . '/Handler.php';
