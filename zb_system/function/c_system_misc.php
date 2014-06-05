@@ -138,7 +138,7 @@ $blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights'];
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<?php if (strpos(GetVars('HTTP_USER_AGENT', 'SERVERS'), 'MSIE')) { ?>
+	<?php if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) { ?>
 		<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
 	<?php } ?>
 	<meta name="robots" content="none"/>

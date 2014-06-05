@@ -635,7 +635,7 @@ class ZBlogPHP{
 	public function Verify_Final($name,$password){
 		if (isset($this->membersbyname[$name])){
 			$m=$this->membersbyname[$name];
-			if($m->Password == $password){
+			if(strcasecmp ( $m->Password ,  $password ) ==  0){
 				$this->user=$m;
 				return true;
 			}else{

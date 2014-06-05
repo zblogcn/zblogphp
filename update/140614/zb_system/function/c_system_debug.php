@@ -8,6 +8,13 @@
 
 function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
+
+	if(is_readable($errfile)){
+		$a = array_slice(file($errfile), max(0,$errline-1), 1, true);
+		$s = reset($a);
+		if(strpos($s,'@')!==false)return true;
+	}
+
 	if(ZBlogException::$iswarning==false){
 		if( $errno == E_WARNING )return true;
 	}
