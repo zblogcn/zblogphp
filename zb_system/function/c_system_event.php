@@ -81,6 +81,7 @@ function Logout() {
 
 	setcookie('username', '', time() - 3600, $zbp->cookiespath);
 	setcookie('password', '', time() - 3600, $zbp->cookiespath);
+	setcookie("dishtml5", '', time() - 3600, $zbp->cookiespath);
 
 }
 
