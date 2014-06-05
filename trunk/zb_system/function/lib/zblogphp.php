@@ -305,6 +305,12 @@ class ZBlogPHP{
 		if($this->user->Status==ZC_MEMBER_STATUS_LOCKED) $this->ShowError(80,__FILE__,__LINE__);
 
 		$this->CheckTemplate();
+		
+		if(GetVars('dishtml5','COOKIE')){
+			$this->option['ZC_ADMIN_HTML5_ENABLE']=false;
+		}else{
+			$this->option['ZC_ADMIN_HTML5_ENABLE']=true;
+		}
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) $fpname();
 
