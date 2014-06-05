@@ -76,7 +76,6 @@ $("#btnPost").click(function(){
 <?php if($zbp->option['ZC_ADMIN_HTML5_ENABLE']){?>
 $(document).ready(function(){
 	if (!$.support.leadingWhitespace) {
-		alert("<?php echo $lang['error']['74']?>");
 		$("#dishtml5").val(1);
 	}
 });
