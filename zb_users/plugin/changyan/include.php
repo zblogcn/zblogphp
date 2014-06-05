@@ -2,7 +2,7 @@
 #注册插件
 RegisterPlugin("changyan","ActivePlugin_changyan");
 
-if(function_exists('ini_set')) ini_set('max_execution_time', '0');
+if(function_exists('ini_set'))ini_set('max_execution_time', '0');
 define('CHANGYAN_PLUGIN_PATH', dirname(__FILE__));
 require CHANGYAN_PLUGIN_PATH . '/Synchronizer.php';
 require CHANGYAN_PLUGIN_PATH . '/Handler.php';
@@ -189,7 +189,7 @@ function changyan_base_init()
     if (!empty($script)) {
         //add_filter('comments_template', array($changyanPlugin, 'getCommentsTemplate'));
     }
-    //ini_set('display_errors', '1');
+    //if(function_exists('ini_set'))ini_set('display_errors', '1');
     //schedule synchronization
 	$isCron = $changyanPlugin->getOption('changyan_script');
     if ($isCron == true || $isCron == 'true') {

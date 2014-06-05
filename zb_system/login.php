@@ -43,6 +43,7 @@ foreach ($GLOBALS['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {$fpna
 	<input type="hidden" name="username" id="username" value="" />
 	<input type="hidden" name="password" id="password" value="" />
 	<input type="hidden" name="savedate" id="savedate" value="0" />
+	<input type="hidden" name="dishtml5" id="dishtml5" value="0" />
     </form>
   </div>
 </div>
@@ -76,6 +77,7 @@ $("#btnPost").click(function(){
 $(document).ready(function(){
 	if (!$.support.leadingWhitespace) {
 		alert("<?php echo $lang['error']['74']?>");
+		$("#dishtml5").val(1);
 	}
 });
 <?php }?>
