@@ -60,9 +60,11 @@ function VerifyLogin() {
 			if ( $sd == 0) {
 				setcookie("username", $un, 0, $zbp->cookiespath);
 				setcookie("password", $ps, 0, $zbp->cookiespath);
+				setcookie("dishtml5", GetVars('dishtml5', 'POST'), 0, $zbp->cookiespath);
 			} else {
 				setcookie("username", $un, time() + 3600 * 24 * $sd, $zbp->cookiespath);
 				setcookie("password", $ps, time() + 3600 * 24 * $sd, $zbp->cookiespath);
+				setcookie("dishtml5", GetVars('dishtml5', 'POST'), time() + 3600 * 24 * $sd, $zbp->cookiespath);
 			}
 
 			return true;
@@ -79,6 +81,7 @@ function Logout() {
 
 	setcookie('username', '', time() - 3600, $zbp->cookiespath);
 	setcookie('password', '', time() - 3600, $zbp->cookiespath);
+	setcookie("dishtml5", '', time() - 3600, $zbp->cookiespath);
 
 }
 

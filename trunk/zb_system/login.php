@@ -8,7 +8,7 @@ $zbp->Load();
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php if(strpos(GetVars('HTTP_USER_AGENT','SERVERS'),'MSIE')){?>
+<?php if(strpos(GetVars('HTTP_USER_AGENT','SERVER'),'Trident/')){?>
 	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 <?php }?>
 	<meta name="robots" content="none" />
@@ -19,9 +19,7 @@ $zbp->Load();
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 	<title><?php echo $blogname . '-' . $lang['msg']['login']?></title>
 <?php
-
 foreach ($GLOBALS['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {$fpname();}
-
 ?>
 </head>
 <body>
@@ -48,9 +46,7 @@ foreach ($GLOBALS['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {$fpna
   </div>
 </div>
 </div>
-
 <script type="text/javascript">
-
 $("#btnPost").click(function(){
 
 	var strUserName=$("#edtUserName").val();
@@ -65,28 +61,24 @@ $("#btnPost").click(function(){
 	$("#edtUserName").remove();
 	$("#edtPassWord").remove();
 
-	strUserName=strUserName;
-	strPassWord=MD5(strPassWord);
-
 	$("form").attr("action","cmd.php?act=verify");
 	$("#username").val(strUserName);
-	$("#password").val(strPassWord);
+	$("#password").val(MD5(strPassWord));
 	$("#savedate").val(strSaveDate);
 })
-<?php if($zbp->option['ZC_ADMIN_HTML5_ENABLE']){?>
-$(document).ready(function(){
-	if (!$.support.leadingWhitespace) {
-		$("#dishtml5").val(1);
-	}
-});
-<?php }?>
+
 $("#chkRemember").click(function(){
 	$("#savedate").attr("value",$("#chkRemember").attr("checked")=="checked"?30:0);
 })
+
+<?php if($zbp->option['ZC_ADMIN_HTML5_ENABLE']){?>
+if (!$.support.leadingWhitespace) {
+	$("#dishtml5").val(1);
+}
+<?php }?>
 </script>
 </body>
 </html>
 <?php
-
 RunTime();
 ?>
