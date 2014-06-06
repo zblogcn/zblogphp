@@ -225,8 +225,9 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 			if ($a->ID == $option['is_related'])
 				unset($articles[$k]);
 		}
-		if (count($articles) == $count)
-			$articles = array_pop($articles);
+		if (count($articles) == $count){
+			array_pop($articles);
+		}
 	}
 
 	return $articles;

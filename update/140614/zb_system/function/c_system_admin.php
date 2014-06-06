@@ -28,6 +28,8 @@ function Zbp_Admin_Addmemsubmenu(){
 	if($zbp->CheckRights('MemberNew')){
 		echo '<a href="../cmd.php?act=MemberNew"><span class="m-left">' . $GLOBALS['lang']['msg']['new_member'] . '</span></a>';
 	}
+	
+	echo '<a href="../cmd.php?act=misc&amp;type=vrs" target="_blank"><span class="m-left">'.$zbp->lang['msg']['view_rights'].'</span></a>';
 }
 
 function Zbp_Admin_Addmodsubmenu(){

@@ -144,7 +144,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 				unset($articles[$k]);
 		}
 		if (count($articles) == $count)
-			$articles = array_pop($articles);
+			array_pop($articles);
 	}
 
 	return $articles;
