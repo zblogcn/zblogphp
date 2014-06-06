@@ -2,9 +2,9 @@
 	<file name='zb_system\function\c_system_plugin.php' md5='41DFCD2EDEB5E3F40CF15CF507B74206' crc32='B429F9CC'/>
 	<file name='zb_system\function\c_system_debug.php' md5='4971A5B36A40AEA3059EAA65D897B453' crc32='B0ABFB62'/>
 	<file name='zb_system\function\c_system_common.php' md5='9C5B2F2ECC6062D99872BA522EDCDFF7' crc32='6E0A0C51'/>
-	<file name='zb_system\function\c_system_event.php' md5='29DB10B462D25CED04BBCEC5DCC16E73' crc32='FD8306D4'/>
+	<file name='zb_system\function\c_system_event.php' md5='17BDE83CB41756811A6DBEE9D2BF51AF' crc32='2ABDF066'/>
 	<file name='zb_system\function\c_system_base.php' md5='A340A6C69DD9B44D29E3ABF9D1D15E4F' crc32='CD0094D5'/>
-	<file name='zb_system\function\c_system_admin.php' md5='BA207F3154A44BE70F3B2AE747F54CB4' crc32='E29684A5'/>
+	<file name='zb_system\function\c_system_admin.php' md5='111815386E7606CB81C867885EF7E209' crc32='1FD79AD'/>
 	<file name='zb_system\defend\option.php' md5='7B94E938D5E2299C3446C46398FA4EE1' crc32='EDE60C6'/>
 	<file name='zb_system\function\lib\base.php' md5='7DB770C89B48ECF5C11198002D4FED64' crc32='A47C96BD'/>
 	<file name='zb_system\function\lib\dbsql.php' md5='E09DD713C736B62F0A13B68B00BE55DB' crc32='7D4B5235'/>
