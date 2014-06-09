@@ -39,6 +39,14 @@ function GetVars($name, $type = 'REQUEST') {
 	}
 }
 
+function GetVarsByDefault($name, $type = 'REQUEST',$default = null) {
+	$g = GetVars($name, $type);
+	if($g==null||$g==''){
+		return $default;
+	}
+	return $g;
+}
+
 function GetDbName() {
 
 	return str_replace('-', '', '#%20' . strtolower(GetGuid())) . '.db';

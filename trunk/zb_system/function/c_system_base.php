@@ -336,8 +336,11 @@ $zbp=ZBlogPHP::GetInstance();
 $zbp->Initialize();
 
 
+$activeapps=array();
+
 #加载主题内置的插件
 if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php')) {
+	$activeapps[]=$blogtheme;
 	require $filename;
 }
 
@@ -347,6 +350,7 @@ $ap=explode("|", $option['ZC_USING_PLUGIN_LIST']);
 $ap=array_unique($ap);
 foreach ($ap as $plugin) {
 	if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
+		$activeapps[]=$plugin;
 		require $filename;
 	}
 }

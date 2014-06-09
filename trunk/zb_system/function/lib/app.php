@@ -341,5 +341,29 @@ class App
 
 		return true;
 	}
+	
+	public function CheckCompatibility(){
+		global $zbp;
+
+		if((int)$this->adapted>(int)$zbp->version){
+			$zbp->ShowError(str_replace('%s',$this->adapted,$zbp->lang['error'][78]),__FILE__,__LINE__);
+		}
+		
+		$ad=explode('|',$this->advanced_dependency);
+		foreach($ad as $d){
+			if(!$d)continue;
+			if(!in_array($d,$zbp->activeapps)){
+				$zbp->ShowError(str_replace('%s',$d,$zbp->lang['error'][83]),__FILE__,__LINE__);
+			}
+		}
+
+		$ac=explode('|',$this->advanced_conflict);
+		foreach($ac as $c){
+			if(!$c)continue;
+			if(in_array($c,$zbp->activeapps)){
+				$zbp->ShowError(str_replace('%s',$c,$zbp->lang['error'][84]),__FILE__,__LINE__);
+			}
+		}
+	}
 
 }

@@ -75,6 +75,7 @@ class ZBlogPHP{
 
 	public $themes = array();
 	public $plugins = array();
+	public $activeapps = array();
 
 	public $managecount = 50;
 	public $pagebarcount = 10;
@@ -99,7 +100,7 @@ class ZBlogPHP{
 	function __construct() {
 
 		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,$datainfo,$actions,$action;
-		global $blogversion,$blogtitle,$blogname,$blogsubname,$blogtheme,$blogstyle,$currenturl;
+		global $blogversion,$blogtitle,$blogname,$blogsubname,$blogtheme,$blogstyle,$currenturl,$activeapps;
 
 		ZBlogException::SetErrorHook();
 
@@ -117,6 +118,7 @@ class ZBlogPHP{
 		$this->actions = &$actions;
 		$this->currenturl = &$currenturl;
 		$this->action = &$action;
+		$this->activeapps = &$activeapps;
 
 		if (trim($this->option['ZC_BLOG_CLSID']) == ''){
 			$this->option['ZC_BLOG_CLSID'] = GetGuid();
@@ -135,7 +137,7 @@ class ZBlogPHP{
 		$this->displaycount = &$this->option['ZC_DISPLAY_COUNT'];
 		$this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
 
-		$this->cache=new Metas;
+		$this->cache = new Metas;
 
 	}
 
