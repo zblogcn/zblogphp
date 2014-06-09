@@ -396,7 +396,7 @@ function ViewAuto($inpurl) {
 
 	$url = urldecode($url);
 
-	if($url==''||$url=='index.php'){
+	if($url==''||$url=='index.php'||trim($url,'/')==''){
 		ViewList(null,null,null,null,null);
 		return null;
 	}
@@ -1875,6 +1875,10 @@ function DelUpload() {
 ################################################################################################################
 function EnablePlugin($name) {
 	global $zbp;
+
+	$app=$zbp->LoadApp('plugin',$name);
+	$app->CheckCompatibility();
+
 	$zbp->option['ZC_USING_PLUGIN_LIST'] = AddNameInString($zbp->option['ZC_USING_PLUGIN_LIST'], $name);
 	$zbp->SaveOption();
 
@@ -1889,6 +1893,10 @@ function DisablePlugin($name) {
 
 function SetTheme($theme, $style) {
 	global $zbp;
+	
+	$app=$zbp->LoadApp('theme',$theme);
+	$app->CheckCompatibility();
+	
 	$oldtheme = $zbp->option['ZC_BLOG_THEME'];
 
 	if ($oldtheme != $theme) {
