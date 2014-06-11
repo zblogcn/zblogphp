@@ -1,10 +1,9 @@
 <?php
-
 /**
- * Z-Blog with PHP
- * @author
+ * 系统初始化等相关操作
+ * @package Z-BlogPHP
+ * @subpackage System/Base 基础操作
  * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
  */
 
 error_reporting(0);
@@ -25,7 +24,11 @@ require $basepath . 'c_system_event.php';
 spl_autoload_register('AutoloadClass');
 
 if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()){
-	function _stripslashes(&$var) {
+    /**
+     * 返回一个去除转义反斜线后的字符串（\' 转换为 ',双反斜线\\被转换为单个反斜线\等等）。
+     * @param string|array &$var
+     */
+    function _stripslashes(&$var) {
 		if(is_array($var)) {
 			foreach($var as $k=>&$v) {
 				_stripslashes($v);
@@ -59,17 +62,43 @@ $zbpvers['140614']='1.3 Beta2 Build 140614';
 
 
 #定义常量
+/**
+ *ZBLOGPHP版本号
+ */
 define('ZC_BLOG_VERSION', $zbpvers['140614']);
 
+/**
+ *文章类型：文章型
+ */
 define('ZC_POST_TYPE_ARTICLE', 0);
+/**
+ *文章类型：页面型
+ */
 define('ZC_POST_TYPE_PAGE', 1);
 
+/**
+ *文章状态：公开发布
+ */
 define('ZC_POST_STATUS_PUBLIC', 0);
+/**
+ *文章状态：草稿
+ */
 define('ZC_POST_STATUS_DRAFT', 1);
+/**
+ *文章状态：审核
+ */
 define('ZC_POST_STATUS_AUDITING', 2);
-
+/**
+ *用户状态：正常
+ */
 define('ZC_MEMBER_STATUS_NORMAL', 0);
+/**
+ *用户状态：审核
+ */
 define('ZC_MEMBER_STATUS_AUDITING', 1);
+/**
+ *用户状态：锁定
+ */
 define('ZC_MEMBER_STATUS_LOCKED', 2);
 
 
