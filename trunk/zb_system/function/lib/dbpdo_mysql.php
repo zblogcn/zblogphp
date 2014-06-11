@@ -1,32 +1,48 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * pdo_MySQL数据库操作类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/DataBase 类库
  */
+class Dbpdo_MySQL implements iDataBase {
 
-/**
-*
-*/
-class Dbpdo_MySQL implements iDataBase
-{
-
+	/**
+	* @var string|null SQL语句分隔符
+	*/
 	public $dbpre = null;
+	/**
+	* @var string|null 数据库服务器
+	*/
 	private $db = null;
+	/**
+	* @var string|null 数据库名
+	*/
 	public $dbname = null;
-
+	/**
+	* @var DbSql|null 
+	*/
 	public $sql=null;
-
+	/**
+	* 构造函数，实例化$sql参数
+	*/
 	function __construct()
 	{
 		$this->sql=new DbSql($this);
 	}
 
+	/**
+	* @param $s
+	* @return string
+	*/
 	public function EscapeString($s){
 		return addslashes($s);
 	}
 
+	/**
+	* @param $array
+	* @return bool
+	*/
 	function Open($array){
 		/*$array=array(
 			'dbmysql_server',
@@ -50,6 +66,13 @@ class Dbpdo_MySQL implements iDataBase
 		return true;
 	}
 
+	/**
+	* @param string $dbmysql_server
+	* @param string $dbmysql_port
+	* @param string $dbmysql_username
+	* @param string $dbmysql_password
+	* @param string $dbmysql_name
+	*/
 	function CreateDB($dbmysql_server,$dbmysql_port,$dbmysql_username,$dbmysql_password,$dbmysql_name){
 		$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',);
 		$db_link = new PDO('mysql:host=' . $dbmysql_server . ';port=' . $dbmysql_port,$dbmysql_username,$dbmysql_password,$options);
@@ -69,11 +92,18 @@ class Dbpdo_MySQL implements iDataBase
 			return true;
 		}
 	}
-
+	
+	/**
+	* 关闭数据库连接
+	*/
 	function Close(){
 		$this->db=null;
 	}
 
+	/**
+	* 拼接SQL语句
+	* @param $s 
+	*/
 	function QueryMulit($s){
 		//$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		$a=explode(';',$s);
@@ -85,6 +115,10 @@ class Dbpdo_MySQL implements iDataBase
 		}
 	}
 
+	/**
+	* @param $query
+	* @return array
+	*/
 	function Query($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		// 遍历出来
@@ -98,30 +132,53 @@ class Dbpdo_MySQL implements iDataBase
 
 	}
 
+	/**
+	* @param $query
+	* @return bool|mysqli_result
+	*/
 	function Update($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		return $this->db->query($this->sql->Filter($query));
 	}
 
+	/**
+	* @param $query
+	* @return bool|mysqli_result
+	*/
 	function Delete($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		return $this->db->query($this->sql->Filter($query));
 	}
 
+	/**
+	* @param $query
+	* @return int 
+	*/
 	function Insert($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		$this->db->exec($this->sql->Filter($query));
 		return $this->db->lastInsertId();
 	}
 
+	/**
+	* @param $table
+	* @param $datainfo
+	*/
 	function CreateTable($table,$datainfo){
 		$this->QueryMulit($this->sql->CreateTable($table,$datainfo));
 	}
 
+	/**
+	* @param $table
+	*/
 	function DelTable($table){
 		$this->QueryMulit($this->sql->DelTable($table));
 	}
-
+	
+	/**
+	* @param $table
+	* @return bool
+	*/
 	function ExistTable($table){
 
 		$a=$this->Query($this->sql->ExistTable($table,$this->dbname));

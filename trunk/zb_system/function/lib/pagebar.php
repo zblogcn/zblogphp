@@ -1,42 +1,66 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
- */
-
-/**
-* PageBar
+* 分页条码
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/Article 类库
 */
 class PageBar{
-	#内容总数
+
+	 /**
+	 * @var int|null 内容总数
+	 */
 	public $Count = null;
-
-	#Pagebar长度数量
+	/**
+	 * @var int Pagebar长度数量
+	 */
 	public $PageBarCount=0;
-
-	#每页数量
+	/**
+	 * @var int 每页数量
+	 */
 	public $PageCount  = 0;
-
-	#总页数
+	/**
+	 * @var int 总页数
+	 */
 	public $PageAll  = 0;
-
-	#当前页
+	/**
+	 * @var int 当前页
+	 */
 	public $PageNow  = 0;
-
+	/**
+	 * @var int 起始页
+	 */
 	public $PageFirst  = 0;
+	/**
+	 * @var int 最后页
+	 */
 	public $PageLast  = 0;
+	/**
+	 * @var int 上一页
+	 */
 	public $PagePrevious  = 0;
+	/**
+	 * @var int 下一页
+	 */
 	public $PageNext  = 0;
-
+	/**
+	 * @var null|UrlRule
+	 */
 	public $UrlRule  = null;
 
+	/**
+	 * @param $url
+	 * @param bool $makereplace
+	 */
 	public function __construct($url,$makereplace=true){
 		$this->UrlRule=new UrlRule($url);
 		$this->UrlRule->MakeReplace=$makereplace;
 	}
 
+	/**
+	 * 构造分页条
+	 * @return null
+	 */
 	public function Make(){
 		global $zbp;
 		if($this->PageCount==0)return null;
@@ -82,11 +106,17 @@ class PageBar{
 
 	}
 
-
+	/**
+	 * @var array
+	 */
 	public $buttons = array();
-
+	/**
+	 * @var null
+	 */
 	public $prevbutton = null;
-
+	/**
+	 * @var null
+	 */
 	public $nextbutton = null;
 
 }

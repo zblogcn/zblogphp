@@ -1,8 +1,8 @@
 <?php
 /**
- * 系统信息
+ * 绯荤粺淇℃伅
  * @package Z-BlogPHP
- * @subpackage System\Misc 摘取信息
+ * @subpackage System\Misc 鎽樺彇淇℃伅
  * @copyright (C) RainbowSoft Studio
  */
 

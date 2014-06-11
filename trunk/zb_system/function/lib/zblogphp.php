@@ -1,95 +1,263 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * zbp全局操作类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib 类库
  */
-
-
-class ZBlogPHP{
+class ZBlogPHP {
 
 	private static $_zbp=null;
-
+	/**
+	 * @var null|string 版本号
+	 */
 	public $version=null;
-
+	/**
+	 * @var null 数据库
+	 */
 	public $db = null;
+	/**
+	 * @var array 配置选项
+	 */
 	public $option = array();
+	/**
+	 * @var array 语言
+	 */
 	public $lang = array();
+	/**
+	 * @var null|string 路径
+	 */
 	public $path = null;
+	/**
+	 * @var null|string 域名
+	 */
 	public $host = null;
+	/**
+	 * @var null cookie作用域
+	 */
 	public $cookiespath=null;
+	/**
+	 * @var null guid
+	 */
 	public $guid=null;
+	/**
+	 * @var null|string 当前链接
+	 */
 	public $currenturl=null;
+	/**
+	 * @var null|string 用户目录
+	 */
 	public $usersdir = null;
+	/**
+	 * @var null 验证码地址
+	 */
 	public $validcodeurl = null;
+	/**
+	 * @var null
+	 */
 	public $feedurl = null;
+	/**
+	 * @var null
+	 */
 	public $searchurl = null;
+	/**
+	 * @var null
+	 */
 	public $ajaxurl = null;
-	
+
+	/**
+	 * @var array 用户数组
+	 */
 	public $members=array();
+	/**
+	 * @var array 用户数组（以用户名为键）
+	 */
 	public $membersbyname=array();
+	/**
+	 * @var array 分类数组
+	 */
 	public $categorys=array();
+	/**
+	 * @var array 分类数组（已排序）
+	 */
 	public $categorysbyorder=array();
+	/**
+	 * @var int 分类最大层数
+	 */
 	public $categorylayer=0;
+	/**
+	 * @var array 模块数组
+	 */
 	public $modules=array();
+	/**
+	 * @var array 模块数组（以文件名为键）
+	 */
 	public $modulesbyfilename=array();
+	/**
+	 * @var array 配置选项
+	 */
 	public $configs=array();
+	/**
+	 * @var array 标签数组
+	 */
 	public $tags=array();
+	/**
+	 * @var array 标签数组（以标签名为键）
+	 */
 	public $tagsbyname=array();
+	/**
+	 * @var array 评论数组
+	 */
 	public $comments = array();
+	/**
+	 * @var array 文章列表数组
+	 */
 	public $posts=array();
 
+	/**
+	 * @var null|string 当前页面标题
+	 */
 	public $title=null;
+	/**
+	 * @var null 网站名
+	 */
 	public $name=null;
+	/**
+	 * @var null 网站子标题
+	 */
 	public $subname=null;
+	/**
+	 * @var null 当前主题
+	 */
 	public $theme = null;
+	/**
+	 * @var null 当前主题风格
+	 */
 	public $style = null;
 
+	/**
+	 * @var null 当前用户
+	 */
 	public $user=null;
+	/**
+	 * @var Metas|null 缓存
+	 */
 	public $cache=null;
 
-	private $readymodules=array();
-	private $readymodules_function=array();	
-	private $readymodules_parameters=array();
+	private $readymodules=array(); #模块
+	private $readymodules_function=array(); #模块函数
+	private $readymodules_parameters=array(); #模块属性
 
+	/**
+	 * @var array|null 数据表
+	 */
 	public $table=null;
+	/**
+	 * @var array|null 数据表信息
+	 */
 	public $datainfo=null;
+	/**
+	 * @var array|null 操作列表
+	 */
 	public $actions=null;
+	/**
+	 * @var mixed|null|string 当前操作
+	 */
 	public $action=null;
 
-	private $isinitialize=false;
-	private $isconnect=false;
-	private $isload=false;
-	private $issession=false;
-	public $ismanage=false;
-	private $isgzip=false;
-	private $isgziped=false;
-	
+	private $isinitialize=false; #是否初始化成功
+	private $isconnect=false; #是否连接成功
+	private $isload=false; #是否载入
+	private $issession=false; #是否使用session
+	public $ismanage=false; #是否管理员
+	private $isgzip=false; #是否开启gzip
+	private $isgziped=false; #是否已经过gzip压缩
+
+	/**
+	 * @var null 当前模板
+	 */
 	public $template = null;
+	/**
+	 * @var array 模板列表
+	 */
 	public $templates = array();
+	/**
+	 * @var array 模板标签
+	 */
 	public $templatetags = array();
+	/**
+	 * @var null 社会化评论
+	 */
 	public $socialcomment = null;
+	/**
+	 * @var null 模板头部
+	 */
 	public $header = null;
+	/**
+	 * @var null 模板尾部
+	 */
 	public $footer = null;
 
+	/**
+	 * @var array 主题列表
+	 */
 	public $themes = array();
+	/**
+	 * @var array 插件列表
+	 */
 	public $plugins = array();
+	/**
+	 * @var array 激活的插件列表
+	 */
 	public $activeapps = array();
 
+	/**
+	 * @var int 管理页面显示条数
+	 */
 	public $managecount = 50;
+	/**
+	 * @var int 页码显示条数
+	 */
 	public $pagebarcount = 10;
+	/**
+	 * @var int 搜索返回条数
+	 */
 	public $searchcount = 10;
+	/**
+	 * @var int 文章列表显示条数
+	 */
 	public $displaycount = 10;
+	/**
+	 * @var int 评论显示数量
+	 */
 	public $commentdisplaycount = 10;
 
+	/**
+	 * @var array 默认侧栏
+	 */
 	public $sidebar =array();
+	/**
+	 * @var array 侧栏2
+	 */
 	public $sidebar2=array();
+	/**
+	 * @var array 侧栏3
+	 */
 	public $sidebar3=array();
+	/**
+	 * @var array 侧栏4
+	 */
 	public $sidebar4=array();
+	/**
+	 * @var array 侧栏5
+	 */
 	public $sidebar5=array();
 
 
+	/**
+	 * 获取唯一实例
+	 * @return null|ZBlogPHP
+	 */
 	static public function GetInstance(){
 		if(!isset(self::$_zbp)){
 			self::$_zbp=new ZBlogPHP;
@@ -97,6 +265,9 @@ class ZBlogPHP{
 		return self::$_zbp;
 	}
 
+	/**
+	 * 构造函数，加载基本配置到$zbp
+	 */
 	function __construct() {
 
 		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,$datainfo,$actions,$action;
@@ -142,10 +313,18 @@ class ZBlogPHP{
 	}
 
 
+	/**
+	 *析构函数，释放资源
+	 */
 	function __destruct(){
 		$this->Terminate();
 	}
 
+	/**
+	 * @param $method
+	 * @param $args
+	 * @return mixed
+	 */
 	function __call($method, $args) {
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Call'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($method, $args);
@@ -154,6 +333,12 @@ class ZBlogPHP{
 		if($this->option['ZC_DEBUG_MODE']==true) $this->ShowError(81,__FILE__,__LINE__);
 	}
 
+	/**
+	 * 设置参数值
+	 * @param $name
+	 * @param $value
+	 * @return mixed
+	 */
 	function __set($name, $value){
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Set'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($name, $value);
@@ -162,6 +347,11 @@ class ZBlogPHP{
 		if($this->option['ZC_DEBUG_MODE']==true) $this->ShowError(81,__FILE__,__LINE__);
 	}
 
+	/**
+	 * 获取参数值
+	 * @param $name
+	 * @return mixed
+	 */
 	function __get($name){
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Get'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($name);
@@ -170,12 +360,13 @@ class ZBlogPHP{
 		if($this->option['ZC_DEBUG_MODE']==true) $this->ShowError(81,__FILE__,__LINE__);
 	}
 
-
-
 ################################################################################################################
+#初始化
 
-
-	#初始化$zbp
+	/**
+	 * 初始化$zbp
+	 * @return bool
+	 */
 	public function Initialize(){
 
 		$oldzone=$this->option['ZC_TIME_ZONE_NAME'];
@@ -195,7 +386,7 @@ class ZBlogPHP{
 		$this->LoadConfigs();
 		$this->LoadCache();
 		$this->LoadOption();
-		
+
 		if($oldlang!=$this->option['ZC_BLOG_LANGUAGEPACK']){
 			$this->lang = require($this->path . 'zb_users/language/' . $this->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 		}
@@ -246,18 +437,22 @@ class ZBlogPHP{
 	}
 
 
+	/**
+	 * 重建索引并载入
+	 * @return bool
+	 */
 	public function Load(){
 
 		if(!$this->isinitialize)return false;
 
 		if($this->isload)return false;
-		
+
 		foreach($this->table as &$tb){
 			$tb=str_replace('%pre%', $this->db->dbpre, $tb);
 		}
 
 		$this->StartGzip();
-		
+
 		header('Content-type: text/html; charset=utf-8');
 
 		$this->LoadMembers();
@@ -301,13 +496,16 @@ class ZBlogPHP{
 		return true;
 	}
 
+	/**
+	 * 载入管理
+	 */
 	public function LoadManage(){
 
 		if($this->user->Status==ZC_MEMBER_STATUS_AUDITING) $this->ShowError(79,__FILE__,__LINE__);
 		if($this->user->Status==ZC_MEMBER_STATUS_LOCKED) $this->ShowError(80,__FILE__,__LINE__);
 
 		$this->CheckTemplate();
-		
+
 		if(GetVars('dishtml5','COOKIE')){
 			$this->option['ZC_ADMIN_HTML5_ENABLE']=false;
 		}else{
@@ -318,7 +516,9 @@ class ZBlogPHP{
 
 	}
 
-	#终止连接，释放资源
+	/**
+	 *终止连接，释放资源
+	 */
 	public function Terminate(){
 		if($this->isinitialize){
 			foreach ($GLOBALS['Filter_Plugin_Zbp_Terminate'] as $fpname => &$fpsignal) $fpname();
@@ -329,58 +529,71 @@ class ZBlogPHP{
 	}
 
 
+	/**
+	 * 初始化数据库连接
+	 * @param string $type 数据连接类型
+	 * @return bool
+	 */
 	public function InitializeDB($type){
 		if(!trim($type))return false;
 		$newtype='Db'.trim($type);
 		$this->db=new $newtype();
 	}
 
+	/**
+	 * 连接数据库
+	 * @return bool
+	 * @throws Exception
+	 */
 	public function OpenConnect(){
 
 		if($this->isconnect)return false;
 		if(!$this->option['ZC_DATABASE_TYPE'])return false;
 		switch ($this->option['ZC_DATABASE_TYPE']) {
-		case 'sqlite':
-		case 'sqlite3':
-			try {
-				$this->InitializeDB($this->option['ZC_DATABASE_TYPE']);
-				if($this->db->Open(array(
-					$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
-					$this->option['ZC_SQLITE_PRE']
-					))==false){
-					$this->ShowError(69,__FILE__,__LINE__);
+			case 'sqlite':
+			case 'sqlite3':
+				try {
+					$this->InitializeDB($this->option['ZC_DATABASE_TYPE']);
+					if($this->db->Open(array(
+							$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
+							$this->option['ZC_SQLITE_PRE']
+						))==false){
+						$this->ShowError(69,__FILE__,__LINE__);
+					}
+				} catch (Exception $e) {
+					throw new Exception("SQLite DateBase Connection Error.");
 				}
-			} catch (Exception $e) {
-				throw new Exception("SQLite DateBase Connection Error.");
-			}
-			break;
-		case 'mysql':
-		case 'mysqli':
-		case 'pdo_mysql':
-		default:
-			try {
-				$this->InitializeDB($this->option['ZC_DATABASE_TYPE']);
-				if($this->db->Open(array(
-						$this->option['ZC_MYSQL_SERVER'],
-						$this->option['ZC_MYSQL_USERNAME'],
-						$this->option['ZC_MYSQL_PASSWORD'],
-						$this->option['ZC_MYSQL_NAME'],
-						$this->option['ZC_MYSQL_PRE'],
-						$this->option['ZC_MYSQL_PORT'],
-						$this->option['ZC_MYSQL_PERSISTENT']
-					))==false){
-					$this->ShowError(67,__FILE__,__LINE__);
+				break;
+			case 'mysql':
+			case 'mysqli':
+			case 'pdo_mysql':
+			default:
+				try {
+					$this->InitializeDB($this->option['ZC_DATABASE_TYPE']);
+					if($this->db->Open(array(
+							$this->option['ZC_MYSQL_SERVER'],
+							$this->option['ZC_MYSQL_USERNAME'],
+							$this->option['ZC_MYSQL_PASSWORD'],
+							$this->option['ZC_MYSQL_NAME'],
+							$this->option['ZC_MYSQL_PRE'],
+							$this->option['ZC_MYSQL_PORT'],
+							$this->option['ZC_MYSQL_PERSISTENT']
+						))==false){
+						$this->ShowError(67,__FILE__,__LINE__);
+					}
+				} catch (Exception $e) {
+					throw new Exception("MySQL DateBase Connection Error.");
 				}
-			} catch (Exception $e) {
-				throw new Exception("MySQL DateBase Connection Error.");
-			}
-			break;
+				break;
 		}
 		$this->isconnect=true;
 		return true;
 
 	}
 
+	/**
+	 * 关闭数据库连接
+	 */
 	public function CloseConnect(){
 		if($this->isconnect){
 			$this->db->Close();
@@ -389,6 +602,10 @@ class ZBlogPHP{
 	}
 
 
+	/**
+	 * 启用session
+	 * @return bool
+	 */
 	public function StartSession(){
 		if($this->issession==true)return false;
 		session_start();
@@ -397,6 +614,10 @@ class ZBlogPHP{
 	}
 
 
+	/**
+	 * 终止session
+	 * @return bool
+	 */
 	public function EndSession(){
 		if($this->issession==false)return false;
 		session_unset();
@@ -405,13 +626,12 @@ class ZBlogPHP{
 		return true;
 	}
 
-
 ################################################################################################################
 #插件用Configs表相关设置函数
 
-
-
-
+	/**
+	 * 载入插件Configs表
+	 */
 	public function LoadConfigs(){
 
 		$this->configs=array();
@@ -424,12 +644,22 @@ class ZBlogPHP{
 		}
 	}
 
+	/**
+	 * 删除Configs表
+	 * @param string $name Configs表名
+	 * @return bool
+	 */
 	public function DelConfig($name){
 		$sql = $this->db->sql->Delete($this->table['Config'],array(array('=','conf_Name',$name)));
 		$this->db->Delete($sql);
 		return true;
 	}
 
+	/**
+	 * 保存Configs表
+	 * @param string $name Configs表名
+	 * @return bool
+	 */
 	public function SaveConfig($name){
 
 		if(!isset($this->configs[$name]))return false;
@@ -450,6 +680,11 @@ class ZBlogPHP{
 		return true;
 	}
 
+	/**
+	 * 获取Configs表值
+	 * @param string $name Configs表名
+	 * @return mixed
+	 */
 	public function Config($name){
 		if(!isset($this->configs[$name])){
 			$m=new Metas;
@@ -458,15 +693,13 @@ class ZBlogPHP{
 		return $this->configs[$name];
 	}
 
-
-
-
-
-
 ################################################################################################################
 #Cache相关
 
-
+	/**
+	 * 保存缓存
+	 * @return bool
+	 */
 	public function SaveCache(){
 		#$s=$this->usersdir . 'cache/' . $this->guid . '.cache';
 		#$c=serialize($this->cache);
@@ -476,6 +709,10 @@ class ZBlogPHP{
 		return true;
 	}
 
+	/**
+	 * 加载缓存
+	 * @return bool
+	 */
 	public function LoadCache(){
 		#$s=$this->usersdir . 'cache/' . $this->guid . '.cache';
 		#if (file_exists($s))
@@ -486,17 +723,13 @@ class ZBlogPHP{
 		return true;
 	}
 
-
-
-
-
-
-
 ################################################################################################################
 #保存zbp设置函数
 
-
-
+	/**
+	 * 保存配置
+	 * @return bool
+	 */
 	public function SaveOption(){
 
 		$this->option['ZC_BLOG_CLSID']=$this->guid;
@@ -517,7 +750,10 @@ class ZBlogPHP{
 	}
 
 
-
+	/**
+	 * 载入配置
+	 * @return bool
+	 */
 	public function LoadOption(){
 
 		$array=$this->Config('system')->Data;
@@ -547,18 +783,14 @@ class ZBlogPHP{
 		return true;
 	}
 
-
-
-
-
-
-
 ################################################################################################################
 #权限及验证类
 
-
-
-
+	/**
+	 * 验证操作权限
+	 * @param string $action 操作
+	 * @return bool
+	 */
 	function CheckRights($action){
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckRights'] as $fpname => &$fpsignal) {
@@ -582,6 +814,12 @@ class ZBlogPHP{
 		}
 	}
 
+	/**
+	 * 根据用户等级验证操作权限
+	 * @param int $level 用户等级
+	 * @param string $action 操作
+	 * @return bool
+	 */
 	function CheckRightsByLevel($level,$action){
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckRightsByLevel'] as $fpname => &$fpsignal) {
@@ -605,10 +843,20 @@ class ZBlogPHP{
 
 	}
 
+	/**
+	 * 验证用户登录(COOKIE中的用户名密码)
+	 * @return bool
+	 */
 	public function Verify(){
 		return $this->Verify_MD5Path(GetVars('username','COOKIE'),GetVars('password','COOKIE'));
 	}
 
+	/**
+	 * 验证用户登录（二次MD5密码）
+	 * @param string $name 用户名
+	 * @param string $ps_and_path 二次md5加密后的密码
+	 * @return bool
+	 */
 	public function Verify_MD5Path($name,$ps_and_path){
 		if (isset($this->membersbyname[$name])){
 			$m=$this->membersbyname[$name];
@@ -621,6 +869,12 @@ class ZBlogPHP{
 		}
 	}
 
+	/**
+	 * 验证用户登录（一次MD5密码）
+	 * @param string $name 用户名
+	 * @param string $md5pw md5加密后的密码
+	 * @return bool
+	 */
 	public function Verify_MD5($name,$md5pw){
 		if (isset($this->membersbyname[$name])){
 			$m=$this->membersbyname[$name];
@@ -630,10 +884,22 @@ class ZBlogPHP{
 		}
 	}
 
+	/**
+	 * 验证用户登录（加盐的密码）
+	 * @param string $name 用户名
+	 * @param string $originalpw 密码明文与Guid连接后的字符串
+	 * @return bool
+	 */
 	public function Verify_Original($name,$originalpw){
 		return $this->Verify_MD5($name,md5($originalpw));
 	}
 
+	/**
+	 * 验证用户登录
+	 * @param string $name 用户名
+	 * @param string $password 二次加密后的密码
+	 * @return bool
+	 */
 	public function Verify_Final($name,$password){
 		if (isset($this->membersbyname[$name])){
 			$m=$this->membersbyname[$name];
@@ -656,64 +922,77 @@ class ZBlogPHP{
 
 ################################################################################################################
 #
-function BuildModule(){
+	/**
+	 * 生成模块
+	 */
+	function BuildModule(){
 
-	foreach ($GLOBALS['Filter_Plugin_Zbp_BuildModule'] as $fpname => &$fpsignal)$fpname();
+		foreach ($GLOBALS['Filter_Plugin_Zbp_BuildModule'] as $fpname => &$fpsignal)$fpname();
 
-	foreach ($this->readymodules as $modfilename) {
-		if(isset($this->modulesbyfilename[$modfilename])){
-			if(isset($this->readymodules_function[$modfilename])){
-				$m=$this->modulesbyfilename[$modfilename];
-				if($m->NoRefresh==true)continue;
-				if(function_exists($this->readymodules_function[$modfilename])){
-					if(!isset($this->readymodules_parameters[$modfilename])){
-						$m->Content=call_user_func($this->readymodules_function[$modfilename]);
-					}else{
-						$m->Content=call_user_func($this->readymodules_function[$modfilename],$this->readymodules_parameters[$modfilename]);
+		foreach ($this->readymodules as $modfilename) {
+			if(isset($this->modulesbyfilename[$modfilename])){
+				if(isset($this->readymodules_function[$modfilename])){
+					$m=$this->modulesbyfilename[$modfilename];
+					if($m->NoRefresh==true)continue;
+					if(function_exists($this->readymodules_function[$modfilename])){
+						if(!isset($this->readymodules_parameters[$modfilename])){
+							$m->Content=call_user_func($this->readymodules_function[$modfilename]);
+						}else{
+							$m->Content=call_user_func($this->readymodules_function[$modfilename],$this->readymodules_parameters[$modfilename]);
+						}
 					}
+					$m->Save();
 				}
-				$m->Save();
 			}
 		}
+
 	}
 
-}
-
-function RegBuildModule($modfilename,$userfunc){
-	$this->readymodules_function[$modfilename]=$userfunc;
-}
-
-function AddBuildModule($modfilename,$parameters=null){
-	$this->readymodules[$modfilename]=$modfilename;
-	$this->readymodules_parameters[$modfilename]=$parameters;
-}
-
-function DelBuildModule($modfilename){
-	unset($this->readymodules[$modfilename]);
-	unset($this->readymodules_function[$modfilename]);
-	unset($this->readymodules_parameters[$modfilename]);
-}
-
-function AddBuildModuleAll(){
-
-	$m=array('catalog','calendar','comments','previous','archives','navbar','tags','authors');
-
-	foreach ($m as $key => $value) {
-		$this->readymodules[$value]=$value;
+	/**
+	 * 重建模块
+	 * @param string $modfilename 模块名
+	 * @param string $userfunc 用户函数
+	 */
+	function RegBuildModule($modfilename,$userfunc){
+		$this->readymodules_function[$modfilename]=$userfunc;
 	}
-}
 
+	/**
+	 * 添加模块
+	 * @param string $modfilename 模块名
+	 * @param null $parameters 模块参数
+	 */
+	function AddBuildModule($modfilename,$parameters=null){
+		$this->readymodules[$modfilename]=$modfilename;
+		$this->readymodules_parameters[$modfilename]=$parameters;
+	}
 
+	/**
+	 * 删除模块
+	 * @param string $modfilename 模块名
+	 */
+	function DelBuildModule($modfilename){
+		unset($this->readymodules[$modfilename]);
+		unset($this->readymodules_function[$modfilename]);
+		unset($this->readymodules_parameters[$modfilename]);
+	}
 
-
-
+	/**
+	 * 所有模块重置
+	 */
+	function AddBuildModuleAll(){
+		$m=array('catalog','calendar','comments','previous','archives','navbar','tags','authors');
+		foreach ($m as $key => $value) {
+			$this->readymodules[$value]=$value;
+		}
+	}
 
 ################################################################################################################
 #加载函数
 
-
-
-
+	/**
+	 *载入用户列表
+	 */
 	public function LoadMembers(){
 
 		$array=$this->GetMemberList();
@@ -723,6 +1002,10 @@ function AddBuildModuleAll(){
 		}
 	}
 
+	/**
+	 * 载入分类列表
+	 * @return bool
+	 */
 	public function LoadCategorys(){
 
 		$lv0=array();
@@ -773,6 +1056,9 @@ function AddBuildModuleAll(){
 		}
 	}
 
+	/**
+	 *载入标签列表
+	 */
 	public function LoadTags(){
 
 		$array=$this->GetTagList();
@@ -783,6 +1069,10 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 * 载入模块列表
+	 * @return null
+	 */
 	public function LoadModules(){
 
 		$array=$this->GetModuleList();
@@ -807,6 +1097,9 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 *载入当前主题
+	 */
 	public function LoadThemes(){
 		$dirs=GetDirsInDir($this->usersdir . 'theme/');
 
@@ -819,6 +1112,9 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 *载入插件列表
+	 */
 	public function LoadPlugins(){
 		$dirs=GetDirsInDir($this->usersdir . 'plugin/');
 
@@ -831,20 +1127,24 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 * 载入应用列表
+	 * @param string $type 应用类型
+	 * @param string $id 应用ID
+	 * @return App
+	 */
 	public function LoadApp($type,$id){
 		$app = new App;
 		$app->LoadInfoByXml($type,$id);
 		return $app;
 	}
 
-
-
 ################################################################################################################
 #模板相关函数
 
-
-
-
+	/**
+	 *解析模板标签
+	 */
 	public function MakeTemplatetags(){
 
 		$this->templatetags=array();
@@ -918,19 +1218,26 @@ function AddBuildModuleAll(){
 		}
 
 	}
-	
+
+	/**
+	 * 预加载模板
+	 * @return Template
+	 */
 	public function PrepareTemplate(){
 		//创建模板类
 		$template = new Template();
 		$template->SetPath($this->usersdir . 'theme/'. $this->theme .'/compile/');
 		$template->SetTagsAll($this->templatetags);
-		
+
 		foreach ($GLOBALS['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($template);
 		}
 		return $template;
 	}
 
+	/**
+	 *载入模板
+	 */
 	public function LoadTemplate(){
 
 		$this->templates=array();
@@ -959,12 +1266,16 @@ function AddBuildModuleAll(){
 		if(!isset($this->templates['sidebar5'])){
 			$this->templates['sidebar5']=str_replace('$sidebar', '$sidebar5', $this->templates['sidebar']);
 		}
-		
+
 		foreach ($GLOBALS['Filter_Plugin_Zbp_LoadTemplate'] as $fpname => &$fpsignal) {
 			$fpname($this->templates);
 		}
 	}
 
+	/**
+	 * 模板解析
+	 * @return bool
+	 */
 	public function BuildTemplate(){
 
 		if( strpos('|SAE|BAE2|ACE|TXY|', '|'.$this->option['ZC_YUN_SITE'].'|')!==false )return false;
@@ -1051,6 +1362,9 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 *更新模板缓存
+	 */
 	public function CheckTemplate(){
 		$s=implode($this->templates);
 		$md5=md5($s);
@@ -1061,14 +1375,16 @@ function AddBuildModuleAll(){
 		}
 	}
 
-
-
-
-
 ################################################################################################################
 #加载数据对像List函数
 
-
+	/**
+	 * 自定义查询语句获取数据库数据列表
+	 * @param string $table 数据表
+	 * @param string $datainfo 数据字段
+	 * @param string $sql SQL操作语句
+	 * @return array
+	 */
 	function GetListCustom($table,$datainfo,$sql){
 
 		$array=null;
@@ -1084,7 +1400,11 @@ function AddBuildModuleAll(){
 	}
 
 
-
+	/**
+	 * @param $type
+	 * @param $sql
+	 * @return array
+	 */
 	function GetList($type,$sql){
 
 		$array=null;
@@ -1099,6 +1419,14 @@ function AddBuildModuleAll(){
 		return $list;
 	}
 
+	/**
+	 * @param null $select
+	 * @param null $where
+	 * @param null $order
+	 * @param null $limit
+	 * @param null $option
+	 * @return array
+	 */
 	function GetPostList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
@@ -1108,6 +1436,15 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 * @param null $select
+	 * @param null $where
+	 * @param null $order
+	 * @param null $limit
+	 * @param null $option
+	 * @param bool $readtags
+	 * @return array
+	 */
 	function GetArticleList($select=null,$where=null,$order=null,$limit=null,$option=null,$readtags=true){
 
 		if(empty($select)){$select = array('*');}
@@ -1129,6 +1466,14 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 * @param null $select
+	 * @param null $where
+	 * @param null $order
+	 * @param null $limit
+	 * @param null $option
+	 * @return array
+	 */
 	function GetPageList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
@@ -1143,6 +1488,14 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 * @param null $select
+	 * @param null $where
+	 * @param null $order
+	 * @param null $limit
+	 * @param null $option
+	 * @return array
+	 */
 	function GetCommentList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
@@ -1155,6 +1508,14 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 * @param null $select
+	 * @param null $where
+	 * @param null $order
+	 * @param null $limit
+	 * @param null $option
+	 * @return array
+	 */
 	function GetMemberList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
@@ -1163,6 +1524,14 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 * @param null $select
+	 * @param null $where
+	 * @param null $order
+	 * @param null $limit
+	 * @param null $option
+	 * @return array
+	 */
 	function GetTagList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
@@ -1171,6 +1540,14 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 * @param null $select
+	 * @param null $where
+	 * @param null $order
+	 * @param null $limit
+	 * @param null $option
+	 * @return array
+	 */
 	function GetCategoryList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
@@ -1179,6 +1556,14 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 * @param null $select
+	 * @param null $where
+	 * @param null $order
+	 * @param null $limit
+	 * @param null $option
+	 * @return array
+	 */
 	function GetModuleList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
@@ -1186,6 +1571,14 @@ function AddBuildModuleAll(){
 		return $this->GetList('Module',$sql);
 	}
 
+	/**
+	 * @param null $select
+	 * @param null $where
+	 * @param null $order
+	 * @param null $limit
+	 * @param null $option
+	 * @return array
+	 */
 	function GetUploadList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
@@ -1193,6 +1586,14 @@ function AddBuildModuleAll(){
 		return $this->GetList('Upload',$sql);
 	}
 
+	/**
+	 * @param null $select
+	 * @param null $where
+	 * @param null $order
+	 * @param null $limit
+	 * @param null $option
+	 * @return array
+	 */
 	function GetCounterList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
@@ -1204,6 +1605,10 @@ function AddBuildModuleAll(){
 ################################################################################################################
 #wp类似
 
+	/**
+	 * @param $sql
+	 * @return mixed
+	 */
 	function get_results($sql){
 		return $this->db->Query($sql);
 	}
@@ -1213,6 +1618,11 @@ function AddBuildModuleAll(){
 #读取对象函数
 
 
+	/**
+	 * 通过ID获取文章实例
+	 * @param int $id
+	 * @return Post
+	 */
 	function GetPostByID($id){
 		if($id==0)return new Post;
 		if(isset($this->posts[$id])){
@@ -1225,6 +1635,11 @@ function AddBuildModuleAll(){
 		}
 	}
 
+	/**
+	 * 通过ID获取分类实例
+	 * @param int $id
+	 * @return Category
+	 */
 	function GetCategoryByID($id){
 		if(isset($this->categorys[$id])){
 			return $this->categorys[$id];
@@ -1233,6 +1648,11 @@ function AddBuildModuleAll(){
 		}
 	}
 
+	/**
+	 * 通过分类名获取分类实例
+	 * @param string $name
+	 * @return Category
+	 */
 	function GetCategoryByName($name){
 		$name=trim($name);
 		foreach ($this->categorys as $key => &$value) {
@@ -1243,6 +1663,11 @@ function AddBuildModuleAll(){
 		return new Category;
 	}
 
+	/**
+	 * 通过分类别名获取分类实例
+	 * @param string $name
+	 * @return Category
+	 */
 	function GetCategoryByAliasOrName($name){
 		$name=trim($name);
 		foreach ($this->categorys as $key => &$value) {
@@ -1253,6 +1678,11 @@ function AddBuildModuleAll(){
 		return new Category;
 	}
 
+	/**
+	 * 通过ID获取模块实例
+	 * @param int $id
+	 * @return Module
+	 */
 	function GetModuleByID($id){
 		if($id==0){
 			$m = new Module;
@@ -1266,6 +1696,11 @@ function AddBuildModuleAll(){
 		}
 	}
 
+	/**
+	 * 通过ID获取用户实例
+	 * @param int $id
+	 * @return Member
+	 */
 	function GetMemberByID($id){
 		if(isset($this->members[$id])){
 			return $this->members[$id];
@@ -1275,6 +1710,11 @@ function AddBuildModuleAll(){
 		return $m;
 	}
 
+	/**
+	 * 通过用户获取用户实例
+	 * @param string $name
+	 * @return Member
+	 */
 	function GetMemberByAliasOrName($name){
 		$name=trim($name);
 		foreach ($this->members as $key => &$value) {
@@ -1285,6 +1725,11 @@ function AddBuildModuleAll(){
 		return new Member;
 	}
 
+	/**
+	 * 通过ID获取评论实例
+	 * @param int $id
+	 * @return Comment
+	 */
 	function GetCommentByID($id){
 		if(isset($this->comments[$id])){
 			return $this->comments[$id];
@@ -1300,6 +1745,11 @@ function AddBuildModuleAll(){
 		}
 	}
 
+	/**
+	 * 通过ID获取附件实例
+	 * @param int $id
+	 * @return Upload
+	 */
 	function GetUploadByID($id){
 		$m = new Upload;
 		if($id>0){
@@ -1308,6 +1758,11 @@ function AddBuildModuleAll(){
 		return $m;
 	}
 
+	/**
+	 * 通过ID获取审计类实例
+	 * @param int $id
+	 * @return Counter
+	 */
 	function GetCounterByID($id){
 		$m = new Counter;
 		if($id>0){
@@ -1316,6 +1771,11 @@ function AddBuildModuleAll(){
 		return $m;
 	}
 
+	/**
+	 * 通过tag名获取tag实例
+	 * @param string $name
+	 * @return Tag
+	 */
 	function GetTagByAliasOrName($name){
 		$a=array();
 		$a[]=array('tag_Alias',$name);
@@ -1330,6 +1790,11 @@ function AddBuildModuleAll(){
 		}
 	}
 
+	/**
+	 * 通过ID获取tag实例
+	 * @param int $id
+	 * @return Tag
+	 */
 	function GetTagByID($id){
 		if(isset($this->tags[$id])){
 			return $this->tags[$id];
@@ -1346,7 +1811,11 @@ function AddBuildModuleAll(){
 		}
 	}
 
-	#load tags '{1}{2}{3}{4}{4}'
+	/**
+	 * 通过类似'{1}{2}{3}{4}{4}'载入tags
+	 * @param $s
+	 * @return array
+	 */
 	function LoadTagsByIDString($s){
 		if($s=='')return array();
 		$s=str_replace('}{', '|', $s);
@@ -1388,7 +1857,12 @@ function AddBuildModuleAll(){
 			return $b+$t;
 		}
 	}
-	#load tags 'aaa,bbb,ccc,ddd'
+
+	/**
+	 * 通过类似'aaa,bbb,ccc,ddd'载入tags
+	 * @param string $s 标签名字符串，如'aaa,bbb,ccc,ddd
+	 * @return array
+	 */
 	function LoadTagsByNameString($s){
 		$s=str_replace(';', ',', $s);
 		$s=str_replace('，', ',', $s);
@@ -1426,14 +1900,14 @@ function AddBuildModuleAll(){
 		}
 	}
 
-
-
-
-
-
-
 ################################################################################################################
 #杂项
+	/**
+	 * 验证评论key
+	 * @param $id
+	 * @param $key
+	 * @return bool
+	 */
 	function VerifyCmtKey($id,$key){
 		$nowkey=md5($this->guid . $id . date('Y-m-d'));
 		$nowkey2=md5($this->guid . $id . date('Y-m-d',time()-(3600*24)));
@@ -1442,12 +1916,24 @@ function AddBuildModuleAll(){
 		}
 	}
 
+	/**
+	 * 检查应用是否安装
+	 * @param string $name 应用ID
+	 * @return bool
+	 */
 	function CheckPlugin($name){
 		$s=$this->option['ZC_BLOG_THEME'] . '|' . $this->option['ZC_USING_PLUGIN_LIST'];
 		return HasNameInString($s,$name);
 	}
 
 	#$type=category,tag,page,item
+	/**
+	 * 向导航菜单添加相应条目
+	 * @param string $type $type=category,tag,page,item
+	 * @param string $id
+	 * @param string $name
+	 * @param string $url
+	 */
 	function AddItemToNavbar($type='item',$id,$name,$url){
 
 		if(!$type)$type='item';
@@ -1468,6 +1954,11 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 * 删除导航菜单中相应条目
+	 * @param string $type
+	 * @param $id
+	 */
 	function DelItemToNavbar($type='item',$id){
 
 		if(!$type)$type='item';
@@ -1481,6 +1972,12 @@ function AddBuildModuleAll(){
 
 	}
 
+	/**
+	 * 检查条目是否在导航菜单中
+	 * @param string $type
+	 * @param $id
+	 * @return bool
+	 */
 	function CheckItemToNavbar($type='item',$id){
 
 		if(!$type)$type='item';
@@ -1492,6 +1989,11 @@ function AddBuildModuleAll(){
 
 	#$signal = good,bad,tips
 	private $hint1=null,$hint2=null,$hint3=null,$hint4=null,$hint5=null;
+	/**
+	 * 设置提示消息并存入Cookie
+	 * @param string $signal 提示类型（good|bad|tips）
+	 * @param string $content 提示内容
+	 */
 	function SetHint($signal,$content=''){
 		if($content==''){
 			if($signal=='good')$content=$this->lang['msg']['operation_succeed'];
@@ -1515,6 +2017,9 @@ function AddBuildModuleAll(){
 		}
 	}
 
+	/**
+	 * 提取Cookie中的提示消息
+	 */
 	function GetHint(){
 		for ($i = 1; $i <= 5; $i++) {
 			$signal=GetVars('hint_signal' . $i,'COOKIE');
@@ -1526,6 +2031,11 @@ function AddBuildModuleAll(){
 		}
 	}
 
+	/**
+	 * 显示提示消息
+	 * @param string $signal 提示类型（good|bad|tips）
+	 * @param string $content 提示内容
+	 */
 	function ShowHint($signal,$content=''){
 		if($content==''){
 			if($signal=='good')$content=$this->lang['msg']['operation_succeed'];
@@ -1534,6 +2044,15 @@ function AddBuildModuleAll(){
 		echo "<div class='hint'><p class='hint hint_$signal'>$content</p></div>";
 	}
 
+	/**
+	 * 显示错误信息
+	 * @api Filter_Plugin_Zbp_ShowError
+	 * @param $idortext
+	 * @param null $file
+	 * @param null $line
+	 * @return mixed
+	 * @throws Exception
+	 */
 	function ShowError($idortext,$file=null,$line=null){
 
 		if((int)$idortext==2){
@@ -1554,11 +2073,19 @@ function AddBuildModuleAll(){
 		throw new Exception($idortext);
 	}
 
-
+	/**
+	 * 获取会话Token
+	 * @return string
+	 */
 	function GetToken(){
 		return md5($this->guid . date('Ymd') . $this->user->Name . $this->user->Password);
 	}
 
+	/**
+	 * 验证会话Token
+	 * @param $t
+	 * @return bool
+	 */
 	function ValidToken($t){
 		if($t==md5($this->guid . date('Ymd') . $this->user->Name . $this->user->Password)){
 			return true;
@@ -1569,7 +2096,13 @@ function AddBuildModuleAll(){
 		return false;
 	}
 
-
+	/**
+	 * 显示验证码
+	 *
+	 * @api Filter_Plugin_Zbp_ShowValidCode 如该接口未被挂载则显示默认验证图片
+	 * @param string $id 页面ID
+	 * @return mixed
+	 */
 	function ShowValidCode($id=''){
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_ShowValidCode'] as $fpname => &$fpsignal) {
@@ -1582,6 +2115,14 @@ function AddBuildModuleAll(){
 	}
 
 
+	/**
+	 * 比对验证码
+	 *
+	 * @api Filter_Plugin_Zbp_CheckValidCode 如该接口未被挂载则比对默认验证码
+	 * @param string $vaidcode 验证码数值
+	 * @param string $id 页面ID
+	 * @return bool
+	 */
 	function CheckValidCode($vaidcode,$id=''){
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckValidCode'] as $fpname => &$fpsignal) {
@@ -1593,10 +2134,16 @@ function AddBuildModuleAll(){
 	}
 
 
+	/**
+	 * 检查Gzip
+	 */
 	function CheckGzip(){
 		$this->isgzip=true;
 	}
 
+	/**
+	 * 启用Gzip
+	 */
 	function StartGzip(){
 		if($this->isgziped)return false;
 
@@ -1615,8 +2162,10 @@ function AddBuildModuleAll(){
 			}
 		}
 	}
-
-
+	/**
+	 * 跳转到安装页面
+	 * @param bool $yun 是否云主机（SAE等）
+	 */
 	function  RedirectInstall($yun=false){
 		if(!$yun){
 			if(!$this->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/index.php');}
@@ -1626,5 +2175,5 @@ function AddBuildModuleAll(){
 			}
 		}
 	}
-	
+
 }

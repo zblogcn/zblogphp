@@ -1,20 +1,19 @@
 <?php
 /**
- * ´íÎóµ÷ÊÔ
+ * é”™è¯¯è°ƒè¯•
  * @package Z-BlogPHP
- * @subpackage System/Debug ´íÎóµ÷ÊÔ
+ * @subpackage System/Debug é”™è¯¯è°ƒè¯•
  * @copyright (C) RainbowSoft Studio
  */
 
 /**
- * ´íÎóµ÷¶ÈÌáÊ¾
- * @param int $errno ´íÎó¼¶±ğ
- * @param string $errstr ´íÎóĞÅÏ¢
- * @param string $errfile ´íÎóÎÄ¼şÃû
- * @param int $errline ´íÎóĞĞ
+ * é”™è¯¯è°ƒåº¦æç¤º
+ * @param int $errno é”™è¯¯çº§åˆ«
+ * @param string $errstr é”™è¯¯ä¿¡æ¯
+ * @param string $errfile é”™è¯¯æ–‡ä»¶å
+ * @param int $errline é”™è¯¯è¡Œ
  * @return bool
  */
-
 function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
 
@@ -44,8 +43,8 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 }
 
 /**
- * Òì³£´¦Àí
- * @param $exception Òì³£ÊÂ¼ş
+ * å¼‚å¸¸å¤„ç†
+ * @param $exception å¼‚å¸¸äº‹ä»¶
  * @return bool
  */
 function Debug_Exception_Handler($exception) {
@@ -59,7 +58,7 @@ function Debug_Exception_Handler($exception) {
 }
 
 /**
- * µ±»ú´íÎó´¦Àí
+ * å½“æœºé”™è¯¯å¤„ç†
  * @return bool
  */
 function Debug_Shutdown_Handler() {
@@ -108,7 +107,7 @@ class ZBlogException {
 	public $errarray=array();
 
 	/**
-	 * ¹¹Ôìº¯Êı£¬¶¨Òå³£¼û´íÎó´úÂë
+	 * æ„é€ å‡½æ•°ï¼Œå®šä¹‰å¸¸è§é”™è¯¯ä»£ç 
 	 */
 	function __construct(){
 		$this->errarray=array(
@@ -132,7 +131,7 @@ class ZBlogException {
 	}
 
 	/**
-	* »ñÈ¡²ÎÊı
+	* è·å–å‚æ•°
 	* @param $name
 	* @return mixed
 	*/
@@ -147,7 +146,7 @@ class ZBlogException {
 	}
 	
 	/**
-	* »ñÈ¡µ¥Ò»ÊµÀı
+	* è·å–å•ä¸€å®ä¾‹
 	* @return ZBlogException
 	*/
 	static public function GetInstance() {
@@ -159,7 +158,7 @@ class ZBlogException {
 	}
 
 	/**
-	* Éè¶¨´íÎó´¦Àíº¯Êı
+	* è®¾å®šé”™è¯¯å¤„ç†å‡½æ•°
 	*/
 	static public function SetErrorHook() {
 		set_error_handler('Debug_Error_Handler');
@@ -168,7 +167,7 @@ class ZBlogException {
 	}
 
 	/**
-	* Çå³ı´íÎóĞÅÏ¢
+	* æ¸…é™¤é”™è¯¯ä¿¡æ¯
 	*/
 	static public function ClearErrorHook() {
 		#set_error_handler(create_function('', ''));
@@ -178,7 +177,7 @@ class ZBlogException {
 	}
 
 	/**
-	* ½ûÖ¹´íÎóµ÷¶È
+	* ç¦æ­¢é”™è¯¯è°ƒåº¦
 	*/
 	static public function DisableErrorHook() {
 		self::$isdisable = true;
@@ -220,7 +219,7 @@ class ZBlogException {
 	}
 
 	/**
-	* ½âÎö´íÎóĞÅÏ¢
+	* è§£æé”™è¯¯ä¿¡æ¯
 	* @param $type
 	* @param $message
 	* @param $file
@@ -236,7 +235,7 @@ class ZBlogException {
 	}
 
 	/**
-	* ½âÎö´íÎóĞÅÏ¢
+	* è§£æé”™è¯¯ä¿¡æ¯
 	* @param $error
 	*/
 	function ParseShutdown($error) {
@@ -248,7 +247,7 @@ class ZBlogException {
 	}
 
 	/**
-	* ½âÎöÒì³£ĞÅÏ¢
+	* è§£æå¼‚å¸¸ä¿¡æ¯
 	* @param $exception
 	*/
 	function ParseException($exception) {
@@ -266,7 +265,7 @@ class ZBlogException {
 	}
 
 	/**
-	* Êä³ö´íÎóĞÅÏ¢
+	* è¾“å‡ºé”™è¯¯ä¿¡æ¯
 	*/
 	function Display() {
 
@@ -280,7 +279,7 @@ class ZBlogException {
 	}
 
 	/**
-	* »ñÈ¡³ö´í´úÂëĞÅÏ¢
+	* è·å–å‡ºé”™ä»£ç ä¿¡æ¯
 	* @param $file
 	* @param $line
 	* @return array

@@ -1,15 +1,15 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author 
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * 审计类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/Article 类库
  */
+class Counter extends Base {
 
-
-class Counter extends Base{
-
-
+	/**
+	* 构造函数
+	*/
 	function __construct()
 	{
 		global $zbp;
