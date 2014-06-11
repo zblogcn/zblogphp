@@ -157,14 +157,15 @@ class Networkfsockopen implements iNetwork {
 		}
 
 		$this->httpheader[] = 'Host: ' . $this->parsed_url['host'];
+		$this->httpheader[] = 'Referer: ' . 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 		$this->httpheader[] = 'Connection: close';
-		
+
 		if(!isset($this->httpheader['Accept'])){
 			if(isset($_SERVER['HTTP_ACCEPT'])){
 				$this->httpheader['Accept']='Accept:' . $_SERVER['HTTP_ACCEPT'];
 			}
 		}
-		
+
 		if(!isset($this->httpheader['Accept-Language'])){
 			if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
 				$this->httpheader['Accept-Language']='Accept-Language: ' . $_SERVER['HTTP_ACCEPT_LANGUAGE'];
