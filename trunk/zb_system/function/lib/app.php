@@ -463,10 +463,10 @@ class App {
 		$type=$xml['type'];
 		$id=$xml->id;
 		$dir=$zbp->path . 'zb_users/' . $type . '/';
+		
+		ZBlogException::SuspendErrorHook();
 
 		if(!file_exists($dir . $id . '/'))@mkdir($dir . $id . '/',0755,true);
-
-		set_error_handler(create_function('',''));
 
 		foreach ($xml->folder as $folder) {
 			$f=$dir . $folder->path;
@@ -483,6 +483,8 @@ class App {
 			}
 
 		}
+		
+		ZBlogException::ResumeErrorHook();
 
 		return true;
 	}

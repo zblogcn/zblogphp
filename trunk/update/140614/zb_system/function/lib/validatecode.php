@@ -1,12 +1,10 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * 验证码类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/Article 类库
  */
-
-//验证码类
 class ValidateCode {
 	protected $charset = 'ABCDEFGHKMNPRSTUVWXYZ123456789';
 	protected $code;//验证码
@@ -18,7 +16,9 @@ class ValidateCode {
 	protected $fontsize = 15;//字体大小
 	protected $fontcolor;//字体颜色
 
-	//构造方法初始化
+	/**
+	 *构造方法初始化
+	 */
 	public function __construct() {
 		global $zbp;
 		$this->font = $zbp->path . (isset($zbp->option['ZC_VERIFYCODE_FONT'])?$zbp->option['ZC_VERIFYCODE_FONT']:'zb_system/defend/arial.ttf');
@@ -27,7 +27,9 @@ class ValidateCode {
 		$this->height = $zbp->option['ZC_VERIFYCODE_HEIGHT'];
 	}
 
-	//生成随机码
+	/**
+	 *生成随机码
+	 */
 	protected function createCode() {
 		$_len = strlen($this->charset)-1;
 		for ($i=0;$i<$this->codelen;$i++) {
@@ -35,14 +37,18 @@ class ValidateCode {
 		}
 	}
 
-	//生成背景
+	/**
+	 *生成背景
+	 */
 	protected function createBg() {
 		$this->img = imagecreatetruecolor($this->width, $this->height);
 		$color = imagecolorallocate($this->img, mt_rand(157,255), mt_rand(157,255), mt_rand(157,255));
 		imagefilledrectangle($this->img,0,$this->height,$this->width,0,$color);
 	}
 
-	//生成文字
+	/**
+	 *生成文字
+	 */
 	protected function createFont() {
 		$_x = $this->width / $this->codelen;
 		for ($i=0;$i<$this->codelen;$i++) {
@@ -51,7 +57,9 @@ class ValidateCode {
 		}
 	}
 
-	//生成线条、雪花
+	/**
+	 *生成线条、雪花
+	 */
 	protected function createLine() {
 		for ($i=0;$i<6;$i++) {
 			$color = imagecolorallocate($this->img,mt_rand(0,156),mt_rand(0,156),mt_rand(0,156));
@@ -63,14 +71,18 @@ class ValidateCode {
 		}
 	}
 
-	//输出
+	/**
+	 *输出
+	 */
 	protected function outPut() {
 		header('Content-type:image/png');
 		imagepng($this->img);
 		imagedestroy($this->img);
 	}
 
-	//对外生成
+	/**
+	 *对外生成
+	 */
 	public function GetImg() {
 		$this->createBg();
 		$this->createCode();
@@ -79,7 +91,10 @@ class ValidateCode {
 		$this->outPut();
 	}
 
-	//获取验证码
+	/**
+	 * 获取验证码
+	 * @return string
+	 */
 	public function GetCode() {
 		return strtolower($this->code);
 	}

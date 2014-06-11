@@ -1,32 +1,44 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * 模板类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib 类库
  */
-
 class Template{
 
 	private $tags = array();
 	private $path = null;
 	private $startpage=null;
 	private $parsephpcodes=array();
-	
+
+	/**
+	 *
+	 */
 	function __construct()
 	{
 	}
 
+	/**
+	 * @param $path
+	 */
 	public function SetPath($path)
 	{
 		$this->path = $path;
 	}
-	
+
+	/**
+	 * @return null
+	 */
 	public function GetPath()
 	{
 		return $this->path;
 	}
-	
+
+	/**
+	 * @param $name
+	 * @return string
+	 */
 	public function GetTemplate($name)
 	{
 		foreach ($GLOBALS['Filter_Plugin_Template_GetTemplate'] as $fpname => &$fpsignal)
@@ -37,27 +49,47 @@ class Template{
 		return $this->path . $name . '.php';
 	}
 
+	/**
+	 * @param $templatename
+	 */
 	public function SetTemplate($templatename)
 	{
 		$this->startpage = $templatename;
 	}
 
+	/**
+	 * @param $name
+	 * @return mixed
+	 */
 	function &GetTags($name){
 		return $this->tags[$name];
 	}
 
+	/**
+	 * @param $name
+	 * @param $value
+	 */
 	function SetTags($name,$value){
 		$this->tags[$name]=$value;
 	}
 
+	/**
+	 * @return array
+	 */
 	function &GetTagsAll(){
 		return $this->tags;
 	}
-	
+
+	/**
+	 * @param $array
+	 */
 	function SetTagsAll(&$array){
 		$this->tags=$array;
 	}
-	
+
+	/**
+	 * @param $filesarray
+	 */
 	function CompileFiles($filesarray){
 
 		foreach ($filesarray as $name => $content) {
@@ -70,6 +102,10 @@ class Template{
 
 	}
 
+	/**
+	 * @param $content
+	 * @return mixed
+	 */
 	public function Compiling($content)
 	{
 
@@ -111,11 +147,17 @@ class Template{
 		return $content;
 	}
 
+	/**
+	 * @param $content
+	 */
 	private function replacePHP(&$content)
 	{
 		$content = preg_replace("/\<\?php[\d\D]+?\?\>/si", '', $content);
 	}
 
+	/**
+	 * @param $content
+	 */
 	private function parsePHP(&$content)
 	{
 		$this->parsephpcodes=array();
@@ -128,6 +170,10 @@ class Template{
 				}
 		}
 	}
+
+	/**
+	 * @param $content
+	 */
 	private function parsePHP2(&$content)
 	{
 		foreach($this->parsephpcodes as $j=>$p) {
@@ -137,31 +183,49 @@ class Template{
 		$this->parsephpcodes=array();
 	}
 
+	/**
+	 * @param $content
+	 */
 	private function parse_template(&$content)
 	{
 		$content = preg_replace('/\{template:([^\}]+)\}/', '{php} include $this->GetTemplate(\'$1\'); {/php}', $content);
 	}
 
+	/**
+	 * @param $content
+	 */
 	private function parse_module(&$content)
 	{
 		$content = preg_replace('/\{module:([^\}]+)\}/', '{php} if(isset($modules[\'$1\'])){echo $modules[\'$1\']->Content;} {/php}', $content);
 	}
 
+	/**
+	 * @param $content
+	 */
 	private function parse_option(&$content)
 	{
 		$content = preg_replace('#\{\#([^\}]+)\#\}#', '<?php echo $option[\'\\1\']; ?>', $content);
 	}
 
+	/**
+	 * @param $content
+	 */
 	private function parse_vars(&$content)
 	{
 		$content = preg_replace_callback('#\{\$(?!\()([^\}]+)\}#',array($this,'parse_vars_replace_dot'), $content);
 	}
 
+	/**
+	 * @param $content
+	 */
 	private function parse_function(&$content)
 	{
 		$content = preg_replace_callback('/\{([a-zA-Z0-9_]+?)\((.+?)\)\}/',array($this,'parse_funtion_replace_dot'), $content);
 	}
 
+	/**
+	 * @param $content
+	 */
 	private function parse_if(&$content)
 	{
 		while(preg_match('/\{if [^\n\}]+\}.*?\{\/if\}/s', $content))
@@ -172,6 +236,10 @@ class Template{
 			);
 	}
 
+	/**
+	 * @param $matches
+	 * @return string
+	 */
 	private function parse_if_sub($matches)
 	{
 
@@ -188,6 +256,10 @@ class Template{
 
 	}
 
+	/**
+	 * @param $matches
+	 * @return string
+	 */
 	private function parse_elseif($matches)
 	{
 		$ifexp = str_replace($matches[1],$this->replace_dot($matches[1]),$matches[1]);
@@ -195,6 +267,9 @@ class Template{
 	}
 
 
+	/**
+	 * @param $content
+	 */
 	private function parse_foreach(&$content)
 	{
 		while(preg_match('/\{foreach(.+?)\}(.+?){\/foreach}/s', $content))
@@ -205,12 +280,20 @@ class Template{
 			);
 	}
 
+	/**
+	 * @param $matches
+	 * @return string
+	 */
 	private function parse_foreach_sub($matches)
 	{
 		$exp = $this->replace_dot($matches[1]);
 		$code = $matches[2];
 		return "{php} foreach ($exp) {{/php} $code{php} }  {/php}";
 	}
+
+	/**
+	 * @param $content
+	 */
 	private function parse_for(&$content)
 	{
 		while(preg_match('/\{for(.+?)\}(.+?){\/for}/s', $content))
@@ -221,6 +304,10 @@ class Template{
 			);
 	}
 
+	/**
+	 * @param $matches
+	 * @return string
+	 */
 	private function parse_for_sub($matches)
 	{
 		$exp = $this->replace_dot($matches[1]);
@@ -228,6 +315,10 @@ class Template{
 		return "{php} for($exp) {{/php} $code{php} }  {/php}";
 	}
 
+	/**
+	 * @param $matches
+	 * @return string
+	 */
 	private function parse_vars_replace_dot($matches)
 	{
 		if(strpos($matches[1],'=')===false){
@@ -237,11 +328,19 @@ class Template{
 		}
 	}
 
+	/**
+	 * @param $matches
+	 * @return string
+	 */
 	private function parse_funtion_replace_dot($matches)
 	{
 		return '{php} echo ' . $matches[1] . '(' . $this->replace_dot($matches[2]) . '); {/php}';
 	}
 
+	/**
+	 * @param $content
+	 * @return mixed
+	 */
 	private function replace_dot($content)
 	{
 		$array=array();
@@ -265,6 +364,9 @@ class Template{
 
 
 	#模板入口
+	/**
+	 *
+	 */
 	public function Display()
 	{
 		#强制撤除所有错误监控
@@ -278,6 +380,9 @@ class Template{
 		include $this->path .  $this->startpage . '.php';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function Output()
 	{
 

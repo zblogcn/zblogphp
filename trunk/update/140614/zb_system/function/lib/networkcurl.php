@@ -1,23 +1,20 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * curl类
+ *
+ * 自定义网络连接接口代替curl
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/Network 网络连接
  */
-
-/**
-*
-*/
 class Networkcurl implements iNetwork
 {
-	private $readyState = 0;        #状态
+	private $readyState = 0;		#状态
 	private $responseBody = NULL;   #返回的二进制
 	private $responseStream = NULL; #返回的数据流
-	private $responseText = '';     #返回的数据
-	private $responseXML = NULL;    #尝试把responseText格式化为XMLDom
-	private $status = 0;            #状态码
-	private $statusText = '';       #状态码文本
+	private $responseText = '';	 #返回的数据
+	private $responseXML = NULL;	#尝试把responseText格式化为XMLDom
+	private $status = 0;			#状态码
+	private $statusText = '';	   #状态码文本
 	private $responseVersion = '';  #返回的HTTP版体
 	
 	private $option = array();
@@ -33,15 +30,27 @@ class Networkcurl implements iNetwork
 	private $isgzip = false;
 	private $maxredirs = 0;
 
+	/**
+	 * @ignore
+	 */
 	function __construct()
 	{
 		//$this->ch = curl_init();
 	}
 
+	/**
+	 * @param $property_name
+	 * @param $value
+	 * @throws Exception
+	 */
 	public function __set($property_name, $value){
 		throw new Exception($property_name.' readonly');
 	}
 
+	/**
+	 * @param $property_name
+	 * @return mixed
+	 */
 	public function __get($property_name){
 		if(strtolower($property_name)=='responsexml'){
 			$w = new DOMDocument();
@@ -61,14 +70,25 @@ class Networkcurl implements iNetwork
 		}
 	}
 
+	/**
+	 * 取消
+	 */
 	public function abort(){
 
 	}
 
+	/**
+	 * @return string
+	*/
 	public function getAllResponseHeaders(){
 		return implode("\r\n",$this->responseHeader);
 	}
 
+	/**
+	 * 获取返回头
+	 * @param $bstrHeader
+	 * @return string
+	 */
 	public function getResponseHeader($bstrHeader){
 		$name=strtolower($bstrHeader);
 		foreach($this->responseHeader as $w){
@@ -79,6 +99,16 @@ class Networkcurl implements iNetwork
 		return '';
 	}
 
+	/**
+	 * 链接远程接口
+	 * @param $bstrMethod
+	 * @param $bstrUrl
+	 * @param bool $varAsync
+	 * @param string $bstrUser
+	 * @param string $bstrPassword
+	 * @return bool
+	 * @throws Exception
+	 */
 	public function open($bstrMethod, $bstrUrl, $varAsync=true, $bstrUser='', $bstrPassword=''){ //Async无用
 		$this->reinit();
 		$method = strtoupper($bstrMethod);
@@ -100,12 +130,23 @@ class Networkcurl implements iNetwork
 		return true;
 	}
 
+	/**
+	 * 设置超时时间
+	 * @param $resolveTimeout
+	 * @param $connectTimeout
+	 * @param $sendTimeout
+	 * @param $receiveTimeout
+	 */
 	public function setTimeOuts($resolveTimeout,$connectTimeout,$sendTimeout,$receiveTimeout)
 	{
 		curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
 		curl_setopt($this->ch, CURLOPT_TIMEOUT, $resolveTimeout);
 	}
 
+	/**
+	* 发送数据
+	* @param string $varBody
+	*/
 	public function send($varBody = ''){
 
 		$data = $varBody;
@@ -153,7 +194,14 @@ class Networkcurl implements iNetwork
 
 	}
 
-	public function setRequestHeader($bstrHeader, $bstrValue, $append=false){
+	/**
+	 * 设置请求HTTP头
+	 * @param $bstrHeader
+	 * @param $bstrValue
+	 * @param bool $append
+	 * @return bool
+	 */
+	 public function setRequestHeader($bstrHeader, $bstrValue, $append=false){
 		if($append==false){
 			$this->httpheader[$bstrHeader]=$bstrHeader.': '.$bstrValue;
 		}else{
@@ -166,21 +214,29 @@ class Networkcurl implements iNetwork
 		return true;
 	}
 
+	/**
+	 * 添加数据
+	 * @param string $bstrItem 参数
+	 * @param mixed $bstrValue 值
+	 */
 	public function add_postdata($bstrItem, $bstrValue){
 		array_push($this->postdata,array(
 			$bstrItem => $bstrValue
 		));
 	}
 
+	/**
+	 * 重置
+	 */
 	private function reinit(){
 		global $zbp;
-		$this->readyState = 0;        #状态
+		$this->readyState = 0;		#状态
 		$this->responseBody = NULL;   #返回的二进制
 		$this->responseStream = NULL; #返回的数据流
-		$this->responseText = '';     #返回的数据
-		$this->responseXML = NULL;    #尝试把responseText格式化为XMLDom
-		$this->status = 0;            #状态码
-		$this->statusText = '';       #状态码文本
+		$this->responseText = '';	 #返回的数据
+		$this->responseXML = NULL;	#尝试把responseText格式化为XMLDom
+		$this->status = 0;			#状态码
+		$this->statusText = '';	   #状态码文本
 
 		$this->option = array();
 		$this->url = '';
@@ -196,13 +252,19 @@ class Networkcurl implements iNetwork
 		$this->setRequestHeader('User-Agent','Mozilla/5.0 ('.$zbp->cache->system_environment.') Z-BlogPHP/' . ZC_BLOG_VERSION);
 		$this->setMaxRedirs(1);
 	}
-	
+
+	/**
+	  * 启用Gzip
+	 */
 	public function enableGzip(){
 		if( extension_loaded('zlib') ){
 			$this->isgzip = true;
 		}
 	}
 
+	/**
+	 * @param int $n
+	 */
 	public function setMaxRedirs($n=0){
 		$this->maxredirs=(int)$n;
 	}

@@ -1,10 +1,9 @@
 <?php
-
 /**
- * Z-Blog with PHP
- * @author
+ * 系统初始化等相关操作
+ * @package Z-BlogPHP
+ * @subpackage System/Base 基础操作
  * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
  */
 
 error_reporting(0);
@@ -59,17 +58,43 @@ $zbpvers['140614']='1.3 Beta2 Build 140614';
 
 
 #定义常量
+/**
+ *ZBLOGPHP版本号
+ */
 define('ZC_BLOG_VERSION', $zbpvers['140614']);
 
+/**
+ *文章类型：文章型
+ */
 define('ZC_POST_TYPE_ARTICLE', 0);
+/**
+ *文章类型：页面型
+ */
 define('ZC_POST_TYPE_PAGE', 1);
 
+/**
+ *文章状态：公开发布
+ */
 define('ZC_POST_STATUS_PUBLIC', 0);
+/**
+ *文章状态：草稿
+ */
 define('ZC_POST_STATUS_DRAFT', 1);
+/**
+ *文章状态：审核
+ */
 define('ZC_POST_STATUS_AUDITING', 2);
-
+/**
+ *用户状态：正常
+ */
 define('ZC_MEMBER_STATUS_NORMAL', 0);
+/**
+ *用户状态：审核
+ */
 define('ZC_MEMBER_STATUS_AUDITING', 1);
+/**
+ *用户状态：锁定
+ */
 define('ZC_MEMBER_STATUS_LOCKED', 2);
 
 
@@ -336,8 +361,11 @@ $zbp=ZBlogPHP::GetInstance();
 $zbp->Initialize();
 
 
+$activeapps=array();
+
 #加载主题内置的插件
 if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php')) {
+	$activeapps[]=$blogtheme;
 	require $filename;
 }
 
@@ -347,6 +375,7 @@ $ap=explode("|", $option['ZC_USING_PLUGIN_LIST']);
 $ap=array_unique($ap);
 foreach ($ap as $plugin) {
 	if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
+		$activeapps[]=$plugin;
 		require $filename;
 	}
 }

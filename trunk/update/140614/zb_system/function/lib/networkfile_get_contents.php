@@ -1,23 +1,19 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * 获取链接内容类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/Network 网络连接
  */
+class Networkfile_get_contents implements iNetwork{
 
-/**
-*
-*/
-class Networkfile_get_contents implements iNetwork
-{
-	private $readyState = 0;        #状态
+	private $readyState = 0;		#状态
 	private $responseBody = NULL;   #返回的二进制
 	private $responseStream = NULL; #返回的数据流
-	private $responseText = '';     #返回的数据
-	private $responseXML = NULL;    #尝试把responseText格式化为XMLDom
-	private $status = 0;            #状态码
-	private $statusText = '';       #状态码文本
+	private $responseText = '';	 #返回的数据
+	private $responseXML = NULL;	#尝试把responseText格式化为XMLDom
+	private $status = 0;			#状态码
+	private $statusText = '';	   #状态码文本
 	private $responseVersion = '';  #返回的HTTP版体
 
 	private $option = array();
@@ -29,10 +25,19 @@ class Networkfile_get_contents implements iNetwork
 	private $maxredirs = 0;
 	private $parsed_url = array();
 
+	/**
+	 * @param $property_name
+	 * @param $value
+	 * @throws Exception
+	 */
 	public function __set($property_name, $value){
 		throw new Exception($property_name.' readonly');
 	}
 
+	/**
+	 * @param $property_name
+	 * @return mixed
+	 */
 	public function __get($property_name){
 		if(strtolower($property_name)=='responsexml'){
 			$w = new DOMDocument();
@@ -52,14 +57,24 @@ class Networkfile_get_contents implements iNetwork
 		}
 	}
 
+	/**
+	 *
+	 */
 	public function abort(){
 
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getAllResponseHeaders(){
 		return implode("\r\n",$this->responseHeader);
 	}
 
+	/**
+	 * @param $bstrHeader
+	 * @return string
+	 */
 	public function getResponseHeader($bstrHeader){
 		$name=strtolower($bstrHeader);
 		foreach($this->responseHeader as $w){
@@ -69,11 +84,26 @@ class Networkfile_get_contents implements iNetwork
 		}
 		return '';
 	}
-	
+
+	/**
+	 * @param $resolveTimeout
+	 * @param $connectTimeout
+	 * @param $sendTimeout
+	 * @param $receiveTimeout
+	 */
 	public function setTimeOuts($resolveTimeout,$connectTimeout,$sendTimeout,$receiveTimeout){
 
 	}
 
+	/**
+	 * @param $bstrMethod
+	 * @param $bstrUrl
+	 * @param bool $varAsync
+	 * @param string $bstrUser
+	 * @param string $bstrPassword
+	 * @return bool
+	 * @throws Exception
+	 */
 	public function open($bstrMethod, $bstrUrl, $varAsync=true, $bstrUser='', $bstrPassword=''){ //Async无用
 		//初始化变量
 		$this->reinit();
@@ -103,6 +133,9 @@ class Networkfile_get_contents implements iNetwork
 		return true;
 	}
 
+	/**
+	 * @param string $varBody
+	 */
 	public function send($varBody=''){
 		$data=$varBody;
 		if(is_array($data)){
@@ -145,6 +178,12 @@ class Networkfile_get_contents implements iNetwork
 
 	}
 
+	/**
+	 * @param $bstrHeader
+	 * @param $bstrValue
+	 * @param bool $append
+	 * @return bool
+	 */
 	public function setRequestHeader($bstrHeader, $bstrValue, $append=false){
 		if($append==false){
 			$this->httpheader[$bstrHeader]=$bstrHeader.': '.$bstrValue;
@@ -158,21 +197,28 @@ class Networkfile_get_contents implements iNetwork
 		return true;
 	}
 
+	/**
+	 * @param $bstrItem
+	 * @param $bstrValue
+	 */
 	public function add_postdata($bstrItem, $bstrValue){
 		array_push($this->postdata,array(
 			$bstrItem => $bstrValue
 		));
 	}
 
+	/**
+	 *
+	 */
 	private function reinit(){
 		global $zbp;
-		$this->readyState = 0;        #状态
+		$this->readyState = 0;		#状态
 		$this->responseBody = NULL;   #返回的二进制
 		$this->responseStream = NULL; #返回的数据流
-		$this->responseText = '';     #返回的数据
-		$this->responseXML = NULL;    #尝试把responseText格式化为XMLDom
-		$this->status = 0;            #状态码
-		$this->statusText = '';       #状态码文本
+		$this->responseText = '';	 #返回的数据
+		$this->responseXML = NULL;	#尝试把responseText格式化为XMLDom
+		$this->status = 0;			#状态码
+		$this->statusText = '';	   #状态码文本
 
 		$this->option = array();
 		$this->url = '';
@@ -182,13 +228,19 @@ class Networkfile_get_contents implements iNetwork
 		$this->setRequestHeader('User-Agent','Mozilla/5.0 ('.$zbp->cache->system_environment.') Z-BlogPHP/' . ZC_BLOG_VERSION);
 		$this->setMaxRedirs(1);
 	}
-	
+
+	/**
+	 * 启用Gzip
+	 */
 	public function enableGzip(){
 		if( extension_loaded('zlib') ){
 			$this->isgzip = true;
 		}
 	}
 
+	/**
+	 * @param int $n
+	 */
 	public function setMaxRedirs($n=0){
 		$this->maxredirs=$n;
 	}

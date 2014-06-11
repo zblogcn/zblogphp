@@ -24,10 +24,6 @@ require $basepath . 'c_system_event.php';
 spl_autoload_register('AutoloadClass');
 
 if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()){
-	/**
-	 * 返回一个去除转义反斜线后的字符串（\' 转换为 ',双反斜线\\被转换为单个反斜线\等等）。
-	 * @param string|array &$var
-	 */
 	function _stripslashes(&$var) {
 		if(is_array($var)) {
 			foreach($var as $k=>&$v) {

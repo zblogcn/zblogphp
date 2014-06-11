@@ -1,43 +1,104 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * 自定义网络连接接口
  */
 if ( !interface_exists ( 'iNetwork' )) {
+	/**
+	 * 网络连接接口
+	 *
+	 * @package Z-BlogPHP
+	 * @subpackage Interface/Network 网络连接
+	 */
+	interface iNetwork{
+		/**
+		 * @return mixed
+		 */
+		public function abort();
+		/**
+		 * @return mixed
+		 */
+		public function getAllResponseHeaders();
 
-interface iNetwork
-{
+		/**
+		 * @param $bstrHeader
+		 * @return mixed
+		 */
+		public function getResponseHeader($bstrHeader);
+		/**
+		 * @param $bstrMethod
+		 * @param $bstrUrl
+		 * @param bool $varAsync
+		 * @param string $bstrUser
+		 * @param string $bstrPassword
+		 * @return mixed
+		 */
+		public function open($bstrMethod, $bstrUrl, $varAsync=true, $bstrUser='', $bstrPassword='');
 
-	public function abort();
-	public function getAllResponseHeaders();
-	public function getResponseHeader($bstrHeader);
-	public function open($bstrMethod, $bstrUrl, $varAsync=true, $bstrUser='', $bstrPassword='');
-	public function send($varBody='');
-	public function setRequestHeader($bstrHeader, $bstrValue);
-	public function enableGzip();
-	public function setMaxRedirs($n=0);
+		/**
+		 * @param string $varBody
+		 * @return mixed
+		 */
+		public function send($varBody='');
+
+		/**
+		 * @param $bstrHeader
+		 * @param $bstrValue
+		 * @return mixed
+		 */
+		public function setRequestHeader($bstrHeader, $bstrValue);
+
+		/**
+		 * @return mixed
+		 */
+		public function enableGzip();
+
+		/**
+		 * @param int $n
+		 * @return mixed
+		 */
+		public function setMaxRedirs($n=0);
+
+	}
 
 }
 
-}
 /**
-* NetworkFactory
-*/
-class Network
-{
+ * 网络连接类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/Network
+ */
+class Network {
 
+	/**
+	 * @var null
+	*/
 	public $networktype = null;
+	/**
+	 * @var array
+	 */
 	public $network_list = array();
+	/**
+	 * @var bool
+	 */
 	public $curl = false;
+	/**
+	 * @var bool
+	 */
 	public $fsockopen = false;
+	/**
+	 * @var bool
+	 */
 	public $file_get_contents = false;
-
+	/**
+	 * @var null
+	 */
 	static private $_network = null;
 
-	function __construct()
-	{
+	/**
+	 * 构造函数
+	 */
+	function __construct(){
 		if (function_exists('curl_init'))
 		{
 			$this->network_list[] = 'curl';
@@ -55,8 +116,11 @@ class Network
 		}
 	}
 
-	static function Create($extension = '')
-	{
+	/**
+	 * @param string $extension
+	 * @return bool|network
+	 */
+	static function Create($extension = ''){
 		if(!isset(self::$_network)){
 			self::$_network=new Network;
 		}	

@@ -1,9 +1,9 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
+ * 系统信息
+ * @package Z-BlogPHP
+ * @subpackage System\Misc 摘取信息
  * @copyright (C) RainbowSoft Studio
- * @version       2.0 2013-06-14
  */
 
 ob_clean();

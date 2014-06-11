@@ -1,23 +1,19 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * sock类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/Network 网络连接
  */
+class Networkfsockopen implements iNetwork {
 
-/**
-*
-*/
-class Networkfsockopen implements iNetwork
-{
-	private $readyState = 0;        #状态
+	private $readyState = 0;		#状态
 	private $responseBody = NULL;   #返回的二进制
 	private $responseStream = NULL; #返回的数据流
-	private $responseText = '';     #返回的数据
-	private $responseXML = NULL;    #尝试把responseText格式化为XMLDom
-	private $status = 0;            #状态码
-	private $statusText = '';       #状态码文本
+	private $responseText = '';	 #返回的数据
+	private $responseXML = NULL;	#尝试把responseText格式化为XMLDom
+	private $status = 0;			#状态码
+	private $statusText = '';	   #状态码文本
 	private $responseVersion = '';  #返回的HTTP版体
 
 	private $option = array();
@@ -33,10 +29,19 @@ class Networkfsockopen implements iNetwork
 	private $maxredirs = 0;
 	private $canreinit = true;
 
+	/**
+	 * @param $property_name
+	 * @param $value
+	 * @throws Exception
+	 */
 	public function __set($property_name, $value){
 		throw new Exception($property_name.' readonly');
 	}
 
+	/**
+	 * @param $property_name
+	 * @return mixed
+	 */
 	public function __get($property_name){
 		if(strtolower($property_name)=='responsexml'){
 			$w = new DOMDocument();
@@ -56,14 +61,24 @@ class Networkfsockopen implements iNetwork
 		}
 	}
 
+	/**
+	 *
+	 */
 	public function abort(){
 
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getAllResponseHeaders(){
 		return implode("\r\n",$this->responseHeader);
 	}
 
+	/**
+	 * @param $bstrHeader
+	 * @return string
+	 */
 	public function getResponseHeader($bstrHeader){
 		$name=strtolower($bstrHeader);
 		foreach($this->responseHeader as $w){
@@ -73,11 +88,26 @@ class Networkfsockopen implements iNetwork
 		}
 		return '';
 	}
-	
+
+	/**
+	 * @param $resolveTimeout
+	 * @param $connectTimeout
+	 * @param $sendTimeout
+	 * @param $receiveTimeout
+	 */
 	public function setTimeOuts($resolveTimeout,$connectTimeout,$sendTimeout,$receiveTimeout){
 
 	}
 
+	/**
+	 * @param $bstrMethod
+	 * @param $bstrUrl
+	 * @param bool $varAsync
+	 * @param string $bstrUser
+	 * @param string $bstrPassword
+	 * @return bool
+	 * @throws Exception
+	 */
 	public function open($bstrMethod, $bstrUrl, $varAsync=true, $bstrUser='', $bstrPassword=''){ //Async无用
 		//初始化变量
 		$this->reinit();
@@ -103,6 +133,10 @@ class Networkfsockopen implements iNetwork
 		return true;
 	}
 
+	/**
+	 * @param string $varBody
+	 * @return mixed|void
+	 */
 	public function send($varBody=''){
 		$data=$varBody;
 		if(is_array($data)){
@@ -159,7 +193,7 @@ class Networkfsockopen implements iNetwork
 		}
 		fwrite($socket,
 			   $url . ' HTTP/1.1' . "\r\n"
-	    );
+		);
 		fwrite($socket,$this->option['header']."\r\n");
 		fwrite($socket,"\r\n");
 		if(isset($this->option['content'])){
@@ -222,6 +256,13 @@ class Networkfsockopen implements iNetwork
 		fclose($socket);
 
 	}
+
+	/**
+	 * @param $bstrHeader
+	 * @param $bstrValue
+	 * @param bool $append
+	 * @return bool
+	 */
 	public function setRequestHeader($bstrHeader, $bstrValue, $append=false){
 		if($append==false){
 			$this->httpheader[$bstrHeader]=$bstrHeader.': '.$bstrValue;
@@ -235,24 +276,31 @@ class Networkfsockopen implements iNetwork
 		return true;
 	}
 
+	/**
+	 * @param $bstrItem
+	 * @param $bstrValue
+	 */
 	public function add_postdata($bstrItem, $bstrValue){
 		array_push($this->postdata,array(
 			$bstrItem => $bstrValue
 		));
 	}
 
+	/**
+	 *
+	 */
 	private function reinit(){
 		global $zbp;
 		$this->httpheader = array();
 	
 		if(!$this->canreinit)return;
-		$this->readyState = 0;        #状态
+		$this->readyState = 0;		#状态
 		$this->responseBody = NULL;   #返回的二进制
 		$this->responseStream = NULL; #返回的数据流
-		$this->responseText = '';     #返回的数据
-		$this->responseXML = NULL;    #尝试把responseText格式化为XMLDom
-		$this->status = 0;            #状态码
-		$this->statusText = '';       #状态码文本
+		$this->responseText = '';	 #返回的数据
+		$this->responseXML = NULL;	#尝试把responseText格式化为XMLDom
+		$this->status = 0;			#状态码
+		$this->statusText = '';	   #状态码文本
 
 		$this->option = array();
 		$this->url = '';
@@ -266,50 +314,64 @@ class Networkfsockopen implements iNetwork
 		$this->setRequestHeader('User-Agent','Mozilla/5.0 ('.$zbp->cache->system_environment.') Z-BlogPHP/' . ZC_BLOG_VERSION);
 		$this->setMaxRedirs(1);
 	}
-	
-    private function http_chunked_decode($chunk) { 
-        $pos = 0; 
-        $len = strlen($chunk); 
-        $dechunk = null; 
 
-        while(($pos < $len) 
-            && ($chunkLenHex = substr($chunk,$pos, ($newlineAt = strpos($chunk,"\n",$pos+1))-$pos)))
-        { 
-            if (! $this->is_hex($chunkLenHex)) { 
-                trigger_error('Value is not properly chunk encoded', E_USER_WARNING);
-                return $chunk; 
-            } 
+	/**
+	 * @param $chunk
+	 * @return null|string
+	 */
+	private function http_chunked_decode($chunk) {
+		$pos = 0; 
+		$len = strlen($chunk); 
+		$dechunk = null; 
 
-            $pos = $newlineAt + 1; 
-            $chunkLen = hexdec(rtrim($chunkLenHex,"\r\n")); 
-            $dechunk .= substr($chunk, $pos, $chunkLen); 
-            $pos = strpos($chunk, "\n", $pos + $chunkLen) + 1; 
-        } 
-        return $dechunk; 
-    } 
+		while(($pos < $len) 
+			&& ($chunkLenHex = substr($chunk,$pos, ($newlineAt = strpos($chunk,"\n",$pos+1))-$pos)))
+		{ 
+			if (! $this->is_hex($chunkLenHex)) { 
+				trigger_error('Value is not properly chunk encoded', E_USER_WARNING);
+				return $chunk; 
+			} 
 
-    /** 
-     * determine if a string can represent a number in hexadecimal 
-     * 
-     * @param string $hex 
-     * @return boolean true if the string is a hex, otherwise false 
-     */ 
+			$pos = $newlineAt + 1; 
+			$chunkLen = hexdec(rtrim($chunkLenHex,"\r\n")); 
+			$dechunk .= substr($chunk, $pos, $chunkLen); 
+			$pos = strpos($chunk, "\n", $pos + $chunkLen) + 1; 
+		} 
+		return $dechunk; 
+	} 
+
+	/** 
+	 * determine if a string can represent a number in hexadecimal 
+	 * 
+	 * @param string $hex 
+	 * @return boolean true if the string is a hex, otherwise false 
+	 */ 
 	private function is_hex($hex) { 
 		// regex is for weenies 
 		$hex = strtolower(trim(ltrim($hex,"0"))); 
 		if (empty($hex)) { $hex = 0; }; 
 		$dec = hexdec($hex); 
 		return ($hex == dechex($dec)); 
-	} 
-	
+	}
+
+	/**
+	 * @param $string
+	 * @return string
+	 */
 	private function gzdecode($string) {// no support for 2nd argument
-        return file_get_contents('compress.zlib://data:zbp/ths;base64,'. base64_encode($string));
-    }
-	
+		return file_get_contents('compress.zlib://data:zbp/ths;base64,'. base64_encode($string));
+	}
+
+	/**
+	 *
+	 */
 	public function enableGzip(){
 		$this->isgzip = true;
 	}
 
+	/**
+	 * @param int $n
+	 */
 	public function setMaxRedirs($n=0){
 		$this->maxredirs=$n;
 	}
