@@ -3,8 +3,14 @@
 RegisterPlugin("AppCentre","ActivePlugin_AppCentre");
 
 define('APPCENTRE_URL','http://app.zblogcn.com/client/');
-
 define('APPCENTRE_SYSTEM_UPDATE','http://update.zblogcn.com/zblogphp/');
+
+define('APPCENTRE_API_URL','http://app.zblogcn.com/api/index.php?api=');
+define('APPCENTRE_API_APP_ISBUY','isbuy');
+define('APPCENTRE_API_USER_INFO','userinfo');
+define('APPCENTRE_API_ORDER_LIST','orderlist');
+define('APPCENTRE_API_ORDER_DETAIL','orderdetail');
+
 
 function ActivePlugin_AppCentre() {
 
