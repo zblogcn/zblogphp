@@ -1,12 +1,17 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
+ * 事件相关函数
+ * @package Z-BlogPHP
+ * @subpackage System\Event 操作事件
  * @copyright (C) RainbowSoft Studio
- * @version       2.0 2013-06-14
  */
 
-################################################################################################################
+/**
+ * 自动加载类文件
+ * @api Filter_Plugin_Autoload
+ * @param string $classname 类名
+ * @return mixed
+ */
 function AutoloadClass($classname){
 	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($classname);
@@ -16,6 +21,10 @@ function AutoloadClass($classname){
 		require $f;
 }
 
+/**
+ * 记录日志
+ * @param string $s
+ */
 function Logs($s) {
 	global $zbp;
 	$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
@@ -24,6 +33,10 @@ function Logs($s) {
 	@fclose($handle);
 }
 
+/**
+ * 页面运行时长
+ * @return array
+ */
 function RunTime() {
 	global $zbp;
 
@@ -49,6 +62,10 @@ function RunTime() {
 
 
 ################################################################################################################
+/**
+ * 验证登录
+ * @return bool
+ */
 function VerifyLogin() {
 	global $zbp;
 
@@ -76,6 +93,9 @@ function VerifyLogin() {
 	}
 }
 
+/**
+ * 注销登录
+ */
 function Logout() {
 	global $zbp;
 
@@ -86,6 +106,12 @@ function Logout() {
 }
 
 ################################################################################################################
+/**
+ * 获取文章
+ * @param mixed $idorname 文章id 或 名称、别名
+ * @param array $option|null
+ * @return Post
+ */
 function GetPost($idorname, $option = null) {
 	global $zbp;
 
@@ -117,6 +143,17 @@ function GetPost($idorname, $option = null) {
 	}
 }
 
+/**
+ * 获取文章列表
+ * @param int $count 数量
+ * @param null $cate 分类ID
+ * @param null $auth 用户ID
+ * @param null $date 日期
+ * @param null $tags 标签
+ * @param null $search 搜索关键词
+ * @param null $option
+ * @return array|mixed
+ */
 function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = null, $search = null, $option = null) {
 	global $zbp;
 
@@ -235,6 +272,11 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 }
 
 ################################################################################################################
+/**
+ * 显示索引页面(page、cate、auth、date、tags)
+ * @api Filter_Plugin_ViewIndex_Begin
+ * @return mixed
+ */
 function ViewIndex(){
 	global $zbp,$action;
 	
@@ -268,7 +310,12 @@ function ViewIndex(){
 		}
 	}
 }
- 
+
+/**
+ * 显示RSS2Feed
+ * @api Filter_Plugin_ViewFeed_Begin
+ * @return mixed
+ */
 function ViewFeed(){
 	global $zbp;
 	
@@ -301,6 +348,12 @@ function ViewFeed(){
 
 }
 
+/**
+ * 展示搜索结果
+ * @api Filter_Plugin_ViewSearch_Begin
+ * @api Filter_Plugin_ViewPost_Template
+ * @return mixed
+ */
 function ViewSearch(){
 	global $zbp;
 	
@@ -368,6 +421,13 @@ function ViewSearch(){
 }
 
 ################################################################################################################
+/**
+ * 根据Rewrite_url规则显示页面
+ * @api Filter_Plugin_ViewAuto_Begin
+ * @api Filter_Plugin_ViewAuto_End
+ * @param string $inpurl 页面url
+ * @return null|string
+ */
 function ViewAuto($inpurl) {
 	global $zbp;
 
@@ -485,6 +545,18 @@ function ViewAuto($inpurl) {
 
 }
 
+/**
+ * 显示列表页面
+ * @api Filter_Plugin_ViewList_Begin
+ * @api Filter_Plugin_ViewList_Template
+ * @param int $page
+ * @param int|string $cate
+ * @param int|string $auth
+ * @param string   $date
+ * @param string $tags tags列表
+ * @param bool $isrewrite 是否启用urlrewrite
+ * @return string
+ */
 function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	global $zbp;
 
@@ -711,6 +783,13 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	return true;
 }
 
+/**
+ * 显示文章
+ * @param int $id 文章ID
+ * @param string $alias 文章别名
+ * @param bool $isrewrite 是否启用urlrewrite
+ * @return string
+ */
 function ViewPost($id, $alias, $isrewrite = false) {
 	global $zbp;
 	foreach ($GLOBALS['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
@@ -827,6 +906,12 @@ function ViewPost($id, $alias, $isrewrite = false) {
 	return true;
 }
 
+/**
+ * 显示文章下评论列表
+ * @param int $postid 文章ID
+ * @param int $page 页数
+ * @return bool
+ */
 function ViewComments($postid, $page) {
 	global $zbp;
 
@@ -906,6 +991,10 @@ function ViewComments($postid, $page) {
 	return true;
 }
 
+/**
+ * 显示评论
+ * @param int $id 评论ID
+ */
 function ViewComment($id) {
 	global $zbp;
 
@@ -929,6 +1018,10 @@ function ViewComment($id) {
 }
 
 ################################################################################################################
+/**
+ * 提交文章数据
+ * @return bool
+ */
 function PostArticle() {
 	global $zbp;
 	if (!isset($_POST['ID'])) return;
@@ -1044,6 +1137,10 @@ function PostArticle() {
 	return true;
 }
 
+/**
+ * 删除文章
+ * @return bool
+ */
 function DelArticle() {
 	global $zbp;
 
@@ -1085,6 +1182,11 @@ function DelArticle() {
 	return true;
 }
 
+/**
+ * 提交文章数据时检查tag数据，并将新tags转为标准格式返回
+ * @param string $tagnamestring 提交的文章tag数据，可以:,，、等符号分隔
+ * @return string 返回如'{1}{2}{3}{4}'的字符串
+ */
 function PostArticle_CheckTagAndConvertIDtoString($tagnamestring) {
 	global $zbp;
 	$s = '';
@@ -1131,6 +1233,10 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring) {
 	return $s;
 }
 
+/**
+ * 删除文章下所有评论
+ * @param int $id 文章ID
+ */
 function DelArticle_Comments($id) {
 	global $zbp;
 
@@ -1139,6 +1245,10 @@ function DelArticle_Comments($id) {
 }
 
 ################################################################################################################
+/**
+ * 提交页面数据
+ * @return bool
+ */
 function PostPage() {
 	global $zbp;
 	if (!isset($_POST['ID'])) return;
@@ -1204,6 +1314,10 @@ function PostPage() {
 	return true;
 }
 
+/**
+ * 删除页面
+ * @return bool
+ */
 function DelPage() {
 	global $zbp;
 
@@ -1238,6 +1352,10 @@ function DelPage() {
 }
 
 ################################################################################################################
+/**
+ * 提交评论
+ * @return bool
+ */
 function PostComment() {
 	global $zbp;
 
@@ -1327,6 +1445,10 @@ function PostComment() {
 	}
 }
 
+/**
+ * 删除评论
+ * @return bool
+ */
 function DelComment() {
 	global $zbp;
 
@@ -1351,6 +1473,10 @@ function DelComment() {
 	return true;
 }
 
+/**
+ * 删除评论下的子评论
+ * @param int $id 父评论ID
+ */
 function DelComment_Children($id) {
 	global $zbp;
 
@@ -1365,6 +1491,11 @@ function DelComment_Children($id) {
 
 }
 
+/**
+ * 删除评论保留其子评论
+ * @param int $id 父评论ID
+ * @param array $array 将子评论ID存入新数组
+ */
 function DelComment_Children_NoDel($id, &$array) {
 	global $zbp;
 
@@ -1379,6 +1510,9 @@ function DelComment_Children_NoDel($id, &$array) {
 
 }
 
+/**
+ *检查评论数据并保存、更新计数、更新“最新评论”模块
+ */
 function CheckComment() {
 	global $zbp;
 
@@ -1394,6 +1528,9 @@ function CheckComment() {
 	$zbp->AddBuildModule('comments');
 }
 
+/**
+ * 评论批量处理（删除、通过审核、加入审核）
+ */
 function BatchComment() {
 	global $zbp;
 	if (isset($_POST['all_del'])) {
@@ -1451,6 +1588,10 @@ function BatchComment() {
 }
 
 ################################################################################################################
+/**
+ * 提交分类数据
+ * @return bool
+ */
 function PostCategory() {
 	global $zbp;
 	if (!isset($_POST['ID'])) return;
@@ -1504,6 +1645,10 @@ function PostCategory() {
 	return true;
 }
 
+/**
+ * 删除分类
+ * @return bool
+ */
 function DelCategory() {
 	global $zbp;
 
@@ -1524,6 +1669,10 @@ function DelCategory() {
 	return true;
 }
 
+/**
+ * 删除分类下所有文章
+ * @param int $id 分类ID
+ */
 function DelCategory_Articles($id) {
 	global $zbp;
 
@@ -1532,6 +1681,10 @@ function DelCategory_Articles($id) {
 }
 
 ################################################################################################################
+/**
+ * 提交标签数据
+ * @return bool
+ */
 function PostTag() {
 	global $zbp;
 	if (!isset($_POST['ID'])) return;
@@ -1577,6 +1730,10 @@ function PostTag() {
 	return true;
 }
 
+/**
+ * 删除标签
+ * @return bool
+ */
 function DelTag() {
 	global $zbp;
 
@@ -1594,6 +1751,10 @@ function DelTag() {
 }
 
 ################################################################################################################
+/**
+ * 提交用户数据
+ * @return bool
+ */
 function PostMember() {
 	global $zbp;
 	if (!isset($_POST['ID'])) return;
@@ -1676,6 +1837,10 @@ function PostMember() {
 	return true;
 }
 
+/**
+ * 删除用户
+ * @return bool
+ */
 function DelMember() {
 	global $zbp;
 
@@ -1693,6 +1858,10 @@ function DelMember() {
 	return true;
 }
 
+/**
+ * 删除用户下所有数据（包括文章、评论、附件）
+ * @param int $id 用户ID
+ */
 function DelMember_AllData($id) {
 	global $zbp;
 
@@ -1723,6 +1892,10 @@ function DelMember_AllData($id) {
 }
 
 ################################################################################################################
+/**
+ * 提交模块数据
+ * @return bool
+ */
 function PostModule() {
 	global $zbp;
 
@@ -1796,6 +1969,10 @@ function PostModule() {
 	return true;
 }
 
+/**
+ * 删除模块
+ * @return bool
+ */
 function DelModule() {
 	global $zbp;
 
@@ -1825,6 +2002,9 @@ function DelModule() {
 }
 
 ################################################################################################################
+/**
+ * 附件上传
+ */
 function PostUpload() {
 	global $zbp;
 
@@ -1856,6 +2036,10 @@ function PostUpload() {
 
 }
 
+/**
+ * 删除附件
+ * @return bool
+ */
 function DelUpload() {
 	global $zbp;
 
@@ -1873,6 +2057,11 @@ function DelUpload() {
 }
 
 ################################################################################################################
+/**
+ * 启用插件
+ * @param string $name 插件ID
+ * @return string 返回插件ID
+ */
 function EnablePlugin($name) {
 	global $zbp;
 
@@ -1885,12 +2074,22 @@ function EnablePlugin($name) {
 	return $name;
 }
 
+/**
+ * 禁用插件
+ * @param string $name 插件ID
+ */
 function DisablePlugin($name) {
 	global $zbp;
 	$zbp->option['ZC_USING_PLUGIN_LIST'] = DelNameInString($zbp->option['ZC_USING_PLUGIN_LIST'], $name);
 	$zbp->SaveOption();
 }
 
+/**
+ * 设置当前主题样式
+ * @param string $theme 主题ID
+ * @param string $style 样式名
+ * @return string 返回主题ID
+ */
 function SetTheme($theme, $style) {
 	global $zbp;
 	
@@ -1950,6 +2149,9 @@ function SetTheme($theme, $style) {
 	}
 }
 
+/**
+ * 设置侧栏
+ */
 function SetSidebar() {
 	global $zbp;
 
@@ -1961,6 +2163,9 @@ function SetSidebar() {
 	$zbp->SaveOption();
 }
 
+/**
+ * 保存网站设置选项
+ */
 function SaveSetting() {
 	global $zbp;
 
@@ -2006,6 +2211,10 @@ function SaveSetting() {
 }
 
 ################################################################################################################
+/**
+ * 过滤扩展数据
+ * @param $object
+ */
 function FilterMeta(&$object) {
 
 	//$type=strtolower(get_class($object));
@@ -2024,6 +2233,10 @@ function FilterMeta(&$object) {
 
 }
 
+/**
+ * 过滤评论数据
+ * @param $comment
+ */
 function FilterComment(&$comment) {
 	global $zbp;
 
@@ -2050,6 +2263,10 @@ function FilterComment(&$comment) {
 	}
 }
 
+/**
+ * 过滤文章数据
+ * @param $article
+ */
 function FilterPost(&$article) {
 	global $zbp;
 
@@ -2070,6 +2287,10 @@ function FilterPost(&$article) {
 	}
 }
 
+/**
+ * 过滤用户数据
+ * @param $member
+ */
 function FilterMember(&$member) {
 	global $zbp;
 	$member->Intro = TransferHTML($member->Intro, '[noscript]');
@@ -2107,12 +2328,20 @@ function FilterMember(&$member) {
 
 }
 
+/**
+ * 过滤模块数据
+ * @param $module
+ */
 function FilterModule(&$module) {
 	global $zbp;
 	$module->FileName = TransferHTML($module->FileName, '[filename]');
 	$module->HtmlID = TransferHTML($module->HtmlID, '[normalname]');
 }
 
+/**
+ * 过滤分类数据
+ * @param $category
+ */
 function FilterCategory(&$category) {
 	global $zbp;
 	$category->Name = strip_tags($category->Name);
@@ -2122,6 +2351,10 @@ function FilterCategory(&$category) {
 	$category->Alias = str_replace(' ', '', $category->Alias);
 }
 
+/**
+ * 过滤tag数据
+ * @param $tag
+ */
 function FilterTag(&$tag) {
 	global $zbp;
 	$tag->Name = strip_tags($tag->Name);
@@ -2130,6 +2363,9 @@ function FilterTag(&$tag) {
 
 ################################################################################################################
 #统计函数
+/**
+ *统计公开文章数
+ */
 function CountNormalArticleNums() {
 	global $zbp;
 	$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 0), array('=', 'log_Status', 0)));
@@ -2139,6 +2375,10 @@ function CountNormalArticleNums() {
 	$zbp->SaveCache();
 }
 
+/**
+ * 统计文章下评论数
+ * @param post $article
+ */
 function CountPost(&$article) {
 	global $zbp;
 
@@ -2150,6 +2390,10 @@ function CountPost(&$article) {
 	$article->CommNums = $num;
 }
 
+/**
+ * 批量统计指定文章下评论数并保存
+ * @param array $array 记录文章ID的数组
+ */
 function CountPostArray($array) {
 	global $zbp;
 	$array = array_unique($array);
@@ -2162,6 +2406,10 @@ function CountPostArray($array) {
 	}
 }
 
+/**
+ * 统计分类下文章数
+ * @param category &$category
+ */
 function CountCategory(&$category) {
 	global $zbp;
 
@@ -2173,6 +2421,10 @@ function CountCategory(&$category) {
 	$category->Count = $num;
 }
 
+/**
+ * 批量统计指定分类下文章数并保存
+ * @param array $array 记录分类ID的数组
+ */
 function CountCategoryArray($array) {
 	global $zbp;
 	$array = array_unique($array);
@@ -2183,6 +2435,10 @@ function CountCategoryArray($array) {
 	}
 }
 
+/**
+ * 统计tag下的文章数
+ * @param tag &$tag
+ */
 function CountTag(&$tag) {
 	global $zbp;
 
@@ -2194,6 +2450,10 @@ function CountTag(&$tag) {
 	$tag->Count = $num;
 }
 
+/**
+ * 批量统计指定tag下文章数并保存
+ * @param string $string 类似'{1}{2}{3}{4}{4}'的tagID串
+ */
 function CountTagArrayString($string) {
 	global $zbp;
 	$array = $zbp->LoadTagsByIDString($string);
@@ -2203,6 +2463,10 @@ function CountTagArrayString($string) {
 	}
 }
 
+/**
+ * 统计用户下的文章数、页面数、评论数、附件数等
+ * @param $member
+ */
 function CountMember(&$member) {
 	global $zbp;
 	if(!($member  instanceof  Member))return;
@@ -2227,6 +2491,10 @@ function CountMember(&$member) {
 	$member->Uploads = $member_Uploads;
 }
 
+/**
+ * 批量统计指定用户数据并保存
+ * @param array $array 记录用户ID的数组
+ */
 function CountMemberArray($array) {
 	global $zbp;
 	$array = array_unique($array);
@@ -2241,6 +2509,10 @@ function CountMemberArray($array) {
 
 ################################################################################################################
 #BuildModule
+/**
+ * 导出网站分类模块数据
+ * @return string 模块内容
+ */
 function BuildModule_catalog() {
 	global $zbp;
 	$s = '';
@@ -2289,6 +2561,11 @@ function BuildModule_catalog() {
 	return $s;
 }
 
+/**
+ * 导出日历模块数据
+ * @param string $date 日期
+ * @return string 模块内容
+ */
 function BuildModule_calendar($date = '') {
 	global $zbp;
 
@@ -2392,6 +2669,10 @@ function BuildModule_calendar($date = '') {
 
 }
 
+/**
+ * 导出最新留言模块数据
+ * @return string 模块内容
+ */
 function BuildModule_comments() {
 	global $zbp;
 
@@ -2407,6 +2688,10 @@ function BuildModule_comments() {
 	return $s;
 }
 
+/**
+ * 导出最近发表文章模块数据
+ * @return string 模块内容
+ */
 function BuildModule_previous() {
 	global $zbp;
 
@@ -2421,6 +2706,10 @@ function BuildModule_previous() {
 	return $s;
 }
 
+/**
+ * 导出文章归档模块数据
+ * @return string 模块内容
+ */
 function BuildModule_archives() {
 	global $zbp;
 
@@ -2487,6 +2776,10 @@ function BuildModule_archives() {
 
 }
 
+/**
+ * 导出导航模块数据
+ * @return string 模块内容
+ */
 function BuildModule_navbar() {
 	global $zbp;
 
@@ -2540,6 +2833,10 @@ function BuildModule_navbar() {
 	return $s;
 }
 
+/**
+ * 导出tags模块数据
+ * @return string 模块内容
+ */
 function BuildModule_tags() {
 	global $zbp;
 	$s = '';
@@ -2559,6 +2856,11 @@ function BuildModule_tags() {
 	return $s;
 }
 
+/**
+ * 导出用户列表模块数据
+ * @param int $level 要导出的用户最低等级，默认为4（即协作者）
+ * @return string 模块内容
+ */
 function BuildModule_authors($level = 4) {
 	global $zbp;
 	$s = '';
@@ -2575,6 +2877,11 @@ function BuildModule_authors($level = 4) {
 	return $s;
 }
 
+/**
+ * 导出网站统计模块数据
+ * @param array $array
+ * @return string 模块内容
+ */
 function BuildModule_statistics($array = array()) {
 	global $zbp;
 	$all_artiles = 0;
@@ -2612,6 +2919,15 @@ function BuildModule_statistics($array = array()) {
 }
 
 ################################################################################################################
+/**
+ * 显示404页面
+ *
+ * 可通过主题中的404.php模板自定义显示效果
+ * @api Filter_Plugin_Zbp_ShowError
+ * @param $idortext
+ * @param $file
+ * @param $line
+ */
 function ShowError404($idortext,$file,$line){
 	global $zbp;
 
@@ -2626,6 +2942,11 @@ function ShowError404($idortext,$file,$line){
 	$GLOBALS['Filter_Plugin_Zbp_ShowError']['ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
 }
 
+/**
+ * 通过文件获取应用URL地址
+ * @param string $file 文件名
+ * @return string 返回URL地址
+ */
 function plugin_dir_url($file) {
 	global $zbp;
 	$s1=$zbp->path;
@@ -2643,6 +2964,11 @@ function plugin_dir_url($file) {
 	return $s;
 }
 
+/**
+ * 通过文件获取应用目录路径
+ * @param $file
+ * @return string
+ */
 function plugin_dir_path($file) {
 	global $zbp;
 	$s1=$zbp->path;

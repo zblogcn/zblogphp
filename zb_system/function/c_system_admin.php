@@ -1,28 +1,37 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
+ * 后台管理相关
+ * @package Z-BlogPHP
+ * @subpackage System/Administrator 后台管理
  * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
  */
-
 
 $zbp->ismanage=true;
 
-
-################################################################################################################
+/**
+ * 添加页面管理子菜单
+ */
 function Zbp_Admin_Addpagesubmenu(){
 	echo '<a href="../cmd.php?act=PageEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_page'] . '</span></a>';
 }
 
+/**
+ * 添加标签管理子菜单
+ */
 function Zbp_Admin_Addtagsubmenu(){
 	echo '<a href="../cmd.php?act=TagEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_tag'] . '</span></a>';
 }
 
+/**
+ * 添加分类管理子菜单
+ */
 function Zbp_Admin_Addcatesubmenu(){
 	echo '<a href="../cmd.php?act=CategoryEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_category'] . '</span></a>';
 }
 
+/**
+ * 添加用户管理子菜单
+ */
 function Zbp_Admin_Addmemsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('MemberNew')){
@@ -32,6 +41,9 @@ function Zbp_Admin_Addmemsubmenu(){
 	echo '<a href="../cmd.php?act=misc&amp;type=vrs" target="_blank"><span class="m-left">'.$zbp->lang['msg']['view_rights'].'</span></a>';
 }
 
+/**
+ * 添加模块管理子菜单
+ */
 function Zbp_Admin_Addmodsubmenu(){
 	echo '<a href="../cmd.php?act=ModuleEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_module'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=navbar"><span class="m-left">' . $GLOBALS['lang']['msg']['module_navbar'] . '</span></a>';
@@ -39,6 +51,10 @@ function Zbp_Admin_Addmodsubmenu(){
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=favorite"><span class="m-left">' . $GLOBALS['lang']['msg']['module_favorite'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=misc"><span class="m-left">' . $GLOBALS['lang']['msg']['module_misc'] . '</span></a>';
 }
+
+/**
+ * 添加评论管理子菜单
+ */
 function Zbp_Admin_Addcmtsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('CommentAll')){
@@ -61,6 +77,9 @@ $topmenus=array();
 
 $leftmenus=array();
 
+/**
+ * 后台管理左侧导航菜单
+ */
 function ResponseAdmin_LeftMenu(){
 
 	global $zbp;
@@ -95,6 +114,9 @@ function ResponseAdmin_LeftMenu(){
 
 }
 
+/**
+ * 后台管理顶部菜单
+ */
 function ResponseAdmin_TopMenu(){
 
 	global $zbp;
@@ -116,6 +138,15 @@ function ResponseAdmin_TopMenu(){
 }
 
 
+/**
+ * 添加顶部菜单项
+ * @param $requireAction
+ * @param $strName
+ * @param $strUrl
+ * @param $strTarget
+ * @param $strLiId
+ * @return null|string
+ */
 function MakeTopMenu($requireAction,$strName,$strUrl,$strTarget,$strLiId){
 	global $zbp;
 
@@ -133,6 +164,16 @@ function MakeTopMenu($requireAction,$strName,$strUrl,$strTarget,$strLiId){
 }
 
 
+/**
+ * 添加左侧菜单项
+ * @param $requireAction
+ * @param $strName
+ * @param $strUrl
+ * @param $strLiId
+ * @param $strAId
+ * @param $strImgUrl
+ * @return null|string
+ */
 function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUrl){
 	global $zbp;
 
@@ -160,6 +201,11 @@ function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUr
 
 
 ################################################################################################################
+/**
+ * 生成分类select表单
+ * @param $default
+ * @return null|string
+ */
 function CreateOptoinsOfCategorys($default){
 	global $zbp;
 
@@ -177,7 +223,11 @@ function CreateOptoinsOfCategorys($default){
 }
 
 
-
+/**
+ * 生成模板select表单
+ * @param $default
+ * @return null|string
+ */
 function CreateOptoinsOfTemplate($default){
 	global $zbp;
 
@@ -204,7 +254,11 @@ function CreateOptoinsOfTemplate($default){
 }
 
 
-
+/**
+ * 生成用户等级select表单
+ * @param $default
+ * @return null|string
+ */
 function CreateOptoinsOfMemberLevel($default){
 	global $zbp;
 
@@ -219,7 +273,11 @@ function CreateOptoinsOfMemberLevel($default){
 }
 
 
-
+/**
+ * 生成用户select表单
+ * @param $default
+ * @return null|string
+ */
 function CreateOptoinsOfMember($default){
 	global $zbp;
 
@@ -237,6 +295,11 @@ function CreateOptoinsOfMember($default){
 }
 
 
+/**
+ * 生成文章发布状态select表单
+ * @param $default
+ * @return null|string
+ */
 function CreateOptoinsOfPostStatus($default){
 	global $zbp;
 
@@ -256,7 +319,11 @@ function CreateOptoinsOfPostStatus($default){
 }
 
 
-
+/**
+ * 创建Div模块
+ * @param $m
+ * @param bool $button
+ */
 function CreateModuleDiv($m,$button=true){
 	global $zbp;
 
@@ -288,6 +355,12 @@ function CreateModuleDiv($m,$button=true){
 	echo '</div>';
 }
 
+
+/**
+ * 生成时区select表单
+ * @param $default
+ * @return string
+ */
 function CreateOptionsOfTimeZone($default){
 	global $zbp;
 	$s='';
@@ -329,7 +402,11 @@ $tz=array
 }
 
 
-
+/**
+ * 生成语言select表单
+ * @param $default
+ * @return string
+ */
 function CreateOptionsOfLang($default){
 	global $zbp;
 	$s='';
@@ -346,6 +423,9 @@ function CreateOptionsOfLang($default){
 
 
 ################################################################################################################
+/**
+ * 后台管理显示网站信息
+ */
 function Admin_SiteInfo(){
 
 	global $zbp;
@@ -394,6 +474,9 @@ function Admin_SiteInfo(){
 
 
 ################################################################################################################
+/**
+ * 后台文章管理
+ */
 function Admin_ArticleMng(){
 
 	global $zbp;
@@ -502,6 +585,9 @@ foreach ($p->buttons as $key => $value) {
 
 
 ################################################################################################################
+/**
+ * 后台页面管理
+ */
 function Admin_PageMng(){
 
 	global $zbp;
@@ -577,6 +663,9 @@ foreach ($p->buttons as $key => $value) {
 
 
 ################################################################################################################
+/**
+ * 后台分类管理
+ */
 function Admin_CategoryMng(){
 
 	global $zbp;
@@ -629,6 +718,9 @@ foreach ($zbp->categorysbyorder as $category) {
 
 
 ################################################################################################################
+/**
+ * 后台评论管理
+ */
 function Admin_CommentMng(){
 
 	global $zbp;
@@ -757,6 +849,9 @@ foreach ($p->buttons as $key => $value) {
 
 
 ################################################################################################################
+/**
+ * 后台用户管理
+ */
 function Admin_MemberMng(){
 
 	global $zbp;
@@ -838,6 +933,9 @@ foreach ($p->buttons as $key => $value) {
 
 
 ################################################################################################################
+/**
+ *  后台上传附件管理
+ */
 function Admin_UploadMng(){
 
 	global $zbp;
@@ -920,6 +1018,9 @@ foreach ($p->buttons as $key => $value) {
 
 
 ################################################################################################################
+/**
+ * 后台标签管理
+ */
 function Admin_TagMng(){
 
 	global $zbp;
@@ -990,6 +1091,9 @@ foreach ($p->buttons as $key => $value) {
 
 
 ################################################################################################################
+/**
+ * 后台主题管理
+ */
 function Admin_ThemeMng(){
 
 	global $zbp;
@@ -1047,6 +1151,9 @@ echo '</div>';
 
 
 ################################################################################################################
+/**
+ * 后台模块管理
+ */
 function Admin_ModuleMng(){
 
 	global $zbp;
@@ -1289,6 +1396,9 @@ foreach ($zbp->sidebar5 as $m) {
 
 
 ################################################################################################################
+/**
+ * 后台插件管理
+ */
 function Admin_PluginMng(){
 
 	global $zbp;
@@ -1374,6 +1484,9 @@ foreach ($plugins as $plugin) {
 
 
 ################################################################################################################
+/**
+ * 后台网站设置管理
+ */
 function Admin_SettingMng(){
 
 	global $zbp;

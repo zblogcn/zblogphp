@@ -1,15 +1,24 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
+ * 插件接口相关
+
+ * 接口模式复制自Z-Blog ASP版
+ * @package Z-BlogPHP
+ * @subpackage System/Plugin 操作API
  * @copyright (C) RainbowSoft Studio
- * @version       2.0 2013-06-14
  */
 
-#接口模式复制自Z-Blog ASP版
-
+/**
+ * 插件运行中断方式：''
+ */
 define('PLUGIN_EXITSIGNAL_NONE', '');
+/**
+ * 插件中断方式：return
+ */
 define('PLUGIN_EXITSIGNAL_RETURN', 'return');
+/**
+ * 插件中断方式：break
+ */
 define('PLUGIN_EXITSIGNAL_BREAK', 'break');
 
 #定义总插件激活函数列表
@@ -18,21 +27,22 @@ $plugins = array();
 #定义总接口列表，暂未启用
 $filters = array();
 
-/*
-'*********************************************************
-' 目的： 注册插件函数，由每个插件主动调用
-'*********************************************************
-*/
+/**
+ * 注册插件函数，由每个插件主动调用
+ * @param string $strPluginName 插件ID
+ * @param string $strPluginActiveFunction 插件激活时执行的函数名
+ * @return void
+ */
+
 function RegisterPlugin($strPluginName, $strPluginActiveFunction) {
 
 	$GLOBALS['plugins'][$strPluginName] = $strPluginActiveFunction;
 
 }
 
-/*
-'*********************************************************
-' 目的： 激活插件函数
-'*********************************************************
+/**
+ * 激活插件，运行插件激活时加载的函数
+ * @return void
 */
 function ActivePlugin() {
 
@@ -43,10 +53,10 @@ function ActivePlugin() {
 
 }
 
-/*
-'*********************************************************
-' 目的： 安装插件函数，只运行一次
-'*********************************************************
+/**
+ * 插件安装函数，只在插件安装时运行一次
+ * @param string $strPluginName 插件ID
+ * @return void
 */
 function InstallPlugin($strPluginName) {
 
@@ -55,10 +65,9 @@ function InstallPlugin($strPluginName) {
 
 }
 
-/*
-'*********************************************************
-' 目的： 删除插件函数，只运行一次
-'*********************************************************
+/**
+ * 插件删除函数，只在插件删除时运行一次
+ * @return void
 */
 function UninstallPlugin($strPluginName) {
 
