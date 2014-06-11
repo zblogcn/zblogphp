@@ -20,7 +20,7 @@ class Rss2 {
 		$this->xml .= $this->createElement('link',$link);
 		$this->xml .= $this->createElement('description',$description);
 
-		$this->xml .= '</channel>';
+		//$this->xml .= '</channel>';
 	}
 	
 	public function createElement($name,$value){
@@ -28,6 +28,7 @@ class Rss2 {
 	}
 
 	public function addItem($title,$link,$description,$date){
+		if(substr($this->xml,-6)=='</rss>')return ;
 		$this->xml .= '<item>';
 		$this->xml .= $this->createElement('title',$title);
 		$this->xml .= $this->createElement('link',$link);
@@ -38,7 +39,7 @@ class Rss2 {
 	}
 	
 	public function saveXML(){
-		if(substr($this->xml,-6)!=='</rss>')$this->xml .= '</rss>';
+		if(substr($this->xml,-6)!=='</rss>')$this->xml .= '</channel></rss>';
 		return $this->xml;
 	}
 

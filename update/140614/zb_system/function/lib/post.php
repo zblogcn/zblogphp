@@ -1,15 +1,15 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author 
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * 文章类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/Article 类库
  */
-
- 
 class Post extends Base{
 
-
+	/**
+	 *
+	 */
 	function __construct()
 	{
 		global $zbp;
@@ -20,6 +20,11 @@ class Post extends Base{
 	}
 
 
+	/**
+	 * @param $method
+	 * @param $args
+	 * @return mixed
+	 */
 	function __call($method, $args) {
 		foreach ($GLOBALS['Filter_Plugin_Post_Call'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this,$method,$args);
@@ -28,10 +33,17 @@ class Post extends Base{
 	}
 
 
+	/**
+	 * @param string $s
+	 * @return bool|string
+	 */
 	public function Time($s='Y-m-d H:i:s'){
 		return date($s,(int)$this->PostTime);
 	}
 
+	/**
+	 * @return array|int|mixed|null|string
+	 */
 	function TagsToNameString(){
 		global $zbp;
 		$s=$this->Tag;
@@ -55,9 +67,14 @@ class Post extends Base{
 		return $s;
 	}
 
-	public function __set($name, $value) 
+	/**
+	 * @param $name
+	 * @param $value
+	 * @return null|string
+	 */
+	public function __set($name, $value)
 	{
-        global $zbp;
+		global $zbp;
 		switch ($name) {
 			case 'Category':
 			case 'Author':
@@ -82,9 +99,13 @@ class Post extends Base{
 		}
 	}
 
-	public function __get($name) 
+	/**
+	 * @param $name
+	 * @return array|int|mixed|null|string
+	 */
+	public function __get($name)
 	{
-        global $zbp;
+		global $zbp;
 		switch ($name) {
 			case 'Category':
 				return $zbp->GetCategoryByID($this->CateID);
@@ -197,8 +218,11 @@ class Post extends Base{
 
 	}
 
+	/**
+	 * @return bool
+	 */
 	function Save(){
-        global $zbp;
+		global $zbp;
 		if($this->Type==ZC_POST_TYPE_ARTICLE){
 			if($this->Template==GetValueInArray($this->Category->GetData(),'LogTemplate'))$this->data['Template'] = '';
 		}

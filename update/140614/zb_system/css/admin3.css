@@ -1,5 +1,5 @@
 *{padding:0; margin:0;font-size: 14px;}
-body{ padding:0;margin:0;font-family:"微软雅黑","宋体", Arial, Helvetica, sans-serif;background:#FFFFFF;color:#444444;font-size: 14px;line-height: 20px;}
+body{ padding:0;margin:0;font-family:"Microsoft YaHei",STHeiti,"Hiragino Sans GB","WenQuanYi Micro Hei","Heiti SC", NSimSun,SimSun,Arial, Helvetica, sans-serif;background:#FFFFFF;color:#444444;font-size: 14px;line-height: 20px;}
 .setup{width:1000px; height:400px; padding:60px 0 0 0;margin:0 auto;}
 font[color='#3D69AA']{background: #3D69AA;}
 #ddleft{float:left;width:360px;height:400px;font-family:Arial,Helvetica,sans-serif;font-size: 14px;}

@@ -97,9 +97,7 @@ class Metas {
 			//$this->Data=json_decode($s,true);
 		//}else{
 
-		ZBlogException::SuspendErrorHook();
 		$this->Data=@unserialize($s);
-		ZBlogException::ResumeErrorHook();
 
 		//}
 		if(is_array($this->Data)){

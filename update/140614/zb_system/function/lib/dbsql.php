@@ -1,51 +1,109 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * 数据库操作接口
+ *
+ * @package Z-BlogPHP
+ * @subpackage Interface/DataBase 类库
  */
+interface iDataBase {
 
-
-/**
-* DbFactory
-*/
-interface iDataBase
-{
+	/**
+	* @param $array
+	* @return mixed
+	*/
 	public function Open($array);
+	/**
+	* @return mixed
+	*/
 	public function Close();
+	/**
+	* @param $query
+	* @return mixed
+	*/
 	public function Query($query);
+	/**
+	* @param $query
+	* @return mixed
+	*/
 	public function Insert($query);
+	/**
+	* @param $query
+	* @return mixed
+	*/
 	public function Update($query);
+
+	/**
+	* @param $query
+	* @return mixed
+	*/
 	public function Delete($query);
+	/**
+	* @param $s
+	* @return mixed
+	*/
 	public function QueryMulit($s);
+	/**
+	* @param $s
+	* @return mixed
+	*/
 	public function EscapeString($s);
+
+	/**
+	* @param $table
+	* @param $datainfo
+	* @return mixed
+	*/
 	public function CreateTable($table,$datainfo);
+	/**
+	* @param $table
+	* @return mixed
+	*/
 	public function DelTable($table);
+	/**
+	* @param $table
+	* @return mixed
+	*/
 	public function ExistTable($table);
 }
 
 
 
 /**
-* DbSql
+* 数据库操作基类
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/DataBase
 */
-class DbSql #extends AnotherClass
+class DbSql #extends AnotherClass 
 {
+	/**
+	* @var null|string
+	*/
 	public $type=null;
+	/**
+	* @var null
+	*/
 	protected $db=null;
-	
+	/**
+	* @param null $db
+	*/
 	function __construct($db=null)
 	{
 		$this->db=$db;
 		$this->type=get_class($db);
 	}
-	
+	/**
+	* @param $tablename
+	* @return string
+	*/
 	public function ReplacePre(&$s){
 		$s=str_replace('%pre%', $this->db->dbpre, $s);
 		return $s;
 	}
-
+	
+	/**
+	* @param $table
+	* @return string
+	*/
 	public function DelTable($table){
 		$this->ReplacePre($table);
 
@@ -54,6 +112,11 @@ class DbSql #extends AnotherClass
 		return $s;
 	}
 
+	/**
+	* @param $tablename
+	* @param string $dbname
+	* @return string
+	*/
 	public function ExistTable($table,$dbname=''){
 		$this->ReplacePre($table);
 
@@ -68,6 +131,11 @@ class DbSql #extends AnotherClass
 		return $s;
 	}
 
+	/**
+	* @param string $table
+	* @param array $datainfo
+	* @return string
+	*/
 	public function CreateTable($table,$datainfo){
 
 		$s='';
@@ -233,6 +301,11 @@ class DbSql #extends AnotherClass
 	}
 
 
+	/**
+	* @param $where
+	* @param null $changewhere
+	* @return null|string
+	*/
 	public function ParseWhere($where,$changewhere=null){
 
 		$sqlw=null;
@@ -357,6 +430,15 @@ class DbSql #extends AnotherClass
 		return $sqlw;
 	}
 
+	/**
+	* @param string $table
+	* @param string $select
+	* @param string $where
+	* @param string $order
+	* @param string $limit
+	* @param array|null $option
+	* @return string
+	*/
 	public function Select($table,$select,$where,$order,$limit,$option=null){
 		$this->ReplacePre($table);
 	
@@ -423,6 +505,13 @@ class DbSql #extends AnotherClass
 		return $sqls . $sqlw . $sqlo . $sqll;
 	}
 
+	/**
+	* @param string $table
+	* @param string $count
+	* @param string $where
+	* @param null $option
+	* @return string
+	*/
 	public function Count($table,$count,$where,$option=null){
 		$this->ReplacePre($table);
 
@@ -446,6 +535,13 @@ class DbSql #extends AnotherClass
 		return $sqlc . $sqlw;
 	}
 
+	/**
+	* @param string $table
+	* @param string $keyvalue
+	* @param string $where
+	* @param array|null $option
+	* @return string
+	*/
 	public function Update($table,$keyvalue,$where,$option=null){
 		$this->ReplacePre($table);
 	
@@ -467,6 +563,11 @@ class DbSql #extends AnotherClass
 		return $sql;
 	}
 
+	/**
+	* @param string $table
+	* @param string $keyvalue
+	* @return string
+	*/
 	public function Insert($table,$keyvalue){
 		$this->ReplacePre($table);
 
@@ -492,6 +593,12 @@ class DbSql #extends AnotherClass
 		return  $sql;
 	}
 
+	/**
+	* @param string $table
+	* @param string $where
+	* @param array|null $option
+	* @return string
+	*/
 	public function Delete($table,$where,$option=null){
 		$this->ReplacePre($table);
 
@@ -504,6 +611,10 @@ class DbSql #extends AnotherClass
 		return $sql;
 	}
 
+	/**
+	* @param $sql
+	* @return mixed
+	*/
 	public function Filter($sql){
 		$_SERVER['_query_count'] = $_SERVER['_query_count'] + 1;
 		

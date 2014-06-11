@@ -1,21 +1,26 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author 
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * Tag类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/Article 类库
  */
-
-
 class Tag extends Base{
 
-
+	/**
+	 *
+	 */
 	function __construct()
 	{
 		global $zbp;
 		parent::__construct($zbp->table['Tag'],$zbp->datainfo['Tag']);
 	}
 
+	/**
+	 * @param $method
+	 * @param $args
+	 * @return mixed
+	 */
 	function __call($method, $args) {
 		foreach ($GLOBALS['Filter_Plugin_Tag_Call'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this,$method, $args);
@@ -23,9 +28,14 @@ class Tag extends Base{
 		}
 	}
 
+	/**
+	 * @param $name
+	 * @param $value
+	 * @return null|string
+	 */
 	public function __set($name, $value)
 	{
-        global $zbp;
+		global $zbp;
 		if ($name=='Url') {
 			return null;
 		}
@@ -36,9 +46,13 @@ class Tag extends Base{
 		parent::__set($name, $value);
 	}
 
+	/**
+	 * @param $name
+	 * @return mixed|string
+	 */
 	public function __get($name)
 	{
-        global $zbp;
+		global $zbp;
 		if ($name=='Url') {
 			$u = new UrlRule($zbp->option['ZC_TAGS_REGEX']);
 			$u->Rules['{%id%}']=$this->ID;
@@ -53,8 +67,11 @@ class Tag extends Base{
 		return parent::__get($name);
 	}
 
+	/**
+	 * @return bool
+	 */
 	function Save(){
-        global $zbp;
+		global $zbp;
 		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
 		foreach ($GLOBALS['Filter_Plugin_Tag_Save'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this);

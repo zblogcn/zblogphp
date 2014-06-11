@@ -5,7 +5,8 @@
 邮箱：u2lei@yahoo.com.cn
      xinxr@msn.com
 */
-body{ padding:0;margin:0;font-family:"微软雅黑","宋体", Arial, Helvetica, sans-serif;background:#ffffff;color:#444444;font-size: 14px;line-height: 20px;}
+
+body{ padding:0;margin:0;font-family:"Microsoft YaHei",STHeiti,"Hiragino Sans GB","WenQuanYi Micro Hei","Heiti SC",NSimSun,SimSun, Arial, Helvetica, sans-serif;background:#ffffff;color:#444444;font-size: 14px;line-height: 20px;}
 * { font-size:14px ;padding:0; margin:0;}
 div, h1, h2, h3, h4, p, form, ul, label, input, textarea, img, span{margin:0; padding:0;}
 table{border-collapse:collapse;}
