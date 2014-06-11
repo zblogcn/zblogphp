@@ -66,6 +66,7 @@ function GetVars($name, $type = 'REQUEST') {
  * @param string $type 默认为REQUEST
  * @param string $default 默认为null
  * @return mixed|null
+ * @since 1.3.140614
  */
 function GetVarsByDefault($name, $type = 'REQUEST',$default = null) {
 	$g = GetVars($name, $type);
@@ -760,6 +761,12 @@ function RemoveBOM($s){
 	return $s;
 }
 
+
+/**
+ * 显示全局数据结构
+ * @return mixed
+ * @since 1.3.140614
+ */
 function Debug_PrintGlobals(){
 	$a=array();
 	foreach($GLOBALS as $n=>$v){
@@ -768,6 +775,11 @@ function Debug_PrintGlobals(){
 	return print_r($a,true);
 }
 
+/**
+ * 显示引用文件列表
+ * @return mixed
+ * @since 1.3.140614
+ */
 function Debug_PrintIncludefiles(){
 	$a=array();
 	foreach(get_included_files() as $n=>$v){
@@ -776,6 +788,12 @@ function Debug_PrintIncludefiles(){
 	return print_r($a,true);
 }
 
+/**
+ * 获取指定时区名
+ * @param int $z 时区号
+ * @return string 时区名
+ * @since 1.3.140614
+ */
 function GetTimeZonebyGMT($z){
 	$timezones = array(  
 		-12 => 'Etc/GMT+12',
