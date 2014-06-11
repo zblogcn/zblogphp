@@ -365,7 +365,7 @@ function CreateOptionsOfTimeZone($default){
 	global $zbp;
 	$s='';
 $tz=array
-\t (
+	 (
 		'Etc/GMT+12' => '-12:00',
 		'Pacific/Midway' => '-11:00',
 		'Pacific/Honolulu' => '-10:00',
@@ -392,7 +392,7 @@ $tz=array
 		'Australia/Sydney' => '+11:00',
 		'Pacific/Fiji' => '+12:00',
 		'Pacific/Tongatapu' => '+13:00'
-\t );
+	 );
 
 	foreach ($tz as $key => $value) {
 		$s .= '<option value="' . $key . '" ' . ($default==$key?'selected="selected"':'') . ' >' . $key . ' ' . $value . '</option>';
@@ -1370,19 +1370,19 @@ foreach ($zbp->sidebar5 as $m) {
  		}).disableSelection();
 
 		$( ".widget-list>.widget" ).draggable({
-\t\t\tconnectToSortable: ".siderbar-sort-list",
-\t\t\trevert: "invalid",
-\t\t\tcontainment: "document",
-\t\t\thelper: "clone",
-\t\t\tcursor: "move"
-\t\t}).disableSelection();
+			connectToSortable: ".siderbar-sort-list",
+			revert: "invalid",
+			containment: "document",
+			helper: "clone",
+			cursor: "move"
+		}).disableSelection();
 
 		$( ".widget-list" ).droppable({
 			accept:".siderbar-sort-list>.widget",
-\t\t\tdrop: function( event, ui ) {
-\t\t\t	ui.draggable.remove();
-\t\t\t}
-\t\t});
+			drop: function( event, ui ) {
+				ui.draggable.remove();
+			}
+		});
 
 });
 
@@ -1500,22 +1500,22 @@ function Admin_SettingMng(){
 
 ?>
 
-\t\t  <form method="post" action="../cmd.php?act=SettingSav<?php echo '&amp;token='. $zbp->GetToken();?>">
-\t\t\t<div id="divMain2">
-\t\t\t  <div class="content-box"><!-- Start Content Box -->
+		  <form method="post" action="../cmd.php?act=SettingSav<?php echo '&amp;token='. $zbp->GetToken();?>">
+			<div id="divMain2">
+			  <div class="content-box"><!-- Start Content Box -->
 
-\t\t\t\t<div class="content-box-header">
-\t\t\t\t  <ul class="content-box-tabs">
-\t\t\t\t\t<li><a href="#tab1" class="default-tab"><span><?php echo $zbp->lang['msg']['basic_setting']?></span></a></li>
-\t\t\t\t\t<li><a href="#tab2"><span><?php echo $zbp->lang['msg']['global_setting']?></span></a></li>
-\t\t\t\t\t<li><a href="#tab3"><span><?php echo $zbp->lang['msg']['page_setting']?></span></a></li>
-\t\t\t\t\t<li><a href="#tab4"><span><?php echo $zbp->lang['msg']['comment_setting']?></span></a></li>
-\t\t\t\t  </ul>
-\t\t\t\t  <div class="clear"></div>
-\t\t\t\t</div>
-\t\t\t\t<!-- End .content-box-header -->
+				<div class="content-box-header">
+				  <ul class="content-box-tabs">
+					<li><a href="#tab1" class="default-tab"><span><?php echo $zbp->lang['msg']['basic_setting']?></span></a></li>
+					<li><a href="#tab2"><span><?php echo $zbp->lang['msg']['global_setting']?></span></a></li>
+					<li><a href="#tab3"><span><?php echo $zbp->lang['msg']['page_setting']?></span></a></li>
+					<li><a href="#tab4"><span><?php echo $zbp->lang['msg']['comment_setting']?></span></a></li>
+				  </ul>
+				  <div class="clear"></div>
+				</div>
+				<!-- End .content-box-header -->
 
-\t\t\t\t<div class="content-box-content">
+				<div class="content-box-content">
 <?php
 
 	echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
@@ -1573,14 +1573,14 @@ function Admin_SettingMng(){
 	echo '</table>';
 	echo '</div>';
 ?>
-\t\t\t\t</div>
-\t\t\t\t<!-- End .content-box-content -->
+				</div>
+				<!-- End .content-box-content -->
 
-\t\t\t  </div>
-\t\t\t  <hr/>
+			  </div>
+			  <hr/>
 			  <p><input type="submit" class="button" value="提交" id="btnPost" onclick="" /></p>
-\t\t\t</div>
-\t\t  </form>
+			</div>
+		  </form>
 <?php
 
 	echo '<script type="text/javascript">ActiveTopMenu("topmenu2");</script>';
