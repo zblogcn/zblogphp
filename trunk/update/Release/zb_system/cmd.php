@@ -41,7 +41,7 @@ switch ($action) {
 		break;
 	case 'search':
 		$q=urlencode(trim(strip_tags(GetVars('q','POST'))));
-		Redirect('../search.php?q=' . $q);
+		Redirect($zbp->searchurl . '?q=' . $q);
 		break;
 	case 'misc':
 		require './function/c_system_misc.php';
@@ -205,6 +205,7 @@ switch ($action) {
 	case 'PluginMng':
 		if(GetVars('install','GET')){
 			InstallPlugin(GetVars('install','GET'));
+			$zbp->BuildModule();
 		}
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
@@ -245,13 +246,14 @@ switch ($action) {
 		Redirect('admin/module_edit.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'ModulePst':
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		PostModule();
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=ModuleMng');
 		break;
 	case 'ModuleDel':
-
+		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelModule();
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
@@ -269,6 +271,11 @@ switch ($action) {
 		$zbp->BuildModule();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=SettingMng');
+		break;
+	case 'ajax':
+		foreach ($GLOBALS['Filter_Plugin_Cmd_Ajax'] as $fpname => &$fpsignal) {
+			$fpname(GetVars('src','GET'));
+		}
 		break;
 	default:
 		# code...

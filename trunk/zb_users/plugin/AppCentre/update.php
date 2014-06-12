@@ -114,9 +114,9 @@ if ($nowxml!=''){
   foreach ($xml->children() as $file) {
   	if(file_exists($f=$zbp->path . str_replace('\\','/',$file['name']))){
 		$f=file_get_contents($f);
-	  	$newcrc32=substr(strtoupper(dechex(crc32_signed($f))),-8);
+	  	$newcrc32=substr(strtoupper(dechex(AppCentre_crc32_signed($f))),-8);
 		$f=str_replace("\n","\r\n",$f);
-		$newcrc32_2=substr(strtoupper(dechex(crc32_signed($f))),-8);
+		$newcrc32_2=substr(strtoupper(dechex(AppCentre_crc32_signed($f))),-8);
   	}else{
   		$newcrc32='';
 		$newcrc32_2='';

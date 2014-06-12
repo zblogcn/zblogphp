@@ -8,7 +8,7 @@ $zbp->Load();
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php if(strpos(GetVars('HTTP_USER_AGENT','SERVERS'),'MSIE')){?>
+<?php if(strpos(GetVars('HTTP_USER_AGENT','SERVER'),'Trident/')){?>
 	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 <?php }?>
 	<meta name="robots" content="none" />
@@ -19,15 +19,13 @@ $zbp->Load();
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 	<title><?php echo $blogname . '-' . $lang['msg']['login']?></title>
 <?php
-
 foreach ($GLOBALS['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {$fpname();}
-
 ?>
 </head>
 <body>
 <div class="bg">
 <div id="wrapper">
-  <div class="logo"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></div>
+  <div class="logo"><img src="image/admin/none.gif" title="<?php echo htmlspecialchars($blogname)?>" alt="<?php echo htmlspecialchars($blogname)?>"/></div>
   <div class="login">
     <form method="post" action="#">
     <dl>
@@ -43,13 +41,12 @@ foreach ($GLOBALS['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {$fpna
 	<input type="hidden" name="username" id="username" value="" />
 	<input type="hidden" name="password" id="password" value="" />
 	<input type="hidden" name="savedate" id="savedate" value="0" />
+	<input type="hidden" name="dishtml5" id="dishtml5" value="0" />
     </form>
   </div>
 </div>
 </div>
-
 <script type="text/javascript">
-
 $("#btnPost").click(function(){
 
 	var strUserName=$("#edtUserName").val();
@@ -64,28 +61,24 @@ $("#btnPost").click(function(){
 	$("#edtUserName").remove();
 	$("#edtPassWord").remove();
 
-	strUserName=strUserName;
-	strPassWord=MD5(strPassWord);
-
 	$("form").attr("action","cmd.php?act=verify");
 	$("#username").val(strUserName);
-	$("#password").val(strPassWord);
+	$("#password").val(MD5(strPassWord));
 	$("#savedate").val(strSaveDate);
 })
-
-$(document).ready(function(){
-	if (!$.support.leadingWhitespace) {
-		alert("<?php echo $lang['error']['74']?>");
-	}
-});
 
 $("#chkRemember").click(function(){
 	$("#savedate").attr("value",$("#chkRemember").attr("checked")=="checked"?30:0);
 })
+
+<?php if($zbp->option['ZC_ADMIN_HTML5_ENABLE']){?>
+if (!$.support.leadingWhitespace) {
+	$("#dishtml5").val(1);
+}
+<?php }?>
 </script>
 </body>
 </html>
 <?php
-
 RunTime();
 ?>

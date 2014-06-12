@@ -9,7 +9,7 @@ body{
 min-width:980px;
 padding:0;
 margin:0;
-font-family:"微软雅黑","宋体", Arial, Helvetica, sans-serif;
+font-family:"Microsoft YaHei",STHeiti,"Hiragino Sans GB","WenQuanYi Micro Hei","Heiti SC",NSimSun,SimSun, Arial, Helvetica, sans-serif;
 color:#333333;
 font-size: 14px;
 line-height: 20px;
@@ -185,13 +185,13 @@ background-image: url(../image/common/window_2.png);
 #leftmenu #nav_page span { background-image: url(../image/common/page_1.png)!important;}
 #leftmenu #nav_category span { background-image: url(../image/common/category_1.png)!important;}
 #leftmenu #nav_tags span { background-image: url(../image/common/tags_1.png)!important;}
-#leftmenu #nav_comments span { background-image: url(../image/common/comments_1.png)!important;}
+#leftmenu #nav_comment span { background-image: url(../image/common/comments_1.png)!important;}
 #leftmenu #nav_quoted span { background-image: url(../image/common/quoted_1.png)!important;}
-#leftmenu #nav_accessories span { background-image: url(../image/common/accessories_1.png)!important;}
-#leftmenu #nav_themes span { background-image: url(../image/common/themes_1.png)!important;}
+#leftmenu #nav_upload span { background-image: url(../image/common/accessories_1.png)!important;}
+#leftmenu #nav_theme span { background-image: url(../image/common/themes_1.png)!important;}
 #leftmenu #nav_plugin span { background-image: url(../image/common/plugin_1.png)!important;}
-#leftmenu #nav_function span { background-image: url(../image/common/link_1.png)!important;}
-#leftmenu #nav_user span { background-image: url(../image/common/user_1.png)!important;}
+#leftmenu #nav_module span { background-image: url(../image/common/link_1.png)!important;}
+#leftmenu #nav_member span { background-image: url(../image/common/user_1.png)!important;}
 
 /*高亮导航图标区*/
 #leftmenu #nav_build.on span { background-image: url(../image/common/rebuild_2.png)!important;}
@@ -201,13 +201,13 @@ background-image: url(../image/common/window_2.png);
 #leftmenu #nav_page.on span { background-image: url(../image/common/page_2.png)!important;}
 #leftmenu #nav_category.on span { background-image: url(../image/common/category_2.png)!important;}
 #leftmenu #nav_tags.on span { background-image: url(../image/common/tags_2.png)!important;}
-#leftmenu #nav_comments.on span { background-image: url(../image/common/comments_2.png)!important;}
+#leftmenu #nav_comment.on span { background-image: url(../image/common/comments_2.png)!important;}
 #leftmenu #nav_quoted.on span { background-image: url(../image/common/quoted_2.png)!important;}
-#leftmenu #nav_accessories.on span { background-image: url(../image/common/accessories_2.png)!important;}
-#leftmenu #nav_themes.on span { background-image: url(../image/common/themes_2.png)!important;}
+#leftmenu #nav_upload.on span { background-image: url(../image/common/accessories_2.png)!important;}
+#leftmenu #nav_theme.on span { background-image: url(../image/common/themes_2.png)!important;}
 #leftmenu #nav_plugin.on span { background-image: url(../image/common/plugin_2.png)!important;}
-#leftmenu #nav_function.on span { background-image: url(../image/common/link_2.png)!important;}
-#leftmenu #nav_user.on span { background-image: url(../image/common/user_2.png)!important;}
+#leftmenu #nav_module.on span { background-image: url(../image/common/link_2.png)!important;}
+#leftmenu #nav_member.on span { background-image: url(../image/common/user_2.png)!important;}
 
 
 #leftmenu li span{
@@ -401,7 +401,8 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 	width:100%;
 }
 
-#divEditTitle,#divContent,#divIntro,#divEditForm,#divEditForm2{
+.editmod2{
+	margin:1em 0;
 	padding-right:265px;
 }
 #divIntro{
@@ -431,7 +432,7 @@ div.post_edit input#edtTitle{
 div.post_edit input#edtAlias, input#edtTag{
 	margin-top: 5px;
 	padding: 3px;
-	width: 63%;
+	width: 70%;
 }
 #ulTag{
 	margin:0 3em;

@@ -4,7 +4,7 @@
 
   <h2><a href="{$article.Url}" title="{$article.Title}">{$article.Title}</a></h2>
 
-      <span class="submitted">{$article.Time('l Y-m-d H:i')} - {$article.Author.Name}</span>
+      <span class="submitted">{$article.Time('l Y-m-d H:i')} - {$article.Author.StaticName}</span>
   
   <div class="content">
     {$article.Intro}

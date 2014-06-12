@@ -1,25 +1,36 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * Url规则类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib 类库
  */
+class UrlRule{
 
-/**
-* UrlRule
-*/
-class UrlRule
-{
+	/**
+	 * @var array
+	 */
 	public $Rules=array();
+	/**
+	 * @var string
+	 */
 	public $Url='';
 	private $PreUrl='';
+	/**
+	 * @var bool
+	 */
 	public $MakeReplace=true;
 
+	/**
+	 * @param $url
+	 */
 	public function __construct($url){
 		$this->PreUrl=$url;
 	}
 
+	/**
+	 * @return string
+	 */
 	private function Make_Preg(){
 		global $zbp;
 
@@ -39,6 +50,9 @@ class UrlRule
 		return $this->Url;
 	}
 
+	/**
+	 * @return string
+	 */
 	private function Make_Replace(){
 		global $zbp;
 		$s=$this->PreUrl;
@@ -70,6 +84,9 @@ class UrlRule
 		return $this->Url;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function Make(){
 		if($this->MakeReplace){
 			return $this->Make_Replace();
@@ -78,6 +95,11 @@ class UrlRule
 		}
 	}
 
+	/**
+	 * @param $url
+	 * @param $type
+	 * @return string
+	 */
 	static public function Rewrite_url($url,$type){
 		global $zbp;
 		switch ($zbp->categorylayer) {
@@ -151,6 +173,9 @@ class UrlRule
 	}
 
 
+	/**
+	 * @return string
+	 */
 	public function Make_htaccess(){
 		global $zbp;
 		$s='<IfModule mod_rewrite.c>' . "\r\n";
@@ -165,6 +190,9 @@ class UrlRule
 	}
 
 
+	/**
+	 * @return string
+	 */
 	public function Make_webconfig(){
 		global $zbp;
 
@@ -175,22 +203,22 @@ class UrlRule
 		$s .='  <rewrite>' . "\r\n";
 		$s .='   <rules>' . "\r\n";
 
-		$s .='    <rule name="'.$zbp->cookiespath.' Z-BlogPHP Imported Rule" stopProcessing="true">' . "\r\n";
-		$s .='     <match url="^.*?" ignoreCase="false" />' . "\r\n";
-		$s .='      <conditions logicalGrouping="MatchAll">' . "\r\n";
-		$s .='       <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />' . "\r\n";
-		$s .='       <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />' . "\r\n";
-		$s .='      </conditions>' . "\r\n";
-		$s .='     <action type="Rewrite" url="index.php/{R:0}" />' . "\r\n";
-		$s .='    </rule>' . "\r\n";
+		$s .='	<rule name="'.$zbp->cookiespath.' Z-BlogPHP Imported Rule" stopProcessing="true">' . "\r\n";
+		$s .='	 <match url="^.*?" ignoreCase="false" />' . "\r\n";
+		$s .='	  <conditions logicalGrouping="MatchAll">' . "\r\n";
+		$s .='	   <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />' . "\r\n";
+		$s .='	   <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />' . "\r\n";
+		$s .='	  </conditions>' . "\r\n";
+		$s .='	 <action type="Rewrite" url="index.php/{R:0}" />' . "\r\n";
+		$s .='	</rule>' . "\r\n";
 		
-		$s .='    <rule name="'.$zbp->cookiespath.' Z-BlogPHP Imported Rule index.php" stopProcessing="true">' . "\r\n";
-		$s .='     <match url="^index.php/.*?" ignoreCase="false" />' . "\r\n";
-		$s .='      <conditions logicalGrouping="MatchAll">' . "\r\n";
-		$s .='       <add input="{REQUEST_FILENAME}" matchType="IsFile" />' . "\r\n";
-		$s .='      </conditions>' . "\r\n";
-		$s .='     <action type="Rewrite" url="index.php/{R:0}" />' . "\r\n";
-		$s .='    </rule>' . "\r\n";
+		$s .='	<rule name="'.$zbp->cookiespath.' Z-BlogPHP Imported Rule index.php" stopProcessing="true">' . "\r\n";
+		$s .='	 <match url="^index.php/.*?" ignoreCase="false" />' . "\r\n";
+		$s .='	  <conditions logicalGrouping="MatchAll">' . "\r\n";
+		$s .='	   <add input="{REQUEST_FILENAME}" matchType="IsFile" />' . "\r\n";
+		$s .='	  </conditions>' . "\r\n";
+		$s .='	 <action type="Rewrite" url="index.php/{R:0}" />' . "\r\n";
+		$s .='	</rule>' . "\r\n";
 
 		$s .='   </rules>' . "\r\n";
 		$s .='  </rewrite>' . "\r\n";
@@ -200,6 +228,9 @@ class UrlRule
 		return $s;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function Make_nginx(){
 		global $zbp;
 		$s ='';
@@ -214,7 +245,10 @@ class UrlRule
 		$s .='}' . "\r\n";
 		return $s;
 	}
-	
+
+	/**
+	 * @return string
+	 */
 	public function Make_lighttpd(){
 		global $zbp;
 		$s ='';
@@ -240,8 +274,11 @@ class UrlRule
 		
 		
 		return $s;
-	}	
+	}
 
+	/**
+	 * @return string
+	 */
 	public function Make_httpdini(){
 		global $zbp;
 
@@ -259,6 +296,11 @@ class UrlRule
 		return $s;
 	}
 
+	/**
+	 * @param $url
+	 * @param $type
+	 * @return string
+	 */
 	public function Rewrite_httpdini($url,$type){
 		global $zbp;
 		switch ($zbp->categorylayer) {
@@ -333,5 +375,4 @@ class UrlRule
 
 	}
 
-	
 }

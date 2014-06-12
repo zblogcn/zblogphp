@@ -1,28 +1,39 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * 数据操作基类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib 类库
  */
+class Base {
 
-/**
-* BaseClass
-*/
-class Base
-{
-
+	/**
+	* @var string 数据表
+	*/
 	protected $table='';
+	/**
+	* @var array 表结构信息
+	*/
 	protected $datainfo = array();
+	/**
+	* @var array 数据
+	*/
 	protected $data = array();
 
+	/**
+	* @var Metas|null 扩展元数据
+	*/
 	public $Metas = null;
 
+	/**
+	* @param string $table 数据表
+	* @param array $datainfo 数据表结构信息
+	*/
 	function __construct(&$table,&$datainfo){
-        global $zbp;
+			global $zbp;
 
-        $this->table=$table;
-        $this->datainfo=$datainfo;
+			$this->table=&$table;
+			$this->datainfo=&$datainfo;
 
 		$this->Metas=new Metas;
 
@@ -31,34 +42,66 @@ class Base
 		}
 	}
 
+	/**
+	* @param $name
+	* @param $value
+	*/
 	public function __set($name, $value){
 		$this->data[$name]  =  $value;
 	}
 
+	/**
+	* @param $name
+	* @return mixed
+	*/
 	public function __get($name){
 		return $this->data[$name];
 	}
 
+	/**
+	* @param $name
+	* @return bool
+	*/
 	public function __isset($name){
 		return isset($this->data[$name]);
 	}
 
+	/**
+	* @param $name
+	*/
 	public function  __unset($name){
 		unset($this->data[$name]);
 	}
-	
+
+	/**
+	* 获取数据库数据
+	* @return array
+	*/
 	function GetData(){
 		return $this->data;
 	}
-	
+
+	/**
+	* 获取数据表
+	* @return string
+	*/
 	function GetTable(){
 		return $this->table;
 	}
-	
+
+	/**
+	* 获取表结构
+	* @return array
+	*/
 	function GetDataInfo(){
 		return $this->datainfo;
 	}
 
+	/**
+	* 从数据库加载实例数据
+	* @param int $id 实例ID
+	* @return bool
+	*/
 	function LoadInfoByID($id){
 		global $zbp;
 
@@ -76,6 +119,11 @@ class Base
 		}
 	}
 
+	/**
+	* 从关联数组中加载实例数据
+	* @param array $array 关联数组
+	* @return bool
+	*/
 	function LoadInfoByAssoc($array){
 		global $zbp;
 
@@ -97,6 +145,11 @@ class Base
 		return true;
 	}
 
+	/**
+	* 从数组中加载实例数据
+	* @param $array
+	* @return bool
+	*/
 	function LoadInfoByArray($array){
 		global $zbp;
 
@@ -120,6 +173,12 @@ class Base
 		return true;
 	}
 
+	/**
+	* 保存数据
+	*
+	* 保存实例数据到$zbp及数据库中
+	* @return bool
+	*/
 	function Save(){
 		global $zbp;
 
@@ -154,25 +213,36 @@ class Base
 		}
 		array_shift($keyvalue);
 
-		if ($this->ID  ==  0) {
+		$id_field=reset($this->datainfo);
+		$id_name=key($this->datainfo);
+		$id_field=$id_field[0];
+		
+		if ($this->$id_name  ==  0) {
 			$sql = $zbp->db->sql->Insert($this->table,$keyvalue);
-			$this->ID = $zbp->db->Insert($sql);
+			$this->$id_name = $zbp->db->Insert($sql);
 		} else {
-			$id_field=reset($this->datainfo);
-			$id_field=$id_field[0];
-			$sql = $zbp->db->sql->Update($this->table,$keyvalue,array(array('=',$id_field,$this->ID)));
+
+			$sql = $zbp->db->sql->Update($this->table,$keyvalue,array(array('=',$id_field,$this->$id_name)));
 			return $zbp->db->Update($sql);
 		}
 
 		return true;
 	}
 
+	/**
+	* 删除数据
+	*
+	* 从$zbp及数据库中删除该实例数据
+	* @return bool
+	*/
 	function Del(){
 		global $zbp;
 		$id_field=reset($this->datainfo);
+		$id_name=key($this->datainfo);
 		$id_field=$id_field[0];
-		$sql = $zbp->db->sql->Delete($this->table,array(array('=',$id_field,$this->ID)));
+		$sql = $zbp->db->sql->Delete($this->table,array(array('=',$id_field,$this->$id_name)));
 		$zbp->db->Delete($sql);
 		return true;
 	}
+
 }

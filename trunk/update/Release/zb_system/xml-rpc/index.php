@@ -7,8 +7,8 @@ if(isset($_GET['rsd'])){
 	echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 	echo '<rsd version="1.0" xmlns="http://archipelago.phrasewise.com/rsd">'."\n";
 	echo '  <service>'."\n";
-	echo '    <engineName>Z-Blog PHP</engineName>'."\n";
-	echo '    <engineLink>http://www.rainbowsoft.org/</engineLink>'."\n";
+	echo '    <engineName>Z-BlogPHP</engineName>'."\n";
+	echo '    <engineLink>http://www.zblogcn.com/</engineLink>'."\n";
 	echo '    <homePageLink>'.$zbp->host.'</homePageLink>'."\n";
 	echo '    <apis>'."\n";
 	echo '      <api name="WordPress" blogID="1" preferred="true" apiLink="'.$zbp->host.'zb_system/xml-rpc/" />'."\n";

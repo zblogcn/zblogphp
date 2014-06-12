@@ -1,64 +1,147 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * 数据库操作接口
+ *
+ * @package Z-BlogPHP
+ * @subpackage Interface/DataBase 类库
  */
+interface iDataBase {
 
-
-/**
-* DbFactory
-*/
-interface iDataBase
-{
+	/**
+	* @param $array
+	* @return mixed
+	*/
 	public function Open($array);
+	/**
+	* @return mixed
+	*/
 	public function Close();
+	/**
+	* @param $query
+	* @return mixed
+	*/
 	public function Query($query);
+	/**
+	* @param $query
+	* @return mixed
+	*/
 	public function Insert($query);
+	/**
+	* @param $query
+	* @return mixed
+	*/
 	public function Update($query);
+
+	/**
+	* @param $query
+	* @return mixed
+	*/
 	public function Delete($query);
+	/**
+	* @param $s
+	* @return mixed
+	*/
 	public function QueryMulit($s);
+	/**
+	* @param $s
+	* @return mixed
+	*/
 	public function EscapeString($s);
-	public function CreateTable($tablename,$datainfo);
-	public function DelTable($tablename);
-	public function ExistTable($tablename);
+
+	/**
+	* @param $table
+	* @param $datainfo
+	* @return mixed
+	*/
+	public function CreateTable($table,$datainfo);
+	/**
+	* @param $table
+	* @return mixed
+	*/
+	public function DelTable($table);
+	/**
+	* @param $table
+	* @return mixed
+	*/
+	public function ExistTable($table);
 }
 
 
 
 /**
-* DbSql
+* 数据库操作基类
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/DataBase
 */
-class DbSql #extends AnotherClass
+class DbSql #extends AnotherClass 
 {
+	/**
+	* @var null|string
+	*/
 	public $type=null;
+	/**
+	* @var null
+	*/
+	protected $db=null;
+	/**
+	* @param null $db
+	*/
+	function __construct($db=null)
+	{
+		$this->db=$db;
+		$this->type=get_class($db);
+	}
+	/**
+	* @param $tablename
+	* @return string
+	*/
+	public function ReplacePre(&$s){
+		$s=str_replace('%pre%', $this->db->dbpre, $s);
+		return $s;
+	}
+	
+	/**
+	* @param $table
+	* @return string
+	*/
+	public function DelTable($table){
+		$this->ReplacePre($table);
 
-	public function DelTable($tablename){
 		$s='';
-		$s="DROP TABLE $tablename";
+		$s="DROP TABLE $table";
 		return $s;
 	}
 
-	public function ExistTable($tablename,$dbname=''){
+	/**
+	* @param $tablename
+	* @param string $dbname
+	* @return string
+	*/
+	public function ExistTable($table,$dbname=''){
+		$this->ReplacePre($table);
 
 		$s='';
 		if($this->type=='DbSQLite'||$this->type=='DbSQLite3'){
-			$s="SELECT count(*) FROM sqlite_master WHERE type='table' AND name='$tablename'";
+			$s="SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='$table'";
 		}
-		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbPostgreSQL'){
-			$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$tablename'";
+		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
+			$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$table'";
 		}
 
 		return $s;
 	}
 
-	public function CreateTable($tablename,$datainfo){
+	/**
+	* @param string $table
+	* @param array $datainfo
+	* @return string
+	*/
+	public function CreateTable($table,$datainfo){
 
 		$s='';
 
 		if($this->type=='DbSQLite'){
-			$s.='CREATE TABLE '.$tablename.' (';
+			$s.='CREATE TABLE '.$table.' (';
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
@@ -100,12 +183,12 @@ class DbSql #extends AnotherClass
 
 			$s.=');';
 			reset($datainfo);
-			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$tablename.' ('.GetValueInArrayByCurrent($datainfo,0).');';
+			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$table.' ('.GetValueInArrayByCurrent($datainfo,0).');';
 
 		}
 
 		if($this->type=='DbSQLite3'){
-			$s.='CREATE TABLE '.$tablename.' (';
+			$s.='CREATE TABLE '.$table.' (';
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
@@ -147,11 +230,11 @@ class DbSql #extends AnotherClass
 
 			$s.=');';
 			reset($datainfo);
-			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$tablename.' ('.GetValueInArrayByCurrent($datainfo,0).');';
+			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$table.' ('.GetValueInArrayByCurrent($datainfo,0).');';
 		}
 
-		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'){
-			$s.='CREATE TABLE IF NOT EXISTS '.$tablename.' (';
+		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
+			$s.='CREATE TABLE IF NOT EXISTS '.$table.' (';
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
@@ -213,96 +296,152 @@ class DbSql #extends AnotherClass
 			$s.=') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
 		}
 
+		$this->ReplacePre($s);
 		return $s;
 	}
 
 
-	public function ParseWhere($where){
-		global $zbp;
+	/**
+	* @param $where
+	* @param null $changewhere
+	* @return null|string
+	*/
+	public function ParseWhere($where,$changewhere=null){
 
 		$sqlw=null;
-		if(!empty($where)) {
+		if(empty($where))return null;
+
+		if(!is_null($changewhere)){
+			$sqlw .= " $changewhere ";
+		}else{
 			$sqlw .= ' WHERE ';
-			$comma = '';
-			foreach($where as $k => $w) {
-				$eq=strtoupper($w[0]);
-				if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='){
-					$x = (string)$w[1];
-					$y = (string)$w[2];
-					$y = $zbp->db->EscapeString($y);
-					$sqlw .= $comma . " $x $eq '$y' ";
-				}
-				if($eq=='BETWEEN'){
-					$b1 = (string)$w[1];
-					$b2 = (string)$w[2];
-					$b3 = (string)$w[3];
-					$sqlw .= $comma . " $b1 BETWEEN '$b2' AND '$b3' ";
-				}
-				if($eq=='SEARCH'){
-					$j=count($w);
-					$sql_search='';
-					$c='';
-					for ($i=1; $i <= $j-1-1; $i++) {
-						$x=(string)$w[$i];
-						$y=(string)$w[$j-1];
-						$y=$zbp->db->EscapeString($y);
-						$sql_search .= $c . " ($x LIKE '%$y%') ";
-						$c='OR';
-					}
-					$sqlw .= $comma .  '(' . $sql_search . ') ';
-				}
-				if($eq=='ARRAY'){
-					$c='';
-					$sql_array='';
-					if(!is_array($w[1]))continue;
-					if(count($w[1])==0)continue;
-					foreach ($w[1] as $x=>$y) {
-						$y[1]=$zbp->db->EscapeString($y[1]);
-						$sql_array .= $c . " $y[0]='$y[1]' ";
-						$c='OR';
-					}
-					$sqlw .= $comma .  '(' . $sql_array . ') ';
-				}
-				if($eq=='ARRAY_LIKE'){
-					$c='';
-					$sql_array='';
-					if(!is_array($w[1]))continue;
-					if(count($w[1])==0)continue;
-					foreach ($w[1] as $x=>$y) {
-						$y[1]=$zbp->db->EscapeString($y[1]);
-						$sql_array .= $c . " ($y[0] LIKE '%$y[1]%') ";
-						$c='OR';
-					}
-					$sqlw .= $comma .  '(' . $sql_array . ') ';
-				}
-				if($eq=='IN'){
-					$c='';
-					$sql_array='';
-					if(!is_array($w[2])){
-						$sql_array=$w[2];
-					}else{
-						if(count($w[2])==0)continue;
-						foreach ($w[2] as $x=>$y) {
-							$y=$zbp->db->EscapeString($y);
-							$sql_array .= $c . " '$y' ";
-							$c=',';
-						}
-					}
-					$sqlw .= $comma .  '('. $w[1] .' IN (' . $sql_array . ')) ';
-				}
-				if($eq=='CUSTOM'){
-					$sqlw .= $comma .  '(' . $w[1] . ') ';
-				}
-				$comma = 'AND';
-			}
 		}
+		
+		if(!is_array($where))return $sqlw . $where;
+		
+		$comma = '';
+		foreach($where as $k => $w) {
+			$eq=strtoupper($w[0]);
+			if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='|$eq=='NOT LIKE'){
+				$x = (string)$w[1];
+				$y = (string)$w[2];
+				$y = $this->db->EscapeString($y);
+				$sqlw .= $comma . " $x $eq '$y' ";
+			}
+			if($eq=='EXISTS'|$eq=='NOT EXISTS'){
+				if(!isset($w[2])){
+					$sqlw .= $comma .  ' ' . $eq . ' (' . $w[1] . ') ';
+				}else{
+					$sqlw .= $comma .  '('. $w[1] .' ' . $eq . ' (' . $w[2] . ')) ';
+				}
+			}
+			if($eq=='BETWEEN'){
+				$b1 = (string)$w[1];
+				$b2 = (string)$w[2];
+				$b3 = (string)$w[3];
+				$sqlw .= $comma . " $b1 BETWEEN '$b2' AND '$b3' ";
+			}
+			if($eq=='SEARCH'){
+				$j=count($w);
+				$sql_search='';
+				$c='';
+				for ($i=1; $i <= $j-1-1; $i++) {
+					$x=(string)$w[$i];
+					$y=(string)$w[$j-1];
+					$y=$this->db->EscapeString($y);
+					$sql_search .= $c . " ($x LIKE '%$y%') ";
+					$c='OR';
+				}
+				$sqlw .= $comma .  '(' . $sql_search . ') ';
+			}
+			if($eq=='ARRAY'){
+				$c='';
+				$sql_array='';
+				if(!is_array($w[1]))continue;
+				if(count($w[1])==0)continue;
+				foreach ($w[1] as $x=>$y) {
+					$y[1]=$this->db->EscapeString($y[1]);
+					$sql_array .= $c . " $y[0]='$y[1]' ";
+					$c='OR';
+				}
+				$sqlw .= $comma .  '(' . $sql_array . ') ';
+			}
+			if($eq=='ARRAY_NOT'){
+				$c='';
+				$sql_array='';
+				if(!is_array($w[1]))continue;
+				if(count($w[1])==0)continue;
+				foreach ($w[1] as $x=>$y) {
+					$y[1]=$this->db->EscapeString($y[1]);
+					$sql_array .= $c . " $y[0]<>'$y[1]' ";
+					$c='OR';
+				}
+				$sqlw .= $comma .  '(' . $sql_array . ') ';
+			}
+			if($eq=='ARRAY_LIKE'){
+				$c='';
+				$sql_array='';
+				if(!is_array($w[1]))continue;
+				if(count($w[1])==0)continue;
+				foreach ($w[1] as $x=>$y) {
+					$y[1]=$this->db->EscapeString($y[1]);
+					$sql_array .= $c . " ($y[0] LIKE '$y[1]') ";
+					$c='OR';
+				}
+				$sqlw .= $comma .  '(' . $sql_array . ') ';
+			}
+			if($eq=='IN'|$eq=='NOT IN'){
+				$c='';
+				$sql_array='';
+				if(!is_array($w[2])){
+					$sql_array=$w[2];
+				}else{
+					if(count($w[2])==0)continue;
+					foreach ($w[2] as $x=>$y) {
+						$y=$this->db->EscapeString($y);
+						$sql_array .= $c . " '$y' ";
+						$c=',';
+					}
+				}
+				$sqlw .= $comma .  '('. $w[1] .' '. $eq .' (' . $sql_array . ')) ';
+			}
+			if($eq=='META_NAME'){
+				if(count($w)!=3)continue;
+				$sql_array='';
+				$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";';	
+				$sql_meta=$this->db->EscapeString($sql_meta);
+				$sql_array .= "$w[1] LIKE '%$sql_meta%'";
+				$sqlw .= $comma .  '(' . $sql_array . ') ';
+			}
+			if($eq=='META_NAMEVALUE'){
+				if(count($w)!=4)continue;
+				$sql_array='';
+				$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";' . 's:' . strlen($w[3]) . ':"'.$w[3].'";';	
+				$sql_meta=$this->db->EscapeString($sql_meta);
+				$sql_array .= "$w[1] LIKE '%$sql_meta%'";
+				$sqlw .= $comma .  '(' . $sql_array . ') ';
+			}
+			if($eq=='CUSTOM'){
+				$sqlw .= $comma . ' ' . $w[1] . ' ';
+			}
+			$comma = 'AND';
+		}
+
 		return $sqlw;
 	}
 
-	public function Select($table,$select,$where,$order,$limit,$option)
-	{
-		global $zbp;
-
+	/**
+	* @param string $table
+	* @param string $select
+	* @param string $where
+	* @param string $order
+	* @param string $limit
+	* @param array|null $option
+	* @return string
+	*/
+	public function Select($table,$select,$where,$order,$limit,$option=null){
+		$this->ReplacePre($table);
+	
 		$sqls='';
 		$sqlw='';
 		$sqlo='';
@@ -321,7 +460,11 @@ class DbSql #extends AnotherClass
 				$sqls="SELECT * FROM $table ";
 		}
 
-		$sqlw=$this->ParseWhere($where);
+		if(isset($option['changewhere'])){
+			$sqlw=$this->ParseWhere($where,$option['changewhere']);
+		}else{
+			$sqlw=$this->ParseWhere($where);
+		}
 
 		if(!empty($order)){
 			$sqlo .= ' ORDER BY ';
@@ -353,7 +496,7 @@ class DbSql #extends AnotherClass
 			if(isset($option['pagebar'])){
 				if($option['pagebar']->Count===null){
 					$s2 = $this->Count($table,array(array('COUNT','*','num')),$where);
-					$option['pagebar']->Count = GetValueInArrayByCurrent($zbp->db->Query($s2),'num');
+					$option['pagebar']->Count = GetValueInArrayByCurrent($this->db->Query($s2),'num');
 				}
 				$option['pagebar']->Count=(int)$option['pagebar']->Count;
 				$option['pagebar']->make();
@@ -362,9 +505,15 @@ class DbSql #extends AnotherClass
 		return $sqls . $sqlw . $sqlo . $sqll;
 	}
 
-	public function Count($table,$count,$where)
-	{
-		global $zbp;
+	/**
+	* @param string $table
+	* @param string $count
+	* @param string $where
+	* @param null $option
+	* @return string
+	*/
+	public function Count($table,$count,$where,$option=null){
+		$this->ReplacePre($table);
 
 		$sqlc="SELECT ";
 
@@ -377,37 +526,57 @@ class DbSql #extends AnotherClass
 
  		$sqlc.=" FROM $table ";
 
-		$sqlw=$this->ParseWhere($where);
+		if(isset($option['changewhere'])){
+			$sqlw=$this->ParseWhere($where,$option['changewhere']);
+		}else{
+			$sqlw=$this->ParseWhere($where);
+		}
 
 		return $sqlc . $sqlw;
 	}
 
-	public function Update($table,$keyvalue,$where)
-	{
-		global $zbp;
-
+	/**
+	* @param string $table
+	* @param string $keyvalue
+	* @param string $where
+	* @param array|null $option
+	* @return string
+	*/
+	public function Update($table,$keyvalue,$where,$option=null){
+		$this->ReplacePre($table);
+	
 		$sql="UPDATE $table SET ";
 
 		$comma = '';
 		foreach ($keyvalue as $k => $v) {
-			$v=$zbp->db->EscapeString($v);
+			if(is_null($v))continue;
+			$v=$this->db->EscapeString($v);
 			$sql.= $comma . "$k = '$v'";
 			$comma = ' , ';
 		}
 
-		$sql.=$this->ParseWhere($where);
+		if(isset($option['changewhere'])){
+			$sql.=$this->ParseWhere($where,$option['changewhere']);
+		}else{
+			$sql.=$this->ParseWhere($where);
+		}
 		return $sql;
 	}
 
-	public function Insert($table,$keyvalue)
-	{
-		global $zbp;
+	/**
+	* @param string $table
+	* @param string $keyvalue
+	* @return string
+	*/
+	public function Insert($table,$keyvalue){
+		$this->ReplacePre($table);
 
 		$sql="INSERT INTO $table ";
 
 		$sql.='(';
 		$comma = '';
 		foreach($keyvalue as $k => $v) {
+			if(is_null($v))continue;
 			$sql.= $comma . "$k";
 			$comma = ',';
 		}
@@ -415,7 +584,8 @@ class DbSql #extends AnotherClass
 
 		$comma = '';
 		foreach($keyvalue as $k => $v) {
-			$v=$zbp->db->EscapeString($v);
+			if(is_null($v))continue;
+			$v=$this->db->EscapeString($v);
 			$sql.= $comma . "'$v'";
 			$comma = ',';
 		}
@@ -423,13 +593,35 @@ class DbSql #extends AnotherClass
 		return  $sql;
 	}
 
-	public function Delete($table,$where)
-	{
-		global $zbp;
+	/**
+	* @param string $table
+	* @param string $where
+	* @param array|null $option
+	* @return string
+	*/
+	public function Delete($table,$where,$option=null){
+		$this->ReplacePre($table);
 
 		$sql="DELETE FROM $table ";
-		$sql.=$this->ParseWhere($where);
+		if(isset($option['changewhere'])){
+			$sql.=$this->ParseWhere($where,$option['changewhere']);
+		}else{
+			$sql.=$this->ParseWhere($where);
+		}
 		return $sql;
 	}
 
+	/**
+	* @param $sql
+	* @return mixed
+	*/
+	public function Filter($sql){
+		$_SERVER['_query_count'] = $_SERVER['_query_count'] + 1;
+		
+		foreach ($GLOBALS['Filter_Plugin_DbSql_Filter'] as $fpname => &$fpsignal) {
+			$fpname($sql);
+		}
+		//Logs($sql);
+		return $sql;
+	}
 }

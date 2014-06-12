@@ -146,7 +146,7 @@ class ZBlogPHP {
 
 	private $readymodules=array(); #模块
 	private $readymodules_function=array(); #模块函数
-	private $readymodules_parameters=array(); #模块属性
+	private $readymodules_parameters=array(); #模块函数的参数
 
 	/**
 	 * @var array|null 数据表
@@ -1933,7 +1933,7 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	function CheckApp($name){
-		return CheckPlugin($name);
+		return $this->CheckPlugin($name);
 	}
 
 	#$type=category,tag,page,item

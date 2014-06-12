@@ -1,16 +1,20 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author 
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * 用户类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib 类库
  */
+class Member extends Base {
 
-
-class Member extends Base{
-
+	/**
+	 * @var string 头像图片地址
+	 */
 	private $_avatar='';
 
+	/**
+	 * 构造函数，默认用户设为anonymous
+	 */
 	function __construct()
 	{
 		global $zbp;
@@ -19,16 +23,29 @@ class Member extends Base{
 		$this->Name = $zbp->lang['msg']['anonymous'];
 	}
 
+	/**
+	 * 自定义函数
+	 * @api Filter_Plugin_Member_Call
+	 * @param $method
+	 * @param $args
+	 * @return mixed
+	 */
 	function __call($method, $args) {
 		foreach ($GLOBALS['Filter_Plugin_Member_Call'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this,$method, $args);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 	}
 
+	/**
+	 * 自定义参数及值
+	 * @param $name
+	 * @param $value
+	 * @return null|string
+	 */
 	public function __set($name, $value)
 	{
-        global $zbp;
+		global $zbp;
 		if ($name=='Url') {
 			$u = new UrlRule($zbp->option['ZC_AUTHOR_REGEX']);
 			$u->Rules['{%id%}']=$this->ID;
@@ -44,6 +61,9 @@ class Member extends Base{
 		if ($name=='EmailMD5') {
 			return null;
 		}
+		if ($name=='StaticName') {
+			return null;
+		}
 		if ($name=='Template') {
 			if($value==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$value='';
 			return $this->data[$name]  =  $value;
@@ -51,9 +71,13 @@ class Member extends Base{
 		parent::__set($name, $value);
 	}
 
+	/**
+	 * @param $name
+	 * @return mixed|string
+	 */
 	public function __get($name)
 	{
-        global $zbp;
+		global $zbp;
 		if ($name=='Url') {
 			$u = new UrlRule($zbp->option['ZC_AUTHOR_REGEX']);
 			$u->Rules['{%id%}']=$this->ID;
@@ -63,11 +87,11 @@ class Member extends Base{
 		if ($name=='Avatar') {
 			foreach ($GLOBALS['Filter_Plugin_Mebmer_Avatar'] as $fpname => &$fpsignal) {
 				$fpreturn=$fpname($this);
-				if($fpreturn)return $fpreturn;
+				if($fpreturn){$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 			}
 			if($this->_avatar)return $this->_avatar;
 			$s=$zbp->usersdir . 'avatar/' . $this->ID . '.png';
-			if(file_exists($s)){
+			if(is_readable($s)){
 				$this->_avatar = $zbp->host . 'zb_users/avatar/' . $this->ID . '.png';
 				return $this->_avatar;
 			}
@@ -80,8 +104,9 @@ class Member extends Base{
 		if ($name=='EmailMD5') {
 			return md5($this->Email);
 		}
-		if ($name=='Meta') {
-			return $this->Metas->serialize();
+		if ($name=='StaticName') {
+			if($this->Alias)return $this->Alias;
+			return $this->Name;
 		}
 		if ($name=='Template') {
 			$value=$this->data[$name];
@@ -91,18 +116,28 @@ class Member extends Base{
 		return parent::__get($name);
 	}
 
+	/**
+	 * 获取加盐及二次加密的密码
+	 * @param string $ps 明文密码
+	 * @param string $guid 用户唯一码
+	 * @return string
+	*/
 	static function GetPassWordByGuid($ps,$guid){
 
 		return md5(md5($ps). $guid);
 
 	}
-	
+
+	/**
+	 * 保存用户数据
+	 * @return bool
+	 */
 	function Save(){
-        global $zbp;
+		global $zbp;
 		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
 		foreach ($GLOBALS['Filter_Plugin_Member_Save'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 		return parent::Save();
 	}

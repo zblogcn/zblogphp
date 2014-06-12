@@ -94,7 +94,7 @@ if($newbuild-$nowbuild>0){
               </p>
 			  <hr/>
 
-              <div class="divHeader">校验系统核心文件&nbsp;&nbsp;<span id="checknow"><a href="?check=now" title="开始校验"><img src="images/refresh.png" width="16" alt="校验" /></a></span></div>
+              <div class="divHeader">校验当前版本的系统核心文件&nbsp;&nbsp;<span id="checknow"><a href="?check=now" title="开始校验"><img src="images/refresh.png" width="16" alt="校验" /></a></span></div>
 			  <!--<div>进度<span id="status">0</span>%；已发现<span id="count">0</span>个修改过的系统文件。<div id="bar"></div></div>-->
               <table border="1" width="100%" cellspacing="0" cellpadding="0" class="tableBorder tableBorder-thcenter">
                 <tr>
@@ -102,6 +102,7 @@ if($newbuild-$nowbuild>0){
                   <th id="_s">状态</th>
                 </tr>
 <?php
+  $i=0;
 //if (file_exists($zbp->usersdir . 'cache/now.xml')) {
 if ($nowxml!=''){
 
@@ -113,9 +114,9 @@ if ($nowxml!=''){
   foreach ($xml->children() as $file) {
   	if(file_exists($f=$zbp->path . str_replace('\\','/',$file['name']))){
 		$f=file_get_contents($f);
-	  	$newcrc32=substr(strtoupper(dechex(crc32_signed($f))),-8);
+	  	$newcrc32=substr(strtoupper(dechex(AppCentre_crc32_signed($f))),-8);
 		$f=str_replace("\n","\r\n",$f);
-		$newcrc32_2=substr(strtoupper(dechex(crc32_signed($f))),-8);
+		$newcrc32_2=substr(strtoupper(dechex(AppCentre_crc32_signed($f))),-8);
   	}else{
   		$newcrc32='';
 		$newcrc32_2='';
@@ -127,7 +128,7 @@ if ($nowxml!=''){
     }else{
       $i+=1;
       echo '<tr><td><b>' . str_replace('\\','/',$file['name']) . '</b></td>';
-    	$s='<a href="javascript:void(0)" onclick="restore(\''.base64_encode($file['name']).'\',\'file'.md5($file['name']) .'\')" class="button" title="还原系统文件"><img src="'.$zbp->host.'zb_system/image/admin/exclamation.png" width="16" alt=""></a>';
+    	$s='<a href="javascript:void(0)" onclick="restore(\''.base64_encode($file['name']).'\',\'file'.md5($file['name']) .'\')" class="resotrefile button" title="还原系统文件"><img src="'.$zbp->host.'zb_system/image/admin/exclamation.png" width="16" alt=""></a>';
     }
     echo '<td class="tdCenter" id="file' . md5($file['name']) . '">' . $s . '</td></tr>';
   }
@@ -138,9 +139,25 @@ if ($nowxml!=''){
 ?>
 
               </table>
+<?php if($i>0){?>
+              <p>
+                <input name="submit" type="button" id="autorestor" onclick="restoreauto();$(this).hide();" value="自动依次更新文件" class="button" />
+              </p>
+<?php }?>
               <p> </p>
             </form>
 <script type="text/javascript">
+
+$("#autorestor").bind('click', function(){restoresingle();$(this).hide()});
+
+function restoresingle(){
+  if($("a.resotrefile").get(0)){
+    $("a.resotrefile").get(0).click();
+    setTimeout("restoresingle()",1000);
+  }
+}
+
+
 function restore(f,id){
 	$.get(bloghost+"zb_users/plugin/AppCentre/update.php?restore="+f, function(data){
 		//alert(data);

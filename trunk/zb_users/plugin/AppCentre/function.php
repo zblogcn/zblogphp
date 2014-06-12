@@ -21,7 +21,7 @@ function AppCentre_SubMenus($id){
 	echo '<a href="theme_edit.php"><span class="m-right '.($id==6?'m-now':'').'">新建主题</span></a>';
 }
 
-function GetCheckQueryString(){
+function AppCentre_GetCheckQueryString(){
 	global $zbp;
 	$check= '';
 	$app=new app;			
@@ -68,13 +68,13 @@ function Server_Open($method){
 			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
 			break;
 		case 'check':
-			$s=Server_SendRequest(APPCENTRE_URL .'?check=' . urlencode(GetCheckQueryString())) . '';
+			$s=Server_SendRequest(APPCENTRE_URL .'?check=' . urlencode(AppCentre_GetCheckQueryString())) . '';
 			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
 			break;
 		case 'checksilent':
 			header('Content-type: application/x-javascript; Charset=utf-8');
 			ob_clean();
-			$s=Server_SendRequest(APPCENTRE_URL .'?blogsilent=1'. ($zbp->Config('AppCentre')->checkbeta?'&betablog=1':'') .'&check=' . urlencode(GetCheckQueryString())) . '';
+			$s=Server_SendRequest(APPCENTRE_URL .'?blogsilent=1'. ($zbp->Config('AppCentre')->checkbeta?'&betablog=1':'') .'&check=' . urlencode(AppCentre_GetCheckQueryString())) . '';
 			if(strpos($s,';')!==false){
 				$newversion=substr($s,0,6);
 				$s=str_replace(($newversion.';'),'',$s);
@@ -236,7 +236,7 @@ function Server_SendRequest_Network($url,$data=array(),$u,$c){
 	return $ajax->responseText;
 }
 
-function CreateOptoinsOfVersion($default){
+function AppCentre_CreateOptoinsOfVersion($default){
 	global $zbp;
 
 	$s=null;
@@ -271,7 +271,7 @@ function AppCentre_GetHttpContent($url){
 	return $r;
 }
 
-function crc32_signed($num){ 
+function AppCentre_crc32_signed($num){ 
     $crc = crc32($num); 
     if($crc & 0x80000000){ 
         $crc ^= 0xffffffff; 

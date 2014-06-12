@@ -1,38 +1,49 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author 
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * 文章类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/Article 类库
  */
-
- 
 class Post extends Base{
 
-
+	/**
+	 *
+	 */
 	function __construct()
 	{
 		global $zbp;
 		parent::__construct($zbp->table['Post'],$zbp->datainfo['Post']);
 
-		$this->ID = 0;
-		$this->Title	= $GLOBALS['lang']['msg']['unnamed'];
+		$this->Title	= $zbp->lang['msg']['unnamed'];
 		$this->PostTime	= time();
 	}
 
 
+	/**
+	 * @param $method
+	 * @param $args
+	 * @return mixed
+	 */
 	function __call($method, $args) {
 		foreach ($GLOBALS['Filter_Plugin_Post_Call'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this,$method,$args);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 	}
 
 
+	/**
+	 * @param string $s
+	 * @return bool|string
+	 */
 	public function Time($s='Y-m-d H:i:s'){
 		return date($s,(int)$this->PostTime);
 	}
 
+	/**
+	 * @return array|int|mixed|null|string
+	 */
 	function TagsToNameString(){
 		global $zbp;
 		$s=$this->Tag;
@@ -56,9 +67,14 @@ class Post extends Base{
 		return $s;
 	}
 
-	public function __set($name, $value) 
+	/**
+	 * @param $name
+	 * @param $value
+	 * @return null|string
+	 */
+	public function __set($name, $value)
 	{
-        global $zbp;
+		global $zbp;
 		switch ($name) {
 			case 'Category':
 			case 'Author':
@@ -83,9 +99,13 @@ class Post extends Base{
 		}
 	}
 
-	public function __get($name) 
+	/**
+	 * @param $name
+	 * @return array|int|mixed|null|string
+	 */
+	public function __get($name)
 	{
-        global $zbp;
+		global $zbp;
 		switch ($name) {
 			case 'Category':
 				return $zbp->GetCategoryByID($this->CateID);
@@ -130,7 +150,7 @@ class Post extends Base{
 				return substr_count($this->Tag, '{');
 				break;				
 			case 'TagsName':
-				return $this->TagsToNameString;
+				return $this->TagsToNameString();
 			case 'Template':
 				$value=$this->data[$name];
 				if($value==''){
@@ -143,7 +163,7 @@ class Post extends Base{
 			case 'CommentPostUrl':
 				foreach ($GLOBALS['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
 					$fpreturn=$fpname($this);
-					if($fpsignal == PLUGIN_EXITSIGNAL_RETURN)return $fpreturn;
+					if($fpsignal == PLUGIN_EXITSIGNAL_RETURN){$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 				}
 				$key='&amp;key=' . md5($zbp->guid . $this->ID . date('Y-m-d'));
 				return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
@@ -164,7 +184,7 @@ class Post extends Base{
 				if(count($articles)==1){
 					$_prev=$articles[0];
 				}else{
-					$_prev='';
+					$_prev=null;
 				}
 				return $_prev;
 				break;
@@ -181,14 +201,14 @@ class Post extends Base{
 				if(count($articles)==1){
 					$_next=$articles[0];
 				}else{
-					$_next='';
+					$_next=null;
 				}
 				return $_next;
 				break;
 			case 'RelatedList':
 				foreach ($GLOBALS['Filter_Plugin_Post_RelatedList'] as $fpname => &$fpsignal) {
 					$fpreturn=$fpname($this);
-					if($fpsignal == PLUGIN_EXITSIGNAL_RETURN)return $fpreturn;
+					if($fpsignal == PLUGIN_EXITSIGNAL_RETURN){$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 				}
 				return GetList($zbp->option['ZC_RELATEDLIST_COUNT'],null,null,null,null,null,array('is_related'=>$this->ID));
 			default:
@@ -198,15 +218,18 @@ class Post extends Base{
 
 	}
 
+	/**
+	 * @return bool
+	 */
 	function Save(){
-        global $zbp;
+		global $zbp;
 		if($this->Type==ZC_POST_TYPE_ARTICLE){
 			if($this->Template==GetValueInArray($this->Category->GetData(),'LogTemplate'))$this->data['Template'] = '';
 		}
 		if($this->Template==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
 		foreach ($GLOBALS['Filter_Plugin_Post_Save'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 		return parent::Save();
 	}

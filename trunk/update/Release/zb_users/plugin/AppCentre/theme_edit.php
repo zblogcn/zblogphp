@@ -16,6 +16,30 @@ $blogtitle='应用中心-主题编辑';
 
 if(GetVars('id')){
   $app = $zbp->LoadApp('theme',GetVars('id'));
+  $mt=array();
+  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/','php|inc|png');
+  foreach($ft as $f){
+    $mt[]=filemtime($f);
+  }
+  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/include/','php|inc|png');
+  foreach($ft as $f){
+    $mt[]=filemtime($f);
+  }
+  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/style/','php|inc|png');
+  foreach($ft as $f){
+    $mt[]=filemtime($f);
+  }
+  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/template/','php|inc|png');
+  foreach($ft as $f){
+    $mt[]=filemtime($f);
+  }
+  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/source/','php|inc|png');
+  foreach($ft as $f){
+    $mt[]=filemtime($f);
+  }  
+  rsort($mt);
+  if(count($mt)==0)$mt[]=time();
+  $app->modified = date('Y-m-d', reset($mt));
 }else{
   $app = new App;
   $app->price=0;
@@ -160,7 +184,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       <td><p><b>· 适用的最低要求 Z-Blog 版本</b></p></td>
       <td><p>&nbsp;
           <select name="app_adapted" id="app_adapted" style="width:400px;">
-<?php echo CreateOptoinsOfVersion($app->adapted);?>
+<?php echo AppCentre_CreateOptoinsOfVersion($app->adapted);?>
           </select>
         </p></td>
     </tr>

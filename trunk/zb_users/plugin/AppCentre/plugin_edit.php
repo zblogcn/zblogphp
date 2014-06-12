@@ -143,7 +143,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       <td><p><b>· 适用的最低要求 Z-Blog 版本</b></p></td>
       <td><p>&nbsp;
           <select name="app_adapted" id="app_adapted" style="width:400px;">
-<?php echo CreateOptoinsOfVersion($app->adapted);?>
+<?php echo AppCentre_CreateOptoinsOfVersion($app->adapted);?>
           </select>
         </p></td>
     </tr>

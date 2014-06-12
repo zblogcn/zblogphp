@@ -2,7 +2,7 @@
   <dt><a name="comment">发表评论</a><a rel="nofollow" id="cancel-reply" href="#comment" style="display:none;"><small>取消回复</small></a></dt>
   <dd>
   <h5><!--◎欢迎参与讨论，请在这里发表您的看法、交流您的观点。--></h5>
-<figure><img src="<?php  echo $user->Avatar;  ?>" alt="来宾的头像" border="0"><?php if ($user->ID>0) { ?><b><?php  echo $user->Name;  ?></b><?php } ?></figure>
+<figure><img src="<?php  echo $user->Avatar;  ?>" alt="来宾的头像" border="0"><?php if ($user->ID>0) { ?><b><?php  echo $user->StaticName;  ?></b><?php } ?></figure>
   <form id="frmSumbit" target="_self" method="post" action="<?php  echo $article->CommentPostUrl;  ?>">
 	<input type="hidden" name="inpId" id="inpId" value="<?php  echo $article->ID;  ?>" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
