@@ -126,7 +126,7 @@ class Networkcurl implements iNetwork
 		curl_setopt($this->ch, CURLOPT_URL, $bstrUrl);
 		curl_setopt($this->ch, CURLOPT_HEADER, 1);
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($this->ch, CURLOPT_REFERER, 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+		//curl_setopt($this->ch, CURLOPT_REFERER, 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 		curl_setopt($this->ch, CURLOPT_POST, ($method == 'POST' ? 1 : 0));
 		return true;
 	}
