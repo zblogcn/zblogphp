@@ -1917,13 +1917,23 @@ class ZBlogPHP {
 	}
 
 	/**
-	 * 检查应用是否安装
-	 * @param string $name 应用ID
+	 * 检查应用是否安装并启用
+	 * @param string $name 应用（插件或主题）的ID
 	 * @return bool
 	 */
 	function CheckPlugin($name){
-		$s=$this->option['ZC_BLOG_THEME'] . '|' . $this->option['ZC_USING_PLUGIN_LIST'];
-		return HasNameInString($s,$name);
+		//$s=$this->option['ZC_BLOG_THEME'] . '|' . $this->option['ZC_USING_PLUGIN_LIST'];
+		//return HasNameInString($s,$name);
+		return in_array($name,$this->activeapps);
+	}
+	
+	/**
+	 * 检查应用是否安装并启用
+	 * @param string $name 应用ID（插件或主题）
+	 * @return bool
+	 */
+	function CheckApp($name){
+		return CheckPlugin($name);
 	}
 
 	#$type=category,tag,page,item
@@ -2135,7 +2145,7 @@ class ZBlogPHP {
 
 
 	/**
-	 * 检查Gzip
+	 * 检查并开启Gzip压缩
 	 */
 	function CheckGzip(){
 		$this->isgzip=true;
@@ -2162,6 +2172,7 @@ class ZBlogPHP {
 			}
 		}
 	}
+
 	/**
 	 * 跳转到安装页面
 	 * @param bool $yun 是否云主机（SAE等）
@@ -2175,5 +2186,5 @@ class ZBlogPHP {
 			}
 		}
 	}
-
+	
 }

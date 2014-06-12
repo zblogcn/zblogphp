@@ -11,7 +11,7 @@
 	<file name='zb_system\function\lib\metas.php' md5='3B0E81A5F17D6B395A8999F4231214E2' crc32='2B5EBB14'/>
 	<file name='zb_system\function\lib\template.php' md5='8285F03C3AAC1AD940854299258B02B9' crc32='6613CF8E'/>
 	<file name='zb_system\function\lib\network.php' md5='5C01A6A2A4CF8588C26A152706680FF5' crc32='4471558B'/>
-	<file name='zb_system\function\lib\zblogphp.php' md5='81C7B843414823CDD0BD03583D6E3EE1' crc32='10A50F'/>
+	<file name='zb_system\function\lib\zblogphp.php' md5='1A63F1B42161BC3FFC543828E0425D29' crc32='C3FFF182'/>
 	<file name='feed.php' md5='CC0653FB511E467A22D6FFD80B0157B3' crc32='F219FDEF'/>
 	<file name='index.php' md5='08632A649367585B07D196605FECD74A' crc32='4A98406E'/>
 	<file name='search.php' md5='F08C1E55C2F6042B49A5DEF030C13FBF' crc32='6F6987D7'/>
@@ -64,9 +64,9 @@
 	<file name='zb_system\function\lib\dbsqlite3.php' md5='101FD198F3EDADE0ED1A22D250224DEC' crc32='409BC735'/>
 	<file name='zb_system\function\lib\member.php' md5='6BB357D9274DF539233121742B1EFBDE' crc32='B1B5901D'/>
 	<file name='zb_system\function\lib\module.php' md5='243D9E625D4AF80EA35318FC4A8546DA' crc32='4F3DF229'/>
-	<file name='zb_system\function\lib\networkcurl.php' md5='18D7C3D48AFA95DBEB3425ABB9984100' crc32='AA4C98F'/>
-	<file name='zb_system\function\lib\networkfile_get_contents.php' md5='E7BB61685DB1B93DA4F1895C829EFE59' crc32='907E941F'/>
-	<file name='zb_system\function\lib\networkfsockopen.php' md5='7C7B3E649CF872B2410BC8BA567ECFC3' crc32='3B34E69A'/>
+	<file name='zb_system\function\lib\networkcurl.php' md5='2412F89F81741580CF02E6DEF19462FC' crc32='BD932A81'/>
+	<file name='zb_system\function\lib\networkfile_get_contents.php' md5='0D59944B42C0FC31A36D42DB856B72BE' crc32='4BAF0211'/>
+	<file name='zb_system\function\lib\networkfsockopen.php' md5='7C3BDECFB7977EB5948EBDC92F45C19E' crc32='9980198E'/>
 	<file name='zb_system\function\lib\pagebar.php' md5='C1C53F94571EF545183C9CE9AD49DEF0' crc32='8A170E3D'/>
 	<file name='zb_system\function\lib\post.php' md5='AE92DE478ADB0882AB2A522C0A99CC5E' crc32='2B8A6E61'/>
 	<file name='zb_system\function\lib\rss2.php' md5='1F6C70F3B020CC06A96FA4D094C2411A' crc32='6A06B9C4'/>

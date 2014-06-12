@@ -157,7 +157,7 @@ class Networkfsockopen implements iNetwork {
 		}
 
 		$this->httpheader[] = 'Host: ' . $this->parsed_url['host'];
-		$this->httpheader[] = 'Referer: ' . 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+		//$this->httpheader[] = 'Referer: ' . 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 		$this->httpheader[] = 'Connection: close';
 
 		if(!isset($this->httpheader['Accept'])){
