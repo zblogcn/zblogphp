@@ -1,23 +1,17 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
+ * 辅助通用函数
+ * @package Z-BlogPHP
+ * @subpackage System/CommonFunction 辅助通用函数
  * @copyright (C) RainbowSoft Studio
- * @version       2.0 2013-06-14
  */
 
-function Logs($s) {
-	$f = $GLOBALS['usersdir'] . 'logs/' . $GLOBALS['option']['ZC_BLOG_CLSID'] . '-log' . date("Ymd") . '.txt';
-	$handle = @fopen($f, 'a+');
-	@fwrite($handle, "[" . date('c') . "~" . current(explode(" ", microtime())) . "]" . "\r\n" . $s . "\r\n");
-	@fclose($handle);
-}
-
-$_SERVER['_start_time'] = microtime(1); //RunTime
-function RunTime() {
-	echo '<!--' . (1000 * number_format(microtime(1) - $_SERVER['_start_time'], 6)) . 'ms-->';
-}
-
+/**
+ * 通过Key从数组获取数据
+ * @param string $array 数组名
+ * @param string $name 下标key
+ * @return mixed
+ */
 function GetValueInArray($array, $name) {
 	if (is_array($array)) {
 		if (array_key_exists($name, $array)) {
@@ -26,6 +20,12 @@ function GetValueInArray($array, $name) {
 	}
 }
 
+/**
+ * 获取数组中的当前元素数据
+ * @param string $array 数组名
+ * @param string $name 下标key
+ * @return mixed
+ */
 function GetValueInArrayByCurrent($array, $name) {
 	if (is_array($array)) {
 		$array = current($array);
@@ -34,37 +34,24 @@ function GetValueInArrayByCurrent($array, $name) {
 	}
 }
 
+/**
+ * 获取Guid
+ * @return string 
+ */
 function GetGuid() {
 	$s = str_replace('.', '', trim(uniqid('zbp', true), 'zbp'));
 
 	return $s;
 }
 
+/**
+ * 获取参数值
+ * @param string $name 数组key名
+ * @param string $type 默认为REQUEST
+ * @return mixed|null
+ */
 function GetVars($name, $type = 'REQUEST') {
-	if ($type == 'ENV') {
-		$array =& $_ENV;
-	}
-	if ($type == 'GET') {
-		$array =& $_GET;
-	}
-	if ($type == 'POST') {
-		$array =& $_POST;
-	}
-	if ($type == 'COOKIE') {
-		$array =& $_COOKIE;
-	}
-	if ($type == 'REQUEST') {
-		$array =& $_REQUEST;
-	}
-	if ($type == 'SERVER') {
-		$array =& $_SERVER;
-	}
-	if ($type == 'SESSION') {
-		$array =& $_SESSION;
-	}
-	if ($type == 'FILES') {
-		$array =& $_FILES;
-	}
+	$array = &$GLOBALS[strtoupper("_$type")];
 
 	if (isset($array[$name])) {
 		return $array[$name];
@@ -73,13 +60,46 @@ function GetVars($name, $type = 'REQUEST') {
 	}
 }
 
+/**
+ * 获取参数值（可设置默认返回值）
+ * @param string $name 数组key名
+ * @param string $type 默认为REQUEST
+ * @param string $default 默认为null
+ * @return mixed|null
+ * @since 1.3.140614
+ */
+function GetVarsByDefault($name, $type = 'REQUEST',$default = null) {
+	$g = GetVars($name, $type);
+	if($g==null||$g==''){
+		return $default;
+	}
+	return $g;
+}
+
+/**
+ * 获取数据库名
+ * @return string  返回SQLite数据文件名
+ */
 function GetDbName() {
 
 	return str_replace('-', '', '#%20' . strtolower(GetGuid())) . '.db';
 }
 
-function GetCurrentHost(&$cookiespath) {
-	if (array_key_exists('HTTPS', $_SERVER)) {
+/**
+ * 获取当前网站地址
+ * @param string $blogpath 网站域名
+ * @param string &$cookiespath 引用cookie作用域值
+ * @return string  返回网站完整地址，如http://localhost/zbp/
+ */
+function GetCurrentHost($blogpath,&$cookiespath) {
+
+	if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
+		if ($_SERVER['REQUEST_SCHEME'] == 'https') {
+			$host = 'https://';
+		} else {
+			$host = 'http://';
+		}
+	}elseif (array_key_exists('HTTPS', $_SERVER)) {
 		if ($_SERVER['HTTPS'] == 'off') {
 			$host = 'http://';
 		} else {
@@ -91,12 +111,12 @@ function GetCurrentHost(&$cookiespath) {
 
 	$host .= $_SERVER['HTTP_HOST'];
 
-	$y = strtolower($GLOBALS['blogpath']);
-	$x = strtolower($_SERVER['SCRIPT_NAME']);
+	$y = $blogpath;
+	$x = $_SERVER['SCRIPT_NAME'];
 
 	for ($i = strlen($x); $i > 0; $i--) {
 		$z = substr($x, 0, $i);
-		if (substr($y, strlen($y) - $i) == $z) {
+		if (strtolower(substr($y, strlen($y) - $i)) == strtolower($z)) {
 			break;
 		}
 	}
@@ -106,20 +126,52 @@ function GetCurrentHost(&$cookiespath) {
 	return $host . $z;
 }
 
+/**
+ * 通过URL获取远程页面内容
+ * @param string $url URL地址
+ * @return string  返回页面文本内容，默认为null
+ */
 function GetHttpContent($url) {
+
+	if(class_exists('Network')){
+		$ajax = Network::Create();
+		if(!$ajax) return null;
+
+		$ajax->open('GET',$url);
+		$ajax->enableGzip();
+		$ajax->setTimeOuts(60,60,0,0);
+		$ajax->send();
+
+		return $ajax->responseText;
+	}
+
 	$r = null;
 	if (function_exists("curl_init")) {
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		if(ini_get("safe_mode")==false && ini_get("open_basedir")==false){
+			curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
+		}
+		if(extension_loaded('zlib')){
+			curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
+		}
 		$r = curl_exec($ch);
 		curl_close($ch);
 	} elseif (ini_get("allow_url_fopen")) {
-		$r = file_get_contents($url);
+		$r = file_get_contents((extension_loaded('zlib')?'compress.zlib://':'') . $url);
 	}
 
 	return $r;
 }
 
+/**
+ * 获取目录下文件夹列表
+ * @param string $dir 目录
+ * @return array 文件夹列表
+ */
 function GetDirsInDir($dir) {
 	$dirs = array();
 
@@ -147,6 +199,12 @@ function GetDirsInDir($dir) {
 	return $dirs;
 }
 
+/**
+ * 获取目录下指定类型文件列表
+ * @param string $dir 目录
+ * @param string $type 文件类型，以｜分隔
+ * @return array 文件列表
+ */
 function GetFilesInDir($dir, $type) {
 
 	$files = array();
@@ -194,6 +252,12 @@ function GetFilesInDir($dir, $type) {
 
 }
 
+/**
+ * 设置http状态头
+ * @param int $number HttpStatus
+ * @internal param string $status 成功获取状态码设置静态参数status
+ * @return bool
+ */
 function SetHttpStatusCode($number) {
 	static $status = '';
 	if ($status != '')
@@ -225,31 +289,50 @@ function SetHttpStatusCode($number) {
 	return true;
 }
 
+/**
+ * 302跳转
+ * @param string $url 跳转链接
+*/
 function Redirect($url) {
 	SetHttpStatusCode(302);
 	header('Location: ' . $url);
 	die();
 }
 
+/**
+ * 301跳转
+ * @param string $url 跳转链接
+ */
 function Redirect301($url) {
 	SetHttpStatusCode(301);
 	header('Location: ' . $url);
 	die();
 }
-
+ /**
+  * @ignore
+  */
 function Http404() {
 	SetHttpStatusCode(404);
 	header("Status: 404 Not Found");
 }
-
+ /**
+  * @ignore
+  */
 function Http500() {
 	SetHttpStatusCode(500);
 }
-
+ /**
+  * @ignore
+  */
 function Http503() {
 	SetHttpStatusCode(503);
 }
 
+/**
+ * 设置304缓存头
+ * @param string $filename 文件名
+ * @param string $time 缓存时间
+ */
 function Http304($filename, $time) {
 	$url = $filename;
 	$md5 = md5($url . $time);
@@ -262,14 +345,26 @@ function Http304($filename, $time) {
 	}
 }
 
+/**
+ * 获取客户端IP
+ * @return string  返回IP地址
+ */
 function GetGuestIP() {
 	return $_SERVER["REMOTE_ADDR"];
 }
 
+/**
+ * 获取客户端Agent
+ * @return string  返回Agent
+ */
 function GetGuestAgent() {
 	return $_SERVER["HTTP_USER_AGENT"];
 }
 
+/**
+ * 获取请求来源URL
+ * @return string  返回URL
+ */
 function GetRequestUri() {
 	$url = '';
 	if (isset($_SERVER['HTTP_X_ORIGINAL_URL'])){
@@ -281,8 +376,10 @@ function GetRequestUri() {
 			foreach (explode('&',$querys) as $query){
 				$name=GetValueInArray(explode('=',$query),'0');
 				$value=GetValueInArray(explode('=',$query),'1');
-				$_GET[$name]=(string)$value;
-				$_REQUEST[$name]=(string)$value;
+				$name=urldecode($name);
+				$value=urldecode($value);
+				if(!isset($_GET[$name]))$_GET[$name]=$value;
+				if(!isset($_GET[$name]))$_REQUEST[$name]=$value;
 				$name='';
 				$value='';
 			}
@@ -300,6 +397,11 @@ function GetRequestUri() {
 	return $url;
 }
 
+/**
+ * 获取文件后缀名
+ * @param string $f 文件名
+ * @return string  返回小写的后缀名
+*/
 function GetFileExt($f) {
 	if (strpos($f, '.') === false)
 		return '';
@@ -308,6 +410,11 @@ function GetFileExt($f) {
 	return strtolower(end($a));
 }
 
+/**
+ * 获取文件权限
+ * @param string $f 文件名
+ * @return string|null  返回文件权限，数值格式，如0644
+*/
 function GetFilePermsOct($f) {
 	if (!file_exists($f)) {
 		return null;
@@ -316,6 +423,11 @@ function GetFilePermsOct($f) {
 	return substr(sprintf('%o', fileperms($f)), -4);
 }
 
+/**
+ * 获取文件权限
+ * @param string $f 文件名
+ * @return string|null  返回文件权限，字符表达格式，如-rw-r--r--
+*/
 function GetFilePerms($f) {
 
 	if (!file_exists($f)) {
@@ -368,6 +480,12 @@ function GetFilePerms($f) {
 	return $info;
 }
 
+/**
+ * 向字符串型的参数表加入一个新参数
+ * @param string $s 字符串型的参数表，以|符号分隔
+ * @param string $name 参数名
+ * @return string  返回新字符串，以|符号分隔
+*/
 function AddNameInString($s, $name) {
 	$pl = $s;
 	$name = (string)$name;
@@ -380,6 +498,12 @@ function AddNameInString($s, $name) {
 	return $pl;
 }
 
+/**
+ * 从字符串型的参数表中删除一个参数
+ * @param string $s 字符串型的参数表，以|符号分隔
+ * @param string $name 参数名
+ * @return string  返回新字符串，以|符号分隔
+*/
 function DelNameInString($s, $name) {
 	$pl = $s;
 	$name = (string)$name;
@@ -394,6 +518,12 @@ function DelNameInString($s, $name) {
 	return $pl;
 }
 
+/**
+ * 在字符串参数值查找参数
+ * @param string $s 字符串型的参数表，以|符号分隔
+ * @param string $name 参数名
+ * @return bool 
+*/
 function HasNameInString($s, $name) {
 	$pl = $s;
 	$name = (string)$name;
@@ -402,9 +532,12 @@ function HasNameInString($s, $name) {
 	return in_array($name, $apl);
 }
 
-#*********************************************************
-# 目的：    XML-RPC显示错误页面
-#'*********************************************************
+
+/**
+ *  XML-RPC应答错误页面
+ * @param string $faultString 错误提示字符串
+ * @return void 
+*/
 function RespondError($faultString) {
 
 	$strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><fault><value><struct><member><name>faultCode</name><value><int>$1</int></value></member><member><name>faultString</name><value><string>$2</string></value></member></struct></value></fault></methodResponse>';
@@ -419,6 +552,11 @@ function RespondError($faultString) {
 
 }
 
+/**
+ *  XML-RPC脚本错误页面
+ * @param string $faultString 错误提示字符串
+ * @return void 
+*/
 function ScriptError($faultString) {
 	header('Content-type: application/x-javascript; Charset=utf-8');
 	ob_clean();
@@ -426,9 +564,15 @@ function ScriptError($faultString) {
 	die();
 }
 
+/**
+ *  验证字符串是否符合正则表达式
+ * @param string $source 字符串
+ * @param string $para 正则表达式，可用[username]|[password]|[email]|[homepage]或自定义表达式
+ * @return bool 
+*/
 function CheckRegExp($source, $para) {
 	if (strpos($para, '[username]') !== false) {
-		$para = "/^[\.\_A-Za-z0-9\x{4e00}-\x{9fa5}]+$/u";
+		$para = "/^[\.\_A-Za-z0-9·\x{4e00}-\x{9fa5}]+$/u";
 	}
 	if (strpos($para, '[password]') !== false) {
 		$para = "/^[A-Za-z0-9`~!@#\$%\^&\*\-_]+$/u";
@@ -445,6 +589,12 @@ function CheckRegExp($source, $para) {
 	return (bool)preg_match($para, $source);
 }
 
+/**
+ *  通过正则表达式格式化字符串
+ * @param string $source 字符串
+ * @param string $para 正则表达式，可用[html-format]|[nohtml]|[noscript]|[enter]|[noenter]|[filename]|[normalname]或自定义表达式
+ * @return string 
+*/
 function TransferHTML($source, $para) {
 
 	if (strpos($para, '[html-format]') !== false) {
@@ -485,6 +635,11 @@ function TransferHTML($source, $para) {
 	return $source;
 }
 
+/**
+ *  封装HTML标签
+ * @param string $html html源码
+ * @return string 
+*/
 function CloseTags($html) {
 
 	// strip fraction of open or close tag from end (e.g. if we take first x characters, we might cut off a tag at the end!)
@@ -527,7 +682,24 @@ function CloseTags($html) {
 
 }
 
+/**
+ *  获取UTF8格式的字符串的子串
+ * @param string $sourcestr 源字符串
+ * @param int $cutlength 子串长度
+ * @return string 
+*/
 function SubStrUTF8($sourcestr, $cutlength) {
+
+	if( function_exists('mb_substr') && function_exists('mb_internal_encoding') ){
+		mb_internal_encoding('UTF-8');
+		return mb_substr($sourcestr, 0, $cutlength);
+	}
+
+	if( function_exists('iconv_substr') && function_exists('iconv_set_encoding') ){
+		iconv_set_encoding ( "internal_encoding" ,  "UTF-8" );
+		iconv_set_encoding ( "output_encoding" ,  "UTF-8" );
+		return iconv_substr($sourcestr, 0, $cutlength);
+	}
 
 	$returnstr = '';
 	$i = 0;
@@ -571,4 +743,99 @@ function SubStrUTF8($sourcestr, $cutlength) {
 
 	return $returnstr;
 
+}
+
+/**
+ *  删除文件BOM头
+ * @param string $s 文件内容
+ * @return string 
+*/
+function RemoveBOM($s){
+	$charset=array();
+	$charset[1] = substr($s, 0, 1);
+	$charset[2] = substr($s, 1, 1);
+	$charset[3] = substr($s, 2, 1);
+	if (ord($charset[1]) == 239 && ord($charset[2]) == 187 && ord($charset[3]) == 191) {
+		$s = substr($s, 3);
+	}
+	return $s;
+}
+
+/**
+ * 获取指定时区名
+ * @param int $z 时区号
+ * @return string 时区名
+ * @since 1.3.140614
+ */
+function GetTimeZonebyGMT($z){
+	$timezones = array(  
+		-12 => 'Etc/GMT+12',
+		-11 => 'Pacific/Midway',
+		-10 => 'Pacific/Honolulu',
+		-9 => 'America/Anchorage',
+		-8 => 'America/Los_Angeles',
+		-7 => 'America/Denver',
+		-6 => 'America/Tegucigalpa',
+		-5 => 'America/New_York',
+		-4 => 'America/Halifax',
+		-3 => 'America/Argentina/Buenos_Aires',
+		-2 => 'Atlantic/South_Georgia',
+		-1 => 'Atlantic/Azores',
+		0 => 'UTC',
+		1 => 'Europe/Berlin',
+		2 => 'Europe/Sofia',
+		3 => 'Africa/Nairobi',
+		4 => 'Europe/Moscow',
+		5 => 'Asia/Karachi',
+		6 => 'Asia/Dhaka',
+		7 => 'Asia/Bangkok',
+		8 => 'Asia/Shanghai',
+		9 => 'Asia/Tokyo',
+		10 => 'Pacific/Guam',
+		11 => 'Australia/Sydney',
+		12 => 'Pacific/Fiji',
+		13 => 'Pacific/Tongatapu',
+	);
+	if(!isset($timezones[$z]))return 'UTC';
+	return $timezones[$z];
+}
+
+/**
+ * 显示全局变量
+ * @return mixed
+ * @since 1.3.140614
+ * @todo 下版转到debug页
+ */
+function Debug_PrintGlobals(){
+	$a=array();
+	foreach($GLOBALS as $n=>$v){
+		$a[] = $n;
+	}
+	return print_r($a,true);
+}
+
+/**
+ *  打印全局Include文件
+ * @return string 
+ * @since 1.3
+ * @todo 下版转到debug页
+*/
+function Debug_PrintIncludefiles(){
+	$a=array();
+	foreach(get_included_files() as $n=>$v){
+		$a[] = $v;
+	}
+	return print_r($a,true);
+}
+
+/**
+ *  打印全局自定义常量
+ * @return string
+ * @since 1.3
+ * @todo 下版转到debug页
+*/
+function Debug_PrintConstants(){
+	$a=get_defined_constants(true);
+	if(isset($a['user']))$a=$a['user'];
+	return print_r($a,true);
 }

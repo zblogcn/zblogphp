@@ -1,73 +1,122 @@
 <?php
-
 /**
- * Z-Blog with PHP
- * @author
+ * 系统初始化等相关操作
+ * @package Z-BlogPHP
+ * @subpackage System/Base 基础操作
  * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
  */
 
 error_reporting(0);
 
 ob_start();
 
-require 'c_system_common.php';
-require 'c_system_debug.php';
-require 'c_system_plugin.php';
-require 'c_system_event.php';
 
+#引入必备
+$basepath = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+define('ZBP_PATH',str_replace('\\','/',realpath($basepath . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR)) . '/');
+require $basepath . 'c_system_plugin.php';
+require $basepath . 'c_system_debug.php';
+require $basepath . 'c_system_common.php';
+require $basepath . 'c_system_event.php';
+
+
+#系统预处理
+spl_autoload_register('AutoloadClass');
+
+if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()){
+	function _stripslashes(&$var) {
+		if(is_array($var)) {
+			foreach($var as $k=>&$v) {
+				_stripslashes($v);
+			}
+		} else {
+			$var = stripslashes($var);
+		}
+	}
+	_stripslashes($_GET);
+	_stripslashes($_POST);
+	_stripslashes($_COOKIE);
+	_stripslashes($_REQUEST);
+}
+
+
+#初始化统计信息
+$_SERVER['_start_time'] = microtime(true); //RunTime
+$_SERVER['_query_count'] = 0;
+$_SERVER['_memory_usage'] = 0;
+$_SERVER['_error_count'] = 0;
+if(function_exists('memory_get_usage'))$_SERVER['_memory_usage'] = memory_get_usage(true);
+
+
+#定义版本号列
 $zbpvers=array();
 $zbpvers['130707']='1.0 Beta Build 130707';
 $zbpvers['131111']='1.0 Beta2 Build 131111';
 $zbpvers['131221']='1.1 Taichi Build 131221';
 $zbpvers['140220']='1.2 Hippo Build 140220';
+$zbpvers['140614']='1.3 Wonce Build 140614';
+
 
 #定义常量
-define('ZC_BLOG_VERSION', $zbpvers['140220']);
+/**
+ *ZBLOGPHP版本号
+ */
+define('ZC_BLOG_VERSION', $zbpvers['140614']);
 
+/**
+ *文章类型：文章型
+ */
 define('ZC_POST_TYPE_ARTICLE', 0);
+/**
+ *文章类型：页面型
+ */
 define('ZC_POST_TYPE_PAGE', 1);
 
+/**
+ *文章状态：公开发布
+ */
 define('ZC_POST_STATUS_PUBLIC', 0);
+/**
+ *文章状态：草稿
+ */
 define('ZC_POST_STATUS_DRAFT', 1);
+/**
+ *文章状态：审核
+ */
 define('ZC_POST_STATUS_AUDITING', 2);
-
+/**
+ *用户状态：正常
+ */
 define('ZC_MEMBER_STATUS_NORMAL', 0);
+/**
+ *用户状态：审核
+ */
 define('ZC_MEMBER_STATUS_AUDITING', 1);
+/**
+ *用户状态：锁定
+ */
 define('ZC_MEMBER_STATUS_LOCKED', 2);
 
-define('ZC_REWRITE_GO_ON', 'go_on');
 
+#定义全局变量
+$zbp = null;
+$action = '';
+$currenturl = GetRequestUri();
+$lang = array();
 
-if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()){
-	_stripslashes($_GET);
-	_stripslashes($_POST);
-	_stripslashes($_COOKIE);
-}
-
-
-$action=null;
-$manage=false;
-
-
-$blogpath = str_replace('\\','/',realpath(dirname(__FILE__).'/../../')) . '/';
+$blogpath = ZBP_PATH;
 $usersdir = $blogpath . 'zb_users/';
 
-
-$option_zbusers=null;
-if(file_exists($usersdir . 'c_option.php')){
-	$option_zbusers = require($usersdir . 'c_option.php');
+$option_zbusers = null;
+if(is_readable($filename = $usersdir . 'c_option.php')){
+	$option_zbusers = require($filename);
 }
 if(!is_array($option_zbusers))$option_zbusers=array();
 $option = require($blogpath . 'zb_system/defend/option.php');
 foreach ($option_zbusers as $key => $value) {
-	$option[$key]=$value;
+	$option[$key] = $value;
 }
-unset($option_zbusers);
-
-date_default_timezone_set($option['ZC_TIME_ZONE_NAME']);
-
-$lang = require($blogpath . 'zb_users/language/' . $option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+unset($basepath,$key,$value,$option_zbusers);
 
 $blogtitle = $option['ZC_BLOG_SUBNAME'];
 $blogname = &$option['ZC_BLOG_NAME'];
@@ -77,15 +126,8 @@ $blogstyle = &$option['ZC_BLOG_CSS'];
 $blogversion = substr(ZC_BLOG_VERSION,-6,6);
 
 $cookiespath = null;
-$bloghost = GetCurrentHost($cookiespath);
+$bloghost = GetCurrentHost($blogpath,$cookiespath);
 
-
-#加载zbp 数据库类 对象
-$lib_array = array('zblogphp','dbsql','base');
-foreach ($lib_array as $f) {
-	require $blogpath.'zb_system/function/lib/' . $f . '.php';
-}
-unset($lib_array);
 
 #定义命令
 $actions=array(
@@ -98,6 +140,7 @@ $actions=array(
 	'feed'=>6,
 	'cmt'=>6,
 	'getcmt'=>6,
+	'ajax'=>6,
 
 	'ArticleEdt'=>4,
 	'ArticlePst'=>4,
@@ -167,7 +210,7 @@ $actions=array(
 );
 
 
-
+#定义数据表
 $table=array(
 
 'Post'=> '%pre%post',
@@ -183,6 +226,7 @@ $table=array(
 );
 
 
+#定义数据结构
 $datainfo=array(
 'Config'=>array(
 	'Name'=>array('conf_Name','string',250,''),
@@ -306,44 +350,37 @@ $datainfo=array(
 );
 
 
+#加载zbp 数据库类 基础对象
+AutoloadClass('ZBlogPHP');
+AutoloadClass('DbSql');
+AutoloadClass('Base');
+
+
 #实例化zbp
 $zbp=ZBlogPHP::GetInstance();
 $zbp->Initialize();
 
 
-/*include plugin*/
-#加载主题插件
-if (file_exists($filename = $usersdir . 'theme/'.$blogtheme.'/include.php')) {
+$activeapps=array();
+
+#加载主题内置的插件
+if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php')) {
+	$activeapps[]=$blogtheme;
 	require $filename;
 }
 
 
-#加载激活插件
+#加载插件
 $ap=explode("|", $option['ZC_USING_PLUGIN_LIST']);
 $ap=array_unique($ap);
 foreach ($ap as $plugin) {
-	if (file_exists($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
+	if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
+		$activeapps[]=$plugin;
 		require $filename;
 	}
 }
-unset($ap);
-unset($filename);
+unset($plugin,$ap,$filename);
 
+
+#激活所有已加载的插件
 ActivePlugin();
-
-
-/*autoload*/
-function __autoload($classname) {
-	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($classname);
-		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-	}
-	if (is_readable($f=$GLOBALS['blogpath'] . 'zb_system/function/lib/' . strtolower($classname) .'.php'))
-		require $f;
-}
-
-function _stripslashes(&$val) {
-	if(!is_array($val)) return stripslashes($val);
-	foreach($val as $k => &$v) $val[$k] = _stripslashes($v);
-	return $val;
-}

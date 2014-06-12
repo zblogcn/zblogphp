@@ -20,8 +20,9 @@ function rrmdir($dir) {
 			if ($object != '.' && $object != '..') { 
 				if (filetype($dir.'/'.$object) == 'dir') rrmdir($dir.'/'.$object); else unlink($dir.'/'.$object); 
 			} 
-		} 
-		reset($objects); 
+		}
+		reset($objects);
+		rmdir($dir);
 	} 
 } 
 

@@ -27,7 +27,8 @@ if(count($_POST)>0){
 	$zbp->AddBuildModuleAll();
 	$zbp->BuildModule();
 	$zbp->SetHint('good');
-	Redirect('./list.php');
+	if($zbp->option['ZC_STATIC_MODE']=='REWRITE'  && strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%host%}index.php')===false) Redirect('./list.php');
+	 Redirect('./main.php');
 }
 
 
@@ -36,6 +37,7 @@ $ua=array(
 
 'ZC_ARTICLE_REGEX' => array(
 '{%host%}?id={%id%}',
+'{%host%}index.php/post/{%id%}.html',
 '{%host%}post/{%id%}.html',
 '{%host%}post/{%alias%}.html',
 '{%host%}{%year%}/{%month%}/{%id%}/',
@@ -45,6 +47,7 @@ $ua=array(
 
 'ZC_PAGE_REGEX' => array(
 '{%host%}?id={%id%}',
+'{%host%}index.php/{%id%}.html',
 '{%host%}{%id%}.html',
 '{%host%}{%alias%}.html',
 '{%host%}{%alias%}/',
@@ -54,6 +57,7 @@ $ua=array(
 
 'ZC_INDEX_REGEX' => array(
 '{%host%}?page={%page%}',
+'{%host%}index.php/page_{%page%}.html',
 '{%host%}page_{%page%}.html',
 '{%host%}page_{%page%}/',
 '{%host%}page_{%page%}',
@@ -62,6 +66,7 @@ $ua=array(
 
 'ZC_CATEGORY_REGEX' =>array(
  '{%host%}?cate={%id%}&page={%page%}',
+ '{%host%}index.php/category-{%id%}_{%page%}.html', 
  '{%host%}category-{%id%}_{%page%}.html',
  '{%host%}category-{%alias%}_{%page%}.html',
  '{%host%}category/{%alias%}/{%page%}/', 
@@ -72,6 +77,7 @@ $ua=array(
  
 'ZC_TAGS_REGEX' => array(
  '{%host%}?tags={%alias%}&page={%page%}',
+ '{%host%}index.php/tags-{%id%}_{%page%}.html',
  '{%host%}tags-{%id%}_{%page%}.html',
  '{%host%}tags-{%alias%}_{%page%}.html',
 ),
@@ -79,6 +85,7 @@ $ua=array(
 
 'ZC_DATE_REGEX' =>array(
  '{%host%}?date={%date%}&page={%page%}',
+ '{%host%}index.php/date-{%date%}_{%page%}.html',
  '{%host%}date-{%date%}_{%page%}.html',
  '{%host%}post/{%date%}_{%page%}.html',
 ),
@@ -86,6 +93,7 @@ $ua=array(
 
 'ZC_AUTHOR_REGEX' =>array(
  '{%host%}?auth={%id%}&page={%page%}',
+ '{%host%}index.php/author-{%id%}_{%page%}.html',
  '{%host%}author-{%id%}_{%page%}.html',
  '{%host%}author/{%id%}/{%page%}/',
 ),
@@ -97,15 +105,17 @@ function CreateOptoinsOfUrl($type){
 	global $ua,$zbp;
 	$s='';
 	$d='style="display:none;"';
-	if($zbp->option['ZC_STATIC_MODE']=='ACTIVE'){
+	if($zbp->option['ZC_STATIC_MODE']=='ACTIVE' || strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%host%}index.php')!==false){
 		$r='disabled="disabled"';
 	}else{
 		$r='';
 	}
 
+	$i=0;
 	foreach ($ua[$type] as $key => $value) {
 		$s .= '<p '.$d.'><label><input '.$r.' type="radio" name="radio'.$type.'" value="'.$value.'" onclick="$(\'#'.$type.'\').val($(this).val())" />&nbsp;' . $value . '</label></p>';
-		$d='';
+		$i++;
+		if($i>1)$d='';
 	}
 
 	echo $s;
@@ -129,7 +139,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 	<th>
 <p><label><input type="radio" <?php echo $zbp->option['ZC_STATIC_MODE']=='ACTIVE'?'checked="checked"':'' ?> value="ACTIVE" name="ZC_STATIC_MODE" onchange="changeOptions(0);" /> &nbsp;&nbsp;动态</label>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<label><input type="radio" <?php echo $zbp->option['ZC_STATIC_MODE']=='ACTIVE'?'':'checked="checked"' ?>  value="REWRITE"  name="ZC_STATIC_MODE" onchange="changeOptions(1);" />&nbsp;&nbsp;伪静态</label></p>
+<label><input type="radio" <?php echo !($zbp->option['ZC_STATIC_MODE']=='REWRITE'  && strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%host%}index.php')===false)?'':'checked="checked"' ?>  value="REWRITE"  name="ZC_STATIC_MODE" onchange="changeOptions(2);" />&nbsp;&nbsp;伪静态</label>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<label><input type="radio" <?php echo !($zbp->option['ZC_STATIC_MODE']=='REWRITE'  && strpos($zbp->option['ZC_ARTICLE_REGEX'],'{%host%}index.php')!==false)?'':'checked="checked"' ?>  value="REWRITE"  name="ZC_STATIC_MODE" onchange="changeOptions(1);" />&nbsp;&nbsp;index.php式仿伪静态</label>
+
+</p>
 	</th>
 	</tr>
 <tr>
@@ -194,12 +208,15 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </table>
 	  <hr/>
 	  <p>
-		规则可以自定义，请注意如果规则解析过于广泛会覆盖之后的规则，浏览页面时就会出现故障.
+		1· 规则可以自定义，请注意如果规则解析过于广泛会覆盖之后的规则，浏览页面时就会出现故障.
+		<br/>2· index.php式仿伪静态在Apache,IIS下可以不用生成伪静态规则.
 	  </p>
 	  <p>
 		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" />
 	  </p>
-
+	  <p>
+		&nbsp;
+	  </p>
 	</form>
 	<script type="text/javascript">
 function changeOptions(i){
@@ -210,6 +227,9 @@ function changeOptions(i){
 	if(i=='0'){
 		$("input[name^='radio']").prop('disabled',true);
 		$("input[name='ZC_STATIC_MODE']").val('ACTIVE');
+	}else if(i=='1'){
+		$("input[name^='radio']").prop('disabled',true);
+		$("input[name='ZC_STATIC_MODE']").val('REWRITE');
 	}else{
 		$("input[name^='radio']").prop('disabled',false);
 		$("input[name='ZC_STATIC_MODE']").val('REWRITE');

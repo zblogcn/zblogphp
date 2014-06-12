@@ -1,34 +1,50 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author 
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * 文章分类类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib/Article 类库
  */
+class Category extends Base {
 
-
-class Category extends Base{
-
+	/**
+	* @var array 下层分类
+	*/
 	public $SubCategorys=array();
 
+	/**
+	* 构造函数
+	*/
 	function __construct()
 	{
 		global $zbp;
 		parent::__construct($zbp->table['Category'],$zbp->datainfo['Category']);
 
-		$this->Name	= $GLOBALS['lang']['msg']['unnamed'];
+		$this->Name	= $zbp->lang['msg']['unnamed'];
 	}
 
+	/**
+	* 魔术方法：重载，可通过接口Filter_Plugin_Category_Call添加自定义函数
+	* @api Filter_Plugin_Category_Call
+	* @param string $method 方法
+	* @param mixed $args 参数
+	* @return mixed
+	*/
 	function __call($method, $args) {
 		foreach ($GLOBALS['Filter_Plugin_Category_Call'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this,$method, $args);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 	}
 
+	/**
+	* @param $name
+	* @param $value
+	* @return null|string
+	*/
 	public function __set($name, $value)
 	{
-        global $zbp;
+		global $zbp;
 		if ($name=='Url') {
 			return null;
 		}
@@ -55,9 +71,13 @@ class Category extends Base{
 		parent::__set($name, $value);
 	}
 
+	/**
+	* @param $name
+	* @return int|mixed|null|string
+	*/
 	public function __get($name)
 	{
-        global $zbp;
+		global $zbp;
 		if ($name=='Url') {
 			$u = new UrlRule($zbp->option['ZC_CATEGORY_REGEX']);
 			$u->Rules['{%id%}']=$this->ID;
@@ -122,13 +142,17 @@ class Category extends Base{
 		return parent::__get($name);
 	}
 
+	/**
+	* 保存分类数据
+	* @return bool
+	*/
 	function Save(){
-        global $zbp;
+		global $zbp;
 		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
 		if($this->LogTemplate==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->data['LogTemplate'] = '';
 		foreach ($GLOBALS['Filter_Plugin_Category_Save'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 		return parent::Save();
 	}

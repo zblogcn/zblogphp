@@ -22,6 +22,9 @@ foreach ($_FILES as $key => $value) {
 			if(App::UnPack($xml)){
 				$zbp->SetHint('good','上传APP并解压成功!');
 				Redirect($_SERVER["HTTP_REFERER"]);
+			}else{
+				$zbp->SetHint('bad',$zbp->lang['error']['64']);
+				Redirect($_SERVER["HTTP_REFERER"]);
 			};
 		}
 	}

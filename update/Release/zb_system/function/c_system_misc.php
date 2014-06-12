@@ -1,9 +1,9 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
+ * 系统信息
+ * @package Z-BlogPHP
+ * @subpackage System\Misc 摘取信息
  * @copyright (C) RainbowSoft Studio
- * @version       2.0 2013-06-14
  */
 
 ob_clean();
@@ -79,7 +79,13 @@ function misc_statistic() {
 	$current_style = $zbp->style;
 	$current_member = '{$zbp->user->Name}';
 
-	$system_environment = PHP_OS . ';' . GetValueInArray(explode('/', GetVars('SERVER_SOFTWARE', 'SERVER')), 0) . ';' . 'PHP ' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'];
+	$ajax = Network::Create();
+	if($ajax) $ajax=substr(get_class($ajax),7);
+	
+	$system_environment = PHP_OS . ';' . 
+							GetValueInArray(explode(' ',str_replace(array('Microsoft-','/'),array('',''),GetVars('SERVER_SOFTWARE', 'SERVER'))),0) . ';' .
+							'PHP' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'] . ';' .
+							$ajax ;
 
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}</td><td class='td30'>{$current_member}</td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_artiles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categorys}</td></tr>";
@@ -89,16 +95,16 @@ function misc_statistic() {
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";
 
 
-	$zbp->LoadConfigs();
-	$zbp->LoadCache();
 	$zbp->cache->reload_statistic = $r;
 	$zbp->cache->reload_statistic_time = time();
+	$zbp->cache->system_environment = $system_environment;
 	//$zbp->SaveCache();
 	CountNormalArticleNums();
 
 	$zbp->AddBuildModule('statistics', array($all_artiles, $all_pages, $all_categorys, $all_tags, $all_views, $all_comments));
 	$zbp->BuildModule();
 
+	$r = str_replace('{#ZC_BLOG_HOST#}', $zbp->host, $r);
 	$r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
 
 	echo $r;
@@ -132,12 +138,19 @@ $blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights'];
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<?php if (strpos(GetVars('HTTP_USER_AGENT', 'SERVERS'), 'MSIE')) { ?>
+	<?php if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) { ?>
 		<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
 	<?php } ?>
 	<meta name="robots" content="none"/>
 	<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL'] ?>"/>
 	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen"/>
+	<script src="script/common.js" type="text/javascript"></script>
+	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
+<?php
+
+foreach ($GLOBALS['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
+
+?>
 	<title><?php echo $blogtitle; ?></title>
 </head>
 <body class="short">
@@ -166,6 +179,7 @@ $blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights'];
 </body>
 </html>
 <?php
+RunTime();
 }
 
 ?>

@@ -13,6 +13,9 @@
  */
 
 require '../zb_system/function/c_system_base.php';
+require '../zb_system/function/c_system_admin.php';
+
+header('Content-type: text/html; charset=utf-8');
 
 define('bingo','<span class="bingo"></span>');
 define('error','<span class="error"></span>');
@@ -298,9 +301,14 @@ CheckServer();
           <th colspan="3" scope="row">函数检查</th>
         </tr>
         <tr>
-          <td scope="row">file_get_contents</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['file_get_contents'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['file_get_contents'][1];?></td>
+          <td scope="row">curl</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['curl'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['curl'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">allow_url_fopen</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['allow_url_fopen'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['allow_url_fopen'][1];?></td>
         </tr>
         <tr>
           <td scope="row">gethostbyname</td>
@@ -308,14 +316,9 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gethostbyname'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">xml_parser_create</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['xml_parser_create'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['xml_parser_create'][1];?></td>
-        </tr>
-        <tr>
-          <td scope="row">fsockopen</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['fsockopen'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['fsockopen'][1];?></td>
+          <td scope="row">simplexml_import_dom</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['simplexml_import_dom'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['simplexml_import_dom'][1];?></td>
         </tr>
       </table>
     </div>
@@ -396,19 +399,22 @@ function Setup3(){
         <p><b>表&nbsp;前&nbsp;缀:</b>
           <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="<?php echo $option['ZC_MYSQL_PRE'];?>" style="width:350px;" />
         </p>
-      <p><b>连接选择:</b> 
+      <p><b>连接选择:</b>
+<?php if ( version_compare ( PHP_VERSION ,  '5.5.0' ,  '<' )) { ?>
         <?php if($CheckResult['mysql'][0]){?>
         <label>
           <input value="mysql" type="radio" name="dbtype"/>MySQL连接</label>
         <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
-        <!--<?php if($CheckResult['mysqli'][0]){?>
+<?php } ?>
+        <?php if($CheckResult['mysqli'][0]){?>
         <label>
           <input value="mysqli" type="radio" name="dbtype"/>MySQLi连接</label>
-        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;-->
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php if($CheckResult['pdo_mysql'][0]){?>
         <label>
           <input value="pdo_mysql" type="radio" name="dbtype"/>PDO_MySQL连接</label>
         <?php } ?>
+		<br/><small>(端口号默认3306，如需要修改请在'数据库主机'里追加':端口号'。)</small>
       </p>
       </div>
       <?php } ?>
@@ -450,6 +456,9 @@ function Setup3(){
       <p><b>确认密码:</b>
         <input type="password" name="repassword" id="repassword" value="" style="width:250px;" />
       </p>
+      <p><b>语&nbsp;言&nbsp;包:</b><select id="language" name="language" style="width:260px;" >
+<?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']); ?>
+      </select></p>
     </div>
     <div id="bottom">
       <input type="submit" name="next" id="netx" onClick="return Setup3()" value="下一步" />
@@ -502,13 +511,23 @@ case 'mysqli':
 case 'pdo_mysql':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/mysql.sql');
   $zbp->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
+  if(strpos($zbp->option['ZC_MYSQL_SERVER'],':')!==false){
+    $servers=explode(':',$zbp->option['ZC_MYSQL_SERVER']);
+	$zbp->option['ZC_MYSQL_SERVER']=$servers[0];
+	$zbp->option['ZC_MYSQL_PORT']=(int)$servers[1];
+	if($zbp->option['ZC_MYSQL_PORT']==0)$zbp->option['ZC_MYSQL_PORT']=3306;
+	unset($servers);
+  }
   $zbp->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
   $zbp->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
-  $zbp->option['ZC_MYSQL_NAME']=GetVars('dbmysql_name','POST');
-  $zbp->option['ZC_MYSQL_PRE']=GetVars('dbmysql_pre','POST');
+  $zbp->option['ZC_MYSQL_NAME']=str_replace(array('\'','"'),array('',''),GetVars('dbmysql_name','POST'));
+  $zbp->option['ZC_MYSQL_PRE']=str_replace(array('\'','"'),array('',''),GetVars('dbmysql_pre','POST'));
   $zbp->InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
-  $zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'],$zbp->option['ZC_MYSQL_PORT'],$zbp->option['ZC_MYSQL_USERNAME'],$zbp->option['ZC_MYSQL_PASSWORD'],$zbp->option['ZC_MYSQL_NAME']);
+  if($zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'],$zbp->option['ZC_MYSQL_PORT'],$zbp->option['ZC_MYSQL_USERNAME'],$zbp->option['ZC_MYSQL_PASSWORD'],$zbp->option['ZC_MYSQL_NAME'])==true){
+    echo "创建数据库". $zbp->option['ZC_MYSQL_NAME'] ."成功!<br/>";
+  }
   $zbp->db->dbpre=$zbp->option['ZC_MYSQL_PRE'];
+  $zbp->db->Close();
   break;
 case 'sqlite':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');
@@ -523,11 +542,15 @@ case 'sqlite3':
 }
 
 $zbp->OpenConnect();
-$zbp->db->QueryMulit($cts);
 
-InsertInfo();
+$zbp->option['ZC_BLOG_LANGUAGEPACK']=GetVars('language','POST');
+$zbp->lang = require($zbp->path . 'zb_users/language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+$zbp->option['ZC_BLOG_LANGUAGE'] = $zbp->lang ['lang'];
 
-SaveConfig();
+if(CreateTable($cts)){
+  InsertInfo();
+  SaveConfig();
+}
 
 $zbp->CloseConnect();
 
@@ -581,10 +604,10 @@ $CheckResult=array(
   'upload'=>array('',''), 
   'c_option.php'=>array('',''), 
   //函数
-  'file_get_contents'=>array('用于连接应用中心',''),
+  'curl'=>array('用于连接应用中心',''), 
+  'allow_url_fopen'=>array('用于连接应用中心',''),
   'gethostbyname'=>array('用于解析DNS',''),
-  'xml_parser_create'=>array('用于处理XML',''),
-  'fsockopen'=>array('用于打开文件','')
+  'simplexml_import_dom'=>array('用于处理XML',''),
 
 );
 
@@ -638,10 +661,10 @@ $CheckResult=array(
   getRightsAndExport('zb_users/','upload');
   //getRightsAndExport('zb_users/','c_option.php');
 
-  $CheckResult['file_get_contents'][1]=function_exists('file_get_contents')?bingo:error;
+  $CheckResult['curl'][1]=function_exists('curl_init')?bingo:error; 
+  $CheckResult['allow_url_fopen'][1]=(bool)ini_get('allow_url_fopen')?bingo:error;
   $CheckResult['gethostbyname'][1]=function_exists('gethostbyname')?bingo:error;
-  $CheckResult['xml_parser_create'][1]=function_exists('xml_parser_create')?bingo:error;
-  $CheckResult['fsockopen'][1]=function_exists('fsockopen')?bingo:error;
+  $CheckResult['simplexml_import_dom'][1]=function_exists('simplexml_import_dom')?bingo:error;
 
 }
 
@@ -656,6 +679,21 @@ function getRightsAndExport($folderparent,$folder){
   }else{
     $GLOBALS['CheckResult'][$folder][1]=(substr($s,1,1)=='r'&&substr($s,2,1)=='w'&&substr($s,3,1)=='x'&&substr($s,4,1)=='r'&&substr($s,7,1)=='r'&&substr($s,6,1)=='x'&&substr($s,9,1)=='x')?bingo:error;
   }
+}
+
+function CreateTable($sql){
+  global $zbp;
+
+  if($zbp->db->ExistTable($GLOBALS['table']['Config'])==true){
+    echo "该数据库里已存在相关的表和数据,请更改表前缀或是更换清空数据库再安装.";
+	return false;
+  }
+  
+  $sql=$zbp->db->sql->ReplacePre($sql);
+  $zbp->db->QueryMulit($sql);
+
+  echo "连接数据库并创建数据表成功!<br/>";
+  return true;
 }
 
 function InsertInfo(){
@@ -675,12 +713,12 @@ function InsertInfo(){
 
 
   $cate = new Category();
-  $cate->Name='未分类';
+  $cate->Name=$zbp->lang['msg']['uncategory'];
   $cate->Alias='uncategorized';
   $cate->Save();
   
   $t=new Module();
-  $t->Name="导航栏";
+  $t->Name=$zbp->lang['msg']['module_navbar'];
   $t->FileName="navbar";
   $t->Source="system";
   $t->SidebarID=0;
@@ -691,7 +729,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="日历";
+  $t->Name=$zbp->lang['msg']['calendar'];
   $t->FileName="calendar";
   $t->Source="system";
   $t->SidebarID=1;
@@ -705,11 +743,11 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="控制面板";
+  $t->Name=$zbp->lang['msg']['control_panel'];
   $t->FileName="controlpanel";
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">[用户登录]</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">[查看权限]</a></span>';
+  $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">['.$zbp->lang['msg']['admin_login'].']</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">['.$zbp->lang['msg']['view_rights'].']</a></span>';
   $t->HtmlID="divContorPanel";
   $t->Type="div";
   $t->Save();
@@ -718,7 +756,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="网站分类";
+  $t->Name=$zbp->lang['msg']['module_catalog'];
   $t->FileName="catalog";
   $t->Source="system";
   $t->SidebarID=1;
@@ -729,18 +767,18 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="搜索";
+  $t->Name=$zbp->lang['msg']['search'];
   $t->FileName="searchpanel";
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Content='<form name="search" method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=search"><input type="text" name="q" size="11" /> <input type="submit" value="搜索" /></form>';
+  $t->Content='<form name="search" method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=search"><input type="text" name="q" size="11" /> <input type="submit" value="'.$zbp->lang['msg']['search'].'" /></form>';
   $t->HtmlID="divSearchPanel";
   $t->Type="div";
   $t->Save();
 
 
   $t=new Module();
-  $t->Name="最新留言";
+  $t->Name=$zbp->lang['msg']['module_comments'];
   $t->FileName="comments";
   $t->Source="system";
   $t->SidebarID=1;
@@ -753,7 +791,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="文章归档";
+  $t->Name=$zbp->lang['msg']['module_archives'];
   $t->FileName="archives";
   $t->Source="system";
   $t->SidebarID=1;
@@ -765,7 +803,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="站点信息";
+  $t->Name=$zbp->lang['msg']['module_statistics'];
   $t->FileName="statistics";
   $t->Source="system";
   $t->SidebarID=0;
@@ -778,7 +816,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="网站收藏";
+  $t->Name=$zbp->lang['msg']['module_favorite'];
   $t->FileName="favorite";
   $t->Source="system";
   $t->SidebarID=1;
@@ -791,7 +829,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="友情链接";
+  $t->Name=$zbp->lang['msg']['module_link'];
   $t->FileName="link";
   $t->Source="system";
   $t->SidebarID=1;
@@ -803,7 +841,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="图标汇集";
+  $t->Name=$zbp->lang['msg']['module_misc'];
   $t->FileName="misc";
   $t->Source="system";
   $t->SidebarID=1;
@@ -817,7 +855,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="作者列表";
+  $t->Name=$zbp->lang['msg']['module_authors'];
   $t->FileName="authors";
   $t->Source="system";
   $t->SidebarID=0;
@@ -830,7 +868,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="最近发表";
+  $t->Name=$zbp->lang['msg']['module_previous'];
   $t->FileName="previous";
   $t->Source="system";
   $t->SidebarID=0;
@@ -842,7 +880,7 @@ function InsertInfo(){
 
 
   $t=new Module();
-  $t->Name="Tags列表";
+  $t->Name=$zbp->lang['msg']['module_tags'];
   $t->FileName="tags";
   $t->Source="system";
   $t->SidebarID=0;

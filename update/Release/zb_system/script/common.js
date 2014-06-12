@@ -182,13 +182,10 @@ function LoadRememberInfo() {
 	var strEmail=GetCookie("email");
 	var strHomePage=GetCookie("homepage");
 
-	if(bolRemember=="true"){
 
-		if(strName&&(!$("#name").val())){$("#name").val(strName);}
-		if(strEmail&&(!$("#name").val())){$("#email").val(strEmail);}
-		if(strHomePage&&(!$("#name").val())){$("#homepage").val(strHomePage);}
-
-	}
+	if(strName){$("#inpName").val(strName);}
+	if(strEmail){$("#inpEmail").val(strEmail);}
+	if(strHomePage){$("#inpHomePage").val(strHomePage);}
 
 }
 //*********************************************************
@@ -203,9 +200,9 @@ function LoadRememberInfo() {
 //*********************************************************
 function SaveRememberInfo() {
 
-	var strName=$("#name").val();
-	var strEmail=$("email").val();
-	var strHomePage=$("#homepage").val();
+	var strName=$("#inpName").val();
+	var strEmail=$("#inpEmail").val();
+	var strHomePage=$("#inpHomePage").val();
 
 	SetCookie("name",strName,365);
 	SetCookie("email",strEmail,365);

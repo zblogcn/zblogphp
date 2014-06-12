@@ -106,7 +106,7 @@ if($mod->Source=='theme'){
 	    <label><input type="radio" name="Type" value="ul" <?php echo $mod->Type=='div'?'':'checked="checked"';?> onclick="$('#pMaxLi').css('display','block');" />&nbsp;UL</label>
 	  </p>
 	  <p id="pMaxLi" style="<?php echo $mod->Type=='div'?'display:none;':'';?>" >
-	    <span class='title'>UL内LI的最大行数:</span><br/>
+	    <span class='title'><?php echo $lang['msg']['max_li_in_ul']?>:</span><br/>
 	    <input type="text" name="MaxLi" value="<?php echo $mod->MaxLi;?>" size="40"  />
 	  </p>
 <?php
@@ -126,14 +126,17 @@ if($mod->FileName=='catalog'){
 		<span class="title"><?php echo $lang['msg']['content']?>:</span><br />
 		<textarea name="Content" id="Content"  cols="80" rows="12"  ><?php echo htmlspecialchars($mod->Content);?></textarea>
 	  </p>
-
+	  <p >
+	    <span class='title'><?php echo $lang['msg']['no_refresh_content']?>:</span>
+		<input type="text" id="NoRefresh" name="NoRefresh" class="checkbox" value="<?php echo $mod->NoRefresh;?>"/>
+	  </p>
 	  <p>
 		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" />
 	  </p>
 	</form>
 	<script type="text/javascript">
 function checkInfo(){
-  document.getElementById("edit").action="../cmd.php?act=ModulePst";
+  document.getElementById("edit").action="../cmd.php?act=ModulePst<?php echo '&token='. $zbp->GetToken();?>";
 
   if(!$("#edtName").val()){
     alert("<?php echo $lang['error']['72']?>");

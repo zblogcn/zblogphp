@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>AppCentre</id>
 <name>应用中心</name>
@@ -10,8 +10,8 @@
 <level>1</level>
 <author>
   <name>zx.asd</name>
-  <email>zxasd@rainbowsoft.org</email>
-  <url>http://www.rainbowsoft.org/</url>
+  <email>rainbowsoft@gmail.com</email>
+  <url>http://www.zblogcn.com/</url>
 </author>
 <source>
   <name></name>
@@ -19,9 +19,9 @@
   <url></url>
 </source>
 <adapted>130707</adapted>
-<version>1.3</version>
+<version>1.4</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2014-03-03</modified>
+<modified>2014-06-11</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

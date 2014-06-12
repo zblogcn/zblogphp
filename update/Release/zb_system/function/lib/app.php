@@ -1,85 +1,191 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version 2.0 2013-06-14
+ * App 应用类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib 类库
  */
+class App {
 
-/**
-* App
-*/
-class App
-{
-	#type='plugin'|'theme'
+	/**
+	* @var string 应用类型，'plugin'表示插件，'theme'表示主题
+	*/
 	public $type='';
+	/**
+	* @var string 应用ID,必须以应用文件目录为ID
+	*/
 	public $id;
+	/**
+	* @var string 应用名
+	*/
 	public $name;
+	/**
+	* @var string 应用发布链接
+	*/
 	public $url;
+	/**
+	* @var string 应用说明
+	*/
 	public $note;
+	/**
+	* @var string 应用详细信息
+	*/
 	public $description;
-
+	/**
+	* @var string 管理页面路径
+	*/
 	public $path;
+	/**
+	* @var string include文件
+	*/
 	public $include;
+	/**
+	* @var int 应用权限等级
+	*/
 	public $level;
-
+	/**
+	* @var string 应用作者
+	*/
 	public $author_name;
+	/**
+	* @var string 作者邮箱
+	*/
 	public $author_email;
+	/**
+	* @var string 作者链接
+	*/
 	public $author_url;
-
+	/**
+	* @var string 原作者名
+	*/
 	public $source_name;
+	/**
+	* @var string 原作者邮箱
+	*/
 	public $source_email;
+	/**
+	* @var string 原作者链接
+	*/
 	public $source_url;
-
-
+	/**
+	* @var string 适用版本
+	*/
 	public $adapted;
+	/**
+	* @var string 版本号
+	*/
 	public $version;
+	/**
+	* @var string 发布时间
+	*/
 	public $pubdate;
+	/**
+	* @var string 最后更新时间
+	*/
 	public $modified;
+	/**
+	* @var string 应用价格
+	*/
 	public $price;
-
+	/**
+	* @var string 高级选项：依赖插件列表（以|分隔）
+	*/
 	public $advanced_dependency;
+	/**
+	* @var string 高级选项：重写函数列表（以|分隔）
+	*/
 	public $advanced_rewritefunctions;
+	/**
+	* @var string 高级选项：冲突插件列表（以|分隔）
+	*/
 	public $advanced_conflict;
-
+	/**
+	* @var string 设置主题侧栏1
+	*/
 	public $sidebars_sidebar1;
+	/**
+	* @var string 定义主题侧栏2
+	*/
 	public $sidebars_sidebar2;
+	/**
+	* @var string 设置主题侧栏3
+	*/
 	public $sidebars_sidebar3;
+	/**
+	* @var string 设置主题侧栏4
+	*/
 	public $sidebars_sidebar4;
+	/**
+	* @var string 设置主题侧栏5
+	*/
 	public $sidebars_sidebar5;
-
+	/**
+	* 是否可删除
+	* @return bool
+	*/
 	public function CanDel(){
 		global $zbp;
 		return false;
 	}
+	/**
+	 * 是否带管理页面 
+	 * @access	public
+	 * @return	bool	
+	 */
 	public function CanManage(){
 		if($this->path){return true;}
 		return false;
 	}
+	/**
+	 * 是否正在使用 
+	 * @access	public
+	 * @return	bool	
+	 */
 	public function IsUsed(){
 		global $zbp;
 		return $zbp->CheckPlugin($this->id);
 	}
+	/**
+	 * 是否附带主题插件（针对主题应用）
+	 * @access	public
+	 * @return	bool	
+	 */
 	public function HasPlugin(){
 		if($this->path || $this->include){return true;}
 		return false;
 	}
-
+	/**
+	 * 获取应用ID的crc32Hash值
+	 * @access	public
+	 * @return	string	
+	 */
 	public function GetHash(){
 		global $zbp;
 		return crc32($this->id);
 	}
-
+	/**
+	 * 获取应用管理页面链接
+	 * @access	public
+	 * @return	string	
+	 */
 	public function GetManageUrl(){
 		global $zbp;
 		return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/' . $this->path;
 	}
-
+	/**
+	 * 获取应用目录地址
+	 * @access	public
+	 * @return	string	
+	 */
 	public function GetDir(){
 		global $zbp;
 		return $zbp->path . 'zb_users/' . $this->type . '/' . $this->id . '/';
 	}
-
+	/**
+	 * 获取应用Logo图片地址
+	 * @access	public
+	 * @return	string	
+	 */
 	public function GetLogo(){
 		global $zbp;
 		if($this->type=='plugin'){
@@ -88,23 +194,38 @@ class App
 			return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
 		}
 	}
-
+	/**
+	 * 获取应用截图地址
+	 * @access	public
+	 * @return	string	
+	 */
 	public function GetScreenshot(){
 		global $zbp;
 		return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
 	}
-
+	/**
+	 * 获取应用（主题）样式文件列表
+	 * @access	public
+	 * @return	array
+	 */
 	public function GetCssFiles(){
 		global $zbp;
 		$dir = $zbp->usersdir . 'theme/' . $this->id . '/style/';
 		return GetFilesInDir($dir,'css');
 	}
 
+	/**
+	* 载入应用xml中的信息
+	* @param string $type 应用类型
+	* @param string $id 应用ID
+	* @return bool
+	*/
 	public function LoadInfoByXml($type,$id){
 		global $zbp;
 		$path=$zbp->usersdir . $type . '/' . $id . '/' . $type . '.xml';
-		if(!file_exists($path)){return;}
-		$xml = simplexml_load_file($path);
+		if(!is_readable($path))return false;
+		$xml = @simplexml_load_file($path);
+		if(!$xml)return false;
 		$appver = $xml->attributes();
 		if($appver <> 'php'){return false;}
 
@@ -148,6 +269,10 @@ class App
 		return true;
 	}
 
+	/**
+	* 保存应用信息到xml文件
+	* @return bool
+	*/
 	public function SaveInfoByXml(){
 		global $zbp;
 		$s='<?xml version="1.0" encoding="utf-8"?>' . "\r\n";
@@ -202,11 +327,24 @@ class App
 
 		@file_put_contents($path, $s);
 
+		return true;
 	}
 
+	/**
+	* @var array 所有目录列表
+	* @private
+	*/
 	private $dirs=array();
+	/**
+	* @var array 所有文件列表
+	* @private
+	*/
 	private $files=array();
 
+	/**
+	* @param string $dir 获取所有目录及文件列表
+	* @private
+	*/
 	private function GetAllFileDir($dir){
 
 		if(function_exists('scandir')){
@@ -239,6 +377,10 @@ class App
 	}
 
 
+	/**
+	* 应用打包
+	* @return string
+	*/
 	public function Pack(){
 		global $zbp;
 
@@ -303,12 +445,16 @@ class App
 		}
 
 
-
 		$s.='</app>';
 
 		return $s;
 	}
 
+	/**
+	* 解开应用包
+	* @param $xml
+	* @return bool
+	*/
 	static public function UnPack($xml){
 		global $zbp;
 		$xml = simplexml_load_string($xml);
@@ -317,10 +463,10 @@ class App
 		$type=$xml['type'];
 		$id=$xml->id;
 		$dir=$zbp->path . 'zb_users/' . $type . '/';
+		
+		ZBlogException::SuspendErrorHook();
 
 		if(!file_exists($dir . $id . '/'))@mkdir($dir . $id . '/',0755,true);
-
-		set_error_handler(create_function('',''));
 
 		foreach ($xml->folder as $folder) {
 			$f=$dir . $folder->path;
@@ -337,11 +483,34 @@ class App
 			}
 
 		}
+		
+		ZBlogException::ResumeErrorHook();
 
 		return true;
 	}
+	
+	public function CheckCompatibility(){
+		global $zbp;
 
-	public function SaveInfo(){
+		if((int)$this->adapted>(int)$zbp->version){
+			$zbp->ShowError(str_replace('%s',$this->adapted,$zbp->lang['error'][78]),__FILE__,__LINE__);
+		}
+		
+		$ad=explode('|',$this->advanced_dependency);
+		foreach($ad as $d){
+			if(!$d)continue;
+			if(!in_array($d,$zbp->activeapps)){
+				$zbp->ShowError(str_replace('%s',$d,$zbp->lang['error'][83]),__FILE__,__LINE__);
+			}
+		}
 
+		$ac=explode('|',$this->advanced_conflict);
+		foreach($ac as $c){
+			if(!$c)continue;
+			if(in_array($c,$zbp->activeapps)){
+				$zbp->ShowError(str_replace('%s',$c,$zbp->lang['error'][84]),__FILE__,__LINE__);
+			}
+		}
 	}
+
 }

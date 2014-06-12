@@ -21,7 +21,7 @@ function AppCentre_SubMenus($id){
 	echo '<a href="theme_edit.php"><span class="m-right '.($id==6?'m-now':'').'">新建主题</span></a>';
 }
 
-function GetCheckQueryString(){
+function AppCentre_GetCheckQueryString(){
 	global $zbp;
 	$check= '';
 	$app=new app;			
@@ -68,13 +68,13 @@ function Server_Open($method){
 			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
 			break;
 		case 'check':
-			$s=Server_SendRequest(APPCENTRE_URL .'?check=' . urlencode(GetCheckQueryString())) . '';
+			$s=Server_SendRequest(APPCENTRE_URL .'?check=' . urlencode(AppCentre_GetCheckQueryString())) . '';
 			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
 			break;
 		case 'checksilent':
 			header('Content-type: application/x-javascript; Charset=utf-8');
 			ob_clean();
-			$s=Server_SendRequest(APPCENTRE_URL .'?blogsilent=1'. ($zbp->Config('AppCentre')->checkbeta?'&betablog=1':'') .'&check=' . urlencode(GetCheckQueryString())) . '';
+			$s=Server_SendRequest(APPCENTRE_URL .'?blogsilent=1'. ($zbp->Config('AppCentre')->checkbeta?'&betablog=1':'') .'&check=' . urlencode(AppCentre_GetCheckQueryString())) . '';
 			if(strpos($s,';')!==false){
 				$newversion=substr($s,0,6);
 				$s=str_replace(($newversion.';'),'',$s);
@@ -172,9 +172,9 @@ function Server_SendRequest($url,$data=array(),$u='',$c=''){
 		$content=stream_context_create($opts);
 	}
 
-	ini_set('default_socket_timeout',120);
+	if(function_exists('ini_set'))ini_set('default_socket_timeout',120);
 	
-	if( version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0 ){
+	if(extension_loaded('zlib')){
 		return file_get_contents('compress.zlib://'.$url,false,$content);
 	}else{
 		return file_get_contents($url,false,$content);
@@ -185,10 +185,18 @@ function Server_SendRequest_CUrl($url,$data=array(),$u,$c){
 	global $zbp;
 
 	$ch = curl_init($url);
-	curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
+	if(extension_loaded('zlib')){
+		curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
+	}
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 120);
 	curl_setopt($ch, CURLOPT_USERAGENT, $u);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+	if(ini_get("safe_mode")==false && ini_get("open_basedir")==false){
+		curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
+	}
 	if($c)curl_setopt($ch,CURLOPT_COOKIE,$c);
 	
 	if($data){//POST
@@ -211,18 +219,14 @@ function Server_SendRequest_Network($url,$data=array(),$u,$c){
 
 	if($data){//POST
 		$ajax->open('POST',$url);
-		if( (get_class($ajax)<>'Networkfile_get_contents') || (version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0) ){
-			$ajax->enableGzip();
-		}
+		$ajax->enableGzip();
 		$ajax->setTimeOuts(120,120,0,0);
 		$ajax->setRequestHeader('User-Agent',$u);
 		$ajax->setRequestHeader('Cookie',$c);
 		$ajax->send($data);
 	}else{
 		$ajax->open('GET',$url);
-		if( (get_class($ajax)<>'Networkfile_get_contents') || (version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0) ){
-			$ajax->enableGzip();
-		}
+		$ajax->enableGzip();
 		$ajax->setTimeOuts(120,120,0,0);
 		$ajax->setRequestHeader('User-Agent',$u);
 		$ajax->setRequestHeader('Cookie',$c);
@@ -232,7 +236,7 @@ function Server_SendRequest_Network($url,$data=array(),$u,$c){
 	return $ajax->responseText;
 }
 
-function CreateOptoinsOfVersion($default){
+function AppCentre_CreateOptoinsOfVersion($default){
 	global $zbp;
 
 	$s=null;
@@ -245,21 +249,29 @@ function CreateOptoinsOfVersion($default){
 }
 
 function AppCentre_GetHttpContent($url){
-	$r=null;
-	if(function_exists("curl_init")){
+
+	if(function_exists("GetHttpContent"))return GetHttpContent($url);
+
+	$r = null;
+	if (function_exists("curl_init")) {
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		if(ini_get("safe_mode")==false && ini_get("open_basedir")==false){
+			curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
+		}
 		$r = curl_exec($ch);
 		curl_close($ch);
-	}elseif(ini_get("allow_url_fopen")){
-		ini_set('default_socket_timeout',60);
-		$r=file_get_contents($url);
+	} elseif (ini_get("allow_url_fopen")) {
+		$r = file_get_contents($url);
 	}
+
 	return $r;
 }
 
-function crc32_signed($num){ 
+function AppCentre_crc32_signed($num){ 
     $crc = crc32($num); 
     if($crc & 0x80000000){ 
         $crc ^= 0xffffffff; 

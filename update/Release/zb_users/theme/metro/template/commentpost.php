@@ -1,5 +1,5 @@
 <div class="commentpost" id="comment">
-    <h4>发表评论:</h4>{if $user.ID>0}{$user.Name#}{/if}<a rel="nofollow" id="cancel-reply" href="#comment" style="display:none;"><small>取消回复</small></a>
+    <h4>发表评论:</h4>{if $user.ID>0}{$user.StaticName}{/if}<a rel="nofollow" id="cancel-reply" href="#comment" style="display:none;"><small>取消回复</small></a>
 	<form id="frmSumbit" target="_self" method="post" action="{$article.CommentPostUrl}" >
 	<input type="hidden" name="inpId" id="inpId" value="{$article.ID}" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />

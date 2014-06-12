@@ -8,7 +8,7 @@
 {if $article.Tags}
     <h4>标签: {foreach $article.Tags as $tag}<a href="{$tag.Url}">{$tag.Name}</a>{/foreach}</h4>
 {/if}
-    <h5><em>作者:{$article.Author.Name}</em> <em>分类:{$article.Category.Name}</em> <em>浏览:{$article.ViewNums}</em> <em>评论:{$article.CommNums}</em></h5>
+    <h5><em>作者:{$article.Author.StaticName}</em> <em>分类:{$article.Category.Name}</em> <em>浏览:{$article.ViewNums}</em> <em>评论:{$article.CommNums}</em></h5>
   </footer>
   <nav>
 {if $article.Prev}

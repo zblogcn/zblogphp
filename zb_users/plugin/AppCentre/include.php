@@ -59,3 +59,21 @@ function AppCentre_AddPluginMenu(){
 	echo "<script type='text/javascript'>var app_username='".$zbp->Config('AppCentre')->username."';</script>";
 	echo "<script src='{$zbp->host}zb_users/plugin/AppCentre/plugin.js' type='text/javascript'></script>";
 }
+
+
+//$appid是App在应用中心的发布后的文章ID数字号，非App的ID名称。
+function AppCentre_App_Check_ISBUY($appid){
+	global $zbp;
+	$postdate = array(
+		'email'=>$zbp->Config('AppCentre')->shop_username,
+		'password'=>$zbp->Config('AppCentre')->shop_password,
+		//'domain'=>$zbp->host,
+		'appid'=>$appid,
+	    );
+	$http_post = Network::Create();
+	$http_post->setRequestHeader('Referer',substr($zbp->host,0,-1) . $zbp->currenturl);
+	$http_post->open('POST',APPCENTRE_API_URL.APPCENTRE_API_APP_ISBUY);
+	$result = $http_post->send($postdate);
+	$result = json_decode($http_post->responseText,true);
+	return $result;
+}

@@ -13,6 +13,9 @@
  */
 return array(
 
+	// '---------------------------------关闭网站-----------------------------------
+	'ZC_SITE_TURNOFF'=>false,
+
 	// '---------------------------------网站基本设置-----------------------------------
 	'ZC_BLOG_HOST' => 'http://localhost/',
 	'ZC_BLOG_NAME' => '我的网站',
@@ -22,9 +25,6 @@ return array(
 	'ZC_BLOG_COPYRIGHT' => 'Copyright Your WebSite.Some Rights Reserved.',
 	'ZC_BLOG_LANGUAGE' => 'zh-CN',
 	'ZC_BLOG_LANGUAGEPACK' => 'SimpChinese',
-
-	// '---------------------------------关闭网站-----------------------------------
-	'ZC_SITE_TURNOFF'=>false,
 
 	// '----------------------------数据库配置---------------------------------------
 	//mysql|sqlite|sqlite3|pdo_mysql
@@ -49,9 +49,10 @@ return array(
 	// '-------------------------------全局配置-----------------------------------
 	'ZC_YUN_SITE'=>'',
 	'ZC_DEBUG_MODE' => true,
+	'ZC_DEBUG_MODE_STRICT' => false,	
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
-	'ZC_UPDATE_INFO_URL' => 'http://update.rainbowsoft.org/info/',
+	'ZC_UPDATE_INFO_URL' => 'http://update.zblogcn.com/info/',
 	// '固定域名,默认为false,如启用则'ZC_BLOG_HOST生效而'ZC_MULTI_DOMAIN_SUPPORT无效
 	'ZC_PERMANENT_DOMAIN_ENABLE' => false,
 	'ZC_MULTI_DOMAIN_SUPPORT' => false,
@@ -61,6 +62,7 @@ return array(
 	'ZC_BLOG_PRODUCT' => 'Z-BlogPHP',
 	'ZC_BLOG_VERSION' => '',
 	'ZC_BLOG_PRODUCT_FULL' => '',
+	'ZC_BLOG_PRODUCT_HTML' => '',
 	'ZC_BLOG_PRODUCT_FULLHTML' => '',
 
 
@@ -74,6 +76,7 @@ return array(
 	'ZC_VERIFYCODE_STRING' => 'ABCDEFGHKMNPRSTUVWXYZ123456789',
 	'ZC_VERIFYCODE_WIDTH' => 90,
 	'ZC_VERIFYCODE_HEIGHT' => 30,
+	'ZC_VERIFYCODE_FONT' => 'zb_system/defend/arial.ttf',
 
 	// '页面各项列数
 	'ZC_DISPLAY_COUNT' => 10,
@@ -168,5 +171,6 @@ return array(
 	'ZC_VIEWNUMS_TURNOFF' => false,
 	'ZC_LISTONTOP_TURNOFF' => false,
 	'ZC_RELATEDLIST_COUNT'=>10,
+	'ZC_RUNINFO_DISPLAY' => true,
 )
 ?>
