@@ -2,7 +2,7 @@
 	<file name='zb_system\function\c_system_plugin.php' md5='3ECA5C62C54690C0062902BF745BC452' crc32='EE9A654E'/>
 	<file name='zb_system\function\c_system_debug.php' md5='5575239E76A814838799E08ED7D0C047' crc32='A41955D7'/>
 	<file name='zb_system\function\c_system_common.php' md5='379563E81258285389F8F97E82F98ED5' crc32='E3AC5682'/>
-	<file name='zb_system\function\c_system_event.php' md5='85BE1F2B0E6370F089DEC61339291AD8' crc32='496A1D9E'/>
+	<file name='zb_system\function\c_system_event.php' md5='42916C374E4D1C1F1668E95F3B8444BE' crc32='EB0F2202'/>
 	<file name='zb_system\function\c_system_base.php' md5='C51CD35DD9DE6E7EE6A968D4B70DC80A' crc32='EE3429A8'/>
 	<file name='zb_system\function\c_system_admin.php' md5='D0CD9C9105A6FA467AB5D9D4BEC210AF' crc32='4297F9CA'/>
 	<file name='zb_system\defend\option.php' md5='7B94E938D5E2299C3446C46398FA4EE1' crc32='EDE60C6'/>
@@ -72,7 +72,7 @@
 	<file name='zb_system\function\lib\rss2.php' md5='1F6C70F3B020CC06A96FA4D094C2411A' crc32='6A06B9C4'/>
 	<file name='zb_system\function\lib\tag.php' md5='514292E74F9CD8A71FF911134A7B535B' crc32='8FBCCBC8'/>
 	<file name='zb_system\function\lib\upload.php' md5='C66027D79B5793AE8C8E504D3C02C36F' crc32='6317F21A'/>
-	<file name='zb_system\function\lib\urlrule.php' md5='5A2D38EAB8C484B5C863ABC930171FAF' crc32='1AC19006'/>
+	<file name='zb_system\function\lib\urlrule.php' md5='54AB15853E5A96EBC26FB0D702BBB8B4' crc32='C65208E'/>
 	<file name='zb_system\function\lib\validatecode.php' md5='E091676E4B5CCB9BAF025F8A79E8D886' crc32='D4F5D015'/>
 	<file name='zb_system\image\admin\app-logo.png' md5='C8B4141B48DFE3415EE2F9668E9BAD17' crc32='7D5E99CC'/>
 	<file name='zb_system\image\admin\arrow-3-right.png' md5='BA3545574C07C5146A7CA472B37191DB' crc32='9613739F'/>

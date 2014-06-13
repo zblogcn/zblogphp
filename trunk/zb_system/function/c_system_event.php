@@ -2298,6 +2298,7 @@ function FilterMember(&$member) {
 	$member->Alias = str_replace('/', '', $member->Alias);
 	$member->Alias = str_replace('.', '', $member->Alias);
 	$member->Alias = str_replace(' ', '', $member->Alias);
+	$member->Alias = str_replace('_', '', $member->Alias);
 	if (strlen($member->Name) < $zbp->option['ZC_USERNAME_MIN'] || strlen($member->Name) > $zbp->option['ZC_USERNAME_MAX']) {
 		$zbp->ShowError(77, __FILE__, __LINE__);
 	}
@@ -2349,6 +2350,7 @@ function FilterCategory(&$category) {
 	//$category->Alias=str_replace('/','',$category->Alias);
 	$category->Alias = str_replace('.', '', $category->Alias);
 	$category->Alias = str_replace(' ', '', $category->Alias);
+	$category->Alias = str_replace('_', '', $category->Alias);
 }
 
 /**
