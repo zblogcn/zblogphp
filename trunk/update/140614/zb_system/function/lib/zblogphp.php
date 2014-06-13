@@ -391,11 +391,16 @@ class ZBlogPHP {
 			$this->lang = require($this->path . 'zb_users/language/' . $this->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 		}
 
-		if(isset($this->option['ZC_DEBUG_MODE_STRICT']) && $this->option['ZC_DEBUG_MODE_STRICT']==true){
-			ZBlogException::EnableStrict();
-		}else{
-			ZBlogException::DisableStrict();
+		if(isset($this->option['ZC_DEBUG_MODE_STRICT'])){
+			ZBlogException::$isstrict = (bool)$this->option['ZC_DEBUG_MODE_STRICT'];
 		}
+		if(isset($this->option['ZC_DEBUG_MODE_WARNING'])){
+			ZBlogException::$iswarning = (bool)$this->option['ZC_DEBUG_MODE_WARNING'];
+		}
+		if(isset($this->option['ZC_DEBUG_MODE_FULL'])){
+			ZBlogException::$isfull = (bool)$this->option['ZC_DEBUG_MODE_FULL'];
+		}
+		
 
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){
 			$this->host=$this->option['ZC_BLOG_HOST'];

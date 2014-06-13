@@ -23,17 +23,20 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 		if(strpos($s,'@')!==false)return true;
 	}
 
-	if(ZBlogException::$iswarning==false){
-		if( $errno == E_WARNING )return true;
-	}
-	if(ZBlogException::$isstrict==false){
-		if( $errno == E_NOTICE )return true;
-		if( $errno == E_STRICT )return true;
-		if( $errno == E_USER_NOTICE )return true;
-		if( defined('E_DEPRECATED') && $errno== E_DEPRECATED )return true;
-		if( defined('E_USER_DEPRECATED ') && $errno== E_USER_DEPRECATED )return true;
-	}
 	if(ZBlogException::$isdisable==true)return true;
+	
+	if(ZBlogException::$isfull==false){
+		if(ZBlogException::$iswarning==false){
+			if( $errno == E_WARNING )return true;
+		}
+		if(ZBlogException::$isstrict==false){
+			if( $errno == E_NOTICE )return true;
+			if( $errno == E_STRICT )return true;
+			if( $errno == E_USER_NOTICE )return true;
+			if( defined('E_DEPRECATED') && $errno== E_DEPRECATED )return true;
+			if( defined('E_USER_DEPRECATED ') && $errno== E_USER_DEPRECATED )return true;
+		}
+	}
 
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseError($errno, $errstr, $errfile, $errline);
@@ -67,22 +70,10 @@ function Debug_Shutdown_Handler() {
 	}
 	if ($error = error_get_last()) {
 		$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
-		if(ZBlogException::$iswarning==false){
-			if( $error['type'] == E_WARNING )return true;
-		}
-		if(ZBlogException::$isstrict==false){
-			if( $error['type'] == E_NOTICE )return true;
-			if( $error['type'] == E_STRICT )return true;
-			if( $error['type'] == E_USER_NOTICE )return true;
-			if( defined('E_DEPRECATED') && $error['type']== E_DEPRECATED )return true;
-			if( defined('E_USER_DEPRECATED ') && $error['type']== E_USER_DEPRECATED )return true;
-		}
-		if(ZBlogException::$isdisable==true)return true;
-
+		
 		$zbe = ZBlogException::GetInstance();
 		$zbe->ParseShutdown($error);
 		$zbe->Display();
-		
 		die();
 	}
 }
@@ -94,6 +85,7 @@ function Debug_Shutdown_Handler() {
 class ZBlogException {
 	private static $_zbe = null;
 	public static $isdisable = false;
+	public static $isfull = false;
 	private static $_isdisable = null;
 	public static $isstrict = false;
 	public static $iswarning = true;
@@ -212,6 +204,14 @@ class ZBlogException {
 
 	static public function EnableWarning() {
 		self::$iswarning = true;
+	}
+	
+	static public function DisableFull() {
+		self::$isfull = false;
+	}
+
+	static public function EnableFull() {
+		self::$isfull = true;
 	}
 	
 	static public function Trace($s) {
