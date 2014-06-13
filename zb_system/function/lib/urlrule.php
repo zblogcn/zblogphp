@@ -104,16 +104,16 @@ class UrlRule{
 		global $zbp;
 		switch ($zbp->categorylayer) {
 			case 4:
-				$fullcategory='[^\./]*|[^\./]*/[^\./]*|[^\./]*/[^\./]*/[^\./]*|[^\./]+/[^\./]*/[^\./]*/[^\./]*';
+				$fullcategory='[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
 				break;
 			case 3:
-				$fullcategory='[^\./]*|[^\./]*/[^\./]*|[^\./]*/[^\./]*/[^\./]*';
+				$fullcategory='[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*';
 				break;
 			case 2:
-				$fullcategory='[^\./]*|[^\./]*/[^\./]*';
+				$fullcategory='[^\./_]*|[^\./_]*/[^\./_]*';
 				break;
 			default:
-				$fullcategory='[^\./]*';
+				$fullcategory='[^\./_]*';
 				break;
 		}
 
@@ -143,7 +143,7 @@ class UrlRule{
 			if($type=='cate'){
 				$url=str_replace('%alias%', '('.$fullcategory.')', $url);
 			}else{
-				$url=str_replace('%alias%', '([^/_]+)', $url);
+				$url=str_replace('%alias%', '([^\./_]+)', $url);
 			}
 		}
 		if($type=='page'||$type=='article'){
@@ -159,7 +159,7 @@ class UrlRule{
 				}
 			}
 			$url=str_replace('%category%', '(?:'.$fullcategory.')', $url);
-			$url=str_replace('%author%', '[^\./]+', $url);
+			$url=str_replace('%author%', '[^\./_]+', $url);
 			$url=str_replace('%year%', '[0-9]<:4:>', $url);
 			$url=str_replace('%month%', '[0-9]<:1,2:>', $url);
 			$url=str_replace('%day%', '[0-9]<:1,2:>', $url);
@@ -305,16 +305,16 @@ class UrlRule{
 		global $zbp;
 		switch ($zbp->categorylayer) {
 			case 4:
-				$fullcategory='[^\./]*|[^\./]*/[^\./]*|[^\./]*/[^\./]*/[^\./]*|[^\./]+/[^\./]*/[^\./]*/[^\./]*';
+				$fullcategory='[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
 				break;
 			case 3:
-				$fullcategory='[^\./]*|[^\./]*/[^\./]*|[^\./]*/[^\./]*/[^\./]*';
+				$fullcategory='[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*';
 				break;
 			case 2:
-				$fullcategory='[^\./]*|[^\./]*/[^\./]*';
+				$fullcategory='[^\./_]*|[^\./_]*/[^\./_]*';
 				break;
 			default:
-				$fullcategory='[^\./]*';
+				$fullcategory='[^\./_]*';
 				break;
 		}
 
@@ -345,7 +345,7 @@ class UrlRule{
 			if($type=='cate'){
 				$url=str_replace('%alias%', '('.$fullcategory.')', $url);
 			}else{
-				$url=str_replace('%alias%', '([^/_]+)', $url);
+				$url=str_replace('%alias%', '([^\./_]+)', $url);
 			}
 		}
 		if($type=='page'||$type=='article'){
@@ -360,9 +360,8 @@ class UrlRule{
 					$url=str_replace('%alias%', '(?!zb_)(.+)', $url);
 				}
 			}
-			//$url=str_replace('%category%', '(?:[^\./]+)', $url);
 			$url=str_replace('%category%', '(?:'.$fullcategory.')', $url);
-			$url=str_replace('%author%', '(?:[^\./]+)', $url);
+			$url=str_replace('%author%', '(?:[^\./_]+)', $url);
 			$url=str_replace('%year%', '(?:[0-9]<:4:>)', $url);
 			$url=str_replace('%month%', '(?:[0-9]<:1,2:>)', $url);
 			$url=str_replace('%day%', '(?:[0-9]<:1,2:>)', $url);
