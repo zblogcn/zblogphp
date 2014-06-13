@@ -126,7 +126,11 @@ class Post extends Base{
 				if($this->Alias){
 					$u->Rules['{%alias%}']=$this->Alias;
 				}else{
-					$u->Rules['{%alias%}']=urlencode($this->Title);
+					if($zbp->option['ZC_POST_ALIAS_USE_ID_NOT_TITLE']==false){
+						$u->Rules['{%alias%}']=urlencode($this->Title);
+					}else{
+						$u->Rules['{%alias%}']=$this->ID;
+					}
 				}
 				$u->Rules['{%year%}']=$this->Time('Y');
 				$u->Rules['{%month%}']=$this->Time('m');

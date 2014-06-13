@@ -804,7 +804,11 @@ function ViewPost($id, $alias, $isrewrite = false) {
 	if ($id !== null) {
 		$w[] = array('=', 'log_ID', $id);
 	} elseif ($alias !== null) {
-		$w[] = array('array', array(array('log_Alias', $alias), array('log_Title', $alias)));
+		if($zbp->option['ZC_POST_ALIAS_USE_ID_NOT_TITLE']==false){
+			$w[] = array('array', array(array('log_Alias', $alias), array('log_Title', $alias)));
+		}else{
+			$w[] = array('array', array(array('log_Alias', $alias), array('log_ID', $alias)));
+		}
 	} else {
 		$zbp->ShowError(2, __FILE__, __LINE__);
 		die();
