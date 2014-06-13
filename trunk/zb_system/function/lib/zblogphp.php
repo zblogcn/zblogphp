@@ -778,6 +778,7 @@ class ZBlogPHP {
 			if($key=='ZC_MYSQL_ENGINE')continue;
 			if($key=='ZC_MYSQL_PORT')continue;
 			if($key=='ZC_MYSQL_PERSISTENT')continue;
+			if($key=='ZC_SITE_TURNOFF')continue;			
 			$this->option[$key]=$value;
 		}
 		return true;
