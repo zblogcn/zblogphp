@@ -68,7 +68,7 @@
 	<file name='zb_system\function\lib\networkfile_get_contents.php' md5='0D59944B42C0FC31A36D42DB856B72BE' crc32='4BAF0211'/>
 	<file name='zb_system\function\lib\networkfsockopen.php' md5='7C3BDECFB7977EB5948EBDC92F45C19E' crc32='9980198E'/>
 	<file name='zb_system\function\lib\pagebar.php' md5='C1C53F94571EF545183C9CE9AD49DEF0' crc32='8A170E3D'/>
-	<file name='zb_system\function\lib\post.php' md5='E4D23BD2C8E878DFB1A8C551E00021AD' crc32='BB828EAD'/>
+	<file name='zb_system\function\lib\post.php' md5='B5A4A1225108D459D62FF9E33845CB52' crc32='DC44B992'/>
 	<file name='zb_system\function\lib\rss2.php' md5='1F6C70F3B020CC06A96FA4D094C2411A' crc32='6A06B9C4'/>
 	<file name='zb_system\function\lib\tag.php' md5='514292E74F9CD8A71FF911134A7B535B' crc32='8FBCCBC8'/>
 	<file name='zb_system\function\lib\upload.php' md5='C66027D79B5793AE8C8E504D3C02C36F' crc32='6317F21A'/>
