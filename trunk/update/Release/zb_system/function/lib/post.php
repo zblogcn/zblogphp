@@ -7,6 +7,9 @@
  */
 class Post extends Base{
 
+	private $_prev = '';
+	private $_next = '';
+
 	/**
 	 *
 	 */
@@ -176,8 +179,7 @@ class Post extends Base{
 				return $zbp->validcodeurl . '?id=cmt';
 				break;
 			case 'Prev':
-				static $_prev=null;
-				if($_prev!==null)return $_prev;
+				if($this->_prev!=='')return $this->_prev;
 				$articles=$zbp->GetPostList(
 					array('*'),
 					array(array('=','log_Type',0),array('=','log_Status',0),array('<','log_PostTime',$this->PostTime)),
@@ -186,15 +188,14 @@ class Post extends Base{
 					null
 				);
 				if(count($articles)==1){
-					$_prev=$articles[0];
+					$this->_prev=$articles[0];
 				}else{
-					$_prev=null;
+					$this->_prev=null;
 				}
-				return $_prev;
+				return $this->_prev;
 				break;
 			case 'Next':
-				static $_next=null;
-				if($_next!==null)return $_next;
+				if($this->_next!=='')return $this->_next;
 				$articles=$zbp->GetPostList(
 					array('*'),
 					array(array('=','log_Type',0),array('=','log_Status',0),array('>','log_PostTime',$this->PostTime)),
@@ -203,11 +204,11 @@ class Post extends Base{
 					null
 				);
 				if(count($articles)==1){
-					$_next=$articles[0];
+					$this->_next=$articles[0];
 				}else{
-					$_next=null;
+					$this->_next=null;
 				}
-				return $_next;
+				return $this->_next;
 				break;
 			case 'RelatedList':
 				foreach ($GLOBALS['Filter_Plugin_Post_RelatedList'] as $fpname => &$fpsignal) {
