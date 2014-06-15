@@ -80,6 +80,10 @@ class UrlRule{
 			$s=str_replace($key, $value, $s);
 		}
 
+		if(substr($this->PreUrl, - 1)<>'/' &&  substr($s, - 1)=='/' ){
+			$s=substr($s,0,strlen($s)-1);
+		}
+
 		$this->Url=htmlspecialchars($s);
 		return $this->Url;
 	}

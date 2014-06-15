@@ -131,6 +131,7 @@ class DbMySQL implements iDataBase {
 	function Query($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		$results = mysql_query($this->sql->Filter($query));
+		if(mysql_errno())trigger_error(mysql_error(),E_USER_NOTICE);
 		$data = array();
 		if(is_resource($results)){
 			while($row = mysql_fetch_assoc($results)){
