@@ -99,12 +99,12 @@ class Network {
 	 * 构造函数
 	 */
 	function __construct(){
-		if (function_exists('curl_init'))
+		if (function_exists('curl_init') && function_exists('curl_exec'))
 		{
 			$this->network_list[] = 'curl';
 			$this->curl = true;
 		}
-		if ((bool)ini_get('allow_url_fopen'))
+		if ((bool)ini_get('allow_url_fopen') && function_exists('fsockopen'))
 		{
 			if(function_exists('fsockopen')) $this->network_list[] = 'fsockopen';
 			$this->fsockopen = true;

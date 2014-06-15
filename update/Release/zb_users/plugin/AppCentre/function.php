@@ -145,7 +145,7 @@ function Server_SendRequest($url,$data=array(),$u='',$c=''){
 	if(!class_exists('NetworkFactory',false))
 		if(class_exists('Network'))
 			return Server_SendRequest_Network($url,$data,$u,$c);
-	if(function_exists("curl_init"))return Server_SendRequest_CUrl($url,$data,$u,$c);
+	if(function_exists("curl_init") && function_exists('curl_exec'))return Server_SendRequest_CUrl($url,$data,$u,$c);
 	if(!ini_get("allow_url_fopen"))return "";
 	
 	if($data){//POST

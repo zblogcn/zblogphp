@@ -146,7 +146,7 @@ function GetHttpContent($url) {
 	}
 
 	$r = null;
-	if (function_exists("curl_init")) {
+	if (function_exists("curl_init") && function_exists('curl_exec')) {
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
