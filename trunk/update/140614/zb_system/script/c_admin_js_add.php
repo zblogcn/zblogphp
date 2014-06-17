@@ -7,9 +7,6 @@
  */
 require '../function/c_system_base.php';
 
-$zbp->CheckGzip();
-$zbp->StartGzip();
-
 header('Content-Type: application/x-javascript; charset=utf-8');
 ?>
 var bloghost="<?php echo $zbp->host; ?>";
