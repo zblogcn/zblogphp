@@ -70,7 +70,22 @@ function Debug_Shutdown_Handler() {
 	}
 	if ($error = error_get_last()) {
 		$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
-		
+
+		if(ZBlogException::$isdisable==true)return true;
+
+		if(ZBlogException::$isfull==false){
+			if(ZBlogException::$iswarning==false){
+				if( $error['type'] == E_WARNING )return true;
+			}
+			if(ZBlogException::$isstrict==false){
+				if( $error['type'] == E_NOTICE )return true;
+				if( $error['type'] == E_STRICT )return true;
+				if( $error['type'] == E_USER_NOTICE )return true;
+				if( defined('E_DEPRECATED') && $error['type'] == E_DEPRECATED )return true;
+				if( defined('E_USER_DEPRECATED ') && $error['type'] == E_USER_DEPRECATED )return true;
+			}
+		}
+
 		$zbe = ZBlogException::GetInstance();
 		$zbe->ParseShutdown($error);
 		$zbe->Display();
@@ -228,7 +243,7 @@ class ZBlogException {
 	function ParseError($type, $message, $file, $line) {
 
 		$this->type = $type;
-		$this->message = $message;
+		$this->message = $message . ' (set_error_handler)';
 		$this->file = $file;
 		$this->line = $line;
 
@@ -241,7 +256,7 @@ class ZBlogException {
 	function ParseShutdown($error) {
 
 		$this->type = $error['type'];
-		$this->message = $error['message'];
+		$this->message = $error['message'] . ' (register_shutdown_function)';
 		$this->file = $error['file'];
 		$this->line = $error['line'];
 	}
@@ -252,7 +267,7 @@ class ZBlogException {
 	*/
 	function ParseException($exception) {
 
-		$this->message = $exception->getMessage();
+		$this->message = $exception->getMessage() . ' (set_exception_handler)';
 		$this->type = $exception->getCode();
 		$this->file = $exception->getFile();
 		$this->line = $exception->getLine();
