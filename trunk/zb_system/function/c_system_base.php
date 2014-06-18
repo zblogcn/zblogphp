@@ -14,10 +14,10 @@ ob_start();
 #引入必备
 $basepath = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 define('ZBP_PATH',str_replace('\\','/',realpath($basepath . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR)) . '/');
-require $basepath . 'c_system_plugin.php';
-require $basepath . 'c_system_debug.php';
-require $basepath . 'c_system_common.php';
-require $basepath . 'c_system_event.php';
+require ZBP_PATH . 'zb_system/function/c_system_plugin.php';
+require ZBP_PATH . 'zb_system/function/c_system_debug.php';
+require ZBP_PATH . 'zb_system/function/c_system_common.php';
+require ZBP_PATH . 'zb_system/function/c_system_event.php';
 
 
 #系统预处理
@@ -99,12 +99,31 @@ define('ZC_MEMBER_STATUS_LOCKED', 2);
 
 
 #定义全局变量
+
+/**
+ *系统核心对像zbp，唯一实例
+ */
 $zbp = null;
+/**
+ *当前动作命令
+ */
 $action = '';
+/**
+ *当前请求路径
+ */
 $currenturl = GetRequestUri();
+/**
+ *语言包数组
+ */
 $lang = array();
 
+/**
+ *系统根路径
+ */
 $blogpath = ZBP_PATH;
+/**
+ *用户路径
+ */
 $usersdir = $blogpath . 'zb_users/';
 
 $option_zbusers = null;
@@ -116,7 +135,6 @@ $option = require($blogpath . 'zb_system/defend/option.php');
 foreach ($option_zbusers as $key => $value) {
 	$option[$key] = $value;
 }
-unset($basepath,$key,$value,$option_zbusers);
 
 $blogtitle = $option['ZC_BLOG_SUBNAME'];
 $blogname = &$option['ZC_BLOG_NAME'];
@@ -360,12 +378,14 @@ AutoloadClass('Base');
 $zbp=ZBlogPHP::GetInstance();
 $zbp->Initialize();
 
-
+/**
+ *已激活应用列表
+ */
 $activeapps=array();
 
 #加载主题内置的插件
+$activeapps[]=$blogtheme;
 if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php')) {
-	$activeapps[]=$blogtheme;
 	require $filename;
 }
 
@@ -381,7 +401,7 @@ foreach ($ap as $plugin) {
 		$activeapps[]=$plugin;
 	}
 }
-unset($plugin,$ap,$filename);
+unset($basepath,$key,$value,$option_zbusers,$plugin,$ap,$filename);
 
 
 #激活所有已加载的插件
