@@ -280,7 +280,11 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 function ViewIndex(){
 	global $zbp,$action;
 	
-	PreViewIndex();
+	if(isset($zbp->templates['404']))Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
+
+	foreach($zbp->modulesbyfilename as $m){
+		$m->Content = str_replace(array_keys($zbp->replacetags),array_values($zbp->replacetags),$m->Content);
+	}
 	
 	foreach ($GLOBALS['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
@@ -2949,26 +2953,9 @@ function ShowError404($idortext,$file,$line){
 }
 
 /**
- * ViewIndex的预处理
+ * ViewIndex的预处理,已废弃
  */
-function PreViewIndex(){
-	global $zbp;
-	if(isset($zbp->templates['404']))Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
-	$t=array();
-	$o=array();
-	foreach($zbp->templatetags as $k => $v){
-		if(is_string($v) || is_numeric($v) || is_bool($v) )
-			$t['{$' . $k . '}']=$v;
-	}
-	foreach($zbp->option as $k => $v){
-		if($k!='ZC_BLOG_CLSID' && $k!='ZC_SQLITE_NAME' && $k!='ZC_SQLITE3_NAME' && $k!='ZC_MYSQL_USERNAME' && $k!='ZC_MYSQL_PASSWORD' && $k!='ZC_MYSQL_NAME')
-			$o['{#' . $k . '#}']=$v;
-	}
-	foreach($zbp->modulesbyfilename as $m){
-		$m->Content = str_replace(array_keys($t),array_values($t),$m->Content);
-		$m->Content = str_replace(array_keys($o),array_values($o),$m->Content);
-	}
-}
+function PreViewIndex(){}
 
 /**
  * 通过文件获取应用URL地址

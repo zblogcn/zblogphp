@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 #///////////////////////////////////////////////////////////////////////////////
 #//              Z-BlogPHP 在线安装程序
 #///////////////////////////////////////////////////////////////////////////////
@@ -15,7 +15,7 @@ $xml=null;
 
 function GetHttpContent($url) {
 	$r = null;
-	if (function_exists("curl_init")) {
+	if (function_exists("curl_init") && function_exists('curl_exec')) {
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -97,7 +97,7 @@ function install3(){
 
 ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex,nofollow" />

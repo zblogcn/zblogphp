@@ -1432,6 +1432,7 @@ if($app->LoadInfoByXml('theme',$zbp->theme)==true){
 
 $pl=$zbp->option['ZC_USING_PLUGIN_LIST'];
 $apl=explode('|',$pl);
+$apl=array_unique($apl);
 foreach ($apl as $name) {
 	foreach ($zbp->plugins as $plugin) {
 		if($name==$plugin->id){
