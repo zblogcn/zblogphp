@@ -67,13 +67,13 @@ function AppCentre_App_Check_ISBUY($appid){
 	$postdate = array(
 		'email'=>$zbp->Config('AppCentre')->shop_username,
 		'password'=>$zbp->Config('AppCentre')->shop_password,
-		//'domain'=>$zbp->host,
 		'appid'=>$appid,
 	    );
 	$http_post = Network::Create();
-	$http_post->setRequestHeader('Referer',substr($zbp->host,0,-1) . $zbp->currenturl);
 	$http_post->open('POST',APPCENTRE_API_URL.APPCENTRE_API_APP_ISBUY);
-	$result = $http_post->send($postdate);
+	$http_post->setRequestHeader('Referer',substr($zbp->host,0,-1) . $zbp->currenturl);
+
+	$http_post->send($postdate);
 	$result = json_decode($http_post->responseText,true);
 	return $result;
 }

@@ -364,8 +364,8 @@ $zbp->Initialize();
 $activeapps=array();
 
 #加载主题内置的插件
+$activeapps[]=$blogtheme;
 if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php')) {
-	$activeapps[]=$blogtheme;
 	require $filename;
 }
 

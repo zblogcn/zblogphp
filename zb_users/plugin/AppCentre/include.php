@@ -71,12 +71,9 @@ function AppCentre_App_Check_ISBUY($appid){
 	    );
 	$http_post = Network::Create();
 	$http_post->open('POST',APPCENTRE_API_URL.APPCENTRE_API_APP_ISBUY);
-	if (get_class($http_post) === 'Networkcurl') {
-		curl_setopt($http_post->ch, CURLOPT_REFERER, substr($zbp->host,0,-1) . $zbp->currenturl);
-	} else {
-		$http_post->setRequestHeader('Referer',substr($zbp->host,0,-1) . $zbp->currenturl);
-	}
-	$result = $http_post->send($postdate);
+	$http_post->setRequestHeader('Referer',substr($zbp->host,0,-1) . $zbp->currenturl);
+
+	$http_post->send($postdate);
 	$result = json_decode($http_post->responseText,true);
 	return $result;
 }
