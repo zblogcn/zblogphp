@@ -183,7 +183,7 @@ class DbSql #extends AnotherClass
 
 			$s.=');';
 			reset($datainfo);
-			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$table.' ('.GetValueInArrayByCurrent($datainfo,0).');';
+			$s.='CREATE UNIQUE INDEX ' . $table . '_' . GetValueInArrayByCurrent($datainfo,0).' on '.$table.' ('.GetValueInArrayByCurrent($datainfo,0).');';
 
 		}
 
@@ -230,7 +230,7 @@ class DbSql #extends AnotherClass
 
 			$s.=');';
 			reset($datainfo);
-			$s.='CREATE UNIQUE INDEX %pre%'.GetValueInArrayByCurrent($datainfo,0).' on '.$table.' ('.GetValueInArrayByCurrent($datainfo,0).');';
+			$s.='CREATE UNIQUE INDEX ' . $table . '_' . GetValueInArrayByCurrent($datainfo,0).' on '.$table.' ('.GetValueInArrayByCurrent($datainfo,0).');';
 		}
 
 		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){

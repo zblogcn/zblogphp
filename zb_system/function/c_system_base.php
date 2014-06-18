@@ -377,6 +377,8 @@ foreach ($ap as $plugin) {
 	if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
 		$activeapps[]=$plugin;
 		require $filename;
+	}elseif(is_readable($filename = $usersdir . 'plugin/' . $plugin . '/plugin.xml')){
+		$activeapps[]=$plugin;
 	}
 }
 unset($plugin,$ap,$filename);

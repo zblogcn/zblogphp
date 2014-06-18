@@ -7,53 +7,6 @@ define('CHANGYAN_PLUGIN_PATH', dirname(__FILE__));
 require CHANGYAN_PLUGIN_PATH . '/Synchronizer.php';
 require CHANGYAN_PLUGIN_PATH . '/Handler.php';
 
-if(!class_exists('Network')){
-	//ZBP1.3之前临时使用
-	require CHANGYAN_PLUGIN_PATH . '/network.php';
-	require CHANGYAN_PLUGIN_PATH . '/networkcurl.php';
-	require CHANGYAN_PLUGIN_PATH . '/networkfile_get_contents.php';
-	require CHANGYAN_PLUGIN_PATH . '/networkfsockopen.php';
-}
-
-if(!function_exists('plugin_dir_url')){
-//ZBP1.3之前临时使用
-	function plugin_dir_url($file) {
-		global $zbp;
-		$s1=$zbp->path;
-		$s2=str_replace('\\','/',dirname($file).'/');
-		$s3='';
-		$s=substr($s2,strspn($s1,$s2,0));
-		if(strpos($s,'zb_users/plugin/')!==false){
-			$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
-		}else{
-			$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
-		}
-		$a=explode('/',$s);
-		$s=$a[0];
-		$s=$zbp->host . $s3 . $s . '/';
-		return $s;
-	}
-}
-if(!function_exists('plugin_dir_path')){
-//ZBP1.3之前临时使用
-	function plugin_dir_path($file) {
-		global $zbp;
-		$s1=$zbp->path;
-		$s2=str_replace('\\','/',dirname($file).'/');
-		$s3='';
-		$s=substr($s2,strspn($s1,$s2,0));
-		if(strpos($s,'zb_users/plugin/')!==false){
-			$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
-		}else{
-			$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
-		}
-		$a=explode('/',$s);
-		$s=$a[0];
-		$s=$zbp->path . $s3 . $s . '/';
-		return $s;
-	}
-}
-
 $changyanPlugin = null;
 
 #注册插件函数

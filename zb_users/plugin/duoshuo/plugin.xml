@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>duoshuo</id>
 <name>多说社会化评论</name>
@@ -18,10 +18,10 @@
   <email></email>
   <url></url>
 </source>
-<adapted>140220</adapted>
-<version>1.0</version>
+<adapted>140614</adapted>
+<version>1.1</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2014-03-29</modified>
+<modified>2014-06-17</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

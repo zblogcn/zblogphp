@@ -2140,7 +2140,7 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	function CheckValidCode($vaidcode,$id=''){
-
+		$vaidcode = strtolower($vaidcode);
 		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckValidCode'] as $fpname => &$fpsignal) {
 			return $fpname($vaidcode,$id);//*
 		}
@@ -2171,8 +2171,8 @@ class ZBlogPHP {
 				}else{
 					ob_start('ob_gzhandler');
 				}
-				ob_start();
 				header('Content-Encoding: gzip');
+				ob_start();
 				$this->isgziped=true;
 				return true;
 			}

@@ -33,11 +33,12 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 			if( $errno == E_NOTICE )return true;
 			if( $errno == E_STRICT )return true;
 			if( $errno == E_USER_NOTICE )return true;
-			if( defined('E_DEPRECATED') && $errno== E_DEPRECATED )return true;
-			if( defined('E_USER_DEPRECATED ') && $errno== E_USER_DEPRECATED )return true;
 		}
 	}
 
+	if( defined('E_DEPRECATED') && $errno== E_DEPRECATED )return true;
+	if( defined('E_USER_DEPRECATED ') && $errno== E_USER_DEPRECATED )return true;
+	
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseError($errno, $errstr, $errfile, $errline);
 	$zbe->Display();
@@ -81,10 +82,11 @@ function Debug_Shutdown_Handler() {
 				if( $error['type'] == E_NOTICE )return true;
 				if( $error['type'] == E_STRICT )return true;
 				if( $error['type'] == E_USER_NOTICE )return true;
-				if( defined('E_DEPRECATED') && $error['type'] == E_DEPRECATED )return true;
-				if( defined('E_USER_DEPRECATED ') && $error['type'] == E_USER_DEPRECATED )return true;
 			}
 		}
+		
+		if( defined('E_DEPRECATED') && $error['type'] == E_DEPRECATED )return true;
+		if( defined('E_USER_DEPRECATED ') && $error['type'] == E_USER_DEPRECATED )return true;
 
 		$zbe = ZBlogException::GetInstance();
 		$zbe->ParseShutdown($error);

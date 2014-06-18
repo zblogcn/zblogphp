@@ -2,14 +2,6 @@
 define('DUOSHUO_DEBUG',TRUE);
 define('DUOSHUO_PATH',dirname(__FILE__));
 
-if(!class_exists('Network')){
-	//ZBP1.3之前临时使用
-	require DUOSHUO_PATH . '/class_network/network.php';
-	require DUOSHUO_PATH . '/class_network/networkcurl.php';
-	require DUOSHUO_PATH . '/class_network/networkfile_get_contents.php';
-	require DUOSHUO_PATH . '/class_network/networkfsockopen.php';
-}
-
 require DUOSHUO_PATH . '/jwt.php';
 require DUOSHUO_PATH . '/duoshuo.class.php';
 require DUOSHUO_PATH . '/duoshuo.api.php';

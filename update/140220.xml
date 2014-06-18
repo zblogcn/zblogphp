@@ -7,7 +7,7 @@
 	<file name='zb_system\function\c_system_admin.php' md5='5E1A8D280B875ECA611E8E41FEFD984D' crc32='638B49C7'/>
 	<file name='zb_system\defend\option.php' md5='26CA2A932E5B15485222A281AF02440C' crc32='B823382E'/>
 	<file name='zb_system\function\lib\base.php' md5='13DE31CD4662922CDA3DCCE1DB04B503' crc32='B5DCD39'/>
-	<file name='zb_system\function\lib\dbsql.php' md5='FCC10A39BB03B9BA050098F444CFE0A8' crc32='7E75F44'/>
+	<file name='zb_system\function\lib\dbsql.php' md5='8B88AA09263641D18EF7E3E6F381DB2E' crc32='5BAD2AD2'/>
 	<file name='zb_system\function\lib\metas.php' md5='B466F432622D6F3EEE4613FBE5ED9D77' crc32='658663D3'/>
 	<file name='zb_system\function\lib\template.php' md5='0042035B0736FE1C20F3DB094ECC9FF2' crc32='A0CE4F28'/>
 	<file name='zb_system\function\lib\network.php' md5='67E341C546E63EAE29D2889C3CDC0724' crc32='A01A67B5'/>

@@ -186,6 +186,10 @@ class ZBlogPHP {
 	 */
 	public $templatetags = array();
 	/**
+	 * @var array 可替换的标签数组
+	 */
+	public $replacetags = array();
+	/**
 	 * @var null 社会化评论
 	 */
 	public $socialcomment = null;
@@ -1162,6 +1166,8 @@ class ZBlogPHP {
 		unset($option['ZC_MYSQL_USERNAME']);
 		unset($option['ZC_MYSQL_PASSWORD']);
 		unset($option['ZC_MYSQL_NAME']);
+		unset($option['ZC_DATABASE_TYPE']);
+		unset($option['ZC_MYSQL_PORT']);
 
 		$this->templatetags['zbp']=&$this;
 		$this->templatetags['user']=&$this->user;
@@ -1223,6 +1229,16 @@ class ZBlogPHP {
 			$fpreturn=$fpname($this->templatetags);
 		}
 
+		$t=array();
+		$o=array();
+		foreach($this->templatetags as $k => $v){
+			if(is_string($v) || is_numeric($v) || is_bool($v) )
+				$t['{$' . $k . '}']=$v;
+		}
+		foreach($option as $k => $v){
+				$o['{#' . $k . '#}']=$v;
+		}
+		$this->replacetags = $t + $o;
 	}
 
 	/**
@@ -2140,7 +2156,7 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	function CheckValidCode($vaidcode,$id=''){
-
+		$vaidcode = strtolower($vaidcode);
 		foreach ($GLOBALS['Filter_Plugin_Zbp_CheckValidCode'] as $fpname => &$fpsignal) {
 			return $fpname($vaidcode,$id);//*
 		}
@@ -2154,7 +2170,12 @@ class ZBlogPHP {
 	 * 检查并开启Gzip压缩
 	 */
 	function CheckGzip(){
-		$this->isgzip=true;
+		if(!headers_sent()&&
+			extension_loaded("zlib")&&
+			isset($_SERVER["HTTP_ACCEPT_ENCODING"])&&
+			strstr($_SERVER["HTTP_ACCEPT_ENCODING"],"gzip")
+			)
+			$this->isgzip=true;
 	}
 
 	/**
@@ -2164,18 +2185,16 @@ class ZBlogPHP {
 		if($this->isgziped)return false;
 
 		if($this->isgzip&&isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE']){
-			if(!headers_sent()&&extension_loaded("zlib")&&isset($_SERVER["HTTP_ACCEPT_ENCODING"])&&strstr($_SERVER["HTTP_ACCEPT_ENCODING"],"gzip")){
-				if(function_exists('ini_set')){
-					ini_set('zlib.output_compression', 'On');
-					ini_set('zlib.output_compression_level', '5');
-				}else{
-					ob_start('ob_gzhandler');
-				}
-				ob_start();
-				header('Content-Encoding: gzip');
-				$this->isgziped=true;
-				return true;
+			if(function_exists('ini_set')){
+				ini_set('zlib.output_compression', 'On');
+				ini_set('zlib.output_compression_level', '5');
+			}else{
+				ob_start('ob_gzhandler');
 			}
+			header('Content-Encoding: gzip');
+			ob_start();
+			$this->isgziped=true;
+			return true;
 		}
 	}
 
