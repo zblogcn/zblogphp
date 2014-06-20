@@ -325,6 +325,7 @@ class ZBlogPHP {
 	}
 
 	/**
+     * @api Filter_Plugin_Zbp_Call
 	 * @param $method
 	 * @param $args
 	 * @return mixed
