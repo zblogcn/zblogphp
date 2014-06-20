@@ -7,13 +7,10 @@
  */
 class DbSQLite3 implements iDataBase {
 	/**
-	* @var string|null SQL语句分隔符
+	* @var string|null 数据库名前缀
 	*/
 	public $dbpre = null;
-	/**
-	* @var string|null 数据库服务器
-	*/
-	private $db = null;
+	private $db = null; #数据库连接实例
 	/**
 	* @var string|null 数据库名
 	*/
@@ -60,8 +57,7 @@ class DbSQLite3 implements iDataBase {
 	}
 
 	/**
-	* 拼接SQL语句
-	* @param $s 
+	* @param $s
 	*/
 	function QueryMulit($s){
 		//$a=explode(';',str_replace('%pre%', $this->dbpre, $s));

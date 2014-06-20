@@ -1028,6 +1028,8 @@ function ViewComment($id) {
 ################################################################################################################
 /**
  * 提交文章数据
+ * @api Filter_Plugin_PostArticle_Core
+ * @api Filter_Plugin_PostArticle_Succeed
  * @return bool
  */
 function PostArticle() {

@@ -8,51 +8,50 @@
 class DbMySQL implements iDataBase {
 
 	/**
-	* @var string|null SQL语句分隔符
+	* @var string|null 数据库名前缀
 	*/
 	public $dbpre = null;
-	/**
-	* @var string|null 数据库服务器
-	*/
-	private $db = null;
+	private $db = null; #数据库连接
 	/**
 	* @var string|null 数据库名
 	*/
 	public $dbname = null;
 	/**
-	* @var DbSql|null 
-	*/
+	 * @var DbSql|null DbSql实例
+	 */
 	public $sql=null;
 	/**
-	* 构造函数，实例化$sql参数
-	*/
+	 * 构造函数，实例化$sql参数
+	 */
 	function __construct()
 	{
 		$this->sql=new DbSql($this);
 	}
 
 	/**
-	* @param $s
-	* @return string
-	*/
+     * 对字符串进行转义，在指定的字符前添加反斜杠，即执行addslashes函数
+     * @use addslashes
+	 * @param string $s
+	 * @return string
+	 */
 	public function EscapeString($s){
 		return addslashes($s);
 	}
 
 	/**
-	* @param $array
-	* @return bool
-	*/
+     * 连接数据库
+	 * @param array $array 数据库连接配置
+	 *              $array=array(
+	 *                  'dbmysql_server',
+	 *                  'dbmysql_username',
+	 *                  'dbmysql_password',
+	 *                  'dbmysql_name',
+	 *                  'dbmysql_pre',
+	 *                  'dbmysql_port',
+	 *                  'persistent')
+	 * @return bool
+	 */
 	function Open($array){
-		/*$array=array(
-			'dbmysql_server',
-			'dbmysql_username',
-			'dbmysql_password',
-			'dbmysql_name',
-			'dbmysql_pre',
-			'dbmysql_port',
-			'persistent'
-		*/
 		if($array[6]==false){
 			$db_link = @mysql_connect($array[0] . ':' . $array[5], $array[1], $array[2]);
 		}else{
@@ -77,12 +76,14 @@ class DbMySQL implements iDataBase {
 	}
 
 	/**
-	* @param string $dbmysql_server
-	* @param string $dbmysql_port
-	* @param string $dbmysql_username
-	* @param string $dbmysql_password
-	* @param string $dbmysql_name
-	*/
+	 * 创建数据库
+	 * @param string $dbmysql_server
+	 * @param string $dbmysql_port
+	 * @param string $dbmysql_username
+	 * @param string $dbmysql_password
+	 * @param string $dbmysql_name
+     * @return bool
+	 */
 	function CreateDB($dbmysql_server,$dbmysql_port,$dbmysql_username,$dbmysql_password,$dbmysql_name){
 		$db_link = @mysql_connect($dbmysql_server . ':' . $dbmysql_port, $dbmysql_username, $dbmysql_password);
 		$this->db = $db_link;
@@ -103,15 +104,15 @@ class DbMySQL implements iDataBase {
 	}
 	
 	/**
-	* 关闭数据库连接
-	*/
+	 * 关闭数据库连接
+	 */
 	function Close(){
 		mysql_close($this->db);
 	}
 
 	/**
-	* 拼接SQL语句
-	* @param $s 
+	* 执行多行SQL语句
+	* @param string $s 以;号分隔的多条SQL语句
 	*/
 	function QueryMulit($s){
 		//$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
@@ -119,15 +120,16 @@ class DbMySQL implements iDataBase {
 		foreach ($a as $s) {
 			$s=trim($s);
 			if($s<>''){
-				mysql_query($this->sql->Filter($s));				
+				mysql_query($this->sql->Filter($s));
 			}
 		}
 	}
 
 	/**
-	* @param $query
-	* @return array
-	*/
+	 * 执行SQL查询语句
+	 * @param string $query
+	 * @return array 返回数据数组
+	 */
 	function Query($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		$results = mysql_query($this->sql->Filter($query));
@@ -144,9 +146,10 @@ class DbMySQL implements iDataBase {
 	}
 
 	/**
-	* @param $query
-	* @return resource
-	*/
+	 * 更新数据
+	 * @param string $query SQL语句
+	 * @return resource
+	 */
 	function Update($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		return mysql_query($this->sql->Filter($query));
@@ -154,7 +157,7 @@ class DbMySQL implements iDataBase {
 
 	/**
 	* 删除数据
-	* @param $query
+	* @param string $query SQL语句
 	* @return resource
 	*/
 	function Delete($query){
@@ -164,7 +167,7 @@ class DbMySQL implements iDataBase {
 
 	/**
 	* 插入数据
-	* @param $query
+	* @param string $query SQL语句
 	* @return int 返回ID序列号
 	*/
 	function Insert($query){
@@ -176,7 +179,7 @@ class DbMySQL implements iDataBase {
 	/**
 	* 新建表
 	* @param string $tablename 表名
-	* @param string $datainfo 表结构
+	* @param array $datainfo 表结构
 	*/
 	function CreateTable($table,$datainfo){
 		$this->QueryMulit($this->sql->CreateTable($table,$datainfo));
@@ -196,7 +199,6 @@ class DbMySQL implements iDataBase {
 	* @return bool
 	*/
 	function ExistTable($table){
-
 		$a=$this->Query($this->sql->ExistTable($table,$this->dbname));
 		if(!is_array($a))return false;
 		$b=current($a);

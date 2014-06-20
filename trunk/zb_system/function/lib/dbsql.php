@@ -7,63 +7,28 @@
  */
 interface iDataBase {
 
-	/**
-	* @param $array
-	* @return mixed
-	*/
 	public function Open($array);
-	/**
-	* @return mixed
-	*/
+
 	public function Close();
-	/**
-	* @param $query
-	* @return mixed
-	*/
+
 	public function Query($query);
-	/**
-	* @param $query
-	* @return mixed
-	*/
+
 	public function Insert($query);
-	/**
-	* @param $query
-	* @return mixed
-	*/
+
 	public function Update($query);
 
-	/**
-	* @param $query
-	* @return mixed
-	*/
 	public function Delete($query);
-	/**
-	* @param $s
-	* @return mixed
-	*/
+
 	public function QueryMulit($s);
-	/**
-	* @param $s
-	* @return mixed
-	*/
+
 	public function EscapeString($s);
 
-	/**
-	* @param $table
-	* @param $datainfo
-	* @return mixed
-	*/
 	public function CreateTable($table,$datainfo);
-	/**
-	* @param $table
-	* @return mixed
-	*/
+
 	public function DelTable($table);
-	/**
-	* @param $table
-	* @return mixed
-	*/
+
 	public function ExistTable($table);
+
 }
 
 
@@ -76,15 +41,15 @@ interface iDataBase {
 class DbSql #extends AnotherClass 
 {
 	/**
-	* @var null|string
+	* @var null|string 数据库类型
 	*/
 	public $type=null;
 	/**
-	* @var null
+	* @var null 数据连接实例
 	*/
 	protected $db=null;
 	/**
-	* @param null $db
+	* @param object $db
 	*/
 	function __construct($db=null)
 	{
@@ -92,18 +57,20 @@ class DbSql #extends AnotherClass
 		$this->type=get_class($db);
 	}
 	/**
-	* @param $tablename
-	* @return string
-	*/
+	 * 替换数据表前缀
+	 * @param string $
+	 * @return string
+	 */
 	public function ReplacePre(&$s){
 		$s=str_replace('%pre%', $this->db->dbpre, $s);
 		return $s;
 	}
 	
 	/**
-	* @param $table
-	* @return string
-	*/
+	 * 删除表,返回SQL语句
+	 * @param string $table
+	 * @return string
+	 */
 	public function DelTable($table){
 		$this->ReplacePre($table);
 
@@ -113,7 +80,8 @@ class DbSql #extends AnotherClass
 	}
 
 	/**
-	* @param $tablename
+	 * 检查表是否存在，返回SQL语句
+	* @param string $table
 	* @param string $dbname
 	* @return string
 	*/
@@ -132,9 +100,10 @@ class DbSql #extends AnotherClass
 	}
 
 	/**
-	* @param string $table
-	* @param array $datainfo
-	* @return string
+	 * 创建表，返回构造完整的SQL语句
+	 * @param string $table
+	 * @param array $datainfo
+	 * @return string
 	*/
 	public function CreateTable($table,$datainfo){
 
@@ -302,10 +271,11 @@ class DbSql #extends AnotherClass
 
 
 	/**
-	* @param $where
-	* @param null $changewhere
-	* @return null|string
-	*/
+	 * 构造条件查询语句
+	 * @param array $where
+	 * @param null $changewhere 是否更改'WHERE'，放空表示不更改，如设为'like'等将替换'WHERE'
+	 * @return null|string 返回构造的语句
+	 */
 	public function ParseWhere($where,$changewhere=null){
 
 		$sqlw=null;
@@ -431,14 +401,15 @@ class DbSql #extends AnotherClass
 	}
 
 	/**
-	* @param string $table
-	* @param string $select
-	* @param string $where
-	* @param string $order
-	* @param string $limit
-	* @param array|null $option
-	* @return string
-	*/
+	 * 构造查询语句
+	 * @param string $table
+	 * @param string $select
+	 * @param string $where
+	 * @param string $order
+	 * @param string $limit
+	 * @param array|null $option
+	 * @return string 返回构造的语句
+	 */
 	public function Select($table,$select,$where,$order,$limit,$option=null){
 		$this->ReplacePre($table);
 	
@@ -506,12 +477,13 @@ class DbSql #extends AnotherClass
 	}
 
 	/**
-	* @param string $table
-	* @param string $count
-	* @param string $where
-	* @param null $option
-	* @return string
-	*/
+	 * 构造计数语句
+	 * @param string $table
+	 * @param string $count
+	 * @param string $where
+	 * @param null $option
+	 * @return string 返回构造的语句
+	 */
 	public function Count($table,$count,$where,$option=null){
 		$this->ReplacePre($table);
 
@@ -536,11 +508,12 @@ class DbSql #extends AnotherClass
 	}
 
 	/**
+	 * 构造数据更新语句
 	* @param string $table
 	* @param string $keyvalue
 	* @param string $where
 	* @param array|null $option
-	* @return string
+	* @return string 返回构造的语句
 	*/
 	public function Update($table,$keyvalue,$where,$option=null){
 		$this->ReplacePre($table);
@@ -564,9 +537,10 @@ class DbSql #extends AnotherClass
 	}
 
 	/**
+	 * 构造数据插入语句
 	* @param string $table
 	* @param string $keyvalue
-	* @return string
+	* @return string 返回构造的语句
 	*/
 	public function Insert($table,$keyvalue){
 		$this->ReplacePre($table);
@@ -594,11 +568,12 @@ class DbSql #extends AnotherClass
 	}
 
 	/**
-	* @param string $table
-	* @param string $where
-	* @param array|null $option
-	* @return string
-	*/
+	 * 构造数据删除语句
+	 * @param string $table
+	 * @param string $where
+	 * @param array|null $option
+	 * @return string 返回构造的语句
+	 */
 	public function Delete($table,$where,$option=null){
 		$this->ReplacePre($table);
 
@@ -612,9 +587,10 @@ class DbSql #extends AnotherClass
 	}
 
 	/**
-	* @param $sql
-	* @return mixed
-	*/
+	 * 返回经过过滤的SQL语句
+	 * @param $sql
+	 * @return mixed
+	 */
 	public function Filter($sql){
 		$_SERVER['_query_count'] = $_SERVER['_query_count'] + 1;
 		
