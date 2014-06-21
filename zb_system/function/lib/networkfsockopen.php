@@ -178,6 +178,7 @@ class Networkfsockopen implements iNetwork {
 
 		$this->option['header'] = implode("\r\n",$this->httpheader);
 
+		ZBlogException::SuspendErrorHook();
 		$socket = fsockopen(
 					($this->scheme=='https'?'ssl://':'') . $this->parsed_url['host'],
 					$this->port,
@@ -185,6 +186,8 @@ class Networkfsockopen implements iNetwork {
 					$this->errstr,
 					$this->timeout
 				  );
+		ZBlogException::SuspendErrorHook();
+		if(!$socket)return ;
 
 		$url = $this->option['method'] . ' ' . $this->parsed_url['path'];
 
