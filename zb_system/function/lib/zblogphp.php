@@ -2186,13 +2186,15 @@ class ZBlogPHP {
 		if($this->isgziped)return false;
 
 		if($this->isgzip&&isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE']){
+			if(ini_get('output_handler'))return false;
+			$a=ob_list_handlers();
+			if(in_array('ob_gzhandler',$a) || in_array('zlib output compression',$a))return false;
 			if(function_exists('ini_set')){
 				ini_set('zlib.output_compression', 'On');
 				ini_set('zlib.output_compression_level', '5');
-			}else{
+			}elseif(function_exists('ob_gzhandler')){
 				ob_start('ob_gzhandler');
 			}
-			header('Content-Encoding: gzip');
 			ob_start();
 			$this->isgziped=true;
 			return true;

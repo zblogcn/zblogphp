@@ -89,11 +89,11 @@ define('ZC_POST_STATUS_AUDITING', 2);
  */
 define('ZC_MEMBER_STATUS_NORMAL', 0);
 /**
- *用户状态：审核
+ *用户状态：审核中
  */
 define('ZC_MEMBER_STATUS_AUDITING', 1);
 /**
- *用户状态：锁定
+ *用户状态：已锁定
  */
 define('ZC_MEMBER_STATUS_LOCKED', 2);
 
@@ -126,12 +126,15 @@ $blogpath = ZBP_PATH;
  */
 $usersdir = $blogpath . 'zb_users/';
 
+/**
+ *配置数组
+ */
+$option = require($blogpath . 'zb_system/defend/option.php');
 $option_zbusers = null;
 if(is_readable($filename = $usersdir . 'c_option.php')){
 	$option_zbusers = require($filename);
 }
 if(!is_array($option_zbusers))$option_zbusers=array();
-$option = require($blogpath . 'zb_system/defend/option.php');
 foreach ($option_zbusers as $key => $value) {
 	$option[$key] = $value;
 }
@@ -147,7 +150,9 @@ $cookiespath = null;
 $bloghost = GetCurrentHost($blogpath,$cookiespath);
 
 
-#定义命令
+/**
+ *定义命令
+ */
 $actions=array(
 	'login'=>6,
 	'logout'=>6,
@@ -228,7 +233,9 @@ $actions=array(
 );
 
 
-#定义数据表
+/**
+ *定义数据表
+ */
 $table=array(
 
 'Post'=> '%pre%post',
@@ -244,7 +251,9 @@ $table=array(
 );
 
 
-#定义数据结构
+/**
+ *定义数据结构
+ */
 $datainfo=array(
 'Config'=>array(
 	'Name'=>array('conf_Name','string',250,''),
@@ -384,7 +393,9 @@ $zbp->Initialize();
 $activeapps=array();
 
 #加载主题内置的插件
-$activeapps[]=$blogtheme;
+if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/theme.xml')) {
+	$activeapps[]=$blogtheme;
+}
 if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php')) {
 	require $filename;
 }
@@ -401,6 +412,7 @@ foreach ($ap as $plugin) {
 		$activeapps[]=$plugin;
 	}
 }
+
 unset($basepath,$key,$value,$option_zbusers,$plugin,$ap,$filename);
 
 
