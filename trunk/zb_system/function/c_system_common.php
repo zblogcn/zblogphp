@@ -142,7 +142,11 @@ function GetHttpContent($url) {
 		$ajax->setTimeOuts(60,60,0,0);
 		$ajax->send();
 
-		return $ajax->responseText;
+		if($ajax->status==200){
+			return $ajax->responseText;
+		}else{
+			return null;
+		}
 	}
 
 	$r = null;
@@ -159,12 +163,20 @@ function GetHttpContent($url) {
 			curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
 		}
 		$r = curl_exec($ch);
+		$code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
 		curl_close($ch);
+		if($code==200)return $r;
 	} elseif (ini_get("allow_url_fopen")) {
+		ZBlogException::SuspendErrorHook();
+		$http_response_header = null;
 		$r = file_get_contents((extension_loaded('zlib')?'compress.zlib://':'') . $url);
+		if(is_array($http_response_header) && in_array('HTTP/1.1 200 OK',$http_response_header)){
+			if($r!==false)return $r;
+		}
+		ZBlogException::ResumeErrorHook();
 	}
 
-	return $r;
+	return null;
 }
 
 /**
