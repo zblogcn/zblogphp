@@ -6,60 +6,6 @@
  * @copyright (C) RainbowSoft Studio
  */
 
-/**
- * 自动加载类文件
- * @api Filter_Plugin_Autoload
- * @param string $classname 类名
- * @return mixed
- */
-function AutoloadClass($classname){
-	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname($classname);
-		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
-	}
-	if (is_readable($f=dirname(__FILE__) . '/lib/' . strtolower($classname) .'.php'))
-		require $f;
-}
-
-/**
- * 记录日志
- * @param string $s
- */
-function Logs($s) {
-	global $zbp;
-	$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
-	$handle = @fopen($f, 'a+');
-	@fwrite($handle, "[" . date('c') . "~" . current(explode(" ", microtime())) . "]" . "\r\n" . $s . "\r\n");
-	@fclose($handle);
-}
-
-/**
- * 页面运行时长
- * @return array
- */
-function RunTime() {
-	global $zbp;
-
-	$rt=array();
-	$rt['time']=number_format(1000 * (microtime(1) - $_SERVER['_start_time']), 2);
-	$rt['query']=$_SERVER['_query_count'];
-	$rt['memory']=$_SERVER['_memory_usage'];
-	$rt['error']=$_SERVER['_error_count'];
-	if(function_exists('memory_get_usage')){
-		$rt['memory']=(int)((memory_get_usage()-$_SERVER['_memory_usage'])/1024);
-	}
-	
-	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false)return $rt;
-
-	echo '<!--' . $rt['time'] . 'ms , ';
-	echo  $rt['query'] . ' query';
-	if(function_exists('memory_get_usage'))
-		echo ' , ' . $rt['memory'] . 'kb memory';
-	echo  ' , ' . $rt['error'] . ' error';
-	echo '-->';
-	return $rt;
-}
-
 
 ################################################################################################################
 /**
@@ -2958,47 +2904,3 @@ function ShowError404($idortext,$file,$line){
  * ViewIndex的预处理,已废弃
  */
 function PreViewIndex(){}
-
-/**
- * 通过文件获取应用URL地址
- * @param string $file 文件名
- * @return string 返回URL地址
- */
-function plugin_dir_url($file) {
-	global $zbp;
-	$s1=$zbp->path;
-	$s2=str_replace('\\','/',dirname($file).'/');
-	$s3='';
-	$s=substr($s2,strspn($s1,$s2,0));
-	if(strpos($s,'zb_users/plugin/')!==false){
-		$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
-	}else{
-		$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
-	}
-	$a=explode('/',$s);
-	$s=$a[0];
-	$s=$zbp->host . $s3 . $s . '/';
-	return $s;
-}
-
-/**
- * 通过文件获取应用目录路径
- * @param $file
- * @return string
- */
-function plugin_dir_path($file) {
-	global $zbp;
-	$s1=$zbp->path;
-	$s2=str_replace('\\','/',dirname($file).'/');
-	$s3='';
-	$s=substr($s2,strspn($s1,$s2,0));
-	if(strpos($s,'zb_users/plugin/')!==false){
-		$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
-	}else{
-		$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
-	}
-	$a=explode('/',$s);
-	$s=$a[0];
-	$s=$zbp->path . $s3 . $s . '/';
-	return $s;
-}

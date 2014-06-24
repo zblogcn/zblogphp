@@ -55,13 +55,13 @@ $zbpvers['131111']='1.0 Beta2 Build 131111';
 $zbpvers['131221']='1.1 Taichi Build 131221';
 $zbpvers['140220']='1.2 Hippo Build 140220';
 $zbpvers['140614']='1.3 Wonce Build 140614';
-
+$zbpvers['150101']='1.4 Beta Build 140624';
 
 #定义常量
 /**
  *ZBLOGPHP版本号
  */
-define('ZC_BLOG_VERSION', $zbpvers['140614']);
+define('ZC_BLOG_VERSION', $zbpvers['150101']);
 
 /**
  *文章类型：文章型

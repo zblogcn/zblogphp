@@ -62,7 +62,7 @@ class DbMySQL implements iDataBase {
 			return false;
 		} else {
 			$this->db = $db_link;
-			mysql_query("SET NAMES 'utf8'",$db_link);
+			mysql_query("SET NAMES 'utf8'",$this->db);
 			if(mysql_select_db($array[3], $this->db)){
 				$this->dbpre=$array[4];
 				$this->dbname=$array[3];
@@ -98,7 +98,7 @@ class DbMySQL implements iDataBase {
 			}
 		}
 		if($c==0){
-			mysql_query($this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
+			mysql_query($this->sql->Filter('CREATE DATABASE ' . $dbmysql_name),$this->db);
 			return true;
 		}
 	}
@@ -120,7 +120,7 @@ class DbMySQL implements iDataBase {
 		foreach ($a as $s) {
 			$s=trim($s);
 			if($s<>''){
-				mysql_query($this->sql->Filter($s));
+				mysql_query($this->sql->Filter($s),$this->db);
 			}
 		}
 	}
@@ -132,8 +132,8 @@ class DbMySQL implements iDataBase {
 	 */
 	function Query($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
-		$results = mysql_query($this->sql->Filter($query));
-		if(mysql_errno())trigger_error(mysql_error(),E_USER_NOTICE);
+		$results = mysql_query($this->sql->Filter($query),$this->db);
+		if(mysql_errno())trigger_error(mysql_error($this->db),E_USER_NOTICE);
 		$data = array();
 		if(is_resource($results)){
 			while($row = mysql_fetch_assoc($results)){
@@ -142,6 +142,20 @@ class DbMySQL implements iDataBase {
 		}else{
 			$data[] = $results;
 		}
+
+		//if(true==true){
+		if(true!==true){
+			$query="EXPLAIN " . $query;
+			$results2 = mysql_query($this->sql->Filter($query),$this->db);
+			$explain=array();
+			if($results2){
+				while($row = mysql_fetch_assoc($results2)){
+					$explain[] = $row;
+				}
+			}
+			logs("\r\n" . $query . "\r\n" . var_export($explain,true));
+		}
+
 		return $data;
 	}
 
@@ -152,7 +166,7 @@ class DbMySQL implements iDataBase {
 	 */
 	function Update($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
-		return mysql_query($this->sql->Filter($query));
+		return mysql_query($this->sql->Filter($query),$this->db);
 	}
 
 	/**
@@ -162,7 +176,7 @@ class DbMySQL implements iDataBase {
 	*/
 	function Delete($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
-		return mysql_query($this->sql->Filter($query));
+		return mysql_query($this->sql->Filter($query),$this->db);
 	}
 
 	/**
@@ -172,8 +186,8 @@ class DbMySQL implements iDataBase {
 	*/
 	function Insert($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
-		mysql_query($this->sql->Filter($query));
-		return mysql_insert_id();
+		mysql_query($this->sql->Filter($query),$this->db);
+		return mysql_insert_id($this->db);
 	}
 
 	/**
