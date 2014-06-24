@@ -6,7 +6,7 @@ function interval_value($author, $content, &$sv, $config_sv, $config_array){
 	$sql = $zbp->db->sql->Select(
 			'%pre%comment',
 			array(
-				'COUNT(`comm_id`) AS c',
+				'COUNT(comm_id) AS c',
 			),
 			array(
 				array('=', 'comm_IP', $author['ip']),
