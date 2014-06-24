@@ -452,7 +452,7 @@ function Admin_SiteInfo(){
 
 	echo '<table class="tableFull tableBorder" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a> <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
-	if((time()-(int)$zbp->cache->reload_updateinfo_time) > (23*60*60) && $zbp->CheckRights('root')){
+	if((time()-(int)$zbp->cache->reload_updateinfo_time) > (47*60*60) && $zbp->CheckRights('root')){
 		echo '<script type="text/javascript">$(document).ready(function(){ updateinfo(\'?act=misc&type=updateinfo\'); });</script>';
 	}else{
 		echo $zbp->cache->reload_updateinfo;

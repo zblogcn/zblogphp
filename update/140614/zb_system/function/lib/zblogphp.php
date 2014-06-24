@@ -2154,8 +2154,7 @@ class ZBlogPHP {
 	 * 检查并开启Gzip压缩
 	 */
 	function CheckGzip(){
-		if(!headers_sent()&&
-			extension_loaded("zlib")&&
+		if(	extension_loaded("zlib")&&
 			isset($_SERVER["HTTP_ACCEPT_ENCODING"])&&
 			strstr($_SERVER["HTTP_ACCEPT_ENCODING"],"gzip")
 			)
@@ -2168,7 +2167,7 @@ class ZBlogPHP {
 	function StartGzip(){
 		if($this->isgziped)return false;
 
-		if($this->isgzip&&isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE']){
+		if(!headers_sent()&&$this->isgzip&&isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE']){
 			if(ini_get('output_handler'))return false;
 			$a=ob_list_handlers();
 			if(in_array('ob_gzhandler',$a) || in_array('zlib output compression',$a))return false;

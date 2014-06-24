@@ -7,6 +7,46 @@
  */
 
 /**
+ * 显示全局变量
+ * @return mixed
+ * @since 1.3.140614
+ * @todo 下版转到debug页
+ */
+function Debug_PrintGlobals(){
+	$a=array();
+	foreach($GLOBALS as $n=>$v){
+		$a[] = $n;
+	}
+	return print_r($a,true);
+}
+
+/**
+ *  打印全局Include文件
+ * @return string 
+ * @since 1.3
+ * @todo 下版转到debug页
+*/
+function Debug_PrintIncludefiles(){
+	$a=array();
+	foreach(get_included_files() as $n=>$v){
+		$a[] = $v;
+	}
+	return print_r($a,true);
+}
+
+/**
+ *  打印全局自定义常量
+ * @return string
+ * @since 1.3
+ * @todo 下版转到debug页
+*/
+function Debug_PrintConstants(){
+	$a=get_defined_constants(true);
+	if(isset($a['user']))$a=$a['user'];
+	return print_r($a,true);
+}
+ 
+/**
  * 错误调度提示
  * @param int $errno 错误级别
  * @param string $errstr 错误信息
