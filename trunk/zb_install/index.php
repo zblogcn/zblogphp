@@ -522,7 +522,7 @@ case 'pdo_mysql':
   $zbp->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
   $zbp->option['ZC_MYSQL_NAME']=str_replace(array('\'','"'),array('',''),GetVars('dbmysql_name','POST'));
   $zbp->option['ZC_MYSQL_PRE']=str_replace(array('\'','"'),array('',''),GetVars('dbmysql_pre','POST'));
-  $zbp->InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
+  $zbp->db = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
   if($zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'],$zbp->option['ZC_MYSQL_PORT'],$zbp->option['ZC_MYSQL_USERNAME'],$zbp->option['ZC_MYSQL_PASSWORD'],$zbp->option['ZC_MYSQL_NAME'])==true){
     echo "创建数据库". $zbp->option['ZC_MYSQL_NAME'] ."成功!<br/>";
   }

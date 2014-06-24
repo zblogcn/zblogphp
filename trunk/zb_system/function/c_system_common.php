@@ -5,6 +5,17 @@
  * @subpackage System/CommonFunction 辅助通用函数
  * @copyright (C) RainbowSoft Studio
  */
+function GetEnvironment(){
+	global $zbp;
+	$ajax = Network::Create();
+	if($ajax) $ajax=substr(get_class($ajax),7);
+	
+	$system_environment = PHP_OS . ';' . 
+							GetValueInArray(explode(' ',str_replace(array('Microsoft-','/'),array('',''),GetVars('SERVER_SOFTWARE', 'SERVER'))),0) . ';' .
+							'PHP' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'] . ';' .
+							$ajax ;
+	return $system_environment;
+}
 
 /**
  * 通过Key从数组获取数据

@@ -26,6 +26,7 @@ foreach ($GLOBALS['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpna
   	  <div class="content">
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p><div>
 		<?php echo '(' . $this->type . ')' . $this->typeName . ' :     ' . htmlspecialchars($this->message); ?>
+		<?php if(!in_array('Status: 404 Not Found',headers_list()))echo '(' . GetEnvironment() . ')' ;?>
 		</div></div>
 	 	<?php if($GLOBALS['option']['ZC_DEBUG_MODE']){?>
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['file_line']; ?></p><div>
