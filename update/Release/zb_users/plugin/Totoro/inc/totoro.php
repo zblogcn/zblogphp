@@ -218,7 +218,7 @@ class Totoro_Class
 		$sql = $zbp->db->sql->Select(
 			'%pre%comment',
 			array(
-				'COUNT(`comm_id`) AS c',
+				'COUNT(comm_id) AS c',
 			),
 			array(
 				array('=', 'comm_IP', $ip),
