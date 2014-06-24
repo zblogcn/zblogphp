@@ -165,13 +165,12 @@ class ZBlogPHP {
 	 */
 	public $action=null;
 
-	private $isinitialize=false; #是否初始化成功
-	private $isconnect=false; #是否连接成功
+	private $isinitialized=false; #是否初始化成功
+	private $isconnected=false; #是否连接成功
 	private $isload=false; #是否载入
 	private $issession=false; #是否使用session
-	public $ismanage=false; #是否管理员
+	public $ismanage=false; #是否加载管理模式
 	private $isgzip=false; #是否开启gzip
-	private $isgziped=false; #是否已经过gzip压缩
 
 	/**
 	 * @var null 当前模板
@@ -267,6 +266,17 @@ class ZBlogPHP {
 			self::$_zbp=new ZBlogPHP;
 		}
 		return self::$_zbp;
+	}
+	
+	/**
+	 * 初始化数据库连接
+	 * @param string $type 数据连接类型
+	 * @return object or null
+	 */
+	static public function InitializeDB($type){
+		if(!trim($type))return null;
+		$newtype='Db'.trim($type);
+		return new $newtype();
 	}
 
 	/**
@@ -442,7 +452,7 @@ class ZBlogPHP {
 		#创建User类
 		$this->user=new Member();
 
-		$this->isinitialize=true;
+		$this->isinitialized=true;
 
 	}
 
@@ -453,7 +463,7 @@ class ZBlogPHP {
 	 */
 	public function Load(){
 
-		if(!$this->isinitialize)return false;
+		if(!$this->isinitialized)return false;
 
 		if($this->isload)return false;
 
@@ -498,7 +508,7 @@ class ZBlogPHP {
 		$this->template=$this->PrepareTemplate();
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
-
+		
 		if($this->ismanage) $this->LoadManage();
 
 		$this->isload=true;
@@ -530,25 +540,14 @@ class ZBlogPHP {
 	 *终止连接，释放资源
 	 */
 	public function Terminate(){
-		if($this->isinitialize){
+		if($this->isinitialized){
 			foreach ($GLOBALS['Filter_Plugin_Zbp_Terminate'] as $fpname => &$fpsignal) $fpname();
 			$this->CloseConnect();
 			unset($this->db);
-			$this->isinitialize=false;
+			$this->isinitialized=false;
 		}
 	}
 
-
-	/**
-	 * 初始化数据库连接
-	 * @param string $type 数据连接类型
-	 * @return bool
-	 */
-	public function InitializeDB($type){
-		if(!trim($type))return false;
-		$newtype='Db'.trim($type);
-		$this->db=new $newtype();
-	}
 
 	/**
 	 * 连接数据库
@@ -557,46 +556,38 @@ class ZBlogPHP {
 	 */
 	public function OpenConnect(){
 
-		if($this->isconnect)return false;
+		if($this->isconnected)return false;
 		if(!$this->option['ZC_DATABASE_TYPE'])return false;
 		switch ($this->option['ZC_DATABASE_TYPE']) {
 			case 'sqlite':
 			case 'sqlite3':
-				try {
-					$this->InitializeDB($this->option['ZC_DATABASE_TYPE']);
-					if($this->db->Open(array(
-							$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
-							$this->option['ZC_SQLITE_PRE']
-						))==false){
-						$this->ShowError(69,__FILE__,__LINE__);
-					}
-				} catch (Exception $e) {
-					throw new Exception("SQLite DateBase Connection Error.");
+				$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
+				if($this->db->Open(array(
+						$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
+						$this->option['ZC_SQLITE_PRE']
+					))==false){
+					$this->ShowError(69,__FILE__,__LINE__);
 				}
 				break;
 			case 'mysql':
 			case 'mysqli':
 			case 'pdo_mysql':
 			default:
-				try {
-					$this->InitializeDB($this->option['ZC_DATABASE_TYPE']);
-					if($this->db->Open(array(
-							$this->option['ZC_MYSQL_SERVER'],
-							$this->option['ZC_MYSQL_USERNAME'],
-							$this->option['ZC_MYSQL_PASSWORD'],
-							$this->option['ZC_MYSQL_NAME'],
-							$this->option['ZC_MYSQL_PRE'],
-							$this->option['ZC_MYSQL_PORT'],
-							$this->option['ZC_MYSQL_PERSISTENT']
-						))==false){
-						$this->ShowError(67,__FILE__,__LINE__);
-					}
-				} catch (Exception $e) {
-					throw new Exception("MySQL DateBase Connection Error.");
+				$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
+				if($this->db->Open(array(
+						$this->option['ZC_MYSQL_SERVER'],
+						$this->option['ZC_MYSQL_USERNAME'],
+						$this->option['ZC_MYSQL_PASSWORD'],
+						$this->option['ZC_MYSQL_NAME'],
+						$this->option['ZC_MYSQL_PRE'],
+						$this->option['ZC_MYSQL_PORT'],
+						$this->option['ZC_MYSQL_PERSISTENT']
+					))==false){
+					$this->ShowError(67,__FILE__,__LINE__);
 				}
 				break;
 		}
-		$this->isconnect=true;
+		$this->isconnected=true;
 		return true;
 
 	}
@@ -605,9 +596,9 @@ class ZBlogPHP {
 	 * 关闭数据库连接
 	 */
 	public function CloseConnect(){
-		if($this->isconnect){
+		if($this->isconnected){
 			$this->db->Close();
-			$this->isconnect=false;
+			$this->isconnected=false;
 		}
 	}
 
@@ -2091,7 +2082,7 @@ class ZBlogPHP {
 		if((int)$idortext==2){
 			Http404();
 		}
-
+//die(var_dump(headers_list()));
 		ZBlogException::$error_id=(int)$idortext;
 		ZBlogException::$error_file=$file;
 		ZBlogException::$error_line=$line;
@@ -2171,8 +2162,7 @@ class ZBlogPHP {
 	 * 检查并开启Gzip压缩
 	 */
 	function CheckGzip(){
-		if(!headers_sent()&&
-			extension_loaded("zlib")&&
+		if( extension_loaded("zlib")&&
 			isset($_SERVER["HTTP_ACCEPT_ENCODING"])&&
 			strstr($_SERVER["HTTP_ACCEPT_ENCODING"],"gzip")
 			)
@@ -2183,9 +2173,8 @@ class ZBlogPHP {
 	 * 启用Gzip
 	 */
 	function StartGzip(){
-		if($this->isgziped)return false;
 
-		if($this->isgzip&&isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE']){
+		if(!headers_sent()&&$this->isgzip&&isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE']){
 			if(ini_get('output_handler'))return false;
 			$a=ob_list_handlers();
 			if(in_array('ob_gzhandler',$a) || in_array('zlib output compression',$a))return false;
@@ -2196,7 +2185,6 @@ class ZBlogPHP {
 				ob_start('ob_gzhandler');
 			}
 			ob_start();
-			$this->isgziped=true;
 			return true;
 		}
 	}
