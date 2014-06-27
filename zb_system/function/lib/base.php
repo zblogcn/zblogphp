@@ -24,13 +24,23 @@ class Base {
 	* @var Metas|null 扩展元数据
 	*/
 	public $Metas = null;
-
+	/**
+	* @var datebase db
+	*/
+	protected $db = null;
+	
+	
 	/**
 	* @param string $table 数据表
 	* @param array $datainfo 数据表结构信息
 	*/
-	function __construct(&$table,&$datainfo){
-			global $zbp;
+	function __construct(&$table,&$datainfo,$db = null){
+			if($db !== null){
+				$this->db = &$db;
+			}else{
+				$zbp = ZBlogPHP::GetInstance();
+				$this->db = &$zbp->db;				
+			}
 
 			$this->table=&$table;
 			$this->datainfo=&$datainfo;
@@ -103,14 +113,12 @@ class Base {
 	* @return bool
 	*/
 	function LoadInfoByID($id){
-		global $zbp;
-
 		$id=(int)$id;
 		$id_field=reset($this->datainfo);
 		$id_field=$id_field[0];
-		$s = $zbp->db->sql->Select($this->table,array('*'),array(array('=',$id_field,$id)),null,null,null);
+		$s = $this->db->sql->Select($this->table,array('*'),array(array('=',$id_field,$id)),null,null,null);
 
-		$array = $zbp->db->Query($s);
+		$array = $this->db->Query($s);
 		if (count($array)>0) {
 			$this->LoadInfoByAssoc($array[0]);
 			return true;
@@ -125,8 +133,7 @@ class Base {
 	* @return bool
 	*/
 	function LoadInfoByAssoc($array){
-		global $zbp;
-
+		global $bloghost;
 		foreach ($this->datainfo as $key => $value) {
 			if(!isset($array[$value[0]]))continue;
 			if($value[1] == 'boolean'){
@@ -135,7 +142,7 @@ class Base {
 				if($key=='Meta'){
 					$this->data[$key]=$array[$value[0]];
 				}else{
-					$this->data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$value[0]]);
+					$this->data[$key]=str_replace('{#ZC_BLOG_HOST#}',$bloghost,$array[$value[0]]);
 				}
 			}else{
 				$this->data[$key]=$array[$value[0]];
@@ -151,8 +158,7 @@ class Base {
 	* @return bool
 	*/
 	function LoadInfoByArray($array){
-		global $zbp;
-
+		global $bloghost;
 		$i = 0;
 		foreach ($this->datainfo as $key => $value) {
 			if(count($array)==$i)continue;
@@ -162,7 +168,7 @@ class Base {
 				if($key=='Meta'){
 					$this->data[$key]=$array[$i];
 				}else{
-					$this->data[$key]=str_replace('{#ZC_BLOG_HOST#}',$zbp->host,$array[$i]);
+					$this->data[$key]=str_replace('{#ZC_BLOG_HOST#}',$bloghost,$array[$i]);
 				}
 			}else{
 				$this->data[$key]=$array[$i];
@@ -180,8 +186,7 @@ class Base {
 	* @return bool
 	*/
 	function Save(){
-		global $zbp;
-
+		global $bloghost;
 		if(isset($this->data['Meta']))$this->data['Meta'] = $this->Metas->Serialize();
 
 		$keys=array();
@@ -205,7 +210,7 @@ class Base {
 				if($key=='Meta'){
 					$keyvalue[$value[0]]=$this->data[$key];
 				}else{
-					$keyvalue[$value[0]]=str_replace($zbp->host,'{#ZC_BLOG_HOST#}',$this->data[$key]);
+					$keyvalue[$value[0]]=str_replace($bloghost,'{#ZC_BLOG_HOST#}',$this->data[$key]);
 				}
 			}else{
 				$keyvalue[$value[0]]=$this->data[$key];
@@ -218,12 +223,12 @@ class Base {
 		$id_field=$id_field[0];
 		
 		if ($this->$id_name  ==  0) {
-			$sql = $zbp->db->sql->Insert($this->table,$keyvalue);
-			$this->$id_name = $zbp->db->Insert($sql);
+			$sql = $this->db->sql->Insert($this->table,$keyvalue);
+			$this->$id_name = $this->db->Insert($sql);
 		} else {
 
-			$sql = $zbp->db->sql->Update($this->table,$keyvalue,array(array('=',$id_field,$this->$id_name)));
-			return $zbp->db->Update($sql);
+			$sql = $this->db->sql->Update($this->table,$keyvalue,array(array('=',$id_field,$this->$id_name)));
+			return $this->db->Update($sql);
 		}
 
 		return true;
@@ -236,12 +241,11 @@ class Base {
 	* @return bool
 	*/
 	function Del(){
-		global $zbp;
 		$id_field=reset($this->datainfo);
 		$id_name=key($this->datainfo);
 		$id_field=$id_field[0];
-		$sql = $zbp->db->sql->Delete($this->table,array(array('=',$id_field,$this->$id_name)));
-		$zbp->db->Delete($sql);
+		$sql = $this->db->sql->Delete($this->table,array(array('=',$id_field,$this->$id_name)));
+		$this->db->Delete($sql);
 		return true;
 	}
 
