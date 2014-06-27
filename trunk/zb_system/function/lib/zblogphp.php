@@ -2102,7 +2102,7 @@ class ZBlogPHP {
 	 * @return string
 	 */
 	function GetToken(){
-		return md5($this->guid . date('Ymd') . $this->user->Name . $this->user->Password);
+		return md5($this->guid . date('Ymd') . $this->user->Guid);
 	}
 
 	/**
@@ -2111,10 +2111,10 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	function ValidToken($t){
-		if($t==md5($this->guid . date('Ymd') . $this->user->Name . $this->user->Password)){
+		if($t==md5($this->guid . date('Ymd') . $this->user->Guid)){
 			return true;
 		}
-		if($t==md5($this->guid . date('Ymd',strtotime("-1 day")) . $this->user->Name . $this->user->Password)){
+		if($t==md5($this->guid . date('Ymd',strtotime("-1 day")) . $this->user->Guid)){
 			return true;
 		}
 		return false;
