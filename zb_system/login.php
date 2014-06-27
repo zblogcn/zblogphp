@@ -1,6 +1,7 @@
 <?php
 require './function/c_system_base.php';
 
+$zbp->CheckGzip();
 $zbp->Load();
 
 ?><!DOCTYPE HTML>

@@ -752,6 +752,7 @@ function ViewPost($id, $alias, $isrewrite = false) {
 	$w = array();
 
 	if ($id !== null) {
+		if(function_exists('ctype_digit')&&!ctype_digit((string)$id))$zbp->ShowError(3, __FILE__, __LINE__);
 		$w[] = array('=', 'log_ID', $id);
 	} elseif ($alias !== null) {
 		if($zbp->option['ZC_POST_ALIAS_USE_ID_NOT_TITLE']==false){
