@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>插入音乐</title>
-    <script type="text/javascript" src="../internal.js"></script>
-    <link rel="stylesheet" type="text/css" href="music.css">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>插入音乐</title>
+<script type="text/javascript" src="../internal.js"></script>
+<link rel="stylesheet" type="text/css" href="music.css">
 </head>
 <body>
 <div class="wrapper">
