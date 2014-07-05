@@ -18,9 +18,9 @@ if(!$zbp->CheckRights('ArticleEdt'))die();
     error_reporting(E_ERROR|E_WARNING);
     //远程抓取图片配置
     $config = array(
-        "savePath" => "upload/" ,            //保存路径
+        "savePath" => $zbp->usersdir . 'upload/' ,            //保存路径
         "allowFiles" => array( ".gif" , ".png" , ".jpg" , ".jpeg" , ".bmp" ) , //文件允许格式
-        "maxSize" => 3000                    //文件大小限制，单位KB
+        "maxSize" => $zbp->option['ZC_UPLOAD_FILESIZE'] * 1024                //文件大小限制，单位KB
     );
     $uri = htmlspecialchars( $_POST[ 'upfile' ] );
     $uri = str_replace( "&amp;" , "&" , $uri );
