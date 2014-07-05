@@ -70,6 +70,7 @@ class Uploader
      */
     private function upFile()
     {
+		global $zbp;
         $file = $this->file = $_FILES[$this->fileField];
         if (!$file) {
             $this->stateInfo = $this->getStateInfo("ERROR_FILE_NOT_FOUND");
@@ -107,17 +108,18 @@ class Uploader
         }
 		
 		$upload = new Upload;
-		$upload->Name = $this->fullName;
+		$upload->Name = $this->fileName;
 		$upload->SourceName = $file['name'];
 		$upload->MimeType = $file['type'];
 		$upload->Size = $this->fileSize;
 		$upload->AuthorID = $zbp->user->ID;
 		
-		if (!$upload->SaveFile($_FILES[$key]['tmp_name']))
+		if (!$upload->SaveFile($file['tmp_name']))
 		{
 			$this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
 			return;
 		}
+		var_dump($upload);exit;
 		$upload->Save();
 		$this->stateInfo = $this->stateMap[0];
 
@@ -129,6 +131,7 @@ class Uploader
      */
     private function upBase64()
     {
+		global $zbp;
         $base64Data = $_POST[$this->fileField];
         $img = base64_decode($base64Data);
 
@@ -141,7 +144,7 @@ class Uploader
         $dirname = dirname($this->filePath);
 
 		$upload = new Upload;
-		$upload->Name = $this->fullName;
+		$upload->Name = $this->fileName;
 		$upload->SourceName = date("YmdHis") . '_scraw.png';
 		$upload->MimeType = 'image/png';
 		$upload->AuthorID = $zbp->user->ID;
@@ -158,6 +161,7 @@ class Uploader
      */
     private function saveRemote()
     {
+		global $zbp;
         $imgUrl = htmlspecialchars($this->fileField);
         $imgUrl = str_replace("&amp;", "&", $imgUrl);
 
@@ -206,8 +210,8 @@ class Uploader
         }
 
 		$upload = new Upload;
-		$upload->Name = $this->fullName;
-		$upload->SourceName = $this->fullName;
+		$upload->Name = $this->fileName;
+		$upload->SourceName = $this->fileName;
 		$upload->MimeType = $heads['Content-Type'];
 		$upload->Size = $this->fileSize;
 		$upload->AuthorID = $zbp->user->ID;
@@ -279,7 +283,7 @@ class Uploader
      * @return string
      */
     private function getFileName () {
-        return substr($this->filePath, strrpos($this->filePath, '/') + 1);
+        return substr($this->fullName, strrpos($this->fullName, '/') + 1);
     }
 
     /**
@@ -288,9 +292,9 @@ class Uploader
      */
     private function getFilePath()
     {
-        $fullname = $this->fullName;
+        $fileName = $this->fileName;
         global $blogpath;
-        return $blogpath . 'zb_users/upload/' . date('Y/m') . '/' . $fullname;
+        return $blogpath . 'zb_users/upload/' . date('Y/m') . '/' . $fileName;
     }
 
     /**
