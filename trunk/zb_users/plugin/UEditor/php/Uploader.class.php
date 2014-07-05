@@ -303,7 +303,7 @@ class Uploader
      */
     private function checkType()
     {
-        return in_array(substr($this->getFileExt(), 1), $this->config["allowFiles"]);
+        return in_array($this->getFileExt(), $this->config["allowFiles"]);
     }
 
     /**
