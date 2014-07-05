@@ -7,7 +7,7 @@ $upload_dir = 'zb_users/upload/' . date('Y/m') . '/';
 $upload_path = '';// = $upload_dir = '';
 
 $upload_dir = $bloghost . $upload_dir;
-$upload_allow = explode('|', $zbp->option['ZC_UPLOAD_FILETYPE']);
+$upload_allow = explode('|', '.' . str_replace('|', '|.', $zbp->option['ZC_UPLOAD_FILETYPE']));
 $max_size = $zbp->option['ZC_UPLOAD_FILESIZE'] * 1024 * 1024;
 
 $CONFIG = array(
