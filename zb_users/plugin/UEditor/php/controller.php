@@ -24,15 +24,6 @@ switch ($action) {
         $result = include("action_upload.php");
         break;
 
-    /* 列出图片 */
-    case 'listimage':
-        $result = include("action_list.php");
-        break;
-    /* 列出文件 */
-    case 'listfile':
-        $result = include("action_list.php");
-        break;
-
     /* 抓取远程文件 */
     case 'catchimage':
         $result = include("action_crawler.php");

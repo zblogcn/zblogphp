@@ -105,22 +105,22 @@ class Uploader
             $this->stateInfo = $this->getStateInfo("ERROR_TYPE_NOT_ALLOWED");
             return;
         }
+		
+		$upload = new Upload;
+		$upload->Name = $this->fullName;
+		$upload->SourceName = $file['name'];
+		$upload->MimeType = $file['type'];
+		$upload->Size = $this->fileSize;
+		$upload->AuthorID = $zbp->user->ID;
+		
+		if (!$upload->SaveFile($_FILES[$key]['tmp_name']))
+		{
+			$this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
+			return;
+		}
+		$upload->Save();
+		$this->stateInfo = $this->stateMap[0];
 
-        //创建目录失败
-        if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
-            $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
-            return;
-        } else if (!is_writeable($dirname)) {
-            $this->stateInfo = $this->getStateInfo("ERROR_DIR_NOT_WRITEABLE");
-            return;
-        }
-
-        //移动文件
-        if (!(move_uploaded_file($file["tmp_name"], $this->filePath) && file_exists($this->filePath))) { //移动失败
-            $this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
-        } else { //移动成功
-            $this->stateInfo = $this->stateMap[0];
-        }
     }
 
     /**
@@ -140,27 +140,15 @@ class Uploader
         $this->fileName = $this->getFileName();
         $dirname = dirname($this->filePath);
 
-        //检查文件大小是否超出限制
-        if (!$this->checkSize()) {
-            $this->stateInfo = $this->getStateInfo("ERROR_SIZE_EXCEED");
-            return;
-        }
-
-        //创建目录失败
-        if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
-            $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
-            return;
-        } else if (!is_writeable($dirname)) {
-            $this->stateInfo = $this->getStateInfo("ERROR_DIR_NOT_WRITEABLE");
-            return;
-        }
-
-        //移动文件
-        if (!(file_put_contents($this->filePath, $img) && file_exists($this->filePath))) { //移动失败
-            $this->stateInfo = $this->getStateInfo("ERROR_WRITE_CONTENT");
-        } else { //移动成功
-            $this->stateInfo = $this->stateMap[0];
-        }
+		$upload = new Upload;
+		$upload->Name = $this->fullName;
+		$upload->SourceName = date("YmdHis") . '_scraw.png';
+		$upload->MimeType = 'image/png';
+		$upload->AuthorID = $zbp->user->ID;
+			
+		$upload->SaveBase64File($base64Data);
+		$upload->Save();
+		$this->stateInfo = $this->stateMap[0];
 
     }
 
@@ -217,21 +205,19 @@ class Uploader
             return;
         }
 
-        //创建目录失败
-        if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
-            $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
-            return;
-        } else if (!is_writeable($dirname)) {
-            $this->stateInfo = $this->getStateInfo("ERROR_DIR_NOT_WRITEABLE");
-            return;
-        }
-
-        //移动文件
-        if (!(file_put_contents($this->filePath, $img) && file_exists($this->filePath))) { //移动失败
-            $this->stateInfo = $this->getStateInfo("ERROR_WRITE_CONTENT");
-        } else { //移动成功
-            $this->stateInfo = $this->stateMap[0];
-        }
+		$upload = new Upload;
+		$upload->Name = $this->fullName;
+		$upload->SourceName = $this->fullName;
+		$upload->MimeType = $heads['Content-Type'];
+		$upload->Size = $this->fileSize;
+		$upload->AuthorID = $zbp->user->ID;
+		
+		if (!$upload->SaveBase64File(base64_encode($img)))
+		{
+			$this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
+			return;
+		}
+		$upload->Save();
 
     }
 
@@ -303,13 +289,8 @@ class Uploader
     private function getFilePath()
     {
         $fullname = $this->fullName;
-        $rootPath = $_SERVER['DOCUMENT_ROOT'];
-
-        if (substr($fullname, 0, 1) != '/') {
-            $fullname = '/' . $fullname;
-        }
-
-        return $rootPath . $fullname;
+        global $blogpath;
+        return $blogpath . 'zb_users/upload/' . date('Y/m') . '/' . $fullname;
     }
 
     /**
@@ -318,7 +299,7 @@ class Uploader
      */
     private function checkType()
     {
-        return in_array($this->getFileExt(), $this->config["allowFiles"]);
+        return in_array(substr($this->getFileExt(), 1), $this->config["allowFiles"]);
     }
 
     /**
