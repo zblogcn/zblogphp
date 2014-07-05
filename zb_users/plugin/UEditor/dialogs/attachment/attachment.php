@@ -6,7 +6,7 @@
     <script type="text/javascript" src="../internal.js"></script>
 
     <!-- jquery -->
-    <script type="text/javascript" src="../../third-party/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="../../../../../zb_system/script/common.js"></script>
 
     <!-- webuploader -->
     <script src="../../third-party/webuploader/webuploader.min.js"></script>
