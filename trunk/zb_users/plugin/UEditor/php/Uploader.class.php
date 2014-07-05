@@ -119,7 +119,7 @@ class Uploader
 			$this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
 			return;
 		}
-		var_dump($upload);exit;
+
 		$upload->Save();
 		$this->stateInfo = $this->stateMap[0];
 

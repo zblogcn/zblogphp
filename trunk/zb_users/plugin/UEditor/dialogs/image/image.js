@@ -274,6 +274,7 @@
                     border: data['border'] || '',
                     floatStyle: data['align'] || '',
                     vspace: data['vhSpace'] || '',
+                    title: data['title'] || '',
                     alt: data['title'] || '',
                     style: "width:" + data['width'] + "px;height:" + data['height'] + "px;"
                 }];
@@ -774,6 +775,7 @@
                 list.push({
                     src: prefix + data.url,
                     _src: prefix + data.url,
+                    title: data.title,
                     alt: data.original,
                     floatStyle: align
                 });
@@ -853,7 +855,7 @@
 
             if(!_this.listEnd && !this.isLoadingData) {
                 this.isLoadingData = true;
-                var url = editor.getActionUrl(editor.getOpt('imageManagerActionName')),
+                var url = editor.getOpt('serverUrl') + '?action=' + editor.getOpt('imageManagerActionName'),
                     isJsonp = utils.isCrossDomainUrl(url);
                 ajax.request(url, {
                     'timeout': 100000,
