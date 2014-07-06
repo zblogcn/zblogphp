@@ -316,13 +316,13 @@ function ViewSearch(){
 	
 	if(!$zbp->CheckRights($GLOBALS['action'])){Redirect('./');}
 
-	$q=trim(strip_tags(GetVars('q','GET')));
+	$q = trim(htmlspecialchars(GetVars('q','GET')));
 
 	$article = new Post;
-	$article->ID=0;
-	$article->Title=$zbp->lang['msg']['search'] . ' &quot;' . $q . '&quot;';
-	$article->IsLock=true;
-	$article->Type=ZC_POST_TYPE_PAGE;
+	$article->ID = 0;
+	$article->Title = $zbp->lang['msg']['search'] . ' &quot;' . $q . '&quot;';
+	$article->IsLock = true;
+	$article->Type = ZC_POST_TYPE_PAGE;
 
 	if(isset($zbp->templates['search'])){
 		$article->Template='search';
