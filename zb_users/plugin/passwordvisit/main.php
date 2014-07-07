@@ -41,7 +41,7 @@ if(isset($_POST['all_encrypt']) && $_POST['all_encrypt'] != ''){
   </tr>
   <tr>
     <td><b><label for="default_text"><p align="center">默认提示内容</p></label></b></td>
-   <td><p align="left"><textarea name="default_text" type="text" id="default_text" style="width: 80%;"><?php echo $zbp->Config('passwordvisit')->default_text;?></textarea><br>支持输入HTML代码</p></td>
+   <td><p align="left"><textarea name="default_text" type="text" id="default_text" style="width: 80%;"><?php echo $zbp->Config('passwordvisit')->default_text;?></textarea><br>支持输入HTML代码,可以根据主题自定义CSS</p></td>
   </tr>
 </table>
  <br />
