@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="php">
+<id>passwordvisit</id>
+<name>密码访问</name>
+<url>http://app.rainbowsoft.org/?auth=4</url>
+<note>给某篇文章或者全站加密，输入密码才能访问查看</note>
+<description>给某篇文章或者全站加密，输入密码才能访问查看</description>
+<path>main.php</path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>未寒</name>
+  <email>im@imzhou.com</email>
+  <url>http://imzhou.com/</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>140614</adapted>
+<version>1.0</version>
+<pubdate>2014-07-07</pubdate>
+<modified>2014-07-07</modified>
+<price>0</price>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+</sidebars>
+</plugin>
