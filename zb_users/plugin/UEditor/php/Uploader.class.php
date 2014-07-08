@@ -50,6 +50,10 @@ class Uploader
      */
     public function __construct($fileField, $config, $type = "upload")
     {
+		global $zbp;
+		$this->stateMap['ERROR_TYPE_NOT_ALLOWED'] = $zbp->lang['error']['26'];
+		$this->stateMap['ERROR_SIZE_EXCEED'] = $zbp->lang['error']['27'];
+		$this->stateMap['ERROR_UNKNOWN'] = $zbp->lang['error']['0'];
         $this->fileField = $fileField;
         $this->config = $config;
         $this->type = $type;
@@ -121,6 +125,7 @@ class Uploader
 		}
 
 		$upload->Save();
+		$this->fullName = $upload->Url;
 		$this->stateInfo = $this->stateMap[0];
 
     }
@@ -151,6 +156,7 @@ class Uploader
 			
 		$upload->SaveBase64File($base64Data);
 		$upload->Save();
+		$this->fullName = $upload->Url;
 		$this->stateInfo = $this->stateMap[0];
 
     }
@@ -221,7 +227,9 @@ class Uploader
 			$this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
 			return;
 		}
+		
 		$upload->Save();
+		$this->fullName = $upload->Url;
 
     }
 
