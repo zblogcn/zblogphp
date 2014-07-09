@@ -69,6 +69,7 @@ function CloudStorage($tmp, &$upload){
 	$upload->Metas->CS_Tpye = $zbp->Config('CloudStorage')->CS_Storage;
 	unlink($file_path);//删除本地文件
 	$GLOBALS['Filter_Plugin_Upload_SaveFile']['CloudStorage'] = PLUGIN_EXITSIGNAL_RETURN;
+	return true;
 }
 
 /**
@@ -108,6 +109,7 @@ function CloudStorage_Del(&$upload){
 		default:
 			break;
 	}
+	return true;
 	$GLOBALS['Filter_Plugin_Upload_DelFile']['CloudStorage_Del'] = PLUGIN_EXITSIGNAL_RETURN;
 }
 
