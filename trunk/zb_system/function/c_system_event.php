@@ -2888,17 +2888,17 @@ function BuildModule_statistics($array = array()) {
  * @param $line
  */
 function ShowError404($idortext,$file,$line){
+	
 	global $zbp;
-
-	if(!in_array( "Status: 404 Not Found" ,  headers_list() )) return;
+	if(!in_array( "Status: 404 Not Found",  headers_list() )) return;
 	
 	$zbp->template->SetTags('title', $zbp->title);
-
 	$zbp->template->SetTemplate('404');
-
 	$zbp->template->Display();
 
 	$GLOBALS['Filter_Plugin_Zbp_ShowError']['ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
+	
+	exit;
 }
 
 /**
