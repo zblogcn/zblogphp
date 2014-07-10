@@ -3,9 +3,8 @@ function qiniuyun_SubMenu($id)
 {
 	$arySubMenu = array(
 		0 => array('七牛账户设置', 'main.php', 'left', false),
-/*		1 => array('略所图设置', 'image.php', 'left', false),
-		2 => array('域名绑定设置', 'domain.php', 'left', false)
-*/	);
+		1 => array('水印设置', 'water.php', 'left', false)
+	);
 
 	
 	foreach($arySubMenu as $k => $v)
@@ -16,11 +15,13 @@ function qiniuyun_SubMenu($id)
 	}
 }
 
-function qiniuyun_initconfig()
-{
-}
 
 function qiniu_display_text($param)
 {
 	echo TransferHTML($GLOBALS['qiniu']->cfg->$param, '[textarea]');
+}
+
+function qiniu_test_image($url)
+{
+	return preg_match("/\.jpe?g|gif|png|svg|bmp|tiff$/i", $url);
 }
