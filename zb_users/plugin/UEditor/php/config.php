@@ -43,6 +43,7 @@ $CONFIG = array(
     "scrawlPathFormat" => $upload_dir. "{yyyy}{mm}{dd}{time}{rand:6}", /* 上传保存路径,可以自定义保存路径和文件名格式 */
     "scrawlMaxSize" => $max_size, /* 上传大小限制，单位B */
     "scrawlUrlPrefix" => "", /* 图片访问路径前缀 */
+	"scrawlAllowFiles" => $upload_allow, /* 上传图片格式显示 */
     "scrawlInsertAlign" => "none",
 
     /* 抓取远程图片配置 */
