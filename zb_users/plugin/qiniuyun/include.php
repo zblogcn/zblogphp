@@ -73,6 +73,26 @@ function qiniuyun_upload_delfile(&$upload)
 	return true;
 }
 
+function qiniuyun_thumbnail_url($content)
+{
+	init_qiniu(); global $qiniu;
+	//基本逻辑：
+	//1. 有七牛，调七牛
+	//2. 没七牛，调首图
+	//3. 都没图，返空值
+	$pattern = "/<img.*?src=[\'|\"](.*?(?:[\.gif|\.jpg|\.png]))[\'|\"].*?[\/]?>/i";
+	$qiniu_pattern = "/<img.*?src=[\'|\"](https?\:\/\/" . str_replace('.', '\.', $qiniu->domain) . ".*?(?:[\.gif|\.jpg|\.png]))[\'|\"].*?[\/]?>/i";
+	$match_qiniu = NULL; $match = NULL;
+	
+	preg_match_all($qiniu_pattern, $content, $match_qiniu);
+	preg_match_all($pattern, $content, $match);
+	
+	if (isset($match_qiniu[1][0]) > 0) return $qiniu->get_thumbnail_url($match_qiniu[1][0], $qiniu->thumbnail_quality, $qiniu->thumbnail_longedge, $qiniu->thumbnail_shortedge, $qiniu->thumbnail_cut);
+	else if (isset($match[1][0]) > 0) return $match[1][0];
+	else return '';
+	
+}
+
 function InstallPlugin_qiniuyun()
 {
 }
