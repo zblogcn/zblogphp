@@ -366,7 +366,7 @@ function ViewSearch(){
 	
 	if(!$zbp->CheckRights($GLOBALS['action'])){Redirect('./');}
 
-	$q=trim(strip_tags(GetVars('q','GET')));
+	$q=trim(htmlspecialchars(GetVars('q','GET')));
 
 	$article = new Post;
 	$article->ID=0;
@@ -2938,7 +2938,7 @@ function ShowError404($idortext,$file,$line){
 	global $zbp;
 
 	if(!in_array( "Status: 404 Not Found" ,  headers_list() )) return;
-	
+
 	$zbp->template->SetTags('title', $zbp->title);
 
 	$zbp->template->SetTemplate('404');
@@ -2946,6 +2946,8 @@ function ShowError404($idortext,$file,$line){
 	$zbp->template->Display();
 
 	$GLOBALS['Filter_Plugin_Zbp_ShowError']['ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
+
+	exit;
 }
 
 /**
