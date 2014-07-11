@@ -31,6 +31,8 @@ class QINIU
 	{
 		if ($name == 'cfg')
 			return $this->cfg;
+		elseif ($name == 'domain')
+			return $this->get_domain();
 		elseif (!is_null($this->cfg->$name))
 			return $this->cfg->$name;
 		elseif (in_array($name, $this->data))
@@ -64,6 +66,11 @@ class QINIU
 		$this->cfg->water_gravity = 'SouthEast';
 		$this->cfg->water_dx = '10';
 		$this->cfg->water_dy = '10';
+		$this->cfg->thumbnail_quality = '85';	
+		$this->cfg->thumbnail_longedge = '300';
+		$this->cfg->thumbnail_shortedge = '300';
+		$this->cfg->thumbnail_cut = FALSE;
+
 		$this->cfg->version = '1.0';
 		return $this->save_config();
 		
@@ -74,11 +81,15 @@ class QINIU
 		return $GLOBALS['zbp']->SaveConfig('qiniuyun');
 	}
 	
+	private function get_domain()
+	{
+		return ($this->cfg->domain == '' ? $this->bucket . '.qiniudn.com' : $this->cfg->domain);
+	}
+	
 	
 	public function get_url($key, $water = FALSE)
 	{
-		$domain = ($this->cfg->domain == '' ? $this->bucket . '.qiniudn.com' : $this->cfg->domain);
-		$return = Qiniu_RS_MakeBaseUrl($domain, $key);
+		$return = Qiniu_RS_MakeBaseUrl($this->domain, $key);
 		if ($water && qiniu_test_image($return))
 			$return = $this->get_waterimage_url($return, QINIU_WATER_URL, $this->water_dissolve, $this->water_gravity, $this->water_dx, $this->water_dy);
 		return $return;
@@ -107,7 +118,7 @@ class QINIU
 			unlink($local_url);
 			return $return;
 		}
-		
+
 		return $ret;
 	}
 	
@@ -139,6 +150,19 @@ class QINIU
 			"gravity", $gravity,
 			"dx", $dx,
 			"dy", $dy
+		);
+		
+		return $url_cloud . '?' . implode($param, '/');
+	}
+	
+	public function get_thumbnail_url($url_cloud, $quality = 85, $longedge = 300, $shortedge = 300, $cut = FALSE)
+	{
+		$param = array(
+			"imageView", 
+			($cut ? 5 : 4), //mode
+			"w", $longedge,
+			"h", $shortedge,
+			"q", $quality
 		);
 		
 		return $url_cloud . '?' . implode($param, '/');
