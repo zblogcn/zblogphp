@@ -34,7 +34,7 @@ class Base {
 	* @param string $table 数据表
 	* @param array $datainfo 数据表结构信息
 	*/
-	function __construct(&$table,&$datainfo,$db = null){
+	function __construct(&$table,&$datainfo,&$db = null){
 			if($db !== null){
 				$this->db = &$db;
 			}else{

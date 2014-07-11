@@ -1,10 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>UEditor</id>
 <name>UEditor编辑器</name>
 <url>http://www.rainbowsoft.org/</url>
 <note>UEditor编辑器.</note>
-<description>ZBP的默认编辑器；1.1版改进了上传文件时没有权限的说明；</description>
+<description>ZBP的默认编辑器；
+现版本号1.4.4。</description>
 <path></path>
 <include>include.php</include>
 <level>1</level>
@@ -19,9 +20,9 @@
   <url></url>
 </source>
 <adapted>130707</adapted>
-<version>1.5</version>
+<version>1.4.4.3</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2014-03-19</modified>
+<modified>2014-07-10</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

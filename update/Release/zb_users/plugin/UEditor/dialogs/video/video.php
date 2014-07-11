@@ -12,10 +12,10 @@
     <div id="videoTab">
         <div id="tabHeads" class="tabhead">
             <span tabSrc="video" class="focus" data-content-id="video"><var id="lang_tab_insertV"></var></span>
+            <span tabSrc="upload" data-content-id="upload"><var id="lang_tab_uploadV"></var></span>
         </div>
-        <!--<span tabSrc="video" data-content-id="videoSearch"><var id="lang_tab_searchV"></var></span>-->
         <div id="tabBodys" class="tabbody">
-            <div id="video" class="panel">
+            <div id="video" class="panel focus">
                <table><tr><td><label for="videoUrl" class="url"><var id="lang_video_url"></var></label></td><td><input id="videoUrl" type="text"></td></tr></table>
                <div id="preview"></div>
                <div id="videoInfo">
@@ -32,12 +32,55 @@
                   </fieldset>
                </div>
             </div>
+            <div id="upload" class="panel">
+                <div id="upload_left">
+                    <div id="queueList" class="queueList">
+                        <div class="statusBar element-invisible">
+                            <div class="progress">
+                                <span class="text">0%</span>
+                                <span class="percentage"></span>
+                            </div><div class="info"></div>
+                            <div class="btns">
+                                <div id="filePickerBtn"></div>
+                                <div class="uploadBtn"><var id="lang_start_upload"></var></div>
+                            </div>
+                        </div>
+                        <div id="dndArea" class="placeholder">
+                            <div class="filePickerContainer">
+                                <div id="filePickerReady"></div>
+                            </div>
+                        </div>
+                        <ul class="filelist element-invisible">
+                            <li id="filePickerBlock" class="filePickerBlock"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="uploadVideoInfo">
+                    <fieldset>
+                        <legend><var id="lang_upload_size"></var></legend>
+                        <table>
+                            <tr><td><label><var id="lang_upload_width"></var></label></td><td><input class="txt" id="upload_width" type="text"/></td></tr>
+                            <tr><td><label><var id="lang_upload_height"></var></label></td><td><input class="txt" id="upload_height" type="text"/></td></tr>
+                        </table>
+                    </fieldset>
+                    <fieldset>
+                        <legend><var id="lang_upload_alignment"></var></legend>
+                        <div id="upload_alignment"></div>
+                    </fieldset>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<script type="text/javascript" src="video.js"></script>
-<script type="text/javascript">
 
-</script>
+<!-- jquery -->
+    <script type="text/javascript" src="../../../../../zb_system/script/common.js"></script>
+
+<!-- webuploader -->
+<script type="text/javascript" src="../../third-party/webuploader/webuploader.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../third-party/webuploader/webuploader.css">
+
+<!-- video -->
+<script type="text/javascript" src="video.js"></script>
 </body>
 </html>

@@ -34,17 +34,20 @@ function UninstallPlugin_UEditor(){
 
 }
 
-function ueditor_addscript_begin(){
+function ueditor_addscript_begin()
+{
 	global $zbp;
 	echo '<script type="text/javascript" src="' . $zbp->host . 'zb_users/plugin/UEditor/ueditor.config.php"></script>';
 	echo '<script type="text/javascript" src="' . $zbp->host . 'zb_users/plugin/UEditor/ueditor.all.min.js"></script>';
+	echo '<style type="text/css">#editor_content{height:auto}</style>';
 }
 
 
-function ueditor_addscript_end(){
+function ueditor_addscript_end()
+{
 	global $zbp;
 
-$s=<<<js
+$s = <<<js
 <script type="text/javascript">
 
 var EditorIntroOption = {
