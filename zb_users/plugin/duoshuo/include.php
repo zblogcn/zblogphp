@@ -80,7 +80,7 @@ function duoshuo_create_functions()
 {
 	global $zbp;
 	//global $duoshuo;
-	if(!isset($zbp->modulesbyfilename['duoshuo_recentcomments']))
+	if(!isset($zbp->modulesbyfilename['Duoshuo_RecentComments']))
 	{
 		$t = new Module();
 		$t->Name = "多说最新评论";
@@ -93,7 +93,7 @@ function duoshuo_create_functions()
 		$t->Content = '<ul class="ds-recent-comments" data-num-items="10"></ul>';
 		$t->Save();
 	}
-	if(!isset($zbp->modulesbyfilename['duoshuo_topthreads']))
+	if(!isset($zbp->modulesbyfilename['Duoshuo_TopThreads']))
 	{
 		$t = new Module();
 		$t->Name = "多说最热文章";
