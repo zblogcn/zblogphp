@@ -33,7 +33,7 @@ function Pad_Main(){
 		if(isset($_GET['q']))Pad_Search();
 
 		Pad_Export();
-		die();
+		die;
 	}
 	if(GetVars('mod','GET')=='pc'){
 		return null;
@@ -44,7 +44,6 @@ function Pad_Main(){
 
 	if(CheckRegExp($UA,$Pad_List)==true){
 		Pad_Export();
-		die();
 	}
 	
 }
@@ -145,16 +144,30 @@ function Pad_Pre(){
 
 function Pad_Export(){
 	global $zbp;
-	
-	Pad_Pre();
-	
-	if(isset($_GET['id'])||isset($_GET['alias'])){
+
+	if( $zbp->currenturl==$zbp->cookiespath ||
+		$zbp->currenturl==$zbp->cookiespath . 'index.php' ){
+		Pad_Pre();
+		$zbp->template->SetTemplate('index');
+		ViewList(null,null,null,null,null);
+		die;
+	}elseif(isset($_GET['id'])||isset($_GET['alias'])){
+		Pad_Pre();
 		$zbp->template->SetTemplate('single');
 		ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
-	}else{
+		die;
+	}elseif(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])){
+		Pad_Pre();
 		$zbp->template->SetTemplate('index');
 		ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('date','GET'),GetVars('tags','GET'));
+		die;
+	}elseif(GetVars('mod','GET')=='pad'){
+		Pad_Pre();
+		$zbp->template->SetTemplate('index');
+		ViewList(null,null,null,null,null);
+		die;
 	}
+
 }
 
 
