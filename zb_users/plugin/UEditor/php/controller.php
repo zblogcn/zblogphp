@@ -4,7 +4,7 @@
 date_default_timezone_set("Asia/chongqing");
 header("Content-Type: text/html; charset=utf-8");
 
-require('config.php');
+require('ue.config.php');
 $action = $_GET['action'];
 
 switch ($action) {

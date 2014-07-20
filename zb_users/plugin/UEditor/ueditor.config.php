@@ -49,7 +49,8 @@ foreach ($array_config as $key => $value) {
 	$output_js .= '"' . $key . '":' . $value . ',';
 }
 
-$output_js .= '"zb_full":""}})();';
+$output_js .= '"zb_full":""};';
+$output_js .= '})();';
 
 
 //Code here
