@@ -738,7 +738,24 @@ class ZBlogPHP {
 		if( strpos('|SAE|BAE2|ACE|TXY|', '|'.$this->option['ZC_YUN_SITE'].'|')===false ){
 			$s="<?php\r\n";
 			$s.="return ";
-			$s.=var_export($this->option,true);
+			$option = array();
+			foreach ($this->option as $key => $value) {
+				if($key=='ZC_YUN_SITE')$option[$key]=$value;
+				if($key=='ZC_DATABASE_TYPE')$option[$key]=$value;
+				if($key=='ZC_SQLITE_NAME')$option[$key]=$value;
+				if($key=='ZC_SQLITE_PRE')$option[$key]=$value;
+				if($key=='ZC_MYSQL_SERVER')$option[$key]=$value;
+				if($key=='ZC_MYSQL_USERNAME')$option[$key]=$value;
+				if($key=='ZC_MYSQL_PASSWORD')$option[$key]=$value;
+				if($key=='ZC_MYSQL_NAME')$option[$key]=$value;
+				if($key=='ZC_MYSQL_CHARSET')$option[$key]=$value;
+				if($key=='ZC_MYSQL_PRE')$option[$key]=$value;
+				if($key=='ZC_MYSQL_ENGINE')$option[$key]=$value;
+				if($key=='ZC_MYSQL_PORT')$option[$key]=$value;
+				if($key=='ZC_MYSQL_PERSISTENT')$option[$key]=$value;
+				if($key=='ZC_SITE_TURNOFF')$option[$key]=$value;		
+			}
+			$s.=var_export($option,true);
 			$s.="\r\n?>";
 			@file_put_contents($this->usersdir . 'c_option.php',$s);
 		}

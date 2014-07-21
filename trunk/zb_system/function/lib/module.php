@@ -76,4 +76,12 @@ class Module extends Base{
 		return parent::__get($name);
 	}
 
+	/**
+	 * @return bool
+	 */
+	function Save(){
+		global $zbp;
+		return parent::Save();
+	}
+
 }
