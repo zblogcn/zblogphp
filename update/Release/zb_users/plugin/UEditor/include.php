@@ -92,6 +92,10 @@ $(document).ready(function(){
 	$('#edit').submit(function(){if(editor_api.editor.content.obj.queryCommandState('source')==1) editor_api.editor.content.obj.execCommand('source');
 	if(editor_api.editor.intro.obj.queryCommandState('source')==1) editor_api.editor.intro.obj.execCommand('source');}) 
 	/*源码模式下保存时必须切换*/
+
+
+	if (("http://" + bloghost + "/").indexOf(location.host.toLowerCase()) < 0)
+		alert("您设置了域名固化，请使用" + bloghost + "访问或进入后台修改域名，否则图片无法上传。");
 });
 
 }
