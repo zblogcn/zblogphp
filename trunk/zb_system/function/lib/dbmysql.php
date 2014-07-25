@@ -107,7 +107,8 @@ class DbMySQL implements iDataBase {
 	 * 关闭数据库连接
 	 */
 	function Close(){
-		mysql_close($this->db);
+		if(is_resource($this->db))
+			mysql_close($this->db);
 	}
 
 	/**
