@@ -6,6 +6,24 @@
  * @copyright (C) RainbowSoft Studio
  */
 
+/**
+ * Operation System
+ */
+define('IS_WINDOWS', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'));
+define('IS_UNIX', (strtoupper(PHP_OS) === 'UNIX'));
+define('IS_LINUX', (strtoupper(PHP_OS) === 'LINUX'));
+define('IS_DARWIN', (strtoupper(PHP_OS) === 'DARWIN'));
+define('IS_CYGWIN', (strtoupper(substr(PHP_OS, 0, 6)) === 'CYGWIN'));
+define('IS_BSD', (strtoupper(substr(PHP_OS, -3)) === 'BSD'));
+
+/**
+ * Web Server
+ */
+define('IS_APACHE', preg_match("/apache/i", $_SERVER['SERVER_SOFTWARE']));
+define('IS_IIS', preg_match("/microsoft-iis/i", $_SERVER['SERVER_SOFTWARE']));
+define('IS_NGINX', preg_match("/nginx/i", $_SERVER['SERVER_SOFTWARE']));
+define('IS_LIGHTTPD', preg_match("/lighttpd/i", $_SERVER['SERVER_SOFTWARE']));
+define('IS_KANGLE', preg_match("/kangle/i", $_SERVER['SERVER_SOFTWARE']));
 
 /**
  * 自动加载类文件
