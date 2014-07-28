@@ -9,12 +9,12 @@
 /**
  * Operation System
  */
-define('IS_WINDOWS', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'));
+define('IS_WINDOWS', in_array(strtoupper(PHP_OS), array('WINNT', 'WIN32', 'WINDOWS')));
 define('IS_UNIX', (strtoupper(PHP_OS) === 'UNIX'));
 define('IS_LINUX', (strtoupper(PHP_OS) === 'LINUX'));
 define('IS_DARWIN', (strtoupper(PHP_OS) === 'DARWIN'));
 define('IS_CYGWIN', (strtoupper(substr(PHP_OS, 0, 6)) === 'CYGWIN'));
-define('IS_BSD', (strtoupper(substr(PHP_OS, -3)) === 'BSD'));
+define('IS_BSD', in_array(strtoupper(PHP_OS), array('NETBSD', 'OPENBSD', 'FREEBSD')));
 
 /**
  * Web Server
