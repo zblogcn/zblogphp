@@ -326,10 +326,12 @@ class ZBlogException {
 	*/
 	function Display() {
 
-		Http500();
-
-		ob_clean();
-
+		if (!headers_sent())
+		{
+			Http500();
+			ob_clean();
+		}
+		
 		require dirname(__FILE__) . '/../defend/error.html';
 		RunTime();
 		die();
