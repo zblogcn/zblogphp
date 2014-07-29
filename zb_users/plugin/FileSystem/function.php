@@ -1,9 +1,27 @@
 <?php
+define('FILESYSTEM_IN_WINDOWS', in_array(strtoupper(PHP_OS), array('WINNT', 'WIN32', 'WINDOWS')));
+
+/**
+	取得用于输出的文件名
+**/
+function get_output_filename($filename)
+{
+	return FILESYSTEM_IN_WINDOWS ? iconv('GBK', 'UTF-8//IGNORE', $filename) : $filename;
+}
+
+/**
+	取得用于读入的文件名
+**/
+function get_input_filename($filename)
+{
+	return FILESYSTEM_IN_WINDOWS ? iconv('UTF-8', 'GBK//IGNORE', $filename) : $filename;
+}
+
 /**
 插件函数
 **/
 function Get_Filelist($current_path){
-	$current_path = iconv('UTF-8','GB2312',$current_path);
+	$current_path = get_input_filename($current_path);
 	$file_list = array();
 	//遍历目录取得文件信息
 	if ($handle = opendir($current_path)) {
@@ -14,7 +32,7 @@ function Get_Filelist($current_path){
 				$file_list['dir'][] = array(
 					'has_file' => (count(scandir($file)) > 2), //文件夹是否包含文件
 					'filesize' => 0, //文件大小
-					'filename' => iconv('GB2312','UTF-8',$filename), //文件名，包含扩展名
+					'filename' => get_output_filename($filename), //文件名，包含扩展名
 					'fileperms' => substr(sprintf('%o', fileperms($current_path . $filename)), -4), //文件权限
 					'datetime' => date('Y-m-d H:i:s', filemtime($file)), //文件最后修改时间
 				);
@@ -23,7 +41,7 @@ function Get_Filelist($current_path){
 				$file_list['file'][] = array(
 					'filesize' => format_size(filesize($file)),//文件大小
 					'filetype' => strtolower($file_ext), //文件类别，用扩展名判断);
-					'filename' => iconv('GB2312','UTF-8',$filename), //文件名，包含扩展名
+					'filename' => get_output_filename($filename), //文件名，包含扩展名
 					'fileperms' => substr(sprintf('%o', fileperms($current_path . $filename)), -4), //文件权限
 					'datetime' => date('Y-m-d H:i:s', filemtime($file)), //文件最后修改时间
 				);
@@ -80,24 +98,31 @@ function GetFileimg($arg) {
 	}
 }
 
-function command_panel($current_path, $filename, $bloghost, $blogpath, $isdir, $type){
+function command_panel($current_path, $filename, $bloghost, $blogpath, $isdir, $type)
+{
+	$output_array = array();
 	$zbsys_file = array('feed.php', 'index.php', 'search.php', 'zb_users', 'zb_system', 'zb_system/cmd.php', 'zb_system/login.php', 'zb_system/function', 'zb_users/language', 'zb_users/plugin', 'zb_users/template', 'zb_users/theme');
-	$edit_file = array('asp',  'aspx',  'php',  'jsp',  'css',  'js', 'htm',  'html',  'mth',  'xml',  'shtml', 'sql', 'txt');
-	$current_path = iconv('UTF-8', 'GB2312', $current_path.$filename);
-	if($isdir){
-		foreach($zbsys_file as $v){
-			if ($current_path == $v){
+	$edit_file = array('asp', 'aspx', 'php', 'jsp', 'css', 'js', 'htm', 'html', 'mht', 'xml', 'shtml', 'sql', 'txt', 'coffee', 'xaml', 'less', 'inc');
+	$current_path = get_output_filename($current_path . $filename);
+	if($isdir)
+	{
+		foreach($zbsys_file as $v)
+		{
+			if ($current_path == $v)
+			{
 				$str = "";
 				break;
 			}
 		}
-		if(!isset($str)) $str ="<a href='#' onclick=\"rename_file('$filename')\" title='重命名'><img src='".$bloghost."zb_system/image/admin/document-rename.png'></a>&nbsp;&nbsp;<a href='#' onclick=\"del_file('$filename')\" title='删除'><img src='".$bloghost."zb_system/image/admin/delete.png'></a>";
+		if(!isset($str)) $str = "<a href=\"#\" onclick=\"rename_file('$filename')\" title=\"重命名\"><img src=\"".$bloghost."zb_system/image/admin/document-rename.png\"></a>&nbsp;&nbsp;<a href=\"#\" onclick=\"del_file('$filename')\" title=\"删除\"><img src=\"".$bloghost."zb_system/image/admin/delete.png\"></a>";
 
 		return $str;
 	
-	}else{
-		$str = "<a href='#' onclick=\"down_file('$filename')\" title='下载'><img src='".$bloghost."zb_system/image/admin/download.png'></a>";
-		if(in_array($type, $edit_file)) $str = $str."&nbsp;&nbsp;<a href='#' onclick=\"edit_file('$filename')\" title='在线编辑'><img src='".$bloghost."zb_system/image/admin/page_edit.png'></a>";	
+	}
+	else
+	{
+		$output_array[] = "<a href=\"#\" onclick=\"down_file('$filename')\" title=\"下载\"><img src=\"".$bloghost."zb_system/image/admin/download.png\"></a>";
+		if(in_array($type, $edit_file)) $output_array[] = "&nbsp;&nbsp;<a href=\"#\" onclick=\"edit_file('$filename')\" title=\"在线编辑\"><img src=\"".$bloghost."zb_system/image/admin/page_edit.png\"></a>";	
 
 		foreach($zbsys_file as $v){
 			if ($current_path == $v){
@@ -105,9 +130,9 @@ function command_panel($current_path, $filename, $bloghost, $blogpath, $isdir, $
 				break;
 			}
 		}
-		if(!isset($sstr)) $str = $str."&nbsp;&nbsp<a href='#' onclick=\"rename_file('$filename')\" title='重命名'><img src='".$bloghost."zb_system/image/admin/document-rename.png'></a>&nbsp;&nbsp;<a href='#' onclick=\"del_file('$filename')\" title='删除'><img src='".$bloghost."zb_system/image/admin/delete.png'></a>";
+		if(!isset($sstr)) $output_array[] = "&nbsp;&nbsp<a href=\"#\" onclick=\"rename_file('$filename')\" title=\"重命名\"><img src=\"".$bloghost."zb_system/image/admin/document-rename.png\"></a>&nbsp;&nbsp;<a href=\"#\" onclick=\"del_file('$filename')\" title=\"删除\"><img src=\"".$bloghost."zb_system/image/admin/delete.png\"></a>";
 
-		return $str;	
+		return implode("\n", $output_array);
 	}
 }
 
