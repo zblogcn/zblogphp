@@ -4,19 +4,19 @@ function convert_article_table($_prefix)
 {	
 	global $zbp;
 	$list = array(
-		"`gid`" => "log_ID",
-		"`title`" => "log_Title",
-		"`date`" => "log_PostTime",
-		"`excerpt`" => "log_Intro",
-		"`content`" => "log_Content",
-		"`alias`" => "log_Alias",
-		"`author`" => "log_AuthorID", 
-		'IF(`sortid` = -1, 1, `sortid`)' => "log_CateID",
-		'IF(`type` =  "blog", 1, 0 )' => "log_Type",
-		"`views`" => "log_ViewNums",
-		"`comnum`" => "log_CommNums",
-		'IF(`top` =  "y", 1, 0 )' => "log_IsTop",
-		'IF(`hide` =  "y", 2, 0 )' => "log_Status",
+		"`ID`" => "log_ID",
+		"`post_title`" => "log_Title",
+		"unix_timestamp(`post_date`)" => "log_PostTime",
+		"`post_excerpt`" => "log_Intro",
+		"`post_content`" => "log_Content",
+		"`post_name`" => "log_Alias",
+		"`post_author`" => "log_AuthorID", 
+		'0' => "log_CateID",
+		'IF(`post_type` =  "page", 0, 1 )' => "log_Type",
+		"0" => "log_ViewNums",
+		"`comment_count`" => "log_CommNums",
+		'0' => "log_IsTop",
+		'IF(`post_status` =  "publish", 0, 1 )' => "log_Status",
 		'""' => "log_Meta"
 	);
 	
@@ -27,7 +27,8 @@ function convert_article_table($_prefix)
 		$ary2[] = $name . ' AS ' . $value;
 	}	
 
-	$sql = build_sql('Post', $_prefix . 'blog', $ary1, $ary2);
+	$sql = build_sql('Post', $_prefix . 'posts', $ary1, $ary2, ' WHERE (((`post_type`="page") OR (`post_type`="post")) AND (`post_status`<>"auto-draft"))');
+
 	return $zbp->db->QueryMulit($sql);
 
 }
@@ -36,19 +37,19 @@ function convert_comment_table($_prefix)
 {
 	global $zbp;
 	$list = array(
-		'comm_ID' => '`cid`',
-		'comm_LogID' => '`gid`',
-		'comm_IsChecking' => 'IF(`hide` =  "y", 1, 0 )',
+		'comm_ID' => '`comment_ID`',
+		'comm_LogID' => '`comment_post_ID`',
+		'comm_IsChecking' => 'IF(`comment_approved` =  "1", 0, 1 )',
 		'comm_RootID' => 0,
-		'comm_ParentID' => '`pid`',
-		'comm_AuthorID' => 0,
-		'comm_Name' => '`poster`',
-		'comm_Content' => '`comment`',
-		'comm_Email' => '`mail`',
-		'comm_HomePage' => '`url`',
-		'comm_PostTime' => '`date`',
-		'comm_IP' => '`ip`',
-		'comm_Agent' => '"Convert from em2zb"',
+		'comm_ParentID' => '`comment_parent`',
+		'comm_AuthorID' => '`user_id`',
+		'comm_Name' => '`comment_author`',
+		'comm_Content' => '`comment_content`',
+		'comm_Email' => '`comment_author_email`',
+		'comm_HomePage' => '`comment_author_url`',
+		'comm_PostTime' => 'unix_timestamp(`comment_date`)',
+		'comm_IP' => '`comment_author_IP`',
+		'comm_Agent' => '`comment_agent`',
 		'comm_Meta' => '""'
 	);
 	
@@ -58,8 +59,7 @@ function convert_comment_table($_prefix)
 		$ary1[] = $name;
 		$ary2[] = $value . ' AS ' . $name;
 	}
-	$sql = build_sql('Comment', $_prefix . 'comment', $ary1, $ary2);
-
+	$sql = build_sql('Comment', $_prefix . 'comments', $ary1, $ary2);
 	return $zbp->db->QueryMulit($sql);
 
 
@@ -69,15 +69,15 @@ function convert_attachment_table($_prefix)
 {
 	global $zbp;
 	$list = array(
-		'ul_ID' => '`aid`',
-		'ul_AuthorID' => 1,
-		'ul_Size' => '`filesize`',
-		'ul_Name' => '`filename`',
-		'ul_SourceName' => '`filename`',
-		'ul_MimeType' => '`mimetype`',
-		'ul_PostTime' => '`addtime`',
+		'ul_ID' => '`ID`',
+		'ul_AuthorID' => '`post_author`',
+		'ul_Size' => '0',
+		'ul_Name' => '`post_title`',
+		'ul_SourceName' => '`post_title`',
+		'ul_MimeType' => '`post_mime_type`',
+		'ul_PostTime' => 'unix_timestamp(`post_date`)',
 		'ul_DownNums' => 0,
-		'ul_LogID' => '`blogid`',
+		'ul_LogID' => '`post_parent`',
 		'ul_Intro' => '""',
 		'ul_Meta' => '""'
 	);
@@ -88,8 +88,8 @@ function convert_attachment_table($_prefix)
 		$ary1[] = $name;
 		$ary2[] = $value . ' AS ' . $name;
 	}
-	$sql = build_sql('Upload', $_prefix . 'attachment', $ary1, $ary2);
-
+	$sql = build_sql('Upload', $_prefix . 'posts', $ary1, $ary2, ' WHERE (`post_type`="attachment")');
+	//die($sql);
 	return $zbp->db->QueryMulit($sql);
 }
 
@@ -285,15 +285,14 @@ function upgrade_tag_rebuild()
 
 
 
-function build_sql($zbp_field, $em_table, $array4zbp, $array4em)
+function build_sql($zbp_field, $em_table, $array4zbp, $array4em, $where = '')
 {
 	global $zbp;
 	$table = str_replace('%pre%', $zbp->db->dbpre, $GLOBALS['table'][$zbp_field]);
-	$sql  = 'DROP TABLE `' . $table . '`; ';
-	$sql .= $zbp->db->sql->CreateTable($GLOBALS['table'][$zbp_field], $GLOBALS['datainfo'][$zbp_field]);
+	$sql  = 'TRUNCATE `' . $table . '`; ';
 	$sql .= 'INSERT INTO ' . $table;
 	$sql .= ' (' . implode(',', $array4zbp) . ') ';
-	$sql .= 'SELECT ' . implode(',', $array4em) . ' FROM `' . $em_table . '`;';
+	$sql .= 'SELECT ' . implode(',', $array4em) . ' FROM `' . $em_table . '` ' . $where . ';';
 	return $sql;
 }
 

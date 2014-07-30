@@ -289,8 +289,7 @@ function build_sql($zbp_field, $em_table, $array4zbp, $array4em)
 {
 	global $zbp;
 	$table = str_replace('%pre%', $zbp->db->dbpre, $GLOBALS['table'][$zbp_field]);
-	$sql  = 'DROP TABLE `' . $table . '`; ';
-	$sql .= $zbp->db->sql->CreateTable($GLOBALS['table'][$zbp_field], $GLOBALS['datainfo'][$zbp_field]);
+	$sql  = 'TRUNCATE `' . $table . '`; ';
 	$sql .= 'INSERT INTO ' . $table;
 	$sql .= ' (' . implode(',', $array4zbp) . ') ';
 	$sql .= 'SELECT ' . implode(',', $array4em) . ' FROM `' . $em_table . '`;';
