@@ -2195,7 +2195,7 @@ class ZBlogPHP {
 			if(ini_get('output_handler'))return false;
 			$a=ob_list_handlers();
 			if(in_array('ob_gzhandler',$a) || in_array('zlib output compression',$a))return false;
-			if(function_exists('ini_set')){
+			if(function_exists('ini_set') && $this->option['ZC_YUN_SITE']!=='SAE'){
 				ini_set('zlib.output_compression', 'On');
 				ini_set('zlib.output_compression_level', '5');
 			}elseif(function_exists('ob_gzhandler')){
