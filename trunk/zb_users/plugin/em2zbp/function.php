@@ -12,7 +12,7 @@ function convert_article_table($_prefix)
 		"`alias`" => "log_Alias",
 		"`author`" => "log_AuthorID", 
 		'IF(`sortid` = -1, 1, `sortid`)' => "log_CateID",
-		'IF(`type` =  "blog", 1, 0 )' => "log_Type",
+		'IF(`type` =  "page", 1, 0 )' => "log_Type",
 		"`views`" => "log_ViewNums",
 		"`comnum`" => "log_CommNums",
 		'IF(`top` =  "y", 1, 0 )' => "log_IsTop",
