@@ -22,12 +22,25 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 $prefix = GetVars('prefix', 'GET');
 
-//convert_article_table($prefix);
+convert_article_table($prefix);
 
-//convert_comment_table($prefix);
-
+convert_comment_table($prefix);
 
 convert_attachment_table($prefix);
+
+convert_category_table($prefix);
+
+convert_tag_table($prefix);
+
+upgrade_comment_id();
+
+convert_user_table($prefix);
+
+upgrade_user_rebuild();
+
+upgrade_category_and_tag_count($prefix);
+
+finish_convert();
 ?>
 
 	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/wp2zbp/logo.png';?>");</script>		

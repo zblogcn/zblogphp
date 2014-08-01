@@ -42,4 +42,19 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 RunTime();
+/*
+0,1,2,7,10
+
+SELECT * FROM `wp_users`,`wp_usermeta` WHERE `wp_users`.`ID`=`wp_usermeta`.`user_id`
+
+
+SELECT * FROM `wp_users` INNER JOIN `wp_usermeta` WHERE `wp_users`.`ID`=`wp_usermeta`.`user_id`
+
+
+SELECT * FROM `wp_users`,`wp_usermeta` WHERE `wp_users`.`ID`=`wp_usermeta`.`user_id` AND `wp_usermeta`.`meta_key`="wp_user_level"
+
+
+SELECT * FROM `wp_posts`,`wp_postmeta` WHERE (`wp_posts`.`ID`=`wp_postmeta`.`post_id` AND `wp_posts`.`post_type`="attachment" AND `wp_postmeta`.`meta_key`="_wp_attached_file");
+
+*/
 ?>
