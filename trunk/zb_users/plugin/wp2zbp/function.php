@@ -12,7 +12,7 @@ function convert_article_table($_prefix)
 		"`post_name`" => "log_Alias",
 		"`post_author`" => "log_AuthorID", 
 		'0' => "log_CateID",
-		'IF(`post_type` =  "page", 0, 1 )' => "log_Type",
+		'IF(`post_type` =  "post", 0, 1 )' => "log_Type",
 		"0" => "log_ViewNums",
 		"`comment_count`" => "log_CommNums",
 		'0' => "log_IsTop",
@@ -72,7 +72,7 @@ function convert_attachment_table($_prefix)
 		'ul_ID' => '`ID`',
 		'ul_AuthorID' => '`post_author`',
 		'ul_Size' => '0',
-		'ul_Name' => '`post_title`',
+		'ul_Name' => '`meta_value`',
 		'ul_SourceName' => '`post_title`',
 		'ul_MimeType' => '`post_mime_type`',
 		'ul_PostTime' => 'unix_timestamp(`post_date`)',
@@ -88,7 +88,12 @@ function convert_attachment_table($_prefix)
 		$ary1[] = $name;
 		$ary2[] = $value . ' AS ' . $name;
 	}
-	$sql = build_sql('Upload', $_prefix . 'posts', $ary1, $ary2, ' WHERE (`post_type`="attachment")');
+	$sql = build_sql('Upload',
+	$_prefix . 'posts' . '`,`' . $_prefix . 'postmeta', 
+	$ary1, 
+	$ary2, 
+	' WHERE (`'.$_prefix.'posts`.`ID`=`'.$_prefix.'postmeta`.`post_id` AND `'.$_prefix.'posts`.`post_type`="attachment" AND `'.$_prefix.'postmeta`.`meta_key`="_wp_attached_file")'
+	);
 	//die($sql);
 	return $zbp->db->QueryMulit($sql);
 }
@@ -97,14 +102,14 @@ function convert_category_table($_prefix)
 {
 	global $zbp;
 	$list = array(
-		'cate_ID' => '`sid`',
-		'cate_Name' => '`sortname`',
-		'cate_Order' => '`taxis`',
+		'cate_ID' => '`term_id`',
+		'cate_Name' => '`name`',
+		'cate_Order' => '0',
 		'cate_Count' => '0', 
-		'cate_Alias' => '`alias`',
-		'cate_Intro' => '`description`',
-		'cate_RootID' => '`pid`',
-		'cate_ParentID' => '`pid`',
+		'cate_Alias' => '`slug`',
+		'cate_Intro' => '""',
+		'cate_RootID' => '0',
+		'cate_ParentID' => '0',
 		'cate_Template' => '""',
 		'cate_LogTemplate' => '""',
 		'cate_Meta' => '""',
@@ -116,8 +121,8 @@ function convert_category_table($_prefix)
 		$ary1[] = $name;
 		$ary2[] = $value . ' AS ' . $name;
 	}
-	$sql = build_sql('Category', $_prefix . 'sort', $ary1, $ary2);
-
+	$sql = build_sql('Category', $_prefix . 'terms', $ary1, $ary2,' WHERE `term_id` IN ( SELECT `term_id` FROM `'. $_prefix .'term_taxonomy` WHERE `taxonomy`="category")');
+	//die($sql);
 	return $zbp->db->QueryMulit($sql);
 }
 
@@ -125,12 +130,12 @@ function convert_tag_table($_prefix)
 {
 	global $zbp;
 	$list = array(
-		'tag_ID' => '`tid`',
-		'tag_Name' => '`tagname`',
+		'tag_ID' => '`term_id`',
+		'tag_Name' => '`name`',
 		'tag_Order' => '0',
 		'tag_Count' => '0',
-		'tag_Alias' => '""', 
-		'tag_Intro' => '`gid`',
+		'tag_Alias' => '`slug`', 
+		'tag_Intro' => '""',
 		'tag_Template' => '""',
 		'tag_Meta' => '""'
 	);
@@ -141,53 +146,69 @@ function convert_tag_table($_prefix)
 		$ary1[] = $name;
 		$ary2[] = $value . ' AS ' . $name;
 	}
-	$sql = build_sql('Tag', $_prefix . 'tag', $ary1, $ary2);
-
+	$sql = build_sql('Tag', $_prefix . 'terms', $ary1, $ary2,' WHERE `term_id` IN ( SELECT `term_id` FROM `'. $_prefix .'term_taxonomy` WHERE `taxonomy`="post_tag")');
+	//die($sql);
 	return $zbp->db->QueryMulit($sql);
 }
 
 function convert_user_table($_prefix)
 {
 	global $zbp;
-	
-	$list = array(
-		'mem_ID' => '`uid`',
-		'mem_Guid' => '"' . $zbp->user->Guid . '"', //Todo: Guid
-		'mem_Level' => 'IF(`role` =  "admin", 1, 4 )', 
-		'mem_Status' => '0',
-		'mem_Name' => '`username`',
-		'mem_Password' => '"' . $zbp->user->Password .'"', //Todo: Password
-		'mem_Email' => '`email`',
-		'mem_HomePage' => '""',
-		'mem_IP' => '""',
-		'mem_PostTime' => time(),
-		'mem_Alias' => '`nickname`',
-		'mem_Intro' => '`description`',
-		'mem_Articles' => 0, 
-		'mem_Pages' => 0, 
-		'mem_Comments' => 0,
-		'mem_Uploads' => 0, 
-		'mem_Template' => '""',
-		'mem_Meta' => '""'
+
+	$sql = $zbp->db->sql->Select(
+		$_prefix . 'users' . ',' . $_prefix . 'usermeta',
+		array('*'),
+		array(
+			array('CUSTOM',$_prefix . 'users.ID=' . $_prefix . 'usermeta.user_id'),
+			array('CUSTOM',$_prefix . 'usermeta.meta_key="wp_user_level"'),
+			),
+		'',
+		'',
+		''
 	);
 
-	$ary1 = array(); $ary2 = array();
-	foreach($list as $name => $value)
-	{
-		$ary1[] = $name;
-		$ary2[] = $value . ' AS ' . $name;
-	}
-	$sql = build_sql('Member', $_prefix . 'user', $ary1, $ary2);
+	$array=$zbp->db->Query($sql);
 
-	return $zbp->db->QueryMulit($sql);
+	$zbp->db->Query('TRUNCATE `'.$zbp->table['Member'].'`;');
+
+	$isadmin=false;
+
+	foreach($array as $key=>$value){
+		$amem=array();
+		$guid=GetGuid();
+
+		$amem['mem_ID']=$value['ID'];
+		$amem['mem_Guid']=$guid;
+		$amem['mem_Name']=$value['user_login'];
+		$amem['mem_Alias']=$value['user_nicename'];
+		$amem['mem_Email']=$value['user_email'];
+		$amem['mem_HomePage']=$value['user_url'];
+		$amem['mem_Password']=Member::GetPassWordByGuid(GetGuid(),$guid);
+		$amem['mem_PostTime']=strtotime($value['user_registered']);
+		$amem['mem_Level']=5;
+		if($value['meta_value']==10)$amem['mem_Level']=1;
+		if($value['meta_value']==7 )$amem['mem_Level']=2;
+		if($value['meta_value']==2 )$amem['mem_Level']=3;
+		if($value['meta_value']==1 )$amem['mem_Level']=4;
+		if($value['meta_value']==0 )$amem['mem_Level']=5;
+
+		if($isadmin==false && $amem['mem_Level']==1){
+			$amem['mem_Name']=$zbp->user->Name;
+			$amem['mem_Guid']=$zbp->user->Guid;
+			$amem['mem_Password']=$zbp->user->Password;
+			$isadmin=true;
+		}
+
+		$zbp->db->Query($zbp->db->sql->Insert($zbp->table['Member'],$amem));
+	}
+
+	return ;
 }
 
 function upgrade_comment_id()
 {
 	global $zbp;
 	$comm_list = $zbp->GetCommentList();
-	ob_start();
-	flush();
 	foreach($comm_list as $o)
 	{
 		if ($o->ParentID == 0) continue;
@@ -195,8 +216,6 @@ function upgrade_comment_id()
 		$o->RootID = $rootid;
 		$o->Save();
 		echo '<p>已转换评论ID：' . $o->ID . '</p>';
-		ob_flush();
-		flush();
 	}
 }
 
@@ -210,12 +229,64 @@ function find_comment_rootid($id)
 		return find_comment_rootid($comment->ParentID);
 }
 
-function upgrade_category_count()
+function upgrade_category_and_tag_count($_prefix)
 {
 	global $zbp;
+	
+	$sql = $zbp->db->sql->Select(
+		$_prefix . 'term_relationships' . ',' . $_prefix . 'term_taxonomy',
+		array('*'),
+		array(
+			array('CUSTOM',$_prefix . 'term_relationships.term_taxonomy_id=' . $_prefix . 'term_taxonomy.term_taxonomy_id'),
+			array('CUSTOM',$_prefix . 'term_taxonomy.taxonomy="category"'),
+			),
+		'',
+		'',
+		''
+	);
+
+	$array=$zbp->db->Query($sql);
+	foreach($array as $key=>$value){
+		$zbp->db->Query($zbp->db->sql->Update(
+				$zbp->table['Post'],
+				array('log_CateID'=>$value['term_id']),
+				array(array('=','log_ID',$value['object_id']))
+			)
+		);
+	}
+	
+	$sql = $zbp->db->sql->Select(
+		$_prefix . 'term_relationships' . ',' . $_prefix . 'term_taxonomy',
+		array('*'),
+		array(
+			array('CUSTOM',$_prefix . 'term_relationships.term_taxonomy_id=' . $_prefix . 'term_taxonomy.term_taxonomy_id'),
+			array('CUSTOM',$_prefix . 'term_taxonomy.taxonomy="post_tag"'),
+			),
+		'',
+		'',
+		''
+	);
+	
+	$array=$zbp->db->Query($sql);
+	$array2=array();
+	foreach($array as $key=>$value){
+		if(isset($array2[$value['object_id']])){
+			$array2[$value['object_id']] .= '{' . $value['term_id'] .'}';
+		}else{
+			$array2[$value['object_id']] = '{' . $value['term_id'] .'}';
+		}
+	}
+
+	foreach($array2 as $key=>$value){
+		$zbp->db->Query($zbp->db->sql->Update(
+				$zbp->table['Post'],
+				array('log_Tag'=>$value),
+				array(array('=','log_ID',$key))
+			)
+		);
+	}	
+	
 	$cate_list = $zbp->GetCategoryList();
-	ob_start();
-	flush();
 	foreach($cate_list as $o)
 	{
 		$sql = 'SELECT COUNT(log_ID) AS `c` FROM `' . $zbp->db->dbpre . 'post` WHERE `log_CateID` = ' . $o->ID;
@@ -227,8 +298,6 @@ function upgrade_category_count()
 		
 		$o->Save();
 		echo '<p>分类ID=' . $o->ID . ' 计数=' . $o->Count . '</p>';
-		ob_flush();
-		flush();
 	}
 }
 
@@ -236,8 +305,6 @@ function upgrade_user_rebuild()
 {
 	global $zbp;
 	$user_list = $zbp->GetMemberList();
-	ob_start();
-	flush();
 	foreach($user_list as $o)
 	{
 		$sql = 'SELECT COUNT(log_ID) AS `c` FROM `' . $zbp->db->dbpre . 'post` WHERE `log_Type` = 1 AND `log_AuthorID` = ' . $o->ID;
@@ -247,17 +314,9 @@ function upgrade_user_rebuild()
 		$sql = 'SELECT COUNT(log_ID) AS `c` FROM `' . $zbp->db->dbpre . 'post` WHERE `log_Type` = 0 AND `log_AuthorID` = ' . $o->ID;
 		$result = $zbp->db->Query($sql);
 		if (count($result) > 0) 	$o->Pages = $result[0]['c'];
-		
-		if ($o->ID > 1)
-		{
-			$o->Guid = substr(md5('emlog' . GetGuid() . time() ), 0, 22);
-			$o->Password = $o->GetPassWordByGuid('emlogolduser', $o->Guid);
-		}
-		
+
 		$o->Save();
-		echo '<p>用户ID=' . $o->ID . ' 文章=' . $o->Articles . ' 页面=' . $o->Pages . ' 密码=emlogolduser</p>';
-		ob_flush();
-		flush();
+		echo '<p>用户ID=' . $o->ID . ' 文章=' . $o->Articles . ' 页面=' . $o->Pages . '</p>';
 	}
 }
 
@@ -265,8 +324,6 @@ function upgrade_tag_rebuild()
 {
 	global $zbp;
 	$tag_list = $zbp->GetTagList();
-	ob_start();
-	flush();
 	foreach($tag_list as $o)
 	{
 		$intro_array = explode(',', $o->Intro);
@@ -276,8 +333,6 @@ function upgrade_tag_rebuild()
 		$o->Intro = '';
 		$o->Save();
 		echo '<p>Tag ID=' . $o->ID . ' Count=' . $o->Count . '</p>';
-		ob_flush();
-		flush();
 	}
 
 }
@@ -301,10 +356,10 @@ function finish_convert()
 	global $zbp;
 	echo '<p>恭喜您，数据转移成功！</p>';
 	echo '<p>转移完成后，请停用并删除此插件，否则可能会导致未知的安全问题。</p>';
-	echo '<p>除了管理员以外，用户密码已经被重置为emlogolduser。</p>';
+	echo '<p>除了管理员以外，用户密码已经被重置为随机了，管理员可以再重置的。</p>';
 	echo '<p>现在，让我们畅游Z-Blog PHP吧！</p>';
 	echo '<p>&nbsp;</p>';
-	echo '<p>一些链接：<a class="href-ajax" href="convert.php?func=drop_emlog&prefix='. htmlspecialchars(GetVars('prefix', 'GET')). '">删除emlog数据表</a>';
+	echo '<p>一些链接：';//<a class="href-ajax" href="convert.php?func=drop_emlog&prefix='. htmlspecialchars(GetVars('prefix', 'GET')). '">删除emlog数据表</a>';
 	echo '&nbsp;&nbsp;<a href="../../../zb_system/cmd.php?act=PluginDis&name=em2zbp&token=' . $zbp->GetToken() . '">停用本插件</a>';
 	echo '&nbsp;&nbsp;<a href="../AppCentre/main.php">去应用中心下载最新应用</a>';
 	echo '&nbsp;&nbsp;<a href="../../../zb_system/cmd.php?act=ArticleEdt">写一篇新的文章</a></p>';
