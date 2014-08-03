@@ -29,7 +29,27 @@ function convert_article_table($_prefix)
 
 	$sql = build_sql('Post', $_prefix . 'posts', $ary1, $ary2, ' WHERE (((`post_type`="page") OR (`post_type`="post")) AND (`post_status`<>"auto-draft"))');
 
-	return $zbp->db->QueryMulit($sql);
+	$zbp->db->QueryMulit($sql);
+
+	$array=$zbp->GetArticleList(null,null,null,null,null,false);
+	foreach ($array as $a) {
+		if($a->Intro==''){
+
+			if (strpos($a->Content, '<!--more-->') !== false) {
+				$a->Intro = GetValueInArray(explode('<!--more-->', $a->Content), 0);
+			} else {
+				if ($a->Intro == '') {
+					$a->Intro = SubStrUTF8($a->Content, $zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
+					if (strpos($a->Intro, '<') !== false) {
+						$a->Intro = CloseTags($a->Intro);
+					}
+				}
+			}
+		
+		}
+		$a->Save();
+	}
+	return ;
 
 }
 
