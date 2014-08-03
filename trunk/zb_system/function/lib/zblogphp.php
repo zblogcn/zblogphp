@@ -1463,8 +1463,12 @@ class ZBlogPHP {
 		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
 		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
-		return $this->GetList('Post',$sql);
 
+		$array = $this->GetList('Post',$sql);
+		foreach ($array as $a) {
+			$this->posts[$a->ID]=$a;
+		}
+		return $array;
 	}
 
 	/**
@@ -1484,11 +1488,14 @@ class ZBlogPHP {
 		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
 		$array = $this->GetList('Post',$sql);
 
+		foreach ($array as $a) {
+			$this->posts[$a->ID]=$a;
+		}
+
 		if($readtags){
 			$tagstring = '';
 			foreach ($array as $a) {
 				$tagstring .= $a->Tag;
-				$this->posts[$a->ID]=$a;
 			}
 			$this->LoadTagsByIDString($tagstring);
 		}
