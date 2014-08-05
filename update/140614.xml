@@ -57,8 +57,8 @@
 	<file name='zb_system\function\lib\category.php' md5='674B7BA9E65EA86268EEA6578C4342F9' crc32='41F1FC8B'/>
 	<file name='zb_system\function\lib\comment.php' md5='08D77580AD0FD8489519B49407DB394D' crc32='FA0405B0'/>
 	<file name='zb_system\function\lib\counter.php' md5='C69E2F34E3BF86B51BA932308D623211' crc32='3ED53FF'/>
-	<file name='zb_system\function\lib\dbmysql.php' md5='56B242B216E64A610C7B989D7A7E88F4' crc32='329A4B65'/>
-	<file name='zb_system\function\lib\dbmysqli.php' md5='308DB3DDBB903AA69A8F4644F2E7D86F' crc32='A236993E'/>
+	<file name='zb_system\function\lib\dbmysql.php' md5='6665DB5F5692ADDB629B883E0361095F' crc32='589FE382'/>
+	<file name='zb_system\function\lib\dbmysqli.php' md5='FC2DEA57C3A05E3A099AC01F85C13E5A' crc32='B71BE14A'/>
 	<file name='zb_system\function\lib\dbpdo_mysql.php' md5='7C19C30D6D919E03D230A82CB409594B' crc32='3CDFAE6C'/>
 	<file name='zb_system\function\lib\dbsqlite.php' md5='A0BC0BA8AE3995A272E82DADC0363C5A' crc32='3E1C078B'/>
 	<file name='zb_system\function\lib\dbsqlite3.php' md5='101FD198F3EDADE0ED1A22D250224DEC' crc32='409BC735'/>

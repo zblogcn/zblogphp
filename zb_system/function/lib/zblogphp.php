@@ -694,6 +694,15 @@ class ZBlogPHP {
 		return $this->configs[$name];
 	}
 
+	/**
+	 * 查某Config是否存在
+	 * @param string $name Configs表名
+	 * @return bool
+	 */
+	public function HasConfig($name){
+		return isset($this->configs[$name]);
+	}
+
 ################################################################################################################
 #Cache相关
 

@@ -98,7 +98,8 @@ class DbMySQLi implements iDataBase {
 	* 关闭数据库连接
 	*/
 	function Close(){
-		mysqli_close($this->db);
+		if(is_resource($this->db))
+			mysqli_close($this->db);
 	}
 
 	/**
