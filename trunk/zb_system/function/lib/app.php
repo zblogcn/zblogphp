@@ -476,12 +476,12 @@ class App {
 		}
 
 		foreach ($xml->file as $file) {
+			$s=base64_decode($file->stream);
 			$f=$dir . $file->path;
-			@file_put_contents($f, base64_decode($file->stream));
+			@file_put_contents($f, $s);
 			if(function_exists('chmod')){
 				@chmod($f,0755);
 			}
-
 		}
 		
 		ZBlogException::ResumeErrorHook();
