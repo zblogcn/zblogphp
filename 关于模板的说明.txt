@@ -63,4 +63,4 @@ xxxxxx为模块的filename
   print_r($actions);
   echo '12345';
 {/php}
-注意：zbp模板不能直接使用<?php ?>和<? ?>标签，只能用{php}包含php代码。
+注意：zbp模板不能直接使用<?php ?>和<? ?>标签，只能用{php}包含php代码。 
