@@ -51,7 +51,6 @@ return array(
 	'ZC_DEBUG_MODE' => true,
 	'ZC_DEBUG_MODE_STRICT' => false,
 	'ZC_DEBUG_MODE_WARNING' => true,
-	'ZC_DEBUG_MODE_FULL' => false,
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
 	'ZC_UPDATE_INFO_URL' => 'http://update.zblogcn.com/info/',

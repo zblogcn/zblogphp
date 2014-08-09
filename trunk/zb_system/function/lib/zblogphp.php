@@ -412,10 +412,6 @@ class ZBlogPHP {
 		if(isset($this->option['ZC_DEBUG_MODE_WARNING'])){
 			ZBlogException::$iswarning = (bool)$this->option['ZC_DEBUG_MODE_WARNING'];
 		}
-		if(isset($this->option['ZC_DEBUG_MODE_FULL'])){
-			ZBlogException::$isfull = (bool)$this->option['ZC_DEBUG_MODE_FULL'];
-		}
-		
 
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){
 			$this->host=$this->option['ZC_BLOG_HOST'];
