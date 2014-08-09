@@ -7,6 +7,46 @@
  */
 
 /**
+ * 显示全局变量
+ * @return mixed
+ * @since 1.3.140614
+ * @todo 下版转到debug页
+ */
+function Debug_PrintGlobals(){
+	$a=array();
+	foreach($GLOBALS as $n=>$v){
+		$a[] = $n;
+	}
+	return print_r($a,true);
+}
+
+/**
+ *  打印全局Include文件
+ * @return string 
+ * @since 1.3
+ * @todo 下版转到debug页
+*/
+function Debug_PrintIncludefiles(){
+	$a=array();
+	foreach(get_included_files() as $n=>$v){
+		$a[] = $v;
+	}
+	return print_r($a,true);
+}
+
+/**
+ *  打印全局自定义常量
+ * @return string
+ * @since 1.3
+ * @todo 下版转到debug页
+*/
+function Debug_PrintConstants(){
+	$a=get_defined_constants(true);
+	if(isset($a['user']))$a=$a['user'];
+	return print_r($a,true);
+}
+ 
+/**
  * 错误调度提示
  * @param int $errno 错误级别
  * @param string $errstr 错误信息
@@ -25,17 +65,18 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 
 	if(ZBlogException::$isdisable==true)return true;
 	
-	if(ZBlogException::$isfull==false){
-		if(ZBlogException::$iswarning==false){
-			if( $errno == E_WARNING )return true;
-		}
-		if(ZBlogException::$isstrict==false){
-			if( $errno == E_NOTICE )return true;
-			if( $errno == E_STRICT )return true;
-			if( $errno == E_USER_NOTICE )return true;
-		}
+	if(ZBlogException::$iswarning==false){
+		if( $errno == E_WARNING )return true;
+		if( $errno == E_USER_WARNING )return true;
+	}
+	if(ZBlogException::$isstrict==false){
+		if( $errno == E_NOTICE )return true;
+		if( $errno == E_STRICT )return true;
+		if( $errno == E_USER_NOTICE )return true;
 	}
 
+	if( $errno == E_CORE_WARNING  )return true;
+	if( $errno == E_COMPILE_WARNING  )return true;
 	if( defined('E_DEPRECATED') && $errno== E_DEPRECATED )return true;
 	if( defined('E_USER_DEPRECATED ') && $errno== E_USER_DEPRECATED )return true;
 	
@@ -74,17 +115,18 @@ function Debug_Shutdown_Handler() {
 
 		if(ZBlogException::$isdisable==true)return true;
 
-		if(ZBlogException::$isfull==false){
-			if(ZBlogException::$iswarning==false){
-				if( $error['type'] == E_WARNING )return true;
-			}
-			if(ZBlogException::$isstrict==false){
-				if( $error['type'] == E_NOTICE )return true;
-				if( $error['type'] == E_STRICT )return true;
-				if( $error['type'] == E_USER_NOTICE )return true;
-			}
+		if(ZBlogException::$iswarning==false){
+			if( $error['type'] == E_WARNING )return true;
+			if( $error['type'] == E_USER_WARNING )return true;
 		}
-		
+		if(ZBlogException::$isstrict==false){
+			if( $error['type'] == E_NOTICE )return true;
+			if( $error['type'] == E_STRICT )return true;
+			if( $error['type'] == E_USER_NOTICE )return true;
+		}
+
+		if( $error['type'] == E_CORE_WARNING  )return true;
+		if( $error['type'] == E_COMPILE_WARNING  )return true;
 		if( defined('E_DEPRECATED') && $error['type'] == E_DEPRECATED )return true;
 		if( defined('E_USER_DEPRECATED ') && $error['type'] == E_USER_DEPRECATED )return true;
 
@@ -102,7 +144,6 @@ function Debug_Shutdown_Handler() {
 class ZBlogException {
 	private static $_zbe = null;
 	public static $isdisable = false;
-	public static $isfull = false;
 	private static $_isdisable = null;
 	public static $isstrict = false;
 	public static $iswarning = true;
@@ -223,14 +264,6 @@ class ZBlogException {
 		self::$iswarning = true;
 	}
 	
-	static public function DisableFull() {
-		self::$isfull = false;
-	}
-
-	static public function EnableFull() {
-		self::$isfull = true;
-	}
-	
 	static public function Trace($s) {
 		Logs($s);
 	}
@@ -286,10 +319,12 @@ class ZBlogException {
 	*/
 	function Display() {
 
-		Http500();
-
-		ob_clean();
-
+		if (!headers_sent())
+		{
+			Http500();
+			ob_clean();
+		}
+		
 		require dirname(__FILE__) . '/../defend/error.html';
 		RunTime();
 		die();
