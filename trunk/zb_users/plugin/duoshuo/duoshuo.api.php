@@ -81,6 +81,7 @@ class duoshuo_api
 				array('ds_key'=>$meta->meta->post_id , 'ds_cmtid'=>$c->ID)
 			);
 			$zbp->db->Insert($sql);
+			CountPostArray(array($c->LogID));
 		}
 		
 		$c = NULL; 
@@ -155,11 +156,12 @@ class duoshuo_api
 		global $zbp;
 		global $duoshuo;
 		$ary_cmtid = array();
+		$ary_logid = array();
 		$ds_keylist = $this->implode2(array('ary' => $meta->meta,'before' => "'",'after' => "'",'split_tag' => ','));
 		//我靠好麻烦，MySQL和SQLite还要写不同的，不如直接通用（虽然效率低）
 		$sql = $zbp->db->sql->Select(
 			$duoshuo->db['comment'],
-			'ds_cmtid',
+			'comm_LogId,ds_cmtid',
 			array(array('custom','ds_key In (' . $ds_keylist . ')')),
 			null,
 			null,
@@ -168,9 +170,15 @@ class duoshuo_api
 		$result = $zbp->db->Query($sql);
 		if(count($result)>0)
 		{
-			foreach($result as $rs) $ary_cmtid[] = $rs['ds_cmtid'];
+			foreach($result as $rs)
+			{
+				$ary_cmtid[] = $rs['ds_cmtid'];
+				if (!in_array($rs['comm_LogId']))
+					$ary_logid = $rs['comm_LogId'];
+			}
 			$zbp->db->Delete($zbp->db->sql->Delete('%pre%Comment',array(array('custom','comm_ID In (' .$this->implode2(array('ary' => $ary_cmtid,'before' => "'",'after' => "'",'split_tag' => ',')) . ')'))));
 			$zbp->db->Delete($zbp->db->sql->Delete($duoshuo->db['comment'],array(array('custom','ds_key In (' . $ds_keylist . ')'))));
+			CountPostArray($ary_logid);
 		}
 		
 	}
