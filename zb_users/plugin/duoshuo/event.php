@@ -101,7 +101,7 @@ function api_async()
 	$result['last'] = $_last;
 	$result['now'] = $_now;
 	$result['status'] = $return_string;
-	echo '(' . json_encode($result) . ')';
+	echo '//(' . json_encode($result) . ')';
 	exit();
 }
 
