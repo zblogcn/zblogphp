@@ -66,17 +66,13 @@ function editor4comment_comment_save(&$comment) {
 
 function editor4comment_html_js_add() {
 	global $zbp;
-	echo "\r\n".';document.writeln("<script src=\'' . $zbp->host .'zb_users/plugin/editor4comment/ueditor/umeditor.min.js\' type=\'text/javascript\'></script><link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host .'zb_users/plugin/editor4comment/ueditor/themes/default/css/umeditor.min.css\'/>");'."\r\n";
 ?>
+window.UMEDITOR_CONFIG = {UMEDITOR_HOME_URL : bloghost + "zb_users/plugin/editor4comment/ueditor/",toolbar: ['bold italic underline forecolor link unlink | emotion drafts'],minWidth: parseInt('<?php echo ((int)$zbp->Config('editor4comment')->minWidth == 0 ? 500 : $zbp->Config('editor4comment')->minWidth)?>'),minHeight: parseInt('<?php echo ((int)$zbp->Config('editor4comment')->minHeight == 0 ? 500 : $zbp->Config('editor4comment')->minHeight)?>')};
 ;$(document).ready(function(){
-	window.UMEDITOR_CONFIG = {
-	        UMEDITOR_HOME_URL : bloghost + "zb_users/plugin/editor4comment/ueditor/"
-	        ,toolbar: [
-	            'bold italic underline forecolor ',
-	            'link unlink | emotion drafts'
-	        ]
-	    };
+		<?php //UE压缩过了，再找哪个option好麻烦，直接UMEDITOR_CONFIG方便?>
 	window.COMMENT = UM.getEditor('txaArticle');;
 });
 <?php
+	echo "\r\n".';document.writeln("<script src=\'' . $zbp->host .'zb_users/plugin/editor4comment/ueditor/umeditor.min.js\' type=\'text/javascript\'></script><link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host .'zb_users/plugin/editor4comment/ueditor/themes/default/css/umeditor.min.css\'/>");'."\r\n";
+
 }

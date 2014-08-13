@@ -8,8 +8,17 @@ if (!$zbp->CheckPlugin('editor4comment')) {$zbp->ShowError(48);die();}
 
 $blogtitle='editor4comment';
 require $blogpath . 'zb_system/admin/admin_header.php';
+
+if (GetVars('act', 'GET') == 'save') {
+	$zbp->Config('editor4comment')->minHeight = GetVars('e4c_minHeight', 'POST');
+	$zbp->Config('editor4comment')->minWidth = GetVars('e4c_minWidth', 'POST');
+	$zbp->SaveConfig('editor4comment');
+	$zbp->SetHint('good');
+}
 ?>
 <link href="ueditor/themes/default/css/umeditor.min.css" type="text/css" rel="stylesheet">
+<script type="text/javascript">window.UMEDITOR_CONFIG = {UMEDITOR_HOME_URL : bloghost + "zb_users/plugin/editor4comment/ueditor/",toolbar: ['bold italic underline forecolor ','link unlink | emotion drafts'],minWidth: parseInt('<?php echo ((int)$zbp->Config('editor4comment')->minWidth == 0 ? 500 : $zbp->Config('editor4comment')->minWidth)?>'),minHeight: parseInt('<?php echo ((int)$zbp->Config('editor4comment')->minHeight == 0 ? 500 : $zbp->Config('editor4comment')->minHeight)?>')};
+</script>
 <script type="text/javascript" charset="utf-8" src="ueditor/umeditor.min.js"></script>
 
 <?php
@@ -20,6 +29,32 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div class="SubMenu">
   </div>
   <div id="divMain2">
+	<form action="main.php?act=save" method="post">
+		<table border="1" class="tableFull tableBorder">
+			<thead>
+				<tr>
+					<th>配置名</th>
+					<th>配置项</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>最小高度</td>
+					<td><input type="text" name="e4c_minHeight" style="width:80%" value="<?php echo $zbp->Config('editor4comment')->minHeight;?>"></td>
+				</tr>
+				<tr style="display:none">
+					<td>最小宽度</td>
+					<td><input type="text" name="e4c_minWidth" style="width:80%" value="<?php echo $zbp->Config('editor4comment')->minWidth;?>"></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="submit" class="button" value="提交" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+	<br/>
 <textarea id="myEditor" style="width:90%">
 这是在前台显示的效果。
 &lt;p&gt;表情包请复制到zb_users/emotion文件夹内，编辑器会自动加载。&lt;/p&gt;
