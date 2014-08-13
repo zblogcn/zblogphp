@@ -4,6 +4,8 @@
  * @author 未寒
  * @copyright (C) RainbowSoft Studio
  */
+define('KINDEDITOR_IS_WINDOWS', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'));
+
 require '../../../../../../zb_system/function/c_system_base.php';
 global $zbp;
 $zbp->Load();
@@ -14,34 +16,35 @@ $emot_ext = explode("|", $zbp->option['ZC_EMOTICONS_FILETYPE']);
 
 if ($handle = opendir($root_path)) {
     while (false !== ($filename = readdir($handle))) {
-		if ($filename{0} == '.') continue;
-		$file = $root_path . $filename;
-		if (is_dir($file)) {
-			$emot_dir[] = $filename;
-		}else{
-			continue;
-		}
-		if ($emot = opendir($root_path . $filename . '/')) {
-			while (false !== ($emotname = readdir($emot))) {
-				if ($emotname{0} == '.') continue;
-				$emotpath = $root_path . $emotname . '/' . $emotname;
-				if (!is_dir($emotpath)) {
-					$temp_arr = explode(".", $emotname);
-					$file_ext = array_pop($temp_arr);
-					$file_ext = trim($file_ext);
-					$file_ext = strtolower($file_ext);
-					if (in_array($file_ext, $emot_ext) === true) {
-						$emot_name[$filename][] = $emotname;
-					}
-				}
-			}
-		}
+        if ($filename{0} == '.') continue;
+        $file = $root_path . $filename;
+        if (is_dir($file)) {
+            $emot_dir[] = (KINDEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $filename) : $filename);
+        }else{
+            continue;
+        }
+        if ($emot = opendir($root_path . $filename . '/')) {
+            while (false !== ($emotname = readdir($emot))) {
+                if ($emotname{0} == '.') continue;
+                $emotpath = $root_path . $emotname . '/' . $emotname;
+                if (!is_dir($emotpath)) {
+                    $temp_arr = explode(".", $emotname);
+                    $file_ext = array_pop($temp_arr);
+                    $file_ext = trim($file_ext);
+                    $file_ext = strtolower($file_ext);
+                    if (in_array($file_ext, $emot_ext) === true) {
+                        $encoded = (KINDEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $filename) : $filename);
+                        $emot_name[$encoded][] = (KINDEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $emotname) : $emotname);
+                    }
+                }
+            }
+        }
     }
 
     closedir($handle);
-	
-	//print_r($emot_dir);
-	//print_r($emot_name);
+    
+    //print_r($emot_dir);
+    //print_r($emot_name);
 }
 
 
@@ -54,28 +57,28 @@ if ($handle = opendir($root_path)) {
 *******************************************************************************/
 KindEditor.plugin('emoticons', function (K) {
     var self = this, name = 'emoticons',arrEmots=[],
-		path = (self.emoticonsPath || self.pluginsPath + 'emoticons/images/'),
-		emoticonspluginsPath = self.pluginsPath + 'emoticons/',
-		allowPreview = self.allowPreviewEmoticons === undefined ? true : self.allowPreviewEmoticons;
+        path = (self.emoticonsPath || self.pluginsPath + 'emoticons/images/'),
+        emoticonspluginsPath = self.pluginsPath + 'emoticons/',
+        allowPreview = self.allowPreviewEmoticons === undefined ? true : self.allowPreviewEmoticons;
     self.clickToolbar(name, function () {
         var elements = [],
-			menu = self.createMenu({
-			    name: name
-			}),
-			
+            menu = self.createMenu({
+                name: name
+            }),
+            
             html = '<div class="ke-plugin-emoticons">\
                         <link rel="stylesheet" type="text/css" href="' + emoticonspluginsPath + 'emoticon.css" />\
                         <div id="tabPanel" class="neweditor-tab">\
-						<div id="tabMenu" class="neweditor-tab-h">\
-						<?php 
-						for ($i = 0; $i < count($emot_dir); $i++) {echo '<div>'.$emot_dir[$i].'</div>';}
-						?>
-						</div>\
+                        <div id="tabMenu" class="neweditor-tab-h">\
+                        <?php 
+                        for ($i = 0; $i < count($emot_dir); $i++) {echo '<div>'.$emot_dir[$i].'</div>';}
+                        ?>
+                        </div>\
 
                             <div id="tabContent" class="neweditor-tab-b">\
-						<?php 
-						for ($i = 0; $i < count($emot_dir); $i++) {echo '<div>'.$i.'</div>';}
-						?>
+                        <?php 
+                        for ($i = 0; $i < count($emot_dir); $i++) {echo '<div>'.$i.'</div>';}
+                        ?>
                             </div>\
                         </div>\
                     <div id="tabIconReview"><img id="faceReview" class="review" src="<?php echo $zbp->host;?>zb_system/image/admin/none.gif" /></div></div>\
@@ -143,17 +146,17 @@ KindEditor.plugin('emoticons', function (K) {
         var emotion = {};
         emotion.SmileyPath = path;
         emotion.SmileyBox = {
-		<?php 
-		for ($i = 0; $i < count($emot_dir); $i++) {
-			echo 'tab'.$i.':[';
-			$emot_char = '';
-			if($i == (count($emot_dir)-1)){echo ']';continue;}
-			foreach($emot_name[$emot_dir[$i]] as $v){
-				$emot_char .= "'$v',";
-			}
-			echo $emot_char.'],';
-		}
-		?>};		
+        <?php 
+        for ($i = 0; $i < count($emot_dir); $i++) {
+            echo 'tab'.$i.':[';
+            $emot_char = '';
+            if($i == (count($emot_dir)-1)){echo ']';continue;}
+            foreach($emot_name[$emot_dir[$i]] as $v){
+                $emot_char .= "'$v',";
+            }
+            echo $emot_char.'],';
+        }
+        ?>};        
         emotion.SmileyInfor = emotion.SmileyBox;
         var faceBox = emotion.SmileyBox;
         var inforBox = emotion.SmileyInfor;
@@ -171,7 +174,7 @@ KindEditor.plugin('emoticons', function (K) {
             imageCssOffset: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab'.$i.':30,';}?>},
             tabExist: [<?php for ($i = 0; $i < count($emot_dir); $i++) {echo $i.',';}?>]
         };
-		
+        
         function switchTab(index) {
             if (FaceHandler.tabExist[index] == 0) {
                 FaceHandler.tabExist[index] = 1;
