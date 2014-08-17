@@ -1,0 +1,9 @@
+{
+	"id": "enviroment-check",
+	"name": "常用组件检查",
+	"category": "enviroment",
+	"question": [
+		"验证码图片无法生成", 
+		"无法连接网络"
+	]
+}

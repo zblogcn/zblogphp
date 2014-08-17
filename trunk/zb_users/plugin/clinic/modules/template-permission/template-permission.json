@@ -1,0 +1,8 @@
+{
+	"id": "template-permission",
+	"name": "模板权限检查",
+	"category": "permission",
+	"question": [
+		"模板修改后无效"
+	]
+}
