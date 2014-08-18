@@ -68,6 +68,9 @@ class Member extends Base {
 			if($value==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$value='';
 			return $this->data[$name]  =  $value;
 		}
+		if ($name=='PassWord_MD5Path') {
+			return null;
+		}
 		parent::__set($name, $value);
 	}
 
@@ -113,6 +116,9 @@ class Member extends Base {
 			if($value=='')$value=$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
 			return $value;
 		}
+		if ($name=='PassWord_MD5Path') {
+			return md5($this->PassWord . $zbp->guid);
+		}
 		return parent::__get($name);
 	}
 
@@ -127,7 +133,7 @@ class Member extends Base {
 		return md5(md5($ps). $guid);
 
 	}
-
+	
 	/**
 	 * 保存用户数据
 	 * @return bool

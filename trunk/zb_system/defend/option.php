@@ -164,7 +164,8 @@ return array(
 	'ZC_ADMIN_HTML5_ENABLE'=>true,
 	// '代码高亮
 	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
-
+	'ZC_LOADMEMBERS_LEVEL' => 0,
+	
 	// '源码编辑高亮
 	'ZC_CODEMIRROR_ENABLE' => true,
 	'ZC_HTTP_LASTMODIFIED' => false,

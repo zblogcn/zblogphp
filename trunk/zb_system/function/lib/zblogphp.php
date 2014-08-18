@@ -471,7 +471,7 @@ class ZBlogPHP {
 
 		header('Content-type: text/html; charset=utf-8');
 
-		$this->LoadMembers();
+		$this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
 
 		$this->LoadCategorys();
 		#$this->LoadTags();
@@ -876,20 +876,25 @@ class ZBlogPHP {
 	}
 
 	/**
-	 * 验证用户登录（二次MD5密码）
+	 * 验证用户登录（二次MD5加zbp->guid盐后的密码）
 	 * @param string $name 用户名
 	 * @param string $ps_and_path 二次md5加密后的密码
 	 * @return bool
 	 */
 	public function Verify_MD5Path($name,$ps_and_path){
-		if (isset($this->membersbyname[$name])){
-			$m=$this->membersbyname[$name];
-			if(md5($m->Password . $this->guid) == $ps_and_path){
+		if($name=='' && $ps_and_path=''){
+			return false;
+		}
+		$m = $this->GetMemberByName($name);
+		if ($m->ID > 0){
+			if($m->PassWord_MD5Path == $ps_and_path){
 				$this->user=$m;
 				return true;
 			}else{
 				return false;
 			}
+		}else{
+			return false;
 		}
 	}
 
@@ -900,8 +905,8 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	public function Verify_MD5($name,$md5pw){
-		if (isset($this->membersbyname[$name])){
-			$m=$this->membersbyname[$name];
+		$m = $this->GetMemberByName($name);
+		if ($m->ID > 0){
 			return $this->Verify_Final($name,md5($md5pw . $m->Guid));
 		}else{
 			return false;
@@ -909,9 +914,9 @@ class ZBlogPHP {
 	}
 
 	/**
-	 * 验证用户登录（加盐的密码）
+	 * 验证用户登录（原始明文密码）
 	 * @param string $name 用户名
-	 * @param string $originalpw 密码明文与Guid连接后的字符串
+	 * @param string $originalpw 密码明文
 	 * @return bool
 	 */
 	public function Verify_Original($name,$originalpw){
@@ -919,20 +924,22 @@ class ZBlogPHP {
 	}
 
 	/**
-	 * 验证用户登录
+	 * 验证用户登录（数据库保存的最终运算后密码）
 	 * @param string $name 用户名
 	 * @param string $password 二次加密后的密码
 	 * @return bool
 	 */
 	public function Verify_Final($name,$password){
-		if (isset($this->membersbyname[$name])){
-			$m=$this->membersbyname[$name];
-			if(strcasecmp ( $m->Password ,  $password ) ==  0){
-				$this->user=$m;
+		$m = $this->GetMemberByName($name);
+		if ($m->ID > 0){
+			if(strcasecmp( $m->Password ,  $password ) ==  0){
+				$this->user = $m;
 				return true;
 			}else{
 				return false;
 			}
+		}else{
+			return false;
 		}
 	}
 
@@ -1017,9 +1024,13 @@ class ZBlogPHP {
 	/**
 	 *载入用户列表
 	 */
-	public function LoadMembers(){
-
-		$array=$this->GetMemberList();
+	public function LoadMembers($level = 0){
+		if($level == -1) return ;
+		$where = null;
+		if($level > 0){
+			$where = array(array('<=','mem_Level',$level));
+		}
+		$array=$this->GetMemberList(null,$where);
 		foreach ($array as $m) {
 			$this->members[$m->ID]=$m;
 			$this->membersbyname[$m->Name]=&$this->members[$m->ID];
@@ -1748,13 +1759,48 @@ class ZBlogPHP {
 		if(isset($this->members[$id])){
 			return $this->members[$id];
 		}
+		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array('=','mem_ID',$id)),null,1,null);
+		$am = $this->GetList('Member',$sql);
+		if(count($am) == 1){
+			$m = $am[0];
+			$this->members[$m->ID] = $m;
+			$this->membersbyname[$m->Name] = &$this->members[$m->ID];
+			return $m;
+		};
+
 		$m = new Member;
 		$m->Guid=GetGuid();
+		$this->members[$id] = $m;
+		return $m;
+	}
+	
+	/**
+	 * 通过用户名获取用户实例
+	 * @param string $name
+	 * @return Member
+	 */
+	function GetMemberByName($name){
+		if(isset($this->membersbyname[$name])){
+			return $this->membersbyname[$name];
+		}
+		
+		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array('=','mem_Name',$name)),null,1,null);
+		$am = $this->GetList('Member',$sql);
+		if(count($am) == 1){
+			$m = $am[0];
+			$this->members[$m->ID] = $m;
+			$this->membersbyname[$m->Name] = &$this->members[$m->ID];
+			return $m;
+		};
+		
+		$m = new Member;
+		$m->Guid=GetGuid();
+		$this->membersbyname[$name] = $m;
 		return $m;
 	}
 
 	/**
-	 * 通过用户获取用户实例
+	 * 通过获取用户名或别名实例
 	 * @param string $name
 	 * @return Member
 	 */
