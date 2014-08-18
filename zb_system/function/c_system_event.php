@@ -15,25 +15,21 @@
 function VerifyLogin() {
 	global $zbp;
 
-	if (isset($zbp->membersbyname[GetVars('username', 'POST')])) {
-		if ($zbp->Verify_MD5(GetVars('username', 'POST'), GetVars('password', 'POST'))) {
-			$un = GetVars('username', 'POST');
-			$ps = md5($zbp->user->Password . $zbp->guid);
-			$sd = (int)GetVars('savedate');
-			if ( $sd == 0) {
-				setcookie("username", $un, 0, $zbp->cookiespath);
-				setcookie("password", $ps, 0, $zbp->cookiespath);
-				setcookie("dishtml5", GetVars('dishtml5', 'POST'), 0, $zbp->cookiespath);
-			} else {
-				setcookie("username", $un, time() + 3600 * 24 * $sd, $zbp->cookiespath);
-				setcookie("password", $ps, time() + 3600 * 24 * $sd, $zbp->cookiespath);
-				setcookie("dishtml5", GetVars('dishtml5', 'POST'), time() + 3600 * 24 * $sd, $zbp->cookiespath);
-			}
-
-			return true;
+	if ($zbp->Verify_MD5(GetVars('username', 'POST'), GetVars('password', 'POST'))) {
+		$un = GetVars('username', 'POST');
+		$ps = $zbp->user->PassWord_MD5Path;
+		$sd = (int)GetVars('savedate');
+		if ( $sd == 0) {
+			setcookie("username", $un, 0, $zbp->cookiespath);
+			setcookie("password", $ps, 0, $zbp->cookiespath);
+			setcookie("dishtml5", GetVars('dishtml5', 'POST'), 0, $zbp->cookiespath);
 		} else {
-			$zbp->ShowError(8, __FILE__, __LINE__);
+			setcookie("username", $un, time() + 3600 * 24 * $sd, $zbp->cookiespath);
+			setcookie("password", $ps, time() + 3600 * 24 * $sd, $zbp->cookiespath);
+			setcookie("dishtml5", GetVars('dishtml5', 'POST'), time() + 3600 * 24 * $sd, $zbp->cookiespath);
 		}
+
+		return true;
 	} else {
 		$zbp->ShowError(8, __FILE__, __LINE__);
 	}
