@@ -72,10 +72,7 @@ class bom_check extends clinic {
 	public function repair_bom($param) {
 		
 		$data = substr(file_get_contents($param), 3); 
-		$file = fopen($param, "w"); 
-		flock($file, LOCK_EX); 
-		@fwrite($file, $data); 
-		fclose($file); 
+		@file_put_contents($param, $data);
 		$this->output('success', $param . ' - 修复完毕');
 
 	}
