@@ -7,4 +7,8 @@
 		"chs": "权限检查"
 		,"modules": []
 	}
+	,"displayerror": {
+		"chs": "乱码及显示错误"
+		,"modules": []
+	}
 }
