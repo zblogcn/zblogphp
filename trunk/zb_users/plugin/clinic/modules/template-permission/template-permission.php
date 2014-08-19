@@ -41,7 +41,7 @@ class template_permission extends clinic {
 				$s = '文件夹不存在 - 待修复';
 			}
 			else {			
-				$s = GetFilePerms($path);
+				/*$s = GetFilePerms($path);
 				
 	
 				if (substr($s, 0, 1) == '-') {
@@ -49,6 +49,19 @@ class template_permission extends clinic {
 				}
 				else {
 					$return = (substr($s, 1, 1) == 'r' && substr($s, 2, 1) == 'w' && substr($s, 3, 1) == 'x' && substr($s, 4, 1) == 'r' && substr($s, 7, 1) == 'r' && substr($s, 6, 1) == 'x' && substr($s, 9, 1) == 'x');
+				}*/
+
+				if (@file_put_contents($path . '/clinic_check.php', '<?php echo "test";')) {
+					if (@unlink($path . '/clinic_check.php')) {
+						$s = '读写权限正常';
+						$return = TRUE;
+					}
+					else {
+						$s = '无法删除文件';
+					}
+				}
+				else {
+					$s = '无法写入文件';
 				}
 			}
 		}
@@ -85,11 +98,11 @@ class template_permission extends clinic {
 					$s = '文件夹创建失败';
 				}
 				else {
-					$return = chmod($path, 0777);
+					@$return = chmod($path, 0777);
 				}
 			}
 			else {			
-				$return = chmod($path, 0777);
+				@$return = chmod($path, 0777);
 			}
 		}
 		
