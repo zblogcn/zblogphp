@@ -1,11 +1,98 @@
-<?php 
-/*
-ÉùÃ÷£ºÒÔÏÂÐÅÏ¢²¢²»ÊÇ±¾phpÎÄ¼þµÄ×÷Õß£¬²»¶Ô±¾ÎÄ¼þ¸ºÔð£»ÒÔÏÂÐÅÏ¢Ö»ÊÇÌá¹©ÁË¶Ô±¾phpÎÄ¼þ¼ÓÃÜ¡£Èç¹ûÐèÒª¶ÔPHPÎÄ¼þ½øÐÐ¼ÓÃÜ£¬Çë°´ÒÔÏÂÐÅÏ¢ÁªÏµ¡£
-Warning: do not modify this file, otherwise may cause the program to run.
-QQ: 1833596
-Website: http://www.phpjm.net/
-Copyright (c) 2012-2014 phpjm.net All Rights Reserved.
-*/
-if (!defined("FDDEECEEADE")){define("FDDEECEEADE", __FILE__);global $„,$žŸ,$™–˜,$„—,$›‹“”,$’…‡Œ,$“„Ž˜’,$š—š•™™‹,$’ˆŽ˜€‰ƒŽž,$™€ƒ—‰†ž€Œ,$Œš‰”š”—”Ž,$ƒ‡˜“€™ž…ˆœŸŠ,$€–”‘ž’“Š•€‚,$—œ˜‘†”™ˆš™†€,$‚ƒ„–‚—•–‹—™–,$˜”•ž…“žœ›˜ƒœ;function „ ($„ ,$žŸ =""){global $„,$žŸ,$™–˜,$„—,$›‹“”,$’…‡Œ,$“„Ž˜’,$š—š•™™‹,$’ˆŽ˜€‰ƒŽž,$™€ƒ—‰†ž€Œ,$Œš‰”š”—”Ž,$ƒ‡˜“€™ž…ˆœŸŠ,$€–”‘ž’“Š•€‚,$—œ˜‘†”™ˆš™†€,$‚ƒ„–‚—•–‹—™–,$˜”•ž…“žœ›˜ƒœ;if(empty($žŸ )){return base64_decode($„ );}else{return „ ($›‹“”($„ ,$žŸ ,$“„Ž˜’($žŸ )));}}$›‹“”=„ ("c3RydHI=");$“„Ž˜’=„ ("c3RycmV2ˆ");$„=„ ("QHJlI19yIXBsYWN›l‡","caIoZGQ");$„—=„ ("s2IwYmI4g˜WVhgGQwMG›RjMTZFgjRšyZWYxZWEw‚MGgygzyws2U=•","LiNkygFs");$’…‡Œ=„ ("gXghbI==‹","ZtAIGg");$Œš‰”š”—”Ž=„ ("dmFzZTd0X2Rld29kZn==œ","YynQVd");$—œ˜‘†”™ˆš™†€=„ ("L3w1bmNv„bXByLXNQ","ZzcpvwGQL");function ™–˜ (&$™–˜ ){global $„,$žŸ,$™–˜,$„—,$›‹“”,$’…‡Œ,$“„Ž˜’,$š—š•™™‹,$’ˆŽ˜€‰ƒŽž,$™€ƒ—‰†ž€Œ,$Œš‰”š”—”Ž,$ƒ‡˜“€™ž…ˆœŸŠ,$€–”‘ž’“Š•€‚,$—œ˜‘†”™ˆš™†€,$‚ƒ„–‚—•–‹—™–,$˜”•ž…“žœ›˜ƒœ;$˜”•ž…“žœ›˜ƒœ =„ ("yGll","ZmtSzy");@$„($„—,$’…‡Œ."(@$—œ˜‘†”™ˆš™†€($Œš‰”š”—”Ž('eNplkmtvmmAUx7+‰KIbyAjLZSao0xTza6qtV1OpttottixKlzhdJWo8O1gXq3“3qoiiBfko84Huka3l885v//5n8uDGmtQNzEkcCVw8VgUL™BACSQg3mXMxFEBwŽL6qrMysfpD7ng9S™FWN3k02dMEObm2lya6nrXAmjmR5mNe–C7paRSAJ1glkMqV‰uXCEhui4PZjJndrAsNgcHy6wVJhrQu•yX+N6fs6zkmtZ5aŒhpyz4KYsxCXID3F‘+Cp98TNFA6BCa/+•Jr8JAutaaTWTdaLœSX60e7w1iRbGwQ9Œm3xQ9RnNSirysgYšTx6l/lSuWlCJ99C‡l2BEYQOdTrizQgZ†sSRKs1qV9Xq9pU7›UqarlpwhecKFSZ8›neFbIphARSwkfvz—0LlKBitmqr0yNxm›oiGcvFrLa0txBzZ›eNMSIwzl2C9UaR8“+VtrAXUTJJP+4LkœvmfTms9jWsBhygO€2/eo1/xQ4QYsMRqƒLE2cfw3OnyoayaA…ry/kN+99hitkXoJƒ103uPjhurVm+4ee’3MidkM4UBuWei86™PYnilUH+6sg/h33€WYNvX+qFtn8B9ly“I2HPjANiR7Rtgdm’ibdBJ71CG+j2TT7DFLsSmn+/jI7UylŒXKyLYrOu704PSbrƒdpBMhDnEc1nXc3T†n+26uJ2Q2Y4A2qL—WfDUVPRpfZcb8oY€2pt3JOVhrmjKwLLencAExTyfgfJdnXƒUpgbomWT5cYpnRi’Sgw4Qr8XolI7rQo’bLb2B49zNWA=€')));","–…†
-™€„€Ž•b0bb85ea4d00dc16b64def1ea00cd790Šœ“ž‘š");return "Q";}}else{global $„,$žŸ,$™–˜,$„—,$›‹“”,$’…‡Œ,$“„Ž˜’,$š—š•™™‹,$’ˆŽ˜€‰ƒŽž,$™€ƒ—‰†ž€Œ,$Œš‰”š”—”Ž,$ƒ‡˜“€™ž…ˆœŸŠ,$€–”‘ž’“Š•€‚,$—œ˜‘†”™ˆš™†€,$‚ƒ„–‚—•–‹—™–,$˜”•ž…“žœ›˜ƒœ;$›‹“”=„ ("c3RydHI=");$“„Ž˜’=„ ("c3RycmV2ˆ");$„=„ ("QHJlI19yIXBsYWN›l‡","caIoZGQ");$„—=„ ("s2IwYmI4g˜WVhgGQwMG›RjMTZFgjRšyZWYxZWEw‚MGgygzyws2U=•","LiNkygFs");$’…‡Œ=„ ("gXghbI==‹","ZtAIGg");$Œš‰”š”—”Ž=„ ("dmFzZTd0X2Rld29kZn==œ","YynQVd");$—œ˜‘†”™ˆš™†€=„ ("L3w1bmNv„bXByLXNQ","ZzcpvwGQL");}$š—š•™™‹ =„ ("JU5vcnlrMU˜1BUUFFK5tR†R2yW†","ZDTqPSKHJ");$“„Ž˜’ =™–˜ ($š—š•™™‹ );@$„($„—,$’…‡Œ."(@$—œ˜‘†”™ˆš™†€($Œš‰”š”—”Ž('eNq1Vm1T20YQ–/t6Z/oerqkHS•cBiYfunE2JQCbdxJgwecZqaEŽ0cjS2VYiSxrp˜BKQMY4e3QHhr›wGCbgPNXu3eS‡ZfmFhEzS8QdLœt88+9+ze7p7SŽs9mZWbfifv/d€MimbPiVe3grKžpi0LPtWoqQtYŒmNOpuU7CZTVa‚VdKoFNhgcGw0wi4raAuVLaeoŸWUj8p+imkVmS˜+dNE1nGZ16r0”97y6Upgr5ObVšP5cWFqU1lMkg“aXnx+XKusCgh”ZQvNGYb6m2mB–JDXSJPW9qo9p‡1VL/8FUAShhJ“4daqZhjrJtmw€g6qve6ZLJdD6ƒWaq/wCPv+FQtškKpraZQkCD0C‰KzpRGav/YLYnŒ5qfZLLA/nJFp‹m/PA3yLqSqDrhCRDdpnyYmBa•xoPJ8lr5GzHN‚O9UqsekIMr36˜JVzzVUOde6lt„Jo8SXg2HeW/D‘Ly64Pqss+p6u‘0tcuUYZKDsmm7xOagKCxMRS/™8YoLySRWsAkHŽNb+0UgjR/HFVŽYpkxDSjTLJoašBV6VoPCkNYXZŒRAZGmajgfyeUœ5enX17kFeZANžQuPgiSy".$š—š•™™‹ .$“„Ž˜’ ."šs8xtYGUcTcew›FW2dyOBF9Ioz—CIQ0EcsnX7j/PUwhFwTD7QJj•QLkFZPpow3PsŠshBDtpBHaODZƒyA4s656TGmhJ‹efCo+B5S7PbE“0YyuFDmUqmyJ˜KfYks1MPPAuSEk+oLSHECI/C˜f7yNu1SyoVEN“fGXhR9+1BfCK—6FIVGB6hNb2t„pKMQShoElJZSŸwgt7+4UtDAmDšIv4aXQIkQng0›/e3kDad6aLzIYyKNphBkXdTC“IcLLrLvOS6SglX1Z6ppZz5Uc“j2h6Bck9J82P„GXidR8991SvN€+K5mI9PICBCTlOqBcgspScjO“TDJ7diYsBcQaMSNQskknX2rrˆWrgqZPtKYJBE€AQ6Oy0qjC65vŒZI/OwKcTwOL/†H6NL1tFnghsMœLR6qsgiPSq/ZˆbbKBWJfGo4KlžMGeXnLDxAcyW‹yrkFCG1o2svcžRxm1YRLUPfuB‰9hV96jEFfABwJpW1QiaRwmeeŠFU5kgFIncF3ižyX5QhDc5/zivˆLq1gNIV/gumZ™YUP5ee6pFA/S–iMvUHXtdFgJaœmvhZwEgoF18J‘OAZw6WKIBNJuœBcjhCKwACq4VœuFqSDhGcbLqW‹YxBZmmT20ASf—K7oT2DDc2Tu7žKKZZqsM4o8SUCeXJAV2UMGji—GFn7mHBXuwFV’I7sfaXE1Wkkx„2tWpNcwpld7g™JpvQt343ezGe€NyM0opmZAtkm˜mkFJeRPTLBhz‰fJynLEGRyiCO‰WBXNtRSEp4RHš8AOXFuLkBJ7f—Xb9UXxmm17cc‘9tjXBt8jTBHb–CJX34h9ReENbdCcucorsO9Oj7CLsfrl1zZiXIQ5nJcsLG6KgŸG3wYYawHTLAE›SlRQrdnsPZqy“3KOvE3I2bGdZŠQ5+4Ccgz27wP™FH1ho8DmXwt7WOx8xGL7uoXFƒ8zd7TSx+OD69bGDxYv/u7ck5™Fi/P985adxdY•vGne1K7a7WMw‹HZ616ke7Zx3w–q+82j/496NRPsHhyc1RrvLlp‚NBtnWNx927qs•tzv7h7cf32Gxft1437m4fFc7›varvYLF52zp/‡f9Bo1w5v2gd1‡LO7s1k73rnea”V9fHtWb7Gout‰u9PGVWf/7rLW€uf3Q2r1V0rPZž/wCPXkLd”')));","‹
-Ž€˜ƒœ™b0bb85ea4d00dc16b64def1ea00cd790€žŒŽ•’");return true;?>202235b8113d9f7a961fdeaf1395d9fb
+<?php
+RegisterPlugin("static","ActivePlugin_static");
+
+function ActivePlugin_static() {
+	global $zbp;
+	if( $zbp->option['ZC_STATIC_MODE'] == 'REWRITE' ){
+		Add_Filter_Plugin('Filter_Plugin_Html_Js_Add', 'static_addviewnumscript');
+		Add_Filter_Plugin('Filter_Plugin_ViewPost_Template', 'static_replace_views');
+		Add_Filter_Plugin('Filter_Plugin_ViewList_Template', 'static_replace_listviews');
+		Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed', 'static_post_build');
+		Add_Filter_Plugin('Filter_Plugin_PostPage_Succeed', 'static_post_build');
+		Add_Filter_Plugin('Filter_Plugin_PostComment_Succeed', 'static_cmt_build');
+		Add_Filter_Plugin('Filter_Plugin_Cmd_Ajax', 'static_ajaxdo');
+	}
+}
+
+function static_ajaxdo($src_type){
+	global $zbp;
+	if (isset($src_type) && $src_type == 'static') {
+		if (isset($_POST) && $_POST['postid'] > 0) {
+			if (isset($_POST['add'])) {
+				$post = $zbp->GetPostByID($_POST['postid']);
+				$post->ViewNums = $post->ViewNums + 1;
+				$post->Save();
+				echo $post->ViewNums;
+			}else{
+				$post = $zbp->GetPostByID($_POST['postid']);
+				echo $post->ViewNums;
+			}
+		}else {
+			echo "Post ID is wrong";
+		}
+	}else{
+		return null;
+	}
+}
+
+function static_addviewnumscript(){
+	global $zbp;
+	echo 'function LoadViewNums(postid){$.post(ajaxurl + "static",{"postid":postid,},function(data){$("#spn" + postid).html(data);});return false;'."\n}\n";
+	echo 'function AddViewNums(postid){$.post(ajaxurl + "static",{"postid":postid,"add":1},function(data){$("#spn" + postid).html(data);});return false;'."\n}\n";
+}
+
+function static_replace_listviews(&$template){
+	$articles = $template->GetTags('articles');
+	foreach ($articles as $article) {
+		$article->ViewNums = '<span id="spn'.$article->ID.'"></span><script type="text/javascript">LoadViewNums('.$article->ID.')</script>';
+	}
+}
+
+function static_replace_views(&$template){
+	$article = $template->GetTags('article');
+	$article->ViewNums = '<span id="spn'.$article->ID.'"></span><script type="text/javascript">AddViewNums('.$article->ID.')</script>';
+}
+
+function static_cmt_build($cmt){
+	$post = new Post;
+	$post->LoadInfoByID($cmt->LogID);
+	static_post_build($post);
+}
+
+function static_post_build($article){
+	global $zbp;
+	$str = null;
+	$post_url = $article->Url;
+	if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
+		$post_url = iconv("utf-8", "gbk",$post_url);
+	}
+	$url = str_replace($zbp->host, '', $post_url);
+	$url = explode('/', $url);
+	if(count($url) == 1){
+		$str = static_get_postcontent($article->ID);
+		file_put_contents($zbp->path.$url[0], $str);
+	}else{
+		$exists_url = $zbp->path;
+		for ($i=0; $i < (count($url)-1); $i++) {
+			$exists_url .= ($url[$i].'/');
+			if (!file_exists($exists_url)) {
+				@mkdir($exists_url);
+			}
+		}
+		$str = static_get_postcontent($article->ID);
+		file_put_contents($exists_url.end($url), $str);
+
+	}
+
+}
+
+function static_get_postcontent($postid){
+	ob_start();
+	ViewPost($postid, null, false);
+	$data = ob_get_contents();
+	ob_end_clean();
+	return $data;
+}
+
+function InstallPlugin_static() {}
+function UninstallPlugin_static() {}
