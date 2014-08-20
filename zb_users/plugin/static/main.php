@@ -6,8 +6,14 @@ $zbp->Load();
 $action='root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('static')) {$zbp->ShowError(48);die();}
-$blogtitle='static';
-
+$blogtitle='静态化插件';
+if (isset($_GET['a'])) {
+	$articles = $zbp->GetPostList();
+	foreach ($articles as $key => $value) {
+		echo $value->ID;
+		static_post_build($value);
+	}
+}
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
@@ -17,7 +23,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div class="SubMenu">
   </div>
   <div id="divMain2">
-
+<a href="?a=b">重建</a>
 
   </div>
 </div>
