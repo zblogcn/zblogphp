@@ -18,13 +18,13 @@
   <email></email>
   <url></url>
 </source>
-<adapted>131221</adapted>
+<adapted>140614</adapted>
 <version>1.0</version>
 <pubdate>2013-12-26</pubdate>
-<modified>2013-12-26</modified>
+<modified>2014-08-20</modified>
 <price>0</price>
 <advanced>
-  <dependency></dependency>
+  <dependency>STACentre</dependency>
   <rewritefunctions></rewritefunctions>
   <conflict></conflict>
 </advanced>
