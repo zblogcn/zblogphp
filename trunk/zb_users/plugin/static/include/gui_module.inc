@@ -8,7 +8,7 @@
     <div id="div-message">
     	<table class="table_border table_border_cells table_stripes" style="width:95%">
 		<tbody id="tbody-message">
-        <tr><td>正在初始化...</td></tr>
+        <tr><td>正在初始化</td></tr>
         </tbody>
         </table>
     </div>
@@ -28,7 +28,7 @@ $(document).ready(function() {
 			bmx2table();
 		};
 		
-	clinic.setModuleId("<?php echo $module->id?>").init().addTimer(function(){
+	clinic.setModuleId("<?php echo $module['id']?>").init().addTimer(function(){
 		console.log(time);
 		$("#span-time").html(time++);
 	}).ajax({"function": "get_queue"}, function(data) {

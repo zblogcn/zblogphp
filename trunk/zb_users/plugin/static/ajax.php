@@ -13,7 +13,7 @@ if (!$module) exit(json_encode(array("err" => "no this module")));
 
 $func = GetVars('function', 'POST');
 $param = GetVars('param', 'POST') | '';
-$class = $clinic->load_module($module->id);
+$class = $clinic->load_module($module['id']);
 $class->$func($param);
 echo '[';
 echo implode(',', $class->output_json);

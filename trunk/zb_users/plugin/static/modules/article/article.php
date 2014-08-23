@@ -11,6 +11,7 @@ class article extends clinic {
 		foreach ($posts as $key => $value) {
 			$this->set_queue('static_post_build', $value->ID);
 		}
+		//$this->output('success', '所有文章静态页重建完成，共生成'.count($posts).'篇文章！');
 	}
 
 	public function static_post_build($postid){
