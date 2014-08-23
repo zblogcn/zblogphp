@@ -1,7 +1,7 @@
 {
 	"id": "article",
 	"name": "文章（含单页）批量重建",
-	"category": "displayerror",
+	"category": "build",
 	"question": [
 		"文章（含单页）批量重建"
 	]

@@ -1,8 +1,0 @@
-{
-	"id": "bom-check",
-	"name": "BOM头及空行检测",
-	"category": "displayerror",
-	"question": [
-		"前后台乱码或出现空行"
-	]
-}
