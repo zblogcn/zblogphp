@@ -127,7 +127,7 @@ class Totoro_Class
 			if (file_exists($file) && $value['VALUE'] > 0)
 			{
 				$func = include($file);
-				$func($build['author'], $build['content'], $this->sv, $value['VALUE'], $this->config_array);
+				$func($build['author'], $build['content'], $comment->Content, $this->sv, $value['VALUE'], $this->config_array);
 				if ($debug) echo 'AFTER ' . $value['NAME'] . ': ' . $this->sv . "\n"; 
 			}
 		}
