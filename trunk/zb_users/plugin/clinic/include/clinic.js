@@ -79,12 +79,11 @@
 		 * setInterval main code
 		 * @return this
 		 */
-		runTimer: function() {
-			var that = this;
+		runTimer: function(that) {
 			$.each(that._timers, function(index, value) {
 				value();
 			});
-			return this;
+			return that;
 		},		
 	
 		/**
@@ -111,7 +110,9 @@
 			
 			// Set timer
 			if (this._timerid == 0) {
-				this._timerid = setInterval(this.runTimer, 1000); 
+				this._timerid = setInterval(function() {
+					that.runTimer(that);
+				}, 1000); 
 				console.log(this._timerid);
 			}
 			
