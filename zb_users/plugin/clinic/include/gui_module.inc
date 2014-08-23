@@ -28,7 +28,7 @@ $(document).ready(function() {
 			bmx2table();
 		};
 		
-	clinic.setModuleId("<?php echo $module->id?>").init().addTimer(function(){
+	clinic.setModuleId("<?php echo $module['id']?>").init().addTimer(function(){
 		console.log(time);
 		$("#span-time").html(time++);
 	}).ajax({"function": "get_queue"}, function(data) {
