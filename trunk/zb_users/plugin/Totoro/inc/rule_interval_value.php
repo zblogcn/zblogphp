@@ -1,6 +1,6 @@
 <?php
 return 'interval_value';
-function interval_value($author, $content, &$sv, $config_sv, $config_array){
+function interval_value($author, $content, $orig_content, &$sv, $config_sv, $config_array){
 	global $zbp;
 	$count = 0;
 	$sql = $zbp->db->sql->Select(
