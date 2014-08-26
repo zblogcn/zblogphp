@@ -90,6 +90,8 @@ function static_post_build($article){
 }
 
 function static_get_postcontent($postid){
+	global $zbp;
+	$zbp->user->ID = 0;
 	ob_start();
 	ViewPost($postid, null, false);
 	$data = ob_get_contents();

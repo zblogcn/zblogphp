@@ -5,13 +5,14 @@
  * @subpackage article.php
  */
 class article extends clinic {
+
 	public function get_queue() {
 		global $zbp;
 		$posts = $zbp->GetPostList();
 		foreach ($posts as $key => $value) {
 			$this->set_queue('static_post_build', $value->ID);
 		}
-		//$this->output('success', '所有文章静态页重建完成，共生成'.count($posts).'篇文章！');
+		$this->set_queue('static_post_build_complete', count($posts));
 	}
 
 	public function static_post_build($postid){
@@ -38,17 +39,22 @@ class article extends clinic {
 		}
 		$data = json_encode(array($post->ID, $save_dir));
 		$this->set_queue('static_file_put_contents', $data);
-
 	}
 
 	public function static_file_put_contents($data){
+		global $zbp;
 		$data = json_decode($data,true);
+		$zbp->user->ID = 0;
 		ob_start();
 		ViewPost($data[0], null, false);
 		$article_Content = ob_get_contents();
 		ob_end_clean();
 		file_put_contents($data[1], $article_Content);
 		$this->output('success', '文章ID【'.$data[0].'】重建成功！');
+	}
+
+	public function static_post_build_complete($posts){
+		$this->output('success', '所有文章静态页重建完成，共生成'.$posts.'篇文章！');
 	}
 
 }
