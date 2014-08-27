@@ -1111,8 +1111,12 @@ function Admin_ThemeMng(){
 	echo '<input type="hidden" name="style" id="style" value="" />';
 
 	foreach ($zbp->themes as $theme) {
+echo "\n\n";
 
-echo '<div class="theme '.($theme->IsUsed()?'theme-now':'theme-other').'">';
+echo '<div class="theme '.($theme->IsUsed()?'theme-now':'theme-other').'"';
+echo ' data-themeid="' . $theme->id . '"';
+echo ' data-themename="' . $theme->name . '"';
+echo '>';
 echo '<div class="theme-name">';
 
 if($theme->IsUsed() && $theme->path){
@@ -1133,7 +1137,6 @@ echo '</select>';
 echo '<input type="button" onclick="$(\'#style\').val($(this).prev().val());$(\'#theme\').val(\''.$theme->id.'\');$(\'#frmTheme\').submit();" class="theme-activate button" value="'.$zbp->lang['msg']['enable'].'">';
 echo '</div>';
 echo '</div>';
-
 	}
 
 	echo '</form></div>';
