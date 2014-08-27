@@ -1,14 +1,14 @@
 <?php
 /**
- * Z-BlogPHP Clinic
- * @package clinic.class
- * @subpackage clinic.class.php
+ * Z-BlogPHP static
+ * @package static.class
+ * @subpackage static.class.php
  */
 
 /**
- * Clinic main class
+ * static main class
  */
-class Clinic {
+class Static_Class {
 
 	public $module_path = '';
 	public $include_path = '';
@@ -22,7 +22,7 @@ class Clinic {
 		$this->include_path = dirname(__FILE__) . '/include/';
 		$this->categories = array_merge(
 			json_decode(file_get_contents('./include/category.json'), true),
-			$GLOBALS['clinic_register_cate']
+			$GLOBALS['static_register_cate']
 		);
 		$this->scan_dir();
 	}
@@ -33,7 +33,7 @@ class Clinic {
 	 */
 	public function scan_dir() {
 		//For third-party developers
-		$this->modules = $GLOBALS['clinic_register_array']; 
+		$this->modules = $GLOBALS['static_register_array']; 
 		$dir = scandir($this->module_path);
 		foreach ($dir as $name) {
 			// Directory name must be English

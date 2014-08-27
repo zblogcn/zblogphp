@@ -19,7 +19,7 @@ $(document).ready(function() {
 	var time = 0,
 		runTask = function(pos) {
 			var index = pos,
-				taskLength = clinic._tasks.length,
+				taskLength = static._tasks.length,
 				per = ((index / taskLength) * 100).toFixed(2);
 			
 			$("#span-progress").html(per);
@@ -28,32 +28,32 @@ $(document).ready(function() {
 			bmx2table();
 		};
 		
-	clinic.setModuleId("<?php echo $module['id']?>").init().addTimer(function(){
+	static.setModuleId("<?php echo $module['id']?>").init().addTimer(function(){
 		console.log(time);
 		$("#span-time").html(time++);
 	}).ajax({"function": "get_queue"}, function(data) {
 		var data = JSON.parse(data),
 			addTask = function(argu) {
 				var value = argu[1];
-				clinic.ajax(value, function(data, textStatus) {
+				static.ajax(value, function(data, textStatus) {
 					var data = JSON.parse(data);
 					$.each(data, function(index, value) {
 						if (value['type'] == 'queue') {
-							clinic.addTask(addTask, value);
+							static.addTask(addTask, value);
 						}
 						else {
-							clinic.msg(value.msg);
+							static.msg(value.msg);
 						}
 					});
-					clinic.runTask(runTask);
+					static.runTask(runTask);
 				}, function(xmlHttp, textStatus, errorThrown) {
-					clinic.msg('<span style="color:red">× 网络访问错误：' + textStatus + '</span>');
+					static.msg('<span style="color:red">× 网络访问错误：' + textStatus + '</span>');
 				})
 			};
 		$.each(data, function(index, value) {
-			clinic.addTask(addTask, value);
+			static.addTask(addTask, value);
 		});
-		clinic.runTask(runTask);
+		static.runTask(runTask);
 	});
 });
 

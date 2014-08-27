@@ -1,7 +1,7 @@
 <?php
-define('CLINIC', true);
-$clinic_register_array = array();
-$clinic_register_cate = array();
+define('STATIC', true);
+$static_register_array = array();
+$static_register_cate = array();
 RegisterPlugin("static","ActivePlugin_static");
 
 function ActivePlugin_static() {

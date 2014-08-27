@@ -5,13 +5,13 @@ $zbp->Load();
 $action='root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('static')) {$zbp->ShowError(48);die();}
-require_once 'clinic.php';
+require_once 'static.php';
 $module = GetVars('module', 'GET');
-$module = (isset($clinic->modules[$module]) ? $clinic->modules[$module] : NULL);
+$module = (isset($static->modules[$module]) ? $static->modules[$module] : NULL);
 $blogtitle = '静态化-' . ($module ? ' - ' . $module['name'] : '');
 
 require $blogpath . 'zb_system/admin/admin_header.php';
-echo '<style type="text/css">tr{height: 32px}</style><script type="text/javascript" src="include/clinic.js"></script>';
+echo '<style type="text/css">tr{height: 32px}</style><script type="text/javascript" src="include/static.js"></script>';
 require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">

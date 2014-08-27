@@ -5,5 +5,5 @@
  * @subpackage clinic.php
  */
 
-require_once('clinic.class.php');
-$clinic = new Clinic();
+require_once('static.class.php');
+$static = new Static_Class();
