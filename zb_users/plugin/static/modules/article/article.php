@@ -10,13 +10,14 @@ class article extends clinic {
 		global $zbp;
 		$posts = $zbp->GetPostList();
 		foreach ($posts as $key => $value) {
-			$this->set_queue('static_post_build', $value->ID);
+			$this->set_queue('static_post_build', serialize(array($value->ID, count($posts))));
 		}
-		$this->set_queue('static_post_build_complete', count($posts));
 	}
 
-	public function static_post_build($postid){
+	public function static_post_build($param){
 		global $zbp;
+		$param = unserialize($param);
+		$postid = $param[0];
 		$post = $zbp->GetPostByID($postid);
 		$str = null;
 		$post_url = $post->Url;
@@ -37,7 +38,8 @@ class article extends clinic {
 			}
 			$save_dir = $exists_url.end($url);
 		}
-		$data = json_encode(array($post->ID, $save_dir));
+		$data = json_encode(array($post->ID, $save_dir, $param[1]));
+		$this->output('success', '文章ID【'.$param[0].'】准备完成！');
 		$this->set_queue('static_file_put_contents', $data);
 	}
 
@@ -51,6 +53,9 @@ class article extends clinic {
 		ob_end_clean();
 		file_put_contents($data[1], $article_Content);
 		$this->output('success', '文章ID【'.$data[0].'】重建成功！');
+		if ($data[0] == $data[2]) {
+			$this->static_post_build_complete($data[2]);
+		}
 	}
 
 	public function static_post_build_complete($posts){
