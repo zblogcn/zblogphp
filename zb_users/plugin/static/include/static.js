@@ -1,10 +1,10 @@
 /**
- * Z-BlogPHP Clinic js class
- * @package clinic
- * @subpackage clinic.js
+ * Z-BlogPHP static js class
+ * @package static
+ * @subpackage static.js
  */
 (function(){ 
-	var Clinic = { 
+	var Static = { 
 		_domMsg: null, 
 		_aryPreInit: [],
 		_tasks: [],
@@ -24,7 +24,7 @@
 		}, 
 		
 		/**
-		 * Set clinic module 
+		 * Set static module 
 		 * @param module module's id
 		 * @return this
 		 */
@@ -161,8 +161,8 @@
 		
 	};
 	
-	var clinic = Object.create(Clinic).preInit(function() {
-		clinic.setMsgDom('#tbody-message');
+	var static = Object.create(Static).preInit(function() {
+		static.setMsgDom('#tbody-message');
 	});
-	window.clinic = clinic;
+	window.static = static;
 })();

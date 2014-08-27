@@ -1,10 +1,10 @@
 <?php
 /**
- * Z-BlogPHP Clinic Check BOM
+ * Z-BlogPHP static Check BOM
  * @package article
  * @subpackage article.php
  */
-class article extends clinic {
+class article extends Static_Class {
 
 	public function get_queue() {
 		global $zbp;

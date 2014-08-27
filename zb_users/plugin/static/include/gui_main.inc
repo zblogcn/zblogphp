@@ -1,4 +1,4 @@
-<?php foreach($clinic->categories as $category) {
+<?php foreach($static->categories as $category) {
 ?>
 	<table class="table_border table_border_cells table_stripes" style="width:95%">
 		<thead>
@@ -8,7 +8,7 @@
 		</thead>
 		<tbody>
 			<?php foreach($category['modules'] as $module_name) {
-				$module = $clinic->modules[$module_name];
+				$module = $static->modules[$module_name];
 			?>
 				<?php foreach($module['question'] as $question) {?>
 			<tr>

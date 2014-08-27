@@ -6,14 +6,14 @@ $action='root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('static')) {$zbp->ShowError(48);die();}
 
-require_once 'clinic.php';
+require_once 'static.php';
 $module = GetVars('module', 'GET');
-$module = (isset($clinic->modules[$module]) ? $clinic->modules[$module] : NULL);
+$module = (isset($static->modules[$module]) ? $static->modules[$module] : NULL);
 if (!$module) exit(json_encode(array("err" => "no this module")));
 
 $func = GetVars('function', 'POST');
 $param = GetVars('param', 'POST') | '';
-$class = $clinic->load_module($module['id']);
+$class = $static->load_module($module['id']);
 $class->$func($param);
 echo '[';
 echo implode(',', $class->output_json);
