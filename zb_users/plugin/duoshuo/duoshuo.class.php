@@ -23,6 +23,8 @@ class duoshuo_class
 		
 		if(isset($this->cfg))
 		{
+			if (!class_exists('JWT')) 
+				require_once DUOSHUO_PATH . '/jwt.php';
 			$this->token = JWT::encode(array(
 				'short_name' => $this->cfg->short_name,
 				'user_key' => $zbp->user->ID,
@@ -116,7 +118,7 @@ class duoshuo_class
 	{
 		if (!$this->is_init) $this->init();
 		if(!$this->cfg->seo_enabled) return false;
-		$spider="/(baidu|google|bing|soso|360|Yahoo|msn|Yandex|youdao|mj12|Jike|Ahrefs|ezooms|Easou|sogou)(bot|spider|Transcoder|slurp)/i";
+		$spider="/(baidu|google|bing|soso|360|Yahoo|msn|Yandex|youdao|Jike|Ahrefs|ezooms|Easou|sogou)(bot|spider|Transcoder|slurp)/i";
 		return (bool)preg_match($spider,GetVars("HTTP_USER_AGENT","SERVER"));
 	}
 	
@@ -124,7 +126,7 @@ class duoshuo_class
 	{
 		if (!$this->is_init) $this->init();
 		$data = '';
-		if($this->cfg->cron_sync_enabled=='async')
+		if($this->cfg->cron_sync_enabled == 'async')
 			$data .= '<script language="javascript" type="text/javascript" src="'.$this->duoshuo_path.'event.php?act=api_async&'.rand().'"></script>';
 		if($this->cc_thread_key!="") 
 		{
@@ -134,8 +136,8 @@ class duoshuo_class
 			//评论数修正		 批量获取
 		}
 	
-		$data = '<script type="text/javascript">function duoshuo_callback(data){if(data.response){for(var i in data.response){jQuery("[duoshuo_id="+i+"]").html(data.response[i].comments);}}};var duoshuoQuery = {short_name:"'. $this->cfg->short_name . '"};</script><script type="text/javascript" src="http://static.duoshuo.com/embed.js"></script>' . $data;
-		
+		$data = '<script type="text/javascript">var duoshuo_callback = function(data){if(data.response){jQuery.each(data.response, function(id, object){jQuery("[duoshuo-id="+id+"]").html(object.comments);})}};var duoshuoQuery = {short_name:"'. $this->cfg->short_name . '"};</script><script type="text/javascript" src="http://static.duoshuo.com/embed.js"></script>' . $data;
+
 		return $data;
 	}
 }

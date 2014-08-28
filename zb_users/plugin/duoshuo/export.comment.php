@@ -5,7 +5,7 @@ function export_post_comment($http,$intmin,$intmax)
 	global $duoshuo;
 	$where = array();
 	if($intmax>0) $where[] = array('between','comm_ID',$intmin,$intmax);
-	$where[] = array('custom',' %pre%comment.comm_id not in (SELECT ds_cmtid FROM %pre%plugin_duoshuo_comment)');
+	$where[] = array('custom', ' ' . $GLOBALS['table']['Comment'] . '.comm_id not in (SELECT ds_cmtid FROM ' . $GLOBALS['table']['plugin_duoshuo_comment'] . ')');
 	//此处空格for 1.2\1.1
 	$return = $zbp->GetCommentList('*',$where,null,null,null);
 	$data = export_comment($return);//var_dump($data);
@@ -17,7 +17,7 @@ function export_post_comment($http,$intmin,$intmax)
 	{
 		foreach($json->response as $a => $v)
 		{
-			$sql = $zbp->db->sql->Insert($duoshuo->db['comment'],array('ds_cmtid'=>$a,'ds_key'=>$v));
+			$sql = $zbp->db->sql->Insert($GLOBALS['table']['plugin_duoshuo_comment'], array('ds_cmtid'=>$a,'ds_key'=>$v));
 			$zbp->db->Insert($sql);
 		}
 	}

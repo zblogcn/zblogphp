@@ -61,7 +61,7 @@ $duoshuo->init();
                 <span class="note">文章数据无论是否存在都将同步</span></p></td>
             <td>
             <?php
-			$sql = $zbp->db->sql->Select('%pre%post','max(log_ID)',null,null,null,null);
+			$sql = $zbp->db->sql->Select($GLOBALS['table']['Post'], 'max(log_ID)',null,null,null,null);
 			$sql = $zbp->db->Query($sql);
 			$postid = $sql[0]['max(log_ID)'];
 			?>
@@ -76,10 +76,11 @@ $duoshuo->init();
           </tr>
           <tr>
           <?php
-	      $sql = $zbp->db->sql->Select('%pre%comment','max(comm_ID)',array(array('=','comm_IsChecking',0)),null,null,null);
+	      $sql = $zbp->db->sql->Select($GLOBALS['table']['Comment'],'max(comm_ID)',array(array('=','comm_IsChecking',0)),null,null,null);
 		  $sql = $zbp->db->Query($sql);
 		  $commid = (int)$sql[0]['max(comm_ID)'];
-	      $sql = $zbp->db->sql->Select('%pre%plugin_duoshuo_comment','max(ds_cmtid)',null,null,null,null);
+		  if ($commid < 1) $commid = 1;
+	      $sql = $zbp->db->sql->Select($GLOBALS['table']['plugin_duoshuo_comment'],'max(ds_cmtid)',null,null,null,null);
 		  $sql = $zbp->db->Query($sql);
           $ds_comid = (int)$sql[0]['max(ds_cmtid)'];
 		  $pl = $commid - $ds_comid;

@@ -2,7 +2,6 @@
 define('DUOSHUO_DEBUG',TRUE);
 define('DUOSHUO_PATH',dirname(__FILE__));
 
-require DUOSHUO_PATH . '/jwt.php';
 require DUOSHUO_PATH . '/duoshuo.class.php';
 require DUOSHUO_PATH . '/duoshuo.api.php';
 
@@ -42,6 +41,12 @@ function ActivePlugin_duoshuo()
 	Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed',"duoshuo_post_article_succeed");
 
 
+
+	//检测clinic插件的存在
+	if (defined('CLINIC')) {
+		
+	}
+	
 }
 
 function InstallPlugin_duoshuo()
@@ -176,7 +181,7 @@ function duoshuo_view_post_template(&$template)
 	
 	if($duoshuo->cfg->cc_fix)
 	{
-		$post->CommNums = '<span id="duoshuo_comment'.$post->ID.'" duoshuo_id="'.$post->ID.'"></span>';
+		$post->CommNums = '<span id="duoshuo_comment'.$post->ID.'" duoshuo-id="'.$post->ID.'"></span>';
 		$duoshuo->cc_thread_key .= $post->ID.',';
 	}
 	
@@ -193,11 +198,11 @@ function duoshuo_view_list_template(&$template)
 	{
 		if($duoshuo->cfg->cc_fix)
 		{
-			$post->CommNums = '<span id="duoshuo_comment'.$post->ID.'" duoshuo_id="'.$post->ID.'"></span>';
+			$post->CommNums = '<span id="duoshuo_comment'.$post->ID.'" duoshuo-id="'.$post->ID.'"></span>';
 			$duoshuo->cc_thread_key .= $post->ID.',';
 		}
 	}
-	$template->SetTags('footer',$duoshuo->get_footer_js());
+	$template->SetTags('footer', $template->GetTags('footer') . $duoshuo->get_footer_js());
 }
 
 function duoshuo_view_post_begin($id,$alias)

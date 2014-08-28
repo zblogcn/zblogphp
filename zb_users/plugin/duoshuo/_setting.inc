@@ -42,14 +42,14 @@ function getChecked($name,$value)
         <td><ul>
             <li>
               <label>
+                <input type="radio" name="duoshuo_cron_sync_enabled" value="sync"<?php echo getChecked("cron_sync_enabled","sync")?>>
+                实时写入</label>
+            </li>
+            <li>
+              <label>
                 <input type="radio" name="duoshuo_cron_sync_enabled" value="async"<?php echo getChecked("cron_sync_enabled","async")?>>
                 定时写入</label>
             </li>
-            <!--<li>
-                          <label>
-                            <input type="radio" name="duoshuo_cron_sync_enabled" value="sync"<?php echo getChecked("cron_sync_enabled","sync")?>>
-                            实时写入</label>
-                        </li>-->
             <li>
               <label>
                 <input type="radio" name="duoshuo_cron_sync_enabled" value="off"<?php echo getChecked("cron_sync_enabled","off")?>>
