@@ -44,7 +44,24 @@ function ActivePlugin_duoshuo()
 
 	//检测clinic插件的存在
 	if (defined('CLINIC')) {
-		
+		global $clinic_register_array;
+		global $clinic_register_cate;
+		$clinic_register_cate['duoshuo'] = array(
+			"chs" => "多说疑难杂症处理",
+			"modules" => array(
+				'duoshuo-sync'
+			)
+		);
+
+		$clinic_register_array['duoshuo-sync'] = array(
+			"id" => "duoshuo-sync",
+			"name" => "多说全身检查",
+			"category" => "duoshuo",
+			"question" => array(
+				"无法同步多说评论"
+			),
+			"path" => DUOSHUO_PATH . '/duoshuo.clinic.php'
+		);
 	}
 	
 }
@@ -60,7 +77,7 @@ function InstallPlugin_duoshuo()
 		$zbp->Config('duoshuo')->short_name = '';
 		$zbp->Config('duoshuo')->secret = '';
 		$zbp->Config('duoshuo')->api_hostname = 'api.duoshuo.com';
-		$zbp->Config('duoshuo')->cron_sync_enabled = 'async';
+		$zbp->Config('duoshuo')->cron_sync_enabled = 'sync';
 		$zbp->Config('duoshuo')->cc_fix = '1';
 		$zbp->Config('duoshuo')->comments_wrapper_intro = '';
 		$zbp->Config('duoshuo')->comments_wrapper_outro	= '';
@@ -185,7 +202,7 @@ function duoshuo_view_post_template(&$template)
 		$duoshuo->cc_thread_key .= $post->ID.',';
 	}
 	
-	$template->SetTags('footer',$duoshuo->get_footer_js());
+	$template->SetTags('footer', $template->GetTags('footer') . $duoshuo->get_footer_js());
 	
 }
 function duoshuo_view_list_template(&$template)
