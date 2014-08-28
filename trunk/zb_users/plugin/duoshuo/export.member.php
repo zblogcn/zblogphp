@@ -4,7 +4,7 @@ function export_post_member($http,$intmin,$intmax)
 	global $zbp;
 	global $duoshuo;
 	$where = array();
-	$where[] = array('custom',' %pre%member.mem_ID not in (SELECT ds_memid FROM %pre%plugin_duoshuo_members)');
+	$where[] = array('custom',' ' . $GLOBALS['table']['Member'] . '.mem_ID not in (SELECT ds_memid FROM ' . $GLOBALS['table']['plugin_duoshuo_members'] . ')');
 	$return = $zbp->GetMemberList('*',$where,null,null,null);
 	$data = export_member($return);
 	$http->open('POST',"http://" . $duoshuo->cfg->api_hostname . '/' . $duoshuo->url['users']['import']);
@@ -15,7 +15,7 @@ function export_post_member($http,$intmin,$intmax)
 	{
 		foreach($json->response as $a => $v)
 		{
-			$sql = $zbp->db->sql->Insert($duoshuo->db['members'],array('ds_memid'=>$a,'ds_key'=>$v));
+			$sql = $zbp->db->sql->Insert($GLOBALS['table']['plugin_duoshuo_members'],array('ds_memid'=>$a,'ds_key'=>$v));
 			$zbp->db->Insert($sql);
 		}
 	}

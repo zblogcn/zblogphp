@@ -41,7 +41,9 @@ switch(GetVars('act','GET'))
 	break;
 	case "api_async":
 		$right = 'cmt';
+		echo '//';
 		api_async();
+		exit;
 	break;
 	case "save":
 		event_init();
@@ -58,7 +60,50 @@ switch(GetVars('act','GET'))
 
 function api()
 {
-	echo '多说 for Z-Blog PHP插件暂不支持Ping请求，请静待版本更新';
+
+	function check_signature($input, $secret){
+
+		$signature = $input['signature'];
+		unset($input['signature']);
+
+		ksort($input);
+		$baseString = http_build_query($input, null, '&');
+		$expectSignature = base64_encode(hmacsha1($baseString, $secret));
+		if ($signature !== $expectSignature) {
+			return false;
+		}
+		return true;
+	}
+
+
+	function hmacsha1($data, $key) {
+		if (function_exists('hash_hmac'))
+			return hash_hmac('sha1', $data, $key, true);
+
+		$blocksize=64;
+		if (strlen($key)>$blocksize)
+			$key=pack('H*', sha1($key));
+		$key=str_pad($key,$blocksize,chr(0x00));
+		$ipad=str_repeat(chr(0x36),$blocksize);
+		$opad=str_repeat(chr(0x5c),$blocksize);
+		$hmac = pack(
+			'H*',sha1(
+				($key^$opad).pack(
+					'H*',sha1(
+						($key^$ipad).$data
+					)
+				)
+			)
+		);
+		return $hmac;
+	}
+
+	global $zbp;
+	global $duoshuo;
+	$duoshuo->init();
+	if (check_signature($_POST, $zbp->config('duoshuo')->secret)) {
+		api_async();
+	}
 }
 
 function api_async()
@@ -89,7 +134,7 @@ function api_async()
 	$zbp->SaveConfig('duoshuo');
 	$return_string = '';
 	
-	if($duoshuo->cfg->cron_sync_enabled != "async")
+	if($duoshuo->cfg->cron_sync_enabled == "off")
 	{
 		$return_string = 'noasync';
 	}
@@ -101,8 +146,7 @@ function api_async()
 	$result['last'] = $_last;
 	$result['now'] = $_now;
 	$result['status'] = $return_string;
-	echo '//(' . json_encode($result) . ')';
-	exit();
+	echo json_encode($result);
 }
 
 function api_run()
@@ -179,6 +223,7 @@ function export()
 	require DUOSHUO_PATH . '/export.comment.php';
 	require DUOSHUO_PATH . '/export.member.php';
 	
+	$strSuccess = '';
 	switch(GetVars("type",'POST'))
 	{
 		case 'all':
@@ -208,6 +253,7 @@ function export()
 			if($strSuccess == 'success') $strSuccess = "数据从多说备份到本地完成";
 		break;
 	}
+
 	$result = array(
 		'success' => $strSuccess  . '，用时' . (microtime_float()-$startTime) . 'ms'
 	);

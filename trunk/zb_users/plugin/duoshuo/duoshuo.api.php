@@ -54,7 +54,7 @@ class duoshuo_api
 	    //写入数据库
 		if ($meta->meta->parent_id > 0) {
 			$sql = $zbp->db->sql->Select(
-				$duoshuo->db['comment'],
+				$GLOBALS['table']['plugin_duoshuo_comment'],
 				array('ds_cmtid'),
 				array(array('=','ds_key',$meta->meta->parent_id)),
 				null,
@@ -64,7 +64,7 @@ class duoshuo_api
 			
 			$result = $zbp->db->Query($sql);
 			if(count($result)>0) $c->ParentID = $result[0]['ds_cmtid'];
-			$sql = $zbp->db->sql->Select('%pre%comment',array('comm_RootID'),array(array('=','comm_ID',$c->ParentID)),null,null,null);
+			$sql = $zbp->db->sql->Select($GLOBALS['table']['Comment'], array('comm_RootID'),array(array('=','comm_ID',$c->ParentID)),null,null,null);
 			$result = $zbp->db->Query($sql);
 			if(count($result)>0)
 			{
@@ -77,7 +77,7 @@ class duoshuo_api
 		if ($c->Save())
 		{
 			$sql = $zbp->db->sql->Insert(
-				$duoshuo->db['comment'],
+				$GLOBALS['table']['plugin_duoshuo_comment'],
 				array('ds_key'=>$meta->meta->post_id , 'ds_cmtid'=>$c->ID)
 			);
 			$zbp->db->Insert($sql);
@@ -94,12 +94,12 @@ class duoshuo_api
 		global $duoshuo;
 		global $table;
 		$sql = $zbp->db->sql->Update(
-			'%pre%Comment',
+			$GLOBALS['table']['Comment'],
 			array('comm_IsChecking' => 0),
 			array(
 				array('custom', 'comm_ID = (' .
 					$zbp->db->sql->Select(
-						$duoshuo->db['comment'],
+						$GLOBALS['table']['plugin_duoshuo_comment'],
 						array('ds_cmtid'),
 						array(array('custom',
 							'ds_key In (' . $this->implode2(array(
@@ -125,12 +125,12 @@ class duoshuo_api
 		global $duoshuo;
 		global $table;
 		$sql = $zbp->db->sql->Update(
-			'%pre%Comment',
+			$GLOBALS['table']['Comment'],
 			array('comm_IsChecking' => 1),
 			array(
 				array('custom', 'comm_ID = (' .
 					$zbp->db->sql->Select(
-						$duoshuo->db['comment'],
+						$GLOBALS['table']['plugin_duoshuo_comment'],
 						array('ds_cmtid'),
 						array(array('custom',
 							'ds_key In (' . $this->implode2(array(
@@ -160,8 +160,8 @@ class duoshuo_api
 		$ds_keylist = $this->implode2(array('ary' => $meta->meta,'before' => "'",'after' => "'",'split_tag' => ','));
 		//我靠好麻烦，MySQL和SQLite还要写不同的，不如直接通用（虽然效率低）
 		$sql = $zbp->db->sql->Select(
-			$duoshuo->db['comment'],
-			'comm_LogId,ds_cmtid',
+			$GLOBALS['table']['plugin_duoshuo_comment'],
+			'ds_cmtid',
 			array(array('custom','ds_key In (' . $ds_keylist . ')')),
 			null,
 			null,
@@ -171,13 +171,25 @@ class duoshuo_api
 		if(count($result)>0)
 		{
 			foreach($result as $rs)
-			{
 				$ary_cmtid[] = $rs['ds_cmtid'];
-				if (!in_array($rs['comm_LogId']))
-					$ary_logid = $rs['comm_LogId'];
-			}
-			$zbp->db->Delete($zbp->db->sql->Delete('%pre%Comment',array(array('custom','comm_ID In (' .$this->implode2(array('ary' => $ary_cmtid,'before' => "'",'after' => "'",'split_tag' => ',')) . ')'))));
-			$zbp->db->Delete($zbp->db->sql->Delete($duoshuo->db['comment'],array(array('custom','ds_key In (' . $ds_keylist . ')'))));
+			
+			$sql = $zbp->db->sql->Select(
+				$GLOBALS['table']['Comment'],
+				'comm_LogID',
+				array(array('custom','comm_ID In (' . implode(',', $ary_cmtid) . ') GROUP BY comm_LogID')),
+				null,
+				null,
+				null
+			);
+			$result = $zbp->db->Query($sql);
+			if(count($result)>0)
+				foreach($result as $rs)
+					$ary_logid[] = $rs['comm_LogID'];
+
+
+			$zbp->db->Delete($zbp->db->sql->Delete($GLOBALS['table']['Comment'], array(array('custom','comm_ID In (' .$this->implode2(array('ary' => $ary_cmtid,'before' => "'",'after' => "'",'split_tag' => ',')) . ')'))));
+			$zbp->db->Delete($zbp->db->sql->Delete($GLOBALS['table']['plugin_duoshuo_comment'], array(array('custom','ds_key In (' . $ds_keylist . ')'))));
+
 			CountPostArray($ary_logid);
 		}
 		
