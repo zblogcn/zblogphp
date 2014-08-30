@@ -1,0 +1,8 @@
+{
+	"id": "recount-member",
+	"name": "用户文章等发表量重新计数",
+	"category": "recount",
+	"question": [
+		"用户信息总数不准"
+	]
+}
