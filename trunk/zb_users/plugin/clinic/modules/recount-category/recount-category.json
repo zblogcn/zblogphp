@@ -1,0 +1,8 @@
+{
+	"id": "recount-category",
+	"name": "分类文章重新计数",
+	"category": "recount",
+	"question": [
+		"分类文章总数不准"
+	]
+}

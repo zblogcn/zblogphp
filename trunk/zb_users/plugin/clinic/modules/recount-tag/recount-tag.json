@@ -1,0 +1,8 @@
+{
+	"id": "recount-tag",
+	"name": "标签文章重新计数",
+	"category": "recount",
+	"question": [
+		"Tags文章总数不准"
+	]
+}
