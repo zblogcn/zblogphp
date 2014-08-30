@@ -1037,6 +1037,7 @@ function PostArticle() {
 	$pre_author = null;
 	$pre_tag = null;
 	$pre_category = null;
+	$orig_id = 0;
 	if (GetVars('ID', 'POST') == 0) {
 		if (!$zbp->CheckRights('ArticlePub')) {
 			$_POST['Status'] = ZC_POST_STATUS_AUDITING;
@@ -1049,6 +1050,7 @@ function PostArticle() {
 		if ((!$zbp->CheckRights('ArticlePub')) && ($article->Status == ZC_POST_STATUS_AUDITING)) {
 			$_POST['Status'] = ZC_POST_STATUS_AUDITING;
 		}
+		$orig_id = $article->ID;
 		$pre_author = $article->AuthorID;
 		$pre_tag = $article->Tag;
 		$pre_category = $article->CateID;
@@ -1072,11 +1074,13 @@ function PostArticle() {
 
 	$article->Save();
 
-	CountTagArrayString($pre_tag . $article->Tag);
-	CountMemberArray(array($pre_author, $article->AuthorID));
-	CountCategoryArray(array($pre_category, $article->CateID));
-	CountPostArray(array($article->ID));
-	CountNormalArticleNums();
+	if ($orig_id == 0) {
+		CountTagArrayString($pre_tag . $article->Tag, +1);
+		CountMemberArray(array($pre_author, $article->AuthorID), array(+1, 0, 0, 0));
+		CountCategoryArray(array($pre_category, $article->CateID), +1);
+		CountPostArray(array($article->ID), 0);
+		CountNormalArticleNums(+1);
+	}
 
 	$zbp->AddBuildModule('previous');
 	$zbp->AddBuildModule('calendar');
@@ -1115,10 +1119,12 @@ function DelArticle() {
 
 		DelArticle_Comments($article->ID);
 
-		CountTagArrayString($pre_tag);
-		CountMemberArray(array($pre_author));
-		CountCategoryArray(array($pre_category));
-		CountNormalArticleNums();
+		
+		CountTagArrayString($pre_tag, -1);
+		CountMemberArray(array($pre_author), array(-1, 0, 0, 0));
+		CountCategoryArray(array($pre_category), -1);
+		CountNormalArticleNums(-1);
+		
 
 		$zbp->AddBuildModule('previous');
 		$zbp->AddBuildModule('calendar');
@@ -1252,8 +1258,8 @@ function PostPage() {
 
 	$article->Save();
 
-	CountMemberArray(array($pre_author, $article->AuthorID));
-	CountPostArray(array($article->ID));
+	CountMemberArray(array($pre_author, $article->AuthorID), array(0, +1, 0, 0));
+	CountPostArray(array($article->ID), 0);
 
 	$zbp->AddBuildModule('comments');
 
@@ -1290,7 +1296,7 @@ function DelPage() {
 
 		DelArticle_Comments($article->ID);
 
-		CountMemberArray(array($pre_author));
+		CountMemberArray(array($pre_author), array(0, -1, 0, 0));
 
 		$zbp->AddBuildModule('comments');
 
@@ -1371,7 +1377,7 @@ function PostComment() {
 
 		if ($cmt->IsChecking == false) {
 
-			CountPostArray(array($cmt->LogID));
+			CountPostArray(array($cmt->LogID), +1);
 
 			$zbp->AddBuildModule('comments');
 
@@ -1416,7 +1422,7 @@ function DelComment() {
 
 		$cmt->Del();
 		
-		CountPostArray(array($cmt->LogID));
+		CountPostArray(array($cmt->LogID), -1);
 
 		$zbp->AddBuildModule('comments');
 
@@ -1474,11 +1480,19 @@ function CheckComment() {
 	$ischecking = (bool)GetVars('ischecking', 'GET');
 
 	$cmt = $zbp->GetCommentByID($id);
+	$orig_check = $cmt->IsChecking;
 	$cmt->IsChecking = $ischecking;
 
 	$cmt->Save();
 
-	CountPostArray(array($cmt->LogID));
+	$orig_check = (bool)$orig_check;
+
+	if ($orig_check && !$ischecking) {
+		CountPostArray(array($cmt->LogID), +1);
+	}
+	else if (!$orig_check && $ischecking) {
+		CountPostArray(array($cmt->LogID), -1);
+	}
 	$zbp->AddBuildModule('comments');
 }
 
@@ -1581,6 +1595,7 @@ function PostCategory() {
 	FilterCategory($cate);
 	FilterMeta($cate);
 
+	// 此处用作刷新分类内文章数据使用，不作更改
 	CountCategory($cate);
 
 	$cate->Save();
@@ -1986,7 +2001,7 @@ function PostUpload() {
 		}
 	}
 	if (isset($upload))
-		CountMemberArray(array($upload->AuthorID));
+		CountMemberArray(array($upload->AuthorID), array(0, 0, 0, +1));
 
 }
 
@@ -2001,7 +2016,7 @@ function DelUpload() {
 	$u = $zbp->GetUploadByID($id);
 	if ($zbp->CheckRights('UploadAll') || (!$zbp->CheckRights('UploadAll') && $u->AuthorID == $zbp->user->ID)) {
 		$u->Del();
-		CountMemberArray(array($u->AuthorID));
+		CountMemberArray(array($u->AuthorID), array(0, 0, 0, -1));
 		$u->DelFile();
 	} else {
 		return false;
@@ -2321,72 +2336,94 @@ function FilterTag(&$tag) {
 #统计函数
 /**
  *统计公开文章数
+ * @param int $plus 控制是否要进行全表扫描
  */
-function CountNormalArticleNums() {
+function CountNormalArticleNums($plus = NULL) {
 	global $zbp;
-	$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 0), array('=', 'log_Status', 0)));
-	$num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 
-	$zbp->cache->normal_article_nums = $num;
+	if ($plus === NULL) {
+		$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 0), array('=', 'log_Status', 0)));
+		$num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
+
+		$zbp->cache->normal_article_nums = $num;
+	}
+	else {
+		$zbp->cache->normal_article_nums += $plus;
+	}
 	$zbp->SaveCache();
 }
 
 /**
  * 统计文章下评论数
  * @param post $article
+ * @param int $plus 控制是否要进行全表扫描
  */
-function CountPost(&$article) {
+function CountPost(&$article, $plus = NULL) {
 	global $zbp;
 
-	$id = $article->ID;
+	if ($plus === NULL) {
+		$id = $article->ID;
 
-	$s = $zbp->db->sql->Count($zbp->table['Comment'], array(array('COUNT', '*', 'num')), array(array('=', 'comm_LogID', $id), array('=', 'comm_IsChecking', 0)));
-	$num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
+		$s = $zbp->db->sql->Count($zbp->table['Comment'], array(array('COUNT', '*', 'num')), array(array('=', 'comm_LogID', $id), array('=', 'comm_IsChecking', 0)));
+		$num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 
-	$article->CommNums = $num;
+		$article->CommNums = $num;
+	}
+	else {
+		$article->CommNums += $plus;
+	}
 }
 
 /**
  * 批量统计指定文章下评论数并保存
  * @param array $array 记录文章ID的数组
+ * @param int $plus 控制是否要进行全表扫描
  */
-function CountPostArray($array) {
+function CountPostArray($array, $plus = NULL) {
 	global $zbp;
 	$array = array_unique($array);
 	foreach ($array as $value) {
 		if ($value == 0) continue;
 		$article = new Post;
-		$article->LoadInfoByID($value);
-		CountPost($article);
-		$article->Save();
+		if ($article->LoadInfoByID($value)) {
+			CountPost($article, $plus);
+			$article->Save();	
+		}
 	}
 }
 
 /**
  * 统计分类下文章数
  * @param category &$category
+ * @param int $plus 控制是否要进行全表扫描
  */
-function CountCategory(&$category) {
+function CountCategory(&$category, $plus = NULL) {
 	global $zbp;
 
-	$id = $category->ID;
+	if ($plus === NULL) {
+		$id = $category->ID;
 
-	$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 0), array('=', 'log_Status', 0), array('=', 'log_CateID', $id)));
-	$num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
-
-	$category->Count = $num;
+		$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 0), array('=', 'log_Status', 0), array('=', 'log_CateID', $id)));
+		$num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
+	
+		$category->Count = $num;
+	}
+	else {
+		$category->Count += $plus;
+	}
 }
 
 /**
  * 批量统计指定分类下文章数并保存
  * @param array $array 记录分类ID的数组
+ * @param int $plus 控制是否要进行全表扫描
  */
-function CountCategoryArray($array) {
+function CountCategoryArray($array, $plus = NULL) {
 	global $zbp;
 	$array = array_unique($array);
 	foreach ($array as $value) {
 		if ($value == 0) continue;
-		CountCategory($zbp->categorys[$value]);
+		CountCategory($zbp->categorys[$value], $plus);
 		$zbp->categorys[$value]->Save();
 	}
 }
@@ -2394,27 +2431,34 @@ function CountCategoryArray($array) {
 /**
  * 统计tag下的文章数
  * @param tag &$tag
+ * @param int $plus 控制是否要进行全表扫描
  */
-function CountTag(&$tag) {
+function CountTag(&$tag, $plus = NULL) {
 	global $zbp;
 
-	$id = $tag->ID;
+	if ($plus === NULL) {
+		$id = $tag->ID;
 
-	$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('LIKE', 'log_Tag', '%{' . $id . '}%')));
-	$num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
+		$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('LIKE', 'log_Tag', '%{' . $id . '}%')));
+		$num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 
-	$tag->Count = $num;
+		$tag->Count = $num;
+	} 
+	else {
+		$tag->Count += $plus;
+	}
 }
 
 /**
  * 批量统计指定tag下文章数并保存
  * @param string $string 类似'{1}{2}{3}{4}{4}'的tagID串
+ * @param int $plus 控制是否要进行全表扫描
  */
-function CountTagArrayString($string) {
+function CountTagArrayString($string, $plus = NULL) {
 	global $zbp;
 	$array = $zbp->LoadTagsByIDString($string);
 	foreach ($array as &$tag) {
-		CountTag($tag);
+		CountTag($tag, $plus);
 		$tag->Save();
 	}
 }
@@ -2422,46 +2466,70 @@ function CountTagArrayString($string) {
 /**
  * 统计用户下的文章数、页面数、评论数、附件数等
  * @param $member
+ * @param array $plus 设置是否需要完全全表扫描
  */
-function CountMember(&$member) {
+function CountMember(&$member, $plus = array(NULL, NULL, NULL, NULL)) {
 	global $zbp;
 	if(!($member  instanceof  Member))return;
 
 	$id = $member->ID;
 
-	$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_AuthorID', $id), array('=', 'log_Type', 0)));
-	$member_Articles = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
+	if ($plus[0] === NULL) {
+		$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_AuthorID', $id), array('=', 'log_Type', 0)));
+		$member_Articles = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
+		$member->Articles = $member_Articles;
+	}
+	else {
+		$member->Articles += $plus[0];
+	}
 
-	$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_AuthorID', $id), array('=', 'log_Type', 1)));
-	$member_Pages = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
+	if ($plus[1] === NULL) {
+		$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_AuthorID', $id), array('=', 'log_Type', 1)));
+		$member_Pages = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
+		$member->Pages = $member_Pages;
+	}
+	else {
+		$member->Pages += $plus[1];
+	}
 
-	$s = $zbp->db->sql->Count($zbp->table['Comment'], array(array('COUNT', '*', 'num')), array(array('=', 'comm_AuthorID', $id)));
-	$member_Comments = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
+	if ($plus[2] === NULL) {
+		$s = $zbp->db->sql->Count($zbp->table['Comment'], array(array('COUNT', '*', 'num')), array(array('=', 'comm_AuthorID', $id)));
+		$member_Comments = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
+		$member->Comments = $member_Comments;
+	}
+	else {
+		$member->Comments += $plus[2];
+	}
 
-	$s = $zbp->db->sql->Count($zbp->table['Upload'], array(array('COUNT', '*', 'num')), array(array('=', 'ul_AuthorID', $id)));
-	$member_Uploads = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
-
-	$member->Articles = $member_Articles;
-	$member->Pages = $member_Pages;
-	$member->Comments = $member_Comments;
-	$member->Uploads = $member_Uploads;
+	if ($plus[3] === NULL) {
+		$s = $zbp->db->sql->Count($zbp->table['Upload'], array(array('COUNT', '*', 'num')), array(array('=', 'ul_AuthorID', $id)));
+		$member_Uploads = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
+		$member->Uploads = $member_Uploads;
+	}
+	else {
+		$member->Uploads += $plus[3];
+	}
+	
+	
 }
 
 /**
  * 批量统计指定用户数据并保存
  * @param array $array 记录用户ID的数组
+ * @param array $plus 设置是否需要完全全表扫描
  */
-function CountMemberArray($array) {
+function CountMemberArray($array, $plus = array(NULL, NULL, NULL, NULL)) {
 	global $zbp;
 	$array = array_unique($array);
 	foreach ($array as $value) {
 		if ($value == 0) continue;
 		if(isset($zbp->members[$value])){
-			CountMember($zbp->members[$value]);
+ 			CountMember($zbp->members[$value], $plus);
 			$zbp->members[$value]->Save();
 		}
 	}
 }
+
 
 ################################################################################################################
 #BuildModule
