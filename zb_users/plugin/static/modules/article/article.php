@@ -5,12 +5,11 @@
  * @subpackage article.php
  */
 class article extends Static_Class {
-
 	public function get_queue() {
 		global $zbp;
 		$posts = $zbp->GetPostList();
 		foreach ($posts as $key => $value) {
-			$this->set_queue('static_post_build', serialize(array($value->ID, count($posts))));
+			$this->set_queue('static_post_build', serialize(array($value->ID, count($posts), end($posts)->ID)));
 		}
 	}
 
@@ -19,7 +18,6 @@ class article extends Static_Class {
 		$param = unserialize($param);
 		$postid = $param[0];
 		$post = $zbp->GetPostByID($postid);
-		$str = null;
 		$post_url = $post->Url;
 		if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
 			$post_url = iconv("utf-8", "gbk",$post_url);
@@ -38,7 +36,7 @@ class article extends Static_Class {
 			}
 			$save_dir = $exists_url.end($url);
 		}
-		$data = json_encode(array($post->ID, $save_dir, $param[1]));
+		$data = json_encode(array($post->ID, $save_dir, $param[1],$param[2]));
 		$this->output('success', '文章ID【'.$param[0].'】准备完成！');
 		$this->set_queue('static_file_put_contents', $data);
 	}
@@ -53,7 +51,7 @@ class article extends Static_Class {
 		ob_end_clean();
 		file_put_contents($data[1], $article_Content);
 		$this->output('success', '文章ID【'.$data[0].'】重建成功！');
-		if ($data[0] == $data[2]) {
+		if ($data[0] == $data[3]) {
 			$this->static_post_build_complete($data[2]);
 		}
 	}
