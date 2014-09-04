@@ -99,5 +99,15 @@ function static_get_postcontent($postid){
 	return $data;
 }
 
-function InstallPlugin_static() {}
+function InstallPlugin_static() {
+	$zbp->option['ZC_STATIC_MODE'] = 'REWRITE';
+	$zbp->option['ZC_TAGS_REGEX'] = '{%host%}?tags={%alias%}&page={%page%}';
+	$zbp->option['ZC_DATE_REGEX'] = '{%host%}?date={%date%}&page={%page%}';
+	$zbp->SaveOption();
+
+	$zbp->AddBuildModuleAll();
+	$zbp->BuildModule();
+	$zbp->SetHint('good','启用成功！');
+}
+
 function UninstallPlugin_static() {}

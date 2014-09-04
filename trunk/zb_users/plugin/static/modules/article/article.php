@@ -7,7 +7,7 @@
 class article extends Static_Class {
 	public function get_queue() {
 		global $zbp;
-		$posts = $zbp->GetPostList();
+		$posts = $zbp->GetPostList(null, array(array('=', 'log_Status', 0)));
 		foreach ($posts as $key => $value) {
 			$this->set_queue('static_post_build', serialize(array($value->ID, count($posts), end($posts)->ID)));
 		}
