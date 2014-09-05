@@ -100,6 +100,7 @@ function static_get_postcontent($postid){
 }
 
 function InstallPlugin_static() {
+	global $zbp;
 	$zbp->option['ZC_STATIC_MODE'] = 'REWRITE';
 	$zbp->option['ZC_TAGS_REGEX'] = '{%host%}?tags={%alias%}&page={%page%}';
 	$zbp->option['ZC_DATE_REGEX'] = '{%host%}?date={%date%}&page={%page%}';
