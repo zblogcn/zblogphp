@@ -350,7 +350,7 @@ class App {
 		if(function_exists('scandir')){
 			foreach (scandir($dir) as $d) {
 				if (is_dir($dir .  $d)) {
-					if( ($d<>'.') && ($d<>'..') ){
+					if( substr($d, 0, 1) != '.' ){
 						$this->GetAllFileDir($dir . $d . '/');
 						$this->dirs[]=$dir . $d . '/';
 					}
