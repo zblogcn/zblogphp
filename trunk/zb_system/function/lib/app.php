@@ -361,7 +361,7 @@ class App {
 		}else{
 			if ($handle = opendir($dir)) {
 				while (false !== ($file = readdir($handle))) {
-					if ($file != "." && $file != "..") {
+					if (substr($file, 0, 1) != '.') {
 						if (is_dir($dir .  $file)) {
 							$this->dirs[]=$dir . $file  . '/';
 							$this->GetAllFileDir($dir . $file . '/');
