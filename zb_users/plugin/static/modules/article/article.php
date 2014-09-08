@@ -19,14 +19,11 @@ class article extends Static_Class {
 		$postid = $param[0];
 		$post = $zbp->GetPostByID($postid);
 		$post_url = $post->Url;
-		if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
-			$post_url = iconv("utf-8", "gbk",$post_url);
-		}
+		$post_url = urldecode($post_url);
 		$url = str_replace($zbp->host, '', $post_url);
+		$save_dir = $zbp->path . $url;
 		$url = explode('/', $url);
-		if(count($url) == 1){
-			$save_dir = $zbp->path.$url[0];
-		}else{
+		if(count($url) > 1){
 			$exists_url = $zbp->path;
 			for ($i=0; $i < (count($url)-1); $i++) {
 				$exists_url .= ($url[$i].'/');
@@ -34,7 +31,6 @@ class article extends Static_Class {
 					@mkdir($exists_url);
 				}
 			}
-			$save_dir = $exists_url.end($url);
 		}
 		$data = json_encode(array($post->ID, $save_dir, $param[1],$param[2]));
 		$this->output('success', '文章ID【'.$param[0].'】准备完成！');
@@ -49,7 +45,12 @@ class article extends Static_Class {
 		ViewPost($data[0], null, false);
 		$article_Content = ob_get_contents();
 		ob_end_clean();
-		file_put_contents($data[1], $article_Content);
+		if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
+			$save_url = iconv("utf-8", "gbk",$data[1]);
+		}else{
+			$save_url = $data[1];
+		}
+		file_put_contents($save_url, $article_Content);
 		$this->output('success', '文章ID【'.$data[0].'】重建成功！');
 		if ($data[0] == $data[3]) {
 			$this->static_post_build_complete($data[2]);
