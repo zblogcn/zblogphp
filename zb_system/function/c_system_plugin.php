@@ -1231,6 +1231,17 @@ DefinePluginFilter('Filter_Plugin_Category_Call');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Member_Call
+'参数:&$member,$method,$args
+'说明:Member类的魔术方法接口
+'调用:
+'**************************************************>
+*/
+DefinePluginFilter('Filter_Plugin_Member_Call');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Post_Save
 '参数:&$post,$method,$args
 '说明:Post类的Save方法接口
