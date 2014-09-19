@@ -5,11 +5,12 @@
  * @subpackage article.php
  */
 class article extends Static_Class {
+
 	public function get_queue() {
 		global $zbp;
-		$posts = $zbp->GetPostList(null, array(array('=', 'log_Status', 0)));
+		$posts = $zbp->GetPostList();
 		foreach ($posts as $key => $value) {
-			$this->set_queue('static_post_build', serialize(array($value->ID, count($posts), end($posts)->ID)));
+			$this->set_queue('static_post_build', serialize(array($value->ID, count($posts))));
 		}
 	}
 
@@ -18,12 +19,16 @@ class article extends Static_Class {
 		$param = unserialize($param);
 		$postid = $param[0];
 		$post = $zbp->GetPostByID($postid);
+		$str = null;
 		$post_url = $post->Url;
-		$post_url = urldecode($post_url);
+		if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
+			$post_url = iconv("utf-8", "gbk",$post_url);
+		}
 		$url = str_replace($zbp->host, '', $post_url);
-		$save_dir = $zbp->path . $url;
 		$url = explode('/', $url);
-		if(count($url) > 1){
+		if(count($url) == 1){
+			$save_dir = $zbp->path.$url[0];
+		}else{
 			$exists_url = $zbp->path;
 			for ($i=0; $i < (count($url)-1); $i++) {
 				$exists_url .= ($url[$i].'/');
@@ -31,8 +36,9 @@ class article extends Static_Class {
 					@mkdir($exists_url);
 				}
 			}
+			$save_dir = $exists_url.end($url);
 		}
-		$data = json_encode(array($post->ID, $save_dir, $param[1],$param[2]));
+		$data = json_encode(array($post->ID, $save_dir, $param[1]));
 		$this->output('success', '文章ID【'.$param[0].'】准备完成！');
 		$this->set_queue('static_file_put_contents', $data);
 	}
@@ -45,14 +51,9 @@ class article extends Static_Class {
 		ViewPost($data[0], null, false);
 		$article_Content = ob_get_contents();
 		ob_end_clean();
-		if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
-			$save_url = iconv("utf-8", "gbk",$data[1]);
-		}else{
-			$save_url = $data[1];
-		}
-		file_put_contents($save_url, $article_Content);
+		file_put_contents($data[1], $article_Content);
 		$this->output('success', '文章ID【'.$data[0].'】重建成功！');
-		if ($data[0] == $data[3]) {
+		if ($data[0] == $data[2]) {
 			$this->static_post_build_complete($data[2]);
 		}
 	}

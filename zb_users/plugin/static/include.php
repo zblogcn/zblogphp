@@ -66,11 +66,15 @@ function static_post_build($article){
 	global $zbp;
 	$str = null;
 	$post_url = $article->Url;
-	$post_url = urldecode($post_url);
+	if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
+		$post_url = iconv("utf-8", "gbk",$post_url);
+	}
 	$url = str_replace($zbp->host, '', $post_url);
-	$save_url = $zbp->path . $url;
 	$url = explode('/', $url);
-	if(count($url) > 1){
+	if(count($url) == 1){
+		$str = static_get_postcontent($article->ID);
+		file_put_contents($zbp->path.$url[0], $str);
+	}else{
 		$exists_url = $zbp->path;
 		for ($i=0; $i < (count($url)-1); $i++) {
 			$exists_url .= ($url[$i].'/');
@@ -78,34 +82,22 @@ function static_post_build($article){
 				@mkdir($exists_url);
 			}
 		}
+		$str = static_get_postcontent($article->ID);
+		file_put_contents($exists_url.end($url), $str);
+
 	}
-	$str = static_get_postcontent($article->ID);
-	if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
-		$save_url = iconv("utf-8", "gbk",$save_url);
-	}
-	file_put_contents($save_url, $str);
+
 }
 
 function static_get_postcontent($postid){
 	global $zbp;
 	$zbp->user->ID = 0;
 	ob_start();
-	ViewPost($postid, null, true);
+	ViewPost($postid, null, false);
 	$data = ob_get_contents();
 	ob_end_clean();
 	return $data;
 }
 
-function InstallPlugin_static() {
-	global $zbp;
-	$zbp->option['ZC_STATIC_MODE'] = 'REWRITE';
-	$zbp->option['ZC_TAGS_REGEX'] = '{%host%}?tags={%alias%}&page={%page%}';
-	$zbp->option['ZC_DATE_REGEX'] = '{%host%}?date={%date%}&page={%page%}';
-	$zbp->SaveOption();
-
-	$zbp->AddBuildModuleAll();
-	$zbp->BuildModule();
-	$zbp->SetHint('good','启用成功！');
-}
-
+function InstallPlugin_static() {}
 function UninstallPlugin_static() {}

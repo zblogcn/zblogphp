@@ -4,6 +4,6 @@
 	<div class="post-body"><?php  echo $article->Intro;  ?></div>
 	<h5 class="post-tags"></h5>
 	<h6 class="post-footer">
-		作者:<?php  echo $article->Author->StaticName;  ?> | 分类:<?php  echo $article->Category->Name;  ?> | 浏览:<?php  echo $article->ViewNums;  ?> | 评论:<?php  echo $article->CommNums;  ?>
+		作者:<?php  echo $article->Author->Name;  ?> | 分类:<?php  echo $article->Category->Name;  ?> | 浏览:<?php  echo $article->ViewNums;  ?> | 评论:<?php  echo $article->CommNums;  ?>
 	</h6>
 </div>

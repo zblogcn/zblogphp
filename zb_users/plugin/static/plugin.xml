@@ -2,16 +2,16 @@
 <plugin version="php">
 <id>static</id>
 <name>全站静态化</name>
-<url>http://app.rainbowsoft.org/?auth=4</url>
-<note>给文章生成真实的静态化文件而不是伪静态</note>
-<description>给文章生成真实的静态化文件而不是伪静态，减少系统资源占用。</description>
+<url></url>
+<note></note>
+<description></description>
 <path>main.php</path>
 <include>include.php</include>
 <level>1</level>
 <author>
-  <name>未寒</name>
-  <email>im@imzhou.com</email>
-  <url>http://imzhou.com/</url>
+  <name></name>
+  <email></email>
+  <url></url>
 </author>
 <source>
   <name></name>
@@ -21,8 +21,8 @@
 <adapted>140614</adapted>
 <version>1.0</version>
 <pubdate>2013-12-26</pubdate>
-<modified>2014-09-05</modified>
-<price>28</price>
+<modified>2014-08-20</modified>
+<price>0</price>
 <advanced>
   <dependency>STACentre</dependency>
   <rewritefunctions></rewritefunctions>

@@ -2,26 +2,26 @@
 <plugin version="php">
 <id>KODExplorer</id>
 <name>KOD文件管理</name>
-<url></url>
-<note></note>
+<url>http://www.zsxsoft.com</url>
+<note>KOD文件管理</note>
 <description></description>
 <path>main.php</path>
 <include>include.php</include>
 <level>1</level>
 <author>
-  <name></name>
-  <email></email>
-  <url></url>
+  <name>zsx</name>
+  <email>zsx@zsxsoft.com</email>
+  <url>http://www.zsxsoft.com</url>
 </author>
 <source>
   <name></name>
   <email></email>
   <url></url>
 </source>
-<adapted>131212</adapted>
-<version>1.0</version>
+<adapted>140614</adapted>
+<version>1.1</version>
 <pubdate>2013-12-11</pubdate>
-<modified>2013-12-11</modified>
+<modified>2014-08-25</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>
