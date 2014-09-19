@@ -1,6 +1,18 @@
 # User Config
 /zb_users/c_option.php
+/zb_users/data/*.db
+
+# Cache 
+/zb_users/cache/*
+/zb_users/logs/*
+
+# Compiled theme
 /zb_users/upload/*/*
+
+# Upload
+/zb_users/theme/*/compile/*.php
+
+# Static
 /post/*
 
 # Update
