@@ -20,7 +20,7 @@
 </nav>
 
 
-<header class="header">
+<header class="header hidden-xs">
 	<div class="logo">
 		<a href="<?php echo $bloghost?>" title="<?php echo htmlspecialchars($blogname)?>" target="_blank">
 			<img src="<?php echo $bloghost?>zb_system/image/admin/none.gif" alt="Z-Blog"/></a>

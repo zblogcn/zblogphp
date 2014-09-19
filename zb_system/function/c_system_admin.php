@@ -961,11 +961,11 @@ function Admin_UploadMng(){
 	echo '<div id="divMain2">';
 
 
-	echo '<form class="search" name="upload" id="upload" method="post" enctype="multipart/form-data" action="../cmd.php?act=UploadPst">';
-	echo '<p>' . $zbp->lang['msg']['upload_file'] . ': </p>';
-	echo '<p><input type="file" name="file" size="60" />&nbsp;&nbsp;';
-	echo '<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '" onclick="" />&nbsp;&nbsp;';
-	echo '<input class="button" type="reset" value="' . $zbp->lang['msg']['reset'] . '" /></p>';
+	echo '<form role="form" class="search" name="upload" id="upload" method="post" enctype="multipart/form-data" action="../cmd.php?act=UploadPst">';
+	echo '<div class="row">' . $zbp->lang['msg']['upload_file'] . ': </div>';
+	echo '<div class="row"><input type="file" class="form-control" name="file" size="60" />&nbsp;&nbsp;';
+	echo '<input type="submit" class="form-control" class="button" value="' . $zbp->lang['msg']['submit'] . '" onclick="" />&nbsp;&nbsp;';
+	echo '<input class="button" class="form-control" type="reset" value="' . $zbp->lang['msg']['reset'] . '" /></div>';
 	echo '</form>';
 
 	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';

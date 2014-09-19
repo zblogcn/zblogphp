@@ -528,7 +528,7 @@ span.note{
 /*正文DIV下的导航条*/
 .SubMenu{
   padding:0 0 0px 0;
-  margin:0 0 5px 0;
+  margin:5px 0 5px 0;
   width:100%;
   text-align:left;
   font-size:1em;
