@@ -139,7 +139,7 @@ background:#ffffdd;
 .left #leftmenu li { float:left; width:140px; height:32px; margin-bottom:5px; background:#ededed;cursor:pointer;}
 .left #leftmenu a { float:left;  width:140px; height:32px; line-height:35px;cursor:pointer;}
 .left #leftmenu a:hover { color:#000000; background:#b0cdee;}
-.left #leftmenu span {  float:left;width:90px; height:32px; line-height:32px; padding-right:50px; text-align:right;cursor:pointer;}
+.left #leftmenu span.item {  float:left; height:32px; line-height:32px; margin-left: 32px; text-align:right;cursor:pointer;}
 
 /*导航高亮*/
 .left #leftmenu .on a,.left #leftmenu #on a:hover { color:#ffffff; background:#3399cc;}
@@ -178,37 +178,6 @@ background-image: url(../../image/common/window_1.png);
 #leftmenu li.on span{
 background-image: url(../../image/common/window_2.png);
 }
-
-#leftmenu #nav_build span { background-image: url(../../image/common/rebuild_1.png)!important;}
-#leftmenu #nav_home span { background-image: url(../../image/common/home_1.png)!important;}
-#leftmenu #nav_new span { background-image: url(../../image/common/new_1.png)!important;}
-#leftmenu #nav_article span { background-image: url(../../image/common/article_1.png)!important;}
-#leftmenu #nav_page span { background-image: url(../../image/common/page_1.png)!important;}
-#leftmenu #nav_category span { background-image: url(../../image/common/category_1.png)!important;}
-#leftmenu #nav_tags span { background-image: url(../../image/common/tags_1.png)!important;}
-#leftmenu #nav_comment span { background-image: url(../../image/common/comments_1.png)!important;}
-#leftmenu #nav_quoted span { background-image: url(../../image/common/quoted_1.png)!important;}
-#leftmenu #nav_upload span { background-image: url(../../image/common/accessories_1.png)!important;}
-#leftmenu #nav_theme span { background-image: url(../../image/common/themes_1.png)!important;}
-#leftmenu #nav_plugin span { background-image: url(../../image/common/plugin_1.png)!important;}
-#leftmenu #nav_module span { background-image: url(../../image/common/link_1.png)!important;}
-#leftmenu #nav_member span { background-image: url(../../image/common/user_1.png)!important;}
-
-/*高亮导航图标区*/
-#leftmenu #nav_build.on span { background-image: url(../../image/common/rebuild_2.png)!important;}
-#leftmenu #nav_home.on span { background-image: url(../../image/common/home_2.png)!important;}
-#leftmenu #nav_new.on span { background-image: url(../../image/common/new_2.png)!important;}
-#leftmenu #nav_article.on span { background-image: url(../../image/common/article_2.png)!important;}
-#leftmenu #nav_page.on span { background-image: url(../../image/common/page_2.png)!important;}
-#leftmenu #nav_category.on span { background-image: url(../../image/common/category_2.png)!important;}
-#leftmenu #nav_tags.on span { background-image: url(../../image/common/tags_2.png)!important;}
-#leftmenu #nav_comment.on span { background-image: url(../../image/common/comments_2.png)!important;}
-#leftmenu #nav_quoted.on span { background-image: url(../../image/common/quoted_2.png)!important;}
-#leftmenu #nav_upload.on span { background-image: url(../../image/common/accessories_2.png)!important;}
-#leftmenu #nav_theme.on span { background-image: url(../../image/common/themes_2.png)!important;}
-#leftmenu #nav_plugin.on span { background-image: url(../../image/common/plugin_2.png)!important;}
-#leftmenu #nav_module.on span { background-image: url(../../image/common/link_2.png)!important;}
-#leftmenu #nav_member.on span { background-image: url(../../image/common/user_2.png)!important;}
 
 
 #leftmenu li span{

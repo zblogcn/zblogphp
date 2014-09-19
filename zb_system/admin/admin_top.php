@@ -54,4 +54,4 @@ require $blogpath . 'zb_system/admin/admin_left.php';
 	<?php
 $zbp->GetHint();
 
-exit;?>
+?>

@@ -85,24 +85,24 @@ function ResponseAdmin_LeftMenu(){
 	global $zbp;
 	global $leftmenus;
 
-	$leftmenus['nav_new']=MakeLeftMenu("ArticleEdt",$zbp->lang['msg']['new_article'],$zbp->host . "zb_system/cmd.php?act=ArticleEdt","nav_new","aArticleEdt","");
-	$leftmenus['nav_article']=MakeLeftMenu("ArticleMng",$zbp->lang['msg']['article_manage'],$zbp->host . "zb_system/cmd.php?act=ArticleMng","nav_article","aArticleMng","");
-	$leftmenus['nav_page']=MakeLeftMenu("PageMng",$zbp->lang['msg']['page_manage'],$zbp->host . "zb_system/cmd.php?act=PageMng","nav_page","aPageMng","");
+	$leftmenus['nav_new'] = MakeLeftMenu("ArticleEdt", $zbp->lang['msg']['new_article'], $zbp->host . "zb_system/cmd.php?act=ArticleEdt","nav_new","aArticleEdt", "glyphicon-edit");
+	$leftmenus['nav_article'] = MakeLeftMenu("ArticleMng", $zbp->lang['msg']['article_manage'], $zbp->host . "zb_system/cmd.php?act=ArticleMng","nav_article","aArticleMng", "glyphicon-book");
+	$leftmenus['nav_page'] = MakeLeftMenu("PageMng", $zbp->lang['msg']['page_manage'], $zbp->host . "zb_system/cmd.php?act=PageMng","nav_page","aPageMng", "glyphicon-list-alt");
 
 	$leftmenus[]="<li class='split'><hr/></li>";
 
 
-	$leftmenus['nav_category']=MakeLeftMenu("CategoryMng",$zbp->lang['msg']['category_manage'],$zbp->host . "zb_system/cmd.php?act=CategoryMng","nav_category","aCategoryMng","");
-	$leftmenus['nav_tags']=MakeLeftMenu("TagMng",$zbp->lang['msg']['tag_manage'],$zbp->host . "zb_system/cmd.php?act=TagMng","nav_tags","aTagMng","");
-	$leftmenus['nav_comment1']=MakeLeftMenu("CommentMng",$zbp->lang['msg']['comment_manage'],$zbp->host . "zb_system/cmd.php?act=CommentMng","nav_comment","aCommentMng","");
-	$leftmenus['nav_upload']=MakeLeftMenu("UploadMng",$zbp->lang['msg']['upload_manage'],$zbp->host . "zb_system/cmd.php?act=UploadMng","nav_upload","aUploadMng","");
-	$leftmenus['nav_member']=MakeLeftMenu("MemberMng",$zbp->lang['msg']['member_manage'],$zbp->host . "zb_system/cmd.php?act=MemberMng","nav_member","aMemberMng","");
+	$leftmenus['nav_category'] = MakeLeftMenu("CategoryMng", $zbp->lang['msg']['category_manage'], $zbp->host . "zb_system/cmd.php?act=CategoryMng","nav_category","aCategoryMng", "glyphicon-folder-open");
+	$leftmenus['nav_tags'] = MakeLeftMenu("TagMng", $zbp->lang['msg']['tag_manage'], $zbp->host . "zb_system/cmd.php?act=TagMng","nav_tags","aTagMng", "glyphicon-tags");
+	$leftmenus['nav_comment1'] = MakeLeftMenu("CommentMng", $zbp->lang['msg']['comment_manage'], $zbp->host . "zb_system/cmd.php?act=CommentMng","nav_comment","aCommentMng", "glyphicon-comment");
+	$leftmenus['nav_upload'] = MakeLeftMenu("UploadMng", $zbp->lang['msg']['upload_manage'], $zbp->host . "zb_system/cmd.php?act=UploadMng","nav_upload","aUploadMng", "glyphicon-paperclip");
+	$leftmenus['nav_member'] = MakeLeftMenu("MemberMng", $zbp->lang['msg']['member_manage'], $zbp->host . "zb_system/cmd.php?act=MemberMng","nav_member","aMemberMng", "glyphicon-user");
 
 	$leftmenus[]="<li class='split'><hr/></li>";
 
-	$leftmenus['nav_theme']=MakeLeftMenu("ThemeMng",$zbp->lang['msg']['theme_manage'],$zbp->host . "zb_system/cmd.php?act=ThemeMng","nav_theme","aThemeMng","");
-	$leftmenus['nav_module']=MakeLeftMenu("ModuleMng",$zbp->lang['msg']['module_manage'],$zbp->host . "zb_system/cmd.php?act=ModuleMng","nav_module","aModuleMng","");
-	$leftmenus['nav_plugin']=MakeLeftMenu("PluginMng",$zbp->lang['msg']['plugin_manage'],$zbp->host . "zb_system/cmd.php?act=PluginMng","nav_plugin","aPluginMng","");
+	$leftmenus['nav_theme'] = MakeLeftMenu("ThemeMng", $zbp->lang['msg']['theme_manage'], $zbp->host . "zb_system/cmd.php?act=ThemeMng","nav_theme","aThemeMng", "glyphicon-tower");
+	$leftmenus['nav_module'] = MakeLeftMenu("ModuleMng", $zbp->lang['msg']['module_manage'], $zbp->host . "zb_system/cmd.php?act=ModuleMng","nav_module","aModuleMng", "glyphicon-tasks");
+	$leftmenus['nav_plugin'] = MakeLeftMenu("PluginMng", $zbp->lang['msg']['plugin_manage'], $zbp->host . "zb_system/cmd.php?act=PluginMng","nav_plugin","aPluginMng", "glyphicon-wrench");
 
 	foreach ($GLOBALS['Filter_Plugin_Admin_LeftMenu'] as $fpname => &$fpsignal) {
 		$fpname($leftmenus);
@@ -171,24 +171,36 @@ function MakeTopMenu($requireAction,$strName,$strUrl,$strTarget,$strLiId){
  * @param $strUrl
  * @param $strLiId
  * @param $strAId
- * @param $strImgUrl
+ * @param $strImg
  * @return null|string
  */
-function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUrl){
+function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $strImg){
+
 	global $zbp;
 
-	static $AdminLeftMenuCount=0;
-	if ($zbp->CheckRights($requireAction)==false) {
-		return null;
+	static $AdminLeftMenuCount = 0;
+
+	if (!$zbp->CheckRights($requireAction)) {
+		return "";
 	}
 
-	$AdminLeftMenuCount=$AdminLeftMenuCount+1;
-	$tmp=null;
-	if($strImgUrl!=""){
-		$tmp="<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\"><span style=\"background-image:url('" . $strImgUrl . "')\">" . $strName . "</span></a></li>";
-	}else{
-		$tmp="<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\"><span>" . $strName . "</span></a></li>";
+	$AdminLeftMenuCount++;
+
+	$tmp = "<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\"><span class=\"item\">" . $strName . '&nbsp;';
+
+	if( $strImg != "" ) {
+		if (preg_match("/glyphicon/", $strImg)) {
+			$tmp .= "<span class=\"glyphicon $strImg\"></span>";
+		}
+		else {
+			$tmp .= "<img src=\"" . $strImg . "\" alt=\"nav-ico\"/>";
+		}
+	} else {
+		$tmp .= "<span></span>";
 	}
+
+	$tmp .= "</span></a></li>";
+
 	return $tmp;
 
 }
