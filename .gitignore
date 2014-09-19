@@ -1,0 +1,9 @@
+# User Config
+/zb_users/c_option.php
+/zb_users/upload/*/*
+/post/*
+
+# Update
+/update/*.xml
+/update/Release/
+/update/*/*
