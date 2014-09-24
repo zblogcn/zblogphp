@@ -1331,6 +1331,13 @@ function PostComment() {
 		}
 	}
 
+	$m = $zbp->GetMemberByName($_POST['name']);
+	if ($m->ID > 0){
+		if($m->ID != $zbp->user->ID){
+			$zbp->ShowError(31, __FILE__, __LINE__);
+		}
+	}
+
 	$replyid = (integer)GetVars('replyid', 'POST');
 
 	if ($replyid == 0) {
