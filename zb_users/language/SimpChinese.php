@@ -191,7 +191,7 @@ return array(
 	'all_audit' => '审核所选项目',
 	'gzip_compress' => 'GZip压缩',
 	'syntax_high_lighter' => '代码高亮',
-	'max_li_in_ul' => 'UL内LI的最大行数',
+	'max_li_in_ul' => '最大行数',
 	'no_refresh_content' => '禁止系统更新模块内容',
 	'uncategory' => '未分类',
 	'calendar' => '日历',

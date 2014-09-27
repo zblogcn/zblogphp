@@ -45,11 +45,11 @@ function Zbp_Admin_Addmemsubmenu(){
  * 添加模块管理子菜单
  */
 function Zbp_Admin_Addmodsubmenu(){
-	echo '<a href="../cmd.php?act=ModuleEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_module'] . '</span></a>';
-	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=navbar"><span class="m-left">' . $GLOBALS['lang']['msg']['module_navbar'] . '</span></a>';
-	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=link"><span class="m-left">' . $GLOBALS['lang']['msg']['module_link'] . '</span></a>';
-	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=favorite"><span class="m-left">' . $GLOBALS['lang']['msg']['module_favorite'] . '</span></a>';
-	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=misc"><span class="m-left">' . $GLOBALS['lang']['msg']['module_misc'] . '</span></a>';
+	echo '<a href="javascript:modedit();"><span class="m-left">' . $GLOBALS['lang']['msg']['new_module'] . '</span></a>';
+	echo '<a href="javascript:modedit(0,\'navbar\',\'\',this);"><span class="m-left">' . $GLOBALS['lang']['msg']['module_navbar'] . '</span></a>';
+	echo '<a href="javascript:modedit(0,\'link\',\'\',this);"><span class="m-left">' . $GLOBALS['lang']['msg']['module_link'] . '</span></a>';
+	echo '<a href="javascript:modedit(0,\'favorite\',\'\',this);"><span class="m-left">' . $GLOBALS['lang']['msg']['module_favorite'] . '</span></a>';
+	echo '<a href="javascript:modedit(0,\'misc\',\'\',this);"><span class="m-left">' . $GLOBALS['lang']['msg']['module_misc'] . '</span></a>';
 }
 
 /**
@@ -318,42 +318,6 @@ function CreateOptoinsOfPostStatus($default){
 	return $s;
 }
 
-
-/**
- * 创建Div模块
- * @param $m
- * @param bool $button
- */
-function CreateModuleDiv($m,$button=true){
-	global $zbp;
-
-	echo '<div class="widget widget_source_' . $m->SourceType . ' widget_id_' . $m->FileName . '">';
-	echo '<div class="widget-title"><img class="more-action" width="16" src="../image/admin/brick.png" alt="" />' . (($m->SourceType!='theme'||$m->Source=='plugin_'.$zbp->theme)?$m->Name:$m->FileName) . '';
-
-	if($button){
-		if($m->SourceType!='theme'||$m->Source=='plugin_'.$zbp->theme){
-			echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;id=' . $m->ID . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="'.$zbp->lang['msg']['edit'].'" title="'.$zbp->lang['msg']['edit'].'" width="16" /></a>';
-		}else{
-			echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;source=theme&amp;filename=' . $m->FileName . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="'.$zbp->lang['msg']['edit'].'" title="'.$zbp->lang['msg']['edit'].'" width="16" /></a>';
-			echo '&nbsp;<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ModuleDel&amp;source=theme&amp;filename=' . $m->FileName . '&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
-		}
-		if( $m->SourceType != 'system'
-			&& $m->SourceType != 'theme'
-			&& !(
-				$m->SourceType == 'plugin' && 
-				CheckRegExp($m->Source, '/plugin_(' . $zbp->option['ZC_USING_PLUGIN_LIST'] . ')/i')
-			)
-		)
-		{
-			echo '&nbsp;<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ModuleDel&amp;id=' . $m->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
-		}
-		echo '</span>';
-	}
-
-	echo '</div>';
-	echo '<div class="funid" style="display:none">' . $m->FileName . '</div>';
-	echo '</div>';
-}
 
 
 /**
@@ -1169,68 +1133,60 @@ function Admin_ModuleMng(){
 	echo '</div>';
 	echo '<div id="divMain2">';
 
-$sm=array();
-$um=array();
-$tm=array();
-$pm=array();
+	$sm=array();
+	$um=array();
+	$tm=array();
+	$pm=array();
 
-foreach ($zbp->modules as $m) {
-	if($m->SourceType=='system'){
-		$sm[]=$m;
-	}elseif($m->SourceType=='user'){
-		$um[]=$m;
-	}elseif($m->SourceType=='theme'){
-		$tm[]=$m;
-	}else{
-		$pm[]=$m;
+	foreach ($zbp->modules as $m) {
+		if($m->SourceType=='system'){
+			$sm[]=$m;
+		}elseif($m->SourceType=='user'){
+			$um[]=$m;
+		}elseif($m->SourceType=='theme'){
+			$tm[]=$m;
+		}else{
+			$pm[]=$m;
+		}
 	}
-}
 	#widget-list begin
 	echo '<div class="widget-left">';
 	echo '<div class="widget-list">';
 
 	echo '<script type="text/javascript">';
 	echo 'var functions = {';
-foreach ($zbp->modules as $key => $value) {
-	echo "'" . $value->FileName . "':'" . $value->Source . "' ,";
-}
+	foreach ($zbp->modules as $key => $value) {
+		echo "'" . $value->FileName . "':'" . $value->Source . "' ,";
+	}
 	echo "'':''};";
 	echo '</script>';
 	echo "\r\n";
 	echo '<div class="widget-list-header">'. $zbp->lang['msg']['system_module'] .'</div>';
 	echo '<div class="widget-list-note">'. $zbp->lang['msg']['drag_module_to_sidebar'] .'</div>';
 	echo "\r\n";
-foreach ($sm as $m) {
-	CreateModuleDiv($m);
-}
+	foreach ($sm as $m) {
+		CreateModuleDiv($m);
+	}
 
 	echo '<div class="widget-list-header">'. $zbp->lang['msg']['user_module'] .'</div>';
 	echo "\r\n";
-foreach ($um as $m) {
-	CreateModuleDiv($m);
-}
+	foreach ($um as $m) {
+		CreateModuleDiv($m);
+	}
 
 	echo '<div class="widget-list-header">'. $zbp->lang['msg']['theme_module'] .'</div>';
 	echo "\r\n";
-foreach ($tm as $m) {
-	CreateModuleDiv($m);
-}
+	foreach ($tm as $m) {
+		CreateModuleDiv($m);
+	}
 
 	echo '<div class="widget-list-header">'. $zbp->lang['msg']['plugin_module'] .'</div>';
 	echo "\r\n";
-foreach ($pm as $m) {
-	CreateModuleDiv($m);
-}
+	foreach ($pm as $m) {
+		CreateModuleDiv($m);
+	}
 
 	echo '<hr/>';
-	echo "\r\n";
-	echo '<form id="edit" method="post" action="../cmd.php?act=SidebarSet">';
-	echo '<input type="hidden" id="strsidebar" name="edtSidebar" value="'. $zbp->option['ZC_SIDEBAR_ORDER'] .'"/>';
-	echo '<input type="hidden" id="strsidebar2" name="edtSidebar2" value="'. $zbp->option['ZC_SIDEBAR2_ORDER'] .'"/>';
-	echo '<input type="hidden" id="strsidebar3" name="edtSidebar3" value="'. $zbp->option['ZC_SIDEBAR3_ORDER'] .'"/>';
-	echo '<input type="hidden" id="strsidebar4" name="edtSidebar4" value="'. $zbp->option['ZC_SIDEBAR4_ORDER'] .'"/>';
-	echo '<input type="hidden" id="strsidebar5" name="edtSidebar5" value="'. $zbp->option['ZC_SIDEBAR5_ORDER'] .'"/>';
-	echo '</form>';
 	echo "\r\n";
 	echo '<div class="clear"></div></div>';
 	echo '</div>';
@@ -1240,41 +1196,41 @@ foreach ($pm as $m) {
 	echo '<div class="siderbar-list">';
 	echo '<div class="siderbar-drop" id="siderbar"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
 	echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar),$zbp->lang['msg']['sidebar_module_count']) . '</div>';
-foreach ($zbp->sidebar as $m) {
-	CreateModuleDiv($m,false);
-}
+	foreach ($zbp->sidebar as $m) {
+		CreateModuleDiv($m,false);
+	}
 	echo '</div></div>';
 	echo "\r\n";
 
 	echo '<div class="siderbar-drop" id="siderbar2"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar2'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
 	echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar2),$zbp->lang['msg']['sidebar_module_count']) . '</div>';
-foreach ($zbp->sidebar2 as $m) {
-	CreateModuleDiv($m,false);
-}
+	foreach ($zbp->sidebar2 as $m) {
+		CreateModuleDiv($m,false);
+	}
 	echo '</div></div>';
 	echo "\r\n";
 
 	echo '<div class="siderbar-drop" id="siderbar3"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar3'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
 	echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar3),$zbp->lang['msg']['sidebar_module_count']) . '</div>';
-foreach ($zbp->sidebar3 as $m) {
-	CreateModuleDiv($m,false);
-}
+	foreach ($zbp->sidebar3 as $m) {
+		CreateModuleDiv($m,false);
+	}
 	echo '</div></div>';
 	echo "\r\n";
 
 	echo '<div class="siderbar-drop" id="siderbar4"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar4'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
 	echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar4),$zbp->lang['msg']['sidebar_module_count']) . '</div>';
-foreach ($zbp->sidebar4 as $m) {
-	CreateModuleDiv($m,false);
-}
+	foreach ($zbp->sidebar4 as $m) {
+		CreateModuleDiv($m,false);
+	}
 	echo '</div></div>';
 	echo "\r\n";
 
 	echo '<div class="siderbar-drop" id="siderbar5"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar5'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
 	echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar5),$zbp->lang['msg']['sidebar_module_count']) . '</div>';
-foreach ($zbp->sidebar5 as $m) {
-	CreateModuleDiv($m,false);
-}
+	foreach ($zbp->sidebar5 as $m) {
+		CreateModuleDiv($m,false);
+	}
 	echo '</div></div>';
 	echo "\r\n";
 
@@ -1285,116 +1241,61 @@ foreach ($zbp->sidebar5 as $m) {
 
 	echo '</div>';
 	echo "\r\n";
-
-	echo '<script type="text/javascript">ActiveLeftMenu("aModuleMng");</script>';
 ?>
+<!-- dialog -->
+<div id="dialog-confirm" title="<?php echo $zbp->lang['msg']['del'];?>">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:2px 7px 20px 0;"></span><?php echo $zbp->lang['msg']['confirm_operating'];?></p>
+</div>
+<div id="dialog-form" title=""></div>
+<!-- loading -->
+<div id="loading">
+	<img class="roll" src="../image/admin/loading.gif" width="16" >
+</div>
 <script type="text/javascript">
-	$(function() {
-		function sortFunction(){
-			var s1="";
-			$("#siderbar").find("div.funid").each(function(i){
-			   s1 += $(this).html() +"|";
-			 });
-
-			 var s2="";
-			$("#siderbar2").find("div.funid").each(function(i){
-			   s2 += $(this).html() +"|";
-			 });
-
-			 var s3="";
-			$("#siderbar3").find("div.funid").each(function(i){
-			   s3 += $(this).html() +"|";
-			 });
-
-			 var s4="";
-			$("#siderbar4").find("div.funid").each(function(i){
-			   s4 += $(this).html() +"|";
-			 });
-
-			 var s5="";
-			$("#siderbar5").find("div.funid").each(function(i){
-			   s5 += $(this).html() +"|";
-			 });
-
-			$("#strsidebar" ).val(s1);
-			$("#strsidebar2").val(s2);
-			$("#strsidebar3").val(s3);
-			$("#strsidebar4").val(s4);
-			$("#strsidebar5").val(s5);
-
-
-			$.post($("#edit").attr("action"),
-				{
-				"sidebar": s1,
-				"sidebar2": s2,
-				"sidebar3": s3,
-				"sidebar4": s4,
-				"sidebar5": s5
-				},
-			   function(data){
-				 //alert("Data Loaded: " + data);
-			   });
-
-		};
-
-		var t;
-		function hideWidget(item){
-				item.find(".ui-icon").removeClass("ui-icon-triangle-1-s").addClass("ui-icon-triangle-1-w");
-				t=item.next();
-				t.find(".widget").hide("fast").end().show();
-				t.find(".siderbar-note>span").text(t.find(".widget").length);
-		}
-		function showWidget(item){
-				item.find(".ui-icon").removeClass("ui-icon-triangle-1-w").addClass("ui-icon-triangle-1-s");
-				t=item.next();
-				t.find(".widget").show("fast");
-				t.find(".siderbar-note>span").text(t.find(".widget").length);
-		}
-
-		$(".siderbar-header").toggle( function () {
-				hideWidget($(this));
-			  },
-			  function () {
-				showWidget($(this));
-			  });
-
- 		$( ".siderbar-sort-list" ).sortable({
- 			items:'.widget',
-			start:function(event, ui){
-				showWidget(ui.item.parent().prev());
-				 var c=ui.item.find(".funid").html();
-				 if(ui.item.parent().find(".widget:contains("+c+")").length>1){
-					ui.item.remove();
-				 };
-			} ,
-			stop:function(event, ui){$(this).parent().find(".roll").show("slow");sortFunction();$(this).parent().find(".roll").hide("slow");
-				showWidget($(this).parent().prev());
-			}
- 		}).disableSelection();
-
-		$( ".widget-list>.widget" ).draggable({
-			connectToSortable: ".siderbar-sort-list",
-			revert: "invalid",
-			containment: "document",
-			helper: "clone",
-			cursor: "move"
-		}).disableSelection();
-
-		$( ".widget-list" ).droppable({
-			accept:".siderbar-sort-list>.widget",
-			drop: function( event, ui ) {
-				ui.draggable.remove();
-			}
-		});
-
-});
-
+	ActiveLeftMenu("aModuleMng");
+	AddHeaderIcon("<?php echo $zbp->host?>zb_system/image/common/link_32.png");
 </script>
+<script type="text/javascript" src="<?php echo $zbp->host?>zb_system/script/c_admin_js_load.php?act=ModuleMng"></script>
 <?php
-	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/link_32.png' . '");</script>';
+
 }
 
 
+/**
+ * 后台模块管理中显示某个模块
+ * @param Module $m 模块实例
+ * @param bool $button 是否显示编辑按钮
+ */
+function CreateModuleDiv($m,$button=true){
+	global $zbp;
+
+	echo '<div class="widget widget_source_' . $m->SourceType . '" modfilename="'. $m->FileName.'" >';
+	echo '<div class="widget-title"><img class="more-action" width="16" src="../image/admin/brick.png" />' . (($m->SourceType!='theme'||$m->Source=='plugin_'.$zbp->theme)?$m->Name:$m->FileName) . '';
+
+	if($button){
+		if($m->SourceType!='theme'||$m->Source=='plugin_'.$zbp->theme){
+			//echo '<a href="../cmd.php?act=ModuleEdt&amp;id=' . $m->ID . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="'.$zbp->lang['msg']['edit'].'" title="'.$zbp->lang['msg']['edit'].'" width="16" /></a>';
+			echo '<span onclick="modedit('. $m->ID .',\''. $m->FileName .'\',\''. $m->SourceType .'\',this)" class="widget-action widget-edit button"><img class="edit-action" src="../image/admin/brick_edit.png" alt="'.$zbp->lang['msg']['edit'].'" title="'.$zbp->lang['msg']['edit'].'" width="16" /></span>';
+		}else{
+			//echo '<a href="../cmd.php?act=ModuleEdt&amp;source=theme&amp;filename=' . $m->FileName . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="'.$zbp->lang['msg']['edit'].'" title="'.$zbp->lang['msg']['edit'].'" width="16" /></a>';
+			echo '<span onclick="modedit('. $m->ID .',\''. $m->FileName .'\',\''. $m->SourceType .'\',this)" class="widget-action widget-edit button"><img class="edit-action" src="../image/admin/brick_edit.png" alt="'.$zbp->lang['msg']['edit'].'" title="'.$zbp->lang['msg']['edit'].'" width="16" /></span>';
+			echo '<span onclick="moddel('. $m->ID .',\''. $m->FileName .'\',\''. $m->SourceType .'\',this)" class="widget-action widget-del button"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></span>';
+		}
+		if( $m->SourceType != 'system'
+			&& $m->SourceType != 'theme'
+			&& !(
+				$m->SourceType == 'plugin' &&
+				CheckRegExp($m->Source, '/plugin_(' . $zbp->option['ZC_USING_PLUGIN_LIST'] . ')/i')
+			)
+		){
+			echo '<span onclick="moddel('. $m->ID .',\''. $m->FileName .'\',\''. $m->SourceType .'\',this)" class="widget-action widget-del button"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></span>';
+		}
+		echo '</span>';
+	}
+
+	echo '</div>';
+	echo '</div>';
+}
 
 
 
@@ -1453,8 +1354,8 @@ function Admin_PluginMng(){
 
 foreach ($plugins as $plugin) {
 	echo '<tr>';
-	echo '<td class="td5 tdCenter'.($plugin->type=='plugin'?' plugin':'').($plugin->IsUsed()?' plugin-on':'').'"><strong style="display:none;">'.$plugin->id.'</strong><img ' . ($plugin->IsUsed()?'':'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" height="32" /></td>';
-	echo '<td class="td25"><a id="mylink'.$plugin->id.'" href="$div'.$plugin->id.'tip?width=300" class="betterTip" title="'. htmlspecialchars($plugin->name) . '">' . $plugin->name .'&nbsp;&nbsp;&nbsp;'. $plugin->version . '</a><div id="div'.$plugin->id.'tip" style="display:none;">'.$plugin->note.'</div></td>';
+	echo '<td class="td5 tdCenter'.($plugin->type=='plugin'?' plugin':'').($plugin->IsUsed()?' plugin-on':'').'"><img ' . ($plugin->IsUsed()?'':'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" height="32" /></td>';
+	echo '<td class="td25"><span id="plugin-'.$plugin->id.'" class="plugin-note" title="'. htmlspecialchars($plugin->note) . '">' . $plugin->name .' '. $plugin->version . '</span><strong style="display:none">'.$plugin->id.'</strong></td>';
 	echo '<td class="td20"><a href="' . $plugin->author_url . '" target="_blank">' . $plugin->author_name . '</a></td>';
 	echo '<td class="td20">' . $plugin->modified . '</td>';
 	echo '<td class="td10 tdCenter">';
@@ -1477,8 +1378,8 @@ foreach ($plugins as $plugin) {
 }
 	echo '</table>';
 	echo '</div>';
-	echo '<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>';
-	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/plugin_32.png' . '");</script>';
+	echo '<script type="text/javascript">ActiveLeftMenu("aPluginMng");';
+	echo 'AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/plugin_32.png' . '");$(".plugin-note").tooltip();</script>';
 
 }
 

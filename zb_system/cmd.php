@@ -249,15 +249,15 @@ switch ($action) {
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		PostModule();
 		$zbp->BuildModule();
-		$zbp->SetHint('good');
-		Redirect('cmd.php?act=ModuleMng');
+		//$zbp->SetHint('good');
+		//Redirect('cmd.php?act=ModuleMng');
 		break;
 	case 'ModuleDel':
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelModule();
 		$zbp->BuildModule();
-		$zbp->SetHint('good');
-		Redirect('cmd.php?act=ModuleMng');
+		//$zbp->SetHint('good');
+		//Redirect('cmd.php?act=ModuleMng');
 		break;
 	case 'ModuleMng':
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));

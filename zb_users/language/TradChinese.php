@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 //<language>正體字</language>
 //The second line of this file is the name of the language
 //Author:楊懿軒
@@ -194,7 +194,7 @@ return array(
 	'all_audit'=>'批次審核',
 	'gzip_compress'=>'GZip壓縮',
 	'syntax_high_lighter'=>'語法突顯',
-	'max_li_in_ul'=>'UL內LI元素的最大行數',
+	'max_li_in_ul'=>'最大行數',
 	'no_refresh_content'=>'禁止系統更新正文',
 	'uncategory'=>'未分類',
 	'calendar'=>'日曆',

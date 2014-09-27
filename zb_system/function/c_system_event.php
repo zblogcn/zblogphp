@@ -88,12 +88,12 @@ function GetPost($idorname, $option = null) {
 /**
  * 获取文章列表
  * @param int $count 数量
- * @param null $cate 分类ID
- * @param null $auth 用户ID
- * @param null $date 日期
- * @param null $tags 标签
- * @param null $search 搜索关键词
- * @param null $option
+ * @param int $cate 分类ID
+ * @param int $auth 用户ID
+ * @param string $date 日期
+ * @param mixed $tags 标签
+ * @param string $search 搜索关键词
+ * @param array $option
  * @return array|mixed
  */
 function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = null, $search = null, $option = null) {
@@ -946,6 +946,7 @@ function ViewComments($postid, $page) {
 /**
  * 显示评论
  * @param int $id 评论ID
+ * @return bool
  */
 function ViewComment($id) {
 	global $zbp;
@@ -1097,6 +1098,7 @@ function PostArticle() {
 
 /**
  * 删除文章
+ * @api Filter_Plugin_DelArticle_Succeed
  * @return bool
  */
 function DelArticle() {
@@ -1947,6 +1949,7 @@ function PostModule() {
 
 /**
  * 删除模块
+ * @api Filter_Plugin_DelModule_Succeed
  * @return bool
  */
 function DelModule() {

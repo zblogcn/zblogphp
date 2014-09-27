@@ -117,7 +117,7 @@ class Member extends Base {
 			return $value;
 		}
 		if ($name=='PassWord_MD5Path') {
-			return md5($this->PassWord . $zbp->guid);
+			return md5($this->Password . $zbp->guid);
 		}
 		return parent::__get($name);
 	}
