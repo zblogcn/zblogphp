@@ -156,18 +156,18 @@ switch ($action) {
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		PostMember();
 		$zbp->BuildModule();
-		$zbp->SetHint('good');
-		Redirect('cmd.php?act=MemberMng');
+		//$zbp->SetHint('good');
+		//Redirect('cmd.php?act=MemberMng');
 		break;
 	case 'MemberDel':
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		if(DelMember()){
 			$zbp->BuildModule();
-			$zbp->SetHint('good');
+			//$zbp->SetHint('good');
 		}else{
-			$zbp->SetHint('bad');
+			//$zbp->SetHint('bad');
 		}
-		Redirect('cmd.php?act=MemberMng');
+		//Redirect('cmd.php?act=MemberMng');
 		break;
 	case 'UploadMng':
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));

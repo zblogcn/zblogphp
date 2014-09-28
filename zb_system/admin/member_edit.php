@@ -13,119 +13,82 @@ $zbp->CheckGzip();
 $zbp->Load();
 
 $action='';
-if(GetVars('act','GET')=='MemberEdt')$action='MemberEdt';
-if(GetVars('act','GET')=='MemberNew')$action='MemberNew';
+if(GetVars('act','POST')=='MemberEdt')$action='MemberEdt';
+if(GetVars('act','POST')=='MemberNew')$action='MemberNew';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
 $blogtitle=$lang['msg']['member_edit'];
 
-require $blogpath . 'zb_system/admin/admin_header.php';
-require $blogpath . 'zb_system/admin/admin_top.php';
-
 $memberid=null;
-if(isset($_GET['id'])){$memberid = (integer)GetVars('id','GET');}else{$memberid = 0;}
+if(isset($_POST['id'])){$memberid = (integer)GetVars('id','POST');}else{$memberid = 0;}
 
 if(!$zbp->CheckRights('MemberAll')){
 	if((int)$memberid<>(int)$zbp->user->ID) {$zbp->ShowError(6,__FILE__,__LINE__);}
 }
 
 $member=$zbp->GetMemberByID($memberid);
-
 ?>
-
-<div id="divMain">
-  <div class="divHeader2"><?php echo $lang['msg']['member_edit']?></div>
-  <div class="SubMenu"></div>
-  <div id="divMain2" class="edit tag_edit">
-	<form id="edit" name="edit" method="post" action="#">
+	<form id="memberedit" name="edit" method="post" action="#">
 	  <input id="edtID" name="ID" type="hidden" value="<?php echo $member->ID;?>" />
 	  <input id="edtGuid" name="Guid" type="hidden" value="<?php echo $member->Guid;?>" />
-	  <p>
-		<span class="title"><?php echo $lang['msg']['member_level']?>:</span><br />
+	  <div class="form-group">
+		<label class="title" for="cmbLevel"><?php echo $lang['msg']['member_level']?></label>
 		<select class="edit" size="1" name="Level" id="cmbLevel">
-<?php echo CreateOptoinsOfMemberLevel($member->Level);?>
+			<?php echo CreateOptoinsOfMemberLevel($member->Level);?>
 		</select>
-<?php if($zbp->CheckRights('MemberAll') && $zbp->user->ID<>$member->ID){?>
-		&nbsp;(<span class="title"><?php echo $lang['msg']['status']?>:</span>
-		<label><input name="Status" type="radio" value="0" <?php echo $member->Status==0?'checked="checked"':''; ?> />&nbsp;<?php echo $lang['user_status_name'][0]?></label>&nbsp;&nbsp;
-		<label><input name="Status" type="radio" value="1" <?php echo $member->Status==1?'checked="checked"':''; ?> />&nbsp;<?php echo $lang['user_status_name'][1]?></label>&nbsp;&nbsp;
-		<label><input name="Status" type="radio" value="2" <?php echo $member->Status==2?'checked="checked"':''; ?> />&nbsp;<?php echo $lang['user_status_name'][2]?></label>
-		)
-<?php }?>
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['name']?>:</span><span class="star">(*)</span><br />
+<?php if($zbp->CheckRights('MemberAll') && $zbp->user->ID<>$member->ID)
+		{
+		?>
+		<div class="form-group">
+		<label class="title" for="Status"><?php echo $lang['msg']['status']?></label>
+		<label><input name="Status" type="radio" value="0" <?php echo $member->Status==0?'checked="checked"':''; ?> /><?php echo $lang['user_status_name'][0]?></label>
+		<label><input name="Status" type="radio" value="1" <?php echo $member->Status==1?'checked="checked"':''; ?> /><?php echo $lang['user_status_name'][1]?></label>
+		<label><input name="Status" type="radio" value="2" <?php echo $member->Status==2?'checked="checked"':''; ?> /><?php echo $lang['user_status_name'][2]?></label>
+		</div>
+<?php 
+		}
+?>
+	  </div>
+	  <div class="form-group">
+		<label class="title" for="edtName"><?php echo $lang['msg']['name']?></label><span class="star">*</span>
 		<input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name;?>" <?php if(!$zbp->CheckRights('MemberAll'))echo 'readonly="readonly"';?> />
-	  </p>
-	  <p>
-	    <span class='title'><?php echo $lang['msg']['password']?>:</span><br/><input id="edtPassword" class="edit" size="40" name="Password"  type="password" value="" />
-	  </p>
-	  <p>
-	    <span class='title'><?php echo $lang['msg']['re_password']?>:</span><br/><input id="edtPasswordRe" class="edit" size="40" name="PasswordRe"  type="password" value="" />
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['alias']?>:</span><br />
+	  </div>
+	  <div class="form-group">
+	    <label class="title" for="edtPassword"><?php echo $lang['msg']['password']?></label><input id="edtPassword" class="edit" size="40" name="Password"  type="password" value="" /><?php echo  ($action=='MemberNew'?'<span class="star">*</span>':'') ?>
+	  </div>
+	  <div class="form-group">
+	    <label class="title" for="edtPasswordRe"><?php echo $lang['msg']['re_password']?></label><input id="edtPasswordRe" class="edit" size="40" name="PasswordRe"  type="password" value="" /><?php echo  ($action=='MemberNew'?'<span class="star">*</span>':'') ?>
+	  </div>
+	  <div class="form-group">
+		<label class="title" for="edtAlias"><?php echo $lang['msg']['alias']?></label>
 		<input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $member->Alias;?>" />
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['email']?>:</span><span class="star">(*)</span><br />
+	  </div>
+	  <div class="form-group">
+		<label class="title" for="edtEmail"><?php echo $lang['msg']['email']?></label><span class="star">*</span>
 		<input id="edtEmail" class="edit" size="40" name="Email" type="text" value="<?php echo $member->Email;?>" />
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['homepage']?>:</span><br />
+	  </div>
+	  <div class="form-group">
+		<label class="title" for="edtHomePage"><?php echo $lang['msg']['homepage']?></label>
 		<input id="edtHomePage" class="edit" size="40" name="HomePage" type="text" value="<?php echo $member->HomePage;?>" />
-	  </p>
-	  <p><span class='title'><?php echo $lang['msg']['intro']?>:</span><br/>
-	    <textarea  cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;"><?php echo htmlspecialchars($member->Intro);?></textarea>
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['template']?>:</span><br />
+	  </div>
+	  <div class="form-group">
+		<label class="title" for="edtIntro"><?php echo $lang['msg']['intro']?></label>
+	    <textarea  cols="3" rows="6" id="edtIntro" name="Intro" ><?php echo htmlspecialchars($member->Intro);?></textarea>
+	  </div>
+	  <div class="form-group">
+		<label class="title" for="cmbTemplate"><?php echo $lang['msg']['template']?></label>
 		<select class="edit" size="1" name="Template" id="cmbTemplate">
 <?php echo CreateOptoinsOfTemplate($member->Template);?>
 		</select>
-	  </p>
+	  </div>
        <div id='response' class='editmod2'>
 <?php
-foreach ($GLOBALS['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
+		foreach ($GLOBALS['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	   </div>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['default_avatar']?>:</span>&nbsp;<br /><?php echo $member->Avatar;?>
-	  </p>
-	  <p>
-		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" />
-	  </p>
+	  <div class="form-group">
+		<label><?php echo $lang['msg']['default_avatar']?></label>&nbsp;<?php echo $member->Avatar;?>
+	  </div>
 	</form>
-	<script type="text/javascript">
-function checkInfo(){
-  document.getElementById("edit").action="../cmd.php?act=MemberPst<?php echo '&token='. $zbp->GetToken();?>";
-
-
-  if(!$("#edtEmail").val()){
-    alert("<?php echo $lang['error']['29']?>");
-    return false
-  }
-
-
-  if(!$("#edtName").val()){
-    alert("<?php echo $lang['error']['72']?>");
-    return false
-  }
-
-  if($("#edtPassword").val()!==$("#edtPasswordRe").val()){
-    alert("<?php echo $lang['error']['73']?>");
-    return false
-  }
-
-}
-	</script>
-	<script type="text/javascript">ActiveLeftMenu("aMemberMng");</script>
-	<script type="text/javascript">AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/user_32.png';?>");</script>
-  </div>
-</div>
-
-
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
-
 RunTime();
 ?>

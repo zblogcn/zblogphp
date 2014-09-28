@@ -198,22 +198,6 @@ function Showhint(){
 
 
 //*********************************************************
-// 目的：    Ajaxhint
-// 输入：    
-//*********************************************************
-function Ajaxhint(signal,content){
-	if(content==undefined){
-		if(signal=='good')content="<?php echo $zbp->lang['msg']['operation_succeed'] ?>";
-		if(signal=='bad')content="<?php echo $zbp->lang['msg']['operation_failed'] ?>";
-	}
-	s= '<div class=\"hint\"><p class=\"hint hint_' + signal +'\">'+content+'</p></div>';
-	$("#divMain").prepend(s);
-	$("p.hint:visible").delay(1500).hide(1500);
-}
-//*********************************************************
-
-
-//*********************************************************
 // 全局脚本
 //*********************************************************
 $(document).ready(function(){

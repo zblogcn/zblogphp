@@ -35,10 +35,10 @@ function Zbp_Admin_Addcatesubmenu(){
 function Zbp_Admin_Addmemsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('MemberNew')){
-		echo '<a href="../cmd.php?act=MemberNew"><span class="m-left">' . $GLOBALS['lang']['msg']['new_member'] . '</span></a>';
+		echo '<a href="javascript:member_edit();"><span class="m-left">' . $GLOBALS['lang']['msg']['new_member'] . '</span></a>';
 	}
 	
-	echo '<a href="../cmd.php?act=misc&amp;type=vrs" target="_blank"><span class="m-left">'.$zbp->lang['msg']['view_rights'].'</span></a>';
+	echo '<a href="javascript:member_vrs();"><span class="m-left">'.$zbp->lang['msg']['view_rights'].'</span></a>';
 }
 
 /**
@@ -328,35 +328,35 @@ function CreateOptoinsOfPostStatus($default){
 function CreateOptionsOfTimeZone($default){
 	global $zbp;
 	$s='';
-$tz=array
-	 (
-		'Etc/GMT+12' => '-12:00',
-		'Pacific/Midway' => '-11:00',
-		'Pacific/Honolulu' => '-10:00',
-		'America/Anchorage' => '-09:00',
-		'America/Los_Angeles' => '-08:00',
-		'America/Denver' => '-07:00',
-		'America/Tegucigalpa' => '-06:00',
-		'America/New_York' => '-05:00',
-		'America/Halifax' => '-04:00',
-		'America/Argentina/Buenos_Aires' => '-03:00',
-		'Atlantic/South_Georgia' => '-02:00',
-		'Atlantic/Azores' => '-01:00',
-		'UTC' => '00:00',
-		'Europe/Berlin' => '+01:00',
-		'Europe/Sofia' => '+02:00',
-		'Africa/Nairobi' => '+03:00',
-		'Europe/Moscow' => '+04:00',
-		'Asia/Karachi' => '+05:00',
-		'Asia/Dhaka' => '+06:00',
-		'Asia/Bangkok' => '+07:00',
-		'Asia/Shanghai' => '+08:00',
-		'Asia/Tokyo' => '+09:00',
-		'Pacific/Guam' => '+10:00',
-		'Australia/Sydney' => '+11:00',
-		'Pacific/Fiji' => '+12:00',
-		'Pacific/Tongatapu' => '+13:00'
-	 );
+	$tz=array
+		 (
+			'Etc/GMT+12' => '-12:00',
+			'Pacific/Midway' => '-11:00',
+			'Pacific/Honolulu' => '-10:00',
+			'America/Anchorage' => '-09:00',
+			'America/Los_Angeles' => '-08:00',
+			'America/Denver' => '-07:00',
+			'America/Tegucigalpa' => '-06:00',
+			'America/New_York' => '-05:00',
+			'America/Halifax' => '-04:00',
+			'America/Argentina/Buenos_Aires' => '-03:00',
+			'Atlantic/South_Georgia' => '-02:00',
+			'Atlantic/Azores' => '-01:00',
+			'UTC' => '00:00',
+			'Europe/Berlin' => '+01:00',
+			'Europe/Sofia' => '+02:00',
+			'Africa/Nairobi' => '+03:00',
+			'Europe/Moscow' => '+04:00',
+			'Asia/Karachi' => '+05:00',
+			'Asia/Dhaka' => '+06:00',
+			'Asia/Bangkok' => '+07:00',
+			'Asia/Shanghai' => '+08:00',
+			'Asia/Tokyo' => '+09:00',
+			'Pacific/Guam' => '+10:00',
+			'Australia/Sydney' => '+11:00',
+			'Pacific/Fiji' => '+12:00',
+			'Pacific/Tongatapu' => '+13:00'
+		 );
 
 	foreach ($tz as $key => $value) {
 		$s .= '<option value="' . $key . '" ' . ($default==$key?'selected="selected"':'') . ' >' . $key . ' ' . $value . '</option>';
@@ -433,10 +433,6 @@ function Admin_SiteInfo(){
 
 
 
-
-
-
-
 ################################################################################################################
 /**
  * 后台文章管理
@@ -444,7 +440,6 @@ function Admin_SiteInfo(){
 function Admin_ArticleMng(){
 
 	global $zbp;
-
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['article_manage'] . '</div>';
 	echo '<div class="SubMenu">';
@@ -475,76 +470,71 @@ function Admin_ArticleMng(){
 	<th></th>
 	</tr>';
 
-$p=new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&page=%page%}{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}',false);
-$p->PageCount=$zbp->managecount;
-$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
-$p->PageBarCount=$zbp->pagebarcount;
+	$p=new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&page=%page%}{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}',false);
+	$p->PageCount=$zbp->managecount;
+	$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+	$p->PageBarCount=$zbp->pagebarcount;
 
-$p->UrlRule->Rules['{%category%}']=GetVars('category');
-$p->UrlRule->Rules['{%search%}']=urlencode(GetVars('search'));
-$p->UrlRule->Rules['{%status%}']=GetVars('status');
-$p->UrlRule->Rules['{%istop%}']=(boolean)GetVars('istop');
+	$p->UrlRule->Rules['{%category%}']=GetVars('category');
+	$p->UrlRule->Rules['{%search%}']=urlencode(GetVars('search'));
+	$p->UrlRule->Rules['{%status%}']=GetVars('status');
+	$p->UrlRule->Rules['{%istop%}']=(boolean)GetVars('istop');
 
-$w=array();
-if(!$zbp->CheckRights('ArticleAll')){
-	$w[]=array('=','log_AuthorID',$zbp->user->ID);
-}
-if(GetVars('search')){
-	$w[]=array('search','log_Content','log_Intro','log_Title',GetVars('search'));
-}
-if(GetVars('istop')){
-	$w[]=array('=','log_Istop','1');
-}
-if(GetVars('status')){
-	$w[]=array('=','log_Status',GetVars('status'));
-}
-if(GetVars('category')){
-	$w[]=array('=','log_CateID',GetVars('category'));
-}
+	$w=array();
+	if(!$zbp->CheckRights('ArticleAll')){
+		$w[]=array('=','log_AuthorID',$zbp->user->ID);
+	}
+	if(GetVars('search')){
+		$w[]=array('search','log_Content','log_Intro','log_Title',GetVars('search'));
+	}
+	if(GetVars('istop')){
+		$w[]=array('=','log_Istop','1');
+	}
+	if(GetVars('status')){
+		$w[]=array('=','log_Status',GetVars('status'));
+	}
+	if(GetVars('category')){
+		$w[]=array('=','log_CateID',GetVars('category'));
+	}
 
-$array=$zbp->GetArticleList(
-	'',
-	$w,
-	array('log_PostTime'=>'DESC'),
-	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
-	array('pagebar'=>$p),
-	false
-);
+	$array=$zbp->GetArticleList(
+		'',
+		$w,
+		array('log_PostTime'=>'DESC'),
+		array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
+		array('pagebar'=>$p),
+		false
+	);
 
-foreach ($array as $article) {
-	echo '<tr>';
-	echo '<td class="td5">' . $article->ID .  '</td>';
-	echo '<td class="td10">' . $article->Category->Name . '</td>';
-	echo '<td class="td10">' . $article->Author->Name . '</td>';
-	echo '<td><a href="'.$article->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title . '</td>';
-	echo '<td class="td20">' .$article->Time() . '</td>';
-	echo '<td class="td5">' . $article->CommNums . '</td>';
-	echo '<td class="td5">' . ($article->IsTop?$zbp->lang['msg']['top'].'|':'').$article->StatusName . '</td>';
-	echo '<td class="td10 tdCenter">';
-	echo '<a href="../cmd.php?act=ArticleEdt&amp;id='. $article->ID .'"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
-	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ArticleDel&amp;id='. $article->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
-	echo '</td>';
+	foreach ($array as $article) {
+		echo '<tr>';
+		echo '<td class="td5">' . $article->ID .  '</td>';
+		echo '<td class="td10">' . $article->Category->Name . '</td>';
+		echo '<td class="td10">' . $article->Author->Name . '</td>';
+		echo '<td><a href="'.$article->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title . '</td>';
+		echo '<td class="td20">' .$article->Time() . '</td>';
+		echo '<td class="td5">' . $article->CommNums . '</td>';
+		echo '<td class="td5">' . ($article->IsTop?$zbp->lang['msg']['top'].'|':'').$article->StatusName . '</td>';
+		echo '<td class="td10 tdCenter">';
+		echo '<a href="../cmd.php?act=ArticleEdt&amp;id='. $article->ID .'"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+		echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+		echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=ArticleDel&amp;id='. $article->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
+		echo '</td>';
 
-	echo '</tr>';
-}
-	echo '</table>';
-	echo '<hr/><p class="pagebar">';
+		echo '</tr>';
+	}
+		echo '</table>';
+		echo '<hr/><p class="pagebar">';
 
-foreach ($p->buttons as $key => $value) {
-	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
-}
+	foreach ($p->buttons as $key => $value) {
+		echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
+	}
 
 	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/article_32.png' . '");</script>';
 
 }
-
-
-
-
-
 
 
 
@@ -555,7 +545,6 @@ foreach ($p->buttons as $key => $value) {
 function Admin_PageMng(){
 
 	global $zbp;
-
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['page_manage'] . '</div>';
 	echo '<div class="SubMenu">';
@@ -576,53 +565,49 @@ function Admin_PageMng(){
 	<th></th>
 	</tr>';
 
-$p=new Pagebar('{%host%}zb_system/cmd.php?act=PageMng{&page=%page%}',false);
-$p->PageCount=$zbp->managecount;
-$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
-$p->PageBarCount=$zbp->pagebarcount;
+	$p=new Pagebar('{%host%}zb_system/cmd.php?act=PageMng{&page=%page%}',false);
+	$p->PageCount=$zbp->managecount;
+	$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+	$p->PageBarCount=$zbp->pagebarcount;
 
-$w=array();
-if(!$zbp->CheckRights('PageAll')){
-	$w[]=array('=','log_AuthorID',$zbp->user->ID);
-}
+	$w=array();
+	if(!$zbp->CheckRights('PageAll')){
+		$w[]=array('=','log_AuthorID',$zbp->user->ID);
+	}
 
-$array=$zbp->GetPageList(
-	'',
-	$w,
-	array('log_PostTime'=>'DESC'),
-	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
-	array('pagebar'=>$p)
-);
+	$array=$zbp->GetPageList(
+		'',
+		$w,
+		array('log_PostTime'=>'DESC'),
+		array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
+		array('pagebar'=>$p)
+	);
 
-foreach ($array as $article) {
-	echo '<tr>';
-	echo '<td class="td5">' . $article->ID . '</td>';
-	echo '<td class="td10">' . $article->Author->Name . '</td>';
-	echo '<td><a href="'.$article->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title . '</td>';
-	echo '<td class="td20">' . $article->Time() . '</td>';
-	echo '<td class="td5">' . $article->CommNums . '</td>';
-	echo '<td class="td5">' . $article->StatusName . '</td>';
-	echo '<td class="td10 tdCenter">';
-	echo '<a href="../cmd.php?act=PageEdt&amp;id='. $article->ID .'"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
-	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=PageDel&amp;id='. $article->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
-	echo '</td>';
+	foreach ($array as $article) {
+		echo '<tr>';
+		echo '<td class="td5">' . $article->ID . '</td>';
+		echo '<td class="td10">' . $article->Author->Name . '</td>';
+		echo '<td><a href="'.$article->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title . '</td>';
+		echo '<td class="td20">' . $article->Time() . '</td>';
+		echo '<td class="td5">' . $article->CommNums . '</td>';
+		echo '<td class="td5">' . $article->StatusName . '</td>';
+		echo '<td class="td10 tdCenter">';
+		echo '<a href="../cmd.php?act=PageEdt&amp;id='. $article->ID .'"><img src="../image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+		echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+		echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=PageDel&amp;id='. $article->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
+		echo '</td>';
 
-	echo '</tr>';
-}
-	echo '</table>';
-	echo '<hr/><p class="pagebar">';
-foreach ($p->buttons as $key => $value) {
-	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
-}
+		echo '</tr>';
+	}
+		echo '</table>';
+		echo '<hr/><p class="pagebar">';
+	foreach ($p->buttons as $key => $value) {
+		echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
+	}
 	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/page_32.png' . '");</script>';
-
 }
-
-
-
 
 
 
@@ -652,32 +637,27 @@ function Admin_CategoryMng(){
 	<th></th>
 	</tr>';
 
+	foreach ($zbp->categorysbyorder as $category) {
+		echo '<tr>';
+		echo '<td class="td5">' . $category->ID . '</td>';
+		echo '<td class="td5">' . $category->Order . '</td>';
+		echo '<td class="td25"><a href="'.$category->Url .'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $category->Symbol . $category->Name . '</td>';
+		echo '<td class="td20">' . $category->Alias . '</td>';
+		echo '<td class="td10">' . $category->Count . '</td>';
+		echo '<td class="td10 tdCenter">';
+		echo '<a href="../cmd.php?act=CategoryEdt&amp;id='. $category->ID .'"><img src="../image/admin/folder_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+		echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+		echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=CategoryDel&amp;id='. $category->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
+		echo '</td>';
 
-foreach ($zbp->categorysbyorder as $category) {
-	echo '<tr>';
-	echo '<td class="td5">' . $category->ID . '</td>';
-	echo '<td class="td5">' . $category->Order . '</td>';
-	echo '<td class="td25"><a href="'.$category->Url .'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $category->Symbol . $category->Name . '</td>';
-	echo '<td class="td20">' . $category->Alias . '</td>';
-	echo '<td class="td10">' . $category->Count . '</td>';
-	echo '<td class="td10 tdCenter">';
-	echo '<a href="../cmd.php?act=CategoryEdt&amp;id='. $category->ID .'"><img src="../image/admin/folder_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
-	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=CategoryDel&amp;id='. $category->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
-	echo '</td>';
-
-	echo '</tr>';
-}
+		echo '</tr>';
+	}
 	echo '</table>';
 	echo '</div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aCategoryMng");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/category_32.png' . '");</script>';
 
 }
-
-
-
-
 
 
 
@@ -697,8 +677,6 @@ function Admin_CommentMng(){
 	echo '</div>';
 	echo '<div id="divMain2">';
 
-
-
 	echo '<form class="search" id="search" method="post" action="#">';
 	echo '<p>' . $zbp->lang['msg']['search'] . '&nbsp;&nbsp;&nbsp;&nbsp;<input name="search" style="width:450px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
 	echo '</form>';
@@ -715,67 +693,64 @@ function Admin_CommentMng(){
 	<th><a href="" onclick="BatchSelectAll();return false;">' . $zbp->lang['msg']['select_all'] . '</a></th>
 	</tr>';
 
-$p=new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&page=%page%}{&ischecking=%ischecking%}{&search=%search%}',false);
-$p->PageCount=$zbp->managecount;
-$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
-$p->PageBarCount=$zbp->pagebarcount;
+	$p=new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&page=%page%}{&ischecking=%ischecking%}{&search=%search%}',false);
+	$p->PageCount=$zbp->managecount;
+	$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+	$p->PageBarCount=$zbp->pagebarcount;
 
-$p->UrlRule->Rules['{%search%}']=urlencode(GetVars('search'));
-$p->UrlRule->Rules['{%ischecking%}']=(boolean)GetVars('ischecking');
+	$p->UrlRule->Rules['{%search%}']=urlencode(GetVars('search'));
+	$p->UrlRule->Rules['{%ischecking%}']=(boolean)GetVars('ischecking');
 
-$w=array();
-if(!$zbp->CheckRights('CommentAll')){
-	$w[]=array('=','comm_AuthorID',$zbp->user->ID);
-}
-if(GetVars('search')){
-	$w[]=array('search','comm_Content','comm_Name',GetVars('search'));
-}
+	$w=array();
+	if(!$zbp->CheckRights('CommentAll')){
+		$w[]=array('=','comm_AuthorID',$zbp->user->ID);
+	}
+	if(GetVars('search')){
+		$w[]=array('search','comm_Content','comm_Name',GetVars('search'));
+	}
 
-$w[]=array('=','comm_Ischecking',(int)GetVars('ischecking'));
+	$w[]=array('=','comm_Ischecking',(int)GetVars('ischecking'));
 
+	$array=$zbp->GetCommentList(
+		'',
+		$w,
+		array('comm_ID'=>'DESC'),
+		array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
+		array('pagebar'=>$p)
+	);
 
+	foreach ($array as $cmt) {
 
-$array=$zbp->GetCommentList(
-	'',
-	$w,
-	array('comm_ID'=>'DESC'),
-	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
-	array('pagebar'=>$p)
-);
+		$article = new Post;
+		if (!$article->LoadInfoById($cmt->LogID)) $article = NULL;
 
-foreach ($array as $cmt) {
-	
-	$article = new Post;
-	if (!$article->LoadInfoById($cmt->LogID)) $article = NULL;
-	
-	echo '<tr>';
-	echo '<td class="td5">' . $cmt->ID .  '</td>';
-	echo '<td class="td5">' . $cmt->ParentID . '</td>';
-	echo '<td class="td10">' . $cmt->Author->Name . '</td>';
-	echo '<td><div style="overflow:hidden;max-width:500px;">';
-	if ($article)
-		echo '<a href="'. $article->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ';
-	else
-		echo '<a href="javascript:void(0)"><img src="../image/admin/delete.png" alt="no exists" title="no exists" width="16" /></a>';
-	echo $cmt->Content . '<div></td>';
-	echo '<td class="td5">' . $cmt->LogID .  '</td>';
-	echo '<td class="td15">' .$cmt->Time() . '</td>';
-	echo '<td class="td10 tdCenter">';
-	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=CommentDel&amp;id='. $cmt->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
-	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-if(!GetVars('ischecking','GET')){
-	echo '<a href="../cmd.php?act=CommentChk&amp;id='. $cmt->ID .'&amp;ischecking='.(int)!GetVars('ischecking','GET').'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/minus-shield.png" alt="'.$zbp->lang['msg']['audit'] .'" title="'.$zbp->lang['msg']['audit'] .'" width="16" /></a>';
-}else{
-	echo '<a href="../cmd.php?act=CommentChk&amp;id='. $cmt->ID .'&amp;ischecking='.(int)!GetVars('ischecking','GET').'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/ok.png" alt="'.$zbp->lang['msg']['pass'] .'" title="'.$zbp->lang['msg']['pass'] .'" width="16" /></a>';
-}
-	echo '</td>';
-	echo '<td class="td5 tdCenter">' . '<input type="checkbox" id="id'.$cmt->ID.'" name="id[]" value="'.$cmt->ID.'"/>' . '</td>';
+		echo '<tr>';
+		echo '<td class="td5">' . $cmt->ID .  '</td>';
+		echo '<td class="td5">' . $cmt->ParentID . '</td>';
+		echo '<td class="td10">' . $cmt->Author->Name . '</td>';
+		echo '<td><div style="overflow:hidden;max-width:500px;">';
+		if ($article)
+			echo '<a href="'. $article->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ';
+		else
+			echo '<a href="javascript:void(0)"><img src="../image/admin/delete.png" alt="no exists" title="no exists" width="16" /></a>';
+		echo $cmt->Content . '<div></td>';
+		echo '<td class="td5">' . $cmt->LogID .  '</td>';
+		echo '<td class="td15">' .$cmt->Time() . '</td>';
+		echo '<td class="td10 tdCenter">';
+		echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=CommentDel&amp;id='. $cmt->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
+		echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+		if(!GetVars('ischecking','GET')){
+			echo '<a href="../cmd.php?act=CommentChk&amp;id='. $cmt->ID .'&amp;ischecking='.(int)!GetVars('ischecking','GET').'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/minus-shield.png" alt="'.$zbp->lang['msg']['audit'] .'" title="'.$zbp->lang['msg']['audit'] .'" width="16" /></a>';
+		}else{
+			echo '<a href="../cmd.php?act=CommentChk&amp;id='. $cmt->ID .'&amp;ischecking='.(int)!GetVars('ischecking','GET').'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/ok.png" alt="'.$zbp->lang['msg']['pass'] .'" title="'.$zbp->lang['msg']['pass'] .'" width="16" /></a>';
+		}
+		echo '</td>';
+		echo '<td class="td5 tdCenter">' . '<input type="checkbox" id="id'.$cmt->ID.'" name="id[]" value="'.$cmt->ID.'"/>' . '</td>';
 
-	echo '</tr>';
-}
+		echo '</tr>';
+	}
 	echo '</table>';
 	echo '<hr/>';
-
 	echo'<p style="float:right;">';
 
 	if((boolean)GetVars('ischecking')){
@@ -785,30 +760,20 @@ if(!GetVars('ischecking','GET')){
 		echo '<input type="submit" name="all_del"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 		echo '<input type="submit" name="all_audit"  value="' . $zbp->lang['msg']['all_audit'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 	}
-
 	echo '</p>';
 
 	echo'<p class="pagebar">';
-
-foreach ($p->buttons as $key => $value) {
-	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
-}
-
+	foreach ($p->buttons as $key => $value) {
+		echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
+	}
 	echo '</p>';
 
-
 	echo '<hr/></form>';
-
-
 
 	echo '</div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aCommentMng");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/comments_32.png' . '");</script>';
 }
-
-
-
-
 
 
 
@@ -841,58 +806,55 @@ function Admin_MemberMng(){
 	<th></th>
 	</tr>';
 
-$p=new Pagebar('{%host%}zb_system/cmd.php?act=MemberMng{&page=%page%}',false);
-$p->PageCount=$zbp->managecount;
-$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
-$p->PageBarCount=$zbp->pagebarcount;
+	$p=new Pagebar('{%host%}zb_system/cmd.php?act=MemberMng{&page=%page%}',false);
+	$p->PageCount=$zbp->managecount;
+	$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+	$p->PageBarCount=$zbp->pagebarcount;
 
 
-$w=array();
-if(!$zbp->CheckRights('MemberAll')){
-	$w[]=array('=','mem_ID',$zbp->user->ID);
-}
-$array=$zbp->GetMemberList(
-	'',
-	$w,
-	array('mem_ID'=>'ASC'),
-	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
-	array('pagebar'=>$p)
-);
+	$w=array();
+	if(!$zbp->CheckRights('MemberAll')){
+		$w[]=array('=','mem_ID',$zbp->user->ID);
+	}
+	$array=$zbp->GetMemberList(
+		'',
+		$w,
+		array('mem_ID'=>'ASC'),
+		array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
+		array('pagebar'=>$p)
+	);
 
-foreach ($array as $member) {
-	echo '<tr>';
-	echo '<td class="td5">' . $member->ID . '</td>';
-	echo '<td class="td10">' . $member->LevelName . ($member->Status>0?'('.$zbp->lang['user_status_name'][$member->Status].')':'') .'</td>';
-	echo '<td><a href="'.$member->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $member->Name . '</td>';
-	echo '<td class="td15">' . $member->Alias . '</td>';
-	echo '<td class="td10">' . $member->Articles . '</td>';
-	echo '<td class="td10">' . $member->Pages . '</td>';
-	echo '<td class="td10">' . $member->Comments . '</td>';
-	echo '<td class="td10">' . $member->Uploads . '</td>';
-	echo '<td class="td10 tdCenter">';
-	echo '<a href="../cmd.php?act=MemberEdt&amp;id='. $member->ID .'"><img src="../image/admin/user_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
-if($zbp->CheckRights('MemberDel')){
-	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=MemberDel&amp;id='. $member->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
-}
-	echo '</td>';
+	foreach ($array as $member) {
+		echo '<tr>';
+		echo '<td class="td5">' . $member->ID . '</td>';
+		echo '<td class="td10">' . $member->LevelName . ($member->Status>0?'('.$zbp->lang['user_status_name'][$member->Status].')':'') .'</td>';
+		echo '<td><a href="'.$member->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $member->Name . '</td>';
+		echo '<td class="td15">' . $member->Alias . '</td>';
+		echo '<td class="td10">' . $member->Articles . '</td>';
+		echo '<td class="td10">' . $member->Pages . '</td>';
+		echo '<td class="td10">' . $member->Comments . '</td>';
+		echo '<td class="td10">' . $member->Uploads . '</td>';
+		echo '<td class="td10 tdCenter">';
+		echo '<span onclick="member_edit('. $member->ID .',this)" class="button"><img src="../image/admin/user_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></span>';
+		if($zbp->CheckRights('MemberDel')){
+			echo '<span onclick="member_del(\''. $member->ID .'\',this)" class="button"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></span>';
+		}
+		echo '</td>';
 
-	echo '</tr>';
-}
+		echo '</tr>';
+	}
 	echo '</table>';
 	echo '<hr/><p class="pagebar">';
-foreach ($p->buttons as $key => $value) {
-	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
-}
+	foreach ($p->buttons as $key => $value) {
+		echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
+	}
 	echo '</p></div>';
-	echo '<script type="text/javascript">ActiveLeftMenu("aMemberMng");</script>';
-	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/user_32.png' . '");</script>';
+
+	CreateAjaxDialog();
+
+	echo '<script type="text/javascript">ActiveLeftMenu("aMemberMng"); AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/user_32.png' . '");</script>';
+	echo '<script type="text/javascript" src="'. $zbp->host . 'zb_system/script/c_admin_js_load.php?act=MemberMng"></script>';
 }
-
-
-
-
-
 
 
 
@@ -931,53 +893,47 @@ function Admin_UploadMng(){
 	<th></th>
 	</tr>';
 
-$w=array();
-if(!$zbp->CheckRights('UploadAll')){
-	$w[]=array('=','ul_AuthorID',$zbp->user->ID);
-}
+	$w=array();
+	if(!$zbp->CheckRights('UploadAll')){
+		$w[]=array('=','ul_AuthorID',$zbp->user->ID);
+	}
 
-$p=new Pagebar('{%host%}zb_system/cmd.php?act=UploadMng{&page=%page%}',false);
-$p->PageCount=$zbp->managecount;
-$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
-$p->PageBarCount=$zbp->pagebarcount;
+	$p=new Pagebar('{%host%}zb_system/cmd.php?act=UploadMng{&page=%page%}',false);
+	$p->PageCount=$zbp->managecount;
+	$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+	$p->PageBarCount=$zbp->pagebarcount;
 
-$array=$zbp->GetUploadList(
-	'',
-	$w,
-	array('ul_PostTime'=>'DESC'),
-	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
-	array('pagebar'=>$p)
-);
+	$array=$zbp->GetUploadList(
+		'',
+		$w,
+		array('ul_PostTime'=>'DESC'),
+		array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
+		array('pagebar'=>$p)
+	);
 
-foreach ($array as $upload) {
-	echo '<tr>';
-	echo '<td class="td5">' . $upload->ID . '</td>';
-	echo '<td class="td10">' . $upload->Author->Name . '</td>';
-	echo '<td><a href="'.$upload->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $upload->Name . '</td>';
-	echo '<td class="td15">' . $upload->Time() . '</td>';
-	echo '<td class="td10">' . $upload->Size . '</td>';
-	echo '<td class="td20">' . $upload->MimeType . '</td>';
-	echo '<td class="td10 tdCenter">';
-	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=UploadDel&amp;id='. $upload->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
-	echo '</td>';
+	foreach ($array as $upload) {
+		echo '<tr>';
+		echo '<td class="td5">' . $upload->ID . '</td>';
+		echo '<td class="td10">' . $upload->Author->Name . '</td>';
+		echo '<td><a href="'.$upload->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $upload->Name . '</td>';
+		echo '<td class="td15">' . $upload->Time() . '</td>';
+		echo '<td class="td10">' . $upload->Size . '</td>';
+		echo '<td class="td20">' . $upload->MimeType . '</td>';
+		echo '<td class="td10 tdCenter">';
+		echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=UploadDel&amp;id='. $upload->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
+		echo '</td>';
 
-	echo '</tr>';
-}
-	echo '</table>';
-	echo '<hr/><p class="pagebar">';
-foreach ($p->buttons as $key => $value) {
-	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
-}
+		echo '</tr>';
+	}
+		echo '</table>';
+		echo '<hr/><p class="pagebar">';
+	foreach ($p->buttons as $key => $value) {
+		echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
+	}
 	echo '</p></div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aUploadMng");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/accessories_32.png' . '");</script>';
 }
-
-
-
-
-
-
 
 
 
@@ -1008,49 +964,43 @@ function Admin_TagMng(){
 	<th></th>
 	</tr>';
 
-$p=new Pagebar('{%host%}zb_system/cmd.php?act=TagMng&page={%page%}',false);
-$p->PageCount=$zbp->managecount;
-$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
-$p->PageBarCount=$zbp->pagebarcount;
+	$p=new Pagebar('{%host%}zb_system/cmd.php?act=TagMng&page={%page%}',false);
+	$p->PageCount=$zbp->managecount;
+	$p->PageNow=(int)GetVars('page','GET')==0?1:(int)GetVars('page','GET');
+	$p->PageBarCount=$zbp->pagebarcount;
 
-$array=$zbp->GetTagList(
-	'',
-	'',
-	array('tag_ID'=>'ASC'),
-	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
-	array('pagebar'=>$p)
-);
+	$array=$zbp->GetTagList(
+		'',
+		'',
+		array('tag_ID'=>'ASC'),
+		array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
+		array('pagebar'=>$p)
+	);
 
-foreach ($array as $tag) {
-	echo '<tr>';
-	echo '<td class="td5">' . $tag->ID . '</td>';
-	echo '<td class="td25"><a href="'.$tag->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $tag->Name . '</td>';
-	echo '<td class="td20">' . $tag->Alias . '</td>';
-	echo '<td class="td10">' . $tag->Count . '</td>';
-	echo '<td class="td10 tdCenter">';
-	echo '<a href="../cmd.php?act=TagEdt&amp;id='. $tag->ID .'"><img src="../image/admin/tag_blue_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
-	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=TagDel&amp;id='. $tag->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
-	echo '</td>';
+	foreach ($array as $tag) {
+		echo '<tr>';
+		echo '<td class="td5">' . $tag->ID . '</td>';
+		echo '<td class="td25"><a href="'.$tag->Url.'" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $tag->Name . '</td>';
+		echo '<td class="td20">' . $tag->Alias . '</td>';
+		echo '<td class="td10">' . $tag->Count . '</td>';
+		echo '<td class="td10 tdCenter">';
+		echo '<a href="../cmd.php?act=TagEdt&amp;id='. $tag->ID .'"><img src="../image/admin/tag_blue_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+		echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+		echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=TagDel&amp;id='. $tag->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
+		echo '</td>';
 
-	echo '</tr>';
-}
-	echo '</table>';
-	echo '<hr/><p class="pagebar">';
-foreach ($p->buttons as $key => $value) {
-	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
-}
+		echo '</tr>';
+	}
+		echo '</table>';
+		echo '<hr/><p class="pagebar">';
+	foreach ($p->buttons as $key => $value) {
+		echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
+	}
 	echo '</p></div>';
 
 	echo '<script type="text/javascript">ActiveLeftMenu("aTagMng");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/tag_32.png' . '");</script>';
 }
-
-
-
-
-
-
 
 
 
@@ -1075,32 +1025,32 @@ function Admin_ThemeMng(){
 	echo '<input type="hidden" name="style" id="style" value="" />';
 
 	foreach ($zbp->themes as $theme) {
-echo "\n\n";
+		echo "\n\n";
 
-echo '<div class="theme '.($theme->IsUsed()?'theme-now':'theme-other').'"';
-echo ' data-themeid="' . $theme->id . '"';
-echo ' data-themename="' . $theme->name . '"';
-echo '>';
-echo '<div class="theme-name">';
+		echo '<div class="theme '.($theme->IsUsed()?'theme-now':'theme-other').'"';
+		echo ' data-themeid="' . $theme->id . '"';
+		echo ' data-themename="' . $theme->name . '"';
+		echo '>';
+		echo '<div class="theme-name">';
 
-if($theme->IsUsed() && $theme->path){
-echo '<a href="'.$theme->GetManageUrl().'" title="管理" class="button"><img width="16" title="" alt="" src="../image/admin/setting_tools.png"/></a>&nbsp;&nbsp;';
-}else{
-echo '<img width="16" title="" alt="" src="../image/admin/layout.png"/>&nbsp;&nbsp;';
-}
-echo '<a target="_blank" href="'.$theme->url.'" title=""><strong style="display:none;">'.$theme->id.'</strong>';
-echo '<b>'.$theme->name.'</b></a></div>';
-echo '<div><img src="'.$theme->GetScreenshot().'" title="'.$theme->name.'" alt="'.$theme->name.'" width="200" height="150" /></div>';
-echo '<div class="theme-author">'.$zbp->lang['msg']['author'].': <a target="_blank" href="'.$theme->author_url.'">'.$theme->author_name.'</a></div>';
-echo '<div class="theme-style">'.$zbp->lang['msg']['style'].': ';
-echo '<select class="edit" size="1" style="width:110px;">';
-foreach ($theme->GetCssFiles() as $key => $value) {
-	echo '<option value="'.$key.'" '.($theme->IsUsed()?($key==$zbp->style?'selected="selected"':''):'').'>'.basename($value).'</option>';
-}
-echo '</select>';
-echo '<input type="button" onclick="$(\'#style\').val($(this).prev().val());$(\'#theme\').val(\''.$theme->id.'\');$(\'#frmTheme\').submit();" class="theme-activate button" value="'.$zbp->lang['msg']['enable'].'">';
-echo '</div>';
-echo '</div>';
+		if($theme->IsUsed() && $theme->path){
+		echo '<a href="'.$theme->GetManageUrl().'" title="管理" class="button"><img width="16" title="" alt="" src="../image/admin/setting_tools.png"/></a>&nbsp;&nbsp;';
+		}else{
+		echo '<img width="16" title="" alt="" src="../image/admin/layout.png"/>&nbsp;&nbsp;';
+		}
+		echo '<a target="_blank" href="'.$theme->url.'" title=""><strong style="display:none;">'.$theme->id.'</strong>';
+		echo '<b>'.$theme->name.'</b></a></div>';
+		echo '<div><img src="'.$theme->GetScreenshot().'" title="'.$theme->name.'" alt="'.$theme->name.'" width="200" height="150" /></div>';
+		echo '<div class="theme-author">'.$zbp->lang['msg']['author'].': <a target="_blank" href="'.$theme->author_url.'">'.$theme->author_name.'</a></div>';
+		echo '<div class="theme-style">'.$zbp->lang['msg']['style'].': ';
+		echo '<select class="edit" size="1" style="width:110px;">';
+		foreach ($theme->GetCssFiles() as $key => $value) {
+			echo '<option value="'.$key.'" '.($theme->IsUsed()?($key==$zbp->style?'selected="selected"':''):'').'>'.basename($value).'</option>';
+		}
+		echo '</select>';
+		echo '<input type="button" onclick="$(\'#style\').val($(this).prev().val());$(\'#theme\').val(\''.$theme->id.'\');$(\'#frmTheme\').submit();" class="theme-activate button" value="'.$zbp->lang['msg']['enable'].'">';
+		echo '</div>';
+		echo '</div>';
 	}
 
 	echo '</form></div>';
@@ -1108,12 +1058,6 @@ echo '</div>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/themes_32.png' . '");</script>';
 
 }
-
-
-
-
-
-
 
 
 
@@ -1241,23 +1185,15 @@ function Admin_ModuleMng(){
 
 	echo '</div>';
 	echo "\r\n";
-?>
-<!-- dialog -->
-<div id="dialog-confirm" title="<?php echo $zbp->lang['msg']['del'];?>">
-	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:2px 7px 20px 0;"></span><?php echo $zbp->lang['msg']['confirm_operating'];?></p>
-</div>
-<div id="dialog-form" title=""></div>
-<!-- loading -->
-<div id="loading">
-	<img class="roll" src="../image/admin/loading.gif" width="16" >
-</div>
-<script type="text/javascript">
-	ActiveLeftMenu("aModuleMng");
-	AddHeaderIcon("<?php echo $zbp->host?>zb_system/image/common/link_32.png");
-</script>
-<script type="text/javascript" src="<?php echo $zbp->host?>zb_system/script/c_admin_js_load.php?act=ModuleMng"></script>
-<?php
 
+	CreateAjaxDialog();
+?>
+	<script type="text/javascript">
+		ActiveLeftMenu("aModuleMng");
+		AddHeaderIcon("<?php echo $zbp->host?>zb_system/image/common/link_32.png");
+	</script>
+	<script type="text/javascript" src="<?php echo $zbp->host?>zb_system/script/c_admin_js_load.php?act=ModuleMng"></script>
+<?php
 }
 
 
@@ -1297,6 +1233,25 @@ function CreateModuleDiv($m,$button=true){
 	echo '</div>';
 }
 
+
+/**
+ * 后台管理中需要的ajax弹窗元素
+ * @param string $message 自定义提示消息
+ */
+function CreateAjaxDialog($message=null){
+	
+	global $zbp;
+?>
+	<!-- dialog -->
+	<div id="dialog-confirm" title="<?php echo $zbp->lang['msg']['del'];?>">
+		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:2px 7px 20px 0;"></span><?php echo (!isset($message)?$zbp->lang['msg']['confirm_operating']:$message);?></p>
+	</div>
+	<div id="dialog-form" title=""></div>
+	<!-- loading -->
+	<div id="loading">
+	</div>
+<?php
+}
 
 
 ################################################################################################################
@@ -1382,9 +1337,6 @@ foreach ($plugins as $plugin) {
 	echo 'AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/plugin_32.png' . '");$(".plugin-note").tooltip();</script>';
 
 }
-
-
-
 
 
 

@@ -354,14 +354,15 @@ input.edit{
 	padding-top: 7px;
 	width: 12%;
 	float: left;
-	padding-left: 10px;
 	font-weight: bold;
 }
 .form-group label[for="NoRefresh"] {
 	width: 26%;
 }
+.form-group select,
 .form-group input[type="text"], 
 .form-group input[type="number"],
+.form-group input[type="password"],
 .form-group textarea{
 	width: 80%;
 	float: left;
@@ -371,6 +372,9 @@ input.edit{
 	padding-left: 15px;
 	display: block;
 	padding: 6px !important;
+}
+.form-group select{
+	width: 230px;
 }
 .form-group .imgcheck{
 	margin-top: 8px;
@@ -444,8 +448,8 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 }
 
 .editmod2{
-	margin:1em 0;
-	padding-right:265px;
+	margin: 0.2em 0;
+	padding-right: 265px;
 }
 #divIntro{
 	padding-bottom:20px;
@@ -779,6 +783,7 @@ a.button:hover,span.button:hover{
 .siderbar-list .roll {display:none;}
 
 #dialog-confirm,#dialog-form{display:none;}
+#dialog-form form{padding-left: 10px;}
 
 .edui-default .edui-editor {
 	width:100%!important;
@@ -796,3 +801,5 @@ a.button:hover,span.button:hover{
     width:100%;
     background:rgba(170, 170, 170,.3) url('../image/admin/loading-big.gif') 50% 50% no-repeat;
 }
+.login { height:100px; margin:0 auto; padding-left:10px;}
+.login dd { width:180px; float:left;}

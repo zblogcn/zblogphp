@@ -207,6 +207,8 @@ return array(
 	'module_previous'=>'近期文章',
 	'module_tags'=>'標籤集',
 	'admin_login'=>'登入控制台',
+	'ok' => '确定',
+	'cancel' => '取消',
 	''=>'',
 ),
 

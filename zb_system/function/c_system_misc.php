@@ -126,55 +126,62 @@ function misc_showtags() {
 
 
 function misc_viewrights(){
-global $zbp;
+	global $zbp;
 
-$blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights'];
-?><!DOCTYPE HTML>
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<?php if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) { ?>
-		<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
-	<?php } ?>
-	<meta name="robots" content="none"/>
-	<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL'] ?>"/>
-	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen"/>
-	<script src="script/common.js" type="text/javascript"></script>
-	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
-<?php
+	$blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights'];
+	if(!isset($_GET['ajax'])){
+	?><!DOCTYPE HTML>
+	<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<?php if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) { ?>
+			<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+		<?php } ?>
+		<meta name="robots" content="none"/>
+		<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL'] ?>"/>
+		<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen"/>
+		<script src="script/common.js" type="text/javascript"></script>
+		<script src="script/c_admin_js_add.php" type="text/javascript"></script>
+	<?php
 
-foreach ($GLOBALS['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
+	foreach ($GLOBALS['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
 
-?>
-	<title><?php echo $blogtitle; ?></title>
-</head>
-<body class="short">
-<div class="bg">
-	<div id="wrapper">
-		<div class="logo"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></div>
-		<div class="login">
-			<form method="post" action="#">
-				<dl>
-					<dt><?php echo $zbp->lang['msg']['current_member'] . ' : <b>' . $zbp->user->Name; ?></b><br/>
-						<?php echo $zbp->lang['msg']['member_level'] . ' : <b>' . $zbp->user->LevelName; ?></b></dt>
-					<?php
+	?>
+		<title><?php echo $blogtitle; ?></title>
+	</head>
+	<body class="short">
 
-					foreach ($GLOBALS['actions'] as $key => $value) {
-						if ($GLOBALS['zbp']->CheckRights($key)) {
-							echo '<dd><b>' . $key . '</b> : ' . ($GLOBALS['zbp']->CheckRights($key) ? '<span style="color:green">true</span>' : '<span style="color:red">false</span>') . '</dd>';
+	<div class="bg">
+		<div id="wrapper">
+			<div class="logo"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></div>
+			<?php
+			}
+			?>
+			<div class="login">
+					<dl>
+						<dt><?php echo $zbp->lang['msg']['current_member'] . ' : <b>' . $zbp->user->Name.'</b>'; ?><br/>
+							<?php echo $zbp->lang['msg']['member_level'] . ' : <b>' . $zbp->user->LevelName; ?></b></dt>
+						<?php
+
+						foreach ($GLOBALS['actions'] as $key => $value) {
+							if ($GLOBALS['zbp']->CheckRights($key)) {
+								echo '<dd><b>' . $key . '</b> : ' . ($GLOBALS['zbp']->CheckRights($key) ? '<span style="color:green">true</span>' : '<span style="color:red">false</span>') . '</dd>';
+							}
 						}
-					}
 
-					?>
-				</dl>
-			</form>
+						?>
+					</dl>
+			</div>
+	<?php
+	if(!isset($_GET['ajax'])){
+	?>
 		</div>
 	</div>
-</div>
-</body>
-</html>
-<?php
-RunTime();
+	</body>
+	</html>
+	<?php
+	}
+	RunTime();
 }
 
 ?>

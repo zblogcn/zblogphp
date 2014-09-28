@@ -204,6 +204,8 @@ return array(
 	'module_previous' => '最近发表',
 	'module_tags' => '标签列表',
 	'admin_login' => '登录后台',
+	'ok' => '确定',
+	'cancel' => '取消',
 	'' => '',
 ),
 
