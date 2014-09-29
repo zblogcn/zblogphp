@@ -86,7 +86,7 @@ td,th{
 	border:1px solid #E1E1E1;
 	margin:0;
 	padding:3px 5px;
-	text-indent:0.2em;
+	text-indent:0;
 	vertical-align:middle;
 }
 tr img{
@@ -281,7 +281,7 @@ form p{padding:0.5em 0  0.5em 0;line-height:1.5em;}
 
 input {
 	padding: 0.25em 0.25em 0.25em 0.25em;
-	border: 1px double #aaaaaa;
+	border: 1px solid #ccc;
 	background-position: bottom;
 	background:#fff;
 	font-size:1em;
@@ -292,14 +292,14 @@ input[type="radio"] {
 }
 select{
 	padding: 0.15em 0.25em 0.20em 0.25em;
-	border: 1px double #aaaaaa;
+	border: 1px solid #ccc;
 	background-position: bottom;
 	background:#fff;
 	font-size:1.0em;
 }
 
 textarea{
-	border: 1px double #aaaaaa;
+	border: 1px solid #ccc;
 	background-position: bottom;
 	background:#fff;
 	font-size:1em;
@@ -327,12 +327,58 @@ input[disabled],input[disabled]:hover{
 input[readonly],input[readonly]:hover{
 	background:#eee;
 	border:1px solid #ccc;
+	color: #808080;
 }
 select.edit{
 	width:300px;
 }
 input.edit{
-	width:300px;
+	width:293px;
+}
+.form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+	width: 100%;
+	margin-bottom: 10px;
+  }
+  .form-group label {
+	padding-top: 7px;
+	margin-bottom: 0;
+	position: relative;
+	min-height: 1px;
+	max-width: 100%;
+	display: inline-block;
+}
+.form-group label.title {
+	padding-top: 7px;
+	width: 12%;
+	float: left;
+	font-weight: bold;
+}
+.form-group label[for="NoRefresh"] {
+	width: 26%;
+}
+.form-group select,
+.form-group input[type="text"], 
+.form-group input[type="number"],
+.form-group input[type="password"],
+.form-group textarea{
+	width: 80%;
+	float: left;
+	position: relative;
+	min-height: 1px;
+	padding-right: 15px;
+	padding-left: 15px;
+	display: block;
+	padding: 6px !important;
+}
+.form-group select{
+	width: 230px;
+}
+.form-group .imgcheck{
+	margin-top: 8px;
+	margin-left: 0px;
 }
 
 #editor_content {width:100%;height:300px;	margin:0 3px;}
@@ -402,8 +448,8 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 }
 
 .editmod2{
-	margin:1em 0;
-	padding-right:265px;
+	margin: 0.2em 0;
+	padding-right: 265px;
 }
 #divIntro{
 	padding-bottom:20px;
@@ -529,8 +575,9 @@ span.title{
 	font-weight:bold;
 }
 span.star{
+	display: inline-block;	
+	margin: 6px;
 	color:red;
-	font-size:0.9em;
 }
 span.note{
 	font-size:0.9em;
@@ -687,14 +734,15 @@ span.note{
 #divFloat input.button{	margin:0.2em 0;}
 .boxfloat{position: fixed;_position: absolute;top: 0px;z-index: 295;}
 
-a.button{
+span.button{cursor: pointer;}
+a.button,span.button{
 	border-radius:2px;
 	padding:2px 3px 2px 3px;
 	line-height: 1.0em;
 	font-size:1em;
 }
 
-a.button:hover{
+a.button:hover,span.button:hover{
 	box-shadow: 0 0 1px #000;
 	border-radius:2px;
 	-ms-border-radius:2px;
@@ -734,8 +782,24 @@ a.button:hover{
 /*.custom-state-active{background: #B5DCF0;}*/
 .siderbar-list .roll {display:none;}
 
-
+#dialog-confirm,#dialog-form{display:none;}
+#dialog-form form{padding-left: 10px;}
 
 .edui-default .edui-editor {
 	width:100%!important;
 }
+.plugin-note{
+	cursor: pointer;
+}
+#loading {
+    display:none;
+    position:fixed;
+    z-index:1000;
+    top:0;
+    left:0;
+    height:100%;
+    width:100%;
+    background:rgba(170, 170, 170,.3) url('../image/admin/loading-big.gif') 50% 50% no-repeat;
+}
+.login { height:100px; margin:0 auto; padding-left:10px;}
+.login dd { width:180px; float:left;}
