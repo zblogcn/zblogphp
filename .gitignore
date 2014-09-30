@@ -20,14 +20,14 @@
 /update/Release/
 /update/*/*
 
+# Plugin cache
+/zb_users/plugin/SQLLog/logs/*.php
+
 # Unoffical Plugin
 /zb_users/plugin/*
 !/zb_users/plugin/AdminColor
 !/zb_users/plugin/AppCentre
-!/zb_users/plugin/AdminColor
-!/zb_users/plugin/AppCentre
 !/zb_users/plugin/AuditRecords
-!/zb_users/plugin/AutoPublic
 !/zb_users/plugin/AutoPublisher
 !/zb_users/plugin/CKEditor
 !/zb_users/plugin/CloudStorage
@@ -37,7 +37,6 @@
 !/zb_users/plugin/HeartComment
 !/zb_users/plugin/HeartVote
 !/zb_users/plugin/Howl
-!/zb_users/plugin/KODExplorer
 !/zb_users/plugin/KindEditor
 !/zb_users/plugin/PDC
 !/zb_users/plugin/Pad
@@ -50,8 +49,6 @@
 !/zb_users/plugin/UEditor
 !/zb_users/plugin/ZBPDK
 !/zb_users/plugin/alipay
-!/zb_users/plugin/asp2php
-!/zb_users/plugin/baidu_bcms
 !/zb_users/plugin/changyan
 !/zb_users/plugin/clinic
 !/zb_users/plugin/duoshuo
@@ -61,8 +58,6 @@
 !/zb_users/plugin/qiniuyun
 !/zb_users/plugin/static
 !/zb_users/plugin/tpluginmaker
-!/zb_users/plugin/upyun
-!/zb_users/plugin/uyan
 !/zb_users/plugin/wearingtheme
 !/zb_users/plugin/wp2zbp
 
