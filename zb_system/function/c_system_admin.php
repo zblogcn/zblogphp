@@ -1248,8 +1248,7 @@ function CreateAjaxDialog($message=null){
 	</div>
 	<div id="dialog-form" title=""></div>
 	<!-- loading -->
-	<div id="loading">
-	</div>
+	<div id="loading"></div>
 <?php
 }
 
@@ -1307,30 +1306,29 @@ function Admin_PluginMng(){
 	}
 
 
-foreach ($plugins as $plugin) {
-	echo '<tr>';
-	echo '<td class="td5 tdCenter'.($plugin->type=='plugin'?' plugin':'').($plugin->IsUsed()?' plugin-on':'').'"><img ' . ($plugin->IsUsed()?'':'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" height="32" /></td>';
-	echo '<td class="td25"><span id="plugin-'.$plugin->id.'" class="plugin-note" title="'. htmlspecialchars($plugin->note) . '">' . $plugin->name .' '. $plugin->version . '</span><strong style="display:none">'.$plugin->id.'</strong></td>';
-	echo '<td class="td20"><a href="' . $plugin->author_url . '" target="_blank">' . $plugin->author_name . '</a></td>';
-	echo '<td class="td20">' . $plugin->modified . '</td>';
-	echo '<td class="td10 tdCenter">';
+	foreach ($plugins as $plugin) {
+		echo '<tr>';
+		echo '<td class="td5 tdCenter'.($plugin->type=='plugin'?' plugin':'').($plugin->IsUsed()?' plugin-on':'').'" data-pluginid="'.$plugin->id.'"><img ' . ($plugin->IsUsed()?'':'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" height="32" /></td>';
+		echo '<td class="td25"><span id="plugin-'.$plugin->id.'" class="plugin-note" title="'. htmlspecialchars($plugin->note) . '">' . $plugin->name .' '. $plugin->version . '</span></td>';
+		echo '<td class="td20"><a href="' . $plugin->author_url . '" target="_blank">' . $plugin->author_name . '</a></td>';
+		echo '<td class="td20">' . $plugin->modified . '</td>';
+		echo '<td class="td10 tdCenter">';
 
-	if($plugin->type=='plugin'){
-		if($plugin->IsUsed()){
-			echo '<a href="../cmd.php?act=PluginDis&amp;name=' . htmlspecialchars($plugin->id) . '&amp;token='. $zbp->GetToken() .'" title="' . $zbp->lang['msg']['disable'] . '"><img width="16" alt="' . $zbp->lang['msg']['disable'] . '" src="../image/admin/control-power.png"/></a>';
-		}else{
-			echo '<a href="../cmd.php?act=PluginEnb&amp;name=' . htmlspecialchars($plugin->id) . '&amp;token='. $zbp->GetToken() .'" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../image/admin/control-power-off.png"/></a>';
+		if($plugin->type=='plugin'){
+			if($plugin->IsUsed()){
+				echo '<a href="../cmd.php?act=PluginDis&amp;name=' . htmlspecialchars($plugin->id) . '&amp;token='. $zbp->GetToken() .'" title="' . $zbp->lang['msg']['disable'] . '"><img width="16" alt="' . $zbp->lang['msg']['disable'] . '" src="../image/admin/control-power.png"/></a>';
+			}else{
+				echo '<a href="../cmd.php?act=PluginEnb&amp;name=' . htmlspecialchars($plugin->id) . '&amp;token='. $zbp->GetToken() .'" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../image/admin/control-power-off.png"/></a>';
+			}
 		}
-	}
-	if($plugin->IsUsed() && $plugin->CanManage()){
-		echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-		echo '<a href="' . $plugin->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><img width="16" alt="' . $zbp->lang['msg']['manage'] . '" src="../image/admin/setting_tools.png"/></a>';
-	}
+		if($plugin->IsUsed() && $plugin->CanManage()){
+			echo '<a href="' . $plugin->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><img width="16" alt="' . $zbp->lang['msg']['manage'] . '" src="../image/admin/setting_tools.png"/></a>';
+		}
 
-	echo '</td>';
+		echo '</td>';
 
-	echo '</tr>';
-}
+		echo '</tr>';
+	}
 	echo '</table>';
 	echo '</div>';
 	echo '<script type="text/javascript">ActiveLeftMenu("aPluginMng");';

@@ -1761,15 +1761,15 @@ button.ui-button::-moz-focus-inner {
 	padding: 8px;
 	position: absolute;
 	z-index: 9999;
-	max-width: 300px;
-	-webkit-border-radius: 2px; /* Safari 4 */
-	-moz-border-radius: 2px; /* Firefox 3.6 */
-	border-radius: 2px;
+	max-width: 368px;
+	-webkit-border-radius: 3px; /* Safari 4 */
+	-moz-border-radius: 3px; /* Firefox 3.6 */
+	border-radius: 3px;
 	-webkit-box-shadow: 0 0 15px #aaa;
 	box-shadow: 0 0 15px #aaa;
 }
 body .ui-tooltip {
-	border-width: 2px;
+	border-width: 1px;
 }
 
 .arrow {
