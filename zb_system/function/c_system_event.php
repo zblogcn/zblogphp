@@ -123,9 +123,9 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 	$w = array();
 
 	if ($option['only_ontop'] == true) {
-		$w[] = array('=', 'log_IsTop', 0);
-	} elseif ($option['only_not_ontop'] == true) {
 		$w[] = array('=', 'log_IsTop', 1);
+	} elseif ($option['only_not_ontop'] == true) {
+		$w[] = array('=', 'log_IsTop', 0);
 	}
 
 	$w[] = array('=', 'log_Status', 0);
