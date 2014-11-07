@@ -1823,10 +1823,12 @@ function DelMember() {
 	$id = (int)GetVars('id', 'GET');
 	$mem = $zbp->GetMemberByID($id);
 	if ($mem->ID > 0 && $mem->ID <> $zbp->user->ID) {
-		DelMember_AllData($id);
-		$mem->Del();
-		foreach ($GLOBALS['Filter_Plugin_DelMember_Succeed'] as $fpname => &$fpsignal)
-			$fpname($mem);
+		if (!($mem->Level == 1 && $zbp->user->IsGod == false)) {
+			DelMember_AllData($id);
+			$mem->Del();
+			foreach ($GLOBALS['Filter_Plugin_DelMember_Succeed'] as $fpname => &$fpsignal)
+				$fpname($mem);
+		}
 	} else {
 		return false;
 	}

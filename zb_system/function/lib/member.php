@@ -13,6 +13,11 @@ class Member extends Base {
 	private $_avatar='';
 
 	/**
+	 * @var boolean 创始id
+	 */
+	private $_isgod=null;
+
+	/**
 	 * 构造函数，默认用户设为anonymous
 	 */
 	function __construct()
@@ -71,6 +76,9 @@ class Member extends Base {
 		if ($name=='PassWord_MD5Path') {
 			return null;
 		}
+		if ($name=='IsGod') {
+			return null;
+		}
 		parent::__set($name, $value);
 	}
 
@@ -118,6 +126,22 @@ class Member extends Base {
 		}
 		if ($name=='PassWord_MD5Path') {
 			return md5($this->Password . $zbp->guid);
+		}
+		if ($name=='IsGod') {
+			if($this->$_isgod === true || $this->$_isgod === false){
+				return $this->$_isgod;
+			}else{
+				$sql = $zbp->db->sql->Select($zbp->table['Member'],'*',array(array('=','mem_Level',1)),'mem_ID ASC',1,null);
+				$am = $zbp->GetList('Member',$sql);
+				if(count($am) == 1){
+					if($am[0]->ID == $zbp->user->ID){
+						$this->$_isgod = true;
+					}else{
+						$this->$_isgod = false;
+					}
+					return $this->$_isgod;
+				};
+			}
 		}
 		return parent::__get($name);
 	}

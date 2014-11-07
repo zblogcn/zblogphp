@@ -908,8 +908,10 @@ foreach ($array as $member) {
 	echo '<td class="td10 tdCenter">';
 	echo '<a href="../cmd.php?act=MemberEdt&amp;id='. $member->ID .'"><img src="../image/admin/user_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
 if($zbp->CheckRights('MemberDel')){
+	if(!($member->Level==1 && $zbp->user->IsGod==false)){
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=MemberDel&amp;id='. $member->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
+	}
 }
 	echo '</td>';
 
