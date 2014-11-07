@@ -25,7 +25,7 @@ define('PLUGIN_EXITSIGNAL_BREAK', 'break');
 $plugins = array();
 
 #定义总接口列表，暂未启用
-$filters = array();
+$hooks = array();
 
 /**
  * 注册插件函数，由每个插件主动调用
@@ -83,8 +83,9 @@ function UninstallPlugin($strPluginName) {
 '*********************************************************
 */
 function DefinePluginFilter($strPluginFilter) {
-	if(!isset($GLOBALS[$strPluginFilter])){
-		$GLOBALS[$strPluginFilter] = array();
+	if(!isset($GLOBALS['hooks'][$strPluginFilter])){
+		$GLOBALS['hooks'][$strPluginFilter] = array();
+		$GLOBALS[$strPluginFilter] = &$GLOBALS['hooks'][$strPluginFilter];
 		return true;
 	}
 }
@@ -95,7 +96,7 @@ function DefinePluginFilter($strPluginFilter) {
 '*********************************************************
 */
 function ExistsPluginFilter($strPluginFilter) {
-	return isset($GLOBALS[$strPluginFilter]);
+	return isset($GLOBALS['hooks'][$strPluginFilter]);
 }
 
 /*
@@ -104,12 +105,23 @@ function ExistsPluginFilter($strPluginFilter) {
 '*********************************************************
 */
 function & UsingPluginFilter($strPluginFilter) {
-	if(isset($GLOBALS[$strPluginFilter]))
-		return $GLOBALS[$strPluginFilter];
+	if(isset($GLOBALS['hooks'][$strPluginFilter]))
+		return $GLOBALS['hooks'][$strPluginFilter];
 	return array();
 }
 
-
+/*
+'*********************************************************
+' 目的： 移除插件接口
+'*********************************************************
+*/
+function RemovePluginFilter($strPluginFilter) {
+	if(isset($GLOBALS['hooks'][$strPluginFilter])){
+		unset($GLOBALS[$strPluginFilter]);
+		unset($GLOBALS['hooks'][$strPluginFilter]);
+		return true;
+	}
+}
 
 
 /*
