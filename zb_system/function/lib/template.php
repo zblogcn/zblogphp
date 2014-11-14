@@ -115,27 +115,29 @@ class Template{
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 
-		//Step1:替换<?php块
+		// Step 1: 替换<?php块
 		$this->replacePHP($content);
-		//Step2:解析PHP
+		// Step 2: 解析PHP
 		$this->parsePHP($content);	
-		//Step3:引入主题
+		// Step 3: 引入主题
 		$this->parse_template($content);
-		//Step4:解析module
+		// Step 4: 解析module
 		$this->parse_module($content);	
-		//Step5:替换配置
+		// Step 5: 处理注释
+		$this->parse_comments($content);
+		// Step 6: 替换配置
 		$this->parse_option($content);
-		//Step6:替换标签
+		// Step 7: 替换标签
 		$this->parse_vars($content);
-		//Step6:替换函数
+		// Step 8: 替换函数
 		$this->parse_function($content);
-		//Step7:解析If
+		// Step 9: 解析If
 		$this->parse_if($content);
-		//Step8:解析foreach
+		// Step 10: 解析foreach
 		$this->parse_foreach($content);
-		//Step9:解析for
+		// Step 11: 解析for
 		$this->parse_for($content);
-		//StepN:解析PHP
+		// Step N: 解析PHP
 		$this->parsePHP2($content);
 
 		foreach ($GLOBALS['Filter_Plugin_Template_Compiling_End'] as $fpname => &$fpsignal)
@@ -153,6 +155,14 @@ class Template{
 	private function replacePHP(&$content)
 	{
 		$content = preg_replace("/\<\?php[\d\D]+?\?\>/si", '', $content);
+	}
+
+	/**
+	 * @param $content
+	 */
+	private function parse_comments(&$content)
+	{
+		$content = preg_replace('/\{\*([^\}]+)\*\}/', '{php} /*$1*/ {/php}', $content);
 	}
 
 	/**
