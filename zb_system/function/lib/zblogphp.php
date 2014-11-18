@@ -1448,11 +1448,25 @@ class ZBlogPHP {
 
 
 	/**
+	 * 已改名GetListType,将在1.5版中扔掉有歧义的GetList
+	 * 
+	 * @deprecated 1.5
 	 * @param $type
 	 * @param $sql
 	 * @return array
 	 */
 	function GetList($type,$sql){
+		return GetListType($type,$sql);
+	}
+	
+	/**
+	 * 原名GetList
+	 * 
+	 * @param $type
+	 * @param $sql
+	 * @return array
+	 */
+	function GetListType($type,$sql){
 
 		$array=null;
 		$list=array();
@@ -1480,7 +1494,7 @@ class ZBlogPHP {
 		if(empty($where)){$where = array();}
 		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
 
-		$array = $this->GetList('Post',$sql);
+		$array = $this->GetListType('Post',$sql);
 		foreach ($array as $a) {
 			$this->posts[$a->ID]=$a;
 		}
@@ -1502,7 +1516,7 @@ class ZBlogPHP {
 		if(empty($where)){$where = array();}
 		if(is_array($where))array_unshift($where,array('=','log_Type','0'));
 		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
-		$array = $this->GetList('Post',$sql);
+		$array = $this->GetListType('Post',$sql);
 
 		foreach ($array as $a) {
 			$this->posts[$a->ID]=$a;
@@ -1534,7 +1548,7 @@ class ZBlogPHP {
 		if(empty($where)){$where = array();}
 		if(is_array($where))array_unshift($where,array('=','log_Type','1'));
 		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
-		$array = $this->GetList('Post',$sql);
+		$array = $this->GetListType('Post',$sql);
 		foreach ($array as $a) {
 			$this->posts[$a->ID]=$a;
 		}
@@ -1554,7 +1568,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Comment'],$select,$where,$order,$limit,$option);
-		$array=$this->GetList('Comment',$sql);
+		$array=$this->GetListType('Comment',$sql);
 		foreach ($array as $comment) {
 			$this->comments[$comment->ID]=$comment;
 		}
@@ -1574,7 +1588,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Member'],$select,$where,$order,$limit,$option);
-		return $this->GetList('Member',$sql);
+		return $this->GetListType('Member',$sql);
 
 	}
 
@@ -1590,7 +1604,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Tag'],$select,$where,$order,$limit,$option);
-		return $this->GetList('Tag',$sql);
+		return $this->GetListType('Tag',$sql);
 
 	}
 
@@ -1606,7 +1620,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Category'],$select,$where,$order,$limit,$option);
-		return $this->GetList('Category',$sql);
+		return $this->GetListType('Category',$sql);
 
 	}
 
@@ -1622,7 +1636,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Module'],$select,$where,$order,$limit,$option);
-		return $this->GetList('Module',$sql);
+		return $this->GetListType('Module',$sql);
 	}
 
 	/**
@@ -1637,7 +1651,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Upload'],$select,$where,$order,$limit,$option);
-		return $this->GetList('Upload',$sql);
+		return $this->GetListType('Upload',$sql);
 	}
 
 	/**
@@ -1652,7 +1666,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Counter'],$select,$where,$order,$limit,$option);
-		return $this->GetList('Counter',$sql);
+		return $this->GetListType('Counter',$sql);
 	}
 
 
@@ -1760,7 +1774,7 @@ class ZBlogPHP {
 			return $this->members[$id];
 		}
 		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array('=','mem_ID',$id)),null,1,null);
-		$am = $this->GetList('Member',$sql);
+		$am = $this->GetListType('Member',$sql);
 		if(count($am) == 1){
 			$m = $am[0];
 			$this->members[$m->ID] = $m;
@@ -1785,7 +1799,7 @@ class ZBlogPHP {
 		}
 		
 		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array('=','mem_Name',$name)),null,1,null);
-		$am = $this->GetList('Member',$sql);
+		$am = $this->GetListType('Member',$sql);
 		if(count($am) == 1){
 			$m = $am[0];
 			$this->members[$m->ID] = $m;
