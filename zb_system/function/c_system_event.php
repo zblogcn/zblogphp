@@ -223,6 +223,8 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 function ViewIndex(){
 	global $zbp,$action;
 	
+	$zbp->RedirectPermanentDomainUrl();
+	
 	if(isset($zbp->templates['404']))Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
 
 	foreach($zbp->modulesbyfilename as $m){

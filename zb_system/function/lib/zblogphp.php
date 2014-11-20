@@ -505,7 +505,10 @@ class ZBlogPHP {
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 		
-		if($this->ismanage) $this->LoadManage();
+		if($this->ismanage){
+			$this->LoadManage();
+			$this->host = GetCurrentHost($this->path,$this->cookiespath);
+		}
 
 		$this->isload=true;
 
@@ -768,6 +771,9 @@ class ZBlogPHP {
 		foreach ($this->option as $key => $value) {
 			$this->Config('system')->$key = $value;
 		}
+		
+		$this->Config('system')->ZC_BLOG_HOST = chunk_split($this->Config('system')->ZC_BLOG_HOST,1,"|");
+
 		$this->SaveConfig('system');
 		return true;
 	}
@@ -779,6 +785,7 @@ class ZBlogPHP {
 	 */
 	public function LoadOption(){
 
+		$this->Config('system')->ZC_BLOG_HOST = str_replace('|','',$this->Config('system')->ZC_BLOG_HOST);
 		$array=$this->Config('system')->Data;
 
 		if(empty($array))return false;
@@ -803,6 +810,7 @@ class ZBlogPHP {
 			if($key=='ZC_MYSQL_PERSISTENT')continue;
 			if($key=='ZC_SITE_TURNOFF')continue;			
 			$this->option[$key]=$value;
+			if($key=='ZC_BLOG_HOST')$this->option[$key] = str_replace('|','',$this->option[$key]);
 		}
 		return true;
 	}
@@ -1456,7 +1464,7 @@ class ZBlogPHP {
 	 * @return array
 	 */
 	function GetList($type,$sql){
-		return GetListType($type,$sql);
+		return $this->GetListType($type,$sql);
 	}
 	
 	/**
@@ -2291,5 +2299,39 @@ class ZBlogPHP {
 			}
 		}
 	}
+
 	
+	/**
+	 * 跳转到固定域名的链接
+	 */
+	function  RedirectPermanentDomainUrl(){
+	
+		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==false)return;
+		if($this->option['ZC_PERMANENT_DOMAIN_REDIRECT']==false)return;
+
+		if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
+			if ($_SERVER['REQUEST_SCHEME'] == 'https') {
+				$host = 'https://';
+			} else {
+				$host = 'http://';
+			}
+		}elseif (array_key_exists('HTTPS', $_SERVER)) {
+			if ($_SERVER['HTTPS'] == 'off') {
+				$host = 'http://';
+			} else {
+				$host = 'https://';
+			}
+		} else {
+			$host = 'http://';
+		}
+
+		$host .= $_SERVER['HTTP_HOST'];
+		$host .= $_SERVER["REQUEST_URI"];
+
+		if(stripos($host,$this->host)===false){
+			$nowhost = GetCurrentHost($this->path,$now);
+			$host = str_replace($nowhost,$this->host,$host);
+			Redirect301($host);
+		}
+	}
 }

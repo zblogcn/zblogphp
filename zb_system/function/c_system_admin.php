@@ -1469,7 +1469,7 @@ function Admin_PluginMng(){
 			}
 		}
 		if($plugin->IsUsed() && $plugin->CanManage()){
-			echo '<a href="' . $plugin->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><img width="16" alt="' . $zbp->lang['msg']['manage'] . '" src="../image/admin/setting_tools.png"/></a>';
+			echo '&nbsp;&nbsp;&nbsp;&nbsp;<a href="' . $plugin->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><img width="16" alt="' . $zbp->lang['msg']['manage'] . '" src="../image/admin/setting_tools.png"/></a>';
 		}
 
 		echo '</td>';
