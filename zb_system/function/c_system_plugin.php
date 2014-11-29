@@ -798,6 +798,17 @@ DefinePluginFilter('Filter_Plugin_Member_Edit_Response');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Module_Edit_Response
+'参数:
+'说明:模块编辑页输出接口
+'调用:
+'**************************************************>
+*/
+DefinePluginFilter('Filter_Plugin_Module_Edit_Response');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Admin_Js_Add
 '参数:
 '说明:c_admin_js_add.php脚本页的接口

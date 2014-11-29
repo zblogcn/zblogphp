@@ -1938,6 +1938,7 @@ function PostModule() {
 	}
 
 	FilterModule($mod);
+	FilterMeta($mod);
 
 	$mod->Save();
 

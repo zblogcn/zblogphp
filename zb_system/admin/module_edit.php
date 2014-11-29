@@ -159,7 +159,12 @@ if($mod->FileName=='catalog'){
 		<span class='title'>
 			<?php echo $lang['msg']['no_refresh_content']?>:</span>
 		<input type="text" id="NoRefresh" name="NoRefresh" class="checkbox" value="<?php echo $mod->NoRefresh;?>"/></p>
+	<!-- 1号输出接口 -->	
+	<div id='response' class='editmod2'>
+		<?php foreach ($GLOBALS['Filter_Plugin_Module_Edit_Response'] as $fpname =>	&$fpsignal) {$fpname();}?>
+	</div>
 	<p>
+
 		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" /></p>
 </form>
 <script type="text/javascript">
