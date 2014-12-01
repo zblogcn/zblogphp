@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 //<language>正體字</language>
 //The second line of this file is the name of the language
 //Author:楊懿軒

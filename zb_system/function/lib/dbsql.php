@@ -34,27 +34,27 @@ interface iDataBase {
 
 
 /**
-* 数据库操作基类
+* SQL语句生成类
  * @package Z-BlogPHP
  * @subpackage ClassLib/DataBase
 */
-class DbSql #extends AnotherClass 
+class DbSql
 {
 	/**
-	* @var null|string 数据库类型
+	* @var null|string 数据库连接类型
 	*/
-	public $type=null;
+	private $type=null;
 	/**
-	* @var null 数据连接实例
+	* @var null 数据库连接实例
 	*/
-	protected $db=null;
+	private $db=null;
 	/**
 	* @param object $db
 	*/
-	function __construct($db=null)
+	function __construct(&$db=null)
 	{
 		$this->db=$db;
-		$this->type=get_class($db);
+		$this->type=get_class($this->db);
 	}
 	/**
 	 * 替换数据表前缀

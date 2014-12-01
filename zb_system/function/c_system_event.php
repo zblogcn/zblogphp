@@ -227,8 +227,10 @@ function ViewIndex(){
 	
 	if(isset($zbp->templates['404']))Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
 
+	$ak = array_keys($zbp->replacetags);
+	$av = array_values($zbp->replacetags);
 	foreach($zbp->modulesbyfilename as $m){
-		$m->Content = str_replace(array_keys($zbp->replacetags),array_values($zbp->replacetags),$m->Content);
+		$m->Content = str_replace($ak,$av,$m->Content);
 	}
 	
 	foreach ($GLOBALS['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
@@ -237,7 +239,7 @@ function ViewIndex(){
 			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
 		}
 	}
-
+	
 	switch ($action) {
 	case 'feed':
 		ViewFeed();

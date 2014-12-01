@@ -48,7 +48,7 @@ return array(
 
 	// '-------------------------------全局配置-----------------------------------
 	'ZC_YUN_SITE'=>'',
-	'ZC_DEBUG_MODE' => true,
+	'ZC_DEBUG_MODE' => false,
 	'ZC_DEBUG_MODE_STRICT' => false,
 	'ZC_DEBUG_MODE_WARNING' => true,
 	'ZC_BLOG_CLSID' => '',

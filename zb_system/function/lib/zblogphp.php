@@ -398,10 +398,11 @@ class ZBlogPHP {
 
 		if(!$this->OpenConnect())return false;
 
+		$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
 		$this->LoadConfigs();
 		$this->LoadCache();
 		$this->LoadOption();
-
+		
 		if($oldlang!=$this->option['ZC_BLOG_LANGUAGEPACK']){
 			$this->lang = require($this->path . 'zb_users/language/' . $this->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 		}
@@ -463,10 +464,6 @@ class ZBlogPHP {
 
 		if($this->isload)return false;
 
-		foreach($this->table as &$tb){
-			$tb=str_replace('%pre%', $this->db->dbpre, $tb);
-		}
-
 		$this->StartGzip();
 
 		header('Content-type: text/html; charset=utf-8');
@@ -509,6 +506,8 @@ class ZBlogPHP {
 			$this->LoadManage();
 			$this->host = GetCurrentHost($this->path,$this->cookiespath);
 		}
+		
+		$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
 
 		$this->isload=true;
 
@@ -1269,6 +1268,7 @@ class ZBlogPHP {
 				$t['{$' . $k . '}']=$v;
 		}
 		foreach($option as $k => $v){
+			if(is_string($v) || is_numeric($v) || is_bool($v) )
 				$o['{#' . $k . '#}']=$v;
 		}
 		$this->replacetags = $t + $o;
