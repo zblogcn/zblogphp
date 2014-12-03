@@ -1,13 +1,12 @@
 <div class="post" id="divCommentPost">
-	<p class="posttop"><a name="comment">{if $user.ID>0}{$user.Name}{/if}发表评论:</a><a rel="nofollow" id="cancel-reply" href="#divCommentPost" style="display:none;"><small>取消回复</small></a></p>
+	<p class="posttop"><a name="comment">{if $user.ID>0}{$user.StaticName}{/if}发表评论:</a><a rel="nofollow" id="cancel-reply" href="#divCommentPost" style="display:none;"><small>取消回复</small></a></p>
 	<form id="frmSumbit" target="_self" method="post" action="{$article.CommentPostUrl}" >
-	{$HeartComment}
 	<input type="hidden" name="inpId" id="inpId" value="{$article.ID}" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
 {if $user.ID>0}
 	<input type="hidden" name="inpName" id="inpName" value="{$user.Name}" />
 	<input type="hidden" name="inpEmail" id="inpEmail" value="{$user.Email}" />
-	<input type="hidden" name="inpHomePage" id="inpHomePage" value="{$user.HomePage}" />	
+	<input type="hidden" name="inpHomePage" id="inpHomePage" value="{$user.HomePage}" />
 {else}
 	<p><input type="text" name="inpName" id="inpName" class="text" value="{$user.Name}" size="28" tabindex="1" /> <label for="inpName">名称(*)</label></p>
 	<p><input type="text" name="inpEmail" id="inpEmail" class="text" value="{$user.Email}" size="28" tabindex="2" /> <label for="inpEmail">邮箱</label></p>
