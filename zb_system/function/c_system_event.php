@@ -2254,6 +2254,7 @@ function FilterPost(&$article) {
 	global $zbp;
 
 	$article->Title = strip_tags($article->Title);
+	$article->Title = htmlspecialchars($article->Title);
 	$article->Alias = TransferHTML($article->Alias, '[normalname]');
 	$article->Alias = str_replace(' ', '', $article->Alias);
 
