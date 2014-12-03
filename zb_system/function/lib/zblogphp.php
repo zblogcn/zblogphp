@@ -811,6 +811,7 @@ class ZBlogPHP {
 			$this->option[$key]=$value;
 			if($key=='ZC_BLOG_HOST')$this->option[$key] = str_replace('|','',$this->option[$key]);
 		}
+		if(!extension_loaded('gd'))$this->option['ZC_COMMENT_VERIFY_ENABLE'] = False;
 		return true;
 	}
 
@@ -2221,7 +2222,7 @@ class ZBlogPHP {
 	 * 显示验证码
 	 *
 	 * @api Filter_Plugin_Zbp_ShowValidCode 如该接口未被挂载则显示默认验证图片
-	 * @param string $id 页面ID
+	 * @param string $id 命名事件
 	 * @return mixed
 	 */
 	function ShowValidCode($id=''){
@@ -2241,7 +2242,7 @@ class ZBlogPHP {
 	 *
 	 * @api Filter_Plugin_Zbp_CheckValidCode 如该接口未被挂载则比对默认验证码
 	 * @param string $vaidcode 验证码数值
-	 * @param string $id 页面ID
+	 * @param string $id 命名事件
 	 * @return bool
 	 */
 	function CheckValidCode($vaidcode,$id=''){
