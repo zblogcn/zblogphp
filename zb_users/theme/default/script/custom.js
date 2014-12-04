@@ -22,9 +22,8 @@ function RevertComment(i){
 	div.style.display = 'none';
 	frm.before(div);
 
-
-	$('#AjaxCommentEnd'+i).before(frm);
-
+	$('#AjaxComment'+i).before(frm);
+	
 	frm.addClass("reply-frm");
 	
 	cancel.show();
@@ -49,8 +48,13 @@ function RevertComment(i){
 function GetComments(logid,page){
 	$('span.commentspage').html("Waiting...");
 	$.get(str00+"zb_system/cmd.asp?act=CommentGet&logid="+logid+"&page="+page, function(data){
-		$("#cancel-reply").click();
 		$('#AjaxCommentBegin').nextUntil('#AjaxCommentEnd').remove();
 		$('#AjaxCommentEnd').before(data);
+		$("#cancel-reply").click();
 	});
+}
+
+
+function CommentComplete(){
+	$("#cancel-reply").click();
 }

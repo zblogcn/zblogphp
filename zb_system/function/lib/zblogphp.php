@@ -2310,29 +2310,12 @@ class ZBlogPHP {
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==false)return;
 		if($this->option['ZC_PERMANENT_DOMAIN_REDIRECT']==false)return;
 
-		if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
-			if ($_SERVER['REQUEST_SCHEME'] == 'https') {
-				$host = 'https://';
-			} else {
-				$host = 'http://';
-			}
-		}elseif (array_key_exists('HTTPS', $_SERVER)) {
-			if ($_SERVER['HTTPS'] == 'off') {
-				$host = 'http://';
-			} else {
-				$host = 'https://';
-			}
-		} else {
-			$host = 'http://';
-		}
-
-		$host .= $_SERVER['HTTP_HOST'];
-		$host .= $_SERVER["REQUEST_URI"];
+		$host = GetCurrentHost(ZBP_PATH , $null);
 
 		if(stripos($host,$this->host)===false){
-			$nowhost = GetCurrentHost($this->path,$now);
-			$host = str_replace($nowhost,$this->host,$host);
-			Redirect301($host);
+			$u=GetRequestUri();
+			$u=$this->host . substr($u,1,strlen($u));
+			Redirect301($u);
 		}
 	}
 }

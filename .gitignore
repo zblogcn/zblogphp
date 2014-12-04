@@ -10,7 +10,7 @@
 /zb_users/upload/*/*
 
 # Upload
-/zb_users/theme/*/compile/*.php
+# /zb_users/theme/*/compile/*.php
 
 # Static
 /post/*

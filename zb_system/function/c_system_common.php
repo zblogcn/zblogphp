@@ -212,7 +212,7 @@ function GetVarsByDefault($name, $type = 'REQUEST',$default = null) {
 
 /**
  * 获取数据库名
- * @return string  返回SQLite数据文件名
+ * @return string  返回一个随机的SQLite数据文件名
  */
 function GetDbName() {
 
@@ -222,7 +222,7 @@ function GetDbName() {
 /**
  * 获取当前网站地址
  * @param string $blogpath 网站域名
- * @param string &$cookiespath 引用cookie作用域值
+ * @param string &$cookiespath 返回cookie作用域值，要传引入
  * @return string  返回网站完整地址，如http://localhost/zbp/
  */
 function GetCurrentHost($blogpath,&$cookiespath) {
@@ -247,6 +247,7 @@ function GetCurrentHost($blogpath,&$cookiespath) {
 
 	$y = $blogpath;
 	$x = $_SERVER['SCRIPT_NAME'];
+	$z = '';
 
 	for ($i = strlen($x); $i > 0; $i--) {
 		$z = substr($x, 0, $i);
