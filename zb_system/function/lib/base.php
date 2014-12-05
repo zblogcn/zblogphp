@@ -5,7 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib 类库
  */
-class Base {
+class Base{
 
 	/**
 	* @var string 数据表
@@ -248,5 +248,15 @@ class Base {
 		$this->db->Delete($sql);
 		return true;
 	}
+
+	/**
+	* toString
+	*
+	* 将Base对像返回JSON数据
+	* @return string
+	*/
+    public function __toString() {
+        return json_encode($this->data);
+    }
 
 }

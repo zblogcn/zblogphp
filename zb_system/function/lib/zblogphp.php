@@ -1038,6 +1038,8 @@ class ZBlogPHP {
 		if($level > 0){
 			$where = array(array('<=','mem_Level',$level));
 		}
+		$this->members = array();
+		$this->membersbyname = array();
 		$array=$this->GetMemberList(null,$where);
 		foreach ($array as $m) {
 			$this->members[$m->ID]=$m;
@@ -1051,6 +1053,7 @@ class ZBlogPHP {
 	 */
 	public function LoadCategorys(){
 
+		$this->categorys = array();
 		$lv0=array();
 		$lv1=array();
 		$lv2=array();
@@ -1104,6 +1107,8 @@ class ZBlogPHP {
 	 */
 	public function LoadTags(){
 
+		$this->tags = array();
+		$this->tagsbyname = array();
 		$array=$this->GetTagList();
 		foreach ($array as $t) {
 			$this->tags[$t->ID]=$t;
@@ -1117,11 +1122,12 @@ class ZBlogPHP {
 	 * @return null
 	 */
 	public function LoadModules(){
-
+	
+		$this->modules = array();
+		$this->modulesbyfilename = array();
 		$array=$this->GetModuleList();
 		foreach ($array as $m) {
 			$this->modules[]=$m;
-
 			$this->modulesbyfilename[$m->FileName]=$m;
 		}
 
@@ -1144,6 +1150,8 @@ class ZBlogPHP {
 	 *载入当前主题
 	 */
 	public function LoadThemes(){
+
+		$this->themes = array();
 		$dirs=GetDirsInDir($this->usersdir . 'theme/');
 
 		foreach ($dirs as $id) {
@@ -1159,6 +1167,8 @@ class ZBlogPHP {
 	 *载入插件列表
 	 */
 	public function LoadPlugins(){
+
+		$this->plugins = array();
 		$dirs=GetDirsInDir($this->usersdir . 'plugin/');
 
 		foreach ($dirs as $id) {
