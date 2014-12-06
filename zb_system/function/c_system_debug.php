@@ -55,6 +55,9 @@ function Debug_PrintConstants(){
  * @return bool
  */
 function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
+	foreach ($GLOBALS['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname('Error',array($errno, $errstr, $errfile, $errline));
+	}
 	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
 
 	if(is_readable($errfile)){
@@ -70,16 +73,20 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 		if( $errno == E_USER_WARNING )return true;
 	}
 	if(ZBlogException::$isstrict==false){
-		if( $errno == E_NOTICE )return true;
 		if( $errno == E_STRICT )return true;
+		if( $errno == E_NOTICE )return true;
 		if( $errno == E_USER_NOTICE )return true;
 	}
 
+	//屏蔽系统的错误
 	if( $errno == E_CORE_WARNING  )return true;
 	if( $errno == E_COMPILE_WARNING  )return true;
 	if( defined('E_DEPRECATED') && $errno== E_DEPRECATED )return true;
 	if( defined('E_USER_DEPRECATED ') && $errno== E_USER_DEPRECATED )return true;
-	
+
+	//E_USER_ERROR
+	//E_RECOVERABLE_ERROR 
+
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseError($errno, $errstr, $errfile, $errline);
 	$zbe->Display();
@@ -93,6 +100,9 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
  * @return bool
  */
 function Debug_Exception_Handler($exception) {
+	foreach ($GLOBALS['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname('Exception',$exception);
+	}
 	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
 	if(ZBlogException::$isdisable==true)return true;
 
@@ -107,10 +117,12 @@ function Debug_Exception_Handler($exception) {
  * @return bool
  */
 function Debug_Shutdown_Handler() {
-	foreach ($GLOBALS['Filter_Plugin_Debug_Shutdown_Handler'] as $fpname => &$fpsignal) {
-		$fpreturn=$fpname();
-	}
 	if ($error = error_get_last()) {
+
+		foreach ($GLOBALS['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname('Shutdown',$error);
+		}
+
 		$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
 
 		if(ZBlogException::$isdisable==true)return true;

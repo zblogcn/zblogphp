@@ -2190,7 +2190,7 @@ class ZBlogPHP {
 		if((int)$idortext==2){
 			Http404();
 		}
-//die(var_dump(headers_list()));
+
 		ZBlogException::$error_id=(int)$idortext;
 		ZBlogException::$error_file=$file;
 		ZBlogException::$error_line=$line;

@@ -166,13 +166,13 @@ function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSI
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Debug_Shutdown_Handler
-'参数:无
-'说明:定义debug_shutdown_handler函数的接口
+'名称:Filter_Plugin_Debug_Handler
+'参数:$type 类型(Shutdown|Exception|Error) $error 错误数据(对象或数组)
+'说明:定义Debug_Shutdown_Handler,Debug_Exception_Handler,Debug_Error_Handler函数的接口
 '调用:
 '**************************************************>
 */
-DefinePluginFilter('Filter_Plugin_Debug_Shutdown_Handler');
+DefinePluginFilter('Filter_Plugin_Debug_Handler');
 
 /*
 '**************************************************<
