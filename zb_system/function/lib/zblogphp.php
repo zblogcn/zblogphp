@@ -306,7 +306,7 @@ class ZBlogPHP {
 		$this->activeapps = &$activeapps;
 
 		if (trim($this->option['ZC_BLOG_CLSID']) == ''){
-			$this->option['ZC_BLOG_CLSID'] = GetGuid();
+				$this->option['ZC_BLOG_CLSID'] = md5($this->path);
 		}
 		$this->guid = &$this->option['ZC_BLOG_CLSID'];
 
@@ -396,7 +396,10 @@ class ZBlogPHP {
 			return false;
 		}
 
-		if(!$this->OpenConnect())return false;
+		if(!$this->OpenConnect()){
+			$this->guid = GetGuid();
+			return false;
+		}
 
 		$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
 		$this->LoadConfigs();
@@ -451,6 +454,7 @@ class ZBlogPHP {
 
 		$this->isinitialized=true;
 
+		return true;
 	}
 
 
@@ -638,8 +642,8 @@ class ZBlogPHP {
 		$array=$this->db->Query($sql);
 		foreach ($array as $c) {
 			$m=new Metas;
-			$m->Unserialize($c['conf_Value']);
-			$this->configs[$c['conf_Name']]=$m;
+			$m->Unserialize($c[$this->datainfo['Config']['Value'][0]]);
+			$this->configs[$c[$this->datainfo['Config']['Name'][0]]]=$m;
 		}
 	}
 
