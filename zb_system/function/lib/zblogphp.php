@@ -399,6 +399,14 @@ class ZBlogPHP {
 		if(!$this->OpenConnect())return false;
 
 		$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
+		if($this->option['ZC_DATABASE_TYPE']==='pgsql'){
+			foreach($this->datainfo as $key=>&$value){
+				foreach($value as $k2=>&$v2){
+					$v2[0]=strtolower($v2[0]);
+				}
+			}
+		}
+
 		$this->LoadConfigs();
 		$this->LoadCache();
 		$this->LoadOption();
@@ -508,6 +516,13 @@ class ZBlogPHP {
 		}
 		
 		$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
+		if($this->option['ZC_DATABASE_TYPE']==='pgsql'){
+			foreach($this->datainfo as $key=>&$value){
+				foreach($value as $k2=>&$v2){
+					$v2[0]=strtolower($v2[0]);
+				}
+			}
+		}
 
 		$this->isload=true;
 
@@ -565,6 +580,20 @@ class ZBlogPHP {
 						$this->option['ZC_SQLITE_PRE']
 					))==false){
 					$this->ShowError(69,__FILE__,__LINE__);
+				}
+				break;
+			case 'pgsql':
+				$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
+				if($this->db->Open(array(
+						$this->option['ZC_PGSQL_SERVER'],
+						$this->option['ZC_PGSQL_USERNAME'],
+						$this->option['ZC_PGSQL_PASSWORD'],
+						$this->option['ZC_PGSQL_NAME'],
+						$this->option['ZC_PGSQL_PRE'],
+						$this->option['ZC_PGSQL_PORT'],
+						$this->option['ZC_PGSQL_PERSISTENT']
+					))==false){
+					$this->ShowError(67,__FILE__,__LINE__);
 				}
 				break;
 			case 'mysql':
@@ -638,8 +667,14 @@ class ZBlogPHP {
 		$array=$this->db->Query($sql);
 		foreach ($array as $c) {
 			$m=new Metas;
-			$m->Unserialize($c['conf_Value']);
-			$this->configs[$c['conf_Name']]=$m;
+			if($this->option['ZC_DATABASE_TYPE']==='pgsql'){
+				$m->Unserialize($c['conf_value']);
+				$this->configs[$c['conf_name']]=$m;
+			}else{
+				$m->Unserialize($c['conf_Value']);
+				$this->configs[$c['conf_Name']]=$m;
+			}
+
 		}
 	}
 
@@ -760,6 +795,14 @@ class ZBlogPHP {
 				if($key=='ZC_MYSQL_ENGINE')$option[$key]=$value;
 				if($key=='ZC_MYSQL_PORT')$option[$key]=$value;
 				if($key=='ZC_MYSQL_PERSISTENT')$option[$key]=$value;
+				if($key=='ZC_PGSQL_SERVER')$option[$key]=$value;
+				if($key=='ZC_PGSQL_USERNAME')$option[$key]=$value;
+				if($key=='ZC_PGSQL_PASSWORD')$option[$key]=$value;
+				if($key=='ZC_PGSQL_NAME')$option[$key]=$value;
+				if($key=='ZC_PGSQL_CHARSET')$option[$key]=$value;
+				if($key=='ZC_PGSQL_PRE')$option[$key]=$value;
+				if($key=='ZC_PGSQL_PORT')$option[$key]=$value;
+				if($key=='ZC_PGSQL_PERSISTENT')$option[$key]=$value;
 				if($key=='ZC_SITE_TURNOFF')$option[$key]=$value;		
 			}
 			$s.=var_export($option,true);
@@ -794,20 +837,30 @@ class ZBlogPHP {
 			//if($key=='ZC_BLOG_HOST')continue;
 			//if($key=='ZC_BLOG_CLSID')continue;
 			//if($key=='ZC_BLOG_LANGUAGEPACK')continue;
-			if($key=='ZC_YUN_SITE')continue;
-			if($key=='ZC_DATABASE_TYPE')continue;
-			if($key=='ZC_SQLITE_NAME')continue;
-			if($key=='ZC_SQLITE_PRE')continue;
-			if($key=='ZC_MYSQL_SERVER')continue;
-			if($key=='ZC_MYSQL_USERNAME')continue;
-			if($key=='ZC_MYSQL_PASSWORD')continue;
-			if($key=='ZC_MYSQL_NAME')continue;
-			if($key=='ZC_MYSQL_CHARSET')continue;
-			if($key=='ZC_MYSQL_PRE')continue;
-			if($key=='ZC_MYSQL_ENGINE')continue;
-			if($key=='ZC_MYSQL_PORT')continue;
-			if($key=='ZC_MYSQL_PERSISTENT')continue;
-			if($key=='ZC_SITE_TURNOFF')continue;			
+			if(
+				($key=='ZC_YUN_SITE') or 
+				($key=='ZC_DATABASE_TYPE') or 
+				($key=='ZC_SQLITE_NAME') or 
+				($key=='ZC_SQLITE_PRE') or 
+				($key=='ZC_MYSQL_SERVER') or 
+				($key=='ZC_MYSQL_USERNAME') or 
+				($key=='ZC_MYSQL_PASSWORD') or 
+				($key=='ZC_MYSQL_NAME') or 
+				($key=='ZC_MYSQL_CHARSET') or 
+				($key=='ZC_MYSQL_PRE') or 
+				($key=='ZC_MYSQL_ENGINE') or 
+				($key=='ZC_MYSQL_PORT') or 
+				($key=='ZC_MYSQL_PERSISTENT') or 
+				($key=='ZC_PGSQL_SERVER') or 
+				($key=='ZC_PGSQL_USERNAME') or 
+				($key=='ZC_PGSQL_PASSWORD') or 
+				($key=='ZC_PGSQL_NAME') or 
+				($key=='ZC_PGSQL_CHARSET') or 
+				($key=='ZC_PGSQL_PRE') or 
+				($key=='ZC_PGSQL_PORT') or 
+				($key=='ZC_PGSQL_PERSISTENT') or 
+				($key=='ZC_SITE_TURNOFF')
+			)continue;			
 			$this->option[$key]=$value;
 			if($key=='ZC_BLOG_HOST')$this->option[$key] = str_replace('|','',$this->option[$key]);
 		}

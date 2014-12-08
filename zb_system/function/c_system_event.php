@@ -1395,7 +1395,8 @@ function PostComment() {
 			$zbp->comments[$cmt->ID] = $cmt;
 
 			if (GetVars('isajax', 'POST')) {
-				ViewComment($cmt->ID);
+				echo $cmt->ID;
+				//ViewComment($cmt->ID);
 			}
 
 			foreach ($GLOBALS['Filter_Plugin_PostComment_Succeed'] as $fpname => &$fpsignal)
@@ -2691,7 +2692,7 @@ function BuildModule_calendar($date = '') {
 	$arraydate = array();
 	$arrayid = array();
 	foreach ($array as $key => $value) {
-		$arraydate[date('j', $value['log_PostTime'])] = $value['log_ID'];
+		$arraydate[date('j', $value[$zbp->datainfo['Post']['PostTime'][0]])] = $value[$zbp->datainfo['Post']['ID'][0]];
 	}
 	if (count($arraydate) > 0) {
 		foreach ($arraydate as $key => $value) {

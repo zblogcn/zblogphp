@@ -42,13 +42,22 @@ return array(
 	'ZC_MYSQL_ENGINE'=>'MyISAM',
     'ZC_MYSQL_PORT' => '3306',
     'ZC_MYSQL_PERSISTENT' => false,
+	
+    'ZC_PGSQL_SERVER' => 'localhost',
+    'ZC_PGSQL_USERNAME' => 'postgres',
+    'ZC_PGSQL_PASSWORD' => '',
+    'ZC_PGSQL_NAME' => '',
+    'ZC_PGSQL_CHARSET' => 'utf8',
+    'ZC_PGSQL_PRE' => 'zbp_',
+    'ZC_PGSQL_PORT' => '5432',
+    'ZC_PGSQL_PERSISTENT' => false,
 
 	// '---------------------------------插件----------------------------------------
 	'ZC_USING_PLUGIN_LIST' => '',
 
 	// '-------------------------------全局配置-----------------------------------
 	'ZC_YUN_SITE'=>'',
-	'ZC_DEBUG_MODE' => false,
+	'ZC_DEBUG_MODE' => true,
 	'ZC_DEBUG_MODE_STRICT' => false,
 	'ZC_DEBUG_MODE_WARNING' => true,
 	'ZC_BLOG_CLSID' => '',
