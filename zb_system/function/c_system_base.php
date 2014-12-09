@@ -6,7 +6,7 @@
  * @copyright (C) RainbowSoft Studio
  */
 
-error_reporting(0);
+error_reporting(E_PARSE);
 
 ob_start();
 
