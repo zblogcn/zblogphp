@@ -95,6 +95,9 @@ class DbSql
 		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
 			$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$table'";
 		}
+		if($this->type=='Dbpdo_PgSQL'||$this->type=='DbPgSQL'){
+			$s="SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='public' AND  table_name ='$table'";
+		}
 
 		return $s;
 	}

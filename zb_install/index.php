@@ -499,6 +499,10 @@ function Setup3(){
         <label>
           <input value="pgsql" type="radio" name="dbtype"/>PGSQL连接</label>
         <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+        <?php if($CheckResult['pdo_pgsql'][0]){?>
+        <label>
+          <input value="pdo_pgsql" type="radio" name="dbtype"/>PDO_PGSQL连接</label>
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
 		<br/><small>(端口号默认5432，如需要修改请在'数据库主机'里追加':端口号'。)</small>
       </p>
       </div>
@@ -602,13 +606,14 @@ case 'pdo_sqlite':
   $zbp->option['ZC_SQLITE_PRE']=GetVars('dbsqlite_pre','POST');
   break;
 case 'pgsql':
+case 'pdo_pgsql':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/pgsql.sql');
   $zbp->option['ZC_PGSQL_SERVER']=GetVars('dbpgsql_server','POST');
   if(strpos($zbp->option['ZC_PGSQL_SERVER'],':')!==false){
     $servers=explode(':',$zbp->option['ZC_PGSQL_SERVER']);
 	$zbp->option['ZC_PGSQL_SERVER']=$servers[0];
 	$zbp->option['ZC_PGSQL_PORT']=(int)$servers[1];
-	if($zbp->option['ZC_PGSQL_PORT']==0)$zbp->option['ZC_PGSQL_PORT']=3306;
+	if($zbp->option['ZC_PGSQL_PORT']==0)$zbp->option['ZC_PGSQL_PORT']=5432;
 	unset($servers);
   }
   $zbp->option['ZC_PGSQL_USERNAME']=GetVars('dbpgsql_username','POST');
@@ -711,15 +716,15 @@ $CheckResult=array(
   }  
   if( class_exists("PDO",false) ){
 	if (extension_loaded('pdo_mysql')){
-		$pdo = new PDO( 'mysql:');
-		$v = strtok($pdo->getAttribute(PDO::ATTR_CLIENT_VERSION),'$');
+		//$pdo = new PDO( 'mysql:');
+		$v = ' ';//strtok($pdo->getAttribute(PDO::ATTR_CLIENT_VERSION),'$');
 		$pdo = null;
 		$CheckResult['pdo_mysql'][0]=$v;
 		$CheckResult['pdo_mysql'][1]=$CheckResult['pdo_mysql'][0]?bingo:error;
 	}
 	if (extension_loaded('pdo_sqlite')){
-		$pdo = new PDO('sqlite::memory:');
-		$v = $pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
+		//$pdo = new PDO('sqlite::memory:');
+		$v = ' ';//$pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
 		$pdo = null;
 		$CheckResult['pdo_sqlite'][0]=$v;
 		$CheckResult['pdo_sqlite'][1]=$CheckResult['pdo_sqlite'][0]?bingo:error;
