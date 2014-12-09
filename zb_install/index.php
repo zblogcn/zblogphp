@@ -255,7 +255,7 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">SQLite</td>
+          <td scope="row">SQLite2</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
         </tr>
@@ -265,9 +265,19 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][1];?></td>
         </tr>
         <tr>
+          <td scope="row">PDO_SQLite</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][1];?></td>
+        </tr>
+        <tr>
           <td scope="row">PostgresSQL</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">PDO_PgSQL</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_pgsql'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_pgsql'][1];?></td>
         </tr>
         <tr>
           <th colspan="3" scope="row">权限检查</th>
@@ -349,9 +359,9 @@ function Setup3(){
   
   $hasPgsql=false;
 
-  $hasMysql=(boolean)((boolean)($CheckResult['mysql'][0]) or (boolean)($CheckResult['pdo_mysql'][0]));
+  $hasMysql=(boolean)((boolean)($CheckResult['mysql'][0]) or (boolean)($CheckResult['mysqli'][0]) or (boolean)($CheckResult['pdo_mysql'][0]));
 
-  $hasSqlite=(boolean)((boolean)($CheckResult['sqlite3'][0]) or (boolean)($CheckResult['sqlite'][0]));
+  $hasSqlite=(boolean)((boolean)($CheckResult['sqlite3'][0]) or (boolean)($CheckResult['sqlite'][0]) or (boolean)($CheckResult['pdo_sqlite'][0]));
 
   $hasPgsql=(boolean)((boolean)($CheckResult['pgsql'][0]) or (boolean)($CheckResult['pdo_pgsql'][0]));
 ?>
@@ -444,7 +454,7 @@ function Setup3(){
       <p><b>版本选择:</b>
         <?php if($CheckResult['sqlite'][0]){?>
         <label>
-          <input value="sqlite" type="radio" name="dbtype" />SQLite</label>
+          <input value="sqlite" type="radio" name="dbtype" />SQLite2</label>
         <?php 
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
           }
@@ -452,7 +462,17 @@ function Setup3(){
         <?php if($CheckResult['sqlite3'][0]){?>
         <label>
           <input value="sqlite3" type="radio" name="dbtype" />SQLite3</label>
-        <?php } ?>
+        <?php 
+          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+          }
+        ?>
+        <?php if($CheckResult['pdo_sqlite'][0]){?>
+        <label>
+          <input value="pdo_sqlite" type="radio" name="dbtype" />PDO_SQLite</label>
+        <?php 
+          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+          }
+        ?>
       </p>
       </div>
       <?php } ?>
@@ -576,6 +596,7 @@ case 'sqlite':
   $zbp->option['ZC_SQLITE_PRE']=GetVars('dbsqlite_pre','POST');
   break;
 case 'sqlite3':
+case 'pdo_sqlite':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite3.sql');
   $zbp->option['ZC_SQLITE_NAME']=GetVars('dbsqlite_name','POST');
   $zbp->option['ZC_SQLITE_PRE']=GetVars('dbsqlite_pre','POST');
@@ -681,21 +702,35 @@ $CheckResult=array(
 	$CheckResult['gd2'][1]=$CheckResult['gd2'][0]?bingo:error;
   }
   if( function_exists("mysql_get_client_info") ){
-    $CheckResult['mysql'][0]=mysql_get_client_info();
+    $CheckResult['mysql'][0]=strtok(mysql_get_client_info(),'$');
 	$CheckResult['mysql'][1]=$CheckResult['mysql'][0]?bingo:error;
   }
   if( function_exists("mysqli_get_client_info") ){
-    $CheckResult['mysqli'][0]=mysqli_get_client_info();
+    $CheckResult['mysqli'][0]=strtok(mysqli_get_client_info(),'$');
 	$CheckResult['mysqli'][1]=$CheckResult['mysqli'][0]?bingo:error;
   }  
   if( class_exists("PDO",false) ){
 	if (extension_loaded('pdo_mysql')){
-		$CheckResult['pdo_mysql'][0]=PDO::ATTR_DRIVER_NAME;
+		$pdo = new PDO( 'mysql:');
+		$v = strtok($pdo->getAttribute(PDO::ATTR_CLIENT_VERSION),'$');
+		$pdo = null;
+		$CheckResult['pdo_mysql'][0]=$v;
 		$CheckResult['pdo_mysql'][1]=$CheckResult['pdo_mysql'][0]?bingo:error;
 	}
-    //$CheckResult['pdo_pgsql'][0]=PDO::ATTR_DRIVER_NAME;
+	if (extension_loaded('pdo_sqlite')){
+		$pdo = new PDO('sqlite::memory:');
+		$v = $pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
+		$pdo = null;
+		$CheckResult['pdo_sqlite'][0]=$v;
+		$CheckResult['pdo_sqlite'][1]=$CheckResult['pdo_sqlite'][0]?bingo:error;
+	}
+	if (extension_loaded('pdo_pgsql')){
+		$v = ' ';
+		$CheckResult['pdo_pgsql'][0]=$v;
+		$CheckResult['pdo_pgsql'][1]=$CheckResult['pdo_pgsql'][0]?bingo:error;
+	}
   }
-  if( defined("PGSQL_STATUS_STRING") ){
+  if( defined("PGSQL_LIBPQ_VERSION") ){
     $CheckResult['pgsql'][0]=PGSQL_LIBPQ_VERSION;
 	$CheckResult['pgsql'][1]=$CheckResult['pgsql'][0]?bingo:error;
   }

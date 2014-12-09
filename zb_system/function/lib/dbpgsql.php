@@ -1,6 +1,6 @@
 <?php
 /**
- * MySQL数据库操作类
+ * PgSQL数据库操作类
  *
  * @package Z-BlogPHP
  * @subpackage ClassLib/DataBase 类库
@@ -140,8 +140,12 @@ class DbPgSQL implements iDataBase {
 	*/
 	function Insert($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
-		$res = pg_query($this->db , $this->sql->Filter($query));
-		return pg_last_oid($res);
+		pg_query($this->db , $this->sql->Filter($query));
+		$seq = explode(' ',$query,4);
+		$seq = $seq[2] . '_seq';
+		$r = pg_query('SELECT CURRVAL(\'' . $seq . '\')');
+		$id = pg_fetch_result($r, 0, 0);
+		return (int)$id;
 	}
 
 	/**

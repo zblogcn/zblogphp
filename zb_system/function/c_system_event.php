@@ -1395,8 +1395,7 @@ function PostComment() {
 			$zbp->comments[$cmt->ID] = $cmt;
 
 			if (GetVars('isajax', 'POST')) {
-				echo $cmt->ID;
-				//ViewComment($cmt->ID);
+				ViewComment($cmt->ID);
 			}
 
 			foreach ($GLOBALS['Filter_Plugin_PostComment_Succeed'] as $fpname => &$fpsignal)

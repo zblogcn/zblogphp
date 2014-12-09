@@ -306,7 +306,7 @@ class ZBlogPHP {
 		$this->activeapps = &$activeapps;
 
 		if (trim($this->option['ZC_BLOG_CLSID']) == ''){
-			$this->option['ZC_BLOG_CLSID'] = GetGuid();
+			$this->option['ZC_BLOG_CLSID'] = md5($this->path);
 		}
 		$this->guid = &$this->option['ZC_BLOG_CLSID'];
 
@@ -396,10 +396,13 @@ class ZBlogPHP {
 			return false;
 		}
 
-		if(!$this->OpenConnect())return false;
+		if(!$this->OpenConnect()){
+			$this->guid = GetGuid();
+			return false;
+		}
 
 		$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
-		if($this->option['ZC_DATABASE_TYPE']==='pgsql'){
+		if($this->option['ZC_DATABASE_TYPE']=='pgsql'||$this->option['ZC_DATABASE_TYPE']=='pdo_pgsql'){
 			foreach($this->datainfo as $key=>&$value){
 				foreach($value as $k2=>&$v2){
 					$v2[0]=strtolower($v2[0]);
@@ -516,7 +519,7 @@ class ZBlogPHP {
 		}
 		
 		$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
-		if($this->option['ZC_DATABASE_TYPE']==='pgsql'){
+		if($this->option['ZC_DATABASE_TYPE']=='pgsql'||$this->option['ZC_DATABASE_TYPE']=='pdo_pgsql'){
 			foreach($this->datainfo as $key=>&$value){
 				foreach($value as $k2=>&$v2){
 					$v2[0]=strtolower($v2[0]);
@@ -574,6 +577,7 @@ class ZBlogPHP {
 		switch ($this->option['ZC_DATABASE_TYPE']) {
 			case 'sqlite':
 			case 'sqlite3':
+			case 'pdo_sqlite':
 				$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
 				if($this->db->Open(array(
 						$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
@@ -583,6 +587,7 @@ class ZBlogPHP {
 				}
 				break;
 			case 'pgsql':
+			case 'pdo_pgsql':
 				$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
 				if($this->db->Open(array(
 						$this->option['ZC_PGSQL_SERVER'],
@@ -667,14 +672,8 @@ class ZBlogPHP {
 		$array=$this->db->Query($sql);
 		foreach ($array as $c) {
 			$m=new Metas;
-			if($this->option['ZC_DATABASE_TYPE']==='pgsql'){
-				$m->Unserialize($c['conf_value']);
-				$this->configs[$c['conf_name']]=$m;
-			}else{
-				$m->Unserialize($c['conf_Value']);
-				$this->configs[$c['conf_Name']]=$m;
-			}
-
+			$m->Unserialize($c[$this->datainfo['Config']['Value'][0]]);
+			$this->configs[$c[$this->datainfo['Config']['Name'][0]]]=$m;
 		}
 	}
 

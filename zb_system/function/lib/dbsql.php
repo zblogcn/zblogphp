@@ -89,7 +89,7 @@ class DbSql
 		$this->ReplacePre($table);
 
 		$s='';
-		if($this->type=='DbSQLite'||$this->type=='DbSQLite3'){
+		if($this->type=='DbSQLite'||$this->type=='DbSQLite3'||$this->type=='Dbpdo_SQLite'){
 			$s="SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='$table'";
 		}
 		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
@@ -156,7 +156,7 @@ class DbSql
 
 		}
 
-		if($this->type=='DbSQLite3'){
+		if($this->type=='DbSQLite3' || $this->type=='Dbpdo_SQLite'){
 			$s.='CREATE TABLE '.$table.' (';
 
 			$i=0;
@@ -597,7 +597,7 @@ class DbSql
 		foreach ($GLOBALS['Filter_Plugin_DbSql_Filter'] as $fpname => &$fpsignal) {
 			$fpname($sql);
 		}
-		//Logs($sql);
+		Logs($sql);
 		return $sql;
 	}
 }
