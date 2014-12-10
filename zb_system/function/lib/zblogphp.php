@@ -2354,11 +2354,11 @@ class ZBlogPHP {
 	/**
 	 * 对表名和数据结构进行预转换
 	 */
-	private $table_datainfo_crc32 = null;
+	private $table_datainfo_hash = null;
 	function ConvertTableAndDatainfo(){
 
-		$now = crc32(serialize($this->table + $this->datainfo));
-		if($this->table_datainfo_crc32!==$now){
+		$now = $this->table + $this->datainfo;//crc32(serialize($this->table + $this->datainfo));
+		if($this->table_datainfo_hash!==$now){
 			$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
 			if($this->option['ZC_DATABASE_TYPE']=='pgsql'||$this->option['ZC_DATABASE_TYPE']=='pdo_pgsql'){
 				foreach($this->datainfo as $key=>&$value){
@@ -2367,7 +2367,7 @@ class ZBlogPHP {
 					}
 				}
 			}
-			$this->table_datainfo_crc32 = crc32(serialize($this->table + $this->datainfo));
+			$this->table_datainfo_hash = $this->table + $this->datainfo;//crc32(serialize($this->table + $this->datainfo));
 		}
 	}
 }

@@ -109,14 +109,14 @@ class DbSql
 
 		$s='';
 
-		if($this->type=='DbSQLite'){
+		if($this->type=='DbSQLite' || $this->type=='DbSQLite3' || $this->type=='Dbpdo_SQLite'){
 			$s.='CREATE TABLE '.$table.' (';
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
 				if($value[1]=='integer'||$value[1]=='timeinteger'){
 					if($i==0){
-						$s.=$value[0] .' integer primary key' . ',';
+						$s.=$value[0] .' integer primary key' . ($this->type=='DbSQLite'?'':' autoincrement') . ',';
 					}else{
 						$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
 					}
@@ -154,52 +154,6 @@ class DbSql
 			reset($datainfo);
 			$s.='CREATE UNIQUE INDEX ' . $table . '_' . GetValueInArrayByCurrent($datainfo,0).' on '.$table.' ('.GetValueInArrayByCurrent($datainfo,0).');';
 
-		}
-
-		if($this->type=='DbSQLite3'){
-			$s.='CREATE TABLE '.$table.' (';
-
-			$i=0;
-			foreach ($datainfo as $key => $value) {
-				if($value[1]=='integer'||$value[1]=='timeinteger'){
-					if($i==0){
-						$s.=$value[0] .' integer primary key autoincrement' . ',';
-					}else{
-						$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
-					}
-				}
-				if($value[1]=='boolean'){
-					$s.=$value[0] . ' bit NOT NULL DEFAULT \''.(int)$value[3].'\'' . ',';
-				}
-				if($value[1]=='string'){
-					if($value[2]!=''){
-						if(strpos($value[2],'char')!==false){
-							$s.=$value[0] . ' char('.str_replace('char','',$value[2]).') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
-						}elseif(is_int($value[2])){
-							$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
-						}else{
-							$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
-						}
-					}else{
-						$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
-					}
-				}
-				if($value[1]=='double'||$value[1]=='float'){
-					$s.=$value[0] . " $value[1] NOT NULL DEFAULT 0" . ',';
-				}
-				if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'){
-					$s.=$value[0] . " $value[1] NOT NULL,";
-				}
-				if($value[1]=='timestamp'){
-					$s.=$value[0] . " $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP,";
-				}
-				$i +=1;
-			}
-			$s=substr($s,0,strlen($s)-1);
-
-			$s.=');';
-			reset($datainfo);
-			$s.='CREATE UNIQUE INDEX ' . $table . '_' . GetValueInArrayByCurrent($datainfo,0).' on '.$table.' ('.GetValueInArrayByCurrent($datainfo,0).');';
 		}
 
 		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
