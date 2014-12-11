@@ -440,7 +440,12 @@ class App {
 		}
 		foreach ($this->files as $key => $value) {
 			$d=$this->id .'/'. str_replace($dir,'',$value);
-			$c=base64_encode(file_get_contents($value));
+			$ext=pathinfo($value,PATHINFO_EXTENSION);
+			if($ext=='php'||$ext=='inc'){
+				$c=base64_encode(RemoveBOM(file_get_contents($value)));
+			}else{
+				$c=base64_encode(file_get_contents($value));
+			}
 			$s.='<file><path>'.$d.'</path><stream>'.$c.'</stream></file>';
 		}
 
