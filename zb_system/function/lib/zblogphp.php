@@ -1847,17 +1847,16 @@ class ZBlogPHP {
 		if(isset($this->membersbyname[$name])){
 			return $this->membersbyname[$name];
 		}else{
-		//	$array = array_keys($this->membersbyname);
-		//	foreach($array as $k=>$v){
-		//		if(strtolower($name)===strtolower($v)){
-		//			return $this->membersbyname[$v];
-		//		}
-		//	}
-		//die;
-			$array = array_change_key_case($this->membersbyname,CASE_LOWER);
-			if(isset($array[strtolower($name)])){
-				return $array[strtolower($name)];
+			$array = array_keys($this->membersbyname);
+			foreach($array as $k=>$v){
+				if(strtolower($name)===strtolower($v)){
+					return $this->membersbyname[$v];
+				}
 			}
+			//$array = array_change_key_case($this->membersbyname,CASE_LOWER);
+			//if(isset($array[strtolower($name)])){
+			//	return $array[strtolower($name)];
+			//}
 		}
 
 		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array('=','mem_Name',$name)),null,1,null);
