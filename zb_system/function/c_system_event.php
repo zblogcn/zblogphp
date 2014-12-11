@@ -1759,6 +1759,7 @@ function PostMember() {
 	}
 
 	if (isset($_POST['Name'])) {
+		//zbp自带数据检测同名
 		if (isset($zbp->membersbyname[$_POST['Name']])) {
 			if ($zbp->membersbyname[$_POST['Name']]->ID <> $_POST['ID']) {
 				$zbp->ShowError(62, __FILE__, __LINE__);
@@ -1802,6 +1803,15 @@ function PostMember() {
 	FilterMeta($mem);
 
 	CountMember($mem);
+	
+	if (isset($_POST['Name'])) {
+		//Member表查询同名
+		if (GetVars('ID', 'POST') == 0) {
+			if ($zbp->CheckMemberNameExist($_POST['Name'])==true) {
+				$zbp->ShowError(62, __FILE__, __LINE__);
+			}
+		}
+	}
 
 	$mem->Save();
 

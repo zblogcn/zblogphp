@@ -2370,4 +2370,22 @@ class ZBlogPHP {
 			$this->table_datainfo_hash = $this->table + $this->datainfo;//crc32(serialize($this->table + $this->datainfo));
 		}
 	}
+	
+	/**
+	 * 检查指定名称的用户是否存在
+	 */
+	function CheckMemberNameExist($name){
+		$name=trim($name);
+		if(!$name)return false;
+		$like='LIKE';
+		if($this->option['ZC_DATABASE_TYPE']=='pgsql'||$this->option['ZC_DATABASE_TYPE']=='pdo_pgsql'){
+			$like='ILIKE';
+		}
+		$sql = $this->db->sql->Select($this->table['Member'],'*','mem_Name ' . $like . ' \'' . $this->db->EscapeString($name) . '\'',null,1,null);
+		$am = $this->GetListType('Member',$sql);
+		if(count($am) > 0){
+			return true;
+		}
+		return false;
+	}
 }
