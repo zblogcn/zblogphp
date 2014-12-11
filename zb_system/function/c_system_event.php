@@ -15,6 +15,8 @@
 function VerifyLogin() {
 	global $zbp;
 	$m=null;
+	$u = trim(GetVars('username','POST'));
+	$p = trim(GetVars('password','POST'));
 	if ($zbp->Verify_MD5(GetVars('username', 'POST'), GetVars('password', 'POST'),$m)) {
 		$un = $m->Name;
 		$ps = $m->PassWord_MD5Path;

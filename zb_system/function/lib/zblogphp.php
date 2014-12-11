@@ -903,7 +903,9 @@ class ZBlogPHP {
 	 */
 	public function Verify(){
 		$m = null;
-		if($this->Verify_MD5Path(GetVars('username','COOKIE'),GetVars('password','COOKIE'),$m)==true){
+		$u = trim(GetVars('username','COOKIE'));
+		$p = trim(GetVars('password','COOKIE'));
+		if($this->Verify_MD5Path($u,$p,$m)==true){
 			$this->user = $m;
 			return true;
 		}
@@ -911,9 +913,9 @@ class ZBlogPHP {
 	}
 
 	/**
-	 * 验证用户登录（二次MD5加zbp->guid盐后的密码）
+	 * 验证用户登录（MD5加zbp->guid盐后的密码）
 	 * @param string $name 用户名
-	 * @param string $ps_path_hash 二次md5加密后的密码
+	 * @param string $ps_path_hash MD5加zbp->guid盐后的密码
 	 * @param object $member 返回读取成功的member对象
 	 * @return bool
 	 */
@@ -923,7 +925,7 @@ class ZBlogPHP {
 		}
 		$m = $this->GetMemberByName($name);
 		if ($m->ID > 0){
-			if($m->PassWord_MD5Path == $ps_and_path){
+			if($m->PassWord_MD5Path == $ps_path_hash){
 				$member=$m;
 				return true;
 			}else{
@@ -942,6 +944,9 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	public function Verify_MD5($name,$md5pw,&$member=null){
+		if($name=='' || $md5pw==''){
+			return false;
+		}
 		$m = $this->GetMemberByName($name);
 		if ($m->ID > 0){
 			return $this->Verify_Final($name,md5($md5pw . $m->Guid),$member);
