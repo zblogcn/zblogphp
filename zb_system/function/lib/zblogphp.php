@@ -401,14 +401,7 @@ class ZBlogPHP {
 			return false;
 		}
 
-		$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
-		if($this->option['ZC_DATABASE_TYPE']=='pgsql'||$this->option['ZC_DATABASE_TYPE']=='pdo_pgsql'){
-			foreach($this->datainfo as $key=>&$value){
-				foreach($value as $k2=>&$v2){
-					$v2[0]=strtolower($v2[0]);
-				}
-			}
-		}
+		$this->ConvertTableAndDatainfo();
 
 		$this->LoadConfigs();
 		$this->LoadCache();
@@ -479,6 +472,8 @@ class ZBlogPHP {
 
 		header('Content-type: text/html; charset=utf-8');
 
+		$this->ConvertTableAndDatainfo();
+
 		$this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
 
 		$this->LoadCategorys();
@@ -518,15 +513,6 @@ class ZBlogPHP {
 			$this->host = GetCurrentHost($this->path,$this->cookiespath);
 		}
 		
-		$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
-		if($this->option['ZC_DATABASE_TYPE']=='pgsql'||$this->option['ZC_DATABASE_TYPE']=='pdo_pgsql'){
-			foreach($this->datainfo as $key=>&$value){
-				foreach($value as $k2=>&$v2){
-					$v2[0]=strtolower($v2[0]);
-				}
-			}
-		}
-
 		$this->isload=true;
 
 		return true;
@@ -2379,5 +2365,42 @@ class ZBlogPHP {
 			$u=$this->host . substr($u,1,strlen($u));
 			Redirect301($u);
 		}
+	}
+	
+	/**
+	 * 对表名和数据结构进行预转换
+	 */
+	private $table_datainfo_hash = null;
+	function ConvertTableAndDatainfo(){
+		$now = $this->table + $this->datainfo;//crc32(serialize($this->table + $this->datainfo));
+		if($this->table_datainfo_hash!==$now){
+			$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
+			if($this->option['ZC_DATABASE_TYPE']=='pgsql'||$this->option['ZC_DATABASE_TYPE']=='pdo_pgsql'){
+				foreach($this->datainfo as $key=>&$value){
+					foreach($value as $k2=>&$v2){
+						$v2[0]=strtolower($v2[0]);
+					}
+				}
+			}
+			$this->table_datainfo_hash = $this->table + $this->datainfo;//crc32(serialize($this->table + $this->datainfo));
+		}
+	}
+
+	/**
+	 * 检查指定名称的用户是否存在
+	 */
+	function CheckMemberNameExist($name){
+		$name=trim($name);
+		if(!$name)return false;
+		$like='LIKE';
+		if($this->option['ZC_DATABASE_TYPE']=='pgsql'||$this->option['ZC_DATABASE_TYPE']=='pdo_pgsql'){
+			$like='ILIKE';
+		}
+		$sql = $this->db->sql->Select($this->table['Member'],'*','mem_Name ' . $like . ' \'' . $this->db->EscapeString($name) . '\'',null,1,null);
+		$am = $this->GetListType('Member',$sql);
+		if(count($am) > 0){
+			return true;
+		}
+		return false;
 	}
 }
