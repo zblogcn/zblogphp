@@ -14,10 +14,10 @@
  */
 function VerifyLogin() {
 	global $zbp;
-
-	if ($zbp->Verify_MD5(GetVars('username', 'POST'), GetVars('password', 'POST'))) {
-		$un = GetVars('username', 'POST');
-		$ps = $zbp->user->PassWord_MD5Path;
+	$m=null;
+	if ($zbp->Verify_MD5(GetVars('username', 'POST'), GetVars('password', 'POST'),$m)) {
+		$un = $m->Name;
+		$ps = $m->PassWord_MD5Path;
 		$sd = (int)GetVars('savedate');
 		if ( $sd == 0) {
 			setcookie("username", $un, 0, $zbp->cookiespath);

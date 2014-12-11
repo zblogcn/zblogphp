@@ -902,23 +902,29 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	public function Verify(){
-		return $this->Verify_MD5Path(GetVars('username','COOKIE'),GetVars('password','COOKIE'));
+		$m = null;
+		if($this->Verify_MD5Path(GetVars('username','COOKIE'),GetVars('password','COOKIE'),$m)==true){
+			$this->user = $m;
+			return true;
+		}
+		return false;
 	}
 
 	/**
 	 * 验证用户登录（二次MD5加zbp->guid盐后的密码）
 	 * @param string $name 用户名
-	 * @param string $ps_and_path 二次md5加密后的密码
+	 * @param string $ps_path_hash 二次md5加密后的密码
+	 * @param object $member 返回读取成功的member对象
 	 * @return bool
 	 */
-	public function Verify_MD5Path($name,$ps_and_path){
-		if($name=='' && $ps_and_path=''){
+	public function Verify_MD5Path($name,$ps_path_hash,&$member=null){
+		if($name=='' || $ps_path_hash==''){
 			return false;
 		}
 		$m = $this->GetMemberByName($name);
 		if ($m->ID > 0){
 			if($m->PassWord_MD5Path == $ps_and_path){
-				$this->user=$m;
+				$member=$m;
 				return true;
 			}else{
 				return false;
@@ -932,12 +938,13 @@ class ZBlogPHP {
 	 * 验证用户登录（一次MD5密码）
 	 * @param string $name 用户名
 	 * @param string $md5pw md5加密后的密码
+	 * @param object $member 返回读取成功的member对象
 	 * @return bool
 	 */
-	public function Verify_MD5($name,$md5pw){
+	public function Verify_MD5($name,$md5pw,&$member=null){
 		$m = $this->GetMemberByName($name);
 		if ($m->ID > 0){
-			return $this->Verify_Final($name,md5($md5pw . $m->Guid));
+			return $this->Verify_Final($name,md5($md5pw . $m->Guid),$member);
 		}else{
 			return false;
 		}
@@ -947,23 +954,25 @@ class ZBlogPHP {
 	 * 验证用户登录（原始明文密码）
 	 * @param string $name 用户名
 	 * @param string $originalpw 密码明文
+	 * @param object $member 返回读取成功的member对象
 	 * @return bool
 	 */
-	public function Verify_Original($name,$originalpw){
-		return $this->Verify_MD5($name,md5($originalpw));
+	public function Verify_Original($name,$originalpw,&$member=null){
+		return $this->Verify_MD5($name,md5($originalpw),$member);
 	}
 
 	/**
 	 * 验证用户登录（数据库保存的最终运算后密码）
 	 * @param string $name 用户名
 	 * @param string $password 二次加密后的密码
+	 * @param object $member 返回读取成功的member对象
 	 * @return bool
 	 */
-	public function Verify_Final($name,$password){
+	public function Verify_Final($name,$password,&$member=null){
 		$m = $this->GetMemberByName($name);
 		if ($m->ID > 0){
 			if(strcasecmp( $m->Password ,  $password ) ==  0){
-				$this->user = $m;
+				$member = $m;
 				return true;
 			}else{
 				return false;
@@ -1837,8 +1846,20 @@ class ZBlogPHP {
 	function GetMemberByName($name){
 		if(isset($this->membersbyname[$name])){
 			return $this->membersbyname[$name];
+		}else{
+		//	$array = array_keys($this->membersbyname);
+		//	foreach($array as $k=>$v){
+		//		if(strtolower($name)===strtolower($v)){
+		//			return $this->membersbyname[$v];
+		//		}
+		//	}
+		//die;
+			$array = array_change_key_case($this->membersbyname,CASE_LOWER);
+			if(isset($array[strtolower($name)])){
+				return $array[strtolower($name)];
+			}
 		}
-		
+
 		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array('=','mem_Name',$name)),null,1,null);
 		$am = $this->GetListType('Member',$sql);
 		if(count($am) == 1){
