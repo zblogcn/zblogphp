@@ -314,7 +314,7 @@ $.timepicker.regional['zh-cn'] = {
   millisecText: '毫秒',
   currentText: '现在',
   closeText: '完成',
-  timeFormat: 'hh:mm:ss',
+  timeFormat: 'HH:mm:ss',
   ampm: false
 };
 $.timepicker.setDefaults($.timepicker.regional['zh-cn']);
