@@ -440,11 +440,15 @@ function Admin_SiteInfo(){
 
 	echo '<table class="tableFull tableBorder" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a> <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
-	if((time()-(int)$zbp->cache->reload_statistic_time) > (23*60*60) && $zbp->CheckRights('root')){
+	if(!$zbp->cache->reload_statistic){
 		echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'?act=misc&type=statistic\'); });</script>';
 	}else{
 		$r=$zbp->cache->reload_statistic;
 		$r=str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
+		$r=str_replace('{$zbp->theme}', $zbp->theme, $r);
+		$r=str_replace('{$zbp->style}', $zbp->style, $r);
+		$r=str_replace('{$zbp->style}', $zbp->style, $r);
+		$r=str_replace('{$system_environment}', GetEnvironment(), $r);
 		echo $r;
 	}
 

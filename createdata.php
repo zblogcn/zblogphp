@@ -16,21 +16,25 @@ register_shutdown_function(create_function('',''));
 $zbp->Load();
 
 function article(){
-	for ($i=0; $i < 10000; $i++) {
+	for ($i=0; $i < 100000; $i++) {
 		$a=new Post();
-		$a->CateID=mt_rand(1,100);
+		$a->CateID=mt_rand(1,1000);
 		$a->AuthorID=1;
-		$a->Tag=getTagStr(mt_rand(0,19));
+		$a->Tag=getTagStr(mt_rand(0,3));
 		$a->Status=ZC_POST_STATUS_PUBLIC;
 		$a->Type=ZC_POST_TYPE_ARTICLE;
 		$a->Alias='';
 		$a->IsTop=false;
 		$a->IsLock=false;
 		$a->Title=getRandStr(mt_rand(8,14));
-		$a->Intro=getRandStr(mt_rand(50,150)) . GetGuid();
-		$a->Content=getRandStr(mt_rand(200,300)) . GetGuid() . '<br/>' . GetGuid();
+		//$a->Intro=getRandStr(mt_rand(50,150)) . GetGuid();
+		$s=getRandStr(mt_rand(500,1000)) . GetGuid() . '<br/>' . GetGuid();
+		$a->Content=$s;
+		$a->Intro=substr($s,0,250);
+		//1418365907
+		$a->PostTime=mt_rand(1400000000,1418360000);
 		$a->IP=GetGuestIP();
-		$a->PostTime=time();
+		//$a->PostTime=time();
 		$a->CommNums=0;
 		$a->ViewNums=0;
 		$a->Template='';
@@ -64,7 +68,7 @@ function page(){
 }
 
 function cate(){
-	for ($i=0; $i < 100; $i++) {
+	for ($i=0; $i < 1000; $i++) {
 		$cate = new Category();
 		$cate->Name=getRandStr(mt_rand(2,4));
 		$cate->Save();
@@ -72,7 +76,7 @@ function cate(){
 }
 
 function tag(){
-	for ($i=0; $i < 5000; $i++) {
+	for ($i=0; $i < 100000; $i++) {
 		$tag = new Tag();
 		$tag->Name=getRandStr(mt_rand(2,5));
 		$tag->Save();
@@ -109,15 +113,15 @@ function getRandStr($len) {
 function getTagStr($tagcount) {
  $str = '';
  for($i=0;$i<$tagcount;$i++) {
-  $str = $str . '{' . mt_rand(1,5000) . '}';
+  $str = $str . '{' . mt_rand(1,10000) . '}';
  }
  return $str;
 
 }
 
 
-
-
+echo "生成文章!<br/>";
+article();
 
 /*
 

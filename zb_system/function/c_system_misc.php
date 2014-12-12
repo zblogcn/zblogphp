@@ -75,12 +75,10 @@ function misc_statistic() {
 	$all_views = $zbp->option['ZC_VIEWNUMS_TURNOFF']==true?0:GetValueInArrayByCurrent($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post']), 'num');
 	$all_tags = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) as num FROM ' . $GLOBALS['table']['Tag']), 'num');
 	$all_members = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Member']), 'num');
-	$current_theme = $zbp->theme;
-	$current_style = $zbp->style;
+	$current_theme = '{$zbp->theme}';
+	$current_style = '{$zbp->style}';
 	$current_member = '{$zbp->user->Name}';
-
-
-	$system_environment = GetEnvironment();
+	$system_environment = '{$system_environment}';
 
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}</td><td class='td30'>{$current_member}</td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_artiles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categorys}</td></tr>";
@@ -89,7 +87,8 @@ function misc_statistic() {
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";
 
-
+	$zbp->LoadConfigs();
+	$zbp->LoadCache();
 	$zbp->cache->reload_statistic = $r;
 	$zbp->cache->reload_statistic_time = time();
 	$zbp->cache->system_environment = $system_environment;
@@ -101,6 +100,9 @@ function misc_statistic() {
 
 	$r = str_replace('{#ZC_BLOG_HOST#}', $zbp->host, $r);
 	$r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
+	$r = str_replace('{$zbp->theme}', $zbp->theme, $r);
+	$r = str_replace('{$zbp->style}', $zbp->style, $r);
+	$r = str_replace('{$system_environment}', GetEnvironment(), $r);
 
 	echo $r;
 }
