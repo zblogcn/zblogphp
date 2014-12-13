@@ -185,5 +185,6 @@ return array(
 	'ZC_RELATEDLIST_COUNT'=>10,
 	'ZC_RUNINFO_DISPLAY' => true,
 	'ZC_POST_ALIAS_USE_ID_NOT_TITLE' => false,
+	'ZC_LARGE_DATA' => false,	
 )
 ?>

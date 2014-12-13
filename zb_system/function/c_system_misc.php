@@ -8,7 +8,11 @@
 
 ob_clean();
 
-switch (GetVars('type', 'GET')) {
+$type=GetVars('type', 'GET');
+
+foreach ($GLOBALS['Filter_Plugin_Misc_Begin'] as $fpname => &$fpsignal) {$fpname($type);}
+
+switch ($type) {
 	case 'statistic':
 		if (!$zbp->CheckRights('root')) {
 			echo $zbp->ShowError(6, __FILE__, __LINE__);

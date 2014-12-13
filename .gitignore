@@ -61,7 +61,7 @@
 !/zb_users/plugin/tpluginmaker
 !/zb_users/plugin/wearingtheme
 !/zb_users/plugin/wp2zbp
-
+!/zb_users/plugin/LargeData
 
 # Unoffical Theme
 /zb_users/theme/*

@@ -61,7 +61,7 @@ $zbpvers['150101']='1.4 Beta Build 141201';
 /**
  *ZBLOGPHP版本号
  */
-define('ZC_BLOG_VERSION', $zbpvers['150101']);
+define('ZC_BLOG_VERSION', end($zbpvers));
 
 /**
  *文章类型：文章型
@@ -144,7 +144,7 @@ $blogname = &$option['ZC_BLOG_NAME'];
 $blogsubname = &$option['ZC_BLOG_SUBNAME'];
 $blogtheme = &$option['ZC_BLOG_THEME'];
 $blogstyle = &$option['ZC_BLOG_CSS'];
-$blogversion = substr(ZC_BLOG_VERSION,-6,6);
+$blogversion = key($zbpvers);
 
 $cookiespath = null;
 $bloghost = GetCurrentHost($blogpath,$cookiespath);

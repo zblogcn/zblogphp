@@ -487,6 +487,19 @@ DefinePluginFilter('Filter_Plugin_Login_Header');
 */
 DefinePluginFilter('Filter_Plugin_Other_Header');
 
+#c_system_misc里的接口
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Misc_Begin
+'参数:$type 类型
+'说明:c_system_misc.php的启动接口,可以在这里拦截各种type
+'调用:
+'**************************************************>
+*/
+DefinePluginFilter('Filter_Plugin_Misc_Begin');
+
 /*
 '**************************************************<
 '类型:Filter

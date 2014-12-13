@@ -323,7 +323,7 @@ function GetDirsInDir($dir) {
 	$dirs = array();
 
 	if (function_exists('scandir')) {
-		foreach (scandir($dir) as $d) {
+		foreach (scandir($dir,0) as $d) {
 			if (is_dir($dir . $d)) {
 				if (($d <> '.') && ($d <> '..')) {
 					$dirs[] = $d;

@@ -1206,6 +1206,7 @@ class ZBlogPHP {
 
 		$this->plugins = array();
 		$dirs=GetDirsInDir($this->usersdir . 'plugin/');
+		natcasesort($dirs);
 
 		foreach ($dirs as $id) {
 			$app = new App;
