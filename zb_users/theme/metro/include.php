@@ -47,24 +47,35 @@ function metro_savetofile($stylefile){
 		$aryColor = explode("|", $strColor);
 	}
 
-	$p=array("", "left", "center", "right");
+	$p = array("", "left", "center", "right");
 	$aryBodyBg[3] = $p[(int)$aryBodyBg[3]];
 	$aryHdBg[3] = $p[(int)$aryHdBg[3]];
+	$strBodyBgsize = "auto";
+	$strHdBgsize = "auto";
 
-	if (stripos($aryBodyBg[2], "repeat")) {
+	if (stripos($aryBodyBg[2], "repeat") > -1) {
 		$aryBodyBg[2] = "no-repeat " .  $aryBodyBg[2];
 	}
-	if (stripos($aryHdBg[2], "repeat")) {
+	if (stripos($aryHdBg[2], "repeat") > -1) {
 		$aryHdBg[2] = "no-repeat " .  $aryHdBg[2];
 	}
-	if ($aryBodyBg[5] == "True"){
-		$strBodyBg=$aryBodyBg[0] . " " . "url('" .  $blogpath . $aryBodyBg[1]  . "') " . " " .  $aryBodyBg[2]  . " " .  $aryBodyBg[3]  . " " .  $aryBodyBg[4] ;
+	if (stripos($aryBodyBg[2], "cover") > -1) {
+		$aryBodyBg[2] = str_replace("cover", "", $aryBodyBg[2]);
+		$strBodyBgsize = "cover";
 	}
-	else { 
-		$strBodyBg=$aryBodyBg[0];
+	if (stripos($aryHdBg[2], "cover") > -1) {
+		$aryHdBg[2] = str_replace("cover", "", $aryHdBg[2]);
+		$strHdBgsize = "cover";
 	}
 
-	if ($aryHdBg[0] != "transparent")$aryHdBg[0]=$aryColor[0];
+	if ($aryBodyBg[5] == "True"){
+		$strBodyBg = $aryBodyBg[0] . " " . "url('" .  $blogpath . $aryBodyBg[1]  . "') " . " " .  $aryBodyBg[2]  . " " .  $aryBodyBg[3]  . " " .  $aryBodyBg[4] ;
+	}
+	else { 
+		$strBodyBg = $aryBodyBg[0];
+	}
+
+	if ($aryHdBg[0] != "transparent") $aryHdBg[0]=$aryColor[0];
 	if ($aryHdBg[6] == "True"){
 		$strHdBg = $aryHdBg[0] . " " . "url('" .  $blogpath . $aryHdBg[1]  . "') " .  $aryHdBg[2]  . " " .  $aryHdBg[3]  . " " .  $aryHdBg[4] ;
 	}
@@ -89,6 +100,10 @@ function metro_savetofile($stylefile){
 
 	$strContent = str_replace("{%strBodyBg%}", $strBodyBg, $strContent);
 	$strContent = str_replace("{%strHdBg%}", $strHdBg, $strContent);
+
+	$strContent = str_replace("{%strHdBgsize%}", $strHdBgsize, $strContent);
+	$strContent = str_replace("{%strBodyBgsize%}", $strBodyBgsize, $strContent);
+
 
 	for ($i = 1; $i < count($aryBodyBg); $i++){
 		$strContent = str_replace("{%aryBodyBg(" . $i . ")%}", $aryBodyBg[$i], $strContent);

@@ -18,7 +18,7 @@ if ($zbp->Config('metro')->HasKey('version')) {
 	$aryColor= explode('|',$strColor);
 }
  
-$a=Array("","左","中","右") ;
+$a=array("","左","中","右") ;
 $r="?" . rand();
 
 require $blogpath . 'zb_system/admin/admin_header.php';
@@ -60,11 +60,9 @@ table .button{padding: 2px 12px 5px 12px; margin: 0.25em 0;}
 					<td scope="col"  height="52">外观模式</td>
 					<td >
 						<div id="layoutset">
-							<input type="radio" id="layoutl" name="layout" value="l" <?php echo $strlayout=='l'?'checked="checked"':''; ?>
-							/>
+							<input type="radio" id="layoutl" name="layout" value="l" <?php echo $strlayout=='l'?'checked="checked"':''; ?> />
 							<label for="layoutl">侧栏居左</label>
-							<input type="radio" id="layoutr" name="layout" value="r" <?php echo $strlayout=='r'?'checked="checked"':''; ?>
-							/>
+							<input type="radio" id="layoutr" name="layout" value="r" <?php echo $strlayout=='r'?'checked="checked"':''; ?> />
 							<label for="layoutr">侧栏居右</label>
 						</div>
 					</td>
@@ -76,17 +74,14 @@ table .button{padding: 2px 12px 5px 12px; margin: 0.25em 0;}
 							顶部高度：
 							<input id="hdbgph" type="text" name="hdbg5"  size="3"  value="<?php echo $aryHdBg[5];?>" />（单位：px）</div>
 						<div id="hdbgcolor" >
-							<input type="checkbox" id="hdbgc0" name="hdbg0" <?php echo $aryHdBg[0]=='transparent'?'checked="checked"':''; ?>
-							value="transparent"/>
+							<input type="checkbox" id="hdbgc0" name="hdbg0" <?php echo $aryHdBg[0]=='transparent'?'checked="checked"':''; ?> value="transparent"/>
 							<label for="hdbgc0">背景透明（不透明情况下使用主色为背景色）</label>
 						</div>
 						<div >
-							<input type="checkbox" id="hdbgc6" name="hdbg6" <?php echo $aryHdBg[6]=='True'?'checked="checked"':''; ?>
-							value="True"/>
+							<input type="checkbox" id="hdbgc6" name="hdbg6" <?php echo $aryHdBg[6]=='True'?'checked="checked"':''; ?> value="True"/>
 							<label for="hdbgc6">使用背景图</label>
 						</div>
-						<div id="hdbgmain" <?php echo $aryHdBg[6]==""?'style="display:none"':"" ?>
-							>
+						<div id="hdbgmain" <?php echo $aryHdBg[6]==""?'style="display:none"':"" ?>>
 							<div class="imageshow">
 								<input  type="hidden"  id="url_updatapic2" name="hdbg1"  value="<?php echo $aryHdBg[1] ?>" />
 								<img src="<?php echo $aryHdBg[1] . $r ?>" width="190" height="120" border="0" alt="" id="pic_updatapic2">
@@ -94,18 +89,20 @@ table .button{padding: 2px 12px 5px 12px; margin: 0.25em 0;}
 							</div>
 							<div id="hdbgs">
 								背景设定：
-								<input type="checkbox" id="hdbg2r" name="hdbg2[]" <?php echo stripos($aryHdBg[2],"repeat")?'checked="checked"':""; ?>
-								value="repeat"/>
+								<input type="checkbox" id="hdbg2r" name="hdbg2[]" <?php echo (stripos($aryHdBg[2], "repeat") > -1 ? 'checked="checked"' : ""); ?> value="repeat"/>
 								<label for="hdbg2r">平铺</label>
-								<input type="checkbox" id="hdbg2f" name="hdbg2[]" <?php echo stripos($aryHdBg[2],"fixed")?'checked="checked"':""; ?>
-								value="fixed"/>
+								<input type="checkbox" id="hdbg2f" name="hdbg2[]" <?php echo (stripos($aryHdBg[2], "fixed") > -1 ? 'checked="checked"' : ""); ?> value="fixed"/>
 								<label for="hdbg2f">固定</label>
+								<input type="checkbox" id="hdbg2g" name="hdbg2[]" <?php echo (stripos($aryHdBg[2], "cover") > -1 ? 'checked="checked"' : ""); ?> value="cover"/>
+								<label for="hdbg2g">拉伸(不支持IE678)</label>
 							</div>
 							<div id="hdbgpx">
 								对齐方式：
 								<?php	for($i=1 ;$i<= 3;$i++){	 ?>
-								<input type="radio" id="hdbgpx<?php echo $i ?>" name="hdbg3" value="<?php echo $i ?>" <?php echo $i==(int)$aryHdBg[3]?'checked="checked"':""; ?>								/>
+
+								<input type="radio" id="hdbgpx<?php echo $i ?>" name="hdbg3" value="<?php echo $i ?>" <?php echo $i==(int)$aryHdBg[3]?'checked="checked"':""; ?> />
 								<label for="hdbgpx<?php echo $i ?>">居<?php echo $a[$i] ?></label>
+								
 								<?php	}   ?></div>
 							<input id="hdbgpy" type="hidden" name="hdbg4"  value="<?php echo $aryHdBg[4] ?>" /></div>
 					</td>
@@ -117,12 +114,10 @@ table .button{padding: 2px 12px 5px 12px; margin: 0.25em 0;}
 							背景颜色：
 							<input id="bodybgc0" name="bodybg0"  value="<?php echo $aryBodyBg[0] ?>" /></div>
 						<div >
-							<input type="checkbox" id="bodybgc5" name="bodybg5" <?php echo $aryBodyBg[5]=='True'?'checked="checked"':''; ?>
-							value="True"/>
+							<input type="checkbox" id="bodybgc5" name="bodybg5" <?php echo $aryBodyBg[5]=='True'?'checked="checked"':''; ?> value="True"/>
 							<label for="bodybgc5">使用背景图</label>
 						</div>
-						<div id="bodybgmain" <?php echo $aryBodyBg[5]==""?'style="display:none"':""; ?>
-							>
+						<div id="bodybgmain" <?php echo $aryBodyBg[5]==""?'style="display:none"':""; ?> >
 							<div class="imageshow">
 								<input type="hidden" id="url_updatapic1" name="bodybg1"  value="<?php echo $aryBodyBg[1] ?>" />
 								<img src="<?php echo $aryBodyBg[1] ?><?php echo $r ?>" width="190" height="120" border="0" alt="" id="pic_updatapic1">
@@ -130,19 +125,20 @@ table .button{padding: 2px 12px 5px 12px; margin: 0.25em 0;}
 							</div>
 							<div id="bodybgs">
 								背景设定：
-								<input type="checkbox" id="bodybg2r" name="bodybg2[]" <?php echo stripos($aryBodyBg[2],"repeat")?'checked="checked"':""; ?>
-								value="repeat"/>
+								<input type="checkbox" id="bodybg2r" name="bodybg2[]" <?php echo (stripos($aryBodyBg[2], "repeat") > -1 ? 'checked="checked"' : ""); ?> value="repeat"/>
 								<label for="bodybg2r">平铺</label>
-								<input type="checkbox" id="bodybg2f" name="bodybg2[]" <?php echo stripos($aryBodyBg[2],"fixed")?'checked="checked"':""; ?>
-								value="fixed"/>
+								<input type="checkbox" id="bodybg2f" name="bodybg2[]" <?php echo (stripos($aryBodyBg[2], "fixed") > -1 ? 'checked="checked"' : ""); ?> value="fixed"/>
 								<label for="bodybg2f">固定</label>
+								<input type="checkbox" id="bodybg2g" name="bodybg2[]" <?php echo (stripos($aryBodyBg[2], "cover") > -1 ? 'checked="checked"' : ""); ?> value="cover"/>
+								<label for="bodybg2g">拉伸(不支持IE678)</label>
 							</div>
 							<div id="bgpx">
 								对齐方式：
 								<?php	for($i=1 ;$i<= 3;$i++){	 ?>
-								<input type="radio" id="bgpx<?php echo $i ?>" name="bodybg3" value="<?php echo $i ?>" <?php echo $i==(int)$aryBodyBg[3]?'checked="checked"':""; ?>
-								/>
+								
+								<input type="radio" id="bgpx<?php echo $i ?>" name="bodybg3" value="<?php echo $i ?>" <?php echo $i==(int)$aryBodyBg[3]?'checked="checked"':""; ?> />
 								<label for="bgpx<?php echo $i ?>">居<?php echo $a[$i] ?></label>
+								
 								<?php	}   ?></div>
 							<input type="hidden" id="bgpy" name="bodybg4"  value="<?php echo $aryBodyBg[4] ?>" /></div>
 					</td>
