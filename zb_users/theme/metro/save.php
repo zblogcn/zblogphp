@@ -14,10 +14,10 @@ echo GetVars('bodybg5','POST');
 	$sbg=$shg="";
 
 	if(!empty($_POST['bodybg2'])) {
-		$sbg = implode("|", $_POST['bodybg2']);
+		$sbg = implode(" ", $_POST['bodybg2']);
 	}
 	if(!empty($_POST['hdbg2'])) {
-		$shg = implode("|", $_POST['hdbg2']);
+		$shg = implode(" ", $_POST['hdbg2']);
 	}
 
 	if(empty($_POST['bodybg5'])) { $_POST['bodybg5'] = "";}
