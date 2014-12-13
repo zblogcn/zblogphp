@@ -132,7 +132,7 @@ table .button{padding: 2px 12px 5px 12px; margin: 0.25em 0;}
 							<div id="bgpx">
 								对齐方式：
 								<?php	for($i=1 ;$i<= 3;$i++){	 ?>
-								<input type="radio" id="bgpx<?php echo $i ?>" name="bodybg3" value="<?php echo $i ?>" <?php echo $i==(int)$aryBodyBg[3]?"checked='checked'":""; ?>
+								<input type="radio" id="bgpx<?php echo $i ?>" name="bodybg3" value="<?php echo $i ?>" <?php echo $i==(int)$aryBodyBg[3]?'checked="checked"':""; ?>
 								/>
 								<label for="bgpx<?php echo $i ?>">居<?php echo $a[$i] ?></label>
 								<?php	}   ?></div>
