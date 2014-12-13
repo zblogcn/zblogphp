@@ -17,8 +17,8 @@ function InstallPlugin_metro(){
 	if(!$zbp->Config('metro')->HasKey('version')){
 		$zbp->Config('metro')->version='1.0';
 		$zbp->Config('metro')->custom_layout="r";
-		$zbp->Config('metro')->custom_bodybg="#EEEEEE|zb_users/theme/metro/images/bg.jpg|repeat|2|top|";
-		$zbp->Config('metro')->custom_hdbg="|zb_users/theme/metro/images/headbg.jpg|repeat  fixed|1|top|120|";
+		$zbp->Config('metro')->custom_bodybg="#EEEEEE|" . $zbp->host . "zb_users/theme/metro/style/images/bg.jpg|repeat|2|top|";
+		$zbp->Config('metro')->custom_hdbg="|" . $zbp->host . "zb_users/theme/metro/style/images/headbg.jpg|repeat  fixed|1|top|120|";
 		$zbp->Config('metro')->custom_color="#5EAAE4| #A3D0F2| #222222| #333333| #FFFFFF";	
 		$zbp->SaveConfig('metro');
 	}

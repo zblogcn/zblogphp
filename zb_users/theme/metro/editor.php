@@ -8,7 +8,7 @@ if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('metro')) {$zbp->ShowError(48);die();}
 $blogtitle='Metro主题配置';
 
-If ($zbp->Config('metro')->HasKey('version')){
+if ($zbp->Config('metro')->HasKey('version')) {
 	$strlayout=$zbp->Config('metro')->custom_layout;
 	$strBodyBg=$zbp->Config('metro')->custom_bodybg;
 	$strHdBg=$zbp->Config('metro')->custom_hdbg;
@@ -37,7 +37,6 @@ table .button{padding: 2px 12px 5px 12px; margin: 0.25em 0;}
 .upinfo{position: relative;left: 3px;top: -19px;color: white;background: #5EAAE4;width: 190px;height: 23px;display: inline-block;text-align: center;opacity: 0.8;filter: alpha(opacity=80);}
 .imageshow{margin:0.25em 0;}.imageshow img{margin:0 10px;margin-bottom:-10px;}
 </style>
-<!--#include file="..\..\..\..\zb_system\admin\admin_top.asp"-->
 <div id="divMain">
 	<div class="divHeader"><?php echo $blogtitle;?></div>
 	<div class="SubMenu"></div>
@@ -70,7 +69,7 @@ table .button{padding: 2px 12px 5px 12px; margin: 0.25em 0;}
 						<div id="hdbgmain" <?php echo $aryHdBg[6]==""?'style="display:none"':"" ?>>
 							<div class="imageshow">
 								<input  type="hidden"  id="url_updatapic2" name="hdbg1"  value="<?php echo $aryHdBg[1] ?>" /> 
-								<img src="<?php echo $blogpath . $aryHdBg[1] ;?><?php echo $r ?>" width="190" height="120" border="0" alt="" id="pic_updatapic2">
+								<img src="<?php echo $aryHdBg[1] ;?><?php echo $r ?>" width="190" height="120" border="0" alt="" id="pic_updatapic2">
 								<input type="button"  id="updatapic2" class="button" value="更换图片" />
 							</div>
 							<div id="hdbgs">背景设定：
@@ -100,7 +99,7 @@ table .button{padding: 2px 12px 5px 12px; margin: 0.25em 0;}
 						<div id="bodybgmain" <?php echo $aryBodyBg[5]==""?'style="display:none"':""; ?>>
 							<div class="imageshow">
 									<input type="hidden" id="url_updatapic1" name="bodybg1"  value="<?php echo $aryBodyBg[1] ?>" /> 
-									<img src=<?php echo $blogpath . $aryBodyBg[1] ?><?php echo $r ?>" width="190" height="120" border="0" alt="" id="pic_updatapic1">
+									<img src="<?php echo $aryBodyBg[1] ?><?php echo $r ?>" width="190" height="120" border="0" alt="" id="pic_updatapic1">
 									<input type="button"  id="updatapic1" class="button" value="更换图片"/>
 							</div>
 							<div id="bodybgs">背景设定：
