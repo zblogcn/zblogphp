@@ -26,10 +26,10 @@ echo GetVars('bodybg5','POST');
 	if(empty($_POST['hdbg0'])) { $_POST['hdbg0'] = "";}
 	if(empty($_POST['hdbg6'])) { $_POST['hdbg6'] = "";}
 
-	$strl=$_POST["layout"];
-	$strb=$_POST["bodybg0"] . "|" . $_POST["bodybg1"] . "|" . $sbg . "|" . $_POST["bodybg3"] . "|" . $_POST["bodybg4"] . "|" . $_POST["bodybg5"];
-	$strh=$_POST["hdbg0"] . "|" . $_POST["hdbg1"] . "|" . $shg . "|" . $_POST["hdbg3"] . "|" . $_POST["hdbg4"] . "|" . $_POST["hdbg5"] . "|" . $_POST["hdbg6"];
-	$strc=implode("|",$_POST["color"]);
+	$strl = $_POST["layout"];
+	$strb = $_POST["bodybg0"] . "|" . $_POST["bodybg1"] . "|" . $sbg . "|" . $_POST["bodybg3"] . "|" . $_POST["bodybg4"] . "|" . $_POST["bodybg5"];
+	$strh = $_POST["hdbg0"] . "|" . $_POST["hdbg1"] . "|" . $shg . "|" . $_POST["hdbg3"] . "|" . $_POST["hdbg4"] . "|" . $_POST["hdbg5"] . "|" . $_POST["hdbg6"];
+	$strc = implode("|",$_POST["color"]);
 
 	$zbp->Config('metro')->custom_layout = $strl;
 	$zbp->Config('metro')->custom_bodybg = $strb;

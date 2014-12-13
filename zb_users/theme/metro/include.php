@@ -37,70 +37,69 @@ function metro_savetofile($stylefile){
 
 	global $zbp;
 
-	If ($zbp->Config('metro')->HasKey('version')){
-		$strlayout=$zbp->Config('metro')->custom_layout;
-		$strBodyBg=$zbp->Config('metro')->custom_bodybg;
-		$strHdBg=$zbp->Config('metro')->custom_hdbg;
-		$strColor=$zbp->Config('metro')->custom_color;
-		$aryBodyBg=explode ("|",$strBodyBg);
-		$aryHdBg=explode ("|",$strHdBg);
-		$aryColor=explode ("|",$strColor);
+	if ($zbp->Config('metro')->HasKey('version')) {
+		$strlayout = $zbp->Config('metro')->custom_layout;
+		$strBodyBg = $zbp->Config('metro')->custom_bodybg;
+		$strHdBg = $zbp->Config('metro')->custom_hdbg;
+		$strColor = $zbp->Config('metro')->custom_color;
+		$aryBodyBg = explode("|", $strBodyBg);
+		$aryHdBg = explode("|", $strHdBg);
+		$aryColor = explode("|", $strColor);
 	}
 
-	$p=array("","left","center","right");
-	$aryBodyBg[3]=$p[(int)$aryBodyBg[3]];
-	$aryHdBg[3]=$p[(int)$aryHdBg[3]];
+	$p=array("", "left", "center", "right");
+	$aryBodyBg[3] = $p[(int)$aryBodyBg[3]];
+	$aryHdBg[3] = $p[(int)$aryHdBg[3]];
 
-	if (stripos($aryBodyBg[2],"repeat")){
-		$aryBodyBg[2]="no-repeat " .  $aryBodyBg[2];
+	if (stripos($aryBodyBg[2], "repeat")) {
+		$aryBodyBg[2] = "no-repeat " .  $aryBodyBg[2];
 	}
-	if (stripos($aryHdBg[2],"repeat")){
-		$aryHdBg[2]="no-repeat " .  $aryHdBg[2];
+	if (stripos($aryHdBg[2], "repeat")) {
+		$aryHdBg[2] = "no-repeat " .  $aryHdBg[2];
 	}
-	If($aryBodyBg[5]=="True"){
+	if ($aryBodyBg[5] == "True"){
 		$strBodyBg=$aryBodyBg[0] . " " . "url('" .  $blogpath . $aryBodyBg[1]  . "') " . " " .  $aryBodyBg[2]  . " " .  $aryBodyBg[3]  . " " .  $aryBodyBg[4] ;
 	}
-	else{ 
+	else { 
 		$strBodyBg=$aryBodyBg[0];
 	}
 
-	If ($aryHdBg[0]!="transparent")$aryHdBg[0]=$aryColor[0];
-	If ($aryHdBg[6]=="True"){
-		$strHdBg=$aryHdBg[0] . " " . "url('" .  $blogpath . $aryHdBg[1]  . "') " .  $aryHdBg[2]  . " " .  $aryHdBg[3]  . " " .  $aryHdBg[4] ;
+	if ($aryHdBg[0] != "transparent")$aryHdBg[0]=$aryColor[0];
+	if ($aryHdBg[6] == "True"){
+		$strHdBg = $aryHdBg[0] . " " . "url('" .  $blogpath . $aryHdBg[1]  . "') " .  $aryHdBg[2]  . " " .  $aryHdBg[3]  . " " .  $aryHdBg[4] ;
 	}
-	Else{ 
-		$strHdBg=$aryHdBg[0];
+	else { 
+		$strHdBg = $aryHdBg[0];
 	}
 
 	//$sLeft,$sRight
-	$sLeft=$p[1];
-	$sRight=$p[3];
-	If ($strlayout=="l"){
-		$sLeft=$p[3];
-		$sRight=$p[1];
+	$sLeft = $p[1];
+	$sRight = $p[3];
+	if ($strlayout == "l"){
+		$sLeft = $p[3];
+		$sRight = $p[1];
 	} 
 	
 	//替换模版标签
 	//strContent=LoadFromFile(BlogPath  .  "zb_users\theme\metro\plugin\style.css.html" ,"utf-8");
 	$strContent = @file_get_contents($zbp->usersdir . 'theme/metro/source/style.css.html');
 
-	$strContent = str_replace("{%strlayoutl%}",$sLeft,$strContent);
-	$strContent = str_replace("{%strlayoutr%}",$sRight,$strContent);
+	$strContent = str_replace("{%strlayoutl%}", $sLeft, $strContent);
+	$strContent = str_replace("{%strlayoutr%}", $sRight, $strContent);
 
-	$strContent = str_replace("{%strBodyBg%}",$strBodyBg,$strContent);
-	$strContent = str_replace("{%strHdBg%}",$strHdBg,$strContent);
+	$strContent = str_replace("{%strBodyBg%}", $strBodyBg, $strContent);
+	$strContent = str_replace("{%strHdBg%}", $strHdBg, $strContent);
 
-	for ($i=1; $i<count($aryBodyBg); $i++){
-		$strContent = str_replace("{%aryBodyBg(" . $i . ")%}",$aryBodyBg[$i],$strContent);
+	for ($i = 1; $i < count($aryBodyBg); $i++){
+		$strContent = str_replace("{%aryBodyBg(" . $i . ")%}", $aryBodyBg[$i], $strContent);
 	}
-	for ($i=1; $i<count($aryHdBg); $i++){
-		$strContent = str_replace("{%aryHdBg(" . $i . ")%}",$aryHdBg[$i],$strContent);
+	for ($i = 1; $i < count($aryHdBg); $i++){
+		$strContent = str_replace("{%aryHdBg(" . $i . ")%}", $aryHdBg[$i], $strContent);
 	}
-	for ($i=0; $i<count($aryColor); $i++) {
-		$strContent = str_replace("{%aryColor(" . $i . ")%}",$aryColor[$i],$strContent);
+	for ($i = 0; $i < count($aryColor); $i++) {
+		$strContent = str_replace("{%aryColor(" . $i . ")%}", $aryColor[$i], $strContent);
 	}
 
-	//Call SaveToFile(BlogPath  .  "zb_users\theme\metro\style\" . stylefile,strContent,"utf-8",False);
 	@file_put_contents($zbp->usersdir . 'theme/metro/style/style.css', $strContent);
 }
 
