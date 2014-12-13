@@ -28,6 +28,14 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <link href="source/evol.colorpicker.css" rel="stylesheet" />
 <script src="source/evol.colorpicker.min.js" type="text/javascript"></script>
 <script src="source/custom.js" type="text/javascript"></script>
+<?php
+if ($zbp->CheckPlugin('UEditor')) {
+?>
+<script type="text/javascript" src="<?php echo $zbp->host;?>zb_users/plugin/UEditor/ueditor.config.php"></script>
+<script type="text/javascript" src="<?php echo $zbp->host;?>zb_users/plugin/UEditor/ueditor.all.min.js"></script>
+<?php
+}
+?>
 <style>
 table input{padding: 0;margin:0.25em 0;}
 table input#hdbgph{padding: 2px 5px;}

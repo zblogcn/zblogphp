@@ -70,27 +70,34 @@ $(document).ready(function() {
 
 	$("#layoutset").buttonset();
 
-	//插入图片
-	var myEditorImage;
-	var d, e;
-	myEditorImage = UE.getEditor('ueimg');
-	myEditorImage.ready(function() { 
-		myEditorImage.setDisabled(); 
-		myEditorImage.hide(); 
-	});
+	// 插入图片
+	// 检测UEditor插件是否存在
+	if ('UE' in window) {
+		var myEditorImage;
+		var d, e;
+		myEditorImage = UE.getEditor('ueimg');
+		myEditorImage.ready(function() { 
+			myEditorImage.hide(); 
+		});
 
-	function upImage() {
-		d = myEditorImage.getDialog("insertimage");
-		d.render();
-		d.open();
+		function upImage() {
+			d = myEditorImage.getDialog("insertimage");
+			d.render();
+			d.open();
+		}
+		$("#updatapic1,#updatapic2").click(function() {
+			upImage();
+			e = $(this).attr("id");
+			myEditorImage.addListener('beforeInsertImage', function(t, arg) {
+				$("#url_" + e).val(arg[0].src);
+				$("#pic_" + e).attr("src", arg[0].src + "?" + Math.random());
+			})
+		});
+	} else {
+		$("#updatapic1,#updatapic2").click(function() { 
+			alert("请先启用UEditor插件！");
+		});
 	}
-	$("#updatapic1,#updatapic2").click(function() {
-		upImage();
-		e = $(this).attr("id");
-		myEditorImage.addListener('beforeInsertImage', function(t, arg) {
-			$("#url_" + e).val(arg[0].src.replace(ZC_BLOG_HOST, ''));
-			$("#pic_" + e).attr("src", arg[0].src + "?" + Math.random());
-		})
-	});
+
 
 });
