@@ -1,5 +1,5 @@
 <?php
-//<language>正體字</language>
+//<language>正體中文</language>
 //The second line of this file is the name of the language
 //Author:楊懿軒
 //Author URI:http://www.yangyixuan.com
@@ -372,8 +372,9 @@ return array(
 '80'=>'帳號已被鎖定',
 '81'=>'未知方法或屬性',
 '82'=>'網站已關閉',
-'83'=>'啟用該應用，需要先啟用%s',
-'84'=>'停用該應用，需要先停用%s',
+'83'=>'啟用該應用，需要先啟用依赖應用%s',
+'84'=>'停用該應用，需要先停用被依赖應用%s',
+'85' => '啟用該應用，需要先停用冲突應用%s',
 ),
 
 );

@@ -513,7 +513,7 @@ class App {
 		foreach($ac as $c){
 			if(!$c)continue;
 			if(in_array($c,$zbp->activeapps)){
-				$zbp->ShowError(str_replace('%s',$c,$zbp->lang['error'][84]),__FILE__,__LINE__);
+				$zbp->ShowError(str_replace('%s',$c,$zbp->lang['error'][85]),__FILE__,__LINE__);
 			}
 		}
 	}
