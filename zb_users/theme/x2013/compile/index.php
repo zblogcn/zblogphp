@@ -1,5 +1,5 @@
 <?php  include $this->GetTemplate('header');  ?>
-<link rel="alternate" type="application/rss+xml" href="<?php  echo $host;  ?>feed.asp" title="<?php  echo $title;  ?>" />
+<link rel="alternate" type="application/rss+xml" href="<?php  echo $host;  ?>feed.php" title="<?php  echo $title;  ?>" />
 </head>
   <body class="home blog" id="hasfixed">
     <header class="header">
