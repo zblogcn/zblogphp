@@ -563,6 +563,7 @@ class ZBlogPHP {
 		switch ($this->option['ZC_DATABASE_TYPE']) {
 			case 'sqlite':
 			case 'sqlite3':
+			case 'pdo_sqlite':
 				$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
 				if($this->db->Open(array(
 						$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],

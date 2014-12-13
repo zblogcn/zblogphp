@@ -447,7 +447,6 @@ function Admin_SiteInfo(){
 		$r=str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
 		$r=str_replace('{$zbp->theme}', $zbp->theme, $r);
 		$r=str_replace('{$zbp->style}', $zbp->style, $r);
-		$r=str_replace('{$zbp->style}', $zbp->style, $r);
 		$r=str_replace('{$system_environment}', GetEnvironment(), $r);
 		echo $r;
 	}

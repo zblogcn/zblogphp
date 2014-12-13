@@ -44,13 +44,14 @@ function LargeData_Misc_Statistic() {
 	$current_member = '{$zbp->user->Name}';
 	$system_environment = '{$system_environment}';
 
-	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}" . '(估算)' . "</td><td class='td30'>{$current_member}</td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";
+	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}" . '' . "</td><td class='td30'>{$current_member}</td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_artiles']}" . '(估算)' . "</td><td>{$all_artiles}</td><td>{$zbp->lang['msg']['all_categorys']}" . '(估算)' . "</td><td>{$all_categorys}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_pages']}" . '(估算)' . "</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}" . '(估算)' . "</td><td>{$all_tags}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_comments']}" . '(估算)' . "</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}" . '(不计算)' . "</td><td>{$all_views}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}" . '(估算)' . "</td><td>{$all_members}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";
-
+	$r .="<script type=\"text/javascript\">$('#statistic').next('small').remove();$('#statistic').after('<small> 更新时间：" . date ( "c" , $zbp->cache->reload_statistic_time ) . "</small>');</script>";
+	
 	$zbp->LoadConfigs();
 	$zbp->LoadCache();
 	$zbp->cache->reload_statistic = $r;

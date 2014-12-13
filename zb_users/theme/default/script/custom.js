@@ -9,17 +9,6 @@
 });
 
 
-function ReComment_CallBack() {
-	for (var i = 0; i <= ReComment_CallBack.list.length - 1; i++) {
-		ReComment_CallBack.list[i].call(this);
-	}
-}
-ReComment_CallBack.list = [];
-ReComment_CallBack.add = function(s) {
-	ReComment_CallBack.list.push(s);
-};
-
-
 //重写了common.js里的同名函数
 function RevertComment(i) {
 	$("#inpRevID").val(i);
@@ -47,13 +36,11 @@ function RevertComment(i) {
 		temp.remove();
 		$(this).hide();
 		frm.removeClass("reply-frm");
-		ReComment_CallBack();
 		return false;
 	});
 	try {
 		$('#txaArticle').focus();
 	} catch (e) {}
-	ReComment_CallBack();
 	return false;
 }
 

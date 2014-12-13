@@ -90,12 +90,13 @@ function misc_statistic() {
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";
+	$r .="<script type=\"text/javascript\">$('#statistic').attr('title','" . date ( "c" , $zbp->cache->reload_statistic_time ) . "');</script>";
 
 	$zbp->LoadConfigs();
 	$zbp->LoadCache();
 	$zbp->cache->reload_statistic = $r;
 	$zbp->cache->reload_statistic_time = time();
-	$zbp->cache->system_environment = $system_environment;
+	$zbp->cache->system_environment = GetEnvironment();
 	//$zbp->SaveCache();
 	CountNormalArticleNums();
 
