@@ -1,5 +1,6 @@
 # User Config
 /zb_users/c_option.php
+/zb_users/c_option*.php
 /zb_users/data/*.db
 
 # Cache 
@@ -69,15 +70,16 @@
 !/zb_users/theme/metro
 !/zb_users/theme/garland
 !/zb_users/theme/x2013
+
+# Rules
+.htaccess
+httpd.*
+web.config
+
+# Others
 zh.php
 testcode1.php
-web.config
 test2.php
 test.php
-.htaccess
 13更新.txt
-zb_users/c_option2.php
-zb_users/c_option3.php
 phpinfo.php
-zb_users/c_option1.php
-zb_users/c_option4.php
