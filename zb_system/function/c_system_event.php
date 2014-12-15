@@ -696,7 +696,11 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 
 	if(isset($zbp->option['ZC_LISTONTOP_TURNOFF'])&&$zbp->option['ZC_LISTONTOP_TURNOFF']==false){
 		if ($type == 'index' && $page == 1) {
-			//$articles_top = $zbp->GetArticleList('*', array(array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), null, null);
+			$articles_top=$zbp->GetPostByArray($zbp->GetOnTopPost(array('global','index')));
+		}elseif ($type == 'category') {
+			$articles_top=$zbp->GetPostByArray($zbp->GetOnTopPost(array('global','category' . $category->ID)));
+		}else {
+			$articles_top=$zbp->GetPostByArray($zbp->GetOnTopPost(array('global')));
 		}
 	}
 
@@ -1089,6 +1093,16 @@ function PostArticle() {
 	FilterMeta($article);
 
 	$article->Save();
+	
+	if(isset($_POST['IsTop'])){
+		$istop=$_POST['IsTop'];
+		if(1 == $istop){
+			$zbp->AddOnTopPost($article->ID,'index');
+		}
+		if(0 == $istop){
+			$zbp->DelOnTopPost($article->ID);
+		}
+	}
 
 	if ($orig_id == 0) {
 		CountTagArrayString($pre_tag . $article->Tag, +1);
@@ -1104,6 +1118,8 @@ function PostArticle() {
 	$zbp->AddBuildModule('archives');
 	$zbp->AddBuildModule('tags');
 	$zbp->AddBuildModule('authors');
+	
+	$zbp->SaveCache();
 
 	foreach ($GLOBALS['Filter_Plugin_PostArticle_Succeed'] as $fpname => &$fpsignal)
 		$fpname($article);
@@ -1148,14 +1164,17 @@ function DelArticle() {
 		$zbp->AddBuildModule('archives');
 		$zbp->AddBuildModule('tags');
 		$zbp->AddBuildModule('authors');
+		
+		$zbp->SaveCache();
 
-		foreach ($GLOBALS['Filter_Plugin_DelArticle_Succeed'] as $fpname => &$fpsignal)
+		foreach ($GLOBALS['Filter_Plugin_DelArticle_Succeed'] as $fpname => &$fpsignal){
 			$fpname($article);
-	} else {
+		}
+		
+		return true;
 
 	}
 
-	return true;
 }
 
 /**
@@ -2387,7 +2406,6 @@ function CountNormalArticleNums($plus = NULL) {
 	else {
 		$zbp->cache->normal_article_nums += $plus;
 	}
-	$zbp->SaveCache();
 }
 
 /**

@@ -6,6 +6,9 @@
  * @subpackage ClassLib/DataBase 类库
  */
 class DbSQLite implements iDataBase {
+
+	public $type = 'sqlite';
+
 	/**
 	* @var string|null 数据库名前缀
 	*/

@@ -7,6 +7,8 @@
  */
 class Dbpdo_MySQL implements iDataBase {
 
+	public $type = 'mysql';
+
 	/**
 	* @var string|null 数据库名前缀
 	*/

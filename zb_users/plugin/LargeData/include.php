@@ -5,7 +5,7 @@ RegisterPlugin("LargeData","ActivePlugin_LargeData");
 
 function ActivePlugin_LargeData() {
 	global $zbp;
-	if($zbp->option['ZC_LARGE_DATA'] == true){
+	if($zbp->option['ZC_LARGE_DATA'] == true && $zbp->db->type == 'mysql'){
 		Add_Filter_Plugin('Filter_Plugin_Misc_Begin','LargeData_Misc_Begin');
 		Add_Filter_Plugin('Filter_Plugin_Zbp_Load','LargeData_Zbp_Begin');
 		Add_Filter_Plugin('Filter_Plugin_LargeData_Aritcle','LargeData_LargeData_Aritcle');

@@ -7,6 +7,8 @@
  */
 class Dbpdo_SQLite implements iDataBase {
 
+	public $type = 'sqlite';
+
 	/**
 	* @var string|null 数据库名前缀
 	*/

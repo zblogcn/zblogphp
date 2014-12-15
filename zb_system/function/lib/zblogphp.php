@@ -1244,12 +1244,17 @@ class ZBlogPHP {
 		$option=$this->option;
 		unset($option['ZC_BLOG_CLSID']);
 		unset($option['ZC_SQLITE_NAME']);
-		unset($option['ZC_SQLITE3_NAME']);
 		unset($option['ZC_MYSQL_USERNAME']);
 		unset($option['ZC_MYSQL_PASSWORD']);
 		unset($option['ZC_MYSQL_NAME']);
-		unset($option['ZC_DATABASE_TYPE']);
 		unset($option['ZC_MYSQL_PORT']);
+		unset($option['ZC_MYSQL_SERVER']);
+		unset($option['ZC_PGSQL_USERNAME']);
+		unset($option['ZC_PGSQL_PASSWORD']);
+		unset($option['ZC_PGSQL_NAME']);
+		unset($option['ZC_PGSQL_PORT']);
+		unset($option['ZC_PGSQL_SERVER']);
+		unset($option['ZC_DATABASE_TYPE']);
 
 		$this->templatetags['zbp']=&$this;
 		$this->templatetags['user']=&$this->user;
@@ -1558,6 +1563,19 @@ class ZBlogPHP {
 		}
 		return $array;
 	}
+	
+	/**
+	 * 通过ID数组获取文章实例
+	 * @param array $array
+	 * @return array Posts
+	 */
+	function GetPostByArray($array){
+		if(count($array)==0)return array();
+		$select = array('*');
+		$where = array();
+		$where[] = array('IN','log_ID',implode(',',$array));
+		return $this->GetPostList($select,$where);
+	}
 
 	/**
 	 * @param null $select
@@ -1760,7 +1778,7 @@ class ZBlogPHP {
 			return $p;
 		}
 	}
-
+	
 	/**
 	 * 通过ID获取分类实例
 	 * @param int $id
@@ -2393,7 +2411,7 @@ class ZBlogPHP {
 		$now = $this->table + $this->datainfo;//crc32(serialize($this->table + $this->datainfo));
 		if($this->table_datainfo_hash!==$now){
 			$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
-			if($this->option['ZC_DATABASE_TYPE']=='pgsql'||$this->option['ZC_DATABASE_TYPE']=='pdo_pgsql'){
+			if($this->db->type == 'pgsql'){
 				foreach($this->datainfo as $key=>&$value){
 					foreach($value as $k2=>&$v2){
 						$v2[0]=strtolower($v2[0]);
@@ -2411,7 +2429,7 @@ class ZBlogPHP {
 		$name=trim($name);
 		if(!$name)return false;
 		$like='LIKE';
-		if($this->option['ZC_DATABASE_TYPE']=='pgsql'||$this->option['ZC_DATABASE_TYPE']=='pdo_pgsql'){
+		if($this->db->type == 'pgsql'){
 			$like='ILIKE';
 		}
 		$sql = $this->db->sql->Select($this->table['Member'],'*','mem_Name ' . $like . ' \'' . $this->db->EscapeString($name) . '\'',null,1,null);
@@ -2424,19 +2442,38 @@ class ZBlogPHP {
 
 	/**
 	 * 拿到置顶文章
-	 * @param array $type[]={all,global,index,category}
+	 * @param array $type[]={all,global,index,category+ID}
 	 */
-	function GetOnTopPost($type){
-	
+	function GetOnTopPost($type_array){
+		ZBlogException::SuspendErrorHook();
+		$array = unserialize($this->cache->top_post_array);
+		ZBlogException::ResumeErrorHook();
+		if(!is_array($array))$array=array();
+		$list=array();
+		foreach($array as $id=>$type){
+			if (in_array ( $type ,  $type_array )) {
+				$list[]=$id;
+			}
+		}
+		return $list;
 	}
 
 	/**
 	 * 添加或删除置顶文章
 	 * @param bool $id 文章ID
-	 * @param bool $type 'add','all,global,index,category'
+	 * @param string $type 'add','global,index,category'
+	 * @param string $addinfo 分类id	 
 	 */
-	function AddOnTopPost($id,$type){
-	
+	function AddOnTopPost($id,$type,$addinfo=null){
+		ZBlogException::SuspendErrorHook();
+		$array = unserialize($this->cache->top_post_array);
+		ZBlogException::ResumeErrorHook();
+		if(!is_array($array))$array=array();
+		if(array_key_exists($id,$array)){
+			unset($array[$id]);
+		}
+		$array[$id] = 'index';
+		$this->cache->top_post_array = serialize($array);
 	}
 	
 	/**
