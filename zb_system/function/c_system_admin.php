@@ -58,7 +58,7 @@ function Zbp_Admin_Addmodsubmenu(){
 function Zbp_Admin_Addcmtsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('CommentAll')){
-		$n=GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(comm_ID) AS num FROM ' . $GLOBALS['table']['Comment'] . ' WHERE comm_Ischecking=1'),'num');
+		$n=$zbp->cache->all_comment_nums - $zbp->cache->normal_comment_nums;
 		if($n!=0){$n=' ('.$n.')';}else{$n='';}
 		echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left '.(GetVars('ischecking')?'m-now':'').'">' . $GLOBALS['lang']['msg']['check_comment']  . $n . '</span></a>';
 	}
@@ -440,7 +440,7 @@ function Admin_SiteInfo(){
 
 	echo '<table class="tableFull tableBorder" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a> <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
-	if(!$zbp->cache->reload_statistic){
+	if((time()-(int)$zbp->cache->reload_statistic_time) > (23*60*60) && $zbp->CheckRights('root')){
 		echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'?act=misc&type=statistic\'); });</script>';
 	}else{
 		$r=$zbp->cache->reload_statistic;
@@ -541,12 +541,21 @@ if(GetVars('category')){
 	$w[]=array('=','log_CateID',GetVars('category'));
 }
 
+$s='';
+$or=array('log_PostTime'=>'DESC');
+$l=array(($p->PageNow-1) * $p->PageCount,$p->PageCount);
+$op=array('pagebar'=>$p);
+
+foreach ($GLOBALS['Filter_Plugin_LargeData_Aritcle'] as $fpname => &$fpsignal) {
+	$fpreturn = $fpname($s,$w,$or,$l,$op);
+}
+
 $array=$zbp->GetArticleList(
-	'',
+	$s,
 	$w,
-	array('log_PostTime'=>'DESC'),
-	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
-	array('pagebar'=>$p),
+	$or,
+	$l,
+	$op,
 	false
 );
 
@@ -625,12 +634,21 @@ if(!$zbp->CheckRights('PageAll')){
 	$w[]=array('=','log_AuthorID',$zbp->user->ID);
 }
 
+$s='';
+$or=array('log_PostTime'=>'DESC');
+$l=array(($p->PageNow-1) * $p->PageCount,$p->PageCount);
+$op=array('pagebar'=>$p);
+
+foreach ($GLOBALS['Filter_Plugin_LargeData_Page'] as $fpname => &$fpsignal) {
+	$fpreturn = $fpname($s,$w,$or,$l,$op);
+}
+
 $array=$zbp->GetPageList(
-	'',
+	$s,
 	$w,
-	array('log_PostTime'=>'DESC'),
-	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
-	array('pagebar'=>$p)
+	$or,
+	$l,
+	$op
 );
 
 foreach ($array as $article) {
@@ -773,19 +791,27 @@ if(GetVars('search')){
 $w[]=array('=','comm_Ischecking',(int)GetVars('ischecking'));
 
 
+$s='';
+$or=array('comm_ID'=>'DESC');
+$l=array(($p->PageNow-1) * $p->PageCount,$p->PageCount);
+$op=array('pagebar'=>$p);
+
+foreach ($GLOBALS['Filter_Plugin_LargeData_Comment'] as $fpname => &$fpsignal) {
+	$fpreturn = $fpname($s,$w,$or,$l,$op);
+}
 
 $array=$zbp->GetCommentList(
-	'',
+	$s,
 	$w,
-	array('comm_ID'=>'DESC'),
-	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
-	array('pagebar'=>$p)
+	$or,
+	$l,
+	$op
 );
 
 foreach ($array as $cmt) {
 	
-	$article = new Post;
-	if (!$article->LoadInfoById($cmt->LogID)) $article = NULL;
+	$article = $zbp->GetPostByID($cmt->LogID);
+	if ($article->ID==0) $article = NULL;
 	
 	echo '<tr>';
 	echo '<td class="td5">' . $cmt->ID .  '</td>';

@@ -327,7 +327,7 @@ class DbSql
 						$c=',';
 					}
 				}
-				$sqlw .= $comma .  '('. $w[1] .' '. $eq .' (' . $sql_array . ')) ';
+				$sqlw .= $comma .  ' '. $w[1] .' '. $eq .' (' . $sql_array . ') ';
 			}
 			if($eq=='META_NAME'){
 				if(count($w)!=3)continue;

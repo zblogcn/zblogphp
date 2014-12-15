@@ -696,15 +696,25 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 
 	if(isset($zbp->option['ZC_LISTONTOP_TURNOFF'])&&$zbp->option['ZC_LISTONTOP_TURNOFF']==false){
 		if ($type == 'index' && $page == 1) {
-			$articles_top = $zbp->GetArticleList('*', array(array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), null, null);
+			//$articles_top = $zbp->GetArticleList('*', array(array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), null, null);
 		}
 	}
 
+	$select = '*';
+	$order = array('log_PostTime' => 'DESC');
+	$limit = array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount);
+	$option = array('pagebar' => $pagebar);
+	
+	foreach ($GLOBALS['Filter_Plugin_LargeData_Aritcle'] as $fpname => &$fpsignal) {
+		$fpreturn = $fpname($select,$w,$order,$limit,$option);
+	}
+
 	$articles = $zbp->GetArticleList(
-		'*', 
+		$select, 
 		$w,
-		array('log_PostTime' => 'DESC'), array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
-		array('pagebar' => $pagebar),
+		$order,
+		$limit,
+		$option,
 		true
 	);
 
@@ -816,12 +826,12 @@ function ViewPost($id, $alias, $isrewrite = false) {
 		);
 		$rootid = array();
 		foreach ($comments as &$comment) {
-			$rootid[] = array('comm_RootID', $comment->ID);
+			$rootid[] = $comment->ID;
 		}
 		$comments2 = $zbp->GetCommentList(
 			'*', 
 			array(
-				array('array', $rootid),
+				array('IN', 'comm_RootID',$rootid),
 				array('=', 'comm_IsChecking', 0),
 				array('=', 'comm_LogID', $article->ID)
 			),
@@ -2568,12 +2578,15 @@ function BuildModule_catalog() {
 	global $zbp;
 	$s = '';
 
+	$i = $zbp->modulesbyfilename['catalog']->MaxLi;
+	$j = 0;
 	if ($zbp->option['ZC_MODULE_CATALOG_STYLE'] == '2') {
-
 		foreach ($zbp->categorysbyorder as $key => $value) {
 			if ($value->Level == 0) {
 				$s .= '<li class="li-cate"><a href="' . $value->Url . '">' . $value->Name . '</a><!--' . $value->ID . 'begin--><!--' . $value->ID . 'end--></li>';
 			}
+			$j += 1;
+			if($j>$i)break;
 		}
 		foreach ($zbp->categorysbyorder as $key => $value) {
 			if ($value->Level == 1) {
@@ -2602,10 +2615,14 @@ function BuildModule_catalog() {
 	} elseif ($zbp->option['ZC_MODULE_CATALOG_STYLE'] == '1') {
 		foreach ($zbp->categorysbyorder as $key => $value) {
 			$s .= '<li>' . $value->Symbol . '<a href="' . $value->Url . '">' . $value->Name . '</a></li>';
+			$j += 1;
+			if($j>$i)break;
 		}
 	} else {
 		foreach ($zbp->categorysbyorder as $key => $value) {
 			$s .= '<li><a href="' . $value->Url . '">' . $value->Name . '</a></li>';
+			$j += 1;
+			if($j>$i)break;
 		}
 	}
 
@@ -2959,7 +2976,7 @@ function BuildModule_statistics($array = array()) {
 	$s .= "<li>{$zbp->lang['msg']['all_categorys']}:{$all_categorys}</li>";
 	$s .= "<li>{$zbp->lang['msg']['all_tags']}:{$all_tags}</li>";
 	$s .= "<li>{$zbp->lang['msg']['all_comments']}:{$all_comments}</li>";
-	if($zbp->option['ZC_VIEWNUMS_TURNOFF']==false){
+	if($zbp->option['ZC_VIEWNUMS_TURNOFF']==false||$zbp->option['ZC_LARGE_DATA']==true){
 		$s .= "<li>{$zbp->lang['msg']['all_views']}:{$all_views}</li>";
 	}
 

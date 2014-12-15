@@ -727,7 +727,9 @@ function CreateTable($sql){
 
 function InsertInfo(){
   global $zbp;
-	
+
+  $zbp->guid = GetGuid();
+
   $mem = new Member();
   $guid=GetGuid();
 

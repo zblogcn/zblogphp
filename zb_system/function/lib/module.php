@@ -29,16 +29,7 @@ class Module extends Base{
 			return null;
 		}
 		if ($name=='NoRefresh') {
-			$n='module_norefresh_' . $this->FileName;
-			if($value==true){
-				$zbp->cache->$n=true;
-				$zbp->SaveCache();
-			}else{
-				if($zbp->cache->HasKey($n)==true){
-					$zbp->cache->Del($n);
-					$zbp->SaveCache();
-				}
-			}
+			$this->Metas->norefresh = (bool)$value;
 			return null;
 		}
 		parent::__set($name, $value);
@@ -66,12 +57,7 @@ class Module extends Base{
 			}
 		}
 		if ($name=='NoRefresh') {
-			$n='module_norefresh_' . $this->FileName;
-			if($zbp->cache->HasKey($n)==true){
-				return true;
-			}else{
-				return false;
-			}
+			return $this->Metas->norefresh;
 		}
 		return parent::__get($name);
 	}

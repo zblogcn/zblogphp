@@ -305,9 +305,6 @@ class ZBlogPHP {
 		$this->action = &$action;
 		$this->activeapps = &$activeapps;
 
-		if (trim($this->option['ZC_BLOG_CLSID']) == ''){
-				$this->option['ZC_BLOG_CLSID'] = md5($this->path);
-		}
 		$this->guid = &$this->option['ZC_BLOG_CLSID'];
 
 		$this->title = &$blogtitle;
@@ -708,6 +705,7 @@ class ZBlogPHP {
 
 ################################################################################################################
 #Cache相关
+	private $cache_hash = null;
 
 	/**
 	 * 保存缓存
@@ -718,7 +716,9 @@ class ZBlogPHP {
 		#$c=serialize($this->cache);
 		#@file_put_contents($s, $c);
 		//$this->configs['cache']=$this->cache;
+		if($this->cache_hash == md5(serialize($this->cache)))return true;
 		$this->SaveConfig('cache');
+		$this->cache_hash = md5(serialize($this->cache));
 		return true;
 	}
 
@@ -732,7 +732,8 @@ class ZBlogPHP {
 		#{
 		#	$this->cache=unserialize(@file_get_contents($s));
 		#}
-		$this->cache=$this->Config('cache');
+		$this->cache = $this->Config('cache');
+		$this->cache_hash = md5(serialize($this->cache));
 		return true;
 	}
 
@@ -1827,6 +1828,11 @@ class ZBlogPHP {
 	 * @return Member
 	 */
 	function GetMemberByID($id){
+		if($id==0){
+			$m = new Member;
+			$m->Guid=GetGuid();
+			return $m;
+		}
 		if(isset($this->members[$id])){
 			return $this->members[$id];
 		}
@@ -2414,5 +2420,30 @@ class ZBlogPHP {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * 拿到置顶文章
+	 * @param array $type[]={all,global,index,category}
+	 */
+	function GetOnTopPost($type){
+	
+	}
+
+	/**
+	 * 添加或删除置顶文章
+	 * @param bool $id 文章ID
+	 * @param bool $type 'add','all,global,index,category'
+	 */
+	function AddOnTopPost($id,$type){
+	
+	}
+	
+	/**
+	 * 添加或删除置顶文章
+	 * @param bool $id 文章ID
+	 */
+	function DelOnTopPost($id){
+	
 	}
 }

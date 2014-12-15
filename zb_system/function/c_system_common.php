@@ -46,7 +46,11 @@ function AutoloadClass($classname){
  */
 function Logs($s) {
 	global $zbp;
-	$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
+	if($zbp->guid){
+		$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
+	}else{
+		$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '.txt';
+	}
 	$handle = @fopen($f, 'a+');
 	@fwrite($handle, "[" . date('c') . "~" . current(explode(" ", microtime())) . "]" . "\r\n" . $s . "\r\n");
 	@fclose($handle);
