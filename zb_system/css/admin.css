@@ -51,3 +51,13 @@ body.short .logo {height:50px;margin:60px auto 60px auto;}
 .loginw>form>p>a{font-size:1.1em;}
 .loginw .content>div>div{padding:0 10px;}
 
+@media only screen and (max-width: 600px) {
+.bg{height:190px;}
+.logo {margin-top:100px}
+.login { width:300px;}
+.login dd { width:300px; float:right;padding:8px 0 7px 0;}
+.login dd.checkbox { width:150px; float:left;padding:10px 0;}
+.login dd.submit { width:150px; float:right;padding:15px 0;}
+#edtUserName, #edtPassWord { float:right;width:200px;}
+input[type="checkbox"]{margin:8px 0 0 5px;}
+}

@@ -1057,7 +1057,10 @@ function PostArticle() {
 	$pre_author = null;
 	$pre_tag = null;
 	$pre_category = null;
+	$pre_istop = null;
+	$pre_status = null;
 	$orig_id = 0;
+
 	if (GetVars('ID', 'POST') == 0) {
 		if (!$zbp->CheckRights('ArticlePub')) {
 			$_POST['Status'] = ZC_POST_STATUS_AUDITING;
@@ -1074,6 +1077,8 @@ function PostArticle() {
 		$pre_author = $article->AuthorID;
 		$pre_tag = $article->Tag;
 		$pre_category = $article->CateID;
+		$pre_istop = $article->IsTop;
+		$pre_status = $article->Status;
 	}
 
 	foreach ($zbp->datainfo['Post'] as $key => $value) {
@@ -1092,7 +1097,7 @@ function PostArticle() {
 	FilterPost($article);
 	FilterMeta($article);
 
-	$article->Save();
+
 	
 	if(isset($_POST['IsTop'])){
 		$istop=$_POST['IsTop'];
@@ -1104,14 +1109,43 @@ function PostArticle() {
 		}
 	}
 
-	if ($orig_id == 0) {
-		CountTagArrayString($pre_tag . $article->Tag, +1);
-		CountMemberArray(array($pre_author, $article->AuthorID), array(+1, 0, 0, 0));
-		CountCategoryArray(array($pre_category, $article->CateID), +1);
-		CountPostArray(array($article->ID), 0);
-		CountNormalArticleNums(+1);
-	}
+	$article->Save();
 
+	//
+	$pre_arrayTag = $zbp->LoadTagsByIDString($pre_tag);
+	$now_arrayTag = $zbp->LoadTagsByIDString($article->Tag);
+	$pre_array = $now_array = array();
+	foreach($pre_arrayTag as $tag){$pre_array[]=$tag->ID;}
+	foreach($now_arrayTag as $tag){$now_array[]=$tag->ID;}
+	$del_array = array_diff($pre_array,$now_array);
+	$add_array = array_diff($now_array,$pre_array);
+	$del_string = $zbp->ConvertTagIDtoString($del_array);
+	$add_string = $zbp->ConvertTagIDtoString($add_array);
+	if($del_string){
+		CountTagArrayString($del_string, -1);
+	}
+	if($add_string){
+		CountTagArrayString($add_string, +1);
+	}
+	if($pre_author <> $article->AuthorID){
+		if($pre_author>0)CountMemberArray(array($pre_author), array(-1, 0, 0, 0));
+		CountMemberArray(array($article->AuthorID), array(+1, 0, 0, 0));
+	}
+	if($pre_category <> $article->CateID){
+		if($pre_category>0)CountCategoryArray(array($pre_category), -1);
+		CountCategoryArray(array($article->CateID), +1);		
+	}
+	//CountPostArray(array($article->ID), 0);
+	if($orig_id==0 && $article->IsTop==0 && $article->Status==ZC_POST_STATUS_PUBLIC){
+		CountNormalArticleNums(+1);
+	}elseif($orig_id>0){
+		if(($pre_istop==0 && $pre_status==0) && ($article->IsTop<>0 || $article->Status<>0)){
+			CountNormalArticleNums(-1);
+		}
+		if(($pre_istop<>0 || $pre_status<>0) && ($article->IsTop==0 && $article->Status==0)){
+			CountNormalArticleNums(+1);
+		}
+	}
 	$zbp->AddBuildModule('previous');
 	$zbp->AddBuildModule('calendar');
 	$zbp->AddBuildModule('comments');
@@ -1146,6 +1180,8 @@ function DelArticle() {
 		$pre_author = $article->AuthorID;
 		$pre_tag = $article->Tag;
 		$pre_category = $article->CateID;
+		$pre_istop = $article->IsTop;
+		$pre_status = $article->Status;
 
 		$article->Del();
 
@@ -1155,7 +1191,9 @@ function DelArticle() {
 		CountTagArrayString($pre_tag, -1);
 		CountMemberArray(array($pre_author), array(-1, 0, 0, 0));
 		CountCategoryArray(array($pre_category), -1);
-		CountNormalArticleNums(-1);
+		if(($pre_istop==0 && $pre_status==0)){
+			CountNormalArticleNums(-1);
+		}
 		
 
 		$zbp->AddBuildModule('previous');
@@ -1266,6 +1304,7 @@ function PostPage() {
 
 	$article = new Post();
 	$pre_author = null;
+	$orig_id = 0;
 	if (GetVars('ID', 'POST') == 0) {
 	} else {
 		$article->LoadInfoByID(GetVars('ID', 'POST'));
@@ -1273,6 +1312,7 @@ function PostPage() {
 			$zbp->ShowError(6, __FILE__, __LINE__);
 		}
 		$pre_author = $article->AuthorID;
+		$orig_id = $article->ID;
 	}
 
 	foreach ($zbp->datainfo['Post'] as $key => $value) {
@@ -1293,8 +1333,11 @@ function PostPage() {
 
 	$article->Save();
 
-	CountMemberArray(array($pre_author, $article->AuthorID), array(0, +1, 0, 0));
-	CountPostArray(array($article->ID), 0);
+	if($pre_author <> $article->AuthorID){
+		if($pre_author>0)CountMemberArray(array($pre_author), array(0, -1, 0, 0));
+		CountMemberArray(array($article->AuthorID), array(0, +1, 0, 0));
+	}
+	//CountPostArray(array($article->ID), 0);
 
 	$zbp->AddBuildModule('comments');
 

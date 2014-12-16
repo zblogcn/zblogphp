@@ -3,6 +3,15 @@
 #注册插件
 RegisterPlugin("LargeData","ActivePlugin_LargeData");
 
+$table['Post2Tag']='%pre%post2tag';
+
+$datainfo['Post2Tag']=array(
+	'ID'=>array('pt_ID','integer','',0),
+	'TagID'=>array('pt_TagID','integer','',0),
+	'LogID'=>array('pt_LogID','integer','',0),
+);
+
+
 function ActivePlugin_LargeData() {
 	global $zbp;
 	if($zbp->option['ZC_LARGE_DATA'] == true && $zbp->db->type == 'mysql'){
@@ -14,8 +23,50 @@ function ActivePlugin_LargeData() {
 	}
 }
 
+function LargeData_CreateTable(){
+	global $zbp;
+	if($zbp->db->ExistTable($GLOBALS['table']['Post2Tag'])==false){
+		$s=$zbp->db->sql->CreateTable($GLOBALS['table']['Post2Tag'],$GLOBALS['datainfo']['Post2Tag']);
+		$zbp->db->QueryMulit($s);
+		$zbp->db->Query("ALTER TABLE " . $GLOBALS['table']['Post2Tag'] . " ADD INDEX  " . $zbp->db->dbpre. "pt_LD_2ID(pt_TagID,pt_LogID) ;");
+	}
+}
+
+function LargeData_ConvertTable_Post2Tag(){
+	global $zbp;
+	$zbp->db->Query("DELETE FROM " . $GLOBALS['table']['Post2Tag']);
+	$a=$zbp->db->Query("Select log_ID,log_Tag FROM " . $GLOBALS['table']['Post']);
+
+	foreach($a as $array){
+		$log_id=reset($array);
+		$log_tag=end($array);
+		$array_tag=LargeData_LoadTagsByIDString($log_tag);
+		LargeData_Insert_Post2Tag($log_id,$array_tag);
+	}
+}
+
+function LargeData_LoadTagsByIDString($s){
+	$s=trim($s);
+	if($s=='')return array();
+	$s=str_replace('}{', '|', $s);
+	$s=str_replace('{', '', $s);
+	$s=str_replace('}', '', $s);
+	$a=explode('|', $s);
+	return $a;
+}
+
+function LargeData_Insert_Post2Tag($log_id,$array_tag){
+	global $zbp;
+	if(count($array_tag)==0)return;
+	foreach($array_tag as $tag_id){
+		$s = "INSERT INTO " . $GLOBALS['table']['Post2Tag'] . " (pt_TagID,pt_logID) VALUES (".$tag_id.",".$log_id.");";
+		$zbp->db->Query($s);
+	}
+}
+
 function LargeData_LargeData_Aritcle(&$select,&$where,&$order,&$limit,&$option){
 	global $zbp;
+	$tag_id=null;
 	foreach($where as $k=>$v){
 		if($v[0]=='search'){
 			$s=end($v);
@@ -23,22 +74,47 @@ function LargeData_LargeData_Aritcle(&$select,&$where,&$order,&$limit,&$option){
 			continue;
 		}
 	}
+	foreach($where as $k=>$v){
+		if($v[0]=='LIKE' && $v[1]='log_Tag'){
+			$tag_id=end($v);
+			$tag_id=str_replace('{','',$tag_id);
+			$tag_id=str_replace('}','',$tag_id);
+			$tag_id=str_replace('%','',$tag_id);
+			$tag_id=trim($tag_id);
+			continue;
+		}
+	}
+	
 	$w=$where;
 	$w[]=array('=','log_Type','0');
-	$s=$zbp->db->sql->Select($zbp->table['Post'],$zbp->datainfo['Post']['ID'][0],$w,$order,$limit,null);
+	if($tag_id==null){
+		$s=$zbp->db->sql->Select($zbp->table['Post'],$zbp->datainfo['Post']['ID'][0],$w,$order,$limit,null);
+	}else{
+		$w=array();
+		$w[]=array('CUSTOM',$zbp->table['Post'].'.log_ID'.'='.$zbp->table['Post2Tag'].'.pt_LogID');
+		$w[]=array('CUSTOM',$zbp->table['Post'].'.log_Type = 0');
+		$w[]=array('CUSTOM',$zbp->table['Post'].'.log_Status = 0');
+		$w[]=array('CUSTOM',$zbp->table['Post2Tag'].'.pt_TagID = ' . $tag_id);
+		$s=$zbp->db->sql->Select($zbp->table['Post'].','.$zbp->table['Post2Tag'],$zbp->table['Post2Tag'].'.'.$zbp->datainfo['Post2Tag']['LogID'][0],$w,$order,$limit,null);
+	}
 	$array = $zbp->db->Query($s);
 	$a = array();
 	if(count($array)>0){
 		foreach($array as $k=>$v){
-			$a[]=$v[$zbp->datainfo['Post']['ID'][0]];
+			$a[]=current($v);
 		}
 		if( array_key_exists('pagebar' ,  $option)){
 			if(count($w)==1){
 				$option['pagebar']->Count=$zbp->cache->all_article_nums;
 			}
 			if($option['pagebar']->Count===null){
-				$s=$zbp->db->sql->Select($zbp->table['Post'],'COUNT('.$zbp->datainfo['Post']['ID'][0].')',$w,$order,null,null);
-				$c = $zbp->db->Query($s);
+				if($tag_id==null){
+					$s=$zbp->db->sql->Select($zbp->table['Post'],'COUNT('.$zbp->datainfo['Post']['ID'][0].')',$w,null,null,null);
+					$c = $zbp->db->Query($s);
+				}else{
+					$s=$zbp->db->sql->Select($zbp->table['Post'].','.$zbp->table['Post2Tag'],'COUNT('.$zbp->datainfo['Post']['ID'][0].')',$w,null,null,null);
+					$c = $zbp->db->Query($s);
+				}
 				$option['pagebar']->Count=(int)current($c[0]);
 			}
 		}
@@ -78,7 +154,7 @@ function LargeData_LargeData_Page(&$select,&$where,&$order,&$limit,&$option){
 				$option['pagebar']->Count=$zbp->cache->all_page_nums;
 			}
 			if($option['pagebar']->Count===null){
-				$s=$zbp->db->sql->Select($zbp->table['Post'],'COUNT('.$zbp->datainfo['Post']['ID'][0].')',$w,$order,null,null);
+				$s=$zbp->db->sql->Select($zbp->table['Post'],'COUNT('.$zbp->datainfo['Post']['ID'][0].')',$w,null,null,null);
 				$c = $zbp->db->Query($s);
 				$option['pagebar']->Count=(int)current($c[0]);
 			}
@@ -116,7 +192,7 @@ function LargeData_LargeData_Comment(&$select,&$where,&$order,&$limit,&$option){
 		}
 		if( array_key_exists('pagebar' ,  $option)){
 			if($option['pagebar']->Count===null){
-				$s=$zbp->db->sql->Select($zbp->table['Comment'],'COUNT('.$zbp->datainfo['Comment']['ID'][0].')',$w,$order,null,null);
+				$s=$zbp->db->sql->Select($zbp->table['Comment'],'COUNT('.$zbp->datainfo['Comment']['ID'][0].')',$w,null,null,null);
 				$c = $zbp->db->Query($s);
 				$option['pagebar']->Count=(int)current($c[0]);
 			}

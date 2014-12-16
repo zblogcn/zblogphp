@@ -2007,11 +2007,12 @@ class ZBlogPHP {
 	}
 
 	/**
-	 * 通过类似'{1}{2}{3}{4}{4}'载入tags
+	 * 通过类似'{1}{2}{3}{4}'载入tags
 	 * @param $s
 	 * @return array
 	 */
 	function LoadTagsByIDString($s){
+		$s=trim($s);
 		if($s=='')return array();
 		$s=str_replace('}{', '|', $s);
 		$s=str_replace('{', '', $s);
@@ -2059,6 +2060,7 @@ class ZBlogPHP {
 	 * @return array
 	 */
 	function LoadTagsByNameString($s){
+		$s=trim($s);
 		$s=str_replace(';', ',', $s);
 		$s=str_replace('，', ',', $s);
 		$s=str_replace('、', ',', $s);
@@ -2093,6 +2095,19 @@ class ZBlogPHP {
 			}
 			return $b+$t;
 		}
+	}
+	
+	/**
+	 * 通过数组array[111,333,444,555,666]转换成存储串
+	 * @param array $array 标签ID数组
+	 * @return string
+	 */
+	function ConvertTagIDtoString($array){
+		$s='';
+		foreach($array as $a){
+			$s .= '{' . $a . '}';
+		}
+		return $s;
 	}
 
 ################################################################################################################
