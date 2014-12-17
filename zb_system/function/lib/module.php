@@ -66,9 +66,20 @@ class Module extends Base{
 	 * @return bool
 	 */
 	function Save(){
+		global $zbp;
 		foreach ($GLOBALS['Filter_Plugin_Module_Save'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+		}
+		if($this->Source=='theme'){
+			$c = $this->Content;
+			$d = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/';
+			$f = $d . $this->FileName . '.php';
+			if(!file_exists($d)){
+				@mkdir($d,0755);
+			}
+			@file_put_contents($f, $c);
+			return true;
 		}
 		return parent::Save();
 	}
@@ -77,9 +88,17 @@ class Module extends Base{
 	 * @return bool
 	 */
 	function Del(){
+		global $zbp;
 		foreach ($GLOBALS['Filter_Plugin_Module_Del'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+		}
+		if($this->Source=='theme'){
+			$f = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $this->FileName . '.php';
+			if (file_exists($f)){
+				@unlink($f);
+			}
+			return true;
 		}
 		return parent::Del();
 	}

@@ -14,7 +14,7 @@
  */
 function VerifyLogin() {
 	global $zbp;
-	$m=null;
+	$m = null;
 	$u = trim(GetVars('username','POST'));
 	$p = trim(GetVars('password','POST'));
 	if ($zbp->Verify_MD5(GetVars('username', 'POST'), GetVars('password', 'POST'),$m)) {
@@ -1994,16 +1994,7 @@ function PostModule() {
 		}
 	}
 	if (isset($_POST['Source'])) {
-		if ($_POST['Source'] == 'theme') {
-			$c = GetVars('Content', 'POST');
-			$d = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/';
-			$f = $d . GetVars('FileName', 'POST') . '.php';
-			if(!file_exists($d)){
-				@mkdir($d,0755);
-			}
-			@file_put_contents($f, $c);
-			return true;
-		}
+
 	}
 	
 	$mod = $zbp->GetModuleByID(GetVars('ID', 'POST'));
@@ -2044,14 +2035,18 @@ function DelModule() {
 	global $zbp;
 
 	if (GetVars('source', 'GET') == 'theme') {
-		if (GetVars('filename', 'GET')) {
-			$f = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . GetVars('filename', 'GET') . '.php';
-			if (file_exists($f))
-				@unlink($f);
-
-			return true;
+		$fn = GetVars('filename', 'GET');
+		if ($fn) {
+			$mod=$zbp->GetModuleByFileName($fn);
+			if($mod->FileName == $fn){
+				$mod->Del();
+				foreach ($GLOBALS['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal){
+					$fpname($mod);
+				}
+				return true;				
+			}
+			unset($mod);
 		}
-
 		return false;
 	}
 
@@ -2059,11 +2054,13 @@ function DelModule() {
 	$mod = $zbp->GetModuleByID($id);
 	if ($mod->Source <> 'system') {
 		$mod->Del();
-		foreach ($GLOBALS['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal)
+		foreach ($GLOBALS['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal){
 			$fpname($mod);
-	} else {
+		}
+	}else{
 		return false;
 	}
+	unset($mod);
 
 	return true;
 }

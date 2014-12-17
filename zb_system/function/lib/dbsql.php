@@ -41,20 +41,20 @@ interface iDataBase {
 class DbSql
 {
 	/**
-	* @var null|string 数据库连接类型
-	*/
-	private $type=null;
-	/**
 	* @var null 数据库连接实例
 	*/
 	private $db=null;
+	/**
+	* @var null|string 数据库类型名称
+	*/
+	private $dbclass=null;
 	/**
 	* @param object $db
 	*/
 	function __construct(&$db=null)
 	{
-		$this->db=$db;
-		$this->type=get_class($this->db);
+		$this->db=&$db;
+		$this->dbclass=get_class($this->db);
 	}
 	/**
 	 * 替换数据表前缀
@@ -89,10 +89,10 @@ class DbSql
 		$this->ReplacePre($table);
 
 		$s='';
-		if($this->type=='DbSQLite'||$this->type=='DbSQLite3'){
+		if($this->dbclass=='DbSQLite'||$this->dbclass=='DbSQLite3'){
 			$s="SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='$table'";
 		}
-		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
+		if($this->dbclass=='Dbpdo_MySQL'||$this->dbclass=='DbMySQL'||$this->dbclass=='DbMySQLi'){
 			$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$table'";
 		}
 
@@ -109,14 +109,14 @@ class DbSql
 
 		$s='';
 
-		if($this->type=='DbSQLite' || $this->type=='DbSQLite3' || $this->type=='Dbpdo_SQLite'){
+		if($this->dbclass=='DbSQLite' || $this->dbclass=='DbSQLite3' || $this->dbclass=='Dbpdo_SQLite'){
 			$s.='CREATE TABLE '.$table.' (';
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
 				if($value[1]=='integer'||$value[1]=='timeinteger'){
 					if($i==0){
-						$s.=$value[0] .' integer primary key' . ($this->type=='DbSQLite'?'':' autoincrement') . ',';
+						$s.=$value[0] .' integer primary key' . ($this->dbclass=='DbSQLite'?'':' autoincrement') . ',';
 					}else{
 						$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
 					}
@@ -156,7 +156,7 @@ class DbSql
 
 		}
 
-		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
+		if($this->dbclass=='Dbpdo_MySQL'||$this->dbclass=='DbMySQL'||$this->dbclass=='DbMySQLi'){
 			$s.='CREATE TABLE IF NOT EXISTS '.$table.' (';
 
 			$i=0;
@@ -551,7 +551,7 @@ class DbSql
 		foreach ($GLOBALS['Filter_Plugin_DbSql_Filter'] as $fpname => &$fpsignal) {
 			$fpname($sql);
 		}
-		Logs($sql);
+		//Logs($sql);
 		return $sql;
 	}
 }

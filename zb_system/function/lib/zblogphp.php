@@ -1830,15 +1830,32 @@ class ZBlogPHP {
 	function GetModuleByID($id){
 		if($id==0){
 			$m = new Module;
-			return $m;
 		}else{
 			foreach ($this->modules as $key => $value) {
 				if($value->ID==$id)return $value;
 			}
 			$m = new Module;
-			return $m;
 		}
+		return $m;		
 	}
+
+	/**
+	 * 通过FileName获取模块实例
+	 * @param string $fn
+	 * @return Module
+	 */
+	function GetModuleByFileName($fn){
+		$fn=trim($fn);
+		if(!$fn){
+			$m = new Module;
+		}else{
+			if(isset($this->modulesbyfilename[$fn])){
+				return $this->modulesbyfilename[$fn];
+			}
+			$m = new Module;
+		}
+		return $m;
+	}	
 
 	/**
 	 * 通过ID获取用户实例
