@@ -1122,10 +1122,10 @@ function PostArticle() {
 	$del_string = $zbp->ConvertTagIDtoString($del_array);
 	$add_string = $zbp->ConvertTagIDtoString($add_array);
 	if($del_string){
-		CountTagArrayString($del_string, -1);
+		CountTagArrayString($del_string, -1 ,$article->ID);
 	}
 	if($add_string){
-		CountTagArrayString($add_string, +1);
+		CountTagArrayString($add_string, +1 ,$article->ID);
 	}
 	if($pre_author <> $article->AuthorID){
 		if($pre_author>0)CountMemberArray(array($pre_author), array(-1, 0, 0, 0));
@@ -1188,7 +1188,7 @@ function DelArticle() {
 		DelArticle_Comments($article->ID);
 
 		
-		CountTagArrayString($pre_tag, -1);
+		CountTagArrayString($pre_tag, -1 ,$article->ID);
 		CountMemberArray(array($pre_author), array(-1, 0, 0, 0));
 		CountCategoryArray(array($pre_category), -1);
 		if(($pre_istop==0 && $pre_status==0)){
@@ -2437,10 +2437,10 @@ function FilterTag(&$tag) {
  *统计公开文章数
  * @param int $plus 控制是否要进行全表扫描
  */
-function CountNormalArticleNums($plus = NULL) {
+function CountNormalArticleNums($plus = null) {
 	global $zbp;
 
-	if ($plus === NULL) {
+	if ($plus === null) {
 		$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 0), array('=', 'log_Status', 0)));
 		$num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 
@@ -2456,10 +2456,10 @@ function CountNormalArticleNums($plus = NULL) {
  * @param post $article
  * @param int $plus 控制是否要进行全表扫描
  */
-function CountPost(&$article, $plus = NULL) {
+function CountPost(&$article, $plus = null) {
 	global $zbp;
 
-	if ($plus === NULL) {
+	if ($plus === null) {
 		$id = $article->ID;
 
 		$s = $zbp->db->sql->Count($zbp->table['Comment'], array(array('COUNT', '*', 'num')), array(array('=', 'comm_LogID', $id), array('=', 'comm_IsChecking', 0)));
@@ -2477,7 +2477,7 @@ function CountPost(&$article, $plus = NULL) {
  * @param array $array 记录文章ID的数组
  * @param int $plus 控制是否要进行全表扫描
  */
-function CountPostArray($array, $plus = NULL) {
+function CountPostArray($array, $plus = null) {
 	global $zbp;
 	$array = array_unique($array);
 	foreach ($array as $value) {
@@ -2495,10 +2495,10 @@ function CountPostArray($array, $plus = NULL) {
  * @param category &$category
  * @param int $plus 控制是否要进行全表扫描
  */
-function CountCategory(&$category, $plus = NULL) {
+function CountCategory(&$category, $plus = null) {
 	global $zbp;
 
-	if ($plus === NULL) {
+	if ($plus === null) {
 		$id = $category->ID;
 
 		$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 0), array('=', 'log_Status', 0), array('=', 'log_CateID', $id)));
@@ -2516,7 +2516,7 @@ function CountCategory(&$category, $plus = NULL) {
  * @param array $array 记录分类ID的数组
  * @param int $plus 控制是否要进行全表扫描
  */
-function CountCategoryArray($array, $plus = NULL) {
+function CountCategoryArray($array, $plus = null) {
 	global $zbp;
 	$array = array_unique($array);
 	foreach ($array as $value) {
@@ -2531,10 +2531,10 @@ function CountCategoryArray($array, $plus = NULL) {
  * @param tag &$tag
  * @param int $plus 控制是否要进行全表扫描
  */
-function CountTag(&$tag, $plus = NULL) {
+function CountTag(&$tag, $plus = null) {
 	global $zbp;
 
-	if ($plus === NULL) {
+	if ($plus === null) {
 		$id = $tag->ID;
 
 		$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('LIKE', 'log_Tag', '%{' . $id . '}%')));
@@ -2552,11 +2552,20 @@ function CountTag(&$tag, $plus = NULL) {
  * @param string $string 类似'{1}{2}{3}{4}{4}'的tagID串
  * @param int $plus 控制是否要进行全表扫描
  */
-function CountTagArrayString($string, $plus = NULL) {
+function CountTagArrayString($string, $plus = null, $articleid = null) {
 	global $zbp;
 	$array = $zbp->LoadTagsByIDString($string);
+
+	//添加大数据接口,tag,plus,id
+	foreach ($GLOBALS['Filter_Plugin_LargeData_CountTagArray'] as $fpname => &$fpsignal) {
+		$fpreturn = $fpname($array,$plus,$articleid);
+		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
+		}
+	}
+
 	foreach ($array as &$tag) {
-		CountTag($tag, $plus);
+		CountTag($tag, $plus, $articleid);
 		$tag->Save();
 	}
 }
@@ -2566,13 +2575,13 @@ function CountTagArrayString($string, $plus = NULL) {
  * @param $member
  * @param array $plus 设置是否需要完全全表扫描
  */
-function CountMember(&$member, $plus = array(NULL, NULL, NULL, NULL)) {
+function CountMember(&$member, $plus = array(null, null, null, null)) {
 	global $zbp;
 	if(!($member  instanceof  Member))return;
 
 	$id = $member->ID;
 
-	if ($plus[0] === NULL) {
+	if ($plus[0] === null) {
 		$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_AuthorID', $id), array('=', 'log_Type', 0)));
 		$member_Articles = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 		$member->Articles = $member_Articles;
@@ -2581,7 +2590,7 @@ function CountMember(&$member, $plus = array(NULL, NULL, NULL, NULL)) {
 		$member->Articles += $plus[0];
 	}
 
-	if ($plus[1] === NULL) {
+	if ($plus[1] === null) {
 		$s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_AuthorID', $id), array('=', 'log_Type', 1)));
 		$member_Pages = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 		$member->Pages = $member_Pages;
@@ -2590,7 +2599,7 @@ function CountMember(&$member, $plus = array(NULL, NULL, NULL, NULL)) {
 		$member->Pages += $plus[1];
 	}
 
-	if ($plus[2] === NULL) {
+	if ($plus[2] === null) {
 		$s = $zbp->db->sql->Count($zbp->table['Comment'], array(array('COUNT', '*', 'num')), array(array('=', 'comm_AuthorID', $id)));
 		$member_Comments = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 		$member->Comments = $member_Comments;
@@ -2599,7 +2608,7 @@ function CountMember(&$member, $plus = array(NULL, NULL, NULL, NULL)) {
 		$member->Comments += $plus[2];
 	}
 
-	if ($plus[3] === NULL) {
+	if ($plus[3] === null) {
 		$s = $zbp->db->sql->Count($zbp->table['Upload'], array(array('COUNT', '*', 'num')), array(array('=', 'ul_AuthorID', $id)));
 		$member_Uploads = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 		$member->Uploads = $member_Uploads;
@@ -2616,7 +2625,7 @@ function CountMember(&$member, $plus = array(NULL, NULL, NULL, NULL)) {
  * @param array $array 记录用户ID的数组
  * @param array $plus 设置是否需要完全全表扫描
  */
-function CountMemberArray($array, $plus = array(NULL, NULL, NULL, NULL)) {
+function CountMemberArray($array, $plus = array(null, null, null, null)) {
 	global $zbp;
 	$array = array_unique($array);
 	foreach ($array as $value) {

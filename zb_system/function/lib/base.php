@@ -34,18 +34,17 @@ class Base{
 	* @param string $table 数据表
 	* @param array $datainfo 数据表结构信息
 	*/
-	function __construct(&$table,&$datainfo,&$db = null){
+	function __construct(&$table, &$datainfo, &$db = null, $hasmetas = true){
 			if($db !== null){
 				$this->db = &$db;
 			}else{
-				$zbp = ZBlogPHP::GetInstance();
-				$this->db = &$zbp->db;				
+				$this->db = &$GLOBALS['zbp']->db;				
 			}
 
 			$this->table=&$table;
 			$this->datainfo=&$datainfo;
 
-		$this->Metas=new Metas;
+		if(true==$hasmetas)$this->Metas=new Metas;
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->data[$key]=$value[3];

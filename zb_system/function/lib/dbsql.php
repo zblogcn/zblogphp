@@ -551,7 +551,7 @@ class DbSql
 		foreach ($GLOBALS['Filter_Plugin_DbSql_Filter'] as $fpname => &$fpsignal) {
 			$fpname($sql);
 		}
-		//Logs($sql);
+		Logs($sql);
 		return $sql;
 	}
 }

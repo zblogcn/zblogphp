@@ -238,5 +238,16 @@ class Post extends Base{
 		}
 		return parent::Save();
 	}
+
+	/**
+	 * @return bool
+	 */
+	function Del(){
+		foreach ($GLOBALS['Filter_Plugin_Post_Del'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($this);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+		}
+		return parent::Del();
+	}
 	
 }

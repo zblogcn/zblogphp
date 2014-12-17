@@ -17,9 +17,32 @@ function ActivePlugin_LargeData() {
 	if($zbp->option['ZC_LARGE_DATA'] == true && $zbp->db->type == 'mysql'){
 		Add_Filter_Plugin('Filter_Plugin_Misc_Begin','LargeData_Misc_Begin');
 		Add_Filter_Plugin('Filter_Plugin_Zbp_Load','LargeData_Zbp_Begin');
-		Add_Filter_Plugin('Filter_Plugin_LargeData_Aritcle','LargeData_LargeData_Aritcle');
-		Add_Filter_Plugin('Filter_Plugin_LargeData_Page','LargeData_LargeData_Page');
-		Add_Filter_Plugin('Filter_Plugin_LargeData_Comment','LargeData_LargeData_Comment');		
+		Add_Filter_Plugin('Filter_Plugin_LargeData_Aritcle','LargeData_Aritcle');
+		Add_Filter_Plugin('Filter_Plugin_LargeData_Page','LargeData_Page');
+		Add_Filter_Plugin('Filter_Plugin_LargeData_Comment','LargeData_Comment');
+		Add_Filter_Plugin('Filter_Plugin_LargeData_CountTagArray','LargeData_CountTagArray');
+		Add_Filter_Plugin('Filter_Plugin_Post_Del','LargeData_Post_Del');
+		Add_Filter_Plugin('Filter_Plugin_Tag_Del','LargeData_Tag_Del');
+	}
+}
+
+function LargeData_Post_Del(&$post){
+	LargeData_Delete_Post2Tag_ByLogID($post->ID);
+}
+
+function LargeData_Tag_Del(&$tag){
+	LargeData_Delete_Post2Tag_ByTagID($tag->ID);
+}
+
+function LargeData_CountTagArray(&$array, &$plus, &$log_id){
+	if($plus>0){
+		foreach($array as $tag){
+			LargeData_Insert_Post2Tag($log_id,array($tag->ID));
+		}
+	}elseif($plus<0){
+		foreach($array as $tag){
+			LargeData_Delete_Post2Tag($log_id,array($tag->ID));
+		}
 	}
 }
 
@@ -29,6 +52,7 @@ function LargeData_CreateTable(){
 		$s=$zbp->db->sql->CreateTable($GLOBALS['table']['Post2Tag'],$GLOBALS['datainfo']['Post2Tag']);
 		$zbp->db->QueryMulit($s);
 		$zbp->db->Query("ALTER TABLE " . $GLOBALS['table']['Post2Tag'] . " ADD INDEX  " . $zbp->db->dbpre. "pt_LD_2ID(pt_TagID,pt_LogID) ;");
+		$zbp->db->Query("ALTER TABLE " . $GLOBALS['table']['Post2Tag'] . " ADD INDEX  " . $zbp->db->dbpre. "pt_LD_LogID(pt_LogID) ;");
 	}
 }
 
@@ -55,6 +79,27 @@ function LargeData_LoadTagsByIDString($s){
 	return $a;
 }
 
+function LargeData_Delete_Post2Tag_ByTagID($id){
+	global $zbp;
+	$s = "DELETE FROM " . $GLOBALS['table']['Post2Tag'] . " WHERE (pt_TagID = ".$id.");";
+	$zbp->db->Query($s);
+}
+
+function LargeData_Delete_Post2Tag_ByLogID($id){
+	global $zbp;
+	$s = "DELETE FROM " . $GLOBALS['table']['Post2Tag'] . " WHERE (pt_LogID = ".$id.");";
+	$zbp->db->Query($s);
+}
+
+function LargeData_Delete_Post2Tag($log_id,$array_tag){
+	global $zbp;
+	if(count($array_tag)==0)return;
+	foreach($array_tag as $tag_id){
+		$s = "DELETE FROM " . $GLOBALS['table']['Post2Tag'] . " WHERE (pt_TagID = ".$tag_id.") AND (pt_LogID = ".$log_id.");";
+		$zbp->db->Query($s);
+	}
+}
+
 function LargeData_Insert_Post2Tag($log_id,$array_tag){
 	global $zbp;
 	if(count($array_tag)==0)return;
@@ -64,7 +109,7 @@ function LargeData_Insert_Post2Tag($log_id,$array_tag){
 	}
 }
 
-function LargeData_LargeData_Aritcle(&$select,&$where,&$order,&$limit,&$option){
+function LargeData_Aritcle(&$select,&$where,&$order,&$limit,&$option){
 	global $zbp;
 	$tag_id=null;
 	foreach($where as $k=>$v){
@@ -131,7 +176,7 @@ function LargeData_LargeData_Aritcle(&$select,&$where,&$order,&$limit,&$option){
 	}
 }
 
-function LargeData_LargeData_Page(&$select,&$where,&$order,&$limit,&$option){
+function LargeData_Page(&$select,&$where,&$order,&$limit,&$option){
 	global $zbp;
 	foreach($where as $k=>$v){
 		if($v[0]=='search'){
@@ -172,7 +217,7 @@ function LargeData_LargeData_Page(&$select,&$where,&$order,&$limit,&$option){
 	}
 }
 
-function LargeData_LargeData_Comment(&$select,&$where,&$order,&$limit,&$option){
+function LargeData_Comment(&$select,&$where,&$order,&$limit,&$option){
 	global $zbp;
 	foreach($where as $k=>$v){
 		if($v[0]=='search'){
