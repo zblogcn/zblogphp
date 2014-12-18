@@ -809,6 +809,7 @@ function ViewPost($id, $alias, $isrewrite = false) {
 	$pagebar->PageCount = $zbp->commentdisplaycount;
 	$pagebar->PageNow = 1;
 	$pagebar->PageBarCount = $zbp->pagebarcount;
+	$pagebar->Count = $article->CommNums;
 
 	if ($zbp->option['ZC_COMMENT_TURNOFF']) {
 		$article->IsLock = true;
@@ -896,6 +897,7 @@ function ViewComments($postid, $page) {
 	$pagebar->PageCount = $zbp->commentdisplaycount;
 	$pagebar->PageNow = $page;
 	$pagebar->PageBarCount = $zbp->pagebarcount;
+	$pagebar->Count = $post->CommNums;
 
 	$comments = array();
 
@@ -1135,7 +1137,7 @@ function PostArticle() {
 		if($pre_category>0)CountCategoryArray(array($pre_category), -1);
 		CountCategoryArray(array($article->CateID), +1);		
 	}
-	//CountPostArray(array($article->ID), 0);
+	//CountPostArray(array($article->ID));
 	if($orig_id==0 && $article->IsTop==0 && $article->Status==ZC_POST_STATUS_PUBLIC){
 		CountNormalArticleNums(+1);
 	}elseif($orig_id>0){
@@ -1337,7 +1339,7 @@ function PostPage() {
 		if($pre_author>0)CountMemberArray(array($pre_author), array(0, -1, 0, 0));
 		CountMemberArray(array($article->AuthorID), array(0, +1, 0, 0));
 	}
-	//CountPostArray(array($article->ID), 0);
+	//CountPostArray(array($article->ID));
 
 	$zbp->AddBuildModule('comments');
 
@@ -1462,7 +1464,7 @@ function PostComment() {
 
 		if ($cmt->IsChecking == false) {
 
-			CountPostArray(array($cmt->LogID), +1);
+			if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), +1);
 
 			$zbp->AddBuildModule('comments');
 
@@ -1507,7 +1509,7 @@ function DelComment() {
 
 		$cmt->Del();
 		
-		CountPostArray(array($cmt->LogID), -1);
+		if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
 
 		$zbp->AddBuildModule('comments');
 
@@ -1537,7 +1539,7 @@ function DelComment_Children($id) {
 }
 
 /**
- * 删除评论保留其子评论
+ * 只历遍并保留评论id进array,不进行删除
  * @param int $id 父评论ID
  * @param array $array 将子评论ID存入新数组
  */
@@ -1573,10 +1575,10 @@ function CheckComment() {
 	$orig_check = (bool)$orig_check;
 
 	if ($orig_check && !$ischecking) {
-		CountPostArray(array($cmt->LogID), +1);
+		if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), +1);
 	}
 	else if (!$orig_check && $ischecking) {
-		CountPostArray(array($cmt->LogID), -1);
+		if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
 	}
 	$zbp->AddBuildModule('comments');
 }
@@ -1597,46 +1599,37 @@ function BatchComment() {
 	}
 	$array = array();
 	$array = $_POST['id'];
+	$array = array_unique($array);
 	if ($type == 'all_del') {
-		$arrpost = array();
-		foreach ($array as $i => $id) {
-			$cmt = $zbp->GetCommentByID($id);
-			if ($cmt->ID == 0)
-				continue;
-			$arrpost[] = $cmt->LogID;
-		}
-		$arrpost = array_unique($arrpost);
-		foreach ($arrpost as $i => $id)
-			$comments = $zbp->GetCommentList('*', array(array('=', 'comm_LogID', $id)), null, null, null);
-
 		$arrdel = array();
 		foreach ($array as $i => $id) {
 			$cmt = $zbp->GetCommentByID($id);
-			if ($cmt->ID == 0)
-				continue;
+			if ($cmt->ID == 0) continue;
 			$arrdel[] = $cmt->ID;
 			DelComment_Children_NoDel($cmt->ID, $arrdel);
 		}
 		foreach ($arrdel as $i => $id) {
 			$cmt = $zbp->GetCommentByID($id);
+			if ($cmt->ID == 0) continue;
 			$cmt->Del();
+			if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
 		}
 	}
 	if ($type == 'all_pass')
 		foreach ($array as $i => $id) {
 			$cmt = $zbp->GetCommentByID($id);
-			if ($cmt->ID == 0)
-				continue;
+			if ($cmt->ID == 0) continue;
 			$cmt->IsChecking = false;
 			$cmt->Save();
+			if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), +1);
 		}
 	if ($type == 'all_audit')
 		foreach ($array as $i => $id) {
 			$cmt = $zbp->GetCommentByID($id);
-			if ($cmt->ID == 0)
-				continue;
+			if ($cmt->ID == 0) continue;
 			$cmt->IsChecking = true;
 			$cmt->Save();
+			if($cmt->RootID==0 && $cmt->IsChecking == true)CountPostArray(array($cmt->LogID), -1);
 		}
 }
 
