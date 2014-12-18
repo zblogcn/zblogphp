@@ -75,7 +75,10 @@ class DbSql
 		$this->ReplacePre($table);
 
 		$s='';
-		$s="DROP TABLE $table";
+		$s="DROP TABLE $table;";
+		if($this->type=='Dbpdo_PgSQL'||$this->type=='DbPgSQL'){
+			$s.="DROP SEQUENCE $table" . "_seq;";
+		}
 		return $s;
 	}
 
@@ -95,7 +98,9 @@ class DbSql
 		if($this->dbclass=='Dbpdo_MySQL'||$this->dbclass=='DbMySQL'||$this->dbclass=='DbMySQLi'){
 			$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$table'";
 		}
-
+		if($this->dbclass=='Dbpdo_PgSQL'||$this->dbclass=='DbPgSQL'){
+			$s="SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='public' AND  table_name ='$table'";
+		}
 		return $s;
 	}
 
@@ -106,6 +111,9 @@ class DbSql
 	 * @return string
 	*/
 	public function CreateTable($table,$datainfo){
+	
+		reset($datainfo);
+		$idname=GetValueInArrayByCurrent($datainfo,0);
 
 		$s='';
 
@@ -114,7 +122,7 @@ class DbSql
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
-				if($value[1]=='integer'||$value[1]=='timeinteger'){
+				if($value[1]=='integer'){
 					if($i==0){
 						$s.=$value[0] .' integer primary key' . ($this->dbclass=='DbSQLite'?'':' autoincrement') . ',';
 					}else{
@@ -152,7 +160,7 @@ class DbSql
 
 			$s.=');';
 			reset($datainfo);
-			$s.='CREATE UNIQUE INDEX ' . $table . '_' . GetValueInArrayByCurrent($datainfo,0).' on '.$table.' ('.GetValueInArrayByCurrent($datainfo,0).');';
+			$s.='CREATE UNIQUE INDEX ' . $table . '_' . $idname.' on '.$table.' ('.$idname.');';
 
 		}
 
@@ -161,7 +169,7 @@ class DbSql
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
-				if($value[1]=='integer'||$value[1]=='timeinteger'){
+				if($value[1]=='integer'){
 					if($i==0){
 						$s.=$value[0] .' int(11) NOT NULL AUTO_INCREMENT' . ',';
 					}else{
@@ -213,12 +221,76 @@ class DbSql
 				}
 				$i +=1;
 			}
-			reset($datainfo);
-			$s.='PRIMARY KEY ('.GetValueInArrayByCurrent($datainfo,0).'),';
+			$s.='PRIMARY KEY ('.$idname.'),';
 			$s=substr($s,0,strlen($s)-1);
 			$s.=') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
 		}
 
+		if($this->dbclass=='Dbpdo_PgSQL'||$this->dbclass=='DbPgSQL'){
+			$s.='CREATE SEQUENCE ' . $table . '_seq;';
+			$s.='CREATE TABLE '.$table.' (';
+
+			$i=0;
+			foreach ($datainfo as $key => $value) {
+				if($value[1]=='integer'){
+					if($i==0){
+						$s.=$value[0] .' INT NOT NULL DEFAULT nextval(\'' . $table. '_seq\')' . ',';
+					}else{
+						if($value[2]==''){
+							$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif($value[2]=='tinyint'){
+							$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif($value[2]=='smallint'){
+							$s.=$value[0] .' smallint NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif($value[2]=='mediumint'){
+							$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif($value[2]=='int'){
+							$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif($value[2]=='bigint'){
+							$s.=$value[0] .' bigint NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}
+					}
+				}
+				if($value[1]=='boolean'){
+					$s.=$value[0] . ' char(1) NOT NULL DEFAULT \''.(int)$value[3].'\'' . ',';
+				}
+				if($value[1]=='string'){
+					if($value[2]!=''){
+						if(strpos($value[2],'char')!==false){
+							$s.=$value[0] . ' char('.str_replace('char','',$value[2]).') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}elseif(is_int($value[2])){
+							$s.=$value[0] . ' varchar('.$value[2].') NOT NULL DEFAULT \''.$value[3].'\'' . ',';
+						}else{
+							$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
+						}
+					}else{
+						$s.=$value[0] . ' text NOT NULL DEFAULT \'\',';
+					}
+				}
+				if($value[1]=='double'){
+					$s.=$value[0] . " double precision NOT NULL DEFAULT 0" . ',';
+				}
+				if($value[1]=='float'){
+					$s.=$value[0] . " real NOT NULL DEFAULT 0" . ',';
+				}				
+				if($value[1]=='date'||$value[1]=='time'){
+					$s.=$value[0] . " $value[1] NOT NULL,";
+				}
+				if($value[1]=='datetime'){
+					$s.=$value[0] . " time NOT NULL,";
+				}				
+				if($value[1]=='timestamp'){
+					$s.=$value[0] . " $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP,";
+				}
+				$i +=1;
+			}
+			$s.='PRIMARY KEY ('.$idname.'),';
+			$s=substr($s,0,strlen($s)-1);
+
+			$s.=');';
+			$s.='CREATE INDEX ' . $table . '_ix_id on ' . $table .'('.$idname.');';
+		}
+		
 		$this->ReplacePre($s);
 		return $s;
 	}

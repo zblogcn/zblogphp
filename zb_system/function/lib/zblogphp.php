@@ -569,6 +569,21 @@ class ZBlogPHP {
 					$this->ShowError(69,__FILE__,__LINE__);
 				}
 				break;
+			case 'pgsql':
+			case 'pdo_pgsql':
+				$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
+				if($this->db->Open(array(
+						$this->option['ZC_PGSQL_SERVER'],
+						$this->option['ZC_PGSQL_USERNAME'],
+						$this->option['ZC_PGSQL_PASSWORD'],
+						$this->option['ZC_PGSQL_NAME'],
+						$this->option['ZC_PGSQL_PRE'],
+						$this->option['ZC_PGSQL_PORT'],
+						$this->option['ZC_PGSQL_PERSISTENT']
+					))==false){
+					$this->ShowError(67,__FILE__,__LINE__);
+				}
+				break;
 			case 'mysql':
 			case 'mysqli':
 			case 'pdo_mysql':
