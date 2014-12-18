@@ -114,6 +114,11 @@ function Server_Open($method){
 			$s=Server_SendRequest(APPCENTRE_URL .'?shoplist');
 			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
 			break;
+		case 'apptype':
+			$zbp->Config('AppCentre')->apptype=GetVars("type");
+			$zbp->SaveConfig('AppCentre');
+			Redirect('main.php');
+			break;
 		default:
 			# code...
 			break;
@@ -126,9 +131,9 @@ function Server_SendRequest($url,$data=array(),$u='',$c=''){
 
 	$un=$zbp->Config('AppCentre')->username;
 	$ps=$zbp->Config('AppCentre')->password;
-	$c='';
+	$c.=' apptype=' . urlencode($zbp->Config('AppCentre')->apptype) . '; ';
 	if($un&&$ps){
-		$c="username=".urlencode($un) ."; password=".urlencode($ps);
+		$c.="username=".urlencode($un) ."; password=".urlencode($ps);
 	}
 	
 	$shopun=$zbp->Config('AppCentre')->shop_username;

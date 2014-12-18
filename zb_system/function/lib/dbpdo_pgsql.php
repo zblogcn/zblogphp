@@ -53,8 +53,11 @@ class Dbpdo_PgSQL implements iDataBase {
 	function Open($array){
 
 		$s="pgsql:host={$array[0]};port={$array[5]};dbname={$array[3]};user={$array[1]};password={$array[2]};options='--client_encoding=UTF8'";
-
-		$db_link = new PDO($s);
+		if(false == $array[5]){
+			$db_link = new PDO($s);
+		}else{
+			$db_link = new PDO($s,null,null,array(PDO::ATTR_PERSISTENT => true));
+		}
 		$this->db = $db_link;
 		$this->dbpre=$array[4];
 		return true;

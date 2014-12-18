@@ -67,6 +67,7 @@ CREATE TABLE %pre%config (
  conf_Value text,
   PRIMARY KEY (conf_ID)
 ) ;
+CREATE INDEX %pre%config_ix_id ON %pre%config(conf_ID);
 
 CREATE SEQUENCE %pre%counter_seq;
 CREATE TABLE %pre%counter (
@@ -82,6 +83,7 @@ CREATE TABLE %pre%counter (
  coun_AllRequestHeader text NOT NULL,
   PRIMARY KEY (coun_ID)
 ) ;
+CREATE INDEX %pre%counter_ix_id ON %pre%counter(coun_ID);
 
 CREATE SEQUENCE %pre%member_seq;
 CREATE TABLE %pre%member (
@@ -95,7 +97,7 @@ CREATE TABLE %pre%member (
  mem_HomePage varchar(255) NOT NULL DEFAULT '',
  mem_IP varchar(15) NOT NULL DEFAULT '',
  mem_PostTime integer NOT NULL DEFAULT '0',
- mem_Alias varchar(255) NOT NULL DEFAULT '',
+ mem_Alias varchar(50) NOT NULL DEFAULT '',
  mem_Intro text NOT NULL,
  mem_Articles integer NOT NULL DEFAULT '0',
  mem_Pages integer NOT NULL DEFAULT '0',
@@ -103,11 +105,11 @@ CREATE TABLE %pre%member (
  mem_Uploads integer NOT NULL DEFAULT '0',
  mem_Template varchar(50) NOT NULL DEFAULT '',
  mem_Meta text NOT NULL,
-  PRIMARY KEY (mem_ID),
-  UNIQUE (mem_Name)
+  PRIMARY KEY (mem_ID)
 ) ;
 CREATE INDEX %pre%member_ix_id ON %pre%member(mem_ID);
 CREATE INDEX %pre%member_ix_name ON %pre%member(mem_Name);
+CREATE INDEX %pre%member_ix_alias ON %pre%member(mem_Alias);
 
 CREATE SEQUENCE %pre%module_seq;
 CREATE TABLE %pre%module (

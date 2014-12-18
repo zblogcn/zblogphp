@@ -55,14 +55,16 @@ class DbPgSQL implements iDataBase {
 	function Open($array){
 
 		$s="host={$array[0]} port={$array[5]} dbname={$array[3]} user={$array[1]} password={$array[2]} options='--client_encoding=UTF8'";
-		//die($s);
-		$db_link = pg_connect($s);
-
+		if(false == $array[5]){
+			$db_link = pg_connect($s);
+		}else{
+			$db_link = pg_pconnect($s);
+		}
 
 		if(!$db_link){
 			return false;
 		} else {
-			$this->dbpre=$array[4];
+			$this->dbpre = $array[4];
 			$this->db = $db_link;
 			return true;
 		}
