@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS %pre%member (
   mem_HomePage varchar(255) NOT NULL DEFAULT '',
   mem_IP varchar(15) NOT NULL DEFAULT '',
   mem_PostTime int(11) NOT NULL DEFAULT '0',
-  mem_Alias varchar(255) NOT NULL DEFAULT '',
+  mem_Alias varchar(50) NOT NULL DEFAULT '',
   mem_Intro text NOT NULL,
   mem_Articles int(11) NOT NULL DEFAULT '0',
   mem_Pages int(11) NOT NULL DEFAULT '0',
@@ -100,7 +100,8 @@ CREATE TABLE IF NOT EXISTS %pre%member (
   mem_Template varchar(50) NOT NULL DEFAULT '',
   mem_Meta longtext NOT NULL,
   PRIMARY KEY (mem_ID),
-  KEY %pre%mem_Name (mem_Name)
+  KEY %pre%mem_Name (mem_Name),
+  KEY %pre%mem_Alias (mem_Alias),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 

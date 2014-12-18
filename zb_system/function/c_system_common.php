@@ -767,16 +767,16 @@ function CheckRegExp($source, $para) {
 	if (strpos($para, '[username]') !== false) {
 		$para = "/^[\.\_A-Za-z0-9·\x{4e00}-\x{9fa5}]+$/u";
 	}
-	if (strpos($para, '[password]') !== false) {
+	elseif (strpos($para, '[password]') !== false) {
 		$para = "/^[A-Za-z0-9`~!@#\$%\^&\*\-_]+$/u";
 	}
-	if (strpos($para, '[email]') !== false) {
+	elseif (strpos($para, '[email]') !== false) {
 		$para = "/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*\.)+[a-zA-Z]*)$/u";
 	}
-	if (strpos($para, '[homepage]') !== false) {
+	elseif (strpos($para, '[homepage]') !== false) {
 		$para = "/^[a-zA-Z]+:\/\/[a-zA-Z0-9\_\-\.\&\?\/:=#\x{4e00}-\x{9fa5}]+$/u";
 	}
-	if (!$para)
+	elseif (!$para)
 		return false;
 
 	return (bool)preg_match($para, $source);

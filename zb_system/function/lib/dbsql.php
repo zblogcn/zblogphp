@@ -246,7 +246,7 @@ class DbSql
 		$comma = '';
 		foreach($where as $k => $w) {
 			$eq=strtoupper($w[0]);
-			if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='|$eq=='NOT LIKE'){
+			if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='|$eq=='NOT LIKE'|$eq=='ILIKE'|$eq=='NOT ILIKE'){
 				$x = (string)$w[1];
 				$y = (string)$w[2];
 				$y = $this->db->EscapeString($y);

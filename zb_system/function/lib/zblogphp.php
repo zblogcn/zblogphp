@@ -1887,29 +1887,29 @@ class ZBlogPHP {
 	}
 	
 	/**
-	 * 通过用户名获取用户实例
+	 * 通过用户名获取用户实例(不区分大小写)
 	 * @param string $name
 	 * @return Member
 	 */
 	function GetMemberByName($name){
+		$name=trim($name);
+		if (!$name || !CheckRegExp($name, '[username]'))return new Member;
+	
 		if(isset($this->membersbyname[$name])){
 			return $this->membersbyname[$name];
 		}else{
 			$array = array_keys($this->membersbyname);
 			foreach($array as $k=>$v){
-				if(strtolower($name)===strtolower($v)){
+				if(strcasecmp($name,$v)==0){
 					return $this->membersbyname[$v];
 				}
 			}
-			//$array = array_change_key_case($this->membersbyname,CASE_LOWER);
-			//if(isset($array[strtolower($name)])){
-			//	return $array[strtolower($name)];
-			//}
 		}
 
-		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array('=','mem_Name',$name)),null,1,null);
+		$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
+		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array($like,'mem_Name',$name)),null,1,null);
 		$am = $this->GetListType('Member',$sql);
-		if(count($am) == 1){
+		if(count($am) > 0){
 			$m = $am[0];
 			$this->members[$m->ID] = $m;
 			$this->membersbyname[$m->Name] = &$this->members[$m->ID];
@@ -1923,18 +1923,57 @@ class ZBlogPHP {
 	}
 
 	/**
-	 * 通过获取用户名或别名实例
+	 * 通过获取用户名或别名实例(不区分大小写)
 	 * @param string $name
 	 * @return Member
 	 */
 	function GetMemberByAliasOrName($name){
 		$name=trim($name);
+		if (!$name || !CheckRegExp($name, '[username]'))return new Member;
+
 		foreach ($this->members as $key => &$value) {
-			if(($value->Name==$name)||($value->Alias==$name)){
+			if(strcasecmp($value->Name,$name)==0||strcasecmp($value->Alias==$name)==0){
 				return $value;
 			}
 		}
+
+		$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
+		$zbp->db->sql->Select(
+			$zbp->table['Member'],'*',
+			//where
+				$zbp->db->sql->ParseWhere(array(array($like,'mem_Alias',$name)),'')
+				.
+				$zbp->db->sql->ParseWhere(array(array($like,'mem_Name',$name)),'OR'),
+			null,
+			1,
+			null
+		);
+
+		$am = $this->GetListType('Member',$sql);
+		if(count($am) > 0){
+			$m = $am[0];
+			$this->members[$m->ID] = $m;
+			$this->membersbyname[$m->Name] = &$this->members[$m->ID];
+			return $m;
+		};
+
 		return new Member;
+	}
+	
+	/**
+	 * 检查指定名称的用户是否存在(不区分大小写)
+	 */
+	function CheckMemberNameExist($name){
+		$name=trim($name);
+		if(!$name || !CheckRegExp($name, '[username]'))return false;
+
+		$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
+		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array($like,'mem_Name',$name)),null,1,null);
+		$am = $this->GetListType('Member',$sql);
+		if(count($am) > 0){
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -2455,26 +2494,8 @@ class ZBlogPHP {
 	}
 	
 	/**
-	 * 检查指定名称的用户是否存在
-	 */
-	function CheckMemberNameExist($name){
-		$name=trim($name);
-		if(!$name)return false;
-		$like='LIKE';
-		if($this->db->type == 'pgsql'){
-			$like='ILIKE';
-		}
-		$sql = $this->db->sql->Select($this->table['Member'],'*','mem_Name ' . $like . ' \'' . $this->db->EscapeString($name) . '\'',null,1,null);
-		$am = $this->GetListType('Member',$sql);
-		if(count($am) > 0){
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * 拿到置顶文章
-	 * @param array $type[]={all,global,index,category+ID}
+	 * @param array $type[]={global全局,index首页,category+ID分类}
 	 */
 	function GetOnTopPost($type_array){
 		ZBlogException::SuspendErrorHook();
@@ -2493,7 +2514,7 @@ class ZBlogPHP {
 	/**
 	 * 添加或删除置顶文章
 	 * @param bool $id 文章ID
-	 * @param string $type 'add','global,index,category'
+	 * @param string $type 'global,index,category'
 	 * @param string $addinfo 分类id	 
 	 */
 	function AddOnTopPost($id,$type,$addinfo=null){
@@ -2504,8 +2525,15 @@ class ZBlogPHP {
 		if(array_key_exists($id,$array)){
 			unset($array[$id]);
 		}
-		$array[$id] = 'index';
+		if($type=='index'){
+			$array[$id] = 'index';
+		}elseif($type=='global'){
+			$array[$id] = 'global';
+		}elseif($type=='category'){
+			$array[$id] = 'category' . $addinfo;
+		}
 		$this->cache->top_post_array = serialize($array);
+		return true;
 	}
 	
 	/**
@@ -2513,6 +2541,11 @@ class ZBlogPHP {
 	 * @param bool $id 文章ID
 	 */
 	function DelOnTopPost($id){
-	
+		ZBlogException::SuspendErrorHook();
+		$array = unserialize($this->cache->top_post_array);
+		ZBlogException::ResumeErrorHook();
+		unset($array[$id]);
+		$this->cache->top_post_array = serialize($array);
+		return true;
 	}
 }

@@ -83,7 +83,7 @@ CREATE TABLE %pre%member (
   mem_HomePage varchar(255) NOT NULL DEFAULT '',
   mem_IP varchar(15) NOT NULL DEFAULT '',
   mem_PostTime integer NOT NULL DEFAULT 0,
-  mem_Alias varchar(255) NOT NULL DEFAULT '',
+  mem_Alias varchar(50) NOT NULL DEFAULT '',
   mem_Intro text NOT NULL DEFAULT '',
   mem_Articles integer NOT NULL DEFAULT 0,
   mem_Pages integer NOT NULL DEFAULT 0,

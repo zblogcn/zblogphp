@@ -2357,6 +2357,7 @@ function FilterMember(&$member) {
 	$member->Alias = str_replace('.', '', $member->Alias);
 	$member->Alias = str_replace(' ', '', $member->Alias);
 	$member->Alias = str_replace('_', '', $member->Alias);
+	$member->Alias = substr($member->Alias, 0, (int)$zbp->datainfo['Member']['Alias'][2]);
 	if (strlen($member->Name) < $zbp->option['ZC_USERNAME_MIN'] || strlen($member->Name) > $zbp->option['ZC_USERNAME_MAX']) {
 		$zbp->ShowError(77, __FILE__, __LINE__);
 	}
