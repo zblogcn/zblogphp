@@ -768,28 +768,30 @@ class ZBlogPHP {
 			$s.="return ";
 			$option = array();
 			foreach ($this->option as $key => $value) {
-				if($key=='ZC_YUN_SITE')$option[$key]=$value;
-				if($key=='ZC_DATABASE_TYPE')$option[$key]=$value;
-				if($key=='ZC_SQLITE_NAME')$option[$key]=$value;
-				if($key=='ZC_SQLITE_PRE')$option[$key]=$value;
-				if($key=='ZC_MYSQL_SERVER')$option[$key]=$value;
-				if($key=='ZC_MYSQL_USERNAME')$option[$key]=$value;
-				if($key=='ZC_MYSQL_PASSWORD')$option[$key]=$value;
-				if($key=='ZC_MYSQL_NAME')$option[$key]=$value;
-				if($key=='ZC_MYSQL_CHARSET')$option[$key]=$value;
-				if($key=='ZC_MYSQL_PRE')$option[$key]=$value;
-				if($key=='ZC_MYSQL_ENGINE')$option[$key]=$value;
-				if($key=='ZC_MYSQL_PORT')$option[$key]=$value;
-				if($key=='ZC_MYSQL_PERSISTENT')$option[$key]=$value;
-				if($key=='ZC_PGSQL_SERVER')$option[$key]=$value;
-				if($key=='ZC_PGSQL_USERNAME')$option[$key]=$value;
-				if($key=='ZC_PGSQL_PASSWORD')$option[$key]=$value;
-				if($key=='ZC_PGSQL_NAME')$option[$key]=$value;
-				if($key=='ZC_PGSQL_CHARSET')$option[$key]=$value;
-				if($key=='ZC_PGSQL_PRE')$option[$key]=$value;
-				if($key=='ZC_PGSQL_PORT')$option[$key]=$value;
-				if($key=='ZC_PGSQL_PERSISTENT')$option[$key]=$value;
-				if($key=='ZC_SITE_TURNOFF')$option[$key]=$value;		
+				if(
+					($key=='ZC_YUN_SITE') or 
+					($key=='ZC_DATABASE_TYPE') or 
+					($key=='ZC_SQLITE_NAME') or 
+					($key=='ZC_SQLITE_PRE') or 
+					($key=='ZC_MYSQL_SERVER') or 
+					($key=='ZC_MYSQL_USERNAME') or 
+					($key=='ZC_MYSQL_PASSWORD') or 
+					($key=='ZC_MYSQL_NAME') or 
+					($key=='ZC_MYSQL_CHARSET') or 
+					($key=='ZC_MYSQL_PRE') or 
+					($key=='ZC_MYSQL_ENGINE') or 
+					($key=='ZC_MYSQL_PORT') or 
+					($key=='ZC_MYSQL_PERSISTENT') or 
+					($key=='ZC_PGSQL_SERVER') or 
+					($key=='ZC_PGSQL_USERNAME') or 
+					($key=='ZC_PGSQL_PASSWORD') or 
+					($key=='ZC_PGSQL_NAME') or 
+					($key=='ZC_PGSQL_CHARSET') or 
+					($key=='ZC_PGSQL_PRE') or 
+					($key=='ZC_PGSQL_PORT') or 
+					($key=='ZC_PGSQL_PERSISTENT') or 
+					($key=='ZC_SITE_TURNOFF')
+				)$option[$key]=$value;	
 			}
 			$s.=var_export($option,true);
 			$s.="\r\n?>";
@@ -1921,15 +1923,17 @@ class ZBlogPHP {
 			}
 		}
 
-		$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
-		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array($like,'mem_Name',$name)),null,1,null);
-		$am = $this->GetListType('Member',$sql);
-		if(count($am) > 0){
-			$m = $am[0];
-			$this->members[$m->ID] = $m;
-			$this->membersbyname[$m->Name] = &$this->members[$m->ID];
-			return $m;
-		};
+		if($this->option['ZC_LOADMEMBERS_LEVEL']!=0){
+			$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
+			$sql = $this->db->sql->Select($this->table['Member'],'*',array(array($like,'mem_Name',$name)),null,1,null);
+			$am = $this->GetListType('Member',$sql);
+			if(count($am) > 0){
+				$m = $am[0];
+				$this->members[$m->ID] = $m;
+				$this->membersbyname[$m->Name] = &$this->members[$m->ID];
+				return $m;
+			};
+		}
 		
 		$m = new Member;
 		$m->Guid=GetGuid();
@@ -1952,25 +1956,26 @@ class ZBlogPHP {
 			}
 		}
 
-		$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
-		$zbp->db->sql->Select(
-			$zbp->table['Member'],'*',
-			//where
-				$zbp->db->sql->ParseWhere(array(array($like,'mem_Alias',$name)),'')
-				.
-				$zbp->db->sql->ParseWhere(array(array($like,'mem_Name',$name)),'OR'),
-			null,
-			1,
-			null
-		);
-
-		$am = $this->GetListType('Member',$sql);
-		if(count($am) > 0){
-			$m = $am[0];
-			$this->members[$m->ID] = $m;
-			$this->membersbyname[$m->Name] = &$this->members[$m->ID];
-			return $m;
-		};
+		if($this->option['ZC_LOADMEMBERS_LEVEL']!=0){
+			$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
+			$zbp->db->sql->Select(
+				$zbp->table['Member'],'*',
+				//where
+					$zbp->db->sql->ParseWhere(array(array($like,'mem_Alias',$name)),'')
+					.
+					$zbp->db->sql->ParseWhere(array(array($like,'mem_Name',$name)),'OR'),
+				null,
+				1,
+				null
+			);
+			$am = $this->GetListType('Member',$sql);
+			if(count($am) > 0){
+				$m = $am[0];
+				$this->members[$m->ID] = $m;
+				$this->membersbyname[$m->Name] = &$this->members[$m->ID];
+				return $m;
+			};
+		}
 
 		return new Member;
 	}

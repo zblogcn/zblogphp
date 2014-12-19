@@ -76,7 +76,7 @@ class DbSql
 
 		$s='';
 		$s="DROP TABLE $table;";
-		if($this->type=='Dbpdo_PgSQL'||$this->type=='DbPgSQL'){
+		if($this->dbclass=='Dbpdo_PgSQL'||$this->dbclass=='DbPgSQL'){
 			$s.="DROP SEQUENCE $table" . "_seq;";
 		}
 		return $s;

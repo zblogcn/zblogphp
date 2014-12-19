@@ -94,9 +94,10 @@ function GetEnvironment(){
 	if($ajax) $ajax=substr(get_class($ajax),7);
 	
 	$system_environment = PHP_OS . ';' . 
-							GetValueInArray(explode(' ',str_replace(array('Microsoft-','/'),array('',''),GetVars('SERVER_SOFTWARE', 'SERVER'))),0) . ';' .
-							'PHP' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'] . ';' .
-							$ajax ;
+							GetValueInArray(
+								explode(' ',str_replace(array('Microsoft-','/'),array('',''),GetVars('SERVER_SOFTWARE', 'SERVER'))), 0
+							) . ';' .
+							'PHP' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'] . ';' . 	$ajax ;
 	return $system_environment;
 }
 

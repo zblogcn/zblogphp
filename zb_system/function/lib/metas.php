@@ -76,11 +76,9 @@ class Metas {
 		global $zbp;
 		if(count($this->Data)==0)return '';
 		$data=$this->Data;
-		foreach ($data as $key => $value) {
-			if(is_string($value)){
+		foreach ($data as $key => $value)
+			if(is_string($value))
 				$data[$key]=str_replace(($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']==false?$zbp->host:$zbp->option['ZC_BLOG_HOST']),'{#ZC_BLOG_HOST#}',$value);
-			}
-		}
 		//return json_encode($data);
 		return serialize($data);
 	}
@@ -96,21 +94,18 @@ class Metas {
 		//if(strpos($s,'{')===0){
 			//$this->Data=json_decode($s,true);
 		//}else{
-
-		$this->Data=@unserialize($s);
-
+			$this->Data=@unserialize($s);
 		//}
 		if(is_array($this->Data)){
-			if(count($this->Data)==0)return false;
+			if(count($this->Data)==0)return true;
 		}else{
 			$this->Data=array();
 			return false;
 		}
-		foreach ($this->Data as $key => $value) {
-			if(is_string($value)){
+		foreach ($this->Data as $key => $value)
+			if(is_string($value))
 				$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']==false?$zbp->host:$zbp->option['ZC_BLOG_HOST']),$value);
-			}
-		}
+
 		return true;
 	}
 }
