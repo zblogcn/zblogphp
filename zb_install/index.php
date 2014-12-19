@@ -76,19 +76,23 @@ switch ($zblogstep) {
 </div>
 <script type="text/javascript">
 function Setup3(){
-  if($("#dbtype").val()=="mssql"){
-    if($("#dbserver").val()==""){alert("数据库服务器需要填写");return false;};
-    if($("#dbname").val()==""){alert("数据库名称需要填写");return false;};
-    if($("#dbusername").val()==""){alert("数据库用户名需要填写");return false;};
+
+  if($("input[name='fdbtype']:checked").val()=="mysql"){
+    if($("#dbmsyql_server").val()==""){alert("数据库服务器需要填写");return false;};
+    if($("#dbmysql_name").val()==""){alert("数据库名称需要填写");return false;};
+    if($("#dbmysql_username").val()==""){alert("数据库用户名需要填写");return false;};
+  }
+  if($("input[name='fdbtype']:checked").val()=="pgsql"){
+    if($("#dbpgsql_server").val()==""){alert("数据库服务器需要填写");return false;};
+    if($("#dbpgsql_name").val()==""){alert("数据库名称需要填写");return false;};
+    if($("#dbpgsql_username").val()==""){alert("数据库用户名需要填写");return false;};
   }
 
-
-
-if($("#blogtitle").val()==""){alert("网站标题需要填写");return false;};
-if($("#username").val()==""){alert("管理员名称需要填写");return false;};
-if($("#password").val()==""){alert("管理员密码需要填写");return false;};
-if($("#password").val().toString().search("^[A-Za-z0-9`~!@#\$%\^&\*\-_]{8,}$")==-1){alert("管理员密码必须是8位或更长的数字和字母,字符组合");return false;};
-if($("#password").val()!==$("#repassword").val()){alert("必须确认密码");return false;};
+  if($("#blogtitle").val()==""){alert("网站标题需要填写");return false;};
+  if($("#username").val()==""){alert("管理员名称需要填写");return false;};
+  if($("#password").val()==""){alert("管理员密码需要填写");return false;};
+  if($("#password").val().toString().search("^[A-Za-z0-9`~!@#\$%\^&\*\-_]{8,}$")==-1){alert("管理员密码必须是8位或更长的数字和字母,字符组合");return false;};
+  if($("#password").val()!==$("#repassword").val()){alert("必须确认密码");return false;};
 
 }
 
@@ -366,7 +370,7 @@ function Setup3(){
         if($hasMysql){
         ?>
           <label class="dbselect" id="mysql_radio">
-          <input type="radio" name="fdbtype"/>MySQL数据库</label>
+          <input type="radio" name="fdbtype" value="mysql"/>MySQL数据库</label>
         <?php
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         }
@@ -375,7 +379,7 @@ function Setup3(){
         if($hasSqlite){
         ?>
           <label class="dbselect" id="sqlite_radio">
-          <input type="radio" name="fdbtype"/>SQLite数据库</label>
+          <input type="radio" name="fdbtype" value="sqlite"/>SQLite数据库</label>
         <?php
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         }

@@ -2407,7 +2407,7 @@ class ZBlogPHP {
 
 		$_vc = new ValidateCode();
 		$_vc->GetImg();
-		setcookie('zbpvalidcode' . md5($this->guid . $id), md5( $this->guid . date("Ymd") . $_vc->GetCode() ), null,$this->cookiespath);
+		setcookie('captcha_' . crc32($this->guid . $id), md5( $this->guid . date("Ymd") . $_vc->GetCode() ), null,$this->cookiespath);
 	}
 
 
@@ -2425,7 +2425,7 @@ class ZBlogPHP {
 			return $fpname($vaidcode,$id);//*
 		}
 
-		$original=GetVars('zbpvalidcode' . md5($this->guid . $id),'COOKIE');
+		$original=GetVars('captcha_' . crc32($this->guid . $id),'COOKIE');
 		if(md5( $this->guid . date("Ymd") . $vaidcode)==$original) return true;
 	}
 
