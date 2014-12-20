@@ -809,7 +809,7 @@ function ViewPost($id, $alias, $isrewrite = false) {
 	$pagebar->PageCount = $zbp->commentdisplaycount;
 	$pagebar->PageNow = 1;
 	$pagebar->PageBarCount = $zbp->pagebarcount;
-	$pagebar->Count = $article->CommNums;
+	//$pagebar->Count = $article->CommNums;
 
 	if ($zbp->option['ZC_COMMENT_TURNOFF']) {
 		$article->IsLock = true;
@@ -821,9 +821,9 @@ function ViewPost($id, $alias, $isrewrite = false) {
 		$comments = $zbp->GetCommentList(
 			'*', 
 			array(
+				array('=', 'comm_LogID', $article->ID),
 				array('=', 'comm_RootID', 0),
 				array('=', 'comm_IsChecking', 0),
-				array('=', 'comm_LogID', $article->ID)
 			),
 			array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
 			array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
@@ -897,16 +897,16 @@ function ViewComments($postid, $page) {
 	$pagebar->PageCount = $zbp->commentdisplaycount;
 	$pagebar->PageNow = $page;
 	$pagebar->PageBarCount = $zbp->pagebarcount;
-	$pagebar->Count = $post->CommNums;
+	//$pagebar->Count = $post->CommNums;
 
 	$comments = array();
 
 	$comments = $zbp->GetCommentList(
 		'*',
 		array(
+			array('=', 'comm_LogID', $post->ID),
 			array('=', 'comm_RootID', 0),
 			array('=', 'comm_IsChecking', 0),
-			array('=', 'comm_LogID', $post->ID)
 		),
 		array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
 		array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
@@ -1113,7 +1113,7 @@ function PostArticle() {
 
 	$article->Save();
 
-	//
+	//更新统计信息
 	$pre_arrayTag = $zbp->LoadTagsByIDString($pre_tag);
 	$now_arrayTag = $zbp->LoadTagsByIDString($article->Tag);
 	$pre_array = $now_array = array();
@@ -1137,7 +1137,9 @@ function PostArticle() {
 		if($pre_category>0)CountCategoryArray(array($pre_category), -1);
 		CountCategoryArray(array($article->CateID), +1);		
 	}
-	//CountPostArray(array($article->ID));
+	if($zbp->option['ZC_LARGE_DATA'] == false){
+		CountPostArray(array($article->ID));
+	}
 	if($orig_id==0 && $article->IsTop==0 && $article->Status==ZC_POST_STATUS_PUBLIC){
 		CountNormalArticleNums(+1);
 	}elseif($orig_id>0){
@@ -1148,6 +1150,7 @@ function PostArticle() {
 			CountNormalArticleNums(+1);
 		}
 	}
+
 	$zbp->AddBuildModule('previous');
 	$zbp->AddBuildModule('calendar');
 	$zbp->AddBuildModule('comments');
@@ -1339,7 +1342,9 @@ function PostPage() {
 		if($pre_author>0)CountMemberArray(array($pre_author), array(0, -1, 0, 0));
 		CountMemberArray(array($article->AuthorID), array(0, +1, 0, 0));
 	}
-	//CountPostArray(array($article->ID));
+	if($zbp->option['ZC_LARGE_DATA'] == false){
+		CountPostArray(array($article->ID));
+	}
 
 	$zbp->AddBuildModule('comments');
 
