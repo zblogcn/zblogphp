@@ -645,21 +645,14 @@ class ZBlogPHP {
 	 * 载入插件Configs表
 	 */
 	public function LoadConfigs(){
-
 		$this->configs=array();
 		$sql = $this->db->sql->Select($this->table['Config'],array('*'),'','','','');
-		$array=$this->db->Query($sql);
+		
+		$array = $this->GetListType('Config',$sql);
 		foreach ($array as $c) {
-			$n=$c[$this->datainfo['Config']['Name'][0]];
-			$v=$c[$this->datainfo['Config']['Value'][0]];
-			$c=new Config;
-			$c->Unserialize($v);
-			$this->configs[$n]=$c;
-			$array=$this->configs[$n]->GetData();
-			foreach ($array as $key => $value)
-				if(is_string($value))
-					$this->configs[$n]->$key=str_replace('{#ZC_BLOG_HOST#}',$this->host,$value);
+			$this->configs[$c->GetItemName()]=$c;
 		}
+		ksort($this->configs);
 	}
 
 	/**
@@ -668,29 +661,8 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	public function SaveConfig($name){
-
 		if(!isset($this->configs[$name]))return false;
-
-		$array=$this->configs[$name]->GetData();
-		foreach ($array as $key => $value)
-			if(is_string($value))
-				$this->configs[$name]->$key=
-					str_replace($this->host,'{#ZC_BLOG_HOST#}',$value);
-
-		$value=$this->configs[$name]->Serialize();
-		$kv=array('conf_Name'=>$name,'conf_Value'=>$value);
-		$sql = $this->db->sql->Select($this->table['Config'],array('*'),array(array('=','conf_Name',$name)),'','','');
-		$array=$this->db->Query($sql);
-
-		if(count($array)==0){
-			$sql = $this->db->sql->Insert($this->table['Config'],$kv);
-			$this->db->Insert($sql);
-		}else{
-			array_shift($kv);
-			$sql = $this->db->sql->Update($this->table['Config'],$kv,array(array('=','conf_Name',$name)));
-			$this->db->Update($sql);
-		}
-
+		$this->configs[$name]->Save();
 		return true;
 	}
 
@@ -700,8 +672,8 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	public function DelConfig($name){
-		$sql = $this->db->sql->Delete($this->table['Config'],array(array('=','conf_Name',$name)));
-		$this->db->Delete($sql);
+		if(!isset($this->configs[$name]))return false;
+		$this->configs[$name]->Delete();
 		return true;
 	}
 
