@@ -380,7 +380,7 @@ $datainfo=array(
 #加载zbp 数据库类 基础对象
 AutoloadClass('ZBlogPHP');
 AutoloadClass('DbSql');
-AutoloadClass('Base');
+AutoloadClass('Config');
 
 
 #实例化zbp

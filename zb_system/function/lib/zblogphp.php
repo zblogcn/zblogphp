@@ -140,7 +140,7 @@ class ZBlogPHP {
 	 */
 	public $user=null;
 	/**
-	 * @var Metas|null 缓存
+	 * @var Config|null 缓存
 	 */
 	public $cache=null;
 
@@ -319,8 +319,6 @@ class ZBlogPHP {
 		$this->displaycount = &$this->option['ZC_DISPLAY_COUNT'];
 		$this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
 
-		$this->cache = new Metas;
-
 	}
 
 
@@ -446,8 +444,11 @@ class ZBlogPHP {
 		$this->searchurl=$this->host . 'search.php';
 		$this->ajaxurl=$this->host . 'zb_system/cmd.php?act=ajax&src=';
 
-		#创建User类
-		$this->user=new Member();
+		#创建User类(stdClass)
+		$this->user = new stdClass;
+		foreach($this->datainfo['Member'] as $key=>$value){
+			$this->user->$key=$value[3];
+		}
 
 		$this->isinitialized=true;
 
@@ -456,23 +457,26 @@ class ZBlogPHP {
 
 
 	/**
-	 * 重建索引并载入
+	 * 载入
 	 * @return bool
 	 */
 	public function Load(){
+	
+		foreach ($GLOBALS['Filter_Plugin_Zbp_Load_Begin'] as $fpname => &$fpsignal) $fpname();
 
 		if(!$this->isinitialized)return false;
 
 		if($this->isload)return false;
-
+		
 		$this->StartGzip();
 
 		header('Content-type: text/html; charset=utf-8');
 		
 		$this->ConvertTableAndDatainfo();
+		
+		$this->user = new Member;
 
 		$this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
-
 		$this->LoadCategorys();
 		#$this->LoadTags();
 		$this->LoadModules();
@@ -480,21 +484,13 @@ class ZBlogPHP {
 		$this->Verify();
 
 		$this->RegBuildModule('catalog','BuildModule_catalog');
-
 		$this->RegBuildModule('calendar','BuildModule_calendar');
-
 		$this->RegBuildModule('comments','BuildModule_comments');
-
 		$this->RegBuildModule('previous','BuildModule_previous');
-
 		$this->RegBuildModule('archives','BuildModule_archives');
-
 		$this->RegBuildModule('navbar','BuildModule_navbar');
-
 		$this->RegBuildModule('tags','BuildModule_tags');
-
 		$this->RegBuildModule('statistics','BuildModule_statistics');
-
 		$this->RegBuildModule('authors','BuildModule_authors');
 
 		$this->LoadTemplate();
@@ -503,15 +499,15 @@ class ZBlogPHP {
 
 		$this->template=$this->PrepareTemplate();
 
-		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
-		
 		if($this->ismanage){
 			$this->LoadManage();
 			$this->host = GetCurrentHost($this->path,$this->cookiespath);
 		}
 		
+		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
+		
 		$this->isload=true;
-
+		
 		return true;
 	}
 
@@ -654,21 +650,16 @@ class ZBlogPHP {
 		$sql = $this->db->sql->Select($this->table['Config'],array('*'),'','','','');
 		$array=$this->db->Query($sql);
 		foreach ($array as $c) {
-			$m=new Metas;
-			$m->Unserialize($c[$this->datainfo['Config']['Value'][0]]);
-			$this->configs[$c[$this->datainfo['Config']['Name'][0]]]=$m;
+			$n=$c[$this->datainfo['Config']['Name'][0]];
+			$v=$c[$this->datainfo['Config']['Value'][0]];
+			$c=new Config;
+			$c->Unserialize($v);
+			$this->configs[$n]=$c;
+			$array=$this->configs[$n]->GetData();
+			foreach ($array as $key => $value)
+				if(is_string($value))
+					$this->configs[$n]->$key=str_replace('{#ZC_BLOG_HOST#}',$this->host,$value);
 		}
-	}
-
-	/**
-	 * 删除Configs表
-	 * @param string $name Configs表名
-	 * @return bool
-	 */
-	public function DelConfig($name){
-		$sql = $this->db->sql->Delete($this->table['Config'],array(array('=','conf_Name',$name)));
-		$this->db->Delete($sql);
-		return true;
 	}
 
 	/**
@@ -680,7 +671,14 @@ class ZBlogPHP {
 
 		if(!isset($this->configs[$name]))return false;
 
-		$kv=array('conf_Name'=>$name,'conf_Value'=>$this->configs[$name]->Serialize());
+		$array=$this->configs[$name]->GetData();
+		foreach ($array as $key => $value)
+			if(is_string($value))
+				$this->configs[$name]->$key=
+					str_replace($this->host,'{#ZC_BLOG_HOST#}',$value);
+
+		$value=$this->configs[$name]->Serialize();
+		$kv=array('conf_Name'=>$name,'conf_Value'=>$value);
 		$sql = $this->db->sql->Select($this->table['Config'],array('*'),array(array('=','conf_Name',$name)),'','','');
 		$array=$this->db->Query($sql);
 
@@ -697,14 +695,25 @@ class ZBlogPHP {
 	}
 
 	/**
+	 * 删除Configs表
+	 * @param string $name Configs表名
+	 * @return bool
+	 */
+	public function DelConfig($name){
+		$sql = $this->db->sql->Delete($this->table['Config'],array(array('=','conf_Name',$name)));
+		$this->db->Delete($sql);
+		return true;
+	}
+
+	/**
 	 * 获取Configs表值
 	 * @param string $name Configs表名
 	 * @return mixed
 	 */
 	public function Config($name){
 		if(!isset($this->configs[$name])){
-			$m=new Metas;
-			$this->configs[$name]=$m;
+			$c=new Config;
+			$this->configs[$name]=$c;
 		}
 		return $this->configs[$name];
 	}
@@ -801,7 +810,7 @@ class ZBlogPHP {
 		foreach ($this->option as $key => $value) {
 			$this->Config('system')->$key = $value;
 		}
-		
+
 		$this->Config('system')->ZC_BLOG_HOST = chunk_split($this->Config('system')->ZC_BLOG_HOST,1,"|");
 
 		$this->SaveConfig('system');
@@ -816,7 +825,7 @@ class ZBlogPHP {
 	public function LoadOption(){
 
 		$this->Config('system')->ZC_BLOG_HOST = str_replace('|','',$this->Config('system')->ZC_BLOG_HOST);
-		$array=$this->Config('system')->Data;
+		$array=$this->Config('system')->GetData();
 
 		if(empty($array))return false;
 		if(!is_array($array))return false;
@@ -1888,6 +1897,7 @@ class ZBlogPHP {
 		if(isset($this->members[$id])){
 			return $this->members[$id];
 		}
+
 		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array('=','mem_ID',$id)),null,1,null);
 		$am = $this->GetListType('Member',$sql);
 		if(count($am) == 1){
@@ -1899,7 +1909,6 @@ class ZBlogPHP {
 
 		$m = new Member;
 		$m->Guid=GetGuid();
-		$this->members[$id] = $m;
 		return $m;
 	}
 	
@@ -1923,21 +1932,18 @@ class ZBlogPHP {
 			}
 		}
 
-		if($this->option['ZC_LOADMEMBERS_LEVEL']!=0){
-			$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
-			$sql = $this->db->sql->Select($this->table['Member'],'*',array(array($like,'mem_Name',$name)),null,1,null);
-			$am = $this->GetListType('Member',$sql);
-			if(count($am) > 0){
-				$m = $am[0];
-				$this->members[$m->ID] = $m;
-				$this->membersbyname[$m->Name] = &$this->members[$m->ID];
-				return $m;
-			};
-		}
+		$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
+		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array($like,'mem_Name',$name)),null,1,null);
+		$am = $this->GetListType('Member',$sql);
+		if(count($am) > 0){
+			$m = $am[0];
+			$this->members[$m->ID] = $m;
+			$this->membersbyname[$m->Name] = &$this->members[$m->ID];
+			return $m;
+		};
 		
 		$m = new Member;
 		$m->Guid=GetGuid();
-		$this->membersbyname[$name] = $m;
 		return $m;
 	}
 
@@ -1956,26 +1962,24 @@ class ZBlogPHP {
 			}
 		}
 
-		if($this->option['ZC_LOADMEMBERS_LEVEL']!=0){
-			$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
-			$zbp->db->sql->Select(
-				$zbp->table['Member'],'*',
-				//where
-					$zbp->db->sql->ParseWhere(array(array($like,'mem_Alias',$name)),'')
-					.
-					$zbp->db->sql->ParseWhere(array(array($like,'mem_Name',$name)),'OR'),
-				null,
-				1,
-				null
-			);
-			$am = $this->GetListType('Member',$sql);
-			if(count($am) > 0){
-				$m = $am[0];
-				$this->members[$m->ID] = $m;
-				$this->membersbyname[$m->Name] = &$this->members[$m->ID];
-				return $m;
-			};
-		}
+		$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
+		$zbp->db->sql->Select(
+			$zbp->table['Member'],'*',
+			//where
+				$zbp->db->sql->ParseWhere(array(array($like,'mem_Alias',$name)),'')
+				.
+				$zbp->db->sql->ParseWhere(array(array($like,'mem_Name',$name)),'OR'),
+			null,
+			1,
+			null
+		);
+		$am = $this->GetListType('Member',$sql);
+		if(count($am) > 0){
+			$m = $am[0];
+			$this->members[$m->ID] = $m;
+			$this->membersbyname[$m->Name] = &$this->members[$m->ID];
+			return $m;
+		};
 
 		return new Member;
 	}

@@ -351,11 +351,23 @@ DefinePluginFilter('Filter_Plugin_Zbp_BuildModule');
 '类型:Filter
 '名称:Filter_Plugin_Zbp_Load
 '参数:
-'说明:Zbp类的初始加载接口
+'说明:Zbp类的加载接口
 '调用:
 '**************************************************>
 */
 DefinePluginFilter('Filter_Plugin_Zbp_Load');
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_Load_Begin
+'参数:
+'说明:Zbp类的加载开始接口
+'调用:
+'**************************************************>
+*/
+DefinePluginFilter('Filter_Plugin_Zbp_Load_Begin');
 
 /*
 '**************************************************<

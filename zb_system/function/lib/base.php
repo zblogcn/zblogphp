@@ -166,6 +166,7 @@ class Base{
 			}elseif($value[1] == 'string'){
 				if($key=='Meta'){
 					$this->data[$key]=$array[$i];
+					if(isset($this->data['Meta']))$this->Metas->Unserialize($this->data['Meta']);
 				}else{
 					$this->data[$key]=str_replace('{#ZC_BLOG_HOST#}',$bloghost,$array[$i]);
 				}
@@ -174,7 +175,6 @@ class Base{
 			}
 			$i += 1;
 		}
-		if(isset($this->data['Meta']))$this->Metas->Unserialize($this->data['Meta']);
 		return true;
 	}
 
