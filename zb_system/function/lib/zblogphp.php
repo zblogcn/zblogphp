@@ -684,7 +684,9 @@ class ZBlogPHP {
 	 */
 	public function Config($name){
 		if(!isset($this->configs[$name])){
-			$c=new Config;
+			$name=FilterCorrectName($name);
+			if(!$name)return ;
+			$c=new Config($name);
 			$this->configs[$name]=$c;
 		}
 		return $this->configs[$name];

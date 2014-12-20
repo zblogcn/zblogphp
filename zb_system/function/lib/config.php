@@ -30,7 +30,7 @@ class Config {
 	/**
 	* 
 	*/
-	function __construct(){
+	function __construct($itemname=''){
 
 		$this->db = &$GLOBALS['zbp']->db;				
 		$this->table = &$GLOBALS['zbp']->table['Config'];
@@ -39,6 +39,9 @@ class Config {
 		foreach ($this->datainfo as $key => $value) {
 			$this->data[$key]=$value[3];
 		}
+		
+		if($itemname)$itemname = FilterCorrectName($itemname);
+		$this->data['Name']=$itemname;
 	}
 
 	/**
@@ -46,6 +49,7 @@ class Config {
 	* @param $value
 	*/
 	public function __set($name, $value){
+		$name = FilterCorrectName($name);
 		$this->kvdata[$name] = $value;
 	}
 
@@ -100,7 +104,8 @@ class Config {
 		 return $this->DelKey($name);
 	}
 	public function DelKey($name){
-		 unset($this->kvdata[$name]);
+		$name = FilterCorrectName($name);
+		unset($this->kvdata[$name]);
 	}
 
 	/**
@@ -113,9 +118,8 @@ class Config {
 
 		$array=$this->kvdata;
 		foreach ($array as $key => &$value)
-			if(is_string($value))
-				$value=str_replace($bloghost,'{#ZC_BLOG_HOST#}',$value);
-					
+			if(is_string($value))$value=str_replace($bloghost,'{#ZC_BLOG_HOST#}',$value);
+
 		return serialize($array);
 	}
 
@@ -135,8 +139,7 @@ class Config {
 		}
 		
 		foreach ($this->kvdata as $key => &$value)
-			if(is_string($value))
-				$value=str_replace('{#ZC_BLOG_HOST#}',$bloghost,$value);
+			if(is_string($value))$value=str_replace('{#ZC_BLOG_HOST#}',$bloghost,$value);
 
 		return true;
 	}

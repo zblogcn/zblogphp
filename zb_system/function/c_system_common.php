@@ -1014,3 +1014,13 @@ function htmlspecialchars_array($array) {
 	return $array;
 
 }
+
+/**
+ * 获得一个只含数字字母和_线的string
+ * @param string $s 待过滤字符串
+ * @return s 
+ * @since 1.4
+ */
+function FilterCorrectName($s) {
+	return preg_replace('|[^0-9a-zA-Z_]|','',$s);
+}
