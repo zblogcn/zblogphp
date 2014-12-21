@@ -59,6 +59,9 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 		$fpreturn=$fpname('Error',array($errno, $errstr, $errfile, $errline));
 	}
 	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
+	if(ZBlogException::$islogerror==true){
+		Logs(var_export(array('Error',$errno, $errstr, $errfile, $errline),true),true);
+	}
 
 	if(is_readable($errfile)){
 		$a = array_slice(file($errfile), max(0,$errline-1), 1, true);
@@ -104,6 +107,10 @@ function Debug_Exception_Handler($exception) {
 		$fpreturn=$fpname('Exception',$exception);
 	}
 	$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
+	if(ZBlogException::$islogerror){
+		Logs(var_export(array('Exception',$exception->getMessage(),$exception->getCode(),$exception->getFile(),$exception->getLine()),true),true);
+	}
+
 	if(ZBlogException::$isdisable==true)return true;
 
 	$zbe = ZBlogException::GetInstance();
@@ -122,8 +129,10 @@ function Debug_Shutdown_Handler() {
 		foreach ($GLOBALS['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname('Shutdown',$error);
 		}
-
 		$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
+		if(ZBlogException::$islogerror){
+			Logs(var_export('Shutdown',array($error['type'],$error['message'],$error['file'],$error['line']),true),true);
+		}
 
 		if(ZBlogException::$isdisable==true)return true;
 
@@ -162,6 +171,7 @@ class ZBlogException {
 	public static $error_id=0;
 	public static $error_file=null;
 	public static $error_line=null;
+	public static $islogerror=false;	
 	public $type;
 	public $message;
 	public $file;

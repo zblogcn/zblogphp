@@ -411,6 +411,9 @@ class ZBlogPHP {
 		if(isset($this->option['ZC_DEBUG_MODE_WARNING'])){
 			ZBlogException::$iswarning = (bool)$this->option['ZC_DEBUG_MODE_WARNING'];
 		}
+		if(isset($this->option['ZC_DEBUG_LOG_ERROR'])){
+			ZBlogException::$islogerror = (bool)$this->option['ZC_DEBUG_LOG_ERROR'];
+		}		
 
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){
 			$this->host=$this->option['ZC_BLOG_HOST'];
@@ -461,8 +464,13 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	public function Load(){
-	
-		foreach ($GLOBALS['Filter_Plugin_Zbp_Load_Begin'] as $fpname => &$fpsignal) $fpname();
+
+		foreach ($GLOBALS['Filter_Plugin_Zbp_Load_Pre'] as $fpname => &$fpsignal) {
+			$fpreturn = $fpname();
+			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+				$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
+			}
+		}
 
 		if(!$this->isinitialized)return false;
 
@@ -474,8 +482,6 @@ class ZBlogPHP {
 		
 		$this->ConvertTableAndDatainfo();
 		
-		$this->user = new Member;
-
 		$this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
 		$this->LoadCategorys();
 		#$this->LoadTags();
@@ -502,6 +508,14 @@ class ZBlogPHP {
 		if($this->ismanage){
 			$this->LoadManage();
 			$this->host = GetCurrentHost($this->path,$this->cookiespath);
+		}else{
+			if(isset($this->templates['404']))
+				Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
+
+			$ak = array_keys($this->replacetags);
+			$av = array_values($this->replacetags);
+			foreach($this->modulesbyfilename as &$m)
+				$m->Content = str_replace($ak,$av,$m->Content);
 		}
 		
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
@@ -911,6 +925,7 @@ class ZBlogPHP {
 			$this->user = $m;
 			return true;
 		}
+		$this->user = new Member;
 		return false;
 	}
 
@@ -2455,7 +2470,7 @@ class ZBlogPHP {
 
 	
 	/**
-	 * 跳转到固定域名的链接
+	 * 检测当前url，如果不符合设置就跳转到固定域名的链接
 	 */
 	function  RedirectPermanentDomainUrl(){
 	

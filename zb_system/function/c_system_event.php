@@ -218,22 +218,12 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 
 ################################################################################################################
 /**
- * 显示索引页面(page、cate、auth、date、tags)
+ * ViewIndex,首页，搜索页，feed页的主函数
  * @api Filter_Plugin_ViewIndex_Begin
  * @return mixed
  */
 function ViewIndex(){
 	global $zbp,$action;
-	
-	$zbp->RedirectPermanentDomainUrl();
-	
-	if(isset($zbp->templates['404']))Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
-
-	$ak = array_keys($zbp->replacetags);
-	$av = array_values($zbp->replacetags);
-	foreach($zbp->modulesbyfilename as $m){
-		$m->Content = str_replace($ak,$av,$m->Content);
-	}
 	
 	foreach ($GLOBALS['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
@@ -242,6 +232,8 @@ function ViewIndex(){
 		}
 	}
 	
+	$zbp->RedirectPermanentDomainUrl();
+
 	switch ($action) {
 	case 'feed':
 		ViewFeed();
@@ -2268,7 +2260,7 @@ function SaveSetting() {
 	$zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST'], '/') . '/';
 	$lang = require($zbp->usersdir . 'language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 	$zbp->option['ZC_BLOG_LANGUAGE'] = $lang['lang'];
-	$zbp->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';	
+	$zbp->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
 	$zbp->SaveOption();
 }
 

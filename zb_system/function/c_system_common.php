@@ -43,10 +43,13 @@ function AutoloadClass($classname){
 /**
  * 记录日志
  * @param string $s
+ * @param bool $iserror
  */
-function Logs($s) {
+function Logs($s,$iserror=false) {
 	global $zbp;
-	if($zbp->guid){
+	if($iserror){
+		$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '-error.txt';
+	}elseif($zbp->guid){
 		$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
 	}else{
 		$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '.txt';

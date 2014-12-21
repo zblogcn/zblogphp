@@ -361,13 +361,13 @@ DefinePluginFilter('Filter_Plugin_Zbp_Load');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Zbp_Load_Begin
+'名称:Filter_Plugin_Zbp_Load_Pre
 '参数:
-'说明:Zbp类的加载开始接口
+'说明:Zbp类的加载(预处理)接口
 '调用:
 '**************************************************>
 */
-DefinePluginFilter('Filter_Plugin_Zbp_Load_Begin');
+DefinePluginFilter('Filter_Plugin_Zbp_Load_Pre');
 
 /*
 '**************************************************<

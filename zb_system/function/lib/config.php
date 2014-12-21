@@ -28,7 +28,7 @@ class Config {
 	protected $db = null;
 
 	/**
-	* 
+	* $itemname string 项目名称
 	*/
 	function __construct($itemname=''){
 
