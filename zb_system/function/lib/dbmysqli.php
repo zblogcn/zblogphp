@@ -19,6 +19,10 @@ class DbMySQLi implements iDataBase {
 	*/
 	public $dbname = null;
 	/**
+	* @var string|null 数据库引擎
+	*/
+	public $dbengine = null;	
+	/**
 	* @var DbSql|null DbSql实例
 	*/
 	public $sql=null;
@@ -49,7 +53,8 @@ class DbMySQLi implements iDataBase {
 	 *                  'dbmysql_name',
 	 *                  'dbmysql_pre',
 	 *                  'dbmysql_port',
-	 *                  'persistent')
+	 *                  'persistent'
+						'engine')
 	 * @return bool
 	 */
 	function Open($array){
@@ -65,6 +70,7 @@ class DbMySQLi implements iDataBase {
 		$this->db=$db;
 		$this->dbname=$array[3];
 		$this->dbpre=$array[4];
+		$this->dbengine = $array[7];
 		return true;
 	}
 

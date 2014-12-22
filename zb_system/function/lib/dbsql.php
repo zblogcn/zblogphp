@@ -223,7 +223,9 @@ class DbSql
 			}
 			$s.='PRIMARY KEY ('.$idname.'),';
 			$s=substr($s,0,strlen($s)-1);
-			$s.=') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
+			$myengtype=$this->db->dbengine;
+			if(!$myengtype)$myengtype='MyISAM';
+			$s.=') ENGINE=' . $myengtype . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
 		}
 
 		if($this->dbclass=='Dbpdo_PgSQL'||$this->dbclass=='DbPgSQL'){
@@ -286,8 +288,8 @@ class DbSql
 			}
 			$s.='PRIMARY KEY ('.$idname.'),';
 			$s=substr($s,0,strlen($s)-1);
-
-			$s.=');';
+			
+			$s.=')';
 			$s.='CREATE INDEX ' . $table . '_ix_id on ' . $table .'('.$idname.');';
 		}
 		

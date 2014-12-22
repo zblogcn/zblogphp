@@ -199,6 +199,16 @@ class Config {
 	}
 
 	/**
+	* toString
+	*
+	* 将Base对像返回JSON数据
+	* @return string
+	*/
+    public function __toString() {
+        return json_encode($this->kvdata);
+    }
+
+	/**
 	* 占位
 	*/
 	function SaveKey($name){}

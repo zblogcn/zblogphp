@@ -133,14 +133,12 @@ class Member extends Base {
 			}else{
 				$sql = $zbp->db->sql->Select($zbp->table['Member'],'*',array(array('=','mem_Level',1)),'mem_ID ASC',1,null);
 				$am = $zbp->GetList('Member',$sql);
-				if(count($am) == 1){
-					if($am[0]->ID == $zbp->user->ID){
-						$this->_isgod = true;
-					}else{
-						$this->_isgod = false;
-					}
-					return $this->_isgod;
-				};
+				if($am[0]->ID == $this->ID){
+					$this->_isgod = true;
+				}else{
+					$this->_isgod = false;
+				}
+				return $this->_isgod;
 			}
 		}
 		return parent::__get($name);

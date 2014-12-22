@@ -472,14 +472,17 @@ class ZBlogPHP {
 			}
 		}
 
-		if(!$this->isinitialized)return false;
+		if(!$this->isinitialized){
+			$this->ShowError(82,__FILE__,__LINE__);
+			return false;
+		}
 
 		if($this->isload)return false;
 		
 		$this->StartGzip();
 
 		header('Content-type: text/html; charset=utf-8');
-		
+
 		$this->ConvertTableAndDatainfo();
 		
 		$this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
@@ -606,7 +609,8 @@ class ZBlogPHP {
 						$this->option['ZC_MYSQL_NAME'],
 						$this->option['ZC_MYSQL_PRE'],
 						$this->option['ZC_MYSQL_PORT'],
-						$this->option['ZC_MYSQL_PERSISTENT']
+						$this->option['ZC_MYSQL_PERSISTENT'],
+						$this->option['ZC_MYSQL_ENGINE'],				
 					))==false){
 					$this->ShowError(67,__FILE__,__LINE__);
 				}
@@ -728,9 +732,10 @@ class ZBlogPHP {
 		#$c=serialize($this->cache);
 		#@file_put_contents($s, $c);
 		//$this->configs['cache']=$this->cache;
-		if($this->cache_hash == md5(serialize($this->cache)))return true;
+		$new_hash = md5($this->Config('cache'));
+		if($this->cache_hash == $new_hash)return true;
 		$this->SaveConfig('cache');
-		$this->cache_hash = md5(serialize($this->cache));
+		$this->cache_hash = $new_hash;
 		return true;
 	}
 
@@ -745,7 +750,7 @@ class ZBlogPHP {
 		#	$this->cache=unserialize(@file_get_contents($s));
 		#}
 		$this->cache = $this->Config('cache');
-		$this->cache_hash = md5(serialize($this->cache));
+		$this->cache_hash = md5($this->Config('cache'));
 		return true;
 	}
 

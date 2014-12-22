@@ -1150,8 +1150,6 @@ function PostArticle() {
 	$zbp->AddBuildModule('tags');
 	$zbp->AddBuildModule('authors');
 	
-	$zbp->SaveCache();
-
 	foreach ($GLOBALS['Filter_Plugin_PostArticle_Succeed'] as $fpname => &$fpsignal)
 		$fpname($article);
 
@@ -1200,8 +1198,6 @@ function DelArticle() {
 		$zbp->AddBuildModule('tags');
 		$zbp->AddBuildModule('authors');
 		
-		$zbp->SaveCache();
-
 		foreach ($GLOBALS['Filter_Plugin_DelArticle_Succeed'] as $fpname => &$fpsignal){
 			$fpname($article);
 		}
@@ -1462,6 +1458,7 @@ function PostComment() {
 		if ($cmt->IsChecking == false) {
 
 			if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), +1);
+			CountCommentNums(+1,0);
 
 			$zbp->AddBuildModule('comments');
 
@@ -1477,7 +1474,7 @@ function PostComment() {
 			return true;
 
 		} else {
-
+			CountCommentNums(0,+1);
 			$zbp->ShowError(53, __FILE__, __LINE__);
 
 		}
@@ -1504,6 +1501,11 @@ function DelComment() {
 
 		DelComment_Children($cmt->ID);
 
+		if($cmt->IsChecking == false){
+			CountCommentNums(-1,0);
+		}else{
+			CountCommentNums(-1,-1);
+		}
 		$cmt->Del();
 		
 		if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
@@ -1529,6 +1531,11 @@ function DelComment_Children($id) {
 	foreach ($cmt->Comments as $comment) {
 		if (Count($comment->Comments) > 0) {
 			DelComment_Children($comment->ID);
+		}
+		if($comment->IsChecking == false){
+			CountCommentNums(-1,0);
+		}else{
+			CountCommentNums(-1,-1);
 		}
 		$comment->Del();
 	}
@@ -1572,11 +1579,18 @@ function CheckComment() {
 	$orig_check = (bool)$orig_check;
 
 	if ($orig_check && !$ischecking) {
-		if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), +1);
+		if($cmt->RootID==0 && $cmt->IsChecking == false){
+			CountPostArray(array($cmt->LogID), +1);
+		}
+		CountCommentNums(0,-1);
 	}
 	else if (!$orig_check && $ischecking) {
-		if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
+		if($cmt->RootID==0 && $cmt->IsChecking == false){
+			CountPostArray(array($cmt->LogID), -1);
+		}
+		CountCommentNums(0,+1);
 	}
+
 	$zbp->AddBuildModule('comments');
 }
 
@@ -1610,6 +1624,11 @@ function BatchComment() {
 			if ($cmt->ID == 0) continue;
 			$cmt->Del();
 			if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
+			if($cmt->IsChecking == false){
+				CountCommentNums(-1,0);
+			}else{
+				CountCommentNums(-1,-1);
+			}
 		}
 	}
 	if ($type == 'all_pass')
@@ -1619,6 +1638,7 @@ function BatchComment() {
 			$cmt->IsChecking = false;
 			$cmt->Save();
 			if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), +1);
+			CountCommentNums(0,-1);
 		}
 	if ($type == 'all_audit')
 		foreach ($array as $i => $id) {
@@ -1627,6 +1647,7 @@ function BatchComment() {
 			$cmt->IsChecking = true;
 			$cmt->Save();
 			if($cmt->RootID==0 && $cmt->IsChecking == true)CountPostArray(array($cmt->LogID), -1);
+			CountCommentNums(0,+1);
 		}
 }
 
@@ -1901,7 +1922,7 @@ function DelMember() {
 	$id = (int)GetVars('id', 'GET');
 	$mem = $zbp->GetMemberByID($id);
 	if ($mem->ID > 0 && $mem->ID <> $zbp->user->ID) {
-		if (!($mem->Level == 1 && $zbp->user->IsGod == false)) {
+		if ($mem->IsGod !== true) {
 			DelMember_AllData($id);
 			$mem->Del();
 			foreach ($GLOBALS['Filter_Plugin_DelMember_Succeed'] as $fpname => &$fpsignal)
@@ -2153,7 +2174,6 @@ function SetTheme($theme, $style) {
 	$oldtheme = $zbp->option['ZC_BLOG_THEME'];
 
 	if ($oldtheme != $theme) {
-		$app = $zbp->LoadApp('theme', $theme);
 		if ($app->sidebars_sidebar1 | $app->sidebars_sidebar2 | $app->sidebars_sidebar3 | $app->sidebars_sidebar4 | $app->sidebars_sidebar5) {
 			$s1 = $zbp->option['ZC_SIDEBAR_ORDER'];
 			$s2 = $zbp->option['ZC_SIDEBAR2_ORDER'];
@@ -2165,25 +2185,23 @@ function SetTheme($theme, $style) {
 			$zbp->option['ZC_SIDEBAR3_ORDER'] = $app->sidebars_sidebar3;
 			$zbp->option['ZC_SIDEBAR4_ORDER'] = $app->sidebars_sidebar4;
 			$zbp->option['ZC_SIDEBAR5_ORDER'] = $app->sidebars_sidebar5;
-			$zbp->cache->ZC_SIDEBAR_ORDER1 = $s1;
-			$zbp->cache->ZC_SIDEBAR_ORDER2 = $s2;
-			$zbp->cache->ZC_SIDEBAR_ORDER3 = $s3;
-			$zbp->cache->ZC_SIDEBAR_ORDER4 = $s4;
-			$zbp->cache->ZC_SIDEBAR_ORDER5 = $s5;
-			$zbp->SaveCache();
+			$zbp->cache->zc_sidebar_order1 = $s1;
+			$zbp->cache->zc_sidebar_order2 = $s2;
+			$zbp->cache->zc_sidebar_order3 = $s3;
+			$zbp->cache->zc_sidebar_order4 = $s4;
+			$zbp->cache->zc_sidebar_order5 = $s5;
 		} else {
-			if ($zbp->cache->ZC_SIDEBAR_ORDER1 | $zbp->cache->ZC_SIDEBAR_ORDER2 | $zbp->cache->ZC_SIDEBAR_ORDER3 | $zbp->cache->ZC_SIDEBAR_ORDER4 | $zbp->cache->ZC_SIDEBAR_ORDER5) {
-				$zbp->option['ZC_SIDEBAR_ORDER'] = $zbp->cache->ZC_SIDEBAR_ORDER1;
-				$zbp->option['ZC_SIDEBAR2_ORDER'] = $zbp->cache->ZC_SIDEBAR_ORDER2;
-				$zbp->option['ZC_SIDEBAR3_ORDER'] = $zbp->cache->ZC_SIDEBAR_ORDER3;
-				$zbp->option['ZC_SIDEBAR4_ORDER'] = $zbp->cache->ZC_SIDEBAR_ORDER4;
-				$zbp->option['ZC_SIDEBAR5_ORDER'] = $zbp->cache->ZC_SIDEBAR_ORDER5;
-				$zbp->cache->ZC_SIDEBAR_ORDER1 = '';
-				$zbp->cache->ZC_SIDEBAR_ORDER2 = '';
-				$zbp->cache->ZC_SIDEBAR_ORDER3 = '';
-				$zbp->cache->ZC_SIDEBAR_ORDER4 = '';
-				$zbp->cache->ZC_SIDEBAR_ORDER5 = '';
-				$zbp->SaveCache();
+			if ($zbp->cache->zc_sidebar_order1 | $zbp->cache->zc_sidebar_order2 | $zbp->cache->zc_sidebar_order3 | $zbp->cache->zc_sidebar_order4 | $zbp->cache->zc_sidebar_order5) {
+				$zbp->option['ZC_SIDEBAR_ORDER'] = $zbp->cache->zc_sidebar_order1;
+				$zbp->option['ZC_SIDEBAR2_ORDER'] = $zbp->cache->zc_sidebar_order2;
+				$zbp->option['ZC_SIDEBAR3_ORDER'] = $zbp->cache->zc_sidebar_order3;
+				$zbp->option['ZC_SIDEBAR4_ORDER'] = $zbp->cache->zc_sidebar_order4;
+				$zbp->option['ZC_SIDEBAR5_ORDER'] = $zbp->cache->zc_sidebar_order5;
+				$zbp->cache->zc_sidebar_order1 = '';
+				$zbp->cache->zc_sidebar_order2 = '';
+				$zbp->cache->zc_sidebar_order3 = '';
+				$zbp->cache->zc_sidebar_order4 = '';
+				$zbp->cache->zc_sidebar_order5 = '';
 			}
 		}
 
@@ -2421,6 +2439,27 @@ function FilterTag(&$tag) {
 
 ################################################################################################################
 #统计函数
+/**
+ *统计评论数
+ * @param int $allplus 控制是否要进行全表扫描 总评论
+ * @param int $chkplus 控制是否要进行全表扫描 未审核评论
+ */
+function CountCommentNums($allplus = null,$chkplus = null) {
+	global $zbp;
+
+	if ($allplus === null) {
+		$zbp->cache->all_comment_nums = (int)GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Comment']), 'num');
+	} else {
+		$zbp->cache->all_comment_nums += $allplus;
+	}
+	if ($chkplus === null) {
+		$zbp->cache->check_comment_nums = (int)GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Comment'] . ' WHERE comm_Ischecking=1'), 'num');
+	} else {
+		$zbp->cache->check_comment_nums += $chkplus;
+	}
+	$zbp->cache->normal_comment_nums = (int)($zbp->cache->all_comment_nums - $zbp->cache->check_comment_nums);
+}
+
 /**
  *统计公开文章数
  * @param int $plus 控制是否要进行全表扫描

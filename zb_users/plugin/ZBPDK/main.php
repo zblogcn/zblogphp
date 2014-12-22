@@ -48,6 +48,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   </div>
 </div>
 <script>ActiveTopMenu('zbpdk');</script>
+<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png';?>");</script>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 RunTime();

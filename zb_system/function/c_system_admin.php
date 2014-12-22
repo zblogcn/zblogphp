@@ -429,6 +429,8 @@ function CreateOptionsOfLang($default){
 function Admin_SiteInfo(){
 
 	global $zbp;
+	
+	$echostatistic=false;
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['info_intro'] . '</div>';
 	echo '<div class="SubMenu">';
@@ -443,6 +445,7 @@ function Admin_SiteInfo(){
 	if((time()-(int)$zbp->cache->reload_statistic_time) > (23*60*60) && $zbp->CheckRights('root')){
 		echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'?act=misc&type=statistic\'); });</script>';
 	}else{
+		$echostatistic=true;
 		$r=$zbp->cache->reload_statistic;
 		$r=str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
 		$r=str_replace('{$zbp->theme}', $zbp->theme, $r);
@@ -455,7 +458,7 @@ function Admin_SiteInfo(){
 
 	echo '<table class="tableFull tableBorder" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a> <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
-	if((time()-(int)$zbp->cache->reload_updateinfo_time) > (47*60*60) && $zbp->CheckRights('root')){
+	if((time()-(int)$zbp->cache->reload_updateinfo_time) > (47*60*60) && $zbp->CheckRights('root') && $echostatistic==true){
 		echo '<script type="text/javascript">$(document).ready(function(){ updateinfo(\'?act=misc&type=updateinfo\'); });</script>';
 	}else{
 		echo $zbp->cache->reload_updateinfo;
@@ -937,7 +940,7 @@ foreach ($array as $member) {
 	echo '<td class="td10 tdCenter">';
 	echo '<a href="../cmd.php?act=MemberEdt&amp;id='. $member->ID .'"><img src="../image/admin/user_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
 if($zbp->CheckRights('MemberDel')){
-	if(!($member->Level==1 && $zbp->user->IsGod==false)){
+	if($member->IsGod!==true){
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=MemberDel&amp;id='. $member->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
 	}

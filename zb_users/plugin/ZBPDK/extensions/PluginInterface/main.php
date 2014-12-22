@@ -133,6 +133,7 @@ $(document).ready(function() {
 });
 
 ActiveTopMenu('zbpdk');
+AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png';?>");
 
 </script>
 <?php

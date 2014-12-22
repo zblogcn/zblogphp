@@ -43,13 +43,10 @@ class Dbpdo_SQLite implements iDataBase {
 	* @return bool
 	*/
 	function Open($array){
-		/*$array=array(
-			'dbmysql_server',
-			'dbmysql_username',
-		*/
 		$db_link = new PDO('sqlite:' . $array[0]);
 		$this->db = $db_link;
 		$this->dbpre=$array[1];
+		$this->dbname=$array[0];
 		return true;
 	}
 

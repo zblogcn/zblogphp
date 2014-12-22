@@ -278,7 +278,9 @@ function LargeData_Misc_Statistic() {
 
 	$r = null;
 
-	$zbp->BuildTemplate();
+	CountNormalArticleNums();
+	CountCommentNums(null,null);
+	$all_comments = $zbp->cache->all_comment_nums;
 
 	$xmlrpc_address = $zbp->host . 'zb_system/xml-rpc/';
 	$current_member = $zbp->user->Name;
@@ -287,8 +289,6 @@ function LargeData_Misc_Statistic() {
 	$all_artiles = GetValueInArrayByCurrent($zbp->db->Query($zbp->db->sql->Select($zbp->table['Post'], 'Count(log_ID) AS num', array(array('=', 'log_Type', '0')), null, 1, null)), 'num');
 	$all_pages = GetValueInArrayByCurrent($zbp->db->Query($zbp->db->sql->Select($zbp->table['Post'], 'Count(log_ID) AS num', array(array('=', 'log_Type', '1')), null, 1, null)), 'num');
 	$all_categorys = GetValueInArrayByCurrent($zbp->db->Query($zbp->db->sql->Select($zbp->table['Category'], 'Count(*) AS num', null, null, 1, null)), 'num');
-	$all_comments = (int)GetValueInArrayByCurrent($zbp->db->Query($zbp->db->sql->Select($zbp->table['Comment'], 'Count(*) AS num', null, null, 1, null)), 'num');
-	$check_comments = (int)GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Comment'] . ' WHERE comm_Ischecking=1'), 'num');
 	$all_views = '不计算';
 	$all_tags = GetValueInArrayByCurrent($zbp->db->Query($zbp->db->sql->Select($zbp->table['Tag'], 'Count(*) AS num', null, null, 1, null)), 'num');
 	$all_members = GetValueInArrayByCurrent($zbp->db->Query($zbp->db->sql->Select($zbp->table['Member'], 'Count(*) AS num', null, null, 1, null)), 'num');
@@ -306,16 +306,12 @@ function LargeData_Misc_Statistic() {
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";
 	$r .="<script type=\"text/javascript\">$('#statistic').next('small').remove();$('#statistic').after('<small> 更新时间：" . date ( "c" , $zbp->cache->reload_statistic_time ) . "</small>');</script>";
 	
-	$zbp->LoadConfigs();
-	$zbp->LoadCache();
 	$zbp->cache->reload_statistic = $r;
 	$zbp->cache->reload_statistic_time = time();
 	$zbp->cache->system_environment = $system_environment;
 	$zbp->cache->all_article_nums = $all_artiles;
 	$zbp->cache->all_page_nums = $all_pages;
-	$zbp->cache->all_comment_nums = $all_comments;
-	$zbp->cache->normal_comment_nums = $all_comments - $check_comments;
-	CountNormalArticleNums();
+
 
 	$zbp->AddBuildModule('statistics', array($all_artiles, $all_pages, $all_categorys, $all_tags, $all_views, $all_comments));
 	$zbp->BuildModule();

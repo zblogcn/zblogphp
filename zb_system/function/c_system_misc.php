@@ -67,7 +67,9 @@ function misc_statistic() {
 
 	$r = null;
 
-	$zbp->BuildTemplate();
+	CountNormalArticleNums();
+	CountCommentNums(null,null);
+	$all_comments = $zbp->cache->all_comment_nums;
 
 	$xmlrpc_address = $zbp->host . 'zb_system/xml-rpc/';
 	$current_member = $zbp->user->Name;
@@ -75,8 +77,6 @@ function misc_statistic() {
 	$all_artiles = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=0'), 'num');
 	$all_pages = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=1'), 'num');
 	$all_categorys = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Category']), 'num');
-	$all_comments = (int)GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Comment']), 'num');
-	$check_comments = (int)GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Comment'] . ' WHERE comm_Ischecking=1'), 'num');
 	$all_views = $zbp->option['ZC_VIEWNUMS_TURNOFF']==true?0:GetValueInArrayByCurrent($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post']), 'num');
 	$all_tags = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) as num FROM ' . $GLOBALS['table']['Tag']), 'num');
 	$all_members = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Member']), 'num');
@@ -93,16 +93,11 @@ function misc_statistic() {
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";
 	$r .="<script type=\"text/javascript\">$('#statistic').attr('title','" . date ( "c" , $zbp->cache->reload_statistic_time ) . "');</script>";
 
-	$zbp->LoadConfigs();
-	$zbp->LoadCache();
 	$zbp->cache->reload_statistic = $r;
 	$zbp->cache->reload_statistic_time = time();
 	$zbp->cache->system_environment = GetEnvironment();
 	$zbp->cache->all_article_nums = $all_artiles;
 	$zbp->cache->all_page_nums = $all_pages;
-	$zbp->cache->all_comment_nums = $all_comments;
-	$zbp->cache->normal_comment_nums = $all_comments - $check_comments;
-	CountNormalArticleNums();
 
 	$zbp->AddBuildModule('statistics', array($all_artiles, $all_pages, $all_categorys, $all_tags, $all_views, $all_comments));
 	$zbp->BuildModule();
@@ -112,9 +107,11 @@ function misc_statistic() {
 	$r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
 	$r = str_replace('{$zbp->theme}', $zbp->theme, $r);
 	$r = str_replace('{$zbp->style}', $zbp->style, $r);
-	$r = str_replace('{$system_environment}', GetEnvironment(), $r);
+	$r = str_replace('{$system_environment}', $zbp->cache->system_environment, $r);
 
 	echo $r;
+	
+	$zbp->BuildTemplate();
 }
 
 

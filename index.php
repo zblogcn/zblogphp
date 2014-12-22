@@ -13,10 +13,10 @@ $zbp->CheckGzip();
 $zbp->Load();
 $zbp->RedirectInstall(true);
 
-foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) $fpname();
 
 ViewIndex();
 
-foreach ($GLOBALS['Filter_Plugin_Index_End'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['Filter_Plugin_Index_End'] as $fpname => &$fpsignal) $fpname();
 
 RunTime();
