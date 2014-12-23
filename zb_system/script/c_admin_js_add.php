@@ -127,8 +127,10 @@ function ChangeCheckValue(obj){
 
 	if($(obj).hasClass('imgcheck-on')){
 		$(obj).prev('input').val('1');
+		if($(obj).prev('input').attr('id')=='edtIstop')$(obj).next('select').show();
 	}else{
 		$(obj).prev('input').val('0');
+		if($(obj).prev('input').attr('id')=='edtIstop')$(obj).next('select').hide();
 	}
 
 }

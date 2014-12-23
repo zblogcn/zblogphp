@@ -259,11 +259,6 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">SQLite</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
-        </tr>
-        <tr>
           <td scope="row">SQLite3</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][1];?></td>
@@ -272,6 +267,11 @@ CheckServer();
           <td scope="row">PDO_SQLite</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">SQLite</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
         </tr>
         <tr>
           <th colspan="3" scope="row">权限检查</th>
@@ -403,6 +403,13 @@ function Setup3(){
         <p><b>表&nbsp;前&nbsp;缀:</b>
           <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="<?php echo $option['ZC_MYSQL_PRE'];?>" style="width:350px;" />
         </p>
+<?php if($zbp->option['ZC_YUN_SITE']==''){?>
+        <p><b>存储引擎:</b>
+          <label><input value="MyISAM" type="radio" name="dbengine" checked="checked"/>MyISAM(默认)</label>
+		  &nbsp;&nbsp;&nbsp;&nbsp;
+          <label><input value="InnoDB" type="radio" name="dbengine"/>InnoDB</label>
+        </p>		
+<?php } ?>
       <p><b>连接选择:</b>
 <?php if ( version_compare ( PHP_VERSION ,  '5.5.0' ,  '<' )) { ?>
         <?php if($CheckResult['mysql'][0]){?>
@@ -432,13 +439,6 @@ function Setup3(){
           <input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" />
         </p>
       <p><b>版本选择:</b>
-        <?php if($CheckResult['sqlite'][0]){?>
-        <label>
-          <input value="sqlite" type="radio" name="dbtype" />SQLite</label>
-        <?php 
-          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-          }
-        ?>
         <?php if($CheckResult['sqlite3'][0]){?>
         <label>
           <input value="sqlite3" type="radio" name="dbtype" />SQLite3</label>
@@ -449,6 +449,13 @@ function Setup3(){
         <?php if($CheckResult['pdo_sqlite'][0]){?>
         <label>
           <input value="pdo_sqlite" type="radio" name="dbtype" />PDO_SQLite</label>
+        <?php 
+          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+          }
+        ?>
+        <?php if($CheckResult['sqlite'][0]){?>
+        <label>
+          <input value="sqlite" type="radio" name="dbtype" />SQLite</label>
         <?php 
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
           }
@@ -527,15 +534,19 @@ case 'pdo_mysql':
   $zbp->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
   if(strpos($zbp->option['ZC_MYSQL_SERVER'],':')!==false){
     $servers=explode(':',$zbp->option['ZC_MYSQL_SERVER']);
-	$zbp->option['ZC_MYSQL_SERVER']=$servers[0];
+	$zbp->option['ZC_MYSQL_SERVER']=trim($servers[0]);
 	$zbp->option['ZC_MYSQL_PORT']=(int)$servers[1];
 	if($zbp->option['ZC_MYSQL_PORT']==0)$zbp->option['ZC_MYSQL_PORT']=3306;
 	unset($servers);
   }
-  $zbp->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
-  $zbp->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
-  $zbp->option['ZC_MYSQL_NAME']=str_replace(array('\'','"'),array('',''),GetVars('dbmysql_name','POST'));
-  $zbp->option['ZC_MYSQL_PRE']=str_replace(array('\'','"'),array('',''),GetVars('dbmysql_pre','POST'));
+  $zbp->option['ZC_MYSQL_USERNAME']=trim(GetVars('dbmysql_username','POST'));
+  $zbp->option['ZC_MYSQL_PASSWORD']=trim(GetVars('dbmysql_password','POST'));
+  $zbp->option['ZC_MYSQL_NAME']=trim(str_replace(array('\'','"'),array('',''),GetVars('dbmysql_name','POST')));
+  $zbp->option['ZC_MYSQL_PRE']=trim(str_replace(array('\'','"'),array('',''),GetVars('dbmysql_pre','POST')));
+  if($zbp->option['ZC_YUN_SITE']==''){
+    $zbp->option['ZC_MYSQL_ENGINE']=GetVars('dbengine','POST');
+    $cts=str_replace('MyISAM',$zbp->option['ZC_MYSQL_ENGINE'],$cts);
+  }
   $zbp->db = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
   if($zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'],$zbp->option['ZC_MYSQL_PORT'],$zbp->option['ZC_MYSQL_USERNAME'],$zbp->option['ZC_MYSQL_PASSWORD'],$zbp->option['ZC_MYSQL_NAME'])==true){
     echo "创建数据库". $zbp->option['ZC_MYSQL_NAME'] ."成功!<br/>";
@@ -545,14 +556,14 @@ case 'pdo_mysql':
   break;
 case 'sqlite':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');
-  $zbp->option['ZC_SQLITE_NAME']=GetVars('dbsqlite_name','POST');
-  $zbp->option['ZC_SQLITE_PRE']=GetVars('dbsqlite_pre','POST');
+  $zbp->option['ZC_SQLITE_NAME']=trim(GetVars('dbsqlite_name','POST'));
+  $zbp->option['ZC_SQLITE_PRE']=trim(GetVars('dbsqlite_pre','POST'));
   break;
 case 'sqlite3':
 case 'pdo_sqlite':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite3.sql');
-  $zbp->option['ZC_SQLITE_NAME']=GetVars('dbsqlite_name','POST');
-  $zbp->option['ZC_SQLITE_PRE']=GetVars('dbsqlite_pre','POST');
+  $zbp->option['ZC_SQLITE_NAME']=trim(GetVars('dbsqlite_name','POST'));
+  $zbp->option['ZC_SQLITE_PRE']=trim(GetVars('dbsqlite_pre','POST'));
   break;
 }
 

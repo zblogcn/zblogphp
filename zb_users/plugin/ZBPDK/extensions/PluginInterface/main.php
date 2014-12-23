@@ -57,7 +57,7 @@ $defined_interface = array(
 	"filter" => array(),
 	"response" => array()
 );
-foreach($GLOBALS as $temp_name => $temp_value)
+foreach($hooks as $temp_name => $temp_value)
 {
 	if(preg_match("/^(Action|Filter|Response)_/i",$temp_name,$matches))
 	{

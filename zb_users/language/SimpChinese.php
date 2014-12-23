@@ -204,7 +204,10 @@ return array(
 	'module_previous' => '最近发表',
 	'module_tags' => '标签列表',
 	'admin_login' => '登录后台',
-	'' => '',
+	'top_index' => '首页',
+	'top_global' => '全局',	
+	'top_category' => '分类',	
+	'' => '',		
 ),
 
 //Article Level
@@ -372,6 +375,7 @@ return array(
 '83' => '启用该应用，需要先启用依赖应用%s',
 '84' => '停用该应用，需要先停用被依赖应用%s',
 '85' => '启用该应用，需要先停用冲突应用%s',
+'86' => '主题模板的编译文件不存在',
 ),
 
 );

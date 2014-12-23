@@ -96,6 +96,15 @@ class Post extends Base{
 				if($value==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$value='';
 				return $this->data[$name]  =  $value;
 				break;
+			case 'TopType':
+				if($value=='global' || $value=='category')
+					$this->Metas->toptype = $value;
+				elseif($value=='' || $value==null)
+					$this->Metas->Del('toptype');
+				else
+					$this->Metas->toptype = 'index';
+				return null;
+				break;
 			default:
 				parent::__set($name, $value);
 				break;
@@ -216,6 +225,10 @@ class Post extends Base{
 					if($fpsignal == PLUGIN_EXITSIGNAL_RETURN){$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 				}
 				return GetList($zbp->option['ZC_RELATEDLIST_COUNT'],null,null,null,null,null,array('is_related'=>$this->ID));
+			case 'TopType':
+				$toptype = $this->Metas->toptype;
+				if($this->IsTop==true && $toptype==null)$toptype = 'index';
+				return $toptype;
 			default:
 				return parent::__get($name);
 				break;

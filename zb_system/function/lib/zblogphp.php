@@ -1590,11 +1590,11 @@ class ZBlogPHP {
 	 * @return array Posts
 	 */
 	function GetPostByArray($array){
+		if(!is_array($array))return array();
 		if(count($array)==0)return array();
-		$select = array('*');
 		$where = array();
 		$where[] = array('IN','log_ID',implode(',',$array));
-		return $this->GetPostList($select,$where);
+		return $this->GetPostList('*',$where);
 	}
 
 	/**
@@ -2510,60 +2510,5 @@ class ZBlogPHP {
 			$this->table_datainfo_hash = $this->table + $this->datainfo;//crc32(serialize($this->table + $this->datainfo));
 		}
 	}
-	
-	/**
-	 * 拿到置顶文章
-	 * @param array $type[]={global全局,index首页,category+ID分类}
-	 */
-	function GetOnTopPost($type_array){
-		ZBlogException::SuspendErrorHook();
-		$array = unserialize($this->cache->top_post_array);
-		ZBlogException::ResumeErrorHook();
-		if(!is_array($array))$array=array();
-		$list=array();
-		foreach($array as $id=>$type){
-			if (in_array ( $type ,  $type_array )) {
-				$list[]=$id;
-			}
-		}
-		return $list;
-	}
 
-	/**
-	 * 添加或删除置顶文章
-	 * @param bool $id 文章ID
-	 * @param string $type 'global,index,category'
-	 * @param string $addinfo 分类id	 
-	 */
-	function AddOnTopPost($id,$type,$addinfo=null){
-		ZBlogException::SuspendErrorHook();
-		$array = unserialize($this->cache->top_post_array);
-		ZBlogException::ResumeErrorHook();
-		if(!is_array($array))$array=array();
-		if(array_key_exists($id,$array)){
-			unset($array[$id]);
-		}
-		if($type=='index'){
-			$array[$id] = 'index';
-		}elseif($type=='global'){
-			$array[$id] = 'global';
-		}elseif($type=='category'){
-			$array[$id] = 'category' . $addinfo;
-		}
-		$this->cache->top_post_array = serialize($array);
-		return true;
-	}
-	
-	/**
-	 * 添加或删除置顶文章
-	 * @param bool $id 文章ID
-	 */
-	function DelOnTopPost($id){
-		ZBlogException::SuspendErrorHook();
-		$array = unserialize($this->cache->top_post_array);
-		ZBlogException::ResumeErrorHook();
-		unset($array[$id]);
-		$this->cache->top_post_array = serialize($array);
-		return true;
-	}
 }

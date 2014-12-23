@@ -97,13 +97,10 @@ class Config {
 
 	/**
 	 * 删除KVData属性（数组）中的相应项
-	 * Del名称和数据库删除函数有冲突，改名DelKey，Del还保留
+	 * Del名称和数据库删除函数有冲突
 	 * @param string $name key名
 	 */
 	public function Del($name){
-		 return $this->DelKey($name);
-	}
-	public function DelKey($name){
 		$name = FilterCorrectName($name);
 		unset($this->kvdata[$name]);
 	}
@@ -211,5 +208,17 @@ class Config {
 	/**
 	* 占位
 	*/
-	function SaveKey($name){}
+	function SaveKey($name){
+		$this->Save();
+	}
+	
+	/**
+	* 占位
+	*/
+	function DelKey($name){
+		$name = FilterCorrectName($name);
+		if(!isset($this->kvdata[$name]))return false;
+		unset($this->kvdata[$name]);
+		$this->Save();
+	}
 }

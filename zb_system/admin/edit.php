@@ -200,6 +200,11 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <div id='istop' class="editmod">
             <label for="edtIstop" class="editinputname" ><?php echo $lang['msg']['top']?></label>
             <input id="edtIstop" name="IsTop" style="" type="text" value="<?php echo (int)$article->IsTop;?>" class="checkbox"/>
+<select style="width:80px;display:<?php echo $article->IsTop?'':'none'?>;" size="1" name="IstopType" id="edtIstopType">
+<option value="index" <?php echo strpos($article->TopType,'index')!==false?'selected="selected"':''; ?>><?php echo $lang['msg']['top_index']?></option>
+<option value="global" <?php echo strpos($article->TopType,'global')!==false?'selected="selected"':''; ?>><?php echo $lang['msg']['top_global']?></option>
+<option value="category" <?php echo strpos($article->TopType,'category')!==false?'selected="selected"':''; ?>><?php echo $lang['msg']['top_category']?></option>
+</select>
           </div><?php }?>
 
           <!-- )Istop -->

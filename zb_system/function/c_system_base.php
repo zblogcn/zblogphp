@@ -99,9 +99,8 @@ define('ZC_MEMBER_STATUS_LOCKED', 2);
 
 
 #定义全局变量
-
 /**
- *系统核心对像zbp，唯一实例
+ *系统核心对象zbp，唯一实例
  */
 $zbp = null;
 /**
@@ -127,7 +126,7 @@ $blogpath = ZBP_PATH;
 $usersdir = $blogpath . 'zb_users/';
 
 /**
- *配置数组
+ *读取设置数组
  */
 $option = require($blogpath . 'zb_system/defend/option.php');
 $option_zbusers = null;
@@ -401,7 +400,7 @@ if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php'))
 
 
 #加载插件
-$ap=explode("|", $option['ZC_USING_PLUGIN_LIST']);
+$ap=explode("|", $zbp->option['ZC_USING_PLUGIN_LIST']);
 $ap=array_unique($ap);
 foreach ($ap as $plugin) {
 	if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {

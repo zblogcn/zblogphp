@@ -57,7 +57,7 @@ class Module extends Base{
 			}
 		}
 		if ($name=='NoRefresh') {
-			return $this->Metas->norefresh;
+			return (bool)$this->Metas->norefresh;
 		}
 		return parent::__get($name);
 	}
@@ -72,6 +72,7 @@ class Module extends Base{
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 		if($this->Source=='theme'){
+			if(!$this->FileName)return true;
 			$c = $this->Content;
 			$d = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/';
 			$f = $d . $this->FileName . '.php';
@@ -94,6 +95,7 @@ class Module extends Base{
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 		if($this->Source=='theme'){
+			if(!$this->FileName)return true;
 			$f = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $this->FileName . '.php';
 			if (file_exists($f)){
 				@unlink($f);

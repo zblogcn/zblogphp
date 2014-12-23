@@ -686,14 +686,29 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 		$fpname($type, $page, $category, $author, $datetime, $tag, $w, $pagebar);
 	}
 
-	if(isset($zbp->option['ZC_LISTONTOP_TURNOFF'])&&$zbp->option['ZC_LISTONTOP_TURNOFF']==false){
-		if ($type == 'index' && $page == 1) {
-			$articles_top=$zbp->GetPostByArray($zbp->GetOnTopPost(array('global','index')));
-		}elseif ($type == 'category') {
-			$articles_top=$zbp->GetPostByArray($zbp->GetOnTopPost(array('global','category' . $category->ID)));
-		}else {
-			$articles_top=$zbp->GetPostByArray($zbp->GetOnTopPost(array('global')));
+	if($zbp->option['ZC_LISTONTOP_TURNOFF']==false){
+		$articles_top_notorder_idarray = unserialize($zbp->cache->top_post_array);
+		if(!is_array($articles_top_notorder_idarray)){
+			$articles_top_notorder=$zbp->db->Query(
+				$zbp->db->sql->Select($zbp->table['Post'],'log_ID', array(array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), array('log_PostTime' => 'ASC'), null, null)
+			);
+			foreach($articles_top_notorder as $articles_top_id){
+				$articles_top_notorder_idarray[(int)current($articles_top_id)]=(int)current($articles_top_id);
+			}
 		}
+		$articles_top_notorder=$zbp->GetPostByArray($articles_top_notorder_idarray);
+		foreach($articles_top_notorder as $articles_top_notorder_post)
+			if($articles_top_notorder_post->TopType == 'global')
+				$articles_top[]=$articles_top_notorder_post;
+		if ($type == 'index' && $page == 1)
+			foreach($articles_top_notorder as $articles_top_notorder_post)
+				if($articles_top_notorder_post->TopType == 'index')
+					$articles_top[]=$articles_top_notorder_post;
+		if ($type == 'category')
+			foreach($articles_top_notorder as $articles_top_notorder_post)
+				if($articles_top_notorder_post->TopType == 'category' && $articles_top_notorder_post->CateID == $category->ID)
+					$articles_top[]=$articles_top_notorder_post;
+
 	}
 
 	$select = '*';
@@ -1084,24 +1099,21 @@ function PostArticle() {
 
 	$article->Type = ZC_POST_TYPE_ARTICLE;
 
+	if(isset($_POST['IsTop'])){
+		if(1 == $_POST['IsTop']){
+			$article->TopType=$_POST['IstopType'];
+		}
+		if(0 == $_POST['IsTop']){
+			$article->TopType=null;
+		}
+	}
+
 	foreach ($GLOBALS['Filter_Plugin_PostArticle_Core'] as $fpname => &$fpsignal) {
 		$fpname($article);
 	}
 
 	FilterPost($article);
 	FilterMeta($article);
-
-
-	
-	if(isset($_POST['IsTop'])){
-		$istop=$_POST['IsTop'];
-		if(1 == $istop){
-			$zbp->AddOnTopPost($article->ID,'index');
-		}
-		if(0 == $istop){
-			$zbp->DelOnTopPost($article->ID);
-		}
-	}
 
 	$article->Save();
 
@@ -1142,6 +1154,10 @@ function PostArticle() {
 			CountNormalArticleNums(+1);
 		}
 	}
+	if($article->IsTop == true)
+		CountTopArticle($article->ID,null);
+	else
+		CountTopArticle(null,$article->ID);
 
 	$zbp->AddBuildModule('previous');
 	$zbp->AddBuildModule('calendar');
@@ -1189,7 +1205,8 @@ function DelArticle() {
 		if(($pre_istop==0 && $pre_status==0)){
 			CountNormalArticleNums(-1);
 		}
-		
+		if($article->IsTop == true)
+			CountTopArticle(null,$article->ID);
 
 		$zbp->AddBuildModule('previous');
 		$zbp->AddBuildModule('calendar');
@@ -2440,6 +2457,33 @@ function FilterTag(&$tag) {
 ################################################################################################################
 #统计函数
 /**
+ *统计置顶文章数组
+ * @param int $plus 控制是否要进行全表扫描
+ */
+function CountTopArticle($addplus = null,$delplus=null) {
+	global $zbp;
+
+	$array = unserialize($zbp->cache->top_post_array);
+	if(!is_array($array))$array=array();
+
+	if($addplus === null && $delplus === null){
+		$s=$zbp->db->sql->Select($zbp->table['Post'],'log_ID', array(array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), array('log_PostTime' => 'ASC'), null, null);
+		$a=$zbp->db->Query($s);
+		foreach($a as $id){
+			$array[(int)current($id)]=(int)current($id);
+		}
+	}elseif($addplus !== null && $delplus === null){
+		$addplus=(int)$addplus;
+		$array[$addplus]=$addplus;
+	}elseif($addplus === null && $delplus !== null){
+		$delplus=(int)$delplus;
+		unset($array[$delplus]);
+	}
+
+	$zbp->cache->top_post_array = serialize($array);
+}
+
+/**
  *统计评论数
  * @param int $allplus 控制是否要进行全表扫描 总评论
  * @param int $chkplus 控制是否要进行全表扫描 未审核评论
@@ -2683,7 +2727,7 @@ function BuildModule_catalog() {
 				$s .= '<li class="li-cate"><a href="' . $value->Url . '">' . $value->Name . '</a><!--' . $value->ID . 'begin--><!--' . $value->ID . 'end--></li>';
 			}
 			$j += 1;
-			if($j>$i)break;
+			if($i!=0 && $j>=$i)break;
 		}
 		foreach ($zbp->categorysbyorder as $key => $value) {
 			if ($value->Level == 1) {
@@ -2713,13 +2757,13 @@ function BuildModule_catalog() {
 		foreach ($zbp->categorysbyorder as $key => $value) {
 			$s .= '<li>' . $value->Symbol . '<a href="' . $value->Url . '">' . $value->Name . '</a></li>';
 			$j += 1;
-			if($j>$i)break;
+			if($i!=0 && $j>=$i)break;
 		}
 	} else {
 		foreach ($zbp->categorysbyorder as $key => $value) {
 			$s .= '<li><a href="' . $value->Url . '">' . $value->Name . '</a></li>';
 			$j += 1;
-			if($j>$i)break;
+			if($i!=0 && $j>=$i)break;
 		}
 	}
 
