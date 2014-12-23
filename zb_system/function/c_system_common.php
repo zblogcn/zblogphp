@@ -36,7 +36,7 @@ function AutoloadClass($classname){
 		$fpreturn=$fpname($classname);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 	}
-	if (is_readable($f=dirname(__FILE__) . '/lib/' . strtolower($classname) .'.php'))
+	if (is_readable($f=ZBP_PATH . 'zb_system/function/lib/' . strtolower($classname) .'.php'))
 		require $f;
 }
 
