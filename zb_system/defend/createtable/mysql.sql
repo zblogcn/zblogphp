@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS %pre%member (
   mem_Meta longtext NOT NULL,
   PRIMARY KEY (mem_ID),
   KEY %pre%mem_Name (mem_Name),
-  KEY %pre%mem_Alias (mem_Alias),
+  KEY %pre%mem_Alias (mem_Alias)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
