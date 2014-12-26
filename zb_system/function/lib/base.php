@@ -35,20 +35,18 @@ class Base{
 	* @param array $datainfo 数据表结构信息
 	*/
 	function __construct(&$table, &$datainfo, &$db = null, $hasmetas = true){
-			if($db !== null){
-				$this->db = &$db;
-			}else{
-				$this->db = &$GLOBALS['zbp']->db;				
-			}
+		if($db !== null)
+			$this->db = &$db;
+		else
+			$this->db = &$GLOBALS['zbp']->db;				
 
-			$this->table=&$table;
-			$this->datainfo=&$datainfo;
+		$this->table=&$table;
+		$this->datainfo=&$datainfo;
 
 		if(true==$hasmetas)$this->Metas=new Metas;
 
-		foreach ($this->datainfo as $key => $value) {
+		foreach ($this->datainfo as $key => $value)
 			$this->data[$key]=$value[3];
-		}
 	}
 
 	/**

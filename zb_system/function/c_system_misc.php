@@ -40,6 +40,13 @@ switch ($type) {
 		}
 		misc_viewrights();
 		break;
+	case 'phpinfo':
+		if (!$zbp->CheckRights('root')) {
+			echo $zbp->ShowError(6, __FILE__, __LINE__);
+			die();
+		}
+		phpinfo();
+		break;
 	default:
 		break;
 }
@@ -91,7 +98,7 @@ function misc_statistic() {
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
-	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";
+	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td><a href='../cmd.php?act=misc&type=phpinfo' target='_blank'>{$system_environment}</a></td></tr>";
 	$r .="<script type=\"text/javascript\">$('#statistic').attr('title','" . date ( "c" , $zbp->cache->reload_statistic_time ) . "');</script>";
 
 	$zbp->cache->reload_statistic = $r;

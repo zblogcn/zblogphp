@@ -30,9 +30,13 @@ class Config {
 	/**
 	* $itemname string 项目名称
 	*/
-	function __construct($itemname=''){
+	function __construct($itemname='', &$db = null){
 
-		$this->db = &$GLOBALS['zbp']->db;				
+		if($db !== null)
+			$this->db = &$db;
+		else
+			$this->db = &$GLOBALS['zbp']->db;				
+	
 		$this->table = &$GLOBALS['zbp']->table['Config'];
 		$this->datainfo = &$GLOBALS['zbp']->datainfo['Config'];
 
@@ -190,8 +194,8 @@ class Config {
 	*/
 	function Delete(){
 		$name = $this->GetItemName();
-		$sql = $db->sql->Delete($this->table,array(array('=','conf_Name',$name)));
-		$db->Delete($sql);
+		$sql = $this->db->sql->Delete($this->table,array(array('=','conf_Name',$name)));
+		$this->db->Delete($sql);
 		return true;
 	}
 
