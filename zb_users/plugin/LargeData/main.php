@@ -14,6 +14,7 @@ if (!$zbp->CheckPlugin('LargeData')) {$zbp->ShowError(48);die();}
 if(GetVars('build_post_index','POST')==='0'){
 	$zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre. "log_TISC ;");
 	$zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre. "log_PT ;");
+	$zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre. "log_TPISC ;");	
 	$zbp->db->Query("ALTER TABLE " . $table['Post'] . " ADD INDEX  " . $zbp->db->dbpre. "log_LD_Title(log_Title) ;");
 	$zbp->db->Query("ALTER TABLE " . $table['Post'] . " ADD INDEX  " . $zbp->db->dbpre. "log_LD_PCATISID(log_PostTime,log_CateID,log_AuthorID,log_Type,log_IsTop,log_Status,log_ID) ;");
 	$zbp->SetHint('good');

@@ -255,7 +255,8 @@ $table=array(
  */
 $datainfo=array(
 'Config'=>array(
-	'Name'=>array('conf_Name','string',250,''),
+	'ID'=>array('conf_ID','integer','',0),
+	'Name'=>array('conf_Name','string',50,''),
 	'Value'=>array('conf_Value','string','',''),
 ),
 'Post'=> array(
