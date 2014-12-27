@@ -1946,23 +1946,23 @@ class ZBlogPHP {
 	 * @param string $name
 	 * @return Member
 	 */
-	function GetMemberByAliasOrName($name){
+	function GetMemberByNameOrAlias($name){
 		$name=trim($name);
 		if (!$name || !CheckRegExp($name, '[username]'))return new Member;
 
 		foreach ($this->members as $key => &$value) {
-			if(strcasecmp($value->Name,$name)==0||strcasecmp($value->Alias==$name)==0){
+			if(strcasecmp($value->Name,$name)==0||strcasecmp($value->Alias,$name)==0){
 				return $value;
 			}
 		}
 
 		$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
-		$zbp->db->sql->Select(
-			$zbp->table['Member'],'*',
+		$sql=$this->db->sql->Select(
+			$this->table['Member'],'*',
 			//where
-				$zbp->db->sql->ParseWhere(array(array($like,'mem_Alias',$name)),'')
+				$this->db->sql->ParseWhere(array(array($like,'mem_Name',$name)),'')
 				.
-				$zbp->db->sql->ParseWhere(array(array($like,'mem_Name',$name)),'OR'),
+				$this->db->sql->ParseWhere(array(array($like,'mem_Alias',$name)),'OR'),
 			null,
 			1,
 			null
@@ -1982,16 +1982,24 @@ class ZBlogPHP {
 	 * 检查指定名称的用户是否存在(不区分大小写)
 	 */
 	function CheckMemberNameExist($name){
-		$name=trim($name);
-		if(!$name || !CheckRegExp($name, '[username]'))return false;
-
-		$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
-		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array($like,'mem_Name',$name)),null,1,null);
-		$am = $this->GetListType('Member',$sql);
-		if(count($am) > 0){
+		$m=$this->GetMemberByName($name);
+		if($m->ID>0){
 			return true;
+		}else{
+			return false;
 		}
-		return false;
+	}
+
+	/**
+	 * 检查指定名称或别名的用户是否存在(不区分大小写)
+	 */
+	function CheckMemberByNameOrAliasExist($name){
+		$m=$this->GetMemberByNameOrAlias($name);
+		if($m->ID>0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	/**
@@ -2497,7 +2505,7 @@ class ZBlogPHP {
 	private $table_datainfo_hash = null;
 	function ConvertTableAndDatainfo(){
 
-		$now = $this->table + $this->datainfo;//crc32(serialize($this->table + $this->datainfo));
+		$now = crc32(serialize($this->table + $this->datainfo));
 		if($this->table_datainfo_hash!==$now){
 			$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
 			if($this->db->type == 'pgsql'){
@@ -2507,7 +2515,7 @@ class ZBlogPHP {
 					}
 				}
 			}
-			$this->table_datainfo_hash = $this->table + $this->datainfo;//crc32(serialize($this->table + $this->datainfo));
+			$this->table_datainfo_hash = crc32(serialize($this->table + $this->datainfo));
 		}
 	}
 

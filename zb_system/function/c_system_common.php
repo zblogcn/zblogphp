@@ -55,7 +55,8 @@ function Logs($s,$iserror=false) {
 		$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '.txt';
 	}
 	$handle = @fopen($f, 'a+');
-	@fwrite($handle, "[" . date('c') . "~" . current(explode(" ", microtime())) . "]" . "\r\n" . $s . "\r\n");
+	$t=date('Y-m-d') . ' ' . date('H:i:s') . ' ' . substr(microtime(),1,9) . ' ' . date('P');
+	@fwrite($handle, '[' . $t . ']' . "\r\n" . $s . "\r\n");
 	@fclose($handle);
 }
 
@@ -235,6 +236,7 @@ function GetDbName() {
  */
 function GetCurrentHost($blogpath,&$cookiespath) {
 
+	$host='';
 	if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
 		if ($_SERVER['REQUEST_SCHEME'] == 'https') {
 			$host = 'https://';
@@ -253,8 +255,12 @@ function GetCurrentHost($blogpath,&$cookiespath) {
 
 	$host .= $_SERVER['HTTP_HOST'];
 
-	$y = $blogpath;
 	$x = $_SERVER['SCRIPT_NAME'];
+	$y = $blogpath;
+	if(isset($_SERVER["CONTEXT_DOCUMENT_ROOT"]) && isset($_SERVER["CONTEXT_PREFIX"]))
+		if($_SERVER["CONTEXT_DOCUMENT_ROOT"] && $_SERVER["CONTEXT_PREFIX"]){
+			$y= $_SERVER["CONTEXT_DOCUMENT_ROOT"] . $_SERVER["CONTEXT_PREFIX"] . '/';
+		}
 	$z = '';
 
 	for ($i = strlen($x); $i > 0; $i--) {

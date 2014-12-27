@@ -443,6 +443,8 @@ class DbSql
 	
 		$sqls='';
 		$sqlw='';
+		$sqlg='';
+		$sqlh='';
 		$sqlo='';
 		$sqll='';
 
@@ -463,6 +465,29 @@ class DbSql
 			$sqlw=$this->ParseWhere($where,$option['changewhere']);
 		}else{
 			$sqlw=$this->ParseWhere($where);
+		}
+		
+		if(isset($option['groupby'])){
+			$sqlg=' GROUP BY ';
+			$comma = '';
+			if(!is_array($option['groupby'])){
+				$sqlg .= $option['groupby'];
+			}else{
+				foreach($option['groupby'] as $k=>$v) {
+					$sqlg .= $comma ."$v";
+					$comma = ',';
+				}
+			}
+		}
+
+		if(isset($option['having'])){
+			$sqlh=' HAVING ';
+			$comma = '';
+			if(!is_array($option['having'])){
+				$sqlh .= $option['having'];
+			}else{
+				$sqlh .= $this->ParseWhere($option['having'],'');
+			}
 		}
 
 		if(!empty($order)){
@@ -501,7 +526,7 @@ class DbSql
 				$option['pagebar']->make();
 			}
 		}
-		return $sqls . $sqlw . $sqlo . $sqll;
+		return $sqls . $sqlw . $sqlg . $sqlh . $sqlo . $sqll;
 	}
 
 	/**
@@ -517,14 +542,19 @@ class DbSql
 
 		$sqlc="SELECT ";
 
-		if(!empty($count)) {
+		if(is_array($count)) {
 			foreach ($count as $key => $value) {
-				$sqlc.=" $value[0]($value[1]) AS $value[2],";
+				if(count($value)==3)
+					$sqlc .= "$value[0]($value[1]) AS $value[2],";
+				if(count($value)==2)
+					$sqlc .= "$value[0]($value[1]),";
 			}
+			$sqlc=substr($sqlc, 0,strlen($sqlc)-1);
+		}else{
+			$sqlc .= $count;
 		}
-		$sqlc=substr($sqlc, 0,strlen($sqlc)-1);
 
- 		$sqlc.=" FROM $table ";
+ 		$sqlc .= " FROM $table ";
 
 		if(isset($option['changewhere'])){
 			$sqlw=$this->ParseWhere($where,$option['changewhere']);
@@ -532,7 +562,32 @@ class DbSql
 			$sqlw=$this->ParseWhere($where);
 		}
 
-		return $sqlc . $sqlw;
+		$sqlg='';
+		if(isset($option['groupby'])){
+			$sqlg=' GROUP BY ';
+			$comma = '';
+			if(!is_array($option['groupby'])){
+				$sqlg .= $option['groupby'];
+			}else{
+				foreach($option['groupby'] as $k=>$v) {
+					$sqlg .= $comma ."$v";
+					$comma = ',';
+				}
+			}
+		}
+
+		$sqlh='';
+		if(isset($option['having'])){
+			$sqlh=' HAVING ';
+			$comma = '';
+			if(!is_array($option['having'])){
+				$sqlh .= $option['having'];
+			}else{
+				$sqlh .= $this->ParseWhere($option['having'],'');
+			}
+		}
+
+		return $sqlc . $sqlw . $sqlg . $sqlh;
 	}
 
 	/**
@@ -625,7 +680,7 @@ class DbSql
 		foreach ($GLOBALS['Filter_Plugin_DbSql_Filter'] as $fpname => &$fpsignal) {
 			$fpname($sql);
 		}
-		//Logs($sql);
+		Logs($sql);
 		return $sql;
 	}
 }
