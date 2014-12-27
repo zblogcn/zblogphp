@@ -53,7 +53,8 @@ CREATE TABLE %pre%comment (
 
 
 CREATE TABLE %pre%config (
-  conf_Name varchar(255) NOT NULL NOT NULL DEFAULT '',
+  conf_ID integer primary key autoincrement,
+  conf_Name varchar(50) NOT NULL NOT NULL DEFAULT '',
   conf_Value text
 );
 
@@ -138,6 +139,7 @@ CREATE TABLE %pre%upload (
 CREATE INDEX %pre%log_PostTime on %pre%post (log_PostTime);
 CREATE INDEX %pre%comm_PostTime on %pre%comment (comm_PostTime);
 CREATE INDEX %pre%mem_Name on %pre%member (mem_Name);
+CREATE INDEX %pre%mem_Alias on %pre%member (mem_Alias);
 CREATE UNIQUE INDEX %pre%tag_ID on %pre%tag (tag_ID);
 CREATE UNIQUE INDEX %pre%log_ID on %pre%post (log_ID);
 CREATE UNIQUE INDEX %pre%cate_ID on %pre%category (cate_ID);
@@ -145,3 +147,4 @@ CREATE UNIQUE INDEX %pre%comm_ID on %pre%comment (comm_ID);
 CREATE UNIQUE INDEX %pre%ul_ID on %pre%upLoad (ul_ID);
 CREATE UNIQUE INDEX %pre%mem_ID on %pre%member (mem_ID);
 CREATE UNIQUE INDEX %pre%mod_ID on %pre%module (mod_ID);
+CREATE UNIQUE INDEX %pre%conf_ID on %pre%config (conf_ID);
