@@ -25,7 +25,6 @@ if(GetVars('build_comment_index','POST')==='0'){
 	$zbp->db->Query("ALTER TABLE " . $table['Comment'] . " DROP INDEX  " . $zbp->db->dbpre. "comm_PT ;");
 	$zbp->db->Query("ALTER TABLE " . $table['Comment'] . " DROP INDEX  " . $zbp->db->dbpre. "comm_RIL ;");
 	$zbp->db->Query("ALTER TABLE " . $table['Comment'] . " ADD INDEX  " . $zbp->db->dbpre. "comm_LD_LRIID(comm_LogID,comm_RootID,comm_IsChecking,comm_ID) ;");
-	$zbp->db->Query("ALTER TABLE " . $table['Comment'] . " ADD INDEX  " . $zbp->db->dbpre. "comm_LD_IID(comm_IsChecking,comm_ID) ;");
 	$zbp->SetHint('good');
 	Redirect('./main.php');
 }

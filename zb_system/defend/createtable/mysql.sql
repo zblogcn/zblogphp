@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS %pre%category (
   cate_Template varchar(50) NOT NULL DEFAULT '',
   cate_LogTemplate varchar(50) NOT NULL DEFAULT '',
   cate_Meta longtext NOT NULL,
-  PRIMARY KEY (cate_ID)
+  PRIMARY KEY (cate_ID),
+  KEY %pre%cate_Order (cate_Order)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
@@ -53,7 +54,6 @@ CREATE TABLE IF NOT EXISTS %pre%comment (
   comm_Agent text NOT NULL,
   comm_Meta longtext NOT NULL,
   PRIMARY KEY (comm_ID),
-  KEY %pre%comm_PT (comm_PostTime),
   KEY %pre%comm_RIL (comm_LogID,comm_RootID,comm_IsChecking)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
