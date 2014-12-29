@@ -11,7 +11,7 @@ require './zb_system/function/c_system_base.php';
 $zbp->RedirectInstall();
 $zbp->CheckGzip();
 $zbp->Load();
-$zbp->RedirectInstall(true);
+$zbp->RedirectPermanentDomainUrl();
 
 foreach ($GLOBALS['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) $fpname();
 

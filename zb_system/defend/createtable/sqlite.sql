@@ -141,6 +141,8 @@ CREATE INDEX %pre%log_PostTime on %pre%post (log_PostTime);
 CREATE INDEX %pre%mem_Name on %pre%member (mem_Name);
 
 CREATE INDEX %pre%mem_Alias on %pre%member (mem_Alias);
+
+CREATE INDEX %pre%cate_Order on %pre%category (cate_Order);
 	
 CREATE UNIQUE INDEX %pre%tag_ID on %pre%tag (tag_ID);
 	
@@ -157,5 +159,3 @@ CREATE UNIQUE INDEX %pre%mem_ID on %pre%member (mem_ID);
 CREATE UNIQUE INDEX %pre%mod_ID on %pre%module (mod_ID);
 
 CREATE UNIQUE INDEX %pre%conf_ID on %pre%config (conf_ID);
-
-CREATE UNIQUE INDEX %pre%cate_Order on %pre%category (cate_Order);

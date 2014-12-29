@@ -76,7 +76,10 @@ function RunTime() {
 		$rt['memory']=(int)((memory_get_usage()-$_SERVER['_memory_usage'])/1024);
 	}
 	
-	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false)return $rt;
+	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false){
+		$_SERVER['_runtime_result']=$rt;
+		return $rt;
+	}
 
 	echo '<!--' . $rt['time'] . 'ms , ';
 	echo  $rt['query'] . ' query';

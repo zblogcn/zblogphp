@@ -232,8 +232,6 @@ function ViewIndex(){
 		}
 	}
 	
-	$zbp->RedirectPermanentDomainUrl();
-
 	switch ($action) {
 	case 'feed':
 		ViewFeed();

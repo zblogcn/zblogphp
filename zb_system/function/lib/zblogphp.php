@@ -473,7 +473,6 @@ class ZBlogPHP {
 		}
 
 		if(!$this->isinitialized){
-			$this->ShowError(82,__FILE__,__LINE__);
 			return false;
 		}
 
@@ -765,7 +764,7 @@ class ZBlogPHP {
 
 		$this->option['ZC_BLOG_CLSID']=$this->guid;
 
-		if( strpos('|SAE|BAE2|ACE|TXY|', '|'.$this->option['ZC_YUN_SITE'].'|')===false ){
+		if( strpos('|SAE|BAE2|ACE|TXY|', '|'.$this->option['ZC_YUN_SITE'].'|')===false && file_exists($this->usersdir . 'c_option.php')==false ){
 			$s="<?php\r\n";
 			$s.="return ";
 			$option = array();
@@ -2469,16 +2468,15 @@ class ZBlogPHP {
 
 	/**
 	 * 跳转到安装页面
-	 * @param bool $yun 是否云主机（SAE等）
 	 */
-	function  RedirectInstall($yun=false){
-		if(!$yun){
-			if(!$this->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/index.php');}
-		}else{
-			if($this->option['ZC_YUN_SITE']){
-				if($this->Config('system')->CountItem()==0){Redirect('./zb_install/index.php');}
-			}
-		}
+	function  RedirectInstall(){
+
+		if(!$this->option['ZC_DATABASE_TYPE'])
+			Redirect('./zb_install/index.php');
+
+		if($this->option['ZC_YUN_SITE'])
+			if($this->Config('system')->CountItem()==0)
+				Redirect('./zb_install/index.php');
 	}
 
 	
@@ -2487,8 +2485,7 @@ class ZBlogPHP {
 	 */
 	function  RedirectPermanentDomainUrl(){
 	
-		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==false)return;
-		if($this->option['ZC_PERMANENT_DOMAIN_REDIRECT']==false)return;
+		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==false || $this->option['ZC_PERMANENT_DOMAIN_REDIRECT']==false)return;
 
 		$host = GetCurrentHost(ZBP_PATH , $null);
 
