@@ -131,7 +131,7 @@ function Debug_Shutdown_Handler() {
 		}
 		$_SERVER['_error_count'] = $_SERVER['_error_count'] +1;
 		if(ZBlogException::$islogerror){
-			Logs(var_export('Shutdown',array($error['type'],$error['message'],$error['file'],$error['line']),true),true);
+			Logs(var_export(array('Shutdown',$error['type'],$error['message'],$error['file'],$error['line']),true),true);
 		}
 
 		if(ZBlogException::$isdisable==true)return true;
