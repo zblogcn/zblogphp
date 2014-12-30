@@ -370,7 +370,7 @@ function Setup3(){
         if($hasMysql){
         ?>
           <label class="dbselect" id="mysql_radio">
-          <input type="radio" name="fdbtype" value="mysql"/>MySQL数据库</label>
+          <input type="radio" name="fdbtype" value="mysql"/> MySQL数据库</label>
         <?php
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         }
@@ -379,7 +379,7 @@ function Setup3(){
         if($hasSqlite){
         ?>
           <label class="dbselect" id="sqlite_radio">
-          <input type="radio" name="fdbtype" value="sqlite"/>SQLite数据库</label>
+          <input type="radio" name="fdbtype" value="sqlite"/> SQLite数据库</label>
         <?php
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         }
@@ -404,27 +404,28 @@ function Setup3(){
           <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="<?php echo $option['ZC_MYSQL_PRE'];?>" style="width:350px;" />
         </p>
 <?php if($zbp->option['ZC_YUN_SITE']==''){?>
-        <p><b>存储引擎:</b>
-          <label><input value="MyISAM" type="radio" name="dbengine" checked="checked"/>MyISAM(默认)</label>
-		  &nbsp;&nbsp;&nbsp;&nbsp;
-          <label><input value="InnoDB" type="radio" name="dbengine"/>InnoDB</label>
+        <p><b>表存储引擎:</b>
+          <label><select id="dbengine" name="dbengine" style="width:360px;" >
+		  <option value="MyISAM"  selected="selected"/>MyISAM(默认)</option>
+          <option value="InnoDB" >InnoDB</option>
+		  </select>
         </p>		
 <?php } ?>
       <p><b>连接选择:</b>
-<?php if ( version_compare ( PHP_VERSION ,  '5.5.0' ,  '<' )) { ?>
-        <?php if($CheckResult['mysql'][0]){?>
-        <label>
-          <input value="mysql" type="radio" name="dbtype"/>MySQL连接</label>
-        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
-<?php } ?>
         <?php if($CheckResult['mysqli'][0]){?>
         <label>
-          <input value="mysqli" type="radio" name="dbtype"/>MySQLi连接</label>
+          <input value="mysqli" type="radio" name="dbtype"/> MySQLi连接</label>
         <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php if($CheckResult['pdo_mysql'][0]){?>
         <label>
-          <input value="pdo_mysql" type="radio" name="dbtype"/>PDO_MySQL连接</label>
-        <?php } ?>
+          <input value="pdo_mysql" type="radio" name="dbtype"/> PDO_MySQL连接</label>
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+<?php if ( version_compare ( PHP_VERSION ,  '5.5.0' ,  '<' )) { ?>
+        <?php if($CheckResult['mysql'][0]){?>
+        <label>
+          <input value="mysql" type="radio" name="dbtype"/> MySQL连接</label>
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+<?php } ?>
 		<br/><small>(端口号默认3306，如需要修改请在'数据库主机'里追加':端口号'。)</small>
       </p>
       </div>
@@ -438,24 +439,24 @@ function Setup3(){
         <p><b>表前缀:</b>
           <input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" />
         </p>
-      <p><b>版本选择:</b>
+      <p><b>连接选择:</b>
         <?php if($CheckResult['sqlite3'][0]){?>
         <label>
-          <input value="sqlite3" type="radio" name="dbtype" />SQLite3</label>
+          <input value="sqlite3" type="radio" name="dbtype" /> SQLite3</label>
         <?php 
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
           }
         ?>
         <?php if($CheckResult['pdo_sqlite'][0]){?>
         <label>
-          <input value="pdo_sqlite" type="radio" name="dbtype" />PDO_SQLite</label>
+          <input value="pdo_sqlite" type="radio" name="dbtype" /> PDO_SQLite</label>
         <?php 
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
           }
         ?>
         <?php if($CheckResult['sqlite'][0]){?>
         <label>
-          <input value="sqlite" type="radio" name="dbtype" />SQLite</label>
+          <input value="sqlite" type="radio" name="dbtype" /> SQLite</label>
         <?php 
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
           }
@@ -994,9 +995,18 @@ function SaveConfig(){
   $zbp->option['ZC_SIDEBAR3_ORDER']='';
   $zbp->option['ZC_SIDEBAR4_ORDER']='';
   $zbp->option['ZC_SIDEBAR5_ORDER']='';
-  $zbp->option['ZC_DEBUG_MODE']=false;
+  $zbp->option['ZC_DEBUG_MODE']=true;
   $zbp->SaveOption();
   //$zbp->BuildTemplate();
+  
+  $zbp->Config('cache')->templates_md5='';
+  $zbp->SaveCache();
+  
+  $zbp->Config('AppCentre')->enabledcheck=1;
+  $zbp->Config('AppCentre')->checkbeta=0;
+  $zbp->Config('AppCentre')->enabledevelop=0;
+  $zbp->Config('AppCentre')->enablegzipapp=1;
+  $zbp->SaveConfig('AppCentre');
   
   echo "保存设置,编译模板成功!<br/>";
 

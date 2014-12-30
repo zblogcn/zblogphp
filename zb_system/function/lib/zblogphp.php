@@ -319,6 +319,7 @@ class ZBlogPHP {
 		$this->displaycount = &$this->option['ZC_DISPLAY_COUNT'];
 		$this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
 
+		$this->cache = new stdClass;
 	}
 
 
@@ -703,8 +704,7 @@ class ZBlogPHP {
 		if(!isset($this->configs[$name])){
 			$name=FilterCorrectName($name);
 			if(!$name)return ;
-			$c=new Config($name);
-			$this->configs[$name]=$c;
+			$this->configs[$name]=new Config($name);
 		}
 		return $this->configs[$name];
 	}
@@ -2485,7 +2485,8 @@ class ZBlogPHP {
 	 */
 	function  RedirectPermanentDomainUrl(){
 	
-		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==false || $this->option['ZC_PERMANENT_DOMAIN_REDIRECT']==false)return;
+		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==false)return;
+		if($this->option['ZC_PERMANENT_DOMAIN_REDIRECT']==false)return;
 
 		$host = GetCurrentHost(ZBP_PATH , $null);
 

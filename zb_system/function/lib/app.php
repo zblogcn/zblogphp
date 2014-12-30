@@ -455,6 +455,10 @@ class App {
 		return $s;
 	}
 
+	public function PackGZip(){
+		return gzencode($this->Pack(),9,FORCE_GZIP);
+	}
+
 	/**
 	* 解开应用包
 	* @param $xml
@@ -462,6 +466,13 @@ class App {
 	*/
 	static public function UnPack($xml){
 		global $zbp;
+		$charset=array();
+		$charset[1] = substr($xml, 0, 1);
+		$charset[2] = substr($xml, 1, 1);
+		if (ord($charset[1]) == 31 && ord($charset[2]) == 139) {
+			if(function_exists('gzdecode'))
+				$xml = gzdecode($xml);
+		}
 		$xml = simplexml_load_string($xml);
 		if(!$xml)return false;
 		if($xml['version']!='php')return false;

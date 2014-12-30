@@ -18,6 +18,7 @@ if(GetVars('act')=='save'){
 	$zbp->Config('AppCentre')->enabledcheck=(int)GetVars("app_enabledcheck");
 	$zbp->Config('AppCentre')->checkbeta=(int)GetVars("app_checkbeta");
 	$zbp->Config('AppCentre')->enabledevelop=(int)GetVars("app_enabledevelop");
+	$zbp->Config('AppCentre')->enablegzipapp=(int)GetVars("app_enablegzipapp");
 	$zbp->SaveConfig('AppCentre');
 
 	$zbp->SetHint('good');
@@ -82,6 +83,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                   <td width="30%" align="left"><p><b>· 启用开发者模式</b><br/>
                       <span class="note">&nbsp;&nbsp;启用开发者模式可以修改应用信息、导出应用和远程提交应用</span></p></td>
                   <td><input id="app_enabledevelop" name="app_enabledevelop" type="text" value="<?php echo $zbp->Config('AppCentre')->enabledevelop; ?>" class="checkbox"/></td>
+                </tr>
+                <tr height="32">
+                  <td width="30%" align="left"><p><b>· 启用GZip压缩APP导出包</b><br/>
+                      <span class="note"></span></p></td>
+                  <td><input id="app_enablegzipapp" name="app_enablegzipapp" type="text" value="<?php echo $zbp->Config('AppCentre')->enablegzipapp; ?>" class="checkbox"/></td>
                 </tr>
               </table>
               <hr/>

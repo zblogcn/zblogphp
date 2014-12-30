@@ -204,7 +204,7 @@ class DbMySQL implements iDataBase {
 	* @param string $tablename 表名
 	* @param array $datainfo 表结构
 	*/
-	function CreateTable($table,$datainfo){
+	function CreateTable($table,$datainfo,$engine=null){
 		$this->QueryMulit($this->sql->CreateTable($table,$datainfo));
 	}
 

@@ -169,7 +169,7 @@ class Dbpdo_MySQL implements iDataBase {
 	* @param $table
 	* @param $datainfo
 	*/
-	function CreateTable($table,$datainfo){
+	function CreateTable($table,$datainfo,$engine=null){
 		$this->QueryMulit($this->sql->CreateTable($table,$datainfo));
 	}
 

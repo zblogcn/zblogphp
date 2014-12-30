@@ -110,7 +110,7 @@ class DbSql
 	 * @param array $datainfo
 	 * @return string
 	*/
-	public function CreateTable($table,$datainfo){
+	public function CreateTable($table,$datainfo,$engine=null){
 	
 		reset($datainfo);
 		$idname=GetValueInArrayByCurrent($datainfo,0);
@@ -224,6 +224,7 @@ class DbSql
 			$s.='PRIMARY KEY ('.$idname.'),';
 			$s=substr($s,0,strlen($s)-1);
 			$myengtype=$this->db->dbengine;
+			if($engine!=null)$myengtype=$engine;
 			if(!$myengtype)$myengtype='MyISAM';
 			$s.=') ENGINE=' . $myengtype . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
 		}

@@ -24,6 +24,10 @@ ob_clean();
 
 header('Content-Type: application/octet-stream');
 
-header('Content-Disposition:attachment;filename='. $id .'.zba');
-
-echo $app->Pack();
+if(function_exists('gzencode')==true && method_exists('App','PackGZip')==true && $zbp->Config('AppCentre')->enablegzipapp==true){
+	header('Content-Disposition:attachment;filename='. $id .'.gzba');
+	echo $app->PackGZip();
+}else{
+	header('Content-Disposition:attachment;filename='. $id .'.zba');
+	echo $app->Pack();
+}

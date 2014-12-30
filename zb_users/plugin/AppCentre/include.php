@@ -25,6 +25,7 @@ function InstallPlugin_AppCentre(){
 	$zbp->Config('AppCentre')->enabledcheck=1;
 	$zbp->Config('AppCentre')->checkbeta=0;
 	$zbp->Config('AppCentre')->enabledevelop=0;
+	$zbp->Config('AppCentre')->enablegzipapp=1;
 	$zbp->SaveConfig('AppCentre');
 }
 

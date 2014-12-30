@@ -37,8 +37,8 @@ class Config {
 		else
 			$this->db = &$GLOBALS['zbp']->db;				
 	
-		$this->table = &$GLOBALS['zbp']->table['Config'];
-		$this->datainfo = &$GLOBALS['zbp']->datainfo['Config'];
+		$this->table = &$GLOBALS['table']['Config'];
+		$this->datainfo = &$GLOBALS['datainfo']['Config'];
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->data[$key]=$value[3];
