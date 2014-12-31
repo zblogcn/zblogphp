@@ -1,7 +1,7 @@
 <?php
 $GLOBALS['zbpdk']->add_extension(array(
 	'url' => 'main.php',
-	'description' => '可以对blog_Config里的数据进行管理，用于调试TConfig类。',
+	'description' => '可以对zbp_config表里的数据进行管理，用于调试Config配置类。',
 	'id' => 'BlogConfig'
 ));
 

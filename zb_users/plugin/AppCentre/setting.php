@@ -85,8 +85,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                   <td><input id="app_enabledevelop" name="app_enabledevelop" type="text" value="<?php echo $zbp->Config('AppCentre')->enabledevelop; ?>" class="checkbox"/></td>
                 </tr>
                 <tr height="32">
-                  <td width="30%" align="left"><p><b>· 启用GZip压缩APP导出包</b><br/>
-                      <span class="note"></span></p></td>
+                  <td width="30%" align="left"><p><b>· 导出经过GZip压缩的应用包</b><br/>
+                      <span class="note">&nbsp;&nbsp;1.4以下版本不支持应用压缩包导入及导出</span></p></td>
                   <td><input id="app_enablegzipapp" name="app_enablegzipapp" type="text" value="<?php echo $zbp->Config('AppCentre')->enablegzipapp; ?>" class="checkbox"/></td>
                 </tr>
               </table>

@@ -47,12 +47,16 @@ function AutoloadClass($classname){
  */
 function Logs($s,$iserror=false) {
 	global $zbp;
-	if($iserror){
-		$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '-error.txt';
-	}elseif($zbp->guid){
-		$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
+	if($zbp->guid){
+		if($iserror)
+			$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-error' . date("Ymd") . '.txt';
+		else
+			$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
 	}else{
-		$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '.txt';
+		if($iserror)
+			$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '-error.txt';
+		else
+			$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '.txt';
 	}
 	ZBlogException::SuspendErrorHook();
 	if($handle = @fopen($f, 'a+')){

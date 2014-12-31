@@ -320,6 +320,10 @@ class ZBlogPHP {
 		$this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
 
 		$this->cache = new stdClass;
+		$this->user = new stdClass;
+		foreach($this->datainfo['Member'] as $key=>$value){
+			$this->user->$key=$value[3];
+		}
 	}
 
 
@@ -393,7 +397,6 @@ class ZBlogPHP {
 		}
 
 		if(!$this->OpenConnect()){
-			$this->guid = GetGuid();
 			return false;
 		}
 
@@ -423,7 +426,6 @@ class ZBlogPHP {
 			$this->option['ZC_BLOG_HOST']=$this->host;
 		}
 
-		$this->option['ZC_BLOG_VERSION']=ZC_BLOG_VERSION;
 		$this->option['ZC_BLOG_PRODUCT_FULL']=$this->option['ZC_BLOG_PRODUCT'] . ' ' . $this->option['ZC_BLOG_VERSION'];
 		$this->option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.zblogcn.com/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
 		$this->option['ZC_BLOG_PRODUCT_HTML']='<a href="http://www.zblogcn.com/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT'] . '</a>';
@@ -447,12 +449,6 @@ class ZBlogPHP {
 		$this->feedurl=$this->host . 'feed.php';
 		$this->searchurl=$this->host . 'search.php';
 		$this->ajaxurl=$this->host . 'zb_system/cmd.php?act=ajax&src=';
-
-		#创建User类(stdClass)
-		$this->user = new stdClass;
-		foreach($this->datainfo['Member'] as $key=>$value){
-			$this->user->$key=$value[3];
-		}
 
 		$this->isinitialized=true;
 

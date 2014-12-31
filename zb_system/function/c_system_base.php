@@ -55,7 +55,7 @@ $zbpvers['131111']='1.0 Beta2 Build 131111';
 $zbpvers['131221']='1.1 Taichi Build 131221';
 $zbpvers['140220']='1.2 Hippo Build 140220';
 $zbpvers['140614']='1.3 Wonce Build 140614';
-$zbpvers['150101']='1.4 Beta Build 141201';
+$zbpvers['150220']='1.4 Beta Build 141201';
 
 #定义常量
 /**
@@ -137,14 +137,14 @@ if(!is_array($option_zbusers))
 foreach ($option_zbusers as $key => $value)
 	$option[$key] = $value;
 
-
 $blogtitle = $option['ZC_BLOG_SUBNAME'];
 $blogname = &$option['ZC_BLOG_NAME'];
 $blogsubname = &$option['ZC_BLOG_SUBNAME'];
 $blogtheme = &$option['ZC_BLOG_THEME'];
 $blogstyle = &$option['ZC_BLOG_CSS'];
 $blogversion = key($zbpvers);
-
+$option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
+$option['ZC_BLOG_VERSION'] = $blogversion;
 $cookiespath = null;
 $bloghost = GetCurrentHost($blogpath,$cookiespath);
 
