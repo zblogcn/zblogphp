@@ -425,7 +425,9 @@ class ZBlogPHP {
 		}else{
 			$this->option['ZC_BLOG_HOST']=$this->host;
 		}
-
+	
+		$this->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
+		$this->option['ZC_BLOG_VERSION'] = ZC_BLOG_VERSION;
 		$this->option['ZC_BLOG_PRODUCT_FULL']=$this->option['ZC_BLOG_PRODUCT'] . ' ' . $this->option['ZC_BLOG_VERSION'];
 		$this->option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.zblogcn.com/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
 		$this->option['ZC_BLOG_PRODUCT_HTML']='<a href="http://www.zblogcn.com/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT'] . '</a>';

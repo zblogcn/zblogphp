@@ -13,7 +13,6 @@ define('APPCENTRE_API_ORDER_DETAIL','orderdetail');
 
 
 function ActivePlugin_AppCentre() {
-
 	Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu','AppCentre_AddMenu');
 	Add_Filter_Plugin('Filter_Plugin_Admin_ThemeMng_SubMenu','AppCentre_AddThemeMenu');
 	Add_Filter_Plugin('Filter_Plugin_Admin_PluginMng_SubMenu','AppCentre_AddPluginMenu');
@@ -45,6 +44,8 @@ function AppCentre_AddSiteInfoMenu(){
 			$zbp->SaveConfig('AppCentre');
 		}
 	}
+	if($zbp->version>=150101 && (int)$zbp->option['ZC_LAST_VERSION']<150101)
+		echo "<script type='text/javascript'>$('.main').prepend('<div class=\"hint\"><p class=\"hint hint_tips\"><a href=\"{$zbp->host}zb_users/plugin/AppCentre/update.php?updatedb\">请点击该链接升级数据库结构</a></p></div>');</script>";
 }
 
 function AppCentre_AddThemeMenu(){

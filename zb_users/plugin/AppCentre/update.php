@@ -17,7 +17,41 @@ $blogtitle='应用中心-系统更新与校验';
 $checkbegin=false;
 $nowxml='';
 
+function updatedb_14(){
+	global $zbp,$table;
 
+	if($zbp->db->type=='mysql'){
+		$zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre. "log_TISC ;");
+		$zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre. "log_PT ;");
+		$zbp->db->Query("ALTER TABLE " . $table['Post'] . " ADD INDEX  " . $zbp->db->dbpre. "log_TPISC(log_Type,log_PostTime,log_IsTop,log_Status,log_CateID) ;");
+		$zbp->db->Query("ALTER TABLE " . $table['Comment'] . " DROP INDEX  " . $zbp->db->dbpre. "comm_PT ;");
+		$zbp->db->Query("ALTER TABLE " . $table['Comment'] . " DROP INDEX  " . $zbp->db->dbpre. "comm_RIL ;");
+		$zbp->db->Query("ALTER TABLE " . $table['Comment'] . " ADD INDEX  " . $zbp->db->dbpre. "comm_LRI(comm_LogID,comm_RootID,comm_IsChecking) ;");
+		$zbp->db->Query("ALTER TABLE " . $table['Category'] . " ADD INDEX  " . $zbp->db->dbpre. "cate_Order(cate_Order) ;");	
+		$zbp->db->Query("ALTER TABLE " . $table['Member'] . " ADD INDEX  " . $zbp->db->dbpre. "mem_Alias(mem_Alias) ;");
+	}elseif($zbp->db->type=='sqlite'){
+		$zbp->db->Query("ALTER TABLE " . $table['Category'] . " ADD INDEX  " . $zbp->db->dbpre. "cate_Order(cate_Order) ;");	
+		$zbp->db->Query("ALTER TABLE " . $table['Member'] . " ADD INDEX  " . $zbp->db->dbpre. "mem_Alias(mem_Alias) ;");
+	}
+	if($zbp->db->type=='mysql' || $zbp->db->type=='sqlite'){
+		$zbp->db->DelTable($GLOBALS['table']['Config']);
+		$s=$zbp->db->sql->CreateTable($GLOBALS['table']['Config'],$GLOBALS['datainfo']['Config']);
+		$zbp->db->QueryMulit($s);
+		$zbp->db->Query("ALTER TABLE " . $GLOBALS['table']['Config'] . " ADD INDEX  " . $zbp->db->dbpre. "conf_Name(conf_Name) ;");
+		array_unshift($zbp->configs,$zbp->configs['system'],$zbp->configs['cache']);
+		foreach($zbp->configs as $c){
+			$c->Save();
+		}
+	}
+	$zbp->option['ZC_LAST_VERSION']=$zbp->version;
+	$zbp->SaveOption();
+
+	$zbp->SetHint('good');Redirect('./update.php?ok');return;
+}
+if(isset($_GET['updatedb'])){
+  if($zbp->version>=150101 && (int)$zbp->option['ZC_LAST_VERSION']<150101)
+    updatedb_14();
+}
 if(GetVars('update','GET')!=''){
 $url=APPCENTRE_SYSTEM_UPDATE . '?' . GetVars('update','GET') . '.xml';
 $f=AppCentre_GetHttpContent($url);
@@ -32,7 +66,7 @@ $f=AppCentre_GetHttpContent($url);
 	  }
 	  $zbp->SetHint('good');
   }
-  Redirect('./update.php');
+  Redirect('./update.php?updatedb');
 }
 
 if(GetVars('restore','GET')!=''){
@@ -70,6 +104,14 @@ $newversion=AppCentre_GetHttpContent(APPCENTRE_SYSTEM_UPDATE . ($zbp->Config('Ap
   <div id="divMain2">
 
             <form method="post" action="">
+			
+<p>
+<?php
+if($zbp->version>=150101 && (int)$zbp->option['ZC_LAST_VERSION']<150101)
+  echo '<input id="updatenow" type="button" onclick="location.href=\'?updatedb\'" value="升级数据库结构" />';
+?>
+			  </p><hr/>
+			
               <table border="1" width="100%" cellspacing="0" cellpadding="0" class="tableBorder tableBorder-thcenter">
                 <tr>
                   <th width='50%'>当前版本</th>
@@ -93,7 +135,6 @@ if($newbuild-$nowbuild>0){
 ?>
               </p>
 			  <hr/>
-
               <div class="divHeader">校验当前版本的系统核心文件&nbsp;&nbsp;<span id="checknow"><a href="?check=now" title="开始校验"><img src="images/refresh.png" width="16" alt="校验" /></a></span></div>
 			  <!--<div>进度<span id="status">0</span>%；已发现<span id="count">0</span>个修改过的系统文件。<div id="bar"></div></div>-->
               <table border="1" width="100%" cellspacing="0" cellpadding="0" class="tableBorder tableBorder-thcenter">

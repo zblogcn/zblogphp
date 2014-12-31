@@ -247,8 +247,11 @@ function AppCentre_CreateOptoinsOfVersion($default){
 	$s=null;
 	$array=$GLOBALS['zbpvers'];
 	krsort($array);
+	$i=0;
 	foreach ($array as $key => $value) {
-		$s .= '<option value="' . $key . '" ' . ($default==$key?'selected="selected"':'') . ' >' . $value . '</option>';
+		$i += 1;
+		if(($i == 1) or strpos($value,'Beta')===False)
+			$s .= '<option value="' . $key . '" ' . ($default==$key?'selected="selected"':'') . ' >' . $value . '</option>';
 	}
 	return $s;
 }

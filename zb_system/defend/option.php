@@ -178,6 +178,7 @@ return array(
 	// '代码高亮
 	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
 	'ZC_LOADMEMBERS_LEVEL' => 0,
+	'ZC_LAST_VERSION' => '',
 	
 	// '源码编辑高亮
 	'ZC_CODEMIRROR_ENABLE' => true,

@@ -985,7 +985,7 @@ function InsertInfo(){
 
 
 function SaveConfig(){
-	global $zbp;
+  global $zbp;
 
   $zbp->option['ZC_BLOG_VERSION']=ZC_BLOG_VERSION;
   $zbp->option['ZC_BLOG_NAME']=GetVars('blogtitle','POST');
@@ -996,6 +996,7 @@ function SaveConfig(){
   $zbp->option['ZC_SIDEBAR4_ORDER']='';
   $zbp->option['ZC_SIDEBAR5_ORDER']='';
   $zbp->option['ZC_DEBUG_MODE']=true;
+  $zbp->option['ZC_LAST_VERSION']=$zbp->version;
   $zbp->SaveOption();
   //$zbp->BuildTemplate();
   

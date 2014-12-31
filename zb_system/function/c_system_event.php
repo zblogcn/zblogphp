@@ -841,9 +841,9 @@ function ViewPost($id, $alias, $isrewrite = false) {
 		$comments2 = $zbp->GetCommentList(
 			'*', 
 			array(
+				array('=', 'comm_LogID', $article->ID),
 				array('IN', 'comm_RootID',$rootid),
 				array('=', 'comm_IsChecking', 0),
-				array('=', 'comm_LogID', $article->ID)
 			),
 			array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
 			null,
@@ -924,9 +924,9 @@ function ViewComments($postid, $page) {
 	$comments2 = $zbp->GetCommentList(
 		'*',
 		array(
+			array('=', 'comm_LogID', $post->ID),
 			array('array', $rootid),
 			array('=', 'comm_IsChecking', 0),
-			array('=', 'comm_LogID', $post->ID)
 		),
 		array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
 		null,
