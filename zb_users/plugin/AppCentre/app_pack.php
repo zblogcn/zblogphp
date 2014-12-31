@@ -28,8 +28,8 @@ if
 	(function_exists('gzencode') && 
 	method_exists('App','PackGZip') && 
 	$zbp->Config('AppCentre')->enablegzipapp &&
-	$app->adapted > 140614 // 1.3和之前版本不打包为gzba)  
-{
+	$app->adapted > 140614 // 1.3和之前版本不打包为gzba
+){
 	header('Content-Disposition:attachment;filename='. $id .'.gzba');
 	echo $app->PackGZip();
 } else{
