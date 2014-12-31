@@ -12,22 +12,27 @@ if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
 
-$type=$_GET['type'];
+$type = $_GET['type'];
 
-$id=$_GET['id'];
+$id = $_GET['id'];
 
 $app=new App;
 
-if($app->LoadInfoByXml($type,$id)==false)die;
+if (!$app->LoadInfoByXml($type,$id)) exit;
 
 ob_clean();
 
 header('Content-Type: application/octet-stream');
 
-if(function_exists('gzencode')==true && method_exists('App','PackGZip')==true && $zbp->Config('AppCentre')->enablegzipapp==true){
+if
+	(function_exists('gzencode') && 
+	method_exists('App','PackGZip') && 
+	$zbp->Config('AppCentre')->enablegzipapp &&
+	$app->adapted > 140614 // 1.3和之前版本不打包为gzba)  
+{
 	header('Content-Disposition:attachment;filename='. $id .'.gzba');
 	echo $app->PackGZip();
-}else{
+} else{
 	header('Content-Disposition:attachment;filename='. $id .'.zba');
 	echo $app->Pack();
 }
