@@ -770,27 +770,27 @@ class ZBlogPHP {
 			$option = array();
 			foreach ($this->option as $key => $value) {
 				if(
-					($key=='ZC_YUN_SITE') or 
-					($key=='ZC_DATABASE_TYPE') or 
-					($key=='ZC_SQLITE_NAME') or 
-					($key=='ZC_SQLITE_PRE') or 
-					($key=='ZC_MYSQL_SERVER') or 
-					($key=='ZC_MYSQL_USERNAME') or 
-					($key=='ZC_MYSQL_PASSWORD') or 
-					($key=='ZC_MYSQL_NAME') or 
-					($key=='ZC_MYSQL_CHARSET') or 
-					($key=='ZC_MYSQL_PRE') or 
-					($key=='ZC_MYSQL_ENGINE') or 
-					($key=='ZC_MYSQL_PORT') or 
-					($key=='ZC_MYSQL_PERSISTENT') or 
-					($key=='ZC_PGSQL_SERVER') or 
-					($key=='ZC_PGSQL_USERNAME') or 
-					($key=='ZC_PGSQL_PASSWORD') or 
-					($key=='ZC_PGSQL_NAME') or 
-					($key=='ZC_PGSQL_CHARSET') or 
-					($key=='ZC_PGSQL_PRE') or 
-					($key=='ZC_PGSQL_PORT') or 
-					($key=='ZC_PGSQL_PERSISTENT') or 
+					($key=='ZC_YUN_SITE') || 
+					($key=='ZC_DATABASE_TYPE') || 
+					($key=='ZC_SQLITE_NAME') || 
+					($key=='ZC_SQLITE_PRE') || 
+					($key=='ZC_MYSQL_SERVER') || 
+					($key=='ZC_MYSQL_USERNAME') || 
+					($key=='ZC_MYSQL_PASSWORD') || 
+					($key=='ZC_MYSQL_NAME') || 
+					($key=='ZC_MYSQL_CHARSET') || 
+					($key=='ZC_MYSQL_PRE') || 
+					($key=='ZC_MYSQL_ENGINE') || 
+					($key=='ZC_MYSQL_PORT') || 
+					($key=='ZC_MYSQL_PERSISTENT') || 
+					($key=='ZC_PGSQL_SERVER') || 
+					($key=='ZC_PGSQL_USERNAME') || 
+					($key=='ZC_PGSQL_PASSWORD') || 
+					($key=='ZC_PGSQL_NAME') || 
+					($key=='ZC_PGSQL_CHARSET') || 
+					($key=='ZC_PGSQL_PRE') || 
+					($key=='ZC_PGSQL_PORT') || 
+					($key=='ZC_PGSQL_PERSISTENT') || 
 					($key=='ZC_SITE_TURNOFF')
 				)$option[$key]=$value;	
 			}
@@ -827,27 +827,27 @@ class ZBlogPHP {
 			//if($key=='ZC_BLOG_CLSID')continue;
 			//if($key=='ZC_BLOG_LANGUAGEPACK')continue;
 			if(
-				($key=='ZC_YUN_SITE') or 
-				($key=='ZC_DATABASE_TYPE') or 
-				($key=='ZC_SQLITE_NAME') or 
-				($key=='ZC_SQLITE_PRE') or 
-				($key=='ZC_MYSQL_SERVER') or 
-				($key=='ZC_MYSQL_USERNAME') or 
-				($key=='ZC_MYSQL_PASSWORD') or 
-				($key=='ZC_MYSQL_NAME') or 
-				($key=='ZC_MYSQL_CHARSET') or 
-				($key=='ZC_MYSQL_PRE') or 
-				($key=='ZC_MYSQL_ENGINE') or 
-				($key=='ZC_MYSQL_PORT') or 
-				($key=='ZC_MYSQL_PERSISTENT') or 
-				($key=='ZC_PGSQL_SERVER') or 
-				($key=='ZC_PGSQL_USERNAME') or 
-				($key=='ZC_PGSQL_PASSWORD') or 
-				($key=='ZC_PGSQL_NAME') or 
-				($key=='ZC_PGSQL_CHARSET') or 
-				($key=='ZC_PGSQL_PRE') or 
-				($key=='ZC_PGSQL_PORT') or 
-				($key=='ZC_PGSQL_PERSISTENT') or 
+				($key=='ZC_YUN_SITE') || 
+				($key=='ZC_DATABASE_TYPE') || 
+				($key=='ZC_SQLITE_NAME') || 
+				($key=='ZC_SQLITE_PRE') || 
+				($key=='ZC_MYSQL_SERVER') || 
+				($key=='ZC_MYSQL_USERNAME') || 
+				($key=='ZC_MYSQL_PASSWORD') || 
+				($key=='ZC_MYSQL_NAME') || 
+				($key=='ZC_MYSQL_CHARSET') || 
+				($key=='ZC_MYSQL_PRE') || 
+				($key=='ZC_MYSQL_ENGINE') || 
+				($key=='ZC_MYSQL_PORT') || 
+				($key=='ZC_MYSQL_PERSISTENT') || 
+				($key=='ZC_PGSQL_SERVER') || 
+				($key=='ZC_PGSQL_USERNAME') || 
+				($key=='ZC_PGSQL_PASSWORD') || 
+				($key=='ZC_PGSQL_NAME') || 
+				($key=='ZC_PGSQL_CHARSET') || 
+				($key=='ZC_PGSQL_PRE') || 
+				($key=='ZC_PGSQL_PORT') || 
+				($key=='ZC_PGSQL_PERSISTENT') || 
 				($key=='ZC_SITE_TURNOFF')
 			)continue;
 			$this->option[$key]=$value;
