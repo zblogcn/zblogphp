@@ -1,7 +1,7 @@
 <?php
 $actions_name_howl = array(
-	'login' => '登陆',
-	'logout' => '退出登陆',
+	'login' => '登录',
+	'logout' => '登出',
 	'verify' => '验证',
 	'admin' => '管理',
 	'search' => '搜索',

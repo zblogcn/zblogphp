@@ -102,7 +102,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
             <form action="?act=login" method="post">
               <table style="line-height:3em;" width="100%" border="0">
                 <tr height="32">
-                  <th  align="center">开发者请填写您在"APP应用中心"的用户名和密码并点登陆
+                  <th  align="center">如果您是开发者，请在这里输入Z-Blog应用中心的开发者账号和密码，以用于身份验证。
                     </td>
                 </tr>
                 <tr height="32">

@@ -69,7 +69,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                     <input type="password" name="shop_password" value="" style="width:35%" /></td>
                 </tr>
                 <tr height="32" align="center">
-                  <td align="center"><input type="submit" value="登陆" class="button" /></td>
+                  <td align="center"><input type="submit" value="登录" class="button" /></td>
                 </tr>
               </table>
             </form>
