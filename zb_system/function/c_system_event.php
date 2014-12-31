@@ -692,16 +692,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	}
 
 	if($zbp->option['ZC_LISTONTOP_TURNOFF']==false){
-		$articles_top_notorder_idarray = unserialize($zbp->cache->top_post_array);
-		if(!is_array($articles_top_notorder_idarray)){
-			$articles_top_notorder=$zbp->db->Query(
-				$zbp->db->sql->Select($zbp->table['Post'],'log_ID', array(array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), array('log_PostTime' => 'ASC'), null, null)
-			);
-			foreach($articles_top_notorder as $articles_top_id){
-				$articles_top_notorder_idarray[(int)current($articles_top_id)]=(int)current($articles_top_id);
-			}
-		}
-		$articles_top_notorder=$zbp->GetPostByArray($articles_top_notorder_idarray);
+		$articles_top_notorder=$zbp->GetTopArticles();
 		foreach($articles_top_notorder as $articles_top_notorder_post)
 			if($articles_top_notorder_post->TopType == 'global')
 				$articles_top[]=$articles_top_notorder_post;
@@ -713,7 +704,6 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 			foreach($articles_top_notorder as $articles_top_notorder_post)
 				if($articles_top_notorder_post->TopType == 'category' && $articles_top_notorder_post->CateID == $category->ID)
 					$articles_top[]=$articles_top_notorder_post;
-
 	}
 
 	$select = '*';
@@ -1159,7 +1149,7 @@ function PostArticle() {
 			CountNormalArticleNums(+1);
 		}
 	}
-	if($article->IsTop == true)
+	if($article->IsTop == true && $article->Status==ZC_POST_STATUS_PUBLIC)
 		CountTopArticle($article->ID,null);
 	else
 		CountTopArticle(null,$article->ID);

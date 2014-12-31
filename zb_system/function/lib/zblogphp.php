@@ -2300,19 +2300,19 @@ class ZBlogPHP {
 		}
 		if($this->hint1==null){
 			$this->hint1=$signal . '|' . $content;
-			setcookie("hint_signal1", $signal . '|' . $content,time()+3600,$this->cookiespath);
+			setcookie("hint_signal1", $signal . '|' . $content,0,$this->cookiespath);
 		}elseif($this->hint2==null){
 			$this->hint2=$signal . '|' . $content;
-			setcookie("hint_signal2", $signal . '|' . $content,time()+3600,$this->cookiespath);
+			setcookie("hint_signal2", $signal . '|' . $content,0,$this->cookiespath);
 		}elseif($this->hint3==null){
 			$this->hint3=$signal . '|' . $content;
-			setcookie("hint_signal3", $signal . '|' . $content,time()+3600,$this->cookiespath);
+			setcookie("hint_signal3", $signal . '|' . $content,0,$this->cookiespath);
 		}elseif($this->hint4==null){
 			$this->hint4=$signal . '|' . $content;
-			setcookie("hint_signal4", $signal . '|' . $content,time()+3600,$this->cookiespath);
+			setcookie("hint_signal4", $signal . '|' . $content,0,$this->cookiespath);
 		}elseif($this->hint5==null){
 			$this->hint5=$signal . '|' . $content;
-			setcookie("hint_signal5", $signal . '|' . $content,time()+3600,$this->cookiespath);
+			setcookie("hint_signal5", $signal . '|' . $content,0,$this->cookiespath);
 		}
 	}
 
@@ -2515,4 +2515,20 @@ class ZBlogPHP {
 		}
 	}
 
+	/**
+	 * 获取全部置顶文章（优先从cache里读数组）
+	 */
+	function GetTopArticles(){
+		$articles_top_notorder_idarray = unserialize($this->cache->top_post_array);
+		if(!is_array($articles_top_notorder_idarray)){
+			$articles_top_notorder=$this->db->Query(
+				$this->db->sql->Select($this->table['Post'],'log_ID', array(array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), array('log_PostTime' => 'ASC'), null, null)
+			);
+			foreach($articles_top_notorder as $articles_top_id){
+				$articles_top_notorder_idarray[(int)current($articles_top_id)]=(int)current($articles_top_id);
+			}
+		}
+		$articles_top_notorder=$this->GetPostByArray($articles_top_notorder_idarray);
+		return $articles_top_notorder;
+	}
 }

@@ -213,7 +213,7 @@ class Config {
 	* 占位
 	*/
 	function SaveKey($name){
-		$this->Save();
+		return $this->Save();
 	}
 	
 	/**
@@ -223,6 +223,6 @@ class Config {
 		$name = FilterCorrectName($name);
 		if(!isset($this->kvdata[$name]))return false;
 		unset($this->kvdata[$name]);
-		$this->Save();
+		return $this->Save();
 	}
 }
