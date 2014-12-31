@@ -1006,7 +1006,7 @@ function SaveConfig(){
   $zbp->Config('AppCentre')->enabledcheck=1;
   $zbp->Config('AppCentre')->checkbeta=0;
   $zbp->Config('AppCentre')->enabledevelop=0;
-  $zbp->Config('AppCentre')->enablegzipapp=1;
+  $zbp->Config('AppCentre')->enablegzipapp=0;
   $zbp->SaveConfig('AppCentre');
   
   echo "保存设置,编译模板成功!<br/>";
