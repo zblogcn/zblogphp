@@ -200,7 +200,14 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 		}
 	}
 
-	$articles = $zbp->GetArticleList('*', $w, array('log_PostTime' => 'DESC'), $count, null, false);
+	$select = '*';
+	$order = array('log_PostTime' => 'DESC');
+
+	foreach ($GLOBALS['Filter_Plugin_LargeData_GetList'] as $fpname => &$fpsignal) {
+		$fpreturn = $fpname($select,$w,$order,$count,$option);
+	}
+	
+	$articles = $zbp->GetArticleList($select, $w, $order, $count, null, false);
 
 	if ($option['is_related']) {
 		foreach ($articles as $k => $a) {

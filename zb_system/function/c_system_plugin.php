@@ -1551,3 +1551,13 @@ DefinePluginFilter('Filter_Plugin_LargeData_Comment');
 */
 DefinePluginFilter('Filter_Plugin_LargeData_CountTagArray');
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_LargeData_GetList
+'参数:&$select,&$where,&$order,&$limit,&$option
+'说明:大数据GetList函数
+'调用:
+'**************************************************>
+*/
+DefinePluginFilter('Filter_Plugin_LargeData_GetList');
