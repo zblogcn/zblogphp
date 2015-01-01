@@ -29,6 +29,7 @@ function updatedb_14(){
 		$zbp->db->Query("ALTER TABLE " . $table['Comment'] . " ADD INDEX  " . $zbp->db->dbpre. "comm_LRI(comm_LogID,comm_RootID,comm_IsChecking) ;");
 		$zbp->db->Query("ALTER TABLE " . $table['Category'] . " ADD INDEX  " . $zbp->db->dbpre. "cate_Order(cate_Order) ;");	
 		$zbp->db->Query("ALTER TABLE " . $table['Member'] . " ADD INDEX  " . $zbp->db->dbpre. "mem_Alias(mem_Alias) ;");
+		$zbp->db->Query("ALTER TABLE " . $table['Member'] . " ADD INDEX  " . $zbp->db->dbpre. "mem_Level(mem_Level) ;");
 	}elseif($zbp->db->type=='sqlite'){
 		$zbp->db->Query("ALTER TABLE " . $table['Category'] . " ADD INDEX  " . $zbp->db->dbpre. "cate_Order(cate_Order) ;");	
 		$zbp->db->Query("ALTER TABLE " . $table['Member'] . " ADD INDEX  " . $zbp->db->dbpre. "mem_Alias(mem_Alias) ;");

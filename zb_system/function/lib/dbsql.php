@@ -439,7 +439,7 @@ class DbSql
 	 * @param array|null $option
 	 * @return string 返回构造的语句
 	 */
-	public function Select($table,$select,$where,$order,$limit,$option=null){
+	public function Select($table,$select=null,$where=null,$order=null,$limit=null,$option=null){
 		$this->ReplacePre($table);
 	
 		$sqls='';
@@ -462,10 +462,12 @@ class DbSql
 				$sqls="SELECT * FROM $table ";
 		}
 
-		if(isset($option['changewhere'])){
-			$sqlw=$this->ParseWhere($where,$option['changewhere']);
-		}else{
-			$sqlw=$this->ParseWhere($where);
+		if(!empty($where)){
+			if(isset($option['changewhere'])){
+				$sqlw=$this->ParseWhere($where,$option['changewhere']);
+			}else{
+				$sqlw=$this->ParseWhere($where);
+			}
 		}
 		
 		if(isset($option['groupby'])){

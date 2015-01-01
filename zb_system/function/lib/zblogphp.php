@@ -1506,7 +1506,7 @@ class ZBlogPHP {
 #加载数据对像List函数
 
 	/**
-	 * 自定义查询语句获取数据库数据列表
+	 * 查询指定数据结构的sql并返回Base对象列表
 	 * @param string $table 数据表
 	 * @param string $datainfo 数据字段
 	 * @param string $sql SQL操作语句
@@ -1526,9 +1526,33 @@ class ZBlogPHP {
 		return $list;
 	}
 
+	/**
+	 * 查询ID数据的指定数据结构的sql并返回Base对象列表
+	 * @param string $table 数据表
+	 * @param string $datainfo 数据字段
+	 * @param array $array ID数组
+	 * @return array
+	 */
+	function GetListCustomByArray($table,$datainfo,$array){
+		if(!is_array($array))return array();
+		if(count($array)==0)return array();
+		$where = array();
+		$where[] = array('IN',$datainfo['ID'][0],implode(',',$array));
+		$sql = $this->db->sql->Select($table,'*',$where);
+		$array=null;
+		$list=array();
+		$array=$this->db->Query($sql);
+		if(!isset($array)){return array();}
+		foreach ($array as $a) {
+			$l=new Base($table,$datainfo);
+			$l->LoadInfoByAssoc($a);
+			$list[]=$l;
+		}
+		return $list;
+	}
 
 	/**
-	 * 已改名GetListType,将在1.5版中扔掉有歧义的GetList
+	 * 已改名GetListType,将在下个版中扔掉有歧义的GetList
 	 * 
 	 * @deprecated 1.5
 	 * @param $type
@@ -1536,18 +1560,43 @@ class ZBlogPHP {
 	 * @return array
 	 */
 	function GetList($type,$sql){
+		$this->SetHint('tips','$zbp->GetList()已改名为GetListType(),下个版本将会取消,请在相关源码中改用新名称.');
 		return $this->GetListType($type,$sql);
 	}
 	
 	/**
 	 * 原名GetList
-	 * 
-	 * @param $type
-	 * @param $sql
+	 * 查询指定类型的sql并返回指定类型对象列表
+	 * @param string $type
+	 * @param string $sql
 	 * @return array
 	 */
 	function GetListType($type,$sql){
 
+		$array=null;
+		$list=array();
+		$array=$this->db->Query($sql);
+		if(!isset($array)){return array();}
+		foreach ($array as $a) {
+			$l=new $type();
+			$l->LoadInfoByAssoc($a);
+			$list[]=$l;
+		}
+		return $list;
+	}
+
+	/**
+	 * 查询ID数据的指定类型的sql并返回指定类型对象列表
+	 * @param string $type 类型
+	 * @param array $array ID数组
+	 * @return array
+	 */
+	function GetListTypeByArray($type,$array){
+		if(!is_array($array))return array();
+		if(count($array)==0)return array();
+		$where = array();
+		$where[] = array('IN',$this->datainfo[$type]['ID'][0],implode(',',$array));
+		$sql = $this->db->sql->Select($this->table[$type],'*',$where);
 		$array=null;
 		$list=array();
 		$array=$this->db->Query($sql);
@@ -1587,11 +1636,7 @@ class ZBlogPHP {
 	 * @return array Posts
 	 */
 	function GetPostByArray($array){
-		if(!is_array($array))return array();
-		if(count($array)==0)return array();
-		$where = array();
-		$where[] = array('IN','log_ID',implode(',',$array));
-		return $this->GetPostList('*',$where);
+		return $this->GetListTypeByArray('Post',$array);
 	}
 
 	/**
