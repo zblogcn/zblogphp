@@ -54,7 +54,8 @@ CREATE TABLE IF NOT EXISTS %pre%comment (
   comm_Agent text NOT NULL,
   comm_Meta longtext NOT NULL,
   PRIMARY KEY (comm_ID),
-  KEY %pre%comm_LRI (comm_LogID,comm_RootID,comm_IsChecking)
+  KEY %pre%comm_LRI (comm_LogID,comm_RootID,comm_IsChecking),
+  KEY %pre%comm_IsChecking (comm_IsChecking)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 

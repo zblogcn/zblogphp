@@ -441,7 +441,8 @@ class DbSql
 	 */
 	public function Select($table,$select=null,$where=null,$order=null,$limit=null,$option=null){
 		$this->ReplacePre($table);
-	
+
+		$sqlp='SELECT ';
 		$sqls='';
 		$sqlw='';
 		$sqlg='';
@@ -453,13 +454,13 @@ class DbSql
 			if(is_array($select)){
 				$selectstr=implode($select,',');
 				if(trim($selectstr)=='')$selectstr='*';
-				$sqls="SELECT $selectstr FROM $table ";
+				$sqls="{$sqlp} {$selectstr} FROM $table ";
 			}else{
 				if(trim($sqls)=='')$sqls='*';
-				$sqls="SELECT $select FROM $table ";
+				$sqls="{$sqlp} {$select} FROM $table ";
 			}
 		}else{
-				$sqls="SELECT * FROM $table ";
+				$sqls="{$sqlp} * FROM $table ";
 		}
 
 		if(!empty($where)){

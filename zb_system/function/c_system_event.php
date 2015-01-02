@@ -2462,7 +2462,7 @@ function CountTopArticle($addplus = null,$delplus=null) {
 	if(!is_array($array))$array=array();
 
 	if($addplus === null && $delplus === null){
-		$s=$zbp->db->sql->Select($zbp->table['Post'],'log_ID', array(array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), array('log_PostTime' => 'ASC'), null, null);
+		$s=$zbp->db->sql->Select($zbp->table['Post'],'log_ID', array(array('=', 'log_Type', 0),array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), null, null, null);
 		$a=$zbp->db->Query($s);
 		foreach($a as $id){
 			$array[(int)current($id)]=(int)current($id);

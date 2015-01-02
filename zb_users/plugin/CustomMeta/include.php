@@ -69,7 +69,7 @@ function CustomMeta_Response($type,&$object){
 				foreach ($ar as $r) {
 					echo '<label><input name="meta_' . $value . '[]" value="'.htmlspecialchars($r).'" type="checkbox" '.(in_array($r,$object->Metas->$value)?' checked="checked"':'').'/>'.$r.'</label>';
 				}
-				echo '<label onclick="$(&quot;:radio[name=\'meta_' . $value . '\']&quot;).prop(&quot;checked&quot;, false);$(&quot;:text[name=\'meta_' . $value . '\']&quot;).prop(&quot;disabled&quot;, false);"><input type="text" name="meta_' . $value . '" value="" disabled="disabled" style="display:none;"/>【全不选】<label>';
+				echo '<label onclick="$(&quot;:checkbox[name=\'meta_' . $value . '[]\']&quot;).removeProp(&quot;checked&quot;);$(&quot;:text[name=\'meta_' . $value . '\']&quot;).prop(&quot;disabled&quot;, false);"><input type="text" name="meta_' . $value . '" value="" disabled="disabled" style="display:none;"/>【全不选】<label>';
 				//echo '</p>';	
 				break;
 			case 'bool':
