@@ -449,18 +449,69 @@ class DbSql
 		$sqlh='';
 		$sqlo='';
 		$sqll='';
+		
+		if(is_array($option)==false)$option=array();
+		$option=array_change_key_case($option);
+		
+		if(isset($option['sql_no_cache'])){
+			$sqlp.= 'SQL_NO_CACHE ';
+		}
+		if(isset($option['sql_cache'])){
+			$sqlp.= 'SQL_CACHE ';
+		}
+		if(isset($option['sql_buffer_result'])){
+			$sqlp.= 'SQL_BUFFER_RESULT ';
+		}
 
-		if(!empty($select)){
-			if(is_array($select)){
-				$selectstr=implode($select,',');
-				if(trim($selectstr)=='')$selectstr='*';
-				$sqls="{$sqlp} {$selectstr} FROM $table ";
+		if(isset($option['select2count'])){
+			$sqls = $sqlp;
+			if(is_array($select)) {
+				foreach ($select as $key => $value) {
+					if(count($value)==3)
+						$sqls .= "$value[0]($value[1]) AS $value[2],";
+					if(count($value)==2)
+						$sqls .= "$value[0]($value[1]),";
+				}
+				$sqls=substr($sqls, 0,strlen($sqls)-1);
 			}else{
-				if(trim($sqls)=='')$sqls='*';
-				$sqls="{$sqlp} {$select} FROM $table ";
+				$sqls .= $select;
 			}
 		}else{
-				$sqls="{$sqlp} * FROM $table ";
+			if(!empty($select)){
+				if(is_array($select)){
+					$selectstr=implode($select,',');
+					if(trim($selectstr)=='')$selectstr='*';
+					$sqls="{$sqlp} {$selectstr} ";
+				}else{
+					if(trim($sqls)=='')$sqls='*';
+					$sqls="{$sqlp} {$select} ";
+				}
+			}else{
+				$sqls="{$sqlp} *";
+			}
+		}
+		$sqls .= " FROM $table ";
+
+		if(isset($option['useindex'])){
+			if(is_array($option['useindex'])){
+				$sqls.='USE INDEX ('.implode($option['useindex'],',').') ';
+			}else{
+				$sqls.='USE INDEX ('.$option['useindex'].') ';
+			}
+		}
+		if(isset($option['forceindex'])){
+			if(is_array($option['forceindex'])){
+				$sqls.='FORCE INDEX ('.implode($option['forceindex'],',').') ';
+			}else{
+				$sqls.='FORCE INDEX ('.$option['forceindex'].') ';
+			}
+		}
+		if(isset($option['ignoreindex'])){
+			if(is_array($option['ignoreindex'])){
+				$sqls.='IGNORE INDEX ('.implode($option['ignoreindex'],',').') ';
+			}else{
+				$sqls.='IGNORE INDEX ('.$option['ignoreindex'].') ';
+			}
 		}
 
 		if(!empty($where)){
@@ -541,57 +592,13 @@ class DbSql
 	 * @param null $option
 	 * @return string 返回构造的语句
 	 */
-	public function Count($table,$count,$where,$option=null){
+	public function Count($table,$count,$where=null,$option=null){
 		$this->ReplacePre($table);
 
-		$sqlc="SELECT ";
+		if(is_array($option)==false)$option=array();
+		$option['select2count']=true;
 
-		if(is_array($count)) {
-			foreach ($count as $key => $value) {
-				if(count($value)==3)
-					$sqlc .= "$value[0]($value[1]) AS $value[2],";
-				if(count($value)==2)
-					$sqlc .= "$value[0]($value[1]),";
-			}
-			$sqlc=substr($sqlc, 0,strlen($sqlc)-1);
-		}else{
-			$sqlc .= $count;
-		}
-
- 		$sqlc .= " FROM $table ";
-
-		if(isset($option['changewhere'])){
-			$sqlw=$this->ParseWhere($where,$option['changewhere']);
-		}else{
-			$sqlw=$this->ParseWhere($where);
-		}
-
-		$sqlg='';
-		if(isset($option['groupby'])){
-			$sqlg=' GROUP BY ';
-			$comma = '';
-			if(!is_array($option['groupby'])){
-				$sqlg .= $option['groupby'];
-			}else{
-				foreach($option['groupby'] as $k=>$v) {
-					$sqlg .= $comma ."$v";
-					$comma = ',';
-				}
-			}
-		}
-
-		$sqlh='';
-		if(isset($option['having'])){
-			$sqlh=' HAVING ';
-			$comma = '';
-			if(!is_array($option['having'])){
-				$sqlh .= $option['having'];
-			}else{
-				$sqlh .= $this->ParseWhere($option['having'],'');
-			}
-		}
-
-		return $sqlc . $sqlw . $sqlg . $sqlh;
+		return $this->Select($table,$count,$where,null,null,$option);
 	}
 
 	/**

@@ -172,7 +172,7 @@ class Config {
 		if($name=='')return false;
 
 		$kv=array('conf_Name'=>$name,'conf_Value'=>$value);
-		$sql = $this->db->sql->Select($this->table,'*',array(array('=','conf_Name',$name)),'','','');
+		$sql = $this->db->sql->Select($this->table,'conf_Name',array(array('=','conf_Name',$name)),'','','');
 		$array=$this->db->Query($sql);
 
 		if(count($array)==0){
