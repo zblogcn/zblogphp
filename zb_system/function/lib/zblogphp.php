@@ -2563,15 +2563,11 @@ class ZBlogPHP {
 	/**
 	 * 获取全部置顶文章（优先从cache里读数组）
 	 */
-	function GetTopArticles(){
+	function GetTopArticle(){
 		$articles_top_notorder_idarray = unserialize($this->cache->top_post_array);
 		if(!is_array($articles_top_notorder_idarray)){
-			$articles_top_notorder=$this->db->Query(
-				$this->db->sql->Select($this->table['Post'],'log_ID', array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), null, null, null)
-			);
-			foreach($articles_top_notorder as $articles_top_id){
-				$articles_top_notorder_idarray[(int)current($articles_top_id)]=(int)current($articles_top_id);
-			}
+			CountTopArticle(null,null);
+			$articles_top_notorder_idarray = unserialize($this->cache->top_post_array);
 		}
 		$articles_top_notorder=$this->GetPostByArray($articles_top_notorder_idarray);
 		return $articles_top_notorder;

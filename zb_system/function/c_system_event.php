@@ -692,7 +692,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	}
 
 	if($zbp->option['ZC_LISTONTOP_TURNOFF']==false){
-		$articles_top_notorder=$zbp->GetTopArticles();
+		$articles_top_notorder=$zbp->GetTopArticle();
 		foreach($articles_top_notorder as $articles_top_notorder_post)
 			if($articles_top_notorder_post->TopType == 'global')
 				$articles_top[]=$articles_top_notorder_post;
