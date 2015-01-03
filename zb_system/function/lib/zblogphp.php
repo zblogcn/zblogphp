@@ -2572,4 +2572,13 @@ class ZBlogPHP {
 		$articles_top_notorder=$this->GetPostByArray($articles_top_notorder_idarray);
 		return $articles_top_notorder;
 	}
+
+	/**
+	 * 获取已激活插件名数组
+	 */
+	function GetActivePlugin(){
+		$ap=explode("|", $this->option['ZC_USING_PLUGIN_LIST']);
+		$ap=array_unique($ap);
+		return $ap;
+	}
 }

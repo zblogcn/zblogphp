@@ -4,27 +4,21 @@ body{
 	padding:0;
 	color:#555;
 	font-size:16px;
-    font-family: "微软雅黑","宋体","Trebuchet MS", Tahoma, Arial, sans-serif;
+    font-family: "微软雅黑",Arial,sans-serif,Tahoma,"Trebuchet MS","宋体";
+	background-color:#FFFFFF;
+    
 }
 a{
+	color:#333;
 	text-decoration: none;
-}
-a:link {
-	color: #333;
-}
-a:visited {
-	color: #333;
 }
 a:hover {
-	color: #B22222;
-	text-decoration: none;
-}
-a:active {
-	color: #B22222;
+	color: red;
 	text-decoration: none;
 }
 
-ol,ul,dl{
+
+ol,ul{
 	list-style-type:none;
 	list-style-position : outside;
 	margin:0 0 0 0;
@@ -66,52 +60,53 @@ h1,h2,h3,h4,h5,h6{
 
 /*---------------------------各模块设定-------------------------------*/
 #divAll{
-	width:100%;
-	margin:0 auto;
-	padding:0 0 0 0;
+	width:1200px;
+	margin:50px auto;
+	padding:8px 0 0 0;
 	text-align:center;
-	background:url("default/bg-nav.jpg") no-repeat center 84px;
+	background:url("default/bg1200-1.png") no-repeat 50% top;
 }
 
 #divPage{
 	width:100%;
 	margin:0 auto;
-	padding:0 0 0 0;
+	padding:0 0 10px 0;
 	text-align:center;
 	text-align:center;
-	background:url("default/bg-bottom.png") repeat-x 0 bottom;
+	background:url("default/bg1200-2.png") no-repeat 50% bottom;		
+	
 }
 
 #divMiddle{
-	width:980px;
-	margin:0 auto 0 auto;
-	padding:0 0 0 0;
+	width:1100px;
+	margin:0 auto;
+	padding:0 50px;
 	text-align:left;
+	background:url("default/bg1200-3.png") repeat-y 50% 50%;	
 }
 
 
 
 #divTop{
-	width:980px;
+	width:100%;
 	margin:0 auto;
-	padding:30px 0 0 0;
+	padding:40px 0 30px 0;
 	text-align:left;
 	float:left;
-	height:180px;
-    clear:both;
+    clear:both;		
 }
 
 #divSidebar{
-    width:230px;
-	margin:15px 0 0 15px;
-	padding:0 0 0 0;
+    width:250px;
+	margin:10px 0 0 0;
+	padding:0 0 0 40px;
 	text-align:left;
 	float:right;
 
 }
 
 #divMain{
-	width:730px;
+	width:810px;
 	margin:10px 0 0 0;
 	padding:0 0 30px 0;
 	text-align:left;
@@ -123,19 +118,21 @@ h1,h2,h3,h4,h5,h6{
 #divBottom{
 	width:100%;
 	margin:0 0 0 0;
-	padding:45px 0 0 0;
+	padding:20px 0 0 0;
 	text-align:center;
     clear:both;
     height:75px;
+
 }
 
 
 
 /*-------------------------------导航栏--------------------------------*/
 #divNavBar{
-	float:right;
+	float:left;
 	width:100%;
-	height:36px;
+	padding:10px 0;
+	clear:both;
 }
 
 
@@ -157,35 +154,26 @@ h1,h2,h3,h4,h5,h6{
 }
 
 #divNavBar a{
-	font-size:1.1em;
 	float:left;
-	margin:0 15px 0px 0px;
-	padding:7px 10px 7px 10px;
+	font-size:1.1em;
+	margin:0 20px 0 10px;
+	padding:5px 10px 5px 10px;
 	text-decoration: none;
 	line-height:22px;
-	border-bottom:2px solid #aaa;
+	border-bottom:1px solid #ccc;
 }
 
 #divNavBar a.on{
 	color:black;
-	border-bottom:2px solid #666;
+	border-bottom:1px solid #999;
 }
 
-#divNavBar a:link {
-	color:black;
-}
-#divNavBar a:visited {
-	color:black;
-}
+
 #divNavBar a:hover {
 	color:black;
-	border-bottom:2px solid #B22222;
+	border-bottom:1px solid #B22222;
 }
 
-#divNavBar a:active {
-	color:black;
-	border-bottom:2px solid #B22222;
-}
 
 
 
@@ -193,18 +181,18 @@ h1,h2,h3,h4,h5,h6{
 .function {
 	float:left;
 	width:100%;
-	margin:0 0 15px 0;
+	margin:0 0 10px 0;
 	padding:0;
 	text-align:left;
+	line-height:1.5em;
 }
 .function .function_t{
-	font-size:1.0em;
+	font-size:1.15em;
 	height:24px;
 	line-height:24px;
 	margin:0 0 0 0;
 	padding:5px 0 5px 1em;
-	color:#444;
-	font-weight:bold;
+	color:#333;
 }
 
 
@@ -219,28 +207,26 @@ h1,h2,h3,h4,h5,h6{
 .function li{
 	font-size:1em;
 	margin:0 0 0 0;
-	padding:0.3em 0 0.3em 0.3em;
+	padding:4px 0 4px 0.9em;
+	background:url("default/pointblue.gif") no-repeat 0 12px;
 	width:auto;
 }
-.function .function_c{
-	padding:0em;
-}
+
 .function .function_c div{
-	padding:0 0 0.5em 1em;
-	line-height:1.5em;
+	padding:0.5em 0 0.5em 1em;
 }
 
 .function a{
-	color:dimgray;
+	color:gray;
 }
 .function a:hover{
-	color:#B22222;
+	color:red;
 }
 
 /*------------------------------网站目录定义---------------------------*/
 
 #divMisc li{
-	padding-left:0.35em;
+	padding-left:1em;
 	background:none;
 }
 
@@ -254,18 +240,18 @@ h1,h2,h3,h4,h5,h6{
 }
 
 #divSearchPanel input[type="text"]{
-	border:1px solid #ccc;
+	border:1px solid #bfd0d7;
 	height:24px;
 	line-height:24px;
 	width:150px;
 }
 #divSearchPanel input[type="submit"]{
-	border:1px solid #ccc;
+	border:1px solid #bfd0d7;
 	height:28px;
 	line-height:24px;
 	width:50px;
 	margin-left:0px;
-	background:#ccc;
+	background:#e5f0f6;
 }
 #divTags {
 	padding:0 0 0 0;
@@ -290,33 +276,13 @@ h1,h2,h3,h4,h5,h6{
     text-overflow:ellipsis;
 }
 
-/*-----------------------------日历-----------------------------*/
-#divCalendar{
-    width:100%;
-	padding:0 0 0 0;
-}
-
-
-#divCalendar div{
-    width:225px;
-	margin:0 0 0 0;
-	padding:5px 0 5px 5px;
-	float:left;
-}
-
-#divCalendar table{
-	width:96%;
-	padding:0 2% 0 2%;
-	text-align:center;
-}
-
 /*------------------------------文章模块---------------------------*/
 
 
 div.post {
-	width:99%;
+	width:98%;
 	margin:0 0 0 0;
-	padding:20px 1% 2px 0;
+	padding:20px 1% 2px 1%;
 	text-align:left;
 	clear:both; 
 	word-break:break-all;
@@ -328,7 +294,8 @@ div.istop-post{
 }
 
 div.pagebar{
-	padding:30px 1% 5px 0;
+	padding:30px 1% 5px 1%;
+	text-align:center;
 }
 
 /*---------------------------文章上下翻条------------------------*/
@@ -349,12 +316,13 @@ div.post-nav {
 div.post .post-title{
     margin:0 0 0 0;
     padding:0 0 5px 0;
-    font-size:1.5em;
+    font-size:1.4em;
     line-height:1.5em; 
+	color: #333;
     text-align:left;
 	width:80%;
 	float:left;
-	color: #333;
+
 }
 
 div.istop-post .post-title{
@@ -368,13 +336,13 @@ div.post .post-date{
     height:1em;
 	line-height:1em;
 	margin:0 0 0 0;
-	padding:17px 0 0 0;
+	padding:10px 0 0 0;
 	font-size:0.9em;
 	font-weight: normal;
     text-align:right;
 	width:20%;
 	float:right;
-	color:#999;
+	color:#aaa;
 }
 
 
@@ -384,7 +352,7 @@ div.post .post-footer{
 	padding:0 0 5px 0;
 	font-size:0.9em;
     font-weight: normal;
-	color:#999;
+	color:#aaa;
 	text-align:right;
 }
 
@@ -403,8 +371,8 @@ div.post .post-tags{
 
 div.post div.post-body{
 	width:100%;
-	margin:0 0 15px 0;
-	padding:0 0 0 0;
+	margin:0px 0 15px 0;
+	padding:0px 0 0 0;
 	font-size:1em;
     text-align:justify;
 	line-height:180%;
@@ -423,18 +391,26 @@ div.post-body p{
 	text-indent:0em;
 }
 
+/*----------tagcloud------*/
+
+div.post-body .tags-cloud{
+	margin:10px 0 15px 0;
+}
+.tags-cloud .tag-name{margin:0 5px;line-height: 1.2;}
+.tags-cloud .tag-name-size-0{font-size: 1.1em;}
+.tags-cloud .tag-name-size-1{font-size: 1.3em;}
+.tags-cloud .tag-name-size-2{font-size: 1.6em;}
+.tags-cloud .tag-name-size-3{font-size: 2.0em;}
+.tags-cloud .tag-name-size-4{font-size: 2.5em;}
+.tags-cloud .tag-name-size-5{font-size: 3.1em;}
+.tags-cloud .tag-name-size-6{font-size: 3.8em;}
+.tags-cloud .tag-name-size-7{font-size: 4.6em;}
 
 /*----------文章中引用code------*/
 
 div.post-body div.syntaxhighlighter{
 	margin: .5em 1em .5em 2em!important;
 	width:auto!important;
-}
-
-div.post-body li p{
-	overflow:visible;
-	text-indent: 0;
-	margin: 3px 0;
 }
 div.post-body ul,div.post-body ol{
 	margin-left:3.5em;
@@ -518,39 +494,30 @@ div.post-body h6{
 /*---------------------------blog标题-----------------------------*/
 
 #BlogTitle{
-	font-size:2.9em;
-	margin:30px 0 0 0;
+	font-size:3em;
+	margin:0 0 0 0;
 	padding:0 0 0 0;
 	font-weight:normal;
-	float:left;
 	clear:both;
-	line-height:1.6em;
-	text-align:center;
-	width:100%;
-	text-shadow: 2px 2px 2px #ccc;	
+	line-height:1.5em;
+	text-shadow: 5px 5px 5px #cccccc;	
+	text-align: center;	
 }
 #BlogTitle a{
-	color:#3a6da4; 
+	color:#333; 
 }
-#BlogTitle a:hover {
-	color: #B22222;
-	text-decoration: none;
-}
-#BlogTitle a:active {
-	color: #B22222;
-	text-decoration: none;
+#BlogTitle a:hover{
+	color:red;
 }
 #BlogSubTitle{
-	color:gray; 
-	font-size:1.0em;
+	color:#333; 
+	font-size:1.2em;
     font-weight:normal;
-	margin:5px 0 0 0;
+	margin:10px 0 0 0;
 	padding:0;
-	float:left;
 	clear:both;
-	line-height:1.0em;
-	text-align:center;
-	width:100%;
+	line-height:1.5em;
+	text-align: center;	
 }
 
 /*---------------------------版权-----------------------------*/
@@ -572,13 +539,33 @@ div.post-body h6{
 	font-weight:normal;
 }
 #BlogPowerBy a,#BlogCopyRight a{
-	color:#666;
+	color:#333;
 }
 #BlogPowerBy a:hover,#BlogCopyRight a:hover{
 	color:red;
 }
 
 
+
+/*-----------------------------日历-----------------------------*/
+#divCalendar{
+    width:100%;
+	padding:0 0 0 0;
+	text-align:center;
+}
+
+
+#divCalendar div{
+    width:96%;
+	margin:0 auto;
+	padding:5px 2%;
+	float:left;
+}
+
+#divCalendar table{
+	width:100%;
+	padding:0;
+}
 
 /*---------------------------文章和评论翻页条------------------------*/
 a.l{
@@ -594,9 +581,9 @@ a.r{
 
 /*---------------------------引用\评论----------------------------------*/
 ul.msg{
-	width:100%;
-	margin:5px 0 5px 0;
-	padding:5px 0% 5px 0%;
+	width:98%;
+	margin:10px 0 20px 0;
+	padding:5px 1% 5px 1%;
 	text-align:left;
 	list-style-position : outside;
     table-layout: fixed;
@@ -604,7 +591,7 @@ ul.msg{
 }
 
 li.msgname{
-	padding:0 0 0px 0px;
+	padding:0 0 10px 0px;
 	margin:0px;   
 	font-weight: bold;
     font-size:1em;
@@ -630,7 +617,7 @@ li.msggravatar{
 
 li.msgarticle{
 	list-style-position : outside;
-	padding:10px;
+	padding:0px 10px 10px 10px;
 	margin:0;
 	line-height:160%; 
 	padding-left:50px;
@@ -645,17 +632,17 @@ img.avatar{
 	width:40px;
 	height:40px;
 	float:left;
-	padding:3px 5px 4px 0;
+	padding:0 5px 5px 0;
 }
 ul.msg ul.msg{
 	padding:10px 0 0 0;
 	margin:20px 0 0 0;
-    border-top:1px dotted #eee;
+    border-top:1px dotted #eaeaea;
     border-bottom:none;
 }
 ul.msg ul.msg li.msgarticle{
 	padding-bottom:0px;
-    border-bottom:0px dotted #eee;
+    border-bottom:0px solid #eaeaea;
 }
 
 ul.msg ul.msg li.msgname{
@@ -667,6 +654,7 @@ ul.msg ul.msg li.msgname{
 /*---------------------------相关文章----------------------------------*/
 ul.mutuality,ul.pagebar,ul.msghead{
 	border:none;
+	margin-bottom:0px;
 }
 ul.mutuality li.tbname,ul.msghead li.tbname{
 	color:#3c6da7;
@@ -699,15 +687,15 @@ li.msgarticle div.quote-title{
 
 /************评论发表用的样式*************/
 #divCommentPost{
-	width:99%;
+	width:98%;
 	margin:0 0 0 0;
-	padding:5px 1% 15px 0%;
+	padding:5px 1% 15px 1%;
 }
 
 #divCommentPost p{margin-top:10px;}
 #divCommentPost label{margin-top:5px;}
 
-#divCommentPost p.posttop{
+#divCommentPost p.posttop a{
 color:#3c6da7;
 }
 
@@ -726,27 +714,26 @@ border:1px solid #d7d7d7;
 line-height:20px;
 height:24px;
 padding:2px 5px 2px 5px;
+width:300px;
 }
-#txaArticle{padding:5px;width:95%;height:150px;border:1px solid #d7d7d7;}
-input.button {color:#FFFFFF; font-size:14px; width:100px; height:32px; background:#3a6ea5; border:1px solid #3399CC;cursor: pointer;}
+#txaArticle{padding:5px 1%;width:98%;height:150px;border:1px solid #d7d7d7;}
+input.button {font-size:14px; width:100px; height:32px; background:#e5f0f6; border:1px solid #bfd0d7;cursor: pointer;}
 
-
+input[type=button]:hover,input[type=submit]:hover{color:red;cursor: pointer;}
 
 /*--------------------------分页条-------------------------------*/
 span.page{
 	color:#666;
 	font-weight:bolder;
-	padding:5px 5px 5px 5px;
-	margin:4px;
-	border:1px solid #ddd;
+	padding:2px 5px;
+	margin:4px 5px;
+	border:1px solid #cccccc;
 }
 
 span.now-page{
 	color:#666;
 	font-weight:bolder;
-	padding:5px 5px 5px 5px;
-	margin:5px;
-	border:1px solid #ddd;
+	border:1px solid #666;
 }
 
 a:hover span.page{
@@ -759,7 +746,7 @@ ul.ul-subcates{
 	margin-bottom:-8px;
 }
 span.sh{
-	border:1px solid #ddd;
+	border:1px solid #CCC;
 	padding:0 3px;
 	margin-right:5px;
 	font-size:.5em;

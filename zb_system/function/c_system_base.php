@@ -399,8 +399,7 @@ if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php'))
 
 
 #加载插件
-$ap=explode("|", $zbp->option['ZC_USING_PLUGIN_LIST']);
-$ap=array_unique($ap);
+$ap=$zbp->GetActivePlugin();
 foreach ($ap as $plugin) {
 	if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
 		$activeapps[]=$plugin;
