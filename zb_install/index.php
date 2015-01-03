@@ -995,6 +995,7 @@ function SaveConfig(){
   $zbp->option['ZC_SIDEBAR3_ORDER']='';
   $zbp->option['ZC_SIDEBAR4_ORDER']='';
   $zbp->option['ZC_SIDEBAR5_ORDER']='';
+  $zbp->option['ZC_BLOG_THEME']='clear';  
   $zbp->option['ZC_DEBUG_MODE']=true;
   $zbp->option['ZC_LAST_VERSION']=$zbp->version;
   $zbp->SaveOption();

@@ -132,7 +132,7 @@ class Member extends Base {
 				return $this->_isgod;
 			}else{
 				$sql = $zbp->db->sql->Select($zbp->table['Member'],'*',array(array('=','mem_Level',1)),'mem_ID ASC',1,null);
-				$am = $zbp->GetList('Member',$sql);
+				$am = $zbp->GetListType('Member',$sql);
 				if($am[0]->ID == $this->ID){
 					$this->_isgod = true;
 				}else{

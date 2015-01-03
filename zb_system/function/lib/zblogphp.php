@@ -1208,7 +1208,7 @@ class ZBlogPHP {
 
 		$this->themes = array();
 		$dirs=GetDirsInDir($this->usersdir . 'theme/');
-
+		natcasesort($dirs);
 		foreach ($dirs as $id) {
 			$app = new App;
 			if($app->LoadInfoByXml('theme',$id)==true){

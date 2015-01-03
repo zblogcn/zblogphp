@@ -1700,6 +1700,9 @@ function PostCategory() {
 		$fpname($cate);
 	}
 
+	//刷新RootID
+	$cate->Level;
+	
 	FilterCategory($cate);
 	FilterMeta($cate);
 
