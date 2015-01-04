@@ -13,7 +13,7 @@ a{
 	text-decoration: none;
 }
 a:hover {
-	color: red;
+	color: #B22222;
 	text-decoration: none;
 }
 
@@ -131,8 +131,11 @@ h1,h2,h3,h4,h5,h6{
 #divNavBar{
 	float:left;
 	width:100%;
-	padding:10px 0;
+	padding:8px 0;
+	margin:3px 0;
 	clear:both;
+	border-top:1px solid #eee;
+	border-bottom:1px solid #eee;
 }
 
 
@@ -160,18 +163,17 @@ h1,h2,h3,h4,h5,h6{
 	padding:5px 10px 5px 10px;
 	text-decoration: none;
 	line-height:22px;
-	border-bottom:1px solid #ccc;
+    font-weight:lighter;
 }
 
 #divNavBar a.on{
 	color:black;
-	border-bottom:1px solid #999;
+	font-weight:normal;
 }
 
 
 #divNavBar a:hover {
-	color:black;
-	border-bottom:1px solid #B22222;
+	color:#B22222;
 }
 
 
@@ -220,7 +222,7 @@ h1,h2,h3,h4,h5,h6{
 	color:gray;
 }
 .function a:hover{
-	color:red;
+	color:#B22222;
 }
 
 /*------------------------------网站目录定义---------------------------*/
@@ -507,7 +509,7 @@ div.post-body h6{
 	color:#333; 
 }
 #BlogTitle a:hover{
-	color:red;
+	color:#B22222;
 }
 #BlogSubTitle{
 	color:#333; 
@@ -542,7 +544,7 @@ div.post-body h6{
 	color:#333;
 }
 #BlogPowerBy a:hover,#BlogCopyRight a:hover{
-	color:red;
+	color:#B22222;
 }
 
 
@@ -678,7 +680,7 @@ li.msgarticle div.quote-title{
 	margin:0;
 	padding:0;
 	font-size:1em;
-    color: red;
+    color: #B22222;
 }
 
 
@@ -719,7 +721,7 @@ width:300px;
 #txaArticle{padding:5px 1%;width:98%;height:150px;border:1px solid #d7d7d7;}
 input.button {font-size:14px; width:100px; height:32px; background:#e5f0f6; border:1px solid #bfd0d7;cursor: pointer;}
 
-input[type=button]:hover,input[type=submit]:hover{color:red;cursor: pointer;}
+input[type=button]:hover,input[type=submit]:hover{color:#B22222;cursor: pointer;}
 
 /*--------------------------分页条-------------------------------*/
 span.page{
@@ -737,8 +739,8 @@ span.now-page{
 }
 
 a:hover span.page{
-	color:red;
-	border:1px solid red;
+	color:#B22222;
+	border:1px solid #B22222;
 }
 
 ul.ul-subcates{

@@ -995,7 +995,7 @@ function SaveConfig(){
   $zbp->option['ZC_SIDEBAR3_ORDER']='';
   $zbp->option['ZC_SIDEBAR4_ORDER']='';
   $zbp->option['ZC_SIDEBAR5_ORDER']='';
-  $zbp->option['ZC_BLOG_THEME']='clear';  
+  $zbp->option['ZC_BLOG_THEME']='WhitePage';  
   $zbp->option['ZC_DEBUG_MODE']=true;
   $zbp->option['ZC_LAST_VERSION']=$zbp->version;
   $zbp->SaveOption();
@@ -1009,7 +1009,14 @@ function SaveConfig(){
   $zbp->Config('AppCentre')->enabledevelop=0;
   $zbp->Config('AppCentre')->enablegzipapp=0;
   $zbp->SaveConfig('AppCentre');
-  
+
+  $zbp->Config('WhitePage')->custom_pagetype='1';
+  $zbp->Config('WhitePage')->custom_pagewidth='1200';
+  $zbp->Config('WhitePage')->custom_headtitle='center';
+  $zbp->Config('WhitePage')->custom_bgcolor='6699ff';
+  $zbp->Config('WhitePage')->text_indent='0';
+  $zbp->SaveConfig('WhitePage');
+
   echo "保存设置,编译模板成功!<br/>";
 
 }

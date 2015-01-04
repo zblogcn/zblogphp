@@ -14,7 +14,6 @@
 
 {/if}
 	<!--verify-->
-	<p><label for="content">正文(*)</label></p>
 	<p><textarea name="txaArticle" id="txaArticle" class="text" cols="50" rows="4" tabindex="5" ></textarea></p>
 	<p><input name="sumbit" type="submit" tabindex="6" value="提交" onclick="return VerifyMessage()" class="button" /></p>
 	</form>
