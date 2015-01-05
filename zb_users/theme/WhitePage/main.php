@@ -73,7 +73,7 @@ $percolors=array("ffffff","ffa07a","8fbc8b","a9a9a9","6699ff","ee82ee","9370db",
 						&nbsp;&nbsp;
 						<label><input type="radio" id="pt4" name="pagetype" value="4" <?php echo($zbp->Config('WhitePage')->custom_pagetype==4)?'checked="checked"':'';?>/>平面无阴影(直角)</label>
 						&nbsp;&nbsp;
-						<label><input type="radio" id="pt5" name="pagetype" value="5" <?php echo($zbp->Config('WhitePage')->custom_pagetype==5)?'checked="checked"':'';?>/>平面无阴影(圆角)</label>
+						<label><input type="radio" id="pt5" name="pagetype" value="5" <?php echo($zbp->Config('WhitePage')->custom_pagetype==5)?'checked="checked"':'';?>/>平面(CSS3圆角)</label>
 						&nbsp;&nbsp;
 					</td>
 				</tr>

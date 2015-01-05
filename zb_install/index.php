@@ -1010,7 +1010,7 @@ function SaveConfig(){
   $zbp->Config('AppCentre')->enablegzipapp=0;
   $zbp->SaveConfig('AppCentre');
 
-  $zbp->Config('WhitePage')->custom_pagetype='1';
+  $zbp->Config('WhitePage')->custom_pagetype='5';
   $zbp->Config('WhitePage')->custom_pagewidth='1200';
   $zbp->Config('WhitePage')->custom_headtitle='center';
   $zbp->Config('WhitePage')->custom_bgcolor='6699ff';

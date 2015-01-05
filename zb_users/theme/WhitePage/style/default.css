@@ -131,7 +131,7 @@ h1,h2,h3,h4,h5,h6{
 #divNavBar{
 	float:left;
 	width:100%;
-	padding:8px 0;
+	padding:5px 0;
 	margin:3px 0;
 	clear:both;
 	border-top:1px solid #eee;
@@ -159,7 +159,7 @@ h1,h2,h3,h4,h5,h6{
 #divNavBar a{
 	float:left;
 	font-size:1.1em;
-	margin:0 20px 0 10px;
+	margin:0 10px 0 10px;
 	padding:5px 10px 5px 10px;
 	text-decoration: none;
 	line-height:22px;
@@ -242,18 +242,13 @@ h1,h2,h3,h4,h5,h6{
 }
 
 #divSearchPanel input[type="text"]{
-	border:1px solid #bfd0d7;
-	height:24px;
-	line-height:24px;
+	height:22px;
 	width:150px;
+	font-size: 0.9em;
 }
 #divSearchPanel input[type="submit"]{
-	border:1px solid #bfd0d7;
 	height:28px;
-	line-height:24px;
-	width:50px;
-	margin-left:0px;
-	background:#e5f0f6;
+	font-size: 0.9em;
 }
 #divTags {
 	padding:0 0 0 0;
@@ -284,7 +279,7 @@ h1,h2,h3,h4,h5,h6{
 div.post {
 	width:98%;
 	margin:0 0 0 0;
-	padding:20px 1% 2px 1%;
+	padding:15px 1% 5px 1%;
 	text-align:left;
 	clear:both; 
 	word-break:break-all;
@@ -317,7 +312,7 @@ div.post-nav {
 
 div.post .post-title{
     margin:0 0 0 0;
-    padding:0 0 5px 0;
+    padding:0 0 10px 0;
     font-size:1.4em;
     line-height:1.5em; 
 	color: #333;
@@ -350,7 +345,7 @@ div.post .post-date{
 
 div.post .post-footer{
 	width:100%;
-	margin:30px 0 40px 0;
+	margin:10px 0 40px 0;
 	padding:0 0 5px 0;
 	font-size:0.9em;
     font-weight: normal;
@@ -362,7 +357,7 @@ div.post .post-footer{
 div.post .post-tags{
 	width:100%;
 	margin:0 0 0 0;
-	padding:2px 0 0 0;
+	padding:0 0 0 0;
 	font-size:1em;
     font-weight: normal;
 	color:gray;
@@ -373,7 +368,7 @@ div.post .post-tags{
 
 div.post div.post-body{
 	width:100%;
-	margin:0px 0 15px 0;
+	margin:0px 0 10px 0;
 	padding:0px 0 0 0;
 	font-size:1em;
     text-align:justify;
@@ -496,8 +491,8 @@ div.post-body h6{
 /*---------------------------blog标题-----------------------------*/
 
 #BlogTitle{
-	font-size:3em;
-	margin:0 0 0 0;
+	font-size:2.8em;
+	margin:10px 0 0 0;
 	padding:0 0 0 0;
 	font-weight:normal;
 	clear:both;
@@ -513,9 +508,9 @@ div.post-body h6{
 }
 #BlogSubTitle{
 	color:#333; 
-	font-size:1.2em;
+	font-size:1.0em;
     font-weight:normal;
-	margin:10px 0 0 0;
+	margin:0 0 5px 0;
 	padding:0;
 	clear:both;
 	line-height:1.5em;
@@ -529,7 +524,7 @@ div.post-body h6{
 	height:25px;
 	margin:0;
 	padding:0;
-	text-align:left;
+	text-align:center;
 	font-weight:normal;
 }
 #BlogCopyRight{
@@ -537,7 +532,7 @@ div.post-body h6{
 	height:20px;
 	margin:0;
 	padding:0;
-	text-align:left;
+	text-align:center;
 	font-weight:normal;
 }
 #BlogPowerBy a,#BlogCopyRight a{
@@ -712,14 +707,14 @@ div.reply-frm{
 }
 
 input.text{
-border:1px solid #d7d7d7;
+border:1px solid #bbb;
 line-height:20px;
 height:24px;
 padding:2px 5px 2px 5px;
 width:300px;
 }
-#txaArticle{padding:5px 1%;width:98%;height:150px;border:1px solid #d7d7d7;}
-input.button {font-size:14px; width:100px; height:32px; background:#e5f0f6; border:1px solid #bfd0d7;cursor: pointer;}
+#txaArticle{padding:5px 1%;width:98%;height:150px;border:1px solid #bbb;}
+input.button {font-size:0.9em; width:100px; height:32px; cursor: pointer;}
 
 input[type=button]:hover,input[type=submit]:hover{color:#B22222;cursor: pointer;}
 

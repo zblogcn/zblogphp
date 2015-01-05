@@ -7,10 +7,11 @@ function ActivePlugin_WhitePage() {
 	Add_Filter_Plugin('Filter_Plugin_Admin_TopMenu','WhitePage_AddMenu');
 	$s='';
 	if($zbp->Config('WhitePage')->HasKey("custom_bgcolor")){
+		$zbp->Config('WhitePage')->custom_bgcolor = str_replace('#','',$zbp->Config('WhitePage')->custom_bgcolor);
 		$s .=   "body{background-color:#" . $zbp->Config('WhitePage')->custom_bgcolor . ";}";
 	}
 	if($zbp->Config('WhitePage')->HasKey("custom_headtitle")){
-		$s .=  "#BlogTitle,#BlogSubTitle{text-align:" . $zbp->Config('WhitePage')->custom_headtitle . ";}";
+		$s .=  "#BlogTitle,#BlogSubTitle,#BlogCopyRight,#BlogPowerBy{text-align:" . $zbp->Config('WhitePage')->custom_headtitle . ";}";
 	}
 	if($zbp->Config('WhitePage')->HasKey("custom_pagewidth")){
 		if($zbp->Config('WhitePage')->custom_pagewidth==1000){

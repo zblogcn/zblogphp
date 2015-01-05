@@ -13,6 +13,8 @@ return array(
 
 'lang'=>'zh-TW',
 
+'font-family'=>'"Microsoft JhengHei",PMingLiu,STHeiti,"Hiragino Sans GB","WenQuanYi Micro Hei","Heiti TC", Arial, Helvetica, sans-serif',
+
 #Front-End & Back-End
 'msg'=>array(
 	'id'=>'ID',

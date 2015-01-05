@@ -319,7 +319,6 @@ class ZBlogPHP {
 		$this->displaycount = &$this->option['ZC_DISPLAY_COUNT'];
 		$this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
 
-		$this->cache = new stdClass;
 		$this->user = new stdClass;
 		foreach($this->datainfo['Member'] as $key=>$value){
 			$this->user->$key=$value[3];
@@ -665,10 +664,17 @@ class ZBlogPHP {
 		$sql = $this->db->sql->Select($this->table['Config'],array('*'),'','','','');
 		
 		$array = $this->GetListType('Config',$sql);
+		$configs_name = $configs_namevalue = array();
 		foreach ($array as $c) {
-			$this->configs[$c->GetItemName()]=$c;
+			$n=$c->GetItemName();
+			$configs_name[$n]=$n;
+			$configs_namevalue[$n]=$c;
 		}
-		ksort($this->configs);
+		natcasesort($configs_name);
+		foreach ($configs_name as $name) {
+			$this->configs[$name]=$configs_namevalue[$name];
+		}
+		unset($configs_name,$configs_namevalue);
 	}
 
 	/**
@@ -1209,6 +1215,8 @@ class ZBlogPHP {
 		$this->themes = array();
 		$dirs=GetDirsInDir($this->usersdir . 'theme/');
 		natcasesort($dirs);
+		array_unshift($dirs,$this->theme);
+		$dirs=array_unique($dirs);
 		foreach ($dirs as $id) {
 			$app = new App;
 			if($app->LoadInfoByXml('theme',$id)==true){
@@ -2564,6 +2572,7 @@ class ZBlogPHP {
 	 * 获取全部置顶文章（优先从cache里读数组）
 	 */
 	function GetTopArticle(){
+		if(!is_object($this->cache))return array();
 		$articles_top_notorder_idarray = unserialize($this->cache->top_post_array);
 		if(!is_array($articles_top_notorder_idarray)){
 			CountTopArticle(null,null);

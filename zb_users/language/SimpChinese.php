@@ -10,6 +10,8 @@ return array(
 
 'lang' => 'zh-CN',
 
+'font-family'=>'',
+
 #Front-End & Back-End
 'msg' => array(
 	'id' => 'ID',

@@ -401,12 +401,11 @@ if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php'))
 #加载插件
 $ap=$zbp->GetActivePlugin();
 foreach ($ap as $plugin) {
-	if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
+	if(is_readable($filename = $usersdir . 'plugin/' . $plugin . '/plugin.xml'))
 		$activeapps[]=$plugin;
+
+	if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/include.php'))
 		require $filename;
-	}elseif(is_readable($filename = $usersdir . 'plugin/' . $plugin . '/plugin.xml')){
-		$activeapps[]=$plugin;
-	}
 }
 
 unset($key,$value,$option_zbusers,$plugin,$ap,$filename);
