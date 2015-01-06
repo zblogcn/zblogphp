@@ -17,7 +17,6 @@ line-height: 20px;
 * { padding:0; margin:0;}
 
 div, h1, h2, h3, h4, p, form, ul, label, input, textarea, select, img, span{margin:0; padding:0;}
-input, textarea, select{font-family:"微软雅黑","宋体", Arial, Helvetica, sans-serif;}
 table{border-collapse:collapse;}
 a { text-decoration: none;color: #333333;}
 a:hover { color:#d60000;}

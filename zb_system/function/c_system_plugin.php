@@ -845,9 +845,9 @@ DefinePluginFilter('Filter_Plugin_Admin_Js_Add');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Login_Header
+'名称:Filter_Plugin_CreateOptoinsOfCategorys
 '参数:
-'说明:定义Login.php首页header接口
+'说明:定义CreateOptoinsOfCategorys函数里的接口
 '调用:
 '**************************************************>
 */

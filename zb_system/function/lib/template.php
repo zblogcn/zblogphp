@@ -298,7 +298,7 @@ class Template{
 	{
 		$exp = $this->replace_dot($matches[1]);
 		$code = $matches[2];
-		return "{php} foreach ($exp) {{/php} $code{php} }  {/php}";
+		return "{php} foreach ($exp) {{/php}$code{php}}  {/php}";
 	}
 
 	/**

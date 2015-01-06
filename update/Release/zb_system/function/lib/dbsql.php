@@ -169,13 +169,13 @@ class DbSql #extends AnotherClass
 					}
 				}
 				if($value[1]=='double'||$value[1]=='float'){
-					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
+					$s.=$value[0] . " $value[1] NOT NULL DEFAULT '0'" . ',';
 				}
 				if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'){
-					$s.=$value[0] . ' $value[1] NOT NULL,';
+					$s.=$value[0] . " $value[1] NOT NULL,";
 				}
 				if($value[1]=='timestamp'){
-					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP,';
+					$s.=$value[0] . " $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP,";
 				}
 				$i +=1;
 			}
@@ -216,13 +216,13 @@ class DbSql #extends AnotherClass
 					}
 				}
 				if($value[1]=='double'||$value[1]=='float'){
-					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
+					$s.=$value[0] . " $value[1] NOT NULL DEFAULT '0'" . ',';
 				}
 				if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'){
-					$s.=$value[0] . ' $value[1] NOT NULL,';
+					$s.=$value[0] . " $value[1] NOT NULL,";
 				}
 				if($value[1]=='timestamp'){
-					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP,';
+					$s.=$value[0] . " $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP,";
 				}
 				$i +=1;
 			}
@@ -280,13 +280,13 @@ class DbSql #extends AnotherClass
 					}
 				}
 				if($value[1]=='double'||$value[1]=='float'){
-					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT \'0\'' . ',';
+					$s.=$value[0] . " $value[1] NOT NULL DEFAULT '0'" . ',';
 				}
 				if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'){
-					$s.=$value[0] . ' $value[1] NOT NULL,';
+					$s.=$value[0] . " $value[1] NOT NULL,";
 				}
 				if($value[1]=='timestamp'){
-					$s.=$value[0] . ' $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,';
+					$s.=$value[0] . " $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,";
 				}
 				$i +=1;
 			}

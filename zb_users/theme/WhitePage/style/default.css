@@ -279,7 +279,7 @@ h1,h2,h3,h4,h5,h6{
 div.post {
 	width:98%;
 	margin:0 0 0 0;
-	padding:15px 1% 5px 1%;
+	padding:15px 1% 15px 1%;
 	text-align:left;
 	clear:both; 
 	word-break:break-all;
@@ -564,7 +564,7 @@ div.post-body h6{
 	padding:0;
 }
 
-/*---------------------------文章和评论翻页条------------------------*/
+/*---------------------------文章前后------------------------*/
 a.l{
 	text-align:left;
 	float:left;
@@ -686,14 +686,14 @@ li.msgarticle div.quote-title{
 #divCommentPost{
 	width:98%;
 	margin:0 0 0 0;
-	padding:5px 1% 15px 1%;
+	padding:0 1% 0 1%;
 }
 
 #divCommentPost p{margin-top:10px;}
 #divCommentPost label{margin-top:5px;}
-
-#divCommentPost p.posttop a{
-color:#3c6da7;
+#divCommentPost form{padding-bottom:10px;}
+#divCommentPost a[name='comment']{
+	color:#3c6da7;
 }
 
 #divCommentPost img{margin-bottom:-0.5em;}
@@ -707,15 +707,14 @@ div.reply-frm{
 }
 
 input.text{
-border:1px solid #bbb;
-line-height:20px;
-height:24px;
-padding:2px 5px 2px 5px;
-width:300px;
+	border:1px solid #bbb;
+	line-height:20px;
+	height:24px;
+	padding:2px 5px 2px 5px;
+	width:300px;
 }
 #txaArticle{padding:5px 1%;width:98%;height:150px;border:1px solid #bbb;}
 input.button {font-size:0.9em; width:100px; height:32px; cursor: pointer;}
-
 input[type=button]:hover,input[type=submit]:hover{color:#B22222;cursor: pointer;}
 
 /*--------------------------分页条-------------------------------*/

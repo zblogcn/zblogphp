@@ -557,12 +557,13 @@ case 'pdo_mysql':
   break;
 case 'sqlite':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');
+  $cts=str_replace(' autoincrement','',$cts);
   $zbp->option['ZC_SQLITE_NAME']=trim(GetVars('dbsqlite_name','POST'));
   $zbp->option['ZC_SQLITE_PRE']=trim(GetVars('dbsqlite_pre','POST'));
   break;
 case 'sqlite3':
 case 'pdo_sqlite':
-  $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite3.sql');
+  $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');
   $zbp->option['ZC_SQLITE_NAME']=trim(GetVars('dbsqlite_name','POST'));
   $zbp->option['ZC_SQLITE_PRE']=trim(GetVars('dbsqlite_pre','POST'));
   break;

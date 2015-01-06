@@ -450,6 +450,12 @@ class ZBlogPHP {
 		$this->feedurl=$this->host . 'feed.php';
 		$this->searchurl=$this->host . 'search.php';
 		$this->ajaxurl=$this->host . 'zb_system/cmd.php?act=ajax&src=';
+		
+		if(isset($this->lang['font-family'])&&trim($this->lang['font-family'])){
+			Add_Filter_Plugin('Filter_Plugin_Login_Header','Include_AddonFontfamily');
+			Add_Filter_Plugin('Filter_Plugin_Other_Header','Include_AddonFontfamily');
+			Add_Filter_Plugin('Filter_Plugin_Admin_Header','Include_AddonFontfamily');
+		}
 
 		$this->isinitialized=true;
 
@@ -510,7 +516,7 @@ class ZBlogPHP {
 			$this->host = GetCurrentHost($this->path,$this->cookiespath);
 		}else{
 			if(isset($this->templates['404']))
-				Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','ShowError404');
+				Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','Include_ShowError404');
 
 			$ak = array_keys($this->replacetags);
 			$av = array_values($this->replacetags);

@@ -1,5 +1,5 @@
 <div class="post" id="divCommentPost">
-	<p class="posttop"><a name="comment"><?php if ($user->ID>0) { ?><?php  echo $user->Name#;  ?><?php } ?>发表评论:</a><a rel="nofollow" id="cancel-reply" href="#divCommentPost" style="display:none;"><small>取消回复</small></a></p>
+	<p><a name="comment"><?php if ($user->ID>0) { ?><?php  echo $user->Name#;  ?><?php } ?>发表评论:</a><a rel="nofollow" id="cancel-reply" href="#divCommentPost" style="display:none;"><small>取消回复</small></a></p>
 	<form id="frmSumbit" target="_self" method="post" action="<?php  echo $article->CommentPostUrl;  ?>" >
 	<input type="hidden" name="inpId" id="inpId" value="<?php  echo $article->ID;  ?>" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
@@ -17,5 +17,4 @@
 	<p><textarea name="txaArticle" id="txaArticle" class="text" cols="50" rows="4" tabindex="5" ></textarea></p>
 	<p><input name="sumbit" type="submit" tabindex="6" value="提交" onclick="return VerifyMessage()" class="button" /></p>
 	</form>
-	<p class="postbottom">◎欢迎参与讨论，请在这里发表您的看法、交流您的观点。</p>
 </div>

@@ -1,10 +1,10 @@
 <?php
-//<language>正體中文</language>
+//<language>傳統中文</language>
 //The second line of this file is the name of the language
 //Author:楊懿軒
 //Author URI:http://www.yangyixuan.com
 //E-mail:sen@yangyixuan.com
-//Date:20140811
+//Date:20150106
 
 //'Custom Information
 //'Don't delete %s and ()
@@ -13,7 +13,7 @@ return array(
 
 'lang'=>'zh-TW',
 
-'font-family'=>'"Microsoft JhengHei",PMingLiu,STHeiti,"Hiragino Sans GB","WenQuanYi Micro Hei","Heiti TC", Arial, Helvetica, sans-serif',
+'font-family'=>'Helvetica,Arial,"Microsoft JhengHei",PMingLiU,MingLiU,sans-serif;',
 
 #Front-End & Back-End
 'msg'=>array(
@@ -92,21 +92,21 @@ return array(
 	'tag_edit'=>'標籤編輯',
 	'member_edit'=>'帳號編輯',
 	'module_edit'=>'模組編輯',
-	'module_navbar'=>'導覽',	
-	'module_misc'=>'標誌',
-	'module_link'=>'連結',
-	'module_favorite'=>'書籤',
+	'module_navbar'=>'導覽列',	
+	'module_misc'=>'標誌列',
+	'module_link'=>'連結列',
+	'module_favorite'=>'書籤列',
 	'comment_manage'=>'迴響管理',
 	'upload_manage'=>'附件管理',
 	'member_manage'=>'帳號管理',
-	'theme_manage'=>'外觀管理',
+	'theme_manage'=>'佈景主題',
 	'plugin_manage'=>'外掛管理',
 	'module_manage'=>'模組管理',
 	'site_analyze'=>'網站資訊',	
 	'info_intro'=>'網站摘要',
 	'refresh_cache'=>'清空快取並重新編譯模板',
 	'latest_news'=>'近期消息',
-	'refresh'=>'更新',
+	'refresh'=>'重新整理',
 	'post_count'=>'文章數量',
 	'basic_setting'=>'基本設定',
 	'global_setting'=>'全局設定',
@@ -209,9 +209,9 @@ return array(
 	'module_previous'=>'近期文章',
 	'module_tags'=>'標籤集',
 	'admin_login'=>'登入控制台',
-	'top_index' => '首页',
+	'top_index' => '首頁',
 	'top_global' => '全局',	
-	'top_category' => '分类',
+	'top_category' => '分類',
 	''=>'',
 ),
 
@@ -380,7 +380,7 @@ return array(
 '83'=>'啟用該應用，需要先啟用依赖應用%s',
 '84'=>'停用該應用，需要先停用被依赖應用%s',
 '85'=>'啟用該應用，需要先停用冲突應用%s',
-'86'=>'主题模板的编译文件不存在',
+'86'=>'佈景主題的編譯檔案不存在',
 ),
 
 );

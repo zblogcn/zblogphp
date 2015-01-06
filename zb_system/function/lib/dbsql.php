@@ -148,7 +148,7 @@ class DbSql
 				if($value[1]=='double'||$value[1]=='float'){
 					$s.=$value[0] . " $value[1] NOT NULL DEFAULT 0" . ',';
 				}
-				if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'){
+				if($value[1]=='date'||$value[1]=='datetime'){
 					$s.=$value[0] . " $value[1] NOT NULL,";
 				}
 				if($value[1]=='timestamp'){
@@ -693,5 +693,45 @@ class DbSql
 		}
 		//Logs($sql);
 		return $sql;
+	}
+
+	/**
+	 * 导出sql生成语句，用于备份数据用。
+	 * @param $type 数据连接类型
+	 * @return mixed
+	 */
+	private $_explort_db = null;
+	public function Export($table,$keyvalue,$type='mysql'){
+
+		if($type=='mysql' && $this->_explort_db === null)$this->_explort_db= new DbMySQL;
+		if($type=='mysqli' && $this->_explort_db === null)$this->_explort_db= new DbMySQLi;
+		if($type=='pdo_mysql' && $this->_explort_db === null)$this->_explort_db= new Dbpdo_MySQL;
+		if($type=='sqlite' && $this->_explort_db === null)$this->_explort_db= new DbSQLite;
+		if($type=='sqlite3' && $this->_explort_db === null)$this->_explort_db= new DbSQLite3;
+		if($type=='pdo_sqlite' && $this->_explort_db === null)$this->_explort_db= new Dbpdo_SQLite;
+		if($this->_explort_db === null)$this->_explort_db= new DbMySQL;
+		$sql="INSERT INTO $table ";
+
+		$sql.='(';
+		$comma = '';
+		foreach($keyvalue as $k => $v) {
+			if(is_null($v))continue;
+			$sql.= $comma . "$k";
+			$comma = ',';
+		}
+		$sql.=')VALUES(';
+
+		$comma = '';
+		foreach($keyvalue as $k => $v) {
+			if(is_null($v))continue;
+			$v=$this->_explort_db->EscapeString($v);
+			$sql.= $comma . "'$v'";
+			$comma = ',';
+		}
+		$sql.=')';
+		
+		unset($db);
+
+		return  $sql . ";\r\n";
 	}
 }

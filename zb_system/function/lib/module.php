@@ -29,7 +29,10 @@ class Module extends Base{
 			return null;
 		}
 		if ($name=='NoRefresh') {
-			$this->Metas->norefresh = (bool)$value;
+			if((bool)$value)
+				$this->Metas->norefresh = (bool)$value;
+			else
+				$this->Metas->Del('norefresh');
 			return null;
 		}
 		parent::__set($name, $value);

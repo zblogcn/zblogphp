@@ -3127,7 +3127,7 @@ function BuildModule_statistics($array = array()) {
 
 ################################################################################################################
 /**
- * 显示404页面
+ * 显示404页面(内置插件函数)
  *
  * 可通过主题中的404.php模板自定义显示效果
  * @api Filter_Plugin_Zbp_ShowError
@@ -3135,21 +3135,23 @@ function BuildModule_statistics($array = array()) {
  * @param $file
  * @param $line
  */
-function ShowError404($idortext,$file,$line){
-	
+function Include_ShowError404($idortext,$file,$line){
 	global $zbp;
 	if(!in_array( "Status: 404 Not Found",  headers_list() )) return;
-	
+
 	$zbp->template->SetTags('title', $zbp->title);
 	$zbp->template->SetTemplate('404');
 	$zbp->template->Display();
 
 	$GLOBALS['Filter_Plugin_Zbp_ShowError']['ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
-	
 	exit;
 }
 
 /**
- * ViewIndex的预处理,已废弃
+ * 输出后台指定字体family(内置插件函数)
  */
-function PreViewIndex(){}
+function Include_AddonFontfamily(){
+	global $lang;
+	if(isset($lang['font-family'])&&trim($lang['font-family']))
+		echo'<style type="text/css">body{font-family:'.$lang['font-family'].'!important;}</style>';
+}

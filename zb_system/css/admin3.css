@@ -2,7 +2,7 @@
 body{ padding:0;margin:0;font-family:"Microsoft YaHei",STHeiti,"Hiragino Sans GB","WenQuanYi Micro Hei","Heiti SC", NSimSun,SimSun,Arial, Helvetica, sans-serif;background:#FFFFFF;color:#444444;font-size: 14px;line-height: 20px;}
 .setup{width:1000px; height:400px; padding:60px 0 0 0;margin:0 auto;}
 font[color='#3D69AA']{background: #3D69AA;}
-#ddleft{float:left;width:360px;height:400px;font-family:Arial,Helvetica,sans-serif;font-size: 14px;}
+#ddleft{float:left;width:360px;height:400px;font-size: 14px;}
 #ddright{float:left;width:600px;height:400px;}
 input[type="text"],input[type="password"]{padding:3px 5px;}input[readonly]{background:#eee;border:1px solid #ccc;}
 input[type="submit"],input[type="button"]{ color:#FFFFFF; font-size:1.1em; height:1.8em;padding: 0.15em 2em 0.20em 2em;padding: 0.15em 1em 0.20em 1em\9;margin:0.2em 0.5em; background:#3a6ea5; border:1px solid #3a6ea5;cursor: pointer;}

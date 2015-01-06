@@ -13,10 +13,16 @@ define('APPCENTRE_API_ORDER_DETAIL','orderdetail');
 
 
 function ActivePlugin_AppCentre() {
+	global $zbp;
 	Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu','AppCentre_AddMenu');
 	Add_Filter_Plugin('Filter_Plugin_Admin_ThemeMng_SubMenu','AppCentre_AddThemeMenu');
 	Add_Filter_Plugin('Filter_Plugin_Admin_PluginMng_SubMenu','AppCentre_AddPluginMenu');
 	Add_Filter_Plugin('Filter_Plugin_Admin_SiteInfo_SubMenu','AppCentre_AddSiteInfoMenu');
+	
+	if(is_readable($f=$zbp->path . 'zb_users/plugin/AppCentre/language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php'))
+		$zbp->lang['AppCentre'] = require($f);
+	else
+		$zbp->lang['AppCentre'] = require($zbp->path . 'zb_users/plugin/AppCentre/language/SimpChinese.php');	
 }
 
 function InstallPlugin_AppCentre(){
@@ -31,7 +37,7 @@ function InstallPlugin_AppCentre(){
 
 function AppCentre_AddMenu(&$m){
 	global $zbp;
-	$m['nav_AppCentre']=MakeLeftMenu("root","应用中心",$zbp->host . "zb_users/plugin/AppCentre/main.php","nav_AppCentre","aAppCentre",$zbp->host . "zb_users/plugin/AppCentre/images/Cube1.png");
+	$m['nav_AppCentre']=MakeLeftMenu("root",$zbp->lang['AppCentre']['name'],$zbp->host . "zb_users/plugin/AppCentre/main.php","nav_AppCentre","aAppCentre",$zbp->host . "zb_users/plugin/AppCentre/images/Cube1.png");
 }
 
 function AppCentre_AddSiteInfoMenu(){

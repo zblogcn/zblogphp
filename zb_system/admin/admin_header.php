@@ -17,6 +17,5 @@
 <link rel="stylesheet" href="<?php echo $bloghost?>zb_system/css/jquery-ui.ie.css">
 <![endif]-->
 <?php
-	if(isset($lang['font-family'])&&trim($lang['font-family']))echo'<style type="text/css">body{font-family:'.$lang['font-family'].'!important;}</style>';
 	foreach ($GLOBALS['Filter_Plugin_Admin_Header'] as $fpname => &$fpsignal) {$fpname();}
 ?>
