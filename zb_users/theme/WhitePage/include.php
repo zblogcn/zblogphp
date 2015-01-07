@@ -46,6 +46,14 @@ function ActivePlugin_WhitePage() {
 			$s .=  "#divTop{padding-top:30px;}";
 		}
 	}
+
+	$Pad_List='/android|iphone|ipad|windows\sphone|kindle|gt\-p|gt\-n|rim\stablet|meego/i';
+	$UA=GetGuestAgent();
+	if(CheckRegExp($UA,$Pad_List)==true){
+		$s .=	"body{font-size:4vw;}#divMain{width:100%;}#divSidebar{width:100%;}.function{width:50%;font-size:3vw;}";
+		$s .=	"div.post .post-title{width:100%;}div.post .post-date{width:100%;}#divBottom{font-size:2vw;}#divAll{width:99%;margin:0.3em auto;}#divMiddle{width:98%;padding:0;}#divCommentPost input{width:75%;}#divCommentPost input.button{width:50%;}";
+	}
+
 	$zbp->header .= '	<style type="text/css">'.$s.'</style>' . "\r\n";
 }
 

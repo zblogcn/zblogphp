@@ -3151,7 +3151,7 @@ function Include_ShowError404($idortext,$file,$line){
  * 输出后台指定字体family(内置插件函数)
  */
 function Include_AddonFontfamily(){
-	global $lang;
-	if(isset($lang['font-family'])&&trim($lang['font-family']))
-		echo'<style type="text/css">body{font-family:'.$lang['font-family'].'!important;}</style>';
+	global $zbp;
+	if(isset($zbp->lang['font-family'])&&trim($zbp->lang['font-family']))
+		echo'<style type="text/css">body{font-family:'.$zbp->lang['font-family'].'!important;}</style>';
 }

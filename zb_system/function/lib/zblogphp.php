@@ -1251,8 +1251,8 @@ class ZBlogPHP {
 	}
 
 	/**
-	 * 载入应用列表
-	 * @param string $type 应用类型
+	 * 载入指定应用
+	 * @param string $type 应用类型(theme|plugin)
 	 * @param string $id 应用ID
 	 * @return App
 	 */
@@ -1260,6 +1260,21 @@ class ZBlogPHP {
 		$app = new App;
 		$app->LoadInfoByXml($type,$id);
 		return $app;
+	}
+	
+	/**
+	 * 载入指定应用语言包
+	 * @param string $type 应用类型(theme|plugin)
+	 * @param string $id 应用ID
+	 * @return App
+	 */
+	public function LoadAppLanguage($type,$id,$default='SimpChinese'){
+		if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $this->option['ZC_BLOG_LANGUAGEPACK'] . '.php'))
+			$this->lang[$id] = require($f);
+		elseif(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php'))
+			$this->lang[$id] = require($f);
+		elseif(is_readable($f=$this->path . 'zb_users/'.$type&'/'.$id.'/language/' . 'English'. '.php'))
+			$this->lang[$id] = require($f);	
 	}
 
 ################################################################################################################

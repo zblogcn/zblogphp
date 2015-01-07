@@ -111,7 +111,6 @@ h1,h2,h3,h4,h5,h6{
 	padding:0 0 30px 0;
 	text-align:left;
 	float:left;
-
 }
 
 
@@ -120,9 +119,9 @@ h1,h2,h3,h4,h5,h6{
 	margin:0 0 0 0;
 	padding:20px 0 0 0;
 	text-align:center;
+	height:4em;
     clear:both;
-    height:75px;
-
+	float:left;
 }
 
 
@@ -131,8 +130,8 @@ h1,h2,h3,h4,h5,h6{
 #divNavBar{
 	float:left;
 	width:100%;
-	padding:5px 0;
-	margin:3px 0;
+	padding:0.4em 0;
+	margin:0.3em 0;
 	clear:both;
 	border-top:1px solid #eee;
 	border-bottom:1px solid #eee;
@@ -153,12 +152,11 @@ h1,h2,h3,h4,h5,h6{
 	float:left;
 	padding:0 0 0 0;
 	margin:0 0 0 0;
-	font-size:1em;
+
 }
 
 #divNavBar a{
 	float:left;
-	font-size:1.1em;
 	margin:0 10px 0 10px;
 	padding:5px 10px 5px 10px;
 	text-decoration: none;
@@ -187,6 +185,7 @@ h1,h2,h3,h4,h5,h6{
 	padding:0;
 	text-align:left;
 	line-height:1.5em;
+    overflow:hidden;
 }
 .function .function_t{
 	font-size:1.15em;
@@ -241,6 +240,11 @@ h1,h2,h3,h4,h5,h6{
 	margin:0 0 0 1em;
 }
 
+#divCatalog ul.ul-subcates{
+	padding: 8px 0 0 0;
+	margin-bottom:-8px;
+}
+
 #divSearchPanel input[type="text"]{
 	height:22px;
 	width:150px;
@@ -269,7 +273,6 @@ h1,h2,h3,h4,h5,h6{
 	width:200px;
     white-space:nowrap;
     word-break:keep-all;
-    overflow:hidden;
     text-overflow:ellipsis;
 }
 
@@ -521,7 +524,7 @@ div.post-body h6{
 
 #BlogPowerBy{
 	font-size:0.9em;
-	height:25px;
+	height:2em;
 	margin:0;
 	padding:0;
 	text-align:center;
@@ -529,24 +532,17 @@ div.post-body h6{
 }
 #BlogCopyRight{
 	font-size:0.9em;
-	height:20px;
+	height:2em;
 	margin:0;
 	padding:0;
 	text-align:center;
 	font-weight:normal;
-}
-#BlogPowerBy a,#BlogCopyRight a{
-	color:#333;
-}
-#BlogPowerBy a:hover,#BlogCopyRight a:hover{
-	color:#B22222;
 }
 
 
 
 /*-----------------------------日历-----------------------------*/
 #divCalendar{
-    width:100%;
 	padding:0 0 0 0;
 	text-align:center;
 }
@@ -708,28 +704,33 @@ div.reply-frm{
 
 input.text{
 	border:1px solid #bbb;
-	line-height:20px;
-	height:24px;
+	line-height:2em;
+	height:2em;
 	padding:2px 5px 2px 5px;
 	width:300px;
+	font-size:0.9em;
 }
 #txaArticle{padding:5px 1%;width:98%;height:150px;border:1px solid #bbb;}
-input.button {font-size:0.9em; width:100px; height:32px; cursor: pointer;}
+input.button {font-size:0.9em; width:100px; height:2em; cursor: pointer;}
 input[type=button]:hover,input[type=submit]:hover{color:#B22222;cursor: pointer;}
 
 /*--------------------------分页条-------------------------------*/
 span.page{
 	color:#666;
 	font-weight:bolder;
-	padding:2px 5px;
-	margin:4px 5px;
+	padding:0.3em 0.35em;
+	margin:0.3em 0.35em;
 	border:1px solid #cccccc;
+	line-height:2.8em;
+	height:2.8em;
 }
 
 span.now-page{
 	color:#666;
 	font-weight:bolder;
 	border:1px solid #666;
+	line-height:2.8em;
+	height:2.8em;
 }
 
 a:hover span.page{
@@ -737,10 +738,7 @@ a:hover span.page{
 	border:1px solid #B22222;
 }
 
-ul.ul-subcates{
-	padding: 8px 0 0 0;
-	margin-bottom:-8px;
-}
+
 span.sh{
 	border:1px solid #CCC;
 	padding:0 3px;
