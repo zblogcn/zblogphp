@@ -1,7 +1,7 @@
 <?php
 require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
-require 'function.php';
+require dirname(__FILE__) . '/function.php';
 $zbp->Load();
 
 $action='root';
