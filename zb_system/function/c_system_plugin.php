@@ -161,7 +161,7 @@ function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSI
 //}
 
 ################################################################################################################
-#dubug里的
+#dubug,common里的
 
 /*
 '**************************************************<
@@ -185,7 +185,18 @@ DefinePluginFilter('Filter_Plugin_Debug_Handler');
 */
 DefinePluginFilter('Filter_Plugin_Autoload');
 
-################################################################################################################
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Logs
+'参数:$s,$iserror
+'说明:监控记录函数
+'调用:
+'**************************************************>
+*/
+DefinePluginFilter('Filter_Plugin_Logs');
+
+
 #DbSql类里的接口
 
 /*

@@ -382,7 +382,7 @@ function ViewAuto($inpurl) {
 	global $zbp;
 
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
-		$fpreturn = $fpname($url);
+		$fpreturn = $fpname($inpurl);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
 		}

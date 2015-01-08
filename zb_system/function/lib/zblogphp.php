@@ -513,7 +513,6 @@ class ZBlogPHP {
 
 		if($this->ismanage){
 			$this->LoadManage();
-			$this->host = GetCurrentHost($this->path,$this->cookiespath);
 		}else{
 			if(isset($this->templates['404']))
 				Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','Include_ShowError404');
@@ -536,8 +535,17 @@ class ZBlogPHP {
 	 */
 	public function LoadManage(){
 
+		$this->host = GetCurrentHost($this->path,$this->cookiespath);
+
 		if($this->user->Status==ZC_MEMBER_STATUS_AUDITING) $this->ShowError(79,__FILE__,__LINE__);
 		if($this->user->Status==ZC_MEMBER_STATUS_LOCKED) $this->ShowError(80,__FILE__,__LINE__);
+		
+		Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','Include_Admin_Addpagesubmenu');
+		Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','Include_Admin_Addtagsubmenu');
+		Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','Include_Admin_Addcatesubmenu');
+		Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu','Include_Admin_Addmemsubmenu');
+		Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','Include_Admin_Addmodsubmenu');
+		Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','Include_Admin_Addcmtsubmenu');
 
 		$this->CheckTemplate();
 
@@ -670,6 +678,10 @@ class ZBlogPHP {
 		$sql = $this->db->sql->Select($this->table['Config'],array('*'),'','','','');
 		
 		$array = $this->GetListType('Config',$sql);
+		foreach ($array as $c) {
+			$n=$c->GetItemName();
+			$this->configs[$n]=$c;
+		}return;
 		$configs_name = $configs_namevalue = array();
 		foreach ($array as $c) {
 			$n=$c->GetItemName();

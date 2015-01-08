@@ -47,6 +47,10 @@ function AutoloadClass($classname){
  */
 function Logs($s,$iserror=false) {
 	global $zbp;
+	foreach ($GLOBALS['Filter_Plugin_Logs'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($s,$iserror);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+	}
 	if($zbp->guid){
 		if($iserror)
 			$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-error' . date("Ymd") . '.txt';

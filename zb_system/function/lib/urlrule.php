@@ -80,7 +80,7 @@ class UrlRule{
 			$s=str_replace($key, $value, $s);
 		}
 
-		if(substr($this->PreUrl, - 1)<>'/' &&  substr($s, - 1)=='/' ){
+		if(substr($this->PreUrl, - 1)<>'/' &&  substr($s, - 1)=='/' && $s<>$zbp->host ){
 			$s=substr($s,0,strlen($s)-1);
 		}
 

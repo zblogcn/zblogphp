@@ -16,6 +16,19 @@ function blogconfig_left()
 {
 	global $zbp;
 	$html = '';
+	
+	$configs_name = $configs_namevalue = array();
+	foreach ($zbp->configs as $n=>$c) {
+		$configs_name[$n]=$n;
+		$configs_namevalue[$n]=$c;
+	}
+	natcasesort($configs_name);
+	$zbp->configs=array();
+	foreach ($configs_name as $name) {
+		$zbp->configs[$name]=$configs_namevalue[$name];
+	}
+	unset($configs_name,$configs_namevalue);
+	
 	foreach ($zbp->configs as $k => $v)
 	{
 		$html .= "<li><a id=\"$k\" href=\"javascript:;\" onclick=\"clk(this);run('open','$k');\">$k</a></li>";
@@ -32,6 +45,7 @@ function blogconfig_exportlist($id)
 	$html .= $id . '</span><a href="javascript:;" onclick="run2(\'new\',\'' . $id . '\')">新建</a></div>';
 	$html .= '<table width="100%" style="padding:0px;" cellspacing="0" cellpadding="0" id="configt">';
 	$html .= '<tr height="32"><th width="25%">项</th><th>内容 <a onclick="alert(\'点击表格即可开始编辑。如果标注有array的话则无法编辑。\')" href="javascript:void(0);">？</a> </th><th width="10%"></th></tr>';
+	
 	if(isset($zbp->configs[$id]->Data)){
 		$data = $zbp->configs[$id]->Data;
 	}else{

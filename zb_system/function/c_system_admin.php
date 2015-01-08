@@ -9,30 +9,30 @@
 $zbp->ismanage=true;
 
 /**
- * 添加页面管理子菜单
+ * 添加页面管理子菜单(内置插件函数)
  */
-function Zbp_Admin_Addpagesubmenu(){
+function Include_Admin_Addpagesubmenu(){
 	echo '<a href="../cmd.php?act=PageEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_page'] . '</span></a>';
 }
 
 /**
- * 添加标签管理子菜单
+ * 添加标签管理子菜单(内置插件函数)
  */
-function Zbp_Admin_Addtagsubmenu(){
+function Include_Admin_Addtagsubmenu(){
 	echo '<a href="../cmd.php?act=TagEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_tag'] . '</span></a>';
 }
 
 /**
- * 添加分类管理子菜单
+ * 添加分类管理子菜单(内置插件函数)
  */
-function Zbp_Admin_Addcatesubmenu(){
+function Include_Admin_Addcatesubmenu(){
 	echo '<a href="../cmd.php?act=CategoryEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_category'] . '</span></a>';
 }
 
 /**
- * 添加用户管理子菜单
+ * 添加用户管理子菜单(内置插件函数)
  */
-function Zbp_Admin_Addmemsubmenu(){
+function Include_Admin_Addmemsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('MemberNew')){
 		echo '<a href="../cmd.php?act=MemberNew"><span class="m-left">' . $GLOBALS['lang']['msg']['new_member'] . '</span></a>';
@@ -42,9 +42,9 @@ function Zbp_Admin_Addmemsubmenu(){
 }
 
 /**
- * 添加模块管理子菜单
+ * 添加模块管理子菜单(内置插件函数)
  */
-function Zbp_Admin_Addmodsubmenu(){
+function Include_Admin_Addmodsubmenu(){
 	echo '<a href="../cmd.php?act=ModuleEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_module'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=navbar"><span class="m-left">' . $GLOBALS['lang']['msg']['module_navbar'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=link"><span class="m-left">' . $GLOBALS['lang']['msg']['module_link'] . '</span></a>';
@@ -53,9 +53,9 @@ function Zbp_Admin_Addmodsubmenu(){
 }
 
 /**
- * 添加评论管理子菜单
+ * 添加评论管理子菜单(内置插件函数)
  */
-function Zbp_Admin_Addcmtsubmenu(){
+function Include_Admin_Addcmtsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('CommentAll')){
 		$n=$zbp->cache->all_comment_nums - $zbp->cache->normal_comment_nums;
@@ -63,13 +63,6 @@ function Zbp_Admin_Addcmtsubmenu(){
 		echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left '.(GetVars('ischecking')?'m-now':'').'">' . $GLOBALS['lang']['msg']['check_comment']  . $n . '</span></a>';
 	}
 }
-
-Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','Zbp_Admin_Addpagesubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','Zbp_Admin_Addtagsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','Zbp_Admin_Addcatesubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu','Zbp_Admin_Addmemsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','Zbp_Admin_Addmodsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','Zbp_Admin_Addcmtsubmenu');
 
 
 ################################################################################################################
