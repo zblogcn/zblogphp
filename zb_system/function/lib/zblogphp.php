@@ -293,8 +293,8 @@ class ZBlogPHP {
 	function __construct() {
 
 		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,
-				$datainfo,$actions,$action,$blogversion,$blogtitle,$blogname,
-				$blogsubname,$blogtheme,$blogstyle,$currenturl,$activeapps,$posttype;
+				$datainfo,$actions,$action,$blogversion,$blogtitle,$blogname,$blogsubname,
+				$blogtheme,$blogstyle,$currenturl,$activeapps,$posttype,$posttype_urlrule;
 
 		ZBlogException::SetErrorHook();
 
@@ -311,6 +311,7 @@ class ZBlogPHP {
 		$this->datainfo = &$datainfo;
 		$this->actions = &$actions;
 		$this->posttype = &$posttype;
+		$this->posttype_urlrule = &$posttype_urlrule;
 		$this->currenturl = &$currenturl;
 		$this->action = &$action;
 		$this->activeapps = &$activeapps;

@@ -70,7 +70,7 @@ define('ZC_POST_TYPE_ARTICLE', 0);
 define('ZC_POST_TYPE_PAGE', 1);
 
 #定义类型序列
-$posttype=array();
+$posttype=$posttype_urlrule=array();
 $posttype[0]='article';
 $posttype[1]='page';
 /**
