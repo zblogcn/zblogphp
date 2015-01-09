@@ -64,14 +64,15 @@ $zbpvers['150101']='1.4 Beta Build 150101';
 define('ZC_BLOG_VERSION', end($zbpvers));
 
 /**
- *文章类型：文章型
+ *文章类型：文章型,页面型
  */
 define('ZC_POST_TYPE_ARTICLE', 0);
-/**
- *文章类型：页面型
- */
 define('ZC_POST_TYPE_PAGE', 1);
 
+#定义类型序列
+$posttype=array();
+$posttype[0]='article';
+$posttype[1]='page';
 /**
  *文章状态：公开发布
  */

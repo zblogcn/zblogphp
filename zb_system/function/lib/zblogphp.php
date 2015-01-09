@@ -157,6 +157,14 @@ class ZBlogPHP {
 	 */
 	public $datainfo=null;
 	/**
+	 * @var array|null 类型序列
+	 */
+	public $posttype=null;
+	/**
+	 * @var array 类型序列的Url Rule
+	 */
+	public $posttype_urlrule=array();
+	/**
 	 * @var array|null 操作列表
 	 */
 	public $actions=null;
@@ -284,8 +292,9 @@ class ZBlogPHP {
 	 */
 	function __construct() {
 
-		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,$datainfo,$actions,$action;
-		global $blogversion,$blogtitle,$blogname,$blogsubname,$blogtheme,$blogstyle,$currenturl,$activeapps;
+		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,
+				$datainfo,$actions,$action,$blogversion,$blogtitle,$blogname,
+				$blogsubname,$blogtheme,$blogstyle,$currenturl,$activeapps,$posttype;
 
 		ZBlogException::SetErrorHook();
 
@@ -301,6 +310,7 @@ class ZBlogPHP {
 		$this->table = &$table;
 		$this->datainfo = &$datainfo;
 		$this->actions = &$actions;
+		$this->posttype = &$posttype;
 		$this->currenturl = &$currenturl;
 		$this->action = &$action;
 		$this->activeapps = &$activeapps;
@@ -404,6 +414,9 @@ class ZBlogPHP {
 		$this->LoadCache();
 		$this->LoadOption();
 		
+		$this->RegPostType(0,$this->posttype[0],$this->option['ZC_ARTICLE_REGEX']);
+		$this->RegPostType(1,$this->posttype[1],$this->option['ZC_PAGE_REGEX']);
+
 		if($oldlang!=$this->option['ZC_BLOG_LANGUAGEPACK']){
 			$this->lang = require($this->path . 'zb_users/language/' . $this->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
 		}
@@ -826,7 +839,6 @@ class ZBlogPHP {
 		}
 
 		$this->Config('system')->ZC_BLOG_HOST = chunk_split($this->Config('system')->ZC_BLOG_HOST,1,"|");
-
 		$this->SaveConfig('system');
 		return true;
 	}
@@ -873,7 +885,6 @@ class ZBlogPHP {
 				($key=='ZC_SITE_TURNOFF')
 			)continue;
 			$this->option[$key]=$value;
-			if($key=='ZC_BLOG_HOST')$this->option[$key] = str_replace('|','',$this->option[$key]);
 		}
 		if(!extension_loaded('gd'))$this->option['ZC_COMMENT_VERIFY_ENABLE'] = False;
 		return true;
@@ -2622,5 +2633,33 @@ class ZBlogPHP {
 		$ap=explode("|", $this->option['ZC_USING_PLUGIN_LIST']);
 		$ap=array_unique($ap);
 		return $ap;
+	}
+
+	/**
+	 * 注册PostType
+	 * int $typeid 系统定义在0-99，插件自定义100-255
+	 * string $urlrule 默认是取Page类型的Url Rule
+	 */
+	function RegPostType($typeid,$name,$urlrule=''){
+		if($urlrule=='')$urlrule=$this->option['ZC_PAGE_REGEX'];
+		$typeid=(int)$typeid;
+		$name=strtolower(trim($name));
+		if($typeid>99){
+			if(isset($this->posttype[$typeid]))$this->ShowError(87,__FILE__,__LINE__);
+			if(in_array($name,$this->posttype) || $name=='')$this->ShowError(87,__FILE__,__LINE__);
+		}
+		$this->posttype[$typeid]=$name;
+		$this->posttype_urlrule[$typeid]=$urlrule;
+	}
+	function GetPostType_Name($typeid){
+		if(isset($this->posttype[$typeid]))
+			return $this->posttype[$typeid];
+		return '';
+	}
+	function GetPostType_UrlRule($typeid){
+		if(isset($this->posttype_urlrule[$typeid]))
+			return $this->posttype_urlrule[$typeid];
+		else
+			return $this->option['ZC_PAGE_REGEX'];
 	}
 }

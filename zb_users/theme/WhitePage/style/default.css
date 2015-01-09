@@ -56,6 +56,9 @@ h1,h2,h3,h4,h5,h6{
 .clear{
     clear:both;
 }
+strong {
+	color: #B22222;
+}
 
 
 /*---------------------------各模块设定-------------------------------*/
@@ -699,7 +702,7 @@ div.reply-frm{
 	box-shadow: 0 0 15px #666;
 	margin:1em 1% !important;
 	padding:.3em .8em !important;
-	min-width:330px;
+	min-width:200px;
 }
 
 input.text{
@@ -710,7 +713,7 @@ input.text{
 	width:300px;
 	font-size:0.9em;
 }
-#txaArticle{padding:5px 1%;width:98%;height:150px;border:1px solid #bbb;}
+#txaArticle{padding:5px 1%;width:98%;height:10em;border:1px solid #bbb;}
 input.button {font-size:0.9em; width:100px; height:2em; cursor: pointer;}
 input[type=button]:hover,input[type=submit]:hover{color:#B22222;cursor: pointer;}
 

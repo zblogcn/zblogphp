@@ -129,11 +129,7 @@ class Post extends Base{
 				return $zbp->lang['post_status_name'][$this->Status];
 				break;
 			case 'Url':
-				if($this->Type==ZC_POST_TYPE_ARTICLE){
-					$u = new UrlRule($zbp->option['ZC_ARTICLE_REGEX']);
-				}else{
-					$u = new UrlRule($zbp->option['ZC_PAGE_REGEX']);
-				}
+				$u = new UrlRule( $zbp->GetPostType_UrlRule($this->Type) );
 				$u->Rules['{%id%}']=$this->ID;
 				if($this->Alias){
 					$u->Rules['{%alias%}']=$this->Alias;
@@ -229,6 +225,8 @@ class Post extends Base{
 				$toptype = $this->Metas->toptype;
 				if($this->IsTop==true && $toptype==null)$toptype = 'index';
 				return $toptype;
+			case 'TypeName':
+				return $zbp->GetPostType_Name($this->Type);
 			default:
 				return parent::__get($name);
 				break;

@@ -349,14 +349,24 @@ function ViewSearch(){
 	);
 
 	foreach ($array as $a) {
-		$article->Content .= '<p><br/>' . $a->Title . '<br/>';
-		$article->Content .= '<a href="' . $a->Url . '">' . $a->Url . '</a></p>';
+		$article->Content .= '<p><a href="' . $a->Url . '">' . str_replace($q,'<strong>' . $q . '</strong>',$a->Title) . '</a><br/>';
+		$s = strip_tags($a->Intro) .''. strip_tags($a->Content);
+		$i = strpos($s,$q,0);
+		if($i!==false){
+			if($i>50){
+				$t=SubStrUTF8WithStart($s,$i-50,100);
+			}else{
+				$t=SubStrUTF8WithStart($s,0,100);
+			}
+			$article->Content .= str_replace($q,'<strong>' . $q . '</strong>',$t) . '<br/>';
+		}
+		$article->Content .= '<a href="' . $a->Url . '">' . $a->Url . '</a><br/></p>';
 	}
 
 	$zbp->header .= '<meta name="robots" content="noindex,follow" />' . "\r\n";
 	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);
-	$zbp->template->SetTags('type',$article->type=0?'article':'page');
+	$zbp->template->SetTags('type',$article->TypeName);
 	$zbp->template->SetTags('page',1);
 	$zbp->template->SetTags('pagebar',null);
 	$zbp->template->SetTags('comments',array());
@@ -859,7 +869,7 @@ function ViewPost($id, $alias, $isrewrite = false) {
 	
 	$zbp->template->SetTags('title', ($article->Status == 0 ? '' : '[' . $zbp->lang['post_status_name'][$article->Status] . ']') . $article->Title);
 	$zbp->template->SetTags('article', $article);
-	$zbp->template->SetTags('type', ($article->Type == 0 ? 'article' : 'page'));
+	$zbp->template->SetTags('type', $article->TypeName);
 	$zbp->template->SetTags('page', 1);
 	if ($pagebar->PageAll == 0 || $pagebar->PageAll == 1)
 		$pagebar = null;
@@ -2369,6 +2379,11 @@ function FilterPost(&$article) {
 		}
 	} elseif ($article->Type == ZC_POST_TYPE_PAGE) {
 		if (!$zbp->CheckRights('PageAll')) {
+			$article->Content = TransferHTML($article->Content, '[noscript]');
+			$article->Intro = TransferHTML($article->Intro, '[noscript]');
+		}
+	} else {
+		if (!$zbp->CheckRights('ArticleAll')) {
 			$article->Content = TransferHTML($article->Content, '[noscript]');
 			$article->Intro = TransferHTML($article->Intro, '[noscript]');
 		}

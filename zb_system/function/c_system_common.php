@@ -899,6 +899,21 @@ function CloseTags($html) {
 
 }
 
+function SubStrUTF8WithStart($sourcestr, $start, $cutlength) {
+	if( function_exists('mb_substr') && function_exists('mb_internal_encoding') ){
+		mb_internal_encoding('UTF-8');
+		return mb_substr($sourcestr, $start, $cutlength);
+	}
+
+	if( function_exists('iconv_substr') && function_exists('iconv_set_encoding') ){
+		iconv_set_encoding ( "internal_encoding" ,  "UTF-8" );
+		iconv_set_encoding ( "output_encoding" ,  "UTF-8" );
+		return iconv_substr($sourcestr, $start, $cutlength);
+	}
+	
+	return substr($sourcestr, $start, $cutlength);
+}
+
 /**
  *  获取UTF8格式的字符串的子串
  * @param string $sourcestr 源字符串
