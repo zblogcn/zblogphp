@@ -426,7 +426,7 @@ div.post-body code{
 }
 
 div.post-body blockquote {
-	width: 93%;
+	width: 95%;
 	background:#F4F4F4;
 	border-left:10px solid #ececec;
 	margin:15px 5px;
@@ -486,7 +486,14 @@ div.post-body h6{
 	font-size:0.8em;
 }
 
-
+div.post-body pre.prettyprint {
+	width: 95%;
+	background:#F4F4F4;
+	border:none;
+	border-left:10px solid #ececec;
+	margin:15px 5px;
+	padding:5px;
+}
 
 /*----------------------隐藏最近文章前的日期---------------------------------*/
 .article-date {

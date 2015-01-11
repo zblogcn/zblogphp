@@ -130,6 +130,17 @@ class Dbpdo_MySQL implements iDataBase {
 		$results = $this->db->query($this->sql->Filter($query));
 		//fetch || fetchAll
 		if(is_object($results)){
+		
+			//if(true==true){
+			if(true!==true){
+				$query="EXPLAIN " . $query;
+				$results2 = $this->db->query($this->sql->Filter($query));
+				if(is_object($results2)){
+					$row = $results2->fetchAll();
+					logs("\r\n" . $query . "\r\n" . var_export($row,true));
+				}
+			}
+		
 			return $results->fetchAll();
 		}else{
 			return array($results);

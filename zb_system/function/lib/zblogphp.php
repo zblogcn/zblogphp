@@ -161,10 +161,6 @@ class ZBlogPHP {
 	 */
 	public $posttype=null;
 	/**
-	 * @var array 类型序列的Url Rule
-	 */
-	public $posttype_urlrule=array();
-	/**
 	 * @var array|null 操作列表
 	 */
 	public $actions=null;
@@ -294,7 +290,7 @@ class ZBlogPHP {
 
 		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,
 				$datainfo,$actions,$action,$blogversion,$blogtitle,$blogname,$blogsubname,
-				$blogtheme,$blogstyle,$currenturl,$activeapps,$posttype,$posttype_urlrule;
+				$blogtheme,$blogstyle,$currenturl,$activeapps,$posttype;
 
 		ZBlogException::SetErrorHook();
 
@@ -311,7 +307,6 @@ class ZBlogPHP {
 		$this->datainfo = &$datainfo;
 		$this->actions = &$actions;
 		$this->posttype = &$posttype;
-		$this->posttype_urlrule = &$posttype_urlrule;
 		$this->currenturl = &$currenturl;
 		$this->action = &$action;
 		$this->activeapps = &$activeapps;
@@ -414,9 +409,9 @@ class ZBlogPHP {
 		$this->LoadConfigs();
 		$this->LoadCache();
 		$this->LoadOption();
-		
-		$this->RegPostType(0,$this->posttype[0],$this->option['ZC_ARTICLE_REGEX']);
-		$this->RegPostType(1,$this->posttype[1],$this->option['ZC_PAGE_REGEX']);
+
+		$this->RegPostType(0,'single',$this->option['ZC_ARTICLE_REGEX'],$this->option['ZC_POST_DEFAULT_TEMPLATE']);
+		$this->RegPostType(1,'page',$this->option['ZC_PAGE_REGEX'],$this->option['ZC_POST_DEFAULT_TEMPLATE']);
 
 		if($oldlang!=$this->option['ZC_BLOG_LANGUAGEPACK']){
 			$this->lang = require($this->path . 'zb_users/language/' . $this->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
@@ -2640,27 +2635,33 @@ class ZBlogPHP {
 	 * 注册PostType
 	 * int $typeid 系统定义在0-99，插件自定义100-255
 	 * string $urlrule 默认是取Page类型的Url Rule
+	 * string $template 默认模板名page
 	 */
-	function RegPostType($typeid,$name,$urlrule=''){
+	function RegPostType($typeid,$name,$urlrule='',$template=''){
 		if($urlrule=='')$urlrule=$this->option['ZC_PAGE_REGEX'];
+		if($template=='')$template='page';
 		$typeid=(int)$typeid;
 		$name=strtolower(trim($name));
 		if($typeid>99){
 			if(isset($this->posttype[$typeid]))$this->ShowError(87,__FILE__,__LINE__);
-			if(in_array($name,$this->posttype) || $name=='')$this->ShowError(87,__FILE__,__LINE__);
 		}
-		$this->posttype[$typeid]=$name;
-		$this->posttype_urlrule[$typeid]=$urlrule;
+		$this->posttype[$typeid]=array($name,$urlrule,$template);
 	}
 	function GetPostType_Name($typeid){
 		if(isset($this->posttype[$typeid]))
-			return $this->posttype[$typeid];
+			return $this->posttype[$typeid][0];
 		return '';
 	}
 	function GetPostType_UrlRule($typeid){
-		if(isset($this->posttype_urlrule[$typeid]))
-			return $this->posttype_urlrule[$typeid];
+		if(isset($this->posttype[$typeid]))
+			return $this->posttype[$typeid][1];
 		else
 			return $this->option['ZC_PAGE_REGEX'];
+	}
+	function GetPostType_Template($typeid){
+		if(isset($this->posttype[$typeid]))
+			return $this->posttype[$typeid][2];
+		else
+			return 'single';
 	}
 }

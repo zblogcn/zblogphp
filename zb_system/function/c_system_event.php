@@ -248,12 +248,14 @@ function ViewIndex(){
 		break;
 	case '':
 	default:
-		if( $zbp->currenturl==$zbp->cookiespath||
+		if( $zbp->currenturl==$zbp->cookiespath || 
 			$zbp->currenturl==$zbp->cookiespath . 'index.php' ){
 			ViewList(null,null,null,null,null);
-		}elseif(isset($_GET['id'])||isset($_GET['alias'])){
+		}elseif( ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') && 
+			(isset($_GET['id'])||isset($_GET['alias'])) ){
 			ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
-		}elseif(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])){
+		}elseif( ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') && 
+			(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])) ){
 			ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('date','GET'),GetVars('tags','GET'));
 		}else{
 			ViewAuto($zbp->currenturl);
@@ -403,101 +405,108 @@ function ViewAuto($inpurl) {
 	if($zbp->cookiespath === substr($url, 0 , strlen($zbp->cookiespath)))
 		$url = substr($url, strlen($zbp->cookiespath));
 
-	if (isset($_SERVER['SERVER_SOFTWARE'])) {
-		if ((strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) == true)){
-			//iis+httpd.ini下如果存在真实文件
-			$realurl = $zbp->path . urldecode($url);
-			if(is_readable($realurl)&&is_file($realurl)){
-				die(file_get_contents($realurl));
-			}
-			unset($realurl);
+	if (isset($_SERVER['SERVER_SOFTWARE']) && (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) == true)){
+		//iis+httpd.ini下如果存在真实文件
+		$realurl = $zbp->path . urldecode($url);
+		if(is_readable($realurl)&&is_file($realurl)){
+			die(file_get_contents($realurl));
 		}
+		unset($realurl);
 	}
-
+	
 	$url = urldecode($url);
 
 	if($url==''||$url=='index.php'||trim($url,'/')==''){
 		ViewList(null,null,null,null,null);
 		return null;
 	}
-	
-	if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') {
-		$zbp->ShowError(2, __FILE__, __LINE__);
-		return null;
-	}
 
-	$r = UrlRule::Rewrite_url($zbp->option['ZC_INDEX_REGEX'], 'index');
-	$m = array();
-	if (preg_match($r, $url, $m) == 1) {
-		ViewList($m[1], null, null, null, null, true);
+	if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
 
-		return null;
-	}
+		$r = UrlRule::Rewrite_url($zbp->option['ZC_INDEX_REGEX'], 'index');
+		$m = array();
+		if (preg_match($r, $url, $m) == 1) {
+			ViewList($m[1], null, null, null, null, true);
 
-	$r = UrlRule::Rewrite_url($zbp->option['ZC_DATE_REGEX'], 'date');
-	$m = array();
-	if (preg_match($r, $url, $m) == 1) {
-		ViewList($m[2], null, null, $m[1], null, true);
-
-		return null;
-	}
-
-	$r = UrlRule::Rewrite_url($zbp->option['ZC_AUTHOR_REGEX'], 'auth');
-	$m = array();
-	if (preg_match($r, $url, $m) == 1) {
-		$result = ViewList($m[2], null, $m[1], null, null, true);
-		if ($result == true)
 			return null;
-	}
-
-	$r = UrlRule::Rewrite_url($zbp->option['ZC_TAGS_REGEX'], 'tags');
-	$m = array();
-	if (preg_match($r, $url, $m) == 1) {
-		$result = ViewList($m[2], null, null, null, $m[1], true);
-		if ($result == true)
-			return null;
-	}
-
-	$r = UrlRule::Rewrite_url($zbp->option['ZC_CATEGORY_REGEX'], 'cate');
-	$m = array();
-	if (preg_match($r, $url, $m) == 1) {
-		$result = ViewList($m[2], $m[1], null, null, null, true);
-		if ($result == true)
-			return null;
-	}
-
-	$r = UrlRule::Rewrite_url($zbp->option['ZC_ARTICLE_REGEX'], 'article');
-	$m = array();
-	if (preg_match($r, $url, $m) == 1) {
-		if (strpos($zbp->option['ZC_ARTICLE_REGEX'], '{%id%}') !== false) {
-			$result = ViewPost($m[1], null, true);
-		} else {
-			$result = ViewPost(null, $m[1], true);
 		}
-		if ($result == false)
-			$zbp->ShowError(2, __FILE__, __LINE__);
 
-		return null;
-	}
+		$r = UrlRule::Rewrite_url($zbp->option['ZC_DATE_REGEX'], 'date');
+		$m = array();
+		if (preg_match($r, $url, $m) == 1) {
+			ViewList($m[2], null, null, $m[1], null, true);
 
-	$r = UrlRule::Rewrite_url($zbp->option['ZC_PAGE_REGEX'], 'page');
-	$m = array();
-	if (preg_match($r, $url, $m) == 1) {
-		if (strpos($zbp->option['ZC_PAGE_REGEX'], '{%id%}') !== false) {
-			$result = ViewPost($m[1], null, true);
-		} else {
-			$result = ViewPost(null, $m[1], true);
+			return null;
 		}
-		if ($result == false)
-			$zbp->ShowError(2, __FILE__, __LINE__);
 
-		return null;
+		$r = UrlRule::Rewrite_url($zbp->option['ZC_AUTHOR_REGEX'], 'auth');
+		$m = array();
+		if (preg_match($r, $url, $m) == 1) {
+			$result = ViewList($m[2], null, $m[1], null, null, true);
+			if ($result == true)
+				return null;
+		}
+
+		$r = UrlRule::Rewrite_url($zbp->option['ZC_TAGS_REGEX'], 'tags');
+		$m = array();
+		if (preg_match($r, $url, $m) == 1) {
+			$result = ViewList($m[2], null, null, null, $m[1], true);
+			if ($result == true)
+				return null;
+		}
+
+		$r = UrlRule::Rewrite_url($zbp->option['ZC_CATEGORY_REGEX'], 'cate');
+		$m = array();
+		if (preg_match($r, $url, $m) == 1) {
+			$result = ViewList($m[2], $m[1], null, null, null, true);
+			if ($result == true)
+				return null;
+		}
+
+		$r = UrlRule::Rewrite_url($zbp->option['ZC_ARTICLE_REGEX'], 'article');
+		$m = array();
+		if (preg_match($r, $url, $m) == 1) {
+			if (strpos($zbp->option['ZC_ARTICLE_REGEX'], '{%id%}') !== false) {
+				$result = ViewPost($m[1], null, true);
+			} else {
+				$result = ViewPost(null, $m[1], true);
+			}
+			if ($result == false)
+				$zbp->ShowError(2, __FILE__, __LINE__);
+
+			return null;
+		}
+
+		$r = UrlRule::Rewrite_url($zbp->option['ZC_PAGE_REGEX'], 'page');
+		$m = array();
+		if (preg_match($r, $url, $m) == 1) {
+			if (strpos($zbp->option['ZC_PAGE_REGEX'], '{%id%}') !== false) {
+				$result = ViewPost($m[1], null, true);
+			} else {
+				$result = ViewPost(null, $m[1], true);
+			}
+			if ($result == false)
+				$zbp->ShowError(2, __FILE__, __LINE__);
+
+			return null;
+		}
+
 	}
 
 	foreach ($GLOBALS['Filter_Plugin_ViewAuto_End'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($url);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
+		}
+	}
+	
+	if( isset($zbp->option['ZC_COMPATIBLE_ASP_URL']) && ($zbp->option['ZC_COMPATIBLE_ASP_URL']==true) ){
+		if( isset($_GET['id'])||isset($_GET['alias']) ){
+			ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
+			return null;
+		}elseif( isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags']) ){
+			ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('date','GET'),GetVars('tags','GET'));
+			return null;
 		}
 	}
 
@@ -2169,6 +2178,14 @@ function EnablePlugin($name) {
 	$app->CheckCompatibility();
 
 	$zbp->option['ZC_USING_PLUGIN_LIST'] = AddNameInString($zbp->option['ZC_USING_PLUGIN_LIST'], $name);
+	
+	$array = explode('|', $zbp->option['ZC_USING_PLUGIN_LIST']);
+	$arrayhas = array();
+	foreach ($array as $p)
+		if(is_readable($zbp->usersdir . 'plugin/' . $p . '/plugin.xml'))
+			$arrayhas[]=$p;
+	$zbp->option['ZC_USING_PLUGIN_LIST'] = trim(implode('|', $arrayhas), '|');
+	
 	$zbp->SaveOption();
 
 	return $name;
@@ -2181,6 +2198,14 @@ function EnablePlugin($name) {
 function DisablePlugin($name) {
 	global $zbp;
 	$zbp->option['ZC_USING_PLUGIN_LIST'] = DelNameInString($zbp->option['ZC_USING_PLUGIN_LIST'], $name);
+
+	$array = explode('|', $zbp->option['ZC_USING_PLUGIN_LIST']);
+	$arrayhas = array();
+	foreach ($array as $p)
+		if(is_readable($zbp->usersdir . 'plugin/' . $p . '/plugin.xml'))
+			$arrayhas[]=$p;
+	$zbp->option['ZC_USING_PLUGIN_LIST'] = trim(implode('|', $arrayhas), '|');
+	
 	$zbp->SaveOption();
 }
 

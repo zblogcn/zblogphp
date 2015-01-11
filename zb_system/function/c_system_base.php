@@ -69,10 +69,10 @@ define('ZC_BLOG_VERSION', end($zbpvers));
 define('ZC_POST_TYPE_ARTICLE', 0);
 define('ZC_POST_TYPE_PAGE', 1);
 
-#定义类型序列
-$posttype=$posttype_urlrule=array();
-$posttype[0]='article';
-$posttype[1]='page';
+#定义类型序列{id=>{name,url,template}}
+$posttype=array();
+$posttype[0]=array('article','','');
+$posttype[1]=array('page','','');
 /**
  *文章状态：公开发布
  */

@@ -93,7 +93,7 @@ class Post extends Base{
 				return null;
 				break;
 			case 'Template':
-				if($value==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$value='';
+				if($value==$zbp->GetPostType_Template($this->Type))$value='';
 				return $this->data[$name]  =  $value;
 				break;
 			case 'TopType':
@@ -168,7 +168,7 @@ class Post extends Base{
 				if($value==''){
 					$value=GetValueInArray($this->Category->GetData(),'LogTemplate');
 					if($value==''){
-						$value=$zbp->option['ZC_POST_DEFAULT_TEMPLATE'];
+						$value=$zbp->GetPostType_Template($this->Type);
 					}
 				}
 				return $value;
@@ -242,7 +242,7 @@ class Post extends Base{
 		if($this->Type==ZC_POST_TYPE_ARTICLE){
 			if($this->Template==GetValueInArray($this->Category->GetData(),'LogTemplate'))$this->data['Template'] = '';
 		}
-		if($this->Template==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
+		if($this->Template==$zbp->GetPostType_Template($this->Type))$this->data['Template'] = '';
 		foreach ($GLOBALS['Filter_Plugin_Post_Save'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname($this);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}

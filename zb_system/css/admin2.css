@@ -137,7 +137,7 @@ background:#ffffdd;
 .left #leftmenu li { float:left; width:140px; height:32px; margin-bottom:5px; background:#ededed;cursor:pointer;}
 .left #leftmenu a { float:left;  width:140px; height:32px; line-height:35px;cursor:pointer;}
 .left #leftmenu a:hover { color:#000000; background:#b0cdee;}
-.left #leftmenu span {  float:left;width:90px; height:32px; line-height:32px; padding-right:50px; text-align:right;cursor:pointer;}
+.left #leftmenu span {  float:left;width:90px; height:32px; line-height:32px; padding-right:50px; text-align:right;cursor:pointer;box-sizing:content-box;}
 
 /*导航高亮*/
 .left #leftmenu .on a,.left #leftmenu #on a:hover { color:#ffffff; background:#3399cc;}
@@ -380,8 +380,8 @@ input.edit{
 	margin-left: 0px;
 }
 
-#editor_content {width:100%;height:300px;	margin:0 3px;}
-#editor_intro{width:100%;height:150px;	margin:0 3px;}
+#editor_content {width:99%;height:300px;margin:0;padding:0.5em 0.5%}
+#editor_intro{width:99%;height:150px;margin:0;padding:0.5em 0.5%}
 
 /*提示DIV*/
 div.hint{
