@@ -435,6 +435,7 @@ class App {
 
 
 		foreach ($this->dirs as $key => $value) {
+			$value = preg_replace('/[^(\x20-\x7F)]*/','', $value);
 			$d=$this->id .'/'. str_replace($dir,'',$value);
 			$s.='<folder><path>'.htmlspecialchars($d).'</path></folder>';
 		}
@@ -446,7 +447,8 @@ class App {
 			}else{
 				$c=base64_encode(file_get_contents($value));
 			}
-			$s.='<file><path>'.$d.'</path><stream>'.$c.'</stream></file>';
+			$d = preg_replace('/[^(\x20-\x7F)]*/','', $d);
+			$s.='<file><path>'.htmlspecialchars($d).'</path><stream>'.$c.'</stream></file>';
 		}
 
 
