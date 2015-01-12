@@ -42,7 +42,7 @@
     <section class="central container">
       <div class="content-wrap">
         <div class="content">
-<?php  foreach ( $articles as $article) { ?> 
+<?php  foreach ( $articles as $article) { ?>
 
 <?php if ($article->IsTop) { ?>
 <?php  include $this->GetTemplate('post-istop');  ?>
@@ -50,7 +50,7 @@
 <?php  include $this->GetTemplate('post-multi');  ?>
 <?php } ?>
 
-<?php  }   ?>
+<?php }   ?>
 			<div class="paging">
 				<?php  include $this->GetTemplate('pagebar');  ?>
 			</div>

@@ -14,9 +14,9 @@
     <div class="meta">
           <div class="terms">
 		  <ul class="links inline"><li class="first last taxonomy_term_2">
-<?php  foreach ( $article->Tags as $tag) { ?> 
+<?php  foreach ( $article->Tags as $tag) { ?>
 <a href="<?php  echo $tag->Url;  ?>"><?php  echo $tag->Name;  ?></a>&nbsp;
-<?php  }   ?>
+<?php }   ?>
 		  </li>
           </ul>
           </div>

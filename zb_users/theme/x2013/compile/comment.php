@@ -1,4 +1,4 @@
-<label id="cmt<?php  echo $comment->ID;  ?>"></label><ol class="commentlist" id="cmt<?php  echo $comment->ID;  ?>">
+<ol class="commentlist" id="cmt<?php  echo $comment->ID;  ?>">
 	<li class="comment odd alt thread-odd thread-alt depth-<?php  echo $comment->ID;  ?>" id="comment-<?php  echo $comment->ID;  ?>">
 		<div class="c-floor"><a href="#cmt<?php  echo $comment->ID;  ?>">#<?php  echo $key+1;  ?></span>
 </a></div>
@@ -8,9 +8,9 @@
 		<div class="c-main" id="div-comment-<?php  echo $comment->ID;  ?>">
 			<div class="c-meta"><span class="c-author"><?php  echo $comment->Author->Name;  ?></span><?php  echo $comment->Time();  ?> <a class='comment-reply-link' href='#respond' onclick="RevertComment('<?php  echo $comment->ID;  ?>')">回复</a></div>
 			<p><?php  echo $comment->Content;  ?>
-<?php  foreach ( $comment->Comments as $key => $comment) { ?> 
+<?php  foreach ( $comment->Comments as $key => $comment) { ?>
 	<?php  include $this->GetTemplate('comment');  ?>
-<?php  }   ?>
+<?php }   ?>
 			</p>
 		</div>
 	</li>

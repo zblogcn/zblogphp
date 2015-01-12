@@ -15,9 +15,9 @@
 	<?php if ($article->Tags) { ?>
 	<br/>
 	<footer class="article-footer"><div class="article-tags">标签:
-	<?php  foreach ( $article->Tags as $tag) { ?> 
+	<?php  foreach ( $article->Tags as $tag) { ?>
 	<a href="<?php  echo $tag->Url;  ?>"><?php  echo $tag->Name;  ?></a>
-	<?php  }   ?>
+	<?php }   ?>
 	</div></footer>
 	<?php } ?>
 

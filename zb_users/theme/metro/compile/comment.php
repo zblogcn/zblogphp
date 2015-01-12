@@ -1,4 +1,4 @@
-<label id="cmt<?php  echo $comment->ID;  ?>"></label><div class="msg" id="cmt<?php  echo $comment->ID;  ?>">
+<div class="msg" id="cmt<?php  echo $comment->ID;  ?>">
           <div class="msgimg"><a name="cmt<?php  echo $comment->ID;  ?>"><img class="avatar" src="<?php  echo $comment->Author->Avatar;  ?>" alt=""/></a></div>
             <div class="msgtxt">
               <div class="msgtxtbogy">
