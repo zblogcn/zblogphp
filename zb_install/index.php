@@ -795,7 +795,7 @@ function InsertInfo(){
   $t->FileName="controlpanel";
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">['.$zbp->lang['msg']['admin_login'].']</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">['.$zbp->lang['msg']['view_rights'].']</a></span>';
+  $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">'.$zbp->lang['msg']['admin_login'].'</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">'.$zbp->lang['msg']['view_rights'].'</a></span>';
   $t->HtmlID="divContorPanel";
   $t->Type="div";
   $t->Save();

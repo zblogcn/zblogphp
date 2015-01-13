@@ -10,7 +10,9 @@ return array(
 
 'lang' => 'zh-CN',
 
-'font-family'=>'',
+'font_family'=>'',
+
+'windows_character_set'=>'GBK',
 
 #Front-End & Back-End
 'msg' => array(

@@ -65,6 +65,7 @@ function Server_Open($method){
 					$zbp->SaveConfig('AppCentre');
 				}
 			}
+			if(strpos($s,'app.zblogcn.com')===false)$zbp->ShowHint('bad','后台访问应用中心故障，不能登录和下载应用，请检查主机空间是否能远程访问app.zblogcn.com。');
 			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
 			break;
 		case 'check':

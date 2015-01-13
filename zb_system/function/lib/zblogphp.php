@@ -460,12 +460,6 @@ class ZBlogPHP {
 		$this->searchurl=$this->host . 'search.php';
 		$this->ajaxurl=$this->host . 'zb_system/cmd.php?act=ajax&src=';
 		
-		if(isset($this->lang['font-family'])&&trim($this->lang['font-family'])){
-			Add_Filter_Plugin('Filter_Plugin_Login_Header','Include_AddonFontfamily');
-			Add_Filter_Plugin('Filter_Plugin_Other_Header','Include_AddonFontfamily');
-			Add_Filter_Plugin('Filter_Plugin_Admin_Header','Include_AddonFontfamily');
-		}
-
 		$this->isinitialized=true;
 
 		return true;
@@ -531,7 +525,13 @@ class ZBlogPHP {
 			foreach($this->modulesbyfilename as &$m)
 				$m->Content = str_replace($ak,$av,$m->Content);
 		}
-		
+
+		if(isset($this->lang['font_family'])&&trim($this->lang['font_family'])){
+			Add_Filter_Plugin('Filter_Plugin_Login_Header','Include_AddonFontfamily');
+			Add_Filter_Plugin('Filter_Plugin_Other_Header','Include_AddonFontfamily');
+			Add_Filter_Plugin('Filter_Plugin_Admin_Header','Include_AddonFontfamily');
+		}
+
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 		
 		$this->isload=true;

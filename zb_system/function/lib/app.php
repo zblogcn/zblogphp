@@ -447,7 +447,8 @@ class App {
 			}else{
 				$c=base64_encode(file_get_contents($value));
 			}
-			$d = preg_replace('/[^(\x20-\x7F)]*/','', $d);
+			if(IS_WINDOWS)
+				$d=iconv($zbp->lang['windows_character_set'], 'UTF-8//IGNORE',$d);
 			$s.='<file><path>'.htmlspecialchars($d).'</path><stream>'.$c.'</stream></file>';
 		}
 

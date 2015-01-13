@@ -76,8 +76,8 @@ class Upload extends Base{
 		if(!file_exists($zbp->usersdir . $this->Dir)){
 			@mkdir($zbp->usersdir . $this->Dir, 0755,true);	
 		}
-		if(PHP_OS=='WINNT'||PHP_OS=='WIN32'||PHP_OS=='Windows'){
-			$fn=iconv("UTF-8","GBK//IGNORE",$this->Name);
+		if(IS_WINDOWS){
+			$fn=iconv("UTF-8",$zbp->lang['windows_character_set'] . "//IGNORE",$this->Name);
 		}else{
 			$fn=$this->Name;
 		}

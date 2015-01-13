@@ -3192,6 +3192,5 @@ function Include_ShowError404($idortext,$file,$line){
  */
 function Include_AddonFontfamily(){
 	global $zbp;
-	if(isset($zbp->lang['font-family'])&&trim($zbp->lang['font-family']))
-		echo'<style type="text/css">body{font-family:'.$zbp->lang['font-family'].'!important;}</style>';
+	echo'<style type="text/css">body{font-family:'.$zbp->lang['font_family'].'!important;}</style>';
 }

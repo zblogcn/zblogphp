@@ -13,7 +13,9 @@ return array(
 
 'lang'=>'zh-TW',
 
-'font-family'=>'Helvetica,Arial,"Microsoft JhengHei",PMingLiU,MingLiU,sans-serif;',
+'font_family'=>'Helvetica,Arial,"Microsoft JhengHei",PMingLiU,MingLiU,sans-serif;',
+
+'windows_character_set'=>'BIG5',
 
 #Front-End & Back-End
 'msg'=>array(

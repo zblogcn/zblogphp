@@ -152,7 +152,7 @@ function MakeTopMenu($requireAction,$strName,$strUrl,$strTarget,$strLiId){
 	if($strTarget==""){$strTarget="_self";}
 	$AdminTopMenuCount=$AdminTopMenuCount+1;
 	if($strLiId==""){$strLiId="topmenu" . $AdminTopMenuCount;}
-	$tmp="<li id=\"" . $strLiId . "\"><a href=\"" . $strUrl . "\" target=\"" . $strTarget . "\">" . $strName . "</a></li>";
+	$tmp="<li id=\"" . $strLiId . "\"><a href=\"" . $strUrl . "\" target=\"" . $strTarget . "\" title=\"".htmlspecialchars($strName)."\">" . $strName . "</a></li>";
 	return $tmp;
 }
 
@@ -178,9 +178,9 @@ function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUr
 	$AdminLeftMenuCount=$AdminLeftMenuCount+1;
 	$tmp=null;
 	if($strImgUrl!=""){
-		$tmp="<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\"><span style=\"background-image:url('" . $strImgUrl . "')\">" . $strName . "</span></a></li>";
+		$tmp="<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\" title=\"".strip_tags($strName)."\"><span style=\"background-image:url('" . $strImgUrl . "')\">" . $strName . "</span></a></li>";
 	}else{
-		$tmp="<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\"><span>" . $strName . "</span></a></li>";
+		$tmp="<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\" title=\"".strip_tags($strName)."\"><span>" . $strName . "</span></a></li>";
 	}
 	return $tmp;
 

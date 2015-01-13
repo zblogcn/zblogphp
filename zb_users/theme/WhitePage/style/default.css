@@ -195,29 +195,29 @@ strong {
 	height:24px;
 	line-height:24px;
 	margin:0 0 0 0;
-	padding:5px 0 5px 1em;
+	padding:5px 0 5px 0.9em;
 	color:#333;
 }
 
 
 .function ul{
 	text-align:left;
-	width:95%;
+	width:auto;
 	margin:0 0 0 0;
-	padding:0 0 0 5%;
+	padding:0 0 0 1em;
 	list-style-position:outside;
 	list-style-type:none;
 }
 .function li{
 	font-size:1em;
 	margin:0 0 0 0;
-	padding:4px 0 4px 0.9em;
-	background:url("default/pointblue.gif") no-repeat 0 12px;
+	padding:4px 0 4px 0.8em;
+	background:url("default/pointblue.gif") no-repeat 0.1em center;
 	width:auto;
 }
 
 .function .function_c div{
-	padding:0.5em 0 0.5em 1em;
+	padding:0.4em 0 0.4em 1em;
 }
 
 .function a{
@@ -225,6 +225,11 @@ strong {
 }
 .function a:hover{
 	color:#B22222;
+}
+
+.function .function_c div a{
+	background:url("default/pointblue.gif") no-repeat 0.1em center;
+	padding-left:0.8em;
 }
 
 /*------------------------------网站目录定义---------------------------*/
