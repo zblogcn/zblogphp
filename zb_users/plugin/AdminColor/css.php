@@ -26,6 +26,42 @@ if(isset($_COOKIE['admincolor'])){
 }
 $c='';
 
+$c.='
+  .ui-tooltip, .arrow_leftmenu:after {
+    background: #3a6ea5;
+    border: 2px solid white;
+  }
+  .ui-tooltip {
+    color: white;
+    font: bold 14px "Helvetica Neue", Sans-Serif;
+    text-transform: uppercase;
+    box-shadow: 0 0 7px black;
+  }
+  .arrow_leftmenu {
+	width: 12px;
+	height: 30px;
+    overflow: hidden;
+    position: absolute;
+    margin-left: -35px;
+    bottom: -16px;
+    top: 3px;
+	left: 23px;
+	bottom: auto;
+	background-color: transparent;
+  }
+  .arrow_leftmenu:after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 0px;
+    width: 25px;
+    height: 25px;
+    box-shadow: 9px -9px 6px 5px black;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }';
+
 $c .="header,.header{background-color:#3a6ea5;}". "\r\n";
 $c .="input.button,input[type='submit'],input[type='button'] {background-color:#3a6ea5;}". "\r\n";
 $c .="div.theme-now .betterTip img{box-shadow: 0 0 10px #3a6ea5;}". "\r\n";

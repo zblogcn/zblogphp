@@ -413,12 +413,19 @@ class DbSql
 				$sqlw .= $comma .  '(' . $sql_array . ') ';
 			}
 			if($eq=='META_NAMEVALUE'){
-				if(count($w)!=4)continue;
-				$sql_array='';
-				$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";' . 's:' . strlen($w[3]) . ':"'.$w[3].'";';	
-				$sql_meta=$this->db->EscapeString($sql_meta);
-				$sql_array .= "$w[1] LIKE '%$sql_meta%'";
-				$sqlw .= $comma .  '(' . $sql_array . ') ';
+				if(count($w)==4){
+					$sql_array='';
+					$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";' . 's:' . strlen($w[3]) . ':"'.$w[3].'"';	
+					$sql_meta=$this->db->EscapeString($sql_meta);
+					$sql_array .= "$w[1] LIKE '%$sql_meta%'";
+					$sqlw .= $comma .  '(' . $sql_array . ') ';
+				}elseif(count($w)==5){
+					$sql_array='';
+					$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";' . $w[3];	
+					$sql_meta=$this->db->EscapeString($sql_meta);
+					$sql_array .= "$w[1] LIKE '%$sql_meta%'";
+					$sqlw .= $comma .  '(' . $sql_array . ') ';
+				}
 			}
 			if($eq=='CUSTOM'){
 				$sqlw .= $comma . ' ' . $w[1] . ' ';
@@ -730,8 +737,6 @@ class DbSql
 		}
 		$sql.=')';
 		
-		unset($db);
-
 		return  $sql . ";\r\n";
 	}
 }

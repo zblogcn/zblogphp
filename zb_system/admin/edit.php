@@ -51,7 +51,7 @@ if($article->Intro){
   if(strpos($article->Content, '<!--more-->')!==false){
     $article->Intro='';
     $article->Content=str_replace('<!--more-->', '<hr class="more" />', $article->Content);
-  }elseif(strpos($article->Content,$article->Intro)===0){
+  }elseif(strpos($article->Intro,'<!--autointro-->')!==false){
     $article->Intro='';
   }
 }

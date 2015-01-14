@@ -1467,7 +1467,7 @@ class ZBlogPHP {
 			$this->templates['comment']='<label id="cmt{$comment.ID}"></label>'. $this->templates['comment'];
 		}
 
-		if(strpos($this->templates['commentpost'], 'inpVerify')===false&&strpos($this->templates['commentpost'], 'verify')===false){
+		if(strpos($this->templates['commentpost'], 'inpVerify')===false&&strpos($this->templates['commentpost'], '=\'verify\'')===false&&strpos($this->templates['commentpost'], '="verify"')===false){
 			$verify='{if $option[\'ZC_COMMENT_VERIFY_ENABLE\'] && !$user.ID}<p><input type="text" name="inpVerify" id="inpVerify" class="text" value="" size="28" tabindex="4" /> <label for="inpVerify">'.$this->lang['msg']['validcode'].'(*)</label><img style="width:{$option[\'ZC_VERIFYCODE_WIDTH\']}px;height:{$option[\'ZC_VERIFYCODE_HEIGHT\']}px;cursor:pointer;" src="{$article.ValidCodeUrl}" alt="" title="" onclick="javascript:this.src=\'{$article.ValidCodeUrl}&amp;tm=\'+Math.random();"/></p>{/if}';
 
 			if(strpos($this->templates['commentpost'], '<!--verify-->')!==false){
@@ -2391,6 +2391,7 @@ class ZBlogPHP {
 			if($signal=='good')$content=$this->lang['msg']['operation_succeed'];
 			if($signal=='bad')$content=$this->lang['msg']['operation_failed'];
 		}
+		$content=substr($content,0,255);
 		if($this->hint1==null){
 			$this->hint1=$signal . '|' . $content;
 			setcookie("hint_signal1", $signal . '|' . $content,0,$this->cookiespath);
@@ -2574,7 +2575,7 @@ class ZBlogPHP {
 	/**
 	 * 检测当前url，如果不符合设置就跳转到固定域名的链接
 	 */
-	function  RedirectPermanentDomainUrl(){
+	function  RedirectPermanentDomain(){
 	
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==false)return;
 		if($this->option['ZC_PERMANENT_DOMAIN_REDIRECT']==false)return;

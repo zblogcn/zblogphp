@@ -1046,10 +1046,9 @@ function PostArticle() {
 			if (isset($_POST['Intro'])) {
 				if ($_POST['Intro'] == '') {
 					$_POST['Intro'] = SubStrUTF8($_POST['Content'], $zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
-					if (strpos($_POST['Intro'], '<') !== false) {
-						$_POST['Intro'] = CloseTags($_POST['Intro']);
-					}
+					$_POST['Intro'] .= '<!--autointro-->';
 				}
+				$_POST['Intro'] = CloseTags($_POST['Intro']);
 			}
 		}
 	}
