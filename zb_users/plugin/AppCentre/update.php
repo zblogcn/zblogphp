@@ -32,14 +32,17 @@ function updatedb_14(){
 		$zbp->db->Query("ALTER TABLE " . $table['Member'] . " ADD INDEX  " . $zbp->db->dbpre. "mem_Alias(mem_Alias) ;");
 		$zbp->db->Query("ALTER TABLE " . $table['Member'] . " ADD INDEX  " . $zbp->db->dbpre. "mem_Level(mem_Level) ;");
 	}elseif($zbp->db->type=='sqlite'){
-		$zbp->db->Query("ALTER TABLE " . $table['Category'] . " ADD INDEX  " . $zbp->db->dbpre. "cate_Order(cate_Order) ;");	
-		$zbp->db->Query("ALTER TABLE " . $table['Member'] . " ADD INDEX  " . $zbp->db->dbpre. "mem_Alias(mem_Alias) ;");
+		$zbp->db->Query("CREATE INDEX " . $zbp->db->dbpre. "cate_Order on " . $table['Category'] . "(cate_Order) ;");	
+		$zbp->db->Query("CREATE INDEX " . $zbp->db->dbpre. "mem_Alias on " . $table['Member'] . "(mem_Alias) ;");
 	}
 	if($zbp->db->type=='mysql' || $zbp->db->type=='sqlite'){
 		$zbp->db->DelTable($GLOBALS['table']['Config']);
 		$s=$zbp->db->sql->CreateTable($GLOBALS['table']['Config'],$GLOBALS['datainfo']['Config']);
 		$zbp->db->QueryMulit($s);
-		$zbp->db->Query("ALTER TABLE " . $GLOBALS['table']['Config'] . " ADD INDEX  " . $zbp->db->dbpre. "conf_Name(conf_Name) ;");
+		if($zbp->db->type=='mysql')
+			$zbp->db->Query("ALTER TABLE " . $GLOBALS['table']['Config'] . " ADD INDEX  " . $zbp->db->dbpre. "conf_Name(conf_Name) ;");
+		elseif($zbp->db->type=='sqlite')
+			$zbp->db->Query("CREATE INDEX " . $zbp->db->dbpre. "conf_Name on " . $GLOBALS['table']['Config'] . "(conf_Name) ;");
 		array_unshift($zbp->configs,$zbp->configs['system'],$zbp->configs['cache']);
 		foreach($zbp->configs as $c){
 			$c->Save();
