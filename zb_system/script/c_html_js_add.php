@@ -25,10 +25,10 @@ echo '$(document).ready(function(){';
 
 if ($zbp->CheckRights('admin')){
 	echo "$('.cp-hello').html('" . $zbp->lang['msg']['welcome'] . ' ' . $zbp->user->Name .  " ("  . $zbp->user->LevelName  . ")');";
-	echo "if($('.cp-login').find('a').html().indexOf('[')>-1)$('.cp-login').find('a').html('[" . $zbp->lang['msg']['admin'] . "]');else $('.cp-login').find('a').html('" . $zbp->lang['msg']['admin'] . "');";
+	echo "if($('.cp-login').find('a').length==1 && $('.cp-login').find('a').html().indexOf('[')>-1)$('.cp-login').find('a').html('[" . $zbp->lang['msg']['admin'] . "]');else $('.cp-login').find('a').html('" . $zbp->lang['msg']['admin'] . "');";
 }
 if ($zbp->CheckRights('ArticleEdt')){
-	echo "if($('.cp-vrs').find('a').html().indexOf('[')>-1)$('.cp-vrs').find('a').html('[" . $zbp->lang['msg']['new_article'] . "]');else $('.cp-vrs').find('a').html('" . $zbp->lang['msg']['new_article'] . "');";
+	echo "if($('.cp-login').find('a').length==1 && $('.cp-vrs').find('a').html().indexOf('[')>-1)$('.cp-vrs').find('a').html('[" . $zbp->lang['msg']['new_article'] . "]');else $('.cp-vrs').find('a').html('" . $zbp->lang['msg']['new_article'] . "');";
 	echo "$('.cp-vrs').find('a').attr('href','" . $zbp->host . "zb_system/cmd.php?act=ArticleEdt');";
 }
 
