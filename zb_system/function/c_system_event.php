@@ -1434,7 +1434,8 @@ function PostComment() {
 		}
 	}
 
-	$m = $zbp->GetMemberByName($_POST['name']);
+	//判断是不是有同名（别名）的用户
+	$m = $zbp->GetMemberByNameOrAlias($_POST['name']);
 	if ($m->ID > 0){
 		if($m->ID != $zbp->user->ID){
 			$zbp->ShowError(31, __FILE__, __LINE__);
@@ -3191,5 +3192,5 @@ function Include_ShowError404($idortext,$file,$line){
  */
 function Include_AddonFontfamily(){
 	global $zbp;
-	echo'<style type="text/css">body{font-family:'.$zbp->lang['font_family'].'!important;}</style>';
+	echo'<style type="text/css">body{font-family:'.$zbp->lang['font_family'].'}</style>';
 }

@@ -19,8 +19,8 @@ function ActivePlugin_AppCentre() {
 	Add_Filter_Plugin('Filter_Plugin_Admin_PluginMng_SubMenu','AppCentre_AddPluginMenu');
 	Add_Filter_Plugin('Filter_Plugin_Admin_SiteInfo_SubMenu','AppCentre_AddSiteInfoMenu');
 
-	if(method_exists('ZBlogPHP','LoadAppLanguage')){
-		$zbp->LoadAppLanguage('plugin','AppCentre');
+	if(method_exists('ZBlogPHP','LoadLanguage')){
+		$zbp->LoadLanguage('plugin','AppCentre');
 	}else{
 		if(is_readable($f=$zbp->path . 'zb_users/plugin/AppCentre/language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php'))
 			$zbp->lang['AppCentre'] = require($f);

@@ -6,7 +6,7 @@ RegisterPlugin("Howl","ActivePlugin_Howl");
 function ActivePlugin_Howl() {
 	global $zbp;
 	Add_Filter_Plugin('Filter_Plugin_Zbp_CheckRights','Howl_CheckRights');
-	$zbp->LoadAppLanguage('plugin','Howl');
+	$zbp->LoadLanguage('plugin','Howl');
 }
 
 function InstallPlugin_Howl(){

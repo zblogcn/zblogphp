@@ -13,7 +13,7 @@ return array(
 
 'lang'=>'zh-TW',
 
-'font_family'=>'Helvetica,Arial,"Microsoft JhengHei",PMingLiU,MingLiU,sans-serif;',
+'font_family'=>'Helvetica,Arial,"Microsoft JhengHei",PMingLiU,MingLiU,sans-serif!important;',
 
 'windows_character_set'=>'BIG5',
 
