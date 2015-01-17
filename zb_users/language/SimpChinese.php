@@ -10,7 +10,7 @@ return array(
 
 'lang' => 'zh-CN',
 
-'font_family'=>'',
+'font_family' => '',
 
 'windows_character_set'=>'GBK',
 
@@ -113,7 +113,7 @@ return array(
 	'comment_setting' => '评论设置',
 	'other_setting' => '其它设置',
 	'blog_host' => '网站地址',
-	'blog_host_add' => '默认自动读取当前网址，如需固化网站域名请点击按钮并输入域名。',	
+	'blog_host_add' => '默认自动读取当前网址，如需固定网站域名请点击按钮并输入域名。',	
 	'copyright' => '版权说明',
 	'copyright_add' => '可以填入备案号、网站统计等内容。',
 	'blog_name' => '网站标题',
@@ -161,7 +161,7 @@ return array(
 	'display_subcategorys' => '列出分类下所有子分类的文章',	
 	'drag_module_to_sidebar' => '请拖动需要的模块到右侧区域指定侧栏。侧栏中的模块可排序，也可拖至左侧区域移除。',
 	'sidebar_module_count' => '内置有%s个模块',
-	'xmlrpc_address' => '离线XML-RPC协议地址',
+	'xmlrpc_address' => 'XML-RPC协议地址',
 	'system_environment' => '系统环境',
 	'view_rights' => '查看权限',
 	'member_level' => '用户级别',
@@ -211,6 +211,7 @@ return array(
 	'top_index' => '首页',
 	'top_global' => '全局',	
 	'top_category' => '分类',	
+	'jump_comment' => '查看评论ID=',
 	'' => '',		
 ),
 
@@ -328,8 +329,8 @@ return array(
 '32' => '操作频率过快',
 '33' => '编辑关键字失败',
 '34' => '删除关键字失败',
-'35' => '编辑Tags失败',
-'36' => '删除Tags失败',
+'35' => '编辑Tag失败',
+'36' => '删除Tag失败',
 '37' => '编辑文件失败',
 '38' => '验证码输入错误',
 '39' => '请不要对网站提交相同的评论',
@@ -358,7 +359,7 @@ return array(
 '62' => '存在同名用户，请修改用户名。',
 '63' => '禁止浏览草稿文章',
 '64' => '启用失败，该应用不适用于Z-BlogPHP。',
-'65' => 'Windows Phone用户可能无法正常上传文件！\nWindows Phone 7用户：使用第三方浏览器可正常上传图片；\nWindows Phone 8用户：请升级到Windows Phone 8.1。',
+'65' => 'Windows Phone用户请升级到Windows Phone 8.1后再上传文件。',
 '66' => '用户名和密码不能为空',
 '67' => 'MySQL数据库无法连接',
 '68' => 'SQLite数据库无法打开',
@@ -367,7 +368,7 @@ return array(
 '71' => '当前的编辑内容还未保存',
 '72' => '名称不能为空或格式不正确',
 '73' => '请确认密码是否设置正确',
-'74' => '您还在用陈旧IE内核的浏览器么？请升级至支持HTML5的IE9吧!\r\n要不咱换个Chrome,Firefox试试(—.—||||',
+'74' => '您还在用陈旧IE内核的浏览器么？请升级至支持HTML5的IE11吧!\r\n要不咱换个Chrome或Firefox试试(—.—||||',
 '75' => '文件名不能为空！',
 '76' => 'HtmlID不能为空！',
 '77' => '用户名只能用中文、数字、字母、“.”与“_”，且长度限制为3-20位。',
