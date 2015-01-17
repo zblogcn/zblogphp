@@ -26,28 +26,28 @@
 		options.commentmaxlength = options.commentmaxlength || 1000;
 		options.lang = options.lang || {};
 		this.options = options;
-		this.userInfo.username = this.cookie.get("name");
-		this.userInfo.mail = this.cookie.get("email");
-		this.userInfo.homepage = this.cookie.get("homepage");
+		this.userinfo.username = this.cookie.get("name");
+		this.userinfo.mail = this.cookie.get("email");
+		this.userinfo.homepage = this.cookie.get("homepage");
 
 		// Register system events
 		this.plugin.on("userinfo.output", "system", function () {
-			this.$("#inpName").val(this.userInfo.username);
-			this.$("#inpEmail").val(this.userInfo.mail);
-			this.$("#inpHomePage").val(this.userInfo.homepage);
+			this.$("#inpName").val(this.userinfo.username);
+			this.$("#inpEmail").val(this.userinfo.mail);
+			this.$("#inpHomePage").val(this.userinfo.homepage);
 		});
 
 		this.plugin.on("userinfo.savefromhtml", "system", function () {
-			this.userInfo.username = this.$("#inpName").val();
-			this.userInfo.mail = this.$("#inpEmail").val();
-			this.userInfo.homepage = this.$("#inpHomePage").val();
-			this.userInfo.save();
+			this.userinfo.username = this.$("#inpName").val();
+			this.userinfo.mail = this.$("#inpEmail").val();
+			this.userinfo.homepage = this.$("#inpHomePage").val();
+			this.userinfo.save();
 		});
 
 		this.plugin.on("userinfo.save", "system", function () {
-			this.cookie.set("name", this.userInfo.username);
-			this.cookie.set("email", this.userInfo.mail);
-			this.cookie.set("homepage", this.userInfo.homepage);
+			this.cookie.set("name", this.userinfo.username);
+			this.cookie.set("email", this.userinfo.mail);
+			this.cookie.set("homepage", this.userinfo.homepage);
 		});
 
 		this.plugin.on("comment.verifydata", "system", function (error, formData) {
@@ -93,7 +93,7 @@
 				location.hash = "#" + cmt;
 				this.$("#txaArticle").val("");
 				
-				this.userInfo.saveFromHtml();
+				this.userinfo.saveFromHtml();
 			}
 
 		});
@@ -188,7 +188,7 @@
 			self.plugin.emit("userinfo.savefromhtml");
 			return self;
 		}
-		self.userInfo = new USERINFO();
+		self.userinfo = new USERINFO();
 
 		var COMMENT = function () {};
 		COMMENT.prototype.get = function (postid, page) {
