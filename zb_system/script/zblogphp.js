@@ -20,32 +20,34 @@
 
 		// Init option
 		options = options || {};
-		options.cookiePath = options.cookiePath || "/";
-		options.commentMaxLength = options.commentMaxLength || 1000;
+		options.cookiepath = options.cookiepath || "/";
+		options.bloghost = options.bloghost || location.origin;
+		options.ajaxurl = options.ajaxurl || location.origin;
+		options.commentmaxlength = options.commentmaxlength || 1000;
 		options.lang = options.lang || {};
 		this.options = options;
-		this.userInfo.userName = this.cookie.get("name");
+		this.userInfo.username = this.cookie.get("name");
 		this.userInfo.mail = this.cookie.get("email");
-		this.userInfo.homePage = this.cookie.get("homepage");
+		this.userInfo.homepage = this.cookie.get("homepage");
 
 		// Register system events
 		this.plugin.on("userinfo.output", "system", function () {
-			this.$("#inpName").val(this.userInfo.userName);
+			this.$("#inpName").val(this.userInfo.username);
 			this.$("#inpEmail").val(this.userInfo.mail);
-			this.$("#inpHomePage").val(this.userInfo.homePage);
+			this.$("#inpHomePage").val(this.userInfo.homepage);
 		});
 
 		this.plugin.on("userinfo.savefromhtml", "system", function () {
-			this.userInfo.userName = this.$("#inpName").val();
+			this.userInfo.username = this.$("#inpName").val();
 			this.userInfo.mail = this.$("#inpEmail").val();
-			this.userInfo.homePage = this.$("#inpHomePage").val();
+			this.userInfo.homepage = this.$("#inpHomePage").val();
 			this.userInfo.save();
 		});
 
 		this.plugin.on("userinfo.save", "system", function () {
-			this.cookie.set("name", this.userInfo.userName);
+			this.cookie.set("name", this.userInfo.username);
 			this.cookie.set("email", this.userInfo.mail);
-			this.cookie.set("homepage", this.userInfo.homePage);
+			this.cookie.set("homepage", this.userInfo.homepage);
 		});
 
 		this.plugin.on("comment.verifydata", "system", function (error, formData) {
@@ -168,7 +170,7 @@
 			if (iExpireDays) {
 				dExpire.setTime(dExpire.getTime() + parseInt(iExpireDays * 24 * 60 * 60 * 1000));
 			}
-			document.cookie = sCookieName + "=" + escape(sCookieValue) + "; " + (iExpireDays ? "expires=" + dExpire.toGMTString() + "; " : "") + "path=" + self.options.cookiePath;
+			document.cookie = sCookieName + "=" + escape(sCookieValue) + "; " + (iExpireDays ? "expires=" + dExpire.toGMTString() + "; " : "") + "path=" + self.options.cookiepath;
 			return self;
 		}
 		self.cookie = new COOKIE();
