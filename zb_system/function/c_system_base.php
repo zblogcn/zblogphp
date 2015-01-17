@@ -64,15 +64,21 @@ $zbpvers['150101']='1.4 Beta Build 150101';
 define('ZC_BLOG_VERSION', end($zbpvers));
 
 /**
- *文章类型：文章型,页面型
+ *文章类型
  */
-define('ZC_POST_TYPE_ARTICLE', 0);
-define('ZC_POST_TYPE_PAGE', 1);
+define('ZC_POST_TYPE_ARTICLE', 0);      // 文章
+define('ZC_POST_TYPE_PAGE', 1);         // 页面
+define('ZC_POST_TYPE_TWEET', 2);        // 一句话
+define('ZC_POST_TYPE_DISCUSSION', 3);   // 讨论
+
 
 #定义类型序列{id=>{name,url,template}}
-$posttype=array();
-$posttype[0]=array('article','','');
-$posttype[1]=array('page','','');
+$posttype = array();
+$posttype[0] = array('article', '', ''); // 文章
+$posttype[1] = array('page', '', '');    // 页面
+$posttype[2] = array('tweet', '', '');   // 一句话
+$posttype[3] = array('discussion', '', ''); // 讨论
+
 /**
  *文章状态：公开发布
  */
