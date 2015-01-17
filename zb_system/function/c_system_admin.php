@@ -783,6 +783,9 @@ if(!$zbp->CheckRights('CommentAll')){
 if(GetVars('search')){
 	$w[]=array('search','comm_Content','comm_Name',GetVars('search'));
 }
+if(GetVars('id')){
+	$w[]=array('=', 'comm_ID', GetVars('id'));
+}
 
 $w[]=array('=','comm_Ischecking',(int)GetVars('ischecking'));
 
@@ -810,8 +813,8 @@ foreach ($array as $cmt) {
 	if ($article->ID==0) $article = NULL;
 	
 	echo '<tr>';
-	echo '<td class="td5">' . $cmt->ID .  '</td>';
-	echo '<td class="td5">' . $cmt->ParentID . '</td>';
+	echo '<td class="td5"><a href="?act=CommentMng&id=' . $cmt->ID . '" alt="' . $zbp->lang['msg']['jump_comment'] . $cmt->ID . '">' . $cmt->ID . '</a></td>';
+	echo '<td class="td5"><a href="?act=CommentMng&id=' . $cmt->ParentID . '" alt="' . $zbp->lang['msg']['jump_comment'] . $cmt->ParentID . '">' . $cmt->ParentID . '</a></td>';
 	echo '<td class="td10">' . $cmt->Author->Name . '</td>';
 	echo '<td><div style="overflow:hidden;max-width:500px;">';
 	if ($article)
