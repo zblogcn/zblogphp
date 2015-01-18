@@ -238,8 +238,12 @@
 		define("zbp", [], function() {
 			return ZBP;
 		});
+	} else if (typeof define === "function" && define.cmd) {
+		define("zbp", [], function (require, exports, module) {
+			module.exports = ZBP;
+		});
+	} else {
+		window.ZBP = ZBP;
 	}
-	// CMD 
-	// ?
-	window.ZBP = ZBP;
+
 })();
