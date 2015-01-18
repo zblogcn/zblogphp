@@ -1296,30 +1296,39 @@ class ZBlogPHP {
 			if($default=='')$default=$this->option['ZC_BLOG_LANGUAGEPACK'];
 			if(is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
 				$this->lang = require($f);
-				$this->langpacklist[$f]=$default;
+				$this->langpacklist[]=array($type,$id,$default);
 			}
 			elseif($default='SimpChinese' && is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
 				$this->lang = require($f);
-				$this->langpacklist[$f]=$default;
+				$this->langpacklist[]=array($type,$id,$default);
 			}
 			elseif($default='English' && is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
 				$this->lang = require($f);
-				$this->langpacklist[$f]=$default;
+				$this->langpacklist[]=array($type,$id,$default);
 			}
 		}else{
 			if($default=='')$default=$this->option['ZC_BLOG_LANGUAGEPACK'];
 			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
-				$this->langpacklist[$f]=$default;
+				$this->langpacklist[]=array($type,$id,$default);
 			}
 			elseif(is_readable($default='SimpChinese' && $f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
-				$this->langpacklist[$f]=$default;
+				$this->langpacklist[]=array($type,$id,$default);
 			}
 			elseif(is_readable($default='English' && $f=$this->path . 'zb_users/'.$type&'/'.$id.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
-				$this->langpacklist[$f]=$default;
+				$this->langpacklist[]=array($type,$id,$default);
 			}
+		}
+	}
+	
+	public function ReloadLanguages($default){
+		$this->lang = array();
+		$array=$this->langpacklist;
+		$this->langpacklist=array();
+		foreach($array as $v){
+			$this->LoadLanguage($v[0],$v[1],$v[2]);
 		}
 	}
 
