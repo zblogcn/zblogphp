@@ -5,32 +5,47 @@
 (function () {
 	/**
 	 * Class ZBP
+	 *
+	 * @constructor
+	 * @global
 	 * @class ZBP
-	 * @arguments options
-	 * @arguments jquery
+	 * @param options {OPTION} Init option
+	 * @param jquery {object} jQuery
 	 */
 	var ZBP = function (options, jquery) {
-		// Load jQuery library
+		/** Load jQuery library */
 		if (typeof jQuery == 'undefined' && typeof jquery == 'undefined') throw new Error('No jQuery!');
 		this.$ = jquery || jQuery;
 
-		// Init self
+		/** Init self */
 		var self = this;
 		initMethods(this);
 
-		// Init option
+		/** Init option */
 		options = options || {};
 		options.cookiepath = options.cookiepath || "/";
 		options.bloghost = options.bloghost || location.origin;
 		options.ajaxurl = options.ajaxurl || location.origin;
 		options.commentmaxlength = options.commentmaxlength || 1000;
 		options.lang = options.lang || {};
+		/**
+		 * Class option
+		 * @memberOf ZBP
+		 * @typedef {OPTION}
+		 * @property {string} cookiepath - Cookie Path
+		 * @property {string} bloghost - Blog Host
+		 * @property {string} ajaxurl - Ajax Url
+		 * @property {string} commentmaxlength - Maximum acceptable length for comment
+		 * @property {object} lang - Language
+		 * @type {object}
+		 */
 		this.options = options;
+
 		this.userinfo.username = this.cookie.get("name");
 		this.userinfo.mail = this.cookie.get("email");
 		this.userinfo.homepage = this.cookie.get("homepage");
 
-		// Register system events
+		/** Register system events */
 		this.plugin.on("userinfo.output", "system", function () {
 			this.$("#inpName").val(this.userinfo.username);
 			this.$("#inpEmail").val(this.userinfo.mail);
@@ -125,17 +140,46 @@
 		return this;
 
 	};
-
+	/**
+	 * Private _plugins
+	 *
+	 * @type {Object}
+	 */
 	ZBP.prototype._plugins = {};
-
+	/**
+	 * Init prototype for ZBP
+	 *
+	 * @param  object
+	 **/
 	var initMethods = function (self) {
-				
+
+		/**
+		 * PLUGIN
+		 * @class PLUGIN
+		 */
 		var PLUGIN = function () {};
+		/**
+		 * Add listener
+		 * @function
+	 	 * @memberOf PLUGIN
+		 * @param interfaceName {string}
+		 * @param pluginName {string}
+		 * @param callback {Function}
+		 * @return {object} this
+		 */
 		PLUGIN.prototype.bind = PLUGIN.prototype.on = PLUGIN.prototype.addListener = function (interfaceName, pluginName, callback) {
 			if (typeof self._plugins[interfaceName] == 'undefined') self._plugins[interfaceName] = {};
 			self._plugins[interfaceName][pluginName] = callback;
 			return self;
 		}
+		/**
+		 * Remove listener
+		 * @function
+		 * @memberOf PLUGIN
+		 * @param interfaceName {string}
+		 * @param pluginName {string}
+		 * @return {object} this
+		 */
 		PLUGIN.prototype.unbind = PLUGIN.prototype.removeListener = function (interfaceName, pluginName) {
 			if (!pluginName) pluginName = "";
 			if (pluginName == "") {
@@ -145,6 +189,13 @@
 			}
 			return self;
 		}
+		/**
+		 * Call listener
+		 * @function
+		 * @memberOf PLUGIN
+		 * @param interfaceName {string}
+		 * @return {object} this
+		 */
 		PLUGIN.prototype.emit = function (interfaceName) {
 			// var argu = self.$.extend([], arguments);
 			// argu.shift();
@@ -158,13 +209,36 @@
 			}
 			return self;
 		}
+		/**
+		 * plugin
+		 * @memberOf ZBP
+		 * @type {PLUGIN}
+		 */
 		self.plugin = new PLUGIN();
 
+		/**
+		 * COOKIE
+		 * @class COOKIE
+		 */
 		var COOKIE = function () {};
+		/**
+		 * Get Cookie
+		 * @memberOf COOKIE
+		 * @param sCookieName {string} Cookie Key
+		 * @return cookieValue {string} Cookie Value
+		 */
 		COOKIE.prototype.get = function (sCookieName) {
 			var arr = document.cookie.match(new RegExp("(^| )" + sCookieName + "=([^;]*)(;|$)"));
 			return (arr ? unescape(arr[2]) : null);
 		};
+		/**
+		 * Set Cookie
+		 * @memberOf COOKIE
+		 * @param sCookieName {string} Cookie Key
+		 * @param sCookieValue {string} Cookie Value
+		 * @param iExpireDays {int} Cookie Expires
+		 * @return ZBP {ZBP}
+		 */
 		COOKIE.prototype.set = function (sCookieName, sCookieValue, iExpireDays) {
 			var dExpire = new Date();
 			if (iExpireDays) {
@@ -173,34 +247,102 @@
 			document.cookie = sCookieName + "=" + escape(sCookieValue) + "; " + (iExpireDays ? "expires=" + dExpire.toGMTString() + "; " : "") + "path=" + self.options.cookiepath;
 			return self;
 		}
+		/**
+		 * cookie
+		 * @memberOf ZBP
+		 * @type {COOKIE}
+		 */
 		self.cookie = new COOKIE();
 
+		/**
+		 * USERINFO
+		 * @class USERINFO
+		 */
 		var USERINFO = function () {};
+		/**
+		 * Output user information to DOM
+		 * @memberOf USERINFO
+		 * @return ZBP {ZBP}
+		 */
 		USERINFO.prototype.output = function () {
 			self.plugin.emit("userinfo.output");
 			return self;
 		}
+		/**
+		 * Save user information from class
+		 * @memberOf USERINFO
+		 * @return ZBP {ZBP}
+		 */
 		USERINFO.prototype.save = function () {
 			self.plugin.emit("userinfo.save");
 			return self;
 		}
+		/**
+		 * Save user information from DOM
+		 * @memberOf USERINFO
+		 * @return ZBP {ZBP}
+		 */
 		USERINFO.prototype.saveFromHtml = function () {
 			self.plugin.emit("userinfo.savefromhtml");
 			return self;
 		}
+		/**
+		 * userinfo
+		 * @type {USERINFO}
+		 * @memberOf ZBP
+		 */
 		self.userinfo = new USERINFO();
 
+		/**
+		 * COMMENT
+		 * @class COMMENT
+		 */
 		var COMMENT = function () {};
+		/**
+		 * Get comments
+		 * @memberOf COMMENT
+		 * @param postid {int} Article ID
+		 * @param page {int} Page
+		 * @return ZBP {ZBP}
+		 */
 		COMMENT.prototype.get = function (postid, page) {
 			self.plugin.emit("comment.get", postid, page);
 			return self;
 		}
+		/**
+		 * Revert Comment
+		 * @memberOf COMMENT
+		 * @param int {int} Comment ID
+		 * @return ZBP {ZBP}
+		 */
 		COMMENT.prototype.revert = function (id) {
 			self.plugin.emit("comment.revert", id);
 			return self;
 		}
+		/**
+		 * Post Comment
+		 * @memberOf COMMENT
+		 * @param formData {PostData}
+		 * @return ZBP {ZBP}
+		 */
 		COMMENT.prototype.post = function(formData) {
 
+			/**
+			 * Form Data
+			 * @name POSTFORMDATA
+			 * @typedef {Object} PostData
+			 * @memberOf COMMENT
+			 * @property {string} action - Post Url
+			 * @property {string} postid - Article ID
+			 * @property {string} verify - Verify code
+			 * @property {string} name   - Comment user name
+			 * @property {string} email  - Comment user E-mail
+			 * @property {string} content - Comment content
+			 * @property {string} homepage - Comment user Website
+			 * @property {string} replyid - Comment Parent ID
+			 * @property {string} isajax - Return Ajax String
+			 * @type {object}
+			 */
 			formData = formData || {};
 			formData.action   = formData.action   || $("#inpId").parent("form").attr("action");
 			formData.postid   = formData.postid   || $("#inpId").val();
@@ -230,10 +372,19 @@
 
 			return self;
 		}
+		/**
+		 * comment
+		 * @memberOf ZBP
+		 * @type {COMMENT}
+		 */
 		self.comment = new COMMENT();
 	};
 
-	// AMD
+	/**
+	 * ZBP Module
+	 * (AMD & CMD compatible)
+	 * @module zbp
+	 */
 	if (typeof define === "function" && define.amd) {
 		define("zbp", [], function() {
 			return ZBP;
