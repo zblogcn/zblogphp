@@ -6,7 +6,7 @@ function admincolor_hideMenu(){
  
  $("#aAdminColor>span").css("background-image","url("+bloghost + "zb_users/plugin/AdminColor/arror2.png)");
  $("#aAdminColor").attr('href','javascript:admincolor_showMenu()');
- 
+ $("#aAdminColor").attr('title','收起菜单');
  SetCookie('admincolor_hm','1',365);
  admincolor_tooptip();
 }
@@ -19,7 +19,7 @@ function admincolor_showMenu(){
  
  $("#aAdminColor>span").css("background-image","url("+bloghost + "zb_users/plugin/AdminColor/arror.png)");
  $("#aAdminColor").attr('href','javascript:admincolor_hideMenu()');
- 
+  $("#aAdminColor").attr('title','展开菜单');
  SetCookie('admincolor_hm','',-1); 
  $("#leftmenu a").tooltip({disabled: true});
  //$("#leftmenu a").tooltip( "destroy" );

@@ -122,7 +122,6 @@ $currenturl = GetRequestUri();
  *语言包数组
  */
 $lang = array();
-
 /**
  *系统根路径
  */
@@ -132,17 +131,18 @@ $blogpath = ZBP_PATH;
  */
 $usersdir = $blogpath . 'zb_users/';
 
+
 /**
  *读取设置数组
  */
 $option = require($blogpath . 'zb_system/defend/option.php');
 $option_zbusers = null;
-if(is_readable($filename = $usersdir . 'c_option.php'))
+if(is_readable($filename = $usersdir . 'c_option.php')){
 	$option_zbusers = require($filename);
-if(!is_array($option_zbusers))
-	$option_zbusers=array();
-foreach ($option_zbusers as $key => $value)
-	$option[$key] = $value;
+	if(is_array($option_zbusers))
+		foreach ($option_zbusers as $key => $value)
+			$option[$key] = $value;
+}
 
 $blogtitle = $option['ZC_BLOG_SUBNAME'];
 $blogname = &$option['ZC_BLOG_NAME'];
@@ -391,6 +391,7 @@ AutoloadClass('Config');
 #实例化zbp
 $zbp=ZBlogPHP::GetInstance();
 $zbp->Initialize();
+
 
 /**
  *已激活应用列表

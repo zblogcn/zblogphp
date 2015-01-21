@@ -463,7 +463,7 @@ class ZBlogPHP {
 		$this->feedurl=$this->host . 'feed.php';
 		$this->searchurl=$this->host . 'search.php';
 		$this->ajaxurl=$this->host . 'zb_system/cmd.php?act=ajax&src=';
-		
+
 		$this->isinitialized=true;
 
 		return true;
@@ -1324,9 +1324,8 @@ class ZBlogPHP {
 	}
 	
 	public function ReloadLanguages($default){
-		$this->lang = array();
-		$array=$this->langpacklist;
-		$this->langpacklist=array();
+		$array = $this->langpacklist;
+		$this->lang = $this->langpacklist = array();
 		foreach($array as $v){
 			$this->LoadLanguage($v[0],$v[1],$v[2]);
 		}
@@ -2700,5 +2699,17 @@ class ZBlogPHP {
 			return $this->posttype[$typeid][2];
 		else
 			return 'single';
+	}
+
+	/**
+	 * 注册Action
+	 */
+	function RegAction($name,$level,$title){
+		$this->actions[$name]=$level;
+		$this->lang['actions'][$name]=$title;
+	}
+	function GetAction_Title($name){
+		if(isset($this->lang['actions'][$name]))return $this->lang['actions'][$name];
+		return $name;
 	}
 }

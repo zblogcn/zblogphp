@@ -22,8 +22,8 @@ function UninstallPlugin_Howl(){
 
 function Howl_GetRightName($key){
 	global $zbp;
-	if(isset($zbp->lang['Howl'][$key]))
-		return $zbp->lang['Howl'][$key];
+	if(isset($zbp->lang['actions'][$key]))
+		return $zbp->lang['actions'][$key];
 	else
 		return $zbp->lang['Howl'][''];
 }
