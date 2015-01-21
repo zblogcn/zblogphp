@@ -13,12 +13,21 @@ ob_clean();
 
 header('Content-Type: application/x-javascript; charset=utf-8');
 ?>
-var bloghost = "<?php echo $zbp->host; ?>";
-var cookiespath = "<?php echo $zbp->cookiespath; ?>";
-var ajaxurl = "<?php echo $zbp->ajaxurl; ?>";
-var lang_comment_name_error = "<?php echo $lang['error']['72']; ?>";
-var lang_comment_email_error = "<?php echo $lang['error']['29']; ?>";
-var lang_comment_content_error = "<?php echo $lang['error']['46']; ?>";
+<?php if (GetVars('jquery', 'GET') != "0" ) { echo file_get_contents($zbp->path . 'zb_system/script/jquery.min.js');}?>
+<?php if (GetVars('default', 'GET') != "0" ) { echo file_get_contents($zbp->path . 'zb_system/script/zblogphp.js');}?>
+
+var zbp = new ZBP({
+	blogHost: "<?php echo $zbp->host; ?>",
+	ajaxUrl: "<?php echo $zbp->ajaxurl; ?>",
+	cookiePath: "<?php echo $zbp->cookiespath; ?>",
+	lang: {
+		error: {
+			72: "<?php echo $lang['error']['72']; ?>",
+			29: "<?php echo $lang['error']['29']; ?>",
+			46: "<?php echo $lang['error']['46']; ?>"
+		}
+	}
+});
 
 <?php
 echo '$(function () {';
