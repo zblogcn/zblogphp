@@ -124,7 +124,7 @@
 			this.$('#AjaxCommentBegin').after(data);
 		});
 
-		this.plugin.on("comment.revert", "system", function (id) {
+		this.plugin.on("comment.reply", "system", function (id) {
 			var me = this;
 			this.$("#inpRevID").val(id);
 			this.$("#cancel-reply").show().bind("click", function () {
@@ -310,13 +310,13 @@
 			return self;
 		}
 		/**
-		 * Revert Comment
+		 * Reply Comment
 		 * @memberOf COMMENT
 		 * @param int {int} Comment ID
 		 * @return ZBP {ZBP}
 		 */
-		COMMENT.prototype.revert = function (id) {
-			self.plugin.emit("comment.revert", id);
+		COMMENT.prototype.reply = function (id) {
+			self.plugin.emit("comment.reply", id);
 			return self;
 		}
 		/**
