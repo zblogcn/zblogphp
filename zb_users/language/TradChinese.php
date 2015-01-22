@@ -215,6 +215,17 @@ return array(
 	'top_global' => '全域',	
 	'top_category' => '分類',
 	'jump_comment' => '檢視迴響ID=',
+	'year_suffix' => '年',
+	'week_suffix' => '周',
+	'time' => '时间',
+	'hour' => '小时',
+	'minute' => '分钟',
+	'second' => '秒钟',
+	'millisec' => '毫秒',
+	'close' => '完成',
+	'current' => '现在',
+	'prev_month' => '上个月',
+	'next_month' => '下个月',
 	''=>'',
 ),
 
@@ -359,6 +370,16 @@ return array(
 '4'=>'四',
 '5'=>'五',
 '6'=>'六',
+),
+
+'week_short'=> array(
+'7' => '周日',
+'1' => '周一',
+'2' => '周二',
+'3' => '周三',
+'4' => '周四',
+'5' => '周五',
+'6' => '周六',
 ),
 
 //Custom Error Information

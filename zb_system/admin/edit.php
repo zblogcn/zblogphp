@@ -292,37 +292,37 @@ function checkArticleInfo(){
 }
 
 //日期时间控件
-$.datepicker.regional['zh-cn'] = {
-  closeText: '完成',
-  prevText: '上个月',
-  nextText: '下个月',
-  currentText: '现在',
-  monthNames: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
-  monthNamesShort: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
-  dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
-  dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
-  dayNamesMin: ['日','一','二','三','四','五','六'],
-  weekHeader: '周',
+$.datepicker.regional['<?php echo $lang['msg']['lang']?>'] = {
+  closeText: '<?php echo $lang['msg']['close']?>',
+  prevText: '<?php echo $lang['msg']['prev_month']?>',
+  nextText: '<?php echo $lang['msg']['next_month']?>',
+  currentText: '<?php echo $lang['msg']['current']?>',
+  monthNames: ['<?php echo $lang['month']['1']?>','<?php echo $lang['month']['2']?>','<?php echo $lang['month']['3']?>','<?php echo $lang['month']['4']?>','<?php echo $lang['month']['5']?>','<?php echo $lang['month']['6']?>','<?php echo $lang['month']['7']?>','<?php echo $lang['month']['8']?>','<?php echo $lang['month']['9']?>','<?php echo $lang['month']['10']?>','<?php echo $lang['month']['11']?>','<?php echo $lang['month']['12']?>'],
+  monthNamesShort: ['<?php echo $lang['month_abbr']['1']?>','<?php echo $lang['month_abbr']['2']?>','<?php echo $lang['month_abbr']['3']?>','<?php echo $lang['month_abbr']['4']?>','<?php echo $lang['month_abbr']['5']?>','<?php echo $lang['month_abbr']['6']?>','<?php echo $lang['month_abbr']['7']?>','<?php echo $lang['month_abbr']['8']?>','<?php echo $lang['month_abbr']['9']?>','<?php echo $lang['month_abbr']['10']?>','<?php echo $lang['month_abbr']['11']?>','<?php echo $lang['month_abbr']['12']?>'],
+  dayNames: ['<?php echo $lang['week']['7']?>','<?php echo $lang['week']['1']?>','<?php echo $lang['week']['2']?>','<?php echo $lang['week']['3']?>','<?php echo $lang['week']['4']?>','<?php echo $lang['week']['5']?>','<?php echo $lang['week']['6']?>'],
+  dayNamesShort: ['<?php echo $lang['week_short']['7']?>','<?php echo $lang['week_short']['1']?>','<?php echo $lang['week_short']['2']?>','<?php echo $lang['week_short']['3']?>','<?php echo $lang['week_short']['4']?>','<?php echo $lang['week_short']['5']?>','<?php echo $lang['week_short']['6']?>'],
+  dayNamesMin: ['<?php echo $lang['week_abbr']['7']?>','<?php echo $lang['week_abbr']['1']?>','<?php echo $lang['week_abbr']['2']?>','<?php echo $lang['week_abbr']['3']?>','<?php echo $lang['week_abbr']['4']?>','<?php echo $lang['week_abbr']['5']?>','<?php echo $lang['week_abbr']['6']?>'],
+  weekHeader: '<?php echo $lang['msg']['week_suffix']?>',
   dateFormat: 'yy-mm-dd',
   firstDay: 1,
   isRTL: false,
   showMonthAfterYear: true,
-  yearSuffix: ' 年  '
+  yearSuffix: ' <?php echo $lang['msg']['year_suffix']?>  '
 };
-$.datepicker.setDefaults($.datepicker.regional['zh-cn']);
-$.timepicker.regional['zh-cn'] = {
-  timeOnlyTitle: '时间',
-  timeText: '时间',
-  hourText: '小时',
-  minuteText: '分钟',
-  secondText: '秒钟',
-  millisecText: '毫秒',
-  currentText: '现在',
-  closeText: '完成',
+$.datepicker.setDefaults($.datepicker.regional['<?php echo $lang['msg']['lang']?>']);
+$.timepicker.regional['<?php echo $lang['msg']['lang']?>'] = {
+  timeOnlyTitle: '<?php echo $lang['msg']['time']?>',
+  timeText: '<?php echo $lang['msg']['time']?>',
+  hourText: '<?php echo $lang['msg']['hour']?>',
+  minuteText: '<?php echo $lang['msg']['minute']?>',
+  secondText: '<?php echo $lang['msg']['second']?>',
+  millisecText: '<?php echo $lang['msg']['millisec']?>',
+  currentText: '<?php echo $lang['msg']['current']?>',
+  closeText: '<?php echo $lang['msg']['close']?>',
   timeFormat: 'HH:mm:ss',
   ampm: false
 };
-$.timepicker.setDefaults($.timepicker.regional['zh-cn']);
+$.timepicker.setDefaults($.timepicker.regional['<?php echo $lang['msg']['lang']?>']);
 $('#edtDateTime').datetimepicker({
   showSecond: true
   //changeMonth: true,

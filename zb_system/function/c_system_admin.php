@@ -813,8 +813,11 @@ foreach ($array as $cmt) {
 	if ($article->ID==0) $article = NULL;
 	
 	echo '<tr>';
-	echo '<td class="td5"><a href="?act=CommentMng&id=' . $cmt->ID . '" alt="' . $zbp->lang['msg']['jump_comment'] . $cmt->ID . '">' . $cmt->ID . '</a></td>';
-	echo '<td class="td5"><a href="?act=CommentMng&id=' . $cmt->ParentID . '" alt="' . $zbp->lang['msg']['jump_comment'] . $cmt->ParentID . '">' . $cmt->ParentID . '</a></td>';
+	echo '<td class="td5"><a href="?act=CommentMng&id=' . $cmt->ID . '" title="' . $zbp->lang['msg']['jump_comment'] . $cmt->ID . '">' . $cmt->ID . '</a></td>';
+	if($cmt->ParentID>0)
+		echo '<td class="td5"><a href="?act=CommentMng&id=' . $cmt->ParentID . '" title="' . $zbp->lang['msg']['jump_comment'] . $cmt->ParentID . '">' . $cmt->ParentID . '</a></td>';
+	else
+		echo '<td class="td5"></td>';
 	echo '<td class="td10">' . $cmt->Author->Name . '</td>';
 	echo '<td><div style="overflow:hidden;max-width:500px;">';
 	if ($article)
