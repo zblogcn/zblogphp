@@ -19,7 +19,6 @@
 # Update
 /update/*.xml
 /update/Release/
-/update/*/*
 
 # Plugin cache
 /zb_users/plugin/SQLLog/logs/*.php
