@@ -530,11 +530,9 @@ class ZBlogPHP {
 				$m->Content = str_replace($ak,$av,$m->Content);
 		}
 
-		if(isset($this->lang['font_family'])&&trim($this->lang['font_family'])){
-			Add_Filter_Plugin('Filter_Plugin_Login_Header','Include_AddonFontfamily');
-			Add_Filter_Plugin('Filter_Plugin_Other_Header','Include_AddonFontfamily');
-			Add_Filter_Plugin('Filter_Plugin_Admin_Header','Include_AddonFontfamily');
-		}
+		Add_Filter_Plugin('Filter_Plugin_Login_Header','Include_AddonAdminFont');
+		Add_Filter_Plugin('Filter_Plugin_Other_Header','Include_AddonAdminFont');
+		Add_Filter_Plugin('Filter_Plugin_Admin_Header','Include_AddonAdminFont');
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 		
@@ -1306,7 +1304,7 @@ class ZBlogPHP {
 				$this->lang = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
 			}
-		}else{
+		}elseif($type=='plugin' || $type=='theme'){
 			if($default=='')$default=$this->option['ZC_BLOG_LANGUAGEPACK'];
 			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
@@ -1317,6 +1315,20 @@ class ZBlogPHP {
 				$this->langpacklist[]=array($type,$id,$default);
 			}
 			elseif(is_readable($default='English' && $f=$this->path . 'zb_users/'.$type&'/'.$id.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+			}
+		}elseif($type!='' && $id!=''){
+			if($default=='')$default=$this->option['ZC_BLOG_LANGUAGEPACK'];
+			if(is_readable($f=$this->path . $type.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+			}
+			elseif(is_readable($default='SimpChinese' && $f=$this->path . $type.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+			}
+			elseif(is_readable($default='English' && $f=$this->path . $type.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
 			}

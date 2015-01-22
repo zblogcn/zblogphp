@@ -4,7 +4,7 @@
 //Author:楊懿軒
 //Author URI:http://www.yangyixuan.com
 //E-mail:sen@yangyixuan.com
-//Date:20150118
+//Date:20150122
 
 //'Custom Information
 //'Don't delete %s and ()
@@ -14,7 +14,7 @@ return array(
 'lang'=>'zh-TW',
 
 'font_family'=>'Helvetica,Arial,"Microsoft JhengHei",PMingLiU,MingLiU,sans-serif!important;',
-
+'font_size' => '',
 'windows_character_set'=>'BIG5',
 
 #Front-End & Back-End
@@ -217,15 +217,15 @@ return array(
 	'jump_comment' => '檢視迴響ID=',
 	'year_suffix' => '年',
 	'week_suffix' => '周',
-	'time' => '时间',
-	'hour' => '小时',
-	'minute' => '分钟',
-	'second' => '秒钟',
+	'time' => '時間',
+	'hour' => '小時',
+	'minute' => '分種',
+	'second' => '秒種',
 	'millisec' => '毫秒',
 	'close' => '完成',
-	'current' => '现在',
-	'prev_month' => '上个月',
-	'next_month' => '下个月',
+	'current' => '現在',
+	'prev_month' => '上個月',
+	'next_month' => '下個月',
 	''=>'',
 ),
 

@@ -62,7 +62,8 @@ class DbSQLite3 implements iDataBase {
 	/**
 	* @param $s
 	*/
-	function QueryMulit($s){
+	function QueryMulit($s){return QueryMulti($s);}//错别字函数，历史原因保留下来
+	function QueryMulti($s){
 		//$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		$a=explode(';',$s);
 		foreach ($a as $s) {

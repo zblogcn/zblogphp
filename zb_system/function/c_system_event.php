@@ -3190,7 +3190,13 @@ function Include_ShowError404($idortext,$file,$line){
 /**
  * 输出后台指定字体family(内置插件函数)
  */
-function Include_AddonFontfamily(){
+function Include_AddonAdminFont(){
 	global $zbp;
-	echo'<style type="text/css">body{font-family:'.$zbp->lang['font_family'].'}</style>';
+	$f = $s = '';
+	if(isset($zbp->lang['font_family'])&&trim($zbp->lang['font_family']))
+		$f='font-family:' . $zbp->lang['font_family'] . ';';
+	if(isset($zbp->lang['font_size'])&&trim($zbp->lang['font_size']))
+		$s='font-size:' . $zbp->lang['font_size'] . ';';
+	if($f || $s)
+		echo'<style type="text/css">body{' . $s . $f . '}</style>';
 }

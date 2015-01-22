@@ -19,7 +19,7 @@ interface iDataBase {
 
 	public function Delete($query);
 
-	public function QueryMulit($s);
+	public function QueryMulti($s);
 
 	public function EscapeString($s);
 

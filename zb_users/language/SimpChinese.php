@@ -11,7 +11,7 @@ return array(
 'lang' => 'zh-CN',
 
 'font_family' => '',
-
+'font_size' => '',
 'windows_character_set'=>'GBK',
 
 #Front-End & Back-End
