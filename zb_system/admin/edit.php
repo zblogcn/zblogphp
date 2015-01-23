@@ -128,7 +128,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpn
       </div>
       <!-- )tags -->
 
-       <div id="insertintro" class="editmod2"><span><?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
+       <div id="insertintro" class="editmod2" style="padding-top:1em;paddding-bottom:0m"><span>*.<?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
 <?php }?>
 
 		<div id="divIntro" class="editmod2" <?php if(!$article->Intro){echo 'style="display:none;"';}?>>
@@ -157,7 +157,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           </div>
 
           <!-- cate --><?php if(!$ispage){ ?>
-          <div id='cate' class="editmod"> <label for="cmbCateID" class="editinputname" ><?php echo $lang['msg']['category']?></label>
+          <div id='cate' class="editmod"> <label for="cmbCateID" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['category']?></label>
             <select style="width:180px;" class="edit" size="1" name="CateID" id="cmbCateID">
 <?php echo CreateOptoinsOfCategorys($article->CateID);?>
             </select>
@@ -165,7 +165,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <!-- cate --><?php } ?>
 
           <!-- level -->
-          <div id='level' class="editmod"> <label for="cmbPostStatus" class="editinputname" ><?php echo $lang['msg']['status']?></label>
+          <div id='level' class="editmod"> <label for="cmbPostStatus" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['status']?></label>
             <select class="edit" style="width:180px;" size="1" name="Status" id="cmbPostStatus" onChange="edtLevel.value=this.options[this.selectedIndex].value">
 <?php echo CreateOptoinsOfPostStatus($article->Status);?>
             </select>
@@ -174,7 +174,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
 
           <!-- template( -->
 
-          <div id='template' class="editmod"> <label for="cmbTemplate" class="editinputname" ><?php echo $lang['msg']['template']?></label>
+          <div id='template' class="editmod"> <label for="cmbTemplate" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['template']?></label>
             <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate" onChange="edtTemplate.value=this.options[this.selectedIndex].value">
 <?php echo CreateOptoinsOfTemplate($article->Template);?>
             </select>
@@ -182,7 +182,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <!-- )template -->
 
           <!-- user( -->
-          <div id='user' class="editmod"> <label for="cmbUser" class="editinputname" ><?php echo $lang['msg']['author']?></label>
+          <div id='user' class="editmod"> <label for="cmbUser" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['author']?></label>
             <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
 				<?php echo CreateOptoinsOfMember($article->AuthorID);?>
             </select>
@@ -190,7 +190,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <!-- )user -->
 
           <!-- newdatetime( -->
-          <div id='newdatetime' class="editmod"> <label for="edtDateTime" class="editinputname" ><?php echo $lang['msg']['date']?></label>
+          <div id='newdatetime' class="editmod"> <label for="edtDateTime" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['date']?></label>
             <input type="text" name="PostTime" id="edtDateTime"  value="<?php echo $article->Time();?>" style="width:171px;"/>
             </div>
 

@@ -24,7 +24,7 @@ function ActivePlugin_AppCentre() {
 	}else{
 		if(is_readable($f=$zbp->path . 'zb_users/plugin/AppCentre/language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php'))
 			$zbp->lang['AppCentre'] = require($f);
-		elseif(is_readable($f=$zbp->path . 'zb_users/plugin/AppCentre/language/' . 'SimpChinese' . '.php'))
+		elseif(is_readable($f=$zbp->path . 'zb_users/plugin/AppCentre/language/' . 'zh-cn' . '.php'))
 			$zbp->lang['AppCentre'] = require($f);
 	}
 }

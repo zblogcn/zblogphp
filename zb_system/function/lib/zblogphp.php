@@ -1295,42 +1295,69 @@ class ZBlogPHP {
 			if(is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
 				$this->lang = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
-			elseif($default='SimpChinese' && is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
+			$default='zh-cn';
+			if(is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
 				$this->lang = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
-			elseif($default='English' && is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
+			$default='en';
+			if(is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
 				$this->lang = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
 		}elseif($type=='plugin' || $type=='theme'){
 			if($default=='')$default=$this->option['ZC_BLOG_LANGUAGEPACK'];
 			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
-			elseif(is_readable($default='SimpChinese' && $f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
+			$default='zh-tw';
+			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
-			elseif(is_readable($default='English' && $f=$this->path . 'zb_users/'.$type&'/'.$id.'/language/' . $default . '.php')){
+			$default='zh-hk';
+			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+			$default='zh-cn';
+			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+			$default='en';
+			if(is_readable($f=$this->path . 'zb_users/'.$type&'/'.$id.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
 		}elseif($type!='' && $id!=''){
 			if($default=='')$default=$this->option['ZC_BLOG_LANGUAGEPACK'];
 			if(is_readable($f=$this->path . $type.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
-			elseif(is_readable($default='SimpChinese' && $f=$this->path . $type.'/language/' . $default . '.php')){
+			$default='zh-cn';
+			if(is_readable($f=$this->path . $type.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
-			elseif(is_readable($default='English' && $f=$this->path . $type.'/language/' . $default . '.php')){
+			$default='en';
+			if(is_readable($f=$this->path . $type.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
 		}
 	}

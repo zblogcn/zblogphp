@@ -408,7 +408,7 @@ function CreateOptionsOfLang($default){
 	foreach($files as $f){
 		$n=basename($f,'.php');
 		$t= require($f);
-		$s.= '<option value="' . $n . '" ' . ($default==$n?'selected="selected"':'') . ' >' . $t['lang'] .' ('. $n .')'. '</option>';
+		$s.= '<option value="' . $n . '" ' . ($default==$n?'selected="selected"':'') . ' >' . $t['lang_name'] .' ('. $n .')'. '</option>';
 	}
 	return $s;
 }
@@ -460,7 +460,15 @@ function Admin_SiteInfo(){
 	echo '</table>';
 
 	echo '</div>';
-	include $zbp->path . "zb_system/defend/thanks.html";
+
+	$s = file_get_contents($zbp->path . "zb_system/defend/thanks.html");
+	$s = str_replace('{$lang[\'msg\'][\'develop_intro\']}',$zbp->lang['msg']['develop_intro'],$s);
+	$s = str_replace('{$lang[\'msg\'][\'program\']}',$zbp->lang['msg']['program'],$s);
+	$s = str_replace('{$lang[\'msg\'][\'interface\']}',$zbp->lang['msg']['interface'],$s);
+	$s = str_replace('{$lang[\'msg\'][\'support\']}',$zbp->lang['msg']['support'],$s);
+	$s = str_replace('{$lang[\'msg\'][\'thanks\']}',$zbp->lang['msg']['thanks'],$s);
+	$s = str_replace('{$lang[\'msg\'][\'website\']}',$zbp->lang['msg']['website'],$s);
+	echo $s;
 	echo '<script type="text/javascript">ActiveTopMenu("topmenu1");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/home_32.png' . '");</script>';
 
@@ -490,11 +498,11 @@ function Admin_ArticleMng(){
 	echo '<div id="divMain2">';
 	echo '<form class="search" id="search" method="post" action="#">';
 
-	echo '<p>' . $zbp->lang['msg']['search'] . ':&nbsp;&nbsp;' . $zbp->lang['msg']['category'] . ' <select class="edit" size="1" name="category" style="width:150px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option>';
+	echo '<p>' . $zbp->lang['msg']['search'] . ':&nbsp;&nbsp;' . $zbp->lang['msg']['category'] . ' <select class="edit" size="1" name="category" style="width:140px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option>';
 	foreach ($zbp->categorysbyorder as $id => $cate) {
 	  echo '<option value="'. $cate->ID .'">' . $cate->SymbolName . '</option>';
 	}
-	echo'</select>&nbsp;&nbsp;&nbsp;&nbsp;' . $zbp->lang['msg']['type'] . ' <select class="edit" size="1" name="status" style="width:80px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option> <option value="0" >' . $zbp->lang['post_status_name']['0'] . '</option><option value="1" >' . $zbp->lang['post_status_name']['1'] . '</option><option value="2" >' . $zbp->lang['post_status_name']['2'] . '</option></select>&nbsp;&nbsp;&nbsp;&nbsp;
+	echo'</select>&nbsp;&nbsp;&nbsp;&nbsp;' . $zbp->lang['msg']['type'] . ' <select class="edit" size="1" name="status" style="width:100px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option> <option value="0" >' . $zbp->lang['post_status_name']['0'] . '</option><option value="1" >' . $zbp->lang['post_status_name']['1'] . '</option><option value="2" >' . $zbp->lang['post_status_name']['2'] . '</option></select>&nbsp;&nbsp;&nbsp;&nbsp;
 	<label><input type="checkbox" name="istop" value="True"/>&nbsp;' . $zbp->lang['msg']['top'] . '</label>&nbsp;&nbsp;&nbsp;&nbsp;
 	<input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
 	echo '</form>';
