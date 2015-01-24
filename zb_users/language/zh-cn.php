@@ -229,6 +229,7 @@ return array(
 	'thanks'=> '感谢',
 	'website' => '网站',
 	'develop_intro' => 'Z-BlogPHP版网站和程序开发',
+	'default' => '默认',
 	'' => '',		
 ),
 

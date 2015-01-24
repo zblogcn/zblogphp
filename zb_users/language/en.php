@@ -4,7 +4,7 @@
 //Author:Yang Yixuan
 //Author URI:http://www.yangyixuan.com
 //E-mail:sen@yangyixuan.com
-//Date:20150123
+//Date:20150124
 
 //'Custom Information
 //'Don't delete %s and ()
@@ -15,7 +15,7 @@ return array(
 'lang_name' => 'English',
 'font_family' => 'Helvetica,Arial,sans-serif',
 'font_size' => '',
-'windows_character_set'=>'ISO-8859-1',
+'windows_character_set'=>'en',
 
 #Front-End & Back-End
 'msg' => array(
@@ -112,16 +112,16 @@ return array(
 	'post_count' => 'Posts',
 	'basic_setting' => 'General Settings',
 	'global_setting' => 'Global Settings',
-	'page_setting' => 'Site Pages Settings',
-	'comment_setting' => 'Reading Settings',
+	'page_setting' => 'Reading Settings',
+	'comment_setting' => 'Discussion Settings',
 	'other_setting' => 'Other Settings',
-	'blog_host' => 'Site Address (URL)',
-	'blog_host_add' => 'Default Automatic Recognition.',	
+	'blog_host' => 'Site Address (Site URL)',
+	'blog_host_add' => 'Default automatic recognition. If you need to permanent your site address, please click on the button and enter your domain name.',	
 	'copyright' => 'Copyright Notice',
-	'copyright_add' => 'Please Fill in the Copyright Notice、Website Statistics Code, and so on.',
+	'copyright_add' => 'Please fill in the copyright notice, website statistics code, and so on.',
 	'blog_name' => 'Site Title',
 	'blog_subname' => 'Site Tagline',
-	'permanent_domain' => 'Change URI Address.',	
+	'permanent_domain' => 'Permanent Site URL',	
 	'blog_timezone' => 'Site Timezone',		
 	'blog_language' => 'Site Language',		
 	'allow_upload_type' => 'Allows to Upload a File of Type',	
@@ -131,7 +131,7 @@ return array(
 	'pagebar_count' => 'Pagebar Displays the Number of Pages',	
 	'search_count' => 'Allows the Search to Return the Maximum Number of Posts',
 	'manage_count' => 'The Dashboard Displays the Number of Posts',
-	'comment_turnoff' => 'Comments Off',	
+	'comment_turnoff' => 'Turn Off Comments',	
 	'comment_reverse_order' => 'Enable Comments Output in Reverse Order',
 	'comments_display_count' => 'Number of Comments Per Page',
 	'comment_verify_enable' => 'Enabled Comments Captcha',	
@@ -164,7 +164,7 @@ return array(
 	'display_subcategorys' => 'Show All Subcategories Posts in the Category',	
 	'drag_module_to_sidebar' => 'To activate a module drag it to a sidebar. To deactivate a module drag it back.',
 	'sidebar_module_count' => 'Built-in %s Module',
-	'xmlrpc_address' => 'Protocol address for XML-RPC',
+	'xmlrpc_address' => 'Protocol Address for XML-RPC',
 	'system_environment' => 'System Environments',
 	'view_rights' => 'Viewing Permissions',
 	'member_level' => 'User Level',
@@ -172,7 +172,7 @@ return array(
 	'default_template' => 'Default Template',
 	'generate_summary' => 'Custom Summary',
 	'add_to_navbar' => 'Add to Navigation Bar',
-	'help_generate_summary' => 'Abstracts depend on the separating tag&quot;&lt;hr class=&quot;more&quot; /&gt;&quot;used in the post. or',	
+	'help_generate_summary' => 'Abstracts depend on the separating tag &quot;&lt;hr class=&quot;more&quot; /&gt;&quot; used in the post. or ',	
 	'use_commas_to_separate' => 'Separated by Commas',
 	'show_common_tags' => 'Choose from the most used tags',
 	'category_aritles_default_template' => 'The Default Template for the Category',
@@ -226,12 +226,13 @@ return array(
 	'current' => 'Current',
 	'prev_month' => 'Prev Month',
 	'next_month' => 'Next Month',
-	'program'=>'Programs',
-	'interface' => 'Interfaces',
-	'support'=> 'Assistances',
+	'program'=>'Programmers',
+	'interface' => 'User Interfaces',
+	'support'=> 'Supporters',
 	'thanks'=> 'Acknowledgements',
 	'website' => 'Official Websites',
 	'develop_intro' => 'About Z-BlogPHP Software Program Developers and Official Websites',
+	'default' => 'Default',
 	'' => '',
 ),
 

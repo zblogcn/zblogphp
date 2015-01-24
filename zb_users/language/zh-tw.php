@@ -232,6 +232,7 @@ return array(
 	'thanks'=> '鳴謝',
 	'website' => '網站',
 	'develop_intro' => 'Z-BlogPHP版程式開發和官方網站群',
+	'default' => '默认',
 	''=>'',
 ),
 

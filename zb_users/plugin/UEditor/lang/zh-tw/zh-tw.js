@@ -48,25 +48,28 @@ UE.I18N['zh-tw'] = {
     },
     'paragraph':{'p':'段落', 'h1':'標題 1', 'h2':'標題 2', 'h3':'標題 3', 'h4':'標題 4', 'h5':'標題 5', 'h6':'標題 6'},
     'fontfamily':{
-	'jhenghei':'微軟正黑體',
-	'pmingliu':'新細明體',
-	'mingliu':'明細體',
-	'dfKaisb':'標楷體',	
-	'yahei':'微軟雅黑體',
-        'simsun':'宋體',
-	'nsimsun':'新宋體',
-	'fangsong':'仿宋體',
-        'kaiti':'楷體',
-        'simhei':'黑體',
-        'simli':'隸書體',
-	'helvetica':'Helvetica',
-        'arial':'Arial',
-        'arialBlack':'Arial Black',
-        'comicSansMs':'Comic Sans MS',
-	'andaleMono':'Andale Mono',
-	'georgia':'Georgia',
-        'impact':'Impact',
-        'timesNewRoman':'Times New Roman'
+		'Microsoft JhengHei':'微軟正黑體'
+		'PMingLiU':'新細明體'
+		'MingLiU':'細明體'
+		'DFKai-SB':'標楷體'
+		'Microsoft YaHei':'微軟雅黑體'
+		'SimSun':'宋體'
+		'NSimSun':'新宋體'
+		'FangSong':'仿宋體'
+		'SimKai':'楷體'
+		'SimHei':'黑體'
+		'Helvetica':'Helvetica'
+		'Arial':'Arial'
+		'Arial Black':'Arial Black'
+		'Comic Sans MS':'Comic Sans MS'
+		'Courier New':'Courier New'
+		'Garamond':'Garamond'
+		'Georgia':'Georgia'
+		'Impact':'Impact'
+		'Tahoma':'Tahoma'
+		'Times New Roman':'Times New Roman'
+		'Trebuchet MS':'Trebuchet MS'
+		'Verdana':'Verdana'
     },
     'customstyle':{
         'tc':'標題居中',
@@ -193,7 +196,7 @@ UE.I18N['zh-tw'] = {
         'copy':"複製(Ctrl + C)",
         'copymsg': "瀏覽器不支援,請使用 'Ctrl + C'",
         'paste':"貼上(Ctrl + V)",
-         'pastemsg': "瀏覽器不支援,請使用 'Ctrl + V'"
+        'pastemsg': "瀏覽器不支援,請使用 'Ctrl + V'"
     },
     'copymsg': "瀏覽器不支援,請使用 'Ctrl + C'",
     'pastemsg': "瀏覽器不支援,請使用 'Ctrl + V'",

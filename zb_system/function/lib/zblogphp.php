@@ -1316,18 +1316,6 @@ class ZBlogPHP {
 				$this->langpacklist[]=array($type,$id,$default);
 				return true;
 			}
-			$default='zh-tw';
-			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
-				$this->lang[$id] = require($f);
-				$this->langpacklist[]=array($type,$id,$default);
-				return true;
-			}
-			$default='zh-hk';
-			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
-				$this->lang[$id] = require($f);
-				$this->langpacklist[]=array($type,$id,$default);
-				return true;
-			}
 			$default='zh-cn';
 			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
