@@ -417,6 +417,9 @@ class ZBlogPHP {
 		$this->RegPostType(0,'article',$this->option['ZC_ARTICLE_REGEX'],$this->option['ZC_POST_DEFAULT_TEMPLATE']);
 		$this->RegPostType(1,'page',$this->option['ZC_PAGE_REGEX'],$this->option['ZC_POST_DEFAULT_TEMPLATE']);
 
+		if($this->option['ZC_BLOG_LANGUAGEPACK']==='SimpChinese')$this->option['ZC_BLOG_LANGUAGEPACK']='zh-cn';
+		if($this->option['ZC_BLOG_LANGUAGEPACK']==='TradChinese')$this->option['ZC_BLOG_LANGUAGEPACK']='zh-tw';
+
 		if($oldlang!=$this->option['ZC_BLOG_LANGUAGEPACK']){
 			$this->LoadLanguage('system','');
 		}
