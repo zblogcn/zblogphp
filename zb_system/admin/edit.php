@@ -153,7 +153,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
       <div id="divBox">
         <div id="divFloat">
           <div id='post' class="editmod">
-            <input class="button" style="width:180px;height:38px;" type="submit" value="提交" id="btnPost" onclick='return checkArticleInfo();' />
+            <input class="button" style="width:180px;height:38px;" type="submit" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick='return checkArticleInfo();' />
           </div>
 
           <!-- cate --><?php if(!$ispage){ ?>

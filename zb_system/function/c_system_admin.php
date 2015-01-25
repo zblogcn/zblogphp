@@ -1623,7 +1623,7 @@ function Admin_SettingMng(){
 
 			  </div>
 			  <hr/>
-			  <p><input type="submit" class="button" value="提交" id="btnPost" onclick="" /></p>
+			  <p><input type="submit" class="button" value="<?php echo $zbp->lang['msg']['submit']?>" id="btnPost" onclick="" /></p>
 			</div>
 		  </form>
 <?php

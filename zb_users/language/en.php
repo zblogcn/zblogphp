@@ -15,7 +15,7 @@ return array(
 'lang_name' => 'English',
 'font_family' => 'Helvetica,Arial,sans-serif',
 'font_size' => '',
-'windows_character_set'=>'en',
+'windows_character_set'=>'ISO-8859-1',
 
 #Front-End & Back-End
 'msg' => array(

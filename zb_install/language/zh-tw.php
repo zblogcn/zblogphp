@@ -10,7 +10,7 @@
 //Don't delete %s and ()
 
 return array(
-	'language' => 'Language：',
+	'language' => 'Language:',
 	'next' => '下一步',
 	'exit' => '退出',
 	'install_program' => '安装程式',
