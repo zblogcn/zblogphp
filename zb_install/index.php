@@ -137,11 +137,7 @@ function Setup0(){
     <p><?php echo $zbp->lang['zb_install']['install_license'];?> » <?php echo $zbp->lang['zb_install']['environment_check'];?> » <?php echo $zbp->lang['zb_install']['db_build_set'];?> » <?php echo $zbp->lang['zb_install']['install_result'];?></p>
   </dd>
   <dd id="ddright">
-<<<<<<< HEAD
       <p style="float:left;clear:both;width:100%;text-align:right;padding-bottom:0.5em;"><b><?php echo $zbp->lang['zb_install']['language'];?></b>&nbsp;<select id="language" name="language" style="width:150px;" >
-=======
-      <p style="float:left;clear:both;width:100%;text-align:right;padding-bottom:0.5em;"><b><?php echo $zbp->lang['zb_install']['language'];?>:&nbsp;</b><select id="language" name="language" style="width:150px;" >
->>>>>>> origin/master
 <?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']); ?>
       </select></p>
     <div id="title"><?php echo $zbp->lang['zb_install']['install_tips'];?></div>
@@ -166,24 +162,15 @@ function Setup1(){
     <p><b><?php echo $zbp->lang['zb_install']['install_license'];?></b> » <?php echo $zbp->lang['zb_install']['environment_check'];?> » <?php echo $zbp->lang['zb_install']['db_build_set'];?> » <?php echo $zbp->lang['zb_install']['install_result'];?></p>
   </dd>
   <dd id="ddright">
-<<<<<<< HEAD
       <p style="float:left;clear:both;width:100%;text-align:right;padding-bottom:0.5em;"><b><?php echo $zbp->lang['zb_install']['language'];?></b>&nbsp;<select id="language" name="language" style="width:150px;" >
-=======
-      <p style="float:left;clear:both;width:100%;text-align:right;padding-bottom:0.5em;"><b><?php echo $zbp->lang['zb_install']['language'];?>: </b><select id="language" name="language" style="width:150px;" >
->>>>>>> origin/master
 <?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']); ?>
       </select></p>
     <div id="title">Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_license']?></div>
     <div id="content">
       <textarea readonly>
-<?php echo $zbp->lang['zb_install']['license_title'];?>
+<?php echo $zbp->lang['zb_install']['license_title'] . "\r\n";?>
 
-<<<<<<< HEAD
-
-感谢您选择Z-BlogPHP。 Z-BlogPHP基于 PHP 的技术开发，采用MySQL 和 SQLite 作为数据库，全部源码开放。希望我们的努力能为您提供一个高效快速、强大的站点解决方案。
-=======
 感谢您选择Z-BlogPHP。 Z-BlogPHP基于 PHP 的技术开发，采用 MySQL 和 SQLite 作为数据库，全部源码开放。希望我们的努力能为您提供一个高效快速、强大的站点解决方案。
->>>>>>> origin/master
 
 Z-BlogPHP官方网址：http://www.zblogcn.com/
 
@@ -583,6 +570,7 @@ case 'pdo_mysql':
   $zbp->option['ZC_MYSQL_PASSWORD']=trim(GetVars('dbmysql_password','POST'));
   $zbp->option['ZC_MYSQL_NAME']=trim(str_replace(array('\'','"'),array('',''),GetVars('dbmysql_name','POST')));
   $zbp->option['ZC_MYSQL_PRE']=trim(str_replace(array('\'','"'),array('',''),GetVars('dbmysql_pre','POST')));
+  if($zbp->option['ZC_MYSQL_PRE']=='')$zbp->option['ZC_MYSQL_PRE']=='zbp_';
   if($zbp->option['ZC_YUN_SITE']==''){
     $zbp->option['ZC_MYSQL_ENGINE']=GetVars('dbengine','POST');
     $cts=str_replace('MyISAM',$zbp->option['ZC_MYSQL_ENGINE'],$cts);
