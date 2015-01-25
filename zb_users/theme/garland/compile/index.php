@@ -1,5 +1,4 @@
 <?php  include $this->GetTemplate('header');  ?>
-</head>
 <body class="multi default">
 <?php  include $this->GetTemplate('c_top');  ?>
 		<div id="mission"><?php  if(isset($modules['new'])){echo $modules['new']->Content;}  ?></div><ins></ins>

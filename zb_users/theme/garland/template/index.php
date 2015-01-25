@@ -1,5 +1,4 @@
 {template:header}
-</head>
 <body class="multi default">
 {template:c_top}
 		<div id="mission">{module:new}</div><ins></ins>

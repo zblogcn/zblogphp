@@ -227,11 +227,6 @@ strong {
 	color:#B22222;
 }
 
-.function .function_c div a{
-	background:url("default/pointblue.gif") no-repeat 0.1em center;
-	padding-left:0.8em;
-}
-
 /*------------------------------网站目录定义---------------------------*/
 
 #divMisc li{
@@ -350,7 +345,7 @@ div.post .post-date{
     text-align:right;
 	width:20%;
 	float:right;
-	color:#aaa;
+	color:#999;
 }
 
 
@@ -360,7 +355,7 @@ div.post .post-footer{
 	padding:0 0 5px 0;
 	font-size:0.9em;
     font-weight: normal;
-	color:#aaa;
+	color:#999;
 	text-align:right;
 }
 

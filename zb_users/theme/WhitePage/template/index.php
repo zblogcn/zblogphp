@@ -1,5 +1,4 @@
 {template:header}
-</head>
 <body class="multi {$type}">
 <div id="divAll">
 	<div id="divPage">
