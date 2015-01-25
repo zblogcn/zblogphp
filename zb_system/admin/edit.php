@@ -128,7 +128,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpn
       </div>
       <!-- )tags -->
 
-       <div id="insertintro" class="editmod2" style="padding-top:1em;paddding-bottom:0m"><span>*.<?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
+       <div id="insertintro" class="editmod2" style="padding-top:1em;paddding-bottom:0;"><span>*.<?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
 <?php }?>
 
 		<div id="divIntro" class="editmod2" <?php if(!$article->Intro){echo 'style="display:none;"';}?>>

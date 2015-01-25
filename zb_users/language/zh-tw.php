@@ -4,7 +4,7 @@
 //Author:楊懿軒
 //Author URI:http://www.yangyixuan.com
 //E-mail:sen@yangyixuan.com
-//Date:20150123
+//Date:20150125
 
 //'Custom Information
 //'Don't delete %s and ()

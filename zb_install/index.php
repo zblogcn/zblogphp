@@ -132,12 +132,12 @@ function Setup0(){
   <dt></dt>
   <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
   <strong><?php echo $zbp->lang['zb_install']['install_program'];?></strong></div>
-    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>:</div>
+    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>&nbsp;</div>
     <div id="setup0"  class="left"></div>
     <p><?php echo $zbp->lang['zb_install']['install_license'];?> » <?php echo $zbp->lang['zb_install']['environment_check'];?> » <?php echo $zbp->lang['zb_install']['db_build_set'];?> » <?php echo $zbp->lang['zb_install']['install_result'];?></p>
   </dd>
   <dd id="ddright">
-      <p style="float:left;clear:both;width:100%;text-align:right;padding-bottom:0.5em;"><b><?php echo $zbp->lang['zb_install']['language'];?>:</b><select id="language" name="language" style="width:150px;" >
+      <p style="float:left;clear:both;width:100%;text-align:right;padding-bottom:0.5em;"><b><?php echo $zbp->lang['zb_install']['language'];?></b>&nbsp;<select id="language" name="language" style="width:150px;" >
 <?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']); ?>
       </select></p>
     <div id="title"><?php echo $zbp->lang['zb_install']['install_tips'];?></div>
@@ -157,18 +157,19 @@ function Setup1(){
   <dt></dt>
   <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
   <strong><?php echo $zbp->lang['zb_install']['install_program'];?></strong></div>
-    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>：</div>
+    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>&nbsp;</div>
     <div id="setup1"  class="left"></div>
     <p><b><?php echo $zbp->lang['zb_install']['install_license'];?></b> » <?php echo $zbp->lang['zb_install']['environment_check'];?> » <?php echo $zbp->lang['zb_install']['db_build_set'];?> » <?php echo $zbp->lang['zb_install']['install_result'];?></p>
   </dd>
   <dd id="ddright">
-      <p style="float:left;clear:both;width:100%;text-align:right;padding-bottom:0.5em;"><b><?php echo $zbp->lang['zb_install']['language'];?>:</b><select id="language" name="language" style="width:150px;" >
+      <p style="float:left;clear:both;width:100%;text-align:right;padding-bottom:0.5em;"><b><?php echo $zbp->lang['zb_install']['language'];?></b>&nbsp;<select id="language" name="language" style="width:150px;" >
 <?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']); ?>
       </select></p>
     <div id="title">Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_license']?></div>
     <div id="content">
       <textarea readonly>
 <?php echo $zbp->lang['zb_install']['license_title'];?>
+
 
 感谢您选择Z-BlogPHP。 Z-BlogPHP基于 PHP 的技术开发，采用MySQL 和 SQLite 作为数据库，全部源码开放。希望我们的努力能为您提供一个高效快速、强大的站点解决方案。
 
@@ -236,7 +237,7 @@ CheckServer();
   <dt></dt>
   <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
   <strong><?php echo $zbp->lang['zb_install']['install_program'];?></strong></div>
-    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>：</div>
+    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>&nbsp;</div>
     <div id="setup2"  class="left"></div>
     <p><b><?php echo $zbp->lang['zb_install']['install_license'];?></b> » <b><?php echo $zbp->lang['zb_install']['environment_check'];?></b> » <?php echo $zbp->lang['zb_install']['db_build_set'];?> » <?php echo $zbp->lang['zb_install']['install_result'];?></p>
   </dd>
@@ -385,7 +386,7 @@ function Setup3(){
   <dt></dt>
   <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
   <strong><?php echo $zbp->lang['zb_install']['install_program'];?></strong></div>
-    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>：</div>
+    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>&nbsp;</div>
     <div id="setup3"  class="left"></div>
     <p><b><?php echo $zbp->lang['zb_install']['install_license'];?></b> » <b><?php echo $zbp->lang['zb_install']['environment_check'];?></b> » <b><?php echo $zbp->lang['zb_install']['db_build_set'];?></b> » <?php echo $zbp->lang['zb_install']['install_result'];?></p>
   </dd>
@@ -393,7 +394,7 @@ function Setup3(){
     <div id="title"><?php echo $zbp->lang['zb_install']['db_build_set'];?></div>
     <div id="content">
       <div>
-        <p><b><?php echo $zbp->lang['zb_install']['database'];?>:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['database'];?></b>
         <?php
         if($hasMysql){
         ?>
@@ -416,30 +417,30 @@ function Setup3(){
       </div>
       <?php if($hasMysql){?>
       <div class="dbdetail" id="mysql">
-        <p><b><?php echo $zbp->lang['zb_install']['server'];?>:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['server'];?></b>
           <input type="text" name="dbmysql_server" id="dbmysql_server" value="<?php echo $option['ZC_MYSQL_SERVER'];?>" style="width:350px;" />
         </p>
-        <p><b><?php echo $zbp->lang['zb_install']['username'];?>:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['username'];?></b>
           <input type="text" name="dbmysql_username" id="dbmysql_username" value="<?php echo $option['ZC_MYSQL_USERNAME'];?>" style="width:350px;" />
         </p>
-        <p><b><?php echo $zbp->lang['zb_install']['password'];?>:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['password'];?></b>
           <input type="password" name="dbmysql_password" id="dbmysql_password" value="<?php echo $option['ZC_MYSQL_PASSWORD'];?>" style="width:350px;" />
         </p>
-        <p><b><?php echo $zbp->lang['zb_install']['db_name'];?>:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_name'];?></b>
           <input type="text" name="dbmysql_name" id="dbmysql_name" value="<?php echo $option['ZC_MYSQL_NAME'];?>" style="width:350px;" />
         </p>
-        <p><b><?php echo $zbp->lang['zb_install']['db_pre'];?>:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_pre'];?></b>
           <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="<?php echo $option['ZC_MYSQL_PRE'];?>" style="width:350px;" />
         </p>
 <?php if($zbp->option['ZC_YUN_SITE']==''){?>
-        <p><b><?php echo $zbp->lang['zb_install']['db_engine'];?>:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_engine'];?></b>
           <label><select id="dbengine" name="dbengine" style="width:360px;" >
 		  <option value="MyISAM"  selected="selected"/>MyISAM(<?php echo $zbp->lang['msg']['default'];?>)</option>
           <option value="InnoDB" >InnoDB</option>
 		  </select>
         </p>		
 <?php } ?>
-      <p><b><?php echo $zbp->lang['zb_install']['db_drive'];?>:</b>
+      <p><b><?php echo $zbp->lang['zb_install']['db_drive'];?></b>
         <?php if($CheckResult['mysqli'][0]){?>
         <label>
           <input value="mysqli" type="radio" name="dbtype"/> MySQLi</label>
@@ -454,20 +455,20 @@ function Setup3(){
           <input value="mysql" type="radio" name="dbtype"/> MySQL</label>
         <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
 <?php } ?>
-		<br/><small>(<?php echo $zbp->lang['zb_install']['db_set_port'];?>)</small>
+		<br/><small><?php echo $zbp->lang['zb_install']['db_set_port'];?></small>
       </p>
       </div>
       <?php } ?>
 
       <?php if($hasSqlite){?>
       <div class="dbdetail" id="sqlite">
-        <p><b><?php echo $zbp->lang['zb_install']['db_name'];?>:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_name'];?></b>
           <input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo GetDbName()?>" readonly style="width:350px;" />
         </p>
-        <p><b><?php echo $zbp->lang['zb_install']['db_pre'];?>:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_pre'];?></b>
           <input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" />
         </p>
-      <p><b><?php echo $zbp->lang['zb_install']['db_drive'];?>:</b>
+      <p><b><?php echo $zbp->lang['zb_install']['db_drive'];?></b>
         <?php if($CheckResult['sqlite3'][0]){?>
         <label>
           <input value="sqlite3" type="radio" name="dbtype" /> SQLite3</label>
@@ -494,16 +495,16 @@ function Setup3(){
       <?php } ?>
 
       <p class="title"><?php echo $zbp->lang['zb_install']['website_setting'];?></p>
-      <p><b><?php echo $zbp->lang['msg']['blog_name'];?>:</b>
+      <p><b><?php echo $zbp->lang['zb_install']['blog_name'];?></b>
         <input type="text" name="blogtitle" id="blogtitle" value="" style="width:350px;" />
       </p>
-      <p><b><?php echo $zbp->lang['msg']['username'];?>:</b>
+      <p><b><?php echo $zbp->lang['zb_install']['admin_username'];?></b>
         <input type="text" name="username" id="username" value="" style="width:200px;" />
-        &nbsp;(<?php echo $zbp->lang['zb_install']['username_intro'];?>)</p>
-      <p><b><?php echo $zbp->lang['msg']['password'];?>:</b>
+        &nbsp;<small><?php echo $zbp->lang['zb_install']['username_intro'];?></small></p>
+      <p><b><?php echo $zbp->lang['zb_install']['admin_password'];?></b>
         <input type="password" name="password" id="password" value="" style="width:200px;" />
-        &nbsp;(<?php echo $zbp->lang['zb_install']['password_intro'];?>)</p>
-      <p><b><?php echo $zbp->lang['msg']['re_password'];?>:</b>
+        &nbsp;<small><?php echo $zbp->lang['zb_install']['password_intro'];?></small></p>
+      <p><b><?php echo $zbp->lang['zb_install']['re_password'];?></b>
         <input type="password" name="repassword" id="repassword" value="" style="width:200px;" />
       </p>
     </div>
@@ -539,7 +540,7 @@ function Setup4(){
   <dt></dt>
   <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
   <strong><?php echo $zbp->lang['zb_install']['install_program'];?></strong></div>
-    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>：</div>
+    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>&nbsp;</div>
     <div id="setup4"  class="left"></div>
     <p><b><?php echo $zbp->lang['zb_install']['install_license'];?></b> » <b><?php echo $zbp->lang['zb_install']['environment_check'];?></b> » <b><?php echo $zbp->lang['zb_install']['db_build_set'];?></b> » <b><?php echo $zbp->lang['zb_install']['install_result'];?></b></p>
   </dd>

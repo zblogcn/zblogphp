@@ -4,7 +4,7 @@
 //Author:Yang Yixuan
 //Author URI:http://www.yangyixuan.com
 //E-mail:sen@yangyixuan.com
-//Date:20150124
+//Date:20150125
 
 //'Custom Information
 //'Don't delete %s and ()
@@ -106,13 +106,13 @@ return array(
 	'module_manage' => 'Modules',
 	'site_analyze' => 'Site Information',	
 	'info_intro' => 'Site Description',
-	'refresh_cache' => 'Refresh Cache &amp; Compiling Template',
+	'refresh_cache' => 'Refresh Cache &amp; Compile Template',
 	'latest_news' => 'Z-Blog News',
 	'refresh' => 'Refresh',
 	'post_count' => 'Posts',
 	'basic_setting' => 'General Settings',
 	'global_setting' => 'Global Settings',
-	'page_setting' => 'Reading Settings',
+	'page_setting' => 'Read Settings',
 	'comment_setting' => 'Discussion Settings',
 	'other_setting' => 'Other Settings',
 	'blog_host' => 'Site Address (Site URL)',
@@ -446,8 +446,8 @@ return array(
 '51' => 'Subcategory cannot include any category.',
 '52' => 'Exceeded maximum number of replies.',
 '53' => 'Your comment has entered the approval process, please do not resubmit.',
-'54' => "Passwords can only be A-Za-z0-9'~!@#$%^&*-_ characters, and can not be less than 8-bit, more than 20 bit",
-'55' => 'Encrypted string length is not equal to 32-Bit',
+'54' => "Passwords can only be A-Za-z0-9'~!@#$%^&*-_ characters, and can not be less than 8 digits, more than 20 digits.",
+'55' => 'Encrypted string length is not equal to 32 digits.',
 '56' => 'Exceeds the set number of replies.',
 '57' => 'The parent and the child comments are not in the same post.',
 '58' => 'Parent category does not exist.',
@@ -469,7 +469,7 @@ return array(
 '74' => 'You still use the old IE core browser? Please upgrade to support HTML5 IE11! \r\n or try to change the Chrome , Firefox or Opera.',
 '75' => 'File name can not be empty!',
 '76' => 'Html ID can not be empty!',
-'77' => 'Username can only be used Chinese、numbers、letters、"." and "_", and the length limit of 3-20 bit.',
+'77' => 'Username can only be used Chinese、numbers、letters、"." and "_", and the length limit of 3 to 20 digits.',
 '78' => 'This application requires%s and above version of Z-BlogPHP.',
 '79' => 'User Accounts not Approved',
 '80' => 'User Account Locked',
