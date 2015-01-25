@@ -461,9 +461,10 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 .editmod{
 	margin:1em 0;
 }
-#cheader,#carea{
-	margin:.5em 0;
+.editmod3{
+	margin:0;
 }
+
 .editinputname{
 	padding:0 2px 0 3px;
 	line-height:1em;
