@@ -105,7 +105,7 @@ return array(
 	'plugin_manage'=>'外掛管理',
 	'module_manage'=>'模組管理',
 	'site_analyze'=>'網站資訊',	
-	'info_intro'=>'網站摘要',
+	'info_intro'=>'控制台',
 	'refresh_cache'=>'清除快取並重新編譯模板',
 	'latest_news'=>'近期消息',
 	'refresh'=>'重新整理',

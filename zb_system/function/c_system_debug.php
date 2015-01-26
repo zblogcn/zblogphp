@@ -321,7 +321,7 @@ class ZBlogException {
 	function ParseError($type, $message, $file, $line) {
 
 		$this->type = $type;
-		$this->message = $message . ' (set_error_handler) (' . GetEnvironment() . ')';
+		$this->message = $message . ' (set_error_handler) ';
 		$this->file = $file;
 		$this->line = $line;
 
@@ -334,7 +334,7 @@ class ZBlogException {
 	function ParseShutdown($error) {
 
 		$this->type = $error['type'];
-		$this->message = $error['message'] . ' (register_shutdown_function) (' . GetEnvironment() . ')';
+		$this->message = $error['message'] . ' (register_shutdown_function) ';
 		$this->file = $error['file'];
 		$this->line = $error['line'];
 	}
@@ -345,7 +345,7 @@ class ZBlogException {
 	*/
 	function ParseException($exception) {
 
-		$this->message = $exception->getMessage() . ' (set_exception_handler) (' . GetEnvironment() . ')';
+		$this->message = $exception->getMessage() . ' (set_exception_handler) ';
 		$this->type = $exception->getCode();
 		$this->file = $exception->getFile();
 		$this->line = $exception->getLine();
