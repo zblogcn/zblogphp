@@ -4,7 +4,7 @@
 //Author:楊懿軒
 //Author URI:http://www.yangyixuan.com
 //E-mail:sen@yangyixuan.com
-//Date:20150125
+//Date:20150126
 
 //'Custom Information
 //'Don't delete %s and ()
@@ -112,11 +112,11 @@ return array(
 	'post_count'=>'文章數量',
 	'basic_setting'=>'基本設定',
 	'global_setting'=>'全域設定',
-	'page_setting'=>'頁面設定',
+	'page_setting'=>'閱讀設定',
 	'comment_setting'=>'討論設定',
 	'other_setting'=>'其他設定',
 	'blog_host'=>'網站位址',
-	'blog_host_add'=>'默認自動讀取當前網站位址，如需固定網站位址請點選按鈕並輸入域名。',	
+	'blog_host_add'=>'默認自動讀取當前網站位址，如需固定網站位址請點擊按鈕並輸入域名。',	
 	'copyright'=>'版權說明',
 	'copyright_add'=>'可以填寫版權資訊、網站統計等內容。',
 	'blog_name'=>'網站標題',
@@ -170,18 +170,18 @@ return array(
 	'member_level'=>'帳號角色',
 	'disable_comment'=>'禁止迴響',
 	'default_template'=>'默認模板',
-	'generate_summary'=>'手動生成摘要',
+	'generate_summary'=>'自訂摘要',
 	'add_to_navbar'=>'加入導覽列選單',
-	'help_generate_summary'=>'在正文裡插入分隔符&quot;&lt;hr class=&quot;more&quot; /&gt;&quot;可以讓系統識別摘要內容。如需另外指定摘要內容，請點選',	
+	'help_generate_summary'=>'在正文裡插入&lt;hr class=&quot;more&quot; /&gt;水平分隔線，系統會識別摘要。或者',
 	'use_commas_to_separate'=>'逗號隔開',
 	'show_common_tags'=>'顯示常用標籤',
 	'category_aritles_default_template'=>'該分類文章的默認模板',
-	'confirm_operating'=>'點選「確定」繼續。點選「取消」停止。',
+	'confirm_operating'=>'點擊「確定」繼續，或點擊「取消」停止。',
 	'batch_operation'=>'批次套用',
 	'operation_succeed'=>'處理成功',
 	'operation_failed'=>'處理失敗',
-	'batch_operation_in_progress'=>'批次處理中...',
-	'previous_operation_not_finished'=>'之前的批次處理尚未完成，點選','<a href=\'#\'>繼續</a>','執行。',
+	'batch_operation_in_progress'=>'批次處理中',
+	'previous_operation_not_finished'=>"之前的批次處理任務尚未完成，點擊<a href=\'#\'>「繼續」</a>執行完所有任務。",
 	'error_tips'=>'錯誤提示',
 	'error_info'=>'錯誤資訊',
 	'file_line'=>'檔案位置',
@@ -446,7 +446,7 @@ return array(
 '52'=>'超過最大回覆層數',
 '53'=>'你的迴響正在待審中，請勿再次送出。',
 '54'=>'密碼只能由A-Za-z0-9`~!@#$%^&*-_字元組成，且不能小於8位、大於20位。',
-'55'=>'加密後的字元串長度不为32',
+'55'=>'加密後的字元串長度不是32',
 '56'=>'超出了設定的回覆層數',
 '57'=>'父迴響和子迴響不在同一篇文章',
 '58'=>'父分類不存在',
@@ -465,7 +465,7 @@ return array(
 '71'=>'當前的編輯內容尚未儲存',
 '72'=>'名稱不能為空或格式不正確',
 '73'=>'請確認密碼是否設定正確',
-'74'=>'您還在用IE6、IE7、IE8核心的瀏覽器麼？請升級至支援HTML5的IE11吧！\r\n要不換個Chrome或Firefox試試(—.—||||',
+'74'=>'您還在用舊的IE內核的瀏覽器嗎？請升級至支援HTML5的IE11吧！\r\n您也可以根據需要使用Chromea、Firefox、Opera等瀏覽器!',
 '75'=>'檔名不能為空！',
 '76'=>'HtmlID不能為空！',
 '77'=>'帳號只能用中文、數字、字母和.與_,且字元長度在3-20位',

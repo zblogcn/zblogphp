@@ -60,7 +60,7 @@ function AuditRecords_CreateTable(){
 	global $zbp;
 	if($zbp->db->ExistTable($GLOBALS['table']['AuditRecords'])==false){
 		$s=$zbp->db->sql->CreateTable($GLOBALS['table']['AuditRecords'],$GLOBALS['datainfo']['AuditRecords']);
-		$zbp->db->QueryMulit($s);
+		$zbp->db->QueryMulti($s);
 	}
 }
 

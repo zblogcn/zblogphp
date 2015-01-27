@@ -50,7 +50,7 @@ function LargeData_CreateTable(){
 	global $zbp;
 	if($zbp->db->ExistTable($GLOBALS['table']['Post2Tag'])==false){
 		$s=$zbp->db->sql->CreateTable($GLOBALS['table']['Post2Tag'],$GLOBALS['datainfo']['Post2Tag']);
-		$zbp->db->QueryMulit($s);
+		$zbp->db->QueryMulti($s);
 		$zbp->db->Query("ALTER TABLE " . $GLOBALS['table']['Post2Tag'] . " ADD INDEX  " . $zbp->db->dbpre. "pt_LD_2ID(pt_TagID,pt_LogID) ;");
 		$zbp->db->Query("ALTER TABLE " . $GLOBALS['table']['Post2Tag'] . " ADD INDEX  " . $zbp->db->dbpre. "pt_LD_LogID(pt_LogID) ;");
 	}

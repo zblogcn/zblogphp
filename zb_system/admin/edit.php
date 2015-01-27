@@ -292,7 +292,7 @@ function checkArticleInfo(){
 }
 
 //日期时间控件
-$.datepicker.regional['<?php echo $lang['msg']['lang']?>'] = {
+$.datepicker.regional['<?php echo $lang['lang']?>'] = {
   closeText: '<?php echo $lang['msg']['close']?>',
   prevText: '<?php echo $lang['msg']['prev_month']?>',
   nextText: '<?php echo $lang['msg']['next_month']?>',
@@ -309,8 +309,8 @@ $.datepicker.regional['<?php echo $lang['msg']['lang']?>'] = {
   showMonthAfterYear: true,
   yearSuffix: ' <?php echo $lang['msg']['year_suffix']?>  '
 };
-$.datepicker.setDefaults($.datepicker.regional['<?php echo $lang['msg']['lang']?>']);
-$.timepicker.regional['<?php echo $lang['msg']['lang']?>'] = {
+$.datepicker.setDefaults($.datepicker.regional['<?php echo $lang['lang']?>']);
+$.timepicker.regional['<?php echo $lang['lang']?>'] = {
   timeOnlyTitle: '<?php echo $lang['msg']['time']?>',
   timeText: '<?php echo $lang['msg']['time']?>',
   hourText: '<?php echo $lang['msg']['hour']?>',
@@ -322,7 +322,7 @@ $.timepicker.regional['<?php echo $lang['msg']['lang']?>'] = {
   timeFormat: 'HH:mm:ss',
   ampm: false
 };
-$.timepicker.setDefaults($.timepicker.regional['<?php echo $lang['msg']['lang']?>']);
+$.timepicker.setDefaults($.timepicker.regional['<?php echo $lang['lang']?>']);
 $('#edtDateTime').datetimepicker({
   showSecond: true
   //changeMonth: true,
