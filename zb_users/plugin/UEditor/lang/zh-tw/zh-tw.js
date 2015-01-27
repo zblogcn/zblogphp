@@ -2,7 +2,7 @@
  * Author:楊懿軒
  * Author URI:http://www.yangyixuan.com
  * E-mail:sen@yangyixuan.com
- * Date:20150123
+ * Date:20150127
  */
 UE.I18N['zh-tw'] = {
     'labelMap':{
@@ -14,8 +14,8 @@ UE.I18N['zh-tw'] = {
         'unlink':'取消連結', 'insertrow':'前插入行', 'insertcol':'前插入列', 'mergeright':'右合併單元格', 'mergedown':'下合併單元格',
         'deleterow':'刪除行', 'deletecol':'刪除列', 'splittorows':'拆分成行',
         'splittocols':'拆分成列', 'splittocells':'完全拆分單元格','deletecaption':'刪除表格標題','inserttitle':'插入標題',
-        'mergecells':'合併多個單元格', 'deletetable':'刪除表格', 'cleardoc':'清空文件','insertparagraphbeforetable':"表格前插入行",'insertcode':'程式碼語言',
-        'fontfamily':'字型', 'fontsize':'字號', 'paragraph':'段落格式', 'simpleupload':'單圖上傳', 'insertimage':'多圖上傳','edittable':'表格屬性','edittd':'單元格屬性', 'link':'超連結',
+        'mergecells':'合併多個單元格', 'deletetable':'刪除表格', 'cleardoc':'清空文件','insertparagraphbeforetable':"表格前插入行",'insertcode':'程式碼',
+        'fontfamily':'字型', 'fontsize':'字型大小', 'paragraph':'段落格式', 'simpleupload':'單圖上傳', 'insertimage':'多圖上傳','edittable':'表格屬性','edittd':'單元格屬性', 'link':'超連結',
         'emotion':'表情', 'spechars':'特殊字元', 'searchreplace':'查詢替換', 'map':'Baidu地圖', 'gmap':'Google地圖',
         'insertvideo':'視訊', 'help':'幫助', 'justifyleft':'居左對齊', 'justifyright':'居右對齊', 'justifycenter':'居中對齊',
         'justifyjustify':'兩端對齊', 'forecolor':'字型顏色', 'backcolor':'背景色', 'insertorderedlist':'有序列表',
@@ -48,27 +48,27 @@ UE.I18N['zh-tw'] = {
     },
     'paragraph':{'p':'段落', 'h1':'標題 1', 'h2':'標題 2', 'h3':'標題 3', 'h4':'標題 4', 'h5':'標題 5', 'h6':'標題 6'},
     'fontfamily':{
-		'Microsoft JhengHei':'微軟正黑體'
-		'PMingLiU':'新細明體'
-		'MingLiU':'細明體'
-		'DFKai-SB':'標楷體'
-		'Microsoft YaHei':'微軟雅黑體'
-		'SimSun':'宋體'
-		'NSimSun':'新宋體'
-		'FangSong':'仿宋體'
-		'SimKai':'楷體'
-		'SimHei':'黑體'
-		'Helvetica':'Helvetica'
-		'Arial':'Arial'
-		'Arial Black':'Arial Black'
-		'Comic Sans MS':'Comic Sans MS'
-		'Courier New':'Courier New'
-		'Garamond':'Garamond'
-		'Georgia':'Georgia'
-		'Impact':'Impact'
-		'Tahoma':'Tahoma'
-		'Times New Roman':'Times New Roman'
-		'Trebuchet MS':'Trebuchet MS'
+		'Microsoft JhengHei':'微軟正黑體',
+		'PMingLiU':'新細明體',
+		'MingLiU':'細明體',
+		'DFKai-SB':'標楷體',
+		'Microsoft YaHei':'微軟雅黑體',
+		'SimSun':'宋體',
+		'NSimSun':'新宋體',
+		'FangSong':'仿宋體',
+		'SimKai':'楷體',
+		'SimHei':'黑體',
+		'Helvetica':'Helvetica',
+		'Arial':'Arial',
+		'Arial Black':'Arial Black',
+		'Comic Sans MS':'Comic Sans MS',
+		'Courier New':'Courier New',
+		'Garamond':'Garamond',
+		'Georgia':'Georgia',
+		'Impact':'Impact',
+		'Tahoma':'Tahoma',
+		'Times New Roman':'Times New Roman',
+		'Trebuchet MS':'Trebuchet MS',
 		'Verdana':'Verdana'
     },
     'customstyle':{
@@ -81,7 +81,7 @@ UE.I18N['zh-tw'] = {
         'exceedSizeError': '檔案大小超出限制',
         'exceedTypeError': '檔案格式不允許',
         'jsonEncodeError': '伺服器返回格式錯誤',
-        'loading':"正在上傳...",
+        'loading':"正在上傳中",
         'loadError':"上傳錯誤",
         'errorLoadConfig': '控制台設定項沒有正常載入，上傳外掛不能正常使用！'
     },
@@ -89,7 +89,7 @@ UE.I18N['zh-tw'] = {
         'exceedSizeError': '檔案大小超出限制',
         'exceedTypeError': '檔案格式不允許',
         'jsonEncodeError': '伺服器返回格式錯誤',
-        'loading':"正在上傳...",
+        'loading':"正在上傳中",
         'loadError':"上傳錯誤",
         'errorLoadConfig': '控制台設定項沒有正常載入，上傳外掛不能正常使用！'
     },
@@ -230,7 +230,7 @@ UE.I18N['zh-tw'] = {
         'indent':"首行縮排",
         'alignment':"對齊方式",
         'imageFloat':"圖片浮動",
-        'removeFontsize':"清除字號",
+        'removeFontsize':"清除字型大小",
         'removeFontFamily':"清除字型",
         'removeHtml':"清除冗餘HTML程式碼",
         'pasteFilter':"貼上過濾",

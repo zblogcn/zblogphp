@@ -4,7 +4,7 @@
 //Author:Yang Yixuan
 //Author URI:http://www.yangyixuan.com
 //E-mail:sen@yangyixuan.com
-//Date:20150125
+//Date:20150127
 
 //Custom Information
 //Don't delete %s and ()
@@ -22,7 +22,7 @@ return array(
 	'environment_check' => '環境檢查',
 	'db_build_set' => '資料庫建立與設定',
 	'install_result' => '安裝結果',
-	'i_agree' => '我已閱讀並同意此協議。',
+	'i_agree' => '我已閱讀並同意本協議。',
 	'server_check'=> '伺服器環境檢查',
 	'http_server' => 'HTTP 伺服器',
 	'path' => '路徑',
@@ -45,16 +45,16 @@ return array(
 	'username_intro' => '（拉丁字母，數字，漢字或._的組合）',
 	'password_intro' => '（最少八位數的數字、字元的組合）',
 	'create_db' => '新增了資料庫！',
-	'create_table' => '新增了資料表！',
+	'create_table' => '資料表已加入至資料庫！',
 	'exist_table_in_db' => '該資料庫裡已存在相關的資料表和資料，請更改資料表前置字串或是更換清空資料庫再安裝。',
 	'ok' => '完成',
 	'index' => '首頁',
-	'guestbook' => '留言簿',
-	'wellcome' => '您好，歡迎造訪網站！',
-	'hello_zblog' => '歡迎使用Z-BlogPHP程式！',
-	'hello_zblog_content' => '<p>歡迎使用Z-BlogPHP程式。這是其自動生成的文章，您可以编辑或刪除它。</p><p>除了本文之外，Z-BlogPHP程式還自動生成了一個「留言簿」頁面。預祝您使用愉快！</p>',
-	'guestbook_content' => '這是一個留言簿，由程式自動生成，您可以編輯修改。',
-	'create_datainfo' => '新增並插入了資料！',
+	'guestbook' => '範例頁面',
+	'wellcome' => '歡迎您造訪本網站！',
+	'hello_zblog' => 'Hello world! 哈囉！',
+	'hello_zblog_content' => '<p>歡迎來到 Z-BlogPHP。這是你的第一篇文章。編輯或者刪除本篇文章，然後開始你的部落客生活！</p>',
+	'guestbook_content' => '這是一個範例頁面。它和網誌文章不同。大多數的人會新增一個「關於」頁面向訪客介紹自己。作為一個新的 Z-BlogPHP 使用者，你可以前往你的控制台刪除這個頁面，並建立一個屬於你的全新內容。祝使用愉快！',
+	'create_datainfo' => '資料已加入至資料表！',
 	'save_option' => '儲存設定並編譯了模板！',
 	'dbserver_need' => '请填寫資料庫伺服器',
 	'dbname_need' => '请填寫資料庫名稱',

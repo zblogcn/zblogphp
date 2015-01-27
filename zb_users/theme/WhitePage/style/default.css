@@ -273,10 +273,9 @@ strong {
 	clear : none;
 }
 #divComments li,divPrevious li{
-	width:200px;
-    white-space:nowrap;
-    word-break:keep-all;
-    text-overflow:ellipsis;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	max-height: 3em;
 }
 
 /*------------------------------文章模块---------------------------*/

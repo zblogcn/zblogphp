@@ -356,9 +356,9 @@ function ViewSearch(){
 		$i = strpos($s,$q,0);
 		if($i!==false){
 			if($i>50){
-				$t=SubStrUTF8WithStart($s,$i-50,100);
+				$t=SubStrUTF8_Start($s,$i-50,100);
 			}else{
-				$t=SubStrUTF8WithStart($s,0,100);
+				$t=SubStrUTF8_Start($s,0,100);
 			}
 			$article->Content .= str_replace($q,'<strong>' . $q . '</strong>',$t) . '<br/>';
 		}
@@ -1488,7 +1488,7 @@ function PostComment() {
 
 		if ($cmt->IsChecking == false) {
 
-			if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), +1);
+			CountPostArray(array($cmt->LogID), +1);
 			CountCommentNums(+1,0);
 
 			$zbp->AddBuildModule('comments');
@@ -1539,7 +1539,7 @@ function DelComment() {
 		}
 		$cmt->Del();
 		
-		if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
+		if($cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
 
 		$zbp->AddBuildModule('comments');
 
@@ -1610,15 +1610,11 @@ function CheckComment() {
 	$orig_check = (bool)$orig_check;
 
 	if ($orig_check && !$ischecking) {
-		if($cmt->RootID==0 && $cmt->IsChecking == false){
-			CountPostArray(array($cmt->LogID), +1);
-		}
+		CountPostArray(array($cmt->LogID), +1);
 		CountCommentNums(0,-1);
 	}
 	else if (!$orig_check && $ischecking) {
-		if($cmt->RootID==0 && $cmt->IsChecking == false){
-			CountPostArray(array($cmt->LogID), -1);
-		}
+		CountPostArray(array($cmt->LogID), -1);
 		CountCommentNums(0,+1);
 	}
 
@@ -1654,7 +1650,7 @@ function BatchComment() {
 			$cmt = $zbp->GetCommentByID($id);
 			if ($cmt->ID == 0) continue;
 			$cmt->Del();
-			if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
+			if($cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
 			if($cmt->IsChecking == false){
 				CountCommentNums(-1,0);
 			}else{
@@ -1668,7 +1664,7 @@ function BatchComment() {
 			if ($cmt->ID == 0) continue;
 			$cmt->IsChecking = false;
 			$cmt->Save();
-			if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), +1);
+			CountPostArray(array($cmt->LogID), +1);
 			CountCommentNums(0,-1);
 		}
 	if ($type == 'all_audit')
@@ -1677,7 +1673,7 @@ function BatchComment() {
 			if ($cmt->ID == 0) continue;
 			$cmt->IsChecking = true;
 			$cmt->Save();
-			if($cmt->RootID==0 && $cmt->IsChecking == true)CountPostArray(array($cmt->LogID), -1);
+			CountPostArray(array($cmt->LogID), -1);
 			CountCommentNums(0,+1);
 		}
 }
@@ -2372,13 +2368,13 @@ function FilterComment(&$comment) {
 		$zbp->ShowError(30, __FILE__, __LINE__);
 	}
 
-	$comment->Name = substr($comment->Name, 0, 20);
-	$comment->Email = substr($comment->Email, 0, 30);
-	$comment->HomePage = substr($comment->HomePage, 0, 100);
+	$comment->Name = SubStrUTF8_Start($comment->Name, 0, 20);
+	$comment->Email = SubStrUTF8_Start($comment->Email, 0, 30);
+	$comment->HomePage = SubStrUTF8_Start($comment->HomePage, 0, 100);
 
 	$comment->Content = TransferHTML($comment->Content, '[nohtml]');
 
-	$comment->Content = substr($comment->Content, 0, 1000);
+	$comment->Content = SubStrUTF8_Start($comment->Content, 0, 1000);
 	$comment->Content = trim($comment->Content);
 	if (strlen($comment->Content) == 0) {
 		$zbp->ShowError(46, __FILE__, __LINE__);
@@ -2427,7 +2423,7 @@ function FilterMember(&$member) {
 	$member->Alias = str_replace('.', '', $member->Alias);
 	$member->Alias = str_replace(' ', '', $member->Alias);
 	$member->Alias = str_replace('_', '', $member->Alias);
-	$member->Alias = substr($member->Alias, 0, (int)$zbp->datainfo['Member']['Alias'][2]);
+	$member->Alias = SubStrUTF8_Start($member->Alias, 0, (int)$zbp->datainfo['Member']['Alias'][2]);
 	if (strlen($member->Name) < $zbp->option['ZC_USERNAME_MIN'] || strlen($member->Name) > $zbp->option['ZC_USERNAME_MAX']) {
 		$zbp->ShowError(77, __FILE__, __LINE__);
 	}
@@ -2591,8 +2587,8 @@ function CountPostArray($array, $plus = null) {
 	$array = array_unique($array);
 	foreach ($array as $value) {
 		if ($value == 0) continue;
-		$article = new Post;
-		if ($article->LoadInfoByID($value)) {
+		$article = $zbp->GetPostByID($value);
+		if ($article->ID > 0) {
 			CountPost($article, $plus);
 			$article->Save();	
 		}
