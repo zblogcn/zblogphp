@@ -2129,7 +2129,7 @@ body .ui-tooltip {
 	filter: none;
 }
 
-.ui-datepicker td .ui-state-highlight{
+.ui-datepicker td .ui-state-active {
 	color: #ffffff;
 	background-color: #5bc0de;
 	border-color: #46b8da;
@@ -2140,9 +2140,9 @@ body .ui-tooltip {
 	border-radius: 2px;
 }
 
-.ui-datepicker td .ui-state-active {
+.ui-datepicker td .ui-state-highlight {
 	color: #333333;
-    background-color: #ebebeb;
+    background-color: #e6e6e6;
     border-color: #adadad;
 	margin-bottom: 0;
 	font-size: normal;
