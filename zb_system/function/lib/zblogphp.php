@@ -563,10 +563,16 @@ class ZBlogPHP {
 
 		$this->CheckTemplate();
 
-		if(GetVars('dishtml5','COOKIE')){
-			$this->option['ZC_ADMIN_HTML5_ENABLE']=false;
-		}else{
-			$this->option['ZC_ADMIN_HTML5_ENABLE']=true;
+		if(GetVars('addoninfo','COOKIE')){
+			$dishtml5=json_decode(GetVars('addoninfo','COOKIE'));
+			if(is_object($dishtml5) && property_exists($dishtml5,'dishtml5'))
+				$dishtml5=(bool)$dishtml5->dishtml5;
+			else
+				$dishtml5=false;
+			if($dishtml5)
+				$this->option['ZC_ADMIN_HTML5_ENABLE']=false;
+			else
+				$this->option['ZC_ADMIN_HTML5_ENABLE']=true;
 		}
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) $fpname();
