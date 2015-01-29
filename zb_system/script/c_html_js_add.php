@@ -9,6 +9,9 @@ require '../function/c_system_base.php';
 
 ob_clean();
 
+$zbp->CheckGzip();
+$zbp->StartGzip();
+
 ?>
 var bloghost = "<?php echo $zbp->host; ?>";
 var cookiespath = "<?php echo $zbp->cookiespath; ?>";
