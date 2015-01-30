@@ -3,7 +3,7 @@ require '../../../zb_system/function/c_system_base.php';
 
 require '../../../zb_system/function/c_system_admin.php';
 
-require 'function.php';
+require dirname(__FILE__) . '/function.php';
 $zbp->Load();
 
 $action='root';
@@ -18,6 +18,7 @@ if(GetVars('act')=='save'){
 	$zbp->Config('AppCentre')->enabledcheck=(int)GetVars("app_enabledcheck");
 	$zbp->Config('AppCentre')->checkbeta=(int)GetVars("app_checkbeta");
 	$zbp->Config('AppCentre')->enabledevelop=(int)GetVars("app_enabledevelop");
+	$zbp->Config('AppCentre')->enablegzipapp=(int)GetVars("app_enablegzipapp");
 	$zbp->SaveConfig('AppCentre');
 
 	$zbp->SetHint('good');
@@ -83,6 +84,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                       <span class="note">&nbsp;&nbsp;启用开发者模式可以修改应用信息、导出应用和远程提交应用</span></p></td>
                   <td><input id="app_enabledevelop" name="app_enabledevelop" type="text" value="<?php echo $zbp->Config('AppCentre')->enabledevelop; ?>" class="checkbox"/></td>
                 </tr>
+                <tr height="32">
+                  <td width="30%" align="left"><p><b>· 导出经过GZip压缩的应用包</b><br/>
+                      <span class="note">&nbsp;&nbsp;1.4以下版本不支持应用压缩包导入及导出</span></p></td>
+                  <td><input id="app_enablegzipapp" name="app_enablegzipapp" type="text" value="<?php echo $zbp->Config('AppCentre')->enablegzipapp; ?>" class="checkbox"/></td>
+                </tr>
               </table>
               <hr/>
               <p>
@@ -96,7 +102,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
             <form action="?act=login" method="post">
               <table style="line-height:3em;" width="100%" border="0">
                 <tr height="32">
-                  <th  align="center">开发者请填写您在"APP应用中心"的用户名和密码并点登陆
+                  <th  align="center">如果您是开发者，请在这里输入Z-Blog应用中心的开发者账号和密码，以用于身份验证。
                     </td>
                 </tr>
                 <tr height="32">

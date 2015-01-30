@@ -17,7 +17,6 @@ line-height: 20px;
 * { padding:0; margin:0;}
 
 div, h1, h2, h3, h4, p, form, ul, label, input, textarea, select, img, span{margin:0; padding:0;}
-input, textarea, select{font-family:"微软雅黑","宋体", Arial, Helvetica, sans-serif;}
 table{border-collapse:collapse;}
 a { text-decoration: none;color: #333333;}
 a:hover { color:#d60000;}
@@ -86,7 +85,7 @@ td,th{
 	border:1px solid #E1E1E1;
 	margin:0;
 	padding:3px 5px;
-	text-indent:0.2em;
+	text-indent:0;
 	vertical-align:middle;
 }
 tr img{
@@ -133,12 +132,13 @@ background:#ffffdd;
 
 
 /*左边导航*/
-.left { float:left; width:140px; padding:0px;margin:0 0 0 0;position: absolute;}
+.left { float:left; width:140px; padding:0px;overflow:hidden;margin:0 0 0 0;position: absolute;}
 .left #leftmenu {}
 .left #leftmenu li { float:left; width:140px; height:32px; margin-bottom:5px; background:#ededed;cursor:pointer;}
 .left #leftmenu a { float:left;  width:140px; height:32px; line-height:35px;cursor:pointer;}
 .left #leftmenu a:hover { color:#000000; background:#b0cdee;}
-.left #leftmenu span {  float:left;width:90px; height:32px; line-height:32px; padding-right:50px; text-align:right;cursor:pointer;}
+.left #leftmenu span {  float:left;width:auto; height:32px; line-height:32px; 
+text-align:left;cursor:pointer;margin-left:25px;padding-left:22px; }
 
 /*导航高亮*/
 .left #leftmenu .on a,.left #leftmenu #on a:hover { color:#ffffff; background:#3399cc;}
@@ -153,7 +153,6 @@ text-align:left;
 width:105px;
 padding-left:35px;
 padding-right:0px;
-background:url(../image/admin/pointgray.gif) no-repeat 20px 8px;
 overflow:hidden;
 }
 
@@ -164,7 +163,6 @@ height:25px; line-height:25px;
 background:white;
 }
 .left #leftmenu li.sub span.m-now{
-background:url(../image/admin/pointblue.gif) no-repeat 20px 8px;
 font-weight:bold;
 }
 
@@ -212,7 +210,7 @@ background-image: url(../image/common/window_2.png);
 
 #leftmenu li span{
 background-repeat:no-repeat;
-background-position: 100px 8px;
+background-position: 0px 8px;
 }
 #leftmenu li.split{
 height:0px!important;
@@ -281,7 +279,7 @@ form p{padding:0.5em 0  0.5em 0;line-height:1.5em;}
 
 input {
 	padding: 0.25em 0.25em 0.25em 0.25em;
-	border: 1px double #aaaaaa;
+	border: 1px solid #ccc;
 	background-position: bottom;
 	background:#fff;
 	font-size:1em;
@@ -292,14 +290,14 @@ input[type="radio"] {
 }
 select{
 	padding: 0.15em 0.25em 0.20em 0.25em;
-	border: 1px double #aaaaaa;
+	border: 1px solid #ccc;
 	background-position: bottom;
 	background:#fff;
 	font-size:1.0em;
 }
 
 textarea{
-	border: 1px double #aaaaaa;
+	border: 1px solid #ccc;
 	background-position: bottom;
 	background:#fff;
 	font-size:1em;
@@ -327,16 +325,62 @@ input[disabled],input[disabled]:hover{
 input[readonly],input[readonly]:hover{
 	background:#eee;
 	border:1px solid #ccc;
+	color: #808080;
 }
 select.edit{
 	width:300px;
 }
 input.edit{
-	width:300px;
+	width:293px;
+}
+.form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+	width: 100%;
+	margin-bottom: 10px;
+  }
+  .form-group label {
+	padding-top: 7px;
+	margin-bottom: 0;
+	position: relative;
+	min-height: 1px;
+	max-width: 100%;
+	display: inline-block;
+}
+.form-group label.title {
+	padding-top: 7px;
+	width: 12%;
+	float: left;
+	font-weight: bold;
+}
+.form-group label[for="NoRefresh"] {
+	width: 26%;
+}
+.form-group select,
+.form-group input[type="text"], 
+.form-group input[type="number"],
+.form-group input[type="password"],
+.form-group textarea{
+	width: 80%;
+	float: left;
+	position: relative;
+	min-height: 1px;
+	padding-right: 15px;
+	padding-left: 15px;
+	display: block;
+	padding: 6px !important;
+}
+.form-group select{
+	width: 230px;
+}
+.form-group .imgcheck{
+	margin-top: 8px;
+	margin-left: 0px;
 }
 
-#editor_content {width:100%;height:300px;	margin:0 3px;}
-#editor_intro{width:100%;height:150px;	margin:0 3px;}
+#editor_content {width:99%;height:300px;margin:0;padding:0.5em 0.5%}
+#editor_intro{width:99%;height:150px;margin:0;padding:0.5em 0.5%}
 
 /*提示DIV*/
 div.hint{
@@ -389,9 +433,9 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 /*后台编辑页,文章编辑和页面编辑*/
 #divEditRight{
 	float:right;
-	width:260px;
+	width:270px;
 	text-align:right;
-	margin-left:-260px
+	margin-left:-270px
 }
 #divEditPost{
 	margin-top: 30px;
@@ -401,9 +445,15 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 	width:100%;
 }
 
+/*文章编辑提交区随动*/
+#divBox { width:270px; position:relative;}
+#divFloat { width:258px;}
+#divFloat input.button{	margin:0.2em 0;}
+.boxfloat{position: fixed;_position: absolute;top: 0px;z-index: 295;}
+
 .editmod2{
-	margin:1em 0;
-	padding-right:265px;
+	margin: 0.2em 0;
+	padding-right: 275px;
 }
 #divIntro{
 	padding-bottom:20px;
@@ -411,9 +461,10 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 .editmod{
 	margin:1em 0;
 }
-#cheader,#carea{
-	margin:.5em 0;
+.editmod3{
+	margin:0;
 }
+
 .editinputname{
 	padding:0 2px 0 3px;
 	line-height:1em;
@@ -424,7 +475,8 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 div.post_edit input#edtTitle{
 	margin: 5px 3px 0 3px;
 	padding: 3px;
-	line-height: 1.8;
+	line-height: 1.8em;
+	height: 1.8em;
 	font-size: 1.2em;
 	width: 99%;
 	color:#333;
@@ -432,7 +484,7 @@ div.post_edit input#edtTitle{
 div.post_edit input#edtAlias, input#edtTag{
 	margin-top: 5px;
 	padding: 3px;
-	width: 70%;
+	width: 50%;
 }
 #ulTag{
 	margin:0 3em;
@@ -529,8 +581,9 @@ span.title{
 	font-weight:bold;
 }
 span.star{
+	display: inline-block;	
+	margin: 6px;
 	color:red;
-	font-size:0.9em;
 }
 span.note{
 	font-size:0.9em;
@@ -681,20 +734,16 @@ span.note{
 	font-size:1.0em;
 }
 
-/*文章编辑提交区随动*/
-#divBox { width:260px; position:relative;}
-#divFloat { width:248px;}
-#divFloat input.button{	margin:0.2em 0;}
-.boxfloat{position: fixed;_position: absolute;top: 0px;z-index: 295;}
 
-a.button{
+span.button{cursor: pointer;}
+a.button,span.button{
 	border-radius:2px;
 	padding:2px 3px 2px 3px;
 	line-height: 1.0em;
 	font-size:1em;
 }
 
-a.button:hover{
+a.button:hover,span.button:hover{
 	box-shadow: 0 0 1px #000;
 	border-radius:2px;
 	-ms-border-radius:2px;
@@ -734,8 +783,24 @@ a.button:hover{
 /*.custom-state-active{background: #B5DCF0;}*/
 .siderbar-list .roll {display:none;}
 
-
+#dialog-confirm,#dialog-form{display:none;}
+#dialog-form form{padding-left: 10px;}
 
 .edui-default .edui-editor {
 	width:100%!important;
 }
+.plugin-note{
+	cursor: pointer;
+}
+#loading {
+    display:none;
+    position:fixed;
+    z-index:1000;
+    top:0;
+    left:0;
+    height:100%;
+    width:100%;
+    background:rgba(170, 170, 170,.3) url('../image/admin/loading-big.gif') 50% 50% no-repeat;
+}
+.login { height:100px; margin:0 auto; padding-left:10px;}
+.login dd { width:180px; float:left;}

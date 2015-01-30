@@ -19,7 +19,6 @@
 # Update
 /update/*.xml
 /update/Release/
-/update/*/*
 
 # Plugin cache
 /zb_users/plugin/SQLLog/logs/*.php
@@ -67,8 +66,9 @@
 !/zb_users/theme/default
 !/zb_users/theme/HTML5CSS3
 !/zb_users/theme/metro
-!/zb_users/theme/garland
+!/zb_users/theme/clear
 !/zb_users/theme/x2013
+!/zb_users/theme/WhitePage
 
 # Rules
 .htaccess
@@ -84,3 +84,5 @@ test.php
 phpinfo.php
 /phpMyAdmin/
 /abc/
+wincache.php
+/Beta/

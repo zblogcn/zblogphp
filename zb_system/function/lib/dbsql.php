@@ -19,7 +19,7 @@ interface iDataBase {
 
 	public function Delete($query);
 
-	public function QueryMulit($s);
+	public function QueryMulti($s);
 
 	public function EscapeString($s);
 
@@ -41,20 +41,20 @@ interface iDataBase {
 class DbSql
 {
 	/**
-	* @var null|string 数据库连接类型
-	*/
-	private $type=null;
-	/**
 	* @var null 数据库连接实例
 	*/
 	private $db=null;
+	/**
+	* @var null|string 数据库类型名称
+	*/
+	private $dbclass=null;
 	/**
 	* @param object $db
 	*/
 	function __construct(&$db=null)
 	{
-		$this->db=$db;
-		$this->type=get_class($this->db);
+		$this->db=&$db;
+		$this->dbclass=get_class($this->db);
 	}
 	/**
 	 * 替换数据表前缀
@@ -76,7 +76,7 @@ class DbSql
 
 		$s='';
 		$s="DROP TABLE $table;";
-		if($this->type=='Dbpdo_PgSQL'||$this->type=='DbPgSQL'){
+		if($this->dbclass=='Dbpdo_PgSQL'||$this->dbclass=='DbPgSQL'){
 			$s.="DROP SEQUENCE $table" . "_seq;";
 		}
 		return $s;
@@ -92,16 +92,15 @@ class DbSql
 		$this->ReplacePre($table);
 
 		$s='';
-		if($this->type=='DbSQLite'||$this->type=='DbSQLite3'||$this->type=='Dbpdo_SQLite'){
+		if($this->dbclass=='DbSQLite'||$this->dbclass=='DbSQLite3'){
 			$s="SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='$table'";
 		}
-		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
+		if($this->dbclass=='Dbpdo_MySQL'||$this->dbclass=='DbMySQL'||$this->dbclass=='DbMySQLi'){
 			$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$table'";
 		}
-		if($this->type=='Dbpdo_PgSQL'||$this->type=='DbPgSQL'){
+		if($this->dbclass=='Dbpdo_PgSQL'||$this->dbclass=='DbPgSQL'){
 			$s="SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='public' AND  table_name ='$table'";
 		}
-
 		return $s;
 	}
 
@@ -111,21 +110,21 @@ class DbSql
 	 * @param array $datainfo
 	 * @return string
 	*/
-	public function CreateTable($table,$datainfo){
+	public function CreateTable($table,$datainfo,$engine=null){
 	
 		reset($datainfo);
 		$idname=GetValueInArrayByCurrent($datainfo,0);
 
 		$s='';
 
-		if($this->type=='DbSQLite' || $this->type=='DbSQLite3' || $this->type=='Dbpdo_SQLite'){
+		if($this->dbclass=='DbSQLite' || $this->dbclass=='DbSQLite3' || $this->dbclass=='Dbpdo_SQLite'){
 			$s.='CREATE TABLE '.$table.' (';
 
 			$i=0;
 			foreach ($datainfo as $key => $value) {
 				if($value[1]=='integer'){
 					if($i==0){
-						$s.=$value[0] .' integer primary key' . ($this->type=='DbSQLite'?'':' autoincrement') . ',';
+						$s.=$value[0] .' integer primary key' . ($this->dbclass=='DbSQLite'?'':' autoincrement') . ',';
 					}else{
 						$s.=$value[0] .' integer NOT NULL DEFAULT \''.$value[3].'\'' . ',';
 					}
@@ -149,7 +148,7 @@ class DbSql
 				if($value[1]=='double'||$value[1]=='float'){
 					$s.=$value[0] . " $value[1] NOT NULL DEFAULT 0" . ',';
 				}
-				if($value[1]=='date'||$value[1]=='time'||$value[1]=='datetime'){
+				if($value[1]=='date'||$value[1]=='datetime'){
 					$s.=$value[0] . " $value[1] NOT NULL,";
 				}
 				if($value[1]=='timestamp'){
@@ -163,7 +162,7 @@ class DbSql
 
 		}
 
-		if($this->type=='Dbpdo_MySQL'||$this->type=='DbMySQL'||$this->type=='DbMySQLi'){
+		if($this->dbclass=='Dbpdo_MySQL'||$this->dbclass=='DbMySQL'||$this->dbclass=='DbMySQLi'){
 			$s.='CREATE TABLE IF NOT EXISTS '.$table.' (';
 
 			$i=0;
@@ -222,10 +221,13 @@ class DbSql
 			}
 			$s.='PRIMARY KEY ('.$idname.'),';
 			$s=substr($s,0,strlen($s)-1);
-			$s.=') ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
+			$myengtype=$this->db->dbengine;
+			if($engine!=null)$myengtype=$engine;
+			if(!$myengtype)$myengtype='MyISAM';
+			$s.=') ENGINE=' . $myengtype . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
 		}
 
-		if($this->type=='Dbpdo_PgSQL'||$this->type=='DbPgSQL'){
+		if($this->dbclass=='Dbpdo_PgSQL'||$this->dbclass=='DbPgSQL'){
 			$s.='CREATE SEQUENCE ' . $table . '_seq;';
 			$s.='CREATE TABLE '.$table.' (';
 
@@ -285,8 +287,8 @@ class DbSql
 			}
 			$s.='PRIMARY KEY ('.$idname.'),';
 			$s=substr($s,0,strlen($s)-1);
-
-			$s.=');';
+			
+			$s.=')';
 			$s.='CREATE INDEX ' . $table . '_ix_id on ' . $table .'('.$idname.');';
 		}
 		
@@ -317,7 +319,7 @@ class DbSql
 		$comma = '';
 		foreach($where as $k => $w) {
 			$eq=strtoupper($w[0]);
-			if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='|$eq=='NOT LIKE'){
+			if($eq=='='|$eq=='<'|$eq=='>'|$eq=='LIKE'|$eq=='<>'|$eq=='<='|$eq=='>='|$eq=='NOT LIKE'|$eq=='ILIKE'|$eq=='NOT ILIKE'){
 				$x = (string)$w[1];
 				$y = (string)$w[2];
 				$y = $this->db->EscapeString($y);
@@ -398,7 +400,7 @@ class DbSql
 						$c=',';
 					}
 				}
-				$sqlw .= $comma .  '('. $w[1] .' '. $eq .' (' . $sql_array . ')) ';
+				$sqlw .= $comma .  ' '. $w[1] .' '. $eq .' (' . $sql_array . ') ';
 			}
 			if($eq=='META_NAME'){
 				if(count($w)!=3)continue;
@@ -409,12 +411,19 @@ class DbSql
 				$sqlw .= $comma .  '(' . $sql_array . ') ';
 			}
 			if($eq=='META_NAMEVALUE'){
-				if(count($w)!=4)continue;
-				$sql_array='';
-				$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";' . 's:' . strlen($w[3]) . ':"'.$w[3].'";';	
-				$sql_meta=$this->db->EscapeString($sql_meta);
-				$sql_array .= "$w[1] LIKE '%$sql_meta%'";
-				$sqlw .= $comma .  '(' . $sql_array . ') ';
+				if(count($w)==4){
+					$sql_array='';
+					$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";' . 's:' . strlen($w[3]) . ':"'.$w[3].'"';	
+					$sql_meta=$this->db->EscapeString($sql_meta);
+					$sql_array .= "$w[1] LIKE '%$sql_meta%'";
+					$sqlw .= $comma .  '(' . $sql_array . ') ';
+				}elseif(count($w)==5){
+					$sql_array='';
+					$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";' . $w[3];	
+					$sql_meta=$this->db->EscapeString($sql_meta);
+					$sql_array .= "$w[1] LIKE '%$sql_meta%'";
+					$sqlw .= $comma .  '(' . $sql_array . ') ';
+				}
 			}
 			if($eq=='CUSTOM'){
 				$sqlw .= $comma . ' ' . $w[1] . ' ';
@@ -435,31 +444,110 @@ class DbSql
 	 * @param array|null $option
 	 * @return string 返回构造的语句
 	 */
-	public function Select($table,$select,$where,$order,$limit,$option=null){
+	public function Select($table,$select=null,$where=null,$order=null,$limit=null,$option=null){
 		$this->ReplacePre($table);
-	
+
+		$sqlp='SELECT ';
 		$sqls='';
 		$sqlw='';
+		$sqlg='';
+		$sqlh='';
 		$sqlo='';
 		$sqll='';
-
-		if(!empty($select)){
-			if(is_array($select)){
-				$selectstr=implode($select,',');
-				if(trim($selectstr)=='')$selectstr='*';
-				$sqls="SELECT $selectstr FROM $table ";
-			}else{
-				if(trim($sqls)=='')$sqls='*';
-				$sqls="SELECT $select FROM $table ";
-			}
-		}else{
-				$sqls="SELECT * FROM $table ";
+		
+		if(is_array($option)==false)$option=array();
+		$option=array_change_key_case($option);
+		
+		if(isset($option['sql_no_cache'])){
+			$sqlp.= 'SQL_NO_CACHE ';
+		}
+		if(isset($option['sql_cache'])){
+			$sqlp.= 'SQL_CACHE ';
+		}
+		if(isset($option['sql_buffer_result'])){
+			$sqlp.= 'SQL_BUFFER_RESULT ';
 		}
 
-		if(isset($option['changewhere'])){
-			$sqlw=$this->ParseWhere($where,$option['changewhere']);
+		if(isset($option['select2count'])){
+			$sqls = $sqlp;
+			if(is_array($select)) {
+				foreach ($select as $key => $value) {
+					if(count($value)==3)
+						$sqls .= "$value[0]($value[1]) AS $value[2],";
+					if(count($value)==2)
+						$sqls .= "$value[0]($value[1]),";
+				}
+				$sqls=substr($sqls, 0,strlen($sqls)-1);
+			}else{
+				$sqls .= $select;
+			}
 		}else{
-			$sqlw=$this->ParseWhere($where);
+			if(!empty($select)){
+				if(is_array($select)){
+					$selectstr=implode($select,',');
+					if(trim($selectstr)=='')$selectstr='*';
+					$sqls="{$sqlp} {$selectstr} ";
+				}else{
+					if(trim($sqls)=='')$sqls='*';
+					$sqls="{$sqlp} {$select} ";
+				}
+			}else{
+				$sqls="{$sqlp} *";
+			}
+		}
+		$sqls .= " FROM $table ";
+
+		if(isset($option['useindex'])){
+			if(is_array($option['useindex'])){
+				$sqls.='USE INDEX ('.implode($option['useindex'],',').') ';
+			}else{
+				$sqls.='USE INDEX ('.$option['useindex'].') ';
+			}
+		}
+		if(isset($option['forceindex'])){
+			if(is_array($option['forceindex'])){
+				$sqls.='FORCE INDEX ('.implode($option['forceindex'],',').') ';
+			}else{
+				$sqls.='FORCE INDEX ('.$option['forceindex'].') ';
+			}
+		}
+		if(isset($option['ignoreindex'])){
+			if(is_array($option['ignoreindex'])){
+				$sqls.='IGNORE INDEX ('.implode($option['ignoreindex'],',').') ';
+			}else{
+				$sqls.='IGNORE INDEX ('.$option['ignoreindex'].') ';
+			}
+		}
+
+		if(!empty($where)){
+			if(isset($option['changewhere'])){
+				$sqlw=$this->ParseWhere($where,$option['changewhere']);
+			}else{
+				$sqlw=$this->ParseWhere($where);
+			}
+		}
+		
+		if(isset($option['groupby'])){
+			$sqlg=' GROUP BY ';
+			$comma = '';
+			if(!is_array($option['groupby'])){
+				$sqlg .= $option['groupby'];
+			}else{
+				foreach($option['groupby'] as $k=>$v) {
+					$sqlg .= $comma ."$v";
+					$comma = ',';
+				}
+			}
+		}
+
+		if(isset($option['having'])){
+			$sqlh=' HAVING ';
+			$comma = '';
+			if(!is_array($option['having'])){
+				$sqlh .= $option['having'];
+			}else{
+				$sqlh .= $this->ParseWhere($option['having'],'');
+			}
 		}
 
 		if(!empty($order)){
@@ -498,7 +586,7 @@ class DbSql
 				$option['pagebar']->make();
 			}
 		}
-		return $sqls . $sqlw . $sqlo . $sqll;
+		return $sqls . $sqlw . $sqlg . $sqlh . $sqlo . $sqll;
 	}
 
 	/**
@@ -509,27 +597,13 @@ class DbSql
 	 * @param null $option
 	 * @return string 返回构造的语句
 	 */
-	public function Count($table,$count,$where,$option=null){
+	public function Count($table,$count,$where=null,$option=null){
 		$this->ReplacePre($table);
 
-		$sqlc="SELECT ";
+		if(is_array($option)==false)$option=array();
+		$option['select2count']=true;
 
-		if(!empty($count)) {
-			foreach ($count as $key => $value) {
-				$sqlc.=" $value[0]($value[1]) AS $value[2],";
-			}
-		}
-		$sqlc=substr($sqlc, 0,strlen($sqlc)-1);
-
- 		$sqlc.=" FROM $table ";
-
-		if(isset($option['changewhere'])){
-			$sqlw=$this->ParseWhere($where,$option['changewhere']);
-		}else{
-			$sqlw=$this->ParseWhere($where);
-		}
-
-		return $sqlc . $sqlw;
+		return $this->Select($table,$count,$where,null,null,$option);
 	}
 
 	/**
@@ -624,5 +698,43 @@ class DbSql
 		}
 		//Logs($sql);
 		return $sql;
+	}
+
+	/**
+	 * 导出sql生成语句，用于备份数据用。
+	 * @param $type 数据连接类型
+	 * @return mixed
+	 */
+	private $_explort_db = null;
+	public function Export($table,$keyvalue,$type='mysql'){
+
+		if($type=='mysql' && $this->_explort_db === null)$this->_explort_db= new DbMySQL;
+		if($type=='mysqli' && $this->_explort_db === null)$this->_explort_db= new DbMySQLi;
+		if($type=='pdo_mysql' && $this->_explort_db === null)$this->_explort_db= new Dbpdo_MySQL;
+		if($type=='sqlite' && $this->_explort_db === null)$this->_explort_db= new DbSQLite;
+		if($type=='sqlite3' && $this->_explort_db === null)$this->_explort_db= new DbSQLite3;
+		if($type=='pdo_sqlite' && $this->_explort_db === null)$this->_explort_db= new Dbpdo_SQLite;
+		if($this->_explort_db === null)$this->_explort_db= new DbMySQL;
+		$sql="INSERT INTO $table ";
+
+		$sql.='(';
+		$comma = '';
+		foreach($keyvalue as $k => $v) {
+			if(is_null($v))continue;
+			$sql.= $comma . "$k";
+			$comma = ',';
+		}
+		$sql.=')VALUES(';
+
+		$comma = '';
+		foreach($keyvalue as $k => $v) {
+			if(is_null($v))continue;
+			$v=$this->_explort_db->EscapeString($v);
+			$sql.= $comma . "'$v'";
+			$comma = ',';
+		}
+		$sql.=')';
+		
+		return  $sql . ";\r\n";
 	}
 }

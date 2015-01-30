@@ -36,20 +36,39 @@ function AutoloadClass($classname){
 		$fpreturn=$fpname($classname);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 	}
-	if (is_readable($f=dirname(__FILE__) . '/lib/' . strtolower($classname) .'.php'))
+	if (is_readable($f=ZBP_PATH . 'zb_system/function/lib/' . strtolower($classname) .'.php'))
 		require $f;
 }
 
 /**
  * 记录日志
  * @param string $s
+ * @param bool $iserror
  */
-function Logs($s) {
+function Logs($s,$iserror=false) {
 	global $zbp;
-	$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
-	$handle = @fopen($f, 'a+');
-	@fwrite($handle, "[" . date('c') . "~" . current(explode(" ", microtime())) . "]" . "\r\n" . $s . "\r\n");
-	@fclose($handle);
+	foreach ($GLOBALS['Filter_Plugin_Logs'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($s,$iserror);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+	}
+	if($zbp->guid){
+		if($iserror)
+			$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-error' . date("Ymd") . '.txt';
+		else
+			$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
+	}else{
+		if($iserror)
+			$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '-error.txt';
+		else
+			$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '.txt';
+	}
+	ZBlogException::SuspendErrorHook();
+	if($handle = @fopen($f, 'a+')){
+		$t=date('Y-m-d') . ' ' . date('H:i:s') . ' ' . substr(microtime(),1,9) . ' ' . date('P');
+		@fwrite($handle, '[' . $t . ']' . "\r\n" . $s . "\r\n");
+		@fclose($handle);
+	}
+	ZBlogException::ResumeErrorHook();
 }
 
 /**
@@ -68,9 +87,12 @@ function RunTime() {
 		$rt['memory']=(int)((memory_get_usage()-$_SERVER['_memory_usage'])/1024);
 	}
 	
-	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false)return $rt;
+	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false){
+		$_SERVER['_runtime_result']=$rt;
+		return $rt;
+	}
 
-	echo '<!--' . $rt['time'] . 'ms , ';
+	echo '<!--' . $rt['time'] . ' ms , ';
 	echo  $rt['query'] . ' query';
 	if(function_exists('memory_get_usage'))
 		echo ' , ' . $rt['memory'] . 'kb memory';
@@ -87,12 +109,13 @@ function RunTime() {
 function GetEnvironment(){
 	global $zbp;
 	$ajax = Network::Create();
-	if($ajax) $ajax=substr(get_class($ajax),7);
+	if ($ajax) $ajax = substr(get_class($ajax), 7);
 	
-	$system_environment = PHP_OS . ';' . 
-							GetValueInArray(explode(' ',str_replace(array('Microsoft-','/'),array('',''),GetVars('SERVER_SOFTWARE', 'SERVER'))),0) . ';' .
-							'PHP' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'] . ';' .
-							$ajax ;
+	$system_environment = PHP_OS . '; ' . 
+							GetValueInArray(
+								explode(' ',str_replace(array('Microsoft-','/'), array('',''), GetVars('SERVER_SOFTWARE', 'SERVER'))), 0
+							) . '; ' .
+							'PHP ' . phpversion() . '; ' . $zbp->option['ZC_DATABASE_TYPE'] . '; ' . 	$ajax ;
 	return $system_environment;
 }
 
@@ -227,6 +250,7 @@ function GetDbName() {
  */
 function GetCurrentHost($blogpath,&$cookiespath) {
 
+	$host='';
 	if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
 		if ($_SERVER['REQUEST_SCHEME'] == 'https') {
 			$host = 'https://';
@@ -245,8 +269,12 @@ function GetCurrentHost($blogpath,&$cookiespath) {
 
 	$host .= $_SERVER['HTTP_HOST'];
 
-	$y = $blogpath;
 	$x = $_SERVER['SCRIPT_NAME'];
+	$y = $blogpath;
+	if(isset($_SERVER["CONTEXT_DOCUMENT_ROOT"]) && isset($_SERVER["CONTEXT_PREFIX"]))
+		if($_SERVER["CONTEXT_DOCUMENT_ROOT"] && $_SERVER["CONTEXT_PREFIX"]){
+			$y= $_SERVER["CONTEXT_DOCUMENT_ROOT"] . $_SERVER["CONTEXT_PREFIX"] . '/';
+		}
 	$z = '';
 
 	for ($i = strlen($x); $i > 0; $i--) {
@@ -323,7 +351,7 @@ function GetDirsInDir($dir) {
 	$dirs = array();
 
 	if (function_exists('scandir')) {
-		foreach (scandir($dir) as $d) {
+		foreach (scandir($dir,0) as $d) {
 			if (is_dir($dir . $d)) {
 				if (($d <> '.') && ($d <> '..')) {
 					$dirs[] = $d;
@@ -763,16 +791,16 @@ function CheckRegExp($source, $para) {
 	if (strpos($para, '[username]') !== false) {
 		$para = "/^[\.\_A-Za-z0-9·\x{4e00}-\x{9fa5}]+$/u";
 	}
-	if (strpos($para, '[password]') !== false) {
+	elseif (strpos($para, '[password]') !== false) {
 		$para = "/^[A-Za-z0-9`~!@#\$%\^&\*\-_]+$/u";
 	}
-	if (strpos($para, '[email]') !== false) {
+	elseif (strpos($para, '[email]') !== false) {
 		$para = "/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*\.)+[a-zA-Z]*)$/u";
 	}
-	if (strpos($para, '[homepage]') !== false) {
+	elseif (strpos($para, '[homepage]') !== false) {
 		$para = "/^[a-zA-Z]+:\/\/[a-zA-Z0-9\_\-\.\&\?\/:=#\x{4e00}-\x{9fa5}]+$/u";
 	}
-	if (!$para)
+	elseif (!$para)
 		return false;
 
 	return (bool)preg_match($para, $source);
@@ -869,6 +897,28 @@ function CloseTags($html) {
 
 	return $html;
 
+}
+
+/**
+ *  获取UTF8格式的字符串的子串
+ * @param string $sourcestr 源字符串
+ * @param int $start 起始位置
+ * @param int $cutlength 子串长度
+ * @return string 
+*/
+function SubStrUTF8_Start($sourcestr, $start, $cutlength) {
+	if( function_exists('mb_substr') && function_exists('mb_internal_encoding') ){
+		mb_internal_encoding('UTF-8');
+		return mb_substr($sourcestr, $start, $cutlength);
+	}
+
+	if( function_exists('iconv_substr') && function_exists('iconv_set_encoding') ){
+		iconv_set_encoding ( "internal_encoding" ,  "UTF-8" );
+		iconv_set_encoding ( "output_encoding" ,  "UTF-8" );
+		return iconv_substr($sourcestr, $start, $cutlength);
+	}
+	
+	return substr($sourcestr, $start, $cutlength);
 }
 
 /**
@@ -1008,4 +1058,14 @@ function htmlspecialchars_array($array) {
 
 	return $array;
 
+}
+
+/**
+ * 获得一个只含数字字母和_线的string
+ * @param string $s 待过滤字符串
+ * @return s 
+ * @since 1.4
+ */
+function FilterCorrectName($s) {
+	return preg_replace('|[^0-9a-zA-Z_]|','',$s);
 }

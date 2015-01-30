@@ -1,7 +1,7 @@
 <?php
 require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
-require 'function.php';
+require dirname(__FILE__) . '/function.php';
 $zbp->Load(); $action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('tpluginmaker')) {$zbp->ShowError(48);die();}

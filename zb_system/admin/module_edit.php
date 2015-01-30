@@ -53,8 +53,6 @@ if(isset($_GET['source'])){
 
 	$mod =$array[0];
 
-
-	//'$mod=
 }else{
 	if(isset($_GET['id'])){$modid = (integer)GetVars('id','GET');}else{$modid = 0;}
 
@@ -126,7 +124,7 @@ if($mod->Source=='theme'){
 			<?php echo $lang['msg']['max_li_in_ul']?>:</span>
 		<br/>
 		<input type="text" name="MaxLi" value="<?php echo $mod->MaxLi;?>" size="40"  /></p>
-	<?php
+<?php
 if($mod->FileName=='catalog'){
 ?>
 	<p>
@@ -155,7 +153,7 @@ if($mod->FileName=='catalog'){
 		<br />
 		<textarea name="Content" id="Content"  cols="80" rows="12"  ><?php echo htmlspecialchars($mod->Content);?></textarea>
 	</p>
-	<p >
+	<p <?php echo $ishide?>>
 		<span class='title'>
 			<?php echo $lang['msg']['no_refresh_content']?>:</span>
 		<input type="text" id="NoRefresh" name="NoRefresh" class="checkbox" value="<?php echo $mod->NoRefresh;?>"/></p>

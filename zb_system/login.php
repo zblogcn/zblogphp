@@ -30,8 +30,8 @@ foreach ($GLOBALS['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {$fpna
     <form method="post" action="#">
     <dl>
       <dt></dt>
-      <dd class="username"><label for="edtUserName"><?php echo $lang['msg']['username']?>:</label><input type="text" id="edtUserName" name="edtUserName" size="20" value="<?php echo GetVars('username','COOKIE')?>" tabindex="1" /></dd>
-      <dd class="password"><label for="edtPassWord"><?php echo $lang['msg']['password']?>:</label><input type="password" id="edtPassWord" name="edtPassWord" size="20" tabindex="2" /></dd>
+      <dd class="username"><label for="edtUserName"><?php echo $lang['msg']['username']?></label><input type="text" id="edtUserName" name="edtUserName" size="20" value="<?php echo GetVars('username','COOKIE')?>" tabindex="1" /></dd>
+      <dd class="password"><label for="edtPassWord"><?php echo $lang['msg']['password']?></label><input type="password" id="edtPassWord" name="edtPassWord" size="20" tabindex="2" /></dd>
     </dl>
     <dl>
       <dt></dt>

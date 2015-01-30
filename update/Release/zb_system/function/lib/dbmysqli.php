@@ -7,20 +7,23 @@
  */
 class DbMySQLi implements iDataBase {
 
+	public $type = 'mysql';
+
 	/**
-	* @var string|null SQL语句分隔符
-	*/
+	 * @var string|null 数据库名前缀
+	 */
 	public $dbpre = null;
-	/**
-	* @var string|null 数据库服务器
-	*/
-	private $db = null;
+	private $db = null; #数据库连接实例
 	/**
 	* @var string|null 数据库名
 	*/
 	public $dbname = null;
 	/**
-	* @var DbSql|null 
+	* @var string|null 数据库引擎
+	*/
+	public $dbengine = null;	
+	/**
+	* @var DbSql|null DbSql实例
 	*/
 	public $sql=null;
 	/**
@@ -32,27 +35,29 @@ class DbMySQLi implements iDataBase {
 	}
 
 	/**
-	* @param $s
-	* @return string
-	*/
+	 * 对字符串进行转义，在指定的字符前添加反斜杠，即执行addslashes函数
+	 * @param string $s
+	 * @return string
+	 */
 	public function EscapeString($s){
 		return addslashes($s);
 	}
 
 	/**
-	* @param $array
-	* @return bool
-	*/
+	 * 连接数据库
+	 * @param array $array 数据库连接配置
+	 *              $array=array(
+	 *                  'dbmysql_server',
+	 *                  'dbmysql_username',
+	 *                  'dbmysql_password',
+	 *                  'dbmysql_name',
+	 *                  'dbmysql_pre',
+	 *                  'dbmysql_port',
+	 *                  'persistent'
+						'engine')
+	 * @return bool
+	 */
 	function Open($array){
-		/*$array=array(
-			'dbmysql_server',
-			'dbmysql_username',
-			'dbmysql_password',
-			'dbmysql_name',
-			'dbmysql_pre',
-			'dbmysql_port',
-			'persistent'
-		*/
 		$db = mysqli_init(); 
 
 		if($array[6]==true){
@@ -65,16 +70,19 @@ class DbMySQLi implements iDataBase {
 		$this->db=$db;
 		$this->dbname=$array[3];
 		$this->dbpre=$array[4];
+		$this->dbengine = $array[7];
 		return true;
 	}
 
 	/**
-	* @param string $dbmysql_server
-	* @param string $dbmysql_port
-	* @param string $dbmysql_username
-	* @param string $dbmysql_password
-	* @param string $dbmysql_name
-	*/
+	 * 创建数据库
+	 * @param string $dbmysql_server
+	 * @param string $dbmysql_port
+	 * @param string $dbmysql_username
+	 * @param string $dbmysql_password
+	 * @param string $dbmysql_name
+	 * @return bool
+	 */
 	function CreateDB($dbmysql_server,$dbmysql_port,$dbmysql_username,$dbmysql_password,$dbmysql_name){
 		$db = @mysqli_connect($dbmysql_server, $dbmysql_username, $dbmysql_password, null,$dbmysql_port);
 		$this->db = $db;
@@ -95,18 +103,20 @@ class DbMySQLi implements iDataBase {
 	}
 	
 	/**
-	* 关闭数据库连接
-	*/
+	 * 关闭数据库连接
+	 */
 	function Close(){
-		if(is_resource($this->db))
+		if(is_object($this->db))
 			mysqli_close($this->db);
 	}
 
 	/**
-	* 拼接SQL语句
-	* @param $s 
-	*/
-	function QueryMulit($s){
+	 * 执行多行SQL语句
+	 * @param string $s 以;号分隔的多条SQL语句
+	 * @return array
+	 */
+	function QueryMulit($s){return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
+	function QueryMulti($s){
 		//$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		$a=explode(';',$s);
 		foreach ($a as $s) {
@@ -118,9 +128,9 @@ class DbMySQLi implements iDataBase {
 	}
 
 	/**
-	* @param $query
-	* @return array
-	*/
+	 * @param $query
+	 * @return array
+	 */
 	function Query($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		$results = mysqli_query($this->db,$this->sql->Filter($query));
@@ -151,27 +161,27 @@ class DbMySQLi implements iDataBase {
 	}
 
 	/**
-	* @param $query
-	* @return bool|mysqli_result
-	*/
+	 * @param $query
+	 * @return bool|mysqli_result
+	 */
 	function Update($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		return mysqli_query($this->db,$this->sql->Filter($query));
 	}
 
 	/**
-	* @param $query
-	* @return bool|mysqli_result
-	*/
+	 * @param $query
+	 * @return bool|mysqli_result
+	 */
 	function Delete($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		return mysqli_query($this->db,$this->sql->Filter($query));
 	}
 
 	/**
-	* @param $query
-	* @return int|string
-	*/
+	 * @param $query
+	 * @return int|string
+	 */
 	function Insert($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		mysqli_query($this->db,$this->sql->Filter($query));
@@ -179,16 +189,16 @@ class DbMySQLi implements iDataBase {
 	}
 
 	/**
-	* @param $table
-	* @param $datainfo
-	*/
-	function CreateTable($table,$datainfo){
+	 * @param $table
+	 * @param $datainfo
+	 */
+	function CreateTable($table,$datainfo,$engine=null){
 		$this->QueryMulit($this->sql->CreateTable($table,$datainfo));
 	}
 
 	/**
-	* @param $table
-	*/
+	 * @param $table
+	 */
 	function DelTable($table){
 		$this->QueryMulit($this->sql->DelTable($table));
 	}

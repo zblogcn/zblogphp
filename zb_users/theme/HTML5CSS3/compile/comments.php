@@ -7,9 +7,9 @@
   <dt>留言列表</dt>
   <dd>
 <label id="AjaxCommentBegin"></label>
-<?php  foreach ( $comments as $key => $comment) { ?> 
+<?php  foreach ( $comments as $key => $comment) { ?>
 <?php  include $this->GetTemplate('comment');  ?>
-<?php  }   ?>
+<?php }   ?>
 
 <!--评论翻页条输出-->
 <nav>

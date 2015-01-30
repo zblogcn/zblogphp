@@ -29,26 +29,29 @@ class Base{
 	*/
 	protected $db = null;
 	
-	
+	protected static $datainfo_entity  =  null;
 	/**
 	* @param string $table 数据表
 	* @param array $datainfo 数据表结构信息
 	*/
-	function __construct(&$table,&$datainfo,&$db = null){
-			if($db !== null){
-				$this->db = &$db;
-			}else{
-				$zbp = ZBlogPHP::GetInstance();
-				$this->db = &$zbp->db;				
-			}
+	function __construct(&$table, &$datainfo, &$db = null, $hasmetas = true){
 
-			$this->table=&$table;
-			$this->datainfo=&$datainfo;
+		if($db !== null)
+			$this->db = &$db;
+		else
+			$this->db = &$GLOBALS['zbp']->db;
 
-		$this->Metas=new Metas;
+		$this->table=&$table;
+		$this->datainfo=&$datainfo;
 
-		foreach ($this->datainfo as $key => $value) {
-			$this->data[$key]=$value[3];
+		if(true==$hasmetas)$this->Metas=new Metas;
+
+		if( self::$datainfo_entity !== null )
+			$this->data = self::$datainfo_entity;
+		else{
+			foreach ($this->datainfo as $key => $value)
+				$this->data[$key]=$value[3];
+			self::$datainfo_entity = $this->data;
 		}
 	}
 
@@ -141,6 +144,7 @@ class Base{
 			}elseif($value[1] == 'string'){
 				if($key=='Meta'){
 					$this->data[$key]=$array[$value[0]];
+					$this->Metas->Unserialize($this->data['Meta']);
 				}else{
 					$this->data[$key]=str_replace('{#ZC_BLOG_HOST#}',$bloghost,$array[$value[0]]);
 				}
@@ -148,7 +152,6 @@ class Base{
 				$this->data[$key]=$array[$value[0]];
 			}
 		}
-		if(isset($this->data['Meta']))$this->Metas->Unserialize($this->data['Meta']);
 		return true;
 	}
 
@@ -167,6 +170,7 @@ class Base{
 			}elseif($value[1] == 'string'){
 				if($key=='Meta'){
 					$this->data[$key]=$array[$i];
+					if(isset($this->data['Meta']))$this->Metas->Unserialize($this->data['Meta']);
 				}else{
 					$this->data[$key]=str_replace('{#ZC_BLOG_HOST#}',$bloghost,$array[$i]);
 				}
@@ -175,7 +179,6 @@ class Base{
 			}
 			$i += 1;
 		}
-		if(isset($this->data['Meta']))$this->Metas->Unserialize($this->data['Meta']);
 		return true;
 	}
 

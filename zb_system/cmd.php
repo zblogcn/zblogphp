@@ -52,6 +52,7 @@ switch ($action) {
 		}
 		PostComment();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		if(GetVars('isajax','POST')){
 			die();
 		}else{
@@ -69,6 +70,7 @@ switch ($action) {
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelArticle();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=ArticleMng');
 		break;
@@ -78,6 +80,7 @@ switch ($action) {
 	case 'ArticlePst':
 		PostArticle();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=ArticleMng');
 		break;
@@ -88,6 +91,7 @@ switch ($action) {
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelPage();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=PageMng');
 		break;
@@ -97,6 +101,7 @@ switch ($action) {
 	case 'PagePst':
 		PostPage();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=PageMng');
 		break;
@@ -109,6 +114,7 @@ switch ($action) {
 	case 'CategoryPst':
 		PostCategory();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=CategoryMng');
 		break;
@@ -116,6 +122,7 @@ switch ($action) {
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelCategory();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=CategoryMng');
 		break;
@@ -123,6 +130,7 @@ switch ($action) {
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelComment();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect($_SERVER["HTTP_REFERER"]);
 		break;
@@ -130,6 +138,7 @@ switch ($action) {
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		CheckComment();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect($_SERVER["HTTP_REFERER"]);
 		break;
@@ -137,6 +146,7 @@ switch ($action) {
 		if(isset($_POST['id'])==false)Redirect($_SERVER["HTTP_REFERER"]);
 		BatchComment();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect($_SERVER["HTTP_REFERER"]);
 		break;
@@ -156,6 +166,7 @@ switch ($action) {
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		PostMember();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=MemberMng');
 		break;
@@ -163,6 +174,7 @@ switch ($action) {
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		if(DelMember()){
 			$zbp->BuildModule();
+			$zbp->SaveCache();
 			$zbp->SetHint('good');
 		}else{
 			$zbp->SetHint('bad');
@@ -192,6 +204,7 @@ switch ($action) {
 	case 'TagPst':
 		PostTag();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=TagMng');
 		break;
@@ -199,6 +212,7 @@ switch ($action) {
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelTag();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=TagMng');
 		break;
@@ -206,6 +220,7 @@ switch ($action) {
 		if(GetVars('install','GET')){
 			InstallPlugin(GetVars('install','GET'));
 			$zbp->BuildModule();
+			$zbp->SaveCache();
 		}
 		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
 		break;
@@ -214,6 +229,7 @@ switch ($action) {
 		UninstallPlugin(GetVars('name','GET'));
 		DisablePlugin(GetVars('name','GET'));
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=PluginMng');
 		break;
@@ -222,6 +238,7 @@ switch ($action) {
 		$install='&install=';
 		$install .= EnablePlugin(GetVars('name','GET'));
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=PluginMng' . $install);
 		break;
@@ -235,12 +252,14 @@ switch ($action) {
 		$install='&install=';
 		$install .=SetTheme(GetVars('theme','POST'),GetVars('style','POST'));
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=ThemeMng' . $install);
 		break;
 	case 'SidebarSet':
 		SetSidebar();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		break;
 	case 'ModuleEdt':
 		Redirect('admin/module_edit.php?' . GetVars('QUERY_STRING','SERVER'));
@@ -249,6 +268,7 @@ switch ($action) {
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		PostModule();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=ModuleMng');
 		break;
@@ -256,6 +276,7 @@ switch ($action) {
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		DelModule();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=ModuleMng');
 		break;
@@ -269,6 +290,7 @@ switch ($action) {
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
 		SaveSetting();
 		$zbp->BuildModule();
+		$zbp->SaveCache();
 		$zbp->SetHint('good');
 		Redirect('cmd.php?act=SettingMng');
 		break;

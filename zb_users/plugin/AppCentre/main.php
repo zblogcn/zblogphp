@@ -3,7 +3,7 @@ require '../../../zb_system/function/c_system_base.php';
 
 require '../../../zb_system/function/c_system_admin.php';
 
-require 'function.php';
+require dirname(__FILE__) . '/function.php';
 
 $zbp->Load();
 
@@ -48,12 +48,6 @@ Server_Open($method);
 	</script>
 	<script type="text/javascript">ActiveLeftMenu("aAppCentre");</script>
 	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>
-<?php
-if('all' ==$zbp->Config('AppCentre')->apptype)echo '<script type="text/javascript">$("#divAppType").find("button:eq(0)").css("background-color","#e8d853");';
-if('free'==$zbp->Config('AppCentre')->apptype)echo '<script type="text/javascript">$("#divAppType").find("button:eq(1)").css("background-color","#6be354");';
-if('cost'==$zbp->Config('AppCentre')->apptype)echo '<script type="text/javascript">$("#divAppType").find("button:eq(2)").css("background-color","#e85353");';
-?>
-	</script>
   </div>
 </div>
 <?php

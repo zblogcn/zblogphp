@@ -17,7 +17,6 @@ line-height: 20px;
 * { padding:0; margin:0;}
 
 div, h1, h2, h3, h4, p, form, ul, label, input, textarea, select, img, span{margin:0; padding:0;}
-input, textarea, select{font-family:"微软雅黑","宋体", Arial, Helvetica, sans-serif;}
 table{border-collapse:collapse;}
 a { text-decoration: none;color: #333333;}
 a:hover { color:#d60000;}
@@ -133,12 +132,13 @@ background:#ffffdd;
 
 
 /*左边导航*/
-.left { float:left; width:140px; padding:0px;margin:0 0 0 0;position: absolute;}
+.left { float:left; width:140px; padding:0px;overflow:hidden;margin:0 0 0 0;position: absolute;}
 .left #leftmenu {}
 .left #leftmenu li { float:left; width:140px; height:32px; margin-bottom:5px; background:#ededed;cursor:pointer;}
 .left #leftmenu a { float:left;  width:140px; height:32px; line-height:35px;cursor:pointer;}
 .left #leftmenu a:hover { color:#000000; background:#b0cdee;}
-.left #leftmenu span {  float:left;width:90px; height:32px; line-height:32px; padding-right:50px; text-align:right;cursor:pointer;}
+.left #leftmenu span {  float:left;width:auto; height:32px; line-height:32px; 
+text-align:left;cursor:pointer;margin-left:25px;padding-left:22px; }
 
 /*导航高亮*/
 .left #leftmenu .on a,.left #leftmenu #on a:hover { color:#ffffff; background:#3399cc;}
@@ -153,7 +153,6 @@ text-align:left;
 width:105px;
 padding-left:35px;
 padding-right:0px;
-background:url(../image/admin/pointgray.gif) no-repeat 20px 8px;
 overflow:hidden;
 }
 
@@ -164,7 +163,6 @@ height:25px; line-height:25px;
 background:white;
 }
 .left #leftmenu li.sub span.m-now{
-background:url(../image/admin/pointblue.gif) no-repeat 20px 8px;
 font-weight:bold;
 }
 
@@ -212,7 +210,7 @@ background-image: url(../image/common/window_2.png);
 
 #leftmenu li span{
 background-repeat:no-repeat;
-background-position: 100px 8px;
+background-position: 0px 8px;
 }
 #leftmenu li.split{
 height:0px!important;
@@ -381,8 +379,8 @@ input.edit{
 	margin-left: 0px;
 }
 
-#editor_content {width:100%;height:300px;	margin:0 3px;}
-#editor_intro{width:100%;height:150px;	margin:0 3px;}
+#editor_content {width:99%;height:300px;margin:0;padding:0.5em 0.5%}
+#editor_intro{width:99%;height:150px;margin:0;padding:0.5em 0.5%}
 
 /*提示DIV*/
 div.hint{
@@ -435,9 +433,9 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 /*后台编辑页,文章编辑和页面编辑*/
 #divEditRight{
 	float:right;
-	width:260px;
+	width:270px;
 	text-align:right;
-	margin-left:-260px
+	margin-left:-270px
 }
 #divEditPost{
 	margin-top: 30px;
@@ -447,9 +445,15 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 	width:100%;
 }
 
+/*文章编辑提交区随动*/
+#divBox { width:270px; position:relative;}
+#divFloat { width:258px;}
+#divFloat input.button{	margin:0.2em 0;}
+.boxfloat{position: fixed;_position: absolute;top: 0px;z-index: 295;}
+
 .editmod2{
 	margin: 0.2em 0;
-	padding-right: 265px;
+	padding-right: 275px;
 }
 #divIntro{
 	padding-bottom:20px;
@@ -457,9 +461,10 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 .editmod{
 	margin:1em 0;
 }
-#cheader,#carea{
-	margin:.5em 0;
+.editmod3{
+	margin:0;
 }
+
 .editinputname{
 	padding:0 2px 0 3px;
 	line-height:1em;
@@ -470,7 +475,8 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 div.post_edit input#edtTitle{
 	margin: 5px 3px 0 3px;
 	padding: 3px;
-	line-height: 1.8;
+	line-height: 1.8em;
+	height: 1.8em;
 	font-size: 1.2em;
 	width: 99%;
 	color:#333;
@@ -478,7 +484,7 @@ div.post_edit input#edtTitle{
 div.post_edit input#edtAlias, input#edtTag{
 	margin-top: 5px;
 	padding: 3px;
-	width: 70%;
+	width: 50%;
 }
 #ulTag{
 	margin:0 3em;
@@ -728,11 +734,6 @@ span.note{
 	font-size:1.0em;
 }
 
-/*文章编辑提交区随动*/
-#divBox { width:260px; position:relative;}
-#divFloat { width:248px;}
-#divFloat input.button{	margin:0.2em 0;}
-.boxfloat{position: fixed;_position: absolute;top: 0px;z-index: 295;}
 
 span.button{cursor: pointer;}
 a.button,span.button{

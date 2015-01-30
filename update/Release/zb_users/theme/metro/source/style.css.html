@@ -6,7 +6,7 @@
 */
 @charset "utf-8";
 
-body { padding:0; margin:0; font-family:"微软雅黑", "宋体", "Trebuchet MS", Tahoma, Arial, sans-serif; color:{%aryColor(2)%}; font-size: 12px; line-height: 20px; background: {%strBodyBg%};}
+body { padding:0; margin:0; font-family:"微软雅黑", "宋体", "Trebuchet MS", Tahoma, Arial, sans-serif; color:{%aryColor(2)%}; font-size: 12px; line-height: 20px; background: {%strBodyBg%}; background-size:{%strBodyBgsize%}; }
 * { padding:0; margin:0;}
 div, h1, h2, h3, h4, p, form, ul, label, input, textarea, img, span, dl, dt, dd { margin:0; padding:0;}
 table {border-collapse:collapse;}
@@ -17,7 +17,7 @@ li { list-style-type: none;}
 img { border: none;}
 .clear { clear: both;}
 /*主要框架*/
-#headerbg { height:{%aryHdBg(5)%}px; background:{%strHdBg%};} 
+#headerbg { height:{%aryHdBg(5)%}px; background:{%strHdBg%}; background-size:{%strHdBgsize%}} 
 #content { width:980px; padding:20px 0; margin:0 auto; background: url(images/sidebar.png) repeat-y {%strlayoutr%} top;}
 #main { float:{%strlayoutl%}; width:720px;}
 #sidebar { float:right; width:240px; background:#E0E1E2; overflow:hidden;margin-{%strlayoutl%}: 20px;}

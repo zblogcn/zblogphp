@@ -31,71 +31,98 @@ if(!$zbp->CheckRights('MemberAll')){
 $member=$zbp->GetMemberByID($memberid);
 
 ?>
-
 <div id="divMain">
-  <div class="divHeader2"><?php echo $lang['msg']['member_edit']?></div>
-  <div class="SubMenu"></div>
-  <div id="divMain2" class="edit tag_edit">
-	<form id="edit" name="edit" method="post" action="#">
-	  <input id="edtID" name="ID" type="hidden" value="<?php echo $member->ID;?>" />
-	  <input id="edtGuid" name="Guid" type="hidden" value="<?php echo $member->Guid;?>" />
-	  <p>
-		<span class="title"><?php echo $lang['msg']['member_level']?>:</span><br />
-		<select class="edit" size="1" name="Level" id="cmbLevel">
-<?php echo CreateOptoinsOfMemberLevel($member->Level);?>
-		</select>
-<?php if($zbp->CheckRights('MemberAll') && $zbp->user->ID<>$member->ID){?>
-		&nbsp;(<span class="title"><?php echo $lang['msg']['status']?>:</span>
-		<label><input name="Status" type="radio" value="0" <?php echo $member->Status==0?'checked="checked"':''; ?> />&nbsp;<?php echo $lang['user_status_name'][0]?></label>&nbsp;&nbsp;
-		<label><input name="Status" type="radio" value="1" <?php echo $member->Status==1?'checked="checked"':''; ?> />&nbsp;<?php echo $lang['user_status_name'][1]?></label>&nbsp;&nbsp;
-		<label><input name="Status" type="radio" value="2" <?php echo $member->Status==2?'checked="checked"':''; ?> />&nbsp;<?php echo $lang['user_status_name'][2]?></label>
-		)
-<?php }?>
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['name']?>:</span><span class="star">(*)</span><br />
-		<input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name;?>" <?php if(!$zbp->CheckRights('MemberAll'))echo 'readonly="readonly"';?> />
-	  </p>
-	  <p>
-	    <span class='title'><?php echo $lang['msg']['password']?>:</span><br/><input id="edtPassword" class="edit" size="40" name="Password"  type="password" value="" />
-	  </p>
-	  <p>
-	    <span class='title'><?php echo $lang['msg']['re_password']?>:</span><br/><input id="edtPasswordRe" class="edit" size="40" name="PasswordRe"  type="password" value="" />
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['alias']?>:</span><br />
-		<input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $member->Alias;?>" />
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['email']?>:</span><span class="star">(*)</span><br />
-		<input id="edtEmail" class="edit" size="40" name="Email" type="text" value="<?php echo $member->Email;?>" />
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['homepage']?>:</span><br />
-		<input id="edtHomePage" class="edit" size="40" name="HomePage" type="text" value="<?php echo $member->HomePage;?>" />
-	  </p>
-	  <p><span class='title'><?php echo $lang['msg']['intro']?>:</span><br/>
-	    <textarea  cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;"><?php echo htmlspecialchars($member->Intro);?></textarea>
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['template']?>:</span><br />
-		<select class="edit" size="1" name="Template" id="cmbTemplate">
-<?php echo CreateOptoinsOfTemplate($member->Template);?>
-		</select>
-	  </p>
-       <div id='response' class='editmod2'>
-<?php
-foreach ($GLOBALS['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
+	<div class="divHeader2">
+		<?php echo $lang['msg']['member_edit']?></div>
+	<div class="SubMenu"></div>
+	<div id="divMain2" class="edit tag_edit">
+		<form id="edit" name="edit" method="post" action="#">
+			<input id="edtID" name="ID" type="hidden" value="<?php echo $member->ID;?>" />
+			<input id="edtGuid" name="Guid" type="hidden" value="<?php echo $member->Guid;?>" />
+			<p>
+				<span class="title">
+					<?php echo $lang['msg']['member_level']?>:</span>
+				<br />
+				<select class="edit" size="1" name="Level" id="cmbLevel">
+					<?php echo CreateOptoinsOfMemberLevel($member->Level);?></select>
+				<?php if($zbp->CheckRights('MemberAll') && $zbp->user->ID<>$member->ID){?>
+		&nbsp;(
+				<span class="title">
+					<?php echo $lang['msg']['status']?>:</span>
+				<label>
+					<input name="Status" type="radio" value="0" <?php echo $member->Status==0?'checked="checked"':''; ?> />&nbsp;
+					<?php echo $lang['user_status_name'][0]?></label>
+				&nbsp;&nbsp;
+				<label>
+					<input name="Status" type="radio" value="1" <?php echo $member->Status==1?'checked="checked"':''; ?> />&nbsp;
+					<?php echo $lang['user_status_name'][1]?></label>
+				&nbsp;&nbsp;
+				<label>
+					<input name="Status" type="radio" value="2" <?php echo $member->Status==2?'checked="checked"':''; ?> />&nbsp;
+					<?php echo $lang['user_status_name'][2]?></label>
+				)
+				<?php }?></p>
+			<p>
+				<span class="title">
+					<?php echo $lang['msg']['name']?>:</span>
+				<span class="star">(*)</span>
+				<br />
+				<input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name;?>" <?php if(!$zbp->CheckRights('MemberAll'))echo 'readonly="readonly"';?> /></p>
+			<p>
+				<span class='title'>
+					<?php echo $lang['msg']['password']?>:</span>
+				<br/>
+				<input id="edtPassword" class="edit" size="40" name="Password"  type="password" value="" />
+			</p>
+			<p>
+				<span class='title'>
+					<?php echo $lang['msg']['re_password']?>:</span>
+				<br/>
+				<input id="edtPasswordRe" class="edit" size="40" name="PasswordRe"  type="password" value="" />
+			</p>
+			<p>
+				<span class="title">
+					<?php echo $lang['msg']['alias']?>:</span>
+				<br />
+				<input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $member->Alias;?>" /></p>
+			<p>
+				<span class="title">
+					<?php echo $lang['msg']['email']?>:</span>
+				<span class="star">(*)</span>
+				<br />
+				<input id="edtEmail" class="edit" size="40" name="Email" type="text" value="<?php echo $member->Email;?>" /></p>
+			<p>
+				<span class="title">
+					<?php echo $lang['msg']['homepage']?>:</span>
+				<br />
+				<input id="edtHomePage" class="edit" size="40" name="HomePage" type="text" value="<?php echo $member->HomePage;?>" /></p>
+			<p>
+				<span class='title'>
+					<?php echo $lang['msg']['intro']?>:</span>
+				<br/>
+				<textarea cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;"><?php echo htmlspecialchars($member->Intro);?></textarea>
+			</p>
+			<p>
+				<span class="title">
+					<?php echo $lang['msg']['template']?>:</span>
+				<br />
+				<select class="edit" size="1" name="Template" id="cmbTemplate">
+					<?php echo CreateOptoinsOfTemplate($member->Template);?></select>
+			</p>
+			<div id='response' class='editmod2'>
+				<?php foreach ($GLOBALS['Filter_Plugin_Member_Edit_Response'] as $fpname =>	&$fpsignal) {$fpname();}
 ?>
-	   </div>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['default_avatar']?>:</span>&nbsp;<br /><?php echo $member->Avatar;?>
-	  </p>
-	  <p>
-		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" />
-	  </p>
-	</form>
-	<script type="text/javascript">
+			</div>
+			<p>
+				<span class="title">
+					<?php echo $lang['msg']['default_avatar']?>:</span>
+				&nbsp;
+				<br />
+				<?php echo $member->Avatar;?></p>
+			<p>
+				<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" /></p>
+		</form>
+		<script type="text/javascript">
 function checkInfo(){
   document.getElementById("edit").action="../cmd.php?act=MemberPst<?php echo '&token='. $zbp->GetToken();?>";
 
@@ -118,11 +145,10 @@ function checkInfo(){
 
 }
 	</script>
-	<script type="text/javascript">ActiveLeftMenu("aMemberMng");</script>
-	<script type="text/javascript">AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/user_32.png';?>");</script>
-  </div>
+		<script type="text/javascript">ActiveLeftMenu("aMemberMng");</script>
+		<script type="text/javascript">AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/user_32.png';?>");</script>
+	</div>
 </div>
-
 
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';

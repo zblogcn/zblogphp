@@ -14,6 +14,23 @@ function ActivePlugin_AdminColor() {
 function AdminColor_Css(){
 	global $zbp;
 	echo '<link rel="stylesheet" type="text/css" href="'. $zbp->host .'zb_users/plugin/AdminColor/css.php"/>' . "\r\n";
+	echo '<script src="'. $zbp->host .'zb_users/plugin/AdminColor/menu.js" type="text/javascript"></script>' . "\r\n";
+
+	Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu','AdminColor_Add_Button');
+	
+	$hm=GetVars('admincolor_hm','COOKIE');
+	if($hm=='1')
+		echo '<style type="text/css">.left{width:36px;background-color:#ededed;}.left #leftmenu span{margin-left:10px;padding-left:100px;}div.main,section.main{padding-left:46px;}</style>';
+}
+
+function AdminColor_Add_Button(&$leftmenus){
+	global $zbp;
+	
+	$hm=GetVars('admincolor_hm','COOKIE');
+	if($hm=='1')
+		$leftmenus['nav_admincolor']=MakeLeftMenu(5,'展开菜单',"javascript:admincolor_showMenu();","nav_admincolor","aAdminColor",$zbp->host."zb_users/plugin/AdminColor/arror2.png");
+	else		
+		$leftmenus['nav_admincolor']=MakeLeftMenu(5,'收起菜单',"javascript:admincolor_hideMenu();","nav_admincolor","aAdminColor",$zbp->host."zb_users/plugin/AdminColor/arror.png");
 }
 
 function AdminColor_ColorButton(){

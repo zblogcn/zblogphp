@@ -9,30 +9,30 @@
 $zbp->ismanage=true;
 
 /**
- * 添加页面管理子菜单
+ * 添加页面管理子菜单(内置插件函数)
  */
-function Zbp_Admin_Addpagesubmenu(){
+function Include_Admin_Addpagesubmenu(){
 	echo '<a href="../cmd.php?act=PageEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_page'] . '</span></a>';
 }
 
 /**
- * 添加标签管理子菜单
+ * 添加标签管理子菜单(内置插件函数)
  */
-function Zbp_Admin_Addtagsubmenu(){
+function Include_Admin_Addtagsubmenu(){
 	echo '<a href="../cmd.php?act=TagEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_tag'] . '</span></a>';
 }
 
 /**
- * 添加分类管理子菜单
+ * 添加分类管理子菜单(内置插件函数)
  */
-function Zbp_Admin_Addcatesubmenu(){
+function Include_Admin_Addcatesubmenu(){
 	echo '<a href="../cmd.php?act=CategoryEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_category'] . '</span></a>';
 }
 
 /**
- * 添加用户管理子菜单
+ * 添加用户管理子菜单(内置插件函数)
  */
-function Zbp_Admin_Addmemsubmenu(){
+function Include_Admin_Addmemsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('MemberNew')){
 		echo '<a href="../cmd.php?act=MemberNew"><span class="m-left">' . $GLOBALS['lang']['msg']['new_member'] . '</span></a>';
@@ -42,9 +42,9 @@ function Zbp_Admin_Addmemsubmenu(){
 }
 
 /**
- * 添加模块管理子菜单
+ * 添加模块管理子菜单(内置插件函数)
  */
-function Zbp_Admin_Addmodsubmenu(){
+function Include_Admin_Addmodsubmenu(){
 	echo '<a href="../cmd.php?act=ModuleEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_module'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=navbar"><span class="m-left">' . $GLOBALS['lang']['msg']['module_navbar'] . '</span></a>';
 	echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=link"><span class="m-left">' . $GLOBALS['lang']['msg']['module_link'] . '</span></a>';
@@ -53,23 +53,16 @@ function Zbp_Admin_Addmodsubmenu(){
 }
 
 /**
- * 添加评论管理子菜单
+ * 添加评论管理子菜单(内置插件函数)
  */
-function Zbp_Admin_Addcmtsubmenu(){
+function Include_Admin_Addcmtsubmenu(){
 	global $zbp;
 	if($zbp->CheckRights('CommentAll')){
-		$n=GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(comm_ID) AS num FROM ' . $GLOBALS['table']['Comment'] . ' WHERE comm_Ischecking=1'),'num');
+		$n=$zbp->cache->all_comment_nums - $zbp->cache->normal_comment_nums;
 		if($n!=0){$n=' ('.$n.')';}else{$n='';}
 		echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left '.(GetVars('ischecking')?'m-now':'').'">' . $GLOBALS['lang']['msg']['check_comment']  . $n . '</span></a>';
 	}
 }
-
-Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','Zbp_Admin_Addpagesubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','Zbp_Admin_Addtagsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','Zbp_Admin_Addcatesubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu','Zbp_Admin_Addmemsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','Zbp_Admin_Addmodsubmenu');
-Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','Zbp_Admin_Addcmtsubmenu');
 
 
 ################################################################################################################
@@ -159,7 +152,7 @@ function MakeTopMenu($requireAction,$strName,$strUrl,$strTarget,$strLiId){
 	if($strTarget==""){$strTarget="_self";}
 	$AdminTopMenuCount=$AdminTopMenuCount+1;
 	if($strLiId==""){$strLiId="topmenu" . $AdminTopMenuCount;}
-	$tmp="<li id=\"" . $strLiId . "\"><a href=\"" . $strUrl . "\" target=\"" . $strTarget . "\">" . $strName . "</a></li>";
+	$tmp="<li id=\"" . $strLiId . "\"><a href=\"" . $strUrl . "\" target=\"" . $strTarget . "\" title=\"".htmlspecialchars($strName)."\">" . $strName . "</a></li>";
 	return $tmp;
 }
 
@@ -185,9 +178,9 @@ function MakeLeftMenu($requireAction,$strName,$strUrl,$strLiId,$strAId,$strImgUr
 	$AdminLeftMenuCount=$AdminLeftMenuCount+1;
 	$tmp=null;
 	if($strImgUrl!=""){
-		$tmp="<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\"><span style=\"background-image:url('" . $strImgUrl . "')\">" . $strName . "</span></a></li>";
+		$tmp="<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\" title=\"".strip_tags($strName)."\"><span style=\"background-image:url('" . $strImgUrl . "')\">" . $strName . "</span></a></li>";
 	}else{
-		$tmp="<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\"><span>" . $strName . "</span></a></li>";
+		$tmp="<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\" title=\"".strip_tags($strName)."\"><span>" . $strName . "</span></a></li>";
 	}
 	return $tmp;
 
@@ -415,7 +408,7 @@ function CreateOptionsOfLang($default){
 	foreach($files as $f){
 		$n=basename($f,'.php');
 		$t= require($f);
-		$s.= '<option value="' . $n . '" ' . ($default==$n?'selected="selected"':'') . ' >' . $t['lang'] .' ('. $n .')'. '</option>';
+		$s.= '<option value="' . $n . '" ' . ($default==$n?'selected="selected"':'') . ' >' . $t['lang_name'] .' ('. $n .')'. '</option>';
 	}
 	return $s;
 }
@@ -429,6 +422,8 @@ function CreateOptionsOfLang($default){
 function Admin_SiteInfo(){
 
 	global $zbp;
+	
+	$echostatistic=false;
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['info_intro'] . '</div>';
 	echo '<div class="SubMenu">';
@@ -438,21 +433,25 @@ function Admin_SiteInfo(){
 	echo '</div>';
 	echo '<div id="divMain2">';
 
-	echo '<table class="tableFull tableBorder" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a> <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+	echo '<table class="tableFull tableBorder" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . ($zbp->CheckRights('root')?'&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>':'') . ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
 	if((time()-(int)$zbp->cache->reload_statistic_time) > (23*60*60) && $zbp->CheckRights('root')){
 		echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'?act=misc&type=statistic\'); });</script>';
 	}else{
+		$echostatistic=true;
 		$r=$zbp->cache->reload_statistic;
 		$r=str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
+		$r=str_replace('{$zbp->theme}', $zbp->theme, $r);
+		$r=str_replace('{$zbp->style}', $zbp->style, $r);
+		$r=str_replace('{$system_environment}', GetEnvironment(), $r);
 		echo $r;
 	}
 
 	echo '</table>';
 
-	echo '<table class="tableFull tableBorder" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a> <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+	echo '<table class="tableFull tableBorder" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . ($zbp->CheckRights('root')?'&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a>':'') . ' <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
-	if((time()-(int)$zbp->cache->reload_updateinfo_time) > (47*60*60) && $zbp->CheckRights('root')){
+	if((time()-(int)$zbp->cache->reload_updateinfo_time) > (47*60*60) && $zbp->CheckRights('root') && $echostatistic==true){
 		echo '<script type="text/javascript">$(document).ready(function(){ updateinfo(\'?act=misc&type=updateinfo\'); });</script>';
 	}else{
 		echo $zbp->cache->reload_updateinfo;
@@ -461,7 +460,15 @@ function Admin_SiteInfo(){
 	echo '</table>';
 
 	echo '</div>';
-	include $zbp->path . "zb_system/defend/thanks.html";
+
+	$s = file_get_contents($zbp->path . "zb_system/defend/thanks.html");
+	$s = str_replace('{$lang[\'msg\'][\'develop_intro\']}',$zbp->lang['msg']['develop_intro'],$s);
+	$s = str_replace('{$lang[\'msg\'][\'program\']}',$zbp->lang['msg']['program'],$s);
+	$s = str_replace('{$lang[\'msg\'][\'interface\']}',$zbp->lang['msg']['interface'],$s);
+	$s = str_replace('{$lang[\'msg\'][\'support\']}',$zbp->lang['msg']['support'],$s);
+	$s = str_replace('{$lang[\'msg\'][\'thanks\']}',$zbp->lang['msg']['thanks'],$s);
+	$s = str_replace('{$lang[\'msg\'][\'website\']}',$zbp->lang['msg']['website'],$s);
+	echo $s;
 	echo '<script type="text/javascript">ActiveTopMenu("topmenu1");</script>';
 	echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/home_32.png' . '");</script>';
 
@@ -491,11 +498,11 @@ function Admin_ArticleMng(){
 	echo '<div id="divMain2">';
 	echo '<form class="search" id="search" method="post" action="#">';
 
-	echo '<p>' . $zbp->lang['msg']['search'] . ':&nbsp;&nbsp;' . $zbp->lang['msg']['category'] . ' <select class="edit" size="1" name="category" style="width:150px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option>';
+	echo '<p>' . $zbp->lang['msg']['search'] . ':&nbsp;&nbsp;' . $zbp->lang['msg']['category'] . ' <select class="edit" size="1" name="category" style="width:140px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option>';
 	foreach ($zbp->categorysbyorder as $id => $cate) {
 	  echo '<option value="'. $cate->ID .'">' . $cate->SymbolName . '</option>';
 	}
-	echo'</select>&nbsp;&nbsp;&nbsp;&nbsp;' . $zbp->lang['msg']['type'] . ' <select class="edit" size="1" name="status" style="width:80px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option> <option value="0" >' . $zbp->lang['post_status_name']['0'] . '</option><option value="1" >' . $zbp->lang['post_status_name']['1'] . '</option><option value="2" >' . $zbp->lang['post_status_name']['2'] . '</option></select>&nbsp;&nbsp;&nbsp;&nbsp;
+	echo'</select>&nbsp;&nbsp;&nbsp;&nbsp;' . $zbp->lang['msg']['type'] . ' <select class="edit" size="1" name="status" style="width:100px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option> <option value="0" >' . $zbp->lang['post_status_name']['0'] . '</option><option value="1" >' . $zbp->lang['post_status_name']['1'] . '</option><option value="2" >' . $zbp->lang['post_status_name']['2'] . '</option></select>&nbsp;&nbsp;&nbsp;&nbsp;
 	<label><input type="checkbox" name="istop" value="True"/>&nbsp;' . $zbp->lang['msg']['top'] . '</label>&nbsp;&nbsp;&nbsp;&nbsp;
 	<input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
 	echo '</form>';
@@ -538,12 +545,21 @@ if(GetVars('category')){
 	$w[]=array('=','log_CateID',GetVars('category'));
 }
 
+$s='';
+$or=array('log_PostTime'=>'DESC');
+$l=array(($p->PageNow-1) * $p->PageCount,$p->PageCount);
+$op=array('pagebar'=>$p);
+
+foreach ($GLOBALS['Filter_Plugin_LargeData_Aritcle'] as $fpname => &$fpsignal) {
+	$fpreturn = $fpname($s,$w,$or,$l,$op);
+}
+
 $array=$zbp->GetArticleList(
-	'',
+	$s,
 	$w,
-	array('log_PostTime'=>'DESC'),
-	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
-	array('pagebar'=>$p),
+	$or,
+	$l,
+	$op,
 	false
 );
 
@@ -622,12 +638,21 @@ if(!$zbp->CheckRights('PageAll')){
 	$w[]=array('=','log_AuthorID',$zbp->user->ID);
 }
 
+$s='';
+$or=array('log_PostTime'=>'DESC');
+$l=array(($p->PageNow-1) * $p->PageCount,$p->PageCount);
+$op=array('pagebar'=>$p);
+
+foreach ($GLOBALS['Filter_Plugin_LargeData_Page'] as $fpname => &$fpsignal) {
+	$fpreturn = $fpname($s,$w,$or,$l,$op);
+}
+
 $array=$zbp->GetPageList(
-	'',
+	$s,
 	$w,
-	array('log_PostTime'=>'DESC'),
-	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
-	array('pagebar'=>$p)
+	$or,
+	$l,
+	$op
 );
 
 foreach ($array as $article) {
@@ -766,27 +791,41 @@ if(!$zbp->CheckRights('CommentAll')){
 if(GetVars('search')){
 	$w[]=array('search','comm_Content','comm_Name',GetVars('search'));
 }
+if(GetVars('id')){
+	$w[]=array('=', 'comm_ID', GetVars('id'));
+}
 
 $w[]=array('=','comm_Ischecking',(int)GetVars('ischecking'));
 
 
+$s='';
+$or=array('comm_ID'=>'DESC');
+$l=array(($p->PageNow-1) * $p->PageCount,$p->PageCount);
+$op=array('pagebar'=>$p);
+
+foreach ($GLOBALS['Filter_Plugin_LargeData_Comment'] as $fpname => &$fpsignal) {
+	$fpreturn = $fpname($s,$w,$or,$l,$op);
+}
 
 $array=$zbp->GetCommentList(
-	'',
+	$s,
 	$w,
-	array('comm_ID'=>'DESC'),
-	array(($p->PageNow-1) * $p->PageCount,$p->PageCount),
-	array('pagebar'=>$p)
+	$or,
+	$l,
+	$op
 );
 
 foreach ($array as $cmt) {
 	
-	$article = new Post;
-	if (!$article->LoadInfoById($cmt->LogID)) $article = NULL;
+	$article = $zbp->GetPostByID($cmt->LogID);
+	if ($article->ID==0) $article = NULL;
 	
 	echo '<tr>';
-	echo '<td class="td5">' . $cmt->ID .  '</td>';
-	echo '<td class="td5">' . $cmt->ParentID . '</td>';
+	echo '<td class="td5"><a href="?act=CommentMng&id=' . $cmt->ID . '" title="' . $zbp->lang['msg']['jump_comment'] . $cmt->ID . '">' . $cmt->ID . '</a></td>';
+	if($cmt->ParentID>0)
+		echo '<td class="td5"><a href="?act=CommentMng&id=' . $cmt->ParentID . '" title="' . $zbp->lang['msg']['jump_comment'] . $cmt->ParentID . '">' . $cmt->ParentID . '</a></td>';
+	else
+		echo '<td class="td5"></td>';
 	echo '<td class="td10">' . $cmt->Author->Name . '</td>';
 	echo '<td><div style="overflow:hidden;max-width:500px;">';
 	if ($article)
@@ -908,7 +947,7 @@ foreach ($array as $member) {
 	echo '<td class="td10 tdCenter">';
 	echo '<a href="../cmd.php?act=MemberEdt&amp;id='. $member->ID .'"><img src="../image/admin/user_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
 if($zbp->CheckRights('MemberDel')){
-	if(!($member->Level==1 && $zbp->user->IsGod==false)){
+	if($member->IsGod!==true){
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="../cmd.php?act=MemberDel&amp;id='. $member->ID .'&amp;token='. $zbp->GetToken() .'"><img src="../image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
 	}
@@ -1584,7 +1623,7 @@ function Admin_SettingMng(){
 
 			  </div>
 			  <hr/>
-			  <p><input type="submit" class="button" value="提交" id="btnPost" onclick="" /></p>
+			  <p><input type="submit" class="button" value="<?php echo $zbp->lang['msg']['submit']?>" id="btnPost" onclick="" /></p>
 			</div>
 		  </form>
 <?php

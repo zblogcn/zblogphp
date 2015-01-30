@@ -29,13 +29,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
 <br/>
-<p><button type="button">WXR(WordPress eXtended Rss)导出</button></p>
+<p><button type="button" onclick="location.href='output/sql.php'">SQL导出(本程序只导出系统自带的表)</button></p>
 <br/>
-<p><button type="button">SQL导出</button></p>
-	<script type="text/javascript">
-		window.plug_list = "<?php echo AddNameInString($option['ZC_USING_PLUGIN_LIST'],$option['ZC_BLOG_THEME'])?>";
-		window.signkey = '<?php echo $zbp->GetToken()?>';
-	</script>
+<p><button type="button">WXR(WordPress eXtended Rss)导出</button></p>
 	<script type="text/javascript">ActiveLeftMenu("aPDC");</script>
 	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/PDC/logo.png';?>");</script>	
   </div>

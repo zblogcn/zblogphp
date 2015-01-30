@@ -7,7 +7,11 @@
  */
 require '../function/c_system_base.php';
 
-header('Content-Type: application/x-javascript; charset=utf-8');
+ob_clean();
+
+$zbp->CheckGzip();
+$zbp->StartGzip();
+
 ?>
 var bloghost="<?php echo $zbp->host; ?>";
 var cookiespath="<?php echo $zbp->cookiespath; ?>";
@@ -127,8 +131,10 @@ function ChangeCheckValue(obj){
 
 	if($(obj).hasClass('imgcheck-on')){
 		$(obj).prev('input').val('1');
+		if($(obj).prev('input').attr('id')=='edtIstop')$(obj).next('select').show();
 	}else{
 		$(obj).prev('input').val('0');
+		if($(obj).prev('input').attr('id')=='edtIstop')$(obj).next('select').hide();
 	}
 
 }
@@ -186,11 +192,16 @@ function updateinfo(s){
 
 
 function AddHeaderIcon(s){
-$("div.divHeader,div.divHeader2").first().css({"padding-left":"38px","background":"url('"+s+"') 1px 8px no-repeat","background-size":"32px"});
+	if ($.support.leadingWhitespace)
+		$("div.divHeader,div.divHeader2").first().css({"padding-left":"38px","background":"url('"+s+"') 3px 9px no-repeat","background-size":"32px"});
 }
 
 
-
+function AutoHideTips(){
+	if($("p.hint:visible").length>0){
+		$("p.hint:visible").delay(3500).hide(1500,function(){});
+	}
+}
 //*********************************************************
 // 目的：
 //*********************************************************
@@ -216,11 +227,7 @@ $(document).ready(function(){
 	bmx2table();
 
 	if($('.SubMenu').find('span').length>0){
-		//if($('#leftmenu').find('li.on').length>0){
-		//	$('#leftmenu li.on').after('<li class="sub">'+$('.SubMenu').html()+'</li>');
-		//}else{
-			$('.SubMenu').show();
-		//}
+		$('.SubMenu').show();
 	}
 
 	//checkbox
@@ -236,12 +243,7 @@ $(document).ready(function(){
 
 	$(".SubMenu span.m-right").parent().css({"float":"right"});
 
-
 	$("img[width='16']").each(function(){if($(this).parent().is("a")){$(this).parent().addClass("button")}});
-
-	if($("p.hint:visible").length>0){
-		$("p.hint:visible").delay(3500).hide(1500,function(){});
-	}
 
 	$("input[type='file']").click(function(){
 		if(/(MSIE (10|9).+?WPDesktop)|(IEMobile\/(10|9))/g.test(navigator.userAgent)&&$(this).val()==""){
@@ -251,15 +253,17 @@ $(document).ready(function(){
 
 	if (!$.support.leadingWhitespace) {
 		<?php
-			if($option['ZC_ADMIN_HTML5_ENABLE']){
-				if(!GetVars('dishtml5','COOKIE')){
+			if($option['ZC_ADMIN_HTML5_ENABLE'])
+				if(!GetVars('dishtml5','COOKIE'))
 					echo 'alert("' . $lang['error']['74'] . '");';
-				}
-			}else{
-				echo 'if($("div.divHeader,div.divHeader2").first().css("background").indexOf("zb_system")==-1){AddHeaderIcon("'. $bloghost .'zb_system/image/common/plugin_32.png");}';
-			}
+		?>
+	}else{
+		<?php
+			echo 'if($("div.divHeader,div.divHeader2").first().css("background-image")=="none"){AddHeaderIcon("'. $bloghost .'zb_system/image/common/window.png");}';
 		?>
 	}
+	
+	AutoHideTips();
 
 	SetCookie("timezone",(new Date().getTimezoneOffset()/60)*(-1));
 });
@@ -268,5 +272,19 @@ $(document).ready(function(){
 
 <?php
 foreach ($GLOBALS['Filter_Plugin_Admin_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
+
+$s = ob_get_clean();
+$m = md5($s);
+
+header('Content-Type: application/x-javascript; charset=utf-8');
+header('Etag: ' . $m);
+
+if( isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m ){
+	SetHttpStatusCode(304);
+	die;
+}
+	
+echo $s;
+
 die();
 ?>

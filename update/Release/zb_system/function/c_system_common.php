@@ -7,6 +7,163 @@
  */
 
 /**
+ * Operation System
+ */
+define('IS_WINDOWS', in_array(strtoupper(PHP_OS), array('WINNT', 'WIN32', 'WINDOWS')));
+define('IS_UNIX', (strtoupper(PHP_OS) === 'UNIX'));
+define('IS_LINUX', (strtoupper(PHP_OS) === 'LINUX'));
+define('IS_DARWIN', (strtoupper(PHP_OS) === 'DARWIN'));
+define('IS_CYGWIN', (strtoupper(substr(PHP_OS, 0, 6)) === 'CYGWIN'));
+define('IS_BSD', in_array(strtoupper(PHP_OS), array('NETBSD', 'OPENBSD', 'FREEBSD')));
+
+/**
+ * Web Server
+ */
+define('IS_APACHE', preg_match("/apache/i", $_SERVER['SERVER_SOFTWARE']));
+define('IS_IIS', preg_match("/microsoft-iis/i", $_SERVER['SERVER_SOFTWARE']));
+define('IS_NGINX', preg_match("/nginx/i", $_SERVER['SERVER_SOFTWARE']));
+define('IS_LIGHTTPD', preg_match("/lighttpd/i", $_SERVER['SERVER_SOFTWARE']));
+define('IS_KANGLE', preg_match("/kangle/i", $_SERVER['SERVER_SOFTWARE']));
+
+/**
+ * 自动加载类文件
+ * @api Filter_Plugin_Autoload
+ * @param string $classname 类名
+ * @return mixed
+ */
+function AutoloadClass($classname){
+	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($classname);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+	}
+	if (is_readable($f=ZBP_PATH . 'zb_system/function/lib/' . strtolower($classname) .'.php'))
+		require $f;
+}
+
+/**
+ * 记录日志
+ * @param string $s
+ * @param bool $iserror
+ */
+function Logs($s,$iserror=false) {
+	global $zbp;
+	foreach ($GLOBALS['Filter_Plugin_Logs'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($s,$iserror);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+	}
+	if($zbp->guid){
+		if($iserror)
+			$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-error' . date("Ymd") . '.txt';
+		else
+			$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
+	}else{
+		if($iserror)
+			$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '-error.txt';
+		else
+			$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '.txt';
+	}
+	ZBlogException::SuspendErrorHook();
+	if($handle = @fopen($f, 'a+')){
+		$t=date('Y-m-d') . ' ' . date('H:i:s') . ' ' . substr(microtime(),1,9) . ' ' . date('P');
+		@fwrite($handle, '[' . $t . ']' . "\r\n" . $s . "\r\n");
+		@fclose($handle);
+	}
+	ZBlogException::ResumeErrorHook();
+}
+
+/**
+ * 页面运行时长
+ * @return array
+ */
+function RunTime() {
+	global $zbp;
+
+	$rt=array();
+	$rt['time']=number_format(1000 * (microtime(1) - $_SERVER['_start_time']), 2);
+	$rt['query']=$_SERVER['_query_count'];
+	$rt['memory']=$_SERVER['_memory_usage'];
+	$rt['error']=$_SERVER['_error_count'];
+	if(function_exists('memory_get_usage')){
+		$rt['memory']=(int)((memory_get_usage()-$_SERVER['_memory_usage'])/1024);
+	}
+	
+	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false){
+		$_SERVER['_runtime_result']=$rt;
+		return $rt;
+	}
+
+	echo '<!--' . $rt['time'] . ' ms , ';
+	echo  $rt['query'] . ' query';
+	if(function_exists('memory_get_usage'))
+		echo ' , ' . $rt['memory'] . 'kb memory';
+	echo  ' , ' . $rt['error'] . ' error';
+	echo '-->';
+	return $rt;
+}
+
+/**
+ * 获得系统信息
+ * @return string 系统信息
+ * @since 1.4
+ */
+function GetEnvironment(){
+	global $zbp;
+	$ajax = Network::Create();
+	if ($ajax) $ajax = substr(get_class($ajax), 7);
+	
+	$system_environment = PHP_OS . '; ' . 
+							GetValueInArray(
+								explode(' ',str_replace(array('Microsoft-','/'), array('',''), GetVars('SERVER_SOFTWARE', 'SERVER'))), 0
+							) . '; ' .
+							'PHP ' . phpversion() . '; ' . $zbp->option['ZC_DATABASE_TYPE'] . '; ' . 	$ajax ;
+	return $system_environment;
+}
+
+/**
+ * 通过文件获取应用URL地址
+ * @param string $file 文件名
+ * @return string 返回URL地址
+ */
+function plugin_dir_url($file) {
+	global $zbp;
+	$s1=$zbp->path;
+	$s2=str_replace('\\','/',dirname($file).'/');
+	$s3='';
+	$s=substr($s2,strspn($s1,$s2,0));
+	if(strpos($s,'zb_users/plugin/')!==false){
+		$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
+	}else{
+		$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
+	}
+	$a=explode('/',$s);
+	$s=$a[0];
+	$s=$zbp->host . $s3 . $s . '/';
+	return $s;
+}
+
+/**
+ * 通过文件获取应用目录路径
+ * @param $file
+ * @return string
+ */
+function plugin_dir_path($file) {
+	global $zbp;
+	$s1=$zbp->path;
+	$s2=str_replace('\\','/',dirname($file).'/');
+	$s3='';
+	$s=substr($s2,strspn($s1,$s2,0));
+	if(strpos($s,'zb_users/plugin/')!==false){
+		$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
+	}else{
+		$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
+	}
+	$a=explode('/',$s);
+	$s=$a[0];
+	$s=$zbp->path . $s3 . $s . '/';
+	return $s;
+}
+
+/**
  * 通过Key从数组获取数据
  * @param string $array 数组名
  * @param string $name 下标key
@@ -78,7 +235,7 @@ function GetVarsByDefault($name, $type = 'REQUEST',$default = null) {
 
 /**
  * 获取数据库名
- * @return string  返回SQLite数据文件名
+ * @return string  返回一个随机的SQLite数据文件名
  */
 function GetDbName() {
 
@@ -88,11 +245,12 @@ function GetDbName() {
 /**
  * 获取当前网站地址
  * @param string $blogpath 网站域名
- * @param string &$cookiespath 引用cookie作用域值
+ * @param string &$cookiespath 返回cookie作用域值，要传引入
  * @return string  返回网站完整地址，如http://localhost/zbp/
  */
 function GetCurrentHost($blogpath,&$cookiespath) {
 
+	$host='';
 	if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
 		if ($_SERVER['REQUEST_SCHEME'] == 'https') {
 			$host = 'https://';
@@ -111,8 +269,13 @@ function GetCurrentHost($blogpath,&$cookiespath) {
 
 	$host .= $_SERVER['HTTP_HOST'];
 
-	$y = $blogpath;
 	$x = $_SERVER['SCRIPT_NAME'];
+	$y = $blogpath;
+	if(isset($_SERVER["CONTEXT_DOCUMENT_ROOT"]) && isset($_SERVER["CONTEXT_PREFIX"]))
+		if($_SERVER["CONTEXT_DOCUMENT_ROOT"] && $_SERVER["CONTEXT_PREFIX"]){
+			$y= $_SERVER["CONTEXT_DOCUMENT_ROOT"] . $_SERVER["CONTEXT_PREFIX"] . '/';
+		}
+	$z = '';
 
 	for ($i = strlen($x); $i > 0; $i--) {
 		$z = substr($x, 0, $i);
@@ -142,7 +305,11 @@ function GetHttpContent($url) {
 		$ajax->setTimeOuts(60,60,0,0);
 		$ajax->send();
 
-		return $ajax->responseText;
+		if($ajax->status==200){
+			return $ajax->responseText;
+		}else{
+			return null;
+		}
 	}
 
 	$r = null;
@@ -159,12 +326,20 @@ function GetHttpContent($url) {
 			curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
 		}
 		$r = curl_exec($ch);
+		$code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
 		curl_close($ch);
+		if($code==200)return $r;
 	} elseif (ini_get("allow_url_fopen")) {
+		ZBlogException::SuspendErrorHook();
+		$http_response_header = null;
 		$r = file_get_contents((extension_loaded('zlib')?'compress.zlib://':'') . $url);
+		if(is_array($http_response_header) && in_array('HTTP/1.1 200 OK',$http_response_header)){
+			if($r!==false)return $r;
+		}
+		ZBlogException::ResumeErrorHook();
 	}
 
-	return $r;
+	return null;
 }
 
 /**
@@ -176,7 +351,7 @@ function GetDirsInDir($dir) {
 	$dirs = array();
 
 	if (function_exists('scandir')) {
-		foreach (scandir($dir) as $d) {
+		foreach (scandir($dir,0) as $d) {
 			if (is_dir($dir . $d)) {
 				if (($d <> '.') && ($d <> '..')) {
 					$dirs[] = $d;
@@ -262,31 +437,73 @@ function SetHttpStatusCode($number) {
 	static $status = '';
 	if ($status != '')
 		return false;
-	switch ($number) {
-		case 200:
-			header("HTTP/1.1 200 OK");
-			break;
-		case 301:
-			header("HTTP/1.1 301 Moved Permanently");
-			break;
-		case 302:
-			header("HTTP/1.1 302 Found");
-			break;
-		case 304:
-			header("HTTP/1.1 304 Not Modified");
-			break;
-		case 404:
-			header('HTTP/1.1 404 Not Found');
-			break;
-		case 500:
-			header('HTTP/1.1 500 Internal Server Error');
-			break;
-		case 503:
-			header('HTTP/1.1 503 Service Unavailable');
-	}
-	$status = $number;
 
-	return true;
+	$codes = array(
+		// Informational 1xx
+		100 => 'Continue',
+		101 => 'Switching Protocols',
+		102 => 'Processing',
+
+		// Success 2xx
+		200 => 'OK',
+		201 => 'Created',
+		202 => 'Accepted',
+		203 => 'Non-Authoritative Information',
+		204 => 'No Content',
+		205 => 'Reset Content',
+		206 => 'Partial Content',
+		207 => 'Multi-Status',
+
+		// Redirection 3xx
+		300 => 'Multiple Choices',
+		301 => 'Moved Permanently',
+		302 => 'Found',  // 1.1
+		303 => 'See Other',
+		304 => 'Not Modified',
+		305 => 'Use Proxy',
+		306 => 'Switch Proxy',
+		307 => 'Temporary Redirect',
+
+		// Client Error 4xx
+		400 => 'Bad Request',
+		401 => 'Unauthorized',
+		402 => 'Payment Required',
+		403 => 'Forbidden',
+		404 => 'Not Found',
+		405 => 'Method Not Allowed',
+		406 => 'Not Acceptable',
+		407 => 'Proxy Authentication Required',
+		408 => 'Request Timeout',
+		409 => 'Conflict',
+		410 => 'Gone',
+		411 => 'Length Required',
+		412 => 'Precondition Failed',
+		413 => 'Request Entity Too Large',
+		414 => 'Request-URI Too Long',
+		415 => 'Unsupported Media Type',
+		416 => 'Requested Range Not Satisfiable',
+		417 => 'Expectation Failed',
+
+		// Server Error 5xx
+		500 => 'Internal Server Error',
+		501 => 'Not Implemented',
+		502 => 'Bad Gateway',
+		503 => 'Service Unavailable',
+		504 => 'Gateway Timeout',
+		505 => 'HTTP Version Not Supported',
+		506 => 'Variant Also Negotiates',
+		507 => 'Insufficient Storage',
+		508 => 'Loop Detected',
+		509 => 'Bandwidth Limit Exceeded',
+		510 => 'Not Extended',
+	);
+
+	if(isset($codes[$number])) {
+		header('HTTP/1.1 '.$number.' '.$codes[$number]);
+		$status = $number;
+		return true;
+	}
+
 }
 
 /**
@@ -574,16 +791,16 @@ function CheckRegExp($source, $para) {
 	if (strpos($para, '[username]') !== false) {
 		$para = "/^[\.\_A-Za-z0-9·\x{4e00}-\x{9fa5}]+$/u";
 	}
-	if (strpos($para, '[password]') !== false) {
+	elseif (strpos($para, '[password]') !== false) {
 		$para = "/^[A-Za-z0-9`~!@#\$%\^&\*\-_]+$/u";
 	}
-	if (strpos($para, '[email]') !== false) {
+	elseif (strpos($para, '[email]') !== false) {
 		$para = "/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*\.)+[a-zA-Z]*)$/u";
 	}
-	if (strpos($para, '[homepage]') !== false) {
+	elseif (strpos($para, '[homepage]') !== false) {
 		$para = "/^[a-zA-Z]+:\/\/[a-zA-Z0-9\_\-\.\&\?\/:=#\x{4e00}-\x{9fa5}]+$/u";
 	}
-	if (!$para)
+	elseif (!$para)
 		return false;
 
 	return (bool)preg_match($para, $source);
@@ -680,6 +897,28 @@ function CloseTags($html) {
 
 	return $html;
 
+}
+
+/**
+ *  获取UTF8格式的字符串的子串
+ * @param string $sourcestr 源字符串
+ * @param int $start 起始位置
+ * @param int $cutlength 子串长度
+ * @return string 
+*/
+function SubStrUTF8_Start($sourcestr, $start, $cutlength) {
+	if( function_exists('mb_substr') && function_exists('mb_internal_encoding') ){
+		mb_internal_encoding('UTF-8');
+		return mb_substr($sourcestr, $start, $cutlength);
+	}
+
+	if( function_exists('iconv_substr') && function_exists('iconv_set_encoding') ){
+		iconv_set_encoding ( "internal_encoding" ,  "UTF-8" );
+		iconv_set_encoding ( "output_encoding" ,  "UTF-8" );
+		return iconv_substr($sourcestr, $start, $cutlength);
+	}
+	
+	return substr($sourcestr, $start, $cutlength);
 }
 
 /**
@@ -801,41 +1040,32 @@ function GetTimeZonebyGMT($z){
 }
 
 /**
- * 显示全局变量
- * @return mixed
- * @since 1.3.140614
- * @todo 下版转到debug页
+ * 对数组内的字符串进行htmlspecialchars
+ * @param array $array 待过滤字符串
+ * @return array 
+ * @since 1.4
  */
-function Debug_PrintGlobals(){
-	$a=array();
-	foreach($GLOBALS as $n=>$v){
-		$a[] = $n;
+function htmlspecialchars_array($array) {
+
+	foreach ($array as $key => &$value) {
+		if (is_array($value)) {
+			$value = htmlspecialchars_array($value);
+		}
+		else if (is_string($value)) {
+			$value = htmlspecialchars($value);
+		}
 	}
-	return print_r($a,true);
+
+	return $array;
+
 }
 
 /**
- *  打印全局Include文件
- * @return string 
- * @since 1.3
- * @todo 下版转到debug页
-*/
-function Debug_PrintIncludefiles(){
-	$a=array();
-	foreach(get_included_files() as $n=>$v){
-		$a[] = $v;
-	}
-	return print_r($a,true);
-}
-
-/**
- *  打印全局自定义常量
- * @return string
- * @since 1.3
- * @todo 下版转到debug页
-*/
-function Debug_PrintConstants(){
-	$a=get_defined_constants(true);
-	if(isset($a['user']))$a=$a['user'];
-	return print_r($a,true);
+ * 获得一个只含数字字母和_线的string
+ * @param string $s 待过滤字符串
+ * @return s 
+ * @since 1.4
+ */
+function FilterCorrectName($s) {
+	return preg_replace('|[^0-9a-zA-Z_]|','',$s);
 }

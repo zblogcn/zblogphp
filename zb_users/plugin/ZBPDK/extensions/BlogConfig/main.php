@@ -113,6 +113,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <li class="del"> <a href="#del">删除</a> </li>
 </ul>
 <script>ActiveTopMenu('zbpdk');</script>
+<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png';?>");</script>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 RunTime();

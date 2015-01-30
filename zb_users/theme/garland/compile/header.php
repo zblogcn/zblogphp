@@ -18,3 +18,4 @@
 	<style type="text/css" media="all"> @import "<?php  echo $host;  ?>zb_users/themes/<?php  echo $theme;  ?>/style/<?php  echo $style;  ?>/fix-ie.css";</style>
 	<![endif]-->
 	<link rel="shortcut icon" href="<?php  echo $host;  ?>zb_users/theme/<?php  echo $theme;  ?>/style/<?php  echo $style;  ?>/favicon.ico" >
+</head>

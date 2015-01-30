@@ -24,10 +24,10 @@ return array(
 	'ZC_BLOG_CSS' => 'default',
 	'ZC_BLOG_COPYRIGHT' => 'Copyright Your WebSite.Some Rights Reserved.',
 	'ZC_BLOG_LANGUAGE' => 'zh-CN',
-	'ZC_BLOG_LANGUAGEPACK' => 'SimpChinese',
+	'ZC_BLOG_LANGUAGEPACK' => 'zh-cn',
 
 	// '----------------------------数据库配置---------------------------------------
-	//mysql|sqlite|sqlite3|pdo_mysql
+	//mysql|mysqli|pdo_mysql|sqlite|sqlite3|pdo_sqlite
 	'ZC_DATABASE_TYPE'=> '',
 
 	'ZC_SQLITE_NAME' => '',
@@ -57,9 +57,6 @@ return array(
 
 	// '-------------------------------全局配置-----------------------------------
 	'ZC_YUN_SITE'=>'',
-	'ZC_DEBUG_MODE' => true,
-	'ZC_DEBUG_MODE_STRICT' => false,
-	'ZC_DEBUG_MODE_WARNING' => true,
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
 	'ZC_UPDATE_INFO_URL' => 'http://update.zblogcn.com/info/',
@@ -67,6 +64,12 @@ return array(
 	'ZC_PERMANENT_DOMAIN_ENABLE' => false,
 	'ZC_PERMANENT_DOMAIN_REDIRECT' => true,
 	'ZC_MULTI_DOMAIN_SUPPORT' => false,
+
+	//
+	'ZC_DEBUG_MODE' => false,
+	'ZC_DEBUG_MODE_STRICT' => false,
+	'ZC_DEBUG_MODE_WARNING' => true,
+	'ZC_DEBUG_LOG_ERROR' => false,
 
 	// '当前 Z-Blog 版本
 
@@ -175,6 +178,7 @@ return array(
 	// '代码高亮
 	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
 	'ZC_LOADMEMBERS_LEVEL' => 0,
+	'ZC_LAST_VERSION' => '',
 	
 	// '源码编辑高亮
 	'ZC_CODEMIRROR_ENABLE' => true,
@@ -185,5 +189,7 @@ return array(
 	'ZC_RELATEDLIST_COUNT'=>10,
 	'ZC_RUNINFO_DISPLAY' => true,
 	'ZC_POST_ALIAS_USE_ID_NOT_TITLE' => false,
+	'ZC_COMPATIBLE_ASP_URL' => true,
+	'ZC_LARGE_DATA' => false,
 )
 ?>

@@ -15,7 +15,8 @@ $("tr").first().children().last().append("<b>开发者模式</b>");
 
 $(".plugin").each(function(){
 
-	var t=$(this).find("strong").html();
+	var t=$(this).data("pluginid");
+	if(t==undefined)t=$(this).find("strong").html();
 	var s=""
 	s=s+"<a class=\"button\"  href='"+bloghost+"zb_users/plugin/AppCentre/plugin_edit.php?id="+t+"' title='编辑该插件信息'><img height='16' width='16' src='"+bloghost+"zb_users/plugin/AppCentre/images/application_edit.png'/></a>";
 
