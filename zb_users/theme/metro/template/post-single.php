@@ -6,7 +6,7 @@
         <div class="post_body">
           <h2>{$article.Title}</h2>
           <div class="post_content">
-            {$article.Content} {$article.sf_praise_show()}
+            {$article.Content}
           </div>
 			<div class="post_tags"></div>
           <div class="post_info">
