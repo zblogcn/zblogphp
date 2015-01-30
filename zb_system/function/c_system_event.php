@@ -2352,9 +2352,9 @@ function FilterMeta(&$object) {
 		}
 	}
 
-	foreach ($object->Metas->Data as $key => $value) {
-		if ($value == "")
-			unset($object->Metas->Data[$key]);
+	foreach ($object->Metas->GetData() as $key => $value) {
+		if ($value == '')
+			$object->Metas->Del($key);
 	}
 
 }

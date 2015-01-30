@@ -583,7 +583,7 @@ foreach ($array as $article) {
 	echo '</table>';
 	echo '<hr/><p class="pagebar">';
 
-foreach ($p->buttons as $key => $value) {
+foreach ($p->Buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 
@@ -673,7 +673,7 @@ foreach ($array as $article) {
 }
 	echo '</table>';
 	echo '<hr/><p class="pagebar">';
-foreach ($p->buttons as $key => $value) {
+foreach ($p->Buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 	echo '</p></div>';
@@ -865,7 +865,7 @@ if(!GetVars('ischecking','GET')){
 
 	echo'<p class="pagebar">';
 
-foreach ($p->buttons as $key => $value) {
+foreach ($p->Buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 
@@ -958,7 +958,7 @@ if($zbp->CheckRights('MemberDel')){
 }
 	echo '</table>';
 	echo '<hr/><p class="pagebar">';
-foreach ($p->buttons as $key => $value) {
+foreach ($p->Buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 	echo '</p></div>';
@@ -1042,7 +1042,7 @@ foreach ($array as $upload) {
 }
 	echo '</table>';
 	echo '<hr/><p class="pagebar">';
-foreach ($p->buttons as $key => $value) {
+foreach ($p->Buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 	echo '</p></div>';
@@ -1114,7 +1114,7 @@ foreach ($array as $tag) {
 }
 	echo '</table>';
 	echo '<hr/><p class="pagebar">';
-foreach ($p->buttons as $key => $value) {
+foreach ($p->Buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 	echo '</p></div>';
