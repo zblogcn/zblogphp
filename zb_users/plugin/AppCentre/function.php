@@ -95,6 +95,12 @@ function Server_Open($method){
 			$s=Server_SendRequest(APPCENTRE_URL .'?vaild',$data);
 			return $s;
 			break;
+		case 'logout':
+			$zbp->Config('AppCentre')->username='';
+			$zbp->Config('AppCentre')->password='';
+			$zbp->SaveConfig('AppCentre');
+			Redirect('main.php');
+			break;
 		case 'submitpre':
 			$s=Server_SendRequest(APPCENTRE_URL .'?submitpre=' . urlencode(GetVars('id')));
 			return $s;
