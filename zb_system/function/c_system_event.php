@@ -2539,7 +2539,7 @@ function CountCommentNums($allplus = null,$chkplus = null) {
 		$zbp->cache->all_comment_nums += $allplus;
 	}
 	if ($chkplus === null) {
-		$zbp->cache->check_comment_nums = (int)GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Comment'] . ' WHERE comm_Ischecking=1'), 'num');
+		$zbp->cache->check_comment_nums = (int)GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Comment'] . ' WHERE comm_Ischecking=\'1\''), 'num');
 	} else {
 		$zbp->cache->check_comment_nums += $chkplus;
 	}

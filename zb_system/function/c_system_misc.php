@@ -82,8 +82,8 @@ function misc_statistic() {
 	$xmlrpc_address = $zbp->host . 'zb_system/xml-rpc/';
 	$current_member = $zbp->user->Name;
 	$current_version = $zbp->option['ZC_BLOG_VERSION'];
-	$all_artiles = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=0'), 'num');
-	$all_pages = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=1'), 'num');
+	$all_artiles = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=\'0\''), 'num');
+	$all_pages = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=\'1\''), 'num');
 	$all_categorys = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Category']), 'num');
 	$all_views = $zbp->option['ZC_VIEWNUMS_TURNOFF']==true?0:GetValueInArrayByCurrent($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post']), 'num');
 	$all_tags = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) as num FROM ' . $GLOBALS['table']['Tag']), 'num');

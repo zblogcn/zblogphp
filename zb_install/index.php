@@ -427,7 +427,7 @@ function Setup3(){
         if($hasPgsql){
         ?>
           <label class="dbselect" id="pgsql_radio">
-          <input type="radio" name="fdbtype"/>Postgres数据库</label>
+          <input type="radio" name="fdbtype"/> PostgreSQL</label>
         <?php
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         }
@@ -525,31 +525,31 @@ function Setup3(){
 	  
       <?php if($hasPgsql){?>
       <div class="dbdetail" id="pgsql">
-        <p><b>数据库主机:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['server'];?></b>
           <input type="text" name="dbpgsql_server" id="dbpgsql_server" value="<?php echo $option['ZC_PGSQL_SERVER'];?>" style="width:350px;" />
         </p>
-        <p><b>用户名称:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['username'];?></b>
           <input type="text" name="dbpgsql_username" id="dbpgsql_username" value="<?php echo $option['ZC_PGSQL_USERNAME'];?>" style="width:350px;" />
         </p>
-        <p><b>用户密码:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['password'];?></b>
           <input type="password" name="dbpgsql_password" id="dbpgsql_password" value="<?php echo $option['ZC_PGSQL_PASSWORD'];?>" style="width:350px;" />
         </p>
-        <p><b>数据库名称:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_name'];?></b>
           <input type="text" name="dbpgsql_name" id="dbpgsql_name" value="<?php echo $option['ZC_PGSQL_NAME'];?>" style="width:350px;" />
         </p>
-        <p><b>表&nbsp;前&nbsp;缀:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_pre'];?></b>
           <input type="text" name="dbpgsql_pre" id="dbpgsql_pre" value="<?php echo $option['ZC_PGSQL_PRE'];?>" style="width:350px;" />
         </p>
-      <p><b>连接选择:</b>
+      <p><b><?php echo $zbp->lang['zb_install']['db_drive'];?></b>
         <?php if($CheckResult['pgsql'][0]){?>
         <label>
-          <input value="pgsql" type="radio" name="dbtype"/>PGSQL连接</label>
+          <input value="pgsql" type="radio" name="dbtype"/> PGSQL</label>
         <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php if($CheckResult['pdo_pgsql'][0]){?>
         <label>
-          <input value="pdo_pgsql" type="radio" name="dbtype"/>PDO_PGSQL连接</label>
+          <input value="pdo_pgsql" type="radio" name="dbtype"/> PDO_PGSQL</label>
         <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
-		<br/><small>(端口号默认5432，如需要修改请在'数据库主机'里追加':端口号'。)</small>
+		<br/><small><?php echo str_replace('3306','5432',$zbp->lang['zb_install']['db_set_port']);?></small>
       </p>
       </div>
       <?php } ?>
