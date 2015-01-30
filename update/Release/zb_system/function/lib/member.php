@@ -13,6 +13,11 @@ class Member extends Base {
 	private $_avatar='';
 
 	/**
+	 * @var boolean 创始id
+	 */
+	private $_isgod=null;
+
+	/**
 	 * 构造函数，默认用户设为anonymous
 	 */
 	function __construct()
@@ -68,6 +73,12 @@ class Member extends Base {
 			if($value==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$value='';
 			return $this->data[$name]  =  $value;
 		}
+		if ($name=='PassWord_MD5Path') {
+			return null;
+		}
+		if ($name=='IsGod') {
+			return null;
+		}
 		parent::__set($name, $value);
 	}
 
@@ -113,6 +124,23 @@ class Member extends Base {
 			if($value=='')$value=$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
 			return $value;
 		}
+		if ($name=='PassWord_MD5Path') {
+			return md5($this->Password . $zbp->guid);
+		}
+		if ($name=='IsGod') {
+			if($this->_isgod === true || $this->_isgod === false){
+				return $this->_isgod;
+			}else{
+				$sql = $zbp->db->sql->Select($zbp->table['Member'],'*',array(array('=','mem_Level',1)),'mem_ID ASC',1,null);
+				$am = $zbp->GetListType('Member',$sql);
+				if($am[0]->ID == $this->ID){
+					$this->_isgod = true;
+				}else{
+					$this->_isgod = false;
+				}
+				return $this->_isgod;
+			}
+		}
 		return parent::__get($name);
 	}
 
@@ -127,7 +155,7 @@ class Member extends Base {
 		return md5(md5($ps). $guid);
 
 	}
-
+	
 	/**
 	 * 保存用户数据
 	 * @return bool
@@ -140,6 +168,17 @@ class Member extends Base {
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
 		return parent::Save();
+	}
+
+	/**
+	 * @return bool
+	 */
+	function Del(){
+		foreach ($GLOBALS['Filter_Plugin_Member_Del'] as $fpname => &$fpsignal) {
+			$fpreturn=$fpname($this);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+		}
+		return parent::Del();
 	}
 
 }

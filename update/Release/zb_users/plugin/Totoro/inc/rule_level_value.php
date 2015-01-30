@@ -1,6 +1,6 @@
 <?php
 return 'level_value';
-function level_value($author, $content, &$sv, $config_sv, $config_array){
+function level_value($author, $content, $orig_content, &$sv, $config_sv, $config_array){
 	global $zbp;
 	$level_max = 6;
 	

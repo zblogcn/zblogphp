@@ -165,9 +165,12 @@ class Networkfile_get_contents implements iNetwork{
 			$this->option['max_redirects']=0;
 		}
 
+		ZBlogException::SuspendErrorHook();
+		$http_response_header=null;
 		$this->responseText = file_get_contents(($this->isgzip==true?'compress.zlib://':'') . $this->url, false, stream_context_create(array('http' => $this->option)));
 
 		$this->responseHeader = $http_response_header;
+		ZBlogException::ResumeErrorHook();
 
 		if(isset($this->responseHeader[0])){
 			$this->statusText=$this->responseHeader[0];

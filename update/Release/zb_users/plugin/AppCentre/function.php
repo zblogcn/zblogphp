@@ -65,6 +65,7 @@ function Server_Open($method){
 					$zbp->SaveConfig('AppCentre');
 				}
 			}
+			if(strpos($s,'app.zblogcn.com')===false)$zbp->ShowHint('bad','后台访问应用中心故障，不能登录和下载应用，请检查主机空间是否能远程访问app.zblogcn.com。');
 			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
 			break;
 		case 'check':
@@ -114,6 +115,11 @@ function Server_Open($method){
 			$s=Server_SendRequest(APPCENTRE_URL .'?shoplist');
 			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
 			break;
+		case 'apptype':
+			$zbp->Config('AppCentre')->apptype=GetVars("type");
+			$zbp->SaveConfig('AppCentre');
+			Redirect('main.php');
+			break;
 		default:
 			# code...
 			break;
@@ -126,9 +132,9 @@ function Server_SendRequest($url,$data=array(),$u='',$c=''){
 
 	$un=$zbp->Config('AppCentre')->username;
 	$ps=$zbp->Config('AppCentre')->password;
-	$c='';
+	$c.=' apptype=' . urlencode($zbp->Config('AppCentre')->apptype) . '; ';
 	if($un&&$ps){
-		$c="username=".urlencode($un) ."; password=".urlencode($ps);
+		$c.="username=".urlencode($un) ."; password=".urlencode($ps);
 	}
 	
 	$shopun=$zbp->Config('AppCentre')->shop_username;
@@ -242,8 +248,11 @@ function AppCentre_CreateOptoinsOfVersion($default){
 	$s=null;
 	$array=$GLOBALS['zbpvers'];
 	krsort($array);
+	$i=0;
 	foreach ($array as $key => $value) {
-		$s .= '<option value="' . $key . '" ' . ($default==$key?'selected="selected"':'') . ' >' . $value . '</option>';
+		$i += 1;
+		if(($i == 1) or strpos($value,'Beta')===False)
+			$s .= '<option value="' . $key . '" ' . ($default==$key?'selected="selected"':'') . ' >' . $value . '</option>';
 	}
 	return $s;
 }

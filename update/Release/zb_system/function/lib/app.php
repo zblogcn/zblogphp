@@ -350,7 +350,7 @@ class App {
 		if(function_exists('scandir')){
 			foreach (scandir($dir) as $d) {
 				if (is_dir($dir .  $d)) {
-					if( ($d<>'.') && ($d<>'..') ){
+					if( substr($d, 0, 1) != '.' ){
 						$this->GetAllFileDir($dir . $d . '/');
 						$this->dirs[]=$dir . $d . '/';
 					}
@@ -361,7 +361,7 @@ class App {
 		}else{
 			if ($handle = opendir($dir)) {
 				while (false !== ($file = readdir($handle))) {
-					if ($file != "." && $file != "..") {
+					if (substr($file, 0, 1) != '.') {
 						if (is_dir($dir .  $file)) {
 							$this->dirs[]=$dir . $file  . '/';
 							$this->GetAllFileDir($dir . $file . '/');
@@ -435,19 +435,31 @@ class App {
 
 
 		foreach ($this->dirs as $key => $value) {
+			$value = preg_replace('/[^(\x20-\x7F)]*/','', $value);
 			$d=$this->id .'/'. str_replace($dir,'',$value);
 			$s.='<folder><path>'.htmlspecialchars($d).'</path></folder>';
 		}
 		foreach ($this->files as $key => $value) {
 			$d=$this->id .'/'. str_replace($dir,'',$value);
-			$c=base64_encode(file_get_contents($value));
-			$s.='<file><path>'.$d.'</path><stream>'.$c.'</stream></file>';
+			$ext=pathinfo($value,PATHINFO_EXTENSION);
+			if($ext=='php'||$ext=='inc'){
+				$c=base64_encode(RemoveBOM(file_get_contents($value)));
+			}else{
+				$c=base64_encode(file_get_contents($value));
+			}
+			if(IS_WINDOWS)
+				$d=iconv($zbp->lang['windows_character_set'], 'UTF-8//IGNORE',$d);
+			$s.='<file><path>'.htmlspecialchars($d).'</path><stream>'.$c.'</stream></file>';
 		}
 
 
 		$s.='</app>';
 
 		return $s;
+	}
+
+	public function PackGZip(){
+		return gzencode($this->Pack(),9,FORCE_GZIP);
 	}
 
 	/**
@@ -457,6 +469,13 @@ class App {
 	*/
 	static public function UnPack($xml){
 		global $zbp;
+		$charset=array();
+		$charset[1] = substr($xml, 0, 1);
+		$charset[2] = substr($xml, 1, 1);
+		if (ord($charset[1]) == 31 && ord($charset[2]) == 139) {
+			if(function_exists('gzdecode'))
+				$xml = gzdecode($xml);
+		}
 		$xml = simplexml_load_string($xml);
 		if(!$xml)return false;
 		if($xml['version']!='php')return false;
@@ -508,7 +527,7 @@ class App {
 		foreach($ac as $c){
 			if(!$c)continue;
 			if(in_array($c,$zbp->activeapps)){
-				$zbp->ShowError(str_replace('%s',$c,$zbp->lang['error'][84]),__FILE__,__LINE__);
+				$zbp->ShowError(str_replace('%s',$c,$zbp->lang['error'][85]),__FILE__,__LINE__);
 			}
 		}
 	}

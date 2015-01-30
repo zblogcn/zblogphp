@@ -78,13 +78,13 @@ function VerifyMessage() {
 	var intMaxLen=1000;
 
 	if(strName==""){
-		alert(str01);
+		alert((typeof(lang_comment_name_error)=="undefined") ? "name error":lang_comment_name_error);
 		return false;
 	}
 	else{
 		re = new RegExp("^[\.\_A-Za-z0-9\u4e00-\u9fa5]+$");
 		if (!re.test(strName)){
-			alert(str02);
+			alert((typeof(lang_comment_name_error)=="undefined") ? "name error":lang_comment_name_error);
 			return false;
 		}
 	}
@@ -96,24 +96,19 @@ function VerifyMessage() {
 	else{
 		re = new RegExp("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$");
 		if (!re.test(strEmail)){
-			alert(str02);
+			alert((typeof(lang_comment_email_error)=="undefined") ? "email error":lang_comment_email_error);
 			return false;
 		}
-	}
-
-	if(typeof(strArticle)=="undefined"){
-		alert(str03);
-		return false;
 	}
 
 	if(typeof(strArticle)=="string"){
 		if(strArticle==""){
-			alert(str03);
+			alert((typeof(lang_comment_content_error)=="undefined") ? "content error":lang_comment_content_error);
 			return false;
 		}
 		if(strArticle.length>intMaxLen)
 		{
-			alert(str03);
+			alert((typeof(lang_comment_content_error)=="undefined") ? "content error":lang_comment_content_error);
 			return false;
 		}
 	}

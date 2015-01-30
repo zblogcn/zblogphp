@@ -14,7 +14,7 @@
 </ul>
 		</div>
 		<div id="divMain">
-<?php  foreach ( $articles as $article) { ?> 
+<?php  foreach ( $articles as $article) { ?>
 
 <?php if ($article->IsTop) { ?>
 <?php  include $this->GetTemplate('post-istop');  ?>
@@ -22,7 +22,7 @@
 <?php  include $this->GetTemplate('post-multi');  ?>
 <?php } ?>
 
-<?php  }   ?>
+<?php }   ?>
 <div class="pagebar"><?php  include $this->GetTemplate('pagebar');  ?></div>
 		</div>
 		<div id="divSidebar">

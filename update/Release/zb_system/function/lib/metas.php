@@ -43,6 +43,26 @@ class Metas {
 	}
 
 	/**
+	 * 依据zbp设置替换签标为host值或是固定域名
+	 * @param string $value
+	 * @return string
+	 */
+	public static function ReplaceTag2Host($value){
+		global $bloghost;
+		return str_replace('{#ZC_BLOG_HOST#}',$bloghost,$value);
+	}
+
+	/**
+	 * 依据zbp设置替换host值为签标
+	 * @param string $value
+	 * @return string
+	 */
+	public static function ReplaceHost2Tag($value){
+		global $bloghost;
+		return str_replace($bloghost,'{#ZC_BLOG_HOST#}',$value);
+	}
+
+	/**
 	 * 检查Data属性（数组）属性值是是否存在相应key
 	 * @param string $name key名
 	 * @return bool
@@ -73,14 +93,11 @@ class Metas {
 	 * @return string 返回序列化的值
 	 */
 	public function Serialize(){
-		global $zbp;
 		if(count($this->Data)==0)return '';
 		$data=$this->Data;
-		foreach ($data as $key => $value) {
-			if(is_string($value)){
-				$data[$key]=str_replace(($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']==false?$zbp->host:$zbp->option['ZC_BLOG_HOST']),'{#ZC_BLOG_HOST#}',$value);
-			}
-		}
+		foreach ($data as $key => $value)
+			if(is_string($value))
+				$data[$key]=self::ReplaceHost2Tag($value);
 		//return json_encode($data);
 		return serialize($data);
 	}
@@ -91,26 +108,24 @@ class Metas {
 	 * @return bool
 	 */
 	public function Unserialize($s){
-		global $zbp;
+
 		if($s=='')return false;
 		//if(strpos($s,'{')===0){
 			//$this->Data=json_decode($s,true);
 		//}else{
-
-		$this->Data=@unserialize($s);
-
+			$this->Data=@unserialize($s);
 		//}
 		if(is_array($this->Data)){
-			if(count($this->Data)==0)return false;
+			if(count($this->Data)==0)return true;
+			foreach ($this->Data as $key => $value)
+				if(is_string($value))
+					$this->Data[$key]=self::ReplaceTag2Host($value);
 		}else{
 			$this->Data=array();
 			return false;
 		}
-		foreach ($this->Data as $key => $value) {
-			if(is_string($value)){
-				$this->Data[$key]=str_replace('{#ZC_BLOG_HOST#}',($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']==false?$zbp->host:$zbp->option['ZC_BLOG_HOST']),$value);
-			}
-		}
+
 		return true;
 	}
+
 }

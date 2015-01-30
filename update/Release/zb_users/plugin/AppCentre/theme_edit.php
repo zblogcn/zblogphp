@@ -3,7 +3,7 @@ require '../../../zb_system/function/c_system_base.php';
 
 require '../../../zb_system/function/c_system_admin.php';
 
-require 'function.php';
+require dirname(__FILE__) . '/function.php';
 
 $zbp->Load();
 
@@ -135,7 +135,7 @@ if(GetVars('app_sidebars_sidebar5')){
 
 $app-> SaveInfoByXml();
 
-	$zbp->SetHint('good');
+  $zbp->SetHint('good', '提交成功！<a href="submit.php?type=theme&id=' . $app->id . '">现在立刻上传到应用中心！</a>');
   Redirect($_SERVER["HTTP_REFERER"]);
 }
 

@@ -17,8 +17,7 @@ CREATE TABLE IF NOT EXISTS %pre%post (
   log_Template varchar(50) NOT NULL DEFAULT '',
   log_Meta longtext NOT NULL,
   PRIMARY KEY (log_ID),
-  KEY %pre%log_PT (log_PostTime),
-  KEY %pre%log_TISC (log_Type,log_IsTop,log_Status,log_CateID)
+  KEY %pre%log_TPISC (log_Type,log_PostTime,log_IsTop,log_Status,log_CateID)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
@@ -34,7 +33,8 @@ CREATE TABLE IF NOT EXISTS %pre%category (
   cate_Template varchar(50) NOT NULL DEFAULT '',
   cate_LogTemplate varchar(50) NOT NULL DEFAULT '',
   cate_Meta longtext NOT NULL,
-  PRIMARY KEY (cate_ID)
+  PRIMARY KEY (cate_ID),
+  KEY %pre%cate_Order (cate_Order)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
@@ -54,14 +54,17 @@ CREATE TABLE IF NOT EXISTS %pre%comment (
   comm_Agent text NOT NULL,
   comm_Meta longtext NOT NULL,
   PRIMARY KEY (comm_ID),
-  KEY %pre%comm_PT (comm_PostTime),
-  KEY %pre%comm_RIL (comm_RootID,comm_IsChecking,comm_LogID)
+  KEY %pre%comm_LRI (comm_LogID,comm_RootID,comm_IsChecking),
+  KEY %pre%comm_IsChecking (comm_IsChecking)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE IF NOT EXISTS %pre%config (
-  conf_Name varchar(255) NOT NULL DEFAULT '',
-  conf_Value text
+  conf_ID int(11) NOT NULL AUTO_INCREMENT,
+  conf_Name varchar(50) NOT NULL DEFAULT '',
+  conf_Value text,
+  PRIMARY KEY (conf_ID),
+  KEY %pre%conf_Name (conf_Name)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -91,7 +94,7 @@ CREATE TABLE IF NOT EXISTS %pre%member (
   mem_HomePage varchar(255) NOT NULL DEFAULT '',
   mem_IP varchar(15) NOT NULL DEFAULT '',
   mem_PostTime int(11) NOT NULL DEFAULT '0',
-  mem_Alias varchar(255) NOT NULL DEFAULT '',
+  mem_Alias varchar(50) NOT NULL DEFAULT '',
   mem_Intro text NOT NULL,
   mem_Articles int(11) NOT NULL DEFAULT '0',
   mem_Pages int(11) NOT NULL DEFAULT '0',
@@ -100,7 +103,9 @@ CREATE TABLE IF NOT EXISTS %pre%member (
   mem_Template varchar(50) NOT NULL DEFAULT '',
   mem_Meta longtext NOT NULL,
   PRIMARY KEY (mem_ID),
-  KEY %pre%mem_Name (mem_Name)
+  KEY %pre%mem_Name (mem_Name),
+  KEY %pre%mem_Alias (mem_Alias),
+  KEY %pre%mem_Level (mem_Level)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 

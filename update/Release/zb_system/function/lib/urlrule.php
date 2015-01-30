@@ -72,7 +72,7 @@ class UrlRule{
 			if(isset($matches[0])){
 				$s=str_replace($matches[0],'',$s);
 			}
-			if(substr($s,-9)=='{%page%}/')$s=substr($s,0,strlen($s)-1);
+			if(substr($this->PreUrl,-10)!='_{%page%}/' && substr($s,-9)=='{%page%}/')$s=substr($s,0,strlen($s)-1);
 		}
 
 		$this->Rules['{%host%}']=$zbp->host;
@@ -80,7 +80,7 @@ class UrlRule{
 			$s=str_replace($key, $value, $s);
 		}
 
-		if(substr($this->PreUrl, - 1)<>'/' &&  substr($s, - 1)=='/' ){
+		if(substr($this->PreUrl, - 1)<>'/' &&  substr($s, - 1)=='/' && $s<>$zbp->host ){
 			$s=substr($s,0,strlen($s)-1);
 		}
 
