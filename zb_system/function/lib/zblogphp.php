@@ -832,6 +832,7 @@ class ZBlogPHP {
 					($key=='ZC_PGSQL_CHARSET') ||
 					($key=='ZC_PGSQL_PRE') ||
 					($key=='ZC_PGSQL_PORT') ||
+					($key=='ZC_PGSQL_PERSISTENT') || 
 					($key=='ZC_SITE_TURNOFF')
 				)$option[$key]=$value;	
 			}

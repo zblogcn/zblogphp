@@ -35,6 +35,7 @@ class Dbpdo_SQLite implements iDataBase {
 	* @return string
 	*/
 	public function EscapeString($s){
+		return str_ireplace('\'','\'\'',$s);
 	}
 
 	/**
@@ -42,10 +43,6 @@ class Dbpdo_SQLite implements iDataBase {
 	* @return bool
 	*/
 	function Open($array){
-		/*$array=array(
-			'dbmysql_server',
-			'dbmysql_username',
-		*/
 		$db_link = new PDO('sqlite:' . $array[0]);
 		$this->db = $db_link;
 		$this->dbpre=$array[1];
