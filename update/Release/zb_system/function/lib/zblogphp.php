@@ -563,8 +563,8 @@ class ZBlogPHP {
 
 		$this->CheckTemplate();
 
-		if(GetVars('addoninfo','COOKIE')){
-			$dishtml5=json_decode(GetVars('addoninfo','COOKIE'));
+		if(GetVars('addinfo' . str_replace('/','',$this->cookiespath) ,'COOKIE')){
+			$dishtml5=json_decode(GetVars('addinfo' . str_replace('/','',$this->cookiespath),'COOKIE'));
 			if(is_object($dishtml5) && property_exists($dishtml5,'dishtml5'))
 				$dishtml5=(bool)$dishtml5->dishtml5;
 			else

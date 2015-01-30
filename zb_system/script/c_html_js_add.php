@@ -24,7 +24,7 @@ var lang_comment_content_error = "<?php echo $lang['error']['46']; ?>";
 echo '$(function () {';
 echo 'var $cpLogin = $(".cp-login").find("a");';
 echo 'var $cpVrs = $(".cp-vrs").find("a");';
-echo 'var $addoninfo = GetCookie("addoninfo");if(!$addoninfo)return ;';
+echo 'var $addoninfo = GetCookie("addinfo' . str_replace('/','',$zbp->cookiespath) . '");if(!$addoninfo)return ;';
 echo '$addoninfo = eval("("+$addoninfo+")");';
 echo 'if($addoninfo.chkadmin){';
 	echo '$(".cp-hello").html("' . $zbp->lang['msg']['welcome'] . ' " + $addoninfo.useralias + " (" + $addoninfo.levelname  + ")");';

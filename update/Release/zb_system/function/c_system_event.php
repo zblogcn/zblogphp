@@ -22,23 +22,21 @@ function VerifyLogin() {
 		$un = $m->Name;
 		$ps = $m->PassWord_MD5Path;
 		$sd = (int)GetVars('savedate');
-		$addoninfo=array();
-		$addoninfo['dishtml5']=(int)GetVars('dishtml5', 'POST');
-		$addoninfo['chkadmin']=(int)$zbp->CheckRights('admin');
-		$addoninfo['chkarticle']=(int)$zbp->CheckRights('ArticleEdt');
-		$addoninfo['levelname']=$m->LevelName;
-		$addoninfo['userid']=$m->ID;
-		$addoninfo['useralias']=$m->StaticName;
+		$addinfo=array();
+		$addinfo['dishtml5']=(int)GetVars('dishtml5', 'POST');
+		$addinfo['chkadmin']=(int)$zbp->CheckRights('admin');
+		$addinfo['chkarticle']=(int)$zbp->CheckRights('ArticleEdt');
+		$addinfo['levelname']=$m->LevelName;
+		$addinfo['userid']=$m->ID;
+		$addinfo['useralias']=$m->StaticName;
 		if ( $sd == 0) {
 			setcookie("username", $un, 0, $zbp->cookiespath);
 			setcookie("password", $ps, 0, $zbp->cookiespath);
-			setcookie("addoninfo", json_encode($addoninfo), 0, $zbp->cookiespath);
-			//setcookie("dishtml5", GetVars('dishtml5', 'POST'), 0, $zbp->cookiespath);
+			setcookie("addinfo" . str_replace('/','',$zbp->cookiespath), json_encode($addinfo), 0, $zbp->cookiespath);
 		} else {
 			setcookie("username", $un, time() + 3600 * 24 * $sd, $zbp->cookiespath);
 			setcookie("password", $ps, time() + 3600 * 24 * $sd, $zbp->cookiespath);
-			setcookie("addoninfo", json_encode($addoninfo), time() + 3600 * 24 * $sd, $zbp->cookiespath);
-			//setcookie("dishtml5", GetVars('dishtml5', 'POST'), time() + 3600 * 24 * $sd, $zbp->cookiespath);
+			setcookie("addinfo" . str_replace('/','',$zbp->cookiespath), json_encode($addinfo), time() + 3600 * 24 * $sd, $zbp->cookiespath);
 		}
 
 		return true;
