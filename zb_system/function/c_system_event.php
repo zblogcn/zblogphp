@@ -2903,7 +2903,7 @@ function BuildModule_calendar($date = '') {
 	$arraydate = array();
 	$arrayid = array();
 	foreach ($array as $key => $value) {
-		$arraydate[date('j', $value['log_PostTime'])] = $value['log_ID'];
+		$arraydate[date('j', $value[$zbp->datainfo['Post']['PostTime'][0]])] = $value[$zbp->datainfo['Post']['ID'][0]];
 	}
 	if (count($arraydate) > 0) {
 		foreach ($arraydate as $key => $value) {

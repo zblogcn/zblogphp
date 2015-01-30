@@ -157,9 +157,7 @@ class DbSql
 				$i +=1;
 			}
 			$s=substr($s,0,strlen($s)-1);
-
 			$s.=');';
-			reset($datainfo);
 			$s.='CREATE UNIQUE INDEX ' . $table . '_' . $idname.' on '.$table.' ('.$idname.');';
 
 		}

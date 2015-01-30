@@ -292,14 +292,24 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][1];?></td>
         </tr>
         <tr>
+          <td scope="row">SQLite</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
+        </tr>
+        <tr>
           <td scope="row">PDO_SQLite</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">SQLite</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
+          <td scope="row">PostgresSQL</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">PDO_PgSQL</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_pgsql'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_pgsql'][1];?></td>
         </tr>
         <tr>
           <th colspan="3" scope="row"><?php echo $zbp->lang['zb_install']['permission_check'];?></th>
@@ -413,6 +423,15 @@ function Setup3(){
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         }
         ?>
+        <?php
+        if($hasPgsql){
+        ?>
+          <label class="dbselect" id="pgsql_radio">
+          <input type="radio" name="fdbtype"/>Postgres数据库</label>
+        <?php
+          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+        }
+        ?>
         </p>
       </div>
       <?php if($hasMysql){?>
@@ -490,6 +509,47 @@ function Setup3(){
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
           }
         ?>
+        <?php 
+          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+          }
+        ?>
+        <?php if($CheckResult['pdo_sqlite'][0]){?>
+        <label>
+          <input value="pdo_sqlite" type="radio" name="dbtype" />PDO_SQLite</label>
+        <?php 
+          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+          }
+        ?>
+      </p>
+      </div>
+	  
+      <?php if($hasPgsql){?>
+      <div class="dbdetail" id="pgsql">
+        <p><b>数据库主机:</b>
+          <input type="text" name="dbpgsql_server" id="dbpgsql_server" value="<?php echo $option['ZC_PGSQL_SERVER'];?>" style="width:350px;" />
+        </p>
+        <p><b>用户名称:</b>
+          <input type="text" name="dbpgsql_username" id="dbpgsql_username" value="<?php echo $option['ZC_PGSQL_USERNAME'];?>" style="width:350px;" />
+        </p>
+        <p><b>用户密码:</b>
+          <input type="password" name="dbpgsql_password" id="dbpgsql_password" value="<?php echo $option['ZC_PGSQL_PASSWORD'];?>" style="width:350px;" />
+        </p>
+        <p><b>数据库名称:</b>
+          <input type="text" name="dbpgsql_name" id="dbpgsql_name" value="<?php echo $option['ZC_PGSQL_NAME'];?>" style="width:350px;" />
+        </p>
+        <p><b>表&nbsp;前&nbsp;缀:</b>
+          <input type="text" name="dbpgsql_pre" id="dbpgsql_pre" value="<?php echo $option['ZC_PGSQL_PRE'];?>" style="width:350px;" />
+        </p>
+      <p><b>连接选择:</b>
+        <?php if($CheckResult['pgsql'][0]){?>
+        <label>
+          <input value="pgsql" type="radio" name="dbtype"/>PGSQL连接</label>
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+        <?php if($CheckResult['pdo_pgsql'][0]){?>
+        <label>
+          <input value="pdo_pgsql" type="radio" name="dbtype"/>PDO_PGSQL连接</label>
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+		<br/><small>(端口号默认5432，如需要修改请在'数据库主机'里追加':端口号'。)</small>
       </p>
       </div>
       <?php } ?>
@@ -593,6 +653,22 @@ case 'pdo_sqlite':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');
   $zbp->option['ZC_SQLITE_NAME']=trim(GetVars('dbsqlite_name','POST'));
   $zbp->option['ZC_SQLITE_PRE']=trim(GetVars('dbsqlite_pre','POST'));
+  break;
+case 'pgsql':
+case 'pdo_pgsql':
+  $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/pgsql.sql');
+  $zbp->option['ZC_PGSQL_SERVER']=GetVars('dbpgsql_server','POST');
+  if(strpos($zbp->option['ZC_PGSQL_SERVER'],':')!==false){
+    $servers=explode(':',$zbp->option['ZC_PGSQL_SERVER']);
+	$zbp->option['ZC_PGSQL_SERVER']=$servers[0];
+	$zbp->option['ZC_PGSQL_PORT']=(int)$servers[1];
+	if($zbp->option['ZC_PGSQL_PORT']==0)$zbp->option['ZC_PGSQL_PORT']=5432;
+	unset($servers);
+  }
+  $zbp->option['ZC_PGSQL_USERNAME']=GetVars('dbpgsql_username','POST');
+  $zbp->option['ZC_PGSQL_PASSWORD']=GetVars('dbpgsql_password','POST');
+  $zbp->option['ZC_PGSQL_NAME']=str_replace(array('\'','"'),array('',''),GetVars('dbpgsql_name','POST'));
+  $zbp->option['ZC_PGSQL_PRE']=str_replace(array('\'','"'),array('',''),GetVars('dbpgsql_pre','POST'));
   break;
 }
 
@@ -703,10 +779,10 @@ $CheckResult=array(
 		$pdo = null;
 		$CheckResult['pdo_pgsql'][0]=$v;
 		$CheckResult['pdo_pgsql'][1]=$CheckResult['pdo_pgsql'][0]?bingo:error;
-	}	
+	}
   }
-  if( defined("PGSQL_STATUS_STRING") ){
-    $CheckResult['pgsql'][0]=PGSQL_STATUS_STRING;
+  if( defined("PGSQL_LIBPQ_VERSION") ){
+    $CheckResult['pgsql'][0]=PGSQL_LIBPQ_VERSION;
 	$CheckResult['pgsql'][1]=$CheckResult['pgsql'][0]?bingo:error;
   }
   if( function_exists("sqlite_libversion") ){
@@ -756,6 +832,7 @@ function CreateTable($sql){
   }
   
   $sql=$zbp->db->sql->ReplacePre($sql);
+
   $zbp->db->QueryMulit($sql);
 
   echo $zbp->lang['zb_install']['create_table'] . "<br/>";

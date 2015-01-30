@@ -5,9 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/DataBase 类库
  */
-class Dbpdo_SQLite implements iDataBase {
-
-	public $type = 'sqlite';
+class Dbpdo_PgSQL implements iDataBase {
 
 	/**
 	* @var string|null 数据库名前缀
@@ -35,21 +33,33 @@ class Dbpdo_SQLite implements iDataBase {
 	* @return string
 	*/
 	public function EscapeString($s){
+		return str_ireplace("'", "''", $s);
 	}
 
 	/**
-	* @param $array
-	* @return bool
-	*/
+     * 连接数据库
+	 * @param array $array 数据库连接配置
+	 *              $array=array(
+	 *                  'pgsql_server',
+	 *                  'pgsql_username',
+	 *                  'pgsql_password',
+	 *                  'pgsql_name',
+	 *                  'pgsql_pre',
+	 *                  'pgsql_port',
+	 *                  'persistent')
+	 *                  )
+	 * @return bool
+	 */
 	function Open($array){
-		/*$array=array(
-			'dbmysql_server',
-			'dbmysql_username',
-		*/
-		$db_link = new PDO('sqlite:' . $array[0]);
+
+		$s="pgsql:host={$array[0]};port={$array[5]};dbname={$array[3]};user={$array[1]};password={$array[2]};options='--client_encoding=UTF8'";
+		if(false == $array[5]){
+			$db_link = new PDO($s);
+		}else{
+			$db_link = new PDO($s,null,null,array(PDO::ATTR_PERSISTENT => true));
+		}
 		$this->db = $db_link;
-		$this->dbpre=$array[1];
-		$this->dbname=$array[0];
+		$this->dbpre=$array[4];
 		return true;
 	}
 
@@ -64,8 +74,7 @@ class Dbpdo_SQLite implements iDataBase {
 	* 执行多行SQL语句
 	* @param $s 
 	*/
-	function QueryMulit($s){return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
-	function QueryMulti($s){
+	function QueryMulit($s){
 		//$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		$a=explode(';',$s);
 		foreach ($a as $s) {
@@ -116,9 +125,12 @@ class Dbpdo_SQLite implements iDataBase {
 	* @return int 
 	*/
 	function Insert($query){
-		//$query=str_replace('%pre%', $this->dbpre, $query);
-		$this->db->exec($this->sql->Filter($query));
-		return $this->db->lastInsertId();
+		//$query=str_replace('%pre%', $this->dbpre, $query);		
+		$this->db->query($this->sql->Filter($query));
+		$seq = explode(' ',$query,4);
+		$seq = $seq[2] . '_seq';
+		$id = $this->db->lastInsertId($seq);
+		return $id;
 	}
 
 	/**

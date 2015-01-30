@@ -825,14 +825,13 @@ class ZBlogPHP {
 					($key=='ZC_MYSQL_ENGINE') || 
 					($key=='ZC_MYSQL_PORT') || 
 					($key=='ZC_MYSQL_PERSISTENT') || 
-					($key=='ZC_PGSQL_SERVER') || 
-					($key=='ZC_PGSQL_USERNAME') || 
-					($key=='ZC_PGSQL_PASSWORD') || 
-					($key=='ZC_PGSQL_NAME') || 
-					($key=='ZC_PGSQL_CHARSET') || 
-					($key=='ZC_PGSQL_PRE') || 
-					($key=='ZC_PGSQL_PORT') || 
-					($key=='ZC_PGSQL_PERSISTENT') || 
+					($key=='ZC_PGSQL_SERVER') ||
+					($key=='ZC_PGSQL_USERNAME') ||
+					($key=='ZC_PGSQL_PASSWORD') ||
+					($key=='ZC_PGSQL_NAME') ||
+					($key=='ZC_PGSQL_CHARSET') ||
+					($key=='ZC_PGSQL_PRE') ||
+					($key=='ZC_PGSQL_PORT') ||
 					($key=='ZC_SITE_TURNOFF')
 				)$option[$key]=$value;	
 			}
@@ -2659,7 +2658,6 @@ class ZBlogPHP {
 			Redirect301($u);
 		}
 	}
-
 	/**
 	 * 对表名和数据结构进行预转换
 	 */
