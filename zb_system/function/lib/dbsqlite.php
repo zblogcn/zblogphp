@@ -19,7 +19,7 @@ class DbSQLite implements iDataBase {
 	*/
 	public $dbname = null;
 	/**
-	* @var DbSql|null 
+	* @var DbSql|null
 	*/
 	public $sql=null;
 	/**

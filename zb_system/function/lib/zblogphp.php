@@ -27,7 +27,7 @@ class ZBlogPHP {
 	/**
 	 * @var array 语言包list
 	 */
-	public $langpacklist = array();	
+	public $langpacklist = array();
 	/**
 	 * @var null|string 路径
 	 */
@@ -275,7 +275,7 @@ class ZBlogPHP {
 		}
 		return self::$_zbp;
 	}
-	
+
 	/**
 	 * 初始化数据库连接
 	 * @param string $type 数据连接类型
@@ -432,7 +432,7 @@ class ZBlogPHP {
 		}
 		if(isset($this->option['ZC_DEBUG_LOG_ERROR'])){
 			ZBlogException::$islogerror = (bool)$this->option['ZC_DEBUG_LOG_ERROR'];
-		}		
+		}
 
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){
 			$this->host=$this->option['ZC_BLOG_HOST'];
@@ -440,7 +440,7 @@ class ZBlogPHP {
 		}else{
 			$this->option['ZC_BLOG_HOST']=$this->host;
 		}
-	
+
 		$this->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
 		$this->option['ZC_BLOG_VERSION'] = ZC_BLOG_VERSION;
 		$this->option['ZC_BLOG_PRODUCT_FULL']=$this->option['ZC_BLOG_PRODUCT'] . ' ' . $this->option['ZC_BLOG_VERSION'];
@@ -491,13 +491,13 @@ class ZBlogPHP {
 		}
 
 		if($this->isload)return false;
-		
+
 		$this->StartGzip();
 
 		header('Content-type: text/html; charset=utf-8');
 
 		$this->ConvertTableAndDatainfo();
-		
+
 		$this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
 		$this->LoadCategorys();
 		#$this->LoadTags();
@@ -538,9 +538,9 @@ class ZBlogPHP {
 		Add_Filter_Plugin('Filter_Plugin_Admin_Header','Include_AddonAdminFont');
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
-		
+
 		$this->isload=true;
-		
+
 		return true;
 	}
 
@@ -553,7 +553,7 @@ class ZBlogPHP {
 
 		if($this->user->Status==ZC_MEMBER_STATUS_AUDITING) $this->ShowError(79,__FILE__,__LINE__);
 		if($this->user->Status==ZC_MEMBER_STATUS_LOCKED) $this->ShowError(80,__FILE__,__LINE__);
-		
+
 		Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','Include_Admin_Addpagesubmenu');
 		Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','Include_Admin_Addtagsubmenu');
 		Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','Include_Admin_Addcatesubmenu');
@@ -641,7 +641,7 @@ class ZBlogPHP {
 						$this->option['ZC_MYSQL_PRE'],
 						$this->option['ZC_MYSQL_PORT'],
 						$this->option['ZC_MYSQL_PERSISTENT'],
-						$this->option['ZC_MYSQL_ENGINE'],				
+						$this->option['ZC_MYSQL_ENGINE'],
 					))==false){
 					$this->ShowError(67,__FILE__,__LINE__);
 				}
@@ -696,7 +696,7 @@ class ZBlogPHP {
 	public function LoadConfigs(){
 		$this->configs=array();
 		$sql = $this->db->sql->Select($this->table['Config'],array('*'),'','','','');
-		
+
 		$array = $this->GetListType('Config',$sql);
 		foreach ($array as $c) {
 			$n=$c->GetItemName();
@@ -812,19 +812,19 @@ class ZBlogPHP {
 			$option = array();
 			foreach ($this->option as $key => $value) {
 				if(
-					($key=='ZC_YUN_SITE') || 
-					($key=='ZC_DATABASE_TYPE') || 
-					($key=='ZC_SQLITE_NAME') || 
-					($key=='ZC_SQLITE_PRE') || 
-					($key=='ZC_MYSQL_SERVER') || 
-					($key=='ZC_MYSQL_USERNAME') || 
-					($key=='ZC_MYSQL_PASSWORD') || 
-					($key=='ZC_MYSQL_NAME') || 
-					($key=='ZC_MYSQL_CHARSET') || 
-					($key=='ZC_MYSQL_PRE') || 
-					($key=='ZC_MYSQL_ENGINE') || 
-					($key=='ZC_MYSQL_PORT') || 
-					($key=='ZC_MYSQL_PERSISTENT') || 
+					($key=='ZC_YUN_SITE') ||
+					($key=='ZC_DATABASE_TYPE') ||
+					($key=='ZC_SQLITE_NAME') ||
+					($key=='ZC_SQLITE_PRE') ||
+					($key=='ZC_MYSQL_SERVER') ||
+					($key=='ZC_MYSQL_USERNAME') ||
+					($key=='ZC_MYSQL_PASSWORD') ||
+					($key=='ZC_MYSQL_NAME') ||
+					($key=='ZC_MYSQL_CHARSET') ||
+					($key=='ZC_MYSQL_PRE') ||
+					($key=='ZC_MYSQL_ENGINE') ||
+					($key=='ZC_MYSQL_PORT') ||
+					($key=='ZC_MYSQL_PERSISTENT') ||
 					($key=='ZC_PGSQL_SERVER') ||
 					($key=='ZC_PGSQL_USERNAME') ||
 					($key=='ZC_PGSQL_PASSWORD') ||
@@ -832,9 +832,9 @@ class ZBlogPHP {
 					($key=='ZC_PGSQL_CHARSET') ||
 					($key=='ZC_PGSQL_PRE') ||
 					($key=='ZC_PGSQL_PORT') ||
-					($key=='ZC_PGSQL_PERSISTENT') || 
+					($key=='ZC_PGSQL_PERSISTENT') ||
 					($key=='ZC_SITE_TURNOFF')
-				)$option[$key]=$value;	
+				)$option[$key]=$value;
 			}
 			$s.=var_export($option,true);
 			$s.="\r\n?>";
@@ -868,27 +868,27 @@ class ZBlogPHP {
 			//if($key=='ZC_BLOG_CLSID')continue;
 			//if($key=='ZC_BLOG_LANGUAGEPACK')continue;
 			if(
-				($key=='ZC_YUN_SITE') || 
-				($key=='ZC_DATABASE_TYPE') || 
-				($key=='ZC_SQLITE_NAME') || 
-				($key=='ZC_SQLITE_PRE') || 
-				($key=='ZC_MYSQL_SERVER') || 
-				($key=='ZC_MYSQL_USERNAME') || 
-				($key=='ZC_MYSQL_PASSWORD') || 
-				($key=='ZC_MYSQL_NAME') || 
-				($key=='ZC_MYSQL_CHARSET') || 
-				($key=='ZC_MYSQL_PRE') || 
-				($key=='ZC_MYSQL_ENGINE') || 
-				($key=='ZC_MYSQL_PORT') || 
-				($key=='ZC_MYSQL_PERSISTENT') || 
-				($key=='ZC_PGSQL_SERVER') || 
-				($key=='ZC_PGSQL_USERNAME') || 
-				($key=='ZC_PGSQL_PASSWORD') || 
-				($key=='ZC_PGSQL_NAME') || 
-				($key=='ZC_PGSQL_CHARSET') || 
-				($key=='ZC_PGSQL_PRE') || 
-				($key=='ZC_PGSQL_PORT') || 
-				($key=='ZC_PGSQL_PERSISTENT') || 
+				($key=='ZC_YUN_SITE') ||
+				($key=='ZC_DATABASE_TYPE') ||
+				($key=='ZC_SQLITE_NAME') ||
+				($key=='ZC_SQLITE_PRE') ||
+				($key=='ZC_MYSQL_SERVER') ||
+				($key=='ZC_MYSQL_USERNAME') ||
+				($key=='ZC_MYSQL_PASSWORD') ||
+				($key=='ZC_MYSQL_NAME') ||
+				($key=='ZC_MYSQL_CHARSET') ||
+				($key=='ZC_MYSQL_PRE') ||
+				($key=='ZC_MYSQL_ENGINE') ||
+				($key=='ZC_MYSQL_PORT') ||
+				($key=='ZC_MYSQL_PERSISTENT') ||
+				($key=='ZC_PGSQL_SERVER') ||
+				($key=='ZC_PGSQL_USERNAME') ||
+				($key=='ZC_PGSQL_PASSWORD') ||
+				($key=='ZC_PGSQL_NAME') ||
+				($key=='ZC_PGSQL_CHARSET') ||
+				($key=='ZC_PGSQL_PRE') ||
+				($key=='ZC_PGSQL_PORT') ||
+				($key=='ZC_PGSQL_PERSISTENT') ||
 				($key=='ZC_SITE_TURNOFF')
 			)continue;
 			$this->option[$key]=$value;
@@ -1219,7 +1219,7 @@ class ZBlogPHP {
 	 * @return null
 	 */
 	public function LoadModules(){
-	
+
 		$this->modules = array();
 		$this->modulesbyfilename = array();
 		$array=$this->GetModuleList();
@@ -1291,7 +1291,7 @@ class ZBlogPHP {
 		$app->LoadInfoByXml($type,$id);
 		return $app;
 	}
-	
+
 	/**
 	 * 载入指定应用语言包
 	 * @param string $type 应用类型(system|theme|plugin)
@@ -1358,7 +1358,7 @@ class ZBlogPHP {
 			}
 		}
 	}
-	
+
 	public function ReloadLanguages($default){
 		$array = $this->langpacklist;
 		$this->lang = $this->langpacklist = array();
@@ -1672,7 +1672,7 @@ class ZBlogPHP {
 
 	/**
 	 * 已改名GetListType,将在下个版中扔掉有歧义的GetList
-	 * 
+	 *
 	 * @deprecated 1.5
 	 * @param $type
 	 * @param $sql
@@ -1682,7 +1682,7 @@ class ZBlogPHP {
 		$this->SetHint('tips','$zbp->GetList()已改名为GetListType(),下个版本将会取消,请在相关源码中改用新名称.');
 		return $this->GetListType($type,$sql);
 	}
-	
+
 	/**
 	 * 原名GetList
 	 * 查询指定类型的sql并返回指定类型对象列表
@@ -1748,7 +1748,7 @@ class ZBlogPHP {
 		}
 		return $array;
 	}
-	
+
 	/**
 	 * 通过ID数组获取文章实例
 	 * @param array $array
@@ -1959,7 +1959,7 @@ class ZBlogPHP {
 			return $p;
 		}
 	}
-	
+
 	/**
 	 * 通过ID获取分类实例
 	 * @param int $id
@@ -2017,7 +2017,7 @@ class ZBlogPHP {
 			}
 			$m = new Module;
 		}
-		return $m;		
+		return $m;
 	}
 
 	/**
@@ -2036,7 +2036,7 @@ class ZBlogPHP {
 			$m = new Module;
 		}
 		return $m;
-	}	
+	}
 
 	/**
 	 * 通过ID获取用户实例
@@ -2066,7 +2066,7 @@ class ZBlogPHP {
 		$m->Guid=GetGuid();
 		return $m;
 	}
-	
+
 	/**
 	 * 通过用户名获取用户实例(不区分大小写)
 	 * @param string $name
@@ -2075,7 +2075,7 @@ class ZBlogPHP {
 	function GetMemberByName($name){
 		$name=trim($name);
 		if (!$name || !CheckRegExp($name, '[username]'))return new Member;
-	
+
 		if(isset($this->membersbyname[$name])){
 			return $this->membersbyname[$name];
 		}else{
@@ -2096,7 +2096,7 @@ class ZBlogPHP {
 			$this->membersbyname[$m->Name] = &$this->members[$m->ID];
 			return $m;
 		};
-		
+
 		$m = new Member;
 		$m->Guid=GetGuid();
 		return $m;
@@ -2138,7 +2138,7 @@ class ZBlogPHP {
 
 		return new Member;
 	}
-	
+
 	/**
 	 * 检查指定名称的用户是否存在(不区分大小写)
 	 */
@@ -2339,7 +2339,7 @@ class ZBlogPHP {
 			return $b+$t;
 		}
 	}
-	
+
 	/**
 	 * 通过数组array[111,333,444,555,666]转换成存储串
 	 * @param array $array 标签ID数组
@@ -2379,7 +2379,7 @@ class ZBlogPHP {
 		//return HasNameInString($s,$name);
 		return in_array($name,$this->activeapps);
 	}
-	
+
 	/**
 	 * 检查应用是否安装并启用
 	 * @param string $name 应用ID（插件或主题）
@@ -2642,12 +2642,12 @@ class ZBlogPHP {
 				Redirect('./zb_install/index.php');
 	}
 
-	
+
 	/**
 	 * 检测当前url，如果不符合设置就跳转到固定域名的链接
 	 */
 	function  RedirectPermanentDomain(){
-	
+
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==false)return;
 		if($this->option['ZC_PERMANENT_DOMAIN_REDIRECT']==false)return;
 

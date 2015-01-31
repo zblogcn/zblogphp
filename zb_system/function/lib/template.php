@@ -118,11 +118,11 @@ class Template{
 		// Step 1: 替换<?php块
 		$this->replacePHP($content);
 		// Step 2: 解析PHP
-		$this->parsePHP($content);	
+		$this->parsePHP($content);
 		// Step 3: 引入主题
 		$this->parse_template($content);
 		// Step 4: 解析module
-		$this->parse_module($content);	
+		$this->parse_module($content);
 		// Step 5: 处理注释
 		$this->parse_comments($content);
 		// Step 6: 替换配置

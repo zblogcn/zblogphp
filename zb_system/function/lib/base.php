@@ -28,7 +28,7 @@ class Base{
 	* @var datebase db
 	*/
 	protected $db = null;
-	
+
 	/**
 	* @param string $table 数据表
 	* @param array $datainfo 数据表结构信息
@@ -217,7 +217,7 @@ class Base{
 		$id_field=reset($this->datainfo);
 		$id_name=key($this->datainfo);
 		$id_field=$id_field[0];
-		
+
 		if ($this->$id_name  ==  0) {
 			$sql = $this->db->sql->Insert($this->table,$keyvalue);
 			$this->$id_name = $this->db->Insert($sql);

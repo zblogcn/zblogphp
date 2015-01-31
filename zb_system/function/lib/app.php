@@ -128,18 +128,18 @@ class App {
 		return false;
 	}
 	/**
-	 * 是否带管理页面 
+	 * 是否带管理页面
 	 * @access	public
-	 * @return	bool	
+	 * @return	bool
 	 */
 	public function CanManage(){
 		if($this->path){return true;}
 		return false;
 	}
 	/**
-	 * 是否正在使用 
+	 * 是否正在使用
 	 * @access	public
-	 * @return	bool	
+	 * @return	bool
 	 */
 	public function IsUsed(){
 		global $zbp;
@@ -148,7 +148,7 @@ class App {
 	/**
 	 * 是否附带主题插件（针对主题应用）
 	 * @access	public
-	 * @return	bool	
+	 * @return	bool
 	 */
 	public function HasPlugin(){
 		if($this->path || $this->include){return true;}
@@ -157,7 +157,7 @@ class App {
 	/**
 	 * 获取应用ID的crc32Hash值
 	 * @access	public
-	 * @return	string	
+	 * @return	string
 	 */
 	public function GetHash(){
 		global $zbp;
@@ -166,7 +166,7 @@ class App {
 	/**
 	 * 获取应用管理页面链接
 	 * @access	public
-	 * @return	string	
+	 * @return	string
 	 */
 	public function GetManageUrl(){
 		global $zbp;
@@ -175,7 +175,7 @@ class App {
 	/**
 	 * 获取应用目录地址
 	 * @access	public
-	 * @return	string	
+	 * @return	string
 	 */
 	public function GetDir(){
 		global $zbp;
@@ -184,7 +184,7 @@ class App {
 	/**
 	 * 获取应用Logo图片地址
 	 * @access	public
-	 * @return	string	
+	 * @return	string
 	 */
 	public function GetLogo(){
 		global $zbp;
@@ -197,7 +197,7 @@ class App {
 	/**
 	 * 获取应用截图地址
 	 * @access	public
-	 * @return	string	
+	 * @return	string
 	 */
 	public function GetScreenshot(){
 		global $zbp;
@@ -482,7 +482,7 @@ class App {
 		$type=$xml['type'];
 		$id=$xml->id;
 		$dir=$zbp->path . 'zb_users/' . $type . '/';
-		
+
 		ZBlogException::SuspendErrorHook();
 
 		if(!file_exists($dir . $id . '/'))@mkdir($dir . $id . '/',0755,true);
@@ -502,19 +502,19 @@ class App {
 				@chmod($f,0755);
 			}
 		}
-		
+
 		ZBlogException::ResumeErrorHook();
 
 		return true;
 	}
-	
+
 	public function CheckCompatibility(){
 		global $zbp;
 
 		if((int)$this->adapted>(int)$zbp->version){
 			$zbp->ShowError(str_replace('%s',$this->adapted,$zbp->lang['error'][78]),__FILE__,__LINE__);
 		}
-		
+
 		$ad=explode('|',$this->advanced_dependency);
 		foreach($ad as $d){
 			if(!$d)continue;

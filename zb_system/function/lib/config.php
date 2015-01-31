@@ -24,7 +24,7 @@ class Config {
 	 * @var array 存储Config相应key-value数值的数组
 	 */
 	private $kvdata=array();
-	 
+
 	protected $db = null;
 
 	/**
@@ -35,15 +35,15 @@ class Config {
 		if($db !== null)
 			$this->db = &$db;
 		else
-			$this->db = &$GLOBALS['zbp']->db;				
-	
+			$this->db = &$GLOBALS['zbp']->db;
+
 		$this->table = &$GLOBALS['table']['Config'];
 		$this->datainfo = &$GLOBALS['datainfo']['Config'];
 
 		foreach ($this->datainfo as $key => $value) {
 			$this->data[$key]=$value[3];
 		}
-		
+
 		if($itemname)$itemname = FilterCorrectName($itemname);
 		$this->data['Name']=$itemname;
 	}
@@ -65,7 +65,7 @@ class Config {
 		if(!isset($this->kvdata[$name]))return null;
 		return $this->kvdata[$name];
 	}
-	
+
 	/**
 	* 获取Data数据
 	* @return array
@@ -138,7 +138,7 @@ class Config {
 			$this->kvdata=array();
 			return false;
 		}
-		
+
 		foreach ($this->kvdata as $key => &$value)
 			if(is_string($value))$value=str_replace('{#ZC_BLOG_HOST#}',$bloghost,$value);
 
@@ -168,7 +168,7 @@ class Config {
 
 		$name = $this->GetItemName();
 		$value = $this->Serialize();
-		
+
 		if($name=='')return false;
 
 		$kv=array('conf_Name'=>$name,'conf_Value'=>$value);
@@ -185,7 +185,7 @@ class Config {
 		}
 		return true;
 	}
-	
+
 	/**
 	* 删除数据
 	* Del名字已被占用，改用Delete表示从数据库删除
@@ -215,7 +215,7 @@ class Config {
 	function SaveKey($name){
 		return $this->Save();
 	}
-	
+
 	/**
 	* 占位
 	*/

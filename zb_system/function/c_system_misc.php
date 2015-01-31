@@ -110,7 +110,7 @@ function misc_statistic() {
 	$zbp->AddBuildModule('statistics', array($all_artiles, $all_pages, $all_categorys, $all_tags, $all_views, $all_comments));
 	$zbp->BuildModule();
 	$zbp->SaveCache();
-	
+
 	$r = str_replace('{#ZC_BLOG_HOST#}', $zbp->host, $r);
 	$r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
 	$r = str_replace('{$zbp->theme}', $zbp->theme, $r);
@@ -118,7 +118,7 @@ function misc_statistic() {
 	$r = str_replace('{$system_environment}', $zbp->cache->system_environment, $r);
 
 	echo $r;
-	
+
 	$zbp->BuildTemplate();
 }
 

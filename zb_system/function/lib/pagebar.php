@@ -71,7 +71,7 @@ class PageBar{
 	 * @var null
 	 */
 	public $NextButton = null;
-	
+
 	/**
 	 * @param $url
 	 * @param bool $makereplace

@@ -3,11 +3,11 @@
 // 作    者:    朱煊(zx.asd)
 // 版权所有:    RainbowSoft Studio
 // 技术支持:    rainbowsoft@163.com
-// 程序名称:    
-// 程序版本:    
+// 程序名称:
+// 程序版本:
 // 单元名称:    common.js
 // 开始时间:    2004.07.25
-// 最后修改:    
+// 最后修改:
 // 备    注:    全局脚本
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -122,18 +122,18 @@ function VerifyMessage() {
 		"isajax":true,
 		"postid":intPostID,
 		"verify":strVerify,
-		"name":strName,		
+		"name":strName,
 		"email":strEmail,
 		"content":strArticle,
 		"homepage":strHomePage,
 		"replyid":intReplyID
 		},
 		function(data){
-		
+
 			$("#inpId").parent("form").find(":submit").removeClass("loading");
 			$("#inpId").parent("form").find(":submit").removeAttr("disabled");
 			$("#inpId").parent("form").find(":submit").val(strSubmit);
-		
+
 			var s =data;
 			if((s.search("faultCode")>0)&&(s.search("faultString")>0))
 			{
@@ -149,7 +149,7 @@ function VerifyMessage() {
 				}
 				window.location="#"+cmt;
 				$("#txaArticle").val("");
-				
+
 				SaveRememberInfo();
 				CommentComplete();
 			}
@@ -217,7 +217,7 @@ function SaveRememberInfo() {
 function RevertComment(i) {
 
 	$("#inpRevID").val(i);
-	
+
 	$("#cancel-reply").show().bind("click", function(){ $("#inpRevID").val(0);$(this).hide();window.location.hash="#comment";return false; });
 
 	window.location.hash="#comment";
@@ -228,7 +228,7 @@ function RevertComment(i) {
 
 
 //*********************************************************
-// 目的：    
+// 目的：
 //*********************************************************
 function GetComments(postid,page){
 	$.get(bloghost+"zb_system/cmd.php?act=getcmt&postid="+postid+"&page="+page, function(data){
@@ -243,7 +243,7 @@ function GetComments(postid,page){
 
 
 //*********************************************************
-// 目的：  预留空函数,留给主题或插件用  
+// 目的：  预留空函数,留给主题或插件用
 //*********************************************************
 function CommentComplete(){
 }

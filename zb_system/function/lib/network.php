@@ -123,7 +123,7 @@ class Network {
 	static function Create($extension = ''){
 		if(!isset(self::$_network)){
 			self::$_network=new Network;
-		}	
+		}
 		if ((!self::$_network->file_get_contents) && (!self::$_network->fsockopen) && (!self::$_network->curl)) return false;
 		$extension = ($extension == '' ? self::$_network->network_list[0] : $extension);
 		$type = 'network' . $extension;

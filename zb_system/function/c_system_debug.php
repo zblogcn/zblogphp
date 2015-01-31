@@ -22,7 +22,7 @@ function Debug_PrintGlobals(){
 
 /**
  *  打印全局Include文件
- * @return string 
+ * @return string
  * @since 1.3
  * @todo 下版转到debug页
 */
@@ -45,7 +45,7 @@ function Debug_PrintConstants(){
 	if(isset($a['user']))$a=$a['user'];
 	return print_r($a,true);
 }
- 
+
 /**
  * 错误调度提示
  * @param int $errno 错误级别
@@ -73,7 +73,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 		$s = reset($a);
 		if(strpos($s,'@')!==false)return true;
 	}
-	
+
 	if(ZBlogException::$iswarning==false){
 		if( $errno == E_WARNING )return true;
 		if( $errno == E_USER_WARNING )return true;
@@ -91,7 +91,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 	if( defined('E_USER_DEPRECATED ') && $errno== E_USER_DEPRECATED )return true;
 
 	//E_USER_ERROR
-	//E_RECOVERABLE_ERROR 
+	//E_RECOVERABLE_ERROR
 
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseError($errno, $errstr, $errfile, $errline);
@@ -179,7 +179,7 @@ class ZBlogException {
 	public static $error_id=0;
 	public static $error_file=null;
 	public static $error_line=null;
-	public static $islogerror=false;	
+	public static $islogerror=false;
 	public $type;
 	public $message;
 	public $file;
@@ -225,7 +225,7 @@ class ZBlogException {
 			}
 		}
 	}
-	
+
 	/**
 	* 获取单一实例
 	* @return ZBlogException
@@ -255,7 +255,7 @@ class ZBlogException {
 		set_exception_handler(create_function('', 'return false;'));
 		register_shutdown_function(create_function('', 'return false;'));
 	}
-	
+
 	/**
 	* 启用错误调度
 	*/
@@ -298,7 +298,7 @@ class ZBlogException {
 	static public function EnableStrict() {
 		self::$isstrict = true;
 	}
-	
+
 	static public function DisableWarning() {
 		self::$iswarning = false;
 	}
@@ -306,7 +306,7 @@ class ZBlogException {
 	static public function EnableWarning() {
 		self::$iswarning = true;
 	}
-	
+
 	static public function Trace($s) {
 		Logs($s);
 	}
@@ -367,7 +367,7 @@ class ZBlogException {
 			Http500();
 			ob_clean();
 		}
-		
+
 		require dirname(__FILE__) . '/../defend/error.html';
 		RunTime();
 		die();

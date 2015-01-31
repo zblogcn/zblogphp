@@ -160,7 +160,7 @@ class Post extends Base{
 				break;
 			case 'TagsCount':
 				return substr_count($this->Tag, '{');
-				break;				
+				break;
 			case 'TagsName':
 				return $this->TagsToNameString();
 			case 'Template':
@@ -260,5 +260,5 @@ class Post extends Base{
 		}
 		return parent::Del();
 	}
-	
+
 }

@@ -110,7 +110,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsignal) {$fp
 <?php
 foreach ($GLOBALS['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
 ?>
-	   </div>	
+	   </div>
 
       <!-- alias( -->
       <div id="alias" class="editmod2"><label for="edtAlias" class="editinputname" ><?php echo $lang['msg']['alias']?></label>

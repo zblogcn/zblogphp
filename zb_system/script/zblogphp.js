@@ -1,7 +1,7 @@
-﻿/** 
- * Z-BlogPHP JavaScript Framework 
+﻿/**
+ * Z-BlogPHP JavaScript Framework
  * @author zsx<zsx@zsxsoft.com>
- */  
+ */
 (function () {
 	/**
 	 * Class ZBP
@@ -82,7 +82,7 @@
 					return error;
 				}
 			}
-			
+
 			var objSubmit = $("#inpId").parent("form").find(":submit");
 			objSubmit.data("orig", objSubmit.val()).val("Waiting...").attr("disabled","disabled").addClass("loading");
 
@@ -92,7 +92,7 @@
 
 			var objSubmit = $("#inpId").parent("form").find(":submit");
 			objSubmit.removeClass("loading").removeAttr("disabled").val(objSubmit.data("orig"));
-			
+
 			if((data.search("faultCode") > 0) && (data.search("faultString")>0)) {
 				var errorData = s.match("<string>.+?</string>")[0].replace("<string>","").replace("</string>","");
 				alert(errorData);
@@ -107,15 +107,15 @@
 				}
 				location.hash = "#" + cmt;
 				this.$("#txaArticle").val("");
-				
+
 				this.userinfo.saveFromHtml();
 			}
 
 		});
 
 		this.plugin.on("comment.get", "system", function (postid, page) {
-			this.$.get(this.options.bloghost + "zb_system/cmd.php?act=getcmt&postid=" + postid + "&page=" + page, function (data, textStatus, jqXhr) { 
-				this.plugin.emit("comment.got", [postid, page], data, textStatus, jqXhr)	
+			this.$.get(this.options.bloghost + "zb_system/cmd.php?act=getcmt&postid=" + postid + "&page=" + page, function (data, textStatus, jqXhr) {
+				this.plugin.emit("comment.got", [postid, page], data, textStatus, jqXhr)
 			});
 		});
 
@@ -353,7 +353,7 @@
 			formData.homepage = formData.homepage || $("#inpHomePage").val();
 			formData.replyid  = formData.replyid  || $("#inpRevID").val();
 			formData.isajax   = formData.isajax   || true;
-			
+
 			var error = {
 				no: 0,
 				msg: ""
@@ -365,7 +365,7 @@
 				alert(error.msg);
 				try { console.log(formData); console.log("ERROR - " + error.msg)} catch (e) { /* do nothing */}
 				return self;
-			} 
+			}
 			self.$.post(formData.action, formData, function (data, textStatus, jqXhr) {
 				self.plugin.emit("comment.postsuccess", formData, data, textStatus, jqXhr);
 			});

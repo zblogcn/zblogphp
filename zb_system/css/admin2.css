@@ -137,7 +137,7 @@ background:#ffffdd;
 .left #leftmenu li { float:left; width:140px; height:32px; margin-bottom:5px; background:#ededed;cursor:pointer;}
 .left #leftmenu a { float:left;  width:140px; height:32px; line-height:35px;cursor:pointer;}
 .left #leftmenu a:hover { color:#000000; background:#b0cdee;}
-.left #leftmenu span {  float:left;width:auto; height:32px; line-height:32px; 
+.left #leftmenu span {  float:left;width:auto; height:32px; line-height:32px;
 text-align:left;cursor:pointer;margin-left:25px;padding-left:22px; }
 
 /*导航高亮*/
@@ -358,7 +358,7 @@ input.edit{
 	width: 26%;
 }
 .form-group select,
-.form-group input[type="text"], 
+.form-group input[type="text"],
 .form-group input[type="number"],
 .form-group input[type="password"],
 .form-group textarea{
@@ -581,7 +581,7 @@ span.title{
 	font-weight:bold;
 }
 span.star{
-	display: inline-block;	
+	display: inline-block;
 	margin: 6px;
 	color:red;
 }

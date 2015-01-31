@@ -21,7 +21,7 @@ class DbMySQL implements iDataBase {
 	/**
 	* @var string|null 数据库引擎
 	*/
-	public $dbengine = null;	
+	public $dbengine = null;
 	/**
 	 * @var DbSql|null DbSql实例
 	 */
@@ -110,7 +110,7 @@ class DbMySQL implements iDataBase {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * 关闭数据库连接
 	 */
