@@ -44,7 +44,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 <td><span class='note'>默认值: </span></td>
-<td><p>http://cn.gravatar.com/avatar/{%emailmd5%}?s=40&d={%source%}</p></td>
+<td><p>http://cn.gravatar.com/avatar/{%emailmd5%}?s=40&d={%source%}</p>
+	<p>因GFW原因推荐：http://gravatar.duoshuo.com/avatar/{%emailmd5%}?s=60&d=mm&r=G</p>
+	</td>
 </tr>
 <tr>
 <td><p align='left'><b>·无邮箱时的替换图片地址</b><br/><span class='note'></span></p></td>

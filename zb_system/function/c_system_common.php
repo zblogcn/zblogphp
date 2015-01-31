@@ -92,7 +92,7 @@ function RunTime() {
 		return $rt;
 	}
 
-	echo '<!--' . $rt['time'] . 'ms , ';
+	echo '<!--' . $rt['time'] . ' ms , ';
 	echo  $rt['query'] . ' query';
 	if(function_exists('memory_get_usage'))
 		echo ' , ' . $rt['memory'] . 'kb memory';
@@ -899,7 +899,14 @@ function CloseTags($html) {
 
 }
 
-function SubStrUTF8WithStart($sourcestr, $start, $cutlength) {
+/**
+ *  获取UTF8格式的字符串的子串
+ * @param string $sourcestr 源字符串
+ * @param int $start 起始位置
+ * @param int $cutlength 子串长度
+ * @return string 
+*/
+function SubStrUTF8_Start($sourcestr, $start, $cutlength) {
 	if( function_exists('mb_substr') && function_exists('mb_internal_encoding') ){
 		mb_internal_encoding('UTF-8');
 		return mb_substr($sourcestr, $start, $cutlength);

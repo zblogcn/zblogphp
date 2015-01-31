@@ -155,7 +155,7 @@ strong {
 	float:left;
 	padding:0 0 0 0;
 	margin:0 0 0 0;
-
+	height: 2em;
 }
 
 #divNavBar a{
@@ -227,11 +227,6 @@ strong {
 	color:#B22222;
 }
 
-.function .function_c div a{
-	background:url("default/pointblue.gif") no-repeat 0.1em center;
-	padding-left:0.8em;
-}
-
 /*------------------------------网站目录定义---------------------------*/
 
 #divMisc li{
@@ -278,10 +273,9 @@ strong {
 	clear : none;
 }
 #divComments li,divPrevious li{
-	width:200px;
-    white-space:nowrap;
-    word-break:keep-all;
-    text-overflow:ellipsis;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	max-height: 3em;
 }
 
 /*------------------------------文章模块---------------------------*/
@@ -350,7 +344,7 @@ div.post .post-date{
     text-align:right;
 	width:20%;
 	float:right;
-	color:#aaa;
+	color:#999;
 }
 
 
@@ -360,7 +354,7 @@ div.post .post-footer{
 	padding:0 0 5px 0;
 	font-size:0.9em;
     font-weight: normal;
-	color:#aaa;
+	color:#999;
 	text-align:right;
 }
 
@@ -439,9 +433,7 @@ div.post-body blockquote {
 }
 
 div.post-body img{
-   max-width:600px;
-   width: expression(this.width > 600 ? 600: true);   /*IE6*/ 
-   height: auto;
+    max-width:100%;height:auto;
 }
 
 div.post-body table {

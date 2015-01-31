@@ -161,7 +161,7 @@ if(strpos($default_tab,'apache')!==false){
 </textarea>
                   <hr/>
                   <p>
-                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="star">修改nginx.conf,在 location / { }节点间加入上述规则.</span></p>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="star">修改nginx.conf,在  location / { }节点 或者是 location [安装目录名称] / { }（子目录安装）节点间加入上述规则.</span></p>
                 </div>
 				
                 <div class="tab-content <?php if($default_tab==5)echo 'default-tab'; ?> " style='border:none;padding:0px;margin:0;' id="tab5">

@@ -7,7 +7,11 @@
  */
 require '../function/c_system_base.php';
 
-header('Content-Type: application/x-javascript; charset=utf-8');
+ob_clean();
+
+$zbp->CheckGzip();
+$zbp->StartGzip();
+
 ?>
 var bloghost="<?php echo $zbp->host; ?>";
 var cookiespath="<?php echo $zbp->cookiespath; ?>";
@@ -268,5 +272,19 @@ $(document).ready(function(){
 
 <?php
 foreach ($GLOBALS['Filter_Plugin_Admin_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
+
+$s = ob_get_clean();
+$m = md5($s);
+
+header('Content-Type: application/x-javascript; charset=utf-8');
+header('Etag: ' . $m);
+
+if( isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m ){
+	SetHttpStatusCode(304);
+	die;
+}
+	
+echo $s;
+
 die();
 ?>

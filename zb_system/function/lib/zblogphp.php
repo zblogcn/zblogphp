@@ -417,6 +417,9 @@ class ZBlogPHP {
 		$this->RegPostType(0,'article',$this->option['ZC_ARTICLE_REGEX'],$this->option['ZC_POST_DEFAULT_TEMPLATE']);
 		$this->RegPostType(1,'page',$this->option['ZC_PAGE_REGEX'],$this->option['ZC_POST_DEFAULT_TEMPLATE']);
 
+		if($this->option['ZC_BLOG_LANGUAGEPACK']==='SimpChinese')$this->option['ZC_BLOG_LANGUAGEPACK']='zh-cn';
+		if($this->option['ZC_BLOG_LANGUAGEPACK']==='TradChinese')$this->option['ZC_BLOG_LANGUAGEPACK']='zh-tw';
+
 		if($oldlang!=$this->option['ZC_BLOG_LANGUAGEPACK']){
 			$this->LoadLanguage('system','');
 		}
@@ -463,7 +466,7 @@ class ZBlogPHP {
 		$this->feedurl=$this->host . 'feed.php';
 		$this->searchurl=$this->host . 'search.php';
 		$this->ajaxurl=$this->host . 'zb_system/cmd.php?act=ajax&src=';
-		
+
 		$this->isinitialized=true;
 
 		return true;
@@ -530,11 +533,9 @@ class ZBlogPHP {
 				$m->Content = str_replace($ak,$av,$m->Content);
 		}
 
-		if(isset($this->lang['font_family'])&&trim($this->lang['font_family'])){
-			Add_Filter_Plugin('Filter_Plugin_Login_Header','Include_AddonFontfamily');
-			Add_Filter_Plugin('Filter_Plugin_Other_Header','Include_AddonFontfamily');
-			Add_Filter_Plugin('Filter_Plugin_Admin_Header','Include_AddonFontfamily');
-		}
+		Add_Filter_Plugin('Filter_Plugin_Login_Header','Include_AddonAdminFont');
+		Add_Filter_Plugin('Filter_Plugin_Other_Header','Include_AddonAdminFont');
+		Add_Filter_Plugin('Filter_Plugin_Admin_Header','Include_AddonAdminFont');
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
 		
@@ -562,10 +563,16 @@ class ZBlogPHP {
 
 		$this->CheckTemplate();
 
-		if(GetVars('dishtml5','COOKIE')){
-			$this->option['ZC_ADMIN_HTML5_ENABLE']=false;
-		}else{
-			$this->option['ZC_ADMIN_HTML5_ENABLE']=true;
+		if(GetVars('addinfo' . str_replace('/','',$this->cookiespath) ,'COOKIE')){
+			$dishtml5=json_decode(GetVars('addinfo' . str_replace('/','',$this->cookiespath),'COOKIE'));
+			if(is_object($dishtml5) && property_exists($dishtml5,'dishtml5'))
+				$dishtml5=(bool)$dishtml5->dishtml5;
+			else
+				$dishtml5=false;
+			if($dishtml5)
+				$this->option['ZC_ADMIN_HTML5_ENABLE']=false;
+			else
+				$this->option['ZC_ADMIN_HTML5_ENABLE']=true;
 		}
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) $fpname();
@@ -818,14 +825,13 @@ class ZBlogPHP {
 					($key=='ZC_MYSQL_ENGINE') || 
 					($key=='ZC_MYSQL_PORT') || 
 					($key=='ZC_MYSQL_PERSISTENT') || 
-					($key=='ZC_PGSQL_SERVER') || 
-					($key=='ZC_PGSQL_USERNAME') || 
-					($key=='ZC_PGSQL_PASSWORD') || 
-					($key=='ZC_PGSQL_NAME') || 
-					($key=='ZC_PGSQL_CHARSET') || 
-					($key=='ZC_PGSQL_PRE') || 
-					($key=='ZC_PGSQL_PORT') || 
-					($key=='ZC_PGSQL_PERSISTENT') || 
+					($key=='ZC_PGSQL_SERVER') ||
+					($key=='ZC_PGSQL_USERNAME') ||
+					($key=='ZC_PGSQL_PASSWORD') ||
+					($key=='ZC_PGSQL_NAME') ||
+					($key=='ZC_PGSQL_CHARSET') ||
+					($key=='ZC_PGSQL_PRE') ||
+					($key=='ZC_PGSQL_PORT') ||
 					($key=='ZC_SITE_TURNOFF')
 				)$option[$key]=$value;	
 			}
@@ -1297,36 +1303,64 @@ class ZBlogPHP {
 			if(is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
 				$this->lang = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
-			elseif($default='SimpChinese' && is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
+			$default='zh-cn';
+			if(is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
 				$this->lang = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
-			elseif($default='English' && is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
+			$default='en';
+			if(is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
 				$this->lang = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
-		}else{
+		}elseif($type=='plugin' || $type=='theme'){
 			if($default=='')$default=$this->option['ZC_BLOG_LANGUAGEPACK'];
 			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
-			elseif(is_readable($default='SimpChinese' && $f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
+			$default='zh-cn';
+			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
-			elseif(is_readable($default='English' && $f=$this->path . 'zb_users/'.$type&'/'.$id.'/language/' . $default . '.php')){
+			$default='en';
+			if(is_readable($f=$this->path . 'zb_users/'.$type&'/'.$id.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+		}elseif($type!='' && $id!=''){
+			if($default=='')$default=$this->option['ZC_BLOG_LANGUAGEPACK'];
+			if(is_readable($f=$this->path . $type.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+			$default='zh-cn';
+			if(is_readable($f=$this->path . $type.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+			$default='en';
+			if(is_readable($f=$this->path . $type.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
 			}
 		}
 	}
 	
 	public function ReloadLanguages($default){
-		$this->lang = array();
-		$array=$this->langpacklist;
-		$this->langpacklist=array();
+		$array = $this->langpacklist;
+		$this->lang = $this->langpacklist = array();
 		foreach($array as $v){
 			$this->LoadLanguage($v[0],$v[1],$v[2]);
 		}
@@ -2579,7 +2613,7 @@ class ZBlogPHP {
 	 */
 	function StartGzip(){
 
-		if(!headers_sent()&&$this->isgzip&&isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE']){
+		if( !headers_sent() && $this->isgzip && $this->option['ZC_GZIP_ENABLE'] ){
 			if(ini_get('output_handler'))return false;
 			$a=ob_list_handlers();
 			if(in_array('ob_gzhandler',$a) || in_array('zlib output compression',$a))return false;
@@ -2624,7 +2658,6 @@ class ZBlogPHP {
 			Redirect301($u);
 		}
 	}
-
 	/**
 	 * 对表名和数据结构进行预转换
 	 */
@@ -2700,5 +2733,17 @@ class ZBlogPHP {
 			return $this->posttype[$typeid][2];
 		else
 			return 'single';
+	}
+
+	/**
+	 * 注册Action
+	 */
+	function RegAction($name,$level,$title){
+		$this->actions[$name]=$level;
+		$this->lang['actions'][$name]=$title;
+	}
+	function GetAction_Title($name){
+		if(isset($this->lang['actions'][$name]))return $this->lang['actions'][$name];
+		return $name;
 	}
 }

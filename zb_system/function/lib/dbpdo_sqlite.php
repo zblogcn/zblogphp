@@ -35,7 +35,6 @@ class Dbpdo_SQLite implements iDataBase {
 	* @return string
 	*/
 	public function EscapeString($s){
-		return str_ireplace('\'','\'\'',$s);
 	}
 
 	/**
@@ -43,6 +42,10 @@ class Dbpdo_SQLite implements iDataBase {
 	* @return bool
 	*/
 	function Open($array){
+		/*$array=array(
+			'dbmysql_server',
+			'dbmysql_username',
+		*/
 		$db_link = new PDO('sqlite:' . $array[0]);
 		$this->db = $db_link;
 		$this->dbpre=$array[1];
@@ -61,7 +64,8 @@ class Dbpdo_SQLite implements iDataBase {
 	* 执行多行SQL语句
 	* @param $s 
 	*/
-	function QueryMulit($s){
+	function QueryMulit($s){return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
+	function QueryMulti($s){
 		//$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		$a=explode(';',$s);
 		foreach ($a as $s) {

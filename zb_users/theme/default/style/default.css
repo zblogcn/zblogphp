@@ -462,9 +462,7 @@ div.post-body blockquote {
 }
 
 div.post-body img{
-   max-width:600px;
-   width: expression(this.width > 600 ? 600: true);   /*IE6*/ 
-   height: auto;
+    max-width:100%;height:auto;
 }
 
 div.post-body table {

@@ -10,7 +10,7 @@ function AppCentre_SubMenus($id){
 	echo '<a href="update.php"><span class="m-left '.($id==3?'m-now':'').'">系统更新与校验</span></a>';
 
 
-	if($zbp->Config('AppCentre')->shop_username&&$zbp->Config('AppCentre')->shop_password){
+	if($zbp->Config('AppCentre')->username&&$zbp->Config('AppCentre')->password){
 		echo '<a href="client.php"><span class="m-left '.($id==9?'m-now':'').'">我的应用仓库</span></a>';
 	}else{
 		echo '<a href="client.php"><span class="m-left '.($id==9?'m-now':'').'">登录应用商城</span></a>';
@@ -95,6 +95,12 @@ function Server_Open($method){
 			$s=Server_SendRequest(APPCENTRE_URL .'?vaild',$data);
 			return $s;
 			break;
+		case 'logout':
+			$zbp->Config('AppCentre')->username='';
+			$zbp->Config('AppCentre')->password='';
+			$zbp->SaveConfig('AppCentre');
+			Redirect('main.php');
+			break;
 		case 'submitpre':
 			$s=Server_SendRequest(APPCENTRE_URL .'?submitpre=' . urlencode(GetVars('id')));
 			return $s;
@@ -104,13 +110,6 @@ function Server_Open($method){
 			$data["zba"]=$app->Pack();
 			$s=Server_SendRequest(APPCENTRE_URL .'?submit=' . urlencode(GetVars('id')),$data);
 			return $s;
-		case 'shopvaild':
-			$data=array();
-			$data["shop_username"]=GetVars("shop_username");
-			$data["shop_password"]=md5(GetVars("shop_password"));
-			$s=Server_SendRequest(APPCENTRE_URL .'?shopvaild',$data);
-			return $s;
-			break;
 		case 'shoplist':
 			$s=Server_SendRequest(APPCENTRE_URL .'?shoplist');
 			echo str_replace('%bloghost%', $zbp->host . 'zb_users/plugin/AppCentre/main.php' ,$s);
@@ -137,16 +136,7 @@ function Server_SendRequest($url,$data=array(),$u='',$c=''){
 		$c.="username=".urlencode($un) ."; password=".urlencode($ps);
 	}
 	
-	$shopun=$zbp->Config('AppCentre')->shop_username;
-	$shopps=$zbp->Config('AppCentre')->shop_password;
-
-	if($shopun&&$shopps){
-		if($c!=='')$c.='; ';
-		$c.="shop_username=".urlencode($shopun) ."; shop_password=".urlencode($shopps);
-	}
-	
 	$u='ZBlogPHP/' . substr(ZC_BLOG_VERSION,-6,6) . ' '. GetGuestAgent();
-	
 	
 	if(!class_exists('NetworkFactory',false))
 		if(class_exists('Network'))

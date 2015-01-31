@@ -6,14 +6,14 @@
  * @subpackage ClassLib/DataBase 类库
  */
 class DbSQLite3 implements iDataBase {
+
+	public $type = 'sqlite';
+
 	/**
-	* @var string|null SQL语句分隔符
+	* @var string|null 数据库名前缀
 	*/
 	public $dbpre = null;
-	/**
-	* @var string|null 数据库服务器
-	*/
-	private $db = null;
+	private $db = null; #数据库连接实例
 	/**
 	* @var string|null 数据库名
 	*/
@@ -60,10 +60,10 @@ class DbSQLite3 implements iDataBase {
 	}
 
 	/**
-	* 拼接SQL语句
-	* @param $s 
+	* @param $s
 	*/
-	function QueryMulit($s){
+	function QueryMulit($s){return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
+	function QueryMulti($s){
 		//$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		$a=explode(';',$s);
 		foreach ($a as $s) {

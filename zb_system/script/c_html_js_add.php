@@ -7,11 +7,11 @@
  */
 require '../function/c_system_base.php';
 
-$zbp->Verify();
-
 ob_clean();
 
-header('Content-Type: application/x-javascript; charset=utf-8');
+$zbp->CheckGzip();
+$zbp->StartGzip();
+
 ?>
 <?php if (GetVars('jquery', 'GET') != "0" ) { echo file_get_contents($zbp->path . 'zb_system/script/jquery.min.js');}?>
 <?php if (GetVars('default', 'GET') != "0" ) { echo file_get_contents($zbp->path . 'zb_system/script/zblogphp.js');}?>
@@ -33,36 +33,48 @@ var zbp = new ZBP({
 echo '$(function () {';
 echo 'var $cpLogin = $(".cp-login").find("a");';
 echo 'var $cpVrs = $(".cp-vrs").find("a");';
-
-if ($zbp->CheckRights('admin')){
-	echo '$(".cp-hello").html("' . $zbp->lang['msg']['welcome'] . ' ' . $zbp->user->Name .  ' ('  . $zbp->user->LevelName  . ')");';
-	
+echo 'var $addoninfo = GetCookie("addinfo' . str_replace('/','',$zbp->cookiespath) . '");if(!$addoninfo)return ;';
+echo '$addoninfo = eval("("+$addoninfo+")");';
+echo 'if($addoninfo.chkadmin){';
+	echo '$(".cp-hello").html("' . $zbp->lang['msg']['welcome'] . ' " + $addoninfo.useralias + " (" + $addoninfo.levelname  + ")");';
 	echo 'if ($cpLogin.length == 1 && $cpLogin.html().indexOf("[") > -1) { ';
 	echo '$cpLogin.html("[' . $zbp->lang['msg']['admin'] . ']");';
 	echo '} else {';
 	echo '$cpLogin.html("' . $zbp->lang['msg']['admin'] . '");';
 	echo '};';
-}
+echo '}';
 
-if ($zbp->CheckRights('ArticleEdt')){
+echo 'if($addoninfo.chkarticle){';
 	echo 'if ($cpLogin.length == 1 && $cpVrs.html().indexOf("[") > -1) {';
 	echo '$cpVrs.html("[' . $zbp->lang['msg']['new_article'] . ']"); ';
 	echo '} else {';
 	echo '$cpVrs.html("' . $zbp->lang['msg']['new_article'] . '");';
 	echo '};';
-	echo '$cpVrs.attr("href", "' . $zbp->host . 'zb_system/cmd.php?act=ArticleEdt");';
-}
+	echo '$cpVrs.attr("href", bloghost + "zb_system/cmd.php?act=ArticleEdt");';
+echo '}';
 
 	echo 'SetCookie("timezone", (new Date().getTimezoneOffset()/60)*(-1));';
 
-if ($zbp->user->ID==0){
+echo 'if($addoninfo.userid<1){';
 	echo 'LoadRememberInfo();';
-}
+echo '}';
 
 echo '});' . "\r\n";
 
 foreach ($GLOBALS['Filter_Plugin_Html_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
 
-die();
+$s = ob_get_clean();
+$m = md5($s);
 
+header('Content-Type: application/x-javascript; charset=utf-8');
+header('Etag: ' . $m);
+
+if( isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m ){
+	SetHttpStatusCode(304);
+	die;
+}
+	
+echo $s;
+
+die();
 ?>

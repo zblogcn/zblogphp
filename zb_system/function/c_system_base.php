@@ -55,7 +55,7 @@ $zbpvers['131111']='1.0 Beta2 Build 131111';
 $zbpvers['131221']='1.1 Taichi Build 131221';
 $zbpvers['140220']='1.2 Hippo Build 140220';
 $zbpvers['140614']='1.3 Wonce Build 140614';
-$zbpvers['150101']='1.4 Beta Build 150101';
+$zbpvers['150101']='1.4 Bariour Build 150101';
 
 #定义常量
 /**
@@ -70,15 +70,25 @@ define('ZC_POST_TYPE_ARTICLE', 0);      // 文章
 define('ZC_POST_TYPE_PAGE', 1);         // 页面
 define('ZC_POST_TYPE_TWEET', 2);        // 一句话
 define('ZC_POST_TYPE_DISCUSSION', 3);   // 讨论
+define('ZC_POST_TYPE_LINK', 4);         // 链接
+define('ZC_POST_TYPE_MUSIC', 5);        // 音乐
+define('ZC_POST_TYPE_VIDEO', 6);        // 视频
+define('ZC_POST_TYPE_PHOTO', 7);        // 照片
+define('ZC_POST_TYPE_ALBUM', 8);        // 相册
 
 
 #定义类型序列{id=>{name,url,template}}
-$posttype = array();
-$posttype[0] = array('article', '', ''); // 文章
-$posttype[1] = array('page', '', '');    // 页面
-$posttype[2] = array('tweet', '', '');   // 一句话
-$posttype[3] = array('discussion', '', ''); // 讨论
-
+$posttype = array(
+	array('article', '', ''),
+	array('page', '', ''),
+	array('tweet', '', ''),
+	array('discussion', '', ''),
+	array('link', '', ''),
+	array('music', '', ''),
+	array('video', '', ''),
+	array('photo', '', ''),
+	array('album', '', '')
+);
 /**
  *文章状态：公开发布
  */
@@ -122,7 +132,6 @@ $currenturl = GetRequestUri();
  *语言包数组
  */
 $lang = array();
-
 /**
  *系统根路径
  */
@@ -132,17 +141,18 @@ $blogpath = ZBP_PATH;
  */
 $usersdir = $blogpath . 'zb_users/';
 
+
 /**
  *读取设置数组
  */
 $option = require($blogpath . 'zb_system/defend/option.php');
 $option_zbusers = null;
-if(is_readable($filename = $usersdir . 'c_option.php'))
+if(is_readable($filename = $usersdir . 'c_option.php')){
 	$option_zbusers = require($filename);
-if(!is_array($option_zbusers))
-	$option_zbusers=array();
-foreach ($option_zbusers as $key => $value)
-	$option[$key] = $value;
+	if(is_array($option_zbusers))
+		foreach ($option_zbusers as $key => $value)
+			$option[$key] = $value;
+}
 
 $blogtitle = $option['ZC_BLOG_SUBNAME'];
 $blogname = &$option['ZC_BLOG_NAME'];
@@ -391,6 +401,7 @@ AutoloadClass('Config');
 #实例化zbp
 $zbp=ZBlogPHP::GetInstance();
 $zbp->Initialize();
+
 
 /**
  *已激活应用列表

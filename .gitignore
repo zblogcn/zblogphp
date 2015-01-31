@@ -19,7 +19,6 @@
 # Update
 /update/*.xml
 /update/Release/
-/update/*/*
 
 # Plugin cache
 /zb_users/plugin/SQLLog/logs/*.php
@@ -86,3 +85,4 @@ phpinfo.php
 /phpMyAdmin/
 /abc/
 wincache.php
+/Beta/

@@ -2,10 +2,10 @@
 #注册插件
 RegisterPlugin("AppCentre","ActivePlugin_AppCentre");
 
-define('APPCENTRE_URL','http://app.zblogcn.com/client/');
+define('APPCENTRE_URL','http://apptest.zblogcn.com/client/');
 define('APPCENTRE_SYSTEM_UPDATE','http://update.zblogcn.com/zblogphp/');
 
-define('APPCENTRE_API_URL','http://app.zblogcn.com/api/index.php?api=');
+define('APPCENTRE_API_URL','http://apptest.zblogcn.com/api/index.php?api=');
 define('APPCENTRE_API_APP_ISBUY','isbuy');
 define('APPCENTRE_API_USER_INFO','userinfo');
 define('APPCENTRE_API_ORDER_LIST','orderlist');
@@ -24,7 +24,7 @@ function ActivePlugin_AppCentre() {
 	}else{
 		if(is_readable($f=$zbp->path . 'zb_users/plugin/AppCentre/language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php'))
 			$zbp->lang['AppCentre'] = require($f);
-		elseif(is_readable($f=$zbp->path . 'zb_users/plugin/AppCentre/language/' . 'SimpChinese' . '.php'))
+		elseif(is_readable($f=$zbp->path . 'zb_users/plugin/AppCentre/language/' . 'zh-cn' . '.php'))
 			$zbp->lang['AppCentre'] = require($f);
 	}
 }

@@ -24,10 +24,10 @@ return array(
 	'ZC_BLOG_CSS' => 'default',
 	'ZC_BLOG_COPYRIGHT' => 'Copyright Your WebSite.Some Rights Reserved.',
 	'ZC_BLOG_LANGUAGE' => 'zh-CN',
-	'ZC_BLOG_LANGUAGEPACK' => 'SimpChinese',
+	'ZC_BLOG_LANGUAGEPACK' => 'zh-cn',
 
 	// '----------------------------数据库配置---------------------------------------
-	//mysql|sqlite|sqlite3|pdo_mysql
+	//mysql|mysqli|pdo_mysql|sqlite|sqlite3|pdo_sqlite
 	'ZC_DATABASE_TYPE'=> '',
 
 	'ZC_SQLITE_NAME' => '',

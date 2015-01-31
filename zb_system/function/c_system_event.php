@@ -18,17 +18,25 @@ function VerifyLogin() {
 	$u = trim(GetVars('username','POST'));
 	$p = trim(GetVars('password','POST'));
 	if ($zbp->Verify_MD5(GetVars('username', 'POST'), GetVars('password', 'POST'),$m)) {
+		$zbp->user = $m;
 		$un = $m->Name;
 		$ps = $m->PassWord_MD5Path;
 		$sd = (int)GetVars('savedate');
+		$addinfo=array();
+		$addinfo['dishtml5']=(int)GetVars('dishtml5', 'POST');
+		$addinfo['chkadmin']=(int)$zbp->CheckRights('admin');
+		$addinfo['chkarticle']=(int)$zbp->CheckRights('ArticleEdt');
+		$addinfo['levelname']=$m->LevelName;
+		$addinfo['userid']=$m->ID;
+		$addinfo['useralias']=$m->StaticName;
 		if ( $sd == 0) {
 			setcookie("username", $un, 0, $zbp->cookiespath);
 			setcookie("password", $ps, 0, $zbp->cookiespath);
-			setcookie("dishtml5", GetVars('dishtml5', 'POST'), 0, $zbp->cookiespath);
+			setcookie("addinfo" . str_replace('/','',$zbp->cookiespath), json_encode($addinfo), 0, $zbp->cookiespath);
 		} else {
 			setcookie("username", $un, time() + 3600 * 24 * $sd, $zbp->cookiespath);
 			setcookie("password", $ps, time() + 3600 * 24 * $sd, $zbp->cookiespath);
-			setcookie("dishtml5", GetVars('dishtml5', 'POST'), time() + 3600 * 24 * $sd, $zbp->cookiespath);
+			setcookie("addinfo" . str_replace('/','',$zbp->cookiespath), json_encode($addinfo), time() + 3600 * 24 * $sd, $zbp->cookiespath);
 		}
 
 		return true;
@@ -45,7 +53,7 @@ function Logout() {
 
 	setcookie('username', '', time() - 3600, $zbp->cookiespath);
 	setcookie('password', '', time() - 3600, $zbp->cookiespath);
-	setcookie("dishtml5", '', time() - 3600, $zbp->cookiespath);
+	setcookie("addoninfo", '', time() - 3600, $zbp->cookiespath);
 
 }
 
@@ -356,9 +364,9 @@ function ViewSearch(){
 		$i = strpos($s,$q,0);
 		if($i!==false){
 			if($i>50){
-				$t=SubStrUTF8WithStart($s,$i-50,100);
+				$t=SubStrUTF8_Start($s,$i-50,100);
 			}else{
-				$t=SubStrUTF8WithStart($s,0,100);
+				$t=SubStrUTF8_Start($s,0,100);
 			}
 			$article->Content .= str_replace($q,'<strong>' . $q . '</strong>',$t) . '<br/>';
 		}
@@ -1488,7 +1496,7 @@ function PostComment() {
 
 		if ($cmt->IsChecking == false) {
 
-			if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), +1);
+			CountPostArray(array($cmt->LogID), +1);
 			CountCommentNums(+1,0);
 
 			$zbp->AddBuildModule('comments');
@@ -1539,7 +1547,7 @@ function DelComment() {
 		}
 		$cmt->Del();
 		
-		if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
+		if($cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
 
 		$zbp->AddBuildModule('comments');
 
@@ -1610,15 +1618,11 @@ function CheckComment() {
 	$orig_check = (bool)$orig_check;
 
 	if ($orig_check && !$ischecking) {
-		if($cmt->RootID==0 && $cmt->IsChecking == false){
-			CountPostArray(array($cmt->LogID), +1);
-		}
+		CountPostArray(array($cmt->LogID), +1);
 		CountCommentNums(0,-1);
 	}
 	else if (!$orig_check && $ischecking) {
-		if($cmt->RootID==0 && $cmt->IsChecking == false){
-			CountPostArray(array($cmt->LogID), -1);
-		}
+		CountPostArray(array($cmt->LogID), -1);
 		CountCommentNums(0,+1);
 	}
 
@@ -1654,7 +1658,7 @@ function BatchComment() {
 			$cmt = $zbp->GetCommentByID($id);
 			if ($cmt->ID == 0) continue;
 			$cmt->Del();
-			if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
+			if($cmt->IsChecking == false)CountPostArray(array($cmt->LogID), -1);
 			if($cmt->IsChecking == false){
 				CountCommentNums(-1,0);
 			}else{
@@ -1668,7 +1672,7 @@ function BatchComment() {
 			if ($cmt->ID == 0) continue;
 			$cmt->IsChecking = false;
 			$cmt->Save();
-			if($cmt->RootID==0 && $cmt->IsChecking == false)CountPostArray(array($cmt->LogID), +1);
+			CountPostArray(array($cmt->LogID), +1);
 			CountCommentNums(0,-1);
 		}
 	if ($type == 'all_audit')
@@ -1677,7 +1681,7 @@ function BatchComment() {
 			if ($cmt->ID == 0) continue;
 			$cmt->IsChecking = true;
 			$cmt->Save();
-			if($cmt->RootID==0 && $cmt->IsChecking == true)CountPostArray(array($cmt->LogID), -1);
+			CountPostArray(array($cmt->LogID), -1);
 			CountCommentNums(0,+1);
 		}
 }
@@ -2372,13 +2376,13 @@ function FilterComment(&$comment) {
 		$zbp->ShowError(30, __FILE__, __LINE__);
 	}
 
-	$comment->Name = substr($comment->Name, 0, 20);
-	$comment->Email = substr($comment->Email, 0, 30);
-	$comment->HomePage = substr($comment->HomePage, 0, 100);
+	$comment->Name = SubStrUTF8_Start($comment->Name, 0, 20);
+	$comment->Email = SubStrUTF8_Start($comment->Email, 0, 30);
+	$comment->HomePage = SubStrUTF8_Start($comment->HomePage, 0, 100);
 
 	$comment->Content = TransferHTML($comment->Content, '[nohtml]');
 
-	$comment->Content = substr($comment->Content, 0, 1000);
+	$comment->Content = SubStrUTF8_Start($comment->Content, 0, 1000);
 	$comment->Content = trim($comment->Content);
 	if (strlen($comment->Content) == 0) {
 		$zbp->ShowError(46, __FILE__, __LINE__);
@@ -2427,7 +2431,7 @@ function FilterMember(&$member) {
 	$member->Alias = str_replace('.', '', $member->Alias);
 	$member->Alias = str_replace(' ', '', $member->Alias);
 	$member->Alias = str_replace('_', '', $member->Alias);
-	$member->Alias = substr($member->Alias, 0, (int)$zbp->datainfo['Member']['Alias'][2]);
+	$member->Alias = SubStrUTF8_Start($member->Alias, 0, (int)$zbp->datainfo['Member']['Alias'][2]);
 	if (strlen($member->Name) < $zbp->option['ZC_USERNAME_MIN'] || strlen($member->Name) > $zbp->option['ZC_USERNAME_MAX']) {
 		$zbp->ShowError(77, __FILE__, __LINE__);
 	}
@@ -2591,8 +2595,8 @@ function CountPostArray($array, $plus = null) {
 	$array = array_unique($array);
 	foreach ($array as $value) {
 		if ($value == 0) continue;
-		$article = new Post;
-		if ($article->LoadInfoByID($value)) {
+		$article = $zbp->GetPostByID($value);
+		if ($article->ID > 0) {
 			CountPost($article, $plus);
 			$article->Save();	
 		}
@@ -3190,7 +3194,13 @@ function Include_ShowError404($idortext,$file,$line){
 /**
  * 输出后台指定字体family(内置插件函数)
  */
-function Include_AddonFontfamily(){
+function Include_AddonAdminFont(){
 	global $zbp;
-	echo'<style type="text/css">body{font-family:'.$zbp->lang['font_family'].'}</style>';
+	$f = $s = '';
+	if(isset($zbp->lang['font_family'])&&trim($zbp->lang['font_family']))
+		$f='font-family:' . $zbp->lang['font_family'] . ';';
+	if(isset($zbp->lang['font_size'])&&trim($zbp->lang['font_size']))
+		$s='font-size:' . $zbp->lang['font_size'] . ';';
+	if($f || $s)
+		echo'<style type="text/css">body{' . $s . $f . '}</style>';
 }

@@ -7,20 +7,23 @@
  */
 class Dbpdo_MySQL implements iDataBase {
 
+	public $type = 'mysql';
+
 	/**
-	* @var string|null SQL语句分隔符
+	* @var string|null 数据库名前缀
 	*/
 	public $dbpre = null;
-	/**
-	* @var string|null 数据库服务器
-	*/
-	private $db = null;
+	private $db = null; #数据库连接实例
 	/**
 	* @var string|null 数据库名
 	*/
 	public $dbname = null;
 	/**
-	* @var DbSql|null 
+	* @var string|null 数据库引擎
+	*/
+	public $dbengine = null;	
+	/**
+	* @var DbSql|null DbSql实例
 	*/
 	public $sql=null;
 	/**
@@ -51,7 +54,8 @@ class Dbpdo_MySQL implements iDataBase {
 			'dbmysql_name',
 			'dbmysql_pre',
 			'dbmysql_port',
-			'persistent'
+			'persistent',
+			'engine',
 		*/
 		if($array[6]==false){
 			$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
@@ -63,6 +67,7 @@ class Dbpdo_MySQL implements iDataBase {
 		$this->db = $db_link;
 		$this->dbpre=$array[4];
 		$this->dbname=$array[3];
+		$this->dbengine = $array[7];
 		return true;
 	}
 
@@ -101,10 +106,11 @@ class Dbpdo_MySQL implements iDataBase {
 	}
 
 	/**
-	* 拼接SQL语句
+	* 执行多行SQL语句
 	* @param $s 
 	*/
-	function QueryMulit($s){
+	function QueryMulit($s){return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
+	function QueryMulti($s){
 		//$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		$a=explode(';',$s);
 		foreach ($a as $s) {
@@ -125,6 +131,17 @@ class Dbpdo_MySQL implements iDataBase {
 		$results = $this->db->query($this->sql->Filter($query));
 		//fetch || fetchAll
 		if(is_object($results)){
+		
+			//if(true==true){
+			if(true!==true){
+				$query="EXPLAIN " . $query;
+				$results2 = $this->db->query($this->sql->Filter($query));
+				if(is_object($results2)){
+					$row = $results2->fetchAll();
+					logs("\r\n" . $query . "\r\n" . var_export($row,true));
+				}
+			}
+		
 			return $results->fetchAll();
 		}else{
 			return array($results);
@@ -164,7 +181,7 @@ class Dbpdo_MySQL implements iDataBase {
 	* @param $table
 	* @param $datainfo
 	*/
-	function CreateTable($table,$datainfo){
+	function CreateTable($table,$datainfo,$engine=null){
 		$this->QueryMulit($this->sql->CreateTable($table,$datainfo));
 	}
 

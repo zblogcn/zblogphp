@@ -29,24 +29,30 @@ class Base{
 	*/
 	protected $db = null;
 	
-	
+	protected static $datainfo_entity  =  null;
 	/**
 	* @param string $table 数据表
 	* @param array $datainfo 数据表结构信息
 	*/
 	function __construct(&$table, &$datainfo, &$db = null, $hasmetas = true){
+
 		if($db !== null)
 			$this->db = &$db;
 		else
-			$this->db = &$GLOBALS['zbp']->db;				
+			$this->db = &$GLOBALS['zbp']->db;
 
 		$this->table=&$table;
 		$this->datainfo=&$datainfo;
 
 		if(true==$hasmetas)$this->Metas=new Metas;
 
-		foreach ($this->datainfo as $key => $value)
-			$this->data[$key]=$value[3];
+		if( self::$datainfo_entity !== null )
+			$this->data = self::$datainfo_entity;
+		else{
+			foreach ($this->datainfo as $key => $value)
+				$this->data[$key]=$value[3];
+			self::$datainfo_entity = $this->data;
+		}
 	}
 
 	/**

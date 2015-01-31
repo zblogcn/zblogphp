@@ -433,9 +433,9 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 /*后台编辑页,文章编辑和页面编辑*/
 #divEditRight{
 	float:right;
-	width:260px;
+	width:270px;
 	text-align:right;
-	margin-left:-260px
+	margin-left:-270px
 }
 #divEditPost{
 	margin-top: 30px;
@@ -445,9 +445,15 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 	width:100%;
 }
 
+/*文章编辑提交区随动*/
+#divBox { width:270px; position:relative;}
+#divFloat { width:258px;}
+#divFloat input.button{	margin:0.2em 0;}
+.boxfloat{position: fixed;_position: absolute;top: 0px;z-index: 295;}
+
 .editmod2{
 	margin: 0.2em 0;
-	padding-right: 265px;
+	padding-right: 275px;
 }
 #divIntro{
 	padding-bottom:20px;
@@ -455,9 +461,10 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 .editmod{
 	margin:1em 0;
 }
-#cheader,#carea{
-	margin:.5em 0;
+.editmod3{
+	margin:0;
 }
+
 .editinputname{
 	padding:0 2px 0 3px;
 	line-height:1em;
@@ -477,7 +484,7 @@ div.post_edit input#edtTitle{
 div.post_edit input#edtAlias, input#edtTag{
 	margin-top: 5px;
 	padding: 3px;
-	width: 70%;
+	width: 50%;
 }
 #ulTag{
 	margin:0 3em;
@@ -727,11 +734,6 @@ span.note{
 	font-size:1.0em;
 }
 
-/*文章编辑提交区随动*/
-#divBox { width:260px; position:relative;}
-#divFloat { width:248px;}
-#divFloat input.button{	margin:0.2em 0;}
-.boxfloat{position: fixed;_position: absolute;top: 0px;z-index: 295;}
 
 span.button{cursor: pointer;}
 a.button,span.button{
