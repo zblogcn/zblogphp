@@ -53,7 +53,7 @@ function Logout() {
 
 	setcookie('username', '', time() - 3600, $zbp->cookiespath);
 	setcookie('password', '', time() - 3600, $zbp->cookiespath);
-	setcookie("addinfo", '', time() - 3600, $zbp->cookiespath);
+	setcookie("addinfo" . str_replace('/','',$zbp->cookiespath), '', time() - 3600, $zbp->cookiespath);
 
 }
 
