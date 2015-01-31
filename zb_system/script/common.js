@@ -14,7 +14,6 @@
 		}
 	}
 	jsPath = jsPath.replace(/common\.js$/, "");
-	alert(jsPath);
 	var createElement = function (src) {
 		document.write('<script src="' + jsPath + src + '"></script>');
 	}
