@@ -14,9 +14,9 @@ $zbp->StartGzip();
 
 ?>
 var zbp = new ZBP({
-	blogHost: "<?php echo $zbp->host; ?>",
-	ajaxUrl: "<?php echo $zbp->ajaxurl; ?>",
-	cookiePath: "<?php echo $zbp->cookiespath; ?>",
+	bloghost: "<?php echo $zbp->host; ?>",
+	ajaxurl: "<?php echo $zbp->ajaxurl; ?>",
+	cookiepath: "<?php echo $zbp->cookiespath; ?>",
 	lang: {
 		error: {
 			72: "<?php echo $lang['error']['72']; ?>",
