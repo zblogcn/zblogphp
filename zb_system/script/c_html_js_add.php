@@ -27,37 +27,43 @@ var zbp = new ZBP({
 });
 
 <?php
-echo '$(function () {';
-echo 'var $cpLogin = $(".cp-login").find("a");';
-echo 'var $cpVrs = $(".cp-vrs").find("a");';
-echo 'var $addoninfo = GetCookie("addinfo' . str_replace('/','',$zbp->cookiespath) . '");if(!$addoninfo)return ;';
-echo '$addoninfo = eval("("+$addoninfo+")");';
-echo 'if($addoninfo.chkadmin){';
-	echo '$(".cp-hello").html("' . $zbp->lang['msg']['welcome'] . ' " + $addoninfo.useralias + " (" + $addoninfo.levelname  + ")");';
-	echo 'if ($cpLogin.length == 1 && $cpLogin.html().indexOf("[") > -1) { ';
-	echo '$cpLogin.html("[' . $zbp->lang['msg']['admin'] . ']");';
-	echo '} else {';
-	echo '$cpLogin.html("' . $zbp->lang['msg']['admin'] . '");';
-	echo '};';
-echo '}';
+if (!isset($_GET['pluginonly'])) {
+?>
+$(function () {
+	
+	var $cpLogin = $(".cp-login").find("a");
+	var $cpVrs = $(".cp-vrs").find("a");
+	var $addoninfo = zbp.cookie.get("addinfo<?php echo str_replace('/', '', $zbp->cookiespath);?>");
+	if (!$addoninfo) return;
+	$addoninfo = JSON.parse($addoninfo);
 
-echo 'if($addoninfo.chkarticle){';
-	echo 'if ($cpLogin.length == 1 && $cpVrs.html().indexOf("[") > -1) {';
-	echo '$cpVrs.html("[' . $zbp->lang['msg']['new_article'] . ']"); ';
-	echo '} else {';
-	echo '$cpVrs.html("' . $zbp->lang['msg']['new_article'] . '");';
-	echo '};';
-	echo '$cpVrs.attr("href", bloghost + "zb_system/cmd.php?act=ArticleEdt");';
-echo '}';
+	if ($addoninfo.chkadmin){
+		$(".cp-hello").html("' . $zbp->lang['msg']['welcome'] . ' " + $addoninfo.useralias + " (" + $addoninfo.levelname  + ")");
+		if ($cpLogin.length == 1 && $cpLogin.html().indexOf("[") > -1) { 
+			$cpLogin.html("[<?php echo $zbp->lang['msg']['admin']; ?>]");
+		} else {
+			$cpLogin.html("<?php echo $zbp->lang['msg']['admin']; ?>");
+		}
+	}
 
-	echo 'SetCookie("timezone", (new Date().getTimezoneOffset()/60)*(-1));';
+	if($addoninfo.chkarticle){
+		if ($cpLogin.length == 1 && $cpVrs.html().indexOf("[") > -1) {
+			$cpVrs.html("[<?php echo $zbp->lang['msg']['new_article']; ?>]"); 
+		} else {
+			$cpVrs.html("<?php echo $zbp->lang['msg']['new_article']; ?>");
+		}
+		$cpVrs.attr("href", bloghost + "zb_system/cmd.php?act=ArticleEdt");
+	}
 
-echo 'if($addoninfo.userid<1){';
-	echo 'LoadRememberInfo();';
-echo '}';
+	zbp.cookie.set("timezone", (new Date().getTimezoneOffset()/60)*(-1));
 
-echo '});' . "\r\n";
+	if ($addoninfo.userid < 1){
+		zbp.userinfo.output();
+	}
 
+});
+<?php
+}
 foreach ($GLOBALS['Filter_Plugin_Html_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
 
 $s = ob_get_clean();
