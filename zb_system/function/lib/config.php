@@ -206,7 +206,7 @@ class Config {
 	* @return string
 	*/
     public function __toString() {
-        return json_encode($this->kvdata);
+        return (string)json_encode($this->kvdata);
     }
 
 	/**
