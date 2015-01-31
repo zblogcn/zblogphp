@@ -88,6 +88,13 @@
 
 		});
 
+		this.plugin.on("comment.posterror", "system", function (error, formData) {
+
+			var objSubmit = $("#inpId").parent("form").find(":submit");
+			objSubmit.removeClass("loading").removeAttr("disabled").val(objSubmit.data("orig"));
+			
+		});
+
 		this.plugin.on("comment.postsuccess", "system", function (formData, data, textStatus, jqXhr) {
 
 			var objSubmit = $("#inpId").parent("form").find(":submit");
@@ -364,6 +371,7 @@
 			if (error.no != 0) {
 				alert(error.msg);
 				try { console.log(formData); console.log("ERROR - " + error.msg)} catch (e) { /* do nothing */}
+				self.plugin.emit("comment.posterror", error, formData);
 				return self;
 			} 
 			self.$.post(formData.action, formData, function (data, textStatus, jqXhr) {
