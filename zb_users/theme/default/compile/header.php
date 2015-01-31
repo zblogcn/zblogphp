@@ -6,7 +6,8 @@
 	<title><?php  echo $name;  ?>-<?php  echo $title;  ?></title>
 	<meta name="generator" content="<?php  echo $zblogphp;  ?>" />
 	<link rel="stylesheet" rev="stylesheet" href="<?php  echo $host;  ?>zb_users/theme/<?php  echo $theme;  ?>/style/<?php  echo $style;  ?>.css" type="text/css" media="all"/>
-	<script src="<?php  echo $host;  ?>zb_system/script/common.js" type="text/javascript"></script>
+	<script src="<?php  echo $host;  ?>zb_system/script/jquery-1.11.2.min.js" type="text/javascript"></script>
+	<script src="<?php  echo $host;  ?>zb_system/script/zblogphp.js" type="text/javascript"></script>
 	<script src="<?php  echo $host;  ?>zb_system/script/c_html_js_add.php" type="text/javascript"></script>
 	<script src="<?php  echo $host;  ?>zb_users/theme/<?php  echo $theme;  ?>/script/custom.js" type="text/javascript"></script>
 <?php  echo $header;  ?>
