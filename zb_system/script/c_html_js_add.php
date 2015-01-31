@@ -13,9 +13,6 @@ $zbp->CheckGzip();
 $zbp->StartGzip();
 
 ?>
-<?php if (GetVars('jquery', 'GET') != "0" ) { echo file_get_contents($zbp->path . 'zb_system/script/jquery.min.js');}?>
-<?php if (GetVars('default', 'GET') != "0" ) { echo file_get_contents($zbp->path . 'zb_system/script/zblogphp.js');}?>
-
 var zbp = new ZBP({
 	blogHost: "<?php echo $zbp->host; ?>",
 	ajaxUrl: "<?php echo $zbp->ajaxurl; ?>",
