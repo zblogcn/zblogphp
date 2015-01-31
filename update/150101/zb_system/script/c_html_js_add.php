@@ -9,9 +9,6 @@ require '../function/c_system_base.php';
 
 ob_clean();
 
-$zbp->CheckGzip();
-$zbp->StartGzip();
-
 ?>
 var bloghost = "<?php echo $zbp->host; ?>";
 var cookiespath = "<?php echo $zbp->cookiespath; ?>";
@@ -64,6 +61,9 @@ if( isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $
 	SetHttpStatusCode(304);
 	die;
 }
+
+$zbp->CheckGzip();
+$zbp->StartGzip();
 	
 echo $s;
 
