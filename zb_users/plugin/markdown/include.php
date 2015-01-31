@@ -94,7 +94,7 @@ function markdown_addscript_begin()
 	
 	echo '<link rel="stylesheet" href="' . $zbp->host . 'zb_users/plugin/markdown/css/bootstrap.min.css" />';
 	echo '<link rel="stylesheet" href="' . $zbp->host . 'zb_users/plugin/markdown/css/bootstrap-markdown.min.css" />';
-
+	echo '<style type="text/css">.divHeader2{padding-bottom:38px;}#edtDateTime{width:180px!important;}</style>';
 	echo '<script src="' . $zbp->host . 'zb_users/plugin/markdown/js/bootstrap.min.js"></script>';
 	echo '<script src="' . $zbp->host . 'zb_users/plugin/markdown/js/markdown.js"></script>';
 	//echo '<script src="' . $zbp->host . 'zb_users/plugin/markdown/js/he.js"></script>';
@@ -104,9 +104,9 @@ function markdown_addscript_begin()
 	echo '<script src="' . $zbp->host . 'zb_users/plugin/markdown/js/jquery.hotkeys.js"></script>';
 	echo '<script src="' . $zbp->host . 'zb_users/plugin/markdown/js/main.js"></script>';
 
-	$article->Content = str_replace('&amp;','&',$article->Content);
-	$article->Content = str_replace('<hr class="more" />','<!--more-->',$article->Content);	
-	$article->Intro = str_replace('&amp;','&',$article->Intro);
+	$article->Content = str_replace('<hr class="more" />','<!--more-->',$article->Content);
+	$article->Content = html_entity_decode($article->Content);
+	$article->Intro = html_entity_decode($article->Intro);
 }
 
 
