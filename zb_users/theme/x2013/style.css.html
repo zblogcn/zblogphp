@@ -26,7 +26,7 @@ textarea{overflow:auto;vertical-align:top}
 ::selection{background:#72d0eb;color:#fff;text-shadow:none}
 ::-moz-selection{background:#72d0eb;color:#fff;text-shadow:none}
 *[hidden]{display:none}
-a{color:#38A3DB;text-decoration:none;cursor:pointer}
+a{color:{%background%};text-decoration:none;cursor:pointer}
 a:hover{color:#FF6600}
 
 .clearfix:after,.central:after,.widget ul:after,.paging:after,.pagenav:after,.base-tit:after{content:".";display:block;height:0;clear:both;visibility:hidden}
@@ -36,7 +36,7 @@ body,button,input,select,textarea,code{font-size:12px;font-family:microsoft yahe
 
 /* wrapper */
 .central{max-width:1200px;_width:1200px;padding:0 10px;margin:0 auto;text-align:left;position:relative}
-.header{background-color:#38A3DB;color:#fff;padding:12px 0;margin-bottom:16px;z-index:9;position: relative;}
+.header{background-color:{%background%};color:#fff;padding:12px 0;margin-bottom:16px;z-index:9;position: relative;}
 .wrapper{background-color:#fff;border:solid 1px #DADADA;padding:20px}
 .content-wrap{width:100%;float:left;}
 .container{margin-bottom:20px}
@@ -84,7 +84,7 @@ body,button,input,select,textarea,code{font-size:12px;font-family:microsoft yahe
 .list_posts a{color:#333}
 .list_posts a:hover{color:#FF6600}
 .list_posts time{color:#ccc;float:right}
-.list_posts h4{border-bottom:1px solid #38A3DB;margin-bottom:10px}
+.list_posts h4{border-bottom:1px solid {%background%};margin-bottom:10px}
 .list_posts ul li{white-space:nowrap;overflow:hidden}
 .widget_divTags ul{padding:8px 0;}
 .widget_divTags li{padding:5px;float: left;}
@@ -288,7 +288,7 @@ span.cp-hello{margin-bottom:5px;line-height: 37px;}
 .paging a:active,.pagenav a:active{box-shadow:inset 0 1px 2px #bbb}
 
 /* footer */
-.footer{clear: both;padding: 15px 0;color: #fff;background-color: #38A3DB;position: relative;z-index: 1}
+.footer{clear: both;padding: 15px 0;color: #fff;background-color: {%background%};position: relative;z-index: 1}
 .footer a{color: #fff;}
 .footer a:hover{color: #fff;text-decoration: underline;}
 .trackcode{float: right;}
