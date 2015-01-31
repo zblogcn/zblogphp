@@ -1332,7 +1332,7 @@ class ZBlogPHP {
 				return true;
 			}
 			$default='en';
-			if(is_readable($f=$this->path . 'zb_users/'.$type&'/'.$id.'/language/' . $default . '.php')){
+			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
 				return true;
