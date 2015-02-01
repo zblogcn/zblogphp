@@ -63,7 +63,20 @@ $zbpvers['150601']='2.0 Beta Build 150601';
  *ZBLOGPHP版本号
  */
 define('ZC_BLOG_VERSION', end($zbpvers));
-
+$blogversion = key($zbpvers);
+define('ZBP_VERSION', $blogversion);
+function zbp_version_compare($version1 , $version2){
+	return (int)$version1 - (int)$version2;
+}
+function zbpversion($appid=''){
+	global $zbp;
+	if($appid=='')return ZBP_VERSION;
+	$app=$zbp->LoadApp('plugin',$appid);
+	if($app->id==$appid)return $app->modified;
+	$app=$zbp->LoadApp('theme',$appid);
+	if($app->id==$appid)return $app->modified;
+	return '';
+}
 /**
  *文章类型
  */
@@ -160,7 +173,6 @@ $blogname = &$option['ZC_BLOG_NAME'];
 $blogsubname = &$option['ZC_BLOG_SUBNAME'];
 $blogtheme = &$option['ZC_BLOG_THEME'];
 $blogstyle = &$option['ZC_BLOG_CSS'];
-$blogversion = key($zbpvers);
 $cookiespath = null;
 $bloghost = GetCurrentHost($blogpath,$cookiespath);
 
