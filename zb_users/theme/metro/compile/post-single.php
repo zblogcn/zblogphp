@@ -6,7 +6,7 @@
         <div class="post_body">
           <h2><?php  echo $article->Title;  ?></h2>
           <div class="post_content">
-            <?php  echo $article->Content;  ?> <?php  echo $article->sf_praise_show();  ?>
+            <?php  echo $article->Content;  ?>
           </div>
 			<div class="post_tags"></div>
           <div class="post_info">

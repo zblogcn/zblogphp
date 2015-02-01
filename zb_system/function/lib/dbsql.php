@@ -65,7 +65,7 @@ class DbSql
 		$s=str_replace('%pre%', $this->db->dbpre, $s);
 		return $s;
 	}
-	
+
 	/**
 	 * 删除表,返回SQL语句
 	 * @param string $table
@@ -111,7 +111,7 @@ class DbSql
 	 * @return string
 	*/
 	public function CreateTable($table,$datainfo,$engine=null){
-	
+
 		reset($datainfo);
 		$idname=GetValueInArrayByCurrent($datainfo,0);
 
@@ -273,13 +273,13 @@ class DbSql
 				}
 				if($value[1]=='float'){
 					$s.=$value[0] . " real NOT NULL DEFAULT 0" . ',';
-				}				
+				}
 				if($value[1]=='date'||$value[1]=='time'){
 					$s.=$value[0] . " $value[1] NOT NULL,";
 				}
 				if($value[1]=='datetime'){
 					$s.=$value[0] . " time NOT NULL,";
-				}				
+				}
 				if($value[1]=='timestamp'){
 					$s.=$value[0] . " $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP,";
 				}
@@ -287,11 +287,11 @@ class DbSql
 			}
 			$s.='PRIMARY KEY ('.$idname.'),';
 			$s=substr($s,0,strlen($s)-1);
-			
+
 			$s.=')';
 			$s.='CREATE INDEX ' . $table . '_ix_id on ' . $table .'('.$idname.');';
 		}
-		
+
 		$this->ReplacePre($s);
 		return $s;
 	}
@@ -313,9 +313,9 @@ class DbSql
 		}else{
 			$sqlw .= ' WHERE ';
 		}
-		
+
 		if(!is_array($where))return $sqlw . $where;
-		
+
 		$comma = '';
 		foreach($where as $k => $w) {
 			$eq=strtoupper($w[0]);
@@ -405,7 +405,7 @@ class DbSql
 			if($eq=='META_NAME'){
 				if(count($w)!=3)continue;
 				$sql_array='';
-				$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";';	
+				$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";';
 				$sql_meta=$this->db->EscapeString($sql_meta);
 				$sql_array .= "$w[1] LIKE '%$sql_meta%'";
 				$sqlw .= $comma .  '(' . $sql_array . ') ';
@@ -413,13 +413,13 @@ class DbSql
 			if($eq=='META_NAMEVALUE'){
 				if(count($w)==4){
 					$sql_array='';
-					$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";' . 's:' . strlen($w[3]) . ':"'.$w[3].'"';	
+					$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";' . 's:' . strlen($w[3]) . ':"'.$w[3].'"';
 					$sql_meta=$this->db->EscapeString($sql_meta);
 					$sql_array .= "$w[1] LIKE '%$sql_meta%'";
 					$sqlw .= $comma .  '(' . $sql_array . ') ';
 				}elseif(count($w)==5){
 					$sql_array='';
-					$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";' . $w[3];	
+					$sql_meta='s:' . strlen($w[2]) . ':"'.$w[2].'";' . $w[3];
 					$sql_meta=$this->db->EscapeString($sql_meta);
 					$sql_array .= "$w[1] LIKE '%$sql_meta%'";
 					$sqlw .= $comma .  '(' . $sql_array . ') ';
@@ -454,10 +454,10 @@ class DbSql
 		$sqlh='';
 		$sqlo='';
 		$sqll='';
-		
+
 		if(is_array($option)==false)$option=array();
 		$option=array_change_key_case($option);
-		
+
 		if(isset($option['sql_no_cache'])){
 			$sqlp.= 'SQL_NO_CACHE ';
 		}
@@ -526,7 +526,7 @@ class DbSql
 				$sqlw=$this->ParseWhere($where);
 			}
 		}
-		
+
 		if(isset($option['groupby'])){
 			$sqlg=' GROUP BY ';
 			$comma = '';
@@ -616,7 +616,7 @@ class DbSql
 	*/
 	public function Update($table,$keyvalue,$where,$option=null){
 		$this->ReplacePre($table);
-	
+
 		$sql="UPDATE $table SET ";
 
 		$comma = '';
@@ -692,7 +692,7 @@ class DbSql
 	 */
 	public function Filter($sql){
 		$_SERVER['_query_count'] = $_SERVER['_query_count'] + 1;
-		
+
 		foreach ($GLOBALS['Filter_Plugin_DbSql_Filter'] as $fpname => &$fpsignal) {
 			$fpname($sql);
 		}
@@ -734,7 +734,7 @@ class DbSql
 			$comma = ',';
 		}
 		$sql.=')';
-		
+
 		return  $sql . ";\r\n";
 	}
 }

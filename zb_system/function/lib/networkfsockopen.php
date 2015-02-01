@@ -248,7 +248,7 @@ class Networkfsockopen implements iNetwork {
 				$this->responseText=gzdecode($this->responseText);
 			}
 		}
-		
+
 		if(isset($this->responseHeader[0])){
 			$this->statusText=$this->responseHeader[0];
 			$a=explode(' ',$this->statusText);
@@ -256,7 +256,7 @@ class Networkfsockopen implements iNetwork {
 			if(isset($a[1]))$this->status=$a[1];
 			unset($this->responseHeader[0]);
 		}
-		
+
 		fclose($socket);
 
 	}
@@ -296,7 +296,7 @@ class Networkfsockopen implements iNetwork {
 	private function reinit(){
 		global $zbp;
 		$this->httpheader = array();
-	
+
 		if(!$this->canreinit)return;
 		$this->readyState = 0;		#状态
 		$this->responseBody = NULL;   #返回的二进制
@@ -324,38 +324,38 @@ class Networkfsockopen implements iNetwork {
 	 * @return null|string
 	 */
 	private function http_chunked_decode($chunk) {
-		$pos = 0; 
-		$len = strlen($chunk); 
-		$dechunk = null; 
+		$pos = 0;
+		$len = strlen($chunk);
+		$dechunk = null;
 
-		while(($pos < $len) 
+		while(($pos < $len)
 			&& ($chunkLenHex = substr($chunk,$pos, ($newlineAt = strpos($chunk,"\n",$pos+1))-$pos)))
-		{ 
-			if (! $this->is_hex($chunkLenHex)) { 
+		{
+			if (! $this->is_hex($chunkLenHex)) {
 				trigger_error('Value is not properly chunk encoded', E_USER_WARNING);
-				return $chunk; 
-			} 
+				return $chunk;
+			}
 
-			$pos = $newlineAt + 1; 
-			$chunkLen = hexdec(rtrim($chunkLenHex,"\r\n")); 
-			$dechunk .= substr($chunk, $pos, $chunkLen); 
-			$pos = strpos($chunk, "\n", $pos + $chunkLen) + 1; 
-		} 
-		return $dechunk; 
-	} 
+			$pos = $newlineAt + 1;
+			$chunkLen = hexdec(rtrim($chunkLenHex,"\r\n"));
+			$dechunk .= substr($chunk, $pos, $chunkLen);
+			$pos = strpos($chunk, "\n", $pos + $chunkLen) + 1;
+		}
+		return $dechunk;
+	}
 
-	/** 
-	 * determine if a string can represent a number in hexadecimal 
-	 * 
-	 * @param string $hex 
-	 * @return boolean true if the string is a hex, otherwise false 
-	 */ 
-	private function is_hex($hex) { 
-		// regex is for weenies 
-		$hex = strtolower(trim(ltrim($hex,"0"))); 
-		if (empty($hex)) { $hex = 0; }; 
-		$dec = hexdec($hex); 
-		return ($hex == dechex($dec)); 
+	/**
+	 * determine if a string can represent a number in hexadecimal
+	 *
+	 * @param string $hex
+	 * @return boolean true if the string is a hex, otherwise false
+	 */
+	private function is_hex($hex) {
+		// regex is for weenies
+		$hex = strtolower(trim(ltrim($hex,"0")));
+		if (empty($hex)) { $hex = 0; };
+		$dec = hexdec($hex);
+		return ($hex == dechex($dec));
 	}
 
 	/**

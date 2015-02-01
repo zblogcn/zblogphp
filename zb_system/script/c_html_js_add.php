@@ -9,9 +9,6 @@ require '../function/c_system_base.php';
 
 ob_clean();
 
-$zbp->CheckGzip();
-$zbp->StartGzip();
-
 ?>
 var zbp = new ZBP({
 	bloghost: "<?php echo $zbp->host; ?>",
@@ -76,6 +73,9 @@ if( isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $
 	SetHttpStatusCode(304);
 	die;
 }
+
+$zbp->CheckGzip();
+$zbp->StartGzip();
 	
 echo $s;
 

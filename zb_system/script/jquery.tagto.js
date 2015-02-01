@@ -26,7 +26,7 @@ jQuery.fn.tagTo = function(target, seperator, tclass){
                 target.val(jQuery(this).text());
                 jQuery(this).addClass(tclass);
             } else {
-                var arr = target.val().split(seperator);    
+                var arr = target.val().split(seperator);
                 var isInArr = false;
                 var position;
                 for (var i = 0, n = arr.length; i < n; ++i) {
@@ -46,8 +46,8 @@ jQuery.fn.tagTo = function(target, seperator, tclass){
                 target.val(arr.join(seperator));
             }
             return false;
-        }); 
+        });
     } else {
         throw "target must be an text area";
     }
-} 
+}

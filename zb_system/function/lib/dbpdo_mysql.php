@@ -21,7 +21,7 @@ class Dbpdo_MySQL implements iDataBase {
 	/**
 	* @var string|null 数据库引擎
 	*/
-	public $dbengine = null;	
+	public $dbengine = null;
 	/**
 	* @var DbSql|null DbSql实例
 	*/
@@ -97,7 +97,7 @@ class Dbpdo_MySQL implements iDataBase {
 			return true;
 		}
 	}
-	
+
 	/**
 	* 关闭数据库连接
 	*/
@@ -107,7 +107,7 @@ class Dbpdo_MySQL implements iDataBase {
 
 	/**
 	* 执行多行SQL语句
-	* @param $s 
+	* @param $s
 	*/
 	function QueryMulit($s){return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
 	function QueryMulti($s){
@@ -131,7 +131,7 @@ class Dbpdo_MySQL implements iDataBase {
 		$results = $this->db->query($this->sql->Filter($query));
 		//fetch || fetchAll
 		if(is_object($results)){
-		
+
 			//if(true==true){
 			if(true!==true){
 				$query="EXPLAIN " . $query;
@@ -141,7 +141,7 @@ class Dbpdo_MySQL implements iDataBase {
 					logs("\r\n" . $query . "\r\n" . var_export($row,true));
 				}
 			}
-		
+
 			return $results->fetchAll();
 		}else{
 			return array($results);
@@ -169,7 +169,7 @@ class Dbpdo_MySQL implements iDataBase {
 
 	/**
 	* @param $query
-	* @return int 
+	* @return int
 	*/
 	function Insert($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
@@ -191,7 +191,7 @@ class Dbpdo_MySQL implements iDataBase {
 	function DelTable($table){
 		$this->QueryMulit($this->sql->DelTable($table));
 	}
-	
+
 	/**
 	* @param $table
 	* @return bool

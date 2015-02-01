@@ -10,14 +10,14 @@ class Metas {
 	/**
 	 * @var array 存储Metas相应数值的数组
 	 */
-	public $Data=array();
+	private $_data=array();
 	/**
 	 * @param string $name key名
 	 * @param $value
 	 */
 
 	public function __set($name, $value){
-		$this->Data[$name] = $value;
+		$this->_data[$name] = $value;
 	}
 
 	/**
@@ -25,8 +25,8 @@ class Metas {
 	 * @return null
 	 */
 	public function __get($name){
-		if(!isset($this->Data[$name]))return null;
-		return $this->Data[$name];
+		if(!isset($this->_data[$name]))return null;
+		return $this->_data[$name];
 	}
 
 	/**
@@ -37,9 +37,17 @@ class Metas {
 	public static function ConvertArray($a){
 		$m = new Metas;
 		if(is_array($a)){
-			$m->Data=$a;
+			$m->_data=$a;
 		}
 		return $m;
+	}
+
+	/**
+	* 获取Data数据
+	* @return array
+	*/
+	function GetData(){
+		return $this->_data;
 	}
 
 	/**
@@ -68,7 +76,7 @@ class Metas {
 	 * @return bool
 	 */
 	public function HasKey($name){
-		return array_key_exists($name,$this->Data);
+		return array_key_exists($name,$this->_data);
 	}
 
 	/**
@@ -76,7 +84,7 @@ class Metas {
 	 * @return int
 	 */
 	public function CountItem(){
-		return count($this->Data);
+		return count($this->_data);
 	}
 
 	/**
@@ -85,7 +93,7 @@ class Metas {
 	 */
 	public function Del($name){
 
-		 unset($this->Data[$name]);
+		 unset($this->_data[$name]);
 	}
 
 	/**
@@ -93,8 +101,8 @@ class Metas {
 	 * @return string 返回序列化的值
 	 */
 	public function Serialize(){
-		if(count($this->Data)==0)return '';
-		$data=$this->Data;
+		if(count($this->_data)==0)return '';
+		$data=$this->_data;
 		foreach ($data as $key => $value)
 			if(is_string($value))
 				$data[$key]=self::ReplaceHost2Tag($value);
@@ -111,17 +119,17 @@ class Metas {
 
 		if($s=='')return false;
 		//if(strpos($s,'{')===0){
-			//$this->Data=json_decode($s,true);
+			//$this->_data=json_decode($s,true);
 		//}else{
-			$this->Data=@unserialize($s);
+			$this->_data=@unserialize($s);
 		//}
-		if(is_array($this->Data)){
-			if(count($this->Data)==0)return true;
-			foreach ($this->Data as $key => $value)
+		if(is_array($this->_data)){
+			if(count($this->_data)==0)return true;
+			foreach ($this->_data as $key => $value)
 				if(is_string($value))
-					$this->Data[$key]=self::ReplaceTag2Host($value);
+					$this->_data[$key]=self::ReplaceTag2Host($value);
 		}else{
-			$this->Data=array();
+			$this->_data=array();
 			return false;
 		}
 

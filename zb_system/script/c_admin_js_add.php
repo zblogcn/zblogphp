@@ -9,9 +9,6 @@ require '../function/c_system_base.php';
 
 ob_clean();
 
-$zbp->CheckGzip();
-$zbp->StartGzip();
-
 ?>
 var bloghost="<?php echo $zbp->host; ?>";
 var cookiespath="<?php echo $zbp->cookiespath; ?>";
@@ -264,11 +261,7 @@ $(document).ready(function(){
 	})
 
 	if (!$.support.leadingWhitespace) {
-		<?php
-			if($option['ZC_ADMIN_HTML5_ENABLE'])
-				if(!GetVars('dishtml5','COOKIE'))
-					echo 'alert("' . $lang['error']['74'] . '");';
-		?>
+
 	}else{
 		<?php
 			echo 'if($("div.divHeader,div.divHeader2").first().css("background-image")=="none"){AddHeaderIcon("'. $bloghost .'zb_system/image/common/window.png");}';
@@ -295,7 +288,10 @@ if( isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $
 	SetHttpStatusCode(304);
 	die;
 }
-	
+
+$zbp->CheckGzip();
+$zbp->StartGzip();
+
 echo $s;
 
 die();

@@ -55,7 +55,8 @@ $zbpvers['131111']='1.0 Beta2 Build 131111';
 $zbpvers['131221']='1.1 Taichi Build 131221';
 $zbpvers['140220']='1.2 Hippo Build 140220';
 $zbpvers['140614']='1.3 Wonce Build 140614';
-$zbpvers['150101']='1.4 Bariour Build 150101';
+$zbpvers['150101']='1.4 Deeplue Build 150101';
+$zbpvers['150601']='2.0 Beta Build 150601';
 
 #定义常量
 /**
@@ -428,6 +429,8 @@ foreach ($ap as $plugin) {
 
 unset($key,$value,$option_zbusers,$plugin,$ap,$filename);
 
+#处理table和datainfo
+$zbp->ConvertTableAndDatainfo();
 
 #激活所有已加载的插件
 ActivePlugin();

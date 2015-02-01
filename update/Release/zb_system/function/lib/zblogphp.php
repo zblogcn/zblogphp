@@ -857,7 +857,6 @@ class ZBlogPHP {
 	 */
 	public function LoadOption(){
 
-		$this->Config('system')->ZC_BLOG_HOST = str_replace('|','',$this->Config('system')->ZC_BLOG_HOST);
 		$array=$this->Config('system')->GetData();
 
 		if(empty($array))return false;
@@ -867,6 +866,7 @@ class ZBlogPHP {
 			//if($key=='ZC_BLOG_HOST')continue;
 			//if($key=='ZC_BLOG_CLSID')continue;
 			//if($key=='ZC_BLOG_LANGUAGEPACK')continue;
+			if($key=='ZC_BLOG_HOST')$value=str_replace('|','',$value);
 			if(
 				($key=='ZC_YUN_SITE') || 
 				($key=='ZC_DATABASE_TYPE') || 
@@ -1332,7 +1332,7 @@ class ZBlogPHP {
 				return true;
 			}
 			$default='en';
-			if(is_readable($f=$this->path . 'zb_users/'.$type&'/'.$id.'/language/' . $default . '.php')){
+			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
 				$this->lang[$id] = require($f);
 				$this->langpacklist[]=array($type,$id,$default);
 				return true;

@@ -18,7 +18,6 @@
 
 # Update
 /update/*.xml
-/update/Release/
 
 # Plugin cache
 /zb_users/plugin/SQLLog/logs/*.php
@@ -61,6 +60,7 @@
 !/zb_users/plugin/wp2zbp
 !/zb_users/plugin/LargeData
 !/zb_users/plugin/ZBPJFExample
+!/zb_users/plugin/markdown
 
 # Unoffical Theme
 /zb_users/theme/*

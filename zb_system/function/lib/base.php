@@ -28,14 +28,12 @@ class Base{
 	* @var datebase db
 	*/
 	protected $db = null;
-	
-	protected static $datainfo_entity  =  null;
+
 	/**
 	* @param string $table 数据表
 	* @param array $datainfo 数据表结构信息
 	*/
 	function __construct(&$table, &$datainfo, &$db = null, $hasmetas = true){
-
 		if($db !== null)
 			$this->db = &$db;
 		else
@@ -46,13 +44,8 @@ class Base{
 
 		if(true==$hasmetas)$this->Metas=new Metas;
 
-		if( self::$datainfo_entity !== null )
-			$this->data = self::$datainfo_entity;
-		else{
-			foreach ($this->datainfo as $key => $value)
-				$this->data[$key]=$value[3];
-			self::$datainfo_entity = $this->data;
-		}
+		foreach ($this->datainfo as $key => $value)
+			$this->data[$key]=$value[3];
 	}
 
 	/**
@@ -224,7 +217,7 @@ class Base{
 		$id_field=reset($this->datainfo);
 		$id_name=key($this->datainfo);
 		$id_field=$id_field[0];
-		
+
 		if ($this->$id_name  ==  0) {
 			$sql = $this->db->sql->Insert($this->table,$keyvalue);
 			$this->$id_name = $this->db->Insert($sql);
@@ -259,7 +252,7 @@ class Base{
 	* @return string
 	*/
     public function __toString() {
-        return json_encode($this->data);
+        return (string)json_encode($this->data);
     }
 
 }

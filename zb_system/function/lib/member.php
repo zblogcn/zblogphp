@@ -155,7 +155,7 @@ class Member extends Base {
 		return md5(md5($ps). $guid);
 
 	}
-	
+
 	/**
 	 * 保存用户数据
 	 * @return bool

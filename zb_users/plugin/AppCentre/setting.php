@@ -97,6 +97,35 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               <hr/>
             </form>
 
+            <div class="divHeader2">开发者登录</div>
+<?php if(!$zbp->Config('AppCentre')->username){ ?>
+            <form action="?act=login" method="post">
+              <table style="line-height:3em;" width="100%" border="0">
+                <tr height="32">
+                  <th  align="center">如果您是开发者，请在这里输入Z-Blog应用中心的开发者账号和密码，以用于身份验证。
+                    </td>
+                </tr>
+                <tr height="32">
+                  <td  align="center">用户名:
+                    <input type="text" name="app_username" value="" style="width:40%"/></td>
+                </tr>
+                <tr height="32">
+                  <td  align="center">密&nbsp;&nbsp;&nbsp;&nbsp;码:
+                    <input type="password" name="app_password" value="" style="width:40%" /></td>
+                </tr>
+                <tr height="32" align="center">
+                  <td align="center"><input type="submit" value="登陆" class="button" /></td>
+                </tr>
+              </table>
+            </form>
+<?php }else{ ?>
+            <form action="?act=logout" method="post">
+              <p>开发者 <b><?php echo $zbp->Config('AppCentre')->username; ?></b> 您好,您已经在当前客户端登录Z-BlogPHP官方网站-APP应用中心.</p>
+              <p>
+                <input name="submit" type="submit" value="退出登录" class="button" />
+              </p>
+            </form>
+<?php }?>
 	<script type="text/javascript">ActiveLeftMenu("aAppCentre");</script>
 	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>	
   </div>

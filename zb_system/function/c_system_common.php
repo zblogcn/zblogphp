@@ -86,7 +86,7 @@ function RunTime() {
 	if(function_exists('memory_get_usage')){
 		$rt['memory']=(int)((memory_get_usage()-$_SERVER['_memory_usage'])/1024);
 	}
-	
+
 	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false){
 		$_SERVER['_runtime_result']=$rt;
 		return $rt;
@@ -110,8 +110,8 @@ function GetEnvironment(){
 	global $zbp;
 	$ajax = Network::Create();
 	if ($ajax) $ajax = substr(get_class($ajax), 7);
-	
-	$system_environment = PHP_OS . '; ' . 
+
+	$system_environment = PHP_OS . '; ' .
 							GetValueInArray(
 								explode(' ',str_replace(array('Microsoft-','/'), array('',''), GetVars('SERVER_SOFTWARE', 'SERVER'))), 0
 							) . '; ' .
@@ -193,7 +193,7 @@ function GetValueInArrayByCurrent($array, $name) {
 
 /**
  * 获取Guid
- * @return string 
+ * @return string
  */
 function GetGuid() {
 	$s = str_replace('.', '', trim(uniqid('zbp', true), 'zbp'));
@@ -739,7 +739,7 @@ function DelNameInString($s, $name) {
  * 在字符串参数值查找参数
  * @param string $s 字符串型的参数表，以|符号分隔
  * @param string $name 参数名
- * @return bool 
+ * @return bool
 */
 function HasNameInString($s, $name) {
 	$pl = $s;
@@ -753,7 +753,7 @@ function HasNameInString($s, $name) {
 /**
  *  XML-RPC应答错误页面
  * @param string $faultString 错误提示字符串
- * @return void 
+ * @return void
 */
 function RespondError($faultString) {
 
@@ -772,7 +772,7 @@ function RespondError($faultString) {
 /**
  *  XML-RPC脚本错误页面
  * @param string $faultString 错误提示字符串
- * @return void 
+ * @return void
 */
 function ScriptError($faultString) {
 	header('Content-type: application/x-javascript; Charset=utf-8');
@@ -785,7 +785,7 @@ function ScriptError($faultString) {
  *  验证字符串是否符合正则表达式
  * @param string $source 字符串
  * @param string $para 正则表达式，可用[username]|[password]|[email]|[homepage]或自定义表达式
- * @return bool 
+ * @return bool
 */
 function CheckRegExp($source, $para) {
 	if (strpos($para, '[username]') !== false) {
@@ -810,7 +810,7 @@ function CheckRegExp($source, $para) {
  *  通过正则表达式格式化字符串
  * @param string $source 字符串
  * @param string $para 正则表达式，可用[html-format]|[nohtml]|[noscript]|[enter]|[noenter]|[filename]|[normalname]或自定义表达式
- * @return string 
+ * @return string
 */
 function TransferHTML($source, $para) {
 
@@ -855,7 +855,7 @@ function TransferHTML($source, $para) {
 /**
  *  封装HTML标签
  * @param string $html html源码
- * @return string 
+ * @return string
 */
 function CloseTags($html) {
 
@@ -904,7 +904,7 @@ function CloseTags($html) {
  * @param string $sourcestr 源字符串
  * @param int $start 起始位置
  * @param int $cutlength 子串长度
- * @return string 
+ * @return string
 */
 function SubStrUTF8_Start($sourcestr, $start, $cutlength) {
 	if( function_exists('mb_substr') && function_exists('mb_internal_encoding') ){
@@ -917,7 +917,7 @@ function SubStrUTF8_Start($sourcestr, $start, $cutlength) {
 		iconv_set_encoding ( "output_encoding" ,  "UTF-8" );
 		return iconv_substr($sourcestr, $start, $cutlength);
 	}
-	
+
 	return substr($sourcestr, $start, $cutlength);
 }
 
@@ -925,7 +925,7 @@ function SubStrUTF8_Start($sourcestr, $start, $cutlength) {
  *  获取UTF8格式的字符串的子串
  * @param string $sourcestr 源字符串
  * @param int $cutlength 子串长度
- * @return string 
+ * @return string
 */
 function SubStrUTF8($sourcestr, $cutlength) {
 
@@ -987,7 +987,7 @@ function SubStrUTF8($sourcestr, $cutlength) {
 /**
  *  删除文件BOM头
  * @param string $s 文件内容
- * @return string 
+ * @return string
 */
 function RemoveBOM($s){
 	$charset=array();
@@ -1007,7 +1007,7 @@ function RemoveBOM($s){
  * @since 1.3.140614
  */
 function GetTimeZonebyGMT($z){
-	$timezones = array(  
+	$timezones = array(
 		-12 => 'Etc/GMT+12',
 		-11 => 'Pacific/Midway',
 		-10 => 'Pacific/Honolulu',
@@ -1042,7 +1042,7 @@ function GetTimeZonebyGMT($z){
 /**
  * 对数组内的字符串进行htmlspecialchars
  * @param array $array 待过滤字符串
- * @return array 
+ * @return array
  * @since 1.4
  */
 function htmlspecialchars_array($array) {
@@ -1063,7 +1063,7 @@ function htmlspecialchars_array($array) {
 /**
  * 获得一个只含数字字母和_线的string
  * @param string $s 待过滤字符串
- * @return s 
+ * @return s
  * @since 1.4
  */
 function FilterCorrectName($s) {

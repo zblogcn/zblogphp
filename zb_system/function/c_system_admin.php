@@ -37,7 +37,7 @@ function Include_Admin_Addmemsubmenu(){
 	if($zbp->CheckRights('MemberNew')){
 		echo '<a href="../cmd.php?act=MemberNew"><span class="m-left">' . $GLOBALS['lang']['msg']['new_member'] . '</span></a>';
 	}
-	
+
 	echo '<a href="../cmd.php?act=misc&amp;type=vrs" target="_blank"><span class="m-left">'.$zbp->lang['msg']['view_rights'].'</span></a>';
 }
 
@@ -333,7 +333,7 @@ function CreateModuleDiv($m,$button=true){
 		if( $m->SourceType != 'system'
 			&& $m->SourceType != 'theme'
 			&& !(
-				$m->SourceType == 'plugin' && 
+				$m->SourceType == 'plugin' &&
 				CheckRegExp($m->Source, '/plugin_(' . $zbp->option['ZC_USING_PLUGIN_LIST'] . ')/i')
 			)
 		)
@@ -422,7 +422,7 @@ function CreateOptionsOfLang($default){
 function Admin_SiteInfo(){
 
 	global $zbp;
-	
+
 	$echostatistic=false;
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['info_intro'] . '</div>';
@@ -583,7 +583,7 @@ foreach ($array as $article) {
 	echo '</table>';
 	echo '<hr/><p class="pagebar">';
 
-foreach ($p->buttons as $key => $value) {
+foreach ($p->Buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 
@@ -673,7 +673,7 @@ foreach ($array as $article) {
 }
 	echo '</table>';
 	echo '<hr/><p class="pagebar">';
-foreach ($p->buttons as $key => $value) {
+foreach ($p->Buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 	echo '</p></div>';
@@ -816,10 +816,10 @@ $array=$zbp->GetCommentList(
 );
 
 foreach ($array as $cmt) {
-	
+
 	$article = $zbp->GetPostByID($cmt->LogID);
 	if ($article->ID==0) $article = NULL;
-	
+
 	echo '<tr>';
 	echo '<td class="td5"><a href="?act=CommentMng&id=' . $cmt->ID . '" title="' . $zbp->lang['msg']['jump_comment'] . $cmt->ID . '">' . $cmt->ID . '</a></td>';
 	if($cmt->ParentID>0)
@@ -865,7 +865,7 @@ if(!GetVars('ischecking','GET')){
 
 	echo'<p class="pagebar">';
 
-foreach ($p->buttons as $key => $value) {
+foreach ($p->Buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 
@@ -958,7 +958,7 @@ if($zbp->CheckRights('MemberDel')){
 }
 	echo '</table>';
 	echo '<hr/><p class="pagebar">';
-foreach ($p->buttons as $key => $value) {
+foreach ($p->Buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 	echo '</p></div>';
@@ -1042,7 +1042,7 @@ foreach ($array as $upload) {
 }
 	echo '</table>';
 	echo '<hr/><p class="pagebar">';
-foreach ($p->buttons as $key => $value) {
+foreach ($p->Buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 	echo '</p></div>';
@@ -1114,7 +1114,7 @@ foreach ($array as $tag) {
 }
 	echo '</table>';
 	echo '<hr/><p class="pagebar">';
-foreach ($p->buttons as $key => $value) {
+foreach ($p->Buttons as $key => $value) {
 	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;' ;
 }
 	echo '</p></div>';
@@ -1465,16 +1465,16 @@ function Admin_PluginMng(){
 	<th>' . $zbp->lang['msg']['date'] . '</th>
 	<th></th>
 	</tr>';
-	
+
 	$plugins=array();
-	
+
 	$app = new App;
 	if($app->LoadInfoByXml('theme',$zbp->theme)==true){
 		if($app->HasPlugin()){
 			array_unshift($plugins,$app);
 		}
 	}
-	
+
 	$pl=$zbp->option['ZC_USING_PLUGIN_LIST'];
 	$apl=explode('|',$pl);
 	$apl=array_unique($apl);

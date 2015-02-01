@@ -47,56 +47,30 @@ class PageBar{
 	 * @var null|UrlRule
 	 */
 	public $UrlRule  = null;
-	
-	public function __set($name, $value){
-		if($name=='count')
-			$this->Count=$value;
-		if($name=='pagebarcount')
-			$this->PageBarCount=$value;
-		if($name=='pagecount')
-			$this->PageCount=$value;
-		if($name=='pageall')
-			$this->PageAll=$value;
-		if($name=='pagenow')
-			$this->PageNow=$value;
-		if($name=='pagefirst')
-			$this->PageFirst=$value;
-		if($name=='pagelast')
-			$this->PageLast=$value;
-		if($name=='pageprevious')
-			$this->PagePrevious=$value;
-		if($name=='pagenext')
-			$this->PageNext=$value;
-		if($name=='urlrule')
-			$this->UrlRule=$value;
-	}
-
 	/**
-	* @param $name
-	* @return mixed
-	*/
-	public function __get($name){
-		if($name=='count')
-			return $this->Count;
-		if($name=='pagebarcount')
-			return $this->PageBarCount;
-		if($name=='pagecount')
-			return $this->PageCount;
-		if($name=='pageall')
-			return $this->PageAll;
-		if($name=='pagenow')
-			return $this->PageNow;
-		if($name=='pagefirst')
-			return $this->PageFirst;
-		if($name=='pagelast')
-			return $this->PageLast;
-		if($name=='pageprevious')
-			return $this->PagePrevious;
-		if($name=='pagenext')
-			return $this->PageNext;
-		if($name=='urlrule')
-			return $this->UrlRule;
-	}
+	 * @var array
+	 */
+	public $buttons = array();
+	/**
+	 * @var null
+	 */
+	public $prevbutton = null;
+	/**
+	 * @var null
+	 */
+	public $nextbutton = null;
+	/**
+	 * @var array
+	 */
+	public $Buttons = array();
+	/**
+	 * @var null
+	 */
+	public $PrevButton = null;
+	/**
+	 * @var null
+	 */
+	public $NextButton = null;
 
 	/**
 	 * @param $url
@@ -105,6 +79,9 @@ class PageBar{
 	public function __construct($url,$makereplace=true){
 		$this->UrlRule=new UrlRule($url);
 		$this->UrlRule->MakeReplace=$makereplace;
+		$this->Buttons=&$this->buttons;
+		$this->PrevButton=&$this->prevbutton;
+		$this->NextButton=&$this->nextbutton;
 	}
 
 	/**
@@ -155,18 +132,5 @@ class PageBar{
 		$this->buttons['››']=$this->UrlRule->Make();
 
 	}
-
-	/**
-	 * @var array
-	 */
-	public $buttons = array();
-	/**
-	 * @var null
-	 */
-	public $prevbutton = null;
-	/**
-	 * @var null
-	 */
-	public $nextbutton = null;
 
 }

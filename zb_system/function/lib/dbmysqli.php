@@ -21,7 +21,7 @@ class DbMySQLi implements iDataBase {
 	/**
 	* @var string|null 数据库引擎
 	*/
-	public $dbengine = null;	
+	public $dbengine = null;
 	/**
 	* @var DbSql|null DbSql实例
 	*/
@@ -58,7 +58,7 @@ class DbMySQLi implements iDataBase {
 	 * @return bool
 	 */
 	function Open($array){
-		$db = mysqli_init(); 
+		$db = mysqli_init();
 
 		if($array[6]==true){
 			$array[0]='p:'.$array[0];
@@ -101,7 +101,7 @@ class DbMySQLi implements iDataBase {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * 关闭数据库连接
 	 */
