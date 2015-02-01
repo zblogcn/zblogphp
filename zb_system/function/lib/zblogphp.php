@@ -409,7 +409,6 @@ class ZBlogPHP {
 			return false;
 		}
 
-		$this->ConvertTableAndDatainfo();
 		$this->LoadConfigs();
 		$this->LoadCache();
 		$this->LoadOption();
@@ -495,8 +494,6 @@ class ZBlogPHP {
 		$this->StartGzip();
 
 		header('Content-type: text/html; charset=utf-8');
-
-		$this->ConvertTableAndDatainfo();
 
 		$this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
 		$this->LoadCategorys();
@@ -857,7 +854,6 @@ class ZBlogPHP {
 	 */
 	public function LoadOption(){
 
-		$this->Config('system')->ZC_BLOG_HOST = str_replace('|','',$this->Config('system')->ZC_BLOG_HOST);
 		$array=$this->Config('system')->GetData();
 
 		if(empty($array))return false;
@@ -867,6 +863,8 @@ class ZBlogPHP {
 			//if($key=='ZC_BLOG_HOST')continue;
 			//if($key=='ZC_BLOG_CLSID')continue;
 			//if($key=='ZC_BLOG_LANGUAGEPACK')continue;
+			if($key=='ZC_BLOG_HOST')
+				$value=str_replace('|','',$value);
 			if(
 				($key=='ZC_YUN_SITE') ||
 				($key=='ZC_DATABASE_TYPE') ||

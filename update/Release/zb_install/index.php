@@ -558,6 +558,9 @@ case 'mysql':
 case 'mysqli':
 case 'pdo_mysql':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/mysql.sql');
+
+  if($zbp->option['ZC_YUN_SITE']!='')break;
+  
   $zbp->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
   if(strpos($zbp->option['ZC_MYSQL_SERVER'],':')!==false){
     $servers=explode(':',$zbp->option['ZC_MYSQL_SERVER']);
@@ -571,16 +574,17 @@ case 'pdo_mysql':
   $zbp->option['ZC_MYSQL_NAME']=trim(str_replace(array('\'','"'),array('',''),GetVars('dbmysql_name','POST')));
   $zbp->option['ZC_MYSQL_PRE']=trim(str_replace(array('\'','"'),array('',''),GetVars('dbmysql_pre','POST')));
   if($zbp->option['ZC_MYSQL_PRE']=='')$zbp->option['ZC_MYSQL_PRE']=='zbp_';
-  if($zbp->option['ZC_YUN_SITE']==''){
-    $zbp->option['ZC_MYSQL_ENGINE']=GetVars('dbengine','POST');
-    $cts=str_replace('MyISAM',$zbp->option['ZC_MYSQL_ENGINE'],$cts);
-  }
+
+  $zbp->option['ZC_MYSQL_ENGINE']=GetVars('dbengine','POST');
+  $cts=str_replace('MyISAM',$zbp->option['ZC_MYSQL_ENGINE'],$cts);
+
   $zbp->db = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
   if($zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'],$zbp->option['ZC_MYSQL_PORT'],$zbp->option['ZC_MYSQL_USERNAME'],$zbp->option['ZC_MYSQL_PASSWORD'],$zbp->option['ZC_MYSQL_NAME'])==true){
     echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_MYSQL_NAME'] ."<br/>";
   }
   $zbp->db->dbpre=$zbp->option['ZC_MYSQL_PRE'];
   $zbp->db->Close();
+
   break;
 case 'sqlite':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');

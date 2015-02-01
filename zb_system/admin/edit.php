@@ -191,7 +191,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
 
           <!-- newdatetime( -->
           <div id='newdatetime' class="editmod"> <label for="edtDateTime" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['date']?></label>
-            <input type="text" name="PostTime" id="edtDateTime"  value="<?php echo $article->Time();?>" style="width:171px;"/>
+            <input type="text" name="PostTime" id="edtDateTime"  value="<?php echo $article->Time();?>" style="width:180px;"/>
             </div>
 
           <!-- )newdatetime -->
