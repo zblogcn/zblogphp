@@ -1,5 +1,6 @@
 <?php
 return array (
+  'ZC_SITE_TURNOFF' => false,
   'ZC_YUN_SITE'=>'SAE',
   'ZC_DATABASE_TYPE' => 'mysql',
   'ZC_SQLITE_NAME' => '',
@@ -12,5 +13,6 @@ return array (
   'ZC_MYSQL_PRE' => 'zbp_',
   'ZC_MYSQL_ENGINE' => 'MyISAM',
   'ZC_MYSQL_PORT' => SAE_MYSQL_PORT,
+  'ZC_MYSQL_PERSISTENT' => false,
 )
 ?>
