@@ -57,6 +57,13 @@ if ( !interface_exists ( 'iNetwork' )) {
 		 * @return mixed
 		 */
 		public function setMaxRedirs($n=0);
+		
+		/**
+		 * @param string $name
+		 * @param string $entity
+		 * @return mixed
+		 */
+		public function addBinaryFile($name,$entity);
 
 	}
 

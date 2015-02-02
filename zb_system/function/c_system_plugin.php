@@ -1237,6 +1237,50 @@ DefinePluginFilter('Filter_Plugin_DelArticle_Succeed');
  */
 DefinePluginFilter('Filter_Plugin_DelModule_Succeed');
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Post_Url
+'参数:&$this
+'说明:干预Post类Url方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Post_Url');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Category_Url
+'参数:&$this
+'说明:干预Category类Url方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Category_Url');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Tag_Url
+'参数:&$this
+'说明:干预Tag类Url方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Tag_Url');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Member_Url
+'参数:&$this
+'说明:干预Member类Url方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Member_Url');
+
 ################################################################################################################
 #类里的接口
 

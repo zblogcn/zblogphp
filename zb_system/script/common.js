@@ -28,10 +28,3 @@ var SaveRememberInfo = function () { zbp.userinfo.saveFromHtml.apply(null); retu
 var RevertComment = function () { zbp.comment.reply.apply(null); return false;} 
 var GetComments = function () { zbp.comment.get.apply(null); return false;} 
 var VerifyMessage = function () { zbp.comment.post.apply(null); return false;}
-
-var bloghost = zbp.options.bloghost;
-var cookiespath = zbp.options.bloghost;
-var ajaxurl = zbp.options.bloghost;
-var lang_comment_name_error = zbp.options.lang.error[72];
-var lang_comment_email_error = zbp.options.lang.error[29];
-var lang_comment_content_error = zbp.options.lang.error[46];

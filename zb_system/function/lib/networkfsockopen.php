@@ -379,4 +379,12 @@ class Networkfsockopen implements iNetwork {
 	public function setMaxRedirs($n=0){
 		$this->maxredirs=$n;
 	}
+
+	/**
+	 * @param string $name
+	 * @param string $entity
+	 * @return mixed
+	 */
+	public function addBinaryFile($name,$entity){
+	}
 }

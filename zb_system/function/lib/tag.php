@@ -54,6 +54,10 @@ class Tag extends Base{
 	{
 		global $zbp;
 		if ($name=='Url') {
+			foreach ($GLOBALS['Filter_Plugin_Tag_Url'] as $fpname => &$fpsignal) {
+				$fpreturn=$fpname($this);
+				if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			}
 			$u = new UrlRule($zbp->option['ZC_TAGS_REGEX']);
 			$u->Rules['{%id%}']=$this->ID;
 			$u->Rules['{%alias%}']=$this->Alias==''?urlencode($this->Name):$this->Alias;
