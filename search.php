@@ -11,10 +11,14 @@ require './zb_system/function/c_system_base.php';
 $zbp->CheckGzip();
 $zbp->Load();
 
-$action='search';
+$action = 'search';
 
-foreach ($GLOBALS['Filter_Plugin_Search_Begin'] as $fpname => &$fpsignal) $fpname();
+foreach ($GLOBALS['Filter_Plugin_Search_Begin'] as $fpname => &$fpsignal) {$fpname();
+}
 
 ViewIndex();
+
+foreach ($GLOBALS['Filter_Plugin_Search_End'] as $fpname => &$fpsignal) {$fpname();
+}
 
 RunTime();
