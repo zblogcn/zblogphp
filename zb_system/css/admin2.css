@@ -380,8 +380,8 @@ input.edit{
 	margin-left: 0px;
 }
 
-#editor_content {width:99%;height:300px;margin:0;padding:0.5em 0.5%}
-#editor_intro{width:99%;height:150px;margin:0;padding:0.5em 0.5%}
+#editor_content {width:100%;height:300px;margin:0;padding:0.5em 0.5%}
+#editor_intro{width:100%;height:150px;margin:0;padding:0.5em 0.5%}
 
 /*提示DIV*/
 div.hint{
@@ -464,6 +464,7 @@ hr {width:100%;height:1px;border:none;padding:0;visibility:hidden;}
 }
 .editmod3{
 	margin:0;
+	width:99%;
 }
 
 .editinputname{
