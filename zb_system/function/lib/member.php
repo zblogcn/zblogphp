@@ -52,6 +52,10 @@ class Member extends Base {
 	{
 		global $zbp;
 		if ($name=='Url') {
+			foreach ($GLOBALS['Filter_Plugin_Member_Url'] as $fpname => &$fpsignal) {
+				$fpreturn=$fpname($this);
+				if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			}
 			$u = new UrlRule($zbp->option['ZC_AUTHOR_REGEX']);
 			$u->Rules['{%id%}']=$this->ID;
 			$u->Rules['{%alias%}']=$this->Alias==''?urlencode($this->Name):$this->Alias;

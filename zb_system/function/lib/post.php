@@ -129,6 +129,10 @@ class Post extends Base{
 				return $zbp->lang['post_status_name'][$this->Status];
 				break;
 			case 'Url':
+				foreach ($GLOBALS['Filter_Plugin_Post_Url'] as $fpname => &$fpsignal) {
+					$fpreturn=$fpname($this);
+					if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+				}
 				$u = new UrlRule( $zbp->GetPostType_UrlRule($this->Type) );
 				$u->Rules['{%id%}']=$this->ID;
 				if($this->Alias){
