@@ -16,7 +16,7 @@ class Networkcurl implements iNetwork
 	private $status = 0;			#状态码
 	private $statusText = '';	   #状态码文本
 	private $responseVersion = '';  #返回的HTTP版体
-
+	
 	private $option = array();
 	private $url = '';
 	private $postdata = array();
@@ -157,9 +157,17 @@ class Networkcurl implements iNetwork
 
 		if($this->option['method'] == 'POST')
 		{
-			if($data=='') $data = http_build_query($this->postdata);
+			if ($data == '') {
+				$data = array();
+				foreach ($this->postdata as $key => $value) {
+					foreach ($value as $key2 => $value2) {
+						$data[$key2] = $value2;
+					}
+				}
+			}
 			curl_setopt($this->ch, CURLOPT_POSTFIELDS,$data);
-			curl_setopt($this->ch, CURLOPT_POST, 1);
+			curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'POST');
+			//curl_setopt($this->ch, CURLOPT_POST, 1);
 		}
 
 		curl_setopt($this->ch,CURLOPT_HTTPHEADER,$this->httpheader);
@@ -171,11 +179,11 @@ class Networkcurl implements iNetwork
 				curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION,true);
 			}
 		}
-
+		
 		if($this->isgzip == true){
 			curl_setopt($this->ch, CURLOPT_ENCODING, 'gzip');
 		}
-
+		
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
 
