@@ -35,7 +35,7 @@ $(function () {
 	$addoninfo = JSON.parse($addoninfo);
 
 	if ($addoninfo.chkadmin){
-		$(".cp-hello").html("' . $zbp->lang['msg']['welcome'] . ' " + $addoninfo.useralias + " (" + $addoninfo.levelname  + ")");
+		$(".cp-hello").html("<?php echo $zbp->lang['msg']['welcome'];?> " + $addoninfo.useralias + " (" + $addoninfo.levelname  + ")");
 		if ($cpLogin.length == 1 && $cpLogin.html().indexOf("[") > -1) { 
 			$cpLogin.html("[<?php echo $zbp->lang['msg']['admin']; ?>]");
 		} else {
@@ -49,7 +49,7 @@ $(function () {
 		} else {
 			$cpVrs.html("<?php echo $zbp->lang['msg']['new_article']; ?>");
 		}
-		$cpVrs.attr("href", bloghost + "zb_system/cmd.php?act=ArticleEdt");
+		$cpVrs.attr("href", zbp.bloghost + "zb_system/cmd.php?act=ArticleEdt");
 	}
 
 	zbp.cookie.set("timezone", (new Date().getTimezoneOffset()/60)*(-1));
