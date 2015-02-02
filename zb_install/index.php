@@ -20,9 +20,15 @@ header('Content-type: text/html; charset=utf-8');
 define('bingo','<span class="bingo"></span>');
 define('error','<span class="error"></span>');
 
+$zbloglang=&$zbp->option['ZC_BLOG_LANGUAGEPACK'];
+if(isset($_POST['zbloglang']))$zbloglang=$_POST['zbloglang'];
+
+$zbp->LoadLanguage('system','',$zbloglang);
+$zbp->LoadLanguage('zb_install','zb_install',$zbloglang);
+$zbp->option['ZC_BLOG_LANGUAGE'] = $zbp->lang ['lang'];
 
 $zblogstep=(int)GetVars('step');
-if($zblogstep=="")$zblogstep=1;
+if($zblogstep==0)$zblogstep=1;
 
 if( ($zbp->option['ZC_DATABASE_TYPE']!=='') && ($zbp->option['ZC_YUN_SITE']=='') ){
 	$zblogstep=0;
@@ -31,7 +37,7 @@ if( ($zbp->option['ZC_DATABASE_TYPE']!=='') && ($zbp->option['ZC_YUN_SITE']=='')
 }
 ?>
 <!DOCTYPE HTML>
-<html>
+<html lang="<?php echo $zbp->option['ZC_BLOG_LANGUAGE']; ?>">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
@@ -43,11 +49,15 @@ if( ($zbp->option['ZC_DATABASE_TYPE']!=='') && ($zbp->option['ZC_YUN_SITE']=='')
 <script src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css"  type="text/css" media="screen" />
 <link rel="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
-<title>Z-BlogPHP <?php echo ZC_BLOG_VERSION?>安装程序</title>
+<title>Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_program']?> </title>
+<?php
+Include_AddonAdminFont();
+?>
 </head>
 <body>
 <div class="setup">
   <form method="post" action="./index.php?step=<?php echo $zblogstep+1;?>">
+	<input type="hidden" name="zbloglang" id="zbloglang" value="<?php echo $zbloglang;?>"/>
     <?php
 
 switch ($zblogstep) {
@@ -75,20 +85,31 @@ switch ($zblogstep) {
   </form>
 </div>
 <script type="text/javascript">
+
+$( "select[id=language]" ).change(function() {
+	$("#zbloglang").val($(this).val());
+	$("form").attr('action','./index.php');
+	$("form").submit();
+});
+
 function Setup3(){
-  if($("#dbtype").val()=="mssql"){
-    if($("#dbserver").val()==""){alert("数据库服务器需要填写");return false;};
-    if($("#dbname").val()==""){alert("数据库名称需要填写");return false;};
-    if($("#dbusername").val()==""){alert("数据库用户名需要填写");return false;};
+
+  if($("input[name='fdbtype']:checked").val()=="mysql"){
+    if($("#dbmsyql_server").val()==""){alert("<?php echo $zbp->lang['zb_install']['dbserver_need'];?>");return false;};
+    if($("#dbmysql_name").val()==""){alert("<?php echo $zbp->lang['zb_install']['dbname_need'];?>");return false;};
+    if($("#dbmysql_username").val()==""){alert("<?php echo $zbp->lang['zb_install']['dbusername_need'];?>");return false;};
+  }
+  if($("input[name='fdbtype']:checked").val()=="pgsql"){
+    if($("#dbpgsql_server").val()==""){alert("<?php echo $zbp->lang['zb_install']['dbserver_need'];?>");return false;};
+    if($("#dbpgsql_name").val()==""){alert("<?php echo $zbp->lang['zb_install']['dbname_need'];?>");return false;};
+    if($("#dbpgsql_username").val()==""){alert("<?php echo $zbp->lang['zb_install']['dbusername_need'];?>");return false;};
   }
 
-
-
-if($("#blogtitle").val()==""){alert("网站标题需要填写");return false;};
-if($("#username").val()==""){alert("管理员名称需要填写");return false;};
-if($("#password").val()==""){alert("管理员密码需要填写");return false;};
-if($("#password").val().toString().search("^[A-Za-z0-9`~!@#\$%\^&\*\-_]{8,}$")==-1){alert("管理员密码必须是8位或更长的数字和字母,字符组合");return false;};
-if($("#password").val()!==$("#repassword").val()){alert("必须确认密码");return false;};
+  if($("#blogtitle").val()==""){alert("<?php echo $zbp->lang['zb_install']['sitetitle_need'];?>");return false;};
+  if($("#username").val()==""){alert("<?php echo $zbp->lang['zb_install']['adminusername_need'];?>");return false;};
+  if($("#password").val()==""){alert("<?php echo $zbp->lang['zb_install']['adminpassword_need'];?>");return false;};
+  if($("#password").val().toString().search("^[A-Za-z0-9`~!@#\$%\^&\*\-_]{8,}$")==-1){alert("<?php echo $zbp->lang['error']['54'];?>");return false;};
+  if($("#password").val()!==$("#repassword").val()){alert("<?php echo $zbp->lang['error']['73'];?>");return false;};
 
 }
 
@@ -105,19 +126,24 @@ $(function() {
 </html>
 <?php
 function Setup0(){
+  global $zbp;
 ?>
 <dl>
   <dt></dt>
-  <dd id="ddleft"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
-    <div class="left">安装进度：</div>
+  <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+  <strong><?php echo $zbp->lang['zb_install']['install_program'];?></strong></div>
+    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>&nbsp;</div>
     <div id="setup0"  class="left"></div>
-    <p>安装协议 » 环境检查 » 数据库建立与设置 » 安装结果</p>
+    <p><?php echo $zbp->lang['zb_install']['install_license'];?> » <?php echo $zbp->lang['zb_install']['environment_check'];?> » <?php echo $zbp->lang['zb_install']['db_build_set'];?> » <?php echo $zbp->lang['zb_install']['install_result'];?></p>
   </dd>
   <dd id="ddright">
-    <div id="title">安装提示</div>
-    <div id="content">通过配置文件的检验,您已经安装并配置好Z-BlogPHP了,不能再重复使用安装程序.</div>
+      <p style="float:left;clear:both;width:100%;text-align:right;padding-bottom:0.5em;"><b><?php echo $zbp->lang['zb_install']['language'];?></b>&nbsp;<select id="language" name="language" style="width:150px;" >
+<?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']); ?>
+      </select></p>
+    <div id="title"><?php echo $zbp->lang['zb_install']['install_tips'];?></div>
+    <div id="content"><?php echo $zbp->lang['zb_install']['install_disable'];?></div>
     <div id="bottom">
-      <input type="button" name="next" onclick="window.location.href='../'" id="netx" value="退出" />
+      <input type="button" name="next" onclick="window.location.href='../'" id="netx" value="<?php echo $zbp->lang['zb_install']['exit'];?>" />
     </div>
   </dd>
 </dl>
@@ -129,48 +155,53 @@ function Setup1(){
 ?>
 <dl>
   <dt></dt>
-  <dd id="ddleft"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
-    <div class="left">安装进度：</div>
+  <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+  <strong><?php echo $zbp->lang['zb_install']['install_program'];?></strong></div>
+    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>&nbsp;</div>
     <div id="setup1"  class="left"></div>
-    <p><b>安装协议</b>» 环境检查 » 数据库建立与设置 » 安装结果</p>
+    <p><b><?php echo $zbp->lang['zb_install']['install_license'];?></b> » <?php echo $zbp->lang['zb_install']['environment_check'];?> » <?php echo $zbp->lang['zb_install']['db_build_set'];?> » <?php echo $zbp->lang['zb_install']['install_result'];?></p>
   </dd>
   <dd id="ddright">
-    <div id="title">Z-BlogPHP <?php echo ZC_BLOG_VERSION?>安装协议</div>
+      <p style="float:left;clear:both;width:100%;text-align:right;padding-bottom:0.5em;"><b><?php echo $zbp->lang['zb_install']['language'];?></b>&nbsp;<select id="language" name="language" style="width:150px;" >
+<?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']); ?>
+      </select></p>
+    <div id="title">Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_license']?></div>
     <div id="content">
       <textarea readonly>
-Z-BlogPHP  最终用户授权协议 
+<?php echo $zbp->lang['zb_install']['license_title'] . "\r\n";?>
 
-感谢您选择Z-BlogPHP。 Z-BlogPHP基于 PHP 的技术开发，采用MySQL 和 SQLite 作为数据库，全部源码开放。希望我们的努力能为您提供一个高效快速、强大的站点解决方案。
+感谢您选择Z-BlogPHP。 Z-BlogPHP基于 PHP 的技术开发，采用 MySQL 和 SQLite 作为数据库，全部源码开放。希望我们的努力能为您提供一个高效快速、强大的站点解决方案。
 
 Z-BlogPHP官方网址：http://www.zblogcn.com/
 
 为了使您正确并合法的使用本软件，请您在使用前务必阅读清楚下面的协议条款： 
 
-一、本授权协议适用且仅适用于 Z-BlogPHP 版本，Rainbow Studio官方对本授权协议拥有最终解释权。
+一、本授权协议适用且仅适用于 Z-BlogPHP ，Rainbow Studio官方对本授权协议拥有最终解释权。
 
 二、协议许可的权利
 
-1.本程序完全开源，您可以将其用于任何用途。
-2.您可以在协议规定的约束和限制范围内修改 Z-BlogPHP 源代码或界面风格以适应您的网站要求。
-3.您拥有使用本软件构建的网站全部内容所有权，并独立承担与这些内容的相关法律义务。
-4.您可以从Z-BlogPHP提供的应用中心服务中下载适合您网站的应用程序，但应向应用程序开发者/所有者支付相应的费用。
-5.本程序在云主机（新浪SAE,百度BAE,阿里云等）使用的相关授权费用由RainbowSoft另行规定。
+1. 本程序完全开源，您可以将其用于任何用途。
+2. 您可以在协议规定的约束和限制范围内修改 Z-BlogPHP 源代码或界面风格以适应您的网站要求。
+3. 您拥有使用本软件构建的网站全部内容所有权，并独立承担与这些内容的相关法律义务。
+4. 您可以从 Z-BlogPHP 提供的应用中心服务中下载适合您网站的应用程序，但应向应用程序开发者/所有者支付相应的费用。
+5. 本程序在云主机（新浪SAE、百度BAE、阿里云等）使用的相关授权费用由 RainbowSoft 另行规定。
 
 三、协议规定的约束和限制
 
-1. 无论如何，即无论用途如何、是否经过修改或美化、修改程度如何，只要使用Z-BlogPHP 的整体或任何部分，未经书面许可，页面页脚处的版权标识（Powered by Z-BlogPHP） 和Z-BlogPHP官方网站（http://www.zblogcn.com）的链接都必须保留，而不能清除或修改。
-2.您从应用中心下载的应用程序，未经应用程序开发者/所有者的书面许可，不得对其进行反向工程、反向汇编、反向编译等，不得擅自复制、修改、链接、转载、汇编、发表、出版、发展与之有关的衍生产品、作品等。
-3.如果您未能遵守本协议的条款，您的授权将被终止，所被许可的权利将被收回，并承担相应法律责任。
+1. 无论如何，即无论用途如何、是否经过修改或美化、修改程度如何，只要使用 Z-BlogPHP 程序本身，未经书面许可，必须保留页面底部的版权（Powered by Z-BlogPHP），不得删除；但可以以任何访客可见的形式对其进行修改和美化。
+2. 您从应用中心下载的应用程序，未经应用程序开发者的书面许可，不得对其进行反向工程、反向汇编、反向编译等，不得擅自复制、修改、链接、转载、汇编、发表、出版、发展与之有关的衍生产品、作品等。
+3. 如果您未能遵守本协议的条款，您的授权将被终止，所被许可的权利将被收回，并承担相应法律责任。
 
 四、有限担保和免责声明
 
-1.本软件及所附带的文件是作为不提供任何明确的或隐含的赔偿或担保的形式提供的。
-2.用户出于自愿而使用本软件，您必须了解使用本软件的风险，在尚未购买产品技术服务之前，我们不承诺对免费用户提供任何形式的技术支持、使用担保，也不承担任何因使用本软件而产生问题的相关责任。
-3.电子文本形式的授权协议如同双方书面签署的协议一样，具有完全的和等同的法律效力。您一旦开始确认本协议并安装Z-BlogPHP，即被视为完全理解并接受本协议的各项条款，在享有上述条款授予的权力的同时，受到相关的约束和限制。协议许可范围以外的行为，将直接违反本授权协议并构成侵权，我们有权随时终止授权，责令停止损害，并保留追究相关责任的权力。
-4.如果本软件带有其它软件的整合API示范例子包，这些文件版权不属于本软件官方，并且这些文件是没经过授权发布的，请参考相关软件的使用许可合法的使用。
+1. 本软件及所附带的文件是作为不提供任何明确的或隐含的赔偿或担保的形式提供的。
+2. 用户出于自愿而使用本软件，您必须了解使用本软件的风险，在尚未购买产品技术服务之前，我们不承诺对免费用户提供任何形式的技术支持、使用担保，也不承担任何因使用本软件而产生问题的相关责任。
+3. 电子文本形式的授权协议如同双方书面签署的协议一样，具有完全的和等同的法律效力。您一旦开始确认本协议并安装 Z-BlogPHP ，即被视为完全理解并接受本协议的各项条款，在享有上述条款授予的权力的同时，受到相关的约束和限制。协议许可范围以外的行为，将直接违反本授权协议并构成侵权，我们有权随时终止授权，责令停止损害，并保留追究相关责任的权力。
+4. 如果本软件带有其它软件的整合API示范例子包，这些文件版权不属于本软件官方，并且这些文件是没经过授权发布的，请参考相关软件的使用许可合法的使用。
 
-版权所有 ©2005-2013，RainbowSoft Studio 保留所有权利。 
-协议发布时间：2013年8月1 日 版本最新更新：2013年8月1日 By RainbowSoft Studio
+版权所有 ©2005 - 2015，RainbowSoft Studio 保留所有权利。 
+协议发布时间：2013 年 8 月 1 日
+版本最新更新：2015 年 1 月 25 日 By RainbowSoft Studio
 
 
   </textarea>
@@ -178,9 +209,9 @@ Z-BlogPHP官方网址：http://www.zblogcn.com/
     <div id="bottom">
       <label>
         <input type="checkbox"/>
-        我已阅读并同意此协议.</label>
+        <?php echo $zbp->lang['zb_install']['i_agree'];?></label>
       &nbsp;&nbsp;&nbsp;&nbsp;
-      <input type="submit" name="next" id="netx" value="下一步" disabled="disabled" />
+      <input type="submit" name="next" id="netx" value="<?php echo $zbp->lang['zb_install']['next'];?>" disabled="disabled" />
       <script type="text/javascript">
 $( "input[type=checkbox]" ).click(function() {
   if ( $( this ).prop( "checked" ) ) {
@@ -198,41 +229,42 @@ $( "input[type=checkbox]" ).click(function() {
 }
 
 function Setup2(){
-
+  global $zbp;
 CheckServer();
 
 ?>
 <dl>
   <dt></dt>
-  <dd id="ddleft"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
-    <div class="left">安装进度：</div>
+  <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+  <strong><?php echo $zbp->lang['zb_install']['install_program'];?></strong></div>
+    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>&nbsp;</div>
     <div id="setup2"  class="left"></div>
-    <p><b>安装协议</b>»<b>环境检查</b>» 数据库建立与设置 » 安装结果</p>
+    <p><b><?php echo $zbp->lang['zb_install']['install_license'];?></b> » <b><?php echo $zbp->lang['zb_install']['environment_check'];?></b> » <?php echo $zbp->lang['zb_install']['db_build_set'];?> » <?php echo $zbp->lang['zb_install']['install_result'];?></p>
   </dd>
   <dd id="ddright">
-    <div id="title">环境检查</div>
+    <div id="title"><?php echo $zbp->lang['zb_install'][''];?><?php echo $zbp->lang['zb_install']['environment_check'];?></div>
     <div id="content">
       <table border="0" style="width:100%;">
         <tr>
-          <th colspan="3" scope="row">服务器环境检查</th>
+          <th colspan="3" scope="row"><?php echo $zbp->lang['zb_install']['server_check'];?></th>
         </tr>
         <tr>
-          <td scope="row">HTTP 服务器</td>
+          <td scope="row"><?php echo $zbp->lang['zb_install']['http_server'];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['server'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['server'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">PHP 版本支持</td>
+          <td scope="row"><?php echo $zbp->lang['zb_install']['php_version'];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['phpver'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['phpver'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">Z-BlogPHP 路径</td>
+          <td scope="row">Z-BlogPHP <?php echo $zbp->lang['zb_install']['path'];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['zbppath'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['zbppath'][1];?></td>
         </tr>
         <tr>
-          <th colspan="3" scope="col">组件支持检查</th>
+          <th colspan="3" scope="col"><?php echo $zbp->lang['zb_install']['lib_check'];?></th>
         </tr>
         <tr>
           <td scope="row" style="width:200px">GD2</td>
@@ -255,17 +287,22 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">SQLite</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
-        </tr>
-        <tr>
           <td scope="row">SQLite3</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][1];?></td>
         </tr>
         <tr>
-          <th colspan="3" scope="row">权限检查</th>
+          <td scope="row">PDO_SQLite</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">SQLite</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
+        </tr>
+        <tr>
+          <th colspan="3" scope="row"><?php echo $zbp->lang['zb_install']['permission_check'];?></th>
         </tr>
         <tr>
           <td scope="row">zb_users</td>
@@ -298,7 +335,7 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['upload'][1];?></td>
         </tr>
         <tr>
-          <th colspan="3" scope="row">函数检查</th>
+          <th colspan="3" scope="row"><?php echo $zbp->lang['zb_install']['function_check'];?></th>
         </tr>
         <tr>
           <td scope="row">curl</td>
@@ -315,17 +352,12 @@ CheckServer();
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gethostbyname'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gethostbyname'][1];?></td>
         </tr>
-        <tr>
-          <td scope="row">simplexml_import_dom</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['simplexml_import_dom'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['simplexml_import_dom'][1];?></td>
-        </tr>
       </table>
     </div>
     <div id="bottom">
       <script type="text/javascript">bmx2table();</script>
       <?php ?>
-      <input type="submit" name="next" id="netx" value="下一步" />
+      <input type="submit" name="next" id="netx" value="<?php echo $zbp->lang['zb_install']['next'];?>" />
       <?php ?>
     </div>
   </dd>
@@ -334,7 +366,7 @@ CheckServer();
 }
 
 function Setup3(){
-
+  global $zbp;
   global $CheckResult,$option;
   CheckServer();
 
@@ -344,38 +376,39 @@ function Setup3(){
   
   $hasPgsql=false;
 
-  $hasMysql=(boolean)((boolean)($CheckResult['mysql'][0]) or (boolean)($CheckResult['pdo_mysql'][0]));
+  $hasMysql=(boolean)((boolean)($CheckResult['mysql'][0]) or (boolean)($CheckResult['mysqli'][0]) or (boolean)($CheckResult['pdo_mysql'][0]));
 
-  $hasSqlite=(boolean)((boolean)($CheckResult['sqlite3'][0]) or (boolean)($CheckResult['sqlite'][0]));
+  $hasSqlite=(boolean)((boolean)($CheckResult['sqlite3'][0]) or (boolean)($CheckResult['sqlite'][0]) or (boolean)($CheckResult['pdo_sqlite'][0]));
 
   $hasPgsql=(boolean)((boolean)($CheckResult['pgsql'][0]) or (boolean)($CheckResult['pdo_pgsql'][0]));
 ?>
 <dl>
   <dt></dt>
-  <dd id="ddleft"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP 在线安装" />
-    <div class="left">安装进度：</div>
+  <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+  <strong><?php echo $zbp->lang['zb_install']['install_program'];?></strong></div>
+    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>&nbsp;</div>
     <div id="setup3"  class="left"></div>
-    <p><b>安装协议</b>»<b>环境检查</b>»<b>数据库建立与设置</b>» 安装结果</p>
+    <p><b><?php echo $zbp->lang['zb_install']['install_license'];?></b> » <b><?php echo $zbp->lang['zb_install']['environment_check'];?></b> » <b><?php echo $zbp->lang['zb_install']['db_build_set'];?></b> » <?php echo $zbp->lang['zb_install']['install_result'];?></p>
   </dd>
   <dd id="ddright">
-    <div id="title">数据库建立与设置</div>
+    <div id="title"><?php echo $zbp->lang['zb_install']['db_build_set'];?></div>
     <div id="content">
       <div>
-        <p><b>数据库：</b>
+        <p><b><?php echo $zbp->lang['zb_install']['database'];?></b>
         <?php
         if($hasMysql){
         ?>
           <label class="dbselect" id="mysql_radio">
-          <input type="radio" name="fdbtype"/>MySQL数据库</label>
+          <input type="radio" name="fdbtype" value="mysql"/> MySQL</label>
         <?php
-          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+          echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         }
         ?>
         <?php
         if($hasSqlite){
         ?>
           <label class="dbselect" id="sqlite_radio">
-          <input type="radio" name="fdbtype"/>SQLite数据库</label>
+          <input type="radio" name="fdbtype" value="sqlite"/> SQLite</label>
         <?php
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         }
@@ -384,84 +417,99 @@ function Setup3(){
       </div>
       <?php if($hasMysql){?>
       <div class="dbdetail" id="mysql">
-        <p><b>数据库主机:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['server'];?></b>
           <input type="text" name="dbmysql_server" id="dbmysql_server" value="<?php echo $option['ZC_MYSQL_SERVER'];?>" style="width:350px;" />
         </p>
-        <p><b>用户名称:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['username'];?></b>
           <input type="text" name="dbmysql_username" id="dbmysql_username" value="<?php echo $option['ZC_MYSQL_USERNAME'];?>" style="width:350px;" />
         </p>
-        <p><b>用户密码:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['password'];?></b>
           <input type="password" name="dbmysql_password" id="dbmysql_password" value="<?php echo $option['ZC_MYSQL_PASSWORD'];?>" style="width:350px;" />
         </p>
-        <p><b>数据库名称:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_name'];?></b>
           <input type="text" name="dbmysql_name" id="dbmysql_name" value="<?php echo $option['ZC_MYSQL_NAME'];?>" style="width:350px;" />
         </p>
-        <p><b>表&nbsp;前&nbsp;缀:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_pre'];?></b>
           <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="<?php echo $option['ZC_MYSQL_PRE'];?>" style="width:350px;" />
         </p>
-      <p><b>连接选择:</b>
-<?php if ( version_compare ( PHP_VERSION ,  '5.5.0' ,  '<' )) { ?>
-        <?php if($CheckResult['mysql'][0]){?>
-        <label>
-          <input value="mysql" type="radio" name="dbtype"/>MySQL连接</label>
-        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+<?php if($zbp->option['ZC_YUN_SITE']==''){?>
+        <p><b><?php echo $zbp->lang['zb_install']['db_engine'];?></b>
+          <label><select id="dbengine" name="dbengine" style="width:360px;" >
+		  <option value="MyISAM"  selected="selected"/>MyISAM(<?php echo $zbp->lang['msg']['default'];?>)</option>
+          <option value="InnoDB" >InnoDB</option>
+		  </select>
+        </p>		
 <?php } ?>
+      <p><b><?php echo $zbp->lang['zb_install']['db_drive'];?></b>
         <?php if($CheckResult['mysqli'][0]){?>
         <label>
-          <input value="mysqli" type="radio" name="dbtype"/>MySQLi连接</label>
+          <input value="mysqli" type="radio" name="dbtype"/> MySQLi</label>
         <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php if($CheckResult['pdo_mysql'][0]){?>
         <label>
-          <input value="pdo_mysql" type="radio" name="dbtype"/>PDO_MySQL连接</label>
-        <?php } ?>
-		<br/><small>(端口号默认3306，如需要修改请在'数据库主机'里追加':端口号'。)</small>
+          <input value="pdo_mysql" type="radio" name="dbtype"/> PDO_MySQL</label>
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+<?php if ( version_compare ( PHP_VERSION ,  '5.5.0' ,  '<' )) { ?>
+        <?php if($CheckResult['mysql'][0]){?>
+        <label>
+          <input value="mysql" type="radio" name="dbtype"/> MySQL</label>
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+<?php } ?>
+		<br/><small><?php echo $zbp->lang['zb_install']['db_set_port'];?></small>
       </p>
       </div>
       <?php } ?>
 
       <?php if($hasSqlite){?>
       <div class="dbdetail" id="sqlite">
-        <p><b>数据库:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_name'];?></b>
           <input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo GetDbName()?>" readonly style="width:350px;" />
         </p>
-        <p><b>表前缀:</b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_pre'];?></b>
           <input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" />
         </p>
-      <p><b>版本选择:</b>
-        <?php if($CheckResult['sqlite'][0]){?>
+      <p><b><?php echo $zbp->lang['zb_install']['db_drive'];?></b>
+        <?php if($CheckResult['sqlite3'][0]){?>
         <label>
-          <input value="sqlite" type="radio" name="dbtype" />SQLite</label>
+          <input value="sqlite3" type="radio" name="dbtype" /> SQLite3</label>
         <?php 
           echo '&nbsp;&nbsp;&nbsp;&nbsp;';
           }
         ?>
-        <?php if($CheckResult['sqlite3'][0]){?>
+        <?php if($CheckResult['pdo_sqlite'][0]){?>
         <label>
-          <input value="sqlite3" type="radio" name="dbtype" />SQLite3</label>
-        <?php } ?>
+          <input value="pdo_sqlite" type="radio" name="dbtype" /> PDO_SQLite</label>
+        <?php 
+          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+          }
+        ?>
+        <?php if($CheckResult['sqlite'][0]){?>
+        <label>
+          <input value="sqlite" type="radio" name="dbtype" /> SQLite</label>
+        <?php 
+          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+          }
+        ?>
       </p>
       </div>
       <?php } ?>
 
-      <p class="title">网站设置</p>
-      <p><b>网站名称:</b>
-        <input type="text" name="blogtitle" id="blogtitle" value="" style="width:250px;" />
+      <p class="title"><?php echo $zbp->lang['zb_install']['website_setting'];?></p>
+      <p><b><?php echo $zbp->lang['zb_install']['blog_name'];?></b>
+        <input type="text" name="blogtitle" id="blogtitle" value="" style="width:350px;" />
       </p>
-      <p><b>用&nbsp;户&nbsp;名:</b>
-        <input type="text" name="username" id="username" value="" style="width:250px;" />
-        &nbsp;(英文,数字,汉字或._的组合)</p>
-      <p><b>密&nbsp;&nbsp;&nbsp;&nbsp;码:</b>
-        <input type="password" name="password" id="password" value="" style="width:250px;" />
-        &nbsp;(8位或更长的数字或字母组合)</p>
-      <p><b>确认密码:</b>
-        <input type="password" name="repassword" id="repassword" value="" style="width:250px;" />
+      <p><b><?php echo $zbp->lang['zb_install']['admin_username'];?></b>
+        <input type="text" name="username" id="username" value="" style="width:200px;" />
+        &nbsp;<small><?php echo $zbp->lang['zb_install']['username_intro'];?></small></p>
+      <p><b><?php echo $zbp->lang['zb_install']['admin_password'];?></b>
+        <input type="password" name="password" id="password" value="" style="width:200px;" />
+        &nbsp;<small><?php echo $zbp->lang['zb_install']['password_intro'];?></small></p>
+      <p><b><?php echo $zbp->lang['zb_install']['re_password'];?></b>
+        <input type="password" name="repassword" id="repassword" value="" style="width:200px;" />
       </p>
-      <p><b>语&nbsp;言&nbsp;包:</b><select id="language" name="language" style="width:260px;" >
-<?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']); ?>
-      </select></p>
     </div>
     <div id="bottom">
-      <input type="submit" name="next" id="netx" onClick="return Setup3()" value="下一步" />
+      <input type="submit" name="next" id="netx" onClick="return Setup3()" value="<?php echo $zbp->lang['zb_install']['next'];?>" />
     </div>
   </dd>
 </dl>
@@ -490,16 +538,16 @@ function Setup4(){
 ?>
 <dl>
   <dt></dt>
-  <dd id="ddleft"><img src="../zb_system/image/admin/install.png" alt="Z-Blog2.0在线安装" />
-    <div class="left">安装进度：</div>
+  <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+  <strong><?php echo $zbp->lang['zb_install']['install_program'];?></strong></div>
+    <div class="left"><?php echo $zbp->lang['zb_install']['install_progress'];?>&nbsp;</div>
     <div id="setup4"  class="left"></div>
-    <p><b>安装协议</b>»<b>环境检查</b>»<b>数据库建立与设置</b>»<b>安装结果</b></p>
+    <p><b><?php echo $zbp->lang['zb_install']['install_license'];?></b> » <b><?php echo $zbp->lang['zb_install']['environment_check'];?></b> » <b><?php echo $zbp->lang['zb_install']['db_build_set'];?></b> » <b><?php echo $zbp->lang['zb_install']['install_result'];?></b></p>
   </dd>
   <dd id="ddright">
-    <div id="title">安装结果</div>
+    <div id="title"><?php echo $zbp->lang['zb_install']['install_result'];?></div>
     <div id="content">
       <?php
-//if(!$zbp->option['ZC_YUN_SITE'])FileWriteTest();
 
 $zbp->option['ZC_DATABASE_TYPE']=GetVars('dbtype','POST');
 
@@ -510,42 +558,49 @@ case 'mysql':
 case 'mysqli':
 case 'pdo_mysql':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/mysql.sql');
+
+  if($zbp->option['ZC_YUN_SITE']!='')break;
+  
   $zbp->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
   if(strpos($zbp->option['ZC_MYSQL_SERVER'],':')!==false){
     $servers=explode(':',$zbp->option['ZC_MYSQL_SERVER']);
-	$zbp->option['ZC_MYSQL_SERVER']=$servers[0];
+	$zbp->option['ZC_MYSQL_SERVER']=trim($servers[0]);
 	$zbp->option['ZC_MYSQL_PORT']=(int)$servers[1];
 	if($zbp->option['ZC_MYSQL_PORT']==0)$zbp->option['ZC_MYSQL_PORT']=3306;
 	unset($servers);
   }
-  $zbp->option['ZC_MYSQL_USERNAME']=GetVars('dbmysql_username','POST');
-  $zbp->option['ZC_MYSQL_PASSWORD']=GetVars('dbmysql_password','POST');
-  $zbp->option['ZC_MYSQL_NAME']=str_replace(array('\'','"'),array('',''),GetVars('dbmysql_name','POST'));
-  $zbp->option['ZC_MYSQL_PRE']=str_replace(array('\'','"'),array('',''),GetVars('dbmysql_pre','POST'));
+  $zbp->option['ZC_MYSQL_USERNAME']=trim(GetVars('dbmysql_username','POST'));
+  $zbp->option['ZC_MYSQL_PASSWORD']=trim(GetVars('dbmysql_password','POST'));
+  $zbp->option['ZC_MYSQL_NAME']=trim(str_replace(array('\'','"'),array('',''),GetVars('dbmysql_name','POST')));
+  $zbp->option['ZC_MYSQL_PRE']=trim(str_replace(array('\'','"'),array('',''),GetVars('dbmysql_pre','POST')));
+  if($zbp->option['ZC_MYSQL_PRE']=='')$zbp->option['ZC_MYSQL_PRE']=='zbp_';
+
+  $zbp->option['ZC_MYSQL_ENGINE']=GetVars('dbengine','POST');
+  $cts=str_replace('MyISAM',$zbp->option['ZC_MYSQL_ENGINE'],$cts);
+
   $zbp->db = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
   if($zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'],$zbp->option['ZC_MYSQL_PORT'],$zbp->option['ZC_MYSQL_USERNAME'],$zbp->option['ZC_MYSQL_PASSWORD'],$zbp->option['ZC_MYSQL_NAME'])==true){
-    echo "创建数据库". $zbp->option['ZC_MYSQL_NAME'] ."成功!<br/>";
+    echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_MYSQL_NAME'] ."<br/>";
   }
   $zbp->db->dbpre=$zbp->option['ZC_MYSQL_PRE'];
   $zbp->db->Close();
+
   break;
 case 'sqlite':
   $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');
-  $zbp->option['ZC_SQLITE_NAME']=GetVars('dbsqlite_name','POST');
-  $zbp->option['ZC_SQLITE_PRE']=GetVars('dbsqlite_pre','POST');
+  $cts=str_replace(' autoincrement','',$cts);
+  $zbp->option['ZC_SQLITE_NAME']=trim(GetVars('dbsqlite_name','POST'));
+  $zbp->option['ZC_SQLITE_PRE']=trim(GetVars('dbsqlite_pre','POST'));
   break;
 case 'sqlite3':
-  $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite3.sql');
-  $zbp->option['ZC_SQLITE_NAME']=GetVars('dbsqlite_name','POST');
-  $zbp->option['ZC_SQLITE_PRE']=GetVars('dbsqlite_pre','POST');
+case 'pdo_sqlite':
+  $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');
+  $zbp->option['ZC_SQLITE_NAME']=trim(GetVars('dbsqlite_name','POST'));
+  $zbp->option['ZC_SQLITE_PRE']=trim(GetVars('dbsqlite_pre','POST'));
   break;
 }
 
 $zbp->OpenConnect();
-
-$zbp->option['ZC_BLOG_LANGUAGEPACK']=GetVars('language','POST');
-$zbp->lang = require($zbp->path . 'zb_users/language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
-$zbp->option['ZC_BLOG_LANGUAGE'] = $zbp->lang ['lang'];
 
 if(CreateTable($cts)){
   InsertInfo();
@@ -556,11 +611,9 @@ $zbp->CloseConnect();
 
 ?>
       
-      <!--<p>Z-Blog 2.0安装成功了,现在您可以点击"完成"进入网站首页.</p>-->
-      
     </div>
     <div id="bottom">
-      <input type="button" name="next" onClick="window.location.href='../'" id="netx" value="完成" />
+      <input type="button" name="next" onClick="window.location.href='../'" id="netx" value="<?php echo $zbp->lang['zb_install']['ok'];?>" />
     </div>
   </dd>
 </dl>
@@ -586,12 +639,13 @@ $CheckResult=array(
   'phpver' => array(PHP_VERSION,''), 
   'zbppath' => array($zbp->path,bingo), 
  //组件
+  'gd2' => array('',''),
   'mysql' => array('',''),
   'mysqli' => array('',''),
   'pdo_mysql' => array('',''),
   'sqlite' => array('',''),
   'sqlite3' => array('',''),
-  'gd2' => array('',''),
+  'pdo_sqlite' => array('',''),
   'pgsql' => array('',''), 
   'pdo_pgsql' => array('',''),
  //权限  
@@ -604,10 +658,9 @@ $CheckResult=array(
   'upload'=>array('',''), 
   'c_option.php'=>array('',''), 
   //函数
-  'curl'=>array('用于连接应用中心',''), 
-  'allow_url_fopen'=>array('用于连接应用中心',''),
-  'gethostbyname'=>array('用于解析DNS',''),
-  'simplexml_import_dom'=>array('用于处理XML',''),
+  'curl'=>array($zbp->lang['zb_install']['connect_appcenter'],''), 
+  'allow_url_fopen'=>array($zbp->lang['zb_install']['connect_appcenter'],''),
+  'gethostbyname'=>array($zbp->lang['zb_install']['whois_dns'],''),
 
 );
 
@@ -625,19 +678,36 @@ $CheckResult=array(
 	$CheckResult['gd2'][1]=$CheckResult['gd2'][0]?bingo:error;
   }
   if( function_exists("mysql_get_client_info") ){
-    $CheckResult['mysql'][0]=mysql_get_client_info();
+    $CheckResult['mysql'][0]=strtok(mysql_get_client_info(),'$');
 	$CheckResult['mysql'][1]=$CheckResult['mysql'][0]?bingo:error;
   }
   if( function_exists("mysqli_get_client_info") ){
-    $CheckResult['mysqli'][0]=mysqli_get_client_info();
+    $CheckResult['mysqli'][0]=strtok(mysqli_get_client_info(),'$');
 	$CheckResult['mysqli'][1]=$CheckResult['mysqli'][0]?bingo:error;
   }  
   if( class_exists("PDO",false) ){
 	if (extension_loaded('pdo_mysql')){
-		$CheckResult['pdo_mysql'][0]=PDO::ATTR_DRIVER_NAME;
+		//$pdo = new PDO( 'mysql:');
+		$v = ' ';//strtok($pdo->getAttribute(PDO::ATTR_CLIENT_VERSION),'$');
+		$pdo = null;
+		$CheckResult['pdo_mysql'][0]=$v;
 		$CheckResult['pdo_mysql'][1]=$CheckResult['pdo_mysql'][0]?bingo:error;
 	}
-    //$CheckResult['pdo_pgsql'][0]=PDO::ATTR_DRIVER_NAME;
+
+	if (extension_loaded('pdo_sqlite')){
+		//$pdo = new PDO('sqlite::memory:');
+		$v = ' ';//$pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
+		$pdo = null;
+		$CheckResult['pdo_sqlite'][0]=$v;
+		$CheckResult['pdo_sqlite'][1]=$CheckResult['pdo_sqlite'][0]?bingo:error;
+	}
+
+	if (extension_loaded('pdo_pgsql')){
+		$v = ' ';
+		$pdo = null;
+		$CheckResult['pdo_pgsql'][0]=$v;
+		$CheckResult['pdo_pgsql'][1]=$CheckResult['pdo_pgsql'][0]?bingo:error;
+	}	
   }
   if( defined("PGSQL_STATUS_STRING") ){
     $CheckResult['pgsql'][0]=PGSQL_STATUS_STRING;
@@ -685,20 +755,22 @@ function CreateTable($sql){
   global $zbp;
 
   if($zbp->db->ExistTable($GLOBALS['table']['Config'])==true){
-    echo "该数据库里已存在相关的表和数据,请更改表前缀或是更换清空数据库再安装.";
+    echo $zbp->lang['zb_install']['exist_table_in_db'];
 	return false;
   }
   
   $sql=$zbp->db->sql->ReplacePre($sql);
   $zbp->db->QueryMulit($sql);
 
-  echo "连接数据库并创建数据表成功!<br/>";
+  echo $zbp->lang['zb_install']['create_table'] . "<br/>";
   return true;
 }
 
 function InsertInfo(){
   global $zbp;
-	
+
+  $zbp->guid = GetGuid();
+
   $mem = new Member();
   $guid=GetGuid();
 
@@ -722,7 +794,7 @@ function InsertInfo(){
   $t->FileName="navbar";
   $t->Source="system";
   $t->SidebarID=0;
-  $t->Content='<li id="nvabar-item-index"><a href="{#ZC_BLOG_HOST#}">首页</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">留言本</a></li>';
+  $t->Content='<li id="nvabar-item-index"><a href="{#ZC_BLOG_HOST#}">'.$zbp->lang['zb_install']['index'].'</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">'.$zbp->lang['zb_install']['guestbook'].'</a></li>';
   $t->HtmlID="divNavBar";
   $t->Type="ul";
   $t->Save();
@@ -747,7 +819,7 @@ function InsertInfo(){
   $t->FileName="controlpanel";
   $t->Source="system";
   $t->SidebarID=1;
-  $t->Content='<span class="cp-hello">您好,欢迎到访网站!</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">['.$zbp->lang['msg']['admin_login'].']</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">['.$zbp->lang['msg']['view_rights'].']</a></span>';
+  $t->Content='<span class="cp-hello">'.$zbp->lang['zb_install']['wellcome'].'</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">'.$zbp->lang['msg']['admin_login'].'</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">'.$zbp->lang['msg']['view_rights'].'</a></span>';
   $t->HtmlID="divContorPanel";
   $t->Type="div";
   $t->Save();
@@ -900,9 +972,9 @@ function InsertInfo(){
   $a->Alias='';
   $a->IsTop=false;
   $a->IsLock=false;
-  $a->Title='欢迎使用Z-BlogPHP！';
-  $a->Intro='<p>欢迎使用Z-Blog,这是程序自动生成的文章.您可以删除或是编辑它:)</p><p>系统总共生成了一个&quot;留言本&quot;页面,和一个&quot;欢迎使用Z-BlogPHP!&quot;文章,祝您使用愉快!</p>';
-  $a->Content='<p>欢迎使用Z-Blog,这是程序自动生成的文章.您可以删除或是编辑它:)</p><p>系统总共生成了一个&quot;留言本&quot;页面,和一个&quot;欢迎使用Z-BlogPHP!&quot;文章,祝您使用愉快!</p>';
+  $a->Title=$zbp->lang['zb_install']['hello_zblog'];
+  $a->Intro=$zbp->lang['zb_install']['hello_zblog_content'];
+  $a->Content=$zbp->lang['zb_install']['hello_zblog_content'];
   $a->IP=GetGuestIP();
   $a->PostTime=time();
   $a->CommNums=0;
@@ -921,9 +993,9 @@ function InsertInfo(){
   $a->Alias='';
   $a->IsTop=false;
   $a->IsLock=false;
-  $a->Title='留言本';
+  $a->Title=$zbp->lang['zb_install']['guestbook'];
   $a->Intro='';
-  $a->Content='这是一个留言本,是由程序自动生成,您可以编辑修改.';
+  $a->Content=$zbp->lang['zb_install']['guestbook_content'];
   $a->IP=GetGuestIP();
   $a->PostTime=time();
   $a->CommNums=0;
@@ -932,13 +1004,13 @@ function InsertInfo(){
   $a->Meta='';
   $a->Save();  
 
-  echo "创建并插入数据成功!<br/>";
+  echo $zbp->lang['zb_install']['create_datainfo'] . "<br/>";
   
 }
 
 
 function SaveConfig(){
-	global $zbp;
+  global $zbp;
 
   $zbp->option['ZC_BLOG_VERSION']=ZC_BLOG_VERSION;
   $zbp->option['ZC_BLOG_NAME']=GetVars('blogtitle','POST');
@@ -948,59 +1020,32 @@ function SaveConfig(){
   $zbp->option['ZC_SIDEBAR3_ORDER']='';
   $zbp->option['ZC_SIDEBAR4_ORDER']='';
   $zbp->option['ZC_SIDEBAR5_ORDER']='';
-  $zbp->option['ZC_DEBUG_MODE']=false;
+  $zbp->option['ZC_BLOG_THEME']='WhitePage';  
+  $zbp->option['ZC_DEBUG_MODE']=true;
+  $zbp->option['ZC_LAST_VERSION']=$zbp->version;
   $zbp->SaveOption();
   //$zbp->BuildTemplate();
   
-  echo "保存设置,编译模板成功!<br/>";
+  $zbp->Config('cache')->templates_md5='';
+  $zbp->SaveCache();
+  
+  $zbp->Config('AppCentre')->enabledcheck=1;
+  $zbp->Config('AppCentre')->checkbeta=0;
+  $zbp->Config('AppCentre')->enabledevelop=0;
+  $zbp->Config('AppCentre')->enablegzipapp=0;
+  $zbp->SaveConfig('AppCentre');
+
+  $zbp->Config('WhitePage')->custom_pagetype='5';
+  $zbp->Config('WhitePage')->custom_pagewidth='1200';
+  $zbp->Config('WhitePage')->custom_headtitle='center';
+  $zbp->Config('WhitePage')->custom_bgcolor='6699ff';
+  $zbp->Config('WhitePage')->text_indent='0';
+  $zbp->SaveConfig('WhitePage');
+
+  echo $zbp->lang['zb_install']['save_option'] . "<br/>";
 
 }
 
-
-function FileWriteTest(){
-	global $zbp;
-	
-$f=$zbp->path . 'zb_users/c_option.php';
-if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-echo "读写'zb_users/c_option.php'成功!<br/>";}
-
-//$f=$zbp->path . 'zb_users/avatar/0.png';
-//if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-//echo "读写'zb_users/avatar/'目录成功!<br/>";}
-
-$f=$zbp->path . 'zb_users/cache/index.html';
-if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-echo "读写'zb_users/cache/'目录成功!<br/>";}
-
-$f=$zbp->path . 'zb_users/data/index.html';
-if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-echo "读写'zb_users/data/'目录成功!<br/>";}
-
-//$f=$zbp->path . 'zb_users/emotion/index.html';
-//if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-//echo "读写'zb_users/emotion/'目录成功!<br/>";}
-
-$f=$zbp->path . 'zb_users/language/SimpChinese.php';
-if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-echo "读写'zb_users/language/'目录成功!<br/>";}
-
-$f=$zbp->path . 'zb_users/logs/index.html';
-if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-echo "读写'zb_users/logs/'目录成功!<br/>";}
-
-$f=$zbp->path . 'zb_users/plugin/index.html';
-if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-echo "读写'zb_users/plugin/'目录成功!<br/>";}
-
-$f=$zbp->path . 'zb_users/theme/index.html';
-if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-echo "读写'zb_users/theme/'目录成功!<br/>";}
-
-$f=$zbp->path . 'zb_users/upload/index.html';
-if(file_exists($f)){file_put_contents($f,file_get_contents($f));
-echo "读写'zb_users/upload/'目录成功!<br/>";}
-
-}
 
 RunTime();
 ?>

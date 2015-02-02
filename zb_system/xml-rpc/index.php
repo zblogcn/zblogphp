@@ -510,9 +510,15 @@ function zbp_editPost($id,$xmlstring,$publish){
 		if(isset($post['mt_excerpt'])){
 			$_POST['Intro']=$post['mt_excerpt'];
 		}
-		if(isset($post['mt_text_more'])){
-			if($post['mt_text_more']!=''){
-				$_POST['Content']=$post['description'] . '<!--more-->' .$post['mt_text_more'];
+		if(isset($post['mt_text_more']) || isset($post['description'])){
+			if(isset($post['mt_text_more']))
+			{
+				if ($post['mt_text_more']!=''){
+					$_POST['Content']=$post['description'] . '<!--more-->' .$post['mt_text_more'];
+				}
+				else {
+					$_POST['Content']=$post['description'];
+				}
 			}else{
 				$_POST['Content']=$post['description'];
 			}
@@ -830,10 +836,5 @@ if($xml){
 	}
 }
 
-
 die();
-
-
-
-
 ?>

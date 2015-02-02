@@ -36,20 +36,39 @@ function AutoloadClass($classname){
 		$fpreturn=$fpname($classname);
 		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 	}
-	if (is_readable($f=dirname(__FILE__) . '/lib/' . strtolower($classname) .'.php'))
+	if (is_readable($f=ZBP_PATH . 'zb_system/function/lib/' . strtolower($classname) .'.php'))
 		require $f;
 }
 
 /**
  * 记录日志
  * @param string $s
+ * @param bool $iserror
  */
-function Logs($s) {
+function Logs($s,$iserror=false) {
 	global $zbp;
-	$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
-	$handle = @fopen($f, 'a+');
-	@fwrite($handle, "[" . date('c') . "~" . current(explode(" ", microtime())) . "]" . "\r\n" . $s . "\r\n");
-	@fclose($handle);
+	foreach ($GLOBALS['Filter_Plugin_Logs'] as $fpname => &$fpsignal) {
+		$fpreturn=$fpname($s,$iserror);
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+	}
+	if($zbp->guid){
+		if($iserror)
+			$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-error' . date("Ymd") . '.txt';
+		else
+			$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
+	}else{
+		if($iserror)
+			$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '-error.txt';
+		else
+			$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '.txt';
+	}
+	ZBlogException::SuspendErrorHook();
+	if($handle = @fopen($f, 'a+')){
+		$t=date('Y-m-d') . ' ' . date('H:i:s') . ' ' . substr(microtime(),1,9) . ' ' . date('P');
+		@fwrite($handle, '[' . $t . ']' . "\r\n" . $s . "\r\n");
+		@fclose($handle);
+	}
+	ZBlogException::ResumeErrorHook();
 }
 
 /**
@@ -67,10 +86,13 @@ function RunTime() {
 	if(function_exists('memory_get_usage')){
 		$rt['memory']=(int)((memory_get_usage()-$_SERVER['_memory_usage'])/1024);
 	}
-	
-	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false)return $rt;
 
-	echo '<!--' . $rt['time'] . 'ms , ';
+	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false){
+		$_SERVER['_runtime_result']=$rt;
+		return $rt;
+	}
+
+	echo '<!--' . $rt['time'] . ' ms , ';
 	echo  $rt['query'] . ' query';
 	if(function_exists('memory_get_usage'))
 		echo ' , ' . $rt['memory'] . 'kb memory';
@@ -87,12 +109,13 @@ function RunTime() {
 function GetEnvironment(){
 	global $zbp;
 	$ajax = Network::Create();
-	if($ajax) $ajax=substr(get_class($ajax),7);
-	
-	$system_environment = PHP_OS . ';' . 
-							GetValueInArray(explode(' ',str_replace(array('Microsoft-','/'),array('',''),GetVars('SERVER_SOFTWARE', 'SERVER'))),0) . ';' .
-							'PHP' . phpversion() . ';' . $zbp->option['ZC_DATABASE_TYPE'] . ';' .
-							$ajax ;
+	if ($ajax) $ajax = substr(get_class($ajax), 7);
+
+	$system_environment = PHP_OS . '; ' .
+							GetValueInArray(
+								explode(' ',str_replace(array('Microsoft-','/'), array('',''), GetVars('SERVER_SOFTWARE', 'SERVER'))), 0
+							) . '; ' .
+							'PHP ' . phpversion() . '; ' . $zbp->option['ZC_DATABASE_TYPE'] . '; ' . 	$ajax ;
 	return $system_environment;
 }
 
@@ -170,7 +193,7 @@ function GetValueInArrayByCurrent($array, $name) {
 
 /**
  * 获取Guid
- * @return string 
+ * @return string
  */
 function GetGuid() {
 	$s = str_replace('.', '', trim(uniqid('zbp', true), 'zbp'));
@@ -212,7 +235,7 @@ function GetVarsByDefault($name, $type = 'REQUEST',$default = null) {
 
 /**
  * 获取数据库名
- * @return string  返回SQLite数据文件名
+ * @return string  返回一个随机的SQLite数据文件名
  */
 function GetDbName() {
 
@@ -222,11 +245,12 @@ function GetDbName() {
 /**
  * 获取当前网站地址
  * @param string $blogpath 网站域名
- * @param string &$cookiespath 引用cookie作用域值
+ * @param string &$cookiespath 返回cookie作用域值，要传引入
  * @return string  返回网站完整地址，如http://localhost/zbp/
  */
 function GetCurrentHost($blogpath,&$cookiespath) {
 
+	$host='';
 	if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
 		if ($_SERVER['REQUEST_SCHEME'] == 'https') {
 			$host = 'https://';
@@ -245,8 +269,13 @@ function GetCurrentHost($blogpath,&$cookiespath) {
 
 	$host .= $_SERVER['HTTP_HOST'];
 
-	$y = $blogpath;
 	$x = $_SERVER['SCRIPT_NAME'];
+	$y = $blogpath;
+	if(isset($_SERVER["CONTEXT_DOCUMENT_ROOT"]) && isset($_SERVER["CONTEXT_PREFIX"]))
+		if($_SERVER["CONTEXT_DOCUMENT_ROOT"] && $_SERVER["CONTEXT_PREFIX"]){
+			$y= $_SERVER["CONTEXT_DOCUMENT_ROOT"] . $_SERVER["CONTEXT_PREFIX"] . '/';
+		}
+	$z = '';
 
 	for ($i = strlen($x); $i > 0; $i--) {
 		$z = substr($x, 0, $i);
@@ -322,7 +351,7 @@ function GetDirsInDir($dir) {
 	$dirs = array();
 
 	if (function_exists('scandir')) {
-		foreach (scandir($dir) as $d) {
+		foreach (scandir($dir,0) as $d) {
 			if (is_dir($dir . $d)) {
 				if (($d <> '.') && ($d <> '..')) {
 					$dirs[] = $d;
@@ -710,7 +739,7 @@ function DelNameInString($s, $name) {
  * 在字符串参数值查找参数
  * @param string $s 字符串型的参数表，以|符号分隔
  * @param string $name 参数名
- * @return bool 
+ * @return bool
 */
 function HasNameInString($s, $name) {
 	$pl = $s;
@@ -724,7 +753,7 @@ function HasNameInString($s, $name) {
 /**
  *  XML-RPC应答错误页面
  * @param string $faultString 错误提示字符串
- * @return void 
+ * @return void
 */
 function RespondError($faultString) {
 
@@ -743,7 +772,7 @@ function RespondError($faultString) {
 /**
  *  XML-RPC脚本错误页面
  * @param string $faultString 错误提示字符串
- * @return void 
+ * @return void
 */
 function ScriptError($faultString) {
 	header('Content-type: application/x-javascript; Charset=utf-8');
@@ -756,22 +785,22 @@ function ScriptError($faultString) {
  *  验证字符串是否符合正则表达式
  * @param string $source 字符串
  * @param string $para 正则表达式，可用[username]|[password]|[email]|[homepage]或自定义表达式
- * @return bool 
+ * @return bool
 */
 function CheckRegExp($source, $para) {
 	if (strpos($para, '[username]') !== false) {
 		$para = "/^[\.\_A-Za-z0-9·\x{4e00}-\x{9fa5}]+$/u";
 	}
-	if (strpos($para, '[password]') !== false) {
+	elseif (strpos($para, '[password]') !== false) {
 		$para = "/^[A-Za-z0-9`~!@#\$%\^&\*\-_]+$/u";
 	}
-	if (strpos($para, '[email]') !== false) {
+	elseif (strpos($para, '[email]') !== false) {
 		$para = "/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*\.)+[a-zA-Z]*)$/u";
 	}
-	if (strpos($para, '[homepage]') !== false) {
+	elseif (strpos($para, '[homepage]') !== false) {
 		$para = "/^[a-zA-Z]+:\/\/[a-zA-Z0-9\_\-\.\&\?\/:=#\x{4e00}-\x{9fa5}]+$/u";
 	}
-	if (!$para)
+	elseif (!$para)
 		return false;
 
 	return (bool)preg_match($para, $source);
@@ -781,7 +810,7 @@ function CheckRegExp($source, $para) {
  *  通过正则表达式格式化字符串
  * @param string $source 字符串
  * @param string $para 正则表达式，可用[html-format]|[nohtml]|[noscript]|[enter]|[noenter]|[filename]|[normalname]或自定义表达式
- * @return string 
+ * @return string
 */
 function TransferHTML($source, $para) {
 
@@ -826,7 +855,7 @@ function TransferHTML($source, $para) {
 /**
  *  封装HTML标签
  * @param string $html html源码
- * @return string 
+ * @return string
 */
 function CloseTags($html) {
 
@@ -873,8 +902,30 @@ function CloseTags($html) {
 /**
  *  获取UTF8格式的字符串的子串
  * @param string $sourcestr 源字符串
+ * @param int $start 起始位置
  * @param int $cutlength 子串长度
- * @return string 
+ * @return string
+*/
+function SubStrUTF8_Start($sourcestr, $start, $cutlength) {
+	if( function_exists('mb_substr') && function_exists('mb_internal_encoding') ){
+		mb_internal_encoding('UTF-8');
+		return mb_substr($sourcestr, $start, $cutlength);
+	}
+
+	if( function_exists('iconv_substr') && function_exists('iconv_set_encoding') ){
+		iconv_set_encoding ( "internal_encoding" ,  "UTF-8" );
+		iconv_set_encoding ( "output_encoding" ,  "UTF-8" );
+		return iconv_substr($sourcestr, $start, $cutlength);
+	}
+
+	return substr($sourcestr, $start, $cutlength);
+}
+
+/**
+ *  获取UTF8格式的字符串的子串
+ * @param string $sourcestr 源字符串
+ * @param int $cutlength 子串长度
+ * @return string
 */
 function SubStrUTF8($sourcestr, $cutlength) {
 
@@ -936,7 +987,7 @@ function SubStrUTF8($sourcestr, $cutlength) {
 /**
  *  删除文件BOM头
  * @param string $s 文件内容
- * @return string 
+ * @return string
 */
 function RemoveBOM($s){
 	$charset=array();
@@ -956,7 +1007,7 @@ function RemoveBOM($s){
  * @since 1.3.140614
  */
 function GetTimeZonebyGMT($z){
-	$timezones = array(  
+	$timezones = array(
 		-12 => 'Etc/GMT+12',
 		-11 => 'Pacific/Midway',
 		-10 => 'Pacific/Honolulu',
@@ -986,4 +1037,35 @@ function GetTimeZonebyGMT($z){
 	);
 	if(!isset($timezones[$z]))return 'UTC';
 	return $timezones[$z];
+}
+
+/**
+ * 对数组内的字符串进行htmlspecialchars
+ * @param array $array 待过滤字符串
+ * @return array
+ * @since 1.4
+ */
+function htmlspecialchars_array($array) {
+
+	foreach ($array as $key => &$value) {
+		if (is_array($value)) {
+			$value = htmlspecialchars_array($value);
+		}
+		else if (is_string($value)) {
+			$value = htmlspecialchars($value);
+		}
+	}
+
+	return $array;
+
+}
+
+/**
+ * 获得一个只含数字字母和_线的string
+ * @param string $s 待过滤字符串
+ * @return s
+ * @since 1.4
+ */
+function FilterCorrectName($s) {
+	return preg_replace('|[^0-9a-zA-Z_]|','',$s);
 }

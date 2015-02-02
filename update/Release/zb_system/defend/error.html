@@ -25,7 +25,8 @@ foreach ($GLOBALS['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpna
 	  <div class="divHeader"><?php echo $GLOBALS['lang']['msg']['error_tips']; ?></div>
   	  <div class="content">
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p><div>
-		<?php echo '(' . $this->type . ')' . $this->typeName . ' :     ' . htmlspecialchars($this->message); ?>
+		<?php echo '(' . $this->type . ')' . $this->typeName . ' :     ' . strip_tags($this->message); ?>
+		<?php echo ' (' . $GLOBALS['blogversion'] . ') ';if(!in_array('Status: 404 Not Found',headers_list()))echo '(' . GetEnvironment() . ') ' ;?>
 		</div></div>
 	 	<?php if($GLOBALS['option']['ZC_DEBUG_MODE']){?>
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['file_line']; ?></p><div>
@@ -47,12 +48,12 @@ foreach ($GLOBALS['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpna
 	 	</table>
 	 	</div></div>
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['request_data']; ?></p><div>
-	 	<pre><?php echo '$_GET = '.print_r($_GET, 1) ?></pre>
-	 	<pre><?php echo '$_POST = '.print_r($_POST, 1) ?></pre>
+	 	<pre><?php echo '$_GET = '.print_r(htmlspecialchars_array($_GET), 1) ?></pre>
+	 	<pre><?php echo '$_POST = '.print_r(htmlspecialchars_array($_POST), 1) ?></pre>
 		 	<?php
 		 		$post_data = $_COOKIE;unset($post_data['username']);unset($post_data['password']);
 		 	?>
-		<pre><?php echo '$_COOKIE = '.print_r($post_data, 1) ?></pre>
+		<pre><?php echo '$_COOKIE = '.print_r(htmlspecialchars_array($post_data), 1) ?></pre>
 	 	</div></div>
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['include_file']; ?></p><div>
 	 	<table style='width:100%'>

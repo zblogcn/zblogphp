@@ -1,5 +1,5 @@
 {template:header}
-<link rel="alternate" type="application/rss+xml" href="{$host}feed.asp" title="{$title}" />
+<link rel="alternate" type="application/rss+xml" href="{$host}feed.php" title="{$title}" />
 </head>
   <body class="home blog" id="hasfixed">
     <header class="header">

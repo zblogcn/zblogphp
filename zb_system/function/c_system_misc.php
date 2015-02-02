@@ -8,7 +8,11 @@
 
 ob_clean();
 
-switch (GetVars('type', 'GET')) {
+$type=GetVars('type', 'GET');
+
+foreach ($GLOBALS['Filter_Plugin_Misc_Begin'] as $fpname => &$fpsignal) {$fpname($type);}
+
+switch ($type) {
 	case 'statistic':
 		if (!$zbp->CheckRights('root')) {
 			echo $zbp->ShowError(6, __FILE__, __LINE__);
@@ -35,6 +39,13 @@ switch (GetVars('type', 'GET')) {
 			$zbp->ShowError(6, __FILE__, __LINE__);
 		}
 		misc_viewrights();
+		break;
+	case 'phpinfo':
+		if (!$zbp->CheckRights('root')) {
+			echo $zbp->ShowError(6, __FILE__, __LINE__);
+			die();
+		}
+		phpinfo();
 		break;
 	default:
 		break;
@@ -63,46 +74,52 @@ function misc_statistic() {
 
 	$r = null;
 
-	$zbp->BuildTemplate();
+	CountNormalArticleNums();
+	CountTopArticle(null,null);
+	CountCommentNums(null,null);
+	$all_comments = $zbp->cache->all_comment_nums;
 
 	$xmlrpc_address = $zbp->host . 'zb_system/xml-rpc/';
 	$current_member = $zbp->user->Name;
 	$current_version = $zbp->option['ZC_BLOG_VERSION'];
-	$all_artiles = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=0'), 'num');
-	$all_pages = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=1'), 'num');
+	$all_artiles = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=\'0\''), 'num');
+	$all_pages = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=\'1\''), 'num');
 	$all_categorys = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Category']), 'num');
-	$all_comments = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Comment']), 'num');
 	$all_views = $zbp->option['ZC_VIEWNUMS_TURNOFF']==true?0:GetValueInArrayByCurrent($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post']), 'num');
 	$all_tags = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) as num FROM ' . $GLOBALS['table']['Tag']), 'num');
 	$all_members = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Member']), 'num');
-	$current_theme = $zbp->theme;
-	$current_style = $zbp->style;
+	$current_theme = '{$zbp->theme}';
+	$current_style = '{$zbp->style}';
 	$current_member = '{$zbp->user->Name}';
+	$system_environment = '{$system_environment}';
 
-
-	$system_environment = GetEnvironment();
-
-	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}</td><td class='td30'>{$current_member}</td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";
+	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}</td><td class='td30'><a href='../cmd.php?act=misc&type=vrs' target='_blank'>{$current_member}</a></td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_artiles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categorys}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
-	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}/{$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
-	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td>{$system_environment}</td></tr>";
-
+	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']} / {$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
+	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td><a href='../cmd.php?act=misc&type=phpinfo' target='_blank'>{$system_environment}</a></td></tr>";
+	$r .="<script type=\"text/javascript\">$('#statistic').attr('title','" . date ( "c" , $zbp->cache->reload_statistic_time ) . "');</script>";
 
 	$zbp->cache->reload_statistic = $r;
 	$zbp->cache->reload_statistic_time = time();
-	$zbp->cache->system_environment = $system_environment;
-	//$zbp->SaveCache();
-	CountNormalArticleNums();
+	$zbp->cache->system_environment = GetEnvironment();
+	$zbp->cache->all_article_nums = $all_artiles;
+	$zbp->cache->all_page_nums = $all_pages;
 
 	$zbp->AddBuildModule('statistics', array($all_artiles, $all_pages, $all_categorys, $all_tags, $all_views, $all_comments));
 	$zbp->BuildModule();
+	$zbp->SaveCache();
 
 	$r = str_replace('{#ZC_BLOG_HOST#}', $zbp->host, $r);
 	$r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
+	$r = str_replace('{$zbp->theme}', $zbp->theme, $r);
+	$r = str_replace('{$zbp->style}', $zbp->style, $r);
+	$r = str_replace('{$system_environment}', $zbp->cache->system_environment, $r);
 
 	echo $r;
+
+	$zbp->BuildTemplate();
 }
 
 
@@ -161,7 +178,7 @@ foreach ($GLOBALS['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpna
 
 					foreach ($GLOBALS['actions'] as $key => $value) {
 						if ($GLOBALS['zbp']->CheckRights($key)) {
-							echo '<dd><b>' . $key . '</b> : ' . ($GLOBALS['zbp']->CheckRights($key) ? '<span style="color:green">true</span>' : '<span style="color:red">false</span>') . '</dd>';
+							echo '<dd><b>' . $zbp->GetAction_Title($key) . '</b> : ' . ($zbp->CheckRights($key) ? '<span style="color:green">true</span>' : '<span style="color:red">false</span>') . '</dd>';
 						}
 					}
 

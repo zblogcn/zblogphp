@@ -51,7 +51,7 @@ if($article->Intro){
   if(strpos($article->Content, '<!--more-->')!==false){
     $article->Intro='';
     $article->Content=str_replace('<!--more-->', '<hr class="more" />', $article->Content);
-  }elseif(strpos($article->Content,$article->Intro)===0){
+  }elseif(strpos($article->Intro,'<!--autointro-->')!==false){
     $article->Intro='';
   }
 }
@@ -100,8 +100,8 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsignal) {$fp
 	   </div>
 
     <div id="divContent"  class="editmod2" style="clear:both;">
-		<div id='cheader' class="editmod"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
-		<div id='carea' class="editmod"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content,'[html-format]');?></textarea></div>
+		<div id='cheader' class="editmod editmod3"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
+		<div id='carea' class="editmod editmod3"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content,'[html-format]');?></textarea></div>
 		<div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Waiting...</div>
 	</div>
 
@@ -110,7 +110,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsignal) {$fp
 <?php
 foreach ($GLOBALS['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
 ?>
-	   </div>	
+	   </div>
 
       <!-- alias( -->
       <div id="alias" class="editmod2"><label for="edtAlias" class="editinputname" ><?php echo $lang['msg']['alias']?></label>
@@ -128,14 +128,14 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpn
       </div>
       <!-- )tags -->
 
-       <div id="insertintro" class="editmod2"><span><?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
+       <div id="insertintro" class="editmod2" style="padding-top:1em;paddding-bottom:0;"><span>* <?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
 <?php }?>
 
 		<div id="divIntro" class="editmod2" <?php if(!$article->Intro){echo 'style="display:none;"';}?>>
-       <div id="introheader" class="editmod"><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
-       <textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro,'[html-format]');?></textarea>
+       <div id="theader" class="editmod editmod3"><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
+       <div id='tarea' class="editmod editmod3"><textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro,'[html-format]');?></textarea></div>
        <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Waiting...</div>
-	   <hr/>
+
     </div>
     <!-- 2号输出接口 -->
        <div id="response2" class="editmod2">
@@ -153,11 +153,11 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
       <div id="divBox">
         <div id="divFloat">
           <div id='post' class="editmod">
-            <input class="button" style="width:180px;height:38px;" type="submit" value="提交" id="btnPost" onclick='return checkArticleInfo();' />
+            <input class="button" style="width:180px;height:38px;" type="submit" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick='return checkArticleInfo();' />
           </div>
 
           <!-- cate --><?php if(!$ispage){ ?>
-          <div id='cate' class="editmod"> <label for="cmbCateID" class="editinputname" ><?php echo $lang['msg']['category']?></label>
+          <div id='cate' class="editmod"> <label for="cmbCateID" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['category']?></label>
             <select style="width:180px;" class="edit" size="1" name="CateID" id="cmbCateID">
 <?php echo CreateOptoinsOfCategorys($article->CateID);?>
             </select>
@@ -165,7 +165,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <!-- cate --><?php } ?>
 
           <!-- level -->
-          <div id='level' class="editmod"> <label for="cmbPostStatus" class="editinputname" ><?php echo $lang['msg']['status']?></label>
+          <div id='level' class="editmod"> <label for="cmbPostStatus" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['status']?></label>
             <select class="edit" style="width:180px;" size="1" name="Status" id="cmbPostStatus" onChange="edtLevel.value=this.options[this.selectedIndex].value">
 <?php echo CreateOptoinsOfPostStatus($article->Status);?>
             </select>
@@ -174,7 +174,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
 
           <!-- template( -->
 
-          <div id='template' class="editmod"> <label for="cmbTemplate" class="editinputname" ><?php echo $lang['msg']['template']?></label>
+          <div id='template' class="editmod"> <label for="cmbTemplate" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['template']?></label>
             <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate" onChange="edtTemplate.value=this.options[this.selectedIndex].value">
 <?php echo CreateOptoinsOfTemplate($article->Template);?>
             </select>
@@ -182,7 +182,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <!-- )template -->
 
           <!-- user( -->
-          <div id='user' class="editmod"> <label for="cmbUser" class="editinputname" ><?php echo $lang['msg']['author']?></label>
+          <div id='user' class="editmod"> <label for="cmbUser" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['author']?></label>
             <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
 				<?php echo CreateOptoinsOfMember($article->AuthorID);?>
             </select>
@@ -190,8 +190,8 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <!-- )user -->
 
           <!-- newdatetime( -->
-          <div id='newdatetime' class="editmod"> <label for="edtDateTime" class="editinputname" ><?php echo $lang['msg']['date']?></label>
-            <input type="text" name="PostTime" id="edtDateTime"  value="<?php echo $article->Time();?>" style="width:171px;"/>
+          <div id='newdatetime' class="editmod"> <label for="edtDateTime" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['date']?></label>
+            <input type="text" name="PostTime" id="edtDateTime"  value="<?php echo $article->Time();?>" style="width:180px;"/>
             </div>
 
           <!-- )newdatetime -->
@@ -200,6 +200,11 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <div id='istop' class="editmod">
             <label for="edtIstop" class="editinputname" ><?php echo $lang['msg']['top']?></label>
             <input id="edtIstop" name="IsTop" style="" type="text" value="<?php echo (int)$article->IsTop;?>" class="checkbox"/>
+<select style="width:80px;display:<?php echo $article->IsTop?'':'none'?>;" size="1" name="IstopType" id="edtIstopType">
+<option value="index" <?php echo strpos($article->TopType,'index')!==false?'selected="selected"':''; ?>><?php echo $lang['msg']['top_index']?></option>
+<option value="global" <?php echo strpos($article->TopType,'global')!==false?'selected="selected"':''; ?>><?php echo $lang['msg']['top_global']?></option>
+<option value="category" <?php echo strpos($article->TopType,'category')!==false?'selected="selected"':''; ?>><?php echo $lang['msg']['top_category']?></option>
+</select>
           </div><?php }?>
 
           <!-- )Istop -->
@@ -287,37 +292,37 @@ function checkArticleInfo(){
 }
 
 //日期时间控件
-$.datepicker.regional['zh-cn'] = {
-  closeText: '完成',
-  prevText: '上个月',
-  nextText: '下个月',
-  currentText: '现在',
-  monthNames: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
-  monthNamesShort: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
-  dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
-  dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
-  dayNamesMin: ['日','一','二','三','四','五','六'],
-  weekHeader: '周',
+$.datepicker.regional['<?php echo $lang['lang']?>'] = {
+  closeText: '<?php echo $lang['msg']['close']?>',
+  prevText: '<?php echo $lang['msg']['prev_month']?>',
+  nextText: '<?php echo $lang['msg']['next_month']?>',
+  currentText: '<?php echo $lang['msg']['current']?>',
+  monthNames: ['<?php echo $lang['month']['1']?>','<?php echo $lang['month']['2']?>','<?php echo $lang['month']['3']?>','<?php echo $lang['month']['4']?>','<?php echo $lang['month']['5']?>','<?php echo $lang['month']['6']?>','<?php echo $lang['month']['7']?>','<?php echo $lang['month']['8']?>','<?php echo $lang['month']['9']?>','<?php echo $lang['month']['10']?>','<?php echo $lang['month']['11']?>','<?php echo $lang['month']['12']?>'],
+  monthNamesShort: ['<?php echo $lang['month_abbr']['1']?>','<?php echo $lang['month_abbr']['2']?>','<?php echo $lang['month_abbr']['3']?>','<?php echo $lang['month_abbr']['4']?>','<?php echo $lang['month_abbr']['5']?>','<?php echo $lang['month_abbr']['6']?>','<?php echo $lang['month_abbr']['7']?>','<?php echo $lang['month_abbr']['8']?>','<?php echo $lang['month_abbr']['9']?>','<?php echo $lang['month_abbr']['10']?>','<?php echo $lang['month_abbr']['11']?>','<?php echo $lang['month_abbr']['12']?>'],
+  dayNames: ['<?php echo $lang['week']['7']?>','<?php echo $lang['week']['1']?>','<?php echo $lang['week']['2']?>','<?php echo $lang['week']['3']?>','<?php echo $lang['week']['4']?>','<?php echo $lang['week']['5']?>','<?php echo $lang['week']['6']?>'],
+  dayNamesShort: ['<?php echo $lang['week_short']['7']?>','<?php echo $lang['week_short']['1']?>','<?php echo $lang['week_short']['2']?>','<?php echo $lang['week_short']['3']?>','<?php echo $lang['week_short']['4']?>','<?php echo $lang['week_short']['5']?>','<?php echo $lang['week_short']['6']?>'],
+  dayNamesMin: ['<?php echo $lang['week_abbr']['7']?>','<?php echo $lang['week_abbr']['1']?>','<?php echo $lang['week_abbr']['2']?>','<?php echo $lang['week_abbr']['3']?>','<?php echo $lang['week_abbr']['4']?>','<?php echo $lang['week_abbr']['5']?>','<?php echo $lang['week_abbr']['6']?>'],
+  weekHeader: '<?php echo $lang['msg']['week_suffix']?>',
   dateFormat: 'yy-mm-dd',
   firstDay: 1,
   isRTL: false,
   showMonthAfterYear: true,
-  yearSuffix: ' 年  '
+  yearSuffix: ' <?php echo $lang['msg']['year_suffix']?>  '
 };
-$.datepicker.setDefaults($.datepicker.regional['zh-cn']);
-$.timepicker.regional['zh-cn'] = {
-  timeOnlyTitle: '时间',
-  timeText: '时间',
-  hourText: '小时',
-  minuteText: '分钟',
-  secondText: '秒钟',
-  millisecText: '毫秒',
-  currentText: '现在',
-  closeText: '完成',
-  timeFormat: 'hh:mm:ss',
+$.datepicker.setDefaults($.datepicker.regional['<?php echo $lang['lang']?>']);
+$.timepicker.regional['<?php echo $lang['lang']?>'] = {
+  timeOnlyTitle: '<?php echo $lang['msg']['time']?>',
+  timeText: '<?php echo $lang['msg']['time']?>',
+  hourText: '<?php echo $lang['msg']['hour']?>',
+  minuteText: '<?php echo $lang['msg']['minute']?>',
+  secondText: '<?php echo $lang['msg']['second']?>',
+  millisecText: '<?php echo $lang['msg']['millisec']?>',
+  currentText: '<?php echo $lang['msg']['current']?>',
+  closeText: '<?php echo $lang['msg']['close']?>',
+  timeFormat: 'HH:mm:ss',
   ampm: false
 };
-$.timepicker.setDefaults($.timepicker.regional['zh-cn']);
+$.timepicker.setDefaults($.timepicker.regional['<?php echo $lang['lang']?>']);
 $('#edtDateTime').datetimepicker({
   showSecond: true
   //changeMonth: true,

@@ -7,42 +7,77 @@
  */
 require '../function/c_system_base.php';
 
-$zbp->CheckGzip();
-$zbp->Load();
-
 ob_clean();
 
-header('Content-Type: application/x-javascript; charset=utf-8');
 ?>
-var bloghost="<?php echo $zbp->host; ?>";
-var cookiespath="<?php echo $zbp->cookiespath; ?>";
-var ajaxurl="<?php echo $zbp->ajaxurl; ?>";
-var str01="<?php echo $lang['error']['72']; ?>";
-var str02="<?php echo $lang['error']['29']; ?>";
-var str03="<?php echo $lang['error']['46']; ?>";
+var zbp = new ZBP({
+	bloghost: "<?php echo $zbp->host; ?>",
+	ajaxurl: "<?php echo $zbp->ajaxurl; ?>",
+	cookiepath: "<?php echo $zbp->cookiespath; ?>",
+	lang: {
+		error: {
+			72: "<?php echo $lang['error']['72']; ?>",
+			29: "<?php echo $lang['error']['29']; ?>",
+			46: "<?php echo $lang['error']['46']; ?>"
+		}
+	}
+});
 
 <?php
-echo '$(document).ready(function(){';
+if (!isset($_GET['pluginonly'])) {
+?>
+$(function () {
+	
+	var $cpLogin = $(".cp-login").find("a");
+	var $cpVrs = $(".cp-vrs").find("a");
+	var $addoninfo = zbp.cookie.get("addinfo<?php echo str_replace('/', '', $zbp->cookiespath);?>");
+	if (!$addoninfo) return;
+	$addoninfo = JSON.parse($addoninfo);
 
-if ($zbp->CheckRights('admin')){
-	echo "$('.cp-hello').html('" . $zbp->lang['msg']['welcome'] . ' ' . $zbp->user->Name .  " ("  . $zbp->user->LevelName  . ")');";
-	echo "$('.cp-login').find('a').html('[" . $zbp->lang['msg']['admin'] . "]');";
+	if ($addoninfo.chkadmin){
+		$(".cp-hello").html("' . $zbp->lang['msg']['welcome'] . ' " + $addoninfo.useralias + " (" + $addoninfo.levelname  + ")");
+		if ($cpLogin.length == 1 && $cpLogin.html().indexOf("[") > -1) { 
+			$cpLogin.html("[<?php echo $zbp->lang['msg']['admin']; ?>]");
+		} else {
+			$cpLogin.html("<?php echo $zbp->lang['msg']['admin']; ?>");
+		}
+	}
+
+	if($addoninfo.chkarticle){
+		if ($cpLogin.length == 1 && $cpVrs.html().indexOf("[") > -1) {
+			$cpVrs.html("[<?php echo $zbp->lang['msg']['new_article']; ?>]"); 
+		} else {
+			$cpVrs.html("<?php echo $zbp->lang['msg']['new_article']; ?>");
+		}
+		$cpVrs.attr("href", bloghost + "zb_system/cmd.php?act=ArticleEdt");
+	}
+
+	zbp.cookie.set("timezone", (new Date().getTimezoneOffset()/60)*(-1));
+
+	if ($addoninfo.userid < 1){
+		zbp.userinfo.output();
+	}
+
+});
+<?php
 }
-if ($zbp->CheckRights('ArticleEdt')){
-	echo "$('.cp-vrs').find('a').html('[" . $zbp->lang['msg']['new_article'] . "]');";
-	echo "$('.cp-vrs').find('a').attr('href','" . $zbp->host . "zb_system/cmd.php?act=ArticleEdt');";
-}
-
-	echo "SetCookie('timezone',(new Date().getTimezoneOffset()/60)*(-1));";
-
-if ($zbp->user->ID==0){
-	echo "LoadRememberInfo();";
-}	
-
-echo '});' . "\r\n";
-
 foreach ($GLOBALS['Filter_Plugin_Html_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
 
-die();
+$s = ob_get_clean();
+$m = md5($s);
 
+header('Content-Type: application/x-javascript; charset=utf-8');
+header('Etag: ' . $m);
+
+if( isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m ){
+	SetHttpStatusCode(304);
+	die;
+}
+
+$zbp->CheckGzip();
+$zbp->StartGzip();
+	
+echo $s;
+
+die();
 ?>

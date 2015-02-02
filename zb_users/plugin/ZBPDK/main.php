@@ -22,11 +22,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div class="SubMenu"><?php echo $zbpdk->submenu->export('main'); ?></div>
   <div id="divMain2">
     <p>ZBPDK，全称Z-Blog PHP Development Kit，是为Z-BlogPHP开发人员开发的一套工具包。它集合了许多开发中常用的工具，可以帮助开发者更好地进行开发。</p>
-    <p>&nbsp;</p>
     <p>该插件有一定的危险性，一旦进行了误操作可能导致博客崩溃，请谨慎使用。</p>
     <p>&nbsp;</p>
     <p>工具列表：</p>
-    <p>&nbsp;</p>
     <p>&nbsp;</p>
     <table width="100%">
       <tr height="40">
@@ -48,6 +46,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   </div>
 </div>
 <script>ActiveTopMenu('zbpdk');</script>
+<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png';?>");</script>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 RunTime();

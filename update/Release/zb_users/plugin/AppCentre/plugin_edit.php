@@ -3,7 +3,7 @@ require '../../../zb_system/function/c_system_base.php';
 
 require '../../../zb_system/function/c_system_admin.php';
 
-require 'function.php';
+require dirname(__FILE__) . '/function.php';
 
 $zbp->Load();
 
@@ -94,7 +94,7 @@ $app->description=trim($_POST['app_description']);
 
 $app-> SaveInfoByXml();
 
-	$zbp->SetHint('good');
+$zbp->SetHint('good', '提交成功！<a href="submit.php?type=plugin&id=' . $app->id . '">现在立刻上传到应用中心！</a>');
   Redirect($_SERVER["HTTP_REFERER"]);
 }
 
@@ -219,7 +219,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
           <input id="app_advanced_dependency" name="app_advanced_dependency" style="width:550px;"  type="text" value="<?php echo $app->advanced_dependency;?>" />
         </p></td>
     </tr>
-    <tr>
+    <tr style="display: none">
       <td><p><b>· 【高级】插件重写系统函数列表（以|分隔）</b>(可选)</p></td>
       <td><p>&nbsp;
           <input id="app_advanced_rewritefunctions" name="app_advanced_rewritefunctions" style="width:550px;"  type="text" value="<?php echo $app->advanced_rewritefunctions;?>" />
@@ -238,7 +238,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         </p></td>
     </tr>
   </table>
-  <p> 提示:插件的图标是名为logo.png的<b>128x128px</b>大小的png文件,推荐使用<a href="http://www.syncfusion.com/downloads/metrostudio" target="_blank">Metro Studio</a>软件创建logo,插件的缩略图(可选)是名为screenshot.png的<b>300x240px</b>大小的png文件,放在插件的目录下.</p>
+  <p> 提示:插件的图标是名为logo.png的<b>128 x 128 px</b>大小的png文件,推荐使用<a href="http://www.syncfusion.com/downloads/metrostudio" target="_blank">Metro Studio</a>软件创建logo,插件的缩略图(可选)是名为screenshot.png的<b>300x240px</b>大小的png文件,放在插件的目录下.</p>
   <p><br/>
     <input type="submit" class="button" value="提交" id="btnPost" onclick='' />
   </p>

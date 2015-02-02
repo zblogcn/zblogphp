@@ -1,4 +1,4 @@
-/* 
+﻿/* 
 	Theme Name: X2013
 	Theme URL: http://lisizhang.com/x2013/
 	Description: 落花生2013作品
@@ -26,7 +26,7 @@ textarea{overflow:auto;vertical-align:top}
 ::selection{background:#72d0eb;color:#fff;text-shadow:none}
 ::-moz-selection{background:#72d0eb;color:#fff;text-shadow:none}
 *[hidden]{display:none}
-a{color:#0088DB;text-decoration:none;cursor:pointer}
+a{color:#38A3DB;text-decoration:none;cursor:pointer}
 a:hover{color:#FF6600}
 
 .clearfix:after,.central:after,.widget ul:after,.paging:after,.pagenav:after,.base-tit:after{content:".";display:block;height:0;clear:both;visibility:hidden}

@@ -13,6 +13,17 @@ $upload_dir = 'zb_users/upload/' . date('Y/m') . '/';
 $upload_path = '';
 $upload_dir = $blogpath . $upload_dir;
 
+$UEditor_lang=$lang['lang'];
+if(strpos($UEditor_lang,'en')===0)$UEditor_lang='en';
+$UEditor_lang=strtolower('\'' . $UEditor_lang . '\'');
+
+$UEditor_initialStyle='';
+if(isset($lang['font_family']))$UEditor_initialStyle=trim($lang['font_family']);
+if(!$UEditor_initialStyle)$UEditor_initialStyle='微软雅黑,宋体,Arial,Helvetica,sans-serif;';
+$UEditor_initialStyle=str_replace('"','&qout;',$UEditor_initialStyle);
+$UEditor_initialStyle='"body{font-size:14px;font-family:'.$UEditor_initialStyle.'}"';
+
+
 #echo '/*' . $upload_dir . '*/' ;
 
 $output_js="(function(){var URL;URL = '{$bloghost}zb_users/plugin/UEditor/';window.UEDITOR_CONFIG = {";
@@ -26,9 +37,8 @@ $array_config = array(
 				  . "'blockquote', 'wordimage','inserttable', 'horizontal','fullscreen']]",
 	'shortcutMenu' => "['fontfamily', 'fontsize', 'bold', 'italic', 'underline', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist']",
 	'maximumWords' => 1000000000,
-	'wordCountMsg' => '"当前已输入 {#count} 个字符" ',
 	'initialContent' => '"<p></p>"',
-	'initialStyle' => '"body{font-size:14px;font-family:微软雅黑,宋体,Arial,Helvetica,sans-serif;}"',
+	'initialStyle' => $UEditor_initialStyle,
 	'wordCount' => 'true',
 	'elementPathEnabled' => 'true',
 	'initialFrameHeight' => '300',
@@ -36,7 +46,7 @@ $array_config = array(
 	'sourceEditor' => '\''.($zbp->option['ZC_CODEMIRROR_ENABLE']?'codemirror':'textarea').'\'',
 	'theme' => '"default"',
     'themePath' => 'URL +"themes/"',
-	'lang' => '\'zh-cn\'',
+	'lang' => $UEditor_lang,
 	'langPath' => 'URL+"lang/"',
 	'codeMirrorJsUrl' => 'URL+ "third-party/codemirror/codemirror.js"',
 	'codeMirrorCssUrl' => 'URL+ "third-party/codemirror/codemirror.css"',

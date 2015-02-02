@@ -5,7 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib 类库
  */
-class Base {
+class Base{
 
 	/**
 	* @var string 数据表
@@ -28,28 +28,24 @@ class Base {
 	* @var datebase db
 	*/
 	protected $db = null;
-	
-	
+
 	/**
 	* @param string $table 数据表
 	* @param array $datainfo 数据表结构信息
 	*/
-	function __construct(&$table,&$datainfo,&$db = null){
-			if($db !== null){
-				$this->db = &$db;
-			}else{
-				$zbp = ZBlogPHP::GetInstance();
-				$this->db = &$zbp->db;				
-			}
+	function __construct(&$table, &$datainfo, &$db = null, $hasmetas = true){
+		if($db !== null)
+			$this->db = &$db;
+		else
+			$this->db = &$GLOBALS['zbp']->db;
 
-			$this->table=&$table;
-			$this->datainfo=&$datainfo;
+		$this->table=&$table;
+		$this->datainfo=&$datainfo;
 
-		$this->Metas=new Metas;
+		if(true==$hasmetas)$this->Metas=new Metas;
 
-		foreach ($this->datainfo as $key => $value) {
+		foreach ($this->datainfo as $key => $value)
 			$this->data[$key]=$value[3];
-		}
 	}
 
 	/**
@@ -141,6 +137,7 @@ class Base {
 			}elseif($value[1] == 'string'){
 				if($key=='Meta'){
 					$this->data[$key]=$array[$value[0]];
+					$this->Metas->Unserialize($this->data['Meta']);
 				}else{
 					$this->data[$key]=str_replace('{#ZC_BLOG_HOST#}',$bloghost,$array[$value[0]]);
 				}
@@ -148,7 +145,6 @@ class Base {
 				$this->data[$key]=$array[$value[0]];
 			}
 		}
-		if(isset($this->data['Meta']))$this->Metas->Unserialize($this->data['Meta']);
 		return true;
 	}
 
@@ -167,6 +163,7 @@ class Base {
 			}elseif($value[1] == 'string'){
 				if($key=='Meta'){
 					$this->data[$key]=$array[$i];
+					if(isset($this->data['Meta']))$this->Metas->Unserialize($this->data['Meta']);
 				}else{
 					$this->data[$key]=str_replace('{#ZC_BLOG_HOST#}',$bloghost,$array[$i]);
 				}
@@ -175,7 +172,6 @@ class Base {
 			}
 			$i += 1;
 		}
-		if(isset($this->data['Meta']))$this->Metas->Unserialize($this->data['Meta']);
 		return true;
 	}
 
@@ -221,7 +217,7 @@ class Base {
 		$id_field=reset($this->datainfo);
 		$id_name=key($this->datainfo);
 		$id_field=$id_field[0];
-		
+
 		if ($this->$id_name  ==  0) {
 			$sql = $this->db->sql->Insert($this->table,$keyvalue);
 			$this->$id_name = $this->db->Insert($sql);
@@ -248,5 +244,15 @@ class Base {
 		$this->db->Delete($sql);
 		return true;
 	}
+
+	/**
+	* toString
+	*
+	* 将Base对像返回JSON数据
+	* @return string
+	*/
+    public function __toString() {
+        return (string)json_encode($this->data);
+    }
 
 }

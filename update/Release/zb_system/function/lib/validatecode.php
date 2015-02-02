@@ -30,7 +30,11 @@ class ValidateCode {
 	/**
 	 *生成随机码
 	 */
-	protected function createCode() {
+	protected function createCode($n = null) {
+		if($n !== null){
+			$this->code = (string)$n;
+			return;
+		}
 		$_len = strlen($this->charset)-1;
 		for ($i=0;$i<$this->codelen;$i++) {
 			$this->code .= $this->charset[mt_rand(0,$_len)];
@@ -83,9 +87,9 @@ class ValidateCode {
 	/**
 	 *对外生成
 	 */
-	public function GetImg() {
+	public function GetImg($n = null) {
 		$this->createBg();
-		$this->createCode();
+		$this->createCode($n);
 		$this->createLine();
 		$this->createFont();
 		$this->outPut();

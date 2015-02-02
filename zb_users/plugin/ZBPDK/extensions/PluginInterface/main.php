@@ -57,7 +57,13 @@ $defined_interface = array(
 	"filter" => array(),
 	"response" => array()
 );
-foreach($GLOBALS as $temp_name => $temp_value)
+if(isset($hooks)){
+	$zbpdk_allhooks= &$hooks;
+}else{
+	$zbpdk_allhooks= &$GLOBALS;
+}
+
+foreach($zbpdk_allhooks as $temp_name => $temp_value)
 {
 	if(preg_match("/^(Action|Filter|Response)_/i",$temp_name,$matches))
 	{
@@ -133,6 +139,7 @@ $(document).ready(function() {
 });
 
 ActiveTopMenu('zbpdk');
+AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png';?>");
 
 </script>
 <?php

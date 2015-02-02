@@ -72,7 +72,7 @@ class UrlRule{
 			if(isset($matches[0])){
 				$s=str_replace($matches[0],'',$s);
 			}
-			if(substr($s,-9)=='{%page%}/')$s=substr($s,0,strlen($s)-1);
+			if(substr($this->PreUrl,-10)!='_{%page%}/' && substr($s,-9)=='{%page%}/')$s=substr($s,0,strlen($s)-1);
 		}
 
 		$this->Rules['{%host%}']=$zbp->host;
@@ -80,7 +80,7 @@ class UrlRule{
 			$s=str_replace($key, $value, $s);
 		}
 
-		if(substr($this->PreUrl, - 1)<>'/' &&  substr($s, - 1)=='/' ){
+		if(substr($this->PreUrl, - 1)<>'/' &&  substr($s, - 1)=='/' && $s<>$zbp->host ){
 			$s=substr($s,0,strlen($s)-1);
 		}
 
@@ -215,7 +215,7 @@ class UrlRule{
 		$s .='	  </conditions>' . "\r\n";
 		$s .='	 <action type="Rewrite" url="index.php/{R:0}" />' . "\r\n";
 		$s .='	</rule>' . "\r\n";
-		
+
 		$s .='	<rule name="'.$zbp->cookiespath.' Z-BlogPHP Imported Rule index.php" stopProcessing="true">' . "\r\n";
 		$s .='	 <match url="^index.php/.*?" ignoreCase="false" />' . "\r\n";
 		$s .='	  <conditions logicalGrouping="MatchAll">' . "\r\n";
@@ -260,23 +260,23 @@ class UrlRule{
 		//$s .='# Handle 404 errors' . "\r\n";
 		//$s .='server.error-handler-404 = "/index.php"' . "\r\n";
 		//$s .='' . "\r\n";
-		
+
 		$s .='# Rewrite rules' . "\r\n";
 		$s .='url.rewrite-if-not-file = (' . "\r\n";
- 
+
 		$s .='' . "\r\n";
 		$s .='"^'.$zbp->cookiespath.'(zb_install|zb_system|zb_users)/(.*)" => "$0",' . "\r\n";
- 
+
 		$s .='' . "\r\n";
 		$s .='"^'.$zbp->cookiespath.'(.*.php)" => "$0",' . "\r\n";
- 
+
 		$s .='' . "\r\n";
 		$s .='"^'.$zbp->cookiespath.'(.*)$" => "'.$zbp->cookiespath.'index.php/$0"' . "\r\n";
 
 		$s .='' . "\r\n";
 		$s .=')' . "\r\n";
-		
-		
+
+
 		return $s;
 	}
 

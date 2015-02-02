@@ -15,7 +15,7 @@ $zbp->Load();
 $action='CategoryEdt';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
 
-$blogtitle=$lang['msg']['category_edit'];
+$blogtitle = $lang['msg']['category_edit'];
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
@@ -42,58 +42,72 @@ foreach ($zbp->categorysbyorder as $k => $v) {
 }
 
 ?>
-
 <div id="divMain">
-  <div class="divHeader2"><?php echo $lang['msg']['category_edit']?></div>
-  <div class="SubMenu"></div>
-  <div id="divMain2" class="edit category_edit">
-	<form id="edit" name="edit" method="post" action="#">
-	  <input id="edtID" name="ID" type="hidden" value="<?php echo $cate->ID;?>" />
-	  <p>
-		<span class="title"><?php echo $lang['msg']['name']?>:</span><span class="star">(*)</span><br />
-		<input id="edtName" class="edit" size="40" name="Name" maxlength="50" type="text" value="<?php echo $cate->Name;?>" />
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['alias']?>:</span><br />
-		<input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $cate->Alias;?>" />
-	  </p>
+	<div class="divHeader2">
+		<?php echo $lang['msg']['category_edit']?></div>
+	<div class="SubMenu"></div>
+	<div id="divMain2" class="edit category_edit">
+		<form id="edit" name="edit" method="post" action="#">
+			<input id="edtID" name="ID" type="hidden" value="<?php echo $cate->ID;?>" />
+			<p>
+				<span class="title">
+					<?php echo $lang['msg']['name']?>:</span>
+				<span class="star">(*)</span>
+				<br />
+				<input id="edtName" class="edit" size="40" name="Name" maxlength="50" type="text" value="<?php echo $cate->Name;?>" /></p>
+			<p>
+				<span class="title">
+					<?php echo $lang['msg']['alias']?>:</span>
+				<br />
+				<input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $cate->Alias;?>" /></p>
 
-	  <p>
-		<span class="title"><?php echo $lang['msg']['order']?>:</span><br />
-		<input id="edtOrder" class="edit" size="40" name="Order" type="text" value="<?php echo $cate->Order;?>" />
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['parent_category']?>:</span><br />
-		<select id="edtParentID" name="ParentID" class="edit" size="1">
-			<?php echo $p;?>
-		</select>
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['template']?>:</span><br />
-		<select class="edit" size="1" name="Template" id="cmbTemplate">
-<?php echo CreateOptoinsOfTemplate($cate->Template);?>
-		</select><input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $cate->Template;?>" />
-	  </p>
-	  <p>
-		<span class="title"><?php echo $lang['msg']['category_aritles_default_template']?>:</span><br />
-		<select class="edit" size="1" name="LogTemplate" id="cmbLogTemplate">
-<?php echo CreateOptoinsOfTemplate($cate->LogTemplate);?>
-		</select>
-	  </p>
-	  <p>
-		<label><span class="title"><?php echo $lang['msg']['add_to_navbar']?>:</span>   <input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int)$zbp->CheckItemToNavbar('category',$cate->ID)?>" class="checkbox" /></label>
-	  </p>
-    <!-- 1号输出接口 -->
-       <div id='response' class='editmod2'>
-<?php
-foreach ($GLOBALS['Filter_Plugin_Category_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
-?>
-	   </div>
-	  <p>
-		<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" />
-	  </p>
-	</form>
-	<script type="text/javascript">
+			<p>
+				<span class="title">
+					<?php echo $lang['msg']['order']?>:</span>
+				<br />
+				<input id="edtOrder" class="edit" size="40" name="Order" type="text" value="<?php echo $cate->Order;?>" /></p>
+			<p>
+				<span class="title">
+					<?php echo $lang['msg']['parent_category']?>:</span>
+				<br />
+				<select id="edtParentID" name="ParentID" class="edit" size="1">
+					<?php echo $p;?></select>
+			</p>
+			<p>
+				<span class="title">
+					<?php echo $lang['msg']['template']?>:</span>
+				<br />
+				<select class="edit" size="1" name="Template" id="cmbTemplate">
+					<?php echo CreateOptoinsOfTemplate($cate->Template);?></select>
+				<input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $cate->Template;?>" /></p>
+			<p>
+				<span class="title">
+					<?php echo $lang['msg']['category_aritles_default_template']?>:</span>
+				<br />
+				<select class="edit" size="1" name="LogTemplate" id="cmbLogTemplate">
+					<?php echo CreateOptoinsOfTemplate($cate->LogTemplate);?></select>
+			</p>
+			<p>
+				<span class='title'>
+					<?php echo $lang['msg']['intro']?>:</span>
+				<br/>
+				<textarea  cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;"><?php echo htmlspecialchars($cate->Intro);?></textarea>
+			</p>
+			<p>
+				<label>
+					<span class="title">
+						<?php echo $lang['msg']['add_to_navbar']?>:</span>
+					<input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int)$zbp->CheckItemToNavbar('category',$cate->ID)?>" class="checkbox" />
+				</label>
+			</p>
+			<!-- 1号输出接口 -->
+			<div id='response' class='editmod2'>
+				<?php foreach ($GLOBALS['Filter_Plugin_Category_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}?>
+			</div>
+			<p>
+				<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" /></p>
+		</form>
+		<script type="text/javascript">
 function checkInfo(){
   document.getElementById("edit").action="../cmd.php?act=CategoryPst";
 
@@ -104,11 +118,10 @@ function checkInfo(){
 
 }
 	</script>
-	<script type="text/javascript">ActiveLeftMenu("aCategoryMng");</script>
-	<script type="text/javascript">AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/category_32.png';?>");</script>
-  </div>
+		<script type="text/javascript">ActiveLeftMenu("aCategoryMng");</script>
+		<script type="text/javascript">AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/category_32.png';?>");</script>
+	</div>
 </div>
-
 
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';

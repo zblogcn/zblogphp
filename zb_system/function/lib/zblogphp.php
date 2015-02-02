@@ -25,6 +25,10 @@ class ZBlogPHP {
 	 */
 	public $lang = array();
 	/**
+	 * @var array 语言包list
+	 */
+	public $langpacklist = array();
+	/**
 	 * @var null|string 路径
 	 */
 	public $path = null;
@@ -140,7 +144,7 @@ class ZBlogPHP {
 	 */
 	public $user=null;
 	/**
-	 * @var Metas|null 缓存
+	 * @var Config|null 缓存
 	 */
 	public $cache=null;
 
@@ -156,6 +160,10 @@ class ZBlogPHP {
 	 * @var array|null 数据表信息
 	 */
 	public $datainfo=null;
+	/**
+	 * @var array|null 类型序列
+	 */
+	public $posttype=null;
 	/**
 	 * @var array|null 操作列表
 	 */
@@ -267,7 +275,7 @@ class ZBlogPHP {
 		}
 		return self::$_zbp;
 	}
-	
+
 	/**
 	 * 初始化数据库连接
 	 * @param string $type 数据连接类型
@@ -284,8 +292,9 @@ class ZBlogPHP {
 	 */
 	function __construct() {
 
-		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,$datainfo,$actions,$action;
-		global $blogversion,$blogtitle,$blogname,$blogsubname,$blogtheme,$blogstyle,$currenturl,$activeapps;
+		global $option,$lang,$blogpath,$bloghost,$cookiespath,$usersdir,$table,
+				$datainfo,$actions,$action,$blogversion,$blogtitle,$blogname,$blogsubname,
+				$blogtheme,$blogstyle,$currenturl,$activeapps,$posttype;
 
 		ZBlogException::SetErrorHook();
 
@@ -301,13 +310,11 @@ class ZBlogPHP {
 		$this->table = &$table;
 		$this->datainfo = &$datainfo;
 		$this->actions = &$actions;
+		$this->posttype = &$posttype;
 		$this->currenturl = &$currenturl;
 		$this->action = &$action;
 		$this->activeapps = &$activeapps;
 
-		if (trim($this->option['ZC_BLOG_CLSID']) == ''){
-			$this->option['ZC_BLOG_CLSID'] = GetGuid();
-		}
 		$this->guid = &$this->option['ZC_BLOG_CLSID'];
 
 		$this->title = &$blogtitle;
@@ -322,8 +329,10 @@ class ZBlogPHP {
 		$this->displaycount = &$this->option['ZC_DISPLAY_COUNT'];
 		$this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
 
-		$this->cache = new Metas;
-
+		$this->user = new stdClass;
+		foreach($this->datainfo['Member'] as $key=>$value){
+			$this->user->$key=$value[3];
+		}
 	}
 
 
@@ -345,7 +354,7 @@ class ZBlogPHP {
 			$fpreturn=$fpname($method, $args);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
-		if($this->option['ZC_DEBUG_MODE']==true) $this->ShowError(81,__FILE__,__LINE__);
+		trigger_error ( $this->lang['error'][81] ,  E_USER_WARNING );
 	}
 
 	/**
@@ -359,7 +368,7 @@ class ZBlogPHP {
 			$fpreturn=$fpname($name, $value);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
-		if($this->option['ZC_DEBUG_MODE']==true) $this->ShowError(81,__FILE__,__LINE__);
+		trigger_error ( $this->lang['error'][81] ,  E_USER_WARNING );
 	}
 
 	/**
@@ -372,7 +381,7 @@ class ZBlogPHP {
 			$fpreturn=$fpname($name);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 		}
-		if($this->option['ZC_DEBUG_MODE']==true) $this->ShowError(81,__FILE__,__LINE__);
+		trigger_error ( $this->lang['error'][81] ,  E_USER_WARNING );
 	}
 
 ################################################################################################################
@@ -388,7 +397,7 @@ class ZBlogPHP {
 		date_default_timezone_set($oldzone);
 
 		$oldlang=$this->option['ZC_BLOG_LANGUAGEPACK'];
-		$this->lang = require($this->path . 'zb_users/language/' . $oldlang . '.php');
+		$this->LoadLanguage('system','');
 
 		if($this->option['ZC_SITE_TURNOFF']==true){
 			Http503();
@@ -396,14 +405,22 @@ class ZBlogPHP {
 			return false;
 		}
 
-		if(!$this->OpenConnect())return false;
+		if(!$this->OpenConnect()){
+			return false;
+		}
 
 		$this->LoadConfigs();
 		$this->LoadCache();
 		$this->LoadOption();
 
+		$this->RegPostType(0,'article',$this->option['ZC_ARTICLE_REGEX'],$this->option['ZC_POST_DEFAULT_TEMPLATE']);
+		$this->RegPostType(1,'page',$this->option['ZC_PAGE_REGEX'],$this->option['ZC_POST_DEFAULT_TEMPLATE']);
+
+		if($this->option['ZC_BLOG_LANGUAGEPACK']==='SimpChinese')$this->option['ZC_BLOG_LANGUAGEPACK']='zh-cn';
+		if($this->option['ZC_BLOG_LANGUAGEPACK']==='TradChinese')$this->option['ZC_BLOG_LANGUAGEPACK']='zh-tw';
+
 		if($oldlang!=$this->option['ZC_BLOG_LANGUAGEPACK']){
-			$this->lang = require($this->path . 'zb_users/language/' . $this->option['ZC_BLOG_LANGUAGEPACK'] . '.php');
+			$this->LoadLanguage('system','');
 		}
 
 		if(isset($this->option['ZC_DEBUG_MODE_STRICT'])){
@@ -411,6 +428,9 @@ class ZBlogPHP {
 		}
 		if(isset($this->option['ZC_DEBUG_MODE_WARNING'])){
 			ZBlogException::$iswarning = (bool)$this->option['ZC_DEBUG_MODE_WARNING'];
+		}
+		if(isset($this->option['ZC_DEBUG_LOG_ERROR'])){
+			ZBlogException::$islogerror = (bool)$this->option['ZC_DEBUG_LOG_ERROR'];
 		}
 
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){
@@ -420,7 +440,8 @@ class ZBlogPHP {
 			$this->option['ZC_BLOG_HOST']=$this->host;
 		}
 
-		$this->option['ZC_BLOG_VERSION']=ZC_BLOG_VERSION;
+		$this->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
+		$this->option['ZC_BLOG_VERSION'] = ZC_BLOG_VERSION;
 		$this->option['ZC_BLOG_PRODUCT_FULL']=$this->option['ZC_BLOG_PRODUCT'] . ' ' . $this->option['ZC_BLOG_VERSION'];
 		$this->option['ZC_BLOG_PRODUCT_FULLHTML']='<a href="http://www.zblogcn.com/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
 		$this->option['ZC_BLOG_PRODUCT_HTML']='<a href="http://www.zblogcn.com/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT'] . '</a>';
@@ -445,34 +466,36 @@ class ZBlogPHP {
 		$this->searchurl=$this->host . 'search.php';
 		$this->ajaxurl=$this->host . 'zb_system/cmd.php?act=ajax&src=';
 
-		#创建User类
-		$this->user=new Member();
-
 		$this->isinitialized=true;
 
+		return true;
 	}
 
 
 	/**
-	 * 重建索引并载入
+	 * 载入
 	 * @return bool
 	 */
 	public function Load(){
 
-		if(!$this->isinitialized)return false;
+		foreach ($GLOBALS['Filter_Plugin_Zbp_Load_Pre'] as $fpname => &$fpsignal) {
+			$fpreturn = $fpname();
+			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+				$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
+			}
+		}
+
+		if(!$this->isinitialized){
+			return false;
+		}
 
 		if($this->isload)return false;
-
-		foreach($this->table as &$tb){
-			$tb=str_replace('%pre%', $this->db->dbpre, $tb);
-		}
 
 		$this->StartGzip();
 
 		header('Content-type: text/html; charset=utf-8');
 
 		$this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
-
 		$this->LoadCategorys();
 		#$this->LoadTags();
 		$this->LoadModules();
@@ -480,21 +503,13 @@ class ZBlogPHP {
 		$this->Verify();
 
 		$this->RegBuildModule('catalog','BuildModule_catalog');
-
 		$this->RegBuildModule('calendar','BuildModule_calendar');
-
 		$this->RegBuildModule('comments','BuildModule_comments');
-
 		$this->RegBuildModule('previous','BuildModule_previous');
-
 		$this->RegBuildModule('archives','BuildModule_archives');
-
 		$this->RegBuildModule('navbar','BuildModule_navbar');
-
 		$this->RegBuildModule('tags','BuildModule_tags');
-
 		$this->RegBuildModule('statistics','BuildModule_statistics');
-
 		$this->RegBuildModule('authors','BuildModule_authors');
 
 		$this->LoadTemplate();
@@ -503,9 +518,23 @@ class ZBlogPHP {
 
 		$this->template=$this->PrepareTemplate();
 
+		if($this->ismanage){
+			$this->LoadManage();
+		}else{
+			if(isset($this->templates['404']))
+				Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','Include_ShowError404');
+
+			$ak = array_keys($this->replacetags);
+			$av = array_values($this->replacetags);
+			foreach($this->modulesbyfilename as &$m)
+				$m->Content = str_replace($ak,$av,$m->Content);
+		}
+
+		Add_Filter_Plugin('Filter_Plugin_Login_Header','Include_AddonAdminFont');
+		Add_Filter_Plugin('Filter_Plugin_Other_Header','Include_AddonAdminFont');
+		Add_Filter_Plugin('Filter_Plugin_Admin_Header','Include_AddonAdminFont');
+
 		foreach ($GLOBALS['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) $fpname();
-		
-		if($this->ismanage) $this->LoadManage();
 
 		$this->isload=true;
 
@@ -517,15 +546,30 @@ class ZBlogPHP {
 	 */
 	public function LoadManage(){
 
+		$this->host = GetCurrentHost($this->path,$this->cookiespath);
+
 		if($this->user->Status==ZC_MEMBER_STATUS_AUDITING) $this->ShowError(79,__FILE__,__LINE__);
 		if($this->user->Status==ZC_MEMBER_STATUS_LOCKED) $this->ShowError(80,__FILE__,__LINE__);
 
+		Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu','Include_Admin_Addpagesubmenu');
+		Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu','Include_Admin_Addtagsubmenu');
+		Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu','Include_Admin_Addcatesubmenu');
+		Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu','Include_Admin_Addmemsubmenu');
+		Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu','Include_Admin_Addmodsubmenu');
+		Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu','Include_Admin_Addcmtsubmenu');
+
 		$this->CheckTemplate();
 
-		if(GetVars('dishtml5','COOKIE')){
-			$this->option['ZC_ADMIN_HTML5_ENABLE']=false;
-		}else{
-			$this->option['ZC_ADMIN_HTML5_ENABLE']=true;
+		if(GetVars('addinfo' . str_replace('/','',$this->cookiespath) ,'COOKIE')){
+			$dishtml5=json_decode(GetVars('addinfo' . str_replace('/','',$this->cookiespath),'COOKIE'));
+			if(is_object($dishtml5) && property_exists($dishtml5,'dishtml5'))
+				$dishtml5=(bool)$dishtml5->dishtml5;
+			else
+				$dishtml5=false;
+			if($dishtml5)
+				$this->option['ZC_ADMIN_HTML5_ENABLE']=false;
+			else
+				$this->option['ZC_ADMIN_HTML5_ENABLE']=true;
 		}
 
 		foreach ($GLOBALS['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) $fpname();
@@ -557,12 +601,28 @@ class ZBlogPHP {
 		switch ($this->option['ZC_DATABASE_TYPE']) {
 			case 'sqlite':
 			case 'sqlite3':
+			case 'pdo_sqlite':
 				$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
 				if($this->db->Open(array(
 						$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
 						$this->option['ZC_SQLITE_PRE']
 					))==false){
 					$this->ShowError(69,__FILE__,__LINE__);
+				}
+				break;
+			case 'pgsql':
+			case 'pdo_pgsql':
+				$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
+				if($this->db->Open(array(
+						$this->option['ZC_PGSQL_SERVER'],
+						$this->option['ZC_PGSQL_USERNAME'],
+						$this->option['ZC_PGSQL_PASSWORD'],
+						$this->option['ZC_PGSQL_NAME'],
+						$this->option['ZC_PGSQL_PRE'],
+						$this->option['ZC_PGSQL_PORT'],
+						$this->option['ZC_PGSQL_PERSISTENT']
+					))==false){
+					$this->ShowError(67,__FILE__,__LINE__);
 				}
 				break;
 			case 'mysql':
@@ -577,7 +637,8 @@ class ZBlogPHP {
 						$this->option['ZC_MYSQL_NAME'],
 						$this->option['ZC_MYSQL_PRE'],
 						$this->option['ZC_MYSQL_PORT'],
-						$this->option['ZC_MYSQL_PERSISTENT']
+						$this->option['ZC_MYSQL_PERSISTENT'],
+						$this->option['ZC_MYSQL_ENGINE'],
 					))==false){
 					$this->ShowError(67,__FILE__,__LINE__);
 				}
@@ -630,26 +691,25 @@ class ZBlogPHP {
 	 * 载入插件Configs表
 	 */
 	public function LoadConfigs(){
-
 		$this->configs=array();
 		$sql = $this->db->sql->Select($this->table['Config'],array('*'),'','','','');
-		$array=$this->db->Query($sql);
-		foreach ($array as $c) {
-			$m=new Metas;
-			$m->Unserialize($c['conf_Value']);
-			$this->configs[$c['conf_Name']]=$m;
-		}
-	}
 
-	/**
-	 * 删除Configs表
-	 * @param string $name Configs表名
-	 * @return bool
-	 */
-	public function DelConfig($name){
-		$sql = $this->db->sql->Delete($this->table['Config'],array(array('=','conf_Name',$name)));
-		$this->db->Delete($sql);
-		return true;
+		$array = $this->GetListType('Config',$sql);
+		foreach ($array as $c) {
+			$n=$c->GetItemName();
+			$this->configs[$n]=$c;
+		}return;
+		$configs_name = $configs_namevalue = array();
+		foreach ($array as $c) {
+			$n=$c->GetItemName();
+			$configs_name[$n]=$n;
+			$configs_namevalue[$n]=$c;
+		}
+		natcasesort($configs_name);
+		foreach ($configs_name as $name) {
+			$this->configs[$name]=$configs_namevalue[$name];
+		}
+		unset($configs_name,$configs_namevalue);
 	}
 
 	/**
@@ -658,22 +718,19 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	public function SaveConfig($name){
-
 		if(!isset($this->configs[$name]))return false;
+		$this->configs[$name]->Save();
+		return true;
+	}
 
-		$kv=array('conf_Name'=>$name,'conf_Value'=>$this->configs[$name]->Serialize());
-		$sql = $this->db->sql->Select($this->table['Config'],array('*'),array(array('=','conf_Name',$name)),'','','');
-		$array=$this->db->Query($sql);
-
-		if(count($array)==0){
-			$sql = $this->db->sql->Insert($this->table['Config'],$kv);
-			$this->db->Insert($sql);
-		}else{
-			array_shift($kv);
-			$sql = $this->db->sql->Update($this->table['Config'],$kv,array(array('=','conf_Name',$name)));
-			$this->db->Update($sql);
-		}
-
+	/**
+	 * 删除Configs表
+	 * @param string $name Configs表名
+	 * @return bool
+	 */
+	public function DelConfig($name){
+		if(!isset($this->configs[$name]))return false;
+		$this->configs[$name]->Delete();
 		return true;
 	}
 
@@ -684,8 +741,9 @@ class ZBlogPHP {
 	 */
 	public function Config($name){
 		if(!isset($this->configs[$name])){
-			$m=new Metas;
-			$this->configs[$name]=$m;
+			$name=FilterCorrectName($name);
+			if(!$name)return ;
+			$this->configs[$name]=new Config($name);
 		}
 		return $this->configs[$name];
 	}
@@ -701,6 +759,7 @@ class ZBlogPHP {
 
 ################################################################################################################
 #Cache相关
+	private $cache_hash = null;
 
 	/**
 	 * 保存缓存
@@ -711,7 +770,10 @@ class ZBlogPHP {
 		#$c=serialize($this->cache);
 		#@file_put_contents($s, $c);
 		//$this->configs['cache']=$this->cache;
+		$new_hash = md5($this->Config('cache'));
+		if($this->cache_hash == $new_hash)return true;
 		$this->SaveConfig('cache');
+		$this->cache_hash = $new_hash;
 		return true;
 	}
 
@@ -725,7 +787,8 @@ class ZBlogPHP {
 		#{
 		#	$this->cache=unserialize(@file_get_contents($s));
 		#}
-		$this->cache=$this->Config('cache');
+		$this->cache = $this->Config('cache');
+		$this->cache_hash = md5($this->Config('cache'));
 		return true;
 	}
 
@@ -740,25 +803,35 @@ class ZBlogPHP {
 
 		$this->option['ZC_BLOG_CLSID']=$this->guid;
 
-		if( strpos('|SAE|BAE2|ACE|TXY|', '|'.$this->option['ZC_YUN_SITE'].'|')===false ){
+		if( strpos('|SAE|BAE2|ACE|TXY|', '|'.$this->option['ZC_YUN_SITE'].'|')===false && file_exists($this->usersdir . 'c_option.php')==false ){
 			$s="<?php\r\n";
 			$s.="return ";
 			$option = array();
 			foreach ($this->option as $key => $value) {
-				if($key=='ZC_YUN_SITE')$option[$key]=$value;
-				if($key=='ZC_DATABASE_TYPE')$option[$key]=$value;
-				if($key=='ZC_SQLITE_NAME')$option[$key]=$value;
-				if($key=='ZC_SQLITE_PRE')$option[$key]=$value;
-				if($key=='ZC_MYSQL_SERVER')$option[$key]=$value;
-				if($key=='ZC_MYSQL_USERNAME')$option[$key]=$value;
-				if($key=='ZC_MYSQL_PASSWORD')$option[$key]=$value;
-				if($key=='ZC_MYSQL_NAME')$option[$key]=$value;
-				if($key=='ZC_MYSQL_CHARSET')$option[$key]=$value;
-				if($key=='ZC_MYSQL_PRE')$option[$key]=$value;
-				if($key=='ZC_MYSQL_ENGINE')$option[$key]=$value;
-				if($key=='ZC_MYSQL_PORT')$option[$key]=$value;
-				if($key=='ZC_MYSQL_PERSISTENT')$option[$key]=$value;
-				if($key=='ZC_SITE_TURNOFF')$option[$key]=$value;		
+				if(
+					($key=='ZC_YUN_SITE') ||
+					($key=='ZC_DATABASE_TYPE') ||
+					($key=='ZC_SQLITE_NAME') ||
+					($key=='ZC_SQLITE_PRE') ||
+					($key=='ZC_MYSQL_SERVER') ||
+					($key=='ZC_MYSQL_USERNAME') ||
+					($key=='ZC_MYSQL_PASSWORD') ||
+					($key=='ZC_MYSQL_NAME') ||
+					($key=='ZC_MYSQL_CHARSET') ||
+					($key=='ZC_MYSQL_PRE') ||
+					($key=='ZC_MYSQL_ENGINE') ||
+					($key=='ZC_MYSQL_PORT') ||
+					($key=='ZC_MYSQL_PERSISTENT') ||
+					($key=='ZC_PGSQL_SERVER') ||
+					($key=='ZC_PGSQL_USERNAME') ||
+					($key=='ZC_PGSQL_PASSWORD') ||
+					($key=='ZC_PGSQL_NAME') ||
+					($key=='ZC_PGSQL_CHARSET') ||
+					($key=='ZC_PGSQL_PRE') ||
+					($key=='ZC_PGSQL_PORT') ||
+					($key=='ZC_PGSQL_PERSISTENT') ||
+					($key=='ZC_SITE_TURNOFF')
+				)$option[$key]=$value;
 			}
 			$s.=var_export($option,true);
 			$s.="\r\n?>";
@@ -768,6 +841,8 @@ class ZBlogPHP {
 		foreach ($this->option as $key => $value) {
 			$this->Config('system')->$key = $value;
 		}
+
+		$this->Config('system')->ZC_BLOG_HOST = chunk_split($this->Config('system')->ZC_BLOG_HOST,1,"|");
 		$this->SaveConfig('system');
 		return true;
 	}
@@ -779,7 +854,7 @@ class ZBlogPHP {
 	 */
 	public function LoadOption(){
 
-		$array=$this->Config('system')->Data;
+		$array=$this->Config('system')->GetData();
 
 		if(empty($array))return false;
 		if(!is_array($array))return false;
@@ -788,22 +863,35 @@ class ZBlogPHP {
 			//if($key=='ZC_BLOG_HOST')continue;
 			//if($key=='ZC_BLOG_CLSID')continue;
 			//if($key=='ZC_BLOG_LANGUAGEPACK')continue;
-			if($key=='ZC_YUN_SITE')continue;
-			if($key=='ZC_DATABASE_TYPE')continue;
-			if($key=='ZC_SQLITE_NAME')continue;
-			if($key=='ZC_SQLITE_PRE')continue;
-			if($key=='ZC_MYSQL_SERVER')continue;
-			if($key=='ZC_MYSQL_USERNAME')continue;
-			if($key=='ZC_MYSQL_PASSWORD')continue;
-			if($key=='ZC_MYSQL_NAME')continue;
-			if($key=='ZC_MYSQL_CHARSET')continue;
-			if($key=='ZC_MYSQL_PRE')continue;
-			if($key=='ZC_MYSQL_ENGINE')continue;
-			if($key=='ZC_MYSQL_PORT')continue;
-			if($key=='ZC_MYSQL_PERSISTENT')continue;
-			if($key=='ZC_SITE_TURNOFF')continue;			
+			if($key=='ZC_BLOG_HOST')
+				$value=str_replace('|','',$value);
+			if(
+				($key=='ZC_YUN_SITE') ||
+				($key=='ZC_DATABASE_TYPE') ||
+				($key=='ZC_SQLITE_NAME') ||
+				($key=='ZC_SQLITE_PRE') ||
+				($key=='ZC_MYSQL_SERVER') ||
+				($key=='ZC_MYSQL_USERNAME') ||
+				($key=='ZC_MYSQL_PASSWORD') ||
+				($key=='ZC_MYSQL_NAME') ||
+				($key=='ZC_MYSQL_CHARSET') ||
+				($key=='ZC_MYSQL_PRE') ||
+				($key=='ZC_MYSQL_ENGINE') ||
+				($key=='ZC_MYSQL_PORT') ||
+				($key=='ZC_MYSQL_PERSISTENT') ||
+				($key=='ZC_PGSQL_SERVER') ||
+				($key=='ZC_PGSQL_USERNAME') ||
+				($key=='ZC_PGSQL_PASSWORD') ||
+				($key=='ZC_PGSQL_NAME') ||
+				($key=='ZC_PGSQL_CHARSET') ||
+				($key=='ZC_PGSQL_PRE') ||
+				($key=='ZC_PGSQL_PORT') ||
+				($key=='ZC_PGSQL_PERSISTENT') ||
+				($key=='ZC_SITE_TURNOFF')
+			)continue;
 			$this->option[$key]=$value;
 		}
+		if(!extension_loaded('gd'))$this->option['ZC_COMMENT_VERIFY_ENABLE'] = False;
 		return true;
 	}
 
@@ -872,23 +960,32 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	public function Verify(){
-		return $this->Verify_MD5Path(GetVars('username','COOKIE'),GetVars('password','COOKIE'));
+		$m = null;
+		$u = trim(GetVars('username','COOKIE'));
+		$p = trim(GetVars('password','COOKIE'));
+		if($this->Verify_MD5Path($u,$p,$m)==true){
+			$this->user = $m;
+			return true;
+		}
+		$this->user = new Member;
+		return false;
 	}
 
 	/**
-	 * 验证用户登录（二次MD5加zbp->guid盐后的密码）
+	 * 验证用户登录（MD5加zbp->guid盐后的密码）
 	 * @param string $name 用户名
-	 * @param string $ps_and_path 二次md5加密后的密码
+	 * @param string $ps_path_hash MD5加zbp->guid盐后的密码
+	 * @param object $member 返回读取成功的member对象
 	 * @return bool
 	 */
-	public function Verify_MD5Path($name,$ps_and_path){
-		if($name=='' && $ps_and_path=''){
+	public function Verify_MD5Path($name,$ps_path_hash,&$member=null){
+		if($name=='' || $ps_path_hash==''){
 			return false;
 		}
 		$m = $this->GetMemberByName($name);
 		if ($m->ID > 0){
-			if($m->PassWord_MD5Path == $ps_and_path){
-				$this->user=$m;
+			if($m->PassWord_MD5Path == $ps_path_hash){
+				$member=$m;
 				return true;
 			}else{
 				return false;
@@ -902,12 +999,16 @@ class ZBlogPHP {
 	 * 验证用户登录（一次MD5密码）
 	 * @param string $name 用户名
 	 * @param string $md5pw md5加密后的密码
+	 * @param object $member 返回读取成功的member对象
 	 * @return bool
 	 */
-	public function Verify_MD5($name,$md5pw){
+	public function Verify_MD5($name,$md5pw,&$member=null){
+		if($name=='' || $md5pw==''){
+			return false;
+		}
 		$m = $this->GetMemberByName($name);
 		if ($m->ID > 0){
-			return $this->Verify_Final($name,md5($md5pw . $m->Guid));
+			return $this->Verify_Final($name,md5($md5pw . $m->Guid),$member);
 		}else{
 			return false;
 		}
@@ -917,23 +1018,25 @@ class ZBlogPHP {
 	 * 验证用户登录（原始明文密码）
 	 * @param string $name 用户名
 	 * @param string $originalpw 密码明文
+	 * @param object $member 返回读取成功的member对象
 	 * @return bool
 	 */
-	public function Verify_Original($name,$originalpw){
-		return $this->Verify_MD5($name,md5($originalpw));
+	public function Verify_Original($name,$originalpw,&$member=null){
+		return $this->Verify_MD5($name,md5($originalpw),$member);
 	}
 
 	/**
 	 * 验证用户登录（数据库保存的最终运算后密码）
 	 * @param string $name 用户名
 	 * @param string $password 二次加密后的密码
+	 * @param object $member 返回读取成功的member对象
 	 * @return bool
 	 */
-	public function Verify_Final($name,$password){
+	public function Verify_Final($name,$password,&$member=null){
 		$m = $this->GetMemberByName($name);
 		if ($m->ID > 0){
 			if(strcasecmp( $m->Password ,  $password ) ==  0){
-				$this->user = $m;
+				$member = $m;
 				return true;
 			}else{
 				return false;
@@ -1030,6 +1133,8 @@ class ZBlogPHP {
 		if($level > 0){
 			$where = array(array('<=','mem_Level',$level));
 		}
+		$this->members = array();
+		$this->membersbyname = array();
 		$array=$this->GetMemberList(null,$where);
 		foreach ($array as $m) {
 			$this->members[$m->ID]=$m;
@@ -1043,6 +1148,7 @@ class ZBlogPHP {
 	 */
 	public function LoadCategorys(){
 
+		$this->categorys = array();
 		$lv0=array();
 		$lv1=array();
 		$lv2=array();
@@ -1096,6 +1202,8 @@ class ZBlogPHP {
 	 */
 	public function LoadTags(){
 
+		$this->tags = array();
+		$this->tagsbyname = array();
 		$array=$this->GetTagList();
 		foreach ($array as $t) {
 			$this->tags[$t->ID]=$t;
@@ -1110,10 +1218,11 @@ class ZBlogPHP {
 	 */
 	public function LoadModules(){
 
+		$this->modules = array();
+		$this->modulesbyfilename = array();
 		$array=$this->GetModuleList();
 		foreach ($array as $m) {
 			$this->modules[]=$m;
-
 			$this->modulesbyfilename[$m->FileName]=$m;
 		}
 
@@ -1136,8 +1245,12 @@ class ZBlogPHP {
 	 *载入当前主题
 	 */
 	public function LoadThemes(){
-		$dirs=GetDirsInDir($this->usersdir . 'theme/');
 
+		$this->themes = array();
+		$dirs=GetDirsInDir($this->usersdir . 'theme/');
+		natcasesort($dirs);
+		array_unshift($dirs,$this->theme);
+		$dirs=array_unique($dirs);
 		foreach ($dirs as $id) {
 			$app = new App;
 			if($app->LoadInfoByXml('theme',$id)==true){
@@ -1151,7 +1264,10 @@ class ZBlogPHP {
 	 *载入插件列表
 	 */
 	public function LoadPlugins(){
+
+		$this->plugins = array();
 		$dirs=GetDirsInDir($this->usersdir . 'plugin/');
+		natcasesort($dirs);
 
 		foreach ($dirs as $id) {
 			$app = new App;
@@ -1163,8 +1279,8 @@ class ZBlogPHP {
 	}
 
 	/**
-	 * 载入应用列表
-	 * @param string $type 应用类型
+	 * 载入指定应用
+	 * @param string $type 应用类型(theme|plugin)
 	 * @param string $id 应用ID
 	 * @return App
 	 */
@@ -1172,6 +1288,81 @@ class ZBlogPHP {
 		$app = new App;
 		$app->LoadInfoByXml($type,$id);
 		return $app;
+	}
+
+	/**
+	 * 载入指定应用语言包
+	 * @param string $type 应用类型(system|theme|plugin)
+	 * @param string $id 应用ID
+	 * @return null
+	 */
+	public function LoadLanguage($type,$id,$default=''){
+		if($type=='system'){
+			if($default=='')$default=$this->option['ZC_BLOG_LANGUAGEPACK'];
+			if(is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
+				$this->lang = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+			$default='zh-cn';
+			if(is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
+				$this->lang = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+			$default='en';
+			if(is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
+				$this->lang = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+		}elseif($type=='plugin' || $type=='theme'){
+			if($default=='')$default=$this->option['ZC_BLOG_LANGUAGEPACK'];
+			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+			$default='zh-cn';
+			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+			$default='en';
+			if(is_readable($f=$this->path . 'zb_users/'.$type.'/'.$id.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+		}elseif($type!='' && $id!=''){
+			if($default=='')$default=$this->option['ZC_BLOG_LANGUAGEPACK'];
+			if(is_readable($f=$this->path . $type.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+			$default='zh-cn';
+			if(is_readable($f=$this->path . $type.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+			$default='en';
+			if(is_readable($f=$this->path . $type.'/language/' . $default . '.php')){
+				$this->lang[$id] = require($f);
+				$this->langpacklist[]=array($type,$id,$default);
+				return true;
+			}
+		}
+	}
+
+	public function ReloadLanguages($default){
+		$array = $this->langpacklist;
+		$this->lang = $this->langpacklist = array();
+		foreach($array as $v){
+			$this->LoadLanguage($v[0],$v[1],$v[2]);
+		}
 	}
 
 ################################################################################################################
@@ -1187,12 +1378,17 @@ class ZBlogPHP {
 		$option=$this->option;
 		unset($option['ZC_BLOG_CLSID']);
 		unset($option['ZC_SQLITE_NAME']);
-		unset($option['ZC_SQLITE3_NAME']);
 		unset($option['ZC_MYSQL_USERNAME']);
 		unset($option['ZC_MYSQL_PASSWORD']);
 		unset($option['ZC_MYSQL_NAME']);
-		unset($option['ZC_DATABASE_TYPE']);
 		unset($option['ZC_MYSQL_PORT']);
+		unset($option['ZC_MYSQL_SERVER']);
+		unset($option['ZC_PGSQL_USERNAME']);
+		unset($option['ZC_PGSQL_PASSWORD']);
+		unset($option['ZC_PGSQL_NAME']);
+		unset($option['ZC_PGSQL_PORT']);
+		unset($option['ZC_PGSQL_SERVER']);
+		unset($option['ZC_DATABASE_TYPE']);
 
 		$this->templatetags['zbp']=&$this;
 		$this->templatetags['user']=&$this->user;
@@ -1261,6 +1457,7 @@ class ZBlogPHP {
 				$t['{$' . $k . '}']=$v;
 		}
 		foreach($option as $k => $v){
+			if(is_string($v) || is_numeric($v) || is_bool($v) )
 				$o['{#' . $k . '#}']=$v;
 		}
 		$this->replacetags = $t + $o;
@@ -1335,11 +1532,11 @@ class ZBlogPHP {
 		if(strpos($this->templates['comments'], 'AjaxCommentEnd')===false)
 			$this->templates['comments']=$this->templates['comments'] . '<label id="AjaxCommentEnd"></label>';
 
-		if(strpos($this->templates['comment'], 'id="cmt{$comment->ID}"')===false&&strpos($this->templates['comment'], 'id=\'cmt{$comment->ID}\'')===false){
-			$this->templates['comment']='<label id="cmt{$comment->ID}"></label>'. $this->templates['comment'];
+		if(strpos($this->templates['comment'], 'id="cmt{$comment.ID}"')===false&&strpos($this->templates['comment'], 'id=\'cmt{$comment.ID}\'')===false){
+			$this->templates['comment']='<label id="cmt{$comment.ID}"></label>'. $this->templates['comment'];
 		}
 
-		if(strpos($this->templates['commentpost'], 'inpVerify')===false){
+		if(strpos($this->templates['commentpost'], 'inpVerify')===false&&strpos($this->templates['commentpost'], '=\'verify\'')===false&&strpos($this->templates['commentpost'], '="verify"')===false){
 			$verify='{if $option[\'ZC_COMMENT_VERIFY_ENABLE\'] && !$user.ID}<p><input type="text" name="inpVerify" id="inpVerify" class="text" value="" size="28" tabindex="4" /> <label for="inpVerify">'.$this->lang['msg']['validcode'].'(*)</label><img style="width:{$option[\'ZC_VERIFYCODE_WIDTH\']}px;height:{$option[\'ZC_VERIFYCODE_HEIGHT\']}px;cursor:pointer;" src="{$article.ValidCodeUrl}" alt="" title="" onclick="javascript:this.src=\'{$article.ValidCodeUrl}&amp;tm=\'+Math.random();"/></p>{/if}';
 
 			if(strpos($this->templates['commentpost'], '<!--verify-->')!==false){
@@ -1426,7 +1623,7 @@ class ZBlogPHP {
 #加载数据对像List函数
 
 	/**
-	 * 自定义查询语句获取数据库数据列表
+	 * 查询指定数据结构的sql并返回Base对象列表
 	 * @param string $table 数据表
 	 * @param string $datainfo 数据字段
 	 * @param string $sql SQL操作语句
@@ -1446,14 +1643,77 @@ class ZBlogPHP {
 		return $list;
 	}
 
+	/**
+	 * 查询ID数据的指定数据结构的sql并返回Base对象列表
+	 * @param string $table 数据表
+	 * @param string $datainfo 数据字段
+	 * @param array $array ID数组
+	 * @return array
+	 */
+	function GetListCustomByArray($table,$datainfo,$array){
+		if(!is_array($array))return array();
+		if(count($array)==0)return array();
+		$where = array();
+		$where[] = array('IN',$datainfo['ID'][0],implode(',',$array));
+		$sql = $this->db->sql->Select($table,'*',$where);
+		$array=null;
+		$list=array();
+		$array=$this->db->Query($sql);
+		if(!isset($array)){return array();}
+		foreach ($array as $a) {
+			$l=new Base($table,$datainfo);
+			$l->LoadInfoByAssoc($a);
+			$list[]=$l;
+		}
+		return $list;
+	}
 
 	/**
+	 * 已改名GetListType,将在下个版中扔掉有歧义的GetList
+	 *
+	 * @deprecated 1.5
 	 * @param $type
 	 * @param $sql
 	 * @return array
 	 */
 	function GetList($type,$sql){
+		$this->SetHint('tips','$zbp->GetList()已改名为GetListType(),下个版本将会取消,请在相关源码中改用新名称.');
+		return $this->GetListType($type,$sql);
+	}
 
+	/**
+	 * 原名GetList
+	 * 查询指定类型的sql并返回指定类型对象列表
+	 * @param string $type
+	 * @param string $sql
+	 * @return array
+	 */
+	function GetListType($type,$sql){
+
+		$array=null;
+		$list=array();
+		$array=$this->db->Query($sql);
+		if(!isset($array)){return array();}
+		foreach ($array as $a) {
+			$l=new $type();
+			$l->LoadInfoByAssoc($a);
+			$list[]=$l;
+		}
+		return $list;
+	}
+
+	/**
+	 * 查询ID数据的指定类型的sql并返回指定类型对象列表
+	 * @param string $type 类型
+	 * @param array $array ID数组
+	 * @return array
+	 */
+	function GetListTypeByArray($type,$array){
+		if(!is_array($array))return array();
+		if(count($array)==0)return array();
+		$where = array();
+		$where[] = array('IN',$this->datainfo[$type]['ID'][0],implode(',',$array));
+		$sql = $this->db->sql->Select($this->table[$type],'*',$where);
 		$array=null;
 		$list=array();
 		$array=$this->db->Query($sql);
@@ -1480,11 +1740,20 @@ class ZBlogPHP {
 		if(empty($where)){$where = array();}
 		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
 
-		$array = $this->GetList('Post',$sql);
+		$array = $this->GetListType('Post',$sql);
 		foreach ($array as $a) {
 			$this->posts[$a->ID]=$a;
 		}
 		return $array;
+	}
+
+	/**
+	 * 通过ID数组获取文章实例
+	 * @param array $array
+	 * @return array Posts
+	 */
+	function GetPostByArray($array){
+		return $this->GetListTypeByArray('Post',$array);
 	}
 
 	/**
@@ -1502,7 +1771,7 @@ class ZBlogPHP {
 		if(empty($where)){$where = array();}
 		if(is_array($where))array_unshift($where,array('=','log_Type','0'));
 		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
-		$array = $this->GetList('Post',$sql);
+		$array = $this->GetListType('Post',$sql);
 
 		foreach ($array as $a) {
 			$this->posts[$a->ID]=$a;
@@ -1534,7 +1803,7 @@ class ZBlogPHP {
 		if(empty($where)){$where = array();}
 		if(is_array($where))array_unshift($where,array('=','log_Type','1'));
 		$sql = $this->db->sql->Select($this->table['Post'],$select,$where,$order,$limit,$option);
-		$array = $this->GetList('Post',$sql);
+		$array = $this->GetListType('Post',$sql);
 		foreach ($array as $a) {
 			$this->posts[$a->ID]=$a;
 		}
@@ -1554,7 +1823,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Comment'],$select,$where,$order,$limit,$option);
-		$array=$this->GetList('Comment',$sql);
+		$array=$this->GetListType('Comment',$sql);
 		foreach ($array as $comment) {
 			$this->comments[$comment->ID]=$comment;
 		}
@@ -1574,7 +1843,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Member'],$select,$where,$order,$limit,$option);
-		return $this->GetList('Member',$sql);
+		return $this->GetListType('Member',$sql);
 
 	}
 
@@ -1590,7 +1859,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Tag'],$select,$where,$order,$limit,$option);
-		return $this->GetList('Tag',$sql);
+		return $this->GetListType('Tag',$sql);
 
 	}
 
@@ -1606,7 +1875,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Category'],$select,$where,$order,$limit,$option);
-		return $this->GetList('Category',$sql);
+		return $this->GetListType('Category',$sql);
 
 	}
 
@@ -1622,7 +1891,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Module'],$select,$where,$order,$limit,$option);
-		return $this->GetList('Module',$sql);
+		return $this->GetListType('Module',$sql);
 	}
 
 	/**
@@ -1637,7 +1906,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Upload'],$select,$where,$order,$limit,$option);
-		return $this->GetList('Upload',$sql);
+		return $this->GetListType('Upload',$sql);
 	}
 
 	/**
@@ -1652,7 +1921,7 @@ class ZBlogPHP {
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Counter'],$select,$where,$order,$limit,$option);
-		return $this->GetList('Counter',$sql);
+		return $this->GetListType('Counter',$sql);
 	}
 
 
@@ -1740,14 +2009,31 @@ class ZBlogPHP {
 	function GetModuleByID($id){
 		if($id==0){
 			$m = new Module;
-			return $m;
 		}else{
 			foreach ($this->modules as $key => $value) {
 				if($value->ID==$id)return $value;
 			}
 			$m = new Module;
-			return $m;
 		}
+		return $m;
+	}
+
+	/**
+	 * 通过FileName获取模块实例
+	 * @param string $fn
+	 * @return Module
+	 */
+	function GetModuleByFileName($fn){
+		$fn=trim($fn);
+		if(!$fn){
+			$m = new Module;
+		}else{
+			if(isset($this->modulesbyfilename[$fn])){
+				return $this->modulesbyfilename[$fn];
+			}
+			$m = new Module;
+		}
+		return $m;
 	}
 
 	/**
@@ -1756,11 +2042,17 @@ class ZBlogPHP {
 	 * @return Member
 	 */
 	function GetMemberByID($id){
+		if($id==0){
+			$m = new Member;
+			$m->Guid=GetGuid();
+			return $m;
+		}
 		if(isset($this->members[$id])){
 			return $this->members[$id];
 		}
+
 		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array('=','mem_ID',$id)),null,1,null);
-		$am = $this->GetList('Member',$sql);
+		$am = $this->GetListType('Member',$sql);
 		if(count($am) == 1){
 			$m = $am[0];
 			$this->members[$m->ID] = $m;
@@ -1770,48 +2062,103 @@ class ZBlogPHP {
 
 		$m = new Member;
 		$m->Guid=GetGuid();
-		$this->members[$id] = $m;
 		return $m;
 	}
-	
+
 	/**
-	 * 通过用户名获取用户实例
+	 * 通过用户名获取用户实例(不区分大小写)
 	 * @param string $name
 	 * @return Member
 	 */
 	function GetMemberByName($name){
+		$name=trim($name);
+		if (!$name || !CheckRegExp($name, '[username]'))return new Member;
+
 		if(isset($this->membersbyname[$name])){
 			return $this->membersbyname[$name];
+		}else{
+			$array = array_keys($this->membersbyname);
+			foreach($array as $k=>$v){
+				if(strcasecmp($name,$v)==0){
+					return $this->membersbyname[$v];
+				}
+			}
 		}
-		
-		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array('=','mem_Name',$name)),null,1,null);
-		$am = $this->GetList('Member',$sql);
-		if(count($am) == 1){
+
+		$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
+		$sql = $this->db->sql->Select($this->table['Member'],'*',array(array($like,'mem_Name',$name)),null,1,null);
+		$am = $this->GetListType('Member',$sql);
+		if(count($am) > 0){
 			$m = $am[0];
 			$this->members[$m->ID] = $m;
 			$this->membersbyname[$m->Name] = &$this->members[$m->ID];
 			return $m;
 		};
-		
+
 		$m = new Member;
 		$m->Guid=GetGuid();
-		$this->membersbyname[$name] = $m;
 		return $m;
 	}
 
 	/**
-	 * 通过获取用户名或别名实例
+	 * 通过获取用户名或别名实例(不区分大小写)
 	 * @param string $name
 	 * @return Member
 	 */
-	function GetMemberByAliasOrName($name){
+	function GetMemberByNameOrAlias($name){
 		$name=trim($name);
+		if (!$name || !CheckRegExp($name, '[username]'))return new Member;
+
 		foreach ($this->members as $key => &$value) {
-			if(($value->Name==$name)||($value->Alias==$name)){
+			if(strcasecmp($value->Name,$name)==0||strcasecmp($value->Alias,$name)==0){
 				return $value;
 			}
 		}
+
+		$like=($this->db->type == 'pgsql')?'ILIKE':'LIKE';
+		$sql=$this->db->sql->Select(
+			$this->table['Member'],'*',
+			//where
+				$this->db->sql->ParseWhere(array(array($like,'mem_Name',$name)),'')
+				.
+				$this->db->sql->ParseWhere(array(array($like,'mem_Alias',$name)),'OR'),
+			null,
+			1,
+			null
+		);
+		$am = $this->GetListType('Member',$sql);
+		if(count($am) > 0){
+			$m = $am[0];
+			$this->members[$m->ID] = $m;
+			$this->membersbyname[$m->Name] = &$this->members[$m->ID];
+			return $m;
+		};
+
 		return new Member;
+	}
+
+	/**
+	 * 检查指定名称的用户是否存在(不区分大小写)
+	 */
+	function CheckMemberNameExist($name){
+		$m=$this->GetMemberByName($name);
+		if($m->ID>0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	/**
+	 * 检查指定名称或别名的用户是否存在(不区分大小写)
+	 */
+	function CheckMemberByNameOrAliasExist($name){
+		$m=$this->GetMemberByNameOrAlias($name);
+		if($m->ID>0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	/**
@@ -1901,11 +2248,12 @@ class ZBlogPHP {
 	}
 
 	/**
-	 * 通过类似'{1}{2}{3}{4}{4}'载入tags
+	 * 通过类似'{1}{2}{3}{4}'载入tags
 	 * @param $s
 	 * @return array
 	 */
 	function LoadTagsByIDString($s){
+		$s=trim($s);
 		if($s=='')return array();
 		$s=str_replace('}{', '|', $s);
 		$s=str_replace('{', '', $s);
@@ -1953,6 +2301,7 @@ class ZBlogPHP {
 	 * @return array
 	 */
 	function LoadTagsByNameString($s){
+		$s=trim($s);
 		$s=str_replace(';', ',', $s);
 		$s=str_replace('，', ',', $s);
 		$s=str_replace('、', ',', $s);
@@ -1989,6 +2338,19 @@ class ZBlogPHP {
 		}
 	}
 
+	/**
+	 * 通过数组array[111,333,444,555,666]转换成存储串
+	 * @param array $array 标签ID数组
+	 * @return string
+	 */
+	function ConvertTagIDtoString($array){
+		$s='';
+		foreach($array as $a){
+			$s .= '{' . $a . '}';
+		}
+		return $s;
+	}
+
 ################################################################################################################
 #杂项
 	/**
@@ -2015,7 +2377,7 @@ class ZBlogPHP {
 		//return HasNameInString($s,$name);
 		return in_array($name,$this->activeapps);
 	}
-	
+
 	/**
 	 * 检查应用是否安装并启用
 	 * @param string $name 应用ID（插件或主题）
@@ -2098,21 +2460,22 @@ class ZBlogPHP {
 			if($signal=='good')$content=$this->lang['msg']['operation_succeed'];
 			if($signal=='bad')$content=$this->lang['msg']['operation_failed'];
 		}
+		$content=substr($content,0,255);
 		if($this->hint1==null){
 			$this->hint1=$signal . '|' . $content;
-			setcookie("hint_signal1", $signal . '|' . $content,time()+3600,$this->cookiespath);
+			setcookie("hint_signal1", $signal . '|' . $content,0,$this->cookiespath);
 		}elseif($this->hint2==null){
 			$this->hint2=$signal . '|' . $content;
-			setcookie("hint_signal2", $signal . '|' . $content,time()+3600,$this->cookiespath);
+			setcookie("hint_signal2", $signal . '|' . $content,0,$this->cookiespath);
 		}elseif($this->hint3==null){
 			$this->hint3=$signal . '|' . $content;
-			setcookie("hint_signal3", $signal . '|' . $content,time()+3600,$this->cookiespath);
+			setcookie("hint_signal3", $signal . '|' . $content,0,$this->cookiespath);
 		}elseif($this->hint4==null){
 			$this->hint4=$signal . '|' . $content;
-			setcookie("hint_signal4", $signal . '|' . $content,time()+3600,$this->cookiespath);
+			setcookie("hint_signal4", $signal . '|' . $content,0,$this->cookiespath);
 		}elseif($this->hint5==null){
 			$this->hint5=$signal . '|' . $content;
-			setcookie("hint_signal5", $signal . '|' . $content,time()+3600,$this->cookiespath);
+			setcookie("hint_signal5", $signal . '|' . $content,0,$this->cookiespath);
 		}
 	}
 
@@ -2157,7 +2520,7 @@ class ZBlogPHP {
 		if((int)$idortext==2){
 			Http404();
 		}
-//die(var_dump(headers_list()));
+
 		ZBlogException::$error_id=(int)$idortext;
 		ZBlogException::$error_file=$file;
 		ZBlogException::$error_line=$line;
@@ -2199,7 +2562,7 @@ class ZBlogPHP {
 	 * 显示验证码
 	 *
 	 * @api Filter_Plugin_Zbp_ShowValidCode 如该接口未被挂载则显示默认验证图片
-	 * @param string $id 页面ID
+	 * @param string $id 命名事件
 	 * @return mixed
 	 */
 	function ShowValidCode($id=''){
@@ -2210,7 +2573,7 @@ class ZBlogPHP {
 
 		$_vc = new ValidateCode();
 		$_vc->GetImg();
-		setcookie('zbpvalidcode' . md5($this->guid . $id), md5( $this->guid . date("Ymd") . $_vc->GetCode() ), null,$this->cookiespath);
+		setcookie('captcha_' . crc32($this->guid . $id), md5( $this->guid . date("Ymd") . $_vc->GetCode() ), null,$this->cookiespath);
 	}
 
 
@@ -2219,7 +2582,7 @@ class ZBlogPHP {
 	 *
 	 * @api Filter_Plugin_Zbp_CheckValidCode 如该接口未被挂载则比对默认验证码
 	 * @param string $vaidcode 验证码数值
-	 * @param string $id 页面ID
+	 * @param string $id 命名事件
 	 * @return bool
 	 */
 	function CheckValidCode($vaidcode,$id=''){
@@ -2228,7 +2591,7 @@ class ZBlogPHP {
 			return $fpname($vaidcode,$id);//*
 		}
 
-		$original=GetVars('zbpvalidcode' . md5($this->guid . $id),'COOKIE');
+		$original=GetVars('captcha_' . crc32($this->guid . $id),'COOKIE');
 		if(md5( $this->guid . date("Ymd") . $vaidcode)==$original) return true;
 	}
 
@@ -2249,7 +2612,7 @@ class ZBlogPHP {
 	 */
 	function StartGzip(){
 
-		if(!headers_sent()&&$this->isgzip&&isset($this->option['ZC_GZIP_ENABLE'])&&$this->option['ZC_GZIP_ENABLE']){
+		if( !headers_sent() && $this->isgzip && $this->option['ZC_GZIP_ENABLE'] ){
 			if(ini_get('output_handler'))return false;
 			$a=ob_list_handlers();
 			if(in_array('ob_gzhandler',$a) || in_array('zlib output compression',$a))return false;
@@ -2266,16 +2629,120 @@ class ZBlogPHP {
 
 	/**
 	 * 跳转到安装页面
-	 * @param bool $yun 是否云主机（SAE等）
 	 */
-	function  RedirectInstall($yun=false){
-		if(!$yun){
-			if(!$this->option['ZC_DATABASE_TYPE']){Redirect('./zb_install/index.php');}
-		}else{
-			if($this->option['ZC_YUN_SITE']){
-				if($this->Config('system')->CountItem()==0){Redirect('./zb_install/index.php');}
-			}
+	function  RedirectInstall(){
+
+		if(!$this->option['ZC_DATABASE_TYPE'])
+			Redirect('./zb_install/index.php');
+
+		if($this->option['ZC_YUN_SITE'])
+			if($this->Config('system')->CountItem()==0)
+				Redirect('./zb_install/index.php');
+	}
+
+
+	/**
+	 * 检测当前url，如果不符合设置就跳转到固定域名的链接
+	 */
+	function  RedirectPermanentDomain(){
+
+		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==false)return;
+		if($this->option['ZC_PERMANENT_DOMAIN_REDIRECT']==false)return;
+
+		$host = GetCurrentHost(ZBP_PATH , $null);
+
+		if(stripos($host,$this->host)===false){
+			$u=GetRequestUri();
+			$u=$this->host . substr($u,1,strlen($u));
+			Redirect301($u);
 		}
 	}
-	
+	/**
+	 * 对表名和数据结构进行预转换
+	 */
+	private $table_datainfo_hash = null;
+	function ConvertTableAndDatainfo(){
+
+		$now = crc32(serialize($this->table + $this->datainfo));
+		if($this->table_datainfo_hash!==$now){
+			$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
+			if($this->db->type == 'pgsql'){
+				foreach($this->datainfo as $key=>&$value){
+					foreach($value as $k2=>&$v2){
+						$v2[0]=strtolower($v2[0]);
+					}
+				}
+			}
+			$this->table_datainfo_hash = crc32(serialize($this->table + $this->datainfo));
+		}
+	}
+
+	/**
+	 * 获取全部置顶文章（优先从cache里读数组）
+	 */
+	function GetTopArticle(){
+		if(!is_object($this->cache))return array();
+		$articles_top_notorder_idarray = unserialize($this->cache->top_post_array);
+		if(!is_array($articles_top_notorder_idarray)){
+			CountTopArticle(null,null);
+			$articles_top_notorder_idarray = unserialize($this->cache->top_post_array);
+		}
+		$articles_top_notorder=$this->GetPostByArray($articles_top_notorder_idarray);
+		return $articles_top_notorder;
+	}
+
+	/**
+	 * 获取已激活插件名数组
+	 */
+	function GetActivePlugin(){
+		$ap=explode("|", $this->option['ZC_USING_PLUGIN_LIST']);
+		$ap=array_unique($ap);
+		return $ap;
+	}
+
+	/**
+	 * 注册PostType
+	 * int $typeid 系统定义在0-99，插件自定义100-255
+	 * string $urlrule 默认是取Page类型的Url Rule
+	 * string $template 默认模板名page
+	 */
+	function RegPostType($typeid,$name,$urlrule='',$template=''){
+		if($urlrule=='')$urlrule=$this->option['ZC_PAGE_REGEX'];
+		if($template=='')$template='page';
+		$typeid=(int)$typeid;
+		$name=strtolower(trim($name));
+		if($typeid>99){
+			if(isset($this->posttype[$typeid]))$this->ShowError(87,__FILE__,__LINE__);
+		}
+		$this->posttype[$typeid]=array($name,$urlrule,$template);
+	}
+	function GetPostType_Name($typeid){
+		if(isset($this->posttype[$typeid]))
+			return $this->posttype[$typeid][0];
+		return '';
+	}
+	function GetPostType_UrlRule($typeid){
+		if(isset($this->posttype[$typeid]))
+			return $this->posttype[$typeid][1];
+		else
+			return $this->option['ZC_PAGE_REGEX'];
+	}
+	function GetPostType_Template($typeid){
+		if(isset($this->posttype[$typeid]))
+			return $this->posttype[$typeid][2];
+		else
+			return 'single';
+	}
+
+	/**
+	 * 注册Action
+	 */
+	function RegAction($name,$level,$title){
+		$this->actions[$name]=$level;
+		$this->lang['actions'][$name]=$title;
+	}
+	function GetAction_Title($name){
+		if(isset($this->lang['actions'][$name]))return $this->lang['actions'][$name];
+		return $name;
+	}
 }

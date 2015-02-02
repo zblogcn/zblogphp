@@ -1,56 +1,47 @@
-﻿$(document).ready(function(){
-	var s=document.location;
-	$("#divNavBar a").each(function(){
-		if(this.href==s.toString().split("#")[0]){$(this).addClass("on");return false;}
+﻿$(document).ready(function() {
+	var s = document.location;
+	$("#divNavBar a").each(function() {
+		if (this.href == s.toString().split("#")[0]) {
+			$(this).addClass("on");
+			return false;
+		}
 	});
 });
 
-
-function ReComment_CallBack(){for(var i=0;i<=ReComment_CallBack.list.length-1;i++){ReComment_CallBack.list[i]()}}
-ReComment_CallBack.list=[];
-ReComment_CallBack.add=function(s){ReComment_CallBack.list.push(s)};
-
-
-//重写了common.js里的同名函数
-function RevertComment(i){
+zbp.plugin.unbind("comment.reply", "system");
+zbp.plugin.on("comment.reply", "default", function(id) {
+	var i = id;
 	$("#inpRevID").val(i);
-	var frm=$('#divCommentPost'),cancel=$("#cancel-reply"),temp = $('#temp-frm');
+	var frm = $('#divCommentPost'),
+		cancel = $("#cancel-reply");
 
+	frm.before($("<div id='temp-frm' style='display:none'>")).addClass("reply-frm");
+	$('#AjaxComment' + i).before(frm);
 
-	var div = document.createElement('div');
-	div.id = 'temp-frm';
-	div.style.display = 'none';
-	frm.before(div);
-
-
-	$('#AjaxCommentEnd'+i).before(frm);
-
-	frm.addClass("reply-frm");
-	
-	cancel.show();
-	cancel.click(function(){
+	cancel.show().click(function() {
+		var temp = $('#temp-frm');
 		$("#inpRevID").val(0);
-		var temp = $('#temp-frm'), frm=$('#divCommentPost');
-		if ( ! temp.length || ! frm.length )return;
-		temp.before(frm);
+		if (!temp.length || !frm.length) return;
 		temp.remove();
 		$(this).hide();
 		frm.removeClass("reply-frm");
-		ReComment_CallBack();
 		return false;
 	});
-	try { $('#txaArticle').focus(); }
-	catch(e) {}
-	ReComment_CallBack();
+	try {
+		$('#txaArticle').focus();
+	} catch (e) {}
 	return false;
-}
+});
 
-//重写GetComments，防止评论框消失
-function GetComments(logid,page){
+zbp.plugin.on("comment.get", "default", function (logid, page) {
 	$('span.commentspage').html("Waiting...");
-	$.get(str00+"zb_system/cmd.asp?act=CommentGet&logid="+logid+"&page="+page, function(data){
-		$("#cancel-reply").click();
+	$.get(str00 + "zb_system/cmd.php?act=CommentGet&logid=" + logid + "&page=" + page, function(data) {
 		$('#AjaxCommentBegin').nextUntil('#AjaxCommentEnd').remove();
 		$('#AjaxCommentEnd').before(data);
+		$("#cancel-reply").click();
 	});
-}
+})
+
+zbp.plugin.on("comment.postsuccess", "default", function () {
+	$("#cancel-reply").click();
+});

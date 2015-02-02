@@ -13,7 +13,8 @@ Add_Filter_Plugin('Filter_Plugin_Mebmer_Avatar','Gravatar_Url');
 
 function InstallPlugin_Gravatar(){
 	global $zbp;
-	$zbp->Config('Gravatar')->default_url='http://cn.gravatar.com/avatar/{%emailmd5%}?s=40&d={%source%}';
+	//$zbp->Config('Gravatar')->default_url='http://cn.gravatar.com/avatar/{%emailmd5%}?s=40&d={%source%}';
+	$zbp->Config('Gravatar')->default_url='http://gravatar.duoshuo.com/avatar/{%emailmd5%}?s=60&d=mm&r=G';
 	$zbp->Config('Gravatar')->source='{%host%}zb_users/avatar/0.png';
 	$zbp->Config('Gravatar')->local_priority=0;	
 	$zbp->SaveConfig('Gravatar');	

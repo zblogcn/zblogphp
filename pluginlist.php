@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $s=file_get_contents('zb_system/function/c_system_plugin.php');
 

@@ -156,7 +156,7 @@ class Networkfile_get_contents implements iNetwork{
 
 		$this->option['header'] = implode("\r\n",$this->httpheader);
 		//$this->httpheader[] = 'Referer: ' . 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-		
+
 		if($this->maxredirs>0){
 			$this->option['follow_location']=1;
 			$this->option['max_redirects']=$this->maxredirs;

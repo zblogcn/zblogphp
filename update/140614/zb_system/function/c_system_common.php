@@ -839,3 +839,24 @@ function Debug_PrintConstants(){
 	if(isset($a['user']))$a=$a['user'];
 	return print_r($a,true);
 }
+
+/**
+ * 对数组内的字符串进行htmlspecialchars
+ * @param array $array 待过滤字符串
+ * @return array 
+ * @since 1.4
+ */
+function htmlspecialchars_array($array) {
+
+	foreach ($array as $key => &$value) {
+		if (is_array($value)) {
+			$value = htmlspecialchars_array($value);
+		}
+		else if (is_string($value)) {
+			$value = htmlspecialchars($value);
+		}
+	}
+
+	return $array;
+
+}

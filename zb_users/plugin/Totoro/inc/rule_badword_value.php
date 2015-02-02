@@ -9,7 +9,7 @@ function badword_value($author, $content, $orig_content, &$sv, $config_sv, $conf
 	
 	if ($regex != "//si") 
 	{
-		preg_match_all($regex, $content, $matches);
+		preg_match_all($regex, $author['name'] . $author['url'] . $content, $matches);
 		$count = count($matches[0]);
 		$sv += $config_sv * $count;
 	}

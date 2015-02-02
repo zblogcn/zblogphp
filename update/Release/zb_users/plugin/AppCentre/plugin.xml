@@ -2,7 +2,7 @@
 <plugin version="php">
 <id>AppCentre</id>
 <name>应用中心</name>
-<url>http://www.rainbowsoft.org/</url>
+<url>http://www.zblogcn.com/</url>
 <note>Z-BlogPHP版的资源大本营</note>
 <description></description>
 <path>main.php</path>
@@ -18,10 +18,10 @@
   <email></email>
   <url></url>
 </source>
-<adapted>130707</adapted>
-<version>1.4</version>
+<adapted>131221</adapted>
+<version>1.5</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2014-06-19</modified>
+<modified>2015-02-01</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

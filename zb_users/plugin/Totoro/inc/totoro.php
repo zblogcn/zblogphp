@@ -63,19 +63,20 @@ class Totoro_Class
 		$matches = array();
 		$regex = "/(([\w\d]+\.)+\w{2,})/si";
 		preg_match_all($regex, $content, $matches);
-	
-		if (substr($black_list, strlen($black_list) - 1, 1) != '|') $black_list .= '|';
+		if (substr($black_list, strlen($black_list) - 1, 1) == '|') $black_list = substr($black_list, 0, strlen($black_list) - 1);
 		
 		foreach($matches[0] as $value)
 		{
-			$value = str_replace('.', '\\.', $value);
-			$tmp_list .= $value . '|';
+			$value = preg_quote($value);
+			if ($value != '' && preg_match("/" . $black_list . "/si", $content) == 0) {
+				$black_list .= '|' . $value;
+				$zbp->SetHint('good', '新黑词被加入：' . $value);
+			}
+			
 		}
 		
-		$zbp->SetHint('good', '新黑词被加入：' . $tmp_list);
-		$black_list .= $tmp_list;
-		if (substr($black_list, strlen($black_list) - 1, 1) == '|') $black_list = substr($black_list, 0, strlen($black_list) - 1);
 		
+
 		$zbp->Config('Totoro')->BLACK_LIST_BADWORD_LIST = $black_list;
 		$zbp->SaveConfig('Totoro');
 

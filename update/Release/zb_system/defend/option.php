@@ -24,10 +24,10 @@ return array(
 	'ZC_BLOG_CSS' => 'default',
 	'ZC_BLOG_COPYRIGHT' => 'Copyright Your WebSite.Some Rights Reserved.',
 	'ZC_BLOG_LANGUAGE' => 'zh-CN',
-	'ZC_BLOG_LANGUAGEPACK' => 'SimpChinese',
+	'ZC_BLOG_LANGUAGEPACK' => 'zh-cn',
 
 	// '----------------------------数据库配置---------------------------------------
-	//mysql|sqlite|sqlite3|pdo_mysql
+	//mysql|mysqli|pdo_mysql|sqlite|sqlite3|pdo_sqlite
 	'ZC_DATABASE_TYPE'=> '',
 
 	'ZC_SQLITE_NAME' => '',
@@ -42,21 +42,34 @@ return array(
 	'ZC_MYSQL_ENGINE'=>'MyISAM',
     'ZC_MYSQL_PORT' => '3306',
     'ZC_MYSQL_PERSISTENT' => false,
+	
+    'ZC_PGSQL_SERVER' => 'localhost',
+    'ZC_PGSQL_USERNAME' => 'postgres',
+    'ZC_PGSQL_PASSWORD' => '',
+    'ZC_PGSQL_NAME' => '',
+    'ZC_PGSQL_CHARSET' => 'utf8',
+    'ZC_PGSQL_PRE' => 'zbp_',
+    'ZC_PGSQL_PORT' => '5432',
+    'ZC_PGSQL_PERSISTENT' => false,
 
 	// '---------------------------------插件----------------------------------------
 	'ZC_USING_PLUGIN_LIST' => '',
 
 	// '-------------------------------全局配置-----------------------------------
 	'ZC_YUN_SITE'=>'',
-	'ZC_DEBUG_MODE' => true,
-	'ZC_DEBUG_MODE_STRICT' => false,
-	'ZC_DEBUG_MODE_WARNING' => true,
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
 	'ZC_UPDATE_INFO_URL' => 'http://update.zblogcn.com/info/',
 	// '固定域名,默认为false,如启用则'ZC_BLOG_HOST生效而'ZC_MULTI_DOMAIN_SUPPORT无效
 	'ZC_PERMANENT_DOMAIN_ENABLE' => false,
+	'ZC_PERMANENT_DOMAIN_REDIRECT' => true,
 	'ZC_MULTI_DOMAIN_SUPPORT' => false,
+
+	//
+	'ZC_DEBUG_MODE' => false,
+	'ZC_DEBUG_MODE_STRICT' => false,
+	'ZC_DEBUG_MODE_WARNING' => true,
+	'ZC_DEBUG_LOG_ERROR' => false,
 
 	// '当前 Z-Blog 版本
 
@@ -164,7 +177,9 @@ return array(
 	'ZC_ADMIN_HTML5_ENABLE'=>true,
 	// '代码高亮
 	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
-
+	'ZC_LOADMEMBERS_LEVEL' => 0,
+	'ZC_LAST_VERSION' => '',
+	
 	// '源码编辑高亮
 	'ZC_CODEMIRROR_ENABLE' => true,
 	'ZC_HTTP_LASTMODIFIED' => false,
@@ -174,5 +189,7 @@ return array(
 	'ZC_RELATEDLIST_COUNT'=>10,
 	'ZC_RUNINFO_DISPLAY' => true,
 	'ZC_POST_ALIAS_USE_ID_NOT_TITLE' => false,
+	'ZC_COMPATIBLE_ASP_URL' => true,
+	'ZC_LARGE_DATA' => false,
 )
 ?>
