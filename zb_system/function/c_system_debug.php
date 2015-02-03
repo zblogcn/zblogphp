@@ -58,7 +58,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 
 	if(ZBlogException::$isdisable==true)return true;
 
-	foreach ($GLOBALS['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname('Error',array($errno, $errstr, $errfile, $errline));
 	}
 
@@ -109,7 +109,7 @@ function Debug_Exception_Handler($exception) {
 
 	if(ZBlogException::$isdisable==true)return true;
 
-	foreach ($GLOBALS['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname('Exception',$exception);
 	}
 
@@ -134,7 +134,7 @@ function Debug_Shutdown_Handler() {
 
 		if(ZBlogException::$isdisable==true)return true;
 
-		foreach ($GLOBALS['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname('Shutdown',$error);
 		}
 

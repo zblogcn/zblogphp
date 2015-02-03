@@ -13,12 +13,12 @@ $zbp->Load();
 
 $action = 'search';
 
-foreach ($GLOBALS['Filter_Plugin_Search_Begin'] as $fpname => &$fpsignal) {$fpname();
+foreach ($GLOBALS['hooks']['Filter_Plugin_Search_Begin'] as $fpname => &$fpsignal) {$fpname();
 }
 
 ViewIndex();
 
-foreach ($GLOBALS['Filter_Plugin_Search_End'] as $fpname => &$fpsignal) {$fpname();
+foreach ($GLOBALS['hooks']['Filter_Plugin_Search_End'] as $fpname => &$fpsignal) {$fpname();
 }
 
 RunTime();

@@ -13,7 +13,7 @@ class Module extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Module'],$zbp->datainfo['Module']);
+		parent::__construct($zbp->table['Module'],$zbp->datainfo['Module'],__CLASS__);
 	}
 
 	/**
@@ -70,9 +70,10 @@ class Module extends Base{
 	 */
 	function Save(){
 		global $zbp;
-		foreach ($GLOBALS['Filter_Plugin_Module_Save'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Save'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		if($this->Source=='theme'){
 			if(!$this->FileName)return true;
@@ -93,9 +94,10 @@ class Module extends Base{
 	 */
 	function Del(){
 		global $zbp;
-		foreach ($GLOBALS['Filter_Plugin_Module_Del'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Del'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		if($this->Source=='theme'){
 			if(!$this->FileName)return true;

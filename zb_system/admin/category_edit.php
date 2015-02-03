@@ -102,7 +102,7 @@ foreach ($zbp->categorysbyorder as $k => $v) {
 			</p>
 			<!-- 1号输出接口 -->
 			<div id='response' class='editmod2'>
-				<?php foreach ($GLOBALS['Filter_Plugin_Category_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}?>
+				<?php foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}?>
 			</div>
 			<p>
 				<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" /></p>

@@ -41,10 +41,10 @@ class Template{
 	 */
 	public function GetTemplate($name)
 	{
-		foreach ($GLOBALS['Filter_Plugin_Template_GetTemplate'] as $fpname => &$fpsignal)
-		{
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Template_GetTemplate'] as $fpname => &$fpsignal){
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this,$name);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return $this->path . $name . '.php';
 	}
@@ -109,10 +109,10 @@ class Template{
 	public function Compiling($content)
 	{
 
-		foreach ($GLOBALS['Filter_Plugin_Template_Compiling_Begin'] as $fpname => &$fpsignal)
-		{
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Compiling_Begin'] as $fpname => &$fpsignal){
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn = $fpname($this,$content);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 
 		// Step 1: 替换<?php块
@@ -140,10 +140,10 @@ class Template{
 		// Step N: 解析PHP
 		$this->parsePHP2($content);
 
-		foreach ($GLOBALS['Filter_Plugin_Template_Compiling_End'] as $fpname => &$fpsignal)
-		{
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Compiling_End'] as $fpname => &$fpsignal){
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this,$content);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 
 		return $content;

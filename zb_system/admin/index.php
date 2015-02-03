@@ -16,7 +16,7 @@ $action=GetVars('act','GET');
 
 if(($action=='')||($action==null)){$action='admin';}
 
-foreach ($GLOBALS['Filter_Plugin_Admin_Begin'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Begin'] as $fpname => &$fpsignal) {$fpname();}
 
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
 
@@ -88,7 +88,7 @@ $f();
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 
-foreach ($GLOBALS['Filter_Plugin_Admin_End'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_End'] as $fpname => &$fpsignal) {$fpname();}
 
 RunTime();
 ?>

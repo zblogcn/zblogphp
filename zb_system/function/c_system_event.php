@@ -66,6 +66,7 @@ function Logout() {
  */
 function GetPost($idorname, $option = null) {
 	global $zbp;
+	$post=null;
 
 	if (!is_array($option)) {
 		$option = array();
@@ -85,14 +86,18 @@ function GetPost($idorname, $option = null) {
 			$w[]=array('=','log_Type','1');
 		}
 		$articles = $zbp->GetPostList('*', $w, null, 1, null);
-		if (count($articles) == 0) {
-			return new Post;
-		}
-		return $articles[0];
+		if (count($articles) == 0)
+			$post=new Post;
+		else
+			$post=$articles[0];
+	}elseif(is_integer($idorname)){
+		$post=$zbp->GetPostByID($idorname);
 	}
-	if(is_integer($idorname)){
-		return $zbp->GetPostByID($idorname);
+
+	foreach ($GLOBALS['hooks']['Filter_Plugin_GetPost_Result'] as $fpname => &$fpsignal) {
+		$fpreturn = $fpname($post);
 	}
+	return $post;
 }
 
 /**
@@ -108,6 +113,7 @@ function GetPost($idorname, $option = null) {
  */
 function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = null, $search = null, $option = null) {
 	global $zbp;
+	$list = array();
 
 	if (!is_array($option)) {
 		$option = array();
@@ -139,8 +145,6 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 	}
 
 	$w[] = array('=', 'log_Status', 0);
-
-	$articles = array();
 
 	if (!is_null($cate)) {
 		$category = new Category;
@@ -211,23 +215,26 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 	$select = '*';
 	$order = array('log_PostTime' => 'DESC');
 
-	foreach ($GLOBALS['Filter_Plugin_LargeData_GetList'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_GetList'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($select,$w,$order,$count,$option);
 	}
 
-	$articles = $zbp->GetArticleList($select, $w, $order, $count, null, false);
+	$list = $zbp->GetArticleList($select, $w, $order, $count, null, false);
 
 	if ($option['is_related']) {
-		foreach ($articles as $k => $a) {
+		foreach ($list as $k => $a) {
 			if ($a->ID == $option['is_related'])
-				unset($articles[$k]);
+				unset($list[$k]);
 		}
-		if (count($articles) == $count){
-			array_pop($articles);
+		if (count($list) == $count){
+			array_pop($list);
 		}
 	}
 
-	return $articles;
+	foreach ($GLOBALS['hooks']['Filter_Plugin_GetList_Result'] as $fpname => &$fpsignal) {
+		$fpreturn = $fpname($list);
+	}
+	return $list;
 
 }
 
@@ -240,7 +247,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 function ViewIndex(){
 	global $zbp,$action;
 
-	foreach ($GLOBALS['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
@@ -279,7 +286,7 @@ function ViewIndex(){
 function ViewFeed(){
 	global $zbp;
 
-	foreach ($GLOBALS['Filter_Plugin_ViewFeed_Begin'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewFeed_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
@@ -317,7 +324,7 @@ function ViewFeed(){
 function ViewSearch(){
 	global $zbp;
 
-	foreach ($GLOBALS['Filter_Plugin_ViewSearch_Begin'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewSearch_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
@@ -382,7 +389,7 @@ function ViewSearch(){
 	$zbp->template->SetTags('comments',array());
 	$zbp->template->SetTemplate($article->Template);
 
-	foreach ($GLOBALS['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname($zbp->template);
 	}
 
@@ -401,7 +408,7 @@ function ViewSearch(){
 function ViewAuto($inpurl) {
 	global $zbp;
 
-	foreach ($GLOBALS['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($inpurl);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
@@ -501,7 +508,7 @@ function ViewAuto($inpurl) {
 
 	}
 
-	foreach ($GLOBALS['Filter_Plugin_ViewAuto_End'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewAuto_End'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($url);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
@@ -537,7 +544,7 @@ function ViewAuto($inpurl) {
 function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	global $zbp;
 
-	foreach ($GLOBALS['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($page, $cate, $auth, $date, $tags);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
@@ -714,7 +721,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	$pagebar->PageBarCount = $zbp->pagebarcount;
 	$pagebar->UrlRule->Rules['{%page%}'] = $page;
 
-	foreach ($GLOBALS['Filter_Plugin_ViewList_Core'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Core'] as $fpname => &$fpsignal) {
 		$fpname($type, $page, $category, $author, $datetime, $tag, $w, $pagebar);
 	}
 
@@ -738,7 +745,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	$limit = array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount);
 	$option = array('pagebar' => $pagebar);
 
-	foreach ($GLOBALS['Filter_Plugin_LargeData_Aritcle'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_Aritcle'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($select,$w,$order,$limit,$option);
 	}
 
@@ -770,7 +777,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 		$zbp->template->SetTemplate('index');
 	}
 
-	foreach ($GLOBALS['Filter_Plugin_ViewList_Template'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Template'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($zbp->template);
 	}
 
@@ -788,7 +795,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
  */
 function ViewPost($id, $alias, $isrewrite = false) {
 	global $zbp;
-	foreach ($GLOBALS['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($id, $alias);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
@@ -899,7 +906,7 @@ function ViewPost($id, $alias, $isrewrite = false) {
 		$zbp->template->SetTemplate('single');
 	}
 
-	foreach ($GLOBALS['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($zbp->template);
 	}
 
@@ -978,7 +985,7 @@ function ViewComments($postid, $page) {
 
 	$zbp->template->SetTemplate($template);
 
-	foreach ($GLOBALS['Filter_Plugin_ViewComments_Template'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewComments_Template'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($zbp->template);
 	}
 
@@ -1129,7 +1136,7 @@ function PostArticle() {
 		}
 	}
 
-	foreach ($GLOBALS['Filter_Plugin_PostArticle_Core'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostArticle_Core'] as $fpname => &$fpsignal) {
 		$fpname($article);
 	}
 
@@ -1187,7 +1194,7 @@ function PostArticle() {
 	$zbp->AddBuildModule('tags');
 	$zbp->AddBuildModule('authors');
 
-	foreach ($GLOBALS['Filter_Plugin_PostArticle_Succeed'] as $fpname => &$fpsignal)
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostArticle_Succeed'] as $fpname => &$fpsignal)
 		$fpname($article);
 
 	return true;
@@ -1236,7 +1243,7 @@ function DelArticle() {
 		$zbp->AddBuildModule('tags');
 		$zbp->AddBuildModule('authors');
 
-		foreach ($GLOBALS['Filter_Plugin_DelArticle_Succeed'] as $fpname => &$fpsignal){
+		foreach ($GLOBALS['hooks']['Filter_Plugin_DelArticle_Succeed'] as $fpname => &$fpsignal){
 			$fpname($article);
 		}
 
@@ -1355,7 +1362,7 @@ function PostPage() {
 
 	$article->Type = ZC_POST_TYPE_PAGE;
 
-	foreach ($GLOBALS['Filter_Plugin_PostPage_Core'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostPage_Core'] as $fpname => &$fpsignal) {
 		$fpname($article);
 	}
 
@@ -1379,7 +1386,7 @@ function PostPage() {
 	if (GetVars('AddNavbar', 'POST') == 1)
 		$zbp->AddItemToNavbar('page', $article->ID, $article->Title, $article->Url);
 
-	foreach ($GLOBALS['Filter_Plugin_PostPage_Succeed'] as $fpname => &$fpsignal)
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostPage_Succeed'] as $fpname => &$fpsignal)
 		$fpname($article);
 
 	return true;
@@ -1413,7 +1420,7 @@ function DelPage() {
 
 		$zbp->DelItemToNavbar('page', $article->ID);
 
-		foreach ($GLOBALS['Filter_Plugin_DelPage_Succeed'] as $fpname => &$fpsignal)
+		foreach ($GLOBALS['hooks']['Filter_Plugin_DelPage_Succeed'] as $fpname => &$fpsignal)
 			$fpname($article);
 	} else {
 
@@ -1484,7 +1491,7 @@ function PostComment() {
 		}
 	}
 
-	foreach ($GLOBALS['Filter_Plugin_PostComment_Core'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostComment_Core'] as $fpname => &$fpsignal) {
 		$fpname($cmt);
 	}
 
@@ -1507,7 +1514,7 @@ function PostComment() {
 				ViewComment($cmt->ID);
 			}
 
-			foreach ($GLOBALS['Filter_Plugin_PostComment_Succeed'] as $fpname => &$fpsignal)
+			foreach ($GLOBALS['hooks']['Filter_Plugin_PostComment_Succeed'] as $fpname => &$fpsignal)
 				$fpname($cmt);
 
 			return true;
@@ -1551,7 +1558,7 @@ function DelComment() {
 
 		$zbp->AddBuildModule('comments');
 
-		foreach ($GLOBALS['Filter_Plugin_DelComment_Succeed'] as $fpname => &$fpsignal)
+		foreach ($GLOBALS['hooks']['Filter_Plugin_DelComment_Succeed'] as $fpname => &$fpsignal)
 			$fpname($cmt);
 	}
 
@@ -1719,7 +1726,7 @@ function PostCategory() {
 		}
 	}
 
-	foreach ($GLOBALS['Filter_Plugin_PostCategory_Core'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostCategory_Core'] as $fpname => &$fpsignal) {
 		$fpname($cate);
 	}
 
@@ -1742,7 +1749,7 @@ function PostCategory() {
 	if (GetVars('AddNavbar', 'POST') == 1)
 		$zbp->AddItemToNavbar('category', $cate->ID, $cate->Name, $cate->Url);
 
-	foreach ($GLOBALS['Filter_Plugin_PostCategory_Succeed'] as $fpname => &$fpsignal)
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostCategory_Succeed'] as $fpname => &$fpsignal)
 		$fpname($cate);
 
 	return true;
@@ -1765,7 +1772,7 @@ function DelCategory() {
 		$zbp->AddBuildModule('catalog');
 		$zbp->DelItemToNavbar('category', $cate->ID);
 
-		foreach ($GLOBALS['Filter_Plugin_DelCategory_Succeed'] as $fpname => &$fpsignal)
+		foreach ($GLOBALS['hooks']['Filter_Plugin_DelCategory_Succeed'] as $fpname => &$fpsignal)
 			$fpname($cate);
 	}
 
@@ -1809,7 +1816,7 @@ function PostTag() {
 		}
 	}
 
-	foreach ($GLOBALS['Filter_Plugin_PostTag_Core'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostTag_Core'] as $fpname => &$fpsignal) {
 		$fpname($tag);
 	}
 
@@ -1827,7 +1834,7 @@ function PostTag() {
 
 	$zbp->AddBuildModule('tags');
 
-	foreach ($GLOBALS['Filter_Plugin_PostTag_Succeed'] as $fpname => &$fpsignal)
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostTag_Succeed'] as $fpname => &$fpsignal)
 		$fpname($tag);
 
 	return true;
@@ -1846,7 +1853,7 @@ function DelTag() {
 		$tag->Del();
 		$zbp->DelItemToNavbar('tag', $tag->ID);
 		$zbp->AddBuildModule('tags');
-		foreach ($GLOBALS['Filter_Plugin_DelTag_Succeed'] as $fpname => &$fpsignal)
+		foreach ($GLOBALS['hooks']['Filter_Plugin_DelTag_Succeed'] as $fpname => &$fpsignal)
 			$fpname($tag);
 	}
 
@@ -1918,7 +1925,7 @@ function PostMember() {
 		}
 	}
 
-	foreach ($GLOBALS['Filter_Plugin_PostMember_Core'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostMember_Core'] as $fpname => &$fpsignal) {
 		$fpname($mem);
 	}
 
@@ -1938,7 +1945,7 @@ function PostMember() {
 
 	$mem->Save();
 
-	foreach ($GLOBALS['Filter_Plugin_PostMember_Succeed'] as $fpname => &$fpsignal)
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostMember_Succeed'] as $fpname => &$fpsignal)
 		$fpname($mem);
 
 	if (isset($_POST['Password'])) {
@@ -1963,7 +1970,7 @@ function DelMember() {
 		if ($mem->IsGod !== true) {
 			DelMember_AllData($id);
 			$mem->Del();
-			foreach ($GLOBALS['Filter_Plugin_DelMember_Succeed'] as $fpname => &$fpsignal)
+			foreach ($GLOBALS['hooks']['Filter_Plugin_DelMember_Succeed'] as $fpname => &$fpsignal)
 				$fpname($mem);
 		}
 	} else {
@@ -2059,7 +2066,7 @@ function PostModule() {
 		$mod->NoRefresh = (bool)$_POST['NoRefresh'];
 	}
 
-	foreach ($GLOBALS['Filter_Plugin_PostModule_Core'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostModule_Core'] as $fpname => &$fpsignal) {
 		$fpname($mod);
 	}
 
@@ -2070,7 +2077,7 @@ function PostModule() {
 
 	$zbp->AddBuildModule($mod->FileName);
 
-	foreach ($GLOBALS['Filter_Plugin_PostModule_Succeed'] as $fpname => &$fpsignal)
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostModule_Succeed'] as $fpname => &$fpsignal)
 		$fpname($mod);
 
 	return true;
@@ -2089,7 +2096,7 @@ function DelModule() {
 			$mod=$zbp->GetModuleByFileName($fn);
 			if($mod->FileName == $fn){
 				$mod->Del();
-				foreach ($GLOBALS['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal){
+				foreach ($GLOBALS['hooks']['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal){
 					$fpname($mod);
 				}
 				return true;
@@ -2103,7 +2110,7 @@ function DelModule() {
 	$mod = $zbp->GetModuleByID($id);
 	if ($mod->Source <> 'system') {
 		$mod->Del();
-		foreach ($GLOBALS['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal){
+		foreach ($GLOBALS['hooks']['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal){
 			$fpname($mod);
 		}
 	}else{
@@ -2670,7 +2677,7 @@ function CountTagArrayString($string, $plus = null, $articleid = null) {
 	$array = $zbp->LoadTagsByIDString($string);
 
 	//添加大数据接口,tag,plus,id
-	foreach ($GLOBALS['Filter_Plugin_LargeData_CountTagArray'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_CountTagArray'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($array,$plus,$articleid);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
 			$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
@@ -3187,7 +3194,7 @@ function Include_ShowError404($idortext,$file,$line){
 	$zbp->template->SetTemplate('404');
 	$zbp->template->Display();
 
-	$GLOBALS['Filter_Plugin_Zbp_ShowError']['ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
+	$GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError']['ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
 	exit;
 }
 

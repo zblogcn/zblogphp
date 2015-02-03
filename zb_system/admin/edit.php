@@ -61,7 +61,7 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 <script type="text/javascript" src="../script/jquery.tagto.js"></script>
 <script type="text/javascript" src="../script/jquery-ui-timepicker-addon.js"></script>
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_Begin'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Begin'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 <?php
 require $blogpath . 'zb_system/admin/admin_top.php';
@@ -77,7 +77,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     <!-- 4号输出接口 -->
        <div id="response4" class="editmod2">
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	   </div>
     <div id="divEditTitle" class="editmod2">
@@ -95,7 +95,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsignal) {$fp
     <!-- 5号输出接口 -->
        <div id="response5" class="editmod2">
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	   </div>
 
@@ -108,7 +108,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsignal) {$fp
     <!-- 1号输出接口 -->
        <div id="response" class="editmod2">
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	   </div>
 
@@ -140,7 +140,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpn
     <!-- 2号输出接口 -->
        <div id="response2" class="editmod2">
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	   </div>
 
@@ -227,7 +227,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <!-- 3号输出接口 -->
           <div id="response3" class="editmod">
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_Response3'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response3'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	      </div>
         </div>
@@ -408,7 +408,7 @@ function editor_init(){
 </script>
 
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_End'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_End'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 
 <script type="text/javascript">editor_init();</script>
