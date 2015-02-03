@@ -10,7 +10,7 @@ ob_clean();
 
 $type=GetVars('type', 'GET');
 
-foreach ($GLOBALS['Filter_Plugin_Misc_Begin'] as $fpname => &$fpsignal) {$fpname($type);}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Misc_Begin'] as $fpname => &$fpsignal) {$fpname($type);}
 
 switch ($type) {
 	case 'statistic':
@@ -160,7 +160,7 @@ $blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights'];
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 <?php
 
-foreach ($GLOBALS['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
 
 ?>
 	<title><?php echo $blogtitle; ?></title>

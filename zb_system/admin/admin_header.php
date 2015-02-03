@@ -18,5 +18,5 @@
 <link rel="stylesheet" href="<?php echo $bloghost?>zb_system/css/jquery-ui.ie.css">
 <![endif]-->
 <?php
-	foreach ($GLOBALS['Filter_Plugin_Admin_Header'] as $fpname => &$fpsignal) {$fpname();}
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Header'] as $fpname => &$fpsignal) {$fpname();}
 ?>

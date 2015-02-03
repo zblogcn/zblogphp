@@ -159,7 +159,7 @@ if($mod->FileName=='catalog'){
 		<input type="text" id="NoRefresh" name="NoRefresh" class="checkbox" value="<?php echo $mod->NoRefresh;?>"/></p>
 	<!-- 1号输出接口 -->	
 	<div id='response' class='editmod2'>
-		<?php foreach ($GLOBALS['Filter_Plugin_Module_Edit_Response'] as $fpname =>	&$fpsignal) {$fpname();}?>
+		<?php foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Edit_Response'] as $fpname =>	&$fpsignal) {$fpname();}?>
 	</div>
 	<p>
 

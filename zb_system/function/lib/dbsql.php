@@ -693,7 +693,7 @@ class DbSql
 	public function Filter($sql){
 		$_SERVER['_query_count'] = $_SERVER['_query_count'] + 1;
 
-		foreach ($GLOBALS['Filter_Plugin_DbSql_Filter'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_DbSql_Filter'] as $fpname => &$fpsignal) {
 			$fpname($sql);
 		}
 		//Logs($sql);

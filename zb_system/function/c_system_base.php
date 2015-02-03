@@ -56,7 +56,7 @@ $zbpvers['131221']='1.1 Taichi Build 131221';
 $zbpvers['140220']='1.2 Hippo Build 140220';
 $zbpvers['140614']='1.3 Wonce Build 140614';
 $zbpvers['150101']='1.4 Deeplue Build 150101';
-$zbpvers['150601']='1.5 Beta Build 150601';
+$zbpvers['150301']='1.5 Beta Build 150301';
 
 #定义常量
 

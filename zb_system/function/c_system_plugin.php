@@ -136,7 +136,7 @@ function RemovePluginFilter($strPluginFilter) {
 '*********************************************************
  */
 //function Add_Action_Plugin($plugname,$actioncode){
-//	$GLOBALS[$plugname][]=$actioncode;
+//	$GLOBALS['hooks'][$plugname][]=$actioncode;
 //}
 
 /*
@@ -148,8 +148,8 @@ function RemovePluginFilter($strPluginFilter) {
 '*********************************************************
  */
 function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSIGNAL_NONE) {
-	if (isset($GLOBALS[$plugname])) {
-		$GLOBALS[$plugname][$functionname] = $exitsignal;
+	if (isset($GLOBALS['hooks'][$plugname])) {
+		$GLOBALS['hooks'][$plugname][$functionname] = $exitsignal;
 	}
 }
 
@@ -161,7 +161,7 @@ function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSI
 '*********************************************************
  */
 //function Add_Response_Plugin($plugname,$functionname){
-//	$GLOBALS[$plugname][]=$functionname;
+//	$GLOBALS['hooks'][$plugname][]=$functionname;
 //}
 
 ################################################################################################################
@@ -885,6 +885,28 @@ DefinePluginFilter('Filter_Plugin_CreateOptoinsOfCategorys');
 
 ################################################################################################################
 #Event里的接口
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_GetPost_Result
+'参数:&$post
+'说明:定义GetPost输出结果接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_GetPost_Result');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_GetList_Result
+'参数:&$list
+'说明:定义GetList输出结果接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_GetList_Result');
+
 /*
 '**************************************************<
 '类型:Filter

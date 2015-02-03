@@ -32,9 +32,10 @@ class Comment extends Base {
 	* @return mixed
 	*/
 	function __call($method, $args) {
-		foreach ($GLOBALS['Filter_Plugin_Comment_Call'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Call'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this,$method, $args);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 	}
 
@@ -140,9 +141,10 @@ class Comment extends Base {
 	*/
 	function Save(){
 		global $zbp;
-		foreach ($GLOBALS['Filter_Plugin_Comment_Save'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Save'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return parent::Save();
 	}
@@ -151,9 +153,10 @@ class Comment extends Base {
 	 * @return bool
 	 */
 	function Del(){
-		foreach ($GLOBALS['Filter_Plugin_Comment_Del'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Del'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return parent::Del();
 	}
