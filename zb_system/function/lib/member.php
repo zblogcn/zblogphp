@@ -23,7 +23,7 @@ class Member extends Base {
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Member'],$zbp->datainfo['Member']);
+		parent::__construct($zbp->table['Member'],$zbp->datainfo['Member'],__CLASS__);
 
 		$this->Name = $zbp->lang['msg']['anonymous'];
 	}

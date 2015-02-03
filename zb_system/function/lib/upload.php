@@ -13,7 +13,7 @@ class Upload extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Upload'],$zbp->datainfo['Upload']);
+		parent::__construct($zbp->table['Upload'],$zbp->datainfo['Upload'],__CLASS__);
 
 		$this->PostTime = time();
 	}

@@ -16,7 +16,7 @@ class Post extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Post'],$zbp->datainfo['Post']);
+		parent::__construct($zbp->table['Post'],$zbp->datainfo['Post'],__CLASS__);
 
 		$this->Title	= $zbp->lang['msg']['unnamed'];
 		$this->PostTime	= time();
