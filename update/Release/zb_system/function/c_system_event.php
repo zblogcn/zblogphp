@@ -261,8 +261,8 @@ function ViewIndex(){
 			ViewList(null,null,null,null,null);
 		}elseif( ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || isset($_GET['rewrite']) ) && 
 			(isset($_GET['id'])||isset($_GET['alias'])) ){
-			ViewPost(GetVars('id','GET'),GetVars('alias','GET' || isset($_GET['rewrite']) ));
-		}elseif( ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') && 
+			ViewPost(GetVars('id','GET'),GetVars('alias','GET'));
+		}elseif( ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || isset($_GET['rewrite']) ) && 
 			(isset($_GET['page'])||isset($_GET['cate'])||isset($_GET['auth'])||isset($_GET['date'])||isset($_GET['tags'])) ){
 			ViewList(GetVars('page','GET'),GetVars('cate','GET'),GetVars('auth','GET'),GetVars('date','GET'),GetVars('tags','GET'));
 		}else{
