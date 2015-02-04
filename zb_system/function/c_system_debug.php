@@ -96,7 +96,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseError($errno, $errstr, $errfile, $errline);
 	$zbe->Display();
-	die();
+	if (!IS_HHVM) exit();
 
 }
 
@@ -122,7 +122,7 @@ function Debug_Exception_Handler($exception) {
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseException($exception);
 	$zbe->Display();
-	die();
+	if (!IS_HHVM) exit();
 }
 
 /**
@@ -162,7 +162,7 @@ function Debug_Shutdown_Handler() {
 		$zbe = ZBlogException::GetInstance();
 		$zbe->ParseShutdown($error);
 		$zbe->Display();
-		die();
+		if (!IS_HHVM) exit();
 	}
 }
 
@@ -370,7 +370,7 @@ class ZBlogException {
 
 		require dirname(__FILE__) . '/../defend/error.html';
 		RunTime();
-		die();
+		if (!IS_HHVM) exit();
 	}
 
 	/**
