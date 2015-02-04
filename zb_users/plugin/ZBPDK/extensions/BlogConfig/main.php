@@ -11,60 +11,59 @@ $zbpdk = new zbpdk_t();
 $zbpdk->scan_extensions();
 //var_dump($zbpdk->objects);
 
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('ZBPDK')) {$zbp->ShowError(48);die();}
 
-
-if(isset($_GET['act']))
-{
-	switch($_GET['act'])
-	{
+if (isset($_GET['act'])) {
+	switch ($_GET['act']) {
 		case 'open':
 			echo blogconfig_exportlist($_GET['name']);
 			exit();
-		break;	
+			break;
 		case 'readleft':
-			echo blogconfig_left(); 
+			echo blogconfig_left();
 			exit();
-		break;
+			break;
 		case 'rename':
-			$sql = $zbp->db->sql->Update($zbp->table['Config'],array('conf_Name' => $_GET['edit']),array(array('=','conf_Name',$_GET['name'])));
+			$sql = $zbp->db->sql->Update($zbp->table['Config'], array('conf_Name' => $_GET['edit']), array(array('=', 'conf_Name', $_GET['name'])));
 			$zbp->db->Update($sql);
-			echo '操作成功'; 
+			echo '操作成功';
 			exit();
-		break;	
+			break;
 		case 'del':
 			$zbp->DelConfig($_GET['name']);
-			echo '操作成功'; 
+			echo '操作成功';
 			exit();
-		break;	
+			break;
 		case 'new':
 			$zbp->SaveConfig($_GET['name']);
 			echo blogconfig_exportlist($_GET['name']);
 			exit();
-		break;	
+			break;
 		default:
 	}
 }
 
-if(isset($_POST['act']))
-{
-	switch($_POST['act'])
-	{
+if (isset($_POST['act'])) {
+	switch ($_POST['act']) {
 		case 'e_del':
 			$zbp->configs[$_POST['name2']]->Del($_POST['name1']);
 			$zbp->SaveConfig($_POST['name2']);
 			echo blogconfig_exportlist($_POST['name2']);
 			exit();
-		break;
+			break;
 		case 'e_edit':
 			$config = $zbp->configs[$_POST['name2']]->$_POST['name1'];
 			$value = $_POST['post'];
-			if (gettype($config) == 'boolean') $value = (bool)$value;
-			elseif (gettype($config) == 'integer') $value = (int)$value;
+			if (gettype($config) == 'boolean') {
+				$value = (bool) $value;
+			} elseif (gettype($config) == 'integer') {
+				$value = (int) $value;
+			}
+
 			$zbp->configs[$_POST['name2']]->$_POST['name1'] = $value;
-			
+
 			$zbp->SaveConfig($_POST['name2']);
 			echo blogconfig_exportlist($_POST['name2']);
 			exit();
@@ -84,12 +83,12 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 <div id="divMain">
   <div class="divHeader"><?php echo $blogtitle;?></div>
-  <div class="SubMenu"><?php echo $zbpdk->submenu->export('BlogConfig'); ?></div>
+  <div class="SubMenu"><?php echo $zbpdk->submenu->export('BlogConfig');?></div>
   <div id="divMain2">
     <div class="DIVBlogConfig">
       <div class="DIVBlogConfignav" name="tree" id="tree">
         <ul>
-          <?php echo blogconfig_left(); ?>
+          <?php echo blogconfig_left();?>
         </ul>
         <script type="text/javascript">
 		$(document).ready(function() {
