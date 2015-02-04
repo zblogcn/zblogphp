@@ -42,8 +42,8 @@ function run2(e, d, h) {
 			break;
 		case "edit":
 		case "del":
-			g.post = $("#ta" + d).attr("value");
-			g.name1 = $("#txt" + d).attr("value") || $("#txt" + d).text();
+			g.post = $("#ta" + d).val();
+			g.name1 = $("#txt" + d).text();
 			g.name2 = $("#name").html();
 			g.test = d;
 			$("#content").html("Loading");
@@ -71,13 +71,24 @@ function readleft() {
 		function(b) {
 			//$("#content").html("");
 			$("#tree ul").html(b);
-			$("#tree ul li").contextMenu({
-					menu: "treemenu"
+			$.contextMenu({
+				selector: '#tree ul li',
+				items: {
+					"open": {
+						name: "打开"
+					},
+					"rename": {
+						name: "重命名"
+					},
+					"del": {
+						name: "删除"
+					}
 				},
-				function(d, c, e) {
-					run(d, $(c).find("a").attr("id"));
-					bmx2table();
-				})
+				callback: function(key, options) {
+					//					console.log(this);
+					run(key, $(this).find("a").attr("id"));
+				}
+			});
 		})
 }
 

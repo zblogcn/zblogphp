@@ -63,7 +63,6 @@ if (isset($_POST['act'])) {
 			}
 
 			$zbp->configs[$_POST['name2']]->$_POST['name1'] = $value;
-
 			$zbp->SaveConfig($_POST['name2']);
 			echo blogconfig_exportlist($_POST['name2']);
 			exit();
@@ -92,11 +91,18 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         </ul>
         <script type="text/javascript">
 		$(document).ready(function() {
-			$("#tree ul li").contextMenu(
-				{menu:'treemenu'},
-				function(action, el, pos) {
-					run(action,$(el).find("a").attr("id"))
-				});
+			$.contextMenu({
+				selector: '#tree ul li', 
+				items: {
+					"open": {name: "打开"},
+					"rename": {name: "重命名"},
+					"del": {name: "删除"}
+				}, 
+				callback: function (key, options) {
+//					console.log(this);
+					run(key, $(this).find("a").attr("id"));
+				}
+			});
 		});
       </script></div>
       <div id="content" class="DIVBlogConfigcontent">
@@ -106,11 +112,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     </div>
   </div>
 </div>
-<ul id="treemenu" class="contextMenu">
-  <li class="open"> <a href="#open">打开</a> </li>
-  <li class="rename"> <a href="#rename">重命名</a> </li>
-  <li class="del"> <a href="#del">删除</a> </li>
-</ul>
+
 <script>ActiveTopMenu('zbpdk');</script>
 <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png';?>");</script>
 <?php
