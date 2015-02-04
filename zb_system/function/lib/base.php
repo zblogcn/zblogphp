@@ -48,8 +48,8 @@ class Base{
 		
 		if(function_exists('get_called_class'))
 			$this->calssname=get_called_class();
-		elseif(is_string($calssname))
-			$this->calssname=$calssname;
+		elseif(is_string($classname))
+			$this->calssname=$classname;
 
 		if(true==$hasmetas)$this->Metas=new Metas;
 
