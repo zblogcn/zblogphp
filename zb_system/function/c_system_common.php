@@ -25,6 +25,11 @@ define('IS_NGINX', preg_match("/nginx/i", $_SERVER['SERVER_SOFTWARE']));
 define('IS_LIGHTTPD', preg_match("/lighttpd/i", $_SERVER['SERVER_SOFTWARE']));
 define('IS_KANGLE', preg_match("/kangle/i", $_SERVER['SERVER_SOFTWARE']));
 
+/** 
+ * PHP 
+ */
+define('IS_HHVM', defined('HHVM_VERSION'));
+
 /**
  * 自动加载类文件
  * @api Filter_Plugin_Autoload
