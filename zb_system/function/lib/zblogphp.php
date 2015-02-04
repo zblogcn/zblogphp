@@ -81,10 +81,12 @@ class ZBlogPHP {
 	 * @var array 分类数组
 	 */
 	public $categorys=array();
+	public $categories=null;
 	/**
 	 * @var array 分类数组（已排序）
 	 */
 	public $categorysbyorder=array();
+	public $categoriesbyorder=null;
 	/**
 	 * @var int 分类最大层数
 	 */
@@ -328,6 +330,9 @@ class ZBlogPHP {
 		$this->searchcount = &$this->option['ZC_SEARCH_COUNT'];
 		$this->displaycount = &$this->option['ZC_DISPLAY_COUNT'];
 		$this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
+		
+		$this->categories = &$this->categorys;
+		$this->categoriesbyorder = &$this->categorysbyorder;
 
 		$this->user = new stdClass;
 		foreach($this->datainfo['Member'] as $key=>$value){
