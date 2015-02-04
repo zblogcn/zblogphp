@@ -154,11 +154,8 @@ class Base{
 				$this->data[$key]=$array[$value[0]];
 			}
 		}
-		foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data'] as $fpname => &$fpsignal) {
-			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-			$fpreturn=$fpname($this,$this->data);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-		}
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal)
+			$fpname($this,$this->data);
 		return true;
 	}
 
@@ -186,11 +183,8 @@ class Base{
 			}
 			$i += 1;
 		}
-		foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data'] as $fpname => &$fpsignal) {
-			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-			$fpreturn=$fpname($this,$this->data);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-		}
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal)
+			$fpname($this,$this->data);
 		return true;
 	}
 

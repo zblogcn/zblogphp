@@ -63,12 +63,16 @@ class Dbpdo_MySQL implements iDataBase {
 			$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',PDO::ATTR_PERSISTENT => true);
 		}
 		$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',PDO::ATTR_PERSISTENT => true);
-		$db_link = new PDO('mysql:host=' . $array[0] . ';port=' . $array[5] . ';dbname=' . $array[3],$array[1],$array[2],$options);
-		$this->db = $db_link;
-		$this->dbpre=$array[4];
-		$this->dbname=$array[3];
-		$this->dbengine = $array[7];
-		return true;
+		try {
+			$db_link = new PDO('mysql:host=' . $array[0] . ';port=' . $array[5] . ';dbname=' . $array[3],$array[1],$array[2],$options);
+			$this->db = $db_link;
+			$this->dbpre=$array[4];
+			$this->dbname=$array[3];
+			$this->dbengine = $array[7];
+			return true;
+		} catch ( PDOException $e ) {
+			return false;
+		}
 	}
 
 	/**

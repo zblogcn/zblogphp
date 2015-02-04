@@ -1265,13 +1265,13 @@ DefinePluginFilter('Filter_Plugin_DelModule_Succeed');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Base_Data
+'名称:Filter_Plugin_Base_Data_Load
 '参数:&$this,&data
 '说明:干预Base类data属性的接口
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_Base_Data');
+DefinePluginFilter('Filter_Plugin_Base_Data_Load');
 
 /*
 '**************************************************<
