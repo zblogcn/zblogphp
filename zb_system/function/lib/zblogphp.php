@@ -366,7 +366,6 @@ class ZBlogPHP {
 		if( strpos('
 			|GetListCustom|
 			|GetListCustomByArray|
-			|GetList|
 			|GetListType|
 			|GetListTypeByArray|
 			|GetPostList|
@@ -1078,7 +1077,15 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	public function Verify_Original($name,$originalpw,&$member=null){
-		return $this->Verify_MD5($name,md5($originalpw),$member);
+		if($name=='' || $originalpw==''){
+			return false;
+		}
+		$m = $this->GetMemberByName($name);
+		if ($m->ID > 0){
+			return $this->Verify_MD5($name,md5($originalpw),$member);
+		}else{
+			return false;
+		}
 	}
 
 	/**
@@ -1089,6 +1096,9 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	public function Verify_Final($name,$password,&$member=null){
+		if($name=='' || $password==''){
+			return false;
+		}
 		$m = $this->GetMemberByName($name);
 		if ($m->ID > 0){
 			if(strcasecmp( $m->Password ,  $password ) ==  0){
@@ -1725,23 +1735,10 @@ class ZBlogPHP {
 	}
 
 	/**
-	 * 已改名GetListType,将在下个版中扔掉有歧义的GetList
+	 * 已改名GetListType,1.5版中扔掉有歧义的GetList
 	 *
-	 * @deprecated 1.5
 	 * @param $type
 	 * @param $sql
-	 * @return array
-	 */
-	public function _GetList($type,$sql){
-		$this->SetHint('tips','$zbp->GetList()已改名为GetListType(),下个版本将会取消,请在相关源码中改用新名称.');
-		return $this->GetListType($type,$sql);
-	}
-
-	/**
-	 * 原名GetList
-	 * 查询指定类型的sql并返回指定类型对象列表
-	 * @param string $type
-	 * @param string $sql
 	 * @return array
 	 */
 	public function _GetListType($type,$sql){

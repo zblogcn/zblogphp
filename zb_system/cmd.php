@@ -5,7 +5,7 @@ $zbp->Load();
 
 $action=GetVars('act','GET');
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Begin'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Begin'] as $fpname => &$fpsignal) $fpname();
 
 if(!$zbp->CheckRights($action)){$zbp->ShowError(6,__FILE__,__LINE__);die();}
 
@@ -295,9 +295,8 @@ switch ($action) {
 		Redirect('cmd.php?act=SettingMng');
 		break;
 	case 'ajax':
-		foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Ajax'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Ajax'] as $fpname => &$fpsignal)
 			$fpname(GetVars('src','GET'));
-		}
 		break;
 	default:
 		# code...

@@ -13,12 +13,10 @@ $zbp->Load();
 
 $action = 'feed';
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Feed_Begin'] as $fpname => &$fpsignal) {$fpname();
-}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Feed_Begin'] as $fpname => &$fpsignal) $fpname();
 
 ViewIndex();
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Feed_End'] as $fpname => &$fpsignal) {$fpname();
-}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Feed_End'] as $fpname => &$fpsignal) $fpname();
 
 RunTime();
