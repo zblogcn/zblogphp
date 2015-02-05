@@ -79,7 +79,7 @@ function misc_statistic() {
 	CountCommentNums(null,null);
 	$all_comments = $zbp->cache->all_comment_nums;
 
-	$xmlrpc_address = $zbp->host . 'zb_system/xml-rpc/';
+	$xmlrpc_address = $zbp->host . 'zb_system/xml-rpc/index.php';
 	$current_member = $zbp->user->Name;
 	$current_version = $zbp->option['ZC_BLOG_VERSION'];
 	$all_artiles = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=\'0\''), 'num');

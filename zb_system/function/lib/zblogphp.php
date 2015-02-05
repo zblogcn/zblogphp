@@ -68,7 +68,10 @@ class ZBlogPHP {
 	 * @var null
 	 */
 	public $ajaxurl = null;
-
+	/**
+	 * @var null
+	 */
+	public $xmlrpcurl = null;
 	/**
 	 * @var array 用户数组
 	 */
@@ -515,6 +518,7 @@ class ZBlogPHP {
 		$this->feedurl=$this->host . 'feed.php';
 		$this->searchurl=$this->host . 'search.php';
 		$this->ajaxurl=$this->host . 'zb_system/cmd.php?act=ajax&src=';
+		$this->xmlrpcurl = $this->host . 'zb_system/xml-rpc/index.php';
 
 		$this->isinitialized=true;
 

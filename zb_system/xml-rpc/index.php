@@ -11,10 +11,10 @@ if(isset($_GET['rsd'])){
 	echo '    <engineLink>http://www.zblogcn.com/</engineLink>'."\n";
 	echo '    <homePageLink>'.$zbp->host.'</homePageLink>'."\n";
 	echo '    <apis>'."\n";
-	echo '      <api name="WordPress" blogID="1" preferred="true" apiLink="'.$zbp->host.'zb_system/xml-rpc/" />'."\n";
-	echo '      <api name="Movable Type" blogID="1" preferred="false" apiLink="'.$zbp->host.'zb_system/xml-rpc/" />'."\n";
-	echo '      <api name="MetaWeblog" blogID="1" preferred="false" apiLink="'.$zbp->host.'zb_system/xml-rpc/" />'."\n";
-	echo '      <api name="Blogger" blogID="1" preferred="false" apiLink="'.$zbp->host.'zb_system/xml-rpc/" />'."\n";
+	echo '      <api name="WordPress" blogID="1" preferred="true" apiLink="'.$zbp->host.'zb_system/xml-rpc/index.php" />'."\n";
+	echo '      <api name="Movable Type" blogID="1" preferred="false" apiLink="'.$zbp->host.'zb_system/xml-rpc/index.php" />'."\n";
+	echo '      <api name="MetaWeblog" blogID="1" preferred="false" apiLink="'.$zbp->host.'zb_system/xml-rpc/index.php" />'."\n";
+	echo '      <api name="Blogger" blogID="1" preferred="false" apiLink="'.$zbp->host.'zb_system/xml-rpc/index.php" />'."\n";
 	echo '    </apis>'."\n";
 	echo '  </service>'."\n";
 	echo '</rsd>'."\n";
