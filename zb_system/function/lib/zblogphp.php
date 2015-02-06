@@ -2550,6 +2550,15 @@ class ZBlogPHP {
 	 */
 	public function GetHint(){
 		for ($i = 1; $i <= 5; $i++) {
+			$signal='hint' . $i;
+			$signal=$this->$signal;
+			if($signal){
+				$a=explode('|', $signal);
+				$this->ShowHint($a[0],$a[1]);
+				setcookie("hint_signal" . $i , '',time()-3600,$this->cookiespath);
+			}
+		}
+		for ($i = 1; $i <= 5; $i++) {
 			$signal=GetVars('hint_signal' . $i,'COOKIE');
 			if($signal){
 				$a=explode('|', $signal);

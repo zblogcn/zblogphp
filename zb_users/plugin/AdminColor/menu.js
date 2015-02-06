@@ -6,9 +6,10 @@ function admincolor_hideMenu(){
  
  $("#aAdminColor>span").css("background-image","url("+bloghost + "zb_users/plugin/AdminColor/arror2.png)");
  $("#aAdminColor").attr('href','javascript:admincolor_showMenu()');
- $("#aAdminColor").attr('title',lang_admincolor_expandmenu);
+ $("#aAdminColor").find('span').html(lang_admincolor_expandmenu);
  SetCookie('admincolor_hm','1',365);
  admincolor_tooptip();
+ $("#aAdminColor").attr('title',lang_admincolor_expandmenu);
 }
 
 function admincolor_showMenu(){
@@ -19,11 +20,11 @@ function admincolor_showMenu(){
  
  $("#aAdminColor>span").css("background-image","url("+bloghost + "zb_users/plugin/AdminColor/arror.png)");
  $("#aAdminColor").attr('href','javascript:admincolor_hideMenu()');
-  $("#aAdminColor").attr('title',lang_admincolor_closemenu);
+ $("#aAdminColor").find('span').html(lang_admincolor_closemenu);
  SetCookie('admincolor_hm','',-1); 
  $("#leftmenu a").tooltip({disabled: true});
  //$("#leftmenu a").tooltip( "destroy" );
-
+ $("#aAdminColor").attr('title',lang_admincolor_closemenu);
 }
 
 function admincolor_tooptip(){
