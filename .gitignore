@@ -18,7 +18,7 @@
 /post/*
 
 # Update
-/update/*.xml
+#/update/*.xml
 
 # Plugin cache
 /zb_users/plugin/SQLLog/logs/*.php
