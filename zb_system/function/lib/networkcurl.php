@@ -6,17 +6,16 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/Network 网络连接
  */
-class Networkcurl implements iNetwork
-{
-	private $readyState = 0;		#状态
-	private $responseBody = NULL;   #返回的二进制
+class Networkcurl implements iNetwork {
+	private $readyState = 0; #状态
+	private $responseBody = NULL; #返回的二进制
 	private $responseStream = NULL; #返回的数据流
-	private $responseText = '';	 #返回的数据
-	private $responseXML = NULL;	#尝试把responseText格式化为XMLDom
-	private $status = 0;			#状态码
-	private $statusText = '';	   #状态码文本
-	private $responseVersion = '';  #返回的HTTP版体
-	
+	private $responseText = ''; #返回的数据
+	private $responseXML = NULL; #尝试把responseText格式化为XMLDom
+	private $status = 0; #状态码
+	private $statusText = ''; #状态码文本
+	private $responseVersion = ''; #返回的HTTP版体
+
 	private $option = array();
 	private $url = '';
 	private $postdata = array();
@@ -30,11 +29,12 @@ class Networkcurl implements iNetwork
 	private $isgzip = false;
 	private $maxredirs = 0;
 
+	private $__isBinary = false;
+
 	/**
 	 * @ignore
 	 */
-	function __construct()
-	{
+	function __construct() {
 		//$this->ch = curl_init();
 	}
 
@@ -43,29 +43,31 @@ class Networkcurl implements iNetwork
 	 * @param $value
 	 * @throws Exception
 	 */
-	public function __set($property_name, $value){
-		throw new Exception($property_name.' readonly');
+	public function __set($property_name, $value) {
+		throw new Exception($property_name . ' readonly');
 	}
 
 	/**
 	 * @param $property_name
 	 * @return mixed
 	 */
-	public function __get($property_name){
-		if(strtolower($property_name)=='responsexml'){
+	public function __get($property_name) {
+		if (strtolower($property_name) == 'responsexml') {
 			$w = new DOMDocument();
 			return $w->loadXML($this->responseText);
-		}elseif(strtolower($property_name)=='scheme'||
-				strtolower($property_name)=='host'||
-				strtolower($property_name)=='port'||
-				strtolower($property_name)=='user'||
-				strtolower($property_name)=='pass'||
-				strtolower($property_name)=='path'||
-				strtolower($property_name)=='query'||
-				strtolower($property_name)=='fragment'){
-			if(isset($this->parsed_url[strtolower($property_name)]))return $this->parsed_url[strtolower($property_name)];
-		}
-		else{
+		} elseif (strtolower($property_name) == 'scheme' ||
+			strtolower($property_name) == 'host' ||
+			strtolower($property_name) == 'port' ||
+			strtolower($property_name) == 'user' ||
+			strtolower($property_name) == 'pass' ||
+			strtolower($property_name) == 'path' ||
+			strtolower($property_name) == 'query' ||
+			strtolower($property_name) == 'fragment') {
+			if (isset($this->parsed_url[strtolower($property_name)])) {
+				return $this->parsed_url[strtolower($property_name)];
+			}
+
+		} else {
 			return $this->$property_name;
 		}
 	}
@@ -73,15 +75,15 @@ class Networkcurl implements iNetwork
 	/**
 	 * 取消
 	 */
-	public function abort(){
+	public function abort() {
 
 	}
 
 	/**
 	 * @return string
-	*/
-	public function getAllResponseHeaders(){
-		return implode("\r\n",$this->responseHeader);
+	 */
+	public function getAllResponseHeaders() {
+		return implode("\r\n", $this->responseHeader);
 	}
 
 	/**
@@ -89,11 +91,11 @@ class Networkcurl implements iNetwork
 	 * @param $bstrHeader
 	 * @return string
 	 */
-	public function getResponseHeader($bstrHeader){
-		$name=strtolower($bstrHeader);
-		foreach($this->responseHeader as $w){
-			if(strtolower(substr($w,0,strpos($w,':')))==$name){
-				return substr(strstr($w,': '),2);
+	public function getResponseHeader($bstrHeader) {
+		$name = strtolower($bstrHeader);
+		foreach ($this->responseHeader as $w) {
+			if (strtolower(substr($w, 0, strpos($w, ':'))) == $name) {
+				return substr(strstr($w, ': '), 2);
 			}
 		}
 		return '';
@@ -109,16 +111,20 @@ class Networkcurl implements iNetwork
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function open($bstrMethod, $bstrUrl, $varAsync=true, $bstrUser='', $bstrPassword=''){ //Async无用
+	public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '') {
+		//Async无用
 		$this->reinit();
 		$method = strtoupper($bstrMethod);
 		$this->option['method'] = $method;
 		$this->parsed_url = parse_url($bstrUrl);
-		if (!$this->parsed_url) throw new Exception('URL Syntax Error!');
-		if(!isset($this->parsed_url['port'])){
-			if($this->parsed_url['scheme']=='https'){
+		if (!$this->parsed_url) {
+			throw new Exception('URL Syntax Error!');
+		}
+
+		if (!isset($this->parsed_url['port'])) {
+			if ($this->parsed_url['scheme'] == 'https') {
 				$this->parsed_url['port'] = 443;
-			}else{
+			} else {
 				$this->parsed_url['port'] = 80;
 			}
 		}
@@ -138,25 +144,23 @@ class Networkcurl implements iNetwork
 	 * @param $sendTimeout
 	 * @param $receiveTimeout
 	 */
-	public function setTimeOuts($resolveTimeout,$connectTimeout,$sendTimeout,$receiveTimeout)
-	{
+	public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout) {
 		curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
 		curl_setopt($this->ch, CURLOPT_TIMEOUT, $resolveTimeout);
 	}
 
 	/**
-	* 发送数据
-	* @param string $varBody
-	*/
-	public function send($varBody = ''){
+	 * 发送数据
+	 * @param string $varBody
+	 */
+	public function send($varBody = '') {
 
 		$data = $varBody;
-		if(is_array($data)){
-			$data=http_build_query($data);
+		if (is_array($data)) {
+			$data = http_build_query($data);
 		}
 
-		if($this->option['method'] == 'POST')
-		{
+		if ($this->option['method'] == 'POST') {
 			if ($data == '') {
 				$data = array();
 				foreach ($this->postdata as $key => $value) {
@@ -165,39 +169,45 @@ class Networkcurl implements iNetwork
 					}
 				}
 			}
-			curl_setopt($this->ch, CURLOPT_POSTFIELDS,$data);
+			curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
 			curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'POST');
 			//curl_setopt($this->ch, CURLOPT_POST, 1);
 		}
 
-		curl_setopt($this->ch,CURLOPT_HTTPHEADER,$this->httpheader);
+		curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->httpheader);
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
 
-		if($this->maxredirs>0){
-			if(ini_get("safe_mode")==false && ini_get("open_basedir")==false){
+		if ($this->maxredirs > 0) {
+			if (ini_get("safe_mode") == false && ini_get("open_basedir") == false) {
 				curl_setopt($this->ch, CURLOPT_MAXREDIRS, $this->maxredirs);
-				curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION,true);
+				curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
 			}
 		}
-		
-		if($this->isgzip == true){
+
+		if ($this->isgzip == true) {
 			curl_setopt($this->ch, CURLOPT_ENCODING, 'gzip');
 		}
-		
+
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
 
 		$result = curl_exec($this->ch);
-		$header_size = curl_getinfo($this->ch,CURLINFO_HEADER_SIZE);
-		$this->responseHeader = explode("\r\n",substr($result,0,$header_size-4));
+		$header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
+		$this->responseHeader = explode("\r\n", substr($result, 0, $header_size - 4));
 
-		$this->responseText = substr($result,$header_size);
+		$this->responseText = substr($result, $header_size);
 		curl_close($this->ch);
-		if(isset($this->responseHeader[0])){
-			$this->statusText=$this->responseHeader[0];
-			$a=explode(' ',$this->statusText);
-			if(isset($a[0]))$this->responseVersion=$a[0];
-			if(isset($a[1]))$this->status=$a[1];
+		if (isset($this->responseHeader[0])) {
+			$this->statusText = $this->responseHeader[0];
+			$a = explode(' ', $this->statusText);
+			if (isset($a[0])) {
+				$this->responseVersion = $a[0];
+			}
+
+			if (isset($a[1])) {
+				$this->status = $a[1];
+			}
+
 			unset($this->responseHeader[0]);
 		}
 
@@ -210,14 +220,14 @@ class Networkcurl implements iNetwork
 	 * @param bool $append
 	 * @return bool
 	 */
-	 public function setRequestHeader($bstrHeader, $bstrValue, $append=false){
-		if($append==false){
-			$this->httpheader[$bstrHeader]=$bstrHeader.': '.$bstrValue;
-		}else{
-			if(isset($this->httpheader[$bstrHeader])){
-				$this->httpheader[$bstrHeader] = $this->httpheader[$bstrHeader].$bstrValue;
-			}else{
-				$this->httpheader[$bstrHeader]=$bstrHeader.': '.$bstrValue;
+	public function setRequestHeader($bstrHeader, $bstrValue, $append = false) {
+		if ($append == false) {
+			$this->httpheader[$bstrHeader] = $bstrHeader . ': ' . $bstrValue;
+		} else {
+			if (isset($this->httpheader[$bstrHeader])) {
+				$this->httpheader[$bstrHeader] = $this->httpheader[$bstrHeader] . $bstrValue;
+			} else {
+				$this->httpheader[$bstrHeader] = $bstrHeader . ': ' . $bstrValue;
 			}
 		}
 		return true;
@@ -228,24 +238,43 @@ class Networkcurl implements iNetwork
 	 * @param string $bstrItem 参数
 	 * @param mixed $bstrValue 值
 	 */
-	public function add_postdata($bstrItem, $bstrValue){
-		array_push($this->postdata,array(
-			$bstrItem => $bstrValue
+	public function add_postdata($bstrItem, $bstrValue) {
+		array_push($this->postdata, array(
+			$bstrItem => $bstrValue,
 		));
+	}
+	/**
+	 * @param string $name
+	 * @param string $entity
+	 * @return mixed
+	 */
+	public function addBinary($name, $entity) {
+		$this->__isBinary = true;
+	}
+
+	/**
+	 * @param string $name
+	 * @param string $entity
+	 * @return mixed
+	 */
+	public function addText($name, $entity) {
+		return $this->add_postdata($name, $entity);
 	}
 
 	/**
 	 * 重置
 	 */
-	private function reinit(){
+	private function reinit() {
 		global $zbp;
-		$this->readyState = 0;		#状态
-		$this->responseBody = NULL;   #返回的二进制
+		$this->readyState = 0; #状态
+		$this->responseBody = NULL; #返回的二进制
 		$this->responseStream = NULL; #返回的数据流
-		$this->responseText = '';	 #返回的数据
-		$this->responseXML = NULL;	#尝试把responseText格式化为XMLDom
-		$this->status = 0;			#状态码
-		$this->statusText = '';	   #状态码文本
+		$this->responseText = ''; #返回的数据
+		$this->responseXML = NULL; #尝试把responseText格式化为XMLDom
+		$this->status = 0; #状态码
+		$this->statusText = ''; #状态码文本
+
+		$this->__isBinary = false;
 
 		$this->option = array();
 		$this->url = '';
@@ -258,15 +287,15 @@ class Networkcurl implements iNetwork
 		$this->errno = 0;
 
 		$this->ch = curl_init();
-		$this->setRequestHeader('User-Agent','Mozilla/5.0 ('.$zbp->cache->system_environment.') Z-BlogPHP/' . ZC_BLOG_VERSION);
+		$this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $zbp->cache->system_environment . ') Z-BlogPHP/' . ZC_BLOG_VERSION);
 		$this->setMaxRedirs(1);
 	}
 
 	/**
-	  * 启用Gzip
+	 * 启用Gzip
 	 */
-	public function enableGzip(){
-		if( extension_loaded('zlib') ){
+	public function enableGzip() {
+		if (extension_loaded('zlib')) {
 			$this->isgzip = true;
 		}
 	}
@@ -274,15 +303,8 @@ class Networkcurl implements iNetwork
 	/**
 	 * @param int $n
 	 */
-	public function setMaxRedirs($n=0){
-		$this->maxredirs=(int)$n;
+	public function setMaxRedirs($n = 0) {
+		$this->maxredirs = (int) $n;
 	}
 
-	/**
-	 * @param string $name
-	 * @param string $entity
-	 * @return mixed
-	 */
-	public function addBinaryFile($name,$entity){
-	}
 }
