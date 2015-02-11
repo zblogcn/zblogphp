@@ -26,6 +26,7 @@ class Networkfile_get_contents implements iNetwork {
 	private $parsed_url = array();
 
 	private $__isBinary = false;
+	private $__boundary = '';
 
 	/**
 	 * @param $property_name
@@ -147,13 +148,18 @@ class Networkfile_get_contents implements iNetwork {
 		if ($this->option['method'] == 'POST') {
 
 			if ($data == '') {
-				$data = http_build_query($this->postdata);
+				$data = $this->__buildPostData(); //http_build_query($this->postdata);
 			}
 			$this->option['content'] = $data;
 
-			$this->httpheader[] = 'Content-Type: application/x-www-form-urlencoded';
-			$this->httpheader[] = 'Content-Length: ' . strlen($data);
-
+			if (!isset($this->httpheader['Content-Type'])) {
+				if ($this->__isBinary) {
+					$this->httpheader['Content-Type'] = 'Content-Type:  multipart/form-data; boundary=' . $this->__boundary;
+				} else {
+					$this->httpheader['Content-Type'] = 'Content-Type: application/x-www-form-urlencoded';
+				}
+			}
+			$this->httpheader['Content-Length'] = 'Content-Length: ' . strlen($data);
 		}
 
 		$this->option['header'] = implode("\r\n", $this->httpheader);
@@ -170,7 +176,6 @@ class Networkfile_get_contents implements iNetwork {
 		ZBlogException::SuspendErrorHook();
 		$http_response_header = null;
 		$this->responseText = file_get_contents(($this->isgzip == true ? 'compress.zlib://' : '') . $this->url, false, stream_context_create(array('http' => $this->option)));
-
 		$this->responseHeader = $http_response_header;
 		ZBlogException::ResumeErrorHook();
 
@@ -213,12 +218,96 @@ class Networkfile_get_contents implements iNetwork {
 	 * @param $bstrItem
 	 * @param $bstrValue
 	 */
-	public function add_postdata($bstrItem, $bstrValue) {
-		array_push($this->postdata, array(
-			$bstrItem => $bstrValue,
-		));
+	private function add_postdata($bstrItem, $bstrValue) {
+		$this->postdata[$bstrItem] = array(
+			'data' => $bstrValue,
+			'type' => 'text',
+		);
+	}
+	/**
+	 * @param string $name
+	 * @param string $entity
+	 * @return mixed
+	 */
+	public function addBinary($name, $entity) {
+		$this->__isBinary = true;
+		$return = array();
+
+		$return['type'] = 'binary';
+		if (is_file($entity)) {
+			$return['data'] = file_get_contents($entity);
+			$return['filename'] = basename($entity);
+			if (function_exists('mime_content_type')) {
+				$return['mime'] = mime_content_type($entity);
+			} else if (function_exists('finfo_open')) {
+				$finfo = finfo_open(FILEINFO_MIME);
+				$return['mime'] = finfo_file($finfo, $filename);
+				finfo_close($finfo);
+			} else {
+				$return['mime'] = 'application/octet-stream';
+			}
+		} else {
+			$return['data'] = $entity;
+			$return['filename'] = $name;
+			$return['mime'] = 'application/octet-stream';
+		}
+
+		$this->postdata[$name] = $return;
 	}
 
+	/**
+	 * @param string $name
+	 * @param string $entity
+	 * @return mixed
+	 */
+	public function addText($name, $entity) {
+		return $this->add_postdata($name, $entity);
+	}
+
+	/**
+	 * @return string
+	 */
+	private function __buildPostData() {
+		if (!$this->__isBinary) {
+			$array = array();
+			foreach ($this->postdata as $name => $value) {
+				$array[$name] = $value['data'];
+			}
+			return http_build_query($array);
+		}
+		$this->__buildBoundary();
+		$boundary = $this->__boundary;
+		$data = '';
+
+		foreach ($this->postdata as $name => $value) {
+			$content = $value['data'];
+			$data .= "--{$boundary}\r\n";
+			$data .= "Content-Disposition: form-data; ";
+			if ($value['type'] == 'text') {
+				$data .= 'name="' . $name . '"' . "\r\n\r\n";
+				$data .= $content . "\r\n";
+				$data .= "--{$boundary}\r\n";
+			} else {
+				$filename = $value['filename'];
+				$mime = $value['mime'];
+				$data .= 'name="' . $name . '"; filename="' . $filename . '"' . "\r\n";
+				$data .= "Content-Type: $mime\r\n";
+				$data .= "\r\n$content\r\n";
+				$data .= "--{$boundary}\r\n";
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Build Boundary
+	 */
+	private function __buildBoundary() {
+		$boundary = 'ZBLOGPHP_BOUNDARY';
+		$boundary .= substr(md5(time()), 8, 16);
+		$this->__boundary = $boundary;
+	}
 	/**
 	 *
 	 */
@@ -231,6 +320,9 @@ class Networkfile_get_contents implements iNetwork {
 		$this->responseXML = NULL; #尝试把responseText格式化为XMLDom
 		$this->status = 0; #状态码
 		$this->statusText = ''; #状态码文本
+
+		$this->__isBinary = false;
+		$this->__boundary = '';
 
 		$this->option = array();
 		$this->url = '';
@@ -257,11 +349,4 @@ class Networkfile_get_contents implements iNetwork {
 		$this->maxredirs = $n;
 	}
 
-	/**
-	 * @param string $name
-	 * @param string $entity
-	 * @return mixed
-	 */
-	public function addBinaryFile($name, $entity) {
-	}
 }
