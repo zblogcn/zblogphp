@@ -293,6 +293,7 @@ class Networkcurl implements iNetwork
 		}else{
 			$basename=basename($name);
 			$type='application/octet-stream';
+			$contents=&$entity;
 			$this->postdata["file\"; filename=\"$basename\r\nContent-Type: $type\r\n"] = $contents;
 		}
 
