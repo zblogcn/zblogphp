@@ -30,7 +30,6 @@ class Networkcurl implements iNetwork {
 	private $maxredirs = 0;
 
 	private $__isBinary = false;
-	private $__deleteTempList = array();
 
 	/**
 	 * @ignore
@@ -171,7 +170,7 @@ class Networkcurl implements iNetwork {
 			} else {
 				curl_setopt($this->ch, CURLOPT_POST, 1);
 			}
-			curl_setopt($this->ch, CURLOPT_POSTFIELDS, ($data == '' ? $this->postdata : $data));
+			curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
 		}
 
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
@@ -208,11 +207,6 @@ class Networkcurl implements iNetwork {
 			}
 
 			unset($this->responseHeader[0]);
-		}
-
-		// Delete temp file
-		foreach ($this->__deleteTempList as $key => $value) {
-			@unlink($value);
 		}
 
 	}
@@ -255,10 +249,9 @@ class Networkcurl implements iNetwork {
 		$this->__isBinary = true;
 
 		if (!is_file($entity)) {
-			$tempFileName = $zbp->path . 'zb_users/cache/curl_uploadtemp_' . md5(rand(1, 10)) . '.tmp';
-			file_put_contents($tempFileName, $entity);
-			$entity = $tempFileName;
-			$this->__deleteTempList[] = $entity;
+			$key = "$name\"; filename=\"$name\r\nContent-Type: application/octet-stream\r\n";
+			$this->postdata[$key] = $entity;
+			return;
 		}
 
 		if (function_exists('mime_content_type')) {
@@ -309,7 +302,6 @@ class Networkcurl implements iNetwork {
 		$this->statusText = ''; #状态码文本
 
 		$this->__isBinary = false;
-		$this->__deleteTempList = array();
 
 		$this->option = array();
 		$this->url = '';
