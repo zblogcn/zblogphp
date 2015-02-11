@@ -30,6 +30,8 @@ class Networkcurl implements iNetwork
 	private $isgzip = false;
 	private $maxredirs = 0;
 
+	private $__isBinary = false;
+	private $__boundary = '';
 	/**
 	 * @ignore
 	 */
@@ -160,9 +162,7 @@ class Networkcurl implements iNetwork
 			if ($data == '') {
 				$data = array();
 				foreach ($this->postdata as $key => $value) {
-					foreach ($value as $key2 => $value2) {
-						$data[$key2] = $value2;
-					}
+					$data[$key] = $value;
 				}
 			}
 			curl_setopt($this->ch, CURLOPT_POSTFIELDS,$data);
@@ -283,6 +283,28 @@ class Networkcurl implements iNetwork
 	 * @param string $entity
 	 * @return mixed
 	 */
-	public function addBinaryFile($name,$entity){
+	public function addBinary($name,$entity){
+		$this->__isBinary = true;
+		if(is_file($entity)){
+			$basename=basename($entity);
+			$type=filetype($entity);
+			$contents=file_get_contents($entity);
+			$this->postdata["file\"; filename=\"$basename\r\nContent-Type: $type\r\n"] = $contents;
+		}else{
+			$basename=basename($name);
+			$type='application/octet-stream';
+			$this->postdata["file\"; filename=\"$basename\r\nContent-Type: $type\r\n"] = $contents;
+		}
+
 	}
+	
+	/**
+	 * @param string $name
+	 * @param string $entity
+	 * @return mixed
+	 */
+	public function addText($name, $entity) {
+		$this->postdata[$name] = $entity;
+	}
+
 }
