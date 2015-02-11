@@ -35,7 +35,7 @@ zbp.plugin.on("comment.reply", "default", function(id) {
 
 zbp.plugin.on("comment.get", "default", function (logid, page) {
 	$('span.commentspage').html("Waiting...");
-	$.get(str00 + "zb_system/cmd.php?act=CommentGet&logid=" + logid + "&page=" + page, function(data) {
+	$.get(bloghost + "zb_system/cmd.php?act=CommentGet&logid=" + logid + "&page=" + page, function(data) {
 		$('#AjaxCommentBegin').nextUntil('#AjaxCommentEnd').remove();
 		$('#AjaxCommentEnd').before(data);
 		$("#cancel-reply").click();

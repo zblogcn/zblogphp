@@ -68,7 +68,10 @@ class ZBlogPHP {
 	 * @var null
 	 */
 	public $ajaxurl = null;
-
+	/**
+	 * @var null
+	 */
+	public $xmlrpcurl = null;
 	/**
 	 * @var array 用户数组
 	 */
@@ -81,10 +84,12 @@ class ZBlogPHP {
 	 * @var array 分类数组
 	 */
 	public $categorys=array();
+	public $categories=null;
 	/**
 	 * @var array 分类数组（已排序）
 	 */
 	public $categorysbyorder=array();
+	public $categoriesbyorder=null;
 	/**
 	 * @var int 分类最大层数
 	 */
@@ -328,6 +333,9 @@ class ZBlogPHP {
 		$this->searchcount = &$this->option['ZC_SEARCH_COUNT'];
 		$this->displaycount = &$this->option['ZC_DISPLAY_COUNT'];
 		$this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
+		
+		$this->categories = &$this->categorys;
+		$this->categoriesbyorder = &$this->categorysbyorder;
 
 		$this->user = new stdClass;
 		foreach($this->datainfo['Member'] as $key=>$value){
@@ -354,48 +362,6 @@ class ZBlogPHP {
 			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($method, $args);
 			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-		}
-		if( strpos('
-			|GetListCustom|
-			|GetListCustomByArray|
-			|GetList|
-			|GetListType|
-			|GetListTypeByArray|
-			|GetPostList|
-			|GetPostByArray|
-			|GetArticleList|
-			|GetPageList|
-			|GetCommentList|
-			|GetMemberList|
-			|GetTagList|
-			|GetCategoryList|
-			|GetModuleList|
-			|GetUploadList|
-			|GetCounterList|
-			|get_results|
-			|GetPostByID|
-			|GetCategoryByID|
-			|GetCategoryByName|
-			|GetCategoryByAliasOrName|
-			|GetModuleByID|
-			|GetModuleByFileName|
-			|GetMemberByID|
-			|GetMemberByName|
-			|GetMemberByNameOrAlias|
-			|CheckMemberNameExist|
-			|CheckMemberByNameOrAliasExist|
-			|GetCommentByID|
-			|GetUploadByID|
-			|GetCounterByID|
-			|GetTagByAliasOrName|
-			|GetTagByID|
-			|LoadTagsByIDString|
-			|LoadTagsByNameString|
-			|ConvertTagIDtoString|
-			|GetTopArticle|
-			','|' . $method . '|')!==0
-		){
-			return call_user_func_array(array($this,'_'.$method),$args);
 		}
 		trigger_error ( $this->lang['error'][81] ,  E_USER_WARNING );
 	}
@@ -510,6 +476,7 @@ class ZBlogPHP {
 		$this->feedurl=$this->host . 'feed.php';
 		$this->searchurl=$this->host . 'search.php';
 		$this->ajaxurl=$this->host . 'zb_system/cmd.php?act=ajax&src=';
+		$this->xmlrpcurl = $this->host . 'zb_system/xml-rpc/index.php';
 
 		$this->isinitialized=true;
 
@@ -1069,7 +1036,15 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	public function Verify_Original($name,$originalpw,&$member=null){
-		return $this->Verify_MD5($name,md5($originalpw),$member);
+		if($name=='' || $originalpw==''){
+			return false;
+		}
+		$m = $this->GetMemberByName($name);
+		if ($m->ID > 0){
+			return $this->Verify_MD5($name,md5($originalpw),$member);
+		}else{
+			return false;
+		}
 	}
 
 	/**
@@ -1080,6 +1055,9 @@ class ZBlogPHP {
 	 * @return bool
 	 */
 	public function Verify_Final($name,$password,&$member=null){
+		if($name=='' || $password==''){
+			return false;
+		}
 		$m = $this->GetMemberByName($name);
 		if ($m->ID > 0){
 			if(strcasecmp( $m->Password ,  $password ) ==  0){
@@ -1676,7 +1654,7 @@ class ZBlogPHP {
 	 * @param string $sql SQL操作语句
 	 * @return array
 	 */
-	public function _GetListCustom($table,$datainfo,$sql){
+	public function GetListCustom($table,$datainfo,$sql){
 
 		$array=null;
 		$list=array();
@@ -1697,7 +1675,7 @@ class ZBlogPHP {
 	 * @param array $array ID数组
 	 * @return array
 	 */
-	public function _GetListCustomByArray($table,$datainfo,$array){
+	public function GetListCustomByArray($table,$datainfo,$array){
 		if(!is_array($array))return array();
 		if(count($array)==0)return array();
 		$where = array();
@@ -1716,26 +1694,13 @@ class ZBlogPHP {
 	}
 
 	/**
-	 * 已改名GetListType,将在下个版中扔掉有歧义的GetList
+	 * 已改名GetListType,1.5版中扔掉有歧义的GetList
 	 *
-	 * @deprecated 1.5
 	 * @param $type
 	 * @param $sql
 	 * @return array
 	 */
-	public function _GetList($type,$sql){
-		$this->SetHint('tips','$zbp->GetList()已改名为GetListType(),下个版本将会取消,请在相关源码中改用新名称.');
-		return $this->GetListType($type,$sql);
-	}
-
-	/**
-	 * 原名GetList
-	 * 查询指定类型的sql并返回指定类型对象列表
-	 * @param string $type
-	 * @param string $sql
-	 * @return array
-	 */
-	public function _GetListType($type,$sql){
+	public function GetListType($type,$sql){
 
 		$array=null;
 		$list=array();
@@ -1755,7 +1720,7 @@ class ZBlogPHP {
 	 * @param array $array ID数组
 	 * @return array
 	 */
-	public function _GetListTypeByArray($type,$array){
+	public function GetListTypeByArray($type,$array){
 		if(!is_array($array))return array();
 		if(count($array)==0)return array();
 		$where = array();
@@ -1781,7 +1746,7 @@ class ZBlogPHP {
 	 * @param null $option
 	 * @return array
 	 */
-	public function _GetPostList($select=null,$where=null,$order=null,$limit=null,$option=null){
+	public function GetPostList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
@@ -1799,7 +1764,7 @@ class ZBlogPHP {
 	 * @param array $array
 	 * @return array Posts
 	 */
-	public function _GetPostByArray($array){
+	public function GetPostByArray($array){
 		return $this->GetListTypeByArray('Post',$array);
 	}
 
@@ -1812,7 +1777,7 @@ class ZBlogPHP {
 	 * @param bool $readtags
 	 * @return array
 	 */
-	public function _GetArticleList($select=null,$where=null,$order=null,$limit=null,$option=null,$readtags=true){
+	public function GetArticleList($select=null,$where=null,$order=null,$limit=null,$option=null,$readtags=true){
 
 		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
@@ -1844,7 +1809,7 @@ class ZBlogPHP {
 	 * @param null $option
 	 * @return array
 	 */
-	public function _GetPageList($select=null,$where=null,$order=null,$limit=null,$option=null){
+	public function GetPageList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
 		if(empty($where)){$where = array();}
@@ -1866,7 +1831,7 @@ class ZBlogPHP {
 	 * @param null $option
 	 * @return array
 	 */
-	public function _GetCommentList($select=null,$where=null,$order=null,$limit=null,$option=null){
+	public function GetCommentList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Comment'],$select,$where,$order,$limit,$option);
@@ -1886,7 +1851,7 @@ class ZBlogPHP {
 	 * @param null $option
 	 * @return array
 	 */
-	public function _GetMemberList($select=null,$where=null,$order=null,$limit=null,$option=null){
+	public function GetMemberList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Member'],$select,$where,$order,$limit,$option);
@@ -1902,7 +1867,7 @@ class ZBlogPHP {
 	 * @param null $option
 	 * @return array
 	 */
-	public function _GetTagList($select=null,$where=null,$order=null,$limit=null,$option=null){
+	public function GetTagList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Tag'],$select,$where,$order,$limit,$option);
@@ -1918,7 +1883,7 @@ class ZBlogPHP {
 	 * @param null $option
 	 * @return array
 	 */
-	public function _GetCategoryList($select=null,$where=null,$order=null,$limit=null,$option=null){
+	public function GetCategoryList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Category'],$select,$where,$order,$limit,$option);
@@ -1934,7 +1899,7 @@ class ZBlogPHP {
 	 * @param null $option
 	 * @return array
 	 */
-	public function _GetModuleList($select=null,$where=null,$order=null,$limit=null,$option=null){
+	public function GetModuleList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Module'],$select,$where,$order,$limit,$option);
@@ -1949,7 +1914,7 @@ class ZBlogPHP {
 	 * @param null $option
 	 * @return array
 	 */
-	public function _GetUploadList($select=null,$where=null,$order=null,$limit=null,$option=null){
+	public function GetUploadList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Upload'],$select,$where,$order,$limit,$option);
@@ -1964,7 +1929,7 @@ class ZBlogPHP {
 	 * @param null $option
 	 * @return array
 	 */
-	public function _GetCounterList($select=null,$where=null,$order=null,$limit=null,$option=null){
+	public function GetCounterList($select=null,$where=null,$order=null,$limit=null,$option=null){
 
 		if(empty($select)){$select = array('*');}
 		$sql = $this->db->sql->Select($this->table['Counter'],$select,$where,$order,$limit,$option);
@@ -1979,7 +1944,7 @@ class ZBlogPHP {
 	 * @param $sql
 	 * @return mixed
 	 */
-	public function _get_results($sql){
+	public function get_results($sql){
 		return $this->db->Query($sql);
 	}
 
@@ -1993,7 +1958,7 @@ class ZBlogPHP {
 	 * @param int $id
 	 * @return Post
 	 */
-	public function _GetPostByID($id){
+	public function GetPostByID($id){
 		if($id==0)return new Post;
 		if(isset($this->posts[$id])){
 			return $this->posts[$id];
@@ -2010,7 +1975,7 @@ class ZBlogPHP {
 	 * @param int $id
 	 * @return Category
 	 */
-	public function _GetCategoryByID($id){
+	public function GetCategoryByID($id){
 		if(isset($this->categorys[$id])){
 			return $this->categorys[$id];
 		}else{
@@ -2023,7 +1988,7 @@ class ZBlogPHP {
 	 * @param string $name
 	 * @return Category
 	 */
-	public function _GetCategoryByName($name){
+	public function GetCategoryByName($name){
 		$name=trim($name);
 		foreach ($this->categorys as $key => &$value) {
 			if($value->Name==$name){
@@ -2038,7 +2003,7 @@ class ZBlogPHP {
 	 * @param string $name
 	 * @return Category
 	 */
-	public function _GetCategoryByAliasOrName($name){
+	public function GetCategoryByAliasOrName($name){
 		$name=trim($name);
 		foreach ($this->categorys as $key => &$value) {
 			if(($value->Name==$name)||($value->Alias==$name)){
@@ -2053,7 +2018,7 @@ class ZBlogPHP {
 	 * @param int $id
 	 * @return Module
 	 */
-	public function _GetModuleByID($id){
+	public function GetModuleByID($id){
 		if($id==0){
 			$m = new Module;
 		}else{
@@ -2070,7 +2035,7 @@ class ZBlogPHP {
 	 * @param string $fn
 	 * @return Module
 	 */
-	public function _GetModuleByFileName($fn){
+	public function GetModuleByFileName($fn){
 		$fn=trim($fn);
 		if(!$fn){
 			$m = new Module;
@@ -2088,7 +2053,7 @@ class ZBlogPHP {
 	 * @param int $id
 	 * @return Member
 	 */
-	public function _GetMemberByID($id){
+	public function GetMemberByID($id){
 		if($id==0){
 			$m = new Member;
 			$m->Guid=GetGuid();
@@ -2117,7 +2082,7 @@ class ZBlogPHP {
 	 * @param string $name
 	 * @return Member
 	 */
-	public function _GetMemberByName($name){
+	public function GetMemberByName($name){
 		$name=trim($name);
 		if (!$name || !CheckRegExp($name, '[username]'))return new Member;
 
@@ -2152,7 +2117,7 @@ class ZBlogPHP {
 	 * @param string $name
 	 * @return Member
 	 */
-	public function _GetMemberByNameOrAlias($name){
+	public function GetMemberByNameOrAlias($name){
 		$name=trim($name);
 		if (!$name || !CheckRegExp($name, '[username]'))return new Member;
 
@@ -2187,7 +2152,7 @@ class ZBlogPHP {
 	/**
 	 * 检查指定名称的用户是否存在(不区分大小写)
 	 */
-	public function _CheckMemberNameExist($name){
+	public function CheckMemberNameExist($name){
 		$m=$this->GetMemberByName($name);
 		if($m->ID>0){
 			return true;
@@ -2199,7 +2164,7 @@ class ZBlogPHP {
 	/**
 	 * 检查指定名称或别名的用户是否存在(不区分大小写)
 	 */
-	public function _CheckMemberByNameOrAliasExist($name){
+	public function CheckMemberByNameOrAliasExist($name){
 		$m=$this->GetMemberByNameOrAlias($name);
 		if($m->ID>0){
 			return true;
@@ -2213,7 +2178,7 @@ class ZBlogPHP {
 	 * @param int $id
 	 * @return Comment
 	 */
-	public function _GetCommentByID($id){
+	public function GetCommentByID($id){
 		if(isset($this->comments[$id])){
 			return $this->comments[$id];
 		}else{
@@ -2233,7 +2198,7 @@ class ZBlogPHP {
 	 * @param int $id
 	 * @return Upload
 	 */
-	public function _GetUploadByID($id){
+	public function GetUploadByID($id){
 		$m = new Upload;
 		if($id>0){
 			$m->LoadInfoByID($id);
@@ -2246,7 +2211,7 @@ class ZBlogPHP {
 	 * @param int $id
 	 * @return Counter
 	 */
-	public function _GetCounterByID($id){
+	public function GetCounterByID($id){
 		$m = new Counter;
 		if($id>0){
 			$m->LoadInfoByID($id);
@@ -2259,7 +2224,7 @@ class ZBlogPHP {
 	 * @param string $name
 	 * @return Tag
 	 */
-	public function _GetTagByAliasOrName($name){
+	public function GetTagByAliasOrName($name){
 		$a=array();
 		$a[]=array('tag_Alias',$name);
 		$a[]=array('tag_Name',$name);
@@ -2278,7 +2243,7 @@ class ZBlogPHP {
 	 * @param int $id
 	 * @return Tag
 	 */
-	public function _GetTagByID($id){
+	public function GetTagByID($id){
 		if(isset($this->tags[$id])){
 			return $this->tags[$id];
 		}else{
@@ -2299,7 +2264,7 @@ class ZBlogPHP {
 	 * @param $s
 	 * @return array
 	 */
-	public function _LoadTagsByIDString($s){
+	public function LoadTagsByIDString($s){
 		$s=trim($s);
 		if($s=='')return array();
 		$s=str_replace('}{', '|', $s);
@@ -2347,7 +2312,7 @@ class ZBlogPHP {
 	 * @param string $s 标签名字符串，如'aaa,bbb,ccc,ddd
 	 * @return array
 	 */
-	public function _LoadTagsByNameString($s){
+	public function LoadTagsByNameString($s){
 		$s=trim($s);
 		$s=str_replace(';', ',', $s);
 		$s=str_replace('，', ',', $s);
@@ -2390,7 +2355,7 @@ class ZBlogPHP {
 	 * @param array $array 标签ID数组
 	 * @return string
 	 */
-	public function _ConvertTagIDtoString($array){
+	public function ConvertTagIDtoString($array){
 		$s='';
 		foreach($array as $a){
 			$s .= '{' . $a . '}';
@@ -2401,7 +2366,7 @@ class ZBlogPHP {
 	/**
 	 * 获取全部置顶文章（优先从cache里读数组）
 	 */
-	public function _GetTopArticle(){
+	public function GetTopArticle(){
 		if(!is_object($this->cache))return array();
 		$articles_top_notorder_idarray = unserialize($this->cache->top_post_array);
 		if(!is_array($articles_top_notorder_idarray)){
@@ -2543,6 +2508,15 @@ class ZBlogPHP {
 	 * 提取Cookie中的提示消息
 	 */
 	public function GetHint(){
+		for ($i = 1; $i <= 5; $i++) {
+			$signal='hint' . $i;
+			$signal=$this->$signal;
+			if($signal){
+				$a=explode('|', $signal);
+				$this->ShowHint($a[0],$a[1]);
+				setcookie("hint_signal" . $i , '',time()-3600,$this->cookiespath);
+			}
+		}
 		for ($i = 1; $i <= 5; $i++) {
 			$signal=GetVars('hint_signal' . $i,'COOKIE');
 			if($signal){

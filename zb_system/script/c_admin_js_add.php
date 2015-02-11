@@ -10,23 +10,15 @@ require '../function/c_system_base.php';
 ob_clean();
 
 ?>
-var bloghost="<?php echo $zbp->host; ?>";
-var cookiespath="<?php echo $zbp->cookiespath; ?>";
-var ajaxurl="<?php echo $zbp->ajaxurl; ?>";
-
 var zbp = new ZBP({
 	bloghost: "<?php echo $zbp->host; ?>",
 	ajaxurl: "<?php echo $zbp->ajaxurl; ?>",
-	cookiepath: "<?php echo $zbp->cookiespath; ?>",
-	lang: {
-		error: {
-			72: "<?php echo $lang['error']['72']; ?>",
-			29: "<?php echo $lang['error']['29']; ?>",
-			46: "<?php echo $lang['error']['46']; ?>"
-		}
-	}
+	cookiepath: "<?php echo $zbp->cookiespath; ?>"
 });
 
+var bloghost = zbp.options.bloghost;
+var cookiespath = zbp.options.bloghost;
+var ajaxurl = zbp.options.bloghost;
 
 //*********************************************************
 // 目的：    全选

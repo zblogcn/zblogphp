@@ -47,7 +47,7 @@ function ActivePlugin_WhitePage() {
 		}
 	}
 
-	$Pad_List='/android|iphone|ipad|windows\sphone|kindle|gt\-p|gt\-n|rim\stablet|meego/i';
+	$Pad_List='/touch|arm;|android|iphone|ipad|windows\sphone|kindle|gt\-p|gt\-n|rim\stablet|meego/i';
 	$UA=GetGuestAgent();
 	if(CheckRegExp($UA,$Pad_List)==true){
 		$s .=	"body{font-size:4vw;}#divMain{width:100%;}#divSidebar{width:100%;}.function{width:50%;font-size:3vw;}";

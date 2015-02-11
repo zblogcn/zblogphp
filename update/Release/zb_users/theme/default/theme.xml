@@ -2,7 +2,7 @@
 <theme version="php">
 <id>default</id>
 <name>默认主题</name>
-<url>http://www.rainbowsoft.org/</url>
+<url>http://www.zblogcn.com/</url>
 <note>Z-Blog的默认主题</note>
 <description>Z-Blog的默认主题.模板由zx制作,娇娇设计.新增了Table日历的支持.</description>
 <path></path>
@@ -19,9 +19,9 @@
   <url>http://imjiao.com/</url>
 </source>
 <adapted>131221</adapted>
-<version>1.5</version>
+<version>1.6</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2015-01-30</modified>
+<modified>2015-02-07</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

@@ -334,6 +334,8 @@ function ViewSearch(){
 	if(!$zbp->CheckRights($GLOBALS['action'])){Redirect('./');}
 
 	$q = trim(htmlspecialchars(GetVars('q','GET')));
+	$page = GetVars('page','GET');
+	$page = (int)$page == 0 ? 1 : (int)$page;
 
 	$article = new Post;
 	$article->ID = 0;
@@ -357,12 +359,19 @@ function ViewSearch(){
 		$w[]=array('=','log_Status',0);
 	}
 
+	$pagebar = new Pagebar('{%host%}search.php?q='.urlencode($q).'{&page=%page%}',false);
+	$pagebar->PageCount = $zbp->searchcount;
+	$pagebar->PageNow = $page;
+	$pagebar->PageBarCount = $zbp->pagebarcount;
+	$pagebar->UrlRule->Rules['{%page%}'] = $page;
+
 	$array=$zbp->GetArticleList(
 		'',
 		$w,
 		array('log_PostTime'=>'DESC'),
-		array($zbp->searchcount),
-		null
+		array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
+		array('pagebar' => $pagebar),
+		false
 	);
 
 	foreach ($array as $a) {
@@ -383,9 +392,11 @@ function ViewSearch(){
 	$zbp->header .= '<meta name="robots" content="noindex,follow" />' . "\r\n";
 	$zbp->template->SetTags('title',$article->Title);
 	$zbp->template->SetTags('article',$article);
+	$zbp->template->SetTags('search',$q);
+	$zbp->template->SetTags('articles',$array);
 	$zbp->template->SetTags('type',$article->TypeName);
-	$zbp->template->SetTags('page',1);
-	$zbp->template->SetTags('pagebar',null);
+	$zbp->template->SetTags('page',$page);
+	$zbp->template->SetTags('pagebar',$pagebar);
 	$zbp->template->SetTags('comments',array());
 	$zbp->template->SetTemplate($article->Template);
 
@@ -420,7 +431,7 @@ function ViewAuto($inpurl) {
 	if($zbp->cookiespath === substr($url, 0 , strlen($zbp->cookiespath)))
 		$url = substr($url, strlen($zbp->cookiespath));
 
-	if (isset($_SERVER['SERVER_SOFTWARE']) && (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) && (isset($_GET['rewrite']) == true)){
+	if ( IS_IIS && isset($_GET['rewrite']) ){
 		//iis+httpd.ini下如果存在真实文件
 		$realurl = $zbp->path . urldecode($url);
 		if(is_readable($realurl)&&is_file($realurl)){

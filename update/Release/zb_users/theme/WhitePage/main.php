@@ -31,25 +31,31 @@ $percolors=array("ffffff","ffa07a","8fbc8b","a9a9a9","6699ff","ee82ee","9370db",
 <link href="source/colpick.css" rel="stylesheet" /> 
 <script src="source/colpick.js" type="text/javascript"></script>
 <style>
-	input.colorpicker { 
-		border-right-width: 32px; 
-		width: 50px; 
-		height: 23px;
-		cursor: pointer; 
-		font-family: 'Lucida Console', Monaco, monospace;
-	}
-	.color-box {
-		float:left;
-		width:30px;
-		height:30px;
-		margin:5px;
-		border: 1px solid white;
-		cursor: pointer; 
-	}
-	.color-box-picker{ 		
-		margin: 8px 10px;
-		border: 1px solid #aaa; width: 90px;
-	}
+input.colorpicker { 
+border-right-width: 25px; 
+width: 84px; 
+height: 25px;
+line-height:25px;
+cursor: pointer; 
+font-family: 'Lucida Console', Monaco, monospace;
+box-sizing: border-box;
+padding:0;
+margin:0;
+float:left;
+}
+.color-box {
+float:left;
+width:30px;
+height:30px;
+margin:5px;
+border: 1px solid white;
+cursor: pointer; 
+box-sizing: border-box;
+}
+.color-box-picker{ 	
+margin: 8px 10px;
+border: 1px solid #aaa; width: 86px;height: 27px;
+}
 </style>
 <!--#include file="..\..\..\..\zb_system\admin\admin_top.asp"-->
 <div id="divMain">

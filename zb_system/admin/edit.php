@@ -101,7 +101,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsig
 
     <div id="divContent"  class="editmod2" style="clear:both;">
 		<div id='cheader' class="editmod editmod3"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
-		<div id='carea' class="editmod editmod3"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content,'[html-format]');?></textarea></div>
+		<div id='carea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content,'[html-format]');?></textarea></div>
 		<div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Waiting...</div>
 	</div>
 
@@ -128,12 +128,12 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsign
       </div>
       <!-- )tags -->
 
-       <div id="insertintro" class="editmod2" style="padding-top:1em;paddding-bottom:0;"><span>* <?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
+       <div id="insertintro" class="editmod2" style="padding-top:0.5em;paddding-bottom:0.5em;"><span>* <?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
 <?php }?>
 
 		<div id="divIntro" class="editmod2" <?php if(!$article->Intro){echo 'style="display:none;"';}?>>
        <div id="theader" class="editmod editmod3"><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
-       <div id='tarea' class="editmod editmod3"><textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro,'[html-format]');?></textarea></div>
+       <div id='tarea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro,'[html-format]');?></textarea></div>
        <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Waiting...</div>
 
     </div>

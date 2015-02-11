@@ -34,11 +34,15 @@ var lang_comment_content_error = zbp.options.lang.error[46];
 if (!isset($_GET['pluginonly'])) {
 ?>
 $(function () {
-	
+
+	zbp.cookie.set("timezone", (new Date().getTimezoneOffset()/60)*(-1));
 	var $cpLogin = $(".cp-login").find("a");
 	var $cpVrs = $(".cp-vrs").find("a");
 	var $addinfo = zbp.cookie.get("addinfo<?php echo str_replace('/', '', $zbp->cookiespath);?>");
-	if (!$addinfo) return;
+	if (!$addinfo){
+		zbp.userinfo.output();
+		return ;
+	}
 	$addinfo = JSON.parse($addinfo);
 
 	if ($addinfo.chkadmin){
@@ -57,12 +61,6 @@ $(function () {
 			$cpVrs.html("<?php echo $zbp->lang['msg']['new_article']; ?>");
 		}
 		$cpVrs.attr("href", zbp.options.bloghost + "zb_system/cmd.php?act=ArticleEdt");
-	}
-
-	zbp.cookie.set("timezone", (new Date().getTimezoneOffset()/60)*(-1));
-
-	if ($addinfo.userid < 1){
-		zbp.userinfo.output();
 	}
 
 });
