@@ -28,7 +28,7 @@ function run2(e, d, h) {
 	switch (e) {
 		case "new":
 			var f;
-			f = $("#configt tr").last().children("td:first").children("input").attr("value");
+			f = $("#configt tr").last().children("td:first").children("input").val();
 			if (f == "NaN") {
 				f = 0
 			}
@@ -43,7 +43,7 @@ function run2(e, d, h) {
 		case "edit":
 		case "del":
 			g.post = $("#ta" + d).val();
-			g.name1 = $("#txt" + d).text();
+			g.name1 = $("#txt" + d).text() || $("#txt" + d).val();
 			g.name2 = $("#name").html();
 			g.test = d;
 			$("#content").html("Loading");
