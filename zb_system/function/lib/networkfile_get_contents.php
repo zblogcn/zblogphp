@@ -247,6 +247,7 @@ class Networkfile_get_contents implements iNetwork {
 				$return['mime'] = 'application/octet-stream';
 			}
 		} else {
+			$name = basename($name);
 			$return['data'] = $entity;
 			$return['filename'] = $name;
 			$return['mime'] = 'application/octet-stream';
