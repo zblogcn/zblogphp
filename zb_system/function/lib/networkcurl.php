@@ -30,6 +30,7 @@ class Networkcurl implements iNetwork {
 	private $maxredirs = 0;
 
 	private $__isBinary = false;
+	private $__deleteTempList = array();
 
 	/**
 	 * @ignore
@@ -159,22 +160,20 @@ class Networkcurl implements iNetwork {
 		if (is_array($data)) {
 			$data = http_build_query($data);
 		}
+		curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->httpheader);
 
 		if ($this->option['method'] == 'POST') {
 			if ($data == '') {
-				$data = array();
-				foreach ($this->postdata as $key => $value) {
-					foreach ($value as $key2 => $value2) {
-						$data[$key2] = $value2;
-					}
-				}
+				$data = $this->postdata;
 			}
-			curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
-			curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'POST');
-			//curl_setopt($this->ch, CURLOPT_POST, 1);
+			if ($this->__isBinary) {
+				curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'POST');
+			} else {
+				curl_setopt($this->ch, CURLOPT_POST, 1);
+			}
+			curl_setopt($this->ch, CURLOPT_POSTFIELDS, ($data == '' ? $this->postdata : $data));
 		}
 
-		curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->httpheader);
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
 
 		if ($this->maxredirs > 0) {
@@ -193,8 +192,8 @@ class Networkcurl implements iNetwork {
 
 		$result = curl_exec($this->ch);
 		$header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
-		$this->responseHeader = explode("\r\n", substr($result, 0, $header_size - 4));
 
+		$this->responseHeader = explode("\r\n", substr($result, 0, $header_size - 4));
 		$this->responseText = substr($result, $header_size);
 		curl_close($this->ch);
 		if (isset($this->responseHeader[0])) {
@@ -209,6 +208,11 @@ class Networkcurl implements iNetwork {
 			}
 
 			unset($this->responseHeader[0]);
+		}
+
+		// Delete temp file
+		foreach ($this->__deleteTempList as $key => $value) {
+			@unlink($value);
 		}
 
 	}
@@ -239,9 +243,7 @@ class Networkcurl implements iNetwork {
 	 * @param mixed $bstrValue 值
 	 */
 	public function add_postdata($bstrItem, $bstrValue) {
-		array_push($this->postdata, array(
-			$bstrItem => $bstrValue,
-		));
+		$this->postdata[$bstrItem] = $bstrValue;
 	}
 	/**
 	 * @param string $name
@@ -249,19 +251,39 @@ class Networkcurl implements iNetwork {
 	 * @return mixed
 	 */
 	public function addBinary($name, $entity) {
+		global $zbp;
 		$this->__isBinary = true;
-		
-		if(is_file($entity)){
-			$basename=basename($entity);
-			$type=filetype($entity);
-			$contents=file_get_contents($entity);
-			$this->postdata[]=array("file\"; filename=\"$basename\r\nContent-Type: $type\r\n"] ,$contents);
-		}else{
-			$basename=basename($name);
-			$type='application/octet-stream';
-			$contents=&$entity;
-			$this->postdata[]=array("file\"; filename=\"$basename\r\nContent-Type: $type\r\n"] ,$contents);
+
+		if (!is_file($entity)) {
+			$tempFileName = $zbp->path . 'zb_users/cache/curl_uploadtemp_' . md5(rand(1, 10)) . '.tmp';
+			file_put_contents($tempFileName, $entity);
+			$entity = $tempFileName;
+			$this->__deleteTempList[] = $entity;
 		}
+
+		if (function_exists('mime_content_type')) {
+			$mime = mime_content_type($entity);
+		} else if (function_exists('finfo_open')) {
+			$finfo = finfo_open(FILEINFO_MIME);
+			$mime = finfo_file($finfo, $name);
+			finfo_close($finfo);
+		} else {
+			$mime = 'application/octet-stream';
+		}
+
+		if (class_exists('CURLFile')) {
+			$this->postdata[$name] = new CURLFile($entity, $mime);
+			return;
+		}
+
+		$entity = realpath($entity);
+		$value = "@{$entity}";
+		if (!empty($mime)) {
+			$value .= ';type=' . $mime;
+		}
+
+		$this->postdata[$name] = $value;
+
 	}
 
 	/**
@@ -287,6 +309,7 @@ class Networkcurl implements iNetwork {
 		$this->statusText = ''; #状态码文本
 
 		$this->__isBinary = false;
+		$this->__deleteTempList = array();
 
 		$this->option = array();
 		$this->url = '';
