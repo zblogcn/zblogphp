@@ -241,7 +241,7 @@ class Networkfile_get_contents implements iNetwork {
 				$return['mime'] = mime_content_type($entity);
 			} else if (function_exists('finfo_open')) {
 				$finfo = finfo_open(FILEINFO_MIME);
-				$return['mime'] = finfo_file($finfo, $filename);
+				$return['mime'] = finfo_file($finfo, $name);
 				finfo_close($finfo);
 			} else {
 				$return['mime'] = 'application/octet-stream';
