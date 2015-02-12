@@ -229,20 +229,14 @@ class Networkfile_get_contents implements iNetwork {
 	 * @param string $entity
 	 * @return mixed
 	 */
-	public function addBinary($name, $entity, $mime = '') {
+	public function addBinary($name, $entity, $filename = NULL, $mime = '') {
 		$this->__isBinary = true;
 		$return = array();
 
 		$return['type'] = 'binary';
 		if (is_file($entity)) {
 			$return['data'] = file_get_contents($entity);
-			$return['filename'] = basename($entity);
-			if (function_exists('mime_content_type')) {
-			} else if (function_exists('finfo_open')) {
-				$finfo = finfo_open(FILEINFO_MIME);
-				finfo_close($finfo);
-			} else {
-			}
+			$return['filename'] = ($filename === NULL ? basename($entity) : $filename);
 
 			if ($mime == '') {
 				if (function_exists('mime_content_type')) {
@@ -259,7 +253,7 @@ class Networkfile_get_contents implements iNetwork {
 		} else {
 			$name = basename($name);
 			$return['data'] = $entity;
-			$return['filename'] = $name;
+			$return['filename'] = ($filename === NULL ? basename($entity) : $filename);
 			$mime = $mime == '' ? 'application/octet-stream' : $mime;
 		}
 		$return['mime'] = $mime;
