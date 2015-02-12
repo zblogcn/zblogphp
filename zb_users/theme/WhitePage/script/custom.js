@@ -8,9 +8,10 @@
 	});
 });
 
-
+zbp.plugin.unbind("comment.reply", "system");
 //重写了common.js里的同名函数
-function RevertComment(i) {
+zbp.plugin.on("comment.reply", "default", function(id) {
+	var i = id;
 	$("#inpRevID").val(i);
 	var frm = $('#divCommentPost'),
 		cancel = $("#cancel-reply"),
@@ -42,19 +43,19 @@ function RevertComment(i) {
 		$('#txaArticle').focus();
 	} catch (e) {}
 	return false;
-}
+});
 
 //重写GetComments，防止评论框消失
-function GetComments(logid, page) {
+zbp.plugin.on("comment.get", "default", function (logid, page) {
 	$('span.commentspage').html("Waiting...");
 	$.get(bloghost + "zb_system/cmd.php?act=CommentGet&logid=" + logid + "&page=" + page, function(data) {
 		$('#AjaxCommentBegin').nextUntil('#AjaxCommentEnd').remove();
 		$('#AjaxCommentEnd').before(data);
 		$("#cancel-reply").click();
 	});
-}
+});
 
 
-function CommentComplete() {
+zbp.plugin.on("comment.postsuccess", "default", function () {
 	$("#cancel-reply").click();
-}
+});

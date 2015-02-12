@@ -23,7 +23,7 @@ class Config {
 	/**
 	 * @var array 存储Config相应key-value数值的数组
 	 */
-	private $kvdata=array();
+	protected $kvdata=array();
 
 	protected $db = null;
 
