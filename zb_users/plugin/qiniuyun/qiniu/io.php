@@ -23,10 +23,8 @@ function Qiniu_Put($upToken, $key, $body, $putExtra) // => ($putRet, $err)
 
 	$client = new Qiniu_HttpClient;
 	$client->ajax->open("POST", $QINIU_UP_HOST);
-	$client->ajax->addBinary('file', $localFile, $putExtra->MimeType);
 	$client->ajax->addText('token', $upToken);
 
-	$fields = array('token' => $upToken);
 	if ($key === null) {
 		$fname = '?';
 	} else {
@@ -42,26 +40,9 @@ function Qiniu_Put($upToken, $key, $body, $putExtra) // => ($putRet, $err)
 		}
 	}
 
-	$files = array(array('file', $fname, $body, $putExtra->MimeType));
+	$client->ajax->addBinary('file', $body, $fname, $putExtra->MimeType);
 
-	$client = new Qiniu_HttpClient;
-	return Qiniu_Client_CallWithMultipartForm($client, $QINIU_UP_HOST, $fields, $files);
-}
-
-function createFile($filename, $mime) {
-	// PHP 5.5 introduced a CurlFile object that deprecates the old @filename syntax
-	// See: https://wiki.php.net/rfc/curl-file-upload
-	if (function_exists('curl_file_create')) {
-		return curl_file_create($filename, $mime);
-	}
-
-	// Use the old style if using an older version of PHP
-	$value = "@{$filename}";
-	if (!empty($mime)) {
-		$value .= ';type=' . $mime;
-	}
-
-	return $value;
+	return Qiniu_Client_CallWithForm($client);
 }
 
 function Qiniu_PutFile($upToken, $key, $localFile, $putExtra) // => ($putRet, $err)
