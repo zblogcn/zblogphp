@@ -17,8 +17,8 @@ if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
 
 $blogtitle = $lang['msg']['category_edit'];
 
-require $blogpath . 'zb_system/admin/admin_header.php';
-require $blogpath . 'zb_system/admin/admin_top.php';
+require ZBP_PATH . 'zb_system/admin/admin_header.php';
+require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
 ?>
 <?php
@@ -124,7 +124,7 @@ function checkInfo(){
 </div>
 
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require ZBP_PATH . 'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>

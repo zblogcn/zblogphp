@@ -155,13 +155,13 @@ $blogpath = ZBP_PATH;
 /**
  *用户路径
  */
-$usersdir = $blogpath . 'zb_users/';
+$usersdir = ZBP_PATH . 'zb_users/';
 
 
 /**
  *读取设置数组
  */
-$option = require($blogpath . 'zb_system/defend/option.php');
+$option = require(ZBP_PATH . 'zb_system/defend/option.php');
 $option_zbusers = null;
 if(is_readable($filename = $usersdir . 'c_option.php')){
 	$option_zbusers = require($filename);

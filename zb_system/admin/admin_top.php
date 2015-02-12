@@ -15,7 +15,7 @@ ResponseAdmin_TopMenu()
     </div>
 <?php if($zbp->option['ZC_ADMIN_HTML5_ENABLE']){?></header><?php }else{?></div><?php }?>
 <?php
-require $blogpath . 'zb_system/admin/admin_left.php';
+require ZBP_PATH . 'zb_system/admin/admin_left.php';
 ?>
 <?php if($zbp->option['ZC_ADMIN_HTML5_ENABLE']){?><section class="main"><?php }else{?><div class="main"><?php }?>
 <?php

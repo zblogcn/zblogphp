@@ -24,7 +24,7 @@ define('PLUGIN_EXITSIGNAL_BREAK', 'break');
 #定义总插件激活函数列表
 $plugins = array();
 
-#定义总接口列表，暂未启用
+#定义总接口列表，1.5版启用，逐渐过度到hooks
 $hooks = array();
 
 /**

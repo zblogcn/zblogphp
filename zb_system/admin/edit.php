@@ -56,7 +56,7 @@ if($article->Intro){
   }
 }
 
-require $blogpath . 'zb_system/admin/admin_header.php';
+require ZBP_PATH . 'zb_system/admin/admin_header.php';
 ?>
 <script type="text/javascript" src="../script/jquery.tagto.js"></script>
 <script type="text/javascript" src="../script/jquery-ui-timepicker-addon.js"></script>
@@ -64,7 +64,7 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Begin'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 <?php
-require $blogpath . 'zb_system/admin/admin_top.php';
+require ZBP_PATH . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
 <div class="divHeader2"><?php echo $ispage?$lang['msg']['page_edit']:$lang['msg']['article_edit'];?></div>
@@ -414,7 +414,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_End'] as $fpname => &$fpsignal) {
 <script type="text/javascript">editor_init();</script>
 </div>
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require ZBP_PATH . 'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>
