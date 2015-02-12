@@ -338,6 +338,7 @@ class Networkfsockopen implements iNetwork {
 			}
 
 		} else {
+			$name = basename($name);
 			$return['data'] = $entity;
 			$return['filename'] = $name;
 			$mime = $mime == '' ? 'application/octet-stream' : $mime;

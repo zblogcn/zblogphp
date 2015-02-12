@@ -249,6 +249,7 @@ class Networkcurl implements iNetwork {
 		$this->__isBinary = true;
 
 		if (!is_file($entity)) {
+			$name = basename($name);
 			$key = "$name\"; filename=\"$name\"\r\nContent-Type: " . ($mime == '' ? 'application/octet-stream' : $mime) . "\r\n";
 			$this->postdata[$key] = $entity;
 			return;
