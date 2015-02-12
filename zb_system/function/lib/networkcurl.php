@@ -65,6 +65,8 @@ class Networkcurl implements iNetwork {
 			strtolower($property_name) == 'fragment') {
 			if (isset($this->parsed_url[strtolower($property_name)])) {
 				return $this->parsed_url[strtolower($property_name)];
+			} else {
+				return null;
 			}
 
 		} else {

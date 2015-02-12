@@ -59,6 +59,8 @@ class Networkfsockopen implements iNetwork {
 			strtolower($property_name) == 'fragment') {
 			if (isset($this->parsed_url[strtolower($property_name)])) {
 				return $this->parsed_url[strtolower($property_name)];
+			} else {
+				return null;
 			}
 
 		} else {
@@ -199,13 +201,13 @@ class Networkfsockopen implements iNetwork {
 			return;
 		}
 
-		$url = $this->option['method'] . ' ' . $this->parsed_url['path'];
+		$url = $this->option['method'] . ' ' . ($this->parsed_url['path'] == '' ? '/' : $this->parsed_url['path']);
 
 		if (isset($this->parsed_url["query"])) {
 			$url .= "?" . $this->parsed_url["query"];
 		}
 		fwrite($socket,
-			$url . ' HTTP/1.1' . "\r\n"
+			$url . ' HTTP/1.0' . "\r\n"// Not support 100 Continue
 		);
 		fwrite($socket, $this->option['header'] . "\r\n");
 		fwrite($socket, "\r\n");
@@ -367,22 +369,24 @@ class Networkfsockopen implements iNetwork {
 		$data = '';
 
 		foreach ($this->postdata as $name => $value) {
+			$data .= "\r\n";
 			$content = $value['data'];
 			$data .= "--{$boundary}\r\n";
 			$data .= "Content-Disposition: form-data; ";
 			if ($value['type'] == 'text') {
 				$data .= 'name="' . $name . '"' . "\r\n\r\n";
-				$data .= $content . "\r\n";
-				$data .= "--{$boundary}\r\n";
+				$data .= $content; // . "\r\n";
+				//$data .= "--{$boundary}";
 			} else {
 				$filename = $value['filename'];
 				$mime = $value['mime'];
 				$data .= 'name="' . $name . '"; filename="' . $filename . '"' . "\r\n";
 				$data .= "Content-Type: $mime\r\n";
-				$data .= "\r\n$content\r\n";
-				$data .= "--{$boundary}\r\n";
+				$data .= "\r\n$content"; //"\r\n";
+				//$data .= "--{$boundary}";
 			}
 		}
+		$data .= "\r\n--{$boundary}--\r\n";
 
 		return $data;
 	}
@@ -391,7 +395,7 @@ class Networkfsockopen implements iNetwork {
 	 * Build Boundary
 	 */
 	private function __buildBoundary() {
-		$boundary = 'ZBLOGPHP_BOUNDARY';
+		$boundary = '----ZBLOGPHPBOUNDARY';
 		$boundary .= substr(md5(time()), 8, 16);
 		$this->__boundary = $boundary;
 	}
