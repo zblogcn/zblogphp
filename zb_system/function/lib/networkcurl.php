@@ -244,24 +244,26 @@ class Networkcurl implements iNetwork {
 	 * @param string $entity
 	 * @return mixed
 	 */
-	public function addBinary($name, $entity) {
+	public function addBinary($name, $entity, $mime = '') {
 		global $zbp;
 		$this->__isBinary = true;
 
 		if (!is_file($entity)) {
-			$key = "$name\"; filename=\"$name\r\nContent-Type: application/octet-stream\r\n";
+			$key = "$name\"; filename=\"$name\"\r\nContent-Type: " . ($mime == '' ? 'application/octet-stream' : $mime) . "\r\n";
 			$this->postdata[$key] = $entity;
 			return;
 		}
 
-		if (function_exists('mime_content_type')) {
-			$mime = mime_content_type($entity);
-		} else if (function_exists('finfo_open')) {
-			$finfo = finfo_open(FILEINFO_MIME);
-			$mime = finfo_file($finfo, $name);
-			finfo_close($finfo);
-		} else {
-			$mime = 'application/octet-stream';
+		if ($mime == '') {
+			if (function_exists('mime_content_type')) {
+				$mime = mime_content_type($entity);
+			} else if (function_exists('finfo_open')) {
+				$finfo = finfo_open(FILEINFO_MIME);
+				$mime = finfo_file($finfo, $name);
+				finfo_close($finfo);
+			} else {
+				$mime = 'application/octet-stream';
+			}
 		}
 
 		if (class_exists('CURLFile')) {
