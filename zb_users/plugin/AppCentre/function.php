@@ -59,9 +59,16 @@ function Server_Open($method){
 		case 'view':
 			$s=Server_SendRequest(APPCENTRE_URL .'?'. GetVars('QUERY_STRING','SERVER'));
 			if(strpos($s,'<!--developer-nologin-->')!==false){
-				if($zbp->Config('AppCentre')->username){
+				if($zbp->Config('AppCentre')->username || $zbp->Config('AppCentre')->password){
 					$zbp->Config('AppCentre')->username='';
 					$zbp->Config('AppCentre')->password='';
+					$zbp->SaveConfig('AppCentre');
+				}
+			}
+			if(strpos($s,'<!--shop-nologin-->')!==false){
+				if($zbp->Config('AppCentre')->shop_username || $zbp->Config('AppCentre')->shop_password){
+					$zbp->Config('AppCentre')->shop_username='';
+					$zbp->Config('AppCentre')->shop_password='';
 					$zbp->SaveConfig('AppCentre');
 				}
 			}

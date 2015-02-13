@@ -359,11 +359,13 @@ function ViewSearch(){
 		$w[]=array('=','log_Status',0);
 	}
 
-	$pagebar = new Pagebar('{%host%}search.php?q='.urlencode($q).'{&page=%page%}',false);
+
+	$pagebar = new Pagebar($zbp->option['ZC_SEARCH_REGEX'],true);
 	$pagebar->PageCount = $zbp->searchcount;
 	$pagebar->PageNow = $page;
 	$pagebar->PageBarCount = $zbp->pagebarcount;
 	$pagebar->UrlRule->Rules['{%page%}'] = $page;
+	$pagebar->UrlRule->Rules['{%q%}'] = urlencode($q);
 
 	$array=$zbp->GetArticleList(
 		'',
