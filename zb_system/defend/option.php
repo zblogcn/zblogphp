@@ -193,5 +193,4 @@ return array(
 	'ZC_POST_ALIAS_USE_ID_NOT_TITLE' => false,
 	'ZC_COMPATIBLE_ASP_URL' => true,
 	'ZC_LARGE_DATA' => false,
-)
-?>
+);

@@ -816,7 +816,7 @@ class ZBlogPHP {
 		$this->option['ZC_BLOG_CLSID']=$this->guid;
 
 		if( strpos('|SAE|BAE2|ACE|TXY|', '|'.$this->option['ZC_YUN_SITE'].'|')===false && file_exists($this->usersdir . 'c_option.php')==false ){
-			$s="<?php\r\n";
+			$s="<" . "?" . "php\r\n";
 			$s.="return ";
 			$option = array();
 			foreach ($this->option as $key => $value) {
@@ -846,7 +846,7 @@ class ZBlogPHP {
 				)$option[$key]=$value;
 			}
 			$s.=var_export($option,true);
-			$s.="\r\n?>";
+			$s.=";";
 			@file_put_contents($this->usersdir . 'c_option.php',$s);
 		}
 
