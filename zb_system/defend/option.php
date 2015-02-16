@@ -63,6 +63,7 @@ return array(
 	// '固定域名,默认为false,如启用则'ZC_BLOG_HOST生效而'ZC_MULTI_DOMAIN_SUPPORT无效
 	'ZC_PERMANENT_DOMAIN_ENABLE' => false,
 	'ZC_PERMANENT_DOMAIN_REDIRECT' => true,
+	'ZC_PERMANENT_DOMAIN_WITH_ADMIN' => false,
 	'ZC_MULTI_DOMAIN_SUPPORT' => false,
 
 	//
