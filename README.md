@@ -1,14 +1,14 @@
 Z-BlogPHP
 =============
 
-Z-BlogPHP是由RainbowSoft Studio团队开发的博客程序，基于高效的PHP环境，体积小，速度快，支持MySQL(MariaDB)和SQLite数据库并支持相对大的数据量。
+Z-BlogPHP是由RainbowSoft Studio团队开发的博客程序，基于高效的PHP环境，体积小，速度快，支持比较大的数据量。
 
 Z-BlogPHP有着强大的可定制性、丰富的插件接口和独立的主题模板，方便开发者和用户定制与优化。
 
 ##运行环境
-- IIS、Apache、Lighttpd、Nginx、Kangle等Web服务器
-- PHP 5.2及以上版本的PHP环境
-- MySQL或SQLite数据库环境
+- Web Server: IIS、Apache、Lighttpd、Nginx、Kangle
+- PHP 5.2 - 5.6（PHP 7 未做完整测试，基本保证可用。） / HHVM 3 
+- MySQL / MariaDB / SQLite / PostgreSQL
 
 ##安装说明
 > 首先请确保网站目录拥有755权限。

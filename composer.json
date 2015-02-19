@@ -1,0 +1,22 @@
+{
+    "name": "zblogcn/zblogphp",
+    "description": "Z-BlogPHP是由RainbowSoft Studio团队开发的博客程序，基于高效的PHP环境，体积小，速度快，支持比较大的数据量。",
+    "license": "GNU/GPL",
+    "authors": [{
+        "name": "zx.asd",
+        "email": "rainbowsoft@gmail.com"
+    }, {
+        "name": "zsx",
+        "email": "zsx@zsxsoft.com"
+    }, {
+        "name": "involvements",
+        "email": "unknown@unknown.unk"
+    }, {
+        "name": "movni",
+        "email": "unknown@unknown.unk"
+    }],
+    "require": {
+        "php": ">=5.2"
+    },
+    "require-dev": {}
+}
