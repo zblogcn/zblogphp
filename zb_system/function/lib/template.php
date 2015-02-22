@@ -41,10 +41,10 @@ class Template{
 	 */
 	public function GetTemplate($name)
 	{
-		foreach ($GLOBALS['Filter_Plugin_Template_GetTemplate'] as $fpname => &$fpsignal)
-		{
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Template_GetTemplate'] as $fpname => &$fpsignal){
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this,$name);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return $this->path . $name . '.php';
 	}
@@ -109,39 +109,41 @@ class Template{
 	public function Compiling($content)
 	{
 
-		foreach ($GLOBALS['Filter_Plugin_Template_Compiling_Begin'] as $fpname => &$fpsignal)
-		{
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Compiling_Begin'] as $fpname => &$fpsignal){
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn = $fpname($this,$content);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 
-		//Step1:替换<?php块
+		// Step 1: 替换<?php块
 		$this->replacePHP($content);
-		//Step2:解析PHP
-		$this->parsePHP($content);	
-		//Step3:引入主题
+		// Step 2: 解析PHP
+		$this->parsePHP($content);
+		// Step 3: 引入主题
 		$this->parse_template($content);
-		//Step4:解析module
-		$this->parse_module($content);	
-		//Step5:替换配置
+		// Step 4: 解析module
+		$this->parse_module($content);
+		// Step 5: 处理注释
+		$this->parse_comments($content);
+		// Step 6: 替换配置
 		$this->parse_option($content);
-		//Step6:替换标签
+		// Step 7: 替换标签
 		$this->parse_vars($content);
-		//Step6:替换函数
+		// Step 8: 替换函数
 		$this->parse_function($content);
-		//Step7:解析If
+		// Step 9: 解析If
 		$this->parse_if($content);
-		//Step8:解析foreach
+		// Step 10: 解析foreach
 		$this->parse_foreach($content);
-		//Step9:解析for
+		// Step 11: 解析for
 		$this->parse_for($content);
-		//StepN:解析PHP
+		// Step N: 解析PHP
 		$this->parsePHP2($content);
 
-		foreach ($GLOBALS['Filter_Plugin_Template_Compiling_End'] as $fpname => &$fpsignal)
-		{
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Compiling_End'] as $fpname => &$fpsignal){
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this,$content);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 
 		return $content;
@@ -153,6 +155,14 @@ class Template{
 	private function replacePHP(&$content)
 	{
 		$content = preg_replace("/\<\?php[\d\D]+?\?\>/si", '', $content);
+	}
+
+	/**
+	 * @param $content
+	 */
+	private function parse_comments(&$content)
+	{
+		$content = preg_replace('/\{\*([^\}]+)\*\}/', '{php} /*$1*/ {/php}', $content);
 	}
 
 	/**
@@ -288,7 +298,7 @@ class Template{
 	{
 		$exp = $this->replace_dot($matches[1]);
 		$code = $matches[2];
-		return "{php} foreach ($exp) {{/php} $code{php} }  {/php}";
+		return "{php} foreach ($exp) {{/php}$code{php}}  {/php}";
 	}
 
 	/**
@@ -369,15 +379,14 @@ class Template{
 	 */
 	public function Display()
 	{
-		#强制撤除所有错误监控
-		//if($GLOBALS['option']['ZC_DEBUG_MODE']==false){
-		//	ZBlogException::ClearErrorHook();
-		//}
+		global $zbp;
+		$f=$this->path .  $this->startpage . '.php';
+		if(!is_readable($f))$zbp->ShowError(86,__FILE__,__LINE__);
 		#入口处将tags里的变量提升全局!!!
 		foreach ($this->tags as $key => &$value) {
 			$$key=&$value;
 		}
-		include $this->path .  $this->startpage . '.php';
+		include $f;
 	}
 
 	/**

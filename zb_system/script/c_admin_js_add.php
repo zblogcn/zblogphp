@@ -7,16 +7,23 @@
  */
 require '../function/c_system_base.php';
 
-header('Content-Type: application/javascript; charset=utf-8');
+ob_clean();
+
 ?>
-var bloghost="<?php echo $zbp->host; ?>";
-var cookiespath="<?php echo $zbp->cookiespath; ?>";
-var ajaxurl="<?php echo $zbp->ajaxurl; ?>";
+var zbp = new ZBP({
+	bloghost: "<?php echo $zbp->host; ?>",
+	ajaxurl: "<?php echo $zbp->ajaxurl; ?>",
+	cookiepath: "<?php echo $zbp->cookiespath; ?>"
+});
 
-
+var bloghost = zbp.options.bloghost;
+var cookiespath = zbp.options.bloghost;
+var ajaxurl = zbp.options.bloghost;
 
 //*********************************************************
 // 目的：    全选
+// 输入：    无
+// 返回：    无
 //*********************************************************
 function BatchSelectAll() {
 	$("input[name='id[]']").click();
@@ -25,10 +32,14 @@ function BatchSelectAll() {
 
 
 
+
 //*********************************************************
-// 目的：    取消全选
+// 目的：
+// 输入：    无
+// 返回：    无
 //*********************************************************
 function BatchDeleteAll(objEdit) {
+
 	objEdit=document.getElementById(objEdit);
 	objEdit.value="";
 	var aryChecks = document.getElementsByTagName("input");
@@ -39,16 +50,24 @@ function BatchDeleteAll(objEdit) {
 			}
 		}
 	}
+
 }
 //*********************************************************
 
 
 
+
+
+
+
+
 //*********************************************************
 // 目的：    ActiveLeftMenu
-// 输入：    Htmlid
+// 输入：    无
+// 返回：    无
 //*********************************************************
 function ActiveLeftMenu(name){
+
 	name="#"+name;
 	$("#leftmenu li").removeClass("on");
 	$(name).parent().addClass("on");
@@ -57,37 +76,35 @@ function ActiveLeftMenu(name){
 		s=s.replace("1.png","2.png");
 		$(name).children("span").css("background-image",s);
 	}
+
 }
 //*********************************************************
+
 
 
 
 //*********************************************************
 // 目的：    ActiveTopMenu
-// 输入：    Htmlid
+// 输入：    无
+// 返回：    无
 //*********************************************************
 function ActiveTopMenu(name){
+
 	name="#"+name;
 	$("#topmenu li").removeClass("on");
 	$(name).addClass("on");
+
 }
 //*********************************************************
 
 
 
-//*********************************************************
-// 目的：    AddHeaderIcon
-// 输入：    ImageURL
-//*********************************************************
-function AddHeaderIcon(s){
-	$("div.divHeader,div.divHeader2").first().css({"padding-left":"38px","background":"url('"+s+"') 1px 8px no-repeat","background-size":"32px"});
-}
-//*********************************************************
-
 
 
 //*********************************************************
-// 目的：    表格斑马线化
+// 目的：    表格斑马线
+// 输入：    无
+// 返回：    无
 //*********************************************************
 function bmx2table(){
 	var class_=new Array("color2","color3","color4");
@@ -103,31 +120,34 @@ function bmx2table(){
 
 
 
+
 //*********************************************************
 // 目的：    CheckBox
+// 输入：    无
+// 返回：    无
 //*********************************************************
-function CheckBoxBind(){
+function ChangeCheckValue(obj){
 
-	$('input.checkbox').css("display","none");
-	$('input.checkbox[value="1"]').after('<span class="imgcheck imgcheck-on"></span>');
-	$('input.checkbox[value!="1"]').after('<span class="imgcheck"></span>');
+	$(obj).toggleClass('imgcheck-on');
 
-	$('span.imgcheck').click(function(){
-		$(this).toggleClass('imgcheck-on');
-		if($(this).hasClass('imgcheck-on')){
-			$(this).prev('input').val('1');
-		}else{
-			$(this).prev('input').val('0');
-		}
-	})
+	if($(obj).hasClass('imgcheck-on')){
+		$(obj).prev('input').val('1');
+		if($(obj).prev('input').attr('id')=='edtIstop')$(obj).next('select').show();
+	}else{
+		$(obj).prev('input').val('0');
+		if($(obj).prev('input').attr('id')=='edtIstop')$(obj).next('select').hide();
+	}
+
 }
 //*********************************************************
 
 
 
+
 //*********************************************************
 // 目的：    Notifications
-// 输入：    notify
+// 输入：    无
+// 返回：    无
 //*********************************************************
 function notify(s){
 	if (window.webkitNotifications) {
@@ -146,10 +166,6 @@ function notify(s){
 
 
 
-//*********************************************************
-// 目的：    Statistic
-// 输入：    cmd
-//*********************************************************
 function statistic(s){
 	$("#statloading").show();
 	$("#updatatime").hide();
@@ -163,14 +179,7 @@ function statistic(s){
 		}
 	);
 }
-//*********************************************************
 
-
-
-//*********************************************************
-// 目的：    Updateinfo
-// 输入：    cmd
-//*********************************************************
 function updateinfo(s){
 	$("#infoloading").show();
 	$.get("<?php echo $bloghost; ?>zb_system/cmd.php"+s,{},
@@ -181,26 +190,24 @@ function updateinfo(s){
 		}
 	);
 }
-//*********************************************************
 
 
+function AddHeaderIcon(s){
+	if ($.support.leadingWhitespace)
+		$("div.divHeader,div.divHeader2").first().css({"padding-left":"38px","background":"url('"+s+"') 3px 9px no-repeat","background-size":"32px"});
+}
 
-//*********************************************************
-// 目的：    Showhint
-// 输入：    
-//*********************************************************
-function Showhint(){
+
+function AutoHideTips(){
 	if($("p.hint:visible").length>0){
 		$("p.hint:visible").delay(3500).hide(1500,function(){});
 	}
 }
 //*********************************************************
-
-
-//*********************************************************
-// 全局脚本
+// 目的：
 //*********************************************************
 $(document).ready(function(){
+
 	// Content box tabs:
 	$('.content-box .content-box-content div.tab-content').hide(); // Hide the content divs
 	$('ul.content-box-tabs li a.default-tab').addClass('current'); // Add the class "current" to the default tab
@@ -217,22 +224,24 @@ $(document).ready(function(){
 		}
 	);
 
-	//表格斑马线化
+	//斑马线化表格
 	bmx2table();
-
-	//checkbox
-	CheckBoxBind();
 
 	if($('.SubMenu').find('span').length>0){
 		$('.SubMenu').show();
 	}
 
-	//显示提示
-	Showhint();
+	//checkbox
+	$('input.checkbox').css("display","none");
+	$('input.checkbox[value="1"]').after('<span class="imgcheck imgcheck-on"></span>');
+	$('input.checkbox[value!="1"]').after('<span class="imgcheck"></span>');
+
+
+	$('span.imgcheck').click(function(){ChangeCheckValue(this)})
 
 	//batch
 	$("#batch a").bind("click", function(){ BatchContinue();$("#batch p").html("<?php echo $lang['msg']['batch_operation_in_progress']; ?>");});
-	
+
 	$(".SubMenu span.m-right").parent().css({"float":"right"});
 
 	$("img[width='16']").each(function(){if($(this).parent().is("a")){$(this).parent().addClass("button")}});
@@ -244,21 +253,46 @@ $(document).ready(function(){
 	})
 
 	if (!$.support.leadingWhitespace) {
+
+	}else{
 		<?php
-			if($option['ZC_ADMIN_HTML5_ENABLE']){
-				if(!GetVars('dishtml5','COOKIE')){
-					echo 'alert("' . $lang['error']['74'] . '");';
-				}
-			}else{
-				echo 'if($("div.divHeader,div.divHeader2").first().css("background").indexOf("zb_system")==-1){AddHeaderIcon("'. $bloghost .'zb_system/image/common/plugin_32.png");}';
-			}
+			echo 'if($("div.divHeader,div.divHeader2").first().css("background-image")=="none"){AddHeaderIcon("'. $bloghost .'zb_system/image/common/window.png");}';
 		?>
 	}
+	
+	AutoHideTips();
 
 	SetCookie("timezone",(new Date().getTimezoneOffset()/60)*(-1));
 });
 
+
+var SetCookie = function () { return zbp.cookie.set.apply(null, arguments); }
+var GetCookie = function () { return zbp.cookie.get.apply(null, arguments); }
+var LoadRememberInfo = function () { zbp.userinfo.output.apply(null); return false;}
+var SaveRememberInfo = function () { zbp.userinfo.saveFromHtml.apply(null); return false;} 
+var RevertComment = function () { zbp.comment.reply.apply(null); return false;} 
+var GetComments = function () { zbp.comment.get.apply(null); return false;} 
+var VerifyMessage = function () { zbp.comment.post.apply(null); return false;}
+
+
 <?php
-foreach ($GLOBALS['Filter_Plugin_Admin_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
+
+$s = ob_get_clean();
+$m = md5($s);
+
+header('Content-Type: application/x-javascript; charset=utf-8');
+header('Etag: ' . $m);
+
+if( isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m ){
+	SetHttpStatusCode(304);
+	die;
+}
+
+$zbp->CheckGzip();
+$zbp->StartGzip();
+
+echo $s;
+
 die();
 ?>

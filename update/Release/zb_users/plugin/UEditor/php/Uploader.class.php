@@ -81,10 +81,10 @@ class Uploader
         if ($this->file['error']) {
             $this->stateInfo = $this->getStateInfo($file['error']);
             return;
-        } else if (!file_exists($file['tmp_name'])) {
+        }/* else if (!file_exists($file['tmp_name'])) {
             $this->stateInfo = $this->getStateInfo("ERROR_TMP_FILE_NOT_FOUND");
             return;
-        } else if (!is_uploaded_file($file['tmp_name'])) {
+        }*/ else if (!is_uploaded_file($file['tmp_name'])) {
             $this->stateInfo = $this->getStateInfo("ERROR_TMPFILE");
             return;
         }

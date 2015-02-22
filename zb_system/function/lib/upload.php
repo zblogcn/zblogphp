@@ -13,7 +13,7 @@ class Upload extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Upload'],$zbp->datainfo['Upload']);
+		parent::__construct($zbp->table['Upload'],$zbp->datainfo['Upload'],__CLASS__);
 
 		$this->PostTime = time();
 	}
@@ -51,10 +51,11 @@ class Upload extends Base{
 	 * @return bool
 	 */
 	function DelFile(){
-	
-		foreach ($GLOBALS['Filter_Plugin_Upload_DelFile'] as $fpname => &$fpsignal) {
+
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_DelFile'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		if (file_exists($this->FullFile)) { @unlink($this->FullFile);}
 		return true;
@@ -68,16 +69,17 @@ class Upload extends Base{
 	function SaveFile($tmp){
 		global $zbp;
 
-		foreach ($GLOBALS['Filter_Plugin_Upload_SaveFile'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_SaveFile'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($tmp,$this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 
 		if(!file_exists($zbp->usersdir . $this->Dir)){
-			@mkdir($zbp->usersdir . $this->Dir, 0755,true);	
+			@mkdir($zbp->usersdir . $this->Dir, 0755,true);
 		}
-		if(PHP_OS=='WINNT'||PHP_OS=='WIN32'||PHP_OS=='Windows'){
-			$fn=iconv("UTF-8","GBK//IGNORE",$this->Name);
+		if(IS_WINDOWS){
+			$fn=iconv("UTF-8",$zbp->lang['windows_character_set'] . "//IGNORE",$this->Name);
 		}else{
 			$fn=$this->Name;
 		}
@@ -92,13 +94,14 @@ class Upload extends Base{
 	function SaveBase64File($str64){
 		global $zbp;
 
-		foreach ($GLOBALS['Filter_Plugin_Upload_SaveBase64File'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_SaveBase64File'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($str64,$this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 
 		if(!file_exists($zbp->usersdir . $this->Dir)){
-			@mkdir($zbp->usersdir . $this->Dir, 0755,true);	
+			@mkdir($zbp->usersdir . $this->Dir, 0755,true);
 		}
 		$s=base64_decode($str64);
 		$this->Size=strlen($s);
@@ -138,7 +141,7 @@ class Upload extends Base{
 		}
 		if ($name=='Author') {
 			return null;
-		}		
+		}
 		parent::__set($name, $value);
 	}
 
@@ -150,7 +153,7 @@ class Upload extends Base{
 	{
 		global $zbp;
 		if ($name=='Url') {
-			foreach ($GLOBALS['Filter_Plugin_Upload_Url'] as $fpname => &$fpsignal) {
+			foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Url'] as $fpname => &$fpsignal) {
 				return $fpname($this);
 			}
 			return $zbp->host . 'zb_users/' . $this->Dir . urlencode($this->Name);

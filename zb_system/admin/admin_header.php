@@ -9,7 +9,8 @@
 <meta name="robots" content="none" />
 <title><?php echo $blogname . '-' . $blogtitle?></title>
 <link href="<?php echo $bloghost?>zb_system/css/admin2.css" rel="stylesheet" type="text/css" />
-<script src="<?php echo $bloghost?>zb_system/script/common.js" type="text/javascript"></script>
+<script src="<?php echo $bloghost?>zb_system/script/jquery-1.11.2.min.js" type="text/javascript"></script>
+<script src="<?php echo $bloghost?>zb_system/script/zblogphp.js" type="text/javascript"></script>
 <script src="<?php echo $bloghost?>zb_system/script/c_admin_js_add.php" type="text/javascript"></script>
 <script src="<?php echo $bloghost?>zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $bloghost?>zb_system/css/jquery-ui.custom.css"/>
@@ -17,5 +18,5 @@
 <link rel="stylesheet" href="<?php echo $bloghost?>zb_system/css/jquery-ui.ie.css">
 <![endif]-->
 <?php
-	foreach ($GLOBALS['Filter_Plugin_Admin_Header'] as $fpname => &$fpsignal) {$fpname();}
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Header'] as $fpname => &$fpsignal) {$fpname();}
 ?>

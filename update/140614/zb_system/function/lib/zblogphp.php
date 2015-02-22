@@ -1290,11 +1290,11 @@ class ZBlogPHP {
 		if(strpos($this->templates['comments'], 'AjaxCommentEnd')===false)
 			$this->templates['comments']=$this->templates['comments'] . '<label id="AjaxCommentEnd"></label>';
 
-		if(strpos($this->templates['comment'], 'id="cmt{$comment->ID}"')===false&&strpos($this->templates['comment'], 'id=\'cmt{$comment->ID}\'')===false){
-			$this->templates['comment']='<label id="cmt{$comment->ID}"></label>'. $this->templates['comment'];
+		if(strpos($this->templates['comment'], 'id="cmt{$comment.ID}"')===false&&strpos($this->templates['comment'], 'id=\'cmt{$comment.ID}\'')===false){
+			$this->templates['comment']='<label id="cmt{$comment.ID}"></label>'. $this->templates['comment'];
 		}
 
-		if(strpos($this->templates['commentpost'], 'inpVerify')===false){
+		if(strpos($this->templates['commentpost'], 'inpVerify')===false&&strpos($this->templates['commentpost'], '=\'verify\'')===false&&strpos($this->templates['commentpost'], '="verify"')===false){
 			$verify='{if $option[\'ZC_COMMENT_VERIFY_ENABLE\'] && !$user.ID}<p><input type="text" name="inpVerify" id="inpVerify" class="text" value="" size="28" tabindex="4" /> <label for="inpVerify">'.$this->lang['msg']['validcode'].'(*)</label><img style="width:{$option[\'ZC_VERIFYCODE_WIDTH\']}px;height:{$option[\'ZC_VERIFYCODE_HEIGHT\']}px;cursor:pointer;" src="{$article.ValidCodeUrl}" alt="" title="" onclick="javascript:this.src=\'{$article.ValidCodeUrl}&amp;tm=\'+Math.random();"/></p>{/if}';
 
 			if(strpos($this->templates['commentpost'], '<!--verify-->')!==false){

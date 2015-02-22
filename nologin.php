@@ -158,7 +158,7 @@ form{
 
 
 <form id="frmLogin" method="post">
-<h3>Z-BlogPHP免输入密码登陆工具</h3>
+<h3>Z-BlogPHP免输入密码登录工具</h3>
 <div id="divHeader">&nbsp;&nbsp;<a href="http://www.zblogcn.com/" target="_blank">Z-Blog主页</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://bbs.zblogcn.com" class="here" target="_blank">Zblogger社区</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://wiki.zblogcn.com/" target="_blank">Z-Wiki</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://blog.zblogcn.com/" target="_blank">菠萝阁</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.dbshost.cn/" target="_blank">DBS主机</a></div>
 <div id="divMain">
 <input type="hidden" name="userid" id="userid" value="0" />

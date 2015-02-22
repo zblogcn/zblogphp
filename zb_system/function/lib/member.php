@@ -13,12 +13,17 @@ class Member extends Base {
 	private $_avatar='';
 
 	/**
+	 * @var boolean 创始id
+	 */
+	private $_isgod=null;
+
+	/**
 	 * 构造函数，默认用户设为anonymous
 	 */
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Member'],$zbp->datainfo['Member']);
+		parent::__construct($zbp->table['Member'],$zbp->datainfo['Member'],__CLASS__);
 
 		$this->Name = $zbp->lang['msg']['anonymous'];
 	}
@@ -31,9 +36,10 @@ class Member extends Base {
 	 * @return mixed
 	 */
 	function __call($method, $args) {
-		foreach ($GLOBALS['Filter_Plugin_Member_Call'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Call'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this,$method, $args);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 	}
 
@@ -47,6 +53,11 @@ class Member extends Base {
 	{
 		global $zbp;
 		if ($name=='Url') {
+			foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Url'] as $fpname => &$fpsignal) {
+				$fpsignal=PLUGIN_EXITSIGNAL_NONE;
+				$fpreturn=$fpname($this);
+				if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			}
 			$u = new UrlRule($zbp->option['ZC_AUTHOR_REGEX']);
 			$u->Rules['{%id%}']=$this->ID;
 			$u->Rules['{%alias%}']=$this->Alias==''?urlencode($this->Name):$this->Alias;
@@ -71,6 +82,9 @@ class Member extends Base {
 		if ($name=='PassWord_MD5Path') {
 			return null;
 		}
+		if ($name=='IsGod') {
+			return null;
+		}
 		parent::__set($name, $value);
 	}
 
@@ -88,7 +102,7 @@ class Member extends Base {
 			return $u->Make();
 		}
 		if ($name=='Avatar') {
-			foreach ($GLOBALS['Filter_Plugin_Mebmer_Avatar'] as $fpname => &$fpsignal) {
+			foreach ($GLOBALS['hooks']['Filter_Plugin_Mebmer_Avatar'] as $fpname => &$fpsignal) {
 				$fpreturn=$fpname($this);
 				if($fpreturn){$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 			}
@@ -119,6 +133,20 @@ class Member extends Base {
 		if ($name=='PassWord_MD5Path') {
 			return md5($this->Password . $zbp->guid);
 		}
+		if ($name=='IsGod') {
+			if($this->_isgod === true || $this->_isgod === false){
+				return $this->_isgod;
+			}else{
+				$sql = $zbp->db->sql->Select($zbp->table['Member'],'*',array(array('=','mem_Level',1)),'mem_ID ASC',1,null);
+				$am = $zbp->GetListType('Member',$sql);
+				if($am[0]->ID == $this->ID){
+					$this->_isgod = true;
+				}else{
+					$this->_isgod = false;
+				}
+				return $this->_isgod;
+			}
+		}
 		return parent::__get($name);
 	}
 
@@ -133,7 +161,7 @@ class Member extends Base {
 		return md5(md5($ps). $guid);
 
 	}
-	
+
 	/**
 	 * 保存用户数据
 	 * @return bool
@@ -141,11 +169,24 @@ class Member extends Base {
 	function Save(){
 		global $zbp;
 		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
-		foreach ($GLOBALS['Filter_Plugin_Member_Save'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Save'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return parent::Save();
+	}
+
+	/**
+	 * @return bool
+	 */
+	function Del(){
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Del'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
+			$fpreturn=$fpname($this);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+		return parent::Del();
 	}
 
 }

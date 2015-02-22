@@ -7,6 +7,8 @@
  */
 class DbMySQL implements iDataBase {
 
+	public $type = 'mysql';
+
 	/**
 	* @var string|null 数据库名前缀
 	*/
@@ -16,6 +18,10 @@ class DbMySQL implements iDataBase {
 	* @var string|null 数据库名
 	*/
 	public $dbname = null;
+	/**
+	* @var string|null 数据库引擎
+	*/
+	public $dbengine = null;
 	/**
 	 * @var DbSql|null DbSql实例
 	 */
@@ -48,7 +54,8 @@ class DbMySQL implements iDataBase {
 	 *                  'dbmysql_name',
 	 *                  'dbmysql_pre',
 	 *                  'dbmysql_port',
-	 *                  'persistent')
+	 *                  'persistent'
+	 * 					'engine')
 	 * @return bool
 	 */
 	function Open($array){
@@ -66,6 +73,7 @@ class DbMySQL implements iDataBase {
 			if(mysql_select_db($array[3], $this->db)){
 				$this->dbpre=$array[4];
 				$this->dbname=$array[3];
+				$this->dbengine = $array[7];
 				return true;
 			} else {
 				$this->Close();
@@ -85,7 +93,7 @@ class DbMySQL implements iDataBase {
      * @return bool
 	 */
 	function CreateDB($dbmysql_server,$dbmysql_port,$dbmysql_username,$dbmysql_password,$dbmysql_name){
-		$db_link = @mysql_connect($dbmysql_server . ':' . $dbmysql_port, $dbmysql_username, $dbmysql_password);
+		$db_link = mysql_connect($dbmysql_server . ':' . $dbmysql_port, $dbmysql_username, $dbmysql_password);
 		$this->db = $db_link;
 		$this->dbname=$dbmysql_name;
 		$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbmysql_name'";
@@ -102,7 +110,7 @@ class DbMySQL implements iDataBase {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * 关闭数据库连接
 	 */
@@ -115,7 +123,8 @@ class DbMySQL implements iDataBase {
 	* 执行多行SQL语句
 	* @param string $s 以;号分隔的多条SQL语句
 	*/
-	function QueryMulit($s){
+	function QueryMulit($s){return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
+	function QueryMulti($s){
 		//$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
 		$a=explode(';',$s);
 		foreach ($a as $s) {
@@ -196,7 +205,7 @@ class DbMySQL implements iDataBase {
 	* @param string $tablename 表名
 	* @param array $datainfo 表结构
 	*/
-	function CreateTable($table,$datainfo){
+	function CreateTable($table,$datainfo,$engine=null){
 		$this->QueryMulit($this->sql->CreateTable($table,$datainfo));
 	}
 

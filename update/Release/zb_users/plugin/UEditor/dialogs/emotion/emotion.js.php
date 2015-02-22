@@ -1,4 +1,6 @@
 <?php
+define('UEDITOR_IS_WINDOWS', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'));
+
 require '../../../../../zb_system/function/c_system_base.php';
 
 header('Content-Type: application/x-javascript; Charset=utf-8');
@@ -19,6 +21,9 @@ function scansubdir($dir)
                  if ( is_dir($dir . "/" . $file) ) {
                      $f= scandir($dir . "/" . $file);
                      $files[$file] = preg_grep("/(.*).gif|png|jpg$/",$f);
+                     foreach($files[$file] as $name => $value) 
+                        if (UEDITOR_IS_WINDOWS)
+                            $files[$file][$name] = iconv('GBK', 'UTF-8', $value);
                  }else {
                      //$files[] = $file;
                  }
@@ -39,10 +44,11 @@ $x=0;
 while (list($key, $i) = each($f)) {
 	$e = implode("','",$i);
 	$en =$key;
+    $en = (UEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $en) : $en);
 ?>
 	emotion.tabNum++;
 	emotion.SmilmgName["tab<?php echo $x; ?>"]=['<?php echo substr($i[2],strlen($i[2])-3); ?>',<?php echo count($i); ?>];
-	emotion.imageFolders["tab<?php echo $x; ?>"]='<?php echo $en;?>/';
+	emotion.imageFolders["tab<?php echo $x; ?>"]='<?php echo urlencode($en);?>/';
 	emotion.imageCss["tab<?php echo $x; ?>"]='<?php echo $en; ?>';
 	emotion.imageCssOffset["tab<?php echo $x; ?>"]=35;
 	emotion.SmileyInfor["tab<?php echo $x; ?>"]=['<?php echo $e; ?>'];

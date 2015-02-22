@@ -16,7 +16,7 @@ class Post extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Post'],$zbp->datainfo['Post']);
+		parent::__construct($zbp->table['Post'],$zbp->datainfo['Post'],__CLASS__);
 
 		$this->Title	= $zbp->lang['msg']['unnamed'];
 		$this->PostTime	= time();
@@ -29,9 +29,10 @@ class Post extends Base{
 	 * @return mixed
 	 */
 	function __call($method, $args) {
-		foreach ($GLOBALS['Filter_Plugin_Post_Call'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Call'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this,$method,$args);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 	}
 
@@ -93,8 +94,17 @@ class Post extends Base{
 				return null;
 				break;
 			case 'Template':
-				if($value==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$value='';
+				if($value==$zbp->GetPostType_Template($this->Type))$value='';
 				return $this->data[$name]  =  $value;
+				break;
+			case 'TopType':
+				if($value=='global' || $value=='category')
+					$this->Metas->toptype = $value;
+				elseif($value=='' || $value==null)
+					$this->Metas->Del('toptype');
+				else
+					$this->Metas->toptype = 'index';
+				return null;
 				break;
 			default:
 				parent::__set($name, $value);
@@ -120,11 +130,12 @@ class Post extends Base{
 				return $zbp->lang['post_status_name'][$this->Status];
 				break;
 			case 'Url':
-				if($this->Type==ZC_POST_TYPE_ARTICLE){
-					$u = new UrlRule($zbp->option['ZC_ARTICLE_REGEX']);
-				}else{
-					$u = new UrlRule($zbp->option['ZC_PAGE_REGEX']);
+				foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Url'] as $fpname => &$fpsignal) {
+					$fpsignal=PLUGIN_EXITSIGNAL_NONE;
+					$fpreturn=$fpname($this);
+					if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 				}
+				$u = new UrlRule( $zbp->GetPostType_UrlRule($this->Type) );
 				$u->Rules['{%id%}']=$this->ID;
 				if($this->Alias){
 					$u->Rules['{%alias%}']=$this->Alias;
@@ -155,7 +166,7 @@ class Post extends Base{
 				break;
 			case 'TagsCount':
 				return substr_count($this->Tag, '{');
-				break;				
+				break;
 			case 'TagsName':
 				return $this->TagsToNameString();
 			case 'Template':
@@ -163,12 +174,12 @@ class Post extends Base{
 				if($value==''){
 					$value=GetValueInArray($this->Category->GetData(),'LogTemplate');
 					if($value==''){
-						$value=$zbp->option['ZC_POST_DEFAULT_TEMPLATE'];
+						$value=$zbp->GetPostType_Template($this->Type);
 					}
 				}
 				return $value;
 			case 'CommentPostUrl':
-				foreach ($GLOBALS['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
+				foreach ($GLOBALS['hooks']['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
 					$fpreturn=$fpname($this);
 					if($fpsignal == PLUGIN_EXITSIGNAL_RETURN){$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 				}
@@ -211,11 +222,17 @@ class Post extends Base{
 				return $this->_next;
 				break;
 			case 'RelatedList':
-				foreach ($GLOBALS['Filter_Plugin_Post_RelatedList'] as $fpname => &$fpsignal) {
+				foreach ($GLOBALS['hooks']['Filter_Plugin_Post_RelatedList'] as $fpname => &$fpsignal) {
 					$fpreturn=$fpname($this);
 					if($fpsignal == PLUGIN_EXITSIGNAL_RETURN){$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 				}
 				return GetList($zbp->option['ZC_RELATEDLIST_COUNT'],null,null,null,null,null,array('is_related'=>$this->ID));
+			case 'TopType':
+				$toptype = $this->Metas->toptype;
+				if($this->IsTop==true && $toptype==null)$toptype = 'index';
+				return $toptype;
+			case 'TypeName':
+				return $zbp->GetPostType_Name($this->Type);
 			default:
 				return parent::__get($name);
 				break;
@@ -231,12 +248,25 @@ class Post extends Base{
 		if($this->Type==ZC_POST_TYPE_ARTICLE){
 			if($this->Template==GetValueInArray($this->Category->GetData(),'LogTemplate'))$this->data['Template'] = '';
 		}
-		if($this->Template==$zbp->option['ZC_POST_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
-		foreach ($GLOBALS['Filter_Plugin_Post_Save'] as $fpname => &$fpsignal) {
+		if($this->Template==$zbp->GetPostType_Template($this->Type))$this->data['Template'] = '';
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Save'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return parent::Save();
 	}
-	
+
+	/**
+	 * @return bool
+	 */
+	function Del(){
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Del'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
+			$fpreturn=$fpname($this);
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		}
+		return parent::Del();
+	}
+
 }

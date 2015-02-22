@@ -7,6 +7,8 @@
  */
 class Dbpdo_MySQL implements iDataBase {
 
+	public $type = 'mysql';
+
 	/**
 	* @var string|null 数据库名前缀
 	*/
@@ -16,6 +18,10 @@ class Dbpdo_MySQL implements iDataBase {
 	* @var string|null 数据库名
 	*/
 	public $dbname = null;
+	/**
+	* @var string|null 数据库引擎
+	*/
+	public $dbengine = null;
 	/**
 	* @var DbSql|null DbSql实例
 	*/
@@ -48,7 +54,8 @@ class Dbpdo_MySQL implements iDataBase {
 			'dbmysql_name',
 			'dbmysql_pre',
 			'dbmysql_port',
-			'persistent'
+			'persistent',
+			'engine',
 		*/
 		if($array[6]==false){
 			$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
@@ -56,11 +63,16 @@ class Dbpdo_MySQL implements iDataBase {
 			$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',PDO::ATTR_PERSISTENT => true);
 		}
 		$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',PDO::ATTR_PERSISTENT => true);
-		$db_link = new PDO('mysql:host=' . $array[0] . ';port=' . $array[5] . ';dbname=' . $array[3],$array[1],$array[2],$options);
-		$this->db = $db_link;
-		$this->dbpre=$array[4];
-		$this->dbname=$array[3];
-		return true;
+		try {
+			$db_link = new PDO('mysql:host=' . $array[0] . ';port=' . $array[5] . ';dbname=' . $array[3],$array[1],$array[2],$options);
+			$this->db = $db_link;
+			$this->dbpre=$array[4];
+			$this->dbname=$array[3];
+			$this->dbengine = $array[7];
+			return true;
+		} catch ( PDOException $e ) {
+			return false;
+		}
 	}
 
 	/**
@@ -89,7 +101,7 @@ class Dbpdo_MySQL implements iDataBase {
 			return true;
 		}
 	}
-	
+
 	/**
 	* 关闭数据库连接
 	*/
@@ -99,9 +111,10 @@ class Dbpdo_MySQL implements iDataBase {
 
 	/**
 	* 执行多行SQL语句
-	* @param $s 
+	* @param $s
 	*/
-	function QueryMulit($s){
+	function QueryMulit($s){return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
+	function QueryMulti($s){
 		//$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		$a=explode(';',$s);
 		foreach ($a as $s) {
@@ -122,6 +135,17 @@ class Dbpdo_MySQL implements iDataBase {
 		$results = $this->db->query($this->sql->Filter($query));
 		//fetch || fetchAll
 		if(is_object($results)){
+
+			//if(true==true){
+			if(true!==true){
+				$query="EXPLAIN " . $query;
+				$results2 = $this->db->query($this->sql->Filter($query));
+				if(is_object($results2)){
+					$row = $results2->fetchAll();
+					logs("\r\n" . $query . "\r\n" . var_export($row,true));
+				}
+			}
+
 			return $results->fetchAll();
 		}else{
 			return array($results);
@@ -149,7 +173,7 @@ class Dbpdo_MySQL implements iDataBase {
 
 	/**
 	* @param $query
-	* @return int 
+	* @return int
 	*/
 	function Insert($query){
 		//$query=str_replace('%pre%', $this->dbpre, $query);
@@ -161,7 +185,7 @@ class Dbpdo_MySQL implements iDataBase {
 	* @param $table
 	* @param $datainfo
 	*/
-	function CreateTable($table,$datainfo){
+	function CreateTable($table,$datainfo,$engine=null){
 		$this->QueryMulit($this->sql->CreateTable($table,$datainfo));
 	}
 
@@ -171,7 +195,7 @@ class Dbpdo_MySQL implements iDataBase {
 	function DelTable($table){
 		$this->QueryMulit($this->sql->DelTable($table));
 	}
-	
+
 	/**
 	* @param $table
 	* @return bool

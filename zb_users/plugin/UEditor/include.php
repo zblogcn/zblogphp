@@ -39,7 +39,7 @@ function ueditor_addscript_begin()
 	global $zbp;
 	echo '<script type="text/javascript" src="' . $zbp->host . 'zb_users/plugin/UEditor/ueditor.config.php"></script>';
 	echo '<script type="text/javascript" src="' . $zbp->host . 'zb_users/plugin/UEditor/ueditor.all.min.js"></script>';
-	echo '<style type="text/css">#editor_content{height:auto}</style>';
+	echo '<style type="text/css">#editor_content{padding:0;height:auto}#editor_intro{padding:0;}</style>';
 }
 
 
