@@ -25,6 +25,11 @@ define('IS_NGINX', preg_match("/nginx/i", $_SERVER['SERVER_SOFTWARE']));
 define('IS_LIGHTTPD', preg_match("/lighttpd/i", $_SERVER['SERVER_SOFTWARE']));
 define('IS_KANGLE', preg_match("/kangle/i", $_SERVER['SERVER_SOFTWARE']));
 
+/** 
+ * PHP 
+ */
+define('IS_HHVM', defined('HHVM_VERSION'));
+
 /**
  * 自动加载类文件
  * @api Filter_Plugin_Autoload
@@ -32,9 +37,10 @@ define('IS_KANGLE', preg_match("/kangle/i", $_SERVER['SERVER_SOFTWARE']));
  * @return mixed
  */
 function AutoloadClass($classname){
-	foreach ($GLOBALS['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
+		$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 		$fpreturn=$fpname($classname);
-		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
 	if (is_readable($f=ZBP_PATH . 'zb_system/function/lib/' . strtolower($classname) .'.php'))
 		require $f;
@@ -47,9 +53,10 @@ function AutoloadClass($classname){
  */
 function Logs($s,$iserror=false) {
 	global $zbp;
-	foreach ($GLOBALS['Filter_Plugin_Logs'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Logs'] as $fpname => &$fpsignal) {
+		$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 		$fpreturn=$fpname($s,$iserror);
-		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
 	if($zbp->guid){
 		if($iserror)
@@ -258,10 +265,10 @@ function GetCurrentHost($blogpath,&$cookiespath) {
 			$host = 'http://';
 		}
 	}elseif (array_key_exists('HTTPS', $_SERVER)) {
-		if ($_SERVER['HTTPS'] == 'off') {
-			$host = 'http://';
-		} else {
+		if ($_SERVER['HTTPS'] == 'on') {
 			$host = 'https://';
+		} else {
+			$host = 'http://';
 		}
 	} else {
 		$host = 'http://';
@@ -792,7 +799,7 @@ function CheckRegExp($source, $para) {
 		$para = "/^[\.\_A-Za-z0-9·\x{4e00}-\x{9fa5}]+$/u";
 	}
 	elseif (strpos($para, '[password]') !== false) {
-		$para = "/^[A-Za-z0-9`~!@#\$%\^&\*\-_]+$/u";
+		$para = "/^[A-Za-z0-9`~!@#\$%\^&\*\-_\?]+$/u";
 	}
 	elseif (strpos($para, '[email]') !== false) {
 		$para = "/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*\.)+[a-zA-Z]*)$/u";

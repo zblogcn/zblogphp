@@ -60,10 +60,11 @@ return array(
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
 	'ZC_UPDATE_INFO_URL' => 'http://update.zblogcn.com/info/',
-	// '固定域名,默认为false,如启用则'ZC_BLOG_HOST生效而'ZC_MULTI_DOMAIN_SUPPORT无效
+
+	// '固定域名,默认为false
 	'ZC_PERMANENT_DOMAIN_ENABLE' => false,
 	'ZC_PERMANENT_DOMAIN_REDIRECT' => true,
-	'ZC_MULTI_DOMAIN_SUPPORT' => false,
+	'ZC_PERMANENT_DOMAIN_WITH_ADMIN' => false,
 
 	//
 	'ZC_DEBUG_MODE' => false,
@@ -94,7 +95,6 @@ return array(
 
 	// '页面各项列数
 	'ZC_DISPLAY_COUNT' => 10,
-	'ZC_SEARCH_COUNT' => 25,
 	'ZC_PAGEBAR_COUNT' => 10,
 	'ZC_COMMENTS_DISPLAY_COUNT' => 100,
 
@@ -179,7 +179,10 @@ return array(
 	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
 	'ZC_LOADMEMBERS_LEVEL' => 0,
 	'ZC_LAST_VERSION' => '',
-	
+
+	'ZC_SEARCH_COUNT' => 20,
+	'ZC_SEARCH_REGEX' => '{%host%}search.php?q={%q%}&page={%page%}',
+
 	// '源码编辑高亮
 	'ZC_CODEMIRROR_ENABLE' => true,
 	'ZC_HTTP_LASTMODIFIED' => false,
@@ -191,5 +194,4 @@ return array(
 	'ZC_POST_ALIAS_USE_ID_NOT_TITLE' => false,
 	'ZC_COMPATIBLE_ASP_URL' => true,
 	'ZC_LARGE_DATA' => false,
-)
-?>
+);

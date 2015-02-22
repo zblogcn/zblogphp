@@ -237,7 +237,7 @@ K.options = {
 	langPath : K.basePath + 'lang/',
 	pluginsPath : K.basePath + 'plugins/',
 	themeType : 'default',
-	langType : 'zh_CN',
+	langType : 'zh_cn',
 	urlType : '',
 	newlineTag : 'p',
 	resizeType : 2,

@@ -7,17 +7,18 @@
 /zb_users/cache/*
 /zb_users/logs/*
 
-# Compiled theme
-/zb_users/upload/*/*
-
 # Upload
+/zb_users/upload/*
+!/zb_users/upload/index.html
+
+# Compiled theme
 # /zb_users/theme/*/compile/*.php
 
 # Static
 /post/*
 
 # Update
-/update/*.xml
+#/update/*.xml
 
 # Plugin cache
 /zb_users/plugin/SQLLog/logs/*.php
@@ -87,3 +88,4 @@ phpinfo.php
 /abc/
 wincache.php
 /Beta/
+/vendor/

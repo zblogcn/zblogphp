@@ -10,7 +10,7 @@ ob_clean();
 
 $type=GetVars('type', 'GET');
 
-foreach ($GLOBALS['Filter_Plugin_Misc_Begin'] as $fpname => &$fpsignal) {$fpname($type);}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Misc_Begin'] as $fpname => &$fpsignal) {$fpname($type);}
 
 switch ($type) {
 	case 'statistic':
@@ -45,7 +45,7 @@ switch ($type) {
 			echo $zbp->ShowError(6, __FILE__, __LINE__);
 			die();
 		}
-		phpinfo();
+		misc_phpinfo();
 		break;
 	default:
 		break;
@@ -79,7 +79,7 @@ function misc_statistic() {
 	CountCommentNums(null,null);
 	$all_comments = $zbp->cache->all_comment_nums;
 
-	$xmlrpc_address = $zbp->host . 'zb_system/xml-rpc/';
+	$xmlrpc_address = $zbp->xmlrpcurl;
 	$current_member = $zbp->user->Name;
 	$current_version = $zbp->option['ZC_BLOG_VERSION'];
 	$all_artiles = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=\'0\''), 'num');
@@ -143,9 +143,9 @@ function misc_showtags() {
 
 
 function misc_viewrights(){
-global $zbp;
+	global $zbp,$blogtitle;
 
-$blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights'];
+	$blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights'];
 ?><!DOCTYPE HTML>
 <html>
 <head>
@@ -159,9 +159,7 @@ $blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights'];
 	<script src="script/common.js" type="text/javascript"></script>
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 <?php
-
-foreach ($GLOBALS['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
-
+foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	<title><?php echo $blogtitle; ?></title>
 </head>
@@ -175,13 +173,11 @@ foreach ($GLOBALS['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpna
 					<dt><?php echo $zbp->lang['msg']['current_member'] . ' : <b>' . $zbp->user->Name; ?></b><br/>
 						<?php echo $zbp->lang['msg']['member_level'] . ' : <b>' . $zbp->user->LevelName; ?></b></dt>
 					<?php
-
 					foreach ($GLOBALS['actions'] as $key => $value) {
 						if ($GLOBALS['zbp']->CheckRights($key)) {
 							echo '<dd><b>' . $zbp->GetAction_Title($key) . '</b> : ' . ($zbp->CheckRights($key) ? '<span style="color:green">true</span>' : '<span style="color:red">false</span>') . '</dd>';
 						}
 					}
-
 					?>
 				</dl>
 			</form>
@@ -194,4 +190,62 @@ foreach ($GLOBALS['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpna
 RunTime();
 }
 
+function misc_phpinfo() {
+	global $zbp,$blogtitle;
+
+	$blogtitle = $zbp->name . '-phpinfo';
+	ob_start();
+	phpinfo();
+	$s = ob_get_clean();
+	preg_match("/<body.*?>(.*?)<\/body>/is",$s,$match);
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<?php if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) { ?>
+		<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+	<?php } ?>
+	<meta name="robots" content="none"/>
+	<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL'] ?>"/>
+	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen"/>
+	<script src="script/common.js" type="text/javascript"></script>
+	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
+<?php
+foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
 ?>
+	<title><?php echo $blogtitle; ?></title>
+	<style type="text/css">
+*{color:#000;}
+pre {margin: 0; font-family: monospace;}
+a:link {color: #009; text-decoration: none; background-color: #fff;}
+a:hover {text-decoration: underline;}
+table {border-collapse: collapse; border: 0; width: 934px; box-shadow: 1px 2px 3px #ccc;}
+.center {text-align: center;}
+.center table {margin: 1em auto; text-align: left;}
+.center th {text-align: center !important;}
+td, th {border: 1px solid #666; font-size: 75%; vertical-align: baseline; padding: 4px 5px;}
+h1 {font-size: 150%;}
+h2 {font-size: 125%;}
+.p {text-align: left;}
+.e {background-color: #ccf; width: 300px; font-weight: bold;}
+.h {background-color: #99c; font-weight: bold;}
+.v {background-color: #ddd; max-width: 300px; overflow-x: auto;}
+.v i {color: #999;}
+img {float: right; border: 0;}
+hr {display:none;}
+div.bg {background: #777bb4!important;}
+	</style>
+</head>
+<body class="short">
+<div class="bg">
+	<div id="wrapper">
+		<div class="logo"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></div>
+		<?php echo $match[0];?>
+	</div>
+</div>
+</body>
+</html>
+<?php
+RunTime();
+}

@@ -11,12 +11,12 @@
 <link href="<?php echo $bloghost?>zb_system/static/css/bootstrap.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo $bloghost?>zb_system/static/css/bootstrap-admin.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo $bloghost?>zb_system/static/css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="<?php echo $bloghost?>zb_system/css/jquery.bettertip.css" type="text/css" media="screen" />
+<script src="<?php echo $bloghost?>zb_system/script/jquery-1.11.2.min.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $bloghost?>zb_system/css/jquery-ui.custom.css"/>
 
 
 
-<script src="<?php echo $bloghost?>zb_system/script/common.js" type="text/javascript"></script>
+<script src="<?php echo $bloghost?>zb_system/script/zblogphp.js" type="text/javascript"></script>
 <script src="<?php echo $bloghost?>zb_system/static/js/bootstrap.js" type="text/javascript"></script>
 <script src="<?php echo $bloghost?>zb_system/script/c_admin_js_add.php" type="text/javascript"></script>
 <script src="<?php echo $bloghost?>zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
@@ -25,5 +25,5 @@
 <link rel="stylesheet" href="<?php echo $bloghost?>zb_system/css/jquery-ui.ie.css">
 <![endif]-->
 <?php
-	foreach ($GLOBALS['Filter_Plugin_Admin_Header'] as $fpname => &$fpsignal) {$fpname();}
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Header'] as $fpname => &$fpsignal) {$fpname();}
 ?>

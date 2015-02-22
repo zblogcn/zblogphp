@@ -56,15 +56,15 @@ if($article->Intro){
   }
 }
 
-require $blogpath . 'zb_system/admin/admin_header.php';
+require ZBP_PATH . 'zb_system/admin/admin_header.php';
 ?>
 <script type="text/javascript" src="../script/jquery.tagto.js"></script>
 <script type="text/javascript" src="../script/jquery-ui-timepicker-addon.js"></script>
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_Begin'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Begin'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 <?php
-require $blogpath . 'zb_system/admin/admin_top.php';
+require ZBP_PATH . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
 <div class="divHeader2"><?php echo $ispage?$lang['msg']['page_edit']:$lang['msg']['article_edit'];?></div>
@@ -77,7 +77,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     <!-- 4号输出接口 -->
        <div id="response4" class="editmod2">
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	   </div>
     <div id="divEditTitle" class="editmod2">
@@ -95,20 +95,20 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsignal) {$fp
     <!-- 5号输出接口 -->
        <div id="response5" class="editmod2">
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	   </div>
 
     <div id="divContent"  class="editmod2" style="clear:both;">
 		<div id='cheader' class="editmod editmod3"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
-		<div id='carea' class="editmod editmod3"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content,'[html-format]');?></textarea></div>
+		<div id='carea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content,'[html-format]');?></textarea></div>
 		<div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Waiting...</div>
 	</div>
 
     <!-- 1号输出接口 -->
        <div id="response" class="editmod2">
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	   </div>
 
@@ -128,19 +128,19 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpn
       </div>
       <!-- )tags -->
 
-       <div id="insertintro" class="editmod2" style="padding-top:1em;paddding-bottom:0;"><span>* <?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
+       <div id="insertintro" class="editmod2" style="padding-top:0.5em;paddding-bottom:0.5em;"><span>* <?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
 <?php }?>
 
 		<div id="divIntro" class="editmod2" <?php if(!$article->Intro){echo 'style="display:none;"';}?>>
        <div id="theader" class="editmod editmod3"><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
-       <div id='tarea' class="editmod editmod3"><textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro,'[html-format]');?></textarea></div>
+       <div id='tarea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro,'[html-format]');?></textarea></div>
        <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Waiting...</div>
 
     </div>
     <!-- 2号输出接口 -->
        <div id="response2" class="editmod2">
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	   </div>
 
@@ -227,7 +227,7 @@ foreach ($GLOBALS['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fp
           <!-- 3号输出接口 -->
           <div id="response3" class="editmod">
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_Response3'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response3'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 	      </div>
         </div>
@@ -408,13 +408,13 @@ function editor_init(){
 </script>
 
 <?php
-foreach ($GLOBALS['Filter_Plugin_Edit_End'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_End'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 
 <script type="text/javascript">editor_init();</script>
 </div>
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require ZBP_PATH . 'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>

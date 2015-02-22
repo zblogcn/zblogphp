@@ -56,13 +56,28 @@ $zbpvers['131221']='1.1 Taichi Build 131221';
 $zbpvers['140220']='1.2 Hippo Build 140220';
 $zbpvers['140614']='1.3 Wonce Build 140614';
 $zbpvers['150101']='1.4 Deeplue Build 150101';
-$zbpvers['150601']='2.0 Beta Build 150601';
+$zbpvers['150301']='1.5 Beta Build 150301';
 
 #定义常量
+
 /**
- *ZBLOGPHP版本号
+ *ZBLOGPHP版本号和比较函数
  */
 define('ZC_BLOG_VERSION', end($zbpvers));
+$blogversion = key($zbpvers);
+define('ZBP_VERSION', $blogversion);
+function zbp_version_compare($version1 , $version2){
+	return (float)$version1 - (float)$version2;
+}
+function zbpversion($appid=''){
+	global $zbp;
+	if($appid==='')return ZBP_VERSION;
+	$app=$zbp->LoadApp('plugin',$appid);
+	if($app->id===$appid)return $app->version;
+	$app=$zbp->LoadApp('theme',$appid);
+	if($app->id===$appid)return $app->version;
+	return 0;
+}
 
 /**
  *文章类型
@@ -140,13 +155,13 @@ $blogpath = ZBP_PATH;
 /**
  *用户路径
  */
-$usersdir = $blogpath . 'zb_users/';
+$usersdir = ZBP_PATH . 'zb_users/';
 
 
 /**
  *读取设置数组
  */
-$option = require($blogpath . 'zb_system/defend/option.php');
+$option = require(ZBP_PATH . 'zb_system/defend/option.php');
 $option_zbusers = null;
 if(is_readable($filename = $usersdir . 'c_option.php')){
 	$option_zbusers = require($filename);
@@ -160,7 +175,6 @@ $blogname = &$option['ZC_BLOG_NAME'];
 $blogsubname = &$option['ZC_BLOG_SUBNAME'];
 $blogtheme = &$option['ZC_BLOG_THEME'];
 $blogstyle = &$option['ZC_BLOG_CSS'];
-$blogversion = key($zbpvers);
 $cookiespath = null;
 $bloghost = GetCurrentHost($blogpath,$cookiespath);
 

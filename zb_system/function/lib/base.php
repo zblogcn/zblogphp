@@ -28,19 +28,28 @@ class Base{
 	* @var datebase db
 	*/
 	protected $db = null;
+	/**
+	* @var string 数据表
+	*/
+	protected $calssname='';
 
 	/**
 	* @param string $table 数据表
 	* @param array $datainfo 数据表结构信息
 	*/
-	function __construct(&$table, &$datainfo, &$db = null, $hasmetas = true){
-		if($db !== null)
+	function __construct(&$table, &$datainfo, $classname = '', $hasmetas = true, &$db = null){
+		if($db !== null && is_object($db))
 			$this->db = &$db;
 		else
 			$this->db = &$GLOBALS['zbp']->db;
 
 		$this->table=&$table;
 		$this->datainfo=&$datainfo;
+		
+		if(function_exists('get_called_class'))
+			$this->calssname=get_called_class();
+		elseif(is_string($classname))
+			$this->calssname=$classname;
 
 		if(true==$hasmetas)$this->Metas=new Metas;
 
@@ -145,6 +154,8 @@ class Base{
 				$this->data[$key]=$array[$value[0]];
 			}
 		}
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal)
+			$fpname($this,$this->data);
 		return true;
 	}
 
@@ -172,6 +183,8 @@ class Base{
 			}
 			$i += 1;
 		}
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal)
+			$fpname($this,$this->data);
 		return true;
 	}
 

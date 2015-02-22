@@ -13,7 +13,7 @@ class Tag extends Base{
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Tag'],$zbp->datainfo['Tag']);
+		parent::__construct($zbp->table['Tag'],$zbp->datainfo['Tag'],__CLASS__);
 	}
 
 	/**
@@ -22,9 +22,10 @@ class Tag extends Base{
 	 * @return mixed
 	 */
 	function __call($method, $args) {
-		foreach ($GLOBALS['Filter_Plugin_Tag_Call'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Call'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this,$method, $args);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 	}
 
@@ -54,6 +55,11 @@ class Tag extends Base{
 	{
 		global $zbp;
 		if ($name=='Url') {
+			foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Url'] as $fpname => &$fpsignal) {
+				$fpsignal=PLUGIN_EXITSIGNAL_NONE;
+				$fpreturn=$fpname($this);
+				if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			}
 			$u = new UrlRule($zbp->option['ZC_TAGS_REGEX']);
 			$u->Rules['{%id%}']=$this->ID;
 			$u->Rules['{%alias%}']=$this->Alias==''?urlencode($this->Name):$this->Alias;
@@ -73,9 +79,10 @@ class Tag extends Base{
 	function Save(){
 		global $zbp;
 		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
-		foreach ($GLOBALS['Filter_Plugin_Tag_Save'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Save'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return parent::Save();
 	}
@@ -84,9 +91,10 @@ class Tag extends Base{
 	 * @return bool
 	 */
 	function Del(){
-		foreach ($GLOBALS['Filter_Plugin_Tag_Del'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Del'] as $fpname => &$fpsignal) {
+			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return parent::Del();
 	}

@@ -407,6 +407,9 @@ function CreateOptionsOfLang($default){
 	$files=GetFilesInDir($dir,'php');
 	foreach($files as $f){
 		$n=basename($f,'.php');
+		//fix 1.3 to 1.4 warning
+		if('SimpChinese'==$n)continue;
+		if('TradChinese'==$n)continue;
 		$t= require($f);
 		$s.= '<option value="' . $n . '" ' . ($default==$n?'selected="selected"':'') . ' >' . $t['lang_name'] .' ('. $n .')'. '</option>';
 	}

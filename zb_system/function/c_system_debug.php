@@ -58,7 +58,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 
 	if(ZBlogException::$isdisable==true)return true;
 
-	foreach ($GLOBALS['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname('Error',array($errno, $errstr, $errfile, $errline));
 	}
 
@@ -96,7 +96,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseError($errno, $errstr, $errfile, $errline);
 	$zbe->Display();
-	die();
+	if (!(defined('IS_HHVM') && IS_HHVM)) exit();
 
 }
 
@@ -109,7 +109,7 @@ function Debug_Exception_Handler($exception) {
 
 	if(ZBlogException::$isdisable==true)return true;
 
-	foreach ($GLOBALS['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
 		$fpreturn=$fpname('Exception',$exception);
 	}
 
@@ -122,7 +122,7 @@ function Debug_Exception_Handler($exception) {
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseException($exception);
 	$zbe->Display();
-	die();
+	if (!(defined('IS_HHVM') && IS_HHVM)) exit();
 }
 
 /**
@@ -134,7 +134,7 @@ function Debug_Shutdown_Handler() {
 
 		if(ZBlogException::$isdisable==true)return true;
 
-		foreach ($GLOBALS['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
 			$fpreturn=$fpname('Shutdown',$error);
 		}
 
@@ -162,7 +162,7 @@ function Debug_Shutdown_Handler() {
 		$zbe = ZBlogException::GetInstance();
 		$zbe->ParseShutdown($error);
 		$zbe->Display();
-		die();
+		if (!(defined('IS_HHVM') && IS_HHVM)) exit();
 	}
 }
 
@@ -370,7 +370,7 @@ class ZBlogException {
 
 		require dirname(__FILE__) . '/../defend/error.html';
 		RunTime();
-		die();
+		if (!(defined('IS_HHVM') && IS_HHVM)) exit();
 	}
 
 	/**

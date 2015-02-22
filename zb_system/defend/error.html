@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="<?php echo $GLOBALS['bloghost'];?>zb_system/script/common.js"></script>
 <?php
 
-foreach ($GLOBALS['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
 
 ?>
 </head>

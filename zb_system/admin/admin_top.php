@@ -48,7 +48,7 @@ ResponseAdmin_TopMenu()
 	</nav>
 </header>
 <?php
-require $blogpath . 'zb_system/admin/admin_left.php';
+require ZBP_PATH . 'zb_system/admin/admin_left.php';
 ?>
 <section class="main">
 	<?php

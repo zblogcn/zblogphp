@@ -10,23 +10,15 @@ require '../function/c_system_base.php';
 ob_clean();
 
 ?>
-var bloghost="<?php echo $zbp->host; ?>";
-var cookiespath="<?php echo $zbp->cookiespath; ?>";
-var ajaxurl="<?php echo $zbp->ajaxurl; ?>";
-
 var zbp = new ZBP({
 	bloghost: "<?php echo $zbp->host; ?>",
 	ajaxurl: "<?php echo $zbp->ajaxurl; ?>",
-	cookiepath: "<?php echo $zbp->cookiespath; ?>",
-	lang: {
-		error: {
-			72: "<?php echo $lang['error']['72']; ?>",
-			29: "<?php echo $lang['error']['29']; ?>",
-			46: "<?php echo $lang['error']['46']; ?>"
-		}
-	}
+	cookiepath: "<?php echo $zbp->cookiespath; ?>"
 });
 
+var bloghost = zbp.options.bloghost;
+var cookiespath = zbp.options.bloghost;
+var ajaxurl = zbp.options.bloghost;
 
 //*********************************************************
 // 目的：    全选
@@ -274,9 +266,17 @@ $(document).ready(function(){
 });
 
 
+var SetCookie = function () { return zbp.cookie.set.apply(null, arguments); }
+var GetCookie = function () { return zbp.cookie.get.apply(null, arguments); }
+var LoadRememberInfo = function () { zbp.userinfo.output.apply(null); return false;}
+var SaveRememberInfo = function () { zbp.userinfo.saveFromHtml.apply(null); return false;} 
+var RevertComment = function () { zbp.comment.reply.apply(null); return false;} 
+var GetComments = function () { zbp.comment.get.apply(null); return false;} 
+var VerifyMessage = function () { zbp.comment.post.apply(null); return false;}
+
 
 <?php
-foreach ($GLOBALS['Filter_Plugin_Admin_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
 
 $s = ob_get_clean();
 $m = md5($s);

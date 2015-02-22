@@ -5,7 +5,7 @@ $zbp->Load();
 
 $action=GetVars('act','GET');
 
-foreach ($GLOBALS['Filter_Plugin_Cmd_Begin'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Begin'] as $fpname => &$fpsignal) $fpname();
 
 if(!$zbp->CheckRights($action)){$zbp->ShowError(6,__FILE__,__LINE__);die();}
 
@@ -27,14 +27,14 @@ switch ($action) {
 		Redirect('../');
 		break;
 	case 'admin':
-		Redirect('admin/?act=admin');
+		Redirect('admin/index.php?act=admin');
 		break;
 	case 'verify':
 		if(VerifyLogin()){
 			if ($zbp->user->ID>0 && GetVars('redirect','COOKIE')) {
 				Redirect(GetVars('redirect','COOKIE'));
 			}
-			Redirect('admin/?act=admin');
+			Redirect('admin/index.php?act=admin');
 		}else{
 			Redirect('../');
 		}
@@ -75,7 +75,7 @@ switch ($action) {
 		Redirect('cmd.php?act=ArticleMng');
 		break;
 	case 'ArticleMng':
-		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		Redirect('admin/index.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'ArticlePst':
 		PostArticle();
@@ -96,7 +96,7 @@ switch ($action) {
 		Redirect('cmd.php?act=PageMng');
 		break;
 	case 'PageMng':
-		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		Redirect('admin/index.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'PagePst':
 		PostPage();
@@ -106,7 +106,7 @@ switch ($action) {
 		Redirect('cmd.php?act=PageMng');
 		break;
 	case 'CategoryMng':
-		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		Redirect('admin/index.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'CategoryEdt':
 		Redirect('admin/category_edit.php?' . GetVars('QUERY_STRING','SERVER'));
@@ -151,10 +151,10 @@ switch ($action) {
 		Redirect($_SERVER["HTTP_REFERER"]);
 		break;
 	case 'CommentMng':
-		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		Redirect('admin/index.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'MemberMng':
-		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		Redirect('admin/index.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'MemberEdt':
 		Redirect('admin/member_edit.php?' . GetVars('QUERY_STRING','SERVER'));
@@ -182,7 +182,7 @@ switch ($action) {
 		Redirect('cmd.php?act=MemberMng');
 		break;
 	case 'UploadMng':
-		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		Redirect('admin/index.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'UploadPst':
 		PostUpload();
@@ -196,7 +196,7 @@ switch ($action) {
 		Redirect('cmd.php?act=UploadMng');
 		break;
 	case 'TagMng':
-		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		Redirect('admin/index.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'TagEdt':
 		Redirect('admin/tag_edit.php?' . GetVars('QUERY_STRING','SERVER'));
@@ -222,7 +222,7 @@ switch ($action) {
 			$zbp->BuildModule();
 			$zbp->SaveCache();
 		}
-		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		Redirect('admin/index.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'PluginDis':
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
@@ -246,7 +246,7 @@ switch ($action) {
 		if(GetVars('install','GET')){
 			InstallPlugin(GetVars('install','GET'));
 		}
-		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		Redirect('admin/index.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'ThemeSet':
 		$install='&install=';
@@ -281,10 +281,10 @@ switch ($action) {
 		Redirect('cmd.php?act=ModuleMng');
 		break;
 	case 'ModuleMng':
-		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		Redirect('admin/index.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'SettingMng':
-		Redirect('admin/?' . GetVars('QUERY_STRING','SERVER'));
+		Redirect('admin/index.php?' . GetVars('QUERY_STRING','SERVER'));
 		break;
 	case 'SettingSav':
 		if(!$zbp->ValidToken(GetVars('token','GET'))){$zbp->ShowError(5,__FILE__,__LINE__);die();}
@@ -295,9 +295,8 @@ switch ($action) {
 		Redirect('cmd.php?act=SettingMng');
 		break;
 	case 'ajax':
-		foreach ($GLOBALS['Filter_Plugin_Cmd_Ajax'] as $fpname => &$fpsignal) {
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Ajax'] as $fpname => &$fpsignal)
 			$fpname(GetVars('src','GET'));
-		}
 		break;
 	default:
 		# code...

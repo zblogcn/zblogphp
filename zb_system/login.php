@@ -19,7 +19,7 @@ $zbp->Load();
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 	<title><?php echo $blogname . '-' . $lang['msg']['login']?></title>
 <?php
-foreach ($GLOBALS['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) $fpname();
 ?>
 </head>
 <body>

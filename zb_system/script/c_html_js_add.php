@@ -23,19 +23,30 @@ var zbp = new ZBP({
 	}
 });
 
+var bloghost = zbp.options.bloghost;
+var cookiespath = zbp.options.bloghost;
+var ajaxurl = zbp.options.bloghost;
+var lang_comment_name_error = zbp.options.lang.error[72];
+var lang_comment_email_error = zbp.options.lang.error[29];
+var lang_comment_content_error = zbp.options.lang.error[46];
+
 <?php
 if (!isset($_GET['pluginonly'])) {
 ?>
 $(function () {
-	
+
+	zbp.cookie.set("timezone", (new Date().getTimezoneOffset()/60)*(-1));
 	var $cpLogin = $(".cp-login").find("a");
 	var $cpVrs = $(".cp-vrs").find("a");
-	var $addoninfo = zbp.cookie.get("addinfo<?php echo str_replace('/', '', $zbp->cookiespath);?>");
-	if (!$addoninfo) return;
-	$addoninfo = JSON.parse($addoninfo);
+	var $addinfo = zbp.cookie.get("addinfo<?php echo str_replace('/', '', $zbp->cookiespath);?>");
+	if (!$addinfo){
+		zbp.userinfo.output();
+		return ;
+	}
+	$addinfo = JSON.parse($addinfo);
 
-	if ($addoninfo.chkadmin){
-		$(".cp-hello").html("' . $zbp->lang['msg']['welcome'] . ' " + $addoninfo.useralias + " (" + $addoninfo.levelname  + ")");
+	if ($addinfo.chkadmin){
+		$(".cp-hello").html("<?php echo $zbp->lang['msg']['welcome'];?> " + $addinfo.useralias + " (" + $addinfo.levelname  + ")");
 		if ($cpLogin.length == 1 && $cpLogin.html().indexOf("[") > -1) { 
 			$cpLogin.html("[<?php echo $zbp->lang['msg']['admin']; ?>]");
 		} else {
@@ -43,25 +54,19 @@ $(function () {
 		}
 	}
 
-	if($addoninfo.chkarticle){
+	if($addinfo.chkarticle){
 		if ($cpLogin.length == 1 && $cpVrs.html().indexOf("[") > -1) {
 			$cpVrs.html("[<?php echo $zbp->lang['msg']['new_article']; ?>]"); 
 		} else {
 			$cpVrs.html("<?php echo $zbp->lang['msg']['new_article']; ?>");
 		}
-		$cpVrs.attr("href", bloghost + "zb_system/cmd.php?act=ArticleEdt");
-	}
-
-	zbp.cookie.set("timezone", (new Date().getTimezoneOffset()/60)*(-1));
-
-	if ($addoninfo.userid < 1){
-		zbp.userinfo.output();
+		$cpVrs.attr("href", zbp.options.bloghost + "zb_system/cmd.php?act=ArticleEdt");
 	}
 
 });
 <?php
 }
-foreach ($GLOBALS['Filter_Plugin_Html_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Html_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
 
 $s = ob_get_clean();
 $m = md5($s);

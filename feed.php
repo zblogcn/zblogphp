@@ -6,15 +6,17 @@
  * @version
  */
 
-require './zb_system/function/c_system_base.php';
+require 'zb_system/function/c_system_base.php';
 
 $zbp->CheckGzip();
 $zbp->Load();
 
-$action='feed';
+$action = 'feed';
 
-foreach ($GLOBALS['Filter_Plugin_Feed_Begin'] as $fpname => &$fpsignal) $fpname();
+foreach ($GLOBALS['hooks']['Filter_Plugin_Feed_Begin'] as $fpname => &$fpsignal) $fpname();
 
 ViewIndex();
+
+foreach ($GLOBALS['hooks']['Filter_Plugin_Feed_End'] as $fpname => &$fpsignal) $fpname();
 
 RunTime();

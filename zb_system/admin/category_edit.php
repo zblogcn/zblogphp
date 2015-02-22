@@ -17,8 +17,8 @@ if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
 
 $blogtitle = $lang['msg']['category_edit'];
 
-require $blogpath . 'zb_system/admin/admin_header.php';
-require $blogpath . 'zb_system/admin/admin_top.php';
+require ZBP_PATH . 'zb_system/admin/admin_header.php';
+require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
 ?>
 <?php
@@ -102,7 +102,7 @@ foreach ($zbp->categorysbyorder as $k => $v) {
 			</p>
 			<!-- 1号输出接口 -->
 			<div id='response' class='editmod2'>
-				<?php foreach ($GLOBALS['Filter_Plugin_Category_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}?>
+				<?php foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}?>
 			</div>
 			<p>
 				<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" /></p>
@@ -124,7 +124,7 @@ function checkInfo(){
 </div>
 
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require ZBP_PATH . 'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>

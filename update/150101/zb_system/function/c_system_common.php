@@ -258,10 +258,10 @@ function GetCurrentHost($blogpath,&$cookiespath) {
 			$host = 'http://';
 		}
 	}elseif (array_key_exists('HTTPS', $_SERVER)) {
-		if ($_SERVER['HTTPS'] == 'off') {
-			$host = 'http://';
-		} else {
+		if ($_SERVER['HTTPS'] == 'on') {
 			$host = 'https://';
+		} else {
+			$host = 'http://';
 		}
 	} else {
 		$host = 'http://';

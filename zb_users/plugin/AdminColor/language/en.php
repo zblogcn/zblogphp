@@ -1,5 +1,5 @@
 <?php
 return array(
-	'closemenu'=>'Close',
+	'closemenu'=>'Collapse',
 	'expandmenu'=>'Expand',
 );

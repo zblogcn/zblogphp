@@ -21,7 +21,9 @@ var lang_comment_content_error = "<?php echo $lang['error']['46']; ?>";
 echo '$(function () {';
 echo 'var $cpLogin = $(".cp-login").find("a");';
 echo 'var $cpVrs = $(".cp-vrs").find("a");';
-echo 'var $addoninfo = GetCookie("addinfo' . str_replace('/','',$zbp->cookiespath) . '");if(!$addoninfo)return ;';
+echo 'SetCookie("timezone", (new Date().getTimezoneOffset()/60)*(-1));';
+echo 'var $addoninfo = GetCookie("addinfo' . str_replace('/','',$zbp->cookiespath) . '");';
+echo 'if(!$addoninfo){LoadRememberInfo();return ;}';
 echo '$addoninfo = eval("("+$addoninfo+")");';
 echo 'if($addoninfo.chkadmin){';
 	echo '$(".cp-hello").html("' . $zbp->lang['msg']['welcome'] . ' " + $addoninfo.useralias + " (" + $addoninfo.levelname  + ")");';
@@ -39,12 +41,6 @@ echo 'if($addoninfo.chkarticle){';
 	echo '$cpVrs.html("' . $zbp->lang['msg']['new_article'] . '");';
 	echo '};';
 	echo '$cpVrs.attr("href", bloghost + "zb_system/cmd.php?act=ArticleEdt");';
-echo '}';
-
-	echo 'SetCookie("timezone", (new Date().getTimezoneOffset()/60)*(-1));';
-
-echo 'if($addoninfo.userid<1){';
-	echo 'LoadRememberInfo();';
 echo '}';
 
 echo '});' . "\r\n";

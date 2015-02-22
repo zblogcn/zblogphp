@@ -97,7 +97,7 @@ function ResponseAdmin_LeftMenu(){
 	$leftmenus['nav_module'] = MakeLeftMenu("ModuleMng", $zbp->lang['msg']['module_manage'], $zbp->host . "zb_system/cmd.php?act=ModuleMng","nav_module","aModuleMng", "glyphicon-tasks");
 	$leftmenus['nav_plugin'] = MakeLeftMenu("PluginMng", $zbp->lang['msg']['plugin_manage'], $zbp->host . "zb_system/cmd.php?act=PluginMng","nav_plugin","aPluginMng", "glyphicon-wrench");
 
-	foreach ($GLOBALS['Filter_Plugin_Admin_LeftMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_LeftMenu'] as $fpname => &$fpsignal) {
 		$fpname($leftmenus);
 	}
 
@@ -118,7 +118,7 @@ function ResponseAdmin_TopMenu(){
 	$topmenus[]=MakeTopMenu("admin",$zbp->lang['msg']['dashboard'],$zbp->host . "zb_system/cmd.php?act=admin","","");
 	$topmenus[]=MakeTopMenu("SettingMng",$zbp->lang['msg']['settings'],$zbp->host . "zb_system/cmd.php?act=SettingMng","","");
 
-	foreach ($GLOBALS['Filter_Plugin_Admin_TopMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_TopMenu'] as $fpname => &$fpsignal) {
 		$fpname($topmenus);
 	}
 
@@ -214,9 +214,10 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
 function CreateOptoinsOfCategorys($default){
 	global $zbp;
 
-	foreach ($GLOBALS['Filter_Plugin_CreateOptoinsOfCategorys'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_CreateOptoinsOfCategorys'] as $fpname => &$fpsignal) {
+		$fpsignal=PLUGIN_EXITSIGNAL_NONE;
 		$fpreturn=$fpname($default);
-		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
 
 	$s=null;
@@ -419,6 +420,9 @@ function CreateOptionsOfLang($default){
 	$files=GetFilesInDir($dir,'php');
 	foreach($files as $f){
 		$n=basename($f,'.php');
+		//fix 1.3 to 1.4 warning
+		if('SimpChinese'==$n)continue;
+		if('TradChinese'==$n)continue;
 		$t= require($f);
 		$s.= '<option value="' . $n . '" ' . ($default==$n?'selected="selected"':'') . ' >' . $t['lang_name'] .' ('. $n .')'. '</option>';
 	}
@@ -439,7 +443,7 @@ function Admin_SiteInfo(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['info_intro'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_SiteInfo_SubMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_SiteInfo_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}
 	echo '</div>';
@@ -503,7 +507,7 @@ function Admin_ArticleMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['article_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_ArticleMng_SubMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_ArticleMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}
 	echo '</div>';
@@ -562,7 +566,7 @@ $or=array('log_PostTime'=>'DESC');
 $l=array(($p->PageNow-1) * $p->PageCount,$p->PageCount);
 $op=array('pagebar'=>$p);
 
-foreach ($GLOBALS['Filter_Plugin_LargeData_Aritcle'] as $fpname => &$fpsignal) {
+foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_Aritcle'] as $fpname => &$fpsignal) {
 	$fpreturn = $fpname($s,$w,$or,$l,$op);
 }
 
@@ -623,7 +627,7 @@ function Admin_PageMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['page_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_PageMng_SubMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_PageMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}
 	echo '</div>';
@@ -655,7 +659,7 @@ $or=array('log_PostTime'=>'DESC');
 $l=array(($p->PageNow-1) * $p->PageCount,$p->PageCount);
 $op=array('pagebar'=>$p);
 
-foreach ($GLOBALS['Filter_Plugin_LargeData_Page'] as $fpname => &$fpsignal) {
+foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_Page'] as $fpname => &$fpsignal) {
 	$fpreturn = $fpname($s,$w,$or,$l,$op);
 }
 
@@ -709,7 +713,7 @@ function Admin_CategoryMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['category_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_CategoryMng_SubMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_CategoryMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}
 	echo '</div>';
@@ -764,7 +768,7 @@ function Admin_CommentMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['comment_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_CommentMng_SubMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_CommentMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}
 	echo '</div>';
@@ -815,7 +819,7 @@ $or=array('comm_ID'=>'DESC');
 $l=array(($p->PageNow-1) * $p->PageCount,$p->PageCount);
 $op=array('pagebar'=>$p);
 
-foreach ($GLOBALS['Filter_Plugin_LargeData_Comment'] as $fpname => &$fpsignal) {
+foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_Comment'] as $fpname => &$fpsignal) {
 	$fpreturn = $fpname($s,$w,$or,$l,$op);
 }
 
@@ -909,7 +913,7 @@ function Admin_MemberMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['member_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_MemberMng_SubMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_MemberMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}
 	echo '</div>';
@@ -995,7 +999,7 @@ function Admin_UploadMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['upload_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_UploadMng_SubMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_UploadMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}
 	echo '</div>';
@@ -1080,7 +1084,7 @@ function Admin_TagMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['tag_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_TagMng_SubMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_TagMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}
 	echo '</div>';
@@ -1155,7 +1159,7 @@ function Admin_ThemeMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['theme_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_ThemeMng_SubMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_ThemeMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}
 	echo '</div>';
@@ -1216,7 +1220,7 @@ function Admin_ModuleMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['module_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_ModuleMng_SubMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_ModuleMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}
 	echo '</div>';
@@ -1463,7 +1467,7 @@ function Admin_PluginMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['plugin_manage'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_PluginMng_SubMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_PluginMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}
 	echo '</div>';
@@ -1550,7 +1554,7 @@ function Admin_SettingMng(){
 
 	echo '<div class="divHeader">' . $zbp->lang['msg']['settings'] . '</div>';
 	echo '<div class="SubMenu">';
-	foreach ($GLOBALS['Filter_Plugin_Admin_SettingMng_SubMenu'] as $fpname => &$fpsignal) {
+	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_SettingMng_SubMenu'] as $fpname => &$fpsignal) {
 		$fpname();
 	}
 	echo '</div>';

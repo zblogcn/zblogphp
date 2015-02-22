@@ -65,13 +65,14 @@ class DbMySQLi implements iDataBase {
 		}
 
 		//mysqli_options($db,MYSQLI_READ_DEFAULT_GROUP,"max_allowed_packet=50M");
-		mysqli_real_connect($db,$array[0], $array[1], $array[2],$array[3],$array[5]);
-		mysqli_set_charset($db,'utf8');
-		$this->db=$db;
-		$this->dbname=$array[3];
-		$this->dbpre=$array[4];
-		$this->dbengine = $array[7];
-		return true;
+		if( @mysqli_real_connect($db,$array[0], $array[1], $array[2],$array[3],$array[5]) ){
+			mysqli_set_charset($db,'utf8');
+			$this->db=$db;
+			$this->dbname=$array[3];
+			$this->dbpre=$array[4];
+			$this->dbengine = $array[7];
+			return true;
+		}
 	}
 
 	/**
@@ -84,7 +85,7 @@ class DbMySQLi implements iDataBase {
 	 * @return bool
 	 */
 	function CreateDB($dbmysql_server,$dbmysql_port,$dbmysql_username,$dbmysql_password,$dbmysql_name){
-		$db = @mysqli_connect($dbmysql_server, $dbmysql_username, $dbmysql_password, null,$dbmysql_port);
+		$db = mysqli_connect($dbmysql_server, $dbmysql_username, $dbmysql_password, null,$dbmysql_port);
 		$this->db = $db;
 		$this->dbname=$dbmysql_name;
 		$s="SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbmysql_name'";

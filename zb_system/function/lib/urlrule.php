@@ -65,12 +65,17 @@ class UrlRule{
 			$this->Rules['{%page%}']='';
 		}
 		if($this->Rules['{%page%}']==''){
-			if(substr_count($s,'{%page%}')==1&&substr_count($s,'{')==2){
+			if(substr_count($s,'{%page%}')==1&&substr_count($s,'{')==2&&substr_count($s,'&')==0){
 				$s=$zbp->host;
 			}
-			preg_match('/(?<=\})[^\{\}%\/]+(?=\{%page%\})/i', $s, $matches);
+			preg_match('/(?<=\})[^\{\}%\/&]+(?=\{%page%\})/i', $s, $matches);
 			if(isset($matches[0])){
 				$s=str_replace($matches[0],'',$s);
+			}else{
+				preg_match('/(?<=&)[^\{\}%\/&]+(?=\{%page%\})/i', $s, $matches);
+				if(isset($matches[0])){
+					$s=str_replace($matches[0],'',$s);
+				}
 			}
 			if(substr($this->PreUrl,-10)!='_{%page%}/' && substr($s,-9)=='{%page%}/')$s=substr($s,0,strlen($s)-1);
 		}
@@ -83,6 +88,7 @@ class UrlRule{
 		if(substr($this->PreUrl, - 1)<>'/' &&  substr($s, - 1)=='/' && $s<>$zbp->host ){
 			$s=substr($s,0,strlen($s)-1);
 		}
+		if(substr($s,-1)=='&')$s=substr($s,0,strlen($s)-1);
 
 		$this->Url=htmlspecialchars($s);
 		return $this->Url;

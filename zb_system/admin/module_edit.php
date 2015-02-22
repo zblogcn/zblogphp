@@ -17,8 +17,8 @@ if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
 
 $blogtitle=$lang['msg']['module_edit'];
 
-require $blogpath . 'zb_system/admin/admin_header.php';
-require $blogpath . 'zb_system/admin/admin_top.php';
+require ZBP_PATH . 'zb_system/admin/admin_header.php';
+require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
 ?>
 <?php
@@ -159,7 +159,7 @@ if($mod->FileName=='catalog'){
 		<input type="text" id="NoRefresh" name="NoRefresh" class="checkbox" value="<?php echo $mod->NoRefresh;?>"/></p>
 	<!-- 1号输出接口 -->	
 	<div id='response' class='editmod2'>
-		<?php foreach ($GLOBALS['Filter_Plugin_Module_Edit_Response'] as $fpname =>	&$fpsignal) {$fpname();}?>
+		<?php foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Edit_Response'] as $fpname =>	&$fpsignal) {$fpname();}?>
 	</div>
 	<p>
 
@@ -189,7 +189,7 @@ function checkInfo(){
 </div>
 
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require ZBP_PATH . 'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>
