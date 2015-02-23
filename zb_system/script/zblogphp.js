@@ -76,7 +76,7 @@
 
 			for (var item in regExList) {
 				var object = regExList[item];
-				if (((!object[0] && formData[item] == "")) || (!(object[2].test(formData[item])) && formData[item] != '')) {
+				if (((!object[0] && formData[item] === "")) || (!(object[2].test(formData[item])) && formData[item] !== '')) {
 					error.no = object[1];
 					error.msg = this.options.lang.error[error.no];
 					return error;
@@ -105,11 +105,11 @@
 				alert(errorData);
 				try {
 					console.log(arguments);
-					console.log("ERROR - " + errorData)
+					console.log("ERROR - " + errorData);
 				} catch (e) { /* do nothing*/ }
 			} else {
 				var cmt = data.match(/cmt\d+/);
-				if (formData.replyid == 0) {
+				if (formData.replyid === 0) {
 					this.$(data).insertAfter("#AjaxCommentBegin");
 				} else {
 					this.$(data).insertAfter("#AjaxComment" + formData.replyid);
@@ -124,7 +124,7 @@
 
 		this.plugin.on("comment.get", "system", function(postid, page) {
 			this.$.get(this.options.bloghost + "zb_system/cmd.php?act=getcmt&postid=" + postid + "&page=" + page, function(data, textStatus, jqXhr) {
-				this.plugin.emit("comment.got", [postid, page], data, textStatus, jqXhr)
+				this.plugin.emit("comment.got", [postid, page], data, textStatus, jqXhr);
 			});
 		});
 
@@ -180,7 +180,7 @@
 			if (typeof self._plugins[interfaceName] == 'undefined') self._plugins[interfaceName] = {};
 			self._plugins[interfaceName][pluginName] = callback;
 			return self;
-		}
+		};
 		/**
 		 * Remove listener
 		 * @function
@@ -191,14 +191,14 @@
 		 */
 		PLUGIN.prototype.unbind = PLUGIN.prototype.removeListener = function(interfaceName, pluginName) {
 			if (!pluginName) pluginName = "";
-			if (pluginName == "") {
+			if (pluginName === "") {
 				self._plugins[interfaceName] = {};
 			} else {
 				self._plugins[interfaceName][pluginName] = null;
 				delete self._plugins[interfaceName][pluginName];
 			}
 			return self;
-		}
+		};
 		/**
 		 * Call listener
 		 * @function
@@ -210,7 +210,7 @@
 			// var argu = self.$.extend([], arguments);
 			// argu.shift();
 			// Let's fuck IE6 together!
-			var argu = []
+			var argu = [];
 			for (var i = 1; i < arguments.length; i++) {
 				argu.push(arguments[i]);
 			}
@@ -218,7 +218,7 @@
 				self._plugins[interfaceName][item].apply(self, argu);
 			}
 			return self;
-		}
+		};
 		/**
 		 * plugin
 		 * @memberOf ZBP
@@ -256,7 +256,7 @@
 			}
 			document.cookie = sCookieName + "=" + escape(sCookieValue) + "; " + (iExpireDays ? "expires=" + dExpire.toGMTString() + "; " : "") + "path=" + self.options.cookiepath;
 			return self;
-		}
+		};
 		/**
 		 * cookie
 		 * @memberOf ZBP
@@ -277,7 +277,7 @@
 		USERINFO.prototype.output = function() {
 			self.plugin.emit("userinfo.output");
 			return self;
-		}
+		};
 		/**
 		 * Save user information from class
 		 * @memberOf USERINFO
@@ -286,7 +286,7 @@
 		USERINFO.prototype.save = function() {
 			self.plugin.emit("userinfo.save");
 			return self;
-		}
+		};
 		/**
 		 * Save user information from DOM
 		 * @memberOf USERINFO
@@ -295,7 +295,7 @@
 		USERINFO.prototype.saveFromHtml = function() {
 			self.plugin.emit("userinfo.savefromhtml");
 			return self;
-		}
+		};
 		/**
 		 * userinfo
 		 * @type {USERINFO}
@@ -318,7 +318,7 @@
 		COMMENT.prototype.get = function(postid, page) {
 			self.plugin.emit("comment.get", postid, page);
 			return self;
-		}
+		};
 		/**
 		 * Reply Comment
 		 * @memberOf COMMENT
@@ -328,7 +328,7 @@
 		COMMENT.prototype.reply = function(id) {
 			self.plugin.emit("comment.reply", id);
 			return self;
-		}
+		};
 		/**
 		 * Post Comment
 		 * @memberOf COMMENT
@@ -371,11 +371,11 @@
 
 			self.plugin.emit("comment.verifydata", error, formData);
 
-			if (error.no != 0) {
+			if (error.no !== 0) {
 				alert(error.msg);
 				try {
 					console.log(formData);
-					console.log("ERROR - " + error.msg)
+					console.log("ERROR - " + error.msg);
 				} catch (e) { /* do nothing */ }
 				self.plugin.emit("comment.posterror", error, formData);
 				return false;
@@ -385,7 +385,7 @@
 			});
 
 			return self;
-		}
+		};
 		/**
 		 * comment
 		 * @memberOf ZBP
