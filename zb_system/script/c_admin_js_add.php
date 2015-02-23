@@ -11,9 +11,9 @@ ob_clean();
 
 ?>
 var zbp = new ZBP({
-	bloghost: "<?php echo $zbp->host; ?>",
-	ajaxurl: "<?php echo $zbp->ajaxurl; ?>",
-	cookiepath: "<?php echo $zbp->cookiespath; ?>"
+	bloghost: "<?php echo $zbp->host;?>",
+	ajaxurl: "<?php echo $zbp->ajaxurl;?>",
+	cookiepath: "<?php echo $zbp->cookiespath;?>"
 });
 
 var bloghost = zbp.options.bloghost;
@@ -152,7 +152,7 @@ function ChangeCheckValue(obj){
 function notify(s){
 	if (window.webkitNotifications) {
 		if (window.webkitNotifications.checkPermission() == 0) {
-			var zb_notifications = window.webkitNotifications.createNotification('<?php echo $bloghost; ?>zb_system/image/admin/logo-16.png', '<?php echo $lang['msg']['notify'];?>', s);
+			var zb_notifications = window.webkitNotifications.createNotification('<?php echo $bloghost;?>zb_system/image/admin/logo-16.png', '<?php echo $lang['msg']['notify'];?>', s);
 			zb_notifications.show();
 			zb_notifications.onclick = function() {top.focus(),this.cancel();}
 			zb_notifications.replaceId = 'Meteoric';
@@ -169,7 +169,7 @@ function notify(s){
 function statistic(s){
 	$("#statloading").show();
 	$("#updatatime").hide();
-	$.get("<?php echo $bloghost; ?>zb_system/cmd.php"+s,{},
+	$.get("<?php echo $bloghost;?>zb_system/cmd.php"+s,{},
 		function(data){
 			$("#tbStatistic tr:first ~ tr").remove();
 			$("#tbStatistic tr:first").after(data);
@@ -182,7 +182,7 @@ function statistic(s){
 
 function updateinfo(s){
 	$("#infoloading").show();
-	$.get("<?php echo $bloghost; ?>zb_system/cmd.php"+s,{},
+	$.get("<?php echo $bloghost;?>zb_system/cmd.php"+s,{},
 		function(data){
 			$("#tbUpdateInfo tr:first ~ tr").remove();
 			$("#tbUpdateInfo tr:first").after(data);
@@ -240,7 +240,7 @@ $(document).ready(function(){
 	$('span.imgcheck').click(function(){ChangeCheckValue(this)})
 
 	//batch
-	$("#batch a").bind("click", function(){ BatchContinue();$("#batch p").html("<?php echo $lang['msg']['batch_operation_in_progress']; ?>");});
+	$("#batch a").bind("click", function(){ BatchContinue();$("#batch p").html("<?php echo $lang['msg']['batch_operation_in_progress'];?>");});
 
 	$(".SubMenu span.m-right").parent().css({"float":"right"});
 
@@ -256,10 +256,10 @@ $(document).ready(function(){
 
 	}else{
 		<?php
-			echo 'if($("div.divHeader,div.divHeader2").first().css("background-image")=="none"){AddHeaderIcon("'. $bloghost .'zb_system/image/common/window.png");}';
-		?>
+echo 'if($("div.divHeader,div.divHeader2").first().css("background-image")=="none"){AddHeaderIcon("' . $bloghost . 'zb_system/image/common/window.png");}';
+?>
 	}
-	
+
 	AutoHideTips();
 
 	SetCookie("timezone",(new Date().getTimezoneOffset()/60)*(-1));
@@ -269,9 +269,9 @@ $(document).ready(function(){
 var SetCookie = function () { return zbp.cookie.set.apply(null, arguments); }
 var GetCookie = function () { return zbp.cookie.get.apply(null, arguments); }
 var LoadRememberInfo = function () { zbp.userinfo.output.apply(null); return false;}
-var SaveRememberInfo = function () { zbp.userinfo.saveFromHtml.apply(null); return false;} 
-var RevertComment = function () { zbp.comment.reply.apply(null); return false;} 
-var GetComments = function () { zbp.comment.get.apply(null); return false;} 
+var SaveRememberInfo = function () { zbp.userinfo.saveFromHtml.apply(null); return false;}
+var RevertComment = function () { zbp.comment.reply.apply(null); return false;}
+var GetComments = function () { zbp.comment.get.apply(null); return false;}
 var VerifyMessage = function () { zbp.comment.post.apply(null); return false;}
 
 
@@ -284,7 +284,7 @@ $m = md5($s);
 header('Content-Type: application/x-javascript; charset=utf-8');
 header('Etag: ' . $m);
 
-if( isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m ){
+if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
 	SetHttpStatusCode(304);
 	die;
 }

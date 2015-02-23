@@ -8,7 +8,7 @@ $zbp->Load();
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php if(strpos(GetVars('HTTP_USER_AGENT','SERVER'),'Trident/')){?>
+<?php if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) {?>
 	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 <?php }?>
 	<meta name="robots" content="none" />
@@ -19,7 +19,10 @@ $zbp->Load();
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 	<title><?php echo $blogname . '-' . $lang['msg']['login']?></title>
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) $fpname();
+foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {
+	$fpname();
+}
+
 ?>
 </head>
 <body>
@@ -30,7 +33,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Header'] as $fpname => &$fpsigna
     <form method="post" action="#">
     <dl>
       <dt></dt>
-      <dd class="username"><label for="edtUserName"><?php echo $lang['msg']['username']?></label><input type="text" id="edtUserName" name="edtUserName" size="20" value="<?php echo GetVars('username','COOKIE')?>" tabindex="1" /></dd>
+      <dd class="username"><label for="edtUserName"><?php echo $lang['msg']['username']?></label><input type="text" id="edtUserName" name="edtUserName" size="20" value="<?php echo GetVars('username', 'COOKIE')?>" tabindex="1" /></dd>
       <dd class="password"><label for="edtPassWord"><?php echo $lang['msg']['password']?></label><input type="password" id="edtPassWord" name="edtPassWord" size="20" tabindex="2" /></dd>
     </dl>
     <dl>
@@ -75,8 +78,10 @@ $("#chkRemember").click(function(){
 if (!$.support.leadingWhitespace) {
 	$("#dishtml5").val(1);
 <?php
-	if($option['ZC_ADMIN_HTML5_ENABLE'])
-		echo 'alert("' . $lang['error']['74'] . '");';
+if ($option['ZC_ADMIN_HTML5_ENABLE']) {
+	echo 'alert("' . $lang['error']['74'] . '");';
+}
+
 ?>
 }
 </script>

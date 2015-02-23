@@ -23,7 +23,7 @@ return array(
 	'db_build_set' => '資料庫建立與設定',
 	'install_result' => '安裝結果',
 	'i_agree' => '我已閱讀並同意本協議。',
-	'server_check'=> '伺服器環境檢查',
+	'server_check' => '伺服器環境檢查',
 	'http_server' => 'HTTP 伺服器',
 	'path' => '路徑',
 	'php_version' => 'PHP 版本支援',

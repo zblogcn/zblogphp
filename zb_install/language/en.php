@@ -23,7 +23,7 @@ return array(
 	'db_build_set' => 'Database Creation and Setup',
 	'install_result' => 'Install Complete',
 	'i_agree' => 'I agree to the Z-BlogPHP Terms.',
-	'server_check'=> 'Check Server Environment',
+	'server_check' => 'Check Server Environment',
 	'http_server' => 'HTTP Server',
 	'path' => 'Path',
 	'php_version' => 'PHP Version',
