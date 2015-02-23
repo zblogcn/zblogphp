@@ -7,7 +7,7 @@ require dirname(__FILE__) . '/function.php';
 
 $zbp->Load();
 
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
@@ -16,23 +16,25 @@ $type = $_GET['type'];
 
 $id = $_GET['id'];
 
-$app=new App;
+$app = new App;
 
-if (!$app->LoadInfoByXml($type,$id)) exit;
+if (!$app->LoadInfoByXml($type, $id)) {
+	exit;
+}
 
 ob_clean();
 
 header('Content-Type: application/octet-stream');
 
 if
-	(function_exists('gzencode') && 
-	method_exists('App','PackGZip') && 
+(function_exists('gzencode') &&
+	method_exists('App', 'PackGZip') &&
 	$zbp->Config('AppCentre')->enablegzipapp &&
-	$app->adapted > 140614 // 1.3和之前版本不打包为gzba
-){
-	header('Content-Disposition:attachment;filename='. $id .'.gzba');
+	$app->adapted > 140614// 1.3和之前版本不打包为gzba
+) {
+	header('Content-Disposition:attachment;filename=' . $id . '.gzba');
 	echo $app->PackGZip();
-} else{
-	header('Content-Disposition:attachment;filename='. $id .'.zba');
+} else {
+	header('Content-Disposition:attachment;filename=' . $id . '.zba');
 	echo $app->Pack();
 }

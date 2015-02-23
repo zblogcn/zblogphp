@@ -4,7 +4,7 @@ require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 if (!$zbp->CheckRights('root')) {$zbp->ShowError(6);exit();}
 if (!$zbp->CheckPlugin('duoshuo')) {$zbp->ShowError(48);exit();}
-$blogtitle='多说社会化评论';
+$blogtitle = '多说社会化评论';
 require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <style type="text/css">
@@ -61,14 +61,14 @@ $duoshuo->init();
                 <span class="note">文章数据无论是否存在都将同步</span></p></td>
             <td>
             <?php
-			$sql = $zbp->db->sql->Select($GLOBALS['table']['Post'], 'max(log_ID)',null,null,null,null);
-			$sql = $zbp->db->Query($sql);
-			$postid = $sql[0]['max(log_ID)'];
-			?>
+$sql = $zbp->db->sql->Select($GLOBALS['table']['Post'], 'max(log_ID)', null, null, null, null);
+$sql = $zbp->db->Query($sql);
+$postid = $sql[0]['max(log_ID)'];
+?>
               <p> 文章ID:
-                <input type="number" id="articlemin" name="articlemin" min="1" max="<?php echo $postid ?>" value="1"/>
+                <input type="number" id="articlemin" name="articlemin" min="1" max="<?php echo $postid?>" value="1"/>
                 -
-                <input type="number" id="articlemax" name="articlemax" min="1" max="<?php echo $postid ?>" value="<?php echo $postid ?>"/>
+                <input type="number" id="articlemax" name="articlemax" min="1" max="<?php echo $postid?>" value="<?php echo $postid?>"/>
               </p>
               <p>
                 <input name="" type="submit" class="button" onClick="$('#type').val('article')" value="导出文章" />
@@ -76,22 +76,25 @@ $duoshuo->init();
           </tr>
           <tr>
           <?php
-	      $sql = $zbp->db->sql->Select($GLOBALS['table']['Comment'],'max(comm_ID)',array(array('=','comm_IsChecking',0)),null,null,null);
-		  $sql = $zbp->db->Query($sql);
-		  $commid = (int)$sql[0]['max(comm_ID)'];
-		  if ($commid < 1) $commid = 1;
-	      $sql = $zbp->db->sql->Select($GLOBALS['table']['plugin_duoshuo_comment'],'max(ds_cmtid)',null,null,null,null);
-		  $sql = $zbp->db->Query($sql);
-          $ds_comid = (int)$sql[0]['max(ds_cmtid)'];
-		  $pl = $commid - $ds_comid;
-		  
-		  ?>
+$sql = $zbp->db->sql->Select($GLOBALS['table']['Comment'], 'max(comm_ID)', array(array('=', 'comm_IsChecking', 0)), null, null, null);
+$sql = $zbp->db->Query($sql);
+$commid = (int) $sql[0]['max(comm_ID)'];
+if ($commid < 1) {
+	$commid = 1;
+}
+
+$sql = $zbp->db->sql->Select($GLOBALS['table']['plugin_duoshuo_comment'], 'max(ds_cmtid)', null, null, null, null);
+$sql = $zbp->db->Query($sql);
+$ds_comid = (int) $sql[0]['max(ds_cmtid)'];
+$pl = $commid - $ds_comid;
+
+?>
                       <td><p><span class="bold"> · 评论数据导出</span><br/>
-                <span class="note">只同步未向多说同步的评论，还有<?php echo $pl ?>条未同步</span></p></td>
+                <span class="note">只同步未向多说同步的评论，还有<?php echo $pl?>条未同步</span></p></td>
             <td><p> 评论ID:
-                <input type="number" id="commentmin" name="commentmin" min="1" max="<?php echo $commid ?>" value="1"/>
+                <input type="number" id="commentmin" name="commentmin" min="1" max="<?php echo $commid?>" value="1"/>
                 -
-                <input type="number" id="commentmax" name="commentmax" min="1" max="<?php echo $commid ?>" value="<?php echo $commid ?>"/>
+                <input type="number" id="commentmax" name="commentmax" min="1" max="<?php echo $commid?>" value="<?php echo $commid?>"/>
               </p>
               <p>
                 <input name="" type="submit" class="button" onClick="$('#type').val('comment')" value="导出评论" />
@@ -278,8 +281,8 @@ $duoshuo->init();
 				},
 			});
 		}
-        </script> 
-<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script> 
+        </script>
+<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
 <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/duoshuo/logo.png';?>");</script>
 </div>
 </div>

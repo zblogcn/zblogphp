@@ -3,11 +3,11 @@ require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('Totoro')) {$zbp->ShowError(48);die();}
 Totoro_init();
-$blogtitle='Totoro反垃圾评论';
+$blogtitle = 'Totoro反垃圾评论';
 require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <style type="text/css">
@@ -26,9 +26,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div id="divMain2">
     <form id="edit" name="edit" method="post" action="save_setting.php">
       <input id="reset" name="reset" type="hidden" value="" />
-      <div class="content-box"> 
+      <div class="content-box">
         <!-- Start Content Box -->
-        
+
         <div class="content-box-header">
           <ul class="content-box-tabs">
             <li><a href="#tab1" class="default-tab"><span>加分减分细则设置</span></a></li>
@@ -50,9 +50,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                 <th><p align="left"><b>信息</b></p></th>
               </tr>
               <?php
-			  $i = 1;
-			  foreach($Totoro->config_array['SV_RULE'] as $name => $value){
-			  ?>
+$i = 1;
+foreach ($Totoro->config_array['SV_RULE'] as $name => $value) {
+	?>
               <tr>
                 <td><?php echo $i?></td>
                 <td><p align="left"><b><?php echo $value['NAME']?></b></p></td>
@@ -60,10 +60,10 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                 <td>(默认：<?php echo $value['DEFAULT']?>) <?php echo $value['DESC']?></td>
               </tr>
               <?php
-			  	$i++;
-			  }
-			  foreach($Totoro->config_array['SV_SETTING'] as $name => $value){
-			  ?>
+$i++;
+}
+foreach ($Totoro->config_array['SV_SETTING'] as $name => $value) {
+	?>
               <tr>
                 <td><?php echo $i?></td>
                 <td><p align="left"><b><?php echo $value['NAME']?></b></p></td>
@@ -71,9 +71,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                 <td>(默认：<?php echo $value['DEFAULT']?>) <?php echo $value['DESC']?></td>
               </tr>
               <?php
-			  	$i++;
-			  }
-			  ?>
+$i++;
+}
+?>
             </table>
           </div>
           <!-- line -->
@@ -84,8 +84,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                 <th><p align="left"><b>值</b></p></th>
               </tr>
               <?php
-			  foreach($Totoro->config_array['BLACK_LIST'] as $name => $value){
-			  ?>
+foreach ($Totoro->config_array['BLACK_LIST'] as $name => $value) {
+	?>
               <tr>
                 <td><p align="left"><b><?php echo $value['NAME']?></b><br/>
                     · <?php echo $value['DESC']?></p></td>
@@ -93,8 +93,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                   <textarea class="unescape-textarea" rows="6" style="width:95%" data-tag="TOTORO_BLACK_LIST_<?php echo $name?>" id="TOTORO_BLACK_LIST_UNESCAPE_<?php echo $name?>">数据读取中</textarea></td>
               </tr>
               <?php
-			  }
-			  ?>
+}
+?>
             </table>
           </div>
           <!-- line -->
@@ -105,15 +105,15 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                 <th><p align="left"><b>值</b></p></th>
               </tr>
               <?php
-			  foreach($Totoro->config_array['STRING_BACK'] as $name => $value){
-			  ?>
+foreach ($Totoro->config_array['STRING_BACK'] as $name => $value) {
+	?>
               <tr>
                 <td><p align="left"><b><?php echo $value['NAME']?></b></p></td>
                 <td><textarea class="unescape-textarea" name="TOTORO_STRING_BACK_<?php echo $name?>" rows="6" style="width:95%"><?php echo $Totoro->output_config('STRING_BACK', $name, FALSE)?></textarea></td>
               </tr>
               <?php
-			  }
-			  ?>
+}
+?>
             </table>
           </div>
           <!-- line -->
@@ -124,16 +124,16 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                 <th><p align="left"><b>值</b></p></th>
               </tr>
               <?php
-			  foreach($Totoro->config_array['BUILD_CONFIG'] as $name => $value){
-			  ?>
+foreach ($Totoro->config_array['BUILD_CONFIG'] as $name => $value) {
+	?>
               <tr>
                 <td><p align="left"><b><?php echo $value['NAME']?></b><br/>
                     · <?php echo $value['DESC']?></p></td>
                 <td><input type="text" class="checkbox" name="TOTORO_BUILD_CONFIG_<?php echo $name?>" value="<?php echo $Totoro->output_config('BUILD_CONFIG', $name)?>"/></td>
               </tr>
               <?php
-			  }
-			  ?>
+}
+?>
             </table>
           </div>
           <div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab-about">
@@ -153,7 +153,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               </dd>
               <dd></dd>
             </dl>
-          </div>--> 
+          </div>-->
         </div>
       </div>
       <hr/>
@@ -167,19 +167,19 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 				var self = $(this);
 				$("#" + self.attr("data-tag")).text(decodeURIComponent(self.val()));
 			});
-			
+
 			$("#edit").submit(function(){
 				$(".unescape-textarea").each(function(){
 					var self = $(this);
 					$("#" + self.attr("data-tag")).text(encodeURIComponent(self.val()));
-				});	
+				});
 			});
-			
+
 		});
-		
-	</script> 
-    <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script> 
-    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Totoro/logo.png';?>");</script> 
+
+	</script>
+    <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Totoro/logo.png';?>");</script>
   </div>
 </div>
 <?php

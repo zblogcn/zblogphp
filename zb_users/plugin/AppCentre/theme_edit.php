@@ -7,136 +7,141 @@ require dirname(__FILE__) . '/function.php';
 
 $zbp->Load();
 
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
 
-$blogtitle='应用中心-主题编辑';
+$blogtitle = '应用中心-主题编辑';
 
-if(GetVars('id')){
-  $app = $zbp->LoadApp('theme',GetVars('id'));
-  $mt=array();
-  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/','php|inc|png');
-  foreach($ft as $f){
-    $mt[]=filemtime($f);
-  }
-  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/include/','php|inc|png');
-  foreach($ft as $f){
-    $mt[]=filemtime($f);
-  }
-  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/style/','php|inc|png');
-  foreach($ft as $f){
-    $mt[]=filemtime($f);
-  }
-  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/template/','php|inc|png');
-  foreach($ft as $f){
-    $mt[]=filemtime($f);
-  }
-  $ft=GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/source/','php|inc|png');
-  foreach($ft as $f){
-    $mt[]=filemtime($f);
-  }  
-  rsort($mt);
-  if(count($mt)==0)$mt[]=time();
-  $app->modified = date('Y-m-d', reset($mt));
-}else{
-  $app = new App;
-  $app->price=0;
-  $app->version='1.0';
-  $app->pubdate=date('Y-m-d',time());
-  $app->modified=date('Y-m-d',time());
-  $v=array_keys($zbpvers);
-  $app->adapted=(string)end($v);
-  $app->type='theme';
+if (GetVars('id')) {
+	$app = $zbp->LoadApp('theme', GetVars('id'));
+	$mt = array();
+	$ft = GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/', 'php|inc|png');
+	foreach ($ft as $f) {
+		$mt[] = filemtime($f);
+	}
+	$ft = GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/include/', 'php|inc|png');
+	foreach ($ft as $f) {
+		$mt[] = filemtime($f);
+	}
+	$ft = GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/style/', 'php|inc|png');
+	foreach ($ft as $f) {
+		$mt[] = filemtime($f);
+	}
+	$ft = GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/template/', 'php|inc|png');
+	foreach ($ft as $f) {
+		$mt[] = filemtime($f);
+	}
+	$ft = GetFilesInDir($zbp->path . '/zb_users/theme/' . $app->id . '/source/', 'php|inc|png');
+	foreach ($ft as $f) {
+		$mt[] = filemtime($f);
+	}
+	rsort($mt);
+	if (count($mt) == 0) {
+		$mt[] = time();
+	}
+
+	$app->modified = date('Y-m-d', reset($mt));
+} else {
+	$app = new App;
+	$app->price = 0;
+	$app->version = '1.0';
+	$app->pubdate = date('Y-m-d', time());
+	$app->modified = date('Y-m-d', time());
+	$v = array_keys($zbpvers);
+	$app->adapted = (string) end($v);
+	$app->type = 'theme';
 }
 
-if(count($_POST)>0){
+if (count($_POST) > 0) {
 
-  $app->id=trim($_POST['app_id']);
-  if(!CheckRegExp($app->id,"/^[A-Za-z0-9_]{3,30}/")) {$zbp->ShowError('ID名必须是字母数字和下划线组成,长度3-30字符.');die();}
-  if(!GetVars('id')){
-    $app2 = $zbp->LoadApp('theme',$app->id);
-    if($app2->id) {$zbp->ShowError('已存在同名的APP应用.');die();}
-    @mkdir($zbp->usersdir . 'theme/' . $app->id);
-    @mkdir($zbp->usersdir . 'theme/' . $app->id . '/style');
-    @mkdir($zbp->usersdir . 'theme/' . $app->id . '/compile');
-    @mkdir($zbp->usersdir . 'theme/' . $app->id . '/template');
-    @copy($zbp->usersdir . 'plugin/AppCentre/images/theme.png',$zbp->usersdir . 'theme/' . $app->id . '/screenshot.png');
-    @file_put_contents($zbp->usersdir . 'theme/' . $app->id . '/style/style.css','');
+	$app->id = trim($_POST['app_id']);
+	if (!CheckRegExp($app->id, "/^[A-Za-z0-9_]{3,30}/")) {$zbp->ShowError('ID名必须是字母数字和下划线组成,长度3-30字符.');die();}
+	if (!GetVars('id')) {
+		$app2 = $zbp->LoadApp('theme', $app->id);
+		if ($app2->id) {$zbp->ShowError('已存在同名的APP应用.');die();}
+		@mkdir($zbp->usersdir . 'theme/' . $app->id);
+		@mkdir($zbp->usersdir . 'theme/' . $app->id . '/style');
+		@mkdir($zbp->usersdir . 'theme/' . $app->id . '/compile');
+		@mkdir($zbp->usersdir . 'theme/' . $app->id . '/template');
+		@copy($zbp->usersdir . 'plugin/AppCentre/images/theme.png', $zbp->usersdir . 'theme/' . $app->id . '/screenshot.png');
+		@file_put_contents($zbp->usersdir . 'theme/' . $app->id . '/style/style.css', '');
 
-    if(trim($_POST['app_path'])){
-      $file = file_get_contents('tpl/main.html');
-      $file = str_replace("<%appid%>", $app->id, $file);
-      $path=$zbp->usersdir . 'theme/' . $app->id . '/' . trim($_POST['app_path']);
-      @file_put_contents($path, $file);
-    }
-    if(trim($_POST['app_include'])){
-      $file = file_get_contents('tpl/include.html');
-      $file = str_replace("<%appid%>", $app->id, $file);
-      $path=$zbp->usersdir . 'theme/' . $app->id . '/include.php';
-      @file_put_contents($path, $file);
-    }
-  }
+		if (trim($_POST['app_path'])) {
+			$file = file_get_contents('tpl/main.html');
+			$file = str_replace("<%appid%>", $app->id, $file);
+			$path = $zbp->usersdir . 'theme/' . $app->id . '/' . trim($_POST['app_path']);
+			@file_put_contents($path, $file);
+		}
+		if (trim($_POST['app_include'])) {
+			$file = file_get_contents('tpl/include.html');
+			$file = str_replace("<%appid%>", $app->id, $file);
+			$path = $zbp->usersdir . 'theme/' . $app->id . '/include.php';
+			@file_put_contents($path, $file);
+		}
+	}
 
-$app->name=trim($_POST['app_name']);
-$app->url=trim($_POST['app_url']);
-$app->note=trim($_POST['app_note']);
-$app->adapted=$_POST['app_adapted'];
-$app->version=(float)$_POST['app_version'];
-if($app->version==1)$app->version='1.0';
-$app->pubdate=date('Y-m-d',strtotime($_POST['app_pubdate']));
-$app->modified=date('Y-m-d',time());
+	$app->name = trim($_POST['app_name']);
+	$app->url = trim($_POST['app_url']);
+	$app->note = trim($_POST['app_note']);
+	$app->adapted = $_POST['app_adapted'];
+	$app->version = (float) $_POST['app_version'];
+	if ($app->version == 1) {
+		$app->version = '1.0';
+	}
 
-$app->author_name=trim($_POST['app_author_name']);
-$app->author_email=trim($_POST['app_author_email']);
-$app->author_url=trim($_POST['app_author_url']);
-$app->source_name=trim($_POST['app_source_name']);
-$app->source_email=trim($_POST['app_source_email']);
-$app->source_url=trim($_POST['app_source_url']);
+	$app->pubdate = date('Y-m-d', strtotime($_POST['app_pubdate']));
+	$app->modified = date('Y-m-d', time());
 
-$app->path=trim($_POST['app_path']);
-$app->include=trim($_POST['app_include']);
-$app->level=(int)$_POST['app_level'];
-$app->price=(float)$_POST['app_price'];
+	$app->author_name = trim($_POST['app_author_name']);
+	$app->author_email = trim($_POST['app_author_email']);
+	$app->author_url = trim($_POST['app_author_url']);
+	$app->source_name = trim($_POST['app_source_name']);
+	$app->source_email = trim($_POST['app_source_email']);
+	$app->source_url = trim($_POST['app_source_url']);
 
-$app->advanced_dependency=trim($_POST['app_advanced_dependency']);
-$app->advanced_rewritefunctions=trim($_POST['app_advanced_rewritefunctions']);
-$app->advanced_conflict=trim($_POST['app_advanced_conflict']);
+	$app->path = trim($_POST['app_path']);
+	$app->include = trim($_POST['app_include']);
+	$app->level = (int) $_POST['app_level'];
+	$app->price = (float) $_POST['app_price'];
 
-$app->description=trim($_POST['app_description']);
+	$app->advanced_dependency = trim($_POST['app_advanced_dependency']);
+	$app->advanced_rewritefunctions = trim($_POST['app_advanced_rewritefunctions']);
+	$app->advanced_conflict = trim($_POST['app_advanced_conflict']);
 
-if(GetVars('app_sidebars_sidebar1')){
-  $app->sidebars_sidebar1=$zbp->option['ZC_SIDEBAR_ORDER'];
-}else{
-  $app->sidebars_sidebar1='';
-}
-if(GetVars('app_sidebars_sidebar2')){
-  $app->sidebars_sidebar2=$zbp->option['ZC_SIDEBAR2_ORDER'];
-}else{
-  $app->sidebars_sidebar2='';
-}
-if(GetVars('app_sidebars_sidebar3')){
-  $app->sidebars_sidebar3=$zbp->option['ZC_SIDEBAR3_ORDER'];
-}else{
-  $app->sidebars_sidebar3='';
-}
-if(GetVars('app_sidebars_sidebar4')){
-  $app->sidebars_sidebar4=$zbp->option['ZC_SIDEBAR4_ORDER'];
-}else{
-  $app->sidebars_sidebar4='';
-}
-if(GetVars('app_sidebars_sidebar5')){
-  $app->sidebars_sidebar5=$zbp->option['ZC_SIDEBAR5_ORDER'];
-}else{
-  $app->sidebars_sidebar5='';
-}
+	$app->description = trim($_POST['app_description']);
 
+	if (GetVars('app_sidebars_sidebar1')) {
+		$app->sidebars_sidebar1 = $zbp->option['ZC_SIDEBAR_ORDER'];
+	} else {
+		$app->sidebars_sidebar1 = '';
+	}
+	if (GetVars('app_sidebars_sidebar2')) {
+		$app->sidebars_sidebar2 = $zbp->option['ZC_SIDEBAR2_ORDER'];
+	} else {
+		$app->sidebars_sidebar2 = '';
+	}
+	if (GetVars('app_sidebars_sidebar3')) {
+		$app->sidebars_sidebar3 = $zbp->option['ZC_SIDEBAR3_ORDER'];
+	} else {
+		$app->sidebars_sidebar3 = '';
+	}
+	if (GetVars('app_sidebars_sidebar4')) {
+		$app->sidebars_sidebar4 = $zbp->option['ZC_SIDEBAR4_ORDER'];
+	} else {
+		$app->sidebars_sidebar4 = '';
+	}
+	if (GetVars('app_sidebars_sidebar5')) {
+		$app->sidebars_sidebar5 = $zbp->option['ZC_SIDEBAR5_ORDER'];
+	} else {
+		$app->sidebars_sidebar5 = '';
+	}
 
-$app-> SaveInfoByXml();
+	$app->SaveInfoByXml();
 
-  $zbp->SetHint('good', '提交成功！<a href="submit.php?type=theme&id=' . $app->id . '">现在立刻上传到应用中心！</a>');
-  Redirect($_SERVER["HTTP_REFERER"]);
+	$zbp->SetHint('good', '提交成功！<a href="submit.php?type=theme&id=' . $app->id . '">现在立刻上传到应用中心！</a>');
+	Redirect($_SERVER["HTTP_REFERER"]);
 }
 
 require $blogpath . 'zb_system/admin/admin_header.php';
@@ -146,7 +151,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <div id="divMain">
 
   <div class="divHeader"><?php echo $blogtitle;?></div>
-<div class="SubMenu"><?php AppCentre_SubMenus(GetVars('id','GET')==''?6:'');?></div>
+<div class="SubMenu"><?php AppCentre_SubMenus(GetVars('id', 'GET') == '' ? 6 : '');?></div>
   <div id="divMain2">
 
 <form method="post" action="">
@@ -159,7 +164,10 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       <td><p><b>· 主题ID</b><br/>
           <span class="note">&nbsp;&nbsp;主题ID为主题的目录名,且不能重复.ID名只能用字母数字和下划线的组合.</span></p></td>
       <td><p>&nbsp;
-          <input id="app_id" name="app_id" style="width:550px;"  type="text" value="<?php echo $app->id;?>" <?php if($app->id)echo 'readonly="readonly"';?>  />
+          <input id="app_id" name="app_id" style="width:550px;"  type="text" value="<?php echo $app->id;?>" <?php if ($app->id) {
+	echo 'readonly="readonly"';
+}
+?>  />
         </p></td>
     </tr>
     <tr>
@@ -300,23 +308,38 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       <td><p><b>· 侧栏配置导出</b> (可选)</p></td>
       <td><p>&nbsp;
           <label>
-            <input type="checkbox" name="app_sidebars_sidebar1" value="1" <?php if($app->sidebars_sidebar1)echo 'checked="checked"';?>  />
+            <input type="checkbox" name="app_sidebars_sidebar1" value="1" <?php if ($app->sidebars_sidebar1) {
+	echo 'checked="checked"';
+}
+?>  />
             侧栏</label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <label>
-            <input type="checkbox" name="app_sidebars_sidebar2" value="1" <?php if($app->sidebars_sidebar2)echo 'checked="checked"';?>   />
+            <input type="checkbox" name="app_sidebars_sidebar2" value="1" <?php if ($app->sidebars_sidebar2) {
+	echo 'checked="checked"';
+}
+?>   />
             侧栏2</label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <label>
-            <input type="checkbox" name="app_sidebars_sidebar3" value="1" <?php if($app->sidebars_sidebar3)echo 'checked="checked"';?>   />
+            <input type="checkbox" name="app_sidebars_sidebar3" value="1" <?php if ($app->sidebars_sidebar3) {
+	echo 'checked="checked"';
+}
+?>   />
             侧栏3</label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <label>
-            <input type="checkbox" name="app_sidebars_sidebar4" value="1" <?php if($app->sidebars_sidebar4)echo 'checked="checked"';?>   />
+            <input type="checkbox" name="app_sidebars_sidebar4" value="1" <?php if ($app->sidebars_sidebar4) {
+	echo 'checked="checked"';
+}
+?>   />
             侧栏4</label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <label>
-            <input type="checkbox" name="app_sidebars_sidebar5" value="1" <?php if($app->sidebars_sidebar5)echo 'checked="checked"';?>   />
+            <input type="checkbox" name="app_sidebars_sidebar5" value="1" <?php if ($app->sidebars_sidebar5) {
+	echo 'checked="checked"';
+}
+?>   />
             侧栏5</label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></td>
     </tr>
@@ -330,7 +353,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 
 	<script type="text/javascript">ActiveLeftMenu("aAppCentre");</script>
-	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>	
+	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>
   </div>
 </div>
 <?php

@@ -4,7 +4,7 @@ require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 if (!$zbp->CheckRights('root')) {$zbp->ShowError(6);exit();}
 if (!$zbp->CheckPlugin('duoshuo')) {$zbp->ShowError(48);exit();}
-$blogtitle='多说社会化评论';
+$blogtitle = '多说社会化评论';
 require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <style type="text/css">
@@ -29,33 +29,29 @@ $duoshuo->init();
 
 <div id="divMain">
   <div class="divHeader"><?php echo $blogtitle;?></div>
-  <div class="SubMenu"><?php echo $duoshuo->export_submenu(GetVars("act","GET"));?></div>
+  <div class="SubMenu"><?php echo $duoshuo->export_submenu(GetVars("act", "GET"));?></div>
   <div id="divMain2">
     <?php
-if ($zbp->config('duoshuo')->short_name=="")
-{
+if ($zbp->config('duoshuo')->short_name == "") {
 	echo '<iframe id="duoshuo-remote-window" src="' . $duoshuo->export_connect_url() . '" style="border:0; width:100%; height:580px;"></iframe>';
-}
-else
-{
-	switch(GetVars("act","GET"))
-	{
+} else {
+	switch (GetVars("act", "GET")) {
 		case "settings":
 		case "users":
 		case "statistics":
-			echo '<iframe id="duoshuo-remote-window" src="' . $duoshuo->export_admin(GetVars("act","GET")) . '" style="border:0; width:100%; height:580px;"></iframe>';
-		break;
+			echo '<iframe id="duoshuo-remote-window" src="' . $duoshuo->export_admin(GetVars("act", "GET")) . '" style="border:0; width:100%; height:580px;"></iframe>';
+			break;
 		case "setting":
 			require '_setting.inc';
-		break;
+			break;
 		default:
-			echo '<iframe id="duoshuo-remote-window" src="' . $duoshuo->export_admin(GetVars("act","GET")) . '" style="border:0; width:100%; height:580px;"></iframe>';
-		break;
+			echo '<iframe id="duoshuo-remote-window" src="' . $duoshuo->export_admin(GetVars("act", "GET")) . '" style="border:0; width:100%; height:580px;"></iframe>';
+			break;
 	}
 }
 ?>
-    <script type="text/javascript">ActiveLeftMenu("a<?php echo !isset($_GET['act'])?'Comment':'Plugin' ?>Mng");</script> 
-    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/duoshuo/logo.png';?>");</script> 
+    <script type="text/javascript">ActiveLeftMenu("a<?php echo !isset($_GET['act']) ? 'Comment' : 'Plugin'?>Mng");</script>
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/duoshuo/logo.png';?>");</script>
     <script type='text/javascript'>$(function(){var w=$('#duoshuo-remote-window');if(w.length>0){$('.divHeader').append('<span style="font-size:12px;padding: 3px 8px;background: #f1f1f1;margin-left: 4px;color: #21759b;-webkit-border-radius: 3px;border-radius: 3px;border-width: 1px;border-style: solid;"><a href='+w.attr("src")+' target="_blank">新窗口打开</a></span>')}})</script>
   </div>
 </div>

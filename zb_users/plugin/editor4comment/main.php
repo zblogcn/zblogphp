@@ -2,11 +2,11 @@
 require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('editor4comment')) {$zbp->ShowError(48);die();}
 
-$blogtitle='editor4comment';
+$blogtitle = 'editor4comment';
 require $blogpath . 'zb_system/admin/admin_header.php';
 
 if (GetVars('act', 'GET') == 'save') {
@@ -17,7 +17,7 @@ if (GetVars('act', 'GET') == 'save') {
 }
 ?>
 <link href="ueditor/themes/default/css/umeditor.min.css" type="text/css" rel="stylesheet">
-<script type="text/javascript">window.UMEDITOR_CONFIG = {UMEDITOR_HOME_URL : bloghost + "zb_users/plugin/editor4comment/ueditor/",toolbar: ['bold italic underline forecolor ','link unlink | emotion drafts'],minWidth: parseInt('<?php echo ((int)$zbp->Config('editor4comment')->minWidth == 0 ? 500 : $zbp->Config('editor4comment')->minWidth)?>'),minHeight: parseInt('<?php echo ((int)$zbp->Config('editor4comment')->minHeight == 0 ? 500 : $zbp->Config('editor4comment')->minHeight)?>')};
+<script type="text/javascript">window.UMEDITOR_CONFIG = {UMEDITOR_HOME_URL : bloghost + "zb_users/plugin/editor4comment/ueditor/",toolbar: ['bold italic underline forecolor ','link unlink | emotion drafts'],minWidth: parseInt('<?php echo ((int) $zbp->Config('editor4comment')->minWidth == 0 ? 500 : $zbp->Config('editor4comment')->minWidth)?>'),minHeight: parseInt('<?php echo ((int) $zbp->Config('editor4comment')->minHeight == 0 ? 500 : $zbp->Config('editor4comment')->minHeight)?>')};
 </script>
 <script type="text/javascript" charset="utf-8" src="ueditor/umeditor.min.js"></script>
 

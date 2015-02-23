@@ -14,7 +14,7 @@ if (!$module) {
 }
 
 $func = GetVars('function', 'POST');
-$param = GetVars('param', 'POST')|'';
+$param = GetVars('param', 'POST');
 $class = $clinic->load_module($module['id']);
 $class->$func($param);
 ob_clean();

@@ -1,27 +1,30 @@
 <?php
-function export_post_article($http,$intmin,$intmax)
-{	
+function export_post_article($http, $intmin, $intmax) {
 	global $zbp;
 	global $duoshuo;
 	$where = array();
-	if($intmax>0) $where[] = array('between','log_ID',$intmin,$intmax);
-	$select=array();
-	foreach ($zbp->datainfo['Post'] as $key => $value) {
-		if($value[1] == 'string'&&$value[2] == '')continue;
-		$select[]=$value[0];
+	if ($intmax > 0) {
+		$where[] = array('between', 'log_ID', $intmin, $intmax);
 	}
-	$return = $zbp->GetPostList($select,$where,null,null,null);
+
+	$select = array();
+	foreach ($zbp->datainfo['Post'] as $key => $value) {
+		if ($value[1] == 'string' && $value[2] == '') {
+			continue;
+		}
+
+		$select[] = $value[0];
+	}
+	$return = $zbp->GetPostList($select, $where, null, null, null);
 	$data = export_article($return);
-	$http->open("POST","http://" . $duoshuo->cfg->api_hostname . '/'. $duoshuo->url['threads']['import']);
+	$http->open("POST", "http://" . $duoshuo->cfg->api_hostname . '/' . $duoshuo->url['threads']['import']);
 	$http->send('short_name=' . urlencode($duoshuo->cfg->short_name) . '&secret=' . urlencode($duoshuo->cfg->secret) . '&' . $data);
-	
+
 }
 
-function export_article($return)
-{
+function export_article($return) {
 	$ary = array();
-	foreach($return as $a)
-	{
+	foreach ($return as $a) {
 		$w = array(
 			'thread_key' => $a->ID,
 			'title' => $a->Title,
@@ -30,14 +33,13 @@ function export_article($return)
 			'views' => $a->ViewNums,
 			'url' => $a->Url,
 			'content' => '',
-			'comment_status' => ($a->IsLock?'open':'close'),
-			'created_at' => date("Y-m-d H:i:s",$a->PostTime),
+			'comment_status' => ($a->IsLock ? 'open' : 'close'),
+			'created_at' => date("Y-m-d H:i:s", $a->PostTime),
 		);
 		$k = '';
-		foreach($w as $b => $c)
-		{
-			$ary[] = 'threads['.$w['thread_key'].']['.$b.']=' .urlencode($c); 
+		foreach ($w as $b => $c) {
+			$ary[] = 'threads[' . $w['thread_key'] . '][' . $b . ']=' . urlencode($c);
 		}
 	}
-	return implode('&',$ary);
+	return implode('&', $ary);
 }
