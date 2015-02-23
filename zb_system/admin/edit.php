@@ -12,48 +12,56 @@ require '../function/c_system_admin.php';
 $zbp->CheckGzip();
 $zbp->Load();
 
-$action='';
-if(GetVars('act','GET')=='PageEdt')$action='PageEdt';
-if(GetVars('act','GET')=='ArticleEdt')$action='ArticleEdt';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
+$action = '';
+if (GetVars('act', 'GET') == 'PageEdt') {
+	$action = 'PageEdt';
+}
 
-if(isset($_COOKIE['timezone'])){
-	$tz=GetVars('timezone','COOKIE');
-	if(is_numeric($tz)){
+if (GetVars('act', 'GET') == 'ArticleEdt') {
+	$action = 'ArticleEdt';
+}
+
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
+
+if (isset($_COOKIE['timezone'])) {
+	$tz = GetVars('timezone', 'COOKIE');
+	if (is_numeric($tz)) {
 		date_default_timezone_set(GetTimeZonebyGMT($tz));
 	}
 	unset($tz);
 }
 
-$article=new Post;
-$article->AuthorID=$zbp->user->ID;
+$article = new Post;
+$article->AuthorID = $zbp->user->ID;
 
-$ispage=false;
-if($action=='PageEdt'){$ispage=true;$article->Type=1;}
+$ispage = false;
+if ($action == 'PageEdt') {
+	$ispage = true;
+	$article->Type = 1;}
 
-if(!$zbp->CheckRights('ArticlePub')){
-  $article->Status=ZC_POST_STATUS_AUDITING;
+if (!$zbp->CheckRights('ArticlePub')) {
+	$article->Status = ZC_POST_STATUS_AUDITING;
 }
 
-if(isset($_GET['id'])){
-  $article->LoadInfoByID((integer)GetVars('id','GET'));
+if (isset($_GET['id'])) {
+	$article->LoadInfoByID((integer) GetVars('id', 'GET'));
 }
 
-if($ispage){
-  $blogtitle=$lang['msg']['page_edit'];
-  if(!$zbp->CheckRights('PageAll')&&$article->AuthorID!=$zbp->user->ID){$zbp->ShowError(6,__FILE__,__LINE__);die();}
-}else{
-  $blogtitle=$lang['msg']['article_edit'];
-  if(!$zbp->CheckRights('ArticleAll')&&$article->AuthorID!=$zbp->user->ID){$zbp->ShowError(6,__FILE__,__LINE__);die();}
+if ($ispage) {
+	$blogtitle = $lang['msg']['page_edit'];
+	if (!$zbp->CheckRights('PageAll') && $article->AuthorID != $zbp->user->ID) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
+} else {
+	$blogtitle = $lang['msg']['article_edit'];
+	if (!$zbp->CheckRights('ArticleAll') && $article->AuthorID != $zbp->user->ID) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
 }
 
-if($article->Intro){
-  if(strpos($article->Content, '<!--more-->')!==false){
-    $article->Intro='';
-    $article->Content=str_replace('<!--more-->', '<hr class="more" />', $article->Content);
-  }elseif(strpos($article->Intro,'<!--autointro-->')!==false){
-    $article->Intro='';
-  }
+if ($article->Intro) {
+	if (strpos($article->Content, '<!--more-->') !== false) {
+		$article->Intro = '';
+		$article->Content = str_replace('<!--more-->', '<hr class="more" />', $article->Content);
+	} elseif (strpos($article->Intro, '<!--autointro-->') !== false) {
+		$article->Intro = '';
+	}
 }
 
 require ZBP_PATH . 'zb_system/admin/admin_header.php';
@@ -67,7 +75,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Begin'] as $fpname => &$fpsignal)
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
-<div class="divHeader2"><?php echo $ispage?$lang['msg']['page_edit']:$lang['msg']['article_edit'];?></div>
+<div class="divHeader2"><?php echo $ispage ? $lang['msg']['page_edit'] : $lang['msg']['article_edit'];?></div>
 
 
 <div class="SubMenu"></div>
@@ -101,7 +109,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsig
 
     <div id="divContent"  class="editmod2" style="clear:both;">
 		<div id='cheader' class="editmod editmod3"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
-		<div id='carea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content,'[html-format]');?></textarea></div>
+		<div id='carea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content, '[html-format]');?></textarea></div>
 		<div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Waiting...</div>
 	</div>
 
@@ -117,7 +125,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsign
         <input type="text" name="Alias" id="edtAlias" maxlength="250" value="<?php echo $article->Alias;?>" />
       </div>
       <!-- )alias -->
-<?php if(!$ispage){?>
+<?php if (!$ispage) {?>
 	    <!-- tags( -->
       <div id="tags" class="editmod2"><label  for="edtTag"  class='editinputname'><?php echo $lang['msg']['tags']?></label>
         <input type="text"  name="Tag" id="edtTag" value="<?php echo $article->TagsToNameString();?>" />
@@ -131,9 +139,9 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsign
        <div id="insertintro" class="editmod2" style="padding-top:0.5em;paddding-bottom:0.5em;"><span>* <?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
 <?php }?>
 
-		<div id="divIntro" class="editmod2" <?php if(!$article->Intro){echo 'style="display:none;"';}?>>
+		<div id="divIntro" class="editmod2" <?php if (!$article->Intro) {echo 'style="display:none;"';}?>>
        <div id="theader" class="editmod editmod3"><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
-       <div id='tarea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro,'[html-format]');?></textarea></div>
+       <div id='tarea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro, '[html-format]');?></textarea></div>
        <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Waiting...</div>
 
     </div>
@@ -156,13 +164,13 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
             <input class="button" style="width:180px;height:38px;" type="submit" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick='return checkArticleInfo();' />
           </div>
 
-          <!-- cate --><?php if(!$ispage){ ?>
+          <!-- cate --><?php if (!$ispage) {?>
           <div id='cate' class="editmod"> <label for="cmbCateID" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['category']?></label>
             <select style="width:180px;" class="edit" size="1" name="CateID" id="cmbCateID">
 <?php echo CreateOptoinsOfCategorys($article->CateID);?>
             </select>
           </div>
-          <!-- cate --><?php } ?>
+          <!-- cate --><?php }?>
 
           <!-- level -->
           <div id='level' class="editmod"> <label for="cmbPostStatus" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['status']?></label>
@@ -196,14 +204,14 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
 
           <!-- )newdatetime -->
 
-          <!-- Istop( --><?php if(!$ispage&&$zbp->CheckRights('ArticleAll')){?>
+          <!-- Istop( --><?php if (!$ispage && $zbp->CheckRights('ArticleAll')) {?>
           <div id='istop' class="editmod">
             <label for="edtIstop" class="editinputname" ><?php echo $lang['msg']['top']?></label>
-            <input id="edtIstop" name="IsTop" style="" type="text" value="<?php echo (int)$article->IsTop;?>" class="checkbox"/>
-<select style="width:80px;display:<?php echo $article->IsTop?'':'none'?>;" size="1" name="IstopType" id="edtIstopType">
-<option value="index" <?php echo strpos($article->TopType,'index')!==false?'selected="selected"':''; ?>><?php echo $lang['msg']['top_index']?></option>
-<option value="global" <?php echo strpos($article->TopType,'global')!==false?'selected="selected"':''; ?>><?php echo $lang['msg']['top_global']?></option>
-<option value="category" <?php echo strpos($article->TopType,'category')!==false?'selected="selected"':''; ?>><?php echo $lang['msg']['top_category']?></option>
+            <input id="edtIstop" name="IsTop" style="" type="text" value="<?php echo (int) $article->IsTop;?>" class="checkbox"/>
+<select style="width:80px;display:<?php echo $article->IsTop ? '' : 'none'?>;" size="1" name="IstopType" id="edtIstopType">
+<option value="index" <?php echo strpos($article->TopType, 'index') !== false ? 'selected="selected"' : '';?>><?php echo $lang['msg']['top_index']?></option>
+<option value="global" <?php echo strpos($article->TopType, 'global') !== false ? 'selected="selected"' : '';?>><?php echo $lang['msg']['top_global']?></option>
+<option value="category" <?php echo strpos($article->TopType, 'category') !== false ? 'selected="selected"' : '';?>><?php echo $lang['msg']['top_category']?></option>
 </select>
           </div><?php }?>
 
@@ -213,14 +221,14 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
 
           <div id='islock' class="editmod">
             <label for="edtIslock" class='editinputname'><?php echo $lang['msg']['disable_comment']?></label>
-             <input id="edtIslock" name="IsLock" style="" type="text" value="<?php echo (int)$article->IsLock;?>" class="checkbox"/>
+             <input id="edtIslock" name="IsLock" style="" type="text" value="<?php echo (int) $article->IsLock;?>" class="checkbox"/>
           </div>
           <!-- )IsLock -->
 
-          <!-- Navbar( --><?php if($ispage){?>
+          <!-- Navbar( --><?php if ($ispage) {?>
           <div id='AddNavbar' class="editmod">
           <label for="edtAddNavbar" class='editinputname'><?php echo $lang['msg']['add_to_navbar']?></label>
-          <input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int)$zbp->CheckItemToNavbar('page',$article->ID)?>" class="checkbox" />
+          <input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int) $zbp->CheckItemToNavbar('page', $article->ID)?>" class="checkbox" />
           </div><?php }?>
           <!-- )Navbar -->
 
@@ -240,14 +248,14 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response3'] as $fpname => &$fpsig
 </div>
 
 <?php
-if($ispage){
-  echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
-}elseif($article->ID==0){
-  echo '<script type="text/javascript">ActiveLeftMenu("aArticleEdt");</script>';
-}else{
-  echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
+if ($ispage) {
+	echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
+} elseif ($article->ID == 0) {
+	echo '<script type="text/javascript">ActiveLeftMenu("aArticleEdt");</script>';
+} else {
+	echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
 }
-  echo '<script type="text/javascript">AddHeaderIcon("'. $zbp->host . 'zb_system/image/common/new_32.png' . '");</script>';
+echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/new_32.png' . '");</script>';
 ?>
 
 <script type="text/javascript">
@@ -282,7 +290,7 @@ window.onbeforeunload = function(){
 
 function checkArticleInfo(){
   if(isSubmit)return false;
-  document.getElementById("edit").action="<?php echo $ispage?'../cmd.php?act=PagePst':'../cmd.php?act=ArticlePst'?>";
+  document.getElementById("edit").action="<?php echo $ispage ? '../cmd.php?act=PagePst' : '../cmd.php?act=ArticlePst'?>";
 
   if(!editor_api.editor.content.get()){
     alert('<?php echo $zbp->lang['error'][70];?>');

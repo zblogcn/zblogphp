@@ -12,8 +12,8 @@ require '../function/c_system_admin.php';
 $zbp->CheckGzip();
 $zbp->Load();
 
-$action='CategoryEdt';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
+$action = 'CategoryEdt';
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
 
 $blogtitle = $lang['msg']['category_edit'];
 
@@ -23,21 +23,21 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 ?>
 <?php
 
-$cateid=null;
-if(isset($_GET['id'])){$cateid = (integer)GetVars('id','GET');}else{$cateid = 0;}
+$cateid = null;
+if (isset($_GET['id'])) {$cateid = (integer) GetVars('id', 'GET');} else { $cateid = 0;}
 
-$cate=$zbp->GetCategoryByID($cateid);
+$cate = $zbp->GetCategoryByID($cateid);
 
-$p=null;
+$p = null;
 
-$p .='<option value="0">' . $lang['msg']['none'] . '</option>';
+$p .= '<option value="0">' . $lang['msg']['none'] . '</option>';
 
 foreach ($zbp->categorysbyorder as $k => $v) {
-	if($v->ID==$cate->ID){continue;}
+	if ($v->ID == $cate->ID) {continue;}
 	#if($v->RootID==$cate->ID){continue;}
 	#if($cate->RootID>0){if($v->RootID==$cate->RootID){continue;}}
-	if($v->Level<3){
-		$p .='<option ' . ($v->ID==$cate->ParentID?'selected="selected"':'') . ' value="'. $v->ID .'">' . $v->SymbolName . '</option>';
+	if ($v->Level < 3) {
+		$p .= '<option ' . ($v->ID == $cate->ParentID ? 'selected="selected"' : '') . ' value="' . $v->ID . '">' . $v->SymbolName . '</option>';
 	}
 }
 
@@ -97,7 +97,7 @@ foreach ($zbp->categorysbyorder as $k => $v) {
 				<label>
 					<span class="title">
 						<?php echo $lang['msg']['add_to_navbar']?>:</span>
-					<input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int)$zbp->CheckItemToNavbar('category',$cate->ID)?>" class="checkbox" />
+					<input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int) $zbp->CheckItemToNavbar('category', $cate->ID)?>" class="checkbox" />
 				</label>
 			</p>
 			<!-- 1号输出接口 -->

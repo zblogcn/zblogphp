@@ -12,10 +12,10 @@ require '../function/c_system_admin.php';
 $zbp->CheckGzip();
 $zbp->Load();
 
-$action='TagEdt';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
+$action = 'TagEdt';
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
 
-$blogtitle=$lang['msg']['tag_edit'];
+$blogtitle = $lang['msg']['tag_edit'];
 
 require ZBP_PATH . 'zb_system/admin/admin_header.php';
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
@@ -23,10 +23,10 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 ?>
 <?php
 
-$tagid=null;
-if(isset($_GET['id'])){$tagid = (integer)GetVars('id','GET');}else{$tagid = 0;}
+$tagid = null;
+if (isset($_GET['id'])) {$tagid = (integer) GetVars('id', 'GET');} else { $tagid = 0;}
 
-$tag=$zbp->GetTagByID($tagid);
+$tag = $zbp->GetTagByID($tagid);
 
 ?>
 <div id="divMain">
@@ -36,7 +36,7 @@ $tag=$zbp->GetTagByID($tagid);
 	<div id="divMain2" class="edit tag_edit">
 		<form id="edit" name="edit" method="post" action="#">
 			<input id="edtID" name="ID" type="hidden" value="<?php echo $tag->
-			ID;?>" />
+ID;?>" />
 			<p>
 				<span class="title">
 					<?php echo $lang['msg']['name']?>:</span>
@@ -65,7 +65,7 @@ $tag=$zbp->GetTagByID($tagid);
 				<label>
 					<span class="title">
 						<?php echo $lang['msg']['add_to_navbar']?>:</span>
-					<input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int)$zbp->CheckItemToNavbar('tag',$tag->ID)?>" class="checkbox" /></label>
+					<input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int) $zbp->CheckItemToNavbar('tag', $tag->ID)?>" class="checkbox" /></label>
 			</p>
 			<div id='response' class='editmod2'>
 				<?php foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}?>
