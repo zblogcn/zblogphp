@@ -8,7 +8,7 @@
 
 ob_clean();
 
-$type=GetVars('type', 'GET');
+$type = GetVars('type', 'GET');
 
 foreach ($GLOBALS['hooks']['Filter_Plugin_Misc_Begin'] as $fpname => &$fpsignal) {$fpname($type);}
 
@@ -75,8 +75,8 @@ function misc_statistic() {
 	$r = null;
 
 	CountNormalArticleNums();
-	CountTopArticle(null,null);
-	CountCommentNums(null,null);
+	CountTopArticle(null, null);
+	CountCommentNums(null, null);
 	$all_comments = $zbp->cache->all_comment_nums;
 
 	$xmlrpc_address = $zbp->xmlrpcurl;
@@ -85,7 +85,7 @@ function misc_statistic() {
 	$all_artiles = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=\'0\''), 'num');
 	$all_pages = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=\'1\''), 'num');
 	$all_categorys = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Category']), 'num');
-	$all_views = $zbp->option['ZC_VIEWNUMS_TURNOFF']==true?0:GetValueInArrayByCurrent($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post']), 'num');
+	$all_views = $zbp->option['ZC_VIEWNUMS_TURNOFF'] == true ? 0 : GetValueInArrayByCurrent($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post']), 'num');
 	$all_tags = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) as num FROM ' . $GLOBALS['table']['Tag']), 'num');
 	$all_members = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Member']), 'num');
 	$current_theme = '{$zbp->theme}';
@@ -99,7 +99,7 @@ function misc_statistic() {
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']} / {$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
 	$r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td><a href='../cmd.php?act=misc&type=phpinfo' target='_blank'>{$system_environment}</a></td></tr>";
-	$r .="<script type=\"text/javascript\">$('#statistic').attr('title','" . date ( "c" , $zbp->cache->reload_statistic_time ) . "');</script>";
+	$r .= "<script type=\"text/javascript\">$('#statistic').attr('title','" . date("c", $zbp->cache->reload_statistic_time) . "');</script>";
 
 	$zbp->cache->reload_statistic = $r;
 	$zbp->cache->reload_statistic_time = time();
@@ -122,7 +122,6 @@ function misc_statistic() {
 	$zbp->BuildTemplate();
 }
 
-
 function misc_showtags() {
 	global $zbp;
 
@@ -141,27 +140,26 @@ function misc_showtags() {
 	echo '");$("#ulTag").tagTo("#edtTag");';
 }
 
-
-function misc_viewrights(){
-	global $zbp,$blogtitle;
+function misc_viewrights() {
+	global $zbp, $blogtitle;
 
 	$blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights'];
-?><!DOCTYPE HTML>
+	?><!DOCTYPE HTML>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<?php if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) { ?>
+	<?php if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) {?>
 		<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
-	<?php } ?>
+	<?php }?>
 	<meta name="robots" content="none"/>
-	<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL'] ?>"/>
+	<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']?>"/>
 	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen"/>
 	<script src="script/common.js" type="text/javascript"></script>
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 <?php
 foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
-?>
-	<title><?php echo $blogtitle; ?></title>
+	?>
+	<title><?php echo $blogtitle;?></title>
 </head>
 <body class="short">
 <div class="bg">
@@ -170,15 +168,15 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsigna
 		<div class="login">
 			<form method="post" action="#">
 				<dl>
-					<dt><?php echo $zbp->lang['msg']['current_member'] . ' : <b>' . $zbp->user->Name; ?></b><br/>
-						<?php echo $zbp->lang['msg']['member_level'] . ' : <b>' . $zbp->user->LevelName; ?></b></dt>
+					<dt><?php echo $zbp->lang['msg']['current_member'] . ' : <b>' . $zbp->user->Name;?></b><br/>
+						<?php echo $zbp->lang['msg']['member_level'] . ' : <b>' . $zbp->user->LevelName;?></b></dt>
 					<?php
-					foreach ($GLOBALS['actions'] as $key => $value) {
-						if ($GLOBALS['zbp']->CheckRights($key)) {
-							echo '<dd><b>' . $zbp->GetAction_Title($key) . '</b> : ' . ($zbp->CheckRights($key) ? '<span style="color:green">true</span>' : '<span style="color:red">false</span>') . '</dd>';
-						}
-					}
-					?>
+foreach ($GLOBALS['actions'] as $key => $value) {
+		if ($GLOBALS['zbp']->CheckRights($key)) {
+			echo '<dd><b>' . $zbp->GetAction_Title($key) . '</b> : ' . ($zbp->CheckRights($key) ? '<span style="color:green">true</span>' : '<span style="color:red">false</span>') . '</dd>';
+		}
+	}
+	?>
 				</dl>
 			</form>
 		</div>
@@ -191,30 +189,30 @@ RunTime();
 }
 
 function misc_phpinfo() {
-	global $zbp,$blogtitle;
+	global $zbp, $blogtitle;
 
 	$blogtitle = $zbp->name . '-phpinfo';
 	ob_start();
 	phpinfo();
 	$s = ob_get_clean();
-	preg_match("/<body.*?>(.*?)<\/body>/is",$s,$match);
+	preg_match("/<body.*?>(.*?)<\/body>/is", $s, $match);
 
-?><!DOCTYPE HTML>
+	?><!DOCTYPE HTML>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<?php if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) { ?>
+	<?php if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) {?>
 		<meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
-	<?php } ?>
+	<?php }?>
 	<meta name="robots" content="none"/>
-	<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL'] ?>"/>
+	<meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']?>"/>
 	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen"/>
 	<script src="script/common.js" type="text/javascript"></script>
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 <?php
 foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
-?>
-	<title><?php echo $blogtitle; ?></title>
+	?>
+	<title><?php echo $blogtitle;?></title>
 	<style type="text/css">
 *{color:#000;}
 pre {margin: 0; font-family: monospace;}

@@ -25,8 +25,8 @@ define('IS_NGINX', preg_match("/nginx/i", $_SERVER['SERVER_SOFTWARE']));
 define('IS_LIGHTTPD', preg_match("/lighttpd/i", $_SERVER['SERVER_SOFTWARE']));
 define('IS_KANGLE', preg_match("/kangle/i", $_SERVER['SERVER_SOFTWARE']));
 
-/** 
- * PHP 
+/**
+ * PHP
  */
 define('IS_HHVM', defined('HHVM_VERSION'));
 
@@ -36,14 +36,16 @@ define('IS_HHVM', defined('HHVM_VERSION'));
  * @param string $classname 类名
  * @return mixed
  */
-function AutoloadClass($classname){
+function AutoloadClass($classname) {
 	foreach ($GLOBALS['hooks']['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
-		$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-		$fpreturn=$fpname($classname);
-		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+		$fpreturn = $fpname($classname);
+		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
-	if (is_readable($f=ZBP_PATH . 'zb_system/function/lib/' . strtolower($classname) .'.php'))
+	if (is_readable($f = ZBP_PATH . 'zb_system/function/lib/' . strtolower($classname) . '.php')) {
 		require $f;
+	}
+
 }
 
 /**
@@ -51,27 +53,31 @@ function AutoloadClass($classname){
  * @param string $s
  * @param bool $iserror
  */
-function Logs($s,$iserror=false) {
+function Logs($s, $iserror = false) {
 	global $zbp;
 	foreach ($GLOBALS['hooks']['Filter_Plugin_Logs'] as $fpname => &$fpsignal) {
-		$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-		$fpreturn=$fpname($s,$iserror);
-		if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+		$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+		$fpreturn = $fpname($s, $iserror);
+		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 	}
-	if($zbp->guid){
-		if($iserror)
+	if ($zbp->guid) {
+		if ($iserror) {
 			$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-error' . date("Ymd") . '.txt';
-		else
+		} else {
 			$f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
-	}else{
-		if($iserror)
+		}
+
+	} else {
+		if ($iserror) {
 			$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '-error.txt';
-		else
+		} else {
 			$f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '.txt';
+		}
+
 	}
 	ZBlogException::SuspendErrorHook();
-	if($handle = @fopen($f, 'a+')){
-		$t=date('Y-m-d') . ' ' . date('H:i:s') . ' ' . substr(microtime(),1,9) . ' ' . date('P');
+	if ($handle = @fopen($f, 'a+')) {
+		$t = date('Y-m-d') . ' ' . date('H:i:s') . ' ' . substr(microtime(), 1, 9) . ' ' . date('P');
 		@fwrite($handle, '[' . $t . ']' . "\r\n" . $s . "\r\n");
 		@fclose($handle);
 	}
@@ -85,25 +91,27 @@ function Logs($s,$iserror=false) {
 function RunTime() {
 	global $zbp;
 
-	$rt=array();
-	$rt['time']=number_format(1000 * (microtime(1) - $_SERVER['_start_time']), 2);
-	$rt['query']=$_SERVER['_query_count'];
-	$rt['memory']=$_SERVER['_memory_usage'];
-	$rt['error']=$_SERVER['_error_count'];
-	if(function_exists('memory_get_usage')){
-		$rt['memory']=(int)((memory_get_usage()-$_SERVER['_memory_usage'])/1024);
+	$rt = array();
+	$rt['time'] = number_format(1000 * (microtime(1) - $_SERVER['_start_time']), 2);
+	$rt['query'] = $_SERVER['_query_count'];
+	$rt['memory'] = $_SERVER['_memory_usage'];
+	$rt['error'] = $_SERVER['_error_count'];
+	if (function_exists('memory_get_usage')) {
+		$rt['memory'] = (int) ((memory_get_usage() - $_SERVER['_memory_usage']) / 1024);
 	}
 
-	if(isset($zbp->option['ZC_RUNINFO_DISPLAY'])&&$zbp->option['ZC_RUNINFO_DISPLAY']==false){
-		$_SERVER['_runtime_result']=$rt;
+	if (isset($zbp->option['ZC_RUNINFO_DISPLAY']) && $zbp->option['ZC_RUNINFO_DISPLAY'] == false) {
+		$_SERVER['_runtime_result'] = $rt;
 		return $rt;
 	}
 
 	echo '<!--' . $rt['time'] . ' ms , ';
-	echo  $rt['query'] . ' query';
-	if(function_exists('memory_get_usage'))
+	echo $rt['query'] . ' query';
+	if (function_exists('memory_get_usage')) {
 		echo ' , ' . $rt['memory'] . 'kb memory';
-	echo  ' , ' . $rt['error'] . ' error';
+	}
+
+	echo ' , ' . $rt['error'] . ' error';
 	echo '-->';
 	return $rt;
 }
@@ -113,16 +121,18 @@ function RunTime() {
  * @return string 系统信息
  * @since 1.4
  */
-function GetEnvironment(){
+function GetEnvironment() {
 	global $zbp;
 	$ajax = Network::Create();
-	if ($ajax) $ajax = substr(get_class($ajax), 7);
+	if ($ajax) {
+		$ajax = substr(get_class($ajax), 7);
+	}
 
 	$system_environment = PHP_OS . '; ' .
-							GetValueInArray(
-								explode(' ',str_replace(array('Microsoft-','/'), array('',''), GetVars('SERVER_SOFTWARE', 'SERVER'))), 0
-							) . '; ' .
-							'PHP ' . phpversion() . '; ' . $zbp->option['ZC_DATABASE_TYPE'] . '; ' . 	$ajax ;
+	GetValueInArray(
+		explode(' ', str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))), 0
+	) . '; ' .
+	'PHP ' . phpversion() . '; ' . $zbp->option['ZC_DATABASE_TYPE'] . '; ' . $ajax;
 	return $system_environment;
 }
 
@@ -133,18 +143,18 @@ function GetEnvironment(){
  */
 function plugin_dir_url($file) {
 	global $zbp;
-	$s1=$zbp->path;
-	$s2=str_replace('\\','/',dirname($file).'/');
-	$s3='';
-	$s=substr($s2,strspn($s1,$s2,0));
-	if(strpos($s,'zb_users/plugin/')!==false){
-		$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
-	}else{
-		$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
+	$s1 = $zbp->path;
+	$s2 = str_replace('\\', '/', dirname($file) . '/');
+	$s3 = '';
+	$s = substr($s2, strspn($s1, $s2, 0));
+	if (strpos($s, 'zb_users/plugin/') !== false) {
+		$s = substr($s, strspn($s, $s3 = 'zb_users/plugin/', 0));
+	} else {
+		$s = substr($s, strspn($s, $s3 = 'zb_users/theme/', 0));
 	}
-	$a=explode('/',$s);
-	$s=$a[0];
-	$s=$zbp->host . $s3 . $s . '/';
+	$a = explode('/', $s);
+	$s = $a[0];
+	$s = $zbp->host . $s3 . $s . '/';
 	return $s;
 }
 
@@ -155,18 +165,18 @@ function plugin_dir_url($file) {
  */
 function plugin_dir_path($file) {
 	global $zbp;
-	$s1=$zbp->path;
-	$s2=str_replace('\\','/',dirname($file).'/');
-	$s3='';
-	$s=substr($s2,strspn($s1,$s2,0));
-	if(strpos($s,'zb_users/plugin/')!==false){
-		$s=substr($s,strspn($s,$s3='zb_users/plugin/',0));
-	}else{
-		$s=substr($s,strspn($s,$s3='zb_users/theme/',0));
+	$s1 = $zbp->path;
+	$s2 = str_replace('\\', '/', dirname($file) . '/');
+	$s3 = '';
+	$s = substr($s2, strspn($s1, $s2, 0));
+	if (strpos($s, 'zb_users/plugin/') !== false) {
+		$s = substr($s, strspn($s, $s3 = 'zb_users/plugin/', 0));
+	} else {
+		$s = substr($s, strspn($s, $s3 = 'zb_users/theme/', 0));
 	}
-	$a=explode('/',$s);
-	$s=$a[0];
-	$s=$zbp->path . $s3 . $s . '/';
+	$a = explode('/', $s);
+	$s = $a[0];
+	$s = $zbp->path . $s3 . $s . '/';
 	return $s;
 }
 
@@ -232,9 +242,9 @@ function GetVars($name, $type = 'REQUEST') {
  * @return mixed|null
  * @since 1.3.140614
  */
-function GetVarsByDefault($name, $type = 'REQUEST',$default = null) {
+function GetVarsByDefault($name, $type = 'REQUEST', $default = null) {
 	$g = GetVars($name, $type);
-	if($g==null||$g==''){
+	if ($g == null || $g == '') {
 		return $default;
 	}
 	return $g;
@@ -255,16 +265,16 @@ function GetDbName() {
  * @param string &$cookiespath 返回cookie作用域值，要传引入
  * @return string  返回网站完整地址，如http://localhost/zbp/
  */
-function GetCurrentHost($blogpath,&$cookiespath) {
+function GetCurrentHost($blogpath, &$cookiespath) {
 
-	$host='';
+	$host = '';
 	if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
 		if ($_SERVER['REQUEST_SCHEME'] == 'https') {
 			$host = 'https://';
 		} else {
 			$host = 'http://';
 		}
-	}elseif (array_key_exists('HTTPS', $_SERVER)) {
+	} elseif (array_key_exists('HTTPS', $_SERVER)) {
 		if ($_SERVER['HTTPS'] == 'on') {
 			$host = 'https://';
 		} else {
@@ -278,10 +288,12 @@ function GetCurrentHost($blogpath,&$cookiespath) {
 
 	$x = $_SERVER['SCRIPT_NAME'];
 	$y = $blogpath;
-	if(isset($_SERVER["CONTEXT_DOCUMENT_ROOT"]) && isset($_SERVER["CONTEXT_PREFIX"]))
-		if($_SERVER["CONTEXT_DOCUMENT_ROOT"] && $_SERVER["CONTEXT_PREFIX"]){
-			$y= $_SERVER["CONTEXT_DOCUMENT_ROOT"] . $_SERVER["CONTEXT_PREFIX"] . '/';
+	if (isset($_SERVER["CONTEXT_DOCUMENT_ROOT"]) && isset($_SERVER["CONTEXT_PREFIX"])) {
+		if ($_SERVER["CONTEXT_DOCUMENT_ROOT"] && $_SERVER["CONTEXT_PREFIX"]) {
+			$y = $_SERVER["CONTEXT_DOCUMENT_ROOT"] . $_SERVER["CONTEXT_PREFIX"] . '/';
 		}
+	}
+
 	$z = '';
 
 	for ($i = strlen($x); $i > 0; $i--) {
@@ -303,18 +315,20 @@ function GetCurrentHost($blogpath,&$cookiespath) {
  */
 function GetHttpContent($url) {
 
-	if(class_exists('Network')){
+	if (class_exists('Network')) {
 		$ajax = Network::Create();
-		if(!$ajax) return null;
+		if (!$ajax) {
+			return null;
+		}
 
-		$ajax->open('GET',$url);
+		$ajax->open('GET', $url);
 		$ajax->enableGzip();
-		$ajax->setTimeOuts(60,60,0,0);
+		$ajax->setTimeOuts(60, 60, 0, 0);
 		$ajax->send();
 
-		if($ajax->status==200){
+		if ($ajax->status == 200) {
 			return $ajax->responseText;
-		}else{
+		} else {
 			return null;
 		}
 	}
@@ -325,23 +339,29 @@ function GetHttpContent($url) {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-		if(ini_get("safe_mode")==false && ini_get("open_basedir")==false){
+		if (ini_get("safe_mode") == false && ini_get("open_basedir") == false) {
 			curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		}
-		if(extension_loaded('zlib')){
+		if (extension_loaded('zlib')) {
 			curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
 		}
 		$r = curl_exec($ch);
-		$code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
-		if($code==200)return $r;
+		if ($code == 200) {
+			return $r;
+		}
+
 	} elseif (ini_get("allow_url_fopen")) {
 		ZBlogException::SuspendErrorHook();
 		$http_response_header = null;
-		$r = file_get_contents((extension_loaded('zlib')?'compress.zlib://':'') . $url);
-		if(is_array($http_response_header) && in_array('HTTP/1.1 200 OK',$http_response_header)){
-			if($r!==false)return $r;
+		$r = file_get_contents((extension_loaded('zlib') ? 'compress.zlib://' : '') . $url);
+		if (is_array($http_response_header) && in_array('HTTP/1.1 200 OK', $http_response_header)) {
+			if ($r !== false) {
+				return $r;
+			}
+
 		}
 		ZBlogException::ResumeErrorHook();
 	}
@@ -358,9 +378,9 @@ function GetDirsInDir($dir) {
 	$dirs = array();
 
 	if (function_exists('scandir')) {
-		foreach (scandir($dir,0) as $d) {
+		foreach (scandir($dir, 0) as $d) {
 			if (is_dir($dir . $d)) {
-				if (($d <> '.') && ($d <> '..')) {
+				if (($d != '.') && ($d != '..')) {
 					$dirs[] = $d;
 				}
 			}
@@ -391,8 +411,9 @@ function GetFilesInDir($dir, $type) {
 
 	$files = array();
 
-	if (!file_exists($dir))
+	if (!file_exists($dir)) {
 		return $files;
+	}
 
 	if (function_exists('scandir')) {
 		foreach (scandir($dir) as $f) {
@@ -442,8 +463,9 @@ function GetFilesInDir($dir, $type) {
  */
 function SetHttpStatusCode($number) {
 	static $status = '';
-	if ($status != '')
+	if ($status != '') {
 		return false;
+	}
 
 	$codes = array(
 		// Informational 1xx
@@ -464,7 +486,7 @@ function SetHttpStatusCode($number) {
 		// Redirection 3xx
 		300 => 'Multiple Choices',
 		301 => 'Moved Permanently',
-		302 => 'Found',  // 1.1
+		302 => 'Found', // 1.1
 		303 => 'See Other',
 		304 => 'Not Modified',
 		305 => 'Use Proxy',
@@ -505,8 +527,8 @@ function SetHttpStatusCode($number) {
 		510 => 'Not Extended',
 	);
 
-	if(isset($codes[$number])) {
-		header('HTTP/1.1 '.$number.' '.$codes[$number]);
+	if (isset($codes[$number])) {
+		header('HTTP/1.1 ' . $number . ' ' . $codes[$number]);
 		$status = $number;
 		return true;
 	}
@@ -516,7 +538,7 @@ function SetHttpStatusCode($number) {
 /**
  * 302跳转
  * @param string $url 跳转链接
-*/
+ */
 function Redirect($url) {
 	SetHttpStatusCode(302);
 	header('Location: ' . $url);
@@ -532,22 +554,22 @@ function Redirect301($url) {
 	header('Location: ' . $url);
 	die();
 }
- /**
-  * @ignore
-  */
+/**
+ * @ignore
+ */
 function Http404() {
 	SetHttpStatusCode(404);
 	header("Status: 404 Not Found");
 }
- /**
-  * @ignore
-  */
+/**
+ * @ignore
+ */
 function Http500() {
 	SetHttpStatusCode(500);
 }
- /**
-  * @ignore
-  */
+/**
+ * @ignore
+ */
 function Http503() {
 	SetHttpStatusCode(503);
 }
@@ -591,29 +613,37 @@ function GetGuestAgent() {
  */
 function GetRequestUri() {
 	$url = '';
-	if (isset($_SERVER['HTTP_X_ORIGINAL_URL'])){
+	if (isset($_SERVER['HTTP_X_ORIGINAL_URL'])) {
 		$url = $_SERVER['HTTP_X_ORIGINAL_URL'];
 	} elseif (isset($_SERVER['HTTP_X_REWRITE_URL'])) {
 		$url = $_SERVER['HTTP_X_REWRITE_URL'];
-		if(strpos($url,'?') !== false){
-			$querys=GetValueInArray(explode('?',$url),'1');
-			foreach (explode('&',$querys) as $query){
-				$name=GetValueInArray(explode('=',$query),'0');
-				$value=GetValueInArray(explode('=',$query),'1');
-				$name=urldecode($name);
-				$value=urldecode($value);
-				if(!isset($_GET[$name]))$_GET[$name]=$value;
-				if(!isset($_GET[$name]))$_REQUEST[$name]=$value;
-				$name='';
-				$value='';
+		if (strpos($url, '?') !== false) {
+			$querys = GetValueInArray(explode('?', $url), '1');
+			foreach (explode('&', $querys) as $query) {
+				$name = GetValueInArray(explode('=', $query), '0');
+				$value = GetValueInArray(explode('=', $query), '1');
+				$name = urldecode($name);
+				$value = urldecode($value);
+				if (!isset($_GET[$name])) {
+					$_GET[$name] = $value;
+				}
+
+				if (!isset($_GET[$name])) {
+					$_REQUEST[$name] = $value;
+				}
+
+				$name = '';
+				$value = '';
 			}
 		}
 	} elseif (isset($_SERVER['REQUEST_URI'])) {
 		$url = $_SERVER['REQUEST_URI'];
 	} elseif (isset($_SERVER['REDIRECT_URL'])) {
 		$url = $_SERVER['REDIRECT_URL'];
-		if (isset($_SERVER['REDIRECT_QUERY_STRIN']))
+		if (isset($_SERVER['REDIRECT_QUERY_STRIN'])) {
 			$url .= '?' . $_SERVER['REDIRECT_QUERY_STRIN'];
+		}
+
 	} else {
 		$url = $_SERVER['PHP_SELF'] . ($_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] : '');
 	}
@@ -625,10 +655,12 @@ function GetRequestUri() {
  * 获取文件后缀名
  * @param string $f 文件名
  * @return string  返回小写的后缀名
-*/
+ */
 function GetFileExt($f) {
-	if (strpos($f, '.') === false)
+	if (strpos($f, '.') === false) {
 		return '';
+	}
+
 	$a = explode('.', $f);
 
 	return strtolower(end($a));
@@ -638,7 +670,7 @@ function GetFileExt($f) {
  * 获取文件权限
  * @param string $f 文件名
  * @return string|null  返回文件权限，数值格式，如0644
-*/
+ */
 function GetFilePermsOct($f) {
 	if (!file_exists($f)) {
 		return null;
@@ -651,7 +683,7 @@ function GetFilePermsOct($f) {
  * 获取文件权限
  * @param string $f 文件名
  * @return string|null  返回文件权限，字符表达格式，如-rw-r--r--
-*/
+ */
 function GetFilePerms($f) {
 
 	if (!file_exists($f)) {
@@ -689,17 +721,17 @@ function GetFilePerms($f) {
 	// Owner
 	$info .= (($perms & 0x0100) ? 'r' : '-');
 	$info .= (($perms & 0x0080) ? 'w' : '-');
-	$info .= (($perms & 0x0040) ? (($perms & 0x0800) ? 's' : 'x') : (($perms & 0x0800) ? 'S' : '-'));
+	$info .= (($perms & 0x0040) ? (($perms & 0x0800) ? 's' : 'x'):(($perms & 0x0800) ? 'S' : '-'));
 
 	// Group
 	$info .= (($perms & 0x0020) ? 'r' : '-');
 	$info .= (($perms & 0x0010) ? 'w' : '-');
-	$info .= (($perms & 0x0008) ? (($perms & 0x0400) ? 's' : 'x') : (($perms & 0x0400) ? 'S' : '-'));
+	$info .= (($perms & 0x0008) ? (($perms & 0x0400) ? 's' : 'x'):(($perms & 0x0400) ? 'S' : '-'));
 
 	// Other
 	$info .= (($perms & 0x0004) ? 'r' : '-');
 	$info .= (($perms & 0x0002) ? 'w' : '-');
-	$info .= (($perms & 0x0001) ? (($perms & 0x0200) ? 't' : 'x') : (($perms & 0x0200) ? 'T' : '-'));
+	$info .= (($perms & 0x0001) ? (($perms & 0x0200) ? 't' : 'x'):(($perms & 0x0200) ? 'T' : '-'));
 
 	return $info;
 }
@@ -709,10 +741,10 @@ function GetFilePerms($f) {
  * @param string $s 字符串型的参数表，以|符号分隔
  * @param string $name 参数名
  * @return string  返回新字符串，以|符号分隔
-*/
+ */
 function AddNameInString($s, $name) {
 	$pl = $s;
-	$name = (string)$name;
+	$name = (string) $name;
 	$apl = explode('|', $pl);
 	if (in_array($name, $apl) == false) {
 		$apl[] = $name;
@@ -727,10 +759,10 @@ function AddNameInString($s, $name) {
  * @param string $s 字符串型的参数表，以|符号分隔
  * @param string $name 参数名
  * @return string  返回新字符串，以|符号分隔
-*/
+ */
 function DelNameInString($s, $name) {
 	$pl = $s;
-	$name = (string)$name;
+	$name = (string) $name;
 	$apl = explode('|', $pl);
 	for ($i = 0; $i <= Count($apl) - 1; $i++) {
 		if ($apl[$i] == $name) {
@@ -747,21 +779,20 @@ function DelNameInString($s, $name) {
  * @param string $s 字符串型的参数表，以|符号分隔
  * @param string $name 参数名
  * @return bool
-*/
+ */
 function HasNameInString($s, $name) {
 	$pl = $s;
-	$name = (string)$name;
+	$name = (string) $name;
 	$apl = explode('|', $pl);
 
 	return in_array($name, $apl);
 }
 
-
 /**
  *  XML-RPC应答错误页面
  * @param string $faultString 错误提示字符串
  * @return void
-*/
+ */
 function RespondError($faultString) {
 
 	$strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><fault><value><struct><member><name>faultCode</name><value><int>$1</int></value></member><member><name>faultString</name><value><string>$2</string></value></member></struct></value></fault></methodResponse>';
@@ -780,7 +811,7 @@ function RespondError($faultString) {
  *  XML-RPC脚本错误页面
  * @param string $faultString 错误提示字符串
  * @return void
-*/
+ */
 function ScriptError($faultString) {
 	header('Content-type: application/x-javascript; Charset=utf-8');
 	ob_clean();
@@ -793,24 +824,21 @@ function ScriptError($faultString) {
  * @param string $source 字符串
  * @param string $para 正则表达式，可用[username]|[password]|[email]|[homepage]或自定义表达式
  * @return bool
-*/
+ */
 function CheckRegExp($source, $para) {
 	if (strpos($para, '[username]') !== false) {
 		$para = "/^[\.\_A-Za-z0-9·\x{4e00}-\x{9fa5}]+$/u";
-	}
-	elseif (strpos($para, '[password]') !== false) {
+	} elseif (strpos($para, '[password]') !== false) {
 		$para = "/^[A-Za-z0-9`~!@#\$%\^&\*\-_\?]+$/u";
-	}
-	elseif (strpos($para, '[email]') !== false) {
+	} elseif (strpos($para, '[email]') !== false) {
 		$para = "/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*\.)+[a-zA-Z]*)$/u";
-	}
-	elseif (strpos($para, '[homepage]') !== false) {
+	} elseif (strpos($para, '[homepage]') !== false) {
 		$para = "/^[a-zA-Z]+:\/\/[a-zA-Z0-9\_\-\.\&\?\/:=#\x{4e00}-\x{9fa5}]+$/u";
-	}
-	elseif (!$para)
+	} elseif (!$para) {
 		return false;
+	}
 
-	return (bool)preg_match($para, $source);
+	return (bool) preg_match($para, $source);
 }
 
 /**
@@ -818,7 +846,7 @@ function CheckRegExp($source, $para) {
  * @param string $source 字符串
  * @param string $para 正则表达式，可用[html-format]|[nohtml]|[noscript]|[enter]|[noenter]|[filename]|[normalname]或自定义表达式
  * @return string
-*/
+ */
 function TransferHTML($source, $para) {
 
 	if (strpos($para, '[html-format]') !== false) {
@@ -863,7 +891,7 @@ function TransferHTML($source, $para) {
  *  封装HTML标签
  * @param string $html html源码
  * @return string
-*/
+ */
 function CloseTags($html) {
 
 	// strip fraction of open or close tag from end (e.g. if we take first x characters, we might cut off a tag at the end!)
@@ -912,16 +940,16 @@ function CloseTags($html) {
  * @param int $start 起始位置
  * @param int $cutlength 子串长度
  * @return string
-*/
+ */
 function SubStrUTF8_Start($sourcestr, $start, $cutlength) {
-	if( function_exists('mb_substr') && function_exists('mb_internal_encoding') ){
+	if (function_exists('mb_substr') && function_exists('mb_internal_encoding')) {
 		mb_internal_encoding('UTF-8');
 		return mb_substr($sourcestr, $start, $cutlength);
 	}
 
-	if( function_exists('iconv_substr') && function_exists('iconv_set_encoding') ){
-		iconv_set_encoding ( "internal_encoding" ,  "UTF-8" );
-		iconv_set_encoding ( "output_encoding" ,  "UTF-8" );
+	if (function_exists('iconv_substr') && function_exists('iconv_set_encoding')) {
+		iconv_set_encoding("internal_encoding", "UTF-8");
+		iconv_set_encoding("output_encoding", "UTF-8");
 		return iconv_substr($sourcestr, $start, $cutlength);
 	}
 
@@ -933,17 +961,17 @@ function SubStrUTF8_Start($sourcestr, $start, $cutlength) {
  * @param string $sourcestr 源字符串
  * @param int $cutlength 子串长度
  * @return string
-*/
+ */
 function SubStrUTF8($sourcestr, $cutlength) {
 
-	if( function_exists('mb_substr') && function_exists('mb_internal_encoding') ){
+	if (function_exists('mb_substr') && function_exists('mb_internal_encoding')) {
 		mb_internal_encoding('UTF-8');
 		return mb_substr($sourcestr, 0, $cutlength);
 	}
 
-	if( function_exists('iconv_substr') && function_exists('iconv_set_encoding') ){
-		iconv_set_encoding ( "internal_encoding" ,  "UTF-8" );
-		iconv_set_encoding ( "output_encoding" ,  "UTF-8" );
+	if (function_exists('iconv_substr') && function_exists('iconv_set_encoding')) {
+		iconv_set_encoding("internal_encoding", "UTF-8");
+		iconv_set_encoding("output_encoding", "UTF-8");
 		return iconv_substr($sourcestr, 0, $cutlength);
 	}
 
@@ -974,17 +1002,19 @@ function SubStrUTF8($sourcestr, $cutlength) {
 			$i = $i + 1; //实际的Byte数仍计1个
 			$n++; //但考虑整体美观，大写字母计成一个高位字符
 
-		} else //其他情况下，包括小写字母和半角标点符号，
-		{
+		} else {
+			//其他情况下，包括小写字母和半角标点符号，
+			{
 
-			$returnstr = $returnstr . substr($sourcestr, $i, 1);
-			$i = $i + 1; //实际的Byte数计1个
-			$n = $n + 0.5; //小写字母和半角标点等与半个高位字符宽...
+				$returnstr = $returnstr . substr($sourcestr, $i, 1);
+				$i = $i + 1; //实际的Byte数计1个
+				$n = $n + 0.5; //小写字母和半角标点等与半个高位字符宽...
 
+			}
 		}
-	}
-	if ($str_length > $cutlength) {
-		$returnstr = $returnstr;
+		if ($str_length > $cutlength) {
+			$returnstr = $returnstr;
+		}
 	}
 
 	return $returnstr;
@@ -995,9 +1025,9 @@ function SubStrUTF8($sourcestr, $cutlength) {
  *  删除文件BOM头
  * @param string $s 文件内容
  * @return string
-*/
-function RemoveBOM($s){
-	$charset=array();
+ */
+function RemoveBOM($s) {
+	$charset = array();
 	$charset[1] = substr($s, 0, 1);
 	$charset[2] = substr($s, 1, 1);
 	$charset[3] = substr($s, 2, 1);
@@ -1013,7 +1043,7 @@ function RemoveBOM($s){
  * @return string 时区名
  * @since 1.3.140614
  */
-function GetTimeZonebyGMT($z){
+function GetTimeZonebyGMT($z) {
 	$timezones = array(
 		-12 => 'Etc/GMT+12',
 		-11 => 'Pacific/Midway',
@@ -1042,7 +1072,10 @@ function GetTimeZonebyGMT($z){
 		12 => 'Pacific/Fiji',
 		13 => 'Pacific/Tongatapu',
 	);
-	if(!isset($timezones[$z]))return 'UTC';
+	if (!isset($timezones[$z])) {
+		return 'UTC';
+	}
+
 	return $timezones[$z];
 }
 
@@ -1057,8 +1090,7 @@ function htmlspecialchars_array($array) {
 	foreach ($array as $key => &$value) {
 		if (is_array($value)) {
 			$value = htmlspecialchars_array($value);
-		}
-		else if (is_string($value)) {
+		} else if (is_string($value)) {
 			$value = htmlspecialchars($value);
 		}
 	}
@@ -1074,5 +1106,5 @@ function htmlspecialchars_array($array) {
  * @since 1.4
  */
 function FilterCorrectName($s) {
-	return preg_replace('|[^0-9a-zA-Z_]|','',$s);
+	return preg_replace('|[^0-9a-zA-Z_]|', '', $s);
 }
