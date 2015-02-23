@@ -8,13 +8,11 @@
 class Counter extends Base {
 
 	/**
-	* 构造函数
-	*/
-	function __construct()
-	{
+	 * 构造函数
+	 */
+	function __construct() {
 		global $zbp;
-		parent::__construct($zbp->table['Counter'],$zbp->datainfo['Counter']);
+		parent::__construct($zbp->table['Counter'], $zbp->datainfo['Counter']);
 	}
-
 
 }

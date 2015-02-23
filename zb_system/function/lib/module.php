@@ -5,15 +5,14 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/Article 类库
  */
-class Module extends Base{
+class Module extends Base {
 
 	/**
 	 * 构造函数
 	 */
-	function __construct()
-	{
+	function __construct() {
 		global $zbp;
-		parent::__construct($zbp->table['Module'],$zbp->datainfo['Module'],__CLASS__);
+		parent::__construct($zbp->table['Module'], $zbp->datainfo['Module'], __CLASS__);
 	}
 
 	/**
@@ -22,17 +21,18 @@ class Module extends Base{
 	 * @param mixed $value
 	 * @return null
 	 */
-	public function __set($name, $value)
-	{
+	public function __set($name, $value) {
 		global $zbp;
-		if ($name=='SourceType') {
+		if ($name == 'SourceType') {
 			return null;
 		}
-		if ($name=='NoRefresh') {
-			if((bool)$value)
-				$this->Metas->norefresh = (bool)$value;
-			else
+		if ($name == 'NoRefresh') {
+			if ((bool) $value) {
+				$this->Metas->norefresh = (bool) $value;
+			} else {
 				$this->Metas->Del('norefresh');
+			}
+
 			return null;
 		}
 		parent::__set($name, $value);
@@ -43,24 +43,23 @@ class Module extends Base{
 	 * @param $name
 	 * @return bool|mixed|string
 	 */
-	public function __get($name)
-	{
+	public function __get($name) {
 		global $zbp;
-		if ($name=='SourceType') {
-			if($this->Source=='system'){
+		if ($name == 'SourceType') {
+			if ($this->Source == 'system') {
 				return 'system';
-			}elseif($this->Source=='user'){
+			} elseif ($this->Source == 'user') {
 				return 'user';
-			}elseif($this->Source=='theme'){
+			} elseif ($this->Source == 'theme') {
 				return 'theme';
-			}elseif($this->Source=='plugin_' . $zbp->theme){
+			} elseif ($this->Source == 'plugin_' . $zbp->theme) {
 				return 'theme';
-			}else{
+			} else {
 				return 'plugin';
 			}
 		}
-		if ($name=='NoRefresh') {
-			return (bool)$this->Metas->norefresh;
+		if ($name == 'NoRefresh') {
+			return (bool) $this->Metas->norefresh;
 		}
 		return parent::__get($name);
 	}
@@ -68,20 +67,23 @@ class Module extends Base{
 	/**
 	 * @return bool
 	 */
-	function Save(){
+	function Save() {
 		global $zbp;
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Save'] as $fpname => &$fpsignal) {
-			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+			$fpreturn = $fpname($this);
+			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		if($this->Source=='theme'){
-			if(!$this->FileName)return true;
+		if ($this->Source == 'theme') {
+			if (!$this->FileName) {
+				return true;
+			}
+
 			$c = $this->Content;
 			$d = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/';
 			$f = $d . $this->FileName . '.php';
-			if(!file_exists($d)){
-				@mkdir($d,0755);
+			if (!file_exists($d)) {
+				@mkdir($d, 0755);
 			}
 			@file_put_contents($f, $c);
 			return true;
@@ -92,17 +94,20 @@ class Module extends Base{
 	/**
 	 * @return bool
 	 */
-	function Del(){
+	function Del() {
 		global $zbp;
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Del'] as $fpname => &$fpsignal) {
-			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+			$fpreturn = $fpname($this);
+			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
-		if($this->Source=='theme'){
-			if(!$this->FileName)return true;
+		if ($this->Source == 'theme') {
+			if (!$this->FileName) {
+				return true;
+			}
+
 			$f = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $this->FileName . '.php';
-			if (file_exists($f)){
+			if (file_exists($f)) {
 				@unlink($f);
 			}
 			return true;

@@ -5,15 +5,14 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/Article 类库
  */
-class Tag extends Base{
+class Tag extends Base {
 
 	/**
 	 *
 	 */
-	function __construct()
-	{
+	function __construct() {
 		global $zbp;
-		parent::__construct($zbp->table['Tag'],$zbp->datainfo['Tag'],__CLASS__);
+		parent::__construct($zbp->table['Tag'], $zbp->datainfo['Tag'], __CLASS__);
 	}
 
 	/**
@@ -23,9 +22,9 @@ class Tag extends Base{
 	 */
 	function __call($method, $args) {
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Call'] as $fpname => &$fpsignal) {
-			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-			$fpreturn=$fpname($this,$method, $args);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+			$fpreturn = $fpname($this, $method, $args);
+			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 	}
 
@@ -34,15 +33,17 @@ class Tag extends Base{
 	 * @param $value
 	 * @return null|string
 	 */
-	public function __set($name, $value)
-	{
+	public function __set($name, $value) {
 		global $zbp;
-		if ($name=='Url') {
+		if ($name == 'Url') {
 			return null;
 		}
-		if ($name=='Template') {
-			if($value==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$value='';
-			return $this->data[$name]  =  $value;
+		if ($name == 'Template') {
+			if ($value == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
+				$value = '';
+			}
+
+			return $this->data[$name] = $value;
 		}
 		parent::__set($name, $value);
 	}
@@ -51,23 +52,25 @@ class Tag extends Base{
 	 * @param $name
 	 * @return mixed|string
 	 */
-	public function __get($name)
-	{
+	public function __get($name) {
 		global $zbp;
-		if ($name=='Url') {
+		if ($name == 'Url') {
 			foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Url'] as $fpname => &$fpsignal) {
-				$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-				$fpreturn=$fpname($this);
-				if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+				$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+				$fpreturn = $fpname($this);
+				if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 			}
 			$u = new UrlRule($zbp->option['ZC_TAGS_REGEX']);
-			$u->Rules['{%id%}']=$this->ID;
-			$u->Rules['{%alias%}']=$this->Alias==''?urlencode($this->Name):$this->Alias;
+			$u->Rules['{%id%}'] = $this->ID;
+			$u->Rules['{%alias%}'] = $this->Alias == '' ? urlencode($this->Name) : $this->Alias;
 			return $u->Make();
 		}
-		if ($name=='Template') {
-			$value=$this->data[$name];
-			if($value=='')$value=$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+		if ($name == 'Template') {
+			$value = $this->data[$name];
+			if ($value == '') {
+				$value = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+			}
+
 			return $value;
 		}
 		return parent::__get($name);
@@ -76,13 +79,16 @@ class Tag extends Base{
 	/**
 	 * @return bool
 	 */
-	function Save(){
+	function Save() {
 		global $zbp;
-		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
+		if ($this->Template == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
+			$this->data['Template'] = '';
+		}
+
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Save'] as $fpname => &$fpsignal) {
-			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+			$fpreturn = $fpname($this);
+			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return parent::Save();
 	}
@@ -90,13 +96,13 @@ class Tag extends Base{
 	/**
 	 * @return bool
 	 */
-	function Del(){
+	function Del() {
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Del'] as $fpname => &$fpsignal) {
-			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+			$fpreturn = $fpname($this);
+			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return parent::Del();
 	}
-	
+
 }

@@ -10,20 +10,19 @@ class Member extends Base {
 	/**
 	 * @var string 头像图片地址
 	 */
-	private $_avatar='';
+	private $_avatar = '';
 
 	/**
 	 * @var boolean 创始id
 	 */
-	private $_isgod=null;
+	private $_isgod = null;
 
 	/**
 	 * 构造函数，默认用户设为anonymous
 	 */
-	function __construct()
-	{
+	function __construct() {
 		global $zbp;
-		parent::__construct($zbp->table['Member'],$zbp->datainfo['Member'],__CLASS__);
+		parent::__construct($zbp->table['Member'], $zbp->datainfo['Member'], __CLASS__);
 
 		$this->Name = $zbp->lang['msg']['anonymous'];
 	}
@@ -37,9 +36,9 @@ class Member extends Base {
 	 */
 	function __call($method, $args) {
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Call'] as $fpname => &$fpsignal) {
-			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-			$fpreturn=$fpname($this,$method, $args);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+			$fpreturn = $fpname($this, $method, $args);
+			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 	}
 
@@ -49,40 +48,42 @@ class Member extends Base {
 	 * @param $value
 	 * @return null|string
 	 */
-	public function __set($name, $value)
-	{
+	public function __set($name, $value) {
 		global $zbp;
-		if ($name=='Url') {
+		if ($name == 'Url') {
 			foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Url'] as $fpname => &$fpsignal) {
-				$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-				$fpreturn=$fpname($this);
-				if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+				$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+				$fpreturn = $fpname($this);
+				if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 			}
 			$u = new UrlRule($zbp->option['ZC_AUTHOR_REGEX']);
-			$u->Rules['{%id%}']=$this->ID;
-			$u->Rules['{%alias%}']=$this->Alias==''?urlencode($this->Name):$this->Alias;
+			$u->Rules['{%id%}'] = $this->ID;
+			$u->Rules['{%alias%}'] = $this->Alias == '' ? urlencode($this->Name) : $this->Alias;
 			return $u->Make();
 		}
-		if ($name=='Avatar') {
+		if ($name == 'Avatar') {
 			return null;
 		}
-		if ($name=='LevelName') {
+		if ($name == 'LevelName') {
 			return null;
 		}
-		if ($name=='EmailMD5') {
+		if ($name == 'EmailMD5') {
 			return null;
 		}
-		if ($name=='StaticName') {
+		if ($name == 'StaticName') {
 			return null;
 		}
-		if ($name=='Template') {
-			if($value==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$value='';
-			return $this->data[$name]  =  $value;
+		if ($name == 'Template') {
+			if ($value == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
+				$value = '';
+			}
+
+			return $this->data[$name] = $value;
 		}
-		if ($name=='PassWord_MD5Path') {
+		if ($name == 'PassWord_MD5Path') {
 			return null;
 		}
-		if ($name=='IsGod') {
+		if ($name == 'IsGod') {
 			return null;
 		}
 		parent::__set($name, $value);
@@ -92,56 +93,64 @@ class Member extends Base {
 	 * @param $name
 	 * @return mixed|string
 	 */
-	public function __get($name)
-	{
+	public function __get($name) {
 		global $zbp;
-		if ($name=='Url') {
+		if ($name == 'Url') {
 			$u = new UrlRule($zbp->option['ZC_AUTHOR_REGEX']);
-			$u->Rules['{%id%}']=$this->ID;
-			$u->Rules['{%alias%}']=$this->Alias==''?urlencode($this->Name):$this->Alias;
+			$u->Rules['{%id%}'] = $this->ID;
+			$u->Rules['{%alias%}'] = $this->Alias == '' ? urlencode($this->Name) : $this->Alias;
 			return $u->Make();
 		}
-		if ($name=='Avatar') {
+		if ($name == 'Avatar') {
 			foreach ($GLOBALS['hooks']['Filter_Plugin_Mebmer_Avatar'] as $fpname => &$fpsignal) {
-				$fpreturn=$fpname($this);
-				if($fpreturn){$fpsignal=PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+				$fpreturn = $fpname($this);
+				if ($fpreturn) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
 			}
-			if($this->_avatar)return $this->_avatar;
-			$s=$zbp->usersdir . 'avatar/' . $this->ID . '.png';
-			if(is_readable($s)){
+			if ($this->_avatar) {
+				return $this->_avatar;
+			}
+
+			$s = $zbp->usersdir . 'avatar/' . $this->ID . '.png';
+			if (is_readable($s)) {
 				$this->_avatar = $zbp->host . 'zb_users/avatar/' . $this->ID . '.png';
 				return $this->_avatar;
 			}
 			$this->_avatar = $zbp->host . 'zb_users/avatar/0.png';
 			return $this->_avatar;
 		}
-		if ($name=='LevelName') {
+		if ($name == 'LevelName') {
 			return $zbp->lang['user_level_name'][$this->Level];
 		}
-		if ($name=='EmailMD5') {
+		if ($name == 'EmailMD5') {
 			return md5($this->Email);
 		}
-		if ($name=='StaticName') {
-			if($this->Alias)return $this->Alias;
+		if ($name == 'StaticName') {
+			if ($this->Alias) {
+				return $this->Alias;
+			}
+
 			return $this->Name;
 		}
-		if ($name=='Template') {
-			$value=$this->data[$name];
-			if($value=='')$value=$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+		if ($name == 'Template') {
+			$value = $this->data[$name];
+			if ($value == '') {
+				$value = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+			}
+
 			return $value;
 		}
-		if ($name=='PassWord_MD5Path') {
+		if ($name == 'PassWord_MD5Path') {
 			return md5($this->Password . $zbp->guid);
 		}
-		if ($name=='IsGod') {
-			if($this->_isgod === true || $this->_isgod === false){
+		if ($name == 'IsGod') {
+			if ($this->_isgod === true || $this->_isgod === false) {
 				return $this->_isgod;
-			}else{
-				$sql = $zbp->db->sql->Select($zbp->table['Member'],'*',array(array('=','mem_Level',1)),'mem_ID ASC',1,null);
-				$am = $zbp->GetListType('Member',$sql);
-				if($am[0]->ID == $this->ID){
+			} else {
+				$sql = $zbp->db->sql->Select($zbp->table['Member'], '*', array(array('=', 'mem_Level', 1)), 'mem_ID ASC', 1, null);
+				$am = $zbp->GetListType('Member', $sql);
+				if ($am[0]->ID == $this->ID) {
 					$this->_isgod = true;
-				}else{
+				} else {
 					$this->_isgod = false;
 				}
 				return $this->_isgod;
@@ -155,10 +164,10 @@ class Member extends Base {
 	 * @param string $ps 明文密码
 	 * @param string $guid 用户唯一码
 	 * @return string
-	*/
-	static function GetPassWordByGuid($ps,$guid){
+	 */
+	static function GetPassWordByGuid($ps, $guid) {
 
-		return md5(md5($ps). $guid);
+		return md5(md5($ps) . $guid);
 
 	}
 
@@ -166,13 +175,16 @@ class Member extends Base {
 	 * 保存用户数据
 	 * @return bool
 	 */
-	function Save(){
+	function Save() {
 		global $zbp;
-		if($this->Template==$zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'])$this->data['Template'] = '';
+		if ($this->Template == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
+			$this->data['Template'] = '';
+		}
+
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Save'] as $fpname => &$fpsignal) {
-			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+			$fpreturn = $fpname($this);
+			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return parent::Save();
 	}
@@ -180,11 +192,11 @@ class Member extends Base {
 	/**
 	 * @return bool
 	 */
-	function Del(){
+	function Del() {
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Del'] as $fpname => &$fpsignal) {
-			$fpsignal=PLUGIN_EXITSIGNAL_NONE;
-			$fpreturn=$fpname($this);
-			if ($fpsignal==PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+			$fpreturn = $fpname($this);
+			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return parent::Del();
 	}

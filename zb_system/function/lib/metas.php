@@ -10,13 +10,13 @@ class Metas {
 	/**
 	 * @var array 存储Metas相应数值的数组
 	 */
-	private $_data=array();
+	private $_data = array();
 	/**
 	 * @param string $name key名
 	 * @param $value
 	 */
 
-	public function __set($name, $value){
+	public function __set($name, $value) {
 		$this->_data[$name] = $value;
 	}
 
@@ -24,8 +24,11 @@ class Metas {
 	 * @param string $name key名
 	 * @return null
 	 */
-	public function __get($name){
-		if(!isset($this->_data[$name]))return null;
+	public function __get($name) {
+		if (!isset($this->_data[$name])) {
+			return null;
+		}
+
 		return $this->_data[$name];
 	}
 
@@ -34,19 +37,19 @@ class Metas {
 	 * @param array $a
 	 * @return Metas
 	 */
-	public static function ConvertArray($a){
+	public static function ConvertArray($a) {
 		$m = new Metas;
-		if(is_array($a)){
-			$m->_data=$a;
+		if (is_array($a)) {
+			$m->_data = $a;
 		}
 		return $m;
 	}
 
 	/**
-	* 获取Data数据
-	* @return array
-	*/
-	function GetData(){
+	 * 获取Data数据
+	 * @return array
+	 */
+	function GetData() {
 		return $this->_data;
 	}
 
@@ -55,9 +58,9 @@ class Metas {
 	 * @param string $value
 	 * @return string
 	 */
-	public static function ReplaceTag2Host($value){
+	public static function ReplaceTag2Host($value) {
 		global $bloghost;
-		return str_replace('{#ZC_BLOG_HOST#}',$bloghost,$value);
+		return str_replace('{#ZC_BLOG_HOST#}', $bloghost, $value);
 	}
 
 	/**
@@ -65,9 +68,9 @@ class Metas {
 	 * @param string $value
 	 * @return string
 	 */
-	public static function ReplaceHost2Tag($value){
+	public static function ReplaceHost2Tag($value) {
 		global $bloghost;
-		return str_replace($bloghost,'{#ZC_BLOG_HOST#}',$value);
+		return str_replace($bloghost, '{#ZC_BLOG_HOST#}', $value);
 	}
 
 	/**
@@ -75,15 +78,15 @@ class Metas {
 	 * @param string $name key名
 	 * @return bool
 	 */
-	public function HasKey($name){
-		return array_key_exists($name,$this->_data);
+	public function HasKey($name) {
+		return array_key_exists($name, $this->_data);
 	}
 
 	/**
 	 * 检查Data属性（数组）中的单元数目
 	 * @return int
 	 */
-	public function CountItem(){
+	public function CountItem() {
 		return count($this->_data);
 	}
 
@@ -91,21 +94,28 @@ class Metas {
 	 * 删除Data属性（数组）中的相应项
 	 * @param string $name key名
 	 */
-	public function Del($name){
+	public function Del($name) {
 
-		 unset($this->_data[$name]);
+		unset($this->_data[$name]);
 	}
 
 	/**
 	 * 将Data属性（数组）值序列化
 	 * @return string 返回序列化的值
 	 */
-	public function Serialize(){
-		if(count($this->_data)==0)return '';
-		$data=$this->_data;
-		foreach ($data as $key => $value)
-			if(is_string($value))
-				$data[$key]=self::ReplaceHost2Tag($value);
+	public function Serialize() {
+		if (count($this->_data) == 0) {
+			return '';
+		}
+
+		$data = $this->_data;
+		foreach ($data as $key => $value) {
+			if (is_string($value)) {
+				$data[$key] = self::ReplaceHost2Tag($value);
+			}
+
+		}
+
 		//return json_encode($data);
 		return serialize($data);
 	}
@@ -115,21 +125,30 @@ class Metas {
 	 * @param string $s 序列化值
 	 * @return bool
 	 */
-	public function Unserialize($s){
+	public function Unserialize($s) {
 
-		if($s=='')return false;
+		if ($s == '') {
+			return false;
+		}
+
 		//if(strpos($s,'{')===0){
-			//$this->_data=json_decode($s,true);
+		//$this->_data=json_decode($s,true);
 		//}else{
-			$this->_data=@unserialize($s);
+		$this->_data = @unserialize($s);
 		//}
-		if(is_array($this->_data)){
-			if(count($this->_data)==0)return true;
-			foreach ($this->_data as $key => $value)
-				if(is_string($value))
-					$this->_data[$key]=self::ReplaceTag2Host($value);
-		}else{
-			$this->_data=array();
+		if (is_array($this->_data)) {
+			if (count($this->_data) == 0) {
+				return true;
+			}
+
+			foreach ($this->_data as $key => $value) {
+				if (is_string($value)) {
+					$this->_data[$key] = self::ReplaceTag2Host($value);
+				}
+
+			}
+		} else {
+			$this->_data = array();
 			return false;
 		}
 
