@@ -1,4 +1,4 @@
-w<?php
+<?php
 /**
  * zbp全局操作类
  *
@@ -2851,33 +2851,33 @@ class ZBlogPHP {
 			}
 
 		}
-
-		/**
-		 * 检测当前url，如果不符合设置就跳转到固定域名的链接
-		 */
-		public function RedirectPermanentDomain() {
-
-			if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == false) {
-				return;
-			}
-
-			if ($this->option['ZC_PERMANENT_DOMAIN_REDIRECT'] == false) {
-				return;
-			}
-
-			$host = GetCurrentHost(ZBP_PATH, $null);
-
-			if (stripos($host, $this->host) === false) {
-				$u = GetRequestUri();
-				$u = $this->host . substr($u, 1, strlen($u));
-				Redirect301($u);
-			}
-		}
-		/**
-		 * 对表名和数据结构进行预转换
-		 */
-		private $table_datainfo_hash = null;
 	}
+
+	/**
+	 * 检测当前url，如果不符合设置就跳转到固定域名的链接
+	 */
+	public function RedirectPermanentDomain() {
+
+		if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == false) {
+			return;
+		}
+
+		if ($this->option['ZC_PERMANENT_DOMAIN_REDIRECT'] == false) {
+			return;
+		}
+
+		$host = GetCurrentHost(ZBP_PATH, $null);
+
+		if (stripos($host, $this->host) === false) {
+			$u = GetRequestUri();
+			$u = $this->host . substr($u, 1, strlen($u));
+			Redirect301($u);
+		}
+	}
+	/**
+	 * 对表名和数据结构进行预转换
+	 */
+	private $table_datainfo_hash = null;
 
 	public function ConvertTableAndDatainfo() {
 
