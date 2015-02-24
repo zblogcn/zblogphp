@@ -73,8 +73,7 @@ $("#chkRemember").click(function(){
 
 
 if (!$.support.leadingWhitespace) {
-	$("#dishtml5").val(1);
-<?php
+	$("#dishtml5").val(1);<?php
 	if($option['ZC_ADMIN_HTML5_ENABLE'])
 		echo 'alert("' . $lang['error']['74'] . '");';
 ?>

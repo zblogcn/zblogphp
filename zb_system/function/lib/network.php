@@ -116,18 +116,16 @@ class Network {
 			$this->network_list[] = 'curl';
 			$this->curl = true;
 		}
-		if ((bool) ini_get('allow_url_fopen') && function_exists('fsockopen')) {
+		if ((bool) ini_get('allow_url_fopen')) {
 			if (function_exists('fsockopen')) {
 				$this->network_list[] = 'fsockopen';
 			}
-
 			$this->fsockopen = true;
 		}
 		if ((bool) ini_get('allow_url_fopen')) {
 			if (function_exists('file_get_contents')) {
 				$this->network_list[] = 'file_get_contents';
 			}
-
 			$this->file_get_contents = true;
 		}
 	}

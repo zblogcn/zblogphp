@@ -29,7 +29,7 @@ class Base{
 	*/
 	protected $db = null;
 	/**
-	* @var string 数据表
+	* @var string 类名
 	*/
 	protected $calssname='';
 
@@ -62,7 +62,7 @@ class Base{
 	* @param $value
 	*/
 	public function __set($name, $value){
-		$this->data[$name]  =  $value;
+		$this->data[$name] = $value;
 	}
 
 	/**

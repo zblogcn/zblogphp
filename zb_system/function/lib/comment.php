@@ -22,7 +22,7 @@ class Comment extends Base {
 	function __construct()
 	{
 		global $zbp;
-		parent::__construct($zbp->table['Comment'],$zbp->datainfo['Comment']);
+		parent::__construct($zbp->table['Comment'],$zbp->datainfo['Comment'],__CLASS__);
 	}
 
 	/**
