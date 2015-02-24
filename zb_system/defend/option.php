@@ -14,7 +14,7 @@
 return array(
 
 	// '---------------------------------关闭网站-----------------------------------
-	'ZC_SITE_TURNOFF'=>false,
+	'ZC_SITE_TURNOFF' => false,
 
 	// '---------------------------------网站基本设置-----------------------------------
 	'ZC_BLOG_HOST' => 'http://localhost/',
@@ -28,7 +28,7 @@ return array(
 
 	// '----------------------------数据库配置---------------------------------------
 	//mysql|mysqli|pdo_mysql|sqlite|sqlite3|pdo_sqlite
-	'ZC_DATABASE_TYPE'=> '',
+	'ZC_DATABASE_TYPE' => '',
 
 	'ZC_SQLITE_NAME' => '',
 	'ZC_SQLITE_PRE' => 'zbp_',
@@ -39,24 +39,24 @@ return array(
 	'ZC_MYSQL_NAME' => '',
 	'ZC_MYSQL_CHARSET' => 'utf8',
 	'ZC_MYSQL_PRE' => 'zbp_',
-	'ZC_MYSQL_ENGINE'=>'MyISAM',
-    'ZC_MYSQL_PORT' => '3306',
-    'ZC_MYSQL_PERSISTENT' => false,
-	
-    'ZC_PGSQL_SERVER' => 'localhost',
-    'ZC_PGSQL_USERNAME' => 'postgres',
-    'ZC_PGSQL_PASSWORD' => '',
-    'ZC_PGSQL_NAME' => '',
-    'ZC_PGSQL_CHARSET' => 'utf8',
-    'ZC_PGSQL_PRE' => 'zbp_',
-    'ZC_PGSQL_PORT' => '5432',
-    'ZC_PGSQL_PERSISTENT' => false,
+	'ZC_MYSQL_ENGINE' => 'MyISAM',
+	'ZC_MYSQL_PORT' => '3306',
+	'ZC_MYSQL_PERSISTENT' => false,
+
+	'ZC_PGSQL_SERVER' => 'localhost',
+	'ZC_PGSQL_USERNAME' => 'postgres',
+	'ZC_PGSQL_PASSWORD' => '',
+	'ZC_PGSQL_NAME' => '',
+	'ZC_PGSQL_CHARSET' => 'utf8',
+	'ZC_PGSQL_PRE' => 'zbp_',
+	'ZC_PGSQL_PORT' => '5432',
+	'ZC_PGSQL_PERSISTENT' => false,
 
 	// '---------------------------------插件----------------------------------------
 	'ZC_USING_PLUGIN_LIST' => '',
 
 	// '-------------------------------全局配置-----------------------------------
-	'ZC_YUN_SITE'=>'',
+	'ZC_YUN_SITE' => '',
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
 	'ZC_UPDATE_INFO_URL' => 'http://update.zblogcn.com/info/',
@@ -80,12 +80,10 @@ return array(
 	'ZC_BLOG_PRODUCT_HTML' => '',
 	'ZC_BLOG_PRODUCT_FULLHTML' => '',
 
-
 	// '留言评论
 	'ZC_COMMENT_TURNOFF' => false,
 	'ZC_COMMENT_VERIFY_ENABLE' => false,
 	'ZC_COMMENT_REVERSE_ORDER' => false,
-
 
 	// '验证码
 	'ZC_VERIFYCODE_STRING' => 'ABCDEFGHKMNPRSTUVWXYZ123456789',
@@ -113,7 +111,6 @@ return array(
 	'ZC_EMOTICONS_FILETYPE' => 'png|gif|jpg',
 
 	'ZC_EMOTICONS_FILESIZE' => '16',
-
 
 	// '上传相关
 	'ZC_UPLOAD_FILETYPE' => 'jpg|gif|png|jpeg|bmp|psd|wmf|ico|rpm|deb|tar|gz|sit|7z|bz2|zip|rar|xml|xsl|svg|svgz|doc|docx|ppt|pptx|xls|xlsx|wps|chm|txt|pdf|mp3|avi|mpg|rm|ra|rmvb|mov|wmv|wma|swf|fla|torrent|apk|zba',
@@ -173,8 +170,8 @@ return array(
 
 	'ZC_SIDEBAR5_ORDER' => '',
 	// '--------------------------其它----------------------------------------
-	'ZC_GZIP_ENABLE'=>false,
-	'ZC_ADMIN_HTML5_ENABLE'=>true,
+	'ZC_GZIP_ENABLE' => false,
+	'ZC_ADMIN_HTML5_ENABLE' => true,
 	// '代码高亮
 	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
 	'ZC_LOADMEMBERS_LEVEL' => 0,
@@ -186,10 +183,10 @@ return array(
 	// '源码编辑高亮
 	'ZC_CODEMIRROR_ENABLE' => true,
 	'ZC_HTTP_LASTMODIFIED' => false,
-	'ZC_MODULE_CATALOG_STYLE'=>0,
+	'ZC_MODULE_CATALOG_STYLE' => 0,
 	'ZC_VIEWNUMS_TURNOFF' => false,
 	'ZC_LISTONTOP_TURNOFF' => false,
-	'ZC_RELATEDLIST_COUNT'=>10,
+	'ZC_RELATEDLIST_COUNT' => 10,
 	'ZC_RUNINFO_DISPLAY' => true,
 	'ZC_POST_ALIAS_USE_ID_NOT_TITLE' => false,
 	'ZC_COMPATIBLE_ASP_URL' => true,
