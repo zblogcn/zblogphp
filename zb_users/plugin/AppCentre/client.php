@@ -4,43 +4,42 @@ require '../../../zb_system/function/c_system_admin.php';
 require dirname(__FILE__) . '/function.php';
 $zbp->Load();
 
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
 
-if(!$zbp->Config('AppCentre')->shop_username||!$zbp->Config('AppCentre')->shop_password){
-	$blogtitle='应用中心-登录应用商城';
-}else{
-	$blogtitle='应用中心-我的应用仓库';
+if (!$zbp->Config('AppCentre')->shop_username || !$zbp->Config('AppCentre')->shop_password) {
+	$blogtitle = '应用中心-登录应用商城';
+} else {
+	$blogtitle = '应用中心-我的应用仓库';
 }
 
+if (GetVars('act') == 'shoplogin') {
 
-if(GetVars('act')=='shoplogin'){
+	$s = Server_Open('shopvaild');
 
-	$s=Server_Open('shopvaild');
+	if ($s) {
 
-	if($s){
-
-		$zbp->Config('AppCentre')->shop_username=GetVars("shop_username");
-		$zbp->Config('AppCentre')->shop_password=$s;
+		$zbp->Config('AppCentre')->shop_username = GetVars("shop_username");
+		$zbp->Config('AppCentre')->shop_password = $s;
 		$zbp->SaveConfig('AppCentre');
 
-		$zbp->SetHint('good','您已成功登录"应用中心"商城.');
+		$zbp->SetHint('good', '您已成功登录"应用中心"商城.');
 		Redirect('./client.php');
 		die;
-	}else{
-		$zbp->SetHint('bad','购买者账户名或密码错误.');
+	} else {
+		$zbp->SetHint('bad', '购买者账户名或密码错误.');
 		Redirect('./client.php');
 		die;
 	}
-	
+
 }
 
-if(GetVars('act')=='shoplogout'){
-	$zbp->Config('AppCentre')->shop_username='';
-	$zbp->Config('AppCentre')->shop_password='';
+if (GetVars('act') == 'shoplogout') {
+	$zbp->Config('AppCentre')->shop_username = '';
+	$zbp->Config('AppCentre')->shop_password = '';
 	$zbp->SaveConfig('AppCentre');
-	$zbp->SetHint('good','您已退出"应用中心"商城.');
+	$zbp->SetHint('good', '您已退出"应用中心"商城.');
 	Redirect('./main.php');
 	die;
 }
@@ -53,7 +52,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div class="divHeader"><?php echo $blogtitle;?></div>
 <div class="SubMenu"><?php AppCentre_SubMenus(9);?></div>
   <div id="divMain2">
-<?php if(!$zbp->Config('AppCentre')->shop_username||!$zbp->Config('AppCentre')->shop_password){ ?>
+<?php if (!$zbp->Config('AppCentre')->shop_username || !$zbp->Config('AppCentre')->shop_password) {?>
             <form action="?act=shoplogin" method="post">
               <table style="line-height:3em;" width="100%" border="0">
                 <tr height="32">
@@ -73,17 +72,17 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                 </tr>
               </table>
             </form>
-<?php }else{ 
+<?php } else {
 
 //已登录
-Server_Open('shoplist');
+	Server_Open('shoplist');
 
-      }?>
+}?>
 
 
 
 	<script type="text/javascript">ActiveLeftMenu("aAppCentre");</script>
-	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>	
+	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>
   </div>
 </div>
 

@@ -5,5 +5,5 @@
  * @subpackage clinic.php
  */
 
-require('clinic.class.php');
+require 'clinic.class.php';
 $clinic = new Clinic();

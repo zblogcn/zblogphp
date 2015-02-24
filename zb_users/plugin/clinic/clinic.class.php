@@ -16,8 +16,7 @@ class Clinic {
 	public $categories = array();
 	public $output_json = array();
 
-	public function __construct()
-	{
+	public function __construct() {
 		$this->module_path = dirname(__FILE__) . '/modules/';
 		$this->include_path = dirname(__FILE__) . '/include/';
 		$this->categories = array_merge(
@@ -33,7 +32,7 @@ class Clinic {
 	 */
 	public function scan_dir() {
 		//For third-party developers
-		$this->modules = $GLOBALS['clinic_register_array']; 
+		$this->modules = $GLOBALS['clinic_register_array'];
 		$dir = scandir($this->module_path);
 		foreach ($dir as $name) {
 			// Directory name must be English
@@ -50,15 +49,14 @@ class Clinic {
 		return $this->modules;
 	}
 
-
 	/**
 	 * Load module
 	 * @param string $module_name
-	 * @return object 
+	 * @return object
 	 */
 	public function load_module($module_name) {
 		if (isset($this->modules[$module_name])) {
-			include_once($this->modules[$module_name]['path']);
+			include_once $this->modules[$module_name]['path'];
 			// Class name cannot include '-'
 			$class_name = str_replace('-', '_', $module_name);
 			if (class_exists($class_name)) {
@@ -69,12 +67,11 @@ class Clinic {
 		return false;
 	}
 
-
 	/**
 	 * Output
 	 * @param string $status
 	 * @param string $text
-	 * @return string 
+	 * @return string
 	 */
 	public function output($status, $text) {
 		$string = '<span style="color:';
@@ -88,7 +85,7 @@ class Clinic {
 	 * Load output
 	 * @param string $function
 	 * @param string $param
-	 * @return string 
+	 * @return string
 	 */
 	public function set_queue($function, $param) {
 		$this->output_json[] = json_encode(array('type' => 'queue', 'function' => $function, 'param' => $param, 'error' => 0));

@@ -12,23 +12,29 @@ require '../function/c_system_admin.php';
 $zbp->CheckGzip();
 $zbp->Load();
 
-$action='';
-if(GetVars('act','GET')=='MemberEdt')$action='MemberEdt';
-if(GetVars('act','GET')=='MemberNew')$action='MemberNew';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6,__FILE__,__LINE__);die();}
-$blogtitle=$lang['msg']['member_edit'];
+$action = '';
+if (GetVars('act', 'GET') == 'MemberEdt') {
+	$action = 'MemberEdt';
+}
+
+if (GetVars('act', 'GET') == 'MemberNew') {
+	$action = 'MemberNew';
+}
+
+if (!$zbp->CheckRights($action)) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
+$blogtitle = $lang['msg']['member_edit'];
 
 require ZBP_PATH . 'zb_system/admin/admin_header.php';
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
-$memberid=null;
-if(isset($_GET['id'])){$memberid = (integer)GetVars('id','GET');}else{$memberid = 0;}
+$memberid = null;
+if (isset($_GET['id'])) {$memberid = (integer) GetVars('id', 'GET');} else { $memberid = 0;}
 
-if(!$zbp->CheckRights('MemberAll')){
-	if((int)$memberid<>(int)$zbp->user->ID) {$zbp->ShowError(6,__FILE__,__LINE__);}
+if (!$zbp->CheckRights('MemberAll')) {
+	if ((int) $memberid != (int) $zbp->user->ID) {$zbp->ShowError(6, __FILE__, __LINE__);}
 }
 
-$member=$zbp->GetMemberByID($memberid);
+$member = $zbp->GetMemberByID($memberid);
 
 ?>
 <div id="divMain">
@@ -45,20 +51,20 @@ $member=$zbp->GetMemberByID($memberid);
 				<br />
 				<select class="edit" size="1" name="Level" id="cmbLevel">
 					<?php echo CreateOptoinsOfMemberLevel($member->Level);?></select>
-				<?php if($zbp->CheckRights('MemberAll') && $zbp->user->ID<>$member->ID){?>
+				<?php if ($zbp->CheckRights('MemberAll') && $zbp->user->ID != $member->ID) {?>
 		&nbsp;(
 				<span class="title">
 					<?php echo $lang['msg']['status']?>:</span>
 				<label>
-					<input name="Status" type="radio" value="0" <?php echo $member->Status==0?'checked="checked"':''; ?> />&nbsp;
+					<input name="Status" type="radio" value="0" <?php echo $member->Status == 0 ? 'checked="checked"' : '';?> />&nbsp;
 					<?php echo $lang['user_status_name'][0]?></label>
 				&nbsp;&nbsp;
 				<label>
-					<input name="Status" type="radio" value="1" <?php echo $member->Status==1?'checked="checked"':''; ?> />&nbsp;
+					<input name="Status" type="radio" value="1" <?php echo $member->Status == 1 ? 'checked="checked"' : '';?> />&nbsp;
 					<?php echo $lang['user_status_name'][1]?></label>
 				&nbsp;&nbsp;
 				<label>
-					<input name="Status" type="radio" value="2" <?php echo $member->Status==2?'checked="checked"':''; ?> />&nbsp;
+					<input name="Status" type="radio" value="2" <?php echo $member->Status == 2 ? 'checked="checked"' : '';?> />&nbsp;
 					<?php echo $lang['user_status_name'][2]?></label>
 				)
 				<?php }?></p>
@@ -67,7 +73,10 @@ $member=$zbp->GetMemberByID($memberid);
 					<?php echo $lang['msg']['name']?>:</span>
 				<span class="star">(*)</span>
 				<br />
-				<input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name;?>" <?php if(!$zbp->CheckRights('MemberAll'))echo 'readonly="readonly"';?> /></p>
+				<input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name;?>" <?php if (!$zbp->CheckRights('MemberAll')) {
+	echo 'readonly="readonly"';
+}
+?> /></p>
 			<p>
 				<span class='title'>
 					<?php echo $lang['msg']['password']?>:</span>
@@ -110,7 +119,7 @@ $member=$zbp->GetMemberByID($memberid);
 					<?php echo CreateOptoinsOfTemplate($member->Template);?></select>
 			</p>
 			<div id='response' class='editmod2'>
-				<?php foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_Response'] as $fpname =>	&$fpsignal) {$fpname();}
+				<?php foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
 ?>
 			</div>
 			<p>
@@ -124,7 +133,7 @@ $member=$zbp->GetMemberByID($memberid);
 		</form>
 		<script type="text/javascript">
 function checkInfo(){
-  document.getElementById("edit").action="../cmd.php?act=MemberPst<?php echo '&token='. $zbp->GetToken();?>";
+  document.getElementById("edit").action="../cmd.php?act=MemberPst<?php echo '&token=' . $zbp->GetToken();?>";
 
 
   if(!$("#edtEmail").val()){

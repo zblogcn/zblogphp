@@ -1,14 +1,14 @@
 <?php
 /**
  * Z-Blog with PHP
- * @author 
+ * @author
  * @copyright (C) RainbowSoft Studio
  * @version 2.0 2013-07-05
  */
- 
+
 /**
  * 安装程序
- * @param 
+ * @param
  * @return array
  */
 
@@ -17,27 +17,34 @@ require '../zb_system/function/c_system_admin.php';
 
 header('Content-type: text/html; charset=utf-8');
 
-define('bingo','<span class="bingo"></span>');
-define('error','<span class="error"></span>');
+define('bingo', '<span class="bingo"></span>');
+define('error', '<span class="error"></span>');
 
-$zbloglang=&$zbp->option['ZC_BLOG_LANGUAGEPACK'];
-if(isset($_POST['zbloglang']))$zbloglang=$_POST['zbloglang'];
+$zbloglang = &$zbp->option['ZC_BLOG_LANGUAGEPACK'];
+if (isset($_POST['zbloglang'])) {
+	$zbloglang = $_POST['zbloglang'];
+}
 
-$zbp->LoadLanguage('system','',$zbloglang);
-$zbp->LoadLanguage('zb_install','zb_install',$zbloglang);
-$zbp->option['ZC_BLOG_LANGUAGE'] = $zbp->lang ['lang'];
+$zbp->LoadLanguage('system', '', $zbloglang);
+$zbp->LoadLanguage('zb_install', 'zb_install', $zbloglang);
+$zbp->option['ZC_BLOG_LANGUAGE'] = $zbp->lang['lang'];
 
-$zblogstep=(int)GetVars('step');
-if($zblogstep==0)$zblogstep=1;
+$zblogstep = (int) GetVars('step');
+if ($zblogstep == 0) {
+	$zblogstep = 1;
+}
 
-if( ($zbp->option['ZC_DATABASE_TYPE']!=='') && ($zbp->option['ZC_YUN_SITE']=='') ){
-	$zblogstep=0;
-}elseif( ($zbp->option['ZC_DATABASE_TYPE']) && ($zbp->option['ZC_YUN_SITE']) ){
-	if($zbp->Config('system')->CountItem()>0)$zblogstep=0;
+if (($zbp->option['ZC_DATABASE_TYPE'] !== '') && ($zbp->option['ZC_YUN_SITE'] == '')) {
+	$zblogstep = 0;
+} elseif (($zbp->option['ZC_DATABASE_TYPE']) && ($zbp->option['ZC_YUN_SITE'])) {
+	if ($zbp->Config('system')->CountItem() > 0) {
+		$zblogstep = 0;
+	}
+
 }
 ?>
 <!DOCTYPE HTML>
-<html lang="<?php echo $zbp->option['ZC_BLOG_LANGUAGE']; ?>">
+<html lang="<?php echo $zbp->option['ZC_BLOG_LANGUAGE'];?>">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
@@ -56,29 +63,29 @@ Include_AddonAdminFont();
 </head>
 <body>
 <div class="setup">
-  <form method="post" action="./index.php?step=<?php echo $zblogstep+1;?>">
+  <form method="post" action="./index.php?step=<?php echo $zblogstep + 1;?>">
 	<input type="hidden" name="zbloglang" id="zbloglang" value="<?php echo $zbloglang;?>"/>
     <?php
 
 switch ($zblogstep) {
-    case 0:
-        Setup0();
-        break;
-    case 1:
-        Setup1();
-        break;
-    case 2:
-        Setup2();
-        break;
-    case 3:
-        Setup3();
-        break;
-    case 4:
-        Setup4();
-        break;
-    case 5:
-        Setup5();
-        break;
+	case 0:
+		Setup0();
+		break;
+	case 1:
+		Setup1();
+		break;
+	case 2:
+		Setup2();
+		break;
+	case 3:
+		Setup3();
+		break;
+	case 4:
+		Setup4();
+		break;
+	case 5:
+		Setup5();
+		break;
 }
 
 ?>
@@ -125,9 +132,9 @@ $(function() {
 </body>
 </html>
 <?php
-function Setup0(){
-  global $zbp;
-?>
+function Setup0() {
+	global $zbp;
+	?>
 <dl>
   <dt></dt>
   <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
@@ -138,7 +145,7 @@ function Setup0(){
   </dd>
   <dd id="ddright">
       <p style="float:left;clear:both;width:100%;text-align:right;padding-bottom:0.5em;"><b><?php echo $zbp->lang['zb_install']['language'];?></b>&nbsp;<select id="language" name="language" style="width:150px;" >
-<?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']); ?>
+<?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']);?>
       </select></p>
     <div id="title"><?php echo $zbp->lang['zb_install']['install_tips'];?></div>
     <div id="content"><?php echo $zbp->lang['zb_install']['install_disable'];?></div>
@@ -150,9 +157,9 @@ function Setup0(){
 <?php
 }
 
-function Setup1(){
-  global $zbp;
-?>
+function Setup1() {
+	global $zbp;
+	?>
 <dl>
   <dt></dt>
   <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
@@ -163,7 +170,7 @@ function Setup1(){
   </dd>
   <dd id="ddright">
       <p style="float:left;clear:both;width:100%;text-align:right;padding-bottom:0.5em;"><b><?php echo $zbp->lang['zb_install']['language'];?></b>&nbsp;<select id="language" name="language" style="width:150px;" >
-<?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']); ?>
+<?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']);?>
       </select></p>
     <div id="title">Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_license']?></div>
     <div id="content">
@@ -174,7 +181,7 @@ function Setup1(){
 
 Z-BlogPHP官方网址：http://www.zblogcn.com/
 
-为了使您正确并合法的使用本软件，请您在使用前务必阅读清楚下面的协议条款： 
+为了使您正确并合法的使用本软件，请您在使用前务必阅读清楚下面的协议条款：
 
 一、本授权协议适用且仅适用于 Z-BlogPHP ，Rainbow Studio官方对本授权协议拥有最终解释权。
 
@@ -199,7 +206,7 @@ Z-BlogPHP官方网址：http://www.zblogcn.com/
 3. 电子文本形式的授权协议如同双方书面签署的协议一样，具有完全的和等同的法律效力。您一旦开始确认本协议并安装 Z-BlogPHP ，即被视为完全理解并接受本协议的各项条款，在享有上述条款授予的权力的同时，受到相关的约束和限制。协议许可范围以外的行为，将直接违反本授权协议并构成侵权，我们有权随时终止授权，责令停止损害，并保留追究相关责任的权力。
 4. 如果本软件带有其它软件的整合API示范例子包，这些文件版权不属于本软件官方，并且这些文件是没经过授权发布的，请参考相关软件的使用许可合法的使用。
 
-版权所有 ©2005 - 2015，RainbowSoft Studio 保留所有权利。 
+版权所有 ©2005 - 2015，RainbowSoft Studio 保留所有权利。
 协议发布时间：2013 年 8 月 1 日
 版本最新更新：2015 年 1 月 25 日 By RainbowSoft Studio
 
@@ -216,7 +223,7 @@ Z-BlogPHP官方网址：http://www.zblogcn.com/
 $( "input[type=checkbox]" ).click(function() {
   if ( $( this ).prop( "checked" ) ) {
     $("#netx").prop("disabled",false);
-  } 
+  }
   else{
     $("#netx").prop("disabled",true);
   }
@@ -228,11 +235,11 @@ $( "input[type=checkbox]" ).click(function() {
 <?php
 }
 
-function Setup2(){
-  global $zbp;
-CheckServer();
+function Setup2() {
+	global $zbp;
+	CheckServer();
 
-?>
+	?>
 <dl>
   <dt></dt>
   <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
@@ -365,23 +372,23 @@ CheckServer();
 <?php
 }
 
-function Setup3(){
-  global $zbp;
-  global $CheckResult,$option;
-  CheckServer();
+function Setup3() {
+	global $zbp;
+	global $CheckResult, $option;
+	CheckServer();
 
-  $hasMysql=false;
+	$hasMysql = false;
 
-  $hasSqlite=false;
-  
-  $hasPgsql=false;
+	$hasSqlite = false;
 
-  $hasMysql=(boolean)((boolean)($CheckResult['mysql'][0]) or (boolean)($CheckResult['mysqli'][0]) or (boolean)($CheckResult['pdo_mysql'][0]));
+	$hasPgsql = false;
 
-  $hasSqlite=(boolean)((boolean)($CheckResult['sqlite3'][0]) or (boolean)($CheckResult['sqlite'][0]) or (boolean)($CheckResult['pdo_sqlite'][0]));
+	$hasMysql = (boolean) ((boolean) ($CheckResult['mysql'][0]) or (boolean) ($CheckResult['mysqli'][0]) or (boolean) ($CheckResult['pdo_mysql'][0]));
 
-  $hasPgsql=(boolean)((boolean)($CheckResult['pgsql'][0]) or (boolean)($CheckResult['pdo_pgsql'][0]));
-?>
+	$hasSqlite = (boolean) ((boolean) ($CheckResult['sqlite3'][0]) or (boolean) ($CheckResult['sqlite'][0]) or (boolean) ($CheckResult['pdo_sqlite'][0]));
+
+	$hasPgsql = (boolean) ((boolean) ($CheckResult['pgsql'][0]) or (boolean) ($CheckResult['pdo_pgsql'][0]));
+	?>
 <dl>
   <dt></dt>
   <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
@@ -396,26 +403,26 @@ function Setup3(){
       <div>
         <p><b><?php echo $zbp->lang['zb_install']['database'];?></b>
         <?php
-        if($hasMysql){
-        ?>
+if ($hasMysql) {
+		?>
           <label class="dbselect" id="mysql_radio">
           <input type="radio" name="fdbtype" value="mysql"/> MySQL</label>
         <?php
-          echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        }
-        ?>
+echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+	}
+	?>
         <?php
-        if($hasSqlite){
-        ?>
+if ($hasSqlite) {
+		?>
           <label class="dbselect" id="sqlite_radio">
           <input type="radio" name="fdbtype" value="sqlite"/> SQLite</label>
         <?php
-          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-        }
-        ?>
+echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+	}
+	?>
         </p>
       </div>
-      <?php if($hasMysql){?>
+      <?php if ($hasMysql) {?>
       <div class="dbdetail" id="mysql">
         <p><b><?php echo $zbp->lang['zb_install']['server'];?></b>
           <input type="text" name="dbmysql_server" id="dbmysql_server" value="<?php echo $option['ZC_MYSQL_SERVER'];?>" style="width:350px;" />
@@ -432,35 +439,36 @@ function Setup3(){
         <p><b><?php echo $zbp->lang['zb_install']['db_pre'];?></b>
           <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="<?php echo $option['ZC_MYSQL_PRE'];?>" style="width:350px;" />
         </p>
-<?php if($zbp->option['ZC_YUN_SITE']==''){?>
+<?php if ($zbp->option['ZC_YUN_SITE'] == '') {?>
         <p><b><?php echo $zbp->lang['zb_install']['db_engine'];?></b>
           <label><select id="dbengine" name="dbengine" style="width:360px;" >
 		  <option value="MyISAM"  selected="selected"/>MyISAM(<?php echo $zbp->lang['msg']['default'];?>)</option>
           <option value="InnoDB" >InnoDB</option>
 		  </select>
-        </p>		
-<?php } ?>
+        </p>
+<?php }?>
       <p><b><?php echo $zbp->lang['zb_install']['db_drive'];?></b>
-        <?php if($CheckResult['mysqli'][0]){?>
+        <?php if ($CheckResult['mysqli'][0]) {?>
         <label>
           <input value="mysqli" type="radio" name="dbtype"/> MySQLi</label>
-        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
-        <?php if($CheckResult['pdo_mysql'][0]){?>
+        <?php }?>&nbsp;&nbsp;&nbsp;&nbsp;
+        <?php if ($CheckResult['pdo_mysql'][0]) {?>
         <label>
           <input value="pdo_mysql" type="radio" name="dbtype"/> PDO_MySQL</label>
-        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
-<?php if ( version_compare ( PHP_VERSION ,  '5.5.0' ,  '<' )) { ?>
-        <?php if($CheckResult['mysql'][0]){?>
+        <?php }?>&nbsp;&nbsp;&nbsp;&nbsp;
+<?php if (version_compare(PHP_VERSION, '5.5.0', '<')) {?>
+        <?php if ($CheckResult['mysql'][0]) {?>
         <label>
           <input value="mysql" type="radio" name="dbtype"/> MySQL</label>
-        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
-<?php } ?>
+        <?php }?>&nbsp;&nbsp;&nbsp;&nbsp;
+<?php }?>
 		<br/><small><?php echo $zbp->lang['zb_install']['db_set_port'];?></small>
       </p>
       </div>
-      <?php } ?>
+      <?php }?>
 
-      <?php if($hasSqlite){?>
+      <?php if ($hasSqlite) {
+		?>
       <div class="dbdetail" id="sqlite">
         <p><b><?php echo $zbp->lang['zb_install']['db_name'];?></b>
           <input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo GetDbName()?>" readonly style="width:350px;" />
@@ -469,30 +477,32 @@ function Setup3(){
           <input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" />
         </p>
       <p><b><?php echo $zbp->lang['zb_install']['db_drive'];?></b>
-        <?php if($CheckResult['sqlite3'][0]){?>
+        <?php if ($CheckResult['sqlite3'][0]) {?>
         <label>
           <input value="sqlite3" type="radio" name="dbtype" /> SQLite3</label>
-        <?php 
-          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-          }
-        ?>
-        <?php if($CheckResult['pdo_sqlite'][0]){?>
+        <?php
+echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+		}
+		?>
+        <?php if ($CheckResult['pdo_sqlite'][0]) {
+			?>
         <label>
           <input value="pdo_sqlite" type="radio" name="dbtype" /> PDO_SQLite</label>
-        <?php 
-          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-          }
-        ?>
-        <?php if($CheckResult['sqlite'][0]){?>
+        <?php
+echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+		}
+		?>
+        <?php if ($CheckResult['sqlite'][0]) {
+			?>
         <label>
           <input value="sqlite" type="radio" name="dbtype" /> SQLite</label>
-        <?php 
-          echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-          }
-        ?>
+        <?php
+echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+		}
+		?>
       </p>
       </div>
-      <?php } ?>
+      <?php }?>
 
       <p class="title"><?php echo $zbp->lang['zb_install']['website_setting'];?></p>
       <p><b><?php echo $zbp->lang['zb_install']['blog_name'];?></b>
@@ -527,15 +537,13 @@ $("input[name='fdbtype']:visible").get(0).click();
 <?php
 }
 
-
-
 ################################################################################################################
 #4
-function Setup4(){
+function Setup4() {
 
-  global $zbp;
+	global $zbp;
 
-?>
+	?>
 <dl>
   <dt></dt>
   <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
@@ -549,68 +557,75 @@ function Setup4(){
     <div id="content">
       <?php
 
-$zbp->option['ZC_DATABASE_TYPE']=GetVars('dbtype','POST');
+	$zbp->option['ZC_DATABASE_TYPE'] = GetVars('dbtype', 'POST');
 
-$cts='';
+	$cts = '';
 
-switch ($zbp->option['ZC_DATABASE_TYPE']) {
-case 'mysql':
-case 'mysqli':
-case 'pdo_mysql':
-  $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/mysql.sql');
+	switch ($zbp->option['ZC_DATABASE_TYPE']) {
+		case 'mysql':
+		case 'mysqli':
+		case 'pdo_mysql':
+			$cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/mysql.sql');
 
-  if($zbp->option['ZC_YUN_SITE']!='')break;
-  
-  $zbp->option['ZC_MYSQL_SERVER']=GetVars('dbmysql_server','POST');
-  if(strpos($zbp->option['ZC_MYSQL_SERVER'],':')!==false){
-    $servers=explode(':',$zbp->option['ZC_MYSQL_SERVER']);
-	$zbp->option['ZC_MYSQL_SERVER']=trim($servers[0]);
-	$zbp->option['ZC_MYSQL_PORT']=(int)$servers[1];
-	if($zbp->option['ZC_MYSQL_PORT']==0)$zbp->option['ZC_MYSQL_PORT']=3306;
-	unset($servers);
-  }
-  $zbp->option['ZC_MYSQL_USERNAME']=trim(GetVars('dbmysql_username','POST'));
-  $zbp->option['ZC_MYSQL_PASSWORD']=trim(GetVars('dbmysql_password','POST'));
-  $zbp->option['ZC_MYSQL_NAME']=trim(str_replace(array('\'','"'),array('',''),GetVars('dbmysql_name','POST')));
-  $zbp->option['ZC_MYSQL_PRE']=trim(str_replace(array('\'','"'),array('',''),GetVars('dbmysql_pre','POST')));
-  if($zbp->option['ZC_MYSQL_PRE']=='')$zbp->option['ZC_MYSQL_PRE']=='zbp_';
+			if ($zbp->option['ZC_YUN_SITE'] != '') {
+				break;
+			}
 
-  $zbp->option['ZC_MYSQL_ENGINE']=GetVars('dbengine','POST');
-  $cts=str_replace('MyISAM',$zbp->option['ZC_MYSQL_ENGINE'],$cts);
+			$zbp->option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'POST');
+			if (strpos($zbp->option['ZC_MYSQL_SERVER'], ':') !== false) {
+				$servers = explode(':', $zbp->option['ZC_MYSQL_SERVER']);
+				$zbp->option['ZC_MYSQL_SERVER'] = trim($servers[0]);
+				$zbp->option['ZC_MYSQL_PORT'] = (int) $servers[1];
+				if ($zbp->option['ZC_MYSQL_PORT'] == 0) {
+					$zbp->option['ZC_MYSQL_PORT'] = 3306;
+				}
 
-  $zbp->db = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
-  if($zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'],$zbp->option['ZC_MYSQL_PORT'],$zbp->option['ZC_MYSQL_USERNAME'],$zbp->option['ZC_MYSQL_PASSWORD'],$zbp->option['ZC_MYSQL_NAME'])==true){
-    echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_MYSQL_NAME'] ."<br/>";
-  }
-  $zbp->db->dbpre=$zbp->option['ZC_MYSQL_PRE'];
-  $zbp->db->Close();
+				unset($servers);
+			}
+			$zbp->option['ZC_MYSQL_USERNAME'] = trim(GetVars('dbmysql_username', 'POST'));
+			$zbp->option['ZC_MYSQL_PASSWORD'] = trim(GetVars('dbmysql_password', 'POST'));
+			$zbp->option['ZC_MYSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_name', 'POST')));
+			$zbp->option['ZC_MYSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_pre', 'POST')));
+			if ($zbp->option['ZC_MYSQL_PRE'] == '') {
+				$zbp->option['ZC_MYSQL_PRE'] == 'zbp_';
+			}
 
-  break;
-case 'sqlite':
-  $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');
-  $cts=str_replace(' autoincrement','',$cts);
-  $zbp->option['ZC_SQLITE_NAME']=trim(GetVars('dbsqlite_name','POST'));
-  $zbp->option['ZC_SQLITE_PRE']=trim(GetVars('dbsqlite_pre','POST'));
-  break;
-case 'sqlite3':
-case 'pdo_sqlite':
-  $cts=file_get_contents($GLOBALS['blogpath'].'zb_system/defend/createtable/sqlite.sql');
-  $zbp->option['ZC_SQLITE_NAME']=trim(GetVars('dbsqlite_name','POST'));
-  $zbp->option['ZC_SQLITE_PRE']=trim(GetVars('dbsqlite_pre','POST'));
-  break;
-}
+			$zbp->option['ZC_MYSQL_ENGINE'] = GetVars('dbengine', 'POST');
+			$cts = str_replace('MyISAM', $zbp->option['ZC_MYSQL_ENGINE'], $cts);
 
-$zbp->OpenConnect();
+			$zbp->db = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
+			if ($zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'], $zbp->option['ZC_MYSQL_PORT'], $zbp->option['ZC_MYSQL_USERNAME'], $zbp->option['ZC_MYSQL_PASSWORD'], $zbp->option['ZC_MYSQL_NAME']) == true) {
+				echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_MYSQL_NAME'] . "<br/>";
+			}
+			$zbp->db->dbpre = $zbp->option['ZC_MYSQL_PRE'];
+			$zbp->db->Close();
 
-if(CreateTable($cts)){
-  InsertInfo();
-  SaveConfig();
-}
+			break;
+		case 'sqlite':
+			$cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
+			$cts = str_replace(' autoincrement', '', $cts);
+			$zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
+			$zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
+			break;
+		case 'sqlite3':
+		case 'pdo_sqlite':
+			$cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
+			$zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
+			$zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
+			break;
+	}
 
-$zbp->CloseConnect();
+	$zbp->OpenConnect();
 
-?>
-      
+	if (CreateTable($cts)) {
+		InsertInfo();
+		SaveConfig();
+	}
+
+	$zbp->CloseConnect();
+
+	?>
+
     </div>
     <div id="bottom">
       <input type="button" name="next" onClick="window.location.href='../'" id="netx" value="<?php echo $zbp->lang['zb_install']['ok'];?>" />
@@ -620,432 +635,393 @@ $zbp->CloseConnect();
 <?php
 }
 
-function Setup5(){
-  global $zbp;
-  header('Location: '.$zbp->host);
+function Setup5() {
+	global $zbp;
+	header('Location: ' . $zbp->host);
 
 }
 
+$CheckResult = null;
 
-$CheckResult=null;
+function CheckServer() {
+	global $zbp;
+	global $CheckResult;
 
-function CheckServer(){
-global $zbp;
-global $CheckResult;
+	$CheckResult = array(
+		//服务器
+		'server' => array(GetVars('SERVER_SOFTWARE', 'SERVER'), bingo),
+		'phpver' => array(PHP_VERSION, ''),
+		'zbppath' => array($zbp->path, bingo),
+		//组件
+		'gd2' => array('', ''),
+		'mysql' => array('', ''),
+		'mysqli' => array('', ''),
+		'pdo_mysql' => array('', ''),
+		'sqlite' => array('', ''),
+		'sqlite3' => array('', ''),
+		'pdo_sqlite' => array('', ''),
+		'pgsql' => array('', ''),
+		'pdo_pgsql' => array('', ''),
+		//权限
+		'zb_users' => array('', ''),
+		'cache' => array('', ''),
+		'data' => array('', ''),
+		'include' => array('', ''),
+		'theme' => array('', ''),
+		'plugin' => array('', ''),
+		'upload' => array('', ''),
+		'c_option.php' => array('', ''),
+		//函数
+		'curl' => array($zbp->lang['zb_install']['connect_appcenter'], ''),
+		'allow_url_fopen' => array($zbp->lang['zb_install']['connect_appcenter'], ''),
+		'gethostbyname' => array($zbp->lang['zb_install']['whois_dns'], ''),
 
-$CheckResult=array(
- //服务器 
-  'server' => array(GetVars('SERVER_SOFTWARE','SERVER'),bingo), 
-  'phpver' => array(PHP_VERSION,''), 
-  'zbppath' => array($zbp->path,bingo), 
- //组件
-  'gd2' => array('',''),
-  'mysql' => array('',''),
-  'mysqli' => array('',''),
-  'pdo_mysql' => array('',''),
-  'sqlite' => array('',''),
-  'sqlite3' => array('',''),
-  'pdo_sqlite' => array('',''),
-  'pgsql' => array('',''), 
-  'pdo_pgsql' => array('',''),
- //权限  
-  'zb_users'=>array('',''), 
-  'cache'=>array('',''), 
-  'data'=>array('',''), 
-  'include'=>array('',''), 
-  'theme'=>array('',''), 
-  'plugin'=>array('',''), 
-  'upload'=>array('',''), 
-  'c_option.php'=>array('',''), 
-  //函数
-  'curl'=>array($zbp->lang['zb_install']['connect_appcenter'],''), 
-  'allow_url_fopen'=>array($zbp->lang['zb_install']['connect_appcenter'],''),
-  'gethostbyname'=>array($zbp->lang['zb_install']['whois_dns'],''),
+	);
 
-);
-
-  if(version_compare(PHP_VERSION,'5.2.0')>=0){
-    $CheckResult['phpver'][1]=bingo;
-  }
-  else{
-    $CheckResult['phpver'][1]=error;
-  }
-
-
-  if( function_exists("gd_info") ){
-    $info = gd_info();
-    $CheckResult['gd2'][0]=$info['GD Version'];
-	$CheckResult['gd2'][1]=$CheckResult['gd2'][0]?bingo:error;
-  }
-  if( function_exists("mysql_get_client_info") ){
-    $CheckResult['mysql'][0]=strtok(mysql_get_client_info(),'$');
-	$CheckResult['mysql'][1]=$CheckResult['mysql'][0]?bingo:error;
-  }
-  if( function_exists("mysqli_get_client_info") ){
-    $CheckResult['mysqli'][0]=strtok(mysqli_get_client_info(),'$');
-	$CheckResult['mysqli'][1]=$CheckResult['mysqli'][0]?bingo:error;
-  }  
-  if( class_exists("PDO",false) ){
-	if (extension_loaded('pdo_mysql')){
-		//$pdo = new PDO( 'mysql:');
-		$v = ' ';//strtok($pdo->getAttribute(PDO::ATTR_CLIENT_VERSION),'$');
-		$pdo = null;
-		$CheckResult['pdo_mysql'][0]=$v;
-		$CheckResult['pdo_mysql'][1]=$CheckResult['pdo_mysql'][0]?bingo:error;
+	if (version_compare(PHP_VERSION, '5.2.0') >= 0) {
+		$CheckResult['phpver'][1] = bingo;
+	} else {
+		$CheckResult['phpver'][1] = error;
 	}
 
-	if (extension_loaded('pdo_sqlite')){
-		//$pdo = new PDO('sqlite::memory:');
-		$v = ' ';//$pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
-		$pdo = null;
-		$CheckResult['pdo_sqlite'][0]=$v;
-		$CheckResult['pdo_sqlite'][1]=$CheckResult['pdo_sqlite'][0]?bingo:error;
+	if (function_exists("gd_info")) {
+		$info = gd_info();
+		$CheckResult['gd2'][0] = $info['GD Version'];
+		$CheckResult['gd2'][1] = $CheckResult['gd2'][0] ? bingo : error;
+	}
+	if (function_exists("mysql_get_client_info")) {
+		$CheckResult['mysql'][0] = strtok(mysql_get_client_info(), '$');
+		$CheckResult['mysql'][1] = $CheckResult['mysql'][0] ? bingo : error;
+	}
+	if (function_exists("mysqli_get_client_info")) {
+		$CheckResult['mysqli'][0] = strtok(mysqli_get_client_info(), '$');
+		$CheckResult['mysqli'][1] = $CheckResult['mysqli'][0] ? bingo : error;
+	}
+	if (class_exists("PDO", false)) {
+		if (extension_loaded('pdo_mysql')) {
+			//$pdo = new PDO( 'mysql:');
+			$v = ' '; //strtok($pdo->getAttribute(PDO::ATTR_CLIENT_VERSION),'$');
+			$pdo = null;
+			$CheckResult['pdo_mysql'][0] = $v;
+			$CheckResult['pdo_mysql'][1] = $CheckResult['pdo_mysql'][0] ? bingo : error;
+		}
+
+		if (extension_loaded('pdo_sqlite')) {
+			//$pdo = new PDO('sqlite::memory:');
+			$v = ' '; //$pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
+			$pdo = null;
+			$CheckResult['pdo_sqlite'][0] = $v;
+			$CheckResult['pdo_sqlite'][1] = $CheckResult['pdo_sqlite'][0] ? bingo : error;
+		}
+
+		if (extension_loaded('pdo_pgsql')) {
+			$v = ' ';
+			$pdo = null;
+			$CheckResult['pdo_pgsql'][0] = $v;
+			$CheckResult['pdo_pgsql'][1] = $CheckResult['pdo_pgsql'][0] ? bingo : error;
+		}
+	}
+	if (defined("PGSQL_STATUS_STRING")) {
+		$CheckResult['pgsql'][0] = PGSQL_STATUS_STRING;
+		$CheckResult['pgsql'][1] = $CheckResult['pgsql'][0] ? bingo : error;
+	}
+	if (function_exists("sqlite_libversion")) {
+		$CheckResult['sqlite'][0] = sqlite_libversion();
+		$CheckResult['sqlite'][1] = $CheckResult['sqlite'][0] ? bingo : error;
+	}
+	if (class_exists('SQLite3', false)) {
+		$info = SQLite3::version();
+		$CheckResult['sqlite3'][0] = $info['versionString'];
+		$CheckResult['sqlite3'][1] = $CheckResult['sqlite3'][0] ? bingo : error;
 	}
 
-	if (extension_loaded('pdo_pgsql')){
-		$v = ' ';
-		$pdo = null;
-		$CheckResult['pdo_pgsql'][0]=$v;
-		$CheckResult['pdo_pgsql'][1]=$CheckResult['pdo_pgsql'][0]?bingo:error;
-	}	
-  }
-  if( defined("PGSQL_STATUS_STRING") ){
-    $CheckResult['pgsql'][0]=PGSQL_STATUS_STRING;
-	$CheckResult['pgsql'][1]=$CheckResult['pgsql'][0]?bingo:error;
-  }
-  if( function_exists("sqlite_libversion") ){
-    $CheckResult['sqlite'][0]=sqlite_libversion();
-	$CheckResult['sqlite'][1]=$CheckResult['sqlite'][0]?bingo:error;
-  }
-  if( class_exists('SQLite3',false) ){
-    $info = SQLite3::version();
-    $CheckResult['sqlite3'][0]=$info['versionString'];
-	$CheckResult['sqlite3'][1]=$CheckResult['sqlite3'][0]?bingo:error;
-  }
+	getRightsAndExport('', 'zb_users');
+	getRightsAndExport('zb_users/', 'cache');
+	getRightsAndExport('zb_users/', 'data');
+	getRightsAndExport('zb_users/', 'theme');
+	getRightsAndExport('zb_users/', 'plugin');
+	getRightsAndExport('zb_users/', 'upload');
+	//getRightsAndExport('zb_users/','c_option.php');
 
-  getRightsAndExport('','zb_users');
-  getRightsAndExport('zb_users/','cache');
-  getRightsAndExport('zb_users/','data');
-  getRightsAndExport('zb_users/','theme');
-  getRightsAndExport('zb_users/','plugin');
-  getRightsAndExport('zb_users/','upload');
-  //getRightsAndExport('zb_users/','c_option.php');
-
-  $CheckResult['curl'][1]=function_exists('curl_init')?bingo:error; 
-  $CheckResult['allow_url_fopen'][1]=(bool)ini_get('allow_url_fopen')?bingo:error;
-  $CheckResult['gethostbyname'][1]=function_exists('gethostbyname')?bingo:error;
-  $CheckResult['simplexml_import_dom'][1]=function_exists('simplexml_import_dom')?bingo:error;
+	$CheckResult['curl'][1] = function_exists('curl_init') ? bingo : error;
+	$CheckResult['allow_url_fopen'][1] = (bool) ini_get('allow_url_fopen') ? bingo : error;
+	$CheckResult['gethostbyname'][1] = function_exists('gethostbyname') ? bingo : error;
+	$CheckResult['simplexml_import_dom'][1] = function_exists('simplexml_import_dom') ? bingo : error;
 
 }
 
-function getRightsAndExport($folderparent,$folder){
-  global $zbp;
-  $s=GetFilePerms($zbp->path.$folderparent.$folder);
-  $o=GetFilePermsOct($zbp->path.$folderparent.$folder);
-  $GLOBALS['CheckResult'][$folder][0]=$s . ' | ' . $o;
+function getRightsAndExport($folderparent, $folder) {
+	global $zbp;
+	$s = GetFilePerms($zbp->path . $folderparent . $folder);
+	$o = GetFilePermsOct($zbp->path . $folderparent . $folder);
+	$GLOBALS['CheckResult'][$folder][0] = $s . ' | ' . $o;
 
-  if(substr($s,0,1)=='-'){
-    $GLOBALS['CheckResult'][$folder][1]=(substr($s,1,1)=='r'&&substr($s,2,1)=='w'&&substr($s,4,1)=='r'&&substr($s,7,1)=='r')?bingo:error;  
-  }else{
-    $GLOBALS['CheckResult'][$folder][1]=(substr($s,1,1)=='r'&&substr($s,2,1)=='w'&&substr($s,3,1)=='x'&&substr($s,4,1)=='r'&&substr($s,7,1)=='r'&&substr($s,6,1)=='x'&&substr($s,9,1)=='x')?bingo:error;
-  }
+	if (substr($s, 0, 1) == '-') {
+		$GLOBALS['CheckResult'][$folder][1] = (substr($s, 1, 1) == 'r' && substr($s, 2, 1) == 'w' && substr($s, 4, 1) == 'r' && substr($s, 7, 1) == 'r') ? bingo : error;
+	} else {
+		$GLOBALS['CheckResult'][$folder][1] = (substr($s, 1, 1) == 'r' && substr($s, 2, 1) == 'w' && substr($s, 3, 1) == 'x' && substr($s, 4, 1) == 'r' && substr($s, 7, 1) == 'r' && substr($s, 6, 1) == 'x' && substr($s, 9, 1) == 'x') ? bingo : error;
+	}
 }
 
-function CreateTable($sql){
-  global $zbp;
+function CreateTable($sql) {
+	global $zbp;
 
-  if($zbp->db->ExistTable($GLOBALS['table']['Config'])==true){
-    echo $zbp->lang['zb_install']['exist_table_in_db'];
-	return false;
-  }
-  
-  $sql=$zbp->db->sql->ReplacePre($sql);
-  $zbp->db->QueryMulit($sql);
+	if ($zbp->db->ExistTable($GLOBALS['table']['Config']) == true) {
+		echo $zbp->lang['zb_install']['exist_table_in_db'];
+		return false;
+	}
 
-  echo $zbp->lang['zb_install']['create_table'] . "<br/>";
-  return true;
+	$sql = $zbp->db->sql->ReplacePre($sql);
+	$zbp->db->QueryMulit($sql);
+
+	echo $zbp->lang['zb_install']['create_table'] . "<br/>";
+	return true;
 }
 
-function InsertInfo(){
-  global $zbp;
+function InsertInfo() {
+	global $zbp;
 
-  $zbp->guid = GetGuid();
+	$zbp->guid = GetGuid();
 
-  $mem = new Member();
-  $guid=GetGuid();
+	$mem = new Member();
+	$guid = GetGuid();
 
-  $mem->Guid=$guid;
-  $mem->Level=1;
-  $mem->Name=GetVars('username','POST');
-  $mem->Password=Member::GetPassWordByGuid(GetVars('password','POST'),$guid);
-  $mem->IP=GetGuestIP();
-  $mem->PostTime=time();
+	$mem->Guid = $guid;
+	$mem->Level = 1;
+	$mem->Name = GetVars('username', 'POST');
+	$mem->Password = Member::GetPassWordByGuid(GetVars('password', 'POST'), $guid);
+	$mem->IP = GetGuestIP();
+	$mem->PostTime = time();
 
-  $mem->Save();
+	$mem->Save();
 
+	$cate = new Category();
+	$cate->Name = $zbp->lang['msg']['uncategory'];
+	$cate->Alias = 'uncategorized';
+	$cate->Save();
 
-  $cate = new Category();
-  $cate->Name=$zbp->lang['msg']['uncategory'];
-  $cate->Alias='uncategorized';
-  $cate->Save();
-  
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['module_navbar'];
-  $t->FileName="navbar";
-  $t->Source="system";
-  $t->SidebarID=0;
-  $t->Content='<li id="nvabar-item-index"><a href="{#ZC_BLOG_HOST#}">'.$zbp->lang['zb_install']['index'].'</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">'.$zbp->lang['zb_install']['guestbook'].'</a></li>';
-  $t->HtmlID="divNavBar";
-  $t->Type="ul";
-  $t->Save();
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['module_navbar'];
+	$t->FileName = "navbar";
+	$t->Source = "system";
+	$t->SidebarID = 0;
+	$t->Content = '<li id="nvabar-item-index"><a href="{#ZC_BLOG_HOST#}">' . $zbp->lang['zb_install']['index'] . '</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">' . $zbp->lang['zb_install']['guestbook'] . '</a></li>';
+	$t->HtmlID = "divNavBar";
+	$t->Type = "ul";
+	$t->Save();
 
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['calendar'];
+	$t->FileName = "calendar";
+	$t->Source = "system";
+	$t->SidebarID = 1;
+	$t->Content = "";
+	$t->HtmlID = "divCalendar";
+	$t->Type = "div";
+	$t->IsHideTitle = true;
+	$t->Save();
 
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['calendar'];
-  $t->FileName="calendar";
-  $t->Source="system";
-  $t->SidebarID=1;
-  $t->Content="";
-  $t->HtmlID="divCalendar";
-  $t->Type="div";
-  $t->IsHideTitle=true;
-  $t->Save();
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['control_panel'];
+	$t->FileName = "controlpanel";
+	$t->Source = "system";
+	$t->SidebarID = 1;
+	$t->Content = '<span class="cp-hello">' . $zbp->lang['zb_install']['wellcome'] . '</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">' . $zbp->lang['msg']['admin_login'] . '</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">' . $zbp->lang['msg']['view_rights'] . '</a></span>';
+	$t->HtmlID = "divContorPanel";
+	$t->Type = "div";
+	$t->Save();
 
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['module_catalog'];
+	$t->FileName = "catalog";
+	$t->Source = "system";
+	$t->SidebarID = 1;
+	$t->Content = "";
+	$t->HtmlID = "divCatalog";
+	$t->Type = "ul";
+	$t->Save();
 
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['search'];
+	$t->FileName = "searchpanel";
+	$t->Source = "system";
+	$t->SidebarID = 1;
+	$t->Content = '<form name="search" method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=search"><input type="text" name="q" size="11" /> <input type="submit" value="' . $zbp->lang['msg']['search'] . '" /></form>';
+	$t->HtmlID = "divSearchPanel";
+	$t->Type = "div";
+	$t->Save();
 
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['module_comments'];
+	$t->FileName = "comments";
+	$t->Source = "system";
+	$t->SidebarID = 1;
+	$t->Content = "";
+	$t->HtmlID = "divComments";
+	$t->Type = "ul";
+	$t->Save();
 
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['control_panel'];
-  $t->FileName="controlpanel";
-  $t->Source="system";
-  $t->SidebarID=1;
-  $t->Content='<span class="cp-hello">'.$zbp->lang['zb_install']['wellcome'].'</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">'.$zbp->lang['msg']['admin_login'].'</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">'.$zbp->lang['msg']['view_rights'].'</a></span>';
-  $t->HtmlID="divContorPanel";
-  $t->Type="div";
-  $t->Save();
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['module_archives'];
+	$t->FileName = "archives";
+	$t->Source = "system";
+	$t->SidebarID = 1;
+	$t->Content = "";
+	$t->HtmlID = "divArchives";
+	$t->Type = "ul";
+	$t->Save();
 
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['module_statistics'];
+	$t->FileName = "statistics";
+	$t->Source = "system";
+	$t->SidebarID = 0;
+	$t->Content = "";
+	$t->HtmlID = "divStatistics";
+	$t->Type = "ul";
+	$t->Save();
 
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['module_favorite'];
+	$t->FileName = "favorite";
+	$t->Source = "system";
+	$t->SidebarID = 1;
+	$t->Content = '<li><a href="http://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li><li><a href="http://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="http://weibo.com/zblogcn" target="_blank">Z-Blog新浪官微</a></li><li><a href="http://t.qq.com/zblogcn" target="_blank">Z-Blog腾讯官微</a></li>';
+	$t->HtmlID = "divFavorites";
+	$t->Type = "ul";
+	$t->Save();
 
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['module_link'];
+	$t->FileName = "link";
+	$t->Source = "system";
+	$t->SidebarID = 1;
+	$t->Content = '<li><a href="http://www.dbshost.cn/" target="_blank" title="独立博客服务 Z-Blog官方主机">DBS主机</a></li>';
+	$t->HtmlID = "divLinkage";
+	$t->Type = "ul";
+	$t->Save();
 
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['module_catalog'];
-  $t->FileName="catalog";
-  $t->Source="system";
-  $t->SidebarID=1;
-  $t->Content="";
-  $t->HtmlID="divCatalog";
-  $t->Type="ul";
-  $t->Save();
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['module_misc'];
+	$t->FileName = "misc";
+	$t->Source = "system";
+	$t->SidebarID = 1;
+	$t->Content = '<li><a href="http://www.zblogcn.com/" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/zblog.gif" height="31" width="88" alt="RainbowSoft Studio Z-Blog" /></a></li><li><a href="{#ZC_BLOG_HOST#}feed.php" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/rss.png" height="31" width="88" alt="订阅本站的 RSS 2.0 新闻聚合" /></a></li>';
+	$t->HtmlID = "divMisc";
+	$t->Type = "ul";
+	$t->IsHideTitle = true;
+	$t->Save();
 
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['module_authors'];
+	$t->FileName = "authors";
+	$t->Source = "system";
+	$t->SidebarID = 0;
+	$t->Content = "";
+	$t->HtmlID = "divAuthors";
+	$t->Type = "ul";
+	$t->Save();
 
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['search'];
-  $t->FileName="searchpanel";
-  $t->Source="system";
-  $t->SidebarID=1;
-  $t->Content='<form name="search" method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=search"><input type="text" name="q" size="11" /> <input type="submit" value="'.$zbp->lang['msg']['search'].'" /></form>';
-  $t->HtmlID="divSearchPanel";
-  $t->Type="div";
-  $t->Save();
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['module_previous'];
+	$t->FileName = "previous";
+	$t->Source = "system";
+	$t->SidebarID = 0;
+	$t->Content = "";
+	$t->HtmlID = "divPrevious";
+	$t->Type = "ul";
+	$t->Save();
 
+	$t = new Module();
+	$t->Name = $zbp->lang['msg']['module_tags'];
+	$t->FileName = "tags";
+	$t->Source = "system";
+	$t->SidebarID = 0;
+	$t->Content = "";
+	$t->HtmlID = "divTags";
+	$t->Type = "ul";
+	$t->Save();
 
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['module_comments'];
-  $t->FileName="comments";
-  $t->Source="system";
-  $t->SidebarID=1;
-  $t->Content="";
-  $t->HtmlID="divComments";
-  $t->Type="ul";
-  $t->Save();
+	$a = new Post();
+	$a->CateID = 1;
+	$a->AuthorID = 1;
+	$a->Tag = '';
+	$a->Status = ZC_POST_STATUS_PUBLIC;
+	$a->Type = ZC_POST_TYPE_ARTICLE;
+	$a->Alias = '';
+	$a->IsTop = false;
+	$a->IsLock = false;
+	$a->Title = $zbp->lang['zb_install']['hello_zblog'];
+	$a->Intro = $zbp->lang['zb_install']['hello_zblog_content'];
+	$a->Content = $zbp->lang['zb_install']['hello_zblog_content'];
+	$a->IP = GetGuestIP();
+	$a->PostTime = time();
+	$a->CommNums = 0;
+	$a->ViewNums = 0;
+	$a->Template = '';
+	$a->Meta = '';
+	$a->Save();
 
+	$a = new Post();
+	$a->CateID = 0;
+	$a->AuthorID = 1;
+	$a->Tag = '';
+	$a->Status = ZC_POST_STATUS_PUBLIC;
+	$a->Type = ZC_POST_TYPE_PAGE;
+	$a->Alias = '';
+	$a->IsTop = false;
+	$a->IsLock = false;
+	$a->Title = $zbp->lang['zb_install']['guestbook'];
+	$a->Intro = '';
+	$a->Content = $zbp->lang['zb_install']['guestbook_content'];
+	$a->IP = GetGuestIP();
+	$a->PostTime = time();
+	$a->CommNums = 0;
+	$a->ViewNums = 0;
+	$a->Template = '';
+	$a->Meta = '';
+	$a->Save();
 
-
-
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['module_archives'];
-  $t->FileName="archives";
-  $t->Source="system";
-  $t->SidebarID=1;
-  $t->Content="";
-  $t->HtmlID="divArchives";
-  $t->Type="ul";
-  $t->Save();
-
-
-
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['module_statistics'];
-  $t->FileName="statistics";
-  $t->Source="system";
-  $t->SidebarID=0;
-  $t->Content="";
-  $t->HtmlID="divStatistics";
-  $t->Type="ul";
-  $t->Save();
-
-
-
-
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['module_favorite'];
-  $t->FileName="favorite";
-  $t->Source="system";
-  $t->SidebarID=1;
-  $t->Content='<li><a href="http://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li><li><a href="http://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="http://weibo.com/zblogcn" target="_blank">Z-Blog新浪官微</a></li><li><a href="http://t.qq.com/zblogcn" target="_blank">Z-Blog腾讯官微</a></li>';
-  $t->HtmlID="divFavorites";
-  $t->Type="ul";
-  $t->Save();
-
-
-
-
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['module_link'];
-  $t->FileName="link";
-  $t->Source="system";
-  $t->SidebarID=1;
-  $t->Content='<li><a href="http://www.dbshost.cn/" target="_blank" title="独立博客服务 Z-Blog官方主机">DBS主机</a></li>';
-  $t->HtmlID="divLinkage";
-  $t->Type="ul";
-  $t->Save();
-
-
-
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['module_misc'];
-  $t->FileName="misc";
-  $t->Source="system";
-  $t->SidebarID=1;
-  $t->Content='<li><a href="http://www.zblogcn.com/" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/zblog.gif" height="31" width="88" alt="RainbowSoft Studio Z-Blog" /></a></li><li><a href="{#ZC_BLOG_HOST#}feed.php" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/rss.png" height="31" width="88" alt="订阅本站的 RSS 2.0 新闻聚合" /></a></li>';
-  $t->HtmlID="divMisc";
-  $t->Type="ul";
-  $t->IsHideTitle=true;
-  $t->Save();
-
-
-
-
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['module_authors'];
-  $t->FileName="authors";
-  $t->Source="system";
-  $t->SidebarID=0;
-  $t->Content="";
-  $t->HtmlID="divAuthors";
-  $t->Type="ul";
-  $t->Save();
-
-
-
-
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['module_previous'];
-  $t->FileName="previous";
-  $t->Source="system";
-  $t->SidebarID=0;
-  $t->Content="";
-  $t->HtmlID="divPrevious";
-  $t->Type="ul";
-  $t->Save();
-
-
-
-  $t=new Module();
-  $t->Name=$zbp->lang['msg']['module_tags'];
-  $t->FileName="tags";
-  $t->Source="system";
-  $t->SidebarID=0;
-  $t->Content="";
-  $t->HtmlID="divTags";
-  $t->Type="ul";
-  $t->Save();
-
-
-
-  $a=new Post();
-  $a->CateID=1;
-  $a->AuthorID=1;
-  $a->Tag='';
-  $a->Status=ZC_POST_STATUS_PUBLIC;
-  $a->Type=ZC_POST_TYPE_ARTICLE;
-  $a->Alias='';
-  $a->IsTop=false;
-  $a->IsLock=false;
-  $a->Title=$zbp->lang['zb_install']['hello_zblog'];
-  $a->Intro=$zbp->lang['zb_install']['hello_zblog_content'];
-  $a->Content=$zbp->lang['zb_install']['hello_zblog_content'];
-  $a->IP=GetGuestIP();
-  $a->PostTime=time();
-  $a->CommNums=0;
-  $a->ViewNums=0;
-  $a->Template='';
-  $a->Meta='';
-  $a->Save();
-
-
-  $a=new Post();
-  $a->CateID=0;
-  $a->AuthorID=1;
-  $a->Tag='';
-  $a->Status=ZC_POST_STATUS_PUBLIC;
-  $a->Type=ZC_POST_TYPE_PAGE;
-  $a->Alias='';
-  $a->IsTop=false;
-  $a->IsLock=false;
-  $a->Title=$zbp->lang['zb_install']['guestbook'];
-  $a->Intro='';
-  $a->Content=$zbp->lang['zb_install']['guestbook_content'];
-  $a->IP=GetGuestIP();
-  $a->PostTime=time();
-  $a->CommNums=0;
-  $a->ViewNums=0;
-  $a->Template='';
-  $a->Meta='';
-  $a->Save();  
-
-  echo $zbp->lang['zb_install']['create_datainfo'] . "<br/>";
-  
-}
-
-
-function SaveConfig(){
-  global $zbp;
-
-  $zbp->option['ZC_BLOG_VERSION']=ZC_BLOG_VERSION;
-  $zbp->option['ZC_BLOG_NAME']=GetVars('blogtitle','POST');
-  $zbp->option['ZC_USING_PLUGIN_LIST']='AppCentre|UEditor';  
-  $zbp->option['ZC_SIDEBAR_ORDER'] ='calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc';
-  $zbp->option['ZC_SIDEBAR2_ORDER']='';
-  $zbp->option['ZC_SIDEBAR3_ORDER']='';
-  $zbp->option['ZC_SIDEBAR4_ORDER']='';
-  $zbp->option['ZC_SIDEBAR5_ORDER']='';
-  $zbp->option['ZC_BLOG_THEME']='WhitePage';  
-  $zbp->option['ZC_DEBUG_MODE']=true;
-  $zbp->option['ZC_LAST_VERSION']=$zbp->version;
-  $zbp->SaveOption();
-  //$zbp->BuildTemplate();
-  
-  $zbp->Config('cache')->templates_md5='';
-  $zbp->SaveCache();
-  
-  $zbp->Config('AppCentre')->enabledcheck=1;
-  $zbp->Config('AppCentre')->checkbeta=0;
-  $zbp->Config('AppCentre')->enabledevelop=0;
-  $zbp->Config('AppCentre')->enablegzipapp=0;
-  $zbp->SaveConfig('AppCentre');
-
-  $zbp->Config('WhitePage')->custom_pagetype='5';
-  $zbp->Config('WhitePage')->custom_pagewidth='1200';
-  $zbp->Config('WhitePage')->custom_headtitle='center';
-  $zbp->Config('WhitePage')->custom_bgcolor='6699ff';
-  $zbp->Config('WhitePage')->text_indent='0';
-  $zbp->SaveConfig('WhitePage');
-
-  echo $zbp->lang['zb_install']['save_option'] . "<br/>";
+	echo $zbp->lang['zb_install']['create_datainfo'] . "<br/>";
 
 }
 
+function SaveConfig() {
+	global $zbp;
+
+	$zbp->option['ZC_BLOG_VERSION'] = ZC_BLOG_VERSION;
+	$zbp->option['ZC_BLOG_NAME'] = GetVars('blogtitle', 'POST');
+	$zbp->option['ZC_USING_PLUGIN_LIST'] = 'AppCentre|UEditor';
+	$zbp->option['ZC_SIDEBAR_ORDER'] = 'calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc';
+	$zbp->option['ZC_SIDEBAR2_ORDER'] = '';
+	$zbp->option['ZC_SIDEBAR3_ORDER'] = '';
+	$zbp->option['ZC_SIDEBAR4_ORDER'] = '';
+	$zbp->option['ZC_SIDEBAR5_ORDER'] = '';
+	$zbp->option['ZC_BLOG_THEME'] = 'WhitePage';
+	$zbp->option['ZC_DEBUG_MODE'] = true;
+	$zbp->option['ZC_LAST_VERSION'] = $zbp->version;
+	$zbp->SaveOption();
+	//$zbp->BuildTemplate();
+
+	$zbp->Config('cache')->templates_md5 = '';
+	$zbp->SaveCache();
+
+	$zbp->Config('AppCentre')->enabledcheck = 1;
+	$zbp->Config('AppCentre')->checkbeta = 0;
+	$zbp->Config('AppCentre')->enabledevelop = 0;
+	$zbp->Config('AppCentre')->enablegzipapp = 0;
+	$zbp->SaveConfig('AppCentre');
+
+	$zbp->Config('WhitePage')->custom_pagetype = '5';
+	$zbp->Config('WhitePage')->custom_pagewidth = '1200';
+	$zbp->Config('WhitePage')->custom_headtitle = 'center';
+	$zbp->Config('WhitePage')->custom_bgcolor = '6699ff';
+	$zbp->Config('WhitePage')->text_indent = '0';
+	$zbp->SaveConfig('WhitePage');
+
+	echo $zbp->lang['zb_install']['save_option'] . "<br/>";
+
+}
 
 RunTime();
 ?>
