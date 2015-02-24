@@ -1,28 +1,28 @@
-1.¼ÓÔØÖ¸Áî
-Ç¶ÈëÄ£°å{template:hearder}
+1.åŠ è½½æŒ‡ä»¤
+åµŒå…¥æ¨¡æ¿{template:hearder}
 
-Ç¶ÈëÄ£¿éÄÚÈÝ{module:xxxxxx}
-xxxxxxÎªÄ£¿éµÄfilename
+åµŒå…¥æ¨¡å—å†…å®¹{module:xxxxxx}
+xxxxxxä¸ºæ¨¡å—çš„filename
 
-2.·ÃÎÊ²¢Êä³ö±äÁ¿»ò¶¨Òå±äÁ¿
+2.è®¿é—®å¹¶è¾“å‡ºå˜é‡æˆ–å®šä¹‰å˜é‡
 
-Êä³ö±äÁ¿
+è¾“å‡ºå˜é‡
 {$article.Name}
 
 
-¶¨Òå±äÁ¿²¢¸³Öµ(Ö»¶¨Òå²»Êä³ö)
+å®šä¹‰å˜é‡å¹¶èµ‹å€¼(åªå®šä¹‰ä¸è¾“å‡º)
 {$now=time()}
 
 {$abc="my name"}
 
 
-3.ÒýÓÃÏµÍ³³£Á¿
-ÈçÕ¾µãÓòÃû£º
+3.å¼•ç”¨ç³»ç»Ÿå¸¸é‡
+å¦‚ç«™ç‚¹åŸŸåï¼š
 {#ZC_BLOG_HOST#}
-ÕâÊÇzblog´«Í³µÄ³£Á¿ÐÍ,ºÍasp°æÓï·¨»ù±¾Ò»ÖÂ
+è¿™æ˜¯zblogä¼ ç»Ÿçš„å¸¸é‡åž‹,å’Œaspç‰ˆè¯­æ³•åŸºæœ¬ä¸€è‡´
 
 
-4.ifÅÐ¶ÏÓï¾ä
+4.ifåˆ¤æ–­è¯­å¥
 {if $i==1}
 
 {elseif $i==2}
@@ -32,7 +32,7 @@ xxxxxxÎªÄ£¿éµÄfilename
 {/if}
 
 
-5.for±éÀúÓï¾ä
+5.foréåŽ†è¯­å¥
 
 {foreach $articles as $article}
   <p>{$article.Title}</p>
@@ -40,27 +40,27 @@ xxxxxxÎªÄ£¿éµÄfilename
 
 
 {for $i  =  1 ;  $i  <=  10 ;  $i ++}
-  <p>ÕâÊÇµÚ{$i}´Î£¿</p>
+  <p>è¿™æ˜¯ç¬¬{$i}æ¬¡ï¼Ÿ</p>
 {/for}
 
 
-6.º¯Êýµ÷ÓÃ
+6.å‡½æ•°è°ƒç”¨
 
-¾ÙÀý£¬Ö±½ÓÊä³öGetList()µÄ·µ»ØÖµ
+ä¸¾ä¾‹ï¼Œç›´æŽ¥è¾“å‡ºGetList()çš„è¿”å›žå€¼
 {GetList()}
 
-Ö±½ÓÊä³öµ±Ç°Ê±¼ä
+ç›´æŽ¥è¾“å‡ºå½“å‰æ—¶é—´
 {time()}
 
 
-7.×¢ÊÍ
-{* ÕâÀïÊÇ×¢ÊÍ *}
+7.æ³¨é‡Š
+{* è¿™é‡Œæ˜¯æ³¨é‡Š *}
 
 
-8.Ö±½ÓÐ´PHP
+8.ç›´æŽ¥å†™PHP
 {php}
   global $actions;
   print_r($actions);
   echo '12345';
 {/php}
-×¢Òâ£ºzbpÄ£°å²»ÄÜÖ±½ÓÊ¹ÓÃ<?php ?>ºÍ<? ?>±êÇ©£¬Ö»ÄÜÓÃ{php}°üº¬php´úÂë¡£ 
+æ³¨æ„ï¼šzbpæ¨¡æ¿ä¸èƒ½ç›´æŽ¥ä½¿ç”¨<?php ?>å’Œ<? ?>æ ‡ç­¾ï¼Œåªèƒ½ç”¨{php}åŒ…å«phpä»£ç ã€‚ 
