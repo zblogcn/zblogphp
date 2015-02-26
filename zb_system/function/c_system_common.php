@@ -16,14 +16,16 @@ define('IS_DARWIN', (strtoupper(PHP_OS) === 'DARWIN'));
 define('IS_CYGWIN', (strtoupper(substr(PHP_OS, 0, 6)) === 'CYGWIN'));
 define('IS_BSD', in_array(strtoupper(PHP_OS), array('NETBSD', 'OPENBSD', 'FREEBSD')));
 
+define('IS_X64', (PHP_INT_SIZE === 8));
+
 /**
  * Web Server
  */
-define('IS_APACHE', preg_match("/apache/i", $_SERVER['SERVER_SOFTWARE']));
-define('IS_IIS', preg_match("/microsoft-iis/i", $_SERVER['SERVER_SOFTWARE']));
-define('IS_NGINX', preg_match("/nginx/i", $_SERVER['SERVER_SOFTWARE']));
-define('IS_LIGHTTPD', preg_match("/lighttpd/i", $_SERVER['SERVER_SOFTWARE']));
-define('IS_KANGLE', preg_match("/kangle/i", $_SERVER['SERVER_SOFTWARE']));
+define('IS_APACHE', stripos($_SERVER['SERVER_SOFTWARE'] , 'apache') !== false);
+define('IS_IIS', stripos($_SERVER['SERVER_SOFTWARE'] , 'microsoft-iis') !== false);
+define('IS_NGINX', stripos($_SERVER['SERVER_SOFTWARE'] , 'nginx') !== false);
+define('IS_LIGHTTPD', stripos($_SERVER['SERVER_SOFTWARE'] , 'lighttpd') !== false);
+define('IS_KANGLE', stripos($_SERVER['SERVER_SOFTWARE'] , 'kangle') !== false);
 
 /**
  * PHP
@@ -132,7 +134,8 @@ function GetEnvironment() {
 	GetValueInArray(
 		explode(' ', str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))), 0
 	) . '; ' .
-	'PHP ' . phpversion() . '; ' . $zbp->option['ZC_DATABASE_TYPE'] . '; ' . $ajax;
+	'PHP ' . phpversion() . (IS_X64?' x64':'') . '; ' . 
+	$zbp->option['ZC_DATABASE_TYPE'] . '; ' . $ajax;
 	return $system_environment;
 }
 

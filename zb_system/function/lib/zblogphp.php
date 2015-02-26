@@ -184,6 +184,7 @@ class ZBlogPHP {
 	private $issession = false; #是否使用session
 	public $ismanage = false; #是否加载管理模式
 	private $isgzip = false; #是否开启gzip
+	public $ishttps=false; #是否HTTPS
 
 	/**
 	 * @var null 当前模板
@@ -455,6 +456,9 @@ class ZBlogPHP {
 			$this->cookiespath = substr($this->host, strpos($this->host, '/', 8));
 		} else {
 			$this->option['ZC_BLOG_HOST'] = $this->host;
+		}
+		if(substr($this->host,0,8)=='https://') {
+			$this->ishttps=true;
 		}
 
 		$this->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';

@@ -419,9 +419,7 @@ AutoloadClass('Config');
 $zbp = ZBlogPHP::GetInstance();
 $zbp->Initialize();
 
-/**
- *已激活应用列表
- */
+#已激活应用列表
 $activeapps = array();
 
 #加载主题内置的插件
