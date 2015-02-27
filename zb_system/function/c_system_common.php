@@ -9,28 +9,105 @@
 /**
  * Operation System
  */
-define('IS_WINDOWS', in_array(strtoupper(PHP_OS), array('WINNT', 'WIN32', 'WINDOWS')));
-define('IS_UNIX', (strtoupper(PHP_OS) === 'UNIX'));
-define('IS_LINUX', (strtoupper(PHP_OS) === 'LINUX'));
-define('IS_DARWIN', (strtoupper(PHP_OS) === 'DARWIN'));
-define('IS_CYGWIN', (strtoupper(substr(PHP_OS, 0, 6)) === 'CYGWIN'));
-define('IS_BSD', in_array(strtoupper(PHP_OS), array('NETBSD', 'OPENBSD', 'FREEBSD')));
+define('OS_UNKNOWN', 0);
+define('OS_WINDOWS', 1);
+define('OS_UNIX', 2);
+define('OS_LINUX', 3);
+define('OS_DARWIN', 4);
+define('OS_CYGWIN', 5);
+define('OS_BSD', 6);
+define('PHP_SYSTEM', GetOS());
+// Compatibility
+define('IS_WINDOWS', PHP_SYSTEM === OS_WINDOWS);
+define('IS_UNIX', PHP_SYSTEM === OS_UNIX);
+define('IS_LINUX', PHP_SYSTEM === OS_LINUX);
+define('IS_DARWIN', PHP_SYSTEM === OS_DARWIN);
+define('IS_CYGWIN', PHP_SYSTEM === OS_CYGWIN);
+define('IS_BSD', PHP_SYSTEM === OS_BSD);
 
 define('IS_X64', (PHP_INT_SIZE === 8));
 
 /**
  * Web Server
  */
-define('IS_APACHE', stripos($_SERVER['SERVER_SOFTWARE'] , 'apache') !== false);
-define('IS_IIS', stripos($_SERVER['SERVER_SOFTWARE'] , 'microsoft-iis') !== false);
-define('IS_NGINX', stripos($_SERVER['SERVER_SOFTWARE'] , 'nginx') !== false);
-define('IS_LIGHTTPD', stripos($_SERVER['SERVER_SOFTWARE'] , 'lighttpd') !== false);
-define('IS_KANGLE', stripos($_SERVER['SERVER_SOFTWARE'] , 'kangle') !== false);
+define('SERVER_UNKNOWN', 0);
+define('SERVER_APACHE', 1);
+define('SERVER_IIS', 2);
+define('SERVER_NGINX', 3);
+define('SERVER_LIGHTTPD', 4);
+define('SERVER_KANGLE', 5);
+define('PHP_SERVER', GetWebServer());
+// Compatibility
+define('IS_APACHE', PHP_SERVER === SERVER_APACHE);
+define('IS_IIS', PHP_SERVER === SERVER_IIS);
+define('IS_NGINX', PHP_SERVER === SERVER_NGINX);
+define('IS_LIGHTTPD', PHP_SERVER === SERVER_LIGHTTPD);
+define('IS_KANGLE', PHP_SERVER === PHP_SERVER);
+/**
+ * PHP Engine
+ */
+define('PHP_ENGINE_PHP', 1);
+define('PHP_ENGINE_HHVM', 2);
+define('PHP_ENGINE', GetPHPEngine());
+// Compatibility
+define('IS_HHVM', PHP_ENGINE === PHP_ENGINE_HHVM);
 
 /**
- * PHP
+ * 获取服务器
+ * @return int
  */
-define('IS_HHVM', defined('HHVM_VERSION'));
+function GetWebServer() {
+	if (!isset($_SERVER['SERVER_SOFTWARE'])) {
+		return SERVER_UNKNOWN;
+	}
+	$webServer = strtolower($_SERVER['SERVER_SOFTWARE']);
+	if (strpos($webServer, 'apache')) {
+		return SERVER_APACHE;
+	} else if (strpos($webServer, 'microsoft-iis')) {
+		return SERVER_IIS;
+	} else if (strpos($webServer, 'nginx')) {
+		return SERVER_NGINX;
+	} else if (strpos($webServer, 'lighttpd')) {
+		return SERVER_LIGHTTPD;
+	} else if (strpos($webServer, 'kangle')) {
+		return SERVER_KANGLE;
+	} else {
+		return SERVER_UNKNOWN;
+	}
+}
+
+/**
+ * 获取操作系统
+ * @return int
+ */
+function GetOS() {
+	if (in_array(strtoupper(PHP_OS), array('WINNT', 'WIN32', 'WINDOWS'))) {
+		return OS_WINDOWS;
+	} else if ((strtoupper(PHP_OS) === 'UNIX')) {
+		return OS_UNIX;
+	} else if (strtoupper(PHP_OS) === 'LINUX') {
+		return OS_LINUX;
+	} else if (strtoupper(PHP_OS) === 'DARWIN') {
+		return OS_DARWIN;
+	} else if (strtoupper(substr(PHP_OS, 0, 6)) === 'CYGWIN') {
+		return OS_CYGWIN;
+	} else if (in_array(strtoupper(PHP_OS), array('NETBSD', 'OPENBSD', 'FREEBSD'))) {
+		return OS_BSD;
+	} else {
+		return OS_UNKNOWN;
+	}
+}
+
+/**
+ * 获取PHP解析引擎
+ * @return int
+ */
+function GetPHPEngine() {
+	if (defined('HHVM_VERSION')) {
+		return PHP_ENGINE_HHVM;
+	}
+	return PHP_ENGINE_PHP;
+}
 
 /**
  * 自动加载类文件
@@ -134,7 +211,7 @@ function GetEnvironment() {
 	GetValueInArray(
 		explode(' ', str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))), 0
 	) . '; ' .
-	'PHP ' . phpversion() . (IS_X64?' x64':'') . '; ' . 
+	'PHP ' . phpversion() . (IS_X64 ? ' x64' : '') . '; ' .
 	$zbp->option['ZC_DATABASE_TYPE'] . '; ' . $ajax;
 	return $system_environment;
 }
