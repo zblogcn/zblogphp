@@ -9,21 +9,21 @@
 /**
  * Operation System
  */
-define('OS_UNKNOWN', 0);
-define('OS_WINDOWS', 1);
-define('OS_UNIX', 2);
-define('OS_LINUX', 3);
-define('OS_DARWIN', 4);
-define('OS_CYGWIN', 5);
-define('OS_BSD', 6);
-define('PHP_SYSTEM', GetOS());
+define('SYSTEM_UNKNOWN', 0);
+define('SYSTEM_WINDOWS', 1);
+define('SYSTEM_UNIX', 2);
+define('SYSTEM_LINUX', 3);
+define('SYSTEM_DARWIN', 4);
+define('SYSTEM_CYGWIN', 5);
+define('SYSTEM_BSD', 6);
+define('PHP_SYSTEM', GetSystem());
 // Compatibility
-define('IS_WINDOWS', PHP_SYSTEM === OS_WINDOWS);
-define('IS_UNIX', PHP_SYSTEM === OS_UNIX);
-define('IS_LINUX', PHP_SYSTEM === OS_LINUX);
-define('IS_DARWIN', PHP_SYSTEM === OS_DARWIN);
-define('IS_CYGWIN', PHP_SYSTEM === OS_CYGWIN);
-define('IS_BSD', PHP_SYSTEM === OS_BSD);
+define('IS_WINDOWS', PHP_SYSTEM === SYSTEM_WINDOWS);
+define('IS_UNIX', PHP_SYSTEM === SYSTEM_UNIX);
+define('IS_LINUX', PHP_SYSTEM === SYSTEM_LINUX);
+define('IS_DARWIN', PHP_SYSTEM === SYSTEM_DARWIN);
+define('IS_CYGWIN', PHP_SYSTEM === SYSTEM_CYGWIN);
+define('IS_BSD', PHP_SYSTEM === SYSTEM_BSD);
 
 define('IS_X64', (PHP_INT_SIZE === 8));
 
@@ -46,11 +46,11 @@ define('IS_KANGLE', PHP_SERVER === PHP_SERVER);
 /**
  * PHP Engine
  */
-define('PHP_ENGINE_PHP', 1);
-define('PHP_ENGINE_HHVM', 2);
+define('ENGINE_PHP', 1);
+define('ENGINE_HHVM', 2);
 define('PHP_ENGINE', GetPHPEngine());
 // Compatibility
-define('IS_HHVM', PHP_ENGINE === PHP_ENGINE_HHVM);
+define('IS_HHVM', PHP_ENGINE === ENGINE_HHVM);
 
 /**
  * 获取服务器
@@ -80,21 +80,21 @@ function GetWebServer() {
  * 获取操作系统
  * @return int
  */
-function GetOS() {
+function GetSystem() {
 	if (in_array(strtoupper(PHP_OS), array('WINNT', 'WIN32', 'WINDOWS'))) {
-		return OS_WINDOWS;
+		return SYSTEM_WINDOWS;
 	} else if ((strtoupper(PHP_OS) === 'UNIX')) {
-		return OS_UNIX;
+		return SYSTEM_UNIX;
 	} else if (strtoupper(PHP_OS) === 'LINUX') {
-		return OS_LINUX;
+		return SYSTEM_LINUX;
 	} else if (strtoupper(PHP_OS) === 'DARWIN') {
-		return OS_DARWIN;
+		return SYSTEM_DARWIN;
 	} else if (strtoupper(substr(PHP_OS, 0, 6)) === 'CYGWIN') {
-		return OS_CYGWIN;
+		return SYSTEM_CYGWIN;
 	} else if (in_array(strtoupper(PHP_OS), array('NETBSD', 'OPENBSD', 'FREEBSD'))) {
-		return OS_BSD;
+		return SYSTEM_BSD;
 	} else {
-		return OS_UNKNOWN;
+		return SYSTEM_UNKNOWN;
 	}
 }
 
@@ -104,9 +104,9 @@ function GetOS() {
  */
 function GetPHPEngine() {
 	if (defined('HHVM_VERSION')) {
-		return PHP_ENGINE_HHVM;
+		return ENGINE_HHVM;
 	}
-	return PHP_ENGINE_PHP;
+	return ENGINE_PHP;
 }
 
 /**
