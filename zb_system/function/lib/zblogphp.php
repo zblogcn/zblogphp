@@ -451,14 +451,14 @@ class ZBlogPHP {
 			ZBlogException::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
 		}
 
+		if(substr($this->host,0,8)=='https://') {
+			$this->ishttps=true;
+		}
 		if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
 			$this->host = $this->option['ZC_BLOG_HOST'];
 			$this->cookiespath = substr($this->host, strpos($this->host, '/', 8));
 		} else {
 			$this->option['ZC_BLOG_HOST'] = $this->host;
-		}
-		if(substr($this->host,0,8)=='https://') {
-			$this->ishttps=true;
 		}
 
 		$this->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
@@ -577,6 +577,10 @@ class ZBlogPHP {
 			$this->host = GetCurrentHost($this->path, $this->cookiespath);
 		}
 
+		if(substr($this->host,0,8)=='https://') {
+			$this->ishttps=true;
+		}
+
 		if ($this->user->Status == ZC_MEMBER_STATUS_AUDITING) {
 			$this->ShowError(79, __FILE__, __LINE__);
 		}
@@ -612,7 +616,6 @@ class ZBlogPHP {
 
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) {
 			$fpname();
-
 		}
 	}
 
