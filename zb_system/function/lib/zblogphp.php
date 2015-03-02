@@ -2870,9 +2870,10 @@ class ZBlogPHP {
 			return;
 		}
 
-		$host = GetCurrentHost(ZBP_PATH, $null);
-
-		if (stripos($host, $this->host) === false) {
+		$host = str_replace(array('https://','http://'),array('',''),GetCurrentHost(ZBP_PATH, $null));
+		$host2 = str_replace(array('https://','http://'),array('',''),$this->host);
+	
+		if (stripos($host, $host2) === false) {
 			$u = GetRequestUri();
 			$u = $this->host . substr($u, 1, strlen($u));
 			Redirect301($u);
