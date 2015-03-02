@@ -24,8 +24,8 @@ var zbp = new ZBP({
 });
 
 var bloghost = zbp.options.bloghost;
-var cookiespath = zbp.options.bloghost;
-var ajaxurl = zbp.options.bloghost;
+var cookiespath = zbp.options.cookiepath;
+var ajaxurl = zbp.options.ajaxurl;
 var lang_comment_name_error = zbp.options.lang.error[72];
 var lang_comment_email_error = zbp.options.lang.error[29];
 var lang_comment_content_error = zbp.options.lang.error[46];
