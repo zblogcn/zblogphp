@@ -1582,14 +1582,14 @@ function PostComment() {
 	}
 
 	$_POST['AuthorID'] = $zbp->user->ID;
-	$_POST['Name'] = $_POST['name'];
+	$_POST['Name'] = GetVars('name', 'POST');
 	if ($zbp->user->ID > 0) {
 		$_POST['Name'] = $zbp->user->Name;
 	}
 
-	$_POST['Email'] = $_POST['email'];
-	$_POST['HomePage'] = $_POST['homepage'];
-	$_POST['Content'] = $_POST['content'];
+	$_POST['Email'] = GetVars('email', 'POST');
+	$_POST['HomePage'] = GetVars('homepage', 'POST');
+	$_POST['Content'] = GetVars('content', 'POST');
 	$_POST['PostTime'] = Time();
 	$_POST['IP'] = GetGuestIP();
 	$_POST['Agent'] = GetGuestAgent();
