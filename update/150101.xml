@@ -11,7 +11,7 @@
 	<file name='zb_system\function\lib\metas.php' md5='DDFB631F62A86538B9BB0125E2AE3BE8' crc32='70095B40'/>
 	<file name='zb_system\function\lib\template.php' md5='20FD9F69D5A4F5F0D310F792E78A139F' crc32='E564CC76'/>
 	<file name='zb_system\function\lib\network.php' md5='F88A4CD04A40520E196FEF7EB1D1B3AD' crc32='7AE4F8E4'/>
-	<file name='zb_system\function\lib\zblogphp.php' md5='842AEEB60F45B3EB4219CCBE4D684F2B' crc32='D4BB987A'/>
+	<file name='zb_system\function\lib\zblogphp.php' md5='AACA8B0AFA5AA3C7882C9ED4DB2E10EA' crc32='3AA0B825'/>
 	<file name='feed.php' md5='7DB0320ED8A1578C9ED9E525A34AD0FE' crc32='D1874F68'/>
 	<file name='index.php' md5='A3046D99903E6F76C64B37E9F51CA5D5' crc32='5BD4D531'/>
 	<file name='search.php' md5='32AA29B4A4EC2C870FD9A7E1CA75E31F' crc32='BB61B84B'/>
@@ -224,7 +224,7 @@
 	<file name='zb_system\script\jquery-ui.custom.min.js' md5='2426EA54262C8F2BAF8BF7B0DD2CCD0E' crc32='8556345B'/>
 	<file name='zb_system\script\jquery.tagto.js' md5='925A1D1092B456A459C7AB02594788CB' crc32='A56AFA00'/>
 	<file name='zb_system\script\md5.js' md5='096F445AB5F7C71095467348BEEC876E' crc32='4945A867'/>
-	<file name='zb_system\xml-rpc\index.php' md5='482029978AF77113A10BFCDB5158F83B' crc32='2A4F8AA0'/>
+	<file name='zb_system\xml-rpc\index.php' md5='6B5F195D8B5B1FE368E08F505643DF20' crc32='7031CF9'/>
 	<file name='zb_system\xml-rpc\wlwmanifest.xml' md5='179BCFEE615F2557D9DBBD15BA881EA0' crc32='7913F5B3'/>
 	<file name='zb_users\language\en.php' md5='0F7A54E0904F136D9B3EAD76CB9F1806' crc32='6734968C'/>
 	<file name='zb_users\language\zh-cn.php' md5='86B3687C0F7ADE1D244F452B5AB89496' crc32='94562D82'/>

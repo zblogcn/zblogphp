@@ -8,6 +8,8 @@
 
 error_reporting(E_PARSE);
 
+date_default_timezone_set('UTC');
+
 ob_start();
 
 define('ZBP_PATH', str_replace('\\', '/', realpath(dirname(__FILE__) . '/../../')) . '/');

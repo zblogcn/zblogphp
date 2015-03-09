@@ -1410,6 +1410,7 @@ class ZBlogPHP {
 	 * @return null
 	 */
 	public function LoadLanguage($type, $id, $default = '') {
+		$default = FilterCorrectName($default);
 		if ($type == 'system') {
 			if ($default == '') {
 				$default = $this->option['ZC_BLOG_LANGUAGEPACK'];

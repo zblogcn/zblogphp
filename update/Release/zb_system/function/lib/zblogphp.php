@@ -1299,6 +1299,7 @@ class ZBlogPHP {
 	 * @return null
 	 */
 	public function LoadLanguage($type,$id,$default=''){
+		$default = FilterCorrectName($default);
 		if($type=='system'){
 			if($default=='')$default=$this->option['ZC_BLOG_LANGUAGEPACK'];
 			if(is_readable($f=$this->path . 'zb_users/language/' . $default . '.php')){
@@ -2651,7 +2652,10 @@ class ZBlogPHP {
 		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==false)return;
 		if($this->option['ZC_PERMANENT_DOMAIN_REDIRECT']==false)return;
 
-		$host = GetCurrentHost(ZBP_PATH , $null);
+		$host = str_replace(array('https://','http://'),array('',''),GetCurrentHost(ZBP_PATH, $null));
+		$host2 = str_replace(array('https://','http://'),array('',''),$this->host);
+	
+		if (stripos($host, $host2) === false) {
 
 		if(stripos($host,$this->host)===false){
 			$u=GetRequestUri();

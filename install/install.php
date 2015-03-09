@@ -7,6 +7,8 @@ error_reporting(0);
 
 @set_time_limit(300);
 
+@date_default_timezone_set('UTC');
+
 header('Content-type: text/html; charset=utf-8');
 
 ob_start();
