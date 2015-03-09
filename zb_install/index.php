@@ -11,6 +11,7 @@
  * @param
  * @return array
  */
+date_default_timezone_set('UTC');
 
 require '../zb_system/function/c_system_base.php';
 require '../zb_system/function/c_system_admin.php';
@@ -22,7 +23,7 @@ define('error', '<span class="error"></span>');
 
 $zbloglang = &$zbp->option['ZC_BLOG_LANGUAGEPACK'];
 if (isset($_POST['zbloglang'])) {
-	$zbloglang = $_POST['zbloglang'];
+	$zbloglang = FilterCorrectName($_POST['zbloglang']);
 }
 
 $zbp->LoadLanguage('system', '', $zbloglang);
@@ -1024,4 +1025,3 @@ function SaveConfig() {
 }
 
 RunTime();
-?>

@@ -638,6 +638,8 @@ Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError','RespondError',PLUGIN_EXITSIGNAL
 
 $xmlstring = file_get_contents( 'php://input' );
 //logs($xmlstring);
+//defense XXE
+libxml_disable_entity_loader(true);
 $xml = simplexml_load_string($xmlstring);
 
 if($xml){
