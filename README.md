@@ -25,7 +25,6 @@ Z-BlogPHP有着强大的可定制性、丰富的插件接口和独立的主题�
 
 > 安装完成后请删除zb_install文件夹。
 
-> 若要使用开发版本，请先[下载稳定版](http://www.zblogcn.com/zblogphp/)并安装，然后再用GitHub内的文件进行覆盖，方可使用。
 
 ##开发文档
 请访问我们的wiki站点：http://wiki.zblogcn.com/doku.php?id=zblogphp
