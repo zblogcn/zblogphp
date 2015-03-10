@@ -454,11 +454,17 @@ class ZBlogPHP {
 		if(substr($this->host,0,8)=='https://') {
 			$this->ishttps=true;
 		}
-		if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
-			$this->host = $this->option['ZC_BLOG_HOST'];
-			$this->cookiespath = substr($this->host, strpos($this->host, '/', 8));
-		} else {
-			$this->option['ZC_BLOG_HOST'] = $this->host;
+		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){
+			if($this->option['ZC_PERMANENT_DOMAIN_INDISCRIMINATE_HTTPS']==true){
+				if(str_replace(array('https://','http://'),array('',''),$this->host) != str_replace(array('https://','http://'),array('',''),$this->option['ZC_BLOG_HOST']) ){
+					$this->host=$this->option['ZC_BLOG_HOST'];
+				}
+			}else{
+				$this->host=$this->option['ZC_BLOG_HOST'];
+			}
+			$this->cookiespath=substr($this->host,strpos($this->host,'/',8));
+		}else{
+			$this->option['ZC_BLOG_HOST']=$this->host;
 		}
 
 		$this->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
@@ -2874,8 +2880,13 @@ class ZBlogPHP {
 			return;
 		}
 
-		$host = str_replace(array('https://','http://'),array('',''),GetCurrentHost(ZBP_PATH, $null));
-		$host2 = str_replace(array('https://','http://'),array('',''),$this->host);
+		if($this->option['ZC_PERMANENT_DOMAIN_INDISCRIMINATE_HTTPS'] == true){
+			$host = str_replace(array('https://','http://'),array('',''),GetCurrentHost(ZBP_PATH, $null));
+			$host2 = str_replace(array('https://','http://'),array('',''),$this->host);
+		} else {
+			$host = GetCurrentHost(ZBP_PATH, $null);
+			$host2 = $this->host;
+		}
 	
 		if (stripos($host, $host2) === false) {
 			$u = GetRequestUri();

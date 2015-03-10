@@ -37,8 +37,6 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
 	_stripslashes($_REQUEST);
 }
 
-libxml_disable_entity_loader(true);
-
 #初始化统计信息
 $_SERVER['_start_time'] = microtime(true); //RunTime
 $_SERVER['_query_count'] = 0;
