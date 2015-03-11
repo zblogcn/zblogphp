@@ -1684,6 +1684,8 @@ function BatchComment() {
 			CountPostArray(array($cmt->LogID), -1);
 			CountCommentNums(0,+1);
 		}
+
+	$zbp->AddBuildModule('comments');
 }
 
 ################################################################################################################
@@ -1730,7 +1732,9 @@ function PostCategory() {
 	FilterMeta($cate);
 
 	// 此处用作刷新分类内文章数据使用，不作更改
-	CountCategory($cate);
+	if ($cate->ID > 0){
+		CountCategory($cate);
+	}
 
 	$cate->Save();
 

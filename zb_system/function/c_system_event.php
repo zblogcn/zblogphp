@@ -1737,17 +1737,15 @@ function CheckComment() {
 	$ischecking = (bool) GetVars('ischecking', 'GET');
 
 	$cmt = $zbp->GetCommentByID($id);
-	$orig_check = $cmt->IsChecking;
+	$orig_check = (bool) $cmt->IsChecking;
 	$cmt->IsChecking = $ischecking;
 
 	$cmt->Save();
 
-	$orig_check = (bool) $orig_check;
-
-	if ($orig_check && !$ischecking) {
+	if (($orig_check==true) && ($ischecking==false)) {
 		CountPostArray(array($cmt->LogID), +1);
 		CountCommentNums(0, -1);
-	} else if (!$orig_check && $ischecking) {
+	} else if (($orig_check==false) && ($ischecking==true)) {
 		CountPostArray(array($cmt->LogID), -1);
 		CountCommentNums(0, +1);
 	}
@@ -1828,6 +1826,8 @@ function BatchComment() {
 			CountCommentNums(0, +1);
 		}
 	}
+
+	$zbp->AddBuildModule('comments');
 }
 ################################################################################################################
 /**
@@ -1875,7 +1875,9 @@ function PostCategory() {
 	FilterMeta($cate);
 
 	// 此处用作刷新分类内文章数据使用，不作更改
-	CountCategory($cate);
+	if ($cate->ID > 0){
+		CountCategory($cate);
+	}
 
 	$cate->Save();
 

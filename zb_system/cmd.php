@@ -148,7 +148,6 @@ switch ($action) {
 		if (isset($_POST['id']) == false) {
 			Redirect($_SERVER["HTTP_REFERER"]);
 		}
-
 		BatchComment();
 		$zbp->BuildModule();
 		$zbp->SaveCache();
