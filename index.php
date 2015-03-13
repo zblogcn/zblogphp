@@ -13,12 +13,14 @@ $zbp->CheckGzip();
 $zbp->Load();
 $zbp->RedirectPermanentDomain();
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {$fpname();
+foreach ($GLOBALS['hooks']['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {
+	$fpname();
 }
 
 ViewIndex();
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Index_End'] as $fpname => &$fpsignal) {$fpname();
+foreach ($GLOBALS['hooks']['Filter_Plugin_Index_End'] as $fpname => &$fpsignal) {
+	$fpname();
 }
 
 RunTime();
