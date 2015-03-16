@@ -617,7 +617,7 @@ function Setup4() {
 	}
 
 	$zbp->OpenConnect();
-
+	$zbp->ConvertTableAndDatainfo();
 	if (CreateTable($cts)) {
 		InsertInfo();
 		SaveConfig();

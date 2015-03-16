@@ -2897,21 +2897,16 @@ class ZBlogPHP {
 	/**
 	 * 对表名和数据结构进行预转换
 	 */
-	private $table_datainfo_hash = null;
-
 	public function ConvertTableAndDatainfo() {
-
-		$now = crc32(serialize($this->table + $this->datainfo));
-		if ($this->table_datainfo_hash !== $now) {
+		if($this->db->dbpre){
 			$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
-			if ($this->db->type == 'pgsql') {
-				foreach ($this->datainfo as $key => &$value) {
-					foreach ($value as $k2 => &$v2) {
-						$v2[0] = strtolower($v2[0]);
-					}
+		}
+		if ($this->db->type == 'pgsql') {
+			foreach ($this->datainfo as $key => &$value) {
+				foreach ($value as $k2 => &$v2) {
+					$v2[0] = strtolower($v2[0]);
 				}
 			}
-			$this->table_datainfo_hash = crc32(serialize($this->table + $this->datainfo));
 		}
 	}
 
