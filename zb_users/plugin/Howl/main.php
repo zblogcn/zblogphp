@@ -12,6 +12,12 @@ if (!$zbp->CheckPlugin('Howl')) {$zbp->ShowError(48);die();}
 
 $blogtitle='Z-Blog角色分配器';
 
+$group_nums = count($zbp->lang['user_level_name']);
+$group_key =array();
+foreach ($zbp->lang['user_level_name'] as $key => $value) {
+	$group_key[] = $key;
+}
+
 if(count($_POST)>0){
 
 	if(GetVars('reset' ,'POST')=='1'){
@@ -23,25 +29,21 @@ if(count($_POST)>0){
 	}
 
 	$a=array();
-	$a[1] = array();
-	$a[2] = array();
-	$a[3] = array();
-	$a[4] = array();
-	$a[5] = array();
-	$a[6] = array();
+	foreach ($group_key as $key) {
+		$a[$key] = array();
+	}
 
-	for ($i=1; $i < 7 ; $i++) {
+	foreach ($group_key as $groupkey) {
 		foreach ($actions as $key => $value) {
-			$check=GetVars('Group' . $i . '_' . $key ,'POST');
-			$a[$i][$key]=(int)$check;
+			$check=GetVars('Group' . $groupkey . '_' . $key ,'POST');
+			$a[$groupkey][$key]=(int)$check;
 		}
 	}
-	$zbp->Config('Howl')->Group1 = $a[1];
-	$zbp->Config('Howl')->Group2 = $a[2];
-	$zbp->Config('Howl')->Group3 = $a[3];
-	$zbp->Config('Howl')->Group4 = $a[4];
-	$zbp->Config('Howl')->Group5 = $a[5];
-	$zbp->Config('Howl')->Group6 = $a[6];
+
+	foreach ($group_key as $groupkey) {
+		$name = 'Group'.$groupkey;
+		$zbp->Config('Howl')->$name = $a[$groupkey];
+	}
 	$zbp->SaveConfig('Howl');
 
 	$zbp->SetHint('good');
@@ -64,35 +66,34 @@ $zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重�
 <table border="1" class="tableFull tableBorder tableBorder-thcenter">
 <tr>
 	<th class="td10">权限</th>
-	<th class="td10"><?php echo $zbp->lang['user_level_name']['1'];?>组</th>
-	<th class="td10"><?php echo $zbp->lang['user_level_name']['2'];?>组</th>
-	<th class="td10"><?php echo $zbp->lang['user_level_name']['3'];?>组</th>
-	<th class="td10"><?php echo $zbp->lang['user_level_name']['4'];?>组</th>
-	<th class="td10"><?php echo $zbp->lang['user_level_name']['5'];?>组</th>
-	<th class="td10"><?php echo $zbp->lang['user_level_name']['6'];?>组</th>
-	<!-- <th class="td10">权限</th> -->
+<?php
+foreach ($group_key as $key) {
+	echo '<th class="td10">';
+	echo $zbp->lang['user_level_name'][$key];
+	echo "组</th>\r\n";
+}
+?>
 </tr>
 <?php
-
 function MakeInput($group,$key){
-global $zbp;
-$zbp->user->Level=$group;
-$check=(int)$zbp->CheckRights($key);
-return '<input name="Group'.$group.'_' . $key .'" style="" type="text" value="'.$check.'" class="checkbox"/>';
+	global $zbp;
+	$zbp->user->Level=$group;
+	$check=(int)$zbp->CheckRights($key);
+	return '<input name="Group'.$group.'_' . $key .'" style="" type="text" value="'.$check.'" class="checkbox"/>';
 }
-
 
 foreach ($actions as $key => $value) {
 ?>
 
 <tr>
 <td class="tdCenter"><?php echo $key?>(<b><?php echo Howl_GetRightName($key);?></b>)</td>
-<td class="tdCenter"><?php echo MakeInput(1,$key);?></td>
-<td class="tdCenter"><?php echo MakeInput(2,$key);?></td>
-<td class="tdCenter"><?php echo MakeInput(3,$key);?></td>
-<td class="tdCenter"><?php echo MakeInput(4,$key);?></td>
-<td class="tdCenter"><?php echo MakeInput(5,$key);?></td>
-<td class="tdCenter"><?php echo MakeInput(6,$key);?></td>
+<?php
+foreach ($group_key as $groupkey) {
+	echo '<td class="tdCenter">';
+	echo MakeInput($groupkey,$key);
+	echo "</td>\r\n";
+}
+?>
 </tr>
 <?php
 }
