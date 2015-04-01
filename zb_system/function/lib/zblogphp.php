@@ -1284,6 +1284,10 @@ class ZBlogPHP {
 			$this->categorylayer = 4;
 		}
 
+		if( !is_array($lv0[0]) ){
+			$lv0[0] = array();
+		}
+		
 		foreach ($lv0[0] as $id0) {
 			$this->categorysbyorder[$id0] = &$this->categorys[$id0];
 			if (!isset($lv1[$id0])) {continue;}
