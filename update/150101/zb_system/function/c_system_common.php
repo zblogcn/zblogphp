@@ -252,13 +252,13 @@ function GetCurrentHost($blogpath,&$cookiespath) {
 
 	$host='';
 	if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
-		if ($_SERVER['REQUEST_SCHEME'] == 'https') {
+		if (strtolower($_SERVER['REQUEST_SCHEME']) == 'https') {
 			$host = 'https://';
 		} else {
 			$host = 'http://';
 		}
 	}elseif (array_key_exists('HTTPS', $_SERVER)) {
-		if ($_SERVER['HTTPS'] == 'on') {
+		if (strtolower($_SERVER['HTTPS']) == 'on') {
 			$host = 'https://';
 		} else {
 			$host = 'http://';
