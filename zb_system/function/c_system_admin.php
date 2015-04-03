@@ -1132,7 +1132,7 @@ function Admin_ThemeMng() {
 		echo '<div class="theme-style">' . $zbp->lang['msg']['style'] . ': ';
 		echo '<select class="edit" size="1" style="width:110px;">';
 		foreach ($theme->GetCssFiles() as $key => $value) {
-			echo '<option value="' . $key . '" ' . ($theme->IsUsed() ? ($key == $zbp->style ? 'selected="selected"' : ''):'') . '>' . basename($value) . '</option>';
+			echo '<option value="' . $key . '" ' . ($theme->IsUsed() ? ($key == $zbp->style ? 'selected="selected"' : '') : '') . '>' . basename($value) . '</option>';
 		}
 		echo '</select>';
 		echo '<input type="button" onclick="$(\'#style\').val($(this).prev().val());$(\'#theme\').val(\'' . $theme->id . '\');$(\'#frmTheme\').submit();" class="theme-activate button" value="' . $zbp->lang['msg']['enable'] . '">';

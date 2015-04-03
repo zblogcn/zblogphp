@@ -1107,18 +1107,21 @@ function SubStrUTF8($sourcestr, $cutlength) {
  * @param int $cutlength 子串长度
  * @return string
  */
-function SubStrUTF8_Html($sourcestr, $cutlength){
+function SubStrUTF8_Html($sourcestr, $cutlength) {
 
 	if (function_exists('mb_substr') && function_exists('mb_internal_encoding')) {
 		mb_internal_encoding('UTF-8');
 		$j = mb_strlen($sourcestr);
 		$s = mb_substr($sourcestr, 0, $cutlength);
-		$l = mb_substr_count ( $s ,  '<');
-		$r = mb_substr_count ( $s ,  '>');
-		if($l>0 && $l>$r){
-			for ( $i  =  $cutlength ;  $i  <  $j ;  $i ++) {
-				$s .=  mb_substr($sourcestr, $i, 1);
-				if(mb_substr($sourcestr, $i, 1)=='>')break;
+		$l = mb_substr_count($s, '<');
+		$r = mb_substr_count($s, '>');
+		if ($l > 0 && $l > $r) {
+			for ($i = $cutlength; $i < $j; $i++) {
+				$s .= mb_substr($sourcestr, $i, 1);
+				if (mb_substr($sourcestr, $i, 1) == '>') {
+					break;
+				}
+
 			}
 		}
 		return $s;
@@ -1129,25 +1132,31 @@ function SubStrUTF8_Html($sourcestr, $cutlength){
 		iconv_set_encoding("output_encoding", "UTF-8");
 		$j = iconv_strlen($sourcestr);
 		$s = iconv_substr($sourcestr, 0, $cutlength);
-		$l = substr_count ( $s ,  '<');
-		$r = substr_count ( $s ,  '>');
-		if($l>0 && $l>$r){
-			for ( $i  =  $cutlength ;  $i  <  $j ;  $i ++) {
-				$s .=  iconv_substr($sourcestr, $i, 1);
-				if(iconv_substr($sourcestr, $i, 1)=='>')break;
+		$l = substr_count($s, '<');
+		$r = substr_count($s, '>');
+		if ($l > 0 && $l > $r) {
+			for ($i = $cutlength; $i < $j; $i++) {
+				$s .= iconv_substr($sourcestr, $i, 1);
+				if (iconv_substr($sourcestr, $i, 1) == '>') {
+					break;
+				}
+
 			}
 		}
 		return $s;
 	}
-	
+
 	$j = strlen($sourcestr);
 	$s = substr($sourcestr, 0, $cutlength);
-	$l = substr_count ( $s ,  '<');
-	$r = substr_count ( $s ,  '>');
-	if($l>0 && $l>$r){
-		for ( $i  =  $cutlength ;  $i  <  $j ;  $i ++) {
-			$s .=  substr($sourcestr, $i, 1);
-			if(substr($sourcestr, $i, 1)=='>')break;
+	$l = substr_count($s, '<');
+	$r = substr_count($s, '>');
+	if ($l > 0 && $l > $r) {
+		for ($i = $cutlength; $i < $j; $i++) {
+			$s .= substr($sourcestr, $i, 1);
+			if (substr($sourcestr, $i, 1) == '>') {
+				break;
+			}
+
 		}
 	}
 	return $s;

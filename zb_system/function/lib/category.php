@@ -113,17 +113,26 @@ class Category extends Base {
 				$this->RootID = 0;
 				return 0;
 			}
-			if(isset($zbp->categorys[$this->ParentID])==false)return 0;
+			if (isset($zbp->categorys[$this->ParentID]) == false) {
+				return 0;
+			}
+
 			if ($zbp->categorys[$this->ParentID]->ParentID == 0) {
 				$this->RootID = $this->ParentID;
 				return 1;
 			}
-			if(isset($zbp->categorys[$zbp->categorys[$this->ParentID]->ParentID])==false)return 0;
+			if (isset($zbp->categorys[$zbp->categorys[$this->ParentID]->ParentID]) == false) {
+				return 0;
+			}
+
 			if ($zbp->categorys[$zbp->categorys[$this->ParentID]->ParentID]->ParentID == 0) {
 				$this->RootID = $zbp->categorys[$this->ParentID]->ParentID;
 				return 2;
 			}
-			if(isset($zbp->categorys[$zbp->categorys[$zbp->categorys[$this->ParentID]->ParentID]->ParentID])==false)return 0;
+			if (isset($zbp->categorys[$zbp->categorys[$zbp->categorys[$this->ParentID]->ParentID]->ParentID]) == false) {
+				return 0;
+			}
+
 			if ($zbp->categorys[$zbp->categorys[$zbp->categorys[$this->ParentID]->ParentID]->ParentID]->ParentID == 0) {
 				$this->RootID = $zbp->categorys[$zbp->categorys[$this->ParentID]->ParentID]->ParentID;
 				return 3;

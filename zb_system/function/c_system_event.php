@@ -1742,10 +1742,10 @@ function CheckComment() {
 
 	$cmt->Save();
 
-	if (($orig_check==true) && ($ischecking==false)) {
+	if (($orig_check) && (!$ischecking)) {
 		CountPostArray(array($cmt->LogID), +1);
 		CountCommentNums(0, -1);
-	} else if (($orig_check==false) && ($ischecking==true)) {
+	} else if ((!$orig_check) && ($ischecking)) {
 		CountPostArray(array($cmt->LogID), -1);
 		CountCommentNums(0, +1);
 	}
@@ -1875,7 +1875,7 @@ function PostCategory() {
 	FilterMeta($cate);
 
 	// 此处用作刷新分类内文章数据使用，不作更改
-	if ($cate->ID > 0){
+	if ($cate->ID > 0) {
 		CountCategory($cate);
 	}
 
@@ -2512,7 +2512,7 @@ function SaveSetting() {
 
 	$zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST']);
 	$zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST'], '/') . '/';
-	if(	$zbp->option['ZC_BLOG_HOST'] == '/' ){
+	if ($zbp->option['ZC_BLOG_HOST'] == '/') {
 		$zbp->option['ZC_BLOG_HOST'] = $zbp->host;
 	}
 	$lang = require $zbp->usersdir . 'language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php';

@@ -184,7 +184,7 @@ class ZBlogPHP {
 	private $issession = false; #是否使用session
 	public $ismanage = false; #是否加载管理模式
 	private $isgzip = false; #是否开启gzip
-	public $ishttps=false; #是否HTTPS
+	public $ishttps = false; #是否HTTPS
 
 	/**
 	 * @var null 当前模板
@@ -451,20 +451,20 @@ class ZBlogPHP {
 			ZBlogException::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
 		}
 
-		if(substr($this->host,0,8)=='https://') {
-			$this->ishttps=true;
+		if (substr($this->host, 0, 8) == 'https://') {
+			$this->ishttps = true;
 		}
-		if($this->option['ZC_PERMANENT_DOMAIN_ENABLE']==true){
-			if($this->option['ZC_PERMANENT_DOMAIN_INDISCRIMINATE_HTTPS']==true){
-				if(str_replace(array('https://','http://'),array('',''),$this->host) != str_replace(array('https://','http://'),array('',''),$this->option['ZC_BLOG_HOST']) ){
-					$this->host=$this->option['ZC_BLOG_HOST'];
+		if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
+			if ($this->option['ZC_PERMANENT_DOMAIN_INDISCRIMINATE_HTTPS'] == true) {
+				if (str_replace(array('https://', 'http://'), array('', ''), $this->host) != str_replace(array('https://', 'http://'), array('', ''), $this->option['ZC_BLOG_HOST'])) {
+					$this->host = $this->option['ZC_BLOG_HOST'];
 				}
-			}else{
-				$this->host=$this->option['ZC_BLOG_HOST'];
+			} else {
+				$this->host = $this->option['ZC_BLOG_HOST'];
 			}
-			$this->cookiespath=strstr( str_replace('://','',$this->host) , '/');
-		}else{
-			$this->option['ZC_BLOG_HOST']=$this->host;
+			$this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
+		} else {
+			$this->option['ZC_BLOG_HOST'] = $this->host;
 		}
 
 		$this->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
@@ -583,8 +583,8 @@ class ZBlogPHP {
 			$this->host = GetCurrentHost($this->path, $this->cookiespath);
 		}
 
-		if(substr($this->host,0,8)=='https://') {
-			$this->ishttps=true;
+		if (substr($this->host, 0, 8) == 'https://') {
+			$this->ishttps = true;
 		}
 
 		if ($this->user->Status == ZC_MEMBER_STATUS_AUDITING) {
@@ -1284,10 +1284,10 @@ class ZBlogPHP {
 			$this->categorylayer = 4;
 		}
 
-		if( !is_array($lv0[0]) ){
+		if (!is_array($lv0[0])) {
 			$lv0[0] = array();
 		}
-		
+
 		foreach ($lv0[0] as $id0) {
 			$this->categorysbyorder[$id0] = &$this->categorys[$id0];
 			if (!isset($lv1[$id0])) {continue;}
@@ -2884,14 +2884,14 @@ class ZBlogPHP {
 			return;
 		}
 
-		if($this->option['ZC_PERMANENT_DOMAIN_INDISCRIMINATE_HTTPS'] == true){
-			$host = str_replace(array('https://','http://'),array('',''),GetCurrentHost(ZBP_PATH, $null));
-			$host2 = str_replace(array('https://','http://'),array('',''),$this->host);
+		if ($this->option['ZC_PERMANENT_DOMAIN_INDISCRIMINATE_HTTPS'] == true) {
+			$host = str_replace(array('https://', 'http://'), array('', ''), GetCurrentHost(ZBP_PATH, $null));
+			$host2 = str_replace(array('https://', 'http://'), array('', ''), $this->host);
 		} else {
 			$host = GetCurrentHost(ZBP_PATH, $null);
 			$host2 = $this->host;
 		}
-	
+
 		if (stripos($host, $host2) === false) {
 			$u = GetRequestUri();
 			$u = $this->host . substr($u, 1, strlen($u));
@@ -2902,7 +2902,7 @@ class ZBlogPHP {
 	 * 对表名和数据结构进行预转换
 	 */
 	public function ConvertTableAndDatainfo() {
-		if($this->db->dbpre){
+		if ($this->db->dbpre) {
 			$this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
 		}
 		if ($this->db->type == 'pgsql') {
