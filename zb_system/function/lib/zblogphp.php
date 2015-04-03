@@ -462,7 +462,7 @@ class ZBlogPHP {
 			}else{
 				$this->host=$this->option['ZC_BLOG_HOST'];
 			}
-			$this->cookiespath=substr($this->host,strpos($this->host,'/',8));
+			$this->cookiespath=strstr( str_replace('://','',$this->host) , '/');
 		}else{
 			$this->option['ZC_BLOG_HOST']=$this->host;
 		}
