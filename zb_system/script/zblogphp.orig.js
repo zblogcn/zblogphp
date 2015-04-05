@@ -123,8 +123,9 @@
 		});
 
 		this.plugin.on("comment.get", "system", function(postid, page) {
+			var self = this;
 			this.$.get(this.options.bloghost + "zb_system/cmd.php?act=getcmt&postid=" + postid + "&page=" + page, function(data, textStatus, jqXhr) {
-				this.plugin.emit("comment.got", [postid, page], data, textStatus, jqXhr);
+				self.plugin.emit("comment.got", [postid, page], data, textStatus, jqXhr);
 			});
 		});
 
