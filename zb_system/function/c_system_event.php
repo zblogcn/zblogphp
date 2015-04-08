@@ -1382,10 +1382,20 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring) {
 		foreach ($d as $key) {
 			$tag = new Tag;
 			$tag->Name = $key;
+
+			foreach ($GLOBALS['hooks']['Filter_Plugin_PostTag_Core'] as $fpname => &$fpsignal) {
+				$fpname($tag);
+			}
+
 			FilterTag($tag);
 			$tag->Save();
 			$zbp->tags[$tag->ID] = $tag;
 			$zbp->tagsbyname[$tag->Name] = &$zbp->tags[$tag->ID];
+
+			foreach ($GLOBALS['hooks']['Filter_Plugin_PostTag_Succeed'] as $fpname => &$fpsignal) {
+				$fpname($tag);
+			}
+
 		}
 	}
 
