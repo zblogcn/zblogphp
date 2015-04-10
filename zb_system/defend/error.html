@@ -26,10 +26,9 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsigna
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['error_info'];?></p><div>
 		<?php echo '(' . $this->type . ')' . $this->typeName . ' :     ' . strip_tags($this->message);?>
 		<?php echo ' (' . $GLOBALS['blogversion'] . ') ';
-		if (!in_array('Status: 404 Not Found', headers_list())) {
+if (!in_array('Status: 404 Not Found', headers_list())) {
 	echo '(' . GetEnvironment() . ') ';
-}
-?>
+}?>
 		</div></div>
 	 	<?php if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
 	?>
@@ -37,7 +36,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsigna
 	 	<p><i><?php echo $this->file?></i><br/></p>
 	 	<table style='width:100%'>
 	 	<tbody>
-		 	<?php
+<?php
 $aFile = $this->get_code($this->file, $this->line);
 	foreach ($aFile as $iInt => $sData) {
 		?>
@@ -45,16 +44,37 @@ $aFile = $this->get_code($this->file, $this->line);
 		 			<td style='width:50px'><?php echo $iInt + 1?></td>
 		 			<td><?php echo $sData?></td>
 		 		</tr>
-		 	<?php
-}
-	?>
+<?php }?>
+		</tbody>
+	 	</table>
+	 	</div></div>
+		<div><p><?php echo $GLOBALS['lang']['msg']['debug_backtrace'];?></p><div>
+	 	<table style='width:100%'>
+	 	<tbody>
+<?php
+	foreach (debug_backtrace() as $iInt => $sData) {
+		if ($iInt <= 2) continue; // 前面的是错误捕捉
+		?>
+		 		<tr>
+		 			<td style='width:50px'><?php echo $iInt + 1?></td>
+		 			<td><?php echo $sData['file']?></td>
+		 		</tr>
+		 		<tr>	
+		 			<td></td>
+		 			<td><code>(<?php echo $sData['line'];?>) <?php echo isset($sData['class']) ? $sData['class'] . $sData['type']: ""; echo $sData['function'];?></code></td>
+		 		</tr>
+		 		<tr>
+		 			<td></td>
+		 			<td><code><?php $fileContent = $this->get_code($sData['file'], $sData['line']); echo $fileContent[$sData['line'] - 1];?></code></td>
+		 		</tr>
+<?php }?>
 		</tbody>
 	 	</table>
 	 	</div></div>
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['request_data'];?></p><div>
 	 	<pre><?php echo '$_GET = ' . print_r(htmlspecialchars_array($_GET), 1)?></pre>
 	 	<pre><?php echo '$_POST = ' . print_r(htmlspecialchars_array($_POST), 1)?></pre>
-		 	<?php
+<?php
 $post_data = $_COOKIE;unset($post_data['username']);unset($post_data['password']);
 	?>
 		<pre><?php echo '$_COOKIE = ' . print_r(htmlspecialchars_array($post_data), 1)?></pre>
