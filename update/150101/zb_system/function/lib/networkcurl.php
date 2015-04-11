@@ -116,7 +116,7 @@ class Networkcurl implements iNetwork
 		$this->parsed_url = parse_url($bstrUrl);
 		if (!$this->parsed_url) throw new Exception('URL Syntax Error!');
 		if(!isset($this->parsed_url['port'])){
-			if($this->parsed_url['scheme']=='https'){
+			if(isset($this->parsed_url['scheme']) && $this->parsed_url['scheme']=='https'){
 				$this->parsed_url['port'] = 443;
 			}else{
 				$this->parsed_url['port'] = 80;

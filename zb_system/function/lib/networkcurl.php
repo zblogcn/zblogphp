@@ -124,7 +124,7 @@ class Networkcurl implements iNetwork {
 		}
 
 		if (!isset($this->parsed_url['port'])) {
-			if ($this->parsed_url['scheme'] == 'https') {
+			if (isset($this->parsed_url['scheme']) && $this->parsed_url['scheme'] == 'https') {
 				$this->parsed_url['port'] = 443;
 			} else {
 				$this->parsed_url['port'] = 80;

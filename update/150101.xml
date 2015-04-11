@@ -65,7 +65,7 @@
 	<file name='zb_system\function\lib\dbsqlite3.php' md5='3730205FB675EB9600198B7AB27D1C5C' crc32='9F8448C6'/>
 	<file name='zb_system\function\lib\member.php' md5='4CED8E2A56AEEFC31EB12726065E578F' crc32='F649E946'/>
 	<file name='zb_system\function\lib\module.php' md5='8BD6415FB93E248C485746E7AD4A0EAE' crc32='20686CED'/>
-	<file name='zb_system\function\lib\networkcurl.php' md5='2412F89F81741580CF02E6DEF19462FC' crc32='BD932A81'/>
+	<file name='zb_system\function\lib\networkcurl.php' md5='F913842FB1CA9103D82258CAB9BC2941' crc32='F058F0CB'/>
 	<file name='zb_system\function\lib\networkfile_get_contents.php' md5='FFF206AE8FDBC3FBD579BB6A37D3B781' crc32='BCDE57F9'/>
 	<file name='zb_system\function\lib\networkfsockopen.php' md5='91ADD47B6A02CA963F7A833276E94A69' crc32='D731173F'/>
 	<file name='zb_system\function\lib\pagebar.php' md5='95BDDD82D7F0798424CC95C9A06F8ABB' crc32='8FF43855'/>
