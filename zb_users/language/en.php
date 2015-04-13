@@ -233,6 +233,7 @@ return array(
 		'website' => 'Official Websites',
 		'develop_intro' => 'Contributors',
 		'default' => 'Default',
+		'debug_backtrace' => 'Debug Backtrace',
 		'' => '',
 	),
 

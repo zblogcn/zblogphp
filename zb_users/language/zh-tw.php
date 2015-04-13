@@ -233,6 +233,7 @@ return array(
 		'website' => '網站',
 		'develop_intro' => 'Z-BlogPHP版程式開發和官方網站群',
 		'default' => '默认',
+		'debug_backtrace' => '堆栈跟踪',
 		'' => '',
 	),
 

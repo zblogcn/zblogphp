@@ -181,7 +181,6 @@ return array(
 		'error_tips' => '错误提示',
 		'error_info' => '错误信息',
 		'file_line' => '文件位置',
-		'debug_backtrace' => '堆栈跟踪',
 		'request_data' => '请求数据',
 		'include_file' => '引用文件',
 		'back' => '返回',
@@ -230,6 +229,7 @@ return array(
 		'website' => '网站',
 		'develop_intro' => 'Z-BlogPHP版网站和程序开发',
 		'default' => '默认',
+		'debug_backtrace' => '堆栈跟踪',
 		'' => '',
 	),
 
