@@ -48,7 +48,7 @@ zbp.plugin.on("comment.reply", "WhitePage", function(id) {
 //重写GetComments，防止评论框消失
 zbp.plugin.on("comment.get", "WhitePage", function (logid, page) {
 	$('span.commentspage').html("Waiting...");
-	$.get(bloghost + "zb_system/cmd.php?act=CommentGet&logid=" + logid + "&page=" + page, function(data) {
+	$.get(bloghost + "zb_system/cmd.php?act=getcmt&postid=" + logid + "&page=" + page, function(data) {
 		$('#AjaxCommentBegin').nextUntil('#AjaxCommentEnd').remove();
 		$('#AjaxCommentEnd').before(data);
 		$("#cancel-reply").click();
