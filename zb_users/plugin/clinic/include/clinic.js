@@ -109,7 +109,7 @@
 			
 			
 			// Set timer
-			if (this._timerid == 0) {
+			if (this._timerid === 0) {
 				this._timerid = setInterval(function() {
 					that.runTimer(that);
 				}, 1000); 
@@ -132,7 +132,7 @@
 				console.log("执行任务" + index + "/" + taskLength + "完成");
 				this._taskpos++;
 				return true;
-			};
+			}
 			
 		},
 		
@@ -150,9 +150,10 @@
 			var ajax_option = {
 				data: param,
 				type: "POST",
+				dataType: "json",
 				success: succcallback,
 				error: errcallback
-			}
+			};
 			
 			$.ajax(url, ajax_option);
 			

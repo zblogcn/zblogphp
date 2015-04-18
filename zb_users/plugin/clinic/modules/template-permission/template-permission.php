@@ -21,7 +21,18 @@ class template_permission extends clinic {
 		foreach ($this->_dirs as $name => $value) {
 			$this->set_queue('check_right', $name);
 		}
+		$this->set_queue('build_template', '');
 
+	}
+
+	/**
+	 * Build Template
+	 * @return null
+	 */
+	public function build_template($param) {
+		global $zbp;
+		$zbp->BuildTemplate();
+		$this->output('success', '模板重编译完成');
 	}
 
 	/**
