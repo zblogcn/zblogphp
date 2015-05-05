@@ -18,7 +18,7 @@ zbpform::hidden('aaaa','文本框');
 zbpform::textarea('aaaa','多行文本');
 zbpform::password('aaaa','文本框');
 */
-class zbpform {
+class ZbpForm {
 
 	public static function radio($name, $array = array('否', '是'), $checkedkey = 0) {
 		$s = '';
