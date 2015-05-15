@@ -1021,7 +1021,7 @@ function SaveConfig(){
   $zbp->option['ZC_SIDEBAR4_ORDER']='';
   $zbp->option['ZC_SIDEBAR5_ORDER']='';
   $zbp->option['ZC_BLOG_THEME']='WhitePage';  
-  $zbp->option['ZC_DEBUG_MODE']=true;
+  $zbp->option['ZC_DEBUG_MODE']=false;
   $zbp->option['ZC_LAST_VERSION']=$zbp->version;
   $zbp->SaveOption();
   //$zbp->BuildTemplate();
