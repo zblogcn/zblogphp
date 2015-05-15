@@ -478,7 +478,8 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;';
           <input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" />
         </p>
       <p><b><?php echo $zbp->lang['zb_install']['db_drive'];?></b>
-        <?php if ($CheckResult['sqlite3'][0]) {?>
+        <?php if ($CheckResult['sqlite3'][0]) {
+			?>
         <label>
           <input value="sqlite3" type="radio" name="dbtype" /> SQLite3</label>
         <?php
@@ -557,7 +558,7 @@ function Setup4() {
     <div id="title"><?php echo $zbp->lang['zb_install']['install_result'];?></div>
     <div id="content">
       <?php
-
+$isInstallFlag = true;
 	$zbp->option['ZC_DATABASE_TYPE'] = GetVars('dbtype', 'POST');
 
 	$cts = '';
@@ -614,17 +615,24 @@ function Setup4() {
 			$zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
 			$zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
 			break;
+		default:
+			$isInstallFlag = false;
+			break;
+
 	}
+	if ($isInstallFlag) {
 
-	$zbp->OpenConnect();
-	$zbp->ConvertTableAndDatainfo();
-	if (CreateTable($cts)) {
-		InsertInfo();
-		SaveConfig();
+		$zbp->OpenConnect();
+		$zbp->ConvertTableAndDatainfo();
+		if (CreateTable($cts)) {
+			InsertInfo();
+			SaveConfig();
+		}
+
+		$zbp->CloseConnect();
+	} else {
+		echo '<p>还没有选择数据库类型，请后退重试。</p><p><a href="javascript:history.go(-1)">点击这里后退</a></p>';
 	}
-
-	$zbp->CloseConnect();
-
 	?>
 
     </div>
