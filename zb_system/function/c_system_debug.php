@@ -130,9 +130,6 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseError($errno, $errstr, $errfile, $errline);
 	$zbe->Display();
-	if (!(defined('IS_HHVM') && IS_HHVM)) {
-		exit();
-	}
 
 }
 
@@ -160,9 +157,6 @@ function Debug_Exception_Handler($exception) {
 	$zbe = ZBlogException::GetInstance();
 	$zbe->ParseException($exception);
 	$zbe->Display();
-	if (!(defined('IS_HHVM') && IS_HHVM)) {
-		exit();
-	}
 
 }
 
@@ -231,9 +225,6 @@ function Debug_Shutdown_Handler() {
 		$zbe = ZBlogException::GetInstance();
 		$zbe->ParseShutdown($error);
 		$zbe->Display();
-		if (!(defined('IS_HHVM') && IS_HHVM)) {
-			exit();
-		}
 
 	}
 }
@@ -450,9 +441,13 @@ class ZBlogException {
 
 		require dirname(__FILE__) . '/../defend/error.html';
 		RunTime();
-		if (!(defined('IS_HHVM') && IS_HHVM)) {
-			exit();
-		}
+
+		/**
+		 * ``flush()`` and ``exit($errorCode)`` is for HHVM.
+		 * @link https://github.com/zblogcn/zblogphp/issues/32
+		 */
+		flush();
+		exit(1);
 
 	}
 
