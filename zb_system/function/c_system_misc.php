@@ -190,12 +190,15 @@ RunTime();
 
 function misc_phpinfo() {
 	global $zbp, $blogtitle;
-
+	$match = array();
 	$blogtitle = $zbp->name . '-phpinfo';
 	ob_start();
 	phpinfo();
 	$s = ob_get_clean();
-	preg_match("/<body.*?>(.*?)<\/body>/is", $s, $match);
+
+	if (PHP_ENGINE !== ENGINE_HHVM) {
+		preg_match("/<body.*?>(.*?)<\/body>/is", $s, $match);
+	}
 
 	?><!DOCTYPE HTML>
 <html>
@@ -239,7 +242,12 @@ div.bg {background: #777bb4!important;}
 <div class="bg">
 	<div id="wrapper">
 		<div class="logo"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></div>
-		<?php echo $match[0];?>
+		<?php
+if (PHP_ENGINE === ENGINE_HHVM) {
+		echo '<p style="text-align: center;">' . GetEnvironment() . '</p>';
+	} else {
+		echo $match[0];
+	}?>
 	</div>
 </div>
 </body>
