@@ -378,7 +378,7 @@ function ViewSearch() {
 	$pagebar->PageNow = $page;
 	$pagebar->PageBarCount = $zbp->pagebarcount;
 	$pagebar->UrlRule->Rules['{%page%}'] = $page;
-	$pagebar->UrlRule->Rules['{%q%}'] = urlencode($q);
+	$pagebar->UrlRule->Rules['{%q%}'] = rawurlencode($q);
 
 	$array = $zbp->GetArticleList(
 		'',
@@ -674,7 +674,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 			}
 
 			$pagebar->UrlRule->Rules['{%id%}'] = $category->ID;
-			$pagebar->UrlRule->Rules['{%alias%}'] = $category->Alias == '' ? urlencode($category->Name) : $category->Alias;
+			$pagebar->UrlRule->Rules['{%alias%}'] = $category->Alias == '' ? rawurlencode($category->Name) : $category->Alias;
 			break;
 		########################################################################################################
 		case 'author':
@@ -706,7 +706,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 			$w[] = array('=', 'log_AuthorID', $author->ID);
 			$pagebar->Count = $author->Articles;
 			$pagebar->UrlRule->Rules['{%id%}'] = $author->ID;
-			$pagebar->UrlRule->Rules['{%alias%}'] = $author->Alias == '' ? urlencode($author->Name) : $author->Alias;
+			$pagebar->UrlRule->Rules['{%alias%}'] = $author->Alias == '' ? rawurlencode($author->Name) : $author->Alias;
 			break;
 		########################################################################################################
 		case 'date':
@@ -760,7 +760,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 			$template = $tag->Template;
 			$w[] = array('LIKE', 'log_Tag', '%{' . $tag->ID . '}%');
 			$pagebar->UrlRule->Rules['{%id%}'] = $tag->ID;
-			$pagebar->UrlRule->Rules['{%alias%}'] = $tag->Alias == '' ? urlencode($tag->Name) : $tag->Alias;
+			$pagebar->UrlRule->Rules['{%alias%}'] = $tag->Alias == '' ? rawurlencode($tag->Name) : $tag->Alias;
 			break;
 	}
 

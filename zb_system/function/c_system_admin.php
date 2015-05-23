@@ -536,7 +536,7 @@ function Admin_ArticleMng() {
 	$p->PageBarCount = $zbp->pagebarcount;
 
 	$p->UrlRule->Rules['{%category%}'] = GetVars('category');
-	$p->UrlRule->Rules['{%search%}'] = urlencode(GetVars('search'));
+	$p->UrlRule->Rules['{%search%}'] = rawurlencode(GetVars('search'));
 	$p->UrlRule->Rules['{%status%}'] = GetVars('status');
 	$p->UrlRule->Rules['{%istop%}'] = (boolean) GetVars('istop');
 
@@ -771,7 +771,7 @@ function Admin_CommentMng() {
 	$p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
 	$p->PageBarCount = $zbp->pagebarcount;
 
-	$p->UrlRule->Rules['{%search%}'] = urlencode(GetVars('search'));
+	$p->UrlRule->Rules['{%search%}'] = rawurlencode(GetVars('search'));
 	$p->UrlRule->Rules['{%ischecking%}'] = (boolean) GetVars('ischecking');
 
 	$w = array();

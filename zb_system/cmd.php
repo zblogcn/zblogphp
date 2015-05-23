@@ -42,7 +42,7 @@ switch ($action) {
 		}
 		break;
 	case 'search':
-		$q = urlencode(trim(strip_tags(GetVars('q', 'POST'))));
+		$q = rawurlencode(trim(strip_tags(GetVars('q', 'POST'))));
 		Redirect($zbp->searchurl . '?q=' . $q);
 		break;
 	case 'misc':

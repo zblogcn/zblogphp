@@ -147,7 +147,7 @@ class Post extends Base {
 					$u->Rules['{%alias%}'] = $this->Alias;
 				} else {
 					if ($zbp->option['ZC_POST_ALIAS_USE_ID_NOT_TITLE'] == false) {
-						$u->Rules['{%alias%}'] = urlencode($this->Title);
+						$u->Rules['{%alias%}'] = rawurlencode($this->Title);
 					} else {
 						$u->Rules['{%alias%}'] = $this->ID;
 					}
@@ -158,12 +158,12 @@ class Post extends Base {
 				if ($this->Category->Alias) {
 					$u->Rules['{%category%}'] = $this->Category->Alias;
 				} else {
-					$u->Rules['{%category%}'] = urlencode($this->Category->Name);
+					$u->Rules['{%category%}'] = rawurlencode($this->Category->Name);
 				}
 				if ($this->Author->Alias) {
 					$u->Rules['{%author%}'] = $this->Author->Alias;
 				} else {
-					$u->Rules['{%author%}'] = urlencode($this->Author->Name);
+					$u->Rules['{%author%}'] = rawurlencode($this->Author->Name);
 				}
 				return $u->Make();
 				break;

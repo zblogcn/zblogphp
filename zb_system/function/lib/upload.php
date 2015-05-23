@@ -156,7 +156,7 @@ class Upload extends Base {
 			foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Url'] as $fpname => &$fpsignal) {
 				return $fpname($this);
 			}
-			return $zbp->host . 'zb_users/' . $this->Dir . urlencode($this->Name);
+			return $zbp->host . 'zb_users/' . $this->Dir . rawurlencode($this->Name);
 		}
 		if ($name == 'Dir') {
 			return 'upload/' . date('Y', $this->PostTime) . '/' . date('m', $this->PostTime) . '/';
