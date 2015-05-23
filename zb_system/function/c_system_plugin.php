@@ -1030,6 +1030,17 @@ DefinePluginFilter('Filter_Plugin_ViewComments_Template');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_ViewComment_Template
+'参数:&$template
+'说明:
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_ViewComment_Template');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_PostModule_Core
 '参数:&$mod
 '说明:模块编辑的核心接口

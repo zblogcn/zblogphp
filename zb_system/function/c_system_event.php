@@ -1095,6 +1095,10 @@ function ViewComment($id) {
 	$zbp->template->SetTags('page', 1);
 	$zbp->template->SetTemplate($template);
 
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewComment_Template'] as $fpname => &$fpsignal) {
+		$fpreturn = $fpname($zbp->template);
+	}
+
 	$zbp->template->Display();
 
 	return true;
