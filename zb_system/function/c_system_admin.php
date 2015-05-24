@@ -1330,7 +1330,7 @@ function Admin_ModuleMng() {
 
 		};
 
-		var t;
+		var t,f=1;
 		function hideWidget(item){
 				item.find(".ui-icon").removeClass("ui-icon-triangle-1-s").addClass("ui-icon-triangle-1-w");
 				t=item.next();
@@ -1344,12 +1344,16 @@ function Admin_ModuleMng() {
 				t.find(".siderbar-note>span").text(t.find(".widget").length);
 		}
 
-		$(".siderbar-header").toggle( function () {
-				hideWidget($(this));
-			  },
-			  function () {
+		$( ".siderbar-header" ).click(function(){
+			if($(this).hasClass("clicked")) {
 				showWidget($(this));
-			  });
+				$(this).removeClass("clicked");
+			}
+			else {
+				hideWidget($(this));
+				$(this).addClass("clicked");
+			}
+		});
 
  		$( ".siderbar-sort-list" ).sortable({
  			items:'.widget',
