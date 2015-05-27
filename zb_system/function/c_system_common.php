@@ -1248,5 +1248,5 @@ function htmlspecialchars_array($array) {
  * @since 1.4
  */
 function FilterCorrectName($s) {
-	return preg_replace('|[^0-9a-zA-Z/-]|', '', $s);
+	return preg_replace('|[^0-9a-zA-Z_/-]|', '', $s);
 }
