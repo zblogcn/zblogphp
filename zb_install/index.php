@@ -65,7 +65,7 @@ Include_AddonAdminFont();
 <body>
 <div class="setup">
   <form method="post" action="./index.php?step=<?php echo $zblogstep + 1;?>">
-	<input type="hidden" name="zbloglang" id="zbloglang" value="<?php echo $zbloglang;?>"/>
+	<input type="hidden" name="zbloglang" id="zbloglang" value="<?php echo $zbloglang;?>"/><?php echo $zbloglang;?>
     <?php
 
 switch ($zblogstep) {
@@ -94,7 +94,7 @@ switch ($zblogstep) {
 </div>
 <script type="text/javascript">
 
-$( "select[id=language]" ).change(function() {
+$( "#language" ).change(function() {
 	$("#zbloglang").val($(this).val());
 	$("form").attr('action','./index.php');
 	$("form").submit();
@@ -221,7 +221,7 @@ Z-BlogPHP官方网址：http://www.zblogcn.com/
       &nbsp;&nbsp;&nbsp;&nbsp;
       <input type="submit" name="next" id="netx" value="<?php echo $zbp->lang['zb_install']['next'];?>" disabled="disabled" />
       <script type="text/javascript">
-$( "input[type=checkbox]" ).click(function() {
+$( "input[type=checkbox]" ).change(function() {
   if ( $( this ).prop( "checked" ) ) {
     $("#netx").prop("disabled",false);
   }
