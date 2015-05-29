@@ -114,18 +114,7 @@ class Comment extends Base {
 			return $array;
 		}
 		if ($name == 'Level') {
-			if ($this->ParentID == 0) {return 0;}
-
-			$c1 = $zbp->GetCommentByID($this->ParentID);
-			if ($c1->ParentID == 0) {return 1;}
-
-			$c2 = $zbp->GetCommentByID($c1->ParentID);
-			if ($c2->ParentID == 0) {return 2;}
-
-			$c3 = $zbp->GetCommentByID($c2->ParentID);
-			if ($c3->ParentID == 0) {return 3;}
-
-			return 4;
+			return $this->GetDeep($this);
 		}
 		if ($name == 'Post') {
 			$p = $zbp->GetPostByID($this->LogID);
@@ -158,5 +147,19 @@ class Comment extends Base {
 			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return parent::Del();
+	}
+
+	/**
+	 * 得到评论深度
+	 * @param object $object
+	 * @return int 评论深度
+	 */
+	private function GetDeep(&$object, $deep = 0) {
+		global $zbp;
+		if ($object->ParentID == 0 || $object->ParentID == $object->ID) {
+			return $deep;
+		}
+		$parentComment = $zbp->GetCommentByID($object->ParentID);
+		return $this->GetDeep($parentComment, $deep + 1);
 	}
 }
