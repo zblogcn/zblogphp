@@ -1420,76 +1420,77 @@ class ZBlogPHP {
 	 * @return null
 	 */
 	public function LoadLanguage($type, $id, $default = '') {
-		$default = str_replace(array('/','\\'),'',$default);
-		if ($type == 'system') {
-			if ($default == '') {
-				$default = $this->option['ZC_BLOG_LANGUAGEPACK'];
-			}
 
-			if (is_readable($f = $this->path . 'zb_users/language/' . $default . '.php')) {
-				$this->lang = require $f;
-				$this->langpacklist[] = array($type, $id, $default);
-				return true;
-			}
-			$default = 'zh-cn';
-			if (is_readable($f = $this->path . 'zb_users/language/' . $default . '.php')) {
-				$this->lang = require $f;
-				$this->langpacklist[] = array($type, $id, $default);
-				return true;
-			}
-			$default = 'en';
-			if (is_readable($f = $this->path . 'zb_users/language/' . $default . '.php')) {
-				$this->lang = require $f;
-				$this->langpacklist[] = array($type, $id, $default);
-				return true;
-			}
-		} elseif ($type == 'plugin' || $type == 'theme') {
-			if ($default == '') {
-				$default = $this->option['ZC_BLOG_LANGUAGEPACK'];
-			}
+		$languagePath = $this->path;
+		$languageRegEx = '/^([0-9A-Z\-_]*)\.php$/ui';
+		$languageList = array();
+		$language = '';
+		$default = str_replace(array('/', '\\'), '', $default);
+		$languagePtr = &$this->lang;
 
-			if (is_readable($f = $this->path . 'zb_users/' . $type . '/' . $id . '/language/' . $default . '.php')) {
-				$this->lang[$id] = require $f;
-				$this->langpacklist[] = array($type, $id, $default);
-				return true;
-			}
-			$default = 'zh-cn';
-			if (is_readable($f = $this->path . 'zb_users/' . $type . '/' . $id . '/language/' . $default . '.php')) {
-				$this->lang[$id] = require $f;
-				$this->langpacklist[] = array($type, $id, $default);
-				return true;
-			}
-			$default = 'en';
-			if (is_readable($f = $this->path . 'zb_users/' . $type . '/' . $id . '/language/' . $default . '.php')) {
-				$this->lang[$id] = require $f;
-				$this->langpacklist[] = array($type, $id, $default);
-				return true;
-			}
-		} elseif ($type != '' && $id != '') {
-			if ($default == '') {
-				$default = $this->option['ZC_BLOG_LANGUAGEPACK'];
-			}
+		if ($default == '') {
+			$default = $this->option['ZC_BLOG_LANGUAGEPACK'];
+		}
 
-			if (is_readable($f = $this->path . $type . '/language/' . $default . '.php')) {
-				$this->lang[$id] = require $f;
-				$this->langpacklist[] = array($type, $id, $default);
-				return true;
+		$defaultLanguageList = array($default, 'zh-cn', 'zh-tw', 'en');
+
+		switch ($type) {
+			case 'system':
+				$languagePath .= 'zb_users/language/';
+				break;
+			case 'plugin':
+			case 'theme':
+				$languagePath .= 'zb_users/' . $type . '/' . $id . '/language/';
+				$languagePtr = &$this->lang[$id];
+				break;
+			default:
+				$languagePath .= $type . '/language/';
+				break;
+		}
+
+		$handle = opendir($languagePath);
+		$match = null;
+		if ($handle) {
+			while (false !== ($file = readdir($handle))) {
+				if (preg_match($languageRegEx, $file, $match)) {
+					$languageList[] = $match[1];
+				}
 			}
-			$default = 'zh-cn';
-			if (is_readable($f = $this->path . $type . '/language/' . $default . '.php')) {
-				$this->lang[$id] = require $f;
-				$this->langpacklist[] = array($type, $id, $default);
-				return true;
-			}
-			$default = 'en';
-			if (is_readable($f = $this->path . $type . '/language/' . $default . '.php')) {
-				$this->lang[$id] = require $f;
-				$this->langpacklist[] = array($type, $id, $default);
-				return true;
+			closedir($handle);
+		} else {
+			// 这里不会执行到，在opendir时就已经抛出E_WARNING
+			throw new Exception('Cannot opendir(' . $languagePath . ')');
+			return false;
+		}
+
+		if (count($languageList) === 0) {
+			throw new Exception('No language in ' . $languagePath);
+			return false;
+		}
+
+		for ($i = 0; $i < count($defaultLanguageList); $i++) {
+			// 在效率上，array_search和命名数组没有本质区别，至少在这里如此。
+			if (false !== array_search($defaultLanguageList[$i], $languageList)) {
+				$language = $defaultLanguageList[$i];
+				break;
 			}
 		}
+		if ($language === '') {
+			throw new Exception('Language ' . $default . ' is not found in ' . $languagePath);
+			return false;
+		}
+
+		$languagePath .= $language . '.php';
+		$languagePtr = require $languagePath;
+		$this->langpacklist[] = array($type, $id, $language);
+		return true;
 	}
 
+	/**
+	 * 重新读取语言包
+	 * @param string $default 默认语言
+	 * @return  null
+	 **/
 	public function ReloadLanguages($default) {
 		$array = $this->langpacklist;
 		$this->lang = $this->langpacklist = array();
