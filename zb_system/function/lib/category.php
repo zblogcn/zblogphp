@@ -98,47 +98,11 @@ class Category extends Base {
 				return;
 			} else {
 				$l = $this->Level;
-				if ($l == 1) {
-					return '&nbsp;└';
-				} elseif ($l == 2) {
-					return '&nbsp;&nbsp;&nbsp;└';
-				} elseif ($l == 3) {
-					return '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└';
-				}
-				return;
+				return str_repeat('&nbsp;', $l * 2 - 1) . '└';
 			}
 		}
 		if ($name == 'Level') {
-			if ($this->ParentID == 0) {
-				$this->RootID = 0;
-				return 0;
-			}
-			if (isset($zbp->categorys[$this->ParentID]) == false) {
-				return 0;
-			}
-
-			if ($zbp->categorys[$this->ParentID]->ParentID == 0) {
-				$this->RootID = $this->ParentID;
-				return 1;
-			}
-			if (isset($zbp->categorys[$zbp->categorys[$this->ParentID]->ParentID]) == false) {
-				return 0;
-			}
-
-			if ($zbp->categorys[$zbp->categorys[$this->ParentID]->ParentID]->ParentID == 0) {
-				$this->RootID = $zbp->categorys[$this->ParentID]->ParentID;
-				return 2;
-			}
-			if (isset($zbp->categorys[$zbp->categorys[$zbp->categorys[$this->ParentID]->ParentID]->ParentID]) == false) {
-				return 0;
-			}
-
-			if ($zbp->categorys[$zbp->categorys[$zbp->categorys[$this->ParentID]->ParentID]->ParentID]->ParentID == 0) {
-				$this->RootID = $zbp->categorys[$zbp->categorys[$this->ParentID]->ParentID]->ParentID;
-				return 3;
-			}
-
-			return 0;
+			return $this->GetDeep($this);
 		}
 		if ($name == 'SymbolName') {
 			return $this->Symbol . htmlspecialchars($this->Name);
@@ -201,5 +165,21 @@ class Category extends Base {
 			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		return parent::Del();
+	}
+
+	/**
+	 * 得到分类深度
+	 * @param object $object
+	 * @return int 分类深度
+	 */
+	private function GetDeep(&$object, $deep = 0) {
+		global $zbp;
+		if ($object->ParentID == 0) {
+			return $deep;
+		} else if (!isset($zbp->categories[$object->ParentID])) {
+			return 0;
+		} else {
+			return $this->GetDeep($zbp->categories[$object->ParentID], $deep + 1);
+		}
 	}
 }
