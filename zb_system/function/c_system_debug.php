@@ -439,7 +439,7 @@ class ZBlogException {
 			ob_clean();
 		}
 
-		require dirname(__FILE__) . '/../defend/error.html';
+		require dirname(__FILE__) . '/../defend/error.php';
 		RunTime();
 
 		/**
