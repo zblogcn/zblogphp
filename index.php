@@ -12,9 +12,11 @@ $zbp->RedirectInstall();
 $zbp->CheckGzip();
 $zbp->Load();
 $zbp->RedirectPermanentDomain();
+$zbp->CheckSiteClosed();
 
 foreach ($GLOBALS['hooks']['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {
 	$fpname();
+
 }
 
 ViewIndex();

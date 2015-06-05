@@ -175,6 +175,7 @@ return array(
 	'ZC_ADMIN_HTML5_ENABLE' => true,
 	// '代码高亮
 	'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
+	'ZC_CLOSE_SITE' => false,
 	'ZC_LOADMEMBERS_LEVEL' => 0,
 	'ZC_LAST_VERSION' => '',
 

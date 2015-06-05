@@ -10,6 +10,7 @@ require 'zb_system/function/c_system_base.php';
 
 $zbp->CheckGzip();
 $zbp->Load();
+$zbp->CheckSiteClosed();
 
 $action = 'search';
 

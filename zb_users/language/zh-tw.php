@@ -198,6 +198,7 @@ return array(
 		'all_audit' => '批次審核',
 		'gzip_compress' => 'GZip壓縮',
 		'syntax_high_lighter' => '語法突顯',
+		'close_site' => '關閉網站',
 		'max_li_in_ul' => 'UL內LI元素的最大行數',
 		'no_refresh_content' => '禁止系統更新正文',
 		'uncategory' => '未分類',

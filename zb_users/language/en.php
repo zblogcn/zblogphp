@@ -198,6 +198,7 @@ return array(
 		'all_audit' => 'Bulk Unapprove',
 		'gzip_compress' => 'GZip Compression',
 		'syntax_high_lighter' => 'Code Highlighting',
+		'close_site' => 'Close site',
 		'max_li_in_ul' => 'Maximum Number of LI in UL',
 		'no_refresh_content' => 'Prevent System Update Module Content',
 		'uncategory' => 'Uncategorized',

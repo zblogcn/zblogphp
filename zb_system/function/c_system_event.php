@@ -2500,7 +2500,8 @@ function SaveSetting() {
 			$key == 'ZC_DISPLAY_SUBCATEGORYS' ||
 			$key == 'ZC_GZIP_ENABLE' ||
 			$key == 'ZC_SYNTAXHIGHLIGHTER_ENABLE' ||
-			$key == 'ZC_COMMENT_VERIFY_ENABLE'
+			$key == 'ZC_COMMENT_VERIFY_ENABLE' ||
+			$key == 'ZC_CLOSE_SITE'
 		) {
 			$zbp->option[$key] = (boolean) $value;
 			continue;

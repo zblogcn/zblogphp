@@ -2856,6 +2856,17 @@ class ZBlogPHP {
 	}
 
 	/**
+	 * 检测网站关闭
+	 */
+	public function CheckSiteClosed() {
+
+		if ($this->option['ZC_CLOSE_SITE']) {
+			$this->ShowError(82, __FILE__, __LINE__);
+			exit;
+		}
+	}
+
+	/**
 	 * 跳转到安装页面
 	 */
 	public function RedirectInstall() {
