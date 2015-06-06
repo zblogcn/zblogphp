@@ -1445,6 +1445,7 @@ class ZBlogPHP {
 				break;
 			default:
 				$languagePath .= $type . '/language/';
+				$languagePtr = &$this->lang[$id];
 				break;
 		}
 

@@ -29,7 +29,6 @@ if (isset($_POST['zbloglang'])) {
 $zbp->LoadLanguage('system', '', $zbloglang);
 $zbp->LoadLanguage('zb_install', 'zb_install', $zbloglang);
 $zbp->option['ZC_BLOG_LANGUAGE'] = $zbp->lang['lang'];
-
 $zblogstep = (int) GetVars('step');
 if ($zblogstep == 0) {
 	$zblogstep = 1;
@@ -423,7 +422,8 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 	?>
         </p>
       </div>
-      <?php if ($hasMysql) {?>
+      <?php if ($hasMysql) {
+		?>
       <div class="dbdetail" id="mysql">
         <p><b><?php echo $zbp->lang['zb_install']['server'];?></b>
           <input type="text" name="dbmysql_server" id="dbmysql_server" value="<?php echo $option['ZC_MYSQL_SERVER'];?>" style="width:350px;" />
@@ -447,26 +447,33 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;';
           <option value="InnoDB" >InnoDB</option>
 		  </select>
         </p>
-<?php }?>
+<?php }
+		?>
       <p><b><?php echo $zbp->lang['zb_install']['db_drive'];?></b>
         <?php if ($CheckResult['mysqli'][0]) {?>
         <label>
           <input value="mysqli" type="radio" name="dbtype"/> MySQLi</label>
-        <?php }?>&nbsp;&nbsp;&nbsp;&nbsp;
+        <?php }
+		?>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php if ($CheckResult['pdo_mysql'][0]) {?>
         <label>
           <input value="pdo_mysql" type="radio" name="dbtype"/> PDO_MySQL</label>
-        <?php }?>&nbsp;&nbsp;&nbsp;&nbsp;
-<?php if (version_compare(PHP_VERSION, '5.5.0', '<')) {?>
+        <?php }
+		?>&nbsp;&nbsp;&nbsp;&nbsp;
+<?php if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+			?>
         <?php if ($CheckResult['mysql'][0]) {?>
         <label>
           <input value="mysql" type="radio" name="dbtype"/> MySQL</label>
-        <?php }?>&nbsp;&nbsp;&nbsp;&nbsp;
-<?php }?>
+        <?php }
+			?>&nbsp;&nbsp;&nbsp;&nbsp;
+<?php }
+		?>
 		<br/><small><?php echo $zbp->lang['zb_install']['db_set_port'];?></small>
       </p>
       </div>
-      <?php }?>
+      <?php }
+	?>
 
       <?php if ($hasSqlite) {
 		?>
@@ -504,7 +511,8 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 		?>
       </p>
       </div>
-      <?php }?>
+      <?php }
+	?>
 
       <p class="title"><?php echo $zbp->lang['zb_install']['website_setting'];?></p>
       <p><b><?php echo $zbp->lang['zb_install']['blog_name'];?></b>
