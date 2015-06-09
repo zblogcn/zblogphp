@@ -64,7 +64,7 @@ Include_AddonAdminFont();
 <body>
 <div class="setup">
   <form method="post" action="./index.php?step=<?php echo $zblogstep + 1;?>">
-	<input type="hidden" name="zbloglang" id="zbloglang" value="<?php echo $zbloglang;?>"/><?php echo $zbloglang;?>
+	<input type="hidden" name="zbloglang" id="zbloglang" value="<?php echo $zbloglang;?>"/>
     <?php
 
 switch ($zblogstep) {
