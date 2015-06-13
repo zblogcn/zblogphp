@@ -67,17 +67,30 @@ foreach (debug_backtrace() as $iInt => $sData) {
 		?>
 		 		<tr>
 		 			<td style='width:50px'><?php echo $iInt + 1?></td>
-		 			<td><?php echo $sData['file']?></td>
+		 			<td><?php echo isset($sData['file']) ? $sData['file'] : 'Callback';?></td>
 		 		</tr>
 		 		<tr>
 		 			<td></td>
-		 			<td><code>(<?php echo $sData['line'];?>) <?php echo isset($sData['class']) ? $sData['class'] . $sData['type'] : "";
-		echo $sData['function'];?></code></td>
+		 			<td><code>(<?php if (isset($sData['line'])) {
+			echo $sData['line'];
+		}
+		?>) <?php echo isset($sData['class']) ? $sData['class'] . $sData['type'] : "";
+		echo $sData['function'] . '(';
+		if (isset($sData['args'])) {
+			foreach ($sData['args'] as $argKey => $argVal) {
+				echo $argKey . ' => ' . htmlspecialchars((string) $argVal) . ',';
+			}
+		}
+		echo ')';?></code></td>
 		 		</tr>
 		 		<tr>
 		 			<td></td>
-		 			<td><code><?php $fileContent = $this->get_code($sData['file'], $sData['line']);
-		echo $fileContent[$sData['line'] - 1];?></code></td>
+		 			<td><code><?php
+if (isset($sData['line'])) {
+			$fileContent = $this->get_code($sData['file'], $sData['line']);
+			echo $fileContent[$sData['line'] - 1];
+		}
+		?></code></td>
 		 		</tr>
 <?php }
 	?>
