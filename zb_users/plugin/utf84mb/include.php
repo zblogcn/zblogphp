@@ -19,7 +19,7 @@ function utf84mb_fixHtmlSpecialChars() {
 	$article->Intro = preg_replace_callback("/\&\#x([0-9A-Z]{2,6})\;/u", 'utf84mb_convertToUTF8', $article->Intro);
 }
 
-// These code is use for fuck PHP 5.3 and lower.
+// These code is used for fuck PHP 5.3 and lower.
 // I love callback!
 
 function utf84mb_convertToUCS4($matches) {
