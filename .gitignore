@@ -62,6 +62,7 @@
 !/zb_users/plugin/LargeData
 !/zb_users/plugin/ZBPJFExample
 !/zb_users/plugin/markdown
+!/zb_users/plugin/utf84mb
 
 # Unoffical Theme
 /zb_users/theme/*
