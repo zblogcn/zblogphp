@@ -167,7 +167,18 @@ tr.color4 { background: #ffffdd; }
 .td10 { width: 10%; }
 .td15 { width: 15%; }
 .td25 { width: 25%; }
-
+.table_hover > tbody > tr > td:hover,
+.table_hover > tbody > tr > th:hover,
+.table_hover > tbody > tr:hover > td,
+.table_hover > tbody > tr:hover > th {
+  background-color: #ffffdd;
+}
+.table_stripes > tbody > tr:nth-of-type(odd) {
+  background-color: #F4F4F4;
+}
+.table_stripes > thead > tr {
+  background-color: #ededed;
+}
 /*表   单*/
 form { border: 0px solid black; padding: 0.0em; margin: 0.5em 0; }
 form p { padding: 0.5em 0  0.5em 0; line-height: 1.5em; }
