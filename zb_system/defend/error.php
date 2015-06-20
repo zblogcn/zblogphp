@@ -78,7 +78,7 @@ foreach (debug_backtrace() as $iInt => $sData) {
 		echo $sData['function'] . '(';
 		if (isset($sData['args'])) {
 			foreach ($sData['args'] as $argKey => $argVal) {
-				echo $argKey . ' => ' . htmlspecialchars((string) $argVal) . ',';
+				echo $argKey . ' => ' . (CheckCanBeString($argVal) ? htmlspecialchars((string) $argVal) : 'Object') . ',';
 			}
 		}
 		echo ')';?></code></td>

@@ -1250,3 +1250,23 @@ function htmlspecialchars_array($array) {
 function FilterCorrectName($s) {
 	return preg_replace('|[^0-9a-zA-Z_/-]|', '', $s);
 }
+
+/**
+ * 确认一个对象是否可被转换为string
+ * @param object $obj
+ * @return bool
+ * @since 1.4
+ */
+function CheckCanBeString($obj) {
+	// Fuck PHP 5.2!!!!
+	// return $obj === null || is_scalar($obj) || is_callable([$obj, '__toString']);
+	if (is_object($obj) && method_exists($obj, '__toString')) {
+		return true;
+	}
+
+	if (is_null($obj)) {
+		return true;
+	}
+
+	return is_scalar($obj);
+}
