@@ -101,7 +101,7 @@
 			objSubmit.removeClass("loading").removeAttr("disabled").val(objSubmit.data("orig"));
 
 			if ((data.search("faultCode") > 0) && (data.search("faultString") > 0)) {
-				var errorData = s.match("<string>.+?</string>")[0].replace("<string>", "").replace("</string>", "");
+				var errorData = data.match("<string>.+?</string>")[0].replace("<string>", "").replace("</string>", "");
 				alert(errorData);
 				try {
 					console.log(arguments);
@@ -109,7 +109,7 @@
 				} catch (e) { /* do nothing*/ }
 			} else {
 				var cmt = data.match(/cmt\d+/);
-				if (formData.replyid === 0) {
+				if (formData.replyid == "0") {
 					this.$(data).insertAfter("#AjaxCommentBegin");
 				} else {
 					this.$(data).insertAfter("#AjaxComment" + formData.replyid);
@@ -354,6 +354,7 @@
 			 * @property {string} isajax - Return Ajax String
 			 * @type {object}
 			 */
+			
 			formData = formData || {};
 			formData.action = formData.action || $("#inpId").parent("form").attr("action");
 			formData.postid = formData.postid || $("#inpId").val();
@@ -364,6 +365,14 @@
 			formData.homepage = formData.homepage || $("#inpHomePage").val();
 			formData.replyid = formData.replyid || $("#inpRevID").val();
 			formData.isajax = formData.isajax || true;
+
+			/** 
+			 * Check `http://`
+			 */
+			if (!/^(.+)\:\/\//.test(formData.homepage) && formData.homepage != "") {
+				$("#inpHomePage").val("http://" + formData.homepage);
+				formData.homepage = "http://" + formData.homepage;
+			}
 
 			var error = {
 				no: 0,
