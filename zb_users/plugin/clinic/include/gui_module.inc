@@ -18,6 +18,25 @@ var $tableSelector = $("#tbody-message");
 var $timeSelector = $("#span-time");
 var $progressSelector = $("#progress");
 var $progressSpanSelector = $("#span-progress");
+$.xhrPool = [];
+$.xhrPool.abortAll = function() {
+    $(this).each(function(idx, jqXHR) {
+        jqXHR.abort();
+    });
+    $.xhrPool = [];
+};
+
+$.ajaxSetup({
+    beforeSend: function(jqXHR) {
+        $.xhrPool.push(jqXHR);
+    },
+    complete: function(jqXHR) {
+        var index = $.xhrPool.indexOf(jqXHR);
+        if (index > -1) {
+            $.xhrPool.splice(index, 1);
+        }
+    }
+});
 
 var clinicConfig = {
 	moduleId: "<?php echo $module['id']?>",
@@ -28,15 +47,13 @@ var clinicConfig = {
 };
 var ajaxPost = function(param) {
 	var url = "ajax.php?module=" + clinicConfig.moduleId;
-	return new Promise(function(resolve, reject) {
-		$.ajax(url, {
+	var ajax = $.ajax(url, {
 			data: param,
 			type: "POST",
-			dataType: "json",
-			success: resolve,
-			error: reject
-		});
-	});
+			dataType: "json"});
+	return new Promise(function(resolve, reject) {
+		ajax.done(resolve).fail(reject);
+	})
 };
 var sendMessage = function(textString) {
 	$("<tr><td>" + textString + "</td></tr>").prependTo($tableSelector);
@@ -45,7 +62,7 @@ $(function() {
 	var addTask = function(data) {
 		console.log(data);
 		clinicConfig.maxTasks += data.length;
-		return Promise.map(data, function(item) {
+		return Promise.map(data, function(item, index) {
 			return ajaxPost(item).then(function(data) {
 				clinicConfig.currentTask++;
 				return Promise.map(data, function(item) {
@@ -70,13 +87,14 @@ $(function() {
 		if (parseInt('<?php echo $GLOBALS['blogversion'];?>') < 150601) bmx2table(); // Fuck
 	}, 1000);
 
-	var task = ajaxPost({function: "get_queue"}).then(addTask).error(function(e) {
+	var task = ajaxPost({function: "get_queue"}).cancellable().then(addTask).error(function(e) {
 		var errorMessage = e.responseText.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').split("\n").reverse();
 		errorMessage.forEach(function(item) {
 			sendMessage(item);
 		});
 		sendMessage('错误状态码：' + e.status);
 		sendMessage('<span style="color: red">× 执行过程中出现错误！</span>');
+		$.xhrPool.abortAll();
 	}).finally(function() {
 		clearInterval(clinicConfig.timeInterval);
 	});
