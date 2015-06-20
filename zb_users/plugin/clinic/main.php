@@ -11,7 +11,7 @@ $module = (isset($clinic->modules[$module]) ? $clinic->modules[$module] : NULL);
 $blogtitle = 'Z-BlogPHP诊断工具' . ($module ? ' - ' . $module['name'] : '');
 
 require $blogpath . 'zb_system/admin/admin_header.php';
-echo '<style type="text/css">tr{height: 32px}</style><script type="text/javascript" src="include/clinic.js"></script>';
+echo '<style type="text/css">tr{height: 32px}</style><script type="text/javascript" src="include/bluebird.min.js"></script>';
 require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
