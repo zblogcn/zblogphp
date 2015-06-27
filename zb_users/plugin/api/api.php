@@ -5,7 +5,11 @@
  * @php >= 5.2
  * @author zsx<zsx@zsxsoft.com>
  */
+define('API_PATH', dirname(__FILE__));
 require 'route.php';
+require 'io.php';
+require 'error.php';
+
 /**
  * API Singleton
  */
@@ -18,7 +22,10 @@ class API {
 	 * Route
 	 */
 	public static $Route;
-
+	/**
+	 * I/O
+	 */
+	public static $IO;
 	/**
 	 * To avoid construct outside this class.
 	 * @private
@@ -52,7 +59,22 @@ class API {
 	 * @return true
 	 */
 	public static function init() {
+
+		global $zbp;
+		// Set Z-BlogPHP Enviroment
+		$zbp->option['ZC_RUNINFO_DISPLAY'] = false;
+
 		self::$Route = API_Route::getInstance();
+		self::$IO = API_IO::getInstance(isset($_SERVER['ACCEPT']) ? $_SERVER['ACCEPT'] : 'application/json');
+
+		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(API_PATH . '/route'), RecursiveIteratorIterator::CHILD_FIRST);
+		foreach ($iterator as $path) {
+			$fileName = $path->__toString();
+			if ($path->isFile()) {
+				include $fileName;
+			}
+		}
+
 		return true;
 	}
 
