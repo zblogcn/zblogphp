@@ -1,4 +1,28 @@
 <?php
+/**
+ * api
+ * @author zsx<zsx@zsxsoft.com>
+ * @package api/route/module
+ * @php >= 5.2
+ */
+/**
+ * Format single module object
+ * @param object $module
+ * @return array          
+ */
+function return_module($id) {
+	global $zbp;
+
+	$module = $zbp->GetModuleByID($id);
+	$ret = $module->GetData();
+	API::$IO->formatObjectName($ret);
+	return $ret;
+	
+}
+
+/**
+ * Get module
+ */
 function api_module_get_function() {
 
 	$id = (int)API::$IO->id;
@@ -10,13 +34,36 @@ function api_module_get_function() {
 	API::$IO->end();
 }
 
-function return_module($id) {
-	global $zbp;
+API::$Route->get('/module/', 'api_module_get_function');
 
-	$module = $zbp->GetModuleByID($id);
-	$ret = $module->GetData();
-	API::$IO->formatObjectName($ret);
-	return $ret;
+/**
+ * Get modules
+ */
+function api_modules_get_function() {
 	
 }
-API::$Route->get('/module/', 'api_module_get_function');
+API::$Route->get('/modules/', 'api_modules_get_function');
+
+/**
+ * Create module
+ */
+function api_module_create_function() {
+
+}
+API::$Route->post('/module/create/', 'api_module_create_function');
+
+/**
+ * Update module
+ */
+function api_module_update_function() {
+
+}
+API::$Route->post('/module/update/', 'api_module_update_function');
+
+/**
+ * Update module
+ */
+function api_module_delete_function() {
+
+}
+API::$Route->post('/module/delete/', 'api_module_delete_function');

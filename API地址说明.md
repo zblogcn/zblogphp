@@ -11,7 +11,7 @@ API地址说明
 
 更新分类信息：POST /category/update/?id=1
 
-删除分类：POST /category/POST /?id=delete/?id=1
+删除分类：POST /category/delete/?id=1
 
 
 
@@ -53,15 +53,15 @@ API地址说明
 
 
 
-获取用户列表：GET /users/?page=1&limit=30&category=1
+获取用户列表：GET /members/?page=1&limit=30&category=1
 
-获取用户：GET /user/?id=1
+获取用户：GET /member/?id=1
 
-创建用户：POST /user/create/
+创建用户：POST /member/create/
 
-更新用户：POST /user/update/?id=1
+更新用户：POST /member/update/?id=1
 
-删除用户：POST /user/delete/?id=1
+删除用户：POST /member/delete/?id=1
 
 
 
@@ -100,10 +100,10 @@ API地址说明
 
 
 
-获取附件：GET /attachment/?id=1
+获取附件：GET /upload/?id=1
 
-上传附件：POST /attachment/create
+上传附件：POST /upload/create
 
-删除附件：POST /attachment/delete/?id=1
+删除附件：POST /upload/delete/?id=1
 
 得到附件列表：GET /attachments/?page=1&limit=30

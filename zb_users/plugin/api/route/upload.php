@@ -1,4 +1,27 @@
 <?php
+/**
+ * api
+ * @author zsx<zsx@zsxsoft.com>
+ * @package api/route/upload
+ * @php >= 5.2
+ */
+/**
+ * Format single upload object
+ * @param object $upload
+ * @return array          
+ */
+function return_upload($id) {
+	global $zbp;
+
+	$upload = $zbp->GetUploadByID($id);
+	$ret = $upload->GetData();
+	API::$IO->formatObjectName($ret);
+	return $ret;
+}
+
+/**
+ * Get upload
+ */
 function api_upload_get_function() {
 
 	$id = (int)API::$IO->id;
@@ -9,13 +32,36 @@ function api_upload_get_function() {
 	API::$IO->upload = $ret;
 	API::$IO->end();
 }
-
-function return_upload($id) {
-	global $zbp;
-
-	$upload = $zbp->GetUploadByID($id);
-	$ret = $upload->GetData();
-	API::$IO->formatObjectName($ret);
-	return $ret;
-}
 API::$Route->get('/upload/', 'api_upload_get_function');
+
+/**
+ * Get attachments list
+ */
+function api_attachments_get_function() {
+
+}
+API::$Route->get('/attachments/', 'api_attachments_get_function');
+
+/**
+ * Create upload
+ */
+function api_upload_create_function() {
+
+}
+API::$Route->post('/upload/create/', 'api_upload_create_function');
+
+/**
+ * Update upload
+ */
+function api_upload_update_function() {
+
+}
+API::$Route->post('/upload/update/', 'api_upload_update_function');
+
+/**
+ * Update upload
+ */
+function api_upload_delete_function() {
+
+}
+API::$Route->post('/upload/delete/', 'api_upload_delete_function');

@@ -20,7 +20,7 @@ function api_index_begin() {
 	// Check if is API
 	$requestUri = GetVars('HTTP_HOST', 'SERVER') . GetVars('REQUEST_URI', 'SERVER') . '/';
 	$removedHttpHost = preg_replace('/^http.+\/\//', '', $bloghost);
-	if (0 > strpos($requestUri, $removedHttpHost . 'api/')) {
+	if (false === strpos($requestUri, $removedHttpHost . 'api/')) {
 		return false;
 	}
 	$requestMethod = strtoupper(GetVars('REQUEST_METHOD', 'SERVER'));
