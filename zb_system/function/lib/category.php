@@ -10,7 +10,9 @@ class Category extends Base {
 	/**
 	 * @var array 下层分类
 	 */
-	public $SubCategorys = array();
+	public $SubCategories = array();
+	public $SubCategorys = null; // 拼写错误，保持兼容
+
 
 	/**
 	 * 构造函数
@@ -19,6 +21,7 @@ class Category extends Base {
 		global $zbp;
 		parent::__construct($zbp->table['Category'], $zbp->datainfo['Category'], __CLASS__);
 
+		$this->SubCategorys = &$this->SubCategories;
 		$this->Name = $zbp->lang['msg']['unnamed'];
 	}
 
