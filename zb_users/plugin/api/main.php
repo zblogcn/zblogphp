@@ -30,7 +30,11 @@ function fuck_hello2_function() {
 	var_dump('Hello2');
 }
 API::$Route->post('/hello', 'fuck_hello2_function');
-API::$Route->checkPath('GET', '/hello/world');
+function fuck_test_function() {
+	var_dump('aaaa');
+}
+API::$Route->route('/test/is', 'fuck_test_function');
+API::$Route->scanRoute('GET', '/test');
 ?>
   </div>
 </div>
