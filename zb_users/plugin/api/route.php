@@ -71,7 +71,6 @@ class API_Route {
 			$tree['__callback'] = $callback; // Register callback in the deepest path.
 			return;
 		}
-
 		if (self::$debug) {echo 'deep = ' . $deep . ', $array[$deep] = ' . $array[$deep] . "\n";}
 		$val = $array[$deep];
 
@@ -106,16 +105,19 @@ class API_Route {
 	 */
 	private static function _analyze($deep, $array, $tree) {
 		//echo $deep;
-
 		$val = $array[$deep];
+
 		foreach ($tree as $key => $child) {
 			if ($key == "__callback") {
 				continue;
 			}
+
 			$str = preg_quote($key);
-			$str = str_replace('\\*', '.+', $str);
+			if ($key === "" && $val !== "") continue;
+			$str = str_replace('\\*', '.*?', $str);
 			$str = str_replace('\\?', '.', $str);
 			$str = "/" . $str . "/"; // Build RegExp for test
+
 			if (self::$debug) {
 				echo "deep = " . $deep . ", RegEx = " . $str . ", Value = " . $val . ", Result = " . (preg_match($str, $val) ? "True" : "False") . "\n";
 			}
@@ -167,13 +169,14 @@ class API_Route {
 		//if (@preg_match($url, null) === false) {
 			// Test if string is not regex
 			$urlArray = explode("/", $url);
-			if (count($urlArray) <= 0) {
+			if (count($urlArray) < 0) {
 				return false;
 			}
 
-			if ($urlArray[0] == "") {
+			if ($urlArray[0] == "" && count($urlArray) > 1) {
 				array_shift($urlArray);
 			}
+			//if ($method == "GLOBAL") var_dump($urlArray);
 
 			return self::buildTree(0, $urlArray, self::$_ruleTree[$method], $callback);
 		//} else {
@@ -214,7 +217,7 @@ class API_Route {
 
 		$urlArray = explode("/", $url);
 		if ($urlArray[0] == "") {
-			array_Shift($urlArray);
+			array_shift($urlArray);
 		}
 
 		// Firstly, we should check request method
@@ -222,7 +225,7 @@ class API_Route {
 			$requestMethod = "GET";
 		}
 
-		$checkList = array($requestMethod, 'GLOBAL');
+		$checkList = array('GLOBAL', $requestMethod);
 		foreach ($checkList as $item) {
 			//self::_checkRegExp($url, self::$_regExList[$item]);
 			self::_analyze(0, $urlArray, self::$_ruleTree[$item]);

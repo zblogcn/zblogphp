@@ -3,9 +3,9 @@ API地址说明
 
 --- 前台 ---
 
-获取分类（用ID）：GET /category/?id=1
+[OK] 获取分类（用ID）：GET /category/?id=1
 
-获取分类（用名字）：GET /category/?name=xx
+[OK] 获取分类（用名字）：GET /category/?name=xx
 
 创建分类：POST /category/create/
 
@@ -15,7 +15,7 @@ API地址说明
 
 
 
-获取文章：GET /article/?id=1
+[OK] 获取文章：GET /article/?id=1
 
 创建文章：POST /article/create/
 
@@ -29,7 +29,7 @@ API地址说明
 
 获取评论列表：GET /comments/?page=1&limit=30&article=1
 
-获取单条评论：GET /comment/?id=1
+[OK] 获取单条评论：GET /comment/?id=1
 
 创建评论：POST /comment/create/
 
@@ -43,7 +43,7 @@ API地址说明
 
 获取Tag列表：GET /tags/?page=1&limit=30
 
-获取Tag：GET /tag/?id=1
+[OK] 获取Tag：GET /tag/?id=1
 
 创建Tag：POST /tag/create/
 
@@ -55,7 +55,7 @@ API地址说明
 
 获取用户列表：GET /members/?page=1&limit=30&category=1
 
-获取用户：GET /member/?id=1
+[OK] 获取用户：GET /member/?id=1
 
 创建用户：POST /member/create/
 
@@ -71,15 +71,15 @@ API地址说明
 
 --- 后台 ---
 
-得到网站信息：GET /
+[OK] 得到网站信息：GET /
 
 更新网站配置：POST /setting/update/
 
 
 
-启用应用：POST /app/enable/id/
+[OK] 启用应用：POST /app/enable/id/
 
-停用应用：POST /app/disable/id/
+[OK] 停用应用：POST /app/disable/id/
 
 调整应用：POST /app/modify/id/
 
@@ -88,7 +88,7 @@ API地址说明
 
 
 
-获取模块：GET /module/?id=1
+[OK] 获取模块：GET /module/?id=1
 
 创建模块：POST /module/create
 
@@ -100,7 +100,7 @@ API地址说明
 
 
 
-获取附件：GET /upload/?id=1
+[OK] 获取附件：GET /upload/?id=1
 
 上传附件：POST /upload/create
 
