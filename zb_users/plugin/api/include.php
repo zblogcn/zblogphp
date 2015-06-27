@@ -19,12 +19,13 @@ function api_index_begin() {
 	global $bloghost;
 	// Check if is API
 	$requestUri = GetVars('HTTP_HOST', 'SERVER') . GetVars('REQUEST_URI', 'SERVER') . '/';
-	$removedHttpHost = preg_replace('/^http.+\/\//', '', $bloghost);
-	if (false === strpos($requestUri, $removedHttpHost . 'api/')) {
+	$removedHttpHost = preg_replace('/^http.+\/\//', '', $bloghost) . 'api/';
+	if (false === strpos($requestUri, $removedHttpHost)) {
 		return false;
 	}
 	$requestMethod = strtoupper(GetVars('REQUEST_METHOD', 'SERVER'));
 	$realRouteUrl = str_replace($removedHttpHost, '', $requestUri);
+	//API::$Route::$debug = true;
 	API::$Route->scanRoute($requestMethod, $realRouteUrl);
 
 }

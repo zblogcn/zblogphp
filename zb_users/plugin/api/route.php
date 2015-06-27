@@ -67,7 +67,7 @@ class API_Route {
 	 */
 	private static function buildTree($deep, $array, &$tree, $callback) {
 
-		if ($deep == count($array)) {
+		if ($deep == count($array) - 1) {
 			$tree['__callback'] = $callback; // Register callback in the deepest path.
 			return;
 		}
@@ -120,7 +120,7 @@ class API_Route {
 				echo "deep = " . $deep . ", RegEx = " . $str . ", Value = " . $val . ", Result = " . (preg_match($str, $val) ? "True" : "False") . "\n";
 			}
 			if (preg_match($str, $val)) {
-				if ($deep == count($array) - 1 || count($child) == 0) {
+				if ($deep == count($array) - 1 || count($child) == 1) {
 					if (isset($tree[$key]['__callback'])) { 
 						$tree[$key]['__callback'](); 
 					}
@@ -163,7 +163,8 @@ class API_Route {
 	 * @return boolean
 	 */
 	public static function route($url, $callback, $method = "GLOBAL") {
-		if (@preg_match($url, null) === false) {
+
+		//if (@preg_match($url, null) === false) {
 			// Test if string is not regex
 			$urlArray = explode("/", $url);
 			if (count($urlArray) <= 0) {
@@ -171,13 +172,13 @@ class API_Route {
 			}
 
 			if ($urlArray[0] == "") {
-				array_Shift($urlArray);
+				array_shift($urlArray);
 			}
 
 			return self::buildTree(0, $urlArray, self::$_ruleTree[$method], $callback);
-		} else {
-			return self::buildRegExpList($url, self::$_regExList[$method], $callback);
-		}
+		//} else {
+		//	return self::buildRegExpList($url, self::$_regExList[$method], $callback);
+		//}
 	}
 
 	/**
@@ -222,9 +223,8 @@ class API_Route {
 		}
 
 		$checkList = array($requestMethod, 'GLOBAL');
-
 		foreach ($checkList as $item) {
-			self::_checkRegExp($url, self::$_regExList[$item]);
+			//self::_checkRegExp($url, self::$_regExList[$item]);
 			self::_analyze(0, $urlArray, self::$_ruleTree[$item]);
 		}
 

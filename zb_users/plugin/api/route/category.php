@@ -29,7 +29,7 @@ function api_category_get_function() {
 	global $zbp;
 	$id = (int)API::$IO->id;
 	$name = API::$IO->name;
-	if ($id === 0 && $name == "") API::$IO->end(API_ERROR::MISSING_PARAMATER);
+	if ($id === 0 && $name == "") API::$IO->end(3);
 
 	if ($id != 0) {
 		API::$IO->category = return_category($zbp->categories[$id]);

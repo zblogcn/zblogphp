@@ -8,7 +8,6 @@
 define('API_PATH', dirname(__FILE__));
 require 'route.php';
 require 'io.php';
-require 'error.php';
 
 /**
  * API Singleton

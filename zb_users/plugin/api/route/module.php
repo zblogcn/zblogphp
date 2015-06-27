@@ -26,7 +26,7 @@ function return_module($id) {
 function api_module_get_function() {
 
 	$id = (int)API::$IO->id;
-	if ($id === 0) API::$IO->end(API_ERROR::MISSING_PARAMATER);
+	if ($id === 0) API::$IO->end(3);
 	//
 	$ret = return_module($id);
 

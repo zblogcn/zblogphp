@@ -2,7 +2,7 @@
 /**
  * api
  * @author zsx<zsx@zsxsoft.com>
-* @package api/io
+ * @package api/io
  * @php >= 5.2
  */
 class API_IO {
@@ -112,14 +112,15 @@ class API_IO {
 	 */
 	public static function end($errorCode = 0, $errorMessage = "") {
 
+		global $zbp; // For language file
 		$returnObject = array(
 			'err' => $errorCode
 		);
 
 		$err = $errorCode;
-		if ($errorCode !== API_ERROR::OK && $errorMessage === "") {
-			$returnObject['message'] = API_ERROR::$errorCode[$err];
-		} else if ($errorCode !== API_ERROR::OK && $errorMessage !== "") {
+		if ($errorCode !== 0 && $errorMessage === "") {
+			$returnObject['message'] = $zbp->lang['error'][$errorCode];
+		} else if ($errorCode !== 0 && $errorMessage !== "") {
 			$returnObject['message'] = $errorMessage;
 		} else {
 			$returnObject['data'] = self::$savedObject;

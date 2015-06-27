@@ -27,7 +27,7 @@ function return_tag($id) {
 function api_tag_get_function() {
 
 	$id = (int)API::$IO->id;
-	if ($id === 0) API::$IO->end(API_ERROR::MISSING_PARAMATER);
+	if ($id === 0) API::$IO->end(3);
 	//
 	$ret = return_tag($id);
 
