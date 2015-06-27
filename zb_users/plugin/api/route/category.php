@@ -19,21 +19,10 @@ function api_category_get_function() {
 }
 
 function return_category($category) {
-var_dump($category);exit;
-	$ret = array();
-	$ret['id'] = $category->ID;
-	$ret['order']  = $category->Order;
-	$ret['url'] = $category->Url;
-	$ret['name'] = $category->Name;
-	$ret['alias'] = $category->Alias;
-	$ret['article_count'] = $category->Count;
-	$ret['parent_id'] = $category->ParentID;
-	$ret['root_id'] = $category->RootID;
-	$ret['template'] = $category->Template;
-	$ret['log_template'] = $category->LogTemplate;
-	$ret['intro'] = $category->Intro;
+	$ret = $category->GetData();
+	$ret['Url'] = $category->Url;
 	$ret['categories'] = array();
-
+	API::$IO->formatObjectName($ret);
 	foreach($category->SubCategorys as $subCategory) {
 		array_push($ret['categories'], return_category($subCategory));
 	}

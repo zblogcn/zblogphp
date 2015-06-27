@@ -90,6 +90,21 @@ class API_IO {
 		return GetVars($name, 'POST');
 	}
 
+
+	/**
+	 * Format array key
+	 * @param array &$object [description]
+	 */
+	public static function formatObjectName(&$object) {
+		foreach ($object as $oldKey => $value) {
+			$newKey = str_replace('ID', 'Id', str_replace('iD', 'id', lcfirst($oldKey)));
+			if ($newKey != $oldKey) {
+				$object[$newKey] = $value;
+				unset($object[$oldKey]);
+			}
+		}
+	}
+
 	/**
 	 * Write data to page and exit
 	 * @param  integer $errorCode  
