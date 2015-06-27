@@ -18,16 +18,19 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <?php
 include 'api.php';
 //API::$Route::$debug = true;
-API::$Route::get('/hello/world', function () {
+function fuck_hello_world_function() {
 	var_dump('a');
-});
-API::$Route::use ('/hello', function () {
+};
+API::$Route->get('/hello/world', 'fuck_hello_world_function');
+function fuck_hello_function() {
 	var_dump('Hello2');
-});
-API::$Route::post('/hello', function () {
+}
+API::$Route->route ('/hello', 'fuck_hello_function');
+function fuck_hello2_function() {
 	var_dump('Hello2');
-});
-API::$Route::checkPath('GET', '/hello/world');
+}
+API::$Route->post('/hello', 'fuck_hello2_function');
+API::$Route->checkPath('GET', '/hello/world');
 ?>
   </div>
 </div>

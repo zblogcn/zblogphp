@@ -145,7 +145,7 @@ class API_Route {
 	 * @param  string $method description
 	 * @return [type]             [description]
 	 */
-	public static function use ($url, callable $callback, $method = "GLOBAL") {
+	public static function route($url, $callback, $method = "GLOBAL") {
 		if (@preg_match($url, null) === false) {
 			// Test if string is not regex
 			$urlArray = explode("/", $url);
@@ -169,11 +169,11 @@ class API_Route {
 	 * @param  callable $callback [description]
 	 * @return [type]             [description]
 	 */
-	public static function get($url, callable $callback) {
+	public static function get($url, $callback) {
 		// I have to write dulipated functions instead of __callStatic.
 		// Because __callStatic was added since PHP 5.3.0.
 		// So that, let's fuck PHP 5.2 together!
-		return self::use ($url, $callback, "GET");
+		return self::route($url, $callback, "GET");
 	}
 
 	/**
@@ -182,8 +182,8 @@ class API_Route {
 	 * @param  callable $callback [description]
 	 * @return [type]             [description]
 	 */
-	public static function post($url, callable $callback) {
-		return self::use ($url, $callback, "POST");
+	public static function post($url, $callback) {
+		return self::route($url, $callback, "POST");
 	}
 
 	/**
@@ -192,7 +192,7 @@ class API_Route {
 	 * @param $path
 	 * @return bool
 	 */
-	public static function checkPath(string $requestMethod, string $path) {
+	public static function checkPath($requestMethod, $path) {
 
 		$urlArray = explode("/", $path);
 		if ($urlArray[0] == "") {
