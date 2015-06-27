@@ -126,6 +126,8 @@ class API_IO {
 		}
 
 		$returnObject['info'] = RunTime(); // A ZBP Function
+
+		header('Content-Type: application/json');
 		echo json_encode($returnObject);
 		
 		exit;
