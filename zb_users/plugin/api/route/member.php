@@ -8,7 +8,7 @@
 /**
  * Format single member object
  * @param object $member
- * @return array          
+ * @return array
  */
 function return_member($id) {
 	global $zbp;
@@ -20,7 +20,7 @@ function return_member($id) {
 	unset($ret['Guid']);
 	API::$IO->formatObjectName($ret);
 	return $ret;
-	
+
 }
 
 /**
@@ -42,7 +42,7 @@ API::$Route->get('/member/', 'api_member_get_function');
  * Get members
  */
 function api_members_get_function() {
-	
+
 }
 API::$Route->get('/members/', 'api_members_get_function');
 

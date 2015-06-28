@@ -9,7 +9,7 @@
 /**
  * Verify user
  */
-function api_app_get_function() { 
+function api_app_get_function() {
 	global $zbp;
 	if (!$zbp->CheckRights('root')) {
 		API::$IO->end(6);

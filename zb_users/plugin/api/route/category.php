@@ -8,7 +8,7 @@
 /**
  * Format single category object
  * @param object $category
- * @return array          
+ * @return array
  */
 function return_category($category) {
 	$ret = $category->GetData();
@@ -18,7 +18,7 @@ function return_category($category) {
 	foreach($category->SubCategorys as $subCategory) {
 		array_push($ret['categories'], return_category($subCategory));
 	}
-	
+
 	return $ret;
 }
 
@@ -36,7 +36,7 @@ function api_category_get_function() {
 	} else if ($name != "") {
 		API::$IO->category = return_category($zbp->GetCategoryByName($name));
 	}
- 	
+
 	API::$IO->end();
 }
 API::$Route->get('/category/', 'api_category_get_function');

@@ -8,7 +8,7 @@
 /**
  * Format single upload object
  * @param object $upload
- * @return array          
+ * @return array
  */
 function return_upload($id) {
 	global $zbp;

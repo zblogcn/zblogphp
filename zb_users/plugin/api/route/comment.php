@@ -8,7 +8,7 @@
 /**
  * Format single comment object
  * @param object $comment
- * @return array          
+ * @return array
  */
 function return_comment($id) {
 	global $zbp;
@@ -38,7 +38,7 @@ API::$Route->get('/comment/', 'api_comment_get_function');
  * Get comments
  */
 function api_comments_get_function() {
-	
+
 }
 API::$Route->get('/comments/', 'api_comments_get_function');
 

@@ -62,7 +62,7 @@ class API_IO {
 	/**
 	 * Return outputData or HTTP_GET
 	 * @param  $name
-	 * @return 
+	 * @return
 	 */
 	public function __get($name) {
 
@@ -70,7 +70,7 @@ class API_IO {
 			return $savedObject[$name];
 		}
 		return GetVars($name, 'GET');
-		
+
 	}
 
 	/**
@@ -107,7 +107,7 @@ class API_IO {
 
 	/**
 	 * Write data to page and exit
-	 * @param  integer $errorCode  
+	 * @param  integer $errorCode
 	 * @param  string  $errorMessage
 	 */
 	public static function end($errorCode = 0, $errorMessage = "") {
@@ -130,7 +130,7 @@ class API_IO {
 
 		header('Content-Type: application/json');
 		echo json_encode($returnObject);
-		
+
 		exit;
 		return true;
 	}

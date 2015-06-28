@@ -85,7 +85,7 @@ class API_Route {
 	}
 
 	/**
-	 * To build RegExp list 
+	 * To build RegExp list
 	 * @param string $string
 	 * @param array $list
 	 * @param callable $callback
@@ -95,7 +95,7 @@ class API_Route {
 		$list[$regex] = $callback;
 		return true;
 	}
-	
+
 	/*
 	 * To analyze path
 	 * @param int $deep
@@ -123,8 +123,8 @@ class API_Route {
 			}
 			if (preg_match($str, $val)) {
 				if ($deep == count($array) - 1 || count($child) == 1) {
-					if (isset($tree[$key]['__callback'])) { 
-						$tree[$key]['__callback'](); 
+					if (isset($tree[$key]['__callback'])) {
+						$tree[$key]['__callback']();
 					}
 					return true;
 				}
@@ -159,7 +159,7 @@ class API_Route {
 
 	/**
 	 * Create Route
-	 * @param  string   $url  
+	 * @param  string   $url
 	 * @param  callable $callback
 	 * @param  string $method
 	 * @return boolean
@@ -186,8 +186,8 @@ class API_Route {
 
 	/**
 	 * Create GET Route
-	 * @param  string   $url      
-	 * @param  callable $callback 
+	 * @param  string   $url
+	 * @param  callable $callback
 	 * @return boolean
 	 */
 	public static function get($url, $callback) {
@@ -199,8 +199,8 @@ class API_Route {
 
 	/**
 	 * Create POST Route
-	 * @param  string   $url      
-	 * @param  callable $callback 
+	 * @param  string   $url
+	 * @param  callable $callback
 	 * @return boolean
 	 */
 	public static function post($url, $callback) {

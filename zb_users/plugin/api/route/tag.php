@@ -8,7 +8,7 @@
 /**
  * Format single tag object
  * @param object $tag
- * @return array          
+ * @return array
  */
 function return_tag($id) {
 	global $zbp;
@@ -40,7 +40,7 @@ API::$Route->get('/tag/', 'api_tag_get_function');
  * Get tags
  */
 function api_tags_get_function() {
-	
+
 }
 API::$Route->get('/tags/', 'api_tags_get_function');
 

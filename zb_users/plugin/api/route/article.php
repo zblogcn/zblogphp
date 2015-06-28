@@ -8,7 +8,7 @@
 /**
  * Format single article object
  * @param object $article
- * @return array          
+ * @return array
  */
 function return_article($id) {
 	global $zbp;

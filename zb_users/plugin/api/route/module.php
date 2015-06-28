@@ -8,7 +8,7 @@
 /**
  * Format single module object
  * @param object $module
- * @return array          
+ * @return array
  */
 function return_module($id) {
 	global $zbp;
@@ -17,7 +17,7 @@ function return_module($id) {
 	$ret = $module->GetData();
 	API::$IO->formatObjectName($ret);
 	return $ret;
-	
+
 }
 
 /**
@@ -40,7 +40,7 @@ API::$Route->get('/module/', 'api_module_get_function');
  * Get modules
  */
 function api_modules_get_function() {
-	
+
 }
 API::$Route->get('/modules/', 'api_modules_get_function');
 
