@@ -167,7 +167,7 @@ function statistic(s){
 		function(data){
 			$("#tbStatistic tr:first ~ tr").remove();
 			$("#tbStatistic tr:first").after(data);
-			bmx2table();
+			//bmx2table();
 			$("#statloading").hide();
 			$("#updatatime").show();
 		}
@@ -219,7 +219,7 @@ $(document).ready(function(){
 	);
 
 	//斑马线化表格
-	bmx2table();
+	//bmx2table();
 
 	if($('.SubMenu').find('span').length>0){
 		$('.SubMenu').show();
