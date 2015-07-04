@@ -151,10 +151,9 @@ class API_IO {
 			$returnObject['message'] = $zbp->lang['error'][$errorCode];
 		} else if ($errorCode !== -1 && $errorMessage !== "") {
 			$returnObject['message'] = $errorMessage;
-		} else {
-			$returnObject['data'] = self::$savedObject;
 		}
 
+		$returnObject['data'] = self::$savedObject;
 		$returnObject['info'] = RunTime(); // A ZBP Function
 
 		header('Content-Type: application/json');
