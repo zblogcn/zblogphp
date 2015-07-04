@@ -20,6 +20,7 @@ function api_index_begin() {
 
 	global $apiRealRouteUrl;
 	global $zbp;
+	if ($apiRealRouteUrl == "") return false;
 	$requestMethod = strtoupper(GetVars('REQUEST_METHOD', 'SERVER'));
 	//API::$Route::$debug = true;
 	API::$Route->scanRoute($requestMethod, $apiRealRouteUrl);
@@ -28,11 +29,12 @@ function api_index_begin() {
 }
 
 function api_zbp_load_pre() {
-
 	// Check URL first
 	global $bloghost;
 	global $apiRealRouteUrl;
-	$requestUri = GetVars('HTTP_HOST', 'SERVER') . GetVars('REQUEST_URI', 'SERVER') . '/';
+	global $zbp;
+
+	$requestUri = str_replace('index.php?', '', GetVars('HTTP_HOST', 'SERVER') . GetVars('REQUEST_URI', 'SERVER') . '/');
 	$removedHttpHost = preg_replace('/^http.+\/\//', '', $bloghost) . 'api/';
 	if (false === strpos($requestUri, $removedHttpHost)) {
 		$apiRealRouteUrl = "";

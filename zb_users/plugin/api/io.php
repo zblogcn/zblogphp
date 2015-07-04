@@ -13,10 +13,16 @@ class API_IO {
 	private static $instance = null;
 	/**
 	 * Saved object
-	 * for input/output
+	 * for output
 	 * @var array
 	 */
 	private static $savedObject = array();
+	/**
+	 * GET object
+	 * for input
+	 * @var array
+	 */
+	private static $getObject = array();
 	/**
 	 * Input/Output format
 	 * for input/output
@@ -35,6 +41,11 @@ class API_IO {
 		} else if (0 > strpos($formatString, 'json')) {
 			self::end(API_ERROR::NON_ACCEPT);
 		}
+
+		$uri = GetVars('REQUEST_URI', 'SERVER');
+		$queryStringArray = explode('?', $uri);
+		$queryString = end($queryStringArray);
+		$query = parse_str($queryString, self::$getObject);
 
 	}
 
@@ -68,8 +79,11 @@ class API_IO {
 
 		if ($name === "output") {
 			return $savedObject[$name];
+		} else if (isset(self::$getObject[$name])) {
+			return self::$getObject[$name];
+		} else {
+			return "";
 		}
-		return GetVars($name, 'GET');
 
 	}
 
