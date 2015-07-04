@@ -24,7 +24,7 @@ function api_index_begin() {
 	$requestMethod = strtoupper(GetVars('REQUEST_METHOD', 'SERVER'));
 	//API::$Route::$debug = true;
 	API::$Route->scanRoute($requestMethod, $apiRealRouteUrl);
-	API::$IO->end(0);
+	API::$IO->end(-1);
 
 }
 

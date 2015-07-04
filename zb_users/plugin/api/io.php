@@ -120,11 +120,26 @@ class API_IO {
 	}
 
 	/**
+	 * Format array key for save
+	 * @param array &$object [description]
+	 */
+	public static function formatObjectNameForSave(&$object) {
+		foreach ($object as $oldKey => $value) {
+			$newKey = str_replace('id', 'ID', str_replace('Id', 'ID', ucfirst($oldKey)));
+			if ($newKey != $oldKey) {
+				$object[$newKey] = $value;
+				unset($object[$oldKey]);
+			}
+		}
+	}
+
+
+	/**
 	 * Write data to page and exit
 	 * @param  integer $errorCode
 	 * @param  string  $errorMessage
 	 */
-	public static function end($errorCode = 0, $errorMessage = "") {
+	public static function end($errorCode = -1, $errorMessage = "") {
 
 		global $zbp; // For language file
 		$returnObject = array(
@@ -132,9 +147,9 @@ class API_IO {
 		);
 
 		$err = $errorCode;
-		if ($errorCode !== 0 && $errorMessage === "") {
+		if ($errorCode !== -1 && $errorMessage === "") {
 			$returnObject['message'] = $zbp->lang['error'][$errorCode];
-		} else if ($errorCode !== 0 && $errorMessage !== "") {
+		} else if ($errorCode !== -1 && $errorMessage !== "") {
 			$returnObject['message'] = $errorMessage;
 		} else {
 			$returnObject['data'] = self::$savedObject;
