@@ -34,7 +34,6 @@
 !/zb_users/plugin/FileSystem
 !/zb_users/plugin/Gravatar
 !/zb_users/plugin/HeartComment
-!/zb_users/plugin/HeartVote
 !/zb_users/plugin/Howl
 !/zb_users/plugin/KindEditor
 !/zb_users/plugin/PDC
@@ -51,10 +50,8 @@
 !/zb_users/plugin/changyan
 !/zb_users/plugin/clinic
 !/zb_users/plugin/duoshuo
-!/zb_users/plugin/editor4comment
 !/zb_users/plugin/em2zbp
 !/zb_users/plugin/passwordvisit
-!/zb_users/plugin/qiniuyun
 !/zb_users/plugin/static
 !/zb_users/plugin/tpluginmaker
 !/zb_users/plugin/wearingtheme
