@@ -58,17 +58,48 @@ function api_categories_get_function() {
 API::$Route->get('/categories/', 'api_categories_get_function');
 
 /**
+ * A function will run after PostCategory().
+ * @param Post $category 
+ */
+function api_category_post_callback(&$category) {
+
+	$ret = return_category($category);
+	API::$IO->category = $ret;
+
+}
+/**
+ * Create & Update category
+ */
+function api_category_post_function() {
+
+	global $zbp;
+	Add_Filter_Plugin('Filter_Plugin_PostCategory_Succeed', 'api_category_post_callback');
+	PostCategory(); 
+	$zbp->BuildModule();
+	$zbp->SaveCache();
+
+}
+
+/**
  * Create category
  */
 function api_category_create_function() {
 
+	$_POST['ID'] = 0;
+	api_category_post_function();
 }
+
 API::$Route->post('/category/create/', 'api_category_create_function');
 
 /**
  * Update category
  */
 function api_category_update_function() {
+
+	$id = (int)API::$IO->id;
+	if ($id === 0) API::$IO->end(3);
+	$_POST['ID'] = $id;
+	api_category_post_function();
 
 }
 API::$Route->post('/category/update/', 'api_category_update_function');
@@ -77,6 +108,11 @@ API::$Route->post('/category/update/', 'api_category_update_function');
  * Update category
  */
 function api_category_delete_function() {
+
+	$ret = DelCategory();
+	if ($ret !== true) {
+		API::$IO->end(0);
+	}
 
 }
 API::$Route->post('/category/delete/', 'api_category_delete_function');
