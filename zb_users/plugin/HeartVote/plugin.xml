@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="php">
+<id>HeartVote</id>
+<name>用“心”打分</name>
+<url>http://www.rainbowsoft.org/</url>
+<note>自定义CSS和图片，还有JS，可以有很多种变化。</note>
+<description>用心打分！</description>
+<path>main.php</path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>zx.asd</name>
+  <email></email>
+  <url>http://www.rainbowsoft.org/</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>140220</adapted>
+<version>1.2</version>
+<pubdate>2013-07-07</pubdate>
+<modified>2014-02-20</modified>
+<price>0</price>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+</sidebars>
+</plugin>

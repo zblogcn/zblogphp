@@ -58,22 +58,32 @@ a { outline: none;}
 		z-index: 20;
 		position: absolute;
 		padding: 0px;
-		cursor: pointer;
 	}
-	
-	.unit-rating .heartcomment-vote {
-		background: url('../image/star_rating.png') left center !important;
+	.unit-rating li a:hover{
+		background: url('../image/star_rating.png') left center;
+		z-index: 2;
+		left: 0px;
 	}
 	.unit-rating a.r1-unit{left: 0px;}
+	.unit-rating a.r1-unit:hover{width:30px;}
 	.unit-rating a.r2-unit{left:30px;}
+	.unit-rating a.r2-unit:hover{width: 60px;}
 	.unit-rating a.r3-unit{left: 60px;}
+	.unit-rating a.r3-unit:hover{width: 90px;}
 	.unit-rating a.r4-unit{left: 90px;}	
+	.unit-rating a.r4-unit:hover{width: 120px;}
 	.unit-rating a.r5-unit{left: 120px;}
+	.unit-rating a.r5-unit:hover{width: 150px;}
 	.unit-rating a.r6-unit{left: 150px;}
+	.unit-rating a.r6-unit:hover{width: 180px;}
 	.unit-rating a.r7-unit{left: 180px;}
+	.unit-rating a.r7-unit:hover{width: 210px;}
 	.unit-rating a.r8-unit{left: 210px;}
+	.unit-rating a.r8-unit:hover{width: 240px;}
 	.unit-rating a.r9-unit{left: 240px;}
+	.unit-rating a.r9-unit:hover{width: 270px;}
 	.unit-rating a.r10-unit{left: 270px;}
+	.unit-rating a.r10-unit:hover{width: 300px;}
 	.unit-rating li.current-rating{
 		background: url('../image/star_rating.png') left bottom;
 		position: absolute;
