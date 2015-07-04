@@ -47,4 +47,6 @@ function api_zbp_load_pre() {
 	$_COOKIE['username'] = "";
 	$_COOKIE['password'] = "";
 
+	API::init();
+
 }

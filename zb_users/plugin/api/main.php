@@ -10,6 +10,8 @@ if (!$zbp->CheckPlugin('api')) {$zbp->ShowError(48);die();}
 $blogtitle = 'api';
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
+
+API::init();
 ?>
 <div id="divMain">
 	<div class="divHeader">
