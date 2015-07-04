@@ -22,7 +22,7 @@ class API_Route {
 	private static $_base = '';
 	/**
 	 * Rule Tree
-	 * Some web servers don't supper PUT/DELETE.
+	 * Some web servers don't support PUT/DELETE.
 	 */
 	private static $_ruleTree = array(
 		"GET" => array(),
@@ -59,6 +59,29 @@ class API_Route {
 	}
 
 	/**
+	 * To build callback to tree
+	 * @param  array &$tree   
+	 * @param  callable $callback
+	 */
+	private static function buildCallback(&$tree, $callback) {
+		if (isset($tree['__callback'])) {
+			array_push($tree['__callback'], $callback);
+		} else {
+			$tree['__callback'] = array($callback);
+		}
+	}
+
+	/**
+	 * To call callable function
+	 * @param  array $callbackTree
+	 * @return
+	 */
+	private static function callBack($callbackTree) {
+		foreach ($callbackTree['__callback'] as $value) {
+			$value();
+		}
+	}
+	/**
 	 * To build tree from path
 	 * @param int $deep
 	 * @param array $array
@@ -68,7 +91,7 @@ class API_Route {
 	private static function buildTree($deep, $array, &$tree, $callback) {
 
 		if ($deep == count($array) - 1) {
-			$tree['__callback'] = $callback; // Register callback in the deepest path.
+			self::buildCallback($tree, $callback); // Register callback in the deepest path.
 			return;
 		}
 		if (self::$debug) {echo 'deep = ' . $deep . ', $array[$deep] = ' . $array[$deep] . "\n";}
@@ -123,9 +146,7 @@ class API_Route {
 			}
 			if (preg_match($str, $val)) {
 				if ($deep == count($array) - 1 || count($child) == 1) {
-					if (isset($tree[$key]['__callback'])) {
-						$tree[$key]['__callback']();
-					}
+					self::callBack($tree[$key]);
 					//return true;
 				}
 				if (count($array) > $deep + 1) {
