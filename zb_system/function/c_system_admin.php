@@ -452,7 +452,7 @@ function Admin_SiteInfo() {
 	echo '</div>';
 	echo '<div id="divMain2">';
 
-	echo '<table class="tableFull tableBorder" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>' : '') . ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+	echo '<table class="tableFull tableBorder table_striped" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>' : '') . ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
 	if ((time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60) && $zbp->CheckRights('root')) {
 		echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'?act=misc&type=statistic\'); });</script>';
@@ -468,7 +468,7 @@ function Admin_SiteInfo() {
 
 	echo '</table>';
 
-	echo '<table class="tableFull tableBorder" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a>' : '') . ' <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+	echo '<table class="tableFull tableBorder table_striped" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a>' : '') . ' <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
 	if ((time() - (int) $zbp->cache->reload_updateinfo_time) > (47 * 60 * 60) && $zbp->CheckRights('root') && $echostatistic == true) {
 		echo '<script type="text/javascript">$(document).ready(function(){ updateinfo(\'?act=misc&type=updateinfo\'); });</script>';
