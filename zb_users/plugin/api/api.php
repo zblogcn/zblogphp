@@ -8,6 +8,7 @@
 define('API_PATH', dirname(__FILE__));
 require 'route.php';
 require 'io.php';
+require 'user.php';
 
 /**
  * API Singleton
@@ -25,6 +26,10 @@ class API {
 	 * I/O
 	 */
 	public static $IO;
+	/**
+	 * User
+	 */
+	public static $User;
 	/**
 	 * To avoid construct outside this class.
 	 * @private
@@ -65,6 +70,7 @@ class API {
 
 		self::$Route = API_Route::getInstance();
 		self::$IO = API_IO::getInstance(isset($_SERVER['ACCEPT']) ? $_SERVER['ACCEPT'] : 'application/json');
+		self::$User = API_User::getInstance();
 
 		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(API_PATH . '/route'), RecursiveIteratorIterator::CHILD_FIRST);
 		foreach ($iterator as $path) {
