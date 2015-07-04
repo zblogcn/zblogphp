@@ -37,7 +37,7 @@ function api_category_get_function() {
 		API::$IO->category = return_category($zbp->GetCategoryByName($name));
 	}
 
-	API::$IO->end();
+
 }
 API::$Route->get('/category/', 'api_category_get_function');
 

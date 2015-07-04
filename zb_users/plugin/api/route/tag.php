@@ -32,7 +32,7 @@ function api_tag_get_function() {
 	$ret = return_tag($id);
 
 	API::$IO->tag = $ret;
-	API::$IO->end();
+
 }
 API::$Route->get('/tag/', 'api_tag_get_function');
 

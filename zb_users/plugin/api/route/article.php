@@ -32,7 +32,7 @@ function api_article_get_function() {
 	$ret = return_article($id);
 
 	API::$IO->article = $ret;
-	API::$IO->end();
+
 }
 
 

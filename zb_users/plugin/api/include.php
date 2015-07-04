@@ -27,5 +27,6 @@ function api_index_begin() {
 	$realRouteUrl = str_replace($removedHttpHost, '', $requestUri);
 	//API::$Route::$debug = true;
 	API::$Route->scanRoute($requestMethod, $realRouteUrl);
+	API::$IO->end(0);
 
 }

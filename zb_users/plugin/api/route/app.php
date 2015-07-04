@@ -27,7 +27,7 @@ function api_app_enable_function() {
 	$id = API::$IO->id;
 	if ($id == "") API::$IO->end(3);
 	API::$IO->app = EnablePlugin($id);
-	API::$IO->end(0);
+
 
 }
 API::$Route->post('/app/enable/', 'api_app_enable_function');
@@ -40,7 +40,7 @@ function api_app_disable_function() {
 	if ($id == "") API::$IO->end(3);
 	DisablePlugin($id);
 	API::$IO->app = $id;
-	API::$IO->end(0);
+
 }
 API::$Route->post('/app/disable/', 'api_app_disable_function');
 

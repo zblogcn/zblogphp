@@ -31,7 +31,7 @@ function api_module_get_function() {
 	$ret = return_module($id);
 
 	API::$IO->module = $ret;
-	API::$IO->end();
+
 }
 
 API::$Route->get('/module/', 'api_module_get_function');

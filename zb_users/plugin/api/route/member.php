@@ -34,7 +34,7 @@ function api_member_get_function() {
 	$ret = return_member($id);
 
 	API::$IO->member = $ret;
-	API::$IO->end();
+
 }
 API::$Route->get('/member/', 'api_member_get_function');
 

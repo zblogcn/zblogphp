@@ -30,7 +30,7 @@ function api_comment_get_function() {
 	$ret = return_comment($id);
 
 	API::$IO->comment = $ret;
-	API::$IO->end();
+
 }
 API::$Route->get('/comment/', 'api_comment_get_function');
 

@@ -30,7 +30,7 @@ function api_upload_get_function() {
 	$ret = return_upload($id);
 
 	API::$IO->upload = $ret;
-	API::$IO->end();
+
 }
 API::$Route->get('/upload/', 'api_upload_get_function');
 

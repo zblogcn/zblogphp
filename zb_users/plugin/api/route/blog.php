@@ -21,7 +21,7 @@ function api_route_index_function() {
 		API::$IO->option = $zbp->option;
 	}
 
-	API::$IO->end(0);
+
 }
 API::$Route->route("//", 'api_route_index_function');
 
