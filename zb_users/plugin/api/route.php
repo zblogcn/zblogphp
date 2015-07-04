@@ -126,10 +126,12 @@ class API_Route {
 					if (isset($tree[$key]['__callback'])) {
 						$tree[$key]['__callback']();
 					}
-					return true;
+					//return true;
 				}
-				if (self::_analyze($deep + 1, $array, $child)) {
-					return true;
+				if (count($array) > $deep + 1) {
+					if (!self::_analyze($deep + 1, $array, $child)) {
+						continue;
+					}
 				} else {
 					continue;
 				}
