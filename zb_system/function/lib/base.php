@@ -118,8 +118,8 @@ class Base {
 	}
 
 	/**
-	 * 从数据库加载实例数据
-	 * @param int $id 实例ID
+	 * 获取数据库内指定ID的数据
+	 * @param int $id 指定ID
 	 * @return bool
 	 */
 	function LoadInfoByID($id) {
@@ -138,8 +138,8 @@ class Base {
 	}
 
 	/**
-	 * 从关联数组中加载实例数据
-	 * @param array $array 关联数组
+	 * 根据数组从数据库内查找数据并返回
+	 * @param array $array 待查找数组
 	 * @return bool
 	 */
 	function LoadInfoByAssoc($array) {
@@ -170,7 +170,7 @@ class Base {
 	}
 
 	/**
-	 * 从数组中加载实例数据
+	 * 从数组中加载数据
 	 * @param $array
 	 * @return bool
 	 */
@@ -208,8 +208,6 @@ class Base {
 
 	/**
 	 * 保存数据
-	 *
-	 * 保存实例数据到$zbp及数据库中
 	 * @return bool
 	 */
 	function Save() {
@@ -271,8 +269,6 @@ class Base {
 
 	/**
 	 * 删除数据
-	 *
-	 * 从$zbp及数据库中删除该实例数据
 	 * @return bool
 	 */
 	function Del() {
@@ -285,9 +281,7 @@ class Base {
 	}
 
 	/**
-	 * toString
-	 *
-	 * 将Base对像返回JSON数据
+	 * 将数据用JSON格式输出
 	 * @return string
 	 */
 	public function __toString() {

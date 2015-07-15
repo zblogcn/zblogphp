@@ -166,7 +166,7 @@ class Config {
 	}
 
 	/**
-	 * 从关联数组中加载实例数据
+	 * 从数组中加载数据
 	 * @param array $array 关联数组
 	 * @return bool
 	 */
@@ -184,7 +184,7 @@ class Config {
 	}
 
 	/**
-	 * 保存实例数据到$zbp及数据库中
+	 * 保存数据
 	 * @return bool
 	 */
 	function Save() {
