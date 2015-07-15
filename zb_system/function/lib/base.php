@@ -170,6 +170,27 @@ class Base {
 	}
 
 	/**
+	 * 从数据库搜索实例数据
+	 * @param array $array 关联数组
+	 * @return bool
+	 */
+	function LoadInfoByKey($key, $key_value) {
+		global $table, $datainfo;
+		$key_table = array_flip($table);
+		$key_table = $key_table[$this->table];
+		$key_field = $datainfo[$key_table][$key][0];
+		$sql = $this->db->sql->Select($this->table, array('*'), array(array('=', $key_field, $key_value)), null, null, null);
+		$array = $this->db->Query($sql);
+
+		if (count($array) > 0) {
+			$this->LoadInfoByAssoc($array[0]);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * 从数组中加载实例数据
 	 * @param $array
 	 * @return bool
