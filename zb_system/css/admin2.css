@@ -173,10 +173,10 @@ tr.color4 { background: #ffffdd; }
 .table_hover > tbody > tr:hover > th {
   background-color: #ffffdd;
 }
-.table_stripes > tbody > tr:nth-of-type(odd) {
+.table_striped > tbody > tr:nth-of-type(odd) {
   background-color: #F4F4F4;
 }
-.table_stripes > thead > tr {
+.table_striped > thead > tr {
   background-color: #ededed;
 }
 /*表   单*/

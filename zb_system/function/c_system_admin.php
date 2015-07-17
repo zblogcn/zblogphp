@@ -452,7 +452,7 @@ function Admin_SiteInfo() {
 	echo '</div>';
 	echo '<div id="divMain2">';
 
-	echo '<table class="tableFull tableBorder table_striped" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>' : '') . ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+	echo '<table class="tableFull tableBorder table_striped table_hover" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>' : '') . ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
 	if ((time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60) && $zbp->CheckRights('root')) {
 		echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'?act=misc&type=statistic\'); });</script>';
@@ -468,7 +468,7 @@ function Admin_SiteInfo() {
 
 	echo '</table>';
 
-	echo '<table class="tableFull tableBorder table_striped" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a>' : '') . ' <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+	echo '<table class="tableFull tableBorder table_striped table_hover" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a>' : '') . ' <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
 	if ((time() - (int) $zbp->cache->reload_updateinfo_time) > (47 * 60 * 60) && $zbp->CheckRights('root') && $echostatistic == true) {
 		echo '<script type="text/javascript">$(document).ready(function(){ updateinfo(\'?act=misc&type=updateinfo\'); });</script>';
@@ -518,7 +518,7 @@ function Admin_ArticleMng() {
 	<label><input type="checkbox" name="istop" value="True"/>&nbsp;' . $zbp->lang['msg']['top'] . '</label>&nbsp;&nbsp;&nbsp;&nbsp;
 	<input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
 	echo '</form>';
-	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<table border="1" class="tableFull tableBorder table_hover table_striped tableBorder-thcenter">';
 	echo '<tr>
 	<th>' . $zbp->lang['msg']['id'] . '</th>
 	<th>' . $zbp->lang['msg']['category'] . '</th>
@@ -621,7 +621,7 @@ function Admin_PageMng() {
 	echo '</div>';
 	echo '<div id="divMain2">';
 	echo '<!--<form class="search" id="search" method="post" action="#"></form>-->';
-	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 	echo '<tr>
 	<th>' . $zbp->lang['msg']['id'] . '</th>
 	<th>' . $zbp->lang['msg']['author'] . '</th>
@@ -701,7 +701,7 @@ function Admin_CategoryMng() {
 	}
 	echo '</div>';
 	echo '<div id="divMain2">';
-	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 	echo '<tr>
 
 	<th>' . $zbp->lang['msg']['id'] . '</th>
@@ -754,7 +754,7 @@ function Admin_CommentMng() {
 	echo '<p>' . $zbp->lang['msg']['search'] . '&nbsp;&nbsp;&nbsp;&nbsp;<input name="search" style="width:450px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
 	echo '</form>';
 	echo '<form method="post" action="' . $zbp->host . 'zb_system/cmd.php?act=CommentBat">';
-	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 	echo '<tr>
 	<th>' . $zbp->lang['msg']['id'] . '</th>
 	<th>' . $zbp->lang['msg']['parend_id'] . '</th>
@@ -889,7 +889,7 @@ function Admin_MemberMng() {
 	echo '</div>';
 	echo '<div id="divMain2">';
 	echo '<!--<form class="search" id="edit" method="post" action="#"></form>-->';
-	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 	echo '<tr>
 	<th>' . $zbp->lang['msg']['id'] . '</th>
 	<th>' . $zbp->lang['msg']['member_level'] . '</th>
@@ -974,7 +974,7 @@ function Admin_UploadMng() {
 	echo '<input class="button" type="reset" value="' . $zbp->lang['msg']['reset'] . '" /></p>';
 	echo '</form>';
 
-	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 	echo '<tr>
 	<th>' . $zbp->lang['msg']['id'] . '</th>
 	<th>' . $zbp->lang['msg']['author'] . '</th>
@@ -1044,7 +1044,7 @@ function Admin_TagMng() {
 
 	echo '<div id="divMain2">';
 	echo '<!--<form class="search" id="edit" method="post" action="#"></form>-->';
-	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 	echo '<tr>
 	<th>' . $zbp->lang['msg']['id'] . '</th>
 	<th>' . $zbp->lang['msg']['name'] . '</th>
@@ -1408,7 +1408,7 @@ function Admin_PluginMng() {
 	}
 	echo '</div>';
 	echo '<div id="divMain2">';
-	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 	echo '<tr>
 
 	<th></th>
@@ -1509,7 +1509,7 @@ function Admin_SettingMng() {
 <?php
 
 	echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
-	echo '<table style="padding:0px;margin:0px;width:100%;">';
+	echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
 	echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/><span class="note">&nbsp;' . $zbp->lang['msg']['blog_host_add'] . '</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="' . $zbp->option['ZC_BLOG_HOST'] . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly"') . ' />';
 	echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>&nbsp;&nbsp;' . $zbp->lang['msg']['permanent_domain'] . '</p></td></tr>';
 	echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_name'] . '</b></p></td><td><p><input id="ZC_BLOG_NAME" name="ZC_BLOG_NAME" style="width:600px;" type="text" value="' . $zbp->option['ZC_BLOG_NAME'] . '" /></p></td></tr>';
@@ -1520,7 +1520,7 @@ function Admin_SettingMng() {
 	echo '</div>';
 
 	echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab2">';
-	echo '<table style="padding:0px;margin:0px;width:100%;">';
+	echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
 
 	echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_timezone'] . '</b></p></td><td><p><select id="ZC_TIME_ZONE_NAME" name="ZC_TIME_ZONE_NAME" style="width:600px;" >';
 	echo CreateOptionsOfTimeZone($zbp->option['ZC_TIME_ZONE_NAME']);
@@ -1539,7 +1539,7 @@ function Admin_SettingMng() {
 	echo '</table>';
 	echo '</div>';
 	echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab3">';
-	echo '<table style="padding:0px;margin:0px;width:100%;">';
+	echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
 
 	echo '<tr><td><p><b>' . $zbp->lang['msg']['display_count'] . '</b></p></td><td><p><input id="ZC_DISPLAY_COUNT" name="ZC_DISPLAY_COUNT" style="width:600px;" type="text" value="' . $zbp->option['ZC_DISPLAY_COUNT'] . '" /></p></td></tr>';
 	echo '<tr><td><p><b>' . $zbp->lang['msg']['display_subcategorys'] . '</b></p></td><td><p><input id="ZC_DISPLAY_SUBCATEGORYS" name="ZC_DISPLAY_SUBCATEGORYS" type="text" value="' . $zbp->option['ZC_DISPLAY_SUBCATEGORYS'] . '" class="checkbox"/></p></td></tr>';
@@ -1549,7 +1549,7 @@ function Admin_SettingMng() {
 	echo '</table>';
 	echo '</div>';
 	echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab4">';
-	echo '<table style="padding:0px;margin:0px;width:100%;">';
+	echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
 
 	echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['comment_turnoff'] . '</b></p></td><td><p><input id="ZC_COMMENT_TURNOFF" name="ZC_COMMENT_TURNOFF" type="text" value="' . $zbp->option['ZC_COMMENT_TURNOFF'] . '" class="checkbox"/></p></td></tr>';
 	echo '<tr><td><p><b>' . $zbp->lang['msg']['comment_reverse_order'] . '</b></p></td><td><p><input id="ZC_COMMENT_REVERSE_ORDER" name="ZC_COMMENT_REVERSE_ORDER" type="text" value="' . $zbp->option['ZC_COMMENT_REVERSE_ORDER'] . '" class="checkbox"/></p></td></tr>';
