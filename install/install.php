@@ -57,7 +57,7 @@ function install1(){
 	echo "<p>正在努力地下载数据包...</p>";
 	ob_flush();
 
-	$GLOBALS['xml']=GetHttpContent('http://update.zblogcn.com/zblogphp/?install');
+	$GLOBALS['xml']=GetHttpContent('http://zblogcn.com/zblogphp/?install');
 
 	//file_put_contents('release.xml',$GLOBALS['xml']);
 
@@ -120,7 +120,7 @@ div{position:absolute;left: 50%;top: 50%;margin: -190px 0px 0px -150px;padding:0
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 ?>
-<p><img id="logo" src="http://update.zblogcn.com/zblogphp/loading.gif" alt="Z-BlogPHP在线安装" title="Z-BlogPHP在线安装"/></p>
+<p><img id="logo" src="http://zblogcn.com/zblogphp/loading.gif" alt="Z-BlogPHP在线安装" title="Z-BlogPHP在线安装"/></p>
 <?php
     flush();
     ob_flush();
@@ -133,16 +133,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 }else{
 
 ?>
-<p><?php echo (($v=GetHttpContent('http://update.zblogcn.com/zblogphp/'))=='')?'不能联网获取Z-BlogPHP！':'最新版本：'.$v;?></p>
-<p><img id="logo" src="http://update.zblogcn.com/zblogphp/loading.png" alt="Z-BlogPHP在线安装" title="Z-BlogPHP在线安装"/></p>
-<p style="display:none;"><img id="logo2" src="http://update.zblogcn.com/zblogphp/loading.gif" alt="" title=""/></p>
+<p><?php echo (($v=GetHttpContent('http://zblogcn.com/zblogphp/'))=='')?'不能联网获取Z-BlogPHP！':'最新版本：'.$v;?></p>
+<p><img id="logo" src="http://zblogcn.com/zblogphp/loading.png" alt="Z-BlogPHP在线安装" title="Z-BlogPHP在线安装"/></p>
+<p style="display:none;"><img id="logo2" src="http://zblogcn.com/zblogphp/loading.gif" alt="" title=""/></p>
 <?php
 	install0();
 }
 
 ?>
 <form method="post" action="#">
-<p><input type="submit" value="开始安装" onclick="this.style.display='none';document.getElementById('logo').src='http://update.zblogcn.com/zblogphp/loading.gif'" /></p>
+<p><input type="submit" value="开始安装" onclick="this.style.display='none';document.getElementById('logo').src='http://zblogcn.com/zblogphp/loading.gif'" /></p>
 </form>
 </div>
 </body>
