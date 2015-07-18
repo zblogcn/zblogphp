@@ -171,7 +171,8 @@ class Base {
 
 	/**
 	 * 根据特定的字段和值搜索数据
-	 * @param array $array 关联数组
+	 * @param string $field 字段(限string,int,bool)
+	 * @param string $field_value 数据值
 	 * @return bool
 	 */
 	function LoadInfoByKey($key, $key_value) {
