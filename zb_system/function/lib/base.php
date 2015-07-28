@@ -175,12 +175,12 @@ class Base {
 	 * @param string $field_value 数据值
 	 * @return bool
 	 */
-	function LoadInfoByKey($key, $key_value) {
+	function LoadInfoByField($field, $field_value) {
 		global $table, $datainfo;
-		$key_table = array_flip($table);
-		$key_table = $key_table[$this->table];
-		$key_field = $datainfo[$key_table][$key][0];
-		$sql = $this->db->sql->Select($this->table, array('*'), array(array('=', $key_field, $key_value)), null, null, null);
+		$field_table = array_flip($table);
+		$field_table = $field_table[$this->table];
+		$field_name = $datainfo[$field_table][$field][0];
+		$sql = $this->db->sql->Select($this->table, array('*'), array(array('=', $field_name, $field_value)), null, null, null);
 		$array = $this->db->Query($sql);
 
 		if (count($array) > 0) {
