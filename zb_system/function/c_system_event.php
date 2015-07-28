@@ -2033,63 +2033,71 @@ function DelTag() {
  */
 function PostMember() {
 	global $zbp;
+	$mem = new Member();
+	$othersEditable = $zbp->CheckRights('MemberAll');
+	$data = array();
+
 	if (!isset($_POST['ID'])) {
-		return;
+		return false;
 	}
 
-	if (!$zbp->CheckRights('MemberAll')) {
-		unset($_POST['Level']);
-		unset($_POST['Name']);
-		unset($_POST['Status']);
+	$data['ID'] = $_POST['ID'];
+	$editableField = array('Password', 'Email', 'HomePage', 'Alias', 'Intro', 'Template');
+	// 如果是管理员，则再允许改动别的字段
+	if ($othersEditable) {
+		array_push($editableField, 'Level', 'Status', 'Name', 'IP');
+	} else {
+		$data['ID'] = $zbp->user->ID;
 	}
-	if (isset($_POST['Password'])) {
-		if ($_POST['Password'] == '') {
-			unset($_POST['Password']);
-		} else {
-			if (strlen($_POST['Password']) < $zbp->option['ZC_PASSWORD_MIN'] || strlen($_POST['Password']) > $zbp->option['ZC_PASSWORD_MAX']) {
-				$zbp->ShowError(54, __FILE__, __LINE__);
-			}
-			if (!CheckRegExp($_POST['Password'], '[password]')) {
-				$zbp->ShowError(54, __FILE__, __LINE__);
-			}
-			$_POST['Password'] = Member::GetPassWordByGuid($_POST['Password'], $_POST['Guid']);
+	// 复制一个新数组
+	foreach ($editableField as $value) {
+		if (isset($_POST[$value])) {
+			$data[$value] = GetVars($value, 'POST');
 		}
 	}
 
-	if (isset($_POST['Name'])) {
-		//zbp自带数据检测同名
-		if (isset($zbp->membersbyname[$_POST['Name']])) {
-			if ($zbp->membersbyname[$_POST['Name']]->ID != $_POST['ID']) {
+	if (isset($data['Name'])) {
+		// 检测同名
+		if (isset($zbp->membersbyname[$data['Name']])) {
+			if ($zbp->membersbyname[$data['Name']]->ID != $data['ID']) {
 				$zbp->ShowError(62, __FILE__, __LINE__);
 			}
 		}
 	}
 
-	if (isset($_POST['Alias'])) {
-		$_POST['Alias'] = TransferHTML($_POST['Alias'], '[noscript]');
+	if (isset($data['Alias'])) {
+		$data['Alias'] = TransferHTML($data['Alias'], '[noscript]');
 	}
 
-	$mem = new Member();
-	if (GetVars('ID', 'POST') == 0) {
-		if (isset($_POST['Password']) == false || $_POST['Password'] == '') {
+	if ($data['ID'] == 0) {
+		if (isset($data['Password']) == false || $data['Password'] == '') {
 			$zbp->ShowError(73, __FILE__, __LINE__);
 		}
-		$_POST['IP'] = GetGuestIP();
+		$data['IP'] = GetGuestIP();
 	} else {
-		$mem->LoadInfoByID(GetVars('ID', 'POST'));
-	}
-
-	if ($zbp->CheckRights('MemberAll')) {
-		if ($mem->ID == $zbp->user->ID) {
-			unset($_POST['Level']);
-			unset($_POST['Status']);
-		}
+		$mem->LoadInfoByID($data['ID']);
 	}
 
 	foreach ($zbp->datainfo['Member'] as $key => $value) {
-		if ($key == 'ID' || $key == 'Meta') {continue;}
-		if (isset($_POST[$key])) {
-			$mem->$key = GetVars($key, 'POST');
+		if ($key == 'ID' || $key == 'Meta') {
+			continue;
+		}
+		if (isset($data[$key])) {
+			$mem->$key = $data[$key];
+		}
+	}
+
+	// 然后，读入密码
+	// 密码需要单独处理，因为拿不到用户Guid
+	if (isset($data['Password'])) {
+		if ($data['Password'] != '') {
+			if (strlen($data['Password']) < $zbp->option['ZC_PASSWORD_MIN'] || strlen($data['Password']) > $zbp->option['ZC_PASSWORD_MAX']) {
+				$zbp->ShowError(54, __FILE__, __LINE__);
+			}
+			if (!CheckRegExp($data['Password'], '[password]')) {
+				$zbp->ShowError(54, __FILE__, __LINE__);
+			}
+			$mem->Password = Member::GetPassWordByGuid($data['Password'], $mem->Guid);
 		}
 	}
 
@@ -2102,14 +2110,15 @@ function PostMember() {
 
 	CountMember($mem);
 
-	if (isset($_POST['Name'])) {
-		//Member表查询同名
-		if (GetVars('ID', 'POST') == 0) {
-			if ($zbp->CheckMemberNameExist($_POST['Name']) == true) {
+	// 查询同名
+	if (isset($data['Name'])) {
+		if ($data['ID'] == 0) {
+			if ($zbp->CheckMemberNameExist($data['Name'])) {
 				$zbp->ShowError(62, __FILE__, __LINE__);
 			}
 		}
 	}
+
 
 	$mem->Save();
 
@@ -2117,7 +2126,7 @@ function PostMember() {
 		$fpname($mem);
 	}
 
-	if (isset($_POST['Password'])) {
+	if (isset($data['Password'])) {
 		if ($mem->ID == $zbp->user->ID) {
 			Redirect($zbp->host . 'zb_system/cmd.php?act=login');
 		}
