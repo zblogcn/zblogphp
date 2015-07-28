@@ -44,7 +44,6 @@ $member = $zbp->GetMemberByID($memberid);
 	<div id="divMain2" class="edit tag_edit">
 		<form id="edit" name="edit" method="post" action="#">
 			<input id="edtID" name="ID" type="hidden" value="<?php echo $member->ID;?>" />
-			<input id="edtGuid" name="Guid" type="hidden" value="<?php echo $member->Guid;?>" />
 			<p>
 				<span class="title">
 					<?php echo $lang['msg']['member_level']?>:</span>
