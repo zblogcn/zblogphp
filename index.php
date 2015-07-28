@@ -1,11 +1,5 @@
 <?php
 /**
- * Z-Blog with PHP
- * @author
- * @copyright (C) RainbowSoft Studio
- * @version
- */
-/**
  *
  *****************************************************************************************************
  *    如果您看到了这个提示，那么我们很遗憾地通知您，您的空间不支持 PHP 。
@@ -38,6 +32,12 @@
  ******************************************************************************************************
  */
 
+/**
+ * Z-Blog with PHP
+ * @author
+ * @copyright (C) RainbowSoft Studio
+ * @version
+ */
 require 'zb_system/function/c_system_base.php';
 
 $zbp->RedirectInstall();
