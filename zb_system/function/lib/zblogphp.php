@@ -2297,11 +2297,7 @@ class ZBlogPHP {
 	 */
 	public function CheckMemberNameExist($name) {
 		$m = $this->GetMemberByName($name);
-		if ($m->ID > 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return ($m->ID > 0);
 	}
 
 	/**
@@ -2309,11 +2305,7 @@ class ZBlogPHP {
 	 */
 	public function CheckMemberByNameOrAliasExist($name) {
 		$m = $this->GetMemberByNameOrAlias($name);
-		if ($m->ID > 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return ($m->ID > 0);
 	}
 
 	/**
