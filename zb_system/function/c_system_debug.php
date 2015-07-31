@@ -473,5 +473,34 @@ class ZBlogException {
 		}
 		return $aFile;
 	}
+	/**
+	 * 得到可能的错误原因
+	 * @return string
+	 */
+	function possible_causes_of_the_error() {
+		global $lang;
+		global $bloghost;
+		$result = '';
+		if (ZBlogException::$error_id != 0) {
+			// 代表Z-BlogPHP自身抛出的错误
+			if (isset($lang['error_reasons'][ZBlogException::$error_id])) {
+				$result = $lang['error_reasons'][ZBlogException::$error_id];
+			} else {
+				$result = $lang['error_reasons']['default'];
+			}
+		}
+
+		// 根据关键词查找错误
+		$lowerErrorReason = strtolower($this->message);
+		foreach ($lang['error_reasons']['other'] as $key => $value) {
+			if (strpos($lowerErrorReason, $key) > -1) {
+				$result .= $value;
+			}
+		}
+
+		$result .= $lang['error_reasons']['end'];
+		$result = str_replace('{%BlogHost%}', $bloghost, $result);
+		return $result;
+	}
 
 }

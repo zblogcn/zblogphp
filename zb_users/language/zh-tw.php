@@ -235,6 +235,7 @@ return array(
 		'develop_intro' => 'Z-BlogPHP版程式開發和官方網站群',
 		'default' => '默认',
 		'debug_backtrace' => '堆栈跟踪',
+		'possible_causes_error' => '可能的錯誤原因',
 		'' => '',
 	),
 
@@ -460,16 +461,16 @@ return array(
 		'64' => '啟用失敗，該應用不適用於Z-BlogPHP。',
 		'65' => 'Windows Phone用戶請先升級到Windows Phone 8.1再上傳檔案。',
 		'66' => '帳號和密碼不能為空',
-		'67' => 'MySQL資料庫無法連線',
-		'68' => 'SQLite資料庫无法打開',
+		'67' => 'MySQL 資料庫無法連線',
+		'68' => 'SQLite 資料庫无法打開',
 		'69' => '未查詢到相關資料',
 		'70' => '正文不能為空',
 		'71' => '當前的編輯內容尚未儲存',
 		'72' => '名稱不能為空或格式不正確',
 		'73' => '請確認密碼是否設定正確',
-		'74' => '您還在用舊的IE內核的瀏覽器嗎？請升級至支援HTML5的IE11吧！\r\n您也可以根據需要使用Chromea、Firefox、Opera等瀏覽器!',
+		'74' => '您還在用舊的IE內核的瀏覽器嗎？請升級至支援 HTML5 的 IE11 吧！\r\n您也可以根據需要使用Chromea、Firefox、Opera等瀏覽器!',
 		'75' => '檔名不能為空！',
-		'76' => 'HtmlID不能為空！',
+		'76' => 'HtmlID 不能為空！',
 		'77' => '帳號只能用中文、數字、字母和.與_,且字元長度在3-20位',
 		'78' => '該應用需要%s及以上版本的Z-BlogPHP',
 		'79' => '帳號待審中',
@@ -481,6 +482,46 @@ return array(
 		'85' => '啟用該應用，需要先停用冲突應用%s',
 		'86' => '佈景主題的編譯檔案不存在',
 		'87' => '註冊類型失敗',
+	),
+
+// Possible causes of the error
+	'error_reasons' => array(
+		// -1 for default
+		'default' => '',
+
+		// ZBP errors first
+		'6' => '
+			您是否已經登入？請先登入控制台，再重試操作。<br/>
+			您是否有此功能所需的權限？您可以<a href="{%BlogHost%}zb_system/cmd.php?act=misc&type=vrs" target="_blank">點擊這裡查看您的權限</a>。<br/>
+			<br/>
+		',
+		'8' => '
+			您是否輸入了正確的名稱和密碼？<br/>
+			如果您是管理員且忘記了密碼，可以點擊這裡下載密碼找回工具。<br/>
+			<br/>
+		',
+
+		'other' => array(
+			// Other errors then
+			'mysql' => '
+			您在 zb_users/c_option.php 內配置、或剛才填寫的的 MySQL 連接信息是否正確？ <br/>
+			您所連接的 MySQL 資料庫是否已經成功啟動？ <br/>
+			<br/>
+			',
+
+			'sqlite' => '
+			您在zb_users/c_option.php內配置的 SQLite 連接信息是否正常？ <br/>
+			您是否有相關 SQLite 資料庫的讀寫權限？ <br/>
+			相關 SQLite 資料庫是否被損壞？ <br/>
+			<br/>
+			',
+
+		),
+
+		'end' => '
+			如果您是訪客，這說明網站程式可能出現了一些錯誤。請您稍後再試，或聯繫站長。 <br/>
+			如果您是站長，您可以到<a href="http://bbs.zblogcn.com/" target="_blank">Z-Blog官方論壇</a>，附上錯誤詳細截圖與描述尋求幫助（可使用傳統中文）。
+		',
 	),
 
 );

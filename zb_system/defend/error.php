@@ -36,6 +36,9 @@ if (!in_array('Status: 404 Not Found', headers_list())) {
 }
 ?>
 		</div></div>
+	 	<div><p><?php echo $GLOBALS['lang']['msg']['possible_causes_error'];?></p><div>
+<?php echo $this->possible_causes_of_the_error();?>
+	 	</div></div>
 	 	<?php if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
 	?>
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['file_line'];?></p><div>

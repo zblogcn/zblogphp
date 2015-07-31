@@ -231,6 +231,7 @@ return array(
 		'develop_intro' => 'Z-BlogPHP版网站和程序开发',
 		'default' => '默认',
 		'debug_backtrace' => '堆栈跟踪',
+		'possible_causes_error' => '可能的错误原因',
 		'' => '',
 	),
 
@@ -477,6 +478,46 @@ return array(
 		'85' => '启用该应用，需要先停用冲突应用%s',
 		'86' => '主题模板的编译文件不存在',
 		'87' => '注册类型失败',
+	),
+
+// Possible causes of the error
+	'error_reasons' => array(
+		// -1 for default
+		'default' => '',
+
+		// ZBP errors first
+		'6' => '
+			您是否已经登录？请先登录后台，再重试操作。<br/>
+			您是否有此功能所需的权限？您可以<a href="{%BlogHost%}zb_system/cmd.php?act=misc&type=vrs" target="_blank">点击这里查看您的权限</a>。<br/>
+			<br/>
+		',
+		'8' => '
+			您是否输入了正确的用户名和密码？<br/>
+			如果您是网站管理员且忘记了密码，可以点击这里下载密码找回工具。<br/>
+			<br/>
+		',
+
+		'other' => array(
+			// Other errors then
+			'mysql' => '
+				您在zb_users/c_option.php内配置、或刚才填写的的 MySQL 连接信息是否正确？<br/>
+				您所连接的 MySQL 数据库是否已经成功启动？<br/>
+				<br/>
+			',
+
+			'sqlite' => '
+				您在zb_users/c_option.php内配置的 SQLite 连接信息是否正常？<br/>
+				您是否有相关 SQLite 数据库的读写权限？<br/>
+				相关 SQLite 数据库是否被损坏？<br/>
+				<br/>
+			',
+
+		),
+
+		'end' => '
+			如果您是访客，这说明网站程序可能出现了一些错误。请您稍后再试，或联系站长。<br/>
+			如果您是站长，您可以到<a href="http://bbs.zblogcn.com/" target="_blank">Z-Blog官方论坛</a>，附上错误详细截图与描述寻求帮助。
+		',
 	),
 
 );

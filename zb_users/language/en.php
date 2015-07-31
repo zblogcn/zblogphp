@@ -235,6 +235,7 @@ return array(
 		'develop_intro' => 'Contributors',
 		'default' => 'Default',
 		'debug_backtrace' => 'Debug Backtrace',
+		'possible_causes_error' => 'Possible causes of errors',
 		'' => '',
 	),
 
@@ -483,4 +484,42 @@ return array(
 		'87' => 'Registered Type Failed',
 	),
 
+// Possible causes of the error
+	'error_reasons' => array(
+		// -1 for default
+		'default' => '',
+
+		// ZBP errors first
+		'6' => '
+			Did you already logined? Please login, and then retry the operation. <br/>
+			Do you have the permissions? You can <a href="{%BlogHost%}zb_system/cmd.php?act=misc&type=vrs" target="_blank"> Click here to see your permissions </a>. <br/>
+			<br/>
+		',
+		'8' => '
+			Have you entered the correct name and password? <br/>
+			If you are the webmaster and have forgotten your password, you can click here to download the retrieve tools. <br/>
+			<br/>
+		',
+
+		'other' => array(
+			// Other errors then
+			'mysql' => '
+					Please check your MySQL configuration in zb_users/c_option.php, or check the MySQL connection information that you just fill. <br/>
+					And your MySQL database has been successfully started? <br/>
+			<br/>
+			',
+
+			'sqlite' => '
+			Please check your SQLite configuration in zb_users/c_option.php. <br/>
+			Or check you have read and write permissions of that SQLite file. <br/>
+			<br/>
+			',
+
+		),
+
+		'end' => '
+			If you are a visitor, this may be something happened. Please try again later, or contact the webmaster. <br/>
+			If you are a webmaster, you can go to the <a href="http://bbs.zblogcn.com/" target="_blank"> Z-Blog official forum </a>, attach screenshots and detailed description of the error to seek help (You can use English to publish a thread).
+		',
+	),
 );
