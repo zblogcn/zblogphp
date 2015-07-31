@@ -305,20 +305,37 @@ function Setup2() {
           <th colspan="3" scope="col"><?php echo $zbp->lang['zb_install']['lib_check'];?></th>
         </tr>
         <tr>
-          <td scope="row" style="width:200px">GD2</td>
+          <td scope="row" style="width:200px">gd2</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gd2'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gd2'][1];?></td>
         </tr>
-
+<?php if (version_compare(PHP_VERSION, '5.5.0', '<')) {?>
         <tr>
-          <td scope="row">MySQL</td>
+          <td scope="row">mysql</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][1];?></td>
         </tr>
+<?php }
+	?>
         <tr>
-          <td scope="row">MySQLi</td>
+          <td scope="row">mysqli</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysqli'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysqli'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">sqlite3</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">sqlite</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">pgsql</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][1];?></td>
         </tr>
         <tr>
           <td scope="row">pdo_mysql</td>
@@ -326,24 +343,9 @@ function Setup2() {
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">SQLite3</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][1];?></td>
-        </tr>
-        <tr>
           <td scope="row">pdo_sqlite</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][1];?></td>
-        </tr>
-        <tr>
-          <td scope="row">SQLite</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
-        </tr>
-        <tr>
-          <td scope="row">PostgreSQL</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][1];?></td>
         </tr>
         <tr>
           <td scope="row">pdo_pgsql</td>
@@ -404,10 +406,7 @@ function Setup2() {
       </table>
     </div>
     <div id="bottom">
-      <script type="text/javascript">bmx2table();</script>
-      <?php ?>
       <input type="submit" name="next" id="netx" value="<?php echo $zbp->lang['zb_install']['next'];?>" />
-      <?php ?>
     </div>
   </dd>
 </dl>
@@ -484,29 +483,30 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         </p>
 <?php if ($zbp->option['ZC_YUN_SITE'] == '') {?>
         <p><b><?php echo $zbp->lang['zb_install']['db_engine'];?></b>
-          <label><select id="dbengine" name="dbengine" style="width:360px;" >
-		  <option value="MyISAM"  selected="selected"/>MyISAM(<?php echo $zbp->lang['msg']['default'];?>)</option>
+          <select id="dbengine" name="dbengine" style="width:360px;" >
+		  <option value="MyISAM" selected>MyISAM(<?php echo $zbp->lang['msg']['default'];?>)</option>
           <option value="InnoDB" >InnoDB</option>
-		  </select>
+        </select>
         </p>
 <?php }
 		?>
       <p><b><?php echo $zbp->lang['zb_install']['db_drive'];?></b>
         <?php if ($CheckResult['mysqli'][0]) {?>
         <label>
-          <input value="mysqli" type="radio" name="dbtype"/> MySQLi</label>
+          <input value="mysqli" type="radio" name="dbtype"/> mysqli</label>
         <?php }
 		?>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php if ($CheckResult['pdo_mysql'][0]) {?>
         <label>
-          <input value="pdo_mysql" type="radio" name="dbtype"/> PDO_MySQL</label>
+          <input value="pdo_mysql" type="radio" name="dbtype"/> pdo_mysql</label>
         <?php }
-		?>&nbsp;&nbsp;&nbsp;&nbsp;
+		?>
+&nbsp;&nbsp;&nbsp;&nbsp;
 <?php if (version_compare(PHP_VERSION, '5.5.0', '<')) {
 			?>
-        <?php if ($CheckResult['mysql'][0]) {?>
+        <?php if ($CheckResult['mysql'][0] && !$CheckResult['mysqli'][0] && !$CheckResult['pdo_mysql'][0]) { // 强制淘汰mysql?>
         <label>
-          <input value="mysql" type="radio" name="dbtype"/> MySQL</label>
+          <input value="mysql" type="radio" name="dbtype"/> mysql</label>
         <?php }
 			?>&nbsp;&nbsp;&nbsp;&nbsp;
 <?php }
@@ -530,7 +530,7 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         <?php if ($CheckResult['sqlite3'][0]) {
 			?>
         <label>
-          <input value="sqlite3" type="radio" name="dbtype" /> SQLite3</label>
+          <input value="sqlite3" type="radio" name="dbtype" /> sqlite3</label>
         <?php
 echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 		}
@@ -538,7 +538,7 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         <?php if ($CheckResult['pdo_sqlite'][0]) {
 			?>
         <label>
-          <input value="pdo_sqlite" type="radio" name="dbtype" /> PDO_SQLite</label>
+          <input value="pdo_sqlite" type="radio" name="dbtype" /> pdo_sqlite</label>
         <?php
 echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 		}
@@ -546,7 +546,7 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         <?php if ($CheckResult['sqlite'][0]) {
 			?>
         <label>
-          <input value="sqlite" type="radio" name="dbtype" /> SQLite</label>
+          <input value="sqlite" type="radio" name="dbtype" /> sqlite</label>
         <?php
 echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 		}
