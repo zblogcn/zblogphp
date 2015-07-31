@@ -99,24 +99,24 @@ Include_AddonAdminFont();
     <?php
 
 switch ($zblogstep) {
-	case 0:
-		Setup0();
-		break;
-	case 1:
-		Setup1();
-		break;
-	case 2:
-		Setup2();
-		break;
-	case 3:
-		Setup3();
-		break;
-	case 4:
-		Setup4();
-		break;
-	case 5:
-		Setup5();
-		break;
+case 0:
+	Setup0();
+	break;
+case 1:
+	Setup1();
+	break;
+case 2:
+	Setup2();
+	break;
+case 3:
+	Setup3();
+	break;
+case 4:
+	Setup4();
+	break;
+case 5:
+	Setup5();
+	break;
 }
 
 ?>
@@ -208,7 +208,7 @@ function Setup1() {
       <textarea readonly>
 <?php echo $zbp->lang['zb_install']['license_title'] . "\r\n";?>
 
-感谢您选择Z-BlogPHP。 Z-BlogPHP基于 PHP 的技术开发，采用 MySQL 和 SQLite 作为数据库，全部源码开放。希望我们的努力能为您提供一个高效快速、强大的站点解决方案。
+感谢您选择Z-BlogPHP。 Z-BlogPHP 基于 PHP 的技术开发，采用 MySQL 或 SQLite 或 PostgreSQL 作为数据库，全部源码开放。希望我们的努力能为您提供一个高效快速、强大的站点解决方案。
 
 Z-BlogPHP官方网址：http://www.zblogcn.com/
 
@@ -218,11 +218,10 @@ Z-BlogPHP官方网址：http://www.zblogcn.com/
 
 二、协议许可的权利
 
-1. 本程序完全开源，您可以将其用于任何用途。
-2. 您可以在协议规定的约束和限制范围内修改 Z-BlogPHP 源代码或界面风格以适应您的网站要求。
-3. 您拥有使用本软件构建的网站全部内容所有权，并独立承担与这些内容的相关法律义务。
-4. 您可以从 Z-BlogPHP 提供的应用中心服务中下载适合您网站的应用程序，但应向应用程序开发者/所有者支付相应的费用。
-5. 本程序在云主机（新浪SAE、百度BAE、阿里云等）使用的相关授权费用由 RainbowSoft 另行规定。
+1. 本程序基于 MIT 协议开源，您可以在 MIT 协议允许的范围内对源代码进行使用，包括源代码或界面风格以适应您的网站要求。
+2. 您拥有使用本软件构建的网站全部内容所有权，并独立承担与这些内容的相关法律义务。
+3. 您可以从 Z-BlogPHP 提供的应用中心服务中下载适合您网站的应用程序，但应向应用程序开发者/所有者支付相应的费用。
+4. 本程序在云主机（新浪SAE、百度BAE、阿里云等）使用的相关授权费用由 RainbowSoft 另行规定。
 
 三、协议规定的约束和限制
 
@@ -238,8 +237,9 @@ Z-BlogPHP官方网址：http://www.zblogcn.com/
 4. 如果本软件带有其它软件的整合API示范例子包，这些文件版权不属于本软件官方，并且这些文件是没经过授权发布的，请参考相关软件的使用许可合法的使用。
 
 版权所有 ©2005 - 2015，RainbowSoft Studio 保留所有权利。
+
 协议发布时间：2013 年 8 月 1 日
-版本最新更新：2015 年 1 月 25 日 By RainbowSoft Studio
+版本最新更新：2015 年 7 月 31 日 By RainbowSoft Studio
 
 
   </textarea>
@@ -282,7 +282,7 @@ function Setup2() {
   <dd id="ddright">
     <div id="title"><?php echo $zbp->lang['zb_install'][''];?><?php echo $zbp->lang['zb_install']['environment_check'];?></div>
     <div id="content">
-      <table border="0" style="width:100%;">
+      <table border="0" style="width:100%;" class="table_striped table_hover">
         <tr>
           <th colspan="3" scope="row"><?php echo $zbp->lang['zb_install']['server_check'];?></th>
         </tr>
@@ -309,6 +309,7 @@ function Setup2() {
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gd2'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gd2'][1];?></td>
         </tr>
+
         <tr>
           <td scope="row">MySQL</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][0];?></td>
@@ -320,7 +321,7 @@ function Setup2() {
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysqli'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">PDO_MySQL</td>
+          <td scope="row">pdo_mysql</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][1];?></td>
         </tr>
@@ -330,7 +331,7 @@ function Setup2() {
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">PDO_SQLite</td>
+          <td scope="row">pdo_sqlite</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][1];?></td>
         </tr>
@@ -338,6 +339,16 @@ function Setup2() {
           <td scope="row">SQLite</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">PostgreSQL</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row">pdo_pgsql</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_pgsql'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_pgsql'][1];?></td>
         </tr>
         <tr>
           <th colspan="3" scope="row"><?php echo $zbp->lang['zb_install']['permission_check'];?></th>
@@ -603,60 +614,60 @@ $isInstallFlag = true;
 	$cts = '';
 
 	switch ($zbp->option['ZC_DATABASE_TYPE']) {
-		case 'mysql':
-		case 'mysqli':
-		case 'pdo_mysql':
-			$cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/mysql.sql');
+	case 'mysql':
+	case 'mysqli':
+	case 'pdo_mysql':
+		$cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/mysql.sql');
 
-			if ($zbp->option['ZC_YUN_SITE'] != '') {
-				break;
+		if ($zbp->option['ZC_YUN_SITE'] != '') {
+			break;
+		}
+
+		$zbp->option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'POST');
+		if (strpos($zbp->option['ZC_MYSQL_SERVER'], ':') !== false) {
+			$servers = explode(':', $zbp->option['ZC_MYSQL_SERVER']);
+			$zbp->option['ZC_MYSQL_SERVER'] = trim($servers[0]);
+			$zbp->option['ZC_MYSQL_PORT'] = (int) $servers[1];
+			if ($zbp->option['ZC_MYSQL_PORT'] == 0) {
+				$zbp->option['ZC_MYSQL_PORT'] = 3306;
 			}
 
-			$zbp->option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'POST');
-			if (strpos($zbp->option['ZC_MYSQL_SERVER'], ':') !== false) {
-				$servers = explode(':', $zbp->option['ZC_MYSQL_SERVER']);
-				$zbp->option['ZC_MYSQL_SERVER'] = trim($servers[0]);
-				$zbp->option['ZC_MYSQL_PORT'] = (int) $servers[1];
-				if ($zbp->option['ZC_MYSQL_PORT'] == 0) {
-					$zbp->option['ZC_MYSQL_PORT'] = 3306;
-				}
+			unset($servers);
+		}
+		$zbp->option['ZC_MYSQL_USERNAME'] = trim(GetVars('dbmysql_username', 'POST'));
+		$zbp->option['ZC_MYSQL_PASSWORD'] = trim(GetVars('dbmysql_password', 'POST'));
+		$zbp->option['ZC_MYSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_name', 'POST')));
+		$zbp->option['ZC_MYSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_pre', 'POST')));
+		if ($zbp->option['ZC_MYSQL_PRE'] == '') {
+			$zbp->option['ZC_MYSQL_PRE'] == 'zbp_';
+		}
 
-				unset($servers);
-			}
-			$zbp->option['ZC_MYSQL_USERNAME'] = trim(GetVars('dbmysql_username', 'POST'));
-			$zbp->option['ZC_MYSQL_PASSWORD'] = trim(GetVars('dbmysql_password', 'POST'));
-			$zbp->option['ZC_MYSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_name', 'POST')));
-			$zbp->option['ZC_MYSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_pre', 'POST')));
-			if ($zbp->option['ZC_MYSQL_PRE'] == '') {
-				$zbp->option['ZC_MYSQL_PRE'] == 'zbp_';
-			}
+		$zbp->option['ZC_MYSQL_ENGINE'] = GetVars('dbengine', 'POST');
+		$cts = str_replace('MyISAM', $zbp->option['ZC_MYSQL_ENGINE'], $cts);
 
-			$zbp->option['ZC_MYSQL_ENGINE'] = GetVars('dbengine', 'POST');
-			$cts = str_replace('MyISAM', $zbp->option['ZC_MYSQL_ENGINE'], $cts);
+		$zbp->db = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
+		if ($zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'], $zbp->option['ZC_MYSQL_PORT'], $zbp->option['ZC_MYSQL_USERNAME'], $zbp->option['ZC_MYSQL_PASSWORD'], $zbp->option['ZC_MYSQL_NAME']) == true) {
+			echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_MYSQL_NAME'] . "<br/>";
+		}
+		$zbp->db->dbpre = $zbp->option['ZC_MYSQL_PRE'];
+		$zbp->db->Close();
 
-			$zbp->db = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
-			if ($zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'], $zbp->option['ZC_MYSQL_PORT'], $zbp->option['ZC_MYSQL_USERNAME'], $zbp->option['ZC_MYSQL_PASSWORD'], $zbp->option['ZC_MYSQL_NAME']) == true) {
-				echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_MYSQL_NAME'] . "<br/>";
-			}
-			$zbp->db->dbpre = $zbp->option['ZC_MYSQL_PRE'];
-			$zbp->db->Close();
-
-			break;
-		case 'sqlite':
-			$cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
-			$cts = str_replace(' autoincrement', '', $cts);
-			$zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
-			$zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
-			break;
-		case 'sqlite3':
-		case 'pdo_sqlite':
-			$cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
-			$zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
-			$zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
-			break;
-		default:
-			$isInstallFlag = false;
-			break;
+		break;
+	case 'sqlite':
+		$cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
+		$cts = str_replace(' autoincrement', '', $cts);
+		$zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
+		$zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
+		break;
+	case 'sqlite3':
+	case 'pdo_sqlite':
+		$cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
+		$zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
+		$zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
+		break;
+	default:
+		$isInstallFlag = false;
+		break;
 
 	}
 	if ($isInstallFlag) {
