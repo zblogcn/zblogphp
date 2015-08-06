@@ -66,19 +66,19 @@ class DbMySQL implements iDataBase {
 
 		if (!$db_link) {
 			return false;
-		} else {
-			$this->db = $db_link;
-			mysql_query("SET NAMES 'utf8'", $this->db);
-			if (mysql_select_db($array[3], $this->db)) {
-				$this->dbpre = $array[4];
-				$this->dbname = $array[3];
-				$this->dbengine = $array[7];
-				return true;
-			} else {
-				$this->Close();
-				return false;
-			}
 		}
+
+		$this->db = $db_link;
+		mysql_query("SET NAMES 'utf8'", $this->db);
+		if (mysql_select_db($array[3], $this->db)) {
+			$this->dbpre = $array[4];
+			$this->dbname = $array[3];
+			$this->dbengine = $array[7];
+			return true;
+		} else {
+			$this->Close();
+		}
+		return false;
 
 	}
 
@@ -124,7 +124,7 @@ class DbMySQL implements iDataBase {
 	 * 执行多行SQL语句
 	 * @param string $s 以;号分隔的多条SQL语句
 	 */
-	function QueryMulit($s) {return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
+	function QueryMulit($s) {return $this->QueryMulti($s);} //错别字函数，历史原因保留下来
 	function QueryMulti($s) {
 		//$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
 		$a = explode(';', $s);

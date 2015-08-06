@@ -72,6 +72,7 @@ class DbMySQLi implements iDataBase {
 			$this->dbengine = $array[7];
 			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -117,7 +118,7 @@ class DbMySQLi implements iDataBase {
 	 * @param string $s 以;号分隔的多条SQL语句
 	 * @return array
 	 */
-	function QueryMulit($s) {return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
+	function QueryMulit($s) {return $this->QueryMulti($s);} //错别字函数，历史原因保留下来
 	function QueryMulti($s) {
 		//$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		$a = explode(';', $s);
