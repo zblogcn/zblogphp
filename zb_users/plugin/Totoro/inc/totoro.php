@@ -180,15 +180,14 @@ class Totoro_Class {
 	}
 
 	function check_ip($ip) {
+		$ip = ip2long($ip);
 		$ip_str = explode('|', $this->config_array['BLACK_LIST']['IPFILTER_LIST']['VALUE']);
 		for ($i = 0; $i < count($ip_str); $i++) {
 			$ip_begin = ip2long(str_replace('*', '0', $ip_str[$i]));
 			$ip_end = ip2long(str_replace('*', '255', $ip_str[$i]));
-			$ip = ip2long($ip);
 			if ($ip >= $ip_begin && $ip <= $ip_end) {
 				return true;
 			}
-
 		}
 		return false;
 	}
