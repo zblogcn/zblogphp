@@ -227,7 +227,7 @@ class App {
 			return false;
 		}
 
-        $content = file_get_contents($path);
+		$content = file_get_contents($path);
 		$xml = @simplexml_load_string($content);
 		if (!$xml) {
 			return false;
