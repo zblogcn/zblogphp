@@ -2970,6 +2970,7 @@ function CountMemberArray($array, $plus = array(null, null, null, null)) {
 /**
  * 导出网站分类模块数据
  * @return string 模块内容
+ * @todo 必须重写
  */
 function BuildModule_catalog() {
 	global $zbp;
@@ -2988,21 +2989,16 @@ function BuildModule_catalog() {
 			}
 
 		}
-		foreach ($zbp->categorysbyorder as $key => $value) {
-			if ($value->Level == 1) {
-				$s = str_replace('<!--' . $value->ParentID . 'end-->', '<li class="li-subcate"><a href="' . $value->Url . '">' . $value->Name . '</a><!--' . $value->ID . 'begin--><!--' . $value->ID . 'end--></li><!--' . $value->ParentID . 'end-->', $s);
+
+		for ($i = 1; $i <= 3; $i++) {
+			// 此处逻辑仍要继续修改
+			foreach ($zbp->categorysbyorder as $key => $value) {
+				if ($value->Level == $i) {
+					$s = str_replace('<!--' . $value->ParentID . 'end-->', '<li class="li-subcate"><a href="' . $value->Url . '">' . $value->Name . '</a><!--' . $value->ID . 'begin--><!--' . $value->ID . 'end--></li><!--' . $value->ParentID . 'end-->', $s);
+				}
 			}
 		}
-		foreach ($zbp->categorysbyorder as $key => $value) {
-			if ($value->Level == 2) {
-				$s = str_replace('<!--' . $value->ParentID . 'end-->', '<li class="li-subcate"><a href="' . $value->Url . '">' . $value->Name . '</a><!--' . $value->ID . 'begin--><!--' . $value->ID . 'end--></li><!--' . $value->ParentID . 'end-->', $s);
-			}
-		}
-		foreach ($zbp->categorysbyorder as $key => $value) {
-			if ($value->Level == 3) {
-				$s = str_replace('<!--' . $value->ParentID . 'end-->', '<li class="li-subcate"><a href="' . $value->Url . '">' . $value->Name . '</a><!--' . $value->ID . 'begin--><!--' . $value->ID . 'end--></li><!--' . $value->ParentID . 'end-->', $s);
-			}
-		}
+
 
 		foreach ($zbp->categorysbyorder as $key => $value) {
 			$s = str_replace('<!--' . $value->ID . 'begin--><!--' . $value->ID . 'end-->', '', $s);
