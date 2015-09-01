@@ -656,50 +656,50 @@ class ZBlogPHP {
 		}
 
 		switch ($this->option['ZC_DATABASE_TYPE']) {
-			case 'sqlite':
-			case 'sqlite3':
-			case 'pdo_sqlite':
-				$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-				if ($this->db->Open(array(
-					$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
-					$this->option['ZC_SQLITE_PRE'],
-				)) == false) {
-					$this->ShowError(69, __FILE__, __LINE__);
-				}
-				break;
-			case 'pgsql':
-			case 'pdo_pgsql':
-				$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-				if ($this->db->Open(array(
-					$this->option['ZC_PGSQL_SERVER'],
-					$this->option['ZC_PGSQL_USERNAME'],
-					$this->option['ZC_PGSQL_PASSWORD'],
-					$this->option['ZC_PGSQL_NAME'],
-					$this->option['ZC_PGSQL_PRE'],
-					$this->option['ZC_PGSQL_PORT'],
-					$this->option['ZC_PGSQL_PERSISTENT'],
-				)) == false) {
-					$this->ShowError(67, __FILE__, __LINE__);
-				}
-				break;
-			case 'mysql':
-			case 'mysqli':
-			case 'pdo_mysql':
-			default:
-				$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-				if ($this->db->Open(array(
-					$this->option['ZC_MYSQL_SERVER'],
-					$this->option['ZC_MYSQL_USERNAME'],
-					$this->option['ZC_MYSQL_PASSWORD'],
-					$this->option['ZC_MYSQL_NAME'],
-					$this->option['ZC_MYSQL_PRE'],
-					$this->option['ZC_MYSQL_PORT'],
-					$this->option['ZC_MYSQL_PERSISTENT'],
-					$this->option['ZC_MYSQL_ENGINE'],
-				)) == false) {
-					$this->ShowError(67, __FILE__, __LINE__);
-				}
-				break;
+		case 'sqlite':
+		case 'sqlite3':
+		case 'pdo_sqlite':
+			$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
+			if ($this->db->Open(array(
+				$this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
+				$this->option['ZC_SQLITE_PRE'],
+			)) == false) {
+				$this->ShowError(69, __FILE__, __LINE__);
+			}
+			break;
+		case 'pgsql':
+		case 'pdo_pgsql':
+			$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
+			if ($this->db->Open(array(
+				$this->option['ZC_PGSQL_SERVER'],
+				$this->option['ZC_PGSQL_USERNAME'],
+				$this->option['ZC_PGSQL_PASSWORD'],
+				$this->option['ZC_PGSQL_NAME'],
+				$this->option['ZC_PGSQL_PRE'],
+				$this->option['ZC_PGSQL_PORT'],
+				$this->option['ZC_PGSQL_PERSISTENT'],
+			)) == false) {
+				$this->ShowError(67, __FILE__, __LINE__);
+			}
+			break;
+		case 'mysql':
+		case 'mysqli':
+		case 'pdo_mysql':
+		default:
+			$this->db = ZBlogPHP::InitializeDB($this->option['ZC_DATABASE_TYPE']);
+			if ($this->db->Open(array(
+				$this->option['ZC_MYSQL_SERVER'],
+				$this->option['ZC_MYSQL_USERNAME'],
+				$this->option['ZC_MYSQL_PASSWORD'],
+				$this->option['ZC_MYSQL_NAME'],
+				$this->option['ZC_MYSQL_PRE'],
+				$this->option['ZC_MYSQL_PORT'],
+				$this->option['ZC_MYSQL_PERSISTENT'],
+				$this->option['ZC_MYSQL_ENGINE'],
+			)) == false) {
+				$this->ShowError(67, __FILE__, __LINE__);
+			}
+			break;
 		}
 		$this->isconnected = true;
 		return true;
@@ -1435,18 +1435,18 @@ class ZBlogPHP {
 		$defaultLanguageList = array($default, 'zh-cn', 'zh-tw', 'en');
 
 		switch ($type) {
-			case 'system':
-				$languagePath .= 'zb_users/language/';
-				break;
-			case 'plugin':
-			case 'theme':
-				$languagePath .= 'zb_users/' . $type . '/' . $id . '/language/';
-				$languagePtr = &$this->lang[$id];
-				break;
-			default:
-				$languagePath .= $type . '/language/';
-				$languagePtr = &$this->lang[$id];
-				break;
+		case 'system':
+			$languagePath .= 'zb_users/language/';
+			break;
+		case 'plugin':
+		case 'theme':
+			$languagePath .= 'zb_users/' . $type . '/' . $id . '/language/';
+			$languagePtr = &$this->lang[$id];
+			break;
+		default:
+			$languagePath .= $type . '/language/';
+			$languagePtr = &$this->lang[$id];
+			break;
 		}
 
 		$handle = opendir($languagePath);
@@ -2085,6 +2085,62 @@ class ZBlogPHP {
 
 ################################################################################################################
 	#读取对象函数
+	private function GetSomeThingById(&$object, $className, $id) {
+		if ($id == 0) {
+			return null;
+		}
+		if ($object != NULL) {
+			if (isset($object[$id])) {
+				return $object[$id];
+			} else if ($className == "Post" || $className == "Comment") {
+				// 文章需要读取，其他的直接返回空对象即可
+				$p = new $className;
+				$p->LoadInfoByID($id);
+				$object[$id] = $p;
+				return $p;
+			} else {
+				return $this->GetSomeThingByAttr($object, 'ID', $id);
+			}
+		} else {
+			$p = new $className;
+			$p->LoadInfoByID($id);
+			return $p;
+		}
+		var_dump(func_get_args());
+		return null;
+	}
+
+	private function GetSomeThingByAttr(&$object, $attr, $val) {
+		$val = trim($val);
+		foreach ($object as $key => &$value) {
+			if ($value->$attr == $val) {
+				return $value;
+			}
+		}
+		var_dump(func_get_args());
+		return null;
+	}
+
+	public function GetSomeThing($objectName, $attr, $argu, $className = NULL) {
+		if ($className === NULL) {
+			$firstItem = reset($this->$object);
+			if ($firstItem) {
+				$className = get_class($firstItem);
+			} else {
+				$className = ucfirst($object);
+			}
+		}
+		$cacheObject = null;
+		if ($objectName != "") {
+			$cacheObject = &$this->$objectName;
+		}
+		if ($attr == "id") {
+			$ret = $this->GetSomeThingById($cacheObject, $className, $argu);
+		} else {
+			$ret = $this->GetSomeThingByAttr($cacheObject, $attr, $argu);
+		}
+		return $ret === null ? new $className : $ret;
+	}
 
 	/**
 	 * 通过ID获取文章实例
@@ -2092,18 +2148,7 @@ class ZBlogPHP {
 	 * @return Post
 	 */
 	public function GetPostByID($id) {
-		if ($id == 0) {
-			return new Post;
-		}
-
-		if (isset($this->posts[$id])) {
-			return $this->posts[$id];
-		} else {
-			$p = new Post;
-			$p->LoadInfoByID($id);
-			$this->posts[$id] = $p;
-			return $p;
-		}
+		return $this->GetSomeThing('posts', 'id', $id, 'Post');
 	}
 
 	/**
@@ -2112,11 +2157,7 @@ class ZBlogPHP {
 	 * @return Category
 	 */
 	public function GetCategoryByID($id) {
-		if (isset($this->categorys[$id])) {
-			return $this->categorys[$id];
-		} else {
-			return new Category;
-		}
+		return $this->GetSomeThing('categories', 'id', $id, 'Category');
 	}
 
 	/**
@@ -2125,13 +2166,7 @@ class ZBlogPHP {
 	 * @return Category
 	 */
 	public function GetCategoryByName($name) {
-		$name = trim($name);
-		foreach ($this->categorys as $key => &$value) {
-			if ($value->Name == $name) {
-				return $value;
-			}
-		}
-		return new Category;
+		return $this->GetSomeThing('categories', 'name', $name, 'Category');
 	}
 
 	/**
@@ -2155,18 +2190,7 @@ class ZBlogPHP {
 	 * @return Module
 	 */
 	public function GetModuleByID($id) {
-		if ($id == 0) {
-			$m = new Module;
-		} else {
-			foreach ($this->modules as $key => $value) {
-				if ($value->ID == $id) {
-					return $value;
-				}
-
-			}
-			$m = new Module;
-		}
-		return $m;
+		return $this->GetSomeThing('modules', 'id', $id, 'Module');
 	}
 
 	/**
@@ -2175,16 +2199,7 @@ class ZBlogPHP {
 	 * @return Module
 	 */
 	public function GetModuleByFileName($fn) {
-		$fn = trim($fn);
-		if (!$fn) {
-			$m = new Module;
-		} else {
-			if (isset($this->modulesbyfilename[$fn])) {
-				return $this->modulesbyfilename[$fn];
-			}
-			$m = new Module;
-		}
-		return $m;
+		return $this->GetSomeThing('modulesbyfilename', 'id', $fn, 'Module');
 	}
 
 	/**
@@ -2273,7 +2288,7 @@ class ZBlogPHP {
 		$like = ($this->db->type == 'pgsql') ? 'ILIKE' : 'LIKE';
 		$sql = $this->db->sql->Select(
 			$this->table['Member'], '*',
-			     //where
+			//where
 			$this->db->sql->ParseWhere(array(array($like, 'mem_Name', $name)), '')
 			.
 			$this->db->sql->ParseWhere(array(array($like, 'mem_Alias', $name)), 'OR'),
@@ -2314,18 +2329,7 @@ class ZBlogPHP {
 	 * @return Comment
 	 */
 	public function GetCommentByID($id) {
-		if (isset($this->comments[$id])) {
-			return $this->comments[$id];
-		} else {
-			$c = new Comment;
-			if ($id == 0) {
-				return $c;
-			} else {
-				$c->LoadInfoByID($id);
-				$this->comments[$id] = $c;
-				return $c;
-			}
-		}
+		return $this->GetSomeThing('comments', 'id', $id, 'Comment');
 	}
 
 	/**
@@ -2334,11 +2338,7 @@ class ZBlogPHP {
 	 * @return Upload
 	 */
 	public function GetUploadByID($id) {
-		$m = new Upload;
-		if ($id > 0) {
-			$m->LoadInfoByID($id);
-		}
-		return $m;
+		return $this->GetSomeThing('', 'id', $id, 'Upload');
 	}
 
 	/**
@@ -2347,11 +2347,7 @@ class ZBlogPHP {
 	 * @return Counter
 	 */
 	public function GetCounterByID($id) {
-		$m = new Counter;
-		if ($id > 0) {
-			$m->LoadInfoByID($id);
-		}
-		return $m;
+		return $this->GetSomeThing('', 'id', $id, 'Counter');
 	}
 
 	/**
