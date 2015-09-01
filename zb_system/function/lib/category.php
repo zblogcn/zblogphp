@@ -91,9 +91,10 @@ class Category extends Base {
 				$fpreturn = $fpname($this);
 				if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 			}
+			$backAttr = $zbp->option['ZC_ALIAS_BACK_ATTR'];
 			$u = new UrlRule($zbp->option['ZC_CATEGORY_REGEX']);
 			$u->Rules['{%id%}'] = $this->ID;
-			$u->Rules['{%alias%}'] = $this->Alias == '' ? rawurlencode($this->Name) : $this->Alias;
+			$u->Rules['{%alias%}'] = $this->Alias == '' ? rawurlencode($this->$backAttr) : $this->Alias;
 			return $u->Make();
 		}
 		if ($name == 'Symbol') {

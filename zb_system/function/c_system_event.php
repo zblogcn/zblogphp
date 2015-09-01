@@ -645,7 +645,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 				$category = $zbp->GetCategoryByID($cate);
 			}
 			if (strpos($zbp->option['ZC_CATEGORY_REGEX'], '{%alias%}') !== false) {
-				$category = $zbp->GetCategoryByAliasOrName($cate);
+				$category = $zbp->GetCategoryByAlias($cate);
 			}
 			if ($category->ID == 0) {
 				if ($isrewrite == true) {

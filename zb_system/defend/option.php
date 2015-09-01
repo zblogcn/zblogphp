@@ -157,6 +157,8 @@ return array(
 
 	'ZC_INDEX_REGEX' => '{%host%}?page={%page%}',
 
+	'ZC_ALIAS_BACK_ATTR' => 'Name',
+
 	#首页，分类页，文章页，页面页的默认模板
 	'ZC_INDEX_DEFAULT_TEMPLATE' => 'index',
 	'ZC_POST_DEFAULT_TEMPLATE' => 'single',

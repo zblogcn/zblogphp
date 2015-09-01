@@ -2079,7 +2079,24 @@ class ZBlogPHP {
 
 ################################################################################################################
 	#读取对象函数
-	
+
+	/**
+	 * 根据别名得到相应数据
+	 * @param &$object   缓存对象
+	 * @param $val
+	 * @param $backAttr
+	 */
+	private function GetSomeThingByAlias($object, $val, $backAttr = null, $className = null) {
+		$ret = $this->GetSomeThing($object, 'Alias', $val);
+		if (!is_null($ret)) {
+			return $ret;
+		} else {
+			if (is_null($backAttr)) {
+				$backAttr = $this->option['ZC_ALIAS_BACK_ATTR'];
+			}
+			return $this->GetSomeThing($object, $backAttr, $val, $className);
+		}
+	}
 	/**
 	 * 根据ID得到相应数据
 	 * @param &$object   缓存对象
@@ -2128,30 +2145,24 @@ class ZBlogPHP {
 
 	/**
 	 * 获取数据通用函数
-	 * @param  $objectName 缓存对象名
+	 * @param  $object 缓存对象（string / object）
 	 * @param  $attr       欲查找的属性
 	 * @param  $argu       查找内容
 	 * @param  $className  对象未找到初始化内容
 	 */
-	public function GetSomeThing($objectName, $attr, $argu, $className = NULL) {
-		if ($className === NULL) {
-			$firstItem = reset($this->$object);
-			if ($firstItem) {
-				$className = get_class($firstItem);
-			} else {
-				$className = ucfirst($object);
-			}
-		}
+	public function GetSomeThing($object, $attr, $argu, $className = null) {
 		$cacheObject = null;
-		if ($objectName != "") {
-			$cacheObject = &$this->$objectName;
+		if (is_object($object)) {
+			$cacheObject = $object; 
+		} else if ($object != "") {
+			$cacheObject = &$this->$object;
 		}
 		if ($attr == "id") {
 			$ret = $this->GetSomeThingById($cacheObject, $className, $argu);
 		} else {
 			$ret = $this->GetSomeThingByAttr($cacheObject, $attr, $argu);
 		}
-		if ($ret === null) {
+		if ($ret === null && !is_null($className)) {
 			$ret = new $className;
 		}
 		return $ret;
@@ -2181,7 +2192,7 @@ class ZBlogPHP {
 	 * @return Category
 	 */
 	public function GetCategoryByName($name) {
-		return $this->GetSomeThing('categories', 'name', $name, 'Category');
+		return $this->GetSomeThing('categories', 'Name', $name, 'Category');
 	}
 
 	/**
@@ -2189,14 +2200,17 @@ class ZBlogPHP {
 	 * @param string $name
 	 * @return Category
 	 */
+	public function GetCategoryByAlias($name, $backKey = NULL) {
+		$ret = $this->GetSomeThingByAlias('categories', $name, $backKey, 'Category');
+	}
+
+	/**
+	 * 与老版本保持兼容函数
+	 * @param string $name
+	 * @return Category
+	 */
 	public function GetCategoryByAliasOrName($name) {
-		$name = trim($name);
-		foreach ($this->categorys as $key => &$value) {
-			if (($value->Name == $name) || ($value->Alias == $name)) {
-				return $value;
-			}
-		}
-		return new Category;
+		return $this->GetCategoryByAlias($name, 'Name');
 	}
 
 	/**
@@ -2205,7 +2219,7 @@ class ZBlogPHP {
 	 * @return Module
 	 */
 	public function GetModuleByID($id) {
-		return $this->GetSomeThing('modules', 'id', $id, 'Module');
+		return $this->GetSomeThing('modules', 'ID', $id, 'Module'); // What the fuck?
 	}
 
 	/**
@@ -2356,18 +2370,20 @@ class ZBlogPHP {
 	 * @param string $name
 	 * @return Tag
 	 */
-	public function GetTagByAliasOrName($name) {
-		$a = array();
-		$a[] = array('tag_Alias', $name);
-		$a[] = array('tag_Name', $name);
-		$array = $this->GetTagList('*', array(array('array', $a)), '', 1, '');
-		if (count($array) == 0) {
-			return new Tag;
-		} else {
-			$this->tags[$array[0]->ID] = $array[0];
-			$this->tagsbyname[$array[0]->ID] = &$this->tags[$array[0]->ID];
-			return $this->tags[$array[0]->ID];
+	public function GetTagByAlias($name, $backKey = null) {
+		$ret = $this->GetSomeThingByAlias('tags', $name, $backKey, 'Tag');
+		if ($ret->ID >= 0) {
+			$this->tagsbyname[$ret->ID] = &$this->tags[$ret->ID];
 		}
+		return $ret;
+	}
+	/**
+	 * 通过tag名获取tag实例
+	 * @param string $name
+	 * @return Tag
+	 */
+	public function GetTagByAliasOrName($name) {
+		return $this->GetTagByAlias($name, 'Name');
 	}
 
 	/**
