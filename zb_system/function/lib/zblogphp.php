@@ -1637,17 +1637,11 @@ class ZBlogPHP {
 		foreach ($files as $sortname => $fullname) {
 			$this->templates[$sortname] = file_get_contents($fullname);
 		}
-		if (!isset($this->templates['sidebar2'])) {
-			$this->templates['sidebar2'] = str_replace('$sidebar', '$sidebar2', $this->templates['sidebar']);
-		}
-		if (!isset($this->templates['sidebar3'])) {
-			$this->templates['sidebar3'] = str_replace('$sidebar', '$sidebar3', $this->templates['sidebar']);
-		}
-		if (!isset($this->templates['sidebar4'])) {
-			$this->templates['sidebar4'] = str_replace('$sidebar', '$sidebar4', $this->templates['sidebar']);
-		}
-		if (!isset($this->templates['sidebar5'])) {
-			$this->templates['sidebar5'] = str_replace('$sidebar', '$sidebar5', $this->templates['sidebar']);
+
+		for ($i = 2; $i <= 5; $i++) {
+			if (!isset($this->templates['sidebar'. $i])) {
+				$this->templates['sidebar' . $i] = str_replace('$sidebar', '$sidebar' . $i, $this->templates['sidebar']);
+			}
 		}
 
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadTemplate'] as $fpname => &$fpsignal) {
@@ -2085,6 +2079,13 @@ class ZBlogPHP {
 
 ################################################################################################################
 	#读取对象函数
+	
+	/**
+	 * 根据ID得到相应数据
+	 * @param &$object   缓存对象
+	 * @param $className 找不到ID时初始化对象
+	 * @param $id        
+	 */
 	private function GetSomeThingById(&$object, $className, $id) {
 		if ($id == 0) {
 			return null;
@@ -2109,6 +2110,12 @@ class ZBlogPHP {
 		return null;
 	}
 
+	/**
+	 * 根据属性值得到相应数据
+	 * @param &$object   缓存对象
+	 * @param $attr
+	 * @param $val
+	 */
 	private function GetSomeThingByAttr(&$object, $attr, $val) {
 		$val = trim($val);
 		foreach ($object as $key => &$value) {
@@ -2119,6 +2126,13 @@ class ZBlogPHP {
 		return null;
 	}
 
+	/**
+	 * 获取数据通用函数
+	 * @param  $objectName 缓存对象名
+	 * @param  $attr       欲查找的属性
+	 * @param  $argu       查找内容
+	 * @param  $className  对象未找到初始化内容
+	 */
 	public function GetSomeThing($objectName, $attr, $argu, $className = NULL) {
 		if ($className === NULL) {
 			$firstItem = reset($this->$object);
