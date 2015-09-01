@@ -680,7 +680,7 @@ function Http304($filename, $time) {
  * @return string  返回IP地址
  */
 function GetGuestIP() {
-	return $_SERVER["REMOTE_ADDR"];
+	return GetVars("REMOTE_ADDR", "SERVER");
 }
 
 /**
@@ -688,7 +688,7 @@ function GetGuestIP() {
  * @return string  返回Agent
  */
 function GetGuestAgent() {
-	return $_SERVER["HTTP_USER_AGENT"];
+	return GetVars("HTTP_USER_AGENT", "SERVER");
 }
 
 /**
