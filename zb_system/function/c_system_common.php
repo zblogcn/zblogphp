@@ -52,6 +52,25 @@ define('PHP_ENGINE', GetPHPEngine());
 // Compatibility
 define('IS_HHVM', PHP_ENGINE === ENGINE_HHVM);
 
+define('HTTP_SCHEME', GetScheme($_SERVER));
+
+/**
+ * 得到请求方法
+ * @param $array
+ * @return $string
+ */
+function GetScheme($array) {
+	if (array_key_exists('REQUEST_SCHEME', $array)) {
+		if (strtolower($array['REQUEST_SCHEME']) == 'https') {
+			return 'https://';
+		}
+	} elseif (array_key_exists('HTTPS', $array)) {
+		if (strtolower($array['HTTPS']) == 'on') {
+			return 'https://';
+		}
+	}
+	return 'http://';
+}
 /**
  * 获取服务器
  * @return int
@@ -347,22 +366,7 @@ function GetDbName() {
  */
 function GetCurrentHost($blogpath, &$cookiespath) {
 
-	$host = '';
-	if (array_key_exists('REQUEST_SCHEME', $_SERVER)) {
-		if (strtolower($_SERVER['REQUEST_SCHEME']) == 'https') {
-			$host = 'https://';
-		} else {
-			$host = 'http://';
-		}
-	} elseif (array_key_exists('HTTPS', $_SERVER)) {
-		if (strtolower($_SERVER['HTTPS']) == 'on') {
-			$host = 'https://';
-		} else {
-			$host = 'http://';
-		}
-	} else {
-		$host = 'http://';
-	}
+	$host = HTTP_SCHEME;
 
 	$host .= $_SERVER['HTTP_HOST'];
 

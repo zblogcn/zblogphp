@@ -2,10 +2,10 @@
 #注册插件
 RegisterPlugin("AppCentre", "ActivePlugin_AppCentre");
 
-define('APPCENTRE_URL', 'http://app.zblogcn.com/client/');
-define('APPCENTRE_SYSTEM_UPDATE', 'http://zblogcn.com/zblogphp/');
-
-define('APPCENTRE_API_URL', 'http://app.zblogcn.com/api/index.php?api=');
+define('APPCENTRE_SCHEME', AppCentretre_GetScheme());
+define('APPCENTRE_URL', APPCENTRE_SCHEME . 'app.zblogcn.com/client/');
+define('APPCENTRE_SYSTEM_UPDATE', APPCENTRE_SCHEME . 'zblogcn.com/zblogphp/');
+define('APPCENTRE_API_URL', APPCENTRE_SCHEME . 'app.zblogcn.com/api/index.php?api=');
 define('APPCENTRE_API_APP_ISBUY', 'isbuy');
 define('APPCENTRE_API_USER_INFO', 'userinfo');
 define('APPCENTRE_API_ORDER_LIST', 'orderlist');
@@ -89,4 +89,21 @@ function AppCentre_App_Check_ISBUY($appid) {
 	$http_post->send($postdate);
 	$result = json_decode($http_post->responseText, true);
 	return $result;
+}
+
+function AppCentretre_GetScheme() {
+	if (defined("HTTP_SCHEME")) {
+		return HTTP_SCHEME;
+	}
+	// 兼容性代码
+	if (array_key_exists('REQUEST_SCHEME', $array)) {
+		if (strtolower($array['REQUEST_SCHEME']) == 'https') {
+			return 'https://';
+		}
+	} elseif (array_key_exists('HTTPS', $array)) {
+		if (strtolower($array['HTTPS']) == 'on') {
+			return 'https://';
+		}
+	}
+	return 'http://';
 }
