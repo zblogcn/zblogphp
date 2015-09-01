@@ -2106,7 +2106,6 @@ class ZBlogPHP {
 			$p->LoadInfoByID($id);
 			return $p;
 		}
-		var_dump(func_get_args());
 		return null;
 	}
 
@@ -2117,7 +2116,6 @@ class ZBlogPHP {
 				return $value;
 			}
 		}
-		var_dump(func_get_args());
 		return null;
 	}
 
@@ -2139,7 +2137,10 @@ class ZBlogPHP {
 		} else {
 			$ret = $this->GetSomeThingByAttr($cacheObject, $attr, $argu);
 		}
-		return $ret === null ? new $className : $ret;
+		if ($ret === null) {
+			$ret = new $className;
+		}
+		return $ret;
 	}
 
 	/**
@@ -2208,27 +2209,13 @@ class ZBlogPHP {
 	 * @return Member
 	 */
 	public function GetMemberByID($id) {
-		if ($id == 0) {
-			$m = new Member;
-			$m->Guid = GetGuid();
-			return $m;
+		$ret = $this->GetSomeThing('members', 'id', $id, 'Member');
+		if ($ret->ID == 0) {
+			$ret->Guid = GetGuid();
+		} else {
+			$this->membersbyname[$ret->Name] = &$this->members[$ret->ID];
 		}
-		if (isset($this->members[$id])) {
-			return $this->members[$id];
-		}
-
-		$sql = $this->db->sql->Select($this->table['Member'], '*', array(array('=', 'mem_ID', $id)), null, 1, null);
-		$am = $this->GetListType('Member', $sql);
-		if (count($am) == 1) {
-			$m = $am[0];
-			$this->members[$m->ID] = $m;
-			$this->membersbyname[$m->Name] = &$this->members[$m->ID];
-			return $m;
-		};
-
-		$m = new Member;
-		$m->Guid = GetGuid();
-		return $m;
+		return $ret;
 	}
 
 	/**
@@ -2375,19 +2362,11 @@ class ZBlogPHP {
 	 * @return Tag
 	 */
 	public function GetTagByID($id) {
-		if (isset($this->tags[$id])) {
-			return $this->tags[$id];
-		} else {
-			$array = $this->GetTagList('', array(array('=', 'tag_ID', $id)), '', array(1), '');
-			if (count($array) == 0) {
-				return new Tag;
-			} else {
-				$this->tags[$array[0]->ID] = $array[0];
-				$this->tagsbyname[$array[0]->ID] = &$this->tags[$array[0]->ID];
-				return $this->tags[$array[0]->ID];
-			}
-
-		}
+		$ret = $this->GetSomeThing('tags', 'id', $id, 'Tag');
+		if ($ret->ID > 0) {
+			$this->tagsbyname[$ret->ID] = &$this->tags[$ret->ID];
+		} 
+		return $ret;
 	}
 
 	/**
