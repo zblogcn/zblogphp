@@ -198,34 +198,48 @@ class Totoro_Class {
 			return;
 		}
 
-		$sql = $zbp->db->sql->Select(
-			'%pre%comment',
-			array(
-				'COUNT(comm_id) AS c',
-			),
-			array(
-				array('=', 'comm_IP', $ip),
-				array('>', 'comm_PostTime', time() - 24 * 60 * 60),
-			),
-			null,
-			null,
-			null
-		);
-		$result = $zbp->db->Query($sql);
-		if (count($result) > 0) {
-			if ((int) $result[0]['c'] > $this->config_array['SV_SETTING']['KILLIP']['VALUE'] || $kill) {
-				if ($kill) {
-					$FILTERIP = $this->config_array['BLACK_LIST']['IPFILTER_LIST']['VALUE'];
-					$FILTERIP = ($FILTERIP == '' ? $ip : $FILTERIP . '|' . $ip);
-					$zbp->Config('Totoro')->BLACK_LIST_IPFILTER_LIST = $FILTERIP;
-					$zbp->SaveConfig('Totoro');
-				}
-				$this->kill_ip($ip, $kill);
+		if (!$kill) {
+			$sql = $zbp->db->sql->Select(
+				'%pre%comment',
+				array(
+					'COUNT(comm_id) AS c',
+				),
+				array(
+					array('=', 'comm_IP', $ip),
+					array('>', 'comm_PostTime', time() - 24 * 60 * 60),
+				),
+				null,
+				null,
+				null
+			);
+			$result = $zbp->db->Query($sql);
+			if (count($result) <= 0) {
+				return;
 			}
+
+			if ((int) $result[0]['c'] <= $this->config_array['SV_SETTING']['KILLIP']['VALUE']) {
+				return;
+			}
+
 		}
+
+		if ($kill) {
+			if ($this->check_ip($ip)) {
+				// IP已被屏蔽
+				return;
+			}
+
+			$FILTERIP = $this->config_array['BLACK_LIST']['IPFILTER_LIST']['VALUE'];
+			$FILTERIP = ($FILTERIP == '' ? $ip : $FILTERIP . '|' . $ip);
+			$zbp->Config('Totoro')->BLACK_LIST_IPFILTER_LIST = $FILTERIP;
+			$zbp->SaveConfig('Totoro');
+		}
+
+		$this->kill_ip($ip);
+
 	}
 
-	function kill_ip($ip, $kill) {
+	function kill_ip($ip) {
 		global $zbp;
 		$logid = array();
 		$cmtid = array();
