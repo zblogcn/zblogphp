@@ -2,10 +2,10 @@
 #注册插件
 RegisterPlugin("AppCentre","ActivePlugin_AppCentre");
 
-define('APPCENTRE_URL','http://apptest.zblogcn.com/client/');
+define('APPCENTRE_URL','http://t.zblogcn.com/client/');
 define('APPCENTRE_SYSTEM_UPDATE','http://zblogcn.com/zblogphp/');
 
-define('APPCENTRE_API_URL','http://apptest.zblogcn.com/api/index.php?api=');
+define('APPCENTRE_API_URL','http://t.zblogcn.com/api/index.php?api=');
 define('APPCENTRE_API_APP_ISBUY','isbuy');
 define('APPCENTRE_API_USER_INFO','userinfo');
 define('APPCENTRE_API_ORDER_LIST','orderlist');
