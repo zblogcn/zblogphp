@@ -245,6 +245,7 @@ class ZBlogException {
 	public static $islogerror = false;
 	public $type;
 	public $message;
+	public $messagefull;
 	public $file;
 	public $line;
 	public $errarray = array();
@@ -390,7 +391,8 @@ class ZBlogException {
 	function ParseError($type, $message, $file, $line) {
 
 		$this->type = $type;
-		$this->message = $message . ' (set_error_handler) ';
+		$this->message = $message;	
+		$this->messagefull = $message . ' (set_error_handler) ';
 		$this->file = $file;
 		$this->line = $line;
 
@@ -403,7 +405,8 @@ class ZBlogException {
 	function ParseShutdown($error) {
 
 		$this->type = $error['type'];
-		$this->message = $error['message'] . ' (register_shutdown_function) ';
+		$this->message = $error['message'];
+		$this->messagefull = $error['message'] . ' (register_shutdown_function) ';
 		$this->file = $error['file'];
 		$this->line = $error['line'];
 	}
@@ -413,8 +416,9 @@ class ZBlogException {
 	 * @param $exception
 	 */
 	function ParseException($exception) {
-
-		$this->message = $exception->getMessage() . ' (set_exception_handler) ';
+		
+		$this->message = $exception->getMessage();
+		$this->messagefull = $exception->getMessage() . ' (set_exception_handler) ';
 		$this->type = $exception->getCode();
 		$this->file = $exception->getFile();
 		$this->line = $exception->getLine();
