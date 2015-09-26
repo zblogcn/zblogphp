@@ -236,6 +236,7 @@ return array(
 		'default' => 'Default',
 		'debug_backtrace' => 'Debug Backtrace',
 		'possible_causes_error' => 'Possible causes of errors',
+		'display_more_info' => 'Display more info',
 		'' => '',
 	),
 
@@ -497,7 +498,7 @@ return array(
 		',
 		'8' => '
 			Have you entered the correct name and password? <br/>
-			If you are the webmaster and have forgotten your password, you can click here to download the retrieve tools. <br/>
+			If you are the webmaster and have forgotten your password, you can click <a href="http://www.zblogcn.com/program/zblogphp_findpassword/" target="_blank">here</a> to download the retrieve tools. <br/>
 			<br/>
 		',
 

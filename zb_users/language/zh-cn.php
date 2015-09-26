@@ -232,6 +232,7 @@ return array(
 		'default' => '默认',
 		'debug_backtrace' => '堆栈跟踪',
 		'possible_causes_error' => '可能的错误原因',
+		'display_more_info' => '显示更多的信息',
 		'' => '',
 	),
 
@@ -493,7 +494,7 @@ return array(
 		',
 		'8' => '
 			您是否输入了正确的用户名和密码？<br/>
-			如果您是网站管理员且忘记了密码，可以点击这里下载密码找回工具。<br/>
+			如果您是网站管理员且忘记了密码，可以点击<a href="http://www.zblogcn.com/program/zblogphp_findpassword/" target="_blank">这里</a>下载密码找回工具。<br/>
 			<br/>
 		',
 

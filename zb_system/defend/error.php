@@ -13,6 +13,7 @@ if (!isset($GLOBALS['zbp'])) {
 	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 	<title><?php echo $GLOBALS['blogname'] . '-' . $GLOBALS['lang']['msg']['error'];?></title>
 	<link rel="stylesheet" href="<?php echo $GLOBALS['bloghost'];?>zb_system/css/admin.css" type="text/css" media="screen" />
+	<style>.lessinfo{display:block;}.moreinfo{display:none;}</style>
 	<script type="text/javascript" src="<?php echo $GLOBALS['bloghost'];?>zb_system/script/common.js"></script>
 <?php
 foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
@@ -26,23 +27,29 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsigna
   <div class="logo"><img src="<?php echo $GLOBALS['bloghost'];?>zb_system/image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></div>
   <div class="login loginw">
 	<form id="frmLogin" method="post" action="#">
-	  <div class="divHeader"><?php echo $GLOBALS['lang']['msg']['error_tips'];?></div>
-  	  <div class="content">
-	 	<div><p><?php echo $GLOBALS['lang']['msg']['error_info'];?></p><div>
-		<?php echo '(' . $this->type . ')' . $this->typeName . ' :     ' . strip_tags($this->message);?>
+	  <div class="divHeader lessinfo" style="margin-bottom:10px;"><b><?php echo $this->message;?></b></div>
+	   <div class="content lessinfo">
+		 <div><p style="font-weight: normal;"><?php echo $GLOBALS['lang']['msg']['possible_causes_error'];?></p>
+<?php echo $this->possible_causes_of_the_error();?>
+	 	</div>
+		<?php if ($GLOBALS['option']['ZC_DEBUG_MODE']) { ?>
+		<p style="text-align:right;"><a href="javascript:$('div.lessinfo').hide(500);$('div.moreinfo').show(500);">显示更多的信息</a></p>
+		<?php } ?>
+	  </div>
+	
+	  <div class="divHeader moreinfo" style="margin-bottom:10px;"><?php echo $GLOBALS['lang']['msg']['error_tips'];?></div>
+  	  <div class="content moreinfo">
+	 	<div><p><?php echo $GLOBALS['lang']['msg']['error_info'];?></p>
+		<?php echo '(' . $this->type . ')' . $this->typeName . ' :     ' . strip_tags($this->messagefull);?>
 		<?php echo ' (' . $GLOBALS['blogversion'] . ') ';
 if (!in_array('Status: 404 Not Found', headers_list())) {
 	echo '(' . GetEnvironment() . ') ';
 }
 ?>
-		</div></div>
-	 	<div><p><?php echo $GLOBALS['lang']['msg']['possible_causes_error'];?></p><div>
-<?php echo $this->possible_causes_of_the_error();?>
-	 	</div></div>
-	 	<?php if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
-	?>
-	 	<div><p><?php echo $GLOBALS['lang']['msg']['file_line'];?></p><div>
-	 	<p><i><?php echo $this->file?></i><br/></p>
+		</div>
+	 	<?php if ($GLOBALS['option']['ZC_DEBUG_MODE']) { ?>
+	 	<div><p><?php echo $GLOBALS['lang']['msg']['file_line'];?></p>
+	 	<i><?php echo $this->file?></i><br/>
 	 	<table style='width:100%'>
 	 	<tbody>
 <?php
@@ -57,8 +64,8 @@ $aFile = $this->get_code($this->file, $this->line);
 	?>
 		</tbody>
 	 	</table>
-	 	</div></div>
-		<div><p><?php echo $GLOBALS['lang']['msg']['debug_backtrace'];?></p><div>
+	 	</div>
+		<div><p><?php echo $GLOBALS['lang']['msg']['debug_backtrace'];?></p>
 	 	<table style='width:100%'>
 	 	<tbody>
 <?php
@@ -99,16 +106,16 @@ if (isset($sData['line'])) {
 	?>
 		</tbody>
 	 	</table>
-	 	</div></div>
-	 	<div><p><?php echo $GLOBALS['lang']['msg']['request_data'];?></p><div>
+	 	</div>
+	 	<div><p><?php echo $GLOBALS['lang']['msg']['request_data'];?></p>
 	 	<pre><?php echo '$_GET = ' . print_r(htmlspecialchars_array($_GET), 1)?></pre>
 	 	<pre><?php echo '$_POST = ' . print_r(htmlspecialchars_array($_POST), 1)?></pre>
 <?php
 $post_data = $_COOKIE;unset($post_data['username']);unset($post_data['password']);
 	?>
 		<pre><?php echo '$_COOKIE = ' . print_r(htmlspecialchars_array($post_data), 1)?></pre>
-	 	</div></div>
-	 	<div><p><?php echo $GLOBALS['lang']['msg']['include_file'];?></p><div>
+	 	</div>
+	 	<div><p><?php echo $GLOBALS['lang']['msg']['include_file'];?></p>
 	 	<table style='width:100%'>
 	 	<tbody>
 		<?php foreach (get_included_files() as $iInt => $sData) {?>
@@ -117,11 +124,10 @@ $post_data = $_COOKIE;unset($post_data['username']);unset($post_data['password']
 	?>
 		</tbody>
 		</table>
-	 	</div></div>
-	 	<?php }
-?>
+	 	</div>
+<?php } ?>
 	  </div>
-	  <p><a href="javascript:history.back(-1)"><?php echo $GLOBALS['lang']['msg']['back'];?></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:location.reload()"><?php echo $GLOBALS['lang']['msg']['refresh'];?></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo $GLOBALS['bloghost'];?>zb_system/cmd.php?act=login"><?php echo $GLOBALS['lang']['msg']['admin'];?></a></p>
+	  <p><a href="javascript:history.back(-1)"><?php echo $GLOBALS['lang']['msg']['back'];?></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:location.reload()"><?php echo $GLOBALS['lang']['msg']['refresh'];?></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo $GLOBALS['bloghost'];?>zb_system/cmd.php?act=login"><?php echo $GLOBALS['lang']['msg']['login'];?></a></p>
     </form>
   </div>
 </div>
