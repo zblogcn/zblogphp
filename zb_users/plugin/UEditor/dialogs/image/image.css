@@ -2,11 +2,11 @@
 /* dialog样式 */
 .wrapper {
     zoom: 1;
-    width: 630px;
-    *width: 626px;
+    width: 96%;
+    *width: 96%;
     height: 380px;
     margin: 0 auto;
-    padding: 10px;
+    padding: 2%;
     position: relative;
     font-family: sans-serif;
 }
