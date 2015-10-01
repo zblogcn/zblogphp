@@ -269,26 +269,26 @@ function ViewIndex() {
 	}
 
 	switch ($action) {
-		case 'feed':
-			ViewFeed();
-			break;
-		case 'search':
-			ViewSearch();
-			break;
-		case '':
-		default:
-			if ($zbp->currenturl == $zbp->cookiespath ||
-				$zbp->currenturl == $zbp->cookiespath . 'index.php') {
-				ViewList(null, null, null, null, null);
-			} elseif (($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || isset($_GET['rewrite'])) &&
-				(isset($_GET['id']) || isset($_GET['alias']))) {
-				ViewPost(GetVars('id', 'GET'), GetVars('alias', 'GET'));
-			} elseif (($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || isset($_GET['rewrite'])) &&
-				(isset($_GET['page']) || isset($_GET['cate']) || isset($_GET['auth']) || isset($_GET['date']) || isset($_GET['tags']))) {
-				ViewList(GetVars('page', 'GET'), GetVars('cate', 'GET'), GetVars('auth', 'GET'), GetVars('date', 'GET'), GetVars('tags', 'GET'));
-			} else {
-				ViewAuto($zbp->currenturl);
-			}
+	case 'feed':
+		ViewFeed();
+		break;
+	case 'search':
+		ViewSearch();
+		break;
+	case '':
+	default:
+		if ($zbp->currenturl == $zbp->cookiespath ||
+			$zbp->currenturl == $zbp->cookiespath . 'index.php') {
+			ViewList(null, null, null, null, null);
+		} elseif (($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || isset($_GET['rewrite'])) &&
+			(isset($_GET['id']) || isset($_GET['alias']))) {
+			ViewPost(GetVars('id', 'GET'), GetVars('alias', 'GET'));
+		} elseif (($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || isset($_GET['rewrite'])) &&
+			(isset($_GET['page']) || isset($_GET['cate']) || isset($_GET['auth']) || isset($_GET['date']) || isset($_GET['tags']))) {
+			ViewList(GetVars('page', 'GET'), GetVars('cate', 'GET'), GetVars('auth', 'GET'), GetVars('date', 'GET'), GetVars('tags', 'GET'));
+		} else {
+			ViewAuto($zbp->currenturl);
+		}
 	}
 }
 
@@ -311,9 +311,15 @@ function ViewFeed() {
 
 	$rss2 = new Rss2($zbp->name, $zbp->host, $zbp->subname);
 
+	$w = array(array('=', 'log_Status', 0));
+
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewFeed_Core'] as $fpname => &$fpsignal) {
+		$fpname($w);
+	}
+
 	$articles = $zbp->GetArticleList(
 		'*',
-		array(array('=', 'log_Status', 0)),
+		$w,
 		array('log_PostTime' => 'DESC'),
 		$zbp->option['ZC_RSS2_COUNT'],
 		null
@@ -379,6 +385,10 @@ function ViewSearch() {
 	$pagebar->PageBarCount = $zbp->pagebarcount;
 	$pagebar->UrlRule->Rules['{%page%}'] = $page;
 	$pagebar->UrlRule->Rules['{%q%}'] = rawurlencode($q);
+
+	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewSearch_Core'] as $fpname => &$fpsignal) {
+		$fpname($q, $page, $w, $pagebar);
+	}
 
 	$array = $zbp->GetArticleList(
 		'',
@@ -618,150 +628,150 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	$articles_top = array();
 
 	switch ($type) {
-		########################################################################################################
-		case 'index':
-			$pagebar = new Pagebar($zbp->option['ZC_INDEX_REGEX']);
-			$pagebar->Count = $zbp->cache->normal_article_nums;
-			$category = new Metas;
-			$author = new Metas;
-			$datetime = new Metas;
-			$tag = new Metas;
-			$template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
-			if ($page == 1) {
-				$zbp->title = $zbp->subname;
-			} else {
-				$zbp->title = str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
-			}
-			break;
-		########################################################################################################
-		case 'category':
-			$pagebar = new Pagebar($zbp->option['ZC_CATEGORY_REGEX']);
-			$author = new Metas;
-			$datetime = new Metas;
-			$tag = new Metas;
+	########################################################################################################
+	case 'index':
+		$pagebar = new Pagebar($zbp->option['ZC_INDEX_REGEX']);
+		$pagebar->Count = $zbp->cache->normal_article_nums;
+		$category = new Metas;
+		$author = new Metas;
+		$datetime = new Metas;
+		$tag = new Metas;
+		$template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+		if ($page == 1) {
+			$zbp->title = $zbp->subname;
+		} else {
+			$zbp->title = str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
+		}
+		break;
+	########################################################################################################
+	case 'category':
+		$pagebar = new Pagebar($zbp->option['ZC_CATEGORY_REGEX']);
+		$author = new Metas;
+		$datetime = new Metas;
+		$tag = new Metas;
 
-			$category = new Category;
-			if (strpos($zbp->option['ZC_CATEGORY_REGEX'], '{%id%}') !== false) {
-				$category = $zbp->GetCategoryByID($cate);
-			}
-			if (strpos($zbp->option['ZC_CATEGORY_REGEX'], '{%alias%}') !== false) {
-				$category = $zbp->GetCategoryByAlias($cate);
-			}
-			if ($category->ID == 0) {
-				if ($isrewrite == true) {
-					return false;
-				}
-
-				$zbp->ShowError(2, __FILE__, __LINE__);
-			}
-			if ($page == 1) {
-				$zbp->title = $category->Name;
-			} else {
-				$zbp->title = $category->Name . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
-			}
-			$template = $category->Template;
-
-			if (!$zbp->option['ZC_DISPLAY_SUBCATEGORYS']) {
-				$w[] = array('=', 'log_CateID', $category->ID);
-				$pagebar->Count = $category->Count;
-			} else {
-				$arysubcate = array();
-				$arysubcate[] = array('log_CateID', $category->ID);
-				foreach ($zbp->categorys[$category->ID]->SubCategorys as $subcate) {
-					$arysubcate[] = array('log_CateID', $subcate->ID);
-				}
-				$w[] = array('array', $arysubcate);
+		$category = new Category;
+		if (strpos($zbp->option['ZC_CATEGORY_REGEX'], '{%id%}') !== false) {
+			$category = $zbp->GetCategoryByID($cate);
+		}
+		if (strpos($zbp->option['ZC_CATEGORY_REGEX'], '{%alias%}') !== false) {
+			$category = $zbp->GetCategoryByAlias($cate);
+		}
+		if ($category->ID == 0) {
+			if ($isrewrite == true) {
+				return false;
 			}
 
-			$pagebar->UrlRule->Rules['{%id%}'] = $category->ID;
-			$pagebar->UrlRule->Rules['{%alias%}'] = $category->Alias == '' ? rawurlencode($category->Name) : $category->Alias;
-			break;
-		########################################################################################################
-		case 'author':
-			$pagebar = new Pagebar($zbp->option['ZC_AUTHOR_REGEX']);
-			$category = new Metas;
-			$datetime = new Metas;
-			$tag = new Metas;
+			$zbp->ShowError(2, __FILE__, __LINE__);
+		}
+		if ($page == 1) {
+			$zbp->title = $category->Name;
+		} else {
+			$zbp->title = $category->Name . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
+		}
+		$template = $category->Template;
 
-			$author = new Member;
-			if (strpos($zbp->option['ZC_AUTHOR_REGEX'], '{%id%}') !== false) {
-				$author = $zbp->GetMemberByID($auth);
+		if (!$zbp->option['ZC_DISPLAY_SUBCATEGORYS']) {
+			$w[] = array('=', 'log_CateID', $category->ID);
+			$pagebar->Count = $category->Count;
+		} else {
+			$arysubcate = array();
+			$arysubcate[] = array('log_CateID', $category->ID);
+			foreach ($zbp->categorys[$category->ID]->SubCategorys as $subcate) {
+				$arysubcate[] = array('log_CateID', $subcate->ID);
 			}
-			if (strpos($zbp->option['ZC_AUTHOR_REGEX'], '{%alias%}') !== false) {
-				$author = $zbp->GetMemberByAliasOrName($auth);
-			}
-			if ($author->ID == 0) {
-				if ($isrewrite == true) {
-					return false;
-				}
+			$w[] = array('array', $arysubcate);
+		}
 
-				$zbp->ShowError(2, __FILE__, __LINE__);
-			}
-			if ($page == 1) {
-				$zbp->title = $author->StaticName;
-			} else {
-				$zbp->title = $author->StaticName . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
-			}
-			$template = $author->Template;
-			$w[] = array('=', 'log_AuthorID', $author->ID);
-			$pagebar->Count = $author->Articles;
-			$pagebar->UrlRule->Rules['{%id%}'] = $author->ID;
-			$pagebar->UrlRule->Rules['{%alias%}'] = $author->Alias == '' ? rawurlencode($author->Name) : $author->Alias;
-			break;
-		########################################################################################################
-		case 'date':
-			$pagebar = new Pagebar($zbp->option['ZC_DATE_REGEX']);
-			$category = new Metas;
-			$author = new Metas;
-			$tag = new Metas;
-			$datetime = strtotime($date);
+		$pagebar->UrlRule->Rules['{%id%}'] = $category->ID;
+		$pagebar->UrlRule->Rules['{%alias%}'] = $category->Alias == '' ? rawurlencode($category->Name) : $category->Alias;
+		break;
+	########################################################################################################
+	case 'author':
+		$pagebar = new Pagebar($zbp->option['ZC_AUTHOR_REGEX']);
+		$category = new Metas;
+		$datetime = new Metas;
+		$tag = new Metas;
 
-			$datetitle = str_replace(array('%y%', '%m%'), array(date('Y', $datetime), date('n', $datetime)), $zbp->lang['msg']['year_month']);
-			if ($page == 1) {
-				$zbp->title = $datetitle;
-			} else {
-				$zbp->title = $datetitle . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
+		$author = new Member;
+		if (strpos($zbp->option['ZC_AUTHOR_REGEX'], '{%id%}') !== false) {
+			$author = $zbp->GetMemberByID($auth);
+		}
+		if (strpos($zbp->option['ZC_AUTHOR_REGEX'], '{%alias%}') !== false) {
+			$author = $zbp->GetMemberByAliasOrName($auth);
+		}
+		if ($author->ID == 0) {
+			if ($isrewrite == true) {
+				return false;
 			}
 
-			$zbp->modulesbyfilename['calendar']->Content = BuildModule_calendar(date('Y', $datetime) . '-' . date('n', $datetime));
+			$zbp->ShowError(2, __FILE__, __LINE__);
+		}
+		if ($page == 1) {
+			$zbp->title = $author->StaticName;
+		} else {
+			$zbp->title = $author->StaticName . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
+		}
+		$template = $author->Template;
+		$w[] = array('=', 'log_AuthorID', $author->ID);
+		$pagebar->Count = $author->Articles;
+		$pagebar->UrlRule->Rules['{%id%}'] = $author->ID;
+		$pagebar->UrlRule->Rules['{%alias%}'] = $author->Alias == '' ? rawurlencode($author->Name) : $author->Alias;
+		break;
+	########################################################################################################
+	case 'date':
+		$pagebar = new Pagebar($zbp->option['ZC_DATE_REGEX']);
+		$category = new Metas;
+		$author = new Metas;
+		$tag = new Metas;
+		$datetime = strtotime($date);
 
-			$template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
-			$w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 month', $datetime));
-			$pagebar->UrlRule->Rules['{%date%}'] = $date;
-			$datetime = Metas::ConvertArray(getdate($datetime));
-			break;
-		########################################################################################################
-		case 'tag':
-			$pagebar = new Pagebar($zbp->option['ZC_TAGS_REGEX']);
-			$category = new Metas;
-			$author = new Metas;
-			$datetime = new Metas;
-			$tag = new Tag;
-			if (strpos($zbp->option['ZC_TAGS_REGEX'], '{%id%}') !== false) {
-				$tag = $zbp->GetTagByID($tags);
-			}
-			if (strpos($zbp->option['ZC_TAGS_REGEX'], '{%alias%}') !== false) {
-				$tag = $zbp->GetTagByAliasOrName($tags);
-			}
-			if ($tag->ID == 0) {
-				if ($isrewrite == true) {
-					return false;
-				}
+		$datetitle = str_replace(array('%y%', '%m%'), array(date('Y', $datetime), date('n', $datetime)), $zbp->lang['msg']['year_month']);
+		if ($page == 1) {
+			$zbp->title = $datetitle;
+		} else {
+			$zbp->title = $datetitle . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
+		}
 
-				$zbp->ShowError(2, __FILE__, __LINE__);
+		$zbp->modulesbyfilename['calendar']->Content = BuildModule_calendar(date('Y', $datetime) . '-' . date('n', $datetime));
+
+		$template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+		$w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 month', $datetime));
+		$pagebar->UrlRule->Rules['{%date%}'] = $date;
+		$datetime = Metas::ConvertArray(getdate($datetime));
+		break;
+	########################################################################################################
+	case 'tag':
+		$pagebar = new Pagebar($zbp->option['ZC_TAGS_REGEX']);
+		$category = new Metas;
+		$author = new Metas;
+		$datetime = new Metas;
+		$tag = new Tag;
+		if (strpos($zbp->option['ZC_TAGS_REGEX'], '{%id%}') !== false) {
+			$tag = $zbp->GetTagByID($tags);
+		}
+		if (strpos($zbp->option['ZC_TAGS_REGEX'], '{%alias%}') !== false) {
+			$tag = $zbp->GetTagByAliasOrName($tags);
+		}
+		if ($tag->ID == 0) {
+			if ($isrewrite == true) {
+				return false;
 			}
 
-			if ($page == 1) {
-				$zbp->title = $tag->Name;
-			} else {
-				$zbp->title = $tag->Name . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
-			}
+			$zbp->ShowError(2, __FILE__, __LINE__);
+		}
 
-			$template = $tag->Template;
-			$w[] = array('LIKE', 'log_Tag', '%{' . $tag->ID . '}%');
-			$pagebar->UrlRule->Rules['{%id%}'] = $tag->ID;
-			$pagebar->UrlRule->Rules['{%alias%}'] = $tag->Alias == '' ? rawurlencode($tag->Name) : $tag->Alias;
-			break;
+		if ($page == 1) {
+			$zbp->title = $tag->Name;
+		} else {
+			$zbp->title = $tag->Name . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
+		}
+
+		$template = $tag->Template;
+		$w[] = array('LIKE', 'log_Tag', '%{' . $tag->ID . '}%');
+		$pagebar->UrlRule->Rules['{%id%}'] = $tag->ID;
+		$pagebar->UrlRule->Rules['{%alias%}'] = $tag->Alias == '' ? rawurlencode($tag->Name) : $tag->Alias;
+		break;
 	}
 
 	$pagebar->PageCount = $zbp->displaycount;
@@ -1923,12 +1933,12 @@ function DelCategory() {
 	$id = (int) GetVars('id', 'GET');
 	$cate = $zbp->GetCategoryByID($id);
 	if ($cate->ID > 0) {
-		
+
 		foreach ($zbp->categorys as $subcate) {
-			if($subcate->ParentID == $cate->ID){
+			if ($subcate->ParentID == $cate->ID) {
 				$zbp->ShowError(49, __FILE__, __LINE__);
 				return false;
-			}			
+			}
 		}
 		DelCategory_Articles($cate->ID);
 		$cate->Del();
@@ -2125,7 +2135,6 @@ function PostMember() {
 			}
 		}
 	}
-
 
 	$mem->Save();
 
@@ -3005,7 +3014,6 @@ function BuildModule_catalog() {
 				}
 			}
 		}
-
 
 		foreach ($zbp->categorysbyorder as $key => $value) {
 			$s = str_replace('<!--' . $value->ID . 'begin--><!--' . $value->ID . 'end-->', '', $s);

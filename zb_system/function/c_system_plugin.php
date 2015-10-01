@@ -986,6 +986,28 @@ DefinePluginFilter('Filter_Plugin_ViewList_Core');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_ViewList_Core
+'参数:$q, $page, $w, $pagebar
+'说明:定义搜索核心接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_ViewSearch_Core');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_ViewList_Core
+'参数:$w
+'说明:定义Feed核心接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_ViewFeed_Core');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_ViewPost_Begin
 '参数:&$id,&$alias
 '说明:定义列表输出接口
