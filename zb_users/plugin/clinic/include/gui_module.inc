@@ -5,7 +5,7 @@
 	</div>
     <p><br/></p>
     <div id="div-message">
-    	<table class="table_border table_border_cells table_stripes" style="width:95%">
+    	<table class="table_border table_border_cells table_striped table_hover" style="width:95%">
 		<tbody id="tbody-message">
         <tr><td>正在初始化</td></tr>
         </tbody>

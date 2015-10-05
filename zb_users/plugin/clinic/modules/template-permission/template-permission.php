@@ -33,6 +33,7 @@ class template_permission extends clinic {
 		global $zbp;
 		$zbp->BuildTemplate();
 		$this->output('success', '模板重编译完成');
+		$this->output('success', '请自行清理浏览器缓存后重试');
 	}
 
 	/**
@@ -54,7 +55,6 @@ class template_permission extends clinic {
 				$s = '文件夹不存在 - 待修复';
 			} else {
 				/*$s = GetFilePerms($path);
-
 
 				if (substr($s, 0, 1) == '-') {
 				$return = (substr($s, 1, 1) == 'r' && substr($s, 2, 1) == 'w' && substr($s, 4, 1) == 'r' && substr($s, 7, 1) == 'r');

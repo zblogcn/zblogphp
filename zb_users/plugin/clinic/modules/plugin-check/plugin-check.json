@@ -1,0 +1,9 @@
+{
+	"id": "plugin-check",
+	"name": "重新扫描应用",
+	"category": "app",
+	"question": [
+		"提示与未安装应用冲突", 
+		"提示某应用已安装"
+	]
+}

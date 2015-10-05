@@ -1,6 +1,6 @@
 <?php foreach($clinic->categories as $category) {
 ?>
-	<table class="table_border table_border_cells table_stripes" style="width:95%">
+	<table class="table_border table_border_cells table_striped table_hover" style="width:95%">
 		<thead>
 			<tr>
 				<th colspan="2" align="left"><?php echo $category['chs'];?></th>
