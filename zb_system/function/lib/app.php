@@ -457,6 +457,8 @@ class App {
 			$s .= '<file><path>' . htmlspecialchars($d) . '</path><stream>' . $c . '</stream></file>';
 		}
 
+		$s .= '<verify>' . base64_encode($zbp->host . "\n" . $zbp->path) . '</verify>';
+
 		$s .= '</app>';
 
 		return $s;
