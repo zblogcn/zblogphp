@@ -5,12 +5,19 @@ Z-BlogPHP是由RainbowSoft Studio团队开发的博客程序，基于高效的PH
 
 Z-BlogPHP有着强大的可定制性、丰富的插件接口和独立的主题模板，方便开发者和用户定制与优化。
 
-##运行环境
-- Web Server: IIS、Apache、Lighttpd、Nginx、Kangle
-- PHP 5.2 - 5.6（PHP 7 未做完整测试，基本保证可用。） / HHVM 3 
-- MySQL / MariaDB / SQLite / PostgreSQL
+## 社区说明
+1. 使用交流及开发建议，请转向[Z-Blog论坛](http://bbs.zblogcn.com/)；
+1. 开发文档，参看[Z-Wiki](http://wiki.zblogcn.com/doku.php?id=zblogphp)；
+1. 提交安全漏洞，请在[乌云（WooYun）](http://wooyun.org/corps/Z-Blog)提交，建议不要在GitHub Issue / 论坛内直接发布；
+1. 提交功能BUG，请在论坛内，或直接在GitHub Issue内提交；
+1. 欢迎Pull Request，如果你喜欢，请为我们点一个Star :)
 
-##安装说明
+## 运行环境
+- Web Server: IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
+- PHP 5.2 - 7 / HHVM 3 
+- MariaDB(MySQL) / SQLite / PostgreSQL
+
+## 安装说明
 > 首先请确保网站目录拥有755权限。
 
 > 若要使用开发版本，请先[下载稳定版](http://www.zblogcn.com/zblogphp/)并安装，然后再用GitHub内的文件进行覆盖，方可使用。
@@ -24,13 +31,6 @@ Z-BlogPHP有着强大的可定制性、丰富的插件接口和独立的主题�
 5. 点击下一步，安装成功，进入网站
 
 > 安装完成后请删除zb_install文件夹。
-
-
-##开发文档
-请访问我们的wiki站点：http://wiki.zblogcn.com/doku.php?id=zblogphp
-
-##BUG反馈
-请直接提交Issue告知我们，谢谢。
 
 ##开源协议
 
