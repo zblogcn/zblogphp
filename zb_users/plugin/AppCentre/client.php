@@ -4,41 +4,40 @@ require '../../../zb_system/function/c_system_admin.php';
 require dirname(__FILE__) . '/function.php';
 $zbp->Load();
 
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
 
-if(!$zbp->Config('AppCentre')->username||!$zbp->Config('AppCentre')->password){
-	$blogtitle='应用中心-登录应用商城';
-}else{
-	$blogtitle='应用中心-我的应用仓库';
+if (!$zbp->Config('AppCentre')->username || !$zbp->Config('AppCentre')->password) {
+	$blogtitle = '应用中心-登录应用商城';
+} else {
+	$blogtitle = '应用中心-我的应用仓库';
 }
 
+if (GetVars('act') == 'login') {
 
-if(GetVars('act')=='login'){
+	$s = Server_Open('vaild');
+	if ($s) {
 
-	$s=Server_Open('vaild');
-	if($s){
-
-		$zbp->Config('AppCentre')->username=GetVars("app_username");
-		$zbp->Config('AppCentre')->password=$s;
+		$zbp->Config('AppCentre')->username = GetVars("app_username");
+		$zbp->Config('AppCentre')->password = $s;
 		$zbp->SaveConfig('AppCentre');
 
-		$zbp->SetHint('good','您已成功登录APP应用中心.');
+		$zbp->SetHint('good', '您已成功登录APP应用中心.');
 		Redirect('./main.php');
 		die;
-	}else{
-		$zbp->SetHint('bad','用户名或密码错误.');
+	} else {
+		$zbp->SetHint('bad', '用户名或密码错误.');
 		Redirect('./client.php');
 		die;
 	}
 }
 
-if(GetVars('act')=='logout'){
-	$zbp->Config('AppCentre')->username='';
-	$zbp->Config('AppCentre')->password='';
+if (GetVars('act') == 'logout') {
+	$zbp->Config('AppCentre')->username = '';
+	$zbp->Config('AppCentre')->password = '';
 	$zbp->SaveConfig('AppCentre');
-	$zbp->SetHint('good','您已退出APP应用中心.');
+	$zbp->SetHint('good', '您已退出APP应用中心.');
 	Redirect('./client.php');
 	die;
 }
@@ -51,7 +50,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div class="divHeader"><?php echo $blogtitle;?></div>
 <div class="SubMenu"><?php AppCentre_SubMenus(9);?></div>
   <div id="divMain2">
-<?php if(!$zbp->Config('AppCentre')->username){ ?>
+<?php if (!$zbp->Config('AppCentre')->username) {?>
             <div class="divHeader2">应用中心账户登录</div>
             <form action="?act=login" method="post">
               <table style="line-height:3em;" width="100%" border="0">
@@ -72,17 +71,18 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                 </tr>
               </table>
             </form>
-<?php }else{
+<?php } else {
 
 //已登录
-Server_Open('shoplist');
+	Server_Open('shoplist');
 
-      }?>
+}
+?>
 
 
 
 	<script type="text/javascript">ActiveLeftMenu("aAppCentre");</script>
-	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>	
+	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>
   </div>
 </div>
 

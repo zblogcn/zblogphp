@@ -7,95 +7,98 @@ require dirname(__FILE__) . '/function.php';
 
 $zbp->Load();
 
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
 
-$blogtitle='应用中心-插件编辑';
+$blogtitle = '应用中心-插件编辑';
 
-if (GetVars('id'))
-{
-  $app = $zbp->LoadApp('plugin',GetVars('id'));
-  $mt=array();
-  $ft=GetFilesInDir($zbp->path . '/zb_users/plugin/' . $app->id . '/','php|inc|png');
-  foreach($ft as $f){
-    $mt[]=filemtime($f);
-  }
-  rsort($mt);
-  if(count($mt)==0)$mt[]=time();
-  $app->modified = date('Y-m-d', reset($mt));
+if (GetVars('id')) {
+	$app = $zbp->LoadApp('plugin', GetVars('id'));
+	$mt = array();
+	$ft = GetFilesInDir($zbp->path . '/zb_users/plugin/' . $app->id . '/', 'php|inc|png');
+	foreach ($ft as $f) {
+		$mt[] = filemtime($f);
+	}
+	rsort($mt);
+	if (count($mt) == 0) {
+		$mt[] = time();
+	}
+
+	$app->modified = date('Y-m-d', reset($mt));
+} else {
+	$app = new App;
+	$app->price = 0;
+	$app->version = '1.0';
+	$app->pubdate = date('Y-m-d', time());
+	$app->modified = date('Y-m-d', time());
+	$v = array_keys($zbpvers);
+	$app->adapted = (string) end($v);
+	$app->type = 'plugin';
+	$app->author_name = $zbp->user->Name;
+	$app->author_email = $zbp->user->Email;
+	$app->author_url = $zbp->user->HomePage;
+	$app->path = 'main.php';
+	$app->include = 'include.php';
+
 }
-else
-{
-  $app = new App;
-  $app->price=0;
-  $app->version='1.0';
-  $app->pubdate=date('Y-m-d',time());
-  $app->modified=date('Y-m-d',time());
-  $v=array_keys($zbpvers);
-  $app->adapted=(string)end($v);
-  $app->type='plugin';
-  $app->author_name = $zbp->user->Name;
-  $app->author_email = $zbp->user->Email;
-  $app->author_url = $zbp->user->HomePage;
-  $app->path = 'main.php';
-  $app->include = 'include.php';
 
-}
+if (count($_POST) > 0) {
 
-if(count($_POST)>0){
+	$app->id = trim($_POST['app_id']);
+	if (!CheckRegExp($app->id, "/^[A-Za-z0-9_]{3,30}/")) {$zbp->ShowError('ID名必须是字母数字和下划线组成,长度3-30字符.');die();}
+	if (!GetVars('id')) {
+		$app2 = $zbp->LoadApp('plugin', $app->id);
+		if ($app2->id) {$zbp->ShowError('已存在同名的APP应用.');die();}
+		@mkdir($zbp->usersdir . 'plugin/' . $app->id . '/');
+		@copy($zbp->usersdir . 'plugin/AppCentre/images/plugin.png', $zbp->usersdir . 'plugin/' . $app->id . '/logo.png');
 
-  $app->id=trim($_POST['app_id']);
-  if(!CheckRegExp($app->id,"/^[A-Za-z0-9_]{3,30}/")) {$zbp->ShowError('ID名必须是字母数字和下划线组成,长度3-30字符.');die();}
-  if(!GetVars('id')){
-    $app2 = $zbp->LoadApp('plugin',$app->id);
-    if($app2->id) {$zbp->ShowError('已存在同名的APP应用.');die();}
-    @mkdir($zbp->usersdir . 'plugin/' . $app->id . '/');
-    @copy($zbp->usersdir . 'plugin/AppCentre/images/plugin.png',$zbp->usersdir . 'plugin/' . $app->id . '/logo.png');
+		if (trim($_POST['app_path'])) {
+			$file = file_get_contents('tpl/main.html');
+			$file = str_replace("<%appid%>", $app->id, $file);
+			$path = $zbp->usersdir . 'plugin/' . $app->id . '/' . trim($_POST['app_path']);
+			@file_put_contents($path, $file);
+		}
+		if (trim($_POST['app_include'])) {
+			$file = file_get_contents('tpl/include.html');
+			$file = str_replace("<%appid%>", $app->id, $file);
+			$path = $zbp->usersdir . 'plugin/' . $app->id . '/include.php';
+			@file_put_contents($path, $file);
+		}
+	}
 
-    if(trim($_POST['app_path'])){
-      $file = file_get_contents('tpl/main.html');
-      $file = str_replace("<%appid%>", $app->id, $file);
-      $path=$zbp->usersdir . 'plugin/' . $app->id . '/' . trim($_POST['app_path']);
-      @file_put_contents($path, $file);
-    }
-    if(trim($_POST['app_include'])){
-      $file = file_get_contents('tpl/include.html');
-      $file = str_replace("<%appid%>", $app->id, $file);
-      $path=$zbp->usersdir . 'plugin/' . $app->id . '/include.php';
-      @file_put_contents($path, $file);
-    }
-  }
+	$app->name = trim($_POST['app_name']);
+	$app->url = trim($_POST['app_url']);
+	$app->note = trim($_POST['app_note']);
+	$app->adapted = $_POST['app_adapted'];
+	$app->version = (float) $_POST['app_version'];
+	if ($app->version == 1) {
+		$app->version = '1.0';
+	}
 
-$app->name=trim($_POST['app_name']);
-$app->url=trim($_POST['app_url']);
-$app->note=trim($_POST['app_note']);
-$app->adapted=$_POST['app_adapted'];
-$app->version=(float)$_POST['app_version'];
-if($app->version==1)$app->version='1.0';
-$app->pubdate=date('Y-m-d',strtotime($_POST['app_pubdate']));
-$app->modified=date('Y-m-d',time());
+	$app->pubdate = date('Y-m-d', strtotime($_POST['app_pubdate']));
+	$app->modified = date('Y-m-d', time());
 
-$app->author_name=trim($_POST['app_author_name']);
-$app->author_email=trim($_POST['app_author_email']);
-$app->author_url=trim($_POST['app_author_url']);
+	$app->author_name = trim($_POST['app_author_name']);
+	$app->author_email = trim($_POST['app_author_email']);
+	$app->author_url = trim($_POST['app_author_url']);
 
-$app->path=trim($_POST['app_path']);
-$app->include=trim($_POST['app_include']);
-$app->level=(int)$_POST['app_level'];
-$app->price=(float)$_POST['app_price'];
+	$app->path = trim($_POST['app_path']);
+	$app->include = trim($_POST['app_include']);
+	$app->level = (int) $_POST['app_level'];
+	$app->price = (float) $_POST['app_price'];
 
-$app->advanced_dependency=trim($_POST['app_advanced_dependency']);
-$app->advanced_rewritefunctions=trim($_POST['app_advanced_rewritefunctions']);
-$app->advanced_conflict=trim($_POST['app_advanced_conflict']);
+	$app->advanced_dependency = trim($_POST['app_advanced_dependency']);
+	$app->advanced_rewritefunctions = trim($_POST['app_advanced_rewritefunctions']);
+	$app->advanced_conflict = trim($_POST['app_advanced_conflict']);
 
-$app->description=trim($_POST['app_description']);
+	$app->description = trim($_POST['app_description']);
 
-$app-> SaveInfoByXml();
+	$app->SaveInfoByXml();
 
-$zbp->SetHint('good', '提交成功！<a href="submit.php?type=plugin&id=' . $app->id . '">现在立刻上传到应用中心！</a>');
-  Redirect($_SERVER["HTTP_REFERER"]);
+	$zbp->SetHint('good', '提交成功！<a href="submit.php?type=plugin&id=' . $app->id . '">现在立刻上传到应用中心！</a>');
+	Redirect($_SERVER["HTTP_REFERER"]);
 }
 
 require $blogpath . 'zb_system/admin/admin_header.php';
@@ -105,7 +108,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <div id="divMain">
 
   <div class="divHeader"><?php echo $blogtitle;?></div>
-<div class="SubMenu"><?php AppCentre_SubMenus(GetVars('id','GET')==''?5:'');?></div>
+<div class="SubMenu"><?php AppCentre_SubMenus(GetVars('id', 'GET') == '' ? 5 : '');?></div>
   <div id="divMain2">
 
 <form method="post" action="">
@@ -118,7 +121,10 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       <td><p><b>· 插件ID</b><br/>
           <span class="note">&nbsp;&nbsp;插件ID为插件的目录名,且不能重复.ID名只能用字母数字和下划线的组合.</span></p></td>
       <td><p>&nbsp;
-          <input id="app_id" name="app_id" style="width:550px;"  type="text" value="<?php echo $app->id;?>" <?php if($app->id)echo 'readonly="readonly"';?>  />
+          <input id="app_id" name="app_id" style="width:550px;"  type="text" value="<?php echo $app->id;?>" <?php if ($app->id) {
+	echo 'readonly="readonly"';
+}
+?>  />
         </p></td>
     </tr>
     <tr>
@@ -246,7 +252,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </form>
 
 	<script type="text/javascript">ActiveLeftMenu("aAppCentre");</script>
-	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>	
+	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AppCentre/logo.png';?>");</script>
   </div>
 </div>
 <?php
