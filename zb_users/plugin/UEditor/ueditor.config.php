@@ -16,6 +16,10 @@ $upload_dir = $blogpath . $upload_dir;
 #echo '/*' . $upload_dir . '*/' ;
 
 $output_js = "(function(){var URL;URL = '{$bloghost}zb_users/plugin/UEditor/';window.UEDITOR_CONFIG = {";
+$lang = strtolower($zbp->lang['lang']);
+if (!is_dir('./lang/' . $lang)) {
+	$lang = "zh-cn";
+}
 
 $array_config = array(
 	'UEDITOR_HOME_URL' => 'URL',
@@ -41,7 +45,7 @@ $array_config = array(
 	'sourceEditor' => '\'' . ($zbp->option['ZC_CODEMIRROR_ENABLE'] ? 'codemirror' : 'textarea') . '\'',
 	'theme' => '"default"',
 	'themePath' => 'URL +"themes/"',
-	'lang' => '\'zh-cn\'',
+	'lang' => '\'' . $lang . '\'',
 	'langPath' => 'URL+"lang/"',
 	'codeMirrorJsUrl' => 'URL+ "third-party/codemirror/codemirror.js"',
 	'codeMirrorCssUrl' => 'URL+ "third-party/codemirror/codemirror.css"',
