@@ -1,11 +1,28 @@
 <?php
 #注册插件
 RegisterPlugin("AppCentre", "ActivePlugin_AppCentre");
+if (!function_exists('GetScheme')) {
+	function GetScheme($array) {
+		if (array_key_exists('REQUEST_SCHEME', $array)) {
+			if (strtolower($array['REQUEST_SCHEME']) == 'https') {
+				return 'https://';
+			}
+		} elseif (array_key_exists('HTTPS', $array)) {
+			if (strtolower($array['HTTPS']) == 'on') {
+				return 'https://';
+			}
+		}
+		return 'http://';
+	}
+}
+if (!defined('HTTP_SCHEME')) {
+	define('HTTP_SCHEME', GetScheme($_SERVER));
+}
 
-define('APPCENTRE_URL', 'http://app.zblogcn.com/client/');
-define('APPCENTRE_SYSTEM_UPDATE', 'http://update.zblogcn.com/zblogphp/');
+define('APPCENTRE_URL', HTTP_SCHEME . 'app.zblogcn.com/client/');
+define('APPCENTRE_SYSTEM_UPDATE', HTTP_SCHEME . 'update.zblogcn.com/zblogphp/');
 
-define('APPCENTRE_API_URL', 'http://app.zblogcn.com/api/index.php?api=');
+define('APPCENTRE_API_URL', HTTP_SCHEME . 'app.zblogcn.com/api/index.php?api=');
 define('APPCENTRE_API_APP_ISBUY', 'isbuy');
 define('APPCENTRE_API_USER_INFO', 'userinfo');
 define('APPCENTRE_API_ORDER_LIST', 'orderlist');
