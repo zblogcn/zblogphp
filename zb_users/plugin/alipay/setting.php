@@ -7,49 +7,44 @@ require_once 'api.php';
 
 $zbp->Load();
 
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('alipay')) {$zbp->ShowError(48);die();}
 
-$blogtitle='支付宝设置';
+$blogtitle = '支付宝设置';
 
-if(count($_POST)>0){
+if (count($_POST) > 0) {
 	$zbp->Config('alipay')->partner = $_POST['partner'];
 	$zbp->Config('alipay')->key = $_POST['key'];
-	$zbp->Config('alipay')->alipayaccount = $_POST['alipayaccount'];	
-	$zbp->Config('alipay')->payforname = $_POST['payforname'];	
-	$zbp->Config('alipay')->notify_add = $_POST['notify_add'];	
+	$zbp->Config('alipay')->alipayaccount = $_POST['alipayaccount'];
+	$zbp->Config('alipay')->payforname = $_POST['payforname'];
+	$zbp->Config('alipay')->notify_add = $_POST['notify_add'];
 	$zbp->SaveConfig('alipay');
-	
+
 	$zbp->SetHint('good');
 	Redirect($_SERVER["HTTP_REFERER"]);
-}elseif(count($_GET)>0){
-	if($_GET['type'] == 'pay'){
+} elseif (count($_GET) > 0) {
+	if ($_GET['type'] == 'pay') {
 		$parameter = array(
-				"service" => "create_direct_pay_by_user",
-				"payment_type"	=> "1",
-				"notify_url"	=> $zbp->host ."/zb_users/plugin/alipay/pay_notify_url.php",
-				"return_url"	=> $zbp->host ."/zb_users/plugin/alipay/pay_return_url.php",
-				"seller_email"	=> $zbp->Config('alipay')->alipayaccount,
-				"out_trade_no"	=>  "12345601",	//订单号
-				"subject"	=> "订单名称",
-				"total_fee"	=> "1",	//金额
-				"royalty_type" => "10",//提成类型
-				"royalty_parameters" => "nbfhzj19901101@126.com^0.1^[名称]分润备注啊啊啊|",
-				"body"	=> "订单描述",
-				"show_url"	=> "http://www.xxx.com/myorder.html",
+			"out_trade_no" => time(), //订单号
+			"subject" => "订单名称",
+			"total_fee" => "200", //金额
+			"royalty_type" => "10", //提成类型
+			"royalty_parameters" => "rainbowsoft@gmail.com^16.8^Z-Blog应用中心[全站缓存(静态化)插件]分润---20151028100230141243|zsxsoft@outlook.com^8^Z-Blog应用中心[全站缓存(静态化)插件]分润---20151028100230141243|13586632603^8^Z-Blog应用中心[全站缓存(静态化)插件]分润---20151028100230141243|huangdi311@sina.com^8^Z-Blog应用中心[全站缓存(静态化)插件]分润---20151028100230141243|hicaptain@163.com^4.39^Z-Blog应用中心[全站缓存(静态化)插件]分润---20151028100230141243|laofei369460966@126.com^150^Z-Blog应用中心[全站缓存(静态化)插件]分润---20151028100230141243",
+			"body" => "订单描述",
+			"show_url" => "http://www.xxx.com/myorder.html",
 		);
 		AlipayAPI_Start($parameter);
-	}elseif($_GET['type'] == 'login'){
+	} elseif ($_GET['type'] == 'login') {
 		$parameter = array(
-				"service" => "alipay.auth.authorize",
-				"target_service"	=> "user.auth.quick.login",
-				"return_url"	=> $bloghost."zb_users/plugin/alipay/login_return_url.php",
+			"service" => "alipay.auth.authorize",
+			"target_service" => "user.auth.quick.login",
+			"return_url" => $bloghost . "zb_users/plugin/alipay/login_return_url.php",
 		);
 		AlipayAPI_Start($parameter);
 	}
 }
-//print_r($_SERVER['Filter_Plugin_AlipayAPI_Start']);
+
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
