@@ -1616,6 +1616,17 @@ DefinePluginFilter('Filter_Plugin_Upload_Url');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Upload_Dir
+'参数:$upload
+'说明:Upload类的Dir方法接口
+'调用:返回Dir的值,可以返回null.
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Upload_Dir');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Template_Compiling_Begin
 '参数:$this,$content
 '说明:Template类编译一个模板前的接口

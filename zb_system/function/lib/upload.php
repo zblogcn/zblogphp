@@ -99,7 +99,9 @@ class Upload extends Base {
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_SaveBase64File'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn = $fpname($str64, $this);
-			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+				return $fpreturn;
+			}
 		}
 
 		if (!file_exists($zbp->usersdir . $this->Dir)) {
@@ -159,6 +161,9 @@ class Upload extends Base {
 			return $zbp->host . 'zb_users/' . $this->Dir . rawurlencode($this->Name);
 		}
 		if ($name == 'Dir') {
+			foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Dir'] as $fpname => &$fpsignal) {
+				return $fpname($this);
+			}
 			return 'upload/' . date('Y', $this->PostTime) . '/' . date('m', $this->PostTime) . '/';
 		}
 		if ($name == 'FullFile') {
