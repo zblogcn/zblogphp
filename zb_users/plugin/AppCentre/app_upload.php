@@ -11,7 +11,6 @@ $action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 if (!$zbp->CheckPlugin('AppCentre')) {$zbp->ShowError(48);die();}
-
 foreach ($_FILES as $key => $value) {
 	if ($_FILES[$key]['error'] == 0) {
 		if (is_uploaded_file($_FILES[$key]['tmp_name'])) {
@@ -28,6 +27,8 @@ foreach ($_FILES as $key => $value) {
 			}
 			;
 		}
+	} else {
+		$zbp->SetHint('bad', $zbp->lang['error']['88']);
 	}
 
 }
