@@ -192,9 +192,9 @@ input[type="button"] { color: #ffffff; font-size: 1.1em; height: 29px; padding: 
 input.button:hover { background: #3399cc; }
 input.button2 { width: auto; }
 input[disabled],
-input[disabled]:hover { background: #eee; border: 1px solid #ccc; }
+input[disabled]:hover { background: #eee; border: 1px solid #ccc; cursor: not-allowed; color: black; }
 input[readonly],
-input[readonly]:hover { background: #eee; border: 1px solid #ccc; color: #808080; }
+input[readonly]:hover { background: #eee; border: 1px solid #ccc; cursor: not-allowed; color: #808080; }
 select.edit { width: 300px; }
 input.edit { width: 293px; }
 .form-group { display: inline-block; margin-bottom: 0; vertical-align: middle; width: 100%; margin-bottom: 10px; }
