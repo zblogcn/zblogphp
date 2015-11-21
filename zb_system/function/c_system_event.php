@@ -1737,7 +1737,7 @@ function DelComment_Children($id) {
  * @param int $id 父评论ID
  * @param array $array 将子评论ID存入新数组
  */
-function DelComment_Children_NoDel($id, &$array) {
+function GetSubComments($id, &$array) {
 	global $zbp;
 
 	$cmt = $zbp->GetCommentByID($id);
@@ -1745,7 +1745,7 @@ function DelComment_Children_NoDel($id, &$array) {
 	foreach ($cmt->Comments as $comment) {
 		$array[] = $comment->ID;
 		if (Count($comment->Comments) > 0) {
-			DelComment_Children_NoDel($comment->ID, $array);
+			GetSubComments($comment->ID, $array);
 		}
 	}
 
@@ -1791,59 +1791,50 @@ function BatchComment() {
 	if (isset($_POST['all_audit'])) {
 		$type = 'all_audit';
 	}
-	$array = array();
 	$array = $_POST['id'];
-	$array = array_unique($array);
-	if ($type == 'all_del') {
-		$arrdel = array();
-		foreach ($array as $i => $id) {
-			$cmt = $zbp->GetCommentByID($id);
-			if ($cmt->ID == 0) {
-				continue;
-			}
+	if (is_array($array)) {
+		$array = array_unique($array);
+	} else {
+		$array = array($array);
+	}
 
-			$arrdel[] = $cmt->ID;
-			DelComment_Children_NoDel($cmt->ID, $arrdel);
+	// Search Child Comments
+	$childArray = array();
+	foreach ($array as $i => $id) {
+		$cmt = $zbp->GetCommentByID($id);
+		if ($cmt->ID == 0) {
+			continue;
 		}
-		foreach ($arrdel as $i => $id) {
-			$cmt = $zbp->GetCommentByID($id);
-			if ($cmt->ID == 0) {
-				continue;
-			}
+		$childArray[] = $cmt;
+		GetSubComments($cmt->ID, $childArray);
+	}
 
+	// Unique child array
+	$childArray = array_unique($childArray);
+
+	if ($type == 'all_del') {
+		foreach ($childArray as $i => $cmt) {
 			$cmt->Del();
-			if ($cmt->IsChecking == false) {
+			if (!$cmt->IsChecking) {
 				CountPostArray(array($cmt->LogID), -1);
-			}
-
-			if ($cmt->IsChecking == false) {
 				CountCommentNums(-1, 0);
 			} else {
 				CountCommentNums(-1, -1);
 			}
 		}
 	}
-	if ($type == 'all_pass') {
-		foreach ($array as $i => $id) {
-			$cmt = $zbp->GetCommentByID($id);
-			if ($cmt->ID == 0) {
-				continue;
-			}
-
+	else if ($type == 'all_pass') {
+		foreach ($childArray as $i => $cmt) {
+			if (!$cmt->IsChecking) continue;
 			$cmt->IsChecking = false;
 			$cmt->Save();
 			CountPostArray(array($cmt->LogID), +1);
 			CountCommentNums(0, -1);
 		}
 	}
-
-	if ($type == 'all_audit') {
-		foreach ($array as $i => $id) {
-			$cmt = $zbp->GetCommentByID($id);
-			if ($cmt->ID == 0) {
-				continue;
-			}
-
+	else if ($type == 'all_audit') {
+		foreach ($childArray as $i => $cmt) {
+			if ($cmt->IsChecking) continue;
 			$cmt->IsChecking = true;
 			$cmt->Save();
 			CountPostArray(array($cmt->LogID), -1);
