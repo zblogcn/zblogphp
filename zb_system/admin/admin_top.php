@@ -7,17 +7,10 @@
       <div class="userbtn"><a class="profile" href="<?php echo $bloghost?>" title="" target="_blank"><?php echo $lang['msg']['return_to_site']?></a>&nbsp;&nbsp;<a class="logout" href="<?php echo $bloghost?>zb_system/cmd.php?act=logout" title=""><?php echo $lang['msg']['logout']?></a></div>
     </div>
     <div class="menu">
-      <ul id="topmenu">
-<?php
-ResponseAdmin_TopMenu()
-?>
+      <ul id="topmenu"><?php ResponseAdmin_TopMenu(); ?>
       </ul>
     </div>
 <?php if ($zbp->option['ZC_ADMIN_HTML5_ENABLE']) {?></header><?php } else {?></div><?php }?>
-<?php
-require ZBP_PATH . 'zb_system/admin/admin_left.php';
-?>
+<?php require ZBP_PATH . 'zb_system/admin/admin_left.php'; ?>
 <?php if ($zbp->option['ZC_ADMIN_HTML5_ENABLE']) {?><section class="main"><?php } else {?><div class="main"><?php }?>
-<?php
-$zbp->GetHint();
-?>
+<?php $zbp->GetHint(); ?>

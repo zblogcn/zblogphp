@@ -233,6 +233,7 @@ return array(
 		'debug_backtrace' => '堆栈跟踪',
 		'possible_causes_error' => '可能的错误原因',
 		'display_more_info' => '显示更多的信息',
+		'error_load_js' => 'JavaScript加载失败，可能被服务器拦截',
 		'' => '',
 	),
 

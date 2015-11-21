@@ -237,6 +237,7 @@ return array(
 		'debug_backtrace' => 'Debug Backtrace',
 		'possible_causes_error' => 'Possible causes of errors',
 		'display_more_info' => 'Display more info',
+		'error_load_js' => 'Error when loading JavaScript',
 		'' => '',
 	),
 
