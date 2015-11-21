@@ -932,7 +932,7 @@ function ViewPost($id, $alias, $isrewrite = false) {
 
 	$comments = array();
 
-	if ($article->IsLock == false && $zbp->socialcomment == null) {
+	if (!$article->IsLock && $zbp->socialcomment == null) {
 		$comments = $zbp->GetCommentList(
 			'*',
 			array(
@@ -1637,40 +1637,36 @@ function PostComment() {
 
 	FilterComment($cmt);
 
-	if ($cmt->IsThrow == false) {
-
-		$cmt->Save();
-
-		if ($cmt->IsChecking == false) {
-
-			CountPostArray(array($cmt->LogID), +1);
-			CountCommentNums(+1, 0);
-
-			$zbp->AddBuildModule('comments');
-
-			$zbp->comments[$cmt->ID] = $cmt;
-
-			if (GetVars('isajax', 'POST')) {
-				ViewComment($cmt->ID);
-			}
-
-			foreach ($GLOBALS['hooks']['Filter_Plugin_PostComment_Succeed'] as $fpname => &$fpsignal) {
-				$fpname($cmt);
-			}
-
-			return true;
-
-		} else {
-			CountCommentNums(0, +1);
-			$zbp->ShowError(53, __FILE__, __LINE__);
-
-		}
-
-	} else {
-
+	if ($cmt->IsThrow) {
 		$zbp->ShowError(14, __FILE__, __LINE__);
-
+		return false;
 	}
+
+	$cmt->Save();
+	if ($cmt->IsChecking) {
+		CountCommentNums(0, +1);
+		$zbp->ShowError(53, __FILE__, __LINE__);
+		return false;
+	}
+
+
+	CountPostArray(array($cmt->LogID), +1);
+	CountCommentNums(+1, 0);
+
+	$zbp->AddBuildModule('comments');
+
+	$zbp->comments[$cmt->ID] = $cmt;
+
+	if (GetVars('isajax', 'POST')) {
+		ViewComment($cmt->ID);
+	}
+
+	foreach ($GLOBALS['hooks']['Filter_Plugin_PostComment_Succeed'] as $fpname => &$fpsignal) {
+		$fpname($cmt);
+	}
+
+	return true;
+
 }
 
 /**
@@ -2078,7 +2074,7 @@ function PostMember() {
 	}
 
 	if ($data['ID'] == 0) {
-		if (isset($data['Password']) == false || $data['Password'] == '') {
+		if (!isset($data['Password']) || $data['Password'] == '') {
 			$zbp->ShowError(73, __FILE__, __LINE__);
 		}
 		$data['IP'] = GetGuestIP();
@@ -3421,7 +3417,7 @@ function BuildModule_statistics($array = array()) {
 	$s .= "<li>{$zbp->lang['msg']['all_categorys']}:{$all_categorys}</li>";
 	$s .= "<li>{$zbp->lang['msg']['all_tags']}:{$all_tags}</li>";
 	$s .= "<li>{$zbp->lang['msg']['all_comments']}:{$all_comments}</li>";
-	if ($zbp->option['ZC_VIEWNUMS_TURNOFF'] == false || $zbp->option['ZC_LARGE_DATA'] == true) {
+	if (!$zbp->option['ZC_VIEWNUMS_TURNOFF'] || $zbp->option['ZC_LARGE_DATA']) {
 		$s .= "<li>{$zbp->lang['msg']['all_views']}:{$all_views}</li>";
 	}
 
