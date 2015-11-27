@@ -10,7 +10,7 @@ error_reporting(E_PARSE);
 
 ob_start();
 
-define('ZBP_PATH', str_replace('\\', '/', realpath(dirname(__FILE__) . '/../../')) . '/');
+define('ZBP_PATH',rtrim(str_replace('\\','/',realpath(dirname(__FILE__) . '/../../')),'/') . '/');
 
 #引入必备 {接口,调试,通用函数,事件处理}
 require ZBP_PATH . 'zb_system/function/c_system_plugin.php';
