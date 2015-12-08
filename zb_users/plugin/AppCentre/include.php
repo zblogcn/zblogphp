@@ -81,14 +81,14 @@ function AppCentre_AddThemeMenu() {
 	global $zbp;
 	echo "<script type='text/javascript'>var app_enabledevelop=" . (int) $zbp->Config('AppCentre')->enabledevelop . ";</script>";
 	echo "<script type='text/javascript'>var app_username='" . $zbp->Config('AppCentre')->username . "';</script>";
-	echo "<script src='{$zbp->host}zb_users/plugin/AppCentre/theme.js' type='text/javascript'></script>";
+	echo "<script src='{$zbp->host}zb_users/plugin/AppCentre/theme.js.php' type='text/javascript'></script>";
 }
 
 function AppCentre_AddPluginMenu() {
 	global $zbp;
 	echo "<script type='text/javascript'>var app_enabledevelop=" . (int) $zbp->Config('AppCentre')->enabledevelop . ";</script>";
 	echo "<script type='text/javascript'>var app_username='" . $zbp->Config('AppCentre')->username . "';</script>";
-	echo "<script src='{$zbp->host}zb_users/plugin/AppCentre/plugin.js' type='text/javascript'></script>";
+	echo "<script src='{$zbp->host}zb_users/plugin/AppCentre/plugin.js.php' type='text/javascript'></script>";
 }
 
 //$appid是App在应用中心的发布后的文章ID数字号，非App的ID名称。

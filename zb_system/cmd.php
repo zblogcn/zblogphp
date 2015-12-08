@@ -187,6 +187,7 @@ case 'UploadMng':
 	Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
 	break;
 case 'UploadPst':
+	if (!$zbp->ValidToken(GetVars('token', 'GET'))) {$zbp->ShowError(5, __FILE__, __LINE__);die();}
 	PostUpload();
 	$zbp->SetHint('good');
 	Redirect('cmd.php?act=UploadMng');

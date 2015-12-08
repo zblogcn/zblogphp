@@ -967,7 +967,7 @@ function Admin_UploadMng() {
 	echo '</div>';
 	echo '<div id="divMain2">';
 
-	echo '<form class="search" name="upload" id="upload" method="post" enctype="multipart/form-data" action="../cmd.php?act=UploadPst">';
+	echo '<form class="search" name="upload" id="upload" method="post" enctype="multipart/form-data" action="../cmd.php?act=UploadPst&token=' . $zbp->GetToken() . '">';
 	echo '<p>' . $zbp->lang['msg']['upload_file'] . ': </p>';
 	echo '<p><input type="file" name="file" size="60" />&nbsp;&nbsp;';
 	echo '<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '" onclick="" />&nbsp;&nbsp;';

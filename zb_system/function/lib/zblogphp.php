@@ -2755,22 +2755,24 @@ class ZBlogPHP {
 
 	/**
 	 * 获取会话Token
+	 * @param $s
 	 * @return string
 	 */
-	public function GetToken() {
-		return md5($this->guid . date('Ymd') . $this->user->Guid);
+	public function GetToken($s='') {
+		return md5($this->guid . date('Ymd') . $this->user->Guid . $s);
 	}
 
 	/**
 	 * 验证会话Token
 	 * @param $t
+	 * @param $s
 	 * @return bool
 	 */
-	public function ValidToken($t) {
-		if ($t == md5($this->guid . date('Ymd') . $this->user->Guid)) {
+	public function ValidToken($t,$s='') {
+		if ($t == md5($this->guid . date('Ymd') . $this->user->Guid . $s)) {
 			return true;
 		}
-		if ($t == md5($this->guid . date('Ymd', strtotime("-1 day")) . $this->user->Guid)) {
+		if ($t == md5($this->guid . date('Ymd', strtotime("-1 day")) . $this->user->Guid . $s)) {
 			return true;
 		}
 		return false;
