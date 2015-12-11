@@ -51,6 +51,7 @@ $array_config = array(
 	'codeMirrorCssUrl' => 'URL+ "third-party/codemirror/codemirror.css"',
 	"maxUpFileSize" => $zbp->option['ZC_UPLOAD_FILESIZE'],
 	"allowDivTransToP" => 'false',
+	"catchRemoteImageEnable" => "false"
 );
 
 foreach ($array_config as $key => $value) {
