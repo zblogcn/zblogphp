@@ -19,8 +19,28 @@ function ueditor_SyntaxHighlighter_print() {
 		return;
 	}
 
-	echo "\r\n" . 'document.writeln("<script src=\'' . $zbp->host . 'zb_users/plugin/UEditor/third-party/SyntaxHighlighter/shCore.pack.js\' type=\'text/javascript\'></script><link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host . 'zb_users/plugin/UEditor/third-party/SyntaxHighlighter/shCoreDefault.pack.css\'/>");' . "\r\n";
-	echo "\r\n$(document).ready(function(){SyntaxHighlighter.highlight();for(var i=0,di;di=SyntaxHighlighter.highlightContainers[i++];){var tds = di.getElementsByTagName('td');for(var j=0,li,ri;li=tds[0].childNodes[j];j++){ri = tds[1].firstChild.childNodes[j];ri.style.height = li.style.height = ri.offsetHeight + 'px';}}});\r\n";
+	echo "\r\n" . 'document.writeln("<script src=\'' . $zbp->host . 'zb_users/plugin/UEditor/third-party/prism/prism.js\' type=\'text/javascript\'></script><link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host . 'zb_users/plugin/UEditor/third-party/prism/prism.css\'/>");' . "\r\n";
+	echo "\r\n$(function(){
+		var compatibility = {'as3': 'actionscript', 'c#': 'csharp', 'delphi': 'pascal', 'html': 'markup', 'xml': 'markup', 'vb': 'basic', 'js': 'javascript', 'plain': 'markdown', 'pl': 'perl', 'ps': 'powershell'};
+		if (document.getElementsByClassName) {
+			var doms = document.getElementsByClassName('prism-highlight', 'pre');
+			for (var i = 0; i < doms.length; i++) {
+				var preDom = doms.item(i);
+				var codeDom = document.createElement('code');
+				codeDom.innerHTML = preDom.innerHTML;
+				console.log(preDom.className)
+				codeDom.className = 'language-' + (function(classObject) {
+					if (classObject === null) return 'markdown';
+					var className = classObject[0].split('language-')[1];
+					console.log(className);
+					console.log(compatibility[className]) ? compatibility[className] : className;
+					return (compatibility[className]) ? compatibility[className] : className;
+				})(preDom.className.match(/prism-language-([0-9a-zA-Z]+)/ig)) + ' prism-line-numbers';
+				preDom.innerHTML = '';
+				preDom.appendChild(codeDom);
+			}
+		}
+	});\r\n";
 
 }
 
