@@ -1,4 +1,11 @@
 <?php
+/**
+ * XML-RPC接口
+ * @package Z-BlogPHP
+ * @subpackage System/XML-RPC XML-RPC接口
+ * @copyright (C) RainbowSoft Studio
+ */
+
 require '../function/c_system_base.php';
 
 if (isset($_GET['rsd'])) {
@@ -23,6 +30,11 @@ if (isset($_GET['rsd'])) {
 
 }
 
+/**
+ * XML-RPC 获取用户站点基本信息
+ *
+ * 输出用户站点地址,guid,网站名xml
+ */
 function zbp_getUsersBlogs() {
 	global $zbp;
 
@@ -35,6 +47,11 @@ function zbp_getUsersBlogs() {
 	echo $strXML;
 }
 
+/**
+ * XML-RPC 获取分类列表
+ *
+ * 输出分类列表xml
+ */
 function zbp_getCategories() {
 	global $zbp;
 
@@ -68,6 +85,11 @@ function zbp_getCategories() {
 
 }
 
+/**
+ * XML-RPC 获取标签列表
+ *
+ * 输出标签列表xml
+ */
 function zbp_getTags() {
 
 	global $zbp;
@@ -110,6 +132,11 @@ function zbp_getTags() {
 
 }
 
+/**
+ * XML-RPC 获取用户列表
+ *
+ * 输出用户列表xml
+ */
 function zbp_getAuthors() {
 
 	global $zbp;
@@ -137,6 +164,12 @@ function zbp_getAuthors() {
 
 }
 
+/**
+ * XML-RPC 获取指定用户创建的页面
+ *
+ * 输出页面列表xml
+ * @param  int $n 用户ID
+ */
 function zbp_getPages($n) {
 	global $zbp;
 
@@ -190,6 +223,12 @@ function zbp_getPages($n) {
 
 }
 
+/**
+ * XML-RPC 获取指定ID页面
+ *
+ * 输出页面列表xml
+ * @param  int $id 页面ID
+ */
 function zbp_getPage($id) {
 	global $zbp;
 
@@ -237,6 +276,12 @@ function zbp_getPage($id) {
 
 }
 
+/**
+ * XML-RPC 获取指定用户最新文章列表
+ *
+ * 输出文章列表xml
+ * @param  int $n 用户ID
+ */
 function zbp_getRecentPosts($n) {
 	global $zbp;
 
@@ -311,6 +356,12 @@ function zbp_getRecentPosts($n) {
 
 }
 
+/**
+ * XML-RPC 删除页面
+ *
+ * 输出操作结果
+ * @param  int $id 页面ID
+ */
 function zbp_delPage($id) {
 
 	$strXML = '<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
@@ -326,6 +377,12 @@ function zbp_delPage($id) {
 
 }
 
+/**
+ * XML-RPC 删除文章
+ *
+ * 输出操作结果
+ * @param  int $id 文章ID
+ */
 function zbp_deletePost($id) {
 
 	$strXML = '<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
@@ -341,6 +398,12 @@ function zbp_deletePost($id) {
 
 }
 
+/**
+ * XML-RPC 获取指定文章
+ *
+ * 输出文章数据xml
+ * @param  int $id 文章ID
+ */
 function zbp_getPost($id) {
 	global $zbp;
 
@@ -409,6 +472,12 @@ function zbp_getPost($id) {
 
 }
 
+/**
+ * XML-RPC 获取指定文章所属分类信息
+ *
+ * 输出指定文章所属分类信息xml
+ * @param  int $id 文章ID
+ */
 function zbp_getPostCategories($id) {
 	global $zbp;
 
@@ -442,6 +511,14 @@ function zbp_getPostCategories($id) {
 
 }
 
+/**
+ * XML-RPC 编辑指定文章
+ *
+ * 输出操作结果
+ * @param  int $id        文章ID
+ * @param  string $xmlstring 文章数据xml
+ * @param  boolval $publish   是否直接发布
+ */
 function zbp_editPost($id, $xmlstring, $publish) {
 	global $zbp;
 
@@ -528,12 +605,25 @@ function zbp_editPost($id, $xmlstring, $publish) {
 
 }
 
+/**
+ * XML-RPC 设置文章默认分类
+ *
+ * 输出默认分类id=1
+ */
 function zbp_setPostCategories() {
 	$strXML = '<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
 	$strXML = str_replace("$%#1#%$", 1, $strXML);
 	echo $strXML;
 }
 
+/**
+ * XML-RPC 编辑指定页面
+ *
+ * 输出操作结果
+ * @param  int $id        页面ID
+ * @param  string $xmlstring 页面数据xml
+ * @param  boolval $publish   是否直接发布
+ */
 function zbp_editPage($id, $xmlstring, $publish) {
 	global $zbp;
 
@@ -598,6 +688,13 @@ function zbp_editPage($id, $xmlstring, $publish) {
 
 }
 
+/**
+ * XML-RPC 上传媒体文件
+ *
+ * 输出操作结果
+ * @param  int $id        页面ID
+ * @param  string $xmlstring 上传文件数据xml
+ */
 function zbp_newMediaObject($xmlstring) {
 	global $zbp;
 
@@ -640,7 +737,6 @@ $xml = simplexml_load_string($xmlstring);
 
 if ($xml) {
 	$method = (string) $xml->methodName;
-
 	switch ($method) {
 		case 'blogger.getUsersBlogs':
 			$username = (string) $xml->params->param[1]->value->string;
