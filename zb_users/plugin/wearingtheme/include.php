@@ -26,7 +26,7 @@ function wearingtheme_index_begin() {
 	}
 
 	if (!$app->LoadInfoByXml('theme', $theme)) {
-		return
+		return;
 	}
 
 	$zbp->Config('system')->ZC_BLOG_THEME = $theme;
