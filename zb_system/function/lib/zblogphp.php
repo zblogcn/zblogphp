@@ -304,7 +304,7 @@ class ZBlogPHP {
 		$datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname,
 		$blogtheme, $blogstyle, $currenturl, $activeapps, $posttype;
 
-		ZBlogException::SetErrorHook();
+		if( ZBP_HOOKERROR )ZBlogException::SetErrorHook();
 
 		//基本配置加载到$zbp内
 		$this->version = &$blogversion;
