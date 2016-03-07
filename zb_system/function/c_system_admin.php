@@ -115,12 +115,12 @@ function ResponseAdmin_TopMenu() {
 
 	$topmenus[] = MakeTopMenu("admin", $zbp->lang['msg']['dashboard'], $zbp->host . "zb_system/cmd.php?act=admin", "", "");
 	$topmenus[] = MakeTopMenu("SettingMng", $zbp->lang['msg']['settings'], $zbp->host . "zb_system/cmd.php?act=SettingMng", "", "");
+	$topmenus[] = MakeTopMenu("misc", $zbp->lang['msg']['official_website'], "http://www.zblogcn.com/", "_blank", "");
 
 	foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_TopMenu'] as $fpname => &$fpsignal) {
 		$fpname($topmenus);
 	}
 
-	$topmenus[] = MakeTopMenu("misc", $zbp->lang['msg']['official_website'], "http://www.zblogcn.com/", "_blank", "");
 
 	foreach ($topmenus as $m) {
 		echo $m;
