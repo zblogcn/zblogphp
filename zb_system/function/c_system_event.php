@@ -138,6 +138,11 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 		$option['is_related'] = false;
 	}
 
+
+	if (!isset($option['order'])) {
+		$option['order'] = array('log_PostTime' => 'DESC');
+	}
+
 	if ($option['is_related']) {
 		$at = $zbp->GetPostByID($option['is_related']);
 		$tags = $at->Tags;
@@ -225,8 +230,8 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 	}
 
 	$select = '*';
-	$order = array('log_PostTime' => 'DESC');
-
+	$order = $option['order'];
+	
 	foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_GetList'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($select, $w, $order, $count, $option);
 	}
@@ -779,8 +784,13 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	$pagebar->PageBarCount = $zbp->pagebarcount;
 	$pagebar->UrlRule->Rules['{%page%}'] = $page;
 
+
+
+	$order = array('log_PostTime' => 'DESC');
+
+
 	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Core'] as $fpname => &$fpsignal) {
-		$fpname($type, $page, $category, $author, $datetime, $tag, $w, $pagebar);
+		$fpname($type, $page, $category, $author, $datetime, $tag, $w, $pagebar, $order);
 	}
 
 	if ($zbp->option['ZC_LISTONTOP_TURNOFF'] == false) {
@@ -813,7 +823,6 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	}
 
 	$select = '*';
-	$order = array('log_PostTime' => 'DESC');
 	$limit = array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount);
 	$option = array('pagebar' => $pagebar);
 
@@ -829,6 +838,10 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 		$option,
 		true
 	);
+
+	if(count($articles)<1){
+		$zbp->ShowError(2, __FILE__, __LINE__);
+	}
 
 	$zbp->template->SetTags('title', $zbp->title);
 	$zbp->template->SetTags('articles', array_merge($articles_top, $articles));
