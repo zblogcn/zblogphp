@@ -291,6 +291,16 @@ class Post extends Base {
 				return $toptype;
 			case 'TypeName':
 				return $zbp->GetPostType_Name($this->Type);
+			case 'Img':
+			$pattern='/<img(.*?)src="(.*?)(?=")/';
+			$content = $this->Content;
+			preg_match_all($pattern,$content,$matchContent);
+			if(isset($matchContent[2][0])) {
+				$result=$matchContent[2][0];
+			}else{
+				$result="";
+			}
+       		return $result;
 			default:
 				return parent::__get($name);
 				break;
