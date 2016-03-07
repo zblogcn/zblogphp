@@ -779,8 +779,13 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	$pagebar->PageBarCount = $zbp->pagebarcount;
 	$pagebar->UrlRule->Rules['{%page%}'] = $page;
 
+
+
+	$order = array('log_PostTime' => 'DESC');
+
+
 	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Core'] as $fpname => &$fpsignal) {
-		$fpname($type, $page, $category, $author, $datetime, $tag, $w, $pagebar);
+		$fpname($type, $page, $category, $author, $datetime, $tag, $w, $pagebar, $order);
 	}
 
 	if ($zbp->option['ZC_LISTONTOP_TURNOFF'] == false) {
@@ -813,7 +818,6 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	}
 
 	$select = '*';
-	$order = array('log_PostTime' => 'DESC');
 	$limit = array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount);
 	$option = array('pagebar' => $pagebar);
 
