@@ -114,7 +114,7 @@ function GetPost($idorname, $option = null) {
  * @param null $option
  * @return array|mixed
  */
-function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = null, $search = null, $option = null,$order) {
+function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = null, $search = null, $option = null) {
 	global $zbp;
 	$list = array();
 
@@ -136,6 +136,11 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 
 	if (!isset($option['is_related'])) {
 		$option['is_related'] = false;
+	}
+
+
+	if (!isset($option['order'])) {
+		$option['order'] = array('log_PostTime' => 'DESC');
 	}
 
 	if ($option['is_related']) {
@@ -225,10 +230,8 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 	}
 
 	$select = '*';
-	if(!$order){
-		$order = array('log_PostTime' => 'DESC');
-	}
-
+	$order = $option['order'];
+	
 	foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_GetList'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($select, $w, $order, $count, $option);
 	}
