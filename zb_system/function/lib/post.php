@@ -9,6 +9,9 @@ class Post extends Base {
 
 	private $_prev = '';
 	private $_next = '';
+	private $_sc_prev = '';
+	private $_sc_next = '';
+
 
 	/**
 	 *
@@ -92,6 +95,8 @@ class Post extends Base {
 			case 'CommentPostUrl':
 			case 'Prev':
 			case 'Next':
+			case 'SCPrev':
+			case 'SCNext':
 			case 'RelatedList':
 				return null;
 				break;
@@ -232,6 +237,44 @@ class Post extends Base {
 					$this->_next = null;
 				}
 				return $this->_next;
+				break;
+			case 'SCPrev':
+				if ($this->_sc_prev !== '') {
+					return $this->_sc_prev;
+				}
+
+				$articles = $zbp->GetPostList(
+					array('*'),
+					array(array('=', 'log_Type', 0), array('=', 'log_Status', 0), array('=','log_CateID',$this->CateID), array('<', 'log_PostTime', $this->PostTime)),
+					array('log_PostTime' => 'DESC'),
+					array(1),
+					null
+				);
+				if (count($articles) == 1) {
+					$this->_sc_prev = $articles[0];
+				} else {
+					$this->_sc_prev = null;
+				}
+				return $this->_sc_prev;
+				break;
+			case 'SCNext':
+				if ($this->_sc_next !== '') {
+					return $this->_sc_next;
+				}
+
+				$articles = $zbp->GetPostList(
+					array('*'),
+					array(array('=', 'log_Type', 0), array('=', 'log_Status', 0), array('=','log_CateID',$this->CateID), array('>', 'log_PostTime', $this->PostTime)),
+					array('log_PostTime' => 'ASC'),
+					array(1),
+					null
+				);
+				if (count($articles) == 1) {
+					$this->_sc_next = $articles[0];
+				} else {
+					$this->_sc_next = null;
+				}
+				return $this->_sc_next;
 				break;
 			case 'RelatedList':
 				foreach ($GLOBALS['hooks']['Filter_Plugin_Post_RelatedList'] as $fpname => &$fpsignal) {
