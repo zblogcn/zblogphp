@@ -43,9 +43,13 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <td><p><input id='default_url' name='default_url' style='width:90%;' type='text' value='<?php echo $zbp->Config('Gravatar')->default_url ?>' /></p></td>
 </tr>
 <tr>
-<td><span class='note'>默认值: </span></td>
-<td><p>http://cn.gravatar.com/avatar/{%emailmd5%}?s=40&d={%source%}</p>
-	<p>因GFW原因推荐：http://gravatar.duoshuo.com/avatar/{%emailmd5%}?s=60&d=mm&r=G</p>
+<td><span class='note'>可选值: </span></td>
+<td>
+	<p><b>V2EX</b>：<a href="javascript:void(0)" class="enterGravatar">https://cdn.v2ex.com/gravatar/{%emailmd5%}.png?s=60&d=mm&r=G</a></p>
+	<p><b>MoeNet公共库</b>：<a href="javascript:void(0)" class="enterGravatar">https://gravatar.moefont.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
+	<p><b>多说CDN</b>：<a href="javascript:void(0)" class="enterGravatar">http://gravatar.duoshuo.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
+	<p><b>官方加密</b>：<a href="javascript:void(0)" class="enterGravatar">https://secure.gravatar.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
+	<p><b>官方</b>：<a href="javascript:void(0)" class="enterGravatar">http://cn.gravatar.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
 	</td>
 </tr>
 <tr>
@@ -72,7 +76,14 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   </div>
 </div>
 
-
+<script>
+$(function() {
+	$(".enterGravatar").click(function() {
+		var $this = $(this);
+		$("#default_url").val($this.text());
+	});
+});
+</script>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 
