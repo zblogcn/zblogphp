@@ -180,6 +180,18 @@ DefinePluginFilter('Filter_Plugin_Debug_Handler');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Debug_Display
+'参数:
+'说明:定义ZBlogException的Display函数的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Debug_Display');
+
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Autoload
 '参数:$classname
 '说明:监控autoload魔术方法

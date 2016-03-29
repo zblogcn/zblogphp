@@ -443,6 +443,10 @@ class ZBlogException {
 			ob_clean();
 		}
 
+		foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
+			$fpreturn = $fpname();
+		}
+
 		require dirname(__FILE__) . '/../defend/error.php';
 		RunTime();
 
