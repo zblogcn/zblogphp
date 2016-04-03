@@ -391,7 +391,7 @@ class ZBlogException {
 	function ParseError($type, $message, $file, $line) {
 
 		$this->type = $type;
-		$this->message = $message;	
+		$this->message = $message;
 		$this->messagefull = $message . ' (set_error_handler) ';
 		$this->file = $file;
 		$this->line = $line;
@@ -416,7 +416,7 @@ class ZBlogException {
 	 * @param $exception
 	 */
 	function ParseException($exception) {
-		
+
 		$this->message = $exception->getMessage();
 		$this->messagefull = $exception->getMessage() . ' (set_exception_handler) ';
 		$this->type = $exception->getCode();
@@ -444,7 +444,11 @@ class ZBlogException {
 		}
 
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
-			$fpreturn = $fpname();
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+			$fpreturn = $fpname($this);
+			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+				return $fpreturn;
+			}
 		}
 
 		require dirname(__FILE__) . '/../defend/error.php';
