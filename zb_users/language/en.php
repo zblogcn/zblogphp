@@ -484,7 +484,7 @@ return array(
 		'85' => 'Activate the application, need to deactivate the conflict of application of %s.',
 		'86' => 'Theme templates compiled file does not exist.',
 		'87' => 'Registered Type Failed',
-		'88' => 'The file that you uploaded not exist, maybe exceed the maximum upload limit of the server.'
+		'88' => 'The file that you uploaded not exist, maybe exceed the maximum upload limit of the server.',
 	),
 
 // Possible causes of the error
@@ -516,6 +516,12 @@ return array(
 			Please check your SQLite configuration in zb_users/c_option.php. <br/>
 			Or check you have read and write permissions of that SQLite file. <br/>
 			<br/>
+			',
+
+			'disabled for security reasons' => '
+				You can disable the Safe Mode of PHP.<br/>
+				Otherwise you can disable the plugin which caused this error and contact the author of which.
+				<br/>
 			',
 
 		),
