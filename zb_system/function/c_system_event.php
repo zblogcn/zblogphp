@@ -1649,7 +1649,6 @@ function PostComment() {
 		return false;
 	}
 
-
 	CountPostArray(array($cmt->LogID), +1);
 	CountCommentNums(+1, 0);
 
@@ -1818,19 +1817,23 @@ function BatchComment() {
 				CountCommentNums(-1, -1);
 			}
 		}
-	}
-	else if ($type == 'all_pass') {
+	} else if ($type == 'all_pass') {
 		foreach ($childArray as $i => $cmt) {
-			if (!$cmt->IsChecking) continue;
+			if (!$cmt->IsChecking) {
+				continue;
+			}
+
 			$cmt->IsChecking = false;
 			$cmt->Save();
 			CountPostArray(array($cmt->LogID), +1);
 			CountCommentNums(0, -1);
 		}
-	}
-	else if ($type == 'all_audit') {
+	} else if ($type == 'all_audit') {
 		foreach ($childArray as $i => $cmt) {
-			if ($cmt->IsChecking) continue;
+			if ($cmt->IsChecking) {
+				continue;
+			}
+
 			$cmt->IsChecking = true;
 			$cmt->Save();
 			CountPostArray(array($cmt->LogID), -1);
@@ -3194,13 +3197,10 @@ function BuildModule_previous() {
 function BuildModule_archives() {
 	global $zbp;
 
-	$i = $zbp->modulesbyfilename['archives']->MaxLi;
-	if ($i < 0) {
+	$maxli = $zbp->modulesbyfilename['archives']->MaxLi;
+	if ($maxli < 0) {
 		return '';
 	}
-
-	$fdate;
-	$ldate;
 
 	$sql = $zbp->db->sql->Select($zbp->table['Post'], array('log_PostTime'), null, array('log_PostTime' => 'DESC'), array(1), null);
 
@@ -3242,10 +3242,14 @@ function BuildModule_archives() {
 	}
 
 	$arraydate = array_reverse($arraydate);
-
 	$s = '';
+	$i = 0;
 
 	foreach ($arraydate as $key => $value) {
+		if ($i >= $maxli && $maxli > 0) {
+			break;
+		}
+
 		$url = new UrlRule($zbp->option['ZC_DATE_REGEX']);
 		$url->Rules['{%date%}'] = date('Y-n', $value);
 		$url->Rules['{%year%}'] = date('Y', $value);
@@ -3258,6 +3262,7 @@ function BuildModule_archives() {
 		$n = GetValueInArrayByCurrent($zbp->db->Query($sql), 'num');
 		if ($n > 0) {
 			$s .= '<li><a href="' . $url->Make() . '">' . str_replace(array('%y%', '%m%'), array(date('Y', $fdate), date('n', $fdate)), $zbp->lang['msg']['year_month']) . ' (' . $n . ')</a></li>';
+			$i++;
 		}
 	}
 
