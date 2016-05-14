@@ -29,11 +29,7 @@ class Upload extends Base {
 			$extlist = $zbp->option['ZC_UPLOAD_FILETYPE'];
 		}
 
-		if (HasNameInString($extlist, $e)) {
-			return true;
-		} else {
-			return false;
-		}
+		return HasNameInString($extlist, $e);
 	}
 
 	/**
@@ -42,11 +38,7 @@ class Upload extends Base {
 	function CheckSize() {
 		global $zbp;
 		$n = 1024 * 1024 * (int) $zbp->option['ZC_UPLOAD_FILESIZE'];
-		if ($n >= $this->Size) {
-			return true;
-		} else {
-			return false;
-		}
+		return $n >= $this->Size;
 	}
 
 	/**
@@ -80,7 +72,7 @@ class Upload extends Base {
 		if (!file_exists($zbp->usersdir . $this->Dir)) {
 			@mkdir($zbp->usersdir . $this->Dir, 0755, true);
 		}
-		if (IS_WINDOWS) {
+		if (PHP_SYSTEM === SYSTEM_WINDOWS) {
 			$fn = iconv("UTF-8", $zbp->lang['windows_character_set'] . "//IGNORE", $this->Name);
 		} else {
 			$fn = $this->Name;
@@ -109,7 +101,7 @@ class Upload extends Base {
 		}
 		$s = base64_decode($str64);
 		$this->Size = strlen($s);
-		if (PHP_OS == 'WINNT' || PHP_OS == 'WIN32' || PHP_OS == 'Windows') {
+		if (PHP_SYSTEM === SYSTEM_WINDOWS) {
 			$fn = iconv("UTF-8", "GBK//IGNORE", $this->Name);
 		} else {
 			$fn = $this->Name;
