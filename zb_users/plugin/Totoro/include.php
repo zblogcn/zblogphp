@@ -17,6 +17,7 @@ function ActivePlugin_Totoro() {
 	Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu', 'Totoro_Admin_CommentMng_SubMenu');
 	Add_Filter_Plugin('Filter_Plugin_PostComment_Core', 'Totoro_PostComment_Core');
 	Add_Filter_Plugin('Filter_Plugin_Cmd_Begin', 'Totoro_Cmd_Begin');
+	Add_Filter_Plugin('Filter_Plugin_Html_Js_Add', 'Totoro_Html_Js_Add');	
 }
 
 function InstallPlugin_Totoro() {
@@ -28,8 +29,19 @@ function Totoro_Admin_CommentMng_SubMenu() {
 	echo '<script src="' . $zbp->host . 'zb_users/plugin/Totoro/submenu.js"></script>';
 }
 
+function Totoro_Html_Js_Add() {
+	global $zbp;
+	echo '$(function () { if($("#inpId").size()==1){';
+	echo 'jQuery.getScript("' . $zbp->host . 'zb_users/plugin/Totoro/add_token.php?id="+$("#inpId").val());';
+	echo '}});';
+}
+
 function Totoro_PostComment_Core(&$comment) {
 	global $zbp;
+	
+	//add Check Totoro_Token
+	Totoro_CheckToken($comment->LogID,GetVars('totoro_token','GET'));
+	
 	Totoro_init();
 	global $Totoro;
 	$Totoro->check_comment($comment);
@@ -50,5 +62,22 @@ function Totoro_Cmd_Begin() {
 			global $Totoro;
 			$Totoro->add_black_list($id);
 		}
+	}
+}
+
+function Totoro_GetTokenbyID($id){
+	global $zbp;
+	$article = new Post();
+	$article->LoadInfoByID($id);
+	return md5($zbp->guid . date('Ymd') . $_SERVER["REMOTE_ADDR"] . $_SERVER["HTTP_USER_AGENT"] . $article->ID . $article->CommNums);
+}
+
+function Totoro_CheckToken($id,$token){
+	global $zbp;
+	$article = new Post();
+	$article->LoadInfoByID($id);
+	$token_real=md5($zbp->guid . date('Ymd') . $_SERVER["REMOTE_ADDR"] . $_SERVER["HTTP_USER_AGENT"] . $article->ID . $article->CommNums);
+	if($token!==$token_real){
+		$zbp->ShowError("token已更新，请重新刷新此页面！", __FILE__, __LINE__);die();
 	}
 }
