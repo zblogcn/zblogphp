@@ -15,6 +15,7 @@ $root_url = $zbp->host . 'zb_users/upload/';
 //图片扩展名
 $ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'GIF', 'JPG', 'JPEG', 'PNG', 'BMP', 'Gif', 'Jpg', 'Jpeg', 'Png', 'Bmp');
 
+
 //根据path参数，设置各路径和URL
 if (empty($_GET['path'])) {
 	$current_path = realpath($root_path) . '/';
@@ -112,8 +113,8 @@ $result['current_url'] = $current_url;
 $result['total_count'] = count($file_list);
 //文件列表数组
 $result['file_list'] = $file_list;
-//echo $result['current_url'];
+
 //输出JSON字符串
 header('Content-type: application/json; charset=UTF-8');
-//$json = new Services_JSON();
+
 echo json_encode($result);
