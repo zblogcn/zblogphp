@@ -63,7 +63,7 @@ if (count($_POST) > 0) {
 		if ($app2->id) {$zbp->ShowError('已存在同名的APP应用.');die();}
 		@mkdir($zbp->usersdir . 'theme/' . $app->id);
 		@mkdir($zbp->usersdir . 'theme/' . $app->id . '/style');
-		@mkdir($zbp->usersdir . 'theme/' . $app->id . '/compile');
+		//@mkdir($zbp->usersdir . 'theme/' . $app->id . '/compile');
 		@mkdir($zbp->usersdir . 'theme/' . $app->id . '/template');
 		@copy($zbp->usersdir . 'plugin/AppCentre/images/theme.png', $zbp->usersdir . 'theme/' . $app->id . '/screenshot.png');
 		@file_put_contents($zbp->usersdir . 'theme/' . $app->id . '/style/style.css', '');

@@ -1610,7 +1610,7 @@ class ZBlogPHP {
 	public function PrepareTemplate() {
 		//创建模板类
 		$template = new Template();
-		$template->SetPath($this->usersdir . 'theme/' . $this->theme . '/compile/');
+		$template->SetPath($this->usersdir . 'cache/template/compile/');
 		$template->SetTagsAll($this->templatetags);
 
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
@@ -1711,7 +1711,7 @@ class ZBlogPHP {
 			}
 		}
 
-		$dir = $this->usersdir . 'theme/' . $this->theme . '/compile/';
+		$dir = $this->usersdir . 'cache/template/compile/';
 
 		if (!file_exists($dir)) {
 			@mkdir($dir, 0755, true);
