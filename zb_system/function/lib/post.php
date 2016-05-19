@@ -189,7 +189,8 @@ class Post extends Base {
 					$fpreturn = $fpname($this);
 					if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;	}
 				}
-				$key = '&amp;key=' . md5($zbp->guid . $this->ID . date('Y-m-d'));
+				//$key = '&amp;key=' . md5($zbp->guid . $this->ID . date('Y-m-d'));
+				$key = '&amp;key=' . md5($zbp->guid . $this->ID . $this->CommNums . date('Y-m-d') . $_SERVER["REMOTE_ADDR"] . $_SERVER["HTTP_USER_AGENT"]);
 				return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
 				break;
 			case 'ValidCodeUrl':
