@@ -2813,7 +2813,10 @@ class ZBlogPHP {
 		$original = GetVars('captcha_' . crc32($this->guid . $id), 'COOKIE');
 		if (md5($this->guid . date("Ymd") . $vaidcode) == $original) {
 			return true;
+		}else{
+			return false;
 		}
+		setcookie('captcha_' . crc32($this->guid . $id), '', time() - 3600, $this->cookiespath);
 
 	}
 
