@@ -228,15 +228,13 @@ class Totoro_Class {
 		}
 
 		if ($kill) {
-			if ($this->check_ip($ip)) {
-				// IP已被屏蔽
-				return;
+			if (!$this->check_ip($ip)) {
+				$FILTERIP = $this->config_array['BLACK_LIST']['IPFILTER_LIST']['VALUE'];
+				$FILTERIP = ($FILTERIP == '' ? $ip : $FILTERIP . '|' . $ip);
+				$zbp->Config('Totoro')->BLACK_LIST_IPFILTER_LIST = $FILTERIP;
+				$zbp->SaveConfig('Totoro');
 			}
 
-			$FILTERIP = $this->config_array['BLACK_LIST']['IPFILTER_LIST']['VALUE'];
-			$FILTERIP = ($FILTERIP == '' ? $ip : $FILTERIP . '|' . $ip);
-			$zbp->Config('Totoro')->BLACK_LIST_IPFILTER_LIST = $FILTERIP;
-			$zbp->SaveConfig('Totoro');
 		}
 
 		$this->kill_ip($ip);
@@ -263,13 +261,21 @@ class Totoro_Class {
 			null
 		);
 		$result = $zbp->db->Query($sql);
-		if (count($result) > 0) {
+		$foundComment = count($result);
+		if ($foundComment > 0) {
 			for ($i = 0; $i < count($result); $i++) {
 				$cmtid[] = $result[$i]['comm_ID'];
 				$logid[] = $result[$i]['comm_logID'];
 			}
 		}
-		$zbp->Config('Totoro')->CHECK_INT = (int) $zbp->Config('Totoro')->CHECK_INT + count($result);
+
+		$zbp->Config('Totoro')->CHECK_INT = (int) $zbp->Config('Totoro')->CHECK_INT + $foundComment;
+		$zbp->SaveConfig('Totoro');
+
+		if (function_exists('CountCommentNums')) {
+			CountCommentNums(0, -$foundComment);
+		}
+
 		CountPostArray($logid);
 		$zbp->AddBuildModule('comments');
 
