@@ -71,10 +71,6 @@ class Totoro_Class {
 			$zbp->Config('Totoro')->BLACK_LIST_BADWORD_LIST = $black_list;
 		}
 
-		if ($this->config_array['BUILD_CONFIG']['IPFLASHBACK']) {
-			$this->kill_ip($comment->IP);
-		}
-
 		$zbp->SaveConfig('Totoro');
 
 	}

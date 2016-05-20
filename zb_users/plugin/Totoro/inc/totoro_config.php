@@ -99,12 +99,6 @@ return array(
 			'DESC' => '将某条评论加入审核时自动将其URL加入过滤列表',
 			'DEFAULT' => FALSE,
 		),
-		'IPFLASHBACK' => array(
-			'VALUE' => FALSE,
-			'NAME' => 'IP回溯',
-			'DESC' => '将某条评论加入审核时自动将该IP一天内的评论全部加入审核',
-			'DEFAULT' => FALSE,
-		),
 	),
 	/*'DEL_DIRECTLY' => array(
 		'TYPE' => 'BOOL',
