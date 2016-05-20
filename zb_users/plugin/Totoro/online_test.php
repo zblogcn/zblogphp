@@ -9,27 +9,11 @@ if (!$zbp->CheckPlugin('Totoro')) {$zbp->ShowError(48);die();}
 Totoro_init();
 $blogtitle = 'Totoro反垃圾评论';
 
-/*
-If Request.QueryString("type")="test" Then
-Call Totoro_Initialize
-Dim oUser,oComment
-Set oComment=New TComment
-Set oUser=New TUser
-oComment.Content=Request.Form("string")
-oComment.Author=Request.Form("name")
-oComment.HomePage=Request.Form("url")
-oComment.IP="0.0.0.0"
-Call Totoro_cComment(oComment,oUser,True)
-
-
-Response.Write Replace(TransferHTML(Totoro_DebugData,"[html-format]"),vbcrlf,"<br/>")
-Response.End
-End If
- */
-
 if (GetVars('type', 'GET') == 'test') {
 	$comment = new Comment;
-	$comment->IP = GetVars('REMOTE_ADDR', 'SERVER');
+	$comment->Name = GetVars('username', 'POST');
+	$comment->HomePage = GetVars('url', 'POST');
+	$comment->IP = GetVars('ip', 'POST');
 	$comment->Content = GetVars('string', 'POST');
 
 //	var_dump($comment);
@@ -49,18 +33,24 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
-  <div class="SubMenu"><?php echo $Totoro->export_submenu('online_test');?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
+  <div class="SubMenu"><?php echo $Totoro->export_submenu('online_test'); ?></div>
   <div id="divMain2">
-    <table width="100%" style="padding:0px;margin:1px;line-height:20px" cellspacing="0" cellpadding="0">
+    <table width="100%" class="table_striped table_hover" style="padding:0px;margin:1px;line-height:20px" cellspacing="0" cellpadding="0">
       <tr height="40">
         <td width="50%"><label for="username">· 用户名</label>
           <input type="text" name="username" id="username" style="width:90%" /></td>
         <td>结果</td>
       </tr>
+
       <tr>
         <td><label for="url">· 网址　</label>
-          <input type="text" name="url" id="url" style="width:90%"/></td>
+            <input type="text" name="url" id="url" style="width:90%"/></td>
+        <td rowspan="5" style="text-indent:0;vertical-align:top"><div id="result"></div></td>
+      </tr>
+      <tr>
+        <td><label for="ip">· IP　　</label>
+            <input type="text" name="ip" id="ip" value="<?php echo GetVars('REMOTE_ADDR', 'SERVER'); ?>" style="width:90%"/></td>
         <td rowspan="5" style="text-indent:0;vertical-align:top"><div id="result"></div></td>
       </tr>
       <tr height="40">
@@ -74,14 +64,19 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       </tr>
     </table>
     <script type="text/javascript">
-	$(document).ready(function() {
+	$(function() {
     	$("#buttonsubmit").bind("click",function(){
 			$("#result").html("Testing...");
 			var o = $.ajax({
 				url : "?type=test",
 				async : false,
 				type : "POST",
-				data : {"name":$("#username").attr("value"),"url":$("#url").attr("value"),"string":$("#regexp").attr("value")},
+				data : {
+          "name":$("#username").val(),
+          "url":$("#url").val(),
+          "ip":$("#ip").val(),
+          "string":$("#regexp").val()
+        },
 				dataType : "script",
 			});
 			$("#result").html(o.responseText.replace(/\n/g, "<br/>"));
@@ -89,7 +84,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     });
     </script>
     <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Totoro/logo.png';?>");</script>
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Totoro/logo.png'; ?>");</script>
   </div>
 </div>
 <?php
