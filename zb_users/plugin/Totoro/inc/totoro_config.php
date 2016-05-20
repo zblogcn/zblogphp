@@ -10,7 +10,7 @@ return array(
 		'INTERVAL_VALUE' => array(
 			'VALUE' => 0,
 			'NAME' => '提交频率评分',
-			'DESC' => '根据1小时内同一IP的评论数量加分。规则为：1小时内10条评论加SV的1/5，以此类推，最多至SV的6/5。',
+			'DESC' => '根据1小时内同一IP的评论数量加分。规则为：1小时内5条评论加SV的1/5，以此类推，不设上限。',
 			'DEFAULT' => 25,
 		),
 		'BADWORD_VALUE' => array(
@@ -28,7 +28,7 @@ return array(
 		'NAME_VALUE' => array(
 			'VALUE' => 0,
 			'NAME' => '访客熟悉度评分',
-			'DESC' => '同一访客在评论1-10条内减10分，10-20条的SV减(10+SV)分，20-50条的SV减(10+2*SV)，大于50条的减(10+3*SV)。',
+			'DESC' => '同一IP在今天之外评论1-10条内减10分，10-20条的SV减(10+SV)分，20-50条的SV减(10+2*SV)，大于50条的减(10+3*SV)。',
 			'DEFAULT' => 45,
 		),
 		'NUMBER_VALUE' => array(

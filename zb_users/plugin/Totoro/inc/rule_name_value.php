@@ -11,6 +11,7 @@ function name_value($author, $content, $orig_content, &$sv, $config_sv, $config_
 		array(
 			array('=', 'comm_IP', $author['ip']),
 			array('=', 'comm_IsChecking', '0'),
+			array('<', 'comm_PostTime', time() - 3600),
 		),
 		null,
 		null,
