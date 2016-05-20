@@ -37,6 +37,12 @@ return array(
 			'DESC' => '若数字长度达到10位，自动加上(数字长度-10)*SV分。',
 			'DEFAULT' => 0,
 		),
+		'SIMILAR_VALUE' => array(
+			'VALUE' => 0,
+			'NAME' => '相似度评分',
+			'DESC' => '一旦相似度达到规则，则加上对应分数（如服务器配置不足，建议设为0）',
+			'DEFAULT' => 50,
+		),
 		'CHINESESV' => array(
 			'VALUE' => 0,
 			'NAME' => '汉字评分',
@@ -72,6 +78,29 @@ return array(
 			'NAME' => 'IP回溯值',
 			'DESC' => '一旦某个IP一天内被审核的评论超过设定的值，则将该IP一天内的评论全部进入审核。若该IP有一条评论直接被拦截，所有评论也将进入审核状态。',
 			'DEFAULT' => 5,
+		),
+	),
+	'SIMILAR_CONFIG' => array(
+		'SIMILAR_AUDIT_COMMCOUNT' => array(
+			'TYPE' => 'INT',
+			'VALUE' => 0,
+			'NAME' => '取未审核评论数量',
+			'DESC' => '取出最近24小时内发布的x条未审核评论计算相似程度',
+			'DEFAULT' => 10,
+		),
+		'SIMILAR_PASS_COMMCOUNT' => array(
+			'TYPE' => 'INT',
+			'VALUE' => 0,
+			'NAME' => '取已通过评论数量',
+			'DESC' => '取出最近24小时内发布的x条已通过评论计算相似程度',
+			'DEFAULT' => 10,
+		),
+		'SIMILAR_PERCENT' => array(
+			'TYPE' => 'INT',
+			'VALUE' => 80,
+			'NAME' => '评论相似度降低到SV的幅度值',
+			'DESC' => '如新发评论与最近x条评论的相似程度百分比有y条大于此数值，则加上y次对应SV（未审核评论为SV * 2）',
+			'DEFAULT' => 80,
 		),
 	),
 	'BUILD_CONFIG' => array(

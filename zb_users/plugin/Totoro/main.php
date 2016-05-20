@@ -35,6 +35,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
             <li><a href="#tab2"><span>过滤列表设置</span></a></li>
             <li><a href="#tab3"><span>提示语设置</span></a></li>
             <li><a href="#tab4"><span>内容审查细则设置</span></a></li>
+            <li><a href="#tab5"><span>相似判断设置</span></a></li>
             <li><a href="#tab-about"><span>关于TotoroⅢ</span></a></li>
           </ul>
           <div class="clear"></div>
@@ -151,6 +152,36 @@ foreach ($Totoro->config_array['BUILD_CONFIG'] as $name => $value) {
 }
 ?>
               </tbody>
+            </table>
+          </div>
+
+          <div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab5">
+            <table border="1" class="tableFull tableBorder table_hover table_striped">
+
+              <thead>
+              <tr>
+                <th style="width:5%"><p align="left"><b>序号</b></p></th>
+                <th style="width:15%"><p align="left"><b>规则</b></p></th>
+                <th style="width:15%"><p align="left"><b>分数</b></p></th>
+                <th><p align="left"><b>信息</b></p></th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+$i = 1;
+foreach ($Totoro->config_array['SIMILAR_CONFIG'] as $name => $value) {
+	?>
+              <tr>
+                <td><?php echo $i ?></td>
+                <td><p align="left"><b><?php echo $value['NAME'] ?></b></p></td>
+                <td><input type="text" class="text-config" name="TOTORO_SIMILAR_CONFIG_<?php echo $name ?>" value="<?php echo $Totoro->output_config('SIMILAR_CONFIG', $name) ?>"/></td>
+                <td>(默认：<?php echo $value['DEFAULT'] ?>) <?php echo $value['DESC'] ?></td>
+              </tr>
+              <?php
+$i++;
+}
+?>
+  </tbody>
             </table>
           </div>
           <div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab-about">
