@@ -304,7 +304,9 @@ class ZBlogPHP {
 		$datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname,
 		$blogtheme, $blogstyle, $currenturl, $activeapps, $posttype;
 
-		if( ZBP_HOOKERROR )ZBlogException::SetErrorHook();
+		if (ZBP_HOOKERROR) {
+			ZBlogException::SetErrorHook();
+		}
 
 		//基本配置加载到$zbp内
 		$this->version = &$blogversion;
@@ -479,13 +481,13 @@ class ZBlogPHP {
 		}
 
 		/*if(isset($_COOKIE['timezone'])){
-		$tz=GetVars('timezone','COOKIE');
-		if(is_numeric($tz)){
-		$tz=sprintf('%+d',-$tz);
-		date_default_timezone_set('Etc/GMT' . $tz);
-		$this->timezone=date_default_timezone_get();
-		}
-		}*/
+			$tz=GetVars('timezone','COOKIE');
+			if(is_numeric($tz)){
+			$tz=sprintf('%+d',-$tz);
+			date_default_timezone_set('Etc/GMT' . $tz);
+			$this->timezone=date_default_timezone_get();
+			}
+		*/
 
 		header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
 
@@ -1610,7 +1612,7 @@ class ZBlogPHP {
 	public function PrepareTemplate() {
 		//创建模板类
 		$template = new Template();
-		$template->SetPath($this->usersdir . 'cache/template/compile/');
+		$template->SetPath($this->usersdir . 'cache/template/' . $this->theme . 'compiled/');
 		$template->SetTagsAll($this->templatetags);
 
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
@@ -1640,7 +1642,7 @@ class ZBlogPHP {
 		}
 
 		for ($i = 2; $i <= 5; $i++) {
-			if (!isset($this->templates['sidebar'. $i])) {
+			if (!isset($this->templates['sidebar' . $i])) {
 				$this->templates['sidebar' . $i] = str_replace('$sidebar', '$sidebar' . $i, $this->templates['sidebar']);
 			}
 		}
@@ -1711,7 +1713,7 @@ class ZBlogPHP {
 			}
 		}
 
-		$dir = $this->usersdir . 'cache/template/compile/';
+		$dir = $this->usersdir . 'cache/template/' . $this->theme . '/compiled/';
 
 		if (!file_exists($dir)) {
 			@mkdir($dir, 0755, true);
@@ -2102,7 +2104,7 @@ class ZBlogPHP {
 	 * 根据ID得到相应数据
 	 * @param &$object   缓存对象
 	 * @param $className 找不到ID时初始化对象
-	 * @param $id        
+	 * @param $id
 	 */
 	private function GetSomeThingById(&$object, $className, $id) {
 		if ($id == 0) {
@@ -2154,7 +2156,7 @@ class ZBlogPHP {
 	public function GetSomeThing($object, $attr, $argu, $className = null) {
 		$cacheObject = null;
 		if (is_object($object)) {
-			$cacheObject = $object; 
+			$cacheObject = $object;
 		} else if ($object != "") {
 			$cacheObject = &$this->$object;
 		}
@@ -2396,7 +2398,7 @@ class ZBlogPHP {
 		$ret = $this->GetSomeThing('tags', 'id', $id, 'Tag');
 		if ($ret->ID > 0) {
 			$this->tagsbyname[$ret->ID] = &$this->tags[$ret->ID];
-		} 
+		}
 		return $ret;
 	}
 
@@ -2761,7 +2763,7 @@ class ZBlogPHP {
 	 * @param $s
 	 * @return string
 	 */
-	public function GetToken($s='') {
+	public function GetToken($s = '') {
 		return md5($this->guid . date('Ymd') . $this->user->Guid . $s);
 	}
 
@@ -2771,7 +2773,7 @@ class ZBlogPHP {
 	 * @param $s
 	 * @return bool
 	 */
-	public function ValidToken($t,$s='') {
+	public function ValidToken($t, $s = '') {
 		if ($t == md5($this->guid . date('Ymd') . $this->user->Guid . $s)) {
 			return true;
 		}
@@ -2815,12 +2817,7 @@ class ZBlogPHP {
 
 		$original = GetVars('captcha_' . crc32($this->guid . $id), 'COOKIE');
 		setcookie('captcha_' . crc32($this->guid . $id), '', time() - 3600, $this->cookiespath);
-		if (md5($this->guid . date("Ymd") . $vaidcode) == $original) {
-			return true;
-		}else{
-			return false;
-		}
-
+		return (md5($this->guid . date("Ymd") . $vaidcode) == $original);
 	}
 
 	/**
