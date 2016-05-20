@@ -98,7 +98,7 @@ return array(
 		'SIMILAR_PERCENT' => array(
 			'TYPE' => 'INT',
 			'VALUE' => 80,
-			'NAME' => '评论相似度降低到SV的幅度值',
+			'NAME' => '评论相似度',
 			'DESC' => '如新发评论与最近x条评论的相似程度百分比有y条大于此数值，则加上y次对应SV（未审核评论为SV * 2）',
 			'DEFAULT' => 80,
 		),
