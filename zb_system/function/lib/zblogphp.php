@@ -1612,7 +1612,7 @@ class ZBlogPHP {
 	public function PrepareTemplate() {
 		//创建模板类
 		$template = new Template();
-		$template->SetPath($this->usersdir . 'cache/template/' . $this->theme . 'compiled/');
+		$template->SetPath($this->usersdir . 'cache/template/' . $this->theme . '/compiled/');
 		$template->SetTagsAll($this->templatetags);
 
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
@@ -2551,7 +2551,7 @@ class ZBlogPHP {
 		$article = new Post();
 		$article->LoadInfoByID($id);
 		$nowkey = md5($this->guid . $id . $article->CommNums . date('Y-m-d') . $_SERVER["REMOTE_ADDR"] . $_SERVER["HTTP_USER_AGENT"]);
-		$nowkey2 = md5($this->guid . $id . ((int)$article->CommNums-1) . date('Y-m-d') . $_SERVER["REMOTE_ADDR"] . $_SERVER["HTTP_USER_AGENT"]);
+		$nowkey2 = md5($this->guid . $id . ((int) $article->CommNums - 1) . date('Y-m-d') . $_SERVER["REMOTE_ADDR"] . $_SERVER["HTTP_USER_AGENT"]);
 		if ($key == $nowkey || $key == $nowkey2) {
 			return true;
 		}
