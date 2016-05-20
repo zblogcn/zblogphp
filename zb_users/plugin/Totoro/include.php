@@ -41,14 +41,19 @@ function Totoro_PostComment_Core(&$comment) {
 function Totoro_Cmd_Begin() {
 	global $zbp;
 
-	if (GetVars('act', 'GET') == 'CommentChk') {
-		if (!$zbp->ValidToken(GetVars('token', 'GET'))) {$zbp->ShowError(5, __FILE__, __LINE__);die();}
-		$id = (int) GetVars('id', 'GET');
-		$ischecking = (bool) GetVars('ischecking', 'GET');
-		if ($ischecking) {
-			Totoro_init();
-			global $Totoro;
-			$Totoro->add_black_list($id);
-		}
+	if (!GetVars('act', 'GET') == 'CommentChk') {
+		return;
 	}
+
+	if (!$zbp->ValidToken(GetVars('token', 'GET'))) {$zbp->ShowError(5, __FILE__, __LINE__);die();}
+	$id = (int) GetVars('id', 'GET');
+	$ischecking = (bool) GetVars('ischecking', 'GET');
+	if (!$ischecking) {
+		return;
+	}
+
+	Totoro_init();
+	global $Totoro;
+	$Totoro->add_black_list($id);
+
 }
