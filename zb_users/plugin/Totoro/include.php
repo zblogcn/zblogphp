@@ -41,7 +41,7 @@ function Totoro_PostComment_Core(&$comment) {
 function Totoro_Cmd_Begin() {
 	global $zbp;
 
-	if (!GetVars('act', 'GET') == 'CommentChk') {
+	if (!(GetVars('act', 'GET') == 'CommentChk')) {
 		return;
 	}
 

@@ -11,7 +11,7 @@ return array(
 			'VALUE' => 0,
 			'NAME' => '提交频率评分',
 			'DESC' => '根据1小时内同一IP的评论数量加分。规则为：1小时内5条评论加SV的1/5，以此类推，不设上限。',
-			'DEFAULT' => 25,
+			'DEFAULT' => 30,
 		),
 		'BADWORD_VALUE' => array(
 			'VALUE' => 0,
@@ -70,8 +70,8 @@ return array(
 			'TYPE' => 'INT',
 			'VALUE' => 0,
 			'NAME' => 'IP回溯值',
-			'DESC' => '一旦某个IP一天内被拦截的评论超过设定的值，则将该IP一天内的评论全部进入审核。若该IP有一条评论直接被拦截，所有评论也将进入审核状态。',
-			'DEFAULT' => 3,
+			'DESC' => '一旦某个IP一天内被审核的评论超过设定的值，则将该IP一天内的评论全部进入审核。若该IP有一条评论直接被拦截，所有评论也将进入审核状态。',
+			'DEFAULT' => 5,
 		),
 	),
 	'BUILD_CONFIG' => array(
