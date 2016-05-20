@@ -52,21 +52,29 @@ class Totoro_Class {
 		$tmp_list = '';
 		$matches = array();
 		$regex = "/(([\w\d]+\.)+\w{2,})/si";
-		preg_match_all($regex, $content, $matches);
-		if (substr($black_list, strlen($black_list) - 1, 1) == '|') {
-			$black_list = substr($black_list, 0, strlen($black_list) - 1);
-		}
 
-		foreach ($matches[0] as $value) {
-			$value = preg_quote($value);
-			if ($value != '' && preg_match("/" . $black_list . "/si", $content) == 0) {
-				$black_list .= '|' . $value;
-				$zbp->SetHint('good', '新黑词被加入：' . $value);
+		if ($this->config_array['BUILD_CONFIG']['AUTOBANURL']) {
+			preg_match_all($regex, $content, $matches);
+			if (substr($black_list, strlen($black_list) - 1, 1) == '|') {
+				$black_list = substr($black_list, 0, strlen($black_list) - 1);
 			}
 
+			foreach ($matches[0] as $value) {
+				$value = preg_quote($value);
+				if ($value != '' && preg_match("/" . $black_list . "/si", $content) == 0) {
+					$black_list .= '|' . $value;
+					$zbp->SetHint('good', '新黑词被加入：' . $value);
+				}
+
+			}
+
+			$zbp->Config('Totoro')->BLACK_LIST_BADWORD_LIST = $black_list;
 		}
 
-		$zbp->Config('Totoro')->BLACK_LIST_BADWORD_LIST = $black_list;
+		if ($this->config_array['BUILD_CONFIG']['IPFLASHBACK']) {
+			$this->kill_ip($comment->IP);
+		}
+
 		$zbp->SaveConfig('Totoro');
 
 	}
@@ -168,10 +176,10 @@ class Totoro_Class {
 		$badword_list = $this->config_array['BLACK_LIST']['BADWORD_LIST']['VALUE'];
 
 		$replace_reg = "/" .
-		($replace_list != '' ? $replace_list : '') .
-		(($replace_list != '' && $badword_list != '') ? '|' : '') .
-		($badword_list != '' ? $badword_list : '') .
-		"/si";
+			($replace_list != '' ? $replace_list : '') .
+			(($replace_list != '' && $badword_list != '') ? '|' : '') .
+			($badword_list != '' ? $badword_list : '') .
+			"/si";
 
 		if ($replace_reg != "//si") {
 			$comment->Content = preg_replace($replace_reg, $replace_str, $comment->Content);

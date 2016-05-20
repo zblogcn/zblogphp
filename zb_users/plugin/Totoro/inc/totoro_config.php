@@ -93,14 +93,26 @@ return array(
 			'DESC' => '把大部分标点和HTML代码过滤再进行反SPAM测试，不影响实际显示的评论',
 			'DEFAULT' => TRUE,
 		),
+		'AUTOBANURL' => array(
+			'VALUE' => FALSE,
+			'NAME' => 'URL审核',
+			'DESC' => '将某条评论加入审核时自动将其URL加入过滤列表',
+			'DEFAULT' => FALSE,
+		),
+		'IPFLASHBACK' => array(
+			'VALUE' => FALSE,
+			'NAME' => 'IP回溯',
+			'DESC' => '将某条评论加入审核时自动将该IP一天内的评论全部加入审核',
+			'DEFAULT' => FALSE,
+		),
 	),
 	/*'DEL_DIRECTLY' => array(
-	'TYPE' => 'BOOL',
-	'VALUE' => TRUE,
-	'NAME' => '后台审核',
-	'DESC' => '点击【加入审核】提取域名后直接删除评论（关闭则为加入审核列表）',
-	'DEFAULT' => TRUE
-	),*/
+		'TYPE' => 'BOOL',
+		'VALUE' => TRUE,
+		'NAME' => '后台审核',
+		'DESC' => '点击【加入审核】提取域名后直接删除评论（关闭则为加入审核列表）',
+		'DEFAULT' => TRUE
+	*/
 	'STRING_BACK' => array(
 		'CHECKSTR' => array(
 			'TYPE' => 'STRING',
