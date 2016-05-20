@@ -269,6 +269,7 @@ class Totoro_Class {
 				$logid[] = $result[$i]['comm_logID'];
 			}
 		}
+		$zbp->Config('Totoro')->CHECK_INT = (int) $zbp->Config('Totoro')->CHECK_INT + count($result);
 		CountPostArray($logid);
 		$zbp->AddBuildModule('comments');
 
