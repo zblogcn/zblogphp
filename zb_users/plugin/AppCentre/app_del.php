@@ -31,5 +31,8 @@ function rrmdir($dir) {
 }
 
 rrmdir($zbp->usersdir . $_GET['type'] . '/' . $_GET['id']);
+if ($_GET['type'] == "theme") {
+	rrmdir($zbp->usersdir . '/cache/template/' . $_GET['id']);
+}
 
 Redirect($_SERVER["HTTP_REFERER"]);
