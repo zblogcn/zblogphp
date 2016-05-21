@@ -553,6 +553,7 @@ class ZBlogPHP {
 		if ($this->ismanage) {
 			$this->LoadManage();
 		} else {
+
 			if (isset($this->templates['404'])) {
 				Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'Include_ShowError404');
 			}
@@ -2724,33 +2725,37 @@ class ZBlogPHP {
 	/**
 	 * 显示错误信息
 	 * @api Filter_Plugin_Zbp_ShowError
-	 * @param $idortext
+	 * @param string/int $errorText
 	 * @param null $file
 	 * @param null $line
 	 * @return mixed
 	 * @throws Exception
 	 */
-	public function ShowError($idortext, $file = null, $line = null) {
+	public function ShowError($errorText, $file = null, $line = null) {
 
-		if ((int) $idortext == 2) {
+		$errorCode = 0;
+		if (is_numeric($errorText)) {
+			$errorCode = (int) $errorText;
+			$errorText = $this->lang['error'][$errorText];
+		}
+
+		if ($errorCode == 2) {
 			Http404();
 		}
 
-		ZBlogException::$error_id = (int) $idortext;
+		ZBlogException::$error_id = $errorCode;
 		ZBlogException::$error_file = $file;
 		ZBlogException::$error_line = $line;
 
-		if (is_numeric($idortext)) {
-			$idortext = $this->lang['error'][$idortext];
-		}
-
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
-			$fpreturn = $fpname($idortext, $file, $line);
-			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+			$fpreturn = $fpname($errorCode, $errorText, $file, $line);
+			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+				return $fpreturn;
+			}
 		}
 
-		throw new Exception($idortext);
+		throw new Exception($errorText);
 	}
 
 	/**

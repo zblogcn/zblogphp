@@ -3438,11 +3438,13 @@ function BuildModule_statistics($array = array()) {
  *
  * 可通过主题中的404.php模板自定义显示效果
  * @api Filter_Plugin_Zbp_ShowError
- * @param $idortext
+ * @param $errorCode
+ * @param $errorDescription
  * @param $file
  * @param $line
  */
-function Include_ShowError404($idortext, $file, $line) {
+function Include_ShowError404($errorCode, $errorDescription, $file, $line) {
+
 	global $zbp;
 	if (!in_array("Status: 404 Not Found", headers_list())) {
 		return;

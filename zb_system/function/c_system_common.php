@@ -874,21 +874,51 @@ function HasNameInString($s, $name) {
 }
 
 /**
+ * 以JSON形式返回错误信息
+ * @param string $errorCode 错误编号
+ * @param string $errorCode 错误内容
+ * @param object
+ */
+function JsonError($errorCode, $errorString, $data) {
+	$result = array(
+		'data' => $data,
+		'err' => array(
+			'code' => $errorCode,
+			'msg' => $errorString,
+			'runtime' => RunTime(),
+			'timestamp' => time(),
+		),
+	);
+	ob_clean();
+	json_encode($result);
+	exit;
+}
+
+/**
+ * 以JSON形式返回正确获取信息
+ * @param object 待返回内容
+ * @param object
+ */
+function JsonReturn($data) {
+	return JsonError(0, "", $data);
+}
+
+/**
  *  XML-RPC应答错误页面
  * @param string $faultString 错误提示字符串
  * @return void
  */
-function RespondError($faultString) {
+function RespondError($errorCode, $errorString) {
 
 	$strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><fault><value><struct><member><name>faultCode</name><value><int>$1</int></value></member><member><name>faultString</name><value><string>$2</string></value></member></struct></value></fault></methodResponse>';
 	$faultCode = time();
 	$strError = $strXML;
 	$strError = str_replace("$1", TransferHTML($faultCode, "[html-format]"), $strError);
-	$strError = str_replace("$2", TransferHTML($faultString, "[html-format]"), $strError);
+	$strError = str_replace("$2", TransferHTML($errorString, "[html-format]"), $strError);
 
 	ob_clean();
 	echo $strError;
-	die();
+	exit;
 
 }
 
