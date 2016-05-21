@@ -77,8 +77,8 @@
             for (var item in regExList) {
                 var object = regExList[item];
                 if (((!object[0] && formData[item] === "")) || (!(object[2].test(formData[item])) && formData[item] !== '')) {
-                    error.no = object[1];
-                    error.msg = this.options.lang.error[error.no];
+                    error.code = object[1];
+                    error.msg = this.options.lang.error[error.code];
                     return error;
                 }
             }
@@ -92,6 +92,7 @@
 
             var objSubmit = $("#inpId").parent("form").find(":submit");
             objSubmit.removeClass("loading").removeAttr("disabled").val(objSubmit.data("orig"));
+
 
         });
 
@@ -372,13 +373,13 @@
             }
 
             var error = {
-                no: 0,
+                code: 0,
                 msg: ""
             };
 
             self.plugin.emit("comment.verifydata", error, formData);
 
-            if (error.no !== 0) {
+            if (error.code !== 0) {
                 alert(error.msg);
                 try {
                     console.log(formData);
@@ -387,8 +388,14 @@
                 self.plugin.emit("comment.posterror", error, formData);
                 return false;
             }
-            self.$.post(formData.action, formData, function(data, textStatus, jqXhr) {
+            self.$.post(formData.action, formData).done(function(data, textStatus, jqXhr) {
                 self.plugin.emit("comment.postsuccess", formData, data, textStatus, jqXhr);
+            }).fail(function(jqXHR, textStatus) {
+            	self.plugin.emit("comment.posterror", {
+            		jqXHR: jqXHR, 
+            		msg: textStatus, 
+            		code: 255,
+            	}, formData);
             });
 
             return self;

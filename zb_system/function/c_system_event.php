@@ -1570,6 +1570,17 @@ function PostComment() {
 
 	$isAjax = GetVars('isajax', 'POST');
 	$returnJson = GetVars('format', 'POST') == 'json';
+	$returnCommentWhiteList = array(
+		'ID' => null,
+		'Content' => null,
+		'LogId' => null,
+		'Name' => null,
+		'ParentID' => null,
+		'PostTime' => null,
+		'HomePage' => null,
+		'Email' => null,
+		'AuthorID' => null,
+	);
 
 	$_POST['LogID'] = $_GET['postid'];
 
@@ -1667,7 +1678,7 @@ function PostComment() {
 		$commentHtml = ob_get_clean();
 		JsonReturn(array_merge_recursive(array(
 			"html" => $commentHtml,
-		), $cmt->GetData()));
+		), array_intersect_key($cmt->GetData(), $returnCommentWhiteList)));
 
 	}
 

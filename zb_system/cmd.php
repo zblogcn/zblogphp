@@ -47,17 +47,27 @@ case 'misc':
 	require './function/c_system_misc.php';
 	break;
 case 'cmt':
+	$die = false;
 	if (GetVars('isajax', 'POST')) {
+		// 兼容老版本的评论前端
 		Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'RespondError', PLUGIN_EXITSIGNAL_RETURN);
+		$die = true;
+	} else if (GetVars('format', 'POST') == "json") {
+		// 1.5之后的评论以json形式加载给前端
+		Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'JsonError4ShowErrorHook', PLUGIN_EXITSIGNAL_RETURN);
+		$die = true;
 	}
+
 	PostComment();
 	$zbp->BuildModule();
 	$zbp->SaveCache();
-	if (GetVars('isajax', 'POST')) {
-		die();
-	} else {
-		Redirect(GetVars('HTTP_REFERER', 'SERVER'));
+
+	if ($die) {
+		exit;
 	}
+
+	Redirect(GetVars('HTTP_REFERER', 'SERVER'));
+
 	break;
 case 'getcmt':
 	ViewComments((int) GetVars('postid', 'GET'), (int) GetVars('page', 'GET'));
