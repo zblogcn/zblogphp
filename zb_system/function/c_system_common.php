@@ -874,6 +874,13 @@ function HasNameInString($s, $name) {
 }
 
 /**
+ * 以JSON形式返回错误信息（用于ShowError接口）
+ * @param object
+ */
+function JsonError4ShowErrorHook($errorCode, $errorString, $file, $line) {
+	return JsonError($errorCode, $errorString, null);
+}
+/**
  * 以JSON形式返回错误信息
  * @param string $errorCode 错误编号
  * @param string $errorCode 错误内容
@@ -890,8 +897,11 @@ function JsonError($errorCode, $errorString, $data) {
 		),
 	);
 	ob_clean();
-	json_encode($result);
-	exit;
+	echo json_encode($result);
+	if ($errorCode != 0) {
+		exit;
+	}
+
 }
 
 /**

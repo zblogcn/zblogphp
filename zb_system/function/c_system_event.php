@@ -1568,6 +1568,9 @@ function DelPage() {
 function PostComment() {
 	global $zbp;
 
+	$isAjax = GetVars('isajax', 'POST');
+	$returnJson = GetVars('format', 'POST') == 'json';
+
 	$_POST['LogID'] = $_GET['postid'];
 
 	if ($zbp->VerifyCmtKey($_GET['postid'], $_GET['key']) == false) {
@@ -1656,8 +1659,16 @@ function PostComment() {
 
 	$zbp->comments[$cmt->ID] = $cmt;
 
-	if (GetVars('isajax', 'POST')) {
+	if ($isAjax) {
 		ViewComment($cmt->ID);
+	} else if ($returnJson) {
+		ob_clean();
+		ViewComment($cmt->ID);
+		$commentHtml = ob_get_clean();
+		JsonReturn(array_merge_recursive(array(
+			"html" => $commentHtml,
+		), $cmt->GetData()));
+
 	}
 
 	foreach ($GLOBALS['hooks']['Filter_Plugin_PostComment_Succeed'] as $fpname => &$fpsignal) {
