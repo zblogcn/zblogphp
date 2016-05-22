@@ -75,7 +75,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Begin'] as $fpname => &$fpsignal)
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
-<div class="divHeader2"><?php echo $ispage ? $lang['msg']['page_edit'] : $lang['msg']['article_edit'];?></div>
+<div class="divHeader2"><?php echo $ispage ? $lang['msg']['page_edit'] : $lang['msg']['article_edit']; ?></div>
 
 
 <div class="SubMenu"></div>
@@ -89,12 +89,12 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsig
 ?>
 	   </div>
     <div id="divEditTitle" class="editmod2">
-      <input type="hidden" name="ID" id="edtID" value="<?php echo $article->ID;?>" />
-      <input type="hidden" name="Type" id="edtType" value="<?php echo $article->Type;?>" />
+      <input type="hidden" name="ID" id="edtID" value="<?php echo $article->ID; ?>" />
+      <input type="hidden" name="Type" id="edtType" value="<?php echo $article->Type; ?>" />
       <!-- title( -->
 		<div id="titleheader" class="editmod">
-			<label for="edtTitle" class="editinputname" ><?php echo $lang['msg']['title']?></label>
-			<div><input type="text" name="Title" id="edtTitle"  maxlength="100" onBlur="if(this.value=='') this.value='<?php echo $lang['msg']['unnamed']?>'" onFocus="if(this.value=='<?php echo $lang['msg']['unnamed']?>') this.value=''" value="<?php echo $article->Title;?>" /></div>
+			<label for="edtTitle" class="editinputname" ><?php echo $lang['msg']['title'] ?></label>
+			<div><input type="text" name="Title" id="edtTitle"  maxlength="100" onBlur="if(this.value=='') this.value='<?php echo $lang['msg']['unnamed'] ?>'" onFocus="if(this.value=='<?php echo $lang['msg']['unnamed'] ?>') this.value=''" value="<?php echo $article->Title; ?>" /></div>
       </div>
       <!-- )title -->
 
@@ -108,8 +108,8 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsig
 	   </div>
 
     <div id="divContent"  class="editmod2" style="clear:both;">
-		<div id='cheader' class="editmod editmod3"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content']?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
-		<div id='carea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content, '[html-format]');?></textarea></div>
+		<div id='cheader' class="editmod editmod3"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content'] ?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
+		<div id='carea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content, '[html-format]'); ?></textarea></div>
 		<div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Waiting...</div>
 	</div>
 
@@ -120,28 +120,29 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsign
 ?>
 	   </div>
 
+    <br/>
       <!-- alias( -->
-      <div id="alias" class="editmod2"><label for="edtAlias" class="editinputname" ><?php echo $lang['msg']['alias']?></label>
-        <input type="text" name="Alias" id="edtAlias" maxlength="250" value="<?php echo $article->Alias;?>" />
+      <div id="alias" class="editmod2"><label for="edtAlias" class="editinputname" ><?php echo $lang['msg']['alias'] ?></label>
+        <input type="text" name="Alias" id="edtAlias" maxlength="250" value="<?php echo $article->Alias; ?>" />
       </div>
       <!-- )alias -->
 <?php if (!$ispage) {?>
 	    <!-- tags( -->
-      <div id="tags" class="editmod2"><label  for="edtTag"  class='editinputname'><?php echo $lang['msg']['tags']?></label>
-        <input type="text"  name="Tag" id="edtTag" value="<?php echo $article->TagsToNameString();?>" />
-        (<?php echo $lang['msg']['use_commas_to_separate']?>) <a href="#" id="showtags"><?php echo $lang['msg']['show_common_tags']?></a></div>
+      <div id="tags" class="editmod2"><label  for="edtTag"  class='editinputname'><?php echo $lang['msg']['tags'] ?></label>
+        <input type="text"  name="Tag" id="edtTag" value="<?php echo $article->TagsToNameString(); ?>" />
+        (<?php echo $lang['msg']['use_commas_to_separate'] ?>) <a href="#" id="showtags"><?php echo $lang['msg']['show_common_tags'] ?></a></div>
       <!-- Tags -->
       <div id="ulTag" class="editmod2" style="display:none;">
         <div id="ajaxtags">Waiting...</div>
       </div>
       <!-- )tags -->
 
-       <div id="insertintro" class="editmod2" style="padding-top:0.5em;paddding-bottom:0.5em;"><span>* <?php echo $lang['msg']['help_generate_summary']?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary']?>]</a></span></div>
+       <div id="insertintro" class="editmod2" style="padding-top:0.5em;paddding-bottom:0.5em;"><span>* <?php echo $lang['msg']['help_generate_summary'] ?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary'] ?>]</a></span></div>
 <?php }?>
 
 		<div id="divIntro" class="editmod2" <?php if (!$article->Intro) {echo 'style="display:none;"';}?>>
-       <div id="theader" class="editmod editmod3"><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro']?></label></div>
-       <div id='tarea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro, '[html-format]');?></textarea></div>
+       <div id="theader" class="editmod editmod3"><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro'] ?></label></div>
+       <div id='tarea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro, '[html-format]'); ?></textarea></div>
        <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Waiting...</div>
 
     </div>
@@ -161,57 +162,57 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
       <div id="divBox">
         <div id="divFloat">
           <div id='post' class="editmod">
-            <input class="button" style="width:180px;height:38px;" type="submit" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick='return checkArticleInfo();' />
+            <input class="button" style="width:180px;height:38px;" type="submit" value="<?php echo $lang['msg']['submit'] ?>" id="btnPost" onclick='return checkArticleInfo();' />
           </div>
 
           <!-- cate --><?php if (!$ispage) {?>
-          <div id='cate' class="editmod"> <label for="cmbCateID" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['category']?></label>
+          <div id='cate' class="editmod"> <label for="cmbCateID" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['category'] ?></label>
             <select style="width:180px;" class="edit" size="1" name="CateID" id="cmbCateID">
-<?php echo CreateOptoinsOfCategorys($article->CateID);?>
+<?php echo CreateOptoinsOfCategorys($article->CateID); ?>
             </select>
           </div>
           <!-- cate --><?php }?>
 
           <!-- level -->
-          <div id='level' class="editmod"> <label for="cmbPostStatus" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['status']?></label>
+          <div id='level' class="editmod"> <label for="cmbPostStatus" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['status'] ?></label>
             <select class="edit" style="width:180px;" size="1" name="Status" id="cmbPostStatus" onChange="edtLevel.value=this.options[this.selectedIndex].value">
-<?php echo CreateOptoinsOfPostStatus($article->Status);?>
+<?php echo CreateOptoinsOfPostStatus($article->Status); ?>
             </select>
           </div>
           <!-- )level -->
 
           <!-- template( -->
 
-          <div id='template' class="editmod"> <label for="cmbTemplate" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['template']?></label>
+          <div id='template' class="editmod"> <label for="cmbTemplate" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['template'] ?></label>
             <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate" onChange="edtTemplate.value=this.options[this.selectedIndex].value">
-<?php echo CreateOptoinsOfTemplate($article->Template);?>
+<?php echo CreateOptoinsOfTemplate($article->Template); ?>
             </select>
           </div>
           <!-- )template -->
 
           <!-- user( -->
-          <div id='user' class="editmod"> <label for="cmbUser" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['author']?></label>
+          <div id='user' class="editmod"> <label for="cmbUser" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['author'] ?></label>
             <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
-				<?php echo CreateOptoinsOfMember($article->AuthorID);?>
+				<?php echo CreateOptoinsOfMember($article->AuthorID); ?>
             </select>
           </div>
           <!-- )user -->
 
           <!-- newdatetime( -->
-          <div id='newdatetime' class="editmod"> <label for="edtDateTime" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['date']?></label>
-            <input type="text" name="PostTime" id="edtDateTime"  value="<?php echo $article->Time();?>" style="width:180px;"/>
+          <div id='newdatetime' class="editmod"> <label for="edtDateTime" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['date'] ?></label>
+            <input type="text" name="PostTime" id="edtDateTime"  value="<?php echo $article->Time(); ?>" style="width:180px;"/>
             </div>
 
           <!-- )newdatetime -->
 
           <!-- Istop( --><?php if (!$ispage && $zbp->CheckRights('ArticleAll')) {?>
           <div id='istop' class="editmod">
-            <label for="edtIstop" class="editinputname" ><?php echo $lang['msg']['top']?></label>
-            <input id="edtIstop" name="IsTop" style="" type="text" value="<?php echo (int) $article->IsTop;?>" class="checkbox"/>
-<select style="width:80px;display:<?php echo $article->IsTop ? '' : 'none'?>;" size="1" name="IstopType" id="edtIstopType" class="off-hide">
-<option value="index" <?php echo strpos($article->TopType, 'index') !== false ? 'selected="selected"' : '';?>><?php echo $lang['msg']['top_index']?></option>
-<option value="global" <?php echo strpos($article->TopType, 'global') !== false ? 'selected="selected"' : '';?>><?php echo $lang['msg']['top_global']?></option>
-<option value="category" <?php echo strpos($article->TopType, 'category') !== false ? 'selected="selected"' : '';?>><?php echo $lang['msg']['top_category']?></option>
+            <label for="edtIstop" class="editinputname" ><?php echo $lang['msg']['top'] ?></label>
+            <input id="edtIstop" name="IsTop" style="" type="text" value="<?php echo (int) $article->IsTop; ?>" class="checkbox"/>
+<select style="width:80px;display:<?php echo $article->IsTop ? '' : 'none' ?>;" size="1" name="IstopType" id="edtIstopType" class="off-hide">
+<option value="index" <?php echo strpos($article->TopType, 'index') !== false ? 'selected="selected"' : ''; ?>><?php echo $lang['msg']['top_index'] ?></option>
+<option value="global" <?php echo strpos($article->TopType, 'global') !== false ? 'selected="selected"' : ''; ?>><?php echo $lang['msg']['top_global'] ?></option>
+<option value="category" <?php echo strpos($article->TopType, 'category') !== false ? 'selected="selected"' : ''; ?>><?php echo $lang['msg']['top_category'] ?></option>
 </select>
           </div><?php }?>
 
@@ -220,15 +221,15 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
           <!-- IsLock( -->
 
           <div id='islock' class="editmod">
-            <label for="edtIslock" class='editinputname'><?php echo $lang['msg']['disable_comment']?></label>
-             <input id="edtIslock" name="IsLock" style="" type="text" value="<?php echo (int) $article->IsLock;?>" class="checkbox"/>
+            <label for="edtIslock" class='editinputname'><?php echo $lang['msg']['disable_comment'] ?></label>
+             <input id="edtIslock" name="IsLock" style="" type="text" value="<?php echo (int) $article->IsLock; ?>" class="checkbox"/>
           </div>
           <!-- )IsLock -->
 
           <!-- Navbar( --><?php if ($ispage) {?>
           <div id='AddNavbar' class="editmod">
-          <label for="edtAddNavbar" class='editinputname'><?php echo $lang['msg']['add_to_navbar']?></label>
-          <input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int) $zbp->CheckItemToNavbar('page', $article->ID)?>" class="checkbox" />
+          <label for="edtAddNavbar" class='editinputname'><?php echo $lang['msg']['add_to_navbar'] ?></label>
+          <input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int) $zbp->CheckItemToNavbar('page', $article->ID) ?>" class="checkbox" />
           </div><?php }?>
           <!-- )Navbar -->
 
@@ -285,52 +286,52 @@ var editor_api={
 
 //文章内容或摘要变动提示保存
 window.onbeforeunload = function(){
-  if (!isSubmit && (editor_api.editor.content.get()!=sContent)) return "<?php echo $zbp->lang['error'][71];?>";
+  if (!isSubmit && (editor_api.editor.content.get()!=sContent)) return "<?php echo $zbp->lang['error'][71]; ?>";
 }
 
 function checkArticleInfo(){
   if(isSubmit)return false;
-  document.getElementById("edit").action="<?php echo $ispage ? '../cmd.php?act=PagePst' : '../cmd.php?act=ArticlePst'?>";
+  document.getElementById("edit").action="<?php echo $ispage ? '../cmd.php?act=PagePst' : '../cmd.php?act=ArticlePst' ?>";
 
   if(!editor_api.editor.content.get()){
-    alert('<?php echo $zbp->lang['error'][70];?>');
+    alert('<?php echo $zbp->lang['error'][70]; ?>');
     return false;
   }
   isSubmit=true;
 }
 
 //日期时间控件
-$.datepicker.regional['<?php echo $lang['lang']?>'] = {
-  closeText: '<?php echo $lang['msg']['close']?>',
-  prevText: '<?php echo $lang['msg']['prev_month']?>',
-  nextText: '<?php echo $lang['msg']['next_month']?>',
-  currentText: '<?php echo $lang['msg']['current']?>',
-  monthNames: ['<?php echo $lang['month']['1']?>','<?php echo $lang['month']['2']?>','<?php echo $lang['month']['3']?>','<?php echo $lang['month']['4']?>','<?php echo $lang['month']['5']?>','<?php echo $lang['month']['6']?>','<?php echo $lang['month']['7']?>','<?php echo $lang['month']['8']?>','<?php echo $lang['month']['9']?>','<?php echo $lang['month']['10']?>','<?php echo $lang['month']['11']?>','<?php echo $lang['month']['12']?>'],
-  monthNamesShort: ['<?php echo $lang['month_abbr']['1']?>','<?php echo $lang['month_abbr']['2']?>','<?php echo $lang['month_abbr']['3']?>','<?php echo $lang['month_abbr']['4']?>','<?php echo $lang['month_abbr']['5']?>','<?php echo $lang['month_abbr']['6']?>','<?php echo $lang['month_abbr']['7']?>','<?php echo $lang['month_abbr']['8']?>','<?php echo $lang['month_abbr']['9']?>','<?php echo $lang['month_abbr']['10']?>','<?php echo $lang['month_abbr']['11']?>','<?php echo $lang['month_abbr']['12']?>'],
-  dayNames: ['<?php echo $lang['week']['7']?>','<?php echo $lang['week']['1']?>','<?php echo $lang['week']['2']?>','<?php echo $lang['week']['3']?>','<?php echo $lang['week']['4']?>','<?php echo $lang['week']['5']?>','<?php echo $lang['week']['6']?>'],
-  dayNamesShort: ['<?php echo $lang['week_short']['7']?>','<?php echo $lang['week_short']['1']?>','<?php echo $lang['week_short']['2']?>','<?php echo $lang['week_short']['3']?>','<?php echo $lang['week_short']['4']?>','<?php echo $lang['week_short']['5']?>','<?php echo $lang['week_short']['6']?>'],
-  dayNamesMin: ['<?php echo $lang['week_abbr']['7']?>','<?php echo $lang['week_abbr']['1']?>','<?php echo $lang['week_abbr']['2']?>','<?php echo $lang['week_abbr']['3']?>','<?php echo $lang['week_abbr']['4']?>','<?php echo $lang['week_abbr']['5']?>','<?php echo $lang['week_abbr']['6']?>'],
-  weekHeader: '<?php echo $lang['msg']['week_suffix']?>',
+$.datepicker.regional['<?php echo $lang['lang'] ?>'] = {
+  closeText: '<?php echo $lang['msg']['close'] ?>',
+  prevText: '<?php echo $lang['msg']['prev_month'] ?>',
+  nextText: '<?php echo $lang['msg']['next_month'] ?>',
+  currentText: '<?php echo $lang['msg']['current'] ?>',
+  monthNames: ['<?php echo $lang['month']['1'] ?>','<?php echo $lang['month']['2'] ?>','<?php echo $lang['month']['3'] ?>','<?php echo $lang['month']['4'] ?>','<?php echo $lang['month']['5'] ?>','<?php echo $lang['month']['6'] ?>','<?php echo $lang['month']['7'] ?>','<?php echo $lang['month']['8'] ?>','<?php echo $lang['month']['9'] ?>','<?php echo $lang['month']['10'] ?>','<?php echo $lang['month']['11'] ?>','<?php echo $lang['month']['12'] ?>'],
+  monthNamesShort: ['<?php echo $lang['month_abbr']['1'] ?>','<?php echo $lang['month_abbr']['2'] ?>','<?php echo $lang['month_abbr']['3'] ?>','<?php echo $lang['month_abbr']['4'] ?>','<?php echo $lang['month_abbr']['5'] ?>','<?php echo $lang['month_abbr']['6'] ?>','<?php echo $lang['month_abbr']['7'] ?>','<?php echo $lang['month_abbr']['8'] ?>','<?php echo $lang['month_abbr']['9'] ?>','<?php echo $lang['month_abbr']['10'] ?>','<?php echo $lang['month_abbr']['11'] ?>','<?php echo $lang['month_abbr']['12'] ?>'],
+  dayNames: ['<?php echo $lang['week']['7'] ?>','<?php echo $lang['week']['1'] ?>','<?php echo $lang['week']['2'] ?>','<?php echo $lang['week']['3'] ?>','<?php echo $lang['week']['4'] ?>','<?php echo $lang['week']['5'] ?>','<?php echo $lang['week']['6'] ?>'],
+  dayNamesShort: ['<?php echo $lang['week_short']['7'] ?>','<?php echo $lang['week_short']['1'] ?>','<?php echo $lang['week_short']['2'] ?>','<?php echo $lang['week_short']['3'] ?>','<?php echo $lang['week_short']['4'] ?>','<?php echo $lang['week_short']['5'] ?>','<?php echo $lang['week_short']['6'] ?>'],
+  dayNamesMin: ['<?php echo $lang['week_abbr']['7'] ?>','<?php echo $lang['week_abbr']['1'] ?>','<?php echo $lang['week_abbr']['2'] ?>','<?php echo $lang['week_abbr']['3'] ?>','<?php echo $lang['week_abbr']['4'] ?>','<?php echo $lang['week_abbr']['5'] ?>','<?php echo $lang['week_abbr']['6'] ?>'],
+  weekHeader: '<?php echo $lang['msg']['week_suffix'] ?>',
   dateFormat: 'yy-mm-dd',
   firstDay: 1,
   isRTL: false,
   showMonthAfterYear: true,
-  yearSuffix: ' <?php echo $lang['msg']['year_suffix']?>  '
+  yearSuffix: ' <?php echo $lang['msg']['year_suffix'] ?>  '
 };
-$.datepicker.setDefaults($.datepicker.regional['<?php echo $lang['lang']?>']);
-$.timepicker.regional['<?php echo $lang['lang']?>'] = {
-  timeOnlyTitle: '<?php echo $lang['msg']['time']?>',
-  timeText: '<?php echo $lang['msg']['time']?>',
-  hourText: '<?php echo $lang['msg']['hour']?>',
-  minuteText: '<?php echo $lang['msg']['minute']?>',
-  secondText: '<?php echo $lang['msg']['second']?>',
-  millisecText: '<?php echo $lang['msg']['millisec']?>',
-  currentText: '<?php echo $lang['msg']['current']?>',
-  closeText: '<?php echo $lang['msg']['close']?>',
+$.datepicker.setDefaults($.datepicker.regional['<?php echo $lang['lang'] ?>']);
+$.timepicker.regional['<?php echo $lang['lang'] ?>'] = {
+  timeOnlyTitle: '<?php echo $lang['msg']['time'] ?>',
+  timeText: '<?php echo $lang['msg']['time'] ?>',
+  hourText: '<?php echo $lang['msg']['hour'] ?>',
+  minuteText: '<?php echo $lang['msg']['minute'] ?>',
+  secondText: '<?php echo $lang['msg']['second'] ?>',
+  millisecText: '<?php echo $lang['msg']['millisec'] ?>',
+  currentText: '<?php echo $lang['msg']['current'] ?>',
+  closeText: '<?php echo $lang['msg']['close'] ?>',
   timeFormat: 'HH:mm:ss',
   ampm: false
 };
-$.timepicker.setDefaults($.timepicker.regional['<?php echo $lang['lang']?>']);
+$.timepicker.setDefaults($.timepicker.regional['<?php echo $lang['lang'] ?>']);
 $('#edtDateTime').datetimepicker({
   showSecond: true
   //changeMonth: true,
@@ -378,7 +379,7 @@ function AutoIntro() {
 	  if(s.indexOf("<hr class=\"more\"/>")>-1){
       editor_api.editor.intro.put(s.split("<hr class=\"more\"/>")[0]);
   	}else{
-	  	editor_api.editor.intro.put(s.substring(0,<?php echo $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];?>));
+	  	editor_api.editor.intro.put(s.substring(0,<?php echo $zbp->option['ZC_ARTICLE_EXCERPT_MAX']; ?>));
   	}
   }
 	$("#divIntro").show();
