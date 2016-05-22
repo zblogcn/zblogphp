@@ -115,21 +115,21 @@ class UrlRule {
 	 * @param $type
 	 * @return string
 	 */
-	static public function Rewrite_url($url, $type) {
+	static public function OutputUrlRegEx($url, $type) {
 		global $zbp;
 		switch ($zbp->categorylayer) {
-			case 4:
-				$fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
-				break;
-			case 3:
-				$fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*';
-				break;
-			case 2:
-				$fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*';
-				break;
-			default:
-				$fullcategory = '[^\./_]*';
-				break;
+		case 4:
+			$fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
+			break;
+		case 3:
+			$fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*';
+			break;
+		case 2:
+			$fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*';
+			break;
+		default:
+			$fullcategory = '[^\./_]*';
+			break;
 		}
 
 		$s = $url;
@@ -316,18 +316,18 @@ class UrlRule {
 	public function Rewrite_httpdini($url, $type) {
 		global $zbp;
 		switch ($zbp->categorylayer) {
-			case 4:
-				$fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
-				break;
-			case 3:
-				$fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*';
-				break;
-			case 2:
-				$fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*';
-				break;
-			default:
-				$fullcategory = '[^\./_]*';
-				break;
+		case 4:
+			$fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
+			break;
+		case 3:
+			$fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*';
+			break;
+		case 2:
+			$fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*';
+			break;
+		default:
+			$fullcategory = '[^\./_]*';
+			break;
 		}
 
 		$s = $url;

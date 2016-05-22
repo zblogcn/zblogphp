@@ -475,7 +475,7 @@ function ViewAuto($inpurl) {
 
 	if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
 
-		$r = UrlRule::Rewrite_url($zbp->option['ZC_INDEX_REGEX'], 'index');
+		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_INDEX_REGEX'], 'index');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
 			ViewList($m[1], null, null, null, null, true);
@@ -483,7 +483,7 @@ function ViewAuto($inpurl) {
 			return null;
 		}
 
-		$r = UrlRule::Rewrite_url($zbp->option['ZC_DATE_REGEX'], 'date');
+		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_DATE_REGEX'], 'date');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
 			ViewList($m[2], null, null, $m[1], null, true);
@@ -491,7 +491,7 @@ function ViewAuto($inpurl) {
 			return null;
 		}
 
-		$r = UrlRule::Rewrite_url($zbp->option['ZC_AUTHOR_REGEX'], 'auth');
+		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_AUTHOR_REGEX'], 'auth');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
 			$result = ViewList($m[2], null, $m[1], null, null, true);
@@ -501,7 +501,7 @@ function ViewAuto($inpurl) {
 
 		}
 
-		$r = UrlRule::Rewrite_url($zbp->option['ZC_TAGS_REGEX'], 'tags');
+		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_TAGS_REGEX'], 'tags');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
 			$result = ViewList($m[2], null, null, null, $m[1], true);
@@ -511,7 +511,7 @@ function ViewAuto($inpurl) {
 
 		}
 
-		$r = UrlRule::Rewrite_url($zbp->option['ZC_CATEGORY_REGEX'], 'cate');
+		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
 			$result = ViewList($m[2], $m[1], null, null, null, true);
@@ -521,7 +521,7 @@ function ViewAuto($inpurl) {
 
 		}
 
-		$r = UrlRule::Rewrite_url($zbp->option['ZC_ARTICLE_REGEX'], 'article');
+		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_ARTICLE_REGEX'], 'article');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
 			if (strpos($zbp->option['ZC_ARTICLE_REGEX'], '{%id%}') !== false) {
@@ -536,7 +536,7 @@ function ViewAuto($inpurl) {
 			return null;
 		}
 
-		$r = UrlRule::Rewrite_url($zbp->option['ZC_PAGE_REGEX'], 'page');
+		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_PAGE_REGEX'], 'page');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
 			if (strpos($zbp->option['ZC_PAGE_REGEX'], '{%id%}') !== false) {
