@@ -478,7 +478,7 @@ function ViewAuto($inpurl) {
 		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_INDEX_REGEX'], 'index');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
-			ViewList($m[1], null, null, null, null, true);
+			ViewList($m['page'], null, null, null, null, true);
 
 			return null;
 		}
@@ -486,7 +486,7 @@ function ViewAuto($inpurl) {
 		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_DATE_REGEX'], 'date');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
-			ViewList($m[2], null, null, $m[1], null, true);
+			ViewList($m['page'], null, null, $m, null, true);
 
 			return null;
 		}
@@ -494,7 +494,7 @@ function ViewAuto($inpurl) {
 		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_AUTHOR_REGEX'], 'auth');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
-			$result = ViewList($m[2], null, $m[1], null, null, true);
+			$result = ViewList($m['page'], null, $m, null, null, true);
 			if ($result == true) {
 				return null;
 			}
@@ -504,7 +504,7 @@ function ViewAuto($inpurl) {
 		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_TAGS_REGEX'], 'tags');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
-			$result = ViewList($m[2], null, null, null, $m[1], true);
+			$result = ViewList($m['page'], null, null, null, $m, true);
 			if ($result == true) {
 				return null;
 			}
@@ -514,7 +514,7 @@ function ViewAuto($inpurl) {
 		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
-			$result = ViewList($m[2], $m[1], null, null, null, true);
+			$result = ViewList($m['page'], $m, null, null, null, true);
 			if ($result == true) {
 				return null;
 			}
@@ -524,26 +524,17 @@ function ViewAuto($inpurl) {
 		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_ARTICLE_REGEX'], 'article');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
-			if (strpos($zbp->option['ZC_ARTICLE_REGEX'], '{%id%}') !== false) {
-				$result = ViewPost($m[1], null, true);
-			} else {
-				$result = ViewPost(null, $m[1], true);
-			}
+			$result = ViewPost($m, null, true);
 			if ($result == false) {
 				$zbp->ShowError(2, __FILE__, __LINE__);
 			}
-
 			return null;
 		}
 
 		$r = UrlRule::OutputUrlRegEx($zbp->option['ZC_PAGE_REGEX'], 'page');
 		$m = array();
 		if (preg_match($r, $url, $m) == 1) {
-			if (strpos($zbp->option['ZC_PAGE_REGEX'], '{%id%}') !== false) {
-				$result = ViewPost($m[1], null, true);
-			} else {
-				$result = ViewPost(null, $m[1], true);
-			}
+			$result = ViewPost($m, null, true);
 			if ($result == false) {
 				$zbp->ShowError(2, __FILE__, __LINE__);
 			}
@@ -632,10 +623,6 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	case 'index':
 		$pagebar = new Pagebar($zbp->option['ZC_INDEX_REGEX']);
 		$pagebar->Count = $zbp->cache->normal_article_nums;
-		$category = new Metas;
-		$author = new Metas;
-		$datetime = new Metas;
-		$tag = new Metas;
 		$template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
 		if ($page == 1) {
 			$zbp->title = $zbp->subname;
@@ -646,17 +633,19 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	########################################################################################################
 	case 'category':
 		$pagebar = new Pagebar($zbp->option['ZC_CATEGORY_REGEX']);
-		$author = new Metas;
-		$datetime = new Metas;
-		$tag = new Metas;
-
 		$category = new Category;
-		if (strpos($zbp->option['ZC_CATEGORY_REGEX'], '{%id%}') !== false) {
-			$category = $zbp->GetCategoryByID($cate);
+
+		if (!is_array($cate)) {
+			$cateId = $cate;
+			$cate = array();
+			$cate['id'] = $cateId;
 		}
-		if (strpos($zbp->option['ZC_CATEGORY_REGEX'], '{%alias%}') !== false) {
-			$category = $zbp->GetCategoryByAlias($cate);
+		if (isset($cate['id'])) {
+			$category = $zbp->GetCategoryByID($cate['id']);
+		} else {
+			$category = $zbp->GetCategoryByAlias($cate['alias']);
 		}
+
 		if ($category->ID == 0) {
 			if ($isrewrite == true) {
 				return false;
@@ -689,17 +678,19 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	########################################################################################################
 	case 'author':
 		$pagebar = new Pagebar($zbp->option['ZC_AUTHOR_REGEX']);
-		$category = new Metas;
-		$datetime = new Metas;
-		$tag = new Metas;
-
 		$author = new Member;
-		if (strpos($zbp->option['ZC_AUTHOR_REGEX'], '{%id%}') !== false) {
-			$author = $zbp->GetMemberByID($auth);
+
+		if (!is_array($auth)) {
+			$authId = $auth;
+			$auth = array();
+			$auth['id'] = $authId;
 		}
-		if (strpos($zbp->option['ZC_AUTHOR_REGEX'], '{%alias%}') !== false) {
-			$author = $zbp->GetMemberByAliasOrName($auth);
+		if (isset($auth['id'])) {
+			$author = $zbp->GetMemberByID($auth['id']);
+		} else {
+			$author = $zbp->GetMemberByAliasOrName($auth['alias']);
 		}
+
 		if ($author->ID == 0) {
 			if ($isrewrite == true) {
 				return false;
@@ -721,10 +712,11 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	########################################################################################################
 	case 'date':
 		$pagebar = new Pagebar($zbp->option['ZC_DATE_REGEX']);
-		$category = new Metas;
-		$author = new Metas;
-		$tag = new Metas;
-		$datetime = strtotime($date);
+		if (!is_array($date)) {
+			$datetime = strtotime($date);
+		} else {
+			$datetime = strtotime($date['date']);
+		}
 
 		$datetitle = str_replace(array('%y%', '%m%'), array(date('Y', $datetime), date('n', $datetime)), $zbp->lang['msg']['year_month']);
 		if ($page == 1) {
@@ -743,16 +735,19 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	########################################################################################################
 	case 'tag':
 		$pagebar = new Pagebar($zbp->option['ZC_TAGS_REGEX']);
-		$category = new Metas;
-		$author = new Metas;
-		$datetime = new Metas;
 		$tag = new Tag;
-		if (strpos($zbp->option['ZC_TAGS_REGEX'], '{%id%}') !== false) {
-			$tag = $zbp->GetTagByID($tags);
+
+		if (!is_array($tags)) {
+			$tagId = $tags;
+			$tags = array();
+			$tags['id'] = $tagId;
 		}
-		if (strpos($zbp->option['ZC_TAGS_REGEX'], '{%alias%}') !== false) {
-			$tag = $zbp->GetTagByAliasOrName($tags);
+		if (isset($tags['id'])) {
+			$tag = $zbp->GetTagByID($tags['id']);
+		} else {
+			$tag = $zbp->GetTagByAliasOrName($tags['alias']);
 		}
+
 		if ($tag->ID == 0) {
 			if ($isrewrite == true) {
 				return false;
@@ -867,8 +862,17 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
  * @param bool $isrewrite 是否启用urlrewrite
  * @return string
  */
-function ViewPost($id, $alias, $isrewrite = false) {
+function ViewPost($object, $theSecondParam, $isrewrite = false) {
 	global $zbp;
+
+	if (is_array($object)) {
+		$id = $object['id'];
+		$alias = $object['alias'];
+	} else {
+		$id = $object;
+		$alias = $theSecondParam;
+	}
+
 	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($id, $alias);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -892,7 +896,29 @@ function ViewPost($id, $alias, $isrewrite = false) {
 		}
 	} else {
 		$zbp->ShowError(2, __FILE__, __LINE__);
-		die();
+		exit;
+	}
+
+	// 验证传递的参数的时间是否存在问题
+	if (isset($object['year'])) {
+		if (isset($object['month'])) {
+			if (isset($object['day'])) {
+				$postTime = $object['year'] . '-' . $object['month'] . '-' . $object['day'];
+				$timestamp = strtotime($postTime);
+				$w[] = array('>=', 'log_PostTime', $timestamp);
+				$w[] = array('<=', 'log_PostTime', $timestamp + 86400); // 1 day = 86400 s
+			} else {
+				$postTime = $object['year'] . '-' . $object['month'];
+				$timestamp = strtotime($postTime);
+				$w[] = array('>=', 'log_PostTime', $timestamp);
+				$w[] = array('<=', 'log_PostTime', strtotime($postTime . ' +1 month')); // 卧槽跪拜PHP
+			}
+		} else {
+			$postTime = $object['year'] . '-1';
+			$timestamp = strtotime($postTime);
+			$w[] = array('>=', 'log_PostTime', $timestamp);
+			$w[] = array('<=', 'log_PostTime', strtotime($postTime . ' +1 year'));
+		}
 	}
 
 	if (!($zbp->CheckRights('ArticleAll') && $zbp->CheckRights('PageAll'))) {
@@ -909,6 +935,18 @@ function ViewPost($id, $alias, $isrewrite = false) {
 	}
 
 	$article = $articles[0];
+
+	// TODO: 验证分类
+
+	// 再验证一下时间（排除某些像只有{%month%}没有{%year%}的情况
+	$articleTime = getdate($article->PostTime);
+	if (
+		(isset($object['year']) && $object['year'] != $articleTime['year']) ||
+		(isset($object['month']) && $object['month'] != $articleTime['mon']) ||
+		(isset($object['day']) && $object['day'] != $articleTime['mday'])
+	) {
+		$zbp->ShowError(2, __FILE__, __LINE__);
+	}
 
 	if ($article->Type == 0) {
 		$zbp->LoadTagsByIDString($article->Tag);
