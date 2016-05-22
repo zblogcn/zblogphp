@@ -1645,6 +1645,10 @@ function PostComment() {
 		}
 	}
 
+	if ($zbp->option['ZC_COMMENT_AUDIT'] && !$zbp->CheckRights('root')) {
+		$cmt->IsChecking = true;
+	}
+
 	foreach ($GLOBALS['hooks']['Filter_Plugin_PostComment_Core'] as $fpname => &$fpsignal) {
 		$fpname($cmt);
 	}
@@ -2534,6 +2538,7 @@ function SaveSetting() {
 			$key == 'ZC_DEBUG_MODE' ||
 			$key == 'ZC_COMMENT_TURNOFF' ||
 			$key == 'ZC_COMMENT_REVERSE_ORDER' ||
+			$key == 'ZC_COMMENT_AUDIT' ||
 			$key == 'ZC_DISPLAY_SUBCATEGORYS' ||
 			$key == 'ZC_GZIP_ENABLE' ||
 			$key == 'ZC_SYNTAXHIGHLIGHTER_ENABLE' ||

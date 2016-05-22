@@ -238,6 +238,8 @@ return array(
 		'possible_causes_error' => 'Possible causes of errors',
 		'display_more_info' => 'Display more info',
 		'error_load_js' => 'Error when loading JavaScript',
+		'comment_audit' => 'Aduit Comments',
+		'comment_audit_comment' => 'All new comments posted by non-root user will be audited.',
 		'' => '',
 	),
 

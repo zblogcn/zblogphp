@@ -234,6 +234,8 @@ return array(
 		'possible_causes_error' => '可能的错误原因',
 		'display_more_info' => '显示更多的信息',
 		'error_load_js' => 'JavaScript加载失败，可能被服务器拦截',
+		'comment_audit' => '审核评论',
+		'comment_audit_comment' => '打开后所有非管理员发布的评论都将进入审核状态',
 		'' => '',
 	),
 

@@ -371,7 +371,7 @@ function CreateOptionsOfTimeZone($default) {
 	global $zbp;
 	$s = '';
 	$tz = array
-	(
+		(
 		'Etc/GMT+12' => '-12:00',
 		'Pacific/Midway' => '-11:00',
 		'Pacific/Honolulu' => '-10:00',
@@ -1490,16 +1490,16 @@ function Admin_SettingMng() {
 
 	?>
 
-		  <form method="post" action="../cmd.php?act=SettingSav<?php echo '&amp;token=' . $zbp->GetToken();?>">
+		  <form method="post" action="../cmd.php?act=SettingSav<?php echo '&amp;token=' . $zbp->GetToken(); ?>">
 			<div id="divMain2">
 			  <div class="content-box"><!-- Start Content Box -->
 
 				<div class="content-box-header">
 				  <ul class="content-box-tabs">
-					<li><a href="#tab1" class="default-tab"><span><?php echo $zbp->lang['msg']['basic_setting']?></span></a></li>
-					<li><a href="#tab2"><span><?php echo $zbp->lang['msg']['global_setting']?></span></a></li>
-					<li><a href="#tab3"><span><?php echo $zbp->lang['msg']['page_setting']?></span></a></li>
-					<li><a href="#tab4"><span><?php echo $zbp->lang['msg']['comment_setting']?></span></a></li>
+					<li><a href="#tab1" class="default-tab"><span><?php echo $zbp->lang['msg']['basic_setting'] ?></span></a></li>
+					<li><a href="#tab2"><span><?php echo $zbp->lang['msg']['global_setting'] ?></span></a></li>
+					<li><a href="#tab3"><span><?php echo $zbp->lang['msg']['page_setting'] ?></span></a></li>
+					<li><a href="#tab4"><span><?php echo $zbp->lang['msg']['comment_setting'] ?></span></a></li>
 				  </ul>
 				  <div class="clear"></div>
 				</div>
@@ -1510,11 +1510,11 @@ function Admin_SettingMng() {
 
 	echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
 	echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
-	echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/><span class="note">&nbsp;' . $zbp->lang['msg']['blog_host_add'] . '</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="' . $zbp->option['ZC_BLOG_HOST'] . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly"') . ' />';
-	echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>&nbsp;&nbsp;' . $zbp->lang['msg']['permanent_domain'] . '</p></td></tr>';
+	echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/><span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="' . $zbp->option['ZC_BLOG_HOST'] . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly"') . ' />';
+	echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>' . $zbp->lang['msg']['permanent_domain'] . '</p></td></tr>';
 	echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_name'] . '</b></p></td><td><p><input id="ZC_BLOG_NAME" name="ZC_BLOG_NAME" style="width:600px;" type="text" value="' . $zbp->option['ZC_BLOG_NAME'] . '" /></p></td></tr>';
 	echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_subname'] . '</b></p></td><td><p><input id="ZC_BLOG_SUBNAME" name="ZC_BLOG_SUBNAME" style="width:600px;"  type="text" value="' . $zbp->option['ZC_BLOG_SUBNAME'] . '" /></p></td></tr>';
-	echo '<tr><td><p><b>' . $zbp->lang['msg']['copyright'] . '</b><br/><span class="note">&nbsp;' . $zbp->lang['msg']['copyright_add'] . '</span></p></td><td><p><textarea cols="3" rows="6" id="ZC_BLOG_COPYRIGHT" name="ZC_BLOG_COPYRIGHT" style="width:600px;">' . htmlspecialchars($zbp->option['ZC_BLOG_COPYRIGHT']) . '</textarea></p></td></tr>';
+	echo '<tr><td><p><b>' . $zbp->lang['msg']['copyright'] . '</b><br/><span class="note">' . $zbp->lang['msg']['copyright_add'] . '</span></p></td><td><p><textarea cols="3" rows="6" id="ZC_BLOG_COPYRIGHT" name="ZC_BLOG_COPYRIGHT" style="width:600px;">' . htmlspecialchars($zbp->option['ZC_BLOG_COPYRIGHT']) . '</textarea></p></td></tr>';
 
 	echo '</table>';
 	echo '</div>';
@@ -1552,6 +1552,7 @@ function Admin_SettingMng() {
 	echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
 
 	echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['comment_turnoff'] . '</b></p></td><td><p><input id="ZC_COMMENT_TURNOFF" name="ZC_COMMENT_TURNOFF" type="text" value="' . $zbp->option['ZC_COMMENT_TURNOFF'] . '" class="checkbox"/></p></td></tr>';
+	echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['comment_audit'] . '</b><br/><span class="note">' . $zbp->lang['msg']['comment_audit_comment'] . '</span></p></td><td><p><input id="ZC_COMMENT_AUDIT" name="ZC_COMMENT_AUDIT" type="text" value="' . $zbp->option['ZC_COMMENT_AUDIT'] . '" class="checkbox"/></p></td></tr>';
 	echo '<tr><td><p><b>' . $zbp->lang['msg']['comment_reverse_order'] . '</b></p></td><td><p><input id="ZC_COMMENT_REVERSE_ORDER" name="ZC_COMMENT_REVERSE_ORDER" type="text" value="' . $zbp->option['ZC_COMMENT_REVERSE_ORDER'] . '" class="checkbox"/></p></td></tr>';
 	echo '<tr><td><p><b>' . $zbp->lang['msg']['comments_display_count'] . '</b></p></td><td><p><input id="ZC_COMMENTS_DISPLAY_COUNT" name="ZC_COMMENTS_DISPLAY_COUNT" type="text" value="' . $zbp->option['ZC_COMMENTS_DISPLAY_COUNT'] . '"  style="width:600px;" /></p></td></tr>';
 	echo '<tr><td><p><b>' . $zbp->lang['msg']['comment_verify_enable'] . '</b></p></td><td><p><input id="ZC_COMMENT_VERIFY_ENABLE" name="ZC_COMMENT_VERIFY_ENABLE" type="text" value="' . $zbp->option['ZC_COMMENT_VERIFY_ENABLE'] . '" class="checkbox"/></p></td></tr>';
@@ -1564,7 +1565,7 @@ function Admin_SettingMng() {
 
 			  </div>
 			  <hr/>
-			  <p><input type="submit" class="button" value="<?php echo $zbp->lang['msg']['submit']?>" id="btnPost" onclick="" /></p>
+			  <p><input type="submit" class="button" value="<?php echo $zbp->lang['msg']['submit'] ?>" id="btnPost" onclick="" /></p>
 			</div>
 		  </form>
 <?php

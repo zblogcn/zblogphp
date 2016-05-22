@@ -238,6 +238,8 @@ return array(
 		'possible_causes_error' => '可能的錯誤原因',
 		'display_more_info' => '显示更多的信息',
 		'error_load_js' => 'JavaScript加載失敗，可能被服務器拦截',
+		'comment_audit' => '審核迴響',
+		'comment_audit_comment' => '打開後所有非管理員發布的迴響都將進入審核狀態',
 		'' => '',
 	),
 
