@@ -2092,6 +2092,7 @@ class ZBlogPHP {
 	 */
 	private function GetSomeThingByAlias($object, $val, $backAttr = null, $className = null) {
 		$ret = $this->GetSomeThing($object, 'Alias', $val);
+
 		if (!is_null($ret)) {
 			return $ret;
 		} else {
@@ -2205,7 +2206,7 @@ class ZBlogPHP {
 	 * @return Category
 	 */
 	public function GetCategoryByAlias($name, $backKey = NULL) {
-		$ret = $this->GetSomeThingByAlias('categories', $name, $backKey, 'Category');
+		return $this->GetSomeThingByAlias('categories', $name, $backKey, 'Category');
 	}
 
 	/**
