@@ -143,7 +143,7 @@ class UrlRule {
 				$url = str_replace($matches[0], '(?:' . $matches[0] . ')<:1:>', $url);
 			}
 			$url = $url . '$';
-			$url = str_replace('%poaogoe%', '([0-9]*)', $url);
+			$url = str_replace('%poaogoe%', '(?P<page>[0-9]*)', $url);
 		}
 		if ($type == 'cate' || $type == 'tags' || $type == 'date' || $type == 'auth') {
 			$url = str_replace('%page%', '%poaogoe%', $url);
@@ -152,39 +152,41 @@ class UrlRule {
 				$url = str_replace($matches[0], '(?:' . $matches[0] . ')?', $url);
 			}
 			$url = $url . '$';
-			$url = str_replace('%poaogoe%', '([0-9]*)', $url);
-			$url = str_replace('%id%', '([0-9]+)', $url);
-			$url = str_replace('%date%', '([0-9\-]+)', $url);
+			$url = str_replace('%poaogoe%', '(?P<page>[0-9]*)', $url);
+			$url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
+			$url = str_replace('%date%', '(?P<date>[0-9\-]+)', $url);
 			if ($type == 'cate') {
-				$url = str_replace('%alias%', '(' . $fullcategory . ')', $url);
+				$url = str_replace('%alias%', '(?P<alias>' . $fullcategory . ')', $url);
 			} else {
-				$url = str_replace('%alias%', '([^\./_]+)', $url);
+				$url = str_replace('%alias%', '(?P<alias>[^\./_]+)', $url);
 			}
 		}
 		if ($type == 'page' || $type == 'article') {
 			if (strpos($url, '%alias%') === false) {
 				$url = $url . '$';
-				$url = str_replace('%id%', '([0-9]+)', $url);
+				$url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
 			} else {
 				$url = $url . '$';
 				if ($type == 'article') {
-					$url = str_replace('%alias%', '([^/]+)', $url);
+					$url = str_replace('%alias%', '(?P<alias>[^/]+)', $url);
 				} else {
-					$url = str_replace('%alias%', '(.+)', $url);
+					$url = str_replace('%alias%', '(?P<alias>.+)', $url);
 				}
 			}
-			$url = str_replace('%category%', '(?:' . $fullcategory . ')', $url);
-			$url = str_replace('%author%', '[^\./_]+', $url);
-			$url = str_replace('%year%', '[0-9]<:4:>', $url);
-			$url = str_replace('%month%', '[0-9]<:1,2:>', $url);
-			$url = str_replace('%day%', '[0-9]<:1,2:>', $url);
+			$url = str_replace('%category%', '(?P<category>(?:' . $fullcategory . '))', $url);
+			$url = str_replace('%author%', '(?P<author>[^\./_]+)', $url);
+			$url = str_replace('%year%', '(?P<year>[0-9]<:4:>)', $url);
+			$url = str_replace('%month%', '(?P<month>[0-9]<:1,2:>)', $url);
+			$url = str_replace('%day%', '(?P<day>[0-9]<:1,2:>)', $url);
 		}
 		$url = str_replace('{', '', $url);
 		$url = str_replace('}', '', $url);
 		$url = str_replace('<:', '{', $url);
 		$url = str_replace(':>', '}', $url);
 		$url = str_replace('/', '\/', $url);
-		return '/' . $url . '/';
+		return '/(?J)' . $url . '/';
+		// 关于J标识符的使用
+		// @see https://bugs.php.net/bug.php?id=47456
 	}
 
 	/**
