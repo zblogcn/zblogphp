@@ -273,7 +273,7 @@ class Totoro_Class {
 		$zbp->SaveConfig('Totoro');
 
 		if (function_exists('CountCommentNums')) {
-			CountCommentNums(0, -$foundComment);
+			CountCommentNums(0, +$foundComment);
 		}
 
 		CountPostArray($logid);
