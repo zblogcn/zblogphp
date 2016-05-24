@@ -57,17 +57,18 @@ class Dbpdo_MySQL implements iDataBase {
 		'engine',
 		 */
 		if ($array[6] == false) {
-			$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
+			$options = array();
 		} else {
-			$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', PDO::ATTR_PERSISTENT => true);
+			$options = array(PDO::ATTR_PERSISTENT => true);
 		}
 		try {
 			$db_link = new PDO('mysql:host=' . $array[0] . ';port=' . $array[5] . ';dbname=' . $array[3], $array[1], $array[2], $options);
+
 			$this->db = $db_link;
 			$this->dbpre = $array[4];
 			$this->dbname = $array[3];
 			$this->dbengine = $array[7];
-			
+
 			$myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
 			$myver = substr($myver, 0, strpos($myver, "-"));
 			if(version_compare($myver,'5.5.3')>=0){
@@ -75,8 +76,9 @@ class Dbpdo_MySQL implements iDataBase {
 			}else{
 				$u="utf8";
 			}
-			$this->db->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, "SET NAMES '" . $u . "'");
-			
+			//$db_link->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, "SET NAMES '" . $u . "'");
+			$db_link->query("SET NAMES '" . $u . "'");
+
 			return true;
 		} catch (PDOException $e) {
 			return false;
@@ -103,7 +105,7 @@ class Dbpdo_MySQL implements iDataBase {
 		}else{
 			$u="utf8";
 		}
-		$this->db->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, "SET NAMES '" . $u . "'");
+		$db_link->query("SET NAMES '" . $u . "'");
 
 		$s = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbmysql_name'";
 		$a = $this->Query($s);
