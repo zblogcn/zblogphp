@@ -65,7 +65,16 @@ class DbMySQLi implements iDataBase {
 
 		//mysqli_options($db,MYSQLI_READ_DEFAULT_GROUP,"max_allowed_packet=50M");
 		if (@mysqli_real_connect($db, $array[0], $array[1], $array[2], $array[3], $array[5])) {
-			mysqli_set_charset($db, 'utf8');
+			
+			$myver = mysqli_get_server_info($db);
+			$myver = substr($myver, 0, strpos($myver, "-"));
+			if(version_compare($myver,'5.5.3')>=0){
+				$u="utf8mb4";
+			}else{
+				$u="utf8";
+			}
+			mysqli_set_charset($db, $u);
+
 			$this->db = $db;
 			$this->dbname = $array[3];
 			$this->dbpre = $array[4];
@@ -86,6 +95,16 @@ class DbMySQLi implements iDataBase {
 	 */
 	function CreateDB($dbmysql_server, $dbmysql_port, $dbmysql_username, $dbmysql_password, $dbmysql_name) {
 		$db = mysqli_connect($dbmysql_server, $dbmysql_username, $dbmysql_password, null, $dbmysql_port);
+		
+		$myver = mysqli_get_server_info($db);
+		$myver = substr($myver, 0, strpos($myver, "-"));
+		if(version_compare($myver,'5.5.3')>=0){
+			$u="utf8mb4";
+		}else{
+			$u="utf8";
+		}
+		mysqli_set_charset($db, $u);
+
 		$this->db = $db;
 		$this->dbname = $dbmysql_name;
 		$s = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbmysql_name'";

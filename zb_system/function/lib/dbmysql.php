@@ -67,9 +67,17 @@ class DbMySQL implements iDataBase {
 		if (!$db_link) {
 			return false;
 		}
-
+		
+		$myver = mysql_get_server_info($db_link);
+		$myver = substr($myver, 0, strpos($myver, "-"));
+		if(version_compare($myver,'5.5.3')>=0){
+			$u="utf8mb4";
+		}else{
+			$u="utf8";
+		}
+		mysql_set_charset($u, $db_link);
+		
 		$this->db = $db_link;
-		mysql_query("SET NAMES 'utf8'", $this->db);
 		if (mysql_select_db($array[3], $this->db)) {
 			$this->dbpre = $array[4];
 			$this->dbname = $array[3];
@@ -93,6 +101,16 @@ class DbMySQL implements iDataBase {
 	 */
 	function CreateDB($dbmysql_server, $dbmysql_port, $dbmysql_username, $dbmysql_password, $dbmysql_name) {
 		$db_link = mysql_connect($dbmysql_server . ':' . $dbmysql_port, $dbmysql_username, $dbmysql_password);
+
+		$myver = mysql_get_server_info($db_link);
+		$myver = substr($myver, 0, strpos($myver, "-"));
+		if(version_compare($myver,'5.5.3')>=0){
+			$u="utf8mb4";
+		}else{
+			$u="utf8";
+		}
+		mysql_set_charset($u, $db_link);
+
 		$this->db = $db_link;
 		$this->dbname = $dbmysql_name;
 		$s = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbmysql_name'";
