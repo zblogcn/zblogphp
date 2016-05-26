@@ -888,7 +888,15 @@ function Admin_MemberMng() {
 	}
 	echo '</div>';
 	echo '<div id="divMain2">';
-	echo '<!--<form class="search" id="edit" method="post" action="#"></form>-->';
+	echo '<form class="search" id="search" method="post" action="#">';
+
+	echo '<p>' . $zbp->lang['msg']['search'] . ':&nbsp;&nbsp;' . $zbp->lang['msg']['member_level'] . ' <select class="edit" size="1" name="level" style="width:140px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option>';
+	foreach ($zbp->lang['user_level_name'] as $id => $name) {
+		echo '<option value="' . $id . '">' . $name . '</option>';
+	}
+	echo '</select>&nbsp;&nbsp;&nbsp;&nbsp;
+	<input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
+	echo '</form>';
 	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 	echo '<tr>
 	<th>' . $zbp->lang['msg']['id'] . '</th>
@@ -910,6 +918,12 @@ function Admin_MemberMng() {
 	$w = array();
 	if (!$zbp->CheckRights('MemberAll')) {
 		$w[] = array('=', 'mem_ID', $zbp->user->ID);
+	}
+	if (GetVars('level')) {
+		$w[] = array('=', 'mem_Level', GetVars('level'));
+	}
+	if (GetVars('search')) {
+		$w[] = array('search', 'mem_Name', 'mem_Email', GetVars('search'));
 	}
 	$array = $zbp->GetMemberList(
 		'',
