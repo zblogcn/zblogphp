@@ -1,3 +1,4 @@
+{* Template Name:单个模块 *}
 <dl class="function" id="{$module.HtmlID}">
 {if (!$module.IsHideTitle)&&($module.Name)}<dt class="function_t">{$module.Name}</dt>{else}<dt style="display:none;"></dt>{/if}
 <dd class="function_c">

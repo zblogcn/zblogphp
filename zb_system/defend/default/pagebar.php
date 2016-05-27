@@ -1,3 +1,4 @@
+{* Template Name:分页 *}
 {if $pagebar}
 {foreach $pagebar.buttons as $k=>$v}
   {if $pagebar.PageNow==$k}

@@ -1,3 +1,4 @@
+{* Template Name:文章页文章内容 *}
 <div class="post single">
 	<h4 class="post-date">{$article.Time('Y年m月d日')}</h4>
 	<h2 class="post-title">{$article.Title}</h2>

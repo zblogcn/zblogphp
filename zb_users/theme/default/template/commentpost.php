@@ -1,3 +1,4 @@
+{* Template Name:评论发布框 *}
 <div class="post" id="divCommentPost">
 	<p class="posttop"><a name="comment">{if $user.ID>0}{$user.StaticName}{/if}发表评论:</a><a rel="nofollow" id="cancel-reply" href="#divCommentPost" style="display:none;"><small>取消回复</small></a></p>
 	<form id="frmSumbit" target="_self" method="post" action="{$article.CommentPostUrl}" >
