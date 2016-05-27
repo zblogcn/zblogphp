@@ -1,12 +1,11 @@
 {* Template Name:公共头部 *}
 <!DOCTYPE html>
-<html xml:lang="{$language}" lang="{$language}">
+<html xml:lang="{$lang['lang_bcp47']}" lang="{$lang['lang_bcp47']}">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<meta http-equiv="Content-Language" content="{$language}" />
-	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 	<meta name="generator" content="{$zblogphp}" />
+	<meta name="renderer" content="webkit">
 	<title>{$name}-{$title}</title>
 	<link rel="stylesheet" rev="stylesheet" href="{$host}zb_users/theme/{$theme}/style/{$style}.css" type="text/css" media="all"/>
 	<script src="{$host}zb_system/script/jquery-1.11.2.min.js" type="text/javascript"></script>

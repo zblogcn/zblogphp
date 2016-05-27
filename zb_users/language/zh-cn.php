@@ -8,6 +8,7 @@
 return array(
 
 	'lang' => 'zh-CN',
+	'lang_bcp47' => 'zh-Hans', // http://tools.ietf.org/html/bcp47
 	'lang_name' => '简体中文',
 	'font_family' => '',
 	'font_size' => '',

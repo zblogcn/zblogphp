@@ -12,6 +12,7 @@
 return array(
 
 	'lang' => 'zh-TW',
+	'lang_bcp47' => 'zh-Hant', // http://tools.ietf.org/html/bcp47
 	'lang_name' => '傳統中文',
 	'font_family' => 'Helvetica,Arial,"Microsoft JhengHei",PMingLiU,MingLiU,sans-serif',
 	'font_size' => '',

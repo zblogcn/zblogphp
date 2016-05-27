@@ -12,6 +12,7 @@
 return array(
 
 	'lang' => 'en',
+	'lang_bcp47' => 'en', // http://tools.ietf.org/html/bcp47
 	'lang_name' => 'English',
 	'font_family' => 'Helvetica,Arial,sans-serif',
 	'font_size' => '',
