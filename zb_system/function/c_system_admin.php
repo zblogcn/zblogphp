@@ -252,10 +252,23 @@ function CreateOptoinsOfTemplate($default) {
 			continue;
 		}
 
+		//读模板名称
+		$t=$zbp->templates[$key];
+		$n='';
+		if(stristr($t, 'Template Name:') !== false) {
+			$t = stristr($t, 'Template Name:');
+			$t = str_ireplace('Template Name:','',$t);
+			$n = strtok($t,' *');
+		}
+
 		if ($default == $key) {
 			$s .= '<option value="' . $key . '" selected="selected">' . $key . ' (' . $zbp->lang['msg']['default_template'] . ')' . '</option>';
 		} else {
-			$s .= '<option value="' . $key . '" >' . $key . '</option>';
+			if ($n !== '') {
+				$s .= '<option value="' . $key . '" >' . $key . ' (' . $n . ')' . '</option>';
+			}else{
+				$s .= '<option value="' . $key . '" >' . $key . '</option>';
+			}
 		}
 	}
 

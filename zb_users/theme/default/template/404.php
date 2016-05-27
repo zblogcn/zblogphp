@@ -1,3 +1,4 @@
+{* Template Name:错误页 *}
 <!DOCTYPE HTML>
 <html lang="zh-cn">
 <head>
