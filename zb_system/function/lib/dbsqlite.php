@@ -8,6 +8,7 @@
 class DbSQLite implements iDataBase {
 
 	public $type = 'sqlite';
+	public $version = '2';
 
 	/**
 	 * @var string|null 数据库名前缀
