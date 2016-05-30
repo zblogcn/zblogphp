@@ -1378,7 +1378,7 @@ class ZBlogPHP {
 	}
 
 	/**
-	 *载入当前主题
+	 * 载入主题列表
 	 */
 	public function LoadThemes() {
 
@@ -1397,7 +1397,7 @@ class ZBlogPHP {
 	}
 
 	/**
-	 *载入插件列表
+	 * 载入插件列表
 	 */
 	public function LoadPlugins() {
 

@@ -124,36 +124,7 @@ class App {
 	 * @return array
 	 */
 	public function GetInfoArray() {
-		$info=array();
-		$info['type'] = $this->type;
-		$info['id'] = $this->id;
-		$info['name'] = $this->name;
-		$info['url'] = $this->url;
-		$info['note'] = $this->note;
-		$info['description'] = $this->description;
-		$info['path'] = $this->path;
-		$info['include'] = $this->include;
-		$info['level'] = $this->level;
-		$info['author_name'] = $this->author_name;
-		$info['author_email'] = $this->author_email;
-		$info['author_url'] = $this->author_url;
-		$info['source_name'] = $this->source_name;
-		$info['source_email'] = $this->source_email;
-		$info['source_url'] = $this->source_url;
-		$info['adapted'] = $this->adapted;
-		$info['version'] = $this->version;
-		$info['pubdate'] = $this->pubdate;
-		$info['modified'] = $this->modified;
-		$info['price'] = $this->price;
-		$info['advanced_dependency'] = $this->advanced_dependency;
-		$info['advanced_rewritefunctions'] = $this->advanced_rewritefunctions;
-		$info['advanced_conflict'] = $this->advanced_conflict;
-		$info['sidebars_sidebar1'] = $this->sidebars_sidebar1;
-		$info['sidebars_sidebar2'] = $this->sidebars_sidebar2;
-		$info['sidebars_sidebar3'] = $this->sidebars_sidebar3;
-		$info['sidebars_sidebar4'] = $this->sidebars_sidebar4;
-		$info['sidebars_sidebar5'] = $this->sidebars_sidebar5;
-		return $info;
+		return get_object_vars($this);
 	}
 	/**
 	 * 是否可删除
