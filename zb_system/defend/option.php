@@ -59,7 +59,7 @@ return array(
 	'ZC_YUN_SITE' => '',
 	'ZC_BLOG_CLSID' => '',
 	'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
-	'ZC_UPDATE_INFO_URL' => 'http://update.zblogcn.com/info/',
+	'ZC_UPDATE_INFO_URL' => 'https://update.zblogcn.com/info/',
 
 	// '固定域名,默认为false
 	'ZC_PERMANENT_DOMAIN_ENABLE' => false,
