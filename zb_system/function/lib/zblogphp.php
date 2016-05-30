@@ -526,7 +526,6 @@ class ZBlogPHP {
 		if ($this->isload) {
 			return false;
 		}
-
 		$this->StartGzip();
 
 		header('Content-type: text/html; charset=utf-8');

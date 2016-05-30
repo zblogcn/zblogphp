@@ -48,9 +48,12 @@ class DbSql {
 	/**
 	 * @param object $db
 	 */
+	private $sql = null;
+
 	function __construct(&$db = null) {
 		$this->db = &$db;
 		$this->dbclass = get_class($this->db);
+		$this->sql = 'sql' . $this->db->type;
 	}
 	/**
 	 * 替换数据表前缀
@@ -476,159 +479,32 @@ class DbSql {
 	public function Select($table, $select = null, $where = null, $order = null, $limit = null, $option = null) {
 		$this->ReplacePre($table);
 
-		$sqlp = 'SELECT ';
-		$sqls = '';
-		$sqlw = '';
-		$sqlg = '';
-		$sqlh = '';
-		$sqlo = '';
-		$sqll = '';
-
 		if (is_array($option) == false) {
 			$option = array();
 		}
-
-		$option = array_change_key_case($option);
-
-		if (isset($option['sql_no_cache'])) {
-			$sqlp .= 'SQL_NO_CACHE ';
-		}
-		if (isset($option['sql_cache'])) {
-			$sqlp .= 'SQL_CACHE ';
-		}
-		if (isset($option['sql_buffer_result'])) {
-			$sqlp .= 'SQL_BUFFER_RESULT ';
-		}
+		$sql = new $this->sql($this->db);
+		$sql->select($table)->option($option)->where($where)->orderBy($order)->limit($limit);
 
 		if (isset($option['select2count'])) {
-			$sqls = $sqlp;
-			if (is_array($select)) {
-				foreach ($select as $key => $value) {
-					if (count($value) == 3) {
-						$sqls .= "$value[0]($value[1]) AS $value[2],";
-					}
-
-					if (count($value) == 2) {
-						$sqls .= "$value[0]($value[1]),";
-					}
-
-				}
-				$sqls = substr($sqls, 0, strlen($sqls) - 1);
-			} else {
-				$sqls .= $select;
+			foreach ($select as $key => $value) {
+				$sql->count($value);
 			}
 		} else {
-			if (!empty($select)) {
-				if (is_array($select)) {
-					$selectstr = implode($select, ',');
-					if (trim($selectstr) == '') {
-						$selectstr = '*';
-					}
-
-					$sqls = "{$sqlp} {$selectstr} ";
-				} else {
-					if (trim($sqls) == '') {
-						$sqls = '*';
-					}
-
-					$sqls = "{$sqlp} {$select} ";
-				}
-			} else {
-				$sqls = "{$sqlp} *";
-			}
-		}
-		$sqls .= " FROM $table ";
-
-		if (isset($option['useindex'])) {
-			if (is_array($option['useindex'])) {
-				$sqls .= 'USE INDEX (' . implode($option['useindex'], ',') . ') ';
-			} else {
-				$sqls .= 'USE INDEX (' . $option['useindex'] . ') ';
-			}
-		}
-		if (isset($option['forceindex'])) {
-			if (is_array($option['forceindex'])) {
-				$sqls .= 'FORCE INDEX (' . implode($option['forceindex'], ',') . ') ';
-			} else {
-				$sqls .= 'FORCE INDEX (' . $option['forceindex'] . ') ';
-			}
-		}
-		if (isset($option['ignoreindex'])) {
-			if (is_array($option['ignoreindex'])) {
-				$sqls .= 'IGNORE INDEX (' . implode($option['ignoreindex'], ',') . ') ';
-			} else {
-				$sqls .= 'IGNORE INDEX (' . $option['ignoreindex'] . ') ';
-			}
-		}
-
-		if (!empty($where)) {
-			if (isset($option['changewhere'])) {
-				$sqlw = $this->ParseWhere($where, $option['changewhere']);
-			} else {
-				$sqlw = $this->ParseWhere($where);
-			}
-		}
-
-		if (isset($option['groupby'])) {
-			$sqlg = ' GROUP BY ';
-			$comma = '';
-			if (!is_array($option['groupby'])) {
-				$sqlg .= $option['groupby'];
-			} else {
-				foreach ($option['groupby'] as $k => $v) {
-					$sqlg .= $comma . "$v";
-					$comma = ',';
-				}
-			}
-		}
-
-		if (isset($option['having'])) {
-			$sqlh = ' HAVING ';
-			$comma = '';
-			if (!is_array($option['having'])) {
-				$sqlh .= $option['having'];
-			} else {
-				$sqlh .= $this->ParseWhere($option['having'], '');
-			}
-		}
-
-		if (!empty($order)) {
-			$sqlo .= ' ORDER BY ';
-			$comma = '';
-			if (!is_array($order)) {
-				$sqlo .= $order;
-			} else {
-				foreach ($order as $k => $v) {
-					$sqlo .= $comma . "$k $v";
-					$comma = ',';
-				}
-			}
-		}
-
-		if (!empty($limit)) {
-			if (!is_array($limit)) {
-				$sqll .= " LIMIT $limit";
-			} elseif (!isset($limit[1])) {
-				$sqll .= " LIMIT $limit[0]";
-			} else {
-				if ($limit[1] > 0) {
-					//$sqll .= " LIMIT $limit[0], $limit[1]";
-					$sqll .= " LIMIT $limit[1] OFFSET $limit[0]";
-				}
-			}
+			$sql->column($select);
 		}
 
 		if (!empty($option)) {
 			if (isset($option['pagebar'])) {
 				if ($option['pagebar']->Count === null) {
-					$s2 = $this->Count($table, array(array('COUNT', '*', 'num')), $where);
+					$s2 = $this->Count($table, array(array('*', 'num')), $where);
 					$option['pagebar']->Count = GetValueInArrayByCurrent($this->db->Query($s2), 'num');
 				}
 				$option['pagebar']->Count = (int) $option['pagebar']->Count;
 				$option['pagebar']->make();
 			}
 		}
-		return $sqls . $sqlw . $sqlg . $sqlh . $sqlo . $sqll;
+		$sql = $sql->sql;
+		return $sql;
 	}
 
 	/**
@@ -661,26 +537,8 @@ class DbSql {
 	 */
 	public function Update($table, $keyvalue, $where, $option = null) {
 		$this->ReplacePre($table);
-
-		$sql = "UPDATE $table SET ";
-
-		$comma = '';
-		foreach ($keyvalue as $k => $v) {
-			if (is_null($v)) {
-				continue;
-			}
-
-			$v = $this->db->EscapeString($v);
-			$sql .= $comma . "$k = '$v'";
-			$comma = ' , ';
-		}
-
-		if (isset($option['changewhere'])) {
-			$sql .= $this->ParseWhere($where, $option['changewhere']);
-		} else {
-			$sql .= $this->ParseWhere($where);
-		}
-		return $sql;
+		$sql = new $this->sql($this->db);
+		return $sql->update($table)->data($keyvalue)->where($where)->option($option)->sql;
 	}
 
 	/**
@@ -691,33 +549,8 @@ class DbSql {
 	 */
 	public function Insert($table, $keyvalue) {
 		$this->ReplacePre($table);
-
-		$sql = "INSERT INTO $table ";
-
-		$sql .= '(';
-		$comma = '';
-		foreach ($keyvalue as $k => $v) {
-			if (is_null($v)) {
-				continue;
-			}
-
-			$sql .= $comma . "$k";
-			$comma = ',';
-		}
-		$sql .= ')VALUES(';
-
-		$comma = '';
-		foreach ($keyvalue as $k => $v) {
-			if (is_null($v)) {
-				continue;
-			}
-
-			$v = $this->db->EscapeString($v);
-			$sql .= $comma . "'$v'";
-			$comma = ',';
-		}
-		$sql .= ')';
-		return $sql;
+		$sql = new $this->sql($this->db);
+		return $sql->insert($this->db)->insert($table)->data($keyvalue)->sql;
 	}
 
 	/**
@@ -729,14 +562,8 @@ class DbSql {
 	 */
 	public function Delete($table, $where, $option = null) {
 		$this->ReplacePre($table);
-
-		$sql = "DELETE FROM $table ";
-		if (isset($option['changewhere'])) {
-			$sql .= $this->ParseWhere($where, $option['changewhere']);
-		} else {
-			$sql .= $this->ParseWhere($where);
-		}
-		return $sql;
+		$sql = new $this->sql($this->db);
+		return $sql->delete($this->db)->delete($table)->where($where)->option($option)->sql;
 	}
 
 	/**

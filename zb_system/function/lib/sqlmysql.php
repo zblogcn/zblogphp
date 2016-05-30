@@ -25,6 +25,20 @@ class SQLMySQL {
 	 * @var null|string 数据库类型名称
 	 */
 	private $dbclass = null;
+
+	private function validateParamater($param) {
+		if (is_null($param)) {
+			return false;
+		} else if (is_string($param)) {
+			if ($param == "") {
+				return false;
+			}
+		} else if (is_array($param) && count($param) == 0) {
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * @param object $db
 	 */
@@ -69,7 +83,9 @@ class SQLMySQL {
 	function __get($getName) {
 		$upperKeyword = strtoupper($getName);
 		if ($upperKeyword == "SQL") {
-			return $this->sql();
+			$ret = $this->sql();
+			$this->reset();
+			return $ret;
 		}
 		return $this->$getName;
 	}
@@ -84,10 +100,18 @@ class SQLMySQL {
 	}
 
 	function option($option) {
+		if (!$this->validateParamater($option)) {
+			return $this;
+		}
+
 		$this->option = array_merge_recursive($this->option, array_change_key_case($option, CASE_LOWER));
 		return $this;
 	}
 	function column($columns) {
+		if (!$this->validateParamater($columns)) {
+			return $this;
+		}
+
 		if (is_array($columns)) {
 			$this->columns = array_merge($this->columns, $columns);
 		} else {
@@ -101,16 +125,22 @@ class SQLMySQL {
 	 * @example limit(array(5, 10))
 	 */
 	function limit() {
+
 		if (func_num_args() == 2) {
-			$this->option['limit'] = func_get_arg(0);
-			$this->option['offset'] = func_get_arg(1);
+			$this->option['limit'] = func_get_arg(1);
+			$this->option['offset'] = func_get_arg(0);
 		} else if (func_num_args() == 1) {
 			$arg = func_get_arg(0);
-			if (is_array($arg)) {
+
+			if (!$this->validateParamater($arg)) {
+				return $this;
+			} else if (is_array($arg)) {
 				if (count($arg) == 2) {
-					$this->option['offset'] = $arg[1];
+					$this->option['offset'] = $arg[0];
+					$this->option['limit'] = $arg[1];
+				} else {
+					$this->option['limit'] = $arg[0];
 				}
-				$this->option['limit'] = $arg[0];
 			} else {
 				$this->option['limit'] = $arg;
 			}
@@ -118,15 +148,39 @@ class SQLMySQL {
 		return $this;
 	}
 	function where() {
-		$this->where = array_merge_recursive($this->where, func_get_args());
+		$where = func_num_args() == 1 ? func_get_arg(0) : func_get_args();
+		if (!$this->validateParamater($where)) {
+			return $this;
+		}
+		// array(array(array('=', 'a', 'b'), array('=', 'a', 'b')))
+		// array(array(array('=', 'a', 'b')))
+		// array(array('=', 'a', 'b'), array('=', 'a', 'b'))
+		// array(array('=', 'a', 'b'))
+
+		if (is_array($where[0])) {
+			if (count($where) == 1) {
+				if (is_array($where[0][0])) {
+					$where = $where[0];
+				}
+			}
+		} else {
+			$where = array($where);
+		}
+		$this->where = array_merge_recursive($this->where, $where);
 		return $this;
 	}
 	function having() {
+		if (!$this->validateParamater(func_get_arg(0))) {
+			return $this;
+		}
+
 		$this->having = array_merge_recursive($this->having, func_get_args());
 		return $this;
 	}
 	function groupBy($groupBy) {
-		if (is_array($groupBy)) {
+		if (!$this->validateParamater($groupBy)) {
+			return $this;
+		} else if (is_array($groupBy)) {
 			$this->groupBy = array_merge($this->groupBy, $groupBy);
 		} else {
 			$this->groupBy[] = $groupBy;
@@ -134,16 +188,25 @@ class SQLMySQL {
 		return $this;
 	}
 	/**
+	 * @example orderBy(array(array('bbb' => 'desc'), 'aaa'))
 	 * @example orderBy(array('bbb' => 'desc'), 'aaa')
 	 * @example orderBy('aaaa')
 	 * @example orderBy(array('a', 'b', 'c'))
 	 */
 	function orderBy() {
-		$order = func_num_args() == 1 ? func_get_arg(0) : func_get_args();
-		if (!is_array($order)) {
-			$this->orderBy[$order] = '';
-			return $this;
+		$order = func_get_args();
+
+		if (count($order) == 1) {
+			if (isset($order[0]) && is_array($order[0])) {
+				$order = $order[0];
+			} else if (!$this->validateParamater($order[0])) {
+				return $this;
+			}
 		}
+		if (count($order) == 1 && !isset($order[0])) {
+			$order = array($order);
+		}
+
 		foreach ($order as $key => $value) {
 			$ret = $value;
 			if (!is_array($ret)) {
@@ -154,9 +217,12 @@ class SQLMySQL {
 		return $this;
 	}
 	function data() {
-		foreach ((func_num_args() == 1 ? func_get_arg(0) : func_get_args()) as $key => $value) {
-			$this->data = array_merge_recursive($this->data, $value);
+		$data = func_num_args() == 1 ? func_get_arg(0) : func_get_args();
+		if (!$this->validateParamater($data)) {
+			return $this;
 		}
+		$this->data = array_merge_recursive($this->data, $data);
+
 		return $this;
 	}
 	function query($sql = null) {
@@ -177,6 +243,7 @@ class SQLMySQL {
 		$sql = &$this->_sql;
 		$table = &$this->table;
 		$tableData = array();
+
 		if (is_string($table)) {
 			$sql[] = $table;
 			return;
@@ -210,13 +277,11 @@ class SQLMySQL {
 	}
 	private function buildWhere($originalWhere = null, $whereKeyword = null) {
 		$sql = &$this->_sql;
-
-		$sql[] = is_null($whereKeyword) ? $this->option['whereKeyword'] : $whereKeyword;
 		$where = is_null($originalWhere) ? $this->where : $originalWhere;
 		if (count($where) == 0) {
 			return;
 		}
-
+		$sql[] = is_null($whereKeyword) ? $this->option['whereKeyword'] : $whereKeyword;
 		$whereData = array();
 		foreach ($where as $index => $value) {
 
@@ -229,22 +294,22 @@ class SQLMySQL {
 			if (in_array($eq, array('=', '<>', '>', '<', '>=', '<=', 'NOT LIKE', 'LIKE', 'ILIKE', 'NOT ILIKE'))) {
 				$x = (string) $value[1];
 				$y = $this->db->EscapeString((string) $value[2]);
-				$whereData[] = " $x $eq '$y' ";
+				$whereData[] = " `$x` $eq '$y' ";
 			} else if ($eq == 'EXISTS' || $eq == 'NOT EXISTS') {
 				if (!isset($value[2])) {
 					$whereData[] = " $eq ( $value[1] ) ";
 				} else {
-					$whereData[] = " (( $value[1] $eq $value[2] )) ";
+					$whereData[] = " (( `$value[1]` $eq $value[2] )) ";
 				}
 			} else if ($eq == 'BETWEEN') {
-				$whereData[] = " ($value[1] BETWEEN '$value[2]' AND '$value[3]') ";
+				$whereData[] = " (`$value[1]` BETWEEN '$value[2]' AND '$value[3]') ";
 			} else if ($eq == 'SEARCH') {
 				$searchCount = count($value);
 				$sqlSearch = array();
 				for ($i = 1; $i <= $j - 1 - 1; $i++) {
 					$x = (string) $value[$i];
 					$y = $this->db->EscapeString((string) $value[$j - 1]);
-					$sqlSearch[] = " ($x LIKE '%$y%') ";
+					$sqlSearch[] = " (`$x` LIKE '%$y%') ";
 				}
 				$whereData[] = " ((1 = 1) AND (" . implode(' OR ', $sqlSearch) . ') )';
 			} else if ($eq == 'ARRAY' || $eq == 'NOT ARRAY' || $eq == "LIKE ARRAY") {
@@ -267,7 +332,7 @@ class SQLMySQL {
 				}
 				foreach ($value[1] as $x => $y) {
 					$y[1] = $this->db->EscapeString($y[1]);
-					$sqlArray[] = " $y[0] $symbol '$y[1]' ";
+					$sqlArray[] = " `$y[0]` $symbol '$y[1]' ";
 				}
 				$whereData[] = " ((1 = 1) AND (" . implode(' OR ', $sqlArray) . ') )';
 			} else if ($eq == 'IN' || $eq == 'NOT IN') {
@@ -285,7 +350,7 @@ class SQLMySQL {
 					$y = $this->db->EscapeString($y);
 					$sqlArray[] = " '$y' ";
 				}
-				$whereData[] = " ((1 = 1) AND ($value[1] $eq (" . implode(', ', $sqlArray) . ') ) )';
+				$whereData[] = " ((1 = 1) AND (`$value[1]` $eq (" . implode(', ', $sqlArray) . ') ) )';
 
 			} else if ($eq == 'META_NAME') {
 				if (count($value) != 3) {
@@ -293,17 +358,19 @@ class SQLMySQL {
 				}
 				$sqlMeta = 's:' . strlen($value[2]) . ':"' . $value[2] . '";';
 				$sqlMeta = $this->db->EscapeString($sqlMeta);
-				$whereData[] = "($value[1] LIKE '%$sqlMeta%')";
+				$whereData[] = "(`$value[1]` LIKE '%$sqlMeta%')";
 			} else if ($eq == 'META_NAMEVALUE') {
-				if (count($w) == 4) {
+				if (count($value) == 4) {
 					$sqlMeta = 's:' . strlen($value[2]) . ':"' . $value[2] . '";' . 's:' . strlen($value[3]) . ':"' . $value[3] . '"';
 					$sqlMeta = $this->db->EscapeString($sqlMeta);
-					$whereData[] = "($value[1] LIKE '%$sqlMeta%')";
-				} elseif (count($w) == 5) {
+					$whereData[] = "(`$value[1]` LIKE '%$sqlMeta%')";
+				} elseif (count($value) == 5) {
 					$sqlMeta = 's:' . strlen($value[2]) . ':"' . $value[2] . '";' . $value[3];
 					$sqlMeta = $this->db->EscapeString($sqlMeta);
-					$whereData[] = "($value[1] LIKE '%$sqlMeta%')";
+					$whereData[] = "(`$value[1]` LIKE '%$sqlMeta%')";
 				}
+			} else if ($eq == "CUSTOM") {
+				$whereData[] = $value[1];
 			}
 		}
 		$sql[] = implode(' AND ', $whereData);
@@ -316,6 +383,7 @@ class SQLMySQL {
 
 		$sql[] = "ORDER BY";
 		$orderByData = array();
+
 		foreach ($this->orderBy as $key => $value) {
 			$orderByData[] = "$key $value";
 		}
@@ -421,6 +489,7 @@ class SQLMySQL {
 			$updateData[] = "$index = '$value'";
 		}
 		$sql[] = implode(', ', $updateData);
+		$this->buildWhere();
 		return $sql;
 	}
 	private function buildDelete() {
@@ -441,10 +510,10 @@ class SQLMySQL {
 			}
 
 			$v = $this->db->EscapeString($value);
-			$keyData[] = $key;
+			$keyData[] = "`$key`";
 			$valueData[] = " '$v' ";
 		}
-		$sql[] = implode($keyData, ',');
+		$sql[] = '(' . implode($keyData, ',') . ')';
 		$sql[] = ' VALUES (';
 		$sql[] = implode($valueData, ',');
 		$sql[] = ')';
