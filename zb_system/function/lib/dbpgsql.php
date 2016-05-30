@@ -8,6 +8,7 @@
 class DbPgSQL implements iDataBase {
 
 	public $type = 'pgsql';
+	public $version = '';
 
 	/**
 	 * @var string|null 数据库名前缀
@@ -67,6 +68,8 @@ class DbPgSQL implements iDataBase {
 		} else {
 			$this->dbpre = $array[4];
 			$this->db = $db_link;
+			$v = pg_version($db_link);
+			$this->version = $v['client'];
 			return true;
 		}
 	}

@@ -8,6 +8,7 @@
 class DbMySQLi implements iDataBase {
 
 	public $type = 'mysql';
+	public $version = '';
 
 	/**
 	 * @var string|null 数据库名前缀
@@ -67,8 +68,8 @@ class DbMySQLi implements iDataBase {
 		if (@mysqli_real_connect($db, $array[0], $array[1], $array[2], $array[3], $array[5])) {
 			
 			$myver = mysqli_get_server_info($db);
-			$myver = substr($myver, 0, strpos($myver, "-"));
-			if(version_compare($myver,'5.5.3')>=0){
+			$this->version = substr($myver, 0, strpos($myver, "-"));
+			if(version_compare($this->version,'5.5.3')>=0){
 				$u="utf8mb4";
 			}else{
 				$u="utf8";

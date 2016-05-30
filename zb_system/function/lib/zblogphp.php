@@ -140,6 +140,10 @@ class ZBlogPHP {
 	 */
 	public $theme = null;
 	/**
+	 * @var array() 当前主题版本信息
+	 */
+	public $themeinfo = array();	
+	/**
 	 * @var null 当前主题风格
 	 */
 	public $style = null;
@@ -704,6 +708,11 @@ class ZBlogPHP {
 				$this->ShowError(67, __FILE__, __LINE__);
 			}
 			break;
+		}
+		//add utf8mb4
+		if( $this->db->type =='mysql' && version_compare($this->db->version,'5.5.3')<0 ){
+			Add_Filter_Plugin('Filter_Plugin_DbSql_Filter', 'utf84mb_filter');
+			Add_Filter_Plugin('Filter_Plugin_Edit_Begin', 'utf84mb_fixHtmlSpecialChars');
 		}
 		$this->isconnected = true;
 		return true;
@@ -1543,6 +1552,7 @@ class ZBlogPHP {
 		$this->templatetags['name'] = htmlspecialchars($this->name);
 		$this->templatetags['subname'] = htmlspecialchars($this->subname);
 		$this->templatetags['theme'] = &$this->theme;
+		$this->templatetags['themeinfo'] = &$this->themeinfo;
 		$this->templatetags['style'] = &$this->style;
 		$this->templatetags['language'] = $this->option['ZC_BLOG_LANGUAGE'];
 		$this->templatetags['copyright'] = $this->option['ZC_BLOG_COPYRIGHT'];
@@ -1640,6 +1650,11 @@ class ZBlogPHP {
 		$files = GetFilesInDir($dir, 'php');
 		foreach ($files as $sortname => $fullname) {
 			$this->templates[$sortname] = file_get_contents($fullname);
+		}
+		//读版本号
+		$app = new App;
+		if ($app->LoadInfoByXml('theme', $this->theme) == true) {
+			$this->themeinfo = $app->GetInfoArray();
 		}
 
 		for ($i = 2; $i <= 5; $i++) {

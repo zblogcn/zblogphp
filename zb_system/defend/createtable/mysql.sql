@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS %pre%post (
   log_Template varchar(50) NOT NULL DEFAULT '',
   log_Meta longtext NOT NULL,
   PRIMARY KEY (log_ID),
-  KEY %pre%log_TPISC (log_Type,log_PostTime,log_IsTop,log_Status,log_CateID)
+  KEY %pre%log_TPISC (log_Type,log_PostTime,log_IsTop,log_Status,log_CateID),
+  KEY %pre%log_VTSC (log_ViewNums,log_Type,log_Status,log_CateID)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 

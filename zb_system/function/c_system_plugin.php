@@ -148,7 +148,9 @@ function RemovePluginFilter($strPluginFilter) {
  */
 function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSIGNAL_NONE) {
 	if (isset($GLOBALS['hooks'][$plugname])) {
-		$GLOBALS['hooks'][$plugname][$functionname] = $exitsignal;
+		if (!isset($GLOBALS['hooks'][$plugname][$functionname])) {
+			$GLOBALS['hooks'][$plugname][$functionname] = $exitsignal;
+		}
 	}
 }
 
