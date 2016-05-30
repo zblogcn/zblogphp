@@ -142,7 +142,7 @@ class ZBlogPHP {
 	/**
 	 * @var array() 当前主题版本信息
 	 */
-	public $themeinfo = array();	
+	public $themeinfo = array();
 	/**
 	 * @var null 当前主题风格
 	 */
@@ -710,7 +710,7 @@ class ZBlogPHP {
 			break;
 		}
 		//add utf8mb4
-		if( $this->db->type =='mysql' && version_compare($this->db->version,'5.5.3')<0 ){
+		if ($this->db->type == 'mysql' && version_compare($this->db->version, '5.5.3') < 0) {
 			Add_Filter_Plugin('Filter_Plugin_DbSql_Filter', 'utf84mb_filter');
 			Add_Filter_Plugin('Filter_Plugin_Edit_Begin', 'utf84mb_fixHtmlSpecialChars');
 		}
@@ -2070,21 +2070,6 @@ class ZBlogPHP {
 		return $this->GetListType('Upload', $sql);
 	}
 
-	/**
-	 * @param null $select
-	 * @param null $where
-	 * @param null $order
-	 * @param null $limit
-	 * @param null $option
-	 * @return array
-	 */
-	public function GetCounterList($select = null, $where = null, $order = null, $limit = null, $option = null) {
-
-		if (empty($select)) {$select = array('*');}
-		$sql = $this->db->sql->Select($this->table['Counter'], $select, $where, $order, $limit, $option);
-		return $this->GetListType('Counter', $sql);
-	}
-
 ################################################################################################################
 	#wp类似
 
@@ -2374,15 +2359,6 @@ class ZBlogPHP {
 	 */
 	public function GetUploadByID($id) {
 		return $this->GetSomeThing('', 'id', $id, 'Upload');
-	}
-
-	/**
-	 * 通过ID获取审计类实例
-	 * @param int $id
-	 * @return Counter
-	 */
-	public function GetCounterByID($id) {
-		return $this->GetSomeThing('', 'id', $id, 'Counter');
 	}
 
 	/**

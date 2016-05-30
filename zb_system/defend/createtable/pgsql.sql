@@ -70,22 +70,6 @@ CREATE TABLE %pre%config (
 ) ;
 CREATE INDEX %pre%config_ix_id ON %pre%config(conf_ID);
 
-CREATE SEQUENCE %pre%counter_seq;
-CREATE TABLE %pre%counter (
- coun_ID INT NOT NULL DEFAULT nextval('%pre%counter_seq'),
- coun_MemID integer NOT NULL DEFAULT '0',
- coun_IP varchar(15) NOT NULL DEFAULT '',
- coun_Agent text NOT NULL,
- coun_Refer varchar(255) NOT NULL DEFAULT '',
- coun_Title varchar(255) NOT NULL DEFAULT '',
- coun_PostTime integer NOT NULL DEFAULT '0',
- coun_Description text NOT NULL,
- coun_PostData text NOT NULL,
- coun_AllRequestHeader text NOT NULL,
-  PRIMARY KEY (coun_ID)
-) ;
-CREATE INDEX %pre%counter_ix_id ON %pre%counter(coun_ID);
-
 CREATE SEQUENCE %pre%member_seq;
 CREATE TABLE %pre%member (
  mem_ID INT NOT NULL DEFAULT nextval('%pre%member_seq'),
