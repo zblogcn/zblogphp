@@ -27,7 +27,6 @@
 /zb_users/plugin/*
 !/zb_users/plugin/api
 !/zb_users/plugin/AdminColor
-!/zb_users/plugin/AppCentre
 !/zb_users/plugin/AuditRecords
 !/zb_users/plugin/AutoPublisher
 !/zb_users/plugin/CloudStorage
