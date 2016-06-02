@@ -2925,10 +2925,14 @@ class ZBlogPHP {
 	/**
 	 * 获取已激活插件名数组
 	 */
-	public function GetActivePlugin() {
+	public function GetActivedPlugin() {
 		$ap = explode("|", $this->option['ZC_USING_PLUGIN_LIST']);
 		$ap = array_unique($ap);
 		return $ap;
+	}
+	public function GetActivePlugin() {
+		// 错别字函数
+		return $this->GetActivedPlugin();
 	}
 
 	/**

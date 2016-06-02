@@ -7,54 +7,6 @@
  */
 
 /**
- * Operation System
- */
-define('SYSTEM_UNKNOWN', 0);
-define('SYSTEM_WINDOWS', 1);
-define('SYSTEM_UNIX', 2);
-define('SYSTEM_LINUX', 3);
-define('SYSTEM_DARWIN', 4);
-define('SYSTEM_CYGWIN', 5);
-define('SYSTEM_BSD', 6);
-define('PHP_SYSTEM', GetSystem());
-// Compatibility
-define('IS_WINDOWS', PHP_SYSTEM === SYSTEM_WINDOWS);
-define('IS_UNIX', PHP_SYSTEM === SYSTEM_UNIX);
-define('IS_LINUX', PHP_SYSTEM === SYSTEM_LINUX);
-define('IS_DARWIN', PHP_SYSTEM === SYSTEM_DARWIN);
-define('IS_CYGWIN', PHP_SYSTEM === SYSTEM_CYGWIN);
-define('IS_BSD', PHP_SYSTEM === SYSTEM_BSD);
-
-define('IS_X64', (PHP_INT_SIZE === 8));
-
-/**
- * Web Server
- */
-define('SERVER_UNKNOWN', 0);
-define('SERVER_APACHE', 1);
-define('SERVER_IIS', 2);
-define('SERVER_NGINX', 3);
-define('SERVER_LIGHTTPD', 4);
-define('SERVER_KANGLE', 5);
-define('PHP_SERVER', GetWebServer());
-// Compatibility
-define('IS_APACHE', PHP_SERVER === SERVER_APACHE);
-define('IS_IIS', PHP_SERVER === SERVER_IIS);
-define('IS_NGINX', PHP_SERVER === SERVER_NGINX);
-define('IS_LIGHTTPD', PHP_SERVER === SERVER_LIGHTTPD);
-define('IS_KANGLE', PHP_SERVER === PHP_SERVER);
-/**
- * PHP Engine
- */
-define('ENGINE_PHP', 1);
-define('ENGINE_HHVM', 2);
-define('PHP_ENGINE', GetPHPEngine());
-// Compatibility
-define('IS_HHVM', PHP_ENGINE === ENGINE_HHVM);
-
-define('HTTP_SCHEME', GetScheme($_SERVER));
-
-/**
  * 得到请求方法
  * @param $array
  * @return $string
@@ -1315,7 +1267,6 @@ function CheckCanBeString($obj) {
 
 	return is_scalar($obj);
 }
-
 
 function utf84mb_filter(&$sql) {
 	$sql = preg_replace_callback("/[\x{10000}-\x{10FFFF}]/u", 'utf84mb_convertToUCS4', $sql);

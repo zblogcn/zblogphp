@@ -40,21 +40,6 @@ function RegisterPlugin($strPluginName, $strPluginActiveFunction) {
 }
 
 /**
- * 激活插件，运行插件激活时加载的函数
- * @return void
- */
-function ActivePlugin() {
-
-	foreach ($GLOBALS['plugins'] as &$sPluginActiveFunctions) {
-		if (function_exists($sPluginActiveFunctions)) {
-			$sPluginActiveFunctions();
-		}
-
-	}
-
-}
-
-/**
  * 插件安装函数，只在插件安装时运行一次
  * @param string $strPluginName 插件ID
  * @return void
@@ -189,7 +174,6 @@ DefinePluginFilter('Filter_Plugin_Debug_Handler');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Debug_Display');
-
 
 /*
 '**************************************************<
