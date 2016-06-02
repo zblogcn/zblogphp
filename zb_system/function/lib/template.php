@@ -310,7 +310,7 @@ class Template {
 	 * @return string
 	 */
 	private function parse_vars_replace_dot($matches) {
-		if (strpos($matches[1], '=') === false) {
+		if (strpos($matches[1], '=') === false || strpos($matches[1], '=>') !== false) {
 			return '{php} echo $' . $this->replace_dot($matches[1]) . '; {/php}';
 		} else {
 			return '{php} $' . $this->replace_dot($matches[1]) . '; {/php}';
