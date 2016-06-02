@@ -207,7 +207,7 @@ class Networkfsockopen implements iNetwork {
 			$url .= "?" . $this->parsed_url["query"];
 		}
 		fwrite($socket,
-			$url . ' HTTP/1.0' . "\r\n"// Not support 100 Continue
+			$url . ' HTTP/1.0' . "\r\n" // Not support 100 Continue
 		);
 		fwrite($socket, $this->option['header'] . "\r\n");
 		fwrite($socket, "\r\n");
@@ -430,7 +430,7 @@ class Networkfsockopen implements iNetwork {
 		$this->errstr = '';
 		$this->errno = 0;
 
-		$this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $zbp->cache->system_environment . ') Z-BlogPHP/' . ZC_BLOG_VERSION);
+		$this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $zbp->cache->system_environment . ') Z-BlogPHP/' . ZC_VERSION);
 		$this->setMaxRedirs(1);
 	}
 

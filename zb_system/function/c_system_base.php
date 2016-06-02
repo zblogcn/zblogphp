@@ -22,10 +22,11 @@ define('ZC_VERSION_BUILD', '0');
 define('ZC_VERSION_COMMIT', '1400');
 define('ZC_VERSION_CODENAME', 'Deeplue');
 define('ZC_VERSION', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . '.' . ZC_VERSION_BUILD . '.' . ZC_VERSION_COMMIT);
-define('ZC_VERSION_DISPLAY', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR);
+define('ZC_VERSION_DISPLAY', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . ' ' . ZC_VERSION_CODENAME);
 define('ZC_VERSION_FULL', ZC_VERSION . '(' . ZC_VERSION_CODENAME . ')');
-define('ZC_BLOG_VERSION', '150101'); // 兼容原策略，但此值不再更新
-$blogversion = ZC_BLOG_VERSION;
+define('ZC_BLOG_VERSION', ZC_VERSION_DISPLAY); // 原变量名
+define('ZC_BLOG_COMMIT', ZC_VERSION_COMMIT); // 为写入系统配置统一风格
+$blogversion = 150101;
 
 /**
  * 加载系统基础函数

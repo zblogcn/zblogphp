@@ -339,7 +339,7 @@ class Networkfile_get_contents implements iNetwork {
 		$this->postdata = array();
 		$this->httpheader = array();
 		$this->responseHeader = array();
-		$this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $zbp->cache->system_environment . ') Z-BlogPHP/' . ZC_BLOG_VERSION);
+		$this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $zbp->cache->system_environment . ') Z-BlogPHP/' . ZC_VERSION);
 		$this->setMaxRedirs(1);
 	}
 

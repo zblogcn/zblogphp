@@ -293,7 +293,7 @@ function LargeData_Misc_Statistic() {
 
 	$xmlrpc_address = $zbp->host . 'zb_system/xml-rpc/';
 	$current_member = $zbp->user->Name;
-	$current_version = $zbp->option['ZC_BLOG_VERSION'];
+	$current_version = ZC_VERSION_FULL;
 
 	$all_artiles = GetValueInArrayByCurrent($zbp->db->Query($zbp->db->sql->Select($zbp->table['Post'], 'Count(log_ID) AS num', array(array('=', 'log_Type', '0')), null, 1, null)), 'num');
 	$all_pages = GetValueInArrayByCurrent($zbp->db->Query($zbp->db->sql->Select($zbp->table['Post'], 'Count(log_ID) AS num', array(array('=', 'log_Type', '1')), null, 1, null)), 'num');
