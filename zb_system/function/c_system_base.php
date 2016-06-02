@@ -13,13 +13,25 @@ ob_start();
 define('ZBP_PATH', rtrim(str_replace('\\', '/', realpath(dirname(__FILE__) . '/../../')), '/') . '/');
 defined('ZBP_HOOKERROR') || define('ZBP_HOOKERROR', true);
 
-#引入必备 {接口,调试,通用函数,事件处理}
+// 定义版本号
+define('ZC_VERSION_MAJOR', '1');
+define('ZC_VERSION_MINOR', '5');
+define('ZC_VERSION_BUILD', '0');
+define('ZC_VERSION_COMMIT', '1400');
+define('ZC_VERSION_CODENAME', 'Deeplue');
+define('ZC_VERSION', ZC_VERSION_MAJOR . '.' ZC_VERSION_MINOR . '.' . ZC_VERSION_BUILD . '.' . ZC_VERSION_COMMIT);
+define('ZC_VERSION_DISPLAY', ZC_VERSION_MAJOR . '.' ZC_VERSION_MINOR);
+define('ZC_VERSION_FULL', ZC_VERSION . '(' . ZBP_VERSION_CODENAME . ')');
+define('ZC_BLOG_VERSION', '150101'); // 兼容原策略，但此值不再更新
+$blogversion = ZC_BLOG_VERSION;
+
+// 加载系统基础函数
 require ZBP_PATH . 'zb_system/function/c_system_plugin.php';
 require ZBP_PATH . 'zb_system/function/c_system_debug.php';
 require ZBP_PATH . 'zb_system/function/c_system_common.php';
 require ZBP_PATH . 'zb_system/function/c_system_event.php';
 
-#系统预处理
+// 系统预处理
 spl_autoload_register('AutoloadClass');
 
 if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
@@ -38,7 +50,7 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
 	_stripslashes($_REQUEST);
 }
 
-#初始化统计信息
+// 初始化统计信息
 $_SERVER['_start_time'] = microtime(true); //RunTime
 $_SERVER['_query_count'] = 0;
 $_SERVER['_memory_usage'] = 0;
@@ -47,45 +59,7 @@ if (function_exists('memory_get_usage')) {
 	$_SERVER['_memory_usage'] = memory_get_usage(true);
 }
 
-#定义版本号列
-$zbpvers = array();
-$zbpvers['130707'] = '1.0 Beta Build 130707';
-$zbpvers['131111'] = '1.0 Beta2 Build 131111';
-$zbpvers['131221'] = '1.1 Taichi Build 131221';
-$zbpvers['140220'] = '1.2 Hippo Build 140220';
-$zbpvers['140614'] = '1.3 Wonce Build 140614';
-$zbpvers['150101'] = '1.4 Deeplue Build 150101';
-$zbpvers['150601'] = '1.5 Beta Build 150601';
-
-#定义常量
-
-/**
- *ZBLOGPHP版本号和比较函数
- */
-define('ZC_BLOG_VERSION', end($zbpvers));
-$blogversion = key($zbpvers);
-define('ZBP_VERSION', $blogversion);
-function zbp_version_compare($version1, $version2) {
-	return (float) $version1 - (float) $version2;
-}
-function zbpversion($appid = '') {
-	global $zbp;
-	if ($appid === '') {
-		return ZBP_VERSION;
-	}
-
-	$app = $zbp->LoadApp('plugin', $appid);
-	if ($app->id === $appid) {
-		return $app->version;
-	}
-
-	$app = $zbp->LoadApp('theme', $appid);
-	if ($app->id === $appid) {
-		return $app->version;
-	}
-
-	return 0;
-}
+// 定义常量
 
 /**
  *文章类型
@@ -100,7 +74,7 @@ define('ZC_POST_TYPE_VIDEO', 6); // 视频
 define('ZC_POST_TYPE_PHOTO', 7); // 照片
 define('ZC_POST_TYPE_ALBUM', 8); // 相册
 
-#定义类型序列{id=>{name,url,template}}
+// 定义类型序列{id=>{name,url,template}}
 $posttype = array(
 	array('article', '', ''),
 	array('page', '', ''),
