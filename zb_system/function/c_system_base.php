@@ -413,7 +413,7 @@ $activedApps = array();
 $activeapps = &$activedApps;
 
 InitializeOption();
-$blogtitle = &$option['ZC_BLOG_SUBNAME'];
+$blogtitle = $option['ZC_BLOG_SUBNAME'];
 $blogname = &$option['ZC_BLOG_NAME'];
 $blogsubname = &$option['ZC_BLOG_SUBNAME'];
 $blogtheme = &$option['ZC_BLOG_THEME'];
