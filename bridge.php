@@ -1,16 +1,23 @@
 <?php
 require './zb_system/function/c_system_base.php';
-$method = $_SERVER['REQUEST_METHOD'];
-$network = Network::Create();
-$network->open($method, $_GET['url']);
-$network->setRequestHeader("auth_bizcode", $_SERVER['HTTP_AUTH_BIZCODE']);
-$network->setRequestHeader("auth_guid", $_SERVER['HTTP_AUTH_GUID']);
-$network->setRequestHeader("auth_timestamp", $_SERVER['HTTP_AUTH_TIMESTAMP']);
-$network->setRequestHeader("auth_token", $_SERVER['HTTP_AUTH_TOKEN']);
-if (strtoupper($method) == "POST") {
-	$network->setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	$network->send(http_build_query($_POST));
-} else {
-	$network->send();
-}
-echo $network->responseText;
+
+$zbp->Load();
+
+$fuck = new SQLMySQL($zbp->db);
+/*
+echo $fuck
+->select("zbp_post")
+->count('log_id', 'countid')
+->count(array('*', 'fuck'))
+->max('log_id')
+->where(array('=', 'log_ID', "1"))
+->where(array('LIKE', 'log_Title', '%哈%'))
+->having(array('=', 'log_ID', '1'))
+->orderBy(array('fuck' => 'desc'), 'aaa')
+->orderBy('aaaa')
+->orderBy(array('a', 'b', 'c'))
+->groupBy("log_Id")
+->limit(array(5, 10))
+->sql;
+*/
+echo $fuck->create($zbp->table['Post'],$zbp->datainfo['Post'])->sql;

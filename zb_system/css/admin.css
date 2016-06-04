@@ -52,7 +52,7 @@ input[type="checkbox"] { margin: 8px 0 0 0; padding: 0; }
 #edtPassWord { float: left; width: 173px; height: 2.4em; padding: 0.1em 5px; line-height: 2.4em; }
 .button { float: right; color: #ffffff; font-size: 14px; width: 70px; height: 32px; background: #3a6ea5; border: 1px solid #3399CC; cursor: pointer; }
 .button:hover { color: #ffffff; background: #3399cc; cursor: pointer; }
-.divHeader { height: 1.5em; font-weight: blod; line-height: 1.5em; font-size: 1.5em; padding: 0 0 10px 0; background: #FFF; text-align: center; }
+.divHeader { height: auto; font-weight: blod; line-height: 1.5em; font-size: 1.5em; padding: 0 0 10px 0; background: #FFF; text-align: center; }
 body.short .bg { height: 150px; }
 body.short .logo { height: 50px; margin: 60px auto 60px auto; }
 .loginw { width: 700px; margin-bottom: 120px; }

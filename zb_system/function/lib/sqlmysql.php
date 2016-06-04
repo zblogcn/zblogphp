@@ -17,7 +17,9 @@ class SQLMySQL extends SQLGlobal {
 	 * @todo
 	 * @override
 	 */
-	private function buildCreate() {
+	protected function buildCreate() {
+		//die;
+		//parent::buildCreate();
 		$sql = &$this->_sql;
 		$sql[] = 'TABLE IF NOT EXISTS';
 		$this->buildTable();

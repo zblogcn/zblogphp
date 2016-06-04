@@ -272,11 +272,12 @@ class SQLGlobal {
 		$sql = &$this->_sql;
 		$sql = array("$this->method");
 		$callableMethod = 'build' . ucfirst($this->method);
+		echo get_class($this) . '<br/>';
 		$this->$callableMethod();
 		return implode(' ', $sql);
 	}
 
-	private function buildTable() {
+	protected function buildTable() {
 		$sql = &$this->_sql;
 		$table = &$this->table;
 		$tableData = array();
@@ -299,7 +300,7 @@ class SQLGlobal {
 		}
 		$sql[] = implode($tableData, ", ");
 	}
-	private function buildColumn() {
+	protected function buildColumn() {
 		$sql = &$this->_sql;
 		$columns = &$this->columns;
 		if (count($columns) > 0) {
@@ -312,7 +313,7 @@ class SQLGlobal {
 			$sql[] = "*";
 		}
 	}
-	private function buildWhere($originalWhere = null, $whereKeyword = null) {
+	protected function buildWhere($originalWhere = null, $whereKeyword = null) {
 		$sql = &$this->_sql;
 		$where = is_null($originalWhere) ? $this->where : $originalWhere;
 		if (count($where) == 0) {
@@ -412,7 +413,7 @@ class SQLGlobal {
 		}
 		$sql[] = implode(' AND ', $whereData);
 	}
-	private function buildOrderBy() {
+	protected function buildOrderBy() {
 		$sql = &$this->_sql;
 		if (count($this->orderBy) == 0) {
 			return;
@@ -429,10 +430,10 @@ class SQLGlobal {
 	/**
 	 * @todo
 	 */
-	private function buildJoin() {
+	protected function buildJoin() {
 		$sql = &$this->_sql;
 	}
-	private function buildGroupBy() {
+	protected function buildGroupBy() {
 		$sql = &$this->_sql;
 		if (count($this->groupBy) == 0) {
 			return;
@@ -445,7 +446,7 @@ class SQLGlobal {
 		}
 		$sql[] = implode(', ', $groupByData);
 	}
-	private function buildHaving() {
+	protected function buildHaving() {
 		$sql = &$this->_sql;
 		if (count($this->having) == 0) {
 			return;
@@ -454,7 +455,7 @@ class SQLGlobal {
 		$sql[] = "HAVING";
 		$this->buildWhere($this->having, ' ');
 	}
-	private function buildLimit() {
+	protected function buildLimit() {
 		$sql = &$this->_sql;
 
 		if (isset($this->option['limit'])) {
@@ -467,11 +468,11 @@ class SQLGlobal {
 	/**
 	 * @todo
 	 **/
-	private function buildPagebar() {
+	protected function buildPagebar() {
 
 	}
 
-	private function buildSelect() {
+	protected function buildSelect() {
 		$sql = &$this->_sql;
 		if (isset($this->option['sql_no_cache'])) {
 			$sql[] = 'SQL_NO_CACHE ';
@@ -513,7 +514,7 @@ class SQLGlobal {
 		$this->buildOrderBy();
 		$this->buildLimit();
 	}
-	private function buildUpdate() {
+	protected function buildUpdate() {
 		$sql = &$this->_sql;
 		$sql[] = $this->buildTable();
 		$sql[] = 'SET';
@@ -529,13 +530,13 @@ class SQLGlobal {
 		$this->buildWhere();
 		return $sql;
 	}
-	private function buildDelete() {
+	protected function buildDelete() {
 		$sql = &$this->_sql;
 		$sql[] = 'FROM';
 		$this->buildTable();
 		$this->buildWhere();
 	}
-	private function buildInsert() {
+	protected function buildInsert() {
 		$sql = &$this->_sql;
 		$sql[] = 'INTO';
 		$this->buildTable();
@@ -556,7 +557,7 @@ class SQLGlobal {
 		$sql[] = ')';
 	}
 
-	private function buildDrop() {
+	protected function buildDrop() {
 		$sql = &$this->_sql;
 		$sql[] = 'TABLE';
 		$this->buildTable();
@@ -565,10 +566,9 @@ class SQLGlobal {
 	/**
 	 * @todo
 	 */
-	private function buildCreate() {
+	protected function buildCreate() {
 		$sql = &$this->_sql;
 		$sql[] = 'TABLE';
-
 	}
 
 }
