@@ -18,6 +18,9 @@ class SQLMySQL extends SQLGlobal {
 	 * @override
 	 */
 	protected function buildCreate() {
+var_dump($this->data);
+//return ;
+
 		//die;
 		//parent::buildCreate();
 		$sql = &$this->_sql;

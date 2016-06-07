@@ -20,4 +20,6 @@ echo $fuck
 ->limit(array(5, 10))
 ->sql;
 */
-echo $fuck->create($zbp->table['Post'],$zbp->datainfo['Post'])->sql;
+
+//,$zbp->datainfo['Post']
+echo $fuck->create($zbp->table['Post'])->sql;

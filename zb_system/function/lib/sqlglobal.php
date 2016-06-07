@@ -16,6 +16,7 @@ class SQLGlobal {
 	protected $having = array();
 	private $methodKeyword = array('SELECT', 'INSERT', 'DROP', 'DELETE', 'CREATE', 'UPDATE');
 	private $selectFunctionKeyword = array('COUNT', 'MIN', 'MAX', 'SUM');
+	private $otherKeyword = array('FIELD','INDEX');
 
 	/**
 	 * @var null 数据库连接实例
@@ -52,6 +53,9 @@ class SQLGlobal {
 		if (in_array($upperKeyword, $this->methodKeyword)) {
 			$this->method = $upperKeyword;
 			$this->table = $argu[0];
+			return $this;
+		} else if (in_array($upperKeyword, $this->otherKeyword)) {
+			$this->data = $argu[0];
 			return $this;
 		} else if (in_array($upperKeyword, $this->selectFunctionKeyword)) {
 			/**
@@ -272,7 +276,7 @@ class SQLGlobal {
 		$sql = &$this->_sql;
 		$sql = array("$this->method");
 		$callableMethod = 'build' . ucfirst($this->method);
-		echo get_class($this) . '<br/>';
+		//echo get_class($this) . '<br/>';
 		$this->$callableMethod();
 		return implode(' ', $sql);
 	}
@@ -567,8 +571,8 @@ class SQLGlobal {
 	 * @todo
 	 */
 	protected function buildCreate() {
-		$sql = &$this->_sql;
-		$sql[] = 'TABLE';
+		//$sql = &$this->_sql;
+		//$sql[] = 'TABLE';
 	}
 
 }
