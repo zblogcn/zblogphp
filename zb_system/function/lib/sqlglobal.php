@@ -93,6 +93,13 @@ class SQLGlobal {
 		}
 		return $this->$getName;
 	}
+	function __set($name, $value) {
+		if (isset($this->$name)) {
+			$this->$name = $value;
+		} else {
+			throw 'Unknown attribute: ' . $name;
+		}
+	}
 	/**
 	 * If we use $this->$getName directly, PHP will throw [Indirect modification of overloaded property]
 	 * So we have to wrap it.
