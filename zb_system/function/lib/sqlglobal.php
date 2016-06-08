@@ -14,6 +14,7 @@ class SQLGlobal {
 	protected $orderBy = array();
 	protected $groupBy = array();
 	protected $having = array();
+	protected $index = array();
 	private $methodKeyword = array('SELECT', 'INSERT', 'DROP', 'DELETE', 'CREATE', 'UPDATE');
 	private $selectFunctionKeyword = array('COUNT', 'MIN', 'MAX', 'SUM');
 	private $otherKeyword = array('FIELD', 'INDEX');
@@ -55,7 +56,11 @@ class SQLGlobal {
 			$this->table = is_array($argu[0]) ? $argu[0] : $argu;
 			return $this;
 		} else if (in_array($upperKeyword, $this->otherKeyword)) {
-			$this->data = is_array($argu[0]) ? $argu[0] : $argu;
+			if ($upperKeyword == 'INDEX') {
+				$this->index = is_array($argu[0]) ? $argu[0] : $argu;
+			}else{
+				$this->data = is_array($argu[0]) ? $argu[0] : $argu;
+			}
 			return $this;
 		} else if (in_array($upperKeyword, $this->selectFunctionKeyword)) {
 			/**
@@ -580,8 +585,10 @@ class SQLGlobal {
 	 * @todo
 	 */
 	protected function buildCreate() {
-		//$sql = &$this->_sql;
-		//$sql[] = 'TABLE';
+
 	}
 
+	protected function buildIndex() {
+
+	}
 }

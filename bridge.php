@@ -22,4 +22,14 @@ echo $fuck
 
 //,$zbp->datainfo['Post']
 echo '<br/>';
+
+echo '<br/>';
+
 echo $fuck->create($zbp->table['Post'])->data($zbp->datainfo['Post'])->sql;
+
+echo '<br/>';
+
+echo '<br/>';
+
+
+echo $fuck->create($zbp->table['Post'])->index(array('indexname'=>array('ddd','eee','eeee')))->sql;

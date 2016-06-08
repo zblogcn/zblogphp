@@ -28,6 +28,13 @@ class SQLMySQL extends SQLGlobal {
 	 */
 	protected function buildCreate() {
 
+		//parent::buildCreate();
+		if(!empty($this->index) && empty($this->data)){
+			$this->buildIndex();
+			return ;
+		}
+
+
 		$sqlAll = array();
 		foreach ($this->table as $tableIndex => $table) {
 			$sql = array();
@@ -106,4 +113,22 @@ class SQLMySQL extends SQLGlobal {
 		$this->_sql = $sqlAll;
 	}
 
+
+	protected function buildIndex() {
+		$sql = array();
+		$indexname = key($this->index);
+		$indexfield = $this->index[$indexname];
+
+		$sql[] = 'CREATE INDEX ' . $indexname;	
+		$sql[] = '(';
+
+		foreach ($indexfield as $key => $value) {
+		$sql[] = $value;
+		$sql[] = ',';
+		}
+		array_pop($sql);
+		$sql[] = ') ;';
+		$sqlAll[] = implode($sql, ' ');
+		$this->_sql = $sqlAll;
+	}
 }
