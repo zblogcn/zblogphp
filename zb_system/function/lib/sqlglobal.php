@@ -16,7 +16,7 @@ class SQLGlobal {
 	protected $having = array();
 	private $methodKeyword = array('SELECT', 'INSERT', 'DROP', 'DELETE', 'CREATE', 'UPDATE');
 	private $selectFunctionKeyword = array('COUNT', 'MIN', 'MAX', 'SUM');
-	private $otherKeyword = array('FIELD','INDEX');
+	private $otherKeyword = array('FIELD', 'INDEX');
 
 	/**
 	 * @var null 数据库连接实例
@@ -52,10 +52,10 @@ class SQLGlobal {
 		$upperKeyword = strtoupper($callName);
 		if (in_array($upperKeyword, $this->methodKeyword)) {
 			$this->method = $upperKeyword;
-			$this->table = $argu[0];
+			$this->table = is_array($argu[0]) ? $argu[0] : $argu;
 			return $this;
 		} else if (in_array($upperKeyword, $this->otherKeyword)) {
-			$this->data = $argu[0];
+			$this->data = is_array($argu[0]) ? $argu[0] : $argu;
 			return $this;
 		} else if (in_array($upperKeyword, $this->selectFunctionKeyword)) {
 			/**
@@ -92,6 +92,15 @@ class SQLGlobal {
 			return $ret;
 		}
 		return $this->$getName;
+	}
+	/**
+	 * If we use $this->$getName directly, PHP will throw [Indirect modification of overloaded property]
+	 * So we have to wrap it.
+	 * It maybe a bug of PHP.
+	 * @see  http://stackoverflow.com/questions/10454779/php-indirect-modification-of-overloaded-property
+	 */
+	function _sqlPush($sql) {
+		$this->_sql[] = $sql;
 	}
 	/**
 	 * Re-initialize this class
@@ -286,13 +295,6 @@ class SQLGlobal {
 		$table = &$this->table;
 		$tableData = array();
 
-		if (is_string($table)) {
-			$sql[] = $table;
-			return;
-		}
-		if (!is_array($table)) {
-			throw new Exception('Unknown table');
-		}
 		//array_walk
 		foreach ($table as $index => $tableValue) {
 			if (is_string($tableValue)) {
