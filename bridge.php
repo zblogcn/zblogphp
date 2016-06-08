@@ -32,4 +32,4 @@ echo '<br/>';
 echo '<br/>';
 
 
-echo $fuck->create($zbp->table['Post'])->index(array('indexname'=>array('ddd','eee','eeee')))->sql;
+echo $fuck->create($zbp->table['Post'])->index(array('indexname'=>array('ddd','eee','eeee')),array('indexname2'=>array('dxxx','eee')))->sql;

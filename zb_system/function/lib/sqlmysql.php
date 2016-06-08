@@ -116,19 +116,23 @@ class SQLMySQL extends SQLGlobal {
 
 	protected function buildIndex() {
 		$sql = array();
-		$indexname = key($this->index);
-		$indexfield = $this->index[$indexname];
+		//var_dump($this->index);
+		foreach ($this->index as $indexkey => $indexvalue){
+			$indexname = $indexkey;
+			$indexfield = $indexvalue;
 
-		$sql[] = 'CREATE INDEX ' . $indexname;	
-		$sql[] = '(';
+			$sql[] = 'CREATE INDEX ' . $indexname;	
+			$sql[] = '(';
 
-		foreach ($indexfield as $key => $value) {
-		$sql[] = $value;
-		$sql[] = ',';
+			foreach ($indexfield as $key => $value) {
+			$sql[] = $value;
+			$sql[] = ',';
+			}
+			array_pop($sql);
+			$sql[] = ') ;';
+			$sqlAll[] = implode($sql, ' ');
+			$this->_sql = $sqlAll;
+			$sqlAll=array();
 		}
-		array_pop($sql);
-		$sql[] = ') ;';
-		$sqlAll[] = implode($sql, ' ');
-		$this->_sql = $sqlAll;
 	}
 }
