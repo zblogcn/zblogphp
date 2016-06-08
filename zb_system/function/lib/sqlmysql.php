@@ -8,6 +8,14 @@ class SQLMySQL extends SQLGlobal {
 		$this->option['engine'] = 'MyISAM';
 	}
 	/**
+	 * @override
+	 */
+	function reset() {
+		parent::reset();
+		$this->option['engine'] = 'MyISAM';
+	}
+
+	/**
 	 * @todo
 	 * @override
 	 */
@@ -22,8 +30,8 @@ class SQLMySQL extends SQLGlobal {
 
 		$sqlAll = array();
 		foreach ($this->table as $tableIndex => $table) {
-			$sql = array("CREATE " . $table);
-			$sql[] = 'TABLE IF NOT EXISTS';
+			$sql = array();
+			$sql[] = 'CREATE TABLE IF NOT EXISTS ' . $table;
 			$sql[] = ' (';
 			$engine = $this->option['engine'];
 			$idname = GetValueInArrayByCurrent($this->data, 0);

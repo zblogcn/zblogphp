@@ -19,6 +19,7 @@ echo $fuck
 	->groupBy("log_Id")
 	->limit(array(5, 10))
 	->sql;
-var_dump($fuck);
+
 //,$zbp->datainfo['Post']
-echo $fuck->create($zbp->table['Post'])->sql;
+echo '<br/>';
+echo $fuck->create($zbp->table['Post'])->data($zbp->datainfo['Post'])->sql;
