@@ -288,11 +288,16 @@ class DbSql {
 			$option = array();
 		}
 		$sql = new $this->sql($this->db);
-		$sql->select($table)->option($option)->where($where)->orderBy($order)->limit($limit);
+		$sql->select($table)->option($option)->where($where)->orderBy($order)->limit($limit); 
 
 		if (isset($option['select2count'])) {
 			foreach ($select as $key => $value) {
-				$sql->count(array_slice($value, 1));
+				if (count($value) > 2) {
+					$sql->count(array_slice($value, 1));
+				} else {
+					$sql->count($value);
+				}
+				
 			}
 		} else {
 			$sql->column($select);
