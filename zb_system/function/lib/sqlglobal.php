@@ -57,7 +57,10 @@ class SQLGlobal {
 			return $this;
 		} else if (in_array($upperKeyword, $this->otherKeyword)) {
 			if ($upperKeyword == 'INDEX') {
-				$this->index = is_array($argu[0]) ? $argu[0] : $argu;
+				foreach ($argu as $key => $value){
+					//is_array($argu[0]) ? $argu[0] : $argu;
+					$this->index[key($value)]=current($value);
+				}
 			}else{
 				$this->data = is_array($argu[0]) ? $argu[0] : $argu;
 			}
