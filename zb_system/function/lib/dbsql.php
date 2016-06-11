@@ -292,7 +292,7 @@ class DbSql {
 
 		if (isset($option['select2count'])) {
 			foreach ($select as $key => $value) {
-				$sql->count($value);
+				$sql->count(array_slice($value, 1));
 			}
 		} else {
 			$sql->column($select);
