@@ -57,11 +57,11 @@ class SQLGlobal {
 			return $this;
 		} else if (in_array($upperKeyword, $this->otherKeyword)) {
 			if ($upperKeyword == 'INDEX') {
-				foreach ($argu as $key => $value){
+				foreach ($argu as $key => $value) {
 					//is_array($argu[0]) ? $argu[0] : $argu;
-					$this->index[key($value)]=current($value);
+					$this->index[key($value)] = current($value);
 				}
-			}else{
+			} else {
 				$this->data = is_array($argu[0]) ? $argu[0] : $argu;
 			}
 			return $this;
@@ -365,9 +365,9 @@ class SQLGlobal {
 			} else if ($eq == 'SEARCH') {
 				$searchCount = count($value);
 				$sqlSearch = array();
-				for ($i = 1; $i <= $j - 1 - 1; $i++) {
+				for ($i = 1; $i <= $searchCount - 1 - 1; $i++) {
 					$x = (string) $value[$i];
-					$y = $this->db->EscapeString((string) $value[$j - 1]);
+					$y = $this->db->EscapeString((string) $value[$searchCount - 1]);
 					$sqlSearch[] = " (`$x` LIKE '%$y%') ";
 				}
 				$whereData[] = " ((1 = 1) AND (" . implode(' OR ', $sqlSearch) . ') )';
