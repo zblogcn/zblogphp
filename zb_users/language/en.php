@@ -241,6 +241,7 @@ return array(
 		'error_load_js' => 'Error when loading JavaScript',
 		'comment_audit' => 'Aduit Comments',
 		'comment_audit_comment' => 'All new comments posted by non-root user will be audited.',
+		'debugging_warning' => 'If your website can be connected via Internet, please disable the Development Mode, or it may be hacked.',
 		'' => '',
 	),
 
