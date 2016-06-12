@@ -8,7 +8,7 @@
 	<meta name="renderer" content="webkit">
 	<title>{$name}-{$title}</title>
 	<link rel="stylesheet" rev="stylesheet" href="{$host}zb_users/theme/{$theme}/style/{$style}.css" type="text/css" media="all"/>
-	<script src="{$host}zb_system/script/jquery-1.11.2.min.js" type="text/javascript"></script>
+	<script src="{$host}zb_system/script/jquery-3.0.0.min.js" type="text/javascript"></script>
 	<script src="{$host}zb_system/script/zblogphp.js" type="text/javascript"></script>
 	<script src="{$host}zb_system/script/c_html_js_add.php" type="text/javascript"></script>
 	<script src="{$host}zb_users/theme/{$theme}/script/custom.js" type="text/javascript"></script>
