@@ -2142,6 +2142,9 @@ class ZBlogPHP {
 	private function GetSomeThingByAttr(&$object, $attr, $val) {
 		$val = trim($val);
 		foreach ($object as $key => &$value) {
+			if (is_null($value)) {
+				continue;
+			}
 			if ($value->$attr == $val) {
 				return $value;
 			}
