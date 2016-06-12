@@ -127,7 +127,7 @@ return array(
 		'blog_language' => 'Site Language',
 		'allow_upload_type' => 'Allows to Upload a File of Type',
 		'allow_upload_size' => 'Allow Upload File Size (in MB)',
-		'debug_mode' => 'Debug Mode',
+		'debug_mode' => 'Development Mode',
 		'display_count' => 'List Page Displays the Number of Posts',
 		'pagebar_count' => 'Pagebar Displays the Number of Pages',
 		'search_count' => 'Allows the Search to Return the Maximum Number of Posts',

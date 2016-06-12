@@ -127,7 +127,7 @@ return array(
 		'blog_language' => '網站語言',
 		'allow_upload_type' => '允許上傳檔案的類型',
 		'allow_upload_size' => '允許上傳檔案的大小（單位MB）',
-		'debug_mode' => '偵錯模式',
+		'debug_mode' => '開發模式',
 		'display_count' => '列表頁顯示文章的數量',
 		'pagebar_count' => '翻頁條顯示翻頁的數量',
 		'search_count' => '允許搜尋顯示文章的最大數量',

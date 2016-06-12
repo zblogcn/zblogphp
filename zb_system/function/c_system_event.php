@@ -2573,7 +2573,6 @@ function SaveSetting() {
 		}
 
 		if ($key == 'ZC_PERMANENT_DOMAIN_ENABLE' ||
-			$key == 'ZC_DEBUG_MODE' ||
 			$key == 'ZC_COMMENT_TURNOFF' ||
 			$key == 'ZC_COMMENT_REVERSE_ORDER' ||
 			$key == 'ZC_COMMENT_AUDIT' ||
@@ -2601,6 +2600,17 @@ function SaveSetting() {
 			$value = strtolower($value);
 			$value = DelNameInString($value, 'php');
 			$value = DelNameInString($value, 'asp');
+		}
+		if ($key == 'ZC_DEBUG_MODE') {
+			if ((bool) $value) {
+				$zbp->option['ZC_DEBUG_MODE'] = true;
+				$zbp->option['ZC_DEBUG_MODE_STRICT'] = true;
+				$zbp->option['ZC_DEBUG_LOG_ERROR'] = true;
+			} else {
+				$zbp->option['ZC_DEBUG_MODE'] = false;
+				$zbp->option['ZC_DEBUG_MODE_STRICT'] = false;
+				$zbp->option['ZC_DEBUG_LOG_ERROR'] = false;
+			}
 		}
 		$zbp->option[$key] = trim(str_replace(array("\r", "\n"), array("", ""), $value));
 	}

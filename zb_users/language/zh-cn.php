@@ -123,7 +123,7 @@ return array(
 		'blog_language' => '网站语言',
 		'allow_upload_type' => '允许上传文件的类型',
 		'allow_upload_size' => '允许上传文件的大小(单位MB)',
-		'debug_mode' => '调试模式',
+		'debug_mode' => '开发模式',
 		'display_count' => '列表页显示文章的数量',
 		'pagebar_count' => '翻页条显示翻页的数量',
 		'search_count' => '允许搜索返回文章的最大数量',
