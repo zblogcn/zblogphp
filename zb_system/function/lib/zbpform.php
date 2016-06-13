@@ -54,6 +54,7 @@ class ZbpForm {
 			$checked = $k == $checkedkey ? ' selected="selected"' : '';
 			$s .= "<option value=\"$k\"$checked>$v</option> \r\n";
 		}
+
 		return $s;
 	}
 

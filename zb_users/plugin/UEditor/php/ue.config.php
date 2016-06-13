@@ -72,4 +72,3 @@ $CONFIG = array(
 	"fileAllowFiles" => $upload_allow, /* 上传文件格式显示 */
 
 );
-?>

@@ -38,7 +38,7 @@ class API_IO {
 
 		if ($formatString === "") {
 			self::$ioFormat = self::FORMAT_JSON;
-		} else if (0 > strpos($formatString, 'json')) {
+		} elseif (0 > strpos($formatString, 'json')) {
 			self::end(API_ERROR::NON_ACCEPT);
 		}
 
@@ -60,6 +60,7 @@ class API_IO {
 			$class = __CLASS__;
 			self::$instance = new $class($formatString);
 		}
+
 		return self::$instance;
 	}
 
@@ -79,7 +80,7 @@ class API_IO {
 
 		if ($name === "output") {
 			return $savedObject[$name];
-		} else if (isset(self::$getObject[$name])) {
+		} elseif (isset(self::$getObject[$name])) {
 			return self::$getObject[$name];
 		} else {
 			return "";
@@ -149,7 +150,7 @@ class API_IO {
 		$err = $errorCode;
 		if ($errorCode !== -1 && $errorMessage === "") {
 			$returnObject['message'] = $zbp->lang['error'][$errorCode];
-		} else if ($errorCode !== -1 && $errorMessage !== "") {
+		} elseif ($errorCode !== -1 && $errorMessage !== "") {
 			$returnObject['message'] = $errorMessage;
 		}
 
@@ -160,6 +161,7 @@ class API_IO {
 		echo json_encode($returnObject);
 
 		exit;
+
 		return true;
 	}
 

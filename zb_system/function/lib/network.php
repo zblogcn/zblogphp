@@ -106,12 +106,12 @@ class Network {
 	/**
 	 * @var null
 	 */
-	static private $_network = null;
+	private static $_network = null;
 
 	/**
 	 * 构造函数
 	 */
-	function __construct() {
+	public function __construct() {
 		if (function_exists('curl_init') && function_exists('curl_exec')) {
 			$this->network_list[] = 'curl';
 			$this->curl = true;
@@ -134,7 +134,7 @@ class Network {
 	 * @param string $extension
 	 * @return bool|network
 	 */
-	static function Create($extension = '') {
+	public static function Create($extension = '') {
 		if (!isset(self::$_network)) {
 			self::$_network = new Network;
 		}
@@ -144,7 +144,8 @@ class Network {
 
 		$extension = ($extension == '' ? self::$_network->network_list[0] : $extension);
 		$type = 'network' . $extension;
-		$network = New $type();
+		$network = new $type();
+
 		return $network;
 	}
 

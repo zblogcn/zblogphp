@@ -20,24 +20,24 @@ class AlipayNotify {
 	/**
 	 * HTTPS形式消息验证地址
 	 */
-	var $https_verify_url = 'https://mapi.alipay.com/gateway.do?service=notify_verify&';
+	public $https_verify_url = 'https://mapi.alipay.com/gateway.do?service=notify_verify&';
 	/**
 	 * HTTP形式消息验证地址
 	 */
-	var $http_verify_url = 'http://notify.alipay.com/trade/notify_query.do?';
-	var $alipay_config;
+	public $http_verify_url = 'http://notify.alipay.com/trade/notify_query.do?';
+	public $alipay_config;
 
-	function __construct($alipay_config) {
+	public function __construct($alipay_config) {
 		$this->alipay_config = $alipay_config;
 	}
-	function AlipayNotify($alipay_config) {
+	public function AlipayNotify($alipay_config) {
 		$this->__construct($alipay_config);
 	}
 	/**
 	 * 针对notify_url验证消息是否是支付宝发出的合法消息
 	 * @return 验证结果
 	 */
-	function verifyNotify() {
+	public function verifyNotify() {
 		if (empty($_POST)) {
 //判断POST来的数组是否为空
 			return false;
@@ -73,7 +73,7 @@ class AlipayNotify {
 	 * 针对return_url验证消息是否是支付宝发出的合法消息
 	 * @return 验证结果
 	 */
-	function verifyReturn() {
+	public function verifyReturn() {
 		if (empty($_GET)) {
 //判断POST来的数组是否为空
 			return false;
@@ -111,7 +111,7 @@ class AlipayNotify {
 	 * @param $sign 返回的签名结果
 	 * @return 签名验证结果
 	 */
-	function getSignVeryfy($para_temp, $sign) {
+	public function getSignVeryfy($para_temp, $sign) {
 		//除去待签名参数数组中的空值和签名参数
 		$para_filter = paraFilter($para_temp);
 
@@ -142,7 +142,7 @@ class AlipayNotify {
 	 * true 返回正确信息
 	 * false 请检查防火墙或者是服务器阻止端口问题以及验证时间是否超过一分钟
 	 */
-	function getResponse($notify_id) {
+	public function getResponse($notify_id) {
 		$transport = strtolower(trim($this->alipay_config['transport']));
 		$partner = trim($this->alipay_config['partner']);
 		$veryfy_url = '';
@@ -157,4 +157,3 @@ class AlipayNotify {
 		return $responseTxt;
 	}
 }
-?>

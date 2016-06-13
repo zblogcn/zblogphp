@@ -17,6 +17,7 @@ function Debug_PrintGlobals() {
 	foreach ($GLOBALS as $n => $v) {
 		$a[] = $n;
 	}
+
 	return print_r($a, true);
 }
 
@@ -31,6 +32,7 @@ function Debug_PrintIncludefiles() {
 	foreach (get_included_files() as $n => $v) {
 		$a[] = $v;
 	}
+
 	return print_r($a, true);
 }
 
@@ -253,7 +255,7 @@ class ZBlogException {
 	/**
 	 * 构造函数，定义常见错误代码
 	 */
-	function __construct() {
+	public function __construct() {
 		$this->errarray = array(
 			0 => 'UNKNOWN',
 			1 => 'E_ERROR',
@@ -294,7 +296,7 @@ class ZBlogException {
 	 * 获取单一实例
 	 * @return ZBlogException
 	 */
-	static public function GetInstance() {
+	public static function GetInstance() {
 		if (!isset(self::$_zbe)) {
 			self::$_zbe = new ZBlogException;
 		}
@@ -305,7 +307,7 @@ class ZBlogException {
 	/**
 	 * 设定错误处理函数
 	 */
-	static public function SetErrorHook() {
+	public static function SetErrorHook() {
 		set_error_handler('Debug_Error_Handler');
 		set_exception_handler('Debug_Exception_Handler');
 		register_shutdown_function('Debug_Shutdown_Handler');
@@ -314,7 +316,7 @@ class ZBlogException {
 	/**
 	 * 清除注册的错误处理程序
 	 */
-	static public function ClearErrorHook() {
+	public static function ClearErrorHook() {
 		set_error_handler(create_function('', 'return false;'));
 		set_exception_handler(create_function('', 'return false;'));
 		register_shutdown_function(create_function('', 'return false;'));
@@ -323,21 +325,21 @@ class ZBlogException {
 	/**
 	 * 启用错误调度
 	 */
-	static public function EnableErrorHook() {
+	public static function EnableErrorHook() {
 		self::$isdisable = false;
 	}
 
 	/**
 	 * 禁止错误调度
 	 */
-	static public function DisableErrorHook() {
+	public static function DisableErrorHook() {
 		self::$isdisable = true;
 	}
 
 	/**
 	 * 暂停错误调度
 	 */
-	static public function SuspendErrorHook() {
+	public static function SuspendErrorHook() {
 		if (self::$_isdisable !== null) {
 			return;
 		}
@@ -349,7 +351,7 @@ class ZBlogException {
 	/**
 	 * 恢复错误调度
 	 */
-	static public function ResumeErrorHook() {
+	public static function ResumeErrorHook() {
 		if (self::$_isdisable === null) {
 			return;
 		}
@@ -361,23 +363,23 @@ class ZBlogException {
 	/**
 	 * 恢复错误调度
 	 */
-	static public function DisableStrict() {
+	public static function DisableStrict() {
 		self::$isstrict = false;
 	}
 
-	static public function EnableStrict() {
+	public static function EnableStrict() {
 		self::$isstrict = true;
 	}
 
-	static public function DisableWarning() {
+	public static function DisableWarning() {
 		self::$iswarning = false;
 	}
 
-	static public function EnableWarning() {
+	public static function EnableWarning() {
 		self::$iswarning = true;
 	}
 
-	static public function Trace($s) {
+	public static function Trace($s) {
 		Logs($s);
 	}
 
@@ -388,7 +390,7 @@ class ZBlogException {
 	 * @param $file
 	 * @param $line
 	 */
-	function ParseError($type, $message, $file, $line) {
+	public function ParseError($type, $message, $file, $line) {
 
 		$this->type = $type;
 		$this->message = $message;
@@ -402,7 +404,7 @@ class ZBlogException {
 	 * 解析错误信息
 	 * @param $error
 	 */
-	function ParseShutdown($error) {
+	public function ParseShutdown($error) {
 
 		$this->type = $error['type'];
 		$this->message = $error['message'];
@@ -415,7 +417,7 @@ class ZBlogException {
 	 * 解析异常信息
 	 * @param $exception
 	 */
-	function ParseException($exception) {
+	public function ParseException($exception) {
 
 		$this->message = $exception->getMessage();
 		$this->messagefull = $exception->getMessage() . ' (set_exception_handler) ';
@@ -436,7 +438,7 @@ class ZBlogException {
 	/**
 	 * 输出错误信息
 	 */
-	function Display() {
+	public function Display() {
 
 		if (!headers_sent()) {
 			Http500();
@@ -469,7 +471,7 @@ class ZBlogException {
 	 * @param $line
 	 * @return array
 	 */
-	function get_code($file, $line) {
+	public function get_code($file, $line) {
 		if (strcasecmp($file, 'Unknown') == 0) {
 			return array();
 		}
@@ -483,13 +485,14 @@ class ZBlogException {
 			//&$ = ByRef
 			$sData = htmlspecialchars($sData);
 		}
+
 		return $aFile;
 	}
 	/**
 	 * 得到可能的错误原因
 	 * @return string
 	 */
-	function possible_causes_of_the_error() {
+	public function possible_causes_of_the_error() {
 		global $lang;
 		global $bloghost;
 		$result = '';
@@ -512,6 +515,7 @@ class ZBlogException {
 
 		$result .= $lang['error_reasons']['end'];
 		$result = str_replace('{%BlogHost%}', $bloghost, $result);
+
 		return $result;
 	}
 

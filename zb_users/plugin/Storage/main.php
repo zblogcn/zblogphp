@@ -2,11 +2,11 @@
 require_once '../../../zb_system/function/c_system_base.php';
 require_once '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('Storage')) {$zbp->ShowError(48);die();}
 
-$blogtitle='Storage';
+$blogtitle = 'Storage';
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 if (isset($_POST['Storage_Domain']) && $_POST['Storage_Domain'] != '') {

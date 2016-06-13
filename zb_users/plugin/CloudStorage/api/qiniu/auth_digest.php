@@ -1,7 +1,7 @@
 <?php
 
-require_once("utils.php");
-require_once("conf.php");
+require_once "utils.php";
+require_once "conf.php";
 
 // ----------------------------------------------------------
 
@@ -19,12 +19,14 @@ class Qiniu_Mac {
 	public function Sign($data) // => $token
 	{
 		$sign = hash_hmac('sha1', $data, $this->SecretKey, true);
+
 		return $this->AccessKey . ':' . Qiniu_Encode($sign);
 	}
 
 	public function SignWithData($data) // => $token
 	{
 		$data = Qiniu_Encode($data);
+
 		return $this->Sign($data) . ':' . $data;
 	}
 
@@ -44,6 +46,7 @@ class Qiniu_Mac {
 		if ($incbody) {
 			$data .= $req->Body;
 		}
+
 		return $this->Sign($data);
 	}
 }
@@ -80,4 +83,3 @@ function Qiniu_SignWithData($mac, $data) // => $token
 }
 
 // ----------------------------------------------------------
-

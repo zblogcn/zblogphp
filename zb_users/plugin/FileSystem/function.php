@@ -20,7 +20,7 @@ function get_input_filename($filename)
 /**
 插件函数
 **/
-function Get_Filelist($current_path){
+function Get_Filelist($current_path) {
 	$current_path = get_input_filename($current_path);
 	$file_list = array();
 	//遍历目录取得文件信息
@@ -39,7 +39,7 @@ function Get_Filelist($current_path){
 			} else {
 				$file_ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 				$file_list['file'][] = array(
-					'filesize' => format_size(filesize($file)),//文件大小
+					'filesize' => format_size(filesize($file)), //文件大小
 					'filetype' => strtolower($file_ext), //文件类别，用扩展名判断);
 					'filename' => get_output_filename($filename), //文件名，包含扩展名
 					'fileperms' => substr(sprintf('%o', fileperms($current_path . $filename)), -4), //文件权限
@@ -49,10 +49,11 @@ function Get_Filelist($current_path){
 		}
 		closedir($handle);
 	}
+
 	return $file_list;
 }
 
-function format_dir($current_path, $root_path){
+function format_dir($current_path, $root_path) {
 	if($current_path == $root_path) return;
 	echo '<div><a class="btn btn-mini" href="main.php" title="根目录"><i class="icon-home"></i></a><i class="icon-chevron-right"></i>';
 	$current_path = str_replace($root_path, "", $current_path);
@@ -70,11 +71,12 @@ function format_dir($current_path, $root_path){
 }
 
 function format_size($arg) {
-    if ($arg>0){
+    if ($arg > 0){
         $j = 0;
-        $ext = array(" Bytes"," KB"," MB"," GB"," TB");
-        while ($arg >= pow(1024,$j)) ++$j;
-        return round($arg / pow(1024,$j-1) * 100) / 100 . $ext[$j-1];
+        $ext = array(" Bytes", " KB", " MB", " GB", " TB");
+        while ($arg >= pow(1024, $j)) ++$j;
+
+        return round($arg / pow(1024, $j - 1) * 100) / 100 . $ext[$j - 1];
     } else return "0 Bytes";
 }
 
@@ -89,7 +91,7 @@ function GetFileimg($arg) {
 	
 	$ext_array = array('img', 'htm', 'code', 'tar', 'mov', 'msc');
 	foreach($ext_array as $v){
-		if(in_array($arg, ${$v.'_ary'})) return $v;	
+		if(in_array($arg, ${$v.'_ary'})) return $v;
 	}
 	if(in_array($arg, $type_ary)) {
 		return $arg;
@@ -122,7 +124,7 @@ function command_panel($current_path, $filename, $bloghost, $blogpath, $isdir, $
 	else
 	{
 		$output_array[] = "<a href=\"#\" class=\"href-command\" data-filename=\"$filename\" data-function=\"down_file\" title=\"下载\"><img src=\"".$bloghost."zb_system/image/admin/download.png\"></a>";
-		if(in_array($type, $edit_file)) $output_array[] = "&nbsp;&nbsp;<a href=\"#\" class=\"href-command\" data-filename=\"$filename\" data-function=\"edit_file\" title=\"在线编辑\"><img src=\"".$bloghost."zb_system/image/admin/page_edit.png\"></a>";	
+		if(in_array($type, $edit_file)) $output_array[] = "&nbsp;&nbsp;<a href=\"#\" class=\"href-command\" data-filename=\"$filename\" data-function=\"edit_file\" title=\"在线编辑\"><img src=\"".$bloghost."zb_system/image/admin/page_edit.png\"></a>";
 
 		foreach($zbsys_file as $v){
 			if ($current_path == $v){
@@ -135,6 +137,3 @@ function command_panel($current_path, $filename, $bloghost, $blogpath, $isdir, $
 		return implode("\n", $output_array);
 	}
 }
-
-
-?>

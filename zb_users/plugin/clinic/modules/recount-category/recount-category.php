@@ -16,6 +16,7 @@ class recount_category extends clinic {
 
 		if ((int) $zbp->version < 140624) {
 			$this->set_queue('output_message', json_encode(array('error', '版本没到Z-Blog 1.4，无法使用本组件')));
+
 			return;
 		}
 

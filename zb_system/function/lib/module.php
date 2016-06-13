@@ -10,7 +10,7 @@ class Module extends Base {
 	/**
 	 * 构造函数
 	 */
-	function __construct() {
+	public function __construct() {
 		global $zbp;
 		parent::__construct($zbp->table['Module'], $zbp->datainfo['Module'], __CLASS__);
 	}
@@ -61,13 +61,14 @@ class Module extends Base {
 		if ($name == 'NoRefresh') {
 			return (bool) $this->Metas->norefresh;
 		}
+
 		return parent::__get($name);
 	}
 
 	/**
 	 * @return bool
 	 */
-	function Save() {
+	public function Save() {
 		global $zbp;
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Save'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
@@ -86,15 +87,17 @@ class Module extends Base {
 				@mkdir($d, 0755);
 			}
 			@file_put_contents($f, $c);
+
 			return true;
 		}
+
 		return parent::Save();
 	}
 
 	/**
 	 * @return bool
 	 */
-	function Del() {
+	public function Del() {
 		global $zbp;
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Del'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
@@ -110,8 +113,10 @@ class Module extends Base {
 			if (file_exists($f)) {
 				@unlink($f);
 			}
+
 			return true;
 		}
+
 		return parent::Del();
 	}
 

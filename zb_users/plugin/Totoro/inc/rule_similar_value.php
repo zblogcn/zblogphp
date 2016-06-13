@@ -43,5 +43,6 @@ function add_similar_sv($condition, $count_for_condition, $content, &$sv, $confi
 function check_similar($val1, $val2) {
 	$percent = 0;
 	similar_text($val2, $val1, $percent);
+
 	return (int) $percent;
 }

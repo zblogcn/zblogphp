@@ -38,6 +38,7 @@ function api_zbp_load_pre() {
 	$removedHttpHost = preg_replace('/^http.+\/\//', '', $bloghost) . 'api/';
 	if (false === strpos($requestUri, $removedHttpHost)) {
 		$apiRealRouteUrl = "";
+
 		return false;
 	}
 	$apiRealRouteUrl = str_replace($removedHttpHost, '', $requestUri);

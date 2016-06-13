@@ -1,6 +1,6 @@
 <?php
 #注册插件
-RegisterPlugin("ZBPJFExample","ActivePlugin_ZBPJFExample");
+RegisterPlugin("ZBPJFExample", "ActivePlugin_ZBPJFExample");
 
 function ActivePlugin_ZBPJFExample() {
 

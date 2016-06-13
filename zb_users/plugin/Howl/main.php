@@ -5,38 +5,38 @@ require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
 
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 if (!$zbp->CheckPlugin('Howl')) {$zbp->ShowError(48);die();}
 
-$blogtitle='Z-Blog角色分配器';
+$blogtitle = 'Z-Blog角色分配器';
 
 $group_nums = count($zbp->lang['user_level_name']);
-$group_key =array();
+$group_key = array();
 foreach ($zbp->lang['user_level_name'] as $key => $value) {
 	$group_key[] = $key;
 }
 
-if(count($_POST)>0){
+if(count($_POST) > 0){
 
-	if(GetVars('reset' ,'POST')=='1'){
+	if(GetVars('reset', 'POST') == '1'){
 
 		$zbp->DelConfig('Howl');
-		$zbp->SetHint('good','已删除所有的配置!');
+		$zbp->SetHint('good', '已删除所有的配置!');
 		Redirect('./main.php');
 		die();
 	}
 
-	$a=array();
+	$a = array();
 	foreach ($group_key as $key) {
 		$a[$key] = array();
 	}
 
 	foreach ($group_key as $groupkey) {
 		foreach ($actions as $key => $value) {
-			$check=GetVars('Group' . $groupkey . '_' . $key ,'POST');
-			$a[$groupkey][$key]=(int)$check;
+			$check = GetVars('Group' . $groupkey . '_' . $key, 'POST');
+			$a[$groupkey][$key] = (int) $check;
 		}
 	}
 
@@ -56,7 +56,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
 <?php
-$zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重后果，请慎用！');
+$zbp->ShowHint('bad', '本插件配置不当可能会造成网站被黑等严重后果，请慎用！');
 ?>
   <div class="divHeader"><?php echo $blogtitle;?></div>
   <div class="SubMenu" style="display: block;"><a href="main.php"><span class="m-left m-now">系统群组设置</span></a><a href="user.php"><span class="m-left">单独用户设置</span></a></div>
@@ -75,10 +75,11 @@ foreach ($group_key as $key) {
 ?>
 </tr>
 <?php
-function MakeInput($group,$key){
+function MakeInput($group, $key) {
 	global $zbp;
-	$zbp->user->Level=$group;
-	$check=(int)$zbp->CheckRights($key);
+	$zbp->user->Level = $group;
+	$check = (int) $zbp->CheckRights($key);
+
 	return '<input name="Group'.$group.'_' . $key .'" style="" type="text" value="'.$check.'" class="checkbox"/>';
 }
 
@@ -90,7 +91,7 @@ foreach ($actions as $key => $value) {
 <?php
 foreach ($group_key as $groupkey) {
 	echo '<td class="tdCenter">';
-	echo MakeInput($groupkey,$key);
+	echo MakeInput($groupkey, $key);
 	echo "</td>\r\n";
 }
 ?>

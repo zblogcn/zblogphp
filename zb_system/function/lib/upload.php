@@ -10,7 +10,7 @@ class Upload extends Base {
 	/**
 	 *
 	 */
-	function __construct() {
+	public function __construct() {
 		global $zbp;
 		parent::__construct($zbp->table['Upload'], $zbp->datainfo['Upload'], __CLASS__);
 
@@ -21,7 +21,7 @@ class Upload extends Base {
 	 * @param string $extlist
 	 * @return bool
 	 */
-	function CheckExtName($extlist = '') {
+	public function CheckExtName($extlist = '') {
 		global $zbp;
 		$e = GetFileExt($this->Name);
 		$extlist = strtolower($extlist);
@@ -35,16 +35,17 @@ class Upload extends Base {
 	/**
 	 * @return bool
 	 */
-	function CheckSize() {
+	public function CheckSize() {
 		global $zbp;
 		$n = 1024 * 1024 * (int) $zbp->option['ZC_UPLOAD_FILESIZE'];
+
 		return $n >= $this->Size;
 	}
 
 	/**
 	 * @return bool
 	 */
-	function DelFile() {
+	public function DelFile() {
 
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_DelFile'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
@@ -52,6 +53,7 @@ class Upload extends Base {
 			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
 		if (file_exists($this->FullFile)) {@unlink($this->FullFile);}
+
 		return true;
 
 	}
@@ -60,7 +62,7 @@ class Upload extends Base {
 	 * @param $tmp
 	 * @return bool
 	 */
-	function SaveFile($tmp) {
+	public function SaveFile($tmp) {
 		global $zbp;
 
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_SaveFile'] as $fpname => &$fpsignal) {
@@ -78,6 +80,7 @@ class Upload extends Base {
 			$fn = $this->Name;
 		}
 		@move_uploaded_file($tmp, $zbp->usersdir . $this->Dir . $fn);
+
 		return true;
 	}
 
@@ -85,7 +88,7 @@ class Upload extends Base {
 	 * @param $str64
 	 * @return bool
 	 */
-	function SaveBase64File($str64) {
+	public function SaveBase64File($str64) {
 		global $zbp;
 
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_SaveBase64File'] as $fpname => &$fpsignal) {
@@ -107,6 +110,7 @@ class Upload extends Base {
 			$fn = $this->Name;
 		}
 		file_put_contents($zbp->usersdir . $this->Dir . $fn, $s);
+
 		return true;
 	}
 
@@ -150,12 +154,14 @@ class Upload extends Base {
 			foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Url'] as $fpname => &$fpsignal) {
 				return $fpname($this);
 			}
+
 			return $zbp->host . 'zb_users/' . $this->Dir . rawurlencode($this->Name);
 		}
 		if ($name == 'Dir') {
 			foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Dir'] as $fpname => &$fpsignal) {
 				return $fpname($this);
 			}
+
 			return 'upload/' . date('Y', $this->PostTime) . '/' . date('m', $this->PostTime) . '/';
 		}
 		if ($name == 'FullFile') {
@@ -164,6 +170,7 @@ class Upload extends Base {
 		if ($name == 'Author') {
 			return $zbp->GetMemberByID($this->AuthorID);
 		}
+
 		return parent::__get($name);
 	}
 

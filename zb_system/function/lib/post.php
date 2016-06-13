@@ -13,7 +13,7 @@ class Post extends Base {
 	/**
 	 *
 	 */
-	function __construct() {
+	public function __construct() {
 		global $zbp;
 		parent::__construct($zbp->table['Post'], $zbp->datainfo['Post'], __CLASS__);
 
@@ -26,7 +26,7 @@ class Post extends Base {
 	 * @param $args
 	 * @return mixed
 	 */
-	function __call($method, $args) {
+	public function __call($method, $args) {
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Call'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn = $fpname($this, $method, $args);
@@ -45,7 +45,7 @@ class Post extends Base {
 	/**
 	 * @return array|int|mixed|null|string
 	 */
-	function TagsToNameString() {
+	public function TagsToNameString() {
 		global $zbp;
 		$s = $this->Tag;
 		if ($s == '') {
@@ -71,6 +71,7 @@ class Post extends Base {
 		}
 
 		$s = implode(',', $c);
+
 		return $s;
 	}
 
@@ -165,6 +166,7 @@ class Post extends Base {
 			} else {
 				$u->Rules['{%author%}'] = rawurlencode($this->Author->Name);
 			}
+
 			return $u->Make();
 			break;
 		case 'Tags':
@@ -183,11 +185,14 @@ class Post extends Base {
 					$value = $zbp->GetPostType_Template($this->Type);
 				}
 			}
+
 			return $value;
 		case 'CommentPostUrl':
 			foreach ($GLOBALS['hooks']['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
 				$fpreturn = $fpname($this);
-				if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+				if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+return $fpreturn;}
 			}
 			$key = '&amp;key=' . md5($zbp->guid . $this->ID . date('Y-m-d'));
 			//$key = '&amp;key=' . md5($zbp->guid . $this->ID . $this->CommNums . date('Y-m-d') . $_SERVER["REMOTE_ADDR"] . $_SERVER["HTTP_USER_AGENT"]);
@@ -213,6 +218,7 @@ class Post extends Base {
 			} else {
 				$this->_prev = null;
 			}
+
 			return $this->_prev;
 			break;
 		case 'Next':
@@ -232,13 +238,17 @@ class Post extends Base {
 			} else {
 				$this->_next = null;
 			}
+
 			return $this->_next;
 			break;
 		case 'RelatedList':
 			foreach ($GLOBALS['hooks']['Filter_Plugin_Post_RelatedList'] as $fpname => &$fpsignal) {
 				$fpreturn = $fpname($this);
-				if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+				if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+return $fpreturn;}
 			}
+
 			return GetList($zbp->option['ZC_RELATEDLIST_COUNT'], null, null, null, null, null, array('is_related' => $this->ID));
 		case 'TopType':
 			$toptype = $this->Metas->toptype;
@@ -259,7 +269,7 @@ class Post extends Base {
 	/**
 	 * @return bool
 	 */
-	function Save() {
+	public function Save() {
 		global $zbp;
 		if ($this->Type == ZC_POST_TYPE_ARTICLE) {
 			if ($this->Template == GetValueInArray($this->Category->GetData(), 'LogTemplate')) {
@@ -276,18 +286,20 @@ class Post extends Base {
 			$fpreturn = $fpname($this);
 			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
+
 		return parent::Save();
 	}
 
 	/**
 	 * @return bool
 	 */
-	function Del() {
+	public function Del() {
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Del'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn = $fpname($this);
 			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
+
 		return parent::Del();
 	}
 

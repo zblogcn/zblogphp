@@ -1,7 +1,7 @@
 <?php
 
-require_once("http.php");
-require_once("auth_digest.php");
+require_once "http.php";
+require_once "auth_digest.php";
 
 // ----------------------------------------------------------
 // class Qiniu_PutExtra
@@ -36,6 +36,7 @@ function Qiniu_Put($upToken, $key, $body, $putExtra) // => ($putRet, $err)
 	$files = array(array('file', $fname, $body));
 
 	$client = new Qiniu_HttpClient;
+
 	return Qiniu_Client_CallWithMultipartForm($client, $QINIU_UP_HOST, $fields, $files);
 }
 
@@ -64,8 +65,8 @@ function Qiniu_PutFile($upToken, $key, $localFile, $putExtra) // => ($putRet, $e
 	}
 
 	$client = new Qiniu_HttpClient;
+
 	return Qiniu_Client_CallWithForm($client, $QINIU_UP_HOST, $fields, 'multipart/form-data');
 }
 
 // ----------------------------------------------------------
-

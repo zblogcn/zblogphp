@@ -99,4 +99,3 @@ $(document).ready(function(){
 js;
 	echo $s;
 }
-?>

@@ -109,6 +109,7 @@ function main_table_rows()
 
 		}
 	}
+
 	return implode('', $return);
 }
 
@@ -130,5 +131,6 @@ function main_save_code()
 		}
 
 	}
+
 	return implode("\r\n", $return);
 }

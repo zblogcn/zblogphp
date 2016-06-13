@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * KindEditor for Z-BlogPHP
  * @author 未寒

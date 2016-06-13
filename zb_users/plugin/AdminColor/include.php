@@ -119,5 +119,3 @@ $AdminColor_NormalColor[10] = '#896a1c';
 $AdminColor_LightColor[10] = '#caa855';
 $AdminColor_HighColor[10] = '#b08313';
 $AdminColor_AntiColor[10] = '#2227e0';
-
-?>

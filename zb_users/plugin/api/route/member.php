@@ -19,6 +19,7 @@ function return_member($id) {
 	unset($ret['Password']);
 	unset($ret['Guid']);
 	API::$IO->formatObjectName($ret);
+
 	return $ret;
 
 }
@@ -28,7 +29,7 @@ function return_member($id) {
  */
 function api_member_get_function() {
 
-	$id = (int)API::$IO->id;
+	$id = (int) API::$IO->id;
 	if ($id === 0) API::$IO->end(3);
 	//
 	$ret = return_member($id);
@@ -64,7 +65,7 @@ function api_member_post_function() {
 
 	global $zbp;
 	Add_Filter_Plugin('Filter_Plugin_PostMember_Succeed', 'api_member_post_callback');
-	PostMember(); 
+	PostMember();
 	$zbp->BuildModule();
 	$zbp->SaveCache();
 
@@ -86,7 +87,7 @@ API::$Route->post('/member/create/', 'api_member_create_function');
  */
 function api_member_update_function() {
 
-	$id = (int)API::$IO->id;
+	$id = (int) API::$IO->id;
 	if ($id === 0) API::$IO->end(3);
 	$_POST['ID'] = $id;
 	api_member_post_function();

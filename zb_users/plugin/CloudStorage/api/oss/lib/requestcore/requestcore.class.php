@@ -260,6 +260,7 @@ class RequestCore
 	{
 		$this->username = $user;
 		$this->password = $pass;
+
 		return $this;
 	}
 
@@ -273,6 +274,7 @@ class RequestCore
 	public function add_header($key, $value)
 	{
 		$this->request_headers[$key] = $value;
+
 		return $this;
 	}
 
@@ -288,6 +290,7 @@ class RequestCore
 		{
 			unset($this->request_headers[$key]);
 		}
+
 		return $this;
 	}
 
@@ -300,6 +303,7 @@ class RequestCore
 	public function set_method($method)
 	{
 		$this->method = strtoupper($method);
+
 		return $this;
 	}
 
@@ -312,6 +316,7 @@ class RequestCore
 	public function set_useragent($ua)
 	{
 		$this->useragent = $ua;
+
 		return $this;
 	}
 
@@ -324,6 +329,7 @@ class RequestCore
 	public function set_body($body)
 	{
 		$this->request_body = $body;
+
 		return $this;
 	}
 
@@ -336,6 +342,7 @@ class RequestCore
 	public function set_request_url($url)
 	{
 		$this->request_url = $url;
+
 		return $this;
 	}
 
@@ -349,6 +356,7 @@ class RequestCore
 	public function set_curlopts($curlopts)
 	{
 		$this->curlopts = $curlopts;
+
 		return $this;
 	}
 
@@ -450,6 +458,7 @@ class RequestCore
 		$proxy['pass'] = isset($proxy['pass']) ? $proxy['pass'] : null;
 		$proxy['port'] = isset($proxy['port']) ? $proxy['port'] : null;
 		$this->proxy = $proxy;
+
 		return $this;
 	}
 
@@ -789,7 +798,7 @@ class RequestCore
 			foreach ($this->response_headers as $header)
 			{
 				$kv = explode(': ', $header);
-				$header_assoc[strtolower($kv[0])] = isset($kv[1])?$kv[1]:'';
+				$header_assoc[strtolower($kv[0])] = isset($kv[1]) ? $kv[1] : '';
 			}
 
 			// Reset the headers to the appropriate property.
@@ -926,6 +935,7 @@ class RequestCore
 		curl_multi_close($multi_handle);
 
 		ksort($handles_post, SORT_NUMERIC);
+
 		return $handles_post;
 	}
 
@@ -945,6 +955,7 @@ class RequestCore
 		{
 			return $this->response_headers[strtolower($header)];
 		}
+
 		return $this->response_headers;
 	}
 

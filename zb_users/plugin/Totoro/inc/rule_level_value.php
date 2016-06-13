@@ -6,8 +6,7 @@ function level_value($author, $content, $orig_content, &$sv, $config_sv, $config
 
 	if ($author['id'] == 0) {
 		$level = 6;
-	} else
-	if (isset($zbp->members[$author['id']])) {
+	} elseif (isset($zbp->members[$author['id']])) {
 		$level = $zbp->members[$author['id']]->Level;
 	} else {
 		$level = 6;

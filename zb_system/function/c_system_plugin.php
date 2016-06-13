@@ -73,6 +73,7 @@ function DefinePluginFilter($strPluginFilter) {
 	if (!isset($GLOBALS['hooks'][$strPluginFilter])) {
 		$GLOBALS['hooks'][$strPluginFilter] = array();
 		$GLOBALS[$strPluginFilter] = &$GLOBALS['hooks'][$strPluginFilter];
+
 		return true;
 	}
 }
@@ -108,6 +109,7 @@ function RemovePluginFilter($strPluginFilter) {
 	if (isset($GLOBALS['hooks'][$strPluginFilter])) {
 		unset($GLOBALS[$strPluginFilter]);
 		unset($GLOBALS['hooks'][$strPluginFilter]);
+
 		return true;
 	}
 }

@@ -3,7 +3,7 @@ require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin($blogtheme)) {$zbp->ShowError(48);die();}
 $dir = $usersdir . 'theme/' . $blogtheme . '/include/';
@@ -57,7 +57,7 @@ function save_text($filename, $content)
 
 function convert_filename(&$filename)
 {
-	if( in_array(PHP_OS, array('WINNT', 'WIN32', 'Windows')) )
+	if(in_array(PHP_OS, array('WINNT', 'WIN32', 'Windows')))
 	{
 		$filename = iconv('UTF-8', "GBK//IGNORE", $filename);
 	}

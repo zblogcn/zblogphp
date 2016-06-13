@@ -14,5 +14,3 @@ function Sitemap_AddMenu() {
 	echo '<a href="' . $zbp->host . 'zb_users/plugin/Sitemap/main.php"><span class="m-left">SiteMap生成器</span></a>';
 
 }
-
-?>

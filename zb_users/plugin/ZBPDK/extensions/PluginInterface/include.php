@@ -44,6 +44,7 @@ function plugininterface_outputfunc($interface_name, $closure) {
 		$func = new ReflectionFunction($closure);
 	} catch (ReflectionException $e) {
 		echo $e->getMessage();
+
 		return;
 	}
 	$start = $func->getStartLine() - 1;
@@ -54,6 +55,7 @@ function plugininterface_outputfunc($interface_name, $closure) {
 	$str .= 'StartLine: ' . $start . "\n";
 	$str .= 'EndLine: ' . $end . "\n";
 	$str .= implode("", array_slice(file($filename), $start, $end - $start + 1));
+
 	return $str;
 }
 

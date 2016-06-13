@@ -25,7 +25,7 @@ switch ($cmd_arg) {
         create_file();
         break;
 	case 3://删除文件
-		del_file(iconv('UTF-8','GB2312',$current_path.$selected_file_list));
+		del_file(iconv('UTF-8', 'GB2312', $current_path.$selected_file_list));
 		break;
 	case 4://下载文件
 		download();
@@ -44,19 +44,19 @@ switch ($cmd_arg) {
 		break;
 }
 
-function edit_file(){
+function edit_file() {
 	global $cmd_data, $current_path, $selected_file_list;
-	$file = iconv('UTF-8','GB2312',$current_path.$selected_file_list);
+	$file = iconv('UTF-8', 'GB2312', $current_path.$selected_file_list);
     if(file_exists($oldfile)){
 		$error_msg = 0;
 		if (!rename($oldfile, $newfile)) $error_msg = '重命名失败，请重试。';
 		back_url($error_msg);
     }
 }
-function renamefile(){
+function renamefile() {
 	global $cmd_data, $current_path, $selected_file_list;
-	$oldfile = iconv('UTF-8','GB2312',$current_path.$selected_file_list);
-	$newfile = iconv('UTF-8','GB2312',$current_path.$cmd_data);
+	$oldfile = iconv('UTF-8', 'GB2312', $current_path.$selected_file_list);
+	$newfile = iconv('UTF-8', 'GB2312', $current_path.$cmd_data);
     if(file_exists($oldfile)){
 		$error_msg = 0;
 		if (!rename($oldfile, $newfile)) $error_msg = '重命名失败，请重试。';
@@ -64,9 +64,9 @@ function renamefile(){
     }
 }
 
-function download(){
+function download() {
 	global $cmd_data, $current_path;
-	$file = iconv('UTF-8','GB2312',$current_path.$cmd_data);
+	$file = iconv('UTF-8', 'GB2312', $current_path.$cmd_data);
     if(file_exists($file)){
 		$size = filesize($file);
 		header("Content-Type: application/save");
@@ -80,16 +80,16 @@ function download(){
     }
 }
 
-function del_file($arg){
+function del_file($arg) {
 	delfile($arg);
 	$error_msg = 0;
 	if (file_exists($arg)) $error_msg = '文件删除失败。';
 	back_url($error_msg);
 }
 
-function delfile($arg){
+function delfile($arg) {
 	if (file_exists($arg)) {
-        @chmod($arg,0755);
+        @chmod($arg, 0755);
         if (is_dir($arg)) {
             $handle = opendir($arg);
             while(false !== ($aux = readdir($handle))) {
@@ -102,27 +102,27 @@ function delfile($arg){
 }
 
 
-function create_file(){
+function create_file() {
 	global $cmd_data, $current_path;
-	$cmd_data = iconv('UTF-8','GB2312',$current_path.$cmd_data);
+	$cmd_data = iconv('UTF-8', 'GB2312', $current_path.$cmd_data);
 	if (strlen($cmd_data)){
 		if (!file_exists($cmd_data)){
 			if ($fh = @fopen($cmd_data, "w")){
 				@fclose($fh);
 			}
-			chmod($cmd_data,0666);
+			chmod($cmd_data, 0666);
 			$error_msg = 0;
 		} else $error_msg = '文件已存在。';
 	}
 	back_url($error_msg);
 }
 
-function create_dir(){
+function create_dir() {
 	global $cmd_data, $current_path;
-	$cmd_data = iconv('UTF-8','GB2312',$current_path.$cmd_data);
+	$cmd_data = iconv('UTF-8', 'GB2312', $current_path.$cmd_data);
 	if (strlen($cmd_data)){
 		if (!file_exists($cmd_data)){
-			mkdir($cmd_data,0755);
+			mkdir($cmd_data, 0755);
 			$error_msg = 0;
 		} else $error_msg = '文件夹已存在。';
 	}
@@ -130,12 +130,12 @@ function create_dir(){
 }
 
 
-function upload_form(){
+function upload_form() {
     global $_FILES,$current_dir,$dir_dest,$fechar,$quota_mb,$path_info;
     $num_uploads = 5;
     html_header();
     echo "<body marginwidth=\"0\" marginheight=\"0\">";
-    if (count($_FILES)==0){
+    if (count($_FILES) == 0){
         echo "
         <table height=\"100%\" border=0 cellspacing=0 cellpadding=2 align=center>
         <form name=\"upload_form\" action=\"".$path_info["basename"]."\" method=\"post\" ENCTYPE=\"multipart/form-data\">
@@ -143,7 +143,7 @@ function upload_form(){
         <input type=hidden name=action value=10>
         <tr><th colspan=2>".et('Upload')."</th></tr>
         <tr><td align=right><b>".et('Destination').":<td><b><nobr>$current_dir</nobr>";
-        for ($x=0;$x<$num_uploads;$x++){
+        for ($x = 0;$x < $num_uploads;$x++){
             echo "<tr><td width=1 align=right><b>".et('File').":<td><nobr><input type=\"file\" name=\"file$x\"></nobr>";
             $test_js .= "(document.upload_form.file$x.value.length>0)||";
         }
@@ -160,7 +160,7 @@ function upload_form(){
             }
             foi = false;
             function test_upload_form(){
-                if(".substr($test_js,0,strlen($test_js)-2)."){
+                if(".substr($test_js, 0, strlen($test_js) - 2)."){
                     if (foi) alert('".et('SendingForm')."...');
                     else {
                         foi = true;
@@ -174,14 +174,14 @@ function upload_form(){
     } else {
         $out = "<tr><th colspan=2>".et('UploadEnd')."</th></tr>
                 <tr><th colspan=2><nobr>".et('Destination').": $dir_dest</nobr>";
-        for ($x=0;$x<$num_uploads;$x++){
+        for ($x = 0;$x < $num_uploads;$x++){
             $temp_file = $_FILES["file".$x]["tmp_name"];
             $filename = $_FILES["file".$x]["name"];
-            if (strlen($filename)) $resul = save_upload($temp_file,$filename,$dir_dest);
+            if (strlen($filename)) $resul = save_upload($temp_file, $filename, $dir_dest);
             else $resul = 7;
             switch($resul){
                 case 1:
-                $out .= "<tr><td><b>".str_zero($x+1,3).".<font color=green><b> ".et('FileSent').":</font><td>".$filename."</td></tr>\n";
+                $out .= "<tr><td><b>".str_zero($x + 1, 3).".<font color=green><b> ".et('FileSent').":</font><td>".$filename."</td></tr>\n";
                 break;
                 case 2:
                 $out .= "<tr><td colspan=2><font color=red><b>".et('IOError')."</font></td></tr>\n";
@@ -192,16 +192,16 @@ function upload_form(){
                 $x = $upload_num;
                 break;
                 case 4:
-                $out .= "<tr><td><b>".str_zero($x+1,3).".<font color=red><b> ".et('InvExt').":</font><td>".$filename."</td></tr>\n";
+                $out .= "<tr><td><b>".str_zero($x + 1, 3).".<font color=red><b> ".et('InvExt').":</font><td>".$filename."</td></tr>\n";
                 break;
                 case 5:
-                $out .= "<tr><td><b>".str_zero($x+1,3).".<font color=red><b> ".et('FileNoOverw')."</font><td>".$filename."</td></tr>\n";
+                $out .= "<tr><td><b>".str_zero($x + 1, 3).".<font color=red><b> ".et('FileNoOverw')."</font><td>".$filename."</td></tr>\n";
                 break;
                 case 6:
-                $out .= "<tr><td><b>".str_zero($x+1,3).".<font color=green><b> ".et('FileOverw').":</font><td>".$filename."</td></tr>\n";
+                $out .= "<tr><td><b>".str_zero($x + 1, 3).".<font color=green><b> ".et('FileOverw').":</font><td>".$filename."</td></tr>\n";
                 break;
                 case 7:
-                $out .= "<tr><td colspan=2><b>".str_zero($x+1,3).".<font color=red><b> ".et('FileIgnored')."</font></td></tr>\n";
+                $out .= "<tr><td colspan=2><b>".str_zero($x + 1, 3).".<font color=red><b> ".et('FileIgnored')."</font></td></tr>\n";
             }
         }
         if ($fechar) {
@@ -231,7 +231,7 @@ function upload_form(){
 
 
 
-function back_url($error_msg){
+function back_url($error_msg) {
 	global $current_path, $blogpath;
 	$url = 'main.php?';
 	if ($blogpath != $current_path) $url = $url . '&path=' . urlencode(str_replace($blogpath, "", $current_path));
@@ -239,13 +239,13 @@ function back_url($error_msg){
 	Redirect($url);
 }
 
-function format_path($str){
+function format_path($str) {
     global $islinux;
     $str = trim($str);
-    $str = str_replace("..","",str_replace("\\","/",str_replace("\$","",$str)));
+    $str = str_replace("..", "", str_replace("\\", "/", str_replace("\$", "", $str)));
     $done = false;
     while (!$done) {
-        $str2 = str_replace("//","/",$str);
+        $str2 = str_replace("//", "/", $str);
         if (strlen($str) == strlen($str2)) $done = true;
         else $str = $str2;
     }
@@ -255,6 +255,6 @@ function format_path($str){
         if ($str[$last_char] != "/") $str .= "/";
         if (!$islinux) $str = ucfirst($str);
     }
+
     return $str;
 }
-?>

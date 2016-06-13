@@ -30,7 +30,7 @@ class DbMySQLi implements iDataBase {
 	/**
 	 * 构造函数，实例化$sql参数
 	 */
-	function __construct() {
+	public function __construct() {
 		$this->sql = new DbSql($this);
 	}
 
@@ -57,7 +57,7 @@ class DbMySQLi implements iDataBase {
 	'engine')
 	 * @return bool
 	 */
-	function Open($array) {
+	public function Open($array) {
 		$db = mysqli_init();
 
 		if ($array[6] == true) {
@@ -69,10 +69,10 @@ class DbMySQLi implements iDataBase {
 			
 			$myver = mysqli_get_server_info($db);
 			$this->version = substr($myver, 0, strpos($myver, "-"));
-			if(version_compare($this->version,'5.5.3')>=0){
-				$u="utf8mb4";
+			if(version_compare($this->version, '5.5.3') >= 0){
+				$u = "utf8mb4";
 			}else{
-				$u="utf8";
+				$u = "utf8";
 			}
 			mysqli_set_charset($db, $u);
 
@@ -80,8 +80,10 @@ class DbMySQLi implements iDataBase {
 			$this->dbname = $array[3];
 			$this->dbpre = $array[4];
 			$this->dbengine = $array[7];
+
 			return true;
 		}
+
 		return false;
 	}
 
@@ -94,15 +96,15 @@ class DbMySQLi implements iDataBase {
 	 * @param string $dbmysql_name
 	 * @return bool
 	 */
-	function CreateDB($dbmysql_server, $dbmysql_port, $dbmysql_username, $dbmysql_password, $dbmysql_name) {
+	public function CreateDB($dbmysql_server, $dbmysql_port, $dbmysql_username, $dbmysql_password, $dbmysql_name) {
 		$db = mysqli_connect($dbmysql_server, $dbmysql_username, $dbmysql_password, null, $dbmysql_port);
 		
 		$myver = mysqli_get_server_info($db);
 		$myver = substr($myver, 0, strpos($myver, "-"));
-		if(version_compare($myver,'5.5.3')>=0){
-			$u="utf8mb4";
+		if(version_compare($myver, '5.5.3') >= 0){
+			$u = "utf8mb4";
 		}else{
-			$u="utf8";
+			$u = "utf8";
 		}
 		mysqli_set_charset($db, $u);
 
@@ -119,6 +121,7 @@ class DbMySQLi implements iDataBase {
 		}
 		if ($c == 0) {
 			mysqli_query($this->db, $this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
+
 			return true;
 		}
 	}
@@ -126,7 +129,7 @@ class DbMySQLi implements iDataBase {
 	/**
 	 * 关闭数据库连接
 	 */
-	function Close() {
+	public function Close() {
 		if (is_object($this->db)) {
 			mysqli_close($this->db);
 		}
@@ -138,8 +141,8 @@ class DbMySQLi implements iDataBase {
 	 * @param string $s 以;号分隔的多条SQL语句
 	 * @return array
 	 */
-	function QueryMulit($s) {return $this->QueryMulti($s);} //错别字函数，历史原因保留下来
-	function QueryMulti($s) {
+	public function QueryMulit($s) {return $this->QueryMulti($s);} //错别字函数，历史原因保留下来
+	public function QueryMulti($s) {
 		//$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		$a = explode(';', $s);
 		foreach ($a as $s) {
@@ -154,7 +157,7 @@ class DbMySQLi implements iDataBase {
 	 * @param $query
 	 * @return array
 	 */
-	function Query($query) {
+	public function Query($query) {
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		$results = mysqli_query($this->db, $this->sql->Filter($query));
 		if (mysqli_errno($this->db)) {
@@ -190,7 +193,7 @@ class DbMySQLi implements iDataBase {
 	 * @param $query
 	 * @return bool|mysqli_result
 	 */
-	function Update($query) {
+	public function Update($query) {
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		return mysqli_query($this->db, $this->sql->Filter($query));
 	}
@@ -199,7 +202,7 @@ class DbMySQLi implements iDataBase {
 	 * @param $query
 	 * @return bool|mysqli_result
 	 */
-	function Delete($query) {
+	public function Delete($query) {
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		return mysqli_query($this->db, $this->sql->Filter($query));
 	}
@@ -208,9 +211,10 @@ class DbMySQLi implements iDataBase {
 	 * @param $query
 	 * @return int|string
 	 */
-	function Insert($query) {
+	public function Insert($query) {
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		mysqli_query($this->db, $this->sql->Filter($query));
+
 		return mysqli_insert_id($this->db);
 	}
 
@@ -218,14 +222,14 @@ class DbMySQLi implements iDataBase {
 	 * @param $table
 	 * @param $datainfo
 	 */
-	function CreateTable($table, $datainfo, $engine = null) {
+	public function CreateTable($table, $datainfo, $engine = null) {
 		$this->QueryMulit($this->sql->CreateTable($table, $datainfo));
 	}
 
 	/**
 	 * @param $table
 	 */
-	function DelTable($table) {
+	public function DelTable($table) {
 		$this->QueryMulit($this->sql->DelTable($table));
 	}
 
@@ -233,7 +237,7 @@ class DbMySQLi implements iDataBase {
 	 * @param $table
 	 * @return bool
 	 */
-	function ExistTable($table) {
+	public function ExistTable($table) {
 
 		$a = $this->Query($this->sql->ExistTable($table, $this->dbname));
 		if (!is_array($a)) {

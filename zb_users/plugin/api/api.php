@@ -48,6 +48,7 @@ class API {
 			$class = __CLASS__;
 			self::$instance = new $class();
 		}
+
 		return self::$instance;
 	}
 

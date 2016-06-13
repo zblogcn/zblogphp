@@ -52,5 +52,3 @@ script;
 
 	echo $s;
 }
-
-?>

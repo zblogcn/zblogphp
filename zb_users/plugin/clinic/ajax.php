@@ -8,7 +8,7 @@ if (!$zbp->CheckPlugin('clinic')) {$zbp->ShowError(48);die();}
 
 require 'clinic.php';
 $module = GetVars('module', 'GET');
-$module = (isset($clinic->modules[$module]) ? $clinic->modules[$module] : NULL);
+$module = (isset($clinic->modules[$module]) ? $clinic->modules[$module] : null);
 if (!$module) {
 	exit(json_encode(array("err" => "no this module")));
 }

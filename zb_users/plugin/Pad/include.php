@@ -219,5 +219,3 @@ function Pad_Search() {
 
 	die();
 }
-
-?>

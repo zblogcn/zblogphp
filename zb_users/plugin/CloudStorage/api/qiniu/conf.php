@@ -13,4 +13,3 @@ $QINIU_RSF_HOST	= 'http://rsf.qbox.me';
 
 $QINIU_ACCESS_KEY	= '<Please apply your access key>';
 $QINIU_SECRET_KEY	= '<Dont send your secret key to anyone>';
-

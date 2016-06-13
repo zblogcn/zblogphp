@@ -29,6 +29,7 @@ function forcehttps_isHttps() {
 				return 'https://';
 			}
 		}
+
 		return 'http://';
 	}
 }

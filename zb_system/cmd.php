@@ -52,7 +52,7 @@ case 'cmt':
 		// 兼容老版本的评论前端
 		Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'RespondError', PLUGIN_EXITSIGNAL_RETURN);
 		$die = true;
-	} else if (GetVars('format', 'POST') == "json") {
+	} elseif (GetVars('format', 'POST') == "json") {
 		// 1.5之后的评论以json形式加载给前端
 		Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'JsonError4ShowErrorHook', PLUGIN_EXITSIGNAL_RETURN);
 		$die = true;

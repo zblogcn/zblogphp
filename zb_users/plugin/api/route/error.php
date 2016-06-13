@@ -27,7 +27,7 @@ function api_format_exception(&$zbe) {
 	
 		if ($iInt <= 1) { // That's error trigger
 			continue;
-		} 
+		}
 		$trace = array();
 		$trace['file'] = isset($sData['file']) ? $sData['file'] : 'Callback';
 		$trace['line'] = isset($sData['line']) ? $sData['line'] : '';
@@ -107,5 +107,3 @@ function api_shutdown_error_handler() {
 		api_format_exception($zbe);
 	}
 }
-
-

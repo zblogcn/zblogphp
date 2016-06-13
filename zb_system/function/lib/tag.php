@@ -10,7 +10,7 @@ class Tag extends Base {
 	/**
 	 *
 	 */
-	function __construct() {
+	public function __construct() {
 		global $zbp;
 		parent::__construct($zbp->table['Tag'], $zbp->datainfo['Tag'], __CLASS__);
 	}
@@ -20,7 +20,7 @@ class Tag extends Base {
 	 * @param $args
 	 * @return mixed
 	 */
-	function __call($method, $args) {
+	public function __call($method, $args) {
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Call'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn = $fpname($this, $method, $args);
@@ -64,6 +64,7 @@ class Tag extends Base {
 			$u = new UrlRule($zbp->option['ZC_TAGS_REGEX']);
 			$u->Rules['{%id%}'] = $this->ID;
 			$u->Rules['{%alias%}'] = rawurlencode($this->Alias == '' ? $this->$backAttr : $this->Alias);
+
 			return $u->Make();
 		}
 		if ($name == 'Template') {
@@ -74,13 +75,14 @@ class Tag extends Base {
 
 			return $value;
 		}
+
 		return parent::__get($name);
 	}
 
 	/**
 	 * @return bool
 	 */
-	function Save() {
+	public function Save() {
 		global $zbp;
 		if ($this->Template == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
 			$this->data['Template'] = '';
@@ -91,18 +93,20 @@ class Tag extends Base {
 			$fpreturn = $fpname($this);
 			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
+
 		return parent::Save();
 	}
 
 	/**
 	 * @return bool
 	 */
-	function Del() {
+	public function Del() {
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Del'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn = $fpname($this);
 			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
+
 		return parent::Del();
 	}
 

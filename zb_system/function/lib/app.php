@@ -132,6 +132,7 @@ class App {
 	 */
 	public function CanDel() {
 		global $zbp;
+
 		return false;
 	}
 	/**
@@ -141,6 +142,7 @@ class App {
 	 */
 	public function CanManage() {
 		if ($this->path) {return true;}
+
 		return false;
 	}
 	/**
@@ -150,6 +152,7 @@ class App {
 	 */
 	public function IsUsed() {
 		global $zbp;
+
 		return $zbp->CheckPlugin($this->id);
 	}
 	/**
@@ -159,6 +162,7 @@ class App {
 	 */
 	public function HasPlugin() {
 		if ($this->path || $this->include) {return true;}
+
 		return false;
 	}
 	/**
@@ -168,6 +172,7 @@ class App {
 	 */
 	public function GetHash() {
 		global $zbp;
+
 		return crc32($this->id);
 	}
 	/**
@@ -177,6 +182,7 @@ class App {
 	 */
 	public function GetManageUrl() {
 		global $zbp;
+
 		return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/' . $this->path;
 	}
 	/**
@@ -186,6 +192,7 @@ class App {
 	 */
 	public function GetDir() {
 		global $zbp;
+
 		return $zbp->path . 'zb_users/' . $this->type . '/' . $this->id . '/';
 	}
 	/**
@@ -208,6 +215,7 @@ class App {
 	 */
 	public function GetScreenshot() {
 		global $zbp;
+
 		return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
 	}
 	/**
@@ -218,6 +226,7 @@ class App {
 	public function GetCssFiles() {
 		global $zbp;
 		$dir = $zbp->usersdir . 'theme/' . $this->id . '/style/';
+
 		return GetFilesInDir($dir, 'css');
 	}
 
@@ -480,7 +489,7 @@ class App {
 	 * @param $xml
 	 * @return bool
 	 */
-	static public function UnPack($xml) {
+	public static function UnPack($xml) {
 		global $zbp;
 		$charset = array();
 		$charset[1] = substr($xml, 0, 1);

@@ -19,7 +19,7 @@ class Comment extends Base {
 	/**
 	 * 构造函数
 	 */
-	function __construct() {
+	public function __construct() {
 		global $zbp;
 		parent::__construct($zbp->table['Comment'], $zbp->datainfo['Comment'], __CLASS__);
 	}
@@ -30,7 +30,7 @@ class Comment extends Base {
 	 * @param mixed $args 参数
 	 * @return mixed
 	 */
-	function __call($method, $args) {
+	public function __call($method, $args) {
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Call'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn = $fpname($this, $method, $args);
@@ -43,7 +43,7 @@ class Comment extends Base {
 	 * @param int $parentid 父评论ID
 	 * @return array|int|mixed
 	 */
-	static public function GetRootID($parentid) {
+	public static function GetRootID($parentid) {
 		global $zbp;
 		if ($parentid == 0) {
 			return 0;
@@ -102,6 +102,7 @@ class Comment extends Base {
 				$m->Email = $this->Email;
 				$m->HomePage = $this->HomePage;
 			}
+
 			return $m;
 		}
 		if ($name == 'Comments') {
@@ -111,6 +112,7 @@ class Comment extends Base {
 					$array[] = &$zbp->comments[$comment->ID];
 				}
 			}
+
 			return $array;
 		}
 		if ($name == 'Level') {
@@ -118,8 +120,10 @@ class Comment extends Base {
 		}
 		if ($name == 'Post') {
 			$p = $zbp->GetPostByID($this->LogID);
+
 			return $p;
 		}
+
 		return parent::__get($name);
 	}
 
@@ -127,25 +131,27 @@ class Comment extends Base {
 	 * 保存评论数据
 	 * @return bool
 	 */
-	function Save() {
+	public function Save() {
 		global $zbp;
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Save'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn = $fpname($this);
 			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
+
 		return parent::Save();
 	}
 
 	/**
 	 * @return bool
 	 */
-	function Del() {
+	public function Del() {
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Del'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn = $fpname($this);
 			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
+
 		return parent::Del();
 	}
 
@@ -160,6 +166,7 @@ class Comment extends Base {
 			return $deep;
 		}
 		$parentComment = $zbp->GetCommentByID($object->ParentID);
+
 		return $this->GetDeep($parentComment, $deep + 1);
 	}
 }

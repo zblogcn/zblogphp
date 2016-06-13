@@ -127,7 +127,7 @@ foreach ($Totoro->config_array['BLACK_LIST'] as $name => $value) {
                                             <br/> · <?php echo $value['DESC'] ?></p>
                                     </td>
                                     <td>
-                                        <textarea class="escape-textarea" name="TOTORO_BLACK_LIST_<?php echo $name ?>" style="display:none" id="TOTORO_BLACK_LIST_<?php echo $name ?>" data-tag="TOTORO_BLACK_LIST_UNESCAPE_<?php echo $name ?>"><?php echo urlencode($Totoro->output_config('BLACK_LIST', $name, FALSE)) ?></textarea>
+                                        <textarea class="escape-textarea" name="TOTORO_BLACK_LIST_<?php echo $name ?>" style="display:none" id="TOTORO_BLACK_LIST_<?php echo $name ?>" data-tag="TOTORO_BLACK_LIST_UNESCAPE_<?php echo $name ?>"><?php echo urlencode($Totoro->output_config('BLACK_LIST', $name, false)) ?></textarea>
                                         <textarea class="unescape-textarea" rows="6" style="width:95%" data-tag="TOTORO_BLACK_LIST_<?php echo $name ?>" id="TOTORO_BLACK_LIST_UNESCAPE_<?php echo $name ?>">数据读取中</textarea>
                                     </td>
                                 </tr>
@@ -159,7 +159,7 @@ foreach ($Totoro->config_array['STRING_BACK'] as $name => $value) {
                                         <p align="left"><b><?php echo $value['NAME'] ?></b></p>
                                     </td>
                                     <td>
-                                        <textarea class="unescape-textarea" name="TOTORO_STRING_BACK_<?php echo $name ?>" rows="6" style="width:95%"><?php echo $Totoro->output_config('STRING_BACK', $name, FALSE) ?></textarea>
+                                        <textarea class="unescape-textarea" name="TOTORO_STRING_BACK_<?php echo $name ?>" rows="6" style="width:95%"><?php echo $Totoro->output_config('STRING_BACK', $name, false) ?></textarea>
                                     </td>
                                 </tr>
                                 <?php

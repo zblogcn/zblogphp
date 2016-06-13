@@ -5,29 +5,29 @@ require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
 
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 if (!$zbp->CheckPlugin('Howl')) {$zbp->ShowError(48);die();}
 
-$blogtitle='Z-Blog角色分配器';
+$blogtitle = 'Z-Blog角色分配器';
 
 if(!isset($_GET['id'])){
 
-if(count($_POST)>0){
+if(count($_POST) > 0){
 	Redirect('./user.php?id=' . $_POST['userid']);
 }
 
 }
 //var_dump($_POST);die;
-if(count($_POST)>0){
+if(count($_POST) > 0){
 	$userid = 'User' . $_GET['id'];
 	$useractions = array();
-	foreach($_POST as $key=>$value){
-		if($value==='-1')
+	foreach($_POST as $key => $value){
+		if($value === '-1')
 			unset($useractions[$key]);
 		else
-			$useractions[$key]=$value;
+			$useractions[$key] = $value;
 	}
 	$zbp->Config('Howl')->$userid = $useractions;
 	$zbp->SaveConfig('Howl');
@@ -41,7 +41,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
 <?php
-$zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重后果，请慎用！');
+$zbp->ShowHint('bad', '本插件配置不当可能会造成网站被黑等严重后果，请慎用！');
 ?>
   <div class="divHeader"><?php echo $blogtitle;?></div>
   <div class="SubMenu" style="display: block;"><a href="main.php"><span class="m-left">系统群组设置</span></a><a href="user.php"><span class="m-left m-now">单独用户设置</span></a></div>
@@ -54,7 +54,7 @@ if(!isset($_GET['id'])){
 	foreach ($zbp->members as $key => $value) {
 			$userid = 'User' . $key;
 			$count = Count($zbp->Config('Howl')->$userid);
-			if($count>0)$count = " (已设置{$count}项)";else $count='';
+			if($count > 0)$count = " (已设置{$count}项)";else $count = '';
 			echo '<option value="' . $key . '" >' . $zbp->members[$key]->Name . $count  .'</option>';
 	}
 	echo '</select>';
@@ -84,9 +84,9 @@ if($zbp->Config('Howl')->HasKey($userid))
 else
 	$useractions = array();
 
-foreach($useractions as $key=>$value){
+foreach($useractions as $key => $value){
 	echo '<tr>';
-	echo '<th>' . $key . '</th><th><input name="' . $key .'" style="" type="text" value="'.(int)$value.'" class="checkbox"/></th><th><input type="submit" onclick="$(this).parent().parent().find(\'input:text\').val(-1);$(\'#edit\').submit();" class="button" value="删除" /></th>';
+	echo '<th>' . $key . '</th><th><input name="' . $key .'" style="" type="text" value="'.(int) $value.'" class="checkbox"/></th><th><input type="submit" onclick="$(this).parent().parent().find(\'input:text\').val(-1);$(\'#edit\').submit();" class="button" value="删除" /></th>';
 	echo '</tr>';
 }
 	echo '<tr>';

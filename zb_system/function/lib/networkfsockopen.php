@@ -8,10 +8,10 @@
 class Networkfsockopen implements iNetwork {
 
 	private $readyState = 0; #状态
-	private $responseBody = NULL; #返回的二进制
-	private $responseStream = NULL; #返回的数据流
+	private $responseBody = null; #返回的二进制
+	private $responseStream = null; #返回的数据流
 	private $responseText = ''; #返回的数据
-	private $responseXML = NULL; #尝试把responseText格式化为XMLDom
+	private $responseXML = null; #尝试把responseText格式化为XMLDom
 	private $status = 0; #状态码
 	private $statusText = ''; #状态码文本
 	private $responseVersion = ''; #返回的HTTP版体
@@ -48,6 +48,7 @@ class Networkfsockopen implements iNetwork {
 	public function __get($property_name) {
 		if (strtolower($property_name) == 'responsexml') {
 			$w = new DOMDocument();
+
 			return $w->loadXML($this->responseText);
 		} elseif (strtolower($property_name) == 'scheme' ||
 			strtolower($property_name) == 'host' ||
@@ -93,6 +94,7 @@ class Networkfsockopen implements iNetwork {
 				return substr(strstr($w, ': '), 2);
 			}
 		}
+
 		return '';
 	}
 
@@ -239,6 +241,7 @@ class Networkfsockopen implements iNetwork {
 				$this->open('Get', $url);
 				$this->setMaxRedirs($i - 1);
 				$this->canreinit = true;
+
 				return $this->send();
 			}
 		}
@@ -293,6 +296,7 @@ class Networkfsockopen implements iNetwork {
 				$this->httpheader[$bstrHeader] = $bstrHeader . ': ' . $bstrValue;
 			}
 		}
+
 		return true;
 	}
 
@@ -312,19 +316,19 @@ class Networkfsockopen implements iNetwork {
 	 * @param string $entity
 	 * @return mixed
 	 */
-	public function addBinary($name, $entity, $filename = NULL, $mime = '') {
+	public function addBinary($name, $entity, $filename = null, $mime = '') {
 		$this->__isBinary = true;
 		$return = array();
 
 		$return['type'] = 'binary';
 		if (is_file($entity)) {
 			$return['data'] = file_get_contents($entity);
-			$return['filename'] = ($filename === NULL ? basename($entity) : $filename);
+			$return['filename'] = ($filename === null ? basename($entity) : $filename);
 
 			if ($mime == '') {
 				if (function_exists('mime_content_type')) {
 					$mime = mime_content_type($entity);
-				} else if (function_exists('finfo_open')) {
+				} elseif (function_exists('finfo_open')) {
 					$finfo = finfo_open(FILEINFO_MIME);
 					$mime = finfo_file($finfo, $name);
 					finfo_close($finfo);
@@ -336,7 +340,7 @@ class Networkfsockopen implements iNetwork {
 		} else {
 			$name = basename($name);
 			$return['data'] = $entity;
-			$return['filename'] = ($filename === NULL ? basename($entity) : $filename);
+			$return['filename'] = ($filename === null ? basename($entity) : $filename);
 			$mime = $mime == '' ? 'application/octet-stream' : $mime;
 		}
 		$return['mime'] = $mime;
@@ -362,6 +366,7 @@ class Networkfsockopen implements iNetwork {
 			foreach ($this->postdata as $name => $value) {
 				$array[$name] = $value['data'];
 			}
+
 			return http_build_query($array);
 		}
 		$this->__buildBoundary();
@@ -411,10 +416,10 @@ class Networkfsockopen implements iNetwork {
 		}
 
 		$this->readyState = 0; #状态
-		$this->responseBody = NULL; #返回的二进制
-		$this->responseStream = NULL; #返回的数据流
+		$this->responseBody = null; #返回的二进制
+		$this->responseStream = null; #返回的数据流
 		$this->responseText = ''; #返回的数据
-		$this->responseXML = NULL; #尝试把responseText格式化为XMLDom
+		$this->responseXML = null; #尝试把responseText格式化为XMLDom
 		$this->status = 0; #状态码
 		$this->statusText = ''; #状态码文本
 
@@ -447,6 +452,7 @@ class Networkfsockopen implements iNetwork {
 			&& ($chunkLenHex = substr($chunk, $pos, ($newlineAt = strpos($chunk, "\n", $pos + 1)) - $pos))) {
 			if (!$this->is_hex($chunkLenHex)) {
 				trigger_error('Value is not properly chunk encoded', E_USER_WARNING);
+
 				return $chunk;
 			}
 
@@ -455,6 +461,7 @@ class Networkfsockopen implements iNetwork {
 			$dechunk .= substr($chunk, $pos, $chunkLen);
 			$pos = strpos($chunk, "\n", $pos + $chunkLen) + 1;
 		}
+
 		return $dechunk;
 	}
 
@@ -469,6 +476,7 @@ class Networkfsockopen implements iNetwork {
 		$hex = strtolower(trim(ltrim($hex, "0")));
 		if (empty($hex)) {$hex = 0;};
 		$dec = hexdec($hex);
+
 		return ($hex == dechex($dec));
 	}
 

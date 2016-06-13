@@ -150,6 +150,7 @@ function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId) {
 	$AdminTopMenuCount = $AdminTopMenuCount + 1;
 	if ($strLiId == "") {$strLiId = "topmenu" . $AdminTopMenuCount;}
 	$tmp = "<li id=\"" . $strLiId . "\"><a href=\"" . $strUrl . "\" target=\"" . $strTarget . "\" title=\"" . htmlspecialchars($strName) . "\">" . $strName . "</a></li>";
+
 	return $tmp;
 }
 
@@ -178,6 +179,7 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
 	} else {
 		$tmp = "<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\" title=\"" . strip_tags($strName) . "\"><span>" . $strName . "</span></a></li>";
 	}
+
 	return $tmp;
 
 }
@@ -253,12 +255,12 @@ function CreateOptoinsOfTemplate($default) {
 		}
 
 		//读模板名称
-		$t=$zbp->templates[$key];
-		$n='';
+		$t = $zbp->templates[$key];
+		$n = '';
 		if(stristr($t, 'Template Name:') !== false) {
 			$t = stristr($t, 'Template Name:');
-			$t = str_ireplace('Template Name:','',$t);
-			$n = strtok($t,' *');
+			$t = str_ireplace('Template Name:', '', $t);
+			$n = strtok($t, ' *');
 		}
 
 		if ($default == $key) {
@@ -290,6 +292,7 @@ function CreateOptoinsOfMemberLevel($default) {
 	for ($i = 1; $i < 7; $i++) {
 		$s .= '<option value="' . $i . '" ' . ($default == $i ? 'selected="selected"' : '') . ' >' . $zbp->lang['user_level_name'][$i] . '</option>';
 	}
+
 	return $s;
 }
 
@@ -314,6 +317,7 @@ function CreateOptoinsOfMember($default) {
 			$s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $zbp->members[$key]->Name . '</option>';
 		}
 	}
+
 	return $s;
 }
 
@@ -337,6 +341,7 @@ function CreateOptoinsOfPostStatus($default) {
 	if ($zbp->CheckRights('ArticleAll')) {
 		$s .= '<option value="2" ' . ($default == 2 ? 'selected="selected"' : '') . ' >' . $zbp->lang['post_status_name']['2'] . '</option>';
 	}
+
 	return $s;
 }
 
@@ -383,8 +388,7 @@ function CreateModuleDiv($m, $button = true) {
 function CreateOptionsOfTimeZone($default) {
 	global $zbp;
 	$s = '';
-	$tz = array
-		(
+	$tz = array(
 		'Etc/GMT+12' => '-12:00',
 		'Pacific/Midway' => '-11:00',
 		'Pacific/Honolulu' => '-10:00',
@@ -444,6 +448,7 @@ function CreateOptionsOfLang($default) {
 		$t = require $f;
 		$s .= '<option value="' . $n . '" ' . ($default == $n ? 'selected="selected"' : '') . ' >' . $t['lang_name'] . ' (' . $n . ')' . '</option>';
 	}
+
 	return $s;
 }
 
@@ -821,7 +826,7 @@ function Admin_CommentMng() {
 
 		$article = $zbp->GetPostByID($cmt->LogID);
 		if ($article->ID == 0) {
-			$article = NULL;
+			$article = null;
 		}
 
 		echo '<tr>';

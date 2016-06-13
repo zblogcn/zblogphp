@@ -26,7 +26,7 @@ class DbSQLite3 implements iDataBase {
 	/**
 	 * 构造函数，实例化$sql参数
 	 */
-	function __construct() {
+	public function __construct() {
 		$this->sql = new DbSql($this);
 	}
 
@@ -42,10 +42,11 @@ class DbSQLite3 implements iDataBase {
 	 * @param $array
 	 * @return bool
 	 */
-	function Open($array) {
+	public function Open($array) {
 		if ($this->db = new SQLite3($array[0])) {
 			$this->dbpre = $array[1];
 			$this->dbname = $array[0];
+
 			return true;
 		} else {
 			return false;
@@ -55,15 +56,15 @@ class DbSQLite3 implements iDataBase {
 	/**
 	 * 关闭数据库连接
 	 */
-	function Close() {
+	public function Close() {
 		$this->db->close();
 	}
 
 	/**
 	 * @param $s
 	 */
-	function QueryMulit($s) {return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
-	function QueryMulti($s) {
+	public function QueryMulit($s) {return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
+	public function QueryMulti($s) {
 		//$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		$a = explode(';', $s);
 		foreach ($a as $s) {
@@ -79,7 +80,7 @@ class DbSQLite3 implements iDataBase {
 	 * @param $query
 	 * @return array
 	 */
-	function Query($query) {
+	public function Query($query) {
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		// 遍历出来
 		$results = $this->db->query($this->sql->Filter($query));
@@ -91,6 +92,7 @@ class DbSQLite3 implements iDataBase {
 		} else {
 			$data[] = $results->numColumns();
 		}
+
 		return $data;
 	}
 
@@ -98,7 +100,7 @@ class DbSQLite3 implements iDataBase {
 	 * @param $query
 	 * @return mixed
 	 */
-	function Update($query) {
+	public function Update($query) {
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		return $this->db->query($this->sql->Filter($query));
 	}
@@ -107,7 +109,7 @@ class DbSQLite3 implements iDataBase {
 	 * @param $query
 	 * @return mixed
 	 */
-	function Delete($query) {
+	public function Delete($query) {
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		return $this->db->query($this->sql->Filter($query));
 	}
@@ -116,9 +118,10 @@ class DbSQLite3 implements iDataBase {
 	 * @param $query
 	 * @return mixed
 	 */
-	function Insert($query) {
+	public function Insert($query) {
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		$this->db->query($this->sql->Filter($query));
+
 		return $this->db->lastInsertRowID();
 	}
 
@@ -126,21 +129,21 @@ class DbSQLite3 implements iDataBase {
 	 * @param $table
 	 * @param $datainfo
 	 */
-	function CreateTable($table, $datainfo) {
+	public function CreateTable($table, $datainfo) {
 		$this->QueryMulit($this->sql->CreateTable($table, $datainfo));
 	}
 
 	/**
 	 * @param $table
 	 */
-	function DelTable($table) {
+	public function DelTable($table) {
 		$this->QueryMulit($this->sql->DelTable($table));
 	}
 
 	/**
 	 * @param $table
 	 */
-	function ExistTable($table) {
+	public function ExistTable($table) {
 
 		$a = $this->Query($this->sql->ExistTable($table));
 		if (!is_array($a)) {

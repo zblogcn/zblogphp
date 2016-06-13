@@ -5,13 +5,13 @@ class zbpdk_t {
 	public $submenu = null;
 	public $objects = array();
 
-	function __construct() {
+	public function __construct() {
 		$this->submenu = new zbpdk_submenu();
 		//$this->scan_extensions();
 		//var_dump($this->objects);
 	}
 
-	function scan_extensions() {
+	public function scan_extensions() {
 		global $blogpath;
 		$current_path = $blogpath . '/zb_users/plugin/ZBPDK/extensions/';
 		if ($handle = opendir($current_path)) {
@@ -31,7 +31,7 @@ class zbpdk_t {
 		}
 	}
 
-	function add_extension(array $ary) {
+	public function add_extension(array $ary) {
 		if (!isset($ary['url'])) {
 			throw new Exception('Param \'url\' is empty!');
 		}
@@ -55,13 +55,13 @@ class zbpdk_extension {
 	public $description = '';
 	public $url = '';
 
-	function __construct($ary) {
+	public function __construct($ary) {
 		$this->id = $ary['id'];
 		$this->url = $ary['url'];
 		$this->description = $ary['description'];
 	}
 
-	function load($id) {
+	public function load($id) {
 
 	}
 
@@ -73,7 +73,7 @@ class zbpdk_submenu {
 	private $actions = array();
 	private $template = '';
 
-	function __construct() {
+	public function __construct() {
 		global $zbp;
 		$this->template = '<a href="' . $zbp->host . 'zb_users/plugin/ZBPDK/extensions/$url"><span class="m-$float$light">$title</span></a>';
 		$this->add(array(
@@ -85,7 +85,7 @@ class zbpdk_submenu {
 
 	}
 
-	function add(array $ary) {
+	public function add(array $ary) {
 		if (!isset($ary['url'])) {
 			throw new Exception('Param \'url\' is empty!');
 		}
@@ -105,7 +105,7 @@ class zbpdk_submenu {
 		$this->actions[] = $ary;
 	}
 
-	function export($id) {
+	public function export($id) {
 		$html = '';
 		$temp = '';
 		for ($i = 0; $i < count($this->actions); $i++) {
@@ -117,6 +117,7 @@ class zbpdk_submenu {
 			$temp = str_replace('$light', ($this->actions[$i]['id'] == $id ? ' m-now' : ''), $temp);
 			$html .= $temp;
 		}
+
 		return $html;
 	}
 

@@ -16,6 +16,7 @@ function return_upload($id) {
 	$upload = $zbp->GetUploadByID($id);
 	$ret = $upload->GetData();
 	API::$IO->formatObjectName($ret);
+
 	return $ret;
 }
 
@@ -24,7 +25,7 @@ function return_upload($id) {
  */
 function api_upload_get_function() {
 
-	$id = (int)API::$IO->id;
+	$id = (int) API::$IO->id;
 	if ($id === 0) API::$IO->end(3);
 	//
 	$ret = return_upload($id);

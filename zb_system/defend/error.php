@@ -57,7 +57,7 @@ if (!in_array('Status: 404 Not Found', headers_list())) {
 $aFile = $this->get_code($this->file, $this->line);
 	foreach ($aFile as $iInt => $sData) {
 		?>
-		 		<tr<?php echo ($iInt + 1 == $this->line ? ' style="background:#75BAFF"' : '') ?>>
+		 		<tr<?php echo($iInt + 1 == $this->line ? ' style="background:#75BAFF"' : '') ?>>
 		 			<td style='width:50px'><?php echo $iInt + 1 ?></td>
 		 			<td><?php echo $sData ?></td>
 		 		</tr>

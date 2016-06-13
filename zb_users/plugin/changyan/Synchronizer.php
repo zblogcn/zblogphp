@@ -21,10 +21,11 @@ class Changyan_Synchronizer
         if (!(self::$instance instanceof self)) {
             self::$instance = new self;
         }
+
         return self::$instance;
     }
 
-    public function sync2Wordpress(){
+    public function sync2Wordpress() {
         global $zbp;
 	
         @set_time_limit(0);
@@ -38,15 +39,15 @@ class Changyan_Synchronizer
         //not site_url: the folder of wp installed, see http://www.andelse.com/wordpress-url-strategy-url-function-list.html
         //echo "<br/>".home_url();//it is right
         //get post list from
-        $nextID2CY = (int)$this->getOption('changyan_sync2CY');
-        $nextID2WP = (int)$this->getOption('changyan_sync2WP');
+        $nextID2CY = (int) $this->getOption('changyan_sync2CY');
+        $nextID2WP = (int) $this->getOption('changyan_sync2WP');
 
-		$cmt=$zbp->GetCommentByID($nextID2WP);
+		$cmt = $zbp->GetCommentByID($nextID2WP);
 		date_default_timezone_set('Etc/GMT-8');
-        if ($cmt->ID==0) {
-			$time = date ( "Y-m-d H:i:s",0 );
+        if ($cmt->ID == 0) {
+			$time = date("Y-m-d H:i:s", 0);
         }else{
-			$time = date ( "Y-m-d H:i:s",$cmt->PostTime );
+			$time = date("Y-m-d H:i:s", $cmt->PostTime);
 		}
 		date_default_timezone_set($zbp->option['ZC_TIME_ZONE_NAME']);
 
@@ -156,32 +157,32 @@ class Changyan_Synchronizer
 		$ajax = Network::Create();
 		if(!$ajax) throw new Exception('主机没有开启访问外部网络功能');
 
-		$ajax->open('GET',$aUrl);
-		if( (get_class($ajax)<>'Networkfile_get_contents') || (version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0) ){
+		$ajax->open('GET', $aUrl);
+		if((get_class($ajax) != 'Networkfile_get_contents') || (version_compare(PHP_VERSION,  '5.3.0') >=  0)){
 			$ajax->enableGzip();
 		}
 
-		$ajax->setTimeOuts(360,20,0,0);
-		$ajax->setRequestHeader('User-Agent','Z-BlogPHP/' . ZC_BLOG_VERSION . '|ChangYan/'. ChangYan_Handler::version);
+		$ajax->setTimeOuts(360, 20, 0, 0);
+		$ajax->setRequestHeader('User-Agent', 'Z-BlogPHP/' . ZC_BLOG_VERSION . '|ChangYan/'. ChangYan_Handler::version);
 		$ajax->send();
 
 		return $ajax->responseText;
 
     }
 
-	function findCommentInDB($aComment,$postID){
+	public function findCommentInDB($aComment, $postID) {
 		global $zbp;
-		$date=$aComment->create_time;
-		$ip=$aComment->ip;
+		$date = $aComment->create_time;
+		$ip = $aComment->ip;
 		$w[] = array('=', 'comm_LogID', $postID);
 		$w[] = array('=', 'comm_PostTime', $date);
 		$w[] = array('=', 'comm_IP', $ip);
 		$comments = $zbp->GetCommentList('*', $w, null, null, null);
-		if(count($comments)==0){
-			$cmt = New Comment;
+		if(count($comments) == 0){
+			$cmt = new Comment;
 			
             $cmt->LogID = $postID;
-            $cmt->IsChecking = (bool)$aComment->status;
+            $cmt->IsChecking = (bool) $aComment->status;
 			$cmt->AuthorID = 0;
             $cmt->Name = $aComment->passport->nickname;
             $cmt->Email = '';
@@ -221,19 +222,19 @@ class Changyan_Synchronizer
 		$commentscy = array();
 
 		foreach ($commentsArray as &$aComment) {
-			if(count($aComment->comments)>3){
+			if(count($aComment->comments) > 3){
 				continue;
 			}
-			$aComment->create_time=(int)substr($aComment->create_time,0,-3);
-			$comments[$aComment->comment_id]=$aComment;
-			$commentscy[$aComment->comment_id]=$aComment;
+			$aComment->create_time = (int) substr($aComment->create_time, 0, -3);
+			$comments[$aComment->comment_id] = $aComment;
+			$commentscy[$aComment->comment_id] = $aComment;
 
 		}
 		
 		foreach ($comments as $aComment) {
-			$cmt = $this->findCommentInDB($aComment,$postID);
+			$cmt = $this->findCommentInDB($aComment, $postID);
 
-			if($cmt->ID==0){
+			if($cmt->ID == 0){
 				//echo $cmt->ID;
 				if(isset($aComment->comments[0])){
 					if(isset($commentscy[$aComment->comments[0]->comment_id])){
@@ -245,18 +246,19 @@ class Changyan_Synchronizer
 				}
 				$cmt->RootID = Comment::GetRootID($cmt->ParentID);
 				$cmt->Save();
-				$commentscy[$aComment->comment_id]=$cmt;
-				$zbp->comments[$aComment->comment_id]=$cmt;
+				$commentscy[$aComment->comment_id] = $cmt;
+				$zbp->comments[$aComment->comment_id] = $cmt;
 			}else{
-				$commentscy[$aComment->comment_id]=$cmt;
+				$commentscy[$aComment->comment_id] = $cmt;
 			}
 			unset($cmt);
 		}
-		$commentLastID=0;
+		$commentLastID = 0;
 		foreach ($commentscy as $aComment) {
 			if(isset($aComment->ID))
 				if($aComment->ID > $commentLastID)$commentLastID = $aComment->ID;
 		}
+
 		return $commentLastID;
 	}
 	
@@ -309,7 +311,7 @@ class Changyan_Synchronizer
 
         $nextID2CY = $this->getOption('changyan_sync2CY');
 
-        if ($nextID2CY==0) {
+        if ($nextID2CY == 0) {
             $nextID2CY = 1;
         }
 
@@ -318,7 +320,7 @@ class Changyan_Synchronizer
 				'%pre%comment',
 				'MAX(comm_ID)',
 				array(
-					array('CUSTOM',"comm_Agent NOT LIKE 'Changyan_%'")
+					array('CUSTOM', "comm_Agent NOT LIKE 'Changyan_%'")
 				),
 				null,
 				null,
@@ -333,16 +335,16 @@ class Changyan_Synchronizer
 				'%pre%comment',
 				'DISTINCT comm_LogID',
 				array(
-					array('CUSTOM',"comm_ID > $nextID2CY AND comm_ID <= $maxID")
+					array('CUSTOM', "comm_ID > $nextID2CY AND comm_ID <= $maxID")
 				),
 				null,
 				null,
 				null
 			)
 		);
-		$postIDList2=array();
+		$postIDList2 = array();
 		foreach($postIDList as $id){
-			$postIDList2[]=(int)$id['comm_LogID'];
+			$postIDList2[] = (int) $id['comm_LogID'];
 		}
 
         //flag of response
@@ -353,7 +355,7 @@ class Changyan_Synchronizer
             //in case of bug of duoshuo or other plugins: postID larger than maxPostID
             //echo ($aPost -> comment_post_ID)."  ";//////////////////xcv
             $postInfo = $zbp->GetPostByID($aPostID);
-			if($postInfo->ID==0)continue;
+			if($postInfo->ID == 0)continue;
 
             //build the comments to be synchronized
             $topic_id = $postInfo->ID;
@@ -361,7 +363,7 @@ class Changyan_Synchronizer
             $topic_title = $postInfo->Title;
 			
 			date_default_timezone_set('Etc/GMT-8');
-			$topic_time = date ( "Y-m-d H:i:s",$postInfo->PostTime );
+			$topic_time = date("Y-m-d H:i:s", $postInfo->PostTime);
 			
             $topic_parents = ""; //$postInfo[0]->post_parents;
             $script = $this->getOption('changyan_script');
@@ -382,7 +384,7 @@ class Changyan_Synchronizer
             $comments = array();
             //insert comments into the commentsArray
             foreach ($commentsList as $comment) {
-				if(strpos($comment->Agent,'Changyan_')===0)continue;
+				if(strpos($comment->Agent, 'Changyan_') === 0)continue;
                 $user = array(
                     'userid' => $comment->Author->Name,
                     'nickname' => $comment->Name,
@@ -464,12 +466,12 @@ class Changyan_Synchronizer
 		$ajax = Network::Create();
 		if(!$ajax) throw new Exception('主机没有开启访问外部网络功能');
 
-		$ajax->open('POST',$aUrl);
-		if( (get_class($ajax)<>'Networkfile_get_contents') || (version_compare ( PHP_VERSION ,  '5.3.0' ) >=  0) ){
+		$ajax->open('POST', $aUrl);
+		if((get_class($ajax) != 'Networkfile_get_contents') || (version_compare(PHP_VERSION,  '5.3.0') >=  0)){
 			$ajax->enableGzip();
 		}
-		$ajax->setTimeOuts(360,20,0,0);
-		$ajax->setRequestHeader('User-Agent','Z-BlogPHP/' . ZC_BLOG_VERSION . '|ChangYan/'. ChangYan_Handler::version);
+		$ajax->setTimeOuts(360, 20, 0, 0);
+		$ajax->setRequestHeader('User-Agent', 'Z-BlogPHP/' . ZC_BLOG_VERSION . '|ChangYan/'. ChangYan_Handler::version);
 		$ajax->send($aCommentsArray);
 		
 		return $ajax->responseText;
@@ -481,6 +483,7 @@ class Changyan_Synchronizer
     private function getOption($option)
     {
 		global $zbp;
+
 		return $zbp->Config('changyan')->$option;
         //return get_option($option);
     }
@@ -488,12 +491,11 @@ class Changyan_Synchronizer
     private function setOption($option, $value)
     {
 		global $zbp;
-		$zbp->Config('changyan')->$option=$value;
+		$zbp->Config('changyan')->$option = $value;
 		$zbp->SaveConfig('changyan');
+
 		return true;
         //return update_option($option, $value);
     }
 
 }
-
-?>

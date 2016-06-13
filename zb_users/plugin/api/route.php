@@ -48,6 +48,7 @@ class API_Route {
 			$class = __CLASS__;
 			self::$instance = new $class();
 		}
+
 		return self::$instance;
 	}
 
@@ -116,6 +117,7 @@ class API_Route {
 	 */
 	private static function buildRegExpList($regex, &$list, $callback) {
 		$list[$regex] = $callback;
+
 		return true;
 	}
 
@@ -160,6 +162,7 @@ class API_Route {
 				continue;
 			}
 		}
+
 		return false;
 	}
 	/**
@@ -173,10 +176,12 @@ class API_Route {
 			if (self::$debug) {echo "Check RegExp: " . $value . " , Result: " . (preg_match($value, $path) ? "True" : "False") . "\n";}
 			if (preg_match($key, $path)) {
 				$value();
+
 				return true;
 			}
 
 		}
+
 		return false;
 	}
 

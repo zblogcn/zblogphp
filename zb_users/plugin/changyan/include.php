@@ -1,6 +1,6 @@
 <?php
 #注册插件
-RegisterPlugin("changyan","ActivePlugin_changyan");
+RegisterPlugin("changyan", "ActivePlugin_changyan");
 
 if(function_exists('ini_set'))ini_set('max_execution_time', '0');
 define('CHANGYAN_PLUGIN_PATH', dirname(__FILE__));
@@ -16,27 +16,27 @@ function ActivePlugin_changyan() {
 	$changyanPlugin = Changyan_Handler::getInstance();
 
 	//add_action('init', 'changyan_init');
-	Add_Filter_Plugin('Filter_Plugin_Zbp_Load','changyan_init');
-	Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu','changyan_AddMenu');
-	Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','changyan_socialcomment');
-	Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','changyan_view_post_template');
-	Add_Filter_Plugin('Filter_Plugin_ViewList_Template','changyan_view_list_template');
-	Add_Filter_Plugin('Filter_Plugin_Html_Js_Add','changyan_html_js_add');	
+	Add_Filter_Plugin('Filter_Plugin_Zbp_Load', 'changyan_init');
+	Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'changyan_AddMenu');
+	Add_Filter_Plugin('Filter_Plugin_ViewPost_Template', 'changyan_socialcomment');
+	Add_Filter_Plugin('Filter_Plugin_ViewPost_Template', 'changyan_view_post_template');
+	Add_Filter_Plugin('Filter_Plugin_ViewList_Template', 'changyan_view_list_template');
+	Add_Filter_Plugin('Filter_Plugin_Html_Js_Add', 'changyan_html_js_add');
 	
 }
 
-function changyan_html_js_add(){
+function changyan_html_js_add() {
     global $changyanPlugin,$zbp;
 	if(!$changyanPlugin->getOption('changyan_script'))return;
-	if(!$changyanPlugin->getOption('changyan_isCron'))return;	
-	if(time()-$changyanPlugin->getOption('changyan_lastSyncTime')>3600){
+	if(!$changyanPlugin->getOption('changyan_isCron'))return;
+	if(time() - $changyanPlugin->getOption('changyan_lastSyncTime') > 3600){
 		$changyanPlugin->sync2Wordpress();
 	}
 	$zbp->AddBuildModule('comments');
 	$zbp->BuildModule();
 }
 
-function changyan_view_list_template(&$template){
+function changyan_view_list_template(&$template) {
     global $changyanPlugin,$zbp;
 	$posts = &$template->GetTags('articles');
 	foreach($posts as $post)
@@ -44,18 +44,18 @@ function changyan_view_list_template(&$template){
 		$post->CommNums = '<span id = "sourceId::'. $post->ID .'" class = "cy_cmt_count" ></span>';
 	}
 }
-function changyan_view_post_template(&$template){
+function changyan_view_post_template(&$template) {
     global $changyanPlugin,$zbp;
 	$post = &$template->GetTags('article');
 	$post->CommNums = '<a href="#SOHUCS" id="changyan_count_unit"></a>';
 }
 
-function InstallPlugin_changyan(){
+function InstallPlugin_changyan() {
 	global $zbp;
 	//@duoshuo_create_database();
 	//duoshuo_create_functions();
 	//Init Config
-	if($zbp->Config('changyan')->CountItem()==0)
+	if($zbp->Config('changyan')->CountItem() == 0)
 	{
 		//$zbp->Config('changyan')->short_name = '';
 		//$zbp->SaveConfig('changyan');
@@ -73,7 +73,7 @@ function InstallPlugin_changyan(){
         function changyan_config_notice()
         {	global $zbp;
             //TODO the link is not available
-            $zbp->SetHint('tips','<strong>请完成相关<a href="' . $zbp->host . 'zb_users/plugin/changyan/main.php' . '">配置</a>，您就能享受畅言的服务了。</strong>');
+            $zbp->SetHint('tips', '<strong>请完成相关<a href="' . $zbp->host . 'zb_users/plugin/changyan/main.php' . '">配置</a>，您就能享受畅言的服务了。</strong>');
         }
 
         //if the admin left menu item is not changyan currently, show links to the changyan item page
@@ -85,45 +85,45 @@ function InstallPlugin_changyan(){
 	
 }
 
-function UninstallPlugin_changyan(){
+function UninstallPlugin_changyan() {
 
 }
 
-function changyan_AddMenu(&$m){
+function changyan_AddMenu(&$m) {
 	global $zbp;
-	$b=false;
-	$i=0;
-	$s=MakeLeftMenu("root","畅言评论",$zbp->host . "zb_users/plugin/changyan/main.php","nav_changyan","aChangYan",$zbp->host . "zb_users/plugin/changyan/cy.png");
-	foreach($m as $key=>$value){
-		if($key==='nav_comment'){
-			$m[$key]=$s;
-			$b=true;
+	$b = false;
+	$i = 0;
+	$s = MakeLeftMenu("root", "畅言评论", $zbp->host . "zb_users/plugin/changyan/main.php", "nav_changyan", "aChangYan", $zbp->host . "zb_users/plugin/changyan/cy.png");
+	foreach($m as $key => $value){
+		if($key === 'nav_comment'){
+			$m[$key] = $s;
+			$b = true;
 		}
 	}
 	if(!$b){
 		reset($m);
-		foreach($m as $key=>$value){
-			if(strpos($value,'act=CommentMng')!==false){
-				$b=true;
+		foreach($m as $key => $value){
+			if(strpos($value, 'act=CommentMng') !== false){
+				$b = true;
 				break;
 			}
-			$i=$i+1;
+			$i = $i + 1;
 		}
 		if($b){
-			array_splice($m,$i,1,array('nav_changyan'=>$s));
+			array_splice($m, $i, 1, array('nav_changyan' => $s));
 		}
 	}
-	if(!$b){$m["nav_changyan"]=$s;}
+	if(!$b){$m["nav_changyan"] = $s;}
 }
 
-function changyan_socialcomment(&$template){
+function changyan_socialcomment(&$template) {
     global $zbp,$changyanPlugin;
     $script = $changyanPlugin->getOption('changyan_script');
     if (!empty($script)) {
-		$a=$template->GetTags('article');
-		$s='sid="'.$a->ID.'"';
-		$script=str_replace('id="SOHUCS"','id="SOHUCS" ' . $s,$script);
-		$template->SetTags('socialcomment',$script);
+		$a = $template->GetTags('article');
+		$s = 'sid="'.$a->ID.'"';
+		$script = str_replace('id="SOHUCS"', 'id="SOHUCS" ' . $s, $script);
+		$template->SetTags('socialcomment', $script);
 	}
 }
 
@@ -159,13 +159,13 @@ function changyan_base_init()
 function changyan_SubMenus()
 {
 	global $zbp;
-	$id=1;
+	$id = 1;
 	$url = GetRequestUri();
-	if(strpos($url,'analysis.php')!==false)$id=2;
-	if(strpos($url,'settings.php')!==false)$id=3;
-	echo '<a href="main.php"><span class="m-left '.($id==1?'m-now':'').'">评论管理</span></a>';
-	echo '<a href="analysis.php"><span class="m-left '.($id==2?'m-now':'').'">统计分析</span></a>';
-	echo '<a href="settings.php"><span class="m-left '.($id==3?'m-now':'').'">设置与初始化</span></a>';
+	if(strpos($url, 'analysis.php') !== false)$id = 2;
+	if(strpos($url, 'settings.php') !== false)$id = 3;
+	echo '<a href="main.php"><span class="m-left '.($id == 1 ? 'm-now' : '').'">评论管理</span></a>';
+	echo '<a href="analysis.php"><span class="m-left '.($id == 2 ? 'm-now' : '').'">统计分析</span></a>';
+	echo '<a href="settings.php"><span class="m-left '.($id == 3 ? 'm-now' : '').'">设置与初始化</span></a>';
 
 }
 
@@ -195,6 +195,3 @@ function cy_profile_update($user_id, $older_user_data)
     echo 'User ' . $user_id . ',Older data is :<br/>';
     print_r($older_user_data);
 }
-
-
-?>

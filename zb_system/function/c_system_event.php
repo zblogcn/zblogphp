@@ -100,6 +100,7 @@ function GetPost($idorname, $option = null) {
 	foreach ($GLOBALS['hooks']['Filter_Plugin_GetPost_Result'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($post);
 	}
+
 	return $post;
 }
 
@@ -248,6 +249,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 	foreach ($GLOBALS['hooks']['Filter_Plugin_GetList_Result'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($list);
 	}
+
 	return $list;
 
 }
@@ -264,7 +266,9 @@ function ViewIndex() {
 	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+return $fpreturn;
 		}
 	}
 
@@ -303,7 +307,9 @@ function ViewFeed() {
 	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewFeed_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+return $fpreturn;
 		}
 	}
 
@@ -347,7 +353,9 @@ function ViewSearch() {
 	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewSearch_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname();
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+return $fpreturn;
 		}
 	}
 
@@ -447,7 +455,9 @@ function ViewAuto($inpurl) {
 	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($inpurl);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+return $fpreturn;
 		}
 	}
 
@@ -470,6 +480,7 @@ function ViewAuto($inpurl) {
 
 	if ($url == '' || $url == 'index.php' || trim($url, '/') == '') {
 		ViewList(null, null, null, null, null);
+
 		return null;
 	}
 
@@ -528,6 +539,7 @@ function ViewAuto($inpurl) {
 			if ($result == false) {
 				$zbp->ShowError(2, __FILE__, __LINE__);
 			}
+
 			return null;
 		}
 
@@ -547,16 +559,20 @@ function ViewAuto($inpurl) {
 	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewAuto_End'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($url);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+return $fpreturn;
 		}
 	}
 
 	if (isset($zbp->option['ZC_COMPATIBLE_ASP_URL']) && ($zbp->option['ZC_COMPATIBLE_ASP_URL'] == true)) {
 		if (isset($_GET['id']) || isset($_GET['alias'])) {
 			ViewPost(GetVars('id', 'GET'), GetVars('alias', 'GET'));
+
 			return null;
 		} elseif (isset($_GET['page']) || isset($_GET['cate']) || isset($_GET['auth']) || isset($_GET['date']) || isset($_GET['tags'])) {
 			ViewList(GetVars('page', 'GET'), GetVars('cate', 'GET'), GetVars('auth', 'GET'), GetVars('date', 'GET'), GetVars('tags', 'GET'));
+
 			return null;
 		}
 	}
@@ -583,7 +599,9 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($page, $cate, $auth, $date, $tags);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+return $fpreturn;
 		}
 	}
 
@@ -876,7 +894,9 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
 	foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($id, $alias);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+return $fpreturn;
 		}
 	}
 
@@ -1043,7 +1063,7 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
 function ViewComments($postid, $page) {
 	global $zbp;
 
-	$post = New Post;
+	$post = new Post;
 	$post->LoadInfoByID($postid);
 	$page = $page == 0 ? 1 : $page;
 	$template = 'comments';
@@ -1695,6 +1715,7 @@ function PostComment() {
 
 	if ($cmt->IsThrow) {
 		$zbp->ShowError(14, __FILE__, __LINE__);
+
 		return false;
 	}
 
@@ -1702,6 +1723,7 @@ function PostComment() {
 	if ($cmt->IsChecking) {
 		CountCommentNums(0, +1);
 		$zbp->ShowError(53, __FILE__, __LINE__);
+
 		return false;
 	}
 
@@ -1714,7 +1736,7 @@ function PostComment() {
 
 	if ($isAjax) {
 		ViewComment($cmt->ID);
-	} else if ($returnJson) {
+	} elseif ($returnJson) {
 		ob_clean();
 		ViewComment($cmt->ID);
 		$commentHtml = ob_get_clean();
@@ -1828,7 +1850,7 @@ function CheckComment() {
 	if (($orig_check) && (!$ischecking)) {
 		CountPostArray(array($cmt->LogID), +1);
 		CountCommentNums(0, -1);
-	} else if ((!$orig_check) && ($ischecking)) {
+	} elseif ((!$orig_check) && ($ischecking)) {
 		CountPostArray(array($cmt->LogID), -1);
 		CountCommentNums(0, +1);
 	}
@@ -1881,7 +1903,7 @@ function BatchComment() {
 				CountCommentNums(-1, -1);
 			}
 		}
-	} else if ($type == 'all_pass') {
+	} elseif ($type == 'all_pass') {
 		foreach ($childArray as $i => $cmt) {
 			if (!$cmt->IsChecking) {
 				continue;
@@ -1892,7 +1914,7 @@ function BatchComment() {
 			CountPostArray(array($cmt->LogID), +1);
 			CountCommentNums(0, -1);
 		}
-	} else if ($type == 'all_audit') {
+	} elseif ($type == 'all_audit') {
 		foreach ($childArray as $i => $cmt) {
 			if ($cmt->IsChecking) {
 				continue;
@@ -1991,6 +2013,7 @@ function DelCategory() {
 		foreach ($zbp->categorys as $subcate) {
 			if ($subcate->ParentID == $cate->ID) {
 				$zbp->ShowError(49, __FILE__, __LINE__);
+
 				return false;
 			}
 		}
@@ -2352,10 +2375,12 @@ function DelModule() {
 				foreach ($GLOBALS['hooks']['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal) {
 					$fpname($mod);
 				}
+
 				return true;
 			}
 			unset($mod);
 		}
+
 		return false;
 	}
 
@@ -2969,7 +2994,9 @@ function CountTagArrayString($string, $plus = null, $articleid = null) {
 	foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_CountTagArray'] as $fpname => &$fpsignal) {
 		$fpreturn = $fpname($array, $plus, $articleid);
 		if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-			$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;
+			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+return $fpreturn;
 		}
 	}
 

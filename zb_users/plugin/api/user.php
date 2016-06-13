@@ -40,6 +40,7 @@ class API_USER {
 			$class = __CLASS__;
 			self::$instance = new $class();
 		}
+
 		return self::$instance;
 	}
 
@@ -57,7 +58,8 @@ class API_USER {
 			case 'secret':
 				return $this->getSecret();
 				break;
-		} 
+		}
+
 		return false;
 
 	}
@@ -74,7 +76,7 @@ class API_USER {
 				$this->key = "";
 				$this->secret = "";
 			break;
-		} 
+		}
 
 	}
 	/**
@@ -94,6 +96,7 @@ class API_USER {
 		$id = $this->user->ID;
 		$guid = $this->user->Guid;
 		$this->key = base64_encode($id . '+' . md5($guid));
+
 		return $this->key;
 	}
 
@@ -109,8 +112,9 @@ class API_USER {
 		$password = $this->user->Password;
 
 		$iv = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB), MCRYPT_RAND);
-		$secret = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $password, $this->key, MCRYPT_MODE_ECB, $iv);  
+		$secret = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $password, $this->key, MCRYPT_MODE_ECB, $iv);
 		$this->secret = base64_encode($secret);
+
 		return $this->secret;
 	}
 
@@ -123,6 +127,7 @@ class API_USER {
 		$keyString = base64_decode($key);
 		$keyArray = explode('+', $keyString);
 		if (count($keyArray) !== 2) return false;
+
 		return array($keyArray[0], $keyArray[1]);
 
 	}
@@ -135,7 +140,8 @@ class API_USER {
 	private function getUserFromSecret($secret, $password) {
 
 		$secret = base64_decode($secret);
-		$iv = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB), MCRYPT_RAND);  
+		$iv = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB), MCRYPT_RAND);
+
 		return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $password, $secret, MCRYPT_MODE_ECB, $iv));
 
 
@@ -161,9 +167,10 @@ class API_USER {
 		$decryptedKey = $this->getUserFromSecret($secret, $password);
 		if ($key !== $decryptedKey) {
 			return false;
-		} 
+		}
 		$zbp->user = $member;
 		$this->user = $member;
+
 		return true;
 	}
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once("auth_digest.php");
+require_once "auth_digest.php";
 
 // --------------------------------------------------------------------------------
 // class Qiniu_Error
@@ -65,6 +65,7 @@ function Qiniu_Header_Get($header, $key) // => $val
 		if (is_array($val)) {
 			return $val[0];
 		}
+
 		return $val;
 	} else {
 		return '';
@@ -86,6 +87,7 @@ function Qiniu_ResponseError($resp) // => $error
 			}
 		}
 	}
+
 	return $err;
 }
 
@@ -103,6 +105,7 @@ function Qiniu_Client_incBody($req) // => $incbody
 	if ($ct === 'application/x-www-form-urlencoded') {
 		return true;
 	}
+
 	return false;
 }
 
@@ -136,6 +139,7 @@ function Qiniu_Client_do($req) // => ($resp, $error)
 	if ($ret !== 0) {
 		$err = new Qiniu_Error(0, curl_error($ch));
 		curl_close($ch);
+
 		return array(null, $err);
 	}
 	$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -143,6 +147,7 @@ function Qiniu_Client_do($req) // => ($resp, $error)
 	curl_close($ch);
 	$resp = new Qiniu_Response($code, $result);
 	$resp->Header['Content-Type'] = $contentType;
+
 	return array($resp, null);
 }
 
@@ -168,6 +173,7 @@ class Qiniu_MacHttpClient
 		$incbody = Qiniu_Client_incBody($req);
 		$token = $this->Mac->SignRequest($req, $incbody);
 		$req->Header['Authorization'] = "QBox $token";
+
 		return Qiniu_Client_do($req);
 	}
 }
@@ -184,6 +190,7 @@ function Qiniu_Client_ret($resp) // => ($data, $error)
 			if ($data === null) {
 				$err_msg = function_exists('json_last_error_msg') ? json_last_error_msg() : "error with content:" . $resp->Body;
 				$err = new Qiniu_Error(0, $err_msg);
+
 				return array(null, $err);
 			}
 		}
@@ -191,6 +198,7 @@ function Qiniu_Client_ret($resp) // => ($data, $error)
 			return array($data, null);
 		}
 	}
+
 	return array($data, Qiniu_ResponseError($resp));
 }
 
@@ -202,6 +210,7 @@ function Qiniu_Client_Call($self, $url) // => ($data, $error)
 	if ($err !== null) {
 		return array(null, $err);
 	}
+
 	return Qiniu_Client_ret($resp);
 }
 
@@ -216,6 +225,7 @@ function Qiniu_Client_CallNoRet($self, $url) // => $error
 	if ($resp->StatusCode === 200) {
 		return null;
 	}
+
 	return Qiniu_ResponseError($resp);
 }
 
@@ -236,6 +246,7 @@ function Qiniu_Client_CallWithForm(
 	if ($err !== null) {
 		return array(null, $err);
 	}
+
 	return Qiniu_Client_ret($resp);
 }
 
@@ -244,6 +255,7 @@ function Qiniu_Client_CallWithForm(
 function Qiniu_Client_CallWithMultipartForm($self, $url, $fields, $files)
 {
 	list($contentType, $body) = Qiniu_Build_MultipartForm($fields, $files);
+
 	return Qiniu_Client_CallWithForm($self, $url, $body, $contentType);
 }
 
@@ -274,6 +286,7 @@ function Qiniu_Build_MultipartForm($fields, $files) // => ($contentType, $body)
 
 	$body = implode("\r\n", $data);
 	$contentType = 'multipart/form-data; boundary=' . $mimeBoundary;
+
 	return array($contentType, $body);
 }
 
@@ -281,8 +294,8 @@ function Qiniu_escapeQuotes($str)
 {
 	$find = array("\\", "\"");
 	$replace = array("\\\\", "\\\"");
+
 	return str_replace($find, $replace, $str);
 }
 
 // --------------------------------------------------------------------------------
-

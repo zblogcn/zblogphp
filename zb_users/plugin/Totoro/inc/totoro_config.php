@@ -105,28 +105,28 @@ return array(
 	),
 	'BUILD_CONFIG' => array(
 		'CONHXW' => array(
-			'VALUE' => TRUE,
+			'VALUE' => true,
 			'NAME' => '火星文转换',
 			'DESC' => '将把斯拉夫字母罗马数字列表符全角字符汉语拼音菊花文HTML编码转换为半角英文字母、半角数字、半角符号再进行反SPAM测试，不影响实际显示的评论',
-			'DEFAULT' => TRUE,
+			'DEFAULT' => true,
 		),
 		'TRANTOSIMP' => array(
-			'VALUE' => TRUE,
+			'VALUE' => true,
 			'NAME' => '简繁转换',
 			'DESC' => '将把正体中文转为简化字再进行反SPAM测试，不影响实际显示的评论',
-			'DEFAULT' => TRUE,
+			'DEFAULT' => true,
 		),
 		'FILTERPUNCT' => array(
-			'VALUE' => TRUE,
+			'VALUE' => true,
 			'NAME' => '标点过滤',
 			'DESC' => '把大部分标点和HTML代码过滤再进行反SPAM测试，不影响实际显示的评论',
-			'DEFAULT' => TRUE,
+			'DEFAULT' => true,
 		),
 		'AUTOBANURL' => array(
-			'VALUE' => FALSE,
+			'VALUE' => false,
 			'NAME' => 'URL审核',
 			'DESC' => '将某条评论加入审核时自动将其URL加入过滤列表',
-			'DEFAULT' => FALSE,
+			'DEFAULT' => false,
 		),
 	),
 	/*'DEL_DIRECTLY' => array(

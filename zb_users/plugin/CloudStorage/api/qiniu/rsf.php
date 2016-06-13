@@ -1,6 +1,6 @@
 <?php
 
-require_once("http.php");
+require_once "http.php";
 
 define('Qiniu_RSF_EOF', 'EOF');
 
@@ -38,6 +38,6 @@ function Qiniu_RSF_ListPrefix(
 	} else {
 		$markerOut = $ret['marker'];
 	}
+
 	return array($items, $markerOut, $err);
 }
-

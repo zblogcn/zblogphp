@@ -26,7 +26,7 @@ function return_article($id) {
  */
 function api_article_get_function() {
 
-	$id = (int)API::$IO->id;
+	$id = (int) API::$IO->id;
 	if ($id === 0) API::$IO->end(3);
 	//
 	$ret = return_article($id);
@@ -55,7 +55,7 @@ function api_article_post_function() {
 
 	global $zbp;
 	Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed', 'api_article_post_callback');
-	PostArticle(); 
+	PostArticle();
 	$zbp->BuildModule();
 	$zbp->SaveCache();
 
@@ -77,7 +77,7 @@ API::$Route->post('/article/create/', 'api_article_create_function');
  */
 function api_article_update_function() {
 
-	$id = (int)API::$IO->id;
+	$id = (int) API::$IO->id;
 	if ($id === 0) API::$IO->end(3);
 	$_POST['ID'] = $id;
 	api_article_post_function();

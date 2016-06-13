@@ -12,7 +12,6 @@
 #
 namespace Michelf;
 
-
 # Just force Michelf/Markdown.php to load. This is needed to load
 # the temporary implementation class. See below for details.
 \Michelf\Markdown::MARKDOWNLIB_VERSION;
@@ -35,4 +34,3 @@ class MarkdownExtra extends \Michelf\_MarkdownExtra_TmpImpl {
 	# See note above.
 
 }
-

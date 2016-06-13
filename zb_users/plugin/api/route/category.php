@@ -27,13 +27,13 @@ function return_category($category) {
  */
 function api_category_get_function() {
 	global $zbp;
-	$id = (int)API::$IO->id;
+	$id = (int) API::$IO->id;
 	$name = API::$IO->name;
 	if ($id === 0 && $name == "") API::$IO->end(3);
 
 	if ($id != 0) {
 		API::$IO->category = return_category($zbp->categories[$id]);
-	} else if ($name != "") {
+	} elseif ($name != "") {
 		API::$IO->category = return_category($zbp->GetCategoryByName($name));
 	}
 
@@ -74,7 +74,7 @@ function api_category_post_function() {
 
 	global $zbp;
 	Add_Filter_Plugin('Filter_Plugin_PostCategory_Succeed', 'api_category_post_callback');
-	PostCategory(); 
+	PostCategory();
 	$zbp->BuildModule();
 	$zbp->SaveCache();
 
@@ -96,7 +96,7 @@ API::$Route->post('/category/create/', 'api_category_create_function');
  */
 function api_category_update_function() {
 
-	$id = (int)API::$IO->id;
+	$id = (int) API::$IO->id;
 	if ($id === 0) API::$IO->end(3);
 	$_POST['ID'] = $id;
 	api_category_post_function();

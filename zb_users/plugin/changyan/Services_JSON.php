@@ -1,5 +1,5 @@
 <?php
-if ( !class_exists( 'Services_JSON' ) ) :
+if (!class_exists('Services_JSON')) :
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 /**
  * Converts to and from JSON format.
@@ -130,7 +130,7 @@ class Services_JSON
 	*								bubble up with an error, so all return values
 	*								from encode() should be checked with isError()
 	*/
-	function Services_JSON($use = 0)
+	public function Services_JSON($use = 0)
 	{
 		$this->use = $use;
 	}
@@ -146,7 +146,7 @@ class Services_JSON
 	* @return string  UTF-8 character
 	* @access private
 	*/
-	function utf162utf8($utf16)
+	public function utf162utf8($utf16)
 	{
 		// oh please oh please oh please oh please oh please
 		if(function_exists('mb_convert_encoding')) {
@@ -190,7 +190,7 @@ class Services_JSON
 	* @return string  UTF-16 character
 	* @access private
 	*/
-	function utf82utf16($utf8)
+	public function utf82utf16($utf8)
 	{
 		// oh please oh please oh please oh please oh please
 		if(function_exists('mb_convert_encoding')) {
@@ -234,9 +234,10 @@ class Services_JSON
 	* @return mixed JSON string representation of input var or an error if a problem occurs
 	* @access public
 	*/
-	function encode($var)
+	public function encode($var)
 	{
 		header('Content-type: application/json');
+
 		return $this->_encode($var);
 	}
 	/**
@@ -250,7 +251,7 @@ class Services_JSON
 	* @return mixed JSON string representation of input var or an error if a problem occurs
 	* @access public
 	*/
-	function encodeUnsafe($var)
+	public function encodeUnsafe($var)
 	{
 		return $this->_encode($var);
 	}
@@ -265,7 +266,7 @@ class Services_JSON
 	* @return mixed JSON string representation of input var or an error if a problem occurs
 	* @access public
 	*/
-	function _encode($var)
+	public function _encode($var)
 	{
 
 		switch (gettype($var)) {
@@ -327,7 +328,7 @@ class Services_JSON
 						case (($ord_var_c & 0xE0) == 0xC0):
 							// characters U-00000080 - U-000007FF, mask 110XXXXX
 							// see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-							if ($c+1 >= $strlen_var) {
+							if ($c + 1 >= $strlen_var) {
 								$c += 1;
 								$ascii .= '?';
 								break;
@@ -340,7 +341,7 @@ class Services_JSON
 							break;
 
 						case (($ord_var_c & 0xF0) == 0xE0):
-							if ($c+2 >= $strlen_var) {
+							if ($c + 2 >= $strlen_var) {
 								$c += 2;
 								$ascii .= '?';
 								break;
@@ -356,7 +357,7 @@ class Services_JSON
 							break;
 
 						case (($ord_var_c & 0xF8) == 0xF0):
-							if ($c+3 >= $strlen_var) {
+							if ($c + 3 >= $strlen_var) {
 								$c += 3;
 								$ascii .= '?';
 								break;
@@ -375,7 +376,7 @@ class Services_JSON
 						case (($ord_var_c & 0xFC) == 0xF8):
 							// characters U-00200000 - U-03FFFFFF, mask 111110XX
 							// see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-							if ($c+4 >= $strlen_var) {
+							if ($c + 4 >= $strlen_var) {
 								$c += 4;
 								$ascii .= '?';
 								break;
@@ -391,7 +392,7 @@ class Services_JSON
 							break;
 
 						case (($ord_var_c & 0xFE) == 0xFC):
-						if ($c+5 >= $strlen_var) {
+						if ($c + 5 >= $strlen_var) {
 								$c += 5;
 								$ascii .= '?';
 								break;
@@ -410,6 +411,7 @@ class Services_JSON
 							break;
 					}
 				}
+
 				return  '"'.$ascii.'"';
 
 			case 'array':
@@ -443,7 +445,7 @@ class Services_JSON
 						}
 					}
 
-					return '{' . join(',', $properties) . '}';
+					return '{' . implode(',', $properties) . '}';
 				}
 
 				// treat it like a regular array
@@ -455,7 +457,7 @@ class Services_JSON
 					}
 				}
 
-				return '[' . join(',', $elements) . ']';
+				return '[' . implode(',', $elements) . ']';
 
 			case 'object':
 				$vars = get_object_vars($var);
@@ -470,7 +472,7 @@ class Services_JSON
 					}
 				}
 
-				return '{' . join(',', $properties) . '}';
+				return '{' . implode(',', $properties) . '}';
 
 			default:
 				return ($this->use & SERVICES_JSON_SUPPRESS_ERRORS)
@@ -488,7 +490,7 @@ class Services_JSON
 	* @return string  JSON-formatted name-value pair, like '"name":value'
 	* @access private
 	*/
-	function name_value($name, $value)
+	public function name_value($name, $value)
 	{
 		$encoded_value = $this->_encode($value);
 
@@ -507,7 +509,7 @@ class Services_JSON
 	* @return string  string value stripped of comments and whitespace
 	* @access private
 	*/
-	function reduce_string($str)
+	public function reduce_string($str)
 	{
 		$str = preg_replace(array(
 
@@ -538,7 +540,7 @@ class Services_JSON
 	*				in ASCII or UTF-8 format!
 	* @access public
 	*/
-	function decode($str)
+	public function decode($str)
 	{
 		$str = $this->reduce_string($str);
 
@@ -563,9 +565,9 @@ class Services_JSON
 					// return (float)$str;
 
 					// Return float or int, as appropriate
-					return ((float)$str == (integer)$str)
-						? (integer)$str
-						: (float)$str;
+					return ((float) $str == (integer) $str)
+						? (integer) $str
+						: (float) $str;
 
 				} elseif (preg_match('/^("|\').*(\1)$/s', $str, $m) && $m[1] == $m[2]) {
 					// STRINGS RETURNED IN UTF-8 FORMAT
@@ -820,7 +822,7 @@ class Services_JSON
 	/**
 	* @todo Ultimately, this should just call PEAR::isError()
 	*/
-	function isError($data, $code = null)
+	public function isError($data, $code = null)
 	{
 		if (class_exists('pear')) {
 			return PEAR::isError($data, $code);
@@ -837,7 +839,7 @@ if (class_exists('PEAR_Error')) {
 
 	class Services_JSON_Error extends PEAR_Error
 	{
-		function Services_JSON_Error($message = 'unknown error', $code = null,
+		public function Services_JSON_Error($message = 'unknown error', $code = null,
 									$mode = null, $options = null, $userinfo = null)
 		{
 			parent::PEAR_Error($message, $code, $mode, $options, $userinfo);
@@ -851,7 +853,7 @@ if (class_exists('PEAR_Error')) {
 	*/
 	class Services_JSON_Error
 	{
-		function Services_JSON_Error($message = 'unknown error', $code = null,
+		public function Services_JSON_Error($message = 'unknown error', $code = null,
 									$mode = null, $options = null, $userinfo = null)
 		{
 
@@ -866,34 +868,36 @@ endif;
  * 为了兼容低版本的php而增加的函数集
  * json从5.2.0开始支持，wordpress 2.9开始提供json函数的兼容性代码
  */
-if ( !function_exists('json_encode') ) {
-	function json_encode( $string ) {
+if (!function_exists('json_encode')) {
+	function json_encode($string) {
 		global $wp_json;
 
-		if ( !is_a($wp_json, 'Services_JSON') ) {
+		if (!is_a($wp_json, 'Services_JSON')) {
 			$wp_json = new Services_JSON();
 		}
 
-		return $wp_json->encodeUnsafe( $string );
+		return $wp_json->encodeUnsafe($string);
 	}
 }
 
-if ( !function_exists('json_decode') ) {
-	function json_decode( $string, $assoc_array = false ) {
+if (!function_exists('json_decode')) {
+	function json_decode($string, $assoc_array = false) {
 		global $wp_json;
 
-		if ( !is_a($wp_json, 'Services_JSON') ) {
+		if (!is_a($wp_json, 'Services_JSON')) {
 			$wp_json = new Services_JSON();
 		}
 
-		$res = $wp_json->decode( $string );
-		if ( $assoc_array )
-			$res = _json_decode_object_helper( $res );
+		$res = $wp_json->decode($string);
+		if ($assoc_array)
+			$res = _json_decode_object_helper($res);
+
 		return $res;
 	}
 	function _json_decode_object_helper($data) {
-		if ( is_object($data) )
+		if (is_object($data))
 			$data = get_object_vars($data);
+
 		return is_array($data) ? array_map(__FUNCTION__, $data) : $data;
 	}
 }

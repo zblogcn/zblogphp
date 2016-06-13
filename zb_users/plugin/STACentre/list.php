@@ -38,16 +38,19 @@ if (count($_GET) > 0) {
 
 function show_htaccess() {
 	$ur = new UrlRule("");
+
 	return $ur->Make_htaccess();
 }
 
 function show_httpini() {
 	$ur = new UrlRule("");
+
 	return $ur->Make_httpdini();
 }
 
 function show_webconfig() {
 	$ur = new UrlRule("");
+
 	return $ur->Make_webconfig();
 }
 
@@ -112,32 +115,32 @@ if (strpos($default_tab, 'apache') !== false) {
         <div class="content-box-header">
           <ul class="content-box-tabs">
             <li>
-              <a href="#tab1" <?php echo ($default_tab == 1 ? 'class="default-tab"' : '');?>>
+              <a href="#tab1" <?php echo($default_tab == 1 ? 'class="default-tab"' : '');?>>
                 <span>Apache + .htaccess</span>
               </a>
             </li>
             <li>
-              <a href="#tab2" <?php echo ($default_tab == 2 ? 'class="default-tab"' : '');?>>
+              <a href="#tab2" <?php echo($default_tab == 2 ? 'class="default-tab"' : '');?>>
                 <span>IIS 7及以上  + URL Rewrite Module</span>
               </a>
             </li>
             <li>
-              <a href="#tab3" <?php echo ($default_tab == 3 ? 'class="default-tab"' : '');?>>
+              <a href="#tab3" <?php echo($default_tab == 3 ? 'class="default-tab"' : '');?>>
                 <span>IIS 6 + ISAPI Rewrite 2.X</span>
               </a>
             </li>
             <li>
-              <a href="#tab4" <?php echo ($default_tab == 4 ? 'class="default-tab"' : '');?>>
+              <a href="#tab4" <?php echo($default_tab == 4 ? 'class="default-tab"' : '');?>>
                 <span>Nginx</span>
               </a>
             </li>
             <li>
-              <a href="#tab5" <?php echo ($default_tab == 5 ? 'class="default-tab"' : '');?>>
+              <a href="#tab5" <?php echo($default_tab == 5 ? 'class="default-tab"' : '');?>>
                 <span>Lighttpd</span>
               </a>
             </li>
             <li>
-              <a href="#tab6" <?php echo ($default_tab == 6 ? 'class="default-tab"' : '');?>>
+              <a href="#tab6" <?php echo($default_tab == 6 ? 'class="default-tab"' : '');?>>
                 <span>无组件</span>
               </a>
             </li>
@@ -148,7 +151,7 @@ if (strpos($default_tab, 'apache') !== false) {
 
         <div class="content-box-content">
 
-          <div class="tab-content <?php echo ($default_tab == 1 ? 'default-tab' : '');?>" style='border:none;padding:0px;margin:0;' id="tab1">
+          <div class="tab-content <?php echo($default_tab == 1 ? 'default-tab' : '');?>" style='border:none;padding:0px;margin:0;' id="tab1">
             <textarea style="width:99%;height:200px" readonly><?php echo htmlentities(show_htaccess())?></textarea>
             <hr/>
             <p>
@@ -165,7 +168,7 @@ if (strpos($default_tab, 'apache') !== false) {
             </p>
           </div>
 
-          <div class="tab-content <?php echo ($default_tab == 2 ? 'default-tab' : '');?>" style='border:none;padding:0px;margin:0;' id="tab2">
+          <div class="tab-content <?php echo($default_tab == 2 ? 'default-tab' : '');?>" style='border:none;padding:0px;margin:0;' id="tab2">
             <textarea style="width:99%;height:400px" readonly><?php echo htmlentities(show_webconfig())?></textarea>
             <hr/>
             <p>
@@ -180,7 +183,7 @@ if (strpos($default_tab, 'apache') !== false) {
             </p>
           </div>
 
-          <div class="tab-content <?php echo ($default_tab == 3 ? 'default-tab' : '');?>" style='border:none;padding:0px;margin:0;' id="tab3">
+          <div class="tab-content <?php echo($default_tab == 3 ? 'default-tab' : '');?>" style='border:none;padding:0px;margin:0;' id="tab3">
             <textarea id="ta_httpini" style="width:99%;height:200px" readonly><?php echo htmlentities(show_httpini())?></textarea>
             <hr/>
             <p>
@@ -198,7 +201,7 @@ if (strpos($default_tab, 'apache') !== false) {
             </p>
           </div>
 
-          <div class="tab-content <?php echo ($default_tab == 4 ? 'default-tab' : '');?>" style='border:none;padding:0px;margin:0;' id="tab4">
+          <div class="tab-content <?php echo($default_tab == 4 ? 'default-tab' : '');?>" style='border:none;padding:0px;margin:0;' id="tab4">
             <textarea style="width:99%;height:200px" readonly><?php echo htmlentities(show_nginx())?></textarea>
             <hr/>
             <p>
@@ -209,7 +212,7 @@ if (strpos($default_tab, 'apache') !== false) {
             </p>
           </div>
 
-          <div class="tab-content <?php echo ($default_tab == 5 ? 'default-tab' : '');?>" style='border:none;padding:0px;margin:0;' id="tab5">
+          <div class="tab-content <?php echo($default_tab == 5 ? 'default-tab' : '');?>" style='border:none;padding:0px;margin:0;' id="tab5">
             <textarea style="width:99%;height:250px" readonly><?php echo htmlentities(show_lighttpd())?></textarea>
             <hr/>
             <p>
@@ -220,7 +223,7 @@ if (strpos($default_tab, 'apache') !== false) {
             </p>
           </div>
 
-          <div class="tab-content <?php echo ($default_tab == 6 ? 'default-tab' : '');?>" style='border:none;padding:0px;margin:0;' id="tab6">
+          <div class="tab-content <?php echo($default_tab == 6 ? 'default-tab' : '');?>" style='border:none;padding:0px;margin:0;' id="tab6">
             <p>你可以到主机的控制面板中找到类似“自定义404错误提示页面”等，填入：
             <code><?php echo str_replace("zb_users/plugin/STACentre/list.php", "index.php", $_SERVER['PHP_SELF']);?></code></p>
             <p>如下图所示，这样你的网站将被Z-BlogPHP全面接管。此方案不需要伪静态组件，且发送的状态码符合规范。</p>

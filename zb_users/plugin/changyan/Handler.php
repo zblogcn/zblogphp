@@ -1,5 +1,5 @@
 <?php
-if( function_exists('ini_set') )ini_set('max_execution_time', '0');
+if(function_exists('ini_set'))ini_set('max_execution_time', '0');
 
 class Changyan_Handler
 {
@@ -28,6 +28,7 @@ class Changyan_Handler
         if (!(self::$instance instanceof self)) {
             self::$instance = new self;
         }
+
         return self::$instance;
     }
 
@@ -46,6 +47,7 @@ class Changyan_Handler
     public function getOption($option)
     {
 		global $zbp;
+
 		return $zbp->Config('changyan')->$option;
         //return get_option($option);
     }
@@ -53,8 +55,9 @@ class Changyan_Handler
     public function setOption($option, $value)
     {
 		global $zbp;
-		$zbp->Config('changyan')->$option=$value;
+		$zbp->Config('changyan')->$option = $value;
 		$zbp->SaveConfig('changyan');
+
 		return true;
         //return update_option($option, $value);
     }
@@ -64,13 +67,14 @@ class Changyan_Handler
 		global $zbp;
 		$zbp->Config('changyan')->Del($option);
 		$zbp->SaveConfig('changyan');
+
 		return true;
         //return delete_option($option);
     }
 
     public function showCommentsNotice()
     {
-        $zbp->SetHint('tips','请访问<a color = red href="http://changyan.sohu.com/manage" target="blank"><font color="red">畅言站长管理后台</font></a>进行评论管理，当前页面的管理操作不能被同步到畅言管理服务器。');
+        $zbp->SetHint('tips', '请访问<a color = red href="http://changyan.sohu.com/manage" target="blank"><font color="red">畅言站长管理后台</font></a>进行评论管理，当前页面的管理操作不能被同步到畅言管理服务器。');
     }
 
     //return a template to be used for comment
@@ -163,7 +167,7 @@ class Changyan_Handler
         die($aScript);
     }
 	
-	public function saveAppIDKey(){
+	public function saveAppIDKey() {
 		$this->saveAppID();
 		$this->saveAppKey();
 	}
@@ -234,5 +238,3 @@ h.insertBefore(s,h.firstChild);
         $this->sync2Wordpress();
     }
 }
-
-?>

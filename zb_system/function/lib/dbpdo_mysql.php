@@ -30,7 +30,7 @@ class Dbpdo_MySQL implements iDataBase {
 	/**
 	 * 构造函数，实例化$sql参数
 	 */
-	function __construct() {
+	public function __construct() {
 		$this->sql = new DbSql($this);
 	}
 
@@ -46,7 +46,7 @@ class Dbpdo_MySQL implements iDataBase {
 	 * @param $array
 	 * @return bool
 	 */
-	function Open($array) {
+	public function Open($array) {
 		/*$array=array(
 		'dbmysql_server',
 		'dbmysql_username',
@@ -72,10 +72,10 @@ class Dbpdo_MySQL implements iDataBase {
 
 			$myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
 			$this->version = substr($myver, 0, strpos($myver, "-"));
-			if(version_compare($this->version,'5.5.3')>=0){
-				$u="utf8mb4";
+			if(version_compare($this->version, '5.5.3') >= 0){
+				$u = "utf8mb4";
 			}else{
-				$u="utf8";
+				$u = "utf8";
 			}
 			//$db_link->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, "SET NAMES '" . $u . "'");
 			$db_link->query("SET NAMES '" . $u . "'");
@@ -93,7 +93,7 @@ class Dbpdo_MySQL implements iDataBase {
 	 * @param string $dbmysql_password
 	 * @param string $dbmysql_name
 	 */
-	function CreateDB($dbmysql_server, $dbmysql_port, $dbmysql_username, $dbmysql_password, $dbmysql_name) {
+	public function CreateDB($dbmysql_server, $dbmysql_port, $dbmysql_username, $dbmysql_password, $dbmysql_name) {
 		$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
 		$db_link = new PDO('mysql:host=' . $dbmysql_server . ';port=' . $dbmysql_port, $dbmysql_username, $dbmysql_password, $options);
 		$this->db = $db_link;
@@ -101,10 +101,10 @@ class Dbpdo_MySQL implements iDataBase {
 		
 		$myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
 		$myver = substr($myver, 0, strpos($myver, "-"));
-		if(version_compare($myver,'5.5.3')>=0){
-			$u="utf8mb4";
+		if(version_compare($myver, '5.5.3') >= 0){
+			$u = "utf8mb4";
 		}else{
-			$u="utf8";
+			$u = "utf8";
 		}
 		$db_link->query("SET NAMES '" . $u . "'");
 
@@ -119,6 +119,7 @@ class Dbpdo_MySQL implements iDataBase {
 		}
 		if ($c == 0) {
 			$this->db->exec($this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
+
 			return true;
 		}
 	}
@@ -126,7 +127,7 @@ class Dbpdo_MySQL implements iDataBase {
 	/**
 	 * 关闭数据库连接
 	 */
-	function Close() {
+	public function Close() {
 		$this->db = null;
 	}
 
@@ -134,8 +135,8 @@ class Dbpdo_MySQL implements iDataBase {
 	 * 执行多行SQL语句
 	 * @param $s
 	 */
-	function QueryMulit($s) {return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
-	function QueryMulti($s) {
+	public function QueryMulit($s) {return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
+	public function QueryMulti($s) {
 		//$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
 		$a = explode(';', $s);
 		foreach ($a as $s) {
@@ -150,7 +151,7 @@ class Dbpdo_MySQL implements iDataBase {
 	 * @param $query
 	 * @return array
 	 */
-	function Query($query) {
+	public function Query($query) {
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		// 遍历出来
 		$results = $this->db->query($this->sql->Filter($query));
@@ -178,7 +179,7 @@ class Dbpdo_MySQL implements iDataBase {
 	 * @param $query
 	 * @return bool|mysqli_result
 	 */
-	function Update($query) {
+	public function Update($query) {
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		return $this->db->query($this->sql->Filter($query));
 	}
@@ -187,7 +188,7 @@ class Dbpdo_MySQL implements iDataBase {
 	 * @param $query
 	 * @return bool|mysqli_result
 	 */
-	function Delete($query) {
+	public function Delete($query) {
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		return $this->db->query($this->sql->Filter($query));
 	}
@@ -196,9 +197,10 @@ class Dbpdo_MySQL implements iDataBase {
 	 * @param $query
 	 * @return int
 	 */
-	function Insert($query) {
+	public function Insert($query) {
 		//$query=str_replace('%pre%', $this->dbpre, $query);
 		$this->db->exec($this->sql->Filter($query));
+
 		return $this->db->lastInsertId();
 	}
 
@@ -206,14 +208,14 @@ class Dbpdo_MySQL implements iDataBase {
 	 * @param $table
 	 * @param $datainfo
 	 */
-	function CreateTable($table, $datainfo, $engine = null) {
+	public function CreateTable($table, $datainfo, $engine = null) {
 		$this->QueryMulit($this->sql->CreateTable($table, $datainfo));
 	}
 
 	/**
 	 * @param $table
 	 */
-	function DelTable($table) {
+	public function DelTable($table) {
 		$this->QueryMulit($this->sql->DelTable($table));
 	}
 
@@ -221,7 +223,7 @@ class Dbpdo_MySQL implements iDataBase {
 	 * @param $table
 	 * @return bool
 	 */
-	function ExistTable($table) {
+	public function ExistTable($table) {
 
 		$a = $this->Query($this->sql->ExistTable($table, $this->dbname));
 		if (!is_array($a)) {

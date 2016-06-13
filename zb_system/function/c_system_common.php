@@ -21,6 +21,7 @@ function GetScheme($array) {
 			return 'https://';
 		}
 	}
+
 	return 'http://';
 }
 /**
@@ -34,13 +35,13 @@ function GetWebServer() {
 	$webServer = strtolower($_SERVER['SERVER_SOFTWARE']);
 	if (strpos($webServer, 'apache')) {
 		return SERVER_APACHE;
-	} else if (strpos($webServer, 'microsoft-iis')) {
+	} elseif (strpos($webServer, 'microsoft-iis')) {
 		return SERVER_IIS;
-	} else if (strpos($webServer, 'nginx')) {
+	} elseif (strpos($webServer, 'nginx')) {
 		return SERVER_NGINX;
-	} else if (strpos($webServer, 'lighttpd')) {
+	} elseif (strpos($webServer, 'lighttpd')) {
 		return SERVER_LIGHTTPD;
-	} else if (strpos($webServer, 'kangle')) {
+	} elseif (strpos($webServer, 'kangle')) {
 		return SERVER_KANGLE;
 	} else {
 		return SERVER_UNKNOWN;
@@ -54,15 +55,15 @@ function GetWebServer() {
 function GetSystem() {
 	if (in_array(strtoupper(PHP_OS), array('WINNT', 'WIN32', 'WINDOWS'))) {
 		return SYSTEM_WINDOWS;
-	} else if ((strtoupper(PHP_OS) === 'UNIX')) {
+	} elseif ((strtoupper(PHP_OS) === 'UNIX')) {
 		return SYSTEM_UNIX;
-	} else if (strtoupper(PHP_OS) === 'LINUX') {
+	} elseif (strtoupper(PHP_OS) === 'LINUX') {
 		return SYSTEM_LINUX;
-	} else if (strtoupper(PHP_OS) === 'DARWIN') {
+	} elseif (strtoupper(PHP_OS) === 'DARWIN') {
 		return SYSTEM_DARWIN;
-	} else if (strtoupper(substr(PHP_OS, 0, 6)) === 'CYGWIN') {
+	} elseif (strtoupper(substr(PHP_OS, 0, 6)) === 'CYGWIN') {
 		return SYSTEM_CYGWIN;
-	} else if (in_array(strtoupper(PHP_OS), array('NETBSD', 'OPENBSD', 'FREEBSD'))) {
+	} elseif (in_array(strtoupper(PHP_OS), array('NETBSD', 'OPENBSD', 'FREEBSD'))) {
 		return SYSTEM_BSD;
 	} else {
 		return SYSTEM_UNKNOWN;
@@ -77,6 +78,7 @@ function GetPHPEngine() {
 	if (defined('HHVM_VERSION')) {
 		return ENGINE_HHVM;
 	}
+
 	return ENGINE_PHP;
 }
 
@@ -152,6 +154,7 @@ function RunTime() {
 
 	if (isset($zbp->option['ZC_RUNINFO_DISPLAY']) && $zbp->option['ZC_RUNINFO_DISPLAY'] == false) {
 		$_SERVER['_runtime_result'] = $rt;
+
 		return $rt;
 	}
 
@@ -163,6 +166,7 @@ function RunTime() {
 
 	echo ' , ' . $rt['error'] . ' error';
 	echo '-->';
+
 	return $rt;
 }
 
@@ -184,6 +188,7 @@ function GetEnvironment() {
 	) . '; ' .
 	'PHP ' . phpversion() . (IS_X64 ? ' x64' : '') . '; ' .
 	$zbp->option['ZC_DATABASE_TYPE'] . '; ' . $ajax;
+
 	return $system_environment;
 }
 
@@ -206,6 +211,7 @@ function plugin_dir_url($file) {
 	$a = explode('/', $s);
 	$s = $a[0];
 	$s = $zbp->host . $s3 . $s . '/';
+
 	return $s;
 }
 
@@ -228,6 +234,7 @@ function plugin_dir_path($file) {
 	$a = explode('/', $s);
 	$s = $a[0];
 	$s = $zbp->path . $s3 . $s . '/';
+
 	return $s;
 }
 
@@ -298,6 +305,7 @@ function GetVarsByDefault($name, $type = 'REQUEST', $default = null) {
 	if ($g == null || $g == '') {
 		return $default;
 	}
+
 	return $g;
 }
 
@@ -567,6 +575,7 @@ function SetHttpStatusCode($number) {
 	if (isset($codes[$number])) {
 		header('HTTP/1.1 ' . $number . ' ' . $codes[$number]);
 		$status = $number;
+
 		return true;
 	}
 
@@ -1021,12 +1030,14 @@ function CloseTags($html) {
 function SubStrUTF8_Start($sourcestr, $start, $cutlength) {
 	if (function_exists('mb_substr') && function_exists('mb_internal_encoding')) {
 		mb_internal_encoding('UTF-8');
+
 		return mb_substr($sourcestr, $start, $cutlength);
 	}
 
 	if (function_exists('iconv_substr') && function_exists('iconv_set_encoding')) {
 		iconv_set_encoding("internal_encoding", "UTF-8");
 		iconv_set_encoding("output_encoding", "UTF-8");
+
 		return iconv_substr($sourcestr, $start, $cutlength);
 	}
 
@@ -1043,12 +1054,14 @@ function SubStrUTF8($sourcestr, $cutlength) {
 
 	if (function_exists('mb_substr') && function_exists('mb_internal_encoding')) {
 		mb_internal_encoding('UTF-8');
+
 		return mb_substr($sourcestr, 0, $cutlength);
 	}
 
 	if (function_exists('iconv_substr') && function_exists('iconv_set_encoding')) {
 		iconv_set_encoding("internal_encoding", "UTF-8");
 		iconv_set_encoding("output_encoding", "UTF-8");
+
 		return iconv_substr($sourcestr, 0, $cutlength);
 	}
 
@@ -1121,6 +1134,7 @@ function SubStrUTF8_Html($sourcestr, $cutlength) {
 
 			}
 		}
+
 		return $s;
 	}
 
@@ -1140,6 +1154,7 @@ function SubStrUTF8_Html($sourcestr, $cutlength) {
 
 			}
 		}
+
 		return $s;
 	}
 
@@ -1156,6 +1171,7 @@ function SubStrUTF8_Html($sourcestr, $cutlength) {
 
 		}
 	}
+
 	return $s;
 
 }
@@ -1173,6 +1189,7 @@ function RemoveBOM($s) {
 	if (ord($charset[1]) == 239 && ord($charset[2]) == 187 && ord($charset[3]) == 191) {
 		$s = substr($s, 3);
 	}
+
 	return $s;
 }
 
@@ -1229,7 +1246,7 @@ function htmlspecialchars_array($array) {
 	foreach ($array as $key => &$value) {
 		if (is_array($value)) {
 			$value = htmlspecialchars_array($value);
-		} else if (is_string($value)) {
+		} elseif (is_string($value)) {
 			$value = htmlspecialchars($value);
 		}
 	}
@@ -1293,6 +1310,7 @@ if (!function_exists('hex2bin')) {
 		for ($i = 0; $i < $len; $i += 2) {
 			$sbin .= pack("H*", substr($str, $i, 2));
 		}
+
 		return $sbin;
 	}
 }

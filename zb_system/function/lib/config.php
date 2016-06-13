@@ -30,7 +30,7 @@ class Config {
 	/**
 	 * $itemname string 项目名称
 	 */
-	function __construct($itemname = '', &$db = null) {
+	public function __construct($itemname = '', &$db = null) {
 
 		if ($db !== null) {
 			$this->db = &$db;
@@ -77,7 +77,7 @@ class Config {
 	 * 获取Data数据
 	 * @return array
 	 */
-	function GetData() {
+	public function GetData() {
 		return $this->kvdata;
 	}
 
@@ -85,7 +85,7 @@ class Config {
 	 * 获取Config的Item(项目名)
 	 * @return array
 	 */
-	function GetItemName() {
+	public function GetItemName() {
 		return $this->data['Name'];
 	}
 
@@ -152,6 +152,7 @@ class Config {
 		$this->kvdata = @unserialize($s);
 		if (!is_array($this->kvdata)) {
 			$this->kvdata = array();
+
 			return false;
 		}
 
@@ -170,7 +171,7 @@ class Config {
 	 * @param array $array 关联数组
 	 * @return bool
 	 */
-	function LoadInfoByAssoc($array) {
+	public function LoadInfoByAssoc($array) {
 		foreach ($this->datainfo as $key => $value) {
 			if (!isset($array[$value[0]])) {
 				continue;
@@ -187,7 +188,7 @@ class Config {
 	 * 保存数据
 	 * @return bool
 	 */
-	function Save() {
+	public function Save() {
 
 		$name = $this->GetItemName();
 		$value = $this->Serialize();
@@ -208,6 +209,7 @@ class Config {
 			$sql = $this->db->sql->Update($this->table, $kv, array(array('=', 'conf_Name', $name)));
 			$this->db->Update($sql);
 		}
+
 		return true;
 	}
 
@@ -217,10 +219,11 @@ class Config {
 	 * 从$zbp及数据库中删除该实例数据
 	 * @return bool
 	 */
-	function Delete() {
+	public function Delete() {
 		$name = $this->GetItemName();
 		$sql = $this->db->sql->Delete($this->table, array(array('=', 'conf_Name', $name)));
 		$this->db->Delete($sql);
+
 		return true;
 	}
 
@@ -237,20 +240,21 @@ class Config {
 	/**
 	 * 占位
 	 */
-	function SaveKey($name) {
+	public function SaveKey($name) {
 		return $this->Save();
 	}
 
 	/**
 	 * 占位
 	 */
-	function DelKey($name) {
+	public function DelKey($name) {
 		$name = FilterCorrectName($name);
 		if (!isset($this->kvdata[$name])) {
 			return false;
 		}
 
 		unset($this->kvdata[$name]);
+
 		return $this->Save();
 	}
 }

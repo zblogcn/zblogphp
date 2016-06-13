@@ -48,7 +48,7 @@ class DbSql {
 	/**
 	 * @param object $db
 	 */
-	function __construct(&$db = null) {
+	public function __construct(&$db = null) {
 		$this->db = &$db;
 		$this->dbclass = get_class($this->db);
 	}
@@ -59,6 +59,7 @@ class DbSql {
 	 */
 	public function ReplacePre(&$s) {
 		$s = str_replace('%pre%', $this->db->dbpre, $s);
+
 		return $s;
 	}
 
@@ -75,6 +76,7 @@ class DbSql {
 		if ($this->dbclass == 'Dbpdo_PgSQL' || $this->dbclass == 'DbPgSQL') {
 			$s .= "DROP SEQUENCE $table" . "_seq;";
 		}
+
 		return $s;
 	}
 
@@ -97,6 +99,7 @@ class DbSql {
 		if ($this->dbclass == 'Dbpdo_PgSQL' || $this->dbclass == 'DbPgSQL') {
 			$s = "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='public' AND  table_name ='$table'";
 		}
+
 		return $s;
 	}
 
@@ -295,6 +298,7 @@ class DbSql {
 		}
 
 		$this->ReplacePre($s);
+
 		return $s;
 	}
 
@@ -628,6 +632,7 @@ class DbSql {
 				$option['pagebar']->make();
 			}
 		}
+
 		return $sqls . $sqlw . $sqlg . $sqlh . $sqlo . $sqll;
 	}
 
@@ -680,6 +685,7 @@ class DbSql {
 		} else {
 			$sql .= $this->ParseWhere($where);
 		}
+
 		return $sql;
 	}
 
@@ -717,6 +723,7 @@ class DbSql {
 			$comma = ',';
 		}
 		$sql .= ')';
+
 		return $sql;
 	}
 
@@ -736,6 +743,7 @@ class DbSql {
 		} else {
 			$sql .= $this->ParseWhere($where);
 		}
+
 		return $sql;
 	}
 

@@ -78,6 +78,7 @@ function LargeData_LoadTagsByIDString($s) {
 	$s = str_replace('{', '', $s);
 	$s = str_replace('}', '', $s);
 	$a = explode('|', $s);
+
 	return $a;
 }
 
@@ -333,5 +334,3 @@ function LargeData_Misc_Statistic() {
 
 	echo $r;
 }
-
-?>

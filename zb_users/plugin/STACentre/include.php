@@ -13,5 +13,3 @@ function STACentre_AddMenu() {
 	global $zbp;
 	echo '<a href="' . $zbp->host . 'zb_users/plugin/STACentre/main.php"><span class="m-left">静态化管理中心</span></a>';
 }
-
-?>

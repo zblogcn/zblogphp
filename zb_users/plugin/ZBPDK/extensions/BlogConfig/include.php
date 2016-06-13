@@ -31,6 +31,7 @@ function blogconfig_left() {
 	foreach ($zbp->configs as $k => $v) {
 		$html .= "<li><a id=\"$k\" href=\"javascript:;\" onclick=\"clk(this);run('open','$k');\">$k</a></li>";
 	}
+
 	return $html;
 }
 
@@ -98,5 +99,6 @@ function blogconfig_exportlist($id) {
 		$html .= PHP_EOL . PHP_EOL;
 		$i++;
 	}
+
 	return $html;
 }

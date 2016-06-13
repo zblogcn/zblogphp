@@ -4,32 +4,32 @@ class Totoro_Class {
 	public $config_array = array();
 	public $sv = 0;
 
-	function __construct() {
+	public function __construct() {
 		$this->config_array = include TOTORO_INCPATH . 'totoro_config.php';
 		$this->init_config();
 	}
 
-	function init_config() {
+	public function init_config() {
 		global $zbp;
-		$config_save = FALSE;
+		$config_save = false;
 		foreach ($this->config_array as $type_name => &$type_value) {
 			foreach ($type_value as $name => &$value) {
 				$config_name = $type_name . '_' . $name;
 				$config_value = $zbp->Config('Totoro')->$config_name;
 				if (!isset($config_value)) {
 					$zbp->Config('Totoro')->$config_name = $value['DEFAULT'];
-					$config_save = TRUE;
+					$config_save = true;
 				}
 				$value['VALUE'] = $zbp->Config('Totoro')->$config_name;
 			}
 		}
 		if (!isset($zbp->Config('Totoro')->THROW_INT)) {
 			$zbp->Config('Totoro')->THROW_INT = 0;
-			$config_save = TRUE;
+			$config_save = true;
 		}
 		if (!isset($zbp->Config('Totoro')->CHECK_INT)) {
 			$zbp->Config('Totoro')->CHECK_INT = 0;
-			$config_save = TRUE;
+			$config_save = true;
 		}
 		if ($config_save) {
 			$zbp->SaveConfig('Totoro');
@@ -38,13 +38,14 @@ class Totoro_Class {
 		return true;
 	}
 
-	function output_config($type, $name, $convert = TRUE) {
+	public function output_config($type, $name, $convert = true) {
 		global $zbp;
 		$content = $this->config_array[$type][$name]['VALUE'];
+
 		return $convert ? TransferHTML($content, '[html-format]') : $content;
 	}
 
-	function add_black_list($id) {
+	public function add_black_list($id) {
 		global $zbp;
 		$comment = $zbp->GetCommentByID($id);
 		$content = $comment->HomePage . ' ' . $comment->Content;
@@ -75,7 +76,7 @@ class Totoro_Class {
 
 	}
 
-	function build_content(&$comment) {
+	public function build_content(&$comment) {
 		$content = '';
 		//$content .= $comment->Name . ' ';
 		//$content .= $comment->Email . ' ';
@@ -105,7 +106,7 @@ class Totoro_Class {
 
 	}
 
-	function get_score(&$comment, $debug = FALSE) {
+	public function get_score(&$comment, $debug = false) {
 		$build = $this->build_content($comment);
 		if ($debug) {
 			echo 'BUILD COMMENT: ' . $build['content'] . "\n";
@@ -127,14 +128,14 @@ class Totoro_Class {
 		return $this->sv;
 	}
 
-	function check_comment(&$comment) {
+	public function check_comment(&$comment) {
 
 		global $zbp;
 		$zbp->lang['error'][53] = $this->config_array['STRING_BACK']['CHECKSTR']['VALUE'];
 		$zbp->lang['error'][14] = $this->config_array['STRING_BACK']['THROWSTR']['VALUE'];
 
 		if ($this->check_ip($comment->IP)) {
-			$comment->IsThrow = TRUE;
+			$comment->IsThrow = true;
 			$zbp->lang['error'][14] = $this->config_array['STRING_BACK']['KILLIPSTR']['VALUE'];
 
 		}
@@ -148,15 +149,15 @@ class Totoro_Class {
 					||
 					$this->config_array['SV_SETTING']['SV_THRESHOLD2']['VALUE'] <= 0
 				) {
-					$comment->IsChecking = TRUE;
+					$comment->IsChecking = true;
 					$zbp->Config('Totoro')->CHECK_INT = (int) $zbp->Config('Totoro')->CHECK_INT + 1;
 					$zbp->SaveConfig('Totoro');
-					$this->filter_ip($comment->IP, FALSE);
+					$this->filter_ip($comment->IP, false);
 				} elseif ($this->config_array['SV_SETTING']['SV_THRESHOLD2']['VALUE'] <= $this->sv) {
-					$comment->IsThrow = TRUE;
+					$comment->IsThrow = true;
 					$zbp->Config('Totoro')->THROW_INT = (int) $zbp->Config('Totoro')->THROW_INT + 1;
 					$zbp->SaveConfig('Totoro');
-					$this->filter_ip($comment->IP, TRUE);
+					$this->filter_ip($comment->IP, true);
 				}
 
 			}
@@ -165,7 +166,7 @@ class Totoro_Class {
 		//if ($this->sv >=)
 	}
 
-	function replace_comment(&$comment) {
+	public function replace_comment(&$comment) {
 		$replace_str = $this->config_array['SV_SETTING']['REPLACE_KEYWORD']['VALUE'];
 
 		$replace_list = $this->config_array['BLACK_LIST']['REPLACE_LIST']['VALUE'];
@@ -183,7 +184,7 @@ class Totoro_Class {
 
 	}
 
-	function check_ip($ip) {
+	public function check_ip($ip) {
 		$ip = ip2long($ip);
 		$ip_str = explode('|', $this->config_array['BLACK_LIST']['IPFILTER_LIST']['VALUE']);
 		for ($i = 0; $i < count($ip_str); $i++) {
@@ -193,10 +194,11 @@ class Totoro_Class {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
-	function filter_ip($ip, $kill) {
+	public function filter_ip($ip, $kill) {
 		global $zbp;
 		if ($this->config_array['SV_SETTING']['KILLIP']['VALUE'] == 0) {
 			return;
@@ -241,7 +243,7 @@ class Totoro_Class {
 
 	}
 
-	function kill_ip($ip) {
+	public function kill_ip($ip) {
 		global $zbp;
 		$logid = array();
 		$cmtid = array();
@@ -294,7 +296,7 @@ class Totoro_Class {
 
 	}
 
-	function export_submenu($action) {
+	public function export_submenu($action) {
 		$array = array(
 			array(
 				'action' => 'main',
@@ -328,6 +330,7 @@ class Totoro_Class {
 			$str = str_replace('$title', $array[$i]['title'], $str);
 			$str = str_replace('$light', ($action == $array[$i]['action'] ? ' m-now' : ''), $str);
 		}
+
 		return $str;
 	}
 }

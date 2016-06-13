@@ -17,7 +17,7 @@ if (GetVars('type', 'GET') == 'test') {
 	$comment->Content = GetVars('string', 'POST');
 
 //	var_dump($comment);
-	$score = $Totoro->get_score($comment, TRUE);
+	$score = $Totoro->get_score($comment, true);
 	echo "\n" . 'MAX_SCORE: ' . $score;
 	if ($score >= $Totoro->config_array['SV_SETTING']['SV_THRESHOLD']['VALUE']) {
 		echo "\n该评论被审核";

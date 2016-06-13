@@ -1,15 +1,15 @@
 <?php
 #注册插件
-RegisterPlugin("passwordvisit","ActivePlugin_passwordvisit");
+RegisterPlugin("passwordvisit", "ActivePlugin_passwordvisit");
 
 function ActivePlugin_passwordvisit() {
-	Add_Filter_Plugin('Filter_Plugin_Edit_Response3','passwordvisit_show_encrypt_button');
-	Add_Filter_Plugin('Filter_Plugin_PostArticle_Core','passwordvisit_save_postpassword');
-	Add_Filter_Plugin('Filter_Plugin_ViewList_Template','passwordvisit_list_password');
-	Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','passwordvisit_input_password');
+	Add_Filter_Plugin('Filter_Plugin_Edit_Response3', 'passwordvisit_show_encrypt_button');
+	Add_Filter_Plugin('Filter_Plugin_PostArticle_Core', 'passwordvisit_save_postpassword');
+	Add_Filter_Plugin('Filter_Plugin_ViewList_Template', 'passwordvisit_list_password');
+	Add_Filter_Plugin('Filter_Plugin_ViewPost_Template', 'passwordvisit_input_password');
 }
 
-function passwordvisit_list_password($template){
+function passwordvisit_list_password($template) {
 	global $zbp;
 	$articles = $template->GetTags('articles');
 	foreach ($articles as $key => $article) {
@@ -22,19 +22,19 @@ function passwordvisit_list_password($template){
 	$template->SetTags('articles', $articles);
 }
 
-function passwordvisit_input_password(&$template){
+function passwordvisit_input_password(&$template) {
 	global $zbp;
 	if(isset($_POST['password']) && $_POST['password'] != ''){
 		$article = $template->GetTags('article');
 		if($article->Metas->passwordvisit_password != ''){
-			if (GetVars('password','POST') == $article->Metas->passwordvisit_password) {
+			if (GetVars('password', 'POST') == $article->Metas->passwordvisit_password) {
 				return;
 			}else{
 				echo '<script type="text/javascript">alert("密码错误，请重新输入！");window.location="'.$article->Url.'";</script>';
 				die();
 			}
 		}else{
-			if (GetVars('password','POST') == $zbp->Config('passwordvisit')->default_password) {
+			if (GetVars('password', 'POST') == $zbp->Config('passwordvisit')->default_password) {
 				return;
 			}else{
 				echo '<script type="text/javascript">alert("密码错误，请重新输入！");window.location="'.$article->Url.'";</script>';
@@ -51,12 +51,12 @@ function passwordvisit_input_password(&$template){
 	}
 }
 
-function passwordvisit_save_postpassword(&$article){
+function passwordvisit_save_postpassword(&$article) {
 	$article->Metas->passwordvisit_enable_encrypt = $_POST['enable_encrypt'];
 	$article->Metas->passwordvisit_password = $_POST['password'];
 }
 
-function passwordvisit_show_encrypt_button(){
+function passwordvisit_show_encrypt_button() {
 	if ($_GET['act'] == 'PageEdt') return;//去掉页面
 
 	if(isset($_GET['id']) && $_GET['id'] != ''){

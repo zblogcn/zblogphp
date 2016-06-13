@@ -15,7 +15,7 @@ class Template {
 	/**
 	 *
 	 */
-	function __construct() {
+	public function __construct() {
 	}
 
 	/**
@@ -42,6 +42,7 @@ class Template {
 			$fpreturn = $fpname($this, $name);
 			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
+
 		return $this->path . $name . '.php';
 	}
 
@@ -56,7 +57,7 @@ class Template {
 	 * @param $name
 	 * @return mixed
 	 */
-	function &GetTags($name) {
+	public function &GetTags($name) {
 		return $this->tags[$name];
 	}
 
@@ -64,28 +65,28 @@ class Template {
 	 * @param $name
 	 * @param $value
 	 */
-	function SetTags($name, $value) {
+	public function SetTags($name, $value) {
 		$this->tags[$name] = $value;
 	}
 
 	/**
 	 * @return array
 	 */
-	function &GetTagsAll() {
+	public function &GetTagsAll() {
 		return $this->tags;
 	}
 
 	/**
 	 * @param $array
 	 */
-	function SetTagsAll(&$array) {
+	public function SetTagsAll(&$array) {
 		$this->tags = $array;
 	}
 
 	/**
 	 * @param $filesarray
 	 */
-	function CompileFiles($filesarray) {
+	public function CompileFiles($filesarray) {
 
 		foreach ($filesarray as $name => $content) {
 			$s = RemoveBOM($this->Compiling($content));
@@ -246,6 +247,7 @@ class Template {
 		$ifexp = str_replace($matches[1], $this->replace_dot($matches[1]), $matches[1]);
 
 		$content = str_replace('{else}', '{php}}else{ {/php}', $content);
+
 		return "<?php if ($ifexp) { ?>$content<?php } ?>";
 
 	}
@@ -256,6 +258,7 @@ class Template {
 	 */
 	private function parse_elseif($matches) {
 		$ifexp = str_replace($matches[1], $this->replace_dot($matches[1]), $matches[1]);
+
 		return "{php}}elseif($ifexp) { {/php}";
 	}
 
@@ -279,6 +282,7 @@ class Template {
 	private function parse_foreach_sub($matches) {
 		$exp = $this->replace_dot($matches[1]);
 		$code = $matches[2];
+
 		return "{php} foreach ($exp) {{/php}$code{php}}  {/php}";
 	}
 
@@ -302,6 +306,7 @@ class Template {
 	private function parse_for_sub($matches) {
 		$exp = $this->replace_dot($matches[1]);
 		$code = $matches[2];
+
 		return "{php} for($exp) {{/php} $code{php} }  {/php}";
 	}
 
@@ -346,6 +351,7 @@ class Template {
 		$content = str_replace(' .', ' {%_dot_%}', $content);
 		$content = str_replace('.', '->', $content);
 		$content = str_replace('{%_dot_%}', '.', $content);
+
 		return $content;
 	}
 
@@ -376,6 +382,7 @@ class Template {
 		$this->Display($this->startpage);
 		$data = ob_get_contents();
 		ob_end_clean();
+
 		return $data;
 
 	}

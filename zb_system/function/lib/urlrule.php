@@ -47,6 +47,7 @@ class UrlRule {
 		$s = str_replace(array('{', '}'), array('', ''), $s);
 
 		$this->Url = htmlspecialchars($s);
+
 		return $this->Url;
 	}
 
@@ -96,6 +97,7 @@ class UrlRule {
 		}
 
 		$this->Url = htmlspecialchars($s);
+
 		return $this->Url;
 	}
 
@@ -115,7 +117,7 @@ class UrlRule {
 	 * @param $type
 	 * @return string
 	 */
-	static public function OutputUrlRegEx($url, $type) {
+	public static function OutputUrlRegEx($url, $type) {
 		global $zbp;
 		switch ($zbp->categorylayer) {
 		case 4:
@@ -184,6 +186,7 @@ class UrlRule {
 		$url = str_replace('<:', '{', $url);
 		$url = str_replace(':>', '}', $url);
 		$url = str_replace('/', '\/', $url);
+
 		return '/(?J)' . $url . '/';
 		// 关于J标识符的使用
 		// @see https://bugs.php.net/bug.php?id=47456
@@ -202,6 +205,7 @@ class UrlRule {
 		$s .= 'RewriteCond %{REQUEST_FILENAME} !-d' . "\r\n";
 		$s .= 'RewriteRule . ' . $zbp->cookiespath . 'index.php [L]' . "\r\n";
 		$s .= '</IfModule>';
+
 		return $s;
 	}
 
@@ -258,6 +262,7 @@ class UrlRule {
 		$s .= 'if (!-f $request_filename){' . "\r\n";
 		$s .= '	rewrite (.*) ' . $zbp->cookiespath . 'index.php;' . "\r\n";
 		$s .= '}' . "\r\n";
+
 		return $s;
 	}
 
@@ -384,6 +389,7 @@ class UrlRule {
 		$url = str_replace('}', '', $url);
 		$url = str_replace('<:', '{', $url);
 		$url = str_replace(':>', '}', $url);
+
 		return 'RewriteRule ' . $zbp->cookiespath . $url . ' [I,L]';
 
 	}

@@ -48,7 +48,7 @@ class template_permission extends clinic {
 
 		$s = '';
 		$path = $zbp->path . str_replace('{%template%}', $blogtheme, $param);
-		$return = FALSE;
+		$return = false;
 		if (isset($this->_dirs[$param])) {
 
 			if (!is_dir($path)) {
@@ -66,7 +66,7 @@ class template_permission extends clinic {
 				if (@file_put_contents($path . '/clinic_check.php', '<?php echo "test";')) {
 					if (@unlink($path . '/clinic_check.php')) {
 						$s = '读写权限正常';
-						$return = TRUE;
+						$return = true;
 					} else {
 						$s = '无法删除文件';
 					}
@@ -95,7 +95,7 @@ class template_permission extends clinic {
 		global $zbp;
 		global $blogtheme;
 
-		$return = FALSE;
+		$return = false;
 		$s = '';
 		$path = $zbp->path . str_replace('{%template%}', $blogtheme, $param);
 		if (isset($this->_dirs[$param])) {

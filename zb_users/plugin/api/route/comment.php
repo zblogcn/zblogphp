@@ -16,6 +16,7 @@ function return_comment($id) {
 	$comment = $zbp->GetCommentByID($id);
 	$ret = $comment->GetData();
 	API::$IO->formatObjectName($ret);
+
 	return $ret;
 }
 
@@ -24,7 +25,7 @@ function return_comment($id) {
  */
 function api_comment_get_function() {
 
-	$id = (int)API::$IO->id;
+	$id = (int) API::$IO->id;
 	if ($id === 0) API::$IO->end(3);
 	//
 	$ret = return_comment($id);

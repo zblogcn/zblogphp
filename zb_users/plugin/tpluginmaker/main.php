@@ -6,14 +6,14 @@ $zbp->Load(); $action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('tpluginmaker')) {$zbp->ShowError(48);die();}
 
-$step = (int)GetVars('step', 'GET');
-$blogtitle = '主题插件生成器 - STEP ' . (string)($step + 1) . ' . ' . $message[$step];
+$step = (int) GetVars('step', 'GET');
+$blogtitle = '主题插件生成器 - STEP ' . (string) ($step + 1) . ' . ' . $message[$step];
 require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <script type="text/javascript">
 
 	var current_theme = "<?php echo htmlspecialchars($blogtheme);?>",
-		plugin_exist = <?php echo (check_plugin_exists($blogtheme) ? "true" : "false")?>;
+		plugin_exist = <?php echo(check_plugin_exists($blogtheme) ? "true" : "false")?>;
 		
 </script>
 <style type="text/css">
@@ -30,7 +30,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div class="SubMenu"> </div>
   <div id="divMain2">
     <?php
-    switch((string)GetVars('step', 'GET'))
+    switch((string) GetVars('step', 'GET'))
 	{
 		case '1': step1(); break;
 		case '2': step2(); break;
@@ -44,7 +44,7 @@ require $blogpath . 'zb_system/admin/admin_footer.php';
 RunTime();
 ?>
 <?php 
-function step2(){
+function step2() {
 	global $zbp;
 	if(count($_POST) > 0)
 	{
@@ -60,7 +60,7 @@ function step2(){
 <?php
 }
 
-function step1(){
+function step1() {
 ?>
 <div style="text-indent:2em;" class="text-note">在主题include文件夹内的文件将在这里即时显示。</div>
 <div id="help001" style="display:none">
@@ -130,7 +130,7 @@ function step1(){
 }
 
 
-function step0(){
+function step0() {
 ?>
 <div style="text-indent:2em;" class="text-note">
   <p>&nbsp;</p>

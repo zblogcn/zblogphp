@@ -31,4 +31,3 @@ function Totoro_Action_Blockip() {
 	$Totoro->filter_ip($comment->IP, true);
 }
 RunTime();
-?>

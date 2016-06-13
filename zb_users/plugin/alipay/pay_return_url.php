@@ -44,4 +44,3 @@ if ($verify_result) {
 	}
 
 }
-?>

@@ -17,7 +17,7 @@ class Category extends Base {
 	/**
 	 * 构造函数
 	 */
-	function __construct() {
+	public function __construct() {
 		global $zbp;
 		parent::__construct($zbp->table['Category'], $zbp->datainfo['Category'], __CLASS__);
 
@@ -32,7 +32,7 @@ class Category extends Base {
 	 * @param mixed $args 参数
 	 * @return mixed
 	 */
-	function __call($method, $args) {
+	public function __call($method, $args) {
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Call'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn = $fpname($this, $method, $args);
@@ -95,6 +95,7 @@ class Category extends Base {
 			$u = new UrlRule($zbp->option['ZC_CATEGORY_REGEX']);
 			$u->Rules['{%id%}'] = $this->ID;
 			$u->Rules['{%alias%}'] = rawurlencode($this->Alias == '' ? $this->$backAttr : $this->Alias);
+
 			return $u->Make();
 		}
 		if ($name == 'Symbol') {
@@ -102,6 +103,7 @@ class Category extends Base {
 				return;
 			} else {
 				$l = $this->Level;
+
 				return str_repeat('&nbsp;', $l * 2 - 1) . '└';
 			}
 		}
@@ -134,6 +136,7 @@ class Category extends Base {
 
 			return $value;
 		}
+
 		return parent::__get($name);
 	}
 
@@ -141,7 +144,7 @@ class Category extends Base {
 	 * 保存分类数据
 	 * @return bool
 	 */
-	function Save() {
+	public function Save() {
 		global $zbp;
 		if ($this->Template == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
 			$this->data['Template'] = '';
@@ -156,18 +159,20 @@ class Category extends Base {
 			$fpreturn = $fpname($this);
 			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
+
 		return parent::Save();
 	}
 
 	/**
 	 * @return bool
 	 */
-	function Del() {
+	public function Del() {
 		foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Del'] as $fpname => &$fpsignal) {
 			$fpsignal = PLUGIN_EXITSIGNAL_NONE;
 			$fpreturn = $fpname($this);
 			if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
 		}
+
 		return parent::Del();
 	}
 
@@ -180,7 +185,7 @@ class Category extends Base {
 		global $zbp;
 		if ($object->ParentID == 0) {
 			return $deep;
-		} else if (!isset($zbp->categories[$object->ParentID])) {
+		} elseif (!isset($zbp->categories[$object->ParentID])) {
 			return 0;
 		} else {
 			return $this->GetDeep($zbp->categories[$object->ParentID], $deep + 1);

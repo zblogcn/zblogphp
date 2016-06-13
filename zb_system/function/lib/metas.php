@@ -42,6 +42,7 @@ class Metas {
 		if (is_array($a)) {
 			$m->_data = $a;
 		}
+
 		return $m;
 	}
 
@@ -49,7 +50,7 @@ class Metas {
 	 * 获取Data数据
 	 * @return array
 	 */
-	function GetData() {
+	public function GetData() {
 		return $this->_data;
 	}
 
@@ -60,6 +61,7 @@ class Metas {
 	 */
 	public static function ReplaceTag2Host($value) {
 		global $bloghost;
+
 		return str_replace('{#ZC_BLOG_HOST#}', $bloghost, $value);
 	}
 
@@ -70,6 +72,7 @@ class Metas {
 	 */
 	public static function ReplaceHost2Tag($value) {
 		global $bloghost;
+
 		return str_replace($bloghost, '{#ZC_BLOG_HOST#}', $value);
 	}
 
@@ -149,6 +152,7 @@ class Metas {
 			}
 		} else {
 			$this->_data = array();
+
 			return false;
 		}
 

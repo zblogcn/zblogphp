@@ -41,7 +41,7 @@ class Markdown implements MarkdownInterface {
 
 		# try to take parser from the static parser list
 		static $parser_list;
-		$parser =& $parser_list[$parser_class];
+		$parser = &$parser_list[$parser_class];
 
 		# create the parser it not already set
 		if (!$parser)
@@ -91,11 +91,11 @@ class Markdown implements MarkdownInterface {
 		$this->_initDetab();
 		$this->prepareItalicsAndBold();
 	
-		$this->nested_brackets_re = 
+		$this->nested_brackets_re =
 			str_repeat('(?>[^\[\]]+|\[', $this->nested_brackets_depth).
 			str_repeat('\])*', $this->nested_brackets_depth);
 	
-		$this->nested_url_parenthesis_re = 
+		$this->nested_url_parenthesis_re =
 			str_repeat('(?>[^()\s]+|\(', $this->nested_url_parenthesis_depth).
 			str_repeat('(?>\)))*', $this->nested_url_parenthesis_depth);
 		
@@ -220,13 +220,15 @@ class Markdown implements MarkdownInterface {
 			}xm',
 			array($this, '_stripLinkDefinitions_callback'),
 			$text);
+
 		return $text;
 	}
 	protected function _stripLinkDefinitions_callback($matches) {
 		$link_id = strtolower($matches[1]);
 		$url = $matches[2] == '' ? $matches[3] : $matches[2];
 		$this->urls[$link_id] = $url;
-		$this->titles[$link_id] =& $matches[4];
+		$this->titles[$link_id] = &$matches[4];
+
 		return ''; # String that will replace the block
 	}
 
@@ -373,6 +375,7 @@ class Markdown implements MarkdownInterface {
 	protected function _hashHTMLBlocks_callback($matches) {
 		$text = $matches[1];
 		$key  = $this->hashBlock($text);
+
 		return "\n\n$key\n\n";
 	}
 	
@@ -396,6 +399,7 @@ class Markdown implements MarkdownInterface {
 		static $i = 0;
 		$key = "$boundary\x1A" . ++$i . $boundary;
 		$this->html_hashes[$key] = $text;
+
 		return $key; # String that will replace the tag.
 	}
 
@@ -465,7 +469,7 @@ class Markdown implements MarkdownInterface {
 				[ ]*		# Tailing spaces
 				$			# End of line.
 			}mx',
-			"\n".$this->hashBlock("<hr$this->empty_element_suffix")."\n", 
+			"\n".$this->hashBlock("<hr$this->empty_element_suffix")."\n",
 			$text);
 	}
 
@@ -508,7 +512,7 @@ class Markdown implements MarkdownInterface {
 	
 	protected function doHardBreaks($text) {
 		# Do hard breaks:
-		return preg_replace_callback('/ {2,}\n/', 
+		return preg_replace_callback('/ {2,}\n/',
 			array($this, '_doHardBreaks_callback'), $text);
 	}
 	protected function _doHardBreaks_callback($matches) {
@@ -584,12 +588,13 @@ class Markdown implements MarkdownInterface {
 			array($this, '_doAnchors_reference_callback'), $text);
 
 		$this->in_anchor = false;
+
 		return $text;
 	}
 	protected function _doAnchors_reference_callback($matches) {
 		$whole_match =  $matches[1];
 		$link_text   =  $matches[2];
-		$link_id     =& $matches[3];
+		$link_id     = &$matches[3];
 
 		if ($link_id == "") {
 			# for shortcut links like [this][] or [this].
@@ -605,7 +610,7 @@ class Markdown implements MarkdownInterface {
 			$url = $this->encodeURLAttribute($url);
 			
 			$result = "<a href=\"$url\"";
-			if ( isset( $this->titles[$link_id] ) ) {
+			if (isset($this->titles[$link_id])) {
 				$title = $this->titles[$link_id];
 				$title = $this->encodeAttribute($title);
 				$result .=  " title=\"$title\"";
@@ -618,13 +623,14 @@ class Markdown implements MarkdownInterface {
 		else {
 			$result = $whole_match;
 		}
+
 		return $result;
 	}
 	protected function _doAnchors_inline_callback($matches) {
 		$whole_match	=  $matches[1];
 		$link_text		=  $this->runSpanGamut($matches[2]);
 		$url			=  $matches[3] == '' ? $matches[4] : $matches[3];
-		$title			=& $matches[7];
+		$title			= &$matches[7];
 
 		// if the URL was of the form <s p a c e s> it got caught by the HTML
 		// tag parser and hashed. Need to reverse the process before using the URL.
@@ -668,7 +674,7 @@ class Markdown implements MarkdownInterface {
 			  \]
 
 			)
-			}xs', 
+			}xs',
 			array($this, '_doImages_reference_callback'), $text);
 
 		#
@@ -734,7 +740,7 @@ class Markdown implements MarkdownInterface {
 		$whole_match	= $matches[1];
 		$alt_text		= $matches[2];
 		$url			= $matches[3] == '' ? $matches[4] : $matches[3];
-		$title			=& $matches[7];
+		$title			= &$matches[7];
 
 		$alt_text = $this->encodeAttribute($alt_text);
 		$url = $this->encodeURLAttribute($url);
@@ -786,11 +792,13 @@ class Markdown implements MarkdownInterface {
 		
 		$level = $matches[2]{0} == '=' ? 1 : 2;
 		$block = "<h$level>".$this->runSpanGamut($matches[1])."</h$level>";
+
 		return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 	protected function _doHeaders_callback_atx($matches) {
 		$level = strlen($matches[1]);
 		$block = "<h$level>".$this->runSpanGamut($matches[2])."</h$level>";
+
 		return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 
@@ -838,10 +846,10 @@ class Markdown implements MarkdownInterface {
 				  )
 				)
 			'; // mx
-			
+
 			# We use a different prefix before nested lists than top-level lists.
 			# See extended comment in _ProcessListItems().
-		
+
 			if ($this->list_level) {
 				$text = preg_replace_callback('{
 						^
@@ -869,12 +877,13 @@ class Markdown implements MarkdownInterface {
 		$list = $matches[1];
 		$list_type = preg_match("/$marker_ul_re/", $matches[4]) ? "ul" : "ol";
 		
-		$marker_any_re = ( $list_type == "ul" ? $marker_ul_re : $marker_ol_re );
+		$marker_any_re = ($list_type == "ul" ? $marker_ul_re : $marker_ol_re);
 		
 		$list .= "\n";
 		$result = $this->processListItems($list, $marker_any_re);
 		
 		$result = $this->hashBlock("<$list_type>\n" . $result . "</$list_type>");
+
 		return "\n". $result ."\n\n";
 	}
 
@@ -905,7 +914,7 @@ class Markdown implements MarkdownInterface {
 		# without resorting to mind-reading. Perhaps the solution is to
 		# change the syntax rules such that sub-lists must start with a
 		# starting cardinal number; e.g. "1." or "a.".
-		
+
 		$this->list_level++;
 
 		# trim trailing blank lines:
@@ -924,16 +933,17 @@ class Markdown implements MarkdownInterface {
 			array($this, '_processListItems_callback'), $list_str);
 
 		$this->list_level--;
+
 		return $list_str;
 	}
 	protected function _processListItems_callback($matches) {
 		$item = $matches[4];
-		$leading_line =& $matches[1];
-		$leading_space =& $matches[2];
+		$leading_line = &$matches[1];
+		$leading_space = &$matches[2];
 		$marker_space = $matches[3];
-		$tailing_blank_line =& $matches[5];
+		$tailing_blank_line = &$matches[5];
 
-		if ($leading_line || $tailing_blank_line || 
+		if ($leading_line || $tailing_blank_line ||
 			preg_match('/\n{2,}/', $item))
 		{
 			# Replace marker with the appropriate whitespace indentation
@@ -979,6 +989,7 @@ class Markdown implements MarkdownInterface {
 		$codeblock = preg_replace('/\A\n+|\n+\z/', '', $codeblock);
 
 		$codeblock = "<pre><code>$codeblock\n</code></pre>";
+
 		return "\n\n".$this->hashBlock($codeblock)."\n\n";
 	}
 
@@ -988,6 +999,7 @@ class Markdown implements MarkdownInterface {
 	# Create a code span markup for $code. Called from handleSpanToken.
 	#
 		$code = htmlspecialchars(trim($code), ENT_NOQUOTES);
+
 		return $this->hashPart("<code>$code</code>");
 	}
 
@@ -1051,8 +1063,8 @@ class Markdown implements MarkdownInterface {
 			#
 			$parts = preg_split($token_re, $text, 2, PREG_SPLIT_DELIM_CAPTURE);
 			$text_stack[0] .= $parts[0];
-			$token =& $parts[1];
-			$text =& $parts[2];
+			$token = &$parts[1];
+			$text = &$parts[2];
 			
 			if (empty($token)) {
 				# Reached end of text span: empty stack without emitting.
@@ -1079,7 +1091,7 @@ class Markdown implements MarkdownInterface {
 				} else {
 					# Other closing marker: close one em or strong and
 					# change current token state to match the other
-					$token_stack[0] = str_repeat($token{0}, 3-$token_len);
+					$token_stack[0] = str_repeat($token{0}, 3 - $token_len);
 					$tag = $token_len == 2 ? "strong" : "em";
 					$span = $text_stack[0];
 					$span = $this->runSpanGamut($span);
@@ -1088,7 +1100,7 @@ class Markdown implements MarkdownInterface {
 					$$tag = ''; # $$tag stands for $em or $strong
 				}
 				$tree_char_em = false;
-			} else if ($token_len == 3) {
+			} elseif ($token_len == 3) {
 				if ($em) {
 					# Reached closing marker for both em and strong.
 					# Closing strong marker:
@@ -1110,7 +1122,7 @@ class Markdown implements MarkdownInterface {
 					array_unshift($text_stack, '');
 					$tree_char_em = true;
 				}
-			} else if ($token_len == 2) {
+			} elseif ($token_len == 2) {
 				if ($strong) {
 					# Unwind any dangling emphasis marker:
 					if (strlen($token_stack[0]) == 1) {
@@ -1150,6 +1162,7 @@ class Markdown implements MarkdownInterface {
 				}
 			}
 		}
+
 		return $text_stack[0];
 	}
 
@@ -1178,7 +1191,7 @@ class Markdown implements MarkdownInterface {
 		$bq = preg_replace('/^/m', "  ", $bq);
 		# These leading spaces cause problem with <pre> content, 
 		# so we need to fix that:
-		$bq = preg_replace_callback('{(\s*<pre>.+?</pre>)}sx', 
+		$bq = preg_replace_callback('{(\s*<pre>.+?</pre>)}sx',
 			array($this, '_doBlockQuotes_callback2'), $bq);
 
 		return "\n". $this->hashBlock("<blockquote>\n$bq\n</blockquote>")."\n\n";
@@ -1186,6 +1199,7 @@ class Markdown implements MarkdownInterface {
 	protected function _doBlockQuotes_callback2($matches) {
 		$pre = $matches[1];
 		$pre = preg_replace('/^  /m', '', $pre);
+
 		return $pre;
 	}
 
@@ -1267,6 +1281,7 @@ class Markdown implements MarkdownInterface {
 	#
 		$text = $this->encodeAmpsAndAngles($text);
 		$text = str_replace('"', '&quot;', $text);
+
 		return $text;
 	}
 
@@ -1283,7 +1298,7 @@ class Markdown implements MarkdownInterface {
 
 		if (preg_match('{^mailto:}i', $url))
 			$url = $this->encodeEntityObfuscatedAttribute($url, $text, 7);
-		else if (preg_match('{^tel:}i', $url))
+		elseif (preg_match('{^tel:}i', $url))
 		{
 			$url = $this->encodeAttribute($url);
 			$text = substr($url, 4);
@@ -1309,7 +1324,7 @@ class Markdown implements MarkdownInterface {
 		} else {
 			# Ampersand-encoding based entirely on Nat Irons's Amputator
 			# MT plugin: <http://bumppo.net/projects/amputator/>
-			$text = preg_replace('/&(?!#?[xX]?(?:[0-9a-fA-F]+|\w+);)/', 
+			$text = preg_replace('/&(?!#?[xX]?(?:[0-9a-fA-F]+|\w+);)/',
 								'&amp;', $text);
 		}
 		# Encode remaining <'s
@@ -1349,12 +1364,14 @@ class Markdown implements MarkdownInterface {
 	protected function _doAutoLinks_url_callback($matches) {
 		$url = $this->encodeURLAttribute($matches[1], $text);
 		$link = "<a href=\"$url\">$text</a>";
+
 		return $this->hashPart($link);
 	}
 	protected function _doAutoLinks_email_callback($matches) {
 		$addr = $matches[1];
 		$url = $this->encodeURLAttribute("mailto:$addr", $text);
 		$link = "<a href=\"$url\">$text</a>";
+
 		return $this->hashPart($link);
 	}
 
@@ -1381,7 +1398,7 @@ class Markdown implements MarkdownInterface {
 		if ($text == "") return $tail = "";
 
 		$chars = preg_split('/(?<!^)(?!$)/', $text);
-		$seed = (int)abs(crc32($text) / strlen($text)); # Deterministic seed.
+		$seed = (int) abs(crc32($text) / strlen($text)); # Deterministic seed.
 
 		foreach ($chars as $key => $char) {
 			$ord = ord($char);
@@ -1392,7 +1409,7 @@ class Markdown implements MarkdownInterface {
 				# '@' *must* be encoded. I insist.
 				# '"' and '>' have to be encoded inside the attribute
 				if ($r > 90 && strpos('@"&>', $char) === false) /* do nothing */;
-				else if ($r < 45) $chars[$key] = '&#x'.dechex($ord).';';
+				elseif ($r < 45) $chars[$key] = '&#x'.dechex($ord).';';
 				else              $chars[$key] = '&#'.$ord.';';
 			}
 		}
@@ -1417,7 +1434,7 @@ class Markdown implements MarkdownInterface {
 				|
 					(?<![`\\\\])
 					`+						# code span marker
-			'.( $this->no_markup ? '' : '
+			'.($this->no_markup ? '' : '
 				|
 					<!--    .*?     -->		# comment
 				|
@@ -1474,13 +1491,15 @@ class Markdown implements MarkdownInterface {
 				return $this->hashPart("&#". ord($token{1}). ";");
 			case "`":
 				# Search for end marker in remaining text.
-				if (preg_match('/^(.*?[^`])'.preg_quote($token).'(?!`)(.*)$/sm', 
+				if (preg_match('/^(.*?[^`])'.preg_quote($token).'(?!`)(.*)$/sm',
 					$str, $matches))
 				{
 					$str = $matches[2];
 					$codespan = $this->makeCodeSpan($matches[1]);
+
 					return $this->hashPart($codespan);
 				}
+
 				return $token; // return as text since no ending marker found.
 			default:
 				return $this->hashPart($token);
@@ -1507,7 +1526,7 @@ class Markdown implements MarkdownInterface {
 		# For each line we separate the line in blocks delemited by
 		# tab characters. Then we reconstruct every line by adding the 
 		# appropriate number of space between each blocks.
-		
+
 		$text = preg_replace_callback('/^.*\t.*$/m',
 			array($this, '_detab_callback'), $text);
 
@@ -1516,7 +1535,7 @@ class Markdown implements MarkdownInterface {
 	protected function _detab_callback($matches) {
 		$line = $matches[0];
 		$strlen = $this->utf8_strlen; # strlen function for UTF-8.
-		
+
 		# Split in blocks.
 		$blocks = explode("\t", $line);
 		# Add each blocks to the line.
@@ -1524,10 +1543,11 @@ class Markdown implements MarkdownInterface {
 		unset($blocks[0]); # Do not add first block twice.
 		foreach ($blocks as $block) {
 			# Calculate amount of space, insert spaces, insert block.
-			$amount = $this->tab_width - 
+			$amount = $this->tab_width -
 				$strlen($line, 'UTF-8') % $this->tab_width;
 			$line .= str_repeat(" ", $amount) . $block;
 		}
+
 		return $line;
 	}
 	protected function _initDetab() {
@@ -1548,7 +1568,7 @@ class Markdown implements MarkdownInterface {
 	#
 	# Swap back in all the tags hashed by _HashHTMLBlocks.
 	#
-		return preg_replace_callback('/(.)\x1A[0-9]+\1/', 
+		return preg_replace_callback('/(.)\x1A[0-9]+\1/',
 			array($this, '_unhash_callback'), $text);
 	}
 	protected function _unhash_callback($matches) {
@@ -1708,9 +1728,9 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 		foreach ($elements as $element) {
 			if ($element{0} == '.') {
 				$classes[] = substr($element, 1);
-			} else if ($element{0} == '#') {
+			} elseif ($element{0} == '#') {
 				if ($id === false) $id = substr($element, 1);
-			} else if (strpos($element, '=') > 0) {
+			} elseif (strpos($element, '=') > 0) {
 				$parts = explode('=', $element, 2);
 				$attributes[] = $parts[0] . '="' . $parts[1] . '"';
 			}
@@ -1727,6 +1747,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 		if (!$this->no_markup && !empty($attributes)) {
 			$attr_str .= ' '.implode(" ", $attributes);
 		}
+
 		return $attr_str;
 	}
 
@@ -1764,20 +1785,22 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			}xm',
 			array($this, '_stripLinkDefinitions_callback'),
 			$text);
+
 		return $text;
 	}
 	protected function _stripLinkDefinitions_callback($matches) {
 		$link_id = strtolower($matches[1]);
 		$url = $matches[2] == '' ? $matches[3] : $matches[2];
 		$this->urls[$link_id] = $url;
-		$this->titles[$link_id] =& $matches[4];
-		$this->ref_attr[$link_id] = $this->doExtraAttributes("", $dummy =& $matches[5]);
+		$this->titles[$link_id] = &$matches[4];
+		$this->ref_attr[$link_id] = $this->doExtraAttributes("", $dummy = &$matches[5]);
+
 		return ''; # String that will replace the block
 	}
 
 
 	### HTML Block Parser ###
-	
+
 	# Tags that are always treated as block tags:
 	protected $block_tags_re = 'p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|address|form|fieldset|iframe|hr|legend|article|section|nav|aside|hgroup|header|footer|figcaption|figure';
 						   
@@ -1816,7 +1839,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 		#
 		# Call the HTML-in-Markdown hasher.
 		#
-		list($text, ) = $this->_hashHTMLBlocks_inMarkdown($text);
+		list($text) = $this->_hashHTMLBlocks_inMarkdown($text);
 		
 		return $text;
 	}
@@ -1852,7 +1875,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 
 		# Regex to check for the presense of newlines around a block tag.
 		$newline_before_re = '/(?:^\n?|\n\n)*$/';
-		$newline_after_re = 
+		$newline_after_re =
 			'{
 				^						# Start of text following the tag.
 				(?>[ ]*<!--.*?-->)?		# Optional comment.
@@ -1885,18 +1908,18 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 					<\?.*?\?> | <%.*?%>	# Processing instruction
 				|
 					<!\[CDATA\[.*?\]\]>	# CData Block
-				'. ( !$span ? ' # If not in span.
+				'. (!$span ? ' # If not in span.
 				|
 					# Indented code block
 					(?: ^[ ]*\n | ^ | \n[ ]*\n )
-					[ ]{'.($indent+4).'}[^\n]* \n
+					[ ]{'.($indent + 4).'}[^\n]* \n
 					(?>
-						(?: [ ]{'.($indent+4).'}[^\n]* | [ ]* ) \n
+						(?: [ ]{'.($indent + 4).'}[^\n]* | [ ]* ) \n
 					)*
 				|
 					# Fenced code block marker
 					(?<= ^ | \n )
-					[ ]{0,'.($indent+3).'}(?:~{3,}|`{3,})
+					[ ]{0,'.($indent + 3).'}(?:~{3,}|`{3,})
 									[ ]*
 					(?:
 					\.?[-_:a-zA-Z0-9]+ # standalone class name
@@ -1905,7 +1928,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 					)?
 					[ ]*
 					(?= \n )
-				' : '' ). ' # End (if not is span).
+				' : ''). ' # End (if not is span).
 				|
 					# Code span marker
 					# Note, this regex needs to go after backtick fenced
@@ -1930,7 +1953,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			# pattern will be at the end, and between will be any catches made 
 			# by the pattern.
 			#
-			$parts = preg_split($block_tag_re, $text, 2, 
+			$parts = preg_split($block_tag_re, $text, 2,
 								PREG_SPLIT_DELIM_CAPTURE);
 			
 			# If in Markdown span mode, add a empty-string span-level hash 
@@ -1942,7 +1965,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			}
 			
 			$parsed .= $parts[0]; # Text before current tag.
-			
+
 			# If end of $text has been reached. Stop loop.
 			if (count($parts) < 3) {
 				$text = "";
@@ -1952,18 +1975,18 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			$tag  = $parts[1]; # Tag to handle.
 			$text = $parts[2]; # Remaining text after current tag.
 			$tag_re = preg_quote($tag); # For use in a regular expression.
-			
+
 			#
 			# Check for: Fenced code block marker.
 			# Note: need to recheck the whole tag to disambiguate backtick
 			# fences from code spans
 			#
-			if (preg_match('{^\n?([ ]{0,'.($indent+3).'})(~{3,}|`{3,})[ ]*(?:\.?[-_:a-zA-Z0-9]+|'.$this->id_class_attr_nocatch_re.')?[ ]*\n?$}', $tag, $capture)) {
+			if (preg_match('{^\n?([ ]{0,'.($indent + 3).'})(~{3,}|`{3,})[ ]*(?:\.?[-_:a-zA-Z0-9]+|'.$this->id_class_attr_nocatch_re.')?[ ]*\n?$}', $tag, $capture)) {
 				# Fenced code block marker: find matching end marker.
 				$fence_indent = strlen($capture[1]); # use captured indent in re
 				$fence_re = $capture[2]; # use captured fence in re
 				if (preg_match('{^(?>.*\n)*?[ ]{'.($fence_indent).'}'.$fence_re.'[ ]*(?:\n|$)}', $text,
-					$matches)) 
+					$matches))
 				{
 					# End marker found: pass text unchanged until marker.
 					$parsed .= $tag . $matches[0];
@@ -1977,7 +2000,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			#
 			# Check for: Indented code block.
 			#
-			else if ($tag{0} == "\n" || $tag{0} == " ") {
+			elseif ($tag{0} == "\n" || $tag{0} == " ") {
 				# Indented code block: pass it unchanged, will be handled 
 				# later.
 				$parsed .= $tag;
@@ -1986,7 +2009,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			# Check for: Code span marker
 			# Note: need to check this after backtick fenced code blocks
 			#
-			else if ($tag{0} == "`") {
+			elseif ($tag{0} == "`") {
 				# Find corresponding end marker.
 				$tag_re = preg_quote($tag);
 				if (preg_match('{^(?>.+?|\n(?!\n))*?(?<!`)'.$tag_re.'(?!`)}',
@@ -2006,14 +2029,14 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			#            Opening Context Block tag (like ins and del) 
 			#               used as a block tag (tag is alone on it's line).
 			#
-			else if (preg_match('{^<(?:'.$this->block_tags_re.')\b}', $tag) ||
-				(	preg_match('{^<(?:'.$this->context_block_tags_re.')\b}', $tag) &&
+			elseif (preg_match('{^<(?:'.$this->block_tags_re.')\b}', $tag) ||
+				(preg_match('{^<(?:'.$this->context_block_tags_re.')\b}', $tag) &&
 					preg_match($newline_before_re, $parsed) &&
-					preg_match($newline_after_re, $text)	)
+					preg_match($newline_after_re, $text))
 				)
 			{
 				# Need to parse tag and following text using the HTML parser.
-				list($block_text, $text) = 
+				list($block_text, $text) =
 					$this->_hashHTMLBlocks_inHTML($tag . $text, "hashBlock", true);
 				
 				# Make sure it stays outside of any paragraph by adding newlines.
@@ -2023,12 +2046,12 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			# Check for: Clean tag (like script, math)
 			#            HTML Comments, processing instructions.
 			#
-			else if (preg_match('{^<(?:'.$this->clean_tags_re.')\b}', $tag) ||
+			elseif (preg_match('{^<(?:'.$this->clean_tags_re.')\b}', $tag) ||
 				$tag{1} == '!' || $tag{1} == '?')
 			{
 				# Need to parse tag and following text using the HTML parser.
 				# (don't check for markdown attribute)
-				list($block_text, $text) = 
+				list($block_text, $text) =
 					$this->_hashHTMLBlocks_inHTML($tag . $text, "hashClean", false);
 				
 				$parsed .= $block_text;
@@ -2036,7 +2059,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			#
 			# Check for: Tag with same name as enclosing tag.
 			#
-			else if ($enclosing_tag_re !== '' &&
+			elseif ($enclosing_tag_re !== '' &&
 				# Same name as enclosing tag.
 				preg_match('{^</?(?:'.$enclosing_tag_re.')\b}', $tag))
 			{
@@ -2044,7 +2067,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 				# Increase/decrease nested tag count.
 				#
 				if ($tag{1} == '/')						$depth--;
-				else if ($tag{strlen($tag)-2} != '/')	$depth++;
+				elseif ($tag{strlen($tag) - 2} != '/')	$depth++;
 
 				if ($depth < 0) {
 					#
@@ -2117,7 +2140,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			}xs';
 		
 		$original_text = $text;		# Save original text in case of faliure.
-		
+
 		$depth		= 0;	# Current depth inside the tag tree.
 		$block_text	= "";	# Temporary text holder for current text.
 		$parsed		= "";	# Parsed text that will be returned.
@@ -2154,7 +2177,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			$block_text .= $parts[0]; # Text before current tag.
 			$tag         = $parts[1]; # Tag to handle.
 			$text        = $parts[2]; # Remaining text after current tag.
-			
+
 			#
 			# Check for: Auto-close tag (like <hr/>)
 			#			 Comments and Processing Instructions.
@@ -2172,13 +2195,13 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 				#
 				if (preg_match('{^</?'.$base_tag_name_re.'\b}', $tag)) {
 					if ($tag{1} == '/')						$depth--;
-					else if ($tag{strlen($tag)-2} != '/')	$depth++;
+					elseif ($tag{strlen($tag) - 2} != '/')	$depth++;
 				}
 				
 				#
 				# Check for `markdown="1"` attribute and handle it.
 				#
-				if ($md_attr && 
+				if ($md_attr &&
 					preg_match($markdown_attr_re, $tag, $attr_m) &&
 					preg_match('/^1|block|span$/', $attr_m[2] . $attr_m[3]))
 				{
@@ -2208,13 +2231,13 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 					$tag_name_re = $matches[1];
 					
 					# Parse the content using the HTML-in-Markdown parser.
-					list ($block_text, $text)
-						= $this->_hashHTMLBlocks_inMarkdown($text, $indent, 
+					list($block_text, $text)
+						= $this->_hashHTMLBlocks_inMarkdown($text, $indent,
 							$tag_name_re, $span_mode);
 					
 					# Outdent markdown text.
 					if ($indent > 0) {
-						$block_text = preg_replace("/^[ ]{1,$indent}/m", "", 
+						$block_text = preg_replace("/^[ ]{1,$indent}/m", "",
 													$block_text);
 					}
 					
@@ -2318,12 +2341,13 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			array($this, '_doAnchors_reference_callback'), $text);
 
 		$this->in_anchor = false;
+
 		return $text;
 	}
 	protected function _doAnchors_reference_callback($matches) {
 		$whole_match =  $matches[1];
 		$link_text   =  $matches[2];
-		$link_id     =& $matches[3];
+		$link_id     = &$matches[3];
 
 		if ($link_id == "") {
 			# for shortcut links like [this][] or [this].
@@ -2339,7 +2363,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			$url = $this->encodeURLAttribute($url);
 			
 			$result = "<a href=\"$url\"";
-			if ( isset( $this->titles[$link_id] ) ) {
+			if (isset($this->titles[$link_id])) {
 				$title = $this->titles[$link_id];
 				$title = $this->encodeAttribute($title);
 				$result .=  " title=\"$title\"";
@@ -2354,14 +2378,15 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 		else {
 			$result = $whole_match;
 		}
+
 		return $result;
 	}
 	protected function _doAnchors_inline_callback($matches) {
 		$whole_match	=  $matches[1];
 		$link_text		=  $this->runSpanGamut($matches[2]);
 		$url			=  $matches[3] == '' ? $matches[4] : $matches[3];
-		$title			=& $matches[7];
-		$attr  = $this->doExtraAttributes("a", $dummy =& $matches[8]);
+		$title			= &$matches[7];
+		$attr  = $this->doExtraAttributes("a", $dummy = &$matches[8]);
 
 		// if the URL was of the form <s p a c e s> it got caught by the HTML
 		// tag parser and hashed. Need to reverse the process before using the URL.
@@ -2406,7 +2431,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			  \]
 
 			)
-			}xs', 
+			}xs',
 			array($this, '_doImages_reference_callback'), $text);
 
 		#
@@ -2475,8 +2500,8 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 		$whole_match	= $matches[1];
 		$alt_text		= $matches[2];
 		$url			= $matches[3] == '' ? $matches[4] : $matches[3];
-		$title			=& $matches[7];
-		$attr  = $this->doExtraAttributes("img", $dummy =& $matches[8]);
+		$title			= &$matches[7];
+		$attr  = $this->doExtraAttributes("img", $dummy = &$matches[8]);
 
 		$alt_text = $this->encodeAttribute($alt_text);
 		$url = $this->encodeURLAttribute($url);
@@ -2536,14 +2561,16 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 		if ($matches[3] == '-' && preg_match('{^- }', $matches[1]))
 			return $matches[0];
 		$level = $matches[3]{0} == '=' ? 1 : 2;
-		$attr  = $this->doExtraAttributes("h$level", $dummy =& $matches[2]);
+		$attr  = $this->doExtraAttributes("h$level", $dummy = &$matches[2]);
 		$block = "<h$level$attr>".$this->runSpanGamut($matches[1])."</h$level>";
+
 		return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 	protected function _doHeaders_callback_atx($matches) {
 		$level = strlen($matches[1]);
-		$attr  = $this->doExtraAttributes("h$level", $dummy =& $matches[3]);
+		$attr  = $this->doExtraAttributes("h$level", $dummy = &$matches[3]);
 		$block = "<h$level$attr>".$this->runSpanGamut($matches[2])."</h$level>";
+
 		return "\n" . $this->hashBlock($block) . "\n\n";
 	}
 
@@ -2625,6 +2652,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			return " align=\"$alignname\"";
 
 		$classname = str_replace('%%', $alignname, $this->table_align_class_tmpl);
+
 		return " class=\"$classname\"";
 	}
 	protected function _doTable_callback($matches) {
@@ -2642,9 +2670,9 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 		foreach ($separators as $n => $s) {
 			if (preg_match('/^ *-+: *$/', $s))
 				$attr[$n] = $this->_doTable_makeAlignAttr('right');
-			else if (preg_match('/^ *:-+: *$/', $s))
+			elseif (preg_match('/^ *:-+: *$/', $s))
 				$attr[$n] = $this->_doTable_makeAlignAttr('center');
-			else if (preg_match('/^ *:-+ *$/', $s))
+			elseif (preg_match('/^ *:-+ *$/', $s))
 				$attr[$n] = $this->_doTable_makeAlignAttr('left');
 			else
 				$attr[$n] = '';
@@ -2741,6 +2769,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 		# paragraph for the last item in a list, if necessary:
 		$result = trim($this->processDefListItems($list));
 		$result = "<dl>\n" . $result . "\n</dl>";
+
 		return $this->hashBlock($result) . "\n\n";
 	}
 
@@ -2795,6 +2824,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			$term = $this->runSpanGamut(trim($term));
 			$text .= "\n<dt>" . $term . "</dt>";
 		}
+
 		return $text . "\n";
 	}
 	protected function _processDefListItems_callback_dd($matches) {
@@ -2857,8 +2887,8 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 		return $text;
 	}
 	protected function _doFencedCodeBlocks_callback($matches) {
-		$classname =& $matches[2];
-		$attrs     =& $matches[3];
+		$classname = &$matches[2];
+		$attrs     = &$matches[3];
 		$codeblock = $matches[4];
 		$codeblock = htmlspecialchars($codeblock, ENT_NOQUOTES);
 		$codeblock = preg_replace_callback('/^\n+/',
@@ -2878,7 +2908,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 		return "\n\n".$this->hashBlock($codeblock)."\n\n";
 	}
 	protected function _doFencedCodeBlocks_newlines($matches) {
-		return str_repeat("<br$this->empty_element_suffix", 
+		return str_repeat("<br$this->empty_element_suffix",
 			strlen($matches[0]));
 	}
 
@@ -2941,7 +2971,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 	
 	
 	### Footnotes
-	
+
 	protected function stripFootnotes($text) {
 	#
 	# Strips link definitions from text, stores the URLs and titles in
@@ -2967,11 +2997,13 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			}xm',
 			array($this, '_stripFootnotes_callback'),
 			$text);
+
 		return $text;
 	}
 	protected function _stripFootnotes_callback($matches) {
 		$note_id = $this->fn_id_prefix . $matches[1];
 		$this->footnotes[$note_id] = $this->outdent($matches[2]);
+
 		return ''; # String that will replace the block
 	}
 
@@ -2984,6 +3016,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 		if (!$this->in_anchor) {
 			$text = preg_replace('{\[\^(.+?)\]}', "F\x1Afn:\\1\x1A:", $text);
 		}
+
 		return $text;
 	}
 
@@ -2992,7 +3025,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 	#
 	# Append footnote list to text.
 	#
-		$text = preg_replace_callback('{F\x1Afn:(.*?)\x1A:}', 
+		$text = preg_replace_callback('{F\x1Afn:(.*?)\x1A:}',
 			array($this, '_appendFootnotes_callback'), $text);
 	
 		if (!empty($this->footnotes_ordered)) {
@@ -3023,8 +3056,8 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 				unset($this->footnotes[$note_id]);
 				
 				$footnote .= "\n"; # Need to append newline before parsing.
-				$footnote = $this->runBlockGamut("$footnote\n");				
-				$footnote = preg_replace_callback('{F\x1Afn:(.*?)\x1A:}', 
+				$footnote = $this->runBlockGamut("$footnote\n");
+				$footnote = preg_replace_callback('{F\x1Afn:(.*?)\x1A:}',
 					array($this, '_appendFootnotes_callback'), $footnote);
 				
 				$attr = str_replace("%%", ++$num, $attr);
@@ -3050,6 +3083,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			$text .= "</ol>\n";
 			$text .= "</div>";
 		}
+
 		return $text;
 	}
 	protected function _appendFootnotes_callback($matches) {
@@ -3058,7 +3092,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 		# Create footnote marker only if it has a corresponding footnote *and*
 		# the footnote hasn't been used by another marker.
 		if (isset($this->footnotes[$node_id])) {
-			$num =& $this->footnotes_numbers[$node_id];
+			$num = &$this->footnotes_numbers[$node_id];
 			if (!isset($num)) {
 				# Transfer footnote content to the ordered list and give it its
 				# number
@@ -3096,7 +3130,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 		
 	
 	### Abbreviations ###
-	
+
 	protected function stripAbbreviations($text) {
 	#
 	# Strips abbreviations from text, stores titles in hash references.
@@ -3110,6 +3144,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			}xm',
 			array($this, '_stripAbbreviations_callback'),
 			$text);
+
 		return $text;
 	}
 	protected function _stripAbbreviations_callback($matches) {
@@ -3119,6 +3154,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 			$this->abbr_word_re .= '|';
 		$this->abbr_word_re .= preg_quote($abbr_word);
 		$this->abbr_desciptions[$abbr_word] = trim($abbr_desc);
+
 		return ''; # String that will replace the block
 	}
 	
@@ -3134,9 +3170,10 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 				'(?<![\w\x1A])'.
 				'(?:'.$this->abbr_word_re.')'.
 				'(?![\w\x1A])'.
-				'}', 
+				'}',
 				array($this, '_doAbbreviations_callback'), $text);
 		}
+
 		return $text;
 	}
 	protected function _doAbbreviations_callback($matches) {
@@ -3147,6 +3184,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown {
 				return $this->hashPart("<abbr>$abbr</abbr>");
 			} else {
 				$desc = $this->encodeAttribute($desc);
+
 				return $this->hashPart("<abbr title=\"$desc\">$abbr</abbr>");
 			}
 		} else {

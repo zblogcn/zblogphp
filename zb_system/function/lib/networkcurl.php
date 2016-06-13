@@ -8,10 +8,10 @@
  */
 class Networkcurl implements iNetwork {
 	private $readyState = 0; #状态
-	private $responseBody = NULL; #返回的二进制
-	private $responseStream = NULL; #返回的数据流
+	private $responseBody = null; #返回的二进制
+	private $responseStream = null; #返回的数据流
 	private $responseText = ''; #返回的数据
-	private $responseXML = NULL; #尝试把responseText格式化为XMLDom
+	private $responseXML = null; #尝试把responseText格式化为XMLDom
 	private $status = 0; #状态码
 	private $statusText = ''; #状态码文本
 	private $responseVersion = ''; #返回的HTTP版体
@@ -25,7 +25,7 @@ class Networkcurl implements iNetwork {
 	private $timeout = 30;
 	private $errstr = '';
 	private $errno = 0;
-	private $ch = NULL;
+	private $ch = null;
 	private $isgzip = false;
 	private $maxredirs = 0;
 
@@ -34,7 +34,7 @@ class Networkcurl implements iNetwork {
 	/**
 	 * @ignore
 	 */
-	function __construct() {
+	public function __construct() {
 		//$this->ch = curl_init();
 	}
 
@@ -54,6 +54,7 @@ class Networkcurl implements iNetwork {
 	public function __get($property_name) {
 		if (strtolower($property_name) == 'responsexml') {
 			$w = new DOMDocument();
+
 			return $w->loadXML($this->responseText);
 		} elseif (strtolower($property_name) == 'scheme' ||
 			strtolower($property_name) == 'host' ||
@@ -100,6 +101,7 @@ class Networkcurl implements iNetwork {
 				return substr(strstr($w, ': '), 2);
 			}
 		}
+
 		return '';
 	}
 
@@ -136,6 +138,7 @@ class Networkcurl implements iNetwork {
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
 		//curl_setopt($this->ch, CURLOPT_REFERER, 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 		curl_setopt($this->ch, CURLOPT_POST, ($method == 'POST' ? 1 : 0));
+
 		return true;
 	}
 
@@ -230,6 +233,7 @@ class Networkcurl implements iNetwork {
 				$this->httpheader[$bstrHeader] = $bstrHeader . ': ' . $bstrValue;
 			}
 		}
+
 		return true;
 	}
 
@@ -246,21 +250,22 @@ class Networkcurl implements iNetwork {
 	 * @param string $entity
 	 * @return mixed
 	 */
-	public function addBinary($name, $entity, $filename = NULL, $mime = '') {
+	public function addBinary($name, $entity, $filename = null, $mime = '') {
 		global $zbp;
 		$this->__isBinary = true;
 
 		if (!is_file($entity)) {
-			$filename = ($filename === NULL ? $name : $filename);
+			$filename = ($filename === null ? $name : $filename);
 			$key = "$name\"; filename=\"$filename\"\r\nContent-Type: " . ($mime == '' ? 'application/octet-stream' : $mime) . "\r\n";
 			$this->postdata[$key] = $entity;
+
 			return;
 		}
 
 		if ($mime == '') {
 			if (function_exists('mime_content_type')) {
 				$mime = mime_content_type($entity);
-			} else if (function_exists('finfo_open')) {
+			} elseif (function_exists('finfo_open')) {
 				$finfo = finfo_open(FILEINFO_MIME);
 				$mime = finfo_file($finfo, $name);
 				finfo_close($finfo);
@@ -269,9 +274,10 @@ class Networkcurl implements iNetwork {
 			}
 		}
 
-		$filename = ($filename === NULL ? basename($entity) : $filename);
+		$filename = ($filename === null ? basename($entity) : $filename);
 		if (class_exists('CURLFile')) {
 			$this->postdata[$name] = new CURLFile($entity, $mime, $filename);
+
 			return;
 		}
 
@@ -301,10 +307,10 @@ class Networkcurl implements iNetwork {
 	private function reinit() {
 		global $zbp;
 		$this->readyState = 0; #状态
-		$this->responseBody = NULL; #返回的二进制
-		$this->responseStream = NULL; #返回的数据流
+		$this->responseBody = null; #返回的二进制
+		$this->responseStream = null; #返回的数据流
 		$this->responseText = ''; #返回的数据
-		$this->responseXML = NULL; #尝试把responseText格式化为XMLDom
+		$this->responseXML = null; #尝试把responseText格式化为XMLDom
 		$this->status = 0; #状态码
 		$this->statusText = ''; #状态码文本
 

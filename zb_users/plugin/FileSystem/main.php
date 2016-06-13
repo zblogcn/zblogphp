@@ -10,7 +10,7 @@ $zbp->Load();
 if (!$zbp->CheckRights('root')) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('FileSystem')) {$zbp->ShowError(48);die();}
 
-$blogtitle='文件管理系统';
+$blogtitle = '文件管理系统';
 $root_path = $blogpath;
 $file_list = array();
 //根据path参数，设置各路径和URL
@@ -37,9 +37,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <?php
 
 if (!empty($_GET['error'])) {
-$zbp->ShowHint('bad',$_GET['error']);
+$zbp->ShowHint('bad', $_GET['error']);
 }elseif (empty($_GET['path'])) {
-$zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重后果，请慎用！');
+$zbp->ShowHint('bad', '本插件配置不当可能会造成网站被黑等严重后果，请慎用！');
 }
 ?>
   <link href="static/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -66,13 +66,13 @@ $zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重�
     </div>
     <table class="table table-condensed">
       <?php
-	if(count($file_list)==0){
+	if(count($file_list) == 0){
 		echo '<thead><tr class="success"><th>#</th><th>文件名</th><th>权限</th><th>文件大小</th><th>修改时间</th><th>文件夹类型</th><th>操作</th></tr></thead><tbody>';
 		
 	}
 	if(isset($file_list['dir'])){
 		echo '<thead><tr class="success"><th>#</th><th>文件名</th><th>权限</th><th>文件大小</th><th>修改时间</th><th>文件夹类型</th><th>操作</th></tr></thead><tbody>';
-		foreach($file_list['dir'] as $k=>$v){
+		foreach($file_list['dir'] as $k => $v){
 			echo "<tbody><tr>";
 			echo "<td><input type=\"checkbox\" name=\"$v[filename]\" class=\"checkbox-file\" data-filename=\"$v[filename]\"></td>";
 			echo "<td><img src=\"".$zbp->host."zb_system/image/filetype/folder.png\"><a href=\"".$zbp->host."zb_users/plugin/FileSystem/main.php?path=".urlencode($current_dir_path.$v['filename']."/")."\"> $v[filename]</a></td>";
@@ -86,7 +86,7 @@ $zbp->ShowHint('bad','本插件配置不当可能会造成网站被黑等严重�
 	}
 	if(isset($file_list['file'])){
 		echo '<thead><tr class="error"><th>#</th><th>文件名</th><th>权限</th><th>文件大小</th><th>修改时间</th><th>文件类型</th><th>操作</th></tr></thead><tbody>';
-		foreach($file_list['file'] as $k=>$v){
+		foreach($file_list['file'] as $k => $v){
 			echo "<tbody><tr>";
 			echo "<td><input type=\"checkbox\" name=\"$v[filename]\" class=\"checkbox-file\" data-filename=\"$v[filename]\"></td>";
 			echo "<td><img src=\"".$zbp->host."zb_system/image/filetype/".GetFileimg($v['filetype']).".png\"><a href=\"$current_url$v[filename]\" target=\"_blank\"> $v[filename]</a></td>";

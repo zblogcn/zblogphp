@@ -28,13 +28,13 @@ function /*TEMPLATE_NAME*/_Require($config_name)
 {
 	global $blogpath;
 	$file_name = explode('/', $config_name);
-	include($blogpath . 'zb_users/theme//*TEMPLATE_NAME*//include/' . end($file_name));
+	include $blogpath . 'zb_users/theme//*TEMPLATE_NAME*//include/' . end($file_name);
 }
 
 function /*TEMPLATE_NAME*/_Url($config_name)
 {
 	global $bloghost;
 	$file_array = explode('/', $config_name);
+
 	return $bloghost . 'zb_users/theme//*TEMPLATE_NAME*//include/' . end($file_array); //safe
 }
-?>

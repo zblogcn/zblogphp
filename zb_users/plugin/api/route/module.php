@@ -16,6 +16,7 @@ function return_module($id) {
 	$module = $zbp->GetModuleByID($id);
 	$ret = $module->GetData();
 	API::$IO->formatObjectName($ret);
+
 	return $ret;
 
 }
@@ -25,7 +26,7 @@ function return_module($id) {
  */
 function api_module_get_function() {
 
-	$id = (int)API::$IO->id;
+	$id = (int) API::$IO->id;
 	if ($id === 0) API::$IO->end(3);
 	//
 	$ret = return_module($id);
@@ -62,7 +63,7 @@ function api_module_post_function() {
 
 	global $zbp;
 	Add_Filter_Plugin('Filter_Plugin_PostModule_Succeed', 'api_module_post_callback');
-	PostModule(); 
+	PostModule();
 	$zbp->BuildModule();
 	$zbp->SaveCache();
 
@@ -84,7 +85,7 @@ API::$Route->post('/module/create/', 'api_module_create_function');
  */
 function api_module_update_function() {
 
-	$id = (int)API::$IO->id;
+	$id = (int) API::$IO->id;
 	if ($id === 0) API::$IO->end(3);
 	$_POST['ID'] = $id;
 	api_module_post_function();

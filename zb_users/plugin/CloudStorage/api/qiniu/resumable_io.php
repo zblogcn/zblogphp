@@ -1,7 +1,7 @@
 <?php
 
-require_once("http.php");
-require_once("auth_digest.php");
+require_once "http.php";
+require_once "auth_digest.php";
 
 // ----------------------------------------------------------
 // class Qiniu_Rio_PutExtra
@@ -42,6 +42,7 @@ function Qiniu_Rio_Mkblock($self, $host, $reader, $size) // => ($blkputRet, $err
 		$body = fread($reader, $size);
 		if ($body === false) {
 			$err = Qiniu_NewError(0, 'fread failed');
+
 			return array(null, $err);
 		}
 	} else {
@@ -52,10 +53,12 @@ function Qiniu_Rio_Mkblock($self, $host, $reader, $size) // => ($blkputRet, $err
 	}
 	if (strlen($body) != $size) {
 		$err = Qiniu_NewError(0, 'fread failed: unexpected eof');
+
 		return array(null, $err);
 	}
 
 	$url = $host . '/mkblk/' . $size;
+
 	return Qiniu_Client_CallWithForm($self, $url, $body, 'application/octet-stream');
 }
 
@@ -72,7 +75,7 @@ function Qiniu_Rio_Mkfile($self, $host, $key, $fsize, $extra) // => ($putRet, $e
 
 	$ctxs = array();
 	foreach ($extra->Progresses as $prog) {
-		$ctxs []= $prog['ctx'];
+		$ctxs [] = $prog['ctx'];
 	}
 	$body = implode(',', $ctxs);
 
@@ -95,6 +98,7 @@ class Qiniu_Rio_UploadClient
 	{
 		$token = $this->uptoken;
 		$req->Header['Authorization'] = "UpToken $token";
+
 		return Qiniu_Client_do($req);
 	}
 }
@@ -119,10 +123,11 @@ function Qiniu_Rio_Put($upToken, $key, $body, $fsize, $putExtra) // => ($putRet,
 		list($blkputRet, $err) = Qiniu_Rio_Mkblock($self, $QINIU_UP_HOST, $body, $bsize);
 		$host = $blkputRet['host'];
 		$uploaded += $bsize;
-		$progresses []= $blkputRet;
+		$progresses [] = $blkputRet;
 	}
 
 	$putExtra->Progresses = $progresses;
+
 	return Qiniu_Rio_Mkfile($self, $QINIU_UP_HOST, $key, $fsize, $putExtra);
 }
 
@@ -131,14 +136,15 @@ function Qiniu_Rio_PutFile($upToken, $key, $localFile, $putExtra) // => ($putRet
 	$fp = fopen($localFile, 'rb');
 	if ($fp === false) {
 		$err = Qiniu_NewError(0, 'fopen failed');
+
 		return array(null, $err);
 	}
 
 	$fi = fstat($fp);
 	$result = Qiniu_Rio_Put($upToken, $key, $fp, $fi['size'], $putExtra);
 	fclose($fp);
+
 	return $result;
 }
 
 // ----------------------------------------------------------
-

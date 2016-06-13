@@ -46,6 +46,7 @@ class Clinic {
 				}
 			}
 		}
+
 		return $this->modules;
 	}
 
@@ -61,9 +62,11 @@ class Clinic {
 			$class_name = str_replace('-', '_', $module_name);
 			if (class_exists($class_name)) {
 				$class = new $class_name;
+
 				return $class;
 			}
 		}
+
 		return false;
 	}
 
@@ -78,6 +81,7 @@ class Clinic {
 		$string .= ($status === 'success' ? 'green">√' : 'red">×') . ' ';
 		$string .= $text . '</span>';
 		$this->output_json[] = json_encode(array('type' => 'msg', 'msg' => $string, 'error' => $status));
+
 		return $string;
 	}
 
@@ -89,6 +93,7 @@ class Clinic {
 	 */
 	public function set_queue($function, $param) {
 		$this->output_json[] = json_encode(array('type' => 'queue', 'function' => $function, 'param' => $param, 'error' => 0));
+
 		return true;
 	}
 }

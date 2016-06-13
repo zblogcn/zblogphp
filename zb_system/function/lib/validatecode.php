@@ -33,6 +33,7 @@ class ValidateCode {
 	protected function createCode($n = null) {
 		if ($n !== null) {
 			$this->code = (string) $n;
+
 			return;
 		}
 		$_len = strlen($this->charset) - 1;

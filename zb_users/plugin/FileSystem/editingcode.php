@@ -17,9 +17,9 @@ if(isset($_POST['file'])){
 	die();
 }
 
-$blogtitle='文件管理系统--编辑';
+$blogtitle = '文件管理系统--编辑';
 
-$file = iconv('UTF-8','GB2312',$_POST['current_path'].$_POST['cmd_data']);
+$file = iconv('UTF-8', 'GB2312', $_POST['current_path'].$_POST['cmd_data']);
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';

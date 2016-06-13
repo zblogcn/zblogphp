@@ -7,7 +7,7 @@ if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('clinic')) {$zbp->ShowError(48);die();}
 require 'clinic.php';
 $module = GetVars('module', 'GET');
-$module = (isset($clinic->modules[$module]) ? $clinic->modules[$module] : NULL);
+$module = (isset($clinic->modules[$module]) ? $clinic->modules[$module] : null);
 $blogtitle = 'Z-BlogPHP诊断工具' . ($module ? ' - ' . $module['name'] : '');
 
 require $blogpath . 'zb_system/admin/admin_header.php';

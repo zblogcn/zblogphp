@@ -40,4 +40,3 @@ function AlipayAPI_Start($parameter) {
 	$html_text = $alipaySubmit->buildRequestForm($parameter, "get", "确认");
 	echo $html_text;
 }
-?>

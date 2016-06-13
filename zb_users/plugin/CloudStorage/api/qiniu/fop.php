@@ -1,6 +1,6 @@
 <?php
 
-require_once("auth_digest.php");
+require_once "auth_digest.php";
 
 // --------------------------------------------------------------------------------
 // class Qiniu_ImageView

@@ -9,7 +9,7 @@
 <section>
   <section id="main">
     <section>
-<?php  foreach ( $articles as $article) { ?> 
+<?php  foreach ($articles as $article) { ?> 
 
 <?php if ($article->IsTop) { ?>
 <?php  include $this->GetTemplate('post-istop');  ?>
