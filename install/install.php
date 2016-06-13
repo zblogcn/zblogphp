@@ -24,7 +24,7 @@ function GetHttpContent($url) {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 		if(ini_get("safe_mode")==false && ini_get("open_basedir")==false){
 			curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		}
 		if(extension_loaded('zlib')){
 			curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
@@ -33,7 +33,7 @@ function GetHttpContent($url) {
 		$r = curl_exec($ch);
 		curl_close($ch);
 	} elseif (ini_get("allow_url_fopen")) {
-		if(function_exists('ini_set'))ini_set('default_socket_timeout',300);
+		if(function_exists('ini_set'))ini_set('default_socket_timeout', 300);
 		$r = file_get_contents((extension_loaded('zlib')?'compress.zlib://':'') . $url);
 	}
 
@@ -41,18 +41,18 @@ function GetHttpContent($url) {
 }
 
 
-function install0(){
+function install0() {
 
 	$d=dirname(__FILE__);
 
-	if(substr((string)decoct(fileperms($d)),-3)<>'755'&&substr((string)decoct(fileperms($d)),-3)<>'777'){
+	if(substr((string)decoct(fileperms($d)), -3)<>'755'&&substr((string)decoct(fileperms($d)), -3)<>'777'){
 		echo "<p>警告:安装目录权限" . $d . "不是0755或是0777,可能无法运行在线安装程序.</p>";
 	}
 
 }
 
 
-function install1(){
+function install1() {
 
 	echo "<p>正在努力地下载数据包...</p>";
 	ob_flush();
@@ -63,24 +63,24 @@ function install1(){
 
 }
 
-function install2(){
+function install2() {
 
 	echo "<p>正在解压和安装文件...</p>";
 	ob_flush();
 	if ($GLOBALS['xml']) {
-		$xml = simplexml_load_string($GLOBALS['xml'],'SimpleXMLElement');
+		$xml = simplexml_load_string($GLOBALS['xml'], 'SimpleXMLElement');
 		$old = umask(0);
 		foreach ($xml->file as $f) {
-			$filename=str_replace('\\','/',$f->attributes());
+			$filename=str_replace('\\', '/', $f->attributes());
 			$dirname= dirname($filename);
-			mkdir($dirname,0755,true);
+			mkdir($dirname, 0755, true);
 			if(PHP_OS=='WINNT'||PHP_OS=='WIN32'||PHP_OS=='Windows'){
 				//$fn=iconv("UTF-8","GBK//IGNORE",$filename);
 				$fn=$filename;
 			}else{
 				$fn=$filename;
 			}
-			file_put_contents($fn,base64_decode($f));
+			file_put_contents($fn, base64_decode($f));
 		}
 		umask($old);
 	} else {
@@ -89,7 +89,7 @@ function install2(){
 
 }
 
-function install3(){
+function install3() {
 
 	#unlink('release.xml');
 	@unlink('install.php');
