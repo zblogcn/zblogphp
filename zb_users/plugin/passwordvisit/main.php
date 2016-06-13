@@ -11,11 +11,11 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 
 if(isset($_POST['all_encrypt']) && $_POST['all_encrypt'] != ''){
-	$zbp->Config('passwordvisit')->all_encrypt = $_POST['all_encrypt'];
-	$zbp->Config('passwordvisit')->default_password = $_POST['default_password'];
-	$zbp->Config('passwordvisit')->default_text = $_POST['default_text'];
-	$zbp->SaveConfig('passwordvisit');
-	$zbp->ShowHint('good', '保存成功！');
+    $zbp->Config('passwordvisit')->all_encrypt = $_POST['all_encrypt'];
+    $zbp->Config('passwordvisit')->default_password = $_POST['default_password'];
+    $zbp->Config('passwordvisit')->default_text = $_POST['default_text'];
+    $zbp->SaveConfig('passwordvisit');
+    $zbp->ShowHint('good', '保存成功！');
 }
 
 ?>

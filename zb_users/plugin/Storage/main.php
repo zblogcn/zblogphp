@@ -10,8 +10,8 @@ $blogtitle = 'Storage';
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 if (isset($_POST['Storage_Domain']) && $_POST['Storage_Domain'] != '') {
-	$zbp->Config('Storage')->Storage_Domain = $_POST['Storage_Domain'];
-	$zbp->SaveConfig('Storage');
+    $zbp->Config('Storage')->Storage_Domain = $_POST['Storage_Domain'];
+    $zbp->SaveConfig('Storage');
 }
 ?>
 <div id="divMain">

@@ -15,39 +15,39 @@ $blogtitle = 'Z-Blog角色分配器';
 $group_nums = count($zbp->lang['user_level_name']);
 $group_key = array();
 foreach ($zbp->lang['user_level_name'] as $key => $value) {
-	$group_key[] = $key;
+    $group_key[] = $key;
 }
 
 if(count($_POST) > 0){
 
-	if(GetVars('reset', 'POST') == '1'){
+    if(GetVars('reset', 'POST') == '1'){
 
-		$zbp->DelConfig('Howl');
-		$zbp->SetHint('good', '已删除所有的配置!');
-		Redirect('./main.php');
-		die();
-	}
+        $zbp->DelConfig('Howl');
+        $zbp->SetHint('good', '已删除所有的配置!');
+        Redirect('./main.php');
+        die();
+    }
 
-	$a = array();
-	foreach ($group_key as $key) {
-		$a[$key] = array();
-	}
+    $a = array();
+    foreach ($group_key as $key) {
+        $a[$key] = array();
+    }
 
-	foreach ($group_key as $groupkey) {
-		foreach ($actions as $key => $value) {
-			$check = GetVars('Group' . $groupkey . '_' . $key, 'POST');
-			$a[$groupkey][$key] = (int) $check;
-		}
-	}
+    foreach ($group_key as $groupkey) {
+        foreach ($actions as $key => $value) {
+            $check = GetVars('Group' . $groupkey . '_' . $key, 'POST');
+            $a[$groupkey][$key] = (int) $check;
+        }
+    }
 
-	foreach ($group_key as $groupkey) {
-		$name = 'Group'.$groupkey;
-		$zbp->Config('Howl')->$name = $a[$groupkey];
-	}
-	$zbp->SaveConfig('Howl');
+    foreach ($group_key as $groupkey) {
+        $name = 'Group'.$groupkey;
+        $zbp->Config('Howl')->$name = $a[$groupkey];
+    }
+    $zbp->SaveConfig('Howl');
 
-	$zbp->SetHint('good');
-	Redirect('./main.php');
+    $zbp->SetHint('good');
+    Redirect('./main.php');
 }
 
 require $blogpath . 'zb_system/admin/admin_header.php';
@@ -68,19 +68,19 @@ $zbp->ShowHint('bad', '本插件配置不当可能会造成网站被黑等严重
 	<th class="td10">权限</th>
 <?php
 foreach ($group_key as $key) {
-	echo '<th class="td10">';
-	echo $zbp->lang['user_level_name'][$key];
-	echo "组</th>\r\n";
+    echo '<th class="td10">';
+    echo $zbp->lang['user_level_name'][$key];
+    echo "组</th>\r\n";
 }
 ?>
 </tr>
 <?php
 function MakeInput($group, $key) {
-	global $zbp;
-	$zbp->user->Level = $group;
-	$check = (int) $zbp->CheckRights($key);
+    global $zbp;
+    $zbp->user->Level = $group;
+    $check = (int) $zbp->CheckRights($key);
 
-	return '<input name="Group'.$group.'_' . $key .'" style="" type="text" value="'.$check.'" class="checkbox"/>';
+    return '<input name="Group'.$group.'_' . $key .'" style="" type="text" value="'.$check.'" class="checkbox"/>';
 }
 
 foreach ($actions as $key => $value) {
@@ -90,9 +90,9 @@ foreach ($actions as $key => $value) {
 <td class="tdCenter"><?php echo $key?>(<b><?php echo Howl_GetRightName($key);?></b>)</td>
 <?php
 foreach ($group_key as $groupkey) {
-	echo '<td class="tdCenter">';
-	echo MakeInput($groupkey, $key);
-	echo "</td>\r\n";
+    echo '<td class="tdCenter">';
+    echo MakeInput($groupkey, $key);
+    echo "</td>\r\n";
 }
 ?>
 </tr>

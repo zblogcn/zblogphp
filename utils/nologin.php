@@ -4,17 +4,17 @@ require '../zb_system/function/c_system_base.php';
 $zbp->Load();
 
 if (isset($_GET['uid'])) {
-	$m = $zbp->members[$_GET['uid']];
-	$un = $m->Name;
-	if ($blogversion > 131221) {
-		$ps = md5($m->Password . $zbp->guid);
-	} else {
-		$ps = md5($m->Password . $zbp->path);
-	}
-	setcookie("username", $un, 0, $zbp->cookiespath);
-	setcookie("password", $ps, 0, $zbp->cookiespath);
-	Redirect('zb_system/admin/?act=admin');
-	die();
+    $m = $zbp->members[$_GET['uid']];
+    $un = $m->Name;
+    if ($blogversion > 131221) {
+        $ps = md5($m->Password . $zbp->guid);
+    } else {
+        $ps = md5($m->Password . $zbp->path);
+    }
+    setcookie("username", $un, 0, $zbp->cookiespath);
+    setcookie("password", $ps, 0, $zbp->cookiespath);
+    Redirect('zb_system/admin/?act=admin');
+    die();
 }
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -167,9 +167,9 @@ form{
 echo '<p></p>';
 
 foreach ($zbp->members as $key => $m) {
-	if ($m->Level < 2) {
-		echo '<p style="padding:10px;">[管理员]' . $m->Name . '<input style="float:right;" type="button" value="&nbsp;&nbsp;登录&nbsp;&nbsp;" onclick="window.location=\'?uid=' . $m->ID . '\'" /></p>';
-	}
+    if ($m->Level < 2) {
+        echo '<p style="padding:10px;">[管理员]' . $m->Name . '<input style="float:right;" type="button" value="&nbsp;&nbsp;登录&nbsp;&nbsp;" onclick="window.location=\'?uid=' . $m->ID . '\'" /></p>';
+    }
 
 }
 

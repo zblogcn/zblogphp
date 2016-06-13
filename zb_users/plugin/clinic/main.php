@@ -22,9 +22,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <?php
 
 if ($module) {
-	require 'include/gui_module.inc';
+    require 'include/gui_module.inc';
 } else {
-	require 'include/gui_main.inc';
+    require 'include/gui_main.inc';
 }
 ?>
 

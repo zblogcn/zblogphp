@@ -21,74 +21,74 @@ switch ($cmd_arg) {
     case 1://新建文件
         create_dir();
         break;
-	case 2://新建文件夹
+    case 2://新建文件夹
         create_file();
         break;
-	case 3://删除文件
-		del_file(iconv('UTF-8', 'GB2312', $current_path.$selected_file_list));
-		break;
-	case 4://下载文件
-		download();
-		break;
-	case 5://重命名
-		renamefile();
-		break;
-	case 6://编辑文件
-		edit_file();
-		break;
-	case 10://上传文件
-		upload_form();
-		break;
-	case 888://phpinfo
-		phpinfo();
-		break;
+    case 3://删除文件
+        del_file(iconv('UTF-8', 'GB2312', $current_path.$selected_file_list));
+        break;
+    case 4://下载文件
+        download();
+        break;
+    case 5://重命名
+        renamefile();
+        break;
+    case 6://编辑文件
+        edit_file();
+        break;
+    case 10://上传文件
+        upload_form();
+        break;
+    case 888://phpinfo
+        phpinfo();
+        break;
 }
 
 function edit_file() {
-	global $cmd_data, $current_path, $selected_file_list;
-	$file = iconv('UTF-8', 'GB2312', $current_path.$selected_file_list);
+    global $cmd_data, $current_path, $selected_file_list;
+    $file = iconv('UTF-8', 'GB2312', $current_path.$selected_file_list);
     if(file_exists($oldfile)){
-		$error_msg = 0;
-		if (!rename($oldfile, $newfile)) $error_msg = '重命名失败，请重试。';
-		back_url($error_msg);
+        $error_msg = 0;
+        if (!rename($oldfile, $newfile)) $error_msg = '重命名失败，请重试。';
+        back_url($error_msg);
     }
 }
 function renamefile() {
-	global $cmd_data, $current_path, $selected_file_list;
-	$oldfile = iconv('UTF-8', 'GB2312', $current_path.$selected_file_list);
-	$newfile = iconv('UTF-8', 'GB2312', $current_path.$cmd_data);
+    global $cmd_data, $current_path, $selected_file_list;
+    $oldfile = iconv('UTF-8', 'GB2312', $current_path.$selected_file_list);
+    $newfile = iconv('UTF-8', 'GB2312', $current_path.$cmd_data);
     if(file_exists($oldfile)){
-		$error_msg = 0;
-		if (!rename($oldfile, $newfile)) $error_msg = '重命名失败，请重试。';
-		back_url($error_msg);
+        $error_msg = 0;
+        if (!rename($oldfile, $newfile)) $error_msg = '重命名失败，请重试。';
+        back_url($error_msg);
     }
 }
 
 function download() {
-	global $cmd_data, $current_path;
-	$file = iconv('UTF-8', 'GB2312', $current_path.$cmd_data);
+    global $cmd_data, $current_path;
+    $file = iconv('UTF-8', 'GB2312', $current_path.$cmd_data);
     if(file_exists($file)){
-		$size = filesize($file);
-		header("Content-Type: application/save");
-		header("Content-Length: $size");
-		header("Content-Disposition: attachment; filename=\"$cmd_data\"");
-		header("Content-Transfer-Encoding: binary");
-		if ($fh = fopen("$file", "rb")){
-			fpassthru($fh);
-			fclose($fh);
-		}
+        $size = filesize($file);
+        header("Content-Type: application/save");
+        header("Content-Length: $size");
+        header("Content-Disposition: attachment; filename=\"$cmd_data\"");
+        header("Content-Transfer-Encoding: binary");
+        if ($fh = fopen("$file", "rb")){
+            fpassthru($fh);
+            fclose($fh);
+        }
     }
 }
 
 function del_file($arg) {
-	delfile($arg);
-	$error_msg = 0;
-	if (file_exists($arg)) $error_msg = '文件删除失败。';
-	back_url($error_msg);
+    delfile($arg);
+    $error_msg = 0;
+    if (file_exists($arg)) $error_msg = '文件删除失败。';
+    back_url($error_msg);
 }
 
 function delfile($arg) {
-	if (file_exists($arg)) {
+    if (file_exists($arg)) {
         @chmod($arg, 0755);
         if (is_dir($arg)) {
             $handle = opendir($arg);
@@ -103,30 +103,30 @@ function delfile($arg) {
 
 
 function create_file() {
-	global $cmd_data, $current_path;
-	$cmd_data = iconv('UTF-8', 'GB2312', $current_path.$cmd_data);
-	if (strlen($cmd_data)){
-		if (!file_exists($cmd_data)){
-			if ($fh = @fopen($cmd_data, "w")){
-				@fclose($fh);
-			}
-			chmod($cmd_data, 0666);
-			$error_msg = 0;
-		} else $error_msg = '文件已存在。';
-	}
-	back_url($error_msg);
+    global $cmd_data, $current_path;
+    $cmd_data = iconv('UTF-8', 'GB2312', $current_path.$cmd_data);
+    if (strlen($cmd_data)){
+        if (!file_exists($cmd_data)){
+            if ($fh = @fopen($cmd_data, "w")){
+                @fclose($fh);
+            }
+            chmod($cmd_data, 0666);
+            $error_msg = 0;
+        } else $error_msg = '文件已存在。';
+    }
+    back_url($error_msg);
 }
 
 function create_dir() {
-	global $cmd_data, $current_path;
-	$cmd_data = iconv('UTF-8', 'GB2312', $current_path.$cmd_data);
-	if (strlen($cmd_data)){
-		if (!file_exists($cmd_data)){
-			mkdir($cmd_data, 0755);
-			$error_msg = 0;
-		} else $error_msg = '文件夹已存在。';
-	}
-	back_url($error_msg);
+    global $cmd_data, $current_path;
+    $cmd_data = iconv('UTF-8', 'GB2312', $current_path.$cmd_data);
+    if (strlen($cmd_data)){
+        if (!file_exists($cmd_data)){
+            mkdir($cmd_data, 0755);
+            $error_msg = 0;
+        } else $error_msg = '文件夹已存在。';
+    }
+    back_url($error_msg);
 }
 
 
@@ -232,11 +232,11 @@ function upload_form() {
 
 
 function back_url($error_msg) {
-	global $current_path, $blogpath;
-	$url = 'main.php?';
-	if ($blogpath != $current_path) $url = $url . '&path=' . urlencode(str_replace($blogpath, "", $current_path));
-	if($error_msg) $url = $url . '&error=' . $error_msg;
-	Redirect($url);
+    global $current_path, $blogpath;
+    $url = 'main.php?';
+    if ($blogpath != $current_path) $url = $url . '&path=' . urlencode(str_replace($blogpath, "", $current_path));
+    if($error_msg) $url = $url . '&error=' . $error_msg;
+    Redirect($url);
 }
 
 function format_path($str) {

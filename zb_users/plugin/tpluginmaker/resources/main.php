@@ -11,9 +11,9 @@ $blogtitle = $blogtheme. "主题 - 配置页面";
 
 if(count($_POST) > 0 || count($_FILES) > 0)
 {
-	/*TEMPLATE_SAVE_CODE*/
-	$zbp->SetHint('good');
-	Redirect('./main.php');
+    /*TEMPLATE_SAVE_CODE*/
+    $zbp->SetHint('good');
+    Redirect('./main.php');
 }
 
 require $blogpath . 'zb_system/admin/admin_header.php';
@@ -45,21 +45,21 @@ RunTime();
 
 function upload_file($filename, $tmp)
 {
-	convert_filename($filename);
-	move_uploaded_file($tmp, $GLOBALS['dir'] . $filename);
+    convert_filename($filename);
+    move_uploaded_file($tmp, $GLOBALS['dir'] . $filename);
 }
 
 function save_text($filename, $content)
 {
-	convert_filename($filename);
-	file_put_contents($GLOBALS['dir'] . $filename, $content);
+    convert_filename($filename);
+    file_put_contents($GLOBALS['dir'] . $filename, $content);
 }
 
 function convert_filename(&$filename)
 {
-	if(in_array(PHP_OS, array('WINNT', 'WIN32', 'Windows')))
-	{
-		$filename = iconv('UTF-8', "GBK//IGNORE", $filename);
-	}
+    if(in_array(PHP_OS, array('WINNT', 'WIN32', 'Windows')))
+    {
+        $filename = iconv('UTF-8', "GBK//IGNORE", $filename);
+    }
 }
 ?>

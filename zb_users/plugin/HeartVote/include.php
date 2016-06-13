@@ -7,49 +7,49 @@ RegisterPlugin("HeartVote", "ActivePlugin_HeartVote");
 
 function ActivePlugin_HeartVote() {
 
-	Add_Filter_Plugin('Filter_Plugin_Zbp_MakeTemplatetags', 'HeartVote_Pre');
-	Add_Filter_Plugin('Filter_Plugin_Post_Call', 'HeartVote_Main');
+    Add_Filter_Plugin('Filter_Plugin_Zbp_MakeTemplatetags', 'HeartVote_Pre');
+    Add_Filter_Plugin('Filter_Plugin_Post_Call', 'HeartVote_Main');
 }
 
 $table['HeartVote'] = '%pre%heartvote';
 
 $datainfo['HeartVote'] = array(
-	'ID' => array('vote_ID', 'integer', '', 0),
-	'LogID' => array('vote_LogID', 'integer', '', 0),
-	'Score' => array('vote_Score', 'integer', '', 0),
-	'IP' => array('vote_IP', 'string', 15, ''),
+    'ID' => array('vote_ID', 'integer', '', 0),
+    'LogID' => array('vote_LogID', 'integer', '', 0),
+    'Score' => array('vote_Score', 'integer', '', 0),
+    'IP' => array('vote_IP', 'string', 15, ''),
 );
 
 class HeartVote extends Base{
 
-	public function __construct()
-	{
-		global $zbp;
-		parent::__construct($zbp->table['HeartVote'], $zbp->datainfo['HeartVote']);
-	}
+    public function __construct()
+    {
+        global $zbp;
+        parent::__construct($zbp->table['HeartVote'], $zbp->datainfo['HeartVote']);
+    }
 }
 
 function InstallPlugin_HeartVote() {
-	global $zbp;
-	HeartVote_CreateTable();
+    global $zbp;
+    HeartVote_CreateTable();
 }
 
 function HeartVote_CreateTable() {
-	global $zbp;
-	if($zbp->db->ExistTable($GLOBALS['table']['HeartVote']) == false){
-		$s = $zbp->db->sql->CreateTable($GLOBALS['table']['HeartVote'], $GLOBALS['datainfo']['HeartVote']);
-		$zbp->db->QueryMulit($s);
-	}
+    global $zbp;
+    if($zbp->db->ExistTable($GLOBALS['table']['HeartVote']) == false){
+        $s = $zbp->db->sql->CreateTable($GLOBALS['table']['HeartVote'], $GLOBALS['datainfo']['HeartVote']);
+        $zbp->db->QueryMulit($s);
+    }
 }
 
 function HeartVote_Pre(&$template) {
-	global $zbp;
-	$zbp->header .= "<script type=\"text/javascript\" src=\"{$zbp->host}zb_users/plugin/HeartVote/js/vote.js\"></script>\r\n";
-	$zbp->header .= "<link rel=\"stylesheet\" href=\"{$zbp->host}zb_users/plugin/HeartVote/css/stars.css\" type=\"text/css\" />\r\n";
+    global $zbp;
+    $zbp->header .= "<script type=\"text/javascript\" src=\"{$zbp->host}zb_users/plugin/HeartVote/js/vote.js\"></script>\r\n";
+    $zbp->header .= "<link rel=\"stylesheet\" href=\"{$zbp->host}zb_users/plugin/HeartVote/css/stars.css\" type=\"text/css\" />\r\n";
 }
 
 function HeartVote_Main(&$post, $method, $args) {
-	global $zbp;
+    global $zbp;
 
 if($method != 'HeartVote')return null;
 
@@ -78,9 +78,9 @@ $array = current($array);
 $alluser = GetValueInArray($array, 'alluser');
 $allvote = GetValueInArray($array, 'allvote');
 if($alluser == 0){
-	$allvote = 0;
+    $allvote = 0;
 }else{
-	$allvote = substr($allvote / $alluser, 0, 3);
+    $allvote = substr($allvote / $alluser, 0, 3);
 }
 $s .= "<script type=\"text/javascript\">showVote('{$allvote}','{$alluser}')</script><!--hvend-->";
 

@@ -14,21 +14,21 @@ $zbp->Load();
 
 $action = '';
 if (GetVars('act', 'GET') == 'PageEdt') {
-	$action = 'PageEdt';
+    $action = 'PageEdt';
 }
 
 if (GetVars('act', 'GET') == 'ArticleEdt') {
-	$action = 'ArticleEdt';
+    $action = 'ArticleEdt';
 }
 
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
 
 if (isset($_COOKIE['timezone'])) {
-	$tz = GetVars('timezone', 'COOKIE');
-	if (is_numeric($tz)) {
-		date_default_timezone_set(GetTimeZonebyGMT($tz));
-	}
-	unset($tz);
+    $tz = GetVars('timezone', 'COOKIE');
+    if (is_numeric($tz)) {
+        date_default_timezone_set(GetTimeZonebyGMT($tz));
+    }
+    unset($tz);
 }
 
 $article = new Post;
@@ -36,32 +36,32 @@ $article->AuthorID = $zbp->user->ID;
 
 $ispage = false;
 if ($action == 'PageEdt') {
-	$ispage = true;
-	$article->Type = 1;}
+    $ispage = true;
+    $article->Type = 1;}
 
 if (!$zbp->CheckRights('ArticlePub')) {
-	$article->Status = ZC_POST_STATUS_AUDITING;
+    $article->Status = ZC_POST_STATUS_AUDITING;
 }
 
 if (isset($_GET['id'])) {
-	$article->LoadInfoByID((integer) GetVars('id', 'GET'));
+    $article->LoadInfoByID((integer) GetVars('id', 'GET'));
 }
 
 if ($ispage) {
-	$blogtitle = $lang['msg']['page_edit'];
-	if (!$zbp->CheckRights('PageAll') && $article->AuthorID != $zbp->user->ID) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
+    $blogtitle = $lang['msg']['page_edit'];
+    if (!$zbp->CheckRights('PageAll') && $article->AuthorID != $zbp->user->ID) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
 } else {
-	$blogtitle = $lang['msg']['article_edit'];
-	if (!$zbp->CheckRights('ArticleAll') && $article->AuthorID != $zbp->user->ID) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
+    $blogtitle = $lang['msg']['article_edit'];
+    if (!$zbp->CheckRights('ArticleAll') && $article->AuthorID != $zbp->user->ID) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
 }
 
 if ($article->Intro) {
-	if (strpos($article->Content, '<!--more-->') !== false) {
-		$article->Intro = '';
-		$article->Content = str_replace('<!--more-->', '<hr class="more" />', $article->Content);
-	} elseif (strpos($article->Intro, '<!--autointro-->') !== false) {
-		$article->Intro = '';
-	}
+    if (strpos($article->Content, '<!--more-->') !== false) {
+        $article->Intro = '';
+        $article->Content = str_replace('<!--more-->', '<hr class="more" />', $article->Content);
+    } elseif (strpos($article->Intro, '<!--autointro-->') !== false) {
+        $article->Intro = '';
+    }
 }
 
 require ZBP_PATH . 'zb_system/admin/admin_header.php';
@@ -250,11 +250,11 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response3'] as $fpname => &$fpsig
 
 <?php
 if ($ispage) {
-	echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
+    echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
 } elseif ($article->ID == 0) {
-	echo '<script type="text/javascript">ActiveLeftMenu("aArticleEdt");</script>';
+    echo '<script type="text/javascript">ActiveLeftMenu("aArticleEdt");</script>';
 } else {
-	echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
+    echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
 }
 echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/new_32.png' . '");</script>';
 ?>

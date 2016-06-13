@@ -16,85 +16,85 @@ ob_start();
 $xml = null;
 
 function GetHttpContent($url) {
-	$r = null;
-	if (function_exists("curl_init") && function_exists('curl_exec')) {
-		$ch = curl_init($url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-		if(ini_get("safe_mode") == false && ini_get("open_basedir") == false){
-			curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-		}
-		if(extension_loaded('zlib')){
-			curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
-		}
-		curl_setopt($ch, CURLOPT_TIMEOUT, 300);
-		$r = curl_exec($ch);
-		curl_close($ch);
-	} elseif (ini_get("allow_url_fopen")) {
-		if(function_exists('ini_set'))ini_set('default_socket_timeout', 300);
-		$r = file_get_contents((extension_loaded('zlib') ? 'compress.zlib://' : '') . $url);
-	}
+    $r = null;
+    if (function_exists("curl_init") && function_exists('curl_exec')) {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        if(ini_get("safe_mode") == false && ini_get("open_basedir") == false){
+            curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        }
+        if(extension_loaded('zlib')){
+            curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
+        }
+        curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+        $r = curl_exec($ch);
+        curl_close($ch);
+    } elseif (ini_get("allow_url_fopen")) {
+        if(function_exists('ini_set'))ini_set('default_socket_timeout', 300);
+        $r = file_get_contents((extension_loaded('zlib') ? 'compress.zlib://' : '') . $url);
+    }
 
-	return $r;
+    return $r;
 }
 
 
 function install0() {
 
-	$d = dirname(__FILE__);
+    $d = dirname(__FILE__);
 
-	if(substr((string) decoct(fileperms($d)), -3) != '755' && substr((string) decoct(fileperms($d)), -3) != '777'){
-		echo "<p>警告:安装目录权限" . $d . "不是0755或是0777,可能无法运行在线安装程序.</p>";
-	}
+    if(substr((string) decoct(fileperms($d)), -3) != '755' && substr((string) decoct(fileperms($d)), -3) != '777'){
+        echo "<p>警告:安装目录权限" . $d . "不是0755或是0777,可能无法运行在线安装程序.</p>";
+    }
 
 }
 
 
 function install1() {
 
-	echo "<p>正在努力地下载数据包...</p>";
-	ob_flush();
+    echo "<p>正在努力地下载数据包...</p>";
+    ob_flush();
 
-	$GLOBALS['xml'] = GetHttpContent('http://update.zblogcn.com/zblogphp/?install');
+    $GLOBALS['xml'] = GetHttpContent('http://update.zblogcn.com/zblogphp/?install');
 
-	//file_put_contents('release.xml',$GLOBALS['xml']);
+    //file_put_contents('release.xml',$GLOBALS['xml']);
 
 }
 
 function install2() {
 
-	echo "<p>正在解压和安装文件...</p>";
-	ob_flush();
-	if ($GLOBALS['xml']) {
-		$xml = simplexml_load_string($GLOBALS['xml'], 'SimpleXMLElement');
-		$old = umask(0);
-		foreach ($xml->file as $f) {
-			$filename = str_replace('\\', '/', $f->attributes());
-			$dirname = dirname($filename);
-			mkdir($dirname, 0755, true);
-			if(PHP_OS == 'WINNT' || PHP_OS == 'WIN32' || PHP_OS == 'Windows'){
-				//$fn=iconv("UTF-8","GBK//IGNORE",$filename);
-				$fn = $filename;
-			}else{
-				$fn = $filename;
-			}
-			file_put_contents($fn, base64_decode($f));
-		}
-		umask($old);
-	} else {
-		exit('release.xml不存在!');
-	}
+    echo "<p>正在解压和安装文件...</p>";
+    ob_flush();
+    if ($GLOBALS['xml']) {
+        $xml = simplexml_load_string($GLOBALS['xml'], 'SimpleXMLElement');
+        $old = umask(0);
+        foreach ($xml->file as $f) {
+            $filename = str_replace('\\', '/', $f->attributes());
+            $dirname = dirname($filename);
+            mkdir($dirname, 0755, true);
+            if(PHP_OS == 'WINNT' || PHP_OS == 'WIN32' || PHP_OS == 'Windows'){
+                //$fn=iconv("UTF-8","GBK//IGNORE",$filename);
+                $fn = $filename;
+            }else{
+                $fn = $filename;
+            }
+            file_put_contents($fn, base64_decode($f));
+        }
+        umask($old);
+    } else {
+        exit('release.xml不存在!');
+    }
 
 }
 
 function install3() {
 
-	#unlink('release.xml');
-	@unlink('install.php');
-	echo '<script type="text/javascript">window.location="./zb_install/"</script>';
-	
+    #unlink('release.xml');
+    @unlink('install.php');
+    echo '<script type="text/javascript">window.location="./zb_install/"</script>';
+    
 }
 
 ?>
@@ -129,11 +129,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     flush();
     ob_flush();
 
-	install1();
-	install2();
-	install3();
-	die();
-	
+    install1();
+    install2();
+    install3();
+    die();
+    
 }else{
 
 ?>
@@ -141,7 +141,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 <p><img id="logo" src="http://update.zblogcn.com/zblogphp/loading.png" alt="Z-BlogPHP在线安装" title="Z-BlogPHP在线安装"/></p>
 <p style="display:none;"><img id="logo2" src="http://update.zblogcn.com/zblogphp/loading.gif" alt="" title=""/></p>
 <?php
-	install0();
+    install0();
 }
 
 ?>

@@ -33,11 +33,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       </tr>
       <?php
 foreach ($zbpdk->objects as $k => $v) {
-	echo '<tr height="40">';
-	echo '<td>' . ($k + 1) . '</td>';
-	echo '<td>' . "<a href=\"extensions/$v->id/$v->url\" target=\"_blank\">$v->id</a>" . '</td>';
-	echo '<td>' . $v->description . '</td>';
-	echo '</tr>';
+    echo '<tr height="40">';
+    echo '<td>' . ($k + 1) . '</td>';
+    echo '<td>' . "<a href=\"extensions/$v->id/$v->url\" target=\"_blank\">$v->id</a>" . '</td>';
+    echo '<td>' . $v->description . '</td>';
+    echo '</tr>';
 }
 ?>
     </table>

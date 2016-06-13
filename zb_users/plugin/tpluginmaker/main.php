@@ -31,12 +31,12 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div id="divMain2">
     <?php
     switch((string) GetVars('step', 'GET'))
-	{
-		case '1': step1(); break;
-		case '2': step2(); break;
-		default: step0(); break;
-	}
-	?>
+    {
+        case '1': step1(); break;
+        case '2': step2(); break;
+        default: step0(); break;
+    }
+    ?>
   </div>
 </div>
 <?php
@@ -45,12 +45,12 @@ RunTime();
 ?>
 <?php 
 function step2() {
-	global $zbp;
-	if(count($_POST) > 0)
-	{
-		$zbp->Config('tpluginmaker')->temp_data = serialize($_POST);
-		$zbp->SaveConfig('tpluginmaker');
-	}
+    global $zbp;
+    if(count($_POST) > 0)
+    {
+        $zbp->Config('tpluginmaker')->temp_data = serialize($_POST);
+        $zbp->SaveConfig('tpluginmaker');
+    }
 ?>
 <div class="div-wait" style="position:fixed; left: 300px; top: 300px">
   <h1>美好的事情正在开启</h1>
@@ -165,5 +165,5 @@ function step0() {
 })();
 </script>
 <?php
-	}
+    }
 ?>

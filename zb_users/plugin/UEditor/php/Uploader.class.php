@@ -50,10 +50,10 @@ class Uploader
      */
     public function __construct($fileField, $config, $type = "upload")
     {
-		global $zbp;
-		$this->stateMap['ERROR_TYPE_NOT_ALLOWED'] = $zbp->lang['error']['26'];
-		$this->stateMap['ERROR_SIZE_EXCEED'] = $zbp->lang['error']['27'];
-		$this->stateMap['ERROR_UNKNOWN'] = $zbp->lang['error']['0'];
+        global $zbp;
+        $this->stateMap['ERROR_TYPE_NOT_ALLOWED'] = $zbp->lang['error']['26'];
+        $this->stateMap['ERROR_SIZE_EXCEED'] = $zbp->lang['error']['27'];
+        $this->stateMap['ERROR_UNKNOWN'] = $zbp->lang['error']['0'];
         $this->fileField = $fileField;
         $this->config = $config;
         $this->type = $type;
@@ -72,7 +72,7 @@ class Uploader
      */
     private function upFile()
     {
-		global $zbp;
+        global $zbp;
         $file = $this->file = $_FILES[$this->fileField];
         if (!$file) {
             $this->stateInfo = $this->getStateInfo("ERROR_FILE_NOT_FOUND");
@@ -113,24 +113,24 @@ class Uploader
 
             return;
         }
-		
-		$upload = new Upload;
-		$upload->Name = $this->fileName;
-		$upload->SourceName = $file['name'];
-		$upload->MimeType = $file['type'];
-		$upload->Size = $this->fileSize;
-		$upload->AuthorID = $zbp->user->ID;
-		
-		if (!$upload->SaveFile($file['tmp_name']))
-		{
-			$this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
+        
+        $upload = new Upload;
+        $upload->Name = $this->fileName;
+        $upload->SourceName = $file['name'];
+        $upload->MimeType = $file['type'];
+        $upload->Size = $this->fileSize;
+        $upload->AuthorID = $zbp->user->ID;
+        
+        if (!$upload->SaveFile($file['tmp_name']))
+        {
+            $this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
 
-			return;
-		}
+            return;
+        }
 
-		$upload->Save();
-		$this->fullName = $upload->Url;
-		$this->stateInfo = $this->stateMap[0];
+        $upload->Save();
+        $this->fullName = $upload->Url;
+        $this->stateInfo = $this->stateMap[0];
 
     }
 
@@ -140,7 +140,7 @@ class Uploader
      */
     private function upBase64()
     {
-		global $zbp;
+        global $zbp;
         $base64Data = $_POST[$this->fileField];
         $img = base64_decode($base64Data);
 
@@ -152,16 +152,16 @@ class Uploader
         $this->fileName = $this->getFileName();
         $dirname = dirname($this->filePath);
 
-		$upload = new Upload;
-		$upload->Name = $this->fileName;
-		$upload->SourceName = date("YmdHis") . '_scraw.png';
-		$upload->MimeType = 'image/png';
-		$upload->AuthorID = $zbp->user->ID;
-			
-		$upload->SaveBase64File($base64Data);
-		$upload->Save();
-		$this->fullName = $upload->Url;
-		$this->stateInfo = $this->stateMap[0];
+        $upload = new Upload;
+        $upload->Name = $this->fileName;
+        $upload->SourceName = date("YmdHis") . '_scraw.png';
+        $upload->MimeType = 'image/png';
+        $upload->AuthorID = $zbp->user->ID;
+            
+        $upload->SaveBase64File($base64Data);
+        $upload->Save();
+        $this->fullName = $upload->Url;
+        $this->stateInfo = $this->stateMap[0];
 
     }
 
@@ -171,7 +171,7 @@ class Uploader
      */
     private function saveRemote()
     {
-		global $zbp;
+        global $zbp;
         $imgUrl = htmlspecialchars($this->fileField);
         $imgUrl = str_replace("&amp;", "&", $imgUrl);
 
@@ -223,22 +223,22 @@ class Uploader
             return;
         }
 
-		$upload = new Upload;
-		$upload->Name = $this->fileName;
-		$upload->SourceName = $this->fileName;
-		$upload->MimeType = $heads['Content-Type'];
-		$upload->Size = $this->fileSize;
-		$upload->AuthorID = $zbp->user->ID;
-		
-		if (!$upload->SaveBase64File(base64_encode($img)))
-		{
-			$this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
+        $upload = new Upload;
+        $upload->Name = $this->fileName;
+        $upload->SourceName = $this->fileName;
+        $upload->MimeType = $heads['Content-Type'];
+        $upload->Size = $this->fileSize;
+        $upload->AuthorID = $zbp->user->ID;
+        
+        if (!$upload->SaveBase64File(base64_encode($img)))
+        {
+            $this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
 
-			return;
-		}
-		
-		$upload->Save();
-		$this->fullName = $upload->Url;
+            return;
+        }
+        
+        $upload->Save();
+        $this->fullName = $upload->Url;
 
     }
 

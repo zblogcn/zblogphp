@@ -15,58 +15,58 @@ $blogtitle = '静态管理中心';
 
 if (count($_GET) > 0) {
 
-	if (GetVars('mak', 'GET') == '1') {
-		@file_put_contents($zbp->path . '.htaccess', show_htaccess());
-	} elseif (GetVars('mak', 'GET') == '2') {
-		@file_put_contents($zbp->path . 'web.config', show_webconfig());
-	} elseif (GetVars('mak', 'GET') == '3') {
-		@file_put_contents($zbp->path . 'httpd.ini', show_httpini());
-	}
+    if (GetVars('mak', 'GET') == '1') {
+        @file_put_contents($zbp->path . '.htaccess', show_htaccess());
+    } elseif (GetVars('mak', 'GET') == '2') {
+        @file_put_contents($zbp->path . 'web.config', show_webconfig());
+    } elseif (GetVars('mak', 'GET') == '3') {
+        @file_put_contents($zbp->path . 'httpd.ini', show_httpini());
+    }
 
-	if (GetVars('del', 'GET') == '1') {
-		@unlink($zbp->path . '.htaccess');
-	} elseif (GetVars('del', 'GET') == '2') {
-		@unlink($zbp->path . 'web.config');
-	} elseif (GetVars('del', 'GET') == '3') {
-		@unlink($zbp->path . 'httpd.ini');
-	}
+    if (GetVars('del', 'GET') == '1') {
+        @unlink($zbp->path . '.htaccess');
+    } elseif (GetVars('del', 'GET') == '2') {
+        @unlink($zbp->path . 'web.config');
+    } elseif (GetVars('del', 'GET') == '3') {
+        @unlink($zbp->path . 'httpd.ini');
+    }
 
-	$zbp->SetHint('good');
+    $zbp->SetHint('good');
 
-	Redirect('./list.php');
+    Redirect('./list.php');
 }
 
 function show_htaccess() {
-	$ur = new UrlRule("");
+    $ur = new UrlRule("");
 
-	return $ur->Make_htaccess();
+    return $ur->Make_htaccess();
 }
 
 function show_httpini() {
-	$ur = new UrlRule("");
+    $ur = new UrlRule("");
 
-	return $ur->Make_httpdini();
+    return $ur->Make_httpdini();
 }
 
 function show_webconfig() {
-	$ur = new UrlRule("");
+    $ur = new UrlRule("");
 
-	return $ur->Make_webconfig();
+    return $ur->Make_webconfig();
 }
 
 function show_nginx() {
-	$ur = new UrlRule("");
-	if (method_exists('UrlRule', 'Make_nginx')) {
-		return $ur->Make_nginx();
-	}
+    $ur = new UrlRule("");
+    if (method_exists('UrlRule', 'Make_nginx')) {
+        return $ur->Make_nginx();
+    }
 
 }
 
 function show_lighttpd() {
-	$ur = new UrlRule("");
-	if (method_exists('UrlRule', 'Make_lighttpd')) {
-		return $ur->Make_lighttpd();
-	}
+    $ur = new UrlRule("");
+    if (method_exists('UrlRule', 'Make_lighttpd')) {
+        return $ur->Make_lighttpd();
+    }
 
 }
 
@@ -75,15 +75,15 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 $default_tab = strtolower($_SERVER["SERVER_SOFTWARE"]);
 if (strpos($default_tab, 'apache') !== false) {
-	$default_tab = 1;
+    $default_tab = 1;
 } elseif (strpos($default_tab, 'iis/6') !== false) {
-	$default_tab = 3;
+    $default_tab = 3;
 } elseif (strpos($default_tab, 'nginx') !== false) {
-	$default_tab = 4;
+    $default_tab = 4;
 } elseif (strpos($default_tab, 'lighttpd') !== false) {
-	$default_tab = 5;
+    $default_tab = 5;
 } else {
-	$default_tab = 2;
+    $default_tab = 2;
 }
 ?>
 <div id="divMain">
@@ -105,7 +105,7 @@ if (strpos($default_tab, 'apache') !== false) {
     <?php if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') {?>
     <p>动态模式下不生成静态规则.</p>
     <?php } else {
-	?>
+    ?>
     <form id="edit" name="edit" method="post" action="#">
       <input id="reset" name="reset" type="hidden" value="" />
 

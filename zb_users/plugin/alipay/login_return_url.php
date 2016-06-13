@@ -10,10 +10,10 @@ require_once "lib/alipay_notify.class.php";
 $alipayNotify = new AlipayNotify($alipay_config);
 $verify_result = $alipayNotify->verifyReturn();
 if($verify_result) {//验证成功
-	//print_r($_GET);
-	foreach ($GLOBALS['Filter_Plugin_AlipayLogin_Succeed'] as $fpname => &$fpsignal) $fpname($_GET);
+    //print_r($_GET);
+    foreach ($GLOBALS['Filter_Plugin_AlipayLogin_Succeed'] as $fpname => &$fpsignal) $fpname($_GET);
 }
 else {
     //验证失败
-	foreach ($GLOBALS['Filter_Plugin_AlipayLogin_Failed'] as $fpname => &$fpsignal) $fpname($_GET);
+    foreach ($GLOBALS['Filter_Plugin_AlipayLogin_Failed'] as $fpname => &$fpsignal) $fpname($_GET);
 }

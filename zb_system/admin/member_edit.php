@@ -14,11 +14,11 @@ $zbp->Load();
 
 $action = '';
 if (GetVars('act', 'GET') == 'MemberEdt') {
-	$action = 'MemberEdt';
+    $action = 'MemberEdt';
 }
 
 if (GetVars('act', 'GET') == 'MemberNew') {
-	$action = 'MemberNew';
+    $action = 'MemberNew';
 }
 
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
@@ -31,7 +31,7 @@ $memberid = null;
 if (isset($_GET['id'])) {$memberid = (integer) GetVars('id', 'GET');} else { $memberid = 0;}
 
 if (!$zbp->CheckRights('MemberAll')) {
-	if ((int) $memberid != (int) $zbp->user->ID) {$zbp->ShowError(6, __FILE__, __LINE__);}
+    if ((int) $memberid != (int) $zbp->user->ID) {$zbp->ShowError(6, __FILE__, __LINE__);}
 }
 
 $member = $zbp->GetMemberByID($memberid);
@@ -73,7 +73,7 @@ $member = $zbp->GetMemberByID($memberid);
 				<span class="star">(*)</span>
 				<br />
 				<input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name;?>" <?php if (!$zbp->CheckRights('MemberAll')) {
-	echo 'readonly="readonly"';
+    echo 'readonly="readonly"';
 }
 ?> /></p>
 			<p>

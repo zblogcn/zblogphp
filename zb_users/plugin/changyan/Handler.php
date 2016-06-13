@@ -46,29 +46,29 @@ class Changyan_Handler
 
     public function getOption($option)
     {
-		global $zbp;
+        global $zbp;
 
-		return $zbp->Config('changyan')->$option;
+        return $zbp->Config('changyan')->$option;
         //return get_option($option);
     }
 
     public function setOption($option, $value)
     {
-		global $zbp;
-		$zbp->Config('changyan')->$option = $value;
-		$zbp->SaveConfig('changyan');
+        global $zbp;
+        $zbp->Config('changyan')->$option = $value;
+        $zbp->SaveConfig('changyan');
 
-		return true;
+        return true;
         //return update_option($option, $value);
     }
 
     public function delOption($option)
     {
-		global $zbp;
-		$zbp->Config('changyan')->Del($option);
-		$zbp->SaveConfig('changyan');
+        global $zbp;
+        $zbp->Config('changyan')->Del($option);
+        $zbp->SaveConfig('changyan');
 
-		return true;
+        return true;
         //return delete_option($option);
     }
 
@@ -166,11 +166,11 @@ class Changyan_Handler
 
         die($aScript);
     }
-	
-	public function saveAppIDKey() {
-		$this->saveAppID();
-		$this->saveAppKey();
-	}
+    
+    public function saveAppIDKey() {
+        $this->saveAppID();
+        $this->saveAppKey();
+    }
 
     public function saveAppID()
     {

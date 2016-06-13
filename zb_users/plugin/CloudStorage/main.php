@@ -12,36 +12,36 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 
 if (isset($_POST['CS_Storage']) && $_POST['CS_Storage'] != '') {
-	foreach ($_POST as $key => $value) {
-		$zbp->Config('CloudStorage')->$key = $value;
-	}
-	$zbp->SaveConfig('CloudStorage');
+    foreach ($_POST as $key => $value) {
+        $zbp->Config('CloudStorage')->$key = $value;
+    }
+    $zbp->SaveConfig('CloudStorage');
 
-	switch ($zbp->Config('CloudStorage')->CS_Storage) {
-		case '1':
-			if ($zbp->Config('CloudStorage')->CS_Ali_KeyID == '') {
-				$buff = "请设置阿里云OSS帐号！";
-			}
-			break;
-		case '2':
-			if ($zbp->Config('CloudStorage')->CS_QNiu_KeyID == '') {
-				$buff = "请设置七牛云帐号！";
-			}
-			break;
-		case '3':
-			if ($zbp->Config('CloudStorage')->CS_Baidu_KeyID == '') {
-				$buff = "请设置百度云帐号！";
-			}
-			break;
-		default:
-			break;
-	}
+    switch ($zbp->Config('CloudStorage')->CS_Storage) {
+        case '1':
+            if ($zbp->Config('CloudStorage')->CS_Ali_KeyID == '') {
+                $buff = "请设置阿里云OSS帐号！";
+            }
+            break;
+        case '2':
+            if ($zbp->Config('CloudStorage')->CS_QNiu_KeyID == '') {
+                $buff = "请设置七牛云帐号！";
+            }
+            break;
+        case '3':
+            if ($zbp->Config('CloudStorage')->CS_Baidu_KeyID == '') {
+                $buff = "请设置百度云帐号！";
+            }
+            break;
+        default:
+            break;
+    }
 
-	if(isset($buff)){
-		$zbp->ShowHint('bad', $buff);
-	}else{
-		$zbp->ShowHint('good', "保存成功！");
-	}
+    if(isset($buff)){
+        $zbp->ShowHint('bad', $buff);
+    }else{
+        $zbp->ShowHint('good', "保存成功！");
+    }
 }
 
 

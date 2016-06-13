@@ -103,15 +103,15 @@ define('ZC_POST_TYPE_ALBUM', 8); // 相册
  * @param  id=>{name,url,template}
  */
 $posttype = array(
-	array('article', '', ''),
-	array('page', '', ''),
-	array('tweet', '', ''),
-	array('discussion', '', ''),
-	array('link', '', ''),
-	array('music', '', ''),
-	array('video', '', ''),
-	array('photo', '', ''),
-	array('album', '', ''),
+    array('article', '', ''),
+    array('page', '', ''),
+    array('tweet', '', ''),
+    array('discussion', '', ''),
+    array('link', '', ''),
+    array('music', '', ''),
+    array('video', '', ''),
+    array('photo', '', ''),
+    array('album', '', ''),
 );
 
 /**
@@ -146,82 +146,82 @@ define('ZC_MEMBER_STATUS_LOCKED', 2);
  *定义命令
  */
 $actions = array(
-	'login' => 6,
-	'logout' => 6,
-	'verify' => 6,
-	'admin' => 5,
-	'search' => 6,
-	'misc' => 6,
-	'feed' => 6,
-	'cmt' => 6,
-	'getcmt' => 6,
-	'ajax' => 6,
+    'login' => 6,
+    'logout' => 6,
+    'verify' => 6,
+    'admin' => 5,
+    'search' => 6,
+    'misc' => 6,
+    'feed' => 6,
+    'cmt' => 6,
+    'getcmt' => 6,
+    'ajax' => 6,
 
-	'ArticleEdt' => 4,
-	'ArticlePst' => 4,
-	'ArticleDel' => 4,
-	'ArticlePub' => 3,
+    'ArticleEdt' => 4,
+    'ArticlePst' => 4,
+    'ArticleDel' => 4,
+    'ArticlePub' => 3,
 
-	'PageEdt' => 2,
-	'PagePst' => 2,
-	'PageDel' => 2,
+    'PageEdt' => 2,
+    'PagePst' => 2,
+    'PageDel' => 2,
 
-	'CategoryEdt' => 2,
-	'CategoryPst' => 2,
-	'CategoryDel' => 2,
+    'CategoryEdt' => 2,
+    'CategoryPst' => 2,
+    'CategoryDel' => 2,
 
-	'CommentEdt' => 5,
-	'CommentSav' => 5,
-	'CommentDel' => 5,
-	'CommentChk' => 5,
-	'CommentBat' => 5,
+    'CommentEdt' => 5,
+    'CommentSav' => 5,
+    'CommentDel' => 5,
+    'CommentChk' => 5,
+    'CommentBat' => 5,
 
-	'MemberEdt' => 5,
-	'MemberPst' => 5,
-	'MemberDel' => 1,
-	'MemberNew' => 1,
+    'MemberEdt' => 5,
+    'MemberPst' => 5,
+    'MemberDel' => 1,
+    'MemberNew' => 1,
 
-	'TagEdt' => 2,
-	'TagPst' => 2,
-	'TagDel' => 2,
-	'TagNew' => 2,
+    'TagEdt' => 2,
+    'TagPst' => 2,
+    'TagDel' => 2,
+    'TagNew' => 2,
 
-	'PluginEnb' => 1,
-	'PluginDis' => 1,
+    'PluginEnb' => 1,
+    'PluginDis' => 1,
 
-	'UploadPst' => 3,
-	'UploadDel' => 3,
+    'UploadPst' => 3,
+    'UploadDel' => 3,
 
-	'ModuleEdt' => 3,
-	'ModulePst' => 3,
-	'ModuleDel' => 3,
+    'ModuleEdt' => 3,
+    'ModulePst' => 3,
+    'ModuleDel' => 3,
 
-	'ThemeSet' => 1,
-	'SidebarSet' => 1,
+    'ThemeSet' => 1,
+    'SidebarSet' => 1,
 
-	'SettingSav' => 1,
+    'SettingSav' => 1,
 
-	'ArticleMng' => 4,
-	'PageMng' => 2,
-	'CategoryMng' => 2,
-	'SettingMng' => 1,
-	'TagMng' => 2,
-	'CommentMng' => 5,
-	'UploadMng' => 3,
-	'MemberMng' => 5,
-	'ThemeMng' => 1,
-	'PluginMng' => 1,
-	'ModuleMng' => 1,
+    'ArticleMng' => 4,
+    'PageMng' => 2,
+    'CategoryMng' => 2,
+    'SettingMng' => 1,
+    'TagMng' => 2,
+    'CommentMng' => 5,
+    'UploadMng' => 3,
+    'MemberMng' => 5,
+    'ThemeMng' => 1,
+    'PluginMng' => 1,
+    'ModuleMng' => 1,
 
-	'ArticleAll' => 2,
-	'PageAll' => 2,
-	'CategoryAll' => 2,
-	'CommentAll' => 2,
-	'MemberAll' => 1,
-	'TagAll' => 2,
-	'UploadAll' => 2,
+    'ArticleAll' => 2,
+    'PageAll' => 2,
+    'CategoryAll' => 2,
+    'CommentAll' => 2,
+    'MemberAll' => 1,
+    'TagAll' => 2,
+    'UploadAll' => 2,
 
-	'root' => 1,
+    'root' => 1,
 );
 
 /**
@@ -229,128 +229,128 @@ $actions = array(
  */
 $table = array(
 
-	'Post' => '%pre%post',
-	'Category' => '%pre%category',
-	'Comment' => '%pre%comment',
-	'Tag' => '%pre%tag',
-	'Upload' => '%pre%upload',
-	'Module' => '%pre%module',
-	'Member' => '%pre%member',
-	'Config' => '%pre%config',
+    'Post' => '%pre%post',
+    'Category' => '%pre%category',
+    'Comment' => '%pre%comment',
+    'Tag' => '%pre%tag',
+    'Upload' => '%pre%upload',
+    'Module' => '%pre%module',
+    'Member' => '%pre%member',
+    'Config' => '%pre%config',
 );
 
 /**
  *定义数据结构
  */
 $datainfo = array(
-	'Config' => array(
-		'ID' => array('conf_ID', 'integer', '', 0),
-		'Name' => array('conf_Name', 'string', 50, ''),
-		'Value' => array('conf_Value', 'string', '', ''),
-	),
-	'Post' => array(
-		'ID' => array('log_ID', 'integer', '', 0),
-		'CateID' => array('log_CateID', 'integer', '', 0),
-		'AuthorID' => array('log_AuthorID', 'integer', '', 0),
-		'Tag' => array('log_Tag', 'string', 250, ''),
-		'Status' => array('log_Status', 'integer', '', 0),
-		'Type' => array('log_Type', 'integer', '', 0),
-		'Alias' => array('log_Alias', 'string', 250, ''),
-		'IsTop' => array('log_IsTop', 'boolean', '', false),
-		'IsLock' => array('log_IsLock', 'boolean', '', false),
-		'Title' => array('log_Title', 'string', 250, ''),
-		'Intro' => array('log_Intro', 'string', '', ''),
-		'Content' => array('log_Content', 'string', '', ''),
-		'PostTime' => array('log_PostTime', 'integer', '', 0),
-		'CommNums' => array('log_CommNums', 'integer', '', 0),
-		'ViewNums' => array('log_ViewNums', 'integer', '', 0),
-		'Template' => array('log_Template', 'string', 50, ''),
-		'Meta' => array('log_Meta', 'string', '', ''),
-	),
-	'Category' => array(
-		'ID' => array('cate_ID', 'integer', '', 0),
-		'Name' => array('cate_Name', 'string', 50, ''),
-		'Order' => array('cate_Order', 'integer', '', 0),
-		'Count' => array('cate_Count', 'integer', '', 0),
-		'Alias' => array('cate_Alias', 'string', 50, ''),
-		'Intro' => array('cate_Intro', 'string', '', ''),
-		'RootID' => array('cate_RootID', 'integer', '', 0),
-		'ParentID' => array('cate_ParentID', 'integer', '', 0),
-		'Template' => array('cate_Template', 'string', 50, ''),
-		'LogTemplate' => array('cate_LogTemplate', 'string', 50, ''),
-		'Meta' => array('cate_Meta', 'string', '', ''),
-	),
-	'Comment' => array(
-		'ID' => array('comm_ID', 'integer', '', 0),
-		'LogID' => array('comm_LogID', 'integer', '', 0),
-		'IsChecking' => array('comm_IsChecking', 'boolean', '', false),
-		'RootID' => array('comm_RootID', 'integer', '', 0),
-		'ParentID' => array('comm_ParentID', 'integer', '', 0),
-		'AuthorID' => array('comm_AuthorID', 'integer', '', 0),
-		'Name' => array('comm_Name', 'string', 20, ''),
-		'Content' => array('comm_Content', 'string', '', ''),
-		'Email' => array('comm_Email', 'string', 50, ''),
-		'HomePage' => array('comm_HomePage', 'string', 250, ''),
-		'PostTime' => array('comm_PostTime', 'integer', '', 0),
-		'IP' => array('comm_IP', 'string', 15, ''),
-		'Agent' => array('comm_Agent', 'string', '', ''),
-		'Meta' => array('comm_Meta', 'string', '', ''),
-	),
-	'Module' => array(
-		'ID' => array('mod_ID', 'integer', '', 0),
-		'Name' => array('mod_Name', 'string', 100, ''),
-		'FileName' => array('mod_FileName', 'string', 50, ''),
-		'Content' => array('mod_Content', 'string', '', ''),
-		'HtmlID' => array('mod_HtmlID', 'string', 50, ''),
-		'Type' => array('mod_Type', 'string', 5, 'div'),
-		'MaxLi' => array('mod_MaxLi', 'integer', '', 0),
-		'Source' => array('mod_Source', 'string', 50, 'user'),
-		'IsHideTitle' => array('mod_IsHideTitle', 'boolean', '', false),
-		'Meta' => array('mod_Meta', 'string', '', ''),
-	),
-	'Member' => array(
-		'ID' => array('mem_ID', 'integer', '', 0),
-		'Guid' => array('mem_Guid', 'string', 36, ''),
-		'Level' => array('mem_Level', 'integer', '', 6),
-		'Status' => array('mem_Status', 'integer', '', 0),
-		'Name' => array('mem_Name', 'string', 50, ''),
-		'Password' => array('mem_Password', 'string', 32, ''),
-		'Email' => array('mem_Email', 'string', 50, ''),
-		'HomePage' => array('mem_HomePage', 'string', 250, ''),
-		'IP' => array('mem_IP', 'string', 15, ''),
-		'PostTime' => array('mem_PostTime', 'integer', '', 0),
-		'Alias' => array('mem_Alias', 'string', 50, ''),
-		'Intro' => array('mem_Intro', 'string', '', ''),
-		'Articles' => array('mem_Articles', 'integer', '', 0),
-		'Pages' => array('mem_Pages', 'integer', '', 0),
-		'Comments' => array('mem_Comments', 'integer', '', 0),
-		'Uploads' => array('mem_Uploads', 'integer', '', 0),
-		'Template' => array('mem_Template', 'string', 50, ''),
-		'Meta' => array('mem_Meta', 'string', '', ''),
-	),
-	'Tag' => array(
-		'ID' => array('tag_ID', 'integer', '', 0),
-		'Name' => array('tag_Name', 'string', 250, ''),
-		'Order' => array('tag_Order', 'integer', '', 0),
-		'Count' => array('tag_Count', 'integer', '', 0),
-		'Alias' => array('tag_Alias', 'string', 250, ''),
-		'Intro' => array('tag_Intro', 'string', '', ''),
-		'Template' => array('tag_Template', 'string', 50, ''),
-		'Meta' => array('tag_Meta', 'string', '', ''),
-	),
-	'Upload' => array(
-		'ID' => array('ul_ID', 'integer', '', 0),
-		'AuthorID' => array('ul_AuthorID', 'integer', '', 0),
-		'Size' => array('ul_Size', 'integer', '', 0),
-		'Name' => array('ul_Name', 'string', 250, ''),
-		'SourceName' => array('ul_SourceName', 'string', 250, ''),
-		'MimeType' => array('ul_MimeType', 'string', 50, ''),
-		'PostTime' => array('ul_PostTime', 'integer', '', 0),
-		'DownNums' => array('ul_DownNums', 'integer', '', 0),
-		'LogID' => array('ul_LogID', 'integer', '', 0),
-		'Intro' => array('ul_Intro', 'string', '', ''),
-		'Meta' => array('ul_Meta', 'string', '', ''),
-	),
+    'Config' => array(
+        'ID' => array('conf_ID', 'integer', '', 0),
+        'Name' => array('conf_Name', 'string', 50, ''),
+        'Value' => array('conf_Value', 'string', '', ''),
+    ),
+    'Post' => array(
+        'ID' => array('log_ID', 'integer', '', 0),
+        'CateID' => array('log_CateID', 'integer', '', 0),
+        'AuthorID' => array('log_AuthorID', 'integer', '', 0),
+        'Tag' => array('log_Tag', 'string', 250, ''),
+        'Status' => array('log_Status', 'integer', '', 0),
+        'Type' => array('log_Type', 'integer', '', 0),
+        'Alias' => array('log_Alias', 'string', 250, ''),
+        'IsTop' => array('log_IsTop', 'boolean', '', false),
+        'IsLock' => array('log_IsLock', 'boolean', '', false),
+        'Title' => array('log_Title', 'string', 250, ''),
+        'Intro' => array('log_Intro', 'string', '', ''),
+        'Content' => array('log_Content', 'string', '', ''),
+        'PostTime' => array('log_PostTime', 'integer', '', 0),
+        'CommNums' => array('log_CommNums', 'integer', '', 0),
+        'ViewNums' => array('log_ViewNums', 'integer', '', 0),
+        'Template' => array('log_Template', 'string', 50, ''),
+        'Meta' => array('log_Meta', 'string', '', ''),
+    ),
+    'Category' => array(
+        'ID' => array('cate_ID', 'integer', '', 0),
+        'Name' => array('cate_Name', 'string', 50, ''),
+        'Order' => array('cate_Order', 'integer', '', 0),
+        'Count' => array('cate_Count', 'integer', '', 0),
+        'Alias' => array('cate_Alias', 'string', 50, ''),
+        'Intro' => array('cate_Intro', 'string', '', ''),
+        'RootID' => array('cate_RootID', 'integer', '', 0),
+        'ParentID' => array('cate_ParentID', 'integer', '', 0),
+        'Template' => array('cate_Template', 'string', 50, ''),
+        'LogTemplate' => array('cate_LogTemplate', 'string', 50, ''),
+        'Meta' => array('cate_Meta', 'string', '', ''),
+    ),
+    'Comment' => array(
+        'ID' => array('comm_ID', 'integer', '', 0),
+        'LogID' => array('comm_LogID', 'integer', '', 0),
+        'IsChecking' => array('comm_IsChecking', 'boolean', '', false),
+        'RootID' => array('comm_RootID', 'integer', '', 0),
+        'ParentID' => array('comm_ParentID', 'integer', '', 0),
+        'AuthorID' => array('comm_AuthorID', 'integer', '', 0),
+        'Name' => array('comm_Name', 'string', 20, ''),
+        'Content' => array('comm_Content', 'string', '', ''),
+        'Email' => array('comm_Email', 'string', 50, ''),
+        'HomePage' => array('comm_HomePage', 'string', 250, ''),
+        'PostTime' => array('comm_PostTime', 'integer', '', 0),
+        'IP' => array('comm_IP', 'string', 15, ''),
+        'Agent' => array('comm_Agent', 'string', '', ''),
+        'Meta' => array('comm_Meta', 'string', '', ''),
+    ),
+    'Module' => array(
+        'ID' => array('mod_ID', 'integer', '', 0),
+        'Name' => array('mod_Name', 'string', 100, ''),
+        'FileName' => array('mod_FileName', 'string', 50, ''),
+        'Content' => array('mod_Content', 'string', '', ''),
+        'HtmlID' => array('mod_HtmlID', 'string', 50, ''),
+        'Type' => array('mod_Type', 'string', 5, 'div'),
+        'MaxLi' => array('mod_MaxLi', 'integer', '', 0),
+        'Source' => array('mod_Source', 'string', 50, 'user'),
+        'IsHideTitle' => array('mod_IsHideTitle', 'boolean', '', false),
+        'Meta' => array('mod_Meta', 'string', '', ''),
+    ),
+    'Member' => array(
+        'ID' => array('mem_ID', 'integer', '', 0),
+        'Guid' => array('mem_Guid', 'string', 36, ''),
+        'Level' => array('mem_Level', 'integer', '', 6),
+        'Status' => array('mem_Status', 'integer', '', 0),
+        'Name' => array('mem_Name', 'string', 50, ''),
+        'Password' => array('mem_Password', 'string', 32, ''),
+        'Email' => array('mem_Email', 'string', 50, ''),
+        'HomePage' => array('mem_HomePage', 'string', 250, ''),
+        'IP' => array('mem_IP', 'string', 15, ''),
+        'PostTime' => array('mem_PostTime', 'integer', '', 0),
+        'Alias' => array('mem_Alias', 'string', 50, ''),
+        'Intro' => array('mem_Intro', 'string', '', ''),
+        'Articles' => array('mem_Articles', 'integer', '', 0),
+        'Pages' => array('mem_Pages', 'integer', '', 0),
+        'Comments' => array('mem_Comments', 'integer', '', 0),
+        'Uploads' => array('mem_Uploads', 'integer', '', 0),
+        'Template' => array('mem_Template', 'string', 50, ''),
+        'Meta' => array('mem_Meta', 'string', '', ''),
+    ),
+    'Tag' => array(
+        'ID' => array('tag_ID', 'integer', '', 0),
+        'Name' => array('tag_Name', 'string', 250, ''),
+        'Order' => array('tag_Order', 'integer', '', 0),
+        'Count' => array('tag_Count', 'integer', '', 0),
+        'Alias' => array('tag_Alias', 'string', 250, ''),
+        'Intro' => array('tag_Intro', 'string', '', ''),
+        'Template' => array('tag_Template', 'string', 50, ''),
+        'Meta' => array('tag_Meta', 'string', '', ''),
+    ),
+    'Upload' => array(
+        'ID' => array('ul_ID', 'integer', '', 0),
+        'AuthorID' => array('ul_AuthorID', 'integer', '', 0),
+        'Size' => array('ul_Size', 'integer', '', 0),
+        'Name' => array('ul_Name', 'string', 250, ''),
+        'SourceName' => array('ul_SourceName', 'string', 250, ''),
+        'MimeType' => array('ul_MimeType', 'string', 50, ''),
+        'PostTime' => array('ul_PostTime', 'integer', '', 0),
+        'DownNums' => array('ul_DownNums', 'integer', '', 0),
+        'LogID' => array('ul_LogID', 'integer', '', 0),
+        'Intro' => array('ul_Intro', 'string', '', ''),
+        'Meta' => array('ul_Meta', 'string', '', ''),
+    ),
 );
 
 /**
@@ -361,26 +361,26 @@ $_SERVER['_query_count'] = 0;
 $_SERVER['_memory_usage'] = 0;
 $_SERVER['_error_count'] = 0;
 if (function_exists('memory_get_usage')) {
-	$_SERVER['_memory_usage'] = memory_get_usage(true);
+    $_SERVER['_memory_usage'] = memory_get_usage(true);
 }
 
 /**
  * 版本兼容处理
  */
 if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
-	function _stripslashes(&$var) {
-		if (is_array($var)) {
-			foreach ($var as $k => &$v) {
-				_stripslashes($v);
-			}
-		} else {
-			$var = stripslashes($var);
-		}
-	}
-	_stripslashes($_GET);
-	_stripslashes($_POST);
-	_stripslashes($_COOKIE);
-	_stripslashes($_REQUEST);
+    function _stripslashes(&$var) {
+        if (is_array($var)) {
+            foreach ($var as $k => &$v) {
+                _stripslashes($v);
+            }
+        } else {
+            $var = stripslashes($var);
+        }
+    }
+    _stripslashes($_GET);
+    _stripslashes($_POST);
+    _stripslashes($_COOKIE);
+    _stripslashes($_REQUEST);
 }
 
 /**
@@ -436,50 +436,50 @@ LoadActivedApps();
  * 加载设置
  */
 function InitializeOption() {
-	global $option;
-	global $usersdir;
+    global $option;
+    global $usersdir;
 
-	$option = require ZBP_PATH . 'zb_system/defend/option.php';
-	$option_zbusers = null;
-	if (is_readable($filename = $usersdir . 'c_option.php')) {
-		$option_zbusers = require $filename;
-		if (is_array($option_zbusers)) {
-			foreach ($option_zbusers as $key => $value) {
-				$option[$key] = $value;
-			}
+    $option = require ZBP_PATH . 'zb_system/defend/option.php';
+    $option_zbusers = null;
+    if (is_readable($filename = $usersdir . 'c_option.php')) {
+        $option_zbusers = require $filename;
+        if (is_array($option_zbusers)) {
+            foreach ($option_zbusers as $key => $value) {
+                $option[$key] = $value;
+            }
 
-		}
-	}
+        }
+    }
 }
 
 function LoadActivedApps() {
-	global $usersdir;
-	global $blogtheme;
-	global $zbp;
-	global $activeapps;
+    global $usersdir;
+    global $blogtheme;
+    global $zbp;
+    global $activeapps;
 
-	if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/theme.xml')) {
-		$activeapps[] = $blogtheme;
-	}
+    if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/theme.xml')) {
+        $activeapps[] = $blogtheme;
+    }
 
-	if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php')) {
-		require $filename;
-	}
+    if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php')) {
+        require $filename;
+    }
 
-	$ap = $zbp->GetActivedPlugin();
-	foreach ($ap as $plugin) {
-		if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/plugin.xml')) {
-			$activeapps[] = $plugin;
-		}
+    $ap = $zbp->GetActivedPlugin();
+    foreach ($ap as $plugin) {
+        if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/plugin.xml')) {
+            $activeapps[] = $plugin;
+        }
 
-		if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
-			require $filename;
-		}
-	}
+        if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
+            require $filename;
+        }
+    }
 
-	foreach ($GLOBALS['plugins'] as &$sPluginActiveFunctions) {
-		if (function_exists($sPluginActiveFunctions)) {
-			$sPluginActiveFunctions();
-		}
-	}
+    foreach ($GLOBALS['plugins'] as &$sPluginActiveFunctions) {
+        if (function_exists($sPluginActiveFunctions)) {
+            $sPluginActiveFunctions();
+        }
+    }
 }

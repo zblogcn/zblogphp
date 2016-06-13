@@ -5,12 +5,12 @@ require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 $action = 'root';
 if (!$zbp->CheckRights($action)) {
-	$zbp->ShowError(6);
-	die();
+    $zbp->ShowError(6);
+    die();
 }
 if (!$zbp->CheckPlugin('Totoro')) {
-	$zbp->ShowError(48);
-	die();
+    $zbp->ShowError(48);
+    die();
 }
 Totoro_init();
 $blogtitle = 'Totoro反垃圾评论';
@@ -71,7 +71,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                                 <?php
 $i = 1;
 foreach ($Totoro->config_array['SV_RULE'] as $name => $value) {
-	?>
+    ?>
                                 <tr>
                                     <td><?php echo $i ?></td>
                                     <td>
@@ -86,7 +86,7 @@ foreach ($Totoro->config_array['SV_RULE'] as $name => $value) {
 $i++;
 }
 foreach ($Totoro->config_array['SV_SETTING'] as $name => $value) {
-	?>
+    ?>
                                 <tr>
                                     <td><?php echo $i ?></td>
                                     <td>
@@ -120,7 +120,7 @@ $i++;
                             <tbody>
                                 <?php
 foreach ($Totoro->config_array['BLACK_LIST'] as $name => $value) {
-	?>
+    ?>
                                 <tr>
                                     <td>
                                         <p align="left"><b><?php echo $value['NAME'] ?></b>
@@ -153,7 +153,7 @@ foreach ($Totoro->config_array['BLACK_LIST'] as $name => $value) {
                             <tbody>
                                 <?php
 foreach ($Totoro->config_array['STRING_BACK'] as $name => $value) {
-	?>
+    ?>
                                 <tr>
                                     <td>
                                         <p align="left"><b><?php echo $value['NAME'] ?></b></p>
@@ -184,7 +184,7 @@ foreach ($Totoro->config_array['STRING_BACK'] as $name => $value) {
                             <tbody>
                                 <?php
 foreach ($Totoro->config_array['BUILD_CONFIG'] as $name => $value) {
-	?>
+    ?>
                                 <tr>
                                     <td>
                                         <p align="left"><b><?php echo $value['NAME'] ?></b>
@@ -224,7 +224,7 @@ foreach ($Totoro->config_array['BUILD_CONFIG'] as $name => $value) {
                                 <?php
 $i = 1;
 foreach ($Totoro->config_array['SIMILAR_CONFIG'] as $name => $value) {
-	?>
+    ?>
                                 <tr>
                                     <td><?php echo $i ?></td>
                                     <td>

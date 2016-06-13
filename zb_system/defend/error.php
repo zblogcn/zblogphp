@@ -1,6 +1,6 @@
 <?php
 if (!isset($GLOBALS['zbp'])) {
-	exit;
+    exit;
 }
 ?>
 <!DOCTYPE HTML>
@@ -43,26 +43,26 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsigna
 		<?php echo '(' . $this->type . ')' . $this->typeName . ' :     ' . strip_tags($this->messagefull); ?>
 		<?php echo ' (' . ZC_VERSION_FULL . ') ';
 if (!in_array('Status: 404 Not Found', headers_list())) {
-	echo '(' . GetEnvironment() . ') ';
+    echo '(' . GetEnvironment() . ') ';
 }
 ?>
 		</div>
 	 	<?php if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
-	?>
+    ?>
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['file_line']; ?></p>
 	 	<i><?php echo $this->file ?></i><br/>
 	 	<table style='width:100%'>
 	 	<tbody>
 <?php
 $aFile = $this->get_code($this->file, $this->line);
-	foreach ($aFile as $iInt => $sData) {
-		?>
+    foreach ($aFile as $iInt => $sData) {
+        ?>
 		 		<tr<?php echo($iInt + 1 == $this->line ? ' style="background:#75BAFF"' : '') ?>>
 		 			<td style='width:50px'><?php echo $iInt + 1 ?></td>
 		 			<td><?php echo $sData ?></td>
 		 		</tr>
 <?php }
-	?>
+    ?>
 		</tbody>
 	 	</table>
 	 	</div>
@@ -71,11 +71,11 @@ $aFile = $this->get_code($this->file, $this->line);
 	 	<tbody>
 <?php
 foreach (debug_backtrace() as $iInt => $sData) {
-		if ($iInt <= 2) {
-			continue;
-		}
-		// 前面的是错误捕捉
-		?>
+        if ($iInt <= 2) {
+            continue;
+        }
+        // 前面的是错误捕捉
+        ?>
 		 		<tr>
 		 			<td style='width:50px'><?php echo $iInt + 1 ?></td>
 		 			<td><?php echo isset($sData['file']) ? $sData['file'] : 'Callback'; ?></td>
@@ -83,28 +83,28 @@ foreach (debug_backtrace() as $iInt => $sData) {
 		 		<tr>
 		 			<td></td>
 		 			<td><code>(<?php if (isset($sData['line'])) {
-			echo $sData['line'];
-		}
-		?>) <?php echo isset($sData['class']) ? $sData['class'] . $sData['type'] : "";
-		echo $sData['function'] . '(';
-		if (isset($sData['args'])) {
-			foreach ($sData['args'] as $argKey => $argVal) {
-				echo $argKey . ' => ' . (CheckCanBeString($argVal) ? htmlspecialchars((string) $argVal) : 'Object') . ',';
-			}
-		}
-		echo ')'; ?></code></td>
+            echo $sData['line'];
+        }
+        ?>) <?php echo isset($sData['class']) ? $sData['class'] . $sData['type'] : "";
+        echo $sData['function'] . '(';
+        if (isset($sData['args'])) {
+            foreach ($sData['args'] as $argKey => $argVal) {
+                echo $argKey . ' => ' . (CheckCanBeString($argVal) ? htmlspecialchars((string) $argVal) : 'Object') . ',';
+            }
+        }
+        echo ')'; ?></code></td>
 		 		</tr>
 		 		<tr>
 		 			<td></td>
 		 			<td><code><?php
 if (isset($sData['line'])) {
-			$fileContent = $this->get_code($sData['file'], $sData['line']);
-			echo $fileContent[$sData['line'] - 1];
-		}
-		?></code></td>
+            $fileContent = $this->get_code($sData['file'], $sData['line']);
+            echo $fileContent[$sData['line'] - 1];
+        }
+        ?></code></td>
 		 		</tr>
 <?php }
-	?>
+    ?>
 		</tbody>
 	 	</table>
 	 	</div>
@@ -113,7 +113,7 @@ if (isset($sData['line'])) {
 	 	<pre><?php echo '$_POST = ' . print_r(htmlspecialchars_array($_POST), 1) ?></pre>
 <?php
 $post_data = $_COOKIE;unset($post_data['username']);unset($post_data['password']);
-	?>
+    ?>
 		<pre><?php echo '$_COOKIE = ' . print_r(htmlspecialchars_array($post_data), 1) ?></pre>
 	 	</div>
 	 	<div><p><?php echo $GLOBALS['lang']['msg']['include_file']; ?></p>
@@ -122,7 +122,7 @@ $post_data = $_COOKIE;unset($post_data['username']);unset($post_data['password']
 		<?php foreach (get_included_files() as $iInt => $sData) {?>
 			<tr><td style='width:30px'><?php echo $iInt ?></td><td><?php echo $sData; ?></td></tr>
 		<?php }
-	?>
+    ?>
 		</tbody>
 		</table>
 	 	</div>

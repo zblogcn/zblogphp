@@ -28,9 +28,9 @@ namespace Michelf;
 
 class MarkdownExtra extends \Michelf\_MarkdownExtra_TmpImpl {
 
-	### Parser Implementation ###
+    ### Parser Implementation ###
 
-	# Temporarily, the implemenation is in the _MarkdownExtra_TmpImpl class.
-	# See note above.
+    # Temporarily, the implemenation is in the _MarkdownExtra_TmpImpl class.
+    # See note above.
 
 }

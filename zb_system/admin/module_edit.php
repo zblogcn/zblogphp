@@ -27,53 +27,53 @@ $modid = null;
 $mod = null;
 
 if (isset($_GET['source'])) {
-	if (GetVars('source', 'GET') == 'theme') {
-		$mod = new Module;
-		$mod->Name = GetVars('filename', 'GET');
-		$mod->FileName = GetVars('filename', 'GET');
-		$mod->HtmlID = GetVars('filename', 'GET');
-		$mod->Source = 'theme';
-		if ($mod->FileName) {
-			$mod->Content = file_get_contents($zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $mod->FileName . '.php');
-		}
-	}
+    if (GetVars('source', 'GET') == 'theme') {
+        $mod = new Module;
+        $mod->Name = GetVars('filename', 'GET');
+        $mod->FileName = GetVars('filename', 'GET');
+        $mod->HtmlID = GetVars('filename', 'GET');
+        $mod->Source = 'theme';
+        if ($mod->FileName) {
+            $mod->Content = file_get_contents($zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $mod->FileName . '.php');
+        }
+    }
 } elseif (isset($_GET['filename'])) {
 
-	$array = $zbp->GetModuleList(
-		array('*'),
-		array(array('=', 'mod_FileName', GetVars('filename', 'GET'))),
-		null,
-		array(1),
-		null
-	);
+    $array = $zbp->GetModuleList(
+        array('*'),
+        array(array('=', 'mod_FileName', GetVars('filename', 'GET'))),
+        null,
+        array(1),
+        null
+    );
 
-	if (count($array) == 0) {
-		$zbp->ShowError(69);
-	}
+    if (count($array) == 0) {
+        $zbp->ShowError(69);
+    }
 
-	$mod = $array[0];
+    $mod = $array[0];
 
 } else {
-	if (isset($_GET['id'])) {$modid = (integer) GetVars('id', 'GET');} else { $modid = 0;}
+    if (isset($_GET['id'])) {$modid = (integer) GetVars('id', 'GET');} else { $modid = 0;}
 
-	$mod = $zbp->GetModuleByID($modid);
+    $mod = $zbp->GetModuleByID($modid);
 }
 if ($mod->Type == 'ul') {
-	$mod->Content = str_replace("</li>", "</li>\r\n", $mod->Content);
+    $mod->Content = str_replace("</li>", "</li>\r\n", $mod->Content);
 }
 
 $islock = '';
 if ($mod->Source == 'system' || $mod->Source == 'theme') {
-	$islock = 'readonly="readonly"';
+    $islock = 'readonly="readonly"';
 }
 if ($mod->Source == 'theme' && $mod->FileName == '') {
-	$islock = '';
-	$mod->Name = 'newmodule';
-	$mod->HtmlID = 'newmodule';
+    $islock = '';
+    $mod->Name = 'newmodule';
+    $mod->HtmlID = 'newmodule';
 }
 $ishide = '';
 if ($mod->Source == 'theme') {
-	$ishide = 'style="display:none;"';
+    $ishide = 'style="display:none;"';
 }
 ?>
 <div id="divMain">
@@ -126,7 +126,7 @@ if ($mod->Source == 'theme') {
 		<input type="text" name="MaxLi" value="<?php echo $mod->MaxLi;?>" size="40"  /></p>
 <?php
 if ($mod->FileName == 'catalog') {
-	?>
+    ?>
 	<p>
 		<span class='title'>
 			<?php echo $lang['msg']['style']?>:</span>

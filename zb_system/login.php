@@ -4,7 +4,7 @@ require './function/c_system_base.php';
 $zbp->CheckGzip();
 $zbp->Load();
 if ($zbp->CheckRights('admin')) {
-	Redirect('cmd.php?act=admin');
+    Redirect('cmd.php?act=admin');
 }
 ?><!DOCTYPE HTML>
 <html>
@@ -22,7 +22,7 @@ if ($zbp->CheckRights('admin')) {
 	<title><?php echo $blogname . '-' . $lang['msg']['login'] ?></title>
 <?php
 foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {
-	$fpname();
+    $fpname();
 }
 
 ?>
@@ -80,7 +80,7 @@ $("#chkRemember").click(function(){
 if (!$.support.leadingWhitespace) {
 	$("#dishtml5").val(1);<?php
 if ($option['ZC_ADMIN_HTML5_ENABLE']) {
-	echo 'alert("' . $lang['error']['74'] . '");';
+    echo 'alert("' . $lang['error']['74'] . '");';
 }
 
 ?>

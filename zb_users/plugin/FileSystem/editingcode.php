@@ -9,12 +9,12 @@ if (!$zbp->CheckPlugin('FileSystem')) {$zbp->ShowError(48);die();}
 
 if(isset($_POST['file'])){
 
-	file_put_contents($_POST['file'], $_POST['code']);
+    file_put_contents($_POST['file'], $_POST['code']);
 
-	$url = 'main.php?';
-	if ($blogpath != $_POST['current_path']) $url = $url . '&path=' . urlencode(str_replace($blogpath, "", $_POST['current_path']));
-	Redirect($url);
-	die();
+    $url = 'main.php?';
+    if ($blogpath != $_POST['current_path']) $url = $url . '&path=' . urlencode(str_replace($blogpath, "", $_POST['current_path']));
+    Redirect($url);
+    die();
 }
 
 $blogtitle = '文件管理系统--编辑';

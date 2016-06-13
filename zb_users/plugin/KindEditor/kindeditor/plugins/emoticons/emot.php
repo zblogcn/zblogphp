@@ -15,42 +15,42 @@ $root_url = $zbp->host . 'zb_users/emotion/';
 $emot_ext = explode("|", $zbp->option['ZC_EMOTICONS_FILETYPE']);
 
 if ($handle = opendir($root_path)) {
-	while (false !== ($filename = readdir($handle))) {
-		if ($filename{0} == '.') {
-			continue;
-		}
+    while (false !== ($filename = readdir($handle))) {
+        if ($filename{0} == '.') {
+            continue;
+        }
 
-		$file = $root_path . $filename;
-		if (is_dir($file)) {
-			$emot_dir[] = (KINDEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $filename) : $filename);
-		} else {
-			continue;
-		}
-		if ($emot = opendir($root_path . $filename . '/')) {
-			while (false !== ($emotname = readdir($emot))) {
-				if ($emotname{0} == '.') {
-					continue;
-				}
+        $file = $root_path . $filename;
+        if (is_dir($file)) {
+            $emot_dir[] = (KINDEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $filename) : $filename);
+        } else {
+            continue;
+        }
+        if ($emot = opendir($root_path . $filename . '/')) {
+            while (false !== ($emotname = readdir($emot))) {
+                if ($emotname{0} == '.') {
+                    continue;
+                }
 
-				$emotpath = $root_path . $emotname . '/' . $emotname;
-				if (!is_dir($emotpath)) {
-					$temp_arr = explode(".", $emotname);
-					$file_ext = array_pop($temp_arr);
-					$file_ext = trim($file_ext);
-					$file_ext = strtolower($file_ext);
-					if (in_array($file_ext, $emot_ext) === true) {
-						$encoded = (KINDEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $filename) : $filename);
-						$emot_name[$encoded][] = (KINDEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $emotname) : $emotname);
-					}
-				}
-			}
-		}
-	}
+                $emotpath = $root_path . $emotname . '/' . $emotname;
+                if (!is_dir($emotpath)) {
+                    $temp_arr = explode(".", $emotname);
+                    $file_ext = array_pop($temp_arr);
+                    $file_ext = trim($file_ext);
+                    $file_ext = strtolower($file_ext);
+                    if (in_array($file_ext, $emot_ext) === true) {
+                        $encoded = (KINDEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $filename) : $filename);
+                        $emot_name[$encoded][] = (KINDEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $emotname) : $emotname);
+                    }
+                }
+            }
+        }
+    }
 
-	closedir($handle);
+    closedir($handle);
 
-	//print_r($emot_dir);
-	//print_r($emot_name);
+    //print_r($emot_dir);
+    //print_r($emot_name);
 }
 
 ?>
@@ -152,15 +152,15 @@ for ($i = 0; $i < count($emot_dir); $i++) {echo '<div>' . $i . '</div>';}
         emotion.SmileyBox = {
         <?php
 for ($i = 0; $i < count($emot_dir); $i++) {
-	echo 'tab' . $i . ':[';
-	$emot_char = '';
-	if ($i == (count($emot_dir) - 1)) {
-		echo ']';
-		continue;}
-	foreach ($emot_name[$emot_dir[$i]] as $v) {
-		$emot_char .= "'$v',";
-	}
-	echo $emot_char . '],';
+    echo 'tab' . $i . ':[';
+    $emot_char = '';
+    if ($i == (count($emot_dir) - 1)) {
+        echo ']';
+        continue;}
+    foreach ($emot_name[$emot_dir[$i]] as $v) {
+        $emot_char .= "'$v',";
+    }
+    echo $emot_char . '],';
 }
 ?>};
         emotion.SmileyInfor = emotion.SmileyBox;

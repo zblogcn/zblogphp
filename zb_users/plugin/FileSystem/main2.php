@@ -10,12 +10,12 @@
  | URL: http://phpfm.sf.net
  | Last Changed: 2012-11-26
 */
-	$charset = "UTF-8";
+    $charset = "UTF-8";
     //@setlocale(LC_CTYPE, 'C');
     header("Pragma: no-cache");
     header("Cache-Control: no-store");
-	header("Content-Type: text/html; charset=".$charset);
-	//@ini_set('default_charset', $charset);
+    header("Content-Type: text/html; charset=".$charset);
+    //@ini_set('default_charset', $charset);
     if (@get_magic_quotes_gpc()) {
         function stripslashes_deep($value) {
             return is_array($value) ? array_map('stripslashes_deep', $value) : $value;
@@ -25,14 +25,14 @@
         $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
         $_REQUEST = array_map('stripslashes_deep', $_REQUEST);
     }
-	// Register Globals
+    // Register Globals
     foreach ($_GET as $key => $val) $$key = $val;
     foreach ($_POST as $key => $val) $$key = $val;
     foreach ($_COOKIE as $key => $val) $$key = $val;
-	// Server Vars
+    // Server Vars
     $ip = $_SERVER["REMOTE_ADDR"];
     if (strlen($_SERVER["HTTP_X_FORWARDED_FOR"])) $ip = $_SERVER["HTTP_X_FORWARDED_FOR"]; // using proxy
-	if ($ip == "::1") $ip = "";
+    if ($ip == "::1") $ip = "";
     $islinux = !(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
     function getServerURL() {
         $url = ($_SERVER["HTTPS"] == "on") ? "https://" : "http://";
@@ -46,12 +46,12 @@
     }
     $url = getCompleteURL();
     $url_info = parse_url($url);
-	if(!isset($_SERVER['DOCUMENT_ROOT'])) {
-		if (isset($_SERVER['SCRIPT_FILENAME'])) $path = $_SERVER['SCRIPT_FILENAME'];
-		elseif (isset($_SERVER['PATH_TRANSLATED'])) $path = str_replace('\\\\', '\\', $_SERVER['PATH_TRANSLATED']);
-		$_SERVER['DOCUMENT_ROOT'] = str_replace('\\', '/', substr($path, 0, 0 - strlen($_SERVER['PHP_SELF'])));
-	}
-	$doc_root = str_replace('//', '/', str_replace(DIRECTORY_SEPARATOR, '/', $_SERVER["DOCUMENT_ROOT"]));
+    if(!isset($_SERVER['DOCUMENT_ROOT'])) {
+        if (isset($_SERVER['SCRIPT_FILENAME'])) $path = $_SERVER['SCRIPT_FILENAME'];
+        elseif (isset($_SERVER['PATH_TRANSLATED'])) $path = str_replace('\\\\', '\\', $_SERVER['PATH_TRANSLATED']);
+        $_SERVER['DOCUMENT_ROOT'] = str_replace('\\', '/', substr($path, 0, 0 - strlen($_SERVER['PHP_SELF'])));
+    }
+    $doc_root = str_replace('//', '/', str_replace(DIRECTORY_SEPARATOR, '/', $_SERVER["DOCUMENT_ROOT"]));
     $fm_self = $doc_root.$_SERVER["PHP_SELF"];
     $path_info = pathinfo($fm_self);
 // +--------------------------------------------------
@@ -451,7 +451,7 @@ function zip_extract() {
 // | Data Formating
 // +--------------------------------------------------
 function html_encode($str) {
-	return preg_replace(array('/&/', '/</', '/>/', '/"/'), array('&amp;', '&lt;', '&gt;', '&quot;'), $str);  // Bypass PHP to allow any charset!!
+    return preg_replace(array('/&/', '/</', '/>/', '/"/'), array('&amp;', '&lt;', '&gt;', '&quot;'), $str);  // Bypass PHP to allow any charset!!
 }
 function rep($x, $y) {
   if ($x) {
@@ -925,12 +925,12 @@ function show_tree() {
         echo "<select name=drive onchange=\"set_fm_current_root(this.value)\">";
         $aux = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         for($x = 0;$x < strlen($aux);$x++){
-			if ($handle = opendir($aux[$x].":/")){
-    			@closedir($handle);
-	            if (strstr(strtoupper($fm_current_root), $aux[$x].":/")) $is_sel = "selected";
-	            else $is_sel = "";
-	            echo "<option $is_sel value=\"".$aux[$x].":/\">".$aux[$x].":/";
-			}
+            if ($handle = opendir($aux[$x].":/")){
+                @closedir($handle);
+                if (strstr(strtoupper($fm_current_root), $aux[$x].":/")) $is_sel = "selected";
+                else $is_sel = "";
+                echo "<option $is_sel value=\"".$aux[$x].":/\">".$aux[$x].":/";
+            }
         }
         echo "</select> ";
     }
@@ -967,9 +967,9 @@ function dir_list_form() {
         $entry_list = array();
         while ($file = readdir($opdir)) {
           if (($file != ".") && ($file != "..")){
-			$entry_list[$entry_count]["size"] = 0;
-			$entry_list[$entry_count]["sizet"] = 0;
-			$entry_list[$entry_count]["type"] = "none";
+            $entry_list[$entry_count]["size"] = 0;
+            $entry_list[$entry_count]["sizet"] = 0;
+            $entry_list[$entry_count]["type"] = "none";
             if (is_file($current_dir.$file)){
                 $ext = strtolower(strrchr($file, "."));
                 $entry_list[$entry_count]["type"] = "file";
@@ -1951,53 +1951,53 @@ function get_mime_type($ext = '') {
 }
 function view() {
     global $doc_root,$path_info,$url_info,$current_dir,$islinux,$filename,$passthru;
-	if (intval($passthru)){
-	    $file = $current_dir.$filename;
-	    if(file_exists($file)){
-	        $is_denied = false;
-	        foreach($download_ext_filter as $key => $ext){
-	            if (eregi($ext, $filename)){
-	                $is_denied = true;
-	                break;
-	            }
-	        }
-	        if (!$is_denied){
+    if (intval($passthru)){
+        $file = $current_dir.$filename;
+        if(file_exists($file)){
+            $is_denied = false;
+            foreach($download_ext_filter as $key => $ext){
+                if (eregi($ext, $filename)){
+                    $is_denied = true;
+                    break;
+                }
+            }
+            if (!$is_denied){
                 if ($fh = fopen("$file", "rb")){
-	                fclose($fh);
-					$ext = pathinfo($file, PATHINFO_EXTENSION);
-					header("Pragma: public");
-					header("Expires: 0");
-					header("Connection: close");
-					header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-					header("Cache-Control: public");
-					header("Content-Description: File Transfer");
-					header("Content-Type: ".get_mime_type($ext));
-				    header("Content-Disposition: inline; filename=\"".pathinfo($file, PATHINFO_BASENAME)."\";");
-					header("Content-Transfer-Encoding: binary");
-					header("Content-Length: ".filesize($file));
-					@readfile($file);
-					exit();
-	            } else alert(et('ReadDenied').": ".$file);
-	        } else alert(et('ReadDenied').": ".$file);
-	    } else alert(et('FileNotFound').": ".$file);
+                    fclose($fh);
+                    $ext = pathinfo($file, PATHINFO_EXTENSION);
+                    header("Pragma: public");
+                    header("Expires: 0");
+                    header("Connection: close");
+                    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+                    header("Cache-Control: public");
+                    header("Content-Description: File Transfer");
+                    header("Content-Type: ".get_mime_type($ext));
+                    header("Content-Disposition: inline; filename=\"".pathinfo($file, PATHINFO_BASENAME)."\";");
+                    header("Content-Transfer-Encoding: binary");
+                    header("Content-Length: ".filesize($file));
+                    @readfile($file);
+                    exit();
+                } else alert(et('ReadDenied').": ".$file);
+            } else alert(et('ReadDenied').": ".$file);
+        } else alert(et('FileNotFound').": ".$file);
         echo "
 	    <script language=\"Javascript\" type=\"text/javascript\">
 	    <!--
 	        window.close();
 	    //-->
 	    </script>";
-	} else {
-	    html_header();
-	    echo "<body marginwidth=\"0\" marginheight=\"0\">";
-	    $is_reachable_thru_webserver = (stristr($current_dir, $doc_root) !== false);
-	    if ($is_reachable_thru_webserver){
-	        $url = $url_info["scheme"]."://".$url_info["host"];
-	        if (strlen($url_info["port"])) $url .= ":".$url_info["port"];
-	        // Malditas variaveis de sistema!! No windows doc_root é sempre em lowercase... cadê o str_ireplace() ??
-	        $url .= str_replace($doc_root, "", $current_dir).$filename;
-	    } else {
-			$url = addslashes($path_info["basename"])."?action=4&current_dir=".addslashes($current_dir)."&filename=".addslashes($filename)."&passthru=1";
-	    }
+    } else {
+        html_header();
+        echo "<body marginwidth=\"0\" marginheight=\"0\">";
+        $is_reachable_thru_webserver = (stristr($current_dir, $doc_root) !== false);
+        if ($is_reachable_thru_webserver){
+            $url = $url_info["scheme"]."://".$url_info["host"];
+            if (strlen($url_info["port"])) $url .= ":".$url_info["port"];
+            // Malditas variaveis de sistema!! No windows doc_root é sempre em lowercase... cadê o str_ireplace() ??
+            $url .= str_replace($doc_root, "", $current_dir).$filename;
+        } else {
+            $url = addslashes($path_info["basename"])."?action=4&current_dir=".addslashes($current_dir)."&filename=".addslashes($filename)."&passthru=1";
+        }
         echo "
 	    <script language=\"Javascript\" type=\"text/javascript\">
 	    <!--
@@ -2006,7 +2006,7 @@ function view() {
 	    //-->
 	    </script>
     	</body>\n</html>";
-	}
+    }
 }
 function edit_file_form() {
     global $current_dir,$filename,$file_data,$save_file,$path_info;
@@ -2273,23 +2273,23 @@ function shell_form() {
 function server_info() {
     if (!@phpinfo()) echo et('NoPhpinfo')."...";
     echo "<br><br>";
-	    $a = ini_get_all();
-	    $output = "<table border=1 cellspacing=0 cellpadding=4 align=center>";
-	    $output .= "<tr><th colspan=2>ini_get_all()</td></tr>";
-	    while(list($key, $value) = each($a)) {
-	        list($k, $v) = each($a[$key]);
-	        $output .= "<tr><td align=right>$key</td><td>$v</td></tr>";
-	    }
-	    $output .= "</table>";
-	echo $output;
+        $a = ini_get_all();
+        $output = "<table border=1 cellspacing=0 cellpadding=4 align=center>";
+        $output .= "<tr><th colspan=2>ini_get_all()</td></tr>";
+        while(list($key, $value) = each($a)) {
+            list($k, $v) = each($a[$key]);
+            $output .= "<tr><td align=right>$key</td><td>$v</td></tr>";
+        }
+        $output .= "</table>";
+    echo $output;
     echo "<br><br>";
-	    $output = "<table border=1 cellspacing=0 cellpadding=4 align=center>";
-	    $output .= "<tr><th colspan=2>\$_SERVER</td></tr>";
-	    foreach ($_SERVER as $k => $v) {
-	        $output .= "<tr><td align=right>$k</td><td>$v</td></tr>";
-	    }
-	    $output .= "</table>";
-	echo $output;
+        $output = "<table border=1 cellspacing=0 cellpadding=4 align=center>";
+        $output .= "<tr><th colspan=2>\$_SERVER</td></tr>";
+        foreach ($_SERVER as $k => $v) {
+            $output .= "<tr><td align=right>$k</td><td>$v</td></tr>";
+        }
+        $output .= "</table>";
+    echo $output;
     echo "<br><br>";
     echo "<table border=1 cellspacing=0 cellpadding=4 align=center>";
     $safe_mode = trim(ini_get("safe_mode"));

@@ -11,23 +11,23 @@ Totoro_init();
 $act = GetVars('act', 'GET');
 $functionName = "Totoro_Action_" . ucfirst($act);
 if (function_exists($functionName)) {
-	$functionName();
+    $functionName();
 } else {
-	$zbp->ShowError(5, __FILE__, __LINE__);
+    $zbp->ShowError(5, __FILE__, __LINE__);
 }
 $zbp->SetHint('good');
 Redirect('../../../zb_system/admin/index.php?act=CommentMng');
 
 function Totoro_Action_Blockip() {
-	global $zbp;
-	global $Totoro;
-	$id = GetVars('id', 'GET');
-	$id = (int) $id;
-	if ($id <= 0) {
-		return;
-	}
-	$comment = $zbp->GetCommentByID($id);
-	if ($comment->ID <= 0) {return;}
-	$Totoro->filter_ip($comment->IP, true);
+    global $zbp;
+    global $Totoro;
+    $id = GetVars('id', 'GET');
+    $id = (int) $id;
+    if ($id <= 0) {
+        return;
+    }
+    $comment = $zbp->GetCommentByID($id);
+    if ($comment->ID <= 0) {return;}
+    $Totoro->filter_ip($comment->IP, true);
 }
 RunTime();

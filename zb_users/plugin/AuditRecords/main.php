@@ -23,8 +23,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 <?php
 
-	echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
-	echo '<tr>
+    echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter">';
+    echo '<tr>
 	<th>' . $zbp->lang['msg']['id'] . '</th>
 	<th>' . $zbp->lang['msg']['category'] . '</th>
 	<th>' . $zbp->lang['msg']['author'] . '</th>
@@ -47,17 +47,17 @@ $p->UrlRule->Rules['{%istop%}'] = (boolean) GetVars('istop');
 
 $w = array();
 if(!$zbp->CheckRights('ArticleAll')){
-	$w[] = array('=', 'log_AuthorID', $zbp->user->ID);
+    $w[] = array('=', 'log_AuthorID', $zbp->user->ID);
 }
 
 $w[] = array('=', 'log_Status', 2);
 
 $array = $zbp->GetArticleList(
-	'',
-	$w,
-	array('log_PostTime' => 'DESC'),
-	array(($p->PageNow - 1) * $p->PageCount, $p->PageCount),
-	array('pagebar' => $p)
+    '',
+    $w,
+    array('log_PostTime' => 'DESC'),
+    array(($p->PageNow - 1) * $p->PageCount, $p->PageCount),
+    array('pagebar' => $p)
 );
 
 foreach ($array as $article) {
@@ -67,34 +67,34 @@ $array = $zbp->GetList('AuditRecords', $sql);
 $num = count($array);
 
 
-	echo '<tr>';
-	echo '<td class="td5">' . $article->ID .  '</td>';
-	echo '<td class="td10">' . $article->Category->Name . '</td>';
-	echo '<td class="td10">' . $article->Author->Name . '</td>';
-	echo '<td><a href="'.$article->Url.'" target="_blank"><img src="'.$bloghost.'zb_system/image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title;
-	if($num > 0){
-		echo '<p><i style="font-size:0.8em">最后一次审核或回复记录：</i></p><blockquote><p><b>'.$zbp->members[$array[0]->AuthorID]->Name.'</b>记录于'.date('c', $array[0]->PostTime).'</p><p>'.htmlspecialchars($array[0]->Logs).'</p></blockquote>';
-	}
-	echo '</td>';
-	echo '<td class="td20">' .$article->Time() . '</td>';
-	echo '<td class="td10">' . $num . '</td>';
-	echo '<td class="td5">' . ($article->IsTop ? $zbp->lang['msg']['top'].'|' : '').$article->StatusName . '</td>';
-	echo '<td class="td10 tdCenter">';
-	echo '<a href="'.$bloghost.'zb_system/cmd.php?act=ArticleEdt&amp;id='. $article->ID .'"><img src="'.$bloghost.'zb_system/image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
-	echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-	echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="'.$bloghost.'zb_system/cmd.php?act=ArticleDel&amp;id='. $article->ID  . '&amp;token='. $zbp->GetToken() .'"><img src="'.$bloghost.'zb_system/image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
-	echo '</td>';
+    echo '<tr>';
+    echo '<td class="td5">' . $article->ID .  '</td>';
+    echo '<td class="td10">' . $article->Category->Name . '</td>';
+    echo '<td class="td10">' . $article->Author->Name . '</td>';
+    echo '<td><a href="'.$article->Url.'" target="_blank"><img src="'.$bloghost.'zb_system/image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title;
+    if($num > 0){
+        echo '<p><i style="font-size:0.8em">最后一次审核或回复记录：</i></p><blockquote><p><b>'.$zbp->members[$array[0]->AuthorID]->Name.'</b>记录于'.date('c', $array[0]->PostTime).'</p><p>'.htmlspecialchars($array[0]->Logs).'</p></blockquote>';
+    }
+    echo '</td>';
+    echo '<td class="td20">' .$article->Time() . '</td>';
+    echo '<td class="td10">' . $num . '</td>';
+    echo '<td class="td5">' . ($article->IsTop ? $zbp->lang['msg']['top'].'|' : '').$article->StatusName . '</td>';
+    echo '<td class="td10 tdCenter">';
+    echo '<a href="'.$bloghost.'zb_system/cmd.php?act=ArticleEdt&amp;id='. $article->ID .'"><img src="'.$bloghost.'zb_system/image/admin/page_edit.png" alt="'.$zbp->lang['msg']['edit'] .'" title="'.$zbp->lang['msg']['edit'] .'" width="16" /></a>';
+    echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+    echo '<a onclick="return window.confirm(\''.$zbp->lang['msg']['confirm_operating'] .'\');" href="'.$bloghost.'zb_system/cmd.php?act=ArticleDel&amp;id='. $article->ID  . '&amp;token='. $zbp->GetToken() .'"><img src="'.$bloghost.'zb_system/image/admin/delete.png" alt="'.$zbp->lang['msg']['del'] .'" title="'.$zbp->lang['msg']['del'] .'" width="16" /></a>';
+    echo '</td>';
 
-	echo '</tr>';
+    echo '</tr>';
 }
-	echo '</table>';
-	echo '<hr/><p class="pagebar">';
+    echo '</table>';
+    echo '<hr/><p class="pagebar">';
 
 foreach ($p->buttons as $key => $value) {
-	echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;';
+    echo '<a href="'. $value .'">' . $key . '</a>&nbsp;&nbsp;';
 }
 
-	echo '</p>';
+    echo '</p>';
 ?>
 
 	<script type="text/javascript">ActiveLeftMenu("aAuditRecords");</script>

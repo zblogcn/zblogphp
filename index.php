@@ -47,14 +47,14 @@ $zbp->RedirectPermanentDomain();
 $zbp->CheckSiteClosed();
 
 foreach ($GLOBALS['hooks']['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {
-	$fpname();
+    $fpname();
 
 }
 
 ViewIndex();
 
 foreach ($GLOBALS['hooks']['Filter_Plugin_Index_End'] as $fpname => &$fpsignal) {
-	$fpname();
+    $fpname();
 }
 
 RunTime();

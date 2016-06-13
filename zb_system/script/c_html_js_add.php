@@ -32,7 +32,7 @@ var lang_comment_content_error = zbp.options.lang.error[46];
 
 <?php
 if (!isset($_GET['pluginonly'])) {
-	?>
+    ?>
 $(function () {
 
 	zbp.cookie.set("timezone", (new Date().getTimezoneOffset()/60)*(-1));
@@ -75,8 +75,8 @@ header('Content-Type: application/x-javascript; charset=utf-8');
 header('Etag: ' . $m);
 
 if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
-	SetHttpStatusCode(304);
-	die;
+    SetHttpStatusCode(304);
+    die;
 }
 
 $zbp->CheckGzip();

@@ -327,8 +327,8 @@ class ValidateCode {
      * Generate the image
      */
     public function build($fingerprint = null) {
-    	$width = $this->width;
-    	$height = $this->height;
+        $width = $this->width;
+        $height = $this->height;
         if (null !== $fingerprint) {
             $this->fingerprint = $fingerprint;
             $this->useFingerprint = true;

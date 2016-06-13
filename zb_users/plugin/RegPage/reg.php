@@ -18,7 +18,7 @@ $invitecode = trim($_POST['invitecode']);
 $verifycode = trim($_POST['verifycode']);
 
 if(!$zbp->CheckValidCode($verifycode, 'RegPage')){
-	$zbp->ShowError('验证码错误，请重新输入.');die();
+    $zbp->ShowError('验证码错误，请重新输入.');die();
 }
 
 $member = new Member;
@@ -27,7 +27,7 @@ $sql = $zbp->db->sql->Select($RegPage_Table, '*', array(array('=', 'reg_InviteCo
 $array = $zbp->GetListCustom($RegPage_Table, $RegPage_DataInfo, $sql);
 $num = count($array);
 if($num == 0){
-	$zbp->ShowError('邀请码不存在或已被使用.');die();
+    $zbp->ShowError('邀请码不存在或已被使用.');die();
 }
 $reg = $array[0];
 
@@ -37,27 +37,27 @@ $member->Level = $reg->Level;
 
 
 if(strlen($name) < $zbp->option['ZC_USERNAME_MIN'] || strlen($name) > $zbp->option['ZC_USERNAME_MAX']){
-	$zbp->ShowError('用户名不能过长或过短.');die();
+    $zbp->ShowError('用户名不能过长或过短.');die();
 }
 
 if(!CheckRegExp($name, '[username]')){
-	$zbp->ShowError('用户名只能包含字母数字._和中文.');die();
+    $zbp->ShowError('用户名只能包含字母数字._和中文.');die();
 }
 
 
 
 if(isset($zbp->membersbyname[$name])){
-	$zbp->ShowError('用户名已存在');die();
+    $zbp->ShowError('用户名已存在');die();
 }
 
 $member->Name = $name;
 
 if(strlen($password) < $zbp->option['ZC_PASSWORD_MIN'] || strlen($password) > $zbp->option['ZC_PASSWORD_MAX']){
-	$zbp->ShowError('密码必须在'.$zbp->option['ZC_PASSWORD_MIN'].'位-'.$zbp->option['ZC_PASSWORD_MAX'].'位间.');die();
+    $zbp->ShowError('密码必须在'.$zbp->option['ZC_PASSWORD_MIN'].'位-'.$zbp->option['ZC_PASSWORD_MAX'].'位间.');die();
 }
 
 if($password != $repassword){
-	$zbp->ShowError('请核对密码.');die();
+    $zbp->ShowError('请核对密码.');die();
 }
 
 $member->Password = Member::GetPassWordByGuid($password, $invitecode);
@@ -68,21 +68,21 @@ $member->IP = GetGuestIP();
 
 
 if(strlen($email) < 5 || strlen($email) > $zbp->option['ZC_EMAIL_MAX']){
-	$zbp->ShowError('邮箱不能过长或过短.');die();
+    $zbp->ShowError('邮箱不能过长或过短.');die();
 }
 
 if(CheckRegExp($email, '[email]')){
-	$member->Email = $email;
+    $member->Email = $email;
 }else{
-	$zbp->ShowError('邮箱格式不正确.');die();
+    $zbp->ShowError('邮箱格式不正确.');die();
 }
 
 if(strlen($homepage) > $zbp->option['ZC_HOMEPAGE_MAX']){
-	$zbp->ShowError('网址不能过长.');die();
+    $zbp->ShowError('网址不能过长.');die();
 }
 
 if(CheckRegExp($homepage, '[homepage]')){
-	$member->HomePage = $homepage;
+    $member->HomePage = $homepage;
 }
 
 $member->Save();

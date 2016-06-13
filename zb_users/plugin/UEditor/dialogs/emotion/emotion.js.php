@@ -43,8 +43,8 @@ $x = 0;
 ?>
 <?php
 while (list($key, $i) = each($f)) {
-	$e = implode("','", $i);
-	$en = $key;
+    $e = implode("','", $i);
+    $en = $key;
     $en = (UEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $en) : $en);
 ?>
 	emotion.tabNum++;
@@ -63,7 +63,7 @@ while (list($key, $i) = each($f)) {
 		tc.appendChild(dtc);
 
 <?php 
-	$x++;
+    $x++;
 }?>
 
     emotion.SmileyBox = createTabList( emotion.tabNum );

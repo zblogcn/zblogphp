@@ -10,16 +10,16 @@ Totoro_init();
 $blogtitle = 'Totoro反垃圾评论';
 
 foreach ($Totoro->config_array as $type_name => &$type_value) {
-	foreach ($type_value as $name => &$value) {
-		$config_name = $type_name . '_' . $name;
-		$value = GetVars('TOTORO_' . $config_name, 'POST');
-		if ($type_name == 'BLACK_LIST') {
-			$value = urldecode($value);
-		}
+    foreach ($type_value as $name => &$value) {
+        $config_name = $type_name . '_' . $name;
+        $value = GetVars('TOTORO_' . $config_name, 'POST');
+        if ($type_name == 'BLACK_LIST') {
+            $value = urldecode($value);
+        }
 
-		$zbp->Config('Totoro')->$config_name = $value;
-		echo $config_name . '<br/>' . $value;
-	}
+        $zbp->Config('Totoro')->$config_name = $value;
+        echo $config_name . '<br/>' . $value;
+    }
 
 }
 

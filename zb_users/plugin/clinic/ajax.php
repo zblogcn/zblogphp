@@ -10,7 +10,7 @@ require 'clinic.php';
 $module = GetVars('module', 'GET');
 $module = (isset($clinic->modules[$module]) ? $clinic->modules[$module] : null);
 if (!$module) {
-	exit(json_encode(array("err" => "no this module")));
+    exit(json_encode(array("err" => "no this module")));
 }
 
 $func = GetVars('function', 'POST');
