@@ -13,7 +13,7 @@ header('Content-type: text/html; charset=utf-8');
 
 ob_start();
 
-$xml=null;
+$xml = null;
 
 function GetHttpContent($url) {
 	$r = null;
@@ -22,7 +22,7 @@ function GetHttpContent($url) {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-		if(ini_get("safe_mode")==false && ini_get("open_basedir")==false){
+		if(ini_get("safe_mode") == false && ini_get("open_basedir") == false){
 			curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		}
@@ -34,7 +34,7 @@ function GetHttpContent($url) {
 		curl_close($ch);
 	} elseif (ini_get("allow_url_fopen")) {
 		if(function_exists('ini_set'))ini_set('default_socket_timeout', 300);
-		$r = file_get_contents((extension_loaded('zlib')?'compress.zlib://':'') . $url);
+		$r = file_get_contents((extension_loaded('zlib') ? 'compress.zlib://' : '') . $url);
 	}
 
 	return $r;
@@ -43,9 +43,9 @@ function GetHttpContent($url) {
 
 function install0() {
 
-	$d=dirname(__FILE__);
+	$d = dirname(__FILE__);
 
-	if(substr((string)decoct(fileperms($d)), -3)<>'755'&&substr((string)decoct(fileperms($d)), -3)<>'777'){
+	if(substr((string) decoct(fileperms($d)), -3) != '755' && substr((string) decoct(fileperms($d)), -3) != '777'){
 		echo "<p>警告:安装目录权限" . $d . "不是0755或是0777,可能无法运行在线安装程序.</p>";
 	}
 
@@ -57,7 +57,7 @@ function install1() {
 	echo "<p>正在努力地下载数据包...</p>";
 	ob_flush();
 
-	$GLOBALS['xml']=GetHttpContent('http://update.zblogcn.com/zblogphp/?install');
+	$GLOBALS['xml'] = GetHttpContent('http://update.zblogcn.com/zblogphp/?install');
 
 	//file_put_contents('release.xml',$GLOBALS['xml']);
 
@@ -71,14 +71,14 @@ function install2() {
 		$xml = simplexml_load_string($GLOBALS['xml'], 'SimpleXMLElement');
 		$old = umask(0);
 		foreach ($xml->file as $f) {
-			$filename=str_replace('\\', '/', $f->attributes());
-			$dirname= dirname($filename);
+			$filename = str_replace('\\', '/', $f->attributes());
+			$dirname = dirname($filename);
 			mkdir($dirname, 0755, true);
-			if(PHP_OS=='WINNT'||PHP_OS=='WIN32'||PHP_OS=='Windows'){
+			if(PHP_OS == 'WINNT' || PHP_OS == 'WIN32' || PHP_OS == 'Windows'){
 				//$fn=iconv("UTF-8","GBK//IGNORE",$filename);
-				$fn=$filename;
+				$fn = $filename;
 			}else{
-				$fn=$filename;
+				$fn = $filename;
 			}
 			file_put_contents($fn, base64_decode($f));
 		}
@@ -137,7 +137,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 }else{
 
 ?>
-<p><?php echo (($v=GetHttpContent('http://update.zblogcn.com/zblogphp/'))=='')?'不能联网获取Z-BlogPHP！':'最新版本：'.$v;?></p>
+<p><?php echo (($v = GetHttpContent('http://update.zblogcn.com/zblogphp/')) == '') ? '不能联网获取Z-BlogPHP！' : '最新版本：'.$v;?></p>
 <p><img id="logo" src="http://update.zblogcn.com/zblogphp/loading.png" alt="Z-BlogPHP在线安装" title="Z-BlogPHP在线安装"/></p>
 <p style="display:none;"><img id="logo2" src="http://update.zblogcn.com/zblogphp/loading.gif" alt="" title=""/></p>
 <?php

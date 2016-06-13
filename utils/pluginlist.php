@@ -22,4 +22,3 @@ foreach ($matchs as $key => $value) {
 	echo $t;
 }
 echo '</pre>';
-?>
