@@ -1,30 +1,30 @@
 <?php
 #注册插件
-RegisterPlugin("metro","ActivePlugin_metro");
+RegisterPlugin("metro", "ActivePlugin_metro");
 
 function ActivePlugin_metro() {
-	Add_Filter_Plugin('Filter_Plugin_Admin_TopMenu','metro_AddMenu');
+	Add_Filter_Plugin('Filter_Plugin_Admin_TopMenu', 'metro_AddMenu');
 }
 
-function metro_AddMenu(&$m){
+function metro_AddMenu(&$m) {
 	global $zbp;
-	$m[]=MakeTopMenu("root",'Metro主题配置',$zbp->host . "zb_users/theme/metro/editor.php","","topmenu_metro");
+	$m[] = MakeTopMenu("root", 'Metro主题配置', $zbp->host . "zb_users/theme/metro/editor.php", "", "topmenu_metro");
 }
 
-function InstallPlugin_metro(){
+function InstallPlugin_metro() {
 	global $zbp;
 	//配置初始化	
 	if(!$zbp->Config('metro')->HasKey('version')){
-		$zbp->Config('metro')->version='1.0';
-		$zbp->Config('metro')->custom_layout="r";
-		$zbp->Config('metro')->custom_bodybg="#EEEEEE|" . $zbp->host . "zb_users/theme/metro/style/images/bg.jpg|repeat|2|top|";
-		$zbp->Config('metro')->custom_hdbg="|" . $zbp->host . "zb_users/theme/metro/style/images/headbg.jpg|repeat  fixed|1|top|120|";
-		$zbp->Config('metro')->custom_color="#5EAAE4| #A3D0F2| #222222| #333333| #FFFFFF";	
+		$zbp->Config('metro')->version = '1.0';
+		$zbp->Config('metro')->custom_layout = "r";
+		$zbp->Config('metro')->custom_bodybg = "#EEEEEE|" . $zbp->host . "zb_users/theme/metro/style/images/bg.jpg|repeat|2|top|";
+		$zbp->Config('metro')->custom_hdbg = "|" . $zbp->host . "zb_users/theme/metro/style/images/headbg.jpg|repeat  fixed|1|top|120|";
+		$zbp->Config('metro')->custom_color = "#5EAAE4| #A3D0F2| #222222| #333333| #FFFFFF";
 		$zbp->SaveConfig('metro');
 	}
 }
 
-function UninstallPlugin_metro(){
+function UninstallPlugin_metro() {
 	global $zbp;
 	//$zbp->DelConfig('metro');
 }
@@ -33,7 +33,7 @@ function UninstallPlugin_metro(){
 //******************************************************************************************
 // 保存css文件
 //******************************************************************************************
-function metro_savetofile($stylefile){
+function metro_savetofile($stylefile) {
 
 	global $zbp;
 
@@ -48,8 +48,8 @@ function metro_savetofile($stylefile){
 	}
 
 	$p = array("", "left", "center", "right");
-	$aryBodyBg[3] = $p[(int)$aryBodyBg[3]];
-	$aryHdBg[3] = $p[(int)$aryHdBg[3]];
+	$aryBodyBg[3] = $p[(int) $aryBodyBg[3]];
+	$aryHdBg[3] = $p[(int) $aryHdBg[3]];
 	$strBodyBgsize = "auto";
 	$strHdBgsize = "auto";
 
@@ -69,17 +69,17 @@ function metro_savetofile($stylefile){
 	}
 
 	if ($aryBodyBg[5] == "True"){
-		$strBodyBg = $aryBodyBg[0] . " " . "url('" .  $blogpath . $aryBodyBg[1]  . "') " . " " .  $aryBodyBg[2]  . " " .  $aryBodyBg[3]  . " " .  $aryBodyBg[4] ;
+		$strBodyBg = $aryBodyBg[0] . " " . "url('" .  $blogpath . $aryBodyBg[1]  . "') " . " " .  $aryBodyBg[2]  . " " .  $aryBodyBg[3]  . " " .  $aryBodyBg[4];
 	}
-	else { 
+	else {
 		$strBodyBg = $aryBodyBg[0];
 	}
 
-	if ($aryHdBg[0] != "transparent") $aryHdBg[0]=$aryColor[0];
+	if ($aryHdBg[0] != "transparent") $aryHdBg[0] = $aryColor[0];
 	if ($aryHdBg[6] == "True"){
-		$strHdBg = $aryHdBg[0] . " " . "url('" .  $blogpath . $aryHdBg[1]  . "') " .  $aryHdBg[2]  . " " .  $aryHdBg[3]  . " " .  $aryHdBg[4] ;
+		$strHdBg = $aryHdBg[0] . " " . "url('" .  $blogpath . $aryHdBg[1]  . "') " .  $aryHdBg[2]  . " " .  $aryHdBg[3]  . " " .  $aryHdBg[4];
 	}
-	else { 
+	else {
 		$strHdBg = $aryHdBg[0];
 	}
 
@@ -89,7 +89,7 @@ function metro_savetofile($stylefile){
 	if ($strlayout == "l"){
 		$sLeft = $p[3];
 		$sRight = $p[1];
-	} 
+	}
 	
 	//替换模版标签
 	//strContent=LoadFromFile(BlogPath  .  "zb_users\theme\metro\plugin\style.css.html" ,"utf-8");
@@ -117,5 +117,3 @@ function metro_savetofile($stylefile){
 
 	@file_put_contents($zbp->usersdir . 'theme/metro/style/style.css', $strContent);
 }
-
-?>

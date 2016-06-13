@@ -69,5 +69,3 @@ return array(
 	'uncategorized' => '未分類',
 	'' => '',
 );
-
-?>

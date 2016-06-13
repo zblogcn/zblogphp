@@ -827,6 +827,7 @@ function CreateTable($sql) {
 
 	if ($zbp->db->ExistTable($GLOBALS['table']['Config']) == true) {
 		echo $zbp->lang['zb_install']['exist_table_in_db'];
+
 		return false;
 	}
 
@@ -834,6 +835,7 @@ function CreateTable($sql) {
 	$zbp->db->QueryMulit($sql);
 
 	echo $zbp->lang['zb_install']['create_table'] . "<br/>";
+
 	return true;
 }
 
