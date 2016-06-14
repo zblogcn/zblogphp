@@ -6,7 +6,7 @@
  * @copyright (C) RainbowSoft Studio
  */
 
-error_reporting(E_PARSE);
+error_reporting(E_ALL);
 ob_start();
 
 define('ZBP_PATH', rtrim(str_replace('\\', '/', realpath(dirname(__FILE__) . '/../../')), '/') . '/');
@@ -26,7 +26,7 @@ define('ZC_VERSION_DISPLAY', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . ' ' . Z
 define('ZC_VERSION_FULL', ZC_VERSION . '(' . ZC_VERSION_CODENAME . ')');
 define('ZC_BLOG_VERSION', ZC_VERSION_DISPLAY); // 原变量名
 define('ZC_BLOG_COMMIT', ZC_VERSION_COMMIT); // 为写入系统配置统一风格
-$blogversion = 150101;
+$GLOBALS['blogversion'] = 150101;
 
 /**
  * 加载系统基础函数
@@ -102,7 +102,7 @@ define('ZC_POST_TYPE_ALBUM', 8); // 相册
  * 定义类型序列
  * @param  id=>{name,url,template}
  */
-$posttype = array(
+$GLOBALS['posttype'] = array(
     array('article', '', ''),
     array('page', '', ''),
     array('tweet', '', ''),
@@ -145,7 +145,7 @@ define('ZC_MEMBER_STATUS_LOCKED', 2);
 /**
  *定义命令
  */
-$actions = array(
+$GLOBALS['actions'] = array(
     'login' => 6,
     'logout' => 6,
     'verify' => 6,
@@ -227,7 +227,7 @@ $actions = array(
 /**
  *定义数据表
  */
-$table = array(
+$GLOBALS['table'] = array(
 
     'Post' => '%pre%post',
     'Category' => '%pre%category',
@@ -242,7 +242,7 @@ $table = array(
 /**
  *定义数据结构
  */
-$datainfo = array(
+$GLOBALS['datainfo'] = array(
     'Config' => array(
         'ID' => array('conf_ID', 'integer', '', 0),
         'Name' => array('conf_Name', 'string', 50, ''),
@@ -389,37 +389,39 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
 /**
  * 当前动作命令
  */
-$action = '';
+$GLOBALS['action'] = '';
 /**
  * 当前请求路径
  */
-$currenturl = GetRequestUri();
+$GLOBALS['currenturl'] = GetRequestUri();
 /**
  * 语言包
  */
-$lang = array();
+$GLOBALS['lang'] = array();
 /**
  * 系统根路径
  */
-$blogpath = ZBP_PATH;
+$GLOBALS['blogpath'] = ZBP_PATH;
 /**
  * 用户路径
  */
-$usersdir = ZBP_PATH . 'zb_users/';
+$GLOBALS['usersdir'] = ZBP_PATH . 'zb_users/';
 /**
  * 已激活插件列表
  */
-$activedApps = array();
-$activeapps = &$activedApps;
+$GLOBALS['activedApps'] = array();
+$GLOBALS['activeapps'] = &$GLOBALS['activedApps'];
 
+$GLOBALS['option'] = array();
 InitializeOption();
-$blogtitle = $option['ZC_BLOG_SUBNAME'];
-$blogname = &$option['ZC_BLOG_NAME'];
-$blogsubname = &$option['ZC_BLOG_SUBNAME'];
-$blogtheme = &$option['ZC_BLOG_THEME'];
-$blogstyle = &$option['ZC_BLOG_CSS'];
-$cookiespath = null;
-$bloghost = GetCurrentHost($blogpath, $cookiespath);
+$GLOBALS['blogtitle'] = $GLOBALS['option']['ZC_BLOG_SUBNAME']; // 不是漏写！
+$GLOBALS['blogname'] = &$GLOBALS['option']['ZC_BLOG_NAME'];
+$GLOBALS['blogsubname'] = &$GLOBALS['option']['ZC_BLOG_SUBNAME'];
+$GLOBALS['blogtheme'] = &$GLOBALS['option']['ZC_BLOG_THEME'];
+$GLOBALS['blogstyle'] = &$GLOBALS['option']['ZC_BLOG_CSS'];
+$GLOBALS['cookiespath'] = null;
+$GLOBALS['bloghost'] = GetCurrentHost($GLOBALS['blogpath'], $GLOBALS['cookiespath']);
+
 
 /**
  * 系统实例化
@@ -427,9 +429,10 @@ $bloghost = GetCurrentHost($blogpath, $cookiespath);
 AutoloadClass('ZBlogPHP');
 AutoloadClass('DbSql');
 AutoloadClass('Config');
-$zbp = ZBlogPHP::GetInstance();
-$zbp->Initialize();
-$zbp->ConvertTableAndDatainfo();
+
+$GLOBALS['zbp'] = ZBlogPHP::GetInstance();
+$GLOBALS['zbp']->Initialize();
+$GLOBALS['zbp']->ConvertTableAndDatainfo();
 LoadActivedApps();
 
 /**
@@ -441,6 +444,7 @@ function InitializeOption() {
 
     $option = require ZBP_PATH . 'zb_system/defend/option.php';
     $option_zbusers = null;
+
     if (is_readable($filename = $usersdir . 'c_option.php')) {
         $option_zbusers = require $filename;
         if (is_array($option_zbusers)) {
