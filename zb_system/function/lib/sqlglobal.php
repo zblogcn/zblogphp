@@ -150,6 +150,20 @@ class SQLGlobal {
 
         return $this;
     }
+
+    protected function columnLoaderArray($columns) {
+        foreach ($columns as $column) {
+            if (is_array($column)) {
+                if (count($column) > 1) {
+                    $this->columns[] = "$column[0] AS $column[1]";
+                } else {
+                    $this->columns[] = $column[0];
+                }
+            } else {
+                $this->columns[] = $column;
+            }
+        }
+    }
     /**
      * Set column for query
      * @return $this
@@ -158,12 +172,36 @@ class SQLGlobal {
         if (!$this->validateParamater($columns)) {
             return $this;
         }
-
-        if (is_array($columns)) {
-            $this->columns = array_merge($this->columns, $columns);
+        $nums = func_num_args();
+        if ($nums == 1) {
+            if (is_array($columns)) {
+                if (count($columns) == 2) {
+                    if (is_string($columns[1])) {
+                        $this->columns[] = "$columns[0] AS $columns[1]";
+                    } else {
+                        $this->columnLoaderArray($columns);
+                    }
+                } elseif (count($columns) == 1) {
+                    $this->columns[] = "$columns[0]";
+                } else {
+                    $this->columnLoaderArray($columns);
+                }
+            } else {
+                $this->columns[] = $columns;
+            }
+        } elseif ($nums == 2) {
+            if (is_array($columns)) {
+                $this->columnLoaderArray(func_get_args());
+            } else {
+                $arg0 = $columns;
+                $arg1 = func_get_arg(1);
+                $this->columns[] = "$arg0 AS $arg1";
+            }
         } else {
-            $this->columns[] = $columns;
+            $this->columnLoaderArray(func_get_args());
         }
+
+
 
         return $this;
     }
@@ -350,9 +388,6 @@ class SQLGlobal {
         $columns = &$this->columns;
         if (count($columns) > 0) {
             $selectStr = implode($columns, ',');
-            if (trim($selectStr) == '') {
-                $selectStr = '*';
-            }
             $sql[] = " {$selectStr} ";
         } else {
             $sql[] = "*";
@@ -396,21 +431,20 @@ class SQLGlobal {
                 }
                 $whereData[] = " ((1 = 1) AND (" . implode(' OR ', $sqlSearch) . ') )';
             } elseif ($eq == 'ARRAY' || $eq == 'NOT ARRAY' || $eq == "LIKE ARRAY") {
-                switch ($eq) {
-                case 'ARRAY':$symbol = '=';
-                    break;
-                case 'NOT ARRAY':$symbol = '<>';
-                    break;
-                case 'LIKE ARRAY':$symbol = 'LIKE';
-                    break;
-                default:throw new Exception("Unknown $eq");
+                if ($eq == 'ARRAY') {
+                    $symbol = '=';
+                } elseif($eq == 'NOT ARRAY') {
+                    $symbol = '<>';
+                } elseif ($eq == 'LIKE ARRAY') {
+                    $symbol = 'LIKE';
                 }
-                $symbol = $eq == 'ARRAY' ? '=' : '<>';
                 $sqlArray = array();
                 if (!is_array($value[1])) {
+                    $whereData[] = " (1 = 1) ";
                     continue;
                 }
                 if (count($value[1]) == 0) {
+                    $whereData[] = " (1 = 1) ";
                     continue;
                 }
                 foreach ($value[1] as $x => $y) {
@@ -422,10 +456,17 @@ class SQLGlobal {
 
                 $sqlArray = array();
                 if (!is_array($value[2])) {
-                    $sqlArray[] = $value[2];
+                    if ($this->validateParamater($value[2])) {
+                        $whereData[] = " ($value[1] $eq ($value[2])) ";
+                        continue;
+                    } else {
+                        $whereData[] = " (1 = 1) ";
+                    }
                     continue;
                 }
+                
                 if (count($value[2]) == 0) {
+                    $whereData[] = " (1 = 1) ";
                     continue;
                 }
 
@@ -437,6 +478,7 @@ class SQLGlobal {
 
             } elseif ($eq == 'META_NAME') {
                 if (count($value) != 3) {
+                    $whereData[] = " (1 = 1) ";
                     continue;
                 }
                 $sqlMeta = 's:' . strlen($value[2]) . ':"' . $value[2] . '";';
@@ -517,47 +559,29 @@ class SQLGlobal {
 
     }
 
+    protected function buildBeforeWhere() {
+        // Do nothing yet
+    }
+
+
+    protected function buildOthers() {
+        // Do nothing yet
+    }
+
     protected function buildSelect() {
         $sql = &$this->_sql;
-        if (isset($this->option['sql_no_cache'])) {
-            $sql[] = 'SQL_NO_CACHE ';
-        }
-        if (isset($this->option['sql_cache'])) {
-            $sql[] = 'SQL_CACHE ';
-        }
-        if (isset($this->option['sql_buffer_result'])) {
-            $sql[] = 'SQL_BUFFER_RESULT ';
-        }
+
         // Unimplemented select2count
         $this->buildColumn();
         $sql[] = 'FROM';
         $this->buildTable();
-        if (isset($this->option['useindex'])) {
-            if (is_array($this->option['useindex'])) {
-                $sql[] = 'USE INDEX (' . implode($this->option['useindex'], ',') . ') ';
-            } else {
-                $sql[] = 'USE INDEX (' . $this->option['useindex'] . ') ';
-            }
-        }
-        if (isset($this->option['forceindex'])) {
-            if (is_array($this->option['forceindex'])) {
-                $sql[] = 'FORCE INDEX (' . implode($this->option['forceindex'], ',') . ') ';
-            } else {
-                $sql[] = 'FORCE INDEX (' . $this->option['forceindex'] . ') ';
-            }
-        }
-        if (isset($this->option['ignoreindex'])) {
-            if (is_array($this->option['ignoreindex'])) {
-                $sql[] = 'IGNORE INDEX (' . implode($this->option['ignoreindex'], ',') . ') ';
-            } else {
-                $sql[] = 'IGNORE INDEX (' . $this->option['ignoreindex'] . ') ';
-            }
-        }
+        $this->buildBeforeWhere();
         $this->buildWhere();
         $this->buildGroupBy();
         $this->buildHaving();
         $this->buildOrderBy();
         $this->buildLimit();
+        $this->buildOthers();
     }
     protected function buildUpdate() {
         $sql = &$this->_sql;

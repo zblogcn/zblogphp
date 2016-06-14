@@ -140,4 +140,47 @@ class SQLMySQL extends SQLGlobal {
             $sqlAll = array();
         }
     }
+
+    /**
+     * @override
+     */
+    protected function buildBeforeWhere() {
+        if (isset($this->option['useindex'])) {
+            if (is_array($this->option['useindex'])) {
+                $this->_sqlPush('USE INDEX (' . implode($this->option['useindex'], ',') . ') ');
+            } else {
+                $this->_sqlPush('USE INDEX (' . $this->option['useindex'] . ') ');
+            }
+        }
+        if (isset($this->option['forceindex'])) {
+            if (is_array($this->option['forceindex'])) {
+                $this->_sqlPush('FORCE INDEX (' . implode($this->option['forceindex'], ',') . ') ');
+            } else {
+                $this->_sqlPush('FORCE INDEX (' . $this->option['forceindex'] . ') ');
+            }
+        }
+        if (isset($this->option['ignoreindex'])) {
+            if (is_array($this->option['ignoreindex'])) {
+                $this->_sqlPush('IGNORE INDEX (' . implode($this->option['ignoreindex'], ',') . ') ');
+            } else {
+                $this->_sqlPush('IGNORE INDEX (' . $this->option['ignoreindex'] . ') ');
+            }
+        }
+    }
+
+    /**
+     * @override
+     */
+    protected function buildSelect() {
+        if (isset($this->option['sql_no_cache'])) {
+            $this->_sqlPush('SQL_NO_CACHE ');
+        }
+        if (isset($this->option['sql_cache'])) {
+            $this->_sqlPush('SQL_CACHE ');
+        }
+        if (isset($this->option['sql_buffer_result'])) {
+            $this->_sqlPush('SQL_BUFFER_RESULT ');
+        }
+        parent::buildSelect();
+    }
 }

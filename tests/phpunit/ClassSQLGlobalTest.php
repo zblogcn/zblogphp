@@ -134,10 +134,38 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ))
             ->sql
         );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  ((1 = 1) AND ( `log_ID` <> \'1\'  OR  `log_Title` <> \'2\' ) )',
+            self::$db
+            ->select("zbp_post")
+            ->where(array('not array',
+                array(
+                    array('log_ID', '1'),
+                    array('log_Title', '2')
+                )
+            ))
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  ((1 = 1) AND ( `log_ID` LIKE \'1\'  OR  `log_Title` LIKE \'2\' ) )',
+            self::$db
+            ->select("zbp_post")
+            ->where(array('like array',
+                array(
+                    array('log_ID', '1'),
+                    array('log_Title', '2')
+                )
+            ))
+            ->sql
+        );
         $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  ((1 = 1) AND (`log_ID` IN ( \'1\' ,  \'2\' ,  \'3\' ,  \'4\' ) ) )',
             self::$db
             ->select("zbp_post")
             ->where(array('IN', 'log_ID', array(1, 2, 3, 4)))
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  (log_ID IN ( \'1\' ,  \'2\' ,  \'3\' ,  \'4\' )) ',
+            self::$db
+            ->select("zbp_post")
+            ->where(array('IN', 'log_ID', ' \'1\' ,  \'2\' ,  \'3\' ,  \'4\' '))
             ->sql
         );
     }
@@ -210,9 +238,54 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ->having('aaaa > 0')
             ->sql
         );
-
     }
 
+    public function testLimit() {
+        $this->assertEquals('SELECT * FROM  `zbp_post`  LIMIT 5',
+            self::$db
+            ->select("zbp_post")
+            ->limit(5)
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  LIMIT 1 OFFSET 10',
+            self::$db
+            ->select("zbp_post")
+            ->limit(10, 1)
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  LIMIT 1 OFFSET 10',
+            self::$db
+            ->select("zbp_post")
+            ->limit(array(10, 1))
+            ->sql
+        );
+    }
+
+    public function testColumn() {
+        $this->assertEquals('SELECT  *  FROM  `zbp_post` ',
+            self::$db
+            ->select("zbp_post")
+            ->column('*')
+            ->sql
+        );
+        $this->assertEquals('SELECT  * AS sum,log_Content AS content,log_AuthorID AS author,log_Title AS Title  FROM  `zbp_post` ',
+            self::$db
+            ->select("zbp_post")
+            ->column(array('*', 'sum'))
+            ->column(array(array('log_Content', 'content'), array('log_AuthorID', 'author')))
+            ->column('log_Title', 'Title')
+            ->sql
+        );
+    }
+
+    public function testOption() {
+        $this->assertEquals('SELECT * FROM  `zbp_post` ',
+            self::$db
+            ->select("zbp_post")
+            ->option(array('test' => 'test'))
+            ->sql
+        );
+    }
 
     public function testInvalid() {
         $this->assertEquals('SELECT * FROM  `zbp_post` ',
@@ -231,6 +304,24 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             self::$db
             ->select("zbp_post")
             ->having(null)
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  (1 = 1) ',
+            self::$db
+            ->select("zbp_post")
+            ->where(array('array', null))
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  (1 = 1) ',
+            self::$db
+            ->select("zbp_post")
+            ->where(array('IN', 'log_ID', null))
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  (1 = 1) ',
+            self::$db
+            ->select("zbp_post")
+            ->where(array('IN', 'log_ID', array()))
             ->sql
         );
     }
