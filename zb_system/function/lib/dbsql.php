@@ -87,7 +87,7 @@ class DbSql {
         $this->ReplacePre($table);
         $sql = new $this->sql($this->db);
 
-        return $sql->exist($table);
+        return $sql->exist($table)->sql;
     }
 
     /**
