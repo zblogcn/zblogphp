@@ -228,12 +228,16 @@ class SQLGlobal {
      * Set having
      * @return $this
      */
-    public function having() {
-        if (!$this->validateParamater(func_get_arg(0))) {
+    public function having($having) {
+        if (!$this->validateParamater($having)) {
             return $this;
+        } elseif (is_array($having)) {
+            $this->having = array_merge($this->having, $having);
+        } elseif (func_num_args() > 1) {
+            $this->having = array_merge($this->having, func_get_args());
+        } else {
+            $this->having[] = $having;
         }
-
-        $this->having = array_merge_recursive($this->having, func_get_args());
 
         return $this;
     }
@@ -246,6 +250,8 @@ class SQLGlobal {
             return $this;
         } elseif (is_array($groupBy)) {
             $this->groupBy = array_merge($this->groupBy, $groupBy);
+        } elseif (func_num_args() > 1) {
+            $this->groupBy = array_merge($this->groupBy, func_get_args());
         } else {
             $this->groupBy[] = $groupBy;
         }

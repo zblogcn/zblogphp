@@ -168,4 +168,70 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ->sql
         );
     }
+
+    public function testGroupBy() {
+        $this->assertEquals('SELECT * FROM  `zbp_post`  GROUP BY bbb, aaa',
+            self::$db
+            ->select("zbp_post")
+            ->groupBy(array('bbb', 'aaa'))
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  GROUP BY bbb, aaa',
+            self::$db
+            ->select("zbp_post")
+            ->groupBy('bbb', 'aaa')
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  GROUP BY aaaa',
+            self::$db
+            ->select("zbp_post")
+            ->groupBy('aaaa')
+            ->sql
+        );
+
+    }
+
+    public function testHaving() {
+        $this->assertEquals('SELECT * FROM  `zbp_post`  HAVING   bbb > 0 AND aaa < 0',
+            self::$db
+            ->select("zbp_post")
+            ->having(array('bbb > 0', 'aaa < 0'))
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  HAVING   bbb > 0 AND aaa < 0',
+            self::$db
+            ->select("zbp_post")
+            ->having('bbb > 0', 'aaa < 0')
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  HAVING   aaaa > 0',
+            self::$db
+            ->select("zbp_post")
+            ->having('aaaa > 0')
+            ->sql
+        );
+
+    }
+
+
+    public function testInvalid() {
+        $this->assertEquals('SELECT * FROM  `zbp_post` ',
+            self::$db
+            ->select("zbp_post")
+            ->orderBy(null)
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post` ',
+            self::$db
+            ->select("zbp_post")
+            ->groupBy(null)
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post` ',
+            self::$db
+            ->select("zbp_post")
+            ->having(null)
+            ->sql
+        );
+    }
 }
