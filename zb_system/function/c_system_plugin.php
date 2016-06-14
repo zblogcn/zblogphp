@@ -21,10 +21,10 @@ define('PLUGIN_EXITSIGNAL_RETURN', 'return');
 define('PLUGIN_EXITSIGNAL_BREAK', 'break');
 
 #定义总插件激活函数列表
-$plugins = array();
+$GLOBALS['plugins'] = array();
 
 #定义总接口列表，1.5版启用，逐渐过度到hooks
-$hooks = array();
+$GLOBALS['hooks'] = array();
 
 /**
  * 注册插件函数，由每个插件主动调用
