@@ -220,7 +220,7 @@ function Debug_Shutdown_Handler() {
             return true;
         }
 
-        if (defined('E_USER_DEPRECATED ') && $error['type'] == E_USER_DEPRECATED) {
+        if (defined('E_USER_DEPRECATED') && $error['type'] == E_USER_DEPRECATED) {
             return true;
         }
 
