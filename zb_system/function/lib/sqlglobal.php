@@ -311,11 +311,14 @@ class SQLGlobal {
 
     }
     private function sql() {
+
         $sql = &$this->_sql;
-        $sql = array("$this->method");
-        $callableMethod = 'build' . ucfirst($this->method);
-        //echo get_class($this) . '<br/>';
-        $this->$callableMethod();
+        if (count($sql) == 0) {
+            
+            $sql = array("$this->method");
+            $callableMethod = 'build' . ucfirst($this->method);
+            $this->$callableMethod();
+        }
 
         return implode(' ', $sql);
     }
