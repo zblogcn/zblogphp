@@ -109,7 +109,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
 
     }
 
-    //屏蔽系统的错误
+    //屏蔽系统的错误，防ZBP报系统的错误，不过也有可能导致ZBP内的DEPRECATED错误也被屏蔽了
     if ($errno == E_CORE_WARNING) {
         return true;
     }
@@ -122,7 +122,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
         return true;
     }
 
-    if (defined('E_USER_DEPRECATED ') && $errno == E_USER_DEPRECATED) {
+    if (defined('E_USER_DEPRECATED') && $errno == E_USER_DEPRECATED) {
         return true;
     }
 
