@@ -9,17 +9,17 @@ if (!$zbp->CheckPlugin('FileSystem')) {$zbp->ShowError(48);die();}
 
 if(isset($_POST['file'])){
 
-	file_put_contents($_POST['file'], $_POST['code']);
+    file_put_contents($_POST['file'], $_POST['code']);
 
-	$url = 'main.php?';
-	if ($blogpath != $_POST['current_path']) $url = $url . '&path=' . urlencode(str_replace($blogpath, "", $_POST['current_path']));
-	Redirect($url);
-	die();
+    $url = 'main.php?';
+    if ($blogpath != $_POST['current_path']) $url = $url . '&path=' . urlencode(str_replace($blogpath, "", $_POST['current_path']));
+    Redirect($url);
+    die();
 }
 
-$blogtitle='文件管理系统--编辑';
+$blogtitle = '文件管理系统--编辑';
 
-$file = iconv('UTF-8','GB2312',$_POST['current_path'].$_POST['cmd_data']);
+$file = iconv('UTF-8', 'GB2312', $_POST['current_path'].$_POST['cmd_data']);
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';

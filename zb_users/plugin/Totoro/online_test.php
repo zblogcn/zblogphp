@@ -10,20 +10,20 @@ Totoro_init();
 $blogtitle = 'Totoro反垃圾评论';
 
 if (GetVars('type', 'GET') == 'test') {
-	$comment = new Comment;
-	$comment->Name = GetVars('name', 'POST');
-	$comment->HomePage = GetVars('url', 'POST');
-	$comment->IP = GetVars('ip', 'POST');
-	$comment->Content = GetVars('string', 'POST');
+    $comment = new Comment;
+    $comment->Name = GetVars('name', 'POST');
+    $comment->HomePage = GetVars('url', 'POST');
+    $comment->IP = GetVars('ip', 'POST');
+    $comment->Content = GetVars('string', 'POST');
 
 //	var_dump($comment);
-	$score = $Totoro->get_score($comment, TRUE);
-	echo "\n" . 'MAX_SCORE: ' . $score;
-	if ($score >= $Totoro->config_array['SV_SETTING']['SV_THRESHOLD']['VALUE']) {
-		echo "\n该评论被审核";
-	}
+    $score = $Totoro->get_score($comment, true);
+    echo "\n" . 'MAX_SCORE: ' . $score;
+    if ($score >= $Totoro->config_array['SV_SETTING']['SV_THRESHOLD']['VALUE']) {
+        echo "\n该评论被审核";
+    }
 
-	exit();
+    exit();
 }
 require $blogpath . 'zb_system/admin/admin_header.php';
 ?>

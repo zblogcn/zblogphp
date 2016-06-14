@@ -11,38 +11,38 @@ if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('LargeData')) {$zbp->ShowError(48);die();}
 
 if (GetVars('build_post_index', 'POST') === '0') {
-	$zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre . "log_TISC ;");
-	$zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre . "log_PT ;");
-	$zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre . "log_TPISC ;");
-	$zbp->db->Query("ALTER TABLE " . $table['Post'] . " ADD INDEX  " . $zbp->db->dbpre . "log_LD_Title(log_Title) ;");
-	$zbp->db->Query("ALTER TABLE " . $table['Post'] . " ADD INDEX  " . $zbp->db->dbpre . "log_LD_PCATISID(log_PostTime,log_CateID,log_AuthorID,log_Type,log_IsTop,log_Status,log_ID) ;");
-	$zbp->SetHint('good');
-	Redirect('./main.php');
+    $zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre . "log_TISC ;");
+    $zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre . "log_PT ;");
+    $zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre . "log_TPISC ;");
+    $zbp->db->Query("ALTER TABLE " . $table['Post'] . " ADD INDEX  " . $zbp->db->dbpre . "log_LD_Title(log_Title) ;");
+    $zbp->db->Query("ALTER TABLE " . $table['Post'] . " ADD INDEX  " . $zbp->db->dbpre . "log_LD_PCATISID(log_PostTime,log_CateID,log_AuthorID,log_Type,log_IsTop,log_Status,log_ID) ;");
+    $zbp->SetHint('good');
+    Redirect('./main.php');
 }
 
 if (GetVars('build_comment_index', 'POST') === '0') {
-	$zbp->db->Query("ALTER TABLE " . $table['Comment'] . " DROP INDEX  " . $zbp->db->dbpre . "comm_PT ;");
-	$zbp->db->Query("ALTER TABLE " . $table['Comment'] . " DROP INDEX  " . $zbp->db->dbpre . "comm_RIL ;");
-	$zbp->db->Query("ALTER TABLE " . $table['Comment'] . " ADD INDEX  " . $zbp->db->dbpre . "comm_LD_LRIID(comm_LogID,comm_RootID,comm_IsChecking,comm_ID) ;");
-	$zbp->SetHint('good');
-	Redirect('./main.php');
+    $zbp->db->Query("ALTER TABLE " . $table['Comment'] . " DROP INDEX  " . $zbp->db->dbpre . "comm_PT ;");
+    $zbp->db->Query("ALTER TABLE " . $table['Comment'] . " DROP INDEX  " . $zbp->db->dbpre . "comm_RIL ;");
+    $zbp->db->Query("ALTER TABLE " . $table['Comment'] . " ADD INDEX  " . $zbp->db->dbpre . "comm_LD_LRIID(comm_LogID,comm_RootID,comm_IsChecking,comm_ID) ;");
+    $zbp->SetHint('good');
+    Redirect('./main.php');
 }
 
 if (GetVars('build_post2tag_table', 'POST') === '0') {
-	LargeData_CreateTable();
-	Redirect('./main.php');
+    LargeData_CreateTable();
+    Redirect('./main.php');
 }
 
 if (GetVars('convert_post2tag_table', 'POST') === '0') {
-	LargeData_ConvertTable_Post2Tag();
-	Redirect('./main.php');
+    LargeData_ConvertTable_Post2Tag();
+    Redirect('./main.php');
 }
 
 if (count($_POST) > 0) {
-	$zbp->option['ZC_LARGE_DATA'] = (boolean) $_POST['ZC_LARGE_DATA'];
-	$zbp->SaveOption();
-	$zbp->SetHint('good');
-	Redirect('./main.php');
+    $zbp->option['ZC_LARGE_DATA'] = (boolean) $_POST['ZC_LARGE_DATA'];
+    $zbp->SaveOption();
+    $zbp->SetHint('good');
+    Redirect('./main.php');
 }
 
 $blogtitle = 'LargeData';

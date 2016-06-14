@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>AuditRecords</id>
 <name>审核文章日志插件</name>

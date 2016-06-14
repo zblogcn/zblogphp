@@ -11,12 +11,13 @@
  * @return array
  */
 function return_upload($id) {
-	global $zbp;
+    global $zbp;
 
-	$upload = $zbp->GetUploadByID($id);
-	$ret = $upload->GetData();
-	API::$IO->formatObjectName($ret);
-	return $ret;
+    $upload = $zbp->GetUploadByID($id);
+    $ret = $upload->GetData();
+    API::$IO->formatObjectName($ret);
+
+    return $ret;
 }
 
 /**
@@ -24,12 +25,12 @@ function return_upload($id) {
  */
 function api_upload_get_function() {
 
-	$id = (int)API::$IO->id;
-	if ($id === 0) API::$IO->end(3);
-	//
-	$ret = return_upload($id);
+    $id = (int) API::$IO->id;
+    if ($id === 0) API::$IO->end(3);
+    //
+    $ret = return_upload($id);
 
-	API::$IO->upload = $ret;
+    API::$IO->upload = $ret;
 
 }
 API::$Route->get('/upload/', 'api_upload_get_function');

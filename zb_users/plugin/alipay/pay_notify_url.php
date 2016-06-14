@@ -20,35 +20,34 @@ $verify_result = $alipayNotify->verifyNotify();
 
 if ($verify_result) {
 //验证成功
-	//商户订单号
-	$out_trade_no = $_POST['out_trade_no'];
+    //商户订单号
+    $out_trade_no = $_POST['out_trade_no'];
 
-	//支付宝交易号
-	$trade_no = $_POST['trade_no'];
+    //支付宝交易号
+    $trade_no = $_POST['trade_no'];
 
-	//交易状态
-	$trade_status = $_POST['trade_status'];
+    //交易状态
+    $trade_status = $_POST['trade_status'];
 
-	if ($_POST['trade_status'] == 'TRADE_FINISHED') {
-		foreach ($GLOBALS['Filter_Plugin_AlipayPayNotice_Succeed'] as $fpname => &$fpsignal) {
-			$fpname($_POST);
-		}
+    if ($_POST['trade_status'] == 'TRADE_FINISHED') {
+        foreach ($GLOBALS['Filter_Plugin_AlipayPayNotice_Succeed'] as $fpname => &$fpsignal) {
+            $fpname($_POST);
+        }
 
-		//注意：
-		//该种交易状态只在两种情况下出现
-		//1、开通了普通即时到账，买家付款成功后。
-		//2、开通了高级即时到账，从该笔交易成功时间算起，过了签约时的可退款时限（如：三个月以内可退款、一年以内可退款等）后。
-	} else if ($_POST['trade_status'] == 'TRADE_SUCCESS') {
-		foreach ($GLOBALS['Filter_Plugin_AlipayPayNotice_Succeed'] as $fpname => &$fpsignal) {
-			$fpname($_POST);
-		}
+        //注意：
+        //该种交易状态只在两种情况下出现
+        //1、开通了普通即时到账，买家付款成功后。
+        //2、开通了高级即时到账，从该笔交易成功时间算起，过了签约时的可退款时限（如：三个月以内可退款、一年以内可退款等）后。
+    } elseif ($_POST['trade_status'] == 'TRADE_SUCCESS') {
+        foreach ($GLOBALS['Filter_Plugin_AlipayPayNotice_Succeed'] as $fpname => &$fpsignal) {
+            $fpname($_POST);
+        }
 
-		//注意：
-		//该种交易状态只在一种情况下出现——开通了高级即时到账，买家付款成功后。
-	}
-	echo "success";
+        //注意：
+        //该种交易状态只在一种情况下出现——开通了高级即时到账，买家付款成功后。
+    }
+    echo "success";
 } else {
-	//验证失败
-	echo "fail";
+    //验证失败
+    echo "fail";
 }
-?>

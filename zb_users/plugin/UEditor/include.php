@@ -6,22 +6,22 @@ RegisterPlugin("UEditor", "ActivePlugin_UEditor");
 
 function ActivePlugin_UEditor() {
 
-	Add_Filter_Plugin('Filter_Plugin_Edit_Begin', 'ueditor_addscript_begin');
-	Add_Filter_Plugin('Filter_Plugin_Edit_End', 'ueditor_addscript_end');
-	Add_Filter_Plugin('Filter_Plugin_Html_Js_Add', 'ueditor_SyntaxHighlighter_print');
+    Add_Filter_Plugin('Filter_Plugin_Edit_Begin', 'ueditor_addscript_begin');
+    Add_Filter_Plugin('Filter_Plugin_Edit_End', 'ueditor_addscript_end');
+    Add_Filter_Plugin('Filter_Plugin_Html_Js_Add', 'ueditor_SyntaxHighlighter_print');
 
 }
 
 function ueditor_SyntaxHighlighter_print() {
 
-	global $zbp;
-	if (!$zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE']) {
-		return;
-	}
+    global $zbp;
+    if (!$zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE']) {
+        return;
+    }
 
-	echo "\r\n" . 'document.writeln("<script src=\'' . $zbp->host . 'zb_users/plugin/UEditor/third-party/prism/prism.js\' type=\'text/javascript\'></script><link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host . 'zb_users/plugin/UEditor/third-party/prism/prism.css\'/>");';
-	echo '$(function(){var compatibility={as3:"actionscript","c#":"csharp",delphi:"pascal",html:"markup",xml:"markup",vb:"basic",js:"javascript",plain:"markdown",pl:"perl",ps:"powershell"};if(document.querySelectorAll){var runFunction=function(doms,callback){for(var i=0;i<doms.length;i++){var preDom=doms.item(i);var codeDom=document.createElement("code");if(callback)callback(preDom);codeDom.innerHTML=preDom.innerHTML;codeDom.className="language-"+function(classObject){if(classObject===null)return"markdown";var className=classObject[1];return compatibility[className]?compatibility[className]:className}(preDom.className.match(/prism-language-([0-9a-zA-Z]+)/))+" prism-line-numbers";preDom.innerHTML="";preDom.appendChild(codeDom)}};runFunction(document.querySelectorAll("pre.prism-highlight"));runFunction(document.querySelectorAll(\'pre[class*="brush:"]\'),function(preDom){var original;if((original=preDom.className.match(/brush:([a-zA-Z0-9\#]+);/))!==null){preDom.className="prism-highlight prism-language-"+original[1]}})}});';
-	echo "\r\n";
+    echo "\r\n" . 'document.writeln("<script src=\'' . $zbp->host . 'zb_users/plugin/UEditor/third-party/prism/prism.js\' type=\'text/javascript\'></script><link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host . 'zb_users/plugin/UEditor/third-party/prism/prism.css\'/>");';
+    echo '$(function(){var compatibility={as3:"actionscript","c#":"csharp",delphi:"pascal",html:"markup",xml:"markup",vb:"basic",js:"javascript",plain:"markdown",pl:"perl",ps:"powershell"};var runFunction=function(doms,callback){doms.each(function(index,unwrappedDom){var dom=$(unwrappedDom);var codeDom=$("<code>");if(callback)callback(dom);var languageClass="prism-language-"+function(classObject){if(classObject===null)return"markdown";var className=classObject[1];return compatibility[className]?compatibility[className]:className}(dom.attr("class").match(/prism-language-([0-9a-zA-Z]+)/));codeDom.html(dom.html()).addClass("prism-line-numbers").addClass(languageClass);dom.html("").addClass(languageClass).append(codeDom)})};runFunction($("pre.prism-highlight"));runFunction($(\'pre[class*="brush:"]\'),function(preDom){var original;if((original=preDom.attr("class").match(/brush:([a-zA-Z0-9\#]+);/))!==null){preDom.get(0).className="prism-highlight prism-language-"+original[1]}});Prism.highlightAll()});';
+    echo "\r\n";
 
 }
 
@@ -34,16 +34,16 @@ function UninstallPlugin_UEditor() {
 }
 
 function ueditor_addscript_begin() {
-	global $zbp;
-	echo '<script type="text/javascript" src="' . $zbp->host . 'zb_users/plugin/UEditor/ueditor.config.php"></script>';
-	echo '<script type="text/javascript" src="' . $zbp->host . 'zb_users/plugin/UEditor/ueditor.all.min.js"></script>';
-	echo '<style type="text/css">#editor_content{height:auto}</style>';
+    global $zbp;
+    echo '<script type="text/javascript" src="' . $zbp->host . 'zb_users/plugin/UEditor/ueditor.config.php"></script>';
+    echo '<script type="text/javascript" src="' . $zbp->host . 'zb_users/plugin/UEditor/ueditor.all.min.js"></script>';
+    echo '<style type="text/css">#editor_content{height:auto}</style>';
 }
 
 function ueditor_addscript_end() {
-	global $zbp;
+    global $zbp;
 
-	$s = <<<js
+    $s = <<<js
 <script type="text/javascript">
 
 var EditorIntroOption = {
@@ -97,6 +97,5 @@ $(document).ready(function(){
 }
 </script>
 js;
-	echo $s;
+    echo $s;
 }
-?>

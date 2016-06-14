@@ -10,34 +10,35 @@
  | URL: http://phpfm.sf.net
  | Last Changed: 2012-11-26
 */
-	$charset = "UTF-8";
+    $charset = "UTF-8";
     //@setlocale(LC_CTYPE, 'C');
     header("Pragma: no-cache");
     header("Cache-Control: no-store");
-	header("Content-Type: text/html; charset=".$charset);
-	//@ini_set('default_charset', $charset);
+    header("Content-Type: text/html; charset=".$charset);
+    //@ini_set('default_charset', $charset);
     if (@get_magic_quotes_gpc()) {
-        function stripslashes_deep($value){
-            return is_array($value)? array_map('stripslashes_deep', $value):$value;
+        function stripslashes_deep($value) {
+            return is_array($value) ? array_map('stripslashes_deep', $value) : $value;
         }
         $_POST = array_map('stripslashes_deep', $_POST);
         $_GET = array_map('stripslashes_deep', $_GET);
         $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
         $_REQUEST = array_map('stripslashes_deep', $_REQUEST);
     }
-	// Register Globals
-    foreach ($_GET as $key => $val) $$key=$val;
-    foreach ($_POST as $key => $val) $$key=$val;
-    foreach ($_COOKIE as $key => $val) $$key=$val;
-	// Server Vars
+    // Register Globals
+    foreach ($_GET as $key => $val) $$key = $val;
+    foreach ($_POST as $key => $val) $$key = $val;
+    foreach ($_COOKIE as $key => $val) $$key = $val;
+    // Server Vars
     $ip = $_SERVER["REMOTE_ADDR"];
     if (strlen($_SERVER["HTTP_X_FORWARDED_FOR"])) $ip = $_SERVER["HTTP_X_FORWARDED_FOR"]; // using proxy
-	if ($ip == "::1") $ip = "";
+    if ($ip == "::1") $ip = "";
     $islinux = !(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
     function getServerURL() {
-        $url = ($_SERVER["HTTPS"] == "on")?"https://":"http://";
+        $url = ($_SERVER["HTTPS"] == "on") ? "https://" : "http://";
         $url .= $_SERVER["SERVER_NAME"]; // variável do servidor, $_SERVER["HTTP_HOST"] é equivalente
         if ($_SERVER["SERVER_PORT"] != "80") $url .= ":".$_SERVER["SERVER_PORT"];
+
         return $url;
     }
     function getCompleteURL() {
@@ -45,12 +46,12 @@
     }
     $url = getCompleteURL();
     $url_info = parse_url($url);
-	if( !isset($_SERVER['DOCUMENT_ROOT']) ) {
-		if ( isset($_SERVER['SCRIPT_FILENAME']) ) $path = $_SERVER['SCRIPT_FILENAME'];
-		elseif ( isset($_SERVER['PATH_TRANSLATED']) ) $path = str_replace('\\\\', '\\', $_SERVER['PATH_TRANSLATED']);
-		$_SERVER['DOCUMENT_ROOT'] = str_replace( '\\', '/', substr($path, 0, 0-strlen($_SERVER['PHP_SELF'])));
-	}
-	$doc_root = str_replace('//','/',str_replace(DIRECTORY_SEPARATOR,'/',$_SERVER["DOCUMENT_ROOT"]));
+    if(!isset($_SERVER['DOCUMENT_ROOT'])) {
+        if (isset($_SERVER['SCRIPT_FILENAME'])) $path = $_SERVER['SCRIPT_FILENAME'];
+        elseif (isset($_SERVER['PATH_TRANSLATED'])) $path = str_replace('\\\\', '\\', $_SERVER['PATH_TRANSLATED']);
+        $_SERVER['DOCUMENT_ROOT'] = str_replace('\\', '/', substr($path, 0, 0 - strlen($_SERVER['PHP_SELF'])));
+    }
+    $doc_root = str_replace('//', '/', str_replace(DIRECTORY_SEPARATOR, '/', $_SERVER["DOCUMENT_ROOT"]));
     $fm_self = $doc_root.$_SERVER["PHP_SELF"];
     $path_info = pathinfo($fm_self);
 // +--------------------------------------------------
@@ -58,8 +59,8 @@
 // +--------------------------------------------------
     $cfg = new config();
     $cfg->load();
-    ini_set("display_errors",1);
-    ini_set("error_reporting",$error_reporting);
+    ini_set("display_errors", 1);
+    ini_set("error_reporting", $error_reporting);
     if (!isset($current_dir)){
         $current_dir = $path_info["dirname"]."/";
         if (!$islinux) $current_dir = ucfirst($current_dir);
@@ -68,8 +69,8 @@
     // Auto Expand Local Path
     if (!isset($expanded_dir_list)){
         $expanded_dir_list = "";
-        $mat = explode("/",$path_info["dirname"]);
-        for ($x=0;$x<count($mat);$x++) $expanded_dir_list .= ":".$mat[$x];
+        $mat = explode("/", $path_info["dirname"]);
+        for ($x = 0;$x < count($mat);$x++) $expanded_dir_list .= ":".$mat[$x];
         setcookie("expanded_dir_list", $expanded_dir_list, 0, "/");
     }
     if (!isset($fm_current_root)){
@@ -84,14 +85,14 @@
         setcookie("fm_current_root", $fm_current_root, 0, "/");
     }
     if (!isset($resolveIDs)){
-        setcookie("resolveIDs", 0, time()+$cookie_cache_time, "/");
+        setcookie("resolveIDs", 0, time() + $cookie_cache_time, "/");
     } elseif (isset($set_resolveIDs)){
-        $resolveIDs=($resolveIDs)?0:1;
-        setcookie("resolveIDs", $resolveIDs, time()+$cookie_cache_time, "/");
+        $resolveIDs = ($resolveIDs) ? 0 : 1;
+        setcookie("resolveIDs", $resolveIDs, time() + $cookie_cache_time, "/");
     }
     if ($resolveIDs){
-        exec("cat /etc/passwd",$mat_passwd);
-        exec("cat /etc/group",$mat_group);
+        exec("cat /etc/passwd", $mat_passwd);
+        exec("cat /etc/group", $mat_group);
     }
     $fm_color['Bg'] = "EEEEEE";
     $fm_color['Text'] = "000000";
@@ -99,8 +100,8 @@
     $fm_color['Entry'] = "FFFFFF";
     $fm_color['Over'] = "C0EBFD";
     $fm_color['Mark'] = "A7D2E4";
-    foreach($fm_color as $tag=>$color){
-        $fm_color[$tag]=strtolower($color);
+    foreach($fm_color as $tag => $color){
+        $fm_color[$tag] = strtolower($color);
     }
 // +--------------------------------------------------
 // | File Manager Actions
@@ -131,52 +132,52 @@
 // | Config Class
 // +--------------------------------------------------
 class config {
-    var $data;
-    var $filename;
-    function config(){
+    public $data;
+    public $filename;
+    public function config() {
         global $fm_self;
         $this->data = array(
-            'lang'=>'zh',
-            'auth_pass'=>md5(''),
-            'quota_mb'=>0,
-            'upload_ext_filter'=>array(),
-            'download_ext_filter'=>array(),
-            'error_reporting'=>'',
-            'fm_root'=>'',
-            'cookie_cache_time'=>60*60*24*30, // 30 Days
-            'version'=>'0.9.7'
+            'lang' => 'zh',
+            'auth_pass' => md5(''),
+            'quota_mb' => 0,
+            'upload_ext_filter' => array(),
+            'download_ext_filter' => array(),
+            'error_reporting' => '',
+            'fm_root' => '',
+            'cookie_cache_time' => 60 * 60 * 24 * 30, // 30 Days
+            'version' => '0.9.7'
             );
         $data = false;
         $this->filename = $fm_self;
         if (file_exists($this->filename)){
             $mat = file($this->filename);
-            $objdata = trim(substr($mat[1],2));
+            $objdata = trim(substr($mat[1], 2));
             if (strlen($objdata)) $data = unserialize($objdata);
         }
-        if (is_array($data)&&count($data)==count($this->data)) $this->data = $data;
+        if (is_array($data) && count($data) == count($this->data)) $this->data = $data;
         else $this->save();
     }
-    function save(){
+    public function save() {
         $objdata = "<?php".chr(13).chr(10)."//".serialize($this->data).chr(13).chr(10);
         if (strlen($objdata)){
             if (file_exists($this->filename)){
                 $mat = file($this->filename);
                 if ($fh = @fopen($this->filename, "w")){
-                    @fputs($fh,$objdata,strlen($objdata));
-                    for ($x=2;$x<count($mat);$x++) @fputs($fh,$mat[$x],strlen($mat[$x]));
+                    @fputs($fh, $objdata, strlen($objdata));
+                    for ($x = 2;$x < count($mat);$x++) @fputs($fh, $mat[$x], strlen($mat[$x]));
                     @fclose($fh);
                 }
             }
         }
     }
-    function load(){
+    public function load() {
         foreach ($this->data as $key => $val) $GLOBALS[$key] = $val;
     }
 }
 // +--------------------------------------------------
 // | Internationalization
 // +--------------------------------------------------
-function et($tag){
+function et($tag) {
     global $lang;
     // Chinese  - by 未寒<im@imzhou.com>
     $zh['Version'] = '版本';
@@ -287,10 +288,9 @@ function et($tag){
     $zh['Seconds'] = 's';
     $zh['ErrorReport'] = '错误报告';
 
-
-
     $lang_ = $$lang;
     if (isset($lang_[$tag])) return html_encode($lang_[$tag]);
+
     return $en[$tag];
 }
 // +--------------------------------------------------
@@ -307,11 +307,12 @@ function total_size($arg) {
             @closedir($handle);
         } else $total = filesize($arg);
     }
+
     return $total;
 }
 function total_delete($arg) {
     if (file_exists($arg)) {
-        @chmod($arg,0755);
+        @chmod($arg, 0755);
         if (is_dir($arg)) {
             $handle = opendir($arg);
             while($aux = readdir($handle)) {
@@ -322,31 +323,32 @@ function total_delete($arg) {
         } else unlink($arg);
     }
 }
-function total_copy($orig,$dest) {
+function total_copy($orig, $dest) {
     $ok = true;
     if (file_exists($orig)) {
         if (is_dir($orig)) {
-            mkdir($dest,0755);
+            mkdir($dest, 0755);
             $handle = opendir($orig);
-            while(($aux = readdir($handle))&&($ok)) {
-                if ($aux != "." && $aux != "..") $ok = total_copy($orig."/".$aux,$dest."/".$aux);
+            while(($aux = readdir($handle)) && ($ok)) {
+                if ($aux != "." && $aux != "..") $ok = total_copy($orig."/".$aux, $dest."/".$aux);
             }
             @closedir($handle);
-        } else $ok = copy((string)$orig,(string)$dest);
+        } else $ok = copy((string) $orig, (string) $dest);
     }
+
     return $ok;
 }
-function total_move($orig,$dest) {
+function total_move($orig, $dest) {
     // Just why doesn't it has a MOVE alias?!
-    return rename((string)$orig,(string)$dest);
+    return rename((string) $orig, (string) $dest);
 }
-function download(){
+function download() {
     global $current_dir,$filename;
     $file = $current_dir.$filename;
     if(file_exists($file)){
         $is_denied = false;
-        foreach($download_ext_filter as $key=>$ext){
-            if (eregi($ext,$filename)){
+        foreach($download_ext_filter as $key => $ext){
+            if (eregi($ext, $filename)){
                 $is_denied = true;
                 break;
             }
@@ -364,34 +366,34 @@ function download(){
         } else alert(et('ReadDenied').": ".$file);
     } else alert(et('FileNotFound').": ".$file);
 }
-function execute_cmd(){
+function execute_cmd() {
     global $cmd;
     header("Content-type: text/plain");
     if (strlen($cmd)){
         echo "# ".$cmd."\n";
-        exec($cmd,$mat);
-        if (count($mat)) echo trim(implode("\n",$mat));
+        exec($cmd, $mat);
+        if (count($mat)) echo trim(implode("\n", $mat));
         else echo "exec(\"$cmd\") ".et('NoReturn')."...";
     } else echo et('NoCmd');
 }
-function execute_file(){
+function execute_file() {
     global $current_dir,$filename;
     header("Content-type: text/plain");
     $file = $current_dir.$filename;
     if(file_exists($file)){
         echo "# ".$file."\n";
-        exec($file,$mat);
-        if (count($mat)) echo trim(implode("\n",$mat));
+        exec($file, $mat);
+        if (count($mat)) echo trim(implode("\n", $mat));
     } else alert(et('FileNotFound').": ".$file);
 }
-function save_upload($temp_file,$filename,$dir_dest) {
+function save_upload($temp_file, $filename, $dir_dest) {
     global $upload_ext_filter;
     $filename = remove_special_chars($filename);
     $file = $dir_dest.$filename;
     $filesize = filesize($temp_file);
     $is_denied = false;
-    foreach($upload_ext_filter as $key=>$ext){
-        if (eregi($ext,$filename)){
+    foreach($upload_ext_filter as $key => $ext){
+        if (eregi($ext, $filename)){
             $is_denied = true;
             break;
         }
@@ -400,22 +402,23 @@ function save_upload($temp_file,$filename,$dir_dest) {
         if (!limite($filesize)){
             if (file_exists($file)){
                 if (unlink($file)){
-                    if (copy($temp_file,$file)){
-                        chmod($file,0755);
+                    if (copy($temp_file, $file)){
+                        chmod($file, 0755);
                         $out = 6;
                     } else $out = 2;
                 } else $out = 5;
             } else {
-                if (copy($temp_file,$file)){
-                    chmod($file,0755);
+                if (copy($temp_file, $file)){
+                    chmod($file, 0755);
                     $out = 1;
                 } else $out = 2;
             }
         } else $out = 3;
     } else $out = 4;
+
     return $out;
 }
-function zip_extract(){
+function zip_extract() {
   global $cmd_arg,$current_dir,$islinux;
   $zip = zip_open($current_dir.$cmd_arg);
   if ($zip) {
@@ -425,7 +428,7 @@ function zip_extract(){
             $complete_name = $path.zip_entry_name($zip_entry);
             if(!file_exists($complete_path)) {
                 $tmp = '';
-                foreach(explode('/',$complete_path) AS $k) {
+                foreach(explode('/', $complete_path) as $k) {
                     $tmp .= $k.'/';
                     if(!file_exists($tmp)) {
                         @mkdir($current_dir.$tmp, 0755);
@@ -447,47 +450,50 @@ function zip_extract(){
 // +--------------------------------------------------
 // | Data Formating
 // +--------------------------------------------------
-function html_encode($str){
-	return preg_replace(array('/&/', '/</', '/>/', '/"/'), array('&amp;', '&lt;', '&gt;', '&quot;'), $str);  // Bypass PHP to allow any charset!!
+function html_encode($str) {
+    return preg_replace(array('/&/', '/</', '/>/', '/"/'), array('&amp;', '&lt;', '&gt;', '&quot;'), $str);  // Bypass PHP to allow any charset!!
 }
-function rep($x,$y){
+function rep($x, $y) {
   if ($x) {
     $aux = "";
-    for ($a=1;$a<=$x;$a++) $aux .= $y;
+    for ($a = 1;$a <= $x;$a++) $aux .= $y;
+
     return $aux;
   } else return "";
 }
-function str_zero($arg1,$arg2){
-    if (strstr($arg1,"-") == false){
+function str_zero($arg1, $arg2) {
+    if (strstr($arg1, "-") == false){
         $aux = intval($arg2) - strlen($arg1);
-        if ($aux) return rep($aux,"0").$arg1;
+        if ($aux) return rep($aux, "0").$arg1;
         else return $arg1;
     } else {
         return "[$arg1]";
     }
 }
-function replace_double($sub,$str){
-    $out=str_replace($sub.$sub,$sub,$str);
-    while ( strlen($out) != strlen($str) ){
-        $str=$out;
-        $out=str_replace($sub.$sub,$sub,$str);
+function replace_double($sub, $str) {
+    $out = str_replace($sub.$sub, $sub, $str);
+    while (strlen($out) != strlen($str)){
+        $str = $out;
+        $out = str_replace($sub.$sub, $sub, $str);
     }
+
     return $out;
 }
-function remove_special_chars($str){
+function remove_special_chars($str) {
     $str = trim($str);
-    $str = strtr($str,"¥µÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ!@#%&*()[]{}+=?",
+    $str = strtr($str, "¥µÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ!@#%&*()[]{}+=?",
                       "YuAAAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy_______________");
-    $str = str_replace("..","",str_replace("/","",str_replace("\\","",str_replace("\$","",$str))));
+    $str = str_replace("..", "", str_replace("/", "", str_replace("\\", "", str_replace("\$", "", $str))));
+
     return $str;
 }
-function format_path($str){
+function format_path($str) {
     global $islinux;
     $str = trim($str);
-    $str = str_replace("..","",str_replace("\\","/",str_replace("\$","",$str)));
+    $str = str_replace("..", "", str_replace("\\", "/", str_replace("\$", "", $str)));
     $done = false;
     while (!$done) {
-        $str2 = str_replace("//","/",$str);
+        $str2 = str_replace("//", "/", $str);
         if (strlen($str) == strlen($str2)) $done = true;
         else $str = $str2;
     }
@@ -497,6 +503,7 @@ function format_path($str){
         if ($str[$last_char] != "/") $str .= "/";
         if (!$islinux) $str = ucfirst($str);
     }
+
     return $str;
 }
 function array_csort() {
@@ -516,9 +523,10 @@ function array_csort() {
    }
    $msortline .= "\$marray));";
    eval($msortline);
+
    return $marray;
 }
-function show_perms( $P ) {
+function show_perms($P) {
    $sP = "<b>";
    if($P & 0x1000) $sP .= 'p';            // FIFO pipe
    elseif($P & 0x2000) $sP .= 'c';        // Character special
@@ -530,57 +538,64 @@ function show_perms( $P ) {
    else $sP .= 'u';                       // UNKNOWN
    $sP .= "</b>";
    // owner - group - others
-   $sP .= (($P & 0x0100) ? 'r' : '&minus;') . (($P & 0x0080) ? 'w' : '&minus;') . (($P & 0x0040) ? (($P & 0x0800) ? 's' : 'x' ) : (($P & 0x0800) ? 'S' : '&minus;'));
-   $sP .= (($P & 0x0020) ? 'r' : '&minus;') . (($P & 0x0010) ? 'w' : '&minus;') . (($P & 0x0008) ? (($P & 0x0400) ? 's' : 'x' ) : (($P & 0x0400) ? 'S' : '&minus;'));
-   $sP .= (($P & 0x0004) ? 'r' : '&minus;') . (($P & 0x0002) ? 'w' : '&minus;') . (($P & 0x0001) ? (($P & 0x0200) ? 't' : 'x' ) : (($P & 0x0200) ? 'T' : '&minus;'));
+   $sP .= (($P & 0x0100) ? 'r' : '&minus;') . (($P & 0x0080) ? 'w' : '&minus;') . (($P & 0x0040) ? (($P & 0x0800) ? 's' : 'x') : (($P & 0x0800) ? 'S' : '&minus;'));
+   $sP .= (($P & 0x0020) ? 'r' : '&minus;') . (($P & 0x0010) ? 'w' : '&minus;') . (($P & 0x0008) ? (($P & 0x0400) ? 's' : 'x') : (($P & 0x0400) ? 'S' : '&minus;'));
+   $sP .= (($P & 0x0004) ? 'r' : '&minus;') . (($P & 0x0002) ? 'w' : '&minus;') . (($P & 0x0001) ? (($P & 0x0200) ? 't' : 'x') : (($P & 0x0200) ? 'T' : '&minus;'));
+
    return $sP;
 }
 function format_size($arg) {
-    if ($arg>0){
+    if ($arg > 0){
         $j = 0;
-        $ext = array(" bytes"," Kb"," Mb"," Gb"," Tb");
-        while ($arg >= pow(1024,$j)) ++$j;
-        return round($arg / pow(1024,$j-1) * 100) / 100 . $ext[$j-1];
+        $ext = array(" bytes", " Kb", " Mb", " Gb", " Tb");
+        while ($arg >= pow(1024, $j)) ++$j;
+
+        return round($arg / pow(1024, $j - 1) * 100) / 100 . $ext[$j - 1];
     } else return "0 bytes";
 }
 function get_size($file) {
     return format_size(filesize($file));
 }
-function limite($new_filesize=0) {
+function limite($new_filesize = 0) {
     global $fm_current_root;
     global $quota_mb;
     if($quota_mb){
         $total = total_size($fm_current_root);
-        if (floor(($total+$new_filesize)/(1024*1024)) > $quota_mb) return true;
+        if (floor(($total + $new_filesize) / (1024 * 1024)) > $quota_mb) return true;
     }
+
     return false;
 }
-function get_user ($arg) {
+function get_user($arg) {
     global $mat_passwd;
     $aux = "x:".trim($arg).":";
-    for($x=0;$x<count($mat_passwd);$x++){
-        if (strstr($mat_passwd[$x],$aux)){
-         $mat = explode(":",$mat_passwd[$x]);
+    for($x = 0;$x < count($mat_passwd);$x++){
+        if (strstr($mat_passwd[$x], $aux)){
+         $mat = explode(":", $mat_passwd[$x]);
+
          return $mat[0];
         }
     }
+
     return $arg;
 }
-function get_group ($arg) {
+function get_group($arg) {
     global $mat_group;
     $aux = "x:".trim($arg).":";
-    for($x=0;$x<count($mat_group);$x++){
-        if (strstr($mat_group[$x],$aux)){
-         $mat = explode(":",$mat_group[$x]);
+    for($x = 0;$x < count($mat_group);$x++){
+        if (strstr($mat_group[$x], $aux)){
+         $mat = explode(":", $mat_group[$x]);
+
          return $mat[0];
         }
     }
+
     return $arg;
 }
 // +--------------------------------------------------
 // | Interface
 // +--------------------------------------------------
-function html_header($header=""){
+function html_header($header = "") {
     global $charset,$fm_color;
     echo "
 	<!DOCTYPE HTML PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
@@ -686,7 +701,7 @@ function html_header($header=""){
             break;
         }
     ";
-    echo replace_double(" ",str_replace(chr(13),"",str_replace(chr(10),"","
+    echo replace_double(" ", str_replace(chr(13), "", str_replace(chr(10), "", "
         document.writeln('
         <style type=\"text/css\">
         body {
@@ -751,7 +766,7 @@ function html_header($header=""){
     </script>
     ";
 }
-function reloadframe($ref,$frame_number,$Plus=""){
+function reloadframe($ref, $frame_number, $Plus = "") {
     global $current_dir,$path_info;
     echo "
     <script language=\"Javascript\" type=\"text/javascript\">
@@ -761,7 +776,7 @@ function reloadframe($ref,$frame_number,$Plus=""){
     </script>
     ";
 }
-function alert($arg){
+function alert($arg) {
     echo "
     <script language=\"Javascript\" type=\"text/javascript\">
     <!--
@@ -770,18 +785,18 @@ function alert($arg){
     </script>
     ";
 }
-function tree($dir_before,$dir_current,$indice){
+function tree($dir_before, $dir_current, $indice) {
     global $fm_current_root, $current_dir, $islinux;
     global $expanded_dir_list;
     $indice++;
     $num_dir = 0;
-    $dir_name = str_replace($dir_before,"",$dir_current);
-    $dir_before = str_replace("//","/",$dir_before);
-    $dir_current = str_replace("//","/",$dir_current);
+    $dir_name = str_replace($dir_before, "", $dir_current);
+    $dir_before = str_replace("//", "/", $dir_before);
+    $dir_current = str_replace("//", "/", $dir_current);
     $is_denied = false;
     if ($islinux) {
         $denied_list = "/proc#/dev";
-        $mat = explode("#",$denied_list);
+        $mat = explode("#", $denied_list);
         foreach($mat as $key => $val){
             if ($dir_current == $val){
                 $is_denied = true;
@@ -799,27 +814,27 @@ function tree($dir_before,$dir_current,$indice){
             }
             @closedir($handle);
             if (count($mat_dir)){
-                sort($mat_dir,SORT_STRING);
+                sort($mat_dir, SORT_STRING);
                 // with Sub-dir
                 if ($indice != 0){
-                    for ($aux=1;$aux<$indice;$aux++) echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+                    for ($aux = 1;$aux < $indice;$aux++) echo "&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
                 if ($dir_before != $dir_current){
-                    if (strstr($expanded_dir_list,":$dir_current/$dir_name")) $op_str = "[–]";
+                    if (strstr($expanded_dir_list, ":$dir_current/$dir_name")) $op_str = "[–]";
                     else $op_str = "[+]";
                     echo "<nobr><a href=\"JavaScript:go_dir('$dir_current/$dir_name')\">$op_str</a> <a href=\"JavaScript:go('$dir_current')\">$dir_name</a></nobr><br>\n";
                 } else {
                     echo "<nobr><a href=\"JavaScript:go('$dir_current')\">$fm_current_root</a></nobr><br>\n";
                 }
-                for ($x=0;$x<count($mat_dir);$x++){
-                    if (($dir_before == $dir_current)||(strstr($expanded_dir_list,":$dir_current/$dir_name"))){
-                        tree($dir_current."/",$dir_current."/".$mat_dir[$x],$indice);
+                for ($x = 0;$x < count($mat_dir);$x++){
+                    if (($dir_before == $dir_current) || (strstr($expanded_dir_list, ":$dir_current/$dir_name"))){
+                        tree($dir_current."/", $dir_current."/".$mat_dir[$x], $indice);
                     } else flush();
                 }
             } else {
               // no Sub-dir
               if ($dir_before != $dir_current){
-                for ($aux=1;$aux<$indice;$aux++) echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+                for ($aux = 1;$aux < $indice;$aux++) echo "&nbsp;&nbsp;&nbsp;&nbsp;";
                 echo "<b>[&nbsp;&nbsp;]</b>";
                 echo "<nobr><a href=\"JavaScript:go('$dir_current')\"> $dir_name</a></nobr><br>\n";
               } else {
@@ -829,7 +844,7 @@ function tree($dir_before,$dir_current,$indice){
         } else {
             // denied
             if ($dir_before != $dir_current){
-                for ($aux=1;$aux<$indice;$aux++) echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+                for ($aux = 1;$aux < $indice;$aux++) echo "&nbsp;&nbsp;&nbsp;&nbsp;";
                 echo "<b>[&nbsp;&nbsp;]</b>";
                 echo "<nobr><a href=\"JavaScript:go('$dir_current')\"><font color=red> $dir_name</font></a></nobr><br>\n";
             } else {
@@ -840,7 +855,7 @@ function tree($dir_before,$dir_current,$indice){
     } else {
         // denied
         if ($dir_before != $dir_current){
-            for ($aux=1;$aux<$indice;$aux++) echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+            for ($aux = 1;$aux < $indice;$aux++) echo "&nbsp;&nbsp;&nbsp;&nbsp;";
             echo "<b>[&nbsp;&nbsp;]</b>";
             echo "<nobr><a href=\"JavaScript:go('$dir_current')\"><font color=red> $dir_name</font></a></nobr><br>\n";
         } else {
@@ -848,7 +863,7 @@ function tree($dir_before,$dir_current,$indice){
         }
     }
 }
-function show_tree(){
+function show_tree() {
     global $fm_current_root,$path_info,$setflag,$islinux,$cookie_cache_time;
     html_header("
     <script language=\"Javascript\" type=\"text/javascript\">
@@ -878,7 +893,7 @@ function show_tree(){
             document.body.onmousedown=disableTextSelection
             document.body.onclick=enableTextSelection
         }
-        var flag = ".(($setflag)?"true":"false")."
+        var flag = ".(($setflag) ? "true" : "false")."
         function set_flag(arg) {
             flag = arg;
         }
@@ -908,21 +923,21 @@ function show_tree(){
     echo "<form><tr valign=top height=10><td>";
     if (!$islinux){
         echo "<select name=drive onchange=\"set_fm_current_root(this.value)\">";
-        $aux="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        for($x=0;$x<strlen($aux);$x++){
-			if ($handle = opendir($aux[$x].":/")){
-    			@closedir($handle);
-	            if (strstr(strtoupper($fm_current_root),$aux[$x].":/")) $is_sel="selected";
-	            else $is_sel="";
-	            echo "<option $is_sel value=\"".$aux[$x].":/\">".$aux[$x].":/";
-			}
+        $aux = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        for($x = 0;$x < strlen($aux);$x++){
+            if ($handle = opendir($aux[$x].":/")){
+                @closedir($handle);
+                if (strstr(strtoupper($fm_current_root), $aux[$x].":/")) $is_sel = "selected";
+                else $is_sel = "";
+                echo "<option $is_sel value=\"".$aux[$x].":/\">".$aux[$x].":/";
+            }
         }
         echo "</select> ";
     }
     echo "<input type=button value=".et('Refresh')." onclick=\"atualizar()\"></tr></form>";
     echo "<tr valign=top><td>";
             clearstatcache();
-            tree($fm_current_root,$fm_current_root,-1,0);
+            tree($fm_current_root, $fm_current_root, -1, 0);
     echo "</td></tr>";
     echo "
         <form name=\"login_form\" action=\"".$path_info["basename"]."\" method=\"post\" target=\"_parent\">
@@ -935,9 +950,10 @@ function show_tree(){
     echo "</table>\n";
     echo "</body>\n</html>";
 }
-function getmicrotime(){
+function getmicrotime() {
    list($usec, $sec) = explode(" ", microtime());
-   return ((float)$usec + (float)$sec);
+
+   return ((float) $usec + (float) $sec);
 }
 function dir_list_form() {
     global $fm_current_root,$current_dir,$quota_mb,$resolveIDs,$order_dir_list_by,$islinux,$cmd_name,$ip,$path_info,$fm_color;
@@ -950,17 +966,17 @@ function dir_list_form() {
         $total_size = 0;
         $entry_list = array();
         while ($file = readdir($opdir)) {
-          if (($file != ".")&&($file != "..")){
-			$entry_list[$entry_count]["size"] = 0;
-			$entry_list[$entry_count]["sizet"] = 0;
-			$entry_list[$entry_count]["type"] = "none";
+          if (($file != ".") && ($file != "..")){
+            $entry_list[$entry_count]["size"] = 0;
+            $entry_list[$entry_count]["sizet"] = 0;
+            $entry_list[$entry_count]["type"] = "none";
             if (is_file($current_dir.$file)){
-                $ext = strtolower(strrchr($file,"."));
+                $ext = strtolower(strrchr($file, "."));
                 $entry_list[$entry_count]["type"] = "file";
                 // Função filetype() returns only "file"...
                 $entry_list[$entry_count]["size"] = filesize($current_dir.$file);
                 $entry_list[$entry_count]["sizet"] = format_size($entry_list[$entry_count]["size"]);
-                if (strstr($ext,".")){
+                if (strstr($ext, ".")){
                     $entry_list[$entry_count]["ext"] = $ext;
                     $entry_list[$entry_count]["extt"] = $ext;
                 } else {
@@ -984,8 +1000,8 @@ function dir_list_form() {
                 $entry_list[$entry_count]["u"] = get_user(fileowner($current_dir.$file));
                 $entry_list[$entry_count]["g"] = get_group(filegroup($current_dir.$file));
             } else {
-                $entry_list[$entry_count]["p"] = base_convert(fileperms($current_dir.$file),10,8);
-                $entry_list[$entry_count]["p"] = substr($entry_list[$entry_count]["p"],strlen($entry_list[$entry_count]["p"])-3);
+                $entry_list[$entry_count]["p"] = base_convert(fileperms($current_dir.$file), 10, 8);
+                $entry_list[$entry_count]["p"] = substr($entry_list[$entry_count]["p"], strlen($entry_list[$entry_count]["p"]) - 3);
                 $entry_list[$entry_count]["u"] = fileowner($current_dir.$file);
                 $entry_list[$entry_count]["g"] = filegroup($current_dir.$file);
             }
@@ -996,28 +1012,28 @@ function dir_list_form() {
         @closedir($opdir);
 
         if($entry_count){
-            $or1="1A";
-            $or2="2D";
-            $or3="3A";
-            $or4="4A";
-            $or5="5A";
-            $or6="6D";
-            $or7="7D";
+            $or1 = "1A";
+            $or2 = "2D";
+            $or3 = "3A";
+            $or4 = "4A";
+            $or5 = "5A";
+            $or6 = "6D";
+            $or7 = "7D";
             switch($order_dir_list_by){
-                case "1A": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"name",SORT_STRING,SORT_ASC); $or1="1D"; break;
-                case "1D": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"name",SORT_STRING,SORT_DESC); $or1="1A"; break;
-                case "2A": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"p",SORT_STRING,SORT_ASC,"g",SORT_STRING,SORT_ASC,"u",SORT_STRING,SORT_ASC); $or2="2D"; break;
-                case "2D": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"p",SORT_STRING,SORT_DESC,"g",SORT_STRING,SORT_ASC,"u",SORT_STRING,SORT_ASC); $or2="2A"; break;
-                case "3A": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"u",SORT_STRING,SORT_ASC,"g",SORT_STRING,SORT_ASC); $or3="3D"; break;
-                case "3D": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"u",SORT_STRING,SORT_DESC,"g",SORT_STRING,SORT_ASC); $or3="3A"; break;
-                case "4A": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"g",SORT_STRING,SORT_ASC,"u",SORT_STRING,SORT_DESC); $or4="4D"; break;
-                case "4D": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"g",SORT_STRING,SORT_DESC,"u",SORT_STRING,SORT_DESC); $or4="4A"; break;
-                case "5A": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"size",SORT_NUMERIC,SORT_ASC); $or5="5D"; break;
-                case "5D": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"size",SORT_NUMERIC,SORT_DESC); $or5="5A"; break;
-                case "6A": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"date",SORT_STRING,SORT_ASC,"time",SORT_STRING,SORT_ASC,"name",SORT_STRING,SORT_ASC); $or6="6D"; break;
-                case "6D": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"date",SORT_STRING,SORT_DESC,"time",SORT_STRING,SORT_DESC,"name",SORT_STRING,SORT_ASC); $or6="6A"; break;
-                case "7A": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"ext",SORT_STRING,SORT_ASC,"name",SORT_STRING,SORT_ASC); $or7="7D"; break;
-                case "7D": $entry_list = array_csort ($entry_list,"type",SORT_STRING,SORT_ASC,"ext",SORT_STRING,SORT_DESC,"name",SORT_STRING,SORT_ASC); $or7="7A"; break;
+                case "1A": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "name", SORT_STRING, SORT_ASC); $or1 = "1D"; break;
+                case "1D": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "name", SORT_STRING, SORT_DESC); $or1 = "1A"; break;
+                case "2A": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "p", SORT_STRING, SORT_ASC, "g", SORT_STRING, SORT_ASC, "u", SORT_STRING, SORT_ASC); $or2 = "2D"; break;
+                case "2D": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "p", SORT_STRING, SORT_DESC, "g", SORT_STRING, SORT_ASC, "u", SORT_STRING, SORT_ASC); $or2 = "2A"; break;
+                case "3A": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "u", SORT_STRING, SORT_ASC, "g", SORT_STRING, SORT_ASC); $or3 = "3D"; break;
+                case "3D": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "u", SORT_STRING, SORT_DESC, "g", SORT_STRING, SORT_ASC); $or3 = "3A"; break;
+                case "4A": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "g", SORT_STRING, SORT_ASC, "u", SORT_STRING, SORT_DESC); $or4 = "4D"; break;
+                case "4D": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "g", SORT_STRING, SORT_DESC, "u", SORT_STRING, SORT_DESC); $or4 = "4A"; break;
+                case "5A": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "size", SORT_NUMERIC, SORT_ASC); $or5 = "5D"; break;
+                case "5D": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "size", SORT_NUMERIC, SORT_DESC); $or5 = "5A"; break;
+                case "6A": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "date", SORT_STRING, SORT_ASC, "time", SORT_STRING, SORT_ASC, "name", SORT_STRING, SORT_ASC); $or6 = "6D"; break;
+                case "6D": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "date", SORT_STRING, SORT_DESC, "time", SORT_STRING, SORT_DESC, "name", SORT_STRING, SORT_ASC); $or6 = "6A"; break;
+                case "7A": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "ext", SORT_STRING, SORT_ASC, "name", SORT_STRING, SORT_ASC); $or7 = "7D"; break;
+                case "7D": $entry_list = array_csort($entry_list, "type", SORT_STRING, SORT_ASC, "ext", SORT_STRING, SORT_DESC, "name", SORT_STRING, SORT_ASC); $or7 = "7A"; break;
             }
         }
         $out .= "
@@ -1038,7 +1054,7 @@ function dir_list_form() {
             this.selected = false;
         }
         // Declare entry_list for selection procedures";
-        foreach ($entry_list as $i=>$data){
+        foreach ($entry_list as $i => $data){
             $out .= "\nentry_list['entry$i'] = new entry('".addslashes($data["name"])."', '".$data["type"]."', ".$data["size"].", false);";
         }
         $out .= "
@@ -1152,7 +1168,7 @@ function dir_list_form() {
         function is_anything_selected(){
             var selected_dir_list = new Array();
             var selected_file_list = new Array();
-            for(var x=0;x<".(integer)count($entry_list).";x++){
+            for(var x=0;x<".(integer) count($entry_list).";x++){
                 if(entry_list['entry'+x].selected){
                     if(entry_list['entry'+x].type == 'dir') selected_dir_list.push(entry_list['entry'+x].name);
                     else selected_file_list.push(entry_list['entry'+x].name);
@@ -1180,7 +1196,7 @@ function dir_list_form() {
         }
         // Select all/none/inverse
         function selectANI(Butt){
-            for(var x=0;x<". (integer)count($entry_list).";x++){
+            for(var x=0;x<". (integer) count($entry_list).";x++){
                 var Row = document.getElementById('entry'+x);
                 var newClassName = null;
                 switch (Butt.value){
@@ -1412,9 +1428,9 @@ function dir_list_form() {
             </nobr>";
         $uplink = "";
         if ($current_dir != $fm_current_root){
-            $mat = explode("/",$current_dir);
+            $mat = explode("/", $current_dir);
             $dir_before = "";
-            for($x=0;$x<(count($mat)-2);$x++) $dir_before .= $mat[$x]."/";
+            for($x = 0;$x < (count($mat) - 2);$x++) $dir_before .= $mat[$x]."/";
             $uplink = "<a href=\"".$path_info["basename"]."?frame=3&current_dir=$dir_before\"><<</a> ";
         }
         if($entry_count){
@@ -1440,9 +1456,9 @@ function dir_list_form() {
             $dir_out = array();
             $file_out = array();
             $max_opt = 0;
-            foreach ($entry_list as $ind=>$dir_entry) {
+            foreach ($entry_list as $ind => $dir_entry) {
                 $file = $dir_entry["name"];
-                if ($dir_entry["type"]=="dir"){
+                if ($dir_entry["type"] == "dir"){
                     $dir_out[$dir_count] = array();
                     $dir_out[$dir_count][] = "
                         <tr ID=\"entry$ind\" class=\"entryUnselected\" onmouseover=\"selectEntry(this, 'over');\" onmousedown=\"selectEntry(this, 'click');\">
@@ -1456,11 +1472,11 @@ function dir_list_form() {
                     $dir_out[$dir_count][] = "<td><nobr>".$dir_entry["datet"]."</nobr></td>";
                     if ($has_files) $dir_out[$dir_count][] = "<td>&nbsp;</td>";
                     // Opções de diretório
-                    if ( is_writable($current_dir.$file) ) $dir_out[$dir_count][] = "
+                    if (is_writable($current_dir.$file)) $dir_out[$dir_count][] = "
                         <td align=center><a href=\"JavaScript:if(confirm('".et('ConfRem')." \\'".addslashes($file)."\\' ?')) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=8&cmd_arg=".addslashes($file)."&current_dir=".addslashes($current_dir)."'\">".et('Rem')."</a>";
-                    if ( is_writable($current_dir.$file) ) $dir_out[$dir_count][] = "
+                    if (is_writable($current_dir.$file)) $dir_out[$dir_count][] = "
                         <td align=center><a href=\"JavaScript:rename('".addslashes($file)."')\">".et('Ren')."</a>";
-                    if (count($dir_out[$dir_count])>$max_opt){
+                    if (count($dir_out[$dir_count]) > $max_opt){
                         $max_opt = count($dir_out[$dir_count]);
                     }
                     $dir_count++;
@@ -1478,25 +1494,25 @@ function dir_list_form() {
                     $file_out[$file_count][] = "<td><nobr>".$dir_entry["datet"]."</nobr></td>";
                     $file_out[$file_count][] = "<td>".$dir_entry["extt"]."</td>";
                     // Opções de arquivo
-                    if ( is_writable($current_dir.$file) ) $file_out[$file_count][] = "
+                    if (is_writable($current_dir.$file)) $file_out[$file_count][] = "
                                 <td align=center><a href=\"javascript:if(confirm('".strtoupper(et('Rem'))." \\'".addslashes($file)."\\' ?')) document.location.href='".addslashes($path_info["basename"])."?frame=3&action=8&cmd_arg=".addslashes($file)."&current_dir=".addslashes($current_dir)."'\">".et('Rem')."</a>";
                     else $file_out[$file_count][] = "<td>&nbsp;</td>";
-                    if ( is_writable($current_dir.$file) ) $file_out[$file_count][] = "
+                    if (is_writable($current_dir.$file)) $file_out[$file_count][] = "
                                 <td align=center><a href=\"javascript:rename('".addslashes($file)."')\">".et('Ren')."</a>";
                     else $file_out[$file_count][] = "<td>&nbsp;</td>";
-                    if ( is_readable($current_dir.$file) && (strpos(".wav#.mp3#.mid#.avi#.mov#.mpeg#.mpg#.rm#.iso#.bin#.img#.dll#.psd#.fla#.swf#.class#.ppt#.tif#.tiff#.pcx#.jpg#.gif#.png#.wmf#.eps#.bmp#.msi#.exe#.com#.rar#.tar#.zip#.bz2#.tbz2#.bz#.tbz#.bzip#.gzip#.gz#.tgz#", $dir_entry["ext"]."#" ) === false)) $file_out[$file_count][] = "
+                    if (is_readable($current_dir.$file) && (strpos(".wav#.mp3#.mid#.avi#.mov#.mpeg#.mpg#.rm#.iso#.bin#.img#.dll#.psd#.fla#.swf#.class#.ppt#.tif#.tiff#.pcx#.jpg#.gif#.png#.wmf#.eps#.bmp#.msi#.exe#.com#.rar#.tar#.zip#.bz2#.tbz2#.bz#.tbz#.bzip#.gzip#.gz#.tgz#", $dir_entry["ext"]."#") === false)) $file_out[$file_count][] = "
                                 <td align=center><a href=\"javascript:edit_file('".addslashes($file)."')\">".et('Edit')."</a>";
                     else $file_out[$file_count][] = "<td>&nbsp;</td>";
-                    if ( is_readable($current_dir.$file) && (strpos(".txt#.sys#.bat#.ini#.conf#.swf#.php#.php3#.asp#.html#.htm#.jpg#.gif#.png#.bmp#", $dir_entry["ext"]."#" ) !== false)) $file_out[$file_count][] = "
+                    if (is_readable($current_dir.$file) && (strpos(".txt#.sys#.bat#.ini#.conf#.swf#.php#.php3#.asp#.html#.htm#.jpg#.gif#.png#.bmp#", $dir_entry["ext"]."#") !== false)) $file_out[$file_count][] = "
                                 <td align=center><a href=\"javascript:view('".addslashes($file)."');\">".et('View')."</a>";
                     else $file_out[$file_count][] = "<td>&nbsp;</td>";
-                    if ( is_readable($current_dir.$file) && strlen($dir_entry["ext"]) && (strpos(".tar#.zip#.bz2#.tbz2#.bz#.tbz#.bzip#.gzip#.gz#.tgz#", $dir_entry["ext"]."#" ) !== false)) $file_out[$file_count][] = "
+                    if (is_readable($current_dir.$file) && strlen($dir_entry["ext"]) && (strpos(".tar#.zip#.bz2#.tbz2#.bz#.tbz#.bzip#.gzip#.gz#.tgz#", $dir_entry["ext"]."#") !== false)) $file_out[$file_count][] = "
                                 <td align=center><a href=\"javascript:decompress('".addslashes($file)."')\">".et('Decompress')."</a>";
                     else $file_out[$file_count][] = "<td>&nbsp;</td>";
-                    if ( is_readable($current_dir.$file) && strlen($dir_entry["ext"]) && (strpos(".exe#.com#.sh#.bat#", $dir_entry["ext"]."#" ) !== false)) $file_out[$file_count][] = "
+                    if (is_readable($current_dir.$file) && strlen($dir_entry["ext"]) && (strpos(".exe#.com#.sh#.bat#", $dir_entry["ext"]."#") !== false)) $file_out[$file_count][] = "
                                 <td align=center><a href=\"javascript:execute_file('".addslashes($file)."')\">".et('Exec')."</a>";
                     else $file_out[$file_count][] = "<td>&nbsp;</td>";
-                    if (count($file_out[$file_count])>$max_opt){
+                    if (count($file_out[$file_count]) > $max_opt){
                         $max_opt = count($file_out[$file_count]);
                     }
                     $file_count++;
@@ -1520,8 +1536,8 @@ function dir_list_form() {
                 </tr>";
 
             }
-            foreach($dir_out as $k=>$v){
-                while (count($dir_out[$k])<$max_opt) {
+            foreach($dir_out as $k => $v){
+                while (count($dir_out[$k]) < $max_opt) {
                     $dir_out[$k][] = "<td>&nbsp;</td>";
                 }
                 $out .= implode($dir_out[$k]);
@@ -1543,8 +1559,8 @@ function dir_list_form() {
                 </tr>";
 
             }
-            foreach($file_out as $k=>$v){
-                while (count($file_out[$k])<$max_opt) {
+            foreach($file_out as $k => $v){
+                while (count($file_out[$k]) < $max_opt) {
                     $file_out[$k][] = "<td>&nbsp;</td>";
                 }
                 $out .= implode($file_out[$k]);
@@ -1572,7 +1588,7 @@ function dir_list_form() {
                 <tr><td bgcolor=\"#DDDDDD\" colspan=50><b>$dir_count ".et('Dir_s')." ".et('And')." $file_count ".et('File_s')." = ".format_size($total_size)."</td></tr>";
             if ($quota_mb) {
                 $out .= "
-                <tr><td bgcolor=\"#DDDDDD\" colspan=50><b>".et('Partition').": ".format_size(($quota_mb*1024*1024))." ".et('Total')." - ".format_size(($quota_mb*1024*1024)-total_size($fm_current_root))." ".et('Free')."</td></tr>";
+                <tr><td bgcolor=\"#DDDDDD\" colspan=50><b>".et('Partition').": ".format_size(($quota_mb * 1024 * 1024))." ".et('Total')." - ".format_size(($quota_mb * 1024 * 1024) - total_size($fm_current_root))." ".et('Free')."</td></tr>";
             } else {
                 $out .= "
                 <tr><td bgcolor=\"#DDDDDD\" colspan=50><b>".et('Partition').": ".format_size(disk_total_space($current_dir))." ".et('Total')." - ".format_size(disk_free_space($fm_current_root))." ".et('Free')."</td></tr>";
@@ -1580,7 +1596,7 @@ function dir_list_form() {
             $tf = getmicrotime();
             $tt = ($tf - $ti);
             $out .= "
-                <tr><td bgcolor=\"#DDDDDD\" colspan=50><b>".et('RenderTime').": ".substr($tt,0,strrpos($tt,".")+5)." ".et('Seconds')."</td></tr>";
+                <tr><td bgcolor=\"#DDDDDD\" colspan=50><b>".et('RenderTime').": ".substr($tt, 0, strrpos($tt, ".") + 5)." ".et('Seconds')."</td></tr>";
             $out .= "
             <script language=\"Javascript\" type=\"text/javascript\">
             <!--
@@ -1597,12 +1613,12 @@ function dir_list_form() {
     $out .= "</table>";
     echo $out;
 }
-function upload_form(){
+function upload_form() {
     global $_FILES,$current_dir,$dir_dest,$fechar,$quota_mb,$path_info;
     $num_uploads = 5;
     html_header();
     echo "<body marginwidth=\"0\" marginheight=\"0\">";
-    if (count($_FILES)==0){
+    if (count($_FILES) == 0){
         echo "
         <table height=\"100%\" border=0 cellspacing=0 cellpadding=2 align=center>
         <form name=\"upload_form\" action=\"".$path_info["basename"]."\" method=\"post\" ENCTYPE=\"multipart/form-data\">
@@ -1610,7 +1626,7 @@ function upload_form(){
         <input type=hidden name=action value=10>
         <tr><th colspan=2>".et('Upload')."</th></tr>
         <tr><td align=right><b>".et('Destination').":<td><b><nobr>$current_dir</nobr>";
-        for ($x=0;$x<$num_uploads;$x++){
+        for ($x = 0;$x < $num_uploads;$x++){
             echo "<tr><td width=1 align=right><b>".et('File').":<td><nobr><input type=\"file\" name=\"file$x\"></nobr>";
             $test_js .= "(document.upload_form.file$x.value.length>0)||";
         }
@@ -1627,7 +1643,7 @@ function upload_form(){
             }
             foi = false;
             function test_upload_form(){
-                if(".substr($test_js,0,strlen($test_js)-2)."){
+                if(".substr($test_js, 0, strlen($test_js) - 2)."){
                     if (foi) alert('".et('SendingForm')."...');
                     else {
                         foi = true;
@@ -1641,14 +1657,14 @@ function upload_form(){
     } else {
         $out = "<tr><th colspan=2>".et('UploadEnd')."</th></tr>
                 <tr><th colspan=2><nobr>".et('Destination').": $dir_dest</nobr>";
-        for ($x=0;$x<$num_uploads;$x++){
+        for ($x = 0;$x < $num_uploads;$x++){
             $temp_file = $_FILES["file".$x]["tmp_name"];
             $filename = $_FILES["file".$x]["name"];
-            if (strlen($filename)) $resul = save_upload($temp_file,$filename,$dir_dest);
+            if (strlen($filename)) $resul = save_upload($temp_file, $filename, $dir_dest);
             else $resul = 7;
             switch($resul){
                 case 1:
-                $out .= "<tr><td><b>".str_zero($x+1,3).".<font color=green><b> ".et('FileSent').":</font><td>".$filename."</td></tr>\n";
+                $out .= "<tr><td><b>".str_zero($x + 1, 3).".<font color=green><b> ".et('FileSent').":</font><td>".$filename."</td></tr>\n";
                 break;
                 case 2:
                 $out .= "<tr><td colspan=2><font color=red><b>".et('IOError')."</font></td></tr>\n";
@@ -1659,16 +1675,16 @@ function upload_form(){
                 $x = $upload_num;
                 break;
                 case 4:
-                $out .= "<tr><td><b>".str_zero($x+1,3).".<font color=red><b> ".et('InvExt').":</font><td>".$filename."</td></tr>\n";
+                $out .= "<tr><td><b>".str_zero($x + 1, 3).".<font color=red><b> ".et('InvExt').":</font><td>".$filename."</td></tr>\n";
                 break;
                 case 5:
-                $out .= "<tr><td><b>".str_zero($x+1,3).".<font color=red><b> ".et('FileNoOverw')."</font><td>".$filename."</td></tr>\n";
+                $out .= "<tr><td><b>".str_zero($x + 1, 3).".<font color=red><b> ".et('FileNoOverw')."</font><td>".$filename."</td></tr>\n";
                 break;
                 case 6:
-                $out .= "<tr><td><b>".str_zero($x+1,3).".<font color=green><b> ".et('FileOverw').":</font><td>".$filename."</td></tr>\n";
+                $out .= "<tr><td><b>".str_zero($x + 1, 3).".<font color=green><b> ".et('FileOverw').":</font><td>".$filename."</td></tr>\n";
                 break;
                 case 7:
-                $out .= "<tr><td colspan=2><b>".str_zero($x+1,3).".<font color=red><b> ".et('FileIgnored')."</font></td></tr>\n";
+                $out .= "<tr><td colspan=2><b>".str_zero($x + 1, 3).".<font color=red><b> ".et('FileIgnored')."</font></td></tr>\n";
             }
         }
         if ($fechar) {
@@ -1695,7 +1711,7 @@ function upload_form(){
     }
     echo "</body>\n</html>";
 }
-function chmod_form(){
+function chmod_form() {
     html_header("
     <script language=\"Javascript\" type=\"text/javascript\">
     <!--
@@ -1836,7 +1852,7 @@ function chmod_form(){
     </form>
     </body>\n</html>";
 }
-function get_mime_type($ext = ''){
+function get_mime_type($ext = '') {
     $mimes = array(
       'hqx'   =>  'application/mac-binhex40',
       'cpt'   =>  'application/mac-compactpro',
@@ -1930,57 +1946,58 @@ function get_mime_type($ext = ''){
       'xlsx'  =>  'application/excel',
       'eml'   =>  'message/rfc822'
     );
+
     return (!isset($mimes[strtolower($ext)])) ? 'application/octet-stream' : $mimes[strtolower($ext)];
 }
-function view(){
+function view() {
     global $doc_root,$path_info,$url_info,$current_dir,$islinux,$filename,$passthru;
-	if (intval($passthru)){
-	    $file = $current_dir.$filename;
-	    if(file_exists($file)){
-	        $is_denied = false;
-	        foreach($download_ext_filter as $key=>$ext){
-	            if (eregi($ext,$filename)){
-	                $is_denied = true;
-	                break;
-	            }
-	        }
-	        if (!$is_denied){
+    if (intval($passthru)){
+        $file = $current_dir.$filename;
+        if(file_exists($file)){
+            $is_denied = false;
+            foreach($download_ext_filter as $key => $ext){
+                if (eregi($ext, $filename)){
+                    $is_denied = true;
+                    break;
+                }
+            }
+            if (!$is_denied){
                 if ($fh = fopen("$file", "rb")){
-	                fclose($fh);
-					$ext = pathinfo($file, PATHINFO_EXTENSION);
-					header("Pragma: public");
-					header("Expires: 0");
-					header("Connection: close");
-					header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-					header("Cache-Control: public");
-					header("Content-Description: File Transfer");
-					header("Content-Type: ".get_mime_type($ext));
-				    header("Content-Disposition: inline; filename=\"".pathinfo($file, PATHINFO_BASENAME)."\";");
-					header("Content-Transfer-Encoding: binary");
-					header("Content-Length: ".filesize($file));
-					@readfile($file);
-					exit();
-	            } else alert(et('ReadDenied').": ".$file);
-	        } else alert(et('ReadDenied').": ".$file);
-	    } else alert(et('FileNotFound').": ".$file);
+                    fclose($fh);
+                    $ext = pathinfo($file, PATHINFO_EXTENSION);
+                    header("Pragma: public");
+                    header("Expires: 0");
+                    header("Connection: close");
+                    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+                    header("Cache-Control: public");
+                    header("Content-Description: File Transfer");
+                    header("Content-Type: ".get_mime_type($ext));
+                    header("Content-Disposition: inline; filename=\"".pathinfo($file, PATHINFO_BASENAME)."\";");
+                    header("Content-Transfer-Encoding: binary");
+                    header("Content-Length: ".filesize($file));
+                    @readfile($file);
+                    exit();
+                } else alert(et('ReadDenied').": ".$file);
+            } else alert(et('ReadDenied').": ".$file);
+        } else alert(et('FileNotFound').": ".$file);
         echo "
 	    <script language=\"Javascript\" type=\"text/javascript\">
 	    <!--
 	        window.close();
 	    //-->
 	    </script>";
-	} else {
-	    html_header();
-	    echo "<body marginwidth=\"0\" marginheight=\"0\">";
-	    $is_reachable_thru_webserver = (stristr($current_dir,$doc_root)!==false);
-	    if ($is_reachable_thru_webserver){
-	        $url = $url_info["scheme"]."://".$url_info["host"];
-	        if (strlen($url_info["port"])) $url .= ":".$url_info["port"];
-	        // Malditas variaveis de sistema!! No windows doc_root é sempre em lowercase... cadê o str_ireplace() ??
-	        $url .= str_replace($doc_root,"",$current_dir).$filename;
-	    } else {
-			$url = addslashes($path_info["basename"])."?action=4&current_dir=".addslashes($current_dir)."&filename=".addslashes($filename)."&passthru=1";
-	    }
+    } else {
+        html_header();
+        echo "<body marginwidth=\"0\" marginheight=\"0\">";
+        $is_reachable_thru_webserver = (stristr($current_dir, $doc_root) !== false);
+        if ($is_reachable_thru_webserver){
+            $url = $url_info["scheme"]."://".$url_info["host"];
+            if (strlen($url_info["port"])) $url .= ":".$url_info["port"];
+            // Malditas variaveis de sistema!! No windows doc_root é sempre em lowercase... cadê o str_ireplace() ??
+            $url .= str_replace($doc_root, "", $current_dir).$filename;
+        } else {
+            $url = addslashes($path_info["basename"])."?action=4&current_dir=".addslashes($current_dir)."&filename=".addslashes($filename)."&passthru=1";
+        }
         echo "
 	    <script language=\"Javascript\" type=\"text/javascript\">
 	    <!--
@@ -1989,18 +2006,18 @@ function view(){
 	    //-->
 	    </script>
     	</body>\n</html>";
-	}
+    }
 }
-function edit_file_form(){
+function edit_file_form() {
     global $current_dir,$filename,$file_data,$save_file,$path_info;
     $file = $current_dir.$filename;
     if ($save_file){
-        $fh=fopen($file,"w");
-        fputs($fh,$file_data,strlen($file_data));
+        $fh = fopen($file, "w");
+        fputs($fh, $file_data, strlen($file_data));
         fclose($fh);
     }
-    $fh=fopen($file,"r");
-    $file_data=fread($fh, filesize($file));
+    $fh = fopen($file, "r");
+    $file_data = fread($fh, filesize($file));
     fclose($fh);
     html_header();
     echo "<body marginwidth=\"0\" marginheight=\"0\">
@@ -2037,24 +2054,24 @@ function edit_file_form(){
     </script>
     </body>\n</html>";
 }
-function config_form(){
+function config_form() {
     global $cfg;
     global $current_dir,$fm_self,$doc_root,$path_info,$fm_current_root,$lang,$error_reporting,$version;
     global $config_action,$newpass,$newlang,$newerror,$newfm_root;
     $Warning = "";
     switch ($config_action){
         case 1:
-            if ($fh = fopen("http://phpfm.sf.net/latest.php","r")){
+            if ($fh = fopen("http://phpfm.sf.net/latest.php", "r")){
                 $data = "";
-                while (!feof($fh)) $data .= fread($fh,1024);
+                while (!feof($fh)) $data .= fread($fh, 1024);
                 fclose($fh);
                 $data = unserialize($data);
                 $ChkVerWarning = "<tr><td align=right> ";
-                if (is_array($data)&&count($data)){
+                if (is_array($data) && count($data)){
                     $ChkVerWarning .= "<a href=\"JavaScript:open_win('http://sourceforge.net')\">
                     <img src=\"http://sourceforge.net/sflogo.php?group_id=114392&type=1\" width=\"88\" height=\"31\" style=\"border: 1px solid #AAAAAA\" alt=\"SourceForge.net Logo\" />
 					</a>";
-                    if (str_replace(".","",$data['version'])>str_replace(".","",$cfg->data['version'])) $ChkVerWarning .= "<td><a href=\"JavaScript:open_win('http://prdownloads.sourceforge.net/phpfm/phpFileManager-".$data['version'].".zip?download')\"><font color=green>".et('ChkVerAvailable')."</font></a>";
+                    if (str_replace(".", "", $data['version']) > str_replace(".", "", $cfg->data['version'])) $ChkVerWarning .= "<td><a href=\"JavaScript:open_win('http://prdownloads.sourceforge.net/phpfm/phpFileManager-".$data['version'].".zip?download')\"><font color=green>".et('ChkVerAvailable')."</font></a>";
                     else $ChkVerWarning .= "<td><font color=red>".et('ChkVerNotAvailable')."</font>";
                 } else $ChkVerWarning .= "<td><font color=red>".et('ChkVerError')."</font>";
             } else $ChkVerWarning .= "<td><font color=red>".et('ChkVerError')."</font>";
@@ -2076,20 +2093,20 @@ function config_form(){
                 $cfg->data['fm_root'] = $newfm_root;
                 if (strlen($newfm_root)) $current_dir = $newfm_root;
                 else $current_dir = $path_info["dirname"]."/";
-                setcookie("fm_current_root", $newfm_root , 0 , "/");
+                setcookie("fm_current_root", $newfm_root, 0, "/");
                 $reload = true;
             }
             $cfg->save();
             if ($reload){
-                reloadframe("window.opener.parent",2);
-                reloadframe("window.opener.parent",3);
+                reloadframe("window.opener.parent", 2);
+                reloadframe("window.opener.parent", 3);
             }
             $Warning1 = et('ConfSaved')."...";
         break;
         case 3:
             if ($cfg->data['auth_pass'] != md5($newpass)){
                 $cfg->data['auth_pass'] = md5($newpass);
-                setcookie("loggedon", md5($newpass) , 0 , "/");
+                setcookie("loggedon", md5($newpass), 0, "/");
             }
             $cfg->save();
             $Warning2 = et('PassSaved')."...";
@@ -2193,12 +2210,12 @@ function config_form(){
     ";
     echo "</body>\n</html>";
 }
-function shell_form(){
+function shell_form() {
     global $current_dir,$shell_form,$cmd_arg,$path_info;
     $data_out = "";
     if (strlen($cmd_arg)){
-        exec($cmd_arg,$mat);
-        if (count($mat)) $data_out = trim(implode("\n",$mat));
+        exec($cmd_arg, $mat);
+        if (count($mat)) $data_out = trim(implode("\n", $mat));
     }
     switch ($shell_form){
         case 1:
@@ -2227,7 +2244,7 @@ function shell_form(){
             <script language=\"Javascript\" type=\"text/javascript\">
             <!--";
             if (strlen($data_out)) echo "
-                var val = '# ".html_encode($cmd_arg)."\\n".html_encode(str_replace("<","[",str_replace(">","]",str_replace("\n","\\n",str_replace("'","\'",str_replace("\\","\\\\",$data_out))))))."\\n';
+                var val = '# ".html_encode($cmd_arg)."\\n".html_encode(str_replace("<", "[", str_replace(">", "]", str_replace("\n", "\\n", str_replace("'", "\'", str_replace("\\", "\\\\", $data_out))))))."\\n';
                 parent.frame1.document.data_form.data_out.value += val;";
             echo "
                 document.shell_form.cmd_arg.focus();
@@ -2253,58 +2270,58 @@ function shell_form(){
             </html>";
     }
 }
-function server_info(){
+function server_info() {
     if (!@phpinfo()) echo et('NoPhpinfo')."...";
     echo "<br><br>";
-	    $a=ini_get_all();
-	    $output="<table border=1 cellspacing=0 cellpadding=4 align=center>";
-	    $output.="<tr><th colspan=2>ini_get_all()</td></tr>";
-	    while(list($key, $value)=each($a)) {
-	        list($k, $v)= each($a[$key]);
-	        $output.="<tr><td align=right>$key</td><td>$v</td></tr>";
-	    }
-	    $output.="</table>";
-	echo $output;
+        $a = ini_get_all();
+        $output = "<table border=1 cellspacing=0 cellpadding=4 align=center>";
+        $output .= "<tr><th colspan=2>ini_get_all()</td></tr>";
+        while(list($key, $value) = each($a)) {
+            list($k, $v) = each($a[$key]);
+            $output .= "<tr><td align=right>$key</td><td>$v</td></tr>";
+        }
+        $output .= "</table>";
+    echo $output;
     echo "<br><br>";
-	    $output="<table border=1 cellspacing=0 cellpadding=4 align=center>";
-	    $output.="<tr><th colspan=2>\$_SERVER</td></tr>";
-	    foreach ($_SERVER as $k=>$v) {
-	        $output.="<tr><td align=right>$k</td><td>$v</td></tr>";
-	    }
-	    $output.="</table>";
-	echo $output;
+        $output = "<table border=1 cellspacing=0 cellpadding=4 align=center>";
+        $output .= "<tr><th colspan=2>\$_SERVER</td></tr>";
+        foreach ($_SERVER as $k => $v) {
+            $output .= "<tr><td align=right>$k</td><td>$v</td></tr>";
+        }
+        $output .= "</table>";
+    echo $output;
     echo "<br><br>";
     echo "<table border=1 cellspacing=0 cellpadding=4 align=center>";
-    $safe_mode=trim(ini_get("safe_mode"));
-    if ((strlen($safe_mode)==0)||($safe_mode==0)) $safe_mode=false;
-    else $safe_mode=true;
+    $safe_mode = trim(ini_get("safe_mode"));
+    if ((strlen($safe_mode) == 0) || ($safe_mode == 0)) $safe_mode = false;
+    else $safe_mode = true;
     $is_windows_server = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
     echo "<tr><td colspan=2>".php_uname();
-    echo "<tr><td>safe_mode<td>".($safe_mode?"on":"off");
+    echo "<tr><td>safe_mode<td>".($safe_mode ? "on" : "off");
     if ($is_windows_server) echo "<tr><td>sisop<td>Windows<br>";
     else echo "<tr><td>sisop<td>Linux<br>";
     echo "</table><br><br><table border=1 cellspacing=0 cellpadding=4 align=center>";
-    $display_errors=ini_get("display_errors");
+    $display_errors = ini_get("display_errors");
     $ignore_user_abort = ignore_user_abort();
     $max_execution_time = ini_get("max_execution_time");
     $upload_max_filesize = ini_get("upload_max_filesize");
-    $memory_limit=ini_get("memory_limit");
-    $output_buffering=ini_get("output_buffering");
-    $default_socket_timeout=ini_get("default_socket_timeout");
+    $memory_limit = ini_get("memory_limit");
+    $output_buffering = ini_get("output_buffering");
+    $default_socket_timeout = ini_get("default_socket_timeout");
     $allow_url_fopen = ini_get("allow_url_fopen");
     $magic_quotes_gpc = ini_get("magic_quotes_gpc");
     ignore_user_abort(true);
-    ini_set("display_errors",0);
-    ini_set("max_execution_time",0);
-    ini_set("upload_max_filesize","10M");
-    ini_set("memory_limit","20M");
-    ini_set("output_buffering",0);
-    ini_set("default_socket_timeout",30);
-    ini_set("allow_url_fopen",1);
-    ini_set("magic_quotes_gpc",0);
+    ini_set("display_errors", 0);
+    ini_set("max_execution_time", 0);
+    ini_set("upload_max_filesize", "10M");
+    ini_set("memory_limit", "20M");
+    ini_set("output_buffering", 0);
+    ini_set("default_socket_timeout", 30);
+    ini_set("allow_url_fopen", 1);
+    ini_set("magic_quotes_gpc", 0);
     echo "<tr><td> <td>Get<td>Set<td>Get";
     echo "<tr><td>display_errors<td>$display_errors<td>0<td>".ini_get("display_errors");
-    echo "<tr><td>ignore_user_abort<td>".($ignore_user_abort?"on":"off")."<td>on<td>".(ignore_user_abort()?"on":"off");
+    echo "<tr><td>ignore_user_abort<td>".($ignore_user_abort ? "on" : "off")."<td>on<td>".(ignore_user_abort() ? "on" : "off");
     echo "<tr><td>max_execution_time<td>$max_execution_time<td>0<td>".ini_get("max_execution_time");
     echo "<tr><td>upload_max_filesize<td>$upload_max_filesize<td>10M<td>".ini_get("upload_max_filesize");
     echo "<tr><td>memory_limit<td>$memory_limit<td>20M<td>".ini_get("memory_limit");
@@ -2325,18 +2342,18 @@ function server_info(){
 // +--------------------------------------------------
 // | Session
 // +--------------------------------------------------
-function logout(){
-    setcookie("loggedon",0,0,"/");
+function logout() {
+    setcookie("loggedon", 0, 0, "/");
     login_form();
 }
-function login(){
+function login() {
     global $pass,$auth_pass,$path_info;
     if (md5(trim($pass)) == $auth_pass){
-        setcookie("loggedon",$auth_pass,0,"/");
-        header ("Location: ".$path_info["basename"]."");
-    } else header ("Location: ".$path_info["basename"]."?erro=1");
+        setcookie("loggedon", $auth_pass, 0, "/");
+        header("Location: ".$path_info["basename"]."");
+    } else header("Location: ".$path_info["basename"]."?erro=1");
 }
-function login_form(){
+function login_form() {
     global $erro,$auth_pass,$path_info;
     html_header();
     echo "<body onLoad=\"if(parent.location.href != self.location.href){ parent.location.href = self.location.href } return true;\">\n";
@@ -2386,17 +2403,17 @@ function login_form(){
     }
     echo "</body>\n</html>";
 }
-function frame3(){
+function frame3() {
     global $islinux,$cmd_arg,$chmod_arg,$zip_dir,$fm_current_root,$cookie_cache_time;
     global $dir_dest,$current_dir,$dir_before;
     global $selected_file_list,$selected_dir_list,$old_name,$new_name;
     global $action,$or_by,$order_dir_list_by;
     if (!isset($order_dir_list_by)){
         $order_dir_list_by = "1A";
-        setcookie("order_dir_list_by", $order_dir_list_by , time()+$cookie_cache_time , "/");
+        setcookie("order_dir_list_by", $order_dir_list_by, time() + $cookie_cache_time, "/");
     } elseif (strlen($or_by)){
         $order_dir_list_by = $or_by;
-        setcookie("order_dir_list_by", $or_by , time()+$cookie_cache_time , "/");
+        setcookie("order_dir_list_by", $or_by, time() + $cookie_cache_time, "/");
     }
     html_header();
     echo "<body>\n";
@@ -2406,9 +2423,9 @@ function frame3(){
             if (strlen($cmd_arg)){
                 $cmd_arg = format_path($current_dir.$cmd_arg);
                 if (!file_exists($cmd_arg)){
-                    mkdir($cmd_arg,0755);
-                    chmod($cmd_arg,0755);
-                    reloadframe("parent",2,"&ec_dir=".$cmd_arg);
+                    mkdir($cmd_arg, 0755);
+                    chmod($cmd_arg, 0755);
+                    reloadframe("parent", 2, "&ec_dir=".$cmd_arg);
                 } else alert(et('FileDirExists').".");
             }
             break;
@@ -2419,35 +2436,35 @@ function frame3(){
                     if ($fh = @fopen($cmd_arg, "w")){
                         @fclose($fh);
                     }
-                    chmod($cmd_arg,0666);
+                    chmod($cmd_arg, 0666);
                 } else alert(et('FileDirExists').".");
             }
             break;
             case 3: // rename arq ou dir
-            if ((strlen($old_name))&&(strlen($new_name))){
-                rename($current_dir.$old_name,$current_dir.$new_name);
-                if (is_dir($current_dir.$new_name)) reloadframe("parent",2);
+            if ((strlen($old_name)) && (strlen($new_name))){
+                rename($current_dir.$old_name, $current_dir.$new_name);
+                if (is_dir($current_dir.$new_name)) reloadframe("parent", 2);
             }
             break;
             case 4: // delete sel
-            if(strstr($current_dir,$fm_current_root)){
+            if(strstr($current_dir, $fm_current_root)){
                 if (strlen($selected_file_list)){
-                    $selected_file_list = explode("<|*|>",$selected_file_list);
+                    $selected_file_list = explode("<|*|>", $selected_file_list);
                     if (count($selected_file_list)) {
-                        for($x=0;$x<count($selected_file_list);$x++) {
+                        for($x = 0;$x < count($selected_file_list);$x++) {
                             $selected_file_list[$x] = trim($selected_file_list[$x]);
-                            if (strlen($selected_file_list[$x])) total_delete($current_dir.$selected_file_list[$x],$dir_dest.$selected_file_list[$x]);
+                            if (strlen($selected_file_list[$x])) total_delete($current_dir.$selected_file_list[$x], $dir_dest.$selected_file_list[$x]);
                         }
                     }
                 }
                 if (strlen($selected_dir_list)){
-                    $selected_dir_list = explode("<|*|>",$selected_dir_list);
+                    $selected_dir_list = explode("<|*|>", $selected_dir_list);
                     if (count($selected_dir_list)) {
-                        for($x=0;$x<count($selected_dir_list);$x++) {
+                        for($x = 0;$x < count($selected_dir_list);$x++) {
                             $selected_dir_list[$x] = trim($selected_dir_list[$x]);
-                            if (strlen($selected_dir_list[$x])) total_delete($current_dir.$selected_dir_list[$x],$dir_dest.$selected_dir_list[$x]);
+                            if (strlen($selected_dir_list[$x])) total_delete($current_dir.$selected_dir_list[$x], $dir_dest.$selected_dir_list[$x]);
                         }
-                        reloadframe("parent",2);
+                        reloadframe("parent", 2);
                     }
                 }
             }
@@ -2456,22 +2473,22 @@ function frame3(){
             if (strlen($dir_dest)){
                 if(strtoupper($dir_dest) != strtoupper($current_dir)){
                     if (strlen($selected_file_list)){
-                        $selected_file_list = explode("<|*|>",$selected_file_list);
+                        $selected_file_list = explode("<|*|>", $selected_file_list);
                         if (count($selected_file_list)) {
-                            for($x=0;$x<count($selected_file_list);$x++) {
+                            for($x = 0;$x < count($selected_file_list);$x++) {
                                 $selected_file_list[$x] = trim($selected_file_list[$x]);
-                                if (strlen($selected_file_list[$x])) total_copy($current_dir.$selected_file_list[$x],$dir_dest.$selected_file_list[$x]);
+                                if (strlen($selected_file_list[$x])) total_copy($current_dir.$selected_file_list[$x], $dir_dest.$selected_file_list[$x]);
                             }
                         }
                     }
                     if (strlen($selected_dir_list)){
-                        $selected_dir_list = explode("<|*|>",$selected_dir_list);
+                        $selected_dir_list = explode("<|*|>", $selected_dir_list);
                         if (count($selected_dir_list)) {
-                            for($x=0;$x<count($selected_dir_list);$x++) {
+                            for($x = 0;$x < count($selected_dir_list);$x++) {
                                 $selected_dir_list[$x] = trim($selected_dir_list[$x]);
-                                if (strlen($selected_dir_list[$x])) total_copy($current_dir.$selected_dir_list[$x],$dir_dest.$selected_dir_list[$x]);
+                                if (strlen($selected_dir_list[$x])) total_copy($current_dir.$selected_dir_list[$x], $dir_dest.$selected_dir_list[$x]);
                             }
-                            reloadframe("parent",2);
+                            reloadframe("parent", 2);
                         }
                     }
                     $current_dir = $dir_dest;
@@ -2482,22 +2499,22 @@ function frame3(){
             if (strlen($dir_dest)){
                 if(strtoupper($dir_dest) != strtoupper($current_dir)){
                     if (strlen($selected_file_list)){
-                        $selected_file_list = explode("<|*|>",$selected_file_list);
+                        $selected_file_list = explode("<|*|>", $selected_file_list);
                         if (count($selected_file_list)) {
-                            for($x=0;$x<count($selected_file_list);$x++) {
+                            for($x = 0;$x < count($selected_file_list);$x++) {
                                 $selected_file_list[$x] = trim($selected_file_list[$x]);
-                                if (strlen($selected_file_list[$x])) total_move($current_dir.$selected_file_list[$x],$dir_dest.$selected_file_list[$x]);
+                                if (strlen($selected_file_list[$x])) total_move($current_dir.$selected_file_list[$x], $dir_dest.$selected_file_list[$x]);
                             }
                         }
                     }
                     if (strlen($selected_dir_list)){
-                        $selected_dir_list = explode("<|*|>",$selected_dir_list);
+                        $selected_dir_list = explode("<|*|>", $selected_dir_list);
                         if (count($selected_dir_list)) {
-                            for($x=0;$x<count($selected_dir_list);$x++) {
+                            for($x = 0;$x < count($selected_dir_list);$x++) {
                                 $selected_dir_list[$x] = trim($selected_dir_list[$x]);
-                                if (strlen($selected_dir_list[$x])) total_move($current_dir.$selected_dir_list[$x],$dir_dest.$selected_dir_list[$x]);
+                                if (strlen($selected_dir_list[$x])) total_move($current_dir.$selected_dir_list[$x], $dir_dest.$selected_dir_list[$x]);
                             }
-                            reloadframe("parent",2);
+                            reloadframe("parent", 2);
                         }
                     }
                     $current_dir = $dir_dest;
@@ -2507,28 +2524,28 @@ function frame3(){
             case 71: // compress sel
             if (strlen($cmd_arg)){
                 ignore_user_abort(true);
-                ini_set("display_errors",0);
-                ini_set("max_execution_time",0);
-                $zipfile=false;
-                if (strstr($cmd_arg,".tar")) $zipfile = new tar_file($cmd_arg);
-                elseif (strstr($cmd_arg,".zip")) $zipfile = new zip_file($cmd_arg);
-                elseif (strstr($cmd_arg,".bzip")) $zipfile = new bzip_file($cmd_arg);
-                elseif (strstr($cmd_arg,".gzip")) $zipfile = new gzip_file($cmd_arg);
+                ini_set("display_errors", 0);
+                ini_set("max_execution_time", 0);
+                $zipfile = false;
+                if (strstr($cmd_arg, ".tar")) $zipfile = new tar_file($cmd_arg);
+                elseif (strstr($cmd_arg, ".zip")) $zipfile = new zip_file($cmd_arg);
+                elseif (strstr($cmd_arg, ".bzip")) $zipfile = new bzip_file($cmd_arg);
+                elseif (strstr($cmd_arg, ".gzip")) $zipfile = new gzip_file($cmd_arg);
                 if ($zipfile){
-                    $zipfile->set_options(array('basedir'=>$current_dir,'overwrite'=>1,'level'=>3));
+                    $zipfile->set_options(array('basedir' => $current_dir, 'overwrite' => 1, 'level' => 3));
                     if (strlen($selected_file_list)){
-                        $selected_file_list = explode("<|*|>",$selected_file_list);
+                        $selected_file_list = explode("<|*|>", $selected_file_list);
                         if (count($selected_file_list)) {
-                            for($x=0;$x<count($selected_file_list);$x++) {
+                            for($x = 0;$x < count($selected_file_list);$x++) {
                                 $selected_file_list[$x] = trim($selected_file_list[$x]);
                                 if (strlen($selected_file_list[$x])) $zipfile->add_files($selected_file_list[$x]);
                             }
                         }
                     }
                     if (strlen($selected_dir_list)){
-                        $selected_dir_list = explode("<|*|>",$selected_dir_list);
+                        $selected_dir_list = explode("<|*|>", $selected_dir_list);
                         if (count($selected_dir_list)) {
-                            for($x=0;$x<count($selected_dir_list);$x++) {
+                            for($x = 0;$x < count($selected_dir_list);$x++) {
                                 $selected_dir_list[$x] = trim($selected_dir_list[$x]);
                                 if (strlen($selected_dir_list[$x])) $zipfile->add_files($selected_dir_list[$x]);
                             }
@@ -2542,35 +2559,35 @@ function frame3(){
             case 72: // decompress arq
             if (strlen($cmd_arg)){
                 if (file_exists($current_dir.$cmd_arg)){
-                    $zipfile=false;
-                    if (strstr($cmd_arg,".zip")) zip_extract();
-                    elseif (strstr($cmd_arg,".bzip")||strstr($cmd_arg,".bz2")||strstr($cmd_arg,".tbz2")||strstr($cmd_arg,".bz")||strstr($cmd_arg,".tbz")) $zipfile = new bzip_file($cmd_arg);
-                    elseif (strstr($cmd_arg,".gzip")||strstr($cmd_arg,".gz")||strstr($cmd_arg,".tgz")) $zipfile = new gzip_file($cmd_arg);
-                    elseif (strstr($cmd_arg,".tar")) $zipfile = new tar_file($cmd_arg);
+                    $zipfile = false;
+                    if (strstr($cmd_arg, ".zip")) zip_extract();
+                    elseif (strstr($cmd_arg, ".bzip") || strstr($cmd_arg, ".bz2") || strstr($cmd_arg, ".tbz2") || strstr($cmd_arg, ".bz") || strstr($cmd_arg, ".tbz")) $zipfile = new bzip_file($cmd_arg);
+                    elseif (strstr($cmd_arg, ".gzip") || strstr($cmd_arg, ".gz") || strstr($cmd_arg, ".tgz")) $zipfile = new gzip_file($cmd_arg);
+                    elseif (strstr($cmd_arg, ".tar")) $zipfile = new tar_file($cmd_arg);
                     if ($zipfile){
-                        $zipfile->set_options(array('basedir'=>$current_dir,'overwrite'=>1));
+                        $zipfile->set_options(array('basedir' => $current_dir, 'overwrite' => 1));
                         $zipfile->extract_files();
                     }
                     unset($zipfile);
-                    reloadframe("parent",2);
+                    reloadframe("parent", 2);
                 }
             }
             break;
             case 8: // delete arq/dir
             if (strlen($cmd_arg)){
                 if (file_exists($current_dir.$cmd_arg)) total_delete($current_dir.$cmd_arg);
-                if (is_dir($current_dir.$cmd_arg)) reloadframe("parent",2);
+                if (is_dir($current_dir.$cmd_arg)) reloadframe("parent", 2);
             }
             break;
             case 9: // CHMOD
-            if((strlen($chmod_arg) == 4)&&(strlen($current_dir))){
-                if ($chmod_arg[0]=="1") $chmod_arg = "0".$chmod_arg;
-                else $chmod_arg = "0".substr($chmod_arg,strlen($chmod_arg)-3);
+            if((strlen($chmod_arg) == 4) && (strlen($current_dir))){
+                if ($chmod_arg[0] == "1") $chmod_arg = "0".$chmod_arg;
+                else $chmod_arg = "0".substr($chmod_arg, strlen($chmod_arg) - 3);
                 $new_mod = octdec($chmod_arg);
-                $selected_file_list = explode("<|*|>",$selected_file_list);
-                if (count($selected_file_list)) for($x=0;$x<count($selected_file_list);$x++) @chmod($current_dir.$selected_file_list[$x],$new_mod);
-                $selected_dir_list = explode("<|*|>",$selected_dir_list);
-                if (count($selected_dir_list)) for($x=0;$x<count($selected_dir_list);$x++) @chmod($current_dir.$selected_dir_list[$x],$new_mod);
+                $selected_file_list = explode("<|*|>", $selected_file_list);
+                if (count($selected_file_list)) for($x = 0;$x < count($selected_file_list);$x++) @chmod($current_dir.$selected_file_list[$x], $new_mod);
+                $selected_dir_list = explode("<|*|>", $selected_dir_list);
+                if (count($selected_dir_list)) for($x = 0;$x < count($selected_dir_list);$x++) @chmod($current_dir.$selected_dir_list[$x], $new_mod);
             }
             break;
         }
@@ -2578,17 +2595,17 @@ function frame3(){
     } else dir_list_form();
     echo "</body>\n</html>";
 }
-function frame2(){
+function frame2() {
     global $expanded_dir_list,$ec_dir;
     if (!isset($expanded_dir_list)) $expanded_dir_list = "";
     if (strlen($ec_dir)){
-        if (strstr($expanded_dir_list,":".$ec_dir)) $expanded_dir_list = str_replace(":".$ec_dir,"",$expanded_dir_list);
+        if (strstr($expanded_dir_list, ":".$ec_dir)) $expanded_dir_list = str_replace(":".$ec_dir, "", $expanded_dir_list);
         else $expanded_dir_list .= ":".$ec_dir;
-        setcookie("expanded_dir_list", $expanded_dir_list , 0 , "/");
+        setcookie("expanded_dir_list", $expanded_dir_list, 0, "/");
     }
     show_tree();
 }
-function frameset(){
+function frameset() {
     global $path_info,$leftFrameWidth;
     if (!isset($leftFrameWidth)) $leftFrameWidth = 300;
     html_header();
@@ -2628,21 +2645,21 @@ function frameset(){
  */
 class archive
 {
-    function archive($name)
+    public function archive($name)
     {
         $this->options = array(
-            'basedir'=>".",
-            'name'=>$name,
-            'prepend'=>"",
-            'inmemory'=>0,
-            'overwrite'=>0,
-            'recurse'=>1,
-            'storepaths'=>1,
-            'level'=>3,
-            'method'=>1,
-            'sfx'=>"",
-            'type'=>"",
-            'comment'=>""
+            'basedir' => ".",
+            'name' => $name,
+            'prepend' => "",
+            'inmemory' => 0,
+            'overwrite' => 0,
+            'recurse' => 1,
+            'storepaths' => 1,
+            'level' => 3,
+            'method' => 1,
+            'sfx' => "",
+            'type' => "",
+            'comment' => ""
         );
         $this->files = array();
         $this->exclude = array();
@@ -2650,7 +2667,7 @@ class archive
         $this->error = array();
     }
 
-    function set_options($options)
+    public function set_options($options)
     {
         foreach($options as $key => $value)
         {
@@ -2658,25 +2675,25 @@ class archive
         }
         if(!empty($this->options['basedir']))
         {
-            $this->options['basedir'] = str_replace("\\","/",$this->options['basedir']);
-            $this->options['basedir'] = preg_replace("/\/+/","/",$this->options['basedir']);
-            $this->options['basedir'] = preg_replace("/\/$/","",$this->options['basedir']);
+            $this->options['basedir'] = str_replace("\\", "/", $this->options['basedir']);
+            $this->options['basedir'] = preg_replace("/\/+/", "/", $this->options['basedir']);
+            $this->options['basedir'] = preg_replace("/\/$/", "", $this->options['basedir']);
         }
         if(!empty($this->options['name']))
         {
-            $this->options['name'] = str_replace("\\","/",$this->options['name']);
-            $this->options['name'] = preg_replace("/\/+/","/",$this->options['name']);
+            $this->options['name'] = str_replace("\\", "/", $this->options['name']);
+            $this->options['name'] = preg_replace("/\/+/", "/", $this->options['name']);
         }
         if(!empty($this->options['prepend']))
         {
-            $this->options['prepend'] = str_replace("\\","/",$this->options['prepend']);
-            $this->options['prepend'] = preg_replace("/^(\.*\/+)+/","",$this->options['prepend']);
-            $this->options['prepend'] = preg_replace("/\/+/","/",$this->options['prepend']);
-            $this->options['prepend'] = preg_replace("/\/$/","",$this->options['prepend']) . "/";
+            $this->options['prepend'] = str_replace("\\", "/", $this->options['prepend']);
+            $this->options['prepend'] = preg_replace("/^(\.*\/+)+/", "", $this->options['prepend']);
+            $this->options['prepend'] = preg_replace("/\/+/", "/", $this->options['prepend']);
+            $this->options['prepend'] = preg_replace("/\/$/", "", $this->options['prepend']) . "/";
         }
     }
 
-    function create_archive()
+    public function create_archive()
     {
         $this->make_list();
 
@@ -2684,13 +2701,14 @@ class archive
         {
             $Pwd = getcwd();
             chdir($this->options['basedir']);
-            if($this->options['overwrite'] == 0 && file_exists($this->options['name'] . ($this->options['type'] == "gzip" || $this->options['type'] == "bzip"? ".tmp" : "")))
+            if($this->options['overwrite'] == 0 && file_exists($this->options['name'] . ($this->options['type'] == "gzip" || $this->options['type'] == "bzip" ? ".tmp" : "")))
             {
                 $this->error[] = "File {$this->options['name']} already exists.";
                 chdir($Pwd);
+
                 return 0;
             }
-            else if($this->archive = @fopen($this->options['name'] . ($this->options['type'] == "gzip" || $this->options['type'] == "bzip"? ".tmp" : ""),"wb+"))
+            elseif($this->archive = @fopen($this->options['name'] . ($this->options['type'] == "gzip" || $this->options['type'] == "bzip" ? ".tmp" : ""), "wb+"))
             {
                 chdir($Pwd);
             }
@@ -2698,6 +2716,7 @@ class archive
             {
                 $this->error[] = "Could not open {$this->options['name']} for writing.";
                 chdir($Pwd);
+
                 return 0;
             }
         }
@@ -2708,10 +2727,11 @@ class archive
 
         switch($this->options['type'])
         {
-        case "zip":
+        case "zip" :
             if(!$this->create_zip())
             {
                 $this->error[] = "Could not create zip file.";
+
                 return 0;
             }
             break;
@@ -2719,11 +2739,13 @@ class archive
             if(!$this->create_tar())
             {
                 $this->error[] = "Could not create tar file.";
+
                 return 0;
             }
             if(!$this->create_bzip())
             {
                 $this->error[] = "Could not create bzip2 file.";
+
                 return 0;
             }
             break;
@@ -2731,11 +2753,13 @@ class archive
             if(!$this->create_tar())
             {
                 $this->error[] = "Could not create tar file.";
+
                 return 0;
             }
             if(!$this->create_gzip())
             {
                 $this->error[] = "Could not create gzip file.";
+
                 return 0;
             }
             break;
@@ -2743,6 +2767,7 @@ class archive
             if(!$this->create_tar())
             {
                 $this->error[] = "Could not create tar file.";
+
                 return 0;
             }
         }
@@ -2750,7 +2775,7 @@ class archive
         if($this->options['inmemory'] == 0)
         {
             fclose($this->archive);
-            chmod($this->options['name'],0666);
+            chmod($this->options['name'], 0666);
             if($this->options['type'] == "gzip" || $this->options['type'] == "bzip")
             {
                 unlink($this->options['basedir'] . "/" . $this->options['name'] . ".tmp");
@@ -2758,11 +2783,11 @@ class archive
         }
     }
 
-    function add_data($data)
+    public function add_data($data)
     {
         if($this->options['inmemory'] == 0)
         {
-            fwrite($this->archive,$data);
+            fwrite($this->archive, $data);
         }
         else
         {
@@ -2770,7 +2795,7 @@ class archive
         }
     }
 
-    function make_list()
+    public function make_list()
     {
         if(!empty($this->exclude))
         {
@@ -2798,11 +2823,10 @@ class archive
                 }
             }
         }
-        unset($this->exclude,$this->storeonly);
+        unset($this->exclude, $this->storeonly);
     }
 
-
-    function add_files($list)
+    public function add_files($list)
     {
         $temp = $this->list_files($list);
         foreach($temp as $current)
@@ -2811,7 +2835,7 @@ class archive
         }
     }
 
-    function exclude_files($list)
+    public function exclude_files($list)
     {
         $temp = $this->list_files($list);
         foreach($temp as $current)
@@ -2820,7 +2844,7 @@ class archive
         }
     }
 
-    function store_files($list)
+    public function store_files($list)
     {
         $temp = $this->list_files($list);
         foreach($temp as $current)
@@ -2829,7 +2853,7 @@ class archive
         }
     }
 
-    function list_files($list)
+    public function list_files($list)
     {
         if(!is_array($list))
         {
@@ -2845,58 +2869,58 @@ class archive
 
         foreach($list as $current)
         {
-            $current = str_replace("\\","/",$current);
-            $current = preg_replace("/\/+/","/",$current);
-            $current = preg_replace("/\/$/","",$current);
-            if(strstr($current,"*"))
+            $current = str_replace("\\", "/", $current);
+            $current = preg_replace("/\/+/", "/", $current);
+            $current = preg_replace("/\/$/", "", $current);
+            if(strstr($current, "*"))
             {
-                $regex = preg_replace("/([\\\^\$\.\[\]\|\(\)\?\+\{\}\/])/","\\\\\\1",$current);
-                $regex = str_replace("*",".*",$regex);
-                $dir = strstr($current,"/")? substr($current,0,strrpos($current,"/")) : ".";
+                $regex = preg_replace("/([\\\^\$\.\[\]\|\(\)\?\+\{\}\/])/", "\\\\\\1", $current);
+                $regex = str_replace("*", ".*", $regex);
+                $dir = strstr($current, "/") ? substr($current, 0, strrpos($current, "/")) : ".";
                 $temp = $this->parse_dir($dir);
                 foreach($temp as $current2)
                 {
-                    if(preg_match("/^{$regex}$/i",$current2['name']))
+                    if(preg_match("/^{$regex}$/i", $current2['name']))
                     {
                         $files[] = $current2;
                     }
                 }
-                unset($regex,$dir,$temp,$current);
+                unset($regex, $dir, $temp, $current);
             }
-            else if(@is_dir($current))
+            elseif(@is_dir($current))
             {
                 $temp = $this->parse_dir($current);
                 foreach($temp as $file)
                 {
                     $files[] = $file;
                 }
-                unset($temp,$file);
+                unset($temp, $file);
             }
-            else if(@file_exists($current))
+            elseif(@file_exists($current))
             {
-                $files[] = array('name'=>$current,'name2'=>$this->options['prepend'] .
-                    preg_replace("/(\.+\/+)+/","",($this->options['storepaths'] == 0 && strstr($current,"/"))?
-                    substr($current,strrpos($current,"/") + 1) : $current),'type'=>0,
-                    'ext'=>substr($current,strrpos($current,".")),'stat'=>stat($current));
+                $files[] = array('name' => $current, 'name2' => $this->options['prepend'] .
+                    preg_replace("/(\.+\/+)+/", "", ($this->options['storepaths'] == 0 && strstr($current, "/")) ?
+                    substr($current, strrpos($current, "/") + 1) : $current), 'type' => 0,
+                    'ext' => substr($current, strrpos($current, ".")), 'stat' => stat($current));
             }
         }
 
         chdir($Pwd);
 
-        unset($current,$Pwd);
+        unset($current, $Pwd);
 
-        usort($files,array("archive","sort_files"));
+        usort($files, array("archive", "sort_files"));
 
         return $files;
     }
 
-    function parse_dir($dirname)
+    public function parse_dir($dirname)
     {
-        if($this->options['storepaths'] == 1 && !preg_match("/^(\.+\/*)+$/",$dirname))
+        if($this->options['storepaths'] == 1 && !preg_match("/^(\.+\/*)+$/", $dirname))
         {
-            $files = array(array('name'=>$dirname,'name2'=>$this->options['prepend'] .
-                preg_replace("/(\.+\/+)+/","",($this->options['storepaths'] == 0 && strstr($dirname,"/"))?
-                substr($dirname,strrpos($dirname,"/") + 1) : $dirname),'type'=>5,'stat'=>stat($dirname)));
+            $files = array(array('name' => $dirname, 'name2' => $this->options['prepend'] .
+                preg_replace("/(\.+\/+)+/", "", ($this->options['storepaths'] == 0 && strstr($dirname, "/")) ?
+                substr($dirname, strrpos($dirname, "/") + 1) : $dirname), 'type' => 5, 'stat' => stat($dirname)));
         }
         else
         {
@@ -2910,7 +2934,7 @@ class archive
             {
                 continue;
             }
-            else if(@is_dir($dirname."/".$file))
+            elseif(@is_dir($dirname."/".$file))
             {
                 if(empty($this->options['recurse']))
                 {
@@ -2922,12 +2946,12 @@ class archive
                     $files[] = $file2;
                 }
             }
-            else if(@file_exists($dirname."/".$file))
+            elseif(@file_exists($dirname."/".$file))
             {
-                $files[] = array('name'=>$dirname."/".$file,'name2'=>$this->options['prepend'] .
-                    preg_replace("/(\.+\/+)+/","",($this->options['storepaths'] == 0 && strstr($dirname."/".$file,"/"))?
-                    substr($dirname."/".$file,strrpos($dirname."/".$file,"/") + 1) : $dirname."/".$file),'type'=>0,
-                    'ext'=>substr($file,strrpos($file,".")),'stat'=>stat($dirname."/".$file));
+                $files[] = array('name' => $dirname."/".$file, 'name2' => $this->options['prepend'] .
+                    preg_replace("/(\.+\/+)+/", "", ($this->options['storepaths'] == 0 && strstr($dirname."/".$file, "/")) ?
+                    substr($dirname."/".$file, strrpos($dirname."/".$file, "/") + 1) : $dirname."/".$file), 'type' => 0,
+                    'ext' => substr($file, strrpos($file, ".")), 'stat' => stat($dirname."/".$file));
             }
         }
 
@@ -2936,57 +2960,59 @@ class archive
         return $files;
     }
 
-    function sort_files($a,$b)
+    public function sort_files($a, $b)
     {
         if($a['type'] != $b['type'])
         {
-            return $a['type'] > $b['type']? -1 : 1;
+            return $a['type'] > $b['type'] ? -1 : 1;
         }
-        else if($a['type'] == 5)
+        elseif($a['type'] == 5)
         {
-            return strcmp(strtolower($a['name']),strtolower($b['name']));
+            return strcmp(strtolower($a['name']), strtolower($b['name']));
         }
         else
         {
             if($a['ext'] != $b['ext'])
             {
-                return strcmp($a['ext'],$b['ext']);
+                return strcmp($a['ext'], $b['ext']);
             }
-            else if($a['stat'][7] != $b['stat'][7])
+            elseif($a['stat'][7] != $b['stat'][7])
             {
-                return $a['stat'][7] > $b['stat'][7]? -1 : 1;
+                return $a['stat'][7] > $b['stat'][7] ? -1 : 1;
             }
             else
             {
-                return strcmp(strtolower($a['name']),strtolower($b['name']));
+                return strcmp(strtolower($a['name']), strtolower($b['name']));
             }
         }
+
         return 0;
     }
 
-    function download_file()
+    public function download_file()
     {
         if($this->options['inmemory'] == 0)
         {
             $this->error[] = "Can only use download_file() if archive is in memory. Redirect to file otherwise, it is faster.";
+
             return;
         }
         switch($this->options['type'])
         {
-        case "zip":
+        case "zip" :
             header("Content-type:application/zip");
             break;
-        case "bzip":
+        case "bzip" :
             header("Content-type:application/x-compressed");
             break;
-        case "gzip":
+        case "gzip" :
             header("Content-type:application/x-compressed");
             break;
         case "tar":
             header("Content-type:application/x-tar");
         }
         $header = "Content-disposition: attachment; filename=\"";
-        $header .= strstr($this->options['name'],"/")? substr($this->options['name'],strrpos($this->options['name'],"/") + 1) : $this->options['name'];
+        $header .= strstr($this->options['name'], "/") ? substr($this->options['name'], strrpos($this->options['name'], "/") + 1) : $this->options['name'];
         $header .= "\"";
         header($header);
         header("Content-length: " . strlen($this->archive));
@@ -3000,13 +3026,13 @@ class archive
 
 class tar_file extends archive
 {
-    function tar_file($name)
+    public function tar_file($name)
     {
         $this->archive($name);
         $this->options['type'] = "tar";
     }
 
-    function create_tar()
+    public function create_tar()
     {
         $Pwd = getcwd();
         chdir($this->options['basedir']);
@@ -3019,35 +3045,35 @@ class tar_file extends archive
             }
             if(strlen($current['name2']) > 99)
             {
-                $Path = substr($current['name2'],0,strpos($current['name2'],"/",strlen($current['name2']) - 100) + 1);
-                $current['name2'] = substr($current['name2'],strlen($Path));
+                $Path = substr($current['name2'], 0, strpos($current['name2'], "/", strlen($current['name2']) - 100) + 1);
+                $current['name2'] = substr($current['name2'], strlen($Path));
                 if(strlen($Path) > 154 || strlen($current['name2']) > 99)
                 {
                     $this->error[] = "Could not add {$Path}{$current['name2']} to archive because the filename is too long.";
                     continue;
                 }
             }
-            $block = pack("a100a8a8a8a12a12a8a1a100a6a2a32a32a8a8a155a12",$current['name2'],decoct($current['stat'][2]),
-                sprintf("%6s ",decoct($current['stat'][4])),sprintf("%6s ",decoct($current['stat'][5])),
-                sprintf("%11s ",decoct($current['stat'][7])),sprintf("%11s ",decoct($current['stat'][9])),
-                "        ",$current['type'],"","ustar","00","Unknown","Unknown","","",!empty($Path)? $Path : "","");
+            $block = pack("a100a8a8a8a12a12a8a1a100a6a2a32a32a8a8a155a12", $current['name2'], decoct($current['stat'][2]),
+                sprintf("%6s ", decoct($current['stat'][4])), sprintf("%6s ", decoct($current['stat'][5])),
+                sprintf("%11s ", decoct($current['stat'][7])), sprintf("%11s ", decoct($current['stat'][9])),
+                "        ", $current['type'], "", "ustar", "00", "Unknown", "Unknown", "", "", !empty($Path) ? $Path : "", "");
 
             $checksum = 0;
             for($i = 0; $i < 512; $i++)
             {
-                $checksum += ord(substr($block,$i,1));
+                $checksum += ord(substr($block, $i, 1));
             }
-            $checksum = pack("a8",sprintf("%6s ",decoct($checksum)));
-            $block = substr_replace($block,$checksum,148,8);
+            $checksum = pack("a8", sprintf("%6s ", decoct($checksum)));
+            $block = substr_replace($block, $checksum, 148, 8);
 
             if($current['stat'][7] == 0)
             {
                 $this->add_data($block);
             }
-            else if($fp = @fopen($current['name'],"rb"))
+            elseif($fp = @fopen($current['name'], "rb"))
             {
                 $this->add_data($block);
-                while($temp = fread($fp,1048576))
+                while($temp = fread($fp, 1048576))
                 {
                     $this->add_data($temp);
                 }
@@ -3068,7 +3094,7 @@ class tar_file extends archive
             }
         }
 
-        $this->add_data(pack("a512",""));
+        $this->add_data(pack("a512", ""));
 
         chdir($Pwd);
 
@@ -3076,7 +3102,7 @@ class tar_file extends archive
 
     }
 
-    function extract_files()
+    public function extract_files()
     {
         $Pwd = getcwd();
         chdir($this->options['basedir']);
@@ -3088,36 +3114,36 @@ class tar_file extends archive
                 $this->files = array();
             }
 
-            while($block = fread($fp,512))
+            while($block = fread($fp, 512))
             {
-                $temp = unpack("a100name/a8mode/a8uid/a8gid/a12size/a12mtime/a8checksum/a1type/a100temp/a6magic/a2temp/a32temp/a32temp/a8temp/a8temp/a155prefix/a12temp",$block);
+                $temp = unpack("a100name/a8mode/a8uid/a8gid/a12size/a12mtime/a8checksum/a1type/a100temp/a6magic/a2temp/a32temp/a32temp/a8temp/a8temp/a155prefix/a12temp", $block);
                 $file = array(
-                    'name'=>$temp['prefix'] . $temp['name'],
-                    'stat'=>array(
-                        2=>$temp['mode'],
-                        4=>octdec($temp['uid']),
-                        5=>octdec($temp['gid']),
-                        7=>octdec($temp['size']),
-                        9=>octdec($temp['mtime']),
+                    'name' => $temp['prefix'] . $temp['name'],
+                    'stat' => array(
+                        2 => $temp['mode'],
+                        4 => octdec($temp['uid']),
+                        5 => octdec($temp['gid']),
+                        7 => octdec($temp['size']),
+                        9 => octdec($temp['mtime']),
                     ),
-                    'checksum'=>octdec($temp['checksum']),
-                    'type'=>$temp['type'],
-                    'magic'=>$temp['magic'],
+                    'checksum' => octdec($temp['checksum']),
+                    'type' => $temp['type'],
+                    'magic' => $temp['magic'],
                 );
                 if($file['checksum'] == 0x00000000)
                 {
                     break;
                 }
-                else if($file['magic'] != "ustar")
+                elseif($file['magic'] != "ustar")
                 {
                     $this->error[] = "This script does not support extracting this type of tar file.";
                     break;
                 }
-                $block = substr_replace($block,"        ",148,8);
+                $block = substr_replace($block, "        ", 148, 8);
                 $checksum = 0;
                 for($i = 0; $i < 512; $i++)
                 {
-                    $checksum += ord(substr($block,$i,1));
+                    $checksum += ord(substr($block, $i, 1));
                 }
                 if($file['checksum'] != $checksum)
                 {
@@ -3126,9 +3152,9 @@ class tar_file extends archive
 
                 if($this->options['inmemory'] == 1)
                 {
-                    $file['data'] = fread($fp,$file['stat'][7]);
-                    fread($fp,(512 - $file['stat'][7] % 512) == 512? 0 : (512 - $file['stat'][7] % 512));
-                    unset($file['checksum'],$file['magic']);
+                    $file['data'] = fread($fp, $file['stat'][7]);
+                    fread($fp, (512 - $file['stat'][7] % 512) == 512 ? 0 : (512 - $file['stat'][7] % 512));
+                    unset($file['checksum'], $file['magic']);
                     $this->files[] = $file;
                 }
                 else
@@ -3137,22 +3163,22 @@ class tar_file extends archive
                     {
                         if(!is_dir($file['name']))
                         {
-                            mkdir($file['name'],0755);
+                            mkdir($file['name'], 0755);
                             //mkdir($file['name'],$file['stat'][2]);
                             //chown($file['name'],$file['stat'][4]);
                             //chgrp($file['name'],$file['stat'][5]);
                         }
                     }
-                    else if($this->options['overwrite'] == 0 && file_exists($file['name']))
+                    elseif($this->options['overwrite'] == 0 && file_exists($file['name']))
                     {
                         $this->error[] = "{$file['name']} already exists.";
                     }
-                    else if($new = @fopen($file['name'],"wb"))
+                    elseif($new = @fopen($file['name'], "wb"))
                     {
-                        fwrite($new,fread($fp,$file['stat'][7]));
-                        fread($fp,(512 - $file['stat'][7] % 512) == 512? 0 : (512 - $file['stat'][7] % 512));
+                        fwrite($new, fread($fp, $file['stat'][7]));
+                        fread($fp, (512 - $file['stat'][7] % 512) == 512 ? 0 : (512 - $file['stat'][7] % 512));
                         fclose($new);
-                        chmod($file['name'],0666);
+                        chmod($file['name'], 0666);
                         //chmod($file['name'],$file['stat'][2]);
                         //chown($file['name'],$file['stat'][4]);
                         //chgrp($file['name'],$file['stat'][5]);
@@ -3173,32 +3199,32 @@ class tar_file extends archive
         chdir($Pwd);
     }
 
-    function open_archive()
+    public function open_archive()
     {
-        return @fopen($this->options['name'],"rb");
+        return @fopen($this->options['name'], "rb");
     }
 }
 
 class gzip_file extends tar_file
 {
-    function gzip_file($name)
+    public function gzip_file($name)
     {
         $this->tar_file($name);
         $this->options['type'] = "gzip";
     }
 
-    function create_gzip()
+    public function create_gzip()
     {
         if($this->options['inmemory'] == 0)
         {
             $Pwd = getcwd();
             chdir($this->options['basedir']);
-            if($fp = gzopen($this->options['name'],"wb{$this->options['level']}"))
+            if($fp = gzopen($this->options['name'], "wb{$this->options['level']}"))
             {
-                fseek($this->archive,0);
-                while($temp = fread($this->archive,1048576))
+                fseek($this->archive, 0);
+                while($temp = fread($this->archive, 1048576))
                 {
-                    gzwrite($fp,$temp);
+                    gzwrite($fp, $temp);
                 }
                 gzclose($fp);
                 chdir($Pwd);
@@ -3207,43 +3233,44 @@ class gzip_file extends tar_file
             {
                 $this->error[] = "Could not open {$this->options['name']} for writing.";
                 chdir($Pwd);
+
                 return 0;
             }
         }
         else
         {
-            $this->archive = gzencode($this->archive,$this->options['level']);
+            $this->archive = gzencode($this->archive, $this->options['level']);
         }
 
         return 1;
     }
 
-    function open_archive()
+    public function open_archive()
     {
-        return @gzopen($this->options['name'],"rb");
+        return @gzopen($this->options['name'], "rb");
     }
 }
 
 class bzip_file extends tar_file
 {
-    function bzip_file($name)
+    public function bzip_file($name)
     {
         $this->tar_file($name);
         $this->options['type'] = "bzip";
     }
 
-    function create_bzip()
+    public function create_bzip()
     {
         if($this->options['inmemory'] == 0)
         {
             $Pwd = getcwd();
             chdir($this->options['basedir']);
-            if($fp = bzopen($this->options['name'],"wb"))
+            if($fp = bzopen($this->options['name'], "wb"))
             {
-                fseek($this->archive,0);
-                while($temp = fread($this->archive,1048576))
+                fseek($this->archive, 0);
+                while($temp = fread($this->archive, 1048576))
                 {
-                    bzwrite($fp,$temp);
+                    bzwrite($fp, $temp);
                 }
                 bzclose($fp);
                 chdir($Pwd);
@@ -3252,32 +3279,33 @@ class bzip_file extends tar_file
             {
                 $this->error[] = "Could not open {$this->options['name']} for writing.";
                 chdir($Pwd);
+
                 return 0;
             }
         }
         else
         {
-            $this->archive = bzcompress($this->archive,$this->options['level']);
+            $this->archive = bzcompress($this->archive, $this->options['level']);
         }
 
         return 1;
     }
 
-    function open_archive()
+    public function open_archive()
     {
-        return @bzopen($this->options['name'],"rb");
+        return @bzopen($this->options['name'], "rb");
     }
 }
 
 class zip_file extends archive
 {
-    function zip_file($name)
+    public function zip_file($name)
     {
         $this->archive($name);
         $this->options['type'] = "zip";
     }
 
-    function create_zip()
+    public function create_zip()
     {
         $files = 0;
         $offset = 0;
@@ -3285,9 +3313,9 @@ class zip_file extends archive
 
         if(!empty($this->options['sfx']))
         {
-            if($fp = @fopen($this->options['sfx'],"rb"))
+            if($fp = @fopen($this->options['sfx'], "rb"))
             {
-                $temp = fread($fp,filesize($this->options['sfx']));
+                $temp = fread($fp, filesize($this->options['sfx']));
                 fclose($fp);
                 $this->add_data($temp);
                 $offset += strlen($temp);
@@ -3308,69 +3336,69 @@ class zip_file extends archive
             {
                 continue;
             }
-            $translate =  array('Ç'=>pack("C",128),'ü'=>pack("C",129),'é'=>pack("C",130),'â'=>pack("C",131),'ä'=>pack("C",132),
-                                'à'=>pack("C",133),'å'=>pack("C",134),'ç'=>pack("C",135),'ê'=>pack("C",136),'ë'=>pack("C",137),
-                                'è'=>pack("C",138),'ï'=>pack("C",139),'î'=>pack("C",140),'ì'=>pack("C",141),'Ä'=>pack("C",142),
-                                'Å'=>pack("C",143),'É'=>pack("C",144),'æ'=>pack("C",145),'Æ'=>pack("C",146),'ô'=>pack("C",147),
-                                'ö'=>pack("C",148),'ò'=>pack("C",149),'û'=>pack("C",150),'ù'=>pack("C",151),'_'=>pack("C",152),
-                                'Ö'=>pack("C",153),'Ü'=>pack("C",154),'£'=>pack("C",156),'¥'=>pack("C",157),'_'=>pack("C",158),
-                                'ƒ'=>pack("C",159),'á'=>pack("C",160),'í'=>pack("C",161),'ó'=>pack("C",162),'ú'=>pack("C",163),
-                                'ñ'=>pack("C",164),'Ñ'=>pack("C",165));
-            $current['name2'] = strtr($current['name2'],$translate);
+            $translate =  array('Ç' => pack("C", 128), 'ü' => pack("C", 129), 'é' => pack("C", 130), 'â' => pack("C", 131), 'ä' => pack("C", 132),
+                                'à' => pack("C", 133), 'å' => pack("C", 134), 'ç' => pack("C", 135), 'ê' => pack("C", 136), 'ë' => pack("C", 137),
+                                'è' => pack("C", 138), 'ï' => pack("C", 139), 'î' => pack("C", 140), 'ì' => pack("C", 141), 'Ä' => pack("C", 142),
+                                'Å' => pack("C", 143), 'É' => pack("C", 144), 'æ' => pack("C", 145), 'Æ' => pack("C", 146), 'ô' => pack("C", 147),
+                                'ö' => pack("C", 148), 'ò' => pack("C", 149), 'û' => pack("C", 150), 'ù' => pack("C", 151), '_' => pack("C", 152),
+                                'Ö' => pack("C", 153), 'Ü' => pack("C", 154), '£' => pack("C", 156), '¥' => pack("C", 157), '_' => pack("C", 158),
+                                'ƒ' => pack("C", 159), 'á' => pack("C", 160), 'í' => pack("C", 161), 'ó' => pack("C", 162), 'ú' => pack("C", 163),
+                                'ñ' => pack("C", 164), 'Ñ' => pack("C", 165));
+            $current['name2'] = strtr($current['name2'], $translate);
 
-            $timedate = explode(" ",date("Y n j G i s",$current['stat'][9]));
+            $timedate = explode(" ", date("Y n j G i s", $current['stat'][9]));
             $timedate = ($timedate[0] - 1980 << 25) | ($timedate[1] << 21) | ($timedate[2] << 16) |
                 ($timedate[3] << 11) | ($timedate[4] << 5) | ($timedate[5]);
 
-            $block = pack("VvvvV",0x04034b50,0x000A,0x0000,(isset($current['method']) || $this->options['method'] == 0)? 0x0000 : 0x0008,$timedate);
+            $block = pack("VvvvV", 0x04034b50, 0x000A, 0x0000, (isset($current['method']) || $this->options['method'] == 0) ? 0x0000 : 0x0008, $timedate);
 
             if($current['stat'][7] == 0 && $current['type'] == 5)
             {
-                $block .= pack("VVVvv",0x00000000,0x00000000,0x00000000,strlen($current['name2']) + 1,0x0000);
+                $block .= pack("VVVvv", 0x00000000, 0x00000000, 0x00000000, strlen($current['name2']) + 1, 0x0000);
                 $block .= $current['name2'] . "/";
                 $this->add_data($block);
-                $central .= pack("VvvvvVVVVvvvvvVV",0x02014b50,0x0014,$this->options['method'] == 0? 0x0000 : 0x000A,0x0000,
-                    (isset($current['method']) || $this->options['method'] == 0)? 0x0000 : 0x0008,$timedate,
-                    0x00000000,0x00000000,0x00000000,strlen($current['name2']) + 1,0x0000,0x0000,0x0000,0x0000,$current['type'] == 5? 0x00000010 : 0x00000000,$offset);
+                $central .= pack("VvvvvVVVVvvvvvVV", 0x02014b50, 0x0014, $this->options['method'] == 0 ? 0x0000 : 0x000A, 0x0000,
+                    (isset($current['method']) || $this->options['method'] == 0) ? 0x0000 : 0x0008, $timedate,
+                    0x00000000, 0x00000000, 0x00000000, strlen($current['name2']) + 1, 0x0000, 0x0000, 0x0000, 0x0000, $current['type'] == 5 ? 0x00000010 : 0x00000000, $offset);
                 $central .= $current['name2'] . "/";
                 $files++;
                 $offset += (31 + strlen($current['name2']));
             }
-            else if($current['stat'][7] == 0)
+            elseif($current['stat'][7] == 0)
             {
-                $block .= pack("VVVvv",0x00000000,0x00000000,0x00000000,strlen($current['name2']),0x0000);
+                $block .= pack("VVVvv", 0x00000000, 0x00000000, 0x00000000, strlen($current['name2']), 0x0000);
                 $block .= $current['name2'];
                 $this->add_data($block);
-                $central .= pack("VvvvvVVVVvvvvvVV",0x02014b50,0x0014,$this->options['method'] == 0? 0x0000 : 0x000A,0x0000,
-                    (isset($current['method']) || $this->options['method'] == 0)? 0x0000 : 0x0008,$timedate,
-                    0x00000000,0x00000000,0x00000000,strlen($current['name2']),0x0000,0x0000,0x0000,0x0000,$current['type'] == 5? 0x00000010 : 0x00000000,$offset);
+                $central .= pack("VvvvvVVVVvvvvvVV", 0x02014b50, 0x0014, $this->options['method'] == 0 ? 0x0000 : 0x000A, 0x0000,
+                    (isset($current['method']) || $this->options['method'] == 0) ? 0x0000 : 0x0008, $timedate,
+                    0x00000000, 0x00000000, 0x00000000, strlen($current['name2']), 0x0000, 0x0000, 0x0000, 0x0000, $current['type'] == 5 ? 0x00000010 : 0x00000000, $offset);
                 $central .= $current['name2'];
                 $files++;
                 $offset += (30 + strlen($current['name2']));
             }
-            else if($fp = @fopen($current['name'],"rb"))
+            elseif($fp = @fopen($current['name'], "rb"))
             {
-                $temp = fread($fp,$current['stat'][7]);
+                $temp = fread($fp, $current['stat'][7]);
                 fclose($fp);
                 $crc32 = crc32($temp);
                 if(!isset($current['method']) && $this->options['method'] == 1)
                 {
-                    $temp = gzcompress($temp,$this->options['level']);
+                    $temp = gzcompress($temp, $this->options['level']);
                     $size = strlen($temp) - 6;
-                    $temp = substr($temp,2,$size);
+                    $temp = substr($temp, 2, $size);
                 }
                 else
                 {
                     $size = strlen($temp);
                 }
-                $block .= pack("VVVvv",$crc32,$size,$current['stat'][7],strlen($current['name2']),0x0000);
+                $block .= pack("VVVvv", $crc32, $size, $current['stat'][7], strlen($current['name2']), 0x0000);
                 $block .= $current['name2'];
                 $this->add_data($block);
                 $this->add_data($temp);
                 unset($temp);
-                $central .= pack("VvvvvVVVVvvvvvVV",0x02014b50,0x0014,$this->options['method'] == 0? 0x0000 : 0x000A,0x0000,
-                    (isset($current['method']) || $this->options['method'] == 0)? 0x0000 : 0x0008,$timedate,
-                    $crc32,$size,$current['stat'][7],strlen($current['name2']),0x0000,0x0000,0x0000,0x0000,0x00000000,$offset);
+                $central .= pack("VvvvvVVVVvvvvvVV", 0x02014b50, 0x0014, $this->options['method'] == 0 ? 0x0000 : 0x000A, 0x0000,
+                    (isset($current['method']) || $this->options['method'] == 0) ? 0x0000 : 0x0008, $timedate,
+                    $crc32, $size, $current['stat'][7], strlen($current['name2']), 0x0000, 0x0000, 0x0000, 0x0000, 0x00000000, $offset);
                 $central .= $current['name2'];
                 $files++;
                 $offset += (30 + strlen($current['name2']) + $size);
@@ -3383,8 +3411,8 @@ class zip_file extends archive
 
         $this->add_data($central);
 
-        $this->add_data(pack("VvvvvVVv",0x06054b50,0x0000,0x0000,$files,$files,strlen($central),$offset,
-            !empty($this->options['comment'])? strlen($this->options['comment']) : 0x0000));
+        $this->add_data(pack("VvvvvVVv", 0x06054b50, 0x0000, 0x0000, $files, $files, strlen($central), $offset,
+            !empty($this->options['comment']) ? strlen($this->options['comment']) : 0x0000));
 
         if(!empty($this->options['comment']))
         {
@@ -3396,4 +3424,3 @@ class zip_file extends archive
         return 1;
     }
 }
-?>

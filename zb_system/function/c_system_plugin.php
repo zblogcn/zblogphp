@@ -35,22 +35,7 @@ $hooks = array();
 
 function RegisterPlugin($strPluginName, $strPluginActiveFunction) {
 
-	$GLOBALS['plugins'][$strPluginName] = $strPluginActiveFunction;
-
-}
-
-/**
- * 激活插件，运行插件激活时加载的函数
- * @return void
- */
-function ActivePlugin() {
-
-	foreach ($GLOBALS['plugins'] as &$sPluginActiveFunctions) {
-		if (function_exists($sPluginActiveFunctions)) {
-			$sPluginActiveFunctions();
-		}
-
-	}
+    $GLOBALS['plugins'][$strPluginName] = $strPluginActiveFunction;
 
 }
 
@@ -61,9 +46,9 @@ function ActivePlugin() {
  */
 function InstallPlugin($strPluginName) {
 
-	if (function_exists($f = 'InstallPlugin_' . $strPluginName)) {
-		$f();
-	}
+    if (function_exists($f = 'InstallPlugin_' . $strPluginName)) {
+        $f();
+    }
 
 }
 
@@ -73,9 +58,9 @@ function InstallPlugin($strPluginName) {
  */
 function UninstallPlugin($strPluginName) {
 
-	if (function_exists($f = 'UninstallPlugin_' . $strPluginName) == true) {
-		$f();
-	}
+    if (function_exists($f = 'UninstallPlugin_' . $strPluginName) == true) {
+        $f();
+    }
 
 }
 
@@ -85,11 +70,12 @@ function UninstallPlugin($strPluginName) {
 '*********************************************************
  */
 function DefinePluginFilter($strPluginFilter) {
-	if (!isset($GLOBALS['hooks'][$strPluginFilter])) {
-		$GLOBALS['hooks'][$strPluginFilter] = array();
-		$GLOBALS[$strPluginFilter] = &$GLOBALS['hooks'][$strPluginFilter];
-		return true;
-	}
+    if (!isset($GLOBALS['hooks'][$strPluginFilter])) {
+        $GLOBALS['hooks'][$strPluginFilter] = array();
+        $GLOBALS[$strPluginFilter] = &$GLOBALS['hooks'][$strPluginFilter];
+
+        return true;
+    }
 }
 
 /*
@@ -98,7 +84,7 @@ function DefinePluginFilter($strPluginFilter) {
 '*********************************************************
  */
 function ExistsPluginFilter($strPluginFilter) {
-	return isset($GLOBALS['hooks'][$strPluginFilter]);
+    return isset($GLOBALS['hooks'][$strPluginFilter]);
 }
 
 /*
@@ -107,11 +93,11 @@ function ExistsPluginFilter($strPluginFilter) {
 '*********************************************************
  */
 function &UsingPluginFilter($strPluginFilter) {
-	if (isset($GLOBALS['hooks'][$strPluginFilter])) {
-		return $GLOBALS['hooks'][$strPluginFilter];
-	}
+    if (isset($GLOBALS['hooks'][$strPluginFilter])) {
+        return $GLOBALS['hooks'][$strPluginFilter];
+    }
 
-	return array();
+    return array();
 }
 
 /*
@@ -120,11 +106,12 @@ function &UsingPluginFilter($strPluginFilter) {
 '*********************************************************
  */
 function RemovePluginFilter($strPluginFilter) {
-	if (isset($GLOBALS['hooks'][$strPluginFilter])) {
-		unset($GLOBALS[$strPluginFilter]);
-		unset($GLOBALS['hooks'][$strPluginFilter]);
-		return true;
-	}
+    if (isset($GLOBALS['hooks'][$strPluginFilter])) {
+        unset($GLOBALS[$strPluginFilter]);
+        unset($GLOBALS['hooks'][$strPluginFilter]);
+
+        return true;
+    }
 }
 
 /*
@@ -147,11 +134,11 @@ function RemovePluginFilter($strPluginFilter) {
 '*********************************************************
  */
 function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSIGNAL_NONE) {
-	if (isset($GLOBALS['hooks'][$plugname])) {
-		if (!isset($GLOBALS['hooks'][$plugname][$functionname])) {
-			$GLOBALS['hooks'][$plugname][$functionname] = $exitsignal;
-		}
-	}
+    if (isset($GLOBALS['hooks'][$plugname])) {
+        if (!isset($GLOBALS['hooks'][$plugname][$functionname])) {
+            $GLOBALS['hooks'][$plugname][$functionname] = $exitsignal;
+        }
+    }
 }
 
 /*
@@ -189,7 +176,6 @@ DefinePluginFilter('Filter_Plugin_Debug_Handler');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Debug_Display');
-
 
 /*
 '**************************************************<

@@ -2,26 +2,26 @@
 require '../../../zb_system/function/c_system_base.php';
 
 if (isset($_GET['setcolor'])) {
-	$zbp->Load();
-	$action = 'root';
-	if ($zbp->CheckRights($action)) {
-		$zbp->Config('AdminColor')->color = (int) $_GET['setcolor'];
-		$zbp->SaveConfig('AdminColor');
-		setcookie("admincolor", (int) $_GET['setcolor'], time() + 3600 * 24 * 365, $zbp->cookiespath);
-		Redirect($zbp->host . 'zb_system/cmd.php?act=admin');
-		die();
-	} else {
-		setcookie("admincolor", (int) $_GET['setcolor'], time() + 3600 * 24 * 365, $zbp->cookiespath);
-		Redirect($zbp->host . 'zb_system/cmd.php?act=admin');
-		die();
-	}
+    $zbp->Load();
+    $action = 'root';
+    if ($zbp->CheckRights($action)) {
+        $zbp->Config('AdminColor')->color = (int) $_GET['setcolor'];
+        $zbp->SaveConfig('AdminColor');
+        setcookie("admincolor", (int) $_GET['setcolor'], time() + 3600 * 24 * 365, $zbp->cookiespath);
+        Redirect($zbp->host . 'zb_system/cmd.php?act=admin');
+        die();
+    } else {
+        setcookie("admincolor", (int) $_GET['setcolor'], time() + 3600 * 24 * 365, $zbp->cookiespath);
+        Redirect($zbp->host . 'zb_system/cmd.php?act=admin');
+        die();
+    }
 }
 
 header('Content-Type: text/css; Charset=utf-8');
 
 $id = (int) $zbp->Config('AdminColor')->color;
 if (isset($_COOKIE['admincolor'])) {
-	$id = (int) $_COOKIE['admincolor'];
+    $id = (int) $_COOKIE['admincolor'];
 }
 $c = '';
 
@@ -126,7 +126,7 @@ $AdminColor_Colors['High'] = $AdminColor_HighColor[$id];
 $AdminColor_Colors['Anti'] = $AdminColor_BlodColor[$id];
 
 foreach ($GLOBALS['Filter_Plugin_AdminColor_CSS_Pre'] as $fpname => &$fpsignal) {
-	$fpname($AdminColor_Colors);
+    $fpname($AdminColor_Colors);
 }
 
 $c = str_replace($c1, $AdminColor_Colors['Blod'], $c);
@@ -138,10 +138,9 @@ $c = str_replace($c5, $AdminColor_Colors['Anti'], $c);
 $c .= "\r\n" . "/*AdminColor*/" . "\r\n" . "#admin_color{float:right;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
 
 if ($id == 10) {
-	$c .= 'header,.header {background:url(header.jpg) no-repeat 0 0;}' . "\r\n";
-	$c .= 'body{background:url(body.jpg) no-repeat 0 0;background-attachment:fixed;}' . "\r\n";
-	$c .= '#topmenu{opacity:0.8;}' . "\r\n";
+    $c .= 'header,.header {background:url(header.jpg) no-repeat 0 0;}' . "\r\n";
+    $c .= 'body{background:url(body.jpg) no-repeat 0 0;background-attachment:fixed;}' . "\r\n";
+    $c .= '#topmenu{opacity:0.8;}' . "\r\n";
 }
 
 echo $c;
-?>

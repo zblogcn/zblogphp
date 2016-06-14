@@ -33,12 +33,12 @@ $p = null;
 $p .= '<option value="0">' . $lang['msg']['none'] . '</option>';
 
 foreach ($zbp->categorysbyorder as $k => $v) {
-	if ($v->ID == $cate->ID) {continue;}
-	#if($v->RootID==$cate->ID){continue;}
-	#if($cate->RootID>0){if($v->RootID==$cate->RootID){continue;}}
-	if ($v->Level < 3) {
-		$p .= '<option ' . ($v->ID == $cate->ParentID ? 'selected="selected"' : '') . ' value="' . $v->ID . '">' . $v->SymbolName . '</option>';
-	}
+    if ($v->ID == $cate->ID) {continue;}
+    #if($v->RootID==$cate->ID){continue;}
+    #if($cate->RootID>0){if($v->RootID==$cate->RootID){continue;}}
+    if ($v->Level < 3) {
+        $p .= '<option ' . ($v->ID == $cate->ParentID ? 'selected="selected"' : '') . ' value="' . $v->ID . '">' . $v->SymbolName . '</option>';
+    }
 }
 
 ?>

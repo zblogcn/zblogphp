@@ -10,11 +10,11 @@
  * Verify user
  */
 function api_app_get_function() {
-	global $zbp;
-	if (!$zbp->CheckRights('root')) {
-		API::$IO->end(6);
-	}
-	exit;
+    global $zbp;
+    if (!$zbp->CheckRights('root')) {
+        API::$IO->end(6);
+    }
+    exit;
 }
 API::$Route->route('/app/*', 'api_app_get_function');
 
@@ -24,9 +24,9 @@ API::$Route->route('/app/*', 'api_app_get_function');
  */
 function api_app_enable_function() {
 
-	$id = API::$IO->id;
-	if ($id == "") API::$IO->end(3);
-	API::$IO->app = EnablePlugin($id);
+    $id = API::$IO->id;
+    if ($id == "") API::$IO->end(3);
+    API::$IO->app = EnablePlugin($id);
 
 
 }
@@ -36,10 +36,10 @@ API::$Route->post('/app/enable/', 'api_app_enable_function');
  * Disable app
  */
 function api_app_disable_function() {
-	$id = API::$IO->id;
-	if ($id == "") API::$IO->end(3);
-	DisablePlugin($id);
-	API::$IO->app = $id;
+    $id = API::$IO->id;
+    if ($id == "") API::$IO->end(3);
+    DisablePlugin($id);
+    API::$IO->app = $id;
 
 }
 API::$Route->post('/app/disable/', 'api_app_disable_function');

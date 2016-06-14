@@ -14,13 +14,13 @@ $blogtitle = 'Gravatar头像';
 
 if (count($_POST) > 0) {
 
-	$zbp->Config('Gravatar')->default_url = $_POST['default_url'];
-	$zbp->Config('Gravatar')->source = $_POST['source'];
-	$zbp->Config('Gravatar')->local_priority = $_POST['local_priority'];
-	$zbp->SaveConfig('Gravatar');
+    $zbp->Config('Gravatar')->default_url = $_POST['default_url'];
+    $zbp->Config('Gravatar')->source = $_POST['source'];
+    $zbp->Config('Gravatar')->local_priority = $_POST['local_priority'];
+    $zbp->SaveConfig('Gravatar');
 
-	$zbp->SetHint('good');
-	Redirect('./main.php');
+    $zbp->SetHint('good');
+    Redirect('./main.php');
 }
 
 require $blogpath . 'zb_system/admin/admin_header.php';

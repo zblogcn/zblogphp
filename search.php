@@ -15,13 +15,13 @@ $zbp->CheckSiteClosed();
 $action = 'search';
 
 foreach ($GLOBALS['hooks']['Filter_Plugin_Search_Begin'] as $fpname => &$fpsignal) {
-	$fpname();
+    $fpname();
 }
 
 ViewIndex();
 
 foreach ($GLOBALS['hooks']['Filter_Plugin_Search_End'] as $fpname => &$fpsignal) {
-	$fpname();
+    $fpname();
 }
 
 RunTime();

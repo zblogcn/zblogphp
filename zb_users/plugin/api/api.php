@@ -14,73 +14,74 @@ require 'user.php';
  * API Singleton
  */
 class API {
-	/**
-	 * Instance
-	 */
-	private static $instance;
-	/**
-	 * Route
-	 */
-	public static $Route;
-	/**
-	 * I/O
-	 */
-	public static $IO;
-	/**
-	 * User
-	 */
-	public static $User;
-	/**
-	 * To avoid construct outside this class.
-	 * @private
-	 */
-	private function __construct() {
-		// Do nothing
-	}
+    /**
+     * Instance
+     */
+    private static $instance;
+    /**
+     * Route
+     */
+    public static $Route;
+    /**
+     * I/O
+     */
+    public static $IO;
+    /**
+     * User
+     */
+    public static $User;
+    /**
+     * To avoid construct outside this class.
+     * @private
+     */
+    private function __construct() {
+        // Do nothing
+    }
 
-	/**
-	 * To return instance
-	 * @return API
-	 */
-	public static function getInstance() {
+    /**
+     * To return instance
+     * @return API
+     */
+    public static function getInstance() {
 
-		if (is_null(self::$instance)) {
-			$class = __CLASS__;
-			self::$instance = new $class();
-		}
-		return self::$instance;
-	}
+        if (is_null(self::$instance)) {
+            $class = __CLASS__;
+            self::$instance = new $class();
+        }
 
-	/**
-	 * To avoid clone
-	 */
-	public function __clone() {
-		throw new Exception("Singleton Class Can Not Be Cloned");
-	}
+        return self::$instance;
+    }
 
-	/**
-	 * Init class
-	 * @return true
-	 */
-	public static function init() {
+    /**
+     * To avoid clone
+     */
+    public function __clone() {
+        throw new Exception("Singleton Class Can Not Be Cloned");
+    }
 
-		global $zbp;
-		// Set Z-BlogPHP Enviroment
-		$zbp->option['ZC_RUNINFO_DISPLAY'] = false;
+    /**
+     * Init class
+     * @return true
+     */
+    public static function init() {
 
-		self::$Route = API_Route::getInstance();
-		self::$IO = API_IO::getInstance(isset($_SERVER['ACCEPT']) ? $_SERVER['ACCEPT'] : 'application/json');
-		self::$User = API_User::getInstance();
+        global $zbp;
+        // Set Z-BlogPHP Enviroment
+        $zbp->option['ZC_RUNINFO_DISPLAY'] = false;
 
-		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(API_PATH . '/route'), RecursiveIteratorIterator::CHILD_FIRST);
-		foreach ($iterator as $path) {
-			$fileName = $path->__toString();
-			if ($path->isFile()) {
-				include $fileName;
-			}
-		}
+        self::$Route = API_Route::getInstance();
+        self::$IO = API_IO::getInstance(isset($_SERVER['ACCEPT']) ? $_SERVER['ACCEPT'] : 'application/json');
+        self::$User = API_User::getInstance();
 
-		return true;
-	}
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(API_PATH . '/route'), RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($iterator as $path) {
+            $fileName = $path->__toString();
+            if ($path->isFile()) {
+                include $fileName;
+            }
+        }
+
+        return true;
+    }
 
 }

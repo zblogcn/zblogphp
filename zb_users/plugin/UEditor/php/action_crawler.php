@@ -6,7 +6,7 @@
  * Time: 下午19:18
  */
 set_time_limit(0);
-include("Uploader.class.php");
+include "Uploader.class.php";
 
 /* 上传配置 */
 $config = array(
@@ -39,6 +39,6 @@ foreach ($source as $imgUrl) {
 
 /* 返回抓取数据 */
 return json_encode(array(
-    'state'=> count($list) ? 'SUCCESS':'ERROR',
-    'list'=> $list
+    'state' => count($list) ? 'SUCCESS' : 'ERROR',
+    'list' => $list
 ));
