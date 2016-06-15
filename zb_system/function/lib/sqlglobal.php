@@ -63,9 +63,12 @@ class SQLGlobal {
                     //is_array($argu[0]) ? $argu[0] : $argu;
                     $this->index[key($value)] = current($value);
                 }
-            } else {
+            }
+            // @codeCoverageIgnoreStart
+            else {
                 $this->data = is_array($argu[0]) ? $argu[0] : $argu;
             }
+            // @codeCoverageIgnoreEnd
 
             return $this;
         } elseif (in_array($upperKeyword, $this->selectFunctionKeyword)) {
@@ -88,13 +91,17 @@ class SQLGlobal {
             }
 
             return $this;
-        } else {
+        }
+        // @codeCoverageIgnoreStart
+        else {
             $lowerKeyword = strtolower($callName);
             if (is_callable($this, $lowerKeyword)) {
                 return call_user_func_array(array($this, $lowerKeyword), $argu);
             }
         }
+        // @codeCoverageIgnoreEnd
         throw new Exception("Unimplemented $callName");
+        
     }
     public function __get($getName) {
         $upperKeyword = strtoupper($getName);
