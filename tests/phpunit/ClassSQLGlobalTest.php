@@ -179,6 +179,18 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ->where(array('IN', 'log_ID', ' \'1\' ,  \'2\' ,  \'3\' ,  \'4\' '))
             ->sql
         );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE (`log_Meta` LIKE \'%s:10:\"meta_Value\";%\')',
+            self::$db
+            ->select("zbp_post")
+            ->where(array('META_NAME', 'log_Meta', 'meta_Value'))
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE (`log_Meta` LIKE \'%s:9:\"meta_Name\";s:10:\"meta_Value\"%\')',
+            self::$db
+            ->select("zbp_post")
+            ->where(array('META_NAMEVALUE', 'log_Meta', 'meta_Name', 'meta_Value'))
+            ->sql
+        );
         $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE 1=1',
             self::$db
             ->select("zbp_post")
@@ -333,12 +345,6 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             self::$db
             ->select("zbp_post")
             ->where(array('IN', 'log_ID', null))
-            ->sql
-        );
-        $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  (1 = 1) ',
-            self::$db
-            ->select("zbp_post")
-            ->where(array('IN', 'log_ID', array()))
             ->sql
         );
         $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  (1 = 1) ',
