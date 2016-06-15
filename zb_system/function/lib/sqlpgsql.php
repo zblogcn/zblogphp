@@ -19,7 +19,7 @@ class SQLPgSQL extends SQLGlobal {
      * @todo
      * @override
      */
-    private function buildCreate() {
+    protected function buildCreate() {
 
         $sqlAll = array();
         foreach ($this->table as $tableIndex => $table) {
@@ -29,7 +29,7 @@ class SQLPgSQL extends SQLGlobal {
             $idname = GetValueInArrayByCurrent($this->data, 0);
 
             $i = 0;
-            foreach ($datainfo as $key => $value) {
+            foreach ($this->data as $key => $value) {
                 if ($value[1] == 'integer') {
                     if ($i == 0) {
                         $sql[] = $value[0] . ' INT NOT NULL DEFAULT nextval(\'' . $table . '_seq\')' . ',';
@@ -84,7 +84,7 @@ class SQLPgSQL extends SQLGlobal {
             }
             $sql[] = 'PRIMARY KEY (' . $idname . ')';
 
-            $sql[] = ')';
+            $sql[] = ');';
             $sql[] = 'CREATE INDEX ' . $table . '_ix_id on ' . $table . '(' . $idname . ');';
             $sqlAll[] = implode($sql, ' ');
 
@@ -93,13 +93,13 @@ class SQLPgSQL extends SQLGlobal {
 
     }
 
-    private function buildDrop() {
-        $sql = &$this->_sql;
-        $sql[] = 'TABLE';
-        $this->buildTable();
-        $sql[] = '; DROP SEQUENCE ';
-        $this->buildTable();
-        $sql[] = '_seq';
+    protected function buildDrop() {
+        foreach ($this->table as $tableIndex => $table) {
+            $sql = array();
+            $sql[] = 'DROP TABLE ' . $table . ';';
+            $sql[] = 'DROP SEQUENCE ' . $table . '_seq;';
+        }
+        $this->_sql = $sql;
     }
 
 }

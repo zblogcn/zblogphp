@@ -19,7 +19,7 @@ class SQLSQLite extends SQLGlobal {
      * @todo
      * @override
      */
-    private function buildCreate() {
+    protected function buildCreate() {
         $sqlAll = array();
         foreach ($this->table as $tableIndex => $table) {
             $sql = array();
@@ -31,7 +31,7 @@ class SQLSQLite extends SQLGlobal {
             $idname = GetValueInArrayByCurrent($this->data, 0);
 
             $i = 0;
-            foreach ($datainfo as $key => $value) {
+            foreach ($this->data as $key => $value) {
                 if ($value[1] == 'integer') {
                     if ($i == 0) {
                         $createData[] = $value[0] . ' integer primary key' . ($this->dbclass == 'DbSQLite' ? '' : ' autoincrement');
@@ -68,8 +68,8 @@ class SQLSQLite extends SQLGlobal {
             }
             $sql[] = implode(', ', $createData);
             $sql[] = ');';
-            $sql[] = 'CREATE UNIQUE INDEX ' . $table;
-            $sql[] = '_' . $idname . ' on ' . $table . ' (' . $idname . ');';
+            $sql[] = 'CREATE UNIQUE INDEX ' . $table . '_' . $idname;
+            $sql[] = ' on ' . $table . ' (' . $idname . ');';
             $sqlAll[] = implode($sql, ' ');
 
         }
