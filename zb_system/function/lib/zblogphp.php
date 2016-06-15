@@ -2357,16 +2357,13 @@ return;
         }
 
         $like = ($this->db->type == 'pgsql') ? 'ILIKE' : 'LIKE';
-        $sql = $this->db->sql->Select(
-            $this->table['Member'], '*',
-            //where
-            $this->db->sql->ParseWhere(array(array($like, 'mem_Name', $name)), '')
-            .
-            $this->db->sql->ParseWhere(array(array($like, 'mem_Alias', $name)), 'OR'),
-            null,
-            1,
-            null
-        );
+
+        $sql = $this->db->sql->get($this->table['Member'], 'SELECT')->where(array("$like array", array(
+                array('mem_Name', $name),
+                array('mem_Alias', $name),
+            )))->limit(1)->sql;
+
+
         $am = $this->GetListType('Member', $sql);
         if (count($am) > 0) {
             $m = $am[0];

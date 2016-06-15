@@ -15,7 +15,7 @@ class ClassSQLPgSQLTest extends PHPUnit_Framework_TestCase
 
     public function testExist() {
         self::$db->exist('zbp_post');
-           $this->assertEquals('SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=\'public\' AND  table_name =\'zbp_post\'', self::$db->sql);
+        $this->assertEquals('SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=\'public\' AND  table_name =\'zbp_post\'', self::$db->sql);
     }
 
     public function testIndex() {
@@ -52,7 +52,7 @@ class ClassSQLPgSQLTest extends PHPUnit_Framework_TestCase
 
     public function testDropTable() {
         self::$db->drop('zbp_post');
-        $this->assert('DROP TABLE zbp_post; DROP SEQUENCE zbp_post_seq;', self::$db->sql);
+        $this->assertEquals('DROP TABLE zbp_post; DROP SEQUENCE zbp_post_seq;', self::$db->sql);
     }
 
 

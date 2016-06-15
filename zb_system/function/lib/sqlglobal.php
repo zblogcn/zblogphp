@@ -437,13 +437,15 @@ class SQLGlobal {
                     $sqlSearch[] = " (`$x` LIKE '%$y%') ";
                 }
                 $whereData[] = " ((1 = 1) AND (" . implode(' OR ', $sqlSearch) . ') )';
-            } elseif ($eq == 'ARRAY' || $eq == 'NOT ARRAY' || $eq == "LIKE ARRAY") {
+            } elseif ($eq == 'ARRAY' || $eq == 'NOT ARRAY' || $eq == "LIKE ARRAY" || $eq == "ILIKE ARRAY") {
                 if ($eq == 'ARRAY') {
                     $symbol = '=';
                 } elseif($eq == 'NOT ARRAY') {
                     $symbol = '<>';
                 } elseif ($eq == 'LIKE ARRAY') {
                     $symbol = 'LIKE';
+                } elseif ($eq == 'ILIKE ARRAY') {
+                    $symbol = 'ILIKE';
                 }
                 $sqlArray = array();
                 if (!is_array($value[1])) {

@@ -156,6 +156,17 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ))
             ->sql
         );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  ((1 = 1) AND ( `log_ID` ILIKE \'1\'  OR  `log_Title` ILIKE \'2\' ) )',
+            self::$db
+            ->select("zbp_post")
+            ->where(array('ilike array',
+                array(
+                    array('log_ID', '1'),
+                    array('log_Title', '2')
+                )
+            ))
+            ->sql
+        );
         $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  ((1 = 1) AND (`log_ID` IN ( \'1\' ,  \'2\' ,  \'3\' ,  \'4\' ) ) )',
             self::$db
             ->select("zbp_post")
