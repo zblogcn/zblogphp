@@ -494,15 +494,13 @@ class SQLGlobal {
                 $sqlMeta = $this->db->EscapeString($sqlMeta);
                 $whereData[] = "(`$value[1]` LIKE '%$sqlMeta%')";
             } elseif ($eq == 'META_NAMEVALUE') {
-                if (count($value) == 4) {
-                    $sqlMeta = 's:' . strlen($value[2]) . ':"' . $value[2] . '";' . 's:' . strlen($value[3]) . ':"' . $value[3] . '"';
-                    $sqlMeta = $this->db->EscapeString($sqlMeta);
-                    $whereData[] = "(`$value[1]` LIKE '%$sqlMeta%')";
-                } elseif (count($value) == 5) {
-                    $sqlMeta = 's:' . strlen($value[2]) . ':"' . $value[2] . '";' . $value[3];
-                    $sqlMeta = $this->db->EscapeString($sqlMeta);
-                    $whereData[] = "(`$value[1]` LIKE '%$sqlMeta%')";
+                if (count($value) != 4) {
+                    $whereData[] = " (1 = 1) ";
+                    continue;
                 }
+                $sqlMeta = 's:' . strlen($value[2]) . ':"' . $value[2] . '";' . 's:' . strlen($value[3]) . ':"' . $value[3] . '"';
+                $sqlMeta = $this->db->EscapeString($sqlMeta);
+                $whereData[] = "(`$value[1]` LIKE '%$sqlMeta%')";
             } elseif ($eq == "CUSTOM") {
                 $whereData[] = $value[1];
             }

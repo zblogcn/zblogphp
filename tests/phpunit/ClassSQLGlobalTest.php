@@ -350,6 +350,12 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  (1 = 1) ',
             self::$db
             ->select("zbp_post")
+            ->where(array('IN', 'log_ID', array()))
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  (1 = 1) ',
+            self::$db
+            ->select("zbp_post")
             ->where(array('array', array()))
             ->sql
         );
@@ -359,7 +365,18 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ->where(array('array', array()))
             ->sql
         );
-
+        $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  (1 = 1) ',
+            self::$db
+            ->select("zbp_post")
+            ->where(array('meta_namevalue', array()))
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  WHERE  (1 = 1) ',
+            self::$db
+            ->select("zbp_post")
+            ->where(array('meta_name', array()))
+            ->sql
+        );
     }
 
     /**
