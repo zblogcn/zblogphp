@@ -9,8 +9,8 @@ class Template {
 
     protected $tags = array();
     protected $path = null;
-    protected $startpage = null;
-    protected $parsephpcodes = array();
+    protected $entryPage = null;
+    protected $parsedPHPCodes = array();
 
     /**
      *
@@ -162,13 +162,13 @@ class Template {
      * @param $content
      */
     protected function parsePHP(&$content) {
-        $this->parsephpcodes = array();
+        $this->parsedPHPCodes = array();
         $matches = array();
         if ($i = preg_match_all('/\{php\}([\D\d]+?)\{\/php\}/si', $content, $matches) > 0) {
             if (isset($matches[1])) {
                 foreach ($matches[1] as $j => $p) {
                     $content = str_replace($p, '<!--' . $j . '-->', $content);
-                    $this->parsephpcodes[$j] = $p;
+                    $this->parsedPHPCodes[$j] = $p;
                 }
             }
         }}
@@ -177,11 +177,11 @@ class Template {
      * @param $content
      */
     protected function parsePHP2(&$content) {
-        foreach ($this->parsephpcodes as $j => $p) {
+        foreach ($this->parsedPHPCodes as $j => $p) {
             $content = str_replace('{php}<!--' . $j . '-->{/php}', '<' . '?php ' . $p . ' ?' . '>', $content);
         }
         $content = preg_replace('/\{php\}([\D\d]+?)\{\/php\}/', '<' . '?php $1 ?' . '>', $content);
-        $this->parsephpcodes = array();
+        $this->parsedPHPCodes = array();
     }
 
     /**
@@ -359,8 +359,11 @@ class Template {
     /**
      *
      */
-    public function Display() {
+    public function Display($entryPage = "") {
         global $zbp;
+        if ($entryPage == "") {
+            $entryPage = $this->entryPage;
+        }
         $f = $this->path . $this->startpage . '.php';
         if (!is_readable($f)) {
             $zbp->ShowError(86, __FILE__, __LINE__);
@@ -376,10 +379,10 @@ class Template {
     /**
      * @return string
      */
-    public function Output() {
+    public function Output($entryPage = "") {
 
         ob_start();
-        $this->Display($this->startpage);
+        $this->Display($entryPage);
         $data = ob_get_contents();
         ob_end_clean();
 
