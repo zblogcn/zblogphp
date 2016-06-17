@@ -12,6 +12,7 @@ class Template {
     protected $entryPage = null;
     protected $parsedPHPCodes = array();
     public $templates = array();
+    public $templatetags = array();
 
     /**
      *
