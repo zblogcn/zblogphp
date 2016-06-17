@@ -7,10 +7,10 @@
  */
 class Template {
 
-    private $tags = array();
-    private $path = null;
-    private $startpage = null;
-    private $parsephpcodes = array();
+    protected $tags = array();
+    protected $path = null;
+    protected $startpage = null;
+    protected $parsephpcodes = array();
 
     /**
      *
@@ -147,21 +147,21 @@ class Template {
     /**
      * @param $content
      */
-    private function replacePHP(&$content) {
+    protected function replacePHP(&$content) {
         $content = preg_replace("/\<\?php[\d\D]+?\?\>/si", '', $content);
     }
 
     /**
      * @param $content
      */
-    private function parse_comments(&$content) {
+    protected function parse_comments(&$content) {
         $content = preg_replace('/\{\*([^\}]+)\*\}/', '{php} /*$1*/ {/php}', $content);
     }
 
     /**
      * @param $content
      */
-    private function parsePHP(&$content) {
+    protected function parsePHP(&$content) {
         $this->parsephpcodes = array();
         $matches = array();
         if ($i = preg_match_all('/\{php\}([\D\d]+?)\{\/php\}/si', $content, $matches) > 0) {
@@ -176,7 +176,7 @@ class Template {
     /**
      * @param $content
      */
-    private function parsePHP2(&$content) {
+    protected function parsePHP2(&$content) {
         foreach ($this->parsephpcodes as $j => $p) {
             $content = str_replace('{php}<!--' . $j . '-->{/php}', '<' . '?php ' . $p . ' ?' . '>', $content);
         }
@@ -187,42 +187,42 @@ class Template {
     /**
      * @param $content
      */
-    private function parse_template(&$content) {
+    protected function parse_template(&$content) {
         $content = preg_replace('/\{template:([^\}]+)\}/', '{php} include $this->GetTemplate(\'$1\'); {/php}', $content);
     }
 
     /**
      * @param $content
      */
-    private function parse_module(&$content) {
+    protected function parse_module(&$content) {
         $content = preg_replace('/\{module:([^\}]+)\}/', '{php} if(isset($modules[\'$1\'])){echo $modules[\'$1\']->Content;} {/php}', $content);
     }
 
     /**
      * @param $content
      */
-    private function parse_option(&$content) {
+    protected function parse_option(&$content) {
         $content = preg_replace('#\{\#([^\}]+)\#\}#', '<?php echo $option[\'\\1\']; ?>', $content);
     }
 
     /**
      * @param $content
      */
-    private function parse_vars(&$content) {
+    protected function parse_vars(&$content) {
         $content = preg_replace_callback('#\{\$(?!\()([^\}]+)\}#', array($this, 'parse_vars_replace_dot'), $content);
     }
 
     /**
      * @param $content
      */
-    private function parse_function(&$content) {
+    protected function parse_function(&$content) {
         $content = preg_replace_callback('/\{([a-zA-Z0-9_]+?)\((.+?)\)\}/', array($this, 'parse_funtion_replace_dot'), $content);
     }
 
     /**
      * @param $content
      */
-    private function parse_if(&$content) {
+    protected function parse_if(&$content) {
         while (preg_match('/\{if [^\n\}]+\}.*?\{\/if\}/s', $content)) {
             $content = preg_replace_callback(
                 '/\{if ([^\n\}]+)\}(.*?)\{\/if\}/s',
@@ -236,7 +236,7 @@ class Template {
      * @param $matches
      * @return string
      */
-    private function parse_if_sub($matches) {
+    protected function parse_if_sub($matches) {
 
         $content = preg_replace_callback(
             '/\{elseif ([^\n\}]+)\}/',
@@ -256,7 +256,7 @@ class Template {
      * @param $matches
      * @return string
      */
-    private function parse_elseif($matches) {
+    protected function parse_elseif($matches) {
         $ifexp = str_replace($matches[1], $this->replace_dot($matches[1]), $matches[1]);
 
         return "{php}}elseif($ifexp) { {/php}";
@@ -265,7 +265,7 @@ class Template {
     /**
      * @param $content
      */
-    private function parse_foreach(&$content) {
+    protected function parse_foreach(&$content) {
         while (preg_match('/\{foreach(.+?)\}(.+?){\/foreach}/s', $content)) {
             $content = preg_replace_callback(
                 '/\{foreach(.+?)\}(.+?){\/foreach}/s',
@@ -279,7 +279,7 @@ class Template {
      * @param $matches
      * @return string
      */
-    private function parse_foreach_sub($matches) {
+    protected function parse_foreach_sub($matches) {
         $exp = $this->replace_dot($matches[1]);
         $code = $matches[2];
 
@@ -289,7 +289,7 @@ class Template {
     /**
      * @param $content
      */
-    private function parse_for(&$content) {
+    protected function parse_for(&$content) {
         while (preg_match('/\{for(.+?)\}(.+?){\/for}/s', $content)) {
             $content = preg_replace_callback(
                 '/\{for(.+?)\}(.+?){\/for}/s',
@@ -303,7 +303,7 @@ class Template {
      * @param $matches
      * @return string
      */
-    private function parse_for_sub($matches) {
+    protected function parse_for_sub($matches) {
         $exp = $this->replace_dot($matches[1]);
         $code = $matches[2];
 
@@ -314,7 +314,7 @@ class Template {
      * @param $matches
      * @return string
      */
-    private function parse_vars_replace_dot($matches) {
+    protected function parse_vars_replace_dot($matches) {
         if (strpos($matches[1], '=') === false || strpos($matches[1], '=>') !== false) {
             return '{php} echo $' . $this->replace_dot($matches[1]) . '; {/php}';
         } else {
@@ -326,7 +326,7 @@ class Template {
      * @param $matches
      * @return string
      */
-    private function parse_funtion_replace_dot($matches) {
+    protected function parse_funtion_replace_dot($matches) {
         return '{php} echo ' . $matches[1] . '(' . $this->replace_dot($matches[2]) . '); {/php}';
     }
 
@@ -334,7 +334,7 @@ class Template {
      * @param $content
      * @return mixed
      */
-    private function replace_dot($content) {
+    protected function replace_dot($content) {
         $array = array();
         preg_match_all('/".+?"|\'.+?\'/', $content, $array, PREG_SET_ORDER);
         if (count($array) > 0) {
