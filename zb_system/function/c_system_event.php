@@ -268,7 +268,7 @@ function ViewIndex() {
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
-return $fpreturn;
+            return $fpreturn;
         }
     }
 
@@ -309,7 +309,7 @@ function ViewFeed() {
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
-return $fpreturn;
+            return $fpreturn;
         }
     }
 
@@ -355,7 +355,7 @@ function ViewSearch() {
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
-return $fpreturn;
+            return $fpreturn;
         }
     }
 
@@ -457,7 +457,7 @@ function ViewAuto($inpurl) {
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
-return $fpreturn;
+            return $fpreturn;
         }
     }
 
@@ -561,7 +561,7 @@ return $fpreturn;
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
-return $fpreturn;
+            return $fpreturn;
         }
     }
 
@@ -601,7 +601,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
-return $fpreturn;
+            return $fpreturn;
         }
     }
 
@@ -896,7 +896,7 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
-return $fpreturn;
+            return $fpreturn;
         }
     }
 
@@ -2996,7 +2996,7 @@ function CountTagArrayString($string, $plus = null, $articleid = null) {
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
-return $fpreturn;
+            return $fpreturn;
         }
     }
 
