@@ -217,7 +217,7 @@ function CreateOptoinsOfTemplate($default) {
 
     $s = null;
     $s .= '<option value="" >' . $zbp->lang['msg']['none'] . '</option>';
-    foreach ($zbp->templates as $key => $value) {
+    foreach ($zbp->template->templates as $key => $value) {
         if (substr($key, 0, 2) == 'b_') {
             continue;
         }
@@ -255,7 +255,7 @@ function CreateOptoinsOfTemplate($default) {
         }
 
         //读模板名称
-        $t = $zbp->templates[$key];
+        $t = $zbp->template->templates[$key];
         $n = '';
         if(stristr($t, 'Template Name:') !== false) {
             $t = stristr($t, 'Template Name:');

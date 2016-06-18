@@ -13,6 +13,7 @@ class Template {
     protected $parsedPHPCodes = array();
     public $templates = array();
     public $templatetags = array();
+    public $compiledtemplates = array();	
 
     /**
      *
@@ -33,6 +34,14 @@ class Template {
     public function GetPath() {
         return $this->path;
     }
+
+    /**
+     * @param $name
+     * @return boolean
+     */
+    public function hasTemplate($name) {
+		return isset($this->templates[$name]);
+	}
 
     /**
      * @param $name

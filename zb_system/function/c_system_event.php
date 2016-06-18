@@ -371,7 +371,7 @@ function ViewSearch() {
     $article->IsLock = true;
     $article->Type = ZC_POST_TYPE_PAGE;
 
-    if (isset($zbp->template->templates['search'])) {
+    if ($zbp->template->hasTemplate('search')) {
         $article->Template = 'search';
     }
 
@@ -858,7 +858,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
     $zbp->template->SetTags('author', $author);
     $zbp->template->SetTags('category', $category);
 
-    if (isset($zbp->template->templates[$template])) {
+    if ($zbp->template->hasTemplate($template)) {
         $zbp->template->SetTemplate($template);
     } else {
         $zbp->template->SetTemplate('index');
@@ -1039,7 +1039,7 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
     $zbp->template->SetTags('pagebar', $pagebar);
     $zbp->template->SetTags('comments', $comments);
 
-    if (isset($zbp->template->templates[$article->Template])) {
+    if ($zbp->template->hasTemplate($article->Template)) {
         $zbp->template->SetTemplate($article->Template);
     } else {
         $zbp->template->SetTemplate('single');
