@@ -190,10 +190,10 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
  * @param $default
  * @return null|string
  */
-function CreateOptoinsOfCategorys($default) {
+function OutputOptionItemsOfCategorys($default) {
     global $zbp;
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_CreateOptoinsOfCategorys'] as $fpname => &$fpsignal) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCategorys'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($default);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
@@ -212,9 +212,9 @@ function CreateOptoinsOfCategorys($default) {
  * @param $default
  * @return null|string
  */
-function CreateOptoinsOfTemplate($default) {
+function OutputOptionItemsOfTemplate($default) {
     global $zbp;
-
+    
     $s = null;
     $s .= '<option value="" >' . $zbp->lang['msg']['none'] . '</option>';
     foreach ($zbp->template->templates as $key => $value) {
@@ -282,7 +282,7 @@ function CreateOptoinsOfTemplate($default) {
  * @param $default
  * @return null|string
  */
-function CreateOptoinsOfMemberLevel($default) {
+function OutputOptionItemsOfMemberLevel($default) {
     global $zbp;
 
     $s = null;
@@ -301,7 +301,7 @@ function CreateOptoinsOfMemberLevel($default) {
  * @param $default
  * @return null|string
  */
-function CreateOptoinsOfMember($default) {
+function OutputOptionItemsOfMember($default) {
     global $zbp;
 
     $s = null;
@@ -326,7 +326,7 @@ function CreateOptoinsOfMember($default) {
  * @param $default
  * @return null|string
  */
-function CreateOptoinsOfPostStatus($default) {
+function OutputOptionItemsOfPostStatus($default) {
     global $zbp;
 
     $s = null;

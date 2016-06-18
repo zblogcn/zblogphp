@@ -94,7 +94,7 @@ $ua = array(
 
 );
 
-function CreateOptoinsOfUrl($type) {
+function OutputOptionItemsOfUrl($type) {
     global $ua, $zbp;
     $s = '';
     $d = 'style="display:none;"';
@@ -148,7 +148,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_ARTICLE_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_ARTICLE_REGEX')?></td>
 </tr>
 <tr>
 	<td><p align='left'><b>·页面的URL配置</b></p></td>
@@ -156,7 +156,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_PAGE_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_PAGE_REGEX')?></td>
 </tr>
 <tr>
 	<td><p align='left'><b>·首页的URL配置</b></p></td>
@@ -164,7 +164,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_INDEX_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_INDEX_REGEX')?></td>
 </tr>
 <tr>
 	<td><p align='left'><b>·分类页的URL配置</b></p></td>
@@ -172,7 +172,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_CATEGORY_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_CATEGORY_REGEX')?></td>
 </tr>
 <tr>
 	<td><p align='left'><b>·标签页的URL配置</b></p></td>
@@ -180,7 +180,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_TAGS_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_TAGS_REGEX')?></td>
 </tr>
 <tr>
 	<td><p align='left'><b>·日期页的URL配置</b></p></td>
@@ -188,7 +188,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_DATE_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_DATE_REGEX')?></td>
 </tr>
 <tr>
 	<td><p align='left'><b>·作者页的URL配置</b></p></td>
@@ -196,7 +196,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_AUTHOR_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_AUTHOR_REGEX')?></td>
 </tr>
 <?php
 

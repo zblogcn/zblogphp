@@ -53,7 +53,7 @@ ID;?>" />
 					<?php echo $lang['msg']['template']?>:</span>
 				<br />
 				<select class="edit" size="1" name="Template" id="cmbTemplate">
-					<?php echo CreateOptoinsOfTemplate($tag->Template);?></select>
+					<?php echo OutputOptionItemsOfTemplate($tag->Template);?></select>
 			</p>
 			<p>
 				<span class='title'>

@@ -49,7 +49,7 @@ $member = $zbp->GetMemberByID($memberid);
 					<?php echo $lang['msg']['member_level']?>:</span>
 				<br />
 				<select class="edit" size="1" name="Level" id="cmbLevel">
-					<?php echo CreateOptoinsOfMemberLevel($member->Level);?></select>
+					<?php echo OutputOptionItemsOfMemberLevel($member->Level);?></select>
 				<?php if ($zbp->CheckRights('MemberAll') && $zbp->user->ID != $member->ID) {?>
 		&nbsp;(
 				<span class="title">
@@ -115,7 +115,7 @@ $member = $zbp->GetMemberByID($memberid);
 					<?php echo $lang['msg']['template']?>:</span>
 				<br />
 				<select class="edit" size="1" name="Template" id="cmbTemplate">
-					<?php echo CreateOptoinsOfTemplate($member->Template);?></select>
+					<?php echo OutputOptionItemsOfTemplate($member->Template);?></select>
 			</p>
 			<div id='response' class='editmod2'>
 				<?php foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}

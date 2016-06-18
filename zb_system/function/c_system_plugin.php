@@ -874,13 +874,13 @@ DefinePluginFilter('Filter_Plugin_Admin_Js_Add');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_CreateOptoinsOfCategorys
+'名称:Filter_Plugin_OutputOptionItemsOfCategorys
 '参数:
-'说明:定义CreateOptoinsOfCategorys函数里的接口
+'说明:定义OutputOptionItemsOfCategorys函数里的接口
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_CreateOptoinsOfCategorys');
+DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfCategorys');
 
 ################################################################################################################
 #Event里的接口
