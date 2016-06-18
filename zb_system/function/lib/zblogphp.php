@@ -549,7 +549,7 @@ class ZBlogPHP {
         //创建模板类
         $this->template = new Template();
         $this->LoadTemplate();
-        $this->MakeTemplatetags();
+        $this->MakeTemplateTags();
         $this->PrepareTemplate();
 
         if ($this->ismanage) {
@@ -1537,9 +1537,9 @@ return;
     /**
      *解析模板标签
      */
-    public function MakeTemplatetags() {
+    public function MakeTemplateTags() {
 
-        $this->template->templatetags = array();
+        $this->template->templateTags = array();
 
         $option = $this->option;
         unset($option['ZC_BLOG_CLSID']);
@@ -1556,36 +1556,36 @@ return;
         unset($option['ZC_PGSQL_SERVER']);
         unset($option['ZC_DATABASE_TYPE']);
 
-        $this->template->templatetags['zbp'] = &$this;
-        $this->template->templatetags['user'] = &$this->user;
-        $this->template->templatetags['option'] = &$option;
-        $this->template->templatetags['lang'] = &$this->lang;
-        $this->template->templatetags['version'] = &$this->version;
-        $this->template->templatetags['categorys'] = &$this->categorys;
-        $this->template->templatetags['modules'] = &$this->modulesbyfilename;
-        $this->template->templatetags['title'] = htmlspecialchars($this->title);
-        $this->template->templatetags['host'] = &$this->host;
-        $this->template->templatetags['path'] = &$this->path;
-        $this->template->templatetags['cookiespath'] = &$this->cookiespath;
-        $this->template->templatetags['name'] = htmlspecialchars($this->name);
-        $this->template->templatetags['subname'] = htmlspecialchars($this->subname);
-        $this->template->templatetags['theme'] = &$this->theme;
-        $this->template->templatetags['themeinfo'] = &$this->themeinfo;
-        $this->template->templatetags['style'] = &$this->style;
-        $this->template->templatetags['language'] = $this->option['ZC_BLOG_LANGUAGE'];
-        $this->template->templatetags['copyright'] = $this->option['ZC_BLOG_COPYRIGHT'];
-        $this->template->templatetags['zblogphp'] = $this->option['ZC_BLOG_PRODUCT_FULL'];
-        $this->template->templatetags['zblogphphtml'] = $this->option['ZC_BLOG_PRODUCT_FULLHTML'];
-        $this->template->templatetags['zblogphpabbrhtml'] = $this->option['ZC_BLOG_PRODUCT_HTML'];
-        $this->template->templatetags['type'] = '';
-        $this->template->templatetags['page'] = '';
-        $this->template->templatetags['socialcomment'] = &$this->socialcomment;
-        $this->template->templatetags['header'] = &$this->header;
-        $this->template->templatetags['footer'] = &$this->footer;
-        $this->template->templatetags['validcodeurl'] = &$this->validcodeurl;
-        $this->template->templatetags['feedurl'] = &$this->feedurl;
-        $this->template->templatetags['searchurl'] = &$this->searchurl;
-        $this->template->templatetags['ajaxurl'] = &$this->ajaxurl;
+        $this->template->templateTags['zbp'] = &$this;
+        $this->template->templateTags['user'] = &$this->user;
+        $this->template->templateTags['option'] = &$option;
+        $this->template->templateTags['lang'] = &$this->lang;
+        $this->template->templateTags['version'] = &$this->version;
+        $this->template->templateTags['categorys'] = &$this->categorys;
+        $this->template->templateTags['modules'] = &$this->modulesbyfilename;
+        $this->template->templateTags['title'] = htmlspecialchars($this->title);
+        $this->template->templateTags['host'] = &$this->host;
+        $this->template->templateTags['path'] = &$this->path;
+        $this->template->templateTags['cookiespath'] = &$this->cookiespath;
+        $this->template->templateTags['name'] = htmlspecialchars($this->name);
+        $this->template->templateTags['subname'] = htmlspecialchars($this->subname);
+        $this->template->templateTags['theme'] = &$this->theme;
+        $this->template->templateTags['themeinfo'] = &$this->themeinfo;
+        $this->template->templateTags['style'] = &$this->style;
+        $this->template->templateTags['language'] = $this->option['ZC_BLOG_LANGUAGE'];
+        $this->template->templateTags['copyright'] = $this->option['ZC_BLOG_COPYRIGHT'];
+        $this->template->templateTags['zblogphp'] = $this->option['ZC_BLOG_PRODUCT_FULL'];
+        $this->template->templateTags['zblogphphtml'] = $this->option['ZC_BLOG_PRODUCT_FULLHTML'];
+        $this->template->templateTags['zblogphpabbrhtml'] = $this->option['ZC_BLOG_PRODUCT_HTML'];
+        $this->template->templateTags['type'] = '';
+        $this->template->templateTags['page'] = '';
+        $this->template->templateTags['socialcomment'] = &$this->socialcomment;
+        $this->template->templateTags['header'] = &$this->header;
+        $this->template->templateTags['footer'] = &$this->footer;
+        $this->template->templateTags['validcodeurl'] = &$this->validcodeurl;
+        $this->template->templateTags['feedurl'] = &$this->feedurl;
+        $this->template->templateTags['searchurl'] = &$this->searchurl;
+        $this->template->templateTags['ajaxurl'] = &$this->ajaxurl;
         $s = array(
             $option['ZC_SIDEBAR_ORDER'],
             $option['ZC_SIDEBAR2_ORDER'],
@@ -1607,19 +1607,19 @@ return;
             $this->$s = $ms;
             $ms = null;
         }
-        $this->template->templatetags['sidebar'] = &$this->sidebar;
-        $this->template->templatetags['sidebar2'] = &$this->sidebar2;
-        $this->template->templatetags['sidebar3'] = &$this->sidebar3;
-        $this->template->templatetags['sidebar4'] = &$this->sidebar4;
-        $this->template->templatetags['sidebar5'] = &$this->sidebar5;
+        $this->template->templateTags['sidebar'] = &$this->sidebar;
+        $this->template->templateTags['sidebar2'] = &$this->sidebar2;
+        $this->template->templateTags['sidebar3'] = &$this->sidebar3;
+        $this->template->templateTags['sidebar4'] = &$this->sidebar4;
+        $this->template->templateTags['sidebar5'] = &$this->sidebar5;
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_MakeTemplatetags'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($this->template->templatetags);
+            $fpreturn = $fpname($this->template->templateTags);
         }
 
         $t = array();
         $o = array();
-        foreach ($this->template->templatetags as $k => $v) {
+        foreach ($this->template->templateTags as $k => $v) {
             if (is_string($v) || is_numeric($v) || is_bool($v)) {
                 $t['{$' . $k . '}'] = $v;
             }
@@ -1641,7 +1641,7 @@ return;
     public function PrepareTemplate() {
 
         $this->template->SetPath($this->usersdir . 'cache/template/' . $this->theme . '/compiled/');
-        $this->template->SetTagsAll($this->template->templatetags);
+        $this->template->SetTagsAll($this->template->templateTags);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this->template);

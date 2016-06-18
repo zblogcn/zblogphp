@@ -12,8 +12,8 @@ class Template {
     protected $entryPage = null;
     protected $parsedPHPCodes = array();
     public $templates = array();
-    public $templatetags = array();
-    public $compiledtemplates = array();	
+    public $templateTags = array();
+    public $compiledTemplates = array();
 
     /**
      *
@@ -40,8 +40,8 @@ class Template {
      * @return boolean
      */
     public function hasTemplate($name) {
-		return isset($this->templates[$name]);
-	}
+        return isset($this->templates[$name]);
+    }
 
     /**
      * @param $name
