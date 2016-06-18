@@ -8,6 +8,7 @@
 class Template {
 
     protected $path = null;
+    protected $templatePath = null;
     protected $entryPage = null;
     protected $parsedPHPCodes = array();
     public $theme = "";
@@ -26,6 +27,13 @@ class Template {
      */
     public function SetPath($path) {
         $this->path = $path;
+    }
+	
+    /**
+     * @param $path
+     */
+    public function SetTemplatePath($path) {
+        $this->templatePath = $path;
     }
 
     /**

@@ -1655,19 +1655,16 @@ return;
     public function LoadTemplate($theme = null) {
 
         if (is_null($theme)) $theme = $this->theme;
-        $templates  = array();
+
+        $this->template->templates  = array();
 
         // 读取预置模板
-        $files = GetFilesInDir($this->path . 'zb_system/defend/default/', 'php');
-        foreach ($files as $sortname => $fullname) {
-            $templates[$sortname] = file_get_contents($fullname);
-        }
+        $this->template->SetTemplatePath($this->path . 'zb_system/defend/default/');
+        $this->template->LoadFiles();
 
         // 读取主题模板
-        $files = GetFilesInDir($this->usersdir . 'theme/' . $theme . '/template/', 'php');
-        foreach ($files as $sortname => $fullname) {
-            $templates[$sortname] = file_get_contents($fullname);
-        }
+        $this->template->SetTemplatePath($this->usersdir . 'theme/' . $theme . '/template/');
+        $this->template->LoadFiles();
 
         // 读版本号
         $app = new App;
@@ -1677,15 +1674,15 @@ return;
 
         for ($i = 2; $i <= 5; $i++) {
             if (!isset($templates['sidebar' . $i])) {
-                $templates['sidebar' . $i] = str_replace('$sidebar', '$sidebar' . $i, $templates['sidebar']);
+                $this->template->templates['sidebar' . $i] = str_replace('$sidebar', '$sidebar' . $i, $this->template->templates['sidebar']);
             }
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadTemplate'] as $fpname => &$fpsignal) {
-            $fpname($templates);
+            $fpname($this->template->templates);
         }
 
-        return $templates;
+        //return $templates;
     }
 
     /**
@@ -1693,10 +1690,7 @@ return;
      * @return bool
      */
     public function BuildTemplate() {
-        if (count($this->template->templates) == 0) {
-            $this->template->templates = $this->LoadTemplate();
-        }
-
+        $this->LoadTemplate();
         return $this->template->BuildTemplate();
     }
 
@@ -1704,7 +1698,7 @@ return;
      *更新模板缓存
      */
     public function CheckTemplate() {
-        $this->template->templates = $this->LoadTemplate();
+        $this->LoadTemplate();
         $s = implode($this->template->templates);
         $md5 = md5($s);
         if ($md5 != $this->cache->templates_md5) {
