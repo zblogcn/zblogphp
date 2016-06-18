@@ -547,16 +547,13 @@ class ZBlogPHP {
         $this->RegBuildModule('authors', 'BuildModule_authors');
 
         //创建模板类
-        $this->template = new Template();
-        $this->LoadTemplate();
-        $this->MakeTemplateTags();
         $this->PrepareTemplate();
 
         if ($this->ismanage) {
             $this->LoadManage();
         } else {
 
-            if (isset($this->template->templates['404'])) {
+            if ($this->template->hasTemplate('404')) {
                 Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'Include_ShowError404');
             }
 
@@ -1640,8 +1637,10 @@ return;
      */
     public function PrepareTemplate() {
 
+        $this->template = new Template();
+        $this->MakeTemplateTags();
         $this->template->SetPath($this->usersdir . 'cache/template/' . $this->theme . '/compiled/');
-        $this->template->SetTagsAll($this->template->templateTags);
+        $this->template->theme = &$this->theme;
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this->template);
@@ -1651,39 +1650,42 @@ return;
     }
 
     /**
-     *载入模板
+     * 载入未编译模板
      */
-    public function LoadTemplate() {
+    public function LoadTemplate($theme = null) {
 
-        $this->template->templates = array();
+        if (is_null($theme)) $theme = $this->theme;
+        $templates  = array();
 
-        #先读默认的
-        $dir = $this->path . 'zb_system/defend/default/';
-        $files = GetFilesInDir($dir, 'php');
+        // 读取预置模板
+        $files = GetFilesInDir($this->path . 'zb_system/defend/default/', 'php');
         foreach ($files as $sortname => $fullname) {
-            $this->template->templates[$sortname] = file_get_contents($fullname);
+            $templates[$sortname] = file_get_contents($fullname);
         }
-        #再读当前的
-        $dir = $this->usersdir . 'theme/' . $this->theme . '/template/';
-        $files = GetFilesInDir($dir, 'php');
+
+        // 读取主题模板
+        $files = GetFilesInDir($this->usersdir . 'theme/' . $theme . '/template/', 'php');
         foreach ($files as $sortname => $fullname) {
-            $this->template->templates[$sortname] = file_get_contents($fullname);
+            $templates[$sortname] = file_get_contents($fullname);
         }
-        //读版本号
+
+        // 读版本号
         $app = new App;
-        if ($app->LoadInfoByXml('theme', $this->theme) == true) {
+        if ($app->LoadInfoByXml('theme', $theme) == true) {
             $this->themeinfo = $app->GetInfoArray();
         }
 
         for ($i = 2; $i <= 5; $i++) {
-            if (!isset($this->template->templates['sidebar' . $i])) {
-                $this->template->templates['sidebar' . $i] = str_replace('$sidebar', '$sidebar' . $i, $this->template->templates['sidebar']);
+            if (!isset($templates['sidebar' . $i])) {
+                $templates['sidebar' . $i] = str_replace('$sidebar', '$sidebar' . $i, $templates['sidebar']);
             }
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadTemplate'] as $fpname => &$fpsignal) {
-            $fpname($this->template->templates);
+            $fpname($templates);
         }
+
+        return $templates;
     }
 
     /**
@@ -1691,99 +1693,18 @@ return;
      * @return bool
      */
     public function BuildTemplate() {
-
-        if (strpos('|SAE|BAE2|ACE|TXY|', '|' . $this->option['ZC_YUN_SITE'] . '|') !== false) {
-            return false;
+        if (count($this->template->templates) == 0) {
+            $this->template->templates = $this->LoadTemplate();
         }
 
-        //初始化模板
-        $this->LoadTemplate();
-
-        if (strpos($this->template->templates['comments'], 'AjaxCommentBegin') === false) {
-            $this->template->templates['comments'] = '<label id="AjaxCommentBegin"></label>' . $this->template->templates['comments'];
-        }
-
-        if (strpos($this->template->templates['comments'], 'AjaxCommentEnd') === false) {
-            $this->template->templates['comments'] = $this->template->templates['comments'] . '<label id="AjaxCommentEnd"></label>';
-        }
-
-        if (strpos($this->template->templates['comment'], 'id="cmt{$comment.ID}"') === false && strpos($this->template->templates['comment'], 'id=\'cmt{$comment.ID}\'') === false) {
-            $this->template->templates['comment'] = '<label id="cmt{$comment.ID}"></label>' . $this->template->templates['comment'];
-        }
-
-        if (strpos($this->template->templates['commentpost'], 'inpVerify') === false && strpos($this->template->templates['commentpost'], '=\'verify\'') === false && strpos($this->template->templates['commentpost'], '="verify"') === false) {
-            $verify = '{if $option[\'ZC_COMMENT_VERIFY_ENABLE\'] && !$user.ID}<p><input type="text" name="inpVerify" id="inpVerify" class="text" value="" size="28" tabindex="4" /> <label for="inpVerify">' . $this->lang['msg']['validcode'] . '(*)</label><img style="width:{$option[\'ZC_VERIFYCODE_WIDTH\']}px;height:{$option[\'ZC_VERIFYCODE_HEIGHT\']}px;cursor:pointer;" src="{$article.ValidCodeUrl}" alt="" title="" onclick="javascript:this.src=\'{$article.ValidCodeUrl}&amp;tm=\'+Math.random();"/></p>{/if}';
-
-            if (strpos($this->template->templates['commentpost'], '<!--verify-->') !== false) {
-                $this->template->templates['commentpost'] = str_replace('<!--verify-->', $verify, $this->template->templates['commentpost']);
-            } elseif (strpos($this->template->templates['commentpost'], '</form>') !== false) {
-                $this->template->templates['commentpost'] = str_replace('</form>', $verify . '</form>', $this->template->templates['commentpost']);
-            } else {
-                $this->template->templates['commentpost'] .= $verify;
-            }
-        }
-
-        if (strpos($this->template->templates['header'], '{$header}') === false) {
-            if (strpos($this->template->templates['header'], '</head>') !== false) {
-                $this->template->templates['header'] = str_replace('</head>', '</head>' . '{$header}', $this->template->templates['header']);
-            } elseif (strpos($this->template->templates['header'], '</ head>') !== false) {
-                $this->template->templates['header'] = str_replace('</ head>', '</ head>' . '{$header}', $this->template->templates['header']);
-            } else {
-                $this->template->templates['header'] .= '{$header}';
-            }
-        }
-
-        if (strpos($this->template->templates['footer'], '{$footer}') === false) {
-            if (strpos($this->template->templates['footer'], '</body>') !== false) {
-                $this->template->templates['footer'] = str_replace('</body>', '{$footer}' . '</body>', $this->template->templates['footer']);
-            } elseif (strpos($this->template->templates['footer'], '</ body>') !== false) {
-                $this->template->templates['footer'] = str_replace('</ body>', '{$footer}' . '</ body>', $this->template->templates['footer']);
-            } elseif (strpos($this->template->templates['footer'], '</html>') !== false) {
-                $this->template->templates['footer'] = str_replace('</html>', '{$footer}' . '</html>', $this->template->templates['footer']);
-            } elseif (strpos($this->template->templates['footer'], '</ html>') !== false) {
-                $this->template->templates['footer'] = str_replace('</ html>', '{$footer}' . '</ html>', $this->template->templates['footer']);
-            } else {
-                $this->template->templates['footer'] = '{$footer}' . $this->template->templates['footer'];
-            }
-        }
-
-        $dir = $this->usersdir . 'cache/template/' . $this->theme . '/compiled/';
-
-        if (!file_exists($dir)) {
-            @mkdir($dir, 0755, true);
-        }
-
-        $files2 = array();
-        foreach ($this->template->templates as $name => $file) {
-            $files2[] = $dir . $name . '.php';
-        }
-
-        //清空目标目录
-        $files = GetFilesInDir($dir, 'php');
-
-        $files3 = array_diff($files, $files2);
-
-        foreach ($files3 as $fullname) {
-            @unlink($fullname);
-        }
-
-        //创建模板类
-        $template = new Template();
-        $template->SetPath($dir);
-
-        //模板接口
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {
-            $fpname($this->template->templates);
-        }
-
-        $template->CompileFiles($this->template->templates);
-
+        return $this->template->BuildTemplate();
     }
 
     /**
      *更新模板缓存
      */
     public function CheckTemplate() {
+        $this->template->templates = $this->LoadTemplate();
         $s = implode($this->template->templates);
         $md5 = md5($s);
         if ($md5 != $this->cache->templates_md5) {

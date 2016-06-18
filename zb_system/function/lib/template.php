@@ -7,10 +7,10 @@
  */
 class Template {
 
-    protected $tags = array();
     protected $path = null;
     protected $entryPage = null;
     protected $parsedPHPCodes = array();
+    public $theme = "";
     public $templates = array();
     public $templateTags = array();
     public $compiledTemplates = array();
@@ -40,7 +40,11 @@ class Template {
      * @return boolean
      */
     public function hasTemplate($name) {
-        return isset($this->templates[$name]);
+        if (!isset($this->compiledTemplates[$name])) {
+            return file_exists($this->path . '/404.php');
+        }
+
+        return true;
     }
 
     /**
@@ -69,7 +73,7 @@ class Template {
      * @return mixed
      */
     public function &GetTags($name) {
-        return $this->tags[$name];
+        return $this->templateTags[$name];
     }
 
     /**
@@ -77,43 +81,115 @@ class Template {
      * @param $value
      */
     public function SetTags($name, $value) {
-        $this->tags[$name] = $value;
+        $this->templateTags[$name] = $value;
     }
 
     /**
      * @return array
      */
     public function &GetTagsAll() {
-        return $this->tags;
+        return $this->templateTags;
     }
 
     /**
      * @param $array
      */
     public function SetTagsAll(&$array) {
-        $this->tags = $array;
+        $this->templateTags = $array;
     }
 
     /**
      * @param $filesarray
      */
-    public function CompileFiles($filesarray) {
+    public function CompileFiles() {
 
-        foreach ($filesarray as $name => $content) {
-            $s = RemoveBOM($this->Compiling($content));
+        foreach ($this->templates as $name => $content) {
+            $s = RemoveBOM($this->CompileFile($content));
             @file_put_contents($this->path . $name . '.php', $s);
-            //if(function_exists('chmod')){
-            //	@chmod($this->path . $name . '.php',0755);
-            //}
         }
 
     }
+
+
+    public function BuildTemplate() {
+        global $zbp;
+
+        // 初始化模板
+        if (!file_exists($this->path)) {
+            @mkdir($this->path, 0755, true);
+        } else {
+            foreach (GetFilesInDir($this->path, 'php') as $fullname) {
+                @unlink($fullname);
+            }
+        }
+        $this->addNonexistendTags();
+
+        // 模板接口
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {
+            $fpname($this->templates);
+        }
+
+        return $this->CompileFiles();
+
+    }
+
+
+    protected function addNonexistendTags() {
+
+        global $zbp;
+        $templates = &$this->templates;
+
+        if (!strpos($templates['comments'], 'AjaxCommentBegin')) {
+            $templates['comments'] = '<label id="AjaxCommentBegin"></label>' . $templates['comments'];
+        }
+
+        if (!strpos($templates['comments'], 'AjaxCommentEnd')) {
+            $templates['comments'] = $templates['comments'] . '<label id="AjaxCommentEnd"></label>';
+        }
+
+        if (!strpos($templates['comment'], 'id="cmt{$comment.ID}"') && !strpos($templates['comment'], 'id=\'cmt{$comment.ID}\'')) {
+            $templates['comment'] = '<label id="cmt{$comment.ID}"></label>' . $templates['comment'];
+        }
+
+        if (!strpos($templates['commentpost'], 'inpVerify') && !strpos($templates['commentpost'], '=\'verify\'') && !strpos($templates['commentpost'], '="verify"')) {
+            $verify = '{if $option[\'ZC_COMMENT_VERIFY_ENABLE\'] && !$user.ID}<p><input type="text" name="inpVerify" id="inpVerify" class="text" value="" size="28" tabindex="4" /> <label for="inpVerify">' . $zbp->lang['msg']['validcode'] . '(*)</label><img style="width:{$option[\'ZC_VERIFYCODE_WIDTH\']}px;height:{$option[\'ZC_VERIFYCODE_HEIGHT\']}px;cursor:pointer;" src="{$article.ValidCodeUrl}" alt="" title="" onclick="javascript:this.src=\'{$article.ValidCodeUrl}&amp;tm=\'+Math.random();"/></p>{/if}';
+
+            if (!strpos($templates['commentpost'], '<!--verify-->')) {
+                $templates['commentpost'] = str_replace('<!--verify-->', $verify, $templates['commentpost']);
+            } elseif (strpos($templates['commentpost'], '</form>')) {
+                $templates['commentpost'] = str_replace('</form>', $verify . '</form>', $templates['commentpost']);
+            } else {
+                $templates['commentpost'] .= $verify;
+            }
+        }
+
+        if (!strpos($templates['header'], '{$header}')) {
+            if (strpos($templates['header'], '</head>')) {
+                $templates['header'] = str_replace('</head>', '</head>' . '{$header}', $templates['header']);
+            } else {
+                $templates['header'] .= '{$header}';
+            }
+        }
+
+        if (!strpos($templates['footer'], '{$footer}')) {
+            if (strpos($templates['footer'], '</body>')) {
+                $templates['footer'] = str_replace('</body>', '{$footer}' . '</body>', $templates['footer']);
+            } elseif (strpos($templates['footer'], '</html>')) {
+                $templates['footer'] = str_replace('</html>', '{$footer}' . '</html>', $templates['footer']);
+            } else {
+                $templates['footer'] = '{$footer}' . $templates['footer'];
+            }
+        }
+
+        return;
+    }
+
 
     /**
      * @param $content
      * @return mixed
      */
-    public function Compiling($content) {
+    public function CompileFile($content) {
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Compiling_Begin'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
@@ -154,6 +230,8 @@ class Template {
 
         return $content;
     }
+
+
 
     /**
      * @param $content
@@ -366,9 +444,11 @@ class Template {
         return $content;
     }
 
-    #模板入口
+
+
+
     /**
-     *
+     * 显示模板
      */
     public function Display($entryPage = "") {
         global $zbp;
@@ -381,9 +461,10 @@ class Template {
         }
 
         #入口处将tags里的变量提升全局!!!
-        foreach ($this->tags as $key => &$value) {
+        foreach ($this->templateTags as $key => &$value) {
             $$key = &$value;
         }
+
         include $f;
     }
 
@@ -400,5 +481,7 @@ class Template {
         return $data;
 
     }
+
+
 
 }
