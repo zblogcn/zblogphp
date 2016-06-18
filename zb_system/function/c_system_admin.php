@@ -214,50 +214,20 @@ function OutputOptionItemsOfCategorys($default) {
  */
 function OutputOptionItemsOfTemplate($default) {
     global $zbp;
-    
+    $testRegExp = "/^(\.|post-|module|header|footer|comment|sidebar|pagebar|[a-zA-Z]\_)/si";
     $s = null;
     $s .= '<option value="" >' . $zbp->lang['msg']['none'] . '</option>';
+
     foreach ($zbp->template->templates as $key => $value) {
-        if (substr($key, 0, 2) == 'b_') {
+        
+        if (preg_match($testRegExp, $key)) {
             continue;
         }
 
-        if (substr($key, 0, 2) == 'c_') {
-            continue;
-        }
+        $n = "";
+        $t = $value;
 
-        if (substr($key, 0, 5) == 'post-') {
-            continue;
-        }
-
-        if (substr($key, 0, 6) == 'module') {
-            continue;
-        }
-
-        if (substr($key, 0, 6) == 'header') {
-            continue;
-        }
-
-        if (substr($key, 0, 6) == 'footer') {
-            continue;
-        }
-
-        if (substr($key, 0, 7) == 'comment') {
-            continue;
-        }
-
-        if (substr($key, 0, 7) == 'sidebar') {
-            continue;
-        }
-
-        if (substr($key, 0, 7) == 'pagebar') {
-            continue;
-        }
-
-        //读模板名称
-        $t = $zbp->template->templates[$key];
-        $n = '';
-        if(stristr($t, 'Template Name:') !== false) {
+        if(stristr($value, 'Template Name:')) {
             $t = stristr($t, 'Template Name:');
             $t = str_ireplace('Template Name:', '', $t);
             $n = strtok($t, ' *');
