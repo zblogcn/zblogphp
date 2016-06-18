@@ -195,10 +195,6 @@ class ZBlogPHP {
      */
     public $template = null;
     /**
-     * @var array 可替换的标签数组
-     */
-    public $replacetags = array();
-    /**
      * @var null 社会化评论
      */
     public $socialcomment = null;
@@ -547,7 +543,7 @@ class ZBlogPHP {
         $this->RegBuildModule('authors', 'BuildModule_authors');
 
         //创建模板类
-        $this->PrepareTemplate();
+        $this->template = $this->PrepareTemplate();
 
         if ($this->ismanage) {
             $this->LoadManage();
@@ -557,8 +553,8 @@ class ZBlogPHP {
                 Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'Include_ShowError404');
             }
 
-            $ak = array_keys($this->replacetags);
-            $av = array_values($this->replacetags);
+            $ak = array_keys($this->template->replaceTags);
+            $av = array_values($this->template->replaceTags);
             foreach ($this->modulesbyfilename as &$m) {
                 $m->Content = str_replace($ak, $av, $m->Content);
             }
@@ -1628,7 +1624,7 @@ return;
             }
 
         }
-        $this->replacetags = $t + $o;
+        $this->template->replaceTags = $t + $o;
     }
 
     /**
@@ -1637,16 +1633,16 @@ return;
      */
     public function PrepareTemplate() {
 
-        $this->template = new Template();
+        $template = new Template();
         $this->MakeTemplateTags();
-        $this->template->SetPath($this->usersdir . 'cache/template/' . $this->theme . '/compiled/');
-        $this->template->theme = &$this->theme;
+        $template->SetPath($this->usersdir . 'cache/template/' . $this->theme . '/compiled/');
+        $template->theme = &$this->theme;
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($this->template);
+            $fpreturn = $fpname($template);
         }
 
-        //return $template;
+        return $template;
     }
 
     /**

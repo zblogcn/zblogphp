@@ -14,7 +14,7 @@ class Template {
     public $templates = array();
     public $templateTags = array();
     public $compiledTemplates = array();
-
+    public $replaceTags = array();
     /**
      *
      */
