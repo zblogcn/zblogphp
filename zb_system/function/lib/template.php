@@ -65,7 +65,7 @@ class Template {
      * @param $templatename
      */
     public function SetTemplate($templatename) {
-        $this->startpage = $templatename;
+        $this->entryPage = $templatename;
     }
 
     /**
@@ -95,7 +95,7 @@ class Template {
      * @param $array
      */
     public function SetTagsAll(&$array) {
-        $this->templateTags = $array;
+        $this->templateTags = array_merge_recursive($this->templateTags, $array);
     }
 
     /**
@@ -455,7 +455,8 @@ class Template {
         if ($entryPage == "") {
             $entryPage = $this->entryPage;
         }
-        $f = $this->path . $this->startpage . '.php';
+        $f = $this->path . $entryPage . '.php';
+
         if (!is_readable($f)) {
             $zbp->ShowError(86, __FILE__, __LINE__);
         }

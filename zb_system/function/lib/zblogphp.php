@@ -532,15 +532,15 @@ class ZBlogPHP {
 
         $this->Verify();
 
-        $this->RegBuildModule('catalog', 'BuildModule_catalog');
-        $this->RegBuildModule('calendar', 'BuildModule_calendar');
-        $this->RegBuildModule('comments', 'BuildModule_comments');
-        $this->RegBuildModule('previous', 'BuildModule_previous');
-        $this->RegBuildModule('archives', 'BuildModule_archives');
-        $this->RegBuildModule('navbar', 'BuildModule_navbar');
-        $this->RegBuildModule('tags', 'BuildModule_tags');
-        $this->RegBuildModule('statistics', 'BuildModule_statistics');
-        $this->RegBuildModule('authors', 'BuildModule_authors');
+        $this->RegBuildModule('catalog', 'BuildModule::Catalog');
+        $this->RegBuildModule('calendar', 'BuildModule::Calendar');
+        $this->RegBuildModule('comments', 'BuildModule::Comments');
+        $this->RegBuildModule('previous', 'BuildModule::LatestArticles');
+        $this->RegBuildModule('archives', 'BuildModule::Archives');
+        $this->RegBuildModule('navbar', 'BuildModule::Navbar');
+        $this->RegBuildModule('tags', 'BuildModule::TagList');
+        $this->RegBuildModule('statistics', 'BuildModule::Statistics');
+        $this->RegBuildModule('authors', 'BuildModule::Authors');
 
         //创建模板类
         $this->template = $this->PrepareTemplate();

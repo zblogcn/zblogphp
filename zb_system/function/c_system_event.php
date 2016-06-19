@@ -743,7 +743,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
             $zbp->title = $datetitle . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
         }
 
-        $zbp->modulesbyfilename['calendar']->Content = BuildModule_calendar(date('Y', $datetime) . '-' . date('n', $datetime));
+        $zbp->modulesbyfilename['calendar']->Content = ModuleBuilder::Calendar(date('Y', $datetime) . '-' . date('n', $datetime));
 
         $template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
         $w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 month', $datetime));
