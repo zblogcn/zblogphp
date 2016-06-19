@@ -209,19 +209,22 @@ class ModuleBuilder {
      */
     public static function LatestArticles() {
         global $zbp;
+        $template = $zbp->PrepareTemplate();
+        $tags = array();
 
-        $i = $zbp->modulesbyfilename['previous']->MaxLi;
+        $tags['module'] = $zbp->modulesbyfilename['comments'];
+        $i = $zbp->modulesbyfilename['comments']->MaxLi;
         if ($i == 0) {
             $i = 10;
         }
-
+        $tags['maxLi'] = $i;
         $articles = $zbp->GetArticleList('*', array(array('=', 'log_Type', 0), array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), $i, null, false);
-        $s = '';
-        foreach ($articles as $article) {
-            $s .= '<li><a href="' . $article->Url . '">' . $article->Title . '</a></li>';
-        }
+        $tags['articles'] = $articles;
 
-        return $s;
+        $template->SetTagsAll($tags);
+        $ret = $template->Output('module-previous');
+
+        return $ret;
     }
 
     /**
