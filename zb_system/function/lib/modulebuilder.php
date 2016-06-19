@@ -37,6 +37,9 @@ class ModuleBuilder {
      */
     public static function Catalog() {
         global $zbp;
+
+        $template = $zbp->PrepareTemplate();
+
         $s = '';
 
         $i = $zbp->modulesbyfilename['catalog']->MaxLi;
@@ -100,74 +103,40 @@ class ModuleBuilder {
      */
     public static function Calendar($date = '') {
         global $zbp;
+        $template = $zbp->PrepareTemplate();
+        $tags = array();
 
         if ($date == '') {
             $date = date('Y-m', time());
         }
-
-        $s = '<table id="tbCalendar"><caption>';
+        $tags['date'] = $date;
 
         $url = new UrlRule($zbp->option['ZC_DATE_REGEX']);
-        $value = strtotime('-1 month', strtotime($date));
-        $url->Rules['{%date%}'] = date('Y-n', $value);
-        $url->Rules['{%year%}'] = date('Y', $value);
-        $url->Rules['{%month%}'] = date('n', $value);
-
         $url->Rules['{%day%}'] = 1;
-        $s .= '<a href="' . $url->Make() . '">«</a>';
+
+        $value = strtotime('-1 month', strtotime($date));
+        $tags['prevMonth'] = date('n', $value);
+        $tags['prevYear'] = date('Y', $value);
+        $url->Rules['{%date%}'] = $tags['prevYear'] . '-' . $tags['prevMonth'];
+        $url->Rules['{%year%}'] = $tags['prevYear'];
+        $url->Rules['{%month%}'] = $tags['prevMonth'];
+        $tags['prevMonthUrl'] = $url->Make();
 
         $value = strtotime($date);
-        $url->Rules['{%date%}'] = date('Y-n', $value);
-        $url->Rules['{%year%}'] = date('Y', $value);
-        $url->Rules['{%month%}'] = date('n', $value);
-        $s .= '&nbsp;&nbsp;&nbsp;<a href="' . $url->Make() . '">' . str_replace(array('%y%', '%m%'), array(date('Y', $value), date('n', $value)), $zbp->lang['msg']['year_month']) . '</a>&nbsp;&nbsp;&nbsp;';
+        $tags['nowMonth'] = date('n', $value);
+        $tags['nowYear'] = date('Y', $value);
+        $url->Rules['{%date%}'] = $tags['nowYear'] . '-' . $tags['nowMonth'];
+        $url->Rules['{%year%}'] = $tags['nowYear'];
+        $url->Rules['{%month%}'] = $tags['nowMonth'];
+        $tags['nowMonthUrl'] = $url->Make();
 
         $value = strtotime('+1 month', strtotime($date));
-        $url->Rules['{%date%}'] = date('Y-n', $value);
-        $url->Rules['{%year%}'] = date('Y', $value);
-        $url->Rules['{%month%}'] = date('n', $value);
-        $s .= '<a href="' . $url->Make() . '">»</a></caption>';
-
-        $s .= '<thead><tr>';
-        for ($i = 1; $i < 8; $i++) {
-            $s .= '<th title="' . $zbp->lang['week'][$i] . '" scope="col"><small>' . $zbp->lang['week_abbr'][$i] . '</small></th>';
-        }
-
-        $s .= '</tr></thead>';
-        $s .= '<tbody>';
-        $s .= '<tr>';
-
-        $a = 1;
-        $b = date('t', strtotime($date));
-        $j = date('N', strtotime($date . '-1'));
-        $k = 7 - date('N', strtotime($date . '-' . date('t', strtotime($date))));
-
-        if ($j > 1) {
-            $s .= '<td class="pad" colspan="' . ($j - 1) . '"> </td>';
-        } elseif ($j = 1) {
-            $s .= '';
-        }
-
-        $l = $j - 1;
-        for ($i = $a; $i < $b + 1; $i++) {
-            $s .= '<td>' . $i . '</td>';
-
-            $l = $l + 1;
-            if ($l % 7 == 0) {
-                $s .= '</tr><tr>';
-            }
-
-        }
-
-        if ($k > 1) {
-            $s .= '<td class="pad" colspan="' . ($k) . '"> </td>';
-        } elseif ($k = 1) {
-            $s .= '';
-        }
-
-        $s .= '</tr></tbody>';
-        $s .= '</table>';
-        $s = str_replace('<tr></tr>', '', $s);
+        $tags['nextMonth'] = date('n', $value);
+        $tags['nextYear'] = date('Y', $value);
+        $url->Rules['{%date%}'] = $tags['nextYear'] . '-' . $tags['nextMonth'];
+        $url->Rules['{%year%}'] = $tags['nextYear'];
+        $url->Rules['{%month%}'] = $tags['nextMonth'];
+        $tags['nextMonthUrl'] = $url->Make();
 
         $fdate = strtotime($date);
         $ldate = (strtotime(date('Y-m-t', strtotime($date))) + 60 * 60 * 24);
@@ -186,21 +155,27 @@ class ModuleBuilder {
         $array = $zbp->db->Query($sql);
         $arraydate = array();
         $arrayid = array();
-        foreach ($array as $key => $value) {
-            $arraydate[date('j', $value[$zbp->datainfo['Post']['PostTime'][0]])] = $value[$zbp->datainfo['Post']['ID'][0]];
-        }
-        if (count($arraydate) > 0) {
-            foreach ($arraydate as $key => $value) {
-                $arrayid[] = array('log_ID', $value);
+        foreach ($array as $value) {
+            $key = date('j', $value[$zbp->datainfo['Post']['PostTime'][0]]);
+            if (!isset($arraydate[$key])) {
+                $fullDate = $tags['nowYear'] . '-' . $tags['nowMonth'] . '-' . $key;
+                $url->Rules['{%date%}'] = $fullDate;
+                $url->Rules['{%year%}'] = $tags['nowYear'];
+                $url->Rules['{%month%}'] = $tags['nowMonth'];
+                $url->Rules['{%day%}'] = $key;
+                $arraydate[$key] = array(
+                    'Date' => $fullDate,
+                    'Url' => $url->Make(),
+                    'Count' => 0
+                );
             }
-            $articles = $zbp->GetArticleList('*', array(array('array', $arrayid)), null, null, null, false);
-            foreach ($arraydate as $key => $value) {
-                $a = $zbp->GetPostByID($value);
-                $s = str_replace('<td>' . $key . '</td>', '<td><a href="' . $a->Url . '">' . $key . '</a></td>', $s);
-            }
+            $arraydate[$key]['Count']++;
         }
+        $tags['arraydate'] = $arraydate;
+        $template->SetTagsAll($tags);
+        $ret = $template->Output('module-calander');
 
-        return $s;
+        return $ret;
 
     }
 
