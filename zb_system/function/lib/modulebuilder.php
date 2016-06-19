@@ -154,7 +154,6 @@ class ModuleBuilder {
         );
         $array = $zbp->db->Query($sql);
         $arraydate = array();
-        $arrayid = array();
         foreach ($array as $value) {
             $key = date('j', $value[$zbp->datainfo['Post']['PostTime'][0]]);
             if (!isset($arraydate[$key])) {
@@ -172,8 +171,9 @@ class ModuleBuilder {
             $arraydate[$key]['Count']++;
         }
         $tags['arraydate'] = $arraydate;
+        $tags['module'] = $zbp->modulesbyfilename['calendar'];
         $template->SetTagsAll($tags);
-        $ret = $template->Output('module-calander');
+        $ret = $template->Output('module-calendar');
 
         return $ret;
 
@@ -185,20 +185,22 @@ class ModuleBuilder {
      */
     public static function Comments() {
         global $zbp;
+        $template = $zbp->PrepareTemplate();
+        $tags = array();
 
+        $tags['module'] = $zbp->modulesbyfilename['comments'];
         $i = $zbp->modulesbyfilename['comments']->MaxLi;
         if ($i == 0) {
             $i = 10;
         }
-
+        $tags['maxLi'] = $i;
         $comments = $zbp->GetCommentList('*', array(array('=', 'comm_IsChecking', 0)), array('comm_PostTime' => 'DESC'), $i, null);
+        $tags['comments'] = $comments;
 
-        $s = '';
-        foreach ($comments as $comment) {
-            $s .= '<li><a href="' . $comment->Post->Url . '#cmt' . $comment->ID . '" title="' . htmlspecialchars($comment->Author->StaticName . ' @ ' . $comment->Time()) . '">' . TransferHTML($comment->Content, '[noenter]') . '</a></li>';
-        }
+        $template->SetTagsAll($tags);
+        $ret = $template->Output('module-comments');
 
-        return $s;
+        return $ret;
     }
 
     /**

@@ -458,6 +458,7 @@ class Template {
         $f = $this->path . $entryPage . '.php';
 
         if (!is_readable($f)) {
+            var_dump($f);exit;
             $zbp->ShowError(86, __FILE__, __LINE__);
         }
 
