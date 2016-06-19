@@ -196,14 +196,6 @@ class SQLGlobal {
             } else {
                 $this->columns[] = $columns;
             }
-        } elseif ($nums == 2) {
-            if (is_array($columns)) {
-                $this->columnLoaderArray(func_get_args());
-            } else {
-                $arg0 = $columns;
-                $arg1 = func_get_arg(1);
-                $this->columns[] = "$arg0 AS $arg1";
-            }
         } else {
             $this->columnLoaderArray(func_get_args());
         }

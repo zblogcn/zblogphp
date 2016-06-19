@@ -297,12 +297,12 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ->column('*')
             ->sql
         );
-        $this->assertEquals('SELECT  * AS sum,log_Content AS content,log_AuthorID AS author,log_Title AS Title  FROM  `zbp_post` ',
+        $this->assertEquals('SELECT  * AS sum,log_Content AS content,log_AuthorID AS author,log_Title,log_PostTime,log_ID AS ID  FROM  `zbp_post` ',
             self::$db
             ->select("zbp_post")
             ->column(array('*', 'sum'))
             ->column(array(array('log_Content', 'content'), array('log_AuthorID', 'author')))
-            ->column('log_Title', 'Title')
+            ->column('log_Title', 'log_PostTime', array('log_ID', 'ID'))
             ->sql
         );
     }
