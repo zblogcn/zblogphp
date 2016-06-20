@@ -41,7 +41,7 @@ class Template {
      */
     public function hasTemplate($name) {
         if (!isset($this->compiledTemplates[$name])) {
-            return file_exists($this->path . '/404.php');
+            return file_exists($this->path . '/' . $name .'.php');
         }
 
         return true;
@@ -458,7 +458,6 @@ class Template {
         $f = $this->path . $entryPage . '.php';
 
         if (!is_readable($f)) {
-            var_dump($f);exit;
             $zbp->ShowError(86, __FILE__, __LINE__);
         }
 
