@@ -547,12 +547,6 @@ class ZBlogPHP {
 
         if ($this->ismanage) {
             $this->LoadManage();
-        } else {
-
-            if ($this->template->hasTemplate('404')) {
-                Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'Include_ShowError404');
-            }
-
         }
 
         Add_Filter_Plugin('Filter_Plugin_Login_Header', 'Include_AddonAdminFont');
