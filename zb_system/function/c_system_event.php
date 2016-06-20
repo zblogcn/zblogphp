@@ -272,7 +272,7 @@ function ViewIndex() {
         }
     }
 
-    if ($this->template->hasTemplate('404')) {
+    if ($zbp->template->hasTemplate('404')) {
          Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'Include_ShowError404');
     }
 
