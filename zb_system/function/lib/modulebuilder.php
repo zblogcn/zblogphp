@@ -39,6 +39,7 @@ class ModuleBuilder {
         global $zbp;
 
         $template = $zbp->PrepareTemplate();
+        $tags = array();
 
         $s = '';
 
@@ -53,7 +54,6 @@ class ModuleBuilder {
                 if ($i != 0 && $j >= $i) {
                     break;
                 }
-
             }
 
             for ($i = 1; $i <= 3; $i++) {
@@ -94,6 +94,15 @@ class ModuleBuilder {
         }
 
         return $s;
+
+
+        $tags['style'] = $zbp->option['ZC_MODULE_CATALOG_STYLE'];
+        $tags['maxLi'] = $zbp->modulesbyfilename['catalog']->MaxLi;
+        $tags['categorys'] = $zbp->categorysbyorder;
+
+        $template->SetTagsAll($tags);
+        $ret = $template->Output('module-catalog');
+
     }
 
     /**
