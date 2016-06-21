@@ -41,61 +41,6 @@ class ModuleBuilder {
         $template = $zbp->PrepareTemplate();
         $tags = array();
 
-        $s = '';
-
-        $i = $zbp->modulesbyfilename['catalog']->MaxLi;
-        $j = 0;
-        if ($zbp->option['ZC_MODULE_CATALOG_STYLE'] == '2') {
-            foreach ($zbp->categorysbyorder as $key => $value) {
-                if ($value->Level == 0) {
-                    $s .= '<li class="li-cate"><a href="' . $value->Url . '">' . $value->Name . '</a><!--' . $value->ID . 'begin--><!--' . $value->ID . 'end--></li>';
-                }
-                $j += 1;
-                if ($i != 0 && $j >= $i) {
-                    break;
-                }
-            }
-
-            for ($i = 1; $i <= 3; $i++) {
-                // 此处逻辑仍要继续修改
-                foreach ($zbp->categorysbyorder as $key => $value) {
-                    if ($value->Level == $i) {
-                        $s = str_replace('<!--' . $value->ParentID . 'end-->', '<li class="li-subcate"><a href="' . $value->Url . '">' . $value->Name . '</a><!--' . $value->ID . 'begin--><!--' . $value->ID . 'end--></li><!--' . $value->ParentID . 'end-->', $s);
-                    }
-                }
-            }
-
-            foreach ($zbp->categorysbyorder as $key => $value) {
-                $s = str_replace('<!--' . $value->ID . 'begin--><!--' . $value->ID . 'end-->', '', $s);
-            }
-            foreach ($zbp->categorysbyorder as $key => $value) {
-                $s = str_replace('<!--' . $value->ID . 'begin-->', '<ul class="ul-subcates">', $s);
-                $s = str_replace('<!--' . $value->ID . 'end-->', '</ul>', $s);
-            }
-
-        } elseif ($zbp->option['ZC_MODULE_CATALOG_STYLE'] == '1') {
-            foreach ($zbp->categorysbyorder as $key => $value) {
-                $s .= '<li>' . $value->Symbol . '<a href="' . $value->Url . '">' . $value->Name . '</a></li>';
-                $j += 1;
-                if ($i != 0 && $j >= $i) {
-                    break;
-                }
-
-            }
-        } else {
-            foreach ($zbp->categorysbyorder as $key => $value) {
-                $s .= '<li><a href="' . $value->Url . '">' . $value->Name . '</a></li>';
-                $j += 1;
-                if ($i != 0 && $j >= $i) {
-                    break;
-                }
-
-            }
-        }
-
-        return $s;
-
-
         $tags['style'] = $zbp->option['ZC_MODULE_CATALOG_STYLE'];
         $tags['maxLi'] = $zbp->modulesbyfilename['catalog']->MaxLi;
         $tags['categorys'] = $zbp->categorysbyorder;
@@ -242,6 +187,9 @@ class ModuleBuilder {
      */
     public static function Archives() {
         global $zbp;
+        $template = $zbp->PrepareTemplate();
+        $tags = array();
+        $urls = array();//array(url,name,count);
 
         $maxli = $zbp->modulesbyfilename['archives']->MaxLi;
         if ($maxli < 0) {
@@ -307,13 +255,17 @@ class ModuleBuilder {
             $sql = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', '0'), array('=', 'log_Status', '0'), array('BETWEEN', 'log_PostTime', $fdate, $ldate)));
             $n = GetValueInArrayByCurrent($zbp->db->Query($sql), 'num');
             if ($n > 0) {
-                $s .= '<li><a href="' . $url->Make() . '">' . str_replace(array('%y%', '%m%'), array(date('Y', $fdate), date('n', $fdate)), $zbp->lang['msg']['year_month']) . ' (' . $n . ')</a></li>';
+                $urls()=array($url->Make(),str_replace(array('%y%', '%m%'), array(date('Y', $fdate), date('n', $fdate)), $zbp->lang['msg']['year_month']),$n);
                 $i++;
             }
         }
 
-        return $s;
+        $tags['urls'] = $urls;
 
+        $template->SetTagsAll($tags);
+        $ret = $template->Output('module-archives');
+
+        return $ret;
     }
 
     /**
@@ -322,6 +274,8 @@ class ModuleBuilder {
      */
     public static function Navbar() {
         global $zbp;
+        $template = $zbp->PrepareTemplate();
+        $tags = array();
 
         $s = $zbp->modulesbyfilename['navbar']->Content;
 
@@ -370,7 +324,12 @@ class ModuleBuilder {
             }
         }
 
-        return $s;
+        $tags['content'] = $s;
+
+        $template->SetTagsAll($tags);
+        $ret = $template->Output('module-navbar');
+
+        return $ret;
     }
 
     /**
@@ -379,7 +338,10 @@ class ModuleBuilder {
      */
     public static function TagList() {
         global $zbp;
-        $s = '';
+        $template = $zbp->PrepareTemplate();
+        $tags = array();
+        $urls = array();//array(url,name,count);
+
         $i = $zbp->modulesbyfilename['tags']->MaxLi;
         if ($i == 0) {
             $i = 25;
@@ -393,10 +355,15 @@ class ModuleBuilder {
         ksort($array2);
 
         foreach ($array2 as $tag) {
-            $s .= '<li><a href="' . $tag->Url . '">' . $tag->Name . '<span class="tag-count"> (' . $tag->Count . ')</span></a></li>';
+            $urls[]=array($tag->Url,$tag->Name,$tag->Count);
         }
 
-        return $s;
+        $tags['urls'] = $urls;
+
+        $template->SetTagsAll($tags);
+        $ret = $template->Output('module-tags');
+
+        return $ret;
     }
 
     /**
@@ -406,7 +373,9 @@ class ModuleBuilder {
      */
     public static function AuthorList($level = 4) {
         global $zbp;
-        $s = '';
+        $template = $zbp->PrepareTemplate();
+        $tags = array();
+        $authors = array();
 
         $w = array();
         $w[] = array('<=', 'mem_Level', $level);
@@ -414,10 +383,16 @@ class ModuleBuilder {
         $array = $zbp->GetMemberList('*', $w, array('mem_ID' => 'ASC'), null, null);
 
         foreach ($array as $member) {
-            $s .= '<li><a href="' . $member->Url . '">' . $member->Name . '<span class="article-nums"> (' . $member->Articles . ')</span></a></li>';
+            unset($member,'Guid');
+            unset($member,'Password');
+            $authors[]=$member;
         }
 
-        return $s;
+        $tags['authors'] = $authors;
+        $template->SetTagsAll($tags);
+        $ret = $template->Output('module-authors');
+
+        return $ret;
     }
 
     /**
@@ -427,6 +402,10 @@ class ModuleBuilder {
      */
     public static function Statistics($array = array()) {
         global $zbp;
+        $template = $zbp->PrepareTemplate();
+        $tags = array();
+        $allinfo = array();
+
         $all_artiles = 0;
         $all_pages = 0;
         $all_categorys = 0;
@@ -462,19 +441,23 @@ class ModuleBuilder {
             $all_comments = $array[5];
         }
 
-        $s = "";
-        $s .= "<li>{$zbp->lang['msg']['all_artiles']}:{$all_artiles}</li>";
-        $s .= "<li>{$zbp->lang['msg']['all_pages']}:{$all_pages}</li>";
-        $s .= "<li>{$zbp->lang['msg']['all_categorys']}:{$all_categorys}</li>";
-        $s .= "<li>{$zbp->lang['msg']['all_tags']}:{$all_tags}</li>";
-        $s .= "<li>{$zbp->lang['msg']['all_comments']}:{$all_comments}</li>";
+        $allinfo[]=array($zbp->lang['msg']['all_artiles'],$all_artiles);
+        $allinfo[]=array($zbp->lang['msg']['all_pages'],$all_pages);
+        $allinfo[]=array($zbp->lang['msg']['all_categorys'],$all_categorys);
+        $allinfo[]=array($zbp->lang['msg']['all_tags'],$all_tags);
+        $allinfo[]=array($zbp->lang['msg']['all_comments'],$all_comments);
         if (!$zbp->option['ZC_VIEWNUMS_TURNOFF'] || $zbp->option['ZC_LARGE_DATA']) {
-            $s .= "<li>{$zbp->lang['msg']['all_views']}:{$all_views}</li>";
+            $allinfo[]=array($zbp->lang['msg']['all_views'],$all_views);
         }
 
         $zbp->modulesbyfilename['statistics']->Type = "ul";
 
-        return $s;
+
+        $tags['allinfo'] = $allinfo;
+        $template->SetTagsAll($tags);
+        $ret = $template->Output('module-statistics');
+
+        return $ret;
 
     }
 

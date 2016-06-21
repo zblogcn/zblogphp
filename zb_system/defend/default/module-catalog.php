@@ -6,7 +6,7 @@
         {if $catalog->Level == 0}
             {$s = $s . '<li class="li-cate"><a href="' . $catalog->Url . '">' . $catalog->Name . '</a><!--' . $catalog->ID . 'begin--><!--' . $catalog->ID . 'end--></li>'}
         {/if}
-    {/for}
+    {/foreach}
 
     {for $i = 1; $i <= 3; $i++}
         {* 此处逻辑仍要继续修改 *}
@@ -14,16 +14,16 @@
             {if $catalog->Level == $i}
                 {$s = str_replace('<!--' . $catalog->ParentID . 'end-->', '<li class="li-subcate"><a href="' . $value->Url . '">' . $catalog->Name . '</a><!--' . $catalog->ID . 'begin--><!--' . $catalog->ID . 'end--></li><!--' . $catalog->ParentID . 'end-->', $s)}
             {/if}
-        {/for}
+        {/foreach}
     {/for}
 
     {foreach $catelogs as $catalog}
         {$s = str_replace('<!--' . $catalog->ID . 'begin--><!--' . $catalog->ID . 'end-->', '', $s)}
-    {/for}
+    {/foreach}
     {foreach $catelogs as $catalog}
         {$s = str_replace('<!--' . $catalog->ID . 'begin-->', '<ul class="ul-subcates">', $s)}
         {$s = str_replace('<!--' . $catalog->ID . 'end-->', '</ul>', $s)}
-    {/for}
+    {/foreach}
     {$s}
 {elseif $style==1}
     {foreach $catelogs as $catalog}
@@ -32,7 +32,7 @@
         {if $i != 0 && $j >= $i}
             {php}break;{/php}
         {/if}
-    {/for}
+    {/foreach}
 {else}
     {foreach $catelogs as $catalog}
         <li><a href="{$catalog.Url}">{$catalog.Title}</a></li>
@@ -40,5 +40,5 @@
         {if $i != 0 && $j >= $i}
             {php}break;{/php}
         {/if}
-    {/for}
+    {/foreach}
 {/if}
