@@ -372,7 +372,7 @@ class App {
         if (function_exists('scandir')) {
             foreach (scandir($dir) as $d) {
                 if (is_dir($dir . $d)) {
-                    if (substr($d, 0, 1) != '.') {
+                    if ((substr($d, 0, 1) != '.') && ($d != 'compile')) {
                         $this->GetAllFileDir($dir . $d . '/');
                         $this->dirs[] = $dir . $d . '/';
                     }
@@ -383,8 +383,8 @@ class App {
         } else {
             if ($handle = opendir($dir)) {
                 while (false !== ($file = readdir($handle))) {
-                    if (substr($file, 0, 1) != '.') {
-                        if (is_dir($dir . $file)) {
+                    if (is_dir($dir . $file)) {
+                        if ((substr($file, 0, 1) != '.') && ($file != 'compile')) {
                             $this->dirs[] = $dir . $file . '/';
                             $this->GetAllFileDir($dir . $file . '/');
                         } else {
