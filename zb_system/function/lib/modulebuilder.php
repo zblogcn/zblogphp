@@ -37,7 +37,7 @@ class ModuleBuilder {
 
     public static function BuildModule() {
         global $zbp;
-        foreach (Self::$readymodules as $modfilename) {
+        foreach (ModuleBuilder::$readymodules as $modfilename) {
             if (isset($zbp->modulesbyfilename[$modfilename])) {
                 $m = $zbp->modulesbyfilename[$modfilename];
                 $m->Build();
@@ -52,7 +52,7 @@ class ModuleBuilder {
      * @param string $userfunc 用户函数
      */
     public static function RegBuildModule($modfilename, $userfunc) {
-        Self::$readymodules_function[$modfilename] = $userfunc;
+        ModuleBuilder::$readymodules_function[$modfilename] = $userfunc;
     }
 
     /**
@@ -61,8 +61,8 @@ class ModuleBuilder {
      * @param null $parameters 模块参数
      */
     public static function AddBuildModule($modfilename, $parameters = null) {
-        Self::$readymodules[$modfilename] = $modfilename;
-        Self::$readymodules_parameters[$modfilename] = $parameters;
+        ModuleBuilder::$readymodules[$modfilename] = $modfilename;
+        ModuleBuilder::$readymodules_parameters[$modfilename] = $parameters;
     }
 
     /**
@@ -70,9 +70,9 @@ class ModuleBuilder {
      * @param string $modfilename 模块名
      */
     public static function DelBuildModule($modfilename) {
-        unset(Self::$readymodules[$modfilename]);
-        unset(Self::$readymodules_function[$modfilename]);
-        unset(Self::$readymodules_parameters[$modfilename]);
+        unset(ModuleBuilder::$readymodules[$modfilename]);
+        unset(ModuleBuilder::$readymodules_function[$modfilename]);
+        unset(ModuleBuilder::$readymodules_parameters[$modfilename]);
     }
 
     /**
