@@ -1166,27 +1166,7 @@ return;
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildModule'] as $fpname => &$fpsignal) {
             $fpname();
         }
-
-        foreach ($this->readymodules as $modfilename) {
-            if (isset($this->modulesbyfilename[$modfilename])) {
-                if (isset($this->readymodules_function[$modfilename])) {
-                    $m = $this->modulesbyfilename[$modfilename];
-                    if ($m->NoRefresh == true) {
-                        continue;
-                    }
-
-                    if (function_exists($this->readymodules_function[$modfilename])) {
-                        if (!isset($this->readymodules_parameters[$modfilename])) {
-                            $m->Content = call_user_func($this->readymodules_function[$modfilename]);
-                        } else {
-                            $m->Content = call_user_func($this->readymodules_function[$modfilename], $this->readymodules_parameters[$modfilename]);
-                        }
-                    }
-                    $m->Save();
-                }
-            }
-        }
-
+		ModuleBuilder::BuildModule();
     }
 
     /**
@@ -1195,7 +1175,7 @@ return;
      * @param string $userfunc 用户函数
      */
     public function RegBuildModule($modfilename, $userfunc) {
-        $this->readymodules_function[$modfilename] = $userfunc;
+        ModuleBuilder::RegBuildModule($modfilename, $userfunc);
     }
 
     /**
@@ -1204,8 +1184,7 @@ return;
      * @param null $parameters 模块参数
      */
     public function AddBuildModule($modfilename, $parameters = null) {
-        $this->readymodules[$modfilename] = $modfilename;
-        $this->readymodules_parameters[$modfilename] = $parameters;
+        ModuleBuilder::AddBuildModule($modfilename, $parameters);
     }
 
     /**
@@ -1213,19 +1192,14 @@ return;
      * @param string $modfilename 模块名
      */
     public function DelBuildModule($modfilename) {
-        unset($this->readymodules[$modfilename]);
-        unset($this->readymodules_function[$modfilename]);
-        unset($this->readymodules_parameters[$modfilename]);
+        ModuleBuilder::DelBuildModule($modfilename);
     }
 
     /**
      * 所有模块重置
      */
     public function AddBuildModuleAll() {
-        $m = array('catalog', 'calendar', 'comments', 'previous', 'archives', 'navbar', 'tags', 'authors');
-        foreach ($m as $key => $value) {
-            $this->readymodules[$value] = $value;
-        }
+    	//del from 1.5
     }
 
 ################################################################################################################

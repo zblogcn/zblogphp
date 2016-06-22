@@ -29,7 +29,52 @@ function BuildModule_statistics($array = array()) {
 }
 
 class ModuleBuilder {
-        
+
+    public static $Modules = array();
+    public static $readymodules = array(); #模块
+    public static $readymodules_function = array(); #模块函数
+    public static $readymodules_parameters = array(); #模块函数的参数
+
+    public static function BuildModule() {
+        global $zbp;
+        foreach (Self::$readymodules as $modfilename) {
+            if (isset($zbp->modulesbyfilename[$modfilename])) {
+                $m = $zbp->modulesbyfilename[$modfilename];
+                $m->Build();
+                $m->Save();
+            }
+        }
+    }
+
+    /**
+     * 重建模块
+     * @param string $modfilename 模块名
+     * @param string $userfunc 用户函数
+     */
+    public static function RegBuildModule($modfilename, $userfunc) {
+        Self::$readymodules_function[$modfilename] = $userfunc;
+    }
+
+    /**
+     * 添加模块
+     * @param string $modfilename 模块名
+     * @param null $parameters 模块参数
+     */
+    public static function AddBuildModule($modfilename, $parameters = null) {
+        Self::$readymodules[$modfilename] = $modfilename;
+        Self::$readymodules_parameters[$modfilename] = $parameters;
+    }
+
+    /**
+     * 删除模块
+     * @param string $modfilename 模块名
+     */
+    public static function DelBuildModule($modfilename) {
+        unset(Self::$readymodules[$modfilename]);
+        unset(Self::$readymodules_function[$modfilename]);
+        unset(Self::$readymodules_parameters[$modfilename]);
+    }
+
     /**
      * 导出网站分类模块数据
      * @return string 模块内容
@@ -255,7 +300,7 @@ class ModuleBuilder {
             $sql = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', '0'), array('=', 'log_Status', '0'), array('BETWEEN', 'log_PostTime', $fdate, $ldate)));
             $n = GetValueInArrayByCurrent($zbp->db->Query($sql), 'num');
             if ($n > 0) {
-                $urls()=array($url->Make(),str_replace(array('%y%', '%m%'), array(date('Y', $fdate), date('n', $fdate)), $zbp->lang['msg']['year_month']),$n);
+                $urls[]=array($url->Make(),str_replace(array('%y%', '%m%'), array(date('Y', $fdate), date('n', $fdate)), $zbp->lang['msg']['year_month']),$n);
                 $i++;
             }
         }
@@ -383,8 +428,8 @@ class ModuleBuilder {
         $array = $zbp->GetMemberList('*', $w, array('mem_ID' => 'ASC'), null, null);
 
         foreach ($array as $member) {
-            unset($member,'Guid');
-            unset($member,'Password');
+            unset($member->Guid);
+            unset($member->Password);
             $authors[]=$member;
         }
 
