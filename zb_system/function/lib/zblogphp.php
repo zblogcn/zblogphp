@@ -237,26 +237,6 @@ class ZBlogPHP {
      */
     public $commentdisplaycount = 10;
 
-    /**
-     * @var array 默认侧栏
-     */
-    public $sidebar = array();
-    /**
-     * @var array 侧栏2
-     */
-    public $sidebar2 = array();
-    /**
-     * @var array 侧栏3
-     */
-    public $sidebar3 = array();
-    /**
-     * @var array 侧栏4
-     */
-    public $sidebar4 = array();
-    /**
-     * @var array 侧栏5
-     */
-    public $sidebar5 = array();
 
     /**
      * 获取唯一实例
@@ -504,7 +484,6 @@ class ZBlogPHP {
             $fpreturn = $fpname();
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-   
                 return $fpreturn;
             }
         }
@@ -1488,112 +1467,19 @@ class ZBlogPHP {
     #模板相关函数
 
     /**
-     *解析模板标签
-     */
-    public function MakeTemplateTags(&$template) {
-
-        $option = $this->option;
-        unset($option['ZC_BLOG_CLSID']);
-        unset($option['ZC_SQLITE_NAME']);
-        unset($option['ZC_MYSQL_USERNAME']);
-        unset($option['ZC_MYSQL_PASSWORD']);
-        unset($option['ZC_MYSQL_NAME']);
-        unset($option['ZC_MYSQL_PORT']);
-        unset($option['ZC_MYSQL_SERVER']);
-        unset($option['ZC_PGSQL_USERNAME']);
-        unset($option['ZC_PGSQL_PASSWORD']);
-        unset($option['ZC_PGSQL_NAME']);
-        unset($option['ZC_PGSQL_PORT']);
-        unset($option['ZC_PGSQL_SERVER']);
-        unset($option['ZC_DATABASE_TYPE']);
-
-        $template->templateTags['zbp'] = &$this;
-        $template->templateTags['user'] = &$this->user;
-        $template->templateTags['option'] = &$option;
-        $template->templateTags['lang'] = &$this->lang;
-        $template->templateTags['version'] = &$this->version;
-        $template->templateTags['categorys'] = &$this->categorys;
-        $template->templateTags['modules'] = &$this->modulesbyfilename;
-        $template->templateTags['title'] = htmlspecialchars($this->title);
-        $template->templateTags['host'] = &$this->host;
-        $template->templateTags['path'] = &$this->path;
-        $template->templateTags['cookiespath'] = &$this->cookiespath;
-        $template->templateTags['name'] = htmlspecialchars($this->name);
-        $template->templateTags['subname'] = htmlspecialchars($this->subname);
-        $template->templateTags['theme'] = &$this->theme;
-        $template->templateTags['themeinfo'] = &$this->themeinfo;
-        $template->templateTags['style'] = &$this->style;
-        $template->templateTags['language'] = $this->option['ZC_BLOG_LANGUAGE'];
-        $template->templateTags['copyright'] = $this->option['ZC_BLOG_COPYRIGHT'];
-        $template->templateTags['zblogphp'] = $this->option['ZC_BLOG_PRODUCT_FULL'];
-        $template->templateTags['zblogphphtml'] = $this->option['ZC_BLOG_PRODUCT_FULLHTML'];
-        $template->templateTags['zblogphpabbrhtml'] = $this->option['ZC_BLOG_PRODUCT_HTML'];
-        $template->templateTags['type'] = '';
-        $template->templateTags['page'] = '';
-        $template->templateTags['socialcomment'] = &$this->socialcomment;
-        $template->templateTags['header'] = &$this->header;
-        $template->templateTags['footer'] = &$this->footer;
-        $template->templateTags['validcodeurl'] = &$this->validcodeurl;
-        $template->templateTags['feedurl'] = &$this->feedurl;
-        $template->templateTags['searchurl'] = &$this->searchurl;
-        $template->templateTags['ajaxurl'] = &$this->ajaxurl;
-        $s = array(
-            $option['ZC_SIDEBAR_ORDER'],
-            $option['ZC_SIDEBAR2_ORDER'],
-            $option['ZC_SIDEBAR3_ORDER'],
-            $option['ZC_SIDEBAR4_ORDER'],
-            $option['ZC_SIDEBAR5_ORDER'],
-        );
-        foreach ($s as $k => $v) {
-            $a = explode('|', $v);
-            $ms = array();
-            foreach ($a as $v2) {
-                if (isset($this->modulesbyfilename[$v2])) {
-                    $m = $this->modulesbyfilename[$v2];
-                    $ms[] = $m;
-                }
-            }
-            //reset($ms);
-            $s = 'sidebar' . ($k == 0 ? '' : $k + 1);
-            $this->$s = $ms;
-            $ms = null;
-        }
-        $template->templateTags['sidebar'] = &$this->sidebar;
-        $template->templateTags['sidebar2'] = &$this->sidebar2;
-        $template->templateTags['sidebar3'] = &$this->sidebar3;
-        $template->templateTags['sidebar4'] = &$this->sidebar4;
-        $template->templateTags['sidebar5'] = &$this->sidebar5;
-
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_MakeTemplatetags'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($template->templateTags);
-        }
-
-        $t = array();
-        $o = array();
-        foreach ($template->templateTags as $k => $v) {
-            if (is_string($v) || is_numeric($v) || is_bool($v)) {
-                $t['{$' . $k . '}'] = $v;
-            }
-
-        }
-        foreach ($option as $k => $v) {
-            if (is_string($v) || is_numeric($v) || is_bool($v)) {
-                $o['{#' . $k . '#}'] = $v;
-            }
-
-        }
-        $template->replaceTags = $t + $o;
-    }
-
-    /**
      * 预加载模板
      * @return Template
      */
     public function PrepareTemplate() {
 
         $template = new Template();
-        $this->MakeTemplateTags($template);
-        $template->SetPath($this->usersdir . 'cache/template/' . $this->theme . '/compiled/');
+        $template->MakeTemplateTags($template);
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_MakeTemplatetags'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($template->templateTags);
+        }
+
+        $template->SetPath($this->usersdir . 'cache/compiled/' . $this->theme . '/');
         $template->theme = &$this->theme;
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
@@ -1623,7 +1509,7 @@ class ZBlogPHP {
             $templates[$sortname] = file_get_contents($fullname);
         }
 
-        // 读版本号
+        // 读版本信息
         $app = new App;
         if ($app->LoadInfoByXml('theme', $theme) == true) {
             $this->themeinfo = $app->GetInfoArray();
@@ -1649,6 +1535,11 @@ class ZBlogPHP {
     public function BuildTemplate() {
         if (count($this->template->templates) == 0) {
             $this->template->templates = $this->LoadTemplate();
+        }
+
+        // 模板接口
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal){
+            $fpname($this->template->templates);
         }
 
         return $this->template->BuildTemplate();

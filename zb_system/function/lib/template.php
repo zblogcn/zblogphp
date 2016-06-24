@@ -15,6 +15,28 @@ class Template {
     public $templateTags = array();
     public $compiledTemplates = array();
     public $replaceTags = array();
+
+    /**
+     * @var array 默认侧栏
+     */
+    public $sidebar = array();
+    /**
+     * @var array 侧栏2
+     */
+    public $sidebar2 = array();
+    /**
+     * @var array 侧栏3
+     */
+    public $sidebar3 = array();
+    /**
+     * @var array 侧栏4
+     */
+    public $sidebar4 = array();
+    /**
+     * @var array 侧栏5
+     */
+    public $sidebar5 = array();
+
     /**
      *
      */
@@ -123,11 +145,6 @@ class Template {
             }
         }
         $this->addNonexistendTags();
-
-        // 模板接口
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {
-            $fpname($this->templates);
-        }
 
         return $this->CompileFiles();
 
@@ -484,5 +501,103 @@ class Template {
     }
 
 
+    /**
+     *解析模板标签
+     */
+    public function MakeTemplateTags() {
 
+        global $zbp;
+
+        $option = $zbp->option;
+        unset($option['ZC_BLOG_CLSID']);
+        unset($option['ZC_SQLITE_NAME']);
+        unset($option['ZC_MYSQL_USERNAME']);
+        unset($option['ZC_MYSQL_PASSWORD']);
+        unset($option['ZC_MYSQL_NAME']);
+        unset($option['ZC_MYSQL_PORT']);
+        unset($option['ZC_MYSQL_SERVER']);
+        unset($option['ZC_PGSQL_USERNAME']);
+        unset($option['ZC_PGSQL_PASSWORD']);
+        unset($option['ZC_PGSQL_NAME']);
+        unset($option['ZC_PGSQL_PORT']);
+        unset($option['ZC_PGSQL_SERVER']);
+        unset($option['ZC_DATABASE_TYPE']);
+
+        $this->templateTags['zbp'] = &$zbp;
+        $this->templateTags['user'] = &$zbp->user;
+        $this->templateTags['option'] = &$option;
+        $this->templateTags['lang'] = &$zbp->lang;
+        $this->templateTags['version'] = &$zbp->version;
+        $this->templateTags['categorys'] = &$zbp->categorys;
+        $this->templateTags['modules'] = &$zbp->modulesbyfilename;
+        $this->templateTags['title'] = htmlspecialchars($zbp->title);
+        $this->templateTags['host'] = &$zbp->host;
+        $this->templateTags['path'] = &$zbp->path;
+        $this->templateTags['cookiespath'] = &$zbp->cookiespath;
+        $this->templateTags['name'] = htmlspecialchars($zbp->name);
+        $this->templateTags['subname'] = htmlspecialchars($zbp->subname);
+        $this->templateTags['theme'] = &$zbp->theme;
+        $this->templateTags['themeinfo'] = &$zbp->themeinfo;
+        $this->templateTags['style'] = &$zbp->style;
+        $this->templateTags['language'] = $zbp->option['ZC_BLOG_LANGUAGE'];
+        $this->templateTags['copyright'] = $zbp->option['ZC_BLOG_COPYRIGHT'];
+        $this->templateTags['zblogphp'] = $zbp->option['ZC_BLOG_PRODUCT_FULL'];
+        $this->templateTags['zblogphphtml'] = $zbp->option['ZC_BLOG_PRODUCT_FULLHTML'];
+        $this->templateTags['zblogphpabbrhtml'] = $zbp->option['ZC_BLOG_PRODUCT_HTML'];
+        $this->templateTags['type'] = '';
+        $this->templateTags['page'] = '';
+        $this->templateTags['socialcomment'] = &$zbp->socialcomment;
+        $this->templateTags['header'] = &$zbp->header;
+        $this->templateTags['footer'] = &$zbp->footer;
+        $this->templateTags['validcodeurl'] = &$zbp->validcodeurl;
+        $this->templateTags['feedurl'] = &$zbp->feedurl;
+        $this->templateTags['searchurl'] = &$zbp->searchurl;
+        $this->templateTags['ajaxurl'] = &$zbp->ajaxurl;
+        $s = array(
+            $option['ZC_SIDEBAR_ORDER'],
+            $option['ZC_SIDEBAR2_ORDER'],
+            $option['ZC_SIDEBAR3_ORDER'],
+            $option['ZC_SIDEBAR4_ORDER'],
+            $option['ZC_SIDEBAR5_ORDER'],
+        );
+        foreach ($s as $k => $v) {
+            $a = explode('|', $v);
+            $ms = array();
+            foreach ($a as $v2) {
+                if (isset($zbp->modulesbyfilename[$v2])) {
+                    $m = $zbp->modulesbyfilename[$v2];
+                    $ms[] = $m;
+                }
+            }
+            //reset($ms);
+            $s = 'sidebar' . ($k == 0 ? '' : $k + 1);
+            $this->$s = $ms;
+            $ms = null;
+        }
+        $this->templateTags['sidebar'] = &$this->sidebar;
+        $this->templateTags['sidebar2'] = &$this->sidebar2;
+        $this->templateTags['sidebar3'] = &$this->sidebar3;
+        $this->templateTags['sidebar4'] = &$this->sidebar4;
+        $this->templateTags['sidebar5'] = &$this->sidebar5;
+
+        //foreach ($GLOBALS['hooks']['Filter_Plugin_Template_MakeTemplatetags'] as $fpname => &$fpsignal) {
+        //    $fpreturn = $fpname($this->templateTags);
+        //}
+
+        $t = array();
+        $o = array();
+        foreach ($this->templateTags as $k => $v) {
+            if (is_string($v) || is_numeric($v) || is_bool($v)) {
+                $t['{$' . $k . '}'] = $v;
+            }
+
+        }
+        foreach ($option as $k => $v) {
+            if (is_string($v) || is_numeric($v) || is_bool($v)) {
+                $o['{#' . $k . '#}'] = $v;
+            }
+
+        }
+        $this->replaceTags = $t + $o;
+    }
 }
