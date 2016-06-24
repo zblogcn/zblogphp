@@ -191,8 +191,8 @@ class Post extends Base {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
                 $fpreturn = $fpname($this);
                 if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
-return $fpreturn;}
+                    return $fpreturn;
+                }
             }
             $key = '&amp;key=' . md5($zbp->guid . $this->ID . date('Y-m-d'));
             //$key = '&amp;key=' . md5($zbp->guid . $this->ID . $this->CommNums . date('Y-m-d') . $_SERVER["REMOTE_ADDR"] . $_SERVER["HTTP_USER_AGENT"]);
@@ -245,8 +245,8 @@ return $fpreturn;}
             foreach ($GLOBALS['hooks']['Filter_Plugin_Post_RelatedList'] as $fpname => &$fpsignal) {
                 $fpreturn = $fpname($this);
                 if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
-return $fpreturn;}
+                    return $fpreturn;
+                }
             }
 
             return GetList($zbp->option['ZC_RELATEDLIST_COUNT'], null, null, null, null, null, array('is_related' => $this->ID));

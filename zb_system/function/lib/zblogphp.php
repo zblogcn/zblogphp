@@ -157,10 +157,6 @@ class ZBlogPHP {
      */
     public $cache = null;
 
-    private $readymodules = array(); #模块
-    private $readymodules_function = array(); #模块函数
-    private $readymodules_parameters = array(); #模块函数的参数
-
     /**
      * @var array|null 数据表
      */
@@ -757,7 +753,8 @@ class ZBlogPHP {
             $this->configs[$n] = $c;
         }
 
-return;
+        return;
+
         $configs_name = $configs_namevalue = array();
         foreach ($array as $c) {
             $n = $c->GetItemName();
@@ -2444,7 +2441,7 @@ return;
      * 获取全部置顶文章（优先从cache里读数组）
      */
     public function GetTopArticle() {
-        if (!is_object($this->cache)) {
+        if ($this->cache->HasKey('top_post_array') == false) {
             return array();
         }
 

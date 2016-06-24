@@ -592,7 +592,7 @@ class SQLGlobal {
                 continue;
             }
             $escapedValue = $this->db->EscapeString($value);
-            $updateData[] = "$index = '$value'";
+            $updateData[] = "$index = '$escapedValue'";
         }
         $sql[] = implode(', ', $updateData);
         $this->buildWhere();
