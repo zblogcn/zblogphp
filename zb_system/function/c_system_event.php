@@ -170,7 +170,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
             } else {
                 $arysubcate = array();
                 $arysubcate[] = array('log_CateID', $category->ID);
-                foreach ($zbp->categorys[$category->ID]->SubCategorys as $subcate) {
+                foreach ($zbp->categorys[$category->ID]->ChildrenCategories as $subcate) {
                     $arysubcate[] = array('log_CateID', $subcate->ID);
                 }
                 $w[] = array('array', $arysubcate);
@@ -693,7 +693,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
         } else {
             $arysubcate = array();
             $arysubcate[] = array('log_CateID', $category->ID);
-            foreach ($zbp->categorys[$category->ID]->SubCategorys as $subcate) {
+            foreach ($zbp->categorys[$category->ID]->ChildrenCategories as $subcate) {
                 $arysubcate[] = array('log_CateID', $subcate->ID);
             }
             $w[] = array('array', $arysubcate);

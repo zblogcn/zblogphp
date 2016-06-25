@@ -1201,19 +1201,22 @@ class ZBlogPHP {
             foreach ($lv1[$id0] as $id1) {
                 if ($this->categorys[$id1]->ParentID == $id0) {
                     $this->categorys[$id0]->SubCategories[] = $this->categorys[$id1];
+                    $this->categorys[$id0]->ChildrenCategories[] = $this->categorys[$id1];
                     $this->categorysbyorder[$id1] = &$this->categorys[$id1];
                     if (!isset($lv2[$id1])) {continue;}
                     foreach ($lv2[$id1] as $id2) {
                         if ($this->categorys[$id2]->ParentID == $id1) {
-                            $this->categorys[$id0]->SubCategorys[] = $this->categorys[$id2];
+                            $this->categorys[$id0]->ChildrenCategories[] = $this->categorys[$id2];
                             $this->categorys[$id1]->SubCategorys[] = $this->categorys[$id2];
+                            $this->categorys[$id1]->ChildrenCategories[] = $this->categorys[$id2];
                             $this->categorysbyorder[$id2] = &$this->categorys[$id2];
                             if (!isset($lv3[$id2])) {continue;}
                             foreach ($lv3[$id2] as $id3) {
                                 if ($this->categorys[$id3]->ParentID == $id2) {
-                                    $this->categorys[$id0]->SubCategorys[] = $this->categorys[$id3];
-                                    $this->categorys[$id1]->SubCategorys[] = $this->categorys[$id3];
+                                    $this->categorys[$id0]->ChildrenCategories[] = $this->categorys[$id3];
+                                    $this->categorys[$id1]->ChildrenCategories[] = $this->categorys[$id3];
                                     $this->categorys[$id2]->SubCategorys[] = $this->categorys[$id3];
+                                    $this->categorys[$id2]->ChildrenCategories[] = $this->categorys[$id3];
                                     $this->categorysbyorder[$id3] = &$this->categorys[$id3];
                                 }
                             }

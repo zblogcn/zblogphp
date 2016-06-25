@@ -10,9 +10,9 @@ class Category extends Base {
     /**
      * @var array 下层分类
      */
-    public $SubCategories = array();
+    public $SubCategories = array(); //子分类
     public $SubCategorys = null; // 拼写错误，保持兼容
-
+    public $ChildrenCategories = array(); //子孙分类
 
     /**
      * 构造函数
