@@ -433,7 +433,6 @@ AutoloadClass('Config');
 
 $GLOBALS['zbp'] = ZBlogPHP::GetInstance();
 $GLOBALS['zbp']->Initialize();
-$GLOBALS['zbp']->ConvertTableAndDatainfo();
 
 
 /**
