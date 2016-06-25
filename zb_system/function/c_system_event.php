@@ -894,6 +894,7 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
     } else {
         $id = $object;
         $alias = $theSecondParam;
+        $object = array('id' => $object);
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
