@@ -465,6 +465,8 @@ class ZBlogPHP {
         $this->ajaxurl = $this->host . 'zb_system/cmd.php?act=ajax&src=';
         $this->xmlrpcurl = $this->host . 'zb_system/xml-rpc/index.php';
 
+        $this->ConvertTableAndDatainfo();
+
         $this->isinitialized = true;
 
         return true;

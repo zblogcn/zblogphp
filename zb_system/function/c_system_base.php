@@ -26,7 +26,7 @@ define('ZC_VERSION_DISPLAY', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . ' ' . Z
 define('ZC_VERSION_FULL', ZC_VERSION . '(' . ZC_VERSION_CODENAME . ')');
 define('ZC_BLOG_VERSION', ZC_VERSION_DISPLAY); // 原变量名
 define('ZC_BLOG_COMMIT', ZC_VERSION_COMMIT); // 为写入系统配置统一风格
-$GLOBALS['blogversion'] = 150101;
+$GLOBALS['blogversion'] = ZC_VERSION_MAJOR . ZC_VERSION_MINOR . ZC_VERSION_COMMIT;
 
 /**
  * 加载系统基础函数
@@ -434,7 +434,36 @@ AutoloadClass('Config');
 $GLOBALS['zbp'] = ZBlogPHP::GetInstance();
 $GLOBALS['zbp']->Initialize();
 $GLOBALS['zbp']->ConvertTableAndDatainfo();
-LoadActivedApps();
+
+
+/**
+ * 加载主题和插件APP
+ */
+if (is_readable($filename = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/theme.xml')) {
+    $GLOBALS['activedapps'][] = $GLOBALS['blogtheme'];
+}
+
+if (is_readable($filename = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/include.php')) {
+    require $filename;
+}
+
+$ap = $GLOBALS['zbp']->GetActivedPlugin();
+foreach ($ap as $plugin) {
+    if (is_readable($filename = $GLOBALS['usersdir'] . 'plugin/' . $plugin . '/plugin.xml')) {
+        $GLOBALS['activedapps'][] = $plugin;
+    }
+    if (is_readable($filename = $GLOBALS['usersdir'] . 'plugin/' . $plugin . '/include.php')) {
+        require $filename;
+    }
+}
+
+foreach ($GLOBALS['plugins'] as &$fn) {
+    if (function_exists($fn)) {
+        $fn();
+    }
+}
+unset($filename, $plugin, $fn, $ap);
+
 
 /**
  * 加载设置
@@ -453,38 +482,6 @@ function InitializeOption() {
                 $option[$key] = $value;
             }
 
-        }
-    }
-}
-
-function LoadActivedApps() {
-    global $usersdir;
-    global $blogtheme;
-    global $zbp;
-    global $activedapps;
-
-    if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/theme.xml')) {
-        $activedapps[] = $blogtheme;
-    }
-
-    if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php')) {
-        require $filename;
-    }
-
-    $ap = $zbp->GetActivedPlugin();
-    foreach ($ap as $plugin) {
-        if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/plugin.xml')) {
-            $activedapps[] = $plugin;
-        }
-
-        if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {
-            require $filename;
-        }
-    }
-
-    foreach ($GLOBALS['plugins'] as &$sPluginActiveFunctions) {
-        if (function_exists($sPluginActiveFunctions)) {
-            $sPluginActiveFunctions();
         }
     }
 }
