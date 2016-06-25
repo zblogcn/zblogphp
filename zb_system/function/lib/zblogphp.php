@@ -91,10 +91,6 @@ class ZBlogPHP {
     public $categorysbyorder = array();
     public $categoriesbyorder = null;
     /**
-     * @var int 分类最大层数
-     */
-    public $categorylayer = 0;
-    /**
      * @var array 模块数组
      */
     public $modules = array();
@@ -484,6 +480,7 @@ class ZBlogPHP {
             $fpreturn = $fpname();
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -1142,7 +1139,7 @@ class ZBlogPHP {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildModule'] as $fpname => &$fpsignal) {
             $fpname();
         }
-		ModuleBuilder::BuildModule();
+        ModuleBuilder::BuildModule();
     }
 
     /**
@@ -1175,7 +1172,7 @@ class ZBlogPHP {
      * 所有模块重置
      */
     public function AddBuildModuleAll() {
-    	//del from 1.5
+        //del from 1.5
     }
 
 ################################################################################################################
@@ -1221,26 +1218,13 @@ class ZBlogPHP {
         foreach ($array as $c) {
             $this->categorys[$c->ID] = $c;
         }
+
+
         foreach ($this->categorys as $id => $c) {
             $l = 'lv' . $c->Level;
             ${$l}[$c->ParentID][] = $id;
         }
 
-        if (count($lv0) > 0) {
-            $this->categorylayer = 1;
-        }
-
-        if (count($lv1) > 0) {
-            $this->categorylayer = 2;
-        }
-
-        if (count($lv2) > 0) {
-            $this->categorylayer = 3;
-        }
-
-        if (count($lv3) > 0) {
-            $this->categorylayer = 4;
-        }
 
         if (!is_array($lv0[0])) {
             $lv0[0] = array();
@@ -1251,7 +1235,7 @@ class ZBlogPHP {
             if (!isset($lv1[$id0])) {continue;}
             foreach ($lv1[$id0] as $id1) {
                 if ($this->categorys[$id1]->ParentID == $id0) {
-                    $this->categorys[$id0]->SubCategorys[] = $this->categorys[$id1];
+                    $this->categorys[$id0]->SubCategories[] = $this->categorys[$id1];
                     $this->categorysbyorder[$id1] = &$this->categorys[$id1];
                     if (!isset($lv2[$id1])) {continue;}
                     foreach ($lv2[$id1] as $id2) {
