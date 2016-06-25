@@ -564,22 +564,6 @@ class ZBlogPHP {
 
         $this->CheckTemplate();
 
-        if (GetVars('addinfo' . str_replace('/', '', $this->cookiespath), 'COOKIE')) {
-            $dishtml5 = json_decode(GetVars('addinfo' . str_replace('/', '', $this->cookiespath), 'COOKIE'));
-            if (is_object($dishtml5) && property_exists($dishtml5, 'dishtml5')) {
-                $dishtml5 = (bool) $dishtml5->dishtml5;
-            } else {
-                $dishtml5 = false;
-            }
-
-            if ($dishtml5) {
-                $this->option['ZC_ADMIN_HTML5_ENABLE'] = false;
-            } else {
-                $this->option['ZC_ADMIN_HTML5_ENABLE'] = true;
-            }
-
-        }
-
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) {
             $fpname();
         }
@@ -978,19 +962,11 @@ class ZBlogPHP {
         }
         if (!isset($this->actions[$action])) {
             if (is_numeric($action)) {
-                if ($this->user->Level > $action) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-        } else {
-            if ($this->user->Level > $this->actions[$action]) {
-                return false;
-            } else {
-                return true;
+                return ($this->user->Level <= $action);
             }
         }
+
+        return ($this->user->Level <= $this->actions[$action]);
     }
 
     /**
@@ -1008,18 +984,10 @@ class ZBlogPHP {
         }
 
         if (is_int($action)) {
-            if ($level > $action) {
-                return false;
-            } else {
-                return true;
-            }
+            return ($level <= $action);
         }
 
-        if ($level > $this->actions[$action]) {
-            return false;
-        } else {
-            return true;
-        }
+        return ($level <= $this->actions[$action]);
 
     }
 
@@ -1058,12 +1026,10 @@ class ZBlogPHP {
                 $member = $m;
 
                 return true;
-            } else {
-                return false;
             }
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -1080,9 +1046,10 @@ class ZBlogPHP {
         $m = $this->GetMemberByName($name);
         if ($m->ID > 0) {
             return $this->Verify_Final($name, md5($md5pw . $m->Guid), $member);
-        } else {
-            return false;
         }
+
+        return false;
+        
     }
 
     /**
@@ -1099,9 +1066,9 @@ class ZBlogPHP {
         $m = $this->GetMemberByName($name);
         if ($m->ID > 0) {
             return $this->Verify_MD5($name, md5($originalpw), $member);
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -1121,12 +1088,10 @@ class ZBlogPHP {
                 $member = $m;
 
                 return true;
-            } else {
-                return false;
             }
-        } else {
-            return false;
         }
+
+        return false;
     }
 
 ################################################################################################################
@@ -2652,6 +2617,8 @@ class ZBlogPHP {
 
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -2745,13 +2712,9 @@ class ZBlogPHP {
      * string $urlrule 默认是取Page类型的Url Rule
      * string $template 默认模板名page
      */
-    public function RegPostType($typeid, $name, $urlrule = '', $template = '') {
+    public function RegPostType($typeid, $name, $urlrule = '', $template = 'page') {
         if ($urlrule == '') {
             $urlrule = $this->option['ZC_PAGE_REGEX'];
-        }
-
-        if ($template == '') {
-            $template = 'page';
         }
 
         $typeid = (int) $typeid;
@@ -2774,18 +2737,17 @@ class ZBlogPHP {
     public function GetPostType_UrlRule($typeid) {
         if (isset($this->posttype[$typeid])) {
             return $this->posttype[$typeid][1];
-        } else {
-            return $this->option['ZC_PAGE_REGEX'];
         }
 
+        return $this->option['ZC_PAGE_REGEX'];
     }
     public function GetPostType_Template($typeid) {
         if (isset($this->posttype[$typeid])) {
             return $this->posttype[$typeid][2];
-        } else {
-            return 'single';
         }
 
+
+        return 'single';
     }
 
     /**
