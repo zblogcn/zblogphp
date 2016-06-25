@@ -78,14 +78,14 @@ foreach ($zbp->categorysbyorder as $k => $v) {
 					<?php echo $lang['msg']['template']?>:</span>
 				<br />
 				<select class="edit" size="1" name="Template" id="cmbTemplate">
-					<?php echo CreateOptoinsOfTemplate($cate->Template);?></select>
+					<?php echo OutputOptionItemsOfTemplate($cate->Template);?></select>
 				<input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $cate->Template;?>" /></p>
 			<p>
 				<span class="title">
 					<?php echo $lang['msg']['category_aritles_default_template']?>:</span>
 				<br />
 				<select class="edit" size="1" name="LogTemplate" id="cmbLogTemplate">
-					<?php echo CreateOptoinsOfTemplate($cate->LogTemplate);?></select>
+					<?php echo OutputOptionItemsOfTemplate($cate->LogTemplate);?></select>
 			</p>
 			<p>
 				<span class='title'>

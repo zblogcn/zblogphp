@@ -146,7 +146,10 @@ class DbSql {
                 
             }
         } else {
-            $sql->column($select);
+            if (!is_array($select)) {
+                $select = array($select);
+            }
+            call_user_func_array(array($sql, 'column'), $select);
         }
 
         if (!empty($option)) {

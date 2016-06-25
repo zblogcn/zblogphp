@@ -190,10 +190,10 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
  * @param $default
  * @return null|string
  */
-function CreateOptoinsOfCategorys($default) {
+function OutputOptionItemsOfCategorys($default) {
     global $zbp;
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_CreateOptoinsOfCategorys'] as $fpname => &$fpsignal) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCategorys'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($default);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
@@ -212,52 +212,22 @@ function CreateOptoinsOfCategorys($default) {
  * @param $default
  * @return null|string
  */
-function CreateOptoinsOfTemplate($default) {
+function OutputOptionItemsOfTemplate($default) {
     global $zbp;
-
+    $testRegExp = "/^(\.|post-|module|header|footer|comment|sidebar|pagebar|[a-zA-Z]\_)/si";
     $s = null;
     $s .= '<option value="" >' . $zbp->lang['msg']['none'] . '</option>';
-    foreach ($zbp->templates as $key => $value) {
-        if (substr($key, 0, 2) == 'b_') {
+
+    foreach ($zbp->template->templates as $key => $value) {
+        
+        if (preg_match($testRegExp, $key)) {
             continue;
         }
 
-        if (substr($key, 0, 2) == 'c_') {
-            continue;
-        }
+        $n = "";
+        $t = $value;
 
-        if (substr($key, 0, 5) == 'post-') {
-            continue;
-        }
-
-        if (substr($key, 0, 6) == 'module') {
-            continue;
-        }
-
-        if (substr($key, 0, 6) == 'header') {
-            continue;
-        }
-
-        if (substr($key, 0, 6) == 'footer') {
-            continue;
-        }
-
-        if (substr($key, 0, 7) == 'comment') {
-            continue;
-        }
-
-        if (substr($key, 0, 7) == 'sidebar') {
-            continue;
-        }
-
-        if (substr($key, 0, 7) == 'pagebar') {
-            continue;
-        }
-
-        //读模板名称
-        $t = $zbp->templates[$key];
-        $n = '';
-        if(stristr($t, 'Template Name:') !== false) {
+        if(stristr($value, 'Template Name:')) {
             $t = stristr($t, 'Template Name:');
             $t = str_ireplace('Template Name:', '', $t);
             $n = strtok($t, ' *');
@@ -282,7 +252,7 @@ function CreateOptoinsOfTemplate($default) {
  * @param $default
  * @return null|string
  */
-function CreateOptoinsOfMemberLevel($default) {
+function OutputOptionItemsOfMemberLevel($default) {
     global $zbp;
 
     $s = null;
@@ -301,7 +271,7 @@ function CreateOptoinsOfMemberLevel($default) {
  * @param $default
  * @return null|string
  */
-function CreateOptoinsOfMember($default) {
+function OutputOptionItemsOfMember($default) {
     global $zbp;
 
     $s = null;
@@ -326,7 +296,7 @@ function CreateOptoinsOfMember($default) {
  * @param $default
  * @return null|string
  */
-function CreateOptoinsOfPostStatus($default) {
+function OutputOptionItemsOfPostStatus($default) {
     global $zbp;
 
     $s = null;

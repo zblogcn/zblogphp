@@ -409,8 +409,9 @@ $GLOBALS['usersdir'] = ZBP_PATH . 'zb_users/';
 /**
  * 已激活插件列表
  */
-$GLOBALS['activedApps'] = array();
-$GLOBALS['activeapps'] = &$GLOBALS['activedApps'];
+$GLOBALS['activedapps'] = array();
+//保留activeapps，兼容以前版本
+$GLOBALS['activeapps'] = &$GLOBALS['activedapps'];
 
 $GLOBALS['option'] = array();
 InitializeOption();
@@ -460,10 +461,10 @@ function LoadActivedApps() {
     global $usersdir;
     global $blogtheme;
     global $zbp;
-    global $activeapps;
+    global $activedapps;
 
     if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/theme.xml')) {
-        $activeapps[] = $blogtheme;
+        $activedapps[] = $blogtheme;
     }
 
     if (is_readable($filename = $usersdir . 'theme/' . $blogtheme . '/include.php')) {
@@ -473,7 +474,7 @@ function LoadActivedApps() {
     $ap = $zbp->GetActivedPlugin();
     foreach ($ap as $plugin) {
         if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/plugin.xml')) {
-            $activeapps[] = $plugin;
+            $activedapps[] = $plugin;
         }
 
         if (is_readable($filename = $usersdir . 'plugin/' . $plugin . '/include.php')) {

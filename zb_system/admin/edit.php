@@ -168,7 +168,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
           <!-- cate --><?php if (!$ispage) {?>
           <div id='cate' class="editmod"> <label for="cmbCateID" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['category'] ?></label>
             <select style="width:180px;" class="edit" size="1" name="CateID" id="cmbCateID">
-<?php echo CreateOptoinsOfCategorys($article->CateID); ?>
+<?php echo OutputOptionItemsOfCategorys($article->CateID); ?>
             </select>
           </div>
           <!-- cate --><?php }?>
@@ -176,7 +176,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
           <!-- level -->
           <div id='level' class="editmod"> <label for="cmbPostStatus" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['status'] ?></label>
             <select class="edit" style="width:180px;" size="1" name="Status" id="cmbPostStatus" onChange="edtLevel.value=this.options[this.selectedIndex].value">
-<?php echo CreateOptoinsOfPostStatus($article->Status); ?>
+<?php echo OutputOptionItemsOfPostStatus($article->Status); ?>
             </select>
           </div>
           <!-- )level -->
@@ -185,7 +185,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
 
           <div id='template' class="editmod"> <label for="cmbTemplate" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['template'] ?></label>
             <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate" onChange="edtTemplate.value=this.options[this.selectedIndex].value">
-<?php echo CreateOptoinsOfTemplate($article->Template); ?>
+<?php echo OutputOptionItemsOfTemplate($article->Template); ?>
             </select>
           </div>
           <!-- )template -->
@@ -193,7 +193,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
           <!-- user( -->
           <div id='user' class="editmod"> <label for="cmbUser" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['author'] ?></label>
             <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
-				<?php echo CreateOptoinsOfMember($article->AuthorID); ?>
+				<?php echo OutputOptionItemsOfMember($article->AuthorID); ?>
             </select>
           </div>
           <!-- )user -->

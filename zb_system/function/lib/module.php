@@ -120,4 +120,17 @@ class Module extends Base {
         return parent::Del();
     }
 
+    public function Build() {
+
+        if ($this->NoRefresh == true) {
+            return;
+        }
+
+        if (function_exists(ModuleBuilder::$readymodules_function[$this->FileName])) {
+            $this->Content = call_user_func(
+                ModuleBuilder::$readymodules_function[$this->FileName],
+                ModuleBuilder::$readymodules_parameters[$this->FileName]
+            );
+        }
+    }
 }
