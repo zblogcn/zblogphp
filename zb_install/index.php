@@ -442,7 +442,7 @@ function Setup3() {
     <div id="title"><?php echo $zbp->lang['zb_install']['db_build_set'];?></div>
     <div id="content">
       <div>
-        <p><b><?php echo $zbp->lang['zb_install']['database'];?></b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_database'];?></b>
         <?php
 if ($hasMysql) {
         ?>
@@ -466,13 +466,13 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;';
       <?php if ($hasMysql) {
         ?>
       <div class="dbdetail" id="mysql">
-        <p><b><?php echo $zbp->lang['zb_install']['server'];?></b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_server'];?></b>
           <input type="text" name="dbmysql_server" id="dbmysql_server" value="<?php echo $option['ZC_MYSQL_SERVER'];?>" style="width:350px;" />
         </p>
-        <p><b><?php echo $zbp->lang['zb_install']['username'];?></b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_username'];?></b>
           <input type="text" name="dbmysql_username" id="dbmysql_username" value="<?php echo $option['ZC_MYSQL_USERNAME'];?>" style="width:350px;" />
         </p>
-        <p><b><?php echo $zbp->lang['zb_install']['password'];?></b>
+        <p><b><?php echo $zbp->lang['zb_install']['db_password'];?></b>
           <input type="password" name="dbmysql_password" id="dbmysql_password" value="<?php echo $option['ZC_MYSQL_PASSWORD'];?>" style="width:350px;" />
         </p>
         <p><b><?php echo $zbp->lang['zb_install']['db_name'];?></b>
