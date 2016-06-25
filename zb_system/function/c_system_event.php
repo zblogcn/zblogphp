@@ -480,9 +480,9 @@ function ViewAuto($inpurl) {
         unset($realurl);
     }
 
-    $url = urldecode($url);
+    $url = trim(urldecode($url), '/');
 
-    if ($url == '' || $url == 'index.php' || trim($url, '/') == '') {
+    if ($url == '' || $url == 'index.php') {
         ViewList(null, null, null, null, null);
 
         return null;
@@ -529,7 +529,12 @@ function ViewAuto($inpurl) {
         $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate');
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
+            var_dump($m);
             $result = ViewList($m['page'], $m, null, null, null, true);
+            var_dump($result);
+var_dump($r);
+var_dump($url);
+            exit;
             if ($result == true) {
                 return null;
             }

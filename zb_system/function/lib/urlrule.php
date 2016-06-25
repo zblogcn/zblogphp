@@ -119,20 +119,6 @@ class UrlRule {
      */
     public static function OutputUrlRegEx($url, $type) {
         global $zbp;
-        switch ($zbp->categorylayer) {
-        case 4:
-            $fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
-            break;
-        case 3:
-            $fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*';
-            break;
-        case 2:
-            $fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*';
-            break;
-        default:
-            $fullcategory = '[^\./_]*';
-            break;
-        }
 
         $s = $url;
         $s = str_replace('%page%', '%poaogoe%', $s);
@@ -158,7 +144,7 @@ class UrlRule {
             $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
             $url = str_replace('%date%', '(?P<date>[0-9\-]+)', $url);
             if ($type == 'cate') {
-                $url = str_replace('%alias%', '(?P<alias>' . $fullcategory . ')', $url);
+                $url = str_replace('%alias%', '(?P<alias>([^\./_]*/?)+)', $url);
             } else {
                 $url = str_replace('%alias%', '(?P<alias>[^\./_]+)', $url);
             }
@@ -175,7 +161,7 @@ class UrlRule {
                     $url = str_replace('%alias%', '(?P<alias>.+)', $url);
                 }
             }
-            $url = str_replace('%category%', '(?P<category>(?:' . $fullcategory . '))', $url);
+            $url = str_replace('%category%', '(?P<category>(?:([^\./_]*/?)+)))', $url);
             $url = str_replace('%author%', '(?P<author>[^\./_]+)', $url);
             $url = str_replace('%year%', '(?P<year>[0-9]<:4:>)', $url);
             $url = str_replace('%month%', '(?P<month>[0-9]<:1,2:>)', $url);
@@ -187,7 +173,9 @@ class UrlRule {
         $url = str_replace(':>', '}', $url);
         $url = str_replace('/', '\/', $url);
 
+
         return '/(?J)' . $url . '/';
+
         // 关于J标识符的使用
         // @see https://bugs.php.net/bug.php?id=47456
     }
@@ -322,20 +310,7 @@ class UrlRule {
      */
     public function Rewrite_httpdini($url, $type) {
         global $zbp;
-        switch ($zbp->categorylayer) {
-        case 4:
-            $fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
-            break;
-        case 3:
-            $fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*';
-            break;
-        case 2:
-            $fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*';
-            break;
-        default:
-            $fullcategory = '[^\./_]*';
-            break;
-        }
+
 
         $s = $url;
         $s = str_replace('%page%', '%poaogoe%', $s);
@@ -345,7 +320,6 @@ class UrlRule {
             $url = str_replace('%page%', '%poaogoe%', $url);
             preg_match('/[^\{\}]+(?=\{%%poaogoe%%\})/i', $s, $matches);
             if (isset($matches[0])) {
-                $r = 0;
                 $url = str_replace($matches[0], '(?:' . $matches[0] . ')<:1:>', $url);
             }
             $url = $url . ' ' . $zbp->cookiespath . 'index\.php\?page=$1&rewrite=1';
@@ -362,7 +336,7 @@ class UrlRule {
             $url = str_replace('%id%', '([0-9]+)', $url);
             $url = str_replace('%date%', '([0-9\-]+)', $url);
             if ($type == 'cate') {
-                $url = str_replace('%alias%', '(' . $fullcategory . ')', $url);
+                $url = str_replace('%alias%', '([^\./_]*/?)+)', $url);
             } else {
                 $url = str_replace('%alias%', '([^\./_]+)', $url);
             }
@@ -379,7 +353,7 @@ class UrlRule {
                     $url = str_replace('%alias%', '(?!zb_)(.+)', $url);
                 }
             }
-            $url = str_replace('%category%', '(?:' . $fullcategory . ')', $url);
+            $url = str_replace('%category%', '([^\./_]*/?)+)', $url);
             $url = str_replace('%author%', '(?:[^\./_]+)', $url);
             $url = str_replace('%year%', '(?:[0-9]<:4:>)', $url);
             $url = str_replace('%month%', '(?:[0-9]<:1,2:>)', $url);
