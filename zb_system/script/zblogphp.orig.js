@@ -422,6 +422,8 @@
         define("zbp", [], function(require, exports, module) {
             module.exports = ZBP;
         });
+    } else if (typeof module !== "undefined") {
+        module.exports = ZBP;
     } else {
         window.ZBP = ZBP;
     }
