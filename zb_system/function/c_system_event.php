@@ -529,12 +529,7 @@ function ViewAuto($inpurl) {
         $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate');
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
-            var_dump($m);
             $result = ViewList($m['page'], $m, null, null, null, true);
-            var_dump($result);
-var_dump($r);
-var_dump($url);
-            exit;
             if ($result == true) {
                 return null;
             }
@@ -543,6 +538,7 @@ var_dump($url);
 
         $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_ARTICLE_REGEX'], 'article');
         $m = array();
+
         if (preg_match($r, $url, $m) == 1) {
             $result = ViewPost($m, null, true);
             if ($result == false) {
@@ -893,8 +889,8 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
     global $zbp;
 
     if (is_array($object)) {
-        $id = $object['id'];
-        $alias = $object['alias'];
+        $id = isset($object['id']) ? $object['id'] : null;
+        $alias = isset($object['alias']) ? $object['alias'] : null;
     } else {
         $id = $object;
         $alias = $theSecondParam;
