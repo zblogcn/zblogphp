@@ -947,7 +947,7 @@ function InsertInfo() {
     $t->FileName = "favorite";
     $t->Source = "system";
     $t->SidebarID = 1;
-    $t->Content = '<li><a href="http://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li><li><a href="http://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="http://weibo.com/zblogcn" target="_blank">Z-Blog新浪官微</a></li><li><a href="http://t.qq.com/zblogcn" target="_blank">Z-Blog腾讯官微</a></li>';
+    $t->Content = '<li><a href="http://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li><li><a href="http://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="http://weibo.com/zblogcn" target="_blank">Z-Blog新浪官微</a></li>';
     $t->HtmlID = "divFavorites";
     $t->Type = "ul";
     $t->Save();
@@ -1050,6 +1050,7 @@ function InsertInfo() {
 function SaveConfig() {
     global $zbp;
 
+
     $zbp->option['ZC_BLOG_VERSION'] = ZC_BLOG_VERSION;
     $zbp->option['ZC_BLOG_NAME'] = GetVars('blogtitle', 'POST');
     $zbp->option['ZC_USING_PLUGIN_LIST'] = 'AppCentre|UEditor';
@@ -1059,10 +1060,11 @@ function SaveConfig() {
     $zbp->option['ZC_SIDEBAR4_ORDER'] = '';
     $zbp->option['ZC_SIDEBAR5_ORDER'] = '';
     $zbp->option['ZC_BLOG_THEME'] = 'WhitePage';
-    $zbp->option['ZC_DEBUG_MODE'] = true;
+    $zbp->option['ZC_DEBUG_MODE'] = false;
     $zbp->option['ZC_LAST_VERSION'] = $zbp->version;
     $zbp->option['ZC_NOW_VERSION'] = $zbp->version;
     $zbp->SaveOption();
+    $zbp->template = $zbp->PrepareTemplate();
     $zbp->BuildTemplate();
 
     $zbp->Config('cache')->templates_md5 = '';
