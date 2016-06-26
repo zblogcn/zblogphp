@@ -506,15 +506,15 @@ class ZBlogPHP {
 
         $this->Verify();
 
-        $this->RegBuildModule('catalog', 'BuildModule::Catalog');
-        $this->RegBuildModule('calendar', 'BuildModule::Calendar');
-        $this->RegBuildModule('comments', 'BuildModule::Comments');
-        $this->RegBuildModule('previous', 'BuildModule::LatestArticles');
-        $this->RegBuildModule('archives', 'BuildModule::Archives');
-        $this->RegBuildModule('navbar', 'BuildModule::Navbar');
-        $this->RegBuildModule('tags', 'BuildModule::TagList');
-        $this->RegBuildModule('statistics', 'BuildModule::Statistics');
-        $this->RegBuildModule('authors', 'BuildModule::Authors');
+        $this->RegBuildModule('catalog', 'ModuleBuilder::Catalog');
+        $this->RegBuildModule('calendar', 'ModuleBuilder::Calendar');
+        $this->RegBuildModule('comments', 'ModuleBuilder::Comments');
+        $this->RegBuildModule('previous', 'ModuleBuilder::LatestArticles');
+        $this->RegBuildModule('archives', 'ModuleBuilder::Archives');
+        $this->RegBuildModule('navbar', 'ModuleBuilder::Navbar');
+        $this->RegBuildModule('tags', 'ModuleBuilder::TagList');
+        $this->RegBuildModule('statistics', 'ModuleBuilder::Statistics');
+        $this->RegBuildModule('authors', 'ModuleBuilder::Authors');
 
         //创建模板类
         $this->template = $this->PrepareTemplate();
@@ -1436,10 +1436,6 @@ class ZBlogPHP {
         $template->SetPath($this->usersdir . 'cache/compiled/' . $this->theme . '/');
         $template->theme = &$this->theme;
 
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($template);
-        }
-
         return $template;
     }
 
@@ -1473,10 +1469,6 @@ class ZBlogPHP {
             if (!isset($templates['sidebar' . $i])) {
                 $templates['sidebar' . $i] = str_replace('$sidebar', '$sidebar' . $i, $templates['sidebar']);
             }
-        }
-
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadTemplate'] as $fpname => &$fpsignal) {
-            $fpname($templates);
         }
 
         return $templates;

@@ -52,7 +52,15 @@ class ModuleBuilder {
      * @param string $userfunc 用户函数
      */
     public static function RegBuildModule($modfilename, $userfunc) {
-        ModuleBuilder::$readymodules_function[$modfilename] = $userfunc;
+        if(function_exists($userfunc)){
+            ModuleBuilder::$readymodules_function[$modfilename] = $userfunc;
+        }
+        if (strpos($userfunc, '::') !== false) {
+            $a=explode('::', $userfunc);
+            if(method_exists($a[0], $a[1])){
+                ModuleBuilder::$readymodules_function[$modfilename] = $userfunc;
+            }
+        }
     }
 
     /**
@@ -88,11 +96,12 @@ class ModuleBuilder {
 
         $tags['style'] = $zbp->option['ZC_MODULE_CATALOG_STYLE'];
         $tags['maxLi'] = $zbp->modulesbyfilename['catalog']->MaxLi;
-        $tags['categorys'] = $zbp->categorysbyorder;
+        $tags['catalogs'] = $zbp->categorysbyorder;
 
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-catalog');
 
+        return $ret;
     }
 
     /**
@@ -503,7 +512,6 @@ class ModuleBuilder {
         $ret = $template->Output('module-statistics');
 
         return $ret;
-
     }
 
 }

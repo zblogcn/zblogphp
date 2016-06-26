@@ -327,28 +327,6 @@ DefinePluginFilter('Filter_Plugin_Zbp_MakeTemplatetags');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Zbp_PrepareTemplate
-'参数:$template
-'说明:Zbp类的模板准备接口
-'调用:
-'**************************************************>
- */
-DefinePluginFilter('Filter_Plugin_Zbp_PrepareTemplate');
-
-/*
-'**************************************************<
-'类型:Filter
-'名称:Filter_Plugin_Zbp_LoadTemplate
-'参数:$template
-'说明:Zbp类的模板加载接口
-'调用:
-'**************************************************>
- */
-DefinePluginFilter('Filter_Plugin_Zbp_LoadTemplate');
-
-/*
-'**************************************************<
-'类型:Filter
 '名称:Filter_Plugin_Zbp_BuildModule
 '参数:
 '说明:Zbp类的生成模块内容的接口
