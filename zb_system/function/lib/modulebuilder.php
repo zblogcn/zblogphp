@@ -91,7 +91,7 @@ class ModuleBuilder {
     public static function Catalog() {
         global $zbp;
 
-        $template = $zbp->PrepareTemplate();
+        $template = $zbp->template;
         $tags = array();
 
         $tags['style'] = $zbp->option['ZC_MODULE_CATALOG_STYLE'];
@@ -111,7 +111,7 @@ class ModuleBuilder {
      */
     public static function Calendar($date = '') {
         global $zbp;
-        $template = $zbp->PrepareTemplate();
+        $template = $zbp->template;
         $tags = array();
 
         if ($date == '') {
@@ -193,7 +193,7 @@ class ModuleBuilder {
      */
     public static function Comments() {
         global $zbp;
-        $template = $zbp->PrepareTemplate();
+        $template = $zbp->template;
         $tags = array();
 
         $tags['module'] = $zbp->modulesbyfilename['comments'];
@@ -217,7 +217,7 @@ class ModuleBuilder {
      */
     public static function LatestArticles() {
         global $zbp;
-        $template = $zbp->PrepareTemplate();
+        $template = $zbp->template;
         $tags = array();
 
         $tags['module'] = $zbp->modulesbyfilename['comments'];
@@ -241,7 +241,7 @@ class ModuleBuilder {
      */
     public static function Archives() {
         global $zbp;
-        $template = $zbp->PrepareTemplate();
+        $template = $zbp->template;
         $tags = array();
         $urls = array();//array(url,name,count);
 
@@ -328,7 +328,7 @@ class ModuleBuilder {
      */
     public static function Navbar() {
         global $zbp;
-        $template = $zbp->PrepareTemplate();
+        $template = $zbp->template;
         $tags = array();
 
         $s = $zbp->modulesbyfilename['navbar']->Content;
@@ -392,7 +392,7 @@ class ModuleBuilder {
      */
     public static function TagList() {
         global $zbp;
-        $template = $zbp->PrepareTemplate();
+        $template = $zbp->template;
         $tags = array();
         $urls = array();//array(url,name,count);
 
@@ -427,7 +427,7 @@ class ModuleBuilder {
      */
     public static function AuthorList($level = 4) {
         global $zbp;
-        $template = $zbp->PrepareTemplate();
+        $template = $zbp->template;
         $tags = array();
         $authors = array();
 
@@ -456,7 +456,7 @@ class ModuleBuilder {
      */
     public static function Statistics($array = array()) {
         global $zbp;
-        $template = $zbp->PrepareTemplate();
+        $template = $zbp->template;
         $tags = array();
         $allinfo = array();
 
