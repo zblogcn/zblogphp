@@ -30,12 +30,11 @@ function BuildModule_statistics($array = array()) {
 
 class ModuleBuilder {
 
-    public static $Modules = array();
     public static $readymodules = array(); #模块
     public static $readymodules_function = array(); #模块函数
     public static $readymodules_parameters = array(); #模块函数的参数
 
-    public static function BuildModule() {
+    public static function Build() {
         global $zbp;
         foreach (ModuleBuilder::$readymodules as $modfilename) {
             if (isset($zbp->modulesbyfilename[$modfilename])) {
@@ -51,7 +50,7 @@ class ModuleBuilder {
      * @param string $modfilename 模块名
      * @param string $userfunc 用户函数
      */
-    public static function RegBuildModule($modfilename, $userfunc) {
+    public static function Reg($modfilename, $userfunc) {
         if(function_exists($userfunc)){
             ModuleBuilder::$readymodules_function[$modfilename] = $userfunc;
         }
@@ -68,7 +67,7 @@ class ModuleBuilder {
      * @param string $modfilename 模块名
      * @param null $parameters 模块参数
      */
-    public static function AddBuildModule($modfilename, $parameters = null) {
+    public static function Add($modfilename, $parameters = null) {
         ModuleBuilder::$readymodules[$modfilename] = $modfilename;
         ModuleBuilder::$readymodules_parameters[$modfilename] = $parameters;
     }
@@ -77,7 +76,7 @@ class ModuleBuilder {
      * 删除模块
      * @param string $modfilename 模块名
      */
-    public static function DelBuildModule($modfilename) {
+    public static function Del($modfilename) {
         unset(ModuleBuilder::$readymodules[$modfilename]);
         unset(ModuleBuilder::$readymodules_function[$modfilename]);
         unset(ModuleBuilder::$readymodules_parameters[$modfilename]);
@@ -179,7 +178,6 @@ class ModuleBuilder {
             $arraydate[$key]['Count']++;
         }
         $tags['arraydate'] = $arraydate;
-        $tags['module'] = $zbp->modulesbyfilename['calendar'];
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-calendar');
 
@@ -196,7 +194,6 @@ class ModuleBuilder {
         $template = $zbp->template;
         $tags = array();
 
-        $tags['module'] = $zbp->modulesbyfilename['comments'];
         $i = $zbp->modulesbyfilename['comments']->MaxLi;
         if ($i == 0) {
             $i = 10;
@@ -220,7 +217,6 @@ class ModuleBuilder {
         $template = $zbp->template;
         $tags = array();
 
-        $tags['module'] = $zbp->modulesbyfilename['comments'];
         $i = $zbp->modulesbyfilename['comments']->MaxLi;
         if ($i == 0) {
             $i = 10;

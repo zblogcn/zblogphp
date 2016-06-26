@@ -210,7 +210,8 @@ class ZBlogPHP {
     /**
      * @var array 激活的插件列表
      */
-    public $activeapps = array();
+    public $activedapps = array();
+    public $activeapps;
 
     /**
      * @var int 管理页面显示条数
@@ -268,7 +269,7 @@ class ZBlogPHP {
 
         global $option, $lang, $blogpath, $bloghost, $cookiespath, $usersdir, $table,
         $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname,
-        $blogtheme, $blogstyle, $currenturl, $activeapps, $posttype;
+        $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype;
 
         if (ZBP_HOOKERROR) {
             ZBlogException::SetErrorHook();
@@ -289,7 +290,8 @@ class ZBlogPHP {
         $this->posttype = &$posttype;
         $this->currenturl = &$currenturl;
         $this->action = &$action;
-        $this->activeapps = &$activeapps;
+        $this->activedapps = &$activedapps;
+        $this->activeapps= &$this->activedapps;
 
         $this->guid = &$this->option['ZC_BLOG_CLSID'];
 
@@ -384,7 +386,6 @@ class ZBlogPHP {
         if ($this->option['ZC_SITE_TURNOFF'] == true) {
             Http503();
             $this->ShowError(82, __FILE__, __LINE__);
-
             return false;
         }
 
@@ -520,8 +521,8 @@ class ZBlogPHP {
         $this->template = $this->PrepareTemplate();
 
         // 读主题版本信息
-        $app = new App;
-        if ($app->LoadInfoByXml('theme', $this->theme) == true) {
+        $app = $this->LoadApp('theme', $this->theme);
+        if ($app->type !== '') {
             $this->themeinfo = $app->GetInfoArray();
         }
 
@@ -1112,7 +1113,7 @@ class ZBlogPHP {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildModule'] as $fpname => &$fpsignal) {
             $fpname();
         }
-        ModuleBuilder::BuildModule();
+        ModuleBuilder::Build();
     }
 
     /**
@@ -1121,7 +1122,7 @@ class ZBlogPHP {
      * @param string $userfunc 用户函数
      */
     public function RegBuildModule($modfilename, $userfunc) {
-        ModuleBuilder::RegBuildModule($modfilename, $userfunc);
+        ModuleBuilder::Reg($modfilename, $userfunc);
     }
 
     /**
@@ -1130,7 +1131,7 @@ class ZBlogPHP {
      * @param null $parameters 模块参数
      */
     public function AddBuildModule($modfilename, $parameters = null) {
-        ModuleBuilder::AddBuildModule($modfilename, $parameters);
+        ModuleBuilder::Add($modfilename, $parameters);
     }
 
     /**
@@ -1138,7 +1139,7 @@ class ZBlogPHP {
      * @param string $modfilename 模块名
      */
     public function DelBuildModule($modfilename) {
-        ModuleBuilder::DelBuildModule($modfilename);
+        ModuleBuilder::Del($modfilename);
     }
 
     /**
@@ -2291,7 +2292,7 @@ class ZBlogPHP {
     public function CheckPlugin($name) {
         //$s=$this->option['ZC_BLOG_THEME'] . '|' . $this->option['ZC_USING_PLUGIN_LIST'];
         //return HasNameInString($s,$name);
-        return in_array($name, $this->activeapps);
+        return in_array($name, $this->activedapps);
     }
 
     /**
@@ -2556,6 +2557,7 @@ class ZBlogPHP {
      * 检查并开启Gzip压缩
      */
     public function CheckGzip() {
+
         if (extension_loaded("zlib") &&
             isset($_SERVER["HTTP_ACCEPT_ENCODING"]) &&
             strstr($_SERVER["HTTP_ACCEPT_ENCODING"], "gzip")
@@ -2649,6 +2651,7 @@ class ZBlogPHP {
             Redirect301($u);
         }
     }
+
     /**
      * 对表名和数据结构进行预转换
      */

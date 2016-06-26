@@ -555,7 +555,7 @@ class App {
                 continue;
             }
 
-            if (!in_array($d, $zbp->activeapps)) {
+            if (!in_array($d, $zbp->activedapps)) {
                 $zbp->ShowError(str_replace('%s', $d, $zbp->lang['error'][83]), __FILE__, __LINE__);
             }
         }
@@ -566,7 +566,7 @@ class App {
                 continue;
             }
 
-            if (in_array($c, $zbp->activeapps)) {
+            if (in_array($c, $zbp->activedapps)) {
                 $zbp->ShowError(str_replace('%s', $c, $zbp->lang['error'][85]), __FILE__, __LINE__);
             }
         }
