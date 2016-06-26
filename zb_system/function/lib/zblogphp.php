@@ -1487,9 +1487,9 @@ class ZBlogPHP {
      * @return bool
      */
     public function BuildTemplate() {
-        if (count($this->template->templates) == 0) {
+        //if (count($this->template->templates) == 0) {
             $this->template->templates = $this->LoadTemplate();
-        }
+        //}
 
         // 模板接口
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal){

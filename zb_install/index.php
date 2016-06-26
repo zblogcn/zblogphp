@@ -1061,8 +1061,9 @@ function SaveConfig() {
     $zbp->option['ZC_BLOG_THEME'] = 'WhitePage';
     $zbp->option['ZC_DEBUG_MODE'] = true;
     $zbp->option['ZC_LAST_VERSION'] = $zbp->version;
+    $zbp->option['ZC_NOW_VERSION'] = $zbp->version;
     $zbp->SaveOption();
-    //$zbp->BuildTemplate();
+    $zbp->BuildTemplate();
 
     $zbp->Config('cache')->templates_md5 = '';
     $zbp->SaveCache();

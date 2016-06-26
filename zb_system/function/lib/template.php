@@ -61,7 +61,7 @@ class Template {
      * @param $name
      * @return boolean
      */
-    public function hasTemplate($name) {
+    public function HasTemplate($name) {
         if (!isset($this->compiledTemplates[$name])) {
             return file_exists($this->path . '/' . $name .'.php');
         }
