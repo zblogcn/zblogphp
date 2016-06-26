@@ -1,6 +1,6 @@
 {* Template Name:公共头部 *}
 <!DOCTYPE html>
-<html xml:lang="{$lang['lang_bcp47']}" lang="{$lang['lang_bcp47']}">
+<html lang="{$lang['lang_bcp47']}">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
