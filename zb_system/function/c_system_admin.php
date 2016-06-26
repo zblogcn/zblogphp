@@ -1234,40 +1234,40 @@ function Admin_ModuleMng() {
     #siderbar-list begin
     echo '<div class="siderbar-list">';
     echo '<div class="siderbar-drop" id="siderbar"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->sidebar as $m) {
+    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    foreach ($zbp->template->sidebar as $m) {
         CreateModuleDiv($m, false);
     }
     echo '</div></div>';
     echo "\r\n";
 
     echo '<div class="siderbar-drop" id="siderbar2"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar2'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar2), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->sidebar2 as $m) {
+    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar2), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    foreach ($zbp->template->sidebar2 as $m) {
         CreateModuleDiv($m, false);
     }
     echo '</div></div>';
     echo "\r\n";
 
     echo '<div class="siderbar-drop" id="siderbar3"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar3'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar3), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->sidebar3 as $m) {
+    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar3), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    foreach ($zbp->template->sidebar3 as $m) {
         CreateModuleDiv($m, false);
     }
     echo '</div></div>';
     echo "\r\n";
 
     echo '<div class="siderbar-drop" id="siderbar4"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar4'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar4), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->sidebar4 as $m) {
+    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar4), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    foreach ($zbp->template->sidebar4 as $m) {
         CreateModuleDiv($m, false);
     }
     echo '</div></div>';
     echo "\r\n";
 
     echo '<div class="siderbar-drop" id="siderbar5"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar5'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->sidebar5), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->sidebar5 as $m) {
+    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar5), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    foreach ($zbp->template->sidebar5 as $m) {
         CreateModuleDiv($m, false);
     }
     echo '</div></div>';
