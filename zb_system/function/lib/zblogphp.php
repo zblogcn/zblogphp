@@ -519,6 +519,12 @@ class ZBlogPHP {
         //创建模板类
         $this->template = $this->PrepareTemplate();
 
+        // 读主题版本信息
+        $app = new App;
+        if ($app->LoadInfoByXml('theme', $this->theme) == true) {
+            $this->themeinfo = $app->GetInfoArray();
+        }
+
         if ($this->ismanage) {
             $this->LoadManage();
         }
@@ -1421,10 +1427,12 @@ class ZBlogPHP {
     #模板相关函数
 
     /**
-     * 预加载模板
+     * 创建模板对象，预加载已编译模板
      * @return Template
      */
-    public function PrepareTemplate() {
+    public function PrepareTemplate($theme = null) {
+
+        if (is_null($theme)) $theme = &$this->theme;
 
         $template = new Template();
         $template->MakeTemplateTags($template);
@@ -1433,46 +1441,12 @@ class ZBlogPHP {
             $fpreturn = $fpname($template->templateTags);
         }
 
-        $template->SetPath($this->usersdir . 'cache/compiled/' . $this->theme . '/');
-        $template->theme = &$this->theme;
+        $template->SetPath($this->usersdir . 'cache/compiled/' . $theme . '/');
+        $template->theme = $theme;
 
         return $template;
     }
 
-    /**
-     * 载入未编译模板
-     */
-    public function LoadTemplate($theme = null) {
-
-        if (is_null($theme)) $theme = $this->theme;
-        $templates  = array();
-
-        // 读取预置模板
-        $files = GetFilesInDir($this->path . 'zb_system/defend/default/', 'php');
-        foreach ($files as $sortname => $fullname) {
-            $templates[$sortname] = file_get_contents($fullname);
-        }
-
-        // 读取主题模板
-        $files = GetFilesInDir($this->usersdir . 'theme/' . $theme . '/template/', 'php');
-        foreach ($files as $sortname => $fullname) {
-            $templates[$sortname] = file_get_contents($fullname);
-        }
-
-        // 读版本信息
-        $app = new App;
-        if ($app->LoadInfoByXml('theme', $theme) == true) {
-            $this->themeinfo = $app->GetInfoArray();
-        }
-
-        for ($i = 2; $i <= 5; $i++) {
-            if (!isset($templates['sidebar' . $i])) {
-                $templates['sidebar' . $i] = str_replace('$sidebar', '$sidebar' . $i, $templates['sidebar']);
-            }
-        }
-
-        return $templates;
-    }
 
     /**
      * 模板解析
@@ -1480,7 +1454,7 @@ class ZBlogPHP {
      */
     public function BuildTemplate() {
         //if (count($this->template->templates) == 0) {
-            $this->template->templates = $this->LoadTemplate();
+            $this->template->LoadTemplates();
         //}
 
         // 模板接口
@@ -1495,7 +1469,8 @@ class ZBlogPHP {
      *更新模板缓存
      */
     public function CheckTemplate() {
-        $this->template->templates = $this->LoadTemplate();
+
+        $this->template->LoadTemplates();
         $s = implode($this->template->templates);
         $md5 = md5($s);
         if ($md5 != $this->cache->templates_md5) {
@@ -1503,6 +1478,7 @@ class ZBlogPHP {
             $this->cache->templates_md5 = $md5;
             $this->SaveCache();
         }
+
     }
 
 ################################################################################################################

@@ -12,8 +12,8 @@ class Template {
     protected $parsedPHPCodes = array();
     public $theme = "";
     public $templates = array();
+    public $compiledTemplates = array();    
     public $templateTags = array();
-    public $compiledTemplates = array();
     public $replaceTags = array();
 
     /**
@@ -62,11 +62,7 @@ class Template {
      * @return boolean
      */
     public function HasTemplate($name) {
-        if (!isset($this->compiledTemplates[$name])) {
-            return file_exists($this->path . '/' . $name .'.php');
-        }
-
-        return true;
+        return file_exists($this->path . '/' . $name .'.php');
     }
 
     /**
@@ -498,6 +494,52 @@ class Template {
 
         return $data;
 
+    }
+
+    /**
+     * 载入已编译模板s
+     */
+    public function LoadCompiledTemplates() {
+        $templates  = array();
+
+        // 读取主题模板
+        $files = GetFilesInDir($this->path, 'php');
+        foreach ($files as $sortname => $fullname) {
+            $templates[$sortname] = file_get_contents($fullname);
+        }
+
+        $this->compiledTemplates = $templates;
+    }
+
+    /**
+     * 载入未编译模板s
+     */
+    public function LoadTemplates($theme = null) {
+
+        global $zbp;
+
+        if (is_null($theme)) $theme = $zbp->theme;
+        $templates  = array();
+
+        // 读取预置模板
+        $files = GetFilesInDir($zbp->path . 'zb_system/defend/default/', 'php');
+        foreach ($files as $sortname => $fullname) {
+            $templates[$sortname] = file_get_contents($fullname);
+        }
+
+        // 读取主题模板
+        $files = GetFilesInDir($zbp->usersdir . 'theme/' . $theme . '/template/', 'php');
+        foreach ($files as $sortname => $fullname) {
+            $templates[$sortname] = file_get_contents($fullname);
+        }
+
+        for ($i = 2; $i <= 5; $i++) {
+            if (!isset($templates['sidebar' . $i])) {
+                $templates['sidebar' . $i] = str_replace('$sidebar', '$sidebar' . $i, $templates['sidebar']);
+            }
+        }
+
+        $this->templates = $templates;
     }
 
 
