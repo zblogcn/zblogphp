@@ -469,12 +469,12 @@ function Admin_SiteInfo() {
     echo '</div>';
 
     $s = file_get_contents($zbp->path . "zb_system/defend/thanks.html");
-    $s = str_replace('{$lang[\'msg\'][\'develop_intro\']}', $zbp->lang['msg']['develop_intro'], $s);
-    $s = str_replace('{$lang[\'msg\'][\'program\']}', $zbp->lang['msg']['program'], $s);
-    $s = str_replace('{$lang[\'msg\'][\'interface\']}', $zbp->lang['msg']['interface'], $s);
-    $s = str_replace('{$lang[\'msg\'][\'support\']}', $zbp->lang['msg']['support'], $s);
-    $s = str_replace('{$lang[\'msg\'][\'thanks\']}', $zbp->lang['msg']['thanks'], $s);
-    $s = str_replace('{$lang[\'msg\'][\'website\']}', $zbp->lang['msg']['website'], $s);
+    $s = str_replace('Z-BlogPHP网站和程序开发', $zbp->lang['msg']['develop_intro'], $s);
+    $s = str_replace('程序', $zbp->lang['msg']['program'], $s);
+    $s = str_replace('界面', $zbp->lang['msg']['interface'], $s);
+    $s = str_replace('支持', $zbp->lang['msg']['support'], $s);
+    $s = str_replace('感谢', $zbp->lang['msg']['thanks'], $s);
+    $s = str_replace('相关链接', $zbp->lang['msg']['website'], $s);
     echo $s;
     echo '<script type="text/javascript">ActiveTopMenu("topmenu1");</script>';
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/home_32.png' . '");</script>';
