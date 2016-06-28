@@ -172,6 +172,7 @@ class UrlRule {
         $url = str_replace('<:', '{', $url);
         $url = str_replace(':>', '}', $url);
         $url = str_replace('/', '\/', $url);
+        $url = str_replace('\/$', '$', $url);
 
 
         return '/(?J)' . $url . '/';
