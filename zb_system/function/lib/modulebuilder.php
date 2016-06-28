@@ -1,33 +1,10 @@
 <?php
-// 兼容代码
-function BuildModule_catalog() {
-    return ModuleBuilder::Catalog();
-}
-function BuildModule_calendar($date = '') {
-    return ModuleBuilder::Calendar($date);
-}
-function BuildModule_comments() {
-    return ModuleBuilder::Comments();
-}
-function BuildModule_previous() {
-    return ModuleBuilder::LatestArticles();
-}
-function BuildModule_archives() {
-    return ModuleBuilder::Archives();
-}
-function BuildModule_navbar() {
-    return ModuleBuilder::Navbar();
-}
-function BuildModule_tags() {
-    return ModuleBuilder::TagList();
-}
-function BuildModule_authors($level = 4) {
-    return ModuleBuilder::AuthorList($level);
-}
-function BuildModule_statistics($array = array()) {
-    return ModuleBuilder::Statistics($array);
-}
-
+/**
+ * 模块创建类
+ *
+ * @package Z-BlogPHP
+ * @subpackage ClassLib 类库
+ */
 class ModuleBuilder {
 
     public static $readymodules = array(); #模块

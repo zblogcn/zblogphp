@@ -2279,7 +2279,7 @@ class ZBlogPHP {
      */
     public function VerifyCmtKey($id, $key) {
         $nowkey = md5($this->guid . $id . date('Y-m-d'));
-        $nowkey2 = md5($this->guid . $id . date('Y-m-d', time() - (3600 * 24)));
+        $nowkey2 = md5($this->guid . $id . date('Y-m-d', time() - (3600 * 1)));
 
         return ($key == $nowkey || $key == $nowkey2);
     }
