@@ -6,7 +6,7 @@
 <note>Z-Blog的默认主题</note>
 <description>Z-Blog的默认主题.模板由zx制作,娇娇设计.新增了Table日历的支持.</description>
 <path></path>
-<include></include>
+<include>include.php</include>
 <level>1</level>
 <author>
   <name>zx.asd</name>
@@ -21,7 +21,7 @@
 <adapted>131221</adapted>
 <version>1.7</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2015-04-14</modified>
+<modified>2016-06-28</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>
