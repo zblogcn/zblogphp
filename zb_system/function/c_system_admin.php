@@ -807,7 +807,7 @@ function Admin_CommentMng() {
             echo '<td class="td5"></td>';
         }
 
-        echo '<td class="td10">' . $cmt->Author->Name . '</td>';
+        echo '<td class="td10"><span class="cmt-note" title="' . $zbp->lang['msg']['email'] .':' . htmlspecialchars($cmt->Email) . '"><a href="mailto:' . htmlspecialchars($cmt->Email) . '">' . $cmt->Author->Name . '</a></span></td>';
         echo '<td><div style="overflow:hidden;max-width:500px;">';
         if ($article) {
             echo '<a href="' . $article->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ';
@@ -858,7 +858,7 @@ function Admin_CommentMng() {
 
     echo '</div>';
     echo '<script type="text/javascript">ActiveLeftMenu("aCommentMng");</script>';
-    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/comments_32.png' . '");</script>';
+    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/comments_32.png' . '");$(".cmt-note").tooltip();</script>';
 }
 
 ################################################################################################################
