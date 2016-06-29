@@ -62,17 +62,11 @@ class DbSql {
      */
     public function ReplacePre(&$s) {
         $s = str_replace('%pre%', $this->db->dbpre, $s);
-
         return $s;
     }
 
-    public function get(&$table, $useKeyword = null) {
-        $this->ReplacePre($table);
+    public function get() {
         $sql = new $this->sql($this->db);
-        if (!is_null($useKeyword)) {
-            $sql->$useKeyword($table);
-        }
-
         return $sql;
     }
 
@@ -83,7 +77,7 @@ class DbSql {
      */
     public function DelTable($table) {
         
-        return $this->get($table)->drop("$table")->sql;
+        return $this->get()->drop("$table")->sql;
     }
 
     /**
@@ -94,7 +88,7 @@ class DbSql {
      */
     public function ExistTable($table, $dbname = '') {
 
-        return $this->get($table)->exist($table, $dbname)->sql;
+        return $this->get()->exist($table, $dbname)->sql;
     }
 
     /**
@@ -105,7 +99,7 @@ class DbSql {
      */
     public function CreateTable($table, $datainfo, $engine = null) {
 
-        $sql = $this->get($table);
+        $sql = $this->get();
         $sql->create($table)->data($datainfo);
         if (!is_null($engine)) {
             $sql->option(array('engine' => $engine));
@@ -113,9 +107,6 @@ class DbSql {
 
         return $sql->sql;
 
-        $this->ReplacePre($s);
-
-        return $s;
     }
 
 
@@ -134,7 +125,7 @@ class DbSql {
             $option = array();
         }
 
-        $sql = $this->get($table)->select($table)->option($option)->where($where)->orderBy($order)->limit($limit);
+        $sql = $this->get()->select($table)->option($option)->where($where)->orderBy($order)->limit($limit);
 
         if (isset($option['select2count'])) {
             foreach ($select as $key => $value) {
@@ -192,7 +183,7 @@ class DbSql {
      * @return string 返回构造的语句
      */
     public function Update($table, $keyvalue, $where, $option = null) {
-        return $this->get($table)->update($table)->data($keyvalue)->where($where)->option($option)->sql;
+        return $this->get()->update($table)->data($keyvalue)->where($where)->option($option)->sql;
     }
 
     /**
@@ -203,7 +194,7 @@ class DbSql {
      */
     public function Insert($table, $keyvalue) {
 
-        return $this->get($table)->insert($this->db)->insert($table)->data($keyvalue)->sql;
+        return $this->get()->insert($this->db)->insert($table)->data($keyvalue)->sql;
     }
 
     /**
@@ -215,7 +206,7 @@ class DbSql {
      */
     public function Delete($table, $where, $option = null) {
 
-        return $this->get($table)->delete($this->db)->delete($table)->where($where)->option($option)->sql;
+        return $this->get()->delete($this->db)->delete($table)->where($where)->option($option)->sql;
     }
 
     /**

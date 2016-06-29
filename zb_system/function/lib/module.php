@@ -102,8 +102,20 @@ class Module extends Base {
 
             return true;
         }
-
-        return parent::Save();
+        $m=$zbp->GetListType('Module',
+                    $zbp->db->sql->get()->select($zbp->table['Module'])
+                    ->where(array('=', $zbp->datainfo['Module']['FileName'][0], $this->FileName))
+                    ->sql
+                );
+        //die(count($m)==1);
+        if(count($m)<1){
+            return parent::Save();
+        }else{
+            if($this->ID==0){
+                return false;
+            }
+            return parent::Save();
+        }
     }
 
     /**

@@ -393,6 +393,8 @@ class ZBlogPHP {
             return false;
         }
 
+        $this->ConvertTableAndDatainfo();
+
         $this->LoadConfigs();
         $this->LoadCache();
         $this->LoadOption();
@@ -466,8 +468,6 @@ class ZBlogPHP {
         $this->ajaxurl = $this->host . 'zb_system/cmd.php?act=ajax&src=';
         $this->xmlrpcurl = $this->host . 'zb_system/xml-rpc/index.php';
 
-        $this->ConvertTableAndDatainfo();
-
         $this->isinitialized = true;
 
         return true;
@@ -499,6 +499,8 @@ class ZBlogPHP {
         $this->StartGzip();
 
         header('Content-type: text/html; charset=utf-8');
+
+        $this->ConvertTableAndDatainfo();
 
         $this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
         $this->LoadCategorys();
