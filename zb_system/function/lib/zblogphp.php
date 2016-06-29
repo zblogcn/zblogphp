@@ -291,7 +291,7 @@ class ZBlogPHP {
         $this->currenturl = &$currenturl;
         $this->action = &$action;
         $this->activedapps = &$activedapps;
-        $this->activeapps= &$this->activedapps;
+        $this->activeapps = &$this->activedapps;
 
         $this->guid = &$this->option['ZC_BLOG_CLSID'];
 
@@ -386,6 +386,7 @@ class ZBlogPHP {
         if ($this->option['ZC_SITE_TURNOFF'] == true) {
             Http503();
             $this->ShowError(82, __FILE__, __LINE__);
+
             return false;
         }
 
@@ -1455,21 +1456,21 @@ class ZBlogPHP {
      * 模板解析
      * @return bool
      */
-    public function BuildTemplate() {
-        //if (count($this->template->templates) == 0) {
-            $this->template->LoadTemplates();
-        //}
-
+    public function BuildTemplate(&$template = null) {
+        if (is_null($template)) {
+            $template = &$this->template;
+        }
+        $template->LoadTemplates();
         // 模板接口
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal){
-            $fpname($this->template->templates);
+            $fpname($template->templates);
         }
 
-        return $this->template->BuildTemplate();
+        return $template->BuildTemplate();
     }
 
     /**
-     *更新模板缓存
+     * 更新模板缓存
      */
     public function CheckTemplate() {
 
