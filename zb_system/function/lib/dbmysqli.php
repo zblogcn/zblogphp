@@ -3,7 +3,7 @@
  * MySQLi数据库操作类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase 类库
+ * @subpackage ClassLib/DataBase/DbMySQLi 类库
  */
 class DbMySQLi implements iDataBase {
 
@@ -54,7 +54,7 @@ class DbMySQLi implements iDataBase {
      *                  'dbmysql_pre',
      *                  'dbmysql_port',
      *                  'persistent'
-    'engine')
+     *                  'engine')
      * @return bool
      */
     public function Open($array) {
@@ -66,7 +66,7 @@ class DbMySQLi implements iDataBase {
 
         //mysqli_options($db,MYSQLI_READ_DEFAULT_GROUP,"max_allowed_packet=50M");
         if (@mysqli_real_connect($db, $array[0], $array[1], $array[2], $array[3], $array[5])) {
-            
+
             $myver = mysqli_get_server_info($db);
             $this->version = substr($myver, 0, strpos($myver, "-"));
             if(version_compare($this->version, '5.5.3') >= 0){
@@ -98,7 +98,7 @@ class DbMySQLi implements iDataBase {
      */
     public function CreateDB($dbmysql_server, $dbmysql_port, $dbmysql_username, $dbmysql_password, $dbmysql_name) {
         $db = mysqli_connect($dbmysql_server, $dbmysql_username, $dbmysql_password, null, $dbmysql_port);
-        
+
         $myver = mysqli_get_server_info($db);
         $myver = substr($myver, 0, strpos($myver, "-"));
         if(version_compare($myver, '5.5.3') >= 0){

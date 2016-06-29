@@ -3,7 +3,7 @@
  * 分页条码
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/Article 类库
+ * @subpackage ClassLib/PageBar 类库
  */
 class PageBar {
 

@@ -3,7 +3,7 @@
  * 获取链接内容类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/Network 网络连接
+ * @subpackage ClassLib/Network/Networkfile_get_contents 网络连接
  */
 class Networkfile_get_contents implements iNetwork {
 

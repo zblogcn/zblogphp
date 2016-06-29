@@ -3,7 +3,7 @@
  * sock类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/Network 网络连接
+ * @subpackage ClassLib/Network/Networkfsockopen 网络连接
  */
 class Networkfsockopen implements iNetwork {
 

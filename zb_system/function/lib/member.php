@@ -3,7 +3,7 @@
  * 用户类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib 类库
+ * @subpackage ClassLib/Member 类库
  */
 class Member extends Base {
 

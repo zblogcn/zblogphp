@@ -3,7 +3,7 @@
  * 评论类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/Article 类库
+ * @subpackage ClassLib/Comment 类库
  */
 class Comment extends Base {
 

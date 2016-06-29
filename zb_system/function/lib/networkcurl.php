@@ -4,7 +4,7 @@
  *
  * 自定义网络连接接口代替curl
  * @package Z-BlogPHP
- * @subpackage ClassLib/Network 网络连接
+ * @subpackage ClassLib/Network/Networkcurl 网络连接
  */
 class Networkcurl implements iNetwork {
     private $readyState = 0; #状态

@@ -4,7 +4,7 @@
  * 验证码类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/Article 类库
+ * @subpackage ClassLib/ValidateCode 类库
  */
 /**
  * Builds a new captcha image

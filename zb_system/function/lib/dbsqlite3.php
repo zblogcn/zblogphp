@@ -3,7 +3,7 @@
  * SQLite3数据库操作类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase 类库
+ * @subpackage ClassLib/DataBase/DbSQLite3 类库
  */
 class DbSQLite3 implements iDataBase {
 

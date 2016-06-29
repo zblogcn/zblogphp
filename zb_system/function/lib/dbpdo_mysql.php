@@ -3,7 +3,7 @@
  * pdo_MySQL数据库操作类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase 类库
+ * @subpackage ClassLib/DataBase/Dbpdo_MySQL 类库
  */
 class Dbpdo_MySQL implements iDataBase {
 

@@ -3,7 +3,7 @@
  * pdo_SQLite数据库操作类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase 类库
+ * @subpackage ClassLib/DataBase/Dbpdo_SQLite 类库
  */
 class Dbpdo_SQLite implements iDataBase {
 

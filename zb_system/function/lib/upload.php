@@ -3,7 +3,7 @@
  * 上传类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/Article 类库
+ * @subpackage ClassLib/Upload 类库
  */
 class Upload extends Base {
 

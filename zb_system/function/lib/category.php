@@ -3,7 +3,7 @@
  * 文章分类类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/Article 类库
+ * @subpackage ClassLib/Category 类库
  */
 class Category extends Base {
 

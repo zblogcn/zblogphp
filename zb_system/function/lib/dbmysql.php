@@ -3,7 +3,7 @@
  * MySQL数据库操作类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase 类库
+ * @subpackage ClassLib/DataBase/DbMySQL 类库
  */
 class DbMySQL implements iDataBase {
 

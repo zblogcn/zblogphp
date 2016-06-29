@@ -3,7 +3,7 @@
  * Tag类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/Article 类库
+ * @subpackage ClassLib/Tag 类库
  */
 class Tag extends Base {
 

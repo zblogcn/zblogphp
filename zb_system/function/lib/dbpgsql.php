@@ -3,7 +3,7 @@
  * PgSQL数据库操作类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase 类库
+ * @subpackage ClassLib/DataBase/DbPgSQL 类库
  */
 class DbPgSQL implements iDataBase {
 

@@ -3,7 +3,7 @@
  * 模块类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/Article 类库
+ * @subpackage ClassLib/Module 类库
  */
 class Module extends Base {
 
