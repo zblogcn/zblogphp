@@ -152,19 +152,19 @@ class Template {
         global $zbp;
         $templates = &$this->templates;
 
-        if (strpos($templates['comments'], 'AjaxCommentBegin')===false) {
+        if (strpos($templates['comments'], 'AjaxCommentBegin') === false) {
             $templates['comments'] = '<label id="AjaxCommentBegin"></label>' . $templates['comments'];
         }
 
-        if (strpos($templates['comments'], 'AjaxCommentEnd')===false) {
+        if (strpos($templates['comments'], 'AjaxCommentEnd') === false) {
             $templates['comments'] = $templates['comments'] . '<label id="AjaxCommentEnd"></label>';
         }
 
-        if (strpos($templates['comment'], 'id="cmt{$comment.ID}"')===false && strpos($templates['comment'], 'id=\'cmt{$comment.ID}\'')===false) {
+        if (strpos($templates['comment'], 'id="cmt{$comment.ID}"') === false && strpos($templates['comment'], 'id=\'cmt{$comment.ID}\'') === false) {
             $templates['comment'] = '<label id="cmt{$comment.ID}"></label>' . $templates['comment'];
         }
 
-        if (strpos($templates['commentpost'], 'inpVerify')===false && strpos($templates['commentpost'], '=\'verify\'')===false && strpos($templates['commentpost'], '="verify"')===false) {
+        if (strpos($templates['commentpost'], 'inpVerify') === false && strpos($templates['commentpost'], '=\'verify\'') === false && strpos($templates['commentpost'], '="verify"') === false) {
             $verify = '{template:commentpost-verify}';
 
             if (strpos($templates['commentpost'], '<!--verify-->') !== false) {
@@ -176,18 +176,18 @@ class Template {
             }
         }
 
-        if (strpos($templates['header'], '{$header}')===false) {
-            if (strpos($templates['header'], '</head>')!==false) {
+        if (strpos($templates['header'], '{$header}') === false) {
+            if (strpos($templates['header'], '</head>') !== false) {
                 $templates['header'] = str_replace('</head>', '</head>' . '{$header}', $templates['header']);
             } else {
                 $templates['header'] .= '{$header}';
             }
         }
 
-        if (strpos($templates['footer'], '{$footer}')===false) {
-            if (strpos($templates['footer'], '</body>')!==false) {
+        if (strpos($templates['footer'], '{$footer}') === false) {
+            if (strpos($templates['footer'], '</body>') !== false) {
                 $templates['footer'] = str_replace('</body>', '{$footer}' . '</body>', $templates['footer']);
-            } elseif (strpos($templates['footer'], '</html>')!==false) {
+            } elseif (strpos($templates['footer'], '</html>') !== false) {
                 $templates['footer'] = str_replace('</html>', '{$footer}' . '</html>', $templates['footer']);
             } else {
                 $templates['footer'] = '{$footer}' . $templates['footer'];
@@ -514,11 +514,11 @@ class Template {
     /**
      * 载入未编译模板s
      */
-    public function LoadTemplates($theme = null) {
+    public function LoadTemplates() {
 
         global $zbp;
 
-        if (is_null($theme)) $theme = $zbp->theme;
+        $theme = $this->theme;
         $templates  = array();
 
         // 读取预置模板
