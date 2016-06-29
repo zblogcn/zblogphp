@@ -138,11 +138,16 @@ class Module extends Base {
             return;
         }
 
-        if (isset(ModuleBuilder::$readymodules_function[$this->FileName])) {
-            $this->Content = call_user_func(
-                ModuleBuilder::$readymodules_function[$this->FileName],
-                ModuleBuilder::$readymodules_parameters[$this->FileName]
-            );
+        if (isset(ModuleBuilder::$List[$this->FileName])) {
+            if(isset(ModuleBuilder::$List[$this->FileName]['function'])){
+                if(isset(ModuleBuilder::$List[$this->FileName]['parameters'])){
+                    $this->Content = call_user_func(ModuleBuilder::$List[$this->FileName]['function'], ModuleBuilder::$List[$this->FileName]['parameters']);
+                }else{
+                    $this->Content = call_user_func(ModuleBuilder::$List[$this->FileName]['function']);
+                }
+           
+            }
+
         }
     }
 

@@ -12,7 +12,7 @@ class Template {
     protected $parsedPHPCodes = array();
     public $theme = "";
     public $templates = array();
-    public $compiledTemplates = array();    
+    public $compiledTemplates = array();
     public $templateTags = array();
     public $replaceTags = array();
 
@@ -152,22 +152,22 @@ class Template {
         global $zbp;
         $templates = &$this->templates;
 
-        if (!strpos($templates['comments'], 'AjaxCommentBegin')) {
+        if (strpos($templates['comments'], 'AjaxCommentBegin')===false) {
             $templates['comments'] = '<label id="AjaxCommentBegin"></label>' . $templates['comments'];
         }
 
-        if (!strpos($templates['comments'], 'AjaxCommentEnd')) {
+        if (strpos($templates['comments'], 'AjaxCommentEnd')===false) {
             $templates['comments'] = $templates['comments'] . '<label id="AjaxCommentEnd"></label>';
         }
 
-        if (!strpos($templates['comment'], 'id="cmt{$comment.ID}"') && !strpos($templates['comment'], 'id=\'cmt{$comment.ID}\'')) {
+        if (strpos($templates['comment'], 'id="cmt{$comment.ID}"')===false && strpos($templates['comment'], 'id=\'cmt{$comment.ID}\'')===false) {
             $templates['comment'] = '<label id="cmt{$comment.ID}"></label>' . $templates['comment'];
         }
 
-        if (!strpos($templates['commentpost'], 'inpVerify') && !strpos($templates['commentpost'], '=\'verify\'') && !strpos($templates['commentpost'], '="verify"')) {
-            $verify = '{if $option[\'ZC_COMMENT_VERIFY_ENABLE\'] && !$user.ID}<p><input type="text" name="inpVerify" id="inpVerify" class="text" value="" size="28" tabindex="4" /> <label for="inpVerify">' . $zbp->lang['msg']['validcode'] . '(*)</label><img style="width:{$option[\'ZC_VERIFYCODE_WIDTH\']}px;height:{$option[\'ZC_VERIFYCODE_HEIGHT\']}px;cursor:pointer;" src="{$article.ValidCodeUrl}" alt="" title="" onclick="javascript:this.src=\'{$article.ValidCodeUrl}&amp;tm=\'+Math.random();"/></p>{/if}';
+        if (strpos($templates['commentpost'], 'inpVerify')===false && strpos($templates['commentpost'], '=\'verify\'')===false && strpos($templates['commentpost'], '="verify"')===false) {
+            $verify = '{template:commentpost-verify}';
 
-            if (!strpos($templates['commentpost'], '<!--verify-->')) {
+            if (strpos($templates['commentpost'], '<!--verify-->') !== false) {
                 $templates['commentpost'] = str_replace('<!--verify-->', $verify, $templates['commentpost']);
             } elseif (strpos($templates['commentpost'], '</form>')) {
                 $templates['commentpost'] = str_replace('</form>', $verify . '</form>', $templates['commentpost']);
@@ -176,18 +176,18 @@ class Template {
             }
         }
 
-        if (!strpos($templates['header'], '{$header}')) {
-            if (strpos($templates['header'], '</head>')) {
+        if (strpos($templates['header'], '{$header}')===false) {
+            if (strpos($templates['header'], '</head>')!==false) {
                 $templates['header'] = str_replace('</head>', '</head>' . '{$header}', $templates['header']);
             } else {
                 $templates['header'] .= '{$header}';
             }
         }
 
-        if (!strpos($templates['footer'], '{$footer}')) {
-            if (strpos($templates['footer'], '</body>')) {
+        if (strpos($templates['footer'], '{$footer}')===false) {
+            if (strpos($templates['footer'], '</body>')!==false) {
                 $templates['footer'] = str_replace('</body>', '{$footer}' . '</body>', $templates['footer']);
-            } elseif (strpos($templates['footer'], '</html>')) {
+            } elseif (strpos($templates['footer'], '</html>')!==false) {
                 $templates['footer'] = str_replace('</html>', '{$footer}' . '</html>', $templates['footer']);
             } else {
                 $templates['footer'] = '{$footer}' . $templates['footer'];

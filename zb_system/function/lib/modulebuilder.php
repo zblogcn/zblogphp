@@ -7,15 +7,14 @@
  */
 class ModuleBuilder {
 
-    public static $readymodules = array(); #模块
-    public static $readymodules_function = array(); #模块函数
-    public static $readymodules_parameters = array(); #模块函数的参数
+	//需要重建的module list
+    public static $List = array();//array('filename'=>,'function' => '', 'paramters' => '');
 
     public static function Build() {
         global $zbp;
-        foreach (ModuleBuilder::$readymodules as $modfilename) {
-            if (isset($zbp->modulesbyfilename[$modfilename])) {
-                $m = $zbp->modulesbyfilename[$modfilename];
+        foreach (ModuleBuilder::$List as $m) {
+            if (isset($zbp->modulesbyfilename[$m['filename']])) {
+                $m = $zbp->modulesbyfilename[$m['filename']];
                 $m->Build();
                 $m->Save();
             }
@@ -28,13 +27,13 @@ class ModuleBuilder {
      * @param string $userfunc 用户函数
      */
     public static function Reg($modfilename, $userfunc) {
+        ModuleBuilder::$List[$modfilename]['filename'] = $modfilename;
         if(function_exists($userfunc)){
-            ModuleBuilder::$readymodules_function[$modfilename] = $userfunc;
-        }
-        if (strpos($userfunc, '::') !== false) {
+            ModuleBuilder::$List[$modfilename]['function'] = $userfunc;
+        } elseif (strpos($userfunc, '::') !== false) {
             $a=explode('::', $userfunc);
             if(method_exists($a[0], $a[1])){
-                ModuleBuilder::$readymodules_function[$modfilename] = $userfunc;
+                ModuleBuilder::$List[$modfilename]['function'] = $userfunc;
             }
         }
     }
@@ -45,8 +44,8 @@ class ModuleBuilder {
      * @param null $parameters 模块参数
      */
     public static function Add($modfilename, $parameters = null) {
-        ModuleBuilder::$readymodules[$modfilename] = $modfilename;
-        ModuleBuilder::$readymodules_parameters[$modfilename] = $parameters;
+        ModuleBuilder::$List[$modfilename]['filename'] = $modfilename;
+        ModuleBuilder::$List[$modfilename]['parameters'] = $parameters;
     }
 
     /**
@@ -54,9 +53,7 @@ class ModuleBuilder {
      * @param string $modfilename 模块名
      */
     public static function Del($modfilename) {
-        unset(ModuleBuilder::$readymodules[$modfilename]);
-        unset(ModuleBuilder::$readymodules_function[$modfilename]);
-        unset(ModuleBuilder::$readymodules_parameters[$modfilename]);
+        unset(ModuleBuilder::$List[$modfilename]);
     }
 
     /**
