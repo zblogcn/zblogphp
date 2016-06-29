@@ -55,6 +55,7 @@ class SQLGlobal {
         if (in_array($upperKeyword, $this->methodKeyword)) {
             $this->method = $upperKeyword;
             $this->table = is_array($argu[0]) ? $argu[0] : $argu;
+            $this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
 
             return $this;
         } elseif (in_array($upperKeyword, $this->otherKeyword)) {
