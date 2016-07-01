@@ -33,6 +33,21 @@ class Metas {
     }
 
     /**
+     * @param $name
+     * @return bool
+     */
+    public function __isset($name) {
+        return isset($this->_data[$name]);
+    }
+
+    /**
+     * @param $name
+     */
+    public function __unset($name) {
+        unset($this->_data[$name]);
+    }
+
+    /**
      * 将数组数据转换为Metas实例
      * @param array $a
      * @return Metas

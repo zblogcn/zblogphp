@@ -2144,17 +2144,23 @@ function DelTag() {
 function PostMember() {
     global $zbp;
     $mem = new Member();
-    $othersEditable = $zbp->CheckRights('MemberAll');
+
     $data = array();
 
     if (!isset($_POST['ID'])) {
         return false;
     }
 
+    //检测密码
+    //if(trim($_POST["Password"])=='' || trim($_POST["PasswordRe"])=='' || $_POST["Password"]!=$_POST["PasswordRe"]){
+    //    unset($_POST["Password"]);
+    //    unset($_POST["PasswordRe"]);
+    //}
+
     $data['ID'] = $_POST['ID'];
     $editableField = array('Password', 'Email', 'HomePage', 'Alias', 'Intro', 'Template');
     // 如果是管理员，则再允许改动别的字段
-    if ($othersEditable) {
+    if ($zbp->CheckRights('MemberAll')) {
         array_push($editableField, 'Level', 'Status', 'Name', 'IP');
     } else {
         $data['ID'] = $zbp->user->ID;
@@ -3158,7 +3164,7 @@ function BuildModule_tags() {
     return ModuleBuilder::TagList();
 }
 function BuildModule_authors($level = 4) {
-    return ModuleBuilder::AuthorList($level);
+    return ModuleBuilder::Authors($level);
 }
 function BuildModule_statistics($array = array()) {
     return ModuleBuilder::Statistics($array);
