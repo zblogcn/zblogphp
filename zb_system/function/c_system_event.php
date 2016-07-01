@@ -2390,7 +2390,7 @@ function DelModule() {
 
     if (GetVars('source', 'GET') == 'theme') {
         $fn = GetVars('filename', 'GET');
-        if ($fn) {var_dump($zbp->GetModuleByFileName($fn));
+        if ($fn) {
             $mod = $zbp->GetModuleByFileName($fn);
             if ($mod->FileName == $fn) {
                 $mod->Del();
