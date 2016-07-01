@@ -398,7 +398,7 @@
             	}, formData);
             });
 
-            return self;
+            return false;
         };
         /**
          * comment
