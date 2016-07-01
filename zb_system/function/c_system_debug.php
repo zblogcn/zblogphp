@@ -513,8 +513,13 @@ class ZBlogException {
             }
         }
 
+        $httpQuery = array(
+            'id' => ZBlogException::$error_id,
+            'message' => $this->message
+        );
         $result .= $lang['error_reasons']['end'];
         $result = str_replace('{%BlogHost%}', $bloghost, $result);
+        $result = str_replace('{%more_info%}', 'https://www.zblogcn.com/help/?' . http_build_query($httpQuery), $result);
 
         return $result;
     }

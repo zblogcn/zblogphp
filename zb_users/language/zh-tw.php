@@ -504,7 +504,7 @@ return array(
 		',
         '8' => '
 			您是否輸入了正確的名稱和密碼？<br/>
-			如果您是管理員且忘記了密碼，可以點擊<a href="http://www.zblogcn.com/program/zblogphp_findpassword/" target="_blank">這裡</a>下載密碼找回工具。<br/>
+			如果您是管理員且忘記了密碼，可以點擊【更多幫助】下載密碼找回工具。<br/>
 			<br/>
 		',
 
@@ -539,7 +539,7 @@ return array(
 
         'end' => '
 			如果您是訪客，這說明網站程式可能出現了一些錯誤。請您稍後再試，或聯繫站長。 <br/>
-			如果您是站長，您可以到<a href="http://bbs.zblogcn.com/" target="_blank">Z-Blog官方論壇</a>，附上錯誤詳細截圖與描述尋求幫助（可使用傳統中文）。
+            如果您是站長，您可以點擊<a href="{%more_info%}" target="_blank">【更多幫助】</a>來查看Z-Blog官方關於這個錯誤的說明，也可以到<a href="http://bbs.zblogcn.com/" target="_blank">Z-Blog官方論壇</a>，附上錯誤詳細截圖與描述尋求幫助。
 		',
     ),
 

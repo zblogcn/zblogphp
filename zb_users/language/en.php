@@ -504,7 +504,7 @@ return array(
 		',
         '8' => '
 			Have you entered the correct name and password? <br/>
-			If you are the webmaster and have forgotten your password, you can click <a href="http://www.zblogcn.com/program/zblogphp_findpassword/" target="_blank">here</a> to download the retrieve tools. <br/>
+			If you are the webmaster and have forgotten your password, you can click [More] to download the retrieve tool. <br/>
 			<br/>
 		',
 
@@ -532,7 +532,7 @@ return array(
 
         'end' => '
 			If you are a visitor, this may be something happened. Please try again later, or contact the webmaster. <br/>
-			If you are a webmaster, you can go to the <a href="http://bbs.zblogcn.com/" target="_blank"> Z-Blog official forum </a>, attach screenshots and detailed description of the error to seek help (You can use English to publish a thread).
+			If you are the webmaster, You can click on <a href="{%more_info%}" target="_blank"> [more] </a> to get more help from Z-Blog Wiki(Chinese only). Therefore, to publish a thread in English in <a href="http://bbs.zblogcn.com/" target="_blank">Z-Blog official forum </a> with detailed error description and screenshots for help is a choice.
 		',
     ),
 );
