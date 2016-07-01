@@ -19,7 +19,7 @@ defined('ZBP_HOOKERROR') || define('ZBP_HOOKERROR', true);
 define('ZC_VERSION_MAJOR', '1');
 define('ZC_VERSION_MINOR', '5');
 define('ZC_VERSION_BUILD', '0');
-define('ZC_VERSION_COMMIT', '1500');
+define('ZC_VERSION_COMMIT', '1525');
 define('ZC_VERSION_CODENAME', 'Subaru');
 define('ZC_VERSION', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . '.' . ZC_VERSION_BUILD . '.' . ZC_VERSION_COMMIT);
 define('ZC_VERSION_DISPLAY', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . ' ' . ZC_VERSION_CODENAME);
