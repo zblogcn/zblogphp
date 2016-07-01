@@ -33,7 +33,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsigna
 <?php echo $this->possible_causes_of_the_error(); ?>
 	 	</div>
 		<?php if ($GLOBALS['option']['ZC_DEBUG_MODE']) {?>
-		<p style="text-align:right;"><a href="javascript:$('div.lessinfo').hide(500);$('div.moreinfo').show(500);">显示更多的信息</a></p>
+		<p style="text-align:right;"><a href="javascript:;" onclick="$('div.lessinfo').hide(500);$('div.moreinfo').show(500);">显示更多的信息</a></p>
 		<?php }?>
 	  </div>
 
@@ -128,7 +128,7 @@ $post_data = $_COOKIE;unset($post_data['username']);unset($post_data['password']
 	 	</div>
 <?php }?>
 	  </div>
-	  <p><a href="javascript:history.back(-1)"><?php echo $GLOBALS['lang']['msg']['back']; ?></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:location.reload()"><?php echo $GLOBALS['lang']['msg']['refresh']; ?></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo $GLOBALS['bloghost']; ?>zb_system/cmd.php?act=login"><?php echo $GLOBALS['lang']['msg']['login']; ?></a></p>
+	  <p><a href="javascript:history.back(-1);"><?php echo $GLOBALS['lang']['msg']['back']; ?></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:location.reload();"><?php echo $GLOBALS['lang']['msg']['refresh']; ?></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo $GLOBALS['bloghost']; ?>zb_system/cmd.php?act=login"><?php echo $GLOBALS['lang']['msg']['login']; ?></a></p>
     </form>
   </div>
 </div>

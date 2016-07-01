@@ -812,7 +812,7 @@ function Admin_CommentMng() {
         if ($article) {
             echo '<a href="' . $article->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ';
         } else {
-            echo '<a href="javascript:void(0)"><img src="../image/admin/delete.png" alt="no exists" title="no exists" width="16" /></a>';
+            echo '<a href="javascript:;"><img src="../image/admin/delete.png" alt="no exists" title="no exists" width="16" /></a>';
         }
 
         echo $cmt->Content . '<div></td>';

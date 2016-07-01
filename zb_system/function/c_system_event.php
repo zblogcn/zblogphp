@@ -984,7 +984,7 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
         $zbp->db->Update($sql);
     }
 
-    $pagebar = new Pagebar('javascript:zbp.comment.get(\'' . $article->ID . '\',\'{%page%}\')', false);
+    $pagebar = new Pagebar('javascript:zbp.comment.get(\'' . $article->ID . '\',\'{%page%}\');', false);
     $pagebar->PageCount = $zbp->commentdisplaycount;
     $pagebar->PageNow = 1;
     $pagebar->PageBarCount = $zbp->pagebarcount;
@@ -1074,7 +1074,7 @@ function ViewComments($postid, $page) {
     $page = $page == 0 ? 1 : $page;
     $template = 'comments';
 
-    $pagebar = new Pagebar('javascript:zbp.comment.get(\'' . $post->ID . '\',\'{%page%}\')');
+    $pagebar = new Pagebar('javascript:zbp.comment.get(\'' . $post->ID . '\',\'{%page%}\');');
     $pagebar->PageCount = $zbp->commentdisplaycount;
     $pagebar->PageNow = $page;
     $pagebar->PageBarCount = $zbp->pagebarcount;
