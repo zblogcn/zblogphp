@@ -203,13 +203,19 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('SELECT * FROM  `zbp_post`  ORDER BY bbb desc, aaa ',
             self::$db
             ->select("zbp_post")
-            ->orderBy(array(array('bbb' => 'desc'), 'aaa'))
+            ->orderBy(array('bbb' => 'desc'), 'aaa')
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  `zbp_post`  ORDER BY bbb desc, aaa ',
+        $this->assertEquals('SELECT * FROM  `zbp_post`  ORDER BY bbb desc',
             self::$db
             ->select("zbp_post")
-            ->orderBy(array('bbb' => 'desc'), 'aaa')
+            ->orderBy(array('bbb' => 'desc'))
+            ->sql
+        );
+        $this->assertEquals('SELECT * FROM  `zbp_post`  ORDER BY bbb desc, aaa asc',
+            self::$db
+            ->select("zbp_post")
+            ->orderBy(array('bbb' => 'desc', 'aaa' => 'asc'))
             ->sql
         );
         $this->assertEquals('SELECT * FROM  `zbp_post`  ORDER BY aaaa ',
@@ -218,7 +224,7 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ->orderBy('aaaa')
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  `zbp_post`  ORDER BY a , b , c ',
+        $this->assertEquals('SELECT * FROM  `zbp_post`  ORDER BY a, b, c',
             self::$db
             ->select("zbp_post")
             ->orderBy(array('a', 'b', 'c'))

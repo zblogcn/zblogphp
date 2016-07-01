@@ -298,31 +298,22 @@ class SQLGlobal {
     }
     /**
      * Order by
-     * @example orderBy(array(array('bbb' => 'desc'), 'aaa'))
-     * @example orderBy(array('bbb' => 'desc'), 'aaa')
-     * @example orderBy('aaaa')
-     * @example orderBy(array('a', 'b', 'c'))
      * @return  $this
      */
     public function orderBy() {
         $order = func_get_args();
-
-        if (count($order) == 1) {
-            if (isset($order[0]) && is_array($order[0])) {
-                $order = $order[0];
-            } elseif (!$this->validateParamater($order[0])) {
-                return $this;
-            }
+        if (!$this->validateParamater($order)) {
+            return $this;
         }
-        if (count($order) == 1 && !isset($order[0])) {
-            $order = array($order);
-        }
-
         foreach ($order as $key => $value) {
             $ret = $value;
+            if (!$this->validateParamater($ret)) {
+                continue;
+            }
             if (!is_array($ret)) {
                 $ret = array($value => '');
             }
+
             $this->orderBy = array_merge_recursive($this->orderBy, $ret);
         }
 
@@ -510,7 +501,12 @@ class SQLGlobal {
         $orderByData = array();
 
         foreach ($this->orderBy as $key => $value) {
-            $orderByData[] = "$key $value";
+            if (is_int($key)) {
+                $orderByData[] = "$value";
+            } else {
+                $orderByData[] = "$key $value";
+            }
+            
         }
         $sql[] = implode(', ', $orderByData);
     }
