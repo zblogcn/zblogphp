@@ -2041,7 +2041,7 @@ class ZBlogPHP {
 
         $like = ($this->db->type == 'pgsql') ? 'ILIKE' : 'LIKE';
 
-        $sql = $this->db->sql->get($this->table['Member'], 'SELECT')->where(array("$like array", array(
+        $sql = $this->db->sql->get()->select($this->table['Member'])->where(array("$like array", array(
                 array('mem_Name', $name),
                 array('mem_Alias', $name),
             )))->limit(1)->sql;
