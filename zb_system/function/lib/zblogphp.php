@@ -1892,7 +1892,7 @@ class ZBlogPHP {
         } elseif ($object != "") {
             $cacheObject = &$this->$object;
         }
-        if ($attr == "id") {
+        if ($attr == "ID") {
             $ret = $this->GetSomeThingById($cacheObject, $className, $argu);
         } else {
             $ret = $this->GetSomeThingByAttr($cacheObject, $attr, $argu);
@@ -1910,7 +1910,7 @@ class ZBlogPHP {
      * @return Post
      */
     public function GetPostByID($id) {
-        return $this->GetSomeThing('posts', 'id', $id, 'Post');
+        return $this->GetSomeThing('posts', 'ID', $id, 'Post');
     }
 
     /**
@@ -1919,7 +1919,7 @@ class ZBlogPHP {
      * @return Category
      */
     public function GetCategoryByID($id) {
-        return $this->GetSomeThing('categories', 'id', $id, 'Category');
+        return $this->GetSomeThing('categories', 'ID', $id, 'Category');
     }
 
     /**
@@ -1964,7 +1964,7 @@ class ZBlogPHP {
      * @return Module
      */
     public function GetModuleByFileName($fn) {
-        return $this->GetSomeThing('modulesbyfilename', 'id', $fn, 'Module');
+        return $this->GetSomeThing('modulesbyfilename', 'FileName', $fn, 'Module');
     }
 
     /**
@@ -1973,7 +1973,7 @@ class ZBlogPHP {
      * @return Member
      */
     public function GetMemberByID($id) {
-        $ret = $this->GetSomeThing('members', 'id', $id, 'Member');
+        $ret = $this->GetSomeThing('members', 'ID', $id, 'Member');
         if ($ret->ID == 0) {
             $ret->Guid = GetGuid();
         } else {
@@ -2083,7 +2083,7 @@ class ZBlogPHP {
      * @return Comment
      */
     public function GetCommentByID($id) {
-        return $this->GetSomeThing('comments', 'id', $id, 'Comment');
+        return $this->GetSomeThing('comments', 'ID', $id, 'Comment');
     }
 
     /**
@@ -2123,7 +2123,7 @@ class ZBlogPHP {
      * @return Tag
      */
     public function GetTagByID($id) {
-        $ret = $this->GetSomeThing('tags', 'id', $id, 'Tag');
+        $ret = $this->GetSomeThing('tags', 'ID', $id, 'Tag');
         if ($ret->ID > 0) {
             $this->tagsbyname[$ret->ID] = &$this->tags[$ret->ID];
         }
