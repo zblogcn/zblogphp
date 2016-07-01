@@ -177,6 +177,8 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 
             }
 
+        } else {
+            return array();
         }
     }
 
@@ -186,6 +188,8 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 
         if ($author->ID > 0) {
             $w[] = array('=', 'log_AuthorID', $author->ID);
+        } else {
+            return array();
         }
     }
 
@@ -194,6 +198,8 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
         if ($datetime) {
             $datetitle = str_replace(array('%y%', '%m%'), array(date('Y', $datetime), date('n', $datetime)), $zbp->lang['msg']['year_month']);
             $w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 month', $datetime));
+        } else {
+            return array();
         }
     }
 
@@ -214,6 +220,8 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
             }
             if ($tag->ID > 0) {
                 $w[] = array('LIKE', 'log_Tag', '%{' . $tag->ID . '}%');
+            } else {
+                return array();
             }
         }
     }
@@ -222,6 +230,8 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
         $search = trim($search);
         if ($search !== '') {
             $w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $search);
+        } else {
+            return array();
         }
     }
 
