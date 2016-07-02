@@ -15,7 +15,7 @@ Z-BlogPHP有着强大的可定制性、丰富的插件接口和独立的主题�
 ## 运行环境
 - Web Server: IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
 - PHP 5.2 - 7 / HHVM 3 
-- MariaDB(MySQL) / SQLite / PostgreSQL
+- MariaDB(MySQL) / SQLite
 
 ## 安装说明
 > 首先请确保网站目录拥有755权限。
