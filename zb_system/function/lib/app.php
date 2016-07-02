@@ -133,7 +133,7 @@ class App {
     public function CanDel() {
         global $zbp;
 
-        return false;
+        return !isset($zbp->activedapps[$this->id]);
     }
     /**
      * 是否带管理页面
@@ -572,4 +572,13 @@ class App {
         }
     }
 
+    /**
+     * DEL
+     * @return null
+     */
+    public function Del() {
+        global $zbp;
+        rrmdir($zbp->usersdir . $this->type . '/' . $this->id);
+        rrmdir($zbp->usersdir . 'cache/compiled/' . $this->id);
+    }
 }
