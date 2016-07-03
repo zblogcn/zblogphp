@@ -238,7 +238,7 @@ return array(
         'debug_backtrace' => 'Debug Backtrace',
         'possible_causes_error' => 'Possible causes of errors',
         'display_more_info' => 'Display more info',
-        'error_load_js' => 'Error when loading JavaScript',
+        'error_load_js' => 'Error when loading JavaScript. OK for more information(Chinese only), Cancel for continue.',
         'comment_audit' => 'Aduit Comments',
         'comment_audit_comment' => 'All new comments posted by non-root user will be audited.',
         'debugging_warning' => 'If your website can be connected via Internet, please disable the Development Mode, or it may be hacked.',
@@ -489,6 +489,11 @@ return array(
         '86' => 'Theme templates compiled file does not exist.',
         '87' => 'Registered Type Failed',
         '88' => 'The file that you uploaded not exist, maybe exceed the maximum upload limit of the server.',
+        '89' => 'Error when loading JavaScript.',
+    ),
+
+    'offical_urls' => array(
+        'more_help' => 'https://www.zblogcn.com/help/?id={%id%}&message={%message%}',
     ),
 
 // Possible causes of the error
@@ -532,7 +537,7 @@ return array(
 
         'end' => '
 			If you are a visitor, this may be something happened. Please try again later, or contact the webmaster. <br/>
-			If you are the webmaster, You can click on <a href="{%more_info%}" target="_blank"> [more] </a> to get more help from Z-Blog Wiki(Chinese only). Therefore, to publish a thread in English in <a href="http://bbs.zblogcn.com/" target="_blank">Z-Blog official forum </a> with detailed error description and screenshots for help is a choice.
+			If you are the webmaster, You can click on <a href="{%morehelp%}" target="_blank"> [more] </a> to get more help from Z-Blog Wiki(Chinese only). Therefore, to publish a thread in English in <a href="http://bbs.zblogcn.com/" target="_blank">Z-Blog official forum </a> with detailed error description and screenshots for help is a choice.
 		',
     ),
 );

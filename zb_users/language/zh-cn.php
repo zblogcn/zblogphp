@@ -234,7 +234,7 @@ return array(
         'debug_backtrace' => '堆栈跟踪',
         'possible_causes_error' => '可能的错误原因',
         'display_more_info' => '显示更多的信息',
-        'error_load_js' => 'JavaScript加载失败，可能被服务器拦截',
+        'error_load_js' => 'JavaScript加载失败。\n点击“确定”即可获得修复方案，点击“取消”继续。',
         'comment_audit' => '审核评论',
         'comment_audit_comment' => '打开后所有非管理员发布的评论都将进入审核状态',
         'debugging_warning' => '您的Z-BlogPHP打开了开发模式。此模式下网站有被黑的风险，实际部署在线上的网站请及时关闭开发模式！',
@@ -485,6 +485,11 @@ return array(
         '86' => '主题模板的编译文件不存在',
         '87' => '注册类型失败',
         '88' => '上传的文件不存在，可能超过了服务器最大上传限制',
+        '89' => '后台JavaScript加载失败',
+    ),
+
+    'offical_urls' => array(
+        'more_help' => 'https://www.zblogcn.com/help/?id={%id%}&message={%message%}',
     ),
 
 // Possible causes of the error
@@ -495,7 +500,7 @@ return array(
         // ZBP errors first
         '6' => '
 			您是否已经登录？请先登录后台，再重试操作。<br/>
-			您是否有此功能所需的权限？您可以<a href="{%BlogHost%}zb_system/cmd.php?act=misc&type=vrs" target="_blank">点击这里查看您的权限</a>。<br/>
+			您是否有此功能所需的权限？您可以<a href="{%bloghost%}zb_system/cmd.php?act=misc&type=vrs" target="_blank">点击这里查看您的权限</a>。<br/>
 			<br/>
 		',
         '8' => '
@@ -535,7 +540,7 @@ return array(
 
         'end' => '
 			如果您是访客，这说明网站程序可能出现了一些错误。请您稍后再试，或联系站长。<br/>
-			如果您是站长，您可以点击<a href="{%more_info%}" target="_blank">【更多信息】</a>来查看Z-Blog官方关于这个错误的说明，也可以到<a href="http://bbs.zblogcn.com/" target="_blank">Z-Blog官方论坛</a>，附上错误详细截图与描述寻求帮助。
+			如果您是站长，您可以点击<a href="{%morehelp%}" target="_blank">【更多信息】</a>来查看Z-Blog官方关于这个错误的说明，也可以到<a href="http://bbs.zblogcn.com/" target="_blank">Z-Blog官方论坛</a>，附上错误详细截图与描述寻求帮助。
 		',
     ),
 

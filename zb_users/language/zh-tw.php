@@ -238,7 +238,7 @@ return array(
         'debug_backtrace' => '堆栈跟踪',
         'possible_causes_error' => '可能的錯誤原因',
         'display_more_info' => '显示更多的信息',
-        'error_load_js' => 'JavaScript加載失敗，可能被服務器拦截',
+        'error_load_js' => 'JavaScript加載失敗。按“確定”即可得到修復方案，按“取消”繼續。',
         'comment_audit' => '審核迴響',
         'comment_audit_comment' => '打開後所有非管理員發布的迴響都將進入審核狀態',
         'debugging_warning' => '您的Z-BlogPHP處於開發模式下。此模式下網站有被骇的風險，實際部署在線上的網站請及時關閉開發模式！',
@@ -489,6 +489,12 @@ return array(
         '86' => '佈景主題的編譯檔案不存在',
         '87' => '註冊類型失敗',
         '88' => '上傳的檔案不存在，可能超過了最大上傳限制',
+        '89' => 'JavaScript加載失敗，可能被服務器拦截',
+    ),
+
+
+    'offical_urls' => array(
+        'more_help' => 'https://www.zblogcn.com/help/?id={%id%}&message={%message%}',
     ),
 
 // Possible causes of the error
@@ -539,7 +545,7 @@ return array(
 
         'end' => '
 			如果您是訪客，這說明網站程式可能出現了一些錯誤。請您稍後再試，或聯繫站長。 <br/>
-            如果您是站長，您可以點擊<a href="{%more_info%}" target="_blank">【更多幫助】</a>來查看Z-Blog官方關於這個錯誤的說明，也可以到<a href="http://bbs.zblogcn.com/" target="_blank">Z-Blog官方論壇</a>，附上錯誤詳細截圖與描述尋求幫助。
+            如果您是站長，您可以點擊<a href="{%morehelp%}" target="_blank">【更多幫助】</a>來查看Z-Blog官方關於這個錯誤的說明，也可以到<a href="http://bbs.zblogcn.com/" target="_blank">Z-Blog官方論壇</a>，附上錯誤詳細截圖與描述尋求幫助。
 		',
     ),
 

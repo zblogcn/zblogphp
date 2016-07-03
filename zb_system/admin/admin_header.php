@@ -12,7 +12,7 @@
 <script src="<?php echo $bloghost ?>zb_system/script/zblogphp.js" type="text/javascript"></script>
 <script src="<?php echo $bloghost ?>zb_system/script/c_admin_js_add.php" type="text/javascript"></script>
 <script src="<?php echo $bloghost ?>zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
-<script>if (!window.bloghost) alert("<?php echo $lang['msg']['error_load_js']; ?>");</script>
+<script>if (!window.bloghost && window.confirm("<?php echo $lang['msg']['error_load_js']; ?>")) window.open('<?php echo str_replace('{%message%}', '', str_replace('{%id%}', 89, $lang['offical_urls']['more_help']))?>');</script>
 <?php
 foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Header'] as $fpname => &$fpsignal) {$fpname();}
 ?>
