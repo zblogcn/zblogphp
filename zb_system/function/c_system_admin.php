@@ -283,7 +283,7 @@ function OutputOptionItemsOfMember($default) {
         return '<option value="' . $default . '" selected="selected" >' . $zbp->members[$default]->Name . '</option>';
     }
     foreach ($zbp->members as $key => $value) {
-        if ($zbp->CheckRightsByLevel($zbp->members[$key]->Level, 'ArticleEdt')) {
+        if ($zbp->CheckRightsByLevel('ArticleEdt', $zbp->members[$key]->Level)) {
             $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $zbp->members[$key]->Name . '</option>';
         }
     }
@@ -1101,7 +1101,7 @@ function Admin_ThemeMng() {
 
     global $zbp;
 
-    $zbp->LoadThemes();
+    $allthemes = $zbp->LoadThemes();
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['theme_manage'] . '</div>';
     echo '<div class="SubMenu">';
@@ -1113,7 +1113,7 @@ function Admin_ThemeMng() {
     echo '<input type="hidden" name="theme" id="theme" value="" />';
     echo '<input type="hidden" name="style" id="style" value="" />';
 
-    foreach ($zbp->themes as $theme) {
+    foreach ($allthemes as $theme) {
         echo "\n\n";
 
         echo '<div class="theme ' . ($theme->IsUsed() ? 'theme-now' : 'theme-other') . '"';
@@ -1401,7 +1401,7 @@ function Admin_PluginMng() {
 
     global $zbp;
 
-    $zbp->LoadPlugins();
+    $allplugins = $zbp->LoadPlugins();
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['plugin_manage'] . '</div>';
     echo '<div class="SubMenu">';
@@ -1433,13 +1433,13 @@ function Admin_PluginMng() {
     $apl = explode('|', $pl);
     $apl = array_unique($apl);
     foreach ($apl as $name) {
-        foreach ($zbp->plugins as $plugin) {
+        foreach ($allplugins as $plugin) {
             if ($name == $plugin->id) {
                 $plugins[] = $plugin;
             }
         }
     }
-    foreach ($zbp->plugins as $plugin) {
+    foreach ($allplugins as $plugin) {
         if (!$plugin->IsUsed()) {
             $plugins[] = $plugin;
         }

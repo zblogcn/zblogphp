@@ -395,7 +395,7 @@ class ModuleBuilder {
      * @param int $level 要导出的用户最低等级，默认为4（即协作者）
      * @return string 模块内容
      */
-    public static function AuthorList($level = 4) {
+    public static function Authors($level = 4) {
         global $zbp;
         $template = $zbp->template;
         $tags = array();
@@ -407,9 +407,10 @@ class ModuleBuilder {
         $array = $zbp->GetMemberList('*', $w, array('mem_ID' => 'ASC'), null, null);
 
         foreach ($array as $member) {
-            unset($member->Guid);
-            unset($member->Password);
-            $authors[]=$member;
+            $m = Metas::ConvertArray($member->GetData());
+            unset($m->Guid);
+            unset($m->Password);
+            $authors[]=$m;
         }
 
         $tags['authors'] = $authors;

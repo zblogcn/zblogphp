@@ -221,6 +221,8 @@ $GLOBALS['actions'] = array(
     'TagAll' => 2,
     'UploadAll' => 2,
 
+    'NoValidCode' => 5,
+
     'root' => 1,
 );
 

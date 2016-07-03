@@ -72,6 +72,8 @@ function misc_statistic() {
 
     global $zbp;
 
+    $zbp->BuildTemplate();
+
     $r = null;
 
     CountNormalArticleNums();
@@ -122,7 +124,6 @@ function misc_statistic() {
 
     echo $r;
 
-    $zbp->BuildTemplate();
 }
 
 function misc_showtags() {
