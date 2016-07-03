@@ -261,17 +261,6 @@ DefinePluginFilter('Filter_Plugin_Zbp_CheckRights');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Zbp_CheckRightsByLevel
-'参数:$level,$action
-'说明:Zbp类的检查权限接口(检查指定level)
-'调用:
-'**************************************************>
- */
-DefinePluginFilter('Filter_Plugin_Zbp_CheckRightsByLevel');
-
-/*
-'**************************************************<
-'类型:Filter
 '名称:Filter_Plugin_Zbp_ShowError
 '参数:$idortext
 '说明:Zbp类的显示错误接口

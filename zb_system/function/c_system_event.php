@@ -1663,7 +1663,7 @@ function PostComment() {
     }
 
     if ($zbp->option['ZC_COMMENT_VERIFY_ENABLE']) {
-        if ($zbp->user->ID == 0) {
+        if (!$zbp->CheckRights('NoValidCode')) {
             if ($zbp->CheckValidCode($_POST['verify'], 'cmt') == false) {
                 $zbp->ShowError(38, __FILE__, __LINE__);
             }

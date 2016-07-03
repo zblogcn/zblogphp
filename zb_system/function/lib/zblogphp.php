@@ -200,14 +200,6 @@ class ZBlogPHP {
     public $footer = null;
 
     /**
-     * @var array 主题列表
-     */
-    public $themes = array();
-    /**
-     * @var array 插件列表
-     */
-    public $plugins = array();
-    /**
      * @var array 激活的插件列表
      */
     public $activedapps = array();
@@ -669,6 +661,22 @@ class ZBlogPHP {
     }
 
     /**
+     * 对表名和数据结构进行预转换
+     */
+    public function ConvertTableAndDatainfo() {
+        if ($this->db->dbpre) {
+            $this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
+        }
+        if ($this->db->type == 'pgsql') {
+            foreach ($this->datainfo as $key => &$value) {
+                foreach ($value as $k2 => &$v2) {
+                    $v2[0] = strtolower($v2[0]);
+                }
+            }
+        }
+    }
+
+    /**
      * 关闭数据库连接
      */
     public function CloseConnect() {
@@ -965,42 +973,34 @@ class ZBlogPHP {
      * @param string $action 操作
      * @return bool
      */
-    public function CheckRights($action) {
+    public function CheckRights($action, $level=null) {
+
+        if($level === null){
+            $level = $this->user->Level;
+        }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_CheckRights'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($action);
+            $fpreturn = $fpname($action, $level);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
         }
         if (!isset($this->actions[$action])) {
             if (is_numeric($action)) {
-                return ($this->user->Level <= $action);
+                return ($level <= $action);
             }
         }
 
-        return ($this->user->Level <= $this->actions[$action]);
+        return ($level <= $this->actions[$action]);
     }
 
     /**
-     * 根据用户等级验证操作权限
-     * @param int $level 用户等级
+     * 根据用户等级验证操作权限 1.5开始参数换顺序
      * @param string $action 操作
+     * @param int $level 用户等级
      * @return bool
      */
-    public function CheckRightsByLevel($level, $action) {
-
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_CheckRightsByLevel'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($level, $action);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
-
-        if (is_int($action)) {
-            return ($level <= $action);
-        }
-
-        return ($level <= $this->actions[$action]);
-
+    public function CheckRightsByLevel($action, $level) {
+        return $this->CheckRights($action, $level);
     }
 
     /**
@@ -1291,7 +1291,7 @@ class ZBlogPHP {
      */
     public function LoadThemes() {
 
-        $this->themes = array();
+        $allthemes = array();
         $dirs = GetDirsInDir($this->usersdir . 'theme/');
         natcasesort($dirs);
         array_unshift($dirs, $this->theme);
@@ -1299,9 +1299,10 @@ class ZBlogPHP {
         foreach ($dirs as $id) {
             $app = new App;
             if ($app->LoadInfoByXml('theme', $id) == true) {
-                $this->themes[] = $app;
+                $allthemes[] = $app;
             }
         }
+        return $allthemes;
 
     }
 
@@ -1310,16 +1311,17 @@ class ZBlogPHP {
      */
     public function LoadPlugins() {
 
-        $this->plugins = array();
+        $allplugins = array();
         $dirs = GetDirsInDir($this->usersdir . 'plugin/');
         natcasesort($dirs);
 
         foreach ($dirs as $id) {
             $app = new App;
             if ($app->LoadInfoByXml('plugin', $id) == true) {
-                $this->plugins[] = $app;
+                $allplugins[] = $app;
             }
         }
+        return $allplugins;
 
     }
 
@@ -1334,6 +1336,40 @@ class ZBlogPHP {
         $app->LoadInfoByXml($type, $id);
 
         return $app;
+    }
+
+    /**
+     * 检查应用是否安装并启用
+     * @param string $name 应用（插件或主题）的ID
+     * @return bool
+     */
+    public function CheckPlugin($name) {
+        //$s=$this->option['ZC_BLOG_THEME'] . '|' . $this->option['ZC_USING_PLUGIN_LIST'];
+        //return HasNameInString($s,$name);
+        return in_array($name, $this->activedapps);
+    }
+
+    /**
+     * 检查应用是否安装并启用
+     * @param string $name 应用ID（插件或主题）
+     * @return bool
+     */
+    public function CheckApp($name) {
+        return $this->CheckPlugin($name);
+    }
+
+    /**
+     * 获取已激活插件名数组
+     */
+    public function GetActivedPlugin() {
+        $ap = explode("|", $this->option['ZC_USING_PLUGIN_LIST']);
+        $ap = array_unique($ap);
+
+        return $ap;
+    }
+    public function GetActivePlugin() {
+        // 错别字函数
+        return $this->GetActivedPlugin();
     }
 
     /**
@@ -1456,12 +1492,11 @@ class ZBlogPHP {
      * 模板解析
      * @return bool
      */
-    public function BuildTemplate(&$template = null) {
-        if (is_null($template)) {
-            $template = &$this->template;
-        }
+    public function BuildTemplate() {
+
+        $template = &$this->template;
         $template->LoadTemplates();
-        // 模板接口
+
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal){
             $fpname($template->templates);
         }
@@ -2272,8 +2307,10 @@ class ZBlogPHP {
         return $articles_top_notorder;
     }
 
+
 ################################################################################################################
-    #杂项
+    #验证相关
+
     /**
      * 验证评论key
      * @param $id
@@ -2288,25 +2325,74 @@ class ZBlogPHP {
     }
 
     /**
-     * 检查应用是否安装并启用
-     * @param string $name 应用（插件或主题）的ID
-     * @return bool
+     * 获取会话Token
+     * @param $s
+     * @return string
      */
-    public function CheckPlugin($name) {
-        //$s=$this->option['ZC_BLOG_THEME'] . '|' . $this->option['ZC_USING_PLUGIN_LIST'];
-        //return HasNameInString($s,$name);
-        return in_array($name, $this->activedapps);
+    public function GetToken($s = '') {
+        return md5($this->guid . date('Ymd') . $this->user->Guid . $s);
     }
 
     /**
-     * 检查应用是否安装并启用
-     * @param string $name 应用ID（插件或主题）
+     * 验证会话Token
+     * @param $t
+     * @param $s
      * @return bool
      */
-    public function CheckApp($name) {
-        return $this->CheckPlugin($name);
+    public function ValidToken($t, $s = '') {
+        if ($t == md5($this->guid . date('Ymd') . $this->user->Guid . $s)) {
+            return true;
+        }
+        if ($t == md5($this->guid . date('Ymd', strtotime("-1 hour")) . $this->user->Guid . $s)) {
+            return true;
+        }
+
+        return false;
     }
 
+    /**
+     * 显示验证码
+     *
+     * @api Filter_Plugin_Zbp_ShowValidCode 如该接口未被挂载则显示默认验证图片
+     * @param string $id 命名事件
+     * @return mixed
+     */
+    public function ShowValidCode($id = '') {
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowValidCode'] as $fpname => &$fpsignal) {
+            return $fpname($id); //*
+        }
+
+        $_vc = new ValidateCode();
+        $_vc->GetImg();
+        setcookie('captcha_' . crc32($this->guid . $id), md5($this->guid . date("Ymd") . $_vc->GetCode()), null, $this->cookiespath);
+    }
+
+    /**
+     * 比对验证码
+     *
+     * @api Filter_Plugin_Zbp_CheckValidCode 如该接口未被挂载则比对默认验证码
+     * @param string $vaidcode 验证码数值
+     * @param string $id 命名事件
+     * @return bool
+     */
+    public function CheckValidCode($vaidcode, $id = '') {
+        $vaidcode = strtolower($vaidcode);
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_CheckValidCode'] as $fpname => &$fpsignal) {
+            return $fpname($vaidcode, $id); //*
+        }
+
+        $original = GetVars('captcha_' . crc32($this->guid . $id), 'COOKIE');
+        setcookie('captcha_' . crc32($this->guid . $id), '', time() - 3600, $this->cookiespath);
+
+        return (md5($this->guid . date("Ymd") . $vaidcode) == $original);
+    }
+
+
+
+
+################################################################################################################
+    #杂项
     #$type=category,tag,page,item
     /**
      * 向导航菜单添加相应条目
@@ -2376,6 +2462,7 @@ class ZBlogPHP {
         return (bool) strpos($s, 'id="navbar-' . $type . '-' . $id . '"');
 
     }
+
 
     #$signal = good,bad,tips
     private $hint1 = null, $hint2 = null, $hint3 = null, $hint4 = null, $hint5 = null;
@@ -2492,69 +2579,6 @@ class ZBlogPHP {
         throw new Exception($errorText);
     }
 
-    /**
-     * 获取会话Token
-     * @param $s
-     * @return string
-     */
-    public function GetToken($s = '') {
-        return md5($this->guid . date('Ymd') . $this->user->Guid . $s);
-    }
-
-    /**
-     * 验证会话Token
-     * @param $t
-     * @param $s
-     * @return bool
-     */
-    public function ValidToken($t, $s = '') {
-        if ($t == md5($this->guid . date('Ymd') . $this->user->Guid . $s)) {
-            return true;
-        }
-        if ($t == md5($this->guid . date('Ymd', strtotime("-1 day")) . $this->user->Guid . $s)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * 显示验证码
-     *
-     * @api Filter_Plugin_Zbp_ShowValidCode 如该接口未被挂载则显示默认验证图片
-     * @param string $id 命名事件
-     * @return mixed
-     */
-    public function ShowValidCode($id = '') {
-
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowValidCode'] as $fpname => &$fpsignal) {
-            return $fpname($id); //*
-        }
-
-        $_vc = new ValidateCode();
-        $_vc->GetImg();
-        setcookie('captcha_' . crc32($this->guid . $id), md5($this->guid . date("Ymd") . $_vc->GetCode()), null, $this->cookiespath);
-    }
-
-    /**
-     * 比对验证码
-     *
-     * @api Filter_Plugin_Zbp_CheckValidCode 如该接口未被挂载则比对默认验证码
-     * @param string $vaidcode 验证码数值
-     * @param string $id 命名事件
-     * @return bool
-     */
-    public function CheckValidCode($vaidcode, $id = '') {
-        $vaidcode = strtolower($vaidcode);
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_CheckValidCode'] as $fpname => &$fpsignal) {
-            return $fpname($vaidcode, $id); //*
-        }
-
-        $original = GetVars('captcha_' . crc32($this->guid . $id), 'COOKIE');
-        setcookie('captcha_' . crc32($this->guid . $id), '', time() - 3600, $this->cookiespath);
-
-        return (md5($this->guid . date("Ymd") . $vaidcode) == $original);
-    }
 
     /**
      * 检查并开启Gzip压缩
@@ -2655,35 +2679,6 @@ class ZBlogPHP {
         }
     }
 
-    /**
-     * 对表名和数据结构进行预转换
-     */
-    public function ConvertTableAndDatainfo() {
-        if ($this->db->dbpre) {
-            $this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
-        }
-        if ($this->db->type == 'pgsql') {
-            foreach ($this->datainfo as $key => &$value) {
-                foreach ($value as $k2 => &$v2) {
-                    $v2[0] = strtolower($v2[0]);
-                }
-            }
-        }
-    }
-
-    /**
-     * 获取已激活插件名数组
-     */
-    public function GetActivedPlugin() {
-        $ap = explode("|", $this->option['ZC_USING_PLUGIN_LIST']);
-        $ap = array_unique($ap);
-
-        return $ap;
-    }
-    public function GetActivePlugin() {
-        // 错别字函数
-        return $this->GetActivedPlugin();
-    }
 
     /**
      * 注册PostType
