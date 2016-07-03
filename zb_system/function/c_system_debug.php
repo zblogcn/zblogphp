@@ -513,13 +513,15 @@ class ZBlogException {
             }
         }
 
-        $httpQuery = array(
-            'id' => ZBlogException::$error_id,
-            'message' => $this->message
-        );
+        $errorId = urlencode(ZBlogException::$error_id);
+        $errorMessage = urlencode($this->message);
+        $moreHelp = $lang['offical_urls']['more_help'];
+        $moreHelp = str_replace('{%id%}', $errorId, $moreHelp);
+        $moreHelp = str_replace('{%message%}', $errorMessage, $moreHelp);
+
         $result .= $lang['error_reasons']['end'];
-        $result = str_replace('{%BlogHost%}', $bloghost, $result);
-        $result = str_replace('{%more_info%}', 'https://www.zblogcn.com/help/?' . http_build_query($httpQuery), $result);
+        $result = str_replace('{%bloghost%}', $bloghost, $result);
+        $result = str_replace('{%morehelp%}', $moreHelp, $result);
 
         return $result;
     }
