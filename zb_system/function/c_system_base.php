@@ -9,7 +9,7 @@
 error_reporting(E_ALL);
 ob_start();
 
-define('ZBP_PATH', rtrim(str_replace('\\', '/', realpath(dirname(__FILE__) . '/../../')), '/') . '/');
+defined('ZBP_PATH') || define('ZBP_PATH', rtrim(str_replace('\\', '/', realpath(dirname(__FILE__) . '/../../')), '/') . '/');
 defined('ZBP_HOOKERROR') || define('ZBP_HOOKERROR', true);
 
 /**
@@ -415,8 +415,21 @@ $GLOBALS['activedapps'] = array();
 //保留activeapps，兼容以前版本
 $GLOBALS['activeapps'] = &$GLOBALS['activedapps'];
 
-$GLOBALS['option'] = array();
-InitializeOption();
+/**
+ * 加载设置
+ */
+$GLOBALS['option'] = require ZBP_PATH . 'zb_system/defend/option.php';
+$op_users = null;
+if (is_readable($file_base = $GLOBALS['usersdir'] . 'c_option.php')) {
+    $op_users = require $file_base;
+    if (is_array($op_users)) {
+        foreach ($op_users as $opk => $opv) {
+            $GLOBALS['option'][$opk] = $opv;
+        }
+
+    }
+}
+
 $GLOBALS['blogtitle'] = $GLOBALS['option']['ZC_BLOG_SUBNAME']; // 不是漏写！
 $GLOBALS['blogname'] = &$GLOBALS['option']['ZC_BLOG_NAME'];
 $GLOBALS['blogsubname'] = &$GLOBALS['option']['ZC_BLOG_SUBNAME'];
@@ -440,21 +453,21 @@ $GLOBALS['zbp']->Initialize();
 /**
  * 加载主题和插件APP
  */
-if (is_readable($filename = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/theme.xml')) {
+if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/theme.xml')) {
     $GLOBALS['activedapps'][] = $GLOBALS['blogtheme'];
 }
 
-if (is_readable($filename = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/include.php')) {
-    require $filename;
+if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/include.php')) {
+    require $file_base;
 }
 
-$ap = $GLOBALS['zbp']->GetActivedPlugin();
-foreach ($ap as $plugin) {
-    if (is_readable($filename = $GLOBALS['usersdir'] . 'plugin/' . $plugin . '/plugin.xml')) {
-        $GLOBALS['activedapps'][] = $plugin;
+$aps = $GLOBALS['zbp']->GetPreActivePlugin();
+foreach ($aps as $ap) {
+    if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/plugin.xml')) {
+        $GLOBALS['activedapps'][] = $ap;
     }
-    if (is_readable($filename = $GLOBALS['usersdir'] . 'plugin/' . $plugin . '/include.php')) {
-        require $filename;
+    if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/include.php')) {
+        require $file_base;
     }
 }
 
@@ -463,26 +476,4 @@ foreach ($GLOBALS['plugins'] as &$fn) {
         $fn();
     }
 }
-unset($filename, $plugin, $fn, $ap);
-
-
-/**
- * 加载设置
- */
-function InitializeOption() {
-    global $option;
-    global $usersdir;
-
-    $option = require ZBP_PATH . 'zb_system/defend/option.php';
-    $option_zbusers = null;
-
-    if (is_readable($filename = $usersdir . 'c_option.php')) {
-        $option_zbusers = require $filename;
-        if (is_array($option_zbusers)) {
-            foreach ($option_zbusers as $key => $value) {
-                $option[$key] = $value;
-            }
-
-        }
-    }
-}
+unset($file_base, $aps, $fn, $ap, $op_users, $opk, $opv);

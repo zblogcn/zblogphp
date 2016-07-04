@@ -1106,51 +1106,6 @@ class ZBlogPHP {
         return false;
     }
 
-################################################################################################################
-    #
-    /**
-     * 生成模块
-     */
-    public function BuildModule() {
-
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildModule'] as $fpname => &$fpsignal) {
-            $fpname();
-        }
-        ModuleBuilder::Build();
-    }
-
-    /**
-     * 重建模块
-     * @param string $modfilename 模块名
-     * @param string $userfunc 用户函数
-     */
-    public function RegBuildModule($modfilename, $userfunc) {
-        ModuleBuilder::Reg($modfilename, $userfunc);
-    }
-
-    /**
-     * 添加模块
-     * @param string $modfilename 模块名
-     * @param null $parameters 模块参数
-     */
-    public function AddBuildModule($modfilename, $parameters = null) {
-        ModuleBuilder::Add($modfilename, $parameters);
-    }
-
-    /**
-     * 删除模块
-     * @param string $modfilename 模块名
-     */
-    public function DelBuildModule($modfilename) {
-        ModuleBuilder::Del($modfilename);
-    }
-
-    /**
-     * 所有模块重置
-     */
-    public function AddBuildModuleAll() {
-        //del from 1.5
-    }
 
 ################################################################################################################
     #加载函数
@@ -1182,7 +1137,7 @@ class ZBlogPHP {
      */
     public function LoadCategorys() {
 
-        $this->categorys = array();
+        $this->categories = array();
         $lv0 = array();
         $lv1 = array();
         $lv2 = array();
@@ -1193,11 +1148,11 @@ class ZBlogPHP {
         }
 
         foreach ($array as $c) {
-            $this->categorys[$c->ID] = $c;
+            $this->categories[$c->ID] = $c;
         }
 
 
-        foreach ($this->categorys as $id => $c) {
+        foreach ($this->categories as $id => $c) {
             $l = 'lv' . $c->Level;
             ${$l}[$c->ParentID][] = $id;
         }
@@ -1208,28 +1163,28 @@ class ZBlogPHP {
         }
 
         foreach ($lv0[0] as $id0) {
-            $this->categorysbyorder[$id0] = &$this->categorys[$id0];
+            $this->categoriesbyorder[$id0] = &$this->categories[$id0];
             if (!isset($lv1[$id0])) {continue;}
             foreach ($lv1[$id0] as $id1) {
-                if ($this->categorys[$id1]->ParentID == $id0) {
-                    $this->categorys[$id0]->SubCategories[] = $this->categorys[$id1];
-                    $this->categorys[$id0]->ChildrenCategories[] = $this->categorys[$id1];
-                    $this->categorysbyorder[$id1] = &$this->categorys[$id1];
+                if ($this->categories[$id1]->ParentID == $id0) {
+                    $this->categories[$id0]->SubCategories[] = $this->categories[$id1];
+                    $this->categories[$id0]->ChildrenCategories[] = $this->categories[$id1];
+                    $this->categoriesbyorder[$id1] = &$this->categories[$id1];
                     if (!isset($lv2[$id1])) {continue;}
                     foreach ($lv2[$id1] as $id2) {
-                        if ($this->categorys[$id2]->ParentID == $id1) {
-                            $this->categorys[$id0]->ChildrenCategories[] = $this->categorys[$id2];
-                            $this->categorys[$id1]->SubCategorys[] = $this->categorys[$id2];
-                            $this->categorys[$id1]->ChildrenCategories[] = $this->categorys[$id2];
-                            $this->categorysbyorder[$id2] = &$this->categorys[$id2];
+                        if ($this->categories[$id2]->ParentID == $id1) {
+                            $this->categories[$id0]->ChildrenCategories[] = $this->categories[$id2];
+                            $this->categories[$id1]->SubCategorys[] = $this->categories[$id2];
+                            $this->categories[$id1]->ChildrenCategories[] = $this->categories[$id2];
+                            $this->categoriesbyorder[$id2] = &$this->categories[$id2];
                             if (!isset($lv3[$id2])) {continue;}
                             foreach ($lv3[$id2] as $id3) {
-                                if ($this->categorys[$id3]->ParentID == $id2) {
-                                    $this->categorys[$id0]->ChildrenCategories[] = $this->categorys[$id3];
-                                    $this->categorys[$id1]->ChildrenCategories[] = $this->categorys[$id3];
-                                    $this->categorys[$id2]->SubCategorys[] = $this->categorys[$id3];
-                                    $this->categorys[$id2]->ChildrenCategories[] = $this->categorys[$id3];
-                                    $this->categorysbyorder[$id3] = &$this->categorys[$id3];
+                                if ($this->categories[$id3]->ParentID == $id2) {
+                                    $this->categories[$id0]->ChildrenCategories[] = $this->categories[$id3];
+                                    $this->categories[$id1]->ChildrenCategories[] = $this->categories[$id3];
+                                    $this->categories[$id2]->SubCategorys[] = $this->categories[$id3];
+                                    $this->categories[$id2]->ChildrenCategories[] = $this->categories[$id3];
+                                    $this->categoriesbyorder[$id3] = &$this->categories[$id3];
                                 }
                             }
                         }
@@ -1344,8 +1299,6 @@ class ZBlogPHP {
      * @return bool
      */
     public function CheckPlugin($name) {
-        //$s=$this->option['ZC_BLOG_THEME'] . '|' . $this->option['ZC_USING_PLUGIN_LIST'];
-        //return HasNameInString($s,$name);
         return in_array($name, $this->activedapps);
     }
 
@@ -1359,17 +1312,12 @@ class ZBlogPHP {
     }
 
     /**
-     * 获取已激活插件名数组
+     * 获取预激活插件名数组
      */
-    public function GetActivedPlugin() {
+    public function GetPreActivePlugin() {
         $ap = explode("|", $this->option['ZC_USING_PLUGIN_LIST']);
         $ap = array_unique($ap);
-
         return $ap;
-    }
-    public function GetActivePlugin() {
-        // 错别字函数
-        return $this->GetActivedPlugin();
     }
 
     /**
@@ -1468,6 +1416,7 @@ class ZBlogPHP {
 
     /**
      * 创建模板对象，预加载已编译模板
+     * @param string $theme 指定主题名
      * @return Template
      */
     public function PrepareTemplate($theme = null) {
@@ -1475,7 +1424,7 @@ class ZBlogPHP {
         if (is_null($theme)) $theme = &$this->theme;
 
         $template = new Template();
-        $template->MakeTemplateTags($template);
+        $template->MakeTemplateTags();
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_MakeTemplatetags'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($template->templateTags);
@@ -1494,14 +1443,13 @@ class ZBlogPHP {
      */
     public function BuildTemplate() {
 
-        $template = &$this->template;
-        $template->LoadTemplates();
+        $this->template->LoadTemplates();
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal){
-            $fpname($template->templates);
+            $fpname($this->template->templates);
         }
 
-        return $template->BuildTemplate();
+        return $this->template->BuildTemplate();
     }
 
     /**
@@ -1519,6 +1467,55 @@ class ZBlogPHP {
         }
 
     }
+
+
+################################################################################################################
+    #模块操作
+
+    /**
+     * 生成模块
+     */
+    public function BuildModule() {
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildModule'] as $fpname => &$fpsignal) {
+            $fpname();
+        }
+        ModuleBuilder::Build();
+    }
+
+    /**
+     * 重建模块
+     * @param string $modfilename 模块名
+     * @param string $userfunc 用户函数
+     */
+    public function RegBuildModule($modfilename, $userfunc) {
+        ModuleBuilder::Reg($modfilename, $userfunc);
+    }
+
+    /**
+     * 添加模块
+     * @param string $modfilename 模块名
+     * @param null $parameters 模块参数
+     */
+    public function AddBuildModule($modfilename, $parameters = null) {
+        ModuleBuilder::Add($modfilename, $parameters);
+    }
+
+    /**
+     * 删除模块
+     * @param string $modfilename 模块名
+     */
+    public function DelBuildModule($modfilename) {
+        ModuleBuilder::Del($modfilename);
+    }
+
+    /**
+     * 所有模块重置
+     */
+    public function AddBuildModuleAll() {
+        //del from 1.5
+    }
+
 
 ################################################################################################################
     #加载数据对像List函数
@@ -2312,14 +2309,23 @@ class ZBlogPHP {
     #验证相关
 
     /**
+     * 获取评论key
+     * @param $id
+     * @return string
+     */
+    public function GetCmtKey($id) {
+        return md5($this->guid . $id . date('Ymdh'));
+    }
+
+    /**
      * 验证评论key
      * @param $id
      * @param $key
      * @return bool
      */
-    public function VerifyCmtKey($id, $key) {
-        $nowkey = md5($this->guid . $id . date('Y-m-d'));
-        $nowkey2 = md5($this->guid . $id . date('Y-m-d', time() - (3600 * 1)));
+    public function ValidCmtKey($id, $key) {
+        $nowkey = md5($this->guid . $id . date('Ymdh'));
+        $nowkey2 = md5($this->guid . $id . date('Ymdh', time() - (3600 * 1)));
 
         return ($key == $nowkey || $key == $nowkey2);
     }
@@ -2330,7 +2336,7 @@ class ZBlogPHP {
      * @return string
      */
     public function GetToken($s = '') {
-        return md5($this->guid . date('Ymd') . $this->user->Guid . $s);
+        return md5($this->guid . $this->user->Guid . $s . date('Ymdh'));
     }
 
     /**
@@ -2340,10 +2346,10 @@ class ZBlogPHP {
      * @return bool
      */
     public function ValidToken($t, $s = '') {
-        if ($t == md5($this->guid . date('Ymd') . $this->user->Guid . $s)) {
+        if ($t == md5($this->guid . $this->user->Guid . $s . date('Ymdh'))) {
             return true;
         }
-        if ($t == md5($this->guid . date('Ymd', strtotime("-1 hour")) . $this->user->Guid . $s)) {
+        if ($t == md5($this->guid . $this->user->Guid . $s. date('Ymdh', time() - (3600 * 1)))) {
             return true;
         }
 
@@ -2365,7 +2371,7 @@ class ZBlogPHP {
 
         $_vc = new ValidateCode();
         $_vc->GetImg();
-        setcookie('captcha_' . crc32($this->guid . $id), md5($this->guid . date("Ymd") . $_vc->GetCode()), null, $this->cookiespath);
+        setcookie('captcha_' . crc32($this->guid . $id), md5($this->guid . date("Ymdh") . $_vc->GetCode()), null, $this->cookiespath);
     }
 
     /**
@@ -2385,7 +2391,10 @@ class ZBlogPHP {
         $original = GetVars('captcha_' . crc32($this->guid . $id), 'COOKIE');
         setcookie('captcha_' . crc32($this->guid . $id), '', time() - 3600, $this->cookiespath);
 
-        return (md5($this->guid . date("Ymd") . $vaidcode) == $original);
+        return (md5($this->guid . date("Ymdh") . $vaidcode) == $original
+                ||
+                md5($this->guid . date("Ymdh", time() - (3600 * 1)) . $vaidcode) == $original
+                );
     }
 
 
@@ -2680,6 +2689,8 @@ class ZBlogPHP {
     }
 
 
+################################################################################################################
+    #扩展{动作，类别}
     /**
      * 注册PostType
      * int $typeid 系统定义在0-99，插件自定义100-255
@@ -2719,7 +2730,6 @@ class ZBlogPHP {
         if (isset($this->posttype[$typeid])) {
             return $this->posttype[$typeid][2];
         }
-
 
         return 'single';
     }

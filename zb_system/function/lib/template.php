@@ -570,7 +570,8 @@ class Template {
         $this->templateTags['option'] = &$option;
         $this->templateTags['lang'] = &$zbp->lang;
         $this->templateTags['version'] = &$zbp->version;
-        $this->templateTags['categorys'] = &$zbp->categorys;
+        $this->templateTags['categorys'] = &$zbp->categories;
+        $this->templateTags['categories'] = &$zbp->categories;
         $this->templateTags['modules'] = &$zbp->modulesbyfilename;
         $this->templateTags['title'] = htmlspecialchars($zbp->title);
         $this->templateTags['host'] = &$zbp->host;

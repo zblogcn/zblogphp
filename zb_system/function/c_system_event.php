@@ -170,7 +170,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
             } else {
                 $arysubcate = array();
                 $arysubcate[] = array('log_CateID', $category->ID);
-                foreach ($zbp->categorys[$category->ID]->ChildrenCategories as $subcate) {
+                foreach ($zbp->categories[$category->ID]->ChildrenCategories as $subcate) {
                     $arysubcate[] = array('log_CateID', $subcate->ID);
                 }
                 $w[] = array('array', $arysubcate);
@@ -699,7 +699,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
         } else {
             $arysubcate = array();
             $arysubcate[] = array('log_CateID', $category->ID);
-            foreach ($zbp->categorys[$category->ID]->ChildrenCategories as $subcate) {
+            foreach ($zbp->categories[$category->ID]->ChildrenCategories as $subcate) {
                 $arysubcate[] = array('log_CateID', $subcate->ID);
             }
             $w[] = array('array', $arysubcate);
@@ -1658,7 +1658,7 @@ function PostComment() {
 
     $_POST['LogID'] = $_GET['postid'];
 
-    if ($zbp->VerifyCmtKey($_GET['postid'], $_GET['key']) == false) {
+    if ($zbp->ValidCmtKey($_GET['postid'], $_GET['key']) == false) {
         $zbp->ShowError(43, __FILE__, __LINE__);
     }
 
@@ -1962,7 +1962,7 @@ function PostCategory() {
 
     $parentid = (int) GetVars('ParentID', 'POST');
     if ($parentid > 0) {
-        if ($zbp->categorys[$parentid]->Level > 2) {
+        if ($zbp->categories[$parentid]->Level > 2) {
             $_POST['ParentID'] = '0';
         }
     }
@@ -2026,7 +2026,7 @@ function DelCategory() {
     $cate = $zbp->GetCategoryByID($id);
     if ($cate->ID > 0) {
 
-        foreach ($zbp->categorys as $subcate) {
+        foreach ($zbp->categories as $subcate) {
             if ($subcate->ParentID == $cate->ID) {
                 $zbp->ShowError(49, __FILE__, __LINE__);
 
@@ -2978,8 +2978,8 @@ function CountCategoryArray($array, $plus = null) {
             continue;
         }
 
-        CountCategory($zbp->categorys[$value], $plus);
-        $zbp->categorys[$value]->Save();
+        CountCategory($zbp->categories[$value], $plus);
+        $zbp->categories[$value]->Save();
     }
 }
 
