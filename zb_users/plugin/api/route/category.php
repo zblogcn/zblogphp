@@ -47,7 +47,7 @@ API::$Route->get('/category/', 'api_category_get_function');
 function api_categories_get_function() {
     global $zbp;
     $ret = array();
-    foreach ($zbp->categorysbyorder as $category) {
+    foreach ($zbp->categoriesbyorder as $category) {
         if ($category->ParentID == 0)
             array_push($ret, return_category($category));
     }

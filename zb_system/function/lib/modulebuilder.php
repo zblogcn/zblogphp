@@ -69,7 +69,7 @@ class ModuleBuilder {
 
         $tags['style'] = $zbp->option['ZC_MODULE_CATALOG_STYLE'];
         $tags['maxLi'] = $zbp->modulesbyfilename['catalog']->MaxLi;
-        $tags['catalogs'] = $zbp->categorysbyorder;
+        $tags['catalogs'] = $zbp->categoriesbyorder;
 
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-catalog');

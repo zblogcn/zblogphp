@@ -117,7 +117,7 @@ class Category extends Base {
             if ($this->ParentID == 0) {
                 return null;
             } else {
-                return $zbp->categorys[$this->ParentID];
+                return $zbp->categories[$this->ParentID];
             }
         }
         if ($name == 'Template') {

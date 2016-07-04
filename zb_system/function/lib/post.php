@@ -194,8 +194,7 @@ class Post extends Base {
                     return $fpreturn;
                 }
             }
-            $key = '&amp;key=' . md5($zbp->guid . $this->ID . date('Y-m-d'));
-            //$key = '&amp;key=' . md5($zbp->guid . $this->ID . $this->CommNums . date('Y-m-d') . $_SERVER["REMOTE_ADDR"] . $_SERVER["HTTP_USER_AGENT"]);
+            $key = '&amp;key=' . $zbp->GetCmtKey($this->ID);
             return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
             break;
         case 'ValidCodeUrl':

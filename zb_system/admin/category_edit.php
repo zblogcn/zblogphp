@@ -32,7 +32,7 @@ $p = null;
 
 $p .= '<option value="0">' . $lang['msg']['none'] . '</option>';
 
-foreach ($zbp->categorysbyorder as $k => $v) {
+foreach ($zbp->categoriesbyorder as $k => $v) {
     if ($v->ID == $cate->ID) {continue;}
     #if($v->RootID==$cate->ID){continue;}
     #if($cate->RootID>0){if($v->RootID==$cate->RootID){continue;}}

@@ -200,7 +200,7 @@ function OutputOptionItemsOfCategorys($default) {
     }
 
     $s = null;
-    foreach ($zbp->categorysbyorder as $id => $cate) {
+    foreach ($zbp->categoriesbyorder as $id => $cate) {
         $s .= '<option ' . ($default == $cate->ID ? 'selected="selected"' : '') . ' value="' . $cate->ID . '">' . $cate->SymbolName . '</option>';
     }
 
@@ -499,7 +499,7 @@ function Admin_ArticleMng() {
     echo '<form class="search" id="search" method="post" action="#">';
 
     echo '<p>' . $zbp->lang['msg']['search'] . ':&nbsp;&nbsp;' . $zbp->lang['msg']['category'] . ' <select class="edit" size="1" name="category" style="width:140px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option>';
-    foreach ($zbp->categorysbyorder as $id => $cate) {
+    foreach ($zbp->categoriesbyorder as $id => $cate) {
         echo '<option value="' . $cate->ID . '">' . $cate->SymbolName . '</option>';
     }
     echo '</select>&nbsp;&nbsp;&nbsp;&nbsp;' . $zbp->lang['msg']['type'] . ' <select class="edit" size="1" name="status" style="width:100px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option> <option value="0" >' . $zbp->lang['post_status_name']['0'] . '</option><option value="1" >' . $zbp->lang['post_status_name']['1'] . '</option><option value="2" >' . $zbp->lang['post_status_name']['2'] . '</option></select>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -700,7 +700,7 @@ function Admin_CategoryMng() {
 	<th></th>
 	</tr>';
 
-    foreach ($zbp->categorysbyorder as $category) {
+    foreach ($zbp->categoriesbyorder as $category) {
         echo '<tr>';
         echo '<td class="td5">' . $category->ID . '</td>';
         echo '<td class="td5">' . $category->Order . '</td>';

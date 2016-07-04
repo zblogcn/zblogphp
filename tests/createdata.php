@@ -8,31 +8,31 @@
 
 require '../zb_system/function/c_system_base.php';
 error_reporting(0);
-ini_set("display_errors",0);
-set_error_handler(create_function('',''));
-set_exception_handler(create_function('',''));
-register_shutdown_function(create_function('',''));
+ini_set("display_errors", 0);
+set_error_handler(create_function('', ''));
+set_exception_handler(create_function('', ''));
+register_shutdown_function(create_function('', ''));
 
 $zbp->Load();
 
-function article(){
+function article() {
 	for ($i=0; $i < 100000; $i++) {
 		$a=new Post();
-		$a->CateID=mt_rand(1,1000);
+		$a->CateID=mt_rand(1, 1000);
 		$a->AuthorID=1;
-		$a->Tag=getTagStr(mt_rand(0,3));
+		$a->Tag=getTagStr(mt_rand(0, 3));
 		$a->Status=ZC_POST_STATUS_PUBLIC;
 		$a->Type=ZC_POST_TYPE_ARTICLE;
 		$a->Alias='';
 		$a->IsTop=false;
 		$a->IsLock=false;
-		$a->Title=getRandStr(mt_rand(8,14));
+		$a->Title=getRandStr(mt_rand(8, 14));
 		//$a->Intro=getRandStr(mt_rand(50,150)) . GetGuid();
-		$s=getRandStr(mt_rand(500,1000)) . GetGuid() . '<br/>' . GetGuid();
+		$s=getRandStr(mt_rand(500, 1000)) . GetGuid() . '<br/>' . GetGuid();
 		$a->Content=$s;
-		$a->Intro=substr($s,0,250);
+		$a->Intro=substr($s, 0, 250);
 		//1418365907
-		$a->PostTime=mt_rand(1400000000,1418360000);
+		$a->PostTime=mt_rand(1400000000, 1418360000);
 		$a->IP=GetGuestIP();
 		//$a->PostTime=time();
 		$a->CommNums=0;
@@ -43,7 +43,7 @@ function article(){
 	}
 }
 
-function page(){
+function page() {
 	for ($i=0; $i < 1000; $i++) {
 		$a=new Post();
 		$a->CateID=0;
@@ -54,9 +54,9 @@ function page(){
 		$a->Alias='';
 		$a->IsTop=false;
 		$a->IsLock=false;
-		$a->Title=getRandStr(mt_rand(6,10));
+		$a->Title=getRandStr(mt_rand(6, 10));
 		$a->Intro='';
-		$a->Content=getRandStr(mt_rand(200,300)) . GetGuid() . '<br/>' . GetGuid();
+		$a->Content=getRandStr(mt_rand(200, 300)) . GetGuid() . '<br/>' . GetGuid();
 		$a->IP=GetGuestIP();
 		$a->PostTime=time();
 		$a->CommNums=0;
@@ -67,18 +67,18 @@ function page(){
 	}
 }
 
-function cate(){
+function cate() {
 	for ($i=0; $i < 1000; $i++) {
 		$cate = new Category();
-		$cate->Name=getRandStr(mt_rand(2,4));
+		$cate->Name=getRandStr(mt_rand(2, 4));
 		$cate->Save();
   	}
 }
 
-function tag(){
+function tag() {
 	for ($i=0; $i < 100000; $i++) {
 		$tag = new Tag();
-		$tag->Name=getRandStr(mt_rand(2,5));
+		$tag->Name=getRandStr(mt_rand(2, 5));
 		$tag->Save();
   	}
 }
@@ -113,7 +113,7 @@ function getRandStr($len) {
 function getTagStr($tagcount) {
  $str = '';
  for($i=0;$i<$tagcount;$i++) {
-  $str = $str . '{' . mt_rand(1,10000) . '}';
+  $str = $str . '{' . mt_rand(1, 10000) . '}';
  }
  return $str;
 
@@ -146,11 +146,10 @@ foreach ($zbp->tags as $key => $value) {
 	$value->Save();
 }
 
-foreach ($zbp->categorys as $key => $value) {
+foreach ($zbp->categories as $key => $value) {
 	$value->Count=$zbp->CountCategory($key);
 	$value->Save();
 }
 
 */
 RunTime();
-?>

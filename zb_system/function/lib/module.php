@@ -109,7 +109,6 @@ class Module extends Base {
                     ->where(array('=', $zbp->datainfo['Module']['FileName'][0], $this->FileName))
                     ->sql
                 );
-        //die(count($m)==1);
         if(count($m)<1){
             return parent::Save();
         }else{

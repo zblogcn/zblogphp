@@ -67,7 +67,7 @@ function zbp_getCategories() {
 
     $strAll = '';
 
-    foreach ($zbp->categorysbyorder as $key => $value) {
+    foreach ($zbp->categoriesbyorder as $key => $value) {
         $s = $strSingle;
         $s = str_replace("$%#1#%$", htmlspecialchars($value->ID), $s);
         $s = str_replace("$%#2#%$", htmlspecialchars($value->ParentID), $s);

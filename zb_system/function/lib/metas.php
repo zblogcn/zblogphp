@@ -11,11 +11,11 @@ class Metas {
      * @var array 存储Metas相应数值的数组
      */
     private $_data = array();
+
     /**
      * @param string $name key名
      * @param $value
      */
-
     public function __set($name, $value) {
         $this->_data[$name] = $value;
     }
