@@ -2152,10 +2152,10 @@ function PostMember() {
     }
 
     //检测密码
-    //if(trim($_POST["Password"])=='' || trim($_POST["PasswordRe"])=='' || $_POST["Password"]!=$_POST["PasswordRe"]){
-    //    unset($_POST["Password"]);
-    //    unset($_POST["PasswordRe"]);
-    //}
+    if(trim($_POST["Password"])=='' || trim($_POST["PasswordRe"])=='' || $_POST["Password"]!=$_POST["PasswordRe"]){
+        unset($_POST["Password"]);
+        unset($_POST["PasswordRe"]);
+    }
 
     $data['ID'] = $_POST['ID'];
     $editableField = array('Password', 'Email', 'HomePage', 'Alias', 'Intro', 'Template');
