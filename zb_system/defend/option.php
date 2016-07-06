@@ -14,7 +14,8 @@
 return array(
 
     // '---------------------------------关闭网站-----------------------------------
-    'ZC_SITE_TURNOFF' => false,
+    'ZC_CLOSE_WHOLE_SITE' => false,
+    'ZC_CLOSE_SITE' => false,
 
     // '---------------------------------网站基本设置-----------------------------------
     'ZC_BLOG_HOST' => 'http://localhost/',
@@ -99,7 +100,7 @@ return array(
     'ZC_PAGEBAR_COUNT' => 10,
     'ZC_COMMENTS_DISPLAY_COUNT' => 100,
 
-    'ZC_DISPLAY_SUBCATEGORYS' => false,
+    'ZC_DISPLAY_SUBCATEGORYS' => true,
 
     // '杂项
     'ZC_RSS2_COUNT' => 10,
@@ -179,7 +180,6 @@ return array(
     'ZC_ADMIN_HTML5_ENABLE' => true,
     // '代码高亮
     'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
-    'ZC_CLOSE_SITE' => false,
     'ZC_LOADMEMBERS_LEVEL' => 0,
     'ZC_LAST_VERSION' => '',
 

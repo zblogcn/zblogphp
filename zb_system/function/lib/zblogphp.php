@@ -375,7 +375,7 @@ class ZBlogPHP {
         $oldlang = $this->option['ZC_BLOG_LANGUAGEPACK'];
         $this->LoadLanguage('system', '');
 
-        if ($this->option['ZC_SITE_TURNOFF'] == true) {
+        if ($this->option['ZC_CLOSE_WHOLE_SITE'] == true) {
             Http503();
             $this->ShowError(82, __FILE__, __LINE__);
 
@@ -883,7 +883,7 @@ class ZBlogPHP {
                     ($key == 'ZC_PGSQL_PRE') ||
                     ($key == 'ZC_PGSQL_PORT') ||
                     ($key == 'ZC_PGSQL_PERSISTENT') ||
-                    ($key == 'ZC_SITE_TURNOFF')
+                    ($key == 'ZC_CLOSE_WHOLE_SITE')
                 ) {
                     $option[$key] = $value;
                 }
@@ -951,7 +951,7 @@ class ZBlogPHP {
                 ($key == 'ZC_PGSQL_PRE') ||
                 ($key == 'ZC_PGSQL_PORT') ||
                 ($key == 'ZC_PGSQL_PERSISTENT') ||
-                ($key == 'ZC_SITE_TURNOFF')
+                ($key == 'ZC_CLOSE_WHOLE_SITE')
             ) {
                 continue;
             }
