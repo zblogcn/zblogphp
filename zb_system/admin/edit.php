@@ -168,7 +168,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
           <!-- cate --><?php if (!$ispage) {?>
           <div id='cate' class="editmod"> <label for="cmbCateID" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['category'] ?></label>
             <select style="width:180px;" class="edit" size="1" name="CateID" id="cmbCateID">
-<?php echo OutputOptionItemsOfCategorys($article->CateID); ?>
+<?php echo OutputOptionItemsOfCategories($article->CateID); ?>
             </select>
           </div>
           <!-- cate --><?php }?>

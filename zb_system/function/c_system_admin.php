@@ -190,10 +190,10 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
  * @param $default
  * @return null|string
  */
-function OutputOptionItemsOfCategorys($default) {
+function OutputOptionItemsOfCategories($default) {
     global $zbp;
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCategorys'] as $fpname => &$fpsignal) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCategories'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($default);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}

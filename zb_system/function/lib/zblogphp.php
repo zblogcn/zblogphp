@@ -1868,6 +1868,17 @@ class ZBlogPHP {
             return null;
         }
         if ($object != null) {
+            //$modules非ID为key
+            if ($className == "Module") {
+                if($id>0){
+                    foreach ($object as $key => $value) {
+                        if($value->ID==$id)return $value;
+                    }
+                }
+                $m = new Module;
+                return $m;
+            }
+
             if (isset($object[$id])) {
                 return $object[$id];
             } elseif ($className == "Post" || $className == "Comment") {

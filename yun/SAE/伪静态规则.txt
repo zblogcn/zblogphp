@@ -1,3 +1,0 @@
-- rewrite: if(!is_dir() && !is_file()) goto "index.php?%{QUERY_STRING}"
-
-请将这段话加进config.yaml或是在“应用管理”的“AppConfig”下设置“URL重写(rewrite)”项，在高级语法里直接加入并保存即可。

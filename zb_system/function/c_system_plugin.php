@@ -841,13 +841,13 @@ DefinePluginFilter('Filter_Plugin_Admin_Js_Add');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_OutputOptionItemsOfCategorys
+'名称:Filter_Plugin_OutputOptionItemsOfCategories
 '参数:
-'说明:定义OutputOptionItemsOfCategorys函数里的接口
+'说明:定义OutputOptionItemsOfCategories函数里的接口
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfCategorys');
+DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfCategories');
 
 ################################################################################################################
 #Event里的接口
