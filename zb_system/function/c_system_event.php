@@ -2241,6 +2241,8 @@ function PostMember() {
         $fpname($mem);
     }
 
+    $zbp->AddBuildModule('authors');
+
     if (isset($data['Password'])) {
         if ($mem->ID == $zbp->user->ID) {
             Redirect($zbp->host . 'zb_system/cmd.php?act=login');
@@ -2583,13 +2585,10 @@ function SetTheme($theme, $style) {
     $zbp->option['ZC_BLOG_THEME'] = $theme;
     $zbp->option['ZC_BLOG_CSS'] = $style;
 
-    $zbp->BuildTemplate();
-
     $zbp->SaveOption();
 
     if ($oldtheme != $theme) {
         UninstallPlugin($oldtheme);
-
         return $theme;
     }
 }

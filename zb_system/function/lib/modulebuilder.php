@@ -7,14 +7,15 @@
  */
 class ModuleBuilder {
 
-	//需要重建的module list
     public static $List = array();//array('filename'=>,'function' => '', 'paramters' => '');
+    //需要重建的module list
+    private static $Ready = array();//'filename';
 
     public static function Build() {
         global $zbp;
-        foreach (ModuleBuilder::$List as $m) {
-            if (isset($zbp->modulesbyfilename[$m['filename']])) {
-                $m = $zbp->modulesbyfilename[$m['filename']];
+        foreach (ModuleBuilder::$Ready as $m) {
+            if (isset($zbp->modulesbyfilename[$m])) {
+                $m = $zbp->modulesbyfilename[$m];
                 $m->Build();
                 $m->Save();
             }
@@ -44,7 +45,7 @@ class ModuleBuilder {
      * @param null $parameters 模块参数
      */
     public static function Add($modfilename, $parameters = null) {
-        ModuleBuilder::$List[$modfilename]['filename'] = $modfilename;
+        ModuleBuilder::$Ready[$modfilename] = $modfilename;
         ModuleBuilder::$List[$modfilename]['parameters'] = $parameters;
     }
 
@@ -53,7 +54,7 @@ class ModuleBuilder {
      * @param string $modfilename 模块名
      */
     public static function Del($modfilename) {
-        unset(ModuleBuilder::$List[$modfilename]);
+        unset(ModuleBuilder::$Ready[$modfilename]);
     }
 
     /**
