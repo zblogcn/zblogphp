@@ -28,14 +28,21 @@ function VerifyLogin() {
         $addinfo['levelname'] = $m->LevelName;
         $addinfo['userid'] = $m->ID;
         $addinfo['useralias'] = $m->StaticName;
-        if ($sd == 0) {
-            setcookie("username", $un, 0, $zbp->cookiespath);
-            setcookie("password", $ps, 0, $zbp->cookiespath);
-            setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), 0, $zbp->cookiespath);
-        } else {
-            setcookie("username", $un, time() + 3600 * 24 * $sd, $zbp->cookiespath);
-            setcookie("password", $ps, time() + 3600 * 24 * $sd, $zbp->cookiespath);
-            setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), time() + 3600 * 24 * $sd, $zbp->cookiespath);
+
+        if ($sd == 0)
+            $sdt = 0;
+        else
+            $sdt = time() + 3600 * 24 * $sd;
+
+        if(HTTP_SCHEME == 'https://'){
+            setcookie("username", $un, $sdt, $zbp->cookiespath, '', true, false);
+            setcookie("password", $ps, $sdt, $zbp->cookiespath, '', true, true);
+            setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $sdt, $zbp->cookiespath, '', true, false);
+
+        }else{
+            setcookie("username", $un, $sdt, $zbp->cookiespath);
+            setcookie("password", $ps, $sdt, $zbp->cookiespath);
+            setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $sdt, $zbp->cookiespath);
         }
 
         return true;

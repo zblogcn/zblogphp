@@ -476,7 +476,6 @@ class ZBlogPHP {
             $fpreturn = $fpname();
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
                 return $fpreturn;
             }
         }

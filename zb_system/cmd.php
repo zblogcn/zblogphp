@@ -258,6 +258,8 @@ case 'PluginEnb':
 case 'ThemeMng':
     if (GetVars('install', 'GET')) {
         InstallPlugin(GetVars('install', 'GET'));
+    }
+    if (GetVars('install', 'GET') !== null) {
         $zbp->BuildTemplate();
     }
     Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));

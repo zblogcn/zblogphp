@@ -14,7 +14,7 @@ class Template {
     public $templates = array();
     public $compiledTemplates = array();
     public $templateTags = array();
-    public $replaceTags = array();
+    public $staticTags = array();
 
     /**
      * @var array 默认侧栏
@@ -641,6 +641,10 @@ class Template {
             }
 
         }
-        $this->replaceTags = $t + $o;
+        $this->staticTags = $t + $o;
+    }
+    public function ReplaceStaticTags($s) {
+        $s = str_replace(array_keys($this->replaceTags), array_values($this->replaceTags), $s);
+        return $s;
     }
 }
