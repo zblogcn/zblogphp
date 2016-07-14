@@ -51,16 +51,7 @@ class Member extends Base {
     public function __set($name, $value) {
         global $zbp;
         if ($name == 'Url') {
-            foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Url'] as $fpname => &$fpsignal) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-                $fpreturn = $fpname($this);
-                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-            }
-            $u = new UrlRule($zbp->option['ZC_AUTHOR_REGEX']);
-            $u->Rules['{%id%}'] = $this->ID;
-            $u->Rules['{%alias%}'] = $this->Alias == '' ? rawurlencode($this->Name) : $this->Alias;
-
-            return $u->Make();
+            return null;
         }
         if ($name == 'Avatar') {
             return null;
@@ -97,6 +88,11 @@ class Member extends Base {
     public function __get($name) {
         global $zbp;
         if ($name == 'Url') {
+            foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Url'] as $fpname => &$fpsignal) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                $fpreturn = $fpname($this);
+                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+            }
             $u = new UrlRule($zbp->option['ZC_AUTHOR_REGEX']);
             $u->Rules['{%id%}'] = $this->ID;
             $u->Rules['{%alias%}'] = $this->Alias == '' ? rawurlencode($this->Name) : $this->Alias;
@@ -106,9 +102,7 @@ class Member extends Base {
         if ($name == 'Avatar') {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Mebmer_Avatar'] as $fpname => &$fpsignal) {
                 $fpreturn = $fpname($this);
-                if ($fpreturn) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
-return $fpreturn;}
+                if ($fpreturn) {$fpsignal = PLUGIN_EXITSIGNAL_NONE; return $fpreturn;}
             }
             if ($this->_avatar) {
                 return $this->_avatar;
