@@ -57,6 +57,7 @@
 !/zb_users/plugin/ZBPJFExample
 !/zb_users/plugin/markdown
 !/zb_users/plugin/forcehttps
+!/zb_users/plugin/linkmanage
 
 # Unoffical Theme
 /zb_users/theme/*
