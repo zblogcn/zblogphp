@@ -2033,13 +2033,11 @@ function DelCategory() {
     $cate = $zbp->GetCategoryByID($id);
     if ($cate->ID > 0) {
 
-        foreach ($zbp->categories as $subcate) {
-            if ($subcate->ParentID == $cate->ID) {
-                $zbp->ShowError(49, __FILE__, __LINE__);
-
-                return false;
-            }
+        if(count($cate->SubCategories)>0){
+            $zbp->ShowError(49, __FILE__, __LINE__);
+            return false;
         }
+
         DelCategory_Articles($cate->ID);
         $cate->Del();
 
