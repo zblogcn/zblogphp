@@ -9,7 +9,7 @@ class Template {
 
     protected $path = null;
     protected $entryPage = null;
-    protected $parsedPHPCodes = array();
+    protected $uncompiledCodeStore = array();
     public $theme = "";
     public $templates = array();
     public $compiledTemplates = array();
@@ -211,9 +211,9 @@ class Template {
         }
 
         // Step 1: 替换<?php块
-        $this->replacePHP($content);
-        // Step 2: 解析PHP
-        $this->parsePHP($content);
+        $this->remove_php_blocks($content);
+        // Step 2: 处理不编译的代码
+        $this->parse_uncompile_code($content);
         // Step 3: 引入主题
         $this->parse_template($content);
         // Step 4: 解析module
@@ -232,8 +232,8 @@ class Template {
         $this->parse_foreach($content);
         // Step 11: 解析for
         $this->parse_for($content);
-        // Step N: 解析PHP
-        $this->parsePHP2($content);
+        // Step N: 恢复不编译的代码
+        $this->parse_back_uncompile_code($content);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Compiling_End'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
@@ -249,7 +249,7 @@ class Template {
     /**
      * @param $content
      */
-    protected function replacePHP(&$content) {
+    protected function remove_php_blocks(&$content) {
         $content = preg_replace("/\<\?php[\d\D]+?\?\>/si", '', $content);
     }
 
@@ -263,27 +263,42 @@ class Template {
     /**
      * @param $content
      */
-    protected function parsePHP(&$content) {
-        $this->parsedPHPCodes = array();
+    protected function parse_uncompile_code(&$content) {
+        $this->uncompiledCodeStore = array();
         $matches = array();
-        if ($i = preg_match_all('/\{php\}([\D\d]+?)\{\/php\}/si', $content, $matches) > 0) {
-            if (isset($matches[1])) {
-                foreach ($matches[1] as $j => $p) {
-                    $content = str_replace($p, '<!--' . $j . '-->', $content);
-                    $this->parsedPHPCodes[$j] = $p;
+        if ($i = preg_match_all('/\{(php|pre)\}([\D\d]+?)\{\/(php|pre)\}/si', $content, $matches) > 0) {
+            if (isset($matches[2])) {
+                foreach ($matches[2] as $j => $p) {
+                    $content = str_replace($p, '<!-- parse_middle_code' . $j . '-->', $content);
+                    $this->uncompiledCodeStore[$j] = array(
+                        'type' => $matches[1][$j],
+                        'content' => $p
+                    );
                 }
             }
-        }}
+        }
+    }
 
     /**
      * @param $content
      */
-    protected function parsePHP2(&$content) {
-        foreach ($this->parsedPHPCodes as $j => $p) {
-            $content = str_replace('{php}<!--' . $j . '-->{/php}', '<' . '?php ' . $p . ' ?' . '>', $content);
+    protected function parse_back_uncompile_code(&$content) {
+                    
+
+        foreach ($this->uncompiledCodeStore as $j => $p) {
+            if ($p['type'] == 'php') {
+                $content = str_replace('{php}<!-- parse_middle_code' . $j . '-->{/php}', '<' . '?php ' . $p['content'] . ' ?' . '>', $content);
+            } else {
+                $content = str_replace(
+                    '{' . $p['type'] . '}<!-- parse_middle_code' . $j . '-->{/' . $p['type'] . '}',
+                    $p['content'],
+                    $content
+                );
+            }
         }
+        
         $content = preg_replace('/\{php\}([\D\d]+?)\{\/php\}/', '<' . '?php $1 ?' . '>', $content);
-        $this->parsedPHPCodes = array();
+        $this->uncompiledCodeStore = array();
     }
 
     /**
