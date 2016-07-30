@@ -6,9 +6,9 @@
  * @author zsx<zsx@zsxsoft.com>
  */
 define('API_PATH', dirname(__FILE__));
-require 'route.php';
-require 'io.php';
-require 'user.php';
+require API_PATH . '/route.php';
+require API_PATH . '/io.php';
+require API_PATH . '/user.php';
 
 /**
  * API Singleton

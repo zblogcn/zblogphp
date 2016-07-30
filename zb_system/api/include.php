@@ -1,20 +1,9 @@
 <?php
-include 'api.php';
+include dirname(__FILE__) . '/api.php';
 RegisterPlugin("api", "ActivePlugin_api");
-$apiRealRouteUrl = "";
-
-function ActivePlugin_api() {
-    Add_Filter_Plugin('Filter_Plugin_Index_Begin', 'api_index_begin');
-    Add_Filter_Plugin('Filter_Plugin_Zbp_Load_Pre', 'api_zbp_load_pre');
-}
-
-function InstallPlugin_api() {
-
-}
-
-function UninstallPlugin_api() {
-
-}
+// 首先，我们需要在系统里加载api
+// 然后剩下的再说
+// $apiRealRouteUrl = "";
 
 function api_index_begin() {
 
