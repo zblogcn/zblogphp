@@ -162,6 +162,9 @@ return array(
 
     'ZC_ALIAS_BACK_ATTR' => 'Name',
 
+    'ZC_SEARCH_COUNT' => 20,
+    'ZC_SEARCH_REGEX' => '{%host%}search.php?q={%q%}&page={%page%}',
+
     #首页，分类页，文章页，页面页的默认模板
     'ZC_INDEX_DEFAULT_TEMPLATE' => 'index',
     'ZC_POST_DEFAULT_TEMPLATE' => 'single',
@@ -176,18 +179,15 @@ return array(
 
     'ZC_SIDEBAR5_ORDER' => '',
     // '--------------------------其它----------------------------------------
-    'ZC_GZIP_ENABLE' => false,
-    'ZC_ADMIN_HTML5_ENABLE' => true,
     // '代码高亮
     'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
-    'ZC_LOADMEMBERS_LEVEL' => 0,
-    'ZC_LAST_VERSION' => '',
-
-    'ZC_SEARCH_COUNT' => 20,
-    'ZC_SEARCH_REGEX' => '{%host%}search.php?q={%q%}&page={%page%}',
-
     // '源码编辑高亮
     'ZC_CODEMIRROR_ENABLE' => true,
+
+    'ZC_GZIP_ENABLE' => false,
+    'ZC_ADMIN_HTML5_ENABLE' => true,
+    'ZC_LOADMEMBERS_LEVEL' => 0,
+    'ZC_LAST_VERSION' => '',
     'ZC_HTTP_LASTMODIFIED' => false,
     'ZC_MODULE_CATALOG_STYLE' => 0,
     'ZC_VIEWNUMS_TURNOFF' => false,
@@ -197,4 +197,5 @@ return array(
     'ZC_POST_ALIAS_USE_ID_NOT_TITLE' => false,
     'ZC_COMPATIBLE_ASP_URL' => true,
     'ZC_LARGE_DATA' => false,
+    'ZC_JS_304_ENABLE' => false,
 );
