@@ -115,16 +115,13 @@ function RemovePluginFilter($strPluginFilter) {
 }
 
 
-function EmitPlugin() {
-    $args = func_get_args();
+function EmitPlugin($hookName, $arguments) {
+    // Cannot pass reference by func_get_args
     $ret = null;
     $signal = PLUGIN_EXITSIGNAL_NONE;
-    if (count($args) == 0) return;
-    $hookName = $args[0];
-    array_shift($args);
     foreach ($GLOBALS['hooks'][$hookName] as $pluginName => &$pluginSignal) {
         $pluginSignal = PLUGIN_EXITSIGNAL_NONE;
-        $funcResult = call_user_func_array($fpname, $args);
+        $funcResult = call_user_func_array($pluginName, $arguments);
         if ($pluginSignal == PLUGIN_EXITSIGNAL_RETURN) {
             $signal = $pluginSignal;
             $ret = $funcResult;
