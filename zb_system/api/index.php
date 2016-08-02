@@ -34,19 +34,16 @@ function api_zbp_load_pre() {
     global $apiRealRouteUrl;
     global $zbp;
 
-    $requestUri = str_replace('index.php?', '', GetVars('HTTP_HOST', 'SERVER') . GetVars('REQUEST_URI', 'SERVER') . '/');
-    $removedHttpHost = preg_replace('/^http.+\/\//', '', $bloghost) . 'api/';
-    if (false === strpos($requestUri, $removedHttpHost)) {
-        $apiRealRouteUrl = "";
+    $requestUri = str_replace('index.php?', '', GetVars('HTTP_HOST', 'SERVER') . GetVars('REQUEST_URI', 'SERVER'));
 
-        return false;
-    }
+    $removedHttpHost = preg_replace('/^http.+\/\//', '', $bloghost) . 'zb_system/api/';
+
     $apiRealRouteUrl = str_replace($removedHttpHost, '', $requestUri);
 
     // Now we know that this is API Request, so remove Cookie.
     // The verification shoule be in API Route.
-    $_COOKIE['username'] = "";
-    $_COOKIE['password'] = "";
+    //$_COOKIE['username'] = "";
+    //$_COOKIE['password'] = "";
 
     API::init();
 
