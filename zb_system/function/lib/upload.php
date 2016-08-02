@@ -47,7 +47,7 @@ class Upload extends Base {
      */
     public function DelFile() {
 
-        $plugin = EmitPlugin('Filter_Plugin_Upload_DelFile', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Upload_DelFile', array($this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
         if (file_exists($this->FullFile)) {@unlink($this->FullFile);}
 
@@ -62,7 +62,7 @@ class Upload extends Base {
     public function SaveFile($tmp) {
         global $zbp;
 
-        $plugin = EmitPlugin('Filter_Plugin_Upload_SaveFile', $tmp, $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Upload_SaveFile', array($tmp, $this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         if (!file_exists($zbp->usersdir . $this->Dir)) {
@@ -85,7 +85,7 @@ class Upload extends Base {
     public function SaveBase64File($str64) {
         global $zbp;
 
-        $plugin = EmitPlugin('Filter_Plugin_Upload_SaveBase64File', $str64, $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Upload_SaveBase64File', array($str64, $this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         if (!file_exists($zbp->usersdir . $this->Dir)) {

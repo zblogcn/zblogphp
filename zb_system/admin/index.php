@@ -16,7 +16,7 @@ $action = GetVars('act', 'GET');
 
 if (($action == '') || ($action == null)) {$action = 'admin';}
 
-EmitPlugin('Filter_Plugin_Admin_Begin');
+TriggerPlugin('Filter_Plugin_Admin_Begin');
 
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
 
@@ -88,7 +88,7 @@ $f();
 <?php
 require ZBP_PATH . 'zb_system/admin/admin_footer.php';
 
-EmitPlugin('Filter_Plugin_Admin_End');
+TriggerPlugin('Filter_Plugin_Admin_End');
 
 RunTime();
 ?>

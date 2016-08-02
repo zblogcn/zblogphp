@@ -102,7 +102,7 @@ foreach ($zbp->categoriesbyorder as $k => $v) {
 			</p>
 			<!-- 1号输出接口 -->
 			<div id='response' class='editmod2'>
-				<?php EmitPlugin('Filter_Plugin_Category_Edit_Response');?>
+				<?php TriggerPlugin('Filter_Plugin_Category_Edit_Response');?>
 			</div>
 			<p>
 				<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" /></p>

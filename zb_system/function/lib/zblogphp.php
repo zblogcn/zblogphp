@@ -323,7 +323,7 @@ class ZBlogPHP {
      * @return mixed
      */
     public function __call($method, $args) {
-        $plugin = EmitPlugin('Filter_Plugin_Zbp_Call', $method, $args);
+        $plugin = TriggerPlugin('Filter_Plugin_Zbp_Call', array($method, $args));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
         trigger_error($this->lang['error'][81], E_USER_WARNING);
     }
@@ -335,7 +335,7 @@ class ZBlogPHP {
      * @return mixed
      */
     public function __set($name, $value) {
-        $plugin = EmitPlugin('Filter_Plugin_Zbp_Set', $name, $value);
+        $plugin = TriggerPlugin('Filter_Plugin_Zbp_Set', array($name, $value));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
         trigger_error($this->lang['error'][81], E_USER_WARNING);
     }
@@ -346,7 +346,7 @@ class ZBlogPHP {
      * @return mixed
      */
     public function __get($name) {
-        $plugin = EmitPlugin('Filter_Plugin_Zbp_Get', $name);
+        $plugin = TriggerPlugin('Filter_Plugin_Zbp_Get', array($name));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
         trigger_error($this->lang['error'][81], E_USER_WARNING);
     }
@@ -970,7 +970,7 @@ class ZBlogPHP {
             $level = $this->user->Level;
         }
 
-        $plugin = EmitPlugin('Filter_Plugin_Zbp_CheckRights', $action, $level);
+        $plugin = TriggerPlugin('Filter_Plugin_Zbp_CheckRights', array($action, $level));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         if (!isset($this->actions[$action])) {
@@ -2581,7 +2581,7 @@ class ZBlogPHP {
         ZBlogException::$error_file = $file;
         ZBlogException::$error_line = $line;
 
-        $plugin = EmitPlugin('Filter_Plugin_Zbp_ShowError', $errorCode, $errorText, $file, $line);
+        $plugin = TriggerPlugin('Filter_Plugin_Zbp_ShowError', array($errorCode, $errorText, $file, $line));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         throw new Exception($errorText);

@@ -115,7 +115,7 @@ function RemovePluginFilter($strPluginFilter) {
 }
 
 
-function EmitPlugin($hookName, $arguments) {
+function TriggerPlugin($hookName, $arguments = array()) {
     // Cannot pass reference by func_get_args
     $ret = null;
     $signal = PLUGIN_EXITSIGNAL_NONE;

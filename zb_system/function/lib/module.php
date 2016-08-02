@@ -82,7 +82,7 @@ class Module extends Base {
      */
     public function Save() {
         global $zbp;
-        $plugin = EmitPlugin('Filter_Plugin_Module_Save', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Module_Save', array($this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
         if ($this->Source == 'theme') {
             if (!$this->FileName) {
@@ -122,7 +122,7 @@ class Module extends Base {
      */
     public function Del() {
         global $zbp;
-        $plugin = EmitPlugin('Filter_Plugin_Module_Del', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Module_Del', array($this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         if ($this->Source == 'theme') {

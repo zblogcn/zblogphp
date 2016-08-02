@@ -9,7 +9,7 @@
 ob_clean();
 
 $type = GetVars('type', 'GET');
-EmitPlugin('Filter_Plugin_Misc_Begin', $type);
+TriggerPlugin('Filter_Plugin_Misc_Begin', array($type));
 
 switch ($type) {
 case 'statistic':
@@ -160,7 +160,7 @@ function misc_viewrights() {
 	<script src="script/common.js" type="text/javascript"></script>
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 <?php
-EmitPlugin('Filter_Plugin_Other_Header');
+TriggerPlugin('Filter_Plugin_Other_Header');
     ?>
 	<title><?php echo $blogtitle; ?></title>
 </head>
@@ -216,7 +216,7 @@ function misc_phpinfo() {
 	<script src="script/common.js" type="text/javascript"></script>
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 <?php
-EmitPlugin('Filter_Plugin_Other_Header');
+TriggerPlugin('Filter_Plugin_Other_Header');
     ?>
 	<title><?php echo $blogtitle; ?></title>
 	<style type="text/css">

@@ -89,7 +89,7 @@ function GetPHPEngine() {
  * @return mixed
  */
 function AutoloadClass($classname) {
-    $plugin = EmitPlugin('Filter_Plugin_Autoload', $classname);
+    $plugin = TriggerPlugin('Filter_Plugin_Autoload', array($classname));
     if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
     if (is_readable($f = ZBP_PATH . 'zb_system/function/lib/' . strtolower($classname) . '.php')) {
         require $f;
@@ -104,7 +104,7 @@ function AutoloadClass($classname) {
  */
 function Logs($s, $iserror = false) {
     global $zbp;
-    $plugin = EmitPlugin('Filter_Plugin_Logs', $s, $iserror);
+    $plugin = TriggerPlugin('Filter_Plugin_Logs', array($s, $iserror));
     if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
     $pathBuilder = array($zbp->usersdir . 'logs/');
 

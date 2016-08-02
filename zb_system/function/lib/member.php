@@ -36,7 +36,7 @@ class Member extends Base {
      * @return mixed
      */
     public function __call($method, $args) {
-        $plugin = EmitPlugin('Filter_Plugin_Member_Call', $this, $method, $args);
+        $plugin = TriggerPlugin('Filter_Plugin_Member_Call', array($this, $method, $args));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
     }
 
@@ -48,7 +48,7 @@ class Member extends Base {
      */
     public function __set($name, $value) {
         global $zbp;
-        if (in_array($name, $nonSetter)) {
+        if (in_array($name, $this->nonSetter)) {
             return null;
         }
         elseif ($name == 'Template') {
@@ -68,7 +68,7 @@ class Member extends Base {
     public function __get($name) {
         global $zbp;
         if ($name == 'Url') {
-            $plugin = EmitPlugin('Filter_Plugin_Member_Url', $this);
+            $plugin = TriggerPlugin('Filter_Plugin_Member_Url', array($this));
             if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
             $u = new UrlRule($zbp->option['ZC_AUTHOR_REGEX']);
             $u->Rules['{%id%}'] = $this->ID;
@@ -77,7 +77,7 @@ class Member extends Base {
             return $u->Make();
         }
         if ($name == 'Avatar') {
-            $plugin = EmitPlugin('Filter_Plugin_Member_Avatar', $this);
+            $plugin = TriggerPlugin('Filter_Plugin_Member_Avatar', array($this));
             if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
             if ($this->_avatar) {
                 return $this->_avatar;
@@ -158,7 +158,7 @@ class Member extends Base {
             $this->data['Template'] = '';
         }
 
-        $plugin = EmitPlugin('Filter_Plugin_Member_Save', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Member_Save', array($this));
     if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Save();
@@ -168,7 +168,7 @@ class Member extends Base {
      * @return bool
      */
     public function Del() {
-        $plugin = EmitPlugin('Filter_Plugin_Member_Del', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Member_Del', array($this));
     if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Del();

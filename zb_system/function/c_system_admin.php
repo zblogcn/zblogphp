@@ -193,7 +193,7 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
 function OutputOptionItemsOfCategories($default) {
     global $zbp;
 
-    $plugin = EmitPlugin('Filter_Plugin_OutputOptionItemsOfCategories', $default);
+    $plugin = TriggerPlugin('Filter_Plugin_OutputOptionItemsOfCategories', array($default));
     if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
     $s = null;

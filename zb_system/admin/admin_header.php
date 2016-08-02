@@ -14,5 +14,5 @@
 <script src="<?php echo $bloghost ?>zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
 <script>if (!window.bloghost && window.confirm("<?php echo $lang['msg']['error_load_js']; ?>")) window.open('<?php echo str_replace('{%message%}', '', str_replace('{%id%}', 89, $lang['offical_urls']['more_help']))?>');</script>
 <?php
-EmitPlugin('Filter_Plugin_Admin_Header');
+TriggerPlugin('Filter_Plugin_Admin_Header');
 ?>

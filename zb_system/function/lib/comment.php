@@ -31,7 +31,7 @@ class Comment extends Base {
      * @return mixed
      */
     public function __call($method, $args) {
-        $plugin = EmitPlugin('Filter_Plugin_Comment_Call', $this, $method, $args);
+        $plugin = TriggerPlugin('Filter_Plugin_Comment_Call', array($this, $method, $args));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
     }
 
@@ -130,7 +130,7 @@ class Comment extends Base {
      */
     public function Save() {
         global $zbp;
-        $plugin = EmitPlugin('Filter_Plugin_Comment_Save', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Comment_Save', array($this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Save();
@@ -140,7 +140,7 @@ class Comment extends Base {
      * @return bool
      */
     public function Del() {
-        $plugin = EmitPlugin('Filter_Plugin_Comment_Del', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Comment_Del', array($this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Del();

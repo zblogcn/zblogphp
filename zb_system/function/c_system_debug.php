@@ -413,7 +413,7 @@ class ZBlogException {
             ob_clean();
         }
 
-        $plugin = EmitPlugin('Filter_Plugin_Debug_Display', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Debug_Display', array($this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         require dirname(__FILE__) . '/../defend/error.php';

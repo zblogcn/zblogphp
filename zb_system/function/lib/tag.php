@@ -21,7 +21,7 @@ class Tag extends Base {
      * @return mixed
      */
     public function __call($method, $args) {
-        $plugin = EmitPlugin('Filter_Plugin_Tag_Call', $this, $method, $args);
+        $plugin = TriggerPlugin('Filter_Plugin_Tag_Call', array($this, $method, $args));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
     }
 
@@ -52,7 +52,7 @@ class Tag extends Base {
     public function __get($name) {
         global $zbp;
         if ($name == 'Url') {
-            $plugin = EmitPlugin('Filter_Plugin_Tag_Url', $this);
+            $plugin = TriggerPlugin('Filter_Plugin_Tag_Url', array($this));
             if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
             $backAttr = $zbp->option['ZC_ALIAS_BACK_ATTR'];
             $u = new UrlRule($zbp->option['ZC_TAGS_REGEX']);
@@ -82,7 +82,7 @@ class Tag extends Base {
             $this->data['Template'] = '';
         }
 
-        $plugin = EmitPlugin('Filter_Plugin_Tag_Save', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Tag_Save', array($this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Save();
@@ -92,7 +92,7 @@ class Tag extends Base {
      * @return bool
      */
     public function Del() {
-        $plugin = EmitPlugin('Filter_Plugin_Tag_Del', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Tag_Del', array($this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Del();

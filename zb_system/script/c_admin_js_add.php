@@ -270,7 +270,7 @@ var VerifyMessage = function () { zbp.comment.post.apply(null); return false;}
 
 
 <?php
-EmitPlugin('Filter_Plugin_Admin_Js_Add');
+TriggerPlugin('Filter_Plugin_Admin_Js_Add');
 
 $s = ob_get_clean();
 $m = md5($s);

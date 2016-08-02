@@ -68,7 +68,7 @@ ID;?>" />
 					<input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int) $zbp->CheckItemToNavbar('tag', $tag->ID)?>" class="checkbox" /></label>
 			</p>
 			<div id='response' class='editmod2'>
-				<?php EmitPlugin('Filter_Plugin_Tag_Edit_Response');?>
+				<?php TriggerPlugin('Filter_Plugin_Tag_Edit_Response');?>
 			</div>
 			<p>
 				<input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" /></p>

@@ -66,7 +66,7 @@ $(function () {
 });
 <?php
 }
-EmitPlugin('Filter_Plugin_Html_Js_Add');
+TriggerPlugin('Filter_Plugin_Html_Js_Add');
 
 $s = ob_get_clean();
 $m = md5($s);

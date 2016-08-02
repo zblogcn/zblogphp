@@ -70,7 +70,7 @@ class Template {
      * @return string
      */
     public function GetTemplate($name) {
-        $plugin = EmitPlugin('Filter_Plugin_Template_GetTemplate', $this, $name);
+        $plugin = TriggerPlugin('Filter_Plugin_Template_GetTemplate', array($this, $name));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return $this->path . $name . '.php';
@@ -201,7 +201,7 @@ class Template {
      */
     public function CompileFile($content) {
 
-        $plugin = EmitPlugin('Filter_Plugin_Template_Compiling_Begin', $this, $content);
+        $plugin = TriggerPlugin('Filter_Plugin_Template_Compiling_Begin', array($this, $content));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         // Step 1: 替换<?php块
@@ -229,7 +229,7 @@ class Template {
         // Step N: 恢复不编译的代码
         $this->parse_back_uncompile_code($content);
 
-        $plugin = EmitPlugin('Filter_Plugin_Template_Compiling_End', $this, $content);
+        $plugin = TriggerPlugin('Filter_Plugin_Template_Compiling_End', array($this, $content));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return $content;

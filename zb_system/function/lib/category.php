@@ -33,7 +33,7 @@ class Category extends Base {
      * @return mixed
      */
     public function __call($method, $args) {
-        $plugin = EmitPlugin('Filter_Plugin_Category_Call', $this, $method, $args);
+        $plugin = TriggerPlugin('Filter_Plugin_Category_Call', array($this, $method, $args));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
     }
 
@@ -83,7 +83,7 @@ class Category extends Base {
     public function __get($name) {
         global $zbp;
         if ($name == 'Url') {
-            $plugin = EmitPlugin('Filter_Plugin_Category_Url', $this);
+            $plugin = TriggerPlugin('Filter_Plugin_Category_Url', array($this));
             if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
             $backAttr = $zbp->option['ZC_ALIAS_BACK_ATTR'];
             $u = new UrlRule($zbp->option['ZC_CATEGORY_REGEX']);
@@ -148,7 +148,7 @@ class Category extends Base {
             $this->data['LogTemplate'] = '';
         }
 
-        $plugin = EmitPlugin('Filter_Plugin_Category_Save', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Category_Save', array($this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Save();
@@ -158,7 +158,7 @@ class Category extends Base {
      * @return bool
      */
     public function Del() {
-        $plugin = EmitPlugin('Filter_Plugin_Category_Del', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Category_Del', array($this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Del();

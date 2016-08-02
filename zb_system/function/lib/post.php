@@ -27,7 +27,7 @@ class Post extends Base {
      * @return mixed
      */
     public function __call($method, $args) {
-        $plugin = EmitPlugin('Filter_Plugin_Post_Call', $this, $method, $args);
+        $plugin = TriggerPlugin('Filter_Plugin_Post_Call', array($this, $method, $args));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
     }
 
@@ -134,7 +134,7 @@ class Post extends Base {
             return $zbp->lang['post_status_name'][$this->Status];
             break;
         case 'Url':
-            $plugin = EmitPlugin('Filter_Plugin_Post_Url', $this);
+            $plugin = TriggerPlugin('Filter_Plugin_Post_Url', array($this));
             if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
             $u = new UrlRule($zbp->GetPostType_UrlRule($this->Type));
@@ -183,7 +183,7 @@ class Post extends Base {
 
             return $value;
         case 'CommentPostUrl':
-            $plugin = EmitPlugin('Filter_Plugin_Post_CommentPostUrl', $this);
+            $plugin = TriggerPlugin('Filter_Plugin_Post_CommentPostUrl', array($this));
             if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
             $key = '&amp;key=' . $zbp->GetCmtKey($this->ID);
@@ -234,7 +234,7 @@ class Post extends Base {
             return $this->_next;
             break;
         case 'RelatedList':
-            $plugin = EmitPlugin('Filter_Plugin_Post_RelatedList', $this);
+            $plugin = TriggerPlugin('Filter_Plugin_Post_RelatedList', array($this));
             if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
             return GetList($zbp->option['ZC_RELATEDLIST_COUNT'], null, null, null, null, null, array('is_related' => $this->ID));
@@ -269,7 +269,7 @@ class Post extends Base {
             $this->data['Template'] = '';
         }
 
-        $plugin = EmitPlugin('Filter_Plugin_Post_Save', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Post_Save', array($this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Save();
@@ -279,7 +279,7 @@ class Post extends Base {
      * @return bool
      */
     public function Del() {
-        $plugin = EmitPlugin('Filter_Plugin_Post_Del', $this);
+        $plugin = TriggerPlugin('Filter_Plugin_Post_Del', array($this));
         if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Del();

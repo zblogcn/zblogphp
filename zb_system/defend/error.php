@@ -16,7 +16,7 @@ unset($post_data['password']);
     <title><?php echo $GLOBALS['blogname'] . '-' . $GLOBALS['lang']['msg']['error']; ?></title>
     <link rel="stylesheet" href="<?php echo $GLOBALS['bloghost']; ?>zb_system/css/admin.css" type="text/css" media="screen" />
     <script type="text/javascript" src="<?php echo $GLOBALS['bloghost']; ?>zb_system/script/common.js"></script>
-    <?php EmitPlugin('Filter_Plugin_Other_Header'); ?>
+    <?php TriggerPlugin('Filter_Plugin_Other_Header'); ?>
 
   </head>
   <body class="short">
