@@ -9,8 +9,7 @@
 ob_clean();
 
 $type = GetVars('type', 'GET');
-
-foreach ($GLOBALS['hooks']['Filter_Plugin_Misc_Begin'] as $fpname => &$fpsignal) {$fpname($type);}
+EmitPlugin('Filter_Plugin_Misc_Begin', $type);
 
 switch ($type) {
 case 'statistic':
@@ -161,7 +160,7 @@ function misc_viewrights() {
 	<script src="script/common.js" type="text/javascript"></script>
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
+EmitPlugin('Filter_Plugin_Other_Header');
     ?>
 	<title><?php echo $blogtitle; ?></title>
 </head>
@@ -217,7 +216,7 @@ function misc_phpinfo() {
 	<script src="script/common.js" type="text/javascript"></script>
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {$fpname();}
+EmitPlugin('Filter_Plugin_Other_Header');
     ?>
 	<title><?php echo $blogtitle; ?></title>
 	<style type="text/css">

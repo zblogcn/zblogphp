@@ -66,7 +66,7 @@ $(function () {
 });
 <?php
 }
-foreach ($GLOBALS['hooks']['Filter_Plugin_Html_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
+EmitPlugin('Filter_Plugin_Html_Js_Add');
 
 $s = ob_get_clean();
 $m = md5($s);
