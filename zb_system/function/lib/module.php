@@ -82,11 +82,8 @@ class Module extends Base {
      */
     public function Save() {
         global $zbp;
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Save'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Module_Save', $this);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
         if ($this->Source == 'theme') {
             if (!$this->FileName) {
                 return true;
@@ -104,17 +101,18 @@ class Module extends Base {
         }
         //return parent::Save();
         //防Module重复保存的机制
-        $m=$zbp->GetListType('Module',
+        $m = $zbp->GetListType('Module',
                     $zbp->db->sql->get()->select($zbp->table['Module'])
                     ->where(array('=', $zbp->datainfo['Module']['FileName'][0], $this->FileName))
                     ->sql
                 );
-        if(count($m)<1){
+        if(count($m) < 1){
             return parent::Save();
         }else{
-            if($this->ID==0){
+            if($this->ID == 0){
                 return false;
             }
+
             return parent::Save();
         }
     }
@@ -124,11 +122,9 @@ class Module extends Base {
      */
     public function Del() {
         global $zbp;
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Del'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Module_Del', $this);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
+
         if ($this->Source == 'theme') {
             if (!$this->FileName) {
                 return true;
@@ -147,21 +143,19 @@ class Module extends Base {
 
     public function Build() {
 
-        if ($this->NoRefresh == true) {
+        if ($this->NoRefresh) {
             return;
         }
 
-        if (isset(ModuleBuilder::$List[$this->FileName])) {
-            if(isset(ModuleBuilder::$List[$this->FileName]['function'])){
-                if(isset(ModuleBuilder::$List[$this->FileName]['parameters'])){
-                    $this->Content = call_user_func(ModuleBuilder::$List[$this->FileName]['function'], ModuleBuilder::$List[$this->FileName]['parameters']);
-                }else{
-                    $this->Content = call_user_func(ModuleBuilder::$List[$this->FileName]['function']);
-                }
-           
-            }
-
+        $module = ModuleBuilder::$List[$this->FileName];
+        if (!isset($module)) return;
+        if (!isset($module['function'])) return;
+        if (isset($module['parameters'])) {
+            $this->Content = call_user_func($module['function'], $module['parameters']);
+        } else {
+            $this->Content = call_user_func($module['function']);
         }
+
     }
 
 }

@@ -89,11 +89,8 @@ function GetPHPEngine() {
  * @return mixed
  */
 function AutoloadClass($classname) {
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
-        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($classname);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-    }
+    $plugin = EmitPlugin('Filter_Plugin_Autoload', $classname);
+    if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
     if (is_readable($f = ZBP_PATH . 'zb_system/function/lib/' . strtolower($classname) . '.php')) {
         require $f;
     }
@@ -107,28 +104,29 @@ function AutoloadClass($classname) {
  */
 function Logs($s, $iserror = false) {
     global $zbp;
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Logs'] as $fpname => &$fpsignal) {
-        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($s, $iserror);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-    }
+    $plugin = EmitPlugin('Filter_Plugin_Logs', $s, $iserror);
+    if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
+    $pathBuilder = array($zbp->usersdir . 'logs/');
+
+
     if ($zbp->guid) {
+        $pathBuilder[] = $zbp->guid;
         if ($iserror) {
-            $f = $zbp->usersdir . 'logs/' . $zbp->guid . '-error' . date("Ymd") . '.txt';
+            $pathBuilder[] = '-error' . date("Ymd");
         } else {
-            $f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
+            $pathBuilder[] = '-log' . date("Ymd");
         }
 
     } else {
+        $pathBuilder[] = md5($zbp->path);
         if ($iserror) {
-            $f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '-error.txt';
-        } else {
-            $f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '.txt';
+            $pathBuilder[] = '-error';
         }
-
     }
+    $pathBuilder[] = '.txt';
+    $path = implode($pathBuilder, '');
     ZBlogException::SuspendErrorHook();
-    if ($handle = @fopen($f, 'a+')) {
+    if ($handle = @fopen($path, 'a+')) {
         $t = date('Y-m-d') . ' ' . date('H:i:s') . ' ' . substr(microtime(), 1, 9) . ' ' . date('P');
         @fwrite($handle, '[' . $t . ']' . "\r\n" . $s . "\r\n");
         @fclose($handle);

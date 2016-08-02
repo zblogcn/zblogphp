@@ -7,6 +7,7 @@
  */
 class Member extends Base {
 
+    private $nonSetter = array('Url', 'Avatar', 'LevelName', 'EmailMD5', 'StaticName', 'PassWord_MD5Path', 'IsGod');
     /**
      * @var string 头像图片地址
      */
@@ -35,11 +36,8 @@ class Member extends Base {
      * @return mixed
      */
     public function __call($method, $args) {
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Call'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($this, $method, $args);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Member_Call', $this, $method, $args);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
     }
 
     /**
@@ -50,33 +48,15 @@ class Member extends Base {
      */
     public function __set($name, $value) {
         global $zbp;
-        if ($name == 'Url') {
+        if (in_array($name, $nonSetter)) {
             return null;
         }
-        if ($name == 'Avatar') {
-            return null;
-        }
-        if ($name == 'LevelName') {
-            return null;
-        }
-        if ($name == 'EmailMD5') {
-            return null;
-        }
-        if ($name == 'StaticName') {
-            return null;
-        }
-        if ($name == 'Template') {
+        elseif ($name == 'Template') {
             if ($value == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
                 $value = '';
             }
 
             return $this->data[$name] = $value;
-        }
-        if ($name == 'PassWord_MD5Path') {
-            return null;
-        }
-        if ($name == 'IsGod') {
-            return null;
         }
         parent::__set($name, $value);
     }
@@ -88,11 +68,8 @@ class Member extends Base {
     public function __get($name) {
         global $zbp;
         if ($name == 'Url') {
-            foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Url'] as $fpname => &$fpsignal) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-                $fpreturn = $fpname($this);
-                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-            }
+            $plugin = EmitPlugin('Filter_Plugin_Member_Url', $this);
+            if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
             $u = new UrlRule($zbp->option['ZC_AUTHOR_REGEX']);
             $u->Rules['{%id%}'] = $this->ID;
             $u->Rules['{%alias%}'] = $this->Alias == '' ? rawurlencode($this->Name) : $this->Alias;
@@ -100,10 +77,8 @@ class Member extends Base {
             return $u->Make();
         }
         if ($name == 'Avatar') {
-            foreach ($GLOBALS['hooks']['Filter_Plugin_Mebmer_Avatar'] as $fpname => &$fpsignal) {
-                $fpreturn = $fpname($this);
-                if ($fpreturn) {$fpsignal = PLUGIN_EXITSIGNAL_NONE; return $fpreturn;}
-            }
+            $plugin = EmitPlugin('Filter_Plugin_Member_Avatar', $this);
+            if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
             if ($this->_avatar) {
                 return $this->_avatar;
             }
@@ -183,11 +158,8 @@ class Member extends Base {
             $this->data['Template'] = '';
         }
 
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Save'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Member_Save', $this);
+    if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Save();
     }
@@ -196,11 +168,8 @@ class Member extends Base {
      * @return bool
      */
     public function Del() {
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Del'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Member_Del', $this);
+    if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Del();
     }

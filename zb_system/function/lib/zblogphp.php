@@ -323,11 +323,8 @@ class ZBlogPHP {
      * @return mixed
      */
     public function __call($method, $args) {
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Call'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($method, $args);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Zbp_Call', $method, $args);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
         trigger_error($this->lang['error'][81], E_USER_WARNING);
     }
 
@@ -338,11 +335,8 @@ class ZBlogPHP {
      * @return mixed
      */
     public function __set($name, $value) {
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Set'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($name, $value);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Zbp_Set', $name, $value);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
         trigger_error($this->lang['error'][81], E_USER_WARNING);
     }
 
@@ -352,11 +346,8 @@ class ZBlogPHP {
      * @return mixed
      */
     public function __get($name) {
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Get'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($name);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Zbp_Get', $name);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
         trigger_error($this->lang['error'][81], E_USER_WARNING);
     }
 
@@ -476,6 +467,7 @@ class ZBlogPHP {
             $fpreturn = $fpname();
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -972,17 +964,15 @@ class ZBlogPHP {
      * @param string $action 操作
      * @return bool
      */
-    public function CheckRights($action, $level=null) {
+    public function CheckRights($action, $level = null) {
 
         if($level === null){
             $level = $this->user->Level;
         }
 
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_CheckRights'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($action, $level);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Zbp_CheckRights', $action, $level);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
+
         if (!isset($this->actions[$action])) {
             if (is_numeric($action)) {
                 return ($level <= $action);
@@ -1256,6 +1246,7 @@ class ZBlogPHP {
                 $allthemes[] = $app;
             }
         }
+
         return $allthemes;
 
     }
@@ -1275,6 +1266,7 @@ class ZBlogPHP {
                 $allplugins[] = $app;
             }
         }
+
         return $allplugins;
 
     }
@@ -1316,6 +1308,7 @@ class ZBlogPHP {
     public function GetPreActivePlugin() {
         $ap = explode("|", $this->option['ZC_USING_PLUGIN_LIST']);
         $ap = array_unique($ap);
+
         return $ap;
     }
 
@@ -1869,12 +1862,13 @@ class ZBlogPHP {
         if ($object != null) {
             //$modules非ID为key
             if ($className == "Module") {
-                if($id>0){
+                if($id > 0){
                     foreach ($object as $key => $value) {
-                        if($value->ID==$id)return $value;
+                        if($value->ID == $id)return $value;
                     }
                 }
                 $m = new Module;
+
                 return $m;
             }
 
@@ -2587,13 +2581,8 @@ class ZBlogPHP {
         ZBlogException::$error_file = $file;
         ZBlogException::$error_line = $line;
 
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($errorCode, $errorText, $file, $line);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-                return $fpreturn;
-            }
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Zbp_ShowError', $errorCode, $errorText, $file, $line);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         throw new Exception($errorText);
     }

@@ -70,11 +70,8 @@ class Template {
      * @return string
      */
     public function GetTemplate($name) {
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Template_GetTemplate'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($this, $name);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Template_GetTemplate', $this, $name);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return $this->path . $name . '.php';
     }
@@ -204,11 +201,8 @@ class Template {
      */
     public function CompileFile($content) {
 
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Compiling_Begin'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($this, $content);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Template_Compiling_Begin', $this, $content);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         // Step 1: 替换<?php块
         $this->remove_php_blocks($content);
@@ -235,11 +229,8 @@ class Template {
         // Step N: 恢复不编译的代码
         $this->parse_back_uncompile_code($content);
 
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Compiling_End'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($this, $content);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Template_Compiling_End', $this, $content);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return $content;
     }
@@ -660,6 +651,7 @@ class Template {
     }
     public function ReplaceStaticTags($s) {
         $s = str_replace(array_keys($this->replaceTags), array_values($this->replaceTags), $s);
+
         return $s;
     }
 }

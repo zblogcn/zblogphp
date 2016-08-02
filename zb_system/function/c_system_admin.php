@@ -193,11 +193,8 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
 function OutputOptionItemsOfCategories($default) {
     global $zbp;
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCategories'] as $fpname => &$fpsignal) {
-        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($default);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-    }
+    $plugin = EmitPlugin('Filter_Plugin_OutputOptionItemsOfCategories', $default);
+    if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
     $s = null;
     foreach ($zbp->categoriesbyorder as $id => $cate) {
@@ -710,7 +707,7 @@ function Admin_CategoryMng() {
         echo '<td class="td10 tdCenter">';
         echo '<a href="../cmd.php?act=CategoryEdt&amp;id=' . $category->ID . '"><img src="../image/admin/folder_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>';
         echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-        if(count($category->SubCategories)==0){
+        if(count($category->SubCategories) == 0){
             echo '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=CategoryDel&amp;id=' . $category->ID . '&amp;token=' . $zbp->GetToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>';
         }
         echo '</td>';

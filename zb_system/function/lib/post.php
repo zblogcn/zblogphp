@@ -27,11 +27,8 @@ class Post extends Base {
      * @return mixed
      */
     public function __call($method, $args) {
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Call'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($this, $method, $args);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Post_Call', $this, $method, $args);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
     }
 
     /**
@@ -137,11 +134,9 @@ class Post extends Base {
             return $zbp->lang['post_status_name'][$this->Status];
             break;
         case 'Url':
-            foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Url'] as $fpname => &$fpsignal) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-                $fpreturn = $fpname($this);
-                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-            }
+            $plugin = EmitPlugin('Filter_Plugin_Post_Url', $this);
+            if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
+
             $u = new UrlRule($zbp->GetPostType_UrlRule($this->Type));
             $u->Rules['{%id%}'] = $this->ID;
             if ($this->Alias) {
@@ -188,13 +183,11 @@ class Post extends Base {
 
             return $value;
         case 'CommentPostUrl':
-            foreach ($GLOBALS['hooks']['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
-                $fpreturn = $fpname($this);
-                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;
-                    return $fpreturn;
-                }
-            }
+            $plugin = EmitPlugin('Filter_Plugin_Post_CommentPostUrl', $this);
+            if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
+
             $key = '&amp;key=' . $zbp->GetCmtKey($this->ID);
+
             return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
             break;
         case 'ValidCodeUrl':
@@ -241,12 +234,8 @@ class Post extends Base {
             return $this->_next;
             break;
         case 'RelatedList':
-            foreach ($GLOBALS['hooks']['Filter_Plugin_Post_RelatedList'] as $fpname => &$fpsignal) {
-                $fpreturn = $fpname($this);
-                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;
-                    return $fpreturn;
-                }
-            }
+            $plugin = EmitPlugin('Filter_Plugin_Post_RelatedList', $this);
+            if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
             return GetList($zbp->option['ZC_RELATEDLIST_COUNT'], null, null, null, null, null, array('is_related' => $this->ID));
         case 'TopType':
@@ -280,11 +269,8 @@ class Post extends Base {
             $this->data['Template'] = '';
         }
 
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Save'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Post_Save', $this);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Save();
     }
@@ -293,11 +279,8 @@ class Post extends Base {
      * @return bool
      */
     public function Del() {
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Del'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Post_Del', $this);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         return parent::Del();
     }

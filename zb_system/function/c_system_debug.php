@@ -85,36 +85,18 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline) {
     }
 
     if (ZBlogException::$iswarning == false) {
-        if ($errno == E_WARNING) {
+        if ($errno == E_WARNING || $errno == E_USER_WARNING) {
             return true;
         }
-
-        if ($errno == E_USER_WARNING) {
-            return true;
-        }
-
     }
     if (ZBlogException::$isstrict == false) {
-        if ($errno == E_STRICT) {
+        if ($errno == E_STRICT || $errno == E_NOTICE || $errno == E_USER_NOTICE) {
             return true;
         }
-
-        if ($errno == E_NOTICE) {
-            return true;
-        }
-
-        if ($errno == E_USER_NOTICE) {
-            return true;
-        }
-
     }
 
-    //屏蔽系统的错误，防ZBP报系统的错误，不过也有可能导致ZBP内的DEPRECATED错误也被屏蔽了
-    if ($errno == E_CORE_WARNING) {
-        return true;
-    }
-
-    if ($errno == E_COMPILE_WARNING) {
+    //屏蔽系统的错误，不过也有可能导致ZBP内的DEPRECATED错误也被屏蔽了
+    if ($errno == E_CORE_WARNING || $errno == E_COMPILE_WARNING) {
         return true;
     }
 
@@ -184,28 +166,14 @@ function Debug_Shutdown_Handler() {
         }
 
         if (ZBlogException::$iswarning == false) {
-            if ($error['type'] == E_WARNING) {
+            if ($errno == E_WARNING || $errno == E_USER_WARNING) {
                 return true;
             }
-
-            if ($error['type'] == E_USER_WARNING) {
-                return true;
-            }
-
         }
         if (ZBlogException::$isstrict == false) {
-            if ($error['type'] == E_NOTICE) {
+            if ($errno == E_STRICT || $errno == E_NOTICE || $errno == E_USER_NOTICE) {
                 return true;
             }
-
-            if ($error['type'] == E_STRICT) {
-                return true;
-            }
-
-            if ($error['type'] == E_USER_NOTICE) {
-                return true;
-            }
-
         }
 
         if ($error['type'] == E_CORE_WARNING) {
@@ -445,13 +413,8 @@ class ZBlogException {
             ob_clean();
         }
 
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-                return $fpreturn;
-            }
-        }
+        $plugin = EmitPlugin('Filter_Plugin_Debug_Display', $this);
+        if ($plugin['signal'] == PLUGIN_EXITSIGNAL_RETURN) return $plugin['return'];
 
         require dirname(__FILE__) . '/../defend/error.php';
         RunTime();
