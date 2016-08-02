@@ -1,5 +1,7 @@
 Z-BlogPHP
 =============
+**此分支暂废弃，因为E_WARNING : Parameter 1 to xxxxx() expected to be a reference, value given **
+
 
 Z-BlogPHP是由RainbowSoft Studio团队开发的博客程序，基于高效的PHP环境，体积小，速度快，支持比较大的数据量。
 
