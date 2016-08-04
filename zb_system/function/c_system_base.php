@@ -420,14 +420,13 @@ $GLOBALS['activeapps'] = &$GLOBALS['activedapps'];
  */
 $GLOBALS['option'] = require ZBP_PATH . 'zb_system/defend/option.php';
 $op_users = null;
-if (is_readable($file_base = $GLOBALS['usersdir'] . 'c_option.php')) {
+if (!ZBP_HOOKERROR && isset($_ENV['ZBP_USER_OPTION']) && is_readable($file_base = $_ENV['ZBP_USER_OPTION'])){
     $op_users = require $file_base;
-    if (is_array($op_users)) {
-        foreach ($op_users as $opk => $opv) {
-            $GLOBALS['option'][$opk] = $opv;
-        }
-
-    }
+    $GLOBALS['option'] = array_merge($GLOBALS['option'], $op_users);
+}
+elseif (is_readable($file_base = $GLOBALS['usersdir'] . 'c_option.php')) {
+    $op_users = require $file_base;
+    $GLOBALS['option'] = array_merge($GLOBALS['option'], $op_users);
 }
 
 $GLOBALS['blogtitle'] = $GLOBALS['option']['ZC_BLOG_SUBNAME']; // 不是漏写！
