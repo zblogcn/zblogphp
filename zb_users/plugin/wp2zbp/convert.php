@@ -4,11 +4,11 @@ require '../../../zb_system/function/c_system_admin.php';
 require 'function.php';
 
 $zbp->Load();
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('wp2zbp')) {$zbp->ShowError(48);die();}
 
-$blogtitle='WordPress数据转移插件';
+$blogtitle = 'WordPress数据转移插件';
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 

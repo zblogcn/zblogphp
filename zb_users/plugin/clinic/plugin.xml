@@ -3,7 +3,7 @@
 <id>clinic</id>
 <name>Z-BlogPHP诊断工具</name>
 <url>http://www.zsxsoft.com</url>
-<note></note>
+<note>Z-BlogPHP诊断工具</note>
 <description></description>
 <path>main.php</path>
 <include>include.php</include>
@@ -18,10 +18,10 @@
   <email></email>
   <url></url>
 </source>
-<adapted>150101</adapted>
-<version>1.0</version>
+<adapted>140614</adapted>
+<version>1.1</version>
 <pubdate>2014-08-15</pubdate>
-<modified>2015-02-17</modified>
+<modified>2015-10-05</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

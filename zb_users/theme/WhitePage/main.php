@@ -3,19 +3,19 @@ require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('WhitePage')) {$zbp->ShowError(48);die();}
-$blogtitle='WhitePage主题配置';
+$blogtitle = 'WhitePage主题配置';
 
-if(count($_POST)>0){
+if(count($_POST) > 0){
 
 
-	if(GetVars('pagetype','POST'))$zbp->Config('WhitePage')->custom_pagetype=GetVars('pagetype','POST');
-	if(GetVars('pagewidth','POST'))$zbp->Config('WhitePage')->custom_pagewidth=GetVars('pagewidth','POST');
-	if(GetVars('headtitle','POST'))$zbp->Config('WhitePage')->custom_headtitle=GetVars('headtitle','POST');
-	if(GetVars('bgcolor','POST'))$zbp->Config('WhitePage')->custom_bgcolor=GetVars('bgcolor','POST');
-	if(GetVars('text_indent','POST')!==false)$zbp->Config('WhitePage')->text_indent=GetVars('text_indent','POST');	
+	if(GetVars('pagetype', 'POST'))$zbp->Config('WhitePage')->custom_pagetype = GetVars('pagetype', 'POST');
+	if(GetVars('pagewidth', 'POST'))$zbp->Config('WhitePage')->custom_pagewidth = GetVars('pagewidth', 'POST');
+	if(GetVars('headtitle', 'POST'))$zbp->Config('WhitePage')->custom_headtitle = GetVars('headtitle', 'POST');
+	if(GetVars('bgcolor', 'POST'))$zbp->Config('WhitePage')->custom_bgcolor = GetVars('bgcolor', 'POST');
+	if(GetVars('text_indent', 'POST') !== false)$zbp->Config('WhitePage')->text_indent = GetVars('text_indent', 'POST');
 	$zbp->SaveConfig('WhitePage');
 
 	$zbp->SetHint('good');
@@ -25,7 +25,7 @@ if(count($_POST)>0){
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 
-$percolors=array("ffffff","ffa07a","8fbc8b","a9a9a9","6699ff","ee82ee","9370db","ff7f50","deb887","ffe4c4","7fffd4","ffc0cb","bdb76b","d3d3d3","eee8aa","98fb98","ffb6c1","eeeeee","add8e6","e9967a");
+$percolors = array("ffffff", "ffa07a", "8fbc8b", "a9a9a9", "6699ff", "ee82ee", "9370db", "ff7f50", "deb887", "ffe4c4", "7fffd4", "ffc0cb", "bdb76b", "d3d3d3", "eee8aa", "98fb98", "ffb6c1", "eeeeee", "add8e6", "e9967a");
 ?>
 
 <link href="source/colpick.css" rel="stylesheet" /> 
@@ -71,40 +71,40 @@ border: 1px solid #aaa; width: 86px;height: 27px;
 				<tr>
 					<td scope="col"  height="52">页面类型</td>					
 					<td >
-						<label><input type="radio" id="pt1" name="pagetype" value="1" <?php echo($zbp->Config('WhitePage')->custom_pagetype==1)?'checked="checked"':'';?>/>默认：图片阴影型(直角)</label>
+						<label><input type="radio" id="pt1" name="pagetype" value="1" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 1) ? 'checked="checked"' : '';?>/>默认：图片阴影型(直角)</label>
 						&nbsp;&nbsp;
-						<label><input type="radio" id="pt2" name="pagetype" value="2" <?php echo($zbp->Config('WhitePage')->custom_pagetype==2)?'checked="checked"':'';?>/>CSS3阴影(直角)</label>
+						<label><input type="radio" id="pt2" name="pagetype" value="2" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 2) ? 'checked="checked"' : '';?>/>CSS3阴影(直角)</label>
 						&nbsp;&nbsp;
-						<label><input type="radio" id="pt3" name="pagetype" value="3" <?php echo($zbp->Config('WhitePage')->custom_pagetype==3)?'checked="checked"':'';?>/>CSS3阴影(圆角)</label>
+						<label><input type="radio" id="pt3" name="pagetype" value="3" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 3) ? 'checked="checked"' : '';?>/>CSS3阴影(圆角)</label>
 						&nbsp;&nbsp;
-						<label><input type="radio" id="pt4" name="pagetype" value="4" <?php echo($zbp->Config('WhitePage')->custom_pagetype==4)?'checked="checked"':'';?>/>平面无阴影(直角)</label>
+						<label><input type="radio" id="pt4" name="pagetype" value="4" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 4) ? 'checked="checked"' : '';?>/>平面无阴影(直角)</label>
 						&nbsp;&nbsp;
-						<label><input type="radio" id="pt5" name="pagetype" value="5" <?php echo($zbp->Config('WhitePage')->custom_pagetype==5)?'checked="checked"':'';?>/>平面(CSS3圆角)</label>
+						<label><input type="radio" id="pt5" name="pagetype" value="5" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 5) ? 'checked="checked"' : '';?>/>平面(CSS3圆角)</label>
 						&nbsp;&nbsp;
 					</td>
 				</tr>
 				<tr>
 					<td scope="col"  height="52">页面宽度</td>					
 					<td >
-						<label><input type="radio" id="pw1" name="pagewidth" value="1200" <?php echo($zbp->Config('WhitePage')->custom_pagewidth==1200)?'checked="checked"':'';?>/>1200px</label>
+						<label><input type="radio" id="pw1" name="pagewidth" value="1200" <?php echo($zbp->Config('WhitePage')->custom_pagewidth == 1200) ? 'checked="checked"' : '';?>/>1200px</label>
 						&nbsp;&nbsp;
-						<label><input type="radio" id="pw2" name="pagewidth" value="1000" <?php echo($zbp->Config('WhitePage')->custom_pagewidth==1000)?'checked="checked"':'';?>/>1000px</label>
+						<label><input type="radio" id="pw2" name="pagewidth" value="1000" <?php echo($zbp->Config('WhitePage')->custom_pagewidth == 1000) ? 'checked="checked"' : '';?>/>1000px</label>
 					</td>
 				</tr>
 				<tr>
 					<td scope="col"  height="52">标题对齐</td>					
 					<td >
-						<label><input type="radio" id="ht1" name="headtitle" value="left" <?php echo($zbp->Config('WhitePage')->custom_headtitle=='left')?'checked="checked"':'';?>/>标题居左</label>
+						<label><input type="radio" id="ht1" name="headtitle" value="left" <?php echo($zbp->Config('WhitePage')->custom_headtitle == 'left') ? 'checked="checked"' : '';?>/>标题居左</label>
 						&nbsp;&nbsp;
-						<label><input type="radio" id="ht2" name="headtitle" value="center" <?php echo($zbp->Config('WhitePage')->custom_headtitle=='center')?'checked="checked"':'';?>/>标题居中</label>
+						<label><input type="radio" id="ht2" name="headtitle" value="center" <?php echo($zbp->Config('WhitePage')->custom_headtitle == 'center') ? 'checked="checked"' : '';?>/>标题居中</label>
 					</td>
 				</tr>
 				<tr>
 					<td scope="col"  height="52">正文缩进</td>					
 					<td >
-						<label><input type="radio" id="text_indent1" name="text_indent" value="0" <?php echo($zbp->Config('WhitePage')->text_indent==0)?'checked="checked"':'';?>/>无</label>
+						<label><input type="radio" id="text_indent1" name="text_indent" value="0" <?php echo($zbp->Config('WhitePage')->text_indent == 0) ? 'checked="checked"' : '';?>/>无</label>
 						&nbsp;&nbsp;
-						<label><input type="radio" id="text_indent2" name="text_indent" value="2" <?php echo($zbp->Config('WhitePage')->text_indent==2)?'checked="checked"':'';?>/>标准</label>
+						<label><input type="radio" id="text_indent2" name="text_indent" value="2" <?php echo($zbp->Config('WhitePage')->text_indent == 2) ? 'checked="checked"' : '';?>/>标准</label>
 					</td>
 				</tr>
 			</table>

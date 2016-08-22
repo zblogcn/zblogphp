@@ -11,9 +11,9 @@ ob_clean();
 
 ?>
 var zbp = new ZBP({
-	bloghost: "<?php echo $zbp->host;?>",
-	ajaxurl: "<?php echo $zbp->ajaxurl;?>",
-	cookiepath: "<?php echo $zbp->cookiespath;?>"
+	bloghost: "<?php echo $zbp->host; ?>",
+	ajaxurl: "<?php echo $zbp->ajaxurl; ?>",
+	cookiepath: "<?php echo $zbp->cookiespath; ?>"
 });
 
 var bloghost = zbp.options.bloghost;
@@ -107,14 +107,8 @@ function ActiveTopMenu(name){
 // 返回：    无
 //*********************************************************
 function bmx2table(){
-	var class_=new Array("color2","color3","color4");
-	var j=$("table[class!='nobmx'] tr:has(th)").addClass("color1");
-    $("table[class!='nobmx']").each(function(){
- 		if(j.length==0){class_[1]="color2";class_[0]="color3";}
-		$(this).find("tr:not(:has(th)):even").removeClass(class_[0]).addClass(class_[1]);
-		$(this).find("tr:not(:has(th)):odd").removeClass(class_[1]).addClass(class_[0]);
-	})
-	$("table[class!='nobmx']").find("tr:not(:has(th))").mouseover(function(){$(this).addClass(class_[2])}).mouseout(function(){$(this).removeClass(class_[2])});
+	$("table:not(.table_striped)").addClass("table_striped");
+	$("table:not(.table_hover)").addClass("table_hover");
 };
 //*********************************************************
 
@@ -152,7 +146,7 @@ function ChangeCheckValue(obj){
 function notify(s){
 	if (window.webkitNotifications) {
 		if (window.webkitNotifications.checkPermission() == 0) {
-			var zb_notifications = window.webkitNotifications.createNotification('<?php echo $bloghost;?>zb_system/image/admin/logo-16.png', '<?php echo $lang['msg']['notify'];?>', s);
+			var zb_notifications = window.webkitNotifications.createNotification('<?php echo $bloghost; ?>zb_system/image/admin/logo-16.png', '<?php echo $lang['msg']['notify']; ?>', s);
 			zb_notifications.show();
 			zb_notifications.onclick = function() {top.focus(),this.cancel();}
 			zb_notifications.replaceId = 'Meteoric';
@@ -169,11 +163,11 @@ function notify(s){
 function statistic(s){
 	$("#statloading").show();
 	$("#updatatime").hide();
-	$.get("<?php echo $bloghost;?>zb_system/cmd.php"+s,{},
+	$.get("<?php echo $bloghost; ?>zb_system/cmd.php"+s,{},
 		function(data){
 			$("#tbStatistic tr:first ~ tr").remove();
 			$("#tbStatistic tr:first").after(data);
-			bmx2table();
+			//bmx2table();
 			$("#statloading").hide();
 			$("#updatatime").show();
 		}
@@ -182,7 +176,7 @@ function statistic(s){
 
 function updateinfo(s){
 	$("#infoloading").show();
-	$.get("<?php echo $bloghost;?>zb_system/cmd.php"+s,{},
+	$.get("<?php echo $bloghost; ?>zb_system/cmd.php"+s,{},
 		function(data){
 			$("#tbUpdateInfo tr:first ~ tr").remove();
 			$("#tbUpdateInfo tr:first").after(data);
@@ -224,7 +218,7 @@ $(document).ready(function(){
 		}
 	);
 
-	//斑马线化表格
+	//斑马线化表格（老版本兼容代码）
 	bmx2table();
 
 	if($('.SubMenu').find('span').length>0){
@@ -240,7 +234,7 @@ $(document).ready(function(){
 	$('span.imgcheck').click(function(){ChangeCheckValue(this)})
 
 	//batch
-	$("#batch a").bind("click", function(){ BatchContinue();$("#batch p").html("<?php echo $lang['msg']['batch_operation_in_progress'];?>");});
+	$("#batch a").bind("click", function(){ BatchContinue();$("#batch p").html("<?php echo $lang['msg']['batch_operation_in_progress']; ?>");});
 
 	$(".SubMenu span.m-right").parent().css({"float":"right"});
 
@@ -248,7 +242,7 @@ $(document).ready(function(){
 
 	$("input[type='file']").click(function(){
 		if(/(MSIE (10|9).+?WPDesktop)|(IEMobile\/(10|9))/g.test(navigator.userAgent)&&$(this).val()==""){
-			alert('<?php echo $lang['error'][65]?>')
+			alert('<?php echo $lang['error'][65] ?>')
 		}
 	})
 
@@ -284,9 +278,9 @@ $m = md5($s);
 header('Content-Type: application/x-javascript; charset=utf-8');
 header('Etag: ' . $m);
 
-if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
-	SetHttpStatusCode(304);
-	die;
+if ($zbp->option['ZC_JS_304_ENABLE'] && isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
+    SetHttpStatusCode(304);
+    die;
 }
 
 $zbp->CheckGzip();

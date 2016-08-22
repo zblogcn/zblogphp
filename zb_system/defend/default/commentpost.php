@@ -1,3 +1,4 @@
+{* Template Name:评论发布框 *}
 <div class="post" id="divCommentPost">
 	<p class="posttop"><a name="comment">{if $user.ID>0}{$user.StaticName}{/if}发表评论:</a><a rel="nofollow" id="cancel-reply" href="#divCommentPost" style="display:none;"><small>取消回复</small></a></p>
 	<form id="frmSumbit" target="_self" method="post" action="{$article.CommentPostUrl}" >
@@ -20,7 +21,7 @@
 {/if}
 	<p><label for="txaArticle">正文(*)</label></p>
 	<p><textarea name="txaArticle" id="txaArticle" class="text" cols="50" rows="4" tabindex="5" ></textarea></p>
-	<p><input name="sumbit" type="submit" tabindex="6" value="提交" onclick="return VerifyMessage()" class="button" /></p>
+	<p><input name="sumbit" type="submit" tabindex="6" value="提交" onclick="return zbp.comment.post()" class="button" /></p>
 	</form>
 	<p class="postbottom">◎欢迎参与讨论，请在这里发表您的看法、交流您的观点。</p>
 </div>

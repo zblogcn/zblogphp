@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS %pre%post (
   log_Template varchar(50) NOT NULL DEFAULT '',
   log_Meta longtext NOT NULL,
   PRIMARY KEY (log_ID),
-  KEY %pre%log_TPISC (log_Type,log_PostTime,log_IsTop,log_Status,log_CateID)
+  KEY %pre%log_TPISC (log_Type,log_PostTime,log_IsTop,log_Status,log_CateID),
+  KEY %pre%log_VTSC (log_ViewNums,log_Type,log_Status,log_CateID)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
@@ -66,22 +67,6 @@ CREATE TABLE IF NOT EXISTS %pre%config (
   PRIMARY KEY (conf_ID),
   KEY %pre%conf_Name (conf_Name)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE IF NOT EXISTS %pre%counter (
-  coun_ID int(11) NOT NULL AUTO_INCREMENT,
-  coun_MemID int(11) NOT NULL DEFAULT '0',
-  coun_IP varchar(15) NOT NULL DEFAULT '',
-  coun_Agent text NOT NULL,
-  coun_Refer varchar(255) NOT NULL DEFAULT '',
-  coun_Title varchar(255) NOT NULL DEFAULT '',
-  coun_PostTime int(11) NOT NULL DEFAULT '0',
-  coun_Description text NOT NULL,
-  coun_PostData text NOT NULL,
-  coun_AllRequestHeader text NOT NULL,
-  PRIMARY KEY (coun_ID)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
 
 CREATE TABLE IF NOT EXISTS %pre%member (
   mem_ID int(11) NOT NULL AUTO_INCREMENT,

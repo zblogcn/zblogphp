@@ -5,12 +5,12 @@ require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
 
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 if (!$zbp->CheckPlugin('PDC')) {$zbp->ShowError(48);die();}
 
-$blogtitle='PHP数据中心';
+$blogtitle = 'PHP数据中心';
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';

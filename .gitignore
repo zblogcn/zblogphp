@@ -25,15 +25,13 @@
 
 # Unoffical Plugin
 /zb_users/plugin/*
+!/zb_users/plugin/api
 !/zb_users/plugin/AdminColor
-!/zb_users/plugin/AppCentre
 !/zb_users/plugin/AuditRecords
 !/zb_users/plugin/AutoPublisher
 !/zb_users/plugin/CloudStorage
 !/zb_users/plugin/CustomMeta
-!/zb_users/plugin/FileSystem
 !/zb_users/plugin/Gravatar
-!/zb_users/plugin/HeartComment
 !/zb_users/plugin/HeartVote
 !/zb_users/plugin/Howl
 !/zb_users/plugin/KindEditor
@@ -50,11 +48,7 @@
 !/zb_users/plugin/alipay
 !/zb_users/plugin/changyan
 !/zb_users/plugin/clinic
-!/zb_users/plugin/duoshuo
-!/zb_users/plugin/editor4comment
-!/zb_users/plugin/em2zbp
 !/zb_users/plugin/passwordvisit
-!/zb_users/plugin/qiniuyun
 !/zb_users/plugin/static
 !/zb_users/plugin/tpluginmaker
 !/zb_users/plugin/wearingtheme
@@ -62,6 +56,8 @@
 !/zb_users/plugin/LargeData
 !/zb_users/plugin/ZBPJFExample
 !/zb_users/plugin/markdown
+!/zb_users/plugin/forcehttps
+!/zb_users/plugin/linkmanage
 
 # Unoffical Theme
 /zb_users/theme/*
@@ -89,3 +85,4 @@ phpinfo.php
 wincache.php
 /Beta/
 /vendor/
+/.idea/

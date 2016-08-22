@@ -14,62 +14,62 @@ $blogtitle = 'SitemapXML生成器';
 
 if (count($_POST) > 0) {
 
-	$xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><urlset />');
-	$xml->addAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
-	$url = $xml->addChild('url');
-	$url->addChild('loc', $zbp->host);
+    $xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><urlset />');
+    $xml->addAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+    $url = $xml->addChild('url');
+    $url->addChild('loc', $zbp->host);
 
-	if (GetVars('category')) {
-		foreach ($zbp->categorys as $c) {
-			$url = $xml->addChild('url');
-			$url->addChild('loc', $c->Url);
-		}
-	}
+    if (GetVars('category')) {
+        foreach ($zbp->categorys as $c) {
+            $url = $xml->addChild('url');
+            $url->addChild('loc', $c->Url);
+        }
+    }
 
-	if (GetVars('article')) {
-		$array = $zbp->GetArticleList(
-			null,
-			array(array('=', 'log_Status', 0)),
-			null,
-			null,
-			null,
-			false
-		);
+    if (GetVars('article')) {
+        $array = $zbp->GetArticleList(
+            null,
+            array(array('=', 'log_Status', 0)),
+            null,
+            null,
+            null,
+            false
+        );
 
-		foreach ($array as $key => $value) {
-			$url = $xml->addChild('url');
-			$url->addChild('loc', $value->Url);
-		}
-	}
+        foreach ($array as $key => $value) {
+            $url = $xml->addChild('url');
+            $url->addChild('loc', $value->Url);
+        }
+    }
 
-	if (GetVars('page')) {
-		$array = $zbp->GetPageList(
-			null,
-			array(array('=', 'log_Status', 0)),
-			null,
-			null,
-			null
-		);
+    if (GetVars('page')) {
+        $array = $zbp->GetPageList(
+            null,
+            array(array('=', 'log_Status', 0)),
+            null,
+            null,
+            null
+        );
 
-		foreach ($array as $key => $value) {
-			$url = $xml->addChild('url');
-			$url->addChild('loc', $value->Url);
-		}
-	}
+        foreach ($array as $key => $value) {
+            $url = $xml->addChild('url');
+            $url->addChild('loc', $value->Url);
+        }
+    }
 
-	if (GetVars('tag')) {
-		$array = $zbp->GetTagList();
+    if (GetVars('tag')) {
+        $array = $zbp->GetTagList();
 
-		foreach ($array as $key => $value) {
-			$url = $xml->addChild('url');
-			$url->addChild('loc', $value->Url);
-		}
-	}
+        foreach ($array as $key => $value) {
+            $url = $xml->addChild('url');
+            $url->addChild('loc', $value->Url);
+        }
+    }
 
-	file_put_contents($zbp->path . 'sitemap.xml', $xml->asXML());
+    file_put_contents($zbp->path . 'sitemap.xml', $xml->asXML());
 
-	$zbp->SetHint('good');
-	Redirect($_SERVER["HTTP_REFERER"]);
+    $zbp->SetHint('good');
+    Redirect($_SERVER["HTTP_REFERER"]);
 }
 
 require $blogpath . 'zb_system/admin/admin_header.php';

@@ -21,7 +21,8 @@ CREATE TABLE %pre%post (
 ) ;
 CREATE INDEX %pre%post_ix_id ON %pre%post(log_ID);
 CREATE INDEX %pre%post_ix_pt ON %pre%post(log_PostTime);
-CREATE INDEX %pre%post_ix_tisc ON %pre%post(log_Type,log_IsTop,log_Status,log_CateID);
+CREATE INDEX %pre%post_ix_tpisc ON %pre%post(log_Type,log_PostTime,log_IsTop,log_Status,log_CateID);
+CREATE INDEX %pre%post_ix_vtsc ON %pre%post(log_ViewNums,log_Type,log_Status,log_CateID);
 
 CREATE SEQUENCE %pre%category_seq;
 CREATE TABLE %pre%category (
@@ -68,22 +69,6 @@ CREATE TABLE %pre%config (
   PRIMARY KEY (conf_ID)
 ) ;
 CREATE INDEX %pre%config_ix_id ON %pre%config(conf_ID);
-
-CREATE SEQUENCE %pre%counter_seq;
-CREATE TABLE %pre%counter (
- coun_ID INT NOT NULL DEFAULT nextval('%pre%counter_seq'),
- coun_MemID integer NOT NULL DEFAULT '0',
- coun_IP varchar(15) NOT NULL DEFAULT '',
- coun_Agent text NOT NULL,
- coun_Refer varchar(255) NOT NULL DEFAULT '',
- coun_Title varchar(255) NOT NULL DEFAULT '',
- coun_PostTime integer NOT NULL DEFAULT '0',
- coun_Description text NOT NULL,
- coun_PostData text NOT NULL,
- coun_AllRequestHeader text NOT NULL,
-  PRIMARY KEY (coun_ID)
-) ;
-CREATE INDEX %pre%counter_ix_id ON %pre%counter(coun_ID);
 
 CREATE SEQUENCE %pre%member_seq;
 CREATE TABLE %pre%member (

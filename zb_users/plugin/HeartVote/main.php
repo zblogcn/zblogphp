@@ -5,13 +5,12 @@ require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
 
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 
 if (!$zbp->CheckPlugin('HeartVote')) {$zbp->ShowError(48);die();}
 
-$blogtitle="用“心”打分";
-
+$blogtitle = "用“心”打分";
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';

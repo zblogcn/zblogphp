@@ -3,7 +3,9 @@ require './function/c_system_base.php';
 
 $zbp->CheckGzip();
 $zbp->Load();
-
+if ($zbp->CheckRights('admin')) {
+    Redirect('cmd.php?act=admin');
+}
 ?><!DOCTYPE HTML>
 <html>
 <head>
@@ -12,15 +14,15 @@ $zbp->Load();
 	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 <?php }?>
 	<meta name="robots" content="none" />
-	<meta name="generator" content="<?php echo $option['ZC_BLOG_PRODUCT_FULL']?>" />
+	<meta name="generator" content="<?php echo $option['ZC_BLOG_PRODUCT_FULL'] ?>" />
 	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
 	<script src="script/common.js" type="text/javascript"></script>
 	<script src="script/md5.js" type="text/javascript"></script>
 	<script src="script/c_admin_js_add.php" type="text/javascript"></script>
-	<title><?php echo $blogname . '-' . $lang['msg']['login']?></title>
+	<title><?php echo $blogname . '-' . $lang['msg']['login'] ?></title>
 <?php
 foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {
-	$fpname();
+    $fpname();
 }
 
 ?>
@@ -28,18 +30,18 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Header'] as $fpname => &$fpsigna
 <body>
 <div class="bg">
 <div id="wrapper">
-  <div class="logo"><img src="image/admin/none.gif" title="<?php echo htmlspecialchars($blogname)?>" alt="<?php echo htmlspecialchars($blogname)?>"/></div>
+  <div class="logo"><img src="image/admin/none.gif" title="<?php echo htmlspecialchars($blogname) ?>" alt="<?php echo htmlspecialchars($blogname) ?>"/></div>
   <div class="login">
     <form method="post" action="#">
     <dl>
       <dt></dt>
-      <dd class="username"><label for="edtUserName"><?php echo $lang['msg']['username']?></label><input type="text" id="edtUserName" name="edtUserName" size="20" value="<?php echo GetVars('username', 'COOKIE')?>" tabindex="1" /></dd>
-      <dd class="password"><label for="edtPassWord"><?php echo $lang['msg']['password']?></label><input type="password" id="edtPassWord" name="edtPassWord" size="20" tabindex="2" /></dd>
+      <dd class="username"><label for="edtUserName"><?php echo $lang['msg']['username'] ?></label><input type="text" id="edtUserName" name="edtUserName" size="20" value="<?php echo GetVars('username', 'COOKIE') ?>" tabindex="1" /></dd>
+      <dd class="password"><label for="edtPassWord"><?php echo $lang['msg']['password'] ?></label><input type="password" id="edtPassWord" name="edtPassWord" size="20" tabindex="2" /></dd>
     </dl>
     <dl>
       <dt></dt>
-      <dd class="checkbox"><input type="checkbox" name="chkRemember" id="chkRemember"  tabindex="3" /><label for="chkRemember"><?php echo $lang['msg']['stay_signed_in']?></label></dd>
-      <dd class="submit"><input id="btnPost" name="btnPost" type="submit" value="<?php echo $lang['msg']['login']?>" class="button" tabindex="4"/></dd>
+      <dd class="checkbox"><input type="checkbox" name="chkRemember" id="chkRemember"  tabindex="3" /><label for="chkRemember"><?php echo $lang['msg']['stay_signed_in'] ?></label></dd>
+      <dd class="submit"><input id="btnPost" name="btnPost" type="submit" value="<?php echo $lang['msg']['login'] ?>" class="button" tabindex="4"/></dd>
     </dl>
 	<input type="hidden" name="username" id="username" value="" />
 	<input type="hidden" name="password" id="password" value="" />
@@ -57,7 +59,7 @@ $("#btnPost").click(function(){
 	var strSaveDate=$("#savedate").val()
 
 	if((strUserName=="")||(strPassWord=="")){
-		alert("<?php echo $lang['error']['66']?>");
+		alert("<?php echo $lang['error']['66'] ?>");
 		return false;
 	}
 
@@ -78,7 +80,7 @@ $("#chkRemember").click(function(){
 if (!$.support.leadingWhitespace) {
 	$("#dishtml5").val(1);<?php
 if ($option['ZC_ADMIN_HTML5_ENABLE']) {
-	echo 'alert("' . $lang['error']['74'] . '");';
+    echo 'alert("' . $lang['error']['74'] . '");';
 }
 
 ?>

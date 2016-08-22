@@ -59,20 +59,6 @@ CREATE TABLE %pre%config (
 );
 
 
-CREATE TABLE %pre%counter (
-  coun_ID integer primary key autoincrement,
-  coun_MemID integer NOT NULL DEFAULT 0,
-  coun_IP varchar(15) NOT NULL DEFAULT '',
-  coun_Agent text NOT NULL DEFAULT '',
-  coun_Refer varchar(255) NOT NULL DEFAULT '',
-  coun_Title varchar(255) NOT NULL DEFAULT '',
-  coun_PostTime integer NOT NULL DEFAULT 0,
-  coun_Description text NOT NULL DEFAULT '',
-  coun_PostData text NOT NULL DEFAULT '',
-  coun_AllRequestHeader text
-);
-
-
 CREATE TABLE %pre%member (
   mem_ID integer primary key autoincrement,
   mem_Guid varchar(36) NOT NULL DEFAULT '',

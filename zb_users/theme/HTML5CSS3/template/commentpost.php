@@ -42,7 +42,7 @@
       <textarea name="txaArticle" id="txaArticle" class="txt" cols="50" rows="4" tabindex="1" required></textarea>
     </p>
     <p>
-      <button name="btnSumbit" type="submit" tabindex="6" onclick="return VerifyMessage()">提交</button>
+      <button name="btnSumbit" type="submit" tabindex="6" onclick="return zbp.comment.post()">提交</button>
     </p>
   </form>
   </dd>

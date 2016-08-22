@@ -1,23 +1,25 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-2013 kindsoft.net
+* Copyright (C) 2006-2016 kindsoft.net
 *
 * @author Roddy <luolonghao@gmail.com>
 * @website http://www.kindsoft.net/
 * @licence http://www.kindsoft.net/license.php
-* @version 4.1.10 (2013-11-23)
+* @version 4.1.11 (2016-03-31)
 *******************************************************************************/
 (function (window, undefined) {
 	if (window.KindEditor) {
 		return;
 	}
+
+
 if (!window.console) {
 	window.console = {};
 }
 if (!console.log) {
 	console.log = function () {};
 }
-var _VERSION = '4.1.10 (2013-11-23)',
+var _VERSION = '4.1.11 (2016-03-31)',
 	_ua = navigator.userAgent.toLowerCase(),
 	_IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
 	_NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
@@ -77,7 +79,7 @@ function _inString(val, str, delimiter) {
 }
 function _addUnit(val, unit) {
 	unit = unit || 'px';
-	return val && /^\d+$/.test(val) ? val + unit : val;
+	return val && /^-?\d+(?:\.\d+)?$/.test(val) ? val + unit : val;
 }
 function _removeUnit(val) {
 	var match;
@@ -154,6 +156,8 @@ function _extend(child, parent, proto) {
 	child.prototype = childProto;
 	child.parent = parent ? parent.prototype : null;
 }
+
+
 function _json(text) {
 	var match;
 	if ((match = /\{[\s\S]*\}|\[[\s\S]*\]/.exec(text))) {
@@ -214,6 +218,8 @@ var _INLINE_TAG_MAP = _toMap('a,abbr,acronym,b,basefont,bdo,big,br,button,cite,c
 	_AUTOCLOSE_TAG_MAP = _toMap('colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr'),
 	_FILL_ATTR_MAP = _toMap('checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected'),
 	_VALUE_TAG_MAP = _toMap('input,button,textarea,select');
+
+
 function _getBasePath() {
 	var els = document.getElementsByTagName('script'), src;
 	for (var i = 0, len = els.length; i < len; i++) {
@@ -237,7 +243,7 @@ K.options = {
 	langPath : K.basePath + 'lang/',
 	pluginsPath : K.basePath + 'plugins/',
 	themeType : 'default',
-	langType : 'zh_cn',
+	langType : 'zh-CN',
 	urlType : '',
 	newlineTag : 'p',
 	resizeType : 2,
@@ -295,7 +301,7 @@ K.options = {
 			'.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
 		],
 		a : ['id', 'class', 'href', 'target', 'name'],
-		embed : ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
+		embed : ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess', 'wmode'],
 		img : ['id', 'class', 'src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
 		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
 			'id', 'class', 'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
@@ -308,9 +314,15 @@ K.options = {
 	},
 	layout : '<div class="container"><div class="toolbar"></div><div class="edit"></div><div class="statusbar"></div></div>'
 };
+
+
 var _useCapture = false;
+
+
 var _INPUT_KEY_MAP = _toMap('8,9,13,32,46,48..57,59,61,65..90,106,109..111,188,190..192,219..222');
+
 var _CURSORMOVE_KEY_MAP = _toMap('33..40');
+
 var _CHANGE_KEY_MAP = {};
 _each(_INPUT_KEY_MAP, function(key, val) {
 	_CHANGE_KEY_MAP[key] = val;
@@ -318,6 +330,8 @@ _each(_INPUT_KEY_MAP, function(key, val) {
 _each(_CURSORMOVE_KEY_MAP, function(key, val) {
 	_CHANGE_KEY_MAP[key] = val;
 });
+
+
 function _bindEvent(el, type, fn) {
 	if (el.addEventListener){
 		el.addEventListener(type, fn, _useCapture);
@@ -325,6 +339,7 @@ function _bindEvent(el, type, fn) {
 		el.attachEvent('on' + type, fn);
 	}
 }
+
 function _unbindEvent(el, type, fn) {
 	if (el.removeEventListener){
 		el.removeEventListener(type, fn, _useCapture);
@@ -335,6 +350,8 @@ function _unbindEvent(el, type, fn) {
 var _EVENT_PROPS = ('altKey,attrChange,attrName,bubbles,button,cancelable,charCode,clientX,clientY,ctrlKey,currentTarget,' +
 	'data,detail,eventPhase,fromElement,handler,keyCode,metaKey,newValue,offsetX,offsetY,originalTarget,pageX,' +
 	'pageY,prevValue,relatedNode,relatedTarget,screenX,screenY,shiftKey,srcElement,target,toElement,view,wheelDelta,which').split(',');
+
+
 function KEvent(el, event) {
 	this.init(el, event);
 }
@@ -592,7 +609,7 @@ function _ready(fn) {
 	}
 	_bind(window, 'load', readyFunc);
 }
-if (_IE) {
+if (window.attachEvent) {
 	window.attachEvent('onunload', function() {
 		_each(_eventData, function(key, events) {
 			if (events.el) {
@@ -603,6 +620,7 @@ if (_IE) {
 }
 K.ctrl = _ctrl;
 K.ready = _ready;
+
 function _getCssList(css) {
 	var list = {},
 		reg = /\s*([\w\-]+)\s*:([^;]*)(;|$)/g,
@@ -731,6 +749,8 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	html = html.replace(/\u200B/g, '');
 	html = html.replace(/\u00A9/g, '&copy;');
 	html = html.replace(/\u00AE/g, '&reg;');
+	html = html.replace(/\u2003/g, '&emsp;');
+	html = html.replace(/\u3000/g, '&emsp;');
 	html = html.replace(/<[^>]+/g, function($0) {
 		return $0.replace(/\s+/g, ' ');
 	});
@@ -889,6 +909,7 @@ function _formatHtml(html, htmlTags, urlType, wellFormatted, indentChar) {
 	html = html.replace(/<span id="__kindeditor_pre_newline__">\n/g, '\n');
 	return _trim(html);
 }
+
 function _clearMsWord(html, htmlTags) {
 	html = html.replace(/<meta[\s\S]*?>/ig, '')
 		.replace(/<![\s\S]*?>/ig, '')
@@ -902,6 +923,7 @@ function _clearMsWord(html, htmlTags) {
 		});
 	return _formatHtml(html, htmlTags);
 }
+
 function _mediaType(src) {
 	if (/\.(rm|rmvb)(\?|$)/i.test(src)) {
 		return 'audio/x-pn-realaudio-plugin';
@@ -911,6 +933,7 @@ function _mediaType(src) {
 	}
 	return 'video/x-ms-asf-plugin';
 }
+
 function _mediaClass(type) {
 	if (/realaudio/i.test(type)) {
 		return 'ke-rm';
@@ -954,6 +977,10 @@ function _mediaImg(blankPath, attrs) {
 	html += 'data-ke-tag="' + escape(srcTag) + '" alt="" />';
 	return html;
 }
+
+
+
+
 function _tmpl(str, data) {
 	var fn = new Function("obj",
 		"var p=[],print=function(){p.push.apply(p,arguments);};" +
@@ -977,6 +1004,8 @@ K.mediaEmbed = _mediaEmbed;
 K.mediaImg = _mediaImg;
 K.clearMsWord = _clearMsWord;
 K.tmpl = _tmpl;
+
+
 function _contains(nodeA, nodeB) {
 	if (nodeA.nodeType == 9 && nodeB.nodeType != 9) {
 		return true;
@@ -1195,6 +1224,8 @@ function _query(expr, root) {
 }
 K.query = _query;
 K.queryAll = _queryAll;
+
+
 function _get(val) {
 	return K(val)[0];
 }
@@ -1286,6 +1317,8 @@ function _getScrollPos(doc) {
 	}
 	return {x : x, y : y};
 }
+
+
 function KNode(node) {
 	this.init(node);
 }
@@ -1792,6 +1825,8 @@ _each(_K, function(key, val) {
 });
 K.NodeClass = KNode;
 window.KindEditor = K;
+
+
 var _START_TO_START = 0,
 	_START_TO_END = 1,
 	_END_TO_END = 2,
@@ -1920,6 +1955,7 @@ function _copyAndDelete(range, isCopy, isDelete) {
 	}
 	return isCopy ? frag : range;
 }
+
 function _moveToElementText(range, el) {
 	var node = el;
 	while (node) {
@@ -1933,6 +1969,7 @@ function _moveToElementText(range, el) {
 		range.moveToElementText(el);
 	} catch(e) {}
 }
+
 function _getStartEnd(rng, isStart) {
 	var doc = rng.parentElement().ownerDocument,
 		pointRange = rng.duplicate();
@@ -1998,6 +2035,7 @@ function _getStartEnd(rng, isStart) {
 	}
 	return {node: startNode, offset: startPos};
 }
+
 function _getEndRange(node, offset) {
 	var doc = node.ownerDocument || node,
 		range = doc.body.createTextRange();
@@ -2055,6 +2093,7 @@ function _getEndRange(node, offset) {
 	K(dummy).remove();
 	return range;
 }
+
 function _toRange(rng) {
 	var doc, range;
 	function tr2td(start) {
@@ -2087,6 +2126,8 @@ function _toRange(rng) {
 	range.setEnd(rng.endContainer, rng.endOffset);
 	return range;
 }
+
+
 function KRange(doc) {
 	this.init(doc);
 }
@@ -2503,11 +2544,14 @@ K.START_TO_START = _START_TO_START;
 K.START_TO_END = _START_TO_END;
 K.END_TO_END = _END_TO_END;
 K.END_TO_START = _END_TO_START;
+
+
 function _nativeCommand(doc, key, val) {
 	try {
 		doc.execCommand(key, false, val);
 	} catch(e) {}
 }
+
 function _nativeCommandValue(doc, key) {
 	var val = '';
 	try {
@@ -2518,10 +2562,12 @@ function _nativeCommandValue(doc, key) {
 	}
 	return val;
 }
+
 function _getSel(doc) {
 	var win = _getWin(doc);
 	return _IERANGE ? doc.selection : win.getSelection();
 }
+
 function _getRng(doc) {
 	var sel = _getSel(doc), rng;
 	try {
@@ -2536,6 +2582,7 @@ function _getRng(doc) {
 	}
 	return rng;
 }
+
 function _singleKeyMap(map) {
 	var newMap = {}, arr, v;
 	_each(map, function(key, val) {
@@ -2547,6 +2594,7 @@ function _singleKeyMap(map) {
 	});
 	return newMap;
 }
+
 function _hasAttrOrCss(knode, map) {
 	return _hasAttrOrCssByKey(knode, map, '*') || _hasAttrOrCssByKey(knode, map);
 }
@@ -2578,6 +2626,7 @@ function _hasAttrOrCssByKey(knode, map, mapKey) {
 	}
 	return false;
 }
+
 function _removeAttrOrCss(knode, map) {
 	if (knode.type != 1) {
 		return;
@@ -2616,6 +2665,7 @@ function _removeAttrOrCssByKey(knode, map, mapKey) {
 		knode.remove(true);
 	}
 }
+
 function _getInnerNode(knode) {
 	var inner = knode;
 	while (inner.first()) {
@@ -2623,12 +2673,17 @@ function _getInnerNode(knode) {
 	}
 	return inner;
 }
+
 function _isEmptyNode(knode) {
 	if (knode.type != 1 || knode.isSingle()) {
 		return false;
 	}
 	return knode.html().replace(/<[^>]+>/g, '') === '';
 }
+
+
+
+
 function _mergeWrapper(a, b) {
 	a = a.clone(true);
 	var lastA = _getInnerNode(a), childA = a, merged = false;
@@ -2648,6 +2703,7 @@ function _mergeWrapper(a, b) {
 	}
 	return a;
 }
+
 function _wrapNode(knode, wrapper) {
 	wrapper = wrapper.clone(true);
 	if (knode.type == 3) {
@@ -2672,6 +2728,7 @@ function _wrapNode(knode, wrapper) {
 	nodeWrapper.replaceWith(wrapper);
 	return wrapper;
 }
+
 function _mergeAttrs(knode, attrs, styles) {
 	_each(attrs, function(key, val) {
 		if (key !== 'style') {
@@ -2682,6 +2739,7 @@ function _mergeAttrs(knode, attrs, styles) {
 		knode.css(key, val);
 	});
 }
+
 function _inPreElement(knode) {
 	while (knode && knode.name != 'body') {
 		if (_PRE_TAG_MAP[knode.name] || knode.name == 'div' && knode.hasClass('ke-script')) {
@@ -2691,6 +2749,7 @@ function _inPreElement(knode) {
 	}
 	return false;
 }
+
 function KCmd(range) {
 	this.init(range);
 }
@@ -3305,6 +3364,8 @@ function _cmd(mixed) {
 }
 K.CmdClass = KCmd;
 K.cmd = _cmd;
+
+
 function _drag(options) {
 	var moveEl = options.moveEl,
 		moveFn = options.moveFn,
@@ -3331,6 +3392,9 @@ function _drag(options) {
 		});
 	}
 	clickEl.mousedown(function(e) {
+		if(e.button !== 0 && e.button !== 1) {
+			return;
+		}
 		e.stopPropagation();
 		var self = clickEl.get(),
 			x = _removeUnit(moveEl.css('left')),
@@ -3369,6 +3433,8 @@ function _drag(options) {
 		}
 	});
 }
+
+
 function KWidget(options) {
 	this.init(options);
 }
@@ -3517,6 +3583,8 @@ function _widget(options) {
 }
 K.WidgetClass = KWidget;
 K.widget = _widget;
+
+
 function _iframeDoc(iframe) {
 	iframe = _get(iframe);
 	return iframe.contentDocument || iframe.contentWindow.document;
@@ -3606,6 +3674,8 @@ function _elementVal(knode, val) {
 	}
 	return knode.html(val);
 }
+
+
 function KEdit(options) {
 	this.init(options);
 }
@@ -3745,7 +3815,6 @@ _extend(KEdit, KWidget, {
 		}
 		_elementVal(self.srcElement, self.html());
 		self.srcElement.show();
-		doc.write('');
 		self.iframe.unbind();
 		self.textarea.unbind();
 		KEdit.parent.remove.call(self);
@@ -3792,9 +3861,15 @@ _extend(KEdit, KWidget, {
 			if (!self.designMode) {
 				val = self.html();
 				self.designMode = true;
-				self.html(val);
 				self.textarea.hide();
-				self.iframe.show();
+				self.html(val);
+				var iframe = self.iframe;
+				var height = _removeUnit(self.height);
+				iframe.height(height - 2);
+				iframe.show();
+				setTimeout(function() {
+					iframe.height(height);
+				}, 0);
 			}
 		} else {
 			if (self.designMode) {
@@ -3849,6 +3924,8 @@ function _edit(options) {
 K.EditClass = KEdit;
 K.edit = _edit;
 K.iframeDoc = _iframeDoc;
+
+
 function _selectToolbar(name, fn) {
 	var self = this,
 		knode = self.get(name);
@@ -3859,6 +3936,8 @@ function _selectToolbar(name, fn) {
 		fn(knode);
 	}
 }
+
+
 function KToolbar(options) {
 	this.init(options);
 }
@@ -3977,6 +4056,8 @@ function _toolbar(options) {
 }
 K.ToolbarClass = KToolbar;
 K.toolbar = _toolbar;
+
+
 function KMenu(options) {
 	this.init(options);
 }
@@ -4058,6 +4139,8 @@ function _menu(options) {
 }
 K.MenuClass = KMenu;
 K.menu = _menu;
+
+
 function KColorPicker(options) {
 	this.init(options);
 }
@@ -4133,6 +4216,8 @@ function _colorpicker(options) {
 }
 K.ColorPickerClass = KColorPicker;
 K.colorpicker = _colorpicker;
+
+
 function KUploadButton(options) {
 	this.init(options);
 }
@@ -4224,6 +4309,8 @@ function _uploadbutton(options) {
 }
 K.UploadButtonClass = KUploadButton;
 K.uploadbutton = _uploadbutton;
+
+
 function _createButton(arg) {
 	arg = arg || {};
 	var name = arg.name || '',
@@ -4235,6 +4322,8 @@ function _createButton(arg) {
 	span.append(btn);
 	return span;
 }
+
+
 function KDialog(options) {
 	this.init(options);
 }
@@ -4359,6 +4448,8 @@ function _dialog(options) {
 }
 K.DialogClass = KDialog;
 K.dialog = _dialog;
+
+
 function _tabs(options) {
 	var self = _widget(options),
 		remove = self.remove,
@@ -4413,6 +4504,8 @@ function _tabs(options) {
 	return self;
 }
 K.tabs = _tabs;
+
+
 function _loadScript(url, fn) {
 	var head = document.getElementsByTagName('head')[0] || (_QUIRKS ? document.body : document.documentElement),
 		script = document.createElement('script');
@@ -4429,6 +4522,8 @@ function _loadScript(url, fn) {
 		}
 	};
 }
+
+
 function _chopQuery(url) {
 	var index = url.indexOf('?');
 	return index > 0 ? url.substr(0, index) : url;
@@ -4479,6 +4574,8 @@ function _ajax(url, fn, method, param, dataType) {
 K.loadScript = _loadScript;
 K.loadStyle = _loadStyle;
 K.ajax = _ajax;
+
+
 var _plugins = {};
 function _plugin(name, fn) {
 	if (name === undefined) {
@@ -4522,6 +4619,8 @@ function _lang(mixed, langType) {
 		_language[langType][obj.ns][obj.key] = val;
 	});
 }
+
+
 function _getImageFromRange(range, fn) {
 	if (range.collapsed) {
 		return;
@@ -4732,6 +4831,9 @@ function _addBookmarkToStack(stack, bookmark) {
 		stack.push(bookmark);
 	}
 }
+
+
+
 function _undoToRedo(fromStack, toStack) {
 	var self = this, edit = self.edit,
 		body = edit.doc.body,
@@ -4813,6 +4915,10 @@ KEditor.prototype = {
 	},
 	loadPlugin : function(name, fn) {
 		var self = this;
+		var _pluginStatus = this._pluginStatus;
+		if (!_pluginStatus) {
+			_pluginStatus = this._pluginStatus = {};
+		}
 		if (_plugins[name]) {
 			if (!_isFunction(_plugins[name])) {
 				setTimeout(function() {
@@ -4820,7 +4926,10 @@ KEditor.prototype = {
 				}, 100);
 				return self;
 			}
-			_plugins[name].call(self, KindEditor);
+			if(!_pluginStatus[name]) {
+				_plugins[name].call(self, KindEditor);
+				_pluginStatus[name] = 'inited';
+			}
 			if (fn) {
 				fn.call(self);
 			}
@@ -5418,6 +5527,10 @@ function _create(expr, options) {
 		_each(_plugins, function(name, fn) {
 			if (_isFunction(fn)) {
 				fn.call(editor, KindEditor);
+				if (!editor._pluginStatus) {
+					editor._pluginStatus = {};
+				}
+				editor._pluginStatus[name] = 'inited';
 			}
 		});
 		return editor.create();
@@ -5479,6 +5592,8 @@ K.appendHtml = function(expr, val) {
 		this.appendHtml(val);
 	});
 };
+
+
 if (_IE && _V < 7) {
 	_nativeCommand(document, 'BackgroundImageCache', true);
 }
@@ -5488,6 +5603,8 @@ K.create = _create;
 K.instances = _instances;
 K.plugin = _plugin;
 K.lang = _lang;
+
+
 _plugin('core', function(K) {
 	var self = this,
 		shortcutKeys = {
@@ -5672,7 +5789,7 @@ _plugin('core', function(K) {
 		});
 	});
 	self.clickToolbar('about', function() {
-		var html = '<div style="margin:20px;"><div>此KindEditor For Z-BlogPHP插件由<a href="http://imzhou.com" target="_blank">未寒</a>基于KindEditor 4.1.10制作。</div><div>Copyright &copy; <a href="http://www.kindsoft.net/" target="_blank">kindsoft.net</a> All rights reserved.</div></div>';
+		var html = '<div style="margin:20px;"><div>此KindEditor For Z-BlogPHP插件由<a href="http://imzhou.com" target="_blank">未寒</a>基于KindEditor 4.1.11制作。</div><div>Copyright &copy; <a href="http://www.kindsoft.net/" target="_blank">kindsoft.net</a> All rights reserved.</div></div>';
 		self.createDialog({
 			name : 'about',
 			width : 350,
@@ -5846,6 +5963,8 @@ _plugin('core', function(K) {
 			} else {
 				cmd.range.selectNodeContents(div[0]);
 				cmd.select();
+				div[0].tabIndex = -1;
+				div[0].focus();
 			}
 			setTimeout(function() {
 				movePastedData();
@@ -5954,4 +6073,6 @@ _plugin('core', function(K) {
 		});
 	});
 });
+
+
 })(window);

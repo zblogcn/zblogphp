@@ -14,107 +14,107 @@ $blogtitle = '静态管理中心';
 
 if (count($_POST) > 0) {
 
-	$zbp->option['ZC_STATIC_MODE'] = trim(GetVars('ZC_STATIC_MODE', 'POST'));
-	$zbp->option['ZC_ARTICLE_REGEX'] = trim(GetVars('ZC_ARTICLE_REGEX', 'POST'));
-	$zbp->option['ZC_PAGE_REGEX'] = trim(GetVars('ZC_PAGE_REGEX', 'POST'));
-	$zbp->option['ZC_INDEX_REGEX'] = trim(GetVars('ZC_INDEX_REGEX', 'POST'));
-	$zbp->option['ZC_CATEGORY_REGEX'] = trim(GetVars('ZC_CATEGORY_REGEX', 'POST'));
-	$zbp->option['ZC_TAGS_REGEX'] = trim(GetVars('ZC_TAGS_REGEX', 'POST'));
-	$zbp->option['ZC_DATE_REGEX'] = trim(GetVars('ZC_DATE_REGEX', 'POST'));
-	$zbp->option['ZC_AUTHOR_REGEX'] = trim(GetVars('ZC_AUTHOR_REGEX', 'POST'));
-	$zbp->SaveOption();
+    $zbp->option['ZC_STATIC_MODE'] = trim(GetVars('ZC_STATIC_MODE', 'POST'));
+    $zbp->option['ZC_ARTICLE_REGEX'] = trim(GetVars('ZC_ARTICLE_REGEX', 'POST'));
+    $zbp->option['ZC_PAGE_REGEX'] = trim(GetVars('ZC_PAGE_REGEX', 'POST'));
+    $zbp->option['ZC_INDEX_REGEX'] = trim(GetVars('ZC_INDEX_REGEX', 'POST'));
+    $zbp->option['ZC_CATEGORY_REGEX'] = trim(GetVars('ZC_CATEGORY_REGEX', 'POST'));
+    $zbp->option['ZC_TAGS_REGEX'] = trim(GetVars('ZC_TAGS_REGEX', 'POST'));
+    $zbp->option['ZC_DATE_REGEX'] = trim(GetVars('ZC_DATE_REGEX', 'POST'));
+    $zbp->option['ZC_AUTHOR_REGEX'] = trim(GetVars('ZC_AUTHOR_REGEX', 'POST'));
+    $zbp->SaveOption();
 
-	$zbp->AddBuildModuleAll();
-	$zbp->BuildModule();
-	$zbp->SetHint('good');
-	if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && strpos($zbp->option['ZC_ARTICLE_REGEX'], '{%host%}index.php') === false) {
-		Redirect('./list.php');
-	}
+    $zbp->AddBuildModuleAll();
+    $zbp->BuildModule();
+    $zbp->SetHint('good');
+    if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && strpos($zbp->option['ZC_ARTICLE_REGEX'], '{%host%}index.php') === false) {
+        Redirect('./list.php');
+    }
 
-	Redirect('./main.php');
+    Redirect('./main.php');
 }
 
 $ua = array(
 
-	'ZC_ARTICLE_REGEX' => array(
-		'{%host%}?id={%id%}',
-		'{%host%}index.php/post/{%id%}.html',
-		'{%host%}post/{%id%}.html',
-		'{%host%}post/{%alias%}.html',
-		'{%host%}{%year%}/{%month%}/{%id%}/',
-		'{%host%}{%category%}/{%alias%}',
-	),
+    'ZC_ARTICLE_REGEX' => array(
+        '{%host%}?id={%id%}',
+        '{%host%}index.php/post/{%id%}.html',
+        '{%host%}post/{%id%}.html',
+        '{%host%}post/{%alias%}.html',
+        '{%host%}{%year%}/{%month%}/{%id%}/',
+        '{%host%}{%category%}/{%alias%}',
+    ),
 
-	'ZC_PAGE_REGEX' => array(
-		'{%host%}?id={%id%}',
-		'{%host%}index.php/{%id%}.html',
-		'{%host%}{%id%}.html',
-		'{%host%}{%alias%}.html',
-		'{%host%}{%alias%}/',
-		'{%host%}{%alias%}',
-	),
+    'ZC_PAGE_REGEX' => array(
+        '{%host%}?id={%id%}',
+        '{%host%}index.php/{%id%}.html',
+        '{%host%}{%id%}.html',
+        '{%host%}{%alias%}.html',
+        '{%host%}{%alias%}/',
+        '{%host%}{%alias%}',
+    ),
 
-	'ZC_INDEX_REGEX' => array(
-		'{%host%}?page={%page%}',
-		'{%host%}index.php/page_{%page%}.html',
-		'{%host%}page_{%page%}.html',
-		'{%host%}page_{%page%}/',
-		'{%host%}page_{%page%}',
-	),
+    'ZC_INDEX_REGEX' => array(
+        '{%host%}?page={%page%}',
+        '{%host%}index.php/page_{%page%}.html',
+        '{%host%}page_{%page%}.html',
+        '{%host%}page_{%page%}/',
+        '{%host%}page_{%page%}',
+    ),
 
-	'ZC_CATEGORY_REGEX' => array(
-		'{%host%}?cate={%id%}&page={%page%}',
-		'{%host%}index.php/category-{%id%}_{%page%}.html',
-		'{%host%}category-{%id%}_{%page%}.html',
-		'{%host%}category-{%alias%}_{%page%}.html',
-		'{%host%}category/{%alias%}/{%page%}/',
-		'{%host%}category/{%id%}/{%page%}',
-	),
+    'ZC_CATEGORY_REGEX' => array(
+        '{%host%}?cate={%id%}&page={%page%}',
+        '{%host%}index.php/category-{%id%}_{%page%}.html',
+        '{%host%}category-{%id%}_{%page%}.html',
+        '{%host%}category-{%alias%}_{%page%}.html',
+        '{%host%}category/{%alias%}/{%page%}/',
+        '{%host%}category/{%id%}/{%page%}',
+    ),
 
-	'ZC_TAGS_REGEX' => array(
-		'{%host%}?tags={%alias%}&page={%page%}',
-		'{%host%}index.php/tags-{%id%}_{%page%}.html',
-		'{%host%}tags-{%id%}_{%page%}.html',
-		'{%host%}tags-{%alias%}_{%page%}.html',
-	),
+    'ZC_TAGS_REGEX' => array(
+        '{%host%}?tags={%alias%}&page={%page%}',
+        '{%host%}index.php/tags-{%id%}_{%page%}.html',
+        '{%host%}tags-{%id%}_{%page%}.html',
+        '{%host%}tags-{%alias%}_{%page%}.html',
+    ),
 
-	'ZC_DATE_REGEX' => array(
-		'{%host%}?date={%date%}&page={%page%}',
-		'{%host%}index.php/date-{%date%}_{%page%}.html',
-		'{%host%}date-{%date%}_{%page%}.html',
-		'{%host%}post/{%date%}_{%page%}.html',
-	),
+    'ZC_DATE_REGEX' => array(
+        '{%host%}?date={%date%}&page={%page%}',
+        '{%host%}index.php/date-{%date%}_{%page%}.html',
+        '{%host%}date-{%date%}_{%page%}.html',
+        '{%host%}post/{%date%}_{%page%}.html',
+    ),
 
-	'ZC_AUTHOR_REGEX' => array(
-		'{%host%}?auth={%id%}&page={%page%}',
-		'{%host%}index.php/author-{%id%}_{%page%}.html',
-		'{%host%}author-{%id%}_{%page%}.html',
-		'{%host%}author/{%id%}/{%page%}/',
-	),
+    'ZC_AUTHOR_REGEX' => array(
+        '{%host%}?auth={%id%}&page={%page%}',
+        '{%host%}index.php/author-{%id%}_{%page%}.html',
+        '{%host%}author-{%id%}_{%page%}.html',
+        '{%host%}author/{%id%}/{%page%}/',
+    ),
 
 );
 
-function CreateOptoinsOfUrl($type) {
-	global $ua, $zbp;
-	$s = '';
-	$d = 'style="display:none;"';
-	if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || strpos($zbp->option['ZC_ARTICLE_REGEX'], '{%host%}index.php') !== false) {
-		$r = 'disabled="disabled"';
-	} else {
-		$r = '';
-	}
+function OutputOptionItemsOfUrl($type) {
+    global $ua, $zbp;
+    $s = '';
+    $d = 'style="display:none;"';
+    if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || strpos($zbp->option['ZC_ARTICLE_REGEX'], '{%host%}index.php') !== false) {
+        $r = 'disabled="disabled"';
+    } else {
+        $r = '';
+    }
 
-	$i = 0;
-	foreach ($ua[$type] as $key => $value) {
-		$s .= '<p ' . $d . '><label><input ' . $r . ' type="radio" name="radio' . $type . '" value="' . $value . '" onclick="$(\'#' . $type . '\').val($(this).val())" />&nbsp;' . $value . '</label></p>';
-		$i++;
-		if ($i > 1) {
-			$d = '';
-		}
+    $i = 0;
+    foreach ($ua[$type] as $key => $value) {
+        $s .= '<p ' . $d . '><label><input ' . $r . ' type="radio" name="radio' . $type . '" value="' . $value . '" onclick="$(\'#' . $type . '\').val($(this).val())" />&nbsp;' . $value . '</label></p>';
+        $i++;
+        if ($i > 1) {
+            $d = '';
+        }
 
-	}
+    }
 
-	echo $s;
+    echo $s;
 
 }
 
@@ -148,7 +148,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_ARTICLE_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_ARTICLE_REGEX')?></td>
 </tr>
 <tr>
 	<td><p align='left'><b>·页面的URL配置</b></p></td>
@@ -156,7 +156,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_PAGE_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_PAGE_REGEX')?></td>
 </tr>
 <tr>
 	<td><p align='left'><b>·首页的URL配置</b></p></td>
@@ -164,7 +164,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_INDEX_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_INDEX_REGEX')?></td>
 </tr>
 <tr>
 	<td><p align='left'><b>·分类页的URL配置</b></p></td>
@@ -172,7 +172,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_CATEGORY_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_CATEGORY_REGEX')?></td>
 </tr>
 <tr>
 	<td><p align='left'><b>·标签页的URL配置</b></p></td>
@@ -180,7 +180,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_TAGS_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_TAGS_REGEX')?></td>
 </tr>
 <tr>
 	<td><p align='left'><b>·日期页的URL配置</b></p></td>
@@ -188,7 +188,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_DATE_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_DATE_REGEX')?></td>
 </tr>
 <tr>
 	<td><p align='left'><b>·作者页的URL配置</b></p></td>
@@ -196,7 +196,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
 	<td></td>
-	<td><?php CreateOptoinsOfUrl('ZC_AUTHOR_REGEX')?></td>
+	<td><?php OutputOptionItemsOfUrl('ZC_AUTHOR_REGEX')?></td>
 </tr>
 <?php
 

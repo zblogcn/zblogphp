@@ -14,11 +14,11 @@ $zbp->Load();
 
 $action = '';
 if (GetVars('act', 'GET') == 'MemberEdt') {
-	$action = 'MemberEdt';
+    $action = 'MemberEdt';
 }
 
 if (GetVars('act', 'GET') == 'MemberNew') {
-	$action = 'MemberNew';
+    $action = 'MemberNew';
 }
 
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
@@ -31,7 +31,7 @@ $memberid = null;
 if (isset($_GET['id'])) {$memberid = (integer) GetVars('id', 'GET');} else { $memberid = 0;}
 
 if (!$zbp->CheckRights('MemberAll')) {
-	if ((int) $memberid != (int) $zbp->user->ID) {$zbp->ShowError(6, __FILE__, __LINE__);}
+    if ((int) $memberid != (int) $zbp->user->ID) {$zbp->ShowError(6, __FILE__, __LINE__);}
 }
 
 $member = $zbp->GetMemberByID($memberid);
@@ -44,13 +44,12 @@ $member = $zbp->GetMemberByID($memberid);
 	<div id="divMain2" class="edit tag_edit">
 		<form id="edit" name="edit" method="post" action="#">
 			<input id="edtID" name="ID" type="hidden" value="<?php echo $member->ID;?>" />
-			<input id="edtGuid" name="Guid" type="hidden" value="<?php echo $member->Guid;?>" />
 			<p>
 				<span class="title">
 					<?php echo $lang['msg']['member_level']?>:</span>
 				<br />
 				<select class="edit" size="1" name="Level" id="cmbLevel">
-					<?php echo CreateOptoinsOfMemberLevel($member->Level);?></select>
+					<?php echo OutputOptionItemsOfMemberLevel($member->Level);?></select>
 				<?php if ($zbp->CheckRights('MemberAll') && $zbp->user->ID != $member->ID) {?>
 		&nbsp;(
 				<span class="title">
@@ -74,7 +73,7 @@ $member = $zbp->GetMemberByID($memberid);
 				<span class="star">(*)</span>
 				<br />
 				<input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name;?>" <?php if (!$zbp->CheckRights('MemberAll')) {
-	echo 'readonly="readonly"';
+    echo 'readonly="readonly"';
 }
 ?> /></p>
 			<p>
@@ -116,7 +115,7 @@ $member = $zbp->GetMemberByID($memberid);
 					<?php echo $lang['msg']['template']?>:</span>
 				<br />
 				<select class="edit" size="1" name="Template" id="cmbTemplate">
-					<?php echo CreateOptoinsOfTemplate($member->Template);?></select>
+					<?php echo OutputOptionItemsOfTemplate($member->Template);?></select>
 			</p>
 			<div id='response' class='editmod2'>
 				<?php foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}

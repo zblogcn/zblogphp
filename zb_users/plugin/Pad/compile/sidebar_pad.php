@@ -1,3 +1,3 @@
-<?php  foreach ( $sidebar_pad as $module) { ?> 
+<?php  foreach ($sidebar_pad as $module) { ?> 
 <?php  include $this->GetTemplate('module');  ?>
 <?php  }   ?>

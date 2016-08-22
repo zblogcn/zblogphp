@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * KindEditor for Z-BlogPHP
  * @author 未寒
@@ -16,16 +16,22 @@ $emot_ext = explode("|", $zbp->option['ZC_EMOTICONS_FILETYPE']);
 
 if ($handle = opendir($root_path)) {
     while (false !== ($filename = readdir($handle))) {
-        if ($filename{0} == '.') continue;
+        if ($filename{0} == '.') {
+            continue;
+        }
+
         $file = $root_path . $filename;
         if (is_dir($file)) {
             $emot_dir[] = (KINDEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $filename) : $filename);
-        }else{
+        } else {
             continue;
         }
         if ($emot = opendir($root_path . $filename . '/')) {
             while (false !== ($emotname = readdir($emot))) {
-                if ($emotname{0} == '.') continue;
+                if ($emotname{0} == '.') {
+                    continue;
+                }
+
                 $emotpath = $root_path . $emotname . '/' . $emotname;
                 if (!is_dir($emotpath)) {
                     $temp_arr = explode(".", $emotname);
@@ -42,12 +48,10 @@ if ($handle = opendir($root_path)) {
     }
 
     closedir($handle);
-    
+
     //print_r($emot_dir);
     //print_r($emot_name);
 }
-
-
 
 ?>
 /*******************************************************************************
@@ -65,23 +69,23 @@ KindEditor.plugin('emoticons', function (K) {
             menu = self.createMenu({
                 name: name
             }),
-            
+
             html = '<div class="ke-plugin-emoticons">\
                         <link rel="stylesheet" type="text/css" href="' + emoticonspluginsPath + 'emoticon.css" />\
                         <div id="tabPanel" class="neweditor-tab">\
                         <div id="tabMenu" class="neweditor-tab-h">\
-                        <?php 
-                        for ($i = 0; $i < count($emot_dir); $i++) {echo '<div>'.$emot_dir[$i].'</div>';}
-                        ?>
+                        <?php
+for ($i = 0; $i < count($emot_dir); $i++) {echo '<div>' . $emot_dir[$i] . '</div>';}
+?>
                         </div>\
 
                             <div id="tabContent" class="neweditor-tab-b">\
-                        <?php 
-                        for ($i = 0; $i < count($emot_dir); $i++) {echo '<div>'.$i.'</div>';}
-                        ?>
+                        <?php
+for ($i = 0; $i < count($emot_dir); $i++) {echo '<div>' . $i . '</div>';}
+?>
                             </div>\
                         </div>\
-                    <div id="tabIconReview"><img id="faceReview" class="review" src="<?php echo $zbp->host;?>zb_system/image/admin/none.gif" /></div></div>\
+                    <div id="tabIconReview"><img id="faceReview" class="review" src="<?php echo $zbp->host; ?>zb_system/image/admin/none.gif" /></div></div>\
                     </div>';
         menu.div.append(K(html));
         function removeEvent() {
@@ -146,35 +150,37 @@ KindEditor.plugin('emoticons', function (K) {
         var emotion = {};
         emotion.SmileyPath = path;
         emotion.SmileyBox = {
-        <?php 
-        for ($i = 0; $i < count($emot_dir); $i++) {
-            echo 'tab'.$i.':[';
-            $emot_char = '';
-            if($i == (count($emot_dir)-1)){echo ']';continue;}
-            foreach($emot_name[$emot_dir[$i]] as $v){
-                $emot_char .= "'$v',";
-            }
-            echo $emot_char.'],';
-        }
-        ?>};        
+        <?php
+for ($i = 0; $i < count($emot_dir); $i++) {
+    echo 'tab' . $i . ':[';
+    $emot_char = '';
+    if ($i == (count($emot_dir) - 1)) {
+        echo ']';
+        continue;}
+    foreach ($emot_name[$emot_dir[$i]] as $v) {
+        $emot_char .= "'$v',";
+    }
+    echo $emot_char . '],';
+}
+?>};
         emotion.SmileyInfor = emotion.SmileyBox;
         var faceBox = emotion.SmileyBox;
         var inforBox = emotion.SmileyInfor;
         var sBasePath = emotion.SmileyPath;
         initImgBox(faceBox['tab0'], '', 84);
         initImgBox(faceBox['tab1'], '', 40);
-   
+
         //大对象
         FaceHandler = {
-            imageFolders: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab'.$i.':\''.$emot_dir[$i].'/\',';}?>},
-            imageWidth: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab'.$i.':30,';}?>},
-            imageCols: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab'.$i.':11,';}?>},
-            imageColWidth: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab'.$i.':3,';}?>},
-            imageCss: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab'.$i.':\''.$emot_dir[$i].'\',';}?>},
-            imageCssOffset: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab'.$i.':30,';}?>},
-            tabExist: [<?php for ($i = 0; $i < count($emot_dir); $i++) {echo $i.',';}?>]
+            imageFolders: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab' . $i . ':\'' . $emot_dir[$i] . '/\',';}?>},
+            imageWidth: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab' . $i . ':30,';}?>},
+            imageCols: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab' . $i . ':11,';}?>},
+            imageColWidth: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab' . $i . ':3,';}?>},
+            imageCss: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab' . $i . ':\'' . $emot_dir[$i] . '\',';}?>},
+            imageCssOffset: {<?php for ($i = 0; $i < count($emot_dir); $i++) {echo 'tab' . $i . ':30,';}?>},
+            tabExist: [<?php for ($i = 0; $i < count($emot_dir); $i++) {echo $i . ',';}?>]
         };
-        
+
         function switchTab(index) {
             if (FaceHandler.tabExist[index] == 0) {
                 FaceHandler.tabExist[index] = 1;

@@ -1,4 +1,3 @@
-
 <div id="div-module">
 	<div id="div-progress">
 		<p>操作进度：<span id="span-progress">0</span>%；运行时间：<span id="span-time">0</span>s。</p>
@@ -6,7 +5,7 @@
 	</div>
     <p><br/></p>
     <div id="div-message">
-    	<table class="table_border table_border_cells table_stripes" style="width:95%">
+    	<table class="table_border table_border_cells table_striped table_hover" style="width:95%">
 		<tbody id="tbody-message">
         <tr><td>正在初始化</td></tr>
         </tbody>
@@ -15,47 +14,91 @@
 </div>
 
 <script type="text/javascript">
-$(document).ready(function() {
-	var time = 0,
-		runTask = function(pos) {
-			var index = pos,
-				taskLength = clinic._tasks.length,
-				per = ((index / taskLength) * 100).toFixed(2);
-			
-			$("#span-progress").html(per);
-			$("#progress").val(per);
-			
-			bmx2table();
-		};
-		
-	clinic.setModuleId("<?php echo $module['id']?>").init().addTimer(function(){
-		console.log(time);
-		$("#span-time").html(time++);
-	}).ajax({"function": "get_queue"}, function(data) {
-		var data = JSON.parse(data),
-			addTask = function(argu) {
-				var value = argu[1];
-				clinic.ajax(value, function(data, textStatus) {
-					var data = JSON.parse(data);
-					$.each(data, function(index, value) {
-						if (value['type'] == 'queue') {
-							clinic.addTask(addTask, value);
-						}
-						else {
-							clinic.msg(value.msg);
-						}
-					});
-					clinic.runTask(runTask);
-				}, function(xmlHttp, textStatus, errorThrown) {
-					clinic.msg('<span style="color:red">× 网络访问错误：' + textStatus + '</span>');
-				})
-			};
-		$.each(data, function(index, value) {
-			clinic.addTask(addTask, value);
-		});
-		clinic.runTask(runTask);
-	});
+var $tableSelector = $("#tbody-message");
+var $timeSelector = $("#span-time");
+var $progressSelector = $("#progress");
+var $progressSpanSelector = $("#span-progress");
+$.xhrPool = [];
+$.xhrPool.abortAll = function() {
+    $(this).each(function(idx, jqXHR) {
+        jqXHR.abort();
+    });
+    $.xhrPool = [];
+};
+
+$.ajaxSetup({
+    beforeSend: function(jqXHR) {
+        $.xhrPool.push(jqXHR);
+    },
+    complete: function(jqXHR) {
+        var index = $.xhrPool.indexOf(jqXHR);
+        if (index > -1) {
+            $.xhrPool.splice(index, 1);
+        }
+    }
 });
 
+var clinicConfig = {
+	moduleId: "<?php echo $module['id']?>",
+	maxTasks: 0,
+	currentTask: 0,
+	currentTime: 0,
+	timeInterval: 0
+};
+var ajaxPost = function(param) {
+	var url = "ajax.php?module=" + clinicConfig.moduleId;
+	var ajax = $.ajax(url, {
+			data: param,
+			type: "POST",
+			dataType: "json"});
+	return new Promise(function(resolve, reject) {
+		ajax.done(resolve).fail(reject);
+	})
+};
+var sendMessage = function(textString) {
+	$("<tr><td>" + textString + "</td></tr>").prependTo($tableSelector);
+};
+$(function() {
+	var addTask = function(data) {
+		console.log(data);
+		clinicConfig.maxTasks += data.length;
+		return Promise.map(data, function(item, index) {
+			return ajaxPost(item).then(function(data) {
+				clinicConfig.currentTask++;
+				return Promise.map(data, function(item) {
+					if (item.type == "msg") {
+						sendMessage(item.msg);
+					} else {
+						task.then(function() {
+							return addTask([item]);
+						});
+					}
+				}).then(function() {
+					var per = ((clinicConfig.currentTask / clinicConfig.maxTasks) * 100).toFixed(2);
+					$progressSpanSelector.text(per);
+					$progressSelector.val(per);
+				});
+			});
+		});
+	};
 
+	clinicConfig.timeInterval = setInterval(function() {
+		$timeSelector.html(clinicConfig.currentTime++);
+		if (parseInt('<?php echo $GLOBALS['blogversion'];?>') < 150601) bmx2table(); // Fuck
+	}, 1000);
+
+	var task = ajaxPost({function: "get_queue"}).cancellable().then(addTask).error(function(e) {
+		var errorMessage = e.responseText.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').split("\n").reverse();
+		errorMessage.forEach(function(item) {
+			sendMessage(item);
+		});
+		sendMessage('错误状态码：' + e.status);
+		sendMessage('<span style="color: red">× 执行过程中出现错误！</span>');
+		$.xhrPool.abortAll();
+	}).finally(function() {
+		clearInterval(clinicConfig.timeInterval);
+	});
+
+
+});
 </script>

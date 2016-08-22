@@ -40,28 +40,28 @@ Response.End
  */
 if (GetVars('type', 'GET') == 'test') {
 
-	set_error_handler(create_function('', ''));
-	set_exception_handler(create_function('', ''));
-	register_shutdown_function(create_function('', ''));
-	$regex = GetVars('regexp', 'POST');
-	$regex = "/(" . $regex . ")/si";
-	$matches = array();
-	$string = GetVars('string', 'POST');
-	$value = preg_match_all($regex, $string, $matches);
-	if ($value) {
-		foreach ($matches[0] as $v) {
-			//echo $v;
-			$string = str_replace($v, '$$$fuabcdeck$$a$' . $v . '$$a$fuckd$b$', $string);
-		}
-		$string = TransferHTML($string, '[html-format]');
-		$string = str_replace('$$$fuabcdeck$$a$', '<span style="background-color:#92d050">', $string);
-		$string = str_replace('$$a$fuckd$b$', '</span>', $string);
-		echo $string;
-	} else {
-		echo "正则有误或未匹配到：<br/><br/>可能的情况是：<ol><li>少打了某个符号</li><li>没有在[ ] ( ) ^ . ? !等符号前加\</li></ol>";
-	}
+    set_error_handler(create_function('', ''));
+    set_exception_handler(create_function('', ''));
+    register_shutdown_function(create_function('', ''));
+    $regex = GetVars('regexp', 'POST');
+    $regex = "/(" . $regex . ")/si";
+    $matches = array();
+    $string = GetVars('string', 'POST');
+    $value = preg_match_all($regex, $string, $matches);
+    if ($value) {
+        foreach ($matches[0] as $v) {
+            //echo $v;
+            $string = str_replace($v, '$$$fuabcdeck$$a$' . $v . '$$a$fuckd$b$', $string);
+        }
+        $string = TransferHTML($string, '[html-format]');
+        $string = str_replace('$$$fuabcdeck$$a$', '<span style="background-color:#92d050">', $string);
+        $string = str_replace('$$a$fuckd$b$', '</span>', $string);
+        echo $string;
+    } else {
+        echo "正则有误或未匹配到：<br/><br/>可能的情况是：<ol><li>少打了某个符号</li><li>没有在[ ] ( ) ^ . ? !等符号前加\</li></ol>";
+    }
 
-	exit();
+    exit();
 }
 require $blogpath . 'zb_system/admin/admin_header.php';
 ?>

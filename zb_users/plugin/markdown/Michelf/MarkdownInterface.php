@@ -12,7 +12,6 @@
 #
 namespace Michelf;
 
-
 #
 # Markdown Parser Interface
 #
