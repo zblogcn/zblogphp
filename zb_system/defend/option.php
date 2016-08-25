@@ -65,8 +65,6 @@ return array(
     // '固定域名,默认为false
     'ZC_PERMANENT_DOMAIN_ENABLE' => false,
     'ZC_PERMANENT_DOMAIN_REDIRECT' => true,
-    'ZC_PERMANENT_DOMAIN_WITH_ADMIN' => false,
-    'ZC_PERMANENT_DOMAIN_INDISCRIMINATE_HTTPS' => false,
 
     //
     'ZC_DEBUG_MODE' => false,

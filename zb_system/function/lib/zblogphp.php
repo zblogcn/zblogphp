@@ -421,13 +421,7 @@ class ZBlogPHP {
             $this->ishttps = true;
         }
         if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
-            if ($this->option['ZC_PERMANENT_DOMAIN_INDISCRIMINATE_HTTPS'] == true) {
-                if (str_replace(array('https://', 'http://'), array('', ''), $this->host) != str_replace(array('https://', 'http://'), array('', ''), $this->option['ZC_BLOG_HOST'])) {
-                    $this->host = $this->option['ZC_BLOG_HOST'];
-                }
-            } else {
-                $this->host = $this->option['ZC_BLOG_HOST'];
-            }
+            $this->host = $this->option['ZC_BLOG_HOST'];
             $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
         } else {
             $this->option['ZC_BLOG_HOST'] = $this->host;
@@ -542,9 +536,7 @@ class ZBlogPHP {
      */
     public function LoadManage() {
 
-        if (!(isset($this->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN']) && $this->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN'])) {
-            $this->host = GetCurrentHost($this->path, $this->cookiespath);
-        }
+        $this->host = GetCurrentHost($this->path, $this->cookiespath);
 
         if (substr($this->host, 0, 8) == 'https://') {
             $this->ishttps = true;
@@ -2683,13 +2675,8 @@ class ZBlogPHP {
             return;
         }
 
-        if ($this->option['ZC_PERMANENT_DOMAIN_INDISCRIMINATE_HTTPS'] == true) {
-            $host = str_replace(array('https://', 'http://'), array('', ''), GetCurrentHost(ZBP_PATH, $null));
-            $host2 = str_replace(array('https://', 'http://'), array('', ''), $this->host);
-        } else {
-            $host = GetCurrentHost(ZBP_PATH, $null);
-            $host2 = $this->host;
-        }
+        $host = str_replace(array('https://', 'http://'), array('', ''), GetCurrentHost(ZBP_PATH, $null));
+        $host2 = str_replace(array('https://', 'http://'), array('', ''), $this->host);
 
         if (stripos($host, $host2) === false) {
             $u = GetRequestUri();
