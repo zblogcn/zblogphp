@@ -1334,3 +1334,14 @@ if (!function_exists('rrmdir')) {
         }
     }
 }
+
+
+function compareRewriteUrl($url) {
+    global $bloghost;
+    $scriptName = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
+    $received = str_replace($scriptName, '', $_SERVER['REQUEST_URI']);
+    $calculated = str_replace($bloghost, '', $url);
+    echo $received . "\n";
+    echo $calculated . "\n";
+    return $received == $calculated;
+}
