@@ -1330,6 +1330,28 @@ DefinePluginFilter('Filter_Plugin_Post_CommentPostUrl');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Post_Prev
+'参数:$post
+'说明:Post类的Prev接口
+'调用:返回Prev值.
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Post_Prev');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Post_Next
+'参数:$post
+'说明:Post类的Next接口
+'调用:返回Next值.
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Post_Next');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Post_RelatedList
 '参数:$post
 '说明:Post类的RelatedList 接口

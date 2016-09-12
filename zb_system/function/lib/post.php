@@ -205,6 +205,13 @@ class Post extends Base {
                 return $this->_prev;
             }
 
+            foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Prev'] as $fpname => &$fpsignal) {
+                $this->_prev = $fpname($this);
+	            if ($this->_prev !== '') {
+	                return $this->_prev;
+	            }
+            }
+
             $articles = $zbp->GetPostList(
                 array('*'),
                 array(array('=', 'log_Type', 0), array('=', 'log_Status', 0), array('<', 'log_PostTime', $this->PostTime)),
@@ -223,6 +230,13 @@ class Post extends Base {
         case 'Next':
             if ($this->_next !== '') {
                 return $this->_next;
+            }
+
+            foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Next'] as $fpname => &$fpsignal) {
+                $this->_prev = $fpname($this);
+	            if ($this->_prev !== '') {
+	                return $this->_prev;
+	            }
             }
 
             $articles = $zbp->GetPostList(
