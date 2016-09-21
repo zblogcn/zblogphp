@@ -7,7 +7,7 @@
  */
 
 /**
- * 得到请求方法
+ * 得到请求方法(未必会准确的，比如SERVER没能某项，或是端口改过的)
  * @param $array
  * @return $string
  */
@@ -20,7 +20,11 @@ function GetScheme($array) {
         if (strtolower($array['HTTPS']) == 'on') {
             return 'https://';
         }
-    }
+    } elseif (array_key_exists('SERVER_PORT', $array)) {
+        if (strtolower($array['SERVER_PORT']) == '443') {
+            return 'https://';
+        }
+    }  
 
     return 'http://';
 }
