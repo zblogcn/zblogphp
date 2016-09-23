@@ -2129,7 +2129,7 @@ class ZBlogPHP {
      * @return Upload
      */
     public function GetUploadByID($id) {
-        return $this->GetSomeThing('', 'id', $id, 'Upload');
+        return $this->GetSomeThing('', 'ID', $id, 'Upload');
     }
 
     /**
