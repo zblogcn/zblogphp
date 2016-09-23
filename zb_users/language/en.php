@@ -69,6 +69,7 @@ return array(
         'password' => 'Password',
         're_password' => 'Repeat Password',
         'upload_file' => 'File Upload',
+        'auto_rename_uploadfile' => 'Auto rename filename',
         'username' => 'Username',
         'return_to_site' => 'Visit Site',
         'check_comment' => 'Pending',

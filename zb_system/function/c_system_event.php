@@ -2438,15 +2438,21 @@ function PostUpload() {
     foreach ($_FILES as $key => $value) {
         if ($_FILES[$key]['error'] == 0) {
             if (is_uploaded_file($_FILES[$key]['tmp_name'])) {
-                $tmp_name = $_FILES[$key]['tmp_name'];
-                $name = $_FILES[$key]['name'];
-
                 $upload = new Upload;
                 $upload->Name = $_FILES[$key]['name'];
+                if (GetVars('auto_rename', 'POST') == 'on' || GetVars('auto_rename', 'POST') == true) {
+                    $temp_arr = explode(".", $upload->Name);
+                    $file_ext = strtolower(trim(array_pop($temp_arr)));
+                    $upload->Name = date("YmdHis") . time() . rand(10000, 99999) . '.' . $file_ext;
+                }
                 $upload->SourceName = $_FILES[$key]['name'];
                 $upload->MimeType = $_FILES[$key]['type'];
                 $upload->Size = $_FILES[$key]['size'];
                 $upload->AuthorID = $zbp->user->ID;
+
+                if (file_exists($upload->FullFile)) {
+                    $zbp->ShowError(28, __FILE__, __LINE__);
+                }
 
                 if (!$upload->CheckExtName()) {
                     $zbp->ShowError(26, __FILE__, __LINE__);
