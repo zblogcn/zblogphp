@@ -65,6 +65,7 @@ return array(
         'password' => '密码',
         're_password' => '确认密码',
         'upload_file' => '选择需要上传的文件',
+        'auto_rename_uploadfile' => '自动重命名文件名',
         'username' => '用户名',
         'return_to_site' => '返回',
         'check_comment' => '审核评论',

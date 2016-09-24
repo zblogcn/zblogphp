@@ -69,6 +69,7 @@ return array(
         'password' => '密碼',
         're_password' => '確認密碼',
         'upload_file' => '選擇需要上傳的檔案',
+        'auto_rename_uploadfile' => '自動重命名檔案名',
         'username' => '帳號',
         'return_to_site' => '造訪網站',
         'check_comment' => '待審中',
