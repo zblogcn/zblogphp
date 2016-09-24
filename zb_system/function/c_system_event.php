@@ -2448,6 +2448,22 @@ function PostUpload() {
                 $upload->Size = $_FILES[$key]['size'];
                 $upload->AuthorID = $zbp->user->ID;
 
+
+				//检查同月重名
+				$d1=date('Y-m-01', time());
+				$d2=date('Y-m-d', strtotime(date('Y-m-01', time()) . ' +1 month -1 day'));
+				$d1=strtotime($d1);
+				$d2=strtotime($d2);
+				$w = array();
+				$w[] = array('=', 'ul_Name', $upload->Name);
+				$w[] = array('>=', 'ul_PostTime', $d1);
+				$w[] = array('<=', 'ul_PostTime', $d2);
+				$uploads = $zbp->GetUploadList('*', $w);
+				if(count($uploads)>0){
+					$zbp->ShowError(28, __FILE__, __LINE__);
+				}
+
+
                 if (!$upload->CheckExtName()) {
                     $zbp->ShowError(26, __FILE__, __LINE__);
                 }
