@@ -912,6 +912,8 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
         $id = $object;
         $alias = $theSecondParam;
         $object = array('id' => $object);
+        $object[0] = $id;    
+        $object['id'] = $id;    
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
@@ -957,8 +959,8 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
 
     $article = $articles[0];
 
-
-    if ($isrewrite && !(compareRewriteUrl($article->Url))) {
+    //ddd
+    if ($isrewrite && !(stripos($article->Url,$object[0])!==false)) {
         $zbp->ShowError(2, __FILE__, __LINE__);
         exit;
     }

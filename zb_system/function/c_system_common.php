@@ -1343,5 +1343,8 @@ function compareRewriteUrl($url) {
     $calculated = str_replace($bloghost, '', $url);
     echo $received . "\n";
     echo $calculated . "\n";
+    echo  $url . "\n";
+    echo $_SERVER['SCRIPT_NAME'] . $_SERVER['REQUEST_URI'] . "\n";
+    die();
     return $received == $calculated;
 }
