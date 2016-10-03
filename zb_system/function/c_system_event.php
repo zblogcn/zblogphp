@@ -912,8 +912,8 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
         $id = $object;
         $alias = $theSecondParam;
         $object = array('id' => $object);
-        $object[0] = $id;    
-        $object['id'] = $id;    
+        $object[0] = $id;
+        $object['id'] = $id;
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
@@ -959,8 +959,7 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
 
     $article = $articles[0];
 
-    //ddd
-    if ($isrewrite && !(stripos($article->Url,$object[0])!==false)) {
+    if ($isrewrite && !(stripos($article->Url, $object[0]) !== false)) {
         $zbp->ShowError(2, __FILE__, __LINE__);
         exit;
     }
@@ -2007,8 +2006,9 @@ function DelCategory() {
     $cate = $zbp->GetCategoryByID($id);
     if ($cate->ID > 0) {
 
-        if(count($cate->SubCategories)>0){
+        if(count($cate->SubCategories) > 0){
             $zbp->ShowError(49, __FILE__, __LINE__);
+
             return false;
         }
 
@@ -2131,7 +2131,7 @@ function PostMember() {
     }
 
     //检测密码
-    if(trim($_POST["Password"])=='' || trim($_POST["PasswordRe"])=='' || $_POST["Password"]!=$_POST["PasswordRe"]){
+    if(trim($_POST["Password"]) == '' || trim($_POST["PasswordRe"]) == '' || $_POST["Password"] != $_POST["PasswordRe"]){
         unset($_POST["Password"]);
         unset($_POST["PasswordRe"]);
     }
@@ -2568,6 +2568,7 @@ function SetTheme($theme, $style) {
 
     if ($oldtheme != $theme) {
         UninstallPlugin($oldtheme);
+
         return $theme;
     }
 }
