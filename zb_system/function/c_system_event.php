@@ -912,6 +912,8 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
         $id = $object;
         $alias = $theSecondParam;
         $object = array('id' => $object);
+        $object[0] = $id;
+        $object['id'] = $id;
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
@@ -942,28 +944,6 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
         exit;
     }
 
-    // 验证传递的参数的时间是否存在问题
-    if (isset($object['year'])) {
-        if (isset($object['month'])) {
-            if (isset($object['day'])) {
-                $postTime = $object['year'] . '-' . $object['month'] . '-' . $object['day'];
-                $timestamp = strtotime($postTime);
-                $w[] = array('>=', 'log_PostTime', $timestamp);
-                $w[] = array('<=', 'log_PostTime', $timestamp + 86400); // 1 day = 86400 s
-            } else {
-                $postTime = $object['year'] . '-' . $object['month'];
-                $timestamp = strtotime($postTime);
-                $w[] = array('>=', 'log_PostTime', $timestamp);
-                $w[] = array('<=', 'log_PostTime', strtotime($postTime . ' +1 month')); // 卧槽跪拜PHP
-            }
-        } else {
-            $postTime = $object['year'] . '-1';
-            $timestamp = strtotime($postTime);
-            $w[] = array('>=', 'log_PostTime', $timestamp);
-            $w[] = array('<=', 'log_PostTime', strtotime($postTime . ' +1 year'));
-        }
-    }
-
     if (!($zbp->CheckRights('ArticleAll') && $zbp->CheckRights('PageAll'))) {
         $w[] = array('=', 'log_Status', 0);
     }
@@ -979,16 +959,9 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
 
     $article = $articles[0];
 
-    // TODO: 验证分类
-
-    // 再验证一下时间（排除某些像只有{%month%}没有{%year%}的情况
-    $articleTime = getdate($article->PostTime);
-    if (
-        (isset($object['year']) && $object['year'] != $articleTime['year']) ||
-        (isset($object['month']) && $object['month'] != $articleTime['mon']) ||
-        (isset($object['day']) && $object['day'] != $articleTime['mday'])
-    ) {
+    if ($isrewrite && !(stripos($article->Url, $object[0]) !== false)) {
         $zbp->ShowError(2, __FILE__, __LINE__);
+        exit;
     }
 
     if ($article->Type == 0) {
@@ -2033,8 +2006,9 @@ function DelCategory() {
     $cate = $zbp->GetCategoryByID($id);
     if ($cate->ID > 0) {
 
-        if(count($cate->SubCategories)>0){
+        if(count($cate->SubCategories) > 0){
             $zbp->ShowError(49, __FILE__, __LINE__);
+
             return false;
         }
 
@@ -2157,7 +2131,7 @@ function PostMember() {
     }
 
     //检测密码
-    if(trim($_POST["Password"])=='' || trim($_POST["PasswordRe"])=='' || $_POST["Password"]!=$_POST["PasswordRe"]){
+    if(trim($_POST["Password"]) == '' || trim($_POST["PasswordRe"]) == '' || $_POST["Password"] != $_POST["PasswordRe"]){
         unset($_POST["Password"]);
         unset($_POST["PasswordRe"]);
     }
@@ -2611,6 +2585,7 @@ function SetTheme($theme, $style) {
 
     if ($oldtheme != $theme) {
         UninstallPlugin($oldtheme);
+
         return $theme;
     }
 }
