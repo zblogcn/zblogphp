@@ -959,7 +959,8 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
 
     $article = $articles[0];
 
-    if ($isrewrite && !(stripos($article->Url, $object[0]) !== false)) {
+
+    if ($isrewrite && !(stripos(urldecode($article->Url), $object[0]) !== false)) {
         $zbp->ShowError(2, __FILE__, __LINE__);
         exit;
     }
@@ -1203,7 +1204,7 @@ function PostArticle() {
         } else {
             if (isset($_POST['Intro'])) {
                 if ($_POST['Intro'] == '') {
-                    $_POST['Intro'] = SubStrUTF8_Html($_POST['Content'], (int)strpos($_POST['Content'], '>') + (int)$zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
+                    $_POST['Intro'] = SubStrUTF8_Html($_POST['Content'], (int) strpos($_POST['Content'], '>') + (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
                     $_POST['Intro'] .= '<!--autointro-->';
                 }
                 $_POST['Intro'] = CloseTags($_POST['Intro']);
@@ -2425,19 +2426,19 @@ function PostUpload() {
                 $upload->AuthorID = $zbp->user->ID;
 
 
-				//检查同月重名
-				$d1=date('Y-m-01', time());
-				$d2=date('Y-m-d', strtotime(date('Y-m-01', time()) . ' +1 month -1 day'));
-				$d1=strtotime($d1);
-				$d2=strtotime($d2);
-				$w = array();
-				$w[] = array('=', 'ul_Name', $upload->Name);
-				$w[] = array('>=', 'ul_PostTime', $d1);
-				$w[] = array('<=', 'ul_PostTime', $d2);
-				$uploads = $zbp->GetUploadList('*', $w);
-				if(count($uploads)>0){
-					$zbp->ShowError(28, __FILE__, __LINE__);
-				}
+                //检查同月重名
+                $d1 = date('Y-m-01', time());
+                $d2 = date('Y-m-d', strtotime(date('Y-m-01', time()) . ' +1 month -1 day'));
+                $d1 = strtotime($d1);
+                $d2 = strtotime($d2);
+                $w = array();
+                $w[] = array('=', 'ul_Name', $upload->Name);
+                $w[] = array('>=', 'ul_PostTime', $d1);
+                $w[] = array('<=', 'ul_PostTime', $d2);
+                $uploads = $zbp->GetUploadList('*', $w);
+                if(count($uploads) > 0){
+                    $zbp->ShowError(28, __FILE__, __LINE__);
+                }
 
                 if (!$upload->CheckExtName()) {
                     $zbp->ShowError(26, __FILE__, __LINE__);
