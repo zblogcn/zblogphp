@@ -161,7 +161,7 @@ class UrlRule {
                     $url = str_replace('%alias%', '(?P<alias>.+)', $url);
                 }
             }
-            $url = str_replace('%category%', '(?P<category>(?:([^\./_]*/?)+)))', $url);
+            $url = str_replace('%category%', '(?P<category>([^\./_]*/?)+)', $url);
             $url = str_replace('%author%', '(?P<author>[^\./_]+)', $url);
             $url = str_replace('%year%', '(?P<year>[0-9]<:4:>)', $url);
             $url = str_replace('%month%', '(?P<month>[0-9]<:1,2:>)', $url);
