@@ -123,7 +123,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                 echo '{$tag.Metas.'.$value.'}<br/>php调用形式:<br/>$tag->Metas->'.$value.';';
             }
             if($type == 'member'){
-                echo '文章页模板调用标签：{{$article.Author.Metas.'.$value.'}<br/> 作者页调用标签：{$author.Metas.'.$value.'}<br/>php调用形式:<br/>$article->Author->Metas->'.$value.';<br/>$zbp->member[<abbr title="请替换成相应的用户ID">?</abbr>]->Metas->'.$value.';<br/>';
+                echo '文章页模板调用标签：{{$article.Author.Metas.'.$value.'}<br/> 作者页调用标签：{$author.Metas.'.$value.'}<br/>php调用形式:<br/>$article->Author->Metas->'.$value.';<br/>$zbp->members[<abbr title="请替换成相应的用户ID">?</abbr>]->Metas->'.$value.';<br/>';
             }
 
                 echo '</p></td>';
