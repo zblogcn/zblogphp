@@ -178,7 +178,7 @@ class Template {
 
         if (strpos($templates['header'], '{$header}') === false) {
             if (strpos($templates['header'], '</head>') !== false) {
-                $templates['header'] = str_replace('</head>', '</head>' . '{$header}', $templates['header']);
+                $templates['header'] = str_replace('</head>', '{$header}' . '</head>', $templates['header']);
             } else {
                 $templates['header'] .= '{$header}';
             }
