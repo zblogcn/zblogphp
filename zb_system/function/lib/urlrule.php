@@ -344,17 +344,17 @@ class UrlRule {
         }
         if ($type == 'page' || $type == 'article') {
             if (strpos($url, '%alias%') === false) {
-                $url = $url . '(\?.*)? ' . $zbp->cookiespath . 'index\.php\?id=$1&rewrite=1';
+                $url = $url . '(.*) ' . $zbp->cookiespath . 'index\.php\?id=$1&rewrite=1';
                 $url = str_replace('%id%', '([0-9]+)', $url);
             } else {
-                $url = $url . '(\?.*)? ' . $zbp->cookiespath . 'index\.php\?alias=$1&rewrite=1';
+                $url = $url . '(.*) ' . $zbp->cookiespath . 'index\.php\?alias=$1&rewrite=1';
                 if ($type == 'article') {
                     $url = str_replace('%alias%', '(?!zb_)([^/]+)', $url);
                 } else {
                     $url = str_replace('%alias%', '(?!zb_)(.+)', $url);
                 }
             }
-            $url = str_replace('%category%', '([^\./_]*/?)+)', $url);
+            $url = str_replace('%category%', '(?:(?:[^\./_]*/?)+)', $url);
             $url = str_replace('%author%', '(?:[^\./_]+)', $url);
             $url = str_replace('%year%', '(?:[0-9]<:4:>)', $url);
             $url = str_replace('%month%', '(?:[0-9]<:1,2:>)', $url);
