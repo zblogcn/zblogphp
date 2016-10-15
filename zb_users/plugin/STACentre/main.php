@@ -24,7 +24,13 @@ if (count($_POST) > 0) {
     $zbp->option['ZC_AUTHOR_REGEX'] = trim(GetVars('ZC_AUTHOR_REGEX', 'POST'));
     $zbp->SaveOption();
 
-    $zbp->AddBuildModuleAll();
+    $zbp->AddBuildModule('archives');
+    $zbp->AddBuildModule('tags');
+    $zbp->AddBuildModule('authors');
+    $zbp->AddBuildModule('previous');
+    $zbp->AddBuildModule('catalog');
+    $zbp->AddBuildModule('navbar');
+
     $zbp->BuildModule();
     $zbp->SetHint('good');
     if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && strpos($zbp->option['ZC_ARTICLE_REGEX'], '{%host%}index.php') === false) {

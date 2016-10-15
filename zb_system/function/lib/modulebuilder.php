@@ -192,7 +192,7 @@ class ModuleBuilder {
         $template = $zbp->template;
         $tags = array();
 
-        $i = $zbp->modulesbyfilename['comments']->MaxLi;
+        $i = $zbp->modulesbyfilename['previous']->MaxLi;
         if ($i == 0) {
             $i = 10;
         }
@@ -280,7 +280,12 @@ class ModuleBuilder {
             $sql = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', '0'), array('=', 'log_Status', '0'), array('BETWEEN', 'log_PostTime', $fdate, $ldate)));
             $n = GetValueInArrayByCurrent($zbp->db->Query($sql), 'num');
             if ($n > 0) {
-                $urls[]=array($url->Make(),str_replace(array('%y%', '%m%'), array(date('Y', $fdate), date('n', $fdate)), $zbp->lang['msg']['year_month']),$n);
+                //$urls[]=array($url->Make(),str_replace(array('%y%', '%m%'), array(date('Y', $fdate), date('n', $fdate)), $zbp->lang['msg']['year_month']),$n);
+                $meta = new Metas;
+                $meta->Url = $url->Make();
+                $meta->Name = str_replace(array('%y%', '%m%'), array(date('Y', $fdate), date('n', $fdate)), $zbp->lang['msg']['year_month']);
+                $meta->Count = $n;
+                $urls[] = $meta;
                 $i++;
             }
         }
@@ -380,10 +385,10 @@ class ModuleBuilder {
         ksort($array2);
 
         foreach ($array2 as $tag) {
-            $urls[]=array($tag->Url,$tag->Name,$tag->Count);
+            $tags[]=$tag;
         }
 
-        $tags['urls'] = $urls;
+        $tags['tags'] = $tags;
 
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-tags');
