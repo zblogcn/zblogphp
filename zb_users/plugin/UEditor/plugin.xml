@@ -5,7 +5,7 @@
 <url>http://www.rainbowsoft.org/</url>
 <note>UEditor编辑器.</note>
 <description>ZBP的默认编辑器；
-现版本号1.4.4。</description>
+现版本号1.4.4.3。</description>
 <path></path>
 <include>include.php</include>
 <level>1</level>
@@ -22,7 +22,7 @@
 <adapted>150101</adapted>
 <version>1.5</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2015-12-31</modified>
+<modified>2016-10-21</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

@@ -275,6 +275,7 @@
                     floatStyle: data['align'] || '',
                     vspace: data['vhSpace'] || '',
                     alt: data['title'] || '',
+                    title: data['title'] || '',
                     style: "width:" + data['width'] + "px;height:" + data['height'] + "px;"
                 }];
             } else {
@@ -665,8 +666,10 @@
             });
 
             uploader.on('fileDequeued', function (file) {
-                fileCount--;
-                fileSize -= file.size;
+                if (file.ext && acceptExtensions.indexOf(file.ext.toLowerCase()) != -1 && file.size <= imageMaxSize) {
+                    fileCount--;
+                    fileSize -= file.size;
+                }
 
                 removeFile(file);
                 updateTotalProgress();
@@ -777,6 +780,7 @@
                     src: prefix + data.url,
                     _src: prefix + data.url,
                     alt: data.original,
+                    title: data.original,
                     floatStyle: align
                 });
             }
@@ -955,6 +959,7 @@
                         src: src,
                         _src: src,
                         alt: src.substr(src.lastIndexOf('/') + 1),
+                        title: src.substr(src.lastIndexOf('/') + 1),
                         floatStyle: align
                     });
                 }
@@ -1110,6 +1115,7 @@
                         src: src,
                         _src: src,
                         alt: src.substr(src.lastIndexOf('/') + 1),
+                        title: src.substr(src.lastIndexOf('/') + 1),
                         floatStyle: align
                     });
                 }
