@@ -39,7 +39,7 @@ unset($post_data['password']);
             <div class="content moreinfo">
               <div>
                 <p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p>
-                <?php echo '(' . $this->type . ')' . $this->typeName . ' :   ' . strip_tags($this->messagefull); ?>
+                <?php echo '(' . $this->type . ')' . $this->typeName . ' :   ' . ($this->messagefull); ?>
                 <?php echo ' (' . ZC_VERSION_FULL . ') ';
                   if (!in_array('Status: 404 Not Found', headers_list())) {
                     echo '(' . GetEnvironment() . ') ';

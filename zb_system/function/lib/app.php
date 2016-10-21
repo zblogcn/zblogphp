@@ -556,6 +556,7 @@ class App {
             }
 
             if (!in_array($d, $zbp->activedapps)) {
+                $d='<a href="'.$zbp->host.'zb_users/plugin/AppCentre/main.php?alias='.$d.'">'.$d .'</a>';
                 $zbp->ShowError(str_replace('%s', $d, $zbp->lang['error'][83]), __FILE__, __LINE__);
             }
         }
