@@ -2152,15 +2152,15 @@ class ZBlogPHP {
      */
     public function GetTagByAliasOrName($name) {
         //return $this->GetTagByAlias($name, 'Name');
-        $a=array();
-        $a[]=array('tag_Alias',$name);
-        $a[]=array('tag_Name',$name);
-        $array=$this->GetTagList('*',array(array('array',$a)),'',1,'');
-        if(count($array)==0){
+        $a = array();
+        $a[] = array('tag_Alias',$name);
+        $a[] = array('tag_Name',$name);
+        $array = $this->GetTagList('*',array(array('array',$a)),'',1,'');
+        if(count($array) == 0) {
             return new Tag;
-        }else{
-            $this->tags[$array[0]->ID]=$array[0];
-            $this->tagsbyname[$array[0]->ID]=&$this->tags[$array[0]->ID];
+        } else {
+            $this->tags[$array[0]->ID] = $array[0];
+            $this->tagsbyname[$array[0]->ID] = &$this->tags[$array[0]->ID];
             return $this->tags[$array[0]->ID];
         }
     }
