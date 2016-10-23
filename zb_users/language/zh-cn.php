@@ -170,7 +170,7 @@ return array(
         'default_template' => '默认模板',
         'generate_summary' => '自动生成摘要',
         'add_to_navbar' => '加入导航栏菜单',
-        'help_generate_summary' => '在正文插入首條分隔符，則分隔符以上的內容將作為摘要。您也可以',
+        'help_generate_summary' => '在正文插入首条分隔符，则分隔符以上的内容将作为摘要。您也可以',
         'use_commas_to_separate' => '逗号分割',
         'show_common_tags' => '显示常用标签',
         'category_aritles_default_template' => '该分类文章的默认模板',
