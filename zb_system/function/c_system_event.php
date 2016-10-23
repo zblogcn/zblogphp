@@ -1203,8 +1203,11 @@ function PostArticle() {
             }
         } else {
             if (isset($_POST['Intro'])) {
-                if ($_POST['Intro'] == '') {
-                    $_POST['Intro'] = SubStrUTF8_Html($_POST['Content'], (int) strpos($_POST['Content'], '>') + (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
+                if ($_POST['Intro'] == '' || (stripos($_POST['Intro'],'<!--autointro-->')!==false)) {
+                    //$_POST['Intro'] = SubStrUTF8_Html($_POST['Content'], (int) strpos($_POST['Content'], '>') + (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
+                    //改纯HTML摘要
+                    $_POST['Intro'] = TransferHTML($_POST['Content'], "[nohtml]");
+                    $_POST['Intro'] = SubStrUTF8_Html($_POST['Intro'], (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
                     $_POST['Intro'] .= '<!--autointro-->';
                 }
                 $_POST['Intro'] = CloseTags($_POST['Intro']);
