@@ -1875,7 +1875,7 @@ class ZBlogPHP {
 
             if (isset($object[$id])) {
                 return $object[$id];
-            } elseif ($className == "Post" || $className == "Comment") {
+            } elseif ($className == "Post" || $className == "Comment" || $className == "Tag") {
                 // 文章需要读取，其他的直接返回空对象即可
                 $p = new $className;
                 $p->LoadInfoByID($id);
@@ -2151,7 +2151,18 @@ class ZBlogPHP {
      * @return Tag
      */
     public function GetTagByAliasOrName($name) {
-        return $this->GetTagByAlias($name, 'Name');
+        //return $this->GetTagByAlias($name, 'Name');
+        $a=array();
+        $a[]=array('tag_Alias',$name);
+        $a[]=array('tag_Name',$name);
+        $array=$this->GetTagList('*',array(array('array',$a)),'',1,'');
+        if(count($array)==0){
+            return new Tag;
+        }else{
+            $this->tags[$array[0]->ID]=$array[0];
+            $this->tagsbyname[$array[0]->ID]=&$this->tags[$array[0]->ID];
+            return $this->tags[$array[0]->ID];
+        }
     }
 
     /**

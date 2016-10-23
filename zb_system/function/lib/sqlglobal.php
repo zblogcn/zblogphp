@@ -355,6 +355,7 @@ class SQLGlobal {
             $this->$callableMethod();
         }
 
+
         return implode(' ', $sql);
     }
 
