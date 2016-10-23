@@ -113,7 +113,7 @@ class Template {
      * @param $array
      */
     public function SetTagsAll(&$array) {
-        $this->templateTags = array_merge_recursive($this->templateTags, $array);
+        $this->templateTags = $array + $this->templateTags;
     }
 
     /**
@@ -432,7 +432,8 @@ class Template {
      * @return string
      */
     protected function parse_vars_replace_dot($matches) {
-        if (strpos($matches[1], '=') === false || strpos($matches[1], '=>') !== false) {
+        $s = str_replace('=>', '', $matches[1]);
+        if (strpos($s, '=') === false) {
             return '{php} echo $' . $this->replace_dot($matches[1]) . '; {/php}';
         } else {
             return '{php} $' . $this->replace_dot($matches[1]) . '; {/php}';

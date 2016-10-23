@@ -9,10 +9,9 @@
     {/foreach}
 
     {for $i = 1; $i <= 3; $i++}
-        {* 此处逻辑仍要继续修改 *}
         {foreach $catalogs as $catalog}
             {if $catalog->Level == $i}
-                {$s = str_replace('<!--' . $catalog->ParentID . 'end-->', '<li class="li-subcate"><a href="' . $value->Url . '">' . $catalog->Name . '</a><!--' . $catalog->ID . 'begin--><!--' . $catalog->ID . 'end--></li><!--' . $catalog->ParentID . 'end-->', $s)}
+                {$s = str_replace('<!--' . $catalog->ParentID . 'end-->', '<li class="li-subcate"><a href="' . $catalog->Url . '">' . $catalog->Name . '</a><!--' . $catalog->ID . 'begin--><!--' . $catalog->ID . 'end--></li><!--' . $catalog->ParentID . 'end-->', $s)}
             {/if}
         {/foreach}
     {/for}
