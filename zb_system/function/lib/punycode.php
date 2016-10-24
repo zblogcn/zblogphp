@@ -1,8 +1,20 @@
 <?php
 /**
+ * Copyright (c) 2014 TrueServer B.V.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is furnished
+ * to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
  * Punycode implementation as described in RFC 3492
  *
  * @link http://tools.ietf.org/html/rfc3492
+ * @see https://github.com/true/php-punycode
  */
 class Punycode
 {
@@ -79,6 +91,7 @@ class Punycode
         if ($length > 255) {
             throw new Exception(sprintf('A full domain name is limited to 255 octets (including the separators), %s given.', $length));
         }
+
         return $output;
     }
     /**
@@ -141,6 +154,7 @@ class Punycode
         if ($length > 63 || $length < 1) {
             throw new Exception(sprintf('The length of any one label is limited to between 1 and 63 octets, but %s given.', $length));
         }
+
         return $out;
     }
     /**
@@ -169,6 +183,7 @@ class Punycode
         if ($length > 255) {
             throw new Exception(sprintf('A full domain name is limited to 255 octets (including the separators), %s given.', $length));
         }
+
         return $output;
     }
     /**
@@ -209,6 +224,7 @@ class Punycode
             $output = mb_substr($output, 0, $i, $this->encoding) . $this->codePointToChar($n) . mb_substr($output, $i, $outputLength - 1, $this->encoding);
             $i++;
         }
+
         return $output;
     }
     /**
@@ -225,6 +241,7 @@ class Punycode
         } elseif ($k >= $bias + static::TMAX) {
             return static::TMAX;
         }
+
         return $k - $bias;
     }
     /**
@@ -249,6 +266,7 @@ class Punycode
             $k = $k + static::BASE;
         }
         $k = $k + (int) (((static::BASE - static::TMIN + 1) * $delta) / ($delta + static::SKEW));
+
         return $k;
     }
     /**
@@ -274,6 +292,7 @@ class Punycode
                 $codePoints['all'][] = $codePoints['nonBasic'][] = $code;
             }
         }
+
         return $codePoints;
     }
     /**

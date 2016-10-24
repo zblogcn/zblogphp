@@ -470,6 +470,7 @@ class ZBlogPHP {
             $fpreturn = $fpname();
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -536,9 +537,9 @@ class ZBlogPHP {
      */
     public function LoadManage() {
 
-    	if( str_replace('http://', '', $this->path)!==str_replace('https://', '', $this->path) ){
-        	$this->host = GetCurrentHost($this->path, $this->cookiespath);
-    	}
+        if(str_replace('http://', '', $this->path) !== str_replace('https://', '', $this->path)){
+            $this->host = GetCurrentHost($this->path, $this->cookiespath);
+        }
 
 
         if (substr($this->host, 0, 8) == 'https://') {
@@ -893,8 +894,8 @@ class ZBlogPHP {
         }
 
         if(function_exists('mb_split')){
-            $a = mb_split('',$this->Config('system')->ZC_BLOG_HOST, 1);
-            $this->Config('system')->ZC_BLOG_HOST = implode("|",$a);
+            $a = mb_split('', $this->Config('system')->ZC_BLOG_HOST, 1);
+            $this->Config('system')->ZC_BLOG_HOST = implode("|", $a);
         } else {
             $this->Config('system')->ZC_BLOG_HOST = chunk_split($this->Config('system')->ZC_BLOG_HOST, 1, "|");
         }
@@ -973,7 +974,7 @@ class ZBlogPHP {
      * @param string $action 操作
      * @return bool
      */
-    public function CheckRights($action, $level=null) {
+    public function CheckRights($action, $level = null) {
 
         if($level === null){
             $level = $this->user->Level;
@@ -1257,6 +1258,7 @@ class ZBlogPHP {
                 $allthemes[] = $app;
             }
         }
+
         return $allthemes;
 
     }
@@ -1276,6 +1278,7 @@ class ZBlogPHP {
                 $allplugins[] = $app;
             }
         }
+
         return $allplugins;
 
     }
@@ -1317,6 +1320,7 @@ class ZBlogPHP {
     public function GetPreActivePlugin() {
         $ap = explode("|", $this->option['ZC_USING_PLUGIN_LIST']);
         $ap = array_unique($ap);
+
         return $ap;
     }
 
@@ -1870,12 +1874,13 @@ class ZBlogPHP {
         if ($object != null) {
             //$modules非ID为key
             if ($className == "Module") {
-                if($id>0){
+                if($id > 0){
                     foreach ($object as $key => $value) {
-                        if($value->ID==$id)return $value;
+                        if($value->ID == $id)return $value;
                     }
                 }
                 $m = new Module;
+
                 return $m;
             }
 
@@ -2159,14 +2164,15 @@ class ZBlogPHP {
     public function GetTagByAliasOrName($name) {
         //return $this->GetTagByAlias($name, 'Name');
         $a = array();
-        $a[] = array('tag_Alias',$name);
-        $a[] = array('tag_Name',$name);
-        $array = $this->GetTagList('*',array(array('array',$a)),'',1,'');
+        $a[] = array('tag_Alias', $name);
+        $a[] = array('tag_Name', $name);
+        $array = $this->GetTagList('*', array(array('array', $a)), '', 1, '');
         if(count($array) == 0) {
             return new Tag;
         } else {
             $this->tags[$array[0]->ID] = $array[0];
             $this->tagsbyname[$array[0]->ID] = &$this->tags[$array[0]->ID];
+
             return $this->tags[$array[0]->ID];
         }
     }
@@ -2698,16 +2704,16 @@ class ZBlogPHP {
         $host = str_replace(array('https://', 'http://'), array('', ''), GetCurrentHost(ZBP_PATH, $null));
         $host2 = str_replace(array('https://', 'http://'), array('', ''), $this->host);
 
-		if(stripos($host,'xn--')===0 && stripos($host2,'xn--')===false){
-			$Punycode = new Punycode();
-			$a = explode(':',$host2);
-			if(count($a)>0)
-			    $host2 = $Punycode->encode($a[0]) . ':' . $a[1];
-			else
-				$host2 = $Punycode->encode($host2);
-		}
+        if(stripos($host, 'xn--') === 0 && stripos($host2, 'xn--') === false){
+            $Punycode = new Punycode();
+            $a = explode(':', $host2);
+            if(count($a) > 0)
+                $host2 = $Punycode->encode($a[0]) . ':' . $a[1];
+            else
+                $host2 = $Punycode->encode($host2);
+        }
 
-        if ($host <> $host2) {
+        if ($host != $host2) {
             $u = GetRequestUri();
             $u = $this->host . substr($u, 1, strlen($u));
             Redirect301($u);
