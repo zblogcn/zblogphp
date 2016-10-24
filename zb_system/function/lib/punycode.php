@@ -78,21 +78,30 @@ class Punycode
     public function encode($input)
     {
         $input = mb_strtolower($input, $this->encoding);
-        $parts = explode('.', $input);
-        foreach ($parts as &$part) {
-            $length = strlen($part);
-            if ($length < 1) {
-                throw new Exception(sprintf('The length of any one label is limited to between 1 and 63 octets, but %s given.', $length));
+        $slashParts = explode('/', $input);
+        $outputs = array();
+        foreach ($slashParts as &$slash) {
+            if ($slash == '') {
+                $outputs[] = '';
+                continue;
             }
-            $part = $this->encodePart($part);
-        }
-        $output = implode('.', $parts);
-        $length = strlen($output);
-        if ($length > 255) {
-            throw new Exception(sprintf('A full domain name is limited to 255 octets (including the separators), %s given.', $length));
+            $parts = explode('.', $slash);
+            foreach ($parts as &$part) {
+                $length = strlen($part);
+                if ($length < 1) {
+                    throw new Exception(sprintf('The length of any one label is limited to between 1 and 63 octets, but %s given.', $length));
+                }
+                $part = $this->encodePart($part);
+            }
+            $output = implode('.', $parts);
+            $length = strlen($output);
+            if ($length > 255) {
+                throw new Exception(sprintf('A full domain name is limited to 255 octets (including the separators), %s given.', $length));
+            }
+            $outputs[] = $output;
         }
 
-        return $output;
+        return implode('/', $outputs);
     }
     /**
      * Encode a part of a domain name, such as tld, to its Punycode version
@@ -166,25 +175,34 @@ class Punycode
     public function decode($input)
     {
         $input = strtolower($input);
-        $parts = explode('.', $input);
-        foreach ($parts as &$part) {
-            $length = strlen($part);
-            if ($length > 63 || $length < 1) {
-                throw new Exception(sprintf('The length of any one label is limited to between 1 and 63 octets, but %s given.', $length));
-            }
-            if (strpos($part, static::PREFIX) !== 0) {
+        $slashParts = explode('/', $input);
+        $outputs = array();
+        foreach ($slashParts as &$slash) {
+            if ($slash == '') {
+                $outputs[] = '';
                 continue;
             }
-            $part = substr($part, strlen(static::PREFIX));
-            $part = $this->decodePart($part);
-        }
-        $output = implode('.', $parts);
-        $length = strlen($output);
-        if ($length > 255) {
-            throw new Exception(sprintf('A full domain name is limited to 255 octets (including the separators), %s given.', $length));
+            $parts = explode('.', $slash);
+            foreach ($parts as &$part) {
+                $length = strlen($part);
+                if ($length > 63 || $length < 1) {
+                    throw new Exception(sprintf('The length of any one label is limited to between 1 and 63 octets, but %s given.', $length));
+                }
+                if (strpos($part, static::PREFIX) !== 0) {
+                    continue;
+                }
+                $part = substr($part, strlen(static::PREFIX));
+                $part = $this->decodePart($part);
+            }
+            $output = implode('.', $parts);
+            $outputs[] = $output;
+            $length = strlen($output);
+            if ($length > 255) {
+                throw new Exception(sprintf('A full domain name is limited to 255 octets (including the separators), %s given.', $length));
+            }
         }
 
-        return $output;
+        return implode('/', $outputs);
     }
     /**
      * Decode a part of domain name, such as tld

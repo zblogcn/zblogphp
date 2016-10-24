@@ -1203,7 +1203,7 @@ function PostArticle() {
             }
         } else {
             if (isset($_POST['Intro'])) {
-                if ($_POST['Intro'] == '' || (stripos($_POST['Intro'],'<!--autointro-->')!==false)) {
+                if ($_POST['Intro'] == '' || (stripos($_POST['Intro'], '<!--autointro-->') !== false)) {
                     //$_POST['Intro'] = SubStrUTF8_Html($_POST['Content'], (int) strpos($_POST['Content'], '>') + (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
                     //改纯HTML摘要
                     $_POST['Intro'] = TransferHTML($_POST['Content'], "[nohtml]");
@@ -2662,11 +2662,14 @@ function SaveSetting() {
         $zbp->option[$key] = trim(str_replace(array("\r", "\n"), array("", ""), $value));
     }
 
+
+    $Punycode = new Punycode();
     $zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST']);
     $zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST'], '/') . '/';
     if ($zbp->option['ZC_BLOG_HOST'] == '/') {
         $zbp->option['ZC_BLOG_HOST'] = $zbp->host;
     }
+    $zbp->option['ZC_BLOG_HOST'] = $Punycode->encode($zbp->option['ZC_BLOG_HOST']);
     $lang = require $zbp->usersdir . 'language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php';
     $zbp->option['ZC_BLOG_LANGUAGE'] = $lang['lang'];
     $zbp->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
