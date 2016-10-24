@@ -892,7 +892,13 @@ class ZBlogPHP {
             $this->Config('system')->$key = $value;
         }
 
-        $this->Config('system')->ZC_BLOG_HOST = chunk_split($this->Config('system')->ZC_BLOG_HOST, 1, "|");
+        if(function_exists('mb_split')){
+            $a = mb_split('',$this->Config('system')->ZC_BLOG_HOST, 1);
+            $this->Config('system')->ZC_BLOG_HOST = implode("|",$a);
+        } else {
+            $this->Config('system')->ZC_BLOG_HOST = chunk_split($this->Config('system')->ZC_BLOG_HOST, 1, "|");
+        }
+
         $this->SaveConfig('system');
 
         return true;
@@ -2692,7 +2698,16 @@ class ZBlogPHP {
         $host = str_replace(array('https://', 'http://'), array('', ''), GetCurrentHost(ZBP_PATH, $null));
         $host2 = str_replace(array('https://', 'http://'), array('', ''), $this->host);
 
-        if (stripos($host, $host2) === false) {
+		if(stripos($host,'xn--')===0 && stripos($host2,'xn--')===false){
+			$Punycode = new Punycode();
+			$a = explode(':',$host2);
+			if(count($a)>0)
+			    $host2 = $Punycode->encode($a[0]) . ':' . $a[1];
+			else
+				$host2 = $Punycode->encode($host2);
+		}
+
+        if ($host <> $host2) {
             $u = GetRequestUri();
             $u = $this->host . substr($u, 1, strlen($u));
             Redirect301($u);
