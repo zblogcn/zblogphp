@@ -370,7 +370,7 @@ class ModuleBuilder {
         global $zbp;
         $template = $zbp->template;
         $tags = array();
-        $urls = array();//array(url,name,count);
+        $urls = array();//array(real tag);
 
         $i = $zbp->modulesbyfilename['tags']->MaxLi;
         if ($i == 0) {
@@ -385,10 +385,10 @@ class ModuleBuilder {
         ksort($array2);
 
         foreach ($array2 as $tag) {
-            $tags[]=$tag;
+            $urls[]=$tag;
         }
 
-        $tags['tags'] = $tags;
+        $tags['tags'] = $urls;
 
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-tags');
