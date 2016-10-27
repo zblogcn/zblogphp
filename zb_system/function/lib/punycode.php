@@ -112,8 +112,8 @@ class Punycode
     protected function encodePart($input)
     {
         $codePoints = $this->listCodePoints($input);
-        $n = static::INITIAL_N;
-        $bias = static::INITIAL_BIAS;
+        $n = Punycode::INITIAL_N;
+        $bias = Punycode::INITIAL_BIAS;
         $delta = 0;
         $h = $b = count($codePoints['basic']);
         $output = '';
@@ -124,7 +124,7 @@ class Punycode
             return $output;
         }
         if ($b > 0) {
-            $output .= static::DELIMITER;
+            $output .= Punycode::DELIMITER;
         }
         $codePoints['nonBasic'] = array_unique($codePoints['nonBasic']);
         sort($codePoints['nonBasic']);
@@ -135,21 +135,21 @@ class Punycode
             $delta = $delta + ($m - $n) * ($h + 1);
             $n = $m;
             foreach ($codePoints['all'] as $c) {
-                if ($c < $n || $c < static::INITIAL_N) {
+                if ($c < $n || $c < Punycode::INITIAL_N) {
                     $delta++;
                 }
                 if ($c === $n) {
                     $q = $delta;
-                    for ($k = static::BASE;; $k += static::BASE) {
+                    for ($k = Punycode::BASE;; $k += Punycode::BASE) {
                         $t = $this->calculateThreshold($k, $bias);
                         if ($q < $t) {
                             break;
                         }
-                        $code = $t + (($q - $t) % (static::BASE - $t));
-                        $output .= static::$encodeTable[$code];
-                        $q = ($q - $t) / (static::BASE - $t);
+                        $code = $t + (($q - $t) % (Punycode::BASE - $t));
+                        $output .= Punycode::$encodeTable[$code];
+                        $q = ($q - $t) / (Punycode::BASE - $t);
                     }
-                    $output .= static::$encodeTable[$q];
+                    $output .= Punycode::$encodeTable[$q];
                     $bias = $this->adapt($delta, $h + 1, ($h === $b));
                     $delta = 0;
                     $h++;
@@ -158,7 +158,7 @@ class Punycode
             $delta++;
             $n++;
         }
-        $out = static::PREFIX . $output;
+        $out = Punycode::PREFIX . $output;
         $length = strlen($out);
         if ($length > 63 || $length < 1) {
             throw new Exception(sprintf('The length of any one label is limited to between 1 and 63 octets, but %s given.', $length));
@@ -188,10 +188,10 @@ class Punycode
                 if ($length > 63 || $length < 1) {
                     throw new Exception(sprintf('The length of any one label is limited to between 1 and 63 octets, but %s given.', $length));
                 }
-                if (strpos($part, static::PREFIX) !== 0) {
+                if (strpos($part, Punycode::PREFIX) !== 0) {
                     continue;
                 }
-                $part = substr($part, strlen(static::PREFIX));
+                $part = substr($part, strlen(Punycode::PREFIX));
                 $part = $this->decodePart($part);
             }
             $output = implode('.', $parts);
@@ -212,11 +212,11 @@ class Punycode
      */
     protected function decodePart($input)
     {
-        $n = static::INITIAL_N;
+        $n = Punycode::INITIAL_N;
         $i = 0;
-        $bias = static::INITIAL_BIAS;
+        $bias = Punycode::INITIAL_BIAS;
         $output = '';
-        $pos = strrpos($input, static::DELIMITER);
+        $pos = strrpos($input, Punycode::DELIMITER);
         if ($pos !== false) {
             $output = substr($input, 0, $pos++);
         } else {
@@ -227,14 +227,14 @@ class Punycode
         while ($pos < $inputLength) {
             $oldi = $i;
             $w = 1;
-            for ($k = static::BASE;; $k += static::BASE) {
-                $digit = static::$decodeTable[$input[$pos++]];
+            for ($k = Punycode::BASE;; $k += Punycode::BASE) {
+                $digit = Punycode::$decodeTable[$input[$pos++]];
                 $i = $i + ($digit * $w);
                 $t = $this->calculateThreshold($k, $bias);
                 if ($digit < $t) {
                     break;
                 }
-                $w = $w * (static::BASE - $t);
+                $w = $w * (Punycode::BASE - $t);
             }
             $bias = $this->adapt($i - $oldi, ++$outputLength, ($oldi === 0));
             $n = $n + (int) ($i / $outputLength);
@@ -254,10 +254,10 @@ class Punycode
      */
     protected function calculateThreshold($k, $bias)
     {
-        if ($k <= $bias + static::TMIN) {
-            return static::TMIN;
-        } elseif ($k >= $bias + static::TMAX) {
-            return static::TMAX;
+        if ($k <= $bias + Punycode::TMIN) {
+            return Punycode::TMIN;
+        } elseif ($k >= $bias + Punycode::TMAX) {
+            return Punycode::TMAX;
         }
 
         return $k - $bias;
@@ -274,16 +274,16 @@ class Punycode
     {
         $delta = (int) (
             ($firstTime)
-                ? $delta / static::DAMP
+                ? $delta / Punycode::DAMP
                 : $delta / 2
             );
         $delta += (int) ($delta / $numPoints);
         $k = 0;
-        while ($delta > ((static::BASE - static::TMIN) * static::TMAX) / 2) {
-            $delta = (int) ($delta / (static::BASE - static::TMIN));
-            $k = $k + static::BASE;
+        while ($delta > ((Punycode::BASE - Punycode::TMIN) * Punycode::TMAX) / 2) {
+            $delta = (int) ($delta / (Punycode::BASE - Punycode::TMIN));
+            $k = $k + Punycode::BASE;
         }
-        $k = $k + (int) (((static::BASE - static::TMIN + 1) * $delta) / ($delta + static::SKEW));
+        $k = $k + (int) (((Punycode::BASE - Punycode::TMIN + 1) * $delta) / ($delta + Punycode::SKEW));
 
         return $k;
     }

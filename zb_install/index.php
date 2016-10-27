@@ -309,6 +309,11 @@ function Setup2() {
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gd2'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gd2'][1];?></td>
         </tr>
+        <tr>
+          <td scope="row" style="width:200px">mbstring</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mbstring'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mbstring'][1];?></td>
+        </tr>        
 <?php if (version_compare(PHP_VERSION, '5.5.0', '<')) {?>
         <tr>
           <td scope="row">mysql</td>
@@ -721,6 +726,7 @@ function CheckServer() {
         'pdo_sqlite' => array('', ''),
         'pgsql' => array('', ''),
         'pdo_pgsql' => array('', ''),
+        'mbstring' => array('', ''),
         //权限
         'zb_users' => array('', ''),
         'cache' => array('', ''),
@@ -756,6 +762,10 @@ function CheckServer() {
         $CheckResult['mysqli'][0] = strtok(mysqli_get_client_info(), '$');
         $CheckResult['mysqli'][1] = $CheckResult['mysqli'][0] ? bingo : error;
     }
+    if (function_exists("mb_language")) {
+        $CheckResult['mbstring'][0] = mb_language();
+        $CheckResult['mbstring'][1] = $CheckResult['mbstring'][0] ? bingo : error;
+    }    
     if (class_exists("PDO", false)) {
         if (extension_loaded('pdo_mysql')) {
             //$pdo = new PDO( 'mysql:');

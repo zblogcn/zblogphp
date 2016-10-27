@@ -72,7 +72,7 @@ class Dbpdo_MySQL implements iDataBase {
 
             $myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
             $this->version = substr($myver, 0, strpos($myver, "-"));
-            if(version_compare($this->version, '5.5.3') >= 0){
+            if(version_compare($this->version, '5.5.3') >= 0 && version_compare(PHP_VERSION, '5.3.0') >= 0){
                 $u = "utf8mb4";
             }else{
                 $u = "utf8";
@@ -101,7 +101,7 @@ class Dbpdo_MySQL implements iDataBase {
         
         $myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
         $myver = substr($myver, 0, strpos($myver, "-"));
-        if(version_compare($myver, '5.5.3') >= 0){
+        if(version_compare($myver, '5.5.3') >= 0 && version_compare(PHP_VERSION, '5.3.0') >= 0){
             $u = "utf8mb4";
         }else{
             $u = "utf8";
