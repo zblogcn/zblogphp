@@ -144,9 +144,9 @@ class UrlRule {
             $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
             $url = str_replace('%date%', '(?P<date>[0-9\-]+)', $url);
             if ($type == 'cate') {
-                $url = str_replace('%alias%', '(?P<alias>([^\./_]*/?)+)', $url);
+                $url = str_replace('%alias%', '(?P<alias>([^\./_]*/?)+?)', $url);
             } else {
-                $url = str_replace('%alias%', '(?P<alias>[^\./_]+)', $url);
+                $url = str_replace('%alias%', '(?P<alias>[^\./_]+?)', $url);
             }
         }
         if ($type == 'page' || $type == 'article') {
@@ -337,24 +337,24 @@ class UrlRule {
             $url = str_replace('%id%', '([0-9]+)', $url);
             $url = str_replace('%date%', '([0-9\-]+)', $url);
             if ($type == 'cate') {
-                $url = str_replace('%alias%', '([^\./_]*/?)+)', $url);
+                $url = str_replace('%alias%', '([^\./_]*/?)+?)', $url);
             } else {
-                $url = str_replace('%alias%', '([^\./_]+)', $url);
+                $url = str_replace('%alias%', '([^\./_]+?)', $url);
             }
         }
         if ($type == 'page' || $type == 'article') {
             if (strpos($url, '%alias%') === false) {
-                $url = $url . '(.*) ' . $zbp->cookiespath . 'index\.php\?id=$1&rewrite=1';
+                $url = $url . '(\?.*)? ' . $zbp->cookiespath . 'index\.php\?id=$1&rewrite=1';
                 $url = str_replace('%id%', '([0-9]+)', $url);
             } else {
-                $url = $url . '(.*) ' . $zbp->cookiespath . 'index\.php\?alias=$1&rewrite=1';
+                $url = $url . '(\?.*)? ' . $zbp->cookiespath . 'index\.php\?alias=$1&rewrite=1';
                 if ($type == 'article') {
                     $url = str_replace('%alias%', '(?!zb_)([^/]+)', $url);
                 } else {
                     $url = str_replace('%alias%', '(?!zb_)(.+)', $url);
                 }
             }
-            $url = str_replace('%category%', '(?:(?:[^\./_]*/?)+)', $url);
+            $url = str_replace('%category%', '([^\./_]*/?)+)', $url);
             $url = str_replace('%author%', '(?:[^\./_]+)', $url);
             $url = str_replace('%year%', '(?:[0-9]<:4:>)', $url);
             $url = str_replace('%month%', '(?:[0-9]<:1,2:>)', $url);
