@@ -379,7 +379,14 @@ function AutoIntro() {
 	  if(s.indexOf("<hr class=\"more\"/>")>-1){
       editor_api.editor.intro.put(s.split("<hr class=\"more\"/>")[0]);
   	}else{
-	  	editor_api.editor.intro.put(s.substring(0,<?php echo $zbp->option['ZC_ARTICLE_EXCERPT_MAX']; ?>));
+      i=<?php echo $zbp->option['ZC_ARTICLE_EXCERPT_MAX']; ?>;
+      j=s.substring(0,i).lastIndexOf("<");
+      k=s.substring(0,i).lastIndexOf(">");
+      if(j>k){
+        m=s.indexOf(">",i)+1;
+        if(m>i)i=m;
+      }
+      editor_api.editor.intro.put(s.substring(0,i));
   	}
   }
 	$("#divIntro").show();

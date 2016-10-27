@@ -1,6 +1,4 @@
-{$i = $maxLi}
-{$j = 0}
-{$s = ''}
+{$i = $maxLi}{$j = 0}{$s = ''}
 {if $style==2}
     {foreach $catalogs as $catalog}
         {if $catalog->Level == 0}
@@ -23,21 +21,21 @@
         {$s = str_replace('<!--' . $catalog->ID . 'begin-->', '<ul class="ul-subcates">', $s)}
         {$s = str_replace('<!--' . $catalog->ID . 'end-->', '</ul>', $s)}
     {/foreach}
-    {$s}
+    {php}ob_clean(){/php}{$s}
 {elseif $style==1}
-    {foreach $catalogs as $catalog}
-        <li>{$catalog->Symbol}<a href="{$catalog.Url}">{$catalog.Name}</a></li>
-        {$j =$j + 1}
-        {if $i != 0 && $j >= $i}
-            {php}break;{/php}
-        {/if}
-    {/foreach}
+{foreach $catalogs as $catalog}
+<li>{$catalog->Symbol}<a href="{$catalog.Url}">{$catalog.Name}</a></li>
+{$j =$j + 1}
+{if $i != 0 && $j >= $i}
+{php}break;{/php}
+{/if}
+{/foreach}
 {else}
-    {foreach $catalogs as $catalog}
-        <li><a href="{$catalog.Url}">{$catalog.Name}</a></li>
-        {$j =$j + 1}
-        {if $i != 0 && $j >= $i}
-            {php}break;{/php}
-        {/if}
-    {/foreach}
+{foreach $catalogs as $catalog}
+<li><a href="{$catalog.Url}">{$catalog.Name}</a></li>
+{$j =$j + 1}
+{if $i != 0 && $j >= $i}
+    {php}break;{/php}
+{/if}
+{/foreach}
 {/if}
