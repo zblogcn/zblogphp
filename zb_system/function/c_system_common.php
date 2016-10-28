@@ -857,7 +857,7 @@ function JsonError($errorCode, $errorString, $data) {
         'err' => array(
             'code' => $errorCode,
             'msg' => $errorString,
-            'runtime' => RunTime(),
+            //'runtime' => RunTime(),
             'timestamp' => time(),
         ),
     );
