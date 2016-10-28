@@ -94,7 +94,7 @@ class Category extends Base {
             $backAttr = $zbp->option['ZC_ALIAS_BACK_ATTR'];
             $u = new UrlRule($zbp->option['ZC_CATEGORY_REGEX']);
             $u->Rules['{%id%}'] = $this->ID;
-            $u->Rules['{%alias%}'] = rawurlencode($this->Alias == '' ? $this->$backAttr : $this->Alias);
+            $u->Rules['{%alias%}'] = $this->Alias == '' ? $this->$backAttr : $this->Alias;
 
             return $u->Make();
         }

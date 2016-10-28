@@ -333,7 +333,7 @@ class Template {
      * @param $content
      */
     protected function parse_function(&$content) {
-        $content = preg_replace_callback('/\{([a-zA-Z0-9_]+?)\((.+?)\)\}/', array($this, 'parse_funtion_replace_dot'), $content);
+        $content = preg_replace_callback('/\{([a-zA-Z0-9_]+?)\((.*?)\)\}/', array($this, 'parse_funtion_replace_dot'), $content);
     }
 
     /**
