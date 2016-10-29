@@ -546,7 +546,7 @@ function ViewAuto($inpurl) {
         $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate');
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
-            isset($m['alias'])?$m['alias']=rtrim($m['alias'],'/'):null;
+            isset($m['alias']) ? $m['alias'] = rtrim($m['alias'],'/') : null;
             $result = ViewList($m['page'], $m, null, null, null, true);
             if ($result == true) {
                 return null;

@@ -511,7 +511,7 @@ return array(
 		',
         '8' => '
 			您是否輸入了正確的名稱和密碼？<br/>
-			如果您是管理員且忘記了密碼，可以點擊下載<a href="https://www.zblogcn.com/program/zblogphp_findpassword/" target="_blank">【密碼找回工具】</a>。<br/>
+			如果您是管理員且忘記了密碼，可以點擊<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-8" target="_blank">【登入失敗】</a>。<br/>
 			<br/>
 		',
 

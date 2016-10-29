@@ -380,12 +380,7 @@ function AutoIntro() {
       editor_api.editor.intro.put(s.split("<hr class=\"more\"/>")[0]);
   	}else{
       i=<?php echo $zbp->option['ZC_ARTICLE_EXCERPT_MAX']; ?>;
-      j=s.substring(0,i).lastIndexOf("<");
-      k=s.substring(0,i).lastIndexOf(">");
-      if(j>k){
-        m=s.indexOf(">",i)+1;
-        if(m>i)i=m;
-      }
+      s=s.replace(/<[^>]+>/g,"");
       editor_api.editor.intro.put(s.substring(0,i));
   	}
   }

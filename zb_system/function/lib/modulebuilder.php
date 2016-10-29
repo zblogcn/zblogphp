@@ -472,13 +472,13 @@ class ModuleBuilder {
             $all_comments = $array[5];
         }
 
-        $allinfo[]=array($zbp->lang['msg']['all_artiles'],$all_artiles);
-        $allinfo[]=array($zbp->lang['msg']['all_pages'],$all_pages);
-        $allinfo[]=array($zbp->lang['msg']['all_categorys'],$all_categorys);
-        $allinfo[]=array($zbp->lang['msg']['all_tags'],$all_tags);
-        $allinfo[]=array($zbp->lang['msg']['all_comments'],$all_comments);
+        $allinfo['all_artiles']=array('name'=>$zbp->lang['msg']['all_artiles'],'count'=>$all_artiles);
+        $allinfo['all_pages']=array('name'=>$zbp->lang['msg']['all_pages'],'count'=>$all_pages);
+        $allinfo['all_categorys']=array('name'=>$zbp->lang['msg']['all_categorys'],'count'=>$all_categorys);
+        $allinfo['all_tags']=array('name'=>$zbp->lang['msg']['all_tags'],'count'=>$all_tags);
+        $allinfo['all_comments']=array('name'=>$zbp->lang['msg']['all_comments'],'count'=>$all_comments);
         if (!$zbp->option['ZC_VIEWNUMS_TURNOFF'] || $zbp->option['ZC_LARGE_DATA']) {
-            $allinfo[]=array($zbp->lang['msg']['all_views'],$all_views);
+            $allinfo['all_views']=array('name'=>$zbp->lang['msg']['all_views'],'count'=>$all_views);
         }
 
         $zbp->modulesbyfilename['statistics']->Type = "ul";
