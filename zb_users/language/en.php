@@ -409,7 +409,7 @@ return array(
         '5' => 'No Unauthorized Access',
         '6' => 'Not Permitted',
         '7' => 'Username is not in the correct format, it may be too long or is empty.',
-        '8' => 'Login Failed for User',
+        '8' => 'Login Failed',
         '9' => 'This Post does not exist, or permission is too low.',
         '10' => 'System Initialization Failed',
         '11' => 'Update Post Failed',
