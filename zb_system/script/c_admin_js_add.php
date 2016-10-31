@@ -17,8 +17,8 @@ var zbp = new ZBP({
 });
 
 var bloghost = zbp.options.bloghost;
-var cookiespath = zbp.options.bloghost;
-var ajaxurl = zbp.options.bloghost;
+var cookiespath = zbp.options.cookiepath;
+var ajaxurl = zbp.options.ajaxurl;
 
 //*********************************************************
 // 目的：    全选
