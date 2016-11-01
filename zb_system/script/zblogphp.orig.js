@@ -91,7 +91,11 @@
         this.plugin.on("comment.posterror", "system", function(error, formData) {
 
             var objSubmit = $("#inpId").parent("form").find(":submit");
-            objSubmit.removeClass("loading").removeAttr("disabled").val(objSubmit.data("orig"));
+            objSubmit.removeClass("loading").removeAttr("disabled");
+
+            if (objSubmit.data("orig")) {
+                objSubmit.val(objSubmit.data("orig"));
+            }
 
 
         });
