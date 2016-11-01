@@ -368,10 +368,10 @@ class SQLGlobal {
         //array_walk
         foreach ($table as $index => $tableValue) {
             if (is_string($tableValue)) {
-                $tableData[] = " `$tableValue` ";
+                $tableData[] = " $tableValue "; // 为保证兼容性，不加反引号
             }
             if (is_array($tableValue)) {
-                $tableData[] = " `$tableValue[0]` $tableValue[1] ";
+                $tableData[] = " $tableValue[0] $tableValue[1] ";
             }
         }
         $sql[] = implode($tableData, ", ");

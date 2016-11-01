@@ -49,55 +49,55 @@ class ClassSQLMySQLTest extends PHPUnit_Framework_TestCase
     }
 
     public function testOption() {
-        $this->assertEquals('SELECT * FROM  `zbp_post`  USE INDEX (test) ',
+        $this->assertEquals('SELECT * FROM  zbp_post  USE INDEX (test) ',
             self::$db
             ->select("zbp_post")
             ->option(array('useindex' => 'test'))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  `zbp_post`  USE INDEX (a, b) ',
+        $this->assertEquals('SELECT * FROM  zbp_post  USE INDEX (a, b) ',
             self::$db
             ->select("zbp_post")
             ->option(array('useindex' => array('a, b')))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  `zbp_post`  FORCE INDEX (test) ',
+        $this->assertEquals('SELECT * FROM  zbp_post  FORCE INDEX (test) ',
             self::$db
             ->select("zbp_post")
             ->option(array('forceindex' => 'test'))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  `zbp_post`  FORCE INDEX (a, b) ',
+        $this->assertEquals('SELECT * FROM  zbp_post  FORCE INDEX (a, b) ',
             self::$db
             ->select("zbp_post")
             ->option(array('forceindex' => array('a, b')))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  `zbp_post`  IGNORE INDEX (test) ',
+        $this->assertEquals('SELECT * FROM  zbp_post  IGNORE INDEX (test) ',
             self::$db
             ->select("zbp_post")
             ->option(array('ignoreindex' => 'test'))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  `zbp_post`  IGNORE INDEX (a, b) ',
+        $this->assertEquals('SELECT * FROM  zbp_post  IGNORE INDEX (a, b) ',
             self::$db
             ->select("zbp_post")
             ->option(array('ignoreindex' => array('a, b')))
             ->sql
         );
-        $this->assertEquals('SELECT SQL_NO_CACHE  * FROM  `zbp_post` ',
+        $this->assertEquals('SELECT SQL_NO_CACHE  * FROM  zbp_post ',
             self::$db
             ->select("zbp_post")
             ->option(array('sql_no_cache' => true))
             ->sql
         );
-        $this->assertEquals('SELECT SQL_CACHE  * FROM  `zbp_post` ',
+        $this->assertEquals('SELECT SQL_CACHE  * FROM  zbp_post ',
             self::$db
             ->select("zbp_post")
             ->option(array('sql_cache' => true))
             ->sql
         );
-        $this->assertEquals('SELECT SQL_BUFFER_RESULT  * FROM  `zbp_post` ',
+        $this->assertEquals('SELECT SQL_BUFFER_RESULT  * FROM  zbp_post ',
             self::$db
             ->select("zbp_post")
             ->option(array('sql_buffer_result' => true))
