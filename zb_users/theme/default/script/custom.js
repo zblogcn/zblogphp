@@ -22,6 +22,7 @@ zbp.plugin.on("comment.reply", "default", function(id) {
 		var temp = $('#temp-frm');
 		$("#inpRevID").val(0);
 		if (!temp.length || !frm.length) return;
+		temp.before(frm);
 		temp.remove();
 		$(this).hide();
 		frm.removeClass("reply-frm");
