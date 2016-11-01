@@ -501,7 +501,6 @@ function ViewAuto($inpurl) {
 
     if ($url == '' || $url == 'index.php') {
         ViewList(null, null, null, null, null);
-
         return null;
     }
 
@@ -511,42 +510,76 @@ function ViewAuto($inpurl) {
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
             ViewList($m['page'], null, null, null, null, true);
-
             return null;
         }
 
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_DATE_REGEX'], 'date');
+        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_DATE_REGEX'], 'date', false);
+        $m = array();
+        if (preg_match($r, $url, $m) == 1) {
+            isset($m['page']) ? null : $m['page'] = 0;
+            ViewList($m['page'], null, null, $m, null, true);
+            return null;
+        }
+
+        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_DATE_REGEX'], 'date', true);
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
             ViewList($m['page'], null, null, $m, null, true);
-
             return null;
         }
 
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_AUTHOR_REGEX'], 'auth');
+        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_AUTHOR_REGEX'], 'auth', false);
+        $m = array();
+        if (preg_match($r, $url, $m) == 1) {
+            isset($m['page']) ? null : $m['page'] = 0;
+            $result = ViewList($m['page'], null, $m, null, null, true);
+            if ($result == true) {
+                return null;
+            }
+        }
+
+        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_AUTHOR_REGEX'], 'auth', true);
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
             $result = ViewList($m['page'], null, $m, null, null, true);
             if ($result == true) {
                 return null;
             }
-
         }
 
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_TAGS_REGEX'], 'tags');
+        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_TAGS_REGEX'], 'tags', false);
+        $m = array();
+        if (preg_match($r, $url, $m) == 1) {
+            isset($m['page']) ? null : $m['page'] = 0;
+            $result = ViewList($m['page'], null, null, null, $m, true);
+            if ($result == true) {
+                return null;
+            }
+        }
+
+        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_TAGS_REGEX'], 'tags' ,true);
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
             $result = ViewList($m['page'], null, null, null, $m, true);
             if ($result == true) {
                 return null;
             }
+        }
+
+        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate' ,false);
+        $m = array();
+        if (preg_match($r, $url, $m) == 1) {
+            isset($m['page']) ? null : $m['page'] = 0;
+            $result = ViewList($m['page'], $m, null, null, null, true);
+            if ($result == true) {
+                return null;
+            }
 
         }
 
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate');
+        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate' ,true);
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
-            isset($m['alias']) ? $m['alias'] = rtrim($m['alias'],'/') : null;
             $result = ViewList($m['page'], $m, null, null, null, true);
             if ($result == true) {
                 return null;
@@ -556,13 +589,11 @@ function ViewAuto($inpurl) {
 
         $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_ARTICLE_REGEX'], 'article');
         $m = array();
-
         if (preg_match($r, $url, $m) == 1) {
             $result = ViewPost($m, null, true);
             if ($result == false) {
                 $zbp->ShowError(2, __FILE__, __LINE__);
             }
-
             return null;
         }
 
@@ -770,7 +801,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 
         $template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
         $w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 month', $datetime));
-        $pagebar->UrlRule->Rules['{%date%}'] = $date;
+        $pagebar->UrlRule->Rules['{%date%}'] = date('Y-n',$datetime);
         $datetime = Metas::ConvertArray(getdate($datetime));
         break;
     ########################################################################################################

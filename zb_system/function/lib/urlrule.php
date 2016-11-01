@@ -86,7 +86,8 @@ class UrlRule {
 
         $this->Rules['{%host%}'] = $zbp->host;
         foreach ($this->Rules as $key => $value) {
-            $s = str_replace($key, $value, $s);
+            if( !is_array($value) )
+                $s = str_replace($key, $value, $s);
         }
 
         if (substr($this->PreUrl, -1) != '/' && substr($s, -1) == '/' && $s != $zbp->host) {
@@ -112,12 +113,15 @@ class UrlRule {
         }
     }
 
+
+
     /**
      * @param $url
      * @param $type
+     * @param $haspage boolean
      * @return string
      */
-    public static function OutputUrlRegEx($url, $type) {
+    public static function OutputUrlRegEx($url, $type, $haspage = false) {
         global $zbp;
 
         $s = $url;
@@ -137,14 +141,24 @@ class UrlRule {
             $url = str_replace('%page%', '%poaogoe%', $url);
             preg_match('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', $s, $matches);
             if (isset($matches[0])) {
-                $url = str_replace($matches[0], '(?:' . $matches[0] . ')?', $url);
+                if ($haspage) {
+                    //$url = str_replace($matches[0], '(?:' . $matches[0] . ')', $url);
+                    $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '(?:' . $matches[0] . ')', $url, 1);
+                }else{
+                    //$url = str_replace($matches[0], '', $url);
+                    $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '', $url, 1);
+                }
             }
             $url = $url . '$';
-            $url = str_replace('%poaogoe%', '(?P<page>[0-9]*)', $url);
+            if ($haspage) {
+                    $url = str_replace('%poaogoe%', '(?P<page>[0-9]*)', $url);
+            }else{
+                    $url = str_replace('%poaogoe%', '', $url);
+            }
             $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
             $url = str_replace('%date%', '(?P<date>[0-9\-]+)', $url);
             if ($type == 'cate') {
-                $url = str_replace('%alias%', '(?P<alias>([^\./_]*/?)+?)', $url);
+                $url = str_replace('%alias%', '(?P<alias>([^\./_]*)+?)', $url);
             } else {
                 $url = str_replace('%alias%', '(?P<alias>[^\./_]+?)', $url);
             }

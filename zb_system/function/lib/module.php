@@ -82,6 +82,9 @@ class Module extends Base {
      */
     public function Save() {
         global $zbp;
+
+        $this->Content = str_replace($zbp->host, '{$host}', $this->Content);
+
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Save'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);

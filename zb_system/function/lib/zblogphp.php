@@ -1240,6 +1240,10 @@ class ZBlogPHP {
             $this->modulesbyfilename[$m->FileName] = $m;
         }
 
+        foreach ($this->modules as $m) {
+            $m->Content = str_replace('{$host}', $this->host, $m->Content);
+        }
+
     }
 
     /**
