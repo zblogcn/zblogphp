@@ -517,15 +517,19 @@ function ViewAuto($inpurl) {
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
             isset($m['page']) ? null : $m['page'] = 0;
-            ViewList($m['page'], null, null, $m, null, true);
-            return null;
+            $result = ViewList($m['page'], null, null, $m, null, true);
+            if ($result == true) {
+                return null;
+            }
         }
 
         $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_DATE_REGEX'], 'date', true);
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
-            ViewList($m['page'], null, null, $m, null, true);
-            return null;
+            $result = ViewList($m['page'], null, null, $m, null, true);
+            if ($result == true) {
+                return null;
+            }
         }
 
         $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_AUTHOR_REGEX'], 'auth', false);
@@ -784,10 +788,18 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
     ########################################################################################################
     case 'date':
         $pagebar = new Pagebar($zbp->option['ZC_DATE_REGEX']);
+
         if (!is_array($date)) {
-            $datetime = strtotime($date);
+            $datetime = $date;
         } else {
-            $datetime = strtotime($date['date']);
+            $datetime = $date['date'];
+        }
+        if(preg_match('/[0-9]{4}-[0-9]{1,2}/i',$datetime)==0){
+            return false;
+        }
+        $datetime = strtotime($datetime);
+        if($datetime == false){
+            return false;
         }
 
         $datetitle = str_replace(array('%y%', '%m%'), array(date('Y', $datetime), date('n', $datetime)), $zbp->lang['msg']['year_month']);

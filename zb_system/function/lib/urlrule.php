@@ -21,6 +21,8 @@ class UrlRule {
      */
     public $MakeReplace = true;
 
+    public static $categorylayer = '-1';
+
     /**
      * @param $url
      */
@@ -158,7 +160,26 @@ class UrlRule {
             $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
             $url = str_replace('%date%', '(?P<date>[0-9\-]+)', $url);
             if ($type == 'cate') {
-                $url = str_replace('%alias%', '(?P<alias>([^\./_]*)+?)', $url);
+                if(UrlRule::$categorylayer == -1){
+                    foreach ($zbp->categorys as $c) {
+                        if($c->Level > UrlRule::$categorylayer) UrlRule::$categorylayer = $c->Level;
+                    }
+                }
+                switch (UrlRule::$categorylayer) {
+                    case 3:
+                        $fullcategory='[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
+                        break;
+                    case 2:
+                        $fullcategory='[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*';
+                        break;
+                    case 1:
+                        $fullcategory='[^\./_]*|[^\./_]*/[^\./_]*';
+                        break;
+                    default:
+                        $fullcategory='[^\./_]*';
+                        break;
+                }
+                $url = str_replace('%alias%', '(?P<alias>(' . $fullcategory . ')+?)', $url);
             } else {
                 $url = str_replace('%alias%', '(?P<alias>[^\./_]+?)', $url);
             }
