@@ -1225,19 +1225,17 @@ class ZBlogPHP {
         }
 
         $dir = $this->usersdir . 'theme/' . $this->theme . '/include/';
-        if (!file_exists($dir)) {
-            return null;
-        }
-
-        $files = GetFilesInDir($dir, 'php');
-        foreach ($files as $sortname => $fullname) {
-            $m = new Module();
-            $m->FileName = $sortname;
-            $m->Content = file_get_contents($fullname);
-            $m->Type = 'div';
-            $m->Source = 'theme';
-            $this->modules[] = $m;
-            $this->modulesbyfilename[$m->FileName] = $m;
+        if (file_exists($dir)) {
+	        $files = GetFilesInDir($dir, 'php');
+	        foreach ($files as $sortname => $fullname) {
+	            $m = new Module();
+	            $m->FileName = $sortname;
+	            $m->Content = file_get_contents($fullname);
+	            $m->Type = 'div';
+	            $m->Source = 'theme';
+	            $this->modules[] = $m;
+	            $this->modulesbyfilename[$m->FileName] = $m;
+	        }
         }
 
         foreach ($this->modules as $m) {
