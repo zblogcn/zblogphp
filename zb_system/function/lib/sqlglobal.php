@@ -405,22 +405,22 @@ class SQLGlobal {
             if (in_array($eq, array('=', '<>', '>', '<', '>=', '<=', 'NOT LIKE', 'LIKE', 'ILIKE', 'NOT ILIKE'))) {
                 $x = (string) $value[1];
                 $y = $this->db->EscapeString((string) $value[2]);
-                $whereData[] = " `$x` $eq '$y' ";
+                $whereData[] = " $x $eq '$y' ";
             } elseif ($eq == 'EXISTS' || $eq == 'NOT EXISTS') {
                 if (!isset($value[2])) {
                     $whereData[] = " $eq ( $value[1] ) ";
                 } else {
-                    $whereData[] = " (( `$value[1]` $eq $value[2] )) ";
+                    $whereData[] = " (( $value[1] $eq $value[2] )) ";
                 }
             } elseif ($eq == 'BETWEEN') {
-                $whereData[] = " (`$value[1]` BETWEEN '$value[2]' AND '$value[3]') ";
+                $whereData[] = " ($value[1] BETWEEN '$value[2]' AND '$value[3]') ";
             } elseif ($eq == 'SEARCH') {
                 $searchCount = count($value);
                 $sqlSearch = array();
                 for ($i = 1; $i <= $searchCount - 1 - 1; $i++) {
                     $x = (string) $value[$i];
                     $y = $this->db->EscapeString((string) $value[$searchCount - 1]);
-                    $sqlSearch[] = " (`$x` LIKE '%$y%') ";
+                    $sqlSearch[] = " ($x LIKE '%$y%') ";
                 }
                 $whereData[] = " ((1 = 1) AND (" . implode(' OR ', $sqlSearch) . ') )';
             } elseif ($eq == 'ARRAY' || $eq == 'NOT ARRAY' || $eq == "LIKE ARRAY" || $eq == "ILIKE ARRAY") {
@@ -444,7 +444,7 @@ class SQLGlobal {
                 }
                 foreach ($value[1] as $x => $y) {
                     $y[1] = $this->db->EscapeString($y[1]);
-                    $sqlArray[] = " `$y[0]` $symbol '$y[1]' ";
+                    $sqlArray[] = " $y[0] $symbol '$y[1]' ";
                 }
                 $whereData[] = " ((1 = 1) AND (" . implode(' OR ', $sqlArray) . ') )';
             } elseif ($eq == 'IN' || $eq == 'NOT IN') {
@@ -469,7 +469,7 @@ class SQLGlobal {
                     $y = $this->db->EscapeString($y);
                     $sqlArray[] = " '$y' ";
                 }
-                $whereData[] = " ((1 = 1) AND (`$value[1]` $eq (" . implode(', ', $sqlArray) . ') ) )';
+                $whereData[] = " ((1 = 1) AND ($value[1] $eq (" . implode(', ', $sqlArray) . ') ) )';
 
             } elseif ($eq == 'META_NAME') {
                 if (count($value) != 3) {
@@ -478,7 +478,7 @@ class SQLGlobal {
                 }
                 $sqlMeta = 's:' . strlen($value[2]) . ':"' . $value[2] . '";';
                 $sqlMeta = $this->db->EscapeString($sqlMeta);
-                $whereData[] = "(`$value[1]` LIKE '%$sqlMeta%')";
+                $whereData[] = "($value[1] LIKE '%$sqlMeta%')";
             } elseif ($eq == 'META_NAMEVALUE') {
                 if (count($value) != 4) {
                     $whereData[] = " (1 = 1) ";
@@ -486,7 +486,7 @@ class SQLGlobal {
                 }
                 $sqlMeta = 's:' . strlen($value[2]) . ':"' . $value[2] . '";' . 's:' . strlen($value[3]) . ':"' . $value[3] . '"';
                 $sqlMeta = $this->db->EscapeString($sqlMeta);
-                $whereData[] = "(`$value[1]` LIKE '%$sqlMeta%')";
+                $whereData[] = "($value[1] LIKE '%$sqlMeta%')";
             } elseif ($eq == "CUSTOM") {
                 $whereData[] = $value[1];
             }
@@ -616,7 +616,7 @@ class SQLGlobal {
             }
 
             $v = $this->db->EscapeString($value);
-            $keyData[] = "`$key`";
+            $keyData[] = "$key";
             $valueData[] = " '$v' ";
         }
         $sql[] = '(' . implode($keyData, ',') . ')';

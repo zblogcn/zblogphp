@@ -26,7 +26,7 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
     public function testInsert() {
         self::$db = new SQLMySQL($GLOBALS['zbp']->db);
         self::$db->insert('zbp_post')->data(array('log_Title' => 'test'));
-        $this->assertEquals('INSERT INTO  zbp_post  (`log_Title`)  VALUES (  \'test\'  )', self::$db->sql);
+        $this->assertEquals('INSERT INTO  zbp_post  (log_Title)  VALUES (  \'test\'  )', self::$db->sql);
     }
 
     public function testDelete() {
@@ -87,7 +87,7 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
 
     public function testWhere() {
         self::$db = new SQLMySQL($GLOBALS['zbp']->db);
-        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  `log_ID` = \'1\' ',
+        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  log_ID = \'1\' ',
             self::$db
             ->select("zbp_post")
             ->where(array('=', 'log_ID', "1"))
@@ -105,25 +105,25 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ->where(array('exists', 'SELECT 1'))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  `log_ID` = \'1\' ',
+        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  log_ID = \'1\' ',
             self::$db
             ->select("zbp_post")
             ->where(array('=', 'log_ID', "1"))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  (`log_ID` BETWEEN \'1\' AND \'3\') ',
+        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  (log_ID BETWEEN \'1\' AND \'3\') ',
             self::$db
             ->select("zbp_post")
             ->where(array('between', 'log_ID', "1", "3"))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND ( (`log_Title` LIKE \'%Test%\') ) )',
+        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND ( (log_Title LIKE \'%Test%\') ) )',
             self::$db
             ->select("zbp_post")
             ->where(array('search', 'log_Title', "Test"))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND ( `log_ID` = \'1\'  OR  `log_Title` = \'2\' ) )',
+        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND ( log_ID = \'1\'  OR  log_Title = \'2\' ) )',
             self::$db
             ->select("zbp_post")
             ->where(array('array',
@@ -134,7 +134,7 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND ( `log_ID` <> \'1\'  OR  `log_Title` <> \'2\' ) )',
+        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND ( log_ID <> \'1\'  OR  log_Title <> \'2\' ) )',
             self::$db
             ->select("zbp_post")
             ->where(array('not array',
@@ -145,7 +145,7 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND ( `log_ID` LIKE \'1\'  OR  `log_Title` LIKE \'2\' ) )',
+        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND ( log_ID LIKE \'1\'  OR  log_Title LIKE \'2\' ) )',
             self::$db
             ->select("zbp_post")
             ->where(array('like array',
@@ -156,7 +156,7 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND ( `log_ID` ILIKE \'1\'  OR  `log_Title` ILIKE \'2\' ) )',
+        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND ( log_ID ILIKE \'1\'  OR  log_Title ILIKE \'2\' ) )',
             self::$db
             ->select("zbp_post")
             ->where(array('ilike array',
@@ -167,7 +167,7 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND (`log_ID` IN ( \'1\' ,  \'2\' ,  \'3\' ,  \'4\' ) ) )',
+        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND (log_ID IN ( \'1\' ,  \'2\' ,  \'3\' ,  \'4\' ) ) )',
             self::$db
             ->select("zbp_post")
             ->where(array('IN', 'log_ID', array(1, 2, 3, 4)))
@@ -179,13 +179,13 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ->where(array('IN', 'log_ID', ' \'1\' ,  \'2\' ,  \'3\' ,  \'4\' '))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  zbp_post  WHERE (`log_Meta` LIKE \'%s:10:\"meta_Value\";%\')',
+        $this->assertEquals('SELECT * FROM  zbp_post  WHERE (log_Meta LIKE \'%s:10:\"meta_Value\";%\')',
             self::$db
             ->select("zbp_post")
             ->where(array('META_NAME', 'log_Meta', 'meta_Value'))
             ->sql
         );
-        $this->assertEquals('SELECT * FROM  zbp_post  WHERE (`log_Meta` LIKE \'%s:9:\"meta_Name\";s:10:\"meta_Value\"%\')',
+        $this->assertEquals('SELECT * FROM  zbp_post  WHERE (log_Meta LIKE \'%s:9:\"meta_Name\";s:10:\"meta_Value\"%\')',
             self::$db
             ->select("zbp_post")
             ->where(array('META_NAMEVALUE', 'log_Meta', 'meta_Name', 'meta_Value'))
