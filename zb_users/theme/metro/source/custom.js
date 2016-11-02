@@ -45,15 +45,16 @@ $(document).ready(function() {
 	$('#bgpx').buttonset();
 
 	$('#bodybgc5').click(function() {
-		if ($(this).attr("checked") !== undefined) {
+		if ($(this).prop("checked")) {
 			$('#bodybgmain').show("fast");
+			console.log("test");
 		} else {
 			$('#bodybgmain').hide("fast");
 		}
 	});
 
 	$('#hdbgc6').click(function() {
-		if ($(this).attr("checked") !== undefined) {
+		if ($(this).prop("checked")) {
 			$('#hdbgmain').show("fast");
 		} else {
 			$('#hdbgmain').hide("fast");
