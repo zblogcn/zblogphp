@@ -501,6 +501,7 @@ function ViewAuto($inpurl) {
 
     if ($url == '' || $url == 'index.php') {
         ViewList(null, null, null, null, null);
+
         return null;
     }
 
@@ -510,6 +511,7 @@ function ViewAuto($inpurl) {
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
             ViewList($m['page'], null, null, null, null, true);
+
             return null;
         }
 
@@ -561,7 +563,7 @@ function ViewAuto($inpurl) {
             }
         }
 
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_TAGS_REGEX'], 'tags' ,true);
+        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_TAGS_REGEX'], 'tags', true);
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
             $result = ViewList($m['page'], null, null, null, $m, true);
@@ -570,7 +572,7 @@ function ViewAuto($inpurl) {
             }
         }
 
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate' ,false);
+        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate', false);
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
             isset($m['page']) ? null : $m['page'] = 0;
@@ -581,7 +583,7 @@ function ViewAuto($inpurl) {
 
         }
 
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate' ,true);
+        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate', true);
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
             $result = ViewList($m['page'], $m, null, null, null, true);
@@ -598,6 +600,7 @@ function ViewAuto($inpurl) {
             if ($result == false) {
                 $zbp->ShowError(2, __FILE__, __LINE__);
             }
+
             return null;
         }
 
@@ -794,7 +797,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
         } else {
             $datetime = $date['date'];
         }
-        if(preg_match('/[0-9]{4}-[0-9]{1,2}/i',$datetime)==0){
+        if(preg_match('/[0-9]{4}-[0-9]{1,2}/i', $datetime) == 0){
             return false;
         }
         $datetime = strtotime($datetime);
@@ -813,7 +816,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
 
         $template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
         $w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 month', $datetime));
-        $pagebar->UrlRule->Rules['{%date%}'] = date('Y-n',$datetime);
+        $pagebar->UrlRule->Rules['{%date%}'] = date('Y-n', $datetime);
         $datetime = Metas::ConvertArray(getdate($datetime));
         break;
     ########################################################################################################
