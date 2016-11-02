@@ -825,9 +825,9 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
         $tag = new Tag;
 
         if (!is_array($tags)) {
-            $tagName = $tags;
+            $tagId = $tags;
             $tags = array();
-            $tags['alias'] = $tagName;
+            $tags['id'] = $tagId;
         }
         if (isset($tags['id'])) {
             $tag = $zbp->GetTagByID($tags['id']);
