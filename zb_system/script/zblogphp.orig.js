@@ -320,7 +320,7 @@
          */
         COMMENT.prototype.get = function(postid, page) {
             self.plugin.emit("comment.get", postid, page);
-            return self;
+            return;
         };
         /**
          * Reply Comment
@@ -330,7 +330,7 @@
          */
         COMMENT.prototype.reply = function(id) {
             self.plugin.emit("comment.reply", id);
-            return self;
+            return;
         };
         /**
          * Post Comment
