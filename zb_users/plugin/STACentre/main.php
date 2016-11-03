@@ -78,7 +78,7 @@ $ua = array(
     ),
 
     'ZC_TAGS_REGEX' => array(
-        '{%host%}?tags={%alias%}&page={%page%}',
+        '{%host%}?tags={%id%}&page={%page%}',
         '{%host%}index.php/tags-{%id%}_{%page%}.html',
         '{%host%}tags-{%id%}_{%page%}.html',
         '{%host%}tags-{%alias%}_{%page%}.html',
