@@ -17,7 +17,7 @@ li { list-style-type: none;}
 img { border: none;}
 .clear { clear: both;}
 /*主要框架*/
-#headerbg { height:120px; background:transparent url('http://localhost:97/zb_users/theme/metro/style/images/headbg.jpg') no-repeat repeat fixed  center top; background-size:cover} 
+#headerbg { height:120px; background:#5EAAE4; background-size:auto} 
 #content { width:980px; padding:20px 0; margin:0 auto; background: url(images/sidebar.png) repeat-y right top;}
 #main { float:left; width:720px;}
 #sidebar { float:right; width:240px; background:#E0E1E2; overflow:hidden;margin-left: 20px;}
