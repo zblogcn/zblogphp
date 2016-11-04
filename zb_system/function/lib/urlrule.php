@@ -162,7 +162,8 @@ class UrlRule {
             if ($type == 'cate') {
                 if(UrlRule::$categorylayer == -1){
                     foreach ($zbp->categorys as $c) {
-                        if($c->Level > UrlRule::$categorylayer) UrlRule::$categorylayer = $c->Level;
+                        if($c->Level > UrlRule::$categorylayer && strpos($c->Alias,'/')!==false)
+                            UrlRule::$categorylayer = $c->Level;
                     }
                 }
                 switch (UrlRule::$categorylayer) {
@@ -347,6 +348,26 @@ class UrlRule {
     public function Rewrite_httpdini($url, $type) {
         global $zbp;
 
+        if(UrlRule::$categorylayer == -1){
+            foreach ($zbp->categorys as $c) {
+                if($c->Level > UrlRule::$categorylayer && strpos($c->Alias,'/')!==false)
+                    UrlRule::$categorylayer = $c->Level;
+            }
+        }
+        switch (UrlRule::$categorylayer) {
+            case 3:
+                $fullcategory='[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
+                break;
+            case 2:
+                $fullcategory='[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*';
+                break;
+            case 1:
+                $fullcategory='[^\./_]*|[^\./_]*/[^\./_]*';
+                break;
+            default:
+                $fullcategory='[^\./_]*';
+                break;
+        }
 
         $s = $url;
         $s = str_replace('%page%', '%poaogoe%', $s);
@@ -372,7 +393,7 @@ class UrlRule {
             $url = str_replace('%id%', '([0-9]+)', $url);
             $url = str_replace('%date%', '([0-9\-]+)', $url);
             if ($type == 'cate') {
-                $url = str_replace('%alias%', '([^\./_]*/?)+?)', $url);
+                $url = str_replace('%alias%', '('.$fullcategory.')', $url);
             } else {
                 $url = str_replace('%alias%', '([^\./_]+?)', $url);
             }
@@ -389,7 +410,7 @@ class UrlRule {
                     $url = str_replace('%alias%', '(?!zb_)(.+)', $url);
                 }
             }
-            $url = str_replace('%category%', '([^\./_]*/?)+)', $url);
+            $url = str_replace('%category%', '(?:'.$fullcategory.')', $url);
             $url = str_replace('%author%', '(?:[^\./_]+)', $url);
             $url = str_replace('%year%', '(?:[0-9]<:4:>)', $url);
             $url = str_replace('%month%', '(?:[0-9]<:1,2:>)', $url);

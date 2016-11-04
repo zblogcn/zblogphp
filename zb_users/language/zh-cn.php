@@ -60,6 +60,7 @@ return array(
         'article' => '文章',
         'page' => '页面',
         'year_month' => '%y%年%m%月',
+        'year_month_day' => '%y%年%m%月%d%日',
         'number_page' => '第%num%页',
         'parent_category' => '父分类',
         'password' => '密码',

@@ -1,4 +1,4 @@
-﻿//Author: Realazy
+//Author: Realazy
 //http://realazy.org/blog/ (chinese)
 
 jQuery.arrRemove = function(arr, rm){

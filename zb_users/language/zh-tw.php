@@ -64,6 +64,7 @@ return array(
         'article' => '文章',
         'page' => '頁面',
         'year_month' => '%y%年%m%月',
+        'year_month_day' => '%y%年%m%月%d%日',
         'number_page' => '第%num%頁',
         'parent_category' => '父分類',
         'password' => '密碼',

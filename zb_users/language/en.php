@@ -64,6 +64,7 @@ return array(
         'article' => 'Published',
         'page' => 'Page',
         'year_month' => '%y%-%m%',
+        'year_month_day' => '%y%-%m%-%d%',
         'number_page' => 'Page %num%',
         'parent_category' => 'Parent',
         'password' => 'Password',

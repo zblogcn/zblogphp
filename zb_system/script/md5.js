@@ -1,4 +1,4 @@
-﻿/* MD5 Message-Digest Algorithm - JavaScript
+/* MD5 Message-Digest Algorithm - JavaScript
 ' MODIFICATION HISTORY:
 ' 1.0 16-Feb-2001 - Phil Fresle (sales@frez.co.uk) - Initial Version (VB/ASP code)
 ' 1.0 21-Feb-2001 - Enrico Mosanghini (erik504@yahoo.com) - JavaScript porting

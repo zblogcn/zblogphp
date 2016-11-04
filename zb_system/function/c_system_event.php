@@ -717,7 +717,12 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
         if (!is_array($cate)) {
             $cateId = $cate;
             $cate = array();
-            $cate['id'] = $cateId;
+            if (strpos($zbp->option['ZC_CATEGORY_REGEX'], '{%id%}') !== false) {
+                $cate['id'] = $cateId;
+            }
+            if (strpos($zbp->option['ZC_CATEGORY_REGEX'], '{%alias%}') !== false) {
+                $cate['alias'] = $cateId;
+            }
         }
         if (isset($cate['id'])) {
             $category = $zbp->GetCategoryByID($cate['id']);
@@ -762,7 +767,12 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
         if (!is_array($auth)) {
             $authId = $auth;
             $auth = array();
-            $auth['id'] = $authId;
+            if (strpos($zbp->option['ZC_AUTHOR_REGEX'], '{%id%}') !== false) {
+                $auth['id'] = $authId;
+            }
+            if (strpos($zbp->option['ZC_AUTHOR_REGEX'], '{%alias%}') !== false) {
+                $auth['alias'] = $authId;
+            }
         }
         if (isset($auth['id'])) {
             $author = $zbp->GetMemberByID($auth['id']);
@@ -797,15 +807,25 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
         } else {
             $datetime = $date['date'];
         }
-        if(preg_match('/[0-9]{4}-[0-9]{1,2}/i', $datetime) == 0){
+
+        $dateregex_ymd='/[0-9]{1,4}-[0-9]{1,2}-[0-9]{1,2}/i';
+        $dateregex_ym='/[0-9]{1,4}-[0-9]{1,2}/i';
+
+        if(preg_match($dateregex_ymd, $datetime) == 0 && preg_match($dateregex_ym, $datetime) == 0){
             return false;
         }
+        $datetime_txt = $datetime;
         $datetime = strtotime($datetime);
         if($datetime == false){
             return false;
         }
 
-        $datetitle = str_replace(array('%y%', '%m%'), array(date('Y', $datetime), date('n', $datetime)), $zbp->lang['msg']['year_month']);
+        if(preg_match($dateregex_ymd, $datetime_txt) != 0 && isset($zbp->lang['msg']['year_month_day'])){
+            $datetitle = str_replace(array('%y%', '%m%', '%d%'), array(date('Y', $datetime), date('n', $datetime), date('j', $datetime)), $zbp->lang['msg']['year_month_day']);
+        }else{
+            $datetitle = str_replace(array('%y%', '%m%'), array(date('Y', $datetime), date('n', $datetime)), $zbp->lang['msg']['year_month']);
+        }
+
         if ($page == 1) {
             $zbp->title = $datetitle;
         } else {
@@ -815,8 +835,15 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
         $zbp->modulesbyfilename['calendar']->Content = ModuleBuilder::Calendar(date('Y', $datetime) . '-' . date('n', $datetime));
 
         $template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
-        $w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 month', $datetime));
-        $pagebar->UrlRule->Rules['{%date%}'] = date('Y-n', $datetime);
+
+        if(preg_match($dateregex_ymd, $datetime_txt) != 0){
+            $w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 day', $datetime));
+            $pagebar->UrlRule->Rules['{%date%}'] = date('Y-n-j', $datetime);
+        } else {
+            $w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 month', $datetime));
+            $pagebar->UrlRule->Rules['{%date%}'] = date('Y-n', $datetime);
+        }
+
         $datetime = Metas::ConvertArray(getdate($datetime));
         break;
     ########################################################################################################
@@ -827,7 +854,12 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
         if (!is_array($tags)) {
             $tagId = $tags;
             $tags = array();
-            $tags['id'] = $tagId;
+            if (strpos($zbp->option['ZC_TAGS_REGEX'], '{%id%}') !== false) {
+                $tags['id'] = $tagId;
+            }
+            if (strpos($zbp->option['ZC_TAGS_REGEX'], '{%alias%}') !== false) {
+                $tags['alias'] = $tagId;
+            }
         }
         if (isset($tags['id'])) {
             $tag = $zbp->GetTagByID($tags['id']);
@@ -1332,12 +1364,13 @@ function PostArticle() {
         }
     }
 
+    FilterMeta($article);
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostArticle_Core'] as $fpname => &$fpsignal) {
         $fpname($article);
     }
 
     FilterPost($article);
-    FilterMeta($article);
 
     $article->Save();
 
@@ -1589,12 +1622,13 @@ function PostPage() {
 
     $article->Type = ZC_POST_TYPE_PAGE;
 
+    FilterMeta($article);
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostPage_Core'] as $fpname => &$fpsignal) {
         $fpname($article);
     }
 
     FilterPost($article);
-    FilterMeta($article);
 
     $article->Save();
 
@@ -2011,15 +2045,16 @@ function PostCategory() {
         }
     }
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_PostCategory_Core'] as $fpname => &$fpsignal) {
-        $fpname($cate);
-    }
+    FilterMeta($cate);
 
     //刷新RootID
     $cate->Level;
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_PostCategory_Core'] as $fpname => &$fpsignal) {
+        $fpname($cate);
+    }
+
     FilterCategory($cate);
-    FilterMeta($cate);
 
     // 此处用作刷新分类内文章数据使用，不作更改
     if ($cate->ID > 0) {
@@ -2117,14 +2152,17 @@ function PostTag() {
         }
     }
 
+    FilterMeta($tag);
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostTag_Core'] as $fpname => &$fpsignal) {
         $fpname($tag);
     }
 
     FilterTag($tag);
-    FilterMeta($tag);
 
-    CountTag($tag);
+    if ($zbp->option['ZC_LARGE_DATA'] == false) {
+        CountTag($tag);
+    }
 
     $tag->Save();
 
@@ -2247,12 +2285,13 @@ function PostMember() {
         }
     }
 
+    FilterMeta($mem);
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostMember_Core'] as $fpname => &$fpsignal) {
         $fpname($mem);
     }
 
     FilterMember($mem);
-    FilterMeta($mem);
 
     CountMember($mem);
 
@@ -2395,12 +2434,13 @@ function PostModule() {
         $mod->NoRefresh = (bool) $_POST['NoRefresh'];
     }
 
+    FilterMeta($mod);
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostModule_Core'] as $fpname => &$fpsignal) {
         $fpname($mod);
     }
 
     FilterModule($mod);
-    FilterMeta($mod);
 
     $mod->Save();
 
@@ -3067,7 +3107,6 @@ function CountTagArrayString($string, $plus = null, $articleid = null) {
         $fpreturn = $fpname($array, $plus, $articleid);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
             return $fpreturn;
         }
     }
