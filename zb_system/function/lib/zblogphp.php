@@ -645,7 +645,7 @@ class ZBlogPHP {
             break;
         }
         //add utf8mb4
-        if ($this->db->type == 'mysql' && (version_compare($this->db->version, '5.5.3') < 0 || version_compare(PHP_VERSION, '5.3.0') < 0 ) ) {
+        if ($this->db->type == 'mysql' && version_compare($this->db->version, '5.5.3') < 0 ) {
             Add_Filter_Plugin('Filter_Plugin_DbSql_Filter', 'utf84mb_filter');
             Add_Filter_Plugin('Filter_Plugin_Edit_Begin', 'utf84mb_fixHtmlSpecialChars');
         }

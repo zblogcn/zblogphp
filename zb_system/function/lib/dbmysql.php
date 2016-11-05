@@ -71,12 +71,14 @@ class DbMySQL implements iDataBase {
         
         $myver = mysql_get_server_info($db_link);
         $this->version = substr($myver, 0, strpos($myver, "-"));
-        if(version_compare($this->version, '5.5.3') >= 0 && version_compare(PHP_VERSION, '5.3.0') >= 0){
+        if(version_compare($this->version, '5.5.3') >= 0){
             $u = "utf8mb4";
         }else{
             $u = "utf8";
         }
-        mysql_set_charset($u, $db_link);
+        if( mysql_set_charset($u, $db_link) == false ){
+            mysql_set_charset("utf8", $db_link);
+        }
         
         $this->db = $db_link;
         if (mysql_select_db($array[3], $this->db)) {
@@ -107,12 +109,14 @@ class DbMySQL implements iDataBase {
 
         $myver = mysql_get_server_info($db_link);
         $myver = substr($myver, 0, strpos($myver, "-"));
-        if(version_compare($myver, '5.5.3') >= 0 && version_compare(PHP_VERSION, '5.3.0') >= 0){
+        if(version_compare($myver, '5.5.3') >= 0){
             $u = "utf8mb4";
         }else{
             $u = "utf8";
         }
-        mysql_set_charset($u, $db_link);
+        if( mysql_set_charset($u, $db_link) == false ){
+            mysql_set_charset("utf8", $db_link);
+        }
 
         $this->db = $db_link;
         $this->dbname = $dbmysql_name;

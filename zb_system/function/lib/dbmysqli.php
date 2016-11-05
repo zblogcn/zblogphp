@@ -69,12 +69,13 @@ class DbMySQLi implements iDataBase {
 
             $myver = mysqli_get_server_info($db);
             $this->version = substr($myver, 0, strpos($myver, "-"));
-            if(version_compare($this->version, '5.5.3') >= 0 && version_compare(PHP_VERSION, '5.3.0') >= 0){
+            if(version_compare($this->version, '5.5.3') >= 0){
                 $u = "utf8mb4";
             }else{
                 $u = "utf8";
             }
-            mysqli_set_charset($db, $u);
+            if(mysqli_set_charset($db, $u) == false)
+                mysqli_set_charset($db, "utf8");
 
             $this->db = $db;
             $this->dbname = $array[3];
@@ -101,12 +102,13 @@ class DbMySQLi implements iDataBase {
 
         $myver = mysqli_get_server_info($db);
         $myver = substr($myver, 0, strpos($myver, "-"));
-        if(version_compare($myver, '5.5.3') >= 0 && version_compare(PHP_VERSION, '5.3.0') >= 0){
+        if(version_compare($myver, '5.5.3') >= 0){
             $u = "utf8mb4";
         }else{
             $u = "utf8";
         }
-        mysqli_set_charset($db, $u);
+        if(mysqli_set_charset($db, $u) == false)
+            mysqli_set_charset($db, "utf8");
 
         $this->db = $db;
         $this->dbname = $dbmysql_name;
