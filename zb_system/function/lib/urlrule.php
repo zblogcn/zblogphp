@@ -165,6 +165,8 @@ class UrlRule {
                         if($c->Level > UrlRule::$categorylayer && strpos($c->Alias,'/')!==false)
                             UrlRule::$categorylayer = $c->Level;
                     }
+                    if(UrlRule::$categorylayer == -1)
+                        UrlRule::$categorylayer = 0;
                 }
                 switch (UrlRule::$categorylayer) {
                     case 3:
@@ -353,6 +355,8 @@ class UrlRule {
                 if($c->Level > UrlRule::$categorylayer && strpos($c->Alias,'/')!==false)
                     UrlRule::$categorylayer = $c->Level;
             }
+            if(UrlRule::$categorylayer == -1)
+                UrlRule::$categorylayer = 0;
         }
         switch (UrlRule::$categorylayer) {
             case 3:
