@@ -537,10 +537,7 @@ class ZBlogPHP {
      */
     public function LoadManage() {
 
-        //if(str_replace('http://', '', $this->path) !== str_replace('https://', '', $this->path)){
-            $this->host = GetCurrentHost($this->path, $this->cookiespath);
-        //}
-
+        $this->host = GetCurrentHost($this->path, $this->cookiespath);
 
         if (substr($this->host, 0, 8) == 'https://') {
             $this->ishttps = true;

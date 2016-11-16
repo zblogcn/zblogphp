@@ -423,14 +423,14 @@ class SQLGlobal {
                     $sqlSearch[] = " ($x LIKE '%$y%') ";
                 }
                 $whereData[] = " ((1 = 1) AND (" . implode(' OR ', $sqlSearch) . ') )';
-            } elseif ($eq == 'ARRAY' || $eq == 'NOT ARRAY' || $eq == "LIKE ARRAY" || $eq == "ILIKE ARRAY") {
+            } elseif ($eq == 'ARRAY' || $eq == 'NOT ARRAY' || $eq == "LIKE ARRAY" || $eq == "ILIKE ARRAY" || $eq == 'ARRAY_LIKE' || $eq == 'ARRAY_ILIKE') {
                 if ($eq == 'ARRAY') {
                     $symbol = '=';
                 } elseif($eq == 'NOT ARRAY') {
                     $symbol = '<>';
-                } elseif ($eq == 'LIKE ARRAY') {
+                } elseif ($eq == 'LIKE ARRAY' || $eq == 'ARRAY_LIKE') {
                     $symbol = 'LIKE';
-                } elseif ($eq == 'ILIKE ARRAY') {
+                } elseif ($eq == 'ILIKE ARRAY' || $eq == 'ARRAY_ILIKE') {
                     $symbol = 'ILIKE';
                 }
                 $sqlArray = array();
