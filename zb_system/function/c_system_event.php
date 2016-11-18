@@ -808,8 +808,8 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
             $datetime = $date['date'];
         }
 
-        $dateregex_ymd='/[0-9]{1,4}-[0-9]{1,2}-[0-9]{1,2}/i';
-        $dateregex_ym='/[0-9]{1,4}-[0-9]{1,2}/i';
+        $dateregex_ymd = '/[0-9]{1,4}-[0-9]{1,2}-[0-9]{1,2}/i';
+        $dateregex_ym = '/[0-9]{1,4}-[0-9]{1,2}/i';
 
         if(preg_match($dateregex_ymd, $datetime) == 0 && preg_match($dateregex_ym, $datetime) == 0){
             return false;
@@ -3107,6 +3107,7 @@ function CountTagArrayString($string, $plus = null, $articleid = null) {
         $fpreturn = $fpname($array, $plus, $articleid);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
             return $fpreturn;
         }
     }

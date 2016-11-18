@@ -191,10 +191,12 @@ class Post extends Base {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
                 $fpreturn = $fpname($this);
                 if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                     return $fpreturn;
                 }
             }
             $key = '&amp;key=' . $zbp->GetCmtKey($this->ID);
+
             return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
             break;
         case 'ValidCodeUrl':
@@ -207,9 +209,9 @@ class Post extends Base {
 
             foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Prev'] as $fpname => &$fpsignal) {
                 $this->_prev = $fpname($this);
-	            if ($this->_prev !== '') {
-	                return $this->_prev;
-	            }
+                if ($this->_prev !== '') {
+                    return $this->_prev;
+                }
             }
 
             $articles = $zbp->GetPostList(
@@ -234,9 +236,9 @@ class Post extends Base {
 
             foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Next'] as $fpname => &$fpsignal) {
                 $this->_prev = $fpname($this);
-	            if ($this->_prev !== '') {
-	                return $this->_prev;
-	            }
+                if ($this->_prev !== '') {
+                    return $this->_prev;
+                }
             }
 
             $articles = $zbp->GetPostList(
@@ -258,6 +260,7 @@ class Post extends Base {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Post_RelatedList'] as $fpname => &$fpsignal) {
                 $fpreturn = $fpname($this);
                 if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                     return $fpreturn;
                 }
             }

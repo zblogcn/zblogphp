@@ -32,7 +32,7 @@ class ModuleBuilder {
         if(function_exists($userfunc)){
             ModuleBuilder::$List[$modfilename]['function'] = $userfunc;
         } elseif (strpos($userfunc, '::') !== false) {
-            $a=explode('::', $userfunc);
+            $a = explode('::', $userfunc);
             if(method_exists($a[0], $a[1])){
                 ModuleBuilder::$List[$modfilename]['function'] = $userfunc;
             }
@@ -385,7 +385,7 @@ class ModuleBuilder {
         ksort($array2);
 
         foreach ($array2 as $tag) {
-            $urls[]=$tag;
+            $urls[] = $tag;
         }
 
         $tags['tags'] = $urls;
@@ -416,7 +416,7 @@ class ModuleBuilder {
             $m = Metas::ConvertArray($member->GetData());
             unset($m->Guid);
             unset($m->Password);
-            $authors[]=$m;
+            $authors[] = $m;
         }
 
         $tags['authors'] = $authors;
@@ -472,13 +472,13 @@ class ModuleBuilder {
             $all_comments = $array[5];
         }
 
-        $allinfo['all_artiles']=array('name'=>$zbp->lang['msg']['all_artiles'],'count'=>$all_artiles);
-        $allinfo['all_pages']=array('name'=>$zbp->lang['msg']['all_pages'],'count'=>$all_pages);
-        $allinfo['all_categorys']=array('name'=>$zbp->lang['msg']['all_categorys'],'count'=>$all_categorys);
-        $allinfo['all_tags']=array('name'=>$zbp->lang['msg']['all_tags'],'count'=>$all_tags);
-        $allinfo['all_comments']=array('name'=>$zbp->lang['msg']['all_comments'],'count'=>$all_comments);
+        $allinfo['all_artiles'] = array('name' => $zbp->lang['msg']['all_artiles'], 'count' => $all_artiles);
+        $allinfo['all_pages'] = array('name' => $zbp->lang['msg']['all_pages'], 'count' => $all_pages);
+        $allinfo['all_categorys'] = array('name' => $zbp->lang['msg']['all_categorys'], 'count' => $all_categorys);
+        $allinfo['all_tags'] = array('name' => $zbp->lang['msg']['all_tags'], 'count' => $all_tags);
+        $allinfo['all_comments'] = array('name' => $zbp->lang['msg']['all_comments'], 'count' => $all_comments);
         if (!$zbp->option['ZC_VIEWNUMS_TURNOFF'] || $zbp->option['ZC_LARGE_DATA']) {
-            $allinfo['all_views']=array('name'=>$zbp->lang['msg']['all_views'],'count'=>$all_views);
+            $allinfo['all_views'] = array('name' => $zbp->lang['msg']['all_views'], 'count' => $all_views);
         }
 
         $zbp->modulesbyfilename['statistics']->Type = "ul";
