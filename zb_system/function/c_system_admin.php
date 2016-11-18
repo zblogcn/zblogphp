@@ -442,7 +442,10 @@ function Admin_SiteInfo() {
 
     echo '<table class="tableFull tableBorder table_striped table_hover" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>' : '') . ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
-    if ((time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60) && $zbp->CheckRights('root')) {
+    if ( ((time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60) && $zbp->CheckRights('root')) 
+          ||
+          ($zbp->CheckTemplate(true) == false)
+        ) {
         echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'?act=misc&type=statistic\'); });</script>';
     } else {
         $echostatistic = true;
