@@ -931,7 +931,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
     $limit = array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount);
     $option = array('pagebar' => $pagebar);
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_Aritcle'] as $fpname => &$fpsignal) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_Article'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($select, $w, $order, $limit, $option);
     }
 
