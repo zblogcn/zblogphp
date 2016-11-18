@@ -1679,7 +1679,17 @@ class ZBlogPHP {
         if (empty($select)) {$select = array('*');}
         if (empty($where)) {$where = array();}
         if (is_array($where)) {
-            array_unshift($where, array('=', 'log_Type', '0'));
+        	$hasType = false;
+        	foreach ($where as $key => $value) {
+				foreach ($value as $key2 => $value2) {
+					if($key2 == 1 && $value2 == 'log_Type'){
+						$hasType = true;
+					}
+				}
+        	}
+        	if($hasType == false){
+            	array_unshift($where, array('=', 'log_Type', '0'));
+        	}
         }
 
         $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);
