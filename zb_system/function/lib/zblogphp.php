@@ -1681,9 +1681,11 @@ class ZBlogPHP {
         if (is_array($where)) {
         	$hasType = false;
         	foreach ($where as $key => $value) {
-				foreach ($value as $key2 => $value2) {
-					if($key2 == 1 && $value2 == 'log_Type'){
-						$hasType = true;
+				if( is_array($value) ){
+					foreach ($value as $key2 => $value2) {
+						if($key2 == 1 && $value2 == 'log_Type'){
+							$hasType = true;
+						}
 					}
 				}
         	}
