@@ -403,11 +403,6 @@ function Setup2() {
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['iconv'][0];?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['iconv'][1];?></td>
         </tr>
-        <tr>
-          <td scope="row"><?php echo $zbp->lang['zb_install']['environment_mb']?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mb_strlen'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mb_strlen'][1];?></td>
-        </tr>
       </table>
     </div>
     <div id="bottom">
