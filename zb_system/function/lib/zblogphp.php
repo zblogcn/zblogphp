@@ -537,10 +537,7 @@ class ZBlogPHP {
      */
     public function LoadManage() {
 
-        //if(str_replace('http://', '', $this->path) !== str_replace('https://', '', $this->path)){
-            $this->host = GetCurrentHost($this->path, $this->cookiespath);
-        //}
-
+        $this->host = GetCurrentHost($this->path, $this->cookiespath);
 
         if (substr($this->host, 0, 8) == 'https://') {
             $this->ishttps = true;
@@ -560,8 +557,6 @@ class ZBlogPHP {
         Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu', 'Include_Admin_Addmemsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu', 'Include_Admin_Addmodsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu', 'Include_Admin_Addcmtsubmenu');
-
-        $this->CheckTemplate();
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) {
             $fpname();
@@ -1460,17 +1455,23 @@ class ZBlogPHP {
 
     /**
      * 更新模板缓存
+     * @param boolean $nobuild 为真的话，只判断是否需要而不Build
+     * @return true or false
      */
-    public function CheckTemplate() {
+    public function CheckTemplate($nobuild = false) {
 
         $this->template->LoadTemplates();
         $s = implode($this->template->templates);
         $md5 = md5($s);
         if ($md5 != $this->cache->templates_md5) {
+        	if($nobuild == true){
+        		return false;
+        	}
             $this->BuildTemplate();
             $this->cache->templates_md5 = $md5;
             $this->SaveCache();
         }
+        return true;
 
     }
 
