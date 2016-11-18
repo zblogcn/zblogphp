@@ -1328,19 +1328,34 @@ if (!function_exists('hex2bin')) {
 if (!function_exists('rrmdir')) {
     function rrmdir($dir) {
         if (is_dir($dir)) {
-            $objects = scandir($dir);
-            foreach ($objects as $object) {
-                if ($object != '.' && $object != '..') {
-                    if (filetype($dir . '/' . $object) == 'dir') {
-                        rrmdir($dir . '/' . $object);
-                    } else {
-                        unlink($dir . '/' . $object);
+            if (function_exists('scandir')) {
+                $objects = scandir($dir);
+                foreach ($objects as $object) {
+                    if ($object != '.' && $object != '..') {
+                        if (filetype($dir . '/' . $object) == 'dir') {
+                            rrmdir($dir . '/' . $object);
+                        } else {
+                            unlink($dir . '/' . $object);
+                        }
                     }
-
+                }
+                reset($objects);
+                rmdir($dir);
+            } else {
+                if ($handle = opendir($dir)) {
+                    while (false !== ($file = readdir($handle))) {
+                        if ($file != "." && $file != "..") {
+                            if (is_dir( rtrim(rtrim($dir,'/'),'\\') . '/' . $file)) {
+                                rrmdir( rtrim(rtrim($dir,'/'),'\\') . '/' . $file);
+                            } else {
+                                unlink( rtrim(rtrim($dir,'/'),'\\') . '/' . $file);
+                            }
+                        }
+                    }
+                    closedir($handle);
+                    rmdir($dir);
                 }
             }
-            reset($objects);
-            rmdir($dir);
         }
     }
 }
