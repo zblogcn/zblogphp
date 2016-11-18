@@ -1661,13 +1661,13 @@ DefinePluginFilter('Filter_Plugin_Template_MakeTemplatetags');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_LargeData_Aritcle
+'名称:Filter_Plugin_LargeData_Article
 '参数:&$select,&$where,&$order,&$limit,&$option
 '说明:大数据文章接口
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_LargeData_Aritcle');
+DefinePluginFilter('Filter_Plugin_LargeData_Article');
 
 /*
 '**************************************************<
