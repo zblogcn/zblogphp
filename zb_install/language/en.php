@@ -67,5 +67,17 @@ return array(
     're_password' => 'Re-password:',
     'blog_name' => 'Site Title:',
     'uncategorized' => 'uncategorized',
+
+
+    'environment_network' => 'Network support',
+    'environment_network_description' => 'Use for check update and download apps',
+    'environment_json' => 'JSON support',
+    'environment_json_description' => '',
+    'environment_xml' => 'XML support',
+    'environment_xml_description' => '',
+    'environment_iconv' => 'Iconv support',
+    'environment_iconv_description' => '',
+    'environment_mb' => 'Multibytes support',
+    'environment_mb_description' => '',
     '' => '',
 );

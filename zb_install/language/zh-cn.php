@@ -65,5 +65,15 @@ return array(
     'blog_name' => '网站标题：',
     'uncategorized' => '未分类',
 
+    'environment_network' => '网络支持',
+    'environment_network_description' => '用于检查更新及应用中心',
+    'environment_json' => 'JSON支持',
+    'environment_json_description' => '',
+    'environment_xml' => 'XML支持',
+    'environment_xml_description' => '',
+    'environment_iconv' => 'iconv编码转换支持',
+    'environment_iconv_description' => '',
+    'environment_mb' => '多字节字符串支持',
+    'environment_mb_description' => '',
     '' => '',
 );

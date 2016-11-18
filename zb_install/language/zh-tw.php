@@ -67,5 +67,17 @@ return array(
     're_password' => '確認密碼：',
     'blog_name' => '網站標題：',
     'uncategorized' => '未分類',
+
+
+    'environment_network' => '網絡支持',
+    'environment_network_description' => '用於檢查更新及應用中心',
+    'environment_json' => 'JSON支持',
+    'environment_json_description' => '',
+    'environment_xml' => 'XML支持',
+    'environment_xml_description' => '',
+    'environment_iconv' => 'iconv編碼轉換支持',
+    'environment_iconv_description' => '',
+    'environment_mb' => '多字節字符串支持',
+    'environment_mb_description' => '',
     '' => '',
 );

@@ -384,19 +384,29 @@ function Setup2() {
           <th colspan="3" scope="row"><?php echo $zbp->lang['zb_install']['function_check'];?></th>
         </tr>
         <tr>
-          <td scope="row">curl</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['curl'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['curl'][1];?></td>
+          <td scope="row"><?php echo $zbp->lang['zb_install']['environment_network']?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['network'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['network'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">allow_url_fopen</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['allow_url_fopen'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['allow_url_fopen'][1];?></td>
+          <td scope="row"><?php echo $zbp->lang['zb_install']['environment_xml']?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['simplexml_load_string'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['simplexml_load_string'][1];?></td>
         </tr>
         <tr>
-          <td scope="row">gethostbyname</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gethostbyname'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['gethostbyname'][1];?></td>
+          <td scope="row"><?php echo $zbp->lang['zb_install']['environment_json']?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['json_decode'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['json_decode'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row"><?php echo $zbp->lang['zb_install']['environment_iconv']?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['iconv'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['iconv'][1];?></td>
+        </tr>
+        <tr>
+          <td scope="row"><?php echo $zbp->lang['zb_install']['environment_mb']?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mb_strlen'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mb_strlen'][1];?></td>
         </tr>
       </table>
     </div>
@@ -802,10 +812,18 @@ function CheckServer() {
     getRightsAndExport('zb_users/', 'upload');
     //getRightsAndExport('zb_users/','c_option.php');
 
-    $CheckResult['curl'][1] = function_exists('curl_init') ? bingo : error;
-    $CheckResult['allow_url_fopen'][1] = (bool) ini_get('allow_url_fopen') ? bingo : error;
-    $CheckResult['gethostbyname'][1] = function_exists('gethostbyname') ? bingo : error;
-    $CheckResult['simplexml_import_dom'][1] = function_exists('simplexml_import_dom') ? bingo : error;
+    $CheckResult['network'][0] = $zbp->lang['zb_install']['environment_network_description'];
+    $CheckResult['simplexml_load_string'][0] = $zbp->lang['zb_install']['environment_xml_description'];
+    $CheckResult['json_decode'][0] = $zbp->lang['zb_install']['environment_json_description'];
+    $CheckResult['iconv'][0] = $zbp->lang['zb_install']['environment_iconv_description'];
+    $CheckResult['mb_strlen'][0] = $zbp->lang['zb_install']['environment_mb_description'];
+
+    $networkTest = Network::create();
+    $CheckResult['network'][1] = ($networkTest == false) ? error : bingo;
+    $CheckResult['simplexml_load_string'][1] = function_exists('simplexml_load_string') ? bingo : error;
+    $CheckResult['json_decode'][1] = function_exists('json_decode') ? bingo : error;
+    $CheckResult['iconv'][1] = function_exists('iconv') ? bingo : error;
+    $CheckResult['mb_strlen'][1] = function_exists('mb_strlen') ? bingo : error;
 
 }
 
