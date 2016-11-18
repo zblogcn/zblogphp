@@ -454,6 +454,7 @@ function Admin_SiteInfo() {
         $r = str_replace('{$zbp->theme}', $zbp->theme, $r);
         $r = str_replace('{$zbp->style}', $zbp->style, $r);
         $r = str_replace('{$system_environment}', GetEnvironment(), $r);
+        $r = str_replace('{$zbp->version}', ZC_VERSION_FULL, $r);
         echo $r;
     }
 

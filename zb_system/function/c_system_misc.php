@@ -93,6 +93,7 @@ function misc_statistic() {
     $current_theme = '{$zbp->theme}';
     $current_style = '{$zbp->style}';
     $current_member = '{$zbp->user->Name}';
+    $current_version = '{$zbp->version}';    
     $system_environment = '{$system_environment}';
 
     if ($zbp->option['ZC_DEBUG_MODE']) {
@@ -120,6 +121,7 @@ function misc_statistic() {
     $r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
     $r = str_replace('{$zbp->theme}', $zbp->theme, $r);
     $r = str_replace('{$zbp->style}', $zbp->style, $r);
+    $r = str_replace('{$zbp->version}', ZC_VERSION_FULL, $r);
     $r = str_replace('{$system_environment}', $zbp->cache->system_environment, $r);
 
     echo $r;
