@@ -11,6 +11,7 @@ require '../function/c_system_admin.php';
 
 $zbp->CheckGzip();
 $zbp->Load();
+$zbp->template->LoadTemplates();
 
 $action = '';
 if (GetVars('act', 'GET') == 'PageEdt') {
@@ -30,6 +31,7 @@ if (isset($_COOKIE['timezone'])) {
     }
     unset($tz);
 }
+
 
 $article = new Post;
 $article->AuthorID = $zbp->user->ID;

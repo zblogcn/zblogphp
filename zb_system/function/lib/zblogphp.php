@@ -640,7 +640,7 @@ class ZBlogPHP {
             break;
         }
         //add utf8mb4
-        if ($this->db->type == 'mysql' && version_compare($this->db->version, '5.5.3') < 0 ) {
+        if ($this->db->type == 'mysql' && version_compare($this->db->version, '5.5.3') < 0) {
             Add_Filter_Plugin('Filter_Plugin_DbSql_Filter', 'utf84mb_filter');
             Add_Filter_Plugin('Filter_Plugin_Edit_Begin', 'utf84mb_fixHtmlSpecialChars');
         }
@@ -1221,16 +1221,16 @@ class ZBlogPHP {
 
         $dir = $this->usersdir . 'theme/' . $this->theme . '/include/';
         if (file_exists($dir)) {
-	        $files = GetFilesInDir($dir, 'php');
-	        foreach ($files as $sortname => $fullname) {
-	            $m = new Module();
-	            $m->FileName = $sortname;
-	            $m->Content = file_get_contents($fullname);
-	            $m->Type = 'div';
-	            $m->Source = 'theme';
-	            $this->modules[] = $m;
-	            $this->modulesbyfilename[$m->FileName] = $m;
-	        }
+            $files = GetFilesInDir($dir, 'php');
+            foreach ($files as $sortname => $fullname) {
+                $m = new Module();
+                $m->FileName = $sortname;
+                $m->Content = file_get_contents($fullname);
+                $m->Type = 'div';
+                $m->Source = 'theme';
+                $this->modules[] = $m;
+                $this->modulesbyfilename[$m->FileName] = $m;
+            }
         }
 
         foreach ($this->modules as $m) {
@@ -1464,13 +1464,14 @@ class ZBlogPHP {
         $s = implode($this->template->templates);
         $md5 = md5($s);
         if ($md5 != $this->cache->templates_md5) {
-        	if($nobuild == true){
-        		return false;
-        	}
+            if($nobuild == true){
+                return false;
+            }
             $this->BuildTemplate();
             $this->cache->templates_md5 = $md5;
             $this->SaveCache();
         }
+
         return true;
 
     }
@@ -1678,20 +1679,21 @@ class ZBlogPHP {
 
         if (empty($select)) {$select = array('*');}
         if (empty($where)) {$where = array();}
+
         if (is_array($where)) {
-        	$hasType = false;
-        	foreach ($where as $key => $value) {
-				if( is_array($value) ){
-					foreach ($value as $key2 => $value2) {
-						if($key2 == 1 && $value2 == 'log_Type'){
-							$hasType = true;
-						}
-					}
-				}
-        	}
-        	if($hasType == false){
-            	array_unshift($where, array('=', 'log_Type', '0'));
-        	}
+            $hasType = false;
+            foreach ($where as $key => $value) {
+                if(is_array($value)){
+                    foreach ($value as $key2 => $value2) {
+                        if($key2 == 1 && $value2 == 'log_Type'){
+                            $hasType = true;
+                        }
+                    }
+                }
+            }
+            if(!$hasType){
+                array_unshift($where, array('=', 'log_Type', '0'));
+            }
         }
 
         $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);

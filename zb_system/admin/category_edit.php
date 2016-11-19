@@ -11,6 +11,7 @@ require '../function/c_system_admin.php';
 
 $zbp->CheckGzip();
 $zbp->Load();
+$zbp->template->LoadTemplates();
 
 $action = 'CategoryEdt';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6, __FILE__, __LINE__);die();}

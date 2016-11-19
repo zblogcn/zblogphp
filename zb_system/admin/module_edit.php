@@ -11,11 +11,13 @@ require '../function/c_system_admin.php';
 
 $zbp->CheckGzip();
 $zbp->Load();
+$zbp->template->LoadTemplates();
 
 $action = 'ModuleEdt';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
 
 $blogtitle = $lang['msg']['module_edit'];
+
 
 require ZBP_PATH . 'zb_system/admin/admin_header.php';
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
