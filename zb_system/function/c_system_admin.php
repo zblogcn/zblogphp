@@ -442,7 +442,7 @@ function Admin_SiteInfo() {
 
     echo '<table class="tableFull tableBorder table_striped table_hover" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>' : '') . ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
-    if ( ((time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60) && $zbp->CheckRights('root')) 
+    if (((time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60) && $zbp->CheckRights('root'))
           ||
           ($zbp->CheckTemplate(true) == false)
         ) {
@@ -554,7 +554,7 @@ function Admin_ArticleMng() {
     $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
     $op = array('pagebar' => $p);
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_Aritcle'] as $fpname => &$fpsignal) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_Article'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($s, $w, $or, $l, $op);
     }
 
