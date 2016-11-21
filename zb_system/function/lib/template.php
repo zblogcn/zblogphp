@@ -113,7 +113,8 @@ class Template {
      * @param $array
      */
     public function SetTagsAll(&$array) {
-        $this->templateTags = $array + $this->templateTags;
+        if(is_array($array))
+            $this->templateTags = $array + $this->templateTags;
     }
 
     /**
