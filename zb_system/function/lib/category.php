@@ -13,6 +13,7 @@ class Category extends Base {
     public $SubCategories = array(); //子分类
     public $SubCategorys = null; // 拼写错误，保持兼容
     public $ChildrenCategories = array(); //子孙分类
+    private $_rootid = null;
 
     /**
      * 构造函数
@@ -136,6 +137,13 @@ class Category extends Base {
 
             return $value;
         }
+        if ($name == 'RootID') {
+            if($this->_rootid === null){
+                $this->_rootid = (int) $this->GetRoot($this->ParentID);
+                $this->RootID = $this->_rootid;
+            }
+            return $this->_rootid;
+        }
 
         return parent::__get($name);
     }
@@ -191,4 +199,27 @@ class Category extends Base {
             return $this->GetDeep($zbp->categories[$object->ParentID], $deep + 1);
         }
     }
+
+    /**
+     * 得到分类RootID
+     * @param int 父分类ID
+     * @return int 祖分类ID
+     */
+    private function GetRoot($parentid) {
+        global $zbp;
+        if ($parentid == 0){
+        	return 0;
+        }
+        if (isset($zbp->categories[$parentid])){
+            if($zbp->categories[$parentid]->ParentID > 0){
+                return $this->GetRoot($zbp->categories[$parentid]->ParentID);
+            }
+            return $parentid;
+        }else{
+            return 0;
+        }
+
+    }
+
+
 }

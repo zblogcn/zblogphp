@@ -373,7 +373,7 @@ class App {
             foreach (scandir($dir) as $d) {
                 if (is_dir($dir . $d)) {
                     if ((substr($d, 0, 1) != '.') &&
-                        !($d == 'compile' && $this->type=='theme' && ((int) $this->adapted > 150101))) {
+                        !($d == 'compile' && $this->type=='theme')) {
                         $this->GetAllFileDir($dir . $d . '/');
                         $this->dirs[] = $dir . $d . '/';
                     }
@@ -386,7 +386,7 @@ class App {
                 while (false !== ($file = readdir($handle))) {
                     if (is_dir($dir . $file)) {
                         if ((substr($file, 0, 1) != '.') &&
-                            !($file == 'compile' && $this->type=='theme' && ((int) $this->adapted > 150101))) {
+                            !($file == 'compile' && $this->type=='theme')) {
                             $this->dirs[] = $dir . $file . '/';
                             $this->GetAllFileDir($dir . $file . '/');
                         } else {
