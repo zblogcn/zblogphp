@@ -2,9 +2,10 @@
 <html lang="<?php echo $lang['lang_bcp47'] ?>">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
 <meta name="generator" content="Z-BlogPHP <?php echo ZC_VERSION_DISPLAY ?>" />
 <meta name="robots" content="none" />
+<meta name="renderer" content="webkit" />
 <title><?php echo $blogname . '-' . $blogtitle ?></title>
 <link href="<?php echo $bloghost ?>zb_system/css/admin2.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $bloghost ?>zb_system/css/jquery-ui.custom.css"/>

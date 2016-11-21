@@ -5,6 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 	<title>{$name}-{$title}</title>
 	<meta name="generator" content="{$zblogphp}" />
+	<meta name="renderer" content="webkit" />
 	<link rel="stylesheet" rev="stylesheet" href="{$host}zb_users/theme/{$theme}/style/{$style}.css" type="text/css" media="all"/>
 	<script src="{$host}zb_system/script/jquery-2.2.4.min.js" type="text/javascript"></script>
 	<script src="{$host}zb_system/script/zblogphp.js" type="text/javascript"></script>

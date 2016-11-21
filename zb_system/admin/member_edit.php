@@ -11,7 +11,6 @@ require '../function/c_system_admin.php';
 
 $zbp->CheckGzip();
 $zbp->Load();
-$zbp->template->LoadTemplates();
 
 $action = '';
 if (GetVars('act', 'GET') == 'MemberEdt') {

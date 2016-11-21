@@ -6,6 +6,7 @@
 	<title>{$name}-{$title}</title>
 	<meta name="generator" content="{$zblogphp}" />
 	<meta name="viewport" content="width=device-width">
+	<meta name="renderer" content="webkit" />
 	<link rel="stylesheet" rev="stylesheet" href="{$host}zb_users/theme/{$theme}/style/{$style}.css" type="text/css" media="all"/>
 	<script src="{$host}zb_system/script/common.js" type="text/javascript"></script>
 	<script src="{$host}zb_system/script/c_html_js_add.php" type="text/javascript"></script>

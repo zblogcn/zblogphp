@@ -10,11 +10,10 @@ if ($zbp->CheckRights('admin')) {
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) {?>
-	<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-<?php }?>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
 	<meta name="robots" content="none" />
 	<meta name="generator" content="<?php echo $option['ZC_BLOG_PRODUCT_FULL'] ?>" />
+	<meta name="renderer" content="webkit" />
 	<link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
 	<script src="script/common.js" type="text/javascript"></script>
 	<script src="script/md5.js" type="text/javascript"></script>
