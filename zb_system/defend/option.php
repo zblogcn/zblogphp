@@ -134,6 +134,11 @@ return array(
 
     'ZC_CONTENT_MAX' => 1000,
 
+    'ZC_ARTICLE_TITLE_MAX' => 100,
+    'ZC_CATEGORY_NAME_MAX' => 50,
+    'ZC_TAGS_NAME_MAX' => 50,
+    'ZC_MODULE_NAME_MAX' => 50,
+
     // '自动摘要字数
     'ZC_ARTICLE_EXCERPT_MAX' => 250,
 

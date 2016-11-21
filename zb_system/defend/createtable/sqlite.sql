@@ -21,7 +21,7 @@ CREATE TABLE %pre%post (
 
 CREATE TABLE %pre%category (
   cate_ID integer primary key autoincrement,
-  cate_Name varchar(50) NOT NULL DEFAULT '',
+  cate_Name varchar(255) NOT NULL DEFAULT '',
   cate_Order integer NOT NULL DEFAULT 0,
   cate_Count integer NOT NULL DEFAULT 0,
   cate_Alias varchar(255) NOT NULL DEFAULT '',
@@ -41,7 +41,7 @@ CREATE TABLE %pre%comment (
   comm_RootID integer NOT NULL DEFAULT 0,
   comm_ParentID integer NOT NULL DEFAULT 0,
   comm_AuthorID integer NOT NULL DEFAULT 0,
-  comm_Name varchar(20) NOT NULL DEFAULT '',
+  comm_Name varchar(50) NOT NULL DEFAULT '',
   comm_Email varchar(50) NOT NULL DEFAULT '',
   comm_HomePage varchar(255) NOT NULL DEFAULT '',
   comm_Content text NOT NULL DEFAULT '',
@@ -83,7 +83,7 @@ CREATE TABLE %pre%member (
 
 CREATE TABLE %pre%module (
   mod_ID integer primary key autoincrement,
-  mod_Name varchar(100) NOT NULL DEFAULT '',
+  mod_Name varchar(255) NOT NULL DEFAULT '',
   mod_FileName varchar(50) NOT NULL DEFAULT '',
   mod_Content text NOT NULL DEFAULT '',
   mod_SidebarID integer NOT NULL DEFAULT 0,

@@ -96,7 +96,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsig
       <!-- title( -->
 		<div id="titleheader" class="editmod">
 			<label for="edtTitle" class="editinputname" ><?php echo $lang['msg']['title'] ?></label>
-			<div><input type="text" name="Title" id="edtTitle"  maxlength="100" onBlur="if(this.value=='') this.value='<?php echo $lang['msg']['unnamed'] ?>'" onFocus="if(this.value=='<?php echo $lang['msg']['unnamed'] ?>') this.value=''" value="<?php echo $article->Title; ?>" /></div>
+			<div><input type="text" name="Title" id="edtTitle"  maxlength="<?php echo $option['ZC_ARTICLE_TITLE_MAX']; ?>" onBlur="if(this.value=='') this.value='<?php echo $lang['msg']['unnamed'] ?>'" onFocus="if(this.value=='<?php echo $lang['msg']['unnamed'] ?>') this.value=''" value="<?php echo $article->Title; ?>" /></div>
       </div>
       <!-- )title -->
 

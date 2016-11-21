@@ -2805,9 +2805,9 @@ function FilterComment(&$comment) {
         $zbp->ShowError(30, __FILE__, __LINE__);
     }
 
-    $comment->Name = SubStrUTF8_Start($comment->Name, 0, 20);
-    $comment->Email = SubStrUTF8_Start($comment->Email, 0, 30);
-    $comment->HomePage = SubStrUTF8_Start($comment->HomePage, 0, 100);
+    $comment->Name = SubStrUTF8_Start($comment->Name, 0, $zbp->option['ZC_USERNAME_MAX']);
+    $comment->Email = SubStrUTF8_Start($comment->Email, 0, $zbp->option['ZC_EMAIL_MAX']);
+    $comment->HomePage = SubStrUTF8_Start($comment->HomePage, 0, $zbp->option['ZC_HOMEPAGE_MAX']);
 
     $comment->Content = TransferHTML($comment->Content, '[nohtml]');
 

@@ -271,7 +271,7 @@ $GLOBALS['datainfo'] = array(
     ),
     'Category' => array(
         'ID' => array('cate_ID', 'integer', '', 0),
-        'Name' => array('cate_Name', 'string', 50, ''),
+        'Name' => array('cate_Name', 'string', 250, ''),
         'Order' => array('cate_Order', 'integer', '', 0),
         'Count' => array('cate_Count', 'integer', '', 0),
         'Alias' => array('cate_Alias', 'string', 50, ''),
@@ -289,7 +289,7 @@ $GLOBALS['datainfo'] = array(
         'RootID' => array('comm_RootID', 'integer', '', 0),
         'ParentID' => array('comm_ParentID', 'integer', '', 0),
         'AuthorID' => array('comm_AuthorID', 'integer', '', 0),
-        'Name' => array('comm_Name', 'string', 20, ''),
+        'Name' => array('comm_Name', 'string', 50, ''),
         'Content' => array('comm_Content', 'string', '', ''),
         'Email' => array('comm_Email', 'string', 50, ''),
         'HomePage' => array('comm_HomePage', 'string', 250, ''),
@@ -300,7 +300,7 @@ $GLOBALS['datainfo'] = array(
     ),
     'Module' => array(
         'ID' => array('mod_ID', 'integer', '', 0),
-        'Name' => array('mod_Name', 'string', 100, ''),
+        'Name' => array('mod_Name', 'string', 250, ''),
         'FileName' => array('mod_FileName', 'string', 50, ''),
         'Content' => array('mod_Content', 'string', '', ''),
         'HtmlID' => array('mod_HtmlID', 'string', 50, ''),

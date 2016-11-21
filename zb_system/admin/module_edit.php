@@ -91,7 +91,7 @@ if ($mod->Source == 'theme') {
 			<?php echo $lang['msg']['name']?>:</span>
 		<span class="star">(*)</span>
 		<br />
-		<input id="edtName" class="edit" size="40" name="Name" maxlength="50" type="text" value="<?php echo $mod->Name;?>" />
+		<input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $option['ZC_MODULE_NAME_MAX']; ?>" type="text" value="<?php echo $mod->Name;?>" />
 		 (
 		<?php echo $lang['msg']['hide_title']?>
 		:
