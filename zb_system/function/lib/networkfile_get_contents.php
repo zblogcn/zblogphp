@@ -170,8 +170,9 @@ class Networkfile_get_contents implements iNetwork {
         //$this->httpheader[] = 'Referer: ' . 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 
         if ($this->maxredirs > 0) {
-            $this->option['follow_location'] = 1;
-            $this->option['max_redirects'] = $this->maxredirs;
+            $this->option['follow_location'] = true;
+            //补一个数字 要大于1才跳转
+            $this->option['max_redirects'] = $this->maxredirs+1;
         } else {
             $this->option['follow_location'] = 0;
             $this->option['max_redirects'] = 0;
@@ -183,18 +184,21 @@ class Networkfile_get_contents implements iNetwork {
         $this->responseHeader = $http_response_header;
         ZBlogException::ResumeErrorHook();
 
-        if (isset($this->responseHeader[0])) {
-            $this->statusText = $this->responseHeader[0];
-            $a = explode(' ', $this->statusText);
-            if (isset($a[0])) {
-                $this->responseVersion = $a[0];
-            }
+        foreach ($this->responseHeader as $key => $value) {
+            if(strpos($value,'HTTP/')===0){
+                if (isset($this->responseHeader[$key])) {
+                    $this->statusText = $this->responseHeader[$key];
+                    $a = explode(' ', $this->statusText);
+                    if (isset($a[0])) {
+                        $this->responseVersion = $a[0];
+                    }
 
-            if (isset($a[1])) {
-                $this->status = $a[1];
+                    if (isset($a[1])) {
+                        $this->status = $a[1];
+                    }
+                    unset($this->responseHeader[$key]);
+                }
             }
-
-            unset($this->responseHeader[0]);
         }
 
     }

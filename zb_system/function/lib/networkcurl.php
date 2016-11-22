@@ -200,18 +200,22 @@ class Networkcurl implements iNetwork {
         $this->responseHeader = explode("\r\n", substr($result, 0, $header_size - 4));
         $this->responseText = substr($result, $header_size);
         curl_close($this->ch);
-        if (isset($this->responseHeader[0])) {
-            $this->statusText = $this->responseHeader[0];
-            $a = explode(' ', $this->statusText);
-            if (isset($a[0])) {
-                $this->responseVersion = $a[0];
-            }
 
-            if (isset($a[1])) {
-                $this->status = $a[1];
-            }
+        foreach ($this->responseHeader as $key => $value) {
+            if(strpos($value,'HTTP/')===0){
+                if (isset($this->responseHeader[$key])) {
+                    $this->statusText = $this->responseHeader[$key];
+                    $a = explode(' ', $this->statusText);
+                    if (isset($a[0])) {
+                        $this->responseVersion = $a[0];
+                    }
 
-            unset($this->responseHeader[0]);
+                    if (isset($a[1])) {
+                        $this->status = $a[1];
+                    }
+                    unset($this->responseHeader[$key]);
+                }
+            }
         }
 
     }

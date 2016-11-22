@@ -217,7 +217,7 @@ class Networkfsockopen implements iNetwork {
             fwrite($socket, $this->option['content'] . "\r\n");
             fwrite($socket, "\r\n");
         }
-
+        $this->responseText = '';
         while (!feof($socket)) {
             $this->responseText .= fgets($socket, 128);
         }
