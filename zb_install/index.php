@@ -675,13 +675,18 @@ $isInstallFlag = true;
         $zbp->OpenConnect();
         $zbp->ConvertTableAndDatainfo();
         if (CreateTable($cts)) {
-            InsertInfo();
-            SaveConfig();
+           if (InsertInfo()) {
+              SaveConfig();
+           } else {
+              echo '<p><a href="javascript:history.go(-1)">' . $zbp->lang['zb_install']['clicktoback']. '</a></p>';
+           }
+        } else {
+            echo '<p><a href="javascript:history.go(-1)">' . $zbp->lang['zb_install']['clicktoback']. '</a></p>';
         }
 
         $zbp->CloseConnect();
     } else {
-        echo '<p>还没有选择数据库类型，请后退重试。</p><p><a href="javascript:history.go(-1)">点击这里后退</a></p>';
+        echo '<p>' . $zbp->lang['zb_install']['not_select_dbtyype'] . '</p><p><a href="javascript:history.go(-1)">' . $zbp->lang['zb_install']['clicktoback']. '</a></p>';
     }
     ?>
 
@@ -846,6 +851,12 @@ function CreateTable($sql) {
 
     $sql = $zbp->db->sql->ReplacePre($sql);
     $zbp->db->QueryMulit($sql);
+
+    if ($zbp->db->ExistTable($GLOBALS['table']['Config']) == false) {
+        echo $zbp->lang['zb_install']['not_create_table'];
+
+        return false;
+    }
 
     echo $zbp->lang['zb_install']['create_table'] . "<br/>";
 
@@ -1056,7 +1067,14 @@ function InsertInfo() {
     $a->Meta = '';
     $a->Save();
 
-    echo $zbp->lang['zb_install']['create_datainfo'] . "<br/>";
+    $zbp->LoadMembers(0);
+    if (count($zbp->members)==0){
+        echo $zbp->lang['zb_install']['not_insert_data'] . "<br/>";
+        return false;
+    }else{
+        echo $zbp->lang['zb_install']['create_datainfo'] . "<br/>";
+        return true;
+    }
 
 }
 

@@ -67,8 +67,6 @@ return array(
     're_password' => 'Re-password:',
     'blog_name' => 'Site Title:',
     'uncategorized' => 'uncategorized',
-
-
     'environment_network' => 'Network support',
     'environment_network_description' => 'Use for check update and download apps',
     'environment_json' => 'JSON support',
@@ -79,5 +77,9 @@ return array(
     'environment_iconv_description' => '',
     'environment_mb' => 'Multibytes support',
     'environment_mb_description' => '',
+    'not_select_dbtyype' => 'Didn\'t configure the database',
+    'clicktoback' => 'please go back and retry',
+    'not_create_table' => 'Created tables failed.',
+    'not_insert_data' => 'Created data failed.',
     '' => '',
 );

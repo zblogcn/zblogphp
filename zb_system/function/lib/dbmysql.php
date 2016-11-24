@@ -102,7 +102,7 @@ class DbMySQL implements iDataBase {
      * @param string $dbmysql_username
      * @param string $dbmysql_password
      * @param string $dbmysql_name
-     * @return bool
+     * @return bool true:创建成功 false:失败 null:是已存在而没有执行创建
      */
     public function CreateDB($dbmysql_server, $dbmysql_port, $dbmysql_username, $dbmysql_password, $dbmysql_name) {
         $db_link = mysql_connect($dbmysql_server . ':' . $dbmysql_port, $dbmysql_username, $dbmysql_password);
@@ -130,10 +130,11 @@ class DbMySQL implements iDataBase {
             }
         }
         if ($c == 0) {
-            mysql_query($this->sql->Filter('CREATE DATABASE ' . $dbmysql_name), $this->db);
-
+            $r = mysql_query($this->sql->Filter('CREATE DATABASE ' . $dbmysql_name), $this->db);
+            if($r === false)return false;
             return true;
         }
+
     }
 
     /**

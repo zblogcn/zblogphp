@@ -67,8 +67,6 @@ return array(
     're_password' => '確認密碼：',
     'blog_name' => '網站標題：',
     'uncategorized' => '未分類',
-
-
     'environment_network' => '網絡支持',
     'environment_network_description' => '用於檢查更新及應用中心',
     'environment_json' => 'JSON支持',
@@ -79,5 +77,9 @@ return array(
     'environment_iconv_description' => '',
     'environment_mb' => '多字節字符串支持',
     'environment_mb_description' => '',
+    'not_select_dbtyype' => '还没有选择数据库类型，请后退重试',
+    'clicktoback' => '点击这里后退',
+    'not_create_table' => '创建表失败。',
+    'not_insert_data' => '插入数据失败。',
     '' => '',
 );
