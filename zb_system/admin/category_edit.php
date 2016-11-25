@@ -34,7 +34,7 @@ $p .= '<option value="0">' . $lang['msg']['none'] . '</option>';
 
 foreach ($zbp->categoriesbyorder as $k => $v) {
     if ($v->ID == $cate->ID) {continue;}
-    if ($v->RootID == $cate->ID) {continue;}
+    if ($cate->ID > 0 && $v->RootID == $cate->ID) {continue;}
     if ($cate->RootID>0) { if ($v->RootID == $cate->RootID && $v->Level >= $cate->Level) {continue;} }
     if ($v->Level < 3) {
         $p .= '<option ' . ($v->ID == $cate->ParentID ? 'selected="selected"' : '') . ' value="' . $v->ID . '">' . $v->SymbolName . '</option>';

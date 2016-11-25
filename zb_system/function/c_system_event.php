@@ -658,7 +658,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
     global $zbp;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($page, $cate, $auth, $date, $tags);
+        $fpreturn = $fpname($page, $cate, $auth, $date, $tags, $isrewrite);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
@@ -996,7 +996,7 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($id, $alias);
+        $fpreturn = $fpname($id, $alias, $isrewrite);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
