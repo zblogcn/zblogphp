@@ -670,29 +670,39 @@ $isInstallFlag = true;
         break;
 
     }
+    $hasError = false;
     if ($isInstallFlag) {
 
         $zbp->OpenConnect();
         $zbp->ConvertTableAndDatainfo();
         if (CreateTable($cts)) {
            if (InsertInfo()) {
-              SaveConfig();
+              if (SaveConfig()) {
+                //ok
+              }else{
+              $hasError = true;
+              }
            } else {
-              echo '<p><a href="javascript:history.go(-1)">' . $zbp->lang['zb_install']['clicktoback']. '</a></p>';
+             $hasError = true;
            }
         } else {
-            echo '<p><a href="javascript:history.go(-1)">' . $zbp->lang['zb_install']['clicktoback']. '</a></p>';
+          $hasError = true;
         }
 
         $zbp->CloseConnect();
     } else {
-        echo '<p>' . $zbp->lang['zb_install']['not_select_dbtyype'] . '</p><p><a href="javascript:history.go(-1)">' . $zbp->lang['zb_install']['clicktoback']. '</a></p>';
+      $hasError = true;
     }
     ?>
 
     </div>
     <div id="bottom">
+      <?php
+      if ($hasError == true) {
+      echo '<p><a href="javascript:history.go(-1)">' . $zbp->lang['zb_install']['clicktoback']. '</a></p>';
+       }else{ ?>
       <input type="button" name="next" onClick="window.location.href='../'" id="netx" value="<?php echo $zbp->lang['zb_install']['ok'];?>" />
+      <?php }?>
     </div>
   </dd>
 </dl>
@@ -1095,8 +1105,18 @@ function SaveConfig() {
     $zbp->option['ZC_LAST_VERSION'] = $zbp->version;
     $zbp->option['ZC_NOW_VERSION'] = $zbp->version;
     $zbp->SaveOption();
+
+    if($zbp->option['ZC_YUN_SITE'] == '' && file_exists($zbp->path . 'zb_users/c_option.php') == false){
+        echo $zbp->lang['zb_install']['not_create_option_file'] . "<br/>";
+        return false;
+    }
+
     $zbp->template = $zbp->PrepareTemplate();
     $zbp->BuildTemplate();
+
+    if(file_exists($zbp->path . 'zb_users/cache/compiled/default/index.php') == false){
+        echo $zbp->lang['zb_install']['not_create_template_file'] . "<br/>";
+    }
 
     $zbp->Config('cache')->templates_md5 = '';
     $zbp->SaveCache();
@@ -1115,7 +1135,7 @@ function SaveConfig() {
     $zbp->SaveConfig('WhitePage');
 
     echo $zbp->lang['zb_install']['save_option'] . "<br/>";
-
+    return true;
 }
 
 RunTime();

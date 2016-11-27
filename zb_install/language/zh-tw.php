@@ -81,5 +81,7 @@ return array(
     'clicktoback' => '点击这里后退',
     'not_create_table' => '创建表失败。',
     'not_insert_data' => '插入数据失败。',
+    'not_create_option_file' => '创建c_option.php失败。',
+    'not_create_template_file' => '编译主题模板失败。',  
     '' => '',
 );

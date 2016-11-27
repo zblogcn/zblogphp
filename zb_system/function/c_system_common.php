@@ -861,7 +861,7 @@ function JsonError($errorCode, $errorString, $data) {
             'timestamp' => time(),
         ),
     );
-    ob_clean();
+    @ob_clean();
     echo json_encode($result);
     if ($errorCode != 0) {
         exit;
