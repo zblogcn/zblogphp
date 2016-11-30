@@ -41,9 +41,20 @@ function zbp_getUsersBlogs() {
     $strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><params><param><value><array><data><value><struct><member><name>url</name><value><string>$%#1#%$</string></value></member><member><name>blogid</name><value><string>$%#2#%$</string></value></member><member><name>blogName</name><value><string>$%#3#%$</string></value></member></struct></value></data></array></value></param></params></methodResponse>';
 
     $strXML = str_replace("$%#1#%$", htmlspecialchars($zbp->host), $strXML);
-    $strXML = str_replace("$%#2#%$", htmlspecialchars($zbp->guid), $strXML);
+    $strXML = str_replace("$%#2#%$", htmlspecialchars(md5(md5($zbp->guid))), $strXML);
     $strXML = str_replace("$%#3#%$", htmlspecialchars($zbp->name), $strXML);
 
+    echo $strXML;
+}
+function zbp_wp_getUsersBlogs() {
+    global $zbp;
+
+    $strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><params><param><value><array><data><value><struct><member><name>isAdmin</name><value><boolean>$%#1#%$</boolean></value></member><member><name>url</name><value><string>$%#2#%$</string></value></member><member><name>blogid</name><value><string>$%#3#%$</string></value></member><member><name>blogName</name><value><string>$%#4#%$</string></value></member><member><name>xmlrpc</name><value><string>$%#5#%$</string></value></member></struct></value></data></array></value></param></params></methodResponse>';
+    $strXML = str_replace("$%#1#%$", $zbp->user->Level === 1 , $strXML);
+    $strXML = str_replace("$%#2#%$", htmlspecialchars($zbp->host), $strXML);
+    $strXML = str_replace("$%#3#%$", htmlspecialchars(md5(md5($zbp->guid))), $strXML);
+    $strXML = str_replace("$%#4#%$", htmlspecialchars($zbp->name), $strXML);
+    $strXML = str_replace("$%#5#%$", $zbp->host . 'zb_system/xml-rpc/index.php', $strXML);
     echo $strXML;
 }
 
@@ -727,6 +738,11 @@ function zbp_newMediaObject($xmlstring) {
 
 $zbp->Load();
 
+if(isset($zbp->option['ZC_XMLRPC_ENABLE']) && $zbp->option['ZC_XMLRPC_ENABLE'] == false){
+	Http404();
+    die;
+}
+
 Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'RespondError');
 
 $xmlstring = file_get_contents('php://input');
@@ -913,6 +929,16 @@ if ($xml) {
             if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
             if ($zbp->CheckRights('UploadPst')) {
                 zbp_newMediaObject($xml->params->param[3]->value->struct->asXML());
+            } else {
+                $zbp->ShowError(6, __FILE__, __LINE__);
+            }
+            break;
+        case 'wp.getUsersBlogs':
+            $username = (string) $xml->params->param[0]->value->string;
+            $password = (string) $xml->params->param[1]->value->string;
+            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            if ($zbp->CheckRights('admin')) {
+                zbp_wp_getUsersBlogs();
             } else {
                 $zbp->ShowError(6, __FILE__, __LINE__);
             }

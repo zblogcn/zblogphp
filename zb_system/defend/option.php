@@ -201,4 +201,5 @@ return array(
     'ZC_COMPATIBLE_ASP_URL' => true,
     'ZC_LARGE_DATA' => false,
     'ZC_JS_304_ENABLE' => false,
+    'ZC_XMLRPC_ENABLE' => true,
 );
