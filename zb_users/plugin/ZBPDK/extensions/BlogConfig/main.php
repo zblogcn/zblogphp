@@ -54,15 +54,16 @@ if (isset($_POST['act'])) {
             exit();
             break;
         case 'e_edit':
-            $config = $zbp->configs[$_POST['name2']]->$_POST['name1'];
+ $name1=$_POST['name1']; 
+			$config = $zbp->configs[$_POST['name2']]->$name1;
             $value = $_POST['post'];
             if (gettype($config) == 'boolean') {
                 $value = (bool) $value;
             } elseif (gettype($config) == 'integer') {
                 $value = (int) $value;
             }
-
-            $zbp->configs[$_POST['name2']]->$_POST['name1'] = $value;
+ $name1=$_POST['name1'];
+			$zbp->configs[$_POST['name2']]->$name1 = $value;
             $zbp->SaveConfig($_POST['name2']);
             echo blogconfig_exportlist($_POST['name2']);
             exit();
