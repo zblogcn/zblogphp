@@ -494,7 +494,8 @@ class ZBlogPHP {
         #$this->LoadTags();
         $this->LoadModules();
 
-        $this->Verify();
+        if( !(get_class($this->user) === 'Member' && $this->user->ID > 0) )
+            $this->Verify();
 
         $this->RegBuildModule('catalog', 'ModuleBuilder::Catalog');
         $this->RegBuildModule('calendar', 'ModuleBuilder::Calendar');

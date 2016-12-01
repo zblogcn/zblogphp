@@ -45,6 +45,10 @@ function VerifyLogin() {
             setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $sdt, $zbp->cookiespath);
         }
 
+        foreach ($GLOBALS['hooks']['Filter_Plugin_VerifyLogin_Succeed'] as $fpname => &$fpsignal) {
+            $fpname();
+        }
+
         return true;
     } else {
         $zbp->ShowError(8, __FILE__, __LINE__);
@@ -60,6 +64,10 @@ function Logout() {
     setcookie('username', '', time() - 3600, $zbp->cookiespath);
     setcookie('password', '', time() - 3600, $zbp->cookiespath);
     setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), '', time() - 3600, $zbp->cookiespath);
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Logout_Succeed'] as $fpname => &$fpsignal) {
+        $fpname();
+    }
 
 }
 

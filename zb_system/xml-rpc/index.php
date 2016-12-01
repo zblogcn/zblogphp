@@ -41,7 +41,7 @@ function zbp_getUsersBlogs() {
     $strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><params><param><value><array><data><value><struct><member><name>url</name><value><string>$%#1#%$</string></value></member><member><name>blogid</name><value><string>$%#2#%$</string></value></member><member><name>blogName</name><value><string>$%#3#%$</string></value></member></struct></value></data></array></value></param></params></methodResponse>';
 
     $strXML = str_replace("$%#1#%$", htmlspecialchars($zbp->host), $strXML);
-    $strXML = str_replace("$%#2#%$", htmlspecialchars(md5(md5($zbp->guid))), $strXML);
+    $strXML = str_replace("$%#2#%$", htmlspecialchars(md5($zbp->guid . sha1($zbp->path))), $strXML);
     $strXML = str_replace("$%#3#%$", htmlspecialchars($zbp->name), $strXML);
 
     echo $strXML;
@@ -52,7 +52,7 @@ function zbp_wp_getUsersBlogs() {
     $strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><params><param><value><array><data><value><struct><member><name>isAdmin</name><value><boolean>$%#1#%$</boolean></value></member><member><name>url</name><value><string>$%#2#%$</string></value></member><member><name>blogid</name><value><string>$%#3#%$</string></value></member><member><name>blogName</name><value><string>$%#4#%$</string></value></member><member><name>xmlrpc</name><value><string>$%#5#%$</string></value></member></struct></value></data></array></value></param></params></methodResponse>';
     $strXML = str_replace("$%#1#%$", $zbp->user->Level === 1 , $strXML);
     $strXML = str_replace("$%#2#%$", htmlspecialchars($zbp->host), $strXML);
-    $strXML = str_replace("$%#3#%$", htmlspecialchars(md5(md5($zbp->guid))), $strXML);
+    $strXML = str_replace("$%#3#%$", htmlspecialchars(md5($zbp->guid . sha1($zbp->path))), $strXML);
     $strXML = str_replace("$%#4#%$", htmlspecialchars($zbp->name), $strXML);
     $strXML = str_replace("$%#5#%$", $zbp->host . 'zb_system/xml-rpc/index.php', $strXML);
     echo $strXML;

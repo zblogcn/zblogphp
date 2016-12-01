@@ -854,6 +854,28 @@ DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfCategories');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_VerifyLogin_Succeed
+'参数:
+'说明:VerifyLogin成功的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_VerifyLogin_Succeed');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Logout_Succeed
+'参数:
+'说明:Logout成功的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Logout_Succeed');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_GetPost_Result
 '参数:&$post
 '说明:定义GetPost输出结果接口
