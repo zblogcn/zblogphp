@@ -68,7 +68,6 @@ function Logout() {
     foreach ($GLOBALS['hooks']['Filter_Plugin_Logout_Succeed'] as $fpname => &$fpsignal) {
         $fpname();
     }
-
 }
 
 ################################################################################################################
@@ -3156,9 +3155,11 @@ function CountMember(&$member, $plus = array(null, null, null, null)) {
     }
 
     if ($plus[2] === null) {
-        $s = $zbp->db->sql->Count($zbp->table['Comment'], array(array('COUNT', '*', 'num')), array(array('=', 'comm_AuthorID', $id)));
-        $member_Comments = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
-        $member->Comments = $member_Comments;
+        if ($member->ID > 0){
+            $s = $zbp->db->sql->Count($zbp->table['Comment'], array(array('COUNT', '*', 'num')), array(array('=', 'comm_AuthorID', $id)));
+            $member_Comments = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
+            $member->Comments = $member_Comments;
+        }
     } else {
         $member->Comments += $plus[2];
     }

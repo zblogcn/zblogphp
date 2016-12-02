@@ -2043,9 +2043,15 @@ class ZBlogPHP {
     public function GetMemberByID($id) {
         $ret = $this->GetSomeThing('members', 'ID', $id, 'Member');
         if ($ret->ID == 0) {
-            $ret->Guid = GetGuid();
-        } else {
-            $this->membersbyname[$ret->Name] = &$this->members[$ret->ID];
+            //如果是部份加载用户
+            if ( $this->option['ZC_LOADMEMBERS_LEVEL'] <> 0 ){
+                if ( $ret->LoadInfoByID($id) == true ){
+                    $this->members[$ret->ID] = $ret;
+                    $this->membersbyname[$ret->Name] = &$this->members[$ret->ID];
+                }
+            } else {
+                $ret->Guid = GetGuid();
+            }
         }
 
         return $ret;

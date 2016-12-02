@@ -981,7 +981,7 @@ function InsertInfo() {
     $t->FileName = "favorite";
     $t->Source = "system";
     $t->SidebarID = 1;
-    $t->Content = '<li><a href="http://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li><li><a href="http://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="http://weibo.com/zblogcn" target="_blank">Z-Blog新浪官微</a></li>';
+    $t->Content = '<li><a href="http://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="http://weibo.com/zblogcn" target="_blank">Z-Blog官方微博</a></li><li><a href="http://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li>';
     $t->HtmlID = "divFavorites";
     $t->Type = "ul";
     $t->Save();
@@ -991,7 +991,7 @@ function InsertInfo() {
     $t->FileName = "link";
     $t->Source = "system";
     $t->SidebarID = 1;
-    $t->Content = '<li><a href="http://www.dbshost.cn/" target="_blank" title="独立博客服务 Z-Blog官方主机">DBS主机</a></li>';
+    $t->Content = '<li><a href="https://github.com/zblogcn" target="_blank" title="Z-Blog on Github">Z-Blog on Github</a></li><li><a href="http://www.dbshost.cn/" target="_blank" title="独立博客服务 Z-Blog官方主机">DBS主机</a></li>';
     $t->HtmlID = "divLinkage";
     $t->Type = "ul";
     $t->Save();
