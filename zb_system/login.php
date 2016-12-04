@@ -75,8 +75,6 @@ $("#chkRemember").click(function(){
 	$("#savedate").attr("value",$("#chkRemember").attr("checked")=="checked"?30:0);
 })
 
-?>
-}
 </script>
 </body>
 </html>

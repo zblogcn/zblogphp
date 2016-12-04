@@ -544,10 +544,13 @@ class SQLGlobal {
         $sql = &$this->_sql;
 
         if (isset($this->option['limit'])) {
-            $sql[] = "LIMIT " . $this->option['limit'];
-        }
-        if (isset($this->option['offset'])) {
-            $sql[] = "OFFSET " . $this->option['offset'];
+            if ($this->option['limit'] > 0) {
+                $sql[] = "LIMIT " . $this->option['limit'];
+
+                if (isset($this->option['offset'])) {
+                    $sql[] = "OFFSET " . $this->option['offset'];
+                }
+            }
         }
     }
     /**

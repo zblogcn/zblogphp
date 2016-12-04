@@ -2264,6 +2264,7 @@ function PostMember() {
             $zbp->ShowError(73, __FILE__, __LINE__);
         }
         $data['IP'] = GetGuestIP();
+        if ($mem->Guid == '') $mem->Guid = GetGuid();
     } else {
         $mem->LoadInfoByID($data['ID']);
     }

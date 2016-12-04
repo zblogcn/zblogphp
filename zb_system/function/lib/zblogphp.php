@@ -494,7 +494,7 @@ class ZBlogPHP {
         #$this->LoadTags();
         $this->LoadModules();
 
-        if( !(get_class($this->user) === 'Member'&& $this->user->Level > 0 && $this->user->ID > 0) )
+        if( !(get_class($this->user) === 'Member' && $this->user->Level > 0 && $this->user->ID > 0) )
             $this->Verify();
 
         $this->RegBuildModule('catalog', 'ModuleBuilder::Catalog');
@@ -2043,14 +2043,13 @@ class ZBlogPHP {
     public function GetMemberByID($id) {
         $ret = $this->GetSomeThing('members', 'ID', $id, 'Member');
         if ($ret->ID == 0) {
+            $ret->Guid = GetGuid();
             //如果是部份加载用户
             if ( $this->option['ZC_LOADMEMBERS_LEVEL'] <> 0 ){
                 if ( $ret->LoadInfoByID($id) == true ){
                     $this->members[$ret->ID] = $ret;
                     $this->membersbyname[$ret->Name] = &$this->members[$ret->ID];
                 }
-            } else {
-                $ret->Guid = GetGuid();
             }
         }
 
