@@ -69,7 +69,7 @@ $(function () {
 foreach ($GLOBALS['hooks']['Filter_Plugin_Html_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
 
 $s = ob_get_clean();
-$m = md5($s);
+$m = 'W/' . md5($s);
 
 header('Content-Type: application/x-javascript; charset=utf-8');
 header('Etag: ' . $m);

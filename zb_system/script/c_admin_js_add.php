@@ -187,8 +187,9 @@ function updateinfo(s){
 
 
 function AddHeaderIcon(s){
-	if ($.support.leadingWhitespace)
+<?php if(!$option['ZC_ADMIN_HTML5_ENABLE'])echo '/*'; ?>
 		$("div.divHeader,div.divHeader2").first().css({"padding-left":"38px","background":"url('"+s+"') 3px 9px no-repeat","background-size":"32px"});
+<?php if(!$option['ZC_ADMIN_HTML5_ENABLE'])echo '*/'; ?>
 }
 
 
@@ -246,13 +247,11 @@ $(document).ready(function(){
 		}
 	})
 
-	if (!$.support.leadingWhitespace) {
-
-	}else{
-		<?php
-echo 'if($("div.divHeader,div.divHeader2").first().css("background-image")=="none"){AddHeaderIcon("' . $bloghost . 'zb_system/image/common/window.png");}';
+<?php
+if ($option['ZC_ADMIN_HTML5_ENABLE'])
+    echo 'if($("div.divHeader,div.divHeader2").first().css("background-image")=="none"){AddHeaderIcon("' . $bloghost . 'zb_system/image/common/window.png");}';
 ?>
-	}
+
 
 	AutoHideTips();
 
@@ -273,7 +272,7 @@ var VerifyMessage = function () { zbp.comment.post.apply(null); return false;};
 foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
 
 $s = ob_get_clean();
-$m = md5($s);
+$m = 'W/' . md5($s);
 
 header('Content-Type: application/x-javascript; charset=utf-8');
 header('Etag: ' . $m);

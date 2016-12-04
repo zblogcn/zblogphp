@@ -494,7 +494,7 @@ class ZBlogPHP {
         #$this->LoadTags();
         $this->LoadModules();
 
-        if( !(get_class($this->user) === 'Member' && $this->user->ID > 0) )
+        if( !(get_class($this->user) === 'Member'&& $this->user->Level > 0 && $this->user->ID > 0) )
             $this->Verify();
 
         $this->RegBuildModule('catalog', 'ModuleBuilder::Catalog');

@@ -22,7 +22,6 @@ function VerifyLogin() {
         $ps = $m->PassWord_MD5Path;
         $sd = (int) GetVars('savedate');
         $addinfo = array();
-        $addinfo['dishtml5'] = (int) GetVars('dishtml5', 'POST');
         $addinfo['chkadmin'] = (int) $zbp->CheckRights('admin');
         $addinfo['chkarticle'] = (int) $zbp->CheckRights('ArticleEdt');
         $addinfo['levelname'] = $m->LevelName;

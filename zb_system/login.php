@@ -75,13 +75,6 @@ $("#chkRemember").click(function(){
 	$("#savedate").attr("value",$("#chkRemember").attr("checked")=="checked"?30:0);
 })
 
-
-if (!$.support.leadingWhitespace) {
-	$("#dishtml5").val(1);<?php
-if ($option['ZC_ADMIN_HTML5_ENABLE']) {
-    echo 'alert("' . $lang['error']['74'] . '");';
-}
-
 ?>
 }
 </script>
