@@ -2757,13 +2757,20 @@ function SaveSetting() {
     }
 
 
-    $Punycode = new Punycode();
     $zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST']);
     $zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST'], '/') . '/';
     if ($zbp->option['ZC_BLOG_HOST'] == '/') {
         $zbp->option['ZC_BLOG_HOST'] = $zbp->host;
     }
-    $zbp->option['ZC_BLOG_HOST'] = $Punycode->encode($zbp->option['ZC_BLOG_HOST']);
+    $usePC = false;
+    for ($i=0; $i < strlen($zbp->option['ZC_BLOG_HOST'])-1; $i++) { 
+        $l = substr($zbp->option['ZC_BLOG_HOST'], $i,1);
+        if(ord($l)>=192) $usePC = true;
+    }
+    if ($usePC) {
+        $Punycode = new Punycode();
+        $zbp->option['ZC_BLOG_HOST'] = $Punycode->encode($zbp->option['ZC_BLOG_HOST']);
+    }
     $lang = require $zbp->usersdir . 'language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php';
     $zbp->option['ZC_BLOG_LANGUAGE'] = $lang['lang'];
     $zbp->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
