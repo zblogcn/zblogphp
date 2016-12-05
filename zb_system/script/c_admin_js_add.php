@@ -187,9 +187,7 @@ function updateinfo(s){
 
 
 function AddHeaderIcon(s){
-<?php if(!$option['ZC_ADMIN_HTML5_ENABLE'])echo '/*'; ?>
-		$("div.divHeader,div.divHeader2").first().css({"padding-left":"38px","background":"url('"+s+"') 3px 9px no-repeat","background-size":"32px"});
-<?php if(!$option['ZC_ADMIN_HTML5_ENABLE'])echo '*/'; ?>
+  $("div.divHeader,div.divHeader2").first().css({"padding-left":"38px","background":"url('"+s+"') 3px 9px no-repeat","background-size":"32px"});
 }
 
 
@@ -241,17 +239,9 @@ $(document).ready(function(){
 
 	$("img[width='16']").each(function(){if($(this).parent().is("a")){$(this).parent().addClass("button")}});
 
-	$("input[type='file']").click(function(){
-		if(/(MSIE (10|9).+?WPDesktop)|(IEMobile\/(10|9))/g.test(navigator.userAgent)&&$(this).val()==""){
-			alert('<?php echo $lang['error'][65] ?>')
-		}
-	})
-
-<?php
-if ($option['ZC_ADMIN_HTML5_ENABLE'])
-    echo 'if($("div.divHeader,div.divHeader2").first().css("background-image")=="none"){AddHeaderIcon("' . $bloghost . 'zb_system/image/common/window.png");}';
-?>
-
+	if ($("div.divHeader,div.divHeader2").first().css("background-image") == "none") { 
+		AddHeaderIcon("<?php echo $bloghost ?>zb_system/image/common/window.png");
+	}
 
 	AutoHideTips();
 
