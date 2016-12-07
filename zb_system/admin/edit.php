@@ -177,7 +177,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
 
           <!-- level -->
           <div id='level' class="editmod"> <label for="cmbPostStatus" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['status'] ?></label>
-            <select class="edit" style="width:180px;" size="1" name="Status" id="cmbPostStatus" onChange="edtLevel.value=this.options[this.selectedIndex].value">
+            <select class="edit" style="width:180px;" size="1" name="Status" id="cmbPostStatus" onChange="cmbPostStatus.value=this.options[this.selectedIndex].value">
 <?php echo OutputOptionItemsOfPostStatus($article->Status); ?>
             </select>
           </div>
@@ -186,7 +186,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
           <!-- template( -->
 
           <div id='template' class="editmod"> <label for="cmbTemplate" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['template'] ?></label>
-            <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate" onChange="edtTemplate.value=this.options[this.selectedIndex].value">
+            <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate" onChange="cmbTemplate.value=this.options[this.selectedIndex].value">
 <?php echo OutputOptionItemsOfTemplate($article->Template); ?>
             </select>
           </div>
@@ -194,7 +194,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
 
           <!-- user( -->
           <div id='user' class="editmod"> <label for="cmbUser" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['author'] ?></label>
-            <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="edtAuthorID.value=this.options[this.selectedIndex].value">
+            <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="cmbUser.value=this.options[this.selectedIndex].value">
 				<?php echo OutputOptionItemsOfMember($article->AuthorID); ?>
             </select>
           </div>

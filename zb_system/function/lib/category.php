@@ -175,6 +175,9 @@ class Category extends Base {
      * @return bool
      */
     public function Del() {
+        global $zbp;
+        if ($this->ID >0) unset($zbp->categories[$this->ID]);
+
         foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Del'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);
