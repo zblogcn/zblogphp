@@ -1,7 +1,7 @@
-<?php if ($zbp->option['ZC_ADMIN_HTML5_ENABLE']) {?><aside class="left"><?php } else {?><div class="left"><?php }?>
+<aside class="left">
   <ul id="leftmenu">
 <?php
 ResponseAdmin_LeftMenu()
 ?>
   </ul>
-<?php if ($zbp->option['ZC_ADMIN_HTML5_ENABLE']) {?></aside><?php } else {?></div><?php }?>
+</aside>

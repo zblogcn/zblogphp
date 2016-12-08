@@ -10,7 +10,7 @@ if ($zbp->CheckRights('admin')) {
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1" />
 	<meta name="robots" content="none" />
 	<meta name="generator" content="<?php echo $option['ZC_BLOG_PRODUCT_FULL'] ?>" />
 	<meta name="renderer" content="webkit" />
@@ -45,7 +45,6 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Header'] as $fpname => &$fpsigna
 	<input type="hidden" name="username" id="username" value="" />
 	<input type="hidden" name="password" id="password" value="" />
 	<input type="hidden" name="savedate" id="savedate" value="0" />
-	<input type="hidden" name="dishtml5" id="dishtml5" value="0" />
     </form>
   </div>
 </div>
