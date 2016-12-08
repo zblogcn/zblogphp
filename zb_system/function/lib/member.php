@@ -196,6 +196,10 @@ class Member extends Base {
      * @return bool
      */
     public function Del() {
+        global $zbp;
+        if ($this->ID >0) unset($zbp->members[$this->ID]);
+        if ($this->Name != '') unset($zbp->membersbyname[$this->Name]);
+
         foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Del'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);

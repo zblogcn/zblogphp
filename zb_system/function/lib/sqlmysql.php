@@ -5,14 +5,14 @@ class SQLMySQL extends SQLGlobal {
      */
     public function __construct(&$db = null) {
         parent::__construct($db);
-        $this->option['engine'] = 'MyISAM';
+        $this->option['engine'] = $GLOBALS['zbp']->option['ZC_MYSQL_ENGINE'];
     }
     /**
      * @override
      */
     public function reset() {
         parent::reset();
-        $this->option['engine'] = 'MyISAM';
+        $this->option['engine'] = $GLOBALS['zbp']->option['ZC_MYSQL_ENGINE'];
 
         return $this;
     }
@@ -104,12 +104,13 @@ class SQLMySQL extends SQLGlobal {
             }
             $sql[] = 'PRIMARY KEY (' . $idname . ')';
             $myengtype = $this->db->dbengine;
-            if ($engine != null) {
-                $myengtype = $engine;
+
+            if (is_array($engine) && count($engine)>0) {
+                $myengtype = $engine[1];
             }
 
             if (!$myengtype) {
-                $myengtype = 'MyISAM';
+                $myengtype = $GLOBALS['zbp']->option['ZC_MYSQL_ENGINE'];
             }
 
             $sql[] = ') ENGINE=' . $myengtype . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';

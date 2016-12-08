@@ -7,7 +7,7 @@
  */
 
 /**
- * 得到请求方法(未必会准确的，比如SERVER没能某项，或是端口改过的)
+ * 得到请求方法(未必会准确的，比如SERVER没有某项，或是端口改过的)
  * @param $array
  * @return $string
  */
@@ -185,12 +185,13 @@ function GetEnvironment() {
     if ($ajax) {
         $ajax = substr(get_class($ajax), 7);
     }
-
+    $p = phpversion();
+    if (strpos($p, '-') !== false ) $p = substr($p,0,strpos($p, '-'));
     $system_environment = PHP_OS . '; ' .
     GetValueInArray(
         explode(' ', str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))), 0
     ) . '; ' .
-    'PHP ' . phpversion() . (IS_X64 ? ' x64' : '') . '; ' .
+    'PHP ' . $p . (IS_X64 ? ' x64' : '') . '; ' .
     $zbp->option['ZC_DATABASE_TYPE'] . '; ' . $ajax;
 
     return $system_environment;

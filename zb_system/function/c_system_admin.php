@@ -1516,9 +1516,11 @@ function Admin_SettingMng() {
 
 				<div class="content-box-content">
 <?php
-
-    $Punycode = new Punycode();
-    $decodedBlogHost = $Punycode->decode($zbp->option['ZC_BLOG_HOST']);
+    $decodedBlogHost = $zbp->option['ZC_BLOG_HOST'];
+    if(stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false){
+        $Punycode = new Punycode();
+        $decodedBlogHost = $Punycode->decode($zbp->option['ZC_BLOG_HOST']);
+    }
 
     echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
     echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';

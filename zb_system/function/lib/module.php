@@ -127,6 +127,16 @@ class Module extends Base {
      */
     public function Del() {
         global $zbp;
+        foreach ($zbp->modules as $key => $m) {
+            if ($this->ID >0 && $m->ID == $this->ID) unset($zbp->modules[$key]);
+            if ($this->Source == 'theme') {
+                if ($this->FileName != '' && $m->FileName == $this->FileName) unset($zbp->modules[$key]);
+            }
+        }
+        foreach ($zbp->modulesbyfilename as $key => $m) {
+            if ($this->FileName != '' && $m->FileName == $this->FileName) unset($zbp->modulesbyfilename[$this->FileName]);
+        }
+
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Del'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);

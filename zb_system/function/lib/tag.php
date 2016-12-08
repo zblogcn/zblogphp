@@ -101,6 +101,10 @@ class Tag extends Base {
      * @return bool
      */
     public function Del() {
+        global $zbp;
+        if ($this->ID >0) unset($zbp->tags[$this->ID]);
+        if ($this->Name != '') unset($zbp->tagsbyname[$this->Name]);
+
         foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Del'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);
