@@ -59,6 +59,8 @@ define('SERVER_IIS', 2);
 define('SERVER_NGINX', 3);
 define('SERVER_LIGHTTPD', 4);
 define('SERVER_KANGLE', 5);
+define('SERVER_CADDY', 6);
+define('SERVER_BUILTIN', 7);
 /**
  * PHP引擎
  */
@@ -82,7 +84,9 @@ define('IS_APACHE', PHP_SERVER === SERVER_APACHE);
 define('IS_IIS', PHP_SERVER === SERVER_IIS);
 define('IS_NGINX', PHP_SERVER === SERVER_NGINX);
 define('IS_LIGHTTPD', PHP_SERVER === SERVER_LIGHTTPD);
-define('IS_KANGLE', PHP_SERVER === PHP_SERVER);
+define('IS_KANGLE', PHP_SERVER === SERVER_KANGLE);
+define('IS_CADDY', PHP_SERVER === SERVER_CADDY);
+define('IS_BUILTIN', PHP_SERVER === SERVER_BUILTIN);
 define('IS_HHVM', PHP_ENGINE === ENGINE_HHVM);
 
 /**

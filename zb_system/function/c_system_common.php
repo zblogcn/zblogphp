@@ -37,16 +37,20 @@ function GetWebServer() {
         return SERVER_UNKNOWN;
     }
     $webServer = strtolower($_SERVER['SERVER_SOFTWARE']);
-    if (strpos($webServer, 'apache')) {
+    if (strpos($webServer, 'apache') !== false) {
         return SERVER_APACHE;
-    } elseif (strpos($webServer, 'microsoft-iis')) {
+    } elseif (strpos($webServer, 'microsoft-iis') !== false) {
         return SERVER_IIS;
-    } elseif (strpos($webServer, 'nginx')) {
+    } elseif (strpos($webServer, 'nginx') !== false) {
         return SERVER_NGINX;
-    } elseif (strpos($webServer, 'lighttpd')) {
+    } elseif (strpos($webServer, 'lighttpd') !== false) {
         return SERVER_LIGHTTPD;
-    } elseif (strpos($webServer, 'kangle')) {
+    } elseif (strpos($webServer, 'kangle') !== false) {
         return SERVER_KANGLE;
+    } elseif (strpos($webServer, 'caddy') !== false) {
+        return SERVER_CADDY;    
+    } elseif (strpos($webServer, 'development server') !== false) {
+        return SERVER_BUILTIN;
     } else {
         return SERVER_UNKNOWN;
     }
