@@ -789,11 +789,11 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
         if (isset($auth['id'])) {
             $author = $zbp->GetMemberByID($auth['id']);
         } else {
-            $author = $zbp->GetMemberByAliasOrName($auth['alias']);
+            $author = $zbp->GetMemberByNameOrAlias($auth['alias']);
         }
 
         if ($author->ID == 0) {
-            if ($isrewrite == true) {
+            if ($isrewrite) {
                 return false;
             }
 
