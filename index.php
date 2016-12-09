@@ -2,7 +2,7 @@
 /**
  *
  *****************************************************************************************************
- *    如果您看到了这个提示，那么我们很遗憾地通知您，您的空间不支持 PHP 。
+ *    如果您通过浏览器访问网站时看到了这个提示，那么我们很遗憾地通知您，您的空间不支持 PHP 。
  *    也就是说，您的空间可能是静态空间，或没有安装PHP，或没有为 Web 服务器打开 PHP 支持。
  *    Sorry, PHP is not installed on your web hosting if you see this prompt.
  *    Please check out the PHP configuration.

@@ -745,6 +745,8 @@ if(isset($zbp->option['ZC_XMLRPC_ENABLE']) && $zbp->option['ZC_XMLRPC_ENABLE'] =
 
 Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'RespondError');
 
+$zbp->CheckSiteClosed();
+
 $xmlstring = file_get_contents('php://input');
 //Logs($xmlstring);
 //defense XXE
