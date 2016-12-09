@@ -888,6 +888,7 @@ function InsertInfo() {
     $mem->IP = GetGuestIP();
     $mem->PostTime = time();
 
+    FilterMember($mem);
     $mem->Save();
 
     $cate = new Category();
@@ -1078,11 +1079,13 @@ function InsertInfo() {
     $a->Save();
 
     $zbp->LoadMembers(0);
-    if (count($zbp->members)==0){
+    if (count($zbp->members) == 0){
         echo $zbp->lang['zb_install']['not_insert_data'] . "<br/>";
+
         return false;
     }else{
         echo $zbp->lang['zb_install']['create_datainfo'] . "<br/>";
+
         return true;
     }
 
@@ -1108,6 +1111,7 @@ function SaveConfig() {
 
     if($zbp->option['ZC_YUN_SITE'] == '' && file_exists($zbp->path . 'zb_users/c_option.php') == false){
         echo $zbp->lang['zb_install']['not_create_option_file'] . "<br/>";
+
         return false;
     }
 
@@ -1135,6 +1139,7 @@ function SaveConfig() {
     $zbp->SaveConfig('WhitePage');
 
     echo $zbp->lang['zb_install']['save_option'] . "<br/>";
+
     return true;
 }
 
