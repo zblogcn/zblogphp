@@ -503,6 +503,12 @@ function ViewAuto($inpurl) {
         unset($realurl);
     }
 
+    //针对PCRE老版本报错
+	$pv = explode(' ',PCRE_VERSION);
+	if (version_compare($pv[0],'6.6')<=0) {
+		$zbp->ShowError('PCRE ' . PCRE_VERSION .' old version', __FILE__, __LINE__);
+	}
+
     $url = trim(urldecode($url), '/');
 
     if ($url == '' || $url == 'index.php') {
