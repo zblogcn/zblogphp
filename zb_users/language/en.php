@@ -492,6 +492,7 @@ return array(
         '87' => 'Registered Type Failed',
         '88' => 'The file that you uploaded not exist, maybe exceed the maximum upload limit of the server.',
         '89' => 'Error when loading JavaScript.',
+        '90' => 'Alias disallow special symbols.'
     ),
 
     'offical_urls' => array(

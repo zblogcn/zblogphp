@@ -504,10 +504,10 @@ function ViewAuto($inpurl) {
     }
 
     //针对PCRE老版本报错
-	$pv = explode(' ',PCRE_VERSION);
-	if (version_compare($pv[0],'6.6')<=0) {
-		$zbp->ShowError('PCRE ' . PCRE_VERSION .' old version', __FILE__, __LINE__);
-	}
+    $pv = explode(' ', PCRE_VERSION);
+    if (version_compare($pv[0], '6.6') <= 0) {
+        $zbp->ShowError('PCRE ' . PCRE_VERSION .' old version', __FILE__, __LINE__);
+    }
 
     $url = trim(urldecode($url), '/');
 
@@ -2769,9 +2769,9 @@ function SaveSetting() {
         $zbp->option['ZC_BLOG_HOST'] = $zbp->host;
     }
     $usePC = false;
-    for ($i=0; $i < strlen($zbp->option['ZC_BLOG_HOST'])-1; $i++) { 
-        $l = substr($zbp->option['ZC_BLOG_HOST'], $i,1);
-        if(ord($l)>=192) $usePC = true;
+    for ($i = 0; $i < strlen($zbp->option['ZC_BLOG_HOST']) - 1; $i++) {
+        $l = substr($zbp->option['ZC_BLOG_HOST'], $i, 1);
+        if(ord($l) >= 192) $usePC = true;
     }
     if ($usePC) {
         $Punycode = new Punycode();
@@ -2887,6 +2887,9 @@ function FilterMember(&$member) {
 
     if (!CheckRegExp($member->Name, '[username]')) {
         $zbp->ShowError(77, __FILE__, __LINE__);
+    }
+    if (!CheckRegExp($member->Alias, '[nickname]')) {
+        $zbp->ShowError(90, __FILE__, __LINE__);
     }
 
     if (!CheckRegExp($member->Email, '[email]')) {
