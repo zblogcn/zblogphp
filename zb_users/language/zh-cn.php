@@ -240,6 +240,7 @@ return array(
         'comment_audit' => '审核评论',
         'comment_audit_comment' => '打开后所有非管理员发布的评论都将进入审核状态',
         'debugging_warning' => '您的Z-BlogPHP打开了开发模式。此模式下网站有被黑的风险，实际部署在线上的网站请及时关闭开发模式！',
+        'permanent_domain_with_admin' => '后台也使用固定域名',
         '' => '',
     ),
 
@@ -488,7 +489,7 @@ return array(
         '87' => '注册类型失败。',
         '88' => '上传的文件不存在，可能超过了服务器最大上传限制。',
         '89' => '后台JavaScript加载失败！',
-        '90' => '别名不允许使用特殊符号。'
+        '90' => '别名不允许使用特殊符号。',
     ),
 
     'offical_urls' => array(

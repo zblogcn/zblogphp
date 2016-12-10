@@ -244,6 +244,7 @@ return array(
         'comment_audit' => 'Aduit Comments',
         'comment_audit_comment' => 'All new comments posted by non-root user will be audited.',
         'debugging_warning' => 'If your website can be connected via Internet, please disable the Development Mode, or it may be hacked.',
+        'permanent_domain_with_admin' => '后台也使用固定域名',
         '' => '',
     ),
 
@@ -492,7 +493,7 @@ return array(
         '87' => 'Registered Type Failed',
         '88' => 'The file that you uploaded not exist, maybe exceed the maximum upload limit of the server.',
         '89' => 'Error when loading JavaScript.',
-        '90' => 'Alias disallow special symbols.'
+        '90' => 'Alias disallow special symbols.',
     ),
 
     'offical_urls' => array(

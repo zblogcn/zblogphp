@@ -539,7 +539,8 @@ class ZBlogPHP {
      */
     public function LoadManage() {
 
-        $this->host = GetCurrentHost($this->path, $this->cookiespath);
+        if ($this->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN'] == false)
+            $this->host = GetCurrentHost($this->path, $this->cookiespath);
 
         if (substr($this->host, 0, 8) == 'https://') {
             $this->ishttps = true;

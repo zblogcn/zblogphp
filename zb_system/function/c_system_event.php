@@ -2727,7 +2727,8 @@ function SaveSetting() {
             $key == 'ZC_GZIP_ENABLE' ||
             $key == 'ZC_SYNTAXHIGHLIGHTER_ENABLE' ||
             $key == 'ZC_COMMENT_VERIFY_ENABLE' ||
-            $key == 'ZC_CLOSE_SITE'
+            $key == 'ZC_CLOSE_SITE' ||
+            $key == 'ZC_PERMANENT_DOMAIN_WITH_ADMIN'
         ) {
             $zbp->option[$key] = (boolean) $value;
             continue;
