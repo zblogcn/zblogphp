@@ -332,8 +332,29 @@ echo '<tr><td class="e">'.'php_uname(n)'.'</td><td class="v">' .php_uname('n') .
 echo '<tr><td class="e">'.'php_uname(r)'.'</td><td class="v">' .php_uname('r') .'</td></tr>';
 echo '<tr><td class="e">'.'php_uname(v)'.'</td><td class="v">' .php_uname('v') .'</td></tr>';
 echo '<tr><td class="e">'.'php_uname(m)'.'</td><td class="v">' .php_uname('m') .'</td></tr>';
-echo '</tbody></table>';
 }
+
+$a = array();
+if(function_exists('get_declared_classes')) 
+    $a = get_declared_classes();
+foreach ($a as $key => $value) {
+    echo '<tr><td class="e">'.'classes'.'</td><td class="v">' .$value .'</td></tr>';
+}
+$a = array();
+if(function_exists('get_declared_interfaces')) 
+    $a = get_declared_interfaces();
+foreach ($a as $key => $value) {
+    echo '<tr><td class="e">'.'interfaces'.'</td><td class="v">' .$value .'</td></tr>';
+}
+
+$a = array();
+if(function_exists('get_declared_traits')) 
+    $a = get_declared_traits();
+foreach ($a as $key => $value) {
+    echo '<tr><td class="e">'.'traits'.'</td><td class="v">' .$value .'</td></tr>';
+}
+
+echo '</tbody></table>';
 echo '</div>';
 
     ?>
