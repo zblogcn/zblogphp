@@ -577,6 +577,10 @@ class ZBlogPHP {
                 $fpname();
             }
 
+            if ( session_status() == 2 ){
+                session_write_close(); 
+            }
+
             $this->CloseConnect();
             unset($this->db);
             $this->isinitialized = false;
@@ -689,11 +693,11 @@ class ZBlogPHP {
         if ($this->issession == true) {
             return false;
         }
-
-        session_start();
-        $this->issession = true;
-
-        return true;
+        if ( session_status() == 1 ){
+            session_start();
+            $this->issession = true;
+            return true;
+        }
     }
 
     /**
@@ -704,12 +708,12 @@ class ZBlogPHP {
         if ($this->issession == false) {
             return false;
         }
-
-        session_unset();
-        session_destroy();
-        $this->issession = false;
-
-        return true;
+        if ( session_status() == 2 ){
+            session_unset();
+            session_destroy();
+            $this->issession = false;
+            return true;
+        }
     }
 
 ################################################################################################################

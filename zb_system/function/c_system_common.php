@@ -1639,3 +1639,15 @@ if (!function_exists('gzdecode')) {
    return $data;
  }
 }
+
+if ( !function_exists('session_status') ){
+    function session_status(){
+        if(!extension_loaded('session')){
+            return 0;
+        }elseif(!session_id()){
+            return 1;
+        }else{
+            return 2;
+        }
+    }
+}
