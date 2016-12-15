@@ -61,7 +61,6 @@ if (($zbp->option['ZC_DATABASE_TYPE'] !== '') && ($zbp->option['ZC_YUN_SITE'] ==
     if ($zbp->Config('system')->CountItem() > 0) {
         $zblogstep = 0;
     }
-
 }
 ?>
 <!DOCTYPE HTML>
@@ -293,6 +292,11 @@ function Setup2() {
         </tr>
         <tr>
           <th colspan="3" scope="col"><?php echo $zbp->lang['zb_install']['lib_check'];?></th>
+        </tr>
+        <tr>
+          <td scope="row" style="width:200px">PCRE</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pcre'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pcre'][1];?></td>
         </tr>
         <tr>
           <td scope="row" style="width:200px">gd2</td>
@@ -680,7 +684,7 @@ $isInstallFlag = true;
               if (SaveConfig()) {
                 //ok
               }else{
-              $hasError = true;
+              	//$hasError = true;
               }
            } else {
              $hasError = true;
@@ -727,6 +731,7 @@ function CheckServer() {
         'phpver' => array(PHP_VERSION, ''),
         'zbppath' => array($zbp->path, bingo),
         //组件
+        'pcre' => array('', ''),        
         'gd2' => array('', ''),
         'mysql' => array('', ''),
         'mysqli' => array('', ''),
@@ -757,6 +762,15 @@ function CheckServer() {
         $CheckResult['phpver'][1] = bingo;
     } else {
         $CheckResult['phpver'][1] = error;
+    }
+
+    //针对PCRE老版本报错
+    $pv = explode(' ', PCRE_VERSION);
+    $CheckResult['pcre'][0] = PCRE_VERSION;
+    if (version_compare($pv[0], '6.6') <= 0) {
+        $CheckResult['pcre'][1] =error;
+    }else{
+        $CheckResult['pcre'][1] = bingo;
     }
 
     if (function_exists("gd_info")) {
@@ -1109,8 +1123,45 @@ function SaveConfig() {
     $zbp->option['ZC_NOW_VERSION'] = $zbp->version;
     $zbp->SaveOption();
 
-    if($zbp->option['ZC_YUN_SITE'] == '' && file_exists($zbp->path . 'zb_users/c_option.php') == false){
+    if(file_exists($zbp->path . 'zb_users/c_option.php') == false){
         echo $zbp->lang['zb_install']['not_create_option_file'] . "<br/>";
+
+        $s = "<pre>&lt;" . "?" . "php\r\n";
+        $s .= "return ";
+        $option = array();
+        foreach ($zbp->option as $key => $value) {
+            if (
+                ($key == 'ZC_YUN_SITE') ||
+                ($key == 'ZC_DATABASE_TYPE') ||
+                ($key == 'ZC_SQLITE_NAME') ||
+                ($key == 'ZC_SQLITE_PRE') ||
+                ($key == 'ZC_MYSQL_SERVER') ||
+                ($key == 'ZC_MYSQL_USERNAME') ||
+                ($key == 'ZC_MYSQL_PASSWORD') ||
+                ($key == 'ZC_MYSQL_NAME') ||
+                ($key == 'ZC_MYSQL_CHARSET') ||
+                ($key == 'ZC_MYSQL_PRE') ||
+                ($key == 'ZC_MYSQL_ENGINE') ||
+                ($key == 'ZC_MYSQL_PORT') ||
+                ($key == 'ZC_MYSQL_PERSISTENT') ||
+                ($key == 'ZC_PGSQL_SERVER') ||
+                ($key == 'ZC_PGSQL_USERNAME') ||
+                ($key == 'ZC_PGSQL_PASSWORD') ||
+                ($key == 'ZC_PGSQL_NAME') ||
+                ($key == 'ZC_PGSQL_CHARSET') ||
+                ($key == 'ZC_PGSQL_PRE') ||
+                ($key == 'ZC_PGSQL_PORT') ||
+                ($key == 'ZC_PGSQL_PERSISTENT') ||
+                ($key == 'ZC_CLOSE_WHOLE_SITE')
+            ) {
+                $option[$key] = $value;
+            }
+
+        }
+        $s .= var_export($option, true);
+        $s .= ";\r\n</pre>";
+
+        echo $s;
 
         return false;
     }
