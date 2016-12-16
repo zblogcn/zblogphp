@@ -246,6 +246,11 @@ $(document).ready(function(){
 	AutoHideTips();
 
 	SetCookie("timezone",(new Date().getTimezoneOffset()/60)*(-1));
+
+	var s = $("div.divHeader,div.divHeader2").first().css("background-image");
+	if(s != undefined && s.indexOf("none.gif") != -1 ){
+		AddHeaderIcon(bloghost + "zb_system/image/common/window.png");
+	}
 });
 
 
