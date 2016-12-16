@@ -51,6 +51,7 @@ $zbp->LoadLanguage('system', '', $zbloglang);
 $zbp->LoadLanguage('zb_install', 'zb_install', $zbloglang);
 $zbp->option['ZC_BLOG_LANGUAGE'] = $zbp->lang['lang'];
 $zblogstep = (int) GetVars('step');
+
 if ($zblogstep == 0) {
     $zblogstep = 1;
 }
@@ -135,7 +136,8 @@ function Setup3(){
   if($("#blogtitle").val()==""){alert("<?php echo $zbp->lang['zb_install']['sitetitle_need'];?>");return false;};
   if($("#username").val()==""){alert("<?php echo $zbp->lang['zb_install']['adminusername_need'];?>");return false;};
   if($("#password").val()==""){alert("<?php echo $zbp->lang['zb_install']['adminpassword_need'];?>");return false;};
-  if($("#password").val().toString().search("^[A-Za-z0-9`~!@#\$%\^&\*\-_]{8,}$")==-1){alert("<?php echo $zbp->lang['error']['54'];?>");return false;};
+  // 注释掉密码检测
+  // if($("#password").val().toString().search("^[A-Za-z0-9`~!@#\$%\^&\*\-_]{8,}$")==-1){alert("<?php echo $zbp->lang['error']['54'];?>");return false;};
   if($("#password").val()!==$("#repassword").val()){alert("<?php echo $zbp->lang['error']['73'];?>");return false;};
 
 }
