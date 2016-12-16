@@ -150,9 +150,9 @@ tr.color4 { background: #ffffdd; }
 #divMain a:hover,
 #divMain2  a:hover { color: #d60000; }
 #divMain2 { padding: 0px; margin: 0px; }
-.divHeader { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 5px 0 40px 0; }
-.divHeader2 { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 5px 0 40px 0; border-bottom: 5px solid #e0e0e0; margin-bottom:5px; }
-.divHeader,.divHeader2{padding-left:40px;background:url('../image/admin/none.gif') 3px 9px no-repeat;}
+.divHeader { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 5px 0 42px 0; }
+.divHeader2 { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 5px 0 42px 0; border-bottom: 5px solid #e0e0e0; margin-bottom:5px; }
+.main>#divMain>div:first-child,.main>#divMain2>div:first-child{padding-left:40px;background:url('../image/admin/none.gif') 3px 9px no-repeat;}
 
 
 /*表   格*/
