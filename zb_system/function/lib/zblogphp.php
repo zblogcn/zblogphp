@@ -1005,14 +1005,25 @@ class ZBlogPHP {
         $m = null;
         $u = trim(GetVars('username', 'COOKIE'));
         $p = trim(GetVars('password', 'COOKIE'));
+        //if ($this->Verify_Token($u, $p, 'zbp', $m) == true) {
         if ($this->Verify_MD5Path($u, $p, $m) == true) {
             $this->user = $m;
 
             return true;
         }
         $this->user = new Member;
-
+        $this->user->Guid = GetGuid();
         return false;
+    }
+
+    /**
+     * 返回登录成功后应保存的cookie信息(COOKIE中的密码)
+     * @param member $m 已验过成功的member
+     * @return string
+     */
+    public function VerifyResult($m) {
+        //return $m->GetHashByToken('zbp',1000);
+        return $m->GetHashByMD5Path();
     }
 
     /**
@@ -1093,6 +1104,31 @@ class ZBlogPHP {
             if (strcasecmp($m->Password, $password) == 0) {
                 $member = $m;
 
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * 验证用户登录（使用Token，替代密码保存）
+     * @param string $name 用户名
+     * @param string $wt WebToken
+     * @param string $wt_id WebToken的ID识别符
+     * @param object $member 返回读取成功的member对象
+     * @return bool
+     */
+    public function Verify_Token($name, $wt, $wt_id, &$member = null) {
+        if ($name == '' || $wt == '') {
+            return false;
+        }
+        $m = null;
+        $m = $this->GetMemberByName($name);
+        if ($m->ID > 0) {
+            if( VerfyToken($wt, $wt_id, $this->guid, $m->ID, $m->Password) === true ){
+                $member = $m;
                 return true;
             }
         }
@@ -2375,12 +2411,37 @@ class ZBlogPHP {
     }
 
     /**
+     * 获取会话WebToken
+     * @param $wt_id
+     * @param $day 默认1天有效期，1小时为1/24，1分钟为1/(24*60)
+     * @return string
+     */
+    public function GetWebToken($wt_id = '', $day = 1 ) {
+        $this->user->GetHashByToken($wt_id, $day);
+    }
+
+    /**
+     * 验证会话WebToken
+     * @param $wt
+     * @param $wt_id
+     * @return bool
+     */
+    public function ValidWebToken($wt, $wt_id) {
+
+        if( VerfyToken($wt, $wt_id, $this->guid, $this->user->ID, $this->user->Password) === true ){
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 获取会话Token
      * @param $s
      * @return string
      */
-    public function GetToken($s = '') {
-        return md5($this->guid . $this->user->Guid . $s . date('Ymdh'));
+    public function GetToken($id = '') {
+        return md5($this->guid . $this->user->Guid . $id . date('Ymdh'));
     }
 
     /**
@@ -2389,11 +2450,11 @@ class ZBlogPHP {
      * @param $s
      * @return bool
      */
-    public function ValidToken($t, $s = '') {
-        if ($t == md5($this->guid . $this->user->Guid . $s . date('Ymdh'))) {
+    public function ValidToken($t, $id = '') {
+        if ($t == md5($this->guid . $this->user->Guid . $id . date('Ymdh'))) {
             return true;
         }
-        if ($t == md5($this->guid . $this->user->Guid . $s. date('Ymdh', time() - (3600 * 1)))) {
+        if ($t == md5($this->guid . $this->user->Guid . $id. date('Ymdh', time() - (3600 * 1)))) {
             return true;
         }
 

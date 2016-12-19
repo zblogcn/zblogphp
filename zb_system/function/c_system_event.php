@@ -19,7 +19,7 @@ function VerifyLogin() {
     if ($zbp->Verify_MD5(GetVars('username', 'POST'), GetVars('password', 'POST'), $m)) {
         $zbp->user = $m;
         $un = $m->Name;
-        $ps = $m->PassWord_MD5Path;
+        $ps = $zbp->VerifyResult($m);
         $sd = (int) GetVars('savedate');
         $addinfo = array();
         $addinfo['chkadmin'] = (int) $zbp->CheckRights('admin');

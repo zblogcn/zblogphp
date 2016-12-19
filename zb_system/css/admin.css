@@ -53,8 +53,8 @@ label { line-height: 30px; float: left; vertical-align: text-bottom; padding: 0 
 .button:hover { color: #ffffff; background: #3399cc; cursor: pointer; }
 .divHeader { height: auto; font-weight: blod; line-height: 1.5em; font-size: 1.5em; padding: 0 0 10px 0; background: #FFF; text-align: center; }
 
-body.short .bg { height: 150px; }
-body.short .logo { height: 50px; margin: 60px auto 60px auto; }
+body.short .bg { height: 160px; }
+body.short .logo { height: 60px; margin: 60px auto 60px auto; }
 .loginw { width: 700px; margin-bottom: 120px; }
 .loginw .content>div>p { font-weight: bold; font-size: 1.2em; padding: 10px; background: #eee; margin-bottom: 10px; }
 .loginw .content>div { padding-bottom: 20px; }
@@ -63,8 +63,8 @@ body.short .logo { height: 50px; margin: 60px auto 60px auto; }
 .loginw .content>div>div { padding: 0 10px; }
 
 @media only screen and (max-width:768px) {
-	.bg { height: 190px; }
-	.logo { margin-top: 100px }
+	.bg { height: 160px; }
+	.logo { margin-top: 60px }
 	.login { width: 310px; }
 	.login dd { width: 300px; float: right; padding: 0px 10px 0px 0; margin-bottom:10px;}
 

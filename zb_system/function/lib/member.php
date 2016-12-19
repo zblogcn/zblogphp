@@ -140,7 +140,7 @@ class Member extends Base {
             return $value;
         }
         if ($name == 'PassWord_MD5Path') {
-            return md5($this->Password . $zbp->guid);
+            return $this->GetHashByMD5Path();
         }
         if ($name == 'IsGod') {
             if ($this->_isgod === true || $this->_isgod === false) {
@@ -162,7 +162,7 @@ class Member extends Base {
     }
 
     /**
-     * 获取加盐及二次加密的密码
+     * 静态方法，获取加盐及二次散列的,用于保存的最终密码
      * @param string $ps 明文密码
      * @param string $guid 用户唯一码
      * @return string
@@ -172,6 +172,28 @@ class Member extends Base {
         return md5(md5($ps) . $guid);
 
     }
+
+    /**
+     * 获取有期限的Token密码
+     * @param string $wt_id Token的ID
+     * @param string $day 时间，按天算 (1分钟就是1/24*60)
+     * @return string (sha1字串+unix时间)
+     */
+    public function GetHashByToken($wt_id='',$day=30) {
+        global $zbp;
+        $t = intval( $day * 24 * 3600 ) + time();
+        $s = $t . $wt_id . $zbp->guid . $this->ID . $this->Password;
+        return sha1($s) . $t;
+    }
+
+    /**
+     * 获取加路径盐的Hash密码 (其实并没有用path，而是用zbp->guid替代了)
+     * @return string 
+     */
+    public function GetHashByMD5Path() {
+        global $zbp;
+        return md5($this->Password . $zbp->guid);
+    }    
 
     /**
      * 保存用户数据
