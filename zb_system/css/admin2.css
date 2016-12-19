@@ -256,6 +256,7 @@ div.theme-now { float: left; background: #b0cdee; padding: .6em 1em; margin: 0 1
 div.theme-other { float: left; background: #f0f0f0; padding: .6em 1em; margin: 0 1em 1em 0; }
 div.theme-other a { cursor: pointer; }
 div.theme-other .theme-name img { opacity: 0.50; }
+div.theme>.theme-name,div.theme>.theme-author,div.theme>.theme-style,div.theme>p{height:2.4em;white-space :nowrap;overflow: hidden;}
 div.theme-now .betterTip img { box-shadow: 0 0 10px #3a6ea5; }
 div.theme-now .betterTip img,
 div.theme-other .betterTip img { border: 2px solid #f6f6f6; }
