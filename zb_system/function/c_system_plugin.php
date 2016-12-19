@@ -1734,3 +1734,14 @@ DefinePluginFilter('Filter_Plugin_LargeData_CountTagArray');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_LargeData_GetList');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Xmlrpc_Begin
+'参数:&xml
+'说明:xml-rpc页的begin接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Xmlrpc_Begin');
