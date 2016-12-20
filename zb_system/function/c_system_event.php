@@ -2300,7 +2300,7 @@ function PostMember() {
 
     FilterMember($mem);
 
-    CountMember($mem);
+    CountMember($mem, array(null, null, null, null));
 
     // 查询同名
     if (isset($data['Name'])) {

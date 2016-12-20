@@ -2417,7 +2417,8 @@ class ZBlogPHP {
      * @return string
      */
     public function GetWebToken($wt_id = '', $day = 1 ) {
-        $this->user->GetHashByToken($wt_id, $day);
+        $t = intval( $day * 24 * 3600 ) + time();
+        return CreateWebToken('token' . $wt_id, $t ,$this->guid, $this->user->Guid, $this->user->ID, $this->user->Password);
     }
 
     /**
@@ -2426,9 +2427,9 @@ class ZBlogPHP {
      * @param $wt_id
      * @return bool
      */
-    public function ValidWebToken($wt, $wt_id) {
+    public function ValidWebToken($wt, $wt_id = '') {
 
-        if( VerfyWebToken($wt, $wt_id, $this->guid, $this->user->ID, $this->user->Password) === true ){
+        if( VerfyWebToken($wt, 'token' . $wt_id, $this->guid, $this->user->Guid, $this->user->ID, $this->user->Password) === true ){
             return true;
         }
 
