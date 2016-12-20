@@ -4,6 +4,9 @@
  * @package Z-BlogPHP
  * @subpackage System/XML-RPC XML-RPC接口
  * @copyright (C) RainbowSoft Studio
+ https://codex.wordpress.org/XML-RPC_WordPress_API
+ https://codex.wordpress.org/XML-RPC_MetaWeblog_API
+ http://codex.wordpress.org.cn/XML-RPC_MetaWeblog_API
  */
 
 require '../function/c_system_base.php';
@@ -34,6 +37,13 @@ if (isset($_GET['rsd'])) {
  * XML-RPC 获取用户站点基本信息
  *
  * 输出用户站点地址,guid,网站名xml
+ array
+struct
+string blogid
+string url: Homepage URL for this blog.
+string blogName
+bool isAdmin
+string xmlrpc: URL endpoint to use for XML-RPC requests on this blog.
  */
 function xmlrpc_getUsersBlogs() {
     global $zbp;
@@ -46,10 +56,25 @@ function xmlrpc_getUsersBlogs() {
 
     echo $strXML;
 }
+/*
+array
+struct
+string blogid
+string blogName
+string url
+string xmlrpc: XML-RPC endpoint for the blog.
+bool isAdmin
+*/
 function xmlrpc_wp_getUsersBlogs() {
     global $zbp;
 
-    $strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><params><param><value><array><data><value><struct><member><name>isAdmin</name><value><boolean>$%#1#%$</boolean></value></member><member><name>url</name><value><string>$%#2#%$</string></value></member><member><name>blogid</name><value><string>$%#3#%$</string></value></member><member><name>blogName</name><value><string>$%#4#%$</string></value></member><member><name>xmlrpc</name><value><string>$%#5#%$</string></value></member></struct></value></data></array></value></param></params></methodResponse>';
+    $strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><params><param><value><array><data><value><struct>
+<member><name>isAdmin</name><value><boolean>$%#1#%$</boolean></value></member>
+<member><name>url</name><value><string>$%#2#%$</string></value></member>
+<member><name>blogid</name><value><string>$%#3#%$</string></value></member>
+<member><name>blogName</name><value><string>$%#4#%$</string></value></member>
+<member><name>xmlrpc</name><value><string>$%#5#%$</string></value></member>
+</struct></value></data></array></value></param></params></methodResponse>';
     $strXML = str_replace("$%#1#%$", $zbp->user->Level === 1 , $strXML);
     $strXML = str_replace("$%#2#%$", htmlspecialchars($zbp->host), $strXML);
     $strXML = str_replace("$%#3#%$", htmlspecialchars(md5($zbp->guid . sha1($zbp->path))), $strXML);
@@ -62,6 +87,16 @@ function xmlrpc_wp_getUsersBlogs() {
  * XML-RPC 获取分类列表
  *
  * 输出分类列表xml
+ wp.getCategories
+ array
+struct
+string categoryId
+string parentId
+string categoryName
+string categoryDescription
+string description: Name of the category, equivalent to categoryName.
+string htmlUrl
+string rssUrl
  */
 function xmlrpc_getCategories() {
     global $zbp;
@@ -73,7 +108,7 @@ function xmlrpc_getCategories() {
 <member><name>categoryName</name><value><string>$%#3#%$</string></value></member>
 <member><name>description</name><value><string>$%#4#%$</string></value></member>
 <member><name>httpUrl</name><value><string>$%#5#%$</string></value></member>
-<member><name>title</name><value><string>$%#6#%$</string></value></member>
+<member><name>categoryDescription</name><value><string>$%#6#%$</string></value></member>
 </struct></value>';
 
     $strAll = '';
@@ -100,6 +135,15 @@ function xmlrpc_getCategories() {
  * XML-RPC 获取标签列表
  *
  * 输出标签列表xml
+ wp.getTags
+array
+struct
+int tag_id
+string name
+string slug
+int count
+string html_url
+string rss_url
  */
 function xmlrpc_getTags() {
 
@@ -120,7 +164,7 @@ function xmlrpc_getTags() {
     $array = $zbp->GetTagList(
         '',
         '',
-        array('tag_Count' => 'ASC', 'tag_ID' => 'ASC'),
+        array('tag_Count' => 'DESC', 'tag_ID' => 'ASC'),
         array(50),
         ''
     );
@@ -147,6 +191,12 @@ function xmlrpc_getTags() {
  * XML-RPC 获取用户列表
  *
  * 输出用户列表xml
+ wp.getAuthors
+array
+struct
+string user_id
+string user_login
+string display_name
  */
 function xmlrpc_getAuthors() {
 
@@ -165,7 +215,7 @@ function xmlrpc_getAuthors() {
         $s = $strSingle;
         $s = str_replace("$%#1#%$", htmlspecialchars($value->ID), $s);
         $s = str_replace("$%#2#%$", htmlspecialchars($value->Name), $s);
-        $s = str_replace("$%#3#%$", htmlspecialchars($value->Name), $s);
+        $s = str_replace("$%#3#%$", htmlspecialchars($value->Alias), $s);
         $strAll .= $s;
 
     }
@@ -745,10 +795,18 @@ function xmlrpc_newMediaObject($xmlstring) {
  */
 function xmlrpc_Verify($username, $password) {
     global $zbp;
-   if (!$zbp->Verify_Original($username, $password, $zbp->user)) {
-       ShowError(8, __FILE__, __LINE__);
-       die;
-   }
+    if(isset($zbp->option['ZC_XMLRPC_USE_WEBTOKEN']) && $zbp->option['ZC_XMLRPC_USE_WEBTOKEN'] == true){
+        if (!$zbp->Verify_Token($username, $password, 'xmlrpc', $zbp->user)) {
+            ShowError(8, __FILE__, __LINE__);
+            die;
+        }
+    }else{
+        if (!$zbp->Verify_Original($username, $password, $zbp->user)) {
+            ShowError(8, __FILE__, __LINE__);
+            die;
+        }
+    }
+
 }
 
 //xml-rpc input
@@ -771,10 +829,10 @@ libxml_disable_entity_loader(true);
 $xml = simplexml_load_string($xmlstring);
 
 if ($xml) {
-    $method = (string) $xml->methodName;
     foreach ($GLOBALS['hooks']['Filter_Plugin_Xmlrpc_Begin'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($xml);
     }
+    $method = (string) $xml->methodName;
     switch ($method) {
         case 'blogger.getUsersBlogs':
             $username = (string) $xml->params->param[1]->value->string;
