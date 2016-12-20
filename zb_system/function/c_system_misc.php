@@ -72,7 +72,7 @@ function misc_statistic() {
 
     global $zbp;
 
-    $zbp->BuildTemplate();
+    $zbp->CheckTemplate();
 
     $r = null;
 
