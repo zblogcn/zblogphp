@@ -709,6 +709,17 @@ DefinePluginFilter('Filter_Plugin_Admin_SettingMng_SubMenu');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Admin_ArticleMng_Table
+'参数:&$article,&$tabletds,&$tableths
+'说明:文章管理页表处理
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_ArticleMng_Table');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Edit_Begin
 '参数:
 '说明:文章页面编辑页开始接口

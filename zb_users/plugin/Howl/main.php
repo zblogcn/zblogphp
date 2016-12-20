@@ -44,6 +44,7 @@ if(count($_POST) > 0){
         $name = 'Group'.$groupkey;
         $zbp->Config('Howl')->$name = $a[$groupkey];
     }
+
     $zbp->SaveConfig('Howl');
 
     $zbp->SetHint('good');
@@ -55,9 +56,6 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
-<?php
-$zbp->ShowHint('bad', '本插件配置不当可能会造成网站被黑等严重后果，请慎用！');
-?>
   <div class="divHeader"><?php echo $blogtitle;?></div>
   <div class="SubMenu" style="display: block;"><a href="main.php"><span class="m-left m-now">系统群组设置</span></a><a href="user.php"><span class="m-left">单独用户设置</span></a></div>
   <div id="divMain2">
@@ -108,7 +106,10 @@ foreach ($group_key as $groupkey) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input type="submit" class="button" value="恢复系统默认配置" onclick="$('#reset').val(1);" />
 	  </p>
-
+      <hr/>
+      <p>
+本插件配置不当可能会造成网站被黑等严重后果，请慎用！
+      </p>
 	</form>
 	<script type="text/javascript">
 

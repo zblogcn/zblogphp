@@ -1319,9 +1319,9 @@ function utf84mb_convertToUTF8($matches) {
 function VerfyToken($wt,$wt_id){
     $time = substr($wt,40);
     $wt = substr($wt,0,40);
-    $args=array();
-    for ($i=2; $i <func_num_args() ; $i++) { 
-        $args[]=func_get_arg($i);
+    $args = array();
+    for ($i = 2; $i < func_num_args() ; $i++) { 
+        $args[] = func_get_arg($i);
     }
     $sha = sha1($time . $wt_id . implode($args));
     if ($wt === $sha){
