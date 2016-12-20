@@ -311,7 +311,7 @@ function xmlrpc_getPage($id) {
 
     $article = new Post;
     $article->LoadInfoByID($id);
-    if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('PageAll'))) {$zbp->ShowError(11, __FILE__, __LINE_);}
+    if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('PageAll'))) {xmlrpc_ShowError(11, __FILE__, __LINE_);}
 
     $array = array();
     $array[] = $article;
@@ -433,7 +433,7 @@ function xmlrpc_delPage($id) {
         $strXML = str_replace("$%#1#%$", 1, $strXML);
         echo $strXML;
     } else {
-        $zbp->ShowError(0, __FILE__, __LINE_);
+        xmlrpc_ShowError(0, __FILE__, __LINE_);
     }
 
 }
@@ -454,7 +454,7 @@ function xmlrpc_deletePost($id) {
         $strXML = str_replace("$%#1#%$", 1, $strXML);
         echo $strXML;
     } else {
-        $zbp->ShowError(0, __FILE__, __LINE_);
+        xmlrpc_ShowError(0, __FILE__, __LINE_);
     }
 
 }
@@ -491,7 +491,7 @@ function xmlrpc_getPost($id) {
 
     $article = new Post;
     $article->LoadInfoByID($id);
-    if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('ArticleAll'))) {$zbp->ShowError(11, __FILE__, __LINE_);}
+    if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('ArticleAll'))) {xmlrpc_ShowError(11, __FILE__, __LINE_);}
 
     $array = array();
     $array[] = $article;
@@ -659,7 +659,7 @@ function xmlrpc_editPost($id, $xmlstring, $publish) {
             $strXML = str_replace("$%#1#%$", 1, $strXML);
             echo $strXML;
         } else {
-            $zbp->ShowError(0, __FILE__, __LINE_);
+            xmlrpc_ShowError(0, __FILE__, __LINE_);
         }
 
     }
@@ -742,7 +742,7 @@ function xmlrpc_editPage($id, $xmlstring, $publish) {
             $strXML = str_replace("$%#1#%$", 1, $strXML);
             echo $strXML;
         } else {
-            $zbp->ShowError(0, __FILE__, __LINE_);
+            xmlrpc_ShowError(0, __FILE__, __LINE_);
         }
 
     }
@@ -797,16 +797,21 @@ function xmlrpc_Verify($username, $password) {
     global $zbp;
     if(isset($zbp->option['ZC_XMLRPC_USE_WEBTOKEN']) && $zbp->option['ZC_XMLRPC_USE_WEBTOKEN'] == true){
         if (!$zbp->Verify_Token($username, $password, 'xmlrpc', $zbp->user)) {
-            ShowError(8, __FILE__, __LINE__);
+            xmlrpc_ShowError(8, __FILE__, __LINE__, 403);
             die;
         }
     }else{
         if (!$zbp->Verify_Original($username, $password, $zbp->user)) {
-            ShowError(8, __FILE__, __LINE__);
+            xmlrpc_ShowError(8, __FILE__, __LINE__, 403);
             die;
         }
     }
 
+}
+
+function xmlrpc_ShowError($code,$file,$line,$httpcode=401){
+    SetHttpStatusCode($httpcode);
+    ShowError($code, $file, $line);
 }
 
 //xml-rpc input
@@ -841,7 +846,7 @@ if ($xml) {
             if ($zbp->CheckRights('admin')) {
                 xmlrpc_getUsersBlogs();
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.getCategories':
@@ -852,7 +857,7 @@ if ($xml) {
             if ($zbp->CheckRights('ArticleEdt')) {
                 xmlrpc_getCategories();
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'mt.setPostCategories':
@@ -862,7 +867,7 @@ if ($xml) {
             if ($zbp->CheckRights('ArticleEdt')) {
                 xmlrpc_setPostCategories();
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'mt.getPostCategories':
@@ -872,7 +877,7 @@ if ($xml) {
             if ($zbp->CheckRights('ArticleEdt')) {
                 xmlrpc_getPostCategories((integer) $xml->params->param[0]->value->string);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.getTags':
@@ -882,7 +887,7 @@ if ($xml) {
             if ($zbp->CheckRights('ArticleEdt')) {
                 xmlrpc_getTags();
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.getAuthors':
@@ -892,7 +897,7 @@ if ($xml) {
             if ($zbp->CheckRights('ArticleEdt')) {
                 xmlrpc_getAuthors();
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'metaWeblog.getRecentPosts':
@@ -902,7 +907,7 @@ if ($xml) {
             if ($zbp->CheckRights('ArticleEdt')) {
                 xmlrpc_getRecentPosts((integer) $xml->params->param[3]->value->int);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'metaWeblog.getPost':
@@ -912,7 +917,7 @@ if ($xml) {
             if ($zbp->CheckRights('ArticleEdt')) {
                 xmlrpc_getPost((integer) $xml->params->param[0]->value->string);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'blogger.deletePost':
@@ -922,7 +927,7 @@ if ($xml) {
             if ($zbp->CheckRights('ArticleDel')) {
                 xmlrpc_deletePost((integer) $xml->params->param[1]->value->string);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'metaWeblog.editPost':
@@ -934,7 +939,7 @@ if ($xml) {
                     $xml->params->param[3]->value->struct->asXML(),
                     (boolean) $xml->params->param[4]->value->boolean->asXML());
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'metaWeblog.newPost':
@@ -946,7 +951,7 @@ if ($xml) {
                     $xml->params->param[3]->value->struct->asXML(),
                     (boolean) $xml->params->param[4]->value->boolean->asXML());
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.newPage':
@@ -958,7 +963,7 @@ if ($xml) {
                     $xml->params->param[3]->value->struct->asXML(),
                     (boolean) $xml->params->param[4]->value->boolean->asXML());
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.editPage':
@@ -970,7 +975,7 @@ if ($xml) {
                     $xml->params->param[4]->value->struct->asXML(),
                     (boolean) $xml->params->param[5]->value->boolean->asXML());
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.getPages':
@@ -980,7 +985,7 @@ if ($xml) {
             if ($zbp->CheckRights('PageEdt')) {
                 xmlrpc_getPages((integer) $xml->params->param[3]->value->int);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.getPage':
@@ -990,7 +995,7 @@ if ($xml) {
             if ($zbp->CheckRights('PageEdt')) {
                 xmlrpc_getPage((integer) $xml->params->param[1]->value->string);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.deletePage':
@@ -1000,7 +1005,7 @@ if ($xml) {
             if ($zbp->CheckRights('PageDel')) {
                 xmlrpc_delPage((integer) $xml->params->param[3]->value->string);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'metaWeblog.newMediaObject':
@@ -1010,7 +1015,7 @@ if ($xml) {
             if ($zbp->CheckRights('UploadPst')) {
                 xmlrpc_newMediaObject($xml->params->param[3]->value->struct->asXML());
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.getUsersBlogs':
@@ -1020,11 +1025,11 @@ if ($xml) {
             if ($zbp->CheckRights('admin')) {
                 xmlrpc_wp_getUsersBlogs();
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         default:
-            $zbp->ShowError(1, __FILE__, __LINE_);
+            xmlrpc_ShowError(1, __FILE__, __LINE_);
             break;
     }
 }

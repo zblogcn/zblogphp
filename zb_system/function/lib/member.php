@@ -182,8 +182,7 @@ class Member extends Base {
     public function GetHashByToken($wt_id='',$day=30) {
         global $zbp;
         $t = intval( $day * 24 * 3600 ) + time();
-        $s = $t . $wt_id . $zbp->guid . $this->ID . $this->Password;
-        return sha1($s) . $t;
+        return CreateWebToken($wt_id, $t ,$zbp->guid, $this->ID, $this->Password);
     }
 
     /**

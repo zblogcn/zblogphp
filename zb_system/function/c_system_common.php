@@ -1316,14 +1316,14 @@ function utf84mb_convertToUTF8($matches) {
 
 
 //$args = 2...x
-function VerfyToken($wt,$wt_id){
-    $time = substr($wt,40);
-    $wt = substr($wt,0,40);
+function VerfyWebToken($wt,$wt_id){
+    $time = substr($wt,32);
+    $wt = substr($wt,0,32);
     $args = array();
     for ($i = 2; $i < func_num_args() ; $i++) { 
         $args[] = func_get_arg($i);
     }
-    $sha = sha1($time . $wt_id . implode($args));
+    $sha = md5( sha1($wt_id . $time) . sha1(implode($args)) );
     if ($wt === $sha){
         if ($time > time()){
             return true;
@@ -1332,6 +1332,16 @@ function VerfyToken($wt,$wt_id){
 
     return false;
 }
+//$time : expired second
+function CreateWebToken($wt_id,$time){
+    $time = (int)$time;
+    $args = array();
+    for ($i = 2; $i < func_num_args() ; $i++) { 
+        $args[] = func_get_arg($i);
+    }
+    return md5( sha1($wt_id . $time) . sha1(implode($args)) ) . $time;
+}
+
 
 
 /**
