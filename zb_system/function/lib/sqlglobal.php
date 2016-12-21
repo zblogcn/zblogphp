@@ -423,7 +423,7 @@ class SQLGlobal {
                     $sqlSearch[] = " ($x LIKE '%$y%') ";
                 }
                 $whereData[] = " ((1 = 1) AND (" . implode(' OR ', $sqlSearch) . ') )';
-            } elseif ($eq == 'ARRAY' || $eq == 'NOT ARRAY' || $eq == "LIKE ARRAY" || $eq == "ILIKE ARRAY" || $eq == 'ARRAY_LIKE' || $eq == 'ARRAY_ILIKE') {
+            } elseif ($eq == 'ARRAY' || $eq == 'NOT ARRAY' || $eq == 'LIKE ARRAY' || $eq == 'ILIKE ARRAY' || $eq == 'ARRAY_LIKE' || $eq == 'ARRAY_ILIKE') {
                 if ($eq == 'ARRAY') {
                     $symbol = '=';
                 } elseif($eq == 'NOT ARRAY') {
@@ -443,8 +443,13 @@ class SQLGlobal {
                     continue;
                 }
                 foreach ($value[1] as $x => $y) {
-                    $y[1] = $this->db->EscapeString($y[1]);
-                    $sqlArray[] = " $y[0] $symbol '$y[1]' ";
+                	if (count($y) == 2){
+                        $y[1] = $this->db->EscapeString($y[1]);
+                        $sqlArray[] = " $y[0] $symbol '$y[1]' ";
+                    }
+                    if (count($y) == 3){
+                        $sqlArray[] = " $y[1] $y[0] '$y[2]' ";
+                    }
                 }
                 $whereData[] = " ((1 = 1) AND (" . implode(' OR ', $sqlArray) . ') )';
             } elseif ($eq == 'IN' || $eq == 'NOT IN') {
