@@ -12,21 +12,21 @@ $zbp->ismanage = true;
  * 添加页面管理子菜单(内置插件函数)
  */
 function Include_Admin_Addpagesubmenu() {
-    echo '<a href="../cmd.php?act=PageEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_page'] . '</span></a>';
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_page'],'../cmd.php?act=PageEdt');
 }
 
 /**
  * 添加标签管理子菜单(内置插件函数)
  */
 function Include_Admin_Addtagsubmenu() {
-    echo '<a href="../cmd.php?act=TagEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_tag'] . '</span></a>';
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_tag'],'../cmd.php?act=TagEdt');
 }
 
 /**
  * 添加分类管理子菜单(内置插件函数)
  */
 function Include_Admin_Addcatesubmenu() {
-    echo '<a href="../cmd.php?act=CategoryEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_category'] . '</span></a>';
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_category'],'../cmd.php?act=CategoryEdt');
 }
 
 /**
@@ -35,21 +35,20 @@ function Include_Admin_Addcatesubmenu() {
 function Include_Admin_Addmemsubmenu() {
     global $zbp;
     if ($zbp->CheckRights('MemberNew')) {
-        echo '<a href="../cmd.php?act=MemberNew"><span class="m-left">' . $GLOBALS['lang']['msg']['new_member'] . '</span></a>';
+        echo MakeSubMenu($GLOBALS['lang']['msg']['new_member'],'../cmd.php?act=MemberNew');
     }
-
-    echo '<a href="../cmd.php?act=misc&amp;type=vrs" target="_blank"><span class="m-left">' . $zbp->lang['msg']['view_rights'] . '</span></a>';
+    echo MakeSubMenu($GLOBALS['lang']['msg']['view_rights'],'../cmd.php?act=misc&amp;type=vrs');
 }
 
 /**
  * 添加模块管理子菜单(内置插件函数)
  */
 function Include_Admin_Addmodsubmenu() {
-    echo '<a href="../cmd.php?act=ModuleEdt"><span class="m-left">' . $GLOBALS['lang']['msg']['new_module'] . '</span></a>';
-    echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=navbar"><span class="m-left">' . $GLOBALS['lang']['msg']['module_navbar'] . '</span></a>';
-    echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=link"><span class="m-left">' . $GLOBALS['lang']['msg']['module_link'] . '</span></a>';
-    echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=favorite"><span class="m-left">' . $GLOBALS['lang']['msg']['module_favorite'] . '</span></a>';
-    echo '<a href="../cmd.php?act=ModuleEdt&amp;filename=misc"><span class="m-left">' . $GLOBALS['lang']['msg']['module_misc'] . '</span></a>';
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_module'],'../cmd.php?act=ModuleEdt');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['module_navbar'],'../cmd.php?act=ModuleEdt&amp;filename=navbar');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['module_link'],'../cmd.php?act=ModuleEdt&amp;filename=link');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['module_favorite'],'../cmd.php?act=ModuleEdt&amp;filename=favorite');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['module_misc'],'../cmd.php?act=ModuleEdt&amp;filename=misc');
 }
 
 /**
@@ -59,8 +58,11 @@ function Include_Admin_Addcmtsubmenu() {
     global $zbp;
     if ($zbp->CheckRights('CommentAll')) {
         $n = $zbp->cache->all_comment_nums - $zbp->cache->normal_comment_nums;
-        if ($n != 0) {$n = ' (' . $n . ')';} else { $n = '';}
-        echo '<a href="../cmd.php?act=CommentMng&amp;ischecking=1"><span class="m-left ' . (GetVars('ischecking') ? 'm-now' : '') . '">' . $GLOBALS['lang']['msg']['check_comment'] . $n . '</span></a>';
+        if ($n != 0) 
+            $n = ' (' . $n . ')';
+        else
+            $n = '';
+        echo MakeSubMenu($GLOBALS['lang']['msg']['check_comment'] . $n ,'../cmd.php?act=CommentMng&amp;ischecking=1','m-left ' . (GetVars('ischecking') ? 'm-now' : ''));
     }
 }
 
@@ -127,6 +129,30 @@ function ResponseAdmin_TopMenu() {
     }
 
 }
+
+/**
+ * 添加子菜单项
+ * @param $strName
+ * @param $strUrl
+ * @param $strClass
+ * @param $strTarget
+ * @param $strId
+ * @param $strTitle
+ * @return null|string
+ */
+function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $strId = '', $strTitle = '') {
+    $s  = '<a href="' . $strUrl . '" ';
+    if($strTarget)
+        $s .= 'target="' . $strTarget . '"';
+    if($strId)
+        $s .= 'id="' . $id . '"';
+    if($strTitle)
+        $s .= 'title="' . $strTitle . '" ' . 'alt="' . $strTitle . '" ';
+    $s .='>';
+    $s .= '<span class="' . $strClass . '">' . $strName . '</span></a>';
+    return $s;
+}
+
 
 /**
  * 添加顶部菜单项
