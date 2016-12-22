@@ -80,7 +80,13 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 <div class="divHeader2"><?php echo $ispage ? $lang['msg']['page_edit'] : $lang['msg']['article_edit']; ?></div>
 
 
-<div class="SubMenu"></div>
+<div class="SubMenu">
+<?php
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_SubMenu'] as $fpname => &$fpsignal) {
+        $fpname();
+    }
+?>
+</div>
 <div id="divMain2" class="edit post_edit">
 <form id="edit" name="edit" method="post" action="#">
   <div id="divEditLeft">

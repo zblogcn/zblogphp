@@ -3,8 +3,9 @@
 function linkmanage_SubMenu($id)
 {
     $arySubMenu = array(
-        0 => array('链接编辑', 'main.php', 'left', false),
-        1 => array('位置管理', 'location.php', 'left', false),
+        0 => array('导航菜单管理', 'main.php', 'left', false),
+        1 => array('导航链接编辑', '', 'left', false),
+        //2 => array('位置管理', 'location.php', 'left', false),
     );
     foreach ($arySubMenu as $k => $v) {
         echo '<a href="'.$v[1].'" '.($v[3] == true ? 'target="_blank"' : '').'><span class="m-'.$v[2].' '.($id == $k ? 'm-now' : '').'">'.$v[0].'</span></a>';
@@ -17,12 +18,14 @@ function linkmanageGetNav()
 
     return json_decode($zbp->Config('linkmanage')->Nav, true);
 }
+
 function linkmanageGetMenu()
 {
     global $zbp;
 
     return json_decode($zbp->Config('linkmanage')->Menu, true);
 }
+
 //创建导航
 function linkmanage_creatNav($nav_name)
 {
@@ -44,20 +47,22 @@ function linkmanage_creatNav($nav_name)
         $zbp->SaveConfig('linkmanage');
 
         //创建模块
-        if (!isset($zbp->modulesbyfilename[$nav_name])) {
+        //TODO 生成链接HTML内容
+        if (!isset($zbp->modulesbyfilename['linkmanage_'.$nav_name])) {
             $t = new Module();
             $t->Name = '菜单：'.GetVars('name', 'POST');
-            $t->FileName = $nav_name;
+            $t->FileName = 'linkmanage_'.$nav_name;
             $t->Source = 'plugin_'.$nav_name;
             $t->SidebarID = 0;
             $t->Content = '';
-            $t->HtmlID = $nav_name;
+            $t->HtmlID = 'linkmanage_'.$nav_name;
             $t->Type = 'ul';
             $t->Save();
         }
-        Redirect('main.php?id='.$nav_name);
+        Redirect('main.php');
     }
 }
+
 // 删除导航
 function linkmanage_deleteNav($nav_name)
 {
@@ -77,10 +82,9 @@ function linkmanage_deleteNav($nav_name)
         $zbp->Config('linkmanage')->Del($nav_name); //排序值
         $zbp->SaveConfig('linkmanage');
 
-// TODO:删除链接
 
         //删除模块
-        $m = $zbp->modulesbyfilename[$nav_name];
+        $m = $zbp->modulesbyfilename['linkmanage_'.$nav_name];
         $m->Del();
 
         Redirect('main.php');
@@ -90,18 +94,79 @@ function linkmanage_deleteNav($nav_name)
 function linkmanage_saveNav()
 {
     global $zbp;
-    if (GetVars('id', 'POST')) {
+    $menuID = GetVars('id', 'POST');
+    $menuName = GetVars('MenuName', 'POST');
+    if ($menuID) {
         $n = linkmanageGetNav();
-        $n['data'][GetVars('id', 'POST')]['name'] = GetVars('MenuName', 'POST');
+        //保存菜单名
+        $n['data'][$menuID]['name'] = $menuName;
         $zbp->Config('linkmanage')->Nav = json_encode($n);
-        $zbp->Config('linkmanage')->$n['data'][GetVars('id', 'POST')]['id'] = json_encode(GetVars('menuItem', 'POST'));
+        //保存菜单链接排序
+        $jsonmenuItem = json_encode(GetVars('menuItem', 'POST'));
+        $zbp->Config('linkmanage')->$menuID = $jsonmenuItem;
         $zbp->SaveConfig('linkmanage');
 
-        //TODO:编译导航
+         //修改模块
+        linkmanage_updataModule($menuID,$menuName);
+
     }
     echo json_encode(GetVars('menuItem', 'POST'));
-    die();
+    $zbp->ShowHint('good', '成功保存菜单设置！');
+    Redirect('menuedit.php?id='.$menuID);
 }
+
+
+function linkmanage_updataModule($menuID,$menuName)
+{
+    global $zbp;
+    //链接组装
+    $html = '';
+
+    $Menus = linkmanageGetMenu();
+    $menuIDarray = json_decode($zbp->Config('linkmanage')->$menuID, true);
+    foreach ($menuIDarray as $key => $value) {
+        $menu = $Menus['ID'.$key];
+        //if ($value !== 'null') {
+            $sub_tmp = '<span id="'.$menu['id'].'"></span>';
+        //} else {
+        //    $sub_tmp = '';
+        //}
+
+        $html_tmp = '<li class="li-item" id="menuItem_'.$menu['id'].'">
+    <a href="'.$menu['url'].'" title="'.$menu['title'].'">'.$menu['title'].'<a>'.$sub_tmp.'
+    </li>';
+
+        if ($value == 'null') {
+            $html .= $html_tmp;
+        } else {
+            $html = str_replace('<span id="'.$value.'"></span>', '<span id="'.$value.'"></span>
+    <ul class="ul-subitem">
+    '.$html_tmp.'   </ul>', $html);
+        }
+    }
+
+    $html=preg_replace("/<(span.*?)>(.*?)<(\/span.*?)>/si","",$html); //过滤style标签
+
+    //修改模块
+    $t = '';
+    if (isset($zbp->modulesbyfilename['linkmanage_'.$menuID])) {
+        $t = $zbp->modulesbyfilename['linkmanage_'.$menuID];
+    }
+    else {
+        $t = new Module();
+    }
+
+    $t->Name = '菜单：'.$menuName;
+    $t->FileName = 'linkmanage_'.$menuID;
+    $t->Source = 'plugin_'.$menuID;
+    $t->SidebarID = 0;
+    $t->Content = $html;
+    $t->HtmlID = 'linkmanage_'.$menuID;
+    $t->Type = 'ul';
+    $t->Save();
+}
+
+
 // 添加链接
 function linkmanage_creatLink()
 {
@@ -118,6 +183,7 @@ function linkmanage_creatLink()
     echo json_encode($_POST);
     die();
 }
+
 // 删除链接函数
 function linkmanage_deleteLink($linkid, $nav_name)
 {
@@ -146,18 +212,34 @@ function linkmanage_deleteLink($linkid, $nav_name)
 
     die();
 }
-// 编辑修改链接
-function linkmanage_saveLink($linkid)
-{
-    global $zbp;
-}
-
-function linkmanage_GetLocation()
+// 编辑保存链接
+function linkmanage_saveLink()
 {
     global $zbp;
 
-    return json_decode($zbp->Config('linkmanage')->Location, true);
+    $menu = json_decode($zbp->Config('linkmanage')->Menu, true);
+    $new_menu = array();
+    foreach ($_POST as $key => $value) {
+        $new_menu[$key] = $value;
+    }
+    $new_menu['type'] = $menu['ID'.$new_menu['id']]['type'];
+    $menu['ID'.$new_menu['id']] = $new_menu;
+    // $menu[] = array(
+    //  "id" => "123456",
+    //  "title" => "导航栏",
+    //  "url" => "",
+    //  "newtable" => "true",
+    //  "img" => "",
+    //  "type" => "",
+    // );
+    $zbp->Config('linkmanage')->Menu = json_encode($menu);
+    $zbp->SaveConfig('linkmanage');
+
+    echo json_encode($_POST);
+    die();
 }
+
+
 function linkmanage_get_link($type)
 {
     global $zbp;
@@ -186,4 +268,13 @@ function linkmanage_get_link($type)
         }
         break;
     }
+}
+
+// 编辑按钮
+function linkmanage_edit_button($menuID)
+{
+    global $zbp;
+    $edit_button = '<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="edit_menu(\''.$menuID.'\');return false;"><span class="ui-button-text">编辑</span></button>
+        <button class="ui-button-danger ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="del_menu(\''.$menuID.'\');return false;">删除导航</button>';
+    return $edit_button;
 }

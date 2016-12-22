@@ -4,6 +4,9 @@
  * @package Z-BlogPHP
  * @subpackage System/XML-RPC XML-RPC接口
  * @copyright (C) RainbowSoft Studio
+ https://codex.wordpress.org/XML-RPC_WordPress_API
+ https://codex.wordpress.org/XML-RPC_MetaWeblog_API
+ http://codex.wordpress.org.cn/XML-RPC_MetaWeblog_API
  */
 
 require '../function/c_system_base.php';
@@ -34,8 +37,15 @@ if (isset($_GET['rsd'])) {
  * XML-RPC 获取用户站点基本信息
  *
  * 输出用户站点地址,guid,网站名xml
+ array
+struct
+string blogid
+string url: Homepage URL for this blog.
+string blogName
+bool isAdmin
+string xmlrpc: URL endpoint to use for XML-RPC requests on this blog.
  */
-function zbp_getUsersBlogs() {
+function xmlrpc_getUsersBlogs() {
     global $zbp;
 
     $strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><params><param><value><array><data><value><struct><member><name>url</name><value><string>$%#1#%$</string></value></member><member><name>blogid</name><value><string>$%#2#%$</string></value></member><member><name>blogName</name><value><string>$%#3#%$</string></value></member></struct></value></data></array></value></param></params></methodResponse>';
@@ -46,10 +56,25 @@ function zbp_getUsersBlogs() {
 
     echo $strXML;
 }
-function zbp_wp_getUsersBlogs() {
+/*
+array
+struct
+string blogid
+string blogName
+string url
+string xmlrpc: XML-RPC endpoint for the blog.
+bool isAdmin
+*/
+function xmlrpc_wp_getUsersBlogs() {
     global $zbp;
 
-    $strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><params><param><value><array><data><value><struct><member><name>isAdmin</name><value><boolean>$%#1#%$</boolean></value></member><member><name>url</name><value><string>$%#2#%$</string></value></member><member><name>blogid</name><value><string>$%#3#%$</string></value></member><member><name>blogName</name><value><string>$%#4#%$</string></value></member><member><name>xmlrpc</name><value><string>$%#5#%$</string></value></member></struct></value></data></array></value></param></params></methodResponse>';
+    $strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><params><param><value><array><data><value><struct>
+<member><name>isAdmin</name><value><boolean>$%#1#%$</boolean></value></member>
+<member><name>url</name><value><string>$%#2#%$</string></value></member>
+<member><name>blogid</name><value><string>$%#3#%$</string></value></member>
+<member><name>blogName</name><value><string>$%#4#%$</string></value></member>
+<member><name>xmlrpc</name><value><string>$%#5#%$</string></value></member>
+</struct></value></data></array></value></param></params></methodResponse>';
     $strXML = str_replace("$%#1#%$", $zbp->user->Level === 1 , $strXML);
     $strXML = str_replace("$%#2#%$", htmlspecialchars($zbp->host), $strXML);
     $strXML = str_replace("$%#3#%$", htmlspecialchars(md5($zbp->guid . sha1($zbp->path))), $strXML);
@@ -62,8 +87,18 @@ function zbp_wp_getUsersBlogs() {
  * XML-RPC 获取分类列表
  *
  * 输出分类列表xml
+ wp.getCategories
+ array
+struct
+string categoryId
+string parentId
+string categoryName
+string categoryDescription
+string description: Name of the category, equivalent to categoryName.
+string htmlUrl
+string rssUrl
  */
-function zbp_getCategories() {
+function xmlrpc_getCategories() {
     global $zbp;
 
     $strXML = '<methodResponse><params><param><value><array><data>$%#1#%$</data></array></value></param></params></methodResponse>';
@@ -73,7 +108,7 @@ function zbp_getCategories() {
 <member><name>categoryName</name><value><string>$%#3#%$</string></value></member>
 <member><name>description</name><value><string>$%#4#%$</string></value></member>
 <member><name>httpUrl</name><value><string>$%#5#%$</string></value></member>
-<member><name>title</name><value><string>$%#6#%$</string></value></member>
+<member><name>categoryDescription</name><value><string>$%#6#%$</string></value></member>
 </struct></value>';
 
     $strAll = '';
@@ -100,8 +135,17 @@ function zbp_getCategories() {
  * XML-RPC 获取标签列表
  *
  * 输出标签列表xml
+ wp.getTags
+array
+struct
+int tag_id
+string name
+string slug
+int count
+string html_url
+string rss_url
  */
-function zbp_getTags() {
+function xmlrpc_getTags() {
 
     global $zbp;
 
@@ -120,7 +164,7 @@ function zbp_getTags() {
     $array = $zbp->GetTagList(
         '',
         '',
-        array('tag_Count' => 'ASC', 'tag_ID' => 'ASC'),
+        array('tag_Count' => 'DESC', 'tag_ID' => 'ASC'),
         array(50),
         ''
     );
@@ -147,8 +191,14 @@ function zbp_getTags() {
  * XML-RPC 获取用户列表
  *
  * 输出用户列表xml
+ wp.getAuthors
+array
+struct
+string user_id
+string user_login
+string display_name
  */
-function zbp_getAuthors() {
+function xmlrpc_getAuthors() {
 
     global $zbp;
 
@@ -165,7 +215,7 @@ function zbp_getAuthors() {
         $s = $strSingle;
         $s = str_replace("$%#1#%$", htmlspecialchars($value->ID), $s);
         $s = str_replace("$%#2#%$", htmlspecialchars($value->Name), $s);
-        $s = str_replace("$%#3#%$", htmlspecialchars($value->Name), $s);
+        $s = str_replace("$%#3#%$", htmlspecialchars($value->Alias), $s);
         $strAll .= $s;
 
     }
@@ -181,7 +231,7 @@ function zbp_getAuthors() {
  * 输出页面列表xml
  * @param  int $n 用户ID
  */
-function zbp_getPages($n) {
+function xmlrpc_getPages($n) {
     global $zbp;
 
     $strXML = '<methodResponse><params><param><value><array><data>$%#1#%$</data></array></value></param></params></methodResponse>';
@@ -240,7 +290,7 @@ function zbp_getPages($n) {
  * 输出页面列表xml
  * @param  int $id 页面ID
  */
-function zbp_getPage($id) {
+function xmlrpc_getPage($id) {
     global $zbp;
 
     $strXML = '<methodResponse><params><param>$%#1#%$</param></params></methodResponse>';
@@ -261,7 +311,7 @@ function zbp_getPage($id) {
 
     $article = new Post;
     $article->LoadInfoByID($id);
-    if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('PageAll'))) {$zbp->ShowError(11, __FILE__, __LINE_);}
+    if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('PageAll'))) {xmlrpc_ShowError(11, __FILE__, __LINE_);}
 
     $array = array();
     $array[] = $article;
@@ -293,7 +343,7 @@ function zbp_getPage($id) {
  * 输出文章列表xml
  * @param  int $n 用户ID
  */
-function zbp_getRecentPosts($n) {
+function xmlrpc_getRecentPosts($n) {
     global $zbp;
 
     $strXML = '<methodResponse><params><param><value><array><data>$%#1#%$</data></array></value></param></params></methodResponse>';
@@ -373,7 +423,7 @@ function zbp_getRecentPosts($n) {
  * 输出操作结果
  * @param  int $id 页面ID
  */
-function zbp_delPage($id) {
+function xmlrpc_delPage($id) {
 
     $strXML = '<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
 
@@ -383,7 +433,7 @@ function zbp_delPage($id) {
         $strXML = str_replace("$%#1#%$", 1, $strXML);
         echo $strXML;
     } else {
-        $zbp->ShowError(0, __FILE__, __LINE_);
+        xmlrpc_ShowError(0, __FILE__, __LINE_);
     }
 
 }
@@ -394,7 +444,7 @@ function zbp_delPage($id) {
  * 输出操作结果
  * @param  int $id 文章ID
  */
-function zbp_deletePost($id) {
+function xmlrpc_deletePost($id) {
 
     $strXML = '<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
 
@@ -404,7 +454,7 @@ function zbp_deletePost($id) {
         $strXML = str_replace("$%#1#%$", 1, $strXML);
         echo $strXML;
     } else {
-        $zbp->ShowError(0, __FILE__, __LINE_);
+        xmlrpc_ShowError(0, __FILE__, __LINE_);
     }
 
 }
@@ -415,7 +465,7 @@ function zbp_deletePost($id) {
  * 输出文章数据xml
  * @param  int $id 文章ID
  */
-function zbp_getPost($id) {
+function xmlrpc_getPost($id) {
     global $zbp;
 
     $strXML = '<methodResponse><params><param>$%#1#%$</param></params></methodResponse>';
@@ -441,7 +491,7 @@ function zbp_getPost($id) {
 
     $article = new Post;
     $article->LoadInfoByID($id);
-    if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('ArticleAll'))) {$zbp->ShowError(11, __FILE__, __LINE_);}
+    if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('ArticleAll'))) {xmlrpc_ShowError(11, __FILE__, __LINE_);}
 
     $array = array();
     $array[] = $article;
@@ -489,7 +539,7 @@ function zbp_getPost($id) {
  * 输出指定文章所属分类信息xml
  * @param  int $id 文章ID
  */
-function zbp_getPostCategories($id) {
+function xmlrpc_getPostCategories($id) {
     global $zbp;
 
     $strXML = '<methodResponse><params><param><value><array><data>$%#1#%$</data></array></value></param></params></methodResponse>';
@@ -530,7 +580,7 @@ function zbp_getPostCategories($id) {
  * @param  string $xmlstring 文章数据xml
  * @param  boolval $publish   是否直接发布
  */
-function zbp_editPost($id, $xmlstring, $publish) {
+function xmlrpc_editPost($id, $xmlstring, $publish) {
     global $zbp;
 
     $xml = simplexml_load_string($xmlstring);
@@ -609,7 +659,7 @@ function zbp_editPost($id, $xmlstring, $publish) {
             $strXML = str_replace("$%#1#%$", 1, $strXML);
             echo $strXML;
         } else {
-            $zbp->ShowError(0, __FILE__, __LINE_);
+            xmlrpc_ShowError(0, __FILE__, __LINE_);
         }
 
     }
@@ -621,7 +671,7 @@ function zbp_editPost($id, $xmlstring, $publish) {
  *
  * 输出默认分类id=1
  */
-function zbp_setPostCategories() {
+function xmlrpc_setPostCategories() {
     $strXML = '<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
     $strXML = str_replace("$%#1#%$", 1, $strXML);
     echo $strXML;
@@ -635,7 +685,7 @@ function zbp_setPostCategories() {
  * @param  string $xmlstring 页面数据xml
  * @param  boolval $publish   是否直接发布
  */
-function zbp_editPage($id, $xmlstring, $publish) {
+function xmlrpc_editPage($id, $xmlstring, $publish) {
     global $zbp;
 
     $xml = simplexml_load_string($xmlstring);
@@ -692,7 +742,7 @@ function zbp_editPage($id, $xmlstring, $publish) {
             $strXML = str_replace("$%#1#%$", 1, $strXML);
             echo $strXML;
         } else {
-            $zbp->ShowError(0, __FILE__, __LINE_);
+            xmlrpc_ShowError(0, __FILE__, __LINE_);
         }
 
     }
@@ -706,7 +756,7 @@ function zbp_editPage($id, $xmlstring, $publish) {
  * @param  int $id        页面ID
  * @param  string $xmlstring 上传文件数据xml
  */
-function zbp_newMediaObject($xmlstring) {
+function xmlrpc_newMediaObject($xmlstring) {
     global $zbp;
 
     $xml = simplexml_load_string($xmlstring);
@@ -736,6 +786,36 @@ function zbp_newMediaObject($xmlstring) {
 
 }
 
+/**
+ * XML-RPC辅助
+ *
+ * 验证用户登录
+ * @param  
+ * @param  
+ */
+function xmlrpc_Verify($username, $password) {
+    global $zbp;
+    if(isset($zbp->option['ZC_XMLRPC_USE_WEBTOKEN']) && $zbp->option['ZC_XMLRPC_USE_WEBTOKEN'] == true){
+        if (!$zbp->Verify_Token($username, $password, 'xmlrpc', $zbp->user)) {
+            xmlrpc_ShowError(8, __FILE__, __LINE__, 403);
+            die;
+        }
+    }else{
+        if (!$zbp->Verify_Original($username, $password, $zbp->user)) {
+            xmlrpc_ShowError(8, __FILE__, __LINE__, 403);
+            die;
+        }
+    }
+
+}
+
+function xmlrpc_ShowError($code,$file,$line,$httpcode=401){
+    SetHttpStatusCode($httpcode);
+    ShowError($code, $file, $line);
+}
+
+//xml-rpc input
+
 $zbp->Load();
 
 if(isset($zbp->option['ZC_XMLRPC_ENABLE']) && $zbp->option['ZC_XMLRPC_ENABLE'] == false){
@@ -754,199 +834,202 @@ libxml_disable_entity_loader(true);
 $xml = simplexml_load_string($xmlstring);
 
 if ($xml) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Xmlrpc_Begin'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($xml);
+    }
     $method = (string) $xml->methodName;
     switch ($method) {
         case 'blogger.getUsersBlogs':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('admin')) {
-                zbp_getUsersBlogs();
+                xmlrpc_getUsersBlogs();
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.getCategories':
         case 'metaWeblog.getCategories':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticleEdt')) {
-                zbp_getCategories();
+                xmlrpc_getCategories();
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'mt.setPostCategories':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticleEdt')) {
-                zbp_setPostCategories();
+                xmlrpc_setPostCategories();
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'mt.getPostCategories':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticleEdt')) {
-                zbp_getPostCategories((integer) $xml->params->param[0]->value->string);
+                xmlrpc_getPostCategories((integer) $xml->params->param[0]->value->string);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.getTags':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticleEdt')) {
-                zbp_getTags();
+                xmlrpc_getTags();
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.getAuthors':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticleEdt')) {
-                zbp_getAuthors();
+                xmlrpc_getAuthors();
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'metaWeblog.getRecentPosts':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticleEdt')) {
-                zbp_getRecentPosts((integer) $xml->params->param[3]->value->int);
+                xmlrpc_getRecentPosts((integer) $xml->params->param[3]->value->int);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'metaWeblog.getPost':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticleEdt')) {
-                zbp_getPost((integer) $xml->params->param[0]->value->string);
+                xmlrpc_getPost((integer) $xml->params->param[0]->value->string);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'blogger.deletePost':
             $username = (string) $xml->params->param[2]->value->string;
             $password = (string) $xml->params->param[3]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticleDel')) {
-                zbp_deletePost((integer) $xml->params->param[1]->value->string);
+                xmlrpc_deletePost((integer) $xml->params->param[1]->value->string);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'metaWeblog.editPost':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticlePst')) {
-                zbp_editPost((integer) $xml->params->param[0]->value->string,
+                xmlrpc_editPost((integer) $xml->params->param[0]->value->string,
                     $xml->params->param[3]->value->struct->asXML(),
                     (boolean) $xml->params->param[4]->value->boolean->asXML());
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'metaWeblog.newPost':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticlePst')) {
-                zbp_editPost(0,
+                xmlrpc_editPost(0,
                     $xml->params->param[3]->value->struct->asXML(),
                     (boolean) $xml->params->param[4]->value->boolean->asXML());
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.newPage':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('PagePst')) {
-                zbp_editPage(0,
+                xmlrpc_editPage(0,
                     $xml->params->param[3]->value->struct->asXML(),
                     (boolean) $xml->params->param[4]->value->boolean->asXML());
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.editPage':
             $username = (string) $xml->params->param[2]->value->string;
             $password = (string) $xml->params->param[3]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('PagePst')) {
-                zbp_editPage((integer) $xml->params->param[1]->value->string,
+                xmlrpc_editPage((integer) $xml->params->param[1]->value->string,
                     $xml->params->param[4]->value->struct->asXML(),
                     (boolean) $xml->params->param[5]->value->boolean->asXML());
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.getPages':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('PageEdt')) {
-                zbp_getPages((integer) $xml->params->param[3]->value->int);
+                xmlrpc_getPages((integer) $xml->params->param[3]->value->int);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.getPage':
             $username = (string) $xml->params->param[2]->value->string;
             $password = (string) $xml->params->param[3]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('PageEdt')) {
-                zbp_getPage((integer) $xml->params->param[1]->value->string);
+                xmlrpc_getPage((integer) $xml->params->param[1]->value->string);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.deletePage':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('PageDel')) {
-                zbp_delPage((integer) $xml->params->param[3]->value->string);
+                xmlrpc_delPage((integer) $xml->params->param[3]->value->string);
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'metaWeblog.newMediaObject':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('UploadPst')) {
-                zbp_newMediaObject($xml->params->param[3]->value->struct->asXML());
+                xmlrpc_newMediaObject($xml->params->param[3]->value->struct->asXML());
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         case 'wp.getUsersBlogs':
             $username = (string) $xml->params->param[0]->value->string;
             $password = (string) $xml->params->param[1]->value->string;
-            if (!$zbp->Verify_Original($username, $password, $zbp->user)) {ShowError(8, __FILE__, __LINE__);    }
+            xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('admin')) {
-                zbp_wp_getUsersBlogs();
+                xmlrpc_wp_getUsersBlogs();
             } else {
-                $zbp->ShowError(6, __FILE__, __LINE__);
+                xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
             break;
         default:
-            $zbp->ShowError(1, __FILE__, __LINE_);
+            xmlrpc_ShowError(1, __FILE__, __LINE_);
             break;
     }
 }

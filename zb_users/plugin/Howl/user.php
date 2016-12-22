@@ -40,9 +40,6 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
-<?php
-$zbp->ShowHint('bad', '本插件配置不当可能会造成网站被黑等严重后果，请慎用！');
-?>
   <div class="divHeader"><?php echo $blogtitle;?></div>
   <div class="SubMenu" style="display: block;"><a href="main.php"><span class="m-left">系统群组设置</span></a><a href="user.php"><span class="m-left m-now">单独用户设置</span></a></div>
   <div id="divMain2">
@@ -104,7 +101,10 @@ echo'</select></th><th><input id="addact" type="text" value="1" class="checkbox"
 
 ?>
 </table>
-	  <hr/>
+      <hr/>
+      <p>
+本插件配置不当可能会造成网站被黑等严重后果，请慎用！
+      </p>
 
 	</form>
 	<script type="text/javascript">

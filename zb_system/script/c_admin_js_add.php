@@ -187,7 +187,7 @@ function updateinfo(s){
 
 
 function AddHeaderIcon(s){
-  $("div.divHeader,div.divHeader2").first().css({"padding-left":"38px","background":"url('"+s+"') 3px 9px no-repeat","background-size":"32px"});
+  $("div.divHeader,div.divHeader2").first().css({"background-image":"url('"+s+"')"});
 }
 
 
@@ -246,6 +246,11 @@ $(document).ready(function(){
 	AutoHideTips();
 
 	SetCookie("timezone",(new Date().getTimezoneOffset()/60)*(-1));
+
+	var s = $("div.divHeader,div.divHeader2").first().css("background-image");
+	if(s != undefined && s.indexOf("none.gif") != -1 ){
+		AddHeaderIcon(bloghost + "zb_system/image/common/window.png");
+	}
 });
 
 

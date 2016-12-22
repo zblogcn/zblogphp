@@ -539,7 +539,8 @@ class ZBlogPHP {
      */
     public function LoadManage() {
 
-        $this->host = GetCurrentHost($this->path, $this->cookiespath);
+        if ($this->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN'] == false)
+            $this->host = GetCurrentHost($this->path, $this->cookiespath);
 
         if (substr($this->host, 0, 8) == 'https://') {
             $this->ishttps = true;
@@ -560,7 +561,7 @@ class ZBlogPHP {
         Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu', 'Include_Admin_Addmodsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu', 'Include_Admin_Addcmtsubmenu');
 
-        $this->CheckTemplate(true);
+        //$this->CheckTemplate(true);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) {
             $fpname();
@@ -685,14 +686,11 @@ class ZBlogPHP {
      * @return bool
      */
     public function StartSession() {
-        if ($this->issession == true) {
-            return false;
+        if ( session_status() == 1 ){
+            session_start();
+            $this->issession = true;
+            return true;
         }
-
-        session_start();
-        $this->issession = true;
-
-        return true;
     }
 
     /**
@@ -700,15 +698,11 @@ class ZBlogPHP {
      * @return bool
      */
     public function EndSession() {
-        if ($this->issession == false) {
-            return false;
+        if ( session_status() == 2 ){
+            session_write_close();
+            $this->issession = false;
+            return true;
         }
-
-        session_unset();
-        session_destroy();
-        $this->issession = false;
-
-        return true;
     }
 
 ################################################################################################################
@@ -1011,14 +1005,25 @@ class ZBlogPHP {
         $m = null;
         $u = trim(GetVars('username', 'COOKIE'));
         $p = trim(GetVars('password', 'COOKIE'));
+        //if ($this->Verify_Token($u, $p, 'zbp', $m) == true) {
         if ($this->Verify_MD5Path($u, $p, $m) == true) {
             $this->user = $m;
 
             return true;
         }
         $this->user = new Member;
-
+        $this->user->Guid = GetGuid();
         return false;
+    }
+
+    /**
+     * 返回登录成功后应保存的cookie信息(COOKIE中的密码)
+     * @param member $m 已验过成功的member
+     * @return string
+     */
+    public function VerifyResult($m) {
+        //return $m->GetHashByToken('zbp',1000);
+        return $m->GetHashByMD5Path();
     }
 
     /**
@@ -1099,6 +1104,31 @@ class ZBlogPHP {
             if (strcasecmp($m->Password, $password) == 0) {
                 $member = $m;
 
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * 验证用户登录（使用Token，替代密码保存）
+     * @param string $name 用户名
+     * @param string $wt WebToken
+     * @param string $wt_id WebToken的ID识别符
+     * @param object $member 返回读取成功的member对象
+     * @return bool
+     */
+    public function Verify_Token($name, $wt, $wt_id, &$member = null) {
+        if ($name == '' || $wt == '') {
+            return false;
+        }
+        $m = null;
+        $m = $this->GetMemberByName($name);
+        if ($m->ID > 0) {
+            if( VerfyWebToken($wt, $wt_id, $this->guid, $m->ID, $m->Password) === true ){
+                $member = $m;
                 return true;
             }
         }
@@ -2381,12 +2411,38 @@ class ZBlogPHP {
     }
 
     /**
+     * 获取会话WebToken
+     * @param $wt_id
+     * @param $day 默认1天有效期，1小时为1/24，1分钟为1/(24*60)
+     * @return string
+     */
+    public function GetWebToken($wt_id = '', $day = 1 ) {
+        $t = intval( $day * 24 * 3600 ) + time();
+        return CreateWebToken($wt_id, $t ,$this->guid, $this->user->Guid, $this->user->ID, $this->user->Password);
+    }
+
+    /**
+     * 验证会话WebToken
+     * @param $wt
+     * @param $wt_id
+     * @return bool
+     */
+    public function ValidWebToken($wt, $wt_id = '') {
+
+        if( VerfyWebToken($wt, $wt_id, $this->guid, $this->user->Guid, $this->user->ID, $this->user->Password) === true ){
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 获取会话Token
      * @param $s
      * @return string
      */
-    public function GetToken($s = '') {
-        return md5($this->guid . $this->user->Guid . $s . date('Ymdh'));
+    public function GetToken($id = '') {
+        return md5($this->guid . $this->user->Guid . $id . date('Ymdh'));
     }
 
     /**
@@ -2395,11 +2451,11 @@ class ZBlogPHP {
      * @param $s
      * @return bool
      */
-    public function ValidToken($t, $s = '') {
-        if ($t == md5($this->guid . $this->user->Guid . $s . date('Ymdh'))) {
+    public function ValidToken($t, $id = '') {
+        if ($t == md5($this->guid . $this->user->Guid . $id . date('Ymdh'))) {
             return true;
         }
-        if ($t == md5($this->guid . $this->user->Guid . $s. date('Ymdh', time() - (3600 * 1)))) {
+        if ($t == md5($this->guid . $this->user->Guid . $id. date('Ymdh', time() - (3600 * 1)))) {
             return true;
         }
 

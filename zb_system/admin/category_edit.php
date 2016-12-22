@@ -45,7 +45,13 @@ foreach ($zbp->categoriesbyorder as $k => $v) {
 <div id="divMain">
 	<div class="divHeader2">
 		<?php echo $lang['msg']['category_edit']?></div>
-	<div class="SubMenu"></div>
+	<div class="SubMenu">
+<?php
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_SubMenu'] as $fpname => &$fpsignal) {
+        $fpname();
+    }
+?>
+	</div>
 	<div id="divMain2" class="edit category_edit">
 		<form id="edit" name="edit" method="post" action="#">
 			<input id="edtID" name="ID" type="hidden" value="<?php echo $cate->ID;?>" />

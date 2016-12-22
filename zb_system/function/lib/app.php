@@ -389,9 +389,9 @@ class App {
                             !($file == 'compile' && $this->type=='theme')) {
                             $this->dirs[] = $dir . $file . '/';
                             $this->GetAllFileDir($dir . $file . '/');
-                        } else {
-                            $this->files[] = $dir . $file;
                         }
+                    } else {
+                        $this->files[] = $dir . $file;
                     }
                 }
                 closedir($handle);
@@ -456,8 +456,9 @@ class App {
         $s .= '</sidebars>';
 
         foreach ($this->dirs as $key => $value) {
+            $value = str_replace($dir, '', $value);
             $value = preg_replace('/[^(\x20-\x7F)]*/', '', $value);
-            $d = $this->id . '/' . str_replace($dir, '', $value);
+            $d = $this->id . '/' . $value;
             $s .= '<folder><path>' . htmlspecialchars($d) . '</path></folder>';
         }
         foreach ($this->files as $key => $value) {

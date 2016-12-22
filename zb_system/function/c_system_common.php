@@ -1315,6 +1315,34 @@ function utf84mb_convertToUTF8($matches) {
 }
 
 
+//$args = 2...x
+function VerfyWebToken($wt,$wt_id){
+    $time = substr($wt,32);
+    $wt = substr($wt,0,32);
+    $args = array();
+    for ($i = 2; $i < func_num_args() ; $i++) { 
+        $args[] = func_get_arg($i);
+    }
+    $sha = md5( hash("sha256", $time . $wt_id) . hash("sha256", implode($args)) );
+    if ($wt === $sha){
+        if ($time > time()){
+            return true;
+        }
+    }
+
+    return false;
+}
+//$time : expired second
+function CreateWebToken($wt_id,$time){
+    $time = (int)$time;
+    $args = array();
+    for ($i = 2; $i < func_num_args() ; $i++) { 
+        $args[] = func_get_arg($i);
+    }
+    return md5( hash("sha256", $time . $wt_id). hash("sha256", implode($args)) ) . $time;
+}
+
+
 
 /**
  * 处理PHP版本兼容代码
@@ -1638,4 +1666,16 @@ if (!function_exists('gzdecode')) {
 
    return $data;
  }
+}
+
+if ( !function_exists('session_status') ){
+    function session_status(){
+        if(!extension_loaded('session')){
+            return 0;
+        }elseif(!session_id()){
+            return 1;
+        }else{
+            return 2;
+        }
+    }
 }

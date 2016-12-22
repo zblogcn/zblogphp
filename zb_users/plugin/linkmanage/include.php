@@ -12,34 +12,9 @@ function ActivePlugin_linkmanage() {
 
 function linkmanage_TopMenu(&$m) {
 	global $zbp;
-	array_unshift($m, MakeTopMenu("root", '链接管理', $zbp->host . "zb_users/plugin/linkmanage/main.php", "", "topmenu_linkmanage"));
+	array_unshift($m, MakeTopMenu("root", '导航链接管理', $zbp->host . "zb_users/plugin/linkmanage/main.php", "", "topmenu_linkmanage"));
 }
 
-function linkmanage_RegLocation($themeid, $local) {
-	global $zbp;
-	$location = json_decode($zbp->Config('linkmanage')->Location, true);
-	foreach ($local as $key => $value) {
-		$location[$themeid . '_' . $key] = array($themeid, $themeid . '_' . $key, $value);
-	}
-	$zbp->Config('linkmanage')->Location = json_encode($location);
-	$zbp->SaveConfig('linkmanage');
-}
-
-function linkmanage_SetMenuLocation($id, $location) {
-	global $zbp;
-	$n = json_decode($zbp->Config('linkmanage')->Nav, true);
-	foreach ($n['data'] as $key => $value) {
-		if ($value['id'] == $id) {
-			$n['data'][$key]['location'] = $location;
-		} else {
-			continue;
-		}
-	}
-	$zbp->Config('linkmanage')->Nav = json_encode($n);
-
-	$zbp->SaveConfig('linkmanage');
-	return $Navs['data'];
-}
 
 function InstallPlugin_linkmanage() {
 	global $zbp;

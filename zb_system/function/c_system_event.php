@@ -19,7 +19,7 @@ function VerifyLogin() {
     if ($zbp->Verify_MD5(GetVars('username', 'POST'), GetVars('password', 'POST'), $m)) {
         $zbp->user = $m;
         $un = $m->Name;
-        $ps = $m->PassWord_MD5Path;
+        $ps = $zbp->VerifyResult($m);
         $sd = (int) GetVars('savedate');
         $addinfo = array();
         $addinfo['chkadmin'] = (int) $zbp->CheckRights('admin');
@@ -501,12 +501,6 @@ function ViewAuto($inpurl) {
             die(file_get_contents($realurl));
         }
         unset($realurl);
-    }
-
-    //针对PCRE老版本报错
-    $pv = explode(' ', PCRE_VERSION);
-    if (version_compare($pv[0], '6.6') <= 0) {
-        $zbp->ShowError('PCRE ' . PCRE_VERSION .' old version', __FILE__, __LINE__);
     }
 
     $url = trim(urldecode($url), '/');
@@ -2306,7 +2300,7 @@ function PostMember() {
 
     FilterMember($mem);
 
-    CountMember($mem);
+    CountMember($mem, array(null, null, null, null));
 
     // 查询同名
     if (isset($data['Name'])) {
@@ -2727,7 +2721,8 @@ function SaveSetting() {
             $key == 'ZC_GZIP_ENABLE' ||
             $key == 'ZC_SYNTAXHIGHLIGHTER_ENABLE' ||
             $key == 'ZC_COMMENT_VERIFY_ENABLE' ||
-            $key == 'ZC_CLOSE_SITE'
+            $key == 'ZC_CLOSE_SITE' ||
+            $key == 'ZC_PERMANENT_DOMAIN_WITH_ADMIN'
         ) {
             $zbp->option[$key] = (boolean) $value;
             continue;
@@ -2888,7 +2883,8 @@ function FilterMember(&$member) {
     if (!CheckRegExp($member->Name, '[username]')) {
         $zbp->ShowError(77, __FILE__, __LINE__);
     }
-    if (!CheckRegExp($member->Alias, '[nickname]')) {
+
+    if ($member->Alias !== '' && !CheckRegExp($member->Alias, '[nickname]')) {
         $zbp->ShowError(90, __FILE__, __LINE__);
     }
 

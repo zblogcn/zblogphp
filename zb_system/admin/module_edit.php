@@ -80,7 +80,13 @@ if ($mod->Source == 'theme') {
 <div id="divMain">
 <div class="divHeader2">
 <?php echo $lang['msg']['module_edit']?></div>
-<div class="SubMenu"></div>
+<div class="SubMenu">
+<?php
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Edit_SubMenu'] as $fpname => &$fpsignal) {
+        $fpname();
+    }
+?>
+</div>
 <div id="divMain2" class="edit tag_edit">
 <form id="edit" name="edit" method="post" action="#">
 	<input id="edtID" name="ID" type="hidden" value="<?php echo $mod->ID;?>" />

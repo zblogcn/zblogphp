@@ -60,7 +60,7 @@ class Post extends Base {
 
         $a = $zbp->LoadTagsByIDString($this->Tag);
         $s = '';
-        $c = '';
+        $c = [];
         foreach ($b as $key) {
             if (isset($zbp->tags[$key])) {
                 $c[] = $zbp->tags[$key]->Name;
@@ -311,7 +311,7 @@ class Post extends Base {
      */
     public function Del() {
         global $zbp;
-        if ($this->ID >0) unset($zbp->posts[$this->ID]);
+        if ($this->ID > 0) unset($zbp->posts[$this->ID]);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Del'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;

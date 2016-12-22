@@ -709,6 +709,72 @@ DefinePluginFilter('Filter_Plugin_Admin_SettingMng_SubMenu');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Edit_SubMenu
+'参数:
+'说明:编辑页菜单(1.5.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Edit_SubMenu');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Tag_Edit_SubMenu
+'参数:
+'说明:标签编辑页菜单(1.5.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Tag_Edit_SubMenu');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Module_Edit_SubMenu
+'参数:
+'说明:模块编辑页菜单(1.5.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Module_Edit_SubMenu');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Member_Edit_SubMenu
+'参数:
+'说明:用户编辑页菜单(1.5.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Member_Edit_SubMenu');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Category_Edit_SubMenu
+'参数:
+'说明:分类编辑页菜单(1.5.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Category_Edit_SubMenu');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_ArticleMng_Table
+'参数:&$article,&$tabletds,&$tableths
+'说明:文章管理页表处理(1.5.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_ArticleMng_Table');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Edit_Begin
 '参数:
 '说明:文章页面编辑页开始接口
@@ -1734,3 +1800,14 @@ DefinePluginFilter('Filter_Plugin_LargeData_CountTagArray');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_LargeData_GetList');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Xmlrpc_Begin
+'参数:&xml
+'说明:xml-rpc页的begin接口(1.5.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Xmlrpc_Begin');
