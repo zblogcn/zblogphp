@@ -60,7 +60,7 @@ class Post extends Base {
 
         $a = $zbp->LoadTagsByIDString($this->Tag);
         $s = '';
-        $c = [];
+        $c = array();
         foreach ($b as $key) {
             if (isset($zbp->tags[$key])) {
                 $c[] = $zbp->tags[$key]->Name;
