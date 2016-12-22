@@ -2883,7 +2883,8 @@ function FilterMember(&$member) {
     if (!CheckRegExp($member->Name, '[username]')) {
         $zbp->ShowError(77, __FILE__, __LINE__);
     }
-    if (!CheckRegExp($member->Alias, '[nickname]')) {
+
+    if ($member->Alias !== '' && !CheckRegExp($member->Alias, '[nickname]')) {
         $zbp->ShowError(90, __FILE__, __LINE__);
     }
 
