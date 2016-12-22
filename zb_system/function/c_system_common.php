@@ -1323,7 +1323,7 @@ function VerfyWebToken($wt,$wt_id){
     for ($i = 2; $i < func_num_args() ; $i++) { 
         $args[] = func_get_arg($i);
     }
-    $sha = md5( sha1($time) . sha1($wt_id) . sha1(implode($args)) );
+    $sha = md5( hash("sha256", $time . $wt_id) . hash("sha256", implode($args)) );
     if ($wt === $sha){
         if ($time > time()){
             return true;
@@ -1339,7 +1339,7 @@ function CreateWebToken($wt_id,$time){
     for ($i = 2; $i < func_num_args() ; $i++) { 
         $args[] = func_get_arg($i);
     }
-    return md5( sha1($time) . sha1($wt_id) . sha1(implode($args)) ) . $time;
+    return md5( hash("sha256", $time . $wt_id). hash("sha256", implode($args)) ) . $time;
 }
 
 
