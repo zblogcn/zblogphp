@@ -19,7 +19,7 @@ defined('ZBP_HOOKERROR') || define('ZBP_HOOKERROR', true);
 define('ZC_VERSION_MAJOR', '1');
 define('ZC_VERSION_MINOR', '5');
 define('ZC_VERSION_BUILD', '1');
-define('ZC_VERSION_COMMIT', '1701');
+define('ZC_VERSION_COMMIT', '1702');
 define('ZC_VERSION_CODENAME', 'Zero');
 define('ZC_VERSION', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . '.' . ZC_VERSION_BUILD . '.' . ZC_VERSION_COMMIT);
 define('ZC_VERSION_DISPLAY', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . '.' . ZC_VERSION_BUILD  .' ' . ZC_VERSION_CODENAME);
@@ -196,9 +196,9 @@ $GLOBALS['actions'] = array(
     'UploadPst' => 3,
     'UploadDel' => 3,
 
-    'ModuleEdt' => 3,
-    'ModulePst' => 3,
-    'ModuleDel' => 3,
+    'ModuleEdt' => 1,
+    'ModulePst' => 1,
+    'ModuleDel' => 1,
 
     'ThemeSet' => 1,
     'SidebarSet' => 1,

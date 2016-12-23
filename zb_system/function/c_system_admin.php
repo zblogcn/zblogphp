@@ -1253,15 +1253,15 @@ function Admin_ModuleMng() {
         CreateModuleDiv($m);
     }
 
-    echo '<div class="widget-list-header">' . $zbp->lang['msg']['theme_module'] . '</div>';
-    echo "\r\n";
-    foreach ($tm as $m) {
-        CreateModuleDiv($m);
-    }
-
     echo '<div class="widget-list-header">' . $zbp->lang['msg']['plugin_module'] . '</div>';
     echo "\r\n";
     foreach ($pm as $m) {
+        CreateModuleDiv($m);
+    }
+
+    echo '<div class="widget-list-header">' . $zbp->lang['msg']['theme_module'] . '</div>';
+    echo "\r\n";
+    foreach ($tm as $m) {
         CreateModuleDiv($m);
     }
 
