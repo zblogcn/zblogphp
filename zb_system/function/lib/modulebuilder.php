@@ -410,13 +410,17 @@ class ModuleBuilder {
         $w = array();
         $w[] = array('<=', 'mem_Level', $level);
 
-        $array = $zbp->GetMemberList('*', $w, array('mem_ID' => 'ASC'), null, null);
+        $i = $zbp->modulesbyfilename['authors']->MaxLi;
+        if ($i == 0) {
+            $i = 10;
+        }
+
+        $array = $zbp->GetMemberList('*', $w, array('mem_ID' => 'ASC'), $i, null);
 
         foreach ($array as $member) {
-            $m = Metas::ConvertArray($member->GetData());
-            unset($m->Guid);
-            unset($m->Password);
-            $authors[] = $m;
+            $member->Guid = '';
+            $member->Password = '';
+            $authors[] = $member;
         }
 
         $tags['authors'] = $authors;
