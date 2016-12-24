@@ -14,7 +14,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Misc_Begin'] as $fpname => &$fpsignal)
 
 switch ($type) {
 case 'statistic':
-    if (!$zbp->CheckRights('root')) {
+    if (!$zbp->CheckRights('admin')) {
         echo $zbp->ShowError(6, __FILE__, __LINE__);
         die();
     }
@@ -72,7 +72,13 @@ function misc_statistic() {
 
     global $zbp;
 
-    $zbp->CheckTemplate();
+    if ( $zbp->CheckRights('root') || $zbp->CheckTemplate(true) == false ){
+        $zbp->CheckTemplate(false,true);
+    }
+    if (!( $zbp->CheckRights('root') || (time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60) )){
+        echo $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
 
     $r = null;
 

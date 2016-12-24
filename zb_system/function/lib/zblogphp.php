@@ -1485,21 +1485,29 @@ class ZBlogPHP {
 
     /**
      * 更新模板缓存
-     * @param boolean $nobuild 为真的话，只判断是否需要而不Build
+     * @param boolean $onlycheck 为真的话，只判断是否需要而不Build
+     * @param boolean $forcebuild     
      * @return true or false
      */
-    public function CheckTemplate($nobuild = false) {
+    public function CheckTemplate($onlycheck = false, $forcebuild = false) {
 
         $this->template->LoadTemplates();
         $s = implode($this->template->templates);
         $md5 = md5($s);
+
         if ($md5 != $this->cache->templates_md5) {
-            if($nobuild == true){
+            if($onlycheck == true && $forcebuild == false){
                 return false;
             }
             $this->BuildTemplate();
             $this->cache->templates_md5 = $md5;
             $this->SaveCache();
+        } else {
+            if ($forcebuild == true) {
+                $this->BuildTemplate();
+                $this->cache->templates_md5 = $md5;
+                $this->SaveCache();
+            }
         }
 
         return true;
