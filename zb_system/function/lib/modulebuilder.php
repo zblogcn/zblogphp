@@ -401,11 +401,12 @@ class ModuleBuilder {
      * @param int $level 要导出的用户最低等级，默认为4（即协作者）
      * @return string 模块内容
      */
-    public static function Authors($level = 4) {
+    public static function Authors() {
         global $zbp;
         $template = $zbp->template;
         $tags = array();
         $authors = array();
+        $level = $zbp->actions['ArticleEdt'];
 
         $w = array();
         $w[] = array('<=', 'mem_Level', $level);
