@@ -453,7 +453,7 @@ class SQLGlobal {
                 $whereData = " (1 = 1) ";
                 return $whereData;
             }
-            if (count($value[1]) == 0) {
+            if (count($value[1]) < 2) {
                 $whereData = " (1 = 1) ";
                 return $whereData;
             }

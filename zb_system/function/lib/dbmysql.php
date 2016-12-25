@@ -143,6 +143,7 @@ class DbMySQL implements iDataBase {
     public function Close() {
         if (is_resource($this->db)) {
             mysql_close($this->db);
+            $this->db = null;
         }
 
     }

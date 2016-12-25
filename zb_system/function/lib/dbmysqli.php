@@ -135,8 +135,8 @@ class DbMySQLi implements iDataBase {
     public function Close() {
         if (is_object($this->db)) {
             mysqli_close($this->db);
+            $this->db = null;
         }
-
     }
 
     /**
