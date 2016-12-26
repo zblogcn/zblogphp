@@ -2,7 +2,7 @@
 $_SERVER["QUERY_STRING"] = "";
 $_SERVER["HTTP_HOST"] = "http://localhost";
 $_SERVER['SERVER_SOFTWARE'] = "IIS";
-define('ZBP_HOOKERROR', true);
+define('ZBP_HOOKERROR', false);
 
 
 function commandmock_loadzbp() {

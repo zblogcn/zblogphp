@@ -392,4 +392,12 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
     public function testExpectionInCall() {
         self::$db->fuck();
     }
+
+
+    public function testIssue121InitializeNewInstance() {
+        $this->assertEquals('SELECT * FROM  zbp_post  WHERE  EXISTS ( SELECT * FROM  zbp_post  WHERE  log_ID = \'2\'  ) ',
+          self::$db->select("zbp_post")->where(
+          array('EXISTS', self::$db->init()->select("zbp_post")->where(array('=', 'log_ID', "2"))->sql )
+        )->sql);
+    }
 }

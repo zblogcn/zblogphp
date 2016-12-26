@@ -1,6 +1,11 @@
 <?php
 class SQLMySQL extends SQLGlobal {
     /**
+     * @override
+     */
+    public $className = __CLASS__;
+
+    /**
      * @param object $db
      */
     public function __construct(&$db = null) {
