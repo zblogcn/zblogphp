@@ -4,8 +4,7 @@
 <name>UEditor编辑器</name>
 <url>http://www.rainbowsoft.org/</url>
 <note>UEditor编辑器.</note>
-<description>ZBP的默认编辑器；
-现版本号1.4.4.3。</description>
+<description>ZBP的默认编辑器；现版本号1.6.1。</description>
 <path></path>
 <include>include.php</include>
 <level>1</level>
@@ -19,10 +18,10 @@
   <email></email>
   <url></url>
 </source>
-<adapted>150101</adapted>
-<version>1.6</version>
+<adapted>151705</adapted>
+<version>1.6.1</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2016-10-30</modified>
+<modified>2016-12-26</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>
