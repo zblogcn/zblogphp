@@ -208,7 +208,8 @@ class SQLGlobal {
                 $this->columns[] = $columns;
             }
         } else {
-            $this->columnLoaderArray(func_get_args());
+            $args = func_get_args(); // Fuck PHP 5.2
+            $this->columnLoaderArray($args);
         }
 
 
@@ -282,7 +283,8 @@ class SQLGlobal {
         } elseif (is_array($having)) {
             $this->having = array_merge($this->having, $having);
         } elseif (func_num_args() > 1) {
-            $this->having = array_merge($this->having, func_get_args());
+            $args = func_get_args(); // Fuck PHP 5.2
+            $this->having = array_merge($this->having, $args);
         } else {
             $this->having[] = $having;
         }
@@ -299,7 +301,8 @@ class SQLGlobal {
         } elseif (is_array($groupBy)) {
             $this->groupBy = array_merge($this->groupBy, $groupBy);
         } elseif (func_num_args() > 1) {
-            $this->groupBy = array_merge($this->groupBy, func_get_args());
+            $args = func_get_args(); // Fuck PHP 5.2
+            $this->groupBy = array_merge($this->groupBy, $args);
         } else {
             $this->groupBy[] = $groupBy;
         }
