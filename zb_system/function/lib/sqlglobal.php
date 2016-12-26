@@ -1,6 +1,12 @@
 <?php
 class SQLGlobal {
 
+    /**
+     * @var string 类名
+     * @description 如果是PHP 5.3的话，可以用get_called_class
+     */
+    public $className = __CLASS__;
+
     private $_sql = array();
     protected $option = array(
         'whereKeyword' => 'WHERE',
@@ -27,6 +33,10 @@ class SQLGlobal {
      * @var null|string 数据库类型名称
      */
     private $dbclass = null;
+
+    public function init() {
+        return new $this->className($this->db);
+    }
 
     private function validateParamater($param) {
         if (is_null($param)) {
