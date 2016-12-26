@@ -28,9 +28,8 @@ class Post extends Base {
      */
     public function __call($method, $args) {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Call'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this, $method, $args);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
     }
 
@@ -138,9 +137,8 @@ class Post extends Base {
             break;
         case 'Url':
             foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Url'] as $fpname => &$fpsignal) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
                 $fpreturn = $fpname($this);
-                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
             }
             $u = new UrlRule($zbp->GetPostType_UrlRule($this->Type));
             $u->Rules['{%id%}'] = $this->ID;
@@ -298,9 +296,8 @@ class Post extends Base {
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Save'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
 
         return parent::Save();
@@ -314,9 +311,8 @@ class Post extends Base {
         if ($this->ID > 0) unset($zbp->posts[$this->ID]);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Del'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
 
         return parent::Del();

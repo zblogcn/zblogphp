@@ -15,6 +15,16 @@ defined('ZBP_HOOKERROR') || define('ZBP_HOOKERROR', true);
 /**
  * 定义版本号
  * 因为版本号要经常改，所以往上面放
+这是1.5取消的数组，被安排到应用中心客户端的include.php文件里。
+#定义版本号列
+$zbpvers=array();
+$zbpvers['130707']='1.0 Beta Build 130707';
+$zbpvers['131111']='1.0 Beta2 Build 131111';
+$zbpvers['131221']='1.1 Taichi Build 131221';
+$zbpvers['140220']='1.2 Hippo Build 140220';
+$zbpvers['140614']='1.3 Wonce Build 140614';
+$zbpvers['150101']='1.4 Deeplue Build 150101';
+$zbpvers['151626']='1.5 Zero Build 151626';
  */
 define('ZC_VERSION_MAJOR', '1');
 define('ZC_VERSION_MINOR', '5');

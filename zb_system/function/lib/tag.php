@@ -22,9 +22,8 @@ class Tag extends Base {
      */
     public function __call($method, $args) {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Call'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this, $method, $args);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
     }
 
@@ -56,9 +55,8 @@ class Tag extends Base {
         global $zbp;
         if ($name == 'Url') {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Url'] as $fpname => &$fpsignal) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
                 $fpreturn = $fpname($this);
-                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
             }
             $backAttr = $zbp->option['ZC_ALIAS_BACK_ATTR'];
             $u = new UrlRule($zbp->option['ZC_TAGS_REGEX']);
@@ -89,9 +87,8 @@ class Tag extends Base {
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Save'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
 
         return parent::Save();
@@ -106,9 +103,8 @@ class Tag extends Base {
         if ($this->Name != '') unset($zbp->tagsbyname[$this->Name]);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Del'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
 
         return parent::Del();

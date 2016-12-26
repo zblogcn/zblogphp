@@ -35,9 +35,8 @@ class Category extends Base {
      */
     public function __call($method, $args) {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Call'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this, $method, $args);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
     }
 
@@ -88,9 +87,8 @@ class Category extends Base {
         global $zbp;
         if ($name == 'Url') {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Url'] as $fpname => &$fpsignal) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
                 $fpreturn = $fpname($this);
-                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
             }
             $backAttr = $zbp->option['ZC_ALIAS_BACK_ATTR'];
             $u = new UrlRule($zbp->option['ZC_CATEGORY_REGEX']);
@@ -163,9 +161,8 @@ class Category extends Base {
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Save'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
 
         return parent::Save();
@@ -179,9 +176,8 @@ class Category extends Base {
         if ($this->ID >0) unset($zbp->categories[$this->ID]);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Del'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
 
         return parent::Del();

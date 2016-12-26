@@ -86,9 +86,8 @@ class Module extends Base {
         $this->Content = str_replace($zbp->host, '{$host}', $this->Content);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Save'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
         if ($this->Source == 'theme') {
             if (!$this->FileName) {

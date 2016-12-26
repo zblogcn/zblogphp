@@ -220,9 +220,8 @@ function OutputOptionItemsOfCategories($default) {
     global $zbp;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCategories'] as $fpname => &$fpsignal) {
-        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($default);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
     }
 
     $s = null;

@@ -48,9 +48,8 @@ class Upload extends Base {
     public function DelFile() {
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_DelFile'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
         if (file_exists($this->FullFile)) {@unlink($this->FullFile);}
 
@@ -66,9 +65,8 @@ class Upload extends Base {
         global $zbp;
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_SaveFile'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($tmp, $this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
 
         if (!file_exists($zbp->usersdir . $this->Dir)) {
@@ -92,9 +90,9 @@ class Upload extends Base {
         global $zbp;
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_SaveBase64File'] as $fpname => &$fpsignal) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($str64, $this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;             
                 return $fpreturn;
             }
         }

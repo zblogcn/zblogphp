@@ -98,9 +98,8 @@ function GetPHPEngine() {
  */
 function AutoloadClass($classname) {
     foreach ($GLOBALS['hooks']['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
-        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($classname);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
     }
     if (is_readable($f = ZBP_PATH . 'zb_system/function/lib/' . strtolower($classname) . '.php')) {
         require $f;
@@ -116,9 +115,8 @@ function AutoloadClass($classname) {
 function Logs($s, $iserror = false) {
     global $zbp;
     foreach ($GLOBALS['hooks']['Filter_Plugin_Logs'] as $fpname => &$fpsignal) {
-        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($s, $iserror);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {return $fpreturn;}
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
     }
     if ($zbp->guid) {
         if ($iserror) {
