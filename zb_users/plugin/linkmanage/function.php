@@ -110,9 +110,9 @@ function linkmanage_saveNav()
         linkmanage_updataModule($menuID,$menuName);
 
     }
-    echo json_encode(GetVars('menuItem', 'POST'));
-    $zbp->ShowHint('good', '成功保存菜单设置！');
-    Redirect('menuedit.php?id='.$menuID);
+    echo $jsonmenuItem;
+    //$zbp->ShowHint('good', '成功保存菜单设置！');
+    //Redirect('menuedit.php?id='.$menuID);
 }
 
 
@@ -126,26 +126,18 @@ function linkmanage_updataModule($menuID,$menuName)
     $menuIDarray = json_decode($zbp->Config('linkmanage')->$menuID, true);
     foreach ($menuIDarray as $key => $value) {
         $menu = $Menus['ID'.$key];
-        //if ($value !== 'null') {
-            $sub_tmp = '<span id="'.$menu['id'].'"></span>';
-        //} else {
-        //    $sub_tmp = '';
-        //}
 
-        $html_tmp = '<li class="li-item" id="menuItem_'.$menu['id'].'">
-    <a href="'.$menu['url'].'" title="'.$menu['title'].'">'.$menu['title'].'<a>'.$sub_tmp.'
-    </li>';
+        $html_tmp = '<li class="li-item" id="menuItem_'.$menu['id'].'"><a href="'.$menu['url'].'" title="'.$menu['title'].'">'.$menu['title'].'<a><span id="'.$menu['id'].'"></span></li>';
 
         if ($value == 'null') {
             $html .= $html_tmp;
         } else {
-            $html = str_replace('<span id="'.$value.'"></span>', '<span id="'.$value.'"></span>
-    <ul class="ul-subitem">
-    '.$html_tmp.'   </ul>', $html);
+            $html = str_replace('<span id="'.$value.'"></span>', '<ul class="ul-subitem">'.$html_tmp.'</ul><span id="'.$value.'"></span>', $html);
         }
     }
 
-    $html=preg_replace("/<(span.*?)>(.*?)<(\/span.*?)>/si","",$html); //过滤style标签
+    $html=preg_replace("/<(span.*?)>(.*?)<(\/span.*?)>/si","",$html); //过滤span标签
+    $html=preg_replace("/<\/ul><ul class=\"ul-subitem\">/si","",$html); //过滤ul标签
 
     //修改模块
     $t = '';

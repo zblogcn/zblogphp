@@ -30,6 +30,13 @@ $(function() {
 });
 
 
+function add_menu(){
+   $( "#dialog" ).dialog({
+      modal:true,
+      width: 500
+    });
+}
+
 function edit_menu(id){
 	window.location.href="menuedit.php?id="+id;
 }
@@ -42,8 +49,8 @@ function postsort(){
 	serialized = $('#menu-edit-body-content .nav-menu').nestedSortable('serialize',{ attribute:"sid"});
 	console.log(serialized);
 	$.post("save.php?type=sort", $("#menuName").serialize()+'&'+serialized , function(data) {
-		//$( "#message" ).dialog();
-		//return false;
+		$( "#message" ).dialog();
+		return false;
 	});
 }
 
@@ -84,13 +91,6 @@ function save_link(id){
 			//$( "#message" ).dialog();
 			return false;
 		});
-}
-
-function add_menu(){
-   $( "#dialog" ).dialog({
-      modal:true,
-      width: 500
-    });
 }
 
 function add_link(item,type,menuid){

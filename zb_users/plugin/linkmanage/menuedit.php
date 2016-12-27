@@ -179,7 +179,7 @@ if (isset($menuID) && $menuID == '') {
         if ($value == 'null') {
             $html .= $html_tmp;
         } else {
-            $html = str_replace('<span id="'.$value.'"></span>', '<span id="'.$value.'"></span><ol>'.$html_tmp.'</ol>', $html);
+            $html = str_replace('<span id="'.$value.'"></span>', '<ol>'.$html_tmp.'</ol><span id="'.$value.'"></span>', $html);
         }
     }
     echo $html;
