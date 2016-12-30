@@ -11,28 +11,36 @@ if (!$zbp->CheckPlugin('linkmanage')) {
     $zbp->ShowError(48);
     die();
 }
-$Navs = linkmanageGetNav();
 global $sysMenu;
+
 $blogtitle = '导航菜单编辑';
+
 require $blogpath.'zb_system/admin/admin_header.php';
 require $blogpath.'zb_system/admin/admin_top.php';
 
-if (GetVars('del', 'GET')) {
-    linkmanage_deleteNav(GetVars('del', 'GET'));
-}
-
-if (GetVars('creat', 'POST') == 'new') {
-    linkmanage_creatNav(GetVars('id', 'POST'));
-}
+$Navs = linkmanageGetNav();
 $menuID = GetVars('id');
 if (isset($menuID) && $menuID == '') {
     unset($menuID);
 }
 
+$links = linkmanage_getLink($menuID);
+
+if ($links == null) {
+	$links_json = "{}";
+} else {
+	$links_json = json_encode($links);
+}
 ?>
 <script type="text/javascript" src="jquery.mjs.nestedSortable.js"></script>
 <script type="text/javascript" src="js.js"></script>
+<script type="text/javascript">
+	var links_json = <?php echo $links_json; ?>;
+</script>
+
 <link href="style.css" rel="stylesheet" type="text/css" />
+
+
 
 <div id="divMain">
   <div class="divHeader"><?php echo $blogtitle; ?></div>
@@ -53,7 +61,7 @@ if (isset($menuID) && $menuID == '') {
 				    <div class="accordion-section-content">
 					    <div class="input-control select">
 							<select multiple="1" size="6" id="post">
-								<?php linkmanage_get_link('post');
+								<?php linkmanage_get_syslink('post');
     ?>
 							</select>
 						</div>
@@ -68,7 +76,7 @@ if (isset($menuID) && $menuID == '') {
 				    <div class="accordion-section-content">
 				    	<div class="input-control select">
 							<select multiple="1" size="6" id="page">
-								<?php linkmanage_get_link('page');
+								<?php linkmanage_get_syslink('page');
     ?>
 							</select>
 						</div>
@@ -83,7 +91,7 @@ if (isset($menuID) && $menuID == '') {
 				    <div class="accordion-section-content">
 					    <div class="input-control select">
 							<select multiple="1" size="6" id="category">
-								<?php linkmanage_get_link('category');
+								<?php linkmanage_get_syslink('category');
     ?>
 							</select>
 						</div>
@@ -98,7 +106,7 @@ if (isset($menuID) && $menuID == '') {
 				    <div class="accordion-section-content">
 					    <div class="input-control select">
 							<select multiple="1" size="6" id="tags">
-								<?php linkmanage_get_link('tags');
+								<?php linkmanage_get_syslink('tags');
     ?>
 							</select>
 						</div>
@@ -125,6 +133,7 @@ if (isset($menuID) && $menuID == '') {
     ?>">
 							</label>
 							<div class="publishing-action">
+								<button  name="reset_menu" id="reset_menu_header"  class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="reset_item();return false;">重置链接</button>
 								<button  name="save_menu" id="save_menu_header"  class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="postsort();return false;">保存更改</button>
 							</div><!-- END .publishing-action -->
 						</div><!-- END .major-publishing-actions -->
@@ -135,54 +144,58 @@ if (isset($menuID) && $menuID == '') {
 							<ol class="nav-menu ui-sortable">
 							<?php
 	$html = '';
-    $Menus = linkmanageGetMenu();
-    $menuIDarray = json_decode($zbp->Config('linkmanage')->$menuID, true);
-    foreach ($menuIDarray as $key => $value) {
-        $menu = $Menus['ID'.$key];
-        $html_tmp = '
-			<li sid="menuItem_'.$menu['id'].'">
-				<div class="menu-item-bar">
-					<div class="menu-item-handle ui-sortable-handle">
-						<span class="item-title"><span class="menu-item-title">'.$menu['title'].'</span>
-						<span class="item-controls">
-							<span class="item-type">'.$menu['type'].'</span>
-							<span class="item-edit ui-icon ui-icon-triangle-1-n"></span>
-						</span>
+    //$Menus = linkmanageGetMenu();
+    $link_sort = linkmanage_getLink_sort($menuID);
+    //echo var_dump($link_sort);
+    //die();
+    if (!is_null($link_sort)){
+	    foreach ($link_sort as $key => $value) {
+	        $menu = $links['ID'.$key];
+	        $html_tmp = '
+				<li sid="menuItem_'.$menu['id'].'">
+					<div class="menu-item-bar">
+						<div class="menu-item-handle ui-sortable-handle">
+							<span class="item-title"><span class="menu-item-title">'.$menu['title'].'</span>
+							<span class="item-controls">
+								<span class="item-type">'.$menu['type'].'</span>
+								<span class="item-edit ui-icon ui-icon-triangle-1-n"></span>
+							</span>
+						</div>
 					</div>
-				</div>
-				<div class="menu-item-settings" style="display: none;">
-					<p class="link-p">
-						<label class="link-edit" for="custom-menu-item-url">
-							<span>URL</span>
-							<input name="menu-item['.$menu['id'].'][menu-item-url]" type="text" class="code menu-item-textbox custom-menu-item-url" value="'.$menu['url'].'">
-						</label>
-					</p>
-					<p class="link-p">
-						<label class="link-edit" for="custom-menu-item-name">
-							<span>描述</span>
-							<input name="menu-item['.$menu['id'].'][menu-item-title]" type="text" class="regular-text menu-item-textbox input-with-default-title custom-menu-item-url" value="'.$menu['title'].'">
-						</label>
-					</p>
-					<p class="link-p">
-						<label class="link-edit" for="custom-menu-item-name">
-							<span>新窗口打开 </span>
-							<input type="text" name="menu-item['.$menu['id'].'][menu-item-newtable]" class="checkbox" value="'.$menu['newtable'].'" style="display: none;">
-						</label>
-					</p>
-					<p class="button-controls">
-						<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text"  onclick="del_link('.$menu['id'].',\''.$menuID.'\');return false;">删除链接</span></button>
-						<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text" onclick="save_link('.$menu['id'].');return false;">保存链接</span></button>
-					</p>
-				</div>
-				<span id="'.$menu['id'].'"></span>
-			</li>';
-        if ($value == 'null') {
-            $html .= $html_tmp;
-        } else {
-            $html = str_replace('<span id="'.$value.'"></span>', '<ol>'.$html_tmp.'</ol><span id="'.$value.'"></span>', $html);
-        }
+					<div class="menu-item-settings" style="display: none;">
+						<p class="link-p">
+							<label class="link-edit" for="menu-item['.$menu['id'].'][menu-item-url]">
+								<span>URL</span>
+								<input name="menu-item['.$menu['id'].'][menu-item-url]" type="text" class="code menu-item-textbox custom-menu-item-url" value="'.$menu['url'].'">
+							</label>
+						</p>
+						<p class="link-p">
+							<label class="link-edit" for="menu-item['.$menu['id'].'][menu-item-title]">
+								<span>描述</span>
+								<input name="menu-item['.$menu['id'].'][menu-item-title]" type="text" class="regular-text menu-item-textbox input-with-default-title custom-menu-item-title" value="'.$menu['title'].'">
+							</label>
+						</p>
+						<p class="link-p">
+							<label class="link-edit" for="custom-menu-item-name">
+								<span>新窗口打开 </span>
+								<input type="text" name="menu-item['.$menu['id'].'][menu-item-newtable]" class="checkbox" value="'.$menu['newtable'].'" style="display: none;">
+							</label>
+						</p>
+						<p class="button-controls">
+							<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text"  onclick="del_link('.$menu['id'].',\''.$menuID.'\');return false;">删除链接</span></button>
+							<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text" onclick="save_link('.$menu['id'].');">保存链接</span></button>
+						</p>
+					</div>
+					<span id="'.$menu['id'].'"></span>
+				</li>';
+	        if ($value == 'null') {
+	            $html .= $html_tmp;
+	        } else {
+	            $html = str_replace('<span id="'.$value.'"></span>', '<ol>'.$html_tmp.'</ol><span id="'.$value.'"></span>', $html);
+	        }
+	    }
+   		echo $html;
     }
-    echo $html;
     ?>
 
 							</ol>

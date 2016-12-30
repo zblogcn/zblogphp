@@ -12,6 +12,10 @@ if (GetVars('creat', 'POST') == 'new') {
     linkmanage_creatNav(GetVars('id', 'POST'));
 }
 
+if (GetVars('del', 'GET')) {
+    linkmanage_deleteNav(GetVars('del', 'GET'));
+}
+
 $blogtitle = '导航链接管理';
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';

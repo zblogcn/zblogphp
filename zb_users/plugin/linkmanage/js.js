@@ -42,22 +42,26 @@ function edit_menu(id){
 }
 
 function del_menu(id){
-	window.location.href="menuedit.php?del="+id;
+	window.location.href="main.php?del="+id;
 }
 
 function postsort(){
-	serialized = $('#menu-edit-body-content .nav-menu').nestedSortable('serialize',{ attribute:"sid"});
-	console.log(serialized);
-	$.post("save.php?type=sort", $("#menuName").serialize()+'&'+serialized , function(data) {
-		$( "#message" ).dialog();
-		return false;
-	});
+	var serialized = $('#menu-edit-body-content .nav-menu').nestedSortable('serialize',{ attribute:"sid"});
+	console.log($("#menuName").serialize()+'&'+serialized+'&links='+ JSON.stringify(links_json));
+	$.post("save.php?type=sort", $("#menuName").serialize()+'&'+serialized+'&links='+ JSON.stringify(links_json), 
+		function(data) {
+			$( "#message" ).dialog();
+			return false;
+		});
 }
 
-
+//删除链接
 function del_link(id,menuid){
+
+	delete links_json['ID'+id];
+
 	$.post(
-		"save.php?type=del_link", 
+		"save.php?type=del_link",
 		{
 			"id":id,'menuid':menuid
 		},
@@ -72,50 +76,56 @@ function del_link(id,menuid){
 	});
 }
 
+//编辑保存
 function save_link(id){
 	var input_name = "input[name='menu-item["+id+"][menu-item-";//url]']
 	//$("input[name='menu-item[1452176482476][menu-item-url]']").val()
-	var id = id;
-	var title = $(input_name+"title]']").val();
-	var url = $(input_name+"url]']").val();
-	var newtable = $(input_name+"newtable]']").val();
+	links_json['ID'+id].title = $(input_name+"title]']").val();
+	links_json['ID'+id].url = $(input_name+"url]']").val();
+	links_json['ID'+id].newtable = $(input_name+"newtable]']").val();
 	//var img = $(input_name+"img]']").val();
-	var img = '';
+	links_json['ID'+id].img = '';
+	links_json['ID'+id].menuid = $("input[name='id']").val();
+
+	//links_json['ID'+id] = {id:id,title:title,url:url,newtable:newtable,img:img,type:type,menuid:menuid};
 
 	$.post(
 		"save.php?type=save_link",
-		{
-			id:id,title:title,url:url,newtable:newtable,img:img
-		},
+		links_json['ID'+id],
 		function(data) {
-			//$( "#message" ).dialog();
+			$( "#message" ).dialog();
+				//$(input_name+"title]']").val(data.title);
+				console.log(data.title);
 			return false;
 		});
 }
 
+//添加链接
 function add_link(item,type,menuid){
 	var foo = [];
 	if (type !== "custom"){
 		links = $(item).parent().prev().find("select");
 		links.find(":selected").each(function(i, selected){
 		  foo[i] = {
-		  	"id":new Date().getTime(),
+		  	"id":new Date().getTime() + Math.random().toString(10).substring(2,5),
 		  	"title":$(selected).text(),
 		  	"url":$(selected).val(),
 		  	"newtable":0,
 		  	"img":"",
 		  	"type":type,
+		  	"menuid":menuid
 		  };
 		  create_item(foo[i],type,menuid);
 		});
 	} else {
 		foo[0] = {
-		  	"id":new Date().getTime(),
+		  	"id":new Date().getTime() + Math.random().toString(10).substring(2,5),
 		  	"title":"新链接",
 		  	"url":"http://",
 		  	"newtable":0,
 		  	"img":"",
 		  	"type":type,
+		  	"menuid":menuid
 		}
 		create_item(foo[0],type,menuid)
 	}
@@ -127,6 +137,8 @@ function create_item(item,type,menuid){
 	if (type == "custom"){
 		display = "";
 	}
+
+	links_json['ID'+item.id] = item;
 
 	$('<li sid="menuItem_'+ item.id +'">'+
 '		<div class="menu-item-bar">'+
@@ -164,9 +176,14 @@ function create_item(item,type,menuid){
 '		</div>'+
 '	</li>').appendTo("#menu-edit-body-content .nav-menu");
 
-	$.post("save.php?type=creat_link", item ,
+/*	$.post("save.php?type=creat_link", item ,
 		function(data) {
 			console.log(data);
 			return false;
-	});
+	});*/
+}
+
+function reset_item(){
+	$("#menu-edit-body-content").empty();
+	links_json = {};
 }
