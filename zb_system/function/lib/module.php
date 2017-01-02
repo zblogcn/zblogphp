@@ -61,18 +61,6 @@ class Module extends Base {
         if ($name == 'NoRefresh') {
             return (bool) $this->Metas->norefresh;
         }
-        if ($name == 'Name' && $this->Source == 'system') {
-            switch ($this->FileName) {
-                case 'calendar':
-                    return $zbp->lang['msg']['calendar'];
-                case 'controlpanel':
-                    return $zbp->lang['msg']['control_panel'];
-                case 'searchpanel':
-                    return $zbp->lang['msg']['search'];
-                default:
-                    return $zbp->lang['msg']['module_'.$this->FileName];
-            }
-        }
 
         return parent::__get($name);
     }
