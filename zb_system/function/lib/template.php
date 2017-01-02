@@ -488,6 +488,12 @@ class Template {
             $zbp->ShowError(86, __FILE__, __LINE__);
         }
 
+		$ak = array_keys($this->staticTags);
+		$av = array_values($this->staticTags);
+		foreach($zbp->modulesbyfilename as &$m)
+			$m->Content = str_replace($ak,$av,$m->Content);
+		unset($ak,$av);
+
         #入口处将tags里的变量提升全局!!!
         foreach ($this->templateTags as $key => &$value) {
             $$key = &$value;
@@ -658,7 +664,7 @@ class Template {
         $this->staticTags = $t + $o;
     }
     public function ReplaceStaticTags($s) {
-        $s = str_replace(array_keys($this->replaceTags), array_values($this->replaceTags), $s);
+        $s = str_replace(array_keys($this->staticTags), array_values($this->staticTags), $s);
         return $s;
     }
 }

@@ -83,8 +83,6 @@ class Module extends Base {
     public function Save() {
         global $zbp;
 
-        $this->Content = str_replace($zbp->host, '{$host}', $this->Content);
-
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Save'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
@@ -104,7 +102,7 @@ class Module extends Base {
 
             return true;
         }
-        //return parent::Save();
+
         //防Module重复保存的机制
         $m=$zbp->GetListType('Module',
                     $zbp->db->sql->get()->select($zbp->table['Module'])
