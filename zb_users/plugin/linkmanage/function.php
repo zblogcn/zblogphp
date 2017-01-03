@@ -131,7 +131,7 @@ function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$li
 {
     global $zbp;
     $html = '';
-    if (is_null($links_json)) {
+    if (!is_null($links_json)) {
         $links = json_decode($links_json, true);
     } else {
         $links = linkmanage_getLink($menuID);
