@@ -230,7 +230,7 @@ $(document).ready(function(){
 	$('input.checkbox[value!="1"]').after('<span class="imgcheck"></span>');
 
 
-	$('span.imgcheck').click(function(){ChangeCheckValue(this)})
+	$("body").on("click","span.imgcheck", function(){ChangeCheckValue(this)});
 
 	//batch
 	$("#batch a").bind("click", function(){ BatchContinue();$("#batch p").html("<?php echo $lang['msg']['batch_operation_in_progress']; ?>");});

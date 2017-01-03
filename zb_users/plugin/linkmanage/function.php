@@ -3,8 +3,8 @@
 function linkmanage_SubMenu($id)
 {
     $arySubMenu = array(
-        0 => array('导航菜单管理', 'main.php', 'left', false),
-        1 => array('导航链接编辑', '', 'left', false),
+        0 => array('菜单管理', 'main.php', 'left', false),
+        1 => array('链接编辑', '', 'left', false),
         //2 => array('位置管理', 'location.php', 'left', false),
     );
     foreach ($arySubMenu as $k => $v) {
@@ -12,72 +12,69 @@ function linkmanage_SubMenu($id)
     }
 }
 
-function linkmanageGetNav()
+//获取菜单列表
+function linkmanage_getMenus()
 {
     global $zbp;
 
-    return json_decode($zbp->Config('linkmanage')->Nav, true);
+    return json_decode($zbp->Config('linkmanage')->Menus, true);
 }
 
-function linkmanageGetMenu()
+//获取菜单链接列表
+function linkmanage_getLink($menuID)
 {
     global $zbp;
-
-    return json_decode($zbp->Config('linkmanage')->Menu, true);
-}
-
-
-function linkmanage_getLink($nav_name = null)
-{
-    global $zbp;
-    $t = '';//json
-    if (isset($zbp->modulesbyfilename['linkmanage_'.$nav_name])) {
-        $t = $zbp->modulesbyfilename['linkmanage_'.$nav_name]->Metas->linkmanage_links;
+    $t = '{}';//json
+    if (isset($zbp->modulesbyfilename['linkmanage_'.$menuID])) {
+        $t = $zbp->modulesbyfilename['linkmanage_'.$menuID]->Metas->linkmanage_links;
     }
     return json_decode($t, true);
 }
 
-function linkmanage_getLink_sort($nav_name = null)
+//获取菜单链接排序
+function linkmanage_getLink_sort($menuID)
 {
     global $zbp;
     $t = '{}';
-    if (isset($zbp->modulesbyfilename['linkmanage_'.$nav_name])) {
-        $t = $zbp->modulesbyfilename['linkmanage_'.$nav_name]->Metas->linkmanage_link_sort;
+    if (isset($zbp->modulesbyfilename['linkmanage_'.$menuID])) {
+        $t = $zbp->modulesbyfilename['linkmanage_'.$menuID]->Metas->linkmanage_link_sort;
     }
     return json_decode($t, true);
 }
 
 //创建导航
-function linkmanage_creatNav($nav_name)
+function linkmanage_creatMenu($menuID)
 {
     global $zbp,$sysMenu;
-    $n = linkmanageGetNav();
-    if (preg_match("/$nav_name/", $sysMenu)) {
-        $zbp->ShowHint('bad', 'ID与系统导航冲突！请更改');
-    } elseif (isset($n['data'][$nav_name])) {
+    $n = linkmanage_getMenus();
+    if (preg_match("/$menuID/", $sysMenu)) {
+        $zbp->ShowHint('bad', 'ID与系统菜单冲突！请更改');
+    } elseif (isset($n['data'][$menuID])) {
         $zbp->ShowHint('bad', 'ID已存在！请更改');
     } else {
-        $n['data'][$nav_name] = array(
-            'id' => $nav_name,
+        $n['data'][$menuID] = array(
+            'id' => $menuID,
             'name' => GetVars('name', 'POST'),
             'location' => '',
         );
         $n['num'] = count($n['data']);
-        $zbp->Config('linkmanage')->Nav = json_encode($n);
-        $zbp->Config('linkmanage')->$nav_name = '{}'; //排序值
+        $zbp->Config('linkmanage')->Menus = json_encode($n);
         $zbp->SaveConfig('linkmanage');
 
         //创建模块
-        //TODO 生成链接HTML内容
-        if (!isset($zbp->modulesbyfilename['linkmanage_'.$nav_name])) {
+        if (!isset($zbp->modulesbyfilename['linkmanage_'.$menuID])) {
             $t = new Module();
             $t->Name = '菜单：'.GetVars('name', 'POST');
-            $t->FileName = 'linkmanage_'.$nav_name;
-            $t->Source = 'plugin_'.$nav_name;
+            $t->FileName = 'linkmanage_'.$menuID;
+            $t->Source = 'plugin_'.$menuID;
             $t->SidebarID = 0;
             $t->Content = '';
-            $t->HtmlID = 'linkmanage_'.$nav_name;
+            $t->HtmlID = 'linkmanage_'.$menuID;
             $t->Type = 'ul';
+
+            $t->Metas->linkmanage_links = '{}';
+            $t->Metas->linkmanage_link_sort = '{}';
+
             $t->Save();
         }
         Redirect('main.php');
@@ -85,77 +82,71 @@ function linkmanage_creatNav($nav_name)
 }
 
 // 删除导航
-function linkmanage_deleteNav($nav_name)
+function linkmanage_deleteMenu($menuID)
 {
     global $zbp,$sysMenu;
-    if (preg_match("/$nav_name/", $sysMenu)) {
-        $zbp->ShowHint('bad', '系统链接不能删除');
+    if (preg_match("/$menuID/", $sysMenu)) {
+        $zbp->ShowHint('bad', '系统菜单不能删除');
     } else {
-        $n = linkmanageGetNav();
-        unset($n['data'][$nav_name]);
+        $n = linkmanage_getMenus();
+        unset($n['data'][$menuID]);
         $n['num'] = count($n['data']);
-        $zbp->Config('linkmanage')->Nav = json_encode($n);
-        $links = json_decode($zbp->Config('linkmanage')->Menu, true);
-        foreach (json_decode($zbp->Config('linkmanage')->$nav_name, true) as $key => $value) {
-            unset($links['ID'.$key]);
-        }
-        $zbp->Config('linkmanage')->Menu = json_encode($links); //链接
-        $zbp->Config('linkmanage')->Del($nav_name); //排序值
+        $zbp->Config('linkmanage')->Menus = json_encode($n);
         $zbp->SaveConfig('linkmanage');
 
-
         //删除模块
-        $m = $zbp->modulesbyfilename['linkmanage_'.$nav_name];
+        $m = $zbp->modulesbyfilename['linkmanage_'.$menuID];
         $m->Del();
 
         Redirect('main.php');
     }
 }
 // 修改、保存导航排序
-function linkmanage_saveNav()
+function linkmanage_saveMenu()
 {
     global $zbp;
     $menuID = GetVars('id', 'POST');
-    $menuName = GetVars('MenuName', 'POST');
+    $menuName = GetVars('menuname', 'POST');
 
     $links_json = GetVars('links', 'POST');
 
     if ($menuID) {
-        $n = linkmanageGetNav();
+        $n = linkmanage_getMenus();
         //保存菜单名
         $n['data'][$menuID]['name'] = $menuName;
-        $zbp->Config('linkmanage')->Nav = json_encode($n);
-        //保存菜单链接排序
-        $link_sort = json_encode(GetVars('menuItem', 'POST'));
-        $zbp->Config('linkmanage')->$menuID = $link_sort;
+        $zbp->Config('linkmanage')->Menus = json_encode($n);
         $zbp->SaveConfig('linkmanage');
 
-
-        //修改模块
+        //保存菜单链接排序
+        $link_sort = json_encode(GetVars('menuItem', 'POST'));
         linkmanage_updataModule($menuID,$menuName,$links_json,$link_sort);
 
     }
     echo $link_sort;
-    //$zbp->ShowHint('good', '成功保存菜单设置！');
-    //Redirect('menuedit.php?id='.$menuID);
+    die();
 }
 
-
-function linkmanage_updataModule($menuID,$menuName,$links_json = null,$link_sort = null)
+//更新模块内容
+function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$link_sort)
 {
     global $zbp;
-    //链接组装
     $html = '';
-    //echo var_dump($link_sort == 'null');
-    //die();
-    $links = json_decode($links_json, true);
+    if (is_null($links_json)) {
+        $links = json_decode($links_json, true);
+    } else {
+        $links = linkmanage_getLink($menuID);
+    }
     if ($link_sort !== 'null'){
         $sort = json_decode($link_sort, true);
-    //$link_sort = json_decode($zbp->Config('linkmanage')->$menuID, true);
         foreach ($sort as $key => $value) {
-            $menu = $links['ID'.$key];
+            $link = $links['ID'.$key];
 
-            $html_tmp = '<li class="li-item" id="menuItem_'.$menu['id'].'"><a href="'.$menu['url'].'" title="'.$menu['title'].'">'.$menu['title'].'<a><span id="'.$menu['id'].'"></span></li>';
+            $newtable_tmp = '';
+            if($link['newtable']){
+                $newtable_tmp = 'target="_blank"';
+            }
+
+            $html_tmp = '<li class="li-item" id="menuItem_'.$link['id'].'"><a href="'.$link['url'].'" title="'.$link['title'].'" ' .$newtable_tmp .'>'.$link['title'].'<a><span id="'.$link['id'].'"></span></li>';
 
             if ($value == 'null') {
                 $html .= $html_tmp;
@@ -167,8 +158,8 @@ function linkmanage_updataModule($menuID,$menuName,$links_json = null,$link_sort
         $html=preg_replace("/<\/ul><ul class=\"ul-subitem\">/si","",$html); //过滤ul标签
     } else {
         $html = '';
-        $links_json = '';
-        $link_sort = '';
+        $links_json = '{}';
+        $link_sort = '{}';
     }
 
     //修改模块
@@ -185,7 +176,9 @@ function linkmanage_updataModule($menuID,$menuName,$links_json = null,$link_sort
         $t->Type = 'ul';
     }
 
-    $t->Name = '菜单：'.$menuName;
+    if(!is_null($menuName)) {
+        $t->Name = '菜单：'.$menuName;
+    }
     $t->Content = $html;
 
     $t->Metas->linkmanage_links = $links_json;
@@ -195,53 +188,55 @@ function linkmanage_updataModule($menuID,$menuName,$links_json = null,$link_sort
 }
 
 
-
 // 创建、编辑保存单链接
-function linkmanage_saveLink_s($nav_name)
+function linkmanage_saveLink_s($menuID)
 {
     global $zbp;
 
     //modulelink
-    $links = linkmanage_getLink($nav_name);
-    $new_menu = array();
+    $links = linkmanage_getLink($menuID);
+    $new_link = array();
+    $new_check = false;
+
     foreach ($_POST as $key => $value) {
-        $new_menu[$key] = $value;
+        $new_link[$key] = $value;
     }
     //$new_menu['type'] = $links['ID'.$new_menu['id']]['type'];
-    $links['ID'.$new_menu['id']] = $new_menu;
+    if (!isset($links['ID'.$new_link['id']])) {
+        $new_check = true;
+    }
 
-    if (isset($zbp->modulesbyfilename['linkmanage_'.$nav_name])) {
-        $t = $zbp->modulesbyfilename['linkmanage_'.$nav_name];
+    $links['ID'.$new_link['id']] = $new_link;
+
+    if (isset($zbp->modulesbyfilename['linkmanage_'.$menuID])) {
+        $t = $zbp->modulesbyfilename['linkmanage_'.$menuID];
     }
     else {
         $t = new Module();
-        $t->FileName = 'linkmanage_'.$nav_name;
-        $t->Source = 'plugin_'.$nav_name;
-        $t->HtmlID = 'linkmanage_'.$nav_name;
+        $t->FileName = 'linkmanage_'.$menuID;
+        $t->Source = 'plugin_'.$menuID;
+        $t->HtmlID = 'linkmanage_'.$menuID;
         $t->Type = 'ul';
     }
     $t->Metas->linkmanage_links = json_encode($links);
     $t->save();
 
-    echo json_encode($new_menu);
+    $new_link['new_check'] = $new_check;
+    echo json_encode($new_link);
     die();
 }
 
-
 // 删除链接函数
-function linkmanage_deleteLink($linkId, $menuID)
+function linkmanage_deleteLink($linkID, $menuID)
 {
     global $zbp;
 
     $links = linkmanage_getLink($menuID);
     $link_sort = linkmanage_getLink_sort($menuID);
 
-    $n = linkmanageGetNav();
-    $menuName = $n['data'][$menuID]['name'];
-
     $have_sun = false;
     foreach ($link_sort as $key => $value) {
-        if ($value == $linkid) {
+        if ($value == $linkID) {
             $have_sun = true;
             break;
         }
@@ -249,18 +244,14 @@ function linkmanage_deleteLink($linkId, $menuID)
     if ($have_sun) {
         echo 1;
     } else {
-        unset($links['ID'.$linkid]);
-        unset($link_sort[$linkid]);
+        unset($links['ID'.$linkID]);
+        unset($link_sort[$linkID]);
         echo 0;
 
-       // $zbp->Config('linkmanage')->Menu = json_encode($links);
-       // $zbp->Config('linkmanage')->$nav_name = json_encode($link_sort);
-       // $zbp->SaveConfig('linkmanage');
-
-        linkmanage_updataModule($menuID,$menuName,json_encode($links),json_encode($link_sort));
+        linkmanage_updataModule($menuID,null,json_encode($links),json_encode($link_sort));
 
     }
-
+    echo json_encode($links);
     die();
 }
 

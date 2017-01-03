@@ -23,9 +23,10 @@ $(function() {
 			isTree: true, //树形
 			expandOnHover: 700,
 			startCollapsed: false,
-			change: function(){
-				console.log('Relocated Menu');
-			}
+			//doNotClear : true,
+			//change: function(){
+			//	console.log('Relocated Menu');
+			//}
 	});
 });
 
@@ -45,10 +46,10 @@ function del_menu(id){
 	window.location.href="main.php?del="+id;
 }
 
-function postsort(){
-	var serialized = $('#menu-edit-body-content .nav-menu').nestedSortable('serialize',{ attribute:"sid"});
-	console.log($("#menuName").serialize()+'&'+serialized+'&links='+ JSON.stringify(links_json));
-	$.post("save.php?type=sort", $("#menuName").serialize()+'&'+serialized+'&links='+ JSON.stringify(links_json), 
+function save_menusetting(){
+	var sort_serialized = $('#menu-edit-body-content .nav-menu').nestedSortable('serialize',{ attribute:"sid"});
+
+	$.post("save.php?type=save_menu", $("#menu-config").serialize()+'&'+sort_serialized+'&links='+ JSON.stringify(links_json),
 		function(data) {
 			$( "#message" ).dialog();
 			return false;
@@ -57,45 +58,63 @@ function postsort(){
 
 //删除链接
 function del_link(id,menuid){
-
-	delete links_json['ID'+id];
-
-	$.post(
-		"save.php?type=del_link",
-		{
-			"id":id,'menuid':menuid
-		},
-		function(data) {
-			if(data==1) {
-				alert('请先删除子链接再删除本链接');
-			} else {
-				$('li[sid$='+id+']').remove();
-				//$( "#message" ).dialog();
-			}
-		return false;
-	});
+	if($("li[sid='menuItem_" + id + "']").has("ol").length){
+		alert('请先删除子链接再删除本链接');
+	} else {
+		// $.post(
+		// 	"save.php?type=del_link",
+		// 	{
+		// 		"id":id,'menuid':menuid
+		// 	},
+		// 	function(data) {
+		// 		if(data==1) {
+		// 			alert('请先删除子链接再删除本链接');
+		// 		} else {
+		// 			$('li[sid$='+id+']').remove();
+		// 			delete links_json['ID'+id];
+		// 			//$( "#message" ).dialog();
+		// 		}
+		// 	return false;
+		// });
+		$('li[sid$='+id+']').remove();
+		delete links_json['ID'+id];
+	}
 }
 
-//编辑保存
+//编辑保存单链接
 function save_link(id){
-	var input_name = "input[name='menu-item["+id+"][menu-item-";//url]']
+	var input_name = "input[name='menu-item[" + id + "][menu-item-";//url]']
 	//$("input[name='menu-item[1452176482476][menu-item-url]']").val()
-	links_json['ID'+id].title = $(input_name+"title]']").val();
-	links_json['ID'+id].url = $(input_name+"url]']").val();
-	links_json['ID'+id].newtable = $(input_name+"newtable]']").val();
+	links_json['ID' + id].title = $(input_name + "title]']").val();
+	links_json['ID' + id].url = $(input_name + "url]']").val();
+	links_json['ID' + id].newtable = $(input_name + "newtable]']").val();
+	links_json['ID' + id].img = '';
+	links_json['ID' + id].menuid = $("input[name='id']").val();
 	//var img = $(input_name+"img]']").val();
-	links_json['ID'+id].img = '';
-	links_json['ID'+id].menuid = $("input[name='id']").val();
 
 	//links_json['ID'+id] = {id:id,title:title,url:url,newtable:newtable,img:img,type:type,menuid:menuid};
 
 	$.post(
 		"save.php?type=save_link",
-		links_json['ID'+id],
+		links_json['ID' + id],
 		function(data) {
-			$( "#message" ).dialog();
-				//$(input_name+"title]']").val(data.title);
-				console.log(data.title);
+			data = JSON.parse(data);
+			$("li[sid='menuItem_" + id + "'] .menu-item-title").html(data.title);
+			//if(data.new_check){
+			//	save_sort();
+			//}
+			return false;
+		});
+}
+
+//保存排序
+function save_sort(){
+	var menu_id = "menuid=" + $("input[name='id']").val();
+	var sort_serialized = $('#menu-edit-body-content .nav-menu').nestedSortable('serialize',{ attribute:"sid"});
+	$.post(
+		"save.php?type=save_sort",
+		menu_id + '&' + sort_serialized,
+		function(data) {
 			return false;
 		});
 }
@@ -167,6 +186,7 @@ function create_item(item,type,menuid){
 '				<label class="link-edit" for="custom-menu-item-name">'+
 '					<span>新窗口打开 </span>'+
 '					<input type="text" name="menu-item['+ item.id +'][menu-item-newtable]" class="checkbox" value="'+ item.newtable +'" style="display: none;">'+
+'					<span class="imgcheck"></span>'+
 '				</label>'+
 '			</p>'+
 '			<p class="button-controls">'+
@@ -176,11 +196,11 @@ function create_item(item,type,menuid){
 '		</div>'+
 '	</li>').appendTo("#menu-edit-body-content .nav-menu");
 
-/*	$.post("save.php?type=creat_link", item ,
-		function(data) {
-			console.log(data);
-			return false;
-	});*/
+	// $.post("save.php?type=creat_link", item ,
+	// 	function(data) {
+	// 		console.log(data);
+	// 		return false;
+	// });
 }
 
 function reset_item(){

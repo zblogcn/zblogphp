@@ -5,15 +5,15 @@ $zbp->Load();
 $action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('linkmanage')) {$zbp->ShowError(48);die();}
-$Navs = linkmanageGetNav();
-//$locals = linkmanageGetLocation();
+
+$Menus = linkmanage_getMenus();
 
 if (GetVars('creat', 'POST') == 'new') {
-    linkmanage_creatNav(GetVars('id', 'POST'));
+    linkmanage_creatMenu(GetVars('id', 'POST'));
 }
 
 if (GetVars('del', 'GET')) {
-    linkmanage_deleteNav(GetVars('del', 'GET'));
+    linkmanage_deleteMenu(GetVars('del', 'GET'));
 }
 
 $blogtitle = '导航链接管理';
@@ -27,7 +27,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 <div id="divMain">
   <div class="divHeader"><?php echo $blogtitle; ?></div>
-  <div class="SubMenu"><span class="m-left m-now">导航链接管理</span></div>
+  <div class="SubMenu"><span class="m-left m-now">菜单链接管理</span></div>
 
   <div id="divMain2">
 	<table border="1" class="tableFull tableBorder table_hover table_striped tableBorder-thcenter tdCenter">
@@ -39,7 +39,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 			<th>编辑</th>
 		</tr>
 		<?php
-			foreach ($Navs['data'] as $key => $value) {
+			foreach ($Menus['data'] as $key => $value) {
 				$menuid = $value['id'];
 				$location = ($value['location'] == '') ? '未使用' : $value['location'];
 				$button = linkmanage_edit_button($menuid);

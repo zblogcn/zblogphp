@@ -12,7 +12,7 @@ function ActivePlugin_linkmanage() {
 
 function linkmanage_TopMenu(&$m) {
 	global $zbp;
-	array_unshift($m, MakeTopMenu("root", '导航链接管理', $zbp->host . "zb_users/plugin/linkmanage/main.php", "", "topmenu_linkmanage"));
+	array_unshift($m, MakeTopMenu("root", '菜单链接管理', $zbp->host . "zb_users/plugin/linkmanage/main.php", "", "topmenu_linkmanage"));
 }
 
 
@@ -20,16 +20,16 @@ function InstallPlugin_linkmanage() {
 	global $zbp;
 	if (!$zbp->Config('linkmanage')->HasKey('Version')) {
 		$zbp->Config('linkmanage')->Version = '0.2';
-		$zbp->Config('linkmanage')->Nav = '{"num":4,"data":{"navbar":{"id":"navbar","name":"导航栏","location":""},"link":{"id":"link","name":"友情链接","location":""},"favorite":{"id":"favorite","name":"网站收藏","location":""},"misc":{"id":"misc","name":"图标汇集","location":""}}}';
-		$zbp->Config('linkmanage')->Menu = '{}'; //菜单集{[{"id":"123456","title":"导航栏","url":"","newtable":"true","img":"","type":""}]}
-		$zbp->Config('linkmanage')->Location = '{}';
+		$zbp->Config('linkmanage')->Menus = '{"num":4,"data":{"navbar":{"id":"navbar","name":"导航栏","location":""},"link":{"id":"link","name":"友情链接","location":""},"favorite":{"id":"favorite","name":"网站收藏","location":""},"misc":{"id":"misc","name":"图标汇集","location":""}}}';
+		//$zbp->Config('linkmanage')->Menu = '{}'; //菜单集{[{"id":"123456","title":"导航栏","url":"","newtable":"true","img":"","type":""}]}
+		//$zbp->Config('linkmanage')->Location = '{}';
 
-		$zbp->Config('linkmanage')->navbar = '{}';
-		$zbp->Config('linkmanage')->link = '{}';
-		$zbp->Config('linkmanage')->favorite = '{}';
-		$zbp->Config('linkmanage')->misc = '{}';
+		//$zbp->Config('linkmanage')->navbar = '{}';
+		//$zbp->Config('linkmanage')->link = '{}';
+		//$zbp->Config('linkmanage')->favorite = '{}';
+		//$zbp->Config('linkmanage')->misc = '{}';
 		$zbp->SaveConfig('linkmanage');
 	}
-	$zbp->SaveConfig('linkmanage');
 }
+
 function UninstallPlugin_linkmanage() {}

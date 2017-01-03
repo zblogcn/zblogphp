@@ -15,8 +15,8 @@ if (!$zbp->CheckPlugin('linkmanage')) {
 }
 
 switch (GetVars('type', 'GET')) {
-    case 'sort':
-        linkmanage_saveNav();
+    case 'save_menu':
+        linkmanage_saveMenu();
         break;
     case 'del_link':
         linkmanage_deleteLink(GetVars('id', 'POST'),GetVars('menuid', 'POST'));
@@ -24,6 +24,10 @@ switch (GetVars('type', 'GET')) {
     case 'save_link':
         //linkmanage_saveLink();
         linkmanage_saveLink_s(GetVars('menuid', 'POST'));
+        break;
+    case 'save_sort':
+        //linkmanage_saveLink();
+        linkmanage_saveLink_s_sort(GetVars('menuid', 'POST'));
         break;
 /*    case 'creat_link':
         linkmanage_creatLink();

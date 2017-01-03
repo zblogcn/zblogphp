@@ -156,6 +156,7 @@
     line-height: 1.5em;
     position: relative;
     margin: 9px 0 0;
+    cursor: move;
 }
 .menu-item-bar .menu-item-handle {
     border: 1px solid #dfdfdf;

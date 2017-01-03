@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>linkmanage</id>
-<name>链接管理</name>
+<name>菜单链接管理</name>
 <url>http://app.zblogcn.com/?auth=4</url>
 <note>以友好的界面管理博客各类导航</note>
 <description></description>
@@ -21,7 +21,7 @@
 <adapted>151525</adapted>
 <version>1.0</version>
 <pubdate>2015-09-30</pubdate>
-<modified>2016-12-22</modified>
+<modified>2017-01-03</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>
