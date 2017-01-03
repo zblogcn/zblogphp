@@ -664,7 +664,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
     global $zbp;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($page, $cate, $auth, $date, $tags, $isrewrite);
+        $fpreturn = call_user_func_array( $fpname, func_get_args() );
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 

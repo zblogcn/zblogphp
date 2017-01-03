@@ -2140,7 +2140,7 @@ class ZBlogPHP {
      */
     public function GetMemberByNameOrAlias($name) {
         $name = trim($name);
-        if (!$name || !CheckRegExp($name, '[username]')) {
+        if (!$name || !(CheckRegExp($name, '[username]')||CheckRegExp($name, '[nickname]'))  ) {
             return new Member;
         }
 
