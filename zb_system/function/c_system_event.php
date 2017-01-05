@@ -664,11 +664,8 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false) {
     global $zbp;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
-        if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
-            $fpreturn = call_user_func_array( $fpname, func_get_args() );
-        } else {
-            $fpreturn = $fpname($page, $cate, $auth, $date, $tags, $isrewrite);
-        }
+        $fpargs = func_get_args();
+        $fpreturn = call_user_func_array( $fpname, $fpargs );
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
@@ -1006,11 +1003,10 @@ function ViewPost($object, $theSecondParam, $isrewrite = false) {
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
-        if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
-            $fpreturn = call_user_func_array( $fpname, func_get_args() );
-        } else {
-            $fpreturn = $fpname($object, $theSecondParam, $isrewrite);
-        }
+        $fpargs = func_get_args();
+        $fpargs[0] = $id;
+        $fpargs[1] = $alias;
+        $fpreturn = call_user_func_array( $fpname, $fpargs );
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 

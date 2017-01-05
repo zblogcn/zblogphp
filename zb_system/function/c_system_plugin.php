@@ -775,6 +775,72 @@ DefinePluginFilter('Filter_Plugin_Admin_ArticleMng_Table');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Admin_PageMng_Table
+'参数:&$article,&$tabletds,&$tableths
+'说明:页面管理页表处理(1.5.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_PageMng_Table');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_CategoryMng_Table
+'参数:&$category,&$tabletds,&$tableths
+'说明:分类管理页表处理(1.5.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_CategoryMng_Table');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_CommentMng_Table
+'参数:&$cmt,&$tabletds,&$tableths,$article
+'说明:评论管理页表处理(1.5.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_CommentMng_Table');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_MemberMng_Table
+'参数:&$member,&$tabletds,&$tableths
+'说明:会员管理页表处理(1.5.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_MemberMng_Table');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_UploadMng_Table
+'参数:&$upload,&$tabletds,&$tableths
+'说明:附件管理页表处理(1.5.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_UploadMng_Table');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_TagMng_Table
+'参数:&$tag,&$tabletds,&$tableths
+'说明:Tag管理页表处理(1.5.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_TagMng_Table');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Edit_Begin
 '参数:
 '说明:文章页面编辑页开始接口
