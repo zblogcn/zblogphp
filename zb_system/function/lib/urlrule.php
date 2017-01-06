@@ -188,18 +188,22 @@ class UrlRule {
             }
         }
         if ($type == 'page' || $type == 'article') {
-            if (strpos($url, '%alias%') === false) {
-                $url = $url . '$';
+            if (strpos($url, '%id%') !== false) {
                 $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
-            } else {
-                $url = $url . '$';
+            }
+            if (strpos($url, '%alias%') !== false) {                
                 if ($type == 'article') {
                     $url = str_replace('%alias%', '(?P<alias>[^/]+)', $url);
                 } else {
                     $url = str_replace('%alias%', '(?P<alias>.+)', $url);
                 }
             }
-            $url = str_replace('%category%', '(?P<category>(([^\./_]*/?)<:1,4:>))', $url);
+            $url = $url . '$';
+            if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+                $url = str_replace('%category%', '(?P<category>(([^\./_]*/?)<:1,4:>))', $url);
+            }else{
+                $url = str_replace('%category%', '(?P<category>(([^\./_]*/?)<:1,3:>))', $url);
+            }
             $url = str_replace('%author%', '(?P<author>[^\./_]+)', $url);
             $url = str_replace('%year%', '(?P<year>[0-9]<:4:>)', $url);
             $url = str_replace('%month%', '(?P<month>[0-9]<:1,2:>)', $url);
@@ -403,10 +407,11 @@ class UrlRule {
             }
         }
         if ($type == 'page' || $type == 'article') {
-            if (strpos($url, '%alias%') === false) {
+            if (strpos($url, '%id%') !== false) {
                 $url = $url . '(\?.*)? ' . $zbp->cookiespath . 'index\.php\?id=$1&rewrite=1';
                 $url = str_replace('%id%', '([0-9]+)', $url);
-            } else {
+            }
+            if (strpos($url, '%alias%') !== false) {
                 $url = $url . '(\?.*)? ' . $zbp->cookiespath . 'index\.php\?alias=$1&rewrite=1';
                 if ($type == 'article') {
                     $url = str_replace('%alias%', '(?!zb_)([^/]+)', $url);
