@@ -26,11 +26,11 @@ unset($post_data['password']);
         <div class="login loginw">
           <form id="frmLogin" method="post" action="#">
             <?php if (!$GLOBALS['option']['ZC_DEBUG_MODE']) {?>
-            <div class="divHeader lessinfo" style="margin-bottom:10px;"><b><?php echo $this->message; ?></b></div>
+            <div class="divHeader lessinfo" style="margin-bottom:10px;"><b><?php echo $error->message; ?></b></div>
             <div class="content lessinfo">
               <div>
                 <p style="font-weight: normal;"><?php echo $GLOBALS['lang']['msg']['possible_causes_error']; ?></p>
-                <?php echo $this->possible_causes_of_the_error(); ?>
+                <?php echo $error->possible_causes_of_the_error(); ?>
               </div>
             </div>
             <?php }?>
@@ -39,7 +39,7 @@ unset($post_data['password']);
             <div class="content moreinfo">
               <div>
                 <p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p>
-                <?php echo '(' . $this->type . ')' . $this->typeName . ' :   ' . ($this->messagefull); ?>
+                <?php echo '(' . $error->type . ')' . $error->typeName . ' :   ' . ($error->messagefull); ?>
                 <?php echo ' (' . ZC_VERSION_FULL . ') ';
                   if (!in_array('Status: 404 Not Found', headers_list())) {
                     echo '(' . GetEnvironment() . ') ';
@@ -48,15 +48,15 @@ unset($post_data['password']);
               </div>
               <div>
                 <p><?php echo $GLOBALS['lang']['msg']['file_line']; ?></p>
-                <i><?php echo $this->file ?></i><br/>
+                <i><?php echo $error->file ?></i><br/>
                 <table style="width: 100%">
                   <tbody>
 
                     <?php
-                      $aFile = $this->get_code($this->file, $this->line);
+                      $aFile = $error->get_code($error->file, $error->line);
                       foreach ($aFile as $iInt => $sData) {
                     ?>
-	                    <tr<?php echo($iInt + 1 == $this->line ? ' style="background:#75BAFF"' : '') ?>>
+	                    <tr<?php echo($iInt + 1 == $error->line ? ' style="background:#75BAFF"' : '') ?>>
 	                      <td style='width:50px'><?php echo $iInt + 1 ?></td>
 	                      <td><?php echo $sData ?></td>
 	                    </tr>
@@ -104,7 +104,7 @@ unset($post_data['password']);
                       	<code>
 	                      	<?php
                           if (isset($sData['line'])) {
-                            $fileContent = $this->get_code($sData['file'], $sData['line']);
+                            $fileContent = $error->get_code($sData['file'], $sData['line']);
                              echo $fileContent[$sData['line'] - 1];
                           }
                           ?>

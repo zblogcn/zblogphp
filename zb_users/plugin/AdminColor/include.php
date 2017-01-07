@@ -6,11 +6,28 @@ $Filter_Plugin_AdminColor_CSS_Pre = array();
 
 function ActivePlugin_AdminColor() {
     global $zbp;
-    Add_Filter_Plugin('Filter_Plugin_Admin_SiteInfo_SubMenu', 'AdminColor_ColorButton');
     Add_Filter_Plugin('Filter_Plugin_Admin_Header', 'AdminColor_Css');
     Add_Filter_Plugin('Filter_Plugin_Login_Header', 'AdminColor_Css');
     Add_Filter_Plugin('Filter_Plugin_Other_Header', 'AdminColor_Css');
     $zbp->LoadLanguage('plugin', 'AdminColor');
+}
+
+function InstallPlugin_AdminColor() {
+    global $zbp;
+    if($zbp->HasConfig('AdminColor') == false){
+      $zbp->Config('AdminColor')->ColorID =  0;
+      $zbp->Config('AdminColor')->BlodColor =  (string) $GLOBALS['AdminColor_BlodColor'][0];
+      $zbp->Config('AdminColor')->NormalColor =  (string) $GLOBALS['AdminColor_NormalColor'][0];
+      $zbp->Config('AdminColor')->LightColor =  (string) $GLOBALS['AdminColor_LightColor'][0];
+      $zbp->Config('AdminColor')->HighColor =  (string) $GLOBALS['AdminColor_HighColor'][0];
+      $zbp->Config('AdminColor')->AntiColor =  (string) $GLOBALS['AdminColor_AntiColor'][0];
+      $zbp->SaveConfig('AdminColor');
+    }
+}
+
+function UninstallPlugin_AdminColor() {
+    global $zbp;
+    $zbp->DelConfig('AdminColor');
 }
 
 function AdminColor_Css() {
@@ -49,9 +66,10 @@ function AdminColor_ColorButton() {
         $s .= "&nbsp;&nbsp;<a href='" . $zbp->host . "zb_users/plugin/AdminColor/css.php?setcolor=" . $i . "'><span style='height:16px;width:16px;background:" . $GLOBALS['AdminColor_NormalColor'][$i] . "'><img src='" . $zbp->host . "zb_system/image/admin/none.gif' width='16' height='16' alt='' /></span></a>&nbsp;&nbsp;";
     }
 
-    $s .= "&nbsp;&nbsp;<a href='" . $zbp->host . "zb_users/plugin/AdminColor/css.php?setcolor=10' title='文艺范'><span style='height:16px;width:16px;background:#eee;'><img src='" . $zbp->host . "zb_system/image/admin/none.gif' width='16' alt=''/></span></a>&nbsp;&nbsp;";
+    $s .= "&nbsp;&nbsp;<a href='" . $zbp->host . "zb_users/plugin/AdminColor/css.php?setcolor=9' title='文艺范'><span style='height:16px;width:16px;background:#eee;'><img src='" . $zbp->host . "zb_system/image/admin/none.gif' width='16' alt=''/></span></a>&nbsp;&nbsp;";
 
-    echo "<script type='text/javascript'>$('.divHeader').append(\"<div id='admin_color'>" . $s . "</div>\");</script>";
+    echo "<div id='admin_color'>" . $s .  "</div>";
+    //echo "<script type='text/javascript'>$('.divHeader').append(\"<div id='admin_color'>" . $s . "</div>\");</script>";
 }
 
 $AdminColor_BlodColor[0] = '#1d4c7d';
@@ -108,14 +126,14 @@ $AdminColor_LightColor[8] = '#ffb3a7';
 $AdminColor_HighColor[8] = '#da4b4a';
 $AdminColor_AntiColor[8] = '#ff000c';
 
-$AdminColor_BlodColor[9] = '#333333';
-$AdminColor_NormalColor[9] = '#555555';
-$AdminColor_LightColor[9] = '#ababab';
-$AdminColor_HighColor[9] = '#8b8b8b';
-$AdminColor_AntiColor[9] = '#d60000';
+$AdminColor_BlodColor[9] = '#4a380b';
+$AdminColor_NormalColor[9] = '#896a1c';
+$AdminColor_LightColor[9] = '#caa855';
+$AdminColor_HighColor[9] = '#b08313';
+$AdminColor_AntiColor[9] = '#2227e0';
 
-$AdminColor_BlodColor[10] = '#4a380b';
-$AdminColor_NormalColor[10] = '#896a1c';
-$AdminColor_LightColor[10] = '#caa855';
-$AdminColor_HighColor[10] = '#b08313';
-$AdminColor_AntiColor[10] = '#2227e0';
+$AdminColor_BlodColor[10] = '#333333';
+$AdminColor_NormalColor[10] = '#555555';
+$AdminColor_LightColor[10] = '#ababab';
+$AdminColor_HighColor[10] = '#8b8b8b';
+$AdminColor_AntiColor[10] = '#d60000';

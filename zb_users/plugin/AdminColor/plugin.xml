@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>AdminColor</id>
 <name>后台配色器</name>
 <url>http://www.zblogcn.com/</url>
 <note>给Z-BlogPHP版换后台配色的小工具.</note>
 <description>给Z-BlogPHP版换后台配色的小工具.</description>
-<path></path>
+<path>main.php</path>
 <include>include.php</include>
 <level>1</level>
 <author>
-  <name>zx.asd</name>
+  <name>zxasd</name>
   <email>rainbowsoft@gmail.com</email>
   <url>http://www.zdevo.com/</url>
 </author>
@@ -19,9 +19,9 @@
   <url></url>
 </source>
 <adapted>150101</adapted>
-<version>2.1</version>
+<version>3.1</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2015-02-07</modified>
+<modified>2017-01-08</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

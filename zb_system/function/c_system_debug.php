@@ -445,9 +445,11 @@ class ZBlogException {
             ob_clean();
         }
 
+        $error = $this;
+
         foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($this);
+            $fpreturn = $fpname($error);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 return $fpreturn;
             }

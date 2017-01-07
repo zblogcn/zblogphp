@@ -5,24 +5,22 @@ if (isset($_GET['setcolor'])) {
     $zbp->Load();
     $action = 'root';
     if ($zbp->CheckRights($action)) {
-        $zbp->Config('AdminColor')->color = (int) $_GET['setcolor'];
+        $i = (int) $_GET['setcolor'];
+        $zbp->Config('AdminColor')->ColorID = $i;
+        $zbp->Config('AdminColor')->BlodColor =  (string) $GLOBALS['AdminColor_BlodColor'][$i];
+        $zbp->Config('AdminColor')->NormalColor =  (string) $GLOBALS['AdminColor_NormalColor'][$i];
+        $zbp->Config('AdminColor')->LightColor =  (string) $GLOBALS['AdminColor_LightColor'][$i];
+        $zbp->Config('AdminColor')->HighColor =  (string) $GLOBALS['AdminColor_HighColor'][$i];
+        $zbp->Config('AdminColor')->AntiColor =  (string) $GLOBALS['AdminColor_AntiColor'][$i];
         $zbp->SaveConfig('AdminColor');
-        setcookie("admincolor", (int) $_GET['setcolor'], time() + 3600 * 24 * 365, $zbp->cookiespath);
-        Redirect($zbp->host . 'zb_system/cmd.php?act=admin');
-        die();
-    } else {
-        setcookie("admincolor", (int) $_GET['setcolor'], time() + 3600 * 24 * 365, $zbp->cookiespath);
-        Redirect($zbp->host . 'zb_system/cmd.php?act=admin');
+        Redirect($zbp->host . 'zb_users/plugin/AdminColor/main.php');
         die();
     }
 }
 
 header('Content-Type: text/css; Charset=utf-8');
 
-$id = (int) $zbp->Config('AdminColor')->color;
-if (isset($_COOKIE['admincolor'])) {
-    $id = (int) $_COOKIE['admincolor'];
-}
+$id = (int) $zbp->Config('AdminColor')->ColorID;
 $c = '';
 
 $c .= '
@@ -119,11 +117,11 @@ $c5 = "#d60000";
 
 $AdminColor_Colors = array();
 
-$AdminColor_Colors['Blod'] = $AdminColor_BlodColor[$id];
-$AdminColor_Colors['Normal'] = $AdminColor_NormalColor[$id];
-$AdminColor_Colors['Light'] = $AdminColor_LightColor[$id];
-$AdminColor_Colors['High'] = $AdminColor_HighColor[$id];
-$AdminColor_Colors['Anti'] = $AdminColor_BlodColor[$id];
+$AdminColor_Colors['Blod'] = $zbp->Config('AdminColor')->BlodColor;
+$AdminColor_Colors['Normal'] = $zbp->Config('AdminColor')->NormalColor;
+$AdminColor_Colors['Light'] = $zbp->Config('AdminColor')->LightColor;
+$AdminColor_Colors['High'] = $zbp->Config('AdminColor')->HighColor;
+$AdminColor_Colors['Anti'] = $zbp->Config('AdminColor')->AntiColor;
 
 foreach ($GLOBALS['Filter_Plugin_AdminColor_CSS_Pre'] as $fpname => &$fpsignal) {
     $fpname($AdminColor_Colors);
@@ -135,12 +133,14 @@ $c = str_replace($c3, $AdminColor_Colors['Light'], $c);
 $c = str_replace($c4, $AdminColor_Colors['High'], $c);
 $c = str_replace($c5, $AdminColor_Colors['Anti'], $c);
 
-$c .= "\r\n" . "/*AdminColor*/" . "\r\n" . "#admin_color{float:right;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
+$c .= "\r\n" . "/*AdminColor*/" . "\r\n" . "#admin_color{float:left;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
 
-if ($id == 10) {
+if ($id == 9) {
     $c .= 'header,.header {background:url(header.jpg) no-repeat 0 0;}' . "\r\n";
     $c .= 'body{background:url(body.jpg) no-repeat 0 0;background-attachment:fixed;}' . "\r\n";
     $c .= '#topmenu{opacity:0.8;}' . "\r\n";
 }
-
+if($zbp->Config('AdminColor')->LogoPath){
+$c .= '.logo img{background:url('. $zbp->Config('AdminColor')->LogoPath .') no-repeat center center;}';
+}
 echo $c;
