@@ -107,7 +107,139 @@ $c .= "#divMain .DIVBlogConfig {background-color: #ededed!important;}" . "\r\n";
 $c .= "div.bg {background: #3a6ea5;!important;}" . "\r\n";
 $c .= "div.bg input[type=\"text\"], input[type=\"password\"] {border-color:#3a6ea5!important;}" . "\r\n";
 
-//$c .=Response_Plugin_AdminColor_Css
+$c .= "\r\n" . "/*AdminColor*/" . "\r\n" . "#admin_color{float:left;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
+
+if ($id == 9) {
+    $c .= 'header,.header {background:url(header.jpg) no-repeat 0 0;}' . "\r\n";
+    $c .= 'body{background:url(body.jpg) no-repeat 0 0;background-attachment:fixed;}' . "\r\n";
+    $c .= '#topmenu{opacity:0.8;}' . "\r\n";
+}
+if($zbp->Config('AdminColor')->LogoPath){
+$c .= '.logo img{background:url('. $zbp->Config('AdminColor')->LogoPath .') no-repeat center center;}';
+}
+
+if ($id == 10) {
+
+$c .= '
+table{
+border-collapse: collapse;
+border: 1px solid #eee;
+background: #ffffff;
+line-height: 120%;
+}
+td,th { border: none;padding: 5px 7px;}
+.header .menu {
+    height: 60px;
+    position: relative;
+    float:left;
+    left:0px;
+}
+.header .menu ul li a {
+    float: left;
+    line-height: 60px;
+    height: 60px;
+    padding: 0px 25px;
+    font-size:1.2em;
+    color: #fff;
+    background: none;
+    border-right:1px solid  #0087B5;
+}
+
+.header {
+    height:60px;
+    margin-bottom: 0px;
+}
+header, .header {
+    background-color: #0099CD;
+}
+  .left{
+padding-top:0px;
+float:left;
+height:100%;
+background-image:url("'.'lb.png");
+background-repeat: no-repeat;
+background-position: -30px -2px;
+width:160px;
+  }
+.left #leftmenu a{
+color:#fff;
+width: 160px;
+height: 40px;
+}
+.left #leftmenu li{
+background-color:#22282e;
+color:#fff;
+width: 160px;
+height: 40px;
+}
+.main {
+padding-left: 170px;
+padding-right: 10px;
+}
+#leftmenu li span {
+    background-repeat: no-repeat;
+    background-position: 0px 12px;
+}
+.left #leftmenu span {
+    float: left;
+    width: auto;
+    height: 40px;
+    line-height: 40px;
+    text-align: left;
+    cursor: pointer;
+    margin-left: 25px;
+    padding-left: 29px;
+}
+.divHeader {
+    padding: 10px 0 45px 0;
+    background-position:1px 13px!important;
+}
+div.hint {margin-top:0.5em;}
+
+.left #leftmenu #nav_admincolor2 {
+background-color:Transparent;
+color:#fff;
+width: 160px;
+height: 30px;
+}
+
+.left #leftmenu #nav_admincolor2 span {
+    float: left;
+    width: auto;
+    height: 30px;
+    line-height: 30px;
+    text-align: left;
+    cursor: pointer;
+    margin-left: 25px;
+    padding-left: 60px;
+    background-position: 40px 12px;
+}
+.left #leftmenu #nav_admincolor2 a:hover { background-color: Transparent!important ; }
+
+';
+
+if(isset($_GET['aly'])){
+$c .='
+body {background:url("l.png") repeat-y 0 top}
+.logo{
+    background-color: #0087B5;
+    width: 62px;
+    height: 60px;
+    padding: 0 0 0 0;
+    left: 0px;
+    float:left;
+}
+.logo img{
+    width: 60px;
+    height: 60px;
+    background-position: -5px -5px;
+}
+.logo img{background:url("sl.png")}
+';
+
+}
+
+}
 
 $c1 = "#1d4c7d";
 $c2 = "#3a6ea5";
@@ -123,8 +255,8 @@ $AdminColor_Colors['Light'] = $zbp->Config('AdminColor')->LightColor;
 $AdminColor_Colors['High'] = $zbp->Config('AdminColor')->HighColor;
 $AdminColor_Colors['Anti'] = $zbp->Config('AdminColor')->AntiColor;
 
-foreach ($GLOBALS['Filter_Plugin_AdminColor_CSS_Pre'] as $fpname => &$fpsignal) {
-    $fpname($AdminColor_Colors);
+foreach ($GLOBALS['hooks']['Filter_Plugin_AdminColor_CSS_Pre'] as $fpname => &$fpsignal) {
+    $fpname($AdminColor_Colors,$c);
 }
 
 $c = str_replace($c1, $AdminColor_Colors['Blod'], $c);
@@ -133,14 +265,4 @@ $c = str_replace($c3, $AdminColor_Colors['Light'], $c);
 $c = str_replace($c4, $AdminColor_Colors['High'], $c);
 $c = str_replace($c5, $AdminColor_Colors['Anti'], $c);
 
-$c .= "\r\n" . "/*AdminColor*/" . "\r\n" . "#admin_color{float:left;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
-
-if ($id == 9) {
-    $c .= 'header,.header {background:url(header.jpg) no-repeat 0 0;}' . "\r\n";
-    $c .= 'body{background:url(body.jpg) no-repeat 0 0;background-attachment:fixed;}' . "\r\n";
-    $c .= '#topmenu{opacity:0.8;}' . "\r\n";
-}
-if($zbp->Config('AdminColor')->LogoPath){
-$c .= '.logo img{background:url('. $zbp->Config('AdminColor')->LogoPath .') no-repeat center center;}';
-}
 echo $c;

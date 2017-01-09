@@ -13,7 +13,6 @@ class Category extends Base {
     public $SubCategories = array(); //子分类
     public $SubCategorys = null; // 拼写错误，保持兼容
     public $ChildrenCategories = array(); //子孙分类
-    private $_rootid = null;
 
     /**
      * 构造函数
@@ -135,13 +134,6 @@ class Category extends Base {
 
             return $value;
         }
-        if ($name == 'RootID') {
-            if($this->_rootid === null){
-                $this->_rootid = (int) $this->GetRoot($this->ParentID);
-                $this->RootID = $this->_rootid;
-            }
-            return $this->_rootid;
-        }
 
         return parent::__get($name);
     }
@@ -160,6 +152,8 @@ class Category extends Base {
             $this->data['LogTemplate'] = '';
         }
 
+        $this->RootID = (int) $this->GetRoot($this->ParentID);
+
         foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Save'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
@@ -173,7 +167,7 @@ class Category extends Base {
      */
     public function Del() {
         global $zbp;
-        if ($this->ID >0) unset($zbp->categories[$this->ID]);
+        if ($this->ID > 0) unset($zbp->categories[$this->ID]);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Del'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
