@@ -5,7 +5,7 @@ function linkmanage_SubMenu($id)
     $arySubMenu = array(
         0 => array('菜单管理', 'main.php', 'left', false),
         1 => array('链接编辑', '', 'left', false),
-        //2 => array('位置管理', 'location.php', 'left', false),
+        2 => array('配置选项', 'config.php', 'left', false),
     );
     foreach ($arySubMenu as $k => $v) {
         echo '<a href="'.$v[1].'" '.($v[3] == true ? 'target="_blank"' : '').'><span class="m-'.$v[2].' '.($id == $k ? 'm-now' : '').'">'.$v[0].'</span></a>';
@@ -42,20 +42,42 @@ function linkmanage_getLink_sort($menuID)
     return json_decode($t, true);
 }
 
+//获取菜单自定义链接序号
+function linkmanage_getTempid()
+{
+    global $zbp;
+    $t = '0';
+    if ($zbp->Config('linkmanage')->Tempid) {
+        $t = $zbp->Config('linkmanage')->Tempid;
+    }
+    return $t;
+}
+
+//检查是否与系统模块同名
+function linkmanage_checkSys($menuID)
+{
+    global $zbp,$sysMenu;
+    $t = false;
+    if (preg_match("/$menuID/", $sysMenu)) {
+        $t = true;
+    }
+    return $t;
+}
+
 //创建导航
 function linkmanage_creatMenu($menuID)
 {
     global $zbp,$sysMenu;
     $n = linkmanage_getMenus();
     if (preg_match("/$menuID/", $sysMenu)) {
-        $zbp->ShowHint('bad', 'ID与系统菜单冲突！请更改');
+        $zbp->SetHint('bad', 'ID与系统菜单冲突！请更改');
     } elseif (isset($n['data'][$menuID])) {
-        $zbp->ShowHint('bad', 'ID已存在！请更改');
+        $zbp->SetHint('bad', 'ID已存在！请更改');
     } else {
         $n['data'][$menuID] = array(
             'id' => $menuID,
             'name' => GetVars('name', 'POST'),
-            'location' => '',
+            //'location' => '',
         );
         $n['num'] = count($n['data']);
         $zbp->Config('linkmanage')->Menus = json_encode($n);
@@ -86,7 +108,9 @@ function linkmanage_deleteMenu($menuID)
 {
     global $zbp,$sysMenu;
     if (preg_match("/$menuID/", $sysMenu)) {
-        $zbp->ShowHint('bad', '系统菜单不能删除');
+        $zbp->SetHint('bad', '系统菜单不能删除！');
+    } elseif (!$zbp->Config('linkmanage')->forcedel && linkmanage_getLink_sort($menuID)) {
+        $zbp->SetHint('bad', '自定义菜单需要清空链接后才可删除！');
     } else {
         $n = linkmanage_getMenus();
         unset($n['data'][$menuID]);
@@ -98,15 +122,18 @@ function linkmanage_deleteMenu($menuID)
         $m = $zbp->modulesbyfilename['linkmanage_'.$menuID];
         $m->Del();
 
+        $zbp->SetHint('good', '菜单已删除，请将模板中相关引用代码手动清除！');
         Redirect('main.php');
     }
 }
+
 // 修改、保存导航排序
 function linkmanage_saveMenu()
 {
     global $zbp;
     $menuID = GetVars('id', 'POST');
     $menuName = GetVars('menuname', 'POST');
+    $tempID = GetVars('tempid', 'POST');
 
     $links_json = GetVars('links', 'POST');
 
@@ -115,6 +142,7 @@ function linkmanage_saveMenu()
         //保存菜单名
         $n['data'][$menuID]['name'] = $menuName;
         $zbp->Config('linkmanage')->Menus = json_encode($n);
+        $zbp->Config('linkmanage')->Tempid = $tempID;
         $zbp->SaveConfig('linkmanage');
 
         //保存菜单链接排序
@@ -129,8 +157,14 @@ function linkmanage_saveMenu()
 //更新模块内容
 function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$link_sort)
 {
-    global $zbp;
+    global $zbp,$sysMenu;
     $html = '';
+
+    $linkmanage_str = 'linkmanage_';
+    if ($zbp->Config('linkmanage')->editsystem && preg_match("/$menuID/", $sysMenu)) {
+        $linkmanage_str = '';
+    }
+
     if (!is_null($links_json)) {
         $links = json_decode($links_json, true);
     } else {
@@ -146,7 +180,7 @@ function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$li
                 $newtable_tmp = 'target="_blank"';
             }
 
-            $html_tmp = '<li class="li-item" id="menuItem_'.$link['id'].'"><a href="'.$link['url'].'" title="'.$link['title'].'" ' .$newtable_tmp .'>'.$link['title'].'<a><span id="'.$link['id'].'"></span></li>';
+            $html_tmp = '<li class="li-item" id="'.$linkmanage_str.$menuID.'-'.$link['type'].'-'.$link['sysid'].'"><a href="'.$link['url'].'" title="'.$link['title'].'" ' .$newtable_tmp .'>'.$link['title'].'<a><span id="'.$link['id'].'"></span></li>';
 
             if ($value == 'null') {
                 $html .= $html_tmp;
@@ -163,9 +197,10 @@ function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$li
     }
 
     //修改模块
+
     $t = '';
-    if (isset($zbp->modulesbyfilename['linkmanage_'.$menuID])) {
-        $t = $zbp->modulesbyfilename['linkmanage_'.$menuID];
+    if (isset($zbp->modulesbyfilename[$linkmanage_str . $menuID])) {
+        $t = $zbp->modulesbyfilename[$linkmanage_str . $menuID];
     }
     else {
         $t = new Module();
@@ -177,7 +212,11 @@ function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$li
     }
 
     if(!is_null($menuName)) {
-        $t->Name = '菜单：'.$menuName;
+        if(preg_match("/$menuID/", $sysMenu)) {
+             $t->Name = $menuName;
+        } else{
+            $t->Name = '菜单：'.$menuName;
+        }
     }
     $t->Content = $html;
 
@@ -208,8 +247,13 @@ function linkmanage_saveLink_s($menuID)
 
     $links['ID'.$new_link['id']] = $new_link;
 
-    if (isset($zbp->modulesbyfilename['linkmanage_'.$menuID])) {
-        $t = $zbp->modulesbyfilename['linkmanage_'.$menuID];
+    $linkmanage_str = 'linkmanage_';
+    if ($zbp->Config('linkmanage')->editsystem && preg_match("/$menuID/", $sysMenu)) {
+        $linkmanage_str = '';
+    }
+
+    if (isset($zbp->modulesbyfilename[$linkmanage_str . $menuID])) {
+        $t = $zbp->modulesbyfilename[$linkmanage_str . $menuID];
     }
     else {
         $t = new Module();
@@ -263,24 +307,31 @@ function linkmanage_get_syslink($type)
     case 'post':
         $array = $zbp->GetArticleList('', '', array('log_PostTime' => 'DESC'), '', '');
         foreach ($array as $article) {
-            echo "<option value=\"{$article->Url}\">{$article->Title}</option>";
+            echo "<option sysid=\"{$article->ID}\" value=\"{$article->Url}\">{$article->Title}</option>";
         }
         break;
     case 'page':
         $array = $zbp->GetPageList('', '', array('log_PostTime' => 'DESC'), '', '');
         foreach ($array as $article) {
-            echo "<option value=\"{$article->Url}\">{$article->Title}</option>";
+            echo "<option sysid=\"{$article->ID}\" value=\"{$article->Url}\">{$article->Title}</option>";
         }
         break;
     case 'category':
         foreach ($zbp->categorysbyorder as $category) {
-            echo "<option value=\"{$category->Url}\">{$category->Name}</option>";
+            echo "<option sysid=\"{$category->ID}\" value=\"{$category->Url}\">{$category->Name}</option>";
         }
         break;
     case 'tags':
         $array = $zbp->GetTagList('*', '', array('tag_Count' => 'DESC'), '', '');
         foreach ($array as $tag) {
-            echo "<option value=\"{$tag->Url}\">{$tag->Name}</option>";
+            echo "<option sysid=\"{$tag->ID}\" value=\"{$tag->Url}\">{$tag->Name}</option>";
+        }
+        break;
+    case 'other':
+        $array = json_decode($zbp->Config('linkmanage')->Favorites);
+        //echo var_dump($array);
+        foreach ($array as $link) {
+            echo "<option sysid='' value=\"{$link->Url}\">{$link->Name}</option>";
         }
         break;
     }
@@ -289,8 +340,23 @@ function linkmanage_get_syslink($type)
 // 编辑按钮
 function linkmanage_edit_button($menuID)
 {
+    global $zbp,$sysMenu;
+    $edit_button = '';
+    $del_button = '';
+    if (!preg_match("/$menuID/", $sysMenu)) {
+        $del_button = '<button class="ui-button-danger ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="del_menu(\''.$menuID.'\');return false;">删除导航</button>';
+    }
+    $edit_button = '<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="edit_menu(\''.$menuID.'\');return false;"><span class="ui-button-text">编辑</span></button>';
+    return $edit_button . '    ' . $del_button;
+}
+
+
+function linkmanage_saveConfig(){
     global $zbp;
-    $edit_button = '<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="edit_menu(\''.$menuID.'\');return false;"><span class="ui-button-text">编辑</span></button>
-            <button class="ui-button-danger ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="del_menu(\''.$menuID.'\');return false;">删除导航</button>';
-    return $edit_button;
+    foreach ($_POST as $key => $value) {
+        $zbp->Config('linkmanage')->$key = $value;
+    }
+    $zbp->SaveConfig('linkmanage');
+    $zbp->SetHint('good', '配置已保存！');
+    Redirect('config.php');
 }

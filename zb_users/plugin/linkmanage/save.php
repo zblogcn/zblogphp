@@ -29,9 +29,9 @@ switch (GetVars('type', 'GET')) {
         //linkmanage_saveLink();
         linkmanage_saveLink_s_sort(GetVars('menuid', 'POST'));
         break;
-/*    case 'creat_link':
-        linkmanage_creatLink();
-        break;*/
+    case 'save_config':
+        linkmanage_saveConfig();
+        break;
     default:
         # code...
         break;

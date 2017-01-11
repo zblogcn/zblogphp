@@ -49,7 +49,7 @@ function del_menu(id){
 function save_menusetting(){
 	var sort_serialized = $('#menu-edit-body-content .nav-menu').nestedSortable('serialize',{ attribute:"sid"});
 
-	$.post("save.php?type=save_menu", $("#menu-config").serialize()+'&'+sort_serialized+'&links='+ JSON.stringify(links_json),
+	$.post("save.php?type=save_menu", $("#menu-config").serialize()+'&'+sort_serialized+'&links='+ JSON.stringify(links_json) + '&tempid=' +tempid,
 		function(data) {
 			$( "#message" ).dialog();
 			return false;
@@ -88,11 +88,12 @@ function save_link(id){
 	links_json['ID' + id].title = $(input_name + "title]']").val();
 	links_json['ID' + id].url = $(input_name + "url]']").val();
 	links_json['ID' + id].newtable = $(input_name + "newtable]']").val();
-	links_json['ID' + id].img = '';
 	links_json['ID' + id].menuid = $("input[name='id']").val();
+
+	links_json['ID' + id].img = '';
 	//var img = $(input_name+"img]']").val();
 
-	//links_json['ID'+id] = {id:id,title:title,url:url,newtable:newtable,img:img,type:type,menuid:menuid};
+	//links_json['ID'+id] = {id:id,title:title,url:url,newtable:newtable,img:img,type:type,sysid:sysid,menuid:menuid};
 
 	$.post(
 		"save.php?type=save_link",
@@ -132,11 +133,13 @@ function add_link(item,type,menuid){
 		  	"newtable":0,
 		  	"img":"",
 		  	"type":type,
+		  	"sysid":$(selected).attr("sysid"),
 		  	"menuid":menuid
 		  };
 		  create_item(foo[i],type,menuid);
 		});
 	} else {
+		tempid++;
 		foo[0] = {
 		  	"id":new Date().getTime() + Math.random().toString(10).substring(2,5),
 		  	"title":"新链接",
@@ -144,6 +147,7 @@ function add_link(item,type,menuid){
 		  	"newtable":0,
 		  	"img":"",
 		  	"type":type,
+		  	"sysid":tempid,
 		  	"menuid":menuid
 		}
 		create_item(foo[0],type,menuid)
@@ -206,4 +210,18 @@ function create_item(item,type,menuid){
 function reset_item(){
 	$("#menu-edit-body-content").empty();
 	links_json = {};
+}
+
+function save_config(){
+		$.post(
+		"save.php?type=save_config",
+		links_json['ID' + id],
+		function(data) {
+			data = JSON.parse(data);
+			$("li[sid='menuItem_" + id + "'] .menu-item-title").html(data.title);
+			//if(data.new_check){
+			//	save_sort();
+			//}
+			return false;
+		});
 }
