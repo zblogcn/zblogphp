@@ -35,7 +35,7 @@ require $blogpath.'zb_system/admin/admin_top.php';
 				<tr>
 					<td> 是否直接编辑系统模块链接 </td>
 					<td> <input id="editsystem" name="editsystem" type="text" value="<?php echo $zbp->Config('linkmanage')->editsystem; ?>" class="checkbox" style="display: none;"></td>
-					<td> 注意：打开该选项后，再次编辑并保存系统同名菜单将覆盖原模块中的链接内容（如navbar将覆盖默认导航内容），模块管理中的插件模块将不再更新，请谨慎操作。 </td>
+					<td> 注意：打开该选项后，再次编辑并保存系统同名菜单将覆盖原模块中的链接内容（如navbar将覆盖默认导航内容）。原先如有生成插件模块不会删除，并在关闭该选项后继续更新。请谨慎操作。 </td>
 				</tr>
 				<tr>
 					<td> 是否允许直接删除非空菜单 </td>

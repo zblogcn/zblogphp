@@ -124,6 +124,19 @@ require $blogpath.'zb_system/admin/admin_top.php';
 				    </div>
 				  </div>
 
+				  <div class="group">
+				    <h3>作者</h3>
+				    <div class="accordion-section-content">
+					    <div class="input-control select">
+							<select multiple="1" size="6" id="author">
+								<?php linkmanage_get_syslink('author');?>
+							</select>
+						</div>
+						<p class="button-controls">
+								<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'author','<?php echo $menuID;?>')"><span class="ui-button-text">添加</span></button>
+						</p>
+				    </div>
+				  </div>
 			</div>
 		</div>
 

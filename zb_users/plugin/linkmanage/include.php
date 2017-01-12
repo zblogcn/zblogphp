@@ -44,9 +44,9 @@ function InstallPlugin_linkmanage() {
 		$zbp->Config('linkmanage')->Version = '0.2';
 		$zbp->Config('linkmanage')->Menus = '{"num":4,"data":{"navbar":{"id":"navbar","name":"导航栏"},"link":{"id":"link","name":"友情链接"},"favorite":{"id":"favorite","name":"网站收藏"},"misc":{"id":"misc","name":"图标汇集"}}}';
 		$array = array(
-            array('Name' => '首页','Url' => $zbp->host),
-            array('Name' => '新建文章','Url' => $zbp->host . "zb_system/cmd.php?act=ArticleEdt"),
-            array('Name' => '登录管理','Url' => $zbp->host . "zb_system/cmd.php?act=Admin")
+            array('Name' => '首页','Url' => $zbp->host,'Sysid' => 'index'),
+            array('Name' => '新建文章','Url' => $zbp->host . "zb_system/cmd.php?act=ArticleEdt",'Sysid' => 'newpost'),
+            array('Name' => '登录管理','Url' => $zbp->host . "zb_system/cmd.php?act=Admin",'Sysid' => 'login')
         );
 		$zbp->Config('linkmanage')->Favorites = json_encode($array);
 		//$zbp->Config('linkmanage')->Menu = '{}'; //菜单集{[{"id":"123456","title":"导航栏","url":"","newtable":"true","img":"","type":""}]}

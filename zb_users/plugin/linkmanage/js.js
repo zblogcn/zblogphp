@@ -208,7 +208,7 @@ function create_item(item,type,menuid){
 }
 
 function reset_item(){
-	$("#menu-edit-body-content").empty();
+	$("#menu-edit-body-content .nav-menu").empty();
 	links_json = {};
 }
 

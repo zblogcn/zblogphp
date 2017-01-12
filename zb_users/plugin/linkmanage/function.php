@@ -25,8 +25,9 @@ function linkmanage_getLink($menuID)
 {
     global $zbp;
     $t = '{}';//json
-    if (isset($zbp->modulesbyfilename['linkmanage_'.$menuID])) {
-        $t = $zbp->modulesbyfilename['linkmanage_'.$menuID]->Metas->linkmanage_links;
+    $linkmanage_str = linkmanage_editSys_str($menuID);
+    if (isset($zbp->modulesbyfilename[$linkmanage_str.$menuID])) {
+        $t = $zbp->modulesbyfilename[$linkmanage_str.$menuID]->Metas->linkmanage_links;
     }
     return json_decode($t, true);
 }
@@ -36,8 +37,9 @@ function linkmanage_getLink_sort($menuID)
 {
     global $zbp;
     $t = '{}';
-    if (isset($zbp->modulesbyfilename['linkmanage_'.$menuID])) {
-        $t = $zbp->modulesbyfilename['linkmanage_'.$menuID]->Metas->linkmanage_link_sort;
+    $linkmanage_str = linkmanage_editSys_str($menuID);
+    if (isset($zbp->modulesbyfilename[$linkmanage_str.$menuID])) {
+        $t = $zbp->modulesbyfilename[$linkmanage_str.$menuID]->Metas->linkmanage_link_sort;
     }
     return json_decode($t, true);
 }
@@ -53,8 +55,9 @@ function linkmanage_getTempid()
     return $t;
 }
 
+//option
 //检查是否与系统模块同名
-function linkmanage_checkSys($menuID)
+function linkmanage_isSys($menuID)
 {
     global $zbp,$sysMenu;
     $t = false;
@@ -64,12 +67,23 @@ function linkmanage_checkSys($menuID)
     return $t;
 }
 
+//是否直接编辑系统模块,返回模块名前缀
+function linkmanage_editSys_str($menuID)
+{
+    global $zbp;
+    $t = 'linkmanage_';
+    if ($zbp->Config('linkmanage')->editsystem && linkmanage_isSys($menuID)) {
+        $t = '';
+    }
+    return $t;
+}
+
 //创建导航
 function linkmanage_creatMenu($menuID)
 {
-    global $zbp,$sysMenu;
+    global $zbp;
     $n = linkmanage_getMenus();
-    if (preg_match("/$menuID/", $sysMenu)) {
+    if (linkmanage_isSys($menuID)) {
         $zbp->SetHint('bad', 'ID与系统菜单冲突！请更改');
     } elseif (isset($n['data'][$menuID])) {
         $zbp->SetHint('bad', 'ID已存在！请更改');
@@ -106,8 +120,8 @@ function linkmanage_creatMenu($menuID)
 // 删除导航
 function linkmanage_deleteMenu($menuID)
 {
-    global $zbp,$sysMenu;
-    if (preg_match("/$menuID/", $sysMenu)) {
+    global $zbp;
+    if (linkmanage_isSys($menuID)) {
         $zbp->SetHint('bad', '系统菜单不能删除！');
     } elseif (!$zbp->Config('linkmanage')->forcedel && linkmanage_getLink_sort($menuID)) {
         $zbp->SetHint('bad', '自定义菜单需要清空链接后才可删除！');
@@ -157,13 +171,10 @@ function linkmanage_saveMenu()
 //更新模块内容
 function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$link_sort)
 {
-    global $zbp,$sysMenu;
+    global $zbp;
     $html = '';
 
-    $linkmanage_str = 'linkmanage_';
-    if ($zbp->Config('linkmanage')->editsystem && preg_match("/$menuID/", $sysMenu)) {
-        $linkmanage_str = '';
-    }
+    $linkmanage_str = linkmanage_editSys_str($menuID);
 
     if (!is_null($links_json)) {
         $links = json_decode($links_json, true);
@@ -180,7 +191,7 @@ function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$li
                 $newtable_tmp = 'target="_blank"';
             }
 
-            $html_tmp = '<li class="li-item" id="'.$linkmanage_str.$menuID.'-'.$link['type'].'-'.$link['sysid'].'"><a href="'.$link['url'].'" title="'.$link['title'].'" ' .$newtable_tmp .'>'.$link['title'].'<a><span id="'.$link['id'].'"></span></li>';
+            $html_tmp = '<li class="li-item" id="'.$linkmanage_str.$menuID.'-'.$link['type'].'-'.$link['sysid'].'"><a href="'.$link['url'].'" title="'.$link['title'].'" ' .$newtable_tmp .'>'.$link['title'].'</a><span id="'.$link['id'].'"></span></li>';
 
             if ($value == 'null') {
                 $html .= $html_tmp;
@@ -212,7 +223,7 @@ function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$li
     }
 
     if(!is_null($menuName)) {
-        if(preg_match("/$menuID/", $sysMenu)) {
+        if(linkmanage_isSys($menuID)) {
              $t->Name = $menuName;
         } else{
             $t->Name = '菜单：'.$menuName;
@@ -247,10 +258,7 @@ function linkmanage_saveLink_s($menuID)
 
     $links['ID'.$new_link['id']] = $new_link;
 
-    $linkmanage_str = 'linkmanage_';
-    if ($zbp->Config('linkmanage')->editsystem && preg_match("/$menuID/", $sysMenu)) {
-        $linkmanage_str = '';
-    }
+    $linkmanage_str = linkmanage_editSys_str($menuID);
 
     if (isset($zbp->modulesbyfilename[$linkmanage_str . $menuID])) {
         $t = $zbp->modulesbyfilename[$linkmanage_str . $menuID];
@@ -327,11 +335,18 @@ function linkmanage_get_syslink($type)
             echo "<option sysid=\"{$tag->ID}\" value=\"{$tag->Url}\">{$tag->Name}</option>";
         }
         break;
+   case 'author':
+        foreach ($zbp->members as $author) {
+            if ($zbp->CheckRightsByLevel('ArticleEdt', $author->Level)) {
+                echo "<option sysid=\"{$author->ID}\" value=\"{$author->Url}\">{$author->Name}</option>";
+            }
+        }
+        break;
     case 'other':
         $array = json_decode($zbp->Config('linkmanage')->Favorites);
         //echo var_dump($array);
         foreach ($array as $link) {
-            echo "<option sysid='' value=\"{$link->Url}\">{$link->Name}</option>";
+            echo "<option sysid=\"{$link->Sysid}\" value=\"{$link->Url}\">{$link->Name}</option>";
         }
         break;
     }
@@ -340,17 +355,17 @@ function linkmanage_get_syslink($type)
 // 编辑按钮
 function linkmanage_edit_button($menuID)
 {
-    global $zbp,$sysMenu;
+    global $zbp;
     $edit_button = '';
     $del_button = '';
-    if (!preg_match("/$menuID/", $sysMenu)) {
+    if (!linkmanage_isSys($menuID)) {
         $del_button = '<button class="ui-button-danger ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="del_menu(\''.$menuID.'\');return false;">删除导航</button>';
     }
     $edit_button = '<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="edit_menu(\''.$menuID.'\');return false;"><span class="ui-button-text">编辑</span></button>';
     return $edit_button . '    ' . $del_button;
 }
 
-
+// 保存配置
 function linkmanage_saveConfig(){
     global $zbp;
     foreach ($_POST as $key => $value) {
