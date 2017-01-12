@@ -51,7 +51,7 @@ function InstallPlugin_linkmanage() {
             array('Name' => '登录管理','Url' => $zbp->host . "zb_system/cmd.php?act=Admin",'Sysid' => 'login')
         );
 		$zbp->Config('linkmanage')->Favorites = json_encode($array);
-		//$zbp->Config('linkmanage')->Menu = '{}'; //菜单集{[{"id":"123456","title":"导航栏","url":"","newtable":"true","img":"","type":""}]}
+		//$zbp->Config('linkmanage')->Menu = '{}'; //菜单集{[{"id":"123456","title":"导航栏","url":"","newtable":"true","icon":"","type":""}]}
 		//$zbp->Config('linkmanage')->Location = '{}';
 		$zbp->Config('linkmanage')->Tempid = '0';
 		$zbp->SaveConfig('linkmanage');

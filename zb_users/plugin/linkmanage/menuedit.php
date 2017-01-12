@@ -12,7 +12,7 @@ if (!$zbp->CheckPlugin('linkmanage')) {
     die();
 }
 
-$blogtitle = '菜单链接编辑';
+$blogtitle = '菜单链接管理';
 
 $Menus = linkmanage_getMenus();
 $menuID = GetVars('id');
@@ -53,89 +53,88 @@ require $blogpath.'zb_system/admin/admin_top.php';
 				<p>常用链接</p>
 			</div>
 			<div id="accordion" class="accordion-container">
-
-				  <div class="group">
-				    <h3>特殊</h3>
-				    <div class="accordion-section-content">
-					    <div class="input-control select">
-							<select multiple="1" size="6" id="other">
-								<?php linkmanage_get_syslink('other');?>
-							</select>
-						</div>
-						<p class="button-controls">
-								<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'other','<?php echo $menuID;?>')"><span class="ui-button-text">添加</span></button>
-						</p>
-				    </div>
-				  </div>
-				  <div class="group">
-				    <h3>文章</h3>
-				    <div class="accordion-section-content">
-					    <div class="input-control select">
-							<select multiple="1" size="6" id="post">
-								<?php linkmanage_get_syslink('post'); ?>
-							</select>
-						</div>
-						<p class="button-controls">
-								<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'post','<?php echo $menuID;?>')"><span class="ui-button-text">添加</span></button>
-						</p>
-				    </div>
-				  </div>
-
-				 <div class="group">
-				    <h3>页面</h3>
-				    <div class="accordion-section-content">
-				    	<div class="input-control select">
-							<select multiple="1" size="6" id="page">
-								<?php linkmanage_get_syslink('page');?>
-							</select>
-						</div>
-						<p class="button-controls">
-							<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'page','<?php echo $menuID;?>')"><span class="ui-button-text">添加</span></button>
-						</p>
+			  <div class="group">
+			    <h3>特殊</h3>
+			    <div class="accordion-section-content">
+				    <div class="input-control select">
+						<select multiple="1" size="6" id="other">
+							<?php linkmanage_get_syslink('other');?>
+						</select>
 					</div>
-				  </div>
+					<p class="button-controls">
+							<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'other','<?php echo $menuID;?>')"><span class="ui-button-text">添加</span></button>
+					</p>
+			    </div>
+			  </div>
+			  <div class="group">
+			    <h3>文章</h3>
+			    <div class="accordion-section-content">
+				    <div class="input-control select">
+						<select multiple="1" size="6" id="post">
+							<?php linkmanage_get_syslink('post'); ?>
+						</select>
+					</div>
+					<p class="button-controls">
+							<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'post','<?php echo $menuID;?>')"><span class="ui-button-text">添加</span></button>
+					</p>
+			    </div>
+			  </div>
 
-				  <div class="group">
-				    <h3>分类</h3>
-				    <div class="accordion-section-content">
-					    <div class="input-control select">
-							<select multiple="1" size="6" id="category">
-								<?php linkmanage_get_syslink('category');?>
-							</select>
-						</div>
-						<p class="button-controls">
-								<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'category','<?php echo $menuID;?>')"><span class="ui-button-text">添加</span></button>
-						</p>
-				    </div>
-				  </div>
+			 <div class="group">
+			    <h3>页面</h3>
+			    <div class="accordion-section-content">
+			    	<div class="input-control select">
+						<select multiple="1" size="6" id="page">
+							<?php linkmanage_get_syslink('page');?>
+						</select>
+					</div>
+					<p class="button-controls">
+						<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'page','<?php echo $menuID;?>')"><span class="ui-button-text">添加</span></button>
+					</p>
+				</div>
+			  </div>
 
-				  <div class="group">
-				    <h3>标签</h3>
-				    <div class="accordion-section-content">
-					    <div class="input-control select">
-							<select multiple="1" size="6" id="tags">
-								<?php linkmanage_get_syslink('tags');?>
-							</select>
-						</div>
-						<p class="button-controls">
-								<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'tags','<?php echo $menuID;?>')"><span class="ui-button-text">添加</span></button>
-						</p>
-				    </div>
-				  </div>
+			  <div class="group">
+			    <h3>分类</h3>
+			    <div class="accordion-section-content">
+				    <div class="input-control select">
+						<select multiple="1" size="6" id="category">
+							<?php linkmanage_get_syslink('category');?>
+						</select>
+					</div>
+					<p class="button-controls">
+							<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'category','<?php echo $menuID;?>')"><span class="ui-button-text">添加</span></button>
+					</p>
+			    </div>
+			  </div>
 
-				  <div class="group">
-				    <h3>作者</h3>
-				    <div class="accordion-section-content">
-					    <div class="input-control select">
-							<select multiple="1" size="6" id="author">
-								<?php linkmanage_get_syslink('author');?>
-							</select>
-						</div>
-						<p class="button-controls">
-								<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'author','<?php echo $menuID;?>')"><span class="ui-button-text">添加</span></button>
-						</p>
-				    </div>
-				  </div>
+			  <div class="group">
+			    <h3>标签</h3>
+			    <div class="accordion-section-content">
+				    <div class="input-control select">
+						<select multiple="1" size="6" id="tags">
+							<?php linkmanage_get_syslink('tags');?>
+						</select>
+					</div>
+					<p class="button-controls">
+							<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'tags','<?php echo $menuID;?>')"><span class="ui-button-text">添加</span></button>
+					</p>
+			    </div>
+			  </div>
+
+			  <div class="group">
+			    <h3>作者</h3>
+			    <div class="accordion-section-content">
+				    <div class="input-control select">
+						<select multiple="1" size="6" id="author">
+							<?php linkmanage_get_syslink('author');?>
+						</select>
+					</div>
+					<p class="button-controls">
+							<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'author','<?php echo $menuID;?>')"><span class="ui-button-text">添加</span></button>
+					</p>
+			    </div>
+			  </div>
 			</div>
 		</div>
 
@@ -164,13 +163,14 @@ require $blogpath.'zb_system/admin/admin_top.php';
 							<ol class="nav-menu ui-sortable">
 							<?php
 							$html = '';
-						    //$Menus = linkmanageGetMenu();
 						    $link_sort = linkmanage_getLink_sort($menuID);
-						    //echo var_dump($link_sort);
-						    //die();
 						    if (!is_null($link_sort)){
 							    foreach ($link_sort as $key => $value) {
 							        $link = $links['ID'.$key];
+									$readonly = "readonly='true'";
+									if ($link['type'] == "custom"){
+										$readonly = "";
+									}
 							        $html_tmp = '
 										<li sid="menuItem_'.$link['id'].'">
 											<div class="menu-item-bar">
@@ -186,7 +186,7 @@ require $blogpath.'zb_system/admin/admin_top.php';
 												<p class="link-p">
 													<label class="link-edit" for="menu-item['.$link['id'].'][menu-item-url]">
 														<span>URL</span>
-														<input name="menu-item['.$link['id'].'][menu-item-url]" type="text" class="code menu-item-textbox custom-menu-item-url" value="'.$link['url'].'">
+														<input name="menu-item['.$link['id'].'][menu-item-url]" type="text" '.$readonly.' class="code menu-item-textbox custom-menu-item-url" value="'.$link['url'].'">
 													</label>
 												</p>
 												<p class="link-p">

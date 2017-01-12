@@ -90,10 +90,10 @@ function save_link(id){
 	links_json['ID' + id].newtable = $(input_name + "newtable]']").val();
 	links_json['ID' + id].menuid = $("input[name='id']").val();
 
-	links_json['ID' + id].img = '';
-	//var img = $(input_name+"img]']").val();
+	links_json['ID' + id].icon = '';
+	//var icon = $(input_name+"icon]']").val();
 
-	//links_json['ID'+id] = {id:id,title:title,url:url,newtable:newtable,img:img,type:type,sysid:sysid,menuid:menuid};
+	//links_json['ID'+id] = {id:id,title:title,url:url,newtable:newtable,icon:icon,type:type,sysid:sysid,menuid:menuid};
 
 	$.post(
 		"save.php?type=save_link",
@@ -131,7 +131,7 @@ function add_link(item,type,menuid){
 		  	"title":$(selected).text(),
 		  	"url":$(selected).val(),
 		  	"newtable":0,
-		  	"img":"",
+		  	"icon":"",
 		  	"type":type,
 		  	"sysid":$(selected).attr("sysid"),
 		  	"menuid":menuid
@@ -145,7 +145,7 @@ function add_link(item,type,menuid){
 		  	"title":"新链接",
 		  	"url":"http://",
 		  	"newtable":0,
-		  	"img":"",
+		  	"icon":"",
 		  	"type":type,
 		  	"sysid":tempid,
 		  	"menuid":menuid
@@ -157,8 +157,10 @@ function add_link(item,type,menuid){
 
 function create_item(item,type,menuid){
 	var display = "style='display: none;'";
+	var readonly = "readonly='true'";
 	if (type == "custom"){
 		display = "";
+		readonly = "";
 	}
 
 	links_json['ID'+item.id] = item;
@@ -177,7 +179,7 @@ function create_item(item,type,menuid){
 '			<p class="link-p">'+
 '				<label class="link-edit" for="custom-menu-item-url">'+
 '					<span>URL</span>'+
-'					<input name="menu-item['+ item.id +'][menu-item-url]" type="text" class="code menu-item-textbox custom-menu-item-url" value="'+ item.url +'">'+
+'					<input name="menu-item['+ item.id +'][menu-item-url]" type="text" '+ readonly +' class="code menu-item-textbox custom-menu-item-url" value="'+ item.url +'">'+
 '				</label>'+
 '			</p>'+
 '			<p class="link-p">'+

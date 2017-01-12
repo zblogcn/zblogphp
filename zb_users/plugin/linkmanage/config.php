@@ -7,7 +7,7 @@ if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('linkmanage')) {$zbp->ShowError(48);die();}
 
 
-$blogtitle = '配置选项';
+$blogtitle = '菜单链接管理';
 
 require $blogpath.'zb_system/admin/admin_header.php';
 ?>
