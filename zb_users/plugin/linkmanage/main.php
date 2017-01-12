@@ -45,10 +45,7 @@ require $blogpath.'zb_system/admin/admin_top.php';
 		<?php
 			foreach ($Menus['data'] as $key => $value) {
 				$menuid = $value['id'];
-				$linkmanage_str = 'linkmanage_';
-			    if ($zbp->Config('linkmanage')->editsystem && preg_match("/$menuid/", $sysMenu)) {
-			        $linkmanage_str = '';
-			    }
+				$linkmanage_str = linkmanage_isSys($menuid);
 				//$location = ($value['location'] == '') ? '未使用' : $value['location'];
 				$button = linkmanage_edit_button($menuid);
 				echo <<<MENULIST

@@ -11,7 +11,6 @@ if (!$zbp->CheckPlugin('linkmanage')) {
     $zbp->ShowError(48);
     die();
 }
-global $sysMenu;
 
 $blogtitle = '菜单链接编辑';
 

@@ -4,8 +4,6 @@ include_once $zbp->usersdir . 'plugin/linkmanage/function.php';
 #注册插件
 RegisterPlugin("linkmanage", "ActivePlugin_linkmanage");
 
-$sysMenu = 'navbar|link|favorite|misc|Menu|Location|Nav|Version';
-
 function ActivePlugin_linkmanage() {
 	Add_Filter_Plugin('Filter_Plugin_Admin_TopMenu', 'linkmanage_TopMenu');
 	Add_Filter_Plugin('Filter_Plugin_Cmd_Begin', 'linkmanage_ModuleEdt');
@@ -27,7 +25,11 @@ function linkmanage_ModuleEdt() {
 			if (isset($_GET['id']) && $_GET['id']>0) {
 				$modid = (integer) GetVars('id', 'GET');
 				$mod = $zbp->GetModuleByID($modid);
-				$menuid = substr($mod->FileName,11);
+				if(linkmanage_editSys_str($mod->FileName)){
+					$menuid = substr($mod->FileName,11);
+				} else{
+					$menuid = $mod->FileName;
+				}
 				if($menuid && isset($n['data'][$menuid])){
 		    		Redirect($zbp->host . 'zb_users/plugin/linkmanage/menuedit.php?id=' . $menuid);
 				}

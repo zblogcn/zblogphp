@@ -56,10 +56,12 @@ function linkmanage_getTempid()
 }
 
 //option
-//检查是否与系统模块同名
+//检查是否与系统链接模块同名
 function linkmanage_isSys($menuID)
 {
-    global $zbp,$sysMenu;
+    global $zbp;
+    $sysMenu = 'navbar|link|favorite|misc';
+
     $t = false;
     if (preg_match("/$menuID/", $sysMenu)) {
         $t = true;
