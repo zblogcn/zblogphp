@@ -795,7 +795,7 @@ class ZBlogPHP {
      * @return bool
      */
     public function HasConfig($name) {
-        return isset($this->configs[$name]);
+        return $this->configs[$name]->CountItem()>0;
     }
 
 ################################################################################################################
