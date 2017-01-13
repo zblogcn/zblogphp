@@ -130,13 +130,13 @@ require $blogpath.'zb_system/admin/admin_top.php';
 												</p>
 												<p class="link-p">
 													<label class="link-edit" for="menu-item['.$link['id'].'][menu-item-title]">
-														<span>ÃèÊö</span>
+														<span>描述</span>
 														<input name="menu-item['.$link['id'].'][menu-item-title]" type="text" class="regular-text menu-item-textbox input-with-default-title custom-menu-item-title" value="'.$link['title'].'">
 													</label>
 												</p>
 												<p class="link-p">
 													<label class="link-edit" for="custom-menu-item-name">
-														<span>ÐÂ´°¿Ú´ò¿ª </span>
+														<span>新窗口打开</span>
 														<input type="text" name="menu-item['.$link['id'].'][menu-item-newtable]" class="checkbox" value="'.$link['newtable'].'" style="display: none;">
 													</label>
 												</p>
