@@ -42,6 +42,25 @@ require $blogpath.'zb_system/admin/admin_top.php';
 					<td> <input id="forcedel" name="forcedel" type="text" value="<?php echo $zbp->Config('linkmanage')->forcedel; ?>" class="checkbox" style="display: none;"></td>
 					<td> 打开该选项后，将允许直接删除含有链接配置的菜单，请谨慎操作。 </td>
 				</tr>
+				<tr>
+					<td> 选择菜单编辑中要显示的系统链接类型 </td>
+					<td>
+					<?php
+					$showtype = linkmanage_showtype();
+					$showoption = $zbp->Config('linkmanage')->showoption;
+					foreach ($showtype as $item) {
+						$chk = (strstr($showoption,$item[0])) ? 'checked' : '';
+						$tmp = '<div class="checkbox">
+					        <label>
+					          <input type="checkbox" name="showoption[]" value="'.$item[0].'" '.$chk.'>'.$item[1].'
+					        </label>
+					      </div>';
+					    echo $tmp;
+					}
+					?>
+					</td>
+					<td>  </td>
+				</tr>
 			</tbody>
 		</table>
 		<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="sumbit">保存配置</button>

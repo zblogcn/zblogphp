@@ -309,6 +309,20 @@ function linkmanage_deleteLink($linkID, $menuID)
     die();
 }
 
+// 定义系统链接类型
+function linkmanage_showtype()
+{
+    global $zbp;
+    $showtype = array(
+        array('post','文章'),
+        array('page','页面'),
+        array('category','分类'),
+        array('tags','标签'),
+        array('author','作者'),
+        array('other','其它')
+    );
+    return $showtype;
+}
 // 获取系统链接
 function linkmanage_get_syslink($type)
 {
@@ -371,7 +385,11 @@ function linkmanage_edit_button($menuID)
 function linkmanage_saveConfig(){
     global $zbp;
     foreach ($_POST as $key => $value) {
-        $zbp->Config('linkmanage')->$key = $value;
+        if ($key == "showoption"){
+            $zbp->Config('linkmanage')->showoption = implode('|',$value);
+        } else {
+            $zbp->Config('linkmanage')->$key = $value;
+        }
     }
     $zbp->SaveConfig('linkmanage');
     $zbp->SetHint('good', '配置已保存！');

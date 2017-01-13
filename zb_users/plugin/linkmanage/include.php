@@ -42,15 +42,16 @@ function linkmanage_ModuleEdt() {
 
 function InstallPlugin_linkmanage() {
 	global $zbp;
-	if (!$zbp->Config('linkmanage')->HasKey('Version')) {
-		$zbp->Config('linkmanage')->Version = '0.2';
+	if (!$zbp->HasConfig('linkmanage')) {
+		$zbp->Config('linkmanage')->Version = '0.3';
 		$zbp->Config('linkmanage')->Menus = '{"num":4,"data":{"navbar":{"id":"navbar","name":"导航栏"},"link":{"id":"link","name":"友情链接"},"favorite":{"id":"favorite","name":"网站收藏"},"misc":{"id":"misc","name":"图标汇集"}}}';
-		$array = array(
+		$favorites = array(
             array('Name' => '首页','Url' => $zbp->host,'Sysid' => 'index'),
             array('Name' => '新建文章','Url' => $zbp->host . "zb_system/cmd.php?act=ArticleEdt",'Sysid' => 'newpost'),
             array('Name' => '登录管理','Url' => $zbp->host . "zb_system/cmd.php?act=Admin",'Sysid' => 'login')
         );
-		$zbp->Config('linkmanage')->Favorites = json_encode($array);
+		$zbp->Config('linkmanage')->Favorites = json_encode($favorites);
+		$zbp->Config('linkmanage')->showoption = 'page|category|tags|other';
 		//$zbp->Config('linkmanage')->Menu = '{}'; //菜单集{[{"id":"123456","title":"导航栏","url":"","newtable":"true","icon":"","type":""}]}
 		//$zbp->Config('linkmanage')->Location = '{}';
 		$zbp->Config('linkmanage')->Tempid = '0';
