@@ -2455,7 +2455,8 @@ function PostModule() {
 
     $mod->Save();
 
-    $zbp->AddBuildModule($mod->FileName);
+    if( (int)GetVars('ID', 'POST') > 0 )
+        $zbp->AddBuildModule($mod->FileName);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostModule_Succeed'] as $fpname => &$fpsignal) {
         $fpname($mod);
