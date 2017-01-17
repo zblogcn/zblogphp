@@ -767,7 +767,7 @@ class ZBlogPHP {
         }
 
         $this->configs[$name]->Delete();
-
+        unset($this->configs[$name]);
         return true;
     }
 
@@ -795,7 +795,7 @@ class ZBlogPHP {
      * @return bool
      */
     public function HasConfig($name) {
-        return $this->configs[$name]->CountItem()>0;
+        return isset($this->configs[$name]) && $this->configs[$name]->CountItem()>0;
     }
 
 ################################################################################################################

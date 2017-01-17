@@ -410,6 +410,10 @@ class App {
         $dir = $this->GetDir();
         $this->GetAllFileDir($dir);
 
+        foreach ($GLOBALS['hooks']['Filter_Plugin_App_Pack'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($this, $this->dirs, $this->files);
+        }
+
         $s = '<?xml version="1.0" encoding="utf-8"?>';
         $s .= '<app version="php" type="' . $this->type . '">';
 

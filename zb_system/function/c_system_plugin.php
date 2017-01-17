@@ -1770,6 +1770,17 @@ DefinePluginFilter('Filter_Plugin_Upload_Dir');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_App_Pack
+'参数:$this, $this->dirs, $this->files
+'说明:App类的Pack方法接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_App_Pack');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Template_Compiling_Begin
 '参数:$this,$content
 '说明:Template类编译一个模板前的接口
