@@ -96,6 +96,10 @@ class App {
      */
     public $advanced_rewritefunctions;
     /**
+     * @var string 高级选项：必须函数列表（以|分隔）
+     */
+    public $advanced_existsfunctions;    
+    /**
      * @var string 高级选项：冲突插件列表（以|分隔）
      */
     public $advanced_conflict;
@@ -119,6 +123,10 @@ class App {
      * @var string 设置主题侧栏5
      */
     public $sidebars_sidebar5;
+    /**
+     * @var string PHP最低版本
+     */
+    public $phpver;
     /**
      * 得到详细信息数组
      * @return array
@@ -278,9 +286,14 @@ class App {
         $this->modified = (string) $xml->modified;
         $this->description = (string) $xml->description;
         $this->price = (string) $xml->price;
-
+        if(empty($xml->phpver)) {
+            $this->phpver = '5.2';
+        } else {
+            $this->phpver = (string) $xml->phpver;
+        }
         $this->advanced_dependency = (string) $xml->advanced->dependency;
         $this->advanced_rewritefunctions = (string) $xml->advanced->rewritefunctions;
+        $this->advanced_existsfunctions = (string) $xml->advanced->existsfunctions;
         $this->advanced_conflict = (string) $xml->advanced->conflict;
 
         $this->sidebars_sidebar1 = (string) $xml->sidebars->sidebar1;
@@ -328,12 +341,15 @@ class App {
         $s .= '<pubdate>' . htmlspecialchars($this->pubdate) . '</pubdate>' . "\r\n";
         $s .= '<modified>' . htmlspecialchars($this->modified) . '</modified>' . "\r\n";
         $s .= '<price>' . htmlspecialchars($this->price) . '</price>' . "\r\n";
+        $s .= '<phpver>' . htmlspecialchars($this->phpver) . '</phpver>' . "\r\n";        
 
         $s .= '<advanced>' . "\r\n";
         $s .= '  <dependency>' . htmlspecialchars($this->advanced_dependency) . '</dependency>' . "\r\n";
         $s .= '  <rewritefunctions>' . htmlspecialchars($this->advanced_rewritefunctions) . '</rewritefunctions>' . "\r\n";
+        $s .= '  <existsfunctions>' . htmlspecialchars($this->advanced_existsfunctions) . '</existsfunctions>' . "\r\n";        
         $s .= '  <conflict>' . htmlspecialchars($this->advanced_conflict) . '</conflict>' . "\r\n";
         $s .= '</advanced>' . "\r\n";
+
 
         $s .= '<sidebars>' . "\r\n";
         $s .= '  <sidebar1>' . htmlspecialchars($this->sidebars_sidebar1) . '</sidebar1>' . "\r\n";
@@ -444,10 +460,12 @@ class App {
         $s .= '<pubdate>' . htmlspecialchars($this->pubdate) . '</pubdate>';
         $s .= '<modified>' . htmlspecialchars($this->modified) . '</modified>';
         $s .= '<price>' . htmlspecialchars($this->price) . '</price>';
+        $s .= '<phpver>' . htmlspecialchars($this->phpver) . '</phpver>';        
 
         $s .= '<advanced>';
         $s .= '<dependency>' . htmlspecialchars($this->advanced_dependency) . '</dependency>';
         $s .= '<rewritefunctions>' . htmlspecialchars($this->advanced_rewritefunctions) . '</rewritefunctions>';
+        $s .= '<existsfunctions>' . htmlspecialchars($this->advanced_existsfunctions) . '</existsfunctions>' . "\r\n";   
         $s .= '<conflict>' . htmlspecialchars($this->advanced_conflict) . '</conflict>';
         $s .= '</advanced>';
 

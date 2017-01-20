@@ -2773,7 +2773,7 @@ function SaveSetting() {
         $l = substr($zbp->option['ZC_BLOG_HOST'], $i, 1);
         if(ord($l) >= 192) $usePC = true;
     }
-    if ($usePC) {
+    if ($usePC && function_exists('mb_strtolower')) {
         $Punycode = new Punycode();
         $zbp->option['ZC_BLOG_HOST'] = $Punycode->encode($zbp->option['ZC_BLOG_HOST']);
     }

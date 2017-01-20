@@ -629,7 +629,10 @@ function Admin_ArticleMng() {
     echo '<hr/><p class="pagebar">';
 
     foreach ($p->Buttons as $key => $value) {
-        echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+        if($p->PageNow == $key)
+            echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
+        else
+            echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
     }
 
     echo '</p></div>';
@@ -726,7 +729,10 @@ function Admin_PageMng() {
     echo '</table>';
     echo '<hr/><p class="pagebar">';
     foreach ($p->Buttons as $key => $value) {
-        echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+        if($p->PageNow == $key)
+            echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
+        else
+            echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
     }
     echo '</p></div>';
     echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
@@ -933,7 +939,10 @@ function Admin_CommentMng() {
     echo '<p class="pagebar">';
 
     foreach ($p->Buttons as $key => $value) {
-        echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+        if($p->PageNow == $key)
+            echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
+        else
+            echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
     }
 
     echo '</p>';
@@ -1043,7 +1052,10 @@ function Admin_MemberMng() {
     echo '</table>';
     echo '<hr/><p class="pagebar">';
     foreach ($p->Buttons as $key => $value) {
-        echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+        if($p->PageNow == $key)
+            echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
+        else
+            echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
     }
     echo '</p></div>';
     echo '<script type="text/javascript">ActiveLeftMenu("aMemberMng");</script>';
@@ -1131,7 +1143,10 @@ function Admin_UploadMng() {
     echo '</table>';
     echo '<hr/><p class="pagebar">';
     foreach ($p->Buttons as $key => $value) {
-        echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+        if($p->PageNow == $key)
+            echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
+        else
+            echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
     }
     echo '</p></div>';
     echo '<script type="text/javascript">ActiveLeftMenu("aUploadMng");</script>';
@@ -1207,7 +1222,10 @@ function Admin_TagMng() {
     echo '</table>';
     echo '<hr/><p class="pagebar">';
     foreach ($p->Buttons as $key => $value) {
-        echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+        if($p->PageNow == $key)
+            echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
+        else
+            echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
     }
     echo '</p></div>';
 
@@ -1632,7 +1650,7 @@ function Admin_SettingMng() {
 				<div class="content-box-content">
 <?php
     $decodedBlogHost = $zbp->option['ZC_BLOG_HOST'];
-    if(stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false){
+    if(stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false && function_exists('mb_strtolower')){
         $Punycode = new Punycode();
         $decodedBlogHost = $Punycode->decode($zbp->option['ZC_BLOG_HOST']);
     }
