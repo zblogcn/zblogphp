@@ -570,6 +570,14 @@ class App {
             $zbp->ShowError(str_replace('%s', $this->adapted, $zbp->lang['error'][78]), __FILE__, __LINE__);
         }
 
+        if( trim($this->phpver) == '' ) $this->phpver = '5.2';
+        $p = phpversion();
+
+        if (strpos($p, '-') !== false) $p = substr($p, 0, strpos($p, '-'));
+        if ( version_compare($this->phpver, $p) > 0 ){
+            $zbp->ShowError(str_replace('%s', $this->phpver, $zbp->lang['error'][91]), __FILE__, __LINE__);
+        }
+
         $ad = explode('|', $this->advanced_dependency);
         foreach ($ad as $d) {
             if (!$d) {

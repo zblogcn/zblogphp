@@ -494,6 +494,7 @@ return array(
         '88' => 'The file that you uploaded not exist, maybe exceed the maximum upload limit of the server.',
         '89' => 'Error when loading JavaScript.',
         '90' => 'Alias disallow special symbols.',
+        '91' => 'This app requires %s or higher php version',
     ),
 
     'offical_urls' => array(
