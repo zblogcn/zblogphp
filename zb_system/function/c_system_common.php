@@ -1314,7 +1314,7 @@ function utf84mb_convertToUTF8($matches) {
 
 
 //$args = 2...x
-function VerfyWebToken($wt,$wt_id){
+function VerfiyWebToken($wt,$wt_id){
     $time = substr($wt,32);
     $wt = substr($wt,0,32);
     $args = array();
