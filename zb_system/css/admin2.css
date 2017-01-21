@@ -210,8 +210,8 @@ input.edit { width: 293px; }
 .form-group textarea { width: 80%; float: left; position: relative; min-height: 1px; padding-right: 15px; padding-left: 15px; display: block; padding: 6px !important; }
 .form-group select { width: 230px; }
 .form-group .imgcheck { margin-top: 8px; margin-left: 0px; }
-textarea #editor_content { width: 100%; height: 300px; margin: 0; padding: 0.5em 0.5em; }
-textarea #editor_intro { width: 100%; height: 150px; margin: 0; padding: 0.5em 0.5em; }
+textarea#editor_content { width: 100%; height: 300px; margin: 0; padding: 0.5em 0.5em; }
+textarea#editor_intro { width: 100%; height: 150px; margin: 0; padding: 0.5em 0.5em; }
 
 /*提示DIV*/
 div.hint { width: 100%; margin: 0 0 0.2em 0; }
