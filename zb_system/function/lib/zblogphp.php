@@ -1134,7 +1134,7 @@ class ZBlogPHP {
         $m = null;
         $m = $this->GetMemberByName($name);
         if ($m->ID > 0) {
-            if( VerfiyWebToken($wt, $wt_id, $this->guid, $m->ID, $m->Password) === true ){
+            if( VerifyWebToken($wt, $wt_id, $this->guid, $m->ID, $m->Password) === true ){
                 $member = $m;
                 return true;
             }
@@ -2443,7 +2443,7 @@ class ZBlogPHP {
      */
     public function ValidWebToken($wt, $wt_id = '') {
 
-        if( VerfiyWebToken($wt, $wt_id, $this->guid, $this->user->Guid, $this->user->ID, $this->user->Password) === true ){
+        if( VerifyWebToken($wt, $wt_id, $this->guid, $this->user->Guid, $this->user->ID, $this->user->Password) === true ){
             return true;
         }
 
