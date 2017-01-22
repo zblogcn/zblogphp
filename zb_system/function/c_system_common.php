@@ -91,6 +91,16 @@ function GetPHPEngine() {
 }
 
 /**
+ * 获取PHP Version
+ * @return string
+ */
+function GetPHPVersion() {
+    $p = phpversion();
+    if (strpos($p, '-') !== false) $p = substr($p, 0, strpos($p, '-'));
+    return $p;
+}
+
+/**
  * 自动加载类文件
  * @api Filter_Plugin_Autoload
  * @param string $classname 类名
@@ -187,13 +197,11 @@ function GetEnvironment() {
     if ($ajax) {
         $ajax = substr(get_class($ajax), 7);
     }
-    $p = phpversion();
-    if (strpos($p, '-') !== false) $p = substr($p, 0, strpos($p, '-'));
     $system_environment = PHP_OS . '; ' .
     GetValueInArray(
         explode(' ', str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))), 0
     ) . '; ' .
-    'PHP ' . $p . (IS_X64 ? ' x64' : '') . '; ' .
+    'PHP ' . GetPHPVersion() . (IS_X64 ? ' x64' : '') . '; ' .
     $zbp->option['ZC_DATABASE_TYPE'] . '; ' . $ajax;
 
     return $system_environment;

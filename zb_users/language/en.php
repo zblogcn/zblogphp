@@ -495,6 +495,7 @@ return array(
         '89' => 'Error when loading JavaScript.',
         '90' => 'Alias disallow special symbols.',
         '91' => 'This app requires %s or higher php version',
+        '92' => '该应用需要系统启用 %s 函数或是相关的扩展',
     ),
 
     'offical_urls' => array(

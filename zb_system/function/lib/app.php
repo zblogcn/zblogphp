@@ -571,11 +571,20 @@ class App {
         }
 
         if( trim($this->phpver) == '' ) $this->phpver = '5.2';
-        $p = phpversion();
-
-        if (strpos($p, '-') !== false) $p = substr($p, 0, strpos($p, '-'));
-        if ( version_compare($this->phpver, $p) > 0 ){
+        if ( version_compare($this->phpver, GetPHPVersion()) > 0 ){
             $zbp->ShowError(str_replace('%s', $this->phpver, $zbp->lang['error'][91]), __FILE__, __LINE__);
+        }
+
+        $ae = explode('|', $advanced_existsfunctions);
+        foreach ($ad as $d) {
+            $d = trim($d);
+            if (!$d) {
+                continue;
+            }
+
+            if(function_exists($d) == false){
+                $zbp->ShowError(str_replace('%s', $d, $zbp->lang['error'][92]), __FILE__, __LINE__);
+            }
         }
 
         $ad = explode('|', $this->advanced_dependency);
