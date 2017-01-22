@@ -300,8 +300,7 @@ class ZBlogPHP {
         $this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
 
         $this->categories = &$this->categorys;
-        $this->categoriesbyorder = &$this->categorys;
-        $this->categorysbyorder = &$this->categorys;
+        $this->categoriesbyorder = &$this->categorysbyorder;
 
         $this->user = new stdClass;
         foreach ($this->datainfo['Member'] as $key => $value) {
@@ -1200,12 +1199,14 @@ class ZBlogPHP {
         }
 
         foreach ($lv0[0] as $id0) {
+            $this->categoriesbyorder[$id0] = &$this->categories[$id0];
             if (!isset($lv1[$id0])) {continue;}
             foreach ($lv1[$id0] as $id1) {
                 if ($this->categories[$id1]->ParentID == $id0) {
                     $this->categories[$id1]->RootID = $id0;
                     $this->categories[$id0]->SubCategories[] = $this->categories[$id1];
                     $this->categories[$id0]->ChildrenCategories[] = $this->categories[$id1];
+                    $this->categoriesbyorder[$id1] = &$this->categories[$id1];
                     if (!isset($lv2[$id1])) {continue;}
                     foreach ($lv2[$id1] as $id2) {
                         if ($this->categories[$id2]->ParentID == $id1) {
@@ -1213,6 +1214,7 @@ class ZBlogPHP {
                             $this->categories[$id0]->ChildrenCategories[] = $this->categories[$id2];
                             $this->categories[$id1]->SubCategorys[] = $this->categories[$id2];
                             $this->categories[$id1]->ChildrenCategories[] = $this->categories[$id2];
+                            $this->categoriesbyorder[$id2] = &$this->categories[$id2];
                             if (!isset($lv3[$id2])) {continue;}
                             foreach ($lv3[$id2] as $id3) {
                                 if ($this->categories[$id3]->ParentID == $id2) {
@@ -1221,6 +1223,7 @@ class ZBlogPHP {
                                     $this->categories[$id1]->ChildrenCategories[] = $this->categories[$id3];
                                     $this->categories[$id2]->SubCategorys[] = $this->categories[$id3];
                                     $this->categories[$id2]->ChildrenCategories[] = $this->categories[$id3];
+                                    $this->categoriesbyorder[$id3] = &$this->categories[$id3];
                                 }
                             }
                         }
