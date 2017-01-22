@@ -575,15 +575,15 @@ class App {
             $zbp->ShowError(str_replace('%s', $this->phpver, $zbp->lang['error'][91]), __FILE__, __LINE__);
         }
 
-        $ae = explode('|', $advanced_existsfunctions);
-        foreach ($ad as $d) {
-            $d = trim($d);
-            if (!$d) {
+        $ae = explode('|', $this->advanced_existsfunctions);
+        foreach ($ae as $e) {
+            $e = trim($e);
+            if (!$e) {
                 continue;
             }
 
-            if(function_exists($d) == false){
-                $zbp->ShowError(str_replace('%s', $d, $zbp->lang['error'][92]), __FILE__, __LINE__);
+            if(function_exists($e) == false){
+                $zbp->ShowError(str_replace('%s', $e, $zbp->lang['error'][92]), __FILE__, __LINE__);
             }
         }
 

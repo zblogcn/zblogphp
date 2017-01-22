@@ -466,10 +466,6 @@ class SQLGlobal {
                 $whereData = " (1 = 1) ";
                 return $whereData;
             }
-            if (count($value[1]) < 2) {
-                $whereData = " (1 = 1) ";
-                return $whereData;
-            }
             foreach ($value[1] as $x => $y) {
                 $y[1] = $this->db->EscapeString($y[1]);
                 $sqlArray[] = " $y[0] $symbol '$y[1]' ";
