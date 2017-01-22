@@ -521,7 +521,7 @@ return array(
         '92' => '
             您的主机环境可能缺少某些必要组件，请联系您的主机商启用这些组件，才可使用本应用。<br/>
             您可以<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-92" target="_blank">点击这里，来获得缺少组件的大致列表。</a>
-        '
+        ',
 
         'other' => array(
             // Other errors then

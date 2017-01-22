@@ -26,7 +26,6 @@
 # Unoffical Plugin
 /zb_users/plugin/*
 !/zb_users/plugin/api
-!/zb_users/plugin/AdminColor
 !/zb_users/plugin/AuditRecords
 !/zb_users/plugin/AutoPublisher
 !/zb_users/plugin/CloudStorage
@@ -56,7 +55,6 @@
 !/zb_users/plugin/LargeData
 !/zb_users/plugin/ZBPJFExample
 !/zb_users/plugin/markdown
-!/zb_users/plugin/forcehttps
 !/zb_users/plugin/linkmanage
 
 # Unoffical Theme

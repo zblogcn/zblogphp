@@ -495,7 +495,7 @@ return array(
         '89' => 'Error when loading JavaScript.',
         '90' => 'Alias disallow special symbols.',
         '91' => 'PHP version is too old to enable this application, it requires %s and above.',
-        '92' => 'Missing %s function, can not enable this application.'
+        '92' => 'Missing %s function, can not enable this application.',
     ),
 
     'offical_urls' => array(
@@ -522,7 +522,7 @@ return array(
              Your PHP version may be too old to enable this application. You\'d better to contact your host and upgrade to the latest PHP version they can provide. <br/>
              For security and efficiency, we also strongly recommend to update your PHP to the latest version.
          ',
-         '92' => '
+        '92' => '
              Your environment may be missing some of the necessary extensions, please contact your host to enable these extensions to use this application. <br/> <br/>
              You can <a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-92" target="_blank"> click here to get a rough list of missing extensions. </a>
          ',

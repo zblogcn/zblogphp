@@ -523,10 +523,10 @@ return array(
             您的PHP版本可能太舊，請您聯繫您的主機商，把PHP版本升級為他們所能提供的最新版本。 <br/>
             為了安全與效率，我們也強烈建議您把您的PHP更新到最新版本。
         ',
-        '92' => '
+        '92' => '
             您的主機環境可能缺少某些必要組件，請聯繫您的主機商啟用這些組件，才可使用本應用。 <br/>
             您可以<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-92" target="_blank">點擊這裡，來獲得缺少組件的大致列表。 </a>
-        '
+        ',
 
         'other' => array(
             // Other errors then
