@@ -490,8 +490,8 @@ return array(
         '88' => '上传的文件不存在，可能超过了服务器最大上传限制。',
         '89' => '后台JavaScript加载失败！',
         '90' => '别名不允许使用特殊符号。',
-        '91' => '该应用需要%s及更高版本的PHP环境',
-        '92' => '该应用需要系统启用 %s 函数或是相关的扩展',
+        '91' => 'PHP版本太旧，该应用要求使用 %s 及以上版本。',
+        '92' => '缺少 %s 函数，无法启用本应用',
     ),
 
     'offical_urls' => array(
@@ -514,6 +514,14 @@ return array(
 			如果您是网站管理员且忘记了密码，可以点击<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-8" target="_blank">【登录失败】</a>。<br/>
 			<br/>
 		',
+        '91' => '
+            您的PHP版本可能太旧，请您联系您的主机商，把PHP版本升级为他们所能提供的最新版本。<br/>
+            为了安全与效率，我们也强烈建议您把您的PHP更新到最新版本。
+        ',
+        '92' => '
+            您的主机环境可能缺少某些必要组件，请联系您的主机商启用这些组件，才可使用本应用。<br/>
+            您可以<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-92" target="_blank">点击这里，来获得缺少组件的大致列表。</a>
+        '
 
         'other' => array(
             // Other errors then

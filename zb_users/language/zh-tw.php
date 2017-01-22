@@ -494,8 +494,8 @@ return array(
         '88' => '上傳的檔案不存在，可能超過了最大上傳限制',
         '89' => 'JavaScript加載失敗，可能被服務器拦截',
         '90' => '代稱不允許使用特殊符號',
-        '91' => '该应用需要%s及更高版本的PHP环境',
-        '92' => '该应用需要系统启用 %s 函数或是相关的扩展',
+        '91' => 'PHP版本太舊，該應用要求使用 %s 及以上版本。 ',
+        '92' => '缺少 %s 函數，無法啟用本應用'
     ),
 
 
@@ -519,6 +519,14 @@ return array(
 			如果您是管理員且忘記了密碼，可以點擊<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-8" target="_blank">【登入失敗】</a>。<br/>
 			<br/>
 		',
+        '91' => '
+            您的PHP版本可能太舊，請您聯繫您的主機商，把PHP版本升級為他們所能提供的最新版本。 <br/>
+            為了安全與效率，我們也強烈建議您把您的PHP更新到最新版本。
+        ',
+        '92' => '
+            您的主機環境可能缺少某些必要組件，請聯繫您的主機商啟用這些組件，才可使用本應用。 <br/>
+            您可以<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-92" target="_blank">點擊這裡，來獲得缺少組件的大致列表。 </a>
+        '
 
         'other' => array(
             // Other errors then
