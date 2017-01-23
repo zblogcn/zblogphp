@@ -908,6 +908,7 @@ function InsertInfo() {
     $cate = new Category();
     $cate->Name = $zbp->lang['msg']['uncategory'];
     $cate->Alias = 'uncategorized';
+    $cate->Count = 1;
     $cate->Save();
 
     $t = new Module();
