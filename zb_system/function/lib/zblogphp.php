@@ -86,9 +86,9 @@ class ZBlogPHP {
     public $categorys = array();
     public $categories = null;
     /**
-     * @var array 分类数组（已排序） 都已链接至$categorys
+     * @var array 分类数组（已排序）
      */
-    public $categorysbyorder = null;
+    public $categorysbyorder = array();
     public $categoriesbyorder = null;
     /**
      * @var array 模块数组
