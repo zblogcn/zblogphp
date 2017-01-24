@@ -256,7 +256,8 @@ div.theme-now { float: left; background: #b0cdee; padding: .6em 1em; margin: 0 1
 div.theme-other { float: left; background: #f0f0f0; padding: .6em 1em; margin: 0 1em 1em 0; }
 div.theme-other a { cursor: pointer; }
 div.theme-other .theme-name img { opacity: 0.50; }
-div.theme>.theme-name,div.theme>.theme-author,div.theme>.theme-style,div.theme>p{height:2.4em;white-space :nowrap;overflow: hidden;}
+div.theme>.theme-name,div.theme>.theme-author,div.theme>.theme-style,div.theme>p{height:2.4em;}
+div.theme>.theme-name{overflow: hidden;white-space :nowrap;}
 div.theme-now .betterTip img { box-shadow: 0 0 10px #3a6ea5; }
 div.theme-now .betterTip img,
 div.theme-other .betterTip img { border: 2px solid #f6f6f6; }
@@ -265,7 +266,7 @@ div.theme-other .betterTip img:hover { border: 2px solid #b0cdee; box-shadow: 0 
 div.theme-now div,
 div.theme-other div { max-width: 220px;	/*overflow:hidden;*/ padding: 0.5em 0 0.5em 0; }
 input.theme-config,
-input.theme-activate { float: right; height: 26px; width: 46px; margin: 0; padding: 2px 5px 3px 5px; font-size: 1em; margin-top: 2px; }
+input.theme-activate { float: right; height: 26px; width: 46px; margin: 0; padding: 2px 5px 3px 5px; font-size: 1em; }
 input.theme-config { margin-top: -3px; }
 .hidden { display: none; }
 .pagebar { padding: 1em 0 2em 0; }
