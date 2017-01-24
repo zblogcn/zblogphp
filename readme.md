@@ -8,13 +8,12 @@ Z-BlogPHP有着强大的可定制性、丰富的插件接口和独立的主题�
 ## 社区说明
 1. 使用交流及开发建议，请转向[Z-Blog论坛](http://bbs.zblogcn.com/)；
 1. 开发文档，参看[Z-Wiki](http://wiki.zblogcn.com/doku.php?id=zblogphp)；
-1. 提交安全漏洞，请在[乌云（WooYun）](http://wooyun.org/corps/Z-Blog)提交，建议不要在GitHub Issue / 论坛内直接发布；
 1. 提交功能BUG，请在论坛内，或直接在GitHub Issue内提交；
 1. 欢迎Pull Request，如果你喜欢，请为我们点一个Star :)
 
 ## 运行环境
 - Web Server: IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
-- PHP 5.2 - 7 / HHVM 3 
+- PHP 5.2 - 7.1 / HHVM 3 
 - MariaDB(MySQL) / SQLite
 
 ## 安装说明
