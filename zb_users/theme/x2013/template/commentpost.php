@@ -5,7 +5,7 @@
 		<h3 class="base-tit">发表我的评论</h3>
 		<div class="comt">
 			<div class="comt-avatar">
-				<img class="avatar" src="{$host}zb_users/theme/X2013/style/images/default.png" width="36" height="36">
+				<img class="avatar" src="{$zbp.user.Avatar}" width="36" height="36">
 			</div>
 			<div class="comt-box">
 				<textarea class="comt-area" name="txaArticle" id="txaArticle" cols="100%" rows="3" tabindex="5" onkeydown="if(event.ctrlKey&amp;&amp;event.keyCode==13){document.getElementById('submit').click();};"></textarea>
@@ -13,7 +13,7 @@
 {if $option['ZC_COMMENT_VERIFY_ENABLE']}
 					&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="inpVerify" id="inpVerify" value="" tabindex="4"/><span style="color:#F00;">验证码(*)</span><img style="border:1px solid #746969;height:18px;vertical-align:middle;margin-left: 10px;" src="{$article.ValidCodeUrl}" onclick="javascript:this.src='{$article.ValidCodeUrl}&amp;tm='+Math.random();"/>
 {/if}
-					<input class="comt-submit" type="submit" name="submit" id="submit" tabindex="6" onclick="return VerifyMessage()" value="发布评论" />
+					<input class="comt-submit" type="submit" name="submit" id="submit" tabindex="6" onclick="return zbp.comment.post()" value="发布评论" />
 				</div>
 			</div>
 				{if $user.ID>0}

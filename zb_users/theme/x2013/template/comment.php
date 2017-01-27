@@ -6,7 +6,7 @@
 			<img class="avatar" src="{$comment.Author.Avatar}" width="36" height="36">
 		</div>
 		<div class="c-main" id="div-comment-{$comment.ID}">
-			<div class="c-meta"><span class="c-author">{$comment.Author.Name}</span>{$comment.Time()} <a class='comment-reply-link' href='#respond' onclick="RevertComment('{$comment.ID}')">回复</a></div>
+			<div class="c-meta"><span class="c-author">{$comment.Author.Name}</span>{$comment.Time()} <a class='comment-reply-link' href='#respond' onclick="zbp.comment.reply('{$comment.ID}')">回复</a></div>
 			<p>{$comment.Content}
 {foreach $comment.Comments as $key => $comment}
 	{template:comment}

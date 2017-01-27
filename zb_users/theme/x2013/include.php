@@ -28,7 +28,7 @@ function x2013_tags_set(&$template) {
 	}
 	//qqmailfeed
 	if(($zbp->Config('x2013')->DisplayFeed)){
-		$qqmail = '<div class="popup-follow-mail"><h4>邮件订阅：</h4><form action="http://list.qq.com/cgi-bin/qf_compose_send" target="_blank" method="post"><input type="hidden" name="t" value="qf_booked_feedback" /><input type="hidden" name="id" value="'.$zbp->Config('x2013')->SetMailKey.'" /><input id="to" placeholder="输入邮箱 订阅本站" name="to" type="text" class="ipt" /><input class="btn btn-primary" type="submit" value="邮件订阅" /></form></div>';
+		$qqmail = '<div class="popup-follow-mail"><h4>邮件订阅：</h4><form action="https://list.qq.com/cgi-bin/qf_compose_send" target="_blank" method="post"><input type="hidden" name="t" value="qf_booked_feedback" /><input type="hidden" name="id" value="'.$zbp->Config('x2013')->SetMailKey.'" /><input id="to" placeholder="输入邮箱 订阅本站" name="to" type="text" class="ipt" /><input class="btn btn-primary" type="submit" value="邮件订阅" /></form></div>';
 	}
 
 	$showlink = $zbp->Config('x2013')->NavBar;
@@ -44,7 +44,7 @@ function x2013_tags_set(&$template) {
 function InstallPlugin_x2013() {
 	global $zbp;
 	if(!$zbp->Config('x2013')->HasKey('Version')){
-		$zbp->Config('x2013')->Version = '1.7';
+		$zbp->Config('x2013')->Version = '2.1';
 		$zbp->Config('x2013')->SetWeiboSina = 'http://weibo.com/810888188';
 		$zbp->Config('x2013')->SetWeiboQQ = 'http://t.qq.com/involvements';
 		$zbp->Config('x2013')->DisplayFeed = '1';
@@ -59,7 +59,7 @@ function InstallPlugin_x2013() {
 		$zbp->Config('x2013')->Css = '#38A3DB';
 		$zbp->SaveConfig('x2013');
 	}
-	$zbp->Config('x2013')->Version = '2.0';
+	$zbp->Config('x2013')->Version = '2.1';
 	$zbp->SaveConfig('x2013');
 	//Call SetBlogHint_Custom("<span style='color:#ff0000'>x2013主题</span>已经激活，点击<a href='" +BlogHost+"zb_users/theme/x2013/plugin/main.asp'>[主题设置]</a>去配置主题")
 }
