@@ -345,6 +345,23 @@ function GetCurrentHost($blogpath, &$cookiespath) {
 
     $host .= $_SERVER['HTTP_HOST'];
 
+    if (isset($_SERVER['SCRIPT_NAME']) && $_SERVER['SCRIPT_NAME']) {
+        $x = $_SERVER['SCRIPT_NAME'];
+        $y = $blogpath;
+        $z = '';
+        for ($i=0; $i < strlen($x) ; $i++) { 
+            $f = $y . substr($x, $i - strlen($x));
+            $z = substr($x,0,$i);
+            if ( file_exists($f)  && is_file($f) ){
+                $z = trim($z,'/');
+                $z = '/' . $z . '/';
+                $z = str_replace('//', '/', $z);
+                $cookiespath = $z;
+                return $host . $z;
+            }
+        }
+    }
+
     $x = $_SERVER['SCRIPT_NAME'];
     $y = $blogpath;
     if (isset($_SERVER["CONTEXT_DOCUMENT_ROOT"]) && isset($_SERVER["CONTEXT_PREFIX"])) {

@@ -2459,7 +2459,7 @@ class ZBlogPHP {
      * @return string
      */
     public function GetToken($id = '') {
-        return md5($this->guid . $this->user->Guid . $id . date('Ymdh'));
+        return md5($this->guid . $this->user->ID . $this->user->Password . $id . date('Ymdh'));
     }
 
     /**
@@ -2469,10 +2469,10 @@ class ZBlogPHP {
      * @return bool
      */
     public function ValidToken($t, $id = '') {
-        if ($t == md5($this->guid . $this->user->Guid . $id . date('Ymdh'))) {
+        if ($t == md5($this->guid . $this->user->ID . $this->user->Password . $id . date('Ymdh'))) {
             return true;
         }
-        if ($t == md5($this->guid . $this->user->Guid . $id. date('Ymdh', time() - (3600 * 1)))) {
+        if ($t == md5($this->guid . $this->user->ID . $this->user->Password . $id. date('Ymdh', time() - (3600 * 1)))) {
             return true;
         }
 
