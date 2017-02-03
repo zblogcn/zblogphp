@@ -117,7 +117,7 @@ class ValidateCode {
 
     public function __construct() {
         global $zbp;
-        $this->font = $zbp->path . (isset($zbp->option['ZC_VERIFYCODE_FONT']) ? $zbp->option['ZC_VERIFYCODE_FONT'] : 'zb_system/defend/captcha0.ttf');
+        $this->font = $zbp->path . (isset($zbp->option['ZC_VERIFYCODE_FONT']) ? $zbp->option['ZC_VERIFYCODE_FONT'] : 'zb_system/defend/arial.ttf');
         $this->charset = $zbp->option['ZC_VERIFYCODE_STRING'];
         $this->width = $zbp->option['ZC_VERIFYCODE_WIDTH'];
         $this->height = $zbp->option['ZC_VERIFYCODE_HEIGHT'];
@@ -483,9 +483,9 @@ class ValidateCode {
     /**
      * Outputs the image
      */
-    public function output() {
+    public function output($n = null) {
         header('Content-type: image/jpeg');
-        $this->createCode();
+        $this->createCode($n);
         $this->build();
         $this->directOutput();
     }
@@ -494,10 +494,7 @@ class ValidateCode {
      * 对外生成
      */
     public function GetImg($n = null) {
-        if (!is_null($n)) {
-            $this->setPhrase($n);
-        }
-        $this->outPut();
+        $this->outPut($n);
     }
 
     /**

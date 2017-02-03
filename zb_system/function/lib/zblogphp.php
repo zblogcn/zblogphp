@@ -2514,9 +2514,9 @@ class ZBlogPHP {
         $original = GetVars('captcha_' . crc32($this->guid . $id), 'COOKIE');
         setcookie('captcha_' . crc32($this->guid . $id), '', time() - 3600, $this->cookiespath);
 
-        return (md5($this->guid . date("Ymdh") . $vaidcode) == $original
+        return (md5($this->guid . date("Ymdh") . strtolower($vaidcode) ) == $original
                 ||
-                md5($this->guid . date("Ymdh", time() - (3600 * 1)) . $vaidcode) == $original
+                md5($this->guid . date("Ymdh", time() - (3600 * 1)) . strtolower($vaidcode) ) == $original
                 );
     }
 
