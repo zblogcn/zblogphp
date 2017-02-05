@@ -341,7 +341,7 @@ class ZBlogPHP {
      */
     public function __set($name, $value) {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Set'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($method, $args);
+            $fpreturn = $fpname($name, $value);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;            	
                 return $fpreturn;
@@ -357,7 +357,7 @@ class ZBlogPHP {
      */
     public function __get($name) {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Get'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($method, $args);
+            $fpreturn = $fpname($name);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;            	
                 return $fpreturn;
