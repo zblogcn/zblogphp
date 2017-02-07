@@ -14,7 +14,8 @@ function RegPage(){
 			var s =data;
 			if((s.search("faultCode")>0)&&(s.search("faultString")>0))
 			{
-				alert(s.match("<string>.+?</string>")[0].replace("<string>","").replace("</string>",""))
+				alert(s.match("<string>.+?</string>")[0].replace("<string>","").replace("</string>",""));
+				$("#reg_verfiycode").attr("src",bloghost+"zb_system/script/c_validcode.php?id=RegPage&amp;tm="+Math.random());
 			}
 			else{
 				var s =data;

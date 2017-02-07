@@ -253,7 +253,7 @@ div.bg {background: #777bb4!important;}
 <body class="short">
 <div class="bg">
 	<div id="wrapper">
-		<div class="logo"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></div>
+		<div class="logo"><a href="#zblogphp"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></a></div>
 		<?php
 if (PHP_ENGINE === ENGINE_HHVM) {
         echo '<p style="text-align: center;">' . GetEnvironment() . '</p>';
@@ -307,8 +307,10 @@ foreach (get_included_files() as $n => $v) {
     $ca[] = $v;
 }
 echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Include Files</th></tr>';
+$i =0;
 foreach ($ca as $key => $value) {
-echo '<tr><td class="e">'.'</td><td class="v">' .$value .'</td></tr>';
+$i ++;
+echo '<tr><td class="e">'.$i.'</td><td class="v">' .$value .'</td></tr>';
 }
 echo '</tbody></table>';
 
@@ -319,14 +321,16 @@ $ca = array();
 foreach ($GLOBALS['hooks'] as $n => $v) {
     $ca[$n] = $n;
 }
-
+$i =0;
 $badfilter = array_diff_key($badfilter , $ca);
 echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Plugin Filters</th></tr>';
 foreach ($ca as $key => $value) {
-echo '<tr><td class="e">'.'</td><td class="v">' .$value .'</td></tr>';
+$i ++;
+echo '<tr><td class="e">'.$i.'</td><td class="v">' .$value .'</td></tr>';
 }
 foreach ($badfilter as $key => $value) {
-echo '<tr><td class="e">'.'(no specification)'.'</td><td class="v">' .$value .'</td></tr>';
+$i ++;
+echo '<tr><td class="e">'.$i.'(no specification)'.'</td><td class="v">' .$value .'</td></tr>';
 }
 echo '</tbody></table>';
 

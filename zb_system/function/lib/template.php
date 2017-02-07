@@ -592,6 +592,8 @@ class Template {
         $this->templateTags['version'] = &$zbp->version;
         $this->templateTags['categorys'] = &$zbp->categories;
         $this->templateTags['categories'] = &$zbp->categories;
+        $this->templateTags['categorysbyorder'] = &$zbp->categoriesbyorder;
+        $this->templateTags['categoriesbyorder'] = &$zbp->categoriesbyorder;        
         $this->templateTags['modules'] = &$zbp->modulesbyfilename;
         $this->templateTags['title'] = htmlspecialchars($zbp->title);
         $this->templateTags['host'] = &$zbp->host;

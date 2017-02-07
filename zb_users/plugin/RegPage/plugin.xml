@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>RegPage</id>
 <name>注册组件</name>
-<url>http://www.rainbowsoft.org/</url>
+<url>http://www.zblogcn.com/</url>
 <note>注册组件</note>
 <description></description>
 <path>main.php</path>
 <include>include.php</include>
 <level>1</level>
 <author>
-  <name>zsx</name>
-  <email>zsx@zsxsoft.com</email>
-  <url>http://www.zsxsoft.com/</url>
+  <name>zxasd</name>
+  <email>rainbowsoft@gmail.com</email>
+  <url>http://www.zdevo.com/</url>
 </author>
 <source>
   <name></name>
@@ -19,9 +19,9 @@
   <url></url>
 </source>
 <adapted>140220</adapted>
-<version>1.4</version>
+<version>2.0</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2014-03-23</modified>
+<modified>2017-02-07</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

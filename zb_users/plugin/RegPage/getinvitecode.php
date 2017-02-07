@@ -16,13 +16,13 @@ if(!$zbp->Config('RegPage')->open_reg){
 }
 
 
-$sql = $zbp->db->sql->Select($RegPage_Table, '*', array(array('=', 'reg_AuthorID', 0)), null, array(1), null);
+$sql = $zbp->db->sql->Select($RegPage_Table, '*', array(array('=', 'reg_AuthorID', 0)), null, array(100), null);
 $array = $zbp->GetListCustom($RegPage_Table, $RegPage_DataInfo, $sql);
 $num = count($array);
 if($num == 0){
     echo '<p>邀请码派发完了.</p>';
 }else{
-    echo '<p>邀请码: </p><p>'.$array[0]->InviteCode .'</p><p>请选中邀请码并复制后点OK按钮.</p>';
+    echo '<p>邀请码: </p><p>'.$array[mt_rand(0,$num-1)]->InviteCode .'</p><p>请选中邀请码并复制后点OK按钮.</p>';
 }
 
 die();

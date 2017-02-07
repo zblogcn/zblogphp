@@ -1174,6 +1174,7 @@ class ZBlogPHP {
     public function LoadCategorys() {
 
         $this->categories = array();
+        $this->categoriesbyorder = array();
         $lv0 = array();
         $lv1 = array();
         $lv2 = array();
@@ -2127,16 +2128,15 @@ class ZBlogPHP {
         $am = $this->GetListType('Member', $sql);
         if (count($am) > 0) {
             $m = $am[0];
-            $this->members[$m->ID] = $m;
-            $this->membersbyname[$m->Name] = &$this->members[$m->ID];
+            if(!isset($this->members[$m->ID]))
+                $this->members[$m->ID] = $m;
+            if(!isset($this->membersbyname[$m->Name]))
+                $this->membersbyname[$m->Name] = &$this->members[$m->ID];
 
             return $m;
         };
 
-        $m = new Member;
-        $m->Guid = GetGuid();
-
-        return $m;
+        return new Member;
     }
 
     /**
@@ -2167,8 +2167,36 @@ class ZBlogPHP {
         $am = $this->GetListType('Member', $sql);
         if (count($am) > 0) {
             $m = $am[0];
-            $this->members[$m->ID] = $m;
-            $this->membersbyname[$m->Name] = &$this->members[$m->ID];
+            if(!isset($this->members[$m->ID]))
+                $this->members[$m->ID] = $m;
+            if(!isset($this->membersbyname[$m->Name]))
+                $this->membersbyname[$m->Name] = &$this->members[$m->ID];
+
+            return $m;
+        };
+
+        return new Member;
+    }
+
+    /**
+     * 通过邮箱名获取用户实例(不区分大小写)
+     * @param string $email
+     * @return Member
+     */
+    public function GetMemberByEmail($email) {
+        $email = strtolower(trim($email));
+        if (!$email || !CheckRegExp($email, '[email]')) {
+            return new Member;
+        }
+
+        $sql = $this->db->sql->Select($this->table['Member'], '*', array(array('LIKE', 'mem_Email', $email)), null, 1, null);
+        $am = $this->GetListType('Member', $sql);
+        if (count($am) > 0) {
+            $m = $am[0];
+            if(!isset($this->members[$m->ID]))
+                $this->members[$m->ID] = $m;
+            if(!isset($this->membersbyname[$m->Name]))
+                $this->membersbyname[$m->Name] = &$this->members[$m->ID];
 
             return $m;
         };
@@ -2190,6 +2218,15 @@ class ZBlogPHP {
      */
     public function CheckMemberByNameOrAliasExist($name) {
         $m = $this->GetMemberByNameOrAlias($name);
+
+        return ($m->ID > 0);
+    }
+
+    /**
+     * 检查指定邮箱的用户是否存在(不区分大小写)
+     */
+    public function CheckMemberByEmailExist($email) {
+        $m = $this->GetMemberByEmail($email);
 
         return ($m->ID > 0);
     }

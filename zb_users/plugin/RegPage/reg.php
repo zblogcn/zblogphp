@@ -45,8 +45,7 @@ if(!CheckRegExp($name, '[username]')){
 }
 
 
-
-if(isset($zbp->membersbyname[$name])){
+if ($zbp->GetMemberByName($name)->ID > 0) {
     $zbp->ShowError('用户名已存在');die();
 }
 
@@ -77,6 +76,11 @@ if(CheckRegExp($email, '[email]')){
     $zbp->ShowError('邮箱格式不正确.');die();
 }
 
+if(RegPage_CheckEmail($member->Email) == true ){
+    $zbp->ShowError('该邮箱已被注册使用.');die();
+}
+
+
 if(strlen($homepage) > $zbp->option['ZC_HOMEPAGE_MAX']){
     $zbp->ShowError('网址不能过长.');die();
 }
@@ -87,7 +91,7 @@ if(CheckRegExp($homepage, '[homepage]')){
 
 $member->Save();
 
-foreach ($GLOBALS['Filter_Plugin_RegPage_RegSucceed'] as $fpname => &$fpsignal) $fpname($member);
+foreach ($GLOBALS['hooks']['Filter_Plugin_RegPage_RegSucceed'] as $fpname => &$fpsignal) $fpname($member);
 
 $keyvalue = array();
 $keyvalue['reg_AuthorID'] = $member->ID;
