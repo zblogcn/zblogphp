@@ -2252,10 +2252,9 @@ function PostMember() {
 
     if (isset($data['Name'])) {
         // 检测同名
-        if (isset($zbp->membersbyname[$data['Name']])) {
-            if ($zbp->membersbyname[$data['Name']]->ID != $data['ID']) {
-                $zbp->ShowError(62, __FILE__, __LINE__);
-            }
+        $m = $zbp->GetMemberByName($data['Name']);
+        if ($m->ID > 0 && $m->ID != $data['ID']) {
+            $zbp->ShowError(62, __FILE__, __LINE__);
         }
     }
 
@@ -2896,6 +2895,7 @@ function FilterMember(&$member) {
     if (!CheckRegExp($member->Email, '[email]')) {
         $member->Email = 'null@null.com';
     }
+    $member->Email = strtolower($member->Email);
 
     if (substr($member->HomePage, 0, 4) != 'http') {
         $member->HomePage = 'http://' . $member->HomePage;
