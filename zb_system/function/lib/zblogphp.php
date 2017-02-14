@@ -1397,7 +1397,7 @@ class ZBlogPHP {
             break;
         }
 
-        $handle = opendir($languagePath);
+        $handle = @opendir($languagePath);
         $match = null;
         if ($handle) {
             while (false !== ($file = readdir($handle))) {

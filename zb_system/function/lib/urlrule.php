@@ -71,13 +71,21 @@ class UrlRule {
             if (substr_count($s, '{%page%}') == 1 && substr_count($s, '{') == 2 && substr_count($s, '&') == 0) {
                 $s = $zbp->host;
             }
-            preg_match('/(?<=\})[^\{\}%\/&]+(?=\{%page%\})/i', $s, $matches);
-            if (isset($matches[0])) {
-                $s = str_replace($matches[0], '', $s);
-            } else {
-                preg_match('/(?<=&)[^\{\}%\/&]+(?=\{%page%\})/i', $s, $matches);
+            if(stripos($s, '_{%page%}')!==false){
+                $s = str_replace('_{%page%}', '{%page%}', $s);
+            }elseif(stripos($s, '/{%page%}')!==false){
+                $s = str_replace('/{%page%}', '{%page%}', $s);
+            }elseif(stripos($s, '-{%page%}')!==false){
+                $s = str_replace('-{%page%}', '{%page%}', $s);
+            }else{
+                preg_match('/(?<=\})[^\{\}%\/&]+(?=\{%page%\})/i', $s, $matches);
                 if (isset($matches[0])) {
                     $s = str_replace($matches[0], '', $s);
+                } else {
+                    preg_match('/(?<=&)[^\{\}%\/&]+(?=\{%page%\})/i', $s, $matches);
+                    if (isset($matches[0])) {
+                        $s = str_replace($matches[0], '', $s);
+                    }
                 }
             }
             if (substr($this->PreUrl, -10) != '_{%page%}/' && substr($s, -9) == '{%page%}/') {
@@ -148,7 +156,15 @@ class UrlRule {
                     $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '(?:' . $matches[0] . ')', $url, 1);
                 }else{
                     //$url = str_replace($matches[0], '', $url);
-                    $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '', $url, 1);
+                    if(stripos($url, '_{%poaogoe%}')!==false){
+                        $url = str_replace('_{%poaogoe%}', '{%poaogoe%}', $url);
+                    }elseif(stripos($url, '/{%poaogoe%}')!==false){
+                        $url = str_replace('/{%poaogoe%}', '{%poaogoe%}', $url);
+                    }elseif(stripos($url, '-{%poaogoe%}')!==false){
+                        $url = str_replace('-{%poaogoe%}', '{%poaogoe%}', $url);
+                    }else{
+                        $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '', $url, 1);
+                    }
                 }
             }
             $url = $url . '$';

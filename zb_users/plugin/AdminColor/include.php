@@ -49,7 +49,7 @@ function AdminColor_Css() {
     	Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'AdminColor_Add_Button');
 	    $hm = GetVars('admincolor_hm', 'COOKIE');
 	    if ($hm == '1') {
-	        echo '<style type="text/css">.left{width:36px;background-color:#ededed;}margin-left{margin-left:10px;padding-left:100px;}div.main,section.main{padding-left:46px;}</style>';
+	        echo '<style type="text/css">.left{width:36px;background-color:#ededed;}.left #leftmenu span{margin-left:10px;padding-left:100px;}div.main,section.main{padding-left:46px;}</style>';
 	    }
 
     }else{
