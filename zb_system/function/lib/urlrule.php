@@ -88,9 +88,9 @@ class UrlRule {
                     }
                 }
             }
-            if (substr($this->PreUrl, -10) != '_{%page%}/' && substr($s, -9) == '{%page%}/') {
-                $s = substr($s, 0, strlen($s) - 1);
-            }
+            //if (substr($this->PreUrl, -10) != '_{%page%}/' && substr($s, -9) == '{%page%}/') {
+            //    $s = substr($s, 0, strlen($s) - 1);
+            //}
 
         }
 
