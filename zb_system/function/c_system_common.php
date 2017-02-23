@@ -453,6 +453,17 @@ function GetHttpContent($url) {
 function GetDirsInDir($dir) {
     $dirs = array();
 
+    if (!file_exists($dir)) {
+        return array();
+    }
+    if (!is_dir($dir)) {
+        return array();
+    }
+    $dir = str_replace('\\', '/', $dir);
+    if(substr($dir, -1)!== '/'){
+        $dir .= '/';
+    }
+
     if (function_exists('scandir')) {
         foreach (scandir($dir, 0) as $d) {
             if (is_dir($dir . $d)) {
@@ -488,7 +499,14 @@ function GetFilesInDir($dir, $type) {
     $files = array();
 
     if (!file_exists($dir)) {
-        return $files;
+        return array();
+    }
+    if (!is_dir($dir)) {
+        return array();
+    }
+    $dir = str_replace('\\', '/', $dir);
+    if(substr($dir, -1)!== '/'){
+        $dir .= '/';
     }
 
     if (function_exists('scandir')) {
