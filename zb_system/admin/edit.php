@@ -22,7 +22,10 @@ if (GetVars('act', 'GET') == 'ArticleEdt') {
     $action = 'ArticleEdt';
 }
 
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6, __FILE__, __LINE__);
+    die();
+}
 
 if (isset($_COOKIE['timezone'])) {
     $tz = GetVars('timezone', 'COOKIE');
@@ -39,7 +42,8 @@ $article->AuthorID = $zbp->user->ID;
 $ispage = false;
 if ($action == 'PageEdt') {
     $ispage = true;
-    $article->Type = 1;}
+    $article->Type = 1;
+}
 
 if (!$zbp->CheckRights('ArticlePub')) {
     $article->Status = ZC_POST_STATUS_AUDITING;
@@ -51,10 +55,16 @@ if (isset($_GET['id'])) {
 
 if ($ispage) {
     $blogtitle = $lang['msg']['page_edit'];
-    if (!$zbp->CheckRights('PageAll') && $article->AuthorID != $zbp->user->ID) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
+    if (!$zbp->CheckRights('PageAll') && $article->AuthorID != $zbp->user->ID) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
 } else {
     $blogtitle = $lang['msg']['article_edit'];
-    if (!$zbp->CheckRights('ArticleAll') && $article->AuthorID != $zbp->user->ID) {$zbp->ShowError(6, __FILE__, __LINE__);die();}
+    if (!$zbp->CheckRights('ArticleAll') && $article->AuthorID != $zbp->user->ID) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
 }
 
 if ($article->Intro) {
@@ -71,7 +81,9 @@ require ZBP_PATH . 'zb_system/admin/admin_header.php';
 <script type="text/javascript" src="../script/jquery.tagto.js"></script>
 <script type="text/javascript" src="../script/jquery-ui-timepicker-addon.js"></script>
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Begin'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Begin'] as $fpname => &$fpsignal) {
+    $fpname();
+}
 ?>
 <?php
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
@@ -82,9 +94,9 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
 <div class="SubMenu">
 <?php
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_SubMenu'] as $fpname => &$fpsignal) {
-        $fpname();
-    }
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_SubMenu'] as $fpname => &$fpsignal) {
+    $fpname();
+}
 ?>
 </div>
 <div id="divMain2" class="edit post_edit">
@@ -93,16 +105,18 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
     <!-- 4号输出接口 -->
        <div id="response4" class="editmod2">
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsignal) {
+    $fpname();
+}
 ?>
-	   </div>
+       </div>
     <div id="divEditTitle" class="editmod2">
       <input type="hidden" name="ID" id="edtID" value="<?php echo $article->ID; ?>" />
       <input type="hidden" name="Type" id="edtType" value="<?php echo $article->Type; ?>" />
       <!-- title( -->
-		<div id="titleheader" class="editmod">
-			<label for="edtTitle" class="editinputname" ><?php echo $lang['msg']['title'] ?></label>
-			<div><input type="text" name="Title" id="edtTitle"  maxlength="<?php echo $option['ZC_ARTICLE_TITLE_MAX']; ?>" onBlur="if(this.value=='') this.value='<?php echo $lang['msg']['unnamed'] ?>'" onFocus="if(this.value=='<?php echo $lang['msg']['unnamed'] ?>') this.value=''" value="<?php echo $article->Title; ?>" /></div>
+        <div id="titleheader" class="editmod">
+            <label for="edtTitle" class="editinputname" ><?php echo $lang['msg']['title'] ?></label>
+            <div><input type="text" name="Title" id="edtTitle"  maxlength="<?php echo $option['ZC_ARTICLE_TITLE_MAX']; ?>" onBlur="if(this.value=='') this.value='<?php echo $lang['msg']['unnamed'] ?>'" onFocus="if(this.value=='<?php echo $lang['msg']['unnamed'] ?>') this.value=''" value="<?php echo $article->Title; ?>" /></div>
       </div>
       <!-- )title -->
 
@@ -111,22 +125,26 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsig
     <!-- 5号输出接口 -->
        <div id="response5" class="editmod2">
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsignal) {
+    $fpname();
+}
 ?>
-	   </div>
+       </div>
 
     <div id="divContent"  class="editmod2" style="clear:both;">
-		<div id='cheader' class="editmod editmod3"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content'] ?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
-		<div id='carea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content, '[html-format]'); ?></textarea></div>
-		<div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Waiting...</div>
-	</div>
+        <div id='cheader' class="editmod editmod3"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content'] ?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
+        <div id='carea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content, '[html-format]'); ?></textarea></div>
+        <div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Waiting...</div>
+    </div>
 
     <!-- 1号输出接口 -->
        <div id="response" class="editmod2">
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {
+    $fpname();
+}
 ?>
-	   </div>
+       </div>
 
     <br/>
       <!-- alias( -->
@@ -135,7 +153,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsign
       </div>
       <!-- )alias -->
 <?php if (!$ispage) {?>
-	    <!-- tags( -->
+        <!-- tags( -->
       <div id="tags" class="editmod2"><label  for="edtTag"  class='editinputname'><?php echo $lang['msg']['tags'] ?></label>
         <input type="text"  name="Tag" id="edtTag" value="<?php echo $article->TagsToNameString(); ?>" />
         (<?php echo $lang['msg']['use_commas_to_separate'] ?>) <a href="#" id="showtags"><?php echo $lang['msg']['show_common_tags'] ?></a></div>
@@ -148,7 +166,9 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsign
        <div id="insertintro" class="editmod2" style="padding-top:0.5em;paddding-bottom:0.5em;"><span>* <?php echo $lang['msg']['help_generate_summary'] ?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary'] ?>]</a></span></div>
 <?php }?>
 
-		<div id="divIntro" class="editmod2" <?php if (!$article->Intro) {echo 'style="display:none;"';}?>>
+        <div id="divIntro" class="editmod2" <?php if (!$article->Intro) {
+            echo 'style="display:none;"';
+}?>>
        <div id="theader" class="editmod editmod3"><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro'] ?></label></div>
        <div id='tarea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro, '[html-format]'); ?></textarea></div>
        <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Waiting...</div>
@@ -157,9 +177,11 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsign
     <!-- 2号输出接口 -->
        <div id="response2" class="editmod2">
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {
+    $fpname();
+}
 ?>
-	   </div>
+       </div>
 
 
   </div>
@@ -201,7 +223,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
           <!-- user( -->
           <div id='user' class="editmod"> <label for="cmbUser" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['author'] ?></label>
             <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="cmbUser.value=this.options[this.selectedIndex].value">
-				<?php echo OutputOptionItemsOfMember($article->AuthorID); ?>
+                <?php echo OutputOptionItemsOfMember($article->AuthorID); ?>
             </select>
           </div>
           <!-- )user -->
@@ -244,9 +266,11 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
           <!-- 3号输出接口 -->
           <div id="response3" class="editmod">
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response3'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response3'] as $fpname => &$fpsignal) {
+    $fpname();
+}
 ?>
-	      </div>
+          </div>
         </div>
       </div>
     </div>
@@ -274,22 +298,22 @@ var sContent="",sIntro="";//原内容与摘要
 var isSubmit=false;//是否提交保存
 
 var editor_api={
-	editor:	{
-		content:{
-			obj:{},
-			get:function(){return ""},
-			insert:function(){return ""},
-			put:function(){return ""},
-			focus:function(){return ""}
-		},
-		intro:{
-			obj:{},
-			get:function(){return ""},
+    editor: {
+        content:{
+            obj:{},
+            get:function(){return ""},
+            insert:function(){return ""},
+            put:function(){return ""},
+            focus:function(){return ""}
+        },
+        intro:{
+            obj:{},
+            get:function(){return ""},
       insert:function(){return ""},
-			put:function(){return ""},
-			focus:function(){return ""}
-		}
-	}
+            put:function(){return ""},
+            focus:function(){return ""}
+        }
+    }
 }
 
 //文章内容或摘要变动提示保存
@@ -384,16 +408,16 @@ function AutoIntro() {
   if(s.indexOf("<hr class=\"more\" />")>-1){
     editor_api.editor.intro.put(s.split("<hr class=\"more\" />")[0]);
   }else{
-	  if(s.indexOf("<hr class=\"more\"/>")>-1){
+      if(s.indexOf("<hr class=\"more\"/>")>-1){
       editor_api.editor.intro.put(s.split("<hr class=\"more\"/>")[0]);
-  	}else{
+    }else{
       i=<?php echo $zbp->option['ZC_ARTICLE_EXCERPT_MAX']; ?>;
       s=s.replace(/<[^>]+>/g,"");
       editor_api.editor.intro.put(s.substring(0,i));
-  	}
+    }
   }
-	$("#divIntro").show();
-	$('html,body').animate({scrollTop:$('#divIntro').offset().top},'fast');
+    $("#divIntro").show();
+    $('html,body').animate({scrollTop:$('#divIntro').offset().top},'fast');
 }
 
 //文章编辑提交区随动JS开始
@@ -406,28 +430,30 @@ $(window).bind("scroll resize",function(){
     $("#divFloat").addClass("boxfloat");
   }
   else{
-	$("#divFloat").removeClass("boxfloat");
+    $("#divFloat").removeClass("boxfloat");
   }
 });
 
 
 
 function editor_init(){
-	editor_api.editor.content.obj=$('#editor_content');
-	editor_api.editor.intro.obj=$('#editor_intro');
-	editor_api.editor.content.get=function(){return this.obj.val()};
-	editor_api.editor.content.put=function(str){return this.obj.val(str)};
-	editor_api.editor.content.focus=function(){return this.obj.focus()};
-	editor_api.editor.intro.get=function(){return this.obj.val()};
-	editor_api.editor.intro.put=function(str){return this.obj.val(str)};
-	editor_api.editor.intro.focus=function(){return this.obj.focus()};
-	sContent=editor_api.editor.content.get();
+    editor_api.editor.content.obj=$('#editor_content');
+    editor_api.editor.intro.obj=$('#editor_intro');
+    editor_api.editor.content.get=function(){return this.obj.val()};
+    editor_api.editor.content.put=function(str){return this.obj.val(str)};
+    editor_api.editor.content.focus=function(){return this.obj.focus()};
+    editor_api.editor.intro.get=function(){return this.obj.val()};
+    editor_api.editor.intro.put=function(str){return this.obj.val(str)};
+    editor_api.editor.intro.focus=function(){return this.obj.focus()};
+    sContent=editor_api.editor.content.get();
 }
 
 </script>
 
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_End'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_End'] as $fpname => &$fpsignal) {
+    $fpname();
+}
 ?>
 
 <script type="text/javascript">editor_init();</script>

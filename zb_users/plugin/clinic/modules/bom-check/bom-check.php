@@ -5,13 +5,15 @@
  * @subpackage bom-check.php
  */
 
-class bom_check extends clinic {
+class bom_check extends clinic
+{
 
     /**
      * Build queue
      * @return null
      */
-    public function get_queue() {
+    public function get_queue()
+    {
 
         global $zbp;
 
@@ -30,7 +32,6 @@ class bom_check extends clinic {
         foreach ($files as $sortname => $fullname) {
             $this->set_queue('check_bom', $fullname);
         }
-
     }
 
     /**
@@ -38,12 +39,12 @@ class bom_check extends clinic {
      * @param string $param
      * @return null
      */
-    public function check_bom($param) {
+    public function check_bom($param)
+    {
 
         $contents = file_get_contents($param);
 
-        if (
-            ord(substr($contents, 0, 1)) == 239 &&
+        if (ord(substr($contents, 0, 1)) == 239 &&
             ord(substr($contents, 1, 1)) == 187 &&
             ord(substr($contents, 2, 1)) == 191
         ) {
@@ -60,7 +61,6 @@ class bom_check extends clinic {
         } else {
             $this->output('success', $param . ' - 不含空行');
         }
-
     }
 
     /**
@@ -68,12 +68,12 @@ class bom_check extends clinic {
      * @param string $param
      * @return null
      */
-    public function repair_bom($param) {
+    public function repair_bom($param)
+    {
 
         $data = substr(file_get_contents($param), 3);
         @file_put_contents($param, $data);
         $this->output('success', $param . ' - 修复完毕');
-
     }
 
     /**
@@ -81,7 +81,8 @@ class bom_check extends clinic {
      * @param string $param
      * @return null
      */
-    public function repair_empty($param) {
+    public function repair_empty($param)
+    {
 
         $data = file_get_contents($param);
         $array = explode('<?php', $data);
@@ -89,7 +90,5 @@ class bom_check extends clinic {
         $data = implode('<?php', $array);
         @file_put_contents($param, $data);
         $this->output('success', $param . ' - 修复完毕');
-
     }
-
 }

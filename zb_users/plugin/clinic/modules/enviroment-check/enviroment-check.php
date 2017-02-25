@@ -5,7 +5,8 @@
  * @subpackage enviroment-check.php
  */
 
-class enviroment_check extends clinic {
+class enviroment_check extends clinic
+{
 
     private $_functions = array(
         'gd_info' => 'GD库 - 用于生成验证码等',
@@ -16,11 +17,11 @@ class enviroment_check extends clinic {
      * Build queue
      * @return null
      */
-    public function get_queue() {
+    public function get_queue()
+    {
         foreach ($this->_functions as $name => $value) {
             $this->set_queue('check_function', $name);
         }
-
     }
 
     /**
@@ -28,7 +29,8 @@ class enviroment_check extends clinic {
      * @param string $param
      * @return null
      */
-    public function check_function($param) {
+    public function check_function($param)
+    {
 
         if (function_exists($param)) {
             $output = '';
@@ -46,7 +48,5 @@ class enviroment_check extends clinic {
         } else {
             $this->output('error', $this->_functions[$param] . ' 未安装，请联系空间商');
         }
-
     }
-
 }

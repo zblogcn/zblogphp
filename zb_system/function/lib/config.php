@@ -5,7 +5,8 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib 类库
  */
-class Config {
+class Config
+{
 
     /**
      * @var string 数据表
@@ -30,7 +31,8 @@ class Config {
     /**
      * $itemname string 项目名称
      */
-    public function __construct($itemname = '', &$db = null) {
+    public function __construct($itemname = '', &$db = null)
+    {
 
         if ($db !== null) {
             $this->db = &$db;
@@ -56,7 +58,8 @@ class Config {
      * @param $name
      * @param $value
      */
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         $name = FilterCorrectName($name);
         $this->kvdata[$name] = $value;
     }
@@ -65,7 +68,8 @@ class Config {
      * @param string $name key名
      * @return null
      */
-    public function __get($name) {
+    public function __get($name)
+    {
         if (!isset($this->kvdata[$name])) {
             return null;
         }
@@ -77,7 +81,8 @@ class Config {
      * 获取Data数据
      * @return array
      */
-    public function GetData() {
+    public function GetData()
+    {
         return $this->kvdata;
     }
 
@@ -85,7 +90,8 @@ class Config {
      * 获取Config的Item(项目名)
      * @return array
      */
-    public function GetItemName() {
+    public function GetItemName()
+    {
         return $this->data['Name'];
     }
 
@@ -94,7 +100,8 @@ class Config {
      * @param string $name key名
      * @return bool
      */
-    public function HasKey($name) {
+    public function HasKey($name)
+    {
         return array_key_exists($name, $this->kvdata);
     }
 
@@ -102,7 +109,8 @@ class Config {
      * 检查KVData属性（数组）中的单元数目
      * @return int
      */
-    public function CountItem() {
+    public function CountItem()
+    {
         return count($this->kvdata);
     }
 
@@ -111,7 +119,8 @@ class Config {
      * Del名称和数据库删除函数有冲突
      * @param string $name key名
      */
-    public function Del($name) {
+    public function Del($name)
+    {
         $name = FilterCorrectName($name);
         unset($this->kvdata[$name]);
     }
@@ -120,7 +129,8 @@ class Config {
      * 将Data属性（数组）值序列化
      * @return string 返回序列化的值
      */
-    public function Serialize() {
+    public function Serialize()
+    {
         global $bloghost;
         if (count($this->kvdata) == 0) {
             return '';
@@ -131,7 +141,6 @@ class Config {
             if (is_string($value)) {
                 $value = str_replace($bloghost, '{#ZC_BLOG_HOST#}', $value);
             }
-
         }
 
         return serialize($array);
@@ -142,7 +151,8 @@ class Config {
      * @param string $s 序列化值
      * @return bool
      */
-    public function Unserialize($s) {
+    public function Unserialize($s)
+    {
         global $bloghost;
 
         if ($s == '') {
@@ -152,7 +162,6 @@ class Config {
         $this->kvdata = @unserialize($s);
         if (!is_array($this->kvdata)) {
             $this->kvdata = array();
-
             return false;
         }
 
@@ -160,7 +169,6 @@ class Config {
             if (is_string($value)) {
                 $value = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $value);
             }
-
         }
 
         return true;
@@ -171,7 +179,8 @@ class Config {
      * @param array $array 关联数组
      * @return bool
      */
-    public function LoadInfoByAssoc($array) {
+    public function LoadInfoByAssoc($array)
+    {
         foreach ($this->datainfo as $key => $value) {
             if (!isset($array[$value[0]])) {
                 continue;
@@ -188,7 +197,8 @@ class Config {
      * 保存数据
      * @return bool
      */
-    public function Save() {
+    public function Save()
+    {
 
         $name = $this->GetItemName();
         $value = $this->Serialize();
@@ -209,7 +219,6 @@ class Config {
             $sql = $this->db->sql->Update($this->table, $kv, array(array('=', 'conf_Name', $name)));
             $this->db->Update($sql);
         }
-
         return true;
     }
 
@@ -219,11 +228,11 @@ class Config {
      * 从$zbp及数据库中删除该实例数据
      * @return bool
      */
-    public function Delete() {
+    public function Delete()
+    {
         $name = $this->GetItemName();
         $sql = $this->db->sql->Delete($this->table, array(array('=', 'conf_Name', $name)));
         $this->db->Delete($sql);
-
         return true;
     }
 
@@ -233,28 +242,30 @@ class Config {
      * 将Base对像返回JSON数据
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return (string) json_encode($this->kvdata);
     }
 
     /**
      * 占位
      */
-    public function SaveKey($name) {
+    public function SaveKey($name)
+    {
         return $this->Save();
     }
 
     /**
      * 占位
      */
-    public function DelKey($name) {
+    public function DelKey($name)
+    {
         $name = FilterCorrectName($name);
         if (!isset($this->kvdata[$name])) {
             return false;
         }
 
         unset($this->kvdata[$name]);
-
         return $this->Save();
     }
 }

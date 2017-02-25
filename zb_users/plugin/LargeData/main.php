@@ -6,9 +6,15 @@ require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
 
-if (!$zbp->CheckPlugin('LargeData')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckPlugin('LargeData')) {
+    $zbp->ShowError(48);
+    die();
+}
 
 if (GetVars('build_post_index', 'POST') === '0') {
     $zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre . "log_TISC ;");
@@ -63,8 +69,8 @@ echo '<tr><td class="td25"><p><b>开启大数据支持</b></p></td>
 	<td><p><input id="ZC_LARGE_DATA" name="ZC_LARGE_DATA" type="text" value="' . $zbp->option['ZC_LARGE_DATA'] . '" class="checkbox"/></p></td></tr>';
 echo '</table>';
 ?>
-	 <hr/>
-	<p><input type="submit" class="button" value="提交" id="btnPost" onclick="" /></p>
+     <hr/>
+    <p><input type="submit" class="button" value="提交" id="btnPost" onclick="" /></p>
 </form>
 
 <form method="post" action="main.php">
@@ -75,7 +81,7 @@ echo '<tr><td class="td25"><p><b>重建文章表的索引</b></p></td>
 	<td><p><input type="submit" class="button" value="提交" id="btnPost" onclick="" /></p></td></tr>';
 echo '</table>';
 ?>
-	 <hr/>
+     <hr/>
 </form>
 
 <form method="post" action="main.php">
@@ -86,7 +92,7 @@ echo '<tr><td class="td25"><p><b>重建评论表的索引</b></p></td>
 	<td><p><input type="submit" class="button" value="提交" id="btnPost" onclick="" /></p></td></tr>';
 echo '</table>';
 ?>
-	 <hr/>
+     <hr/>
 </form>
 
 <form method="post" action="main.php">
@@ -97,7 +103,7 @@ echo '<tr><td class="td25"><p><b>建立文章标签关联表和索引</b></p></t
 	<td><p><input type="submit" class="button" value="提交" id="btnPost" onclick="" /></p></td></tr>';
 echo '</table>';
 ?>
-	 <hr/>
+     <hr/>
 </form>
 
 <form method="post" action="main.php">
@@ -108,12 +114,12 @@ echo '<tr><td class="td25"><p><b>转换原文章表的标签关联到新表</b><
 	<td><p><input type="submit" class="button" value="提交" id="btnPost" onclick="" /></p></td></tr>';
 echo '</table>';
 ?>
-	 <hr/>
+     <hr/>
 </form>
 
 
-	<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/LargeData/logo.png';?>");</script>
+    <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/LargeData/logo.png';?>");</script>
   </div>
 </div>
 <?php

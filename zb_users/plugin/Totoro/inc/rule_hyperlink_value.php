@@ -1,6 +1,7 @@
 <?php
 return 'hyperlink_value';
-function hyperlink_value($author, $content, $orig_content, &$sv, $config_sv, $config_array) {
+function hyperlink_value($author, $content, $orig_content, &$sv, $config_sv, $config_array)
+{
 
     $matches = array();
     preg_match_all("/https?:\/\/(?!www|ftp)|ftp|www./si", $orig_content, $matches);

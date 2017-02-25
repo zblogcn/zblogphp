@@ -1,6 +1,7 @@
 <?php
 return 'badword_value';
-function badword_value($author, $content, $orig_content, &$sv, $config_sv, $config_array) {
+function badword_value($author, $content, $orig_content, &$sv, $config_sv, $config_array)
+{
 
     $matches = array();
 

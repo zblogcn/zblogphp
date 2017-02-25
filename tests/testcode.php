@@ -1,6 +1,7 @@
 <?php
 /**
  * Z-Blog with PHP
+ *
  * @author
  * @copyright (C) RainbowSoft Studio
  * @version

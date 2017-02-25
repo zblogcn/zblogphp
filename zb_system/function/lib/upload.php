@@ -5,12 +5,14 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/Upload 类库
  */
-class Upload extends Base {
+class Upload extends Base
+{
 
     /**
      *
      */
-    public function __construct() {
+    public function __construct()
+    {
         global $zbp;
         parent::__construct($zbp->table['Upload'], $zbp->datainfo['Upload'], __CLASS__);
 
@@ -21,7 +23,8 @@ class Upload extends Base {
      * @param string $extlist
      * @return bool
      */
-    public function CheckExtName($extlist = '') {
+    public function CheckExtName($extlist = '')
+    {
         global $zbp;
         $e = GetFileExt($this->Name);
         $extlist = strtolower($extlist);
@@ -35,7 +38,8 @@ class Upload extends Base {
     /**
      * @return bool
      */
-    public function CheckSize() {
+    public function CheckSize()
+    {
         global $zbp;
         $n = 1024 * 1024 * (int) $zbp->option['ZC_UPLOAD_FILESIZE'];
 
@@ -45,28 +49,37 @@ class Upload extends Base {
     /**
      * @return bool
      */
-    public function DelFile() {
+    public function DelFile()
+    {
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_DelFile'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                return $fpreturn;
+            }
         }
-        if (file_exists($this->FullFile)) {@unlink($this->FullFile);}
+        if (file_exists($this->FullFile)) {
+            @unlink($this->FullFile);
+        }
 
         return true;
-
     }
 
     /**
      * @param $tmp
      * @return bool
      */
-    public function SaveFile($tmp) {
+    public function SaveFile($tmp)
+    {
         global $zbp;
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_SaveFile'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($tmp, $this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                return $fpreturn;
+            }
         }
 
         if (!file_exists($zbp->usersdir . $this->Dir)) {
@@ -86,13 +99,14 @@ class Upload extends Base {
      * @param $str64
      * @return bool
      */
-    public function SaveBase64File($str64) {
+    public function SaveBase64File($str64)
+    {
         global $zbp;
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_SaveBase64File'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($str64, $this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;             
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
                 return $fpreturn;
             }
         }
@@ -116,7 +130,8 @@ class Upload extends Base {
      * @param string $s
      * @return bool|string
      */
-    public function Time($s = 'Y-m-d H:i:s') {
+    public function Time($s = 'Y-m-d H:i:s')
+    {
         return date($s, $this->PostTime);
     }
 
@@ -125,7 +140,8 @@ class Upload extends Base {
      * @param $value
      * @return null
      */
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         global $zbp;
         if ($name == 'Url') {
             return null;
@@ -146,7 +162,8 @@ class Upload extends Base {
      * @param $name
      * @return Member|mixed|string
      */
-    public function __get($name) {
+    public function __get($name)
+    {
         global $zbp;
         if ($name == 'Url') {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Url'] as $fpname => &$fpsignal) {
@@ -171,5 +188,4 @@ class Upload extends Base {
 
         return parent::__get($name);
     }
-
 }

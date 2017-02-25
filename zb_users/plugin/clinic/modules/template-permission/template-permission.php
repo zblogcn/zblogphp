@@ -5,7 +5,8 @@
  * @subpackage template-permission.php
  */
 
-class template_permission extends clinic {
+class template_permission extends clinic
+{
 
     private $_dirs = array(
         'zb_users/cache' => '缓存文件夹',
@@ -17,19 +18,20 @@ class template_permission extends clinic {
      * Build queue
      * @return null
      */
-    public function get_queue() {
+    public function get_queue()
+    {
         foreach ($this->_dirs as $name => $value) {
             $this->set_queue('check_right', $name);
         }
         $this->set_queue('build_template', '');
-
     }
 
     /**
      * Build Template
      * @return null
      */
-    public function build_template($param) {
+    public function build_template($param)
+    {
         global $zbp;
         $zbp->BuildTemplate();
         $this->output('success', '模板重编译完成');
@@ -41,7 +43,8 @@ class template_permission extends clinic {
      * @param string $param
      * @return null
      */
-    public function check_right($param) {
+    public function check_right($param)
+    {
 
         global $zbp;
         global $blogtheme;
@@ -50,7 +53,6 @@ class template_permission extends clinic {
         $path = $zbp->path . str_replace('{%template%}', $blogtheme, $param);
         $return = false;
         if (isset($this->_dirs[$param])) {
-
             if (!is_dir($path)) {
                 $s = '文件夹不存在 - 待修复';
             } else {
@@ -82,7 +84,6 @@ class template_permission extends clinic {
             $this->output('error', $path . '-' . $this->_dirs[$param] . ' - ' . $s);
             $this->set_queue('repair_right', $param);
         }
-
     }
 
     /**
@@ -90,7 +91,8 @@ class template_permission extends clinic {
      * @param string $param
      * @return null
      */
-    public function repair_right($param) {
+    public function repair_right($param)
+    {
 
         global $zbp;
         global $blogtheme;
@@ -99,7 +101,6 @@ class template_permission extends clinic {
         $s = '';
         $path = $zbp->path . str_replace('{%template%}', $blogtheme, $param);
         if (isset($this->_dirs[$param])) {
-
             if (!is_dir($path)) {
                 if (!mkdir($path, 0777)) {
                     $s = '文件夹创建失败';
@@ -120,7 +121,5 @@ class template_permission extends clinic {
         } else {
             $this->output('error', $path . '-' . $this->_dirs[$param] . ' - ' . $s);
         }
-
     }
-
 }

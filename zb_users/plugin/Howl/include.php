@@ -3,32 +3,38 @@
 RegisterPlugin("Howl", "ActivePlugin_Howl");
 
 
-function ActivePlugin_Howl() {
+function ActivePlugin_Howl()
+{
     global $zbp;
     Add_Filter_Plugin('Filter_Plugin_Zbp_CheckRights', 'Howl_CheckRights');
     $zbp->LoadLanguage('plugin', 'Howl');
 }
 
-function InstallPlugin_Howl() {
+function InstallPlugin_Howl()
+{
     global $zbp;
     $zbp->Config('Howl')->version = '1.0';
     $zbp->SaveConfig('Howl');
 }
 
-function UninstallPlugin_Howl() {
+function UninstallPlugin_Howl()
+{
     global $zbp;
     //$zbp->DelConfig('Howl');
 }
 
-function Howl_GetRightName($key) {
+function Howl_GetRightName($key)
+{
     global $zbp;
-    if(isset($zbp->lang['actions'][$key]))
+    if (isset($zbp->lang['actions'][$key])) {
         return $zbp->lang['actions'][$key];
-    else
+    } else {
         return $zbp->lang['Howl'][''];
+    }
 }
 
-function Howl_CheckRights(&$action) {
+function Howl_CheckRights(&$action)
+{
     global $zbp;
 
     $group_nums = count($zbp->lang['user_level_name']);
@@ -45,13 +51,15 @@ function Howl_CheckRights(&$action) {
     $g = $zbp->user->Level;
     foreach ($group_key as $key) {
         $name = 'Group'.$key;
-        if($zbp->Config('Howl')->HasKey($name)){$a[$key] = $zbp->Config('Howl')->$name;}
+        if ($zbp->Config('Howl')->HasKey($name)) {
+            $a[$key] = $zbp->Config('Howl')->$name;
+        }
     }
 
     $userid = 'User' . $zbp->user->ID;
-    if($zbp->Config('Howl')->HasKey($userid)){
+    if ($zbp->Config('Howl')->HasKey($userid)) {
         $useractions = $zbp->Config('Howl')->$userid;
-        if(array_key_exists($action, $useractions)){
+        if (array_key_exists($action, $useractions)) {
             $GLOBALS['Filter_Plugin_Zbp_CheckRights']['Howl_CheckRights'] = PLUGIN_EXITSIGNAL_RETURN;
 
             return (boolean) $useractions[$action];
@@ -59,10 +67,9 @@ function Howl_CheckRights(&$action) {
     }
 
 
-    if(array_key_exists($action, $a[$g])){
+    if (array_key_exists($action, $a[$g])) {
         $GLOBALS['Filter_Plugin_Zbp_CheckRights']['Howl_CheckRights'] = PLUGIN_EXITSIGNAL_RETURN;
 
         return (boolean) $a[$g][$action];
     }
-
 }

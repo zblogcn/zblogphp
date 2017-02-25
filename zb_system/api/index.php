@@ -16,19 +16,22 @@ api_zbp_load_pre();
 
 api_index_begin();
 
-function api_index_begin() {
+function api_index_begin()
+{
 
     global $apiRealRouteUrl;
     global $zbp;
-    if ($apiRealRouteUrl == "") return false;
+    if ($apiRealRouteUrl == "") {
+        return false;
+    }
     $requestMethod = strtoupper(GetVars('REQUEST_METHOD', 'SERVER'));
     //API::$Route::$debug = true;
     API::$Route->scanRoute($requestMethod, $apiRealRouteUrl);
     API::$IO->end(-1);
-
 }
 
-function api_zbp_load_pre() {
+function api_zbp_load_pre()
+{
     // Check URL first
     global $bloghost;
     global $apiRealRouteUrl;
@@ -46,5 +49,4 @@ function api_zbp_load_pre() {
     //$_COOKIE['password'] = "";
 
     API::init();
-
 }

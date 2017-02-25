@@ -4,8 +4,14 @@ require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('Totoro')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
+if (!$zbp->CheckPlugin('Totoro')) {
+    $zbp->ShowError(48);
+    die();
+}
 Totoro_init();
 $blogtitle = 'Totoro反垃圾评论';
 
@@ -29,7 +35,7 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <style type="text/css">
 .text-config {
-	width: 95%
+    width: 95%
 }
 </style>
 <?php
@@ -69,23 +75,23 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       </tr>
     </table>
     <script type="text/javascript">
-	$(function() {
-    	$("#buttonsubmit").bind("click",function(){
-			$("#result").html("Testing...");
-			var o = $.ajax({
-				url : "?type=test",
-				async : false,
-				type : "POST",
-				data : {
+    $(function() {
+        $("#buttonsubmit").bind("click",function(){
+            $("#result").html("Testing...");
+            var o = $.ajax({
+                url : "?type=test",
+                async : false,
+                type : "POST",
+                data : {
           "name":$("#username").val(),
           "url":$("#url").val(),
           "ip":$("#ip").val(),
           "string":$("#regexp").val()
         },
-				dataType : "script",
-			});
-			$("#result").html(o.responseText.replace(/\n/g, "<br/>"));
-		});
+                dataType : "script",
+            });
+            $("#result").html(o.responseText.replace(/\n/g, "<br/>"));
+        });
     });
     </script>
     <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>

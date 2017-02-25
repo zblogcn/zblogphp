@@ -11,19 +11,20 @@
 // 然后维护一个文章数组，初始值为0，遍历一遍全部评论，给文章数组一个一个++
 // 最后遍历文章数组，写入数据库
 // 数据保存可能要Redis/memcached了，或者文件
-class recount_comment extends clinic {
+class recount_comment extends clinic
+{
 
     private $perRequestBuildArticle = 100;
     /**
      * Build queue
      * @return null
      */
-    public function get_queue() {
+    public function get_queue()
+    {
         global $zbp;
 
         if ((int) $zbp->version < 140624) {
             $this->set_queue('output_message', json_encode(array('error', '版本没到Z-Blog 1.4，无法使用本组件')));
-
             return;
         }
 
@@ -34,13 +35,11 @@ class recount_comment extends clinic {
             $max = $max_id[0]['num'];
             $this->perRequestBuildArticle = (int) ($max / 100);
             $this->set_queue('output_message', json_encode(array('success', '初始化成功')));
-            for ($i = 1; $i <= $max; $i += $this->perRequestBuildArticle)
+            for ($i = 1; $i <= $max; $i += $this->perRequestBuildArticle) {
             //for($i = 1; $i <= $max; $i += 1000)
             //for($i = $max; $i >= 1; $i -= 1000)
-            {
                 $this->set_queue('category_recount', json_encode(array($i, $this->perRequestBuildArticle)));
             }
-
         } else {
             $this->set_queue('output_message', json_encode(array('error', '初始化失败')));
         }
@@ -50,7 +49,8 @@ class recount_comment extends clinic {
      * Recount category
      * @return null
      */
-    public function category_recount($param) {
+    public function category_recount($param)
+    {
 
         //$array = array();
         //for($i = 0; $i <= 9999; $i++) {
@@ -65,16 +65,15 @@ class recount_comment extends clinic {
         }
         CountPostArray($array);
         $this->output('success', '文章' . '（ID = ' . $id . '）重建成功');
-
     }
 
     /**
      * output_message
      * @return null
      */
-    public function output_message($str) {
+    public function output_message($str)
+    {
         $str = json_decode($str);
         $this->output($str[0], $str[1]);
     }
-
 }

@@ -5,7 +5,8 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib 类库
  */
-class Template {
+class Template
+{
 
     protected $path = null;
     protected $entryPage = null;
@@ -40,20 +41,23 @@ class Template {
     /**
      *
      */
-    public function __construct() {
+    public function __construct()
+    {
     }
 
     /**
      * @param $path
      */
-    public function SetPath($path) {
+    public function SetPath($path)
+    {
         $this->path = $path;
     }
 
     /**
      * @return null
      */
-    public function GetPath() {
+    public function GetPath()
+    {
         return $this->path;
     }
 
@@ -61,7 +65,8 @@ class Template {
      * @param $name
      * @return boolean
      */
-    public function HasTemplate($name) {
+    public function HasTemplate($name)
+    {
         return file_exists($this->path . '/' . $name .'.php');
     }
 
@@ -69,10 +74,14 @@ class Template {
      * @param $name
      * @return string
      */
-    public function GetTemplate($name) {
+    public function GetTemplate($name)
+    {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Template_GetTemplate'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $name);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                return $fpreturn;
+            }
         }
 
         return $this->path . $name . '.php';
@@ -81,7 +90,8 @@ class Template {
     /**
      * @param $templatename
      */
-    public function SetTemplate($templatename) {
+    public function SetTemplate($templatename)
+    {
         $this->entryPage = $templatename;
     }
 
@@ -89,7 +99,8 @@ class Template {
      * @param $name
      * @return mixed
      */
-    public function &GetTags($name) {
+    public function &GetTags($name)
+    {
         return $this->templateTags[$name];
     }
 
@@ -97,39 +108,44 @@ class Template {
      * @param $name
      * @param $value
      */
-    public function SetTags($name, $value) {
+    public function SetTags($name, $value)
+    {
         $this->templateTags[$name] = $value;
     }
 
     /**
      * @return array
      */
-    public function &GetTagsAll() {
+    public function &GetTagsAll()
+    {
         return $this->templateTags;
     }
 
     /**
      * @param $array
      */
-    public function SetTagsAll(&$array) {
-        if(is_array($array))
+    public function SetTagsAll(&$array)
+    {
+        if (is_array($array)) {
             $this->templateTags = $array + $this->templateTags;
+        }
     }
 
     /**
      * @param $filesarray
      */
-    public function CompileFiles() {
+    public function CompileFiles()
+    {
 
         foreach ($this->templates as $name => $content) {
             $s = RemoveBOM($this->CompileFile($content));
             @file_put_contents($this->path . $name . '.php', $s);
         }
-
     }
 
 
-    public function BuildTemplate() {
+    public function BuildTemplate()
+    {
         global $zbp;
 
         // 初始化模板
@@ -143,11 +159,11 @@ class Template {
         $this->addNonexistendTags();
 
         return $this->CompileFiles();
-
     }
 
 
-    protected function addNonexistendTags() {
+    protected function addNonexistendTags()
+    {
 
         global $zbp;
         $templates = &$this->templates;
@@ -202,11 +218,15 @@ class Template {
      * @param $content
      * @return mixed
      */
-    public function CompileFile($content) {
+    public function CompileFile($content)
+    {
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Compiling_Begin'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $content);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                return $fpreturn;
+            }
         }
 
         // Step 1: 替换<?php块
@@ -236,7 +256,10 @@ class Template {
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Compiling_End'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $content);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                return $fpreturn;
+            }
         }
 
         return $content;
@@ -247,21 +270,24 @@ class Template {
     /**
      * @param $content
      */
-    protected function remove_php_blocks(&$content) {
+    protected function remove_php_blocks(&$content)
+    {
         $content = preg_replace("/\<\?php[\d\D]+?\?\>/si", '', $content);
     }
 
     /**
      * @param $content
      */
-    protected function parse_comments(&$content) {
+    protected function parse_comments(&$content)
+    {
         $content = preg_replace('/\{\*([^\}]+)\*\}/', '{php} /*$1*/ {/php}', $content);
     }
 
     /**
      * @param $content
      */
-    protected function parse_uncompile_code(&$content) {
+    protected function parse_uncompile_code(&$content)
+    {
         $this->uncompiledCodeStore = array();
         $matches = array();
         if ($i = preg_match_all('/\{(php|pre)\}([\D\d]+?)\{\/(php|pre)\}/si', $content, $matches) > 0) {
@@ -280,7 +306,8 @@ class Template {
     /**
      * @param $content
      */
-    protected function parse_back_uncompile_code(&$content) {
+    protected function parse_back_uncompile_code(&$content)
+    {
                     
 
         foreach ($this->uncompiledCodeStore as $j => $p) {
@@ -302,42 +329,48 @@ class Template {
     /**
      * @param $content
      */
-    protected function parse_template(&$content) {
+    protected function parse_template(&$content)
+    {
         $content = preg_replace('/\{template:([^\}]+)\}/', '{php} include $this->GetTemplate(\'$1\'); {/php}', $content);
     }
 
     /**
      * @param $content
      */
-    protected function parse_module(&$content) {
+    protected function parse_module(&$content)
+    {
         $content = preg_replace('/\{module:([^\}]+)\}/', '{php} if(isset($modules[\'$1\'])){echo $modules[\'$1\']->Content;} {/php}', $content);
     }
 
     /**
      * @param $content
      */
-    protected function parse_option(&$content) {
+    protected function parse_option(&$content)
+    {
         $content = preg_replace('#\{\#([^\}]+)\#\}#', '<?php echo $option[\'\\1\']; ?>', $content);
     }
 
     /**
      * @param $content
      */
-    protected function parse_vars(&$content) {
+    protected function parse_vars(&$content)
+    {
         $content = preg_replace_callback('#\{\$(?!\()([^\}]+)\}#', array($this, 'parse_vars_replace_dot'), $content);
     }
 
     /**
      * @param $content
      */
-    protected function parse_function(&$content) {
+    protected function parse_function(&$content)
+    {
         $content = preg_replace_callback('/\{([a-zA-Z0-9_]+?)\((.*?)\)\}/', array($this, 'parse_funtion_replace_dot'), $content);
     }
 
     /**
      * @param $content
      */
-    protected function parse_if(&$content) {
+    protected function parse_if(&$content)
+    {
         while (preg_match('/\{if [^\n\}]+\}.*?\{\/if\}/s', $content)) {
             $content = preg_replace_callback(
                 '/\{if ([^\n\}]+)\}(.*?)\{\/if\}/s',
@@ -351,7 +384,8 @@ class Template {
      * @param $matches
      * @return string
      */
-    protected function parse_if_sub($matches) {
+    protected function parse_if_sub($matches)
+    {
 
         $content = preg_replace_callback(
             '/\{elseif ([^\n\}]+)\}/',
@@ -364,14 +398,14 @@ class Template {
         $content = str_replace('{else}', '{php}}else{ {/php}', $content);
 
         return "<?php if ($ifexp) { ?>$content<?php } ?>";
-
     }
 
     /**
      * @param $matches
      * @return string
      */
-    protected function parse_elseif($matches) {
+    protected function parse_elseif($matches)
+    {
         $ifexp = str_replace($matches[1], $this->replace_dot($matches[1]), $matches[1]);
 
         return "{php}}elseif($ifexp) { {/php}";
@@ -380,7 +414,8 @@ class Template {
     /**
      * @param $content
      */
-    protected function parse_foreach(&$content) {
+    protected function parse_foreach(&$content)
+    {
         while (preg_match('/\{foreach(.+?)\}(.+?){\/foreach}/s', $content)) {
             $content = preg_replace_callback(
                 '/\{foreach(.+?)\}(.+?){\/foreach}/s',
@@ -394,7 +429,8 @@ class Template {
      * @param $matches
      * @return string
      */
-    protected function parse_foreach_sub($matches) {
+    protected function parse_foreach_sub($matches)
+    {
         $exp = $this->replace_dot($matches[1]);
         $code = $matches[2];
 
@@ -404,7 +440,8 @@ class Template {
     /**
      * @param $content
      */
-    protected function parse_for(&$content) {
+    protected function parse_for(&$content)
+    {
         while (preg_match('/\{for(.+?)\}(.+?){\/for}/s', $content)) {
             $content = preg_replace_callback(
                 '/\{for(.+?)\}(.+?){\/for}/s',
@@ -418,7 +455,8 @@ class Template {
      * @param $matches
      * @return string
      */
-    protected function parse_for_sub($matches) {
+    protected function parse_for_sub($matches)
+    {
         $exp = $this->replace_dot($matches[1]);
         $code = $matches[2];
 
@@ -429,7 +467,8 @@ class Template {
      * @param $matches
      * @return string
      */
-    protected function parse_vars_replace_dot($matches) {
+    protected function parse_vars_replace_dot($matches)
+    {
         $s = str_replace('=>', '', $matches[1]);
         if (strpos($s, '=') === false) {
             return '{php} echo $' . $this->replace_dot($matches[1]) . '; {/php}';
@@ -442,7 +481,8 @@ class Template {
      * @param $matches
      * @return string
      */
-    protected function parse_funtion_replace_dot($matches) {
+    protected function parse_funtion_replace_dot($matches)
+    {
         return '{php} echo ' . $matches[1] . '(' . $this->replace_dot($matches[2]) . '); {/php}';
     }
 
@@ -450,7 +490,8 @@ class Template {
      * @param $content
      * @return mixed
      */
-    protected function replace_dot($content) {
+    protected function replace_dot($content)
+    {
         $array = array();
         preg_match_all('/".+?"|\'.+?\'/', $content, $array, PREG_SET_ORDER);
         if (count($array) > 0) {
@@ -477,7 +518,8 @@ class Template {
     /**
      * 显示模板
      */
-    public function Display($entryPage = "") {
+    public function Display($entryPage = "")
+    {
         global $zbp;
         if ($entryPage == "") {
             $entryPage = $this->entryPage;
@@ -488,11 +530,12 @@ class Template {
             $zbp->ShowError(86, __FILE__, __LINE__);
         }
 
-		$ak = array_keys($this->staticTags);
-		$av = array_values($this->staticTags);
-		foreach($zbp->modulesbyfilename as &$m)
-			$m->Content = str_replace($ak,$av,$m->Content);
-		unset($ak,$av);
+        $ak = array_keys($this->staticTags);
+        $av = array_values($this->staticTags);
+        foreach ($zbp->modulesbyfilename as &$m) {
+            $m->Content = str_replace($ak, $av, $m->Content);
+        }
+        unset($ak, $av);
 
         #入口处将tags里的变量提升全局!!!
         foreach ($this->templateTags as $key => &$value) {
@@ -505,7 +548,8 @@ class Template {
     /**
      * @return string
      */
-    public function Output($entryPage = "") {
+    public function Output($entryPage = "")
+    {
 
         ob_start();
         $this->Display($entryPage);
@@ -513,13 +557,13 @@ class Template {
         ob_end_clean();
 
         return $data;
-
     }
 
     /**
      * 载入已编译模板s
      */
-    public function LoadCompiledTemplates() {
+    public function LoadCompiledTemplates()
+    {
         $templates  = array();
 
         // 读取主题模板
@@ -534,7 +578,8 @@ class Template {
     /**
      * 载入未编译模板s
      */
-    public function LoadTemplates() {
+    public function LoadTemplates()
+    {
 
         global $zbp;
 
@@ -566,7 +611,8 @@ class Template {
     /**
      *解析模板标签
      */
-    public function MakeTemplateTags() {
+    public function MakeTemplateTags()
+    {
 
         global $zbp;
 
@@ -593,7 +639,7 @@ class Template {
         $this->templateTags['categorys'] = &$zbp->categories;
         $this->templateTags['categories'] = &$zbp->categories;
         $this->templateTags['categorysbyorder'] = &$zbp->categoriesbyorder;
-        $this->templateTags['categoriesbyorder'] = &$zbp->categoriesbyorder;        
+        $this->templateTags['categoriesbyorder'] = &$zbp->categoriesbyorder;
         $this->templateTags['modules'] = &$zbp->modulesbyfilename;
         $this->templateTags['title'] = htmlspecialchars($zbp->title);
         $this->templateTags['host'] = &$zbp->host;
@@ -655,17 +701,16 @@ class Template {
             if (is_string($v) || is_numeric($v) || is_bool($v)) {
                 $t['{$' . $k . '}'] = $v;
             }
-
         }
         foreach ($option as $k => $v) {
             if (is_string($v) || is_numeric($v) || is_bool($v)) {
                 $o['{#' . $k . '#}'] = $v;
             }
-
         }
         $this->staticTags = $t + $o;
     }
-    public function ReplaceStaticTags($s) {
+    public function ReplaceStaticTags($s)
+    {
         $s = str_replace(array_keys($this->staticTags), array_values($this->staticTags), $s);
         return $s;
     }

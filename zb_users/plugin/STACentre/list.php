@@ -7,14 +7,19 @@ $zbp->
 Load();
 
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
 
-if (!$zbp->CheckPlugin('STACentre')) {$zbp->ShowError(68);die();}
+if (!$zbp->CheckPlugin('STACentre')) {
+    $zbp->ShowError(68);
+    die();
+}
 
 $blogtitle = '静态管理中心';
 
 if (count($_GET) > 0) {
-
     if (GetVars('mak', 'GET') == '1') {
         @file_put_contents($zbp->path . '.htaccess', show_htaccess());
     } elseif (GetVars('mak', 'GET') == '2') {
@@ -36,38 +41,38 @@ if (count($_GET) > 0) {
     Redirect('./list.php');
 }
 
-function show_htaccess() {
+function show_htaccess()
+{
     $ur = new UrlRule("");
-
     return $ur->Make_htaccess();
 }
 
-function show_httpini() {
+function show_httpini()
+{
     $ur = new UrlRule("");
-
     return $ur->Make_httpdini();
 }
 
-function show_webconfig() {
+function show_webconfig()
+{
     $ur = new UrlRule("");
-
     return $ur->Make_webconfig();
 }
 
-function show_nginx() {
+function show_nginx()
+{
     $ur = new UrlRule("");
     if (method_exists('UrlRule', 'Make_nginx')) {
         return $ur->Make_nginx();
     }
-
 }
 
-function show_lighttpd() {
+function show_lighttpd()
+{
     $ur = new UrlRule("");
     if (method_exists('UrlRule', 'Make_lighttpd')) {
         return $ur->Make_lighttpd();
     }
-
 }
 
 require $blogpath . 'zb_system/admin/admin_header.php';
@@ -261,7 +266,7 @@ if (strpos($default_tab, 'apache') !== false) {
 
     <hr/>
   </form>
-  <?php }?>
+    <?php }?>
   <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
   <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/STACentre/logo.png';?>");</script>
 </div>

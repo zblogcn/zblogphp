@@ -1,6 +1,7 @@
 <?php
 return 'similar_value';
-function similar_value($author, $content, $orig_content, &$sv, $config_sv, $config_array) {
+function similar_value($author, $content, $orig_content, &$sv, $config_sv, $config_array)
+{
     add_similar_sv(array(
         array('=', 'comm_IsChecking', 0),
         array('>', 'comm_PostTime', time() - 24 * 60 * 60),
@@ -17,7 +18,8 @@ function similar_value($author, $content, $orig_content, &$sv, $config_sv, $conf
         $content, $sv, $config_sv * 2, $config_array);
 };
 
-function add_similar_sv($condition, $count_for_condition, $content, &$sv, $config_sv, $config_array) {
+function add_similar_sv($condition, $count_for_condition, $content, &$sv, $config_sv, $config_array)
+{
     global $zbp;
     $sql = $zbp->db->sql->Select(
         '%pre%comment',
@@ -40,7 +42,8 @@ function add_similar_sv($condition, $count_for_condition, $content, &$sv, $confi
     }
 }
 
-function check_similar($val1, $val2) {
+function check_similar($val1, $val2)
+{
     $percent = 0;
     similar_text($val2, $val1, $percent);
 

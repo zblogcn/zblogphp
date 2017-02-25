@@ -1,6 +1,7 @@
 <?php
 return 'conhxw';
-function conhxw(&$content) {
+function conhxw(&$content)
+{
 
     //全角转半角（可能和下面放一起更合适吧）
     $str_sbc = 'ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ１２３４５６７８９０ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ［］；＇／．，＜＞？＂：｜＋＿＼＝－）（＊＆＾％＄＠！￣';
@@ -20,5 +21,4 @@ function conhxw(&$content) {
 
     //替换HTML编码字符
     $content = html_entity_decode($content, ENT_QUOTES);
-
 };

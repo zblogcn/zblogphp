@@ -5,18 +5,19 @@
  * @subpackage recount-member.php
  */
 
-class recount_member extends clinic {
+class recount_member extends clinic
+{
 
     /**
      * Build queue
      * @return null
      */
-    public function get_queue() {
+    public function get_queue()
+    {
         global $zbp;
 
         if ((int) $zbp->version < 140624) {
             $this->set_queue('output_message', json_encode(array('error', '版本没到Z-Blog 1.4，无法使用本组件')));
-
             return;
         }
 
@@ -29,7 +30,6 @@ class recount_member extends clinic {
             for ($i = 1; $i <= $max; $i++) {
                 $this->set_queue('member_recount', $i);
             }
-
         } else {
             $this->set_queue('output_message', json_encode(array('error', '初始化失败')));
         }
@@ -39,7 +39,8 @@ class recount_member extends clinic {
      * Recount member
      * @return null
      */
-    public function member_recount($id) {
+    public function member_recount($id)
+    {
 
         //$param = unserialize($param);
         //$id = $param[0];
@@ -47,16 +48,15 @@ class recount_member extends clinic {
 
         CountMemberArray(array($id));
         $this->output('success', '用户' . '（ID = ' . $id . '）重建成功');
-
     }
 
     /**
      * output_message
      * @return null
      */
-    public function output_message($str) {
+    public function output_message($str)
+    {
         $str = json_decode($str);
         $this->output($str[0], $str[1]);
     }
-
 }

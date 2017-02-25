@@ -362,7 +362,8 @@ if (function_exists('memory_get_usage')) {
  * 版本兼容处理
  */
 if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
-    function _stripslashes(&$var) {
+    function _stripslashes(&$var)
+    {
         if (is_array($var)) {
             foreach ($var as $k => &$v) {
                 _stripslashes($v);
@@ -412,11 +413,10 @@ $GLOBALS['activeapps'] = &$GLOBALS['activedapps'];
  */
 $GLOBALS['option'] = require ZBP_PATH . 'zb_system/defend/option.php';
 $op_users = null;
-if (!ZBP_HOOKERROR && isset($_ENV['ZBP_USER_OPTION']) && is_readable($file_base = $_ENV['ZBP_USER_OPTION'])){
+if (!ZBP_HOOKERROR && isset($_ENV['ZBP_USER_OPTION']) && is_readable($file_base = $_ENV['ZBP_USER_OPTION'])) {
     $op_users = require $file_base;
     $GLOBALS['option'] = array_merge($GLOBALS['option'], $op_users);
-}
-elseif (is_readable($file_base = $GLOBALS['usersdir'] . 'c_option.php')) {
+} elseif (is_readable($file_base = $GLOBALS['usersdir'] . 'c_option.php')) {
     $op_users = require $file_base;
     $GLOBALS['option'] = array_merge($GLOBALS['option'], $op_users);
 }

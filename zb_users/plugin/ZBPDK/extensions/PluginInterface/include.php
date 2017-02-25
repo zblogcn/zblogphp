@@ -18,33 +18,37 @@ $GLOBALS['zbdk_interface_defined_plugins'] = array(
     "response" => array(),
 );
 
-function plugininterface_getall() {
+function plugininterface_getall()
+{
     foreach ($GLOBALS as $temp_name => $temp_value) {
-
         if (preg_match("/^(Action|Filter|Response)_/i", $temp_name, $matches)) {
             switch (strtolower($matches[1])) {
-                case 'filter':plugininterface_formatfilter($temp_name, true);
+                case 'filter':
+                    plugininterface_formatfilter($temp_name, true);
             }
         }
     }
 }
 
-function plugininterface_filterexit($filter) {
+function plugininterface_filterexit($filter)
+{
     switch ($filter) {
-        case '':return 'PLUGIN_EXITSIGNAL_NONE';
-        case 'break':return 'PLUGIN_EXITSIGNAL_BREAK';
-        case 'return':return 'PLUGIN_EXITSIGNAL_RETURN';
+        case '':
+            return 'PLUGIN_EXITSIGNAL_NONE';
+        case 'break':
+            return 'PLUGIN_EXITSIGNAL_BREAK';
+        case 'return':
+            return 'PLUGIN_EXITSIGNAL_RETURN';
     }
 }
 
-function plugininterface_outputfunc($interface_name, $closure) {
+function plugininterface_outputfunc($interface_name, $closure)
+{
     $str = '';
-    try
-    {
+    try {
         $func = new ReflectionFunction($closure);
     } catch (ReflectionException $e) {
         echo $e->getMessage();
-
         return;
     }
     $start = $func->getStartLine() - 1;
@@ -55,11 +59,11 @@ function plugininterface_outputfunc($interface_name, $closure) {
     $str .= 'StartLine: ' . $start . "\n";
     $str .= 'EndLine: ' . $end . "\n";
     $str .= implode("", array_slice(file($filename), $start, $end - $start + 1));
-
     return $str;
 }
 
-function plugininterface_formatfilter($interface_name, $show_interface_name = false) {
+function plugininterface_formatfilter($interface_name, $show_interface_name = false)
+{
     foreach ($GLOBALS[$interface_name] as $temp => $temp2) {
         $w = array(
             "orig" => $temp,
@@ -80,6 +84,5 @@ function plugininterface_formatfilter($interface_name, $show_interface_name = fa
         $w["output"] = $temp;
 
         array_push($GLOBALS['zbdk_interface_defined_plugins']['filter'], $w);
-
     }
 }

@@ -1,5 +1,6 @@
 <?php
-class SQLMySQL extends SQLGlobal {
+class SQLMySQL extends SQLGlobal
+{
     /**
      * @override
      */
@@ -8,14 +9,16 @@ class SQLMySQL extends SQLGlobal {
     /**
      * @param object $db
      */
-    public function __construct(&$db = null) {
+    public function __construct(&$db = null)
+    {
         parent::__construct($db);
         $this->option['engine'] = $GLOBALS['zbp']->option['ZC_MYSQL_ENGINE'];
     }
     /**
      * @override
      */
-    public function reset() {
+    public function reset()
+    {
         parent::reset();
         $this->option['engine'] = $GLOBALS['zbp']->option['ZC_MYSQL_ENGINE'];
 
@@ -26,7 +29,8 @@ class SQLMySQL extends SQLGlobal {
      * @todo
      * @override
      */
-    public function exist($table, $dbname = '') {
+    public function exist($table, $dbname = '')
+    {
         $this->_sql = array("SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$table'");
 
         return $this;
@@ -35,10 +39,11 @@ class SQLMySQL extends SQLGlobal {
      * @todo
      * @override
      */
-    protected function buildCreate() {
+    protected function buildCreate()
+    {
 
         //parent::buildCreate();
-        if(!empty($this->index) && empty($this->data)){
+        if (!empty($this->index) && empty($this->data)) {
             $this->buildIndex();
 
             return;
@@ -125,10 +130,11 @@ class SQLMySQL extends SQLGlobal {
     }
 
 
-    protected function buildIndex() {
+    protected function buildIndex()
+    {
         $sql = array();
         //var_dump($this->index);
-        foreach ($this->index as $indexkey => $indexvalue){
+        foreach ($this->index as $indexkey => $indexvalue) {
             $indexname = $indexkey;
             $indexfield = $indexvalue;
 
@@ -136,8 +142,8 @@ class SQLMySQL extends SQLGlobal {
             $sql[] = '(';
 
             foreach ($indexfield as $key => $value) {
-            $sql[] = $value;
-            $sql[] = ',';
+                $sql[] = $value;
+                $sql[] = ',';
             }
             array_pop($sql);
             $sql[] = ') ;';
@@ -150,7 +156,8 @@ class SQLMySQL extends SQLGlobal {
     /**
      * @override
      */
-    protected function buildBeforeWhere() {
+    protected function buildBeforeWhere()
+    {
         if (isset($this->option['useindex'])) {
             if (is_array($this->option['useindex'])) {
                 $this->_sqlPush('USE INDEX (' . implode($this->option['useindex'], ',') . ') ');
@@ -177,7 +184,8 @@ class SQLMySQL extends SQLGlobal {
     /**
      * @override
      */
-    protected function buildSelect() {
+    protected function buildSelect()
+    {
         if (isset($this->option['sql_no_cache'])) {
             $this->_sqlPush('SQL_NO_CACHE ');
         }

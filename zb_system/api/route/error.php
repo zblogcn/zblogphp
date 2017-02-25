@@ -17,14 +17,14 @@ register_shutdown_function('api_shutdown_error_handler');
  * @param  ZBlogException &$zbe
  * @return true
  */
-function api_format_exception(&$zbe) {
+function api_format_exception(&$zbe)
+{
     $code = $zbe->get_code($zbe->file, $zbe->line);
     $code = $code[$zbe->line - 1];
 
     
     $traces = array();
     foreach (debug_backtrace() as $iInt => $sData) {
-    
         if ($iInt <= 1) { // That's error trigger
             continue;
         }
@@ -63,20 +63,20 @@ function api_format_exception(&$zbe) {
 
 /**
  * api_error_handler
- * @param  integer $errno 
+ * @param  integer $errno
  * @param  string $errstr
  * @param  string $errfile
  * @param  integer $errline
  * @param  array $errcontext
  * @return true
  */
-function api_error_handler($errno, $errstr, $errfile, $errline) {
+function api_error_handler($errno, $errstr, $errfile, $errline)
+{
 
     $zbe = ZBlogException::GetInstance();
     $zbe->ParseError($errno, $errstr, $errfile, $errline);
     //Http500();
     api_format_exception($zbe);
-
 }
 
 /**
@@ -84,21 +84,22 @@ function api_error_handler($errno, $errstr, $errfile, $errline) {
  * @param  array $exception
  * @return true
  */
-function api_exception_handler($exception) {
+function api_exception_handler($exception)
+{
 
     //ob_clean();
     $zbe = ZBlogException::GetInstance();
     $zbe->ParseException($exception);
     //Http500();
     api_format_exception($zbe);
-
 }
 
 /**
  * register_shutdown_function
  * @return true
  */
-function api_shutdown_error_handler() {
+function api_shutdown_error_handler()
+{
     if ($error = error_get_last()) {
         //ob_clean();
         $zbe = ZBlogException::GetInstance();
