@@ -1046,7 +1046,6 @@ function ViewPost($object, $theSecondParam, $isrewrite = false)
 
     $article = $articles[0];
 
-
     if ($isrewrite && !(stripos(urldecode($article->Url), $object[0]) !== false)) {
         $zbp->ShowError(2, __FILE__, __LINE__);
         exit;
@@ -2551,7 +2550,6 @@ function PostUpload()
                 $upload->Size = $_FILES[$key]['size'];
                 $upload->AuthorID = $zbp->user->ID;
 
-
                 //检查同月重名
                 $d1 = date('Y-m-01', time());
                 $d2 = date('Y-m-d', strtotime(date('Y-m-01', time()) . ' +1 month -1 day'));
@@ -2787,7 +2785,6 @@ function SaveSetting()
         }
         $zbp->option[$key] = trim(str_replace(array("\r", "\n"), array("", ""), $value));
     }
-
 
     $zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST']);
     $zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST'], '/') . '/';
