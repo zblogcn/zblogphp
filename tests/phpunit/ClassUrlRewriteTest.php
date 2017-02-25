@@ -116,13 +116,16 @@ class ClassUrlRewriteTest extends PHPUnit_Framework_TestCase
         ]
     ];
 
-    public function setUp() {
+    public function setUp()
+    {
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
     }
 
-    private function generateAndMatch($url, $regex, $type, $hasPage = false) {
+    private function generateAndMatch($url, $regex, $type, $hasPage = false)
+    {
         $m = [];
         $r = UrlRule::OutputUrlRegEx($regex, $type, $hasPage);
         preg_match($r, $url, $m);
@@ -131,7 +134,8 @@ class ClassUrlRewriteTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testRegExsSingle() {
+    public function testRegExsSingle()
+    {
         foreach ($this->testRules as $key => $rule) {
             foreach ($rule as $data) {
                 foreach ($data[1] as $testUrl => $testSubset) {
@@ -163,9 +167,7 @@ class ClassUrlRewriteTest extends PHPUnit_Framework_TestCase
     }
     */
 
-    private function getRegExpResult($str) {
-        
+    private function getRegExpResult($str)
+    {
     }
-
-
 }

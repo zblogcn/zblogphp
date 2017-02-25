@@ -4,26 +4,31 @@ class ClassSQLPgSQLTest extends PHPUnit_Framework_TestCase
     protected $backupGlobalsBlacklist = ['zbp'];
     protected static $db = null;
 
-    public function setUp() {
+    public function setUp()
+    {
         self::$db = new SQLPgSQL($GLOBALS['zbp']->db);
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         self::$db->reset();
         self::$db = null;
     }
 
-    public function testExist() {
+    public function testExist()
+    {
         self::$db->exist('zbp_post');
         $this->assertEquals('SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=\'public\' AND  table_name =\'zbp_post\'', self::$db->sql);
     }
 
-    public function testIndex() {
+    public function testIndex()
+    {
         //self::$db->create('zbp_post')->index(array('indexname' => array('ddd', 'eee', 'eeee')));
         //$this->assertEquals('CREATE INDEX indexname ( ddd , eee , eeee ) ;', self::$db->sql);
     }
 
-    public function testCreateTable() {
+    public function testCreateTable()
+    {
         $tableData = array(
             'a' => array('a', 'integer', '', 0),
             'b' => array('b', 'integer', 'tinyint', 0),
@@ -50,11 +55,9 @@ class ClassSQLPgSQLTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('CREATE SEQUENCE zbp_post_seq; CREATE TABLE zbp_post ( a INT NOT NULL DEFAULT nextval(\'zbp_post_seq\'), b integer NOT NULL DEFAULT \'0\', c smallint NOT NULL DEFAULT \'0\', d integer NOT NULL DEFAULT \'0\', e integer NOT NULL DEFAULT \'0\', f bigint NOT NULL DEFAULT \'0\', g integer NOT NULL DEFAULT \'0\', h timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, i char(1) NOT NULL DEFAULT \'0\', j char() NOT NULL DEFAULT \'\', k varchar(250) NOT NULL DEFAULT \'\', l text NOT NULL DEFAULT \'\', m text NOT NULL DEFAULT \'\', n text NOT NULL DEFAULT \'\', o text NOT NULL DEFAULT \'\', p text NOT NULL DEFAULT \'\', q time NOT NULL, r real NOT NULL DEFAULT 0, s double precision NOT NULL DEFAULT 0, t date NOT NULL, PRIMARY KEY (a) ); CREATE INDEX zbp_post_ix_id on zbp_post(a);', self::$db->sql);
     }
 
-    public function testDropTable() {
+    public function testDropTable()
+    {
         self::$db->drop('zbp_post');
         $this->assertEquals('DROP TABLE zbp_post; DROP SEQUENCE zbp_post_seq;', self::$db->sql);
     }
-
-
-
 }
