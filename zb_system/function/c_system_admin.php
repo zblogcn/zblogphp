@@ -11,28 +11,32 @@ $zbp->ismanage = true;
 /**
  * 添加页面管理子菜单(内置插件函数)
  */
-function Include_Admin_Addpagesubmenu() {
+function Include_Admin_Addpagesubmenu()
+{
     echo MakeSubMenu($GLOBALS['lang']['msg']['new_page'], '../cmd.php?act=PageEdt');
 }
 
 /**
  * 添加标签管理子菜单(内置插件函数)
  */
-function Include_Admin_Addtagsubmenu() {
+function Include_Admin_Addtagsubmenu()
+{
     echo MakeSubMenu($GLOBALS['lang']['msg']['new_tag'], '../cmd.php?act=TagEdt');
 }
 
 /**
  * 添加分类管理子菜单(内置插件函数)
  */
-function Include_Admin_Addcatesubmenu() {
+function Include_Admin_Addcatesubmenu()
+{
     echo MakeSubMenu($GLOBALS['lang']['msg']['new_category'], '../cmd.php?act=CategoryEdt');
 }
 
 /**
  * 添加用户管理子菜单(内置插件函数)
  */
-function Include_Admin_Addmemsubmenu() {
+function Include_Admin_Addmemsubmenu()
+{
     global $zbp;
     if ($zbp->CheckRights('MemberNew')) {
         echo MakeSubMenu($GLOBALS['lang']['msg']['new_member'], '../cmd.php?act=MemberNew');
@@ -43,7 +47,8 @@ function Include_Admin_Addmemsubmenu() {
 /**
  * 添加模块管理子菜单(内置插件函数)
  */
-function Include_Admin_Addmodsubmenu() {
+function Include_Admin_Addmodsubmenu()
+{
     echo MakeSubMenu($GLOBALS['lang']['msg']['new_module'], '../cmd.php?act=ModuleEdt');
     echo MakeSubMenu($GLOBALS['lang']['msg']['module_navbar'], '../cmd.php?act=ModuleEdt&amp;filename=navbar');
     echo MakeSubMenu($GLOBALS['lang']['msg']['module_link'], '../cmd.php?act=ModuleEdt&amp;filename=link');
@@ -54,14 +59,16 @@ function Include_Admin_Addmodsubmenu() {
 /**
  * 添加评论管理子菜单(内置插件函数)
  */
-function Include_Admin_Addcmtsubmenu() {
+function Include_Admin_Addcmtsubmenu()
+{
     global $zbp;
     if ($zbp->CheckRights('CommentAll')) {
         $n = $zbp->cache->all_comment_nums - $zbp->cache->normal_comment_nums;
-        if ($n != 0)
+        if ($n != 0) {
             $n = ' (' . $n . ')';
-        else
+        } else {
             $n = '';
+        }
         echo MakeSubMenu($GLOBALS['lang']['msg']['check_comment'] . $n, '../cmd.php?act=CommentMng&amp;ischecking=1', 'm-left ' . (GetVars('ischecking') ? 'm-now' : ''));
     }
 }
@@ -74,7 +81,8 @@ $leftmenus = array();
 /**
  * 后台管理左侧导航菜单
  */
-function ResponseAdmin_LeftMenu() {
+function ResponseAdmin_LeftMenu()
+{
 
     global $zbp;
     global $leftmenus;
@@ -104,13 +112,13 @@ function ResponseAdmin_LeftMenu() {
     foreach ($leftmenus as $m) {
         echo $m;
     }
-
 }
 
 /**
  * 后台管理顶部菜单
  */
-function ResponseAdmin_TopMenu() {
+function ResponseAdmin_TopMenu()
+{
 
     global $zbp;
     global $topmenus;
@@ -127,7 +135,6 @@ function ResponseAdmin_TopMenu() {
     foreach ($topmenus as $m) {
         echo $m;
     }
-
 }
 
 /**
@@ -140,17 +147,20 @@ function ResponseAdmin_TopMenu() {
  * @param $strTitle
  * @return null|string
  */
-function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $strId = '', $strTitle = '') {
+function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $strId = '', $strTitle = '')
+{
     $s  = '<a href="' . $strUrl . '" ';
-    if($strTarget)
+    if ($strTarget) {
         $s .= 'target="' . $strTarget . '"';
-    if($strId)
+    }
+    if ($strId) {
         $s .= 'id="' . $id . '"';
-    if($strTitle)
+    }
+    if ($strTitle) {
         $s .= 'title="' . $strTitle . '" ' . 'alt="' . $strTitle . '" ';
+    }
     $s .= '>';
     $s .= '<span class="' . $strClass . '">' . $strName . '</span></a>';
-
     return $s;
 }
 
@@ -164,7 +174,8 @@ function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $
  * @param $strLiId
  * @return null|string
  */
-function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId) {
+function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId)
+{
     global $zbp;
 
     static $AdminTopMenuCount = 0;
@@ -173,9 +184,13 @@ function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId) {
     }
 
     $tmp = null;
-    if ($strTarget == "") {$strTarget = "_self";}
+    if ($strTarget == "") {
+        $strTarget = "_self";
+    }
     $AdminTopMenuCount = $AdminTopMenuCount + 1;
-    if ($strLiId == "") {$strLiId = "topmenu" . $AdminTopMenuCount;}
+    if ($strLiId == "") {
+        $strLiId = "topmenu" . $AdminTopMenuCount;
+    }
     $tmp = "<li id=\"" . $strLiId . "\"><a href=\"" . $strUrl . "\" target=\"" . $strTarget . "\" title=\"" . htmlspecialchars($strName) . "\">" . $strName . "</a></li>";
 
     return $tmp;
@@ -191,7 +206,8 @@ function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId) {
  * @param $strImgUrl
  * @return null|string
  */
-function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $strImgUrl) {
+function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $strImgUrl)
+{
     global $zbp;
 
     static $AdminLeftMenuCount = 0;
@@ -208,7 +224,6 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
     }
 
     return $tmp;
-
 }
 
 ################################################################################################################
@@ -217,14 +232,16 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
  * @param $default
  * @return null|string
  */
-function OutputOptionItemsOfCategories($default) {
+function OutputOptionItemsOfCategories($default)
+{
     global $zbp;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCategories'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($default);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
-return $fpreturn;}
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
     }
 
     $s = null;
@@ -240,14 +257,14 @@ return $fpreturn;}
  * @param $default
  * @return null|string
  */
-function OutputOptionItemsOfTemplate($default) {
+function OutputOptionItemsOfTemplate($default)
+{
     global $zbp;
     $testRegExp = "/^(\.|post-|module|header|footer|comment|sidebar|pagebar|[a-zA-Z]\_)/si";
     $s = null;
     $s .= '<option value="" >' . $zbp->lang['msg']['none'] . '</option>';
 
     foreach ($zbp->template->templates as $key => $value) {
-        
         if (preg_match($testRegExp, $key)) {
             continue;
         }
@@ -255,7 +272,7 @@ function OutputOptionItemsOfTemplate($default) {
         $n = "";
         $t = $value;
 
-        if(stristr($value, 'Template Name:')) {
+        if (stristr($value, 'Template Name:')) {
             $t = stristr($t, 'Template Name:');
             $t = str_ireplace('Template Name:', '', $t);
             $n = strtok($t, ' *');
@@ -266,7 +283,7 @@ function OutputOptionItemsOfTemplate($default) {
         } else {
             if ($n !== '') {
                 $s .= '<option value="' . $key . '" >' . $key . ' (' . $n . ')' . '</option>';
-            }else{
+            } else {
                 $s .= '<option value="' . $key . '" >' . $key . '</option>';
             }
         }
@@ -280,7 +297,8 @@ function OutputOptionItemsOfTemplate($default) {
  * @param $default
  * @return null|string
  */
-function OutputOptionItemsOfMemberLevel($default) {
+function OutputOptionItemsOfMemberLevel($default)
+{
     global $zbp;
 
     $s = null;
@@ -299,7 +317,8 @@ function OutputOptionItemsOfMemberLevel($default) {
  * @param $default
  * @return null|string
  */
-function OutputOptionItemsOfMember($default) {
+function OutputOptionItemsOfMember($default)
+{
     global $zbp;
 
     $s = null;
@@ -324,7 +343,8 @@ function OutputOptionItemsOfMember($default) {
  * @param $default
  * @return null|string
  */
-function OutputOptionItemsOfPostStatus($default) {
+function OutputOptionItemsOfPostStatus($default)
+{
     global $zbp;
 
     $s = null;
@@ -348,7 +368,8 @@ function OutputOptionItemsOfPostStatus($default) {
  * @param $m
  * @param bool $button
  */
-function CreateModuleDiv($m, $button = true) {
+function CreateModuleDiv($m, $button = true)
+{
     global $zbp;
 
     echo '<div class="widget widget_source_' . $m->SourceType . ' widget_id_' . $m->FileName . '">';
@@ -383,7 +404,8 @@ function CreateModuleDiv($m, $button = true) {
  * @param $default
  * @return string
  */
-function CreateOptionsOfTimeZone($default) {
+function CreateOptionsOfTimeZone($default)
+{
     global $zbp;
     $s = '';
     $tz = array(
@@ -427,7 +449,8 @@ function CreateOptionsOfTimeZone($default) {
  * @param $default
  * @return string
  */
-function CreateOptionsOfLang($default) {
+function CreateOptionsOfLang($default)
+{
     global $zbp;
     $s = '';
     $dir = $zbp->usersdir . 'language/';
@@ -454,7 +477,8 @@ function CreateOptionsOfLang($default) {
 /**
  * 后台管理显示网站信息
  */
-function Admin_SiteInfo() {
+function Admin_SiteInfo()
+{
 
     global $zbp;
 
@@ -470,8 +494,7 @@ function Admin_SiteInfo() {
 
     echo '<table class="tableFull tableBorder table_striped table_hover" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>' : '') . ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
-    if (
-          ((time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60))
+    if (((time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60))
               ||
           ($zbp->CheckTemplate(true) == false)
         ) {
@@ -511,14 +534,14 @@ function Admin_SiteInfo() {
     echo $s;
     echo '<script type="text/javascript">ActiveTopMenu("topmenu1");</script>';
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/home_32.png' . '");</script>';
-
 }
 
 ################################################################################################################
 /**
  * 后台文章管理
  */
-function Admin_ArticleMng() {
+function Admin_ArticleMng()
+{
 
     global $zbp;
 
@@ -632,23 +655,24 @@ function Admin_ArticleMng() {
     echo '<hr/><p class="pagebar">';
 
     foreach ($p->Buttons as $key => $value) {
-        if($p->PageNow == $key)
+        if ($p->PageNow == $key) {
             echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
-        else
+        } else {
             echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+        }
     }
 
     echo '</p></div>';
     echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/article_32.png' . '");</script>';
-
 }
 
 ################################################################################################################
 /**
  * 后台页面管理
  */
-function Admin_PageMng() {
+function Admin_PageMng()
+{
 
     global $zbp;
 
@@ -732,22 +756,23 @@ function Admin_PageMng() {
     echo '</table>';
     echo '<hr/><p class="pagebar">';
     foreach ($p->Buttons as $key => $value) {
-        if($p->PageNow == $key)
+        if ($p->PageNow == $key) {
             echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
-        else
+        } else {
             echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+        }
     }
     echo '</p></div>';
     echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/page_32.png' . '");</script>';
-
 }
 
 ################################################################################################################
 /**
  * 后台分类管理
  */
-function Admin_CategoryMng() {
+function Admin_CategoryMng()
+{
 
     global $zbp;
 
@@ -801,14 +826,14 @@ function Admin_CategoryMng() {
     echo '</div>';
     echo '<script type="text/javascript">ActiveLeftMenu("aCategoryMng");</script>';
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/category_32.png' . '");</script>';
-
 }
 
 ################################################################################################################
 /**
  * 后台评论管理
  */
-function Admin_CommentMng() {
+function Admin_CommentMng()
+{
 
     global $zbp;
 
@@ -878,7 +903,6 @@ function Admin_CommentMng() {
     $tableths[] = '</tr>';
 
     foreach ($array as $cmt) {
-
         $article = $zbp->GetPostByID($cmt->LogID);
         if ($article->ID == 0) {
             $article = null;
@@ -942,10 +966,11 @@ function Admin_CommentMng() {
     echo '<p class="pagebar">';
 
     foreach ($p->Buttons as $key => $value) {
-        if($p->PageNow == $key)
+        if ($p->PageNow == $key) {
             echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
-        else
+        } else {
             echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+        }
     }
 
     echo '</p>';
@@ -961,7 +986,8 @@ function Admin_CommentMng() {
 /**
  * 后台用户管理
  */
-function Admin_MemberMng() {
+function Admin_MemberMng()
+{
 
     global $zbp;
 
@@ -1055,10 +1081,11 @@ function Admin_MemberMng() {
     echo '</table>';
     echo '<hr/><p class="pagebar">';
     foreach ($p->Buttons as $key => $value) {
-        if($p->PageNow == $key)
+        if ($p->PageNow == $key) {
             echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
-        else
+        } else {
             echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+        }
     }
     echo '</p></div>';
     echo '<script type="text/javascript">ActiveLeftMenu("aMemberMng");</script>';
@@ -1069,7 +1096,8 @@ function Admin_MemberMng() {
 /**
  *  后台上传附件管理
  */
-function Admin_UploadMng() {
+function Admin_UploadMng()
+{
 
     global $zbp;
 
@@ -1146,10 +1174,11 @@ function Admin_UploadMng() {
     echo '</table>';
     echo '<hr/><p class="pagebar">';
     foreach ($p->Buttons as $key => $value) {
-        if($p->PageNow == $key)
+        if ($p->PageNow == $key) {
             echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
-        else
+        } else {
             echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+        }
     }
     echo '</p></div>';
     echo '<script type="text/javascript">ActiveLeftMenu("aUploadMng");</script>';
@@ -1160,7 +1189,8 @@ function Admin_UploadMng() {
 /**
  * 后台标签管理
  */
-function Admin_TagMng() {
+function Admin_TagMng()
+{
 
     global $zbp;
 
@@ -1225,10 +1255,11 @@ function Admin_TagMng() {
     echo '</table>';
     echo '<hr/><p class="pagebar">';
     foreach ($p->Buttons as $key => $value) {
-        if($p->PageNow == $key)
+        if ($p->PageNow == $key) {
             echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
-        else
+        } else {
             echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+        }
     }
     echo '</p></div>';
 
@@ -1240,7 +1271,8 @@ function Admin_TagMng() {
 /**
  * 后台主题管理
  */
-function Admin_ThemeMng() {
+function Admin_ThemeMng()
+{
 
     global $zbp;
 
@@ -1288,14 +1320,14 @@ function Admin_ThemeMng() {
     echo '</form></div>';
     echo '<script type="text/javascript">ActiveLeftMenu("aThemeMng");</script>';
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/themes_32.png' . '");</script>';
-
 }
 
 ################################################################################################################
 /**
  * 后台模块管理
  */
-function Admin_ModuleMng() {
+function Admin_ModuleMng()
+{
 
     global $zbp;
 
@@ -1427,107 +1459,107 @@ function Admin_ModuleMng() {
     echo '<script type="text/javascript">ActiveLeftMenu("aModuleMng");</script>';
     ?>
 <script type="text/javascript">
-	$(function() {
-		function sortFunction(){
-			var s1="";
-			$("#siderbar").find("div.funid").each(function(i){
-			   s1 += $(this).html() +"|";
-			 });
+    $(function() {
+        function sortFunction(){
+            var s1="";
+            $("#siderbar").find("div.funid").each(function(i){
+               s1 += $(this).html() +"|";
+             });
 
-			 var s2="";
-			$("#siderbar2").find("div.funid").each(function(i){
-			   s2 += $(this).html() +"|";
-			 });
+             var s2="";
+            $("#siderbar2").find("div.funid").each(function(i){
+               s2 += $(this).html() +"|";
+             });
 
-			 var s3="";
-			$("#siderbar3").find("div.funid").each(function(i){
-			   s3 += $(this).html() +"|";
-			 });
+             var s3="";
+            $("#siderbar3").find("div.funid").each(function(i){
+               s3 += $(this).html() +"|";
+             });
 
-			 var s4="";
-			$("#siderbar4").find("div.funid").each(function(i){
-			   s4 += $(this).html() +"|";
-			 });
+             var s4="";
+            $("#siderbar4").find("div.funid").each(function(i){
+               s4 += $(this).html() +"|";
+             });
 
-			 var s5="";
-			$("#siderbar5").find("div.funid").each(function(i){
-			   s5 += $(this).html() +"|";
-			 });
+             var s5="";
+            $("#siderbar5").find("div.funid").each(function(i){
+               s5 += $(this).html() +"|";
+             });
 
-			$("#strsidebar" ).val(s1);
-			$("#strsidebar2").val(s2);
-			$("#strsidebar3").val(s3);
-			$("#strsidebar4").val(s4);
-			$("#strsidebar5").val(s5);
+            $("#strsidebar" ).val(s1);
+            $("#strsidebar2").val(s2);
+            $("#strsidebar3").val(s3);
+            $("#strsidebar4").val(s4);
+            $("#strsidebar5").val(s5);
 
 
-			$.post($("#edit").attr("action"),
-				{
-				"sidebar": s1,
-				"sidebar2": s2,
-				"sidebar3": s3,
-				"sidebar4": s4,
-				"sidebar5": s5
-				},
-			   function(data){
-				 //alert("Data Loaded: " + data);
-			   });
+            $.post($("#edit").attr("action"),
+                {
+                "sidebar": s1,
+                "sidebar2": s2,
+                "sidebar3": s3,
+                "sidebar4": s4,
+                "sidebar5": s5
+                },
+               function(data){
+                 //alert("Data Loaded: " + data);
+               });
 
-		};
+        };
 
-		var t,f=1;
-		function hideWidget(item){
-				item.find(".ui-icon").removeClass("ui-icon-triangle-1-s").addClass("ui-icon-triangle-1-w");
-				t=item.next();
-				t.find(".widget").hide("fast").end().show();
-				t.find(".siderbar-note>span").text(t.find(".widget").length);
-		}
-		function showWidget(item){
-				item.find(".ui-icon").removeClass("ui-icon-triangle-1-w").addClass("ui-icon-triangle-1-s");
-				t=item.next();
-				t.find(".widget").show("fast");
-				t.find(".siderbar-note>span").text(t.find(".widget").length);
-		}
+        var t,f=1;
+        function hideWidget(item){
+                item.find(".ui-icon").removeClass("ui-icon-triangle-1-s").addClass("ui-icon-triangle-1-w");
+                t=item.next();
+                t.find(".widget").hide("fast").end().show();
+                t.find(".siderbar-note>span").text(t.find(".widget").length);
+        }
+        function showWidget(item){
+                item.find(".ui-icon").removeClass("ui-icon-triangle-1-w").addClass("ui-icon-triangle-1-s");
+                t=item.next();
+                t.find(".widget").show("fast");
+                t.find(".siderbar-note>span").text(t.find(".widget").length);
+        }
 
-		$( ".siderbar-header" ).click(function(){
-			if($(this).hasClass("clicked")) {
-				showWidget($(this));
-				$(this).removeClass("clicked");
-			}
-			else {
-				hideWidget($(this));
-				$(this).addClass("clicked");
-			}
-		});
+        $( ".siderbar-header" ).click(function(){
+            if($(this).hasClass("clicked")) {
+                showWidget($(this));
+                $(this).removeClass("clicked");
+            }
+            else {
+                hideWidget($(this));
+                $(this).addClass("clicked");
+            }
+        });
 
- 		$( ".siderbar-sort-list" ).sortable({
- 			items:'.widget',
-			start:function(event, ui){
-				showWidget(ui.item.parent().prev());
-				 var c=ui.item.find(".funid").html();
-				 if(ui.item.parent().find(".widget:contains("+c+")").length>1){
-					ui.item.remove();
-				 };
-			} ,
-			stop:function(event, ui){$(this).parent().find(".roll").show("slow");sortFunction();$(this).parent().find(".roll").hide("slow");
-				showWidget($(this).parent().prev());
-			}
- 		}).disableSelection();
+        $( ".siderbar-sort-list" ).sortable({
+            items:'.widget',
+            start:function(event, ui){
+                showWidget(ui.item.parent().prev());
+                 var c=ui.item.find(".funid").html();
+                 if(ui.item.parent().find(".widget:contains("+c+")").length>1){
+                    ui.item.remove();
+                 };
+            } ,
+            stop:function(event, ui){$(this).parent().find(".roll").show("slow");sortFunction();$(this).parent().find(".roll").hide("slow");
+                showWidget($(this).parent().prev());
+            }
+        }).disableSelection();
 
-		$( ".widget-list>.widget" ).draggable({
-			connectToSortable: ".siderbar-sort-list",
-			revert: "invalid",
-			containment: "document",
-			helper: "clone",
-			cursor: "move"
-		}).disableSelection();
+        $( ".widget-list>.widget" ).draggable({
+            connectToSortable: ".siderbar-sort-list",
+            revert: "invalid",
+            containment: "document",
+            helper: "clone",
+            cursor: "move"
+        }).disableSelection();
 
-		$( ".widget-list" ).droppable({
-			accept:".siderbar-sort-list>.widget",
-			drop: function( event, ui ) {
-				ui.draggable.remove();
-			}
-		});
+        $( ".widget-list" ).droppable({
+            accept:".siderbar-sort-list>.widget",
+            drop: function( event, ui ) {
+                ui.draggable.remove();
+            }
+        });
 
 });
 
@@ -1540,7 +1572,8 @@ echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/
 /**
  * 后台插件管理
  */
-function Admin_PluginMng() {
+function Admin_PluginMng()
+{
 
     global $zbp;
 
@@ -1615,14 +1648,14 @@ function Admin_PluginMng() {
     echo '</div>';
     echo '<script type="text/javascript">ActiveLeftMenu("aPluginMng");';
     echo 'AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/plugin_32.png' . '");$(".plugin-note").tooltip();</script>';
-
 }
 
 ################################################################################################################
 /**
  * 后台网站设置管理
  */
-function Admin_SettingMng() {
+function Admin_SettingMng()
+{
 
     global $zbp;
 
@@ -1635,28 +1668,28 @@ function Admin_SettingMng() {
 
     ?>
 
-		  <form method="post" action="../cmd.php?act=SettingSav<?php echo '&amp;token=' . $zbp->GetToken(); ?>">
-			<div id="divMain2">
-			  <div class="content-box"><!-- Start Content Box -->
+          <form method="post" action="../cmd.php?act=SettingSav<?php echo '&amp;token=' . $zbp->GetToken(); ?>">
+            <div id="divMain2">
+              <div class="content-box"><!-- Start Content Box -->
 
-				<div class="content-box-header">
-				  <ul class="content-box-tabs">
-					<li><a href="#tab1" class="default-tab"><span><?php echo $zbp->lang['msg']['basic_setting'] ?></span></a></li>
-					<li><a href="#tab2"><span><?php echo $zbp->lang['msg']['global_setting'] ?></span></a></li>
-					<li><a href="#tab3"><span><?php echo $zbp->lang['msg']['page_setting'] ?></span></a></li>
-					<li><a href="#tab4"><span><?php echo $zbp->lang['msg']['comment_setting'] ?></span></a></li>
-				  </ul>
-				  <div class="clear"></div>
-				</div>
-				<!-- End .content-box-header -->
+                <div class="content-box-header">
+                  <ul class="content-box-tabs">
+                    <li><a href="#tab1" class="default-tab"><span><?php echo $zbp->lang['msg']['basic_setting'] ?></span></a></li>
+                    <li><a href="#tab2"><span><?php echo $zbp->lang['msg']['global_setting'] ?></span></a></li>
+                    <li><a href="#tab3"><span><?php echo $zbp->lang['msg']['page_setting'] ?></span></a></li>
+                    <li><a href="#tab4"><span><?php echo $zbp->lang['msg']['comment_setting'] ?></span></a></li>
+                  </ul>
+                  <div class="clear"></div>
+                </div>
+                <!-- End .content-box-header -->
 
-				<div class="content-box-content">
+                <div class="content-box-content">
 <?php
     $decodedBlogHost = $zbp->option['ZC_BLOG_HOST'];
-    if(stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false && function_exists('mb_strtolower')){
-        $Punycode = new Punycode();
-        $decodedBlogHost = $Punycode->decode($zbp->option['ZC_BLOG_HOST']);
-    }
+if (stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false && function_exists('mb_strtolower')) {
+    $Punycode = new Punycode();
+    $decodedBlogHost = $Punycode->decode($zbp->option['ZC_BLOG_HOST']);
+}
 
     echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
     echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
@@ -1710,14 +1743,14 @@ function Admin_SettingMng() {
     echo '</table>';
     echo '</div>';
     ?>
-				</div>
-				<!-- End .content-box-content -->
+                </div>
+                <!-- End .content-box-content -->
 
-			  </div>
-			  <hr/>
-			  <p><input type="submit" class="button" value="<?php echo $zbp->lang['msg']['submit'] ?>" id="btnPost" onclick="" /></p>
-			</div>
-		  </form>
+              </div>
+              <hr/>
+              <p><input type="submit" class="button" value="<?php echo $zbp->lang['msg']['submit'] ?>" id="btnPost" onclick="" /></p>
+            </div>
+          </form>
 <?php
 
     echo '<script type="text/javascript">ActiveTopMenu("topmenu2");</script>';

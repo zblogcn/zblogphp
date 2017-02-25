@@ -5,7 +5,8 @@
  * @package api/io
  * @php >= 5.2
  */
-class API_USER {
+class API_USER
+{
     /**
      * Instance
      */
@@ -26,15 +27,16 @@ class API_USER {
      * To avoid construct outside this class.
      * @private
      */
-    private function __construct() {
-
+    private function __construct()
+    {
     }
 
     /**
      * To return instance
      * @return API_Route
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
 
         if (is_null(self::$instance)) {
             $class = __CLASS__;
@@ -49,7 +51,8 @@ class API_USER {
      * @param  $name
      * @return
      */
-    public function __get($name) {
+    public function __get($name)
+    {
 
         switch ($name) {
             case 'key':
@@ -61,38 +64,41 @@ class API_USER {
         }
 
         return false;
-
     }
     /**
      * To set some property
      * @param  $name
      * @return
      */
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
 
         switch ($name) {
             case 'user':
                 $this->user = &$value;
                 $this->key = "";
                 $this->secret = "";
-            break;
+                break;
         }
-
     }
     /**
      * To avoid clone
      */
-    public function __clone() {
+    public function __clone()
+    {
         throw new Exception("Singleton Class Can Not Be Cloned");
     }
 
-    /** 
+    /**
      * To encrypt user for Key
      * @return string $key [base64_encode($id . '+' . md5($guid))]
      */
-    private function getKey() {
+    private function getKey()
+    {
 
-        if ($this->key != "") return $this->key;
+        if ($this->key != "") {
+            return $this->key;
+        }
         $id = $this->user->ID;
         $guid = $this->user->Guid;
         $this->key = base64_encode($id . '+' . md5($guid));
@@ -100,14 +106,19 @@ class API_USER {
         return $this->key;
     }
 
-    /** 
+    /**
      * To encrypt user for Secret
      * @return string $secret [base64_encode(aes_decode($key, $password))]
      */
-    private function getSecret() {
+    private function getSecret()
+    {
 
-        if ($this->secret != "") return $this->secret;
-        if ($this->key == "") $this->getKey();
+        if ($this->secret != "") {
+            return $this->secret;
+        }
+        if ($this->key == "") {
+            $this->getKey();
+        }
 
         $password = $this->user->Password;
 
@@ -120,39 +131,41 @@ class API_USER {
 
     /**
      * To decrypt key to id
-     * @param string $key [base64_encode(UserID . '+' . UserGuid)] 
+     * @param string $key [base64_encode(UserID . '+' . UserGuid)]
      */
-    private function getUserFromKey($key) {
+    private function getUserFromKey($key)
+    {
 
         $keyString = base64_decode($key);
         $keyArray = explode('+', $keyString);
-        if (count($keyArray) !== 2) return false;
+        if (count($keyArray) !== 2) {
+            return false;
+        }
 
         return array($keyArray[0], $keyArray[1]);
-
     }
 
     /**
      * To decrypt secret to key
-     * @param string $secret [base64_encode(ENCRYPTED_DATA)] 
+     * @param string $secret [base64_encode(ENCRYPTED_DATA)]
      * @return string $key
      */
-    private function getUserFromSecret($secret, $password) {
+    private function getUserFromSecret($secret, $password)
+    {
 
         $secret = base64_decode($secret);
         $iv = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB), MCRYPT_RAND);
 
         return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $password, $secret, MCRYPT_MODE_ECB, $iv));
-
-
     }
-    /** 
+    /**
      * Login
-     * @param  string $key 
+     * @param  string $key
      * @param  string $secret
-     * @return boolean  
+     * @return boolean
      */
-    public function login($key, $secret) {
+    public function login($key, $secret)
+    {
         
         global $zbp;
         $userData = $this->getUserFromKey($key);
@@ -173,5 +186,4 @@ class API_USER {
 
         return true;
     }
-
 }

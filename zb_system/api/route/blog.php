@@ -5,7 +5,8 @@
  * @package api/route/global
  * @php >= 5.2
  */
-function api_route_index_function() {
+function api_route_index_function()
+{
     global $zbp;
     API::$IO->bloghost = $zbp->host;
     if ($zbp->CheckRights('root')) {
@@ -19,11 +20,10 @@ function api_route_index_function() {
         );
         API::$IO->option = $zbp->option;
     }
-
-
 }
 
-function api_route_login_function() {
+function api_route_login_function()
+{
     global $zbp;
     $originalString = trim(GetVars('HTTP_AUTHORIZATION', 'SERVER'));
     $originalArray = explode(' ', $originalString);
@@ -41,7 +41,8 @@ function api_route_login_function() {
     API::$User->login($key, $secret);
 }
 
-function api_route_global_function() {
+function api_route_global_function()
+{
     global $zbp;
     API::$IO->version = $zbp->version;
 }

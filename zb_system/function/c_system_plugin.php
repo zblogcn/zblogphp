@@ -33,10 +33,10 @@ $GLOBALS['hooks'] = array();
  * @return void
  */
 
-function RegisterPlugin($strPluginName, $strPluginActiveFunction) {
+function RegisterPlugin($strPluginName, $strPluginActiveFunction)
+{
 
     $GLOBALS['plugins'][$strPluginName] = $strPluginActiveFunction;
-
 }
 
 /**
@@ -44,24 +44,24 @@ function RegisterPlugin($strPluginName, $strPluginActiveFunction) {
  * @param string $strPluginName 插件ID
  * @return void
  */
-function InstallPlugin($strPluginName) {
+function InstallPlugin($strPluginName)
+{
 
     if (function_exists($f = 'InstallPlugin_' . $strPluginName)) {
         $f();
     }
-
 }
 
 /**
  * 插件删除函数，只在插件删除时运行一次
  * @return void
  */
-function UninstallPlugin($strPluginName) {
+function UninstallPlugin($strPluginName)
+{
 
     if (function_exists($f = 'UninstallPlugin_' . $strPluginName) == true) {
         $f();
     }
-
 }
 
 /*
@@ -69,7 +69,8 @@ function UninstallPlugin($strPluginName) {
 ' 目的： 创建插件接口
 '*********************************************************
  */
-function DefinePluginFilter($strPluginFilter) {
+function DefinePluginFilter($strPluginFilter)
+{
     if (!isset($GLOBALS['hooks'][$strPluginFilter])) {
         $GLOBALS['hooks'][$strPluginFilter] = array();
         $GLOBALS[$strPluginFilter] = &$GLOBALS['hooks'][$strPluginFilter];
@@ -83,7 +84,8 @@ function DefinePluginFilter($strPluginFilter) {
 ' 目的： 检查插件接口
 '*********************************************************
  */
-function ExistsPluginFilter($strPluginFilter) {
+function ExistsPluginFilter($strPluginFilter)
+{
     return isset($GLOBALS['hooks'][$strPluginFilter]);
 }
 
@@ -92,7 +94,8 @@ function ExistsPluginFilter($strPluginFilter) {
 ' 目的： 调用插件接口
 '*********************************************************
  */
-function &UsingPluginFilter($strPluginFilter) {
+function &UsingPluginFilter($strPluginFilter)
+{
     if (isset($GLOBALS['hooks'][$strPluginFilter])) {
         return $GLOBALS['hooks'][$strPluginFilter];
     }
@@ -105,7 +108,8 @@ function &UsingPluginFilter($strPluginFilter) {
 ' 目的： 移除插件接口
 '*********************************************************
  */
-function RemovePluginFilter($strPluginFilter) {
+function RemovePluginFilter($strPluginFilter)
+{
     if (isset($GLOBALS['hooks'][$strPluginFilter])) {
         unset($GLOBALS[$strPluginFilter]);
         unset($GLOBALS['hooks'][$strPluginFilter]);
@@ -133,7 +137,8 @@ function RemovePluginFilter($strPluginFilter) {
 'exitsignal:return,break,continue
 '*********************************************************
  */
-function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSIGNAL_NONE) {
+function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSIGNAL_NONE)
+{
     if (isset($GLOBALS['hooks'][$plugname])) {
         if (!isset($GLOBALS['hooks'][$plugname][$functionname])) {
             $GLOBALS['hooks'][$plugname][$functionname] = $exitsignal;

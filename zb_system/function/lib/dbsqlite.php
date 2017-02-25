@@ -5,7 +5,8 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/DataBase/DbSQLite 类库
  */
-class DbSQLite implements iDataBase {
+class DbSQLite implements iDataBase
+{
 
     public $type = 'sqlite';
     public $version = '2';
@@ -26,7 +27,8 @@ class DbSQLite implements iDataBase {
     /**
      * 构造函数，实例化$sql参数
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->sql = new DbSql($this);
     }
 
@@ -34,7 +36,8 @@ class DbSQLite implements iDataBase {
      * @param $s
      * @return string
      */
-    public function EscapeString($s) {
+    public function EscapeString($s)
+    {
         return sqlite_escape_string($s);
     }
 
@@ -42,7 +45,8 @@ class DbSQLite implements iDataBase {
      * @param $array
      * @return bool
      */
-    public function Open($array) {
+    public function Open($array)
+    {
         if ($this->db = sqlite_open($array[0], 0666, $sqliteerror)) {
             $this->dbpre = $array[1];
             $this->dbname = $array[0];
@@ -56,15 +60,20 @@ class DbSQLite implements iDataBase {
     /**
      * 关闭数据库连接
      */
-    public function Close() {
+    public function Close()
+    {
         sqlite_close($this->db);
     }
 
     /**
      * @param $s
      */
-    public function QueryMulit($s) {return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
-    public function QueryMulti($s) {
+    public function QueryMulit($s)
+    {
+        return $this->QueryMulti($s);
+    }//错别字函数，历史原因保留下来
+    public function QueryMulti($s)
+    {
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
         $a = explode(';', $s);
         foreach ($a as $s) {
@@ -79,7 +88,8 @@ class DbSQLite implements iDataBase {
      * @param $query
      * @return array
      */
-    public function Query($query) {
+    public function Query($query)
+    {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
         $results = sqlite_query($this->db, $this->sql->Filter($query));
@@ -93,14 +103,14 @@ class DbSQLite implements iDataBase {
         }
 
         return $data;
-
     }
 
     /**
      * @param $query
      * @return SQLiteResult
      */
-    public function Update($query) {
+    public function Update($query)
+    {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         return sqlite_query($this->db, $this->sql->Filter($query));
     }
@@ -109,7 +119,8 @@ class DbSQLite implements iDataBase {
      * @param $query
      * @return SQLiteResult
      */
-    public function Delete($query) {
+    public function Delete($query)
+    {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         return sqlite_query($this->db, $this->sql->Filter($query));
     }
@@ -118,7 +129,8 @@ class DbSQLite implements iDataBase {
      * @param $query
      * @return int
      */
-    public function Insert($query) {
+    public function Insert($query)
+    {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         sqlite_query($this->db, $this->sql->Filter($query));
 
@@ -129,14 +141,16 @@ class DbSQLite implements iDataBase {
      * @param $table
      * @param $datainfo
      */
-    public function CreateTable($table, $datainfo) {
+    public function CreateTable($table, $datainfo)
+    {
         $this->QueryMulit($this->sql->CreateTable($table, $datainfo));
     }
 
     /**
      * @param $table
      */
-    public function DelTable($table) {
+    public function DelTable($table)
+    {
         $this->QueryMulit($this->sql->DelTable($table));
     }
 
@@ -144,7 +158,8 @@ class DbSQLite implements iDataBase {
      * @param $table
      * @return bool
      */
-    public function ExistTable($table) {
+    public function ExistTable($table)
+    {
 
         $a = $this->Query($this->sql->ExistTable($table));
         if (!is_array($a)) {

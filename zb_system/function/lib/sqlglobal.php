@@ -1,5 +1,6 @@
 <?php
-class SQLGlobal {
+class SQLGlobal
+{
 
     /**
      * @var string 类名
@@ -34,11 +35,13 @@ class SQLGlobal {
      */
     private $dbclass = null;
 
-    public function init() {
+    public function init()
+    {
         return new $this->className($this->db);
     }
 
-    private function validateParamater($param) {
+    private function validateParamater($param)
+    {
         if (is_null($param)) {
             return false;
         } elseif (is_string($param)) {
@@ -55,12 +58,14 @@ class SQLGlobal {
     /**
      * @param object $db
      */
-    public function __construct(&$db = null) {
+    public function __construct(&$db = null)
+    {
         $this->db = &$db;
         $this->dbclass = get_class($this->db);
     }
 
-    public function __call($callName, $argu) {
+    public function __call($callName, $argu)
+    {
         $upperKeyword = strtoupper($callName);
         if (in_array($upperKeyword, $this->methodKeyword)) {
             $this->method = $upperKeyword;
@@ -74,8 +79,7 @@ class SQLGlobal {
                     //is_array($argu[0]) ? $argu[0] : $argu;
                     $this->index[key($value)] = current($value);
                 }
-            }
-            // @codeCoverageIgnoreStart
+            } // @codeCoverageIgnoreStart
             else {
                 $this->data = is_array($argu[0]) ? $argu[0] : $argu;
             }
@@ -102,8 +106,7 @@ class SQLGlobal {
             }
 
             return $this;
-        }
-        // @codeCoverageIgnoreStart
+        } // @codeCoverageIgnoreStart
         else {
             $lowerKeyword = strtolower($callName);
             if (is_callable($this, $lowerKeyword)) {
@@ -112,9 +115,9 @@ class SQLGlobal {
         }
         // @codeCoverageIgnoreEnd
         throw new Exception("Unimplemented $callName");
-        
     }
-    public function __get($getName) {
+    public function __get($getName)
+    {
         $upperKeyword = strtoupper($getName);
         if ($upperKeyword == "SQL") {
             $ret = $this->sql();
@@ -125,7 +128,8 @@ class SQLGlobal {
 
         return $this->$getName;
     }
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         if (isset($this->$name)) {
             $this->$name = $value;
         } else {
@@ -138,14 +142,16 @@ class SQLGlobal {
      * It maybe a bug of PHP.
      * @see  http://stackoverflow.com/questions/10454779/php-indirect-modification-of-overloaded-property
      */
-    public function _sqlPush($sql) {
+    public function _sqlPush($sql)
+    {
         $this->_sql[] = $sql;
     }
     /**
      * Re-initialize this class
      * @return $this
      */
-    public function reset() {
+    public function reset()
+    {
         foreach (get_class_vars(get_class($this)) as $var => $defVal) {
             if ($var == "db" || $var == "dbclass") {
                 continue;
@@ -159,7 +165,8 @@ class SQLGlobal {
      * Set SQL query option
      * @return $this
      */
-    public function option($option) {
+    public function option($option)
+    {
         if (!$this->validateParamater($option)) {
             return $this;
         }
@@ -169,7 +176,8 @@ class SQLGlobal {
         return $this;
     }
 
-    protected function columnLoaderArray($columns) {
+    protected function columnLoaderArray($columns)
+    {
         foreach ($columns as $column) {
             if (is_array($column)) {
                 if (count($column) > 1) {
@@ -186,7 +194,8 @@ class SQLGlobal {
      * Set column for query
      * @return $this
      */
-    public function column($columns) {
+    public function column($columns)
+    {
         if (!$this->validateParamater($columns)) {
             return $this;
         }
@@ -222,7 +231,8 @@ class SQLGlobal {
      * @example limit(10, 1)
      * @example limit(array(10, 1))
      */
-    public function limit() {
+    public function limit()
+    {
 
         if (func_num_args() == 2) {
             $this->option['limit'] = func_get_arg(1);
@@ -254,7 +264,8 @@ class SQLGlobal {
      * @example array('=', 'a', 'b')
      * @return $this
      */
-    public function where() {
+    public function where()
+    {
         $where = func_num_args() == 1 ? func_get_arg(0) : func_get_args();
         if (!$this->validateParamater($where)) {
             return $this;
@@ -277,7 +288,8 @@ class SQLGlobal {
      * Set having
      * @return $this
      */
-    public function having($having) {
+    public function having($having)
+    {
         if (!$this->validateParamater($having)) {
             return $this;
         } elseif (is_array($having)) {
@@ -295,7 +307,8 @@ class SQLGlobal {
      * GroupBy
      * @return $this
      */
-    public function groupBy($groupBy) {
+    public function groupBy($groupBy)
+    {
         if (!$this->validateParamater($groupBy)) {
             return $this;
         } elseif (is_array($groupBy)) {
@@ -313,7 +326,8 @@ class SQLGlobal {
      * Order by
      * @return  $this
      */
-    public function orderBy() {
+    public function orderBy()
+    {
         $order = func_get_args();
         if (!$this->validateParamater($order)) {
             return $this;
@@ -337,7 +351,8 @@ class SQLGlobal {
      * @example array('key' => 'value', 'key2' => 'value2')
      * @return $this
      */
-    public function data() {
+    public function data()
+    {
         $data = func_num_args() == 1 ? func_get_arg(0) : func_get_args();
         if (!$this->validateParamater($data)) {
             return $this;
@@ -349,20 +364,21 @@ class SQLGlobal {
     /**
      * @todo
      */
-    public function exist($table) {
+    public function exist($table)
+    {
         return $this->sql();
     }
-    public function query($sql = null) {
+    public function query($sql = null)
+    {
         if (is_null($sql)) {
             $sql = $this->sql();
         }
-
     }
-    private function sql() {
+    private function sql()
+    {
 
         $sql = &$this->_sql;
         if (count($sql) == 0) {
-            
             $sql = array("$this->method");
             $callableMethod = 'build' . ucfirst($this->method);
             $this->$callableMethod();
@@ -373,7 +389,8 @@ class SQLGlobal {
         return implode(' ', $sql);
     }
 
-    protected function buildTable() {
+    protected function buildTable()
+    {
         $sql = &$this->_sql;
         $table = &$this->table;
         $tableData = array();
@@ -389,7 +406,8 @@ class SQLGlobal {
         }
         $sql[] = implode($tableData, ", ");
     }
-    protected function buildColumn() {
+    protected function buildColumn()
+    {
         $sql = &$this->_sql;
         $columns = &$this->columns;
         if (count($columns) > 0) {
@@ -399,7 +417,8 @@ class SQLGlobal {
             $sql[] = "*";
         }
     }
-    protected function buildWhere($originalWhere = null, $whereKeyword = null) {
+    protected function buildWhere($originalWhere = null, $whereKeyword = null)
+    {
         $sql = &$this->_sql;
         $where = is_null($originalWhere) ? $this->where : $originalWhere;
         if (count($where) == 0) {
@@ -408,18 +427,17 @@ class SQLGlobal {
         $sql[] = is_null($whereKeyword) ? $this->option['whereKeyword'] : $whereKeyword;
         $whereData = array();
         foreach ($where as $index => $value) {
-
             if (is_string($value)) {
                 $whereData[] = $value;
                 continue;
             }
             $whereData[] = $this->buildWhere_Single($value);
-
         }
         $sql[] = implode(' AND ', $whereData);
     }
 
-    protected function buildWhere_Single($value){
+    protected function buildWhere_Single($value)
+    {
         $whereData = '';
         $eq = strtoupper($value[0]);
         if (in_array($eq, array('=', '<>', '>', '<', '>=', '<=', 'NOT LIKE', 'LIKE', 'ILIKE', 'NOT ILIKE'))) {
@@ -444,17 +462,19 @@ class SQLGlobal {
                 $sqlSearch[] = " ($x LIKE '%$y%') ";
             }
             $whereData = " ((1 = 1) AND (" . implode(' OR ', $sqlSearch) . ') )';
-        } elseif ( ($eq == 'OR' || $eq == 'ARRAY') && count($value)>2 ){
-        	$sqlArray = array();
+        } elseif (($eq == 'OR' || $eq == 'ARRAY') && count($value)>2) {
+            $sqlArray = array();
             foreach ($value as $x => $y) {
-            	if($x == 0)continue;
+                if ($x == 0) {
+                    continue;
+                }
                 $sqlArray[] = $this->buildWhere_Single($y);
             }
             $whereData = " ( " . implode(' OR ', $sqlArray) . ') ';
         } elseif ($eq == 'ARRAY' || $eq == 'NOT ARRAY' || $eq == 'LIKE ARRAY' || $eq == 'ILIKE ARRAY' || $eq == 'ARRAY_LIKE' || $eq == 'ARRAY_ILIKE') {
             if ($eq == 'ARRAY') {
                 $symbol = '=';
-            } elseif($eq == 'NOT ARRAY') {
+            } elseif ($eq == 'NOT ARRAY') {
                 $symbol = '<>';
             } elseif ($eq == 'LIKE ARRAY' || $eq == 'ARRAY_LIKE') {
                 $symbol = 'LIKE';
@@ -472,7 +492,6 @@ class SQLGlobal {
             }
             $whereData = " ((1 = 1) AND (" . implode(' OR ', $sqlArray) . ') )';
         } elseif ($eq == 'IN' || $eq == 'NOT IN') {
-
             $sqlArray = array();
             if (!is_array($value[2])) {
                 if ($this->validateParamater($value[2])) {
@@ -494,7 +513,6 @@ class SQLGlobal {
                 $sqlArray[] = " '$y' ";
             }
             $whereData = " ((1 = 1) AND ($value[1] $eq (" . implode(', ', $sqlArray) . ') ) )';
-
         } elseif ($eq == 'META_NAME') {
             if (count($value) != 3) {
                 $whereData = " (1 = 1) ";
@@ -517,7 +535,8 @@ class SQLGlobal {
         return $whereData;
     }
 
-    protected function buildOrderBy() {
+    protected function buildOrderBy()
+    {
         $sql = &$this->_sql;
         if (count($this->orderBy) == 0) {
             return;
@@ -532,17 +551,18 @@ class SQLGlobal {
             } else {
                 $orderByData[] = "$key $value";
             }
-            
         }
         $sql[] = implode(', ', $orderByData);
     }
     /**
      * @todo
      */
-    protected function buildJoin() {
+    protected function buildJoin()
+    {
         $sql = &$this->_sql;
     }
-    protected function buildGroupBy() {
+    protected function buildGroupBy()
+    {
         $sql = &$this->_sql;
         if (count($this->groupBy) == 0) {
             return;
@@ -555,7 +575,8 @@ class SQLGlobal {
         }
         $sql[] = implode(', ', $groupByData);
     }
-    protected function buildHaving() {
+    protected function buildHaving()
+    {
         $sql = &$this->_sql;
         if (count($this->having) == 0) {
             return;
@@ -564,7 +585,8 @@ class SQLGlobal {
         $sql[] = "HAVING";
         $this->buildWhere($this->having, ' ');
     }
-    protected function buildLimit() {
+    protected function buildLimit()
+    {
         $sql = &$this->_sql;
 
         if (isset($this->option['limit'])) {
@@ -580,20 +602,23 @@ class SQLGlobal {
     /**
      * @todo
      **/
-    protected function buildPagebar() {
-
+    protected function buildPagebar()
+    {
     }
 
-    protected function buildBeforeWhere() {
+    protected function buildBeforeWhere()
+    {
         // Do nothing yet
     }
 
 
-    protected function buildOthers() {
+    protected function buildOthers()
+    {
         // Do nothing yet
     }
 
-    protected function buildSelect() {
+    protected function buildSelect()
+    {
         $sql = &$this->_sql;
 
         // Unimplemented select2count
@@ -608,7 +633,8 @@ class SQLGlobal {
         $this->buildLimit();
         $this->buildOthers();
     }
-    protected function buildUpdate() {
+    protected function buildUpdate()
+    {
         $sql = &$this->_sql;
         $sql[] = $this->buildTable();
         $sql[] = 'SET';
@@ -625,13 +651,15 @@ class SQLGlobal {
 
         return $sql;
     }
-    protected function buildDelete() {
+    protected function buildDelete()
+    {
         $sql = &$this->_sql;
         $sql[] = 'FROM';
         $this->buildTable();
         $this->buildWhere();
     }
-    protected function buildInsert() {
+    protected function buildInsert()
+    {
         $sql = &$this->_sql;
         $sql[] = 'INTO';
         $this->buildTable();
@@ -652,7 +680,8 @@ class SQLGlobal {
         $sql[] = ')';
     }
 
-    protected function buildDrop() {
+    protected function buildDrop()
+    {
         $sql = &$this->_sql;
         $sql[] = 'TABLE';
         $this->buildTable();
@@ -661,11 +690,11 @@ class SQLGlobal {
     /**
      * @todo
      */
-    protected function buildCreate() {
-
+    protected function buildCreate()
+    {
     }
 
-    protected function buildIndex() {
-
+    protected function buildIndex()
+    {
     }
 }

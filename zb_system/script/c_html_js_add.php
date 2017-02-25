@@ -11,16 +11,16 @@ ob_clean();
 
 ?>
 var zbp = new ZBP({
-	bloghost: "<?php echo $zbp->host;?>",
-	ajaxurl: "<?php echo $zbp->ajaxurl;?>",
-	cookiepath: "<?php echo $zbp->cookiespath;?>",
-	lang: {
-		error: {
-			72: "<?php echo $lang['error']['72'];?>",
-			29: "<?php echo $lang['error']['29'];?>",
-			46: "<?php echo $lang['error']['46'];?>"
-		}
-	}
+    bloghost: "<?php echo $zbp->host;?>",
+    ajaxurl: "<?php echo $zbp->ajaxurl;?>",
+    cookiepath: "<?php echo $zbp->cookiespath;?>",
+    lang: {
+        error: {
+            72: "<?php echo $lang['error']['72'];?>",
+            29: "<?php echo $lang['error']['29'];?>",
+            46: "<?php echo $lang['error']['46'];?>"
+        }
+    }
 });
 
 var bloghost = zbp.options.bloghost;
@@ -35,38 +35,40 @@ if (!isset($_GET['pluginonly'])) {
     ?>
 $(function () {
 
-	zbp.cookie.set("timezone", (new Date().getTimezoneOffset()/60)*(-1));
-	var $cpLogin = $(".cp-login").find("a");
-	var $cpVrs = $(".cp-vrs").find("a");
-	var $addinfo = zbp.cookie.get("addinfo<?php echo str_replace('/', '', $zbp->cookiespath);?>");
-	if (!$addinfo){
-		zbp.userinfo.output();
-		return ;
-	}
-	$addinfo = JSON.parse($addinfo);
+    zbp.cookie.set("timezone", (new Date().getTimezoneOffset()/60)*(-1));
+    var $cpLogin = $(".cp-login").find("a");
+    var $cpVrs = $(".cp-vrs").find("a");
+    var $addinfo = zbp.cookie.get("addinfo<?php echo str_replace('/', '', $zbp->cookiespath);?>");
+    if (!$addinfo){
+        zbp.userinfo.output();
+        return ;
+    }
+    $addinfo = JSON.parse($addinfo);
 
-	if ($addinfo.chkadmin){
-		$(".cp-hello").html("<?php echo $zbp->lang['msg']['welcome'];?> " + $addinfo.useralias + " (" + $addinfo.levelname  + ")");
-		if ($cpLogin.length == 1 && $cpLogin.html().indexOf("[") > -1) {
-			$cpLogin.html("[<?php echo $zbp->lang['msg']['admin'];?>]");
-		} else {
-			$cpLogin.html("<?php echo $zbp->lang['msg']['admin'];?>");
-		}
-	}
+    if ($addinfo.chkadmin){
+        $(".cp-hello").html("<?php echo $zbp->lang['msg']['welcome'];?> " + $addinfo.useralias + " (" + $addinfo.levelname  + ")");
+        if ($cpLogin.length == 1 && $cpLogin.html().indexOf("[") > -1) {
+            $cpLogin.html("[<?php echo $zbp->lang['msg']['admin'];?>]");
+        } else {
+            $cpLogin.html("<?php echo $zbp->lang['msg']['admin'];?>");
+        }
+    }
 
-	if($addinfo.chkarticle){
-		if ($cpLogin.length == 1 && $cpVrs.html().indexOf("[") > -1) {
-			$cpVrs.html("[<?php echo $zbp->lang['msg']['new_article'];?>]");
-		} else {
-			$cpVrs.html("<?php echo $zbp->lang['msg']['new_article'];?>");
-		}
-		$cpVrs.attr("href", zbp.options.bloghost + "zb_system/cmd.php?act=ArticleEdt");
-	}
+    if($addinfo.chkarticle){
+        if ($cpLogin.length == 1 && $cpVrs.html().indexOf("[") > -1) {
+            $cpVrs.html("[<?php echo $zbp->lang['msg']['new_article'];?>]");
+        } else {
+            $cpVrs.html("<?php echo $zbp->lang['msg']['new_article'];?>");
+        }
+        $cpVrs.attr("href", zbp.options.bloghost + "zb_system/cmd.php?act=ArticleEdt");
+    }
 
 });
 <?php
 }
-foreach ($GLOBALS['hooks']['Filter_Plugin_Html_Js_Add'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Html_Js_Add'] as $fpname => &$fpsignal) {
+    $fpname();
+}
 
 $s = ob_get_clean();
 $m = 'W/' . md5($s);
