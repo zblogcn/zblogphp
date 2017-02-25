@@ -26,7 +26,7 @@ function AlipayAPI_Start($trans_detail, $parameter = array())
     $detail_data = '';
     foreach ($trans_detail as $key => $value) {
         //流水号1^收款方帐号1^真实姓名^付款金额1^备注说明1
-    $detail_data = '|'.$value[0].$value[1].$value[2].$value[3].$value[4];
+        $detail_data = '|'.$value[0].$value[1].$value[2].$value[3].$value[4];
         $batch_fee += $value[3];
     }
 

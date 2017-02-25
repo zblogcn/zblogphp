@@ -1,6 +1,7 @@
 <?php
 return 'interval_value';
-function interval_value($author, $content, $orig_content, &$sv, $config_sv, $config_array) {
+function interval_value($author, $content, $orig_content, &$sv, $config_sv, $config_array)
+{
     global $zbp;
     $count = 0;
     $sql = $zbp->db->sql->Select(
@@ -31,7 +32,5 @@ function interval_value($author, $content, $orig_content, &$sv, $config_sv, $con
         //		else {
         //			$sv += $config_sv * 8 / 5;
         //		}
-
     }
-
 };

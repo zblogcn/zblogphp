@@ -1,15 +1,18 @@
 <?php
 
-class Totoro_Class {
+class Totoro_Class
+{
     public $config_array = array();
     public $sv = 0;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->config_array = include TOTORO_INCPATH . 'totoro_config.php';
         $this->init_config();
     }
 
-    public function init_config() {
+    public function init_config()
+    {
         global $zbp;
         $config_save = false;
         foreach ($this->config_array as $type_name => &$type_value) {
@@ -38,14 +41,15 @@ class Totoro_Class {
         return true;
     }
 
-    public function output_config($type, $name, $convert = true) {
+    public function output_config($type, $name, $convert = true)
+    {
         global $zbp;
         $content = $this->config_array[$type][$name]['VALUE'];
-
         return $convert ? TransferHTML($content, '[html-format]') : $content;
     }
 
-    public function add_black_list($id) {
+    public function add_black_list($id)
+    {
         global $zbp;
         $comment = $zbp->GetCommentByID($id);
         $content = $comment->HomePage . ' ' . $comment->Content;
@@ -66,17 +70,16 @@ class Totoro_Class {
                     $black_list .= '|' . $value;
                     $zbp->SetHint('good', '新黑词被加入：' . $value);
                 }
-
             }
 
             $zbp->Config('Totoro')->BLACK_LIST_BADWORD_LIST = $black_list;
         }
 
         $zbp->SaveConfig('Totoro');
-
     }
 
-    public function build_content(&$comment) {
+    public function build_content(&$comment)
+    {
         $content = '';
         //$content .= $comment->Name . ' ';
         //$content .= $comment->Email . ' ';
@@ -103,10 +106,10 @@ class Totoro_Class {
             ),
             'content' => $content,
         );
-
     }
 
-    public function get_score(&$comment, $debug = false) {
+    public function get_score(&$comment, $debug = false)
+    {
         $build = $this->build_content($comment);
         if ($debug) {
             echo 'BUILD COMMENT: ' . $build['content'] . "\n";
@@ -121,14 +124,14 @@ class Totoro_Class {
                 if ($debug) {
                     echo 'AFTER ' . $value['NAME'] . ': ' . $this->sv . "\n";
                 }
-
             }
         }
 
         return $this->sv;
     }
 
-    public function check_comment(&$comment) {
+    public function check_comment(&$comment)
+    {
 
         global $zbp;
         $zbp->lang['error'][53] = $this->config_array['STRING_BACK']['CHECKSTR']['VALUE'];
@@ -137,15 +140,12 @@ class Totoro_Class {
         if ($this->check_ip($comment->IP)) {
             $comment->IsThrow = true;
             $zbp->lang['error'][14] = $this->config_array['STRING_BACK']['KILLIPSTR']['VALUE'];
-
         }
 
         if (!$comment->IsThrow) {
             $this->get_score($comment);
             if ($this->sv >= $this->config_array['SV_SETTING']['SV_THRESHOLD']['VALUE']) {
-
-                if (
-                    $this->sv < $this->config_array['SV_SETTING']['SV_THRESHOLD2']['VALUE']
+                if ($this->sv < $this->config_array['SV_SETTING']['SV_THRESHOLD2']['VALUE']
                     ||
                     $this->config_array['SV_SETTING']['SV_THRESHOLD2']['VALUE'] <= 0
                 ) {
@@ -159,14 +159,13 @@ class Totoro_Class {
                     $zbp->SaveConfig('Totoro');
                     $this->filter_ip($comment->IP, true);
                 }
-
             }
-
         }
         //if ($this->sv >=)
     }
 
-    public function replace_comment(&$comment) {
+    public function replace_comment(&$comment)
+    {
         $replace_str = $this->config_array['SV_SETTING']['REPLACE_KEYWORD']['VALUE'];
 
         $replace_list = $this->config_array['BLACK_LIST']['REPLACE_LIST']['VALUE'];
@@ -181,10 +180,10 @@ class Totoro_Class {
         if ($replace_reg != "//si") {
             $comment->Content = preg_replace($replace_reg, $replace_str, $comment->Content);
         }
-
     }
 
-    public function check_ip($ip) {
+    public function check_ip($ip)
+    {
         $ip = ip2long($ip);
         $ip_str = explode('|', $this->config_array['BLACK_LIST']['IPFILTER_LIST']['VALUE']);
         for ($i = 0; $i < count($ip_str); $i++) {
@@ -194,11 +193,11 @@ class Totoro_Class {
                 return true;
             }
         }
-
         return false;
     }
 
-    public function filter_ip($ip, $kill) {
+    public function filter_ip($ip, $kill)
+    {
         global $zbp;
         if ($this->config_array['SV_SETTING']['KILLIP']['VALUE'] == 0) {
             return;
@@ -226,7 +225,6 @@ class Totoro_Class {
             if ((int) $result[0]['c'] <= $this->config_array['SV_SETTING']['KILLIP']['VALUE']) {
                 return;
             }
-
         }
 
         if ($kill) {
@@ -236,14 +234,13 @@ class Totoro_Class {
                 $zbp->Config('Totoro')->BLACK_LIST_IPFILTER_LIST = $FILTERIP;
                 $zbp->SaveConfig('Totoro');
             }
-
         }
 
         $this->kill_ip($ip);
-
     }
 
-    public function kill_ip($ip) {
+    public function kill_ip($ip)
+    {
         global $zbp;
         $logid = array();
         $cmtid = array();
@@ -293,10 +290,10 @@ class Totoro_Class {
             )
         );
         $zbp->db->Update($sql);
-
     }
 
-    public function export_submenu($action) {
+    public function export_submenu($action)
+    {
         $array = array(
             array(
                 'action' => 'main',
@@ -330,7 +327,6 @@ class Totoro_Class {
             $str = str_replace('$title', $array[$i]['title'], $str);
             $str = str_replace('$light', ($action == $array[$i]['action'] ? ' m-now' : ''), $str);
         }
-
         return $str;
     }
 }

@@ -4,10 +4,10 @@
 <?php  echo $footer;  ?>
 <script type="text/javascript">
 function GetComments(postid,page){
-	$.get(bloghost+"zb_system/cmd.php?act=getcmt&postid="+postid+"&page="+page+"&mod=pad", function(data){
-	  $('#AjaxCommentBegin').nextUntil('#AjaxCommentEnd').remove();
-	  $('#AjaxCommentBegin').after(data);
-	});
+    $.get(bloghost+"zb_system/cmd.php?act=getcmt&postid="+postid+"&page="+page+"&mod=pad", function(data){
+      $('#AjaxCommentBegin').nextUntil('#AjaxCommentEnd').remove();
+      $('#AjaxCommentBegin').after(data);
+    });
 
 }
 </script>

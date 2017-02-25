@@ -12,8 +12,14 @@ $zbpdk->scan_extensions();
 //var_dump($zbpdk->objects);
 
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('ZBPDK')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
+if (!$zbp->CheckPlugin('ZBPDK')) {
+    $zbp->ShowError(48);
+    die();
+}
 
 if (isset($_GET['act'])) {
     switch ($_GET['act']) {
@@ -41,7 +47,6 @@ if (isset($_GET['act'])) {
             echo TransferHTML(plugininterface_outputfunc($interface_name, $func_name), "[html-format][enter]");
             exit();
             break;
-
     }
 }
 
@@ -68,23 +73,23 @@ foreach ($zbpdk_allhooks as $temp_name => $temp_value) {
 
 ?>
 var defined_interface = {
-	"action":[<?php echo implode(",", $defined_interface['action']);?>],
-	"filter":["Filter_ZBPDK_Display_All",<?php echo implode(",", $defined_interface['filter']);?>],
-	"response":[<?php echo implode(",", $defined_interface['response']);?>],
+    "action":[<?php echo implode(",", $defined_interface['action']);?>],
+    "filter":["Filter_ZBPDK_Display_All",<?php echo implode(",", $defined_interface['filter']);?>],
+    "response":[<?php echo implode(",", $defined_interface['response']);?>],
 }
 function write_list(type_name)
 {
-	var str = "" , p = defined_interface[type_name];
-	for(var i=0; i<=p.length-1; i++){
-		var o = p[i];
-		str += "<option value='"+o+"'>"+o+"</option>"
-	}
-	return str;
+    var str = "" , p = defined_interface[type_name];
+    for(var i=0; i<=p.length-1; i++){
+        var o = p[i];
+        str += "<option value='"+o+"'>"+o+"</option>"
+    }
+    return str;
 }
 
 function show_code(func_name,if_name,tr_obj)
 {
-	$.post("main.php?act=showcode",{"func":func_name,"if":if_name},function(data){$(tr_obj).attr("onclick","").find("td").html('<pre>'+data+'</pre>')})
+    $.post("main.php?act=showcode",{"func":func_name,"if":if_name},function(data){$(tr_obj).attr("onclick","").find("td").html('<pre>'+data+'</pre>')})
 }
 </script>
 <style type="text/css">
@@ -118,19 +123,19 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#list').html(write_list('filter'));
-	$("#form1").bind("submit",function(){
-		$("#result").html("Waiting...");
-		$.post(
-			"main.php?act=interface",
-			{"interface":$("#interface").val()},
-			function(data)
-			{
-				$("#result").html(data);
-				bmx2table();
-			}
-		);
-	})
+    $('#list').html(write_list('filter'));
+    $("#form1").bind("submit",function(){
+        $("#result").html("Waiting...");
+        $.post(
+            "main.php?act=interface",
+            {"interface":$("#interface").val()},
+            function(data)
+            {
+                $("#result").html(data);
+                bmx2table();
+            }
+        );
+    })
 });
 
 ActiveTopMenu('zbpdk');

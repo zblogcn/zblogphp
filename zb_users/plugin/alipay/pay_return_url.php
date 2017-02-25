@@ -16,7 +16,6 @@ require_once 'lib/alipay_notify.class.php';
 $alipayNotify = new AlipayNotify($alipay_config);
 $verify_result = $alipayNotify->verifyReturn();
 if ($verify_result) {
-
     //验证成功
     //商户订单号
     $out_trade_no = $_GET['out_trade_no'];
@@ -37,7 +36,6 @@ if ($verify_result) {
         }
     }
 } else {
-
     //验证失败
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_AlipayPayReturn_Failed'] as $fpname => &$fpsignal) {

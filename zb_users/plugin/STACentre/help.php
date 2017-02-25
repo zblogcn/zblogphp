@@ -6,9 +6,15 @@ require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
 
-if (!$zbp->CheckPlugin('STACentre')) {$zbp->ShowError(68);die();}
+if (!$zbp->CheckPlugin('STACentre')) {
+    $zbp->ShowError(68);
+    die();
+}
 
 $blogtitle = '静态管理中心';
 

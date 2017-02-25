@@ -12,7 +12,8 @@ $GLOBALS['zbpdk']->submenu->add(array(
     'title' => 'BlogConfig',
 ));
 
-function blogconfig_left() {
+function blogconfig_left()
+{
     global $zbp;
     $html = '';
 
@@ -31,11 +32,11 @@ function blogconfig_left() {
     foreach ($zbp->configs as $k => $v) {
         $html .= "<li><a id=\"$k\" href=\"javascript:;\" onclick=\"clk(this);run('open','$k');\">$k</a></li>";
     }
-
     return $html;
 }
 
-function blogconfig_exportlist($id) {
+function blogconfig_exportlist($id)
+{
     global $zbp;
     $html = '';
     $i = 0;
@@ -99,6 +100,5 @@ function blogconfig_exportlist($id) {
         $html .= PHP_EOL . PHP_EOL;
         $i++;
     }
-
     return $html;
 }

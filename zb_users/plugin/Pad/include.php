@@ -3,25 +3,26 @@
 #注册插件
 RegisterPlugin("Pad", "ActivePlugin_Pad");
 
-function ActivePlugin_Pad() {
+function ActivePlugin_Pad()
+{
 
     Add_Filter_Plugin('Filter_Plugin_Index_Begin', 'Pad_Main');
     Add_Filter_Plugin('Filter_Plugin_Cmd_Begin', 'Pad_Template');
-
 }
 
-function Pad_Template() {
+function Pad_Template()
+{
     global $zbp, $action;
     if (GetVars('mod', 'GET') == 'pad') {
         $zbp->template->SetPath($zbp->usersdir . 'plugin/Pad/compile/');
     }
 }
 
-function Pad_Main() {
+function Pad_Main()
+{
     global $zbp;
 
     if (GetVars('mod', 'GET') == 'pad') {
-
         if (GetVars('act', 'GET') == 'logout') {
             Pad_Logout();
         }
@@ -51,16 +52,17 @@ function Pad_Main() {
     if (CheckRegExp($UA, $Pad_List) == true) {
         Pad_Export();
     }
-
 }
 
-function Pad_Logout() {
+function Pad_Logout()
+{
     Logout();
     Redirect('?mod=pad');
     die();
 }
 
-function Pad_Verify() {
+function Pad_Verify()
+{
     $_POST['username'] = $_POST['username'];
     $_POST['password'] = md5($_POST['password']);
     if (VerifyLogin()) {
@@ -70,7 +72,8 @@ function Pad_Verify() {
     die();
 }
 
-function Pad_Login() {
+function Pad_Login()
+{
     global $zbp, $lang;
 
     Pad_Pre();
@@ -98,7 +101,8 @@ function Pad_Login() {
     die();
 }
 
-function Pad_Pre() {
+function Pad_Pre()
+{
     global $zbp;
 
     $zbp->option['ZC_STATIC_MODE'] = 'ACTIVE';
@@ -146,7 +150,8 @@ function Pad_Pre() {
     $zbp->template->SetTags('sidebar_pad', $sidebar_pad);
 }
 
-function Pad_Export() {
+function Pad_Export()
+{
     global $zbp;
 
     if ($zbp->currenturl == $zbp->cookiespath ||
@@ -171,17 +176,19 @@ function Pad_Export() {
         ViewList(null, null, null, null, null);
         die;
     }
-
 }
 
-function Pad_Search() {
+function Pad_Search()
+{
     global $zbp, $lang;
 
     Pad_Pre();
 
     $action = 'search';
 
-    if (!$zbp->CheckRights($action)) {Redirect('?mod=pad');}
+    if (!$zbp->CheckRights($action)) {
+        Redirect('?mod=pad');
+    }
 
     $article = new Post;
     $article->Title = $lang['msg']['search'] . '“' . GetVars('q', 'GET') . '”';

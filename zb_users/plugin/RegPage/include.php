@@ -7,11 +7,11 @@ DefinePluginFilter('Filter_Plugin_RegPage_RegSucceed');
 RegisterPlugin("RegPage", "ActivePlugin_RegPage");
 
 
-function ActivePlugin_RegPage() {
+function ActivePlugin_RegPage()
+{
 
     Add_Filter_Plugin('Filter_Plugin_Index_Begin', 'RegPage_Main');
     Add_Filter_Plugin('Filter_Plugin_Login_Header', 'RegPage_LoginAddon');
-
 }
 
 $RegPage_Table = '%pre%regpage';
@@ -25,34 +25,38 @@ $RegPage_DataInfo = array(
     'Intro' => array('reg_Intro', 'string', '', ''),
 );
 
-function InstallPlugin_RegPage() {
+function InstallPlugin_RegPage()
+{
     global $zbp;
 
-    if(!$zbp->Config('RegPage')->default_level){
+    if (!$zbp->Config('RegPage')->default_level) {
         $zbp->Config('RegPage')->default_level = 5;
         $zbp->Config('RegPage')->open_reg = 0;
         $zbp->Config('RegPage')->loginpage_addon = 0;
-        $zbp->Config('RegPage')->loginpage_text = '欢迎您注册本站账号,请点击链接完成注册.';        
+        $zbp->Config('RegPage')->loginpage_text = '欢迎您注册本站账号,请点击链接完成注册.';
         $zbp->Config('RegPage')->title_text = '会员注册';
         $zbp->SaveConfig('RegPage');
 
         RegPage_CreateTable();
         RegPage_CreateCode(1000);
     }
-
 }
 
-function RegPage_LoginAddon(){
-	global $zbp;
-	if ($zbp->Config('RegPage')->loginpage_addon == false) return ;
-	echo '<script type="text/javascript">
+function RegPage_LoginAddon()
+{
+    global $zbp;
+    if ($zbp->Config('RegPage')->loginpage_addon == false) {
+        return ;
+    }
+    echo '<script type="text/javascript">
 $(document).ready(function(){
 	$("dl:last").after("<dl><dd></dd><dd style=\"text-align:right;\"><a href=\"../?reg\">' . $zbp->Config('RegPage')->loginpage_text  .'</a></dd></dl>");
 });
 	</script>';
 }
 
-function RegPage_CreateCode($n) {
+function RegPage_CreateCode($n)
+{
     global $zbp;
 
     for ($i = 0; $i < $n; $i++) {
@@ -61,10 +65,10 @@ function RegPage_CreateCode($n) {
         $r->Level = $zbp->Config('RegPage')->default_level;
         $r->Save();
     }
-    
 }
 
-function RegPage_DelUsedCode() {
+function RegPage_DelUsedCode()
+{
     global $zbp;
 
     $sql = $zbp->db->sql->Delete($GLOBALS['RegPage_Table'], array(array('<>', 'reg_AuthorID', 0)));
@@ -72,31 +76,36 @@ function RegPage_DelUsedCode() {
 }
 
 
-function RegPage_EmptyCode() {
+function RegPage_EmptyCode()
+{
     global $zbp;
 
     $sql = $zbp->db->sql->Delete($GLOBALS['RegPage_Table'], null);
     $zbp->db->Delete($sql);
 }
 
-function RegPage_CreateTable() {
+function RegPage_CreateTable()
+{
     global $zbp;
-    if($zbp->db->ExistTable($GLOBALS['RegPage_Table']) == true)return;
+    if ($zbp->db->ExistTable($GLOBALS['RegPage_Table']) == true) {
+        return;
+    }
     $s = $zbp->db->sql->CreateTable($GLOBALS['RegPage_Table'], $GLOBALS['RegPage_DataInfo']);
     $zbp->db->QueryMulit($s);
 }
 
-function RegPage_Main() {
+function RegPage_Main()
+{
     global $zbp;
 
-    if(isset($_GET['reg'])){
+    if (isset($_GET['reg'])) {
         RegPage_Page();
         die();
     }
-    
 }
 
-function RegPage_CheckEmail($email) {
+function RegPage_CheckEmail($email)
+{
     global $zbp;
     $email = trim(strtolower($email));
     $sql = $zbp->db->sql->Select($zbp->table['Member'], '*', array(array('LIKE', 'mem_Email', $email)), null, 1, null);
@@ -107,7 +116,8 @@ function RegPage_CheckEmail($email) {
 }
 
 
-function RegPage_Page() {
+function RegPage_Page()
+{
 
     global $zbp;
     
@@ -130,7 +140,7 @@ function RegPage_Page() {
     $article->Content .= '<tr><td style="text-align:right;border:none;">网站：</td><td  style="border:none;" ><input type="text" name="homepage" style="width:250px;font-size:1.2em;" /></td></tr>';
     $article->Content .= '<tr><td style="text-align:right;border:none;">(*)邀请码：</td><td  style="border:none;" ><input required="required" type="text" name="invitecode" style="width:250px;font-size:1.2em;" />';
 
-    if($zbp->Config('RegPage')->open_reg){
+    if ($zbp->Config('RegPage')->open_reg) {
         $article->Content .= '&nbsp;&nbsp;<a onclick="$(\'#dialog-message\').dialog(\'open\');return false;" href="'.$zbp->host.'zb_users/plugin/RegPage/getinvitecode.php" target="_blank">点击这里获取邀请码</a>.';
     }
     
@@ -143,8 +153,8 @@ function RegPage_Page() {
     $article->Content .= '</table>';
     //$article->Content .='<p>带星号为必填选项.</p>';
 
-$mt = microtime();
-$s =    <<<js
+    $mt = microtime();
+    $s =    <<<js
 <script type="text/javascript">
   $(function() {
     $( "#dialog-message" ).dialog({

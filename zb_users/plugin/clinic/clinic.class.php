@@ -8,7 +8,8 @@
 /**
  * Clinic main class
  */
-class Clinic {
+class Clinic
+{
 
     public $module_path = '';
     public $include_path = '';
@@ -16,7 +17,8 @@ class Clinic {
     public $categories = array();
     public $output_json = array();
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->module_path = dirname(__FILE__) . '/modules/';
         $this->include_path = dirname(__FILE__) . '/include/';
         $this->categories = array_merge(
@@ -30,7 +32,8 @@ class Clinic {
      * Scan modules folder
      * @return array modules
      */
-    public function scan_dir() {
+    public function scan_dir()
+    {
         //For third-party developers
         $this->modules = $GLOBALS['clinic_register_array'];
         $dir = scandir($this->module_path);
@@ -46,7 +49,6 @@ class Clinic {
                 }
             }
         }
-
         return $this->modules;
     }
 
@@ -55,18 +57,17 @@ class Clinic {
      * @param string $module_name
      * @return object
      */
-    public function load_module($module_name) {
+    public function load_module($module_name)
+    {
         if (isset($this->modules[$module_name])) {
             include_once $this->modules[$module_name]['path'];
             // Class name cannot include '-'
             $class_name = str_replace('-', '_', $module_name);
             if (class_exists($class_name)) {
                 $class = new $class_name;
-
                 return $class;
             }
         }
-
         return false;
     }
 
@@ -76,12 +77,12 @@ class Clinic {
      * @param string $text
      * @return string
      */
-    public function output($status, $text) {
+    public function output($status, $text)
+    {
         $string = '<span style="color:';
         $string .= ($status === 'success' ? 'green">√' : 'red">×') . ' ';
         $string .= $text . '</span>';
         $this->output_json[] = json_encode(array('type' => 'msg', 'msg' => $string, 'error' => $status));
-
         return $string;
     }
 
@@ -91,9 +92,9 @@ class Clinic {
      * @param string $param
      * @return string
      */
-    public function set_queue($function, $param) {
+    public function set_queue($function, $param)
+    {
         $this->output_json[] = json_encode(array('type' => 'queue', 'function' => $function, 'param' => $param, 'error' => 0));
-
         return true;
     }
 }

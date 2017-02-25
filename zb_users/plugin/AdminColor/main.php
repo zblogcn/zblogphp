@@ -6,26 +6,30 @@ require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
 
-if (!$zbp->CheckPlugin('AdminColor')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckPlugin('AdminColor')) {
+    $zbp->ShowError(48);
+    die();
+}
 
 $blogtitle = '后台配色器-设置';
 
 if (GetVars('act') == 'save') {
+    $zbp->Config('AdminColor')->LogoPath =  (string) GetVars("ac_LogoPath");
+    $zbp->Config('AdminColor')->BlodColor =  (string) GetVars("ac_BlodColor");
+    $zbp->Config('AdminColor')->NormalColor =  (string) GetVars("ac_NormalColor");
+    $zbp->Config('AdminColor')->LightColor =  (string) GetVars("ac_LightColor");
+    $zbp->Config('AdminColor')->HighColor =  (string) GetVars("ac_HighColor");
+    $zbp->Config('AdminColor')->AntiColor =  (string) GetVars("ac_AntiColor");
 
-  $zbp->Config('AdminColor')->LogoPath =  (string) GetVars("ac_LogoPath");
-  $zbp->Config('AdminColor')->BlodColor =  (string) GetVars("ac_BlodColor");
-  $zbp->Config('AdminColor')->NormalColor =  (string) GetVars("ac_NormalColor");
-  $zbp->Config('AdminColor')->LightColor =  (string) GetVars("ac_LightColor");
-  $zbp->Config('AdminColor')->HighColor =  (string) GetVars("ac_HighColor");
-  $zbp->Config('AdminColor')->AntiColor =  (string) GetVars("ac_AntiColor");
+    $zbp->SaveConfig('AdminColor');
 
-  $zbp->SaveConfig('AdminColor');
-
-	$zbp->SetHint('good');
-	Redirect('./main.php');
-
+    $zbp->SetHint('good');
+    Redirect('./main.php');
 }
 
 require $blogpath . 'zb_system/admin/admin_header.php';
@@ -104,7 +108,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               <hr/>
             </form>
 
-	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AdminColor/logo.png';?>");</script>
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/AdminColor/logo.png';?>");</script>
   </div>
 </div>
 
