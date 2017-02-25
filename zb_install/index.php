@@ -84,29 +84,29 @@ Include_AddonAdminFont();
 <body>
 <div class="setup">
   <form method="post" action="./index.php?step=<?php echo $zblogstep + 1;?>">
-	<input type="hidden" name="zbloglang" id="zbloglang" value="<?php echo $zbloglang;?>"/>
+    <input type="hidden" name="zbloglang" id="zbloglang" value="<?php echo $zbloglang;?>"/>
     <?php
 
-switch ($zblogstep) {
-case 0:
-    Setup0();
-    break;
-case 1:
-    Setup1();
-    break;
-case 2:
-    Setup2();
-    break;
-case 3:
-    Setup3();
-    break;
-case 4:
-    Setup4();
-    break;
-case 5:
-    Setup5();
-    break;
-}
+    switch ($zblogstep) {
+        case 0:
+            Setup0();
+            break;
+        case 1:
+            Setup1();
+            break;
+        case 2:
+            Setup2();
+            break;
+        case 3:
+            Setup3();
+            break;
+        case 4:
+            Setup4();
+            break;
+        case 5:
+            Setup5();
+            break;
+    }
 
 ?>
   </form>
@@ -114,9 +114,9 @@ case 5:
 <script type="text/javascript">
 
 $( "#language" ).change(function() {
-	$("#zbloglang").val($(this).val());
-	$("form").attr('action','./index.php');
-	$("form").submit();
+    $("#zbloglang").val($(this).val());
+    $("form").attr('action','./index.php');
+    $("form").submit();
 });
 
 function Setup3(){
@@ -152,7 +152,8 @@ $(function() {
 </body>
 </html>
 <?php
-function Setup0() {
+function Setup0()
+{
     global $zbp;
     ?>
 <dl>
@@ -177,7 +178,8 @@ function Setup0() {
 <?php
 }
 
-function Setup1() {
+function Setup1()
+{
     global $zbp;
     ?>
 <dl>
@@ -255,7 +257,8 @@ $( "input[type=checkbox]" ).change(function() {
 <?php
 }
 
-function Setup2() {
+function Setup2()
+{
     global $zbp;
     CheckServer();
 
@@ -417,7 +420,8 @@ function Setup2() {
 <?php
 }
 
-function Setup3() {
+function Setup3()
+{
     global $zbp;
     global $CheckResult, $option;
     CheckServer();
@@ -448,26 +452,26 @@ function Setup3() {
       <div>
         <p><b><?php echo $zbp->lang['zb_install']['db_database'];?></b>
         <?php
-if ($hasMysql) {
-        ?>
-          <label class="dbselect" id="mysql_radio">
-          <input type="radio" name="fdbtype" value="mysql"/> MySQL</label>
-        <?php
-echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-    }
+        if ($hasMysql) {
+                ?>
+                  <label class="dbselect" id="mysql_radio">
+                  <input type="radio" name="fdbtype" value="mysql"/> MySQL</label>
+                <?php
+                echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        }
     ?>
         <?php
-if ($hasSqlite) {
-        ?>
-          <label class="dbselect" id="sqlite_radio">
-          <input type="radio" name="fdbtype" value="sqlite"/> SQLite</label>
-        <?php
-echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-    }
+        if ($hasSqlite) {
+                ?>
+                  <label class="dbselect" id="sqlite_radio">
+                  <input type="radio" name="fdbtype" value="sqlite"/> SQLite</label>
+                <?php
+                echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+        }
     ?>
         </p>
       </div>
-      <?php if ($hasMysql) {
+        <?php if ($hasMysql) {
         ?>
       <div class="dbdetail" id="mysql">
         <p><b><?php echo $zbp->lang['zb_install']['db_server'];?></b>
@@ -488,7 +492,7 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 <?php if ($zbp->option['ZC_YUN_SITE'] == '') {?>
         <p><b><?php echo $zbp->lang['zb_install']['db_engine'];?></b>
           <select id="dbengine" name="dbengine" style="width:360px;" >
-		  <option value="MyISAM" selected>MyISAM(<?php echo $zbp->lang['msg']['default'];?>)</option>
+          <option value="MyISAM" selected>MyISAM(<?php echo $zbp->lang['msg']['default'];?>)</option>
           <option value="InnoDB" >InnoDB</option>
         </select>
         </p>
@@ -515,13 +519,13 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;';
             ?>&nbsp;&nbsp;&nbsp;&nbsp;
 <?php }
         ?>
-		<br/><small><?php echo $zbp->lang['zb_install']['db_set_port'];?></small>
+        <br/><small><?php echo $zbp->lang['zb_install']['db_set_port'];?></small>
       </p>
       </div>
-      <?php }
+        <?php }
     ?>
 
-      <?php if ($hasSqlite) {
+        <?php if ($hasSqlite) {
         ?>
       <div class="dbdetail" id="sqlite">
         <p><b><?php echo $zbp->lang['zb_install']['db_name'];?></b>
@@ -536,28 +540,28 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         <label>
           <input value="sqlite3" type="radio" name="dbtype" /> sqlite3</label>
         <?php
-echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-        }
+        echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+}
         ?>
         <?php if ($CheckResult['pdo_sqlite'][0]) {
             ?>
         <label>
           <input value="pdo_sqlite" type="radio" name="dbtype" /> pdo_sqlite</label>
         <?php
-echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-        }
+        echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+}
         ?>
         <?php if ($CheckResult['sqlite'][0]) {
             ?>
         <label>
           <input value="sqlite" type="radio" name="dbtype" /> sqlite</label>
         <?php
-echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-        }
+        echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+}
         ?>
       </p>
       </div>
-      <?php }
+        <?php }
     ?>
 
       <p class="title"><?php echo $zbp->lang['zb_install']['website_setting'];?></p>
@@ -595,7 +599,8 @@ $("input[name='fdbtype']:visible").get(0).click();
 
 ################################################################################################################
 #4
-function Setup4() {
+function Setup4()
+{
 
     global $zbp;
 
@@ -611,117 +616,116 @@ function Setup4() {
   <dd id="ddright">
     <div id="title"><?php echo $zbp->lang['zb_install']['install_result'];?></div>
     <div id="content">
-      <?php
-$isInstallFlag = true;
-    $zbp->option['ZC_DATABASE_TYPE'] = GetVars('dbtype', 'POST');
+        <?php
+        $isInstallFlag = true;
+        $zbp->option['ZC_DATABASE_TYPE'] = GetVars('dbtype', 'POST');
 
-    $cts = '';
+        $cts = '';
 
-    switch ($zbp->option['ZC_DATABASE_TYPE']) {
-    case 'mysql':
-    case 'mysqli':
-    case 'pdo_mysql':
-        $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/mysql.sql');
+        switch ($zbp->option['ZC_DATABASE_TYPE']) {
+            case 'mysql':
+            case 'mysqli':
+            case 'pdo_mysql':
+                $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/mysql.sql');
 
-        if ($zbp->option['ZC_YUN_SITE'] != '') {
-            break;
+                if ($zbp->option['ZC_YUN_SITE'] != '') {
+                    break;
+                }
+
+                $zbp->option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'POST');
+                if (strpos($zbp->option['ZC_MYSQL_SERVER'], ':') !== false) {
+                    $servers = explode(':', $zbp->option['ZC_MYSQL_SERVER']);
+                    $zbp->option['ZC_MYSQL_SERVER'] = trim($servers[0]);
+                    $zbp->option['ZC_MYSQL_PORT'] = (int) $servers[1];
+                    if ($zbp->option['ZC_MYSQL_PORT'] == 0) {
+                        $zbp->option['ZC_MYSQL_PORT'] = 3306;
+                    }
+
+                    unset($servers);
+                }
+                $zbp->option['ZC_MYSQL_USERNAME'] = trim(GetVars('dbmysql_username', 'POST'));
+                $zbp->option['ZC_MYSQL_PASSWORD'] = trim(GetVars('dbmysql_password', 'POST'));
+                $zbp->option['ZC_MYSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_name', 'POST')));
+                $zbp->option['ZC_MYSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_pre', 'POST')));
+                if ($zbp->option['ZC_MYSQL_PRE'] == '') {
+                    $zbp->option['ZC_MYSQL_PRE'] == 'zbp_';
+                }
+
+                $zbp->option['ZC_MYSQL_ENGINE'] = GetVars('dbengine', 'POST');
+                $cts = str_replace('MyISAM', $zbp->option['ZC_MYSQL_ENGINE'], $cts);
+
+                $zbp->db = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
+                if ($zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'], $zbp->option['ZC_MYSQL_PORT'], $zbp->option['ZC_MYSQL_USERNAME'], $zbp->option['ZC_MYSQL_PASSWORD'], $zbp->option['ZC_MYSQL_NAME']) == true) {
+                    echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_MYSQL_NAME'] . "<br/>";
+                }
+                $zbp->db->dbpre = $zbp->option['ZC_MYSQL_PRE'];
+                $zbp->db->Close();
+
+                break;
+            case 'sqlite':
+                $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
+                $cts = str_replace(' autoincrement', '', $cts);
+                $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
+                $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
+                break;
+            case 'sqlite3':
+            case 'pdo_sqlite':
+                $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
+                $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
+                $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
+                break;
+            default:
+                $isInstallFlag = false;
+                break;
         }
-
-        $zbp->option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'POST');
-        if (strpos($zbp->option['ZC_MYSQL_SERVER'], ':') !== false) {
-            $servers = explode(':', $zbp->option['ZC_MYSQL_SERVER']);
-            $zbp->option['ZC_MYSQL_SERVER'] = trim($servers[0]);
-            $zbp->option['ZC_MYSQL_PORT'] = (int) $servers[1];
-            if ($zbp->option['ZC_MYSQL_PORT'] == 0) {
-                $zbp->option['ZC_MYSQL_PORT'] = 3306;
+        $hasError = false;
+        if ($isInstallFlag) {
+            $zbp->OpenConnect();
+            $zbp->ConvertTableAndDatainfo();
+            if (CreateTable($cts)) {
+                if (InsertInfo()) {
+                    if (SaveConfig()) {
+                       //ok
+                    } else {
+                       //$hasError = true;
+                    }
+                } else {
+                    $hasError = true;
+                }
+            } else {
+                $hasError = true;
             }
 
-            unset($servers);
-        }
-        $zbp->option['ZC_MYSQL_USERNAME'] = trim(GetVars('dbmysql_username', 'POST'));
-        $zbp->option['ZC_MYSQL_PASSWORD'] = trim(GetVars('dbmysql_password', 'POST'));
-        $zbp->option['ZC_MYSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_name', 'POST')));
-        $zbp->option['ZC_MYSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_pre', 'POST')));
-        if ($zbp->option['ZC_MYSQL_PRE'] == '') {
-            $zbp->option['ZC_MYSQL_PRE'] == 'zbp_';
-        }
-
-        $zbp->option['ZC_MYSQL_ENGINE'] = GetVars('dbengine', 'POST');
-        $cts = str_replace('MyISAM', $zbp->option['ZC_MYSQL_ENGINE'], $cts);
-
-        $zbp->db = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
-        if ($zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'], $zbp->option['ZC_MYSQL_PORT'], $zbp->option['ZC_MYSQL_USERNAME'], $zbp->option['ZC_MYSQL_PASSWORD'], $zbp->option['ZC_MYSQL_NAME']) == true) {
-            echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_MYSQL_NAME'] . "<br/>";
-        }
-        $zbp->db->dbpre = $zbp->option['ZC_MYSQL_PRE'];
-        $zbp->db->Close();
-
-        break;
-    case 'sqlite':
-        $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
-        $cts = str_replace(' autoincrement', '', $cts);
-        $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
-        $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
-        break;
-    case 'sqlite3':
-    case 'pdo_sqlite':
-        $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
-        $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
-        $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
-        break;
-    default:
-        $isInstallFlag = false;
-        break;
-
-    }
-    $hasError = false;
-    if ($isInstallFlag) {
-
-        $zbp->OpenConnect();
-        $zbp->ConvertTableAndDatainfo();
-        if (CreateTable($cts)) {
-           if (InsertInfo()) {
-              if (SaveConfig()) {
-                //ok
-              }else{
-              	//$hasError = true;
-              }
-           } else {
-             $hasError = true;
-           }
+                $zbp->CloseConnect();
         } else {
-          $hasError = true;
+              $hasError = true;
         }
-
-        $zbp->CloseConnect();
-    } else {
-      $hasError = true;
-    }
     ?>
 
     </div>
     <div id="bottom">
-      <?php
-      if ($hasError == true) {
-      echo '<p><a href="javascript:history.go(-1)">' . $zbp->lang['zb_install']['clicktoback']. '</a></p>';
-       }else{ ?>
-      <input type="button" name="next" onClick="window.location.href='../'" id="netx" value="<?php echo $zbp->lang['zb_install']['ok'];?>" />
-      <?php }?>
+        <?php
+        if ($hasError == true) {
+            echo '<p><a href="javascript:history.go(-1)">' . $zbp->lang['zb_install']['clicktoback']. '</a></p>';
+        } else { ?>
+        <input type="button" name="next" onClick="window.location.href='../'" id="netx" value="<?php echo $zbp->lang['zb_install']['ok'];?>" />
+        <?php                                                                                                                                                                                                                                                                                                                                                                                                                                }?>
     </div>
   </dd>
 </dl>
 <?php
 }
 
-function Setup5() {
+function Setup5()
+{
     global $zbp;
     header('Location: ' . $zbp->host);
-
 }
 
 $CheckResult = null;
 
-function CheckServer() {
+function CheckServer()
+{
     global $zbp;
     global $CheckResult;
 
@@ -731,7 +735,7 @@ function CheckServer() {
         'phpver' => array(PHP_VERSION, ''),
         'zbppath' => array($zbp->path, bingo),
         //组件
-        'pcre' => array('', ''),        
+        'pcre' => array('', ''),
         'gd2' => array('', ''),
         'mysql' => array('', ''),
         'mysqli' => array('', ''),
@@ -769,7 +773,7 @@ function CheckServer() {
     $CheckResult['pcre'][0] = PCRE_VERSION;
     if (version_compare($pv[0], '6.6') <= 0) {
         $CheckResult['pcre'][1] =error;
-    }else{
+    } else {
         $CheckResult['pcre'][1] = bingo;
     }
 
@@ -848,10 +852,10 @@ function CheckServer() {
     $CheckResult['json_decode'][1] = function_exists('json_decode') ? bingo : error;
     $CheckResult['iconv'][1] = function_exists('iconv') ? bingo : error;
     $CheckResult['mb_strlen'][1] = function_exists('mb_strlen') ? bingo : error;
-
 }
 
-function getRightsAndExport($folderparent, $folder) {
+function getRightsAndExport($folderparent, $folder)
+{
     global $zbp;
     $s = GetFilePerms($zbp->path . $folderparent . $folder);
     $o = GetFilePermsOct($zbp->path . $folderparent . $folder);
@@ -864,7 +868,8 @@ function getRightsAndExport($folderparent, $folder) {
     }
 }
 
-function CreateTable($sql) {
+function CreateTable($sql)
+{
     global $zbp;
 
     if ($zbp->db->ExistTable($GLOBALS['table']['Config']) == true) {
@@ -887,7 +892,8 @@ function CreateTable($sql) {
     return true;
 }
 
-function InsertInfo() {
+function InsertInfo()
+{
     global $zbp;
 
     $zbp->guid = GetGuid();
@@ -1094,19 +1100,19 @@ function InsertInfo() {
     $a->Save();
 
     $zbp->LoadMembers(0);
-    if (count($zbp->members) == 0){
+    if (count($zbp->members) == 0) {
         echo $zbp->lang['zb_install']['not_insert_data'] . "<br/>";
 
         return false;
-    }else{
+    } else {
         echo $zbp->lang['zb_install']['create_datainfo'] . "<br/>";
 
         return true;
     }
-
 }
 
-function SaveConfig() {
+function SaveConfig()
+{
     global $zbp;
 
 
@@ -1124,15 +1130,14 @@ function SaveConfig() {
     $zbp->option['ZC_NOW_VERSION'] = $zbp->version;
     $zbp->SaveOption();
 
-    if(file_exists($zbp->path . 'zb_users/c_option.php') == false){
+    if (file_exists($zbp->path . 'zb_users/c_option.php') == false) {
         echo $zbp->lang['zb_install']['not_create_option_file'] . "<br/>";
 
         $s = "<pre>&lt;" . "?" . "php\r\n";
         $s .= "return ";
         $option = array();
         foreach ($zbp->option as $key => $value) {
-            if (
-                ($key == 'ZC_YUN_SITE') ||
+            if (($key == 'ZC_YUN_SITE') ||
                 ($key == 'ZC_DATABASE_TYPE') ||
                 ($key == 'ZC_SQLITE_NAME') ||
                 ($key == 'ZC_SQLITE_PRE') ||
@@ -1157,7 +1162,6 @@ function SaveConfig() {
             ) {
                 $option[$key] = $value;
             }
-
         }
         $s .= var_export($option, true);
         $s .= ";\r\n</pre>";
@@ -1170,7 +1174,7 @@ function SaveConfig() {
     $zbp->template = $zbp->PrepareTemplate();
     $zbp->BuildTemplate();
 
-    if(file_exists($zbp->path . 'zb_users/cache/compiled/default/index.php') == false){
+    if (file_exists($zbp->path . 'zb_users/cache/compiled/default/index.php') == false) {
         echo $zbp->lang['zb_install']['not_create_template_file'] . "<br/>";
     }
 
