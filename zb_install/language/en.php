@@ -82,6 +82,6 @@ return array(
     'not_create_table' => 'Created tables failed.',
     'not_insert_data' => 'Created data failed.',
     'not_create_option_file' => 'Created c_option.php failed，please put this code in file:"/zb_system/zb_users/c_option.php" and save.',
-    'not_create_template_file' => 'Compile theme template failed.',  
+    'not_create_template_file' => 'Compile theme template failed.',
     '' => '',
 );

@@ -5,7 +5,8 @@
  * @package api/io
  * @php >= 5.2
  */
-class API_IO {
+class API_IO
+{
     const FORMAT_JSON = 0;
     /**
      * Instance
@@ -34,7 +35,8 @@ class API_IO {
      * @param string $formatString
      * @private
      */
-    private function __construct($formatString) {
+    private function __construct($formatString)
+    {
 
         if ($formatString === "") {
             self::$ioFormat = self::FORMAT_JSON;
@@ -46,7 +48,6 @@ class API_IO {
         $queryStringArray = explode('?', $uri);
         $queryString = end($queryStringArray);
         $query = parse_str($queryString, self::$getObject);
-
     }
 
     /**
@@ -54,7 +55,8 @@ class API_IO {
      * @param string $type
      * @return API_Route
      */
-    public static function getInstance($formatString) {
+    public static function getInstance($formatString)
+    {
 
         if (is_null(self::$instance)) {
             $class = __CLASS__;
@@ -67,7 +69,8 @@ class API_IO {
     /**
      * To avoid clone
      */
-    public function __clone() {
+    public function __clone()
+    {
         throw new Exception("Singleton Class Can Not Be Cloned");
     }
 
@@ -76,7 +79,8 @@ class API_IO {
      * @param  $name
      * @return
      */
-    public function __get($name) {
+    public function __get($name)
+    {
 
         if ($name === "output") {
             return $savedObject[$name];
@@ -85,7 +89,6 @@ class API_IO {
         } else {
             return "";
         }
-
     }
 
     /**
@@ -93,7 +96,8 @@ class API_IO {
      * @param string $name
      * @param $value
      */
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         self::$savedObject[$name] = $value;
     }
 
@@ -101,7 +105,8 @@ class API_IO {
      * Return POST Data
      * @param  string $name
      */
-    public static function post($name) {
+    public static function post($name)
+    {
         return GetVars($name, 'POST');
     }
 
@@ -110,7 +115,8 @@ class API_IO {
      * Format array key
      * @param array &$object [description]
      */
-    public static function formatObjectName(&$object) {
+    public static function formatObjectName(&$object)
+    {
         foreach ($object as $oldKey => $value) {
             $newKey = str_replace('ID', 'Id', str_replace('iD', 'id', lcfirst($oldKey)));
             if ($newKey != $oldKey) {
@@ -124,7 +130,8 @@ class API_IO {
      * Format array key for save
      * @param array &$object [description]
      */
-    public static function formatObjectNameForSave(&$object) {
+    public static function formatObjectNameForSave(&$object)
+    {
         foreach ($object as $oldKey => $value) {
             $newKey = str_replace('id', 'ID', str_replace('Id', 'ID', ucfirst($oldKey)));
             if ($newKey != $oldKey) {
@@ -140,7 +147,8 @@ class API_IO {
      * @param  integer $errorCode
      * @param  string  $errorMessage
      */
-    public static function end($errorCode = -1, $errorMessage = "") {
+    public static function end($errorCode = -1, $errorMessage = "")
+    {
 
         global $zbp; // For language file
         $returnObject = array(
@@ -164,8 +172,4 @@ class API_IO {
 
         return true;
     }
-
-
-
-
 }

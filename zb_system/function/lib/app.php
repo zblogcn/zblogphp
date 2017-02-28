@@ -5,7 +5,8 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib 类库
  */
-class App {
+class App
+{
 
     /**
      * @var string 应用类型，'plugin'表示插件，'theme'表示主题
@@ -98,7 +99,7 @@ class App {
     /**
      * @var string 高级选项：必须函数列表（以|分隔）
      */
-    public $advanced_existsfunctions;    
+    public $advanced_existsfunctions;
     /**
      * @var string 高级选项：冲突插件列表（以|分隔）
      */
@@ -131,84 +132,97 @@ class App {
      * 得到详细信息数组
      * @return array
      */
-    public function GetInfoArray() {
+    public function GetInfoArray()
+    {
         return get_object_vars($this);
     }
     /**
      * 是否可删除
      * @return bool
      */
-    public function CanDel() {
+    public function CanDel()
+    {
         global $zbp;
 
         return !isset($zbp->activedapps[$this->id]);
     }
     /**
      * 是否带管理页面
-     * @access	public
-     * @return	bool
+     * @access  public
+     * @return  bool
      */
-    public function CanManage() {
-        if ($this->path) {return true;}
+    public function CanManage()
+    {
+        if ($this->path) {
+            return true;
+        }
 
         return false;
     }
     /**
      * 是否正在使用
-     * @access	public
-     * @return	bool
+     * @access  public
+     * @return  bool
      */
-    public function IsUsed() {
+    public function IsUsed()
+    {
         global $zbp;
 
         return $zbp->CheckPlugin($this->id);
     }
     /**
      * 是否附带主题插件（针对主题应用）
-     * @access	public
-     * @return	bool
+     * @access  public
+     * @return  bool
      */
-    public function HasPlugin() {
-        if ($this->path || $this->include) {return true;}
+    public function HasPlugin()
+    {
+        if ($this->path || $this->include) {
+            return true;
+        }
 
         return false;
     }
     /**
      * 获取应用ID的crc32Hash值
-     * @access	public
-     * @return	string
+     * @access  public
+     * @return  string
      */
-    public function GetHash() {
+    public function GetHash()
+    {
         global $zbp;
 
         return crc32($this->id);
     }
     /**
      * 获取应用管理页面链接
-     * @access	public
-     * @return	string
+     * @access  public
+     * @return  string
      */
-    public function GetManageUrl() {
+    public function GetManageUrl()
+    {
         global $zbp;
 
         return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/' . $this->path;
     }
     /**
      * 获取应用目录地址
-     * @access	public
-     * @return	string
+     * @access  public
+     * @return  string
      */
-    public function GetDir() {
+    public function GetDir()
+    {
         global $zbp;
 
         return $zbp->path . 'zb_users/' . $this->type . '/' . $this->id . '/';
     }
     /**
      * 获取应用Logo图片地址
-     * @access	public
-     * @return	string
+     * @access  public
+     * @return  string
      */
-    public function GetLogo() {
+    public function GetLogo()
+    {
         global $zbp;
         if ($this->type == 'plugin') {
             return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/logo.png';
@@ -218,20 +232,22 @@ class App {
     }
     /**
      * 获取应用截图地址
-     * @access	public
-     * @return	string
+     * @access  public
+     * @return  string
      */
-    public function GetScreenshot() {
+    public function GetScreenshot()
+    {
         global $zbp;
 
         return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
     }
     /**
      * 获取应用（主题）样式文件列表
-     * @access	public
-     * @return	array
+     * @access  public
+     * @return  array
      */
-    public function GetCssFiles() {
+    public function GetCssFiles()
+    {
         global $zbp;
         $dir = $zbp->usersdir . 'theme/' . $this->id . '/style/';
 
@@ -244,7 +260,8 @@ class App {
      * @param string $id 应用ID
      * @return bool
      */
-    public function LoadInfoByXml($type, $id) {
+    public function LoadInfoByXml($type, $id)
+    {
         global $zbp;
         $path = $zbp->usersdir . $type . '/' . $id . '/' . $type . '.xml';
         if (!is_readable($path)) {
@@ -258,7 +275,9 @@ class App {
         }
 
         $appver = $xml->attributes();
-        if ($appver != 'php') {return false;}
+        if ($appver != 'php') {
+            return false;
+        }
 
         $this->type = $type;
 
@@ -286,7 +305,7 @@ class App {
         $this->modified = (string) $xml->modified;
         $this->description = (string) $xml->description;
         $this->price = (string) $xml->price;
-        if(empty($xml->phpver)) {
+        if (empty($xml->phpver)) {
             $this->phpver = '5.2';
         } else {
             $this->phpver = (string) $xml->phpver;
@@ -309,7 +328,8 @@ class App {
      * 保存应用信息到xml文件
      * @return bool
      */
-    public function SaveInfoByXml() {
+    public function SaveInfoByXml()
+    {
         global $zbp;
         $s = '<?xml version="1.0" encoding="utf-8"?>' . "\r\n";
         $s .= '<' . $this->type . ' version="php">' . "\r\n";
@@ -341,12 +361,12 @@ class App {
         $s .= '<pubdate>' . htmlspecialchars($this->pubdate) . '</pubdate>' . "\r\n";
         $s .= '<modified>' . htmlspecialchars($this->modified) . '</modified>' . "\r\n";
         $s .= '<price>' . htmlspecialchars($this->price) . '</price>' . "\r\n";
-        $s .= '<phpver>' . htmlspecialchars($this->phpver) . '</phpver>' . "\r\n";        
+        $s .= '<phpver>' . htmlspecialchars($this->phpver) . '</phpver>' . "\r\n";
 
         $s .= '<advanced>' . "\r\n";
         $s .= '  <dependency>' . htmlspecialchars($this->advanced_dependency) . '</dependency>' . "\r\n";
         $s .= '  <rewritefunctions>' . htmlspecialchars($this->advanced_rewritefunctions) . '</rewritefunctions>' . "\r\n";
-        $s .= '  <existsfunctions>' . htmlspecialchars($this->advanced_existsfunctions) . '</existsfunctions>' . "\r\n";        
+        $s .= '  <existsfunctions>' . htmlspecialchars($this->advanced_existsfunctions) . '</existsfunctions>' . "\r\n";
         $s .= '  <conflict>' . htmlspecialchars($this->advanced_conflict) . '</conflict>' . "\r\n";
         $s .= '</advanced>' . "\r\n";
 
@@ -383,7 +403,8 @@ class App {
      * @param string $dir 获取所有目录及文件列表
      * @private
      */
-    private function GetAllFileDir($dir) {
+    private function GetAllFileDir($dir)
+    {
 
         if (function_exists('scandir')) {
             foreach (scandir($dir) as $d) {
@@ -413,14 +434,14 @@ class App {
                 closedir($handle);
             }
         }
-
     }
 
     /**
      * 应用打包
      * @return string
      */
-    public function Pack() {
+    public function Pack()
+    {
         global $zbp;
 
         $dir = $this->GetDir();
@@ -460,12 +481,12 @@ class App {
         $s .= '<pubdate>' . htmlspecialchars($this->pubdate) . '</pubdate>';
         $s .= '<modified>' . htmlspecialchars($this->modified) . '</modified>';
         $s .= '<price>' . htmlspecialchars($this->price) . '</price>';
-        $s .= '<phpver>' . htmlspecialchars($this->phpver) . '</phpver>';        
+        $s .= '<phpver>' . htmlspecialchars($this->phpver) . '</phpver>';
 
         $s .= '<advanced>';
         $s .= '<dependency>' . htmlspecialchars($this->advanced_dependency) . '</dependency>';
         $s .= '<rewritefunctions>' . htmlspecialchars($this->advanced_rewritefunctions) . '</rewritefunctions>';
-        $s .= '<existsfunctions>' . htmlspecialchars($this->advanced_existsfunctions) . '</existsfunctions>' . "\r\n";   
+        $s .= '<existsfunctions>' . htmlspecialchars($this->advanced_existsfunctions) . '</existsfunctions>' . "\r\n";
         $s .= '<conflict>' . htmlspecialchars($this->advanced_conflict) . '</conflict>';
         $s .= '</advanced>';
 
@@ -505,7 +526,8 @@ class App {
         return $s;
     }
 
-    public function PackGZip() {
+    public function PackGZip()
+    {
         return gzencode($this->Pack(), 9, FORCE_GZIP);
     }
 
@@ -514,7 +536,8 @@ class App {
      * @param $xml
      * @return bool
      */
-    public static function UnPack($xml) {
+    public static function UnPack($xml)
+    {
         global $zbp;
         $charset = array();
         $charset[1] = substr($xml, 0, 1);
@@ -563,15 +586,18 @@ class App {
         return true;
     }
 
-    public function CheckCompatibility() {
+    public function CheckCompatibility()
+    {
         global $zbp;
 
         if ((int) $this->adapted > (int) $zbp->version) {
             $zbp->ShowError(str_replace('%s', $this->adapted, $zbp->lang['error'][78]), __FILE__, __LINE__);
         }
 
-        if( trim($this->phpver) == '' ) $this->phpver = '5.2';
-        if ( version_compare($this->phpver, GetPHPVersion()) > 0 ){
+        if (trim($this->phpver) == '') {
+            $this->phpver = '5.2';
+        }
+        if (version_compare($this->phpver, GetPHPVersion()) > 0) {
             $zbp->ShowError(str_replace('%s', $this->phpver, $zbp->lang['error'][91]), __FILE__, __LINE__);
         }
 
@@ -582,7 +608,7 @@ class App {
                 continue;
             }
 
-            if(function_exists($e) == false){
+            if (function_exists($e) == false) {
                 $zbp->ShowError(str_replace('%s', $e, $zbp->lang['error'][92]), __FILE__, __LINE__);
             }
         }
@@ -615,7 +641,8 @@ class App {
      * DEL
      * @return null
      */
-    public function Del() {
+    public function Del()
+    {
         global $zbp;
         rrmdir($zbp->usersdir . $this->type . '/' . $this->id);
         $this->DelCompiled();
@@ -625,7 +652,8 @@ class App {
      * DEL Compiled
      * @return null
      */
-    public function DelCompiled() {
+    public function DelCompiled()
+    {
         global $zbp;
         rrmdir($zbp->usersdir . 'cache/compiled/' . $this->id);
     }

@@ -114,13 +114,12 @@ if ($id == 9) {
     $c .= 'body{background:url(body.jpg) no-repeat 0 0;background-attachment:fixed;}' . "\r\n";
     $c .= '#topmenu{opacity:0.8;}' . "\r\n";
 }
-if($zbp->Config('AdminColor')->LogoPath){
-$c .= '.logo img{background:url('. $zbp->Config('AdminColor')->LogoPath .') no-repeat center center;}';
+if ($zbp->Config('AdminColor')->LogoPath) {
+    $c .= '.logo img{background:url('. $zbp->Config('AdminColor')->LogoPath .') no-repeat center center;}';
 }
 
 if ($id == 10) {
-
-$c .= '
+    $c .= '
 table{
 border-collapse: collapse;
 border: 1px solid #eee;
@@ -218,8 +217,8 @@ height: 30px;
 
 ';
 
-if(isset($_GET['aly'])){
-$c .='
+    if (isset($_GET['aly'])) {
+        $c .='
 body {background:url("l.png") repeat-y 0 top}
 .logo{
     background-color: #0087B5;
@@ -236,9 +235,7 @@ body {background:url("l.png") repeat-y 0 top}
 }
 .logo img{background:url("sl.png")}
 ';
-
-}
-
+    }
 }
 
 $c1 = "#1d4c7d";
@@ -256,7 +253,7 @@ $AdminColor_Colors['High'] = $zbp->Config('AdminColor')->HighColor;
 $AdminColor_Colors['Anti'] = $zbp->Config('AdminColor')->AntiColor;
 
 foreach ($GLOBALS['hooks']['Filter_Plugin_AdminColor_CSS_Pre'] as $fpname => &$fpsignal) {
-    $fpname($AdminColor_Colors,$c);
+    $fpname($AdminColor_Colors, $c);
 }
 
 $c = str_replace($c1, $AdminColor_Colors['Blod'], $c);

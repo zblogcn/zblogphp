@@ -1,8 +1,8 @@
-﻿/** 
+﻿/**
  * Z-BlogPHP JavaScript Framework
  * @author zsx<zsx@zsxsoft.com>
  */
-(function() {
+(function () {
     /**
      * Class ZBP
      *
@@ -12,9 +12,11 @@
      * @param options {OPTION} Init option
      * @param jquery {object} jQuery
      */
-    var ZBP = function(options, jquery) {
+    var ZBP = function (options, jquery) {
         /** Load jQuery library */
-        if (typeof jQuery == 'undefined' && typeof jquery == 'undefined') throw new Error('No jQuery!');
+        if (typeof jQuery == 'undefined' && typeof jquery == 'undefined') {
+            throw new Error('No jQuery!');
+        }
         this.$ = jquery || jQuery;
 
         /** Init self */
@@ -46,26 +48,26 @@
         this.userinfo.homepage = this.cookie.get("homepage");
 
         /** Register system events */
-        this.plugin.on("userinfo.output", "system", function() {
+        this.plugin.on("userinfo.output", "system", function () {
             this.$("#inpName").val(this.userinfo.username);
             this.$("#inpEmail").val(this.userinfo.mail);
             this.$("#inpHomePage").val(this.userinfo.homepage);
         });
 
-        this.plugin.on("userinfo.savefromhtml", "system", function() {
+        this.plugin.on("userinfo.savefromhtml", "system", function () {
             this.userinfo.username = this.$("#inpName").val();
             this.userinfo.mail = this.$("#inpEmail").val();
             this.userinfo.homepage = this.$("#inpHomePage").val();
             this.userinfo.save();
         });
 
-        this.plugin.on("userinfo.save", "system", function() {
+        this.plugin.on("userinfo.save", "system", function () {
             this.cookie.set("name", this.userinfo.username);
             this.cookie.set("email", this.userinfo.mail);
             this.cookie.set("homepage", this.userinfo.homepage);
         });
 
-        this.plugin.on("comment.verifydata", "system", function(error, formData) {
+        this.plugin.on("comment.verifydata", "system", function (error, formData) {
 
             var regExList = {
                 // [canBeEmpty, errorCode, RegExp]
@@ -88,7 +90,7 @@
 
         });
 
-        this.plugin.on("comment.posterror", "system", function(error, formData) {
+        this.plugin.on("comment.posterror", "system", function (error, formData) {
 
             var objSubmit = $("#inpId").parent("form").find(":submit");
             objSubmit.removeClass("loading").removeAttr("disabled");
@@ -100,7 +102,7 @@
 
         });
 
-        this.plugin.on("comment.postsuccess", "system", function(formData, retString, textStatus, jqXhr) {
+        this.plugin.on("comment.postsuccess", "system", function (formData, retString, textStatus, jqXhr) {
 
             var objSubmit = $("#inpId").parent("form").find(":submit");
             objSubmit.removeClass("loading").removeAttr("disabled").val(objSubmit.data("orig"));
@@ -124,22 +126,22 @@
 
         });
 
-        this.plugin.on("comment.get", "system", function(postid, page) {
+        this.plugin.on("comment.get", "system", function (postid, page) {
             var self = this;
-            this.$.get(this.options.bloghost + "zb_system/cmd.php?act=getcmt&postid=" + postid + "&page=" + page, function(data, textStatus, jqXhr) {
+            this.$.get(this.options.bloghost + "zb_system/cmd.php?act=getcmt&postid=" + postid + "&page=" + page, function (data, textStatus, jqXhr) {
                 self.plugin.emit("comment.got", [postid, page], data, textStatus, jqXhr);
             });
         });
 
-        this.plugin.on("comment.got", "system", function(formData, data, textStatus, jqXhr) {
+        this.plugin.on("comment.got", "system", function (formData, data, textStatus, jqXhr) {
             this.$('#AjaxCommentBegin').nextUntil('#AjaxCommentEnd').remove();
             this.$('#AjaxCommentBegin').after(data);
         });
 
-        this.plugin.on("comment.reply", "system", function(id) {
+        this.plugin.on("comment.reply", "system", function (id) {
             var me = this;
             this.$("#inpRevID").val(id);
-            this.$("#cancel-reply").show().bind("click", function() {
+            this.$("#cancel-reply").show().bind("click", function () {
                 me.$("#inpRevID").val(0);
                 me.$(this).hide();
                 window.location.hash = "#comment";
@@ -163,13 +165,13 @@
      *
      * @param  object
      **/
-    var initMethods = function(self) {
+    var initMethods = function (self) {
 
         /**
          * PLUGIN
          * @class PLUGIN
          */
-        var PLUGIN = function() {};
+        var PLUGIN = function () {};
         /**
          * Add listener
          * @function
@@ -179,8 +181,9 @@
          * @param callback {Function}
          * @return {object} this
          */
-        PLUGIN.prototype.bind = PLUGIN.prototype.on = PLUGIN.prototype.addListener = function(interfaceName, pluginName, callback) {
-            if (typeof self._plugins[interfaceName] == 'undefined') self._plugins[interfaceName] = {};
+        PLUGIN.prototype.bind = PLUGIN.prototype.on = PLUGIN.prototype.addListener = function (interfaceName, pluginName, callback) {
+            if (typeof self._plugins[interfaceName] == 'undefined') {
+                self._plugins[interfaceName] = };
             self._plugins[interfaceName][pluginName] = callback;
             return self;
         };
@@ -192,8 +195,10 @@
          * @param pluginName {string}
          * @return {object} this
          */
-        PLUGIN.prototype.unbind = PLUGIN.prototype.removeListener = function(interfaceName, pluginName) {
-            if (!pluginName) pluginName = "";
+        PLUGIN.prototype.unbind = PLUGIN.prototype.removeListener = function (interfaceName, pluginName) {
+            if (!pluginName) {
+                pluginName = "";
+            }
             if (pluginName === "") {
                 self._plugins[interfaceName] = {};
             } else {
@@ -209,7 +214,7 @@
          * @param interfaceName {string}
          * @return {object} this
          */
-        PLUGIN.prototype.emit = function(interfaceName) {
+        PLUGIN.prototype.emit = function (interfaceName) {
             // var argu = self.$.extend([], arguments);
             // argu.shift();
             // Let's fuck IE6 together!
@@ -233,14 +238,14 @@
          * COOKIE
          * @class COOKIE
          */
-        var COOKIE = function() {};
+        var COOKIE = function () {};
         /**
          * Get Cookie
          * @memberOf COOKIE
          * @param sCookieName {string} Cookie Key
          * @return cookieValue {string} Cookie Value
          */
-        COOKIE.prototype.get = function(sCookieName) {
+        COOKIE.prototype.get = function (sCookieName) {
             var arr = document.cookie.match(new RegExp("(^| )" + sCookieName + "=([^;]*)(;|$)"));
             return (arr ? unescape(arr[2]) : null);
         };
@@ -252,7 +257,7 @@
          * @param iExpireDays {int} Cookie Expires
          * @return ZBP {ZBP}
          */
-        COOKIE.prototype.set = function(sCookieName, sCookieValue, iExpireDays) {
+        COOKIE.prototype.set = function (sCookieName, sCookieValue, iExpireDays) {
             var dExpire = new Date();
             if (iExpireDays) {
                 dExpire.setTime(dExpire.getTime() + parseInt(iExpireDays * 24 * 60 * 60 * 1000));
@@ -271,13 +276,13 @@
          * USERINFO
          * @class USERINFO
          */
-        var USERINFO = function() {};
+        var USERINFO = function () {};
         /**
          * Output user information to DOM
          * @memberOf USERINFO
          * @return ZBP {ZBP}
          */
-        USERINFO.prototype.output = function() {
+        USERINFO.prototype.output = function () {
             self.plugin.emit("userinfo.output");
             return self;
         };
@@ -286,7 +291,7 @@
          * @memberOf USERINFO
          * @return ZBP {ZBP}
          */
-        USERINFO.prototype.save = function() {
+        USERINFO.prototype.save = function () {
             self.plugin.emit("userinfo.save");
             return self;
         };
@@ -295,7 +300,7 @@
          * @memberOf USERINFO
          * @return ZBP {ZBP}
          */
-        USERINFO.prototype.saveFromHtml = function() {
+        USERINFO.prototype.saveFromHtml = function () {
             self.plugin.emit("userinfo.savefromhtml");
             return self;
         };
@@ -310,7 +315,7 @@
          * COMMENT
          * @class COMMENT
          */
-        var COMMENT = function() {};
+        var COMMENT = function () {};
         /**
          * Get comments
          * @memberOf COMMENT
@@ -318,7 +323,7 @@
          * @param page {int} Page
          * @return ZBP {ZBP}
          */
-        COMMENT.prototype.get = function(postid, page) {
+        COMMENT.prototype.get = function (postid, page) {
             self.plugin.emit("comment.get", postid, page);
             return;
         };
@@ -328,7 +333,7 @@
          * @param int {int} Comment ID
          * @return ZBP {ZBP}
          */
-        COMMENT.prototype.reply = function(id) {
+        COMMENT.prototype.reply = function (id) {
             self.plugin.emit("comment.reply", id);
             return;
         };
@@ -338,7 +343,7 @@
          * @param formData {PostData}
          * @return ZBP {ZBP}
          */
-        COMMENT.prototype.post = function(formData) {
+        COMMENT.prototype.post = function (formData) {
 
             /**
              * Form Data
@@ -368,7 +373,7 @@
             formData.replyid = formData.replyid || $("#inpRevID").val();
             formData.format = formData.format || "json";
 
-            /** 
+            /**
              * Check `http://`
              */
             if (!/^(.+)\:\/\//.test(formData.homepage) && formData.homepage != "") {
@@ -388,18 +393,19 @@
                 try {
                     console.log(formData);
                     console.log("ERROR - " + error.msg);
-                } catch (e) { /* do nothing */ }
+                } catch (e) {
+/* do nothing */ }
                 self.plugin.emit("comment.posterror", error, formData);
                 return false;
             }
-            self.$.post(formData.action, formData).done(function(data, textStatus, jqXhr) {
+            self.$.post(formData.action, formData).done(function (data, textStatus, jqXhr) {
                 self.plugin.emit("comment.postsuccess", formData, data, textStatus, jqXhr);
-            }).fail(function(jqXHR, textStatus) {
-            	self.plugin.emit("comment.posterror", {
-            		jqXHR: jqXHR, 
-            		msg: textStatus, 
-            		code: 255,
-            	}, formData);
+            }).fail(function (jqXHR, textStatus) {
+                self.plugin.emit("comment.posterror", {
+                    jqXHR: jqXHR,
+                    msg: textStatus,
+                    code: 255,
+                }, formData);
             });
 
             return false;
@@ -419,11 +425,11 @@
      * @module zbp
      */
     if (typeof define === "function" && define.amd) {
-        define("zbp", [], function() {
+        define("zbp", [], function () {
             return ZBP;
         });
     } else if (typeof define === "function" && define.cmd) {
-        define("zbp", [], function(require, exports, module) {
+        define("zbp", [], function (require, exports, module) {
             module.exports = ZBP;
         });
     } else if (typeof module !== "undefined") {
@@ -433,3 +439,4 @@
     }
 
 })();
+

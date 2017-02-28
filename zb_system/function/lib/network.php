@@ -9,7 +9,8 @@ if (!interface_exists('iNetwork')) {
      * @package Z-BlogPHP
      * @subpackage Interface/Network 网络连接
      */
-    interface iNetwork {
+    interface iNetwork
+    {
         /**
          * @return mixed
          */
@@ -70,7 +71,6 @@ if (!interface_exists('iNetwork')) {
          * @return mixed
          */
         public function addText($name, $entity);
-
     }
 
 }
@@ -81,7 +81,8 @@ if (!interface_exists('iNetwork')) {
  * @package Z-BlogPHP
  * @subpackage ClassLib/Network
  */
-class Network {
+class Network
+{
 
     /**
      * @var null
@@ -111,7 +112,8 @@ class Network {
     /**
      * 构造函数
      */
-    public function __construct() {
+    public function __construct()
+    {
         if (function_exists('curl_init') && function_exists('curl_exec')) {
             $this->network_list[] = 'curl';
             $this->curl = true;
@@ -134,7 +136,8 @@ class Network {
      * @param string $extension
      * @return bool|network
      */
-    public static function Create($extension = '') {
+    public static function Create($extension = '')
+    {
         if (!isset(self::$_network)) {
             self::$_network = new Network;
         }
@@ -145,8 +148,6 @@ class Network {
         $extension = ($extension == '' ? self::$_network->network_list[0] : $extension);
         $type = 'network' . $extension;
         $network = new $type();
-
         return $network;
     }
-
 }

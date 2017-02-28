@@ -12,8 +12,14 @@ $zbpdk->scan_extensions();
 //var_dump($zbpdk->objects);
 
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('ZBPDK')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
+if (!$zbp->CheckPlugin('ZBPDK')) {
+    $zbp->ShowError(48);
+    die();
+}
 
 if (isset($_GET['act'])) {
     switch ($_GET['act']) {
@@ -54,16 +60,16 @@ if (isset($_POST['act'])) {
             exit();
             break;
         case 'e_edit':
- $name1=$_POST['name1']; 
-			$config = $zbp->configs[$_POST['name2']]->$name1;
+            $name1=$_POST['name1'];
+            $config = $zbp->configs[$_POST['name2']]->$name1;
             $value = $_POST['post'];
             if (gettype($config) == 'boolean') {
                 $value = (bool) $value;
             } elseif (gettype($config) == 'integer') {
                 $value = (int) $value;
             }
- $name1=$_POST['name1'];
-			$zbp->configs[$_POST['name2']]->$name1 = $value;
+            $name1=$_POST['name1'];
+            $zbp->configs[$_POST['name2']]->$name1 = $value;
             $zbp->SaveConfig($_POST['name2']);
             echo blogconfig_exportlist($_POST['name2']);
             exit();
@@ -90,23 +96,23 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     <div class="DIVBlogConfig">
       <div class="DIVBlogConfignav" name="tree" id="tree">
         <ul>
-          <?php echo blogconfig_left();?>
+            <?php echo blogconfig_left();?>
         </ul>
         <script type="text/javascript">
-		$(document).ready(function() {
-			$.contextMenu({
-				selector: '#tree ul li', 
-				items: {
-					"open": {name: "打开"},
-					"rename": {name: "重命名"},
-					"del": {name: "删除"}
-				}, 
-				callback: function (key, options) {
+        $(document).ready(function() {
+            $.contextMenu({
+                selector: '#tree ul li', 
+                items: {
+                    "open": {name: "打开"},
+                    "rename": {name: "重命名"},
+                    "del": {name: "删除"}
+                }, 
+                callback: function (key, options) {
 //					console.log(this);
-					run(key, $(this).find("a").attr("id"));
-				}
-			});
-		});
+                    run(key, $(this).find("a").attr("id"));
+                }
+            });
+        });
       </script></div>
       <div id="content" class="DIVBlogConfigcontent">
         <div class="DIVBlogConfigcontentbody">请选择</div>

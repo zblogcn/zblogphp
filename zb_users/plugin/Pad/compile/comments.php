@@ -1,6 +1,6 @@
 <?php if ($socialcomment) { ?>
 <?php  echo $socialcomment;  ?>
-<?php }else{  ?>
+<?php } else {  ?>
 <!--评论输出-->
 
 <dl id="comment">

@@ -5,7 +5,8 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/Network/Networkfsockopen 网络连接
  */
-class Networkfsockopen implements iNetwork {
+class Networkfsockopen implements iNetwork
+{
 
     private $readyState = 0; #状态
     private $responseBody = null; #返回的二进制
@@ -37,7 +38,8 @@ class Networkfsockopen implements iNetwork {
      * @param $value
      * @throws Exception
      */
-    public function __set($property_name, $value) {
+    public function __set($property_name, $value)
+    {
         throw new Exception($property_name . ' readonly');
     }
 
@@ -45,7 +47,8 @@ class Networkfsockopen implements iNetwork {
      * @param $property_name
      * @return mixed
      */
-    public function __get($property_name) {
+    public function __get($property_name)
+    {
         if (strtolower($property_name) == 'responsexml') {
             $w = new DOMDocument();
 
@@ -63,7 +66,6 @@ class Networkfsockopen implements iNetwork {
             } else {
                 return null;
             }
-
         } else {
             return $this->$property_name;
         }
@@ -72,14 +74,15 @@ class Networkfsockopen implements iNetwork {
     /**
      *
      */
-    public function abort() {
-
+    public function abort()
+    {
     }
 
     /**
      * @return string
      */
-    public function getAllResponseHeaders() {
+    public function getAllResponseHeaders()
+    {
         return implode("\r\n", $this->responseHeader);
     }
 
@@ -87,7 +90,8 @@ class Networkfsockopen implements iNetwork {
      * @param $bstrHeader
      * @return string
      */
-    public function getResponseHeader($bstrHeader) {
+    public function getResponseHeader($bstrHeader)
+    {
         $name = strtolower($bstrHeader);
         foreach ($this->responseHeader as $w) {
             if (strtolower(substr($w, 0, strpos($w, ':'))) == $name) {
@@ -104,8 +108,8 @@ class Networkfsockopen implements iNetwork {
      * @param $sendTimeout
      * @param $receiveTimeout
      */
-    public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout) {
-
+    public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout)
+    {
     }
 
     /**
@@ -117,7 +121,8 @@ class Networkfsockopen implements iNetwork {
      * @return bool
      * @throws Exception
      */
-    public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '') {
+    public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '')
+    {
         //Async无用
         //初始化变量
         $this->reinit();
@@ -145,14 +150,14 @@ class Networkfsockopen implements iNetwork {
      * @param string $varBody
      * @return mixed|void
      */
-    public function send($varBody = '') {
+    public function send($varBody = '')
+    {
         $data = $varBody;
         if (is_array($data)) {
             $data = http_build_query($data);
         }
 
         if ($this->option['method'] == 'POST') {
-
             if ($data == '') {
                 $data = $this->__buildPostData(); //http_build_query($this->postdata);
             }
@@ -165,7 +170,6 @@ class Networkfsockopen implements iNetwork {
                 }
             }
             $this->httpheader['Content-Length'] = 'Content-Length: ' . strlen($data);
-
         }
 
         $this->httpheader[] = 'Host: ' . $this->parsed_url['host'];
@@ -277,7 +281,6 @@ class Networkfsockopen implements iNetwork {
         }
 
         fclose($socket);
-
     }
 
     /**
@@ -286,7 +289,8 @@ class Networkfsockopen implements iNetwork {
      * @param bool $append
      * @return bool
      */
-    public function setRequestHeader($bstrHeader, $bstrValue, $append = false) {
+    public function setRequestHeader($bstrHeader, $bstrValue, $append = false)
+    {
         if ($append == false) {
             $this->httpheader[$bstrHeader] = $bstrHeader . ': ' . $bstrValue;
         } else {
@@ -304,7 +308,8 @@ class Networkfsockopen implements iNetwork {
      * @param $bstrItem
      * @param $bstrValue
      */
-    private function add_postdata($bstrItem, $bstrValue) {
+    private function add_postdata($bstrItem, $bstrValue)
+    {
         $this->postdata[$bstrItem] = array(
             'data' => $bstrValue,
             'type' => 'text',
@@ -316,7 +321,8 @@ class Networkfsockopen implements iNetwork {
      * @param string $entity
      * @return mixed
      */
-    public function addBinary($name, $entity, $filename = null, $mime = '') {
+    public function addBinary($name, $entity, $filename = null, $mime = '')
+    {
         $this->__isBinary = true;
         $return = array();
 
@@ -336,7 +342,6 @@ class Networkfsockopen implements iNetwork {
                     $mime = 'application/octet-stream';
                 }
             }
-
         } else {
             $name = basename($name);
             $return['data'] = $entity;
@@ -353,14 +358,16 @@ class Networkfsockopen implements iNetwork {
      * @param string $entity
      * @return mixed
      */
-    public function addText($name, $entity) {
+    public function addText($name, $entity)
+    {
         return $this->add_postdata($name, $entity);
     }
 
     /**
      * @return string
      */
-    private function __buildPostData() {
+    private function __buildPostData()
+    {
         if (!$this->__isBinary) {
             $array = array();
             foreach ($this->postdata as $name => $value) {
@@ -399,7 +406,8 @@ class Networkfsockopen implements iNetwork {
     /**
      * Build Boundary
      */
-    private function __buildBoundary() {
+    private function __buildBoundary()
+    {
         $boundary = '----ZBLOGPHPBOUNDARY';
         $boundary .= substr(md5(time()), 8, 16);
         $this->__boundary = $boundary;
@@ -407,7 +415,8 @@ class Networkfsockopen implements iNetwork {
     /**
      *
      */
-    private function reinit() {
+    private function reinit()
+    {
         global $zbp;
         $this->httpheader = array();
 
@@ -443,7 +452,8 @@ class Networkfsockopen implements iNetwork {
      * @param $chunk
      * @return null|string
      */
-    private function http_chunked_decode($chunk) {
+    private function http_chunked_decode($chunk)
+    {
         $pos = 0;
         $len = strlen($chunk);
         $dechunk = null;
@@ -471,10 +481,13 @@ class Networkfsockopen implements iNetwork {
      * @param string $hex
      * @return boolean true if the string is a hex, otherwise false
      */
-    private function is_hex($hex) {
+    private function is_hex($hex)
+    {
         // regex is for weenies
         $hex = strtolower(trim(ltrim($hex, "0")));
-        if (empty($hex)) {$hex = 0;};
+        if (empty($hex)) {
+            $hex = 0;
+        };
         $dec = hexdec($hex);
 
         return ($hex == dechex($dec));
@@ -484,7 +497,8 @@ class Networkfsockopen implements iNetwork {
      * @param $string
      * @return string
      */
-    private function gzdecode($string) {
+    private function gzdecode($string)
+    {
 // no support for 2nd argument
         return file_get_contents('compress.zlib://data:zbp/ths;base64,' . base64_encode($string));
     }
@@ -492,15 +506,16 @@ class Networkfsockopen implements iNetwork {
     /**
      *
      */
-    public function enableGzip() {
+    public function enableGzip()
+    {
         $this->isgzip = true;
     }
 
     /**
      * @param int $n
      */
-    public function setMaxRedirs($n = 0) {
+    public function setMaxRedirs($n = 0)
+    {
         $this->maxredirs = $n;
     }
-
 }

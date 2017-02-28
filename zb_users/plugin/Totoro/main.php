@@ -69,10 +69,10 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                             </thead>
                             <tbody>
                                 <?php
-$i = 1;
-foreach ($Totoro->config_array['SV_RULE'] as $name => $value) {
-    ?>
-                                <tr>
+                                $i = 1;
+                                foreach ($Totoro->config_array['SV_RULE'] as $name => $value) {
+                                    ?>
+                                                                <tr>
                                     <td><?php echo $i ?></td>
                                     <td>
                                         <p align="left"><b><?php echo $value['NAME'] ?></b></p>
@@ -82,12 +82,12 @@ foreach ($Totoro->config_array['SV_RULE'] as $name => $value) {
                                     </td>
                                     <td>(默认：<?php echo $value['DEFAULT'] ?>) <?php echo $value['DESC'] ?></td>
                                 </tr>
-                                <?php
-$i++;
-}
-foreach ($Totoro->config_array['SV_SETTING'] as $name => $value) {
-    ?>
-                                <tr>
+                                                                <?php
+                                                                $i++;
+                                }
+                                foreach ($Totoro->config_array['SV_SETTING'] as $name => $value) {
+                                    ?>
+                                                                <tr>
                                     <td><?php echo $i ?></td>
                                     <td>
                                         <p align="left"><b><?php echo $value['NAME'] ?></b></p>
@@ -97,9 +97,9 @@ foreach ($Totoro->config_array['SV_SETTING'] as $name => $value) {
                                     </td>
                                     <td>(默认：<?php echo $value['DEFAULT'] ?>) <?php echo $value['DESC'] ?></td>
                                 </tr>
-                                <?php
-$i++;
-}
+                                                                <?php
+                                                                $i++;
+                                }
 ?>
                             </tbody>
                         </table>
@@ -119,9 +119,9 @@ $i++;
                             </thead>
                             <tbody>
                                 <?php
-foreach ($Totoro->config_array['BLACK_LIST'] as $name => $value) {
-    ?>
-                                <tr>
+                                foreach ($Totoro->config_array['BLACK_LIST'] as $name => $value) {
+                                    ?>
+                                                                <tr>
                                     <td>
                                         <p align="left"><b><?php echo $value['NAME'] ?></b>
                                             <br/> · <?php echo $value['DESC'] ?></p>
@@ -131,8 +131,8 @@ foreach ($Totoro->config_array['BLACK_LIST'] as $name => $value) {
                                         <textarea class="unescape-textarea" rows="6" style="width:95%" data-tag="TOTORO_BLACK_LIST_<?php echo $name ?>" id="TOTORO_BLACK_LIST_UNESCAPE_<?php echo $name ?>">数据读取中</textarea>
                                     </td>
                                 </tr>
-                                <?php
-}
+                                                                <?php
+                                }
 ?>
                             </tbody>
                         </table>
@@ -152,9 +152,9 @@ foreach ($Totoro->config_array['BLACK_LIST'] as $name => $value) {
                             </thead>
                             <tbody>
                                 <?php
-foreach ($Totoro->config_array['STRING_BACK'] as $name => $value) {
-    ?>
-                                <tr>
+                                foreach ($Totoro->config_array['STRING_BACK'] as $name => $value) {
+                                    ?>
+                                                                <tr>
                                     <td>
                                         <p align="left"><b><?php echo $value['NAME'] ?></b></p>
                                     </td>
@@ -162,8 +162,8 @@ foreach ($Totoro->config_array['STRING_BACK'] as $name => $value) {
                                         <textarea class="unescape-textarea" name="TOTORO_STRING_BACK_<?php echo $name ?>" rows="6" style="width:95%"><?php echo $Totoro->output_config('STRING_BACK', $name, false) ?></textarea>
                                     </td>
                                 </tr>
-                                <?php
-}
+                                                                <?php
+                                }
 ?>
                             </tbody>
                         </table>
@@ -183,9 +183,9 @@ foreach ($Totoro->config_array['STRING_BACK'] as $name => $value) {
                             </thead>
                             <tbody>
                                 <?php
-foreach ($Totoro->config_array['BUILD_CONFIG'] as $name => $value) {
-    ?>
-                                <tr>
+                                foreach ($Totoro->config_array['BUILD_CONFIG'] as $name => $value) {
+                                    ?>
+                                                                <tr>
                                     <td>
                                         <p align="left"><b><?php echo $value['NAME'] ?></b>
                                             <br/> · <?php echo $value['DESC'] ?></p>
@@ -194,8 +194,8 @@ foreach ($Totoro->config_array['BUILD_CONFIG'] as $name => $value) {
                                         <input type="text" class="checkbox" name="TOTORO_BUILD_CONFIG_<?php echo $name ?>" value="<?php echo $Totoro->output_config('BUILD_CONFIG', $name) ?>" />
                                     </td>
                                 </tr>
-                                <?php
-}
+                                                                <?php
+                                }
 ?>
                             </tbody>
                         </table>
@@ -222,10 +222,10 @@ foreach ($Totoro->config_array['BUILD_CONFIG'] as $name => $value) {
                             </thead>
                             <tbody>
                                 <?php
-$i = 1;
-foreach ($Totoro->config_array['SIMILAR_CONFIG'] as $name => $value) {
-    ?>
-                                <tr>
+                                $i = 1;
+                                foreach ($Totoro->config_array['SIMILAR_CONFIG'] as $name => $value) {
+                                    ?>
+                                                                <tr>
                                     <td><?php echo $i ?></td>
                                     <td>
                                         <p align="left"><b><?php echo $value['NAME'] ?></b></p>
@@ -235,9 +235,9 @@ foreach ($Totoro->config_array['SIMILAR_CONFIG'] as $name => $value) {
                                     </td>
                                     <td>(默认：<?php echo $value['DEFAULT'] ?>) <?php echo $value['DESC'] ?></td>
                                 </tr>
-                                <?php
-$i++;
-}
+                                                                <?php
+                                                                $i++;
+                                }
 ?>
                             </tbody>
                         </table>

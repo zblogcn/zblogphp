@@ -1,68 +1,68 @@
 #divMain .DIVBlogConfig {
-	background: #c9dfea;
-	padding: 0px;
-	margin: 0px;
-	position: relative;
+    background: #c9dfea;
+    padding: 0px;
+    margin: 0px;
+    position: relative;
 }
 .DIVBlogConfig #name {
-	padding-right: 15px;
+    padding-right: 15px;
 }
 .DIVBlogConfignav {
-	background: #c9dfea;
-	width: 230px;
-	position: absolute;
-	left: 0px;
-	top: 0px;
+    background: #c9dfea;
+    width: 230px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
 }
 #divMain .DIVBlogConfignav ul li {
-	height: 36px;
-	margin-bottom: 1px;
-	font-size: 14px;
+    height: 36px;
+    margin-bottom: 1px;
+    font-size: 14px;
 }
 #divMain .DIVBlogConfignav ul li a {
-	display: block;
-	height: 36px;
-	line-height: 36px;
-	padding: 0 10px;
-	overflow: hidden;
-	word-break: break-all;
+    display: block;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 10px;
+    overflow: hidden;
+    word-break: break-all;
 }
 #divMain .DIVBlogConfignav ul li a:hover {
-	background: #39F;
-	color: #FFFFFF;
+    background: #39F;
+    color: #FFFFFF;
 }
 #divMain .DIVBlogConfignav ul li a .clicked{
-	background: #3399cc;
-	color: #FFFFFF;
+    background: #3399cc;
+    color: #FFFFFF;
 }
 #divMain .DIVBlogConfigtop {
-	height: 36px;
-	line-height: 36px;
-	font-size: 16px;
-	background: #3399cc;
-	padding-left: 15px;
-	color: #FFFFFF;
+    height: 36px;
+    line-height: 36px;
+    font-size: 16px;
+    background: #3399cc;
+    padding-left: 15px;
+    color: #FFFFFF;
 }
 #divMain .DIVBlogConfigtop a {
-	color: #c9dfea;
+    color: #c9dfea;
 }
 #divMain .DIVBlogConfigtop a:hover {
-	color: #FFFFFF;
+    color: #FFFFFF;
 }
 #divMain .DIVBlogConfigcontent {
-	background: #FFFFFF;
-	margin-left: 230px;
-	min-height: 400px;
-	_height: 400px;
-	padding-left: 10px;
+    background: #FFFFFF;
+    margin-left: 230px;
+    min-height: 400px;
+    _height: 400px;
+    padding-left: 10px;
 }
 .DIVBlogConfigcontentbody {
-	width: 100%;
+    width: 100%;
 }
 table {
-	word-break: break-all;
-	table-layout: fixed;
-	margin-bottom: 10px;
+    word-break: break-all;
+    table-layout: fixed;
+    margin-bottom: 10px;
 }
 
 .hide{display:none}

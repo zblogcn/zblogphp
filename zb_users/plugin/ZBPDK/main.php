@@ -9,8 +9,14 @@ $zbpdk->scan_extensions();
 //var_dump($zbpdk->objects);
 
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('ZBPDK')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
+if (!$zbp->CheckPlugin('ZBPDK')) {
+    $zbp->ShowError(48);
+    die();
+}
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
@@ -31,14 +37,14 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         <td width="120">工具名</td>
         <td>信息</td>
       </tr>
-      <?php
-foreach ($zbpdk->objects as $k => $v) {
-    echo '<tr height="40">';
-    echo '<td>' . ($k + 1) . '</td>';
-    echo '<td>' . "<a href=\"extensions/$v->id/$v->url\" target=\"_blank\">$v->id</a>" . '</td>';
-    echo '<td>' . $v->description . '</td>';
-    echo '</tr>';
-}
+        <?php
+        foreach ($zbpdk->objects as $k => $v) {
+            echo '<tr height="40">';
+            echo '<td>' . ($k + 1) . '</td>';
+            echo '<td>' . "<a href=\"extensions/$v->id/$v->url\" target=\"_blank\">$v->id</a>" . '</td>';
+            echo '<td>' . $v->description . '</td>';
+            echo '</tr>';
+        }
 ?>
     </table>
   </div>

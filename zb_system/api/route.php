@@ -5,7 +5,8 @@
  * @package api/route
  * @php >= 5.2
  */
-class API_Route {
+class API_Route
+{
     /**
      * Instance
      */
@@ -42,7 +43,8 @@ class API_Route {
      * To return instance
      * @return API_Route
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
 
         if (is_null(self::$instance)) {
             $class = __CLASS__;
@@ -55,16 +57,18 @@ class API_Route {
     /**
      * To avoid clone
      */
-    public function __clone() {
+    public function __clone()
+    {
         throw new Exception("Singleton Class Can Not Be Cloned");
     }
 
     /**
      * To build callback to tree
-     * @param  array &$tree   
+     * @param  array &$tree
      * @param  callable $callback
      */
-    private static function buildCallback(&$tree, $callback) {
+    private static function buildCallback(&$tree, $callback)
+    {
         if (isset($tree['__callback'])) {
             array_push($tree['__callback'], $callback);
         } else {
@@ -77,7 +81,8 @@ class API_Route {
      * @param  array $callbackTree
      * @return
      */
-    private static function callBack($callbackTree) {
+    private static function callBack($callbackTree)
+    {
         foreach ($callbackTree['__callback'] as $value) {
             $value();
         }
@@ -89,13 +94,16 @@ class API_Route {
      * @param array $tree
      * @return bool
      */
-    private static function buildTree($deep, $array, &$tree, $callback) {
+    private static function buildTree($deep, $array, &$tree, $callback)
+    {
 
         if ($deep == count($array) - 1) {
             self::buildCallback($tree, $callback); // Register callback in the deepest path.
             return;
         }
-        if (self::$debug) {echo 'deep = ' . $deep . ', $array[$deep] = ' . $array[$deep] . "\n";}
+        if (self::$debug) {
+            echo 'deep = ' . $deep . ', $array[$deep] = ' . $array[$deep] . "\n";
+        }
         $val = $array[$deep];
 
         $childTree = &$tree;
@@ -115,7 +123,8 @@ class API_Route {
      * @param callable $callback
      * @return bool
      */
-    private static function buildRegExpList($regex, &$list, $callback) {
+    private static function buildRegExpList($regex, &$list, $callback)
+    {
         $list[$regex] = $callback;
 
         return true;
@@ -128,7 +137,8 @@ class API_Route {
      * @param array $tree
      * @return bool
      */
-    private static function _analyze($deep, $array, $tree) {
+    private static function _analyze($deep, $array, $tree)
+    {
         //echo $deep;
         $val = $array[$deep];
 
@@ -138,7 +148,9 @@ class API_Route {
             }
 
             $str = preg_quote($key);
-            if ($key === "" && $val !== "") continue;
+            if ($key === "" && $val !== "") {
+                continue;
+            }
             $str = str_replace('\\*', '.*?', $str);
             $str = str_replace('\\?', '.', $str);
             $str = "/" . $str . "/"; // Build RegExp for test
@@ -171,15 +183,17 @@ class API_Route {
      * @param array $array
      * @return bool
      */
-    private static function _checkRegExp($path, $array) {
+    private static function _checkRegExp($path, $array)
+    {
         foreach ($array as $key => $value) {
-            if (self::$debug) {echo "Check RegExp: " . $value . " , Result: " . (preg_match($value, $path) ? "True" : "False") . "\n";}
+            if (self::$debug) {
+                echo "Check RegExp: " . $value . " , Result: " . (preg_match($value, $path) ? "True" : "False") . "\n";
+            }
             if (preg_match($key, $path)) {
                 $value();
 
                 return true;
             }
-
         }
 
         return false;
@@ -192,18 +206,19 @@ class API_Route {
      * @param  string $method
      * @return boolean
      */
-    public static function route($url, $callback, $method = "GLOBAL") {
+    public static function route($url, $callback, $method = "GLOBAL")
+    {
 
         //if (@preg_match($url, null) === false) {
             // Test if string is not regex
             $urlArray = explode("/", $url);
-            if (count($urlArray) < 0) {
-                return false;
-            }
+        if (count($urlArray) < 0) {
+            return false;
+        }
 
-            if ($urlArray[0] == "" && count($urlArray) > 1) {
-                array_shift($urlArray);
-            }
+        if ($urlArray[0] == "" && count($urlArray) > 1) {
+            array_shift($urlArray);
+        }
             //if ($method == "GLOBAL") var_dump($urlArray);
 
             return self::buildTree(0, $urlArray, self::$_ruleTree[$method], $callback);
@@ -218,7 +233,8 @@ class API_Route {
      * @param  callable $callback
      * @return boolean
      */
-    public static function get($url, $callback) {
+    public static function get($url, $callback)
+    {
         // I have to write dulipated functions instead of __callStatic.
         // Because __callStatic was added since PHP 5.3.0.
         // So that, let's fuck PHP 5.2 together!
@@ -231,7 +247,8 @@ class API_Route {
      * @param  callable $callback
      * @return boolean
      */
-    public static function post($url, $callback) {
+    public static function post($url, $callback)
+    {
         return self::route($url, $callback, "POST");
     }
 
@@ -241,7 +258,8 @@ class API_Route {
      * @param string $url
      * @return bool
      */
-    public static function scanRoute($requestMethod, $url) {
+    public static function scanRoute($requestMethod, $url)
+    {
 
         $urlArray = explode("/", $url);
         if ($urlArray[0] == "") {
@@ -258,7 +276,5 @@ class API_Route {
             //self::_checkRegExp($url, self::$_regExList[$item]);
             self::_analyze(0, $urlArray, self::$_ruleTree[$item]);
         }
-
     }
-
 }

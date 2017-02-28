@@ -6,23 +6,28 @@ require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
 
-if (!$zbp->CheckPlugin('RegPage')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckPlugin('RegPage')) {
+    $zbp->ShowError(48);
+    die();
+}
 
 $blogtitle = '注册组件';
 
-if(count($_POST) > 0){
-
-    if(GetVars('reset', 'POST') == 'add'){
+if (count($_POST) > 0) {
+    if (GetVars('reset', 'POST') == 'add') {
         RegPage_CreateCode(1000);
     }
 
-    if(GetVars('reset', 'POST') == 'del'){
+    if (GetVars('reset', 'POST') == 'del') {
         RegPage_DelUsedCode();
     }
 
-    if(GetVars('reset', 'POST') == 'ept'){
+    if (GetVars('reset', 'POST') == 'ept') {
         RegPage_EmptyCode();
     }
     
@@ -43,23 +48,23 @@ require $blogpath . 'zb_system/admin/admin_top.php';
  <a href="main_code.php"><span class="m-left m-now">邀请码管理</span></a>
 </div>
   <div id="divMain2">
-	<form id="edit" name="edit" method="post" action="#">
+    <form id="edit" name="edit" method="post" action="#">
 <input id="reset" name="reset" type="hidden" value="" />
-	  <hr/>
-	  <p>
-		<input type="submit" class="button" onclick="$('#reset').val('add');" value="生成1000个邀请码" />
+      <hr/>
+      <p>
+        <input type="submit" class="button" onclick="$('#reset').val('add');" value="生成1000个邀请码" />
 
-		<input type="submit" class="button" onclick="$('#reset').val('del');" value="删除已使用过的邀请码" />
-		
-		<input type="submit" class="button" onclick="$('#reset').val('ept');" value="清空所有邀请码" />
-	  </p>
-	  <hr/>
+        <input type="submit" class="button" onclick="$('#reset').val('del');" value="删除已使用过的邀请码" />
+        
+        <input type="submit" class="button" onclick="$('#reset').val('ept');" value="清空所有邀请码" />
+      </p>
+      <hr/>
 <table border="1" class="tableFull tableBorder">
 <tr>
-	<th class="td10"></th>
-	<th >邀请码</th>
-	<th >用户级别(组)</th>
-	<th >注册用户</th>
+    <th class="td10"></th>
+    <th >邀请码</th>
+    <th >用户级别(组)</th>
+    <th >注册用户</th>
 </tr>
 <?php
 $sql = $zbp->db->sql->Select($RegPage_Table, '*', null, null, null, null);
@@ -78,9 +83,9 @@ foreach ($array as $key => $reg) {
 
 
 
-	</form>
-	<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/RegPage/logo.png';?>");</script>	
+    </form>
+    <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/RegPage/logo.png';?>");</script>  
   </div>
 </div>
 

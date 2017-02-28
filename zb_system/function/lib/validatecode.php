@@ -16,7 +16,8 @@
  * @see https://github.com/Gregwar/Captcha
  * @license MIT
  */
-class ValidateCode {
+class ValidateCode
+{
     /**
      * @var array
      */
@@ -98,7 +99,8 @@ class ValidateCode {
     /**
      * The image contents
      */
-    public function getContents() {
+    public function getContents()
+    {
         return $this->contents;
     }
 
@@ -109,13 +111,15 @@ class ValidateCode {
      *
      * @return CaptchaBuilder
      */
-    public function setInterpolation($interpolate = true) {
+    public function setInterpolation($interpolate = true)
+    {
         $this->interpolation = $interpolate;
 
         return $this;
     }
 
-    public function __construct() {
+    public function __construct()
+    {
         global $zbp;
         $this->font = $zbp->path . (isset($zbp->option['ZC_VERIFYCODE_FONT']) ? $zbp->option['ZC_VERIFYCODE_FONT'] : 'zb_system/defend/arial.ttf');
         $this->charset = $zbp->option['ZC_VERIFYCODE_STRING'];
@@ -126,7 +130,8 @@ class ValidateCode {
     /**
      * 生成随机码
      */
-    protected function createCode($n = null) {
+    protected function createCode($n = null)
+    {
         if ($n !== null) {
             $this->phrase = (string) $n;
 
@@ -141,38 +146,44 @@ class ValidateCode {
     /**
      * Setting the phrase
      */
-    public function setPhrase($phrase) {
+    public function setPhrase($phrase)
+    {
         $this->phrase = (string) $phrase;
     }
 
     /**
      * Enables/disable distortion
      */
-    public function setDistortion($distortion) {
+    public function setDistortion($distortion)
+    {
         $this->distortion = (bool) $distortion;
 
         return $this;
     }
 
-    public function setMaxBehindLines($maxBehindLines) {
+    public function setMaxBehindLines($maxBehindLines)
+    {
         $this->maxBehindLines = $maxBehindLines;
 
         return $this;
     }
 
-    public function setMaxFrontLines($maxFrontLines) {
+    public function setMaxFrontLines($maxFrontLines)
+    {
         $this->maxFrontLines = $maxFrontLines;
 
         return $this;
     }
 
-    public function setMaxAngle($maxAngle) {
+    public function setMaxAngle($maxAngle)
+    {
         $this->maxAngle = $maxAngle;
 
         return $this;
     }
 
-    public function setMaxOffset($maxOffset) {
+    public function setMaxOffset($maxOffset)
+    {
         $this->maxOffset = $maxOffset;
 
         return $this;
@@ -181,21 +192,24 @@ class ValidateCode {
     /**
      * Gets the captcha phrase
      */
-    public function getPhrase() {
+    public function getPhrase()
+    {
         return strtolower($this->phrase);
     }
 
     /**
      * Instantiation
      */
-    public static function create($phrase = null) {
+    public static function create($phrase = null)
+    {
         return new self($phrase);
     }
 
     /**
      * Sets the text color to use
      */
-    public function setTextColor($r, $g, $b) {
+    public function setTextColor($r, $g, $b)
+    {
         $this->textColor = array($r, $g, $b);
 
         return $this;
@@ -204,7 +218,8 @@ class ValidateCode {
     /**
      * Sets the background color to use
      */
-    public function setBackgroundColor($r, $g, $b) {
+    public function setBackgroundColor($r, $g, $b)
+    {
         $this->backgroundColor = array($r, $g, $b);
 
         return $this;
@@ -216,7 +231,8 @@ class ValidateCode {
      * @param bool $ignoreAllEffects
      * @return CaptchaBuilder
      */
-    public function setIgnoreAllEffects($ignoreAllEffects) {
+    public function setIgnoreAllEffects($ignoreAllEffects)
+    {
         $this->ignoreAllEffects = $ignoreAllEffects;
 
         return $this;
@@ -225,7 +241,8 @@ class ValidateCode {
     /**
      * Sets the list of background images to use (one image is randomly selected)
      */
-    public function setBackgroundImages(array $backgroundImages) {
+    public function setBackgroundImages(array $backgroundImages)
+    {
         $this->backgroundImages = $backgroundImages;
 
         return $this;
@@ -234,7 +251,8 @@ class ValidateCode {
     /**
      * Draw lines over the image
      */
-    protected function drawLine($image, $width, $height, $tcol = null) {
+    protected function drawLine($image, $width, $height, $tcol = null)
+    {
         if ($tcol === null) {
             $tcol = imagecolorallocate($image, $this->rand(100, 255), $this->rand(100, 255), $this->rand(100, 255));
         }
@@ -257,7 +275,8 @@ class ValidateCode {
     /**
      * Apply some post effects
      */
-    protected function postEffect($image) {
+    protected function postEffect($image)
+    {
         if (!function_exists('imagefilter')) {
             return;
         }
@@ -288,7 +307,8 @@ class ValidateCode {
     /**
      * Writes the phrase on the image
      */
-    protected function writePhrase($image, $phrase, $font, $width, $height) {
+    protected function writePhrase($image, $phrase, $font, $width, $height)
+    {
 
         $length = strlen($phrase);
         if ($length === 0) {
@@ -326,7 +346,8 @@ class ValidateCode {
     /**
      * Generate the image
      */
-    public function build($fingerprint = null) {
+    public function build($fingerprint = null)
+    {
         $width = $this->width;
         $height = $this->height;
         if (null !== $fingerprint) {
@@ -403,7 +424,8 @@ class ValidateCode {
     /**
      * Distorts the image
      */
-    public function distort($image, $width, $height, $bg) {
+    public function distort($image, $width, $height, $bg)
+    {
         $contents = imagecreatetruecolor($width, $height);
         $X          = $this->rand(0, $width);
         $Y          = $this->rand(0, $height);
@@ -452,14 +474,16 @@ class ValidateCode {
     /**
      * Gets the image GD
      */
-    public function getGd() {
+    public function getGd()
+    {
         return $this->contents;
     }
 
     /**
      * Gets the image contents
      */
-    public function get($quality = 90) {
+    public function get($quality = 90)
+    {
         ob_start();
         $this->directOutput($quality);
 
@@ -469,21 +493,24 @@ class ValidateCode {
     /**
      * Gets the HTML inline base64
      */
-    public function inline($quality = 90) {
+    public function inline($quality = 90)
+    {
         return 'data:image/jpeg;base64,' . base64_encode($this->get($quality));
     }
 
     /**
      * Outputs the image
      */
-    public function directOutput($quality = 90) {
+    public function directOutput($quality = 90)
+    {
         imagejpeg($this->contents, null, $quality);
     }
 
     /**
      * Outputs the image
      */
-    public function output($n = null) {
+    public function output($n = null)
+    {
         header('Content-type: image/jpeg');
         $this->createCode($n);
         $this->build();
@@ -493,14 +520,16 @@ class ValidateCode {
     /**
      * 对外生成
      */
-    public function GetImg($n = null) {
+    public function GetImg($n = null)
+    {
         $this->outPut($n);
     }
 
     /**
      * @return array
      */
-    public function getFingerprint() {
+    public function getFingerprint()
+    {
         return $this->fingerprint;
     }
 
@@ -508,7 +537,8 @@ class ValidateCode {
      * Returns a random number or the next number in the
      * fingerprint
      */
-    protected function rand($min, $max) {
+    protected function rand($min, $max)
+    {
         if (!is_array($this->fingerprint)) {
             $this->fingerprint = array();
         }
@@ -534,7 +564,8 @@ class ValidateCode {
      *
      * @return int
      */
-    protected function interpolate($x, $y, $nw, $ne, $sw, $se) {
+    protected function interpolate($x, $y, $nw, $ne, $sw, $se)
+    {
         list($r0, $g0, $b0) = $this->getRGB($nw);
         list($r1, $g1, $b1) = $this->getRGB($ne);
         list($r2, $g2, $b2) = $this->getRGB($sw);
@@ -565,7 +596,8 @@ class ValidateCode {
      *
      * @return int
      */
-    protected function getCol($image, $x, $y, $background) {
+    protected function getCol($image, $x, $y, $background)
+    {
         $L = imagesx($image);
         $H = imagesy($image);
         if ($x < 0 || $x >= $L || $y < 0 || $y >= $H) {
@@ -580,7 +612,8 @@ class ValidateCode {
      *
      * @return array
      */
-    protected function getRGB($col) {
+    protected function getRGB($col)
+    {
         return array(
             (int) ($col >> 16) & 0xff,
             (int) ($col >> 8) & 0xff,
@@ -592,8 +625,8 @@ class ValidateCode {
      * 获取验证码
      * @return string
      */
-    public function GetCode() {
+    public function GetCode()
+    {
         return $this->getPhrase();
     }
-
 }

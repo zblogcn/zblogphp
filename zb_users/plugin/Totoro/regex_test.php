@@ -4,8 +4,14 @@ require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('Totoro')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
+if (!$zbp->CheckPlugin('Totoro')) {
+    $zbp->ShowError(48);
+    die();
+}
 Totoro_init();
 $blogtitle = 'Totoro反垃圾评论';
 
@@ -39,7 +45,6 @@ Response.Write h
 Response.End
  */
 if (GetVars('type', 'GET') == 'test') {
-
     set_error_handler(create_function('', ''));
     set_exception_handler(create_function('', ''));
     register_shutdown_function(create_function('', ''));
@@ -67,7 +72,7 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <style type="text/css">
 .text-config {
-	width: 95%
+    width: 95%
 }
 </style>
 <?php
@@ -102,16 +107,16 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </div>
 <script type="text/javascript">
 $(document).ready(function(e) {
-	$("#buttonsubmit").bind("click",function(){
-		var o = $.ajax({
-			url : "regex_test.php?type=test",
-			async : false,
-			type : "POST",
-			data : {"string":$("#test").attr("value"),"regexp":$("#regexp").attr("value")},
-			dataType : "script"
-		});
-		$("#result").html(o.responseText);
-	});
+    $("#buttonsubmit").bind("click",function(){
+        var o = $.ajax({
+            url : "regex_test.php?type=test",
+            async : false,
+            type : "POST",
+            data : {"string":$("#test").attr("value"),"regexp":$("#regexp").attr("value")},
+            dataType : "script"
+        });
+        $("#result").html(o.responseText);
+    });
 });
 </script>
 <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>

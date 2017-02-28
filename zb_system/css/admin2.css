@@ -264,7 +264,7 @@ div.theme-other .betterTip img { border: 2px solid #f6f6f6; }
 div.theme-other .betterTip img { box-shadow: 0 0 10px #aaa; }
 div.theme-other .betterTip img:hover { border: 2px solid #b0cdee; box-shadow: 0 0 10px #3399cc; }
 div.theme-now div,
-div.theme-other div { max-width: 220px;	/*overflow:hidden;*/ padding: 0.5em 0 0.5em 0; }
+div.theme-other div { max-width: 220px;     /*overflow:hidden;*/ padding: 0.5em 0 0.5em 0; }
 input.theme-config,
 input.theme-activate { float: right; height: 26px; width: 46px; margin: 0; padding: 2px 5px 3px 5px; font-size: 1em; }
 input.theme-config { margin-top: -3px; }

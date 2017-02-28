@@ -1,6 +1,7 @@
 <?php
 return 'name_value';
-function name_value($author, $content, $orig_content, &$sv, $config_sv, $config_array) {
+function name_value($author, $content, $orig_content, &$sv, $config_sv, $config_array)
+{
     global $zbp;
     $count = 0;
     $sql = $zbp->db->sql->Select(
@@ -33,5 +34,4 @@ function name_value($author, $content, $orig_content, &$sv, $config_sv, $config_
     } elseif ($count > 50) {
         $sv += -10 - 3 * $config_sv;
     }
-
 };

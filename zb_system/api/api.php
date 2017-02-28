@@ -13,7 +13,8 @@ require API_PATH . '/user.php';
 /**
  * API Singleton
  */
-class API {
+class API
+{
     /**
      * Instance
      */
@@ -34,7 +35,8 @@ class API {
      * To avoid construct outside this class.
      * @private
      */
-    private function __construct() {
+    private function __construct()
+    {
         // Do nothing
     }
 
@@ -42,7 +44,8 @@ class API {
      * To return instance
      * @return API
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
 
         if (is_null(self::$instance)) {
             $class = __CLASS__;
@@ -55,7 +58,8 @@ class API {
     /**
      * To avoid clone
      */
-    public function __clone() {
+    public function __clone()
+    {
         throw new Exception("Singleton Class Can Not Be Cloned");
     }
 
@@ -63,7 +67,8 @@ class API {
      * Init class
      * @return true
      */
-    public static function init() {
+    public static function init()
+    {
 
         global $zbp;
         // Set Z-BlogPHP Enviroment
@@ -83,5 +88,4 @@ class API {
 
         return true;
     }
-
 }
