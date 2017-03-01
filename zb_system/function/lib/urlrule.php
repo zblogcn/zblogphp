@@ -21,6 +21,10 @@ class UrlRule
      * @var bool
      */
     public $MakeReplace = true;
+    /**
+     * @var bool
+     */
+    public $IsIndex = false;//指示是否为首页的规则
 
     public static $categorylayer = '-1';
 
@@ -74,7 +78,8 @@ class UrlRule
             $this->Rules['{%page%}'] = '';
         }
         if ($this->Rules['{%page%}'] == '') {
-            if (substr_count($s, '{%page%}') == 1 && substr_count($s, '{') == 2 && substr_count($s, '&') == 0) {
+            if ($this->Isindex == true){
+            //if (substr_count($s, '{%page%}') == 1 && substr_count($s, '{') == 2 && substr_count($s, '&') == 0) {
                 $s = $zbp->host;
             }
             if (stripos($s, '_{%page%}')!==false) {
@@ -155,7 +160,7 @@ class UrlRule
             $url = $url . '$';
             $url = str_replace('%poaogoe%', '(?P<page>[0-9]*)', $url);
         }
-        if ($type == 'cate' || $type == 'tags' || $type == 'date' || $type == 'auth') {
+        if ($type == 'cate' || $type == 'tags' || $type == 'date' || $type == 'auth' || $type == 'list') {
             $url = str_replace('%page%', '%poaogoe%', $url);
             preg_match('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', $s, $matches);
             if (isset($matches[0])) {
@@ -424,7 +429,7 @@ class UrlRule
             $url = $url . ' ' . $zbp->cookiespath . 'index\.php\?page=$1&rewrite=1';
             $url = str_replace('%poaogoe%', '([0-9]*)', $url);
         }
-        if ($type == 'cate' || $type == 'tags' || $type == 'date' || $type == 'auth') {
+        if ($type == 'cate' || $type == 'tags' || $type == 'date' || $type == 'auth' || $type == 'list') {
             $url = str_replace('%page%', '%poaogoe%', $url);
             preg_match('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', $s, $matches);
             if (isset($matches[0])) {

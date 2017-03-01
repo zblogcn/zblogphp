@@ -708,7 +708,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
     switch ($type) {
     ########################################################################################################
         case 'index':
-            $pagebar = new Pagebar($zbp->option['ZC_INDEX_REGEX']);
+            $pagebar = new Pagebar($zbp->option['ZC_INDEX_REGEX'], true ,true);
             $pagebar->Count = $zbp->cache->normal_article_nums;
             $template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
             if ($page == 1) {

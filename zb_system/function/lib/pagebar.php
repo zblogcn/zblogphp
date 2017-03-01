@@ -77,10 +77,11 @@ class PageBar
      * @param $url
      * @param bool $makereplace
      */
-    public function __construct($url, $makereplace = true)
+    public function __construct($url, $makereplace = true, $isindex = false)
     {
         $this->UrlRule = new UrlRule($url);
         $this->UrlRule->MakeReplace = $makereplace;
+        $this->UrlRule->IsIndex = $isindex;
         $this->Buttons = &$this->buttons;
         $this->PrevButton = &$this->prevbutton;
         $this->NextButton = &$this->nextbutton;
