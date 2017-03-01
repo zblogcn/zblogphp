@@ -300,6 +300,25 @@ function GetValueInArrayByCurrent($array, $name)
 }
 
 /**
+ * 分割string并取某项数据
+ */
+function SplitAndGet($s,$t=';',$n=0){
+    $a = explode($t,$s);
+    if(is_array($a)==false)
+        $a=array();
+    if( isset($a[$n]) ){
+        return $a[$n];
+    }
+}
+
+/**
+ * 消连续空格
+ */
+function RemoveMoreSpaces($s){
+    return preg_replace("/\s(?=\s)/","\\1",$s);
+}
+
+/**
  * 获取Guid
  * @return string
  */
