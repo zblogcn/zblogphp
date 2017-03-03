@@ -17,7 +17,7 @@ function ActivePlugin_LargeData()
     if ($zbp->option['ZC_LARGE_DATA'] == true && $zbp->db->type == 'mysql') {
         Add_Filter_Plugin('Filter_Plugin_Misc_Begin', 'LargeData_Misc_Begin');
         Add_Filter_Plugin('Filter_Plugin_Zbp_Load', 'LargeData_Zbp_Begin');
-        Add_Filter_Plugin('Filter_Plugin_LargeData_Aritcle', 'LargeData_Aritcle');
+        Add_Filter_Plugin('Filter_Plugin_LargeData_Article', 'LargeData_Article');
         Add_Filter_Plugin('Filter_Plugin_LargeData_Page', 'LargeData_Page');
         Add_Filter_Plugin('Filter_Plugin_LargeData_Comment', 'LargeData_Comment');
         Add_Filter_Plugin('Filter_Plugin_LargeData_CountTagArray', 'LargeData_CountTagArray');
@@ -85,6 +85,7 @@ function LargeData_LoadTagsByIDString($s)
     $s = str_replace('{', '', $s);
     $s = str_replace('}', '', $s);
     $a = explode('|', $s);
+
     return $a;
 }
 
@@ -128,7 +129,7 @@ function LargeData_Insert_Post2Tag($log_id, $array_tag)
     }
 }
 
-function LargeData_Aritcle(&$select, &$where, &$order, &$limit, &$option)
+function LargeData_Article(&$select, &$where, &$order, &$limit, &$option)
 {
     global $zbp;
     $tag_id = null;
