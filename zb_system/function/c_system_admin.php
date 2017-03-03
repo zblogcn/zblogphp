@@ -228,6 +228,27 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
 
 ################################################################################################################
 /**
+ * 生成TYPEselect表单
+ * @param $default
+ * @return null|string
+ */
+function OutputOptionItemsOfType($default) {
+    global $zbp;
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfType'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($default);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+    }
+
+    $s = null;
+    foreach ($zbp->posttype as $key => $value) {
+        $s .= '<option ' . ($default == $key ? 'selected="selected"' : '') . ' value="' . $key . '">' . $value[0] . '</option>';
+    }
+
+    return $s;
+}
+
+/**
  * 生成分类select表单
  * @param $default
  * @return null|string
@@ -300,6 +321,14 @@ function OutputOptionItemsOfTemplate($default)
 function OutputOptionItemsOfMemberLevel($default)
 {
     global $zbp;
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfMemberLevel'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($default);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
+    }
 
     $s = null;
     if (!$zbp->CheckRights('MemberAll')) {

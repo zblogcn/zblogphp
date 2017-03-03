@@ -978,6 +978,29 @@ DefinePluginFilter('Filter_Plugin_Admin_Js_Add');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_OutputOptionItemsOfType
+'参数:
+'说明:定义OutputOptionItemsOfType函数里的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfType');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_OutputOptionItemsOfMemberLevel
+'参数:
+'说明:定义OutputOptionItemsOfMemberLevel函数里的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfMemberLevel');
+
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_OutputOptionItemsOfCategories
 '参数:
 '说明:定义OutputOptionItemsOfCategories函数里的接口
