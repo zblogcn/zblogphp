@@ -78,7 +78,7 @@ class UrlRule
             $this->Rules['{%page%}'] = '';
         }
         if ($this->Rules['{%page%}'] == '') {
-            if ($this->Isindex == true){
+            if ($this->IsIndex == true){
             //if (substr_count($s, '{%page%}') == 1 && substr_count($s, '{') == 2 && substr_count($s, '&') == 0) {
                 $s = $zbp->host;
             }
