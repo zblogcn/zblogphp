@@ -21,9 +21,17 @@ function ActivePlugin_LargeData()
         Add_Filter_Plugin('Filter_Plugin_LargeData_Page', 'LargeData_Page');
         Add_Filter_Plugin('Filter_Plugin_LargeData_Comment', 'LargeData_Comment');
         Add_Filter_Plugin('Filter_Plugin_LargeData_CountTagArray', 'LargeData_CountTagArray');
+        Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed', 'LargeData_PostArticle_Succeed');
         Add_Filter_Plugin('Filter_Plugin_Post_Del', 'LargeData_Post_Del');
         Add_Filter_Plugin('Filter_Plugin_Tag_Del', 'LargeData_Tag_Del');
     }
+}
+
+function LargeData_PostArticle_Succeed(&$article)
+{
+    LargeData_Delete_Post2Tag_ByLogID($article->ID);
+    $array_tag = LargeData_LoadTagsByIDString($article->Tag);
+    LargeData_Insert_Post2Tag($article->ID, $array_tag);
 }
 
 function LargeData_Post_Del(&$post)
@@ -296,6 +304,8 @@ function LargeData_Misc_Begin($type)
         die();
     }
 }
+
+
 
 function LargeData_Misc_Statistic()
 {
