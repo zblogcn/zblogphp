@@ -93,15 +93,15 @@ define('ZC_POST_TYPE_ALBUM', 8); // 相册
  * @param  id=>{name,url,template}
  */
 $GLOBALS['posttype'] = array(
-    array('article', '', ''),
-    array('page', '', ''),
-    array('tweet', '', ''),
-    array('discussion', '', ''),
-    array('link', '', ''),
-    array('music', '', ''),
-    array('video', '', ''),
-    array('photo', '', ''),
-    array('album', '', ''),
+    array('article', '', '', 0, 0),
+    array('page', '', '', null, null),
+    array('tweet', '', '', null, null),
+    array('discussion', '', '', null, null),
+    array('link', '', '', null, null),
+    array('music', '', '', null, null),
+    array('video', '', '', null, null),
+    array('photo', '', '', null, null),
+    array('album', '', '', null, null),
 );
 
 /**

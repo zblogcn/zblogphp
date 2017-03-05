@@ -407,8 +407,8 @@ class ZBlogPHP
         $this->LoadCache();
         $this->LoadOption();
 
-        $this->RegPostType(0, 'article', $this->option['ZC_ARTICLE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE']);
-        $this->RegPostType(1, 'page', $this->option['ZC_PAGE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE']);
+        $this->RegPostType(0, 'article', $this->option['ZC_ARTICLE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE'], 0, 0);
+        $this->RegPostType(1, 'page', $this->option['ZC_PAGE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE'], null, null);
 
         if ($this->option['ZC_BLOG_LANGUAGEPACK'] === 'SimpChinese') {
             $this->option['ZC_BLOG_LANGUAGEPACK'] = 'zh-cn';
@@ -2996,8 +2996,10 @@ class ZBlogPHP
      * int $typeid 系统定义在0-99，插件自定义100-255
      * string $urlrule 默认是取Page类型的Url Rule
      * string $template 默认模板名page
+     * string $catetype 当前文章类的分类Type
+     * string $tagtype 当前文章类的标签Type
      */
-    public function RegPostType($typeid, $name, $urlrule = '', $template = 'page')
+    public function RegPostType($typeid, $name, $urlrule = '', $template = 'single', $catetype = null, $tagtype = null)
     {
         if ($urlrule == '') {
             $urlrule = $this->option['ZC_PAGE_REGEX'];
@@ -3010,7 +3012,7 @@ class ZBlogPHP
                 $this->ShowError(87, __FILE__, __LINE__);
             }
         }
-        $this->posttype[$typeid] = array($name, $urlrule, $template);
+        $this->posttype[$typeid] = array($name, $urlrule, $template, $catetype, $tagtype);
     }
     public function GetPostType_Name($typeid)
     {
@@ -3036,7 +3038,30 @@ class ZBlogPHP
 
         return 'single';
     }
+    public function GetPostType_CategoryType($typeid)
+    {
+        if (isset($this->posttype[$typeid])) {
+            return $this->posttype[$typeid][3];
+        }
 
+        return null;
+    }
+    public function GetPostType_TagType($typeid)
+    {
+        if (isset($this->posttype[$typeid])) {
+            return $this->posttype[$typeid][4];
+        }
+
+        return null;
+    }
+    public function GetPostTypeIDByName($name)
+    {
+        foreach ($this->posttype as $key => $value) {
+            if($name == $this->posttype[$typeid][0])
+                return $key;
+        }
+        return null;
+    }
     /**
      * 注册Action
      */
