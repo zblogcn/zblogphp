@@ -347,6 +347,19 @@ div.bg {background: #777bb4!important;}
         }
         echo '</tbody></table>';
 
+        $ca = get_defined_functions();
+        $i = 0;
+        echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">User Functions</th></tr>';
+        foreach ($ca as $key => $value) {
+        	if($key!=='user')continue;
+            foreach ($value as $key2 => $value2) {
+                $i ++;
+                echo '<tr><td class="e">'.$i.'</td><td class="v">' .$value2 .'</td></tr>';
+            }
+        }
+        echo '</tbody></table>';
+
+
         echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Others</th></tr>';
         if (function_exists('php_uname')) {
                 echo '<tr><td class="e">'.'php_uname()'.'</td><td class="v">' .php_uname() .'</td></tr>';
