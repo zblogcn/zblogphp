@@ -2552,16 +2552,16 @@ class ZBlogPHP
     /**
      * 获取全部置顶文章（优先从cache里读数组）
      */
-    public function GetTopArticle()
-    {
-        if ($this->cache->HasKey('top_post_array') == false) {
+    public function GetTopArticle($type=0) {
+        $varname='top_post_array_' . $type;
+        if ($this->cache->HasKey($varname) == false) {
             return array();
         }
 
-        $articles_top_notorder_idarray = unserialize($this->cache->top_post_array);
+        $articles_top_notorder_idarray = unserialize($this->cache->$varname);
         if (!is_array($articles_top_notorder_idarray)) {
-            CountTopArticle(null, null);
-            $articles_top_notorder_idarray = unserialize($this->cache->top_post_array);
+            CountTopArticle($type, null, null);
+            $articles_top_notorder_idarray = unserialize($this->cache->$varname);
         }
         $articles_top_notorder = $this->GetPostByArray($articles_top_notorder_idarray);
 

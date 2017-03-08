@@ -1433,9 +1433,9 @@ function PostArticle()
         }
     }
     if ($article->IsTop == true && $article->Status == ZC_POST_STATUS_PUBLIC) {
-        CountTopArticle($article->ID, null);
+        CountTopArticle($article->Type, $article->ID, null);
     } else {
-        CountTopArticle(null, $article->ID);
+        CountTopArticle($article->Type, null, $article->ID);
     }
 
     $zbp->AddBuildModule('previous');
@@ -1486,7 +1486,7 @@ function DelArticle()
             CountNormalArticleNums(-1);
         }
         if ($article->IsTop == true) {
-            CountTopArticle(null, $article->ID);
+            CountTopArticle($article->Type, null, $article->ID);
         }
 
         $zbp->AddBuildModule('previous');
@@ -2985,17 +2985,16 @@ function FilterTag(&$tag)
  *统计置顶文章数组
  * @param int $plus 控制是否要进行全表扫描
  */
-function CountTopArticle($addplus = null, $delplus = null)
-{
+function CountTopArticle($type = 0,$addplus = null, $delplus = null) {
     global $zbp;
-
-    $array = unserialize($zbp->cache->top_post_array);
+    $varname='top_post_array_' . $type;
+    $array = unserialize($zbp->cache->$varname);
     if (!is_array($array)) {
         $array = array();
     }
 
     if ($addplus === null && $delplus === null) {
-        $s = $zbp->db->sql->Select($zbp->table['Post'], 'log_ID', array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), null, null, null);
+        $s = $zbp->db->sql->Select($zbp->table['Post'], 'log_ID', array(array('=', 'log_Type', $type), array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), null, null, null);
         $a = $zbp->db->Query($s);
         foreach ($a as $id) {
             $array[(int) current($id)] = (int) current($id);
@@ -3008,7 +3007,7 @@ function CountTopArticle($addplus = null, $delplus = null)
         unset($array[$delplus]);
     }
 
-    $zbp->cache->top_post_array = serialize($array);
+    $zbp->cache->$varname = serialize($array);
 }
 
 /**
