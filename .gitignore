@@ -83,3 +83,4 @@ wincache.php
 /Beta/
 /vendor/
 /.idea/
+composer.lock
