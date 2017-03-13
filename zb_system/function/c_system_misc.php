@@ -5,6 +5,7 @@
  * @subpackage System\Misc 摘取信息
  * @copyright (C) RainbowSoft Studio
  */
+require 'c_system_common.php'；
 
 ob_clean();
 
