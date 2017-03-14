@@ -6,52 +6,6 @@
  * @copyright (C) RainbowSoft Studio
  */
 
-ob_clean();
-
-$type = GetVars('type', 'GET');
-
-foreach ($GLOBALS['hooks']['Filter_Plugin_Misc_Begin'] as $fpname => &$fpsignal) {
-    $fpname($type);
-}
-
-switch ($type) {
-    case 'statistic':
-        if (!$zbp->CheckRights('admin')) {
-            echo $zbp->ShowError(6, __FILE__, __LINE__);
-            die();
-        }
-        misc_statistic();
-        break;
-    case 'updateinfo':
-        if (!$zbp->CheckRights('root')) {
-            echo $zbp->ShowError(6, __FILE__, __LINE__);
-            die();
-        }
-        misc_updateinfo();
-        break;
-    case 'showtags':
-        if (!$zbp->CheckRights('ArticleEdt')) {
-            Http404();
-            die();
-        }
-        misc_showtags();
-        break;
-    case 'vrs':
-        if (!$zbp->CheckRights('misc')) {
-            $zbp->ShowError(6, __FILE__, __LINE__);
-        }
-        misc_viewrights();
-        break;
-    case 'phpinfo':
-        if (!$zbp->CheckRights('root')) {
-            echo $zbp->ShowError(6, __FILE__, __LINE__);
-            die();
-        }
-        misc_phpinfo();
-        break;
-    default:
-        break;
-}
 
 function misc_updateinfo()
 {
@@ -87,7 +41,7 @@ function misc_statistic()
     $r = null;
 
     CountNormalArticleNums();
-    CountTopArticle(0,null, null);
+    CountTopArticle(0, null, null);
     CountCommentNums(null, null);
     $all_comments = $zbp->cache->all_comment_nums;
 
@@ -351,7 +305,9 @@ div.bg {background: #777bb4!important;}
         $i = 0;
         echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">User Functions</th></tr>';
         foreach ($ca as $key => $value) {
-        	if($key!=='user')continue;
+            if ($key !== 'user') {
+                continue;
+            }
             foreach ($value as $key2 => $value2) {
                 $i ++;
                 echo '<tr><td class="e">'.$i.'</td><td class="v">' .$value2 .'</td></tr>';

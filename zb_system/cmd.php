@@ -48,6 +48,53 @@ switch ($action) {
         break;
     case 'misc':
         include './function/c_system_misc.php';
+        ob_clean();
+
+        $miscType = GetVars('type', 'GET');
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Misc_Begin'] as $fpname => &$fpsignal) {
+            $fpname($miscType);
+        }
+
+        switch ($miscType) {
+            case 'statistic':
+                if (!$zbp->CheckRights('admin')) {
+                    echo $zbp->ShowError(6, __FILE__, __LINE__);
+                    die();
+                }
+                misc_statistic();
+                break;
+            case 'updateinfo':
+                if (!$zbp->CheckRights('root')) {
+                    echo $zbp->ShowError(6, __FILE__, __LINE__);
+                    die();
+                }
+                misc_updateinfo();
+                break;
+            case 'showtags':
+                if (!$zbp->CheckRights('ArticleEdt')) {
+                    Http404();
+                    die();
+                }
+                misc_showtags();
+                break;
+            case 'vrs':
+                if (!$zbp->CheckRights('misc')) {
+                    $zbp->ShowError(6, __FILE__, __LINE__);
+                }
+                misc_viewrights();
+                break;
+            case 'phpinfo':
+                if (!$zbp->CheckRights('root')) {
+                    echo $zbp->ShowError(6, __FILE__, __LINE__);
+                    die();
+                }
+                misc_phpinfo();
+                break;
+            default:
+                break;
+        }
+
         break;
     case 'cmt':
         $die = false;
@@ -61,15 +108,15 @@ switch ($action) {
             $die = true;
         }
 
-            PostComment();
-            $zbp->BuildModule();
-            $zbp->SaveCache();
+        PostComment();
+        $zbp->BuildModule();
+        $zbp->SaveCache();
 
         if ($die) {
             exit;
         }
 
-            Redirect(GetVars('HTTP_REFERER', 'SERVER'));
+        Redirect(GetVars('HTTP_REFERER', 'SERVER'));
 
         break;
     case 'getcmt':
