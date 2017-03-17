@@ -84,3 +84,4 @@ wincache.php
 /vendor/
 /.idea/
 composer.lock
+.php_cs.cache

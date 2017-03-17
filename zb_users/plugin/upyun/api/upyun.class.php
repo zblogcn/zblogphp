@@ -43,7 +43,7 @@ class UpYun
      * @param null $endpoint
      * @param int $timeout
      */
-    public function __construct($bucketname, $username, $password, $endpoint = NULL, $timeout = 30)
+    public function __construct($bucketname, $username, $password, $endpoint = null, $timeout = 30)
     {
         $this->_bucketname = $bucketname;
         $this->_username = $username;
@@ -71,7 +71,9 @@ class UpYun
     public function makeDir($path, $auto_mkdir = true)
     {
         $headers = array('Folder' => 'true');
-        if ($auto_mkdir) $headers['Mkdir'] = 'true';
+        if ($auto_mkdir) {
+            $headers['Mkdir'] = 'true';
+        }
         return $this->_do_request('PUT', $path, $headers);
     }
 
@@ -95,14 +97,22 @@ class UpYun
      * @param array $opts 可选参数
      * @return mixed|null
      */
-    public function writeFile($path, $file, $auto_mkdir = true, $opts = NULL)
+    public function writeFile($path, $file, $auto_mkdir = true, $opts = null)
     {
-        if (is_null($opts)) $opts = array();
+        if (is_null($opts)) {
+            $opts = array();
+        }
 
-        if (!is_null($this->_content_md5)) $opts[self::CONTENT_MD5] = $this->_content_md5;
-        if (!is_null($this->_file_secret)) $opts[self::CONTENT_SECRET] = $this->_file_secret;
+        if (!is_null($this->_content_md5)) {
+            $opts[self::CONTENT_MD5] = $this->_content_md5;
+        }
+        if (!is_null($this->_file_secret)) {
+            $opts[self::CONTENT_SECRET] = $this->_file_secret;
+        }
 
-        if ($auto_mkdir === true) $opts['Mkdir'] = 'true';
+        if ($auto_mkdir === true) {
+            $opts['Mkdir'] = 'true';
+        }
 
         return $this->_do_request('PUT', $path, $opts, $file);
     }
@@ -114,9 +124,9 @@ class UpYun
      *
      * @return mixed
      */
-    public function readFile($path, $file_handle = NULL)
+    public function readFile($path, $file_handle = null)
     {
-        return $this->_do_request('GET', $path, NULL, NULL, $file_handle);
+        return $this->_do_request('GET', $path, null, null, $file_handle);
     }
 
     /**
@@ -237,7 +247,7 @@ class UpYun
      * @throws UpYunNotFoundException
      * @throws UpYunServiceUnavailable
      */
-    protected function _do_request($method, $path, $headers = NULL, $body = NULL, $file_handle = NULL)
+    protected function _do_request($method, $path, $headers = null, $body = null, $file_handle = null)
     {
         $uri = "/{$this->_bucketname}{$path}";
         $ch = curl_init("http://{$this->endpoint}{$uri}");
@@ -299,7 +309,9 @@ class UpYun
         $response = curl_exec($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        if ($http_code == 0) throw new UpYunException('Connection Failed', $http_code);
+        if ($http_code == 0) {
+            throw new UpYunException('Connection Failed', $http_code);
+        }
 
         curl_close($ch);
 
@@ -360,7 +372,7 @@ class UpYun
         $items = array();
         foreach ($headers as $header) {
             $header = trim($header);
-            if (stripos($header, 'x-upyun') !== False) {
+            if (stripos($header, 'x-upyun') !== false) {
                 list($k, $v) = explode(':', $header);
                 $items[trim($k)] = in_array(substr($k, 8, 5), array('width', 'heigh', 'frame')) ? intval($v) : trim($v);
             }

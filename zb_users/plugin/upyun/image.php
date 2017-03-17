@@ -3,8 +3,14 @@ require_once '../../../zb_system/function/c_system_base.php';
 require_once '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 $action='root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('upyun')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
+if (!$zbp->CheckPlugin('upyun')) {
+    $zbp->ShowError(48);
+    die();
+}
 $blogtitle='又拍云存储';
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
@@ -18,20 +24,20 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 // 	}
 // }
 if (isset($_POST['upyun_enable_thumbnail']) && $_POST['upyun_enable_thumbnail'] != '') {
-	$zbp->Config('upyun')->upyun_enable_thumbnail = $_POST['upyun_enable_thumbnail'];
-	$zbp->Config('upyun')->upyun_cutname = $_POST['upyun_cutname'];
-	$zbp->Config('upyun')->upyun_ver_name = $_POST['upyun_ver_name'];
-	$zbp->SaveConfig('upyun');
+    $zbp->Config('upyun')->upyun_enable_thumbnail = $_POST['upyun_enable_thumbnail'];
+    $zbp->Config('upyun')->upyun_cutname = $_POST['upyun_cutname'];
+    $zbp->Config('upyun')->upyun_ver_name = $_POST['upyun_ver_name'];
+    $zbp->SaveConfig('upyun');
 
-	if ($zbp->Config('upyun')->upyun_ver_name == '' && $zbp->Config('upyun')->upyun_enable_thumbnail==1) {
-		$buff = "请设置版本名！！！";
-	}
+    if ($zbp->Config('upyun')->upyun_ver_name == '' && $zbp->Config('upyun')->upyun_enable_thumbnail==1) {
+        $buff = "请设置版本名！！！";
+    }
 
-	if(isset($buff)){
-		$zbp->ShowHint('bad', $buff);
-	}else{
-		$zbp->ShowHint('good', "保存成功！");
-	}
+    if (isset($buff)) {
+        $zbp->ShowHint('bad', $buff);
+    } else {
+        $zbp->ShowHint('good', "保存成功！");
+    }
 }
 ?>
 <div id="divMain">
