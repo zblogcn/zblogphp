@@ -347,7 +347,7 @@ class Template
      */
     protected function parse_option(&$content)
     {
-        $content = preg_replace('#\{\#([^\}]+)\#\}#', '<?php echo $option[\'\\1\']; ?>', $content);
+        $content = preg_replace('#\{\#([^\}]+)\#\}#', '<?php if(defined(trim(\'\\1\'))){echo \\1;}else{echo $option[\'\\1\'];} ?>', $content);
     }
 
     /**

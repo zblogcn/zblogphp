@@ -50,6 +50,10 @@ class ZBlogPHP
      */
     public $currenturl = null;
     /**
+     * @var null|string 当前链接
+     */
+    public $fullcurrenturl = null;
+    /**
      * @var null|string 用户目录
      */
     public $usersdir = null;
@@ -285,6 +289,7 @@ class ZBlogPHP
         $this->actions = &$actions;
         $this->posttype = &$posttype;
         $this->currenturl = &$currenturl;
+        $this->fullcurrenturl =substr($this->host, 0, -1) . $this->currenturl;
         $this->action = &$action;
         $this->activedapps = &$activedapps;
         $this->activeapps = &$this->activedapps;
