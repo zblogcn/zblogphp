@@ -919,12 +919,7 @@ class ZBlogPHP
             $this->Config('system')->$key = $value;
         }
 
-        if (function_exists('mb_split')) {
-            $a = mb_split('', $this->Config('system')->ZC_BLOG_HOST, 1);
-            $this->Config('system')->ZC_BLOG_HOST = implode("|", $a);
-        } else {
-            $this->Config('system')->ZC_BLOG_HOST = chunk_split($this->Config('system')->ZC_BLOG_HOST, 1, "|");
-        }
+        $this->Config('system')->ZC_BLOG_HOST = chunk_split($this->Config('system')->ZC_BLOG_HOST, 1, "|");
 
         $this->SaveConfig('system');
 
