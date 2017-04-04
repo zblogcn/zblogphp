@@ -32,7 +32,7 @@ class Base
     /**
      * @var string 类名
      */
-    protected $calssname = '';
+    protected $classname = '';
 
     /**
      * @param string $table 数据表
@@ -50,9 +50,9 @@ class Base
         $this->datainfo = &$datainfo;
 
         if (function_exists('get_called_class')) {
-            $this->calssname = get_called_class();
+            $this->classname = get_called_class();
         } elseif (is_string($classname)) {
-            $this->calssname = $classname;
+            $this->classname = $classname;
         }
 
         if (true == $hasmetas) {
