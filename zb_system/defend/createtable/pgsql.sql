@@ -1,13 +1,13 @@
 CREATE SEQUENCE %pre%post_seq;
 CREATE TABLE %pre%post (
  log_ID INT NOT NULL DEFAULT nextval('%pre%post_seq'),
- log_CateID smallint NOT NULL DEFAULT '0',
+ log_CateID integer NOT NULL DEFAULT '0',
  log_AuthorID integer NOT NULL DEFAULT '0',
  log_Tag varchar(255) NOT NULL DEFAULT '',
  log_Status smallint NOT NULL DEFAULT '0',
  log_Type smallint NOT NULL DEFAULT '0',
  log_Alias varchar(255) NOT NULL DEFAULT '',
- log_IsTop char(1) NOT NULL DEFAULT '0',
+ log_IsTop integer NOT NULL DEFAULT '0',
  log_IsLock char(1) NOT NULL DEFAULT '0',
  log_Title varchar(255) NOT NULL DEFAULT '',
  log_Intro text NOT NULL,

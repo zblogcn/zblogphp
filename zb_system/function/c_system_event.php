@@ -168,7 +168,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
     $w = array();
 
     if ($option['only_ontop'] == true) {
-        $w[] = array('=', 'log_IsTop', 1);
+        $w[] = array('>', 'log_IsTop', 0);
     } elseif ($option['only_not_ontop'] == true) {
         $w[] = array('=', 'log_IsTop', 0);
     }
@@ -1365,15 +1365,6 @@ function PostArticle()
     }
 
     $article->Type = ZC_POST_TYPE_ARTICLE;
-
-    if (isset($_POST['IsTop'])) {
-        if (1 == $_POST['IsTop']) {
-            $article->TopType = $_POST['IstopType'];
-        }
-        if (0 == $_POST['IsTop']) {
-            $article->TopType = null;
-        }
-    }
 
     FilterMeta($article);
 

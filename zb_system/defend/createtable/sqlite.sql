@@ -6,7 +6,7 @@ CREATE TABLE %pre%post (
   log_Status integer NOT NULL DEFAULT 0,
   log_Type integer NOT NULL DEFAULT 0,
   log_Alias varchar(255) NOT NULL DEFAULT '',
-  log_IsTop bit NOT NULL DEFAULT 0,
+  log_IsTop integer NOT NULL DEFAULT 0,
   log_IsLock bit NOT NULL DEFAULT 0,
   log_Title varchar(255) NOT NULL DEFAULT '',
   log_Intro text NOT NULL DEFAULT '',

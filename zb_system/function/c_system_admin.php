@@ -367,6 +367,25 @@ function OutputOptionItemsOfMember($default)
     return $s;
 }
 
+
+/**
+ * 生成文章IsTop状态select表单
+ * @param $default
+ * @return null|string
+ */
+function OutputOptionItemsOfIsTop($default)
+{
+    global $zbp;
+
+    $s = null;
+    $s .= '<option value="0" ' . ($default == 0 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['none'] . '</option>';
+    $s .= '<option value="2" ' . ($default == 2 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['top_index'] . '</option>';
+    $s .= '<option value="1" ' . ($default == 1 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['top_global'] . '</option>';
+    $s .= '<option value="4" ' . ($default == 4 ? 'selected="selected"' : '') . ' >' .$zbp->lang['msg']['top_category'] . '</option>';
+    return $s;
+}
+
+
 /**
  * 生成文章发布状态select表单
  * @param $default

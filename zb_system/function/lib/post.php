@@ -112,12 +112,14 @@ class Post extends Base
                 return $this->data[$name] = $value;
             break;
             case 'TopType':
-                if ($value == 'global' || $value == 'category') {
-                    $this->Metas->toptype = $value;
+                if ($value == 'global') {
+                    $this->Top = 1;
+                }elseif ($value == 'index') {
+                    $this->Top = 2;
+                }elseif ($value == 'category') {
+                    $this->Top = 4;
                 } elseif ($value == '' || $value == null) {
-                    $this->Metas->Del('toptype');
-                } else {
-                    $this->Metas->toptype = 'index';
+                    $this->Top = 0;
                 }
 
                 return null;
@@ -280,11 +282,16 @@ class Post extends Base
 
                 return GetList($zbp->option['ZC_RELATEDLIST_COUNT'], null, null, null, null, null, array('is_related' => $this->ID));
             case 'TopType':
-                $toptype = $this->Metas->toptype;
-                if ($this->IsTop == true && $toptype == null) {
+                $toptype = '';
+                if ($this->IsTop == 1) {
+                    $toptype = 'global';
+                }
+                if ($this->IsTop == 2) {
                     $toptype = 'index';
                 }
-
+                if ($this->IsTop == 4) {
+                    $toptype = 'category';
+                }
                 return $toptype;
             case 'TypeName':
                 return $zbp->GetPostType_Name($this->Type);
