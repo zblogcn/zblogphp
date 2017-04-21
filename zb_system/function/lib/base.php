@@ -174,9 +174,9 @@ class Base
                 $this->data[$key] = $array[$value[0]];
             }
         }
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
-            $fpname($this, $this->data);
-        }
+        //foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
+        //    $fpname($this, $this->data);
+        //}
 
         return true;
     }
@@ -235,9 +235,9 @@ class Base
             }
             $i += 1;
         }
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
-            $fpname($this, $this->data);
-        }
+        //foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
+        //    $fpname($this, $this->data);
+        //}
 
         return true;
     }

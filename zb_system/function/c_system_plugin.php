@@ -1452,7 +1452,7 @@ DefinePluginFilter('Filter_Plugin_DelModule_Succeed');
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_Base_Data_Load');
+//DefinePluginFilter('Filter_Plugin_Base_Data_Load');
 
 /*
 '**************************************************<
