@@ -1,10 +1,10 @@
 <?php
 //<language>English</language>
 //The second line of this file is the name of the language
-//Author:Yang Yixuan
-//Author URI:http://www.yangyixuan.com
-//E-mail:sen@yangyixuan.com
-//Date:20150127
+//Author:zblogcn
+//Author URI:https://www.zblogcn.com
+//E-mail:contact@rainbowsoft.org
+//Date:20170429
 
 //Custom Information
 //Don't delete %s and ()
@@ -81,7 +81,7 @@ return array(
     'clicktoback' => 'please go back and retry',
     'not_create_table' => 'Created tables failed.',
     'not_insert_data' => 'Created data failed.',
-    'not_create_option_file' => 'Created c_option.php failed，please put this code in file:"/zb_system/zb_users/c_option.php" and save.',
+    'not_create_option_file' => 'Created c_option.php failed，please put this code in file:"/zb_users/c_option.php" and save.',
     'not_create_template_file' => 'Compile theme template failed.',
     '' => '',
 );
