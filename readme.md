@@ -36,6 +36,6 @@ Z-BlogPHP有着强大的可定制性、丰富的插件接口和独立的主题�
 [代码标准](standards)
 
 
-##开源协议
+## 开源协议
 
 Z-BlogPHP项目，基于[The MIT License](http://opensource.org/licenses/mit-license.php)协议开放源代码。
