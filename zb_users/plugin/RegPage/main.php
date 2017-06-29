@@ -25,6 +25,9 @@ if (count($_POST) > 0) {
     $zbp->Config('RegPage')->title_text = $_POST['title_text'];
     $zbp->Config('RegPage')->loginpage_addon = (int) $_POST['loginpage_addon'];
     $zbp->Config('RegPage')->loginpage_text = $_POST['loginpage_text'];
+    $zbp->Config('RegPage')->only_on_ip = (int) $_POST['only_on_ip'];
+    $zbp->Config('RegPage')->disable_website = $_POST['disable_website'];
+    $zbp->Config('RegPage')->disable_validcode = $_POST['disable_validcode'];
     $zbp->SaveConfig('RegPage');
     
     if (GetVars('addnavbar')) {
@@ -99,6 +102,18 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <tr>
     <td class="td30"><p align='left'><b>在登录页引导用户注册的链接文字</b></p></td>
     <td><input type="text" name="loginpage_text" value="<?php echo htmlspecialchars($zbp->Config('RegPage')->loginpage_text);?>" style="width:89%;" /></td>
+</tr>
+<tr>
+    <td class="td30"><p align='left'><b>同一IP一天只能注册一个账号</b></p></td>
+    <td><input type="text" class="checkbox" name="only_on_ip" value="<?php echo $zbp->Config('RegPage')->only_on_ip;?>" /></td>
+</tr>
+<tr>
+    <td class="td30"><p align='left'><b>不用填写网址</b></p></td>
+    <td><input type="text" class="checkbox" name="disable_website" value="<?php echo $zbp->Config('RegPage')->disable_website;?>" /></td>
+</tr>
+<tr>
+    <td class="td30"><p align='left'><b>不用填写验证码</b></p></td>
+    <td><input type="text" class="checkbox" name="disable_validcode" value="<?php echo $zbp->Config('RegPage')->disable_validcode;?>" /></td>
 </tr>
 </table>
       <hr/>

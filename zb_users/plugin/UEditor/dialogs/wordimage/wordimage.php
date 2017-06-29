@@ -88,7 +88,7 @@
                     }
                 },
                 uploadCompleteCallback: function(data){               // 单个文件上传完成的回调
-                    try{var info = eval("(" + data.info + ")");
+                    try{var info = JSON.parse(data.info);
                     info && imageUrls.push(info);
                     selectedImageCount--;
                     }catch(e){}

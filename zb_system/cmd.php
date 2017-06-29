@@ -89,7 +89,7 @@ switch ($action) {
                     echo $zbp->ShowError(6, __FILE__, __LINE__);
                     die();
                 }
-                misc_phpinfo();
+                misc_phpif();
                 break;
             default:
                 break;

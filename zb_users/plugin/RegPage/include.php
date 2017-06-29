@@ -23,6 +23,8 @@ $RegPage_DataInfo = array(
     'AuthorID' => array('reg_AuthorID', 'integer', '', 0),
     'IsUsed' => array('reg_IsUsed', 'boolean', '', false),
     'Intro' => array('reg_Intro', 'string', '', ''),
+    'IP' => array('reg_IP', 'string', 50, ''),
+    'Time' => array('reg_Time', 'integer', '', 0),
 );
 
 function InstallPlugin_RegPage()
@@ -35,10 +37,22 @@ function InstallPlugin_RegPage()
         $zbp->Config('RegPage')->loginpage_addon = 0;
         $zbp->Config('RegPage')->loginpage_text = '欢迎您注册本站账号,请点击链接完成注册.';
         $zbp->Config('RegPage')->title_text = '会员注册';
+        $zbp->Config('RegPage')->only_one_ip = 0;
+        $zbp->Config('RegPage')->disable_website = 0;
+        $zbp->Config('RegPage')->disable_validcode = 0;
         $zbp->SaveConfig('RegPage');
 
         RegPage_CreateTable();
-        RegPage_CreateCode(1000);
+        RegPage_CreateCode(100);
+    }
+}
+
+function UninstallPlugin_RegPage()
+{
+    global $zbp;
+	$zbp->DelConfig('RegPage');
+    if ($zbp->db->ExistTable($zbp->db->sql->ReplacePre($GLOBALS['RegPage_Table'])) == true) {
+        $zbp->db->DelTable($zbp->db->sql->ReplacePre($GLOBALS['RegPage_Table']));
     }
 }
 
@@ -87,7 +101,7 @@ function RegPage_EmptyCode()
 function RegPage_CreateTable()
 {
     global $zbp;
-    if ($zbp->db->ExistTable($GLOBALS['RegPage_Table']) == true) {
+    if ($zbp->db->ExistTable($zbp->db->sql->ReplacePre($GLOBALS['RegPage_Table'])) == true) {
         return;
     }
     $s = $zbp->db->sql->CreateTable($GLOBALS['RegPage_Table'], $GLOBALS['RegPage_DataInfo']);
@@ -120,6 +134,9 @@ function RegPage_Page()
 {
 
     global $zbp;
+    $hash = sha1($zbp->guid . GetVars('REMOTE_ADDR','SERVER') );
+
+    $zbp->validcodeurl = $zbp->host . 'zb_users/plugin/RegPage/c_validcode.php' . '?hash=' . $hash ;
     
     $zbp->header .= '<script src="'.$zbp->host.'zb_users/plugin/RegPage/reg.js" type="text/javascript"></script>' . "\r\n";
     $zbp->header .= '<script src="'.$zbp->host.'zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>' . "\r\n";
@@ -131,12 +148,14 @@ function RegPage_Page()
     $article->IsLock = true;
     $article->Type = ZC_POST_TYPE_PAGE;
 
+    $article->Content .= '<input type="hidden" name="hash" value="'.$hash.'" />';
     $article->Content .= '<table style="width:90%;border:none;font-size:1.1em;line-height:2.5em;">';
     $article->Content .= '<tr style=""><th style="border:none;" colspan="2" scope="col"><p>'.$zbp->Config('RegPage')->readme_text.'</p></th></tr>';
     $article->Content .= '<tr><td width="30%" style="text-align:right;border:none;">(*)名称：</td><td  style="border:none;" ><input required="required" type="text" name="name" style="width:250px;font-size:1.2em;" /></td></tr>';
     $article->Content .= '<tr><td style="text-align:right;border:none;">(*)密码：</td><td  style="border:none;" ><input required="required" type="password" name="password" style="width:250px;font-size:1.2em;" /></td></tr>';
     $article->Content .= '<tr><td style="text-align:right;border:none;">(*)确认密码：</td><td  style="border:none;" ><input required="required" type="password" name="repassword" style="width:250px;font-size:1.2em;" /></td></tr>';
     $article->Content .= '<tr><td style="text-align:right;border:none;">(*)邮箱：</td><td  style="border:none;" ><input type="text" name="email" style="width:250px;font-size:1.2em;" /></td></tr>';
+if($zbp->Config('RegPage')->disable_website != true)
     $article->Content .= '<tr><td style="text-align:right;border:none;">网站：</td><td  style="border:none;" ><input type="text" name="homepage" style="width:250px;font-size:1.2em;" /></td></tr>';
     $article->Content .= '<tr><td style="text-align:right;border:none;">(*)邀请码：</td><td  style="border:none;" ><input required="required" type="text" name="invitecode" style="width:250px;font-size:1.2em;" />';
 
@@ -145,8 +164,8 @@ function RegPage_Page()
     }
     
     $article->Content .= '</td></tr>';
-
-    $article->Content .= '<tr><td style="text-align:right;border:none;">(*)</td><td  style="border:none;" ><input required="required" type="text" name="verifycode" style="width:150px;font-size:1.2em;" />&nbsp;&nbsp;<img id="reg_verfiycode" style="border:none;vertical-align:middle;width:'.$zbp->option['ZC_VERIFYCODE_WIDTH']. 'px;height:' . $zbp->option['ZC_VERIFYCODE_HEIGHT'] . 'px;cursor:pointer;" src="' .$zbp->validcodeurl . '?id=RegPage" alt="" title="" onclick="javascript:this.src=\'' . $zbp->validcodeurl . '?id=RegPage&amp;tm=\'+Math.random();"/></td></tr>';
+if($zbp->Config('RegPage')->disable_validcode != true)
+    $article->Content .= '<tr><td style="text-align:right;border:none;">(*)</td><td  style="border:none;" ><input required="required" type="text" name="verifycode" style="width:150px;font-size:1.2em;" />&nbsp;&nbsp;<img id="reg_verfiycode" style="border:none;vertical-align:middle;width:'.$zbp->option['ZC_VERIFYCODE_WIDTH']. 'px;height:' . $zbp->option['ZC_VERIFYCODE_HEIGHT'] . 'px;cursor:pointer;" src="' .$zbp->validcodeurl . '&amp;id=RegPage" alt="" title="" onclick="javascript:this.src=\'' . $zbp->validcodeurl . '&amp;id=RegPage&amp;tm=\'+Math.random();"/></td></tr>';
     
     $article->Content .= '<tr><td  style="border:none;" ></td><td  style="border:none;" ><input type="submit" style="width:100px;font-size:1.0em;padding:0.2em" value="提交" onclick="return RegPage()" /></td></tr>';
 

@@ -11,21 +11,58 @@ if (!$zbp->CheckPlugin('RegPage')) {
     die();
 }
 
+Add_Filter_Plugin('Filter_Plugin_Zbp_CheckValidCode', 'RegPage_CheckValidCode');
+
+function RegPage_CheckValidCode($vaidcode, $id = ''){
+    global $zbp;
+	$ua_md5 = GetVars('REMOTE_ADDR','SERVER') . GetVars('hash','POST');
+    $vaidcode = strtolower($vaidcode);
+    $original = GetVars('captcha_' . crc32($zbp->guid . $id), 'COOKIE');
+    setcookie('captcha_' . crc32($zbp->guid . $id), '', time() - 3600, $zbp->cookiespath);
+
+    return (md5($zbp->guid . date("Ymdh") . strtolower($vaidcode) . $ua_md5 ) == $original
+            ||
+            md5($zbp->guid . date("Ymdh", time() - (3600 * 1)) . strtolower($vaidcode) . $ua_md5 ) == $original
+            );
+}
+
 
 $name = trim($_POST['name']);
 $password = trim($_POST['password']);
 $repassword = trim($_POST['repassword']);
 $email = trim($_POST['email']);
-$homepage = trim($_POST['homepage']);
-$invitecode = trim($_POST['invitecode']);
-$verifycode = trim($_POST['verifycode']);
 
-if (!$zbp->CheckValidCode($verifycode, 'RegPage')) {
-    $zbp->ShowError('验证码错误，请重新输入.');
-    die();
+$invitecode = trim($_POST['invitecode']);
+
+$homepage = '';
+
+
+if($zbp->Config('RegPage')->disable_website != true){
+    $homepage = trim($_POST['homepage']);
 }
 
+if($zbp->Config('RegPage')->disable_validcode != true){
+    $verifycode = trim($_POST['verifycode']);
+    if (!$zbp->CheckValidCode($verifycode, 'RegPage')) {
+        $zbp->ShowError('验证码错误，请重新输入.');
+        die();
+    }
+}
+
+
 $member = new Member;
+
+
+if ($zbp->Config('RegPage')->only_one_ip) {
+    $sql = $zbp->db->sql->Select($RegPage_Table, '*', array(array('=', 'reg_IP', GetVars('REMOTE_ADDR','SERVER')), array('>', 'reg_Time', time()-23*3600 )), null, null, null);
+    $array = $zbp->GetListCustom($RegPage_Table, $RegPage_DataInfo, $sql);
+    $num = count($array);
+    if ($num > 0) {
+        $zbp->ShowError('今天已注册过了请明天再来注册.');
+        die();
+    }
+}
+
 
 $sql = $zbp->db->sql->Select($RegPage_Table, '*', array(array('=', 'reg_InviteCode', $invitecode), array('=', 'reg_AuthorID', 0)), null, null, null);
 $array = $zbp->GetListCustom($RegPage_Table, $RegPage_DataInfo, $sql);
@@ -111,6 +148,8 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_RegPage_RegSucceed'] as $fpname => &$f
 
 $keyvalue = array();
 $keyvalue['reg_AuthorID'] = $member->ID;
+$keyvalue['reg_IP'] = GetVars('REMOTE_ADDR','SERVER');
+$keyvalue['reg_Time'] = time();
 
 $sql = $zbp->db->sql->Update($RegPage_Table, $keyvalue, array(array('=', 'reg_ID', $reg->ID)));
 $zbp->db->Update($sql);

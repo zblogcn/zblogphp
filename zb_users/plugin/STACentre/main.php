@@ -71,6 +71,7 @@ $ua = array(
         '{%host%}page_{%page%}.html',
         '{%host%}page_{%page%}/',
         '{%host%}page_{%page%}',
+        '{%host%}page/{%page%}/',
     ),
 
     'ZC_CATEGORY_REGEX' => array(
@@ -87,6 +88,7 @@ $ua = array(
         '{%host%}index.php/tags-{%id%}_{%page%}.html',
         '{%host%}tags-{%id%}_{%page%}.html',
         '{%host%}tags-{%alias%}_{%page%}.html',
+        '{%host%}tags/{%alias%}/{%page%}/',
     ),
 
     'ZC_DATE_REGEX' => array(
@@ -94,6 +96,7 @@ $ua = array(
         '{%host%}index.php/date-{%date%}_{%page%}.html',
         '{%host%}date-{%date%}_{%page%}.html',
         '{%host%}post/{%date%}_{%page%}.html',
+        '{%host%}date/{%date%}/{%page%}/',
     ),
 
     'ZC_AUTHOR_REGEX' => array(
@@ -101,6 +104,7 @@ $ua = array(
         '{%host%}index.php/author-{%id%}_{%page%}.html',
         '{%host%}author-{%id%}_{%page%}.html',
         '{%host%}author/{%id%}/{%page%}/',
+        '{%host%}author/{%alias%}/{%page%}/',
     ),
 
 );

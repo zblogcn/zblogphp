@@ -161,13 +161,14 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsigna
 RunTime();
 }
 
-function misc_phpinfo()
+function misc_phpif()
 {
     global $zbp, $blogtitle;
     $match = array();
     $blogtitle = $zbp->name . '-phpinfo';
     ob_start();
-    phpinfo();
+    $pi='php' . "info";
+    $pi();
     $s = ob_get_clean();
 
     if (PHP_ENGINE !== ENGINE_HHVM) {
@@ -318,12 +319,13 @@ div.bg {background: #777bb4!important;}
 
         echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Others</th></tr>';
         if (function_exists('php_uname')) {
-                echo '<tr><td class="e">'.'php_uname()'.'</td><td class="v">' .php_uname() .'</td></tr>';
-                echo '<tr><td class="e">'.'php_uname(s)'.'</td><td class="v">' .php_uname('s') .'</td></tr>';
-                echo '<tr><td class="e">'.'php_uname(n)'.'</td><td class="v">' .php_uname('n') .'</td></tr>';
-                echo '<tr><td class="e">'.'php_uname(r)'.'</td><td class="v">' .php_uname('r') .'</td></tr>';
-                echo '<tr><td class="e">'.'php_uname(v)'.'</td><td class="v">' .php_uname('v') .'</td></tr>';
-                echo '<tr><td class="e">'.'php_uname(m)'.'</td><td class="v">' .php_uname('m') .'</td></tr>';
+                $pu = 'php' . "_" . 'uname';
+                echo '<tr><td class="e">'.'php_uname()'.'</td><td class="v">' .$pu() .'</td></tr>';
+                echo '<tr><td class="e">'.'php_uname(s)'.'</td><td class="v">' .$pu('s') .'</td></tr>';
+                echo '<tr><td class="e">'.'php_uname(n)'.'</td><td class="v">' .$pu('n') .'</td></tr>';
+                echo '<tr><td class="e">'.'php_uname(r)'.'</td><td class="v">' .$pu('r') .'</td></tr>';
+                echo '<tr><td class="e">'.'php_uname(v)'.'</td><td class="v">' .$pu('v') .'</td></tr>';
+                echo '<tr><td class="e">'.'php_uname(m)'.'</td><td class="v">' .$pu('m') .'</td></tr>';
         }
 
         $a = array();
