@@ -2641,6 +2641,19 @@ function EnablePlugin($name)
 function DisablePlugin($name)
 {
     global $zbp;
+    $apps = $zbp->LoadPlugins();
+    $apps[] = $zbp->LoadApp('theme', $zbp->theme);
+    foreach ($apps as $app) {
+        if (!$zbp->CheckApp($app->id)) continue;
+        $dependList = explode('|', $app->advanced_dependency);
+        foreach ($dependList as $depend) {
+            if ($depend == $name) {
+                return $app;
+            }
+        }
+    }
+
+    UninstallPlugin($name);
     $zbp->option['ZC_USING_PLUGIN_LIST'] = DelNameInString($zbp->option['ZC_USING_PLUGIN_LIST'], $name);
 
     $array = explode('|', $zbp->option['ZC_USING_PLUGIN_LIST']);
@@ -2654,6 +2667,7 @@ function DisablePlugin($name)
     $zbp->option['ZC_USING_PLUGIN_LIST'] = trim(implode('|', $arrayhas), '|');
 
     $zbp->SaveOption();
+    return true;
 }
 
 /**

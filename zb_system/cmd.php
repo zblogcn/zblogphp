@@ -322,11 +322,18 @@ switch ($action) {
             $zbp->ShowError(5, __FILE__, __LINE__);
             die();
         }
-        UninstallPlugin(GetVars('name', 'GET'));
-        DisablePlugin(GetVars('name', 'GET'));
-        $zbp->BuildModule();
-        $zbp->SaveCache();
-        $zbp->SetHint('good');
+        $disableResult = DisablePlugin(GetVars('name', 'GET'));
+        if (is_object($disableResult)) {
+            // 本来应该用ShowError的，但是不太方便，算了
+            // 姑且先用SetHint放在这里
+            $hint = $lang['error']['84'];
+            $hint = str_replace('%s', "【$disableResult->name ($disableResult->id)】", $hint);
+            $zbp->SetHint('bad', $hint);
+        } else {
+            $zbp->BuildModule();
+            $zbp->SaveCache();
+            $zbp->SetHint('good');
+        }
         Redirect('cmd.php?act=PluginMng');
         break;
     case 'PluginEnb':
