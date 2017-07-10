@@ -26,7 +26,7 @@ class ZbpForm
         $s = '';
         foreach ((array) $array as $k => $v) {
             $checked = $k == $checkedkey ? ' checked="checked"' : '';
-            $s .= "<input type=\"radio\" name=\"$name\" id=\"$name\" class=\"$name\" value=\"$k\"$checked />$v\r\n";
+            $s .= "<input type=\"radio\" name=\"$name\" id=\"$name-$k\" class=\"$name\" value=\"$k\"$checked /><label for=\"$name-$k\">$v</label>\r\n";
         }
         echo $s;
     }
@@ -68,7 +68,7 @@ class ZbpForm
         foreach ((array) $array as $k => $v) {
             $checked = $v[1] ? ' checked="checked"' : '';
 
-            $s .= "<input type=\"checkbox\" name=\"". $name ."[]\" id=\"$name\" class=\"$name\" value=\"$k\"$checked />$v[0]\r\n";
+            $s .= "<input type=\"checkbox\" name=\"". $name ."[]\" id=\"$name-$k\" class=\"$name\" value=\"$k\"$checked /><label for=\"$name-$k\">$v[0]</label>\r\n";
         }
         echo $s;
     }
