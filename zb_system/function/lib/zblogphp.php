@@ -467,7 +467,9 @@ class ZBlogPHP
             }
         */
 
-        header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
+        if ($this->option['ZC_VERSION_IN_HEADER']) {
+            header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
+        }
 
         $this->validcodeurl = $this->host . 'zb_system/script/c_validcode.php';
         $this->feedurl = $this->host . 'feed.php';
