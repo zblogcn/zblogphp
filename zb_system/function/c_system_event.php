@@ -466,7 +466,12 @@ function ViewSearch()
     $zbp->template->SetTemplate($article->Template);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($zbp->template);
+        $fpreturn = $fpname($inpurl);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+            return $fpreturn;
+        }
     }
 
     $zbp->template->Display();
@@ -1130,6 +1135,11 @@ function ViewPost($object, $theSecondParam, $isrewrite = false)
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($zbp->template);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+            return $fpreturn;
+        }
     }
 
     $zbp->template->Display();
