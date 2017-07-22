@@ -800,31 +800,30 @@ function GetFilePerms($f)
     }
 
     $perms = fileperms($f);
-
-    if (($perms & 0xC000) == 0xC000) {
-        // Socket
-        $info = 's';
-    } elseif (($perms & 0xA000) == 0xA000) {
-        // Symbolic Link
-        $info = 'l';
-    } elseif (($perms & 0x8000) == 0x8000) {
-        // Regular
-        $info = '-';
-    } elseif (($perms & 0x6000) == 0x6000) {
-        // Block special
-        $info = 'b';
-    } elseif (($perms & 0x4000) == 0x4000) {
-        // Directory
-        $info = 'd';
-    } elseif (($perms & 0x2000) == 0x2000) {
-        // Character special
-        $info = 'c';
-    } elseif (($perms & 0x1000) == 0x1000) {
-        // FIFO pipe
-        $info = 'p';
-    } else {
-        // Unknown
-        $info = 'u';
+    switch ($perms & 0xF000) {
+        case 0xC000: // socket
+            $info = 's';
+            break;
+        case 0xA000: // symbolic link
+            $info = 'l';
+            break;
+        case 0x8000: // regular
+            $info = '-';
+            break;
+        case 0x6000: // block special
+            $info = 'b';
+            break;
+        case 0x4000: // directory
+            $info = 'd';
+            break;
+        case 0x2000: // character special
+            $info = 'c';
+            break;
+        case 0x1000: // FIFO pipe
+            $info = 'p';
+            break;
+        default: // unknown
+            $info = 'u';
     }
 
     // Owner
