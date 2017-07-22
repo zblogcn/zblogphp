@@ -312,6 +312,7 @@ return array(
         'TagAll' => 'All Tages Privilege Management',
         'UploadAll' => 'All Attachments Privilege Management',
         'root' => 'Superuser Privilege Management',
+        'NoValidCode' => 'Ignore Captcha'
     ),
 
 //Article Level

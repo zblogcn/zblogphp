@@ -312,6 +312,7 @@ return array(
         'TagAll' => '所有標籤權限',
         'UploadAll' => '所有附件權限',
         'root' => '超級權限',
+        'NoValidCode' => '驗證碼'
     ),
 
 //Article Level

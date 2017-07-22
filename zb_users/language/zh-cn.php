@@ -308,6 +308,7 @@ return array(
         'TagAll' => '所有标签权限',
         'UploadAll' => '所有附件权限',
         'root' => '超级权限',
+        'NoValidCode' => '无视验证码'
     ),
 
 //Article Level
