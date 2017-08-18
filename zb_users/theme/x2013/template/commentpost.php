@@ -10,9 +10,6 @@
 			<div class="comt-box">
 				<textarea class="comt-area" name="txaArticle" id="txaArticle" cols="100%" rows="3" tabindex="5" onkeydown="if(event.ctrlKey&amp;&amp;event.keyCode==13){document.getElementById('submit').click();};"></textarea>
 				<div class="comt-ctrl">
-{if $option['ZC_COMMENT_VERIFY_ENABLE']}
-					&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="inpVerify" id="inpVerify" value="" tabindex="4"/><span style="color:#F00;">验证码(*)</span><img style="border:1px solid #746969;height:18px;vertical-align:middle;margin-left: 10px;" src="{$article.ValidCodeUrl}" onclick="javascript:this.src='{$article.ValidCodeUrl}&amp;tm='+Math.random();"/>
-{/if}
 					<input class="comt-submit" type="submit" name="submit" id="submit" tabindex="6" onclick="return zbp.comment.post()" value="发布评论" />
 				</div>
 			</div>
@@ -24,11 +21,18 @@
 			<div class="comt-comterinfo" id="comment-author-info" >
 				<h4>Hi，您需要填写昵称和邮箱！</h4>
 				<ul>
-					<li><label for="inpName">昵称</label><input class="ipt" type="text" name="inpName" id="inpName" value="" size="28" tabindex="1"><span>必填项</span></li>
-					<li><label for="inpEmail">邮箱</label><input class="ipt" type="mail" name="inpEmail" id="inpEmail" value="" size="28" tabindex="2"></li>
-					<li class="comt-comterinfo-url"><label for="inpHomePage">链接</label><input class="ipt" type="url" name="inpHomePage" id="inpHomePage" value="" size="42" tabindex="3"></li>
+                    {if $option['ZC_COMMENT_VERIFY_ENABLE']}
+                    <li>
+                        <label for="inpName">验证码</label>
+                        <input class="ipt" type="text" name="inpVerify" id="inpVerify" value="" size="28" tabindex="4"/>
+                        <span>必填项</span>
+                        <img src="{$article.ValidCodeUrl}" onclick="javascript:this.src='{$article.ValidCodeUrl}&amp;tm='+Math.random();"/>
+                    </li>
+                    {/if}
+					<li><label for="inpName">昵&nbsp;&nbsp;&nbsp;&nbsp;称</label><input class="ipt" type="text" name="inpName" id="inpName" value="" size="28" tabindex="1"><span>必填项</span></li>
+					<li><label for="inpEmail">邮&nbsp;&nbsp;&nbsp;&nbsp;箱</label><input class="ipt" type="mail" name="inpEmail" id="inpEmail" value="" size="28" tabindex="2"></li>
+					<li class="comt-comterinfo-url"><label for="inpHomePage">链&nbsp;&nbsp;&nbsp;&nbsp;接</label><input class="ipt" type="url" name="inpHomePage" id="inpHomePage" value="" size="42" tabindex="3"></li>
 					<script type="text/javascript">LoadRememberInfo();</script>
-
 				</ul>
 			</div>
 				{/if}
