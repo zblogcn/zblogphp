@@ -1,6 +1,12 @@
 vendor
 node_modules
 mix-manifest.json
+.vscode
+zb_users/theme/**/*/dist
+zb_users/theme/default/template
+zb_users/theme/default/style
+zb_users/theme/default/script
+
 
 # User Config
 /zb_users/c_option.php
