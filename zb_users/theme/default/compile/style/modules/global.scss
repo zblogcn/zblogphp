@@ -1,0 +1,148 @@
+/* 全局 */
+body {
+    margin: 0;
+    padding: 0;
+    color: #555;
+    font-size: 14px;
+    font-family: "微软雅黑", "宋体", "Trebuchet MS", Tahoma, Arial, sans-serif;
+    background: url("default/bg-top.png") repeat-x 0 0;
+}
+
+a {
+    text-decoration: none;
+
+    :link, :visited {
+        color: #0273C6;
+    }
+
+    :hover, :active {
+        color: red;
+        text-decoration: none;
+    }
+}
+
+ol,
+ul,
+dl {
+    list-style-type: none;
+    list-style-position: outside;
+}
+
+img {
+    border: 0;
+}
+
+p, dl, dd, dt, li, ol, ul {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: normal;
+}
+
+.clear {
+    clear: both;
+}
+
+/* 大体框架 */
+#divAll {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 0 0 0;
+    text-align: center;
+    background: url("default/bg-nav.jpg") no-repeat center 84px;
+}
+
+#divPage {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 0 0 0;
+    text-align: center;
+    text-align: center;
+    background: url("default/bg-bottom.png") repeat-x 0 bottom;
+}
+
+#divMiddle {
+    width: 980px;
+    margin: 0 auto 0 auto;
+    padding: 0 0 0 0;
+    text-align: left;
+}
+
+#divTop {
+    width: 980px;
+    margin: 0 auto;
+    padding: 30px 0 0 0;
+    text-align: left;
+    float: left;
+    height: 234px;
+    clear: both;
+}
+
+#divSidebar {
+    width: 230px;
+    margin: 10px 0 0 0;
+    padding: 0 0 0 0;
+    text-align: left;
+    float: right;
+}
+
+#divMain {
+    width: 720px;
+    margin: 10px 0 0 0;
+    padding: 0 0 30px 10px;
+    text-align: left;
+    float: left;
+}
+
+#divBottom {
+    width: 100%;
+    margin: 0 0 0 0;
+    padding: 45px 0 0 0;
+    text-align: center;
+    clear: both;
+    height: 75px;
+}
+
+/* 导航栏 */
+#divNavBar {
+  float: right;
+  width: 100%;
+  height: 36px;
+  color: #fff;
+
+  h3 {
+      display: none;
+  }
+  ul,li {
+      margin: 0;
+      padding: 0 0 0 0;
+      float: left;
+  }
+  li {
+      font-size: 1em;
+  }
+  a {
+      float: left;
+      margin: 0 0 0px 0px;
+      padding: 7px 25px 7px 25px;
+      text-decoration: none;
+      line-height: 22px;
+      :link,:visited,:hover,:active {
+          color: white;
+      }
+      :hover,:active {
+          background: #226bb8;
+      }
+  }
+  a.on {
+      color: white;
+      background: #226bb8;
+  }
+}

@@ -1,7 +1,10 @@
-﻿$(document).ready(function() {
-  var s = document.location
-  $("#divNavBar a").each(function() {
-    if (this.href == s.toString().split("#")[0]) {
+﻿const $ = require('jquery')
+const zbp = require('zbp')
+const templateName = 'default'
+
+$(() => {
+  $("#divNavBar a").each(function () {
+    if (this.href == location.href.toString().split("#")[0]) {
       $(this).addClass("on")
       return false
     }
@@ -9,17 +12,16 @@
 })
 
 zbp.plugin.unbind("comment.reply", "system")
-zbp.plugin.on("comment.reply", "default", function(id) {
-  var i = id
-  $("#inpRevID").val(i)
-  var frm = $('#divCommentPost')
-  var cancel = $("#cancel-reply")
+zbp.plugin.on("comment.reply", templateName, id => {
+  $("#inpRevID").val(id)
+  const frm = $('#divCommentPost')
+  const cancel = $("#cancel-reply")
 
   frm.before($("<div id='temp-frm' style='display:none'>")).addClass("reply-frm")
-  $('#AjaxComment' + i).before(frm)
+  $(`#AjaxComment${id}`).before(frm)
 
   cancel.show().click(function() {
-    var temp = $('#temp-frm')
+    const temp = $('#temp-frm')
     $("#inpRevID").val(0)
     if (!temp.length || !frm.length) return
     temp.before(frm)
@@ -36,14 +38,14 @@ zbp.plugin.on("comment.reply", "default", function(id) {
   return false
 })
 
-zbp.plugin.on("comment.get", "default", function (logid, page) {
+zbp.plugin.on("comment.get", templateName, (logid, page) => {
   $('span.commentspage').html("Waiting...")
 })
 
-zbp.plugin.on("comment.got", "default", function () {
+zbp.plugin.on("comment.got", templateName, () => {
   $("#cancel-reply").click()
 })
 
-zbp.plugin.on("comment.postsuccess", "default", function () {
+zbp.plugin.on("comment.postsuccess", templateName, () => {
   $("#cancel-reply").click()
 })

@@ -31,18 +31,18 @@ if (mix.config.inProduction) {
 // Sass / Less / Stylus
 if (fs.existsSync(getPath('style/app.scss'))) {
   mix.sass('style/app.scss', 'style/app.sass.css')
-  styles.push('style/app.sass.css')
+  styles.push('dist/style/app.sass.css')
 }
 if (fs.existsSync(getPath('style/app.less'))) {
   mix.less('style/app.less', 'style/app.less.css')
-  styles.push('style/app.less.css')
+  styles.push('dist/style/app.less.css')
 }
 if (fs.existsSync(getPath('style/app.styl'))) {
   mix.less('style/app.styl', 'style/app.styl.css')
-  styles.push('style/app.styl.css')
+  styles.push('dist/style/app.styl.css')
 }
 if (styles.length > 0) {
-  mix.styles(styles, 'style/app.css')
+  mix.styles(styles, 'dist/style/app.css')
 }
 
 // Copy styles
@@ -82,7 +82,13 @@ mix
   .pug('php/*.pug', 'dist/template', {})
   .copy('php/*.php', 'dist/template')
 
-
+mix
+  .webpackConfig({
+    externals: {
+      jquery: 'jQuery',
+      zbp: 'zbp'
+    }
+  })
 
 // Full API
 // mix.js(src, output);
