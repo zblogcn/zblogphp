@@ -2,12 +2,14 @@ const mix = require('laravel-mix')
 const fs = require('fs')
 const os = require('os')
 const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 mix.pug = require('laravel-mix-pug')
 
 const styles = []
+const getPath = str => path.join(__dirname, str)
 
-if (fs.existsSync(path.join(__dirname, 'dist'))) {
-  fs.unlinkSync(path.join(__dirname, 'dist'))
+if (fs.existsSync(getPath('dist'))) {
+  fs.unlinkSync(getPath('dist'))
 }
 if (os.platform() === 'win32') {
   fs.symlinkSync('..', 'dist', 'junction')
@@ -15,46 +17,72 @@ if (os.platform() === 'win32') {
   fs.linkSync('..', 'dist')
 }
 
-if (fs.existsSync(path.join(__dirname, 'style/app.scss'))) {
+// Global
+mix.setPublicPath('dist')
+  .disableNotifications()
+  .options({
+    processCssUrls: false
+  })
+
+if (mix.config.inProduction) {
+  mix.version()
+}
+
+// Sass / Less / Stylus
+if (fs.existsSync(getPath('style/app.scss'))) {
   mix.sass('style/app.scss', 'style/app.sass.css')
   styles.push('style/app.sass.css')
 }
-if (fs.existsSync(path.join(__dirname, 'style/app.less'))) {
+if (fs.existsSync(getPath('style/app.less'))) {
   mix.less('style/app.less', 'style/app.less.css')
   styles.push('style/app.less.css')
 }
-if (fs.existsSync(path.join(__dirname, 'style/app.styl'))) {
+if (fs.existsSync(getPath('style/app.styl'))) {
   mix.less('style/app.styl', 'style/app.styl.css')
   styles.push('style/app.styl.css')
-}
-if (fs.existsSync(path.join(__dirname, 'script/app.js'))) {
-  mix.js('script/app.js', 'script')
 }
 if (styles.length > 0) {
   mix.styles(styles, 'style/app.css')
 }
 
-mix.setPublicPath('dist')
-/*
-
+// Copy styles
 mix.webpackConfig({
-  output: {
-    path: path.resolve('dist') // path.resolve('../dist')
-  }
+  plugins: [
+    new CopyWebpackPlugin([{
+      from: 'style/**/*',
+      to: ''
+    }], {
+      ignore: [
+        '*.sass',
+        '*.scss',
+        '*.less',
+        '*.styl'
+      ]
+    })
+  ]
 })
-mix
-  // .pug('php/*.pug', '../template')
-  .copy('php/*.php', '../template')
 
-  .disableNotifications()
-  .options({
-    processCssUrls: false
-   })
-   .version()
-*/
-if (mix.config.inProduction) {
-  mix.version()
+// CoffeeScript / JavaScript
+if (fs.existsSync(getPath('script/app.coffee'))) {
+  mix.js('script/app.coffee', 'script')
+    .webpackConfig({
+      module: {
+        rules: [
+          { test: /\.coffee$/, loader: 'coffee-loader' }
+        ]
+      }
+    })
 }
+else if (fs.existsSync(getPath('script/app.js'))) {
+  mix.js('script/app.js', 'script')
+}
+
+// Pug / Raw PHP
+mix
+  .pug('php/*.pug', 'dist/template', {})
+  .copy('php/*.php', 'dist/template')
+
+
 
 // Full API
 // mix.js(src, output);
