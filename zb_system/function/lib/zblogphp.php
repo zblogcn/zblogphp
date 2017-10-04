@@ -555,6 +555,10 @@ class ZBlogPHP
             $fpname();
         }
 
+        if ($this->option['ZC_DEBUG_MODE']) {
+            $this->CheckTemplate(false, true);
+        }
+
         $this->isload = true;
 
         return true;

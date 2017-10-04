@@ -44,12 +44,12 @@ function x2013_tags_set(&$template) {
 function InstallPlugin_x2013() {
 	global $zbp;
 	if(!$zbp->Config('x2013')->HasKey('Version')){
-		$zbp->Config('x2013')->Version = '2.1';
+		$zbp->Config('x2013')->Version = '2.3';
 		$zbp->Config('x2013')->SetWeiboSina = 'http://weibo.com/810888188';
 		$zbp->Config('x2013')->SetWeiboQQ = 'http://t.qq.com/involvements';
 		$zbp->Config('x2013')->DisplayFeed = '1';
 		$zbp->Config('x2013')->SetMailKey = '4e54e0008863773ff0f44e54eb9c1805cf165e63a0601789';
-		$zbp->Config('x2013')->PostAdHeader = '<embed src="http://www.xiami.com/widget/0_1771097510/singlePlayer.swf" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent"></embed>';
+		$zbp->Config('x2013')->PostAdHeader = '<embed src="//music.163.com/style/swf/widget.swf?sid=27090774&type=2&auto=1&width=320&height=66" width="340" height="86"  allowNetworking="all"></embed>';
 		$zbp->Config('x2013')->PostAdFooter = '<img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif">';
 		$zbp->Config('x2013')->FirstInstall = '1';
 		$zbp->Config('x2013')->NavBar = '<li class="menu-item" style="position: relative;"><a href="{$host}">{$name}</a></li>';
@@ -59,12 +59,10 @@ function InstallPlugin_x2013() {
 		$zbp->Config('x2013')->Css = '#38A3DB';
 		$zbp->SaveConfig('x2013');
 	}
-	$zbp->Config('x2013')->Version = '2.1';
+	$zbp->Config('x2013')->Version = '2.3';
 	$zbp->SaveConfig('x2013');
 	//Call SetBlogHint_Custom("<span style='color:#ff0000'>x2013主题</span>已经激活，点击<a href='" +BlogHost+"zb_users/theme/x2013/plugin/main.asp'>[主题设置]</a>去配置主题")
 }
 
 function UninstallPlugin_x2013() {
-	//global $zbp;
-	//$zbp->DelConfig('x2013');
 }

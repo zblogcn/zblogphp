@@ -953,6 +953,10 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
         true
     );
 
+    if (count($articles) <= 0) {
+        $zbp->ShowError(2, __FILE__, __LINE__);
+    }
+
     $zbp->template->SetTags('title', $zbp->title);
     $zbp->template->SetTags('articles', array_merge($articles_top, $articles));
     if ($pagebar->PageAll == 0) {

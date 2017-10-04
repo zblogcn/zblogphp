@@ -56,7 +56,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_SubMenu'] as $fpname => &$
 }
 ?>
     </div>
-    <div id="divMain2" class="edit tag_edit">
+    <div id="divMain2" class="edit member_edit">
         <form id="edit" name="edit" method="post" action="#">
             <input id="edtID" name="ID" type="hidden" value="<?php echo $member->ID;?>" />
             <p>
