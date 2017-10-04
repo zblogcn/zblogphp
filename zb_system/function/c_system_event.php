@@ -1320,7 +1320,7 @@ function PostArticle()
         if (($_POST['AuthorID'] != $zbp->user->ID) && (!$zbp->CheckRights('ArticleAll'))) {
             $_POST['AuthorID'] = $zbp->user->ID;
         }
-        if ($_POST['AuthorID'] == 0) {
+        if ((is_int($_POST['AuthorID']) ? ($_POST['AuthorID'] == 0) : ($_POST['AuthorID'] == ''))) {
             $_POST['AuthorID'] = $zbp->user->ID;
         }
     }

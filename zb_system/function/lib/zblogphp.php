@@ -236,10 +236,14 @@ class ZBlogPHP
      * 获取唯一实例
      * @return null|ZBlogPHP
      */
-    public static function GetInstance()
-    {
+    public static function GetInstance() {
         if (!isset(self::$_zbp)) {
-            self::$_zbp = new ZBlogPHP;
+            if(isset($GLOBALS['option']['ZC_GODZBP_FILE']) && isset($GLOBALS['option']['ZC_GODZBP_NAME']) && is_readable(ZBP_PATH . $GLOBALS['option']['ZC_GODZBP_FILE'])){
+                require ZBP_PATH . $GLOBALS['option']['ZC_GODZBP_FILE'];
+                self::$_zbp = new $GLOBALS['option']['ZC_GODZBP_NAME'];
+            }else{
+                self::$_zbp = new ZBlogPHP;
+            }
         }
 
         return self::$_zbp;

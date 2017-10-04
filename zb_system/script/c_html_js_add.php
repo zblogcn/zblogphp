@@ -40,7 +40,6 @@ $(function () {
     var $cpVrs = $(".cp-vrs").find("a");
     var $addinfo = zbp.cookie.get("addinfo<?php echo str_replace('/', '', $zbp->cookiespath);?>");
     if (!$addinfo){
-        zbp.userinfo.output();
         return ;
     }
     $addinfo = JSON.parse($addinfo);
