@@ -14,13 +14,13 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Begin'] as $fpname => &$fpsignal) 
 
 switch ($action) {
     case 'login':
-        if ($zbp->user->ID > 0 && GetVars('redirect', 'GET')) {
+        if ( !empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
             Redirect(GetVars('redirect', 'GET'));
         }
         if ($zbp->CheckRights('admin')) {
             Redirect('cmd.php?act=admin');
         }
-        if ($zbp->user->ID == 0 && GetVars('redirect', 'GET')) {
+        if ( empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
             setcookie("redirect", GetVars('redirect', 'GET'), 0, $zbp->cookiespath);
         }
         Redirect('login.php');
@@ -34,7 +34,7 @@ switch ($action) {
         break;
     case 'verify':
         if (VerifyLogin()) {
-            if ($zbp->user->ID > 0 && GetVars('redirect', 'COOKIE')) {
+            if ( !empty($zbp->user->ID) && GetVars('redirect', 'COOKIE')) {
                 Redirect(GetVars('redirect', 'COOKIE'));
             }
             Redirect('admin/index.php?act=admin');
