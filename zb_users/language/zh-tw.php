@@ -512,7 +512,7 @@ return array(
         // ZBP errors first
         '6' => '
 			您是否已經登入？請先登入控制台，再重試操作。<br/>
-			您是否有此功能所需的權限？您可以<a href="{%BlogHost%}zb_system/cmd.php?act=misc&type=vrs" target="_blank">點擊這裡查看您的權限</a>。<br/>
+			您是否有此功能所需的權限？您可以<a href="{%bloghost%}zb_system/cmd.php?act=misc&type=vrs" target="_blank">點擊這裡查看您的權限</a>。<br/>
 			<br/>
 		',
         '8' => '
