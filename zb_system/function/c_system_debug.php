@@ -310,6 +310,7 @@ class ZBlogException
      */
     public static function SetErrorHook()
     {
+        if (IS_CLI) return;
         set_error_handler('Debug_Error_Handler');
         set_exception_handler('Debug_Exception_Handler');
         register_shutdown_function('Debug_Shutdown_Handler');

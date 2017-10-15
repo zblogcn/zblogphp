@@ -75,6 +75,7 @@ define('IS_CADDY', PHP_SERVER === SERVER_CADDY);
 define('IS_BUILTIN', PHP_SERVER === SERVER_BUILTIN);
 define('IS_HHVM', PHP_ENGINE === ENGINE_HHVM);
 
+define('IS_CLI', php_sapi_name() === 'cli');
 /**
  * 定义文章类型
  */
