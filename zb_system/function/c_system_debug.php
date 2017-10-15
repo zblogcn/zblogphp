@@ -228,6 +228,11 @@ function Debug_Shutdown_Handler()
     }
 }
 
+function Debug_DoNothing ()
+{
+    return false;
+}
+
 /**
  * Class ZBlogException
  *
@@ -321,9 +326,9 @@ class ZBlogException
      */
     public static function ClearErrorHook()
     {
-        set_error_handler(create_function('', 'return false;'));
-        set_exception_handler(create_function('', 'return false;'));
-        register_shutdown_function(create_function('', 'return false;'));
+        set_error_handler('Debug_DoNothing');
+        set_exception_handler('Debug_DoNothing');
+        register_shutdown_function('Debug_DoNothing');
     }
 
     /**
