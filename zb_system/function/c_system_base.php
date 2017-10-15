@@ -379,6 +379,16 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
     _stripslashes($_REQUEST);
 }
 
+
+/**
+ * CLI Mock 处理 
+ */
+if (IS_CLI) {
+    $_SERVER["QUERY_STRING"] = "";
+    $_SERVER["HTTP_HOST"] = "http://localhost";
+    $_SERVER['SERVER_SOFTWARE'] = "CLI";
+}
+
 /**
  * 定义系统全局变量
  */
