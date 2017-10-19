@@ -298,6 +298,17 @@ function ViewIndex()
          Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'Include_ShowError404');
     }
 
+    if (IS_IIS && isset($_GET['rewrite']) && isset($_GET['full_uri'])) {
+        //对iis+rewirt进行修正
+        $uri_array= parse_url($_GET['full_uri']));
+        if(isset($uri_array['query'])){
+            parse_str($uri_array['query'],$uri_query);
+            $_GET = $_GET + $uri_query;
+            $_REQUEST = $_REQUEST + $uri_query;
+        }
+        unset($uri_array,$uri_query);
+    }
+
     switch ($action) {
         case 'feed':
             ViewFeed();

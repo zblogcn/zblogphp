@@ -469,6 +469,6 @@ class UrlRule
         $url = str_replace('<:', '{', $url);
         $url = str_replace(':>', '}', $url);
 
-        return 'RewriteRule ' . $zbp->cookiespath . $url . ' [I,L]';
+        return 'RewriteRule ' . $zbp->cookiespath . $url . '&full_uri=$0 [I,L]';
     }
 }
