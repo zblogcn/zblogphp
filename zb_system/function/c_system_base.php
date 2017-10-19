@@ -75,6 +75,7 @@ define('IS_CADDY', PHP_SERVER === SERVER_CADDY);
 define('IS_BUILTIN', PHP_SERVER === SERVER_BUILTIN);
 define('IS_HHVM', PHP_ENGINE === ENGINE_HHVM);
 
+define('IS_CLI', php_sapi_name() === 'cli');
 /**
  * 定义文章类型
  */
@@ -376,6 +377,16 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
     _stripslashes($_POST);
     _stripslashes($_COOKIE);
     _stripslashes($_REQUEST);
+}
+
+
+/**
+ * CLI Mock 处理 
+ */
+if (IS_CLI) {
+    $_SERVER["QUERY_STRING"] = "";
+    $_SERVER["HTTP_HOST"] = "http://localhost";
+    $_SERVER['SERVER_SOFTWARE'] = "CLI";
 }
 
 /**
