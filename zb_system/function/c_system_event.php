@@ -918,7 +918,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
     $pagebar->UrlRule->Rules['{%page%}'] = $page;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Core'] as $fpname => &$fpsignal) {
-        $fpname($type, $page, $category, $author, $datetime, $tag, $w, $pagebar);
+        $fpname($type, $page, $category, $author, $datetime, $tag, $w, $pagebar, $template);
     }
 
     if ($zbp->option['ZC_LISTONTOP_TURNOFF'] == false) {

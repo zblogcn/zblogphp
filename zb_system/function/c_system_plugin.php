@@ -142,6 +142,24 @@ function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSI
     if (isset($GLOBALS['hooks'][$plugname])) {
         if (!isset($GLOBALS['hooks'][$plugname][$functionname])) {
             $GLOBALS['hooks'][$plugname][$functionname] = $exitsignal;
+            return true;
+        }
+    }
+}
+
+/*
+'*********************************************************
+' 目的：卸载Filter接口的某项挂载函数
+' 参数：'plugname:接口名称
+'functionname:要卸载的函数名
+'exitsignal:return,break,continue
+'*********************************************************
+ */
+function Remove_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSIGNAL_NONE) {
+    if (isset($GLOBALS['hooks'][$plugname])) {
+        if (isset($GLOBALS['hooks'][$plugname][$functionname])) {
+            unset($GLOBALS['hooks'][$plugname][$functionname]);
+            return true;
         }
     }
 }
