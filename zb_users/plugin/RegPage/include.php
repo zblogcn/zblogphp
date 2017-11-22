@@ -9,9 +9,12 @@ RegisterPlugin("RegPage", "ActivePlugin_RegPage");
 
 function ActivePlugin_RegPage()
 {
-
+    global $zbp;
     Add_Filter_Plugin('Filter_Plugin_Index_Begin', 'RegPage_Main');
     Add_Filter_Plugin('Filter_Plugin_Login_Header', 'RegPage_LoginAddon');
+    if(trim($zbp->Config('RegPage')->rewrite_url)==''){
+        $zbp->Config('RegPage')->rewrite_url = '/reg.html';
+    }
 }
 
 $RegPage_Table = '%pre%regpage';
@@ -40,6 +43,7 @@ function InstallPlugin_RegPage()
         $zbp->Config('RegPage')->only_one_ip = 0;
         $zbp->Config('RegPage')->disable_website = 0;
         $zbp->Config('RegPage')->disable_validcode = 0;
+        $zbp->Config('RegPage')->rewrite_url = '/reg.html';
         $zbp->SaveConfig('RegPage');
 
         RegPage_CreateTable();
@@ -112,7 +116,11 @@ function RegPage_Main()
 {
     global $zbp;
 
-    if (isset($_GET['reg'])) {
+
+    if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && stripos($zbp->currenturl,$zbp->Config('RegPage')->rewrite_url)===0) {
+        RegPage_Page();
+        die();
+    }elseif (isset($_GET['reg'])) {
         RegPage_Page();
         die();
     }
@@ -195,6 +203,10 @@ js;
 
     $article->Content .= $s;
     
+    if ($zbp->template->hasTemplate('t_regpage')) {
+        $article->Template = 't_regpage';
+    }
+
     $zbp->template->SetTags('title', $article->Title);
     $zbp->template->SetTags('article', $article);
     $zbp->template->SetTags('type', $article->type = 0 ? 'article' : 'page');

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>RegPage</id>
 <name>注册组件</name>
@@ -21,11 +21,13 @@
 <adapted>140220</adapted>
 <version>2.3</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2017-06-26</modified>
+<modified>2017-11-05</modified>
 <price>0</price>
+<phpver>5.2</phpver>
 <advanced>
   <dependency></dependency>
   <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
   <conflict></conflict>
 </advanced>
 <sidebars>

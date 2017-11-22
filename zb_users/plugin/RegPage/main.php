@@ -18,6 +18,7 @@ if (!$zbp->CheckPlugin('RegPage')) {
 
 $blogtitle = '注册组件';
 
+
 if (count($_POST) > 0) {
     $zbp->Config('RegPage')->open_reg = (int) $_POST['open_reg'];
     $zbp->Config('RegPage')->default_level = (int) $_POST['default_level'];
@@ -28,6 +29,7 @@ if (count($_POST) > 0) {
     $zbp->Config('RegPage')->only_on_ip = (int) $_POST['only_on_ip'];
     $zbp->Config('RegPage')->disable_website = $_POST['disable_website'];
     $zbp->Config('RegPage')->disable_validcode = $_POST['disable_validcode'];
+    $zbp->Config('RegPage')->rewrite_url = trim($_POST['rewrite_url']);
     $zbp->SaveConfig('RegPage');
     
     if (GetVars('addnavbar')) {
@@ -102,6 +104,10 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <tr>
     <td class="td30"><p align='left'><b>在登录页引导用户注册的链接文字</b></p></td>
     <td><input type="text" name="loginpage_text" value="<?php echo htmlspecialchars($zbp->Config('RegPage')->loginpage_text);?>" style="width:89%;" /></td>
+</tr>
+<tr>
+    <td class="td30"><p align='left'><b>伪静态下的注册页地址</b></p></td>
+    <td><input type="text" name="rewrite_url" value="<?php echo htmlspecialchars($zbp->Config('RegPage')->rewrite_url);?>" style="width:89%;" /></td>
 </tr>
 <tr>
     <td class="td30"><p align='left'><b>同一IP一天只能注册一个账号</b></p></td>
