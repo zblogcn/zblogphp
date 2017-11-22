@@ -11,6 +11,7 @@ ob_start();
 
 defined('ZBP_PATH') || define('ZBP_PATH', rtrim(str_replace('\\', '/', realpath(dirname(__FILE__) . '/../../')), '/') . '/');
 defined('ZBP_HOOKERROR') || define('ZBP_HOOKERROR', true);
+defined('ZBP_SAFEMODE') || define('ZBP_SAFEMODE', false);
 
 
 /**
@@ -455,27 +456,30 @@ $GLOBALS['zbp']->Initialize();
 /**
  * 加载主题和插件APP
  */
-if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/theme.xml')) {
-    $GLOBALS['activedapps'][] = $GLOBALS['blogtheme'];
-}
-
-if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/include.php')) {
-    require $file_base;
-}
-
-$aps = $GLOBALS['zbp']->GetPreActivePlugin();
-foreach ($aps as $ap) {
-    if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/plugin.xml')) {
-        $GLOBALS['activedapps'][] = $ap;
+if(ZBP_SAFEMODE === false){
+    if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/theme.xml')) {
+        $GLOBALS['activedapps'][] = $GLOBALS['blogtheme'];
     }
-    if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/include.php')) {
+
+    if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/include.php')) {
         require $file_base;
     }
-}
 
-foreach ($GLOBALS['plugins'] as &$fn) {
-    if (function_exists($fn)) {
-        $fn();
+    $aps = $GLOBALS['zbp']->GetPreActivePlugin();
+    foreach ($aps as $ap) {
+        if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/plugin.xml')) {
+            $GLOBALS['activedapps'][] = $ap;
+        }
+        if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/include.php')) {
+            require $file_base;
+        }
+    }
+
+    foreach ($GLOBALS['plugins'] as &$fn) {
+        if (function_exists($fn)) {
+            $fn();
+        }
     }
 }
+
 unset($file_base, $aps, $fn, $ap, $op_users, $opk, $opv);
