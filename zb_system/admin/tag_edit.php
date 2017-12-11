@@ -90,7 +90,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Edit_SubMenu'] as $fpname => &$fps
         </form>
         <script type="text/javascript">
 function checkInfo(){
-  document.getElementById("edit").action="../cmd.php?act=TagPst";
+  document.getElementById("edit").action="../cmd.php?act=TagPst<?php echo '&token=' . $zbp->GetToken(); ?>";
 
   if(!$("#edtName").val()){
     alert("<?php echo $lang['error']['72']?>");

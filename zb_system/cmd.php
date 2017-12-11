@@ -141,6 +141,10 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ArticlePst':
+        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
+            $zbp->ShowError(5, __FILE__, __LINE__);
+            die();
+        }
         PostArticle();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -165,6 +169,10 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PagePst':
+        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
+            $zbp->ShowError(5, __FILE__, __LINE__);
+            die();
+        }
         PostPage();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -178,6 +186,10 @@ switch ($action) {
         Redirect('admin/category_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'CategoryPst':
+        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
+            $zbp->ShowError(5, __FILE__, __LINE__);
+            die();
+        }
         PostCategory();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -292,6 +304,10 @@ switch ($action) {
         Redirect('admin/tag_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'TagPst':
+        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
+            $zbp->ShowError(5, __FILE__, __LINE__);
+            die();
+        }
         PostTag();
         $zbp->BuildModule();
         $zbp->SaveCache();
