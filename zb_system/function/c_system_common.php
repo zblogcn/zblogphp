@@ -1407,6 +1407,16 @@ function CreateWebToken($wt_id, $time)
 
 
 
+function GetIDArrayByList($array){
+    $ids = array();
+    foreach ($array as $key => $value) {
+        $ids[] = reset($value->GetData());
+    }
+    return $ids;
+}
+
+
+
 /**
  * 处理PHP版本兼容代码
  */
