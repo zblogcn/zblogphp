@@ -94,7 +94,7 @@ class DbSQLite3 implements iDataBase
         // 遍历出来
         $results = $this->db->query($this->sql->Filter($query));
         $data = array();
-        if (!($result instanceof Sqlite3Result)) {
+        if (!($results instanceof Sqlite3Result)) {
             return $data;
         }
         if ($results->numColumns() > 0) {
