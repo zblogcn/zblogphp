@@ -1,3 +1,4 @@
+<?php if (!defined('ZBP_PATH')) exit('Access denied');?>
 </head>
 <body>
 <header class="header">

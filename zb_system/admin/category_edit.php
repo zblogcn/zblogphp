@@ -150,4 +150,3 @@ function checkInfo(){
 require ZBP_PATH . 'zb_system/admin/admin_footer.php';
 
 RunTime();
-?>
