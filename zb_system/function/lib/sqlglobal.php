@@ -444,6 +444,15 @@ class SQLGlobal
             $x = (string) $value[1];
             $y = $this->db->EscapeString((string) $value[2]);
             $whereData = " $x $eq '$y' ";
+        } elseif (($eq == 'AND') && count($value)>2) {
+            $sqlArray = array();
+            foreach ($value as $x => $y) {
+                if ($x == 0) {
+                    continue;
+                }
+                $sqlArray[] = $this->buildWhere_Single($y);
+            }
+            $whereData = " ( " . implode(' AND ', $sqlArray) . ') ';
         } elseif ($eq == 'EXISTS' || $eq == 'NOT EXISTS') {
             if (!isset($value[2])) {
                 $whereData = " $eq ( $value[1] ) ";

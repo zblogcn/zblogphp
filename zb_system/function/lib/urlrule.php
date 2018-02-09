@@ -218,7 +218,7 @@ class UrlRule
                 $url = str_replace('%alias%', '(?P<alias>[^\./_]+?)', $url);
             }
         }
-        if ($type == 'page' || $type == 'article') {
+        if ($type == 'page' || $type == 'article' || $type == 'post') {
             if (strpos($url, '%id%') !== false) {
                 $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
             }
