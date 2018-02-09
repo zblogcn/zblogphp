@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('ZBP_PATH')) exit('Access denied');
 /**
  * MySQLi数据库操作类
  *

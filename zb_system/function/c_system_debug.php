@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('ZBP_PATH')) exit('Access denied');
 /**
  * 错误调试
  * @package Z-BlogPHP

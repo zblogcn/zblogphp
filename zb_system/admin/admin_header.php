@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<?php if (!defined('ZBP_PATH')) exit('Access denied');?><!doctype html>
 <html lang="<?php echo $lang['lang_bcp47'] ?>">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1" />
 <meta name="generator" content="Z-BlogPHP <?php echo ZC_VERSION_DISPLAY ?>" />
 <meta name="robots" content="none" />
 <meta name="renderer" content="webkit" />

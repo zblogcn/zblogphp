@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('ZBP_PATH')) exit('Access denied');
 /**
  * 自定义域类
  *

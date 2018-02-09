@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('ZBP_PATH')) exit('Access denied');
 /**
  * 插件接口相关
  * 接口模式复制自Z-Blog ASP版

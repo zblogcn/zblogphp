@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('ZBP_PATH')) exit('Access denied');
 /**
  * Copyright (c) 2014 TrueServer B.V.
  * Permission is hereby granted, free of charge, to any person obtaining a copy
