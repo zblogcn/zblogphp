@@ -471,7 +471,7 @@ class ZBlogPHP
             }
         */
 
-        if ($this->option['ZC_VERSION_IN_HEADER']) {
+        if ($this->option['ZC_VERSION_IN_HEADER'] && !headers_sent()) {
             header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
         }
 
@@ -511,8 +511,10 @@ class ZBlogPHP
 
         $this->StartGzip();
 
-        header('Content-type: text/html; charset=utf-8');
-
+        if (!headers_sent()) {
+            header('Content-type: text/html; charset=utf-8');
+        }
+        
         $this->ConvertTableAndDatainfo();
 
         $this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
