@@ -18,14 +18,16 @@
   <email></email>
   <url>http://lisizhang.com/</url>
 </source>
-<adapted>140614</adapted>
-<version>2</version>
+<adapted>151740</adapted>
+<version>2.3</version>
 <pubdate>2013-01-31</pubdate>
-<modified>2014-09-28</modified>
+<modified>2017-08-18</modified>
 <price>0</price>
+<phpver>5.2</phpver>
 <advanced>
   <dependency></dependency>
   <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
   <conflict></conflict>
 </advanced>
 <sidebars>

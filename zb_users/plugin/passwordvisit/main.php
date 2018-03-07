@@ -2,20 +2,20 @@
 require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
-$action='root';
+$action = 'root';
 if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
 if (!$zbp->CheckPlugin('passwordvisit')) {$zbp->ShowError(48);die();}
 
-$blogtitle='密码访问';
+$blogtitle = '密码访问';
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 
 if(isset($_POST['all_encrypt']) && $_POST['all_encrypt'] != ''){
-	$zbp->Config('passwordvisit')->all_encrypt = $_POST['all_encrypt'];
-	$zbp->Config('passwordvisit')->default_password = $_POST['default_password'];
-	$zbp->Config('passwordvisit')->default_text = $_POST['default_text'];
-	$zbp->SaveConfig('passwordvisit');
-	$zbp->ShowHint('good', '保存成功！');
+    $zbp->Config('passwordvisit')->all_encrypt = $_POST['all_encrypt'];
+    $zbp->Config('passwordvisit')->default_password = $_POST['default_password'];
+    $zbp->Config('passwordvisit')->default_text = $_POST['default_text'];
+    $zbp->SaveConfig('passwordvisit');
+    $zbp->ShowHint('good', '保存成功！');
 }
 
 ?>

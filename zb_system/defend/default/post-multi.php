@@ -1,3 +1,4 @@
+{* Template Name:列表页普通文章 *}
 <div class="post multi">
 	<h4 class="post-date">{$article.Time('Y年m月d日')}</h4>
 	<h2 class="post-title"><a href="{$article.Url}">{$article.Title}</a></h2>

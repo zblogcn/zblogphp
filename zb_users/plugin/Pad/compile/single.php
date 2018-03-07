@@ -9,14 +9,14 @@
 <section>
   <section id="main">
     <section>
-<?php if ($article->Type==ZC_POST_TYPE_ARTICLE) { ?>
+<?php if ($article->Type == ZC_POST_TYPE_ARTICLE) { ?>
 <?php  include $this->GetTemplate('post-single');  ?>
-<?php }else{  ?>
+<?php } else {  ?>
 <?php  include $this->GetTemplate('post-page');  ?>
 <?php } ?>
     </section>
     <aside>
-      <?php  include $this->GetTemplate('sidebar_pad');  ?>
+        <?php  include $this->GetTemplate('sidebar_pad');  ?>
     </aside>
   </section>
 </section>

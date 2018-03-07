@@ -7,13 +7,13 @@
 	<input type="hidden" name="inpId" id="inpId" value="{$article.ID}" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
 {if $user.ID>0}
-	<input type="hidden" name="inpName" id="inpName" value="{$user.Name}" />
+	<input type="hidden" name="inpName" id="inpName" value="{$user.StaticName}" />
 	<input type="hidden" name="inpEmail" id="inpEmail" value="{$user.Email}" />
 	<input type="hidden" name="inpHomePage" id="inpHomePage" value="{$user.HomePage}" />	
 {else}
     <p>
       <label>
-        <input type="text" id="inpName" name="inpName" size="28" tabindex="2" required value="{$user.Name}" />
+        <input type="text" id="inpName" name="inpName" size="28" tabindex="2" required value="{$user.StaticName}" />
         名称<sup>*</sup></label>
     </p>
     <p>
@@ -42,7 +42,7 @@
       <textarea name="txaArticle" id="txaArticle" class="txt" cols="50" rows="4" tabindex="1" required></textarea>
     </p>
     <p>
-      <button name="btnSumbit" type="submit" tabindex="6" onclick="return VerifyMessage()">提交</button>
+      <button name="btnSumbit" type="submit" tabindex="6" onclick="return zbp.comment.post()">提交</button>
     </p>
   </form>
   </dd>

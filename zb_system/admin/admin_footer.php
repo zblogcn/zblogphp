@@ -1,6 +1,9 @@
-<?php if ($zbp->option['ZC_ADMIN_HTML5_ENABLE']) {?></section><?php } else {?></div><?php }?>
+<?php if (!defined('ZBP_PATH')) exit('Access denied');?>
+</section>
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Footer'] as $fpname => &$fpsignal) {$fpname();}
+foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Footer'] as $fpname => &$fpsignal) {
+    $fpname();
+}
 ?>
 </body>
 </html>

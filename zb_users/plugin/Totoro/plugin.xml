@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>Totoro</id>
-<name>Totoro</name>
+<name>Totoro - 评论审核系统</name>
 <url>http://www.zsxsoft.com/</url>
 <note>基于TotoroII的Z-Blog的评论及引用管理审核系统增强版。</note>
 <description></description>
@@ -19,9 +19,9 @@
   <url></url>
 </source>
 <adapted>140220</adapted>
-<version>2.2</version>
+<version>2.4</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2015-01-30</modified>
+<modified>2016-05-21</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

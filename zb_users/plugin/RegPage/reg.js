@@ -9,12 +9,14 @@ function RegPage(){
 		"homepage":$("input[name='homepage']").val(),
 		"invitecode":$("input[name='invitecode']").val(),
 		"verifycode":$("input[name='verifycode']").val(),
+		"hash":$("input[name='hash']").val(),
 		},
 		function(data){
 			var s =data;
 			if((s.search("faultCode")>0)&&(s.search("faultString")>0))
 			{
-				alert(s.match("<string>.+?</string>")[0].replace("<string>","").replace("</string>",""))
+				alert(s.match("<string>.+?</string>")[0].replace("<string>","").replace("</string>",""));
+				$("#reg_verfiycode").click();
 			}
 			else{
 				var s =data;

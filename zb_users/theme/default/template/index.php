@@ -1,3 +1,4 @@
+{* Template Name:首页及列表页 *}
 {template:header}
 <body class="multi {$type}">
 <div id="divAll">

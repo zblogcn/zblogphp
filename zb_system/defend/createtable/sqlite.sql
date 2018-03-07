@@ -6,7 +6,7 @@ CREATE TABLE %pre%post (
   log_Status integer NOT NULL DEFAULT 0,
   log_Type integer NOT NULL DEFAULT 0,
   log_Alias varchar(255) NOT NULL DEFAULT '',
-  log_IsTop bit NOT NULL DEFAULT 0,
+  log_IsTop integer NOT NULL DEFAULT 0,
   log_IsLock bit NOT NULL DEFAULT 0,
   log_Title varchar(255) NOT NULL DEFAULT '',
   log_Intro text NOT NULL DEFAULT '',
@@ -21,8 +21,9 @@ CREATE TABLE %pre%post (
 
 CREATE TABLE %pre%category (
   cate_ID integer primary key autoincrement,
-  cate_Name varchar(50) NOT NULL DEFAULT '',
+  cate_Name varchar(255) NOT NULL DEFAULT '',
   cate_Order integer NOT NULL DEFAULT 0,
+  cate_Type integer NOT NULL DEFAULT 0,
   cate_Count integer NOT NULL DEFAULT 0,
   cate_Alias varchar(255) NOT NULL DEFAULT '',
   cate_Intro text NOT NULL DEFAULT '',
@@ -41,7 +42,7 @@ CREATE TABLE %pre%comment (
   comm_RootID integer NOT NULL DEFAULT 0,
   comm_ParentID integer NOT NULL DEFAULT 0,
   comm_AuthorID integer NOT NULL DEFAULT 0,
-  comm_Name varchar(20) NOT NULL DEFAULT '',
+  comm_Name varchar(50) NOT NULL DEFAULT '',
   comm_Email varchar(50) NOT NULL DEFAULT '',
   comm_HomePage varchar(255) NOT NULL DEFAULT '',
   comm_Content text NOT NULL DEFAULT '',
@@ -56,20 +57,6 @@ CREATE TABLE %pre%config (
   conf_ID integer primary key autoincrement,
   conf_Name varchar(50) NOT NULL NOT NULL DEFAULT '',
   conf_Value text
-);
-
-
-CREATE TABLE %pre%counter (
-  coun_ID integer primary key autoincrement,
-  coun_MemID integer NOT NULL DEFAULT 0,
-  coun_IP varchar(15) NOT NULL DEFAULT '',
-  coun_Agent text NOT NULL DEFAULT '',
-  coun_Refer varchar(255) NOT NULL DEFAULT '',
-  coun_Title varchar(255) NOT NULL DEFAULT '',
-  coun_PostTime integer NOT NULL DEFAULT 0,
-  coun_Description text NOT NULL DEFAULT '',
-  coun_PostData text NOT NULL DEFAULT '',
-  coun_AllRequestHeader text
 );
 
 
@@ -97,7 +84,7 @@ CREATE TABLE %pre%member (
 
 CREATE TABLE %pre%module (
   mod_ID integer primary key autoincrement,
-  mod_Name varchar(100) NOT NULL DEFAULT '',
+  mod_Name varchar(255) NOT NULL DEFAULT '',
   mod_FileName varchar(50) NOT NULL DEFAULT '',
   mod_Content text NOT NULL DEFAULT '',
   mod_SidebarID integer NOT NULL DEFAULT 0,
@@ -114,6 +101,7 @@ CREATE TABLE %pre%tag (
   tag_ID integer primary key autoincrement,
   tag_Name varchar(255) NOT NULL DEFAULT '',
   tag_Order integer NOT NULL DEFAULT 0,
+  tag_Type integer NOT NULL DEFAULT 0,
   tag_Count integer NOT NULL DEFAULT 0,
   tag_Alias varchar(255) NOT NULL DEFAULT '',  
   tag_Intro text NOT NULL DEFAULT '',

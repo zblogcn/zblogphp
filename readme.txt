@@ -1,15 +1,37 @@
-﻿Z-BlogPHP安装说明
+﻿Z-BlogPHP是由Z-Blog社区提供的博客程序，一直致力于给国内用户提供优秀的博客写作体验。从2006年起发布第一版，至今已有11年的历史，是目前国内为数不多的持续提供更新的开源CMS系统之一。我们的目标是使用户沉浸于写作、记录生活，不需要关注繁琐的设置等，让用户专注于创作。对于用户而言，它简单易用，体积小，速度快，支持数据量大。对开发者而言，它又有着强大的可定制性、丰富的插件接口和独立的主题模板。期待Z-BlogPHP能成为您写博客的第一选择。
 
-1.Z-BlogPHP需要PHP 5.2及以上版本的PHP环境。
-2.支持IIS,Apache,Lighttpd,Nginx等Web服务器。
-3.上传Z-BlogPHP。
-4.打开http://你的网站/。
-5.同意Z-Blog许可协议。
-6.建立数据库
-    Z-BlogPHP支持MySQL以及SQLite数据库。具体您该使用哪一种需要参考空间配置。
-    一般情况下选择MySQL数据库，输入空间商为您提供的MySQL帐号密码。
-    或是使用单数据库的SQLite，程序将自动创建。
-    然后输入你为站点设置的管理员帐号密码。
-7.安装成功，进入网站。
-8.安装完成后请删除zb_install文件夹。
-9.系统默认集成的是UEditor编辑器，如需Markdown，KindEditor等请到应用中心搜索并安装。
+GitHub: https://github.com/zblogcn/zblogphp
+
+=============================
+          社区说明
+=============================
+1. 使用交流及开发建议，请转向：Z-Blog论坛 http://bbs.zblogcn.com/；
+2. 开发文档，参看[Z-Wiki](http://wiki.zblogcn.com/doku.php?id=zblogphp)；
+3. 提交功能BUG，请在论坛内，或直接在GitHub Issue内提交；
+4. 欢迎Pull Request，如果你喜欢，请为我们点一个Star :)
+
+=============================
+          运行环境
+=============================
+- Web Server: IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
+- PHP 5.2 - 7.2 / HHVM 3 
+- MySQL 5+ / MariaDB 10+ / SQLite 3
+
+=============================
+          安装说明
+=============================
+首先请确保网站目录拥有755权限。
+1. 上传Z-BlogPHP程序到网站目录
+2. 打开http://你的网站/，进入安装界面
+3. 建立数据库
+   - 选择MySQL数据库，请输入空间商为您提供的MySQL帐号密码等信息
+   - 选择SQLite，请确保服务器支持SQLite，安装程序将在点击下一步后自动创建SQLite数据库文件
+4. 填写你为站点设置的管理员账号密码，务必使用强口令账号
+5. 点击下一步，安装成功，进入网站
+
+=============================
+          一键部署
+=============================
+对于非虚拟主机用户，推荐使用宝塔面板搭建PHP环境并部署Z-BlogPHP。2分钟装好面板，一键管理服务器。
+安装宝塔面板：https://www.bt.cn/download/linux.html?z-blog
+一键部署：https://www.bt.cn/bbs/thread-5443-1-1.html?z-blog

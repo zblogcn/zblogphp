@@ -106,36 +106,36 @@ tr.color4 { background: #ffffdd; }
 /*导航图标区*/
 #leftmenu li span { background-repeat: no-repeat; background-position: 100px 8px; background-image: url(../image/common/window_1.png); }
 #leftmenu li.on span { background-image: url(../image/common/window_2.png); }
-#leftmenu #nav_build span { background-image: url(../image/common/rebuild_1.png) !important; }
-#leftmenu #nav_home span { background-image: url(../image/common/home_1.png) !important; }
-#leftmenu #nav_new span { background-image: url(../image/common/new_1.png) !important; }
-#leftmenu #nav_article span { background-image: url(../image/common/article_1.png) !important; }
-#leftmenu #nav_page span { background-image: url(../image/common/page_1.png) !important; }
-#leftmenu #nav_category span { background-image: url(../image/common/category_1.png) !important; }
-#leftmenu #nav_tags span { background-image: url(../image/common/tags_1.png) !important; }
-#leftmenu #nav_comment span { background-image: url(../image/common/comments_1.png) !important; }
-#leftmenu #nav_quoted span { background-image: url(../image/common/quoted_1.png) !important; }
-#leftmenu #nav_upload span { background-image: url(../image/common/accessories_1.png) !important; }
-#leftmenu #nav_theme span { background-image: url(../image/common/themes_1.png) !important; }
-#leftmenu #nav_plugin span { background-image: url(../image/common/plugin_1.png) !important; }
-#leftmenu #nav_module span { background-image: url(../image/common/link_1.png) !important; }
-#leftmenu #nav_member span { background-image: url(../image/common/user_1.png) !important; }
+#leftmenu #nav_build span { background-image: url(../image/common/rebuild_1.png); }
+#leftmenu #nav_home span { background-image: url(../image/common/home_1.png); }
+#leftmenu #nav_new span { background-image: url(../image/common/new_1.png); }
+#leftmenu #nav_article span { background-image: url(../image/common/article_1.png); }
+#leftmenu #nav_page span { background-image: url(../image/common/page_1.png); }
+#leftmenu #nav_category span { background-image: url(../image/common/category_1.png); }
+#leftmenu #nav_tags span { background-image: url(../image/common/tags_1.png); }
+#leftmenu #nav_comment span { background-image: url(../image/common/comments_1.png); }
+#leftmenu #nav_quoted span { background-image: url(../image/common/quoted_1.png); }
+#leftmenu #nav_upload span { background-image: url(../image/common/accessories_1.png); }
+#leftmenu #nav_theme span { background-image: url(../image/common/themes_1.png); }
+#leftmenu #nav_plugin span { background-image: url(../image/common/plugin_1.png); }
+#leftmenu #nav_module span { background-image: url(../image/common/link_1.png); }
+#leftmenu #nav_member span { background-image: url(../image/common/user_1.png); }
 
 /*高亮导航图标区*/
-#leftmenu #nav_build.on span { background-image: url(../image/common/rebuild_2.png) !important; }
-#leftmenu #nav_home.on span { background-image: url(../image/common/home_2.png) !important; }
-#leftmenu #nav_new.on span { background-image: url(../image/common/new_2.png) !important; }
-#leftmenu #nav_article.on span { background-image: url(../image/common/article_2.png) !important; }
-#leftmenu #nav_page.on span { background-image: url(../image/common/page_2.png) !important; }
-#leftmenu #nav_category.on span { background-image: url(../image/common/category_2.png) !important; }
-#leftmenu #nav_tags.on span { background-image: url(../image/common/tags_2.png) !important; }
-#leftmenu #nav_comment.on span { background-image: url(../image/common/comments_2.png) !important; }
-#leftmenu #nav_quoted.on span { background-image: url(../image/common/quoted_2.png) !important; }
-#leftmenu #nav_upload.on span { background-image: url(../image/common/accessories_2.png) !important; }
-#leftmenu #nav_theme.on span { background-image: url(../image/common/themes_2.png) !important; }
-#leftmenu #nav_plugin.on span { background-image: url(../image/common/plugin_2.png) !important; }
-#leftmenu #nav_module.on span { background-image: url(../image/common/link_2.png) !important; }
-#leftmenu #nav_member.on span { background-image: url(../image/common/user_2.png) !important; }
+#leftmenu #nav_build.on span { background-image: url(../image/common/rebuild_2.png); }
+#leftmenu #nav_home.on span { background-image: url(../image/common/home_2.png); }
+#leftmenu #nav_new.on span { background-image: url(../image/common/new_2.png); }
+#leftmenu #nav_article.on span { background-image: url(../image/common/article_2.png); }
+#leftmenu #nav_page.on span { background-image: url(../image/common/page_2.png); }
+#leftmenu #nav_category.on span { background-image: url(../image/common/category_2.png); }
+#leftmenu #nav_tags.on span { background-image: url(../image/common/tags_2.png); }
+#leftmenu #nav_comment.on span { background-image: url(../image/common/comments_2.png); }
+#leftmenu #nav_quoted.on span { background-image: url(../image/common/quoted_2.png); }
+#leftmenu #nav_upload.on span { background-image: url(../image/common/accessories_2.png); }
+#leftmenu #nav_theme.on span { background-image: url(../image/common/themes_2.png); }
+#leftmenu #nav_plugin.on span { background-image: url(../image/common/plugin_2.png); }
+#leftmenu #nav_module.on span { background-image: url(../image/common/link_2.png); }
+#leftmenu #nav_member.on span { background-image: url(../image/common/user_2.png); }
 #leftmenu li span { background-repeat: no-repeat; background-position: 0px 8px; }
 #leftmenu li.split { height: 0px !important; background: #fff; }
 #leftmenu li.split hr { display: none; }
@@ -150,8 +150,10 @@ tr.color4 { background: #ffffdd; }
 #divMain a:hover,
 #divMain2  a:hover { color: #d60000; }
 #divMain2 { padding: 0px; margin: 0px; }
-.divHeader { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 6px 0 40px 0; }
-.divHeader2 { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 6px 0 40px 0; border-bottom: 5px solid #e0e0e0; }
+.divHeader { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 5px 0 42px 0; }
+.divHeader2 { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 5px 0 42px 0; border-bottom: 5px solid #e0e0e0; margin-bottom:5px; }
+.main>#divMain>div[class^="divHeader"],.main>#divMain2>div[class^="divHeader"]{padding-left:40px;background:url('../image/admin/none.gif') 3px 9px no-repeat;background-size:32px;}
+
 
 /*表   格*/
 .tableBorder { line-height: 1.8em; margin-bottom: 0.8em; margin-top: 0.2em; -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
@@ -192,9 +194,9 @@ input[type="button"] { color: #ffffff; font-size: 1.1em; height: 29px; padding: 
 input.button:hover { background: #3399cc; }
 input.button2 { width: auto; }
 input[disabled],
-input[disabled]:hover { background: #eee; border: 1px solid #ccc; }
+input[disabled]:hover { background: #eee; border: 1px solid #ccc; cursor: not-allowed; color: black; }
 input[readonly],
-input[readonly]:hover { background: #eee; border: 1px solid #ccc; color: #808080; }
+input[readonly]:hover { background: #eee; border: 1px solid #ccc; cursor: not-allowed; color: #808080; }
 select.edit { width: 300px; }
 input.edit { width: 293px; }
 .form-group { display: inline-block; margin-bottom: 0; vertical-align: middle; width: 100%; margin-bottom: 10px; }
@@ -208,8 +210,8 @@ input.edit { width: 293px; }
 .form-group textarea { width: 80%; float: left; position: relative; min-height: 1px; padding-right: 15px; padding-left: 15px; display: block; padding: 6px !important; }
 .form-group select { width: 230px; }
 .form-group .imgcheck { margin-top: 8px; margin-left: 0px; }
-#editor_content { width: 100%; height: 300px; margin: 0; padding: 0.5em 0.5em; }
-#editor_intro { width: 100%; height: 150px; margin: 0; padding: 0.5em 0.5em; }
+textarea#editor_content { width: 100%; height: 300px; margin: 0; padding: 0.5em 0.5em; }
+textarea#editor_intro { width: 100%; height: 150px; margin: 0; padding: 0.5em 0.5em; }
 
 /*提示DIV*/
 div.hint { width: 100%; margin: 0 0 0.2em 0; }
@@ -254,15 +256,17 @@ div.theme-now { float: left; background: #b0cdee; padding: .6em 1em; margin: 0 1
 div.theme-other { float: left; background: #f0f0f0; padding: .6em 1em; margin: 0 1em 1em 0; }
 div.theme-other a { cursor: pointer; }
 div.theme-other .theme-name img { opacity: 0.50; }
+div.theme>.theme-name,div.theme>.theme-author,div.theme>.theme-style,div.theme>p{height:2.4em;}
+div.theme>.theme-name{overflow: hidden;white-space :nowrap;}
 div.theme-now .betterTip img { box-shadow: 0 0 10px #3a6ea5; }
 div.theme-now .betterTip img,
 div.theme-other .betterTip img { border: 2px solid #f6f6f6; }
 div.theme-other .betterTip img { box-shadow: 0 0 10px #aaa; }
 div.theme-other .betterTip img:hover { border: 2px solid #b0cdee; box-shadow: 0 0 10px #3399cc; }
 div.theme-now div,
-div.theme-other div { max-width: 220px;	/*overflow:hidden;*/ padding: 0.5em 0 0.5em 0; }
+div.theme-other div { max-width: 220px;     /*overflow:hidden;*/ padding: 0.5em 0 0.5em 0; }
 input.theme-config,
-input.theme-activate { float: right; height: 26px; width: 46px; margin: 0; padding: 2px 5px 3px 5px; font-size: 1em; margin-top: 2px; }
+input.theme-activate { float: right; height: 26px; width: 46px; margin: 0; padding: 2px 5px 3px 5px; font-size: 1em; }
 input.theme-config { margin-top: -3px; }
 .hidden { display: none; }
 .pagebar { padding: 1em 0 2em 0; }

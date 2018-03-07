@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>ZBPDK</id>
 <name>Z-Blog PHP Development Kit(Beta)</name>
@@ -19,9 +19,9 @@
   <url></url>
 </source>
 <adapted>150101</adapted>
-<version>1.3</version>
+<version>1.5</version>
 <pubdate>2014-01-29</pubdate>
-<modified>2015-01-31</modified>
+<modified>2017-02-16</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

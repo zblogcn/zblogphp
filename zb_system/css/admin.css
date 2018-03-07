@@ -1,4 +1,4 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 
 /*
 作者：新鲜人
@@ -35,40 +35,42 @@ img { border: none; }
 .logo { width: 200px; height: 70px; margin: 170px auto 60px auto; }
 .logo img { width: 200px; height: 70px; background: url("../image/admin/logo.png"); }
 input { float: left; vertical-align: middle; }
-input[type="text"],
-input[type="password"] { border: 1px solid #3a6ea5; }
-.login { width: 560px; height: 100px; margin: 0 auto; padding-left: 0px; }
-.login dl { height: 50px; }
-.login dd { width: 280px; float: left; }
-dd.checkbox { margin-left: 65px; width: 200px; text-align: left; }
-dd.submit { width: 250px; }
-dd.username { overflow: hidden; width: 280px; }
-dd.password { overflow: hidden; width: 280px; }
-dd.username label,
-dd.password label { width: 65px; text-align: center; }
-label { line-height: 30px; float: left; vertical-align: text-bottom; padding: 0 5px 0 5px; }
+input[type="text"],input[type="password"] { border: 1px solid #3a6ea5; }
 input[type="checkbox"] { margin: 8px 0 0 0; padding: 0; }
-#edtUserName,
-#edtPassWord { float: left; width: 173px; height: 2.4em; padding: 0.1em 5px; line-height: 2.4em; }
+label { line-height: 30px; float: left; vertical-align: text-bottom; padding: 0 5px 0 5px; }
+
+.login { width: 600px; height: 100px; margin: 0 auto; padding-left: 0px; }
+.login dl { height: 50px;clear:both; }
+.login dd { width: 300px; float: left; margin-bottom:20px;}
+.login dd.floatright {float: right;}
+.login dd.checkbox { margin-left: 100px; width: 200px; text-align: left; }
+.login dd.submit ,.login dd.password ,.login dd.username { overflow: hidden; width: 300px; }
+.login label { width: 100px; text-align: right;overflow :hidden;text-overflow : clip;white-space:nowrap; }
+.login input[type="checkbox"]+label {width:auto;}
+.login input[type="text"],.login input[type="password"]{ float: left; width: 200px; height: 2.4em; padding: 0.1em 5px; line-height: 2.4em; }
+
 .button { float: right; color: #ffffff; font-size: 14px; width: 70px; height: 32px; background: #3a6ea5; border: 1px solid #3399CC; cursor: pointer; }
 .button:hover { color: #ffffff; background: #3399cc; cursor: pointer; }
-.divHeader { height: 1.5em; font-weight: blod; line-height: 1.5em; font-size: 1.5em; padding: 0 0 10px 0; background: #FFF; text-align: center; }
-body.short .bg { height: 150px; }
-body.short .logo { height: 50px; margin: 60px auto 60px auto; }
+.divHeader { height: auto; font-weight: blod; line-height: 1.5em; font-size: 1.5em; padding: 0 0 10px 0; background: #FFF; text-align: center; }
+
+body.short .bg { height: 160px; }
+body.short .logo { height: 60px; margin: 60px auto 60px auto; }
 .loginw { width: 700px; margin-bottom: 120px; }
 .loginw .content>div>p { font-weight: bold; font-size: 1.2em; padding: 10px; background: #eee; margin-bottom: 10px; }
 .loginw .content>div { padding-bottom: 20px; }
 .loginw>form>p { padding: 10px 10px 50px 10px; }
 .loginw>form>p>a { font-size: 1.1em; }
 .loginw .content>div>div { padding: 0 10px; }
-@media only screen and (max-width:720px) {
-	.bg { height: 190px; }
-	.logo { margin-top: 100px }
-	.login { width: 310px; }
-	.login dd { width: 300px; float: right; padding: 8px 10px 7px 0; }
-	.login dd.checkbox { margin-left: 95px; width: 220px; float: left; padding: 5px 0; }
-	.login dd.submit { width: 290px; float: right; padding: 5px 0; margin-right: 10px; }
-	#edtUserName,
-	#edtPassWord { float: right; width: 200px; }
-	input[type="checkbox"] { margin: 8px 0 0 5px; }
+
+@media only screen and (max-width:768px) {
+    .bg { height: 160px; }
+    .logo { margin-top: 60px }
+    .login { width: 310px; }
+    .login dd { width: 300px; float: right; padding: 0px 10px 0px 0; margin-bottom:10px;}
+
+    .login dd.checkbox { margin-left: 10px; width: 300px; float: left; padding: 5px 0; }
+    .login dd.submit { width: 300px; float: right; padding: 5px 0; margin-right: 10px; }
+    .login dd.username label,.login dd.password label { width: 300px;clear:float;text-align: left;}
+    .login input[type="text"],.login input[type="password"]{ float: right; width: 285px; }
+    input[type="checkbox"] { margin: 8px 0 0 5px; }
 }

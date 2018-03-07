@@ -1,13 +1,13 @@
 CREATE SEQUENCE %pre%post_seq;
 CREATE TABLE %pre%post (
  log_ID INT NOT NULL DEFAULT nextval('%pre%post_seq'),
- log_CateID smallint NOT NULL DEFAULT '0',
+ log_CateID integer NOT NULL DEFAULT '0',
  log_AuthorID integer NOT NULL DEFAULT '0',
  log_Tag varchar(255) NOT NULL DEFAULT '',
  log_Status smallint NOT NULL DEFAULT '0',
  log_Type smallint NOT NULL DEFAULT '0',
  log_Alias varchar(255) NOT NULL DEFAULT '',
- log_IsTop char(1) NOT NULL DEFAULT '0',
+ log_IsTop integer NOT NULL DEFAULT '0',
  log_IsLock char(1) NOT NULL DEFAULT '0',
  log_Title varchar(255) NOT NULL DEFAULT '',
  log_Intro text NOT NULL,
@@ -21,13 +21,15 @@ CREATE TABLE %pre%post (
 ) ;
 CREATE INDEX %pre%post_ix_id ON %pre%post(log_ID);
 CREATE INDEX %pre%post_ix_pt ON %pre%post(log_PostTime);
-CREATE INDEX %pre%post_ix_tisc ON %pre%post(log_Type,log_IsTop,log_Status,log_CateID);
+CREATE INDEX %pre%post_ix_tpisc ON %pre%post(log_Type,log_PostTime,log_IsTop,log_Status,log_CateID);
+CREATE INDEX %pre%post_ix_vtsc ON %pre%post(log_ViewNums,log_Type,log_Status,log_CateID);
 
 CREATE SEQUENCE %pre%category_seq;
 CREATE TABLE %pre%category (
  cate_ID INT NOT NULL DEFAULT nextval('%pre%category_seq'),
- cate_Name varchar(50) NOT NULL DEFAULT '',
+ cate_Name varchar(255) NOT NULL DEFAULT '',
  cate_Order integer NOT NULL DEFAULT '0',
+ cate_Type smallint NOT NULL DEFAULT '0',
  cate_Count integer NOT NULL DEFAULT '0',
  cate_Alias varchar(255) NOT NULL DEFAULT '',
  cate_Intro text NOT NULL,
@@ -48,7 +50,7 @@ CREATE TABLE %pre%comment (
  comm_RootID integer NOT NULL DEFAULT '0',
  comm_ParentID integer NOT NULL DEFAULT '0',
  comm_AuthorID integer NOT NULL DEFAULT '0',
- comm_Name varchar(20) NOT NULL DEFAULT '',
+ comm_Name varchar(50) NOT NULL DEFAULT '',
  comm_Email varchar(50) NOT NULL DEFAULT '',
  comm_HomePage varchar(255) NOT NULL DEFAULT '',
  comm_Content text NOT NULL,
@@ -68,22 +70,6 @@ CREATE TABLE %pre%config (
   PRIMARY KEY (conf_ID)
 ) ;
 CREATE INDEX %pre%config_ix_id ON %pre%config(conf_ID);
-
-CREATE SEQUENCE %pre%counter_seq;
-CREATE TABLE %pre%counter (
- coun_ID INT NOT NULL DEFAULT nextval('%pre%counter_seq'),
- coun_MemID integer NOT NULL DEFAULT '0',
- coun_IP varchar(15) NOT NULL DEFAULT '',
- coun_Agent text NOT NULL,
- coun_Refer varchar(255) NOT NULL DEFAULT '',
- coun_Title varchar(255) NOT NULL DEFAULT '',
- coun_PostTime integer NOT NULL DEFAULT '0',
- coun_Description text NOT NULL,
- coun_PostData text NOT NULL,
- coun_AllRequestHeader text NOT NULL,
-  PRIMARY KEY (coun_ID)
-) ;
-CREATE INDEX %pre%counter_ix_id ON %pre%counter(coun_ID);
 
 CREATE SEQUENCE %pre%member_seq;
 CREATE TABLE %pre%member (
@@ -114,7 +100,7 @@ CREATE INDEX %pre%member_ix_alias ON %pre%member(mem_Alias);
 CREATE SEQUENCE %pre%module_seq;
 CREATE TABLE %pre%module (
  mod_ID INT NOT NULL DEFAULT nextval('%pre%module_seq'),
- mod_Name varchar(100) NOT NULL DEFAULT '',
+ mod_Name varchar(255) NOT NULL DEFAULT '',
  mod_FileName varchar(50) NOT NULL DEFAULT '',
  mod_Content text NOT NULL,
  mod_SidebarID integer NOT NULL DEFAULT '0',
@@ -133,6 +119,7 @@ CREATE TABLE %pre%tag (
   tag_ID INT NOT NULL DEFAULT nextval('%pre%tag_seq'),
   tag_Name varchar(255) NOT NULL DEFAULT '',
   tag_Order integer NOT NULL DEFAULT '0',
+  tag_Type smallint NOT NULL DEFAULT '0',
   tag_Count integer NOT NULL DEFAULT '0',
   tag_Alias varchar(255) NOT NULL DEFAULT '', 
   tag_Intro text NOT NULL,  

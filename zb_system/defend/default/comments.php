@@ -1,3 +1,4 @@
+{* Template Name:所有评论模板 *}
 {if $socialcomment}
 {$socialcomment}
 {else}

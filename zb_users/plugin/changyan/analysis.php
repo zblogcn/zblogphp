@@ -4,7 +4,7 @@ require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 if (!$zbp->CheckRights('root')) {$zbp->ShowError(6);exit();}
 if (!$zbp->CheckPlugin('changyan')) {$zbp->ShowError(48);exit();}
-$blogtitle='畅言评论系统';
+$blogtitle = '畅言评论系统';
 require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <script type="text/javascript">

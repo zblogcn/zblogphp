@@ -9,11 +9,11 @@
 <section>
   <section id="main">
     <section>
-<?php  foreach ( $articles as $article) { ?> 
+<?php  foreach ($articles as $article) { ?> 
 
 <?php if ($article->IsTop) { ?>
 <?php  include $this->GetTemplate('post-istop');  ?>
-<?php }else{  ?>
+<?php } else {  ?>
 <?php  include $this->GetTemplate('post-multi');  ?>
 <?php } ?>
 
@@ -21,7 +21,7 @@
       <nav><?php  include $this->GetTemplate('pagebar');  ?></nav>
     </section>
     <aside>
-      <?php  include $this->GetTemplate('sidebar_pad');  ?>
+        <?php  include $this->GetTemplate('sidebar_pad');  ?>
     </aside>
   </section>
 </section>

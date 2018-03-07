@@ -1,0 +1,72 @@
+/* http://prismjs.com/download.html?themes=prism&languages=markup+css+clike+javascript+actionscript+applescript+aspnet+bash+basic+c+csharp+cpp+coffeescript+ruby+css-extras+d+diff+erlang+fsharp+fortran+go+groovy+haskell+java+latex+less+matlab+objectivec+ocaml+perl+php+php-extras+powershell+prolog+python+r+jsx+crystal+rust+sass+scss+scala+smalltalk+sql+swift+typescript+yaml&plugins=line-numbers+show-language */
+
+/**
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
+
+code[class*="language-"],
+pre[class*="language-"]{color:black;text-shadow:0 1px white;font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;direction:ltr;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;}
+pre[class*="language-"]::-moz-selection,
+pre[class*="language-"]::-moz-selection,
+code[class*="language-"]::-moz-selection,
+code[class*="language-"]::-moz-selection{text-shadow:none;background:#b3d4fc;}
+pre[class*="language-"]::selection,
+pre[class*="language-"]::selection,
+code[class*="language-"]::selection,
+code[class*="language-"]::selection{text-shadow:none;background:#b3d4fc;}
+@media print{
+	code[class*="language-"],
+	pre[class*="language-"]{text-shadow:none;}
+}
+
+/* Code blocks */
+pre[class*="language-"]{padding:1em;margin:.5em 0;overflow:auto;}
+:not(pre) > code[class*="language-"],pre[class*="language-"]{background:#f5f2f0;}
+
+/* Inline code */
+:not(pre) > code[class*="language-"]{padding:.1em;border-radius:.3em;white-space:normal;}
+.prism-highlight>code[class*="language-"] {background: none;}
+.prism-token.prism-comment,
+.prism-token.prism-prolog,
+.prism-token.prism-doctype,
+.prism-token.prism-cdata{color:slategray;}
+.prism-token.prism-punctuation{color:#999;}
+.prism-namespace{opacity:.7;}
+.prism-token.property,
+.prism-token.prism-tag,
+.prism-token.prism-boolean,
+.prism-token.prism-number,
+.prism-token.prism-constant,
+.prism-token.prism-symbol,
+.prism-token.prism-deleted{color:#905;}
+.prism-token.prism-selector,
+.prism-token.prism-attr-name,
+.prism-token.prism-string,
+.prism-token.prism-char,
+.prism-token.prism-builtin,
+.prism-token.prism-inserted{color:#690;}
+.prism-token.prism-operator,
+.prism-token.prism-entity,
+.prism-token.prism-url,
+.prism-language-css .prism-token.prism-string,
+.prism-style .prism-token.prism-string{color:#a67f59;background:hsla(0,0%,100%,.5);}
+.prism-token.prism-atrule,
+.prism-token.prism-attr-value,
+.prism-token.prism-keyword{color:#07a;}
+.prism-token.prism-function{color:#DD4A68;}
+.prism-token.prism-regex,
+.prism-token.prism-important,
+.prism-token.prism-variable{color:#e90;}
+.prism-token.prism-important,
+.prism-token.prism-bold{font-weight:bold;}
+.prism-token.prism-italic{font-style:italic;}
+.prism-token.prism-entity{cursor:help;}
+pre.prism-line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber;}
+pre.prism-line-numbers > code{position:relative;}
+.prism-line-numbers .prism-line-numbers-rows{position:absolute;pointer-events:none;top:0;font-size:100%;left:-3.8em;width:3em; /* works for line-numbers below 1000 lines */letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
+.prism-line-numbers-rows > span{pointer-events:none;display:block;counter-increment:linenumber;}
+.prism-line-numbers-rows > span:before{content:counter(linenumber);color:#999;display:block;padding-right:0.8em;text-align:right;}
+div.prism-show-language{position:relative;}
+div.prism-show-language > div.prism-show-language-label[data-language]{color:black;background-color:#CFCFCF;display:inline-block;position:absolute;bottom:auto;left:auto;top:0;right:0;width:auto;height:auto;font-size:0.9em;border-radius:0 0 0 5px;padding:0 0.5em;text-shadow:none;z-index:1;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;-webkit-transform:none;-moz-transform:none;-ms-transform:none;-o-transform:none;transform:none;}

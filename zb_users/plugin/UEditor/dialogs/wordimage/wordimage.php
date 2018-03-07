@@ -44,7 +44,7 @@
             optImageUrl = editor.getActionUrl(editor.getOpt('imageActionName')),
             optImageFieldName = editor.getOpt('imageFieldName'),
             optImageCompressBorder = editor.getOpt('imageCompressEnable') ? editor.getOpt('imageCompressBorder'):null,
-            maxSize = editor.getOpt('imageMaxSize') / 1024,
+            maxSize = editor.getOpt('imageMaxSize') / 1024 / 1024,
             extension = editor.getOpt('imageAllowFiles').join(';').replace(/\./g, '*.');
 
         /* 添加额外的GET参数 */
@@ -88,7 +88,7 @@
                     }
                 },
                 uploadCompleteCallback: function(data){               // 单个文件上传完成的回调
-                    try{var info = eval("(" + data.info + ")");
+                    try{var info = JSON.parse(data.info);
                     info && imageUrls.push(info);
                     selectedImageCount--;
                     }catch(e){}

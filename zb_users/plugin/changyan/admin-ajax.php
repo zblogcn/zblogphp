@@ -13,32 +13,32 @@ if (!$zbp->CheckPlugin('changyan')) {$zbp->ShowError(48);exit();}
 */
 if(isset($_REQUEST['action'])){
 
-	if($_REQUEST['action']=='changyan_sync2Wordpress'){
-		$changyanPlugin->sync2Wordpress();
-	}
+    if($_REQUEST['action'] == 'changyan_sync2Wordpress'){
+        $changyanPlugin->sync2Wordpress();
+    }
 
-	if($_REQUEST['action']=='changyan_sync2Changyan'){
-		$changyanPlugin->sync2Changyan();
-	}
+    if($_REQUEST['action'] == 'changyan_sync2Changyan'){
+        $changyanPlugin->sync2Changyan();
+    }
 
-	if($_REQUEST['action']=='changyan_saveScript'){
-		$changyanPlugin->saveScript();
-	}
-	
-	if($_REQUEST['action']=='changyan_saveAppIDKey'){
-		$changyanPlugin->saveAppIDKey();
-	}
+    if($_REQUEST['action'] == 'changyan_saveScript'){
+        $changyanPlugin->saveScript();
+    }
+    
+    if($_REQUEST['action'] == 'changyan_saveAppIDKey'){
+        $changyanPlugin->saveAppIDKey();
+    }
 
-	if($_REQUEST['action']=='changyan_saveAppID'){
-		$changyanPlugin->saveAppID();
-	}
+    if($_REQUEST['action'] == 'changyan_saveAppID'){
+        $changyanPlugin->saveAppID();
+    }
 
-	if($_REQUEST['action']=='changyan_saveAppKey'){
-		$changyanPlugin->saveAppKey();
-	}
-	
-	if($_REQUEST['action']=='changyan_setCron'){
-		$changyanPlugin->setCron();
-	}
+    if($_REQUEST['action'] == 'changyan_saveAppKey'){
+        $changyanPlugin->saveAppKey();
+    }
+    
+    if($_REQUEST['action'] == 'changyan_setCron'){
+        $changyanPlugin->setCron();
+    }
 
 }

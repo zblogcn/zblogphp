@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>CustomMeta</id>
 <name>自定义字段插件</name>
-<url>http://www.rainbowsoft.org/</url>
+<url>http://www.zblogcn.com/</url>
 <note>为文章,分类等添加自定义数据字段</note>
 <description></description>
 <path>main.php</path>
 <include>include.php</include>
 <level>1</level>
 <author>
-  <name>zx.asd</name>
-  <email>rainbowsoft@163.com</email>
+  <name>zxasd</name>
+  <email>rainbowsoft@gmail.com</email>
   <url>http://www.zdevo.com/</url>
 </author>
 <source>
@@ -21,7 +21,7 @@
 <adapted>131221</adapted>
 <version>1.5</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2015-01-02</modified>
+<modified>2016-12-16</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

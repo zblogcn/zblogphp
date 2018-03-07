@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <theme version="php">
 <id>default</id>
 <name>默认主题</name>
@@ -6,7 +6,7 @@
 <note>Z-Blog的默认主题</note>
 <description>Z-Blog的默认主题.模板由zx制作,娇娇设计.新增了Table日历的支持.</description>
 <path></path>
-<include></include>
+<include>include.php</include>
 <level>1</level>
 <author>
   <name>zx.asd</name>
@@ -18,10 +18,10 @@
   <email>luheou@126.com</email>
   <url>http://imjiao.com/</url>
 </source>
-<adapted>131221</adapted>
+<adapted>151603</adapted>
 <version>1.7</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2015-04-14</modified>
+<modified>2016-11-01</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>

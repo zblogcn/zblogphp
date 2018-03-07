@@ -182,9 +182,7 @@ div.edui-box {
 .edui-default .edui-editor-iframeholder {
     position: relative;
     /*for fix ie6 toolbarmsg under iframe bug. relative -> static */
-    /*_position: static !important;*/
-	width:auto !important;
-	/*
+    /*_position: static !important;*
 }
 
 .edui-default .edui-editor-iframeholder textarea {
@@ -199,6 +197,9 @@ div.edui-box {
     /*width: 40%;*/
     /*float: left;*/
     /*overflow: hidden;*/
+}
+.edui-default .edui-editor-iframeholder iframe {
+    width: 99%;
 }
 
 .edui-default .edui-editor-bottomContainer {
@@ -1035,7 +1036,9 @@ div.edui-box {
     background-color: #ffffff;
     width:auto;
     height:auto;
-
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
 }
 
 .edui-default .edui-popup .edui-shadow {
@@ -1699,11 +1702,9 @@ div.edui-box {
 .edui-default .edui-cellalignpicker-body table {
     border-collapse: separate;
     border-spacing: 0;
-	border:0;
 }
 .edui-default .edui-cellalignpicker-body td{
     padding: 1px;
-	border:0;
 }
 .edui-default .edui-cellalignpicker-body .edui-icon{
     height: 20px;

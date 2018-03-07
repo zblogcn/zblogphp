@@ -13,76 +13,76 @@
 /* Layout helpers
 ----------------------------------*/
 .ui-helper-hidden {
-	display: none;
+    display: none;
 }
 
 .ui-helper-hidden-accessible {
-	border: 0;
-	clip: rect(0 0 0 0);
-	height: 1px;
-	margin: -1px;
-	overflow: hidden;
-	padding: 0;
-	position: absolute;
-	width: 1px;
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
 }
 
 .ui-helper-reset {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: 0;
-	line-height: 1.3;
-	text-decoration: none;
-	font-size: 100%;
-	list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    line-height: 1.3;
+    text-decoration: none;
+    font-size: 100%;
+    list-style: none;
 }
 
 .ui-helper-clearfix:before,
 .ui-helper-clearfix:after {
-	content: "";
-	display: table;
-	border-collapse: collapse;
+    content: "";
+    display: table;
+    border-collapse: collapse;
 }
 
 .ui-helper-clearfix:after {
-	content: ".";
-	display: block;
-	height: 0;
-	clear: both;
-	visibility: hidden;
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
 }
 
 .ui-helper-clearfix {
-	/*display: inline-block; */
-	display: block;
-	min-height: 0; /* support: IE7 */
+    /*display: inline-block; */
+    display: block;
+    min-height: 0; /* support: IE7 */
 }
 
 /* required comment for clearfix to work in Opera \*/
 * html .ui-helper-clearfix {
-	height:1%;
+    height:1%;
 }
 
 /* end clearfix */
 .ui-helper-zfix {
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	position: absolute;
-	opacity: 0;
-	filter:Alpha(Opacity=0);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    opacity: 0;
+    filter:Alpha(Opacity=0);
 }
 .ui-front {
-	z-index: 100;
+    z-index: 100;
 }
 
 
 /* Interaction Cues
 ----------------------------------*/
 .ui-state-disabled {
-	cursor: default !important;
+    cursor: default !important;
 }
 
 
@@ -91,10 +91,10 @@
 
 /* states and images */
 .ui-icon {
-	display: block;
-	text-indent: -99999px;
-	overflow: hidden;
-	background-repeat: no-repeat;
+    display: block;
+    text-indent: -99999px;
+    overflow: hidden;
+    background-repeat: no-repeat;
 }
 
 
@@ -104,11 +104,11 @@
 /* Overlays */
 
 .ui-widget-overlay {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -123,83 +123,83 @@
  */
 
 .ui-resizable {
-	position: relative;
+    position: relative;
 }
 
 .ui-resizable-handle {
-	position: absolute;
-	font-size: 0.1px;
-	z-index: 99999;
-	display: block;
+    position: absolute;
+    font-size: 0.1px;
+    z-index: 99999;
+    display: block;
 }
 
 .ui-resizable-disabled .ui-resizable-handle,
 .ui-resizable-autohide .ui-resizable-handle {
-	display: none;
+    display: none;
 }
 
 .ui-resizable-n {
-	cursor: n-resize;
-	height: 7px;
-	width: 100%;
-	top: -5px;
-	left: 0;
+    cursor: n-resize;
+    height: 7px;
+    width: 100%;
+    top: -5px;
+    left: 0;
 }
 
 .ui-resizable-s {
-	cursor: s-resize;
-	height: 7px;
-	width: 100%;
-	bottom: -5px;
-	left: 0;
+    cursor: s-resize;
+    height: 7px;
+    width: 100%;
+    bottom: -5px;
+    left: 0;
 }
 
 .ui-resizable-e {
-	cursor: e-resize;
-	width: 7px;
-	right: -5px;
-	top: 0;
-	height: 100%;
+    cursor: e-resize;
+    width: 7px;
+    right: -5px;
+    top: 0;
+    height: 100%;
 }
 
 .ui-resizable-w {
-	cursor: w-resize;
-	width: 7px;
-	left: -5px;
-	top: 0;
-	height: 100%;
+    cursor: w-resize;
+    width: 7px;
+    left: -5px;
+    top: 0;
+    height: 100%;
 }
 
 .ui-resizable-se {
-	cursor: se-resize;
-	width: 12px;
-	height: 12px;
-	right: 1px;
-	bottom: 1px;
+    cursor: se-resize;
+    width: 12px;
+    height: 12px;
+    right: 1px;
+    bottom: 1px;
 }
 
 .ui-resizable-sw {
-	cursor: sw-resize;
-	width: 9px;
-	height: 9px;
-	left: -5px;
-	bottom: -5px;
+    cursor: sw-resize;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    bottom: -5px;
 }
 
 .ui-resizable-nw {
-	cursor: nw-resize;
-	width: 9px;
-	height: 9px;
-	left: -5px;
-	top: -5px;
+    cursor: nw-resize;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    top: -5px;
 }
 
 .ui-resizable-ne {
-	cursor: ne-resize;
-	width: 9px;
-	height: 9px;
-	right: -5px;
-	top: -5px;
+    cursor: ne-resize;
+    width: 9px;
+    height: 9px;
+    right: -5px;
+    top: -5px;
 }
 
 /*
@@ -213,9 +213,9 @@
  */
 
 .ui-selectable-helper {
-	position: absolute;
-	z-index: 100;
-	border: 1px dotted black;
+    position: absolute;
+    z-index: 100;
+    border: 1px dotted black;
 }
 
 
@@ -247,25 +247,25 @@
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: inherit;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: inherit;
 }
 
 .ui-widget-content {
-	border: 1px solid #aaaaaa;
-	background: #ffffff url("../image/jqueryui/ui-bg_glass_75_ffffff_1x400.png") 50% 50% repeat-x;
-	color: #404040;
+    border: 1px solid #aaaaaa;
+    background: #ffffff url("../image/jqueryui/ui-bg_glass_75_ffffff_1x400.png") 50% 50% repeat-x;
+    color: #404040;
 }
 
 .ui-widget-header {
-	font-weight: bold;
+    font-weight: bold;
     border-color: #DDDDDD;
     color: #333333;
 
 }
 
 .ui-widget-header a {
-	color: #222222;
+    color: #222222;
 }
 
 /* Interaction states
@@ -283,8 +283,8 @@
 .ui-state-default a,
 .ui-state-default a:link,
 .ui-state-default a:visited {
-	color: #555555;
-	text-decoration: none;
+    color: #555555;
+    text-decoration: none;
 }
 
 .ui-state-hover,
@@ -293,36 +293,36 @@
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
-	color: #333333;
+    color: #333333;
     background-color: #ebebeb;
     border-color: #adadad;
-	text-decoration: none;
+    text-decoration: none;
 }
 
 .ui-state-hover a,
 .ui-state-hover a:hover,
 .ui-state-hover a:link,
 .ui-state-hover a:visited {
-	color: #333333;
-	text-decoration: none;
+    color: #333333;
+    text-decoration: none;
 }
 .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
-	border: 1px solid #adadad;
-	font-weight: normal;
-	color: #333333;
+    border: 1px solid #adadad;
+    font-weight: normal;
+    color: #333333;
 }
 
 .ui-state-active a,
 .ui-state-active a:link,
 .ui-state-active a:visited {
-	color: #333333;
-	text-decoration: none;
+    color: #333333;
+    text-decoration: none;
 }
 
 .ui-widget :active {
-	outline: none;
+    outline: none;
 }
 
 /* Interaction Cues
@@ -331,24 +331,24 @@
 .ui-state-highlight,
 .ui-state-error,
 .ui-state-default {
-	position: relative;
-	border-width: 1px;
-	border-style: solid;
+    position: relative;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .ui-state-highlight p,
 .ui-state-error p,
 .ui-state-default p {
-	font-size: 13px;
-	font-weight: normal;
-	line-height: 18px;
-	margin:7px 15px;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 18px;
+    margin:7px 15px;
 }
 
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
-	color: #3a87ad;
+    color: #3a87ad;
     background-color: #d9edf7;
     border-color: #bce8f1;
 }
@@ -356,13 +356,13 @@
 .ui-state-highlight a,
 .ui-widget-content .ui-state-highlight a,
 .ui-widget-header .ui-state-highlight a {
-	color: #2d6987;
+    color: #2d6987;
 }
 
 .ui-state-error,
 .ui-widget-content .ui-state-error,
 .ui-widget-header .ui-state-error {
-	color: #b94a48;
+    color: #b94a48;
     background-color: #f2dede;
     border-color: #eed3d7;
 }
@@ -370,39 +370,39 @@
 .ui-state-error a,
 .ui-widget-content .ui-state-error a,
 .ui-widget-header .ui-state-error a {
-	color: #953b39;
+    color: #953b39;
 }
 
 .ui-state-error-text,
 .ui-widget-content .ui-state-error-text,
 .ui-widget-header .ui-state-error-text {
-	color: #953b39;
+    color: #953b39;
 }
 
 .ui-priority-primary,
 .ui-widget-content .ui-priority-primary,
 .ui-widget-header .ui-priority-primary {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .ui-priority-secondary,
 .ui-widget-content .ui-priority-secondary,
 .ui-widget-header .ui-priority-secondary {
-	opacity: .7;
-	filter:Alpha(Opacity=70);
-	font-weight: normal;
+    opacity: .7;
+    filter:Alpha(Opacity=70);
+    font-weight: normal;
 }
 
 .ui-state-disabled,
 .ui-widget-content .ui-state-disabled,
 .ui-widget-header .ui-state-disabled {
-	opacity: .35;
-	filter:Alpha(Opacity=35);
-	background-image: none;
+    opacity: .35;
+    filter:Alpha(Opacity=35);
+    background-image: none;
 }
 
 .ui-state-disabled .ui-icon {
-	filter:Alpha(Opacity=35); /* For IE8 - See #6059 */
+    filter:Alpha(Opacity=35); /* For IE8 - See #6059 */
 }
 
 /* Icons
@@ -411,39 +411,39 @@
 /* states and images */
 
 .ui-icon {
-	width: 16px;
-	height: 16px;
-	background-image: url("../image/jqueryui/ui-icons_222222_256x240.png");
+    width: 16px;
+    height: 16px;
+    background-image: url("../image/jqueryui/ui-icons_222222_256x240.png");
 }
 
 .ui-widget-content .ui-icon {
-	background-image: url("../image/jqueryui/ui-icons_222222_256x240.png");
+    background-image: url("../image/jqueryui/ui-icons_222222_256x240.png");
 }
 
 .ui-widget-header .ui-icon {
-	background-image: url("../image/jqueryui/ui-icons_222222_256x240.png");
+    background-image: url("../image/jqueryui/ui-icons_222222_256x240.png");
 }
 
 .ui-state-default .ui-icon {
-	background-image: url("../image/jqueryui/ui-icons_888888_256x240.png");
+    background-image: url("../image/jqueryui/ui-icons_888888_256x240.png");
 }
 
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon {
-	background-image: url("../image/jqueryui/ui-icons_454545_256x240.png");
+    background-image: url("../image/jqueryui/ui-icons_454545_256x240.png");
 }
 
 .ui-state-active .ui-icon {
-	background-image: url("../image/jqueryui/ui-icons_454545_256x240.png");
+    background-image: url("../image/jqueryui/ui-icons_454545_256x240.png");
 }
 
 .ui-state-highlight .ui-icon {
-	background-image: url("../image/jqueryui/ui-icons_2e83ff_256x240.png");
+    background-image: url("../image/jqueryui/ui-icons_2e83ff_256x240.png");
 }
 
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon {
-	background-image: url("../image/jqueryui/ui-icons_f6cf3b_256x240.png");
+    background-image: url("../image/jqueryui/ui-icons_f6cf3b_256x240.png");
 }
 
 /* positioning */
@@ -643,60 +643,60 @@
 /* Corner radius */
 
 .ui-corner-all {
-	-webkit-border-radius: 2px; /* Safari 4 */
-	-moz-border-radius: 2px; /* Firefox 3.6 */
-	border-radius: 2px;
+    -webkit-border-radius: 2px; /* Safari 4 */
+    -moz-border-radius: 2px; /* Firefox 3.6 */
+    border-radius: 2px;
 }
 
 .ui-corner-top,
 .ui-corner-left,
 .ui-corner-tl {
-	-webkit-border-top-left-radius: 2px; /* Safari 4 */
-	-moz-border-radius-topleft: 2px; /* Firefox 3.6 */
-	border-top-left-radius: 2px;
+    -webkit-border-top-left-radius: 2px; /* Safari 4 */
+    -moz-border-radius-topleft: 2px; /* Firefox 3.6 */
+    border-top-left-radius: 2px;
 }
 
 .ui-corner-top,
 .ui-corner-right,
 .ui-corner-tr {
-	-webkit-border-top-right-radius: 2px; /* Safari 4 */
-	-moz-border-radius-topright: 2px; /* Firefox 3.6 */
-	border-top-right-radius: 2px;
+    -webkit-border-top-right-radius: 2px; /* Safari 4 */
+    -moz-border-radius-topright: 2px; /* Firefox 3.6 */
+    border-top-right-radius: 2px;
 }
 
 .ui-corner-bottom,
 .ui-corner-left,
 .ui-corner-bl {
-	-webkit-border-bottom-left-radius: 2px; /* Safari 4 */
-	-moz-border-radius-bottomleft: 2px; /* Firefox 3.6 */
-	border-bottom-left-radius: 2px;
+    -webkit-border-bottom-left-radius: 2px; /* Safari 4 */
+    -moz-border-radius-bottomleft: 2px; /* Firefox 3.6 */
+    border-bottom-left-radius: 2px;
 }
 
 .ui-corner-bottom,
 .ui-corner-right,
 .ui-corner-br {
-	-webkit-border-bottom-right-radius: 2px; /* Safari 4 */
-	-moz-border-radius-bottomright: 2px; /* Firefox 3.6 */
-	border-bottom-right-radius: 2px;
+    -webkit-border-bottom-right-radius: 2px; /* Safari 4 */
+    -moz-border-radius-bottomright: 2px; /* Firefox 3.6 */
+    border-bottom-right-radius: 2px;
 }
 
 /* Overlays */
 
 .ui-widget-overlay {
-	background: #aaaaaa url("../image/jqueryui/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat-x;
-	opacity: .30;
-	filter:Alpha(Opacity=30);
+    background: #aaaaaa url("../image/jqueryui/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat-x;
+    opacity: .30;
+    filter:Alpha(Opacity=30);
 }
 
 .ui-widget-shadow {
-	margin: -8px 0 0 -8px;
-	padding: 8px;
-	background: #aaaaaa url("../image/jqueryui/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat-x;
-	opacity: .30;
-	filter:Alpha(Opacity=30);
-	-webkit-border-radius: 4px; /* Safari 4 */
-	-moz-border-radius: 4px; /* Firefox 3.6 */
-	border-radius: 4px;
+    margin: -8px 0 0 -8px;
+    padding: 8px;
+    background: #aaaaaa url("../image/jqueryui/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat-x;
+    opacity: .30;
+    filter:Alpha(Opacity=30);
+    -webkit-border-radius: 4px; /* Safari 4 */
+    -moz-border-radius: 4px; /* Firefox 3.6 */
+    border-radius: 4px;
 }
 
 /*
@@ -711,55 +711,55 @@
 
 /* IE/Win - Fix animation bug - #4615 */
 .ui-accordion {
-	width: 100%;
+    width: 100%;
 }
 
 .ui-accordion .ui-accordion-li-fix {
-	display: inline;
+    display: inline;
 }
 
 .ui-accordion .ui-accordion-header-active {
-	border-bottom: 0 !important;
+    border-bottom: 0 !important;
 }
 
 .ui-accordion .ui-accordion-header {
-	display: block;
-	cursor: pointer;
-	position: relative;
-	margin-top: 2px;
-	padding: .5em .5em .5em .7em;
-	min-height: 0; /* support: IE7 */
+    display: block;
+    cursor: pointer;
+    position: relative;
+    margin-top: 2px;
+    padding: .5em .5em .5em .7em;
+    min-height: 0; /* support: IE7 */
 }
 
 .ui-accordion .ui-accordion-icons {
-	padding-left: 2.2em;
+    padding-left: 2.2em;
 }
 .ui-accordion .ui-accordion-noicons {
-	padding-left: .7em;
+    padding-left: .7em;
 }
 .ui-accordion .ui-accordion-icons .ui-accordion-icons {
-	padding-left: 2.2em;
+    padding-left: 2.2em;
 }
 .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
-	position: absolute;
-	left: .5em;
-	top: 50%;
-	margin-top: -8px;
+    position: absolute;
+    left: .5em;
+    top: 50%;
+    margin-top: -8px;
 }
 
 .ui-accordion .ui-accordion-content {
-	padding: 1em 2.2em;
+    padding: 1em 2.2em;
     border-top: 0 none;
-	margin-top: -3px;
-	position: relative;
-	top: 1px;
-	margin-bottom: 2px;
-	overflow: auto;
-	display: none;
+    margin-top: -3px;
+    position: relative;
+    top: 1px;
+    margin-bottom: 2px;
+    overflow: auto;
+    display: none;
 }
 
 .ui-accordion .ui-accordion-content-active {
-	display: block;
+    display: block;
 }
 
 
@@ -774,10 +774,10 @@
  */
 
 .ui-autocomplete {
-	position: absolute;
-	top: 0;
-	left: 0;
-	cursor: default;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: default;
 }
 
 
@@ -792,23 +792,23 @@
  */
 
 .ui-button {
-	cursor: pointer;
-	display: inline-block;
-	padding: 6px 12px;
-  	margin-bottom: 0;
-	font-size: 14px;
-	font-weight: normal;
-	line-height: 1.428571429;
-	text-align: center;
-	white-space: nowrap;
-	vertical-align: middle;
-	cursor: pointer;
-	border: 1px solid #ccc;
-	-webkit-user-select: none;
-	 -moz-user-select: none;
-	  -ms-user-select: none;
-	   -o-user-select: none;
-	      user-select: none;
+    cursor: pointer;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+       -o-user-select: none;
+          user-select: none;
 }
 
 .ui-button:focus {
@@ -819,7 +819,7 @@
 
 .ui-button:focus,
 .ui-button:hover {
-	color: #333333;
+    color: #333333;
     background-color: #ebebeb;
     border-color: #adadad;
     text-decoration: none;
@@ -845,7 +845,7 @@ fieldset[disabled] ui-button.ui-state-active {
 }
 
 .ui-btn-lg{
-	padding: 10px 16px;
+    padding: 10px 16px;
   font-size: 18px;
   line-height: 1.33;
   border-radius: 3px;
@@ -890,15 +890,15 @@ input[type="button"].ui-btn-block {
 }
 
 .ui-button-primary {
-	color: #ffffff;
+    color: #ffffff;
     background-color: #428bca;
     border-color: #357ebd;
 }
 
 .ui-button-warning {
-	color: #ffffff;
-	background-color: #f0ad4e;
-	border-color: #eea236;
+    color: #ffffff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
 }
 
 .ui-button-info {
@@ -907,14 +907,14 @@ input[type="button"].ui-btn-block {
   border-color: #46b8da;
 }
 .ui-button-danger {
-	color: #ffffff;
-	background-color: #d9534f;
-	border-color: #d43f3a;
+    color: #ffffff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
 }
 
 .ui-button-inverse {
-	color: #ffffff;
-	background-color: #222222;
+    color: #ffffff;
+    background-color: #222222;
     border-color: #080808;
 }
 
@@ -925,9 +925,9 @@ input[type="button"].ui-btn-block {
 }
 
 .ui-button-error {
-	color: #ffffff;
-	background-color: #c43c35;
-	border-color: #882a25;
+    color: #ffffff;
+    background-color: #c43c35;
+    border-color: #882a25;
 }
 
 .ui-button-primary:hover,
@@ -936,15 +936,15 @@ input[type="button"].ui-btn-block {
 .ui-button-danger:hover,
 .ui-button-warning:hover,
 .ui-button-inverse:hover{
-	color: #ffffff;
-	text-decoration: none;
+    color: #ffffff;
+    text-decoration: none;
 }
 
 .ui-button-primary:hover,
 .ui-button-primary:focus {
-	color: #ffffff;
-	background-color: #3276b1;
-	border-color: #285e8e;
+    color: #ffffff;
+    background-color: #3276b1;
+    border-color: #285e8e;
 }
 .ui-button-success:hover{
   color: #ffffff;
@@ -965,29 +965,29 @@ input[type="button"].ui-btn-block {
 }
 
 .ui-button-warning:hover{
-	color: #ffffff;
-	background-color: #ed9c28;
-	border-color: #d58512;
+    color: #ffffff;
+    background-color: #ed9c28;
+    border-color: #d58512;
 }
 
 .ui-button-inverse:hover{
-	color: #ffffff;
-	background-color: #363636;
-	border-color: #000000;
+    color: #ffffff;
+    background-color: #363636;
+    border-color: #000000;
 }
 
 /* to make room for the icon, a width needs to be set here */
 .ui-button-icon-only {
-	width: 2.2em;
+    width: 2.2em;
 }
 
 /* button elements seem to need a little more width */
 .ui-button-icons-only {
-	width: 3.4em;
+    width: 3.4em;
 }
 
 button.ui-button-icons-only {
-	width: 3.7em;
+    width: 3.7em;
 }
 
 .ui-button-text-icon-primary .ui-button-icon-primary.ui-icon {
@@ -996,35 +996,35 @@ button.ui-button-icons-only {
 /*button text element */
 
 .ui-button .ui-button-text {
-	display: block;
-	line-height: normal;
+    display: block;
+    line-height: normal;
 }
 
 .ui-button-icon-only .ui-button-text,
 .ui-button-icons-only .ui-button-text {
-	padding: .4em;
-	text-indent: -9999px;
-	display:none; /*tempfix*/
+    padding: .4em;
+    text-indent: -9999px;
+    display:none; /*tempfix*/
 }
 
 .ui-button-text-icon-primary .ui-button-text,
 .ui-button-text-icons .ui-button-text {
-	padding: .4em 1em .4em 2.1em;
+    padding: .4em 1em .4em 2.1em;
 }
 
 .ui-button-text-icon-secondary .ui-button-text,
 .ui-button-text-icons .ui-button-text {
-	padding: .4em 2.1em .4em 1em;
+    padding: .4em 2.1em .4em 1em;
 }
 
 .ui-button-text-icons .ui-button-text {
-	padding-left: 2.1em;
-	padding-right: 2.1em;
+    padding-left: 2.1em;
+    padding-right: 2.1em;
 }
 
 /* no icon support for input elements, provide padding by default */
 input.ui-button {
-	padding: .4em 1em;
+    padding: .4em 1em;
 }
 
 /*button icon element(s) */
@@ -1039,34 +1039,34 @@ input.ui-button {
 }
 
 .ui-button-icon-only .ui-icon {
-	left: 50%;
-	/* chrome margin*/
-	margin-left: -8px;
-	/* firefox margin*/
+    left: 50%;
+    /* chrome margin*/
+    margin-left: -8px;
+    /* firefox margin*/
     margin-right: -6px;
 }
 
 .ui-button-text-icon-primary .ui-button-icon-primary,
 .ui-button-text-icons .ui-button-icon-primary,
 .ui-button-icons-only .ui-button-icon-primary {
-	left: .5em;
+    left: .5em;
 }
 
 .ui-button-text-icon-secondary .ui-button-icon-secondary,
 .ui-button-text-icons .ui-button-icon-secondary,
 .ui-button-icons-only .ui-button-icon-secondary {
-	right: .5em;
+    right: .5em;
 }
 
 .ui-button-text-icons .ui-button-icon-secondary,
 .ui-button-icons-only .ui-button-icon-secondary {
-	right: .5em;
+    right: .5em;
 }
 
 /*button sets*/
 
 .ui-buttonset {
-	margin-right: 7px;
+    margin-right: 7px;
 }
 
 .ui-buttonset .ui-state-active {
@@ -1082,14 +1082,14 @@ input.ui-button {
 }
 
 .ui-buttonset .ui-button {
-	margin-left: 0;
-	margin-right: -.4em;
+    margin-left: 0;
+    margin-right: -.4em;
 }
 
 /* reset extra padding in Firefox */
 button.ui-button::-moz-focus-inner {
-	border: 0;
-	padding: 0;
+    border: 0;
+    padding: 0;
 }
 
 
@@ -1104,17 +1104,17 @@ button.ui-button::-moz-focus-inner {
  */
 
 .ui-menu {
-	list-style: none;
-	padding: 2px;
-	margin: 0;
-	display: block;
-	outline: none;
+    list-style: none;
+    padding: 2px;
+    margin: 0;
+    display: block;
+    outline: none;
 }
 
 .ui-menu .ui-menu{
-	margin-top: -3px;
-	position: absolute;
-	list-style:none;
+    margin-top: -3px;
+    position: absolute;
+    list-style:none;
 }
 
 /*
@@ -1122,46 +1122,46 @@ button.ui-button::-moz-focus-inner {
 */
 /* IE9, IE10 */
 @media screen and (min-width:0\0) {
-	.ui-menu li {
-	  list-style-type: none;
-	  display: inline;
-	  line-height: 0;
-	}
+    .ui-menu li {
+      list-style-type: none;
+      display: inline;
+      line-height: 0;
+    }
 
-	li.ui-menu-item {
-	  /* This fixes the IE10 issue (jQuery UI Issue #8844)*/
-	  list-style-type: none;
-	}
+    li.ui-menu-item {
+      /* This fixes the IE10 issue (jQuery UI Issue #8844)*/
+      list-style-type: none;
+    }
 }
 
 .ui-menu .ui-menu-item {
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	list-style:none;
-	/* support: IE10, see #8844 */
-	list-style-image: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7);
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    list-style:none;
+    /* support: IE10, see #8844 */
+    list-style-image: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP//yH5BAEAAAAALAAAAAABAAEAAAIBRAA7);
 }
 
 .ui-menu .ui-menu-divider {
-	margin: 5px -2px 5px -2px;
-	height: 0;
-	font-size: 0;
-	line-height: 0;
-	border-width: 1px 0 0 0;
+    margin: 5px -2px 5px -2px;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+    border-width: 1px 0 0 0;
 }
 
 .ui-menu .ui-menu-item a {
-	text-decoration: none;
-	display: block;
-	padding: 2px .4em;
-	line-height: 1.5;
-	min-height: 0; /* support: IE7 */
-	font-weight: normal;
+    text-decoration: none;
+    display: block;
+    padding: 2px .4em;
+    line-height: 1.5;
+    min-height: 0; /* support: IE7 */
+    font-weight: normal;
 }
 
 .ui-menu .ui-menu-item a.ui-corner-all{
-	-webkit-border-radius: 0px; /* Safari 4 */
+    -webkit-border-radius: 0px; /* Safari 4 */
     -moz-border-radius: 0px; /* Firefox 3.6 */
     border-radius: 0px;
 }
@@ -1169,8 +1169,8 @@ button.ui-button::-moz-focus-inner {
 .ui-menu .ui-menu-item a.ui-state-focus,
 .ui-menu .ui-menu-item a.ui-state-active,
 .ui-menu .ui-menu-item a.ui-widget-content{
-	font-weight: bold;
-	margin: 0;
+    font-weight: bold;
+    margin: 0;
     background-color: #428BCA;
     border-color: #357EBD;
     color: #FFFFFF;
@@ -1180,45 +1180,45 @@ button.ui-button::-moz-focus-inner {
 
 /* Fix problem with border in ui-state-active */
 .ui-menu .ui-menu-item a.ui-state-active {
-	padding: 1px .4em;
+    padding: 1px .4em;
 }
 
 .ui-menu .ui-state-disabled {
-	font-weight: normal;
-	margin: .4em 0 .2em;
-	line-height: 1.5;
+    font-weight: normal;
+    margin: .4em 0 .2em;
+    line-height: 1.5;
 }
 
 .ui-menu .ui-state-disabled a {
-	cursor: default;
+    cursor: default;
 }
 
 /* icon support */
 .ui-menu-icons {
-	position: relative;
+    position: relative;
 }
 
 .ui-menu-icons .ui-menu-item a {
-	position: relative;
-	padding-left: 2em;
+    position: relative;
+    padding-left: 2em;
 }
 
 /* left-aligned */
 .ui-menu .ui-icon {
-	position: absolute;
-	top: .2em;
-	left: .2em;
+    position: absolute;
+    top: .2em;
+    left: .2em;
 }
 
 /* right-aligned */
 .ui-menu .ui-menu-icon {
-	position: static;
-	float: right;
+    position: static;
+    float: right;
 }
 
 .ui-menu {
-	width: 200px;
-	margin-bottom: 2em;
+    width: 200px;
+    margin-bottom: 2em;
 }
 
 
@@ -1233,63 +1233,63 @@ button.ui-button::-moz-focus-inner {
  */
 
 .ui-spinner {
-	position: relative;
-	display: inline-block;
-	overflow: hidden;
-	padding: 0;
-	vertical-align: middle;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0;
+    vertical-align: middle;
 }
 
 .ui-spinner-input {
-	border: none;
-	background: none;
-	padding: 0;
-	margin: .2em 0;
-	vertical-align: middle;
-	margin-left: .4em;
-	margin-right: 22px;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: .2em 0;
+    vertical-align: middle;
+    margin-left: .4em;
+    margin-right: 22px;
 }
 
 .ui-spinner-button {
-	width: 16px;
-	height: 50%;
-	font-size: .5em;
-	padding: 0;
-	margin: 0;
-	text-align: center;
-	position: absolute;
-	cursor: default;
-	display: block;
-	overflow: hidden;
-	right: 0;
+    width: 16px;
+    height: 50%;
+    font-size: .5em;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    position: absolute;
+    cursor: default;
+    display: block;
+    overflow: hidden;
+    right: 0;
 }
 
 /* more specificity required here to overide default borders */
 .ui-spinner a.ui-spinner-button {
-	border-top: none;
-	border-bottom: none;
-	border-right: none;
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
 }
 
 /* vertical centre icon */
 .ui-spinner .ui-icon {
-	position: absolute;
-	margin-top: -8px;
-	top: 50%;
-	left: 0;
+    position: absolute;
+    margin-top: -8px;
+    top: 50%;
+    left: 0;
 }
 
 .ui-spinner-up {
-	top: 0;
+    top: 0;
 }
 
 .ui-spinner-down {
-	bottom: 0;
+    bottom: 0;
 }
 
 /* need to fix icons sprite */
 .ui-spinner .ui-icon-triangle-1-s {
-	background-position: -65px -16px;
+    background-position: -65px -16px;
 }
 
 /*
@@ -1303,139 +1303,139 @@ button.ui-button::-moz-focus-inner {
  */
 
 .ui-dialog {
-	position: absolute;
-	top: 0;
-	left: 0;
-	padding: .2em;
-	width: 300px;
-	overflow: hidden;
-	outline: 0;
-	background-clip: padding-box;
-	background-color: #ffffff;
-	border: 1px solid rgba(0, 0, 0, 0.3);
-	border-radius: 3px;
-	-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); /* Safari 4 */
-	-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); /* Firefox 3.6 */
-	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-	/*left: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: .2em;
+    width: 300px;
+    overflow: hidden;
+    outline: 0;
+    background-clip: padding-box;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); /* Safari 4 */
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); /* Firefox 3.6 */
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    /*left: 50%;
 	margin-left: -280px;*/
-	outline: medium none;
-	/*top: 10%;
+    outline: medium none;
+    /*top: 10%;
 	width: 560px;*/
-	z-index: 1050;
+    z-index: 1050;
 }
 
 .ui-dialog .ui-dialog-titlebar {
-	/*padding: .4em 1em;*/
-	position: relative;
-	padding: 5px 10px;
-	border: 0 0 0 1px solid;
-	border-color: white;
-	padding: 5px 15px;
-	font-size: 18px;
-	text-decoration: none;
-	-webkit-border-bottom-right-radius: 0; /* Safari 4 */
-	-moz-border-radius-bottomright: 0; /* Firefox 3.6 */
-	border-bottom-right-radius: 0;
-	-webkit-border-bottom-left-radius: 0; /* Safari 4 */
-	-moz-border-radius-bottomleft: 0; /* Firefox 3.6 */
-	border-bottom-left-radius: 0;
-	border-bottom: 1px solid #ccc;
+    /*padding: .4em 1em;*/
+    position: relative;
+    padding: 5px 10px;
+    border: 0 0 0 1px solid;
+    border-color: white;
+    padding: 5px 15px;
+    font-size: 18px;
+    text-decoration: none;
+    -webkit-border-bottom-right-radius: 0; /* Safari 4 */
+    -moz-border-radius-bottomright: 0; /* Firefox 3.6 */
+    border-bottom-right-radius: 0;
+    -webkit-border-bottom-left-radius: 0; /* Safari 4 */
+    -moz-border-radius-bottomleft: 0; /* Firefox 3.6 */
+    border-bottom-left-radius: 0;
+    border-bottom: 1px solid #ccc;
 }
 
 .ui-dialog .ui-dialog-title {
-	float: left;
-	color: #404040;
-	font-weight: bold;
-	margin-top: 2px;
-	margin-bottom: 2px;
-	padding: 5px;
-	text-overflow: ellipsis;
-	overflow: hidden;
+    float: left;
+    color: #404040;
+    font-weight: bold;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .ui-dialog .ui-dialog-titlebar-close {
-	position: absolute;
-	right: .3em;
-	top: 50%;
-	width: 19px;
-	margin: -12px 2px 0 0;
-	padding: 1px;
-	height: 18px;
-	font-size: 20px;
-	font-weight: bold;
-	line-height: 13.5px;
-	text-shadow: 0 1px 0 #ffffff;
-	filter:alpha(opacity=25);
-	-khtml-opacity: 0.25;
-	-moz-opacity: 0.25;
-	opacity: 0.25;
-	background: none;
-	border-width: 0;
-	border: none;
-	-webkit-box-shadow: none; /* Safari 4 */
-	-moz-box-shadow: none; /* Firefox 3.6 */
-	box-shadow: none;
+    position: absolute;
+    right: .3em;
+    top: 50%;
+    width: 19px;
+    margin: -12px 2px 0 0;
+    padding: 1px;
+    height: 18px;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 13.5px;
+    text-shadow: 0 1px 0 #ffffff;
+    filter:alpha(opacity=25);
+    -khtml-opacity: 0.25;
+    -moz-opacity: 0.25;
+    opacity: 0.25;
+    background: none;
+    border-width: 0;
+    border: none;
+    -webkit-box-shadow: none; /* Safari 4 */
+    -moz-box-shadow: none; /* Firefox 3.6 */
+    box-shadow: none;
 }
 
 .ui-dialog .ui-dialog-titlebar-close span {
-	display: block;
-	margin: 1px;
-	text-indent: 9999px;
+    display: block;
+    margin: 1px;
+    text-indent: 9999px;
 }
 
 .ui-dialog .ui-dialog-titlebar-close:hover,
 .ui-dialog .ui-dialog-titlebar-close:focus {
-	padding: 1px;
-	filter:alpha(opacity=90);
-	-moz-opacity: 0.90;
-	opacity: 0.90;
+    padding: 1px;
+    filter:alpha(opacity=90);
+    -moz-opacity: 0.90;
+    opacity: 0.90;
 }
 
 .ui-dialog .ui-dialog-content {
-	position: relative;
-	border: 0;
-	padding: .5em 1em;
-	background: none;
-	overflow: auto;
+    position: relative;
+    border: 0;
+    padding: .5em 1em;
+    background: none;
+    overflow: auto;
 }
 
 .ui-dialog .ui-dialog-buttonpane {
-	text-align: left;
-	border-width: 1px 0 0 0;
-	background-image: none;
-	margin: 2px 0 0 0;
-	background-color: #ffffff;
-	padding: 3px 15px 3px;
-	border-top: 1px solid #ddd;
-	-webkit-border-radius: 0 0 3px 3px; /* Safari 4 */
-	-moz-border-radius: 0 0 3px 3px; /* Firefox 3.6 */
-	border-radius: 0 0 3px 3px;
-	-webkit-box-shadow: inset 0 1px 0 #ffffff; /* Safari 4 */
-	-moz-box-shadow: inset 0 1px 0 #ffffff; /* Firefox 3.6 */
-	box-shadow: inset 0 1px 0 #ffffff;
-	margin-bottom: 0;
+    text-align: left;
+    border-width: 1px 0 0 0;
+    background-image: none;
+    margin: 2px 0 0 0;
+    background-color: #ffffff;
+    padding: 3px 15px 3px;
+    border-top: 1px solid #ddd;
+    -webkit-border-radius: 0 0 3px 3px; /* Safari 4 */
+    -moz-border-radius: 0 0 3px 3px; /* Firefox 3.6 */
+    border-radius: 0 0 3px 3px;
+    -webkit-box-shadow: inset 0 1px 0 #ffffff; /* Safari 4 */
+    -moz-box-shadow: inset 0 1px 0 #ffffff; /* Firefox 3.6 */
+    box-shadow: inset 0 1px 0 #ffffff;
+    margin-bottom: 0;
 
 }
 
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
-	float: right;
+    float: right;
 }
 
 .ui-dialog .ui-dialog-buttonpane button {
-	margin: .3em .4em .2em .4em;
-	cursor: pointer;
+    margin: .3em .4em .2em .4em;
+    cursor: pointer;
 }
 
 .ui-dialog .ui-resizable-se {
-	width: 14px;
-	height: 14px;
-	right: 3px;
-	bottom: 3px;
+    width: 14px;
+    height: 14px;
+    right: 3px;
+    bottom: 3px;
 }
 
 .ui-draggable .ui-dialog-titlebar {
-	cursor: move;
+    cursor: move;
 }
 
 .ui-dialog-buttonpane .ui-dialog-buttonset .ui-button {
@@ -1474,67 +1474,67 @@ button.ui-button::-moz-focus-inner {
 
 /* ui-dialog-buttonset UI info */
 .ui-dialog-buttonset .ui-button.ui-button-info{
-	color: #ffffff;
-	background-color: #5bc0de;
-	border-color: #46b8da;
+    color: #ffffff;
+    background-color: #5bc0de;
+    border-color: #46b8da;
 }
 
 .ui-dialog-buttonset .ui-button.ui-button-info.ui-state-hover{
-	color: #ffffff;
-	background-color: #39b3d7;
-	border-color: #269abc;
+    color: #ffffff;
+    background-color: #39b3d7;
+    border-color: #269abc;
 }
 
 /* ui-dialog-buttonset UI success */
 .ui-dialog-buttonset .ui-button.ui-button-success{
-	color: #ffffff;
-	background-color: #5cb85c;
-	border-color: #4cae4c;
+    color: #ffffff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
 }
 
 .ui-dialog-buttonset .ui-button.ui-button-success.ui-state-hover{
-	color: #ffffff;
-	background-color: #47a447;
-	border-color: #398439;
+    color: #ffffff;
+    background-color: #47a447;
+    border-color: #398439;
 }
 
 /* ui-dialog-buttonset UI warning */
 .ui-dialog-buttonset .ui-button.ui-button-warning{
-	color: #ffffff;
-	background-color: #f0ad4e;
-	border-color: #eea236;
+    color: #ffffff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
 }
 
 .ui-dialog-buttonset .ui-button.ui-button-warning.ui-state-hover{
     color: #ffffff;
-	background-color: #ed9c28;
-	border-color: #d58512;
+    background-color: #ed9c28;
+    border-color: #d58512;
 }
 
 /* ui-dialog-buttonset UI Danger */
 .ui-dialog-buttonset .ui-button.ui-button-danger{
-	color: #ffffff;
-	background-color: #d9534f;
-	border-color: #d43f3a;
+    color: #ffffff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
 }
 
 .ui-dialog-buttonset .ui-button.ui-button-danger.ui-state-hover{
-	color: #ffffff;
-	background-color: #d2322d;
-	border-color: #ac2925;
+    color: #ffffff;
+    background-color: #d2322d;
+    border-color: #ac2925;
 }
 
 /* ui-dialog-buttonset UI Inverse */
 .ui-dialog-buttonset .ui-button.ui-button-inverse{
-	color: #ffffff;
-	background-color: #222222;
+    color: #ffffff;
+    background-color: #222222;
     border-color: #080808;
 }
 
 .ui-dialog-buttonset .ui-button.ui-button-inverse.ui-state-hover{
-	color: #ffffff;
-	background-color: #363636;
-	border-color: #000000;
+    color: #ffffff;
+    background-color: #363636;
+    border-color: #000000;
 }
 
 /*
@@ -1548,96 +1548,96 @@ button.ui-button::-moz-focus-inner {
  */
 
 .ui-slider {
-	position: relative;
-	text-align: left;
+    position: relative;
+    text-align: left;
 }
 
 /* For IE8 - See #6727 */
 .ui-slider.ui-state-disabled .ui-slider-handle,
 .ui-slider.ui-state-disabled .ui-slider-range {
-	filter: inherit;
+    filter: inherit;
 }
 
 .ui-slider .ui-slider-handle {
-	position: absolute;
-	z-index: 2;
-	width: 1.2em;
-	height: 1.2em;
-	cursor: default;
+    position: absolute;
+    z-index: 2;
+    width: 1.2em;
+    height: 1.2em;
+    cursor: default;
 }
 
 .ui-slider .ui-slider-range {
-	position: absolute;
-	z-index: 1;
-	font-size: .7em;
-	display: block;
-	border: 0;
-	background-position: 0 0;
-	color: #ffffff;
-	background-color: #0e90d2;
-	background-image: -moz-linear-gradient(top, #149bdf, #0480be);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#149bdf), to(#0480be));
-	background-image: -webkit-linear-gradient(top, #149bdf, #0480be);
-	background-image: -o-linear-gradient(top, #149bdf, #0480be);
-	background-image: linear-gradient(to bottom, #149bdf, #0480be);
-	background-repeat: repeat-x;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff149bdf', endColorstr='#ff0480be', GradientType=0);
-	-webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-	-moz-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-	box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	-webkit-transition: width 0.6s ease;
-	-moz-transition: width 0.6s ease;
-	-o-transition: width 0.6s ease;
-	transition: width 0.6s ease;
+    position: absolute;
+    z-index: 1;
+    font-size: .7em;
+    display: block;
+    border: 0;
+    background-position: 0 0;
+    color: #ffffff;
+    background-color: #0e90d2;
+    background-image: -moz-linear-gradient(top, #149bdf, #0480be);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#149bdf), to(#0480be));
+    background-image: -webkit-linear-gradient(top, #149bdf, #0480be);
+    background-image: -o-linear-gradient(top, #149bdf, #0480be);
+    background-image: linear-gradient(to bottom, #149bdf, #0480be);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff149bdf', endColorstr='#ff0480be', GradientType=0);
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: width 0.6s ease;
+    -moz-transition: width 0.6s ease;
+    -o-transition: width 0.6s ease;
+    transition: width 0.6s ease;
 }
 
 .ui-slider-horizontal {
-	height: .8em;
+    height: .8em;
 }
 
 .ui-slider-horizontal .ui-slider-handle {
-	top: -.3em;
-	margin-left: -.6em;
+    top: -.3em;
+    margin-left: -.6em;
 }
 
 .ui-slider-horizontal .ui-slider-range {
-	top: 0;
-	height: 100%;
+    top: 0;
+    height: 100%;
 }
 
 .ui-slider-horizontal .ui-slider-range-min {
-	left: 0;
+    left: 0;
 }
 
 .ui-slider-horizontal .ui-slider-range-max {
-	right: 0;
+    right: 0;
 }
 
 .ui-slider-vertical {
-	width: .8em;
-	height: 100px;
+    width: .8em;
+    height: 100px;
 }
 
 .ui-slider-vertical .ui-slider-handle {
-	left: -.3em;
-	margin-left: 0;
-	margin-bottom: -.6em;
+    left: -.3em;
+    margin-left: 0;
+    margin-bottom: -.6em;
 }
 
 .ui-slider-vertical .ui-slider-range {
-	left: 0;
-	width: 100%;
+    left: 0;
+    width: 100%;
 }
 
 .ui-slider-vertical .ui-slider-range-min {
-	bottom: 0;
+    bottom: 0;
 }
 
 .ui-slider-vertical .ui-slider-range-max {
-	top: 0;
+    top: 0;
 }
 
 /*
@@ -1651,100 +1651,100 @@ button.ui-button::-moz-focus-inner {
  */
 
 .ui-tabs {
-	position: relative; /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
-	border: 0;
-	-webkit-border-radius: 0; /* Safari 4 */
-	-moz-border-radius: 0; /* Firefox 3.6 */
-	border-radius: 0;
+    position: relative; /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+    border: 0;
+    -webkit-border-radius: 0; /* Safari 4 */
+    -moz-border-radius: 0; /* Firefox 3.6 */
+    border-radius: 0;
 }
 
 .ui-tabs .ui-tabs-nav {
-	margin-bottom: 5px;
-	border: solid #ddd;
-	border-width: 0 0 1px 0;
-	-webkit-border-radius: 0; /* Safari 4 */
-	-moz-border-radius: 0; /* Firefox 3.6 */
-	border-radius: 0;
-	background: none;
+    margin-bottom: 5px;
+    border: solid #ddd;
+    border-width: 0 0 1px 0;
+    -webkit-border-radius: 0; /* Safari 4 */
+    -moz-border-radius: 0; /* Firefox 3.6 */
+    border-radius: 0;
+    background: none;
 }
 
 .ui-tabs .ui-tabs-nav li {
-	position: relative;
-	top: 0;
-	float: left;
-	margin-right: 2px;
-	margin-bottom: -1px;
-	border: 0;
-	list-style: none;
-	white-space: nowrap;
-	background: none;
+    position: relative;
+    top: 0;
+    float: left;
+    margin-right: 2px;
+    margin-bottom: -1px;
+    border: 0;
+    list-style: none;
+    white-space: nowrap;
+    background: none;
 }
 
 .ui-tabs-nav .ui-state-default {
-	border: 0;
-	-webkit-box-shadow: none;  /* Safari 4 */
-	-moz-box-shadow: none;  /* Firefox 3.6 */
-	box-shadow: none;
+    border: 0;
+    -webkit-box-shadow: none;  /* Safari 4 */
+    -moz-box-shadow: none;  /* Firefox 3.6 */
+    box-shadow: none;
 }
 
 .ui-tabs .ui-tabs-nav li a {
-	float: left;
-	border: 1px solid #fff;
-	border-bottom: 1px solid #ddd;
-	-webkit-border-radius: 2px 2px 0 0; /* Safari 4 */
-	-moz-border-radius: 2px 2px 0 0; /* Firefox 3.6 */
-	border-radius: 2px 2px 0 0;
-	padding: 8px 12px;
-	font-weight: normal;
-	text-decoration: none;
-	outline: none;
-	color: #0069D6;
-	background: none;
+    float: left;
+    border: 1px solid #fff;
+    border-bottom: 1px solid #ddd;
+    -webkit-border-radius: 2px 2px 0 0; /* Safari 4 */
+    -moz-border-radius: 2px 2px 0 0; /* Firefox 3.6 */
+    border-radius: 2px 2px 0 0;
+    padding: 8px 12px;
+    font-weight: normal;
+    text-decoration: none;
+    outline: none;
+    color: #0069D6;
+    background: none;
 }
 
 .ui-tabs .ui-tabs-nav li a:hover {
-	border: 1px solid whiteSmoke;
-	border-bottom: 1px solid #ddd;
-	background-color: whiteSmoke;
+    border: 1px solid whiteSmoke;
+    border-bottom: 1px solid #ddd;
+    background-color: whiteSmoke;
 }
 
 .ui-tabs .ui-tabs-nav li.ui-tabs-active a {
-	border: 1px solid #ddd;
-	border-bottom: 1px solid #fff;
-	background-color: #fff;
-	color: #555;
+    border: 1px solid #ddd;
+    border-bottom: 1px solid #fff;
+    background-color: #fff;
+    color: #555;
 }
 
 .ui-tabs .ui-tabs-nav li.ui-tabs-active:hover {
-	background: #fff;
-	cursor: text;
+    background: #fff;
+    cursor: text;
 }
 
 .ui-tabs .ui-tabs-nav li.ui-tabs-active a,
 .ui-tabs .ui-tabs-nav li.ui-state-disabled a,
 .ui-tabs .ui-tabs-nav li.ui-tabs-loading a {
-	cursor: text;
+    cursor: text;
 }
 
 /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
 .ui-tabs .ui-tabs-panel {
-	display: block;
-	margin: 1em 0;
-	border: 0;
-	-webkit-border-radius: 0; /* Safari 4 */
-	-moz-border-radius: 0; /* Firefox 3.6 */
-	border-radius: 0;
-	padding: 1px 0;
-	background: none;
+    display: block;
+    margin: 1em 0;
+    border: 0;
+    -webkit-border-radius: 0; /* Safari 4 */
+    -moz-border-radius: 0; /* Firefox 3.6 */
+    border-radius: 0;
+    padding: 1px 0;
+    background: none;
 }
 
 .ui-tabs .ui-tabs-hide {
-	display: none !important;
+    display: none !important;
 }
 
 /* IE fix for background inheritance from ui-widget */
 .ui-tabs .ui-tabs-nav li {
-	filter:none;
+    filter:none;
 }
 
 /*
@@ -1758,18 +1758,18 @@ button.ui-button::-moz-focus-inner {
  */
 
 .ui-tooltip {
-	padding: 8px;
-	position: absolute;
-	z-index: 9999;
-	max-width: 368px;
-	-webkit-border-radius: 3px; /* Safari 4 */
-	-moz-border-radius: 3px; /* Firefox 3.6 */
-	border-radius: 3px;
-	-webkit-box-shadow: 0 0 15px #aaa;
-	box-shadow: 0 0 15px #aaa;
+    padding: 8px;
+    position: absolute;
+    z-index: 9999;
+    max-width: 368px;
+    -webkit-border-radius: 3px; /* Safari 4 */
+    -moz-border-radius: 3px; /* Firefox 3.6 */
+    border-radius: 3px;
+    -webkit-box-shadow: 0 0 15px #aaa;
+    box-shadow: 0 0 15px #aaa;
 }
 body .ui-tooltip {
-	border-width: 1px;
+    border-width: 1px;
 }
 
 .arrow {
@@ -1859,310 +1859,310 @@ body .ui-tooltip {
  */
 
 .ui-datepicker {
-	width: 17em;
-	padding: .2em .2em 0;
-	display: none;
+    width: 17em;
+    padding: .2em .2em 0;
+    display: none;
 }
 
 .ui-datepicker .ui-datepicker-header {
-	position:relative;
-	padding: .2em 0;
-	border: 0;
-	font-weight: bold;
-	width: 100%;
-	padding: 4px 0;
-	background-color: #f5f5f5;
-	color: #808080;
+    position:relative;
+    padding: .2em 0;
+    border: 0;
+    font-weight: bold;
+    width: 100%;
+    padding: 4px 0;
+    background-color: #f5f5f5;
+    color: #808080;
 }
 
 .ui-datepicker .ui-datepicker-prev,
 .ui-datepicker .ui-datepicker-next {
-	position: absolute;
-	top: 2px;
-	width: 1.8em;
-	height: 1.8em;
+    position: absolute;
+    top: 2px;
+    width: 1.8em;
+    height: 1.8em;
 }
 
 .ui-datepicker .ui-datepicker-prev-hover,
 .ui-datepicker .ui-datepicker-next-hover {
-	/*top: 1px;*/
+    /*top: 1px;*/
 }
 
 .ui-datepicker .ui-datepicker-prev {
-	left: 2px;
+    left: 2px;
 }
 
 .ui-datepicker .ui-datepicker-next {
-	right: 2px;
+    right: 2px;
 }
 
 .ui-datepicker .ui-datepicker-prev-hover {
-	/*left:1px;*/
+    /*left:1px;*/
 }
 
 .ui-datepicker .ui-datepicker-next-hover {
-	/*right:1px;*/
+    /*right:1px;*/
 }
 
 .ui-datepicker .ui-datepicker-prev span,
 .ui-datepicker .ui-datepicker-next span {
-	display: block;
-	position: absolute;
-	left: 50%;
-	margin-left: -8px;
-	top: 50%;
-	margin-top: -8px;
+    display: block;
+    position: absolute;
+    left: 50%;
+    margin-left: -8px;
+    top: 50%;
+    margin-top: -8px;
 }
 
 .ui-datepicker .ui-datepicker-title {
-	margin: 0 2.3em;
-	line-height: 1.8em;
-	text-align: center;
+    margin: 0 2.3em;
+    line-height: 1.8em;
+    text-align: center;
 }
 
 .ui-datepicker .ui-datepicker-title select {
-	font-size: 1em;
-	margin: 1px 0;
+    font-size: 1em;
+    margin: 1px 0;
 }
 
 .ui-datepicker select.ui-datepicker-month-year {
-	width: 100%;
+    width: 100%;
 }
 
 .ui-datepicker select.ui-datepicker-month,
 .ui-datepicker select.ui-datepicker-year {
-	width: 49%;
+    width: 49%;
 }
 
 .ui-datepicker table {
-	width: 100%;
-	font-size: .9em;
-	border-collapse: collapse;
-	margin:0 0 .4em;
+    width: 100%;
+    font-size: .9em;
+    border-collapse: collapse;
+    margin:0 0 .4em;
 }
 
 .ui-datepicker th {
-	padding: .7em .3em;
-	text-align: center;
-	font-weight: bold;
-	border: 0;
+    padding: .7em .3em;
+    text-align: center;
+    font-weight: bold;
+    border: 0;
 }
 
 .ui-datepicker td {
-	border: 0;
-	padding: 1px;
+    border: 0;
+    padding: 1px;
 }
 
 .ui-datepicker td span,
 .ui-datepicker td a {
-	display: block;
-	padding: .2em;
-	text-align: right;
-	text-decoration: none;
+    display: block;
+    padding: .2em;
+    text-align: right;
+    text-decoration: none;
 }
 
 .ui-datepicker .ui-datepicker-buttonpane {
-	background-image: none;
-	margin: .7em 0 0 0;
-	padding:0 .2em;
-	border-left: 0;
-	border-right: 0;
-	border-bottom: 0;
+    background-image: none;
+    margin: .7em 0 0 0;
+    padding:0 .2em;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
 }
 
 .ui-datepicker .ui-datepicker-buttonpane button {
-	float: right;
-	margin: .5em .2em .4em;
-	cursor: pointer;
-	padding: .2em .6em .3em .6em;
-	width: auto;
-	overflow:visible;
+    float: right;
+    margin: .5em .2em .4em;
+    cursor: pointer;
+    padding: .2em .6em .3em .6em;
+    width: auto;
+    overflow:visible;
 }
 
 .ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current {
-	float: left;
+    float: left;
 }
 
 /* with multiple calendars */
 
 .ui-datepicker.ui-datepicker-multi {
-	width: auto;
+    width: auto;
 }
 
 .ui-datepicker-multi .ui-datepicker-group {
-	float: left;
+    float: left;
 }
 
 .ui-datepicker-multi .ui-datepicker-group table {
-	width: 95%;
-	margin: 0 auto .4em;
+    width: 95%;
+    margin: 0 auto .4em;
 }
 
 .ui-datepicker-multi-2 .ui-datepicker-group {
-	width: 50%;
+    width: 50%;
 }
 
 .ui-datepicker-multi-3 .ui-datepicker-group {
-	width: 33.3%;
+    width: 33.3%;
 }
 
 .ui-datepicker-multi-4 .ui-datepicker-group {
-	width: 25%;
+    width: 25%;
 }
 
 .ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header {
-	border-left-width: 0;
+    border-left-width: 0;
 }
 
 .ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header {
-	border-left-width: 0;
+    border-left-width: 0;
 }
 
 .ui-datepicker-multi .ui-datepicker-buttonpane {
-	clear: left;
+    clear: left;
 }
 
 .ui-datepicker-row-break {
-	clear: both;
-	width: 100%;
-	font-size: 0em;
+    clear: both;
+    width: 100%;
+    font-size: 0em;
 }
 
 /* RTL support */
 
 .ui-datepicker-rtl {
-	direction: rtl;
+    direction: rtl;
 }
 
 .ui-datepicker-rtl .ui-datepicker-prev {
-	right: 2px;
-	left: auto;
+    right: 2px;
+    left: auto;
 }
 
 .ui-datepicker-rtl .ui-datepicker-next {
-	left: 2px;
-	right: auto;
+    left: 2px;
+    right: auto;
 }
 
 .ui-datepicker-rtl .ui-datepicker-prev:hover {
-	right: 1px;
-	left: auto;
+    right: 1px;
+    left: auto;
 }
 
 .ui-datepicker-rtl .ui-datepicker-next:hover {
-	left: 1px;
-	right: auto;
+    left: 1px;
+    right: auto;
 }
 
 .ui-datepicker-rtl .ui-datepicker-buttonpane {
-	clear: right;
+    clear: right;
 }
 
 .ui-datepicker-rtl .ui-datepicker-buttonpane button {
-	float: left;
+    float: left;
 }
 
 .ui-datepicker-rtl .ui-datepicker-buttonpane button.ui-datepicker-current {
-	float: right;
+    float: right;
 }
 
 .ui-datepicker-rtl .ui-datepicker-group {
-	float: right;
+    float: right;
 }
 
 .ui-datepicker-rtl .ui-datepicker-group-last .ui-datepicker-header {
-	border-right-width: 0;
-	border-left-width: 1px;
+    border-right-width: 0;
+    border-left-width: 1px;
 }
 
 .ui-datepicker-rtl .ui-datepicker-group-middle .ui-datepicker-header {
-	border-right-width: 0;
-	border-left-width: 1px;
+    border-right-width: 0;
+    border-left-width: 1px;
 }
 
 /* IE6 IFRAME FIX (taken from datepicker 1.5.3 */
 .ui-datepicker-cover {
-	display: none; /*sorry for IE5*/
-	display/**/: block; /*sorry for IE5*/
-	position: absolute; /*must have*/
-	z-index: -1; /*must have*/
-	filter: mask(); /*must have*/
-	top: -4px; /*must have*/
-	left: -4px; /*must have*/
-	width: 200px; /*must have*/
-	height: 200px; /*must have*/
+    display: none; /*sorry for IE5*/
+    display/**/: block; /*sorry for IE5*/
+    position: absolute; /*must have*/
+    z-index: -1; /*must have*/
+    filter: mask(); /*must have*/
+    top: -4px; /*must have*/
+    left: -4px; /*must have*/
+    width: 200px; /*must have*/
+    height: 200px; /*must have*/
 }
 
 .ui-datepicker th {
-	font-weight: bold;
-	color: gray;
+    font-weight: bold;
+    color: gray;
 }
 
 .ui-datepicker-today a:hover {
-	background-color: #808080;
-	color: #ffffff;
+    background-color: #808080;
+    color: #ffffff;
 
 }
 .ui-datepicker-today a {
-	background-color: #BFBFBF;
-	cursor: pointer;
-	padding: 0 4px;
-	margin-bottom: 0;
+    background-color: #BFBFBF;
+    cursor: pointer;
+    padding: 0 4px;
+    margin-bottom: 0;
 }
 
 .ui-datepicker td a {
-	margin-bottom: 0;
-	border: 0;
+    margin-bottom: 0;
+    border: 0;
 }
 
 .ui-datepicker td:hover {
-	color: #ffffff;
+    color: #ffffff;
 }
 
 .ui-datepicker td .ui-state-default {
-	border: 0;
-	background:none;
-	margin-bottom: 0;
-	padding: 5px;
-	color: gray;
-	text-align: center;
-	filter: none;
+    border: 0;
+    background:none;
+    margin-bottom: 0;
+    padding: 5px;
+    color: gray;
+    text-align: center;
+    filter: none;
 }
 
 .ui-datepicker td .ui-state-active {
-	color: #ffffff;
-	background-color: #5bc0de;
-	border-color: #46b8da;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	-webkit-border-radius: 2px; /* Safari 4 */
-	-moz-border-radius: 2px; /* Firefox 3.6 */
-	border-radius: 2px;
+    color: #ffffff;
+    background-color: #5bc0de;
+    border-color: #46b8da;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    -webkit-border-radius: 2px; /* Safari 4 */
+    -moz-border-radius: 2px; /* Firefox 3.6 */
+    border-radius: 2px;
 }
 
 .ui-datepicker td .ui-state-highlight {
-	color: #333333;
+    color: #333333;
     background-color: #e6e6e6;
     border-color: #adadad;
-	margin-bottom: 0;
-	font-size: normal;
-	text-shadow: 0;
-	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	-webkit-border-radius: 2px; /* Safari 4 */
-	-moz-border-radius: 2px; /* Firefox 3.6 */
-	border-radius: 2px;
+    margin-bottom: 0;
+    font-size: normal;
+    text-shadow: 0;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    -webkit-border-radius: 2px; /* Safari 4 */
+    -moz-border-radius: 2px; /* Firefox 3.6 */
+    border-radius: 2px;
 }
 
 .ui-datepicker td .ui-state-hover {
-	color: #ffffff;
-	background: #428bca;
-	background-color: #428bca;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	border-color: #357ebd;
-	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	-webkit-border-radius: 2px; /* Safari 4 */
-	-moz-border-radius: 2px; /* Firefox 3.6 */
-	border-radius: 2px;
+    color: #ffffff;
+    background: #428bca;
+    background-color: #428bca;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    border-color: #357ebd;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    -webkit-border-radius: 2px; /* Safari 4 */
+    -moz-border-radius: 2px; /* Firefox 3.6 */
+    border-radius: 2px;
 }
 
 
@@ -2177,63 +2177,63 @@ body .ui-tooltip {
  */
 
 .ui-progressbar {
-	height:2em;
-	margin-bottom: 20px;
-	border:0px;
-	overflow: hidden;
-	background-color: #f7f7f7;
-	background-image: -moz-linear-gradient(top, #f5f5f5, #f9f9f9);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f5f5), to(#f9f9f9));
-	background-image: -webkit-linear-gradient(top, #f5f5f5, #f9f9f9);
-	background-image: -o-linear-gradient(top, #f5f5f5, #f9f9f9);
-	background-image: linear-gradient(to bottom, #f5f5f5, #f9f9f9);
-	background-repeat: repeat-x;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border-radius: 2px;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#fff9f9f9', GradientType=0);
-	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-	-moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    height:2em;
+    margin-bottom: 20px;
+    border:0px;
+    overflow: hidden;
+    background-color: #f7f7f7;
+    background-image: -moz-linear-gradient(top, #f5f5f5, #f9f9f9);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f5f5), to(#f9f9f9));
+    background-image: -webkit-linear-gradient(top, #f5f5f5, #f9f9f9);
+    background-image: -o-linear-gradient(top, #f5f5f5, #f9f9f9);
+    background-image: linear-gradient(to bottom, #f5f5f5, #f9f9f9);
+    background-repeat: repeat-x;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#fff9f9f9', GradientType=0);
+    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .ui-progressbar .ui-progressbar-value {
-	margin: 0px;
-	height: 100%;
-	height:100%;
-	color: #ffffff; /*this can be removed if ui-widget-header is blue*/
-	background-color: #428BCA;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	-webkit-transition: width 0.6s ease;
-	transition: width 0.6s ease;
+    margin: 0px;
+    height: 100%;
+    height:100%;
+    color: #ffffff; /*this can be removed if ui-widget-header is blue*/
+    background-color: #428BCA;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: width 0.6s ease;
+    transition: width 0.6s ease;
 }
 
 .ui-progressbar .ui-progressbar-overlay {
-	background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
-	background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-	background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-	background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-	background-size: 40px 40px;
-	-webkit-animation: progress-bar-stripes 2s linear infinite;
-	-moz-animation: progress-bar-stripes 2s linear infinite;
-	-ms-animation: progress-bar-stripes 2s linear infinite;
-	-o-animation: progress-bar-stripes 2s linear infinite;
-	animation: progress-bar-stripes 2s linear infinite;
+    background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-size: 40px 40px;
+    -webkit-animation: progress-bar-stripes 2s linear infinite;
+    -moz-animation: progress-bar-stripes 2s linear infinite;
+    -ms-animation: progress-bar-stripes 2s linear infinite;
+    -o-animation: progress-bar-stripes 2s linear infinite;
+    animation: progress-bar-stripes 2s linear infinite;
 }
 
 .ui-progressbar-indeterminate .ui-progressbar-value {
-	background-image: none;
+    background-image: none;
 }
 
 /*** Input field styling from Bootstrap **/
 
  input, textarea {
-	-webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
-	-moz-transition: border linear 0.2s, box-shadow linear 0.2s;
-	-o-transition: border linear 0.2s, box-shadow linear 0.2s;
-	transition: border linear 0.2s, box-shadow linear 0.2s;
+    -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+    -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+    -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+    transition: border linear 0.2s, box-shadow linear 0.2s;
 }
 
 .ui-widget textarea {
@@ -2242,17 +2242,17 @@ body .ui-tooltip {
 }
 
 input:focus, textarea:focus {
-	outline: 0;
-	border-color: rgba(82, 168, 236, 0.8);
-	-webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6); /* Safari 4 */
-	-moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6); /* Firefox 3.6 */
-	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+    outline: 0;
+    border-color: rgba(82, 168, 236, 0.8);
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6); /* Safari 4 */
+    -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6); /* Firefox 3.6 */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
 }
 input[type=file]:focus, input[type=checkbox]:focus, select:focus {
-	-webkit-box-shadow: none; /* Safari 4 */
-	-moz-box-shadow: none; /* Firefox 3.6 */
-	box-shadow: none;
-	outline: 1px dotted #666;
+    -webkit-box-shadow: none; /* Safari 4 */
+    -moz-box-shadow: none; /* Firefox 3.6 */
+    box-shadow: none;
+    outline: 1px dotted #666;
 }
 
 .ui-widget input[type="text"],
@@ -2264,13 +2264,13 @@ input[type=file]:focus, input[type=checkbox]:focus, select:focus {
 .ui-autocomplete-input,
 .ui-widget textarea,
 .uneditable-input {
-	display: inline-block;
-	padding: 4px;
-	line-height: 18px;
-	border: 1px solid #ccc;
-	-webkit-border-radius: 2px; /* Safari 4 */
-	-moz-border-radius: 2px; /* Firefox 3.6 */
-	border-radius: 2px;
+    display: inline-block;
+    padding: 4px;
+    line-height: 18px;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 2px; /* Safari 4 */
+    -moz-border-radius: 2px; /* Firefox 3.6 */
+    border-radius: 2px;
 }
 
 input[type="search"] {
@@ -2287,22 +2287,22 @@ input[type="search"]::-webkit-search-decoration {
 /**Toolbar**/
 
 .ui-toolbar {
-	padding: 7px 14px;
-	margin: 0 0 18px;
-	background-color: #f5f5f5;
-	background-repeat: repeat-x;
-	background-image: -webkit-linear-gradient(top, #ffffff, #f5f5f5); /* Safari 5.1+, Chrome 10+ */
-	background-image: -moz-linear-gradient(top, #ffffff, #f5f5f5); /* Firefox 3.6 */
-	background-image: -o-linear-gradient(top, #ffffff, #f5f5f5); /* Opera 11.10+ */
-	background-image: linear-gradient(top, #ffffff, #f5f5f5); /* CSS3 Compliant */
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f5f5f5', GradientType=0); /* IE8 */
-	border: 1px solid #ddd;
-	-webkit-border-radius: 2px; /* Safari 4 */
-	-moz-border-radius: 2px; /* Firefox 3.6 */
-	border-radius: 2px;
-	-webkit-box-shadow: inset 0 1px 0 #ffffff; /* Safari 4 */
-	-moz-box-shadow: inset 0 1px 0 #ffffff; /* Firefox 3.6 */
-	box-shadow: inset 0 1px 0 #ffffff;
+    padding: 7px 14px;
+    margin: 0 0 18px;
+    background-color: #f5f5f5;
+    background-repeat: repeat-x;
+    background-image: -webkit-linear-gradient(top, #ffffff, #f5f5f5); /* Safari 5.1+, Chrome 10+ */
+    background-image: -moz-linear-gradient(top, #ffffff, #f5f5f5); /* Firefox 3.6 */
+    background-image: -o-linear-gradient(top, #ffffff, #f5f5f5); /* Opera 11.10+ */
+    background-image: linear-gradient(top, #ffffff, #f5f5f5); /* CSS3 Compliant */
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f5f5f5', GradientType=0); /* IE8 */
+    border: 1px solid #ddd;
+    -webkit-border-radius: 2px; /* Safari 4 */
+    -moz-border-radius: 2px; /* Firefox 3.6 */
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 1px 0 #ffffff; /* Safari 4 */
+    -moz-box-shadow: inset 0 1px 0 #ffffff; /* Firefox 3.6 */
+    box-shadow: inset 0 1px 0 #ffffff;
 }
 
 /**
@@ -2351,3 +2351,4 @@ input[type="search"]::-webkit-search-decoration {
 .ui-button-text-icon-primary .ui-button-icon-primary{
     float:none;
 }*/
+

@@ -49,28 +49,17 @@ UE.I18N['zh-cn'] = {
     },
     'paragraph':{'p':'段落', 'h1':'标题 1', 'h2':'标题 2', 'h3':'标题 3', 'h4':'标题 4', 'h5':'标题 5', 'h6':'标题 6'},
     'fontfamily':{
-		'Microsoft YaHei':'微软雅黑体',
-		'SimSun':'宋体',
-		'NSimSun':'新宋体',
-		'FangSong':'仿宋体',
-		'SimKai':'楷体',
-		'SimHei':'黑体',
-		'Microsoft JhengHei':'微软正黑体',
-		'PMingLiU':'新细明体',
-		'MingLiU':'细明体',
-		'DFKai-SB':'标楷体',
-		'Helvetica':'Helvetica',
-		'Arial':'Arial',
-		'Arial Black':'Arial Black',
-		'Comic Sans MS':'Comic Sans MS',
-		'Courier New':'Courier New',
-		'Garamond':'Garamond',
-		'Georgia':'Georgia',
-		'Impact':'Impact',
-		'Tahoma':'Tahoma',
-		'Times New Roman':'Times New Roman',
-		'Trebuchet MS':'Trebuchet MS',
-		'Verdana':'Verdana'
+        'songti':'宋体',
+        'kaiti':'楷体',
+        'heiti':'黑体',
+        'lishu':'隶书',
+        'yahei':'微软雅黑',
+        'andaleMono':'andale mono',
+        'arial': 'arial',
+        'arialBlack':'arial black',
+        'comicSansMs':'comic sans ms',
+        'impact':'impact',
+        'timesNewRoman':'times new roman'
     },
     'customstyle':{
         'tc':'标题居中',
@@ -194,13 +183,13 @@ UE.I18N['zh-cn'] = {
         'unsetbackground':'取消选区背景',
         'redandblue':'红蓝相间',
         'threecolorgradient':'三色渐变',
-        'copy':"复制(Ctrl + C)",
-        'copymsg': "浏览器不支持,请使用 'Ctrl + C'",
-        'paste':"粘贴(Ctrl + V)",
-        'pastemsg': "浏览器不支持,请使用 'Ctrl + V'"
+        'copy':"复制(Ctrl + c)",
+        'copymsg': "浏览器不支持,请使用 'Ctrl + c'",
+        'paste':"粘贴(Ctrl + v)",
+         'pastemsg': "浏览器不支持,请使用 'Ctrl + v'"
     },
-    'copymsg': "浏览器不支持,请使用 'Ctrl + C'",
-    'pastemsg': "浏览器不支持,请使用 'Ctrl + V'",
+    'copymsg': "浏览器不支持,请使用 'Ctrl + c'",
+    'pastemsg': "浏览器不支持,请使用 'Ctrl + v'",
     'anthorMsg':"链接",
     'clearColor':'清空颜色',
     'standardColor':'标准颜色',
@@ -433,6 +422,7 @@ UE.I18N['zh-cn'] = {
         'errorHttp':'http请求错误',
         'errorServerUpload':'服务器返回出错'
     },
+
     'template':{
         'static':{
             'lang_template_bkcolor':'背景颜色',
@@ -628,5 +618,9 @@ UE.I18N['zh-cn'] = {
         'netError':"网络连接错误，请重试！",
         'copySuccess':"图片地址已经复制！",
         'flashI18n':{} //留空默认中文
+    },
+    'autosave': {
+        'saving':'保存中...',
+        'success':'本地保存成功'
     }
 };
