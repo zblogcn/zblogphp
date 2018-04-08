@@ -518,7 +518,7 @@ function ViewAuto($inpurl)
     if (IS_IIS && isset($_GET['rewrite'])) {
         //iis+httpd.ini下如果存在真实文件
         $realurl = $zbp->path . urldecode($url);
-        if (is_readable($realurl) && is_file($realurl)) {
+        if (is_readable($realurl) && is_file($realurl) && !preg_match('/\.php$/', $realurl)) {
             die(file_get_contents($realurl));
         }
         unset($realurl);

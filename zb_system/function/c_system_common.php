@@ -1406,6 +1406,26 @@ function CreateWebToken($wt_id, $time)
 }
 
 
+function CheckTokenValid($fieldName = 'token', $methods = array('get', 'post'))
+{
+    global $zbp;
+    $flag = false;
+    if (is_string($methods)) {
+        $methods = array($methods);
+    }
+    foreach ($methods as $method) {
+        if ($zbp->ValidToken(GetVars($fieldName, $method))) {
+            $flag = true;
+            break;
+        }
+    }
+
+    if (!$flag) {
+        $zbp->ShowError(5, __FILE__, __LINE__);
+        exit;
+    }
+}
+
 
 function GetIDArrayByList($array){
     $ids = array();
