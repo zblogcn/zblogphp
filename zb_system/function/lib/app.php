@@ -263,7 +263,9 @@ class App
     public function LoadInfoByXml($type, $id)
     {
         global $zbp;
-        $path = $zbp->usersdir . $type . '/' . $id . '/' . $type . '.xml';
+        $path = $zbp->usersdir . TransferHTML($type, '[filename]');
+        $path .= '/' . TransferHTML($id, '[filename]') . '/' . TransferHTML($type, '[filename]') . '.xml';
+
         if (!is_readable($path)) {
             return false;
         }

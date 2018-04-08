@@ -38,7 +38,7 @@ if (isset($_GET['source'])) {
         $mod->HtmlID = GetVars('filename', 'GET');
         $mod->Source = 'theme';
         if ($mod->FileName) {
-            $mod->Content = file_get_contents($zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $mod->FileName . '.php');
+            $mod->Content = file_get_contents($zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . TransferHTML($mod->FileName, '[filename]') . '.php');
         }
     }
 } elseif (isset($_GET['filename'])) {
