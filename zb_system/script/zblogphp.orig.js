@@ -71,7 +71,7 @@
 
             var regExList = {
                 // [canBeEmpty, errorCode, RegExp]
-                "name": [false, 72, /^[\.\_A-Za-z0-9\u4e00-\u9fa5]+$/ig],
+                "name": [false, 72, /^[\.\_A-Za-z0-9\u4e00-\u9fa5@]+$/ig],
                 "email": [true, 29, /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/ig],
                 "content": [false, 46, /./]
             };
