@@ -9,10 +9,11 @@
 ################################################################################################################
 /**
  * 验证登录
+ * @param bool $throwException
  * @return bool
  * @throws Exception
  */
-function VerifyLogin()
+function VerifyLogin($throwException = true)
 {
     global $zbp;
     /** @var Member $m */
@@ -24,12 +25,6 @@ function VerifyLogin()
         $un = $m->Name;
         $ps = $zbp->VerifyResult($m);
         $sd = (int) GetVars('savedate');
-        $addinfo = array();
-        $addinfo['chkadmin'] = (int) $zbp->CheckRights('admin');
-        $addinfo['chkarticle'] = (int) $zbp->CheckRights('ArticleEdt');
-        $addinfo['levelname'] = $m->LevelName;
-        $addinfo['userid'] = $m->ID;
-        $addinfo['useralias'] = $m->StaticName;
 
         if ($sd == 0) {
             $sdt = 0;
@@ -37,27 +32,45 @@ function VerifyLogin()
             $sdt = time() + 3600 * 24 * $sd;
         }
 
-        $token = $zbp->GenerateUserToken($m, $sdt);
-
-        if (HTTP_SCHEME == 'https://') {
-            setcookie("username", $un, $sdt, $zbp->cookiespath, '', true, false);
-            setcookie("token", $token, $sdt, $zbp->cookiespath, '', true, true);
-            setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $sdt, $zbp->cookiespath, '', true, false);
-        } else {
-            setcookie("username", $un, $sdt, $zbp->cookiespath, '', false, false);
-            setcookie("token", $token, $sdt, $zbp->cookiespath, '', false, true);
-            setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $sdt, $zbp->cookiespath);
-        }
+        SetLoginCookie($m, $sdt);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_VerifyLogin_Succeed'] as $fpname => &$fpsignal) {
             $fpname();
         }
 
         return true;
-    } else {
+    } else if ($throwException) {
         $zbp->ShowError(8, __FILE__, __LINE__);
+    } else {
+        return false;
     }
 }
+
+/**
+ * 设置登录Cookie，直接登录该用户
+ * @param Member $user
+ * @param int $cookieTime
+ * @return bool
+ */
+function SetLoginCookie($user, $cookieTime)
+{
+    global $zbp;
+    $addinfo = array();
+    $addinfo['chkadmin'] = (int) $zbp->CheckRights('admin');
+    $addinfo['chkarticle'] = (int) $zbp->CheckRights('ArticleEdt');
+    $addinfo['levelname'] = $user->LevelName;
+    $addinfo['userid'] = $user->ID;
+    $addinfo['useralias'] = $user->StaticName;
+    $token = $zbp->GenerateUserToken($user, $cookieTime);
+    $secure = HTTP_SCHEME == 'https://';
+    setcookie("username", $user->Name, $cookieTime, $zbp->cookiespath, '', $secure, false);
+    setcookie("token", $token, $cookieTime, $zbp->cookiespath, '', $secure, true);
+    setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $cookieTime, $zbp->cookiespath, '', $secure, false);
+
+    return true;
+}
+
+
 
 /**
  * 注销登录
