@@ -299,7 +299,7 @@ function OutputOptionItemsOfTemplate($default)
         }
 
         if ($default == $key) {
-            $s .= '<option value="' . $key . '" selected="selected">' . $key . ' (' . $zbp->lang['msg']['default_template'] . ')' . '</option>';
+            $s .= '<option value="' . $key . '" selected="selected">' . $key . ' (' . $zbp->lang['msg']['current_template'] . ')' . '</option>';
         } else {
             if ($n !== '') {
                 $s .= '<option value="' . $key . '" >' . $key . ' (' . $n . ')' . '</option>';
