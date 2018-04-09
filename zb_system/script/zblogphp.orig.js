@@ -118,7 +118,7 @@
             } else {
                 this.$(data.data.html).insertAfter("#AjaxComment" + formData.replyid);
             }
-            location.hash = "#" + data.data.ID;
+            location.hash = "#cmt" + data.data.ID;
             this.$("#txaArticle").val("");
 
             this.userinfo.saveFromHtml();
