@@ -1207,8 +1207,8 @@ function Admin_UploadMng()
         $ret = array();//table string
         $ret[] = '<tr>';
         $ret[] = '<td class="td5">' . $upload->ID . '</td>';
-        $ret[] = '<td class="td10">' . $upload->Author->Name . '</td>';
-        $ret[] = '<td><a href="' . $upload->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $upload->Name . '</td>';
+        $ret[] = '<td class="td10">' . htmlspecialchars($upload->Author->Name) . '</td>';
+        $ret[] = '<td><a href="' . htmlspecialchars($upload->Url) . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . htmlspecialchars($upload->Name) . '</td>';
         $ret[] = '<td class="td15">' . $upload->Time() . '</td>';
         $ret[] = '<td class="td10">' . $upload->Size . '</td>';
         $ret[] = '<td class="td20">' . $upload->MimeType . '</td>';
@@ -1348,8 +1348,8 @@ function Admin_ThemeMng()
         echo "\n\n";
 
         echo '<div class="theme ' . ($theme->IsUsed() ? 'theme-now' : 'theme-other') . '"';
-        echo ' data-themeid="' . $theme->id . '"';
-        echo ' data-themename="' . $theme->name . '"';
+        echo ' data-themeid="' . htmlspecialchars($theme->id) . '"';
+        echo ' data-themename="' . htmlspecialchars($theme->name) . '"';
         echo '>';
         echo '<div class="theme-name">';
 
@@ -1358,14 +1358,14 @@ function Admin_ThemeMng()
         } else {
             echo '<img width="16" title="" alt="" src="../image/admin/layout.png"/>&nbsp;&nbsp;';
         }
-        echo '<a target="_blank" href="' . $theme->url . '" title=""><strong style="display:none;">' . $theme->id . '</strong>';
-        echo '<b>' . $theme->name . '</b></a></div>';
-        echo '<div><img src="' . $theme->GetScreenshot() . '" title="' . $theme->name . '" alt="' . $theme->name . '" width="200" height="150" /></div>';
-        echo '<div class="theme-author">' . $zbp->lang['msg']['author'] . ': <a target="_blank" href="' . $theme->author_url . '">' . $theme->author_name . '</a></div>';
+        echo '<a target="_blank" href="' . htmlspecialchars($theme->url) . '" title=""><strong style="display:none;">' . htmlspecialchars($theme->id) . '</strong>';
+        echo '<b>' . htmlspecialchars($theme->name) . '</b></a></div>';
+        echo '<div><img src="' . $theme->GetScreenshot() . '" title="' . htmlspecialchars($theme->name) . '" alt="' . htmlspecialchars($theme->name) . '" width="200" height="150" /></div>';
+        echo '<div class="theme-author">' . $zbp->lang['msg']['author'] . ': <a target="_blank" href="' . htmlspecialchars($theme->author_url) . '">' . htmlspecialchars($theme->author_name) . '</a></div>';
         echo '<div class="theme-style">' . $zbp->lang['msg']['style'] . ': ';
         echo '<select class="edit" size="1" style="width:110px;">';
         foreach ($theme->GetCssFiles() as $key => $value) {
-            echo '<option value="' . $key . '" ' . ($theme->IsUsed() ? ($key == $zbp->style ? 'selected="selected"' : '') : '') . '>' . basename($value) . '</option>';
+            echo '<option value="' . htmlspecialchars($key) . '" ' . ($theme->IsUsed() ? ($key == $zbp->style ? 'selected="selected"' : '') : '') . '>' . basename($value) . '</option>';
         }
         echo '</select>';
         echo '<input type="button" onclick="$(\'#style\').val($(this).prev().val());$(\'#theme\').val(\'' . $theme->id . '\');$(\'#frmTheme\').submit();" class="theme-activate button" value="' . $zbp->lang['msg']['enable'] . '">';
@@ -1679,10 +1679,10 @@ function Admin_PluginMng()
 
     foreach ($plugins as $plugin) {
         echo '<tr>';
-        echo '<td class="td5 tdCenter' . ($plugin->type == 'plugin' ? ' plugin' : '') . ($plugin->IsUsed() ? ' plugin-on' : '') . '" data-pluginid="' . $plugin->id . '"><img ' . ($plugin->IsUsed() ? '' : 'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" height="32" /></td>';
-        echo '<td class="td25"><span class="plugin-note" title="' . htmlspecialchars($plugin->note) . '">' . $plugin->name . ' ' . $plugin->version . '</span></td>';
-        echo '<td class="td20"><a href="' . $plugin->author_url . '" target="_blank">' . $plugin->author_name . '</a></td>';
-        echo '<td class="td20">' . $plugin->modified . '</td>';
+        echo '<td class="td5 tdCenter' . ($plugin->type == 'plugin' ? ' plugin' : '') . ($plugin->IsUsed() ? ' plugin-on' : '') . '" data-pluginid="' . htmlspecialchars($plugin->id) . '"><img ' . ($plugin->IsUsed() ? '' : 'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" height="32" /></td>';
+        echo '<td class="td25"><span class="plugin-note" title="' . htmlspecialchars($plugin->note) . '">' . htmlspecialchars($plugin->name) . ' ' . htmlspecialchars($plugin->version) . '</span></td>';
+        echo '<td class="td20"><a href="' . htmlspecialchars($plugin->author_url) . '" target="_blank">' . htmlspecialchars($plugin->author_name) . '</a></td>';
+        echo '<td class="td20">' . htmlspecialchars($plugin->modified) . '</td>';
         echo '<td class="td10 tdCenter">';
 
         if ($plugin->type == 'plugin') {
