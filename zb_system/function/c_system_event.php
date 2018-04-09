@@ -2849,7 +2849,7 @@ function SaveSetting()
             $key == 'ZC_COMMENT_VERIFY_ENABLE' ||
             $key == 'ZC_CLOSE_SITE' ||
             $key == 'ZC_PERMANENT_DOMAIN_WITH_ADMIN' ||
-            $key == 'ZC_ADVANCED_SECURITY'
+            $key == 'ZC_ADDITIONAL_SECURITY'
         ) {
             $zbp->option[$key] = (boolean) $value;
             continue;

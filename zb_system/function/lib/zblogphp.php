@@ -1716,8 +1716,8 @@ class ZBlogPHP
     /**
      * 查询ID数据的指定类型的sql并返回指定类型对象列表
      * @param string $type 类型
-     * @param array $array ID数组
-     * @return array
+     * @param mixed $array ID数组
+     * @return Base[]
      */
     public function GetListTypeByArray($type, $array)
     {
@@ -1749,12 +1749,12 @@ class ZBlogPHP
     }
 
     /**
-     * @param null $select
-     * @param null $where
-     * @param null $order
-     * @param null $limit
-     * @param null $option
-     * @return array
+     * @param mixed $select
+     * @param mixed $where
+     * @param mixed $order
+     * @param mixed $limit
+     * @param mixed $option
+     * @return Post[]
      */
     public function GetPostList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
@@ -1767,6 +1767,7 @@ class ZBlogPHP
         }
         $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);
 
+        /** @var Post[] $array */
         $array = $this->GetListType('Post', $sql);
         foreach ($array as $a) {
             $this->posts[$a->ID] = $a;
@@ -1777,8 +1778,8 @@ class ZBlogPHP
 
     /**
      * 通过ID数组获取文章实例
-     * @param array $array
-     * @return array Posts
+     * @param mixed[] $array
+     * @return Post[] Posts
      */
     public function GetPostByArray($array)
     {
@@ -1792,7 +1793,7 @@ class ZBlogPHP
      * @param null $limit
      * @param null $option
      * @param bool $readtags
-     * @return array
+     * @return Post[]
      */
     public function GetArticleList($select = null, $where = null, $order = null, $limit = null, $option = null, $readtags = true)
     {
@@ -1846,7 +1847,7 @@ class ZBlogPHP
      * @param null $order
      * @param null $limit
      * @param null $option
-     * @return array
+     * @return Post[]
      */
     public function GetPageList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
@@ -1862,6 +1863,7 @@ class ZBlogPHP
         }
 
         $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);
+        /** @var Post[] $array */
         $array = $this->GetListType('Post', $sql);
         foreach ($array as $a) {
             $this->posts[$a->ID] = $a;
@@ -1876,7 +1878,7 @@ class ZBlogPHP
      * @param null $order
      * @param null $limit
      * @param null $option
-     * @return array
+     * @return Comment[]
      */
     public function GetCommentList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
@@ -1885,6 +1887,7 @@ class ZBlogPHP
             $select = array('*');
         }
         $sql = $this->db->sql->Select($this->table['Comment'], $select, $where, $order, $limit, $option);
+        /** @var Comment[] $array */
         $array = $this->GetListType('Comment', $sql);
         foreach ($array as $comment) {
             $this->comments[$comment->ID] = $comment;
@@ -1899,7 +1902,7 @@ class ZBlogPHP
      * @param null $order
      * @param null $limit
      * @param null $option
-     * @return array
+     * @return Member[]|Base[]
      */
     public function GetMemberList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
@@ -1918,7 +1921,7 @@ class ZBlogPHP
      * @param null $order
      * @param null $limit
      * @param null $option
-     * @return array
+     * @return Tag[]|Base[]
      */
     public function GetTagList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
@@ -1937,7 +1940,7 @@ class ZBlogPHP
      * @param null $order
      * @param null $limit
      * @param null $option
-     * @return array
+     * @return Category[]|Base[]
      */
     public function GetCategoryList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
@@ -1956,7 +1959,7 @@ class ZBlogPHP
      * @param null $order
      * @param null $limit
      * @param null $option
-     * @return array
+     * @return Module[]|Base[]
      */
     public function GetModuleList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
@@ -1975,7 +1978,7 @@ class ZBlogPHP
      * @param null $order
      * @param null $limit
      * @param null $option
-     * @return array
+     * @return Upload[]|Base[]
      */
     public function GetUploadList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
@@ -1988,8 +1991,6 @@ class ZBlogPHP
         return $this->GetListType('Upload', $sql);
     }
 
-################################################################################################################
-    #wp类似
 
     /**
      * @param $sql
@@ -2000,8 +2001,6 @@ class ZBlogPHP
         return $this->db->Query($sql);
     }
 
-################################################################################################################
-    #读取对象函数
 
     /**
      * 根据别名得到相应数据
