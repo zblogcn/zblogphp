@@ -78,4 +78,13 @@ interface Network__Interface
      */
     public function addText($name, $entity);
 
+    /**
+     * @param $resolveTimeout
+     * @param $connectTimeout
+     * @param $sendTimeout
+     * @param $receiveTimeout
+     * @return mixed
+     */
+    public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout);
+
 }

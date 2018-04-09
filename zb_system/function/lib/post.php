@@ -23,6 +23,8 @@
  * @property string Url 文章地址
  * @property bool IsLock 是否锁定
  * @property string TypeName 文章类型的具体信息
+ * @property string StatusName 文章状态的详细信息
+ * @property int|string CommNums 评论数量
  */
 class Post extends Base
 {

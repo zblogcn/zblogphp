@@ -14,6 +14,8 @@
  * @property string Template 分类模板
  * @property string LogTemplate 分类下文章模板
  * @property string Url
+ * @property int|string Order 分类顺序
+ * @property string SymbolName 层次标识符+名字
  * @package Z-BlogPHP
  */
 class Category extends Base

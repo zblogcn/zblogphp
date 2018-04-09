@@ -1119,7 +1119,7 @@ class ZBlogPHP
      * 验证用户登录（原始明文密码）
      * @param string $name 用户名
      * @param string $originalpw 密码明文
-     * @param object $member 返回读取成功的member对象
+     * @param Member $member 返回读取成功的member对象
      * @return bool
      */
     public function Verify_Original($name, $originalpw, &$member = null)
@@ -1779,7 +1779,7 @@ class ZBlogPHP
     /**
      * 通过ID数组获取文章实例
      * @param mixed[] $array
-     * @return Post[] Posts
+     * @return Post[]|Base[] Posts
      */
     public function GetPostByArray($array)
     {
@@ -1787,12 +1787,12 @@ class ZBlogPHP
     }
 
     /**
-     * @param null $select
-     * @param null $where
-     * @param null $order
-     * @param null $limit
-     * @param null $option
-     * @param bool $readtags
+     * @param mixed $select
+     * @param mixed $where
+     * @param mixed $order
+     * @param mixed $limit
+     * @param mixed $option
+     * @param mixed $readtags
      * @return Post[]
      */
     public function GetArticleList($select = null, $where = null, $order = null, $limit = null, $option = null, $readtags = true)
@@ -1842,11 +1842,11 @@ class ZBlogPHP
     }
 
     /**
-     * @param null $select
-     * @param null $where
-     * @param null $order
-     * @param null $limit
-     * @param null $option
+     * @param mixed $select
+     * @param mixed $where
+     * @param mixed $order
+     * @param mixed $limit
+     * @param mixed $option
      * @return Post[]
      */
     public function GetPageList($select = null, $where = null, $order = null, $limit = null, $option = null)
@@ -1873,11 +1873,11 @@ class ZBlogPHP
     }
 
     /**
-     * @param null $select
-     * @param null $where
-     * @param null $order
-     * @param null $limit
-     * @param null $option
+     * @param mixed $select
+     * @param mixed $where
+     * @param mixed $order
+     * @param mixed $limit
+     * @param mixed $option
      * @return Comment[]
      */
     public function GetCommentList($select = null, $where = null, $order = null, $limit = null, $option = null)
@@ -1897,11 +1897,11 @@ class ZBlogPHP
     }
 
     /**
-     * @param null $select
-     * @param null $where
-     * @param null $order
-     * @param null $limit
-     * @param null $option
+     * @param mixed $select
+     * @param mixed $where
+     * @param mixed $order
+     * @param mixed $limit
+     * @param mixed $option
      * @return Member[]|Base[]
      */
     public function GetMemberList($select = null, $where = null, $order = null, $limit = null, $option = null)
@@ -1916,11 +1916,11 @@ class ZBlogPHP
     }
 
     /**
-     * @param null $select
-     * @param null $where
-     * @param null $order
-     * @param null $limit
-     * @param null $option
+     * @param mixed $select
+     * @param mixed $where
+     * @param mixed $order
+     * @param mixed $limit
+     * @param mixed $option
      * @return Tag[]|Base[]
      */
     public function GetTagList($select = null, $where = null, $order = null, $limit = null, $option = null)
@@ -1935,11 +1935,11 @@ class ZBlogPHP
     }
 
     /**
-     * @param null $select
-     * @param null $where
-     * @param null $order
-     * @param null $limit
-     * @param null $option
+     * @param mixed $select
+     * @param mixed $where
+     * @param mixed $order
+     * @param mixed $limit
+     * @param mixed $option
      * @return Category[]|Base[]
      */
     public function GetCategoryList($select = null, $where = null, $order = null, $limit = null, $option = null)
@@ -1954,11 +1954,11 @@ class ZBlogPHP
     }
 
     /**
-     * @param null $select
-     * @param null $where
-     * @param null $order
-     * @param null $limit
-     * @param null $option
+     * @param mixed $select
+     * @param mixed $where
+     * @param mixed $order
+     * @param mixed $limit
+     * @param mixed $option
      * @return Module[]|Base[]
      */
     public function GetModuleList($select = null, $where = null, $order = null, $limit = null, $option = null)
@@ -1973,11 +1973,11 @@ class ZBlogPHP
     }
 
     /**
-     * @param null $select
-     * @param null $where
-     * @param null $order
-     * @param null $limit
-     * @param null $option
+     * @param mixed $select
+     * @param mixed $where
+     * @param mixed $order
+     * @param mixed $limit
+     * @param mixed $option
      * @return Upload[]|Base[]
      */
     public function GetUploadList($select = null, $where = null, $order = null, $limit = null, $option = null)

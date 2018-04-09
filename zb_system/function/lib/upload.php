@@ -12,6 +12,7 @@
  * @property int|string AuthorID
  * @property string SourceName
  * @property string MimeType
+ * @property Member Author
  */
 class Upload extends Base
 {

@@ -54,6 +54,7 @@ function InstallPlugin($strPluginName)
 
 /**
  * 插件删除函数，只在插件删除时运行一次
+ * @param $strPluginName
  * @return void
  */
 function UninstallPlugin($strPluginName)
@@ -158,7 +159,7 @@ function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSI
 'exitsignal:return,break,continue
 '*********************************************************
  */
-function Remove_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSIGNAL_NONE) {
+function Remove_Filter_Plugin($plugname, $functionname) {
     if (isset($GLOBALS['hooks'][$plugname])) {
         if (isset($GLOBALS['hooks'][$plugname][$functionname])) {
             unset($GLOBALS['hooks'][$plugname][$functionname]);

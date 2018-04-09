@@ -9,9 +9,12 @@
  * @property string Password
  * @property string Template
  * @property string Email
+ * @property string LevelName 等级详细信息
  * @property string HomePage
  * @property string Guid
+ * @property string Url
  * @property string Alias
+ * @property int|string Status 用户状态
  * @property string PassWord_MD5Path
  * @property string StaticName 对外展示的名字（推荐用于替代Name和Alias）
  * @property bool IsGod 是否最高管理员
