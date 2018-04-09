@@ -18,6 +18,7 @@ defined('ZBP_SAFEMODE') || define('ZBP_SAFEMODE', false);
  * 加载系统基础函数
  */
 require ZBP_PATH . 'zb_system/function/c_system_version.php';
+require ZBP_PATH . 'zb_system/function/c_system_compat.php';
 require ZBP_PATH . 'zb_system/function/c_system_plugin.php';
 require ZBP_PATH . 'zb_system/function/c_system_debug.php';
 require ZBP_PATH . 'zb_system/function/c_system_common.php';

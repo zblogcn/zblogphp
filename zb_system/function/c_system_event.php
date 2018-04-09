@@ -40,8 +40,8 @@ function VerifyLogin()
             setcookie("password", $ps, $sdt, $zbp->cookiespath, '', true, true);
             setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $sdt, $zbp->cookiespath, '', true, false);
         } else {
-            setcookie("username", $un, $sdt, $zbp->cookiespath);
-            setcookie("password", $ps, $sdt, $zbp->cookiespath);
+            setcookie("username", $un, $sdt, $zbp->cookiespath, '', false, false);
+            setcookie("password", $ps, $sdt, $zbp->cookiespath, '', false, true);
             setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $sdt, $zbp->cookiespath);
         }
 
