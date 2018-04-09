@@ -412,13 +412,13 @@ class ModuleBuilder
      * @return string 模块内容
      * @throws Exception
      */
-    public static function Authors()
+    public static function Authors($level)
     {
         global $zbp;
         $template = $zbp->template;
         $tags = array();
         $authors = array();
-        $level = $zbp->actions['ArticleEdt'];
+        $level = $level || $zbp->actions['ArticleEdt'];
 
         $w = array();
         $w[] = array('<=', 'mem_Level', $level);

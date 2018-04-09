@@ -1102,14 +1102,14 @@ class ZBlogPHP
      * @param Member $member 返回读取成功的member对象
      * @return bool
      */
-    public function Verify_MD5($name, $md5pw, &$member = null)
+    public function Verify_MD5($name, $md5pw, &$member)
     {
         if ($name == '' || $md5pw == '') {
             return false;
         }
-        $m = $this->GetMemberByName($name);
-        if ($m->ID > 0) {
-            return $this->Verify_Final($name, md5($md5pw . $m->Guid), $member);
+        $member = $this->GetMemberByName($name);
+        if ($member->ID > 0) {
+            return $this->Verify_Final($name, md5($md5pw . $member->Guid), $member);
         }
 
         return false;
@@ -3006,6 +3006,10 @@ class ZBlogPHP
         $this->posttype[$typeId] = array($name, $urlRule, $template, $categoryType, $tagType);
     }
 
+    /**
+     * @param $typeid
+     * @return string
+     */
     public function GetPostType_Name($typeid)
     {
         if (isset($this->posttype[$typeid])) {

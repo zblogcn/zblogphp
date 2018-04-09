@@ -73,7 +73,6 @@ function Include_Admin_Addcmtsubmenu()
     }
 }
 
-################################################################################################################
 $topmenus = array();
 
 $leftmenus = array();
@@ -154,7 +153,7 @@ function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $
         $s .= 'target="' . $strTarget . '"';
     }
     if ($strId) {
-        $s .= 'id="' . $id . '"';
+        $s .= 'id="' . $strId . '"';
     }
     if ($strTitle) {
         $s .= 'title="' . $strTitle . '" ' . 'alt="' . $strTitle . '" ';
@@ -454,7 +453,6 @@ function CreateModuleDiv($m, $button = true)
  */
 function CreateOptionsOfTimeZone($default)
 {
-    global $zbp;
     $s = '';
     $tz = array(
         'Etc/GMT+12' => '-12:00',
@@ -530,7 +528,7 @@ function Admin_SiteInfo()
 
     global $zbp;
 
-    $echostatistic = false;
+    $echoStatistic = false;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['info_intro'] . '</div>';
     echo '<div class="SubMenu">';
@@ -548,7 +546,7 @@ function Admin_SiteInfo()
         ) {
         echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'?act=misc&type=statistic\'); });</script>';
     } else {
-        $echostatistic = true;
+        $echoStatistic = true;
         $r = $zbp->cache->reload_statistic;
         $r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
         $r = str_replace('{$zbp->theme}', $zbp->theme, $r);
@@ -562,7 +560,7 @@ function Admin_SiteInfo()
 
     echo '<table class="tableFull tableBorder table_striped table_hover" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a>' : '') . ' <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
-    if ((time() - (int) $zbp->cache->reload_updateinfo_time) > (47 * 60 * 60) && $zbp->CheckRights('root') && $echostatistic == true) {
+    if ((time() - (int) $zbp->cache->reload_updateinfo_time) > (47 * 60 * 60) && $zbp->CheckRights('root') && $echoStatistic == true) {
         echo '<script type="text/javascript">$(document).ready(function(){ updateinfo(\'?act=misc&type=updateinfo\'); });</script>';
     } else {
         echo $zbp->cache->reload_updateinfo;
@@ -1186,40 +1184,40 @@ function Admin_UploadMng()
 
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
     $tables = '';
-    $tableths = array();
-    $tableths[] = '<tr>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['author'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['name'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['date'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['size'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['type'] . '</th>';
-    $tableths[] = '<th></th>';
-    $tableths[] = '</tr>';
+    $tableHeaders = array();
+    $tableHeaders[] = '<tr>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['id'] . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['author'] . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['name'] . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['date'] . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['size'] . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['type'] . '</th>';
+    $tableHeaders[] = '<th></th>';
+    $tableHeaders[] = '</tr>';
 
     foreach ($array as $upload) {
-        $tabletds = array();//table string
-        $tabletds[] = '<tr>';
-        $tabletds[] = '<td class="td5">' . $upload->ID . '</td>';
-        $tabletds[] = '<td class="td10">' . $upload->Author->Name . '</td>';
-        $tabletds[] = '<td><a href="' . $upload->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $upload->Name . '</td>';
-        $tabletds[] = '<td class="td15">' . $upload->Time() . '</td>';
-        $tabletds[] = '<td class="td10">' . $upload->Size . '</td>';
-        $tabletds[] = '<td class="td20">' . $upload->MimeType . '</td>';
-        $tabletds[] = '<td class="td10 tdCenter">' .
+        $ret = array();//table string
+        $ret[] = '<tr>';
+        $ret[] = '<td class="td5">' . $upload->ID . '</td>';
+        $ret[] = '<td class="td10">' . $upload->Author->Name . '</td>';
+        $ret[] = '<td><a href="' . $upload->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $upload->Name . '</td>';
+        $ret[] = '<td class="td15">' . $upload->Time() . '</td>';
+        $ret[] = '<td class="td10">' . $upload->Size . '</td>';
+        $ret[] = '<td class="td20">' . $upload->MimeType . '</td>';
+        $ret[] = '<td class="td10 tdCenter">' .
             '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=UploadDel&amp;id=' . $upload->ID . '&amp;token=' . $zbp->GetCSRFToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
             '</td>';
 
-        $tabletds[] = '</tr>';
+        $ret[] = '</tr>';
         foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_UploadMng_Table'] as $fpname => &$fpsignal) {
             //传入 当前$upload，当前行，表头
-            $fpreturn = $fpname($upload, $tabletds, $tableths);
+            $fpreturn = $fpname($upload, $ret, $tableHeaders);
         }
 
-        $tables .= implode($tabletds);
+        $tables .= implode($ret);
     }
 
-    echo implode($tableths) . $tables;
+    echo implode($tableHeaders) . $tables;
     echo '</table>';
     echo '<hr/><p class="pagebar">';
     foreach ($p->Buttons as $key => $value) {

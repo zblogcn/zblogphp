@@ -9,6 +9,7 @@
  * @property string Name
  * @property string ID
  * @property string Alias
+ * @property string Url
  */
 class Tag extends Base
 {

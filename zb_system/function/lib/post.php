@@ -21,6 +21,8 @@
  * @property string Tag 文章标签
  * @property string Alias 文章别名
  * @property string Url 文章地址
+ * @property bool IsLock 是否锁定
+ * @property string TypeName 文章类型的具体信息
  */
 class Post extends Base
 {

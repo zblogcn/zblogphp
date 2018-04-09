@@ -11,7 +11,11 @@
  * @property int|string RootID
  * @property int|string ParentID
  * @property int|string LogID
+ * @property bool IsChecking 审核状态
+ * @property int|string Level 评论层级
  * @property int PostTime
+ * @property Comment[] Comments 子评论
+ * @property string Content
  */
 class Comment extends Base
 {

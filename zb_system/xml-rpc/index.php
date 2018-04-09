@@ -310,7 +310,7 @@ function xmlrpc_getPage($id)
     $article = new Post;
     $article->LoadInfoByID($id);
     if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('PageAll'))) {
-        xmlrpc_ShowError(11, __FILE__, __LINE_);
+        xmlrpc_ShowError(11, __FILE__, __LINE__);
     }
 
     $array = array();
@@ -421,6 +421,7 @@ function xmlrpc_getRecentPosts($n)
  *
  * 输出操作结果
  * @param  int $id 页面ID
+ * @throws Exception
  */
 function xmlrpc_delPage($id)
 {
@@ -433,7 +434,7 @@ function xmlrpc_delPage($id)
         $strXML = str_replace("$%#1#%$", 1, $strXML);
         echo $strXML;
     } else {
-        xmlrpc_ShowError(0, __FILE__, __LINE_);
+        xmlrpc_ShowError(0, __FILE__, __LINE__);
     }
 }
 
@@ -442,6 +443,7 @@ function xmlrpc_delPage($id)
  *
  * 输出操作结果
  * @param  int $id 文章ID
+ * @throws Exception
  */
 function xmlrpc_deletePost($id)
 {
@@ -454,7 +456,7 @@ function xmlrpc_deletePost($id)
         $strXML = str_replace("$%#1#%$", 1, $strXML);
         echo $strXML;
     } else {
-        xmlrpc_ShowError(0, __FILE__, __LINE_);
+        xmlrpc_ShowError(0, __FILE__, __LINE__);
     }
 }
 
@@ -492,7 +494,7 @@ function xmlrpc_getPost($id)
     $article = new Post;
     $article->LoadInfoByID($id);
     if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('ArticleAll'))) {
-        xmlrpc_ShowError(11, __FILE__, __LINE_);
+        xmlrpc_ShowError(11, __FILE__, __LINE__);
     }
 
     $array = array();
@@ -576,9 +578,10 @@ function xmlrpc_getPostCategories($id)
  * XML-RPC 编辑指定文章
  *
  * 输出操作结果
- * @param  int $id        文章ID
+ * @param  int $id 文章ID
  * @param  string $xmlstring 文章数据xml
- * @param  boolval $publish   是否直接发布
+ * @param  boolval $publish 是否直接发布
+ * @throws Exception
  */
 function xmlrpc_editPost($id, $xmlstring, $publish)
 {
@@ -659,7 +662,7 @@ function xmlrpc_editPost($id, $xmlstring, $publish)
             $strXML = str_replace("$%#1#%$", 1, $strXML);
             echo $strXML;
         } else {
-            xmlrpc_ShowError(0, __FILE__, __LINE_);
+            xmlrpc_ShowError(0, __FILE__, __LINE__);
         }
     }
 }
@@ -680,9 +683,10 @@ function xmlrpc_setPostCategories()
  * XML-RPC 编辑指定页面
  *
  * 输出操作结果
- * @param  int $id        页面ID
+ * @param  int $id 页面ID
  * @param  string $xmlstring 页面数据xml
- * @param  boolval $publish   是否直接发布
+ * @param  bool $publish 是否直接发布
+ * @throws Exception
  */
 function xmlrpc_editPage($id, $xmlstring, $publish)
 {
@@ -741,7 +745,7 @@ function xmlrpc_editPage($id, $xmlstring, $publish)
             $strXML = str_replace("$%#1#%$", 1, $strXML);
             echo $strXML;
         } else {
-            xmlrpc_ShowError(0, __FILE__, __LINE_);
+            xmlrpc_ShowError(0, __FILE__, __LINE__);
         }
     }
 }
@@ -1026,7 +1030,7 @@ if ($xml) {
             }
             break;
         default:
-            xmlrpc_ShowError(1, __FILE__, __LINE_);
+            xmlrpc_ShowError(1, __FILE__, __LINE__);
             break;
     }
 }

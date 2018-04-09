@@ -6,12 +6,14 @@
  * @property int|string ID
  * @property string Name 分类名
  * @property string Alias 别名
+ * @property int|string Count 分类下文章数量
  * @property int|string RootID 祖先分类ID
  * @property int|string ParentID 父分类ID
  * @property string Symbol 用于后台分类管理的“层次标识符”，无用处，待改名
  * @property int|string Level 分类层级
  * @property string Template 分类模板
  * @property string LogTemplate 分类下文章模板
+ * @property string Url
  * @package Z-BlogPHP
  */
 class Category extends Base

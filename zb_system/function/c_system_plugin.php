@@ -77,6 +77,7 @@ function DefinePluginFilter($strPluginFilter)
 
         return true;
     }
+    return false;
 }
 
 /*
@@ -116,6 +117,7 @@ function RemovePluginFilter($strPluginFilter)
 
         return true;
     }
+    return false;
 }
 
 /*
@@ -145,6 +147,7 @@ function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSI
             return true;
         }
     }
+    return false;
 }
 
 /*
@@ -162,6 +165,7 @@ function Remove_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXI
             return true;
         }
     }
+    return false;
 }
 
 /*

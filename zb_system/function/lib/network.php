@@ -57,7 +57,7 @@ class Network
 
     /**
      * @param string $extension
-     * @return bool|iNetwork
+     * @return Network_Interface
      */
     public static function Create($extension = '')
     {
@@ -65,7 +65,7 @@ class Network
             self::$_network = new Network;
         }
         if ((!self::$_network->file_get_contents) && (!self::$_network->fsockopen) && (!self::$_network->curl)) {
-            return false;
+            return null;
         }
 
         $extension = ($extension == '' ? self::$_network->network_list[0] : $extension);

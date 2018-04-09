@@ -9,7 +9,9 @@
  * @property string Size
  * @property string Dir
  * @property int PostTime
- * @property string AuthorID
+ * @property int|string AuthorID
+ * @property string SourceName
+ * @property string MimeType
  */
 class Upload extends Base
 {

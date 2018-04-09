@@ -133,11 +133,12 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
     $zbe = ZBlogException::GetInstance();
     $zbe->ParseError($errno, $errstr, $errfile, $errline);
     $zbe->Display();
+    return true;
 }
 
 /**
  * 异常处理
- * @param $exception 异常事件
+ * @param Exception $exception 异常事件
  * @return bool
  */
 function Debug_Exception_Handler($exception)
@@ -154,12 +155,16 @@ function Debug_Exception_Handler($exception)
     $_SERVER['_error_count'] = $_SERVER['_error_count'] + 1;
 
     if (ZBlogException::$islogerror) {
-        Logs(var_export(array('Exception', $exception->getMessage(), $exception->getCode(), $exception->getFile(), $exception->getLine()), true), true);
+        Logs(var_export(
+            array('Exception',
+                $exception->getMessage(), $exception->getCode(), $exception->getFile(), $exception->getLine()
+            ), true), true);
     }
 
     $zbe = ZBlogException::GetInstance();
     $zbe->ParseException($exception);
     $zbe->Display();
+    return true;
 }
 
 /**
@@ -226,6 +231,7 @@ function Debug_Shutdown_Handler()
         $zbe->ParseShutdown($error);
         $zbe->Display();
     }
+    return true;
 }
 
 function Debug_DoNothing ()
@@ -295,6 +301,7 @@ class ZBlogException
                 return $this->errarray[0];
             }
         }
+        return null;
     }
 
     /**
@@ -438,7 +445,7 @@ class ZBlogException
 
     /**
      * 解析异常信息
-     * @param $exception
+     * @param Exception $exception
      */
     public function ParseException($exception)
     {

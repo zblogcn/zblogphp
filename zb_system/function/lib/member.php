@@ -13,6 +13,12 @@
  * @property string Guid
  * @property string Alias
  * @property string PassWord_MD5Path
+ * @property string StaticName 对外展示的名字（推荐用于替代Name和Alias）
+ * @property bool IsGod 是否最高管理员
+ * @property int|string Articles 文章数量
+ * @property int|string Pages 页面数量
+ * @property int|string Comments 评论数量
+ * @property int|string Uploads 上传数量
  */
 class Member extends Base
 {
