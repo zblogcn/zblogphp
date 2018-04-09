@@ -35,13 +35,15 @@ function VerifyLogin()
             $sdt = time() + 3600 * 24 * $sd;
         }
 
+        $token = $zbp->GenerateUserToken($m, $sdt);
+
         if (HTTP_SCHEME == 'https://') {
             setcookie("username", $un, $sdt, $zbp->cookiespath, '', true, false);
-            setcookie("password", $ps, $sdt, $zbp->cookiespath, '', true, true);
+            setcookie("token", $token, $sdt, $zbp->cookiespath, '', true, true);
             setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $sdt, $zbp->cookiespath, '', true, false);
         } else {
             setcookie("username", $un, $sdt, $zbp->cookiespath, '', false, false);
-            setcookie("password", $ps, $sdt, $zbp->cookiespath, '', false, true);
+            setcookie("token", $token, $sdt, $zbp->cookiespath, '', false, true);
             setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $sdt, $zbp->cookiespath);
         }
 
@@ -64,6 +66,7 @@ function Logout()
 
     setcookie('username', '', time() - 3600, $zbp->cookiespath);
     setcookie('password', '', time() - 3600, $zbp->cookiespath);
+    setcookie('token', '', time() - 3600, $zbp->cookiespath);
     setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), '', time() - 3600, $zbp->cookiespath);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Logout_Succeed'] as $fpname => &$fpsignal) {

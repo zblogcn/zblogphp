@@ -1047,12 +1047,12 @@ class ZBlogPHP
      */
     public function Verify()
     {
-        $m = null;
-        $u = trim(GetVars('username', 'COOKIE'));
-        $p = trim(GetVars('password', 'COOKIE'));
+        $username = trim(GetVars('username', 'COOKIE'));
+        $token = trim(GetVars('token', 'COOKIE'));
         //if ($this->Verify_Token($u, $p, 'zbp', $m) == true) {
-        if ($this->Verify_MD5Path($u, $p, $m) == true) {
-            $this->user = $m;
+        $user = $this->VerifyUserToken($token, $username);
+        if (!is_null($user)) {
+            $this->user = $user;
 
             return true;
         }
@@ -1069,11 +1069,31 @@ class ZBlogPHP
     public function VerifyResult($m)
     {
         //return $m->GetHashByToken('zbp',1000);
-        return $m->GetHashByMD5Path();
+        return $this->GenerateUserToken($m);
+    }
+
+    public function GenerateUserToken($user, $time = 0)
+    {
+        if ($time === 0) {
+            $time = time() + 3600 * 24;
+        }
+        return CreateWebToken($user->ID, $time, $user->Guid, $user->PassWord_MD5Path);
+    }
+
+    public function VerifyUserToken($token, $username)
+    {
+        $user = $this->GetMemberByName($username);
+        if ($user->ID > 0) {
+            if (VerifyWebToken($token, $user->ID, $user->Guid, $user->PassWord_MD5Path)) {
+                return $user;
+            }
+        }
+        return null;
     }
 
     /**
      * 验证用户登录（MD5加zbp->guid盐后的密码）
+     * @deprecated
      * @param string $name 用户名
      * @param string $ps_path_hash MD5加zbp->guid盐后的密码
      * @param object $member 返回读取成功的member对象

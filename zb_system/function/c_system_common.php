@@ -6,8 +6,9 @@
  * @copyright (C) RainbowSoft Studio
  */
 
+define('WEB_TOKEN_DEFAULT_KEY', 'zblogphpwebtokendefaultkey');
 /**
- * 得到请求方法(未必会准确的，比如SERVER没有某项，或是端口改过的)
+ * 得到请求协议（考虑到反向代理等原因，未必准确）
  * @param $array
  * @return $string
  */
@@ -1377,15 +1378,20 @@ function utf84mb_convertToUTF8($matches)
 
 
 //$args = 2...x
-function VerifyWebToken($wt, $wt_id)
+function VerifyWebToken($webTokenString, $webTokenId, $key = '')
 {
-    $time = substr($wt, 32);
-    $wt = substr($wt, 0, 32);
+    global $zbp;
+    $time = substr($webTokenString, 64);
+    $wt = substr($webTokenString, 0, 64);
     $args = array();
-    for ($i = 2; $i < func_num_args(); $i++) {
+    for ($i = 3; $i < func_num_args(); $i++) {
         $args[] = func_get_arg($i);
     }
-    $sha = md5(hash("sha256", $time . $wt_id) . hash("sha256", implode($args) . $time));
+    if ($key == '') {
+        $key = $zbp->guid;
+    }
+    // 152324239818800b0d8ecee58eb3843e1068f183447;
+    $sha = hash_hmac('sha256', $time . $webTokenId . implode($args), $key);
     if ($wt === $sha) {
         if ($time > time()) {
             return true;
@@ -1394,15 +1400,22 @@ function VerifyWebToken($wt, $wt_id)
 
     return false;
 }
+
 //$time : expired second
-function CreateWebToken($wt_id, $time)
+function CreateWebToken($webTokenId, $time, $key = '')
 {
+    global $zbp;
     $time = (int) $time;
     $args = array();
-    for ($i = 2; $i < func_num_args(); $i++) {
+    for ($i = 3; $i < func_num_args(); $i++) {
         $args[] = func_get_arg($i);
     }
-    return md5(hash("sha256", $time . $wt_id) . hash("sha256", implode($args) . $time)) . $time;
+    if ($key == '') {
+        $key = $zbp->guid;
+    }
+    var_dump('Create!!');
+    var_dump($time . $webTokenId . implode($args));
+    return hash_hmac('sha256', $time . $webTokenId . implode($args), $key) . $time;
 }
 
 

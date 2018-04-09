@@ -5,6 +5,7 @@ if (!isset($GLOBALS['zbp'])) {
 $post_data = $_COOKIE;
 unset($post_data['username']);
 unset($post_data['password']);
+unset($post_data['token']);
 ?>
 <!doctype html>
 <html lang="<?php echo $GLOBALS['lang']['lang_bcp47']; ?>">
