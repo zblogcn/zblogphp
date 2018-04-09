@@ -1374,6 +1374,25 @@ function CheckCanBeString($obj)
     return is_scalar($obj);
 }
 
+function BuildSafeURL($url, $appId = '')
+{
+    global $zbp;
+    if (strpos($url, '?') > 0) {
+        $url .= '&token=';
+    } else {
+        $url .= '?token=';
+    }
+    $url = $zbp->host . $url . $zbp->GetCSRFToken($appId);
+    return $url;
+}
+
+function BuildSafeCmdURL($paramters)
+{
+    return BuildSafeURL('zb_system/cmd.php?' . $paramters);
+}
+
+
+
 function utf84mb_filter(&$sql)
 {
     $sql = preg_replace_callback("/[\x{10000}-\x{10FFFF}]/u", 'utf84mb_convertToUCS4', $sql);

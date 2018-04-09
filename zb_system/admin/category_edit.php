@@ -132,7 +132,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_SubMenu'] as $fpname => 
         </form>
         <script type="text/javascript">
 function checkInfo(){
-  document.getElementById("edit").action="../cmd.php?act=CategoryPst<?php echo '&token=' . $zbp->GetCSRFToken(); ?>";
+  document.getElementById("edit").action="<?php echo BuildSafeCmdURL('act=CategoryPst'); ?>";
 
   if(!$("#edtName").val()){
     alert("<?php echo $lang['error']['72']?>");

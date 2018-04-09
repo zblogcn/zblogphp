@@ -412,7 +412,7 @@ class ModuleBuilder
      * @return string 模块内容
      * @throws Exception
      */
-    public static function Authors($level)
+    public static function Authors($level = 4)
     {
         global $zbp;
         $template = $zbp->template;

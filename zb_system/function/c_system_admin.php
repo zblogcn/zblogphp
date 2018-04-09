@@ -427,7 +427,7 @@ function CreateModuleDiv($m, $button = true)
             echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;id=' . $m->ID . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>';
         } else {
             echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;source=theme&amp;filename=' . $m->FileName . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>';
-            echo '&nbsp;<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=ModuleDel&amp;source=theme&amp;filename=' . $m->FileName . '&amp;token=' . $zbp->GetCSRFToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>';
+            echo '&nbsp;<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=ModuleDel&amp;source=theme&amp;filename=' . $m->FileName) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>';
         }
         if ($m->SourceType != 'system'
             && $m->SourceType != 'theme'
@@ -436,7 +436,7 @@ function CreateModuleDiv($m, $button = true)
                 CheckRegExp($m->Source, '/plugin_(' . $zbp->option['ZC_USING_PLUGIN_LIST'] . ')/i')
             )
         ) {
-            echo '&nbsp;<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=ModuleDel&amp;id=' . $m->ID . '&amp;token=' . $zbp->GetCSRFToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>';
+            echo '&nbsp;<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=ModuleDel&amp;id=' . $m->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>';
         }
         echo '</span>';
     }
@@ -538,13 +538,17 @@ function Admin_SiteInfo()
     echo '</div>';
     echo '<div id="divMain2">';
 
-    echo '<table class="tableFull tableBorder table_striped table_hover" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>' : '') . ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+    echo '<table class="tableFull tableBorder table_striped table_hover" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'];
+    if ($zbp->CheckRights('root')) {
+        echo '&nbsp;<a href="javascript:statistic(\'' . BuildSafeCmdURL('act=misc&amp;type=statistic') . '\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>' ;
+    }
+    echo ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
     if (((time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60))
               ||
           ($zbp->CheckTemplate(true) == false)
         ) {
-        echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'?act=misc&type=statistic\'); });</script>';
+        echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'' . BuildSafeCmdURL('act=misc&amp;type=statistic') . '\'); });</script>';
     } else {
         $echoStatistic = true;
         $r = $zbp->cache->reload_statistic;
@@ -558,10 +562,14 @@ function Admin_SiteInfo()
 
     echo '</table>';
 
-    echo '<table class="tableFull tableBorder table_striped table_hover" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a>' : '') . ' <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+    echo '<table class="tableFull tableBorder table_striped table_hover" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'];
+    if ($zbp->CheckRights('root')) {
+        echo '&nbsp;<a href="javascript:updateinfo(\'' . BuildSafeCmdURL('act=misc&amp;type=updateinfo') . '\');">[' . $zbp->lang['msg']['refresh'] . ']</a>';
+    }
+    echo ' <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
     if ((time() - (int) $zbp->cache->reload_updateinfo_time) > (47 * 60 * 60) && $zbp->CheckRights('root') && $echoStatistic == true) {
-        echo '<script type="text/javascript">$(document).ready(function(){ updateinfo(\'?act=misc&type=updateinfo\'); });</script>';
+        echo '<script type="text/javascript">$(document).ready(function(){ updateinfo(\'' . BuildSafeCmdURL('act=misc&amp;type=updateinfo') . '\'); });</script>';
     } else {
         echo $zbp->cache->reload_updateinfo;
     }
@@ -682,7 +690,7 @@ function Admin_ArticleMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
         '<a href="../cmd.php?act=ArticleEdt&amp;id=' . $article->ID . '"><img src="../image/admin/page_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>' .
         '&nbsp;&nbsp;&nbsp;&nbsp;' .
-        '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=ArticleDel&amp;id=' . $article->ID . '&amp;token=' . $zbp->GetCSRFToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
+        '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=ArticleDel&amp;id=' . $article->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
         '</td>';
 
         $tabletds[] = '</tr>';
@@ -785,7 +793,7 @@ function Admin_PageMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=PageEdt&amp;id=' . $article->ID . '"><img src="../image/admin/page_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=PageDel&amp;id=' . $article->ID . '&amp;token=' . $zbp->GetCSRFToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
+            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=PageDel&id=' . $article->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
              '</td>';
 
         $tabletds[] = '</tr>';
@@ -854,7 +862,7 @@ function Admin_CategoryMng()
             '<a href="../cmd.php?act=CategoryEdt&amp;id=' . $category->ID . '"><img src="../image/admin/folder_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
         ((count($category->SubCategories) == 0) ?
-            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=CategoryDel&amp;id=' . $category->ID . '&amp;token=' . $zbp->GetCSRFToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' : '') .
+            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=CategoryDel&amp;id=' . $category->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' : '') .
             '</td>';
 
         $tabletds[] = '</tr>';
@@ -975,13 +983,13 @@ function Admin_CommentMng()
         $tabletds[] = '<td class="td5">' . $cmt->LogID . '</td>';
         $tabletds[] = '<td class="td15">' . $cmt->Time() . '</td>';
         $tabletds[] = '<td class="td10 tdCenter">' .
-            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=CommentDel&amp;id=' . $cmt->ID . '&amp;token=' . $zbp->GetCSRFToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
-        '&nbsp;&nbsp;&nbsp;&nbsp;' .
-        (!GetVars('ischecking', 'GET') ?
-            '<a href="../cmd.php?act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET') . '&amp;token=' . $zbp->GetCSRFToken() . '"><img src="../image/admin/minus-shield.png" alt="' . $zbp->lang['msg']['audit'] . '" title="' . $zbp->lang['msg']['audit'] . '" width="16" /></a>'
-        :
-            '<a href="../cmd.php?act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET') . '&amp;token=' . $zbp->GetCSRFToken() . '"><img src="../image/admin/ok.png" alt="' . $zbp->lang['msg']['pass'] . '" title="' . $zbp->lang['msg']['pass'] . '" width="16" /></a>'
-        ) .
+            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=CommentDel&amp;id=' . $cmt->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
+            '&nbsp;&nbsp;&nbsp;&nbsp;' .
+            (!GetVars('ischecking', 'GET') ?
+                '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><img src="../image/admin/minus-shield.png" alt="' . $zbp->lang['msg']['audit'] . '" title="' . $zbp->lang['msg']['audit'] . '" width="16" /></a>'
+                :
+                '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><img src="../image/admin/ok.png" alt="' . $zbp->lang['msg']['pass'] . '" title="' . $zbp->lang['msg']['pass'] . '" width="16" /></a>'
+            ) .
             '</td>';
         $tabletds[] = '<td class="td5 tdCenter">' . '<input type="checkbox" id="id' . $cmt->ID . '" name="id[]" value="' . $cmt->ID . '"/>' . '</td>';
 
@@ -1108,7 +1116,7 @@ function Admin_MemberMng()
             '<a href="../cmd.php?act=MemberEdt&amp;id=' . $member->ID . '"><img src="../image/admin/user_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>' .
         (($zbp->CheckRights('MemberDel') && ($member->IsGod !== true)) ?
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=MemberDel&amp;id=' . $member->ID . '&amp;token=' . $zbp->GetCSRFToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>'
+            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=MemberDel&amp;id=' . $member->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>'
 
         : '') .
             '</td>';
@@ -1156,7 +1164,7 @@ function Admin_UploadMng()
     echo '</div>';
     echo '<div id="divMain2">';
 
-    echo '<form class="search" name="upload" id="upload" method="post" enctype="multipart/form-data" action="../cmd.php?act=UploadPst&token=' . $zbp->GetCSRFToken() . '">';
+    echo '<form class="search" name="upload" id="upload" method="post" enctype="multipart/form-data" action="' . BuildSafeCmdURL('act=UploadPst') . '">';
     echo '<p>' . $zbp->lang['msg']['upload_file'] . ': </p>';
     echo '<p><input type="file" name="file" size="60" />&nbsp;&nbsp;';
     echo '<label><input type="checkbox" name="auto_rename" checked/>'.$zbp->lang['msg']['auto_rename_uploadfile'].'</label>&nbsp;&nbsp;';
@@ -1205,7 +1213,7 @@ function Admin_UploadMng()
         $ret[] = '<td class="td10">' . $upload->Size . '</td>';
         $ret[] = '<td class="td20">' . $upload->MimeType . '</td>';
         $ret[] = '<td class="td10 tdCenter">' .
-            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=UploadDel&amp;id=' . $upload->ID . '&amp;token=' . $zbp->GetCSRFToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
+            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=UploadDel&amp;id=' . $upload->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
             '</td>';
 
         $ret[] = '</tr>';
@@ -1285,7 +1293,7 @@ function Admin_TagMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=TagEdt&amp;id=' . $tag->ID . '"><img src="../image/admin/tag_blue_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=TagDel&amp;id=' . $tag->ID . '&amp;token=' . $zbp->GetCSRFToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
+            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=TagDel&amp;id=' . $tag->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
             '</td>';
 
         $tabletds[] = '</tr>';
@@ -1442,7 +1450,7 @@ function Admin_ModuleMng()
 
     echo '<hr/>';
     echo "\r\n";
-    echo '<form id="edit" method="post" action="../cmd.php?act=SidebarSet">';
+    echo '<form id="edit" method="post" action="'. BuildSafeCmdURL('act=SidebarSet') . '">';
     echo '<input type="hidden" id="strsidebar" name="edtSidebar" value="' . $zbp->option['ZC_SIDEBAR_ORDER'] . '"/>';
     echo '<input type="hidden" id="strsidebar2" name="edtSidebar2" value="' . $zbp->option['ZC_SIDEBAR2_ORDER'] . '"/>';
     echo '<input type="hidden" id="strsidebar3" name="edtSidebar3" value="' . $zbp->option['ZC_SIDEBAR3_ORDER'] . '"/>';
@@ -1679,9 +1687,9 @@ function Admin_PluginMng()
 
         if ($plugin->type == 'plugin') {
             if ($plugin->IsUsed()) {
-                echo '<a href="../cmd.php?act=PluginDis&amp;name=' . htmlspecialchars($plugin->id) . '&amp;token=' . $zbp->GetCSRFToken() . '" title="' . $zbp->lang['msg']['disable'] . '"><img width="16" alt="' . $zbp->lang['msg']['disable'] . '" src="../image/admin/control-power.png"/></a>';
+                echo '<a href="' . BuildSafeCmdURL('act=PluginDis&amp;name=' . htmlspecialchars($plugin->id)) . '" title="' . $zbp->lang['msg']['disable'] . '"><img width="16" alt="' . $zbp->lang['msg']['disable'] . '" src="../image/admin/control-power.png"/></a>';
             } else {
-                echo '<a href="../cmd.php?act=PluginEnb&amp;name=' . htmlspecialchars($plugin->id) . '&amp;token=' . $zbp->GetCSRFToken() . '" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../image/admin/control-power-off.png"/></a>';
+                echo '<a href="' . BuildSafeCmdURL('act=PluginEnb&amp;name=' . htmlspecialchars($plugin->id)) . '" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../image/admin/control-power-off.png"/></a>';
             }
         }
         if ($plugin->IsUsed() && $plugin->CanManage()) {
@@ -1716,7 +1724,7 @@ function Admin_SettingMng()
 
     ?>
 
-          <form method="post" action="../cmd.php?act=SettingSav<?php echo '&amp;token=' . $zbp->GetCSRFToken(); ?>">
+          <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav'); ?>">
             <div id="divMain2">
               <div class="content-box"><!-- Start Content Box -->
 

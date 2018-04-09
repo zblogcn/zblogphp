@@ -163,7 +163,7 @@ function notify(s){
 function statistic(s){
     $("#statloading").show();
     $("#updatatime").hide();
-    $.get("<?php echo $bloghost; ?>zb_system/cmd.php"+s+"&tm="+Math.random(),{},
+    $.get(s+"&tm="+Math.random(),{},
         function(data){
             $("#tbStatistic tr:first ~ tr").remove();
             $("#tbStatistic tr:first").after(data);
@@ -176,7 +176,7 @@ function statistic(s){
 
 function updateinfo(s){
     $("#infoloading").show();
-    $.get("<?php echo $bloghost; ?>zb_system/cmd.php"+s+"&tm="+Math.random(),{},
+    $.get(s+"&tm="+Math.random(),{},
         function(data){
             $("#tbUpdateInfo tr:first ~ tr").remove();
             $("#tbUpdateInfo tr:first").after(data);

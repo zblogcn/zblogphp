@@ -149,7 +149,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_SubMenu'] as $fpname => &$
         </form>
         <script type="text/javascript">
 function checkInfo(){
-  document.getElementById("edit").action="../cmd.php?act=MemberPst<?php echo '&token=' . $zbp->GetCSRFToken();?>";
+  document.getElementById("edit").action="<?php echo BuildSafeCmdURL('act=MemberPst'); ?>";
 
 
   if(!$("#edtEmail").val()){

@@ -181,7 +181,7 @@ if ($mod->FileName == 'catalog') {
 </form>
 <script type="text/javascript">
 function checkInfo(){
-  document.getElementById("edit").action="../cmd.php?act=ModulePst<?php echo '&token=' . $zbp->GetCSRFToken();?>";
+  document.getElementById("edit").action="<?php echo BuildSafeCmdURL('act=ModulePst'); ?>";
 
   if(!$("#edtName").val()){
     alert("<?php echo $lang['error']['72']?>");

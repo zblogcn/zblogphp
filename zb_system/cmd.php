@@ -26,6 +26,7 @@ switch ($action) {
         Redirect('login.php');
         break;
     case 'logout':
+        CheckCSRFTokenValid();
         Logout();
         Redirect('../');
         break;
@@ -33,6 +34,9 @@ switch ($action) {
         Redirect('admin/index.php?act=admin');
         break;
     case 'verify':
+        /**
+         * 考虑兼容原因，此处不加CSRF验证。logout加的原因是主题的退出无大碍。
+         */
         if (VerifyLogin()) {
             if ( !empty($zbp->user->ID) && GetVars('redirect', 'COOKIE')) {
                 Redirect(GetVars('redirect', 'COOKIE'));
@@ -58,6 +62,7 @@ switch ($action) {
 
         switch ($miscType) {
             case 'statistic':
+                CheckCSRFTokenValid();
                 if (!$zbp->CheckRights('admin')) {
                     echo $zbp->ShowError(6, __FILE__, __LINE__);
                     die();
@@ -65,6 +70,7 @@ switch ($action) {
                 misc_statistic();
                 break;
             case 'updateinfo':
+                CheckCSRFTokenValid();
                 if (!$zbp->CheckRights('root')) {
                     echo $zbp->ShowError(6, __FILE__, __LINE__);
                     die();
@@ -72,6 +78,7 @@ switch ($action) {
                 misc_updateinfo();
                 break;
             case 'showtags':
+                CheckCSRFTokenValid();
                 if (!$zbp->CheckRights('ArticleEdt')) {
                     Http404();
                     die();

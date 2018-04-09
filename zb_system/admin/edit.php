@@ -132,7 +132,8 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsig
        </div>
 
     <div id="divContent"  class="editmod2" style="clear:both;">
-        <div id='cheader' class="editmod editmod3"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content'] ?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span><script type="text/javascript" src="../cmd.php?act=misc&amp;type=autosave"></script></div>
+        <div id='cheader' class="editmod editmod3"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content'] ?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span>
+        <script src="<?php echo BuildSafeCmdURL('act=misc&amp;type=autosave'); ?>"></script></div>
         <div id='carea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content, '[html-format]'); ?></textarea></div>
         <div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Waiting...</div>
     </div>
@@ -320,7 +321,7 @@ window.onbeforeunload = function(){
 
 function checkArticleInfo(){
   if(isSubmit)return false;
-  document.getElementById("edit").action="<?php echo ($ispage ? '../cmd.php?act=PagePst' : '../cmd.php?act=ArticlePst') . '&token=' . $zbp->GetCSRFToken(); ?>";
+  document.getElementById("edit").action="<?php echo BuildSafeCmdURL($ispage ? 'act=PagePst' : 'act=ArticlePst'); ?>";
 
   if(!editor_api.editor.content.get()){
     alert('<?php echo $zbp->lang['error'][70]; ?>');
@@ -376,7 +377,7 @@ $('#showtags').click(function (event) {
   var offset = $(event.target).offset();
   $('#ulTag').css({ top: offset.top + $(event.target).height()+20+ "px", left: offset.left});
   $('#ulTag').slideDown("fast");
-  if(tag_loaded==false){$.getScript('../cmd.php?act=misc&type=showtags');tag_loaded=true;}
+  if(tag_loaded==false){$.getScript('<?php echo BuildSafeCmdURL('act=misc&type=showtags'); ?>');tag_loaded=true;}
   return false;
 });
 function AddKey(i) {
