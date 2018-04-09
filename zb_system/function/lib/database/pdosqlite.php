@@ -1,11 +1,11 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
 /**
- * SQLite3数据库操作类
+ * pdo_SQLite数据库操作类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase/DbSQLite3 类库
+ * @subpackage ClassLib/DataBase/Dbpdo_SQLite 类库
  */
-class DbSQLite3 implements iDataBase
+class Database_PDOSQLite implements Database_Interface
 {
 
     public $type = 'sqlite';
@@ -21,7 +21,7 @@ class DbSQLite3 implements iDataBase
      */
     public $dbname = null;
     /**
-     * @var DbSql|null
+     * @var DbSql|null DbSql实例
      */
     public $sql = null;
     /**
@@ -38,7 +38,7 @@ class DbSQLite3 implements iDataBase
      */
     public function EscapeString($s)
     {
-        return SQLite3::escapeString($s);
+        return str_ireplace('\'', '\'\'', $s);
     }
 
     /**
@@ -47,14 +47,12 @@ class DbSQLite3 implements iDataBase
      */
     public function Open($array)
     {
-        if ($this->db = new SQLite3($array[0])) {
-            $this->dbpre = $array[1];
-            $this->dbname = $array[0];
+        $db_link = new PDO('sqlite:' . $array[0]);
+        $this->db = $db_link;
+        $this->dbpre = $array[1];
+        $this->dbname = $array[0];
 
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
 
     /**
@@ -62,10 +60,11 @@ class DbSQLite3 implements iDataBase
      */
     public function Close()
     {
-        $this->db->close();
+        $this->db = null;
     }
 
     /**
+     * 执行多行SQL语句
      * @param $s
      */
     public function QueryMulit($s)
@@ -79,7 +78,7 @@ class DbSQLite3 implements iDataBase
         foreach ($a as $s) {
             $s = trim($s);
             if ($s != '') {
-                $this->db->query($this->sql->Filter($s));
+                $this->db->exec($this->sql->Filter($s));
             }
         }
     }
@@ -93,24 +92,17 @@ class DbSQLite3 implements iDataBase
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
         $results = $this->db->query($this->sql->Filter($query));
-        $data = array();
-        if (!($results instanceof Sqlite3Result)) {
-            return $data;
-        }
-        if ($results->numColumns() > 0) {
-            while ($row = $results->fetchArray()) {
-                $data[] = $row;
-            }
+        //fetch || fetchAll
+        if (is_object($results)) {
+            return $results->fetchAll();
         } else {
-            $data[] = $results->numColumns();
+            return array($results);
         }
-
-        return $data;
     }
 
     /**
      * @param $query
-     * @return mixed
+     * @return bool|mysqli_result
      */
     public function Update($query)
     {
@@ -120,7 +112,7 @@ class DbSQLite3 implements iDataBase
 
     /**
      * @param $query
-     * @return mixed
+     * @return bool|mysqli_result
      */
     public function Delete($query)
     {
@@ -130,14 +122,14 @@ class DbSQLite3 implements iDataBase
 
     /**
      * @param $query
-     * @return mixed
+     * @return int
      */
     public function Insert($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        $this->db->query($this->sql->Filter($query));
+        $this->db->exec($this->sql->Filter($query));
 
-        return $this->db->lastInsertRowID();
+        return $this->db->lastInsertId();
     }
 
     /**
@@ -159,11 +151,12 @@ class DbSQLite3 implements iDataBase
 
     /**
      * @param $table
+     * @return bool
      */
     public function ExistTable($table)
     {
 
-        $a = $this->Query($this->sql->ExistTable($table));
+        $a = $this->Query($this->sql->ExistTable($table, $this->dbname));
         if (!is_array($a)) {
             return false;
         }

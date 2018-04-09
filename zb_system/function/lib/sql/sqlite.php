@@ -1,5 +1,5 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
-class SQLSQLite extends SQLGlobal
+class SQL_SQLite extends SQL_Global
 {
     /**
      * @override

@@ -30,7 +30,7 @@ if (!$zbp->CheckRights($action)) {
 if (isset($_COOKIE['timezone'])) {
     $tz = GetVars('timezone', 'COOKIE');
     if (is_numeric($tz)) {
-        date_default_timezone_set(GetTimeZonebyGMT($tz));
+        date_default_timezone_set(GetTimeZoneByGMT($tz));
     }
     unset($tz);
 }
@@ -320,7 +320,7 @@ window.onbeforeunload = function(){
 
 function checkArticleInfo(){
   if(isSubmit)return false;
-  document.getElementById("edit").action="<?php echo ($ispage ? '../cmd.php?act=PagePst' : '../cmd.php?act=ArticlePst') . '&token=' . $zbp->GetToken(); ?>";
+  document.getElementById("edit").action="<?php echo ($ispage ? '../cmd.php?act=PagePst' : '../cmd.php?act=ArticlePst') . '&token=' . $zbp->GetCSRFToken(); ?>";
 
   if(!editor_api.editor.content.get()){
     alert('<?php echo $zbp->lang['error'][70]; ?>');

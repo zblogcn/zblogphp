@@ -127,7 +127,7 @@ switch ($action) {
         Redirect('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ArticleDel':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         DelArticle();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -138,7 +138,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ArticlePst':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         PostArticle();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -149,7 +149,7 @@ switch ($action) {
         Redirect('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PageDel':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         DelPage();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -160,7 +160,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PagePst':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         PostPage();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -174,7 +174,7 @@ switch ($action) {
         Redirect('admin/category_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'CategoryPst':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         PostCategory();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -182,7 +182,7 @@ switch ($action) {
         Redirect('cmd.php?act=CategoryMng');
         break;
     case 'CategoryDel':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         DelCategory();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -190,7 +190,7 @@ switch ($action) {
         Redirect('cmd.php?act=CategoryMng');
         break;
     case 'CommentDel':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         DelComment();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -198,7 +198,7 @@ switch ($action) {
         Redirect($_SERVER["HTTP_REFERER"]);
         break;
     case 'CommentChk':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         CheckComment();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -206,7 +206,7 @@ switch ($action) {
         Redirect($_SERVER["HTTP_REFERER"]);
         break;
     case 'CommentBat':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         BatchComment();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -226,7 +226,7 @@ switch ($action) {
         Redirect('admin/member_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'MemberPst':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         PostMember();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -234,7 +234,7 @@ switch ($action) {
         Redirect('cmd.php?act=MemberMng');
         break;
     case 'MemberDel':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         if (DelMember()) {
             $zbp->BuildModule();
             $zbp->SaveCache();
@@ -248,13 +248,13 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'UploadPst':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         PostUpload();
         $zbp->SetHint('good');
         Redirect('cmd.php?act=UploadMng');
         break;
     case 'UploadDel':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         DelUpload();
         $zbp->SetHint('good');
         Redirect('cmd.php?act=UploadMng');
@@ -266,7 +266,7 @@ switch ($action) {
         Redirect('admin/tag_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'TagPst':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         PostTag();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -274,7 +274,7 @@ switch ($action) {
         Redirect('cmd.php?act=TagMng');
         break;
     case 'TagDel':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         DelTag();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -290,7 +290,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PluginDis':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         $disableResult = DisablePlugin(GetVars('name', 'GET'));
         if (is_object($disableResult)) {
             // 本来应该用ShowError的，但是不太方便，算了
@@ -306,7 +306,7 @@ switch ($action) {
         Redirect('cmd.php?act=PluginMng');
         break;
     case 'PluginEnb':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         $install = '&install=';
         $install .= EnablePlugin(GetVars('name', 'GET'));
         $zbp->BuildModule();
@@ -324,7 +324,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ThemeSet':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         $install = '&install=';
         $install .= SetTheme(GetVars('theme', 'POST'), GetVars('style', 'POST'));
         $zbp->BuildModule();
@@ -333,7 +333,7 @@ switch ($action) {
         Redirect('cmd.php?act=ThemeMng' . $install);
         break;
     case 'SidebarSet':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         SetSidebar();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -342,7 +342,7 @@ switch ($action) {
         Redirect('admin/module_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ModulePst':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         PostModule();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -350,7 +350,7 @@ switch ($action) {
         Redirect('cmd.php?act=ModuleMng');
         break;
     case 'ModuleDel':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         DelModule();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -364,7 +364,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'SettingSav':
-        CheckTokenValid();
+        CheckCSRFTokenValid();
         SaveSetting();
         $zbp->BuildModule();
         $zbp->SaveCache();

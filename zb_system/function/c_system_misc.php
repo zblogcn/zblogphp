@@ -146,7 +146,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsigna
                     <?php
                     foreach ($GLOBALS['actions'] as $key => $value) {
                         if ($GLOBALS['zbp']->CheckRights($key)) {
-                            echo '<dd><b>' . $zbp->GetAction_Title($key) . '</b> : ' . ($zbp->CheckRights($key) ? '<span style="color:green">true</span>' : '<span style="color:red">false</span>') . '</dd>';
+                            echo '<dd><b>' . $zbp->GetActionDescription($key) . '</b> : ' . ($zbp->CheckRights($key) ? '<span style="color:green">true</span>' : '<span style="color:red">false</span>') . '</dd>';
                         }
                     }
     ?>

@@ -1,5 +1,5 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
-class SQLGlobal
+class SQL_Global
 {
 
     /**
@@ -64,6 +64,12 @@ class SQLGlobal
         $this->dbclass = get_class($this->db);
     }
 
+    /**
+     * @param $callName
+     * @param $argu
+     * @return $this|mixed
+     * @throws Exception
+     */
     public function __call($callName, $argu)
     {
         $upperKeyword = strtoupper($callName);
@@ -128,19 +134,27 @@ class SQLGlobal
 
         return $this->$getName;
     }
+
+    /**
+     * @param $name
+     * @param $value
+     * @throws Exception
+     */
     public function __set($name, $value)
     {
         if (isset($this->$name)) {
             $this->$name = $value;
         } else {
-            throw 'Unknown attribute: ' . $name;
+            throw new Exception('Unknown attribute: ' . $name);
         }
     }
+
     /**
      * If we use $this->$getName directly, PHP will throw [Indirect modification of overloaded property]
      * So we have to wrap it.
      * It maybe a bug of PHP.
      * @see  http://stackoverflow.com/questions/10454779/php-indirect-modification-of-overloaded-property
+     * @param $sql
      */
     public function _sqlPush($sql)
     {
@@ -161,8 +175,10 @@ class SQLGlobal
 
         return $this;
     }
+
     /**
      * Set SQL query option
+     * @param $option
      * @return $this
      */
     public function option($option)
@@ -190,8 +206,10 @@ class SQLGlobal
             }
         }
     }
+
     /**
      * Set column for query
+     * @param $columns
      * @return $this
      */
     public function column($columns)
@@ -284,8 +302,10 @@ class SQLGlobal
 
         return $this;
     }
+
     /**
      * Set having
+     * @param $having
      * @return $this
      */
     public function having($having)
@@ -303,8 +323,10 @@ class SQLGlobal
 
         return $this;
     }
+
     /**
      * GroupBy
+     * @param $groupBy
      * @return $this
      */
     public function groupBy($groupBy)
@@ -361,19 +383,27 @@ class SQLGlobal
 
         return $this;
     }
+
     /**
      * @todo
+     * @param string $table
+     * @return string
      */
     public function exist($table)
     {
         return $this->sql();
     }
+
+    /**
+     * @param $sql
+     */
     public function query($sql = null)
     {
         if (is_null($sql)) {
-            $sql = $this->sql();
+            $sql = $this->sql(); // wtf is it??
         }
     }
+
     private function sql()
     {
 
@@ -389,6 +419,9 @@ class SQLGlobal
         return implode(' ', $sql);
     }
 
+    /**
+     *
+     */
     protected function buildTable()
     {
         $sql = &$this->_sql;
@@ -489,6 +522,8 @@ class SQLGlobal
                 $symbol = 'LIKE';
             } elseif ($eq == 'ILIKE ARRAY' || $eq == 'ARRAY_ILIKE') {
                 $symbol = 'ILIKE';
+            } else {
+                $symbol = '=';
             }
             $sqlArray = array();
             if (!is_array($value[1])) {
@@ -563,13 +598,18 @@ class SQLGlobal
         }
         $sql[] = implode(', ', $orderByData);
     }
+
     /**
      * @todo
      */
     protected function buildJoin()
     {
-        $sql = &$this->_sql;
+
     }
+
+    /**
+     *
+     */
     protected function buildGroupBy()
     {
         $sql = &$this->_sql;
@@ -615,17 +655,26 @@ class SQLGlobal
     {
     }
 
+    /**
+     *
+     */
     protected function buildBeforeWhere()
     {
         // Do nothing yet
     }
 
 
+    /**
+     *
+     */
     protected function buildOthers()
     {
         // Do nothing yet
     }
 
+    /**
+     *
+     */
     protected function buildSelect()
     {
         $sql = &$this->_sql;
@@ -703,6 +752,9 @@ class SQLGlobal
     {
     }
 
+    /**
+     *
+     */
     protected function buildIndex()
     {
     }

@@ -5,7 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/DataBase/Dbpdo_MySQL 类库
  */
-class Dbpdo_MySQL implements iDataBase
+class Database_PDOMySQL implements Database_Interface
 {
 
     public $type = 'mysql';

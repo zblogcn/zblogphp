@@ -14,7 +14,7 @@ class ZBlogPHP
      */
     public $version = null;
     /**
-     * @var null 数据库
+     * @var Database_Base 数据库
      */
     public $db = null;
     /**
@@ -188,7 +188,7 @@ class ZBlogPHP
     public $ishttps = false; #是否HTTPS
 
     /**
-     * @var null 当前模板
+     * @var Template 当前模板
      */
     public $template = null;
     /**
@@ -260,7 +260,7 @@ class ZBlogPHP
             return null;
         }
 
-        $newtype = 'Db' . trim($type);
+        $newtype = 'Database_' . trim($type);
 
         return new $newtype();
     }
@@ -346,6 +346,7 @@ class ZBlogPHP
             }
         }
         trigger_error($this->lang['error'][81], E_USER_WARNING);
+        return null;
     }
 
     /**
@@ -364,6 +365,7 @@ class ZBlogPHP
             }
         }
         trigger_error($this->lang['error'][81], E_USER_WARNING);
+        return null;
     }
 
     /**
@@ -381,22 +383,21 @@ class ZBlogPHP
             }
         }
         trigger_error($this->lang['error'][81], E_USER_WARNING);
+        return null;
     }
-
-################################################################################################################
-    #初始化
 
     /**
      * 初始化$zbp
      * @return bool
+     * @throws Exception
      */
     public function Initialize()
     {
 
-        $oldzone = $this->option['ZC_TIME_ZONE_NAME'];
-        date_default_timezone_set($oldzone);
+        $oldZone = $this->option['ZC_TIME_ZONE_NAME'];
+        date_default_timezone_set($oldZone);
 
-        $oldlang = $this->option['ZC_BLOG_LANGUAGEPACK'];
+        $oldLang = $this->option['ZC_BLOG_LANGUAGEPACK'];
         $this->LoadLanguage('system', '');
 
         if ($this->option['ZC_CLOSE_WHOLE_SITE'] == true) {
@@ -427,7 +428,7 @@ class ZBlogPHP
             $this->option['ZC_BLOG_LANGUAGEPACK'] = 'zh-tw';
         }
 
-        if ($oldlang != $this->option['ZC_BLOG_LANGUAGEPACK']) {
+        if ($oldLang != $this->option['ZC_BLOG_LANGUAGEPACK']) {
             $this->LoadLanguage('system', '');
         }
 
@@ -458,7 +459,7 @@ class ZBlogPHP
         $this->option['ZC_BLOG_PRODUCT_FULLHTML'] = '<a href="http://www.zblogcn.com/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
         $this->option['ZC_BLOG_PRODUCT_HTML'] = '<a href="http://www.zblogcn.com/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT'] . '</a>';
 
-        if ($oldzone != $this->option['ZC_TIME_ZONE_NAME']) {
+        if ($oldZone != $this->option['ZC_TIME_ZONE_NAME']) {
             date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
         }
 
@@ -487,8 +488,9 @@ class ZBlogPHP
     }
 
     /**
-     * 载入
+     * 从数据库里读取信息，启动整个ZBP
      * @return bool
+     * @throws Exception
      */
     public function Load()
     {
@@ -518,7 +520,7 @@ class ZBlogPHP
         $this->ConvertTableAndDatainfo();
 
         $this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
-        $this->LoadCategorys();
+        $this->LoadCategories();
         #$this->LoadTags();
         $this->LoadModules();
 
@@ -568,6 +570,7 @@ class ZBlogPHP
 
     /**
      * 载入管理
+     * @throws Exception
      */
     public function LoadManage()
     {
@@ -603,7 +606,7 @@ class ZBlogPHP
     }
 
     /**
-     *终止连接，释放资源
+     * 终止连接，释放资源
      */
     public function Terminate()
     {
@@ -680,7 +683,7 @@ class ZBlogPHP
                 }
                 break;
         }
-        //add utf8mb4
+        // utf8mb4支持
         if ($this->db->type == 'mysql' && version_compare($this->db->version, '5.5.3') < 0) {
             Add_Filter_Plugin('Filter_Plugin_DbSql_Filter', 'utf84mb_filter');
             Add_Filter_Plugin('Filter_Plugin_Edit_Begin', 'utf84mb_fixHtmlSpecialChars');
@@ -729,6 +732,7 @@ class ZBlogPHP
             $this->issession = true;
             return true;
         }
+        return false;
     }
 
     /**
@@ -742,10 +746,9 @@ class ZBlogPHP
             $this->issession = false;
             return true;
         }
+        return false;
     }
 
-################################################################################################################
-    #插件用Configs表相关设置函数
 
     /**
      * 载入插件Configs表
@@ -868,19 +871,12 @@ class ZBlogPHP
      */
     public function LoadCache()
     {
-        #$s=$this->usersdir . 'cache/' . $this->guid . '.cache';
-        #if (file_exists($s))
-        #{
-        #	$this->cache=unserialize(@file_get_contents($s));
-        #}
+
         $this->cache = $this->Config('cache');
         $this->cache_hash = md5($this->Config('cache'));
 
         return true;
     }
-
-################################################################################################################
-    #保存zbp设置函数
 
     /**
      * 保存配置
@@ -1042,18 +1038,16 @@ class ZBlogPHP
     }
 
     /**
-     * 验证用户登录(COOKIE中的用户名密码)
+     * 验证用户登录
      * @return bool
      */
     public function Verify()
     {
         $username = trim(GetVars('username', 'COOKIE'));
         $token = trim(GetVars('token', 'COOKIE'));
-        //if ($this->Verify_Token($u, $p, 'zbp', $m) == true) {
         $user = $this->VerifyUserToken($token, $username);
         if (!is_null($user)) {
             $this->user = $user;
-
             return true;
         }
         $this->user = new Member;
@@ -1062,16 +1056,21 @@ class ZBlogPHP
     }
 
     /**
-     * 返回登录成功后应保存的cookie信息(COOKIE中的密码)
-     * @param member $m 已验过成功的member
+     * 返回登录成功后应保存的cookie信息
+     * @param Member $m 已验过成功的member
      * @return string
      */
     public function VerifyResult($m)
     {
-        //return $m->GetHashByToken('zbp',1000);
         return $this->GenerateUserToken($m);
     }
 
+    /**
+     * 生成User Token，用于登录验证
+     * @param Member $user
+     * @param int $time
+     * @return string
+     */
     public function GenerateUserToken($user, $time = 0)
     {
         if ($time === 0) {
@@ -1080,6 +1079,12 @@ class ZBlogPHP
         return CreateWebToken($user->ID, $time, $user->Guid, $user->PassWord_MD5Path);
     }
 
+    /**
+     * 验证用户登录Token
+     * @param string $token
+     * @param string $username
+     * @return Member|null
+     */
     public function VerifyUserToken($token, $username)
     {
         $user = $this->GetMemberByName($username);
@@ -1089,31 +1094,6 @@ class ZBlogPHP
             }
         }
         return null;
-    }
-
-    /**
-     * 验证用户登录（MD5加zbp->guid盐后的密码）
-     * @deprecated
-     * @param string $name 用户名
-     * @param string $ps_path_hash MD5加zbp->guid盐后的密码
-     * @param object $member 返回读取成功的member对象
-     * @return bool
-     */
-    public function Verify_MD5Path($name, $ps_path_hash, &$member = null)
-    {
-        if ($name == '' || $ps_path_hash == '') {
-            return false;
-        }
-        $m = $this->GetMemberByName($name);
-        if ($m->ID > 0) {
-            if ($m->PassWord_MD5Path == $ps_path_hash) {
-                $member = $m;
-
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -1206,17 +1186,15 @@ class ZBlogPHP
         return false;
     }
 
-
-################################################################################################################
-    #加载函数
-
     /**
-     *载入用户列表
+     * 载入用户列表
+     * @param int $level 用户等级
+     * @return bool
      */
     public function LoadMembers($level = 0)
     {
-        if ($level == -1) {
-            return;
+        if ($level < 0) {
+            return false;
         }
 
         $where = null;
@@ -1230,13 +1208,14 @@ class ZBlogPHP
             $this->members[$m->ID] = $m;
             $this->membersbyname[$m->Name] = &$this->members[$m->ID];
         }
+        return true;
     }
 
     /**
      * 载入分类列表
      * @return bool
      */
-    public function LoadCategorys()
+    public function LoadCategories()
     {
 
         $this->categories = array();
@@ -1265,6 +1244,9 @@ class ZBlogPHP
             $lv0[0] = array();
         }
 
+        /*
+         * 以下垃圾代码，必须重构！
+         */
         foreach ($lv0[0] as $id0) {
             $this->categoriesbyorder[$id0] = &$this->categories[$id0];
             if (!isset($lv1[$id0])) {
@@ -1304,10 +1286,12 @@ class ZBlogPHP
                 }
             }
         }
+        return true;
     }
 
     /**
-     *载入标签列表
+     * 载入标签列表
+     * @return bool
      */
     public function LoadTags()
     {
@@ -1319,11 +1303,12 @@ class ZBlogPHP
             $this->tags[$t->ID] = $t;
             $this->tagsbyname[$t->Name] = &$this->tags[$t->ID];
         }
+        return true;
     }
 
     /**
      * 载入模块列表
-     * @return null
+     * @return bool
      */
     public function LoadModules()
     {
@@ -1349,15 +1334,16 @@ class ZBlogPHP
                 $this->modulesbyfilename[$m->FileName] = $m;
             }
         }
+        return true;
     }
 
     /**
      * 载入主题列表
+     * @return App[]
      */
     public function LoadThemes()
     {
-
-        $allthemes = array();
+        $allThemes = array();
         $dirs = GetDirsInDir($this->usersdir . 'theme/');
         natcasesort($dirs);
         array_unshift($dirs, $this->theme);
@@ -1365,31 +1351,32 @@ class ZBlogPHP
         foreach ($dirs as $id) {
             $app = new App;
             if ($app->LoadInfoByXml('theme', $id) == true) {
-                $allthemes[] = $app;
+                $allThemes[] = $app;
             }
         }
 
-        return $allthemes;
+        return $allThemes;
     }
 
     /**
      * 载入插件列表
+     * @return App[]
      */
     public function LoadPlugins()
     {
 
-        $allplugins = array();
+        $allPlugins = array();
         $dirs = GetDirsInDir($this->usersdir . 'plugin/');
         natcasesort($dirs);
 
         foreach ($dirs as $id) {
             $app = new App;
             if ($app->LoadInfoByXml('plugin', $id) == true) {
-                $allplugins[] = $app;
+                $allPlugins[] = $app;
             }
         }
 
-        return $allplugins;
+        return $allPlugins;
     }
 
     /**
@@ -1428,6 +1415,7 @@ class ZBlogPHP
 
     /**
      * 获取预激活插件名数组
+     * @return string[]
      */
     public function GetPreActivePlugin()
     {
@@ -1441,7 +1429,9 @@ class ZBlogPHP
      * 载入指定应用语言包
      * @param string $type 应用类型(system|theme|plugin)
      * @param string $id 应用ID
+     * @param string $default 默认语言
      * @return null
+     * @throws Exception
      */
     public function LoadLanguage($type, $id, $default = '')
     {
@@ -1453,7 +1443,7 @@ class ZBlogPHP
         $default = str_replace(array('/', '\\'), '', $default);
         $languagePtr = &$this->lang;
 
-        if ($default == '') {
+        if ($default === '') {
             $default = $this->option['ZC_BLOG_LANGUAGEPACK'];
         }
 
@@ -1486,14 +1476,10 @@ class ZBlogPHP
         } else {
             // 这里不会执行到，在opendir时就已经抛出E_WARNING
             throw new Exception('Cannot opendir(' . $languagePath . ')');
-
-            return false;
         }
 
         if (count($languageList) === 0) {
             throw new Exception('No language in ' . $languagePath);
-
-            return false;
         }
 
         for ($i = 0; $i < count($defaultLanguageList); $i++) {
@@ -1505,8 +1491,6 @@ class ZBlogPHP
         }
         if ($language === '') {
             throw new Exception('Language ' . $default . ' is not found in ' . $languagePath);
-
-            return false;
         }
 
         $languagePath .= $language . '.php';
@@ -1519,8 +1503,8 @@ class ZBlogPHP
     /**
      * 重新读取语言包
      * @param string $default 默认语言
-     * @return  null
-     **/
+     * @throws Exception
+     */
     public function ReloadLanguages($default)
     {
         $array = $this->langpacklist;
@@ -1529,9 +1513,6 @@ class ZBlogPHP
             $this->LoadLanguage($v[0], $v[1], $v[2]);
         }
     }
-
-################################################################################################################
-    #模板相关函数
 
     /**
      * 创建模板对象，预加载已编译模板
@@ -1549,7 +1530,7 @@ class ZBlogPHP
         $template->MakeTemplateTags();
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_MakeTemplatetags'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($template->templateTags);
+            $fpname($template->templateTags);
         }
 
         $template->SetPath($this->usersdir . 'cache/compiled/' . $theme . '/');
@@ -1607,15 +1588,11 @@ class ZBlogPHP
     }
 
 
-################################################################################################################
-    #模块操作
-
     /**
      * 生成模块
      */
     public function BuildModule()
     {
-
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildModule'] as $fpname => &$fpsignal) {
             $fpname();
         }
@@ -1624,39 +1601,31 @@ class ZBlogPHP
 
     /**
      * 重建模块
-     * @param string $modfilename 模块名
-     * @param string $userfunc 用户函数
+     * @param string $moduleFileName 模块名
+     * @param string $moduleFunction 用户函数
      */
-    public function RegBuildModule($modfilename, $userfunc)
+    public function RegBuildModule($moduleFileName, $moduleFunction)
     {
-        ModuleBuilder::Reg($modfilename, $userfunc);
+        ModuleBuilder::Reg($moduleFileName, $moduleFunction);
     }
 
     /**
      * 添加模块
-     * @param string $modfilename 模块名
+     * @param string $moduleFileName 模块名
      * @param null $parameters 模块参数
      */
-    public function AddBuildModule($modfilename, $parameters = null)
+    public function AddBuildModule($moduleFileName, $parameters = null)
     {
-        ModuleBuilder::Add($modfilename, $parameters);
+        ModuleBuilder::Add($moduleFileName, $parameters);
     }
 
     /**
      * 删除模块
-     * @param string $modfilename 模块名
+     * @param string $moduleFileName 模块名
      */
-    public function DelBuildModule($modfilename)
+    public function DelBuildModule($moduleFileName)
     {
-        ModuleBuilder::Del($modfilename);
-    }
-
-    /**
-     * 所有模块重置
-     */
-    public function AddBuildModuleAll()
-    {
-        //del from 1.5
+        ModuleBuilder::Del($moduleFileName);
     }
 
 
@@ -2657,23 +2626,23 @@ class ZBlogPHP
     }
 
     /**
-     * 获取会话Token
-     * @param $s
+     * 获取CSRF Token
+     * @param string $id 应用ID，可以保证每个应用获取不同的Token
      * @return string
      */
-    public function GetToken($id = '')
+    public function GetCSRFToken($id = '')
     {
         $s = $this->user->ID . $this->user->Password . $this->user->Status;
         return md5($this->guid . $s . $id . date('Ymdh'));
     }
 
     /**
-     * 验证会话Token
+     * 验证CSRF Token
      * @param $t
-     * @param $s
+     * @param string $id
      * @return bool
      */
-    public function ValidToken($t, $id = '')
+    public function VerifyCSRFToken($t, $id = '')
     {
         $s = $this->user->ID . $this->user->Password . $this->user->Status;
         if ($t == md5($this->guid . $s . $id . date('Ymdh'))) {
@@ -2695,7 +2664,6 @@ class ZBlogPHP
      */
     public function ShowValidCode($id = '')
     {
-
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowValidCode'] as $fpname => &$fpsignal) {
             return $fpname($id); //*
         }
@@ -2807,6 +2775,7 @@ class ZBlogPHP
 
     #$signal = good,bad,tips
     private $hint1 = null, $hint2 = null, $hint3 = null, $hint4 = null, $hint5 = null;
+
     /**
      * 设置提示消息并存入Cookie
      * @param string $signal 提示类型（good|bad|tips）
@@ -2867,7 +2836,7 @@ class ZBlogPHP
     }
 
     /**
-     * 显示提示消息
+     * 由提示消息获取HTML
      * @param string $signal 提示类型（good|bad|tips）
      * @param string $content 提示内容
      */
@@ -2968,7 +2937,8 @@ class ZBlogPHP
     }
 
     /**
-     * 检测网站关闭
+     * 检测网站关闭，如果关闭，则抛出错误
+     * @throws Exception
      */
     public function CheckSiteClosed()
     {
@@ -3021,31 +2991,32 @@ class ZBlogPHP
     }
 
 
-################################################################################################################
-    #扩展{动作，类别}
     /**
      * 注册PostType
-     * int $typeid 系统定义在0-99，插件自定义100-255
-     * string $urlrule 默认是取Page类型的Url Rule
-     * string $template 默认模板名page
-     * string $catetype 当前文章类的分类Type
-     * string $tagtype 当前文章类的标签Type
+     * @param $typeId
+     * @param $name
+     * @param string $urlRule 默认是取Page类型的Url Rule
+     * @param string $template 默认模板名page
+     * @param string $categoryType 当前文章类的分类Type
+     * @param string $tagType 当前文章类的标签Type
+     * @throws Exception
      */
-    public function RegPostType($typeid, $name, $urlrule = '', $template = 'single', $catetype = null, $tagtype = null)
+    public function RegPostType($typeId, $name, $urlRule = '', $template = 'single', $categoryType = null, $tagType = null)
     {
-        if ($urlrule == '') {
-            $urlrule = $this->option['ZC_PAGE_REGEX'];
+        if ($urlRule == '') {
+            $urlRule = $this->option['ZC_PAGE_REGEX'];
         }
 
-        $typeid = (int) $typeid;
+        $typeId = (int) $typeId;
         $name = strtolower(trim($name));
-        if ($typeid > 99) {
-            if (isset($this->posttype[$typeid])) {
+        if ($typeIf > 99) {
+            if (isset($this->posttype[$typeIf])) {
                 $this->ShowError(87, __FILE__, __LINE__);
             }
         }
-        $this->posttype[$typeid] = array($name, $urlrule, $template, $catetype, $tagtype);
+        $this->posttype[$typeIf] = array($name, $urlRule, $template, $categoryType, $tagType);
     }
+
     public function GetPostType_Name($typeid)
     {
         if (isset($this->posttype[$typeid])) {
@@ -3054,6 +3025,7 @@ class ZBlogPHP
 
         return '';
     }
+
     public function GetPostType_UrlRule($typeid)
     {
         if (isset($this->posttype[$typeid])) {
@@ -3062,6 +3034,7 @@ class ZBlogPHP
 
         return $this->option['ZC_PAGE_REGEX'];
     }
+
     public function GetPostType_Template($typeid)
     {
         if (isset($this->posttype[$typeid])) {
@@ -3070,6 +3043,7 @@ class ZBlogPHP
 
         return 'single';
     }
+
     public function GetPostType_CategoryType($typeid)
     {
         if (isset($this->posttype[$typeid])) {
@@ -3078,6 +3052,7 @@ class ZBlogPHP
 
         return null;
     }
+
     public function GetPostType_TagType($typeid)
     {
         if (isset($this->posttype[$typeid])) {
@@ -3086,14 +3061,8 @@ class ZBlogPHP
 
         return null;
     }
-    public function GetPostTypeIDByName($name)
-    {
-        foreach ($this->posttype as $key => $value) {
-            if($name == $this->posttype[$typeid][0])
-                return $key;
-        }
-        return null;
-    }
+
+
     /**
      * 注册Action
      */
@@ -3102,12 +3071,89 @@ class ZBlogPHP
         $this->actions[$name] = $level;
         $this->lang['actions'][$name] = $title;
     }
-    public function GetAction_Title($name)
+
+    /**
+     * 获得Action权限注释
+     * @param $name
+     * @return mixed
+     */
+    public function GetActionDescription($name)
     {
         if (isset($this->lang['actions'][$name])) {
             return $this->lang['actions'][$name];
         }
 
         return $name;
+    }
+
+
+    /**
+     * 以下部分为已废弃，但考虑到兼容性保留的代码
+     */
+
+    /**
+     * 验证用户登录（MD5加zbp->guid盐后的密码）
+     * @deprecated
+     * @param string $name 用户名
+     * @param string $ps_path_hash MD5加zbp->guid盐后的密码
+     * @param object $member 返回读取成功的member对象
+     * @return bool
+     */
+    public function Verify_MD5Path($name, $ps_path_hash, &$member = null)
+    {
+        if ($name == '' || $ps_path_hash == '') {
+            return false;
+        }
+        $m = $this->GetMemberByName($name);
+        if ($m->ID > 0) {
+            if ($m->PassWord_MD5Path == $ps_path_hash) {
+                $member = $m;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * 获取CSRF Token的错误别名
+     * @deprecated Use ``GetCSRFToken``
+     * @param string $id 应用ID，可以保证每个应用获取不同的Token
+     * @return string
+     */
+    public function GetToken ($id = '')
+    {
+        return $this->GetCSRFToken($id);
+    }
+
+    /**
+     * 验证CSRF Token的错误别名
+     * @deprecated Use ``VerifyCSRFToken``
+     * @param $t
+     * @param $id
+     * @return bool
+     */
+    public function ValidToken ($t, $id = '')
+    {
+        return $this->VerifyCSRFToken($t, $id);
+    }
+
+    /**
+     * @deprecated
+     * @return bool
+     */
+    public function LoadCategorys()
+    {
+        return $this->LoadCategories();
+    }
+
+
+
+    /**
+     * 所有模块重置
+     * @deprecated
+     */
+    public function AddBuildModuleAll()
+    {
     }
 }

@@ -1,21 +1,21 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
 /**
- * PgSQL数据库操作类
+ * pdo_SQLite数据库操作类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase/DbPgSQL 类库
+ * @subpackage ClassLib/DataBase/Dbpdo_PgSQL 类库
  */
-class DbPgSQL implements iDataBase
+class Database_PDOPostgreSQL implements Database_Interface
 {
 
-    public $type = 'pgsql';
+    public $type = 'postgresql';
     public $version = '';
 
     /**
      * @var string|null 数据库名前缀
      */
     public $dbpre = null;
-    private $db = null; #数据库连接
+    private $db = null; #数据库连接实例
     /**
      * @var string|null 数据库名
      */
@@ -33,14 +33,12 @@ class DbPgSQL implements iDataBase
     }
 
     /**
-     * 对字符串进行转义，在指定的字符前添加反斜杠，即执行addslashes函数
-     * @use addslashes
-     * @param string $s
+     * @param $s
      * @return string
      */
     public function EscapeString($s)
     {
-        return pg_escape_string($s);
+        return str_ireplace("'", "''", $s);
     }
 
     /**
@@ -60,23 +58,16 @@ class DbPgSQL implements iDataBase
     public function Open($array)
     {
 
-        $s = "host={$array[0]} port={$array[5]} dbname={$array[3]} user={$array[1]} password={$array[2]} options='--client_encoding=UTF8'";
+        $s = "pgsql:host={$array[0]};port={$array[5]};dbname={$array[3]};user={$array[1]};password={$array[2]};options='--client_encoding=UTF8'";
         if (false == $array[5]) {
-            $db_link = pg_connect($s);
+            $db_link = new PDO($s);
         } else {
-            $db_link = pg_pconnect($s);
+            $db_link = new PDO($s, null, null, array(PDO::ATTR_PERSISTENT => true));
         }
+        $this->db = $db_link;
+        $this->dbpre = $array[4];
 
-        if (!$db_link) {
-            return false;
-        } else {
-            $this->dbpre = $array[4];
-            $this->db = $db_link;
-            $v = pg_version($db_link);
-            $this->version = $v['client'];
-
-            return true;
-        }
+        return true;
     }
 
     /**
@@ -84,14 +75,12 @@ class DbPgSQL implements iDataBase
      */
     public function Close()
     {
-        if (is_resource($this->db)) {
-            pg_close($this->db);
-        }
+        $this->db = null;
     }
 
     /**
      * 执行多行SQL语句
-     * @param string $s 以;号分隔的多条SQL语句
+     * @param $s
      */
     public function QueryMulit($s)
     {
@@ -99,82 +88,71 @@ class DbPgSQL implements iDataBase
     }//错别字函数，历史原因保留下来
     public function QueryMulti($s)
     {
-        //$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
+        //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
         $a = explode(';', $s);
         foreach ($a as $s) {
             $s = trim($s);
             if ($s != '') {
-                pg_query($this->db, $this->sql->Filter($s));
+                $this->db->exec($this->sql->Filter($s));
             }
         }
     }
 
     /**
-     * 执行SQL查询语句
-     * @param string $query
-     * @return array 返回数据数组
+     * @param $query
+     * @return array
      */
     public function Query($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        logs($this->sql->Filter($query));
-        $results = pg_query($this->db, $this->sql->Filter($query));
-        //if(mysql_errno())trigger_error(mysql_error($this->db),E_USER_NOTICE);
-        $data = array();
-        if (is_resource($results)) {
-            while ($row = pg_fetch_assoc($results)) {
-                $data[] = $row;
-            }
+        // 遍历出来
+        $results = $this->db->query($this->sql->Filter($query));
+        //fetch || fetchAll
+        if (is_object($results)) {
+            return $results->fetchAll();
         } else {
-            $data[] = $results;
+            return array($results);
         }
-
-        return $data;
     }
 
     /**
-     * 更新数据
-     * @param string $query SQL语句
-     * @return resource
+     * @param $query
+     * @return bool|mysqli_result
      */
     public function Update($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return pg_query($this->db, $this->sql->Filter($query));
+        return $this->db->query($this->sql->Filter($query));
     }
 
     /**
-     * 删除数据
-     * @param string $query SQL语句
-     * @return resource
+     * @param $query
+     * @return bool|mysqli_result
      */
     public function Delete($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return pg_query($this->db, $this->sql->Filter($query));
+        return $this->db->query($this->sql->Filter($query));
     }
 
     /**
-     * 插入数据
-     * @param string $query SQL语句
-     * @return int 返回ID序列号
+     * @param $query
+     * @return int
      */
     public function Insert($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        pg_query($this->db, $this->sql->Filter($query));
+        $this->db->query($this->sql->Filter($query));
         $seq = explode(' ', $query, 4);
         $seq = $seq[2] . '_seq';
-        $r = pg_query('SELECT CURRVAL(\'' . $seq . '\')');
-        $id = pg_fetch_result($r, 0, 0);
+        $id = $this->db->lastInsertId($seq);
 
-        return (int) $id;
+        return $id;
     }
 
     /**
-     * 新建表
-     * @param string $tablename 表名
-     * @param array $datainfo 表结构
+     * @param $table
+     * @param $datainfo
      */
     public function CreateTable($table, $datainfo)
     {
@@ -182,8 +160,7 @@ class DbPgSQL implements iDataBase
     }
 
     /**
-     * 删除表
-     * @param string $table 表名
+     * @param $table
      */
     public function DelTable($table)
     {
@@ -191,12 +168,12 @@ class DbPgSQL implements iDataBase
     }
 
     /**
-     * 判断数据表是否存在
-     * @param string $table 表名
+     * @param $table
      * @return bool
      */
     public function ExistTable($table)
     {
+
         $a = $this->Query($this->sql->ExistTable($table, $this->dbname));
         if (!is_array($a)) {
             return false;

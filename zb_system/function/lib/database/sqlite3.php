@@ -1,15 +1,15 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
 /**
- * SQLite2数据库操作类
+ * SQLite3数据库操作类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase/DbSQLite 类库
+ * @subpackage ClassLib/DataBase/DbSQLite3 类库
  */
-class DbSQLite implements iDataBase
+class Database_SQLite3 implements Database_Interface
 {
 
     public $type = 'sqlite';
-    public $version = '2';
+    public $version = '3';
 
     /**
      * @var string|null 数据库名前缀
@@ -38,7 +38,7 @@ class DbSQLite implements iDataBase
      */
     public function EscapeString($s)
     {
-        return sqlite_escape_string($s);
+        return SQLite3::escapeString($s);
     }
 
     /**
@@ -47,7 +47,7 @@ class DbSQLite implements iDataBase
      */
     public function Open($array)
     {
-        if ($this->db = sqlite_open($array[0], 0666, $sqliteerror)) {
+        if ($this->db = new SQLite3($array[0])) {
             $this->dbpre = $array[1];
             $this->dbname = $array[0];
 
@@ -62,7 +62,7 @@ class DbSQLite implements iDataBase
      */
     public function Close()
     {
-        sqlite_close($this->db);
+        $this->db->close();
     }
 
     /**
@@ -79,7 +79,7 @@ class DbSQLite implements iDataBase
         foreach ($a as $s) {
             $s = trim($s);
             if ($s != '') {
-                sqlite_query($this->db, $this->sql->Filter($s));
+                $this->db->query($this->sql->Filter($s));
             }
         }
     }
@@ -92,14 +92,17 @@ class DbSQLite implements iDataBase
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
-        $results = sqlite_query($this->db, $this->sql->Filter($query));
+        $results = $this->db->query($this->sql->Filter($query));
         $data = array();
-        if (is_resource($results)) {
-            while ($row = sqlite_fetch_array($results)) {
+        if (!($results instanceof Sqlite3Result)) {
+            return $data;
+        }
+        if ($results->numColumns() > 0) {
+            while ($row = $results->fetchArray()) {
                 $data[] = $row;
             }
         } else {
-            $data[] = $results;
+            $data[] = $results->numColumns();
         }
 
         return $data;
@@ -107,34 +110,34 @@ class DbSQLite implements iDataBase
 
     /**
      * @param $query
-     * @return SQLiteResult
+     * @return mixed
      */
     public function Update($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return sqlite_query($this->db, $this->sql->Filter($query));
+        return $this->db->query($this->sql->Filter($query));
     }
 
     /**
      * @param $query
-     * @return SQLiteResult
+     * @return mixed
      */
     public function Delete($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return sqlite_query($this->db, $this->sql->Filter($query));
+        return $this->db->query($this->sql->Filter($query));
     }
 
     /**
      * @param $query
-     * @return int
+     * @return mixed
      */
     public function Insert($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        sqlite_query($this->db, $this->sql->Filter($query));
+        $this->db->query($this->sql->Filter($query));
 
-        return sqlite_last_insert_rowid($this->db);
+        return $this->db->lastInsertRowID();
     }
 
     /**
@@ -156,7 +159,6 @@ class DbSQLite implements iDataBase
 
     /**
      * @param $table
-     * @return bool
      */
     public function ExistTable($table)
     {

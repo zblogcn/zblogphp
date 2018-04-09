@@ -1,15 +1,15 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
 /**
- * pdo_SQLite数据库操作类
+ * SQLite2数据库操作类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase/Dbpdo_SQLite 类库
+ * @subpackage ClassLib/DataBase/DbSQLite 类库
  */
-class Dbpdo_SQLite implements iDataBase
+class Database_SQLite implements Database_Interface
 {
 
     public $type = 'sqlite';
-    public $version = '3';
+    public $version = '2';
 
     /**
      * @var string|null 数据库名前缀
@@ -21,7 +21,7 @@ class Dbpdo_SQLite implements iDataBase
      */
     public $dbname = null;
     /**
-     * @var DbSql|null DbSql实例
+     * @var DbSql|null
      */
     public $sql = null;
     /**
@@ -38,7 +38,7 @@ class Dbpdo_SQLite implements iDataBase
      */
     public function EscapeString($s)
     {
-        return str_ireplace('\'', '\'\'', $s);
+        return sqlite_escape_string($s);
     }
 
     /**
@@ -47,12 +47,14 @@ class Dbpdo_SQLite implements iDataBase
      */
     public function Open($array)
     {
-        $db_link = new PDO('sqlite:' . $array[0]);
-        $this->db = $db_link;
-        $this->dbpre = $array[1];
-        $this->dbname = $array[0];
+        if ($this->db = sqlite_open($array[0], 0666, $sqliteerror)) {
+            $this->dbpre = $array[1];
+            $this->dbname = $array[0];
 
-        return true;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -60,11 +62,10 @@ class Dbpdo_SQLite implements iDataBase
      */
     public function Close()
     {
-        $this->db = null;
+        sqlite_close($this->db);
     }
 
     /**
-     * 执行多行SQL语句
      * @param $s
      */
     public function QueryMulit($s)
@@ -78,7 +79,7 @@ class Dbpdo_SQLite implements iDataBase
         foreach ($a as $s) {
             $s = trim($s);
             if ($s != '') {
-                $this->db->exec($this->sql->Filter($s));
+                sqlite_query($this->db, $this->sql->Filter($s));
             }
         }
     }
@@ -91,33 +92,37 @@ class Dbpdo_SQLite implements iDataBase
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
-        $results = $this->db->query($this->sql->Filter($query));
-        //fetch || fetchAll
-        if (is_object($results)) {
-            return $results->fetchAll();
+        $results = sqlite_query($this->db, $this->sql->Filter($query));
+        $data = array();
+        if (is_resource($results)) {
+            while ($row = sqlite_fetch_array($results)) {
+                $data[] = $row;
+            }
         } else {
-            return array($results);
+            $data[] = $results;
         }
+
+        return $data;
     }
 
     /**
      * @param $query
-     * @return bool|mysqli_result
+     * @return SQLiteResult
      */
     public function Update($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return $this->db->query($this->sql->Filter($query));
+        return sqlite_query($this->db, $this->sql->Filter($query));
     }
 
     /**
      * @param $query
-     * @return bool|mysqli_result
+     * @return SQLiteResult
      */
     public function Delete($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return $this->db->query($this->sql->Filter($query));
+        return sqlite_query($this->db, $this->sql->Filter($query));
     }
 
     /**
@@ -127,9 +132,9 @@ class Dbpdo_SQLite implements iDataBase
     public function Insert($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        $this->db->exec($this->sql->Filter($query));
+        sqlite_query($this->db, $this->sql->Filter($query));
 
-        return $this->db->lastInsertId();
+        return sqlite_last_insert_rowid($this->db);
     }
 
     /**
@@ -156,7 +161,7 @@ class Dbpdo_SQLite implements iDataBase
     public function ExistTable($table)
     {
 
-        $a = $this->Query($this->sql->ExistTable($table, $this->dbname));
+        $a = $this->Query($this->sql->ExistTable($table));
         if (!is_array($a)) {
             return false;
         }

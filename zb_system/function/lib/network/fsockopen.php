@@ -5,7 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/Network/Networkfsockopen 网络连接
  */
-class Networkfsockopen implements iNetwork
+class Network_fsockopen implements Network_Interface
 {
 
     private $readyState = 0; #状态

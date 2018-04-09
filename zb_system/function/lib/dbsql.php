@@ -5,31 +5,6 @@
  * @package Z-BlogPHP
  * @subpackage Interface/DataBase 类库
  */
-interface iDataBase
-{
-
-    public function Open($array);
-
-    public function Close();
-
-    public function Query($query);
-
-    public function Insert($query);
-
-    public function Update($query);
-
-    public function Delete($query);
-
-    public function QueryMulti($s);
-
-    public function EscapeString($s);
-
-    public function CreateTable($table, $datainfo);
-
-    public function DelTable($table);
-
-    public function ExistTable($table);
-}
 
 /**
  * SQL语句生成类
@@ -55,7 +30,7 @@ class DbSql
     {
         $this->db = &$db;
         $this->dbclass = get_class($this->db);
-        $this->sql = 'sql' . $this->db->type;
+        $this->sql = 'sql_' . $this->db->type;
     }
     /**
      * 替换数据表前缀
@@ -245,31 +220,31 @@ class DbSql
     {
 
         if ($type == 'mysql' && $this->_explort_db === null) {
-            $this->_explort_db = new DbMySQL;
+            $this->_explort_db = new Database_MySQL();
         }
 
         if ($type == 'mysqli' && $this->_explort_db === null) {
-            $this->_explort_db = new DbMySQLi;
+            $this->_explort_db = new Database_MySQLi();
         }
 
         if ($type == 'pdo_mysql' && $this->_explort_db === null) {
-            $this->_explort_db = new Dbpdo_MySQL;
+            $this->_explort_db = new Database_PDOMySQL();
         }
 
         if ($type == 'sqlite' && $this->_explort_db === null) {
-            $this->_explort_db = new DbSQLite;
+            $this->_explort_db = new Database_SQLite();
         }
 
         if ($type == 'sqlite3' && $this->_explort_db === null) {
-            $this->_explort_db = new DbSQLite3;
+            $this->_explort_db = new Database_SQLite();
         }
 
         if ($type == 'pdo_sqlite' && $this->_explort_db === null) {
-            $this->_explort_db = new Dbpdo_SQLite;
+            $this->_explort_db = new Database_SQLite3();
         }
 
         if ($this->_explort_db === null) {
-            $this->_explort_db = new DbMySQL;
+            $this->_explort_db = new Database_MySQL();
         }
 
         $sql = "INSERT INTO $table ";

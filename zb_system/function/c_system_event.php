@@ -2102,7 +2102,7 @@ function PostCategory()
 
     $cate->Save();
 
-    $zbp->LoadCategorys();
+    $zbp->LoadCategories();
     $zbp->AddBuildModule('catalog');
 
     if (GetVars('AddNavbar', 'POST') == 0) {
@@ -2140,7 +2140,7 @@ function DelCategory()
         DelCategory_Articles($cate->ID);
         $cate->Del();
 
-        $zbp->LoadCategorys();
+        $zbp->LoadCategories();
         $zbp->AddBuildModule('catalog');
         $zbp->DelItemToNavbar('category', $cate->ID);
 

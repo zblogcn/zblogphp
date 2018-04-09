@@ -1,13 +1,13 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
 /**
- * 获取链接内容类
+ * curl类
  *
+ * 自定义网络连接接口代替curl
  * @package Z-BlogPHP
- * @subpackage ClassLib/Network/Networkfile_get_contents 网络连接
+ * @subpackage ClassLib/Network/CUrl 网络连接
  */
-class Networkfile_get_contents implements iNetwork
+class Network_curl implements Network_Interface
 {
-
     private $readyState = 0; #状态
     private $responseBody = null; #返回的二进制
     private $responseStream = null; #返回的数据流
@@ -22,12 +22,23 @@ class Networkfile_get_contents implements iNetwork
     private $postdata = array();
     private $httpheader = array();
     private $responseHeader = array();
+    private $parsed_url = array();
+    private $timeout = 30;
+    private $errstr = '';
+    private $errno = 0;
+    private $ch = null;
     private $isgzip = false;
     private $maxredirs = 0;
-    private $parsed_url = array();
 
     private $__isBinary = false;
-    private $__boundary = '';
+
+    /**
+     * @ignore
+     */
+    public function __construct()
+    {
+        //$this->ch = curl_init();
+    }
 
     /**
      * @param $property_name
@@ -68,7 +79,7 @@ class Networkfile_get_contents implements iNetwork
     }
 
     /**
-     *
+     * 取消
      */
     public function abort()
     {
@@ -83,6 +94,7 @@ class Networkfile_get_contents implements iNetwork
     }
 
     /**
+     * 获取返回头
      * @param $bstrHeader
      * @return string
      */
@@ -99,16 +111,7 @@ class Networkfile_get_contents implements iNetwork
     }
 
     /**
-     * @param $resolveTimeout
-     * @param $connectTimeout
-     * @param $sendTimeout
-     * @param $receiveTimeout
-     */
-    public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout)
-    {
-    }
-
-    /**
+     * 链接远程接口
      * @param $bstrMethod
      * @param $bstrUrl
      * @param bool $varAsync
@@ -120,74 +123,91 @@ class Networkfile_get_contents implements iNetwork
     public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '')
     {
         //Async无用
-        //初始化变量
         $this->reinit();
         $method = strtoupper($bstrMethod);
         $this->option['method'] = $method;
         $this->parsed_url = parse_url($bstrUrl);
-
         if (!$this->parsed_url) {
             throw new Exception('URL Syntax Error!');
-        } else {
-            if ($bstrUser != '') {
-                $bstrUrl = substr($bstrUrl, 0, strpos($bstrUrl, ':')) . '://' . $bstrUser . ':' . $bstrPassword . '@' . substr($bstrUrl, strpos($bstrUrl, '/') + 2);
-            }
-            $this->url = $bstrUrl;
-            if (!isset($this->parsed_url['port'])) {
-                if ($this->parsed_url['scheme'] == 'https') {
-                    $this->parsed_url['port'] = 443;
-                } else {
-                    $this->parsed_url['port'] = 80;
-                }
+        }
+
+        if (!isset($this->parsed_url['port'])) {
+            if (isset($this->parsed_url['scheme']) && $this->parsed_url['scheme'] == 'https') {
+                $this->parsed_url['port'] = 443;
+            } else {
+                $this->parsed_url['port'] = 80;
             }
         }
+
+        curl_setopt($this->ch, CURLOPT_URL, $bstrUrl);
+        curl_setopt($this->ch, CURLOPT_HEADER, 1);
+        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
+        //curl_setopt($this->ch, CURLOPT_REFERER, 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+        curl_setopt($this->ch, CURLOPT_POST, ($method == 'POST' ? 1 : 0));
 
         return true;
     }
 
     /**
+     * 设置超时时间
+     * @param $resolveTimeout
+     * @param $connectTimeout
+     * @param $sendTimeout
+     * @param $receiveTimeout
+     */
+    public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout)
+    {
+        curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+        curl_setopt($this->ch, CURLOPT_TIMEOUT, $resolveTimeout);
+    }
+
+    /**
+     * 发送数据
      * @param string $varBody
      */
     public function send($varBody = '')
     {
+
         $data = $varBody;
         if (is_array($data)) {
             $data = http_build_query($data);
         }
+        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->httpheader);
 
         if ($this->option['method'] == 'POST') {
             if ($data == '') {
-                $data = $this->__buildPostData(); //http_build_query($this->postdata);
+                $data = $this->postdata;
             }
-            $this->option['content'] = $data;
-
-            if (!isset($this->httpheader['Content-Type'])) {
-                if ($this->__isBinary) {
-                    $this->httpheader['Content-Type'] = 'Content-Type:  multipart/form-data; boundary=' . $this->__boundary;
-                } else {
-                    $this->httpheader['Content-Type'] = 'Content-Type: application/x-www-form-urlencoded';
-                }
+            if ($this->__isBinary) {
+                curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'POST');
+            } else {
+                curl_setopt($this->ch, CURLOPT_POST, 1);
             }
-            $this->httpheader['Content-Length'] = 'Content-Length: ' . strlen($data);
+            curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
         }
 
-        $this->option['header'] = implode("\r\n", $this->httpheader);
-        //$this->httpheader[] = 'Referer: ' . 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
 
         if ($this->maxredirs > 0) {
-            $this->option['follow_location'] = true;
-            //补一个数字 要大于1才跳转
-            $this->option['max_redirects'] = $this->maxredirs+1;
-        } else {
-            $this->option['follow_location'] = 0;
-            $this->option['max_redirects'] = 0;
+            if (ini_get("safe_mode") == false && ini_get("open_basedir") == false) {
+                curl_setopt($this->ch, CURLOPT_MAXREDIRS, $this->maxredirs);
+                curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
+            }
         }
 
-        ZBlogException::SuspendErrorHook();
-        $http_response_header = null;
-        $this->responseText = file_get_contents(($this->isgzip == true ? 'compress.zlib://' : '') . $this->url, false, stream_context_create(array('http' => $this->option)));
-        $this->responseHeader = $http_response_header;
-        ZBlogException::ResumeErrorHook();
+        if ($this->isgzip == true) {
+            curl_setopt($this->ch, CURLOPT_ENCODING, 'gzip');
+        }
+
+        curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
+
+        $result = curl_exec($this->ch);
+        $header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
+
+        $this->responseHeader = explode("\r\n", substr($result, 0, $header_size - 4));
+        $this->responseText = substr($result, $header_size);
+        curl_close($this->ch);
 
         foreach ($this->responseHeader as $key => $value) {
             if (strpos($value, 'HTTP/')===0) {
@@ -208,6 +228,7 @@ class Networkfile_get_contents implements iNetwork
     }
 
     /**
+     * 设置请求HTTP头
      * @param $bstrHeader
      * @param $bstrValue
      * @param bool $append
@@ -229,15 +250,13 @@ class Networkfile_get_contents implements iNetwork
     }
 
     /**
-     * @param $bstrItem
-     * @param $bstrValue
+     * 添加数据
+     * @param string $bstrItem 参数
+     * @param mixed $bstrValue 值
      */
-    private function add_postdata($bstrItem, $bstrValue)
+    public function add_postdata($bstrItem, $bstrValue)
     {
-        $this->postdata[$bstrItem] = array(
-            'data' => $bstrValue,
-            'type' => 'text',
-        );
+        $this->postdata[$bstrItem] = $bstrValue;
     }
     /**
      * @param string $name
@@ -246,34 +265,44 @@ class Networkfile_get_contents implements iNetwork
      */
     public function addBinary($name, $entity, $filename = null, $mime = '')
     {
+        global $zbp;
         $this->__isBinary = true;
-        $return = array();
 
-        $return['type'] = 'binary';
-        if (is_file($entity)) {
-            $return['data'] = file_get_contents($entity);
-            $return['filename'] = ($filename === null ? basename($entity) : $filename);
+        if (!is_file($entity)) {
+            $filename = ($filename === null ? $name : $filename);
+            $key = "$name\"; filename=\"$filename\"\r\nContent-Type: " . ($mime == '' ? 'application/octet-stream' : $mime) . "\r\n";
+            $this->postdata[$key] = $entity;
 
-            if ($mime == '') {
-                if (function_exists('mime_content_type')) {
-                    $mime = mime_content_type($entity);
-                } elseif (function_exists('finfo_open')) {
-                    $finfo = finfo_open(FILEINFO_MIME);
-                    $mime = finfo_file($finfo, $name);
-                    finfo_close($finfo);
-                } else {
-                    $mime = 'application/octet-stream';
-                }
-            }
-        } else {
-            $name = basename($name);
-            $return['data'] = $entity;
-            $return['filename'] = ($filename === null ? basename($entity) : $filename);
-            $mime = $mime == '' ? 'application/octet-stream' : $mime;
+            return;
         }
-        $return['mime'] = $mime;
 
-        $this->postdata[$name] = $return;
+        if ($mime == '') {
+            if (function_exists('mime_content_type')) {
+                $mime = mime_content_type($entity);
+            } elseif (function_exists('finfo_open')) {
+                $finfo = finfo_open(FILEINFO_MIME);
+                $mime = finfo_file($finfo, $name);
+                finfo_close($finfo);
+            } else {
+                $mime = 'application/octet-stream';
+            }
+        }
+
+        $filename = ($filename === null ? basename($entity) : $filename);
+        if (class_exists('CURLFile')) {
+            $this->postdata[$name] = new CURLFile($entity, $mime, $filename);
+
+            return;
+        }
+
+        $entity = realpath($entity);
+        $value = "@{$entity}";
+        if (!empty($mime)) {
+            $value .= ';type=' . $mime;
+        }
+        $value .= ';filename=' . $filename;
+
+        $this->postdata[$name] = $value;
     }
 
     /**
@@ -287,56 +316,7 @@ class Networkfile_get_contents implements iNetwork
     }
 
     /**
-     * @return string
-     */
-    private function __buildPostData()
-    {
-        if (!$this->__isBinary) {
-            $array = array();
-            foreach ($this->postdata as $name => $value) {
-                $array[$name] = $value['data'];
-            }
-
-            return http_build_query($array);
-        }
-        $this->__buildBoundary();
-        $boundary = $this->__boundary;
-        $data = '';
-
-        foreach ($this->postdata as $name => $value) {
-            $data .= "\r\n";
-            $content = $value['data'];
-            $data .= "--{$boundary}\r\n";
-            $data .= "Content-Disposition: form-data; ";
-            if ($value['type'] == 'text') {
-                $data .= 'name="' . $name . '"' . "\r\n\r\n";
-                $data .= $content; // . "\r\n";
-                //$data .= "--{$boundary}";
-            } else {
-                $filename = $value['filename'];
-                $mime = $value['mime'];
-                $data .= 'name="' . $name . '"; filename="' . $filename . '"' . "\r\n";
-                $data .= "Content-Type: $mime\r\n";
-                $data .= "\r\n$content"; //"\r\n";
-                //$data .= "--{$boundary}";
-            }
-        }
-        $data .= "\r\n--{$boundary}--\r\n";
-
-        return $data;
-    }
-
-    /**
-     * Build Boundary
-     */
-    private function __buildBoundary()
-    {
-        $boundary = '----ZBLOGPHPBOUNDARY';
-        $boundary .= substr(md5(time()), 8, 16);
-        $this->__boundary = $boundary;
-    }
-    /**
-     *
+     * 重置
      */
     private function reinit()
     {
@@ -350,13 +330,18 @@ class Networkfile_get_contents implements iNetwork
         $this->statusText = ''; #状态码文本
 
         $this->__isBinary = false;
-        $this->__boundary = '';
 
         $this->option = array();
         $this->url = '';
         $this->postdata = array();
         $this->httpheader = array();
         $this->responseHeader = array();
+        $this->parsed_url = array();
+        $this->timeout = 30;
+        $this->errstr = '';
+        $this->errno = 0;
+
+        $this->ch = curl_init();
         $this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $zbp->cache->system_environment . ') Z-BlogPHP/' . $GLOBALS['blogversion']);
         $this->setMaxRedirs(1);
     }
@@ -376,6 +361,6 @@ class Networkfile_get_contents implements iNetwork
      */
     public function setMaxRedirs($n = 0)
     {
-        $this->maxredirs = $n;
+        $this->maxredirs = (int) $n;
     }
 }

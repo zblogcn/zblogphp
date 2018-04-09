@@ -45,7 +45,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Header'] as $fpname => &$fpsigna
     </dl>
     <input type="hidden" name="username" id="username" value="" />
     <input type="hidden" name="password" id="password" value="" />
-    <input type="hidden" name="savedate" id="savedate" value="0" />
+    <input type="hidden" name="savedate" id="savedate" value="1" />
     </form>
   </div>
 </div>
@@ -57,7 +57,7 @@ $("#btnPost").click(function(){
     var strPassWord=$("#edtPassWord").val();
     var strSaveDate=$("#savedate").val()
 
-    if((strUserName=="")||(strPassWord=="")){
+    if (strUserName=== "" || strPassWord === ""){
         alert("<?php echo $lang['error']['66'] ?>");
         return false;
     }
@@ -72,7 +72,7 @@ $("#btnPost").click(function(){
 })
 
 $("#chkRemember").click(function(){
-    $("#savedate").attr("value",$("#chkRemember").attr("checked")=="checked"?30:0);
+    $("#savedate").attr("value", $("#chkRemember").attr("checked") == "checked" ? 30 : 1);
 })
 
 </script>
