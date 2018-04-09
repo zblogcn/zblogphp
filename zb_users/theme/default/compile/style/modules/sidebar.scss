@@ -1,0 +1,131 @@
+.function {
+    float: left;
+    width: 100%;
+    margin: 0 0 10px 0;
+    padding: 0;
+    text-align: left;
+
+    .function_t {
+        font-size: 1.15em;
+        height: 24px;
+        line-height: 24px;
+        margin: 0 0 2px 0;
+        padding: 5px 0 5px 1em;
+        color: #444;
+        background: #fbfbfb;
+        border: 1px solid #eeeeee;
+    }
+
+    ul {
+        text-align: left;
+        width: 95%;
+        margin: 0 0 0 0;
+        padding: 0 0 0 5%;
+        border-top: 1px solid #FFFFFF;
+        list-style-position: outside;
+        list-style-type: none;
+    }
+
+    li {
+        font-size: 1em;
+        margin: 0 0 0 0;
+        padding: 0.4em 0 0.4em 0.9em;
+        background: url("default/pointblue.gif") no-repeat 0 center;
+        width: auto;
+    }
+
+    .function_c {
+        padding: 0em;
+    }
+
+    .function_c div {
+        padding: 0.8em 0 0.5em 1em;
+        line-height: 1.5em;
+    }
+
+    a {
+        color: gray;
+    }
+
+    a:hover {
+        color: red;
+    }
+}
+
+/*------------------------------网站目录定义---------------------------*/
+
+#divMisc li {
+    padding-left: 0em;
+    background: none;
+}
+
+#divCatalog li span.feed-icon {
+    display: none;
+}
+
+#divCatalog li.li-subcate {
+    margin: 0 0 0 1em;
+}
+
+#divSearchPanel input[type="text"] {
+    border: 1px solid #bfd0d7;
+    height: 24px;
+    line-height: 24px;
+    width: 150px;
+}
+
+#divSearchPanel input[type="submit"] {
+    border: 1px solid #bfd0d7;
+    height: 28px;
+    line-height: 24px;
+    width: 50px;
+    margin-left: 0px;
+    background: #e5f0f6;
+}
+
+#divTags {
+    padding: 0 0 0 0;
+}
+
+#divTags .tag-count {
+    display: none;
+}
+
+#divTags li {
+    float: left;
+    background: none;
+    padding-left: 0;
+    padding-right: 0.5em;
+    padding: 5px 8px 5px 0;
+    display: inline;
+    clear: none;
+}
+
+#divComments li,
+divPrevious li {
+    width: 200px;
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*-----------------------------日历-----------------------------*/
+
+#divCalendar {
+    width: 100%;
+    padding: 0 0 0 0;
+}
+
+#divCalendar div {
+    width: 225px;
+    margin: 0 0 0 0;
+    padding: 5px 0 5px 5px;
+    float: left;
+}
+
+#divCalendar table {
+    width: 96%;
+    padding: 0 2% 0 2%;
+    text-align: center;
+}

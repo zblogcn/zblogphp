@@ -1,0 +1,25 @@
+{
+  "name": "zblogphp",
+  "version": "1.5.2",
+  "description": "Z-BlogPHP",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zblogcn/zblogphp.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zblogcn/zblogphp/issues"
+  },
+  "homepage": "https://github.com/zblogcn/zblogphp#readme",
+  "devDependencies": {
+    "laravel-mix-pug": "^0.1.3"
+  }
+}
