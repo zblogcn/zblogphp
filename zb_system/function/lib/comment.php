@@ -1,9 +1,17 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
+
 /**
  * 评论类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/Comment 类库
+ * @property string Name
+ * @property int|string AuthorID
+ * @property string HomePage
+ * @property string Email
+ * @property int|string RootID
+ * @property int|string ParentID
+ * @property int|string LogID
+ * @property int PostTime
  */
 class Comment extends Base
 {
@@ -41,6 +49,7 @@ class Comment extends Base
                 return $fpreturn;
             }
         }
+        return null;
     }
 
     /**
@@ -76,22 +85,11 @@ class Comment extends Base
     /**
      * @param $name
      * @param $value
-     * @return null
      */
     public function __set($name, $value)
     {
-        global $zbp;
-        if ($name == 'Author') {
-            return null;
-        }
-        if ($name == 'Comments') {
-            return null;
-        }
-        if ($name == 'Level') {
-            return null;
-        }
-        if ($name == 'Post') {
-            return null;
+        if (in_array($name, array('Author', 'Comments', 'Level', 'Post'))) {
+            return;
         }
         parent::__set($name, $value);
     }
@@ -103,7 +101,7 @@ class Comment extends Base
     public function __get($name)
     {
         global $zbp;
-        if ($name == 'Author') {
+        if ($name === 'Author') {
             $m = $zbp->GetMemberByID($this->AuthorID);
             if ($m->ID == 0) {
                 $m->Name = $this->Name;
@@ -113,8 +111,7 @@ class Comment extends Base
             }
 
             return $m;
-        }
-        if ($name == 'Comments') {
+        } else if ($name === 'Comments') {
             $array = array();
             foreach ($zbp->comments as $comment) {
                 if ($comment->ParentID == $this->ID) {
@@ -123,14 +120,10 @@ class Comment extends Base
             }
 
             return $array;
-        }
-        if ($name == 'Level') {
+        } else if ($name === 'Level') {
             return $this->GetDeep($this);
-        }
-        if ($name == 'Post') {
-            $p = $zbp->GetPostByID($this->LogID);
-
-            return $p;
+        } else if ($name === 'Post') {
+            return $zbp->GetPostByID($this->LogID);
         }
 
         return parent::__get($name);
@@ -178,6 +171,7 @@ class Comment extends Base
     /**
      * 得到评论深度
      * @param object $object
+     * @param int $deep
      * @return int 评论深度
      */
     private function GetDeep(&$object, $deep = 0)

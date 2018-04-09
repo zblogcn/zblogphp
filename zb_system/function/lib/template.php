@@ -132,7 +132,7 @@ class Template
     }
 
     /**
-     * @param $filesarray
+     * 编译所有文件
      */
     public function CompileFiles()
     {
@@ -144,6 +144,10 @@ class Template
     }
 
 
+    /**
+     * 初始化并编译所有文件
+     * @return bool
+     */
     public function BuildTemplate()
     {
         global $zbp;
@@ -158,7 +162,8 @@ class Template
         }
         $this->addNonexistendTags();
 
-        return $this->CompileFiles();
+        $this->CompileFiles();
+        return true;
     }
 
 
@@ -513,10 +518,10 @@ class Template
     }
 
 
-
-
     /**
      * 显示模板
+     * @param string $entryPage
+     * @throws Exception
      */
     public function Display($entryPage = "")
     {
@@ -537,7 +542,7 @@ class Template
         }
         unset($ak, $av);
 
-        #入口处将tags里的变量提升全局!!!
+        // 入口处将tags里的变量提升全局
         foreach ($this->templateTags as $key => &$value) {
             $$key = &$value;
         }
@@ -546,7 +551,10 @@ class Template
     }
 
     /**
+     * 获取输出内容
+     * @param string $entryPage
      * @return string
+     * @throws Exception
      */
     public function Output($entryPage = "")
     {

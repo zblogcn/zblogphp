@@ -10,11 +10,11 @@ class ZBlogPHP
 
     private static $_zbp = null;
     /**
-     * @var null|string 版本号
+     * @var string 版本号
      */
     public $version = null;
     /**
-     * @var Database_Base 数据库
+     * @var Database_Interface 数据库
      */
     public $db = null;
     /**
@@ -30,114 +30,114 @@ class ZBlogPHP
      */
     public $langpacklist = array();
     /**
-     * @var null|string 路径
+     * @var string 路径
      */
     public $path = null;
     /**
-     * @var null|string 域名
+     * @var string 域名
      */
     public $host = null;
     /**
-     * @var null cookie作用域
+     * @var string cookie作用域
      */
     public $cookiespath = null;
     /**
-     * @var null guid
+     * @var string guid
      */
     public $guid = null;
     /**
-     * @var null|string 当前链接
+     * @var string 当前链接
      */
     public $currenturl = null;
     /**
-     * @var null|string 当前链接
+     * @var string 当前链接
      */
     public $fullcurrenturl = null;
     /**
-     * @var null|string 用户目录
+     * @var string 用户目录
      */
     public $usersdir = null;
     /**
-     * @var null 验证码地址
+     * @var string 验证码地址
      */
     public $validcodeurl = null;
     /**
-     * @var null
+     * @var string
      */
     public $feedurl = null;
     /**
-     * @var null
+     * @var string
      */
     public $searchurl = null;
     /**
-     * @var null
+     * @var string
      */
     public $ajaxurl = null;
     /**
-     * @var null
+     * @var string
      */
     public $xmlrpcurl = null;
     /**
-     * @var array 用户数组
+     * @var Member[] 用户数组
      */
     public $members = array();
     /**
-     * @var array 用户数组（以用户名为键）
+     * @var Member[] 用户数组（以用户名为键）
      */
     public $membersbyname = array();
     /**
-     * @var array 分类数组
+     * @var Category[] 分类数组
      */
     public $categorys = array();
     public $categories = null;
     /**
-     * @var array 分类数组（已排序）
+     * @var Category[] 分类数组（已排序）
      */
     public $categorysbyorder = array();
     public $categoriesbyorder = null;
     /**
-     * @var array 模块数组
+     * @var Module[] 模块数组
      */
     public $modules = array();
     /**
-     * @var array 模块数组（以文件名为键）
+     * @var Module[] 模块数组（以文件名为键）
      */
     public $modulesbyfilename = array();
     /**
-     * @var array 配置选项
+     * @var Config[] 配置选项
      */
     public $configs = array();
     /**
-     * @var array 标签数组
+     * @var Tag[] 标签数组
      */
     public $tags = array();
     /**
-     * @var array 标签数组（以标签名为键）
+     * @var Tag[] 标签数组（以标签名为键）
      */
     public $tagsbyname = array();
     /**
-     * @var array 评论数组
+     * @var Comment[] 评论数组
      */
     public $comments = array();
     /**
-     * @var array 文章列表数组
+     * @var Post[] 文章列表数组
      */
     public $posts = array();
 
     /**
-     * @var null|string 当前页面标题
+     * @var string 当前页面标题
      */
     public $title = null;
     /**
-     * @var null 网站名
+     * @var string 网站名
      */
     public $name = null;
     /**
-     * @var null 网站子标题
+     * @var string 网站子标题
      */
     public $subname = null;
     /**
-     * @var null 当前主题
+     * @var App 当前主题
      */
     public $theme = null;
     /**
@@ -145,16 +145,16 @@ class ZBlogPHP
      */
     public $themeinfo = array();
     /**
-     * @var null 当前主题风格
+     * @var string 当前主题风格
      */
     public $style = null;
 
     /**
-     * @var null 当前用户
+     * @var Member 当前用户
      */
     public $user = null;
     /**
-     * @var Config|null 缓存
+     * @var Config 缓存
      */
     public $cache = null;
 
@@ -252,7 +252,7 @@ class ZBlogPHP
     /**
      * 初始化数据库连接
      * @param string $type 数据连接类型
-     * @return object or null
+     * @return Database_Interface
      */
     public static function InitializeDB($type)
     {
@@ -701,7 +701,7 @@ class ZBlogPHP
         if ($this->db->dbpre) {
             $this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
         }
-        if ($this->db->type == 'pgsql') {
+        if ($this->db->type === 'postgresql') {
             foreach ($this->datainfo as $key => &$value) {
                 foreach ($value as $k2 => &$v2) {
                     $v2[0] = strtolower($v2[0]);
@@ -758,6 +758,7 @@ class ZBlogPHP
         $this->configs = array();
         $sql = $this->db->sql->Select($this->table['Config'], array('*'), '', '', '', '');
 
+        /** @var Config[] $array */
         $array = $this->GetListType('Config', $sql);
         foreach ($array as $c) {
             $n = $c->GetItemName();
@@ -765,7 +766,7 @@ class ZBlogPHP
         }
 
         return;
-
+/*
         $configs_name = $configs_namevalue = array();
         foreach ($array as $c) {
             $n = $c->GetItemName();
@@ -777,6 +778,7 @@ class ZBlogPHP
             $this->configs[$name] = $configs_namevalue[$name];
         }
         unset($configs_name, $configs_namevalue);
+*/
     }
 
     /**
@@ -821,7 +823,7 @@ class ZBlogPHP
         if (!isset($this->configs[$name])) {
             $name = FilterCorrectName($name);
             if (!$name) {
-                return;
+                return null;
             }
 
             $this->configs[$name] = new Config($name);
@@ -995,17 +997,14 @@ class ZBlogPHP
         return true;
     }
 
-################################################################################################################
-    #权限及验证类
-
     /**
      * 验证操作权限
      * @param string $action 操作
+     * @param int|string $level
      * @return bool
      */
     public function CheckRights($action, $level = null)
     {
-
         if ($level === null) {
             $level = $this->user->Level;
         }
@@ -1100,7 +1099,7 @@ class ZBlogPHP
      * 验证用户登录（一次MD5密码）
      * @param string $name 用户名
      * @param string $md5pw md5加密后的密码
-     * @param object $member 返回读取成功的member对象
+     * @param Member $member 返回读取成功的member对象
      * @return bool
      */
     public function Verify_MD5($name, $md5pw, &$member = null)
@@ -1265,7 +1264,7 @@ class ZBlogPHP
                         if ($this->categories[$id2]->ParentID == $id1) {
                             $this->categories[$id2]->RootID = $id0;
                             $this->categories[$id0]->ChildrenCategories[] = $this->categories[$id2];
-                            $this->categories[$id1]->SubCategorys[] = $this->categories[$id2];
+                            $this->categories[$id1]->SubCategories[] = $this->categories[$id2];
                             $this->categories[$id1]->ChildrenCategories[] = $this->categories[$id2];
                             $this->categoriesbyorder[$id2] = &$this->categories[$id2];
                             if (!isset($lv3[$id2])) {
@@ -1276,7 +1275,7 @@ class ZBlogPHP
                                     $this->categories[$id3]->RootID = $id0;
                                     $this->categories[$id0]->ChildrenCategories[] = $this->categories[$id3];
                                     $this->categories[$id1]->ChildrenCategories[] = $this->categories[$id3];
-                                    $this->categories[$id2]->SubCategorys[] = $this->categories[$id3];
+                                    $this->categories[$id2]->SubCategories[] = $this->categories[$id3];
                                     $this->categories[$id2]->ChildrenCategories[] = $this->categories[$id3];
                                     $this->categoriesbyorder[$id3] = &$this->categories[$id3];
                                 }
@@ -1502,10 +1501,9 @@ class ZBlogPHP
 
     /**
      * 重新读取语言包
-     * @param string $default 默认语言
      * @throws Exception
      */
-    public function ReloadLanguages($default)
+    public function ReloadLanguages()
     {
         $array = $this->langpacklist;
         $this->lang = $this->langpacklist = array();
@@ -1629,13 +1627,10 @@ class ZBlogPHP
     }
 
 
-################################################################################################################
-    #加载数据对像List函数
-
     /**
      * 查询指定数据结构的sql并返回Base对象列表
-     * @param string $table 数据表
-     * @param string $datainfo 数据字段
+     * @param string|array $table 数据表
+     * @param array $datainfo 数据字段
      * @param string $sql SQL操作语句
      * @return array
      */
@@ -1659,10 +1654,10 @@ class ZBlogPHP
 
     /**
      * 查询ID数据的指定数据结构的sql并返回Base对象列表
-     * @param string $table 数据表
-     * @param string $datainfo 数据字段
+     * @param string|array $table 数据表
+     * @param array $datainfo 数据字段
      * @param array $array ID数组
-     * @return array
+     * @return Base[]
      */
     public function GetListCustomByArray($table, $datainfo, $array)
     {
@@ -1697,7 +1692,7 @@ class ZBlogPHP
      *
      * @param $type
      * @param $sql
-     * @return array
+     * @return Base[]
      */
     public function GetListType($type, $sql)
     {
@@ -1709,6 +1704,7 @@ class ZBlogPHP
             return array();
         }
         foreach ($array as $a) {
+            /** @var Base $l */
             $l = new $type();
             $l->LoadInfoByAssoc($a);
             $list[] = $l;
@@ -1743,6 +1739,7 @@ class ZBlogPHP
             return array();
         }
         foreach ($array as $a) {
+            /** @var Base $l */
             $l = new $type();
             $l->LoadInfoByAssoc($a);
             $list[] = $l;
@@ -1824,6 +1821,8 @@ class ZBlogPHP
         }
 
         $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);
+
+        /** @var Post[] $array */
         $array = $this->GetListType('Post', $sql);
 
         foreach ($array as $a) {
@@ -2006,9 +2005,11 @@ class ZBlogPHP
 
     /**
      * 根据别名得到相应数据
-     * @param &$object   缓存对象
-     * @param $val
-     * @param $backAttr
+     * @param Base[]|string &$object   缓存对象
+     * @param string $val
+     * @param string $backAttr
+     * @param string $className
+     * @return Base|null
      */
     private function GetSomeThingByAlias($object, $val, $backAttr = null, $className = null)
     {
@@ -2024,11 +2025,13 @@ class ZBlogPHP
             return $this->GetSomeThing($object, $backAttr, $val, $className);
         }
     }
+
     /**
      * 根据ID得到相应数据
-     * @param &$object   缓存对象
-     * @param $className 找不到ID时初始化对象
-     * @param $id
+     * @param Base[] &$object   缓存对象
+     * @param string $className 找不到ID时初始化对象的类名
+     * @param int|string $id 与此类相关的ID
+     * @return Base|null
      */
     private function GetSomeThingById(&$object, $className, $id)
     {
@@ -2054,6 +2057,7 @@ class ZBlogPHP
                 return $object[$id];
             } elseif ($className == "Post" || $className == "Comment" || $className == "Tag") {
                 // 文章需要读取，其他的直接返回空对象即可
+                /** @var Base $p */
                 $p = new $className;
                 $p->LoadInfoByID($id);
                 $object[$id] = $p;
@@ -2063,20 +2067,20 @@ class ZBlogPHP
                 return $this->GetSomeThingByAttr($object, 'ID', $id);
             }
         } else {
+            /** @var Base $p */
             $p = new $className;
             $p->LoadInfoByID($id);
 
             return $p;
         }
-
-        return null;
     }
 
     /**
      * 根据属性值得到相应数据
-     * @param &$object   缓存对象
-     * @param $attr
-     * @param $val
+     * @param Base[] &$object   缓存对象
+     * @param string $attr 属性名
+     * @param mixed $val 要查找的值
+     * @return null
      */
     private function GetSomeThingByAttr(&$object, $attr, $val)
     {
@@ -2095,12 +2099,13 @@ class ZBlogPHP
 
     /**
      * 获取数据通用函数
-     * @param  $object 缓存对象（string / object）
-     * @param  $attr       欲查找的属性
-     * @param  $argu       查找内容
-     * @param  $className  对象未找到初始化内容
+     * @param  Base[]|string $object 缓存对象（string / object）
+     * @param  string $attr 欲查找的属性
+     * @param  mixed $val 要查找内容
+     * @param  string $className 对象未找到时，初始化类名
+     * @return Base|null
      */
-    public function GetSomeThing($object, $attr, $argu, $className = null)
+    public function GetSomeThing($object, $attr, $val, $className = null)
     {
         $cacheObject = null;
         if (is_object($object)) {
@@ -2109,11 +2114,12 @@ class ZBlogPHP
             $cacheObject = &$this->$object;
         }
         if ($attr == "ID") {
-            $ret = $this->GetSomeThingById($cacheObject, $className, $argu);
+            $ret = $this->GetSomeThingById($cacheObject, $className, $val);
         } else {
-            $ret = $this->GetSomeThingByAttr($cacheObject, $attr, $argu);
+            $ret = $this->GetSomeThingByAttr($cacheObject, $attr, $val);
         }
         if ($ret === null && !is_null($className)) {
+            /** @var Base $ret */
             $ret = new $className;
         }
 
@@ -2123,7 +2129,7 @@ class ZBlogPHP
     /**
      * 通过ID获取文章实例
      * @param int $id
-     * @return Post
+     * @return Post|Base
      */
     public function GetPostByID($id)
     {
@@ -2133,7 +2139,7 @@ class ZBlogPHP
     /**
      * 通过ID获取分类实例
      * @param int $id
-     * @return Category
+     * @return Category|Base
      */
     public function GetCategoryByID($id)
     {
@@ -2143,7 +2149,7 @@ class ZBlogPHP
     /**
      * 通过分类名获取分类实例
      * @param string $name
-     * @return Category
+     * @return Category|Base
      */
     public function GetCategoryByName($name)
     {
@@ -2153,7 +2159,8 @@ class ZBlogPHP
     /**
      * 通过分类别名获取分类实例
      * @param string $name
-     * @return Category
+     * @param null $backKey
+     * @return Category|Base
      */
     public function GetCategoryByAlias($name, $backKey = null)
     {
@@ -2173,7 +2180,7 @@ class ZBlogPHP
     /**
      * 通过ID获取模块实例
      * @param int $id
-     * @return Module
+     * @return Module|Base
      */
     public function GetModuleByID($id)
     {
@@ -2183,7 +2190,7 @@ class ZBlogPHP
     /**
      * 通过FileName获取模块实例
      * @param string $fn
-     * @return Module
+     * @return Module|Base
      */
     public function GetModuleByFileName($fn)
     {
@@ -2193,10 +2200,11 @@ class ZBlogPHP
     /**
      * 通过ID获取用户实例
      * @param int $id
-     * @return Member
+     * @return Member|Base
      */
     public function GetMemberByID($id)
     {
+        /** @var Member $ret */
         $ret = $this->GetSomeThing('members', 'ID', $id, 'Member');
         if ($ret->ID == 0) {
             $ret->Guid = GetGuid();
@@ -2215,7 +2223,7 @@ class ZBlogPHP
     /**
      * 通过用户名获取用户实例(不区分大小写)
      * @param string $name
-     * @return Member
+     * @return Member|Base
      */
     public function GetMemberByName($name)
     {
@@ -2237,6 +2245,8 @@ class ZBlogPHP
 
         $like = ($this->db->type == 'pgsql') ? 'ILIKE' : 'LIKE';
         $sql = $this->db->sql->Select($this->table['Member'], '*', array(array($like, 'mem_Name', $name)), null, 1, null);
+
+        /** @var Member[] $am */
         $am = $this->GetListType('Member', $sql);
         if (count($am) > 0) {
             $m = $am[0];
@@ -2256,7 +2266,7 @@ class ZBlogPHP
     /**
      * 通过获取用户名或别名实例(不区分大小写)
      * @param string $name
-     * @return Member
+     * @return Member|Base
      */
     public function GetMemberByNameOrAlias($name)
     {
@@ -2279,6 +2289,7 @@ class ZBlogPHP
             )))->limit(1)->sql;
 
 
+        /** @var Member[] $am */
         $am = $this->GetListType('Member', $sql);
         if (count($am) > 0) {
             $m = $am[0];
@@ -2308,6 +2319,7 @@ class ZBlogPHP
         }
 
         $sql = $this->db->sql->Select($this->table['Member'], '*', array(array('LIKE', 'mem_Email', $email)), null, 1, null);
+        /** @var Member[] $am */
         $am = $this->GetListType('Member', $sql);
         if (count($am) > 0) {
             $m = $am[0];
@@ -2326,6 +2338,8 @@ class ZBlogPHP
 
     /**
      * 检查指定名称的用户是否存在(不区分大小写)
+     * @param $name
+     * @return bool
      */
     public function CheckMemberNameExist($name)
     {
@@ -2336,6 +2350,8 @@ class ZBlogPHP
 
     /**
      * 检查指定名称或别名的用户是否存在(不区分大小写)
+     * @param $name
+     * @return bool
      */
     public function CheckMemberByNameOrAliasExist($name)
     {
@@ -2346,6 +2362,8 @@ class ZBlogPHP
 
     /**
      * 检查指定邮箱的用户是否存在(不区分大小写)
+     * @param $email
+     * @return bool
      */
     public function CheckMemberByEmailExist($email)
     {
@@ -2357,7 +2375,7 @@ class ZBlogPHP
     /**
      * 通过ID获取评论实例
      * @param int $id
-     * @return Comment
+     * @return Comment|Base
      */
     public function GetCommentByID($id)
     {
@@ -2367,7 +2385,7 @@ class ZBlogPHP
     /**
      * 通过ID获取附件实例
      * @param int $id
-     * @return Upload
+     * @return Upload|Base
      */
     public function GetUploadByID($id)
     {
@@ -2377,7 +2395,8 @@ class ZBlogPHP
     /**
      * 通过tag名获取tag实例
      * @param string $name
-     * @return Tag
+     * @param null $backKey
+     * @return Tag|Base
      */
     public function GetTagByAlias($name, $backKey = null)
     {
@@ -2391,7 +2410,7 @@ class ZBlogPHP
     /**
      * 通过tag名获取tag实例
      * @param string $name
-     * @return Tag
+     * @return Tag|Base
      */
     public function GetTagByAliasOrName($name)
     {
@@ -2413,7 +2432,7 @@ class ZBlogPHP
     /**
      * 通过ID获取tag实例
      * @param int $id
-     * @return Tag
+     * @return Tag|Base
      */
     public function GetTagByID($id)
     {
@@ -2552,9 +2571,11 @@ class ZBlogPHP
 
     /**
      * 获取全部置顶文章（优先从cache里读数组）
+     * @param int $type
+     * @return array
      */
-    public function GetTopArticle($type=0) {
-        $varname='top_post_array_' . $type;
+    public function GetTopArticle($type = 0) {
+        $varname = 'top_post_array_' . $type;
         if ($this->cache->HasKey($varname) == false) {
             return array();
         }
@@ -2598,34 +2619,6 @@ class ZBlogPHP
     }
 
     /**
-     * 获取会话WebToken
-     * @param $wt_id
-     * @param $day 默认1天有效期，1小时为1/24，1分钟为1/(24*60)
-     * @return string
-     */
-    public function GetWebToken($wt_id = '', $day = 1)
-    {
-        $t = intval( $day * 24 * 3600 ) + time();
-        return CreateWebToken($wt_id, $t, $this->guid, $this->user->Status, $this->user->ID, $this->user->Password);
-    }
-
-    /**
-     * 验证会话WebToken
-     * @param $wt
-     * @param $wt_id
-     * @return bool
-     */
-    public function ValidWebToken($wt, $wt_id = '')
-    {
-
-        if (VerifyWebToken($wt, $wt_id, $this->guid, $this->user->Status, $this->user->ID, $this->user->Password) === true) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * 获取CSRF Token
      * @param string $id 应用ID，可以保证每个应用获取不同的Token
      * @return string
@@ -2660,7 +2653,7 @@ class ZBlogPHP
      *
      * @api Filter_Plugin_Zbp_ShowValidCode 如该接口未被挂载则显示默认验证图片
      * @param string $id 命名事件
-     * @return mixed
+     * @return bool
      */
     public function ShowValidCode($id = '')
     {
@@ -2671,38 +2664,34 @@ class ZBlogPHP
         $_vc = new ValidateCode();
         $_vc->GetImg();
         setcookie('captcha_' . crc32($this->guid . $id), md5($this->guid . date("Ymdh") . $_vc->GetCode()), null, $this->cookiespath);
+        return true;
     }
 
     /**
      * 比对验证码
      *
      * @api Filter_Plugin_Zbp_CheckValidCode 如该接口未被挂载则比对默认验证码
-     * @param string $vaidcode 验证码数值
+     * @param string $verifyCode 验证码数值
      * @param string $id 命名事件
      * @return bool
      */
-    public function CheckValidCode($vaidcode, $id = '')
+    public function CheckValidCode($verifyCode, $id = '')
     {
-        $vaidcode = strtolower($vaidcode);
+        $verifyCode = strtolower($verifyCode);
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_CheckValidCode'] as $fpname => &$fpsignal) {
-            return $fpname($vaidcode, $id); //*
+            return $fpname($verifyCode, $id); //*
         }
 
         $original = GetVars('captcha_' . crc32($this->guid . $id), 'COOKIE');
         setcookie('captcha_' . crc32($this->guid . $id), '', time() - 3600, $this->cookiespath);
 
-        return (md5($this->guid . date("Ymdh") . strtolower($vaidcode) ) == $original
+        return (md5($this->guid . date("Ymdh") . strtolower($verifyCode) ) == $original
                 ||
-                md5($this->guid . date("Ymdh", time() - (3600 * 1)) . strtolower($vaidcode) ) == $original
+                md5($this->guid . date("Ymdh", time() - (3600 * 1)) . strtolower($verifyCode) ) == $original
                 );
     }
 
 
-
-
-################################################################################################################
-    #杂项
-    #$type=category,tag,page,item
     /**
      * 向导航菜单添加相应条目
      * @param string $type $type=category,tag,page,item
@@ -3009,12 +2998,12 @@ class ZBlogPHP
 
         $typeId = (int) $typeId;
         $name = strtolower(trim($name));
-        if ($typeIf > 99) {
-            if (isset($this->posttype[$typeIf])) {
+        if ($typeId > 99) {
+            if (isset($this->posttype[$typeId])) {
                 $this->ShowError(87, __FILE__, __LINE__);
             }
         }
-        $this->posttype[$typeIf] = array($name, $urlRule, $template, $categoryType, $tagType);
+        $this->posttype[$typeId] = array($name, $urlRule, $template, $categoryType, $tagType);
     }
 
     public function GetPostType_Name($typeid)
@@ -3065,6 +3054,9 @@ class ZBlogPHP
 
     /**
      * 注册Action
+     * @param $name
+     * @param $level
+     * @param $title
      */
     public function RegAction($name, $level, $title)
     {
@@ -3155,5 +3147,34 @@ class ZBlogPHP
      */
     public function AddBuildModuleAll()
     {
+    }
+
+    /**
+     * 获取会话WebToken
+     * @deprecated 毫无意义，即将废弃
+     * @param string $wt_id
+     * @param int $day 默认1天有效期，1小时为1/24，1分钟为1/(24*60)
+     * @return string
+     */
+    public function GetWebToken($wt_id = '', $day = 1)
+    {
+        $t = intval( $day * 24 * 3600 ) + time();
+        return CreateWebToken($wt_id, $t, $this->guid, $this->user->Status, $this->user->ID, $this->user->Password);
+    }
+
+    /**
+     * 验证会话WebToken
+     * @deprecated 毫无意义，即将废弃
+     * @param $wt
+     * @param $wt_id
+     * @return bool
+     */
+    public function ValidWebToken($wt, $wt_id = '')
+    {
+        if (VerifyWebToken($wt, $wt_id, $this->guid, $this->user->Status, $this->user->ID, $this->user->Password) === true) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -1,9 +1,12 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
+
 /**
- * 自定义域类
+ * 扩展内容类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib 类库
+ * @property string Name
+ * @property int|string Count
+ * @property string Url
  */
 class Metas
 {

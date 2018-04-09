@@ -14,7 +14,7 @@
 class DbSql
 {
     /**
-     * @var null 数据库连接实例
+     * @var Database_Interface 数据库连接实例
      */
     private $db = null;
     /**
@@ -32,9 +32,10 @@ class DbSql
         $this->dbclass = get_class($this->db);
         $this->sql = 'sql_' . $this->db->type;
     }
+
     /**
      * 替换数据表前缀
-     * @param string $
+     * @param string $s
      * @return string
      */
     public function ReplacePre(&$s)
@@ -43,6 +44,9 @@ class DbSql
         return $s;
     }
 
+    /**
+     * @return SQL_Global
+     */
     public function get()
     {
         $sql = new $this->sql($this->db);
@@ -68,7 +72,6 @@ class DbSql
      */
     public function ExistTable($table, $dbname = '')
     {
-
         return $this->get()->exist($table, $dbname)->sql;
     }
 
@@ -76,6 +79,7 @@ class DbSql
      * 创建表，返回构造完整的SQL语句
      * @param string $table
      * @param array $datainfo
+     * @param null $engine
      * @return string
      */
     public function CreateTable($table, $datainfo, $engine = null)
@@ -142,8 +146,8 @@ class DbSql
     /**
      * 构造计数语句
      * @param string $table
-     * @param string $count
-     * @param string $where
+     * @param mixed $count
+     * @param mixed $where
      * @param null $option
      * @return string 返回构造的语句
      */
@@ -159,8 +163,8 @@ class DbSql
     /**
      * 构造数据更新语句
      * @param string $table
-     * @param string $keyvalue
-     * @param string $where
+     * @param mixed $keyvalue
+     * @param mixed $where
      * @param array|null $option
      * @return string 返回构造的语句
      */
@@ -172,7 +176,7 @@ class DbSql
     /**
      * 构造数据插入语句
      * @param string $table
-     * @param string $keyvalue
+     * @param mixed $keyvalue
      * @return string 返回构造的语句
      */
     public function Insert($table, $keyvalue)
@@ -184,7 +188,7 @@ class DbSql
     /**
      * 构造数据删除语句
      * @param string $table
-     * @param string $where
+     * @param mixed $where
      * @param array|null $option
      * @return string 返回构造的语句
      */

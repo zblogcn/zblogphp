@@ -26,7 +26,7 @@ class UrlRule
      */
     public $IsIndex = false;//指示是否为首页的规则
 
-    public static $categorylayer = '-1';
+    public static $categoryLayer = '-1';
 
     /**
      * @param $url
@@ -189,17 +189,17 @@ class UrlRule
             $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
             $url = str_replace('%date%', '(?P<date>[0-9\-]+)', $url);
             if ($type == 'cate') {
-                if (UrlRule::$categorylayer == -1) {
+                if (UrlRule::$categoryLayer == -1) {
                     foreach ($zbp->categorys as $c) {
-                        if ($c->Level > UrlRule::$categorylayer && strpos($c->Alias, '/')!==false) {
-                            UrlRule::$categorylayer = $c->Level;
+                        if ($c->Level > UrlRule::$categoryLayer && strpos($c->Alias, '/')!==false) {
+                            UrlRule::$categoryLayer = $c->Level;
                         }
                     }
-                    if (UrlRule::$categorylayer == -1) {
-                        UrlRule::$categorylayer = 0;
+                    if (UrlRule::$categoryLayer == -1) {
+                        UrlRule::$categoryLayer = 0;
                     }
                 }
-                switch (UrlRule::$categorylayer) {
+                switch (UrlRule::$categoryLayer) {
                     case 3:
                         $fullcategory='[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
                         break;
@@ -391,17 +391,17 @@ class UrlRule
     {
         global $zbp;
 
-        if (UrlRule::$categorylayer == -1) {
+        if (UrlRule::$categoryLayer == -1) {
             foreach ($zbp->categorys as $c) {
-                if ($c->Level > UrlRule::$categorylayer && strpos($c->Alias, '/')!==false) {
-                    UrlRule::$categorylayer = $c->Level;
+                if ($c->Level > UrlRule::$categoryLayer && strpos($c->Alias, '/')!==false) {
+                    UrlRule::$categoryLayer = $c->Level;
                 }
             }
-            if (UrlRule::$categorylayer == -1) {
-                UrlRule::$categorylayer = 0;
+            if (UrlRule::$categoryLayer == -1) {
+                UrlRule::$categoryLayer = 0;
             }
         }
-        switch (UrlRule::$categorylayer) {
+        switch (UrlRule::$categoryLayer) {
             case 3:
                 $fullcategory='[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
                 break;

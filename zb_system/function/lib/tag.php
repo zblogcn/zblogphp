@@ -1,9 +1,14 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
+
 /**
  * Tag类
  *
  * @package Z-BlogPHP
  * @subpackage ClassLib/Tag 类库
+ * @property string Template
+ * @property string Name
+ * @property string ID
+ * @property string Alias
  */
 class Tag extends Base
 {
@@ -31,25 +36,25 @@ class Tag extends Base
                 return $fpreturn;
             }
         }
+        return null;
     }
 
     /**
      * @param $name
      * @param $value
-     * @return null|string
      */
     public function __set($name, $value)
     {
         global $zbp;
         if ($name == 'Url') {
-            return null;
+            return;
         }
         if ($name == 'Template') {
             if ($value == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
                 $value = '';
             }
-
-            return $this->data[$name] = $value;
+            $this->data[$name] = $value;
+            return;
         }
         parent::__set($name, $value);
     }

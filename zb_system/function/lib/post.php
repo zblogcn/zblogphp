@@ -1,9 +1,26 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
+
 /**
  * 文章类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/Post 类库
+ * @property int|string ID 文章ID
+ * @property string Title 文章标题
+ * @property string Intro 文章摘要
+ * @property string Content 文章内容
+ * @property int Top
+ * @property int Type 文章类型
+ * @property string Template 文章模板
+ * @property int|string AuthorID 文章作者ID
+ * @property Member Author 文章作者类
+ * @property int|string CateID 文章分类ID
+ * @property Category Category 文章分类
+ * @property int|string Status 文章状态
+ * @property int PostTime 发表时间
+ * @property int IsTop 文章置顶状态
+ * @property string Tag 文章标签
+ * @property string Alias 文章别名
+ * @property string Url 文章地址
  */
 class Post extends Base
 {
@@ -37,6 +54,7 @@ class Post extends Base
                 return $fpreturn;
             }
         }
+        return null;
     }
 
     /**
@@ -85,7 +103,6 @@ class Post extends Base
     /**
      * @param $name
      * @param $value
-     * @return null|string
      */
     public function __set($name, $value)
     {
@@ -102,27 +119,26 @@ class Post extends Base
             case 'Prev':
             case 'Next':
             case 'RelatedList':
-                return null;
+                return;
             break;
             case 'Template':
                 if ($value == $zbp->GetPostType_Template($this->Type)) {
                     $value = '';
                 }
-
-                return $this->data[$name] = $value;
+                $this->data[$name] = $value;
+                return;
             break;
             case 'TopType':
                 if ($value == 'global') {
                     $this->Top = 1;
-                }elseif ($value == 'index') {
+                } elseif ($value == 'index') {
                     $this->Top = 2;
-                }elseif ($value == 'category') {
+                } elseif ($value == 'category') {
                     $this->Top = 4;
                 } elseif ($value == '' || $value == null) {
                     $this->Top = 0;
                 }
-
-                return null;
+                return;
             break;
             default:
                 parent::__set($name, $value);

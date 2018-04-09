@@ -303,6 +303,7 @@ class Network_curl implements Network_Interface
         $value .= ';filename=' . $filename;
 
         $this->postdata[$name] = $value;
+        return true;
     }
 
     /**

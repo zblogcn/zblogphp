@@ -149,6 +149,7 @@ class Network_fsockopen implements Network_Interface
     /**
      * @param string $varBody
      * @return mixed|void
+     * @throws Exception
      */
     public function send($varBody = '')
     {
@@ -351,6 +352,7 @@ class Network_fsockopen implements Network_Interface
         $return['mime'] = $mime;
 
         $this->postdata[$name] = $return;
+        return true;
     }
 
     /**

@@ -1,4 +1,18 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
+
+/**
+ * @property string sql 最终生成的SQL语句
+ * @method SQL_Global select(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL_Global insert(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL_Global update(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL_Global delete(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL_Global create(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL_Global drop(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL_Global count(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL_Global min(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL_Global max(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL_Global sum(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ */
 class SQL_Global
 {
 
@@ -67,7 +81,7 @@ class SQL_Global
     /**
      * @param $callName
      * @param $argu
-     * @return $this|mixed
+     * @return SQL_Global|mixed
      * @throws Exception
      */
     public function __call($callName, $argu)
@@ -162,7 +176,7 @@ class SQL_Global
     }
     /**
      * Re-initialize this class
-     * @return $this
+     * @return SQL_Global
      */
     public function reset()
     {
@@ -179,7 +193,7 @@ class SQL_Global
     /**
      * Set SQL query option
      * @param $option
-     * @return $this
+     * @return SQL_Global
      */
     public function option($option)
     {
@@ -210,7 +224,7 @@ class SQL_Global
     /**
      * Set column for query
      * @param $columns
-     * @return $this
+     * @return SQL_Global
      */
     public function column($columns)
     {
@@ -248,6 +262,7 @@ class SQL_Global
      * @example limit(5)
      * @example limit(10, 1)
      * @example limit(array(10, 1))
+     * @return SQL_Global
      */
     public function limit()
     {
@@ -280,7 +295,7 @@ class SQL_Global
      * @example array(array('=', 'a', 'b'))
      * @example array('=', 'a', 'b'), array('=', 'a', 'b')
      * @example array('=', 'a', 'b')
-     * @return $this
+     * @return SQL_Global
      */
     public function where()
     {
@@ -306,7 +321,7 @@ class SQL_Global
     /**
      * Set having
      * @param $having
-     * @return $this
+     * @return SQL_Global
      */
     public function having($having)
     {
@@ -327,7 +342,7 @@ class SQL_Global
     /**
      * GroupBy
      * @param $groupBy
-     * @return $this
+     * @return SQL_Global
      */
     public function groupBy($groupBy)
     {
@@ -346,7 +361,7 @@ class SQL_Global
     }
     /**
      * Order by
-     * @return  $this
+     * @return  SQL_Global
      */
     public function orderBy()
     {
@@ -371,7 +386,7 @@ class SQL_Global
     /**
      * Set data for INSERT & UPDATE
      * @example array('key' => 'value', 'key2' => 'value2')
-     * @return $this
+     * @return SQL_Global
      */
     public function data()
     {
@@ -387,11 +402,12 @@ class SQL_Global
     /**
      * @todo
      * @param string $table
-     * @return string
+     * @param string $dbname
+     * @return SQL_Global
      */
-    public function exist($table)
+    public function exist($table, $dbname = '')
     {
-        return $this->sql();
+        return $this;
     }
 
     /**
@@ -418,6 +434,7 @@ class SQL_Global
 
         return implode(' ', $sql);
     }
+
 
     /**
      *

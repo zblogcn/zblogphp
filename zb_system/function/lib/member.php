@@ -3,7 +3,16 @@
  * 用户类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/Member 类库
+ * @property int|string ID
+ * @property int|string Level 用户等级
+ * @property string Name
+ * @property string Password
+ * @property string Template
+ * @property string Email
+ * @property string HomePage
+ * @property string Guid
+ * @property string Alias
+ * @property string PassWord_MD5Path
  */
 class Member extends Base
 {
@@ -45,44 +54,25 @@ class Member extends Base
                 return $fpreturn;
             }
         }
+        return null;
     }
 
     /**
      * 自定义参数及值
      * @param $name
      * @param $value
-     * @return null|string
      */
     public function __set($name, $value)
     {
         global $zbp;
-        if ($name == 'Url') {
-            return null;
-        }
-        if ($name == 'Avatar') {
-            return null;
-        }
-        if ($name == 'LevelName') {
-            return null;
-        }
-        if ($name == 'EmailMD5') {
-            return null;
-        }
-        if ($name == 'StaticName') {
-            return null;
-        }
-        if ($name == 'Template') {
+        if (in_array($name, array('Url', 'Avatar', 'LevelName', 'EmailMD5', 'StaticName', 'PassWord_MD5Path', 'IsGod'))) {
+            return;
+        } else if ($name == 'Template') {
             if ($value == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
                 $value = '';
             }
-
-            return $this->data[$name] = $value;
-        }
-        if ($name == 'PassWord_MD5Path') {
-            return null;
-        }
-        if ($name == 'IsGod') {
-            return null;
+            $this->data[$name] = $value;
+            return;
         }
         parent::__set($name, $value);
     }
@@ -181,14 +171,13 @@ class Member extends Base
      */
     public static function GetPassWordByGuid($ps, $guid)
     {
-
         return md5(md5($ps) . $guid);
     }
 
     /**
      * 获取有期限的Token密码
      * @param string $wt_id Token的ID
-     * @param string $day 时间，按天算 (1分钟就是1/24*60)
+     * @param int $day 时间，按天算 (1分钟就是1/24*60)
      * @return string (sha1字串+unix时间)
      */
     public function GetHashByToken($wt_id = '', $day = 30)

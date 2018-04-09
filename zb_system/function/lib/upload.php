@@ -1,9 +1,15 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
+
 /**
  * 上传类
- *
  * @package Z-BlogPHP
  * @subpackage ClassLib/Upload 类库
+ * @property string Name
+ * @property string FullFile
+ * @property string Size
+ * @property string Dir
+ * @property int PostTime
+ * @property string AuthorID
  */
 class Upload extends Base
 {
@@ -138,22 +144,11 @@ class Upload extends Base
     /**
      * @param $name
      * @param $value
-     * @return null
      */
     public function __set($name, $value)
     {
-        global $zbp;
-        if ($name == 'Url') {
-            return null;
-        }
-        if ($name == 'Dir') {
-            return null;
-        }
-        if ($name == 'FullFile') {
-            return null;
-        }
-        if ($name == 'Author') {
-            return null;
+        if (in_array($name, array('Url', 'Dir', 'FullFile', 'Author'))) {
+            return;
         }
         parent::__set($name, $value);
     }

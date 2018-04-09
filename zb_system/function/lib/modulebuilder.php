@@ -66,6 +66,7 @@ class ModuleBuilder
      * 导出网站分类模块数据
      * @return string 模块内容
      * @todo 必须重写
+     * @throws Exception
      */
     public static function Catalog()
     {
@@ -88,6 +89,7 @@ class ModuleBuilder
      * 导出日历模块数据
      * @param string $date 日期
      * @return string 模块内容
+     * @throws Exception
      */
     public static function Calendar($date = '')
     {
@@ -169,6 +171,7 @@ class ModuleBuilder
     /**
      * 导出最新留言模块数据
      * @return string 模块内容
+     * @throws Exception
      */
     public static function Comments()
     {
@@ -193,6 +196,7 @@ class ModuleBuilder
     /**
      * 导出最近发表文章模块数据
      * @return string 模块内容
+     * @throws Exception
      */
     public static function LatestArticles()
     {
@@ -217,6 +221,7 @@ class ModuleBuilder
     /**
      * 导出文章归档模块数据
      * @return string 模块内容
+     * @throws Exception
      */
     public static function Archives()
     {
@@ -309,6 +314,7 @@ class ModuleBuilder
     /**
      * 导出导航模块数据
      * @return string 模块内容
+     * @throws Exception
      */
     public static function Navbar()
     {
@@ -367,6 +373,7 @@ class ModuleBuilder
     /**
      * 导出tags模块数据
      * @return string 模块内容
+     * @throws Exception
      */
     public static function TagList()
     {
@@ -403,6 +410,7 @@ class ModuleBuilder
      * 导出用户列表模块数据
      * @param int $level 要导出的用户最低等级，默认为4（即协作者）
      * @return string 模块内容
+     * @throws Exception
      */
     public static function Authors()
     {
@@ -439,6 +447,7 @@ class ModuleBuilder
      * 导出网站统计模块数据
      * @param array $array
      * @return string 模块内容
+     * @throws Exception
      */
     public static function Statistics($array = array())
     {

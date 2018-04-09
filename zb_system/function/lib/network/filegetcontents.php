@@ -274,6 +274,7 @@ class Network_Filegetcontents implements Network_Interface
         $return['mime'] = $mime;
 
         $this->postdata[$name] = $return;
+        return true;
     }
 
     /**

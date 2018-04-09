@@ -1,9 +1,14 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
+
 /**
  * 模块类
  *
  * @package Z-BlogPHP
- * @subpackage ClassLib/Module 类库
+ * @property string FileName
+ * @property int|string ID
+ * @property string Source 模块来源
+ * @property string Content
+ * @property string Type 模块显示类型（div / ul）
  */
 class Module extends Base
 {
@@ -21,13 +26,12 @@ class Module extends Base
      * 设置参数值
      * @param string $name
      * @param mixed $value
-     * @return null
      */
     public function __set($name, $value)
     {
         global $zbp;
         if ($name == 'SourceType') {
-            return null;
+            return;
         }
         if ($name == 'NoRefresh') {
             if ((bool) $value) {
@@ -36,7 +40,7 @@ class Module extends Base
                 $this->Metas->Del('norefresh');
             }
 
-            return null;
+            return;
         }
         parent::__set($name, $value);
     }

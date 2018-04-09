@@ -1,4 +1,5 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
+
 /**
  * 配置类
  *
@@ -26,12 +27,17 @@ class Config
      */
     protected $kvdata = array();
 
+    /**
+     * @var Database_Interface
+     */
     protected $db = null;
 
     /**
      * $itemname string 项目名称
+     * @param string $itemName
+     * @param null $db
      */
-    public function __construct($itemname = '', &$db = null)
+    public function __construct($itemName = '', &$db = null)
     {
 
         if ($db !== null) {
@@ -47,11 +53,11 @@ class Config
             $this->data[$key] = $value[3];
         }
 
-        if ($itemname) {
-            $itemname = FilterCorrectName($itemname);
+        if ($itemName) {
+            $itemName = FilterCorrectName($itemName);
         }
 
-        $this->data['Name'] = $itemname;
+        $this->data['Name'] = $itemName;
     }
 
     /**
@@ -88,7 +94,7 @@ class Config
 
     /**
      * 获取Config的Item(项目名)
-     * @return array
+     * @return string
      */
     public function GetItemName()
     {
@@ -249,6 +255,8 @@ class Config
 
     /**
      * 占位
+     * @param $name
+     * @return bool
      */
     public function SaveKey($name)
     {
@@ -257,6 +265,8 @@ class Config
 
     /**
      * 占位
+     * @param $name
+     * @return bool
      */
     public function DelKey($name)
     {

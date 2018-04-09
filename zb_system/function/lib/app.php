@@ -588,6 +588,9 @@ class App
         return true;
     }
 
+    /**
+     * @throws Exception
+     */
     public function CheckCompatibility()
     {
         global $zbp;
@@ -622,7 +625,7 @@ class App
             }
 
             if (!in_array($d, $zbp->activedapps)) {
-                $d='<a href="'.$zbp->host.'zb_users/plugin/AppCentre/main.php?alias='.$d.'">'.$d .'</a>';
+                $d = '<a href="' . $zbp->host . 'zb_users/plugin/AppCentre/main.php?alias=' . $d . '">' . $d .'</a>';
                 $zbp->ShowError(str_replace('%s', $d, $zbp->lang['error'][83]), __FILE__, __LINE__);
             }
         }
@@ -640,8 +643,7 @@ class App
     }
 
     /**
-     * DEL
-     * @return null
+     * Delete app
      */
     public function Del()
     {
@@ -651,8 +653,7 @@ class App
     }
 
     /**
-     * DEL Compiled
-     * @return null
+     * Delete Compiled theme
      */
     public function DelCompiled()
     {

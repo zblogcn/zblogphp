@@ -1,7 +1,9 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
+
 /**
  * 数据操作基类
  *
+ * @property mixed ID
  * @package Z-BlogPHP
  * @subpackage ClassLib 类库
  */
@@ -26,7 +28,7 @@ class Base
      */
     public $Metas = null;
     /**
-     * @var datebase db
+     * @var Database_Interface db
      */
     protected $db = null;
     /**
@@ -37,6 +39,9 @@ class Base
     /**
      * @param string $table 数据表
      * @param array $datainfo 数据表结构信息
+     * @param string $classname
+     * @param bool $hasmetas
+     * @param null $db
      */
     public function __construct(&$table, &$datainfo, $classname = '', $hasmetas = true, &$db = null)
     {

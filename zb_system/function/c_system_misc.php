@@ -25,6 +25,9 @@ function misc_updateinfo()
     echo $r;
 }
 
+/**
+ * @throws Exception
+ */
 function misc_statistic()
 {
 

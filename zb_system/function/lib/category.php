@@ -1,9 +1,18 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
+
 /**
  * 文章分类类
  *
+ * @property int|string ID
+ * @property string Name 分类名
+ * @property string Alias 别名
+ * @property int|string RootID 祖先分类ID
+ * @property int|string ParentID 父分类ID
+ * @property string Symbol 用于后台分类管理的“层次标识符”，无用处，待改名
+ * @property int|string Level 分类层级
+ * @property string Template 分类模板
+ * @property string LogTemplate 分类下文章模板
  * @package Z-BlogPHP
- * @subpackage ClassLib/Category 类库
  */
 class Category extends Base
 {
@@ -47,44 +56,31 @@ class Category extends Base
                 return $fpreturn;
             }
         }
+        return null;
     }
 
     /**
      * @param $name
      * @param $value
-     * @return null|string
      */
     public function __set($name, $value)
     {
         global $zbp;
-        if ($name == 'Url') {
-            return null;
-        }
-        if ($name == 'Symbol') {
-            return null;
-        }
-        if ($name == 'Level') {
-            return null;
-        }
-        if ($name == 'SymbolName') {
-            return null;
-        }
-        if ($name == 'Parent') {
-            return null;
-        }
-        if ($name == 'Template') {
+        if (in_array($name, array('Url', 'Symbol', 'Level', 'SymbolName', 'Parent'))) {
+            return;
+        } else if ($name == 'Template') {
             if ($value == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
                 $value = '';
             }
-
-            return $this->data[$name] = $value;
+            $this->data[$name] = $value;
+            return;
         }
         if ($name == 'LogTemplate') {
             if ($value == $zbp->option['ZC_POST_DEFAULT_TEMPLATE']) {
                 $value = '';
             }
-
-            return $this->data[$name] = $value;
+            $this->data[$name] = $value;
+            return;
         }
         parent::__set($name, $value);
     }
@@ -113,7 +109,7 @@ class Category extends Base
         }
         if ($name == 'Symbol') {
             if ($this->ParentID == 0) {
-                return;
+                return null;
             } else {
                 $l = $this->Level;
 
@@ -206,6 +202,7 @@ class Category extends Base
     /**
      * 得到分类深度
      * @param object $object
+     * @param int $deep
      * @return int 分类深度
      */
     private function GetDeep(&$object, $deep = 0)
