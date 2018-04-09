@@ -291,15 +291,6 @@ function ViewIndex()
 {
     global $zbp, $action;
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname();
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
-            return $fpreturn;
-        }
-    }
-
     if ($zbp->template->hasTemplate('404')) {
          Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'Include_ShowError404');
     }
@@ -313,6 +304,15 @@ function ViewIndex()
             $_REQUEST = array_merge($_REQUEST, $uri_query);
         }
         unset($uri_array, $uri_query);
+    }
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname();
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+            return $fpreturn;
+        }
     }
 
     switch ($action) {
@@ -380,6 +380,15 @@ function ViewFeed()
 
     foreach ($articles as $article) {
         $rss2->addItem($article->Title, $article->Url, ($zbp->option['ZC_RSS_EXPORT_WHOLE'] == true ? $article->Content : $article->Intro), $article->PostTime);
+    }
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_ViewFeed_End'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($rss2);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+            return $fpreturn;
+        }
     }
 
     header("Content-type:text/xml; Charset=utf-8");
@@ -510,6 +519,12 @@ function ViewAuto($inpurl)
 {
     global $zbp;
 
+    $url = GetValueInArray(explode('?', $inpurl), '0');
+
+    if ($zbp->cookiespath === substr($url, 0, strlen($zbp->cookiespath))) {
+        $url = substr($url, strlen($zbp->cookiespath));
+    }
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($inpurl);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -517,12 +532,6 @@ function ViewAuto($inpurl)
 
             return $fpreturn;
         }
-    }
-
-    $url = GetValueInArray(explode('?', $inpurl), '0');
-
-    if ($zbp->cookiespath === substr($url, 0, strlen($zbp->cookiespath))) {
-        $url = substr($url, strlen($zbp->cookiespath));
     }
 
     if (IS_IIS && isset($_GET['rewrite'])) {

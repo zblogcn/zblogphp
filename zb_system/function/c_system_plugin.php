@@ -1179,6 +1179,17 @@ DefinePluginFilter('Filter_Plugin_ViewFeed_Core');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_ViewFeed_End
+'参数:$rss2
+'说明:定义Feed核心接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_ViewFeed_End');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_ViewPost_Begin
 '参数:&$id,&$alias
 '说明:定义列表输出接口
