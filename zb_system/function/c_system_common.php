@@ -1468,12 +1468,29 @@ function CreateWebToken($webTokenId, $time, $key = '')
     return hash_hmac('sha256', $time . $webTokenId . implode($args), $key) . $time;
 }
 
+/**
+ * 检测来源是否合法，这包括CSRF检测，在开启增强安全模式时加入来源检测
+ * @throws Exception
+ */
+function CheckIsRefererValid ()
+{
+    global $zbp;
+    $flag = CheckCSRFTokenValid();
+    if ($flag && $zbp->option['ZC_ADDITIONAL_SECURITY']) {
+        $flag = CheckHTTPRefererValid();
+    }
+
+    if (!$flag) {
+        $zbp->ShowError(5, __FILE__, __LINE__);
+        exit;
+    }
+}
 
 /**
  * 验证CSRF Token是否合法
  * @param string $fieldName
  * @param array $methods
- * @throws Exception
+ * @return bool
  */
 function CheckCSRFTokenValid($fieldName = 'csrfToken', $methods = array('get', 'post'))
 {
@@ -1488,13 +1505,21 @@ function CheckCSRFTokenValid($fieldName = 'csrfToken', $methods = array('get', '
             break;
         }
     }
-
-    if (!$flag) {
-        $zbp->ShowError(5, __FILE__, __LINE__);
-        exit;
-    }
+    return $flag;
 }
 
+/**
+ * 检测HTTP Referer是否合法
+ * @return bool
+ */
+function CheckHTTPRefererValid()
+{
+    global $bloghost;
+    $referer = GetVars('HTTP_REFERER', 'SERVER');
+    if (trim($referer) === '') return true;
+    if (stripos($referer, $bloghost) === false) return false;
+    return true;
+}
 
 function GetIDArrayByList($array) {
     $ids = array();

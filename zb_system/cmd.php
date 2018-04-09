@@ -26,7 +26,7 @@ switch ($action) {
         Redirect('login.php');
         break;
     case 'logout':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         Logout();
         Redirect('../');
         break;
@@ -62,7 +62,7 @@ switch ($action) {
 
         switch ($miscType) {
             case 'statistic':
-                CheckCSRFTokenValid();
+                CheckIsRefererValid();
                 if (!$zbp->CheckRights('admin')) {
                     echo $zbp->ShowError(6, __FILE__, __LINE__);
                     die();
@@ -70,7 +70,7 @@ switch ($action) {
                 misc_statistic();
                 break;
             case 'updateinfo':
-                CheckCSRFTokenValid();
+                CheckIsRefererValid();
                 if (!$zbp->CheckRights('root')) {
                     echo $zbp->ShowError(6, __FILE__, __LINE__);
                     die();
@@ -78,7 +78,7 @@ switch ($action) {
                 misc_updateinfo();
                 break;
             case 'showtags':
-                CheckCSRFTokenValid();
+                CheckIsRefererValid();
                 if (!$zbp->CheckRights('ArticleEdt')) {
                     Http404();
                     die();
@@ -134,7 +134,7 @@ switch ($action) {
         Redirect('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ArticleDel':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         DelArticle();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -145,7 +145,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ArticlePst':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         PostArticle();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -156,7 +156,7 @@ switch ($action) {
         Redirect('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PageDel':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         DelPage();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -167,7 +167,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PagePst':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         PostPage();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -181,7 +181,7 @@ switch ($action) {
         Redirect('admin/category_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'CategoryPst':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         PostCategory();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -189,7 +189,7 @@ switch ($action) {
         Redirect('cmd.php?act=CategoryMng');
         break;
     case 'CategoryDel':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         DelCategory();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -197,7 +197,7 @@ switch ($action) {
         Redirect('cmd.php?act=CategoryMng');
         break;
     case 'CommentDel':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         DelComment();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -205,7 +205,7 @@ switch ($action) {
         Redirect($_SERVER["HTTP_REFERER"]);
         break;
     case 'CommentChk':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         CheckComment();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -213,7 +213,7 @@ switch ($action) {
         Redirect($_SERVER["HTTP_REFERER"]);
         break;
     case 'CommentBat':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         BatchComment();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -233,7 +233,7 @@ switch ($action) {
         Redirect('admin/member_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'MemberPst':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         PostMember();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -241,7 +241,7 @@ switch ($action) {
         Redirect('cmd.php?act=MemberMng');
         break;
     case 'MemberDel':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         if (DelMember()) {
             $zbp->BuildModule();
             $zbp->SaveCache();
@@ -255,13 +255,13 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'UploadPst':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         PostUpload();
         $zbp->SetHint('good');
         Redirect('cmd.php?act=UploadMng');
         break;
     case 'UploadDel':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         DelUpload();
         $zbp->SetHint('good');
         Redirect('cmd.php?act=UploadMng');
@@ -273,7 +273,7 @@ switch ($action) {
         Redirect('admin/tag_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'TagPst':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         PostTag();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -281,7 +281,7 @@ switch ($action) {
         Redirect('cmd.php?act=TagMng');
         break;
     case 'TagDel':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         DelTag();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -297,7 +297,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PluginDis':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         $disableResult = DisablePlugin(GetVars('name', 'GET'));
         if (is_object($disableResult)) {
             // 本来应该用ShowError的，但是不太方便，算了
@@ -313,7 +313,7 @@ switch ($action) {
         Redirect('cmd.php?act=PluginMng');
         break;
     case 'PluginEnb':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         $install = '&install=';
         $install .= EnablePlugin(GetVars('name', 'GET'));
         $zbp->BuildModule();
@@ -331,7 +331,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ThemeSet':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         $install = '&install=';
         $install .= SetTheme(GetVars('theme', 'POST'), GetVars('style', 'POST'));
         $zbp->BuildModule();
@@ -340,7 +340,7 @@ switch ($action) {
         Redirect('cmd.php?act=ThemeMng' . $install);
         break;
     case 'SidebarSet':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         SetSidebar();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -349,7 +349,7 @@ switch ($action) {
         Redirect('admin/module_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ModulePst':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         PostModule();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -357,7 +357,7 @@ switch ($action) {
         Redirect('cmd.php?act=ModuleMng');
         break;
     case 'ModuleDel':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         DelModule();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -371,7 +371,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'SettingSav':
-        CheckCSRFTokenValid();
+        CheckIsRefererValid();
         SaveSetting();
         $zbp->BuildModule();
         $zbp->SaveCache();
