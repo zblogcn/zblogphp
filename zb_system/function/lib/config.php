@@ -28,7 +28,7 @@ class Config
     protected $kvdata = array();
 
     /**
-     * @var Database_Interface
+     * @var Database__Interface
      */
     protected $db = null;
 

@@ -14,7 +14,7 @@ class ZBlogPHP
      */
     public $version = null;
     /**
-     * @var Database_Interface 数据库
+     * @var Database__Interface 数据库
      */
     public $db = null;
     /**
@@ -252,7 +252,7 @@ class ZBlogPHP
     /**
      * 初始化数据库连接
      * @param string $type 数据连接类型
-     * @return Database_Interface
+     * @return Database__Interface
      */
     public static function InitializeDB($type)
     {
@@ -260,7 +260,7 @@ class ZBlogPHP
             return null;
         }
 
-        $newtype = 'Database_' . trim($type);
+        $newtype = 'Database__' . trim($type);
 
         return new $newtype();
     }

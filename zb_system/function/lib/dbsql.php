@@ -14,7 +14,7 @@
 class DbSql
 {
     /**
-     * @var Database_Interface 数据库连接实例
+     * @var Database__Interface 数据库连接实例
      */
     private $db = null;
     /**
@@ -30,7 +30,7 @@ class DbSql
     {
         $this->db = &$db;
         $this->dbclass = get_class($this->db);
-        $this->sql = 'sql_' . $this->db->type;
+        $this->sql = 'sql__' . $this->db->type;
     }
 
     /**
@@ -45,7 +45,7 @@ class DbSql
     }
 
     /**
-     * @return SQL_Global
+     * @return SQL__Global
      */
     public function get()
     {

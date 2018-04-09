@@ -5,7 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/DataBase/DbPgSQL 类库
  */
-class Database_PostgreSQL implements Database_Interface
+class Database__PostgreSQL implements Database__Interface
 {
 
     public $type = 'postgresql';

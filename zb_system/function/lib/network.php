@@ -28,7 +28,7 @@ class Network
      */
     public $file_get_contents = false;
     /**
-     * @var Network_Interface[]
+     * @var Network__Interface[]
      */
     private static $_network = null;
 
@@ -57,7 +57,7 @@ class Network
 
     /**
      * @param string $extension
-     * @return Network_Interface
+     * @return Network__Interface
      */
     public static function Create($extension = '')
     {
@@ -69,7 +69,7 @@ class Network
         }
 
         $extension = ($extension == '' ? self::$_network->network_list[0] : $extension);
-        $type = 'network_' . $extension;
+        $type = 'Network__' . $extension;
         $network = new $type();
         return $network;
     }

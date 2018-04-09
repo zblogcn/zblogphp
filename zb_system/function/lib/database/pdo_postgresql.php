@@ -5,7 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/DataBase/Dbpdo_PgSQL 类库
  */
-class Database_PDOPostgreSQL implements Database_Interface
+class Database__PDO_PostgreSQL implements Database__Interface
 {
 
     public $type = 'postgresql';

@@ -5,7 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/Network/Networkfile_get_contents 网络连接
  */
-class Network_Filegetcontents implements Network_Interface
+class Network__Filegetcontents implements Network__Interface
 {
 
     private $readyState = 0; #状态

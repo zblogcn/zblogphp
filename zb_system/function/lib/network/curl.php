@@ -6,7 +6,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/Network/CUrl 网络连接
  */
-class Network_curl implements Network_Interface
+class Network__curl implements Network__Interface
 {
     private $readyState = 0; #状态
     private $responseBody = null; #返回的二进制

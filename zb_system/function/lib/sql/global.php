@@ -2,18 +2,18 @@
 
 /**
  * @property string sql 最终生成的SQL语句
- * @method SQL_Global select(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
- * @method SQL_Global insert(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
- * @method SQL_Global update(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
- * @method SQL_Global delete(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
- * @method SQL_Global create(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
- * @method SQL_Global drop(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
- * @method SQL_Global count(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
- * @method SQL_Global min(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
- * @method SQL_Global max(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
- * @method SQL_Global sum(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL__Global select(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL__Global insert(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL__Global update(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL__Global delete(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL__Global create(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL__Global drop(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL__Global count(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL__Global min(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL__Global max(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
+ * @method SQL__Global sum(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
  */
-class SQL_Global
+class SQL__Global
 {
 
     /**
@@ -81,7 +81,7 @@ class SQL_Global
     /**
      * @param $callName
      * @param $argu
-     * @return SQL_Global|mixed
+     * @return SQL__Global|mixed
      * @throws Exception
      */
     public function __call($callName, $argu)
@@ -176,7 +176,7 @@ class SQL_Global
     }
     /**
      * Re-initialize this class
-     * @return SQL_Global
+     * @return SQL__Global
      */
     public function reset()
     {
@@ -193,7 +193,7 @@ class SQL_Global
     /**
      * Set SQL query option
      * @param $option
-     * @return SQL_Global
+     * @return SQL__Global
      */
     public function option($option)
     {
@@ -224,7 +224,7 @@ class SQL_Global
     /**
      * Set column for query
      * @param $columns
-     * @return SQL_Global
+     * @return SQL__Global
      */
     public function column($columns)
     {
@@ -262,7 +262,7 @@ class SQL_Global
      * @example limit(5)
      * @example limit(10, 1)
      * @example limit(array(10, 1))
-     * @return SQL_Global
+     * @return SQL__Global
      */
     public function limit()
     {
@@ -295,7 +295,7 @@ class SQL_Global
      * @example array(array('=', 'a', 'b'))
      * @example array('=', 'a', 'b'), array('=', 'a', 'b')
      * @example array('=', 'a', 'b')
-     * @return SQL_Global
+     * @return SQL__Global
      */
     public function where()
     {
@@ -321,7 +321,7 @@ class SQL_Global
     /**
      * Set having
      * @param $having
-     * @return SQL_Global
+     * @return SQL__Global
      */
     public function having($having)
     {
@@ -342,7 +342,7 @@ class SQL_Global
     /**
      * GroupBy
      * @param $groupBy
-     * @return SQL_Global
+     * @return SQL__Global
      */
     public function groupBy($groupBy)
     {
@@ -361,7 +361,7 @@ class SQL_Global
     }
     /**
      * Order by
-     * @return  SQL_Global
+     * @return  SQL__Global
      */
     public function orderBy()
     {
@@ -386,7 +386,7 @@ class SQL_Global
     /**
      * Set data for INSERT & UPDATE
      * @example array('key' => 'value', 'key2' => 'value2')
-     * @return SQL_Global
+     * @return SQL__Global
      */
     public function data()
     {
@@ -403,7 +403,7 @@ class SQL_Global
      * @todo
      * @param string $table
      * @param string $dbname
-     * @return SQL_Global
+     * @return SQL__Global
      */
     public function exist($table, $dbname = '')
     {

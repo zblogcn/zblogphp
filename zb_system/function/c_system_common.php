@@ -123,7 +123,7 @@ function AutoloadClass($className)
             return $fpreturn;
         }
     }
-    $className = str_replace('_', '/', $className);
+    $className = str_replace('__', '/', $className);
     $fileName = ZBP_PATH . 'zb_system/function/lib/' . strtolower($className) . '.php';
     if (is_readable($fileName)) {
         require $fileName;

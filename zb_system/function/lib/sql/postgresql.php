@@ -1,5 +1,5 @@
 <?php if (!defined('ZBP_PATH')) exit('Access denied');
-class SQL_PostgreSQL extends SQL_Global
+class SQL__PostgreSQL extends SQL__Global
 {
     /**
      * @override

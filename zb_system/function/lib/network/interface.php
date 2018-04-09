@@ -14,7 +14,7 @@
  * @property string $responseVersion HTTP版本号
  * @property string[] $responseHeader 返回的 HTTP 响应头
  */
-interface Network_Interface
+interface Network__Interface
 {
 
     /**

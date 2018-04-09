@@ -5,7 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/DataBase/DbSQLite 类库
  */
-class Database_SQLite implements Database_Interface
+class Database__SQLite implements Database__Interface
 {
 
     public $type = 'sqlite';

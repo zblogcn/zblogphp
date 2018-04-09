@@ -5,7 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/DataBase/DbMySQL 类库
  */
-class Database_MySQL implements Database_Interface
+class Database__MySQL implements Database__Interface
 {
 
     public $type = 'mysql';

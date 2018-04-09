@@ -5,7 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/DataBase/Dbpdo_MySQL 类库
  */
-class Database_PDOMySQL implements Database_Interface
+class Database__PDO_MySQL implements Database__Interface
 {
 
     public $type = 'mysql';

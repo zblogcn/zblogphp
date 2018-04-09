@@ -28,7 +28,7 @@ class Base
      */
     public $Metas = null;
     /**
-     * @var Database_Interface db
+     * @var Database__Interface db
      */
     protected $db = null;
     /**
