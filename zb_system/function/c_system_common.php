@@ -1378,9 +1378,9 @@ function BuildSafeURL($url, $appId = '')
 {
     global $zbp;
     if (strpos($url, '?') > 0) {
-        $url .= '&token=';
+        $url .= '&csrfToken=';
     } else {
-        $url .= '?token=';
+        $url .= '?csrfToken=';
     }
     $url = $zbp->host . $url . $zbp->GetCSRFToken($appId);
     return $url;
@@ -1474,7 +1474,7 @@ function CreateWebToken($webTokenId, $time, $key = '')
  * @param array $methods
  * @throws Exception
  */
-function CheckCSRFTokenValid($fieldName = 'token', $methods = array('get', 'post'))
+function CheckCSRFTokenValid($fieldName = 'csrfToken', $methods = array('get', 'post'))
 {
     global $zbp;
     $flag = false;

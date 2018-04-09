@@ -2631,17 +2631,17 @@ class ZBlogPHP
 
     /**
      * 验证CSRF Token
-     * @param $t
-     * @param string $id
+     * @param string $token
+     * @param string $id 应用ID，可为每个应用生成一个专属token
      * @return bool
      */
-    public function VerifyCSRFToken($t, $id = '')
+    public function VerifyCSRFToken($token, $id = '')
     {
         $s = $this->user->ID . $this->user->Password . $this->user->Status;
-        if ($t == md5($this->guid . $s . $id . date('Ymdh'))) {
+        if ($token == md5($this->guid . $s . $id . date('Ymdh'))) {
             return true;
         }
-        if ($t == md5($this->guid . $s . $id. date('Ymdh', time() - (3600 * 1)))) {
+        if ($token == md5($this->guid . $s . $id. date('Ymdh', time() - (3600 * 1)))) {
             return true;
         }
 

@@ -903,7 +903,7 @@ function Admin_CommentMng()
     echo '<p>' . $zbp->lang['msg']['search'] . '&nbsp;&nbsp;&nbsp;&nbsp;<input name="search" style="width:450px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
     echo '</form>';
     echo '<form method="post" action="' . $zbp->host . 'zb_system/cmd.php?act=CommentBat">';
-    echo '<input type="hidden" name="token" value="' . $zbp->GetCSRFToken() . '">';
+    echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&page=%page%}{&ischecking=%ischecking%}{&search=%search%}', false);
     $p->PageCount = $zbp->managecount;
@@ -1340,7 +1340,7 @@ function Admin_ThemeMng()
     }
     echo '</div>';
     echo '<div id="divMain2"><form id="frmTheme" method="post" action="../cmd.php?act=ThemeSet">';
-    echo '<input type="hidden" name="token" value="' . $zbp->GetCSRFToken() . '">';
+    echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
     echo '<input type="hidden" name="theme" id="theme" value="" />';
     echo '<input type="hidden" name="style" id="style" value="" />';
 
