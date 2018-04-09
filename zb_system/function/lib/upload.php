@@ -28,19 +28,23 @@ class Upload extends Base
     }
 
     /**
-     * @param string $extlist
+     * @param string $extList
      * @return bool
      */
-    public function CheckExtName($extlist = '')
+    public function CheckExtName($extList = '')
     {
         global $zbp;
         $e = GetFileExt($this->Name);
-        $extlist = strtolower($extlist);
-        if (trim($extlist) == '') {
-            $extlist = $zbp->option['ZC_UPLOAD_FILETYPE'];
+        $extList = strtolower($extList);
+        // 无论如何，禁止.php、.php5之类的文件的上传
+        if (preg_match('/php/i', $e)) {
+            return false;
+        }
+        if (trim($extList) == '') {
+            $extList = $zbp->option['ZC_UPLOAD_FILETYPE'];
         }
 
-        return HasNameInString($extlist, $e);
+        return HasNameInString($extList, $e);
     }
 
     /**

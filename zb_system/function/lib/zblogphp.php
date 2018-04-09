@@ -184,8 +184,8 @@ class ZBlogPHP
     private $isload = false; #是否载入
     private $issession = false; #是否使用session
     public $ismanage = false; #是否加载管理模式
-    private $isgzip = false; #是否开启gzip
-    public $ishttps = false; #是否HTTPS
+    private $isGzip = false; #是否开启gzip
+    public $isHttps = false; #是否HTTPS
 
     /**
      * @var Template 当前模板
@@ -443,7 +443,7 @@ class ZBlogPHP
         }
 
         if (substr($this->host, 0, 8) == 'https://') {
-            $this->ishttps = true;
+            $this->isHttps = true;
         }
         if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
             $this->host = $this->option['ZC_BLOG_HOST'];
@@ -580,7 +580,7 @@ class ZBlogPHP
         }
 
         if (substr($this->host, 0, 8) == 'https://') {
-            $this->ishttps = true;
+            $this->isHttps = true;
         }
 
         if ($this->user->Status == ZC_MEMBER_STATUS_AUDITING) {
@@ -2631,17 +2631,17 @@ class ZBlogPHP
 
     /**
      * 验证CSRF Token
-     * @param $t
-     * @param string $id
+     * @param string $token
+     * @param string $id 应用ID，可为每个应用生成一个专属token
      * @return bool
      */
-    public function VerifyCSRFToken($t, $id = '')
+    public function VerifyCSRFToken($token, $id = '')
     {
         $s = $this->user->ID . $this->user->Password . $this->user->Status;
-        if ($t == md5($this->guid . $s . $id . date('Ymdh'))) {
+        if ($token == md5($this->guid . $s . $id . date('Ymdh'))) {
             return true;
         }
-        if ($t == md5($this->guid . $s . $id. date('Ymdh', time() - (3600 * 1)))) {
+        if ($token == md5($this->guid . $s . $id. date('Ymdh', time() - (3600 * 1)))) {
             return true;
         }
 
@@ -2891,7 +2891,7 @@ class ZBlogPHP
             isset($_SERVER["HTTP_ACCEPT_ENCODING"]) &&
             strstr($_SERVER["HTTP_ACCEPT_ENCODING"], "gzip")
         ) {
-            $this->isgzip = true;
+            $this->isGzip = true;
         }
     }
 
@@ -2901,7 +2901,7 @@ class ZBlogPHP
     public function StartGzip()
     {
 
-        if (!headers_sent() && $this->isgzip && $this->option['ZC_GZIP_ENABLE']) {
+        if (!headers_sent() && $this->isGzip && $this->option['ZC_GZIP_ENABLE']) {
             if (ini_get('output_handler')) {
                 return false;
             }

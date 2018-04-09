@@ -246,6 +246,7 @@ return array(
         'debugging_warning' => '您的Z-BlogPHP處於開發模式下。此模式下網站有被骇的風險，實際部署在線上的網站請及時關閉開發模式！',
         'permanent_domain_with_admin' => '后台也使用永久域名',
         'current_template' => '当前模板',
+        'additional_security' => '安全增強',
         '' => '',
     ),
 

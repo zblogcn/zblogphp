@@ -1,12 +1,21 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');?><!doctype html>
+<?php if (!defined('ZBP_PATH')) exit('Access denied');
+if ($zbp->option['ZC_ADDITIONAL_SECURITY']) {
+    header('X-Frame-Options: DENY');
+    header('X-XSS-Protection: 1; mode=block');
+    header('Content-Security-Policy: ' . GetBackendCSPHeader());
+    if ($zbp->isHttps) {
+        header('Upgrade-Insecure-Requests: 1');
+    }
+}
+?><!doctype html>
 <html lang="<?php echo $lang['lang_bcp47'] ?>">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 <meta name="generator" content="Z-BlogPHP <?php echo ZC_VERSION_DISPLAY ?>" />
 <meta name="robots" content="none" />
 <meta name="renderer" content="webkit" />
-<title><?php echo $blogname . '-' . $blogtitle ?></title>
+<title><?php echo $blogname . ' - ' . $blogtitle ?></title>
 <link href="<?php echo $bloghost ?>zb_system/css/admin2.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $bloghost ?>zb_system/css/jquery-ui.custom.css"/>
 <script src="<?php echo $bloghost ?>zb_system/script/jquery-2.2.4.min.js" type="text/javascript"></script>

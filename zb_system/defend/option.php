@@ -203,6 +203,7 @@ return array(
     'ZC_LARGE_DATA' => false,
     'ZC_JS_304_ENABLE' => false,
     'ZC_VERSION_IN_HEADER' => true,
+    'ZC_ADDITIONAL_SECURITY' => true,
     'ZC_XMLRPC_ENABLE' => true,
     'ZC_XMLRPC_USE_WEBTOKEN' => false,
 );

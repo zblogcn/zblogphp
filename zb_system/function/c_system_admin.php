@@ -903,7 +903,7 @@ function Admin_CommentMng()
     echo '<p>' . $zbp->lang['msg']['search'] . '&nbsp;&nbsp;&nbsp;&nbsp;<input name="search" style="width:450px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
     echo '</form>';
     echo '<form method="post" action="' . $zbp->host . 'zb_system/cmd.php?act=CommentBat">';
-    echo '<input type="hidden" name="token" value="' . $zbp->GetCSRFToken() . '">';
+    echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&page=%page%}{&ischecking=%ischecking%}{&search=%search%}', false);
     $p->PageCount = $zbp->managecount;
@@ -1207,8 +1207,8 @@ function Admin_UploadMng()
         $ret = array();//table string
         $ret[] = '<tr>';
         $ret[] = '<td class="td5">' . $upload->ID . '</td>';
-        $ret[] = '<td class="td10">' . $upload->Author->Name . '</td>';
-        $ret[] = '<td><a href="' . $upload->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $upload->Name . '</td>';
+        $ret[] = '<td class="td10">' . htmlspecialchars($upload->Author->Name) . '</td>';
+        $ret[] = '<td><a href="' . htmlspecialchars($upload->Url) . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . htmlspecialchars($upload->Name) . '</td>';
         $ret[] = '<td class="td15">' . $upload->Time() . '</td>';
         $ret[] = '<td class="td10">' . $upload->Size . '</td>';
         $ret[] = '<td class="td20">' . $upload->MimeType . '</td>';
@@ -1340,7 +1340,7 @@ function Admin_ThemeMng()
     }
     echo '</div>';
     echo '<div id="divMain2"><form id="frmTheme" method="post" action="../cmd.php?act=ThemeSet">';
-    echo '<input type="hidden" name="token" value="' . $zbp->GetCSRFToken() . '">';
+    echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
     echo '<input type="hidden" name="theme" id="theme" value="" />';
     echo '<input type="hidden" name="style" id="style" value="" />';
 
@@ -1348,8 +1348,8 @@ function Admin_ThemeMng()
         echo "\n\n";
 
         echo '<div class="theme ' . ($theme->IsUsed() ? 'theme-now' : 'theme-other') . '"';
-        echo ' data-themeid="' . $theme->id . '"';
-        echo ' data-themename="' . $theme->name . '"';
+        echo ' data-themeid="' . htmlspecialchars($theme->id) . '"';
+        echo ' data-themename="' . htmlspecialchars($theme->name) . '"';
         echo '>';
         echo '<div class="theme-name">';
 
@@ -1358,14 +1358,14 @@ function Admin_ThemeMng()
         } else {
             echo '<img width="16" title="" alt="" src="../image/admin/layout.png"/>&nbsp;&nbsp;';
         }
-        echo '<a target="_blank" href="' . $theme->url . '" title=""><strong style="display:none;">' . $theme->id . '</strong>';
-        echo '<b>' . $theme->name . '</b></a></div>';
-        echo '<div><img src="' . $theme->GetScreenshot() . '" title="' . $theme->name . '" alt="' . $theme->name . '" width="200" height="150" /></div>';
-        echo '<div class="theme-author">' . $zbp->lang['msg']['author'] . ': <a target="_blank" href="' . $theme->author_url . '">' . $theme->author_name . '</a></div>';
+        echo '<a target="_blank" href="' . htmlspecialchars($theme->url) . '" title=""><strong style="display:none;">' . htmlspecialchars($theme->id) . '</strong>';
+        echo '<b>' . htmlspecialchars($theme->name) . '</b></a></div>';
+        echo '<div><img src="' . $theme->GetScreenshot() . '" title="' . htmlspecialchars($theme->name) . '" alt="' . htmlspecialchars($theme->name) . '" width="200" height="150" /></div>';
+        echo '<div class="theme-author">' . $zbp->lang['msg']['author'] . ': <a target="_blank" href="' . htmlspecialchars($theme->author_url) . '">' . htmlspecialchars($theme->author_name) . '</a></div>';
         echo '<div class="theme-style">' . $zbp->lang['msg']['style'] . ': ';
         echo '<select class="edit" size="1" style="width:110px;">';
         foreach ($theme->GetCssFiles() as $key => $value) {
-            echo '<option value="' . $key . '" ' . ($theme->IsUsed() ? ($key == $zbp->style ? 'selected="selected"' : '') : '') . '>' . basename($value) . '</option>';
+            echo '<option value="' . htmlspecialchars($key) . '" ' . ($theme->IsUsed() ? ($key == $zbp->style ? 'selected="selected"' : '') : '') . '>' . basename($value) . '</option>';
         }
         echo '</select>';
         echo '<input type="button" onclick="$(\'#style\').val($(this).prev().val());$(\'#theme\').val(\'' . $theme->id . '\');$(\'#frmTheme\').submit();" class="theme-activate button" value="' . $zbp->lang['msg']['enable'] . '">';
@@ -1679,10 +1679,10 @@ function Admin_PluginMng()
 
     foreach ($plugins as $plugin) {
         echo '<tr>';
-        echo '<td class="td5 tdCenter' . ($plugin->type == 'plugin' ? ' plugin' : '') . ($plugin->IsUsed() ? ' plugin-on' : '') . '" data-pluginid="' . $plugin->id . '"><img ' . ($plugin->IsUsed() ? '' : 'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" height="32" /></td>';
-        echo '<td class="td25"><span class="plugin-note" title="' . htmlspecialchars($plugin->note) . '">' . $plugin->name . ' ' . $plugin->version . '</span></td>';
-        echo '<td class="td20"><a href="' . $plugin->author_url . '" target="_blank">' . $plugin->author_name . '</a></td>';
-        echo '<td class="td20">' . $plugin->modified . '</td>';
+        echo '<td class="td5 tdCenter' . ($plugin->type == 'plugin' ? ' plugin' : '') . ($plugin->IsUsed() ? ' plugin-on' : '') . '" data-pluginid="' . htmlspecialchars($plugin->id) . '"><img ' . ($plugin->IsUsed() ? '' : 'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" height="32" /></td>';
+        echo '<td class="td25"><span class="plugin-note" title="' . htmlspecialchars($plugin->note) . '">' . htmlspecialchars($plugin->name) . ' ' . htmlspecialchars($plugin->version) . '</span></td>';
+        echo '<td class="td20"><a href="' . htmlspecialchars($plugin->author_url) . '" target="_blank">' . htmlspecialchars($plugin->author_name) . '</a></td>';
+        echo '<td class="td20">' . htmlspecialchars($plugin->modified) . '</td>';
         echo '<td class="td10 tdCenter">';
 
         if ($plugin->type == 'plugin') {
@@ -1771,6 +1771,7 @@ if (stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false && function_exists(
     echo '<tr><td><p><b>' . $zbp->lang['msg']['allow_upload_type'] . '</b></p></td><td><p><input id="ZC_UPLOAD_FILETYPE" name="ZC_UPLOAD_FILETYPE" style="width:600px;" type="text" value="' . $zbp->option['ZC_UPLOAD_FILETYPE'] . '" /></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['allow_upload_size'] . '</b></p></td><td><p><input id="ZC_UPLOAD_FILESIZE" name="ZC_UPLOAD_FILESIZE" style="width:600px;" type="text" value="' . $zbp->option['ZC_UPLOAD_FILESIZE'] . '" /></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['debug_mode'] . '</b></p></td><td><p><input id="ZC_DEBUG_MODE" name="ZC_DEBUG_MODE" type="text" value="' . $zbp->option['ZC_DEBUG_MODE'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['additional_security'] . '</b></p></td><td><p><input id="ZC_ADDITIONAL_SECURITY" name="ZC_ADDITIONAL_SECURITY" type="text" value="' . $zbp->option['ZC_ADDITIONAL_SECURITY'] . '" class="checkbox"/></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['gzip_compress'] . '</b></p></td><td><p><input id="ZC_GZIP_ENABLE" name="ZC_GZIP_ENABLE" type="text" value="' . $zbp->option['ZC_GZIP_ENABLE'] . '" class="checkbox"/></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['syntax_high_lighter'] . '</b></p></td><td><p><input id="ZC_SYNTAXHIGHLIGHTER_ENABLE" name="ZC_SYNTAXHIGHLIGHTER_ENABLE" type="text" value="' . $zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE'] . '" class="checkbox"/></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['close_site'] . '</b></p></td><td><p><input id="ZC_CLOSE_SITE" name="ZC_CLOSE_SITE" type="text" value="' . $zbp->option['ZC_CLOSE_SITE'] . '" class="checkbox"/></p></td></tr>';

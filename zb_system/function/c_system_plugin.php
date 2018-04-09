@@ -1949,3 +1949,16 @@ DefinePluginFilter('Filter_Plugin_LargeData_GetList');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Xmlrpc_Begin');
+
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_CSP_Backend
+'参数:&xml
+'说明:后台CSP接口(1.5.2加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_CSP_Backend');
