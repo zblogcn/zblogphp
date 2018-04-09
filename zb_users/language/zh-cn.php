@@ -241,6 +241,7 @@ return array(
         'comment_audit_comment' => '打开后所有非管理员发布的评论都将进入审核状态',
         'debugging_warning' => '您的Z-BlogPHP打开了开发模式。此模式下网站有被黑的风险，实际部署在线上的网站请及时关闭开发模式！',
         'permanent_domain_with_admin' => '后台也使用固定域名',
+        'current_template' => '当前模板',
         '' => '',
     ),
 
