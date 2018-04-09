@@ -58,6 +58,10 @@ define('PHP_SYSTEM', GetSystem());
 define('PHP_SERVER', GetWebServer());
 define('PHP_ENGINE', GetPHPEngine());
 define('IS_X64', (PHP_INT_SIZE === 8));
+/**
+ * 如果想获取准确的值，请zbp->Load后使用$zbp->isHttps
+ * 此处仅为当前系统环境检测
+ */
 define('HTTP_SCHEME', GetScheme($_SERVER));
 /**
  * 兼容性策略

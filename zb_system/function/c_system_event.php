@@ -319,6 +319,13 @@ function ViewIndex()
         unset($uri_array, $uri_query);
     }
 
+    if ($zbp->option['ZC_ADDITIONAL_SECURITY']) {
+        header('X-XSS-Protection: 1; mode=block');
+        if ($zbp->isHttps) {
+            header('Upgrade-Insecure-Requests: 1');
+        }
+    }
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname();
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -2841,7 +2848,8 @@ function SaveSetting()
             $key == 'ZC_SYNTAXHIGHLIGHTER_ENABLE' ||
             $key == 'ZC_COMMENT_VERIFY_ENABLE' ||
             $key == 'ZC_CLOSE_SITE' ||
-            $key == 'ZC_PERMANENT_DOMAIN_WITH_ADMIN'
+            $key == 'ZC_PERMANENT_DOMAIN_WITH_ADMIN' ||
+            $key == 'ZC_ADDITIONAL_SECURITY'
         ) {
             $zbp->option[$key] = (boolean) $value;
             continue;

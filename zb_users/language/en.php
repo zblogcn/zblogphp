@@ -245,6 +245,7 @@ return array(
         'comment_audit_comment' => 'All new comments posted by non-root user will be audited.',
         'debugging_warning' => 'If your website can be connected via Internet, please disable the Development Mode, or it may be hacked.',
         'permanent_domain_with_admin' => 'Fixed domain both on background',
+        'additional_security' => 'Additional Security',
         '' => '',
     ),
 
@@ -312,7 +313,7 @@ return array(
         'TagAll' => 'All Tages Privilege Management',
         'UploadAll' => 'All Attachments Privilege Management',
         'root' => 'Superuser Privilege Management',
-        'NoValidCode' => 'Ignore Captcha'
+        'NoValidCode' => 'Ignore Captcha',
     ),
 
 //Article Level

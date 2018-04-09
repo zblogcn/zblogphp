@@ -9,6 +9,7 @@
 
 /**
  * 得到请求协议（考虑到反向代理等原因，未必准确）
+ * 如果想获取准确的值，请zbp->Load后使用$zbp->isHttps
  * @param $array
  * @return $string
  */
@@ -1503,3 +1504,22 @@ function GetIDArrayByList($array) {
     return $ids;
 }
 
+
+
+function GetBackendCSPHeader() {
+    $defaultCSP = array(
+        'default-src' => "'self'",
+        'img-src' => "*",
+        'media-src' => "*",
+        'script-src' => "'self' 'unsafe-inline' 'unsafe-eval'",
+        'style-src' => "'self' 'unsafe-inline'"
+    );
+    foreach ($GLOBALS['hooks']['Filter_Plugin_CSP_Backend'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($defaultCSP);
+    }
+    $ret = array();
+    foreach ($defaultCSP as $key => $value) {
+        $ret[] = $key . ' ' . $value;
+    }
+    return implode('; ', $ret);
+}
