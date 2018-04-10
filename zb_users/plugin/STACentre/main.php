@@ -19,6 +19,9 @@ if (!$zbp->CheckPlugin('STACentre')) {
 $blogtitle = '静态管理中心';
 
 if (count($_POST) > 0) {
+    if (function_exists('CheckIsRefererValid')) {
+        CheckIsRefererValid();
+    }
     $zbp->option['ZC_STATIC_MODE'] = trim(GetVars('ZC_STATIC_MODE', 'POST'));
     $zbp->option['ZC_ARTICLE_REGEX'] = trim(GetVars('ZC_ARTICLE_REGEX', 'POST'));
     $zbp->option['ZC_PAGE_REGEX'] = trim(GetVars('ZC_PAGE_REGEX', 'POST'));
@@ -142,6 +145,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <div class="SubMenu"> <a href="main.php"><span class="m-left m-now">配置页面</span></a><a href="list.php"><span class="m-left">ReWrite规则</span></a><a href="help.php"><span class="m-right">帮助</span></a> </div>
   <div id="divMain2">
     <form id="edit" name="edit" method="post" action="#">
+        <?php if (function_exists('CheckIsRefererValid')) {echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';}?>
 <input id="reset" name="reset" type="hidden" value="" />
 <table border="1" class="tableFull tableBorder">
 <tr>

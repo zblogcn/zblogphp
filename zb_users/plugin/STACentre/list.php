@@ -20,6 +20,9 @@ if (!$zbp->CheckPlugin('STACentre')) {
 $blogtitle = '静态管理中心';
 
 if (count($_GET) > 0) {
+    if (function_exists('CheckIsRefererValid')) {
+        CheckIsRefererValid();
+    }
     if (GetVars('mak', 'GET') == '1') {
         @file_put_contents($zbp->path . '.htaccess', show_htaccess());
     } elseif (GetVars('mak', 'GET') == '2') {
@@ -112,7 +115,8 @@ if (strpos($default_tab, 'apache') !== false) {
     <?php } else {
     ?>
     <form id="edit" name="edit" method="post" action="#">
-      <input id="reset" name="reset" type="hidden" value="" />
+        <?php if (function_exists('CheckIsRefererValid')) {echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';}?>
+        <input id="reset" name="reset" type="hidden" value="" />
 
       <div class="content-box">
         <!-- Start Content Box -->
@@ -160,9 +164,9 @@ if (strpos($default_tab, 'apache') !== false) {
             <textarea style="width:99%;height:200px" readonly><?php echo htmlentities(show_htaccess())?></textarea>
             <hr/>
             <p>
-              <input type="button" onclick="window.location.href='?mak=1'" value="创建.htaccess" />
+              <input type="button" onclick="window.location.href='<?php echo BuildSafeURL('?mak=1');?>'" value="创建.htaccess" />
               &nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="button" onclick="window.location.href='?del=1'" value="删除.htaccess" />
+              <input type="button" onclick="window.location.href='<?php echo BuildSafeURL('?del=1');?>'" value="删除.htaccess" />
               <hr/>
               <span class="star">
                 请在网站 <u>"当前目录"</u>
@@ -177,9 +181,9 @@ if (strpos($default_tab, 'apache') !== false) {
             <textarea style="width:99%;height:400px" readonly><?php echo htmlentities(show_webconfig())?></textarea>
             <hr/>
             <p>
-              <input type="button" onclick="window.location.href='?mak=2'" value="创建web.config" />
+              <input type="button" onclick="window.location.href='<?php echo BuildSafeURL('?mak=2');?>'" value="创建web.config" />
               &nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="button" onclick="window.location.href='?del=2'" value="删除web.config" />
+              <input type="button" onclick="window.location.href='<?php echo BuildSafeURL('?del=2');?>'" value="删除web.config" />
               <hr/>
               <span class="star">
                 请在网站 <u>"当前目录"</u>
@@ -192,9 +196,9 @@ if (strpos($default_tab, 'apache') !== false) {
             <textarea id="ta_httpini" style="width:99%;height:200px" readonly><?php echo htmlentities(show_httpini())?></textarea>
             <hr/>
             <p>
-              <input type="button" onclick="window.location.href='?mak=3'" value="创建httpd.ini" />
+              <input type="button" onclick="window.location.href='<?php echo BuildSafeURL('?mak=3');?>'" value="创建httpd.ini" />
               &nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="button" onclick="window.location.href='?del=3'" value="删除httpd.ini" />
+              <input type="button" onclick="window.location.href='<?php echo BuildSafeURL('?del=3');?>'" value="删除httpd.ini" />
               <hr/>
               <span class="star">
                 请在网站根目录创建httpd.ini文件并把相关内容复制进去,httpd.ini文件必须为ANSI编码,也可以点击按钮生成.

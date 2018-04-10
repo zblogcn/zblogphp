@@ -1378,18 +1378,21 @@ function CheckCanBeString($obj)
 function BuildSafeURL($url, $appId = '')
 {
     global $zbp;
-    if (strpos($url, '?') > 0) {
+    if (strpos($url, '?') >= 0) {
         $url .= '&csrfToken=';
     } else {
         $url .= '?csrfToken=';
     }
-    $url = $zbp->host . $url . $zbp->GetCSRFToken($appId);
+    if (substr($url, 0, 1) === '/') {
+        $url = $zbp->host . $url;
+    }
+    $url = $url . $zbp->GetCSRFToken($appId);
     return $url;
 }
 
 function BuildSafeCmdURL($paramters)
 {
-    return BuildSafeURL('zb_system/cmd.php?' . $paramters);
+    return BuildSafeURL('/zb_system/cmd.php?' . $paramters);
 }
 
 
