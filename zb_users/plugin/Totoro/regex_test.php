@@ -15,35 +15,6 @@ if (!$zbp->CheckPlugin('Totoro')) {
 Totoro_init();
 $blogtitle = 'Totoro反垃圾评论';
 
-/*
-On Error Resume Next
-Set o=New RegExp
-t=Request.Form("string")
-o.Global=True
-o.IgnoreCase=True
-o.Pattern="("&Request.Form("regexp")&")"
-'Set m=o.Execute(t)
-h=TransferHTML(t,"[html-format]")
-t=h
-'For Each s in m
-'h=Replace(h,s.value,"<span style=""background-color:#92d050"">"&s.value&"</span>")
-'Next
-h=o.replace(h,"<span style=""background-color:#92d050"">$1</span>")
-n1=RunTime
-If Err.Number<>0 Then
-
-Else
-n="用时"&n1&"ms"
-if (t<>h) then h=n&"<br/><br/>检测到黑词或敏感词：<br/><br/>"&h  else h=n&"<br/><br/>"&h
-End If
-
-
-
-
-
-Response.Write h
-Response.End
- */
 if (GetVars('type', 'GET') == 'test') {
     set_error_handler(create_function('', ''));
     set_exception_handler(create_function('', ''));

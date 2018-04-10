@@ -6,6 +6,8 @@
 RegisterPlugin("Totoro", "ActivePlugin_Totoro");
 define('TOTORO_PATH', dirname(__FILE__));
 define('TOTORO_INCPATH', TOTORO_PATH . '/inc/');
+/** @var Totoro_Class $Totoro */
+$Totoro = null;
 
 function Totoro_init()
 {
@@ -51,9 +53,10 @@ function Totoro_Cmd_Begin()
         return;
     }
 
-    if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
+    if (function_exists('CheckIsRefererValid')) {
+        CheckIsRefererValid();
+    } else if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
         $zbp->ShowError(5, __FILE__, __LINE__);
-        die();
     }
     $id = (int) GetVars('id', 'GET');
     $ischecking = (bool) GetVars('ischecking', 'GET');

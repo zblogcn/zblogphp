@@ -22,6 +22,7 @@ if (!$zbp->CheckPlugin('ZBPDK')) {
 }
 
 if (isset($_GET['act'])) {
+    if (function_exists('CheckHTTPRefererValid') && !CheckHTTPRefererValid()) return;
     switch ($_GET['act']) {
         case 'open':
             echo blogconfig_exportlist($_GET['name']);
@@ -52,6 +53,7 @@ if (isset($_GET['act'])) {
 }
 
 if (isset($_POST['act'])) {
+    if (function_exists('CheckHTTPRefererValid') && !CheckHTTPRefererValid()) return;
     switch ($_POST['act']) {
         case 'e_del':
             $zbp->configs[$_POST['name2']]->Del($_POST['name1']);

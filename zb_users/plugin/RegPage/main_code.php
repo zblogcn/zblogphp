@@ -19,6 +19,7 @@ if (!$zbp->CheckPlugin('RegPage')) {
 $blogtitle = '注册组件';
 
 if (count($_POST) > 0) {
+    if (function_exists('CheckIsRefererValid')) CheckIsRefererValid();
     if (GetVars('reset', 'POST') == 'add') {
         RegPage_CreateCode(1000);
     }
@@ -49,6 +50,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </div>
   <div id="divMain2">
     <form id="edit" name="edit" method="post" action="#">
+<?php if (function_exists('CheckIsRefererValid')) {echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';}?>
+
+
 <input id="reset" name="reset" type="hidden" value="" />
       <hr/>
       <p>

@@ -109,7 +109,7 @@ function RegPage_CreateTable()
         return;
     }
     $s = $zbp->db->sql->CreateTable($GLOBALS['RegPage_Table'], $GLOBALS['RegPage_DataInfo']);
-    $zbp->db->QueryMulit($s);
+    $zbp->db->QueryMulti($s);
 }
 
 function RegPage_Main()
@@ -157,6 +157,7 @@ function RegPage_Page()
     $article->Type = ZC_POST_TYPE_PAGE;
 
     $article->Content .= '<input type="hidden" name="hash" value="'.$hash.'" />';
+
     $article->Content .= '<table style="width:90%;border:none;font-size:1.1em;line-height:2.5em;">';
     $article->Content .= '<tr style=""><th style="border:none;" colspan="2" scope="col"><p>'.$zbp->Config('RegPage')->readme_text.'</p></th></tr>';
     $article->Content .= '<tr><td width="30%" style="text-align:right;border:none;">(*)名称：</td><td  style="border:none;" ><input required="required" type="text" name="name" style="width:250px;font-size:1.2em;" /></td></tr>';

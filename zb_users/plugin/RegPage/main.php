@@ -20,6 +20,7 @@ $blogtitle = '注册组件';
 
 
 if (count($_POST) > 0) {
+    if (function_exists('CheckIsRefererValid')) CheckIsRefererValid();
     $zbp->Config('RegPage')->open_reg = (int) $_POST['open_reg'];
     $zbp->Config('RegPage')->default_level = (int) $_POST['default_level'];
     $zbp->Config('RegPage')->readme_text = $_POST['readme_text'];
@@ -56,7 +57,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </div>
   <div id="divMain2">
     <form id="edit" name="edit" method="post" action="#">
-<input id="reset" name="reset" type="hidden" value="" />
+        <?php if (function_exists('CheckIsRefererValid')) {echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';}?>
+        <input id="reset" name="reset" type="hidden" value="" />
 <table border="1" class="tableFull tableBorder">
 <tr>
     <th class="td30"><p align='left'><b>选项</b><br><span class='note'></span></p></th>
