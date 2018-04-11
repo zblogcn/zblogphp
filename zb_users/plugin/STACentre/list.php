@@ -3,8 +3,7 @@ require '../../../zb_system/function/c_system_base.php';
 
 require '../../../zb_system/function/c_system_admin.php';
 
-$zbp->
-Load();
+$zbp->Load();
 
 $action = 'root';
 if (!$zbp->CheckRights($action)) {
@@ -75,6 +74,18 @@ function show_lighttpd()
     $ur = new UrlRule("");
     if (method_exists('UrlRule', 'Make_lighttpd')) {
         return $ur->Make_lighttpd();
+    }
+}
+
+if (!function_exists('BuildSafeURL')) {
+
+    function BuildSafeURL($url, $appId = '')
+    {
+        global $zbp;
+        if (substr($url, 0, 1) === '/') {
+            $url = $zbp->host . $url;
+        }
+        return $url;
     }
 }
 

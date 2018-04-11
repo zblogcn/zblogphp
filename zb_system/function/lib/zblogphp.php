@@ -60,6 +60,11 @@ class ZBlogPHP
     /**
      * @var string 验证码地址
      */
+    public $verifyCodeUrl = null;
+    /**
+     * @var string 验证码地址（拼写错误）
+     * @deprecated
+     */
     public $validcodeurl = null;
     /**
      * @var string
@@ -476,7 +481,8 @@ class ZBlogPHP
             header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
         }
 
-        $this->validcodeurl = $this->host . 'zb_system/script/c_validcode.php';
+        $this->verifyCodeUrl = $this->host . 'zb_system/script/c_validcode.php';
+        $this->validcodeurl = &$this->verifyCodeUrl;
         $this->feedurl = $this->host . 'feed.php';
         $this->searchurl = $this->host . 'search.php';
         $this->ajaxurl = $this->host . 'zb_system/cmd.php?act=ajax&src=';
