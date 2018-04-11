@@ -1537,7 +1537,7 @@ function GetIDArrayByList($array) {
 function GetBackendCSPHeader() {
     $defaultCSP = array(
         'default-src' => "'self'",
-        'img-src' => "*",
+        'img-src' => "* data:",
         'media-src' => "*",
         'script-src' => "'self' 'unsafe-inline' 'unsafe-eval'",
         'style-src' => "'self' 'unsafe-inline'"
