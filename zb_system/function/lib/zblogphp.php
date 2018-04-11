@@ -1025,6 +1025,8 @@ class ZBlogPHP
         if (!isset($this->actions[$action])) {
             if (is_numeric($action)) {
                 return ($level <= $action);
+            } else {
+                return false;
             }
         }
 
