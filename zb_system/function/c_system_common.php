@@ -1384,7 +1384,7 @@ function BuildSafeURL($url, $appId = '')
         $url .= '?csrfToken=';
     }
     if (substr($url, 0, 1) === '/') {
-        $url = $zbp->host . $url;
+        $url = $zbp->host . substr($url, 1);
     }
     $url = $url . $zbp->GetCSRFToken($appId);
     return $url;
