@@ -1375,6 +1375,13 @@ function CheckCanBeString($obj)
     return is_scalar($obj);
 }
 
+/**
+ * 构造带Token的安全URL
+ * @param string $url
+ * @param string $appId 应用ID，可以生成一个应用专属的Token
+ * @return string
+ * @since 1.5.2
+ */
 function BuildSafeURL($url, $appId = '')
 {
     global $zbp;
@@ -1390,6 +1397,12 @@ function BuildSafeURL($url, $appId = '')
     return $url;
 }
 
+/**
+ * 构造cmd.php的访问链接
+ * @param string $paramters cmd.php参数
+ * @return bool
+ * @since 1.5.2
+ */
 function BuildSafeCmdURL($paramters)
 {
     return BuildSafeURL('/zb_system/cmd.php?' . $paramters);
@@ -1466,8 +1479,6 @@ function CreateWebToken($webTokenId, $time, $key = '')
     if ($key == '') {
         $key = $zbp->guid;
     }
-    var_dump('Create!!');
-    var_dump($time . $webTokenId . implode($args));
     return hash_hmac('sha256', $time . $webTokenId . implode($args), $key) . $time;
 }
 
