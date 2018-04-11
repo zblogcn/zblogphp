@@ -220,7 +220,7 @@ function GetEnvironment()
     global $zbp;
     $ajax = Network::Create();
     if ($ajax) {
-        $ajax = substr(get_class($ajax), 7);
+        $ajax = substr(get_class($ajax), 9);
     }
     $system_environment = PHP_OS . '; ' .
     GetValueInArray(
