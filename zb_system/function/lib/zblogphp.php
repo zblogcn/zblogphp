@@ -2918,11 +2918,13 @@ class ZBlogPHP
                 return false;
             }
 
-            if (function_exists('ini_set') && $this->option['ZC_YUN_SITE'] !== 'SAE') {
-                ini_set('zlib.output_compression', 'On');
-                ini_set('zlib.output_compression_level', '5');
+            if (function_exists('ini_set') && function_exists('zlib_encode') && $this->option['ZC_YUN_SITE'] !== 'SAE') {
+                @ob_end_clean();
+                @ini_set('zlib.output_compression', 'On');
+                @ini_set('zlib.output_compression_level', '5');
             } elseif (function_exists('ob_gzhandler')) {
-                ob_start('ob_gzhandler');
+                @ob_end_clean();
+                @ob_start('ob_gzhandler');
             }
             ob_start();
 
@@ -2931,6 +2933,7 @@ class ZBlogPHP
 
         return false;
     }
+
 
     /**
      * 检测网站关闭，如果关闭，则抛出错误
