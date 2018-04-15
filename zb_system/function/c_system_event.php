@@ -326,8 +326,9 @@ function ViewIndex()
         }
     }
 
+    $url = $zbp->currenturl;
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname();
+        $fpreturn = $fpname($url);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
@@ -344,8 +345,7 @@ function ViewIndex()
             break;
         case '':
         default:
-            if ($zbp->currenturl == $zbp->cookiespath ||
-            $zbp->currenturl == $zbp->cookiespath . 'index.php') {
+            if ($url == $zbp->cookiespath ||$url == $zbp->cookiespath . 'index.php') {
                 ViewList(null, null, null, null, null);
             } elseif (($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || isset($_GET['rewrite'])) &&
             (isset($_GET['id']) || isset($_GET['alias']))) {
@@ -354,7 +354,7 @@ function ViewIndex()
                 (isset($_GET['page']) || isset($_GET['cate']) || isset($_GET['auth']) || isset($_GET['date']) || isset($_GET['tags']))) {
                 ViewList(GetVars('page', 'GET'), GetVars('cate', 'GET'), GetVars('auth', 'GET'), GetVars('date', 'GET'), GetVars('tags', 'GET'));
             } else {
-                ViewAuto($zbp->currenturl);
+                ViewAuto($url);
             }
     }
     return false;
@@ -546,7 +546,7 @@ function ViewAuto($inpurl)
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($inpurl);
+        $fpreturn = $fpname($inpurl, $url);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
