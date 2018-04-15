@@ -298,7 +298,9 @@ class ZBlogPHP
         $this->actions = &$actions;
         $this->posttype = &$posttype;
         $this->currenturl = &$currenturl;
-        $this->fullcurrenturl =substr($this->host, 0, -1) . $this->currenturl;
+
+        $parsedHost = parse_url($this->host);
+        $this->fullcurrenturl = $parsedHost['scheme'] . '://' . $parsedHost['host'] . $this->currenturl;
         $this->action = &$action;
         $this->activedapps = &$activedapps;
         $this->activeapps = &$this->activedapps;
