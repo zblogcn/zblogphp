@@ -79,6 +79,7 @@ function misc_statistic()
     $zbp->cache->system_environment = GetEnvironment();
     $zbp->cache->all_article_nums = $all_artiles;
     $zbp->cache->all_page_nums = $all_pages;
+    $zbp->cache->all_category_nums = $all_categorys;
 
     $zbp->AddBuildModule('statistics', array($all_artiles, $all_pages, $all_categorys, $all_tags, $all_views, $all_comments));
     $zbp->BuildModule();
