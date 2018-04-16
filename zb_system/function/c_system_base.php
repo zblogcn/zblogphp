@@ -390,7 +390,12 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
  * CLI Mock 处理 
  */
 if (IS_CLI) {
-    $_SERVER["QUERY_STRING"] = implode('&', array_slice($argv, 1));
+    if (isset($GLOBALS['argv'])) {
+        $_SERVER["QUERY_STRING"] = implode('&', array_slice($GLOBALS['argv'], 1));
+    } else {
+        $_SERVER["QUERY_STRING"] = '';
+    }
+    
     $_SERVER["HTTP_HOST"] = "localhost";
     $_SERVER['SERVER_SOFTWARE'] = "CLI";
     $_GET = array();
