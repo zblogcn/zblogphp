@@ -13,6 +13,7 @@ function misc_updateinfo()
     global $zbp;
 
     $r = GetHttpContent($zbp->option['ZC_UPDATE_INFO_URL']);
+    $r = TransferHTML($r, '[noscript]');
 
     $r = '<tr><td>' . $r . '</td></tr>';
 
