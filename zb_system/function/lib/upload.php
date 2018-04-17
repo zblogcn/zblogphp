@@ -157,6 +157,9 @@ class Upload extends Base
         if (in_array($name, array('Url', 'Dir', 'FullFile', 'Author'))) {
             return;
         }
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Set'] as $fpname => &$fpsignal) {
+            $fpname($this, $name, $value);
+        }
         parent::__set($name, $value);
     }
 
@@ -186,6 +189,14 @@ class Upload extends Base
         }
         if ($name == 'Author') {
             return $zbp->GetMemberByID($this->AuthorID);
+        } 
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Get'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($this, $name);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                return $fpreturn;
+            }
         }
 
         return parent::__get($name);

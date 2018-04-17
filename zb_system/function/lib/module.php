@@ -43,6 +43,9 @@ class Module extends Base
 
             return;
         }
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Set'] as $fpname => &$fpsignal) {
+            $fpname($this, $name, $value);
+        }
         parent::__set($name, $value);
     }
 
@@ -70,7 +73,13 @@ class Module extends Base
         if ($name == 'NoRefresh') {
             return (bool) $this->Metas->norefresh;
         }
-
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Get'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($this, $name);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                return $fpreturn;
+            }
+        }
         return parent::__get($name);
     }
 

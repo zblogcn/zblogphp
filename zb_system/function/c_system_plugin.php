@@ -1682,6 +1682,27 @@ DefinePluginFilter('Filter_Plugin_Comment_Call');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Comment_Get
+'参数:&$this, $method
+'说明:干预Comment类Get方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Comment_Get');
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Comment_Set
+'参数:&$this, $method, $arg
+'说明:干预Comment类Set方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Comment_Set');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Tag_Call
 '参数:&$tag,$method,$args
 '说明:Tag类的魔术方法接口
@@ -1778,6 +1799,26 @@ DefinePluginFilter('Filter_Plugin_Member_Del');
  */
 DefinePluginFilter('Filter_Plugin_Module_Del');
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Module_Get
+'参数:&$this, $method
+'说明:干预Module类Get方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Module_Get');
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Module_Set
+'参数:&$this, $method, $arg
+'说明:干预Module类Set方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Module_Set');
 /*
 '**************************************************<
 '类型:Filter
@@ -1898,6 +1939,27 @@ DefinePluginFilter('Filter_Plugin_Upload_DelFile');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Upload_Url');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Upload_Get
+'参数:&$this, $method
+'说明:干预Upload类Get方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Upload_Get');
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Upload_Set
+'参数:&$this, $method, $arg
+'说明:干预Upload类Set方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Upload_Set');
 
 /*
 '**************************************************<
