@@ -1009,7 +1009,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
         true
     );
 
-    if (count($articles) <= 0) {
+    if (count($articles) <= 0 && $page > 1) {
         $zbp->ShowError(2, __FILE__, __LINE__);
     }
 
