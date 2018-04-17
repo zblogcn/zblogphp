@@ -86,6 +86,9 @@ class Category extends Base
             $this->data[$name] = $value;
             return;
         }
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Set'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($this, $name, $value);
+        }
         parent::__set($name, $value);
     }
 
@@ -148,6 +151,14 @@ class Category extends Base
             }
 
             return $value;
+        } else {
+            foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Get'] as $fpname => &$fpsignal) {
+                $fpreturn = $fpname($this, $name);
+                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                    $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                    return $fpreturn;
+                }
+            }
         }
 
         return parent::__get($name);

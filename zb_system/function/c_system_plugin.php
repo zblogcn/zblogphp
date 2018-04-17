@@ -1502,6 +1502,27 @@ DefinePluginFilter('Filter_Plugin_Post_Url');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Post_Get
+'参数:&$this, $method
+'说明:干预Post类Get方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Post_Get');
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Post_Set
+'参数:&$this, $method, $arg
+'说明:干预Post类Set方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Post_Set');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Category_Url
 '参数:&$this
 '说明:干预Category类Url方法的接口
@@ -1509,6 +1530,26 @@ DefinePluginFilter('Filter_Plugin_Post_Url');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Category_Url');
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Category_Get
+'参数:&$this, $method
+'说明:干预Category类Get方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Category_Get');
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Category_Set
+'参数:&$this, $method, $arg
+'说明:干预Category类Set方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Category_Set');
 
 /*
 '**************************************************<
@@ -1520,6 +1561,26 @@ DefinePluginFilter('Filter_Plugin_Category_Url');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Tag_Url');
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Category_Get
+'参数:&$this, $method
+'说明:干预Tag类Get方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Tag_Get');
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Tag_Set
+'参数:&$this, $method, $arg
+'说明:干预Tag类Set方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Tag_Set');
 
 /*
 '**************************************************<
@@ -1531,6 +1592,26 @@ DefinePluginFilter('Filter_Plugin_Tag_Url');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Member_Url');
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Member_Get
+'参数:&$this, $method
+'说明:干预Member类Get方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Member_Get');
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Member_Set
+'参数:&$this, $method, $arg
+'说明:干预Member类Set方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Member_Set');
 
 /*
 '**************************************************<

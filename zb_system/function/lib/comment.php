@@ -95,6 +95,9 @@ class Comment extends Base
         if (in_array($name, array('Author', 'Comments', 'Level', 'Post'))) {
             return;
         }
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Set'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($this, $name, $value);
+        }
         parent::__set($name, $value);
     }
 
@@ -128,6 +131,14 @@ class Comment extends Base
             return $this->GetDeep($this);
         } else if ($name === 'Post') {
             return $zbp->GetPostByID($this->LogID);
+        } else {
+            foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Get'] as $fpname => &$fpsignal) {
+                $fpreturn = $fpname($this, $name);
+                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                    $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                    return $fpreturn;
+                }
+            }
         }
 
         return parent::__get($name);

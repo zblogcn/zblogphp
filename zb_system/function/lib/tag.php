@@ -58,6 +58,9 @@ class Tag extends Base
             $this->data[$name] = $value;
             return;
         }
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Set'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($this, $name, $value);
+        }
         parent::__set($name, $value);
     }
 
@@ -90,8 +93,14 @@ class Tag extends Base
             }
 
             return $value;
-        }
-
+        } 
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Get'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($this, $name);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                return $fpreturn;
+            }
+         }
         return parent::__get($name);
     }
 

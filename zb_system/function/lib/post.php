@@ -145,6 +145,9 @@ class Post extends Base
                 return;
             break;
             default:
+                foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Set'] as $fpname => &$fpsignal) {
+                    $fpreturn = $fpname($this, $name, $value);
+                }
                 parent::__set($name, $value);
                 break;
         }
@@ -316,6 +319,13 @@ class Post extends Base
             case 'TypeName':
                 return $zbp->GetPostType_Name($this->Type);
             default:
+                foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Get'] as $fpname => &$fpsignal) {
+                    $fpreturn = $fpname($this, $name);
+                    if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                        return $fpreturn;
+                    }
+                }
                 return parent::__get($name);
             break;
         }
