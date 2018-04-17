@@ -795,7 +795,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
                 $category = $zbp->GetCategoryByAlias($cate['alias']);
             }
 
-            if ($category->ID == 0) {
+            if ($category->ID == '') {
                 if ($isrewrite == true) {
                     return false;
                 }
@@ -847,7 +847,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
                 $author = $zbp->GetMemberByNameOrAlias($auth['alias']);
             }
 
-            if ($author->ID == 0) {
+            if ($author->ID == '') {
                 if ($isrewrite) {
                     return false;
                 }
