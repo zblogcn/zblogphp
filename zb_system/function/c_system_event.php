@@ -514,7 +514,7 @@ function ViewSearch()
     $zbp->template->SetTemplate($article->Template);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname('');
+        $fpreturn = $fpname($zbp->template);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
