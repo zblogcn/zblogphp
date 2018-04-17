@@ -897,9 +897,9 @@ class ZBlogPHP
 
         $this->option['ZC_BLOG_CLSID'] = $this->guid;
 
-        if (ZC_VERSION_MAJOR === 1 && ZC_VERSION_MINOR === 5) {
-            if (is_dir($zbp->path . '/zb_system/api')) {
-                rrmdir($zbp->path . '/zb_system/api'); // Fix bug!!!
+        if (ZC_VERSION_MAJOR === '1' && ZC_VERSION_MINOR === '5') {
+            if (is_dir($this->path . 'zb_system/api')) {
+                @rrmdir($this->path . 'zb_system/api'); // Fix bug!!!
             }
         }
 
