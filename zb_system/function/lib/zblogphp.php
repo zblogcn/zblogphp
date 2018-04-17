@@ -897,6 +897,12 @@ class ZBlogPHP
 
         $this->option['ZC_BLOG_CLSID'] = $this->guid;
 
+        if (ZC_VERSION_MAJOR === 1 && ZC_VERSION_MINOR === 5) {
+            if (is_dir($zbp->path . '/zb_system/api')) {
+                rrmdir($zbp->path . '/zb_system/api'); // Fix bug!!!
+            }
+        }
+
         if (strpos('|SAE|BAE2|ACE|TXY|', '|' . $this->option['ZC_YUN_SITE'] . '|') === false && file_exists($this->usersdir . 'c_option.php') == false) {
             $s = "<" . "?" . "php\r\n";
             $s .= "return ";
