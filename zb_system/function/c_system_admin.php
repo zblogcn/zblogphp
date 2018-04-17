@@ -635,7 +635,7 @@ function Admin_ArticleMng()
         $w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', GetVars('search'));
     }
     if (GetVars('istop')) {
-        $w[] = array('=', 'log_Istop', '1');
+        $w[] = array('<>', 'log_Istop', '0');
     }
     if (GetVars('status')) {
         $w[] = array('=', 'log_Status', GetVars('status'));
