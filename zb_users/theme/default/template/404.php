@@ -29,7 +29,7 @@
         .ui-tc{ text-align: center;}             /* 内容居中 */
 
         textarea{width:600px;height:40px;border:1px solid #7F9DB9;resize:0;padding:10px}
-        .icon_err{display:inline-block;width:113px;height:117px;overflow:hidden;line-height:500px;background-image:url(http://mat1.gtimg.com/www/404/404.png);}
+        .icon_err{display:inline-block;width:113px;height:117px;overflow:hidden;line-height:500px;background-image:url(//mat1.gtimg.com/www/404/404.png);}
 
         .box-item .hint_tips{color:#545454;background:#E3E3E3;padding:5px;margin:20px 10px 15px;}
         .box-item .hint_tips h4{font-size:14px;margin-bottom:5px;padding:0;}
@@ -39,8 +39,8 @@
         .mod_img .img_wrap{float:left;width:130px;margin-right:10px;_margin-right:7px;}
         .mod_img .txt_details{overflow:hidden;*zoom:1;}
 
-        .tc_gy{display:inline-block;width:50px;height:50px;line-height:200px;overflow:hidden;background-image:url(http://mat1.gtimg.com/www/404/tc_gy.png)}
-        .baby_back{display:inline-block;width:107px;height:40px;line-height:200px;overflow:hidden;background-image:url(http://mat1.gtimg.com/www/404/baby_back.png)}
+        .tc_gy{display:inline-block;width:50px;height:50px;line-height:200px;overflow:hidden;background-image:url(//mat1.gtimg.com/www/404/tc_gy.png)}
+        .baby_back{display:inline-block;width:107px;height:40px;line-height:200px;overflow:hidden;background-image:url(//mat1.gtimg.com/www/404/baby_back.png)}
 
         a{color:#2F93CE;text-decoration:none;}
 
@@ -49,6 +49,6 @@
     </style>
 </head>
 <body>
-<script type="text/javascript" src="http://www.qq.com/404/search_children.js" charset="utf-8"></script>
+<script type="text/javascript" src="//qzonestyle.gtimg.cn/qzone/hybrid/app/404/search_children.js" homePageName="返回{$name}" homePageUrl="{$host}"></script>
 </body>
 </html>
