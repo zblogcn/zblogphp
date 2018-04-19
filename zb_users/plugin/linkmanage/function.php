@@ -24,11 +24,12 @@ function linkmanage_getMenus()
 function linkmanage_getLink($menuID)
 {
     global $zbp;
-    $t = '{}';//json
+    $t = '{}'; //json
     $linkmanage_str = linkmanage_editSys_str($menuID);
     if (isset($zbp->modulesbyfilename[$linkmanage_str.$menuID])) {
         $t = $zbp->modulesbyfilename[$linkmanage_str.$menuID]->Metas->linkmanage_links;
     }
+
     return json_decode($t, true);
 }
 
@@ -41,6 +42,7 @@ function linkmanage_getLink_sort($menuID)
     if (isset($zbp->modulesbyfilename[$linkmanage_str.$menuID])) {
         $t = $zbp->modulesbyfilename[$linkmanage_str.$menuID]->Metas->linkmanage_link_sort;
     }
+
     return json_decode($t, true);
 }
 
@@ -52,6 +54,7 @@ function linkmanage_getTempid()
     if ($zbp->Config('linkmanage')->Tempid) {
         $t = $zbp->Config('linkmanage')->Tempid;
     }
+
     return $t;
 }
 
@@ -66,6 +69,7 @@ function linkmanage_isSys($menuID)
     if (preg_match("/$menuID/", $sysMenu)) {
         $t = true;
     }
+
     return $t;
 }
 
@@ -77,6 +81,7 @@ function linkmanage_editSys_str($menuID)
     if ($zbp->Config('linkmanage')->editsystem && linkmanage_isSys($menuID)) {
         $t = '';
     }
+
     return $t;
 }
 
@@ -91,7 +96,7 @@ function linkmanage_creatMenu($menuID)
         $zbp->SetHint('bad', 'ID已存在！请更改');
     } else {
         $n['data'][$menuID] = array(
-            'id' => $menuID,
+            'id'   => $menuID,
             'name' => GetVars('name', 'POST'),
             //'location' => '',
         );
@@ -163,15 +168,14 @@ function linkmanage_saveMenu()
 
         //保存菜单链接排序
         $link_sort = json_encode(GetVars('menuItem', 'POST'));
-        linkmanage_updataModule($menuID,$menuName,$links_json,$link_sort);
-
+        linkmanage_updataModule($menuID, $menuName, $links_json, $link_sort);
     }
     echo $link_sort;
     die();
 }
 
 //更新模块内容
-function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$link_sort)
+function linkmanage_updataModule($menuID, $menuName, $links_json, $link_sort)
 {
     global $zbp;
     $html = '';
@@ -183,17 +187,17 @@ function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$li
     } else {
         $links = linkmanage_getLink($menuID);
     }
-    if ($link_sort !== 'null'){
+    if ($link_sort !== 'null') {
         $sort = json_decode($link_sort, true);
         foreach ($sort as $key => $value) {
             $link = $links['ID'.$key];
 
             $newtable_tmp = '';
-            if($link['newtable']){
+            if ($link['newtable']) {
                 $newtable_tmp = 'target="_blank"';
             }
 
-            $html_tmp = '<li class="li-item" id="'.$linkmanage_str.$menuID.'-'.$link['type'].'-'.$link['sysid'].'"><a href="'.$link['url'].'" title="'.$link['title'].'" ' .$newtable_tmp .'>'.$link['title'].'</a><span id="'.$link['id'].'"></span></li>';
+            $html_tmp = '<li class="li-item" id="'.$linkmanage_str.$menuID.'-'.$link['type'].'-'.$link['sysid'].'"><a href="'.$link['url'].'" title="'.$link['title'].'" '.$newtable_tmp.'>'.$link['title'].'</a><span id="'.$link['id'].'"></span></li>';
 
             if ($value == 'null') {
                 $html .= $html_tmp;
@@ -201,8 +205,8 @@ function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$li
                 $html = str_replace('<span id="'.$value.'"></span>', '<ul class="ul-subitem">'.$html_tmp.'</ul><span id="'.$value.'"></span>', $html);
             }
         }
-        $html=preg_replace("/<(span.*?)>(.*?)<(\/span.*?)>/si","",$html); //过滤span标签
-        $html=preg_replace("/<\/ul><ul class=\"ul-subitem\">/si","",$html); //过滤ul标签
+        $html = preg_replace("/<(span.*?)>(.*?)<(\/span.*?)>/si", "", $html); //过滤span标签
+        $html = preg_replace("/<\/ul><ul class=\"ul-subitem\">/si", "", $html); //过滤ul标签
     } else {
         $html = '';
         $links_json = '{}';
@@ -212,10 +216,9 @@ function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$li
     //修改模块
 
     $t = '';
-    if (isset($zbp->modulesbyfilename[$linkmanage_str . $menuID])) {
-        $t = $zbp->modulesbyfilename[$linkmanage_str . $menuID];
-    }
-    else {
+    if (isset($zbp->modulesbyfilename[$linkmanage_str.$menuID])) {
+        $t = $zbp->modulesbyfilename[$linkmanage_str.$menuID];
+    } else {
         $t = new Module();
         $t->SidebarID = 0;
         $t->FileName = 'linkmanage_'.$menuID;
@@ -224,10 +227,10 @@ function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$li
         $t->Type = 'ul';
     }
 
-    if(!is_null($menuName)) {
-        if(linkmanage_isSys($menuID)) {
-             $t->Name = $menuName;
-        } else{
+    if (!is_null($menuName)) {
+        if (linkmanage_isSys($menuID)) {
+            $t->Name = $menuName;
+        } else {
             $t->Name = '菜单：'.$menuName;
         }
     }
@@ -238,7 +241,6 @@ function linkmanage_updataModule($menuID,$menuName = null,$links_json = null,$li
 
     $t->Save();
 }
-
 
 // 创建、编辑保存单链接
 function linkmanage_saveLink_s($menuID)
@@ -262,10 +264,9 @@ function linkmanage_saveLink_s($menuID)
 
     $linkmanage_str = linkmanage_editSys_str($menuID);
 
-    if (isset($zbp->modulesbyfilename[$linkmanage_str . $menuID])) {
-        $t = $zbp->modulesbyfilename[$linkmanage_str . $menuID];
-    }
-    else {
+    if (isset($zbp->modulesbyfilename[$linkmanage_str.$menuID])) {
+        $t = $zbp->modulesbyfilename[$linkmanage_str.$menuID];
+    } else {
         $t = new Module();
         $t->FileName = 'linkmanage_'.$menuID;
         $t->Source = 'plugin_'.$menuID;
@@ -302,8 +303,7 @@ function linkmanage_deleteLink($linkID, $menuID)
         unset($link_sort[$linkID]);
         echo 0;
 
-        linkmanage_updataModule($menuID,null,json_encode($links),json_encode($link_sort));
-
+        linkmanage_updataModule($menuID, null, json_encode($links), json_encode($link_sort));
     }
     echo json_encode($links);
     die();
@@ -314,13 +314,14 @@ function linkmanage_showtype()
 {
     global $zbp;
     $showtype = array(
-        array('post','文章'),
-        array('page','页面'),
-        array('category','分类'),
-        array('tags','标签'),
-        array('author','作者'),
-        array('other','其它')
+        array('post', '文章'),
+        array('page', '页面'),
+        array('category', '分类'),
+        array('tags', '标签'),
+        array('author', '作者'),
+        array('other', '其它'),
     );
+
     return $showtype;
 }
 // 获取系统链接
@@ -378,15 +379,17 @@ function linkmanage_edit_button($menuID)
         $del_button = '<button class="ui-button-danger ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="del_menu(\''.$menuID.'\');return false;">删除导航</button>';
     }
     $edit_button = '<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="edit_menu(\''.$menuID.'\');return false;"><span class="ui-button-text">编辑</span></button>';
-    return $edit_button . '    ' . $del_button;
+
+    return $edit_button.'    '.$del_button;
 }
 
 // 保存配置
-function linkmanage_saveConfig(){
+function linkmanage_saveConfig()
+{
     global $zbp;
     foreach ($_POST as $key => $value) {
-        if ($key == "showoption"){
-            $zbp->Config('linkmanage')->showoption = implode('|',$value);
+        if ($key == "showoption") {
+            $zbp->Config('linkmanage')->showoption = implode('|', $value);
         } else {
             $zbp->Config('linkmanage')->$key = $value;
         }

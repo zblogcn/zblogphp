@@ -5,15 +5,15 @@
  */
 RegisterPlugin("Totoro", "ActivePlugin_Totoro");
 define('TOTORO_PATH', dirname(__FILE__));
-define('TOTORO_INCPATH', TOTORO_PATH . '/inc/');
+define('TOTORO_INCPATH', TOTORO_PATH.'/inc/');
 /** @var Totoro_Class $Totoro */
 $Totoro = null;
 
 function Totoro_init()
 {
-    require_once TOTORO_PATH . '/inc/totoro.php';
+    require_once TOTORO_PATH.'/inc/totoro.php';
     global $Totoro;
-    $Totoro = new Totoro_Class;
+    $Totoro = new Totoro_Class();
 }
 
 function ActivePlugin_Totoro()
@@ -30,8 +30,8 @@ function InstallPlugin_Totoro()
 function Totoro_Admin_CommentMng_SubMenu()
 {
     global $zbp;
-    echo '<a href="' . $zbp->host . 'zb_users/plugin/Totoro/main.php"><span class="m-right">Totoro设置</span></a>';
-    echo '<script src="' . $zbp->host . 'zb_users/plugin/Totoro/submenu.js"></script>';
+    echo '<a href="'.$zbp->host.'zb_users/plugin/Totoro/main.php"><span class="m-right">Totoro设置</span></a>';
+    echo '<script src="'.$zbp->host.'zb_users/plugin/Totoro/submenu.js"></script>';
 }
 
 function Totoro_PostComment_Core(&$comment)
@@ -55,7 +55,7 @@ function Totoro_Cmd_Begin()
 
     if (function_exists('CheckIsRefererValid')) {
         CheckIsRefererValid();
-    } else if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
+    } elseif (!$zbp->ValidToken(GetVars('token', 'GET'))) {
         $zbp->ShowError(5, __FILE__, __LINE__);
     }
     $id = (int) GetVars('id', 'GET');

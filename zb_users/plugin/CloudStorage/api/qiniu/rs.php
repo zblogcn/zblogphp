@@ -149,22 +149,22 @@ class Qiniu_RS_EntryPathPair
 
 function Qiniu_RS_URIStat($bucket, $key)
 {
-    return '/stat/' . Qiniu_Encode("$bucket:$key");
+    return '/stat/'.Qiniu_Encode("$bucket:$key");
 }
 
 function Qiniu_RS_URIDelete($bucket, $key)
 {
-    return '/delete/' . Qiniu_Encode("$bucket:$key");
+    return '/delete/'.Qiniu_Encode("$bucket:$key");
 }
 
 function Qiniu_RS_URICopy($bucketSrc, $keySrc, $bucketDest, $keyDest)
 {
-    return '/copy/' . Qiniu_Encode("$bucketSrc:$keySrc") . '/' . Qiniu_Encode("$bucketDest:$keyDest");
+    return '/copy/'.Qiniu_Encode("$bucketSrc:$keySrc").'/'.Qiniu_Encode("$bucketDest:$keyDest");
 }
 
 function Qiniu_RS_URIMove($bucketSrc, $keySrc, $bucketDest, $keyDest)
 {
-    return '/move/' . Qiniu_Encode("$bucketSrc:$keySrc") . '/' . Qiniu_Encode("$bucketDest:$keyDest");
+    return '/move/'.Qiniu_Encode("$bucketSrc:$keySrc").'/'.Qiniu_Encode("$bucketDest:$keyDest");
 }
 
 // ----------------------------------------------------------
@@ -174,7 +174,7 @@ function Qiniu_RS_Stat($self, $bucket, $key) // => ($statRet, $error)
     global $QINIU_RS_HOST;
     $uri = Qiniu_RS_URIStat($bucket, $key);
 
-    return Qiniu_Client_Call($self, $QINIU_RS_HOST . $uri);
+    return Qiniu_Client_Call($self, $QINIU_RS_HOST.$uri);
 }
 
 function Qiniu_RS_Delete($self, $bucket, $key) // => $error
@@ -182,7 +182,7 @@ function Qiniu_RS_Delete($self, $bucket, $key) // => $error
     global $QINIU_RS_HOST;
     $uri = Qiniu_RS_URIDelete($bucket, $key);
 
-    return Qiniu_Client_CallNoRet($self, $QINIU_RS_HOST . $uri);
+    return Qiniu_Client_CallNoRet($self, $QINIU_RS_HOST.$uri);
 }
 
 function Qiniu_RS_Move($self, $bucketSrc, $keySrc, $bucketDest, $keyDest) // => $error
@@ -190,7 +190,7 @@ function Qiniu_RS_Move($self, $bucketSrc, $keySrc, $bucketDest, $keyDest) // => 
     global $QINIU_RS_HOST;
     $uri = Qiniu_RS_URIMove($bucketSrc, $keySrc, $bucketDest, $keyDest);
 
-    return Qiniu_Client_CallNoRet($self, $QINIU_RS_HOST . $uri);
+    return Qiniu_Client_CallNoRet($self, $QINIU_RS_HOST.$uri);
 }
 
 function Qiniu_RS_Copy($self, $bucketSrc, $keySrc, $bucketDest, $keyDest) // => $error
@@ -198,7 +198,7 @@ function Qiniu_RS_Copy($self, $bucketSrc, $keySrc, $bucketDest, $keyDest) // => 
     global $QINIU_RS_HOST;
     $uri = Qiniu_RS_URICopy($bucketSrc, $keySrc, $bucketDest, $keyDest);
 
-    return Qiniu_Client_CallNoRet($self, $QINIU_RS_HOST . $uri);
+    return Qiniu_Client_CallNoRet($self, $QINIU_RS_HOST.$uri);
 }
 
 // ----------------------------------------------------------
@@ -207,8 +207,8 @@ function Qiniu_RS_Copy($self, $bucketSrc, $keySrc, $bucketDest, $keyDest) // => 
 function Qiniu_RS_Batch($self, $ops) // => ($data, $error)
 {
     global $QINIU_RS_HOST;
-    $url = $QINIU_RS_HOST . '/batch';
-    $params = 'op=' . implode('&op=', $ops);
+    $url = $QINIU_RS_HOST.'/batch';
+    $params = 'op='.implode('&op=', $ops);
 
     return Qiniu_Client_CallWithForm($self, $url, $params);
 }

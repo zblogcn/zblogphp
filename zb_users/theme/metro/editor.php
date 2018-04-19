@@ -4,33 +4,39 @@ require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('metro')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
+if (!$zbp->CheckPlugin('metro')) {
+    $zbp->ShowError(48);
+    die();
+}
 $blogtitle = 'Metro主题配置';
 
 if ($zbp->Config('metro')->HasKey('version')) {
-	$strlayout = $zbp->Config('metro')->custom_layout;
-	$strBodyBg = $zbp->Config('metro')->custom_bodybg;
-	$strHdBg = $zbp->Config('metro')->custom_hdbg;
-	$strColor = $zbp->Config('metro')->custom_color;
-	$aryBodyBg = explode('|', $strBodyBg);
-	$aryHdBg = explode('|', $strHdBg);
-	$aryColor = explode('|', $strColor);
+    $strlayout = $zbp->Config('metro')->custom_layout;
+    $strBodyBg = $zbp->Config('metro')->custom_bodybg;
+    $strHdBg = $zbp->Config('metro')->custom_hdbg;
+    $strColor = $zbp->Config('metro')->custom_color;
+    $aryBodyBg = explode('|', $strBodyBg);
+    $aryHdBg = explode('|', $strHdBg);
+    $aryColor = explode('|', $strColor);
 }
- 
-$a = array("", "左", "中", "右");
-$r = "?" . rand();
 
-require $blogpath . 'zb_system/admin/admin_header.php';
+$a = array("", "左", "中", "右");
+$r = "?".rand();
+
+require $blogpath.'zb_system/admin/admin_header.php';
 ?>
 <link href="source/evol.colorpicker.css" rel="stylesheet" />
 <script src="source/evol.colorpicker.min.js" type="text/javascript"></script>
 <script src="source/custom.js" type="text/javascript"></script>
 <?php
 if ($zbp->CheckPlugin('UEditor')) {
-?>
-<script type="text/javascript" src="<?php echo $zbp->host;?>zb_users/plugin/UEditor/ueditor.config.php"></script>
-<script type="text/javascript" src="<?php echo $zbp->host;?>zb_users/plugin/UEditor/ueditor.all.min.js"></script>
+    ?>
+<script type="text/javascript" src="<?php echo $zbp->host; ?>zb_users/plugin/UEditor/ueditor.config.php"></script>
+<script type="text/javascript" src="<?php echo $zbp->host; ?>zb_users/plugin/UEditor/ueditor.all.min.js"></script>
 <?php
 }
 ?>
@@ -44,11 +50,11 @@ table .button{padding: 2px 12px 5px 12px; margin: 0.25em 0;}
 .imageshow{margin:0.25em 0;}.imageshow img{margin:0 10px;margin-bottom:-10px;}
 </style>
 <?php
-require $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath.'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
 	<div class="divHeader">
-		<?php echo $blogtitle;?></div>
+		<?php echo $blogtitle; ?></div>
 	<div class="SubMenu"></div>
 	<div id="divMain2">
 		<form action="save.php" method="post">
@@ -73,7 +79,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 					<td>
 						<div >
 							顶部高度：
-							<input id="hdbgph" type="text" name="hdbg5"  size="3"  value="<?php echo $aryHdBg[5];?>" />（单位：px）</div>
+							<input id="hdbgph" type="text" name="hdbg5"  size="3"  value="<?php echo $aryHdBg[5]; ?>" />（单位：px）</div>
 						<div id="hdbgcolor" >
 							<input type="checkbox" id="hdbgc0" name="hdbg0" <?php echo $aryHdBg[0] == 'transparent' ? 'checked="checked"' : ''; ?> value="transparent"/>
 							<label for="hdbgc0">背景透明（不透明情况下使用主色为背景色）</label>
@@ -85,26 +91,28 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 						<div id="hdbgmain" <?php echo $aryHdBg[6] == "" ? 'style="display:none"' : "" ?>>
 							<div class="imageshow">
 								<input  type="hidden"  id="url_updatapic2" name="hdbg1"  value="<?php echo $aryHdBg[1] ?>" />
-								<img src="<?php echo $aryHdBg[1] . $r ?>" width="190" height="120" border="0" alt="" id="pic_updatapic2">
+								<img src="<?php echo $aryHdBg[1].$r ?>" width="190" height="120" border="0" alt="" id="pic_updatapic2">
 								<input type="button"  id="updatapic2" class="button" value="更换图片" />
 							</div>
 							<div id="hdbgs">
 								背景设定：
-								<input type="checkbox" id="hdbg2r" name="hdbg2[]" <?php echo(stripos($aryHdBg[2], "repeat") > -1 ? 'checked="checked"' : ""); ?> value="repeat"/>
+								<input type="checkbox" id="hdbg2r" name="hdbg2[]" <?php echo stripos($aryHdBg[2], "repeat") > -1 ? 'checked="checked"' : ""; ?> value="repeat"/>
 								<label for="hdbg2r">平铺</label>
-								<input type="checkbox" id="hdbg2f" name="hdbg2[]" <?php echo(stripos($aryHdBg[2], "fixed") > -1 ? 'checked="checked"' : ""); ?> value="fixed"/>
+								<input type="checkbox" id="hdbg2f" name="hdbg2[]" <?php echo stripos($aryHdBg[2], "fixed") > -1 ? 'checked="checked"' : ""; ?> value="fixed"/>
 								<label for="hdbg2f">固定</label>
-								<input type="checkbox" id="hdbg2g" name="hdbg2[]" <?php echo(stripos($aryHdBg[2], "cover") > -1 ? 'checked="checked"' : ""); ?> value="cover"/>
+								<input type="checkbox" id="hdbg2g" name="hdbg2[]" <?php echo stripos($aryHdBg[2], "cover") > -1 ? 'checked="checked"' : ""; ?> value="cover"/>
 								<label for="hdbg2g">拉伸(不支持IE678)</label>
 							</div>
 							<div id="hdbgpx">
 								对齐方式：
-								<?php	for($i = 1;$i <= 3;$i++){	 ?>
+								<?php	for ($i = 1; $i <= 3; $i++) {
+    ?>
 
 								<input type="radio" id="hdbgpx<?php echo $i ?>" name="hdbg3" value="<?php echo $i ?>" <?php echo $i == (int) $aryHdBg[3] ? 'checked="checked"' : ""; ?> />
 								<label for="hdbgpx<?php echo $i ?>">居<?php echo $a[$i] ?></label>
 								
-								<?php	}   ?></div>
+								<?php
+}   ?></div>
 							<input id="hdbgpy" type="hidden" name="hdbg4"  value="<?php echo $aryHdBg[4] ?>" /></div>
 					</td>
 				</tr>
@@ -126,21 +134,23 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 							</div>
 							<div id="bodybgs">
 								背景设定：
-								<input type="checkbox" id="bodybg2r" name="bodybg2[]" <?php echo(stripos($aryBodyBg[2], "repeat") > -1 ? 'checked="checked"' : ""); ?> value="repeat"/>
+								<input type="checkbox" id="bodybg2r" name="bodybg2[]" <?php echo stripos($aryBodyBg[2], "repeat") > -1 ? 'checked="checked"' : ""; ?> value="repeat"/>
 								<label for="bodybg2r">平铺</label>
-								<input type="checkbox" id="bodybg2f" name="bodybg2[]" <?php echo(stripos($aryBodyBg[2], "fixed") > -1 ? 'checked="checked"' : ""); ?> value="fixed"/>
+								<input type="checkbox" id="bodybg2f" name="bodybg2[]" <?php echo stripos($aryBodyBg[2], "fixed") > -1 ? 'checked="checked"' : ""; ?> value="fixed"/>
 								<label for="bodybg2f">固定</label>
-								<input type="checkbox" id="bodybg2g" name="bodybg2[]" <?php echo(stripos($aryBodyBg[2], "cover") > -1 ? 'checked="checked"' : ""); ?> value="cover"/>
+								<input type="checkbox" id="bodybg2g" name="bodybg2[]" <?php echo stripos($aryBodyBg[2], "cover") > -1 ? 'checked="checked"' : ""; ?> value="cover"/>
 								<label for="bodybg2g">拉伸(不支持IE678)</label>
 							</div>
 							<div id="bgpx">
 								对齐方式：
-								<?php	for($i = 1;$i <= 3;$i++){	 ?>
+								<?php	for ($i = 1; $i <= 3; $i++) {
+        ?>
 								
 								<input type="radio" id="bgpx<?php echo $i ?>" name="bodybg3" value="<?php echo $i ?>" <?php echo $i == (int) $aryBodyBg[3] ? 'checked="checked"' : ""; ?> />
 								<label for="bgpx<?php echo $i ?>">居<?php echo $a[$i] ?></label>
 								
-								<?php	}   ?></div>
+								<?php
+    }   ?></div>
 							<input type="hidden" id="bgpy" name="bodybg4"  value="<?php echo $aryBodyBg[4] ?>" /></div>
 					</td>
 				</tr>
@@ -187,6 +197,6 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </div>
 <script type="text/javascript">ActiveTopMenu("topmenu_metro");</script>
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath.'zb_system/admin/admin_footer.php';
 RunTime();
 ?>

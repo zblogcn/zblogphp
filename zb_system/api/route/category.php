@@ -1,13 +1,15 @@
 <?php
 /**
- * api
+ * api.
+ *
  * @author zsx<zsx@zsxsoft.com>
- * @package api/route/category
  * @php >= 5.2
  */
 /**
- * Format single category object
+ * Format single category object.
+ *
  * @param object $category
+ *
  * @return array
  */
 function return_category($category)
@@ -24,7 +26,7 @@ function return_category($category)
 }
 
 /**
- * Get category
+ * Get category.
  */
 function api_category_get_function()
 {
@@ -44,7 +46,7 @@ function api_category_get_function()
 API::$Route->get('/category/', 'api_category_get_function');
 
 /**
- * Get categories
+ * Get categories.
  */
 function api_categories_get_function()
 {
@@ -62,20 +64,19 @@ API::$Route->get('/categories/', 'api_categories_get_function');
 
 /**
  * A function will run after PostCategory().
+ *
  * @param Post $category
  */
 function api_category_post_callback(&$category)
 {
-
     $ret = return_category($category);
     API::$IO->category = $ret;
 }
 /**
- * Create & Update category
+ * Create & Update category.
  */
 function api_category_post_function()
 {
-
     global $zbp;
     Add_Filter_Plugin('Filter_Plugin_PostCategory_Succeed', 'api_category_post_callback');
     PostCategory();
@@ -84,11 +85,10 @@ function api_category_post_function()
 }
 
 /**
- * Create category
+ * Create category.
  */
 function api_category_create_function()
 {
-
     $_POST['ID'] = 0;
     api_category_post_function();
 }
@@ -96,11 +96,10 @@ function api_category_create_function()
 API::$Route->post('/category/create/', 'api_category_create_function');
 
 /**
- * Update category
+ * Update category.
  */
 function api_category_update_function()
 {
-
     $id = (int) API::$IO->id;
     if ($id === 0) {
         API::$IO->end(3);
@@ -111,11 +110,10 @@ function api_category_update_function()
 API::$Route->post('/category/update/', 'api_category_update_function');
 
 /**
- * Update category
+ * Update category.
  */
 function api_category_delete_function()
 {
-
     $ret = DelCategory();
     if ($ret !== true) {
         API::$IO->end(0);

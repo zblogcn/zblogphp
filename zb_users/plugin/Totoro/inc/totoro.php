@@ -7,7 +7,7 @@ class Totoro_Class
 
     public function __construct()
     {
-        $this->config_array = include TOTORO_INCPATH . 'totoro_config.php';
+        $this->config_array = include TOTORO_INCPATH.'totoro_config.php';
         $this->init_config();
     }
 
@@ -17,7 +17,7 @@ class Totoro_Class
         $config_save = false;
         foreach ($this->config_array as $type_name => &$type_value) {
             foreach ($type_value as $name => &$value) {
-                $config_name = $type_name . '_' . $name;
+                $config_name = $type_name.'_'.$name;
                 $config_value = $zbp->Config('Totoro')->$config_name;
                 if (!isset($config_value)) {
                     $zbp->Config('Totoro')->$config_name = $value['DEFAULT'];
@@ -45,6 +45,7 @@ class Totoro_Class
     {
         global $zbp;
         $content = $this->config_array[$type][$name]['VALUE'];
+
         return $convert ? TransferHTML($content, '[html-format]') : $content;
     }
 
@@ -52,7 +53,7 @@ class Totoro_Class
     {
         global $zbp;
         $comment = $zbp->GetCommentByID($id);
-        $content = $comment->HomePage . ' ' . $comment->Content;
+        $content = $comment->HomePage.' '.$comment->Content;
         $black_list = $this->config_array['BLACK_LIST']['BADWORD_LIST']['VALUE'];
         $tmp_list = '';
         $matches = array();
@@ -66,9 +67,9 @@ class Totoro_Class
 
             foreach ($matches[0] as $value) {
                 $value = preg_quote($value);
-                if ($value != '' && preg_match("/" . $black_list . "/si", $content) == 0) {
-                    $black_list .= '|' . $value;
-                    $zbp->SetHint('good', '新黑词被加入：' . $value);
+                if ($value != '' && preg_match("/".$black_list."/si", $content) == 0) {
+                    $black_list .= '|'.$value;
+                    $zbp->SetHint('good', '新黑词被加入：'.$value);
                 }
             }
 
@@ -83,12 +84,12 @@ class Totoro_Class
         $content = '';
         //$content .= $comment->Name . ' ';
         //$content .= $comment->Email . ' ';
-        $content .= $comment->Content . ' ';
+        $content .= $comment->Content.' ';
 
         foreach ($this->config_array['BUILD_CONFIG'] as $name => $value) {
             if ($value['VALUE']) {
                 $low_name = strtolower($name);
-                $file = TOTORO_INCPATH . 'build_' . $low_name . '.php';
+                $file = TOTORO_INCPATH.'build_'.$low_name.'.php';
                 if (file_exists($file)) {
                     $func = include $file;
                     $func($content);
@@ -98,11 +99,11 @@ class Totoro_Class
 
         return array(
             'author' => array(
-                'id' => $comment->AuthorID,
-                'name' => $comment->Name,
-                'ip' => $comment->IP,
+                'id'    => $comment->AuthorID,
+                'name'  => $comment->Name,
+                'ip'    => $comment->IP,
                 'email' => $comment->Email,
-                'url' => $comment->HomePage,
+                'url'   => $comment->HomePage,
             ),
             'content' => $content,
         );
@@ -112,17 +113,17 @@ class Totoro_Class
     {
         $build = $this->build_content($comment);
         if ($debug) {
-            echo 'BUILD COMMENT: ' . $build['content'] . "\n";
+            echo 'BUILD COMMENT: '.$build['content']."\n";
         }
 
         foreach ($this->config_array['SV_RULE'] as $name => $value) {
             $low_name = strtolower($name);
-            $file = TOTORO_INCPATH . 'rule_' . $low_name . '.php';
+            $file = TOTORO_INCPATH.'rule_'.$low_name.'.php';
             if (file_exists($file) && $value['VALUE'] > 0) {
                 $func = include $file;
                 $func($build['author'], $build['content'], $comment->Content, $this->sv, $value['VALUE'], $this->config_array);
                 if ($debug) {
-                    echo 'AFTER ' . $value['NAME'] . ': ' . $this->sv . "\n";
+                    echo 'AFTER '.$value['NAME'].': '.$this->sv."\n";
                 }
             }
         }
@@ -132,7 +133,6 @@ class Totoro_Class
 
     public function check_comment(&$comment)
     {
-
         global $zbp;
         $zbp->lang['error'][53] = $this->config_array['STRING_BACK']['CHECKSTR']['VALUE'];
         $zbp->lang['error'][14] = $this->config_array['STRING_BACK']['THROWSTR']['VALUE'];
@@ -171,10 +171,10 @@ class Totoro_Class
         $replace_list = $this->config_array['BLACK_LIST']['REPLACE_LIST']['VALUE'];
         $badword_list = $this->config_array['BLACK_LIST']['BADWORD_LIST']['VALUE'];
 
-        $replace_reg = "/" .
-            ($replace_list != '' ? $replace_list : '') .
-            (($replace_list != '' && $badword_list != '') ? '|' : '') .
-            ($badword_list != '' ? $badword_list : '') .
+        $replace_reg = "/".
+            ($replace_list != '' ? $replace_list : '').
+            (($replace_list != '' && $badword_list != '') ? '|' : '').
+            ($badword_list != '' ? $badword_list : '').
             "/si";
 
         if ($replace_reg != "//si") {
@@ -193,6 +193,7 @@ class Totoro_Class
                 return true;
             }
         }
+
         return false;
     }
 
@@ -230,7 +231,7 @@ class Totoro_Class
         if ($kill) {
             if (!$this->check_ip($ip)) {
                 $FILTERIP = $this->config_array['BLACK_LIST']['IPFILTER_LIST']['VALUE'];
-                $FILTERIP = ($FILTERIP == '' ? $ip : $FILTERIP . '|' . $ip);
+                $FILTERIP = ($FILTERIP == '' ? $ip : $FILTERIP.'|'.$ip);
                 $zbp->Config('Totoro')->BLACK_LIST_IPFILTER_LIST = $FILTERIP;
                 $zbp->SaveConfig('Totoro');
             }
@@ -297,24 +298,24 @@ class Totoro_Class
         $array = array(
             array(
                 'action' => 'main',
-                'url' => 'main.php',
+                'url'    => 'main.php',
                 'target' => '_self',
-                'float' => 'left',
-                'title' => '设置页面',
+                'float'  => 'left',
+                'title'  => '设置页面',
             ),
             array(
                 'action' => 'regex_test',
-                'url' => 'regex_test.php',
+                'url'    => 'regex_test.php',
                 'target' => '_self',
-                'float' => 'right',
-                'title' => '正则测试',
+                'float'  => 'right',
+                'title'  => '正则测试',
             ),
             array(
                 'action' => 'online_test',
-                'url' => 'online_test.php',
+                'url'    => 'online_test.php',
                 'target' => '_self',
-                'float' => 'right',
-                'title' => '配置测试',
+                'float'  => 'right',
+                'title'  => '配置测试',
             ),
         );
         $str = '';
@@ -327,6 +328,7 @@ class Totoro_Class
             $str = str_replace('$title', $array[$i]['title'], $str);
             $str = str_replace('$light', ($action == $array[$i]['action'] ? ' m-now' : ''), $str);
         }
+
         return $str;
     }
 }

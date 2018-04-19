@@ -1,43 +1,47 @@
 <?php
 /**
- * api
+ * api.
+ *
  * @author zsx<zsx@zsxsoft.com>
- * @package api/io
  * @php >= 5.2
  */
-class API_IO
+class api_io
 {
     const FORMAT_JSON = 0;
     /**
-     * Instance
+     * Instance.
      */
     private static $instance = null;
     /**
      * Saved object
-     * for output
+     * for output.
+     *
      * @var array
      */
     private static $savedObject = array();
     /**
      * GET object
-     * for input
+     * for input.
+     *
      * @var array
      */
     private static $getObject = array();
     /**
      * Input/Output format
-     * for input/output
+     * for input/output.
+     *
      * @var array
      */
     private static $ioFormat = self::FORMAT_JSON;
+
     /**
      * To avoid construct outside this class.
+     *
      * @param string $formatString
      * @private
      */
     private function __construct($formatString)
     {
-
         if ($formatString === "") {
             self::$ioFormat = self::FORMAT_JSON;
         } elseif (0 > strpos($formatString, 'json')) {
@@ -51,13 +55,14 @@ class API_IO
     }
 
     /**
-     * To return instance
+     * To return instance.
+     *
      * @param string $type
+     *
      * @return API_Route
      */
     public static function getInstance($formatString)
     {
-
         if (is_null(self::$instance)) {
             $class = __CLASS__;
             self::$instance = new $class($formatString);
@@ -67,7 +72,7 @@ class API_IO
     }
 
     /**
-     * To avoid clone
+     * To avoid clone.
      */
     public function __clone()
     {
@@ -75,13 +80,14 @@ class API_IO
     }
 
     /**
-     * Return outputData or HTTP_GET
+     * Return outputData or HTTP_GET.
+     *
      * @param  $name
+     *
      * @return
      */
     public function __get($name)
     {
-
         if ($name === "output") {
             return $savedObject[$name];
         } elseif (isset(self::$getObject[$name])) {
@@ -92,7 +98,8 @@ class API_IO
     }
 
     /**
-     * Set outputData
+     * Set outputData.
+     *
      * @param string $name
      * @param $value
      */
@@ -102,17 +109,18 @@ class API_IO
     }
 
     /**
-     * Return POST Data
-     * @param  string $name
+     * Return POST Data.
+     *
+     * @param string $name
      */
     public static function post($name)
     {
         return GetVars($name, 'POST');
     }
 
-
     /**
-     * Format array key
+     * Format array key.
+     *
      * @param array &$object [description]
      */
     public static function formatObjectName(&$object)
@@ -127,7 +135,8 @@ class API_IO
     }
 
     /**
-     * Format array key for save
+     * Format array key for save.
+     *
      * @param array &$object [description]
      */
     public static function formatObjectNameForSave(&$object)
@@ -141,18 +150,17 @@ class API_IO
         }
     }
 
-
     /**
-     * Write data to page and exit
-     * @param  integer $errorCode
-     * @param  string  $errorMessage
+     * Write data to page and exit.
+     *
+     * @param int    $errorCode
+     * @param string $errorMessage
      */
     public static function end($errorCode = -1, $errorMessage = "")
     {
-
         global $zbp; // For language file
         $returnObject = array(
-            'err' => $errorCode
+            'err' => $errorCode,
         );
 
         $err = $errorCode;

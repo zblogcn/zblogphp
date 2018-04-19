@@ -2,25 +2,31 @@
 require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
-if (!$zbp->CheckRights('root')) {$zbp->ShowError(6);exit();}
-if (!$zbp->CheckPlugin('changyan')) {$zbp->ShowError(48);exit();}
+if (!$zbp->CheckRights('root')) {
+    $zbp->ShowError(6);
+    exit();
+}
+if (!$zbp->CheckPlugin('changyan')) {
+    $zbp->ShowError(48);
+    exit();
+}
 $blogtitle = '畅言评论系统';
-require $blogpath . 'zb_system/admin/admin_header.php';
+require $blogpath.'zb_system/admin/admin_header.php';
 ?>
 <script type="text/javascript">
 function bmx2table(){}
 var ajaxurl = 'admin-ajax.php';
 </script>
 <?php
-include_once dirname(__FILE__) . '/scripts.html';
-include_once dirname(__FILE__) . '/header.html';
-require $blogpath . 'zb_system/admin/admin_top.php';
+include_once dirname(__FILE__).'/scripts.html';
+include_once dirname(__FILE__).'/header.html';
+require $blogpath.'zb_system/admin/admin_top.php';
 
 ?>
 
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
-  <div class="SubMenu"><?php echo changyan_SubMenus();?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
+  <div class="SubMenu"><?php echo changyan_SubMenus(); ?></div>
   <div id="divMain2">
 <?php
 {
@@ -162,7 +168,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                         <td style="padding:10px 0;">
                             <label>
                                 <input type="checkbox" id="changyanCron" name="changyanCronCheckbox" value="1"
-                                    <?php if ($changyanPlugin->getOption('changyan_isCron')) echo 'checked'; ?> /> 定时从畅言同步评论到本地
+                                    <?php if ($changyanPlugin->getOption('changyan_isCron')) {
+                                       echo 'checked';
+                                   } ?> /> 定时从畅言同步评论到本地
                             </label>
                         </td>
                     </tr>
@@ -176,11 +184,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 
     <script type="text/javascript">ActiveLeftMenu("aChangYan");</script> 
-    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/changyan/logo.png';?>");</script> 
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost.'zb_users/plugin/changyan/logo.png'; ?>");</script> 
   </div>
 </div>
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath.'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>

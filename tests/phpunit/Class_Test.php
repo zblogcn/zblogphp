@@ -1,7 +1,7 @@
 <?php
 /**
  * Useless test
- * only to require mock
+ * only to require mock.
  */
 require_once './tests/CommandMock.php';
 commandmock_loadzbp();

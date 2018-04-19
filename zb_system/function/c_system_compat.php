@@ -21,10 +21,10 @@ if (!function_exists('rrmdir')) {
                 $objects = scandir($dir);
                 foreach ($objects as $object) {
                     if ($object != '.' && $object != '..') {
-                        if (filetype($dir . '/' . $object) == 'dir') {
-                            rrmdir($dir . '/' . $object);
+                        if (filetype($dir.'/'.$object) == 'dir') {
+                            rrmdir($dir.'/'.$object);
                         } else {
-                            unlink($dir . '/' . $object);
+                            unlink($dir.'/'.$object);
                         }
                     }
                 }
@@ -34,10 +34,10 @@ if (!function_exists('rrmdir')) {
                 if ($handle = opendir($dir)) {
                     while (false !== ($file = readdir($handle))) {
                         if ($file != "." && $file != "..") {
-                            if (is_dir(rtrim(rtrim($dir, '/'), '\\') . '/' . $file)) {
-                                rrmdir(rtrim(rtrim($dir, '/'), '\\') . '/' . $file);
+                            if (is_dir(rtrim(rtrim($dir, '/'), '\\').'/'.$file)) {
+                                rrmdir(rtrim(rtrim($dir, '/'), '\\').'/'.$file);
                             } else {
-                                unlink(rtrim(rtrim($dir, '/'), '\\') . '/' . $file);
+                                unlink(rtrim(rtrim($dir, '/'), '\\').'/'.$file);
                             }
                         }
                     }
@@ -49,7 +49,7 @@ if (!function_exists('rrmdir')) {
     }
 }
 
-/**
+/*
  * URL constants as defined in the PHP Manual under "Constants usable with
  * http_build_url()".
  *
@@ -105,6 +105,7 @@ if (!function_exists('http_build_url')) {
      *                       HTTP_URL_REPLACE is the default
      * @param array $new_url if set, it will be filled with the parts of the
      *                       composed url like parse_url() would return
+     *
      * @return string
      */
     function http_build_url($url, $parts = array(), $flags = HTTP_URL_REPLACE, &$new_url = array())
@@ -142,7 +143,7 @@ if (!function_exists('http_build_url')) {
                     $url['path'] = rtrim(
                             str_replace(basename($url['path']), '', $url['path']),
                             '/'
-                        ) . '/' . ltrim($parts['path'], '/');
+                        ).'/'.ltrim($parts['path'], '/');
                 } else {
                     $url['path'] = $parts['path'];
                 }
@@ -163,22 +164,22 @@ if (!function_exists('http_build_url')) {
             }
         }
         if (isset($url['path']) && $url['path'] !== '' && substr($url['path'], 0, 1) !== '/') {
-            $url['path'] = '/' . $url['path'];
+            $url['path'] = '/'.$url['path'];
         }
         foreach ($keys as $key) {
-            $strip = 'HTTP_URL_STRIP_' . strtoupper($key);
+            $strip = 'HTTP_URL_STRIP_'.strtoupper($key);
             if ($flags & constant($strip)) {
                 unset($url[$key]);
             }
         }
         $parsed_string = '';
         if (!empty($url['scheme'])) {
-            $parsed_string .= $url['scheme'] . '://';
+            $parsed_string .= $url['scheme'].'://';
         }
         if (!empty($url['user'])) {
             $parsed_string .= $url['user'];
             if (isset($url['pass'])) {
-                $parsed_string .= ':' . $url['pass'];
+                $parsed_string .= ':'.$url['pass'];
             }
             $parsed_string .= '@';
         }
@@ -186,16 +187,16 @@ if (!function_exists('http_build_url')) {
             $parsed_string .= $url['host'];
         }
         if (!empty($url['port'])) {
-            $parsed_string .= ':' . $url['port'];
+            $parsed_string .= ':'.$url['port'];
         }
         if (!empty($url['path'])) {
             $parsed_string .= $url['path'];
         }
         if (!empty($url['query'])) {
-            $parsed_string .= '?' . $url['query'];
+            $parsed_string .= '?'.$url['query'];
         }
         if (!empty($url['fragment'])) {
-            $parsed_string .= '#' . $url['fragment'];
+            $parsed_string .= '#'.$url['fragment'];
         }
         $new_url = $url;
 
@@ -206,24 +207,24 @@ if (!function_exists('http_build_url')) {
 if (!function_exists('gzdecode')) {
     function gzdecode($data)
     {
-         $len = strlen($data);
+        $len = strlen($data);
         if ($len < 18 || strcmp(substr($data, 0, 2), "\x1f\x8b")) {
-            return null;  // Not GZIP format (See RFC 1952)
+            return;  // Not GZIP format (See RFC 1952)
         }
-         $method = ord(substr($data, 2, 1));  // Compression method
-         $flags  = ord(substr($data, 3, 1));  // Flags
+        $method = ord(substr($data, 2, 1));  // Compression method
+         $flags = ord(substr($data, 3, 1));  // Flags
         if ($flags & 31 != $flags) {
             // Reserved bits are set -- NOT ALLOWED by RFC 1952
-            return null;
+            return;
         }
-         // NOTE: $mtime may be negative (PHP integer limitations)
-         $mtime = unpack("V", substr($data, 4, 4));
-         $mtime = $mtime[1];
-         $xfl   = substr($data, 8, 1);
-         $os    = substr($data, 8, 1);
-         $headerlen = 10;
-         $extralen  = 0;
-         $extra     = "";
+        // NOTE: $mtime may be negative (PHP integer limitations)
+        $mtime = unpack("V", substr($data, 4, 4));
+        $mtime = $mtime[1];
+        $xfl = substr($data, 8, 1);
+        $os = substr($data, 8, 1);
+        $headerlen = 10;
+        $extralen = 0;
+        $extra = "";
         if ($flags & 4) {
             // 2-byte length prefixed EXTRA data in header
             if ($len - $headerlen - 2 < 8) {
@@ -238,8 +239,8 @@ if (!function_exists('gzdecode')) {
             $headerlen += 2 + $extralen;
         }
 
-         $filenamelen = 0;
-         $filename = "";
+        $filenamelen = 0;
+        $filename = "";
         if ($flags & 8) {
             // C-style string file NAME data in header
             if ($len - $headerlen - 1 < 8) {
@@ -253,8 +254,8 @@ if (!function_exists('gzdecode')) {
             $headerlen += $filenamelen + 1;
         }
 
-         $commentlen = 0;
-         $comment = "";
+        $commentlen = 0;
+        $comment = "";
         if ($flags & 16) {
             // C-style string COMMENT data in header
             if ($len - $headerlen - 1 < 8) {
@@ -268,7 +269,7 @@ if (!function_exists('gzdecode')) {
             $headerlen += $commentlen + 1;
         }
 
-         $headercrc = "";
+        $headercrc = "";
         if ($flags & 2) {
             // 2-bytes (lowest order) of CRC32 on header present
             if ($len - $headerlen - 2 < 8) {
@@ -283,20 +284,20 @@ if (!function_exists('gzdecode')) {
             $headerlen += 2;
         }
 
-         // GZIP FOOTER - These be negative due to PHP's limitations
-         $datacrc = unpack("V", substr($data, -8, 4));
-         $datacrc = $datacrc[1];
-         $isize = unpack("V", substr($data, -4));
-         $isize = $isize[1];
+        // GZIP FOOTER - These be negative due to PHP's limitations
+        $datacrc = unpack("V", substr($data, -8, 4));
+        $datacrc = $datacrc[1];
+        $isize = unpack("V", substr($data, -4));
+        $isize = $isize[1];
 
-         // Perform the decompression:
-         $bodylen = $len - $headerlen - 8;
+        // Perform the decompression:
+        $bodylen = $len - $headerlen - 8;
         if ($bodylen < 1) {
             // This should never happen - IMPLEMENTATION BUG!
-            return null;
+            return;
         }
-         $body = substr($data, $headerlen, $bodylen);
-         $data = "";
+        $body = substr($data, $headerlen, $bodylen);
+        $data = "";
         if ($bodylen > 0) {
             switch ($method) {
                 case 8:
@@ -312,16 +313,16 @@ if (!function_exists('gzdecode')) {
             // Allow it for now...  Do nothing...
         }
 
-         // Verifiy decompressed size and CRC32:
-         // NOTE: This may fail with large data sizes depending on how
-         //       PHP's integer limitations affect strlen() since $isize
-         //       may be negative for large sizes.
+        // Verifiy decompressed size and CRC32:
+        // NOTE: This may fail with large data sizes depending on how
+        //       PHP's integer limitations affect strlen() since $isize
+        //       may be negative for large sizes.
         if ($isize != strlen($data) || crc32($data) != $datacrc) {
             // Bad format!  Length or CRC doesn't match!
             return false;
         }
 
-         return $data;
+        return $data;
     }
 }
 
@@ -338,43 +339,39 @@ if (!function_exists('session_status')) {
     }
 }
 
-if (!function_exists('array_replace_recursive')){
+if (!function_exists('array_replace_recursive')) {
     function array_replace_recursive($array, $array1)
     {
-     function recurse($array, $array1)
-     {
-       foreach ($array1 as $key => $value)
-       {
-         // create new key in $array, if it is empty or not an array
-         if (!isset($array[$key]) || (isset($array[$key]) && !is_array($array[$key])))
-         {
-           $array[$key] = array();
-         }
+        function recurse($array, $array1)
+        {
+            foreach ($array1 as $key => $value) {
+                // create new key in $array, if it is empty or not an array
+                if (!isset($array[$key]) || (isset($array[$key]) && !is_array($array[$key]))) {
+                    $array[$key] = array();
+                }
 
-         // overwrite the value in the base array
-         if (is_array($value))
-         {
-           $value = recurse($array[$key], $value);
-         }
-         $array[$key] = $value;
-       }
-       return $array;
-     }
+                // overwrite the value in the base array
+                if (is_array($value)) {
+                    $value = recurse($array[$key], $value);
+                }
+                $array[$key] = $value;
+            }
 
-     // handle the arguments, merge one by one
-     $args = func_get_args();
-     $array = $args[0];
-     if (!is_array($array))
-     {
-       return $array;
-     }
-     for ($i = 1; $i < count($args); $i++)
-     {
-       if (is_array($args[$i]))
-       {
-         $array = recurse($array, $args[$i]);
-       }
-     }
-     return $array;
+            return $array;
+        }
+
+        // handle the arguments, merge one by one
+        $args = func_get_args();
+        $array = $args[0];
+        if (!is_array($array)) {
+            return $array;
+        }
+        for ($i = 1; $i < count($args); $i++) {
+            if (is_array($args[$i])) {
+                $array = recurse($array, $args[$i]);
+            }
+        }
+
+        return $array;
     }
 }

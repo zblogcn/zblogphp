@@ -1,16 +1,18 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 /**
- * 扩展内容类
+ * 扩展内容类.
  *
- * @package Z-BlogPHP
  * @property string Name
  * @property int|string Count
  * @property string Url
  */
-class Metas
+class metas
 {
-
     /**
      * @var array 存储Metas相应数值的数组
      */
@@ -27,12 +29,13 @@ class Metas
 
     /**
      * @param string $name key名
+     *
      * @return null
      */
     public function __get($name)
     {
         if (!isset($this->_data[$name])) {
-            return null;
+            return;
         }
 
         return $this->_data[$name];
@@ -40,6 +43,7 @@ class Metas
 
     /**
      * @param $name
+     *
      * @return bool
      */
     public function __isset($name)
@@ -56,13 +60,15 @@ class Metas
     }
 
     /**
-     * 将数组数据转换为Metas实例
+     * 将数组数据转换为Metas实例.
+     *
      * @param array $a
+     *
      * @return Metas
      */
     public static function ConvertArray($a)
     {
-        $m = new Metas;
+        $m = new self();
         if (is_array($a)) {
             $m->_data = $a;
         }
@@ -71,7 +77,8 @@ class Metas
     }
 
     /**
-     * 获取Data数据
+     * 获取Data数据.
+     *
      * @return array
      */
     public function GetData()
@@ -80,8 +87,10 @@ class Metas
     }
 
     /**
-     * 依据zbp设置替换签标为host值或是固定域名
+     * 依据zbp设置替换签标为host值或是固定域名.
+     *
      * @param string $value
+     *
      * @return string
      */
     public static function ReplaceTag2Host($value)
@@ -92,8 +101,10 @@ class Metas
     }
 
     /**
-     * 依据zbp设置替换host值为签标
+     * 依据zbp设置替换host值为签标.
+     *
      * @param string $value
+     *
      * @return string
      */
     public static function ReplaceHost2Tag($value)
@@ -104,8 +115,10 @@ class Metas
     }
 
     /**
-     * 检查Data属性（数组）属性值是是否存在相应key
+     * 检查Data属性（数组）属性值是是否存在相应key.
+     *
      * @param string $name key名
+     *
      * @return bool
      */
     public function HasKey($name)
@@ -114,7 +127,8 @@ class Metas
     }
 
     /**
-     * 检查Data属性（数组）中的单元数目
+     * 检查Data属性（数组）中的单元数目.
+     *
      * @return int
      */
     public function CountItem()
@@ -123,17 +137,18 @@ class Metas
     }
 
     /**
-     * 删除Data属性（数组）中的相应项
+     * 删除Data属性（数组）中的相应项.
+     *
      * @param string $name key名
      */
     public function Del($name)
     {
-
         unset($this->_data[$name]);
     }
 
     /**
-     * 将Data属性（数组）值序列化
+     * 将Data属性（数组）值序列化.
+     *
      * @return string 返回序列化的值
      */
     public function Serialize()
@@ -155,12 +170,13 @@ class Metas
 
     /**
      * 将序列化的值反序列化后赋予Data属性值
+     *
      * @param string $s 序列化值
+     *
      * @return bool
      */
     public function Unserialize($s)
     {
-
         if ($s == '') {
             return false;
         }

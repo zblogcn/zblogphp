@@ -118,13 +118,12 @@ function Qiniu_Client_do($req) // => ($resp, $error)
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_SSL_VERIFYHOST => false,
         CURLOPT_CUSTOMREQUEST  => 'POST',
-        CURLOPT_URL => $url['path']
+        CURLOPT_URL            => $url['path'],
     );
     $httpHeader = $req->Header;
-    if (!empty($httpHeader))
-    {
+    if (!empty($httpHeader)) {
         $header = array();
-        foreach($httpHeader as $key => $parsedUrlValue) {
+        foreach ($httpHeader as $key => $parsedUrlValue) {
             $header[] = "$key: $parsedUrlValue";
         }
         $options[CURLOPT_HTTPHEADER] = $header;
@@ -188,7 +187,7 @@ function Qiniu_Client_ret($resp) // => ($data, $error)
         if ($resp->ContentLength !== 0) {
             $data = json_decode($resp->Body, true);
             if ($data === null) {
-                $err_msg = function_exists('json_last_error_msg') ? json_last_error_msg() : "error with content:" . $resp->Body;
+                $err_msg = function_exists('json_last_error_msg') ? json_last_error_msg() : "error with content:".$resp->Body;
                 $err = new Qiniu_Error(0, $err_msg);
 
                 return array(null, $err);
@@ -223,7 +222,7 @@ function Qiniu_Client_CallNoRet($self, $url) // => $error
         return array(null, $err);
     }
     if ($resp->StatusCode === 200) {
-        return null;
+        return;
     }
 
     return Qiniu_ResponseError($resp);
@@ -265,14 +264,14 @@ function Qiniu_Build_MultipartForm($fields, $files) // => ($contentType, $body)
     $mimeBoundary = md5(microtime());
 
     foreach ($fields as $name => $val) {
-        array_push($data, '--' . $mimeBoundary);
+        array_push($data, '--'.$mimeBoundary);
         array_push($data, "Content-Disposition: form-data; name=\"$name\"");
         array_push($data, '');
         array_push($data, $val);
     }
 
     foreach ($files as $file) {
-        array_push($data, '--' . $mimeBoundary);
+        array_push($data, '--'.$mimeBoundary);
         list($name, $fileName, $fileBody) = $file;
         $fileName = Qiniu_escapeQuotes($fileName);
         array_push($data, "Content-Disposition: form-data; name=\"$name\"; filename=\"$fileName\"");
@@ -281,11 +280,11 @@ function Qiniu_Build_MultipartForm($fields, $files) // => ($contentType, $body)
         array_push($data, $fileBody);
     }
 
-    array_push($data, '--' . $mimeBoundary . '--');
+    array_push($data, '--'.$mimeBoundary.'--');
     array_push($data, '');
 
     $body = implode("\r\n", $data);
-    $contentType = 'multipart/form-data; boundary=' . $mimeBoundary;
+    $contentType = 'multipart/form-data; boundary='.$mimeBoundary;
 
     return array($contentType, $body);
 }

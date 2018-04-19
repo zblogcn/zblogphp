@@ -5,8 +5,8 @@ require_once "conf.php";
 
 // ----------------------------------------------------------
 
-class Qiniu_Mac {
-
+class Qiniu_Mac
+{
     public $AccessKey;
     public $SecretKey;
 
@@ -20,14 +20,14 @@ class Qiniu_Mac {
     {
         $sign = hash_hmac('sha1', $data, $this->SecretKey, true);
 
-        return $this->AccessKey . ':' . Qiniu_Encode($sign);
+        return $this->AccessKey.':'.Qiniu_Encode($sign);
     }
 
     public function SignWithData($data) // => $token
     {
         $data = Qiniu_Encode($data);
 
-        return $this->Sign($data) . ':' . $data;
+        return $this->Sign($data).':'.$data;
     }
 
     public function SignRequest($req, $incbody) // => ($token, $error)
@@ -39,7 +39,7 @@ class Qiniu_Mac {
             $data = $url['path'];
         }
         if (isset($url['query'])) {
-            $data .= '?' . $url['query'];
+            $data .= '?'.$url['query'];
         }
         $data .= "\n";
 

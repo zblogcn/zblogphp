@@ -24,6 +24,7 @@ class AlipaySubmit
     {
         $this->alipay_config = $alipay_config;
     }
+
     public function AlipaySubmit($alipay_config)
     {
         $this->__construct($alipay_config);

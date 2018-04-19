@@ -32,10 +32,12 @@ class AlipayNotify
     {
         $this->alipay_config = $alipay_config;
     }
+
     public function AlipayNotify($alipay_config)
     {
         $this->__construct($alipay_config);
     }
+
     /**
      * 针对notify_url验证消息是否是支付宝发出的合法消息.
      *

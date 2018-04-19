@@ -13,19 +13,18 @@ if (!$zbp->CheckPlugin('RegPage')) {
 
 Add_Filter_Plugin('Filter_Plugin_Zbp_CheckValidCode', 'RegPage_CheckValidCode');
 
-function RegPage_CheckValidCode($vaidcode, $id = ''){
+function RegPage_CheckValidCode($vaidcode, $id = '')
+{
     global $zbp;
-	$ua_md5 = GetVars('REMOTE_ADDR','SERVER') . GetVars('hash','POST');
+    $ua_md5 = GetVars('REMOTE_ADDR', 'SERVER').GetVars('hash', 'POST');
     $vaidcode = strtolower($vaidcode);
-    $original = GetVars('captcha_' . crc32($zbp->guid . $id), 'COOKIE');
-    setcookie('captcha_' . crc32($zbp->guid . $id), '', time() - 3600, $zbp->cookiespath);
+    $original = GetVars('captcha_'.crc32($zbp->guid.$id), 'COOKIE');
+    setcookie('captcha_'.crc32($zbp->guid.$id), '', time() - 3600, $zbp->cookiespath);
 
-    return (md5($zbp->guid . date("Ymdh") . strtolower($vaidcode) . $ua_md5 ) == $original
+    return md5($zbp->guid.date("Ymdh").strtolower($vaidcode).$ua_md5) == $original
             ||
-            md5($zbp->guid . date("Ymdh", time() - (3600 * 1)) . strtolower($vaidcode) . $ua_md5 ) == $original
-            );
+            md5($zbp->guid.date("Ymdh", time() - (3600 * 1)).strtolower($vaidcode).$ua_md5) == $original;
 }
-
 
 $name = trim($_POST['name']);
 $password = trim($_POST['password']);
@@ -36,12 +35,11 @@ $invitecode = trim($_POST['invitecode']);
 
 $homepage = '';
 
-
-if($zbp->Config('RegPage')->disable_website != true){
+if ($zbp->Config('RegPage')->disable_website != true) {
     $homepage = trim($_POST['homepage']);
 }
 
-if($zbp->Config('RegPage')->disable_validcode != true){
+if ($zbp->Config('RegPage')->disable_validcode != true) {
     $verifycode = trim($_POST['verifycode']);
     if (!$zbp->CheckValidCode($verifycode, 'RegPage')) {
         $zbp->ShowError('验证码错误，请重新输入.');
@@ -49,12 +47,10 @@ if($zbp->Config('RegPage')->disable_validcode != true){
     }
 }
 
-
-$member = new Member;
-
+$member = new Member();
 
 if ($zbp->Config('RegPage')->only_one_ip) {
-    $sql = $zbp->db->sql->Select($RegPage_Table, '*', array(array('=', 'reg_IP', GetVars('REMOTE_ADDR','SERVER')), array('>', 'reg_Time', time()-23*3600 )), null, null, null);
+    $sql = $zbp->db->sql->Select($RegPage_Table, '*', array(array('=', 'reg_IP', GetVars('REMOTE_ADDR', 'SERVER')), array('>', 'reg_Time', time() - 23 * 3600)), null, null, null);
     $array = $zbp->GetListCustom($RegPage_Table, $RegPage_DataInfo, $sql);
     $num = count($array);
     if ($num > 0) {
@@ -62,7 +58,6 @@ if ($zbp->Config('RegPage')->only_one_ip) {
         die();
     }
 }
-
 
 $sql = $zbp->db->sql->Select($RegPage_Table, '*', array(array('=', 'reg_InviteCode', $invitecode), array('=', 'reg_AuthorID', 0)), null, null, null);
 $array = $zbp->GetListCustom($RegPage_Table, $RegPage_DataInfo, $sql);
@@ -76,8 +71,6 @@ $reg = $array[0];
 $member->Guid = $invitecode;
 $member->Level = $reg->Level;
 
-
-
 if (strlen($name) < $zbp->option['ZC_USERNAME_MIN'] || strlen($name) > $zbp->option['ZC_USERNAME_MAX']) {
     $zbp->ShowError('用户名不能过长或过短.');
     die();
@@ -87,7 +80,6 @@ if (!CheckRegExp($name, '[username]')) {
     $zbp->ShowError('用户名只能包含字母数字._和中文.');
     die();
 }
-
 
 if ($zbp->GetMemberByName($name)->ID > 0) {
     $zbp->ShowError('用户名已存在');
@@ -112,7 +104,6 @@ $member->PostTime = time();
 
 $member->IP = GetGuestIP();
 
-
 if (strlen($email) < 5 || strlen($email) > $zbp->option['ZC_EMAIL_MAX']) {
     $zbp->ShowError('邮箱不能过长或过短.');
     die();
@@ -129,7 +120,6 @@ if (RegPage_CheckEmail($member->Email) == true) {
     $zbp->ShowError('该邮箱已被注册使用.');
     die();
 }
-
 
 if (strlen($homepage) > $zbp->option['ZC_HOMEPAGE_MAX']) {
     $zbp->ShowError('网址不能过长.');
@@ -148,7 +138,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_RegPage_RegSucceed'] as $fpname => &$f
 
 $keyvalue = array();
 $keyvalue['reg_AuthorID'] = $member->ID;
-$keyvalue['reg_IP'] = GetVars('REMOTE_ADDR','SERVER');
+$keyvalue['reg_IP'] = GetVars('REMOTE_ADDR', 'SERVER');
 $keyvalue['reg_Time'] = time();
 
 $sql = $zbp->db->sql->Update($RegPage_Table, $keyvalue, array(array('=', 'reg_ID', $reg->ID)));

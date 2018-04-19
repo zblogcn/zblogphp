@@ -6,19 +6,25 @@ require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
 
-if (!$zbp->CheckPlugin('HeartVote')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckPlugin('HeartVote')) {
+    $zbp->ShowError(48);
+    die();
+}
 
 $blogtitle = "用“心”打分";
 
-require $blogpath . 'zb_system/admin/admin_header.php';
-require $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath.'zb_system/admin/admin_header.php';
+require $blogpath.'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
 
-  <div class="divHeader2"><?php echo $blogtitle;?></div>
+  <div class="divHeader2"><?php echo $blogtitle; ?></div>
 <div class="SubMenu"></div>
   <div id="divMain2">
 	<form id="edit" name="edit" method="post" action="#">
@@ -45,13 +51,13 @@ function changeOptions(i){
 }
 	</script>
 	<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/HeartVote/logo.png';?>");</script>	
+	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost.'zb_users/plugin/HeartVote/logo.png'; ?>");</script>	
   </div>
 </div>
 
 
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath.'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>

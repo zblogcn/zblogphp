@@ -1,13 +1,13 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
  * 分页条码
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/PageBar 类库
  */
-class PageBar
+class pagebar
 {
-
     /**
      * @var int|null 内容总数
      */

@@ -1,4 +1,6 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');?>
+<?php if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+} ?>
 <aside class="left">
   <ul id="leftmenu">
 <?php

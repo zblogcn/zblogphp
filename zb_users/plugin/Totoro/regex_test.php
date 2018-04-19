@@ -20,14 +20,14 @@ if (GetVars('type', 'GET') == 'test') {
     set_exception_handler(create_function('', ''));
     register_shutdown_function(create_function('', ''));
     $regex = GetVars('regexp', 'POST');
-    $regex = "/(" . $regex . ")/si";
+    $regex = "/(".$regex.")/si";
     $matches = array();
     $string = GetVars('string', 'POST');
     $value = preg_match_all($regex, $string, $matches);
     if ($value) {
         foreach ($matches[0] as $v) {
             //echo $v;
-            $string = str_replace($v, '$$$fuabcdeck$$a$' . $v . '$$a$fuckd$b$', $string);
+            $string = str_replace($v, '$$$fuabcdeck$$a$'.$v.'$$a$fuckd$b$', $string);
         }
         $string = TransferHTML($string, '[html-format]');
         $string = str_replace('$$$fuabcdeck$$a$', '<span style="background-color:#92d050">', $string);
@@ -39,7 +39,7 @@ if (GetVars('type', 'GET') == 'test') {
 
     exit();
 }
-require $blogpath . 'zb_system/admin/admin_header.php';
+require $blogpath.'zb_system/admin/admin_header.php';
 ?>
 <style type="text/css">
 .text-config {
@@ -47,13 +47,13 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 }
 </style>
 <?php
-require $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath.'zb_system/admin/admin_top.php';
 
 ?>
 
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
-  <div class="SubMenu"><?php echo $Totoro->export_submenu('regex_test');?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
+  <div class="SubMenu"><?php echo $Totoro->export_submenu('regex_test'); ?></div>
   <div id="divMain2">
     <table width="100%" style="padding:0px;margin:1px;line-height:20px" cellspacing="0" cellpadding="0">
       <tr height="40">
@@ -91,11 +91,11 @@ $(document).ready(function(e) {
 });
 </script>
 <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Totoro/logo.png';?>");</script>
+<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost.'zb_users/plugin/Totoro/logo.png'; ?>");</script>
 </div>
 </div>
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath.'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>

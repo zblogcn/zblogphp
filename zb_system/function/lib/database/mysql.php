@@ -1,13 +1,13 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
- * MySQL数据库操作类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase/DbMySQL 类库
+ * MySQL数据库操作类.
  */
 class Database__MySQL implements Database__Interface
 {
-
     public $type = 'mysql';
     public $version = '';
 
@@ -15,7 +15,7 @@ class Database__MySQL implements Database__Interface
      * @var string|null 数据库名前缀
      */
     public $dbpre = null;
-    private $db = null; #数据库连接
+    private $db = null; //数据库连接
     /**
      * @var string|null 数据库名
      */
@@ -28,8 +28,9 @@ class Database__MySQL implements Database__Interface
      * @var DbSql|null DbSql实例
      */
     public $sql = null;
+
     /**
-     * 构造函数，实例化$sql参数
+     * 构造函数，实例化$sql参数.
      */
     public function __construct()
     {
@@ -37,9 +38,12 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
-     * 对字符串进行转义，在指定的字符前添加反斜杠，即执行addslashes函数
+     * 对字符串进行转义，在指定的字符前添加反斜杠，即执行addslashes函数.
+     *
      * @use addslashes
+     *
      * @param string $s
+     *
      * @return string
      */
     public function EscapeString($s)
@@ -48,31 +52,33 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
-     * 连接数据库
+     * 连接数据库.
+     *
      * @param array $array 数据库连接配置
-     *              $array=array(
-     *                  'dbmysql_server',
-     *                  'dbmysql_username',
-     *                  'dbmysql_password',
-     *                  'dbmysql_name',
-     *                  'dbmysql_pre',
-     *                  'dbmysql_port',
-     *                  'persistent'
-     *                  'engine')
+     *                     $array=array(
+     *                     'dbmysql_server',
+     *                     'dbmysql_username',
+     *                     'dbmysql_password',
+     *                     'dbmysql_name',
+     *                     'dbmysql_pre',
+     *                     'dbmysql_port',
+     *                     'persistent'
+     *                     'engine')
+     *
      * @return bool
      */
     public function Open($array)
     {
         if ($array[6] == false) {
-            $db_link = @mysql_connect($array[0] . ':' . $array[5], $array[1], $array[2]);
+            $db_link = @mysql_connect($array[0].':'.$array[5], $array[1], $array[2]);
         } else {
-            $db_link = @mysql_pconnect($array[0] . ':' . $array[5], $array[1], $array[2]);
+            $db_link = @mysql_pconnect($array[0].':'.$array[5], $array[1], $array[2]);
         }
 
         if (!$db_link) {
             return false;
         }
-        
+
         $myver = mysql_get_server_info($db_link);
         $this->version = substr($myver, 0, strpos($myver, "-"));
         if (version_compare($this->version, '5.5.3') >= 0) {
@@ -83,7 +89,7 @@ class Database__MySQL implements Database__Interface
         if (mysql_set_charset($u, $db_link) == false) {
             mysql_set_charset("utf8", $db_link);
         }
-        
+
         $this->db = $db_link;
         if (mysql_select_db($array[3], $this->db)) {
             $this->dbpre = $array[4];
@@ -99,17 +105,19 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
-     * 创建数据库
+     * 创建数据库.
+     *
      * @param string $dbmysql_server
      * @param string $dbmysql_port
      * @param string $dbmysql_username
      * @param string $dbmysql_password
      * @param string $dbmysql_name
+     *
      * @return bool true:创建成功 false:失败 null:是已存在而没有执行创建
      */
     public function CreateDB($dbmysql_server, $dbmysql_port, $dbmysql_username, $dbmysql_password, $dbmysql_name)
     {
-        $db_link = mysql_connect($dbmysql_server . ':' . $dbmysql_port, $dbmysql_username, $dbmysql_password);
+        $db_link = mysql_connect($dbmysql_server.':'.$dbmysql_port, $dbmysql_username, $dbmysql_password);
 
         $myver = mysql_get_server_info($db_link);
         $myver = substr($myver, 0, strpos($myver, "-"));
@@ -134,16 +142,17 @@ class Database__MySQL implements Database__Interface
             }
         }
         if ($c == 0) {
-            $r = mysql_query($this->sql->Filter('CREATE DATABASE ' . $dbmysql_name), $this->db);
+            $r = mysql_query($this->sql->Filter('CREATE DATABASE '.$dbmysql_name), $this->db);
             if ($r === false) {
                 return false;
             }
+
             return true;
         }
     }
 
     /**
-     * 关闭数据库连接
+     * 关闭数据库连接.
      */
     public function Close()
     {
@@ -154,13 +163,17 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
-     * 执行多行SQL语句
+     * 执行多行SQL语句.
+     *
      * @param string $s 以;号分隔的多条SQL语句
      */
     public function QueryMulit($s)
     {
         return $this->QueryMulti($s);
-    } //错别字函数，历史原因保留下来
+    }
+
+    //错别字函数，历史原因保留下来
+
     public function QueryMulti($s)
     {
         //$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
@@ -174,8 +187,10 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
-     * 执行SQL查询语句
+     * 执行SQL查询语句.
+     *
      * @param string $query
+     *
      * @return array 返回数据数组
      */
     public function Query($query)
@@ -197,7 +212,7 @@ class Database__MySQL implements Database__Interface
 
         //if(true==true){
         if (true !== true) {
-            $query = "EXPLAIN " . $query;
+            $query = "EXPLAIN ".$query;
             $results2 = mysql_query($this->sql->Filter($query), $this->db);
             $explain = array();
             if ($results2) {
@@ -205,15 +220,17 @@ class Database__MySQL implements Database__Interface
                     $explain[] = $row;
                 }
             }
-            logs("\r\n" . $query . "\r\n" . var_export($explain, true));
+            logs("\r\n".$query."\r\n".var_export($explain, true));
         }
 
         return $data;
     }
 
     /**
-     * 更新数据
+     * 更新数据.
+     *
      * @param string $query SQL语句
+     *
      * @return resource
      */
     public function Update($query)
@@ -223,8 +240,10 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
-     * 删除数据
+     * 删除数据.
+     *
      * @param string $query SQL语句
+     *
      * @return resource
      */
     public function Delete($query)
@@ -234,8 +253,10 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
-     * 插入数据
+     * 插入数据.
+     *
      * @param string $query SQL语句
+     *
      * @return int 返回ID序列号
      */
     public function Insert($query)
@@ -247,9 +268,10 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
-     * 新建表
+     * 新建表.
+     *
      * @param string $tablename 表名
-     * @param array $datainfo 表结构
+     * @param array  $datainfo  表结构
      */
     public function CreateTable($table, $datainfo, $engine = null)
     {
@@ -257,7 +279,8 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
-     * 删除表
+     * 删除表.
+     *
      * @param string $table 表名
      */
     public function DelTable($table)
@@ -266,8 +289,10 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
-     * 判断数据表是否存在
+     * 判断数据表是否存在.
+     *
      * @param string $table 表名
+     *
      * @return bool
      */
     public function ExistTable($table)

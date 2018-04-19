@@ -1,9 +1,12 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 /**
- * 模块类
+ * 模块类.
  *
- * @package Z-BlogPHP
  * @property string FileName
  * @property int|string ID
  * @property string Source 模块来源
@@ -11,11 +14,10 @@
  * @property string Type 模块显示类型（div / ul）
  * @property bool NoRefresh 拒绝系统刷新该模块
  */
-class Module extends Base
+class module extends Base
 {
-
     /**
-     * 构造函数
+     * 构造函数.
      */
     public function __construct()
     {
@@ -25,8 +27,9 @@ class Module extends Base
 
     /**
      * 设置参数值
+     *
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function __set($name, $value)
     {
@@ -51,7 +54,9 @@ class Module extends Base
 
     /**
      * 获取参数值
+     *
      * @param $name
+     *
      * @return bool|mixed|string
      */
     public function __get($name)
@@ -64,7 +69,7 @@ class Module extends Base
                 return 'user';
             } elseif ($this->Source == 'theme') {
                 return 'theme';
-            } elseif ($this->Source == 'plugin_' . $zbp->theme) {
+            } elseif ($this->Source == 'plugin_'.$zbp->theme) {
                 return 'theme';
             } else {
                 return 'plugin';
@@ -77,9 +82,11 @@ class Module extends Base
             $fpreturn = $fpname($this, $name);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
+
         return parent::__get($name);
     }
 
@@ -94,6 +101,7 @@ class Module extends Base
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -103,8 +111,8 @@ class Module extends Base
             }
 
             $c = $this->Content;
-            $d = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/';
-            $f = $d . $this->FileName . '.php';
+            $d = $zbp->usersdir.'theme/'.$zbp->theme.'/include/';
+            $f = $d.$this->FileName.'.php';
             if (!file_exists($d)) {
                 @mkdir($d, 0755);
             }
@@ -114,17 +122,18 @@ class Module extends Base
         }
 
         //防Module重复保存的机制
-        $m=$zbp->GetListType('Module',
+        $m = $zbp->GetListType('Module',
                     $zbp->db->sql->get()->select($zbp->table['Module'])
                     ->where(array('=', $zbp->datainfo['Module']['FileName'][0], $this->FileName))
                     ->sql
                 );
-        if (count($m)<1) {
+        if (count($m) < 1) {
             return parent::Save();
         } else {
-            if ($this->ID==0) {
+            if ($this->ID == 0) {
                 return false;
             }
+
             return parent::Save();
         }
     }
@@ -136,7 +145,7 @@ class Module extends Base
     {
         global $zbp;
         foreach ($zbp->modules as $key => $m) {
-            if ($this->ID >0 && $m->ID == $this->ID) {
+            if ($this->ID > 0 && $m->ID == $this->ID) {
                 unset($zbp->modules[$key]);
             }
             if ($this->Source == 'theme') {
@@ -163,7 +172,7 @@ class Module extends Base
                 return true;
             }
 
-            $f = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $this->FileName . '.php';
+            $f = $zbp->usersdir.'theme/'.$zbp->theme.'/include/'.$this->FileName.'.php';
             if (file_exists($f)) {
                 @unlink($f);
             }
@@ -176,7 +185,6 @@ class Module extends Base
 
     public function Build()
     {
-
         if ($this->NoRefresh == true) {
             return;
         }

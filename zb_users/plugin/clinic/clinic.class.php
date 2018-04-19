@@ -1,16 +1,13 @@
 <?php
 /**
- * Z-BlogPHP Clinic
- * @package clinic.class
- * @subpackage clinic.class.php
+ * Z-BlogPHP Clinic.
  */
 
 /**
- * Clinic main class
+ * Clinic main class.
  */
 class Clinic
 {
-
     public $module_path = '';
     public $include_path = '';
     public $modules = array();
@@ -19,8 +16,8 @@ class Clinic
 
     public function __construct()
     {
-        $this->module_path = dirname(__FILE__) . '/modules/';
-        $this->include_path = dirname(__FILE__) . '/include/';
+        $this->module_path = dirname(__FILE__).'/modules/';
+        $this->include_path = dirname(__FILE__).'/include/';
         $this->categories = array_merge(
             json_decode(file_get_contents('./include/category.json'), true),
             $GLOBALS['clinic_register_cate']
@@ -29,7 +26,8 @@ class Clinic
     }
 
     /**
-     * Scan modules folder
+     * Scan modules folder.
+     *
      * @return array modules
      */
     public function scan_dir()
@@ -39,22 +37,25 @@ class Clinic
         $dir = scandir($this->module_path);
         foreach ($dir as $name) {
             // Directory name must be English
-            if ($name != '.' && $name != '..' && is_dir($this->module_path . $name)) {
-                if (is_file($this->module_path . $name . '/' . $name . '.json')) {
+            if ($name != '.' && $name != '..' && is_dir($this->module_path.$name)) {
+                if (is_file($this->module_path.$name.'/'.$name.'.json')) {
                     // Load JSON Data
-                    $this->modules[$name] = json_decode(file_get_contents($this->module_path . $name . '/' . $name . '.json'), true);
-                    $this->modules[$name]['path'] = $this->module_path . $name . '/' . $name . '.php';
+                    $this->modules[$name] = json_decode(file_get_contents($this->module_path.$name.'/'.$name.'.json'), true);
+                    $this->modules[$name]['path'] = $this->module_path.$name.'/'.$name.'.php';
                     $category_name = $this->modules[$name]['category'];
                     $this->categories[$category_name]['modules'][] = $name;
                 }
             }
         }
+
         return $this->modules;
     }
 
     /**
-     * Load module
+     * Load module.
+     *
      * @param string $module_name
+     *
      * @return object
      */
     public function load_module($module_name)
@@ -64,37 +65,45 @@ class Clinic
             // Class name cannot include '-'
             $class_name = str_replace('-', '_', $module_name);
             if (class_exists($class_name)) {
-                $class = new $class_name;
+                $class = new $class_name();
+
                 return $class;
             }
         }
+
         return false;
     }
 
     /**
-     * Output
+     * Output.
+     *
      * @param string $status
      * @param string $text
+     *
      * @return string
      */
     public function output($status, $text)
     {
         $string = '<span style="color:';
-        $string .= ($status === 'success' ? 'green">√' : 'red">×') . ' ';
-        $string .= $text . '</span>';
+        $string .= ($status === 'success' ? 'green">√' : 'red">×').' ';
+        $string .= $text.'</span>';
         $this->output_json[] = json_encode(array('type' => 'msg', 'msg' => $string, 'error' => $status));
+
         return $string;
     }
 
     /**
-     * Load output
+     * Load output.
+     *
      * @param string $function
      * @param string $param
+     *
      * @return string
      */
     public function set_queue($function, $param)
     {
         $this->output_json[] = json_encode(array('type' => 'queue', 'function' => $function, 'param' => $param, 'error' => 0));
+
         return true;
     }
 }

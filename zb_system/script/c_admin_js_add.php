@@ -1,8 +1,10 @@
 <?php
 /**
- * Z-Blog with PHP
+ * Z-Blog with PHP.
+ *
  * @author
  * @copyright (C) RainbowSoft Studio
+ *
  * @version 2.0 2013-06-14
  */
 require '../function/c_system_base.php';
@@ -269,17 +271,16 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Js_Add'] as $fpname => &$fpsigna
 }
 
 $s = ob_get_clean();
-$m = 'W/' . md5($s);
+$m = 'W/'.md5($s);
 
 header('Content-Type: application/x-javascript; charset=utf-8');
 if ($zbp->option['ZC_JS_304_ENABLE']) {
-    header('Etag: ' . $m);
+    header('Etag: '.$m);
     if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
         SetHttpStatusCode(304);
         die;
     }
 }
-
 
 $zbp->CheckGzip();
 $zbp->StartGzip();

@@ -1,15 +1,16 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 /**
- * 数据操作基类
+ * 数据操作基类.
  *
  * @property mixed ID
- * @package Z-BlogPHP
- * @subpackage ClassLib 类库
  */
-class Base
+class base
 {
-
     /**
      * @var string 数据表
      */
@@ -37,11 +38,11 @@ class Base
     protected $classname = '';
 
     /**
-     * @param string $table 数据表
-     * @param array $datainfo 数据表结构信息
+     * @param string $table     数据表
+     * @param array  $datainfo  数据表结构信息
      * @param string $classname
-     * @param bool $hasmetas
-     * @param null $db
+     * @param bool   $hasmetas
+     * @param null   $db
      */
     public function __construct(&$table, &$datainfo, $classname = '', $hasmetas = true, &$db = null)
     {
@@ -61,7 +62,7 @@ class Base
         }
 
         if (true == $hasmetas) {
-            $this->Metas = new Metas;
+            $this->Metas = new Metas();
         }
 
         foreach ($this->datainfo as $key => $value) {
@@ -80,6 +81,7 @@ class Base
 
     /**
      * @param $name
+     *
      * @return mixed
      */
     public function __get($name)
@@ -89,6 +91,7 @@ class Base
 
     /**
      * @param $name
+     *
      * @return bool
      */
     public function __isset($name)
@@ -105,7 +108,8 @@ class Base
     }
 
     /**
-     * 获取数据库数据
+     * 获取数据库数据.
+     *
      * @return array
      */
     public function GetData()
@@ -114,7 +118,8 @@ class Base
     }
 
     /**
-     * 获取数据表
+     * 获取数据表.
+     *
      * @return string
      */
     public function GetTable()
@@ -123,7 +128,8 @@ class Base
     }
 
     /**
-     * 获取表结构
+     * 获取表结构.
+     *
      * @return array
      */
     public function GetDataInfo()
@@ -132,8 +138,10 @@ class Base
     }
 
     /**
-     * 获取数据库内指定ID的数据
+     * 获取数据库内指定ID的数据.
+     *
      * @param int $id 指定ID
+     *
      * @return bool
      */
     public function LoadInfoByID($id)
@@ -154,8 +162,10 @@ class Base
     }
 
     /**
-     * 根据数组从数据库内查找数据并返回
+     * 根据数组从数据库内查找数据并返回.
+     *
      * @param array $array 待查找数组
+     *
      * @return bool
      */
     public function LoadInfoByAssoc($array)
@@ -167,7 +177,7 @@ class Base
             }
 
             if ($value[1] == 'boolean') {
-                $this->data[$key] = (boolean) $array[$value[0]];
+                $this->data[$key] = (bool) $array[$value[0]];
             } elseif ($value[1] == 'string') {
                 if ($key == 'Meta') {
                     $this->data[$key] = $array[$value[0]];
@@ -187,9 +197,11 @@ class Base
     }
 
     /**
-     * 根据特定的字段和值搜索数据
-     * @param string $field 字段(限string,int,bool)
+     * 根据特定的字段和值搜索数据.
+     *
+     * @param string $field       字段(限string,int,bool)
      * @param string $field_value 数据值
+     *
      * @return bool
      */
     public function LoadInfoByField($field, $field_value)
@@ -211,8 +223,10 @@ class Base
     }
 
     /**
-     * 从数组中加载数据
+     * 从数组中加载数据.
+     *
      * @param $array
+     *
      * @return bool
      */
     public function LoadInfoByArray($array)
@@ -225,7 +239,7 @@ class Base
             }
 
             if ($value[1] == 'boolean') {
-                $this->data[$key] = (boolean) $array[$i];
+                $this->data[$key] = (bool) $array[$i];
             } elseif ($value[1] == 'string') {
                 if ($key == 'Meta') {
                     $this->data[$key] = $array[$i];
@@ -248,7 +262,8 @@ class Base
     }
 
     /**
-     * 保存数据
+     * 保存数据.
+     *
      * @return bool
      */
     public function Save()
@@ -274,13 +289,13 @@ class Base
             }
 
             if ($value[1] == 'boolean') {
-                $keyvalue[$value[0]] = (integer) $this->data[$key];
+                $keyvalue[$value[0]] = (int) $this->data[$key];
             } elseif ($value[1] == 'integer') {
-                $keyvalue[$value[0]] = (integer) $this->data[$key];
+                $keyvalue[$value[0]] = (int) $this->data[$key];
             } elseif ($value[1] == 'float') {
                 $keyvalue[$value[0]] = (float) $this->data[$key];
             } elseif ($value[1] == 'double') {
-                $keyvalue[$value[0]] = (double) $this->data[$key];
+                $keyvalue[$value[0]] = (float) $this->data[$key];
             } elseif ($value[1] == 'string') {
                 if ($key == 'Meta') {
                     $keyvalue[$value[0]] = $this->data[$key];
@@ -310,7 +325,8 @@ class Base
     }
 
     /**
-     * 删除数据
+     * 删除数据.
+     *
      * @return bool
      */
     public function Del()
@@ -325,7 +341,8 @@ class Base
     }
 
     /**
-     * 将数据用JSON格式输出
+     * 将数据用JSON格式输出.
+     *
      * @return string
      */
     public function __toString()

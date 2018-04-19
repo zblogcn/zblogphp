@@ -1,4 +1,5 @@
 <?php
+
 function upyun_SubMenu($id)
 {
     $arySubMenu = array(
@@ -7,6 +8,6 @@ function upyun_SubMenu($id)
     );
 
     foreach ($arySubMenu as $k => $v) {
-        echo '<a href="'.$v[1].'" '.($v[3]==true?'target="_blank"':'').'><span class="m-'.$v[2].' '.($id==$k?'m-now':'').'">'.$v[0].'</span></a>';
+        echo '<a href="'.$v[1].'" '.($v[3] == true ? 'target="_blank"' : '').'><span class="m-'.$v[2].' '.($id == $k ? 'm-now' : '').'">'.$v[0].'</span></a>';
     }
 }

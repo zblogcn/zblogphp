@@ -1,13 +1,13 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
-/**
- * App 应用类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib 类库
- */
-class App
-{
+<?php
 
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+/**
+ * App 应用类.
+ */
+class app
+{
     /**
      * @var string 应用类型，'plugin'表示插件，'theme'表示主题
      */
@@ -128,16 +128,20 @@ class App
      * @var string PHP最低版本
      */
     public $phpver;
+
     /**
-     * 得到详细信息数组
+     * 得到详细信息数组.
+     *
      * @return array
      */
     public function GetInfoArray()
     {
         return get_object_vars($this);
     }
+
     /**
-     * 是否可删除
+     * 是否可删除.
+     *
      * @return bool
      */
     public function CanDel()
@@ -146,10 +150,11 @@ class App
 
         return !isset($zbp->activedapps[$this->id]);
     }
+
     /**
-     * 是否带管理页面
-     * @access  public
-     * @return  bool
+     * 是否带管理页面.
+     *
+     * @return bool
      */
     public function CanManage()
     {
@@ -159,10 +164,11 @@ class App
 
         return false;
     }
+
     /**
-     * 是否正在使用
-     * @access  public
-     * @return  bool
+     * 是否正在使用.
+     *
+     * @return bool
      */
     public function IsUsed()
     {
@@ -170,10 +176,11 @@ class App
 
         return $zbp->CheckPlugin($this->id);
     }
+
     /**
-     * 是否附带主题插件（针对主题应用）
-     * @access  public
-     * @return  bool
+     * 是否附带主题插件（针对主题应用）.
+     *
+     * @return bool
      */
     public function HasPlugin()
     {
@@ -183,10 +190,11 @@ class App
 
         return false;
     }
+
     /**
      * 获取应用ID的crc32Hash值
-     * @access  public
-     * @return  string
+     *
+     * @return string
      */
     public function GetHash()
     {
@@ -194,77 +202,84 @@ class App
 
         return crc32($this->id);
     }
+
     /**
-     * 获取应用管理页面链接
-     * @access  public
-     * @return  string
+     * 获取应用管理页面链接.
+     *
+     * @return string
      */
     public function GetManageUrl()
     {
         global $zbp;
 
-        return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/' . $this->path;
+        return $zbp->host.'zb_users/'.$this->type.'/'.$this->id.'/'.$this->path;
     }
+
     /**
      * 获取应用目录地址
-     * @access  public
-     * @return  string
+     *
+     * @return string
      */
     public function GetDir()
     {
         global $zbp;
 
-        return $zbp->path . 'zb_users/' . $this->type . '/' . $this->id . '/';
+        return $zbp->path.'zb_users/'.$this->type.'/'.$this->id.'/';
     }
+
     /**
      * 获取应用Logo图片地址
-     * @access  public
-     * @return  string
+     *
+     * @return string
      */
     public function GetLogo()
     {
         global $zbp;
         if ($this->type == 'plugin') {
-            return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/logo.png';
+            return $zbp->host.'zb_users/'.$this->type.'/'.$this->id.'/logo.png';
         } else {
-            return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
+            return $zbp->host.'zb_users/'.$this->type.'/'.$this->id.'/screenshot.png';
         }
     }
+
     /**
      * 获取应用截图地址
-     * @access  public
-     * @return  string
+     *
+     * @return string
      */
     public function GetScreenshot()
     {
         global $zbp;
 
-        return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
+        return $zbp->host.'zb_users/'.$this->type.'/'.$this->id.'/screenshot.png';
     }
+
     /**
-     * 获取应用（主题）样式文件列表
-     * @access  public
-     * @return  array
+     * 获取应用（主题）样式文件列表.
+     *
+     * @return array
      */
     public function GetCssFiles()
     {
         global $zbp;
-        $dir = $zbp->usersdir . 'theme/' . $this->id . '/style/';
+        $dir = $zbp->usersdir.'theme/'.$this->id.'/style/';
 
         return GetFilesInDir($dir, 'css');
     }
 
     /**
-     * 载入应用xml中的信息
+     * 载入应用xml中的信息.
+     *
      * @param string $type 应用类型
-     * @param string $id 应用ID
+     * @param string $id   应用ID
+     *
      * @return bool
      */
     public function LoadInfoByXml($type, $id)
     {
         global $zbp;
-        $path = $zbp->usersdir . TransferHTML($type, '[filename]');
-        $path .= '/' . TransferHTML($id, '[filename]') . '/' . TransferHTML($type, '[filename]') . '.xml';
+        $path = $zbp->usersdir.TransferHTML($type, '[filename]');
+        $path .= '/'.TransferHTML($id, '[filename]').'/'.TransferHTML($type, '[filename]').'.xml';
 
         if (!is_readable($path)) {
             return false;
@@ -327,63 +342,63 @@ class App
     }
 
     /**
-     * 保存应用信息到xml文件
+     * 保存应用信息到xml文件.
+     *
      * @return bool
      */
     public function SaveInfoByXml()
     {
         global $zbp;
-        $s = '<?xml version="1.0" encoding="utf-8"?>' . "\r\n";
-        $s .= '<' . $this->type . ' version="php">' . "\r\n";
+        $s = '<?xml version="1.0" encoding="utf-8"?>'."\r\n";
+        $s .= '<'.$this->type.' version="php">'."\r\n";
 
-        $s .= '<id>' . htmlspecialchars($this->id) . '</id>' . "\r\n";
-        $s .= '<name>' . htmlspecialchars($this->name) . '</name>' . "\r\n";
-        $s .= '<url>' . htmlspecialchars($this->url) . '</url>' . "\r\n";
-        $s .= '<note>' . htmlspecialchars($this->note) . '</note>' . "\r\n";
-        $s .= '<description>' . htmlspecialchars($this->description) . '</description>' . "\r\n";
+        $s .= '<id>'.htmlspecialchars($this->id).'</id>'."\r\n";
+        $s .= '<name>'.htmlspecialchars($this->name).'</name>'."\r\n";
+        $s .= '<url>'.htmlspecialchars($this->url).'</url>'."\r\n";
+        $s .= '<note>'.htmlspecialchars($this->note).'</note>'."\r\n";
+        $s .= '<description>'.htmlspecialchars($this->description).'</description>'."\r\n";
 
-        $s .= '<path>' . htmlspecialchars($this->path) . '</path>' . "\r\n";
-        $s .= '<include>' . htmlspecialchars($this->include) . '</include>' . "\r\n";
-        $s .= '<level>' . htmlspecialchars($this->level) . '</level>' . "\r\n";
+        $s .= '<path>'.htmlspecialchars($this->path).'</path>'."\r\n";
+        $s .= '<include>'.htmlspecialchars($this->include).'</include>'."\r\n";
+        $s .= '<level>'.htmlspecialchars($this->level).'</level>'."\r\n";
 
-        $s .= '<author>' . "\r\n";
-        $s .= '  <name>' . htmlspecialchars($this->author_name) . '</name>' . "\r\n";
-        $s .= '  <email>' . htmlspecialchars($this->author_email) . '</email>' . "\r\n";
-        $s .= '  <url>' . htmlspecialchars($this->author_url) . '</url>' . "\r\n";
-        $s .= '</author>' . "\r\n";
+        $s .= '<author>'."\r\n";
+        $s .= '  <name>'.htmlspecialchars($this->author_name).'</name>'."\r\n";
+        $s .= '  <email>'.htmlspecialchars($this->author_email).'</email>'."\r\n";
+        $s .= '  <url>'.htmlspecialchars($this->author_url).'</url>'."\r\n";
+        $s .= '</author>'."\r\n";
 
-        $s .= '<source>' . "\r\n";
-        $s .= '  <name>' . htmlspecialchars($this->source_name) . '</name>' . "\r\n";
-        $s .= '  <email>' . htmlspecialchars($this->source_email) . '</email>' . "\r\n";
-        $s .= '  <url>' . htmlspecialchars($this->source_url) . '</url>' . "\r\n";
-        $s .= '</source>' . "\r\n";
+        $s .= '<source>'."\r\n";
+        $s .= '  <name>'.htmlspecialchars($this->source_name).'</name>'."\r\n";
+        $s .= '  <email>'.htmlspecialchars($this->source_email).'</email>'."\r\n";
+        $s .= '  <url>'.htmlspecialchars($this->source_url).'</url>'."\r\n";
+        $s .= '</source>'."\r\n";
 
-        $s .= '<adapted>' . htmlspecialchars($this->adapted) . '</adapted>' . "\r\n";
-        $s .= '<version>' . htmlspecialchars($this->version) . '</version>' . "\r\n";
-        $s .= '<pubdate>' . htmlspecialchars($this->pubdate) . '</pubdate>' . "\r\n";
-        $s .= '<modified>' . htmlspecialchars($this->modified) . '</modified>' . "\r\n";
-        $s .= '<price>' . htmlspecialchars($this->price) . '</price>' . "\r\n";
-        $s .= '<phpver>' . htmlspecialchars($this->phpver) . '</phpver>' . "\r\n";
+        $s .= '<adapted>'.htmlspecialchars($this->adapted).'</adapted>'."\r\n";
+        $s .= '<version>'.htmlspecialchars($this->version).'</version>'."\r\n";
+        $s .= '<pubdate>'.htmlspecialchars($this->pubdate).'</pubdate>'."\r\n";
+        $s .= '<modified>'.htmlspecialchars($this->modified).'</modified>'."\r\n";
+        $s .= '<price>'.htmlspecialchars($this->price).'</price>'."\r\n";
+        $s .= '<phpver>'.htmlspecialchars($this->phpver).'</phpver>'."\r\n";
 
-        $s .= '<advanced>' . "\r\n";
-        $s .= '  <dependency>' . htmlspecialchars($this->advanced_dependency) . '</dependency>' . "\r\n";
-        $s .= '  <rewritefunctions>' . htmlspecialchars($this->advanced_rewritefunctions) . '</rewritefunctions>' . "\r\n";
-        $s .= '  <existsfunctions>' . htmlspecialchars($this->advanced_existsfunctions) . '</existsfunctions>' . "\r\n";
-        $s .= '  <conflict>' . htmlspecialchars($this->advanced_conflict) . '</conflict>' . "\r\n";
-        $s .= '</advanced>' . "\r\n";
+        $s .= '<advanced>'."\r\n";
+        $s .= '  <dependency>'.htmlspecialchars($this->advanced_dependency).'</dependency>'."\r\n";
+        $s .= '  <rewritefunctions>'.htmlspecialchars($this->advanced_rewritefunctions).'</rewritefunctions>'."\r\n";
+        $s .= '  <existsfunctions>'.htmlspecialchars($this->advanced_existsfunctions).'</existsfunctions>'."\r\n";
+        $s .= '  <conflict>'.htmlspecialchars($this->advanced_conflict).'</conflict>'."\r\n";
+        $s .= '</advanced>'."\r\n";
 
+        $s .= '<sidebars>'."\r\n";
+        $s .= '  <sidebar1>'.htmlspecialchars($this->sidebars_sidebar1).'</sidebar1>'."\r\n";
+        $s .= '  <sidebar2>'.htmlspecialchars($this->sidebars_sidebar2).'</sidebar2>'."\r\n";
+        $s .= '  <sidebar3>'.htmlspecialchars($this->sidebars_sidebar3).'</sidebar3>'."\r\n";
+        $s .= '  <sidebar4>'.htmlspecialchars($this->sidebars_sidebar4).'</sidebar4>'."\r\n";
+        $s .= '  <sidebar5>'.htmlspecialchars($this->sidebars_sidebar5).'</sidebar5>'."\r\n";
+        $s .= '</sidebars>'."\r\n";
 
-        $s .= '<sidebars>' . "\r\n";
-        $s .= '  <sidebar1>' . htmlspecialchars($this->sidebars_sidebar1) . '</sidebar1>' . "\r\n";
-        $s .= '  <sidebar2>' . htmlspecialchars($this->sidebars_sidebar2) . '</sidebar2>' . "\r\n";
-        $s .= '  <sidebar3>' . htmlspecialchars($this->sidebars_sidebar3) . '</sidebar3>' . "\r\n";
-        $s .= '  <sidebar4>' . htmlspecialchars($this->sidebars_sidebar4) . '</sidebar4>' . "\r\n";
-        $s .= '  <sidebar5>' . htmlspecialchars($this->sidebars_sidebar5) . '</sidebar5>' . "\r\n";
-        $s .= '</sidebars>' . "\r\n";
+        $s .= '</'.$this->type.'>';
 
-        $s .= '</' . $this->type . '>';
-
-        $path = $zbp->usersdir . $this->type . '/' . $this->id . '/' . $this->type . '.xml';
+        $path = $zbp->usersdir.$this->type.'/'.$this->id.'/'.$this->type.'.xml';
 
         @file_put_contents($path, $s);
 
@@ -407,30 +422,29 @@ class App
      */
     private function GetAllFileDir($dir)
     {
-
         if (function_exists('scandir')) {
             foreach (scandir($dir) as $d) {
-                if (is_dir($dir . $d)) {
+                if (is_dir($dir.$d)) {
                     if ((substr($d, 0, 1) != '.') &&
-                        !($d == 'compile' && $this->type=='theme')) {
-                        $this->GetAllFileDir($dir . $d . '/');
-                        $this->dirs[] = $dir . $d . '/';
+                        !($d == 'compile' && $this->type == 'theme')) {
+                        $this->GetAllFileDir($dir.$d.'/');
+                        $this->dirs[] = $dir.$d.'/';
                     }
                 } else {
-                    $this->files[] = $dir . $d;
+                    $this->files[] = $dir.$d;
                 }
             }
         } else {
             if ($handle = opendir($dir)) {
                 while (false !== ($file = readdir($handle))) {
-                    if (is_dir($dir . $file)) {
+                    if (is_dir($dir.$file)) {
                         if ((substr($file, 0, 1) != '.') &&
-                            !($file == 'compile' && $this->type=='theme')) {
-                            $this->dirs[] = $dir . $file . '/';
-                            $this->GetAllFileDir($dir . $file . '/');
+                            !($file == 'compile' && $this->type == 'theme')) {
+                            $this->dirs[] = $dir.$file.'/';
+                            $this->GetAllFileDir($dir.$file.'/');
                         }
                     } else {
-                        $this->files[] = $dir . $file;
+                        $this->files[] = $dir.$file;
                     }
                 }
                 closedir($handle);
@@ -439,7 +453,8 @@ class App
     }
 
     /**
-     * 应用打包
+     * 应用打包.
+     *
      * @return string
      */
     public function Pack()
@@ -454,60 +469,60 @@ class App
         }
 
         $s = '<?xml version="1.0" encoding="utf-8"?>';
-        $s .= '<app version="php" type="' . $this->type . '">';
+        $s .= '<app version="php" type="'.$this->type.'">';
 
-        $s .= '<id>' . htmlspecialchars($this->id) . '</id>';
-        $s .= '<name>' . htmlspecialchars($this->name) . '</name>';
-        $s .= '<url>' . htmlspecialchars($this->url) . '</url>';
-        $s .= '<note>' . htmlspecialchars($this->note) . '</note>';
-        $s .= '<description>' . htmlspecialchars($this->description) . '</description>';
+        $s .= '<id>'.htmlspecialchars($this->id).'</id>';
+        $s .= '<name>'.htmlspecialchars($this->name).'</name>';
+        $s .= '<url>'.htmlspecialchars($this->url).'</url>';
+        $s .= '<note>'.htmlspecialchars($this->note).'</note>';
+        $s .= '<description>'.htmlspecialchars($this->description).'</description>';
 
-        $s .= '<path>' . htmlspecialchars($this->path) . '</path>';
-        $s .= '<include>' . htmlspecialchars($this->include) . '</include>';
-        $s .= '<level>' . htmlspecialchars($this->level) . '</level>';
+        $s .= '<path>'.htmlspecialchars($this->path).'</path>';
+        $s .= '<include>'.htmlspecialchars($this->include).'</include>';
+        $s .= '<level>'.htmlspecialchars($this->level).'</level>';
 
         $s .= '<author>';
-        $s .= '<name>' . htmlspecialchars($this->author_name) . '</name>';
-        $s .= '<email>' . htmlspecialchars($this->author_email) . '</email>';
-        $s .= '<url>' . htmlspecialchars($this->author_url) . '</url>';
+        $s .= '<name>'.htmlspecialchars($this->author_name).'</name>';
+        $s .= '<email>'.htmlspecialchars($this->author_email).'</email>';
+        $s .= '<url>'.htmlspecialchars($this->author_url).'</url>';
         $s .= '</author>';
 
         $s .= '<source>';
-        $s .= '<name>' . htmlspecialchars($this->source_name) . '</name>';
-        $s .= '<email>' . htmlspecialchars($this->source_email) . '</email>';
-        $s .= '<url>' . htmlspecialchars($this->source_url) . '</url>';
+        $s .= '<name>'.htmlspecialchars($this->source_name).'</name>';
+        $s .= '<email>'.htmlspecialchars($this->source_email).'</email>';
+        $s .= '<url>'.htmlspecialchars($this->source_url).'</url>';
         $s .= '</source>';
 
-        $s .= '<adapted>' . htmlspecialchars($this->adapted) . '</adapted>';
-        $s .= '<version>' . htmlspecialchars($this->version) . '</version>';
-        $s .= '<pubdate>' . htmlspecialchars($this->pubdate) . '</pubdate>';
-        $s .= '<modified>' . htmlspecialchars($this->modified) . '</modified>';
-        $s .= '<price>' . htmlspecialchars($this->price) . '</price>';
-        $s .= '<phpver>' . htmlspecialchars($this->phpver) . '</phpver>';
+        $s .= '<adapted>'.htmlspecialchars($this->adapted).'</adapted>';
+        $s .= '<version>'.htmlspecialchars($this->version).'</version>';
+        $s .= '<pubdate>'.htmlspecialchars($this->pubdate).'</pubdate>';
+        $s .= '<modified>'.htmlspecialchars($this->modified).'</modified>';
+        $s .= '<price>'.htmlspecialchars($this->price).'</price>';
+        $s .= '<phpver>'.htmlspecialchars($this->phpver).'</phpver>';
 
         $s .= '<advanced>';
-        $s .= '<dependency>' . htmlspecialchars($this->advanced_dependency) . '</dependency>';
-        $s .= '<rewritefunctions>' . htmlspecialchars($this->advanced_rewritefunctions) . '</rewritefunctions>';
-        $s .= '<existsfunctions>' . htmlspecialchars($this->advanced_existsfunctions) . '</existsfunctions>' . "\r\n";
-        $s .= '<conflict>' . htmlspecialchars($this->advanced_conflict) . '</conflict>';
+        $s .= '<dependency>'.htmlspecialchars($this->advanced_dependency).'</dependency>';
+        $s .= '<rewritefunctions>'.htmlspecialchars($this->advanced_rewritefunctions).'</rewritefunctions>';
+        $s .= '<existsfunctions>'.htmlspecialchars($this->advanced_existsfunctions).'</existsfunctions>'."\r\n";
+        $s .= '<conflict>'.htmlspecialchars($this->advanced_conflict).'</conflict>';
         $s .= '</advanced>';
 
         $s .= '<sidebars>';
-        $s .= '<sidebar1>' . htmlspecialchars($this->sidebars_sidebar1) . '</sidebar1>';
-        $s .= '<sidebar2>' . htmlspecialchars($this->sidebars_sidebar2) . '</sidebar2>';
-        $s .= '<sidebar3>' . htmlspecialchars($this->sidebars_sidebar3) . '</sidebar3>';
-        $s .= '<sidebar4>' . htmlspecialchars($this->sidebars_sidebar4) . '</sidebar4>';
-        $s .= '<sidebar5>' . htmlspecialchars($this->sidebars_sidebar5) . '</sidebar5>';
+        $s .= '<sidebar1>'.htmlspecialchars($this->sidebars_sidebar1).'</sidebar1>';
+        $s .= '<sidebar2>'.htmlspecialchars($this->sidebars_sidebar2).'</sidebar2>';
+        $s .= '<sidebar3>'.htmlspecialchars($this->sidebars_sidebar3).'</sidebar3>';
+        $s .= '<sidebar4>'.htmlspecialchars($this->sidebars_sidebar4).'</sidebar4>';
+        $s .= '<sidebar5>'.htmlspecialchars($this->sidebars_sidebar5).'</sidebar5>';
         $s .= '</sidebars>';
 
         foreach ($this->dirs as $key => $value) {
             $value = str_replace($dir, '', $value);
             $value = preg_replace('/[^(\x20-\x7F)]*/', '', $value);
-            $d = $this->id . '/' . $value;
-            $s .= '<folder><path>' . htmlspecialchars($d) . '</path></folder>';
+            $d = $this->id.'/'.$value;
+            $s .= '<folder><path>'.htmlspecialchars($d).'</path></folder>';
         }
         foreach ($this->files as $key => $value) {
-            $d = $this->id . '/' . str_replace($dir, '', $value);
+            $d = $this->id.'/'.str_replace($dir, '', $value);
             $ext = pathinfo($value, PATHINFO_EXTENSION);
             if ($ext == 'php' || $ext == 'inc') {
                 $c = base64_encode(RemoveBOM(file_get_contents($value)));
@@ -518,10 +533,10 @@ class App
                 $d = iconv($zbp->lang['windows_character_set'], 'UTF-8//IGNORE', $d);
             }
 
-            $s .= '<file><path>' . htmlspecialchars($d) . '</path><stream>' . $c . '</stream></file>';
+            $s .= '<file><path>'.htmlspecialchars($d).'</path><stream>'.$c.'</stream></file>';
         }
 
-        $s .= '<verify>' . base64_encode($zbp->host . "\n" . $zbp->path) . '</verify>';
+        $s .= '<verify>'.base64_encode($zbp->host."\n".$zbp->path).'</verify>';
 
         $s .= '</app>';
 
@@ -534,8 +549,10 @@ class App
     }
 
     /**
-     * 解开应用包
+     * 解开应用包.
+     *
      * @param $xml
+     *
      * @return bool
      */
     public static function UnPack($xml)
@@ -559,16 +576,16 @@ class App
 
         $type = $xml['type'];
         $id = $xml->id;
-        $dir = $zbp->path . 'zb_users/' . $type . '/';
+        $dir = $zbp->path.'zb_users/'.$type.'/';
 
         ZBlogException::SuspendErrorHook();
 
-        if (!file_exists($dir . $id . '/')) {
-            @mkdir($dir . $id . '/', 0755, true);
+        if (!file_exists($dir.$id.'/')) {
+            @mkdir($dir.$id.'/', 0755, true);
         }
 
         foreach ($xml->folder as $folder) {
-            $f = $dir . $folder->path;
+            $f = $dir.$folder->path;
             if (!file_exists($f)) {
                 @mkdir($f, 0755, true);
             }
@@ -576,7 +593,7 @@ class App
 
         foreach ($xml->file as $file) {
             $s = base64_decode($file->stream);
-            $f = $dir . $file->path;
+            $f = $dir.$file->path;
             @file_put_contents($f, $s);
             if (function_exists('chmod')) {
                 @chmod($f, 0755);
@@ -625,7 +642,7 @@ class App
             }
 
             if (!in_array($d, $zbp->activedapps)) {
-                $d = '<a href="' . $zbp->host . 'zb_users/plugin/AppCentre/main.php?alias=' . $d . '">' . $d .'</a>';
+                $d = '<a href="'.$zbp->host.'zb_users/plugin/AppCentre/main.php?alias='.$d.'">'.$d.'</a>';
                 $zbp->ShowError(str_replace('%s', $d, $zbp->lang['error'][83]), __FILE__, __LINE__);
             }
         }
@@ -643,21 +660,21 @@ class App
     }
 
     /**
-     * Delete app
+     * Delete app.
      */
     public function Del()
     {
         global $zbp;
-        rrmdir($zbp->usersdir . $this->type . '/' . $this->id);
+        rrmdir($zbp->usersdir.$this->type.'/'.$this->id);
         $this->DelCompiled();
     }
 
     /**
-     * Delete Compiled theme
+     * Delete Compiled theme.
      */
     public function DelCompiled()
     {
         global $zbp;
-        rrmdir($zbp->usersdir . 'cache/compiled/' . $this->id);
+        rrmdir($zbp->usersdir.'cache/compiled/'.$this->id);
     }
 }

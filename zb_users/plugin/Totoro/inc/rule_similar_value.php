@@ -1,4 +1,5 @@
 <?php
+
 return 'similar_value';
 function similar_value($author, $content, $orig_content, &$sv, $config_sv, $config_array)
 {
@@ -16,7 +17,7 @@ function similar_value($author, $content, $orig_content, &$sv, $config_sv, $conf
     ),
         $config_array['SIMILAR_CONFIG']['SIMILAR_AUDIT_COMMCOUNT']['VALUE'],
         $content, $sv, $config_sv * 2, $config_array);
-};
+}
 
 function add_similar_sv($condition, $count_for_condition, $content, &$sv, $config_sv, $config_array)
 {

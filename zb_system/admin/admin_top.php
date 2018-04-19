@@ -1,4 +1,6 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');?>
+<?php if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+} ?>
 </head>
 <body>
 <header class="header">
@@ -8,10 +10,10 @@
       <div class="userbtn"><a class="profile" href="<?php echo $bloghost ?>" title="" target="_blank"><?php echo $lang['msg']['return_to_site'] ?></a>&nbsp;&nbsp;<a class="logout" href="<?php echo BuildSafeCmdURL('act=logout'); ?>" title=""><?php echo $lang['msg']['logout'] ?></a></div>
     </div>
     <div class="menu">
-      <ul id="topmenu"><?php ResponseAdmin_TopMenu();?>
+      <ul id="topmenu"><?php ResponseAdmin_TopMenu(); ?>
       </ul>
     </div>
 </header>
-<?php require ZBP_PATH . 'zb_system/admin/admin_left.php';?>
+<?php require ZBP_PATH.'zb_system/admin/admin_left.php'; ?>
 <section class="main">
 <?php $zbp->GetHint();?>

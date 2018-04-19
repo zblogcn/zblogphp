@@ -1,7 +1,8 @@
 <?php
+
 class ClassSQLMySQLTest extends PHPUnit_Framework_TestCase
 {
-    protected $backupGlobalsBlacklist = ['zbp'];
+    protected $backupGlobalsBlacklist = array('zbp');
     protected static $db = null;
 
     public function setUp()
@@ -18,7 +19,7 @@ class ClassSQLMySQLTest extends PHPUnit_Framework_TestCase
     public function testExist()
     {
         self::$db->exist('zbp_post', 'zbphp');
-           $this->assertEquals('SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA=\'zbphp\' AND TABLE_NAME=\'zbp_post\'', self::$db->sql);
+        $this->assertEquals('SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA=\'zbphp\' AND TABLE_NAME=\'zbp_post\'', self::$db->sql);
     }
 
     public function testIndex()

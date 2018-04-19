@@ -1,4 +1,5 @@
 <?php
+
 require '../../../zb_system/function/c_system_base.php';
 
 if (isset($_GET['setcolor'])) {
@@ -7,13 +8,13 @@ if (isset($_GET['setcolor'])) {
     if ($zbp->CheckRights($action)) {
         $i = (int) $_GET['setcolor'];
         $zbp->Config('AdminColor')->ColorID = $i;
-        $zbp->Config('AdminColor')->BlodColor =  (string) $GLOBALS['AdminColor_BlodColor'][$i];
-        $zbp->Config('AdminColor')->NormalColor =  (string) $GLOBALS['AdminColor_NormalColor'][$i];
-        $zbp->Config('AdminColor')->LightColor =  (string) $GLOBALS['AdminColor_LightColor'][$i];
-        $zbp->Config('AdminColor')->HighColor =  (string) $GLOBALS['AdminColor_HighColor'][$i];
-        $zbp->Config('AdminColor')->AntiColor =  (string) $GLOBALS['AdminColor_AntiColor'][$i];
+        $zbp->Config('AdminColor')->BlodColor = (string) $GLOBALS['AdminColor_BlodColor'][$i];
+        $zbp->Config('AdminColor')->NormalColor = (string) $GLOBALS['AdminColor_NormalColor'][$i];
+        $zbp->Config('AdminColor')->LightColor = (string) $GLOBALS['AdminColor_LightColor'][$i];
+        $zbp->Config('AdminColor')->HighColor = (string) $GLOBALS['AdminColor_HighColor'][$i];
+        $zbp->Config('AdminColor')->AntiColor = (string) $GLOBALS['AdminColor_AntiColor'][$i];
         $zbp->SaveConfig('AdminColor');
-        Redirect($zbp->host . 'zb_users/plugin/AdminColor/main.php');
+        Redirect($zbp->host.'zb_users/plugin/AdminColor/main.php');
         die();
     }
 }
@@ -59,63 +60,63 @@ $c .= '
     transform: rotate(45deg);
   }';
 
-$c .= "header,.header{background-color:#3a6ea5;}" . "\r\n";
-$c .= "input.button,input[type='submit'],input[type='button'] {background-color:#3a6ea5;}" . "\r\n";
-$c .= "div.theme-now .betterTip img{box-shadow: 0 0 10px #3a6ea5;}" . "\r\n";
+$c .= "header,.header{background-color:#3a6ea5;}"."\r\n";
+$c .= "input.button,input[type='submit'],input[type='button'] {background-color:#3a6ea5;}"."\r\n";
+$c .= "div.theme-now .betterTip img{box-shadow: 0 0 10px #3a6ea5;}"."\r\n";
 
-$c .= "#divMain a,#divMain2 a{color:#1d4c7d;}" . "\r\n";
+$c .= "#divMain a,#divMain2 a{color:#1d4c7d;}"."\r\n";
 
-$c .= ".menu ul li a:hover {background-color: #b0cdee;}" . "\r\n";
-$c .= "#leftmenu a:hover {background-color: #b0cdee!important;}" . "\r\n";
-$c .= "div.theme-now{background-color:#b0cdee;}" . "\r\n";
-$c .= "div.theme-other .betterTip img:hover{border-color:#b0cdee;}" . "\r\n";
-$c .= ".SubMenu a:hover {background-color:#b0cdee;}" . "\r\n";
-$c .= ".siderbar-header:hover {background-color:#b0cdee;}" . "\r\n";
+$c .= ".menu ul li a:hover {background-color: #b0cdee;}"."\r\n";
+$c .= "#leftmenu a:hover {background-color: #b0cdee!important;}"."\r\n";
+$c .= "div.theme-now{background-color:#b0cdee;}"."\r\n";
+$c .= "div.theme-other .betterTip img:hover{border-color:#b0cdee;}"."\r\n";
+$c .= ".SubMenu a:hover {background-color:#b0cdee;}"."\r\n";
+$c .= ".siderbar-header:hover {background-color:#b0cdee;}"."\r\n";
 
-$c .= "#leftmenu .on a,#leftmenu #on a:hover {background-color:#3399cc!important;}" . "\r\n";
-$c .= "input.button,input[type=\"submit\"],input[type=\"button\"] { border-color:#3399cc;}" . "\r\n";
-$c .= "input.button:hover {background-color: #3399cc;}" . "\r\n";
-$c .= "div.theme-other .betterTip img:hover{box-shadow: 0 0 10px #3399cc;}" . "\r\n";
-$c .= ".SubMenu{border-bottom-color:#3399cc;}" . "\r\n";
-$c .= ".SubMenu span.m-now{background-color:#3399cc;}" . "\r\n";
-$c .= "div #BT_title {background-color: #3399cc;border-color:#3399cc;}" . "\r\n";
+$c .= "#leftmenu .on a,#leftmenu #on a:hover {background-color:#3399cc!important;}"."\r\n";
+$c .= "input.button,input[type=\"submit\"],input[type=\"button\"] { border-color:#3399cc;}"."\r\n";
+$c .= "input.button:hover {background-color: #3399cc;}"."\r\n";
+$c .= "div.theme-other .betterTip img:hover{box-shadow: 0 0 10px #3399cc;}"."\r\n";
+$c .= ".SubMenu{border-bottom-color:#3399cc;}"."\r\n";
+$c .= ".SubMenu span.m-now{background-color:#3399cc;}"."\r\n";
+$c .= "div #BT_title {background-color: #3399cc;border-color:#3399cc;}"."\r\n";
 
-$c .= "a:hover { color:#d60000;}" . "\r\n";
-$c .= "#divMain a:hover,#divMain2  a:hover{color:#d60000;}" . "\r\n";
+$c .= "a:hover { color:#d60000;}"."\r\n";
+$c .= "#divMain a:hover,#divMain2  a:hover{color:#d60000;}"."\r\n";
 
 //appcenter
-$c .= ".tabs { border-bottom-color:#3a6ea5!important;}" . "\r\n";
-$c .= ".tabs li a.selected {background-color:#3a6ea5!important;}" . "\r\n";
-$c .= "div.heart-vote {background-color:#3a6ea5!important;}" . "\r\n";
-$c .= "div.heart-vote ul {border-color:#3a6ea5!important;}" . "\r\n";
-$c .= ".install {background-color:#3a6ea5!important;}" . "\r\n";
-$c .= ".install:hover{background-color: #3399cc!important;}" . "\r\n";
-$c .= "input.button{background-color:#3a6ea5!important;border-color:#3399cc!important;}" . "\r\n";
-$c .= "input.button:hover{background-color:#3399cc!important;}" . "\r\n";
-$c .= ".themes_body ul li img:hover,.plugin_body ul li img:hover,.main_plugin ul li img:hover,.main_theme ul li img:hover{box-shadow: 0 0 10px #3399cc!important;}" . "\r\n";
-$c .= ".left_nav h2,.text h2 {color: #3a6ea5!important;}" . "\r\n";
-$c .= ".pagebar span{ background:#3399cc!important; border-color:#3399cc!important;color:#fff;}" . "\r\n";
-$c .= ".pagebar span.now-page,.pagebar span:hover{ background:#eee!important;border-color:#eee!important; color:#3399cc!important;}" . "\r\n";
+$c .= ".tabs { border-bottom-color:#3a6ea5!important;}"."\r\n";
+$c .= ".tabs li a.selected {background-color:#3a6ea5!important;}"."\r\n";
+$c .= "div.heart-vote {background-color:#3a6ea5!important;}"."\r\n";
+$c .= "div.heart-vote ul {border-color:#3a6ea5!important;}"."\r\n";
+$c .= ".install {background-color:#3a6ea5!important;}"."\r\n";
+$c .= ".install:hover{background-color: #3399cc!important;}"."\r\n";
+$c .= "input.button{background-color:#3a6ea5!important;border-color:#3399cc!important;}"."\r\n";
+$c .= "input.button:hover{background-color:#3399cc!important;}"."\r\n";
+$c .= ".themes_body ul li img:hover,.plugin_body ul li img:hover,.main_plugin ul li img:hover,.main_theme ul li img:hover{box-shadow: 0 0 10px #3399cc!important;}"."\r\n";
+$c .= ".left_nav h2,.text h2 {color: #3a6ea5!important;}"."\r\n";
+$c .= ".pagebar span{ background:#3399cc!important; border-color:#3399cc!important;color:#fff;}"."\r\n";
+$c .= ".pagebar span.now-page,.pagebar span:hover{ background:#eee!important;border-color:#eee!important; color:#3399cc!important;}"."\r\n";
 
 //zbdk
-$c .= "#divMain .DIVBlogConfignav ul li a:hover {background-color: #3399cc!important;}" . "\r\n";
-$c .= "#divMain .DIVBlogConfignav ul li a.clicked{background-color: #b0cdee!important;}" . "\r\n";
-$c .= ".DIVBlogConfignav {background-color: #ededed!important;}" . "\r\n";
-$c .= "#divMain .DIVBlogConfigtop {background-color: #3399cc!important;}" . "\r\n";
-$c .= "#divMain .DIVBlogConfig {background-color: #ededed!important;}" . "\r\n";
+$c .= "#divMain .DIVBlogConfignav ul li a:hover {background-color: #3399cc!important;}"."\r\n";
+$c .= "#divMain .DIVBlogConfignav ul li a.clicked{background-color: #b0cdee!important;}"."\r\n";
+$c .= ".DIVBlogConfignav {background-color: #ededed!important;}"."\r\n";
+$c .= "#divMain .DIVBlogConfigtop {background-color: #3399cc!important;}"."\r\n";
+$c .= "#divMain .DIVBlogConfig {background-color: #ededed!important;}"."\r\n";
 
-$c .= "div.bg {background: #3a6ea5;!important;}" . "\r\n";
-$c .= "div.bg input[type=\"text\"], input[type=\"password\"] {border-color:#3a6ea5!important;}" . "\r\n";
+$c .= "div.bg {background: #3a6ea5;!important;}"."\r\n";
+$c .= "div.bg input[type=\"text\"], input[type=\"password\"] {border-color:#3a6ea5!important;}"."\r\n";
 
-$c .= "\r\n" . "/*AdminColor*/" . "\r\n" . "#admin_color{float:left;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
+$c .= "\r\n"."/*AdminColor*/"."\r\n"."#admin_color{float:left;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
 
 if ($id == 9) {
-    $c .= 'header,.header {background:url(header.jpg) no-repeat 0 0;}' . "\r\n";
-    $c .= 'body{background:url(body.jpg) no-repeat 0 0;background-attachment:fixed;}' . "\r\n";
-    $c .= '#topmenu{opacity:0.8;}' . "\r\n";
+    $c .= 'header,.header {background:url(header.jpg) no-repeat 0 0;}'."\r\n";
+    $c .= 'body{background:url(body.jpg) no-repeat 0 0;background-attachment:fixed;}'."\r\n";
+    $c .= '#topmenu{opacity:0.8;}'."\r\n";
 }
 if ($zbp->Config('AdminColor')->LogoPath) {
-    $c .= '.logo img{background:url('. $zbp->Config('AdminColor')->LogoPath .') no-repeat center center;}';
+    $c .= '.logo img{background:url('.$zbp->Config('AdminColor')->LogoPath.') no-repeat center center;}';
 }
 
 if ($id == 10) {
@@ -218,7 +219,7 @@ height: 30px;
 ';
 
     if (isset($_GET['aly'])) {
-        $c .='
+        $c .= '
 body {background:url("l.png") repeat-y 0 top}
 .logo{
     background-color: #0087B5;

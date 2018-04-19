@@ -1,10 +1,13 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 /**
- * form creat
- * @package Z-BlogPHP
+ * form creat.
+ *
  * @author 未寒 <im@imzhou.com>
- * @subpackage 表单生成操作
  * @copyright (C) RainbowSoft Studio
  */
 
@@ -18,9 +21,8 @@ zbpform::hidden('aaaa','文本框');
 zbpform::textarea('aaaa','多行文本');
 zbpform::password('aaaa','文本框');
  */
-class ZbpForm
+class zbpform
 {
-
     public static function radio($name, $array = array('否', '是'), $checkedkey = 0)
     {
         $s = '';
@@ -44,7 +46,7 @@ class ZbpForm
             return;
         }
 
-        $onchange = !empty($change) ? ' onchange="' . $change . '"' : '';
+        $onchange = !empty($change) ? ' onchange="'.$change.'"' : '';
         $s = "<select name=\"$name\" id=\"$name\" class=\"$name\"$onchange> \r\n";
         $s .= self::options($array, $checkedkey);
         $s .= "</select> \r\n";
@@ -68,14 +70,14 @@ class ZbpForm
         foreach ((array) $array as $k => $v) {
             $checked = $v[1] ? ' checked="checked"' : '';
 
-            $s .= "<input type=\"checkbox\" name=\"". $name ."[]\" id=\"$name-$k\" class=\"$name\" value=\"$k\"$checked /><label for=\"$name-$k\">$v[0]</label>\r\n";
+            $s .= "<input type=\"checkbox\" name=\"".$name."[]\" id=\"$name-$k\" class=\"$name\" value=\"$k\"$checked /><label for=\"$name-$k\">$v[0]</label>\r\n";
         }
         echo $s;
     }
 
     public static function text($name, $value, $width = '150px')
     {
-        $style = $width ? ' style="width: ' . $width . ';"' : '';
+        $style = $width ? ' style="width: '.$width.';"' : '';
         $s = "<input type=\"text\" name=\"$name\" id=\"$name\" class=\"$name\" value=\"$value\"$style/>\r\n";
         echo $s;
     }
@@ -88,14 +90,14 @@ class ZbpForm
 
     public static function textarea($name, $value, $width = '250px', $height = '100px')
     {
-        $style = $width ? ' style="width: ' . $width . '; height: ' . $height . '"' : '';
+        $style = $width ? ' style="width: '.$width.'; height: '.$height.'"' : '';
         $s = "<textarea name=\"$name\" id=\"$name\" class=\"$name\"$style>$value</textarea>\r\n";
         echo $s;
     }
 
     public static function password($name, $value, $width = '150px')
     {
-        $style = $width ? ' style="width: ' . $width . ';"' : '';
+        $style = $width ? ' style="width: '.$width.';"' : '';
         $s = "<input type=\"password\" name=\"$name\" id=\"$name\" class=\"$name\" value=\"$value\"$style/>\r\n";
         echo $s;
     }

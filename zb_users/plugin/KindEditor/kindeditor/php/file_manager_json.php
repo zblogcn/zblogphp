@@ -1,30 +1,32 @@
 <?php
 /**
- * KindEditor for Z-BlogPHP
+ * KindEditor for Z-BlogPHP.
+ *
  * @author 未寒
  * @copyright (C) RainbowSoft Studio
  */
 require '../../../../../zb_system/function/c_system_base.php';
 global $zbp;
 $zbp->Load();
-if(!$zbp->CheckRights('UploadPst'))die();
+if (!$zbp->CheckRights('UploadPst')) {
+    die();
+}
 //根目录路径，可以指定绝对路径，比如 /var/www/attached/
-$root_path = $zbp->usersdir . 'upload/';
+$root_path = $zbp->usersdir.'upload/';
 //根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
-$root_url = $zbp->host . 'zb_users/upload/';
+$root_url = $zbp->host.'zb_users/upload/';
 //图片扩展名
 $ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'GIF', 'JPG', 'JPEG', 'PNG', 'BMP', 'Gif', 'Jpg', 'Jpeg', 'Png', 'Bmp');
 
-
 //根据path参数，设置各路径和URL
 if (empty($_GET['path'])) {
-    $current_path = realpath($root_path) . '/';
+    $current_path = realpath($root_path).'/';
     $current_url = $root_url;
     $current_dir_path = '';
     $moveup_dir_path = '';
 } else {
-    $current_path = realpath($root_path) . '/' . $_GET['path'];
-    $current_url = $root_url . $_GET['path'];
+    $current_path = realpath($root_path).'/'.$_GET['path'];
+    $current_url = $root_url.$_GET['path'];
     $current_dir_path = $_GET['path'];
     $moveup_dir_path = preg_replace('/(.*?)[^\/]+\/$/', '$1', $current_dir_path);
 }
@@ -53,8 +55,10 @@ $file_list = array();
 if ($handle = opendir($current_path)) {
     $i = 0;
     while (false !== ($filename = readdir($handle))) {
-        if ($filename{0} == '.') continue;
-        $file = $current_path . $filename;
+        if ($filename[0] == '.') {
+            continue;
+        }
+        $file = $current_path.$filename;
         if (is_dir($file)) {
             $file_list[$i]['is_dir'] = true; //是否文件夹
             $file_list[$i]['has_file'] = (count(scandir($file)) > 2); //文件夹是否包含文件
@@ -78,7 +82,8 @@ if ($handle = opendir($current_path)) {
 }
 
 //排序
-function cmp_func($a, $b) {
+function cmp_func($a, $b)
+{
     global $order;
     if ($a['is_dir'] && !$b['is_dir']) {
         return -1;

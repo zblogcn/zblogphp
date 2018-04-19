@@ -1,7 +1,12 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 /**
  * @property string sql 最终生成的SQL语句
+ *
  * @method SQL__Global select(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
  * @method SQL__Global insert(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
  * @method SQL__Global update(mixed $a, mixed $b = null, mixed $c = null, mixed $d = null, mixed $e = null)
@@ -15,7 +20,6 @@
  */
 class SQL__Global
 {
-
     /**
      * @var string 类名
      * @description 如果是PHP 5.3的话，可以用get_called_class
@@ -81,8 +85,10 @@ class SQL__Global
     /**
      * @param $callName
      * @param $argu
-     * @return SQL__Global|mixed
+     *
      * @throws Exception
+     *
+     * @return SQL__Global|mixed
      */
     public function __call($callName, $argu)
     {
@@ -107,7 +113,7 @@ class SQL__Global
 
             return $this;
         } elseif (in_array($upperKeyword, $this->selectFunctionKeyword)) {
-            /**
+            /*
              * Count
              * @example count('log_ID')
              * @example count('log_ID', 'countLogId')
@@ -136,6 +142,7 @@ class SQL__Global
         // @codeCoverageIgnoreEnd
         throw new Exception("Unimplemented $callName");
     }
+
     public function __get($getName)
     {
         $upperKeyword = strtoupper($getName);
@@ -152,6 +159,7 @@ class SQL__Global
     /**
      * @param $name
      * @param $value
+     *
      * @throws Exception
      */
     public function __set($name, $value)
@@ -159,7 +167,7 @@ class SQL__Global
         if (isset($this->$name)) {
             $this->$name = $value;
         } else {
-            throw new Exception('Unknown attribute: ' . $name);
+            throw new Exception('Unknown attribute: '.$name);
         }
     }
 
@@ -167,15 +175,19 @@ class SQL__Global
      * If we use $this->$getName directly, PHP will throw [Indirect modification of overloaded property]
      * So we have to wrap it.
      * It maybe a bug of PHP.
+     *
      * @see  http://stackoverflow.com/questions/10454779/php-indirect-modification-of-overloaded-property
+     *
      * @param $sql
      */
     public function _sqlPush($sql)
     {
         $this->_sql[] = $sql;
     }
+
     /**
-     * Re-initialize this class
+     * Re-initialize this class.
+     *
      * @return SQL__Global
      */
     public function reset()
@@ -191,8 +203,10 @@ class SQL__Global
     }
 
     /**
-     * Set SQL query option
+     * Set SQL query option.
+     *
      * @param $option
+     *
      * @return SQL__Global
      */
     public function option($option)
@@ -222,8 +236,10 @@ class SQL__Global
     }
 
     /**
-     * Set column for query
+     * Set column for query.
+     *
      * @param $columns
+     *
      * @return SQL__Global
      */
     public function column($columns)
@@ -253,20 +269,20 @@ class SQL__Global
             $this->columnLoaderArray($args);
         }
 
-
-
         return $this;
     }
+
     /**
-     * Set limit & offset
+     * Set limit & offset.
+     *
      * @example limit(5)
      * @example limit(10, 1)
      * @example limit(array(10, 1))
+     *
      * @return SQL__Global
      */
     public function limit()
     {
-
         if (func_num_args() == 2) {
             $this->option['limit'] = func_get_arg(1);
             $this->option['offset'] = func_get_arg(0);
@@ -289,12 +305,15 @@ class SQL__Global
 
         return $this;
     }
+
     /**
-     * Set where query
+     * Set where query.
+     *
      * @example array(array('=', 'a', 'b'), array('=', 'a', 'b'))
      * @example array(array('=', 'a', 'b'))
      * @example array('=', 'a', 'b'), array('=', 'a', 'b')
      * @example array('=', 'a', 'b')
+     *
      * @return SQL__Global
      */
     public function where()
@@ -319,8 +338,10 @@ class SQL__Global
     }
 
     /**
-     * Set having
+     * Set having.
+     *
      * @param $having
+     *
      * @return SQL__Global
      */
     public function having($having)
@@ -340,8 +361,10 @@ class SQL__Global
     }
 
     /**
-     * GroupBy
+     * GroupBy.
+     *
      * @param $groupBy
+     *
      * @return SQL__Global
      */
     public function groupBy($groupBy)
@@ -359,9 +382,11 @@ class SQL__Global
 
         return $this;
     }
+
     /**
-     * Order by
-     * @return  SQL__Global
+     * Order by.
+     *
+     * @return SQL__Global
      */
     public function orderBy()
     {
@@ -383,9 +408,12 @@ class SQL__Global
 
         return $this;
     }
+
     /**
-     * Set data for INSERT & UPDATE
+     * Set data for INSERT & UPDATE.
+     *
      * @example array('key' => 'value', 'key2' => 'value2')
+     *
      * @return SQL__Global
      */
     public function data()
@@ -401,8 +429,10 @@ class SQL__Global
 
     /**
      * @todo
+     *
      * @param string $table
      * @param string $dbname
+     *
      * @return SQL__Global
      */
     public function exist($table, $dbname = '')
@@ -422,11 +452,10 @@ class SQL__Global
 
     private function sql()
     {
-
         $sql = &$this->_sql;
         if (count($sql) == 0) {
             $sql = array("$this->method");
-            $callableMethod = 'build' . ucfirst($this->method);
+            $callableMethod = 'build'.ucfirst($this->method);
             $this->$callableMethod();
         }
 
@@ -435,10 +464,6 @@ class SQL__Global
         return implode(' ', $sql);
     }
 
-
-    /**
-     *
-     */
     protected function buildTable()
     {
         $sql = &$this->_sql;
@@ -456,6 +481,7 @@ class SQL__Global
         }
         $sql[] = implode($tableData, ", ");
     }
+
     protected function buildColumn()
     {
         $sql = &$this->_sql;
@@ -467,6 +493,7 @@ class SQL__Global
             $sql[] = "*";
         }
     }
+
     protected function buildWhere($originalWhere = null, $whereKeyword = null)
     {
         $sql = &$this->_sql;
@@ -494,7 +521,7 @@ class SQL__Global
             $x = (string) $value[1];
             $y = $this->db->EscapeString((string) $value[2]);
             $whereData = " $x $eq '$y' ";
-        } elseif (($eq == 'AND') && count($value)>2) {
+        } elseif (($eq == 'AND') && count($value) > 2) {
             $sqlArray = array();
             foreach ($value as $x => $y) {
                 if ($x == 0) {
@@ -502,12 +529,13 @@ class SQL__Global
                 }
                 $sqlArray[] = $this->buildWhere_Single($y);
             }
-            $whereData = " ( " . implode(' AND ', $sqlArray) . ') ';
+            $whereData = " ( ".implode(' AND ', $sqlArray).') ';
         } elseif ($eq == 'EXISTS' || $eq == 'NOT EXISTS') {
             if (!isset($value[2])) {
                 $whereData = " $eq ( $value[1] ) ";
             } else {
                 $whereData = " (1 = 1) ";
+
                 return $whereData;
             }
         } elseif ($eq == 'BETWEEN') {
@@ -520,8 +548,8 @@ class SQL__Global
                 $y = $this->db->EscapeString((string) $value[$searchCount - 1]);
                 $sqlSearch[] = " ($x LIKE '%$y%') ";
             }
-            $whereData = " ((1 = 1) AND (" . implode(' OR ', $sqlSearch) . ') )';
-        } elseif (($eq == 'OR' || $eq == 'ARRAY') && count($value)>2) {
+            $whereData = " ((1 = 1) AND (".implode(' OR ', $sqlSearch).') )';
+        } elseif (($eq == 'OR' || $eq == 'ARRAY') && count($value) > 2) {
             $sqlArray = array();
             foreach ($value as $x => $y) {
                 if ($x == 0) {
@@ -529,7 +557,7 @@ class SQL__Global
                 }
                 $sqlArray[] = $this->buildWhere_Single($y);
             }
-            $whereData = " ( " . implode(' OR ', $sqlArray) . ') ';
+            $whereData = " ( ".implode(' OR ', $sqlArray).') ';
         } elseif ($eq == 'ARRAY' || $eq == 'NOT ARRAY' || $eq == 'LIKE ARRAY' || $eq == 'ILIKE ARRAY' || $eq == 'ARRAY_LIKE' || $eq == 'ARRAY_ILIKE') {
             if ($eq == 'ARRAY') {
                 $symbol = '=';
@@ -545,27 +573,31 @@ class SQL__Global
             $sqlArray = array();
             if (!is_array($value[1])) {
                 $whereData = " (1 = 1) ";
+
                 return $whereData;
             }
             foreach ($value[1] as $x => $y) {
                 $y[1] = $this->db->EscapeString($y[1]);
                 $sqlArray[] = " $y[0] $symbol '$y[1]' ";
             }
-            $whereData = " ((1 = 1) AND (" . implode(' OR ', $sqlArray) . ') )';
+            $whereData = " ((1 = 1) AND (".implode(' OR ', $sqlArray).') )';
         } elseif ($eq == 'IN' || $eq == 'NOT IN') {
             $sqlArray = array();
             if (!is_array($value[2])) {
                 if ($this->validateParamater($value[2])) {
                     $whereData = " ($value[1] $eq ($value[2])) ";
+
                     return $whereData;
                 } else {
                     $whereData = " (1 = 1) ";
                 }
+
                 return $whereData;
             }
-            
+
             if (count($value[2]) == 0) {
                 $whereData = " (1 = 1) ";
+
                 return $whereData;
             }
 
@@ -573,26 +605,29 @@ class SQL__Global
                 $y = $this->db->EscapeString($y);
                 $sqlArray[] = " '$y' ";
             }
-            $whereData = " ((1 = 1) AND ($value[1] $eq (" . implode(', ', $sqlArray) . ') ) )';
+            $whereData = " ((1 = 1) AND ($value[1] $eq (".implode(', ', $sqlArray).') ) )';
         } elseif ($eq == 'META_NAME') {
             if (count($value) != 3) {
                 $whereData = " (1 = 1) ";
+
                 return $whereData;
             }
-            $sqlMeta = 's:' . strlen($value[2]) . ':"' . $value[2] . '";';
+            $sqlMeta = 's:'.strlen($value[2]).':"'.$value[2].'";';
             $sqlMeta = $this->db->EscapeString($sqlMeta);
             $whereData = "($value[1] LIKE '%$sqlMeta%')";
         } elseif ($eq == 'META_NAMEVALUE') {
             if (count($value) != 4) {
                 $whereData = " (1 = 1) ";
+
                 return $whereData;
             }
-            $sqlMeta = 's:' . strlen($value[2]) . ':"' . $value[2] . '";' . 's:' . strlen($value[3]) . ':"' . $value[3] . '"';
+            $sqlMeta = 's:'.strlen($value[2]).':"'.$value[2].'";'.'s:'.strlen($value[3]).':"'.$value[3].'"';
             $sqlMeta = $this->db->EscapeString($sqlMeta);
             $whereData = "($value[1] LIKE '%$sqlMeta%')";
         } elseif ($eq == "CUSTOM") {
             $whereData = $value[1];
         }
+
         return $whereData;
     }
 
@@ -621,12 +656,8 @@ class SQL__Global
      */
     protected function buildJoin()
     {
-
     }
 
-    /**
-     *
-     */
     protected function buildGroupBy()
     {
         $sql = &$this->_sql;
@@ -641,6 +672,7 @@ class SQL__Global
         }
         $sql[] = implode(', ', $groupByData);
     }
+
     protected function buildHaving()
     {
         $sql = &$this->_sql;
@@ -651,20 +683,22 @@ class SQL__Global
         $sql[] = "HAVING";
         $this->buildWhere($this->having, ' ');
     }
+
     protected function buildLimit()
     {
         $sql = &$this->_sql;
 
         if (isset($this->option['limit'])) {
             if ($this->option['limit'] > 0) {
-                $sql[] = "LIMIT " . $this->option['limit'];
+                $sql[] = "LIMIT ".$this->option['limit'];
 
                 if (isset($this->option['offset'])) {
-                    $sql[] = "OFFSET " . $this->option['offset'];
+                    $sql[] = "OFFSET ".$this->option['offset'];
                 }
             }
         }
     }
+
     /**
      * @todo
      **/
@@ -672,26 +706,16 @@ class SQL__Global
     {
     }
 
-    /**
-     *
-     */
     protected function buildBeforeWhere()
     {
         // Do nothing yet
     }
 
-
-    /**
-     *
-     */
     protected function buildOthers()
     {
         // Do nothing yet
     }
 
-    /**
-     *
-     */
     protected function buildSelect()
     {
         $sql = &$this->_sql;
@@ -708,6 +732,7 @@ class SQL__Global
         $this->buildLimit();
         $this->buildOthers();
     }
+
     protected function buildUpdate()
     {
         $sql = &$this->_sql;
@@ -726,6 +751,7 @@ class SQL__Global
 
         return $sql;
     }
+
     protected function buildDelete()
     {
         $sql = &$this->_sql;
@@ -733,6 +759,7 @@ class SQL__Global
         $this->buildTable();
         $this->buildWhere();
     }
+
     protected function buildInsert()
     {
         $sql = &$this->_sql;
@@ -749,7 +776,7 @@ class SQL__Global
             $keyData[] = "$key";
             $valueData[] = " '$v' ";
         }
-        $sql[] = '(' . implode($keyData, ',') . ')';
+        $sql[] = '('.implode($keyData, ',').')';
         $sql[] = ' VALUES (';
         $sql[] = implode($valueData, ',');
         $sql[] = ')';
@@ -769,9 +796,6 @@ class SQL__Global
     {
     }
 
-    /**
-     *
-     */
     protected function buildIndex()
     {
     }

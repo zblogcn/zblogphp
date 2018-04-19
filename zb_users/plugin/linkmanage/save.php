@@ -1,4 +1,5 @@
 <?php
+
 header('Content-type: application/json');
 
 require '../../../zb_system/function/c_system_base.php';
@@ -19,7 +20,7 @@ switch (GetVars('type', 'GET')) {
         linkmanage_saveMenu();
         break;
     case 'del_link':
-        linkmanage_deleteLink(GetVars('id', 'POST'),GetVars('menuid', 'POST'));
+        linkmanage_deleteLink(GetVars('id', 'POST'), GetVars('menuid', 'POST'));
         break;
     case 'save_link':
         //linkmanage_saveLink();
@@ -33,6 +34,6 @@ switch (GetVars('type', 'GET')) {
         linkmanage_saveConfig();
         break;
     default:
-        # code...
+        // code...
         break;
 }

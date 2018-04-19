@@ -1,4 +1,5 @@
 <?php
+
 RegisterPlugin("ZBPDK", "ActivePlugin_ZBPDK");
 
 function ActivePlugin_ZBPDK()
@@ -15,5 +16,5 @@ function UninstallPlugin_ZBPDK()
 function ZBPDK_AddMenu(&$topmenus)
 {
     global $zbp;
-    $topmenus[] = MakeTopMenu('admin', '开发工具', $zbp->host . "zb_users/plugin/ZBPDK/main.php", "", "zbpdk");
+    $topmenus[] = MakeTopMenu('admin', '开发工具', $zbp->host."zb_users/plugin/ZBPDK/main.php", "", "zbpdk");
 }

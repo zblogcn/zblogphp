@@ -1,8 +1,8 @@
 <?php
+
 return 'hyperlink_value';
 function hyperlink_value($author, $content, $orig_content, &$sv, $config_sv, $config_array)
 {
-
     $matches = array();
     preg_match_all("/https?:\/\/(?!www|ftp)|ftp|www./si", $orig_content, $matches);
 
@@ -14,4 +14,4 @@ function hyperlink_value($author, $content, $orig_content, &$sv, $config_sv, $co
     }
 
     //Totoro_SV=Totoro_SV+TOTORO_HYPERLINK_VALUE*(2^matches.count-1)
-};
+}
