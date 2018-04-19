@@ -6,6 +6,11 @@
  * @copyright (C) RainbowSoft Studio
  */
 
+/**
+ * @var ZBlogPHP $zbp;
+ */
+$zbp = null;
+
 error_reporting(E_ALL);
 ob_start();
 
