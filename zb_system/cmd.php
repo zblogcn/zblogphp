@@ -1,4 +1,5 @@
 <?php
+
 require './function/c_system_base.php';
 $zbp->Load();
 $action = GetVars('act', 'GET');
@@ -14,13 +15,13 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Begin'] as $fpname => &$fpsignal) 
 
 switch ($action) {
     case 'login':
-        if ( !empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
+        if (!empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
             Redirect(GetVars('redirect', 'GET'));
         }
         if ($zbp->CheckRights('admin')) {
             Redirect('cmd.php?act=admin');
         }
-        if ( empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
+        if (empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
             setcookie("redirect", GetVars('redirect', 'GET'), 0, $zbp->cookiespath);
         }
         Redirect('login.php');
@@ -34,11 +35,11 @@ switch ($action) {
         Redirect('admin/index.php?act=admin');
         break;
     case 'verify':
-        /**
+        /*
          * 考虑兼容原因，此处不加CSRF验证。logout加的原因是主题的退出无大碍。
          */
         if (VerifyLogin()) {
-            if ( !empty($zbp->user->ID) && GetVars('redirect', 'COOKIE')) {
+            if (!empty($zbp->user->ID) && GetVars('redirect', 'COOKIE')) {
                 Redirect(GetVars('redirect', 'COOKIE'));
             }
             Redirect('admin/index.php?act=admin');

@@ -1,15 +1,14 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
- * 数据库操作接口
- *
- * @package Z-BlogPHP
- * @subpackage Interface/DataBase 类库
+ * 数据库操作接口.
  */
 
 /**
- * SQL语句生成类
- * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase
+ * SQL语句生成类.
  */
 class DbSql
 {
@@ -35,12 +34,15 @@ class DbSql
 
     /**
      * 替换数据表前缀
+     *
      * @param string $s
+     *
      * @return string
      */
     public function ReplacePre(&$s)
     {
         $s = str_replace('%pre%', $this->db->dbpre, $s);
+
         return $s;
     }
 
@@ -50,24 +52,28 @@ class DbSql
     public function get()
     {
         $sql = new $this->sql($this->db);
+
         return $sql;
     }
 
     /**
-     * 删除表,返回SQL语句
+     * 删除表,返回SQL语句.
+     *
      * @param string $table
+     *
      * @return string
      */
     public function DelTable($table)
     {
-        
         return $this->get()->drop("$table")->sql;
     }
 
     /**
-     * 检查表是否存在，返回SQL语句
+     * 检查表是否存在，返回SQL语句.
+     *
      * @param string $table
      * @param string $dbname
+     *
      * @return string
      */
     public function ExistTable($table, $dbname = '')
@@ -76,15 +82,16 @@ class DbSql
     }
 
     /**
-     * 创建表，返回构造完整的SQL语句
+     * 创建表，返回构造完整的SQL语句.
+     *
      * @param string $table
-     * @param array $datainfo
-     * @param null $engine
+     * @param array  $datainfo
+     * @param null   $engine
+     *
      * @return string
      */
     public function CreateTable($table, $datainfo, $engine = null)
     {
-
         $sql = $this->get();
         $sql->create($table)->data($datainfo);
         if (!is_null($engine)) {
@@ -94,15 +101,16 @@ class DbSql
         return $sql->sql;
     }
 
-
     /**
-     * 构造查询语句
-     * @param string $table
-     * @param string $select
-     * @param string $where
-     * @param string $order
-     * @param string $limit
+     * 构造查询语句.
+     *
+     * @param string     $table
+     * @param string     $select
+     * @param string     $where
+     * @param string     $order
+     * @param string     $limit
      * @param array|null $option
+     *
      * @return string 返回构造的语句
      */
     public function Select($table, $select = null, $where = null, $order = null, $limit = null, $option = null)
@@ -144,11 +152,13 @@ class DbSql
     }
 
     /**
-     * 构造计数语句
+     * 构造计数语句.
+     *
      * @param string $table
-     * @param mixed $count
-     * @param mixed $where
-     * @param null $option
+     * @param mixed  $count
+     * @param mixed  $where
+     * @param null   $option
+     *
      * @return string 返回构造的语句
      */
     public function Count($table, $count, $where = null, $option = null)
@@ -161,11 +171,13 @@ class DbSql
     }
 
     /**
-     * 构造数据更新语句
-     * @param string $table
-     * @param mixed $keyvalue
-     * @param mixed $where
+     * 构造数据更新语句.
+     *
+     * @param string     $table
+     * @param mixed      $keyvalue
+     * @param mixed      $where
      * @param array|null $option
+     *
      * @return string 返回构造的语句
      */
     public function Update($table, $keyvalue, $where, $option = null)
@@ -174,33 +186,37 @@ class DbSql
     }
 
     /**
-     * 构造数据插入语句
+     * 构造数据插入语句.
+     *
      * @param string $table
-     * @param mixed $keyvalue
+     * @param mixed  $keyvalue
+     *
      * @return string 返回构造的语句
      */
     public function Insert($table, $keyvalue)
     {
-
         return $this->get()->insert($this->db)->insert($table)->data($keyvalue)->sql;
     }
 
     /**
-     * 构造数据删除语句
-     * @param string $table
-     * @param mixed $where
+     * 构造数据删除语句.
+     *
+     * @param string     $table
+     * @param mixed      $where
      * @param array|null $option
+     *
      * @return string 返回构造的语句
      */
     public function Delete($table, $where, $option = null)
     {
-
         return $this->get()->delete($this->db)->delete($table)->where($where)->option($option)->sql;
     }
 
     /**
-     * 返回经过过滤的SQL语句
+     * 返回经过过滤的SQL语句.
+     *
      * @param $sql
+     *
      * @return mixed
      */
     public function Filter($sql)
@@ -216,13 +232,15 @@ class DbSql
 
     /**
      * 导出sql生成语句，用于备份数据用。
+     *
      * @param $type 数据连接类型
+     *
      * @return mixed
      */
     private $_explort_db = null;
+
     public function Export($table, $keyvalue, $type = 'mysql')
     {
-
         if ($type == 'mysql' && $this->_explort_db === null) {
             $this->_explort_db = new Database_MySQL();
         }

@@ -1,8 +1,11 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
- * 用户类
+ * 用户类.
  *
- * @package Z-BlogPHP
  * @property int|string ID
  * @property int|string Level 用户等级
  * @property string Name
@@ -25,19 +28,18 @@
  */
 class Member extends Base
 {
-
     /**
      * @var string 头像图片地址
      */
     private $_avatar = '';
 
     /**
-     * @var boolean 创始id
+     * @var bool 创始id
      */
     private $_isgod = null;
 
     /**
-     * 构造函数，默认用户设为anonymous
+     * 构造函数，默认用户设为anonymous.
      */
     public function __construct()
     {
@@ -48,10 +50,13 @@ class Member extends Base
     }
 
     /**
-     * 自定义函数
+     * 自定义函数.
+     *
      * @api Filter_Plugin_Member_Call
+     *
      * @param $method
      * @param $args
+     *
      * @return mixed
      */
     public function __call($method, $args)
@@ -60,14 +65,15 @@ class Member extends Base
             $fpreturn = $fpname($this, $method, $args);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
-        return null;
     }
 
     /**
      * 自定义参数及值
+     *
      * @param $name
      * @param $value
      */
@@ -76,11 +82,12 @@ class Member extends Base
         global $zbp;
         if (in_array($name, array('Url', 'Avatar', 'LevelName', 'EmailMD5', 'StaticName', 'PassWord_MD5Path', 'IsGod'))) {
             return;
-        } else if ($name == 'Template') {
+        } elseif ($name == 'Template') {
             if ($value == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
                 $value = '';
             }
             $this->data[$name] = $value;
+
             return;
         }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Set'] as $fpname => &$fpsignal) {
@@ -91,6 +98,7 @@ class Member extends Base
 
     /**
      * @param $name
+     *
      * @return mixed|string
      */
     public function __get($name)
@@ -115,6 +123,7 @@ class Member extends Base
                 $fpreturn = $fpname($this);
                 if ($fpreturn) {
                     $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                     return $fpreturn;
                 }
             }
@@ -170,21 +179,25 @@ class Member extends Base
 
                 return $this->_isgod;
             }
-        } 
+        }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Get'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $name);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
+
         return parent::__get($name);
     }
 
     /**
      * 静态方法，获取加盐及二次散列的,用于保存的最终密码
-     * @param string $ps 明文密码
+     *
+     * @param string $ps   明文密码
      * @param string $guid 用户唯一码
+     *
      * @return string
      */
     public static function GetPassWordByGuid($ps, $guid)
@@ -194,29 +207,35 @@ class Member extends Base
 
     /**
      * 获取有期限的Token密码
+     *
      * @param string $wt_id Token的ID
-     * @param int $day 时间，按天算 (1分钟就是1/24*60)
+     * @param int    $day   时间，按天算 (1分钟就是1/24*60)
+     *
      * @return string (sha1字串+unix时间)
      */
     public function GetHashByToken($wt_id = '', $day = 30)
     {
         global $zbp;
-        $t = intval( $day * 24 * 3600 ) + time();
+        $t = intval($day * 24 * 3600) + time();
+
         return CreateWebToken($wt_id, $t, $zbp->guid, $this->ID, $this->Password);
     }
 
     /**
-     * 获取加路径盐的Hash密码 (其实并没有用path，而是用zbp->guid替代了)
+     * 获取加路径盐的Hash密码 (其实并没有用path，而是用zbp->guid替代了).
+     *
      * @return string
      */
     public function GetHashByMD5Path()
     {
         global $zbp;
+
         return md5($this->Password . $zbp->guid);
     }
 
     /**
-     * 保存用户数据
+     * 保存用户数据.
+     *
      * @return bool
      */
     public function Save()
@@ -243,7 +262,7 @@ class Member extends Base
     public function Del()
     {
         global $zbp;
-        if ($this->ID >0) {
+        if ($this->ID > 0) {
             unset($zbp->members[$this->ID]);
         }
         if ($this->Name != '') {

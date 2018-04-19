@@ -1,7 +1,8 @@
 <?php
+
 class ClassSQLPgSQLTest extends PHPUnit_Framework_TestCase
 {
-    protected $backupGlobalsBlacklist = ['zbp'];
+    protected $backupGlobalsBlacklist = array('zbp');
     protected static $db = null;
 
     public function setUp()

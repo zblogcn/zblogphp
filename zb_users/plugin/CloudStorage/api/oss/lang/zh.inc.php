@@ -1,4 +1,5 @@
 <?php
+
 /*%*************************************************************************************%*/
 //access id & access key 相关
 define('NOT_SET_OSS_ACCESS_ID', '未设置OSS服务的ACCESS ID');
@@ -9,11 +10,10 @@ define('OSS_ACCESS_ID_OR_ACCESS_KEY_EMPTY', 'ACCESS ID或ACCESS KEY为空');
 /*%*************************************************************************************%*/
 //OSS语言包以及文件相关
 define('OSS_LANG_FILE_NOT_EXIST', 'OSS语言包文件不存在');
-define('OSS_CONFIG_FILE_NOT_EXIST', OSS_API_PATH.DIRECTORY_SEPARATOR.'conf.inc.php不存在');
-define('OSS_UTILS_FILE_NOT_EXIST', OSS_API_PATH.DIRECTORY_SEPARATOR.'util'.DIRECTORY_SEPARATOR.'utils.php不存在');
+define('OSS_CONFIG_FILE_NOT_EXIST', OSS_API_PATH . DIRECTORY_SEPARATOR . 'conf.inc.php不存在');
+define('OSS_UTILS_FILE_NOT_EXIST', OSS_API_PATH . DIRECTORY_SEPARATOR . 'util' . DIRECTORY_SEPARATOR . 'utils.php不存在');
 define('OSS_CURL_EXTENSION_MUST_BE_LOAD', '系统没有安装CURL扩展');
 define('OSS_NO_ANY_EXTENSIONS_LOADED', '系统没有安装任何扩展,请检查系统配置');
-
 
 /*%*************************************************************************************%*/
 //日志文件相关

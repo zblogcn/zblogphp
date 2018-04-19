@@ -1,4 +1,5 @@
 <?php
+
 require '../../../zb_system/function/c_system_base.php';
 
 if (isset($_GET['setcolor'])) {
@@ -7,11 +8,11 @@ if (isset($_GET['setcolor'])) {
     if ($zbp->CheckRights($action)) {
         $i = (int) $_GET['setcolor'];
         $zbp->Config('AdminColor')->ColorID = $i;
-        $zbp->Config('AdminColor')->BlodColor =  (string) $GLOBALS['AdminColor_BlodColor'][$i];
-        $zbp->Config('AdminColor')->NormalColor =  (string) $GLOBALS['AdminColor_NormalColor'][$i];
-        $zbp->Config('AdminColor')->LightColor =  (string) $GLOBALS['AdminColor_LightColor'][$i];
-        $zbp->Config('AdminColor')->HighColor =  (string) $GLOBALS['AdminColor_HighColor'][$i];
-        $zbp->Config('AdminColor')->AntiColor =  (string) $GLOBALS['AdminColor_AntiColor'][$i];
+        $zbp->Config('AdminColor')->BlodColor = (string) $GLOBALS['AdminColor_BlodColor'][$i];
+        $zbp->Config('AdminColor')->NormalColor = (string) $GLOBALS['AdminColor_NormalColor'][$i];
+        $zbp->Config('AdminColor')->LightColor = (string) $GLOBALS['AdminColor_LightColor'][$i];
+        $zbp->Config('AdminColor')->HighColor = (string) $GLOBALS['AdminColor_HighColor'][$i];
+        $zbp->Config('AdminColor')->AntiColor = (string) $GLOBALS['AdminColor_AntiColor'][$i];
         $zbp->SaveConfig('AdminColor');
         Redirect($zbp->host . 'zb_users/plugin/AdminColor/main.php');
         die();
@@ -115,7 +116,7 @@ if ($id == 9) {
     $c .= '#topmenu{opacity:0.8;}' . "\r\n";
 }
 if ($zbp->Config('AdminColor')->LogoPath) {
-    $c .= '.logo img{background:url('. $zbp->Config('AdminColor')->LogoPath .') no-repeat center center;}';
+    $c .= '.logo img{background:url(' . $zbp->Config('AdminColor')->LogoPath . ') no-repeat center center;}';
 }
 
 if ($id == 10) {
@@ -155,7 +156,7 @@ header, .header {
 padding-top:0px;
 float:left;
 height:100%;
-background-image:url("'.'lb.png");
+background-image:url("' . 'lb.png");
 background-repeat: no-repeat;
 background-position: -30px -2px;
 width:160px;
@@ -218,7 +219,7 @@ height: 30px;
 ';
 
     if (isset($_GET['aly'])) {
-        $c .='
+        $c .= '
 body {background:url("l.png") repeat-y 0 top}
 .logo{
     background-color: #0087B5;

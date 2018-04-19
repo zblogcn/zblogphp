@@ -1,12 +1,11 @@
 <?php
 /**
- * api
- * @package api
+ * api.
+ *
  * @php >= 5.2
+ *
  * @author zsx<zsx@zsxsoft.com>
  */
-
-
 require '../function/c_system_base.php';
 require dirname(__FILE__) . '/api.php';
 
@@ -18,7 +17,6 @@ api_index_begin();
 
 function api_index_begin()
 {
-
     global $apiRealRouteUrl;
     global $zbp;
     if ($apiRealRouteUrl == "") {

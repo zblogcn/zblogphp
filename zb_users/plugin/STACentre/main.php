@@ -141,11 +141,13 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
 
-  <div class="divHeader"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
 <div class="SubMenu"> <a href="main.php"><span class="m-left m-now">配置页面</span></a><a href="list.php"><span class="m-left">ReWrite规则</span></a><a href="help.php"><span class="m-right">帮助</span></a> </div>
   <div id="divMain2">
     <form id="edit" name="edit" method="post" action="#">
-        <?php if (function_exists('CheckIsRefererValid')) {echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';}?>
+        <?php if (function_exists('CheckIsRefererValid')) {
+    echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
+}?>
 <input id="reset" name="reset" type="hidden" value="" />
 <table border="1" class="tableFull tableBorder">
 <tr>
@@ -252,7 +254,7 @@ function changeOptions(i){
 }
     </script>
     <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/STACentre/logo.png';?>");</script>
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/STACentre/logo.png'; ?>");</script>
   </div>
 </div>
 

@@ -1,11 +1,12 @@
 <?php
 /**
- * Z-Blog with PHP
+ * Z-Blog with PHP.
+ *
  * @author
  * @copyright (C) RainbowSoft Studio
+ *
  * @version 2.0 2013-07-05
  */
-
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
@@ -28,7 +29,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
 $cateid = null;
 if (isset($_GET['id'])) {
-    $cateid = (integer) GetVars('id', 'GET');
+    $cateid = (int) GetVars('id', 'GET');
 } else {
     $cateid = 0;
 }
@@ -46,7 +47,7 @@ foreach ($zbp->categoriesbyorder as $k => $v) {
     if ($cate->ID > 0 && $v->RootID == $cate->ID) {
         continue;
     }
-    if ($cate->RootID>0) {
+    if ($cate->RootID > 0) {
         if ($v->RootID == $cate->RootID && $v->Level >= $cate->Level) {
             continue;
         }
@@ -69,50 +70,50 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_SubMenu'] as $fpname => 
     </div>
     <div id="divMain2" class="edit category_edit">
         <form id="edit" name="edit" method="post" action="#">
-            <input id="edtID" name="ID" type="hidden" value="<?php echo $cate->ID;?>" />
+            <input id="edtID" name="ID" type="hidden" value="<?php echo $cate->ID; ?>" />
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['name']?>:</span>
                 <span class="star">(*)</span>
                 <br />
-                <input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $option['ZC_CATEGORY_NAME_MAX']; ?>" type="text" value="<?php echo $cate->Name;?>" /></p>
+                <input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $option['ZC_CATEGORY_NAME_MAX']; ?>" type="text" value="<?php echo $cate->Name; ?>" /></p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['alias']?>:</span>
                 <br />
-                <input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $cate->Alias;?>" /></p>
+                <input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $cate->Alias; ?>" /></p>
 
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['order']?>:</span>
                 <br />
-                <input id="edtOrder" class="edit" size="40" name="Order" type="text" value="<?php echo $cate->Order;?>" /></p>
+                <input id="edtOrder" class="edit" size="40" name="Order" type="text" value="<?php echo $cate->Order; ?>" /></p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['parent_category']?>:</span>
                 <br />
                 <select id="edtParentID" name="ParentID" class="edit" size="1">
-                    <?php echo $p;?></select>
+                    <?php echo $p; ?></select>
             </p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['template']?>:</span>
                 <br />
                 <select class="edit" size="1" name="Template" id="cmbTemplate">
-                    <?php echo OutputOptionItemsOfTemplate($cate->Template);?></select>
-                <input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $cate->Template;?>" /></p>
+                    <?php echo OutputOptionItemsOfTemplate($cate->Template); ?></select>
+                <input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $cate->Template; ?>" /></p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['category_aritles_default_template']?>:</span>
                 <br />
                 <select class="edit" size="1" name="LogTemplate" id="cmbLogTemplate">
-                    <?php echo OutputOptionItemsOfTemplate($cate->LogTemplate);?></select>
+                    <?php echo OutputOptionItemsOfTemplate($cate->LogTemplate); ?></select>
             </p>
             <p>
                 <span class='title'>
                     <?php echo $lang['msg']['intro']?>:</span>
                 <br/>
-                <textarea  cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;"><?php echo htmlspecialchars($cate->Intro);?></textarea>
+                <textarea  cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;"><?php echo htmlspecialchars($cate->Intro); ?></textarea>
             </p>
             <p>
                 <label>
@@ -124,7 +125,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_SubMenu'] as $fpname => 
             <!-- 1号输出接口 -->
             <div id='response' class='editmod2'>
                 <?php foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_Response'] as $fpname => &$fpsignal) {
-                    $fpname();
+    $fpname();
 }?>
             </div>
             <p>
@@ -142,7 +143,7 @@ function checkInfo(){
 }
     </script>
         <script type="text/javascript">ActiveLeftMenu("aCategoryMng");</script>
-        <script type="text/javascript">AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/category_32.png';?>");</script>
+        <script type="text/javascript">AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/category_32.png'; ?>");</script>
     </div>
 </div>
 

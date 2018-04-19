@@ -1,20 +1,22 @@
 <?php
 /**
- * KindEditor for Z-BlogPHP
+ * KindEditor for Z-BlogPHP.
+ *
  * @author 未寒
  * @copyright (C) RainbowSoft Studio
  */
 require '../../../../../zb_system/function/c_system_base.php';
 global $zbp;
 $zbp->Load();
-if(!$zbp->CheckRights('UploadPst'))die();
+if (!$zbp->CheckRights('UploadPst')) {
+    die();
+}
 //根目录路径，可以指定绝对路径，比如 /var/www/attached/
 $root_path = $zbp->usersdir . 'upload/';
 //根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
 $root_url = $zbp->host . 'zb_users/upload/';
 //图片扩展名
 $ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'GIF', 'JPG', 'JPEG', 'PNG', 'BMP', 'Gif', 'Jpg', 'Jpeg', 'Png', 'Bmp');
-
 
 //根据path参数，设置各路径和URL
 if (empty($_GET['path'])) {
@@ -53,7 +55,9 @@ $file_list = array();
 if ($handle = opendir($current_path)) {
     $i = 0;
     while (false !== ($filename = readdir($handle))) {
-        if ($filename{0} == '.') continue;
+        if ($filename[0] == '.') {
+            continue;
+        }
         $file = $current_path . $filename;
         if (is_dir($file)) {
             $file_list[$i]['is_dir'] = true; //是否文件夹
@@ -78,7 +82,8 @@ if ($handle = opendir($current_path)) {
 }
 
 //排序
-function cmp_func($a, $b) {
+function cmp_func($a, $b)
+{
     global $order;
     if ($a['is_dir'] && !$b['is_dir']) {
         return -1;

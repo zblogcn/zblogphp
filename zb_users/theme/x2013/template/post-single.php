@@ -1,4 +1,4 @@
-﻿<article class="article">
+<article class="article">
 	<header class="article-header">
 		<h1 class="article-title">{$article.Title}</h1>
 		<p class="article-meta">

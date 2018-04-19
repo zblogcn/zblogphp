@@ -1,9 +1,10 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
- * 网络连接类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/Network
+ * 网络连接类.
  */
 class Network
 {
@@ -33,7 +34,7 @@ class Network
     private static $_network = null;
 
     /**
-     * 构造函数
+     * 构造函数.
      */
     public function __construct()
     {
@@ -57,20 +58,22 @@ class Network
 
     /**
      * @param string $extension
+     *
      * @return Network__Interface
      */
     public static function Create($extension = '')
     {
         if (!isset(self::$_network)) {
-            self::$_network = new Network;
+            self::$_network = new self();
         }
         if ((!self::$_network->file_get_contents) && (!self::$_network->fsockopen) && (!self::$_network->curl)) {
-            return null;
+            return;
         }
 
         $extension = ($extension == '' ? self::$_network->network_list[0] : $extension);
         $type = 'Network__' . $extension;
         $network = new $type();
+
         return $network;
     }
 }

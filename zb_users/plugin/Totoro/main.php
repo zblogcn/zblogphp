@@ -31,7 +31,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     <div class="SubMenu"><?php echo $Totoro->export_submenu('main'); ?></div>
     <div id="divMain2">
         <form id="edit" name="edit" method="post" action="save_setting.php">
-            <?php if (function_exists('CheckIsRefererValid')) {echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';}?>
+            <?php if (function_exists('CheckIsRefererValid')) {
+    echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
+}?>
             <input id="reset" name="reset" type="hidden" value="" />
             <div class="content-box">
                 <!-- Start Content Box -->

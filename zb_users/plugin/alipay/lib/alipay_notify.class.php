@@ -32,10 +32,12 @@ class AlipayNotify
     {
         $this->alipay_config = $alipay_config;
     }
+
     public function AlipayNotify($alipay_config)
     {
         $this->__construct($alipay_config);
     }
+
     /**
      * 针对notify_url验证消息是否是支付宝发出的合法消息.
      *
@@ -62,8 +64,8 @@ class AlipayNotify
                 } else {
                     $isSignStr = 'false';
                 }
-                $log_text = 'responseTxt='.$responseTxt."\n notify_url_log:isSign=".$isSignStr.',';
-                $log_text = $log_text.createLinkString($_POST);
+                $log_text = 'responseTxt=' . $responseTxt . "\n notify_url_log:isSign=" . $isSignStr . ',';
+                $log_text = $log_text . createLinkString($_POST);
                 logResult($log_text);
             }
             //验证
@@ -104,8 +106,8 @@ class AlipayNotify
                 } else {
                     $isSignStr = 'false';
                 }
-                $log_text = 'responseTxt='.$responseTxt."\n return_url_log:isSign=".$isSignStr.',';
-                $log_text = $log_text.createLinkString($_GET);
+                $log_text = 'responseTxt=' . $responseTxt . "\n return_url_log:isSign=" . $isSignStr . ',';
+                $log_text = $log_text . createLinkString($_GET);
                 logResult($log_text);
             }
             //验证
@@ -171,7 +173,7 @@ class AlipayNotify
         } else {
             $veryfy_url = $this->http_verify_url;
         }
-        $veryfy_url = $veryfy_url.'partner='.$partner.'&notify_id='.$notify_id;
+        $veryfy_url = $veryfy_url . 'partner=' . $partner . '&notify_id=' . $notify_id;
         $responseTxt = getHttpResponseGET($veryfy_url, $this->alipay_config['cacert']);
 
         return $responseTxt;

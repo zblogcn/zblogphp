@@ -1,8 +1,8 @@
 <?php
+
 return 'badword_value';
 function badword_value($author, $content, $orig_content, &$sv, $config_sv, $config_array)
 {
-
     $matches = array();
 
     $regex = $config_array['BLACK_LIST']['BADWORD_LIST']['VALUE'];
@@ -13,4 +13,4 @@ function badword_value($author, $content, $orig_content, &$sv, $config_sv, $conf
         $count = count($matches[0]);
         $sv += $config_sv * $count;
     }
-};
+}

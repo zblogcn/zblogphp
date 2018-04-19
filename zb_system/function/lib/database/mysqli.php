@@ -1,13 +1,13 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
- * MySQLi数据库操作类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase/DbMySQLi 类库
+ * MySQLi数据库操作类.
  */
 class Database__MySQLi implements Database__Interface
 {
-
     public $type = 'mysql';
     public $version = '';
 
@@ -15,7 +15,7 @@ class Database__MySQLi implements Database__Interface
      * @var string|null 数据库名前缀
      */
     public $dbpre = null;
-    private $db = null; #数据库连接实例
+    private $db = null; //数据库连接实例
     /**
      * @var string|null 数据库名
      */
@@ -28,8 +28,9 @@ class Database__MySQLi implements Database__Interface
      * @var DbSql|null DbSql实例
      */
     public $sql = null;
+
     /**
-     * 构造函数，实例化$sql参数
+     * 构造函数，实例化$sql参数.
      */
     public function __construct()
     {
@@ -37,8 +38,10 @@ class Database__MySQLi implements Database__Interface
     }
 
     /**
-     * 对字符串进行转义，在指定的字符前添加反斜杠，即执行addslashes函数
+     * 对字符串进行转义，在指定的字符前添加反斜杠，即执行addslashes函数.
+     *
      * @param string $s
+     *
      * @return string
      */
     public function EscapeString($s)
@@ -47,17 +50,19 @@ class Database__MySQLi implements Database__Interface
     }
 
     /**
-     * 连接数据库
+     * 连接数据库.
+     *
      * @param array $array 数据库连接配置
-     *              $array=array(
-     *                  'dbmysql_server',
-     *                  'dbmysql_username',
-     *                  'dbmysql_password',
-     *                  'dbmysql_name',
-     *                  'dbmysql_pre',
-     *                  'dbmysql_port',
-     *                  'persistent'
-     *                  'engine')
+     *                     $array=array(
+     *                     'dbmysql_server',
+     *                     'dbmysql_username',
+     *                     'dbmysql_password',
+     *                     'dbmysql_name',
+     *                     'dbmysql_pre',
+     *                     'dbmysql_port',
+     *                     'persistent'
+     *                     'engine')
+     *
      * @return bool
      */
     public function Open($array)
@@ -93,12 +98,14 @@ class Database__MySQLi implements Database__Interface
     }
 
     /**
-     * 创建数据库
+     * 创建数据库.
+     *
      * @param string $dbmysql_server
      * @param string $dbmysql_port
      * @param string $dbmysql_username
      * @param string $dbmysql_password
      * @param string $dbmysql_name
+     *
      * @return bool
      */
     public function CreateDB($dbmysql_server, $dbmysql_port, $dbmysql_username, $dbmysql_password, $dbmysql_name)
@@ -128,16 +135,17 @@ class Database__MySQLi implements Database__Interface
             }
         }
         if ($c == 0) {
-            $r=mysqli_query($this->db, $this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
+            $r = mysqli_query($this->db, $this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
             if ($r === false) {
                 return false;
             }
+
             return true;
         }
     }
 
     /**
-     * 关闭数据库连接
+     * 关闭数据库连接.
      */
     public function Close()
     {
@@ -148,14 +156,19 @@ class Database__MySQLi implements Database__Interface
     }
 
     /**
-     * 执行多行SQL语句
+     * 执行多行SQL语句.
+     *
      * @param string $s 以;号分隔的多条SQL语句
+     *
      * @return array
      */
     public function QueryMulit($s)
     {
         return $this->QueryMulti($s);
-    } //错别字函数，历史原因保留下来
+    }
+
+    //错别字函数，历史原因保留下来
+
     public function QueryMulti($s)
     {
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
@@ -170,6 +183,7 @@ class Database__MySQLi implements Database__Interface
 
     /**
      * @param $query
+     *
      * @return array
      */
     public function Query($query)
@@ -207,6 +221,7 @@ class Database__MySQLi implements Database__Interface
 
     /**
      * @param $query
+     *
      * @return bool|mysqli_result
      */
     public function Update($query)
@@ -217,6 +232,7 @@ class Database__MySQLi implements Database__Interface
 
     /**
      * @param $query
+     *
      * @return bool|mysqli_result
      */
     public function Delete($query)
@@ -227,6 +243,7 @@ class Database__MySQLi implements Database__Interface
 
     /**
      * @param $query
+     *
      * @return int|string
      */
     public function Insert($query)
@@ -256,11 +273,11 @@ class Database__MySQLi implements Database__Interface
 
     /**
      * @param $table
+     *
      * @return bool
      */
     public function ExistTable($table)
     {
-
         $a = $this->Query($this->sql->ExistTable($table, $this->dbname));
         if (!is_array($a)) {
             return false;

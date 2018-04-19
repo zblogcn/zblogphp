@@ -1,13 +1,15 @@
 <?php
 /**
- * api
+ * api.
+ *
  * @author zsx<zsx@zsxsoft.com>
- * @package api/route/upload
  * @php >= 5.2
  */
 /**
- * Format single upload object
+ * Format single upload object.
+ *
  * @param object $upload
+ *
  * @return array
  */
 function return_upload($id)
@@ -22,11 +24,10 @@ function return_upload($id)
 }
 
 /**
- * Get upload
+ * Get upload.
  */
 function api_upload_get_function()
 {
-
     $id = (int) API::$IO->id;
     if ($id === 0) {
         API::$IO->end(3);
@@ -39,7 +40,7 @@ function api_upload_get_function()
 API::$Route->get('/upload/', 'api_upload_get_function');
 
 /**
- * Get attachments list
+ * Get attachments list.
  */
 function api_attachments_get_function()
 {
@@ -47,7 +48,7 @@ function api_attachments_get_function()
 API::$Route->get('/attachments/', 'api_attachments_get_function');
 
 /**
- * Create upload
+ * Create upload.
  */
 function api_upload_create_function()
 {
@@ -55,7 +56,7 @@ function api_upload_create_function()
 API::$Route->post('/upload/create/', 'api_upload_create_function');
 
 /**
- * Update upload
+ * Update upload.
  */
 function api_upload_update_function()
 {
@@ -63,7 +64,7 @@ function api_upload_update_function()
 API::$Route->post('/upload/update/', 'api_upload_update_function');
 
 /**
- * Update upload
+ * Update upload.
  */
 function api_upload_delete_function()
 {

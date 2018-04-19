@@ -1,30 +1,34 @@
 <?php
 /**
- * Z-Blog with PHP
+ * Z-Blog with PHP.
+ *
  * @author
  * @copyright (C) RainbowSoft Studio
+ *
  * @version 2.0 2013-06-14
  */
 
 /**
- * 返回配置
+ * 返回配置.
+ *
  * @param
+ *
  * @return array
  */
 return array(
 
     // '---------------------------------关闭网站-----------------------------------
     'ZC_CLOSE_WHOLE_SITE' => false,
-    'ZC_CLOSE_SITE' => false,
+    'ZC_CLOSE_SITE'       => false,
 
     // '---------------------------------网站基本设置-----------------------------------
-    'ZC_BLOG_HOST' => 'http://localhost/',
-    'ZC_BLOG_NAME' => '我的网站',
-    'ZC_BLOG_SUBNAME' => 'Good Luck To You!',
-    'ZC_BLOG_THEME' => 'default',
-    'ZC_BLOG_CSS' => 'default',
-    'ZC_BLOG_COPYRIGHT' => 'Copyright Your WebSite.Some Rights Reserved.',
-    'ZC_BLOG_LANGUAGE' => 'zh-CN',
+    'ZC_BLOG_HOST'         => 'http://localhost/',
+    'ZC_BLOG_NAME'         => '我的网站',
+    'ZC_BLOG_SUBNAME'      => 'Good Luck To You!',
+    'ZC_BLOG_THEME'        => 'default',
+    'ZC_BLOG_CSS'          => 'default',
+    'ZC_BLOG_COPYRIGHT'    => 'Copyright Your WebSite.Some Rights Reserved.',
+    'ZC_BLOG_LANGUAGE'     => 'zh-CN',
     'ZC_BLOG_LANGUAGEPACK' => 'zh-cn',
 
     // '----------------------------数据库配置---------------------------------------
@@ -32,77 +36,77 @@ return array(
     'ZC_DATABASE_TYPE' => '',
 
     'ZC_SQLITE_NAME' => '',
-    'ZC_SQLITE_PRE' => 'zbp_',
+    'ZC_SQLITE_PRE'  => 'zbp_',
 
-    'ZC_MYSQL_SERVER' => 'localhost',
-    'ZC_MYSQL_USERNAME' => 'root',
-    'ZC_MYSQL_PASSWORD' => '',
-    'ZC_MYSQL_NAME' => '',
-    'ZC_MYSQL_CHARSET' => 'utf8',
-    'ZC_MYSQL_PRE' => 'zbp_',
-    'ZC_MYSQL_ENGINE' => 'MyISAM',
-    'ZC_MYSQL_PORT' => '3306',
+    'ZC_MYSQL_SERVER'     => 'localhost',
+    'ZC_MYSQL_USERNAME'   => 'root',
+    'ZC_MYSQL_PASSWORD'   => '',
+    'ZC_MYSQL_NAME'       => '',
+    'ZC_MYSQL_CHARSET'    => 'utf8',
+    'ZC_MYSQL_PRE'        => 'zbp_',
+    'ZC_MYSQL_ENGINE'     => 'MyISAM',
+    'ZC_MYSQL_PORT'       => '3306',
     'ZC_MYSQL_PERSISTENT' => false,
 
-    'ZC_PGSQL_SERVER' => 'localhost',
-    'ZC_PGSQL_USERNAME' => 'postgres',
-    'ZC_PGSQL_PASSWORD' => '',
-    'ZC_PGSQL_NAME' => '',
-    'ZC_PGSQL_CHARSET' => 'utf8',
-    'ZC_PGSQL_PRE' => 'zbp_',
-    'ZC_PGSQL_PORT' => '5432',
+    'ZC_PGSQL_SERVER'     => 'localhost',
+    'ZC_PGSQL_USERNAME'   => 'postgres',
+    'ZC_PGSQL_PASSWORD'   => '',
+    'ZC_PGSQL_NAME'       => '',
+    'ZC_PGSQL_CHARSET'    => 'utf8',
+    'ZC_PGSQL_PRE'        => 'zbp_',
+    'ZC_PGSQL_PORT'       => '5432',
     'ZC_PGSQL_PERSISTENT' => false,
 
     // '---------------------------------插件----------------------------------------
     'ZC_USING_PLUGIN_LIST' => '',
 
     // '-------------------------------全局配置-----------------------------------
-    'ZC_YUN_SITE' => '',
-    'ZC_BLOG_CLSID' => '',
-    'ZC_TIME_ZONE_NAME' => 'Asia/Shanghai',
+    'ZC_YUN_SITE'        => '',
+    'ZC_BLOG_CLSID'      => '',
+    'ZC_TIME_ZONE_NAME'  => 'Asia/Shanghai',
     'ZC_UPDATE_INFO_URL' => 'https://update.zblogcn.com/info/',
 
     // '固定域名,默认为false
-    'ZC_PERMANENT_DOMAIN_ENABLE' => false,
-    'ZC_PERMANENT_DOMAIN_REDIRECT' => true,
+    'ZC_PERMANENT_DOMAIN_ENABLE'     => false,
+    'ZC_PERMANENT_DOMAIN_REDIRECT'   => true,
     'ZC_PERMANENT_DOMAIN_WITH_ADMIN' => false,
 
     //
-    'ZC_DEBUG_MODE' => false,
-    'ZC_DEBUG_MODE_STRICT' => false,
+    'ZC_DEBUG_MODE'         => false,
+    'ZC_DEBUG_MODE_STRICT'  => false,
     'ZC_DEBUG_MODE_WARNING' => true,
-    'ZC_DEBUG_LOG_ERROR' => false,
+    'ZC_DEBUG_LOG_ERROR'    => false,
 
     // '当前 Z-Blog 版本
 
-    'ZC_BLOG_PRODUCT' => 'Z-BlogPHP',
-    'ZC_BLOG_VERSION' => '',
-    'ZC_BLOG_COMMIT' => '',
-    'ZC_BLOG_PRODUCT_FULL' => '',
-    'ZC_BLOG_PRODUCT_HTML' => '',
+    'ZC_BLOG_PRODUCT'          => 'Z-BlogPHP',
+    'ZC_BLOG_VERSION'          => '',
+    'ZC_BLOG_COMMIT'           => '',
+    'ZC_BLOG_PRODUCT_FULL'     => '',
+    'ZC_BLOG_PRODUCT_HTML'     => '',
     'ZC_BLOG_PRODUCT_FULLHTML' => '',
 
     // '留言评论
-    'ZC_COMMENT_TURNOFF' => false,
+    'ZC_COMMENT_TURNOFF'       => false,
     'ZC_COMMENT_VERIFY_ENABLE' => false,
     'ZC_COMMENT_REVERSE_ORDER' => false,
-    'ZC_COMMENT_AUDIT' => false,
+    'ZC_COMMENT_AUDIT'         => false,
 
     // '验证码
     'ZC_VERIFYCODE_STRING' => 'ABCDEFGHKMNPRSTUVWXYZ123456789',
-    'ZC_VERIFYCODE_WIDTH' => 90,
+    'ZC_VERIFYCODE_WIDTH'  => 90,
     'ZC_VERIFYCODE_HEIGHT' => 30,
-    'ZC_VERIFYCODE_FONT' => 'zb_system/defend/arial.ttf',
+    'ZC_VERIFYCODE_FONT'   => 'zb_system/defend/arial.ttf',
 
     // '页面各项列数
-    'ZC_DISPLAY_COUNT' => 10,
-    'ZC_PAGEBAR_COUNT' => 10,
+    'ZC_DISPLAY_COUNT'          => 10,
+    'ZC_PAGEBAR_COUNT'          => 10,
     'ZC_COMMENTS_DISPLAY_COUNT' => 100,
 
     'ZC_DISPLAY_SUBCATEGORYS' => true,
 
     // '杂项
-    'ZC_RSS2_COUNT' => 10,
+    'ZC_RSS2_COUNT'       => 10,
     'ZC_RSS_EXPORT_WHOLE' => true,
 
     // '后台管理
@@ -137,8 +141,8 @@ return array(
 
     'ZC_ARTICLE_TITLE_MAX' => 100,
     'ZC_CATEGORY_NAME_MAX' => 50,
-    'ZC_TAGS_NAME_MAX' => 50,
-    'ZC_MODULE_NAME_MAX' => 50,
+    'ZC_TAGS_NAME_MAX'     => 50,
+    'ZC_MODULE_NAME_MAX'   => 50,
 
     // '自动摘要字数
     'ZC_ARTICLE_EXCERPT_MAX' => 250,
@@ -169,9 +173,9 @@ return array(
     'ZC_SEARCH_COUNT' => 20,
     'ZC_SEARCH_REGEX' => '{%host%}search.php?q={%q%}&page={%page%}',
 
-    #首页，分类页，文章页，页面页的默认模板
+    //首页，分类页，文章页，页面页的默认模板
     'ZC_INDEX_DEFAULT_TEMPLATE' => 'index',
-    'ZC_POST_DEFAULT_TEMPLATE' => 'single',
+    'ZC_POST_DEFAULT_TEMPLATE'  => 'single',
 
     'ZC_SIDEBAR_ORDER' => 'calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc',
 
@@ -188,22 +192,22 @@ return array(
     // '源码编辑高亮
     'ZC_CODEMIRROR_ENABLE' => true,
 
-    'ZC_GZIP_ENABLE' => false,
-    'ZC_ADMIN_HTML5_ENABLE' => true,
-    'ZC_LOADMEMBERS_LEVEL' => 0,
-    'ZC_LAST_VERSION' => '',
-    'ZC_HTTP_LASTMODIFIED' => false,
-    'ZC_MODULE_CATALOG_STYLE' => 0,
-    'ZC_VIEWNUMS_TURNOFF' => false,
-    'ZC_LISTONTOP_TURNOFF' => false,
-    'ZC_RELATEDLIST_COUNT' => 10,
-    'ZC_RUNINFO_DISPLAY' => true,
+    'ZC_GZIP_ENABLE'                 => false,
+    'ZC_ADMIN_HTML5_ENABLE'          => true,
+    'ZC_LOADMEMBERS_LEVEL'           => 0,
+    'ZC_LAST_VERSION'                => '',
+    'ZC_HTTP_LASTMODIFIED'           => false,
+    'ZC_MODULE_CATALOG_STYLE'        => 0,
+    'ZC_VIEWNUMS_TURNOFF'            => false,
+    'ZC_LISTONTOP_TURNOFF'           => false,
+    'ZC_RELATEDLIST_COUNT'           => 10,
+    'ZC_RUNINFO_DISPLAY'             => true,
     'ZC_POST_ALIAS_USE_ID_NOT_TITLE' => false,
-    'ZC_COMPATIBLE_ASP_URL' => true,
-    'ZC_LARGE_DATA' => false,
-    'ZC_JS_304_ENABLE' => false,
-    'ZC_VERSION_IN_HEADER' => true,
-    'ZC_ADDITIONAL_SECURITY' => true,
-    'ZC_XMLRPC_ENABLE' => true,
-    'ZC_XMLRPC_USE_WEBTOKEN' => false,
+    'ZC_COMPATIBLE_ASP_URL'          => true,
+    'ZC_LARGE_DATA'                  => false,
+    'ZC_JS_304_ENABLE'               => false,
+    'ZC_VERSION_IN_HEADER'           => true,
+    'ZC_ADDITIONAL_SECURITY'         => true,
+    'ZC_XMLRPC_ENABLE'               => true,
+    'ZC_XMLRPC_USE_WEBTOKEN'         => false,
 );

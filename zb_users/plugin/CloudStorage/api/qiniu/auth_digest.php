@@ -5,8 +5,8 @@ require_once "conf.php";
 
 // ----------------------------------------------------------
 
-class Qiniu_Mac {
-
+class Qiniu_Mac
+{
     public $AccessKey;
     public $SecretKey;
 

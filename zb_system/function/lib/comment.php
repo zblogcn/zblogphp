@@ -1,9 +1,12 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 /**
- * 评论类
+ * 评论类.
  *
- * @package Z-BlogPHP
  * @property string Name
  * @property int|string AuthorID
  * @property string HomePage
@@ -19,7 +22,6 @@
  */
 class Comment extends Base
 {
-
     /**
      * @var bool 是否丢弃，如通过插件等判断为垃圾评论则标记为true
      */
@@ -30,7 +32,7 @@ class Comment extends Base
     public $FloorID = 0;
 
     /**
-     * 构造函数
+     * 构造函数.
      */
     public function __construct()
     {
@@ -39,9 +41,11 @@ class Comment extends Base
     }
 
     /**
-     * 魔术方法：重载，可通过接口Filter_Plugin_Comment_Call添加自定义函数
+     * 魔术方法：重载，可通过接口Filter_Plugin_Comment_Call添加自定义函数.
+     *
      * @param string $method 方法
-     * @param mixed $args 参数
+     * @param mixed  $args   参数
+     *
      * @return mixed
      */
     public function __call($method, $args)
@@ -50,15 +54,17 @@ class Comment extends Base
             $fpreturn = $fpname($this, $method, $args);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
-        return null;
     }
 
     /**
-     * 获取评论楼号
+     * 获取评论楼号.
+     *
      * @param int $parentid 父评论ID
+     *
      * @return array|int|mixed
      */
     public static function GetRootID($parentid)
@@ -77,8 +83,10 @@ class Comment extends Base
     }
 
     /**
-     * 评论时间
+     * 评论时间.
+     *
      * @param string $s 时间格式
+     *
      * @return bool|string
      */
     public function Time($s = 'Y-m-d H:i:s')
@@ -103,6 +111,7 @@ class Comment extends Base
 
     /**
      * @param $name
+     *
      * @return array|int|Member|mixed
      */
     public function __get($name)
@@ -118,7 +127,7 @@ class Comment extends Base
             }
 
             return $m;
-        } else if ($name === 'Comments') {
+        } elseif ($name === 'Comments') {
             $array = array();
             foreach ($zbp->comments as $comment) {
                 if ($comment->ParentID == $this->ID) {
@@ -127,15 +136,16 @@ class Comment extends Base
             }
 
             return $array;
-        } else if ($name === 'Level') {
+        } elseif ($name === 'Level') {
             return $this->GetDeep($this);
-        } else if ($name === 'Post') {
+        } elseif ($name === 'Post') {
             return $zbp->GetPostByID($this->LogID);
         } else {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Get'] as $fpname => &$fpsignal) {
                 $fpreturn = $fpname($this, $name);
                 if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                     $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                     return $fpreturn;
                 }
             }
@@ -145,7 +155,8 @@ class Comment extends Base
     }
 
     /**
-     * 保存评论数据
+     * 保存评论数据.
+     *
      * @return bool
      */
     public function Save()
@@ -155,6 +166,7 @@ class Comment extends Base
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -168,7 +180,7 @@ class Comment extends Base
     public function Del()
     {
         global $zbp;
-        if ($this->ID >0) {
+        if ($this->ID > 0) {
             unset($zbp->comments[$this->ID]);
         }
 
@@ -176,6 +188,7 @@ class Comment extends Base
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -184,9 +197,11 @@ class Comment extends Base
     }
 
     /**
-     * 得到评论深度
+     * 得到评论深度.
+     *
      * @param object $object
-     * @param int $deep
+     * @param int    $deep
+     *
      * @return int 评论深度
      */
     private function GetDeep(&$object, $deep = 0)

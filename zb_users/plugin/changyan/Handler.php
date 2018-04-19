@@ -1,5 +1,8 @@
 <?php
-if(function_exists('ini_set'))ini_set('max_execution_time', '0');
+
+if (function_exists('ini_set')) {
+    ini_set('max_execution_time', '0');
+}
 
 class Changyan_Handler
 {
@@ -26,7 +29,7 @@ class Changyan_Handler
     public static function getInstance()
     {
         if (!(self::$instance instanceof self)) {
-            self::$instance = new self;
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -135,6 +138,7 @@ class Changyan_Handler
         //$this->sync2Wordpress();
         //$this->sync2Changyan();
     }
+
     //deprecated
     public function account()
     {
@@ -155,6 +159,7 @@ class Changyan_Handler
     {
         $this->changyanSynchronizer->sync2Changyan();
     }
+
     //deprecated
     public function saveScript()
     {
@@ -166,8 +171,9 @@ class Changyan_Handler
 
         die($aScript);
     }
-    
-    public function saveAppIDKey() {
+
+    public function saveAppIDKey()
+    {
         $this->saveAppID();
         $this->saveAppKey();
     }
@@ -180,7 +186,7 @@ class Changyan_Handler
         $appID = $_POST['appID'];
         $appID = trim($appID);
         $appIDArray = array(
-            'app_id' => $appID
+            'app_id' => $appID,
         );
         //get conf using appID through http://changyan.sohu.com/getConf?app_id=cyqqryvMq
         $aUrl = $this->changyanSynchronizer->buildURL($appIDArray, "http://changyan.sohu.com/getConf");
@@ -200,7 +206,6 @@ h.insertBefore(s,h.firstChild);
         $script = $scriptPart0 . $appID . $scriptPart1 . $conf . $scriptPart2;
         $this->setOption('changyan_appID', $appID);
         $this->setOption('changyan_script', $script);
-
     }
 
     public function saveAppKey()
@@ -210,7 +215,6 @@ h.insertBefore(s,h.firstChild);
         $appKey = trim($appKey);
         //save
         $this->setOption('changyan_appKey', $appKey);
-
     }
 
     public function setCron()

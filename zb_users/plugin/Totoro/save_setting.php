@@ -1,4 +1,5 @@
 <?php
+
 require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 
@@ -15,7 +16,9 @@ if (!$zbp->CheckPlugin('Totoro')) {
 Totoro_init();
 $blogtitle = 'Totoro反垃圾评论';
 
-if (function_exists('CheckIsRefererValid')) CheckIsRefererValid();
+if (function_exists('CheckIsRefererValid')) {
+    CheckIsRefererValid();
+}
 
 foreach ($Totoro->config_array as $type_name => &$type_value) {
     foreach ($type_value as $name => &$value) {

@@ -52,8 +52,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
-  <div class="SubMenu"><?php echo $Totoro->export_submenu('regex_test');?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
+  <div class="SubMenu"><?php echo $Totoro->export_submenu('regex_test'); ?></div>
   <div id="divMain2">
     <table width="100%" style="padding:0px;margin:1px;line-height:20px" cellspacing="0" cellpadding="0">
       <tr height="40">
@@ -91,7 +91,7 @@ $(document).ready(function(e) {
 });
 </script>
 <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Totoro/logo.png';?>");</script>
+<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Totoro/logo.png'; ?>");</script>
 </div>
 </div>
 <?php

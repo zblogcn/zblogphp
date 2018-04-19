@@ -5,8 +5,14 @@ require 'function.php';
 
 $zbp->Load();
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('wp2zbp')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
+if (!$zbp->CheckPlugin('wp2zbp')) {
+    $zbp->ShowError(48);
+    die();
+}
 
 $blogtitle = 'WordPress数据转移插件';
 require $blogpath . 'zb_system/admin/admin_header.php';
@@ -15,7 +21,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 
 <div id="divMain">
-  <div class="divHeader2"><?php echo $blogtitle;?></div>
+  <div class="divHeader2"><?php echo $blogtitle; ?></div>
   <div class="SubMenu"> </div>
   <div id="divMain2">
 <?php
@@ -43,7 +49,7 @@ upgrade_category_and_tag_count($prefix);
 finish_convert();
 ?>
 
-	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/wp2zbp/logo.png';?>");</script>		
+	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/wp2zbp/logo.png'; ?>");</script>		
   </div>
 </div>
 

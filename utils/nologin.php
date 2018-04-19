@@ -170,7 +170,6 @@ foreach ($zbp->members as $key => $m) {
     if ($m->Level < 2) {
         echo '<p style="padding:10px;">[管理员]' . $m->Name . '<input style="float:right;" type="button" value="&nbsp;&nbsp;登录&nbsp;&nbsp;" onclick="window.location=\'?uid=' . $m->ID . '\'" /></p>';
     }
-
 }
 
 ?>

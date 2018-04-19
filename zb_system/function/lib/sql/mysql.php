@@ -1,4 +1,8 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 class SQL__MySQL extends SQL__Global
 {
     /**
@@ -14,6 +18,7 @@ class SQL__MySQL extends SQL__Global
         parent::__construct($db);
         $this->option['engine'] = $GLOBALS['zbp']->option['ZC_MYSQL_ENGINE'];
     }
+
     /**
      * @override
      */
@@ -35,6 +40,7 @@ class SQL__MySQL extends SQL__Global
 
         return $this;
     }
+
     /**
      * @todo
      * @override
@@ -48,7 +54,6 @@ class SQL__MySQL extends SQL__Global
 
             return;
         }
-
 
         $sqlAll = array();
         foreach ($this->table as $tableIndex => $table) {
@@ -115,7 +120,7 @@ class SQL__MySQL extends SQL__Global
             $sql[] = 'PRIMARY KEY (' . $idname . ')';
             $myengtype = $this->db->dbengine;
 
-            if (is_array($engine) && count($engine)>0) {
+            if (is_array($engine) && count($engine) > 0) {
                 $myengtype = $engine[1];
             }
 
@@ -128,7 +133,6 @@ class SQL__MySQL extends SQL__Global
         }
         $this->_sql = $sqlAll;
     }
-
 
     protected function buildIndex()
     {

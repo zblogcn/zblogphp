@@ -1,14 +1,15 @@
 <?php
+
 $GLOBALS['zbpdk']->add_extension(array(
-    'url' => 'main.php',
+    'url'         => 'main.php',
     'description' => '可以对zbp_config表里的数据进行管理，用于调试Config配置类。',
-    'id' => 'BlogConfig',
+    'id'          => 'BlogConfig',
 ));
 
 $GLOBALS['zbpdk']->submenu->add(array(
-    'url' => 'BlogConfig/main.php',
+    'url'   => 'BlogConfig/main.php',
     'float' => 'left',
-    'id' => 'BlogConfig',
+    'id'    => 'BlogConfig',
     'title' => 'BlogConfig',
 ));
 
@@ -32,6 +33,7 @@ function blogconfig_left()
     foreach ($zbp->configs as $k => $v) {
         $html .= "<li><a id=\"$k\" href=\"javascript:;\" onclick=\"clk(this);run('open','$k');\">$k</a></li>";
     }
+
     return $html;
 }
 
@@ -100,5 +102,6 @@ function blogconfig_exportlist($id)
         $html .= PHP_EOL . PHP_EOL;
         $i++;
     }
+
     return $html;
 }

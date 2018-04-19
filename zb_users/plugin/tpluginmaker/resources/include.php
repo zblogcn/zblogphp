@@ -1,4 +1,5 @@
 <?php
+
 //注册插件
 define('TEMPLATE_/*TEMPLATE_NAME*/_IS_WINDOWS', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'));
 RegisterPlugin('/*TEMPLATE_NAME*/', 'ActivePlugin_/*TEMPLATE_NAME*/');
@@ -16,12 +17,10 @@ function /*TEMPLATE_NAME*/_AddMenu(&$menus)
 
 function InstallPlugin_/*TEMPLATE_NAME*/()
 {
-
 }
 
 function UninstallPlugin_/*TEMPLATE_NAME*/()
 {
-
 }
 
 function /*TEMPLATE_NAME*/_Require($config_name)

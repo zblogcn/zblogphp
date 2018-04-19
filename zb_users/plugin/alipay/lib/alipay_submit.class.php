@@ -24,6 +24,7 @@ class AlipaySubmit
     {
         $this->alipay_config = $alipay_config;
     }
+
     public function AlipaySubmit($alipay_config)
     {
         $this->__construct($alipay_config);
@@ -109,15 +110,15 @@ class AlipaySubmit
         //待请求参数数组
         $para = $this->buildRequestPara($para_temp);
 
-        $sHtml = "<form id='alipaysubmit' name='alipaysubmit' action='".$this->alipay_gateway_new.'_input_charset='.trim(strtolower($this->alipay_config['input_charset']))."' method='".$method."'>";
+        $sHtml = "<form id='alipaysubmit' name='alipaysubmit' action='" . $this->alipay_gateway_new . '_input_charset=' . trim(strtolower($this->alipay_config['input_charset'])) . "' method='" . $method . "'>";
         while (list($key, $val) = each($para)) {
-            $sHtml .= "<input type='hidden' name='".$key."' value='".$val."'/>";
+            $sHtml .= "<input type='hidden' name='" . $key . "' value='" . $val . "'/>";
         }
 
         //submit按钮控件请不要含有name属性
-        $sHtml = $sHtml."<input type='submit' value='".$button_name."'></form>";
+        $sHtml = $sHtml . "<input type='submit' value='" . $button_name . "'></form>";
 
-        $sHtml = $sHtml."<script>document.forms['alipaysubmit'].submit();</script>";
+        $sHtml = $sHtml . "<script>document.forms['alipaysubmit'].submit();</script>";
 
         return $sHtml;
     }
@@ -156,7 +157,7 @@ class AlipaySubmit
 
         //待请求参数数组
         $para = $this->buildRequestPara($para_temp);
-        $para[$file_para_name] = '@'.$file_name;
+        $para[$file_para_name] = '@' . $file_name;
 
         //远程获取数据
         $sResult = getHttpResponsePOST($this->alipay_gateway_new, $this->alipay_config['cacert'], $para, trim(strtolower($this->alipay_config['input_charset'])));
@@ -171,7 +172,7 @@ class AlipaySubmit
      */
     public function query_timestamp()
     {
-        $url = $this->alipay_gateway_new.'service=query_timestamp&partner='.trim(strtolower($this->alipay_config['partner'])).'&_input_charset='.trim(strtolower($this->alipay_config['input_charset']));
+        $url = $this->alipay_gateway_new . 'service=query_timestamp&partner=' . trim(strtolower($this->alipay_config['partner'])) . '&_input_charset=' . trim(strtolower($this->alipay_config['input_charset']));
         $encrypt_key = '';
 
         $doc = new DOMDocument();

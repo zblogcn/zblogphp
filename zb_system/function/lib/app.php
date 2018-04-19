@@ -1,13 +1,13 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
- * App 应用类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib 类库
+ * App 应用类.
  */
 class App
 {
-
     /**
      * @var string 应用类型，'plugin'表示插件，'theme'表示主题
      */
@@ -128,16 +128,20 @@ class App
      * @var string PHP最低版本
      */
     public $phpver;
+
     /**
-     * 得到详细信息数组
+     * 得到详细信息数组.
+     *
      * @return array
      */
     public function GetInfoArray()
     {
         return get_object_vars($this);
     }
+
     /**
-     * 是否可删除
+     * 是否可删除.
+     *
      * @return bool
      */
     public function CanDel()
@@ -146,10 +150,11 @@ class App
 
         return !isset($zbp->activedapps[$this->id]);
     }
+
     /**
-     * 是否带管理页面
-     * @access  public
-     * @return  bool
+     * 是否带管理页面.
+     *
+     * @return bool
      */
     public function CanManage()
     {
@@ -159,10 +164,11 @@ class App
 
         return false;
     }
+
     /**
-     * 是否正在使用
-     * @access  public
-     * @return  bool
+     * 是否正在使用.
+     *
+     * @return bool
      */
     public function IsUsed()
     {
@@ -170,10 +176,11 @@ class App
 
         return $zbp->CheckPlugin($this->id);
     }
+
     /**
-     * 是否附带主题插件（针对主题应用）
-     * @access  public
-     * @return  bool
+     * 是否附带主题插件（针对主题应用）.
+     *
+     * @return bool
      */
     public function HasPlugin()
     {
@@ -183,10 +190,11 @@ class App
 
         return false;
     }
+
     /**
      * 获取应用ID的crc32Hash值
-     * @access  public
-     * @return  string
+     *
+     * @return string
      */
     public function GetHash()
     {
@@ -194,10 +202,11 @@ class App
 
         return crc32($this->id);
     }
+
     /**
-     * 获取应用管理页面链接
-     * @access  public
-     * @return  string
+     * 获取应用管理页面链接.
+     *
+     * @return string
      */
     public function GetManageUrl()
     {
@@ -205,10 +214,11 @@ class App
 
         return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/' . $this->path;
     }
+
     /**
      * 获取应用目录地址
-     * @access  public
-     * @return  string
+     *
+     * @return string
      */
     public function GetDir()
     {
@@ -216,10 +226,11 @@ class App
 
         return $zbp->path . 'zb_users/' . $this->type . '/' . $this->id . '/';
     }
+
     /**
      * 获取应用Logo图片地址
-     * @access  public
-     * @return  string
+     *
+     * @return string
      */
     public function GetLogo()
     {
@@ -230,10 +241,11 @@ class App
             return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
         }
     }
+
     /**
      * 获取应用截图地址
-     * @access  public
-     * @return  string
+     *
+     * @return string
      */
     public function GetScreenshot()
     {
@@ -241,10 +253,11 @@ class App
 
         return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
     }
+
     /**
-     * 获取应用（主题）样式文件列表
-     * @access  public
-     * @return  array
+     * 获取应用（主题）样式文件列表.
+     *
+     * @return array
      */
     public function GetCssFiles()
     {
@@ -255,9 +268,11 @@ class App
     }
 
     /**
-     * 载入应用xml中的信息
+     * 载入应用xml中的信息.
+     *
      * @param string $type 应用类型
-     * @param string $id 应用ID
+     * @param string $id   应用ID
+     *
      * @return bool
      */
     public function LoadInfoByXml($type, $id)
@@ -327,7 +342,8 @@ class App
     }
 
     /**
-     * 保存应用信息到xml文件
+     * 保存应用信息到xml文件.
+     *
      * @return bool
      */
     public function SaveInfoByXml()
@@ -372,7 +388,6 @@ class App
         $s .= '  <conflict>' . htmlspecialchars($this->advanced_conflict) . '</conflict>' . "\r\n";
         $s .= '</advanced>' . "\r\n";
 
-
         $s .= '<sidebars>' . "\r\n";
         $s .= '  <sidebar1>' . htmlspecialchars($this->sidebars_sidebar1) . '</sidebar1>' . "\r\n";
         $s .= '  <sidebar2>' . htmlspecialchars($this->sidebars_sidebar2) . '</sidebar2>' . "\r\n";
@@ -407,12 +422,11 @@ class App
      */
     private function GetAllFileDir($dir)
     {
-
         if (function_exists('scandir')) {
             foreach (scandir($dir) as $d) {
                 if (is_dir($dir . $d)) {
                     if ((substr($d, 0, 1) != '.') &&
-                        !($d == 'compile' && $this->type=='theme')) {
+                        !($d == 'compile' && $this->type == 'theme')) {
                         $this->GetAllFileDir($dir . $d . '/');
                         $this->dirs[] = $dir . $d . '/';
                     }
@@ -425,7 +439,7 @@ class App
                 while (false !== ($file = readdir($handle))) {
                     if (is_dir($dir . $file)) {
                         if ((substr($file, 0, 1) != '.') &&
-                            !($file == 'compile' && $this->type=='theme')) {
+                            !($file == 'compile' && $this->type == 'theme')) {
                             $this->dirs[] = $dir . $file . '/';
                             $this->GetAllFileDir($dir . $file . '/');
                         }
@@ -439,7 +453,8 @@ class App
     }
 
     /**
-     * 应用打包
+     * 应用打包.
+     *
      * @return string
      */
     public function Pack()
@@ -534,8 +549,10 @@ class App
     }
 
     /**
-     * 解开应用包
+     * 解开应用包.
+     *
      * @param $xml
+     *
      * @return bool
      */
     public static function UnPack($xml)
@@ -625,7 +642,7 @@ class App
             }
 
             if (!in_array($d, $zbp->activedapps)) {
-                $d = '<a href="' . $zbp->host . 'zb_users/plugin/AppCentre/main.php?alias=' . $d . '">' . $d .'</a>';
+                $d = '<a href="' . $zbp->host . 'zb_users/plugin/AppCentre/main.php?alias=' . $d . '">' . $d . '</a>';
                 $zbp->ShowError(str_replace('%s', $d, $zbp->lang['error'][83]), __FILE__, __LINE__);
             }
         }
@@ -643,7 +660,7 @@ class App
     }
 
     /**
-     * Delete app
+     * Delete app.
      */
     public function Del()
     {
@@ -653,7 +670,7 @@ class App
     }
 
     /**
-     * Delete Compiled theme
+     * Delete Compiled theme.
      */
     public function DelCompiled()
     {

@@ -1,21 +1,23 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
- * curl类
+ * curl类.
  *
  * 自定义网络连接接口代替curl
- * @package Z-BlogPHP
- * @subpackage ClassLib/Network/CUrl 网络连接
  */
 class Network__curl implements Network__Interface
 {
-    private $readyState = 0; #状态
-    private $responseBody = null; #返回的二进制
-    private $responseStream = null; #返回的数据流
-    private $responseText = ''; #返回的数据
-    private $responseXML = null; #尝试把responseText格式化为XMLDom
-    private $status = 0; #状态码
-    private $statusText = ''; #状态码文本
-    private $responseVersion = ''; #返回的HTTP版体
+    private $readyState = 0; //状态
+    private $responseBody = null; //返回的二进制
+    private $responseStream = null; //返回的数据流
+    private $responseText = ''; //返回的数据
+    private $responseXML = null; //尝试把responseText格式化为XMLDom
+    private $status = 0; //状态码
+    private $statusText = ''; //状态码文本
+    private $responseVersion = ''; //返回的HTTP版体
 
     private $option = array();
     private $url = '';
@@ -43,6 +45,7 @@ class Network__curl implements Network__Interface
     /**
      * @param $property_name
      * @param $value
+     *
      * @throws Exception
      */
     public function __set($property_name, $value)
@@ -52,6 +55,7 @@ class Network__curl implements Network__Interface
 
     /**
      * @param $property_name
+     *
      * @return mixed
      */
     public function __get($property_name)
@@ -71,7 +75,7 @@ class Network__curl implements Network__Interface
             if (isset($this->parsed_url[strtolower($property_name)])) {
                 return $this->parsed_url[strtolower($property_name)];
             } else {
-                return null;
+                return;
             }
         } else {
             return $this->$property_name;
@@ -79,7 +83,7 @@ class Network__curl implements Network__Interface
     }
 
     /**
-     * 取消
+     * 取消.
      */
     public function abort()
     {
@@ -94,8 +98,10 @@ class Network__curl implements Network__Interface
     }
 
     /**
-     * 获取返回头
+     * 获取返回头.
+     *
      * @param $bstrHeader
+     *
      * @return string
      */
     public function getResponseHeader($bstrHeader)
@@ -111,14 +117,17 @@ class Network__curl implements Network__Interface
     }
 
     /**
-     * 链接远程接口
+     * 链接远程接口.
+     *
      * @param $bstrMethod
      * @param $bstrUrl
-     * @param bool $varAsync
+     * @param bool   $varAsync
      * @param string $bstrUser
      * @param string $bstrPassword
-     * @return bool
+     *
      * @throws Exception
+     *
+     * @return bool
      */
     public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '')
     {
@@ -149,7 +158,8 @@ class Network__curl implements Network__Interface
     }
 
     /**
-     * 设置超时时间
+     * 设置超时时间.
+     *
      * @param $resolveTimeout
      * @param $connectTimeout
      * @param $sendTimeout
@@ -162,12 +172,12 @@ class Network__curl implements Network__Interface
     }
 
     /**
-     * 发送数据
+     * 发送数据.
+     *
      * @param string $varBody
      */
     public function send($varBody = '')
     {
-
         $data = $varBody;
         if (is_array($data)) {
             $data = http_build_query($data);
@@ -210,7 +220,7 @@ class Network__curl implements Network__Interface
         curl_close($this->ch);
 
         foreach ($this->responseHeader as $key => $value) {
-            if (strpos($value, 'HTTP/')===0) {
+            if (strpos($value, 'HTTP/') === 0) {
                 if (isset($this->responseHeader[$key])) {
                     $this->statusText = $this->responseHeader[$key];
                     $a = explode(' ', $this->statusText);
@@ -228,10 +238,12 @@ class Network__curl implements Network__Interface
     }
 
     /**
-     * 设置请求HTTP头
+     * 设置请求HTTP头.
+     *
      * @param $bstrHeader
      * @param $bstrValue
      * @param bool $append
+     *
      * @return bool
      */
     public function setRequestHeader($bstrHeader, $bstrValue, $append = false)
@@ -250,17 +262,20 @@ class Network__curl implements Network__Interface
     }
 
     /**
-     * 添加数据
-     * @param string $bstrItem 参数
-     * @param mixed $bstrValue 值
+     * 添加数据.
+     *
+     * @param string $bstrItem  参数
+     * @param mixed  $bstrValue 值
      */
     public function add_postdata($bstrItem, $bstrValue)
     {
         $this->postdata[$bstrItem] = $bstrValue;
     }
+
     /**
      * @param string $name
      * @param string $entity
+     *
      * @return mixed
      */
     public function addBinary($name, $entity, $filename = null, $mime = '')
@@ -303,12 +318,14 @@ class Network__curl implements Network__Interface
         $value .= ';filename=' . $filename;
 
         $this->postdata[$name] = $value;
+
         return true;
     }
 
     /**
      * @param string $name
      * @param string $entity
+     *
      * @return mixed
      */
     public function addText($name, $entity)
@@ -317,18 +334,18 @@ class Network__curl implements Network__Interface
     }
 
     /**
-     * 重置
+     * 重置.
      */
     private function reinit()
     {
         global $zbp;
-        $this->readyState = 0; #状态
-        $this->responseBody = null; #返回的二进制
-        $this->responseStream = null; #返回的数据流
-        $this->responseText = ''; #返回的数据
-        $this->responseXML = null; #尝试把responseText格式化为XMLDom
-        $this->status = 0; #状态码
-        $this->statusText = ''; #状态码文本
+        $this->readyState = 0; //状态
+        $this->responseBody = null; //返回的二进制
+        $this->responseStream = null; //返回的数据流
+        $this->responseText = ''; //返回的数据
+        $this->responseXML = null; //尝试把responseText格式化为XMLDom
+        $this->status = 0; //状态码
+        $this->statusText = ''; //状态码文本
 
         $this->__isBinary = false;
 
@@ -348,7 +365,7 @@ class Network__curl implements Network__Interface
     }
 
     /**
-     * 启用Gzip
+     * 启用Gzip.
      */
     public function enableGzip()
     {
