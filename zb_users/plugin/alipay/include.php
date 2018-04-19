@@ -6,7 +6,7 @@ DefinePluginFilter('Filter_Plugin_AlipayPayReturn_Succeed');
 DefinePluginFilter('Filter_Plugin_AlipayPayReturn_Failed');
 DefinePluginFilter('Filter_Plugin_AlipayPayNotice_Succeed');
 DefinePluginFilter('Filter_Plugin_AlipayBatchTrans_Notice');
-#注册插件
+//注册插件
 RegisterPlugin('alipay', 'ActivePlugin_alipay');
 
 function ActivePlugin_alipay()

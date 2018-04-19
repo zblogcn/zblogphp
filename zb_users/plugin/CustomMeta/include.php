@@ -1,13 +1,11 @@
 <?php
 
 
-#注册插件
+//注册插件
 RegisterPlugin("CustomMeta", "ActivePlugin_CustomMeta");
-
 
 function ActivePlugin_CustomMeta()
 {
-
     Add_Filter_Plugin('Filter_Plugin_Admin_Header', 'CustomMeta_CSS_Response');
 
     Add_Filter_Plugin('Filter_Plugin_Edit_Response', 'CustomMeta_Edit_Response');
@@ -19,7 +17,7 @@ function ActivePlugin_CustomMeta()
 function CustomMeta_CSS_Response()
 {
     global $zbp;
-    echo '<link href="' .$zbp->host. 'zb_users/plugin/CustomMeta/custommeta.css" rel="stylesheet" type="text/css" />';
+    echo '<link href="' . $zbp->host . 'zb_users/plugin/CustomMeta/custommeta.css" rel="stylesheet" type="text/css" />';
 }
 
 function InstallPlugin_CustomMeta()
@@ -34,14 +32,13 @@ function UninstallPlugin_CustomMeta()
 
 function CustomMeta_Response($type, &$object)
 {
-
     global $zbp;
     $array = $zbp->Config('CustomMeta')->$type;
     if (is_array($array) == false) {
-        return null;
+        return;
     }
     if (count($array) == 0) {
-        return null;
+        return;
     }
     echo '<div id="editCustomMeta" ><div class="title">自定义作用域</div>';
     foreach ($array as $key => $value) {
@@ -61,15 +58,15 @@ function CustomMeta_Response($type, &$object)
             $single_meta_type = 'text';
         }
 
-        echo '<div class="form-group"><label  class="title" for="meta_' . $value . '">'. $single_meta_intro .'</label>';
+        echo '<div class="form-group"><label  class="title" for="meta_' . $value . '">' . $single_meta_intro . '</label>';
         switch ($single_meta_type) {
             case 'textarea':
-                echo '<textarea id="meta_' . $value . '" name="meta_' . $value . '" >'.htmlspecialchars($object->Metas->$value).'</textarea>';
+                echo '<textarea id="meta_' . $value . '" name="meta_' . $value . '" >' . htmlspecialchars($object->Metas->$value) . '</textarea>';
                 break;
             case 'radio':
                 $ar = explode('|', $single_meta_option);
                 foreach ($ar as $r) {
-                    echo '<label><input name="meta_' . $value . '" value="'.htmlspecialchars($r).'" type="radio" '.($object->Metas->$value == $r ? ' checked="checked"' : '').'/>'.$r.'</label> ';
+                    echo '<label><input name="meta_' . $value . '" value="' . htmlspecialchars($r) . '" type="radio" ' . ($object->Metas->$value == $r ? ' checked="checked"' : '') . '/>' . $r . '</label> ';
                 }
                 echo '<label onclick="$(&quot;:radio[name=\'meta_' . $value . '\']&quot;).prop(&quot;checked&quot;, false);$(&quot;:text[name=\'meta_' . $value . '\']&quot;).prop(&quot;disabled&quot;, false);"><input type="text" name="meta_' . $value . '" value="" disabled="disabled" style="display:none;"/>【全不选】<label>';
                 //echo '</p>';
@@ -80,16 +77,16 @@ function CustomMeta_Response($type, &$object)
                     $object->Metas->$value = array();
                 }
                 foreach ($ar as $r) {
-                    echo '<label><input name="meta_' . $value . '[]" value="'.htmlspecialchars($r).'" type="checkbox" '.(in_array($r, $object->Metas->$value) ? ' checked="checked"' : '').'/>'.$r.'</label>';
+                    echo '<label><input name="meta_' . $value . '[]" value="' . htmlspecialchars($r) . '" type="checkbox" ' . (in_array($r, $object->Metas->$value) ? ' checked="checked"' : '') . '/>' . $r . '</label>';
                 }
                 echo '<label onclick="$(&quot;:checkbox[name=\'meta_' . $value . '[]\']&quot;).removeProp(&quot;checked&quot;);$(&quot;:text[name=\'meta_' . $value . '\']&quot;).prop(&quot;disabled&quot;, false);"><input type="text" name="meta_' . $value . '" value="" disabled="disabled" style="display:none;"/>【全不选】<label>';
                 //echo '</p>';
                 break;
             case 'bool':
-                echo '<input class="checkbox" type="text" name="meta_' . $value . '" value="'.htmlspecialchars($object->Metas->$value).'" />';
+                echo '<input class="checkbox" type="text" name="meta_' . $value . '" value="' . htmlspecialchars($object->Metas->$value) . '" />';
                 break;
             default:
-                echo '<input type="text" id="meta_' . $value . '" name="meta_' . $value . '" value="'.htmlspecialchars($object->Metas->$value).'" />';
+                echo '<input type="text" id="meta_' . $value . '" name="meta_' . $value . '" value="' . htmlspecialchars($object->Metas->$value) . '" />';
                 break;
         }
         echo '</div>';

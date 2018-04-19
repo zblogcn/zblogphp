@@ -5,7 +5,7 @@
  * User: taoqili
  * Date: 12-7-18
  * Time: 上午11: 32
- * UEditor编辑器通用上传类
+ * UEditor编辑器通用上传类.
  */
 class Uploader
 {
@@ -27,26 +27,27 @@ class Uploader
         "文件未被完整上传",
         "没有文件被上传",
         "上传文件为空",
-        "ERROR_TMP_FILE" => "临时文件错误",
+        "ERROR_TMP_FILE"           => "临时文件错误",
         "ERROR_TMP_FILE_NOT_FOUND" => "找不到临时文件",
-        "ERROR_SIZE_EXCEED" => "文件大小超出网站限制",
-        "ERROR_TYPE_NOT_ALLOWED" => "文件类型不允许",
-        "ERROR_CREATE_DIR" => "目录创建失败",
-        "ERROR_DIR_NOT_WRITEABLE" => "目录没有写权限",
-        "ERROR_FILE_MOVE" => "文件保存时出错",
-        "ERROR_FILE_NOT_FOUND" => "找不到上传文件",
-        "ERROR_WRITE_CONTENT" => "写入文件内容错误",
-        "ERROR_UNKNOWN" => "未知错误",
-        "ERROR_DEAD_LINK" => "链接不可用",
-        "ERROR_HTTP_LINK" => "链接不是http链接",
-        "ERROR_HTTP_CONTENTTYPE" => "链接contentType不正确"
+        "ERROR_SIZE_EXCEED"        => "文件大小超出网站限制",
+        "ERROR_TYPE_NOT_ALLOWED"   => "文件类型不允许",
+        "ERROR_CREATE_DIR"         => "目录创建失败",
+        "ERROR_DIR_NOT_WRITEABLE"  => "目录没有写权限",
+        "ERROR_FILE_MOVE"          => "文件保存时出错",
+        "ERROR_FILE_NOT_FOUND"     => "找不到上传文件",
+        "ERROR_WRITE_CONTENT"      => "写入文件内容错误",
+        "ERROR_UNKNOWN"            => "未知错误",
+        "ERROR_DEAD_LINK"          => "链接不可用",
+        "ERROR_HTTP_LINK"          => "链接不是http链接",
+        "ERROR_HTTP_CONTENTTYPE"   => "链接contentType不正确",
     );
 
     /**
-     * 构造函数
+     * 构造函数.
+     *
      * @param string $fileField 表单名称
-     * @param array $config 配置项
-     * @param bool $base64 是否解析base64编码，可省略。若开启，则$fileField代表的是base64编码的字符串表单名
+     * @param array  $config    配置项
+     * @param bool   $base64    是否解析base64编码，可省略。若开启，则$fileField代表的是base64编码的字符串表单名
      */
     public function __construct($fileField, $config, $type = "upload")
     {
@@ -59,7 +60,7 @@ class Uploader
         $this->type = $type;
         if ($type == "remote") {
             $this->saveRemote();
-        } elseif($type == "base64") {
+        } elseif ($type == "base64") {
             $this->upBase64();
         } else {
             $this->upFile();
@@ -67,7 +68,8 @@ class Uploader
     }
 
     /**
-     * 上传文件的主处理方法
+     * 上传文件的主处理方法.
+     *
      * @return mixed
      */
     private function upFile()
@@ -113,16 +115,15 @@ class Uploader
 
             return;
         }
-        
-        $upload = new Upload;
+
+        $upload = new Upload();
         $upload->Name = $this->fileName;
         $upload->SourceName = $file['name'];
         $upload->MimeType = $file['type'];
         $upload->Size = $this->fileSize;
         $upload->AuthorID = $zbp->user->ID;
-        
-        if (!$upload->SaveFile($file['tmp_name']))
-        {
+
+        if (!$upload->SaveFile($file['tmp_name'])) {
             $this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
 
             return;
@@ -131,11 +132,11 @@ class Uploader
         $upload->Save();
         $this->fullName = $upload->Url;
         $this->stateInfo = $this->stateMap[0];
-
     }
 
     /**
-     * 处理base64编码的图片上传
+     * 处理base64编码的图片上传.
+     *
      * @return mixed
      */
     private function upBase64()
@@ -152,21 +153,21 @@ class Uploader
         $this->fileName = $this->getFileName();
         $dirname = dirname($this->filePath);
 
-        $upload = new Upload;
+        $upload = new Upload();
         $upload->Name = $this->fileName;
         $upload->SourceName = date("YmdHis") . '_scraw.png';
         $upload->MimeType = 'image/png';
         $upload->AuthorID = $zbp->user->ID;
-            
+
         $upload->SaveBase64File($base64Data);
         $upload->Save();
         $this->fullName = $upload->Url;
         $this->stateInfo = $this->stateMap[0];
-
     }
 
     /**
-     * 拉取远程图片
+     * 拉取远程图片.
+     *
      * @return mixed
      */
     private function saveRemote()
@@ -200,7 +201,7 @@ class Uploader
         ob_start();
         $context = stream_context_create(
             array('http' => array(
-                'follow_location' => false // don't follow redirects
+                'follow_location' => false, // don't follow redirects
             ))
         );
         readfile($imgUrl, false, $context);
@@ -223,28 +224,28 @@ class Uploader
             return;
         }
 
-        $upload = new Upload;
+        $upload = new Upload();
         $upload->Name = $this->fileName;
         $upload->SourceName = $this->fileName;
         $upload->MimeType = $heads['Content-Type'];
         $upload->Size = $this->fileSize;
         $upload->AuthorID = $zbp->user->ID;
-        
-        if (!$upload->SaveBase64File(base64_encode($img)))
-        {
+
+        if (!$upload->SaveBase64File(base64_encode($img))) {
             $this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
 
             return;
         }
-        
+
         $upload->Save();
         $this->fullName = $upload->Url;
-
     }
 
     /**
-     * 上传错误检查
+     * 上传错误检查.
+     *
      * @param $errCode
+     *
      * @return string
      */
     private function getStateInfo($errCode)
@@ -253,7 +254,8 @@ class Uploader
     }
 
     /**
-     * 获取文件扩展名
+     * 获取文件扩展名.
+     *
      * @return string
      */
     private function getFileExt()
@@ -262,7 +264,8 @@ class Uploader
     }
 
     /**
-     * 重命名文件
+     * 重命名文件.
+     *
      * @return string
      */
     private function getFullName()
@@ -291,7 +294,7 @@ class Uploader
             $format = preg_replace("/\{rand\:[\d]*\}/i", substr($randNum, 0, $matches[1]), $format);
         }
 
-        if($this->fileType){
+        if ($this->fileType) {
             $ext = $this->fileType;
         } else {
             $ext = $this->getFileExt();
@@ -301,15 +304,18 @@ class Uploader
     }
 
     /**
-     * 获取文件名
+     * 获取文件名.
+     *
      * @return string
      */
-    private function getFileName() {
+    private function getFileName()
+    {
         return substr($this->fullName, strrpos($this->fullName, '/') + 1);
     }
 
     /**
-     * 获取文件完整路径
+     * 获取文件完整路径.
+     *
      * @return string
      */
     private function getFilePath()
@@ -321,7 +327,8 @@ class Uploader
     }
 
     /**
-     * 文件类型检测
+     * 文件类型检测.
+     *
      * @return bool
      */
     private function checkType()
@@ -330,7 +337,8 @@ class Uploader
     }
 
     /**
-     * 文件大小检测
+     * 文件大小检测.
+     *
      * @return bool
      */
     private function checkSize()
@@ -339,19 +347,19 @@ class Uploader
     }
 
     /**
-     * 获取当前上传成功文件的各项信息
+     * 获取当前上传成功文件的各项信息.
+     *
      * @return array
      */
     public function getFileInfo()
     {
         return array(
-            "state" => $this->stateInfo,
-            "url" => $this->fullName,
-            "title" => $this->fileName,
+            "state"    => $this->stateInfo,
+            "url"      => $this->fullName,
+            "title"    => $this->fileName,
             "original" => $this->oriName,
-            "type" => $this->fileType,
-            "size" => $this->fileSize
+            "type"     => $this->fileType,
+            "size"     => $this->fileSize,
         );
     }
-
 }

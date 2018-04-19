@@ -17,7 +17,8 @@ class Qiniu_Rio_PutExtra
     public $Notify = null;        // 进度通知：func(blkIdx int, blkSize int, ret *BlkputRet)
     public $NotifyErr = null;    // 错误通知：func(blkIdx int, blkSize int, err error)
 
-    public function __construct($bucket = null) {
+    public function __construct($bucket = null)
+    {
         $this->Bucket = $bucket;
     }
 }
@@ -62,7 +63,6 @@ function Qiniu_Rio_Mkblock($self, $host, $reader, $size) // => ($blkputRet, $err
     return Qiniu_Client_CallWithForm($self, $url, $body, 'application/octet-stream');
 }
 
-
 function Qiniu_Rio_Mkfile($self, $host, $key, $fsize, $extra) // => ($putRet, $err)
 {
     $url = $host . '/mkfile/' . $fsize;
@@ -75,7 +75,7 @@ function Qiniu_Rio_Mkfile($self, $host, $key, $fsize, $extra) // => ($putRet, $e
 
     $ctxs = array();
     foreach ($extra->Progresses as $prog) {
-        $ctxs [] = $prog['ctx'];
+        $ctxs[] = $prog['ctx'];
     }
     $body = implode(',', $ctxs);
 
@@ -123,7 +123,7 @@ function Qiniu_Rio_Put($upToken, $key, $body, $fsize, $putExtra) // => ($putRet,
         list($blkputRet, $err) = Qiniu_Rio_Mkblock($self, $QINIU_UP_HOST, $body, $bsize);
         $host = $blkputRet['host'];
         $uploaded += $bsize;
-        $progresses [] = $blkputRet;
+        $progresses[] = $blkputRet;
     }
 
     $putExtra->Progresses = $progresses;

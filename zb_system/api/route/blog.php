@@ -1,8 +1,8 @@
 <?php
 /**
- * api
+ * api.
+ *
  * @author zsx<zsx@zsxsoft.com>
- * @package api/route/global
  * @php >= 5.2
  */
 function api_route_index_function()
@@ -12,11 +12,11 @@ function api_route_index_function()
     if ($zbp->CheckRights('root')) {
         API::$IO->blogpath = $zbp->path;
         API::$IO->environment = array(
-            'php' => PHP_SYSTEM,
-            'x64' => IS_X64,
+            'php'    => PHP_SYSTEM,
+            'x64'    => IS_X64,
             'server' => PHP_SERVER,
             'engine' => PHP_ENGINE,
-            'str' => GetEnvironment()
+            'str'    => GetEnvironment(),
         );
         API::$IO->option = $zbp->option;
     }

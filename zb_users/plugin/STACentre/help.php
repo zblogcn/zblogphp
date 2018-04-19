@@ -29,7 +29,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <div id="divMain">
 
   <div class="divHeader">
-    <?php echo $blogtitle;?></div>
+    <?php echo $blogtitle; ?></div>
   <div class="SubMenu">
     <a href="main.php">
       <span class="m-left">配置页面</span>
@@ -81,7 +81,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     </table>
 
     <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/STACentre/logo.png';?>");</script>
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/STACentre/logo.png'; ?>");</script>
   </div>
 </div>
 

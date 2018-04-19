@@ -1,12 +1,12 @@
 <?php
 
-#注册插件
+//注册插件
 RegisterPlugin("LargeData", "ActivePlugin_LargeData");
 
 $table['Post2Tag'] = '%pre%post2tag';
 
 $datainfo['Post2Tag'] = array(
-    'ID' => array('pt_ID', 'integer', '', 0),
+    'ID'    => array('pt_ID', 'integer', '', 0),
     'TagID' => array('pt_TagID', 'integer', '', 0),
     'LogID' => array('pt_LogID', 'integer', '', 0),
 );
@@ -305,11 +305,8 @@ function LargeData_Misc_Begin($type)
     }
 }
 
-
-
 function LargeData_Misc_Statistic()
 {
-
     global $zbp;
 
     $r = null;

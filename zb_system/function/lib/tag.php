@@ -1,10 +1,12 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 /**
- * Tag类
+ * Tag类.
  *
- * @package Z-BlogPHP
- * @subpackage ClassLib/Tag 类库
  * @property string Template
  * @property string Name
  * @property string ID
@@ -14,10 +16,6 @@
  */
 class Tag extends Base
 {
-
-    /**
-     *
-     */
     public function __construct()
     {
         global $zbp;
@@ -27,6 +25,7 @@ class Tag extends Base
     /**
      * @param $method
      * @param $args
+     *
      * @return mixed
      */
     public function __call($method, $args)
@@ -35,10 +34,10 @@ class Tag extends Base
             $fpreturn = $fpname($this, $method, $args);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
-        return null;
     }
 
     /**
@@ -56,6 +55,7 @@ class Tag extends Base
                 $value = '';
             }
             $this->data[$name] = $value;
+
             return;
         }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Set'] as $fpname => &$fpsignal) {
@@ -66,6 +66,7 @@ class Tag extends Base
 
     /**
      * @param $name
+     *
      * @return mixed|string
      */
     public function __get($name)
@@ -76,6 +77,7 @@ class Tag extends Base
                 $fpreturn = $fpname($this);
                 if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                     $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                     return $fpreturn;
                 }
             }
@@ -93,14 +95,16 @@ class Tag extends Base
             }
 
             return $value;
-        } 
+        }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Get'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $name);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
-         }
+        }
+
         return parent::__get($name);
     }
 
@@ -118,6 +122,7 @@ class Tag extends Base
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -131,7 +136,7 @@ class Tag extends Base
     public function Del()
     {
         global $zbp;
-        if ($this->ID >0) {
+        if ($this->ID > 0) {
             unset($zbp->tags[$this->ID]);
         }
         if ($this->Name != '') {
@@ -142,6 +147,7 @@ class Tag extends Base
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }

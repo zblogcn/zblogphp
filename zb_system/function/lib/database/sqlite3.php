@@ -1,13 +1,13 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
- * SQLite3数据库操作类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase/DbSQLite3 类库
+ * SQLite3数据库操作类.
  */
 class Database__SQLite3 implements Database__Interface
 {
-
     public $type = 'sqlite';
     public $version = '3';
 
@@ -15,7 +15,7 @@ class Database__SQLite3 implements Database__Interface
      * @var string|null 数据库名前缀
      */
     public $dbpre = null;
-    private $db = null; #数据库连接实例
+    private $db = null; //数据库连接实例
     /**
      * @var string|null 数据库名
      */
@@ -24,8 +24,9 @@ class Database__SQLite3 implements Database__Interface
      * @var DbSql|null
      */
     public $sql = null;
+
     /**
-     * 构造函数，实例化$sql参数
+     * 构造函数，实例化$sql参数.
      */
     public function __construct()
     {
@@ -34,6 +35,7 @@ class Database__SQLite3 implements Database__Interface
 
     /**
      * @param $s
+     *
      * @return string
      */
     public function EscapeString($s)
@@ -43,6 +45,7 @@ class Database__SQLite3 implements Database__Interface
 
     /**
      * @param $array
+     *
      * @return bool
      */
     public function Open($array)
@@ -58,7 +61,7 @@ class Database__SQLite3 implements Database__Interface
     }
 
     /**
-     * 关闭数据库连接
+     * 关闭数据库连接.
      */
     public function Close()
     {
@@ -71,7 +74,10 @@ class Database__SQLite3 implements Database__Interface
     public function QueryMulit($s)
     {
         return $this->QueryMulti($s);
-    }//错别字函数，历史原因保留下来
+    }
+
+    //错别字函数，历史原因保留下来
+
     public function QueryMulti($s)
     {
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
@@ -86,6 +92,7 @@ class Database__SQLite3 implements Database__Interface
 
     /**
      * @param $query
+     *
      * @return array
      */
     public function Query($query)
@@ -110,6 +117,7 @@ class Database__SQLite3 implements Database__Interface
 
     /**
      * @param $query
+     *
      * @return mixed
      */
     public function Update($query)
@@ -120,6 +128,7 @@ class Database__SQLite3 implements Database__Interface
 
     /**
      * @param $query
+     *
      * @return mixed
      */
     public function Delete($query)
@@ -130,6 +139,7 @@ class Database__SQLite3 implements Database__Interface
 
     /**
      * @param $query
+     *
      * @return mixed
      */
     public function Insert($query)
@@ -162,7 +172,6 @@ class Database__SQLite3 implements Database__Interface
      */
     public function ExistTable($table)
     {
-
         $a = $this->Query($this->sql->ExistTable($table));
         if (!is_array($a)) {
             return false;

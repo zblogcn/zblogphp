@@ -19,7 +19,9 @@ if (!$zbp->CheckPlugin('Gravatar')) {
 $blogtitle = 'Gravatar头像';
 
 if (count($_POST) > 0) {
-    if (function_exists('CheckIsRefererValid')) CheckIsRefererValid();
+    if (function_exists('CheckIsRefererValid')) {
+        CheckIsRefererValid();
+    }
     $zbp->Config('Gravatar')->default_url = $_POST['default_url'];
     $zbp->Config('Gravatar')->source = $_POST['source'];
     $zbp->Config('Gravatar')->local_priority = $_POST['local_priority'];
@@ -38,7 +40,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div class="SubMenu"></div>
   <div id="divMain2">
     <form id="edit" name="edit" method="post" action="#">
-        <?php if (function_exists('CheckIsRefererValid')) {echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';}?>
+        <?php if (function_exists('CheckIsRefererValid')) {
+    echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
+}?>
 
 <input id="reset" name="reset" type="hidden" value="" />
 <table border="1" class="tableFull tableBorder tableBorder-thcenter">

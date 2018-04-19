@@ -1,11 +1,10 @@
 <?php
 
-#注册插件
+//注册插件
 RegisterPlugin("STACentre", "ActivePlugin_STACentre");
 
 function ActivePlugin_STACentre()
 {
-
     Add_Filter_Plugin('Filter_Plugin_Admin_SettingMng_SubMenu', 'STACentre_AddMenu');
 }
 

@@ -1,13 +1,15 @@
 <?php
 /**
- * api
+ * api.
+ *
  * @author zsx<zsx@zsxsoft.com>
- * @package api/route/module
  * @php >= 5.2
  */
 /**
- * Format single module object
+ * Format single module object.
+ *
  * @param object $module
+ *
  * @return array
  */
 function return_module($id)
@@ -22,11 +24,10 @@ function return_module($id)
 }
 
 /**
- * Get module
+ * Get module.
  */
 function api_module_get_function()
 {
-
     $id = (int) API::$IO->id;
     if ($id === 0) {
         API::$IO->end(3);
@@ -40,30 +41,28 @@ function api_module_get_function()
 API::$Route->get('/module/', 'api_module_get_function');
 
 /**
- * Get modules
+ * Get modules.
  */
 function api_modules_get_function()
 {
 }
 API::$Route->get('/modules/', 'api_modules_get_function');
 
-
 /**
  * A function will run after Postmodule().
+ *
  * @param Post $module
  */
 function api_module_post_callback(&$module)
 {
-
     $ret = return_module($module->ID);
     API::$IO->module = $ret;
 }
 /**
- * Create & Update module
+ * Create & Update module.
  */
 function api_module_post_function()
 {
-
     global $zbp;
     Add_Filter_Plugin('Filter_Plugin_PostModule_Succeed', 'api_module_post_callback');
     PostModule();
@@ -72,11 +71,10 @@ function api_module_post_function()
 }
 
 /**
- * Create module
+ * Create module.
  */
 function api_module_create_function()
 {
-
     $_POST['ID'] = 0;
     api_module_post_function();
 }
@@ -84,11 +82,10 @@ function api_module_create_function()
 API::$Route->post('/module/create/', 'api_module_create_function');
 
 /**
- * Update module
+ * Update module.
  */
 function api_module_update_function()
 {
-
     $id = (int) API::$IO->id;
     if ($id === 0) {
         API::$IO->end(3);
@@ -99,11 +96,10 @@ function api_module_update_function()
 API::$Route->post('/module/update/', 'api_module_update_function');
 
 /**
- * Update module
+ * Update module.
  */
 function api_module_delete_function()
 {
-
     $ret = DelModule();
     if ($ret !== true) {
         API::$IO->end(0);

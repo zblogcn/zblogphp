@@ -1,13 +1,13 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
- * pdo_MySQL数据库操作类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase/Dbpdo_MySQL 类库
+ * pdo_MySQL数据库操作类.
  */
 class Database__PDO_MySQL implements Database__Interface
 {
-
     public $type = 'mysql';
     public $version = '';
 
@@ -15,7 +15,7 @@ class Database__PDO_MySQL implements Database__Interface
      * @var string|null 数据库名前缀
      */
     public $dbpre = null;
-    private $db = null; #数据库连接实例
+    private $db = null; //数据库连接实例
     /**
      * @var string|null 数据库名
      */
@@ -28,8 +28,9 @@ class Database__PDO_MySQL implements Database__Interface
      * @var DbSql|null DbSql实例
      */
     public $sql = null;
+
     /**
-     * 构造函数，实例化$sql参数
+     * 构造函数，实例化$sql参数.
      */
     public function __construct()
     {
@@ -38,6 +39,7 @@ class Database__PDO_MySQL implements Database__Interface
 
     /**
      * @param $s
+     *
      * @return string
      */
     public function EscapeString($s)
@@ -47,6 +49,7 @@ class Database__PDO_MySQL implements Database__Interface
 
     /**
      * @param $array
+     *
      * @return bool
      */
     public function Open($array)
@@ -66,6 +69,7 @@ class Database__PDO_MySQL implements Database__Interface
         } else {
             $options = array(PDO::ATTR_PERSISTENT => true);
         }
+
         try {
             $db_link = new PDO('mysql:host=' . $array[0] . ';port=' . $array[5] . ';dbname=' . $array[3], $array[1], $array[2], $options);
 
@@ -102,7 +106,7 @@ class Database__PDO_MySQL implements Database__Interface
         $db_link = new PDO('mysql:host=' . $dbmysql_server . ';port=' . $dbmysql_port, $dbmysql_username, $dbmysql_password, $options);
         $this->db = $db_link;
         $this->dbname = $dbmysql_name;
-        
+
         $myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
         $myver = substr($myver, 0, strpos($myver, "-"));
         if (version_compare($myver, '5.5.3') >= 0) {
@@ -126,12 +130,13 @@ class Database__PDO_MySQL implements Database__Interface
             if ($r === false) {
                 return false;
             }
+
             return true;
         }
     }
 
     /**
-     * 关闭数据库连接
+     * 关闭数据库连接.
      */
     public function Close()
     {
@@ -139,13 +144,17 @@ class Database__PDO_MySQL implements Database__Interface
     }
 
     /**
-     * 执行多行SQL语句
+     * 执行多行SQL语句.
+     *
      * @param $s
      */
     public function QueryMulit($s)
     {
         return $this->QueryMulti($s);
-    }//错别字函数，历史原因保留下来
+    }
+
+    //错别字函数，历史原因保留下来
+
     public function QueryMulti($s)
     {
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
@@ -160,6 +169,7 @@ class Database__PDO_MySQL implements Database__Interface
 
     /**
      * @param $query
+     *
      * @return array
      */
     public function Query($query)
@@ -187,6 +197,7 @@ class Database__PDO_MySQL implements Database__Interface
 
     /**
      * @param $query
+     *
      * @return bool|mysqli_result
      */
     public function Update($query)
@@ -197,6 +208,7 @@ class Database__PDO_MySQL implements Database__Interface
 
     /**
      * @param $query
+     *
      * @return bool|mysqli_result
      */
     public function Delete($query)
@@ -207,6 +219,7 @@ class Database__PDO_MySQL implements Database__Interface
 
     /**
      * @param $query
+     *
      * @return int
      */
     public function Insert($query)
@@ -236,11 +249,11 @@ class Database__PDO_MySQL implements Database__Interface
 
     /**
      * @param $table
+     *
      * @return bool
      */
     public function ExistTable($table)
     {
-
         $a = $this->Query($this->sql->ExistTable($table, $this->dbname));
         if (!is_array($a)) {
             return false;

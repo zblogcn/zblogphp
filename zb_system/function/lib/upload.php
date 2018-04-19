@@ -1,9 +1,12 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 /**
- * 上传类
- * @package Z-BlogPHP
- * @subpackage ClassLib/Upload 类库
+ * 上传类.
+ *
  * @property string Name
  * @property string FullFile
  * @property string Size
@@ -16,10 +19,6 @@
  */
 class Upload extends Base
 {
-
-    /**
-     *
-     */
     public function __construct()
     {
         global $zbp;
@@ -30,6 +29,7 @@ class Upload extends Base
 
     /**
      * @param string $extList
+     *
      * @return bool
      */
     public function CheckExtName($extList = '')
@@ -64,11 +64,11 @@ class Upload extends Base
      */
     public function DelFile()
     {
-
         foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_DelFile'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -81,6 +81,7 @@ class Upload extends Base
 
     /**
      * @param $tmp
+     *
      * @return bool
      */
     public function SaveFile($tmp)
@@ -91,6 +92,7 @@ class Upload extends Base
             $fpreturn = $fpname($tmp, $this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -110,6 +112,7 @@ class Upload extends Base
 
     /**
      * @param $str64
+     *
      * @return bool
      */
     public function SaveBase64File($str64)
@@ -120,6 +123,7 @@ class Upload extends Base
             $fpreturn = $fpname($str64, $this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -141,6 +145,7 @@ class Upload extends Base
 
     /**
      * @param string $s
+     *
      * @return bool|string
      */
     public function Time($s = 'Y-m-d H:i:s')
@@ -165,6 +170,7 @@ class Upload extends Base
 
     /**
      * @param $name
+     *
      * @return Member|mixed|string
      */
     public function __get($name)
@@ -189,12 +195,13 @@ class Upload extends Base
         }
         if ($name == 'Author') {
             return $zbp->GetMemberByID($this->AuthorID);
-        } 
+        }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Get'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $name);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }

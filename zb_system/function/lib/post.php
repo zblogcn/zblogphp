@@ -1,9 +1,12 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 /**
- * 文章类
+ * 文章类.
  *
- * @package Z-BlogPHP
  * @property int|string ID 文章ID
  * @property string Title 文章标题
  * @property string Intro 文章摘要
@@ -28,13 +31,9 @@
  */
 class Post extends Base
 {
-
     private $_prev = '';
     private $_next = '';
 
-    /**
-     *
-     */
     public function __construct()
     {
         global $zbp;
@@ -47,6 +46,7 @@ class Post extends Base
     /**
      * @param $method
      * @param $args
+     *
      * @return mixed
      */
     public function __call($method, $args)
@@ -55,14 +55,15 @@ class Post extends Base
             $fpreturn = $fpname($this, $method, $args);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
-        return null;
     }
 
     /**
      * @param string $s
+     *
      * @return bool|string
      */
     public function Time($s = 'Y-m-d H:i:s')
@@ -130,6 +131,7 @@ class Post extends Base
                     $value = '';
                 }
                 $this->data[$name] = $value;
+
                 return;
             break;
             case 'TopType':
@@ -142,6 +144,7 @@ class Post extends Base
                 } elseif ($value == '' || $value == null) {
                     $this->Top = 0;
                 }
+
                 return;
             break;
             default:
@@ -155,6 +158,7 @@ class Post extends Base
 
     /**
      * @param $name
+     *
      * @return array|int|mixed|null|string
      */
     public function __get($name)
@@ -175,6 +179,7 @@ class Post extends Base
                     $fpreturn = $fpname($this);
                     if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                         return $fpreturn;
                     }
                 }
@@ -315,6 +320,7 @@ class Post extends Base
                 if ($this->IsTop == 4) {
                     $toptype = 'category';
                 }
+
                 return $toptype;
             case 'TypeName':
                 return $zbp->GetPostType_Name($this->Type);
@@ -323,9 +329,11 @@ class Post extends Base
                     $fpreturn = $fpname($this, $name);
                     if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                         return $fpreturn;
                     }
                 }
+
                 return parent::__get($name);
             break;
         }
@@ -350,6 +358,7 @@ class Post extends Base
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -371,6 +380,7 @@ class Post extends Base
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }

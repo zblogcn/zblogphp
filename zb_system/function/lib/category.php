@@ -1,7 +1,11 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 /**
- * 文章分类类
+ * 文章分类类.
  *
  * @property int|string ID
  * @property string Name 分类名
@@ -16,24 +20,23 @@
  * @property string Url
  * @property int|string Order 分类顺序
  * @property string SymbolName 层次标识符+名字
- * @package Z-BlogPHP
  */
 class Category extends Base
 {
-
     /**
      * @var array 下层分类
      */
     public $SubCategories = array(); //子分类
     /**
      * @deprecated
+     *
      * @var array|null
      */
     public $SubCategorys = null; // 拼写错误，保持兼容
     public $ChildrenCategories = array(); //子孙分类
 
     /**
-     * 构造函数
+     * 构造函数.
      */
     public function __construct()
     {
@@ -45,10 +48,13 @@ class Category extends Base
     }
 
     /**
-     * 魔术方法：重载，可通过接口Filter_Plugin_Category_Call添加自定义函数
+     * 魔术方法：重载，可通过接口Filter_Plugin_Category_Call添加自定义函数.
+     *
      * @api Filter_Plugin_Category_Call
+     *
      * @param string $method 方法
-     * @param mixed $args 参数
+     * @param mixed  $args   参数
+     *
      * @return mixed
      */
     public function __call($method, $args)
@@ -57,10 +63,10 @@ class Category extends Base
             $fpreturn = $fpname($this, $method, $args);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
-        return null;
     }
 
     /**
@@ -72,11 +78,12 @@ class Category extends Base
         global $zbp;
         if (in_array($name, array('Url', 'Symbol', 'Level', 'SymbolName', 'Parent'))) {
             return;
-        } else if ($name == 'Template') {
+        } elseif ($name == 'Template') {
             if ($value == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
                 $value = '';
             }
             $this->data[$name] = $value;
+
             return;
         }
         if ($name == 'LogTemplate') {
@@ -84,6 +91,7 @@ class Category extends Base
                 $value = '';
             }
             $this->data[$name] = $value;
+
             return;
         }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Set'] as $fpname => &$fpsignal) {
@@ -94,6 +102,7 @@ class Category extends Base
 
     /**
      * @param $name
+     *
      * @return int|mixed|null|string
      */
     public function __get($name)
@@ -104,6 +113,7 @@ class Category extends Base
                 $fpreturn = $fpname($this);
                 if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                     $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                     return $fpreturn;
                 }
             }
@@ -116,7 +126,7 @@ class Category extends Base
         }
         if ($name == 'Symbol') {
             if ($this->ParentID == 0) {
-                return null;
+                return;
             } else {
                 $l = $this->Level;
 
@@ -131,7 +141,7 @@ class Category extends Base
         }
         if ($name == 'Parent') {
             if ($this->ParentID == 0) {
-                return null;
+                return;
             } else {
                 return $zbp->categories[$this->ParentID];
             }
@@ -156,6 +166,7 @@ class Category extends Base
                 $fpreturn = $fpname($this, $name);
                 if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                     $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                     return $fpreturn;
                 }
             }
@@ -165,7 +176,8 @@ class Category extends Base
     }
 
     /**
-     * 保存分类数据
+     * 保存分类数据.
+     *
      * @return bool
      */
     public function Save()
@@ -185,6 +197,7 @@ class Category extends Base
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -207,6 +220,7 @@ class Category extends Base
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -215,9 +229,11 @@ class Category extends Base
     }
 
     /**
-     * 得到分类深度
+     * 得到分类深度.
+     *
      * @param object $object
-     * @param int $deep
+     * @param int    $deep
+     *
      * @return int 分类深度
      */
     private function GetDeep(&$object, $deep = 0)
@@ -233,8 +249,10 @@ class Category extends Base
     }
 
     /**
-     * 得到分类RootID
+     * 得到分类RootID.
+     *
      * @param int 父分类ID
+     *
      * @return int 祖分类ID
      */
     private function GetRoot($parentid)
@@ -247,6 +265,7 @@ class Category extends Base
             if ($zbp->categories[$parentid]->ParentID > 0) {
                 return $this->GetRoot($zbp->categories[$parentid]->ParentID);
             }
+
             return $parentid;
         } else {
             return 0;

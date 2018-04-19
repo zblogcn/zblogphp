@@ -1,13 +1,15 @@
 <?php
 /**
- * api
+ * api.
+ *
  * @author zsx<zsx@zsxsoft.com>
- * @package api/route/article
  * @php >= 5.2
  */
 /**
- * Format single article object
+ * Format single article object.
+ *
  * @param object $article
+ *
  * @return array
  */
 function return_article($id)
@@ -23,11 +25,10 @@ function return_article($id)
 }
 
 /**
- * Get article
+ * Get article.
  */
 function api_article_get_function()
 {
-
     $id = (int) API::$IO->id;
     if ($id === 0) {
         API::$IO->end(3);
@@ -38,25 +39,23 @@ function api_article_get_function()
     API::$IO->article = $ret;
 }
 
-
 API::$Route->get('/article/', 'api_article_get_function');
 
 /**
  * A function will run after PostArticle().
+ *
  * @param Post $article
  */
 function api_article_post_callback(&$article)
 {
-
     $ret = return_article($article->ID);
     API::$IO->article = $ret;
 }
 /**
- * Create & Update article
+ * Create & Update article.
  */
 function api_article_post_function()
 {
-
     global $zbp;
     Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed', 'api_article_post_callback');
     PostArticle();
@@ -65,11 +64,10 @@ function api_article_post_function()
 }
 
 /**
- * Create article
+ * Create article.
  */
 function api_article_create_function()
 {
-
     $_POST['ID'] = 0;
     api_article_post_function();
 }
@@ -77,11 +75,10 @@ function api_article_create_function()
 API::$Route->post('/article/create/', 'api_article_create_function');
 
 /**
- * Update article
+ * Update article.
  */
 function api_article_update_function()
 {
-
     $id = (int) API::$IO->id;
     if ($id === 0) {
         API::$IO->end(3);
@@ -92,11 +89,10 @@ function api_article_update_function()
 API::$Route->post('/article/update/', 'api_article_update_function');
 
 /**
- * Update article
+ * Update article.
  */
 function api_article_delete_function()
 {
-
     $ret = DelArticle();
     if ($ret !== true) {
         API::$IO->end(0);

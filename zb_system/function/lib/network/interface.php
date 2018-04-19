@@ -1,10 +1,12 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 /**
- * 网络连接接口
+ * 网络连接接口.
  *
- * @package Z-BlogPHP
- * @subpackage Interface/Network 网络连接
  * @property int $readyState 状态
  * @property mixed $responseBody 返回的二进制
  * @property string $responseText 返回的字符串
@@ -16,11 +18,11 @@
  */
 interface Network__Interface
 {
-
     /**
      * @return mixed
      */
     public function abort();
+
     /**
      * @return mixed
      */
@@ -28,21 +30,25 @@ interface Network__Interface
 
     /**
      * @param $bstrHeader
+     *
      * @return mixed
      */
     public function getResponseHeader($bstrHeader);
+
     /**
      * @param $bstrMethod
      * @param $bstrUrl
-     * @param bool $varAsync
+     * @param bool   $varAsync
      * @param string $bstrUser
      * @param string $bstrPassword
+     *
      * @return mixed
      */
     public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '');
 
     /**
      * @param string $varBody
+     *
      * @return mixed
      */
     public function send($varBody = '');
@@ -50,6 +56,7 @@ interface Network__Interface
     /**
      * @param $bstrHeader
      * @param $bstrValue
+     *
      * @return mixed
      */
     public function setRequestHeader($bstrHeader, $bstrValue);
@@ -61,6 +68,7 @@ interface Network__Interface
 
     /**
      * @param int $n
+     *
      * @return mixed
      */
     public function setMaxRedirs($n = 0);
@@ -68,12 +76,15 @@ interface Network__Interface
     /**
      * @param string $name
      * @param string $entity
+     *
      * @return mixed
      */
     public function addBinary($name, $entity);
+
     /**
      * @param string $name
      * @param string $entity
+     *
      * @return mixed
      */
     public function addText($name, $entity);
@@ -83,8 +94,8 @@ interface Network__Interface
      * @param $connectTimeout
      * @param $sendTimeout
      * @param $receiveTimeout
+     *
      * @return mixed
      */
     public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout);
-
 }

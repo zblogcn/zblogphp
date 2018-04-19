@@ -1,11 +1,12 @@
 <?php
 /**
- * Z-Blog with PHP
+ * Z-Blog with PHP.
+ *
  * @author
  * @copyright (C) RainbowSoft Studio
+ *
  * @version 2.0 2013-07-05
  */
-
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
@@ -35,8 +36,7 @@ if (isset($_COOKIE['timezone'])) {
     unset($tz);
 }
 
-
-$article = new Post;
+$article = new Post();
 $article->AuthorID = $zbp->user->ID;
 
 $ispage = false;
@@ -50,7 +50,7 @@ if (!$zbp->CheckRights('ArticlePub')) {
 }
 
 if (isset($_GET['id'])) {
-    $article->LoadInfoByID((integer) GetVars('id', 'GET'));
+    $article->LoadInfoByID((int) GetVars('id', 'GET'));
 }
 
 if ($ispage) {
@@ -153,7 +153,8 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsign
         <input type="text" name="Alias" id="edtAlias" maxlength="250" value="<?php echo $article->Alias; ?>" />
       </div>
       <!-- )alias -->
-<?php if (!$ispage) {?>
+<?php if (!$ispage) {
+    ?>
         <!-- tags( -->
       <div id="tags" class="editmod2"><label  for="edtTag"  class='editinputname'><?php echo $lang['msg']['tags'] ?></label>
         <input type="text"  name="Tag" id="edtTag" value="<?php echo $article->TagsToNameString(); ?>" />
@@ -165,11 +166,12 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsign
       <!-- )tags -->
 
        <div id="insertintro" class="editmod2" style="padding-top:0.5em;paddding-bottom:0.5em;"><span>* <?php echo $lang['msg']['help_generate_summary'] ?><a href="" onClick="try{AutoIntro();return false;}catch(e){}">[<?php echo $lang['msg']['generate_summary'] ?>]</a></span></div>
-<?php }?>
+<?php
+}?>
 
         <div id="divIntro" class="editmod2" <?php if (!$article->Intro) {
-            echo 'style="display:none;"';
-}?>>
+        echo 'style="display:none;"';
+    }?>>
        <div id="theader" class="editmod editmod3"><label for="editor_intro" class="editinputname" ><?php echo $lang['msg']['intro'] ?></label></div>
        <div id='tarea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro, '[html-format]'); ?></textarea></div>
        <div id="introready" style="display:none"><img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Waiting...</div>
@@ -179,8 +181,8 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsign
        <div id="response2" class="editmod2">
 <?php
 foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {
-    $fpname();
-}
+        $fpname();
+    }
 ?>
        </div>
 
@@ -196,13 +198,15 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
             <input class="button" style="width:180px;height:38px;" type="submit" value="<?php echo $lang['msg']['submit'] ?>" id="btnPost" onclick='return checkArticleInfo();' />
           </div>
 
-          <!-- cate --><?php if (!$ispage) {?>
+          <!-- cate --><?php if (!$ispage) {
+    ?>
           <div id='cate' class="editmod"> <label for="cmbCateID" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['category'] ?></label>
             <select style="width:180px;" class="edit" size="1" name="CateID" id="cmbCateID">
 <?php echo OutputOptionItemsOfCategories($article->CateID); ?>
             </select>
           </div>
-          <!-- cate --><?php }?>
+          <!-- cate --><?php
+}?>
 
           <!-- level -->
           <div id='level' class="editmod"> <label for="cmbPostStatus" class="editinputname" style="max-width:65px;text-overflow:ellipsis;"><?php echo $lang['msg']['status'] ?></label>
@@ -236,13 +240,15 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
 
           <!-- )newdatetime -->
 
-          <!-- Istop( --><?php if (!$ispage && $zbp->CheckRights('ArticleAll')) {?>
+          <!-- Istop( --><?php if (!$ispage && $zbp->CheckRights('ArticleAll')) {
+        ?>
           <div id='istop' class="editmod">
             <label for="edtIstop" class="editinputname" ><?php echo $lang['msg']['top'] ?></label>
 <select style="width:80px;" size="1" name="IsTop" id="edtIstopType" class="off-hide">
             <?php echo OutputOptionItemsOfIsTop($article->IsTop); ?>
 </select>
-          </div><?php }?>
+          </div><?php
+    }?>
 
           <!-- )Istop -->
 
@@ -254,19 +260,21 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsig
           </div>
           <!-- )IsLock -->
 
-          <!-- Navbar( --><?php if ($ispage) {?>
+          <!-- Navbar( --><?php if ($ispage) {
+        ?>
           <div id='AddNavbar' class="editmod">
           <label for="edtAddNavbar" class='editinputname'><?php echo $lang['msg']['add_to_navbar'] ?></label>
           <input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int) $zbp->CheckItemToNavbar('page', $article->ID) ?>" class="checkbox" />
-          </div><?php }?>
+          </div><?php
+    }?>
           <!-- )Navbar -->
 
           <!-- 3号输出接口 -->
           <div id="response3" class="editmod">
 <?php
 foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response3'] as $fpname => &$fpsignal) {
-    $fpname();
-}
+        $fpname();
+    }
 ?>
           </div>
         </div>

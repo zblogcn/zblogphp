@@ -3,19 +3,24 @@ require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('linkmanage')) {$zbp->ShowError(48);die();}
-
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
+if (!$zbp->CheckPlugin('linkmanage')) {
+    $zbp->ShowError(48);
+    die();
+}
 
 $blogtitle = '菜单链接管理';
 
-require $blogpath.'zb_system/admin/admin_header.php';
+require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <script type="text/javascript" src="jquery.mjs.nestedSortable.js"></script>
 <script type="text/javascript" src="js.js"></script>
 <link href="style.css" rel="stylesheet" type="text/css" />
 <?php
-require $blogpath.'zb_system/admin/admin_top.php';
+require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
 	<div class="divHeader"><?php echo $blogtitle; ?></div>
@@ -46,18 +51,18 @@ require $blogpath.'zb_system/admin/admin_top.php';
 					<td> 选择菜单编辑中要显示的系统链接类型 </td>
 					<td>
 					<?php
-					$showtype = linkmanage_showtype();
-					$showoption = $zbp->Config('linkmanage')->showoption;
-					foreach ($showtype as $item) {
-						$chk = (strstr($showoption,$item[0])) ? 'checked' : '';
-						$tmp = '<div class="checkbox">
+                    $showtype = linkmanage_showtype();
+                    $showoption = $zbp->Config('linkmanage')->showoption;
+                    foreach ($showtype as $item) {
+                        $chk = (strstr($showoption, $item[0])) ? 'checked' : '';
+                        $tmp = '<div class="checkbox">
 					        <label>
-					          <input type="checkbox" name="showoption[]" value="'.$item[0].'" '.$chk.'>'.$item[1].'
+					          <input type="checkbox" name="showoption[]" value="' . $item[0] . '" ' . $chk . '>' . $item[1] . '
 					        </label>
 					      </div>';
-					    echo $tmp;
-					}
-					?>
+                        echo $tmp;
+                    }
+                    ?>
 					</td>
 					<td>  </td>
 				</tr>

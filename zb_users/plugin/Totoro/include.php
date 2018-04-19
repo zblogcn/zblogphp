@@ -13,7 +13,7 @@ function Totoro_init()
 {
     require_once TOTORO_PATH . '/inc/totoro.php';
     global $Totoro;
-    $Totoro = new Totoro_Class;
+    $Totoro = new Totoro_Class();
 }
 
 function ActivePlugin_Totoro()
@@ -55,7 +55,7 @@ function Totoro_Cmd_Begin()
 
     if (function_exists('CheckIsRefererValid')) {
         CheckIsRefererValid();
-    } else if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
+    } elseif (!$zbp->ValidToken(GetVars('token', 'GET'))) {
         $zbp->ShowError(5, __FILE__, __LINE__);
     }
     $id = (int) GetVars('id', 'GET');

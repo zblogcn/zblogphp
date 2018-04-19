@@ -1,5 +1,7 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
-/**
+<?php if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+/*
  * 后台管理相关
  * @package Z-BlogPHP
  * @subpackage System/Administrator 后台管理
@@ -9,7 +11,7 @@
 $zbp->ismanage = true;
 
 /**
- * 添加页面管理子菜单(内置插件函数)
+ * 添加页面管理子菜单(内置插件函数).
  */
 function Include_Admin_Addpagesubmenu()
 {
@@ -17,7 +19,7 @@ function Include_Admin_Addpagesubmenu()
 }
 
 /**
- * 添加标签管理子菜单(内置插件函数)
+ * 添加标签管理子菜单(内置插件函数).
  */
 function Include_Admin_Addtagsubmenu()
 {
@@ -25,7 +27,7 @@ function Include_Admin_Addtagsubmenu()
 }
 
 /**
- * 添加分类管理子菜单(内置插件函数)
+ * 添加分类管理子菜单(内置插件函数).
  */
 function Include_Admin_Addcatesubmenu()
 {
@@ -33,7 +35,7 @@ function Include_Admin_Addcatesubmenu()
 }
 
 /**
- * 添加用户管理子菜单(内置插件函数)
+ * 添加用户管理子菜单(内置插件函数).
  */
 function Include_Admin_Addmemsubmenu()
 {
@@ -45,7 +47,7 @@ function Include_Admin_Addmemsubmenu()
 }
 
 /**
- * 添加模块管理子菜单(内置插件函数)
+ * 添加模块管理子菜单(内置插件函数).
  */
 function Include_Admin_Addmodsubmenu()
 {
@@ -57,7 +59,7 @@ function Include_Admin_Addmodsubmenu()
 }
 
 /**
- * 添加评论管理子菜单(内置插件函数)
+ * 添加评论管理子菜单(内置插件函数).
  */
 function Include_Admin_Addcmtsubmenu()
 {
@@ -78,11 +80,10 @@ $topmenus = array();
 $leftmenus = array();
 
 /**
- * 后台管理左侧导航菜单
+ * 后台管理左侧导航菜单.
  */
 function ResponseAdmin_LeftMenu()
 {
-
     global $zbp;
     global $leftmenus;
 
@@ -114,11 +115,10 @@ function ResponseAdmin_LeftMenu()
 }
 
 /**
- * 后台管理顶部菜单
+ * 后台管理顶部菜单.
  */
 function ResponseAdmin_TopMenu()
 {
-
     global $zbp;
     global $topmenus;
 
@@ -137,18 +137,20 @@ function ResponseAdmin_TopMenu()
 }
 
 /**
- * 添加子菜单项
+ * 添加子菜单项.
+ *
  * @param $strName
  * @param $strUrl
  * @param $strClass
  * @param $strTarget
  * @param $strId
  * @param $strTitle
+ *
  * @return null|string
  */
 function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $strId = '', $strTitle = '')
 {
-    $s  = '<a href="' . $strUrl . '" ';
+    $s = '<a href="' . $strUrl . '" ';
     if ($strTarget) {
         $s .= 'target="' . $strTarget . '"';
     }
@@ -160,17 +162,19 @@ function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $
     }
     $s .= '>';
     $s .= '<span class="' . $strClass . '">' . $strName . '</span></a>';
+
     return $s;
 }
 
-
 /**
- * 添加顶部菜单项
+ * 添加顶部菜单项.
+ *
  * @param $requireAction
  * @param $strName
  * @param $strUrl
  * @param $strTarget
  * @param $strLiId
+ *
  * @return null|string
  */
 function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId)
@@ -179,7 +183,7 @@ function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId)
 
     static $AdminTopMenuCount = 0;
     if ($zbp->CheckRights($requireAction) == false) {
-        return null;
+        return;
     }
 
     $tmp = null;
@@ -196,13 +200,15 @@ function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId)
 }
 
 /**
- * 添加左侧菜单项
+ * 添加左侧菜单项.
+ *
  * @param $requireAction
  * @param $strName
  * @param $strUrl
  * @param $strLiId
  * @param $strAId
  * @param $strImgUrl
+ *
  * @return null|string
  */
 function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $strImgUrl)
@@ -211,7 +217,7 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
 
     static $AdminLeftMenuCount = 0;
     if ($zbp->CheckRights($requireAction) == false) {
-        return null;
+        return;
     }
 
     $AdminLeftMenuCount = $AdminLeftMenuCount + 1;
@@ -225,18 +231,25 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
     return $tmp;
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 生成TYPEselect表单
+ * 生成TYPEselect表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
-function OutputOptionItemsOfType($default) {
+function OutputOptionItemsOfType($default)
+{
     global $zbp;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfType'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($default);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+            return $fpreturn;
+        }
     }
 
     $s = null;
@@ -248,8 +261,10 @@ function OutputOptionItemsOfType($default) {
 }
 
 /**
- * 生成分类select表单
+ * 生成分类select表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
 function OutputOptionItemsOfCategories($default)
@@ -260,6 +275,7 @@ function OutputOptionItemsOfCategories($default)
         $fpreturn = $fpname($default);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
             return $fpreturn;
         }
     }
@@ -273,8 +289,10 @@ function OutputOptionItemsOfCategories($default)
 }
 
 /**
- * 生成模板select表单
+ * 生成模板select表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
 function OutputOptionItemsOfTemplate($default)
@@ -313,8 +331,10 @@ function OutputOptionItemsOfTemplate($default)
 }
 
 /**
- * 生成用户等级select表单
+ * 生成用户等级select表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
 function OutputOptionItemsOfMemberLevel($default)
@@ -325,6 +345,7 @@ function OutputOptionItemsOfMemberLevel($default)
         $fpreturn = $fpname($default);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
             return $fpreturn;
         }
     }
@@ -341,8 +362,10 @@ function OutputOptionItemsOfMemberLevel($default)
 }
 
 /**
- * 生成用户select表单
+ * 生成用户select表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
 function OutputOptionItemsOfMember($default)
@@ -366,10 +389,11 @@ function OutputOptionItemsOfMember($default)
     return $s;
 }
 
-
 /**
- * 生成文章IsTop状态select表单
+ * 生成文章IsTop状态select表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
 function OutputOptionItemsOfIsTop($default)
@@ -380,14 +404,16 @@ function OutputOptionItemsOfIsTop($default)
     $s .= '<option value="0" ' . ($default == 0 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['none'] . '</option>';
     $s .= '<option value="2" ' . ($default == 2 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['top_index'] . '</option>';
     $s .= '<option value="1" ' . ($default == 1 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['top_global'] . '</option>';
-    $s .= '<option value="4" ' . ($default == 4 ? 'selected="selected"' : '') . ' >' .$zbp->lang['msg']['top_category'] . '</option>';
+    $s .= '<option value="4" ' . ($default == 4 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['top_category'] . '</option>';
+
     return $s;
 }
 
-
 /**
- * 生成文章发布状态select表单
+ * 生成文章发布状态select表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
 function OutputOptionItemsOfPostStatus($default)
@@ -411,7 +437,8 @@ function OutputOptionItemsOfPostStatus($default)
 }
 
 /**
- * 创建Div模块
+ * 创建Div模块.
+ *
  * @param $m
  * @param bool $button
  */
@@ -447,40 +474,42 @@ function CreateModuleDiv($m, $button = true)
 }
 
 /**
- * 生成时区select表单
+ * 生成时区select表单.
+ *
  * @param $default
+ *
  * @return string
  */
 function CreateOptionsOfTimeZone($default)
 {
     $s = '';
     $tz = array(
-        'Etc/GMT+12' => '-12:00',
-        'Pacific/Midway' => '-11:00',
-        'Pacific/Honolulu' => '-10:00',
-        'America/Anchorage' => '-09:00',
-        'America/Los_Angeles' => '-08:00',
-        'America/Denver' => '-07:00',
-        'America/Tegucigalpa' => '-06:00',
-        'America/New_York' => '-05:00',
-        'America/Halifax' => '-04:00',
+        'Etc/GMT+12'                     => '-12:00',
+        'Pacific/Midway'                 => '-11:00',
+        'Pacific/Honolulu'               => '-10:00',
+        'America/Anchorage'              => '-09:00',
+        'America/Los_Angeles'            => '-08:00',
+        'America/Denver'                 => '-07:00',
+        'America/Tegucigalpa'            => '-06:00',
+        'America/New_York'               => '-05:00',
+        'America/Halifax'                => '-04:00',
         'America/Argentina/Buenos_Aires' => '-03:00',
-        'Atlantic/South_Georgia' => '-02:00',
-        'Atlantic/Azores' => '-01:00',
-        'UTC' => '00:00',
-        'Europe/Berlin' => '+01:00',
-        'Europe/Sofia' => '+02:00',
-        'Africa/Nairobi' => '+03:00',
-        'Europe/Moscow' => '+04:00',
-        'Asia/Karachi' => '+05:00',
-        'Asia/Dhaka' => '+06:00',
-        'Asia/Bangkok' => '+07:00',
-        'Asia/Shanghai' => '+08:00',
-        'Asia/Tokyo' => '+09:00',
-        'Pacific/Guam' => '+10:00',
-        'Australia/Sydney' => '+11:00',
-        'Pacific/Fiji' => '+12:00',
-        'Pacific/Tongatapu' => '+13:00',
+        'Atlantic/South_Georgia'         => '-02:00',
+        'Atlantic/Azores'                => '-01:00',
+        'UTC'                            => '00:00',
+        'Europe/Berlin'                  => '+01:00',
+        'Europe/Sofia'                   => '+02:00',
+        'Africa/Nairobi'                 => '+03:00',
+        'Europe/Moscow'                  => '+04:00',
+        'Asia/Karachi'                   => '+05:00',
+        'Asia/Dhaka'                     => '+06:00',
+        'Asia/Bangkok'                   => '+07:00',
+        'Asia/Shanghai'                  => '+08:00',
+        'Asia/Tokyo'                     => '+09:00',
+        'Pacific/Guam'                   => '+10:00',
+        'Australia/Sydney'               => '+11:00',
+        'Pacific/Fiji'                   => '+12:00',
+        'Pacific/Tongatapu'              => '+13:00',
     );
 
     foreach ($tz as $key => $value) {
@@ -491,8 +520,10 @@ function CreateOptionsOfTimeZone($default)
 }
 
 /**
- * 生成语言select表单
+ * 生成语言select表单.
+ *
  * @param $default
+ *
  * @return string
  */
 function CreateOptionsOfLang($default)
@@ -519,13 +550,12 @@ function CreateOptionsOfLang($default)
     return $s;
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台管理显示网站信息
+ * 后台管理显示网站信息.
  */
 function Admin_SiteInfo()
 {
-
     global $zbp;
 
     $echoStatistic = false;
@@ -540,7 +570,7 @@ function Admin_SiteInfo()
 
     echo '<table class="tableFull tableBorder table_striped table_hover" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'];
     if ($zbp->CheckRights('root')) {
-        echo '&nbsp;<a href="javascript:statistic(\'' . BuildSafeCmdURL('act=misc&amp;type=statistic') . '\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>' ;
+        echo '&nbsp;<a href="javascript:statistic(\'' . BuildSafeCmdURL('act=misc&amp;type=statistic') . '\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>';
     }
     echo ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
@@ -590,13 +620,12 @@ function Admin_SiteInfo()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/home_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台文章管理
+ * 后台文章管理.
  */
 function Admin_ArticleMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['article_manage'] . '</div>';
@@ -625,7 +654,7 @@ function Admin_ArticleMng()
     $p->UrlRule->Rules['{%category%}'] = GetVars('category');
     $p->UrlRule->Rules['{%search%}'] = rawurlencode(GetVars('search'));
     $p->UrlRule->Rules['{%status%}'] = GetVars('status');
-    $p->UrlRule->Rules['{%istop%}'] = (boolean) GetVars('istop');
+    $p->UrlRule->Rules['{%istop%}'] = (bool) GetVars('istop');
 
     $w = array();
     if (!$zbp->CheckRights('ArticleAll')) {
@@ -678,7 +707,7 @@ function Admin_ArticleMng()
     $tableths[] = '</tr>';
 
     foreach ($array as $article) {
-        $tabletds = array();//table string
+        $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $article->ID . '</td>';
         $tabletds[] = '<td class="td10">' . $article->Category->Name . '</td>';
@@ -721,13 +750,12 @@ function Admin_ArticleMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/article_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台页面管理
+ * 后台页面管理.
  */
 function Admin_PageMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['page_manage'] . '</div>';
@@ -780,9 +808,8 @@ function Admin_PageMng()
     $tableths[] = '<th></th>';
     $tableths[] = '</tr>';
 
-
     foreach ($array as $article) {
-        $tabletds = array();//table string
+        $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $article->ID . '</td>';
         $tabletds[] = '<td class="td10">' . $article->Author->Name . '</td>';
@@ -821,13 +848,12 @@ function Admin_PageMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/page_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台分类管理
+ * 后台分类管理.
  */
 function Admin_CategoryMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['category_manage'] . '</div>';
@@ -851,7 +877,7 @@ function Admin_CategoryMng()
     $tableths[] = '</tr>';
 
     foreach ($zbp->categoriesbyorder as $category) {
-        $tabletds = array();//table string
+        $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $category->ID . '</td>';
         $tabletds[] = '<td class="td5">' . $category->Order . '</td>';
@@ -882,13 +908,12 @@ function Admin_CategoryMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/category_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台评论管理
+ * 后台评论管理.
  */
 function Admin_CommentMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['comment_manage'] . '</div>';
@@ -911,7 +936,7 @@ function Admin_CommentMng()
     $p->PageBarCount = $zbp->pagebarcount;
 
     $p->UrlRule->Rules['{%search%}'] = rawurlencode(GetVars('search'));
-    $p->UrlRule->Rules['{%ischecking%}'] = (boolean) GetVars('ischecking');
+    $p->UrlRule->Rules['{%ischecking%}'] = (bool) GetVars('ischecking');
 
     $w = array();
     if (!$zbp->CheckRights('CommentAll')) {
@@ -963,7 +988,7 @@ function Admin_CommentMng()
             $article = null;
         }
 
-        $tabletds = array();//table string
+        $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5"><a href="?act=CommentMng&id=' . $cmt->ID . '" title="' . $zbp->lang['msg']['jump_comment'] . $cmt->ID . '">' . $cmt->ID . '</a></td>';
         if ($cmt->ParentID > 0) {
@@ -972,7 +997,7 @@ function Admin_CommentMng()
             $tabletds[] = '<td class="td5"></td>';
         }
 
-        $tabletds[] = '<td class="td10"><span class="cmt-note" title="' . $zbp->lang['msg']['email'] .':' . htmlspecialchars($cmt->Email) . '"><a href="mailto:' . htmlspecialchars($cmt->Email) . '">' . $cmt->Author->Name . '</a></span></td>';
+        $tabletds[] = '<td class="td10"><span class="cmt-note" title="' . $zbp->lang['msg']['email'] . ':' . htmlspecialchars($cmt->Email) . '"><a href="mailto:' . htmlspecialchars($cmt->Email) . '">' . $cmt->Author->Name . '</a></span></td>';
         $tabletds[] = '<td><div style="overflow:hidden;max-width:500px;">' .
         (($article) ?
             '<a href="' . $article->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> '
@@ -1008,7 +1033,7 @@ function Admin_CommentMng()
 
     echo '<p style="float:right;">';
 
-    if ((boolean) GetVars('ischecking')) {
+    if ((bool) GetVars('ischecking')) {
         echo '<input type="submit" name="all_del"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         echo '<input type="submit" name="all_pass"  value="' . $zbp->lang['msg']['all_pass'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
     } else {
@@ -1037,13 +1062,12 @@ function Admin_CommentMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/comments_32.png' . '");$(".cmt-note").tooltip();</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台用户管理
+ * 后台用户管理.
  */
 function Admin_MemberMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['member_manage'] . '</div>';
@@ -1102,7 +1126,7 @@ function Admin_MemberMng()
     $tableths[] = '</tr>';
 
     foreach ($array as $member) {
-        $tabletds = array();//table string
+        $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $member->ID . '</td>';
         $tabletds[] = '<td class="td10">' . $member->LevelName . ($member->Status > 0 ? '(' . $zbp->lang['user_status_name'][$member->Status] . ')' : '') . '</td>';
@@ -1147,13 +1171,12 @@ function Admin_MemberMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/user_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- *  后台上传附件管理
+ *  后台上传附件管理.
  */
 function Admin_UploadMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['upload_manage'] . '</div>';
@@ -1167,7 +1190,7 @@ function Admin_UploadMng()
     echo '<form class="search" name="upload" id="upload" method="post" enctype="multipart/form-data" action="' . BuildSafeCmdURL('act=UploadPst') . '">';
     echo '<p>' . $zbp->lang['msg']['upload_file'] . ': </p>';
     echo '<p><input type="file" name="file" size="60" />&nbsp;&nbsp;';
-    echo '<label><input type="checkbox" name="auto_rename" checked/>'.$zbp->lang['msg']['auto_rename_uploadfile'].'</label>&nbsp;&nbsp;';
+    echo '<label><input type="checkbox" name="auto_rename" checked/>' . $zbp->lang['msg']['auto_rename_uploadfile'] . '</label>&nbsp;&nbsp;';
     echo '<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '" onclick="" />&nbsp;&nbsp;';
     echo '<input class="button" type="reset" value="' . $zbp->lang['msg']['reset'] . '" /></p>';
     echo '</form>';
@@ -1204,7 +1227,7 @@ function Admin_UploadMng()
     $tableHeaders[] = '</tr>';
 
     foreach ($array as $upload) {
-        $ret = array();//table string
+        $ret = array(); //table string
         $ret[] = '<tr>';
         $ret[] = '<td class="td5">' . $upload->ID . '</td>';
         $ret[] = '<td class="td10">' . htmlspecialchars($upload->Author->Name) . '</td>';
@@ -1240,13 +1263,12 @@ function Admin_UploadMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/accessories_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台标签管理
+ * 后台标签管理.
  */
 function Admin_TagMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['tag_manage'] . '</div>';
@@ -1284,7 +1306,7 @@ function Admin_TagMng()
     $tableths[] = '</tr>';
 
     foreach ($array as $tag) {
-        $tabletds = array();//table string
+        $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $tag->ID . '</td>';
         $tabletds[] = '<td class="td25"><a href="' . $tag->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $tag->Name . '</td>';
@@ -1322,13 +1344,12 @@ function Admin_TagMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/tag_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台主题管理
+ * 后台主题管理.
  */
 function Admin_ThemeMng()
 {
-
     global $zbp;
 
     $allthemes = $zbp->LoadThemes();
@@ -1378,13 +1399,12 @@ function Admin_ThemeMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/themes_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台模块管理
+ * 后台模块管理.
  */
 function Admin_ModuleMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['module_manage'] . '</div>';
@@ -1411,7 +1431,7 @@ function Admin_ModuleMng()
             $pm[] = $m;
         }
     }
-    #widget-list begin
+    //widget-list begin
     echo '<div class="widget-left">';
     echo '<div class="widget-list">';
 
@@ -1450,7 +1470,7 @@ function Admin_ModuleMng()
 
     echo '<hr/>';
     echo "\r\n";
-    echo '<form id="edit" method="post" action="'. BuildSafeCmdURL('act=SidebarSet') . '">';
+    echo '<form id="edit" method="post" action="' . BuildSafeCmdURL('act=SidebarSet') . '">';
     echo '<input type="hidden" id="strsidebar" name="edtSidebar" value="' . $zbp->option['ZC_SIDEBAR_ORDER'] . '"/>';
     echo '<input type="hidden" id="strsidebar2" name="edtSidebar2" value="' . $zbp->option['ZC_SIDEBAR2_ORDER'] . '"/>';
     echo '<input type="hidden" id="strsidebar3" name="edtSidebar3" value="' . $zbp->option['ZC_SIDEBAR3_ORDER'] . '"/>';
@@ -1460,12 +1480,12 @@ function Admin_ModuleMng()
     echo "\r\n";
     echo '<div class="clear"></div></div>';
     echo '</div>';
-    #widget-list end
+    //widget-list end
     echo "\r\n";
-    #siderbar-list begin
+    //siderbar-list begin
     echo '<div class="siderbar-list">';
     echo '<div class="siderbar-drop" id="siderbar"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
     foreach ($zbp->template->sidebar as $m) {
         CreateModuleDiv($m, false);
     }
@@ -1473,7 +1493,7 @@ function Admin_ModuleMng()
     echo "\r\n";
 
     echo '<div class="siderbar-drop" id="siderbar2"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar2'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar2), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar2), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
     foreach ($zbp->template->sidebar2 as $m) {
         CreateModuleDiv($m, false);
     }
@@ -1481,7 +1501,7 @@ function Admin_ModuleMng()
     echo "\r\n";
 
     echo '<div class="siderbar-drop" id="siderbar3"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar3'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar3), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar3), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
     foreach ($zbp->template->sidebar3 as $m) {
         CreateModuleDiv($m, false);
     }
@@ -1489,7 +1509,7 @@ function Admin_ModuleMng()
     echo "\r\n";
 
     echo '<div class="siderbar-drop" id="siderbar4"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar4'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar4), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar4), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
     foreach ($zbp->template->sidebar4 as $m) {
         CreateModuleDiv($m, false);
     }
@@ -1497,7 +1517,7 @@ function Admin_ModuleMng()
     echo "\r\n";
 
     echo '<div class="siderbar-drop" id="siderbar5"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar5'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar5), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar5), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
     foreach ($zbp->template->sidebar5 as $m) {
         CreateModuleDiv($m, false);
     }
@@ -1505,15 +1525,14 @@ function Admin_ModuleMng()
     echo "\r\n";
 
     echo '<div class="clear"></div></div>';
-    #siderbar-list end
+    //siderbar-list end
     echo "\r\n";
     echo '<div class="clear"></div>';
 
     echo '</div>';
     echo "\r\n";
 
-    echo '<script type="text/javascript">ActiveLeftMenu("aModuleMng");</script>';
-    ?>
+    echo '<script type="text/javascript">ActiveLeftMenu("aModuleMng");</script>'; ?>
 <script type="text/javascript">
     $(function() {
         function sortFunction(){
@@ -1624,13 +1643,12 @@ function Admin_ModuleMng()
 echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/link_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台插件管理
+ * 后台插件管理.
  */
 function Admin_PluginMng()
 {
-
     global $zbp;
 
     $allplugins = $zbp->LoadPlugins();
@@ -1654,7 +1672,7 @@ function Admin_PluginMng()
 
     $plugins = array();
 
-    $app = new App;
+    $app = new App();
     if ($app->LoadInfoByXml('theme', $zbp->theme) == true) {
         if ($app->HasPlugin()) {
             array_unshift($plugins, $app);
@@ -1706,13 +1724,12 @@ function Admin_PluginMng()
     echo 'AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/plugin_32.png' . '");$(".plugin-note").tooltip();</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台网站设置管理
+ * 后台网站设置管理.
  */
 function Admin_SettingMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['settings'] . '</div>';
@@ -1720,9 +1737,7 @@ function Admin_SettingMng()
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_SettingMng_SubMenu'] as $fpname => &$fpsignal) {
         $fpname();
     }
-    echo '</div>';
-
-    ?>
+    echo '</div>'; ?>
 
           <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav'); ?>">
             <div id="divMain2">
@@ -1742,10 +1757,10 @@ function Admin_SettingMng()
                 <div class="content-box-content">
 <?php
     $decodedBlogHost = $zbp->option['ZC_BLOG_HOST'];
-if (stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false && function_exists('mb_strtolower')) {
-    $Punycode = new Punycode();
-    $decodedBlogHost = $Punycode->decode($zbp->option['ZC_BLOG_HOST']);
-}
+    if (stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false && function_exists('mb_strtolower')) {
+        $Punycode = new Punycode();
+        $decodedBlogHost = $Punycode->decode($zbp->option['ZC_BLOG_HOST']);
+    }
 
     echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
     echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
@@ -1798,8 +1813,7 @@ if (stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false && function_exists(
     echo '<tr><td><p><b>' . $zbp->lang['msg']['comment_verify_enable'] . '</b></p></td><td><p><input id="ZC_COMMENT_VERIFY_ENABLE" name="ZC_COMMENT_VERIFY_ENABLE" type="text" value="' . $zbp->option['ZC_COMMENT_VERIFY_ENABLE'] . '" class="checkbox"/></p></td></tr>';
 
     echo '</table>';
-    echo '</div>';
-    ?>
+    echo '</div>'; ?>
                 </div>
                 <!-- End .content-box-content -->
 

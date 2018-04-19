@@ -1,120 +1,121 @@
 <?php
+
 class ClassUrlRewriteTest extends PHPUnit_Framework_TestCase
 {
-    protected $backupGlobalsBlacklist = ['zbp'];
-    protected $testRules = [
-        'article' => [
-            ['{%host%}post/{%id%}.html',
-                ['post/1.html' => ['id' => '1']]
-            ],
-            ['{%host%}post/{%alias%}.html',
-                ['post/alias.html' => ['alias' => 'alias']]
-            ],
-            ['{%host%}{%year%}/{%month%}/{%id%}/',
-                ['2016/11/233' => ['year' => '2016', 'month' => '11', 'id' => '233']]
-            ],
-            ['{%host%}{%category%}/{%alias%}',
-                [
-                    'category/alias' => ['category' => 'category', 'alias' => 'alias'],
-                    'post/category/alias' => ['category' => 'post/category', 'alias' => 'alias']
-                ]
-            ]
-        ],
-        'page' => [
-            ['{%host%}{%id%}.html',
-                ['1.html' => ['id' => '1']]
-            ],
-            ['{%host%}{%alias%}.html',
-                ['alias.html' => ['alias' => 'alias']]
-            ],
-            ['{%host%}{%alias%}/',
-                ['alias' => ['alias' => 'alias']]
-            ],
-            ['{%host%}{%alias%}',
-                ['alias' => ['alias' => 'alias']]
-            ],
-        ],
-        'index' => [
-            ['{%host%}page_{%page%}.html',
-                ['page_1.html' => ['page' => '1']]
-            ],
-            ['{%host%}page_{%page%}/',
-                ['page_1' => ['page' => '1']]
-            ],
-            ['{%host%}page_{%page%}',
-                ['page_1' => ['page' => '1']]
-            ],
-        ],
-        'cate' => [
-            ['{%host%}category-{%id%}_{%page%}.html',
-                [
-                    'category-1.html' => ['id' => '1'],
-                    'category-1_1.html' => ['id' => '1', 'page' => '1']
-                ]
-            ],
-            ['{%host%}category-{%alias%}_{%page%}.html',
-                [
-                    'category-alias.html' => ['alias' => 'alias'],
-                    'category-alias_1.html' => ['alias' => 'alias', 'page' => '1']
-                ]
-            ],
-            ['{%host%}category/{%alias%}/{%page%}/',
-                [
-                    'category/alias' => ['alias' => 'alias'],
-                    'category/alias/1' => ['alias' => 'alias', 'page' => '1']
-                ]
-            ],
-            ['{%host%}category/{%id%}/{%page%}',
-                [
-                    'category/123' => ['id' => '123'],
+    protected $backupGlobalsBlacklist = array('zbp');
+    protected $testRules = array(
+        'article' => array(
+            array('{%host%}post/{%id%}.html',
+                array('post/1.html' => array('id' => '1')),
+            ),
+            array('{%host%}post/{%alias%}.html',
+                array('post/alias.html' => array('alias' => 'alias')),
+            ),
+            array('{%host%}{%year%}/{%month%}/{%id%}/',
+                array('2016/11/233' => array('year' => '2016', 'month' => '11', 'id' => '233')),
+            ),
+            array('{%host%}{%category%}/{%alias%}',
+                array(
+                    'category/alias'      => array('category' => 'category', 'alias' => 'alias'),
+                    'post/category/alias' => array('category' => 'post/category', 'alias' => 'alias'),
+                ),
+            ),
+        ),
+        'page' => array(
+            array('{%host%}{%id%}.html',
+                array('1.html' => array('id' => '1')),
+            ),
+            array('{%host%}{%alias%}.html',
+                array('alias.html' => array('alias' => 'alias')),
+            ),
+            array('{%host%}{%alias%}/',
+                array('alias' => array('alias' => 'alias')),
+            ),
+            array('{%host%}{%alias%}',
+                array('alias' => array('alias' => 'alias')),
+            ),
+        ),
+        'index' => array(
+            array('{%host%}page_{%page%}.html',
+                array('page_1.html' => array('page' => '1')),
+            ),
+            array('{%host%}page_{%page%}/',
+                array('page_1' => array('page' => '1')),
+            ),
+            array('{%host%}page_{%page%}',
+                array('page_1' => array('page' => '1')),
+            ),
+        ),
+        'cate' => array(
+            array('{%host%}category-{%id%}_{%page%}.html',
+                array(
+                    'category-1.html'   => array('id' => '1'),
+                    'category-1_1.html' => array('id' => '1', 'page' => '1'),
+                ),
+            ),
+            array('{%host%}category-{%alias%}_{%page%}.html',
+                array(
+                    'category-alias.html'   => array('alias' => 'alias'),
+                    'category-alias_1.html' => array('alias' => 'alias', 'page' => '1'),
+                ),
+            ),
+            array('{%host%}category/{%alias%}/{%page%}/',
+                array(
+                    'category/alias'   => array('alias' => 'alias'),
+                    'category/alias/1' => array('alias' => 'alias', 'page' => '1'),
+                ),
+            ),
+            array('{%host%}category/{%id%}/{%page%}',
+                array(
+                    'category/123' => array('id' => '123'),
                     //'category/alias/alias2/' => ['alias' => 'alias/alias2'],
-                    'category/123/1' => ['id' => '123', 'page' => '1']
-                ]
-            ],
-        ],
-        'tags' => [
-            ['{%host%}tags-{%id%}_{%page%}.html',
-                [
-                    'tags-23.html' => ['id' => '23'],
-                    'tags-23_1.html' => ['id' => '23', 'page' => '1']
-                ]
-            ],
-            ['{%host%}tags-{%alias%}_{%page%}.html',
-                [
-                    'tags-alias.html' => ['alias' => 'alias'],
-                    'tags-alias_1.html' => ['alias' => 'alias', 'page' => '1']
-                ]
-            ],
-        ],
-        'date' => [
-            ['{%host%}date-{%date%}_{%page%}.html',
-                [
-                    'date-2016-10.html' => ['date' => '2016-10'],
-                    'date-2016-10_44.html' => ['page' => '44'],
-                ]
-            ],
-            ['{%host%}post/{%date%}_{%page%}.html',
-                [
-                    'post/2016-10.html' => ['date' => '2016-10'],
-                    'post/2016-10_44.html' => ['page' => '44'],
-                ]
-            ],
-        ],
-        'auth' => [
-            ['{%host%}author-{%id%}_{%page%}.html',
-                [
-                    'author-23.html' => ['id' => '23'],
-                    'author-23_1.html' => ['id' => '23', 'page' => '1']
-                ]
-            ],
-            ['{%host%}author/{%id%}/{%page%}/',
-                [
-                    'author/23' => ['id' => '23'],
-                    'author/23/2' => ['id' => '23', 'page' => '2']
-                ]
-            ],
-        ]
-    ];
+                    'category/123/1' => array('id' => '123', 'page' => '1'),
+                ),
+            ),
+        ),
+        'tags' => array(
+            array('{%host%}tags-{%id%}_{%page%}.html',
+                array(
+                    'tags-23.html'   => array('id' => '23'),
+                    'tags-23_1.html' => array('id' => '23', 'page' => '1'),
+                ),
+            ),
+            array('{%host%}tags-{%alias%}_{%page%}.html',
+                array(
+                    'tags-alias.html'   => array('alias' => 'alias'),
+                    'tags-alias_1.html' => array('alias' => 'alias', 'page' => '1'),
+                ),
+            ),
+        ),
+        'date' => array(
+            array('{%host%}date-{%date%}_{%page%}.html',
+                array(
+                    'date-2016-10.html'    => array('date' => '2016-10'),
+                    'date-2016-10_44.html' => array('page' => '44'),
+                ),
+            ),
+            array('{%host%}post/{%date%}_{%page%}.html',
+                array(
+                    'post/2016-10.html'    => array('date' => '2016-10'),
+                    'post/2016-10_44.html' => array('page' => '44'),
+                ),
+            ),
+        ),
+        'auth' => array(
+            array('{%host%}author-{%id%}_{%page%}.html',
+                array(
+                    'author-23.html'   => array('id' => '23'),
+                    'author-23_1.html' => array('id' => '23', 'page' => '1'),
+                ),
+            ),
+            array('{%host%}author/{%id%}/{%page%}/',
+                array(
+                    'author/23'   => array('id' => '23'),
+                    'author/23/2' => array('id' => '23', 'page' => '2'),
+                ),
+            ),
+        ),
+    );
 
     public function setUp()
     {
@@ -126,13 +127,12 @@ class ClassUrlRewriteTest extends PHPUnit_Framework_TestCase
 
     private function generateAndMatch($url, $regex, $type, $hasPage = false)
     {
-        $m = [];
+        $m = array();
         $r = UrlRule::OutputUrlRegEx($regex, $type, $hasPage);
         preg_match($r, $url, $m);
 
         return $m;
     }
-
 
     public function testRegExsSingle()
     {

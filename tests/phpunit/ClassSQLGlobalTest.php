@@ -1,12 +1,13 @@
 <?php
+
 class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
 {
-    protected $backupGlobalsBlacklist = ['zbp'];
+    protected $backupGlobalsBlacklist = array('zbp');
     protected static $db = null;
 
     public function setUp()
     {
-        /**
+        /*
          * Use MySQL to test Global
          */
         self::$db = new SQLMySQL($GLOBALS['zbp']->db);
@@ -17,7 +18,6 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
         self::$db->reset();
         self::$db = null;
     }
-
 
     // Basic test cases
     public function testSelect()
@@ -54,7 +54,7 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ->create('zbp_post')
             ->data(
                 array(
-                'ID' => array('log_ID', 'integer', '', 0)
+                'ID' => array('log_ID', 'integer', '', 0),
                 )
             );
         $this->assertEquals('CREATE TABLE IF NOT EXISTS zbp_post  ( log_ID int(11) NOT NULL AUTO_INCREMENT, PRIMARY KEY (log_ID) ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;', self::$db->sql);
@@ -98,7 +98,6 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
                 ->sql
         );
     }
-
 
     public function testWhere()
     {
@@ -153,8 +152,8 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
                     array('array',
                     array(
                     array('log_ID', '1'),
-                    array('log_Title', '2')
-                    )
+                    array('log_Title', '2'),
+                    ),
                     )
                 )
                 ->sql
@@ -167,8 +166,8 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
                     array('not array',
                     array(
                     array('log_ID', '1'),
-                    array('log_Title', '2')
-                    )
+                    array('log_Title', '2'),
+                    ),
                     )
                 )
                 ->sql
@@ -181,8 +180,8 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
                     array('like array',
                     array(
                     array('log_ID', '1'),
-                    array('log_Title', '2')
-                    )
+                    array('log_Title', '2'),
+                    ),
                     )
                 )
                 ->sql
@@ -195,8 +194,8 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
                     array('ilike array',
                     array(
                     array('log_ID', '1'),
-                    array('log_Title', '2')
-                    )
+                    array('log_Title', '2'),
+                    ),
                     )
                 )
                 ->sql
@@ -466,13 +465,12 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
         self::$db->fuck();
     }
 
-
     public function testIssue121InitializeNewInstance()
     {
         $this->assertEquals(
             'SELECT * FROM  zbp_post  WHERE  EXISTS ( SELECT * FROM  zbp_post  WHERE  log_ID = \'2\'  ) ',
             self::$db->select("zbp_post")->where(
-                array('EXISTS', self::$db->init()->select("zbp_post")->where(array('=', 'log_ID', "2"))->sql )
+                array('EXISTS', self::$db->init()->select("zbp_post")->where(array('=', 'log_ID', "2"))->sql)
             )->sql
         );
     }

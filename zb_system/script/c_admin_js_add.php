@@ -1,8 +1,10 @@
 <?php
 /**
- * Z-Blog with PHP
+ * Z-Blog with PHP.
+ *
  * @author
  * @copyright (C) RainbowSoft Studio
+ *
  * @version 2.0 2013-06-14
  */
 require '../function/c_system_base.php';
@@ -279,7 +281,6 @@ if ($zbp->option['ZC_JS_304_ENABLE']) {
         die;
     }
 }
-
 
 $zbp->CheckGzip();
 $zbp->StartGzip();

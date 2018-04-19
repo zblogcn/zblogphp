@@ -1,5 +1,6 @@
 <?php
+
 return array(
-    'closemenu' => 'Collapse',
+    'closemenu'  => 'Collapse',
     'expandmenu' => 'Expand',
 );

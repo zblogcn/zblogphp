@@ -44,8 +44,8 @@ function AlipayAPI_Start($parameter)
     $parameter['exter_invoke_ip'] = GetGuestIP(); //客户端的IP地址
     $parameter['_input_charset'] = trim(strtolower($alipay_config['input_charset']));
 
-    $parameter['notify_url'] = (isset($parameter['notify_url'])) ? $parameter['notify_url'] : ($zbp->host.'zb_users/plugin/alipay/pay_notify_url.php');
-    $parameter['return_url'] = (isset($parameter['return_url'])) ? $parameter['return_url'] : ($zbp->host.'zb_users/plugin/alipay/pay_return_url.php');
+    $parameter['notify_url'] = (isset($parameter['notify_url'])) ? $parameter['notify_url'] : ($zbp->host . 'zb_users/plugin/alipay/pay_notify_url.php');
+    $parameter['return_url'] = (isset($parameter['return_url'])) ? $parameter['return_url'] : ($zbp->host . 'zb_users/plugin/alipay/pay_return_url.php');
     $parameter['service'] = 'create_direct_pay_by_user';
     $parameter['payment_type'] = (isset($parameter['payment_type'])) ? $parameter['payment_type'] : '1';
     $parameter['seller_email'] = trim($alipay_config['seller_email']);

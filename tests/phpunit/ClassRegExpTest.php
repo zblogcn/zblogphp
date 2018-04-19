@@ -1,7 +1,8 @@
 <?php
+
 class ClassRegExpTest extends PHPUnit_Framework_TestCase
 {
-    protected $backupGlobalsBlacklist = ['zbp'];
+    protected $backupGlobalsBlacklist = array('zbp');
 
     public function setUp()
     {
@@ -10,7 +11,6 @@ class ClassRegExpTest extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
     }
-
 
     public function testNickname()
     {
