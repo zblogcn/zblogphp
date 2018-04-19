@@ -1,9 +1,6 @@
 <?php
 /**
- * Z-BlogPHP Clinic
- * @package clinic
- * @subpackage clinic.php
+ * Z-BlogPHP Clinic.
  */
-
 require 'clinic.class.php';
 $clinic = new Clinic();

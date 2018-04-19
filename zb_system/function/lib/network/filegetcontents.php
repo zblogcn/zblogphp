@@ -1,21 +1,21 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
- * 获取链接内容类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/Network/Networkfile_get_contents 网络连接
+ * 获取链接内容类.
  */
 class Network__Filegetcontents implements Network__Interface
 {
-
-    private $readyState = 0; #状态
-    private $responseBody = null; #返回的二进制
-    private $responseStream = null; #返回的数据流
-    private $responseText = ''; #返回的数据
-    private $responseXML = null; #尝试把responseText格式化为XMLDom
-    private $status = 0; #状态码
-    private $statusText = ''; #状态码文本
-    private $responseVersion = ''; #返回的HTTP版体
+    private $readyState = 0; //状态
+    private $responseBody = null; //返回的二进制
+    private $responseStream = null; //返回的数据流
+    private $responseText = ''; //返回的数据
+    private $responseXML = null; //尝试把responseText格式化为XMLDom
+    private $status = 0; //状态码
+    private $statusText = ''; //状态码文本
+    private $responseVersion = ''; //返回的HTTP版体
 
     private $option = array();
     private $url = '';
@@ -32,15 +32,17 @@ class Network__Filegetcontents implements Network__Interface
     /**
      * @param $property_name
      * @param $value
+     *
      * @throws Exception
      */
     public function __set($property_name, $value)
     {
-        throw new Exception($property_name . ' readonly');
+        throw new Exception($property_name.' readonly');
     }
 
     /**
      * @param $property_name
+     *
      * @return mixed
      */
     public function __get($property_name)
@@ -60,16 +62,13 @@ class Network__Filegetcontents implements Network__Interface
             if (isset($this->parsed_url[strtolower($property_name)])) {
                 return $this->parsed_url[strtolower($property_name)];
             } else {
-                return null;
+                return;
             }
         } else {
             return $this->$property_name;
         }
     }
 
-    /**
-     *
-     */
     public function abort()
     {
     }
@@ -84,6 +83,7 @@ class Network__Filegetcontents implements Network__Interface
 
     /**
      * @param $bstrHeader
+     *
      * @return string
      */
     public function getResponseHeader($bstrHeader)
@@ -111,11 +111,13 @@ class Network__Filegetcontents implements Network__Interface
     /**
      * @param $bstrMethod
      * @param $bstrUrl
-     * @param bool $varAsync
+     * @param bool   $varAsync
      * @param string $bstrUser
      * @param string $bstrPassword
-     * @return bool
+     *
      * @throws Exception
+     *
+     * @return bool
      */
     public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '')
     {
@@ -130,7 +132,7 @@ class Network__Filegetcontents implements Network__Interface
             throw new Exception('URL Syntax Error!');
         } else {
             if ($bstrUser != '') {
-                $bstrUrl = substr($bstrUrl, 0, strpos($bstrUrl, ':')) . '://' . $bstrUser . ':' . $bstrPassword . '@' . substr($bstrUrl, strpos($bstrUrl, '/') + 2);
+                $bstrUrl = substr($bstrUrl, 0, strpos($bstrUrl, ':')).'://'.$bstrUser.':'.$bstrPassword.'@'.substr($bstrUrl, strpos($bstrUrl, '/') + 2);
             }
             $this->url = $bstrUrl;
             if (!isset($this->parsed_url['port'])) {
@@ -163,12 +165,12 @@ class Network__Filegetcontents implements Network__Interface
 
             if (!isset($this->httpheader['Content-Type'])) {
                 if ($this->__isBinary) {
-                    $this->httpheader['Content-Type'] = 'Content-Type:  multipart/form-data; boundary=' . $this->__boundary;
+                    $this->httpheader['Content-Type'] = 'Content-Type:  multipart/form-data; boundary='.$this->__boundary;
                 } else {
                     $this->httpheader['Content-Type'] = 'Content-Type: application/x-www-form-urlencoded';
                 }
             }
-            $this->httpheader['Content-Length'] = 'Content-Length: ' . strlen($data);
+            $this->httpheader['Content-Length'] = 'Content-Length: '.strlen($data);
         }
 
         $this->option['header'] = implode("\r\n", $this->httpheader);
@@ -177,7 +179,7 @@ class Network__Filegetcontents implements Network__Interface
         if ($this->maxredirs > 0) {
             $this->option['follow_location'] = true;
             //补一个数字 要大于1才跳转
-            $this->option['max_redirects'] = $this->maxredirs+1;
+            $this->option['max_redirects'] = $this->maxredirs + 1;
         } else {
             $this->option['follow_location'] = 0;
             $this->option['max_redirects'] = 0;
@@ -185,12 +187,12 @@ class Network__Filegetcontents implements Network__Interface
 
         ZBlogException::SuspendErrorHook();
         $http_response_header = null;
-        $this->responseText = file_get_contents(($this->isgzip == true ? 'compress.zlib://' : '') . $this->url, false, stream_context_create(array('http' => $this->option)));
+        $this->responseText = file_get_contents(($this->isgzip == true ? 'compress.zlib://' : '').$this->url, false, stream_context_create(array('http' => $this->option)));
         $this->responseHeader = $http_response_header;
         ZBlogException::ResumeErrorHook();
 
         foreach ($this->responseHeader as $key => $value) {
-            if (strpos($value, 'HTTP/')===0) {
+            if (strpos($value, 'HTTP/') === 0) {
                 if (isset($this->responseHeader[$key])) {
                     $this->statusText = $this->responseHeader[$key];
                     $a = explode(' ', $this->statusText);
@@ -211,17 +213,18 @@ class Network__Filegetcontents implements Network__Interface
      * @param $bstrHeader
      * @param $bstrValue
      * @param bool $append
+     *
      * @return bool
      */
     public function setRequestHeader($bstrHeader, $bstrValue, $append = false)
     {
         if ($append == false) {
-            $this->httpheader[$bstrHeader] = $bstrHeader . ': ' . $bstrValue;
+            $this->httpheader[$bstrHeader] = $bstrHeader.': '.$bstrValue;
         } else {
             if (isset($this->httpheader[$bstrHeader])) {
-                $this->httpheader[$bstrHeader] = $this->httpheader[$bstrHeader] . $bstrValue;
+                $this->httpheader[$bstrHeader] = $this->httpheader[$bstrHeader].$bstrValue;
             } else {
-                $this->httpheader[$bstrHeader] = $bstrHeader . ': ' . $bstrValue;
+                $this->httpheader[$bstrHeader] = $bstrHeader.': '.$bstrValue;
             }
         }
 
@@ -239,9 +242,11 @@ class Network__Filegetcontents implements Network__Interface
             'type' => 'text',
         );
     }
+
     /**
      * @param string $name
      * @param string $entity
+     *
      * @return mixed
      */
     public function addBinary($name, $entity, $filename = null, $mime = '')
@@ -274,12 +279,14 @@ class Network__Filegetcontents implements Network__Interface
         $return['mime'] = $mime;
 
         $this->postdata[$name] = $return;
+
         return true;
     }
 
     /**
      * @param string $name
      * @param string $entity
+     *
      * @return mixed
      */
     public function addText($name, $entity)
@@ -310,13 +317,13 @@ class Network__Filegetcontents implements Network__Interface
             $data .= "--{$boundary}\r\n";
             $data .= "Content-Disposition: form-data; ";
             if ($value['type'] == 'text') {
-                $data .= 'name="' . $name . '"' . "\r\n\r\n";
+                $data .= 'name="'.$name.'"'."\r\n\r\n";
                 $data .= $content; // . "\r\n";
                 //$data .= "--{$boundary}";
             } else {
                 $filename = $value['filename'];
                 $mime = $value['mime'];
-                $data .= 'name="' . $name . '"; filename="' . $filename . '"' . "\r\n";
+                $data .= 'name="'.$name.'"; filename="'.$filename.'"'."\r\n";
                 $data .= "Content-Type: $mime\r\n";
                 $data .= "\r\n$content"; //"\r\n";
                 //$data .= "--{$boundary}";
@@ -328,7 +335,7 @@ class Network__Filegetcontents implements Network__Interface
     }
 
     /**
-     * Build Boundary
+     * Build Boundary.
      */
     private function __buildBoundary()
     {
@@ -336,19 +343,17 @@ class Network__Filegetcontents implements Network__Interface
         $boundary .= substr(md5(time()), 8, 16);
         $this->__boundary = $boundary;
     }
-    /**
-     *
-     */
+
     private function reinit()
     {
         global $zbp;
-        $this->readyState = 0; #状态
-        $this->responseBody = null; #返回的二进制
-        $this->responseStream = null; #返回的数据流
-        $this->responseText = ''; #返回的数据
-        $this->responseXML = null; #尝试把responseText格式化为XMLDom
-        $this->status = 0; #状态码
-        $this->statusText = ''; #状态码文本
+        $this->readyState = 0; //状态
+        $this->responseBody = null; //返回的二进制
+        $this->responseStream = null; //返回的数据流
+        $this->responseText = ''; //返回的数据
+        $this->responseXML = null; //尝试把responseText格式化为XMLDom
+        $this->status = 0; //状态码
+        $this->statusText = ''; //状态码文本
 
         $this->__isBinary = false;
         $this->__boundary = '';
@@ -358,12 +363,12 @@ class Network__Filegetcontents implements Network__Interface
         $this->postdata = array();
         $this->httpheader = array();
         $this->responseHeader = array();
-        $this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $zbp->cache->system_environment . ') Z-BlogPHP/' . $GLOBALS['blogversion']);
+        $this->setRequestHeader('User-Agent', 'Mozilla/5.0 ('.$zbp->cache->system_environment.') Z-BlogPHP/'.$GLOBALS['blogversion']);
         $this->setMaxRedirs(1);
     }
 
     /**
-     * 启用Gzip
+     * 启用Gzip.
      */
     public function enableGzip()
     {

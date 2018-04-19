@@ -4,26 +4,32 @@ require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('x2013')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
+if (!$zbp->CheckPlugin('x2013')) {
+    $zbp->ShowError(48);
+    die();
+}
 $blogtitle = '主题配置';
-require $blogpath . 'zb_system/admin/admin_header.php';
-require $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath.'zb_system/admin/admin_header.php';
+require $blogpath.'zb_system/admin/admin_top.php';
 
-if(isset($_GET['act']) && $_GET['act'] == 'save'){
-	$navcontent = str_replace('{$name}', $zbp->name, $_POST['inpContent']);
-	$navcontent = str_replace($zbp->host, '{$host}', $navcontent);
-	$zbp->Config('x2013')->NavBar = $navcontent;
-	$zbp->SaveConfig('x2013');
-	$zbp->ShowHint('good');
+if (isset($_GET['act']) && $_GET['act'] == 'save') {
+    $navcontent = str_replace('{$name}', $zbp->name, $_POST['inpContent']);
+    $navcontent = str_replace($zbp->host, '{$host}', $navcontent);
+    $zbp->Config('x2013')->NavBar = $navcontent;
+    $zbp->SaveConfig('x2013');
+    $zbp->ShowHint('good');
 }
 ?>
 <style>p{line-height:1.5em;padding:0.5em 0;}</style>
 <link href="style/plugin/modern.css" rel="stylesheet">
 <script type="text/javascript" src="style/plugin/accordion.js"></script>
 <div id="divMain">
-	<div class="divHeader"><?php echo $blogtitle;?></div>
-  	<div class="SubMenu"><?php x2013_SubMenu(1);?></div>
+	<div class="divHeader"><?php echo $blogtitle; ?></div>
+  	<div class="SubMenu"><?php x2013_SubMenu(1); ?></div>
 	<div id="divMain2">
 		<div class="widget-list ui-droppable" style="min-width: 830px;">
 		<div class="widget-list-header">添加导航链接</div>
@@ -34,7 +40,7 @@ if(isset($_GET['act']) && $_GET['act'] == 'save'){
                         <div>
                            <div class="input-control select">
                                     <select multiple="1" size="10" id="post">
-										<?php x2013_get_link('post');?>
+										<?php x2013_get_link('post'); ?>
                                     </select>
                                 </div>
 								<input type="button" value="添加" onclick="addsekectpartent('post')"/>
@@ -45,7 +51,7 @@ if(isset($_GET['act']) && $_GET['act'] == 'save'){
                         <div style="display: none;">
                            <div class="input-control select">
                                     <select multiple="1" size="8" id="page">
-										<?php x2013_get_link('page');?>
+										<?php x2013_get_link('page'); ?>
                                     </select>
                                 </div>
 								<input type="button" value="添加" onclick="addsekectpartent('page')"/>
@@ -56,7 +62,7 @@ if(isset($_GET['act']) && $_GET['act'] == 'save'){
                         <div>
                             <div class="input-control select">
                                     <select multiple="1" size="8" id="cate">
-										<?php x2013_get_link('category');?>
+										<?php x2013_get_link('category'); ?>
                                     </select>
                                 </div>
 								<input type="button" value="添加" onclick="addsekectpartent('cate')"/>
@@ -67,7 +73,7 @@ if(isset($_GET['act']) && $_GET['act'] == 'save'){
                         <div>
                             <div class="input-control select">
                                     <select multiple="1" size="10" id="tag">
-										<?php x2013_get_link('tags');?>
+										<?php x2013_get_link('tags'); ?>
                                     </select>
                                 </div>
 								<input type="button" value="添加" onclick="addsekectpartent('tag')"/>
@@ -91,7 +97,7 @@ if(isset($_GET['act']) && $_GET['act'] == 'save'){
 			<div  class="siderbar-sort-list ui-sortable">
 			<div class="widget widget_source_other ">
 			<div class="page-sidebar">
-			  <ul id="connect"><?php echo $zbp->Config('x2013')->NavBar;?></ul>
+			  <ul id="connect"><?php echo $zbp->Config('x2013')->NavBar; ?></ul>
 			</div>
 			<div class="clear"></div>
 			  <div id="result">
@@ -167,6 +173,6 @@ if(isset($_GET['act']) && $_GET['act'] == 'save'){
 </div>
 <script type="text/javascript">ActiveTopMenu("topmenu_x2013");</script> 
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath.'zb_system/admin/admin_footer.php';
 RunTime();
 ?>

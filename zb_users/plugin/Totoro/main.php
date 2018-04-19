@@ -14,7 +14,7 @@ if (!$zbp->CheckPlugin('Totoro')) {
 }
 Totoro_init();
 $blogtitle = 'Totoro反垃圾评论';
-require $blogpath . 'zb_system/admin/admin_header.php';
+require $blogpath.'zb_system/admin/admin_header.php';
 ?>
 <style type="text/css">
     .text-config {
@@ -22,7 +22,7 @@ require $blogpath . 'zb_system/admin/admin_header.php';
     }
 </style>
 <?php
-require $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath.'zb_system/admin/admin_top.php';
 
 ?>
 
@@ -31,7 +31,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     <div class="SubMenu"><?php echo $Totoro->export_submenu('main'); ?></div>
     <div id="divMain2">
         <form id="edit" name="edit" method="post" action="save_setting.php">
-            <?php if (function_exists('CheckIsRefererValid')) {echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';}?>
+            <?php if (function_exists('CheckIsRefererValid')) {
+    echo '<input type="hidden" name="csrfToken" value="'.$zbp->GetCSRFToken().'">';
+}?>
             <input id="reset" name="reset" type="hidden" value="" />
             <div class="content-box">
                 <!-- Start Content Box -->
@@ -287,12 +289,12 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         </script>
         <script type="text/javascript">
             ActiveLeftMenu("aPluginMng");
-            AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Totoro/logo.png'; ?>");
+            AddHeaderIcon("<?php echo $bloghost.'zb_users/plugin/Totoro/logo.png'; ?>");
         </script>
     </div>
 </div>
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath.'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>

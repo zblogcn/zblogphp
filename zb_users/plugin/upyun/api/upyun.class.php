@@ -1,4 +1,5 @@
 <?php
+
 class UpYun
 {
     const VERSION = '2.2.0';
@@ -19,7 +20,6 @@ class UpYun
     const X_GMKERL_QUALITY = 'x­gmkerl-quality';
     const X_GMKERL_UNSHARP = 'x­gmkerl-unsharp';
 
-
     private $_bucketname;
     private $_username;
     private $_password;
@@ -35,13 +35,13 @@ class UpYun
     private $x_request_id;
 
     /**
-     * 初始化 UpYun 存储接口
+     * 初始化 UpYun 存储接口.
+     *
      * @param $bucketname string 空间名称
      * @param $username string 操作员名称
      * @param $password string 密码
-     *
      * @param null $endpoint
-     * @param int $timeout
+     * @param int  $timeout
      */
     public function __construct($bucketname, $username, $password, $endpoint = null, $timeout = 30)
     {
@@ -54,7 +54,7 @@ class UpYun
     }
 
     /**
-     * 获取当前SDK版本号
+     * 获取当前SDK版本号.
      */
     public function version()
     {
@@ -62,7 +62,8 @@ class UpYun
     }
 
     /**
-     * 创建目录
+     * 创建目录.
+     *
      * @param $path string 路径
      * @param $auto_mkdir bool 是否自动创建父级目录，最多10层次
      *
@@ -74,27 +75,30 @@ class UpYun
         if ($auto_mkdir) {
             $headers['Mkdir'] = 'true';
         }
+
         return $this->_do_request('PUT', $path, $headers);
     }
 
     /**
-     * 删除目录和文件
+     * 删除目录和文件.
+     *
      * @param string $path 路径
      *
-     * @return boolean
+     * @return bool
      */
     public function delete($path)
     {
         return $this->_do_request('DELETE', $path);
     }
 
-
     /**
-     * 上传文件
-     * @param string $path 存储路径
-     * @param mixed $file 需要上传的文件，可以是文件流或者文件内容
-     * @param boolean $auto_mkdir 自动创建目录
-     * @param array $opts 可选参数
+     * 上传文件.
+     *
+     * @param string $path       存储路径
+     * @param mixed  $file       需要上传的文件，可以是文件流或者文件内容
+     * @param bool   $auto_mkdir 自动创建目录
+     * @param array  $opts       可选参数
+     *
      * @return mixed|null
      */
     public function writeFile($path, $file, $auto_mkdir = true, $opts = null)
@@ -118,9 +122,10 @@ class UpYun
     }
 
     /**
-     * 下载文件
-     * @param string $path 文件路径
-     * @param mixed $file_handle
+     * 下载文件.
+     *
+     * @param string $path        文件路径
+     * @param mixed  $file_handle
      *
      * @return mixed
      */
@@ -130,7 +135,7 @@ class UpYun
     }
 
     /**
-     * 获取目录文件列表
+     * 获取目录文件列表.
      *
      * @param string $path 查询路径
      *
@@ -163,7 +168,7 @@ class UpYun
     }
 
     /**
-     * 获取文件、目录信息
+     * 获取文件、目录信息.
      *
      * @param string $path 路径
      *
@@ -172,19 +177,23 @@ class UpYun
     public function getFileInfo($path)
     {
         $rsp = $this->_do_request('HEAD', $path);
+
         return $rsp;
     }
 
     /**
-     * 获取空间使用情况
+     * 获取空间使用情况.
+     *
      * @param string $bucket
-     * @return mixed
+     *
      * @throws UpYunAuthorizationException
      * @throws UpYunException
      * @throws UpYunForbiddenException
      * @throws UpYunNotAcceptableException
      * @throws UpYunNotFoundException
      * @throws UpYunServiceUnavailable
+     *
+     * @return mixed
      */
     public function getFolderUsage($bucket = '/')
     {
@@ -192,7 +201,7 @@ class UpYun
     }
 
     /**
-     * 获取空间存储使用量，单位 byte
+     * 获取空间存储使用量，单位 byte.
      */
     public function getBucketUsage()
     {
@@ -205,7 +214,7 @@ class UpYun
     }
 
     /**
-     * 设置文件访问密钥
+     * 设置文件访问密钥.
      */
     public function setFileSecret($str)
     {
@@ -221,31 +230,37 @@ class UpYun
     }
 
     /**
-     * 连接签名方法
+     * 连接签名方法.
+     *
      * @param $method string 请求方式 {GET, POST, PUT, DELETE}
+     *
      * @return string 签名字符串
      */
     private function sign($method, $uri, $date, $length)
     {
         //$uri = urlencode($uri);
         $sign = "{$method}&{$uri}&{$date}&{$length}&{$this->_password}";
-        return 'UpYun ' . $this->_username . ':' . md5($sign);
+
+        return 'UpYun '.$this->_username.':'.md5($sign);
     }
 
     /**
-     * HTTP REQUEST 封装
-     * @param string $method HTTP REQUEST方法，包括PUT、POST、GET、OPTIONS、DELETE
-     * @param string $path 除Bucketname之外的请求路径，包括get参数
-     * @param array $headers 请求需要的特殊HTTP HEADERS
-     * @param array $body 需要POST发送的数据
-     * @param null $file_handle
-     * @return mixed
+     * HTTP REQUEST 封装.
+     *
+     * @param string $method      HTTP REQUEST方法，包括PUT、POST、GET、OPTIONS、DELETE
+     * @param string $path        除Bucketname之外的请求路径，包括get参数
+     * @param array  $headers     请求需要的特殊HTTP HEADERS
+     * @param array  $body        需要POST发送的数据
+     * @param null   $file_handle
+     *
      * @throws UpYunAuthorizationException
      * @throws UpYunException
      * @throws UpYunForbiddenException
      * @throws UpYunNotAcceptableException
      * @throws UpYunNotFoundException
      * @throws UpYunServiceUnavailable
+     *
+     * @return mixed
      */
     protected function _do_request($method, $path, $headers = null, $body = null, $file_handle = null)
     {
@@ -330,6 +345,7 @@ class UpYun
                 return $body;
             } else {
                 $data = $this->_getHeadersData($header_string);
+
                 return count($data) > 0 ? $data : true;
             }
         } else {
@@ -360,7 +376,7 @@ class UpYun
     }
 
     /**
-     * 处理HTTP HEADERS中返回的自定义数据
+     * 处理HTTP HEADERS中返回的自定义数据.
      *
      * @param string $text header字符串
      *
@@ -377,11 +393,12 @@ class UpYun
                 $items[trim($k)] = in_array(substr($k, 8, 5), array('width', 'heigh', 'frame')) ? intval($v) : trim($v);
             }
         }
+
         return $items;
     }
 
     /**
-     * 获取返回的错误信息
+     * 获取返回的错误信息.
      *
      * @param string $header_string
      *
@@ -391,7 +408,8 @@ class UpYun
     {
         list($status, $stash) = explode("\r\n", $header_string, 2);
         list($v, $code, $message) = explode(" ", $status, 3);
-        return $message . " X-Request-Id: " . $this->getXRequestId();
+
+        return $message." X-Request-Id: ".$this->getXRequestId();
     }
 
     private function setXRequestId($header_string)
@@ -400,7 +418,6 @@ class UpYun
         $this->x_request_id = isset($result[1]) ? $result[1] : '';
     }
 }
-
 
 class UpYunException extends Exception
 {
@@ -411,7 +428,7 @@ class UpYunException extends Exception
 
     public function __toString()
     {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+        return __CLASS__.": [{$this->code}]: {$this->message}\n";
     }
 }
 

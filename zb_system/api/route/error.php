@@ -1,8 +1,8 @@
 <?php
 /**
- * api
+ * api.
+ *
  * @author zsx<zsx@zsxsoft.com>
- * @package api/route/error
  * @php >= 5.2
  */
 set_error_handler(create_function('', ''));
@@ -13,8 +13,10 @@ set_exception_handler('api_exception_handler');
 register_shutdown_function('api_shutdown_error_handler');
 
 /**
- * api_format_exception
- * @param  ZBlogException &$zbe
+ * api_format_exception.
+ *
+ * @param ZBlogException &$zbe
+ *
  * @return true
  */
 function api_format_exception(&$zbe)
@@ -22,7 +24,6 @@ function api_format_exception(&$zbe)
     $code = $zbe->get_code($zbe->file, $zbe->line);
     $code = $code[$zbe->line - 1];
 
-    
     $traces = array();
     foreach (debug_backtrace() as $iInt => $sData) {
         if ($iInt <= 1) { // That's error trigger
@@ -31,7 +32,7 @@ function api_format_exception(&$zbe)
         $trace = array();
         $trace['file'] = isset($sData['file']) ? $sData['file'] : 'Callback';
         $trace['line'] = isset($sData['line']) ? $sData['line'] : '';
-        $trace['class'] = isset($sData['class']) ? $sData['class'] . $sData['type'] : "";
+        $trace['class'] = isset($sData['class']) ? $sData['class'].$sData['type'] : "";
         $trace['function'] = $sData['function'];
         if (isset($sData['line'])) {
             $fileContent = $zbe->get_code($sData['file'], $sData['line']);
@@ -43,9 +44,9 @@ function api_format_exception(&$zbe)
     }
 
     $requestData = array(
-        'get' => $_GET,
-        'post' => $_POST,
-        'cookie' => $_COOKIE
+        'get'    => $_GET,
+        'post'   => $_POST,
+        'cookie' => $_COOKIE,
     );
     unset($requestData['cookie']['password']);
 
@@ -62,17 +63,18 @@ function api_format_exception(&$zbe)
 }
 
 /**
- * api_error_handler
- * @param  integer $errno
- * @param  string $errstr
- * @param  string $errfile
- * @param  integer $errline
- * @param  array $errcontext
+ * api_error_handler.
+ *
+ * @param int    $errno
+ * @param string $errstr
+ * @param string $errfile
+ * @param int    $errline
+ * @param array  $errcontext
+ *
  * @return true
  */
 function api_error_handler($errno, $errstr, $errfile, $errline)
 {
-
     $zbe = ZBlogException::GetInstance();
     $zbe->ParseError($errno, $errstr, $errfile, $errline);
     //Http500();
@@ -80,8 +82,10 @@ function api_error_handler($errno, $errstr, $errfile, $errline)
 }
 
 /**
- * api_exception_handler
- * @param  array $exception
+ * api_exception_handler.
+ *
+ * @param array $exception
+ *
  * @return true
  */
 function api_exception_handler($exception)
@@ -95,7 +99,8 @@ function api_exception_handler($exception)
 }
 
 /**
- * register_shutdown_function
+ * register_shutdown_function.
+ *
  * @return true
  */
 function api_shutdown_error_handler()

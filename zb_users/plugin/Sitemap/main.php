@@ -6,14 +6,19 @@ require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
 
-if (!$zbp->CheckPlugin('Sitemap')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckPlugin('Sitemap')) {
+    $zbp->ShowError(48);
+    die();
+}
 
 $blogtitle = 'SitemapXML生成器';
 
 if (count($_POST) > 0) {
-
     $xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><urlset />');
     $xml->addAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
     $url = $xml->addChild('url');
@@ -66,18 +71,18 @@ if (count($_POST) > 0) {
         }
     }
 
-    file_put_contents($zbp->path . 'sitemap.xml', $xml->asXML());
+    file_put_contents($zbp->path.'sitemap.xml', $xml->asXML());
 
     $zbp->SetHint('good');
     Redirect($_SERVER["HTTP_REFERER"]);
 }
 
-require $blogpath . 'zb_system/admin/admin_header.php';
-require $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath.'zb_system/admin/admin_header.php';
+require $blogpath.'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
   <div class="SubMenu">
 
   </div>
@@ -107,7 +112,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <table border="1" class="tableFull tableBorder">
 <tr>
 	<th class="td20">sitemap.xml地址：</td>
-	<th><p><?php echo $zbp->host;?>sitemap.xml</p></td>
+	<th><p><?php echo $zbp->host; ?>sitemap.xml</p></td>
 </tr>
 <tr>
 	<td class="td20">向Google提交：</td>
@@ -122,13 +127,13 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 	</form>
 	<script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Sitemap/logo.png';?>");</script>
+	<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost.'zb_users/plugin/Sitemap/logo.png'; ?>");</script>
   </div>
 </div>
 
 
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath.'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>

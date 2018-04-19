@@ -20,12 +20,12 @@ $blogtitle = 'Z-Blog角色分配器';
 
 if (!isset($_GET['id'])) {
     if (count($_POST) > 0) {
-        Redirect('./user.php?id=' . $_POST['userid']);
+        Redirect('./user.php?id='.$_POST['userid']);
     }
 }
 //var_dump($_POST);die;
 if (count($_POST) > 0) {
-    $userid = 'User' . $_GET['id'];
+    $userid = 'User'.$_GET['id'];
     $useractions = array();
     foreach ($_POST as $key => $value) {
         if ($value === '-1') {
@@ -37,15 +37,15 @@ if (count($_POST) > 0) {
     $zbp->Config('Howl')->$userid = $useractions;
     $zbp->SaveConfig('Howl');
     $zbp->SetHint('good');
-    Redirect('./user.php?id=' . $_GET['id']);
+    Redirect('./user.php?id='.$_GET['id']);
 }
 
-require $blogpath . 'zb_system/admin/admin_header.php';
-require $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath.'zb_system/admin/admin_header.php';
+require $blogpath.'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
   <div class="SubMenu" style="display: block;"><a href="main.php"><span class="m-left">系统群组设置</span></a><a href="user.php"><span class="m-left m-now">单独用户设置</span></a></div>
   <div id="divMain2">
     <form id="edit2" name="edit2" method="post" action="#">
@@ -54,19 +54,19 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 if (!isset($_GET['id'])) {
     echo '<select name="userid">';
     foreach ($zbp->members as $key => $value) {
-            $userid = 'User' . $key;
-            $count = Count($zbp->Config('Howl')->$userid);
+        $userid = 'User'.$key;
+        $count = count($zbp->Config('Howl')->$userid);
         if ($count > 0) {
             $count = " (已设置{$count}项)";
         } else {
             $count = '';
         }
-            echo '<option value="' . $key . '" >' . $zbp->members[$key]->Name . $count  .'</option>';
+        echo '<option value="'.$key.'" >'.$zbp->members[$key]->Name.$count.'</option>';
     }
     echo '</select>';
     echo '<input type="submit" class="button" value="选择用户" />';
 } else {
-    echo '当前用户：<b>' . $zbp->GetMemberByID($_GET['id'])->Name . '</b>';
+    echo '当前用户：<b>'.$zbp->GetMemberByID($_GET['id'])->Name.'</b>';
 }
     echo '<hr/>';
 
@@ -83,7 +83,7 @@ if (!isset($_GET['id'])) {
     
 <?php
 if (isset($_GET['id'])) {
-    $userid = 'User' . $_GET['id'];
+    $userid = 'User'.$_GET['id'];
     if ($zbp->Config('Howl')->HasKey($userid)) {
         $useractions = $zbp->Config('Howl')->$userid;
     } else {
@@ -92,7 +92,7 @@ if (isset($_GET['id'])) {
 
     foreach ($useractions as $key => $value) {
         echo '<tr>';
-        echo '<th>' . $key . '</th><th><input name="' . $key .'" style="" type="text" value="'.(int) $value.'" class="checkbox"/></th><th><input type="submit" onclick="$(this).parent().parent().find(\'input:text\').val(-1);$(\'#edit\').submit();" class="button" value="删除" /></th>';
+        echo '<th>'.$key.'</th><th><input name="'.$key.'" style="" type="text" value="'.(int) $value.'" class="checkbox"/></th><th><input type="submit" onclick="$(this).parent().parent().find(\'input:text\').val(-1);$(\'#edit\').submit();" class="button" value="删除" /></th>';
         echo '</tr>';
     }
     echo '<tr>';
@@ -118,13 +118,13 @@ if (isset($_GET['id'])) {
 
     </script>
     <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Howl/logo.png';?>");</script> 
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost.'zb_users/plugin/Howl/logo.png'; ?>");</script> 
   </div>
 </div>
 
 
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath.'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>

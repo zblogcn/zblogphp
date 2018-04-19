@@ -3,7 +3,7 @@ require '../../../../../zb_system/function/c_system_base.php';
 require '../../../../../zb_system/function/c_system_admin.php';
 require '../../zbpdk_include.php';
 header("Cache-Control: no-cache, must-revalidate");
-header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Pragma: no-cache");
 
 $zbp->Load();
@@ -33,10 +33,10 @@ if (isset($_GET['act'])) {
                 plugininterface_getall();
             }
 
-            echo '<table width="100%"><tr><td height="40">挂接口数量（共' . count($GLOBALS['zbdk_interface_defined_plugins']['filter']) . '个）</td></tr>';
+            echo '<table width="100%"><tr><td height="40">挂接口数量（共'.count($GLOBALS['zbdk_interface_defined_plugins']['filter']).'个）</td></tr>';
             foreach ($GLOBALS['zbdk_interface_defined_plugins']['filter'] as $temp) {
-                echo '<tr onclick="show_code(\'' . $temp['orig'] . '\',$(this).attr(\'_interface\'),this)" _interface="' . $temp['interface_name'] . '">';
-                echo '<td height="40">' . TransferHTML($temp['output'], "[html-format]") . '</td></tr>';
+                echo '<tr onclick="show_code(\''.$temp['orig'].'\',$(this).attr(\'_interface\'),this)" _interface="'.$temp['interface_name'].'">';
+                echo '<td height="40">'.TransferHTML($temp['output'], "[html-format]").'</td></tr>';
             }
             echo '</table>';
             exit();
@@ -50,13 +50,13 @@ if (isset($_GET['act'])) {
     }
 }
 
-require $blogpath . 'zb_system/admin/admin_header.php';
+require $blogpath.'zb_system/admin/admin_header.php';
 ?>
 <script type="text/javascript">
 <?php
 $defined_interface = array(
-    "action" => array(),
-    "filter" => array(),
+    "action"   => array(),
+    "filter"   => array(),
     "response" => array(),
 );
 if (isset($hooks)) {
@@ -67,15 +67,15 @@ if (isset($hooks)) {
 
 foreach ($zbpdk_allhooks as $temp_name => $temp_value) {
     if (preg_match("/^(Action|Filter|Response)_/i", $temp_name, $matches)) {
-        array_push($defined_interface[strtolower($matches[1])], '"' . $temp_name . '"');
+        array_push($defined_interface[strtolower($matches[1])], '"'.$temp_name.'"');
     }
 }
 
 ?>
 var defined_interface = {
-    "action":[<?php echo implode(",", $defined_interface['action']);?>],
-    "filter":["Filter_ZBPDK_Display_All",<?php echo implode(",", $defined_interface['filter']);?>],
-    "response":[<?php echo implode(",", $defined_interface['response']);?>],
+    "action":[<?php echo implode(",", $defined_interface['action']); ?>],
+    "filter":["Filter_ZBPDK_Display_All",<?php echo implode(",", $defined_interface['filter']); ?>],
+    "response":[<?php echo implode(",", $defined_interface['response']); ?>],
 }
 function write_list(type_name)
 {
@@ -96,12 +96,12 @@ function show_code(func_name,if_name,tr_obj)
 td,th{text-indent:0}
 </style>
 <?php
-require $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath.'zb_system/admin/admin_top.php';
 ?>
 
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
-  <div class="SubMenu"><?php echo $zbpdk->submenu->export('PluginInterface');?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
+  <div class="SubMenu"><?php echo $zbpdk->submenu->export('PluginInterface'); ?></div>
   <div id="divMain2">
     <form id="form1" onSubmit="return false">
       <label for="interface">输入接口名</label>
@@ -139,10 +139,10 @@ $(document).ready(function() {
 });
 
 ActiveTopMenu('zbpdk');
-AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png';?>");
+AddHeaderIcon("<?php echo $bloghost.'zb_users/plugin/ZBPDK/logo.png'; ?>");
 
 </script>
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath.'zb_system/admin/admin_footer.php';
 RunTime();
 ?>

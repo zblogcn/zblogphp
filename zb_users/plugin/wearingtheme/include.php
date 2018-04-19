@@ -1,22 +1,24 @@
 <?php
+
 RegisterPlugin("wearingtheme", "ActivePlugin_wearingtheme");
 
-function ActivePlugin_wearingtheme() {
+function ActivePlugin_wearingtheme()
+{
     Add_Filter_Plugin('Filter_Plugin_Index_Begin', 'wearingtheme_index_begin');
 }
 
-function wearingtheme_index_begin() {
-
+function wearingtheme_index_begin()
+{
     global $zbp;
     global $usersdir;
 
-    $app = new App;
+    $app = new App();
     $theme = GetVars('theme', 'GET');
     if ($theme == '') {
         $theme = GetVars('theme', 'COOKIE');
     }
 
-    $dir = $usersdir . 'theme/' . $theme;
+    $dir = $usersdir.'theme/'.$theme;
 
     if ($theme == '') {
         return;
@@ -40,14 +42,13 @@ function wearingtheme_index_begin() {
         break;
     }
 
-    if (is_readable($filename = $dir . '/include.php')) {
+    if (is_readable($filename = $dir.'/include.php')) {
         require $filename;
         if (isset($GLOBALS['plugins'][$theme])) {
             $func_name = $GLOBALS['plugins'][$theme];
             if (function_exists($func_name)) {
                 $func_name();
             }
-
         }
     }
 
@@ -66,13 +67,12 @@ function wearingtheme_index_begin() {
 
         二、主题从APP上传到theme
     */
-
 }
 
-function InstallPlugin_wearingtheme() {
-
+function InstallPlugin_wearingtheme()
+{
 }
 
-function UninstallPlugin_wearingtheme() {
-
+function UninstallPlugin_wearingtheme()
+{
 }

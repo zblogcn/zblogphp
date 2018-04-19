@@ -1,9 +1,12 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 /**
- * 上传类
- * @package Z-BlogPHP
- * @subpackage ClassLib/Upload 类库
+ * 上传类.
+ *
  * @property string Name
  * @property string FullFile
  * @property string Size
@@ -14,12 +17,8 @@
  * @property string MimeType
  * @property Member Author
  */
-class Upload extends Base
+class upload extends Base
 {
-
-    /**
-     *
-     */
     public function __construct()
     {
         global $zbp;
@@ -30,6 +29,7 @@ class Upload extends Base
 
     /**
      * @param string $extList
+     *
      * @return bool
      */
     public function CheckExtName($extList = '')
@@ -64,11 +64,11 @@ class Upload extends Base
      */
     public function DelFile()
     {
-
         foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_DelFile'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -81,6 +81,7 @@ class Upload extends Base
 
     /**
      * @param $tmp
+     *
      * @return bool
      */
     public function SaveFile($tmp)
@@ -91,25 +92,27 @@ class Upload extends Base
             $fpreturn = $fpname($tmp, $this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
 
-        if (!file_exists($zbp->usersdir . $this->Dir)) {
-            @mkdir($zbp->usersdir . $this->Dir, 0755, true);
+        if (!file_exists($zbp->usersdir.$this->Dir)) {
+            @mkdir($zbp->usersdir.$this->Dir, 0755, true);
         }
         if (PHP_SYSTEM === SYSTEM_WINDOWS) {
-            $fn = iconv("UTF-8", $zbp->lang['windows_character_set'] . "//IGNORE", $this->Name);
+            $fn = iconv("UTF-8", $zbp->lang['windows_character_set']."//IGNORE", $this->Name);
         } else {
             $fn = $this->Name;
         }
-        @move_uploaded_file($tmp, $zbp->usersdir . $this->Dir . $fn);
+        @move_uploaded_file($tmp, $zbp->usersdir.$this->Dir.$fn);
 
         return true;
     }
 
     /**
      * @param $str64
+     *
      * @return bool
      */
     public function SaveBase64File($str64)
@@ -120,12 +123,13 @@ class Upload extends Base
             $fpreturn = $fpname($str64, $this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
 
-        if (!file_exists($zbp->usersdir . $this->Dir)) {
-            @mkdir($zbp->usersdir . $this->Dir, 0755, true);
+        if (!file_exists($zbp->usersdir.$this->Dir)) {
+            @mkdir($zbp->usersdir.$this->Dir, 0755, true);
         }
         $s = base64_decode($str64);
         $this->Size = strlen($s);
@@ -134,13 +138,14 @@ class Upload extends Base
         } else {
             $fn = $this->Name;
         }
-        file_put_contents($zbp->usersdir . $this->Dir . $fn, $s);
+        file_put_contents($zbp->usersdir.$this->Dir.$fn, $s);
 
         return true;
     }
 
     /**
      * @param string $s
+     *
      * @return bool|string
      */
     public function Time($s = 'Y-m-d H:i:s')
@@ -165,6 +170,7 @@ class Upload extends Base
 
     /**
      * @param $name
+     *
      * @return Member|mixed|string
      */
     public function __get($name)
@@ -175,26 +181,27 @@ class Upload extends Base
                 return $fpname($this);
             }
 
-            return $zbp->host . 'zb_users/' . $this->Dir . rawurlencode($this->Name);
+            return $zbp->host.'zb_users/'.$this->Dir.rawurlencode($this->Name);
         }
         if ($name == 'Dir') {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Dir'] as $fpname => &$fpsignal) {
                 return $fpname($this);
             }
 
-            return 'upload/' . date('Y', $this->PostTime) . '/' . date('m', $this->PostTime) . '/';
+            return 'upload/'.date('Y', $this->PostTime).'/'.date('m', $this->PostTime).'/';
         }
         if ($name == 'FullFile') {
-            return $zbp->usersdir . $this->Dir . $this->Name;
+            return $zbp->usersdir.$this->Dir.$this->Name;
         }
         if ($name == 'Author') {
             return $zbp->GetMemberByID($this->AuthorID);
-        } 
+        }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Get'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $name);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }

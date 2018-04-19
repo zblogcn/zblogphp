@@ -32,9 +32,9 @@ if (count($_POST) > 0) {
             if (CheckRegExp(trim($value), '/^[a-zA-Z][a-zA-Z0-9_]{0,30}$/')) {
                 $array2[] = trim($value);
 
-                $name_meta_intro = $type . '_' . $value . '_intro';
-                $name_meta_type = $type . '_' . $value . '_type';
-                $name_meta_option = $type . '_' . $value . '_option';
+                $name_meta_intro = $type.'_'.$value.'_intro';
+                $name_meta_type = $type.'_'.$value.'_type';
+                $name_meta_option = $type.'_'.$value.'_option';
 
                 if (isset($_POST['meta_intro'][$key])) {
                     $single_meta_intro = $_POST['meta_intro'][$key];
@@ -53,7 +53,6 @@ if (count($_POST) > 0) {
     }
     $array2 = array_unique($array2);
 
-
     $zbp->Config('CustomMeta')->$type = $array2;
     $zbp->SaveConfig('CustomMeta');
 
@@ -61,24 +60,24 @@ if (count($_POST) > 0) {
     Redirect($_SERVER["HTTP_REFERER"]);
 }
 
-require $blogpath . 'zb_system/admin/admin_header.php';
-require $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath.'zb_system/admin/admin_header.php';
+require $blogpath.'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
   <div class="SubMenu">
  <a href="?type=post"><span class="m-left <?php if ($_GET['type'] == 'post') {
-        echo 'm-now';
+    echo 'm-now';
 }?>">文章自定义域</span></a>
  <a href="?type=category"><span class="m-left <?php if ($_GET['type'] == 'category') {
-        echo 'm-now';
+    echo 'm-now';
 }?>">分类自定义域</span></a>
  <a href="?type=tag"><span class="m-left <?php if ($_GET['type'] == 'tag') {
-        echo 'm-now';
+    echo 'm-now';
 }?>">标签自定义域</span></a>
  <a href="?type=member"><span class="m-left <?php if ($_GET['type'] == 'member') {
-        echo 'm-now';
+    echo 'm-now';
 }?>">用户自定义域</span></a>
   </div>
   <div id="divMain2">
@@ -101,15 +100,15 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 if (is_array($array)) {
     foreach ($array as $key => $value) {
-        $single_meta_intro = $type . '_' . $value . '_intro';
+        $single_meta_intro = $type.'_'.$value.'_intro';
         $single_meta_intro = $zbp->Config('CustomMeta')->$single_meta_intro;
-        $single_meta_type = $type . '_' . $value . '_type';
+        $single_meta_type = $type.'_'.$value.'_type';
         if (!$single_meta_type) {
             $single_meta_type = 'text';
         } else {
             $single_meta_type = $zbp->Config('CustomMeta')->$single_meta_type;
         }
-        $single_meta_option = $type . '_' . $value . '_option';
+        $single_meta_option = $type.'_'.$value.'_option';
         $single_meta_option = $zbp->Config('CustomMeta')->$single_meta_option;
         $distr = 'display:none';
         if ($single_meta_type == 'radio' || $single_meta_type == 'checkbox') {
@@ -117,15 +116,15 @@ if (is_array($array)) {
         }
         echo '<tr>';
         echo '<td style=\'width:65%\'><p>名称：<input type="text" style="width:84%" name="meta[]" value="'.$value.'" /></p>';
-        echo '<p>说明：<input type="text" style="width:84%" name="meta_intro[]" value="'. $single_meta_intro .'" /></p>';
+        echo '<p>说明：<input type="text" style="width:84%" name="meta_intro[]" value="'.$single_meta_intro.'" /></p>';
         echo '<p>类型：<select style="width:85%" name="meta_type[]">';
-        echo '<option value="text"     '.($single_meta_type == 'text'    ? 'selected="selected"' : '').'>单行文本框（默认）</option>';
+        echo '<option value="text"     '.($single_meta_type == 'text' ? 'selected="selected"' : '').'>单行文本框（默认）</option>';
         echo '<option value="textarea" '.($single_meta_type == 'textarea' ? 'selected="selected"' : '').'>多行文本框</option>';
-        echo '<option value="bool"     '.($single_meta_type == 'bool'    ? 'selected="selected"' : '').'>On/Off按钮</option>';
-        echo '<option value="radio"    '.($single_meta_type == 'radio'   ? 'selected="selected"' : '').'>单选框</option>';
+        echo '<option value="bool"     '.($single_meta_type == 'bool' ? 'selected="selected"' : '').'>On/Off按钮</option>';
+        echo '<option value="radio"    '.($single_meta_type == 'radio' ? 'selected="selected"' : '').'>单选框</option>';
         echo '<option value="checkbox" '.($single_meta_type == 'checkbox' ? 'selected="selected"' : '').'>多选框</option>';
         echo '</select></p>';
-        echo '<p style="'. $distr .'">选项：<input style="width:84%" name="meta_option[]"  value="'.htmlspecialchars($single_meta_option).'" /></p>';
+        echo '<p style="'.$distr.'">选项：<input style="width:84%" name="meta_option[]"  value="'.htmlspecialchars($single_meta_option).'" /></p>';
         echo '</td>';
         echo '<td><p>';
         if ($type == 'post') {
@@ -141,9 +140,9 @@ if (is_array($array)) {
             echo '文章页模板调用标签：{{$article.Author.Metas.'.$value.'}<br/> 作者页调用标签：{$author.Metas.'.$value.'}<br/>php调用形式:<br/>$article->Author->Metas->'.$value.';<br/>$zbp->members[<abbr title="请替换成相应的用户ID">?</abbr>]->Metas->'.$value.';<br/>';
         }
 
-            echo '</p></td>';
-            echo '<td><p><input type="submit" value="删除" onclick="$(this).parent().parent().parent().remove();" /></p></td>';
-            echo '</tr>';
+        echo '</p></td>';
+        echo '<td><p><input type="submit" value="删除" onclick="$(this).parent().parent().parent().remove();" /></p></td>';
+        echo '</tr>';
     }
 }
 
@@ -165,7 +164,7 @@ if (is_array($array)) {
 
 <script type="text/javascript">
     ActiveLeftMenu("aPluginMng");
-    AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/CustomMeta/logo.png';?>");
+    AddHeaderIcon("<?php echo $bloghost.'zb_users/plugin/CustomMeta/logo.png'; ?>");
 
     $("select").change(function () {
       var str = $(this).find("option:selected").val();
@@ -229,7 +228,7 @@ $(function(){
 });
 </script>	
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath.'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>

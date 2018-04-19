@@ -1,11 +1,10 @@
 <?php
 
-#注册插件
+//注册插件
 RegisterPlugin("Pad", "ActivePlugin_Pad");
 
 function ActivePlugin_Pad()
 {
-
     Add_Filter_Plugin('Filter_Plugin_Index_Begin', 'Pad_Main');
     Add_Filter_Plugin('Filter_Plugin_Cmd_Begin', 'Pad_Template');
 }
@@ -14,7 +13,7 @@ function Pad_Template()
 {
     global $zbp, $action;
     if (GetVars('mod', 'GET') == 'pad') {
-        $zbp->template->SetPath($zbp->usersdir . 'plugin/Pad/compile/');
+        $zbp->template->SetPath($zbp->usersdir.'plugin/Pad/compile/');
     }
 }
 
@@ -43,7 +42,7 @@ function Pad_Main()
         die;
     }
     if (GetVars('mod', 'GET') == 'pc') {
-        return null;
+        return;
     }
 
     $Pad_List = '/android|iphone|ipad|windows\sphone|kindle|gt\-p|gt\-n|rim\stablet|opera|meego/i';
@@ -78,7 +77,7 @@ function Pad_Login()
 
     Pad_Pre();
 
-    $article = new Post;
+    $article = new Post();
     $article->Title = '登录';
     $article->IsLock = true;
     $article->Type = ZC_POST_TYPE_PAGE;
@@ -114,16 +113,16 @@ function Pad_Pre()
     $zbp->option['ZC_DATE_REGEX'] = '{%host%}?mod=pad&date={%date%}&page={%page%}';
     $zbp->option['ZC_INDEX_REGEX'] = '{%host%}?mod=pad&page={%page%}';
 
-    $zbp->template->SetPath($zbp->usersdir . 'plugin/Pad/compile/');
+    $zbp->template->SetPath($zbp->usersdir.'plugin/Pad/compile/');
 
     $sidebar_pad = array();
 
-    $mod = new Module;
+    $mod = new Module();
     $mod->Name = '控制面板';
     $mod->Type = 'ul';
     $s = '';
     if ($zbp->user->ID > 0) {
-        $mod->Name = '欢迎' . $zbp->user->Name;
+        $mod->Name = '欢迎'.$zbp->user->Name;
         $s .= '<li><a href="?mod=pad&amp;act=logout">退出登录</a></li>';
     } else {
         $s .= '<li><a href="?mod=pad&amp;act=login">登录管理</a></li>';
@@ -131,10 +130,10 @@ function Pad_Pre()
     $mod->Content = $s;
     $sidebar_pad[] = $mod;
 
-    $mod = new Module;
+    $mod = new Module();
     $s = '';
     foreach ($zbp->categorys as $key => $value) {
-        $s .= '<li><a href="' . $value->Url . '">' . $value->Name . '</a></li>';
+        $s .= '<li><a href="'.$value->Url.'">'.$value->Name.'</a></li>';
     }
     $mod->Type = 'ul';
     $mod->Name = '分类';
@@ -142,7 +141,7 @@ function Pad_Pre()
     $mod->Content = $s;
     $sidebar_pad[] = $mod;
 
-    $mod = new Module;
+    $mod = new Module();
     $mod->Name = '搜索';
     $mod->Content = '<form name="search" method="get" action="#"><input type="hidden" name="mod" value="pad" /><input type="text" name="q" size="11" /> <input type="submit" value="搜索" /></form>';
     $sidebar_pad[] = $mod;
@@ -155,7 +154,7 @@ function Pad_Export()
     global $zbp;
 
     if ($zbp->currenturl == $zbp->cookiespath ||
-        $zbp->currenturl == $zbp->cookiespath . 'index.php') {
+        $zbp->currenturl == $zbp->cookiespath.'index.php') {
         Pad_Pre();
         $zbp->template->SetTemplate('index');
         ViewList(null, null, null, null, null);
@@ -190,8 +189,8 @@ function Pad_Search()
         Redirect('?mod=pad');
     }
 
-    $article = new Post;
-    $article->Title = $lang['msg']['search'] . '“' . GetVars('q', 'GET') . '”';
+    $article = new Post();
+    $article->Title = $lang['msg']['search'].'“'.GetVars('q', 'GET').'”';
     $article->IsLock = true;
     $article->Type = ZC_POST_TYPE_PAGE;
 
@@ -213,8 +212,8 @@ function Pad_Search()
     );
 
     foreach ($array as $a) {
-        $article->Content .= '<p><br/>' . $a->Title . '<br/>';
-        $article->Content .= '<a href="' . $a->Url . '">' . $a->Url . '</a></p>';
+        $article->Content .= '<p><br/>'.$a->Title.'<br/>';
+        $article->Content .= '<a href="'.$a->Url.'">'.$a->Url.'</a></p>';
     }
 
     $zbp->template->SetTags('title', $article->Title);

@@ -1,4 +1,5 @@
 <?php
+
 require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 
@@ -18,7 +19,7 @@ if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
 }
 Totoro_init();
 $act = GetVars('act', 'GET');
-$functionName = "Totoro_Action_" . ucfirst($act);
+$functionName = "Totoro_Action_".ucfirst($act);
 if (function_exists($functionName)) {
     $functionName();
 } else {

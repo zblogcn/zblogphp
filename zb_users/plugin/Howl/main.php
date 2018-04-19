@@ -39,7 +39,7 @@ if (count($_POST) > 0) {
 
     foreach ($group_key as $groupkey) {
         foreach ($actions as $key => $value) {
-            $check = GetVars('Group' . $groupkey . '_' . $key, 'POST');
+            $check = GetVars('Group'.$groupkey.'_'.$key, 'POST');
             $a[$groupkey][$key] = (int) $check;
         }
     }
@@ -55,12 +55,12 @@ if (count($_POST) > 0) {
     Redirect('./main.php');
 }
 
-require $blogpath . 'zb_system/admin/admin_header.php';
-require $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath.'zb_system/admin/admin_header.php';
+require $blogpath.'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
   <div class="SubMenu" style="display: block;"><a href="main.php"><span class="m-left m-now">系统群组设置</span></a><a href="user.php"><span class="m-left">单独用户设置</span></a></div>
   <div id="divMain2">
     <form id="edit" name="edit" method="post" action="#">
@@ -83,25 +83,23 @@ function MakeInput($group, $key)
     $zbp->user->Level = $group;
     $check = (int) $zbp->CheckRights($key);
 
-    return '<input name="Group'.$group.'_' . $key .'" style="" type="text" value="'.$check.'" class="checkbox"/>';
+    return '<input name="Group'.$group.'_'.$key.'" style="" type="text" value="'.$check.'" class="checkbox"/>';
 }
 
 foreach ($actions as $key => $value) {
-?>
+    ?>
 
 <tr>
-<td class="tdCenter"><?php echo $key?>(<b><?php echo Howl_GetRightName($key);?></b>)</td>
+<td class="tdCenter"><?php echo $key?>(<b><?php echo Howl_GetRightName($key); ?></b>)</td>
 <?php
 foreach ($group_key as $groupkey) {
-    echo '<td class="tdCenter">';
-    echo MakeInput($groupkey, $key);
-    echo "</td>\r\n";
-}
-?>
+        echo '<td class="tdCenter">';
+        echo MakeInput($groupkey, $key);
+        echo "</td>\r\n";
+    } ?>
 </tr>
 <?php
 }
-
 
 ?>
 </table>
@@ -120,13 +118,13 @@ foreach ($group_key as $groupkey) {
 
     </script>
     <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Howl/logo.png';?>");</script> 
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost.'zb_users/plugin/Howl/logo.png'; ?>");</script> 
   </div>
 </div>
 
 
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath.'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>

@@ -1,14 +1,13 @@
 <?php
 /**
- * api
- * @package api
+ * api.
+ *
  * @php >= 5.2
+ *
  * @author zsx<zsx@zsxsoft.com>
  */
-
-
 require '../function/c_system_base.php';
-require dirname(__FILE__) . '/api.php';
+require dirname(__FILE__).'/api.php';
 
 $apiRealRouteUrl = "";
 
@@ -18,7 +17,6 @@ api_index_begin();
 
 function api_index_begin()
 {
-
     global $apiRealRouteUrl;
     global $zbp;
     if ($apiRealRouteUrl == "") {
@@ -37,9 +35,9 @@ function api_zbp_load_pre()
     global $apiRealRouteUrl;
     global $zbp;
 
-    $requestUri = str_replace('index.php?', '', GetVars('HTTP_HOST', 'SERVER') . GetVars('REQUEST_URI', 'SERVER'));
+    $requestUri = str_replace('index.php?', '', GetVars('HTTP_HOST', 'SERVER').GetVars('REQUEST_URI', 'SERVER'));
 
-    $removedHttpHost = preg_replace('/^http.+\/\//', '', $bloghost) . 'zb_system/api/';
+    $removedHttpHost = preg_replace('/^http.+\/\//', '', $bloghost).'zb_system/api/';
 
     $apiRealRouteUrl = str_replace($removedHttpHost, '', $requestUri);
 

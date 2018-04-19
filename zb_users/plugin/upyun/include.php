@@ -1,7 +1,7 @@
 <?php
 
 include_once dirname(__FILE__).'/function.php';
-#注册插件
+//注册插件
 RegisterPlugin('upyun', 'ActivePlugin_upyun');
 
 function ActivePlugin_upyun()
@@ -16,25 +16,25 @@ function ActivePlugin_upyun()
 function upyun($tmp, &$upload)
 {
     global $zbp;
-    $bucket = $zbp->Config('upyun')->upyun_bucket;//云文件夹
+    $bucket = $zbp->Config('upyun')->upyun_bucket; //云文件夹
     // $filename = date('Ymd', time()).mt_rand(1000, 9999).'_'.mt_rand(0, 10000).'.'.GetFileExt($upload->SourceName);
     // $dir = 'zb_users/upload/'.date('Y/m/', time());
     // $object = $dir.$filename;    //构造云文件名
     // $file_path = $zbp->path.$object;//本地文件
-    if (!file_exists($zbp->usersdir . $upload->Dir)) {
-        @mkdir($zbp->usersdir . $upload->Dir, 0755, true);
+    if (!file_exists($zbp->usersdir.$upload->Dir)) {
+        @mkdir($zbp->usersdir.$upload->Dir, 0755, true);
     }
 
     if (PHP_SYSTEM === SYSTEM_WINDOWS) {
-        $fn = iconv("UTF-8", $zbp->lang['windows_character_set'] . "//IGNORE", $upload->Name);
+        $fn = iconv("UTF-8", $zbp->lang['windows_character_set']."//IGNORE", $upload->Name);
     } else {
         $fn = $upload->Name;
     }
 
-    @move_uploaded_file($tmp, $zbp->usersdir . $upload->Dir . $fn);//上传到本地
+    @move_uploaded_file($tmp, $zbp->usersdir.$upload->Dir.$fn); //上传到本地
 
-    $object=str_replace($zbp->host, '/', $upload->Url);
-    $file_path=str_replace($zbp->host, $zbp->path, $upload->Url);
+    $object = str_replace($zbp->host, '/', $upload->Url);
+    $file_path = str_replace($zbp->host, $zbp->path, $upload->Url);
     $operator_name = $zbp->Config('upyun')->upyun_operator_name;
     $operator_password = $zbp->Config('upyun')->upyun_operator_password;
 
@@ -45,9 +45,9 @@ function upyun($tmp, &$upload)
     $upyun->writeFile('/'.$object, $file_handler, true);
     fclose($file_handler);
 
-
     $GLOBALS['Filter_Plugin_Upload_SaveFile']['upyun'] = PLUGIN_EXITSIGNAL_RETURN;
     $GLOBALS['Filter_Plugin_Upload_SaveBase64File']['upyun'] = PLUGIN_EXITSIGNAL_RETURN;
+
     return true;
 }
 
@@ -87,6 +87,7 @@ function upyun_Del(&$upload)
     }
 
     $GLOBALS['Filter_Plugin_Upload_DelFile']['upyun_Del'] = PLUGIN_EXITSIGNAL_RETURN;
+
     return true;
 }
 function upyun_replace(&$template)

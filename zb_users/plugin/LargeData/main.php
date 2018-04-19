@@ -17,19 +17,19 @@ if (!$zbp->CheckPlugin('LargeData')) {
 }
 
 if (GetVars('build_post_index', 'POST') === '0') {
-    $zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre . "log_TISC ;");
-    $zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre . "log_PT ;");
-    $zbp->db->Query("ALTER TABLE " . $table['Post'] . " DROP INDEX  " . $zbp->db->dbpre . "log_TPISC ;");
-    $zbp->db->Query("ALTER TABLE " . $table['Post'] . " ADD INDEX  " . $zbp->db->dbpre . "log_LD_Title(log_Title) ;");
-    $zbp->db->Query("ALTER TABLE " . $table['Post'] . " ADD INDEX  " . $zbp->db->dbpre . "log_LD_PCATISID(log_PostTime,log_CateID,log_AuthorID,log_Type,log_IsTop,log_Status,log_ID) ;");
+    $zbp->db->Query("ALTER TABLE ".$table['Post']." DROP INDEX  ".$zbp->db->dbpre."log_TISC ;");
+    $zbp->db->Query("ALTER TABLE ".$table['Post']." DROP INDEX  ".$zbp->db->dbpre."log_PT ;");
+    $zbp->db->Query("ALTER TABLE ".$table['Post']." DROP INDEX  ".$zbp->db->dbpre."log_TPISC ;");
+    $zbp->db->Query("ALTER TABLE ".$table['Post']." ADD INDEX  ".$zbp->db->dbpre."log_LD_Title(log_Title) ;");
+    $zbp->db->Query("ALTER TABLE ".$table['Post']." ADD INDEX  ".$zbp->db->dbpre."log_LD_PCATISID(log_PostTime,log_CateID,log_AuthorID,log_Type,log_IsTop,log_Status,log_ID) ;");
     $zbp->SetHint('good');
     Redirect('./main.php');
 }
 
 if (GetVars('build_comment_index', 'POST') === '0') {
-    $zbp->db->Query("ALTER TABLE " . $table['Comment'] . " DROP INDEX  " . $zbp->db->dbpre . "comm_PT ;");
-    $zbp->db->Query("ALTER TABLE " . $table['Comment'] . " DROP INDEX  " . $zbp->db->dbpre . "comm_RIL ;");
-    $zbp->db->Query("ALTER TABLE " . $table['Comment'] . " ADD INDEX  " . $zbp->db->dbpre . "comm_LD_LRIID(comm_LogID,comm_RootID,comm_IsChecking,comm_ID) ;");
+    $zbp->db->Query("ALTER TABLE ".$table['Comment']." DROP INDEX  ".$zbp->db->dbpre."comm_PT ;");
+    $zbp->db->Query("ALTER TABLE ".$table['Comment']." DROP INDEX  ".$zbp->db->dbpre."comm_RIL ;");
+    $zbp->db->Query("ALTER TABLE ".$table['Comment']." ADD INDEX  ".$zbp->db->dbpre."comm_LD_LRIID(comm_LogID,comm_RootID,comm_IsChecking,comm_ID) ;");
     $zbp->SetHint('good');
     Redirect('./main.php');
 }
@@ -45,7 +45,7 @@ if (GetVars('convert_post2tag_table', 'POST') === '0') {
 }
 
 if (count($_POST) > 0) {
-    $zbp->option['ZC_LARGE_DATA'] = (boolean) $_POST['ZC_LARGE_DATA'];
+    $zbp->option['ZC_LARGE_DATA'] = (bool) $_POST['ZC_LARGE_DATA'];
     $zbp->SaveOption();
     $zbp->SetHint('good');
     Redirect('./main.php');
@@ -53,20 +53,20 @@ if (count($_POST) > 0) {
 
 $blogtitle = 'LargeData';
 
-require $blogpath . 'zb_system/admin/admin_header.php';
-require $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath.'zb_system/admin/admin_header.php';
+require $blogpath.'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
 
-  <div class="divHeader2"><?php echo $blogtitle;?></div>
+  <div class="divHeader2"><?php echo $blogtitle; ?></div>
 <div class="SubMenu"></div>
   <div id="divMain2">
 <form method="post" action="main.php">
 <?php
 echo '<table style="padding:0px;margin:0px;width:100%;">';
 echo '<tr><td class="td25"><p><b>开启大数据支持</b></p></td>
-	<td><p><input id="ZC_LARGE_DATA" name="ZC_LARGE_DATA" type="text" value="' . $zbp->option['ZC_LARGE_DATA'] . '" class="checkbox"/></p></td></tr>';
+	<td><p><input id="ZC_LARGE_DATA" name="ZC_LARGE_DATA" type="text" value="'.$zbp->option['ZC_LARGE_DATA'].'" class="checkbox"/></p></td></tr>';
 echo '</table>';
 ?>
      <hr/>
@@ -119,11 +119,11 @@ echo '</table>';
 
 
     <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/LargeData/logo.png';?>");</script>
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost.'zb_users/plugin/LargeData/logo.png'; ?>");</script>
   </div>
 </div>
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath.'zb_system/admin/admin_footer.php';
 
 RunTime();
 ?>

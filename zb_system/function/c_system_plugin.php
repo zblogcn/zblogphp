@@ -1,5 +1,9 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
-/**
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+/*
  * 插件接口相关
  * 接口模式复制自Z-Blog ASP版
  * @package Z-BlogPHP
@@ -7,60 +11,62 @@
  * @copyright (C) RainbowSoft Studio
  */
 
-/**
+/*
  * 插件运行中断方式：''
  */
 define('PLUGIN_EXITSIGNAL_NONE', '');
-/**
+/*
  * 插件中断方式：return
  */
 define('PLUGIN_EXITSIGNAL_RETURN', 'return');
-/**
+/*
  * 插件中断方式：break
  */
 define('PLUGIN_EXITSIGNAL_BREAK', 'break');
 
-#定义总插件激活函数列表
+//定义总插件激活函数列表
 $GLOBALS['plugins'] = array();
 
-#定义总接口列表，1.5版启用，逐渐过度到hooks
+//定义总接口列表，1.5版启用，逐渐过度到hooks
 $GLOBALS['hooks'] = array();
 
 /**
- * 注册插件函数，由每个插件主动调用
- * @param string $strPluginName 插件ID
+ * 注册插件函数，由每个插件主动调用.
+ *
+ * @param string $strPluginName           插件ID
  * @param string $strPluginActiveFunction 插件激活时执行的函数名
+ *
  * @return void
  */
-
 function RegisterPlugin($strPluginName, $strPluginActiveFunction)
 {
-
     $GLOBALS['plugins'][$strPluginName] = $strPluginActiveFunction;
 }
 
 /**
  * 插件安装函数，只在插件安装时运行一次
+ *
  * @param string $strPluginName 插件ID
+ *
  * @return void
  */
 function InstallPlugin($strPluginName)
 {
-
-    if (function_exists($f = 'InstallPlugin_' . $strPluginName)) {
+    if (function_exists($f = 'InstallPlugin_'.$strPluginName)) {
         $f();
     }
 }
 
 /**
  * 插件删除函数，只在插件删除时运行一次
+ *
  * @param $strPluginName
+ *
  * @return void
  */
 function UninstallPlugin($strPluginName)
 {
-
-    if (function_exists($f = 'UninstallPlugin_' . $strPluginName) == true) {
+    if (function_exists($f = 'UninstallPlugin_'.$strPluginName) == true) {
         $f();
     }
 }
@@ -78,6 +84,7 @@ function DefinePluginFilter($strPluginFilter)
 
         return true;
     }
+
     return false;
 }
 
@@ -118,6 +125,7 @@ function RemovePluginFilter($strPluginFilter)
 
         return true;
     }
+
     return false;
 }
 
@@ -145,9 +153,11 @@ function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSI
     if (isset($GLOBALS['hooks'][$plugname])) {
         if (!isset($GLOBALS['hooks'][$plugname][$functionname])) {
             $GLOBALS['hooks'][$plugname][$functionname] = $exitsignal;
+
             return true;
         }
     }
+
     return false;
 }
 
@@ -159,13 +169,16 @@ function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSI
 'exitsignal:return,break,continue
 '*********************************************************
  */
-function Remove_Filter_Plugin($plugname, $functionname) {
+function Remove_Filter_Plugin($plugname, $functionname)
+{
     if (isset($GLOBALS['hooks'][$plugname])) {
         if (isset($GLOBALS['hooks'][$plugname][$functionname])) {
             unset($GLOBALS['hooks'][$plugname][$functionname]);
+
             return true;
         }
     }
+
     return false;
 }
 
@@ -180,8 +193,8 @@ function Remove_Filter_Plugin($plugname, $functionname) {
 //	$GLOBALS['hooks'][$plugname][]=$functionname;
 //}
 
-################################################################################################################
-#dubug,common里的
+//###############################################################################################################
+//dubug,common里的
 
 /*
 '**************************************************<
@@ -227,7 +240,7 @@ DefinePluginFilter('Filter_Plugin_Autoload');
  */
 DefinePluginFilter('Filter_Plugin_Logs');
 
-#DbSql类里的接口
+//DbSql类里的接口
 
 /*
 '**************************************************<
@@ -240,7 +253,7 @@ DefinePluginFilter('Filter_Plugin_Logs');
  */
 DefinePluginFilter('Filter_Plugin_DbSql_Filter');
 
-#ZBP类里的接口
+//ZBP类里的接口
 
 /*
 '**************************************************<
@@ -396,8 +409,8 @@ DefinePluginFilter('Filter_Plugin_Zbp_LoadManage');
  */
 DefinePluginFilter('Filter_Plugin_Zbp_Terminate');
 
-################################################################################################################
-#前台view,index
+//###############################################################################################################
+//前台view,index
 
 /*
 '**************************************************<
@@ -473,8 +486,8 @@ DefinePluginFilter('Filter_Plugin_Feed_Begin');
  */
 DefinePluginFilter('Filter_Plugin_Feed_End');
 
-################################################################################################################
-#CMD里的接口
+//###############################################################################################################
+//CMD里的接口
 
 /*
 '**************************************************<
@@ -498,8 +511,8 @@ DefinePluginFilter('Filter_Plugin_Cmd_Begin');
  */
 DefinePluginFilter('Filter_Plugin_Cmd_Ajax');
 
-################################################################################################################
-#后台里的接口
+//###############################################################################################################
+//后台里的接口
 
 /*
 '**************************************************<
@@ -523,7 +536,7 @@ DefinePluginFilter('Filter_Plugin_Login_Header');
  */
 DefinePluginFilter('Filter_Plugin_Other_Header');
 
-#c_system_misc里的接口
+//c_system_misc里的接口
 
 /*
 '**************************************************<
@@ -1020,7 +1033,6 @@ DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfType');
  */
 DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfMemberLevel');
 
-
 /*
 '**************************************************<
 '类型:Filter
@@ -1032,8 +1044,8 @@ DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfMemberLevel');
  */
 DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfCategories');
 
-################################################################################################################
-#Event里的接口
+//###############################################################################################################
+//Event里的接口
 /*
 '**************************************************<
 '类型:Filter
@@ -1474,8 +1486,8 @@ DefinePluginFilter('Filter_Plugin_DelArticle_Succeed');
  */
 DefinePluginFilter('Filter_Plugin_DelModule_Succeed');
 
-################################################################################################################
-#类里的接口
+//###############################################################################################################
+//类里的接口
 
 /*
 '**************************************************<
@@ -2027,7 +2039,6 @@ DefinePluginFilter('Filter_Plugin_Template_GetTemplate');
  */
 DefinePluginFilter('Filter_Plugin_Template_MakeTemplatetags');
 
-
 /*
 '**************************************************<
 '类型:Filter
@@ -2093,8 +2104,6 @@ DefinePluginFilter('Filter_Plugin_LargeData_GetList');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Xmlrpc_Begin');
-
-
 
 /*
 '**************************************************<

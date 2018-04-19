@@ -1,7 +1,10 @@
 <?php
-if(function_exists('ini_set'))ini_set('max_execution_time', '0');
 
-class Changyan_Handler
+if (function_exists('ini_set')) {
+    ini_set('max_execution_time', '0');
+}
+
+class changyan_Handler
 {
     const version = '1.1';
     public $value;
@@ -26,7 +29,7 @@ class Changyan_Handler
     public static function getInstance()
     {
         if (!(self::$instance instanceof self)) {
-            self::$instance = new self;
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -35,7 +38,7 @@ class Changyan_Handler
     //rt
     public function doPluginActionLinks($linkes, $file)
     {
-        array_unshift($links, '<a href="' . admin_url('admin.php?page=changyan_settings') . '">' . __('Settings') . '</a>');
+        array_unshift($links, '<a href="'.admin_url('admin.php?page=changyan_settings').'">'.__('Settings').'</a>');
     }
 
     //do nothing
@@ -86,7 +89,7 @@ class Changyan_Handler
             return $default_template;
         }
 
-        return dirname(__FILE__) . '/comments_sohu.php';
+        return dirname(__FILE__).'/comments_sohu.php';
     }
 
     public function setup()
@@ -97,7 +100,7 @@ class Changyan_Handler
         }
 
         //tips
-        include dirname(__FILE__) . '/setup.php';
+        include dirname(__FILE__).'/setup.php';
     }
 
     public function configure()
@@ -108,7 +111,7 @@ class Changyan_Handler
         }
 
         //tips
-        include dirname(__FILE__) . '/configure.php';
+        include dirname(__FILE__).'/configure.php';
     }
 
     public function analysis()
@@ -119,7 +122,7 @@ class Changyan_Handler
         }
 
         //tips
-        include dirname(__FILE__) . '/analysis.php';
+        include dirname(__FILE__).'/analysis.php';
     }
 
     public function settings()
@@ -129,12 +132,13 @@ class Changyan_Handler
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
 
-        include dirname(__FILE__) . '/settings.php';
+        include dirname(__FILE__).'/settings.php';
 
         //synchronization
         //$this->sync2Wordpress();
         //$this->sync2Changyan();
     }
+
     //deprecated
     public function account()
     {
@@ -143,7 +147,7 @@ class Changyan_Handler
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
 
-        include dirname(__FILE__) . '/account.php';
+        include dirname(__FILE__).'/account.php';
     }
 
     public function sync2Wordpress()
@@ -155,6 +159,7 @@ class Changyan_Handler
     {
         $this->changyanSynchronizer->sync2Changyan();
     }
+
     //deprecated
     public function saveScript()
     {
@@ -166,8 +171,9 @@ class Changyan_Handler
 
         die($aScript);
     }
-    
-    public function saveAppIDKey() {
+
+    public function saveAppIDKey()
+    {
         $this->saveAppID();
         $this->saveAppKey();
     }
@@ -180,7 +186,7 @@ class Changyan_Handler
         $appID = $_POST['appID'];
         $appID = trim($appID);
         $appIDArray = array(
-            'app_id' => $appID
+            'app_id' => $appID,
         );
         //get conf using appID through http://changyan.sohu.com/getConf?app_id=cyqqryvMq
         $aUrl = $this->changyanSynchronizer->buildURL($appIDArray, "http://changyan.sohu.com/getConf");
@@ -197,10 +203,9 @@ s.charset = 'utf-8';
 s.src =  'http://assets.changyan.sohu.com/upload/changyan.js?conf='+ conf +'&appid=' + appid;
 h.insertBefore(s,h.firstChild);
 })()</script>";
-        $script = $scriptPart0 . $appID . $scriptPart1 . $conf . $scriptPart2;
+        $script = $scriptPart0.$appID.$scriptPart1.$conf.$scriptPart2;
         $this->setOption('changyan_appID', $appID);
         $this->setOption('changyan_script', $script);
-
     }
 
     public function saveAppKey()
@@ -210,7 +215,6 @@ h.insertBefore(s,h.firstChild);
         $appKey = trim($appKey);
         //save
         $this->setOption('changyan_appKey', $appKey);
-
     }
 
     public function setCron()

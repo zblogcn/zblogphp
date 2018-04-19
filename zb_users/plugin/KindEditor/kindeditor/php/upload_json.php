@@ -1,6 +1,7 @@
 <?php
 /**
- * KindEditor for Z-BlogPHP
+ * KindEditor for Z-BlogPHP.
+ *
  * @author 未寒
  * @copyright (C) RainbowSoft Studio
  */
@@ -91,11 +92,11 @@ if (empty($_FILES) === false) {
     $file_ext = strtolower($file_ext);
     //检查扩展名
     if (in_array($file_ext, $ext_arr) === false) {
-        alert("上传文件扩展名是不允许的扩展名。\n只允许" . implode(",", $ext_arr) . "格式。");
+        alert("上传文件扩展名是不允许的扩展名。\n只允许".implode(",", $ext_arr)."格式。");
     }
 
-    $upload = new Upload;
-    $upload->Name = date("YmdHis") . '_' . rand(10000, 99999) . '.' . $file_ext;
+    $upload = new Upload();
+    $upload->Name = date("YmdHis").'_'.rand(10000, 99999).'.'.$file_ext;
     $upload->SourceName = $file_name;
     $upload->MimeType = $_FILES['imgFile']['type'];
     $upload->Size = $file_size;
@@ -112,7 +113,8 @@ if (empty($_FILES) === false) {
     exit;
 }
 
-function alert($msg) {
+function alert($msg)
+{
     header('Content-type: text/html; charset=UTF-8');
     echo json_encode(array('error' => 1, 'message' => $msg));
     exit;

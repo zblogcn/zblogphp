@@ -4,16 +4,22 @@ require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('x2013')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
+if (!$zbp->CheckPlugin('x2013')) {
+    $zbp->ShowError(48);
+    die();
+}
 $blogtitle = '主题配置';
-require $blogpath . 'zb_system/admin/admin_header.php';
-require $blogpath . 'zb_system/admin/admin_top.php';
+require $blogpath.'zb_system/admin/admin_header.php';
+require $blogpath.'zb_system/admin/admin_top.php';
 ?>
 <style>p{line-height:1.5em;padding:0.5em 0;}</style>
 <div id="divMain">
-	<div class="divHeader"><?php echo $blogtitle;?></div>
-  	<div class="SubMenu"><?php x2013_SubMenu(2);?></div>
+	<div class="divHeader"><?php echo $blogtitle; ?></div>
+  	<div class="SubMenu"><?php x2013_SubMenu(2); ?></div>
 	<div id="divMain2">
     <table width="100%" style='padding:0px;margin:0px;' cellspacing='0' cellpadding='0' class="tableBorder">
 	  <tr>
@@ -31,6 +37,6 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </div>
 <script type="text/javascript">ActiveTopMenu("topmenu_x2013");</script> 
 <?php
-require $blogpath . 'zb_system/admin/admin_footer.php';
+require $blogpath.'zb_system/admin/admin_footer.php';
 RunTime();
 ?>

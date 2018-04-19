@@ -1,5 +1,6 @@
 <?php
-#注册插件
+
+//注册插件
 RegisterPlugin("AdminColor", "ActivePlugin_AdminColor");
 
 DefinePluginFilter('Filter_Plugin_AdminColor_CSS_Pre');
@@ -18,12 +19,12 @@ function InstallPlugin_AdminColor()
 {
     global $zbp;
     if ($zbp->HasConfig('AdminColor') == false) {
-        $zbp->Config('AdminColor')->ColorID =  0;
-        $zbp->Config('AdminColor')->BlodColor =  (string) $GLOBALS['AdminColor_BlodColor'][0];
-        $zbp->Config('AdminColor')->NormalColor =  (string) $GLOBALS['AdminColor_NormalColor'][0];
-        $zbp->Config('AdminColor')->LightColor =  (string) $GLOBALS['AdminColor_LightColor'][0];
-        $zbp->Config('AdminColor')->HighColor =  (string) $GLOBALS['AdminColor_HighColor'][0];
-        $zbp->Config('AdminColor')->AntiColor =  (string) $GLOBALS['AdminColor_AntiColor'][0];
+        $zbp->Config('AdminColor')->ColorID = 0;
+        $zbp->Config('AdminColor')->BlodColor = (string) $GLOBALS['AdminColor_BlodColor'][0];
+        $zbp->Config('AdminColor')->NormalColor = (string) $GLOBALS['AdminColor_NormalColor'][0];
+        $zbp->Config('AdminColor')->LightColor = (string) $GLOBALS['AdminColor_LightColor'][0];
+        $zbp->Config('AdminColor')->HighColor = (string) $GLOBALS['AdminColor_HighColor'][0];
+        $zbp->Config('AdminColor')->AntiColor = (string) $GLOBALS['AdminColor_AntiColor'][0];
         $zbp->SaveConfig('AdminColor');
     }
 }
@@ -38,18 +39,17 @@ function AdminColor_Css()
 {
     global $zbp;
 
-    $aly='';
+    $aly = '';
     $f = get_included_files();
-    if (strpos( array_pop($f), 'admin_header.php')!==false) {
-        $aly='?aly';
+    if (strpos(array_pop($f), 'admin_header.php') !== false) {
+        $aly = '?aly';
     }
- 
-    echo '<link rel="stylesheet" type="text/css" href="' . $zbp->host . 'zb_users/plugin/AdminColor/css.php'.$aly.'"/>' . "\r\n";
 
+    echo '<link rel="stylesheet" type="text/css" href="'.$zbp->host.'zb_users/plugin/AdminColor/css.php'.$aly.'"/>'."\r\n";
 
     if ($zbp->Config('AdminColor')->ColorID != 10) {
-        echo '<script type="text/javascript">var lang_admincolor_closemenu = "' . $zbp->lang['AdminColor']['closemenu'] . '";var lang_admincolor_expandmenu = "' . $zbp->lang['AdminColor']['expandmenu'] . '"</script>' . "\r\n";
-        echo '<script src="' . $zbp->host . 'zb_users/plugin/AdminColor/menu.js" type="text/javascript"></script>' . "\r\n";
+        echo '<script type="text/javascript">var lang_admincolor_closemenu = "'.$zbp->lang['AdminColor']['closemenu'].'";var lang_admincolor_expandmenu = "'.$zbp->lang['AdminColor']['expandmenu'].'"</script>'."\r\n";
+        echo '<script src="'.$zbp->host.'zb_users/plugin/AdminColor/menu.js" type="text/javascript"></script>'."\r\n";
         Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'AdminColor_Add_Button');
         $hm = GetVars('admincolor_hm', 'COOKIE');
         if ($hm == '1') {
@@ -58,7 +58,7 @@ function AdminColor_Css()
     } else {
         Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'AdminColor_Add_Button2');
 
-        echo '<script src="' . $zbp->host . 'zb_users/plugin/AdminColor/menu2.js" type="text/javascript"></script>' . "\r\n";
+        echo '<script src="'.$zbp->host.'zb_users/plugin/AdminColor/menu2.js" type="text/javascript"></script>'."\r\n";
 
         $hm = GetVars('admincolor_hm', 'COOKIE');
         if ($hm == '1') {
@@ -71,7 +71,7 @@ function AdminColor_Css2()
 {
     global $zbp;
     if ($zbp->Config('AdminColor')->ColorID == 10) {
-            echo '
+        echo '
 <script type="text/javascript">
 $("#leftmenu li span").each(function(k){
   if(k>0){
@@ -90,9 +90,9 @@ function AdminColor_Add_Button(&$leftmenus)
 
     $hm = GetVars('admincolor_hm', 'COOKIE');
     if ($hm == '1') {
-        $leftmenus['nav_admincolor'] = MakeLeftMenu(5, $zbp->lang['AdminColor']['expandmenu'], "javascript:admincolor_showMenu();", "nav_admincolor", "aAdminColor", $zbp->host . "zb_users/plugin/AdminColor/arror2.png");
+        $leftmenus['nav_admincolor'] = MakeLeftMenu(5, $zbp->lang['AdminColor']['expandmenu'], "javascript:admincolor_showMenu();", "nav_admincolor", "aAdminColor", $zbp->host."zb_users/plugin/AdminColor/arror2.png");
     } else {
-        $leftmenus['nav_admincolor'] = MakeLeftMenu(5, $zbp->lang['AdminColor']['closemenu'], "javascript:admincolor_hideMenu();", "nav_admincolor", "aAdminColor", $zbp->host . "zb_users/plugin/AdminColor/arror.png");
+        $leftmenus['nav_admincolor'] = MakeLeftMenu(5, $zbp->lang['AdminColor']['closemenu'], "javascript:admincolor_hideMenu();", "nav_admincolor", "aAdminColor", $zbp->host."zb_users/plugin/AdminColor/arror.png");
     }
 }
 
@@ -102,9 +102,9 @@ function AdminColor_Add_Button2(&$leftmenus)
 
     $hm = GetVars('admincolor_hm', 'COOKIE');
     if ($hm == '1') {
-        array_unshift($leftmenus, MakeLeftMenu(5, '', "javascript:admincolor_showMenu();", "nav_admincolor2", "aAdminColor2", $zbp->host . "zb_users/plugin/AdminColor/arroraly2.png"));
+        array_unshift($leftmenus, MakeLeftMenu(5, '', "javascript:admincolor_showMenu();", "nav_admincolor2", "aAdminColor2", $zbp->host."zb_users/plugin/AdminColor/arroraly2.png"));
     } else {
-        array_unshift($leftmenus, MakeLeftMenu(5, '', "javascript:admincolor_hideMenu();", "nav_admincolor2", "aAdminColor2", $zbp->host . "zb_users/plugin/AdminColor/arroraly.png"));
+        array_unshift($leftmenus, MakeLeftMenu(5, '', "javascript:admincolor_hideMenu();", "nav_admincolor2", "aAdminColor2", $zbp->host."zb_users/plugin/AdminColor/arroraly.png"));
     }
 }
 
@@ -115,14 +115,14 @@ function AdminColor_ColorButton()
     $s = '';
 
     for ($i = 0; $i < 9; $i++) {
-        $s .= "&nbsp;&nbsp;<a href='" . $zbp->host . "zb_users/plugin/AdminColor/css.php?setcolor=" . $i . "'><span style='height:16px;width:16px;background:" . $GLOBALS['AdminColor_NormalColor'][$i] . "'><img src='" . $zbp->host . "zb_system/image/admin/none.gif' width='16' height='16' alt='' /></span></a>&nbsp;&nbsp;";
+        $s .= "&nbsp;&nbsp;<a href='".$zbp->host."zb_users/plugin/AdminColor/css.php?setcolor=".$i."'><span style='height:16px;width:16px;background:".$GLOBALS['AdminColor_NormalColor'][$i]."'><img src='".$zbp->host."zb_system/image/admin/none.gif' width='16' height='16' alt='' /></span></a>&nbsp;&nbsp;";
     }
 
-    $s .= "&nbsp;&nbsp;<a href='" . $zbp->host . "zb_users/plugin/AdminColor/css.php?setcolor=9' title='文艺范'><span style='height:16px;width:16px;background:#eee;'><img src='" . $zbp->host . "zb_system/image/admin/none.gif' width='16' alt=''/></span></a>&nbsp;&nbsp;";
+    $s .= "&nbsp;&nbsp;<a href='".$zbp->host."zb_users/plugin/AdminColor/css.php?setcolor=9' title='文艺范'><span style='height:16px;width:16px;background:#eee;'><img src='".$zbp->host."zb_system/image/admin/none.gif' width='16' alt=''/></span></a>&nbsp;&nbsp;";
 
-    $s .= "&nbsp;&nbsp;<a href='" . $zbp->host . "zb_users/plugin/AdminColor/css.php?setcolor=10' title='阿里云'><span style='height:16px;width:16px;background:#0099CD;'><img src='" . $zbp->host . "zb_system/image/admin/none.gif' width='16' alt=''/></span></a>&nbsp;&nbsp;";
+    $s .= "&nbsp;&nbsp;<a href='".$zbp->host."zb_users/plugin/AdminColor/css.php?setcolor=10' title='阿里云'><span style='height:16px;width:16px;background:#0099CD;'><img src='".$zbp->host."zb_system/image/admin/none.gif' width='16' alt=''/></span></a>&nbsp;&nbsp;";
 
-    echo "<div id='admin_color'>" . $s .  "</div>";
+    echo "<div id='admin_color'>".$s."</div>";
     //echo "<script type='text/javascript'>$('.divHeader').append(\"<div id='admin_color'>" . $s . "</div>\");</script>";
 }
 

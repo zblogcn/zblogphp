@@ -1,21 +1,21 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
- * sock类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/Network/Networkfsockopen 网络连接
+ * sock类.
  */
 class Network__fsockopen implements Network__Interface
 {
-
-    private $readyState = 0; #状态
-    private $responseBody = null; #返回的二进制
-    private $responseStream = null; #返回的数据流
-    private $responseText = ''; #返回的数据
-    private $responseXML = null; #尝试把responseText格式化为XMLDom
-    private $status = 0; #状态码
-    private $statusText = ''; #状态码文本
-    private $responseVersion = ''; #返回的HTTP版体
+    private $readyState = 0; //状态
+    private $responseBody = null; //返回的二进制
+    private $responseStream = null; //返回的数据流
+    private $responseText = ''; //返回的数据
+    private $responseXML = null; //尝试把responseText格式化为XMLDom
+    private $status = 0; //状态码
+    private $statusText = ''; //状态码文本
+    private $responseVersion = ''; //返回的HTTP版体
 
     private $option = array();
     private $url = '';
@@ -36,15 +36,17 @@ class Network__fsockopen implements Network__Interface
     /**
      * @param $property_name
      * @param $value
+     *
      * @throws Exception
      */
     public function __set($property_name, $value)
     {
-        throw new Exception($property_name . ' readonly');
+        throw new Exception($property_name.' readonly');
     }
 
     /**
      * @param $property_name
+     *
      * @return mixed
      */
     public function __get($property_name)
@@ -64,16 +66,13 @@ class Network__fsockopen implements Network__Interface
             if (isset($this->parsed_url[strtolower($property_name)])) {
                 return $this->parsed_url[strtolower($property_name)];
             } else {
-                return null;
+                return;
             }
         } else {
             return $this->$property_name;
         }
     }
 
-    /**
-     *
-     */
     public function abort()
     {
     }
@@ -88,6 +87,7 @@ class Network__fsockopen implements Network__Interface
 
     /**
      * @param $bstrHeader
+     *
      * @return string
      */
     public function getResponseHeader($bstrHeader)
@@ -115,11 +115,13 @@ class Network__fsockopen implements Network__Interface
     /**
      * @param $bstrMethod
      * @param $bstrUrl
-     * @param bool $varAsync
+     * @param bool   $varAsync
      * @param string $bstrUser
      * @param string $bstrPassword
-     * @return bool
+     *
      * @throws Exception
+     *
+     * @return bool
      */
     public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '')
     {
@@ -148,8 +150,10 @@ class Network__fsockopen implements Network__Interface
 
     /**
      * @param string $varBody
-     * @return mixed|void
+     *
      * @throws Exception
+     *
+     * @return mixed|void
      */
     public function send($varBody = '')
     {
@@ -165,27 +169,27 @@ class Network__fsockopen implements Network__Interface
             $this->option['content'] = $data;
             if (!isset($this->httpheader['Content-Type'])) {
                 if ($this->__isBinary) {
-                    $this->httpheader['Content-Type'] = 'Content-Type: multipart/form-data; boundary=' . $this->__boundary;
+                    $this->httpheader['Content-Type'] = 'Content-Type: multipart/form-data; boundary='.$this->__boundary;
                 } else {
                     $this->httpheader['Content-Type'] = 'Content-Type: application/x-www-form-urlencoded';
                 }
             }
-            $this->httpheader['Content-Length'] = 'Content-Length: ' . strlen($data);
+            $this->httpheader['Content-Length'] = 'Content-Length: '.strlen($data);
         }
 
-        $this->httpheader[] = 'Host: ' . $this->parsed_url['host'];
+        $this->httpheader[] = 'Host: '.$this->parsed_url['host'];
         //$this->httpheader[] = 'Referer: ' . 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         $this->httpheader[] = 'Connection: close';
 
         if (!isset($this->httpheader['Accept'])) {
             if (isset($_SERVER['HTTP_ACCEPT'])) {
-                $this->httpheader['Accept'] = 'Accept:' . $_SERVER['HTTP_ACCEPT'];
+                $this->httpheader['Accept'] = 'Accept:'.$_SERVER['HTTP_ACCEPT'];
             }
         }
 
         if (!isset($this->httpheader['Accept-Language'])) {
             if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-                $this->httpheader['Accept-Language'] = 'Accept-Language: ' . $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+                $this->httpheader['Accept-Language'] = 'Accept-Language: '.$_SERVER['HTTP_ACCEPT_LANGUAGE'];
             }
         }
 
@@ -197,7 +201,7 @@ class Network__fsockopen implements Network__Interface
 
         ZBlogException::SuspendErrorHook();
         $socket = fsockopen(
-            ($this->scheme == 'https' ? 'ssl://' : '') . $this->parsed_url['host'],
+            ($this->scheme == 'https' ? 'ssl://' : '').$this->parsed_url['host'],
             $this->port,
             $this->errno,
             $this->errstr,
@@ -208,18 +212,18 @@ class Network__fsockopen implements Network__Interface
             return;
         }
 
-        $url = $this->option['method'] . ' ' . ($this->parsed_url['path'] == '' ? '/' : $this->parsed_url['path']);
+        $url = $this->option['method'].' '.($this->parsed_url['path'] == '' ? '/' : $this->parsed_url['path']);
 
         if (isset($this->parsed_url["query"])) {
-            $url .= "?" . $this->parsed_url["query"];
+            $url .= "?".$this->parsed_url["query"];
         }
         fwrite($socket,
-            $url . ' HTTP/1.0' . "\r\n" // Not support 100 Continue
+            $url.' HTTP/1.0'."\r\n" // Not support 100 Continue
         );
-        fwrite($socket, $this->option['header'] . "\r\n");
+        fwrite($socket, $this->option['header']."\r\n");
         fwrite($socket, "\r\n");
         if (isset($this->option['content'])) {
-            fwrite($socket, $this->option['content'] . "\r\n");
+            fwrite($socket, $this->option['content']."\r\n");
             fwrite($socket, "\r\n");
         }
         $this->responseText = '';
@@ -288,17 +292,18 @@ class Network__fsockopen implements Network__Interface
      * @param $bstrHeader
      * @param $bstrValue
      * @param bool $append
+     *
      * @return bool
      */
     public function setRequestHeader($bstrHeader, $bstrValue, $append = false)
     {
         if ($append == false) {
-            $this->httpheader[$bstrHeader] = $bstrHeader . ': ' . $bstrValue;
+            $this->httpheader[$bstrHeader] = $bstrHeader.': '.$bstrValue;
         } else {
             if (isset($this->httpheader[$bstrHeader])) {
-                $this->httpheader[$bstrHeader] = $this->httpheader[$bstrHeader] . $bstrValue;
+                $this->httpheader[$bstrHeader] = $this->httpheader[$bstrHeader].$bstrValue;
             } else {
-                $this->httpheader[$bstrHeader] = $bstrHeader . ': ' . $bstrValue;
+                $this->httpheader[$bstrHeader] = $bstrHeader.': '.$bstrValue;
             }
         }
 
@@ -320,6 +325,7 @@ class Network__fsockopen implements Network__Interface
     /**
      * @param string $name
      * @param string $entity
+     *
      * @return mixed
      */
     public function addBinary($name, $entity, $filename = null, $mime = '')
@@ -352,12 +358,14 @@ class Network__fsockopen implements Network__Interface
         $return['mime'] = $mime;
 
         $this->postdata[$name] = $return;
+
         return true;
     }
 
     /**
      * @param string $name
      * @param string $entity
+     *
      * @return mixed
      */
     public function addText($name, $entity)
@@ -388,13 +396,13 @@ class Network__fsockopen implements Network__Interface
             $data .= "--{$boundary}\r\n";
             $data .= "Content-Disposition: form-data; ";
             if ($value['type'] == 'text') {
-                $data .= 'name="' . $name . '"' . "\r\n\r\n";
+                $data .= 'name="'.$name.'"'."\r\n\r\n";
                 $data .= $content; // . "\r\n";
                 //$data .= "--{$boundary}";
             } else {
                 $filename = $value['filename'];
                 $mime = $value['mime'];
-                $data .= 'name="' . $name . '"; filename="' . $filename . '"' . "\r\n";
+                $data .= 'name="'.$name.'"; filename="'.$filename.'"'."\r\n";
                 $data .= "Content-Type: $mime\r\n";
                 $data .= "\r\n$content"; //"\r\n";
                 //$data .= "--{$boundary}";
@@ -406,7 +414,7 @@ class Network__fsockopen implements Network__Interface
     }
 
     /**
-     * Build Boundary
+     * Build Boundary.
      */
     private function __buildBoundary()
     {
@@ -414,9 +422,7 @@ class Network__fsockopen implements Network__Interface
         $boundary .= substr(md5(time()), 8, 16);
         $this->__boundary = $boundary;
     }
-    /**
-     *
-     */
+
     private function reinit()
     {
         global $zbp;
@@ -426,13 +432,13 @@ class Network__fsockopen implements Network__Interface
             return;
         }
 
-        $this->readyState = 0; #状态
-        $this->responseBody = null; #返回的二进制
-        $this->responseStream = null; #返回的数据流
-        $this->responseText = ''; #返回的数据
-        $this->responseXML = null; #尝试把responseText格式化为XMLDom
-        $this->status = 0; #状态码
-        $this->statusText = ''; #状态码文本
+        $this->readyState = 0; //状态
+        $this->responseBody = null; //返回的二进制
+        $this->responseStream = null; //返回的数据流
+        $this->responseText = ''; //返回的数据
+        $this->responseXML = null; //尝试把responseText格式化为XMLDom
+        $this->status = 0; //状态码
+        $this->statusText = ''; //状态码文本
 
         $this->__isBinary = false;
         $this->__boundary = '';
@@ -446,12 +452,13 @@ class Network__fsockopen implements Network__Interface
         $this->errstr = '';
         $this->errno = 0;
 
-        $this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $zbp->cache->system_environment . ') Z-BlogPHP/' . $GLOBALS['blogversion']);
+        $this->setRequestHeader('User-Agent', 'Mozilla/5.0 ('.$zbp->cache->system_environment.') Z-BlogPHP/'.$GLOBALS['blogversion']);
         $this->setMaxRedirs(1);
     }
 
     /**
      * @param $chunk
+     *
      * @return null|string
      */
     private function http_chunked_decode($chunk)
@@ -478,10 +485,11 @@ class Network__fsockopen implements Network__Interface
     }
 
     /**
-     * determine if a string can represent a number in hexadecimal
+     * determine if a string can represent a number in hexadecimal.
      *
      * @param string $hex
-     * @return boolean true if the string is a hex, otherwise false
+     *
+     * @return bool true if the string is a hex, otherwise false
      */
     private function is_hex($hex)
     {
@@ -489,25 +497,23 @@ class Network__fsockopen implements Network__Interface
         $hex = strtolower(trim(ltrim($hex, "0")));
         if (empty($hex)) {
             $hex = 0;
-        };
+        }
         $dec = hexdec($hex);
 
-        return ($hex == dechex($dec));
+        return $hex == dechex($dec);
     }
 
     /**
      * @param $string
+     *
      * @return string
      */
     private function gzdecode($string)
     {
-// no support for 2nd argument
-        return file_get_contents('compress.zlib://data:zbp/ths;base64,' . base64_encode($string));
+        // no support for 2nd argument
+        return file_get_contents('compress.zlib://data:zbp/ths;base64,'.base64_encode($string));
     }
 
-    /**
-     *
-     */
     public function enableGzip()
     {
         $this->isgzip = true;

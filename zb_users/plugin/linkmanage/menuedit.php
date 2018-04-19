@@ -23,9 +23,9 @@ if (isset($menuID) && $menuID == '') {
 $links = linkmanage_getLink($menuID);
 
 if ($links == null) {
-	$links_json = "{}";
+    $links_json = "{}";
 } else {
-	$links_json = json_encode($links);
+    $links_json = json_encode($links);
 }
 $tempid = linkmanage_getTempid();
 require $blogpath.'zb_system/admin/admin_header.php';
@@ -42,10 +42,11 @@ require $blogpath.'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
 	<div class="divHeader"><?php echo $blogtitle; ?></div>
-	<div class="SubMenu"><?php linkmanage_SubMenu(1);?></div>
+	<div class="SubMenu"><?php linkmanage_SubMenu(1); ?></div>
 	<div id="divMain2">
 
-<?php if (isset($menuID)) {	?>
+<?php if (isset($menuID)) {
+    ?>
 	<div id="nav-menus-frame">
 		<div id="menu-settings">
 			<div class="clear"></div>
@@ -54,26 +55,25 @@ require $blogpath.'zb_system/admin/admin_top.php';
 			</div>
 			<div id="accordion" class="accordion-container">
 				<?php
-				$showtype = linkmanage_showtype();
-				$showoption = $zbp->Config('linkmanage')->showoption;
-				foreach ($showtype as $item) {
-					if (strstr($showoption,$item[0])){
-					echo '			  <div class="group">
-				    <h3>'. $item[1] .'</h3>
+                $showtype = linkmanage_showtype();
+    $showoption = $zbp->Config('linkmanage')->showoption;
+    foreach ($showtype as $item) {
+        if (strstr($showoption, $item[0])) {
+            echo '			  <div class="group">
+				    <h3>'.$item[1].'</h3>
 				    <div class="accordion-section-content">
 					    <div class="input-control select">
-							<select multiple="1" size="6" id="'. $item[0] .'">';
-					linkmanage_get_syslink($item[0]);
-					echo '		</select>
+							<select multiple="1" size="6" id="'.$item[0].'">';
+            linkmanage_get_syslink($item[0]);
+            echo '		</select>
 						</div>
 						<p class="button-controls">
 								<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,\''.$item[0].'\',\''.$menuID.'\')"><span class="ui-button-text">添加</span></button>
 						</p>
 				    </div>
 				  </div>';
-					}
-				}
-				?>
+        }
+    } ?>
 			</div>
 		</div>
 
@@ -82,11 +82,11 @@ require $blogpath.'zb_system/admin/admin_top.php';
 				<div class="menu-edit">
 					<div id="nav-menu-header">
 						<form id="menu-config" method="POST">
-						<input name="id" type="hidden" value="<?php echo $menuID;?>">
+						<input name="id" type="hidden" value="<?php echo $menuID; ?>">
 						<div class="major-publishing-actions">
 							<label class="menu-name-label howto open-label" for="menu-name">
-								<span>菜单名称 (<?php echo $Menus['data'][$menuID]['id'];?>) </span>
-								<input name="menuname" id="menu-name" type="text" class="menu-name regular-text menu-item-textbox" title="在此输入名称" value="<?php echo $Menus['data'][$menuID]['name'];?>">
+								<span>菜单名称 (<?php echo $Menus['data'][$menuID]['id']; ?>) </span>
+								<input name="menuname" id="menu-name" type="text" class="menu-name regular-text menu-item-textbox" title="在此输入名称" value="<?php echo $Menus['data'][$menuID]['name']; ?>">
 							</label>
 							<div class="publishing-action">
 								<button  name="reset_menu" id="reset_menu_header"  class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="reset_item();return false;">清空链接</button>
@@ -101,16 +101,16 @@ require $blogpath.'zb_system/admin/admin_top.php';
 						<div id="menu-edit-body-content">
 							<ol class="nav-menu ui-sortable">
 							<?php
-							$html = '';
-						    $link_sort = linkmanage_getLink_sort($menuID);
-						    if (!is_null($link_sort)){
-							    foreach ($link_sort as $key => $value) {
-							        $link = $links['ID'.$key];
-									$readonly = "readonly='true'";
-									if ($link['type'] == "custom"){
-										$readonly = "";
-									}
-							        $html_tmp = '
+                            $html = '';
+    $link_sort = linkmanage_getLink_sort($menuID);
+    if (!is_null($link_sort)) {
+        foreach ($link_sort as $key => $value) {
+            $link = $links['ID'.$key];
+            $readonly = "readonly='true'";
+            if ($link['type'] == "custom") {
+                $readonly = "";
+            }
+            $html_tmp = '
 										<li sid="menuItem_'.$link['id'].'">
 											<div class="menu-item-bar">
 												<div class="menu-item-handle ui-sortable-handle">
@@ -147,31 +147,29 @@ require $blogpath.'zb_system/admin/admin_top.php';
 											</div>
 											<span id="'.$link['id'].'"></span>
 										</li>';
-							        if ($value == 'null') {
-							            $html .= $html_tmp;
-							        } else {
-							            $html = str_replace('<span id="'.$value.'"></span>', '<ol>'.$html_tmp.'</ol><span id="'.$value.'"></span>', $html);
-							        }
-							    }
-							    $html=preg_replace("/<(span id\=.*?)>(.*?)<(\/span.*?)>/si","",$html); //
-								$html=preg_replace("/<\/ol><ol>/si","",$html); //
-						   		echo $html;
-						    }
-							?>
+            if ($value == 'null') {
+                $html .= $html_tmp;
+            } else {
+                $html = str_replace('<span id="'.$value.'"></span>', '<ol>'.$html_tmp.'</ol><span id="'.$value.'"></span>', $html);
+            }
+        }
+        $html = preg_replace("/<(span id\=.*?)>(.*?)<(\/span.*?)>/si", "", $html); //
+                                $html = preg_replace("/<\/ol><ol>/si", "", $html); //
+                                echo $html;
+    } ?>
 							</ol>
 						</div>
 					</div>
 
 					<div id="menu-edit-footer">
 						<div class="addlink-action">
-							<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'custom','<?php echo $menuID;?>');return false;"><span class="ui-button-text">添加自定义链接</span></button>
+							<button class="ui-button-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="add_link(this,'custom','<?php echo $menuID; ?>');return false;"><span class="ui-button-text">添加自定义链接</span></button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 <?php
-
 }
 ?>
 	</div>

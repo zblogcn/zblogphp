@@ -1,21 +1,21 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
-/**
- * 模块创建类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib 类库
- */
-class ModuleBuilder
-{
+<?php
 
-    public static $List = array();//array('filename'=>,'function' => '', 'paramters' => '');
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+/**
+ * 模块创建类.
+ */
+class modulebuilder
+{
+    public static $List = array(); //array('filename'=>,'function' => '', 'paramters' => '');
     //需要重建的module list
-    private static $Ready = array();//'filename';
+    private static $Ready = array(); //'filename';
 
     public static function Build()
     {
         global $zbp;
-        foreach (ModuleBuilder::$Ready as $m) {
+        foreach (self::$Ready as $m) {
             if (isset($zbp->modulesbyfilename[$m])) {
                 $m = $zbp->modulesbyfilename[$m];
                 $m->Build();
@@ -25,48 +25,54 @@ class ModuleBuilder
     }
 
     /**
-     * 重建模块
+     * 重建模块.
+     *
      * @param string $modfilename 模块名
-     * @param string $userfunc 用户函数
+     * @param string $userfunc    用户函数
      */
     public static function Reg($modfilename, $userfunc)
     {
-        ModuleBuilder::$List[$modfilename]['filename'] = $modfilename;
+        self::$List[$modfilename]['filename'] = $modfilename;
         if (function_exists($userfunc)) {
-            ModuleBuilder::$List[$modfilename]['function'] = $userfunc;
+            self::$List[$modfilename]['function'] = $userfunc;
         } elseif (strpos($userfunc, '::') !== false) {
             $a = explode('::', $userfunc);
             if (method_exists($a[0], $a[1])) {
-                ModuleBuilder::$List[$modfilename]['function'] = $userfunc;
+                self::$List[$modfilename]['function'] = $userfunc;
             }
         }
     }
 
     /**
-     * 添加模块
+     * 添加模块.
+     *
      * @param string $modfilename 模块名
-     * @param null $parameters 模块参数
+     * @param null   $parameters  模块参数
      */
     public static function Add($modfilename, $parameters = null)
     {
-        ModuleBuilder::$Ready[$modfilename] = $modfilename;
-        ModuleBuilder::$List[$modfilename]['parameters'] = $parameters;
+        self::$Ready[$modfilename] = $modfilename;
+        self::$List[$modfilename]['parameters'] = $parameters;
     }
 
     /**
-     * 删除模块
+     * 删除模块.
+     *
      * @param string $modfilename 模块名
      */
     public static function Del($modfilename)
     {
-        unset(ModuleBuilder::$Ready[$modfilename]);
+        unset(self::$Ready[$modfilename]);
     }
 
     /**
-     * 导出网站分类模块数据
-     * @return string 模块内容
-     * @todo 必须重写
+     * 导出网站分类模块数据.
+     *
      * @throws Exception
+     *
+     * @return string 模块内容
+     *
+     * @todo 必须重写
      */
     public static function Catalog()
     {
@@ -86,10 +92,13 @@ class ModuleBuilder
     }
 
     /**
-     * 导出日历模块数据
+     * 导出日历模块数据.
+     *
      * @param string $date 日期
-     * @return string 模块内容
+     *
      * @throws Exception
+     *
+     * @return string 模块内容
      */
     public static function Calendar($date = '')
     {
@@ -108,7 +117,7 @@ class ModuleBuilder
         $value = strtotime('-1 month', strtotime($date));
         $tags['prevMonth'] = date('n', $value);
         $tags['prevYear'] = date('Y', $value);
-        $url->Rules['{%date%}'] = $tags['prevYear'] . '-' . $tags['prevMonth'];
+        $url->Rules['{%date%}'] = $tags['prevYear'].'-'.$tags['prevMonth'];
         $url->Rules['{%year%}'] = $tags['prevYear'];
         $url->Rules['{%month%}'] = $tags['prevMonth'];
         $tags['prevMonthUrl'] = $url->Make();
@@ -116,7 +125,7 @@ class ModuleBuilder
         $value = strtotime($date);
         $tags['nowMonth'] = date('n', $value);
         $tags['nowYear'] = date('Y', $value);
-        $url->Rules['{%date%}'] = $tags['nowYear'] . '-' . $tags['nowMonth'];
+        $url->Rules['{%date%}'] = $tags['nowYear'].'-'.$tags['nowMonth'];
         $url->Rules['{%year%}'] = $tags['nowYear'];
         $url->Rules['{%month%}'] = $tags['nowMonth'];
         $tags['nowMonthUrl'] = $url->Make();
@@ -124,7 +133,7 @@ class ModuleBuilder
         $value = strtotime('+1 month', strtotime($date));
         $tags['nextMonth'] = date('n', $value);
         $tags['nextYear'] = date('Y', $value);
-        $url->Rules['{%date%}'] = $tags['nextYear'] . '-' . $tags['nextMonth'];
+        $url->Rules['{%date%}'] = $tags['nextYear'].'-'.$tags['nextMonth'];
         $url->Rules['{%year%}'] = $tags['nextYear'];
         $url->Rules['{%month%}'] = $tags['nextMonth'];
         $tags['nextMonthUrl'] = $url->Make();
@@ -148,15 +157,15 @@ class ModuleBuilder
         foreach ($array as $value) {
             $key = date('j', $value[$zbp->datainfo['Post']['PostTime'][0]]);
             if (!isset($arraydate[$key])) {
-                $fullDate = $tags['nowYear'] . '-' . $tags['nowMonth'] . '-' . $key;
+                $fullDate = $tags['nowYear'].'-'.$tags['nowMonth'].'-'.$key;
                 $url->Rules['{%date%}'] = $fullDate;
                 $url->Rules['{%year%}'] = $tags['nowYear'];
                 $url->Rules['{%month%}'] = $tags['nowMonth'];
                 $url->Rules['{%day%}'] = $key;
                 $arraydate[$key] = array(
-                    'Date' => $fullDate,
-                    'Url' => $url->Make(),
-                    'Count' => 0
+                    'Date'  => $fullDate,
+                    'Url'   => $url->Make(),
+                    'Count' => 0,
                 );
             }
             $arraydate[$key]['Count']++;
@@ -169,9 +178,11 @@ class ModuleBuilder
     }
 
     /**
-     * 导出最新留言模块数据
-     * @return string 模块内容
+     * 导出最新留言模块数据.
+     *
      * @throws Exception
+     *
+     * @return string 模块内容
      */
     public static function Comments()
     {
@@ -194,9 +205,11 @@ class ModuleBuilder
     }
 
     /**
-     * 导出最近发表文章模块数据
-     * @return string 模块内容
+     * 导出最近发表文章模块数据.
+     *
      * @throws Exception
+     *
+     * @return string 模块内容
      */
     public static function LatestArticles()
     {
@@ -219,16 +232,18 @@ class ModuleBuilder
     }
 
     /**
-     * 导出文章归档模块数据
-     * @return string 模块内容
+     * 导出文章归档模块数据.
+     *
      * @throws Exception
+     *
+     * @return string 模块内容
      */
     public static function Archives()
     {
         global $zbp;
         $template = $zbp->template;
         $tags = array();
-        $urls = array();//array(url,name,count);
+        $urls = array(); //array(url,name,count);
 
         $maxli = $zbp->modulesbyfilename['archives']->MaxLi;
         if ($maxli < 0) {
@@ -259,16 +274,16 @@ class ModuleBuilder
 
         for ($i = $fdate[0]; $i < $ldate[0] + 1; $i++) {
             for ($j = 1; $j < 13; $j++) {
-                $arraydate[] = strtotime($i . '-' . $j);
+                $arraydate[] = strtotime($i.'-'.$j);
             }
         }
 
         foreach ($arraydate as $key => $value) {
-            if ($value - strtotime($ldate[0] . '-' . $ldate[1]) > 0) {
+            if ($value - strtotime($ldate[0].'-'.$ldate[1]) > 0) {
                 unset($arraydate[$key]);
             }
 
-            if ($value - strtotime($fdate[0] . '-' . $fdate[1]) < 0) {
+            if ($value - strtotime($fdate[0].'-'.$fdate[1]) < 0) {
                 unset($arraydate[$key]);
             }
         }
@@ -294,7 +309,7 @@ class ModuleBuilder
             $n = GetValueInArrayByCurrent($zbp->db->Query($sql), 'num');
             if ($n > 0) {
                 //$urls[]=array($url->Make(),str_replace(array('%y%', '%m%'), array(date('Y', $fdate), date('n', $fdate)), $zbp->lang['msg']['year_month']),$n);
-                $meta = new Metas;
+                $meta = new Metas();
                 $meta->Url = $url->Make();
                 $meta->Name = str_replace(array('%y%', '%m%'), array(date('Y', $fdate), date('n', $fdate)), $zbp->lang['msg']['year_month']);
                 $meta->Count = $n;
@@ -312,9 +327,11 @@ class ModuleBuilder
     }
 
     /**
-     * 导出导航模块数据
-     * @return string 模块内容
+     * 导出导航模块数据.
+     *
      * @throws Exception
+     *
+     * @return string 模块内容
      */
     public static function Navbar()
     {
@@ -337,8 +354,8 @@ class ModuleBuilder
                 $url = $o->Url;
                 $name = $o->Title;
 
-                $a = '<li id="navbar-' . $type . '-' . $id . '"><a href="' . $url . '">' . $name . '</a></li>';
-                $s = preg_replace('/<li id="navbar-' . $type . '-' . $id . '">.*?<\/a><\/li>/', $a, $s);
+                $a = '<li id="navbar-'.$type.'-'.$id.'"><a href="'.$url.'">'.$name.'</a></li>';
+                $s = preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*?<\/a><\/li>/', $a, $s);
             }
             if ($b[$key] == 'category') {
                 $type = 'category';
@@ -347,8 +364,8 @@ class ModuleBuilder
                 $url = $o->Url;
                 $name = $o->Name;
 
-                $a = '<li id="navbar-' . $type . '-' . $id . '"><a href="' . $url . '">' . $name . '</a></li>';
-                $s = preg_replace('/<li id="navbar-' . $type . '-' . $id . '">.*?<\/a><\/li>/', $a, $s);
+                $a = '<li id="navbar-'.$type.'-'.$id.'"><a href="'.$url.'">'.$name.'</a></li>';
+                $s = preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*?<\/a><\/li>/', $a, $s);
             }
             if ($b[$key] == 'tag') {
                 $type = 'tag';
@@ -357,8 +374,8 @@ class ModuleBuilder
                 $url = $o->Url;
                 $name = $o->Name;
 
-                $a = '<li id="navbar-' . $type . '-' . $id . '"><a href="' . $url . '">' . $name . '</a></li>';
-                $s = preg_replace('/<li id="navbar-' . $type . '-' . $id . '">.*?<\/a><\/li>/', $a, $s);
+                $a = '<li id="navbar-'.$type.'-'.$id.'"><a href="'.$url.'">'.$name.'</a></li>';
+                $s = preg_replace('/<li id="navbar-'.$type.'-'.$id.'">.*?<\/a><\/li>/', $a, $s);
             }
         }
 
@@ -371,16 +388,18 @@ class ModuleBuilder
     }
 
     /**
-     * 导出tags模块数据
-     * @return string 模块内容
+     * 导出tags模块数据.
+     *
      * @throws Exception
+     *
+     * @return string 模块内容
      */
     public static function TagList()
     {
         global $zbp;
         $template = $zbp->template;
         $tags = array();
-        $urls = array();//array(real tag);
+        $urls = array(); //array(real tag);
 
         $i = $zbp->modulesbyfilename['tags']->MaxLi;
         if ($i == 0) {
@@ -407,10 +426,13 @@ class ModuleBuilder
     }
 
     /**
-     * 导出用户列表模块数据
+     * 导出用户列表模块数据.
+     *
      * @param int $level 要导出的用户最低等级，默认为4（即协作者）
-     * @return string 模块内容
+     *
      * @throws Exception
+     *
+     * @return string 模块内容
      */
     public static function Authors($level = 4)
     {
@@ -444,10 +466,13 @@ class ModuleBuilder
     }
 
     /**
-     * 导出网站统计模块数据
+     * 导出网站统计模块数据.
+     *
      * @param array $array
-     * @return string 模块内容
+     *
      * @throws Exception
+     *
+     * @return string 模块内容
      */
     public static function Statistics($array = array())
     {
@@ -501,7 +526,6 @@ class ModuleBuilder
         }
 
         $zbp->modulesbyfilename['statistics']->Type = "ul";
-
 
         $tags['allinfo'] = $allinfo;
         $template->SetTagsAll($tags);
