@@ -423,7 +423,8 @@ class ZBlogException
         $this->messagefull = $message . ' (set_error_handler) ';
         $this->file = $file;
         $this->line = $line;
-		$this->message = htmlspecialchars($this->message);
+		//$this->message = htmlspecialchars($this->message);
+        $this->message = strip_tags($this->message, '<a>');
 		$this->messagefull = htmlspecialchars($this->messagefull);
     }
 
@@ -439,7 +440,8 @@ class ZBlogException
         $this->messagefull = $error['message'] . ' (register_shutdown_function) ';
         $this->file = $error['file'];
         $this->line = $error['line'];
-		$this->message = htmlspecialchars($this->message);
+		//$this->message = htmlspecialchars($this->message);
+        $this->message = strip_tags($this->message, '<a>');
 		$this->messagefull = htmlspecialchars($this->messagefull);
     }
 
@@ -455,7 +457,8 @@ class ZBlogException
         $this->type = $exception->getCode();
         $this->file = $exception->getFile();
         $this->line = $exception->getLine();
-		$this->message = htmlspecialchars($this->message);
+		//$this->message = htmlspecialchars($this->message);
+        $this->message = strip_tags($this->message, '<a>');
 		$this->messagefull = htmlspecialchars($this->messagefull);
 
         if (self::$error_file !== null) {
