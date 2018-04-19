@@ -55,6 +55,61 @@ function Debug_PrintConstants()
 }
 
 /**
+ * Return true if a error can be ignored
+ * @param int $errno
+ * @return bool
+ */
+function Debug_IgnoreError ($errno)
+{
+
+    if (ZBlogException::$iswarning == false) {
+        if ($errno == E_WARNING) {
+            return true;
+        }
+
+        if ($errno == E_USER_WARNING) {
+            return true;
+        }
+    }
+    if (ZBlogException::$isstrict == false) {
+        if ($errno == E_STRICT) {
+            return true;
+        }
+
+        if ($errno == E_NOTICE) {
+            return true;
+        }
+
+        if ($errno == E_USER_NOTICE) {
+            return true;
+        }
+    }
+
+    // 屏蔽系统的错误，防ZBP报系统的错误，不过也有可能导致ZBP内的DEPRECATED错误也被屏蔽了
+    if ($errno == E_CORE_WARNING) {
+        return true;
+    }
+
+    if ($errno == E_COMPILE_WARNING) {
+        return true;
+    }
+
+    if (defined('E_DEPRECATED') && $errno == E_DEPRECATED) {
+        return true;
+    }
+
+    if (defined('E_USER_DEPRECATED') && $errno == E_USER_DEPRECATED) {
+        return true;
+    }
+
+    //E_USER_ERROR
+    //E_RECOVERABLE_ERROR
+
+    return false;
+}
+
+
+/**
  * 错误调度提示
  * @param int $errno 错误级别
  * @param string $errstr 错误信息
@@ -87,48 +142,9 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         }
     }
 
-    if (ZBlogException::$iswarning == false) {
-        if ($errno == E_WARNING) {
-            return true;
-        }
-
-        if ($errno == E_USER_WARNING) {
-            return true;
-        }
-    }
-    if (ZBlogException::$isstrict == false) {
-        if ($errno == E_STRICT) {
-            return true;
-        }
-
-        if ($errno == E_NOTICE) {
-            return true;
-        }
-
-        if ($errno == E_USER_NOTICE) {
-            return true;
-        }
-    }
-
-    //屏蔽系统的错误，防ZBP报系统的错误，不过也有可能导致ZBP内的DEPRECATED错误也被屏蔽了
-    if ($errno == E_CORE_WARNING) {
+    if (Debug_IgnoreError($errno)) {
         return true;
     }
-
-    if ($errno == E_COMPILE_WARNING) {
-        return true;
-    }
-
-    if (defined('E_DEPRECATED') && $errno == E_DEPRECATED) {
-        return true;
-    }
-
-    if (defined('E_USER_DEPRECATED') && $errno == E_USER_DEPRECATED) {
-        return true;
-    }
-
-    //E_USER_ERROR
-    //E_RECOVERABLE_ERROR
 
     $zbe = ZBlogException::GetInstance();
     $zbe->ParseError($errno, $errstr, $errfile, $errline);
@@ -188,42 +204,7 @@ function Debug_Shutdown_Handler()
             Logs(var_export(array('Shutdown', $error['type'], $error['message'], $error['file'], $error['line']), true), true);
         }
 
-        if (ZBlogException::$iswarning == false) {
-            if ($error['type'] == E_WARNING) {
-                return true;
-            }
-
-            if ($error['type'] == E_USER_WARNING) {
-                return true;
-            }
-        }
-        if (ZBlogException::$isstrict == false) {
-            if ($error['type'] == E_NOTICE) {
-                return true;
-            }
-
-            if ($error['type'] == E_STRICT) {
-                return true;
-            }
-
-            if ($error['type'] == E_USER_NOTICE) {
-                return true;
-            }
-        }
-
-        if ($error['type'] == E_CORE_WARNING) {
-            return true;
-        }
-
-        if ($error['type'] == E_COMPILE_WARNING) {
-            return true;
-        }
-
-        if (defined('E_DEPRECATED') && $error['type'] == E_DEPRECATED) {
-            return true;
-        }
-
-        if (defined('E_USER_DEPRECATED') && $error['type'] == E_USER_DEPRECATED) {
+        if (Debug_IgnoreError($error['type'])) {
             return true;
         }
 
@@ -423,9 +404,6 @@ class ZBlogException
         $this->messagefull = $message . ' (set_error_handler) ';
         $this->file = $file;
         $this->line = $line;
-		//$this->message = htmlspecialchars($this->message);
-        $this->message = strip_tags($this->message, '<a>');
-		$this->messagefull = htmlspecialchars($this->messagefull);
     }
 
     /**
@@ -440,9 +418,6 @@ class ZBlogException
         $this->messagefull = $error['message'] . ' (register_shutdown_function) ';
         $this->file = $error['file'];
         $this->line = $error['line'];
-		//$this->message = htmlspecialchars($this->message);
-        $this->message = strip_tags($this->message, '<a>');
-		$this->messagefull = htmlspecialchars($this->messagefull);
     }
 
     /**
@@ -457,7 +432,6 @@ class ZBlogException
         $this->type = $exception->getCode();
         $this->file = $exception->getFile();
         $this->line = $exception->getLine();
-		//$this->message = htmlspecialchars($this->message);
         $this->message = strip_tags($this->message, '<a>');
 		$this->messagefull = htmlspecialchars($this->messagefull);
 
