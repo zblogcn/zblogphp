@@ -453,8 +453,6 @@ class ZBlogException
         $this->type = $exception->getCode();
         $this->file = $exception->getFile();
         $this->line = $exception->getLine();
-        $this->message = strip_tags($this->message, '<a>');
-        $this->messagefull = htmlspecialchars($this->messagefull);
 
         if (self::$error_file !== null) {
             $this->file = self::$error_file;
@@ -470,6 +468,7 @@ class ZBlogException
      */
     public function Display()
     {
+
         if (!headers_sent()) {
             Http500();
             ob_clean();

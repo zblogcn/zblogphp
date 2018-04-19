@@ -1110,11 +1110,8 @@ function TransferHTML($source, $para)
     }
 
     if (strpos($para, '[noscript]') !== false) {
-        $source = preg_replace("/<(script.*?)>(.*?)<(\/script.*?)>/si", "", $source);
-        $source = preg_replace("/<(\/?script.*?)>/si", "", $source);
-        $source = preg_replace("/javascript/si", "", $source);
-        $source = preg_replace("/vbscript/si", "", $source);
-        $source = preg_replace("/on([a-z]+)\s*=/si", "on\\=", $source);
+        $class = new XssHtml($source);
+        $source = $class->getHtml();
     }
     if (strpos($para, '[enter]') !== false) {
         $source = str_replace("\r\n", "<br/>", $source);

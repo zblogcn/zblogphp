@@ -30,7 +30,7 @@ unset($post_data['token']);
           <form id="frmLogin" method="post" action="#">
             <?php if (!$GLOBALS['option']['ZC_DEBUG_MODE']) {
     ?>
-            <div class="divHeader lessinfo" style="margin-bottom:10px;"><b><?php echo $error->message; ?></b></div>
+            <div class="divHeader lessinfo" style="margin-bottom:10px;"><b><?php echo TransferHTML($error->message, '[noscript]'); ?></b></div>
             <div class="content lessinfo">
               <div>
                 <p style="font-weight: normal;"><?php echo $GLOBALS['lang']['msg']['possible_causes_error']; ?></p>
@@ -45,7 +45,7 @@ unset($post_data['token']);
             <div class="content moreinfo">
               <div>
                 <p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p>
-                <?php echo '(' . $error->type . ')' . $error->typeName . ' :   ' . ($error->messagefull); ?>
+                <?php echo '(' . $error->type . ')' . $error->typeName . ' :   ' . ( TransferHTML($error->messagefull, '[noscript]')); ?>
                 <?php echo ' (' . ZC_VERSION_FULL . ') ';
         if (!in_array('Status: 404 Not Found', headers_list())) {
             echo '(' . GetEnvironment() . ') ';
