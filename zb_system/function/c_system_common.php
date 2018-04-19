@@ -1385,7 +1385,7 @@ function CheckCanBeString($obj)
 function BuildSafeURL($url, $appId = '')
 {
     global $zbp;
-    if (strpos($url, '?') >= 0) {
+    if (strpos($url, '?') !== FALSE) {
         $url .= '&csrfToken=';
     } else {
         $url .= '?csrfToken=';

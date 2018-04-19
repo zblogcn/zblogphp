@@ -11,7 +11,7 @@ $Totoro = null;
 
 function Totoro_init()
 {
-    require TOTORO_PATH . '/inc/totoro.php';
+    require_once TOTORO_PATH . '/inc/totoro.php';
     global $Totoro;
     $Totoro = new Totoro_Class;
 }
