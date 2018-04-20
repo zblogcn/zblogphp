@@ -241,6 +241,7 @@ class ZBlogPHP
      * @var int 当前实例下CSRF Token过期时间（小时）
      */
     public $csrfExpiration = 1;
+
     /**
      * 获取唯一实例.
      *
@@ -270,7 +271,7 @@ class ZBlogPHP
     public static function InitializeDB($type)
     {
         if (!trim($type)) {
-            return null;
+            return;
         }
 
         $newtype = 'Database__' . trim($type);
@@ -859,7 +860,7 @@ class ZBlogPHP
         if (!isset($this->configs[$name])) {
             $name = FilterCorrectName($name);
             if (!$name) {
-                return null;
+                return;
             }
 
             $this->configs[$name] = new Config($name);
@@ -1154,7 +1155,6 @@ class ZBlogPHP
                 return $user;
             }
         }
-        return null;
     }
 
     /**
@@ -2132,7 +2132,7 @@ class ZBlogPHP
     private function GetSomeThingById(&$object, $className, $id)
     {
         if ($id == 0) {
-            return null;
+            return;
         }
         if ($object != null) {
             //$modules非ID为key

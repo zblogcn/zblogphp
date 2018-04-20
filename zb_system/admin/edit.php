@@ -50,7 +50,7 @@ if (!$zbp->CheckRights('ArticlePub')) {
 }
 
 if (isset($_GET['id'])) {
-    $article->LoadInfoByID((int)GetVars('id', 'GET'));
+    $article->LoadInfoByID((int) GetVars('id', 'GET'));
 }
 
 if ($ispage) {
@@ -178,7 +178,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                     <!-- )alias -->
 
                     <?php if (!$ispage) {
-                        ?>
+                            ?>
                         <!-- tags( -->
                         <div id="tags" class="editmod2">
                             <label for="edtTag" class='editinputname'>
@@ -199,11 +199,11 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                             <span>* <?php echo $lang['msg']['help_generate_summary'] ?>
                                 <a href="#" onClick="AutoIntro()">[<?php echo $lang['msg']['generate_summary'] ?>]</a></span></div>
                         <?php
-                    } ?>
+                        } ?>
 
                     <div id="divIntro" class="editmod2" <?php if (!$article->Intro) {
-                        echo 'style="display:none;"';
-                    } ?>>
+                            echo 'style="display:none;"';
+                        } ?>>
                         <div id="theader" class="editmod editmod3">
                             <label for="editor_intro" class="editinputname">
                                 <?php echo $lang['msg']['intro'] ?>
@@ -241,7 +241,8 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                 </div>
 
                                 <!-- cate -->
-                                <?php if (!$ispage) { ?>
+                                <?php if (!$ispage) {
+                            ?>
                                     <div id="cate" class="editmod">
                                         <label for="cmbCateID" class="editinputname" style="max-width:65px;text-overflow:ellipsis;">
                                             <?php echo $lang['msg']['category'] ?>
@@ -250,7 +251,8 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                             <?php echo OutputOptionItemsOfCategories($article->CateID); ?>
                                         </select>
                                     </div>
-                                <?php } ?>
+                                <?php
+                        } ?>
                                 <!-- )cate -->
 
                                 <!-- level -->
@@ -300,7 +302,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                 <!-- )newdatetime -->
 
                                 <!-- Istop( --><?php if (!$ispage && $zbp->CheckRights('ArticleAll')) {
-                                    ?>
+                            ?>
                                     <div id='istop' class="editmod">
                                     <label for="edtIstop"
                                            class="editinputname"><?php echo $lang['msg']['top'] ?></label>
@@ -309,7 +311,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                         <?php echo OutputOptionItemsOfIsTop($article->IsTop); ?>
                                     </select>
                                     </div><?php
-                                } ?>
+                        } ?>
 
                                 <!-- )Istop -->
 
@@ -319,20 +321,20 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                     <label for="edtIslock"
                                            class='editinputname'><?php echo $lang['msg']['disable_comment'] ?></label>
                                     <input id="edtIslock" name="IsLock" style="" type="text"
-                                           value="<?php echo (int)$article->IsLock; ?>" class="checkbox"/>
+                                           value="<?php echo (int) $article->IsLock; ?>" class="checkbox"/>
                                 </div>
                                 <!-- )IsLock -->
 
                                 <!-- Navbar( --><?php if ($ispage) {
-                                    ?>
+                            ?>
                                     <div id='AddNavbar' class="editmod">
                                     <label for="edtAddNavbar"
                                            class='editinputname'><?php echo $lang['msg']['add_to_navbar'] ?></label>
                                     <input type="text" name="AddNavbar" id="edtAddNavbar"
-                                           value="<?php echo (int)$zbp->CheckItemToNavbar('page', $article->ID) ?>"
+                                           value="<?php echo (int) $zbp->CheckItemToNavbar('page', $article->ID) ?>"
                                            class="checkbox"/>
                                     </div><?php
-                                } ?>
+                        } ?>
                                 <!-- )Navbar -->
 
                                 <!-- 3号输出接口 -->

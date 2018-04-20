@@ -18,8 +18,8 @@ unset($post_data['token']);
     <link rel="stylesheet" href="<?php echo $GLOBALS['bloghost']; ?>zb_system/css/admin.css" type="text/css" media="screen"/>
     <script type="text/javascript" src="<?php echo $GLOBALS['bloghost']; ?>zb_system/script/common.js"></script>
     <?php foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {
-        $fpname();
-    } ?>
+    $fpname();
+} ?>
 
 </head>
 <body class="short">
@@ -30,7 +30,7 @@ unset($post_data['token']);
         <div class="login loginw">
             <form id="frmLogin" method="post" action="#">
                 <?php if (!$GLOBALS['option']['ZC_DEBUG_MODE']) {
-                    ?>
+    ?>
                     <div class="divHeader lessinfo" style="margin-bottom:10px;">
                         <b><?php echo TransferHTML($error->message, '[noscript]'); ?></b></div>
                     <div class="content lessinfo">
@@ -40,9 +40,9 @@ unset($post_data['token']);
                         </div>
                     </div>
                     <?php
-                } ?>
+} ?>
                 <?php if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
-                    ?>
+        ?>
                     <div class="divHeader moreinfo"
                          style="margin-bottom:10px;"><?php echo $GLOBALS['lang']['msg']['error_tips']; ?></div>
                     <div class="content moreinfo">
@@ -50,9 +50,9 @@ unset($post_data['token']);
                             <p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p>
                             <?php echo '(' . $error->type . ')' . $error->typeName . ' :   ' . (TransferHTML($error->messagefull, '[noscript]')); ?>
                             <?php echo ' (' . ZC_VERSION_FULL . ') ';
-                            if (!in_array('Status: 404 Not Found', headers_list())) {
-                                echo '(' . GetEnvironment() . ') ';
-                            } ?>
+        if (!in_array('Status: 404 Not Found', headers_list())) {
+            echo '(' . GetEnvironment() . ') ';
+        } ?>
                         </div>
                         <div>
                             <p><?php echo $GLOBALS['lang']['msg']['file_line']; ?></p>
@@ -62,14 +62,14 @@ unset($post_data['token']);
 
                                 <?php
                                 $aFile = $error->get_code($error->file, $error->line);
-                                foreach ($aFile as $iInt => $sData) {
-                                    ?>
+        foreach ($aFile as $iInt => $sData) {
+            ?>
                                     <tr<?php echo $iInt + 1 == $error->line ? ' style="background:#75BAFF"' : '' ?>>
                                         <td style='width:50px'><?php echo $iInt + 1 ?></td>
                                         <td><?php echo $sData ?></td>
                                     </tr>
                                     <?php
-                                } ?>
+        } ?>
 
                                 </tbody>
                             </table>
@@ -96,13 +96,13 @@ unset($post_data['token']);
                                                 } ?>)
                                                 <?php
                                                 echo isset($sData['class']) ? $sData['class'] . $sData['type'] : "";
-                                                echo $sData['function'] . '(';
-                                                if (isset($sData['args'])) {
-                                                    foreach ($sData['args'] as $argKey => $argVal) {
-                                                        echo $argKey . ' => ' . (CheckCanBeString($argVal) ? htmlspecialchars((string)$argVal) : 'Object') . ',';
-                                                    }
-                                                }
-                                                echo ')'; ?></code></td>
+                                    echo $sData['function'] . '(';
+                                    if (isset($sData['args'])) {
+                                        foreach ($sData['args'] as $argKey => $argVal) {
+                                            echo $argKey . ' => ' . (CheckCanBeString($argVal) ? htmlspecialchars((string) $argVal) : 'Object') . ',';
+                                        }
+                                    }
+                                    echo ')'; ?></code></td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -146,7 +146,7 @@ unset($post_data['token']);
                         </div>
                     </div>
                     <?php
-                } ?>
+    } ?>
 
                 <p>
                     <a href="javascript:history.back(-1);"><?php echo $GLOBALS['lang']['msg']['back']; ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
