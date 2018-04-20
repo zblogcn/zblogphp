@@ -1,9 +1,12 @@
 Z-BlogPHP
 =============
 [![StyleCI](https://styleci.io/repos/24038803/shield?branch=master)](https://styleci.io/repos/24038803)
-[![License](https://poser.pugx.org/zblogcn/zblogphp/license)](https://packagist.org/packages/zblogcn/zblogphp)
 
-Z-BlogPHP是由Z-Blog社区提供的博客程序，一直致力于给国内用户提供优秀的博客写作体验。从2006年起发布第一版，至今已有13年的历史，是目前国内为数不多的持续提供更新的开源CMS系统之一。我们的目标是使用户沉浸于写作、记录生活，不需要关注繁琐的设置等，让用户专注于创作。对于用户而言，它简单易用，体积小，速度快，支持数据量大。对开发者而言，它又有着强大的可定制性、丰富的插件接口和独立的主题模板。期待Z-BlogPHP能成为您写博客的第一选择。
+Z-BlogPHP是由Z-Blog社区提供的博客程序，一直致力于给国内用户提供优秀的博客写作体验。从2006年起发布第一版，至今已有13年的历史，是目前国内为数不多的持续提供更新的开源CMS系统之一。
+
+我们的目标是使用户沉浸于写作、记录生活，不需要关注繁琐的设置等，让用户专注于创作。对于用户而言，它简单易用，体积小，速度快，支持数据量大。对开发者而言，它又有着强大的可定制性、丰富的插件接口和精美的主题模板。
+
+期待Z-BlogPHP能成为您写博客的第一选择。
 
 ## 社区说明
 1. 使用交流及开发建议，请转向[Z-Blog论坛](http://bbs.zblogcn.com/)；
@@ -18,6 +21,8 @@ Z-BlogPHP是由Z-Blog社区提供的博客程序，一直致力于给国内用�
 - IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
 - PHP 5.2 - 7.2 / HHVM 3 
 - MySQL 5+ / MariaDB 10+ / SQLite 3
+
+另：开发版内有 PostgreSQL 支持，需要手动启动，欢迎测试。
 
 ## 安装说明
 > 首先请确保网站目录拥有755权限。
