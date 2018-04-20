@@ -460,6 +460,7 @@ function editor_init(){
     var articleKey = 'zblogphp_article_' + $idElement.val();
     var isFirstOpenPage = true;
     var autosave = true;
+    var hint = '<?php echo $lang['error']['93']; ?>';
     var currentStatus = {
         time: new Date().getTime(),
         random: 0,
@@ -482,6 +483,10 @@ function editor_init(){
         // So we don't need to auto-save data,
         // but have to warn user the content is saved by other page.
         if (currentStatus.random !== 0 && prevStatus === null) {
+            if (hint !== '') {
+                alert(hint);
+                hint = '';
+            }
             return;
         }
 

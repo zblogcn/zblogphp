@@ -500,6 +500,7 @@ return array(
         '90' => 'Alias disallow special symbols.',
         '91' => 'PHP version is too old to enable this application, it requires %s and above.',
         '92' => 'Missing %s function, can not enable this application.',
+        '93' => 'This article is updated by other pages, so we do not automatically back up the content on the current page unless you refresh the page.'
     ),
 
     'offical_urls' => array(
