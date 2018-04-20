@@ -79,6 +79,7 @@ switch ($action) {
                 misc_updateinfo();
                 break;
             case 'showtags':
+                $zbp->csrfExpiration = 48;
                 CheckIsRefererValid();
                 if (!$zbp->CheckRights('ArticleEdt')) {
                     Http404();
