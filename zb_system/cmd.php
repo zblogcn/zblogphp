@@ -151,7 +151,7 @@ switch ($action) {
         $zbp->BuildModule();
         $zbp->SaveCache();
         $zbp->SetHint('good');
-        echo '<script>localStorage.removeItem("zblogphp_article_" + decodeURIComponent('. urlencode(GetVars('ID', 'POST')) .'));</script>';
+        echo '<script>localStorage.removeItem("zblogphp_article_" + decodeURIComponent(' . urlencode(GetVars('ID', 'POST')) . '));</script>';
         RedirectByScript('cmd.php?act=ArticleMng');
         break;
     case 'PageEdt':
@@ -174,7 +174,7 @@ switch ($action) {
         $zbp->BuildModule();
         $zbp->SaveCache();
         $zbp->SetHint('good');
-        echo '<script>localStorage.removeItem("zblogphp_article_" + decodeURIComponent('. urlencode(GetVars('ID', 'POST')) .'));</script>';
+        echo '<script>localStorage.removeItem("zblogphp_article_" + decodeURIComponent(' . urlencode(GetVars('ID', 'POST')) . '));</script>';
         RedirectByScript('cmd.php?act=PageMng');
         break;
     case 'CategoryMng':

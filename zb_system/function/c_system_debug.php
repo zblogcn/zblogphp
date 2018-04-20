@@ -468,7 +468,6 @@ class ZBlogException
      */
     public function Display()
     {
-
         if (!headers_sent()) {
             Http500();
             ob_clean();
