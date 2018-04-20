@@ -132,8 +132,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsig
        </div>
 
     <div id="divContent"  class="editmod2" style="clear:both;">
-        <div id='cheader' class="editmod editmod3"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content'] ?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span>
-        <script src="<?php echo BuildSafeCmdURL('act=misc&amp;type=autosave'); ?>"></script></div>
+        <div id='cheader' class="editmod editmod3"><label for="editor_content" class="editinputname" ><?php echo $lang['msg']['content'] ?></label>&nbsp;&nbsp;<span id="timemsg"></span><span id="msg2"></span><span id="msg"></span><span class="editinputname" ></span></div>
         <div id='carea' style="margin:5px 0 0 0" class="editmod editmod3"><textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content, '[html-format]'); ?></textarea></div>
         <div id="contentready" style="display:none"><img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Waiting...</div>
     </div>
@@ -324,7 +323,7 @@ var editor_api={
 
 //文章内容或摘要变动提示保存
 window.onbeforeunload = function(){
-  if (!isSubmit && (editor_api.editor.content.get()!=sContent)) return "<?php echo $zbp->lang['error'][71]; ?>";
+  if (!isSubmit && (editor_api.editor.content.get() !== sContent)) return "<?php echo $zbp->lang['error'][71]; ?>";
 }
 
 function checkArticleInfo(){
@@ -453,6 +452,81 @@ function editor_init(){
     editor_api.editor.intro.focus=function(){return this.obj.focus()};
     sContent=editor_api.editor.content.get();
 }
+
+
+// Auto-save module
+(function() {
+    var $idElement = $('#edtID');
+    var articleKey = 'zblogphp_article_' + $idElement.val();
+    var isFirstOpenPage = true;
+    var autosave = true;
+    var currentStatus = {
+        time: new Date().getTime(),
+        random: 0,
+        data: {},
+        content: '',
+        intro: ''
+    };
+    var updateStatus = function () {
+        var prevStatus = parseSavedStatus();
+        currentStatus.content = editor_api.editor.content.get();
+        currentStatus.intro = editor_api.editor.intro.get();
+
+        // The browser is posting data to server, no action should be taken.
+        if (!autosave) {
+            return;
+        }
+        // random === 0 means currently didn't save any data
+        // If we saved data before, but found data is empty
+        // That's mean the content is posted to the server
+        // So we don't need to auto-save data,
+        // but have to warn user the content is saved by other page.
+        if (currentStatus.random !== 0 && prevStatus === null) {
+            return;
+        }
+
+        if (prevStatus !== null && currentStatus.time !== prevStatus.time && currentStatus.random !== prevStatus.random) {
+            // That's mean the content of this page is deprecated
+            // But we have no need to check the content should be auto-saved.
+            // Let them have a competition!
+            // We don't need to recover text from localStorage except the first time!
+            // if (prevStatus.time > currentStatus.time) return;
+            if (currentStatus.content === prevStatus.content) return;
+            if (currentStatus.content.trim() === '') return;
+        }
+        currentStatus.random = Math.random();
+        currentStatus.time = new Date().getTime();
+        // currentStatus.data = $('#edit').serializeJson();
+        localStorage.setItem(articleKey, JSON.stringify(currentStatus));
+    };
+    var parseSavedStatus = function () {
+        var content = localStorage.getItem(articleKey);
+        if (!content) return null;
+        try {
+            return JSON.parse(content);
+        } catch (e) {
+            return null;
+        }
+    };
+    var readStatus = function () {
+        var status = parseSavedStatus();
+        if (isFirstOpenPage && status !== null) {
+            currentStatus = status;
+            editor_api.editor.content.put(currentStatus.content);
+            editor_api.editor.intro.put(currentStatus.intro);
+            // Object.keys(currentStatus.data).
+        }
+        isFirstOpenPage = false;
+    };
+    setInterval(function () {
+        updateStatus();
+    }, 5000);
+    $(document).ready(function () {
+        setTimeout(function() {
+            readStatus()
+        }, 2000);
+    });
+})();
 
 </script>
 

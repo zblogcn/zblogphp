@@ -151,7 +151,8 @@ switch ($action) {
         $zbp->BuildModule();
         $zbp->SaveCache();
         $zbp->SetHint('good');
-        Redirect('cmd.php?act=ArticleMng');
+        echo '<script>localStorage.removeItem("zblogphp_article_" + decodeURIComponent('. urlencode(GetVars('ID', 'POST')) .'));</script>';
+        RedirectByScript('cmd.php?act=ArticleMng');
         break;
     case 'PageEdt':
         Redirect('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
@@ -173,7 +174,8 @@ switch ($action) {
         $zbp->BuildModule();
         $zbp->SaveCache();
         $zbp->SetHint('good');
-        Redirect('cmd.php?act=PageMng');
+        echo '<script>localStorage.removeItem("zblogphp_article_" + decodeURIComponent('. urlencode(GetVars('ID', 'POST')) .'));</script>';
+        RedirectByScript('cmd.php?act=PageMng');
         break;
     case 'CategoryMng':
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));

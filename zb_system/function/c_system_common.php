@@ -701,6 +701,16 @@ function SetHttpStatusCode($number)
 }
 
 /**
+ * 用script标签进行跳转
+ *
+ * @param string $url 跳转链接
+ */
+function RedirectByScript($url)
+{
+    echo '<script>location.href = decodeURIComponent("' . urlencode($url) . '");</script>';
+    die();
+}
+/**
  * 302跳转.
  *
  * @param string $url 跳转链接
