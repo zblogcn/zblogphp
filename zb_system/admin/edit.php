@@ -121,8 +121,8 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                             <div>
                                 <input type="text" name="Title" id="edtTitle"
                                         maxlength="<?php echo $option['ZC_ARTICLE_TITLE_MAX']; ?>"
-                                        onBlur="if(this.value=='') this.value='<?php echo $lang['msg']['unnamed'] ?>'"
-                                        onFocus="if(this.value=='<?php echo $lang['msg']['unnamed'] ?>') this.value=''"
+                                        onBlur="if(this.value==='') this.value='<?php echo $lang['msg']['unnamed'] ?>'"
+                                        onFocus="if(this.value==='<?php echo $lang['msg']['unnamed'] ?>') this.value=''"
                                         value="<?php echo $article->Title; ?>"/>
                             </div>
                         </div>
@@ -365,6 +365,9 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
         <script>
 
+            /**
+             * Gargabe codes
+             */
             var tag_loaded = false; //是否已经ajax读取过TAGS
             var sContent = "", sIntro = "";//原内容与摘要
             var isSubmit = false;//是否提交保存
@@ -402,12 +405,12 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                         }
                     }
                 }
-            }
+            };
 
             //文章内容或摘要变动提示保存
             window.onbeforeunload = function () {
                 if (!isSubmit && (editor_api.editor.content.get() !== sContent)) return "<?php echo $zbp->lang['error'][71]; ?>";
-            }
+            };
 
             function checkArticleInfo() {
                 if (isSubmit) return false;
@@ -469,7 +472,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                 var offset = $(event.target).offset();
                 $('#ulTag').css({top: offset.top + $(event.target).height() + 20 + "px", left: offset.left});
                 $('#ulTag').slideDown("fast");
-                if (tag_loaded == false) {
+                if (tag_loaded === false) {
                     $.getScript('<?php echo BuildSafeCmdURL('act=misc&type=showtags'); ?>');
                     tag_loaded = true;
                 }
@@ -565,7 +568,6 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                 var $idElement = $('#edtID');
                 var articleKey = 'zblogphp_article_' + $idElement.val();
                 var isFirstOpenPage = true;
-                var autosave = true;
                 var hint = '<?php echo $lang['error']['93']; ?>';
                 var currentStatus = {
                     time: new Date().getTime(),
@@ -580,7 +582,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                     currentStatus.intro = editor_api.editor.intro.get();
 
                     // The browser is posting data to server, no action should be taken.
-                    if (!autosave) {
+                    if (!isSubmit) {
                         return;
                     }
                     // random === 0 means currently didn't save any data
@@ -631,7 +633,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                 };
                 setInterval(function () {
                     updateStatus();
-                }, 5000);
+                }, 10000);
                 $(document).ready(function () {
                     setTimeout(function () {
                         readStatus()
@@ -647,7 +649,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
         }
         ?>
 
-        <script type="text/javascript">editor_init();</script>
+        <script>editor_init();</script>
     </div>
 <?php
 require ZBP_PATH . 'zb_system/admin/admin_footer.php';
