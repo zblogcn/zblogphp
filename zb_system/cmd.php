@@ -146,6 +146,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ArticlePst':
+        $zbp->csrfExpiration = 48;
         CheckIsRefererValid();
         PostArticle();
         $zbp->BuildModule();
@@ -169,6 +170,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PagePst':
+        $zbp->csrfExpiration = 48;
         CheckIsRefererValid();
         PostPage();
         $zbp->BuildModule();

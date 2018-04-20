@@ -238,6 +238,10 @@ class ZBlogPHP
     public $commentdisplaycount = 10;
 
     /**
+     * @var int 当前实例下CSRF Token过期时间（小时）
+     */
+    public $csrfExpiration = 1;
+    /**
      * 获取唯一实例.
      *
      * @return null|ZBlogPHP
@@ -266,7 +270,7 @@ class ZBlogPHP
     public static function InitializeDB($type)
     {
         if (!trim($type)) {
-            return;
+            return null;
         }
 
         $newtype = 'Database__' . trim($type);
@@ -855,7 +859,7 @@ class ZBlogPHP
         if (!isset($this->configs[$name])) {
             $name = FilterCorrectName($name);
             if (!$name) {
-                return;
+                return null;
             }
 
             $this->configs[$name] = new Config($name);
@@ -1140,7 +1144,7 @@ class ZBlogPHP
      * @param string $token
      * @param string $username
      *
-     * @return Member|null
+     * @return Member
      */
     public function VerifyUserToken($token, $username)
     {
@@ -1150,6 +1154,7 @@ class ZBlogPHP
                 return $user;
             }
         }
+        return null;
     }
 
     /**
@@ -2127,7 +2132,7 @@ class ZBlogPHP
     private function GetSomeThingById(&$object, $className, $id)
     {
         if ($id == 0) {
-            return;
+            return null;
         }
         if ($object != null) {
             //$modules非ID为key
@@ -2785,12 +2790,13 @@ class ZBlogPHP
      */
     public function VerifyCSRFToken($token, $id = '')
     {
-        $s = $this->user->ID . $this->user->Password . $this->user->Status;
-        if ($token == md5($this->guid . $s . $id . date('Ymdh'))) {
-            return true;
-        }
-        if ($token == md5($this->guid . $s . $id . date('Ymdh', time() - (3600 * 1)))) {
-            return true;
+        $userString = $this->user->ID . $this->user->Password . $this->user->Status;
+        $tokenString = $this->guid . $userString . $id;
+
+        for ($i = 0; $i <= $this->csrfExpiration; $i++) {
+            if ($token === md5($tokenString . date('Ymdh', time() - (3600 * $i)))) {
+                return true;
+            }
         }
 
         return false;
