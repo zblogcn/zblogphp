@@ -1,35 +1,36 @@
 <?php
 /**
- * PHP 富文本XSS过滤类
+ * PHP 富文本XSS过滤类.
  *
- * @package XssHtml
  * @version 1.0.0
+ *
  * @link http://phith0n.github.io/XssHtml
  * @since 20140621
- * @copyright (c) Phithon All Rights Reserved
  *
+ * @copyright (c) Phithon All Rights Reserved
  */
 
-#
-# Written by Phithon <root@leavesongs.com> in 2014 and placed in
-# the public domain.
-#
-# phithon <root@leavesongs.com> 编写于20140621
-# From: XDSEC <www.xdsec.org> & 离别歌 <www.leavesongs.com>
-# Usage:
-# <?php
-# require('xsshtml.class.php');
-# $html = '<html code>';
-# $xss = new XssHtml($html);
-# $html = $xss->getHtml();
-# ?\>
-#
-# 需求：
-# PHP Version > 5.0
-# 浏览器版本：IE7+ 或其他浏览器，无法防御IE6及以下版本浏览器中的XSS
-# 更多使用选项见 http://phith0n.github.io/XssHtml
+//
+// Written by Phithon <root@leavesongs.com> in 2014 and placed in
+// the public domain.
+//
+// phithon <root@leavesongs.com> 编写于20140621
+// From: XDSEC <www.xdsec.org> & 离别歌 <www.leavesongs.com>
+// Usage:
+// <?php
+// require('xsshtml.class.php');
+// $html = '<html code>';
+// $xss = new XssHtml($html);
+// $html = $xss->getHtml();
+// ?\>
+//
+// 需求：
+// PHP Version > 5.0
+// 浏览器版本：IE7+ 或其他浏览器，无法防御IE6及以下版本浏览器中的XSS
+// 更多使用选项见 http://phith0n.github.io/XssHtml
 
-class XssHtml {
+class XssHtml
+{
     private $m_dom;
     private $m_xss;
     private $m_ok;
@@ -37,27 +38,29 @@ class XssHtml {
     private $m_AllowTag = array('a', 'img', 'br', 'strong', 'b', 'code', 'pre', 'p', 'div', 'em', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'table', 'ul', 'ol', 'tr', 'th', 'td', 'hr', 'li', 'u');
 
     /**
-     * 构造函数
+     * 构造函数.
      *
-     * @param string $html 待过滤的文本
-     * @param string $charset 文本编码，默认utf-8
-     * @param array $AllowTag 允许的标签，如果不清楚请保持默认，默认已涵盖大部分功能，不要增加危险标签
+     * @param string $html     待过滤的文本
+     * @param string $charset  文本编码，默认utf-8
+     * @param array  $AllowTag 允许的标签，如果不清楚请保持默认，默认已涵盖大部分功能，不要增加危险标签
      */
-    public function __construct($html, $charset = 'utf-8', $AllowTag = array()){
+    public function __construct($html, $charset = 'utf-8', $AllowTag = array())
+    {
         $this->m_AllowTag = empty($AllowTag) ? $this->m_AllowTag : $AllowTag;
         $this->m_xss = strip_tags($html, '<' . implode('><', $this->m_AllowTag) . '>');
         if (empty($this->m_xss)) {
-            $this->m_ok = FALSE;
-            return ;
+            $this->m_ok = false;
+
+            return;
         }
         $this->m_xss = "<meta http-equiv=\"Content-Type\" content=\"text/html;charset={$charset}\"><nouse>" . $this->m_xss . "</nouse>";
         $this->m_dom = new DOMDocument();
-        $this->m_dom->strictErrorChecking = FALSE;
+        $this->m_dom->strictErrorChecking = false;
         $this->m_ok = @$this->m_dom->loadHTML($this->m_xss);
     }
 
     /**
-     * 获得过滤后的内容
+     * 获得过滤后的内容.
      */
     public function getHtml()
     {
@@ -65,51 +68,57 @@ class XssHtml {
             return '';
         }
         $nodeList = $this->m_dom->getElementsByTagName('*');
-        for ($i = 0; $i < $nodeList->length; $i++){
+        for ($i = 0; $i < $nodeList->length; $i++) {
             $node = $nodeList->item($i);
             if (in_array($node->nodeName, $this->m_AllowTag)) {
                 if (method_exists($this, "__node_{$node->nodeName}")) {
                     call_user_func(array($this, "__node_{$node->nodeName}"), $node);
-                }else{
+                } else {
                     call_user_func(array($this, '__node_default'), $node);
                 }
             }
         }
         $html = strip_tags($this->m_dom->saveHTML(), '<' . implode('><', $this->m_AllowTag) . '>');
         $html = preg_replace('/^\n(.*)\n$/s', '$1', $html);
+
         return $html;
     }
 
-    private function __true_url($url){
+    private function __true_url($url)
+    {
         if (preg_match('#^https?://.+#is', $url)) {
             return $url;
-        }else{
+        } else {
             return 'http://' . $url;
         }
     }
 
-    private function __get_style($node){
+    private function __get_style($node)
+    {
         if ($node->attributes->getNamedItem('style')) {
             $style = $node->attributes->getNamedItem('style')->nodeValue;
             $style = str_replace('\\', ' ', $style);
             $style = str_replace(array('&#', '/*', '*/'), ' ', $style);
             $style = preg_replace('#e.*x.*p.*r.*e.*s.*s.*i.*o.*n#Uis', ' ', $style);
+
             return $style;
-        }else{
+        } else {
             return '';
         }
     }
 
-    private function __get_link($node, $att){
+    private function __get_link($node, $att)
+    {
         $link = $node->attributes->getNamedItem($att);
         if ($link) {
             return $this->__true_url($link->nodeValue);
-        }else{
+        } else {
             return '';
         }
     }
 
-    private function __setAttr($dom, $attr, $val){
+    private function __setAttr($dom, $attr, $val)
+    {
         if (!empty($val)) {
             $dom->setAttribute($attr, $val);
         }
@@ -120,7 +129,7 @@ class XssHtml {
         $o = $node->attributes->getNamedItem($attr);
         if ($o) {
             $this->__setAttr($node, $attr, $o->nodeValue);
-        }else{
+        } else {
             $this->__setAttr($node, $attr, $default);
         }
     }
@@ -144,7 +153,8 @@ class XssHtml {
         $this->__set_default_attr($node, 'class');
     }
 
-    private function __node_img($node){
+    private function __node_img($node)
+    {
         $this->__common_attr($node);
 
         $this->__set_default_attr($node, 'src');
@@ -152,10 +162,10 @@ class XssHtml {
         $this->__set_default_attr($node, 'height');
         $this->__set_default_attr($node, 'alt');
         $this->__set_default_attr($node, 'align');
-
     }
 
-    private function __node_a($node){
+    private function __node_a($node)
+    {
         $this->__common_attr($node);
         $href = $this->__get_link($node, 'href');
 
@@ -163,7 +173,8 @@ class XssHtml {
         $this->__set_default_attr($node, 'target', '_blank');
     }
 
-    private function __node_embed($node){
+    private function __node_embed($node)
+    {
         $this->__common_attr($node);
         $link = $this->__get_link($node, 'src');
 
@@ -173,7 +184,8 @@ class XssHtml {
         $this->__set_default_attr($node, 'height');
     }
 
-    private function __node_default($node){
+    private function __node_default($node)
+    {
         $this->__common_attr($node);
     }
 }
@@ -184,4 +196,3 @@ class XssHtml {
 // 	$html = $xss->getHtml();
 // 	echo "'$html'";
 // }
-?>

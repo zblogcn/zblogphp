@@ -701,7 +701,7 @@ function SetHttpStatusCode($number)
 }
 
 /**
- * 用script标签进行跳转
+ * 用script标签进行跳转.
  *
  * @param string $url 跳转链接
  */
