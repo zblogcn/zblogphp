@@ -297,7 +297,7 @@ class ZBlogPHP
         $this->option = &$option;
         $this->lang = &$lang;
         $this->path = &$blogpath;
-        $this->host = &$bloghost;
+        $this->host = &$bloghost;//此值在后边初始化时可能会变化!
         $this->cookiespath = &$cookiespath;
         $this->usersdir = &$usersdir;
 
@@ -307,8 +307,6 @@ class ZBlogPHP
         $this->posttype = &$posttype;
         $this->currenturl = &$currenturl;
 
-        $parsedHost = parse_url($this->host);
-        $this->fullcurrenturl = $parsedHost['scheme'] . '://' . $parsedHost['host'] . $this->currenturl;
         $this->action = &$action;
         $this->activedapps = &$activedapps;
         $this->activeapps = &$this->activedapps;
@@ -435,8 +433,7 @@ class ZBlogPHP
 
         $this->ConvertTableAndDatainfo();
 
-        $this->LoadConfigs();
-        $this->LoadCache();
+        $this->LoadConfigsOnlySystem(true);
         $this->LoadOption();
 
         $this->RegPostType(0, 'article', $this->option['ZC_ARTICLE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE'], 0, 0);
@@ -464,9 +461,6 @@ class ZBlogPHP
             ZBlogException::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
         }
 
-        if (substr($this->host, 0, 8) == 'https://') {
-            $this->isHttps = true;
-        }
         if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
             $this->host = $this->option['ZC_BLOG_HOST'];
             $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
@@ -498,12 +492,22 @@ class ZBlogPHP
             header('Product:' . $this->option['ZC_BLOG_PRODUCT_FULL']);
         }
 
+        $parsedHost = parse_url($this->host);
+        $this->fullcurrenturl = $parsedHost['scheme'] . '://' . $parsedHost['host'] . $this->currenturl;
+        if (substr($this->host, 0, 8) == 'https://') {
+            $this->isHttps = true;
+        }
+
         $this->verifyCodeUrl = $this->host . 'zb_system/script/c_validcode.php';
         $this->validcodeurl = &$this->verifyCodeUrl;
         $this->feedurl = $this->host . 'feed.php';
         $this->searchurl = $this->host . 'search.php';
         $this->ajaxurl = $this->host . 'zb_system/cmd.php?act=ajax&src=';
         $this->xmlrpcurl = $this->host . 'zb_system/xml-rpc/index.php';
+
+        $this->LoadConfigsOnlySystem(false);
+
+        $this->LoadCache();
 
         $this->isinitialized = true;
 
@@ -795,21 +799,28 @@ class ZBlogPHP
             $n = $c->GetItemName();
             $this->configs[$n] = $c;
         }
-
-        /*
-                $configs_name = $configs_namevalue = array();
-                foreach ($array as $c) {
-                    $n = $c->GetItemName();
-                    $configs_name[$n] = $n;
-                    $configs_namevalue[$n] = $c;
-                }
-                natcasesort($configs_name);
-                foreach ($configs_name as $name) {
-                    $this->configs[$name] = $configs_namevalue[$name];
-                }
-                unset($configs_name, $configs_namevalue);
-        */
     }
+
+    /**
+     * 载入插件Configs表 Only System Option And Cache.
+     */
+    public function LoadConfigsOnlySystem($onlysystemoption = true)
+    {
+        if($onlysystemoption == true)
+            $this->configs = array();
+        if($onlysystemoption == true)
+            $sql = $this->db->sql->Select($this->table['Config'], array('*'), 'conf_Name = "system"', '', '', '');
+        else
+            $sql = $this->db->sql->Select($this->table['Config'], array('*'), 'conf_Name <> "system"', '', '', '');
+
+        /** @var Config[] $array */
+        $array = $this->GetListType('Config', $sql);
+        foreach ($array as $c) {
+            $n = $c->GetItemName();
+            $this->configs[$n] = $c;
+        }
+    }
+
 
     /**
      * 保存Configs表.

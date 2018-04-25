@@ -587,7 +587,7 @@ function ViewAuto($inpurl)
         unset($realurl);
     }
 
-    //$url = trim(urldecode($url), '/');
+    $url = urldecode($url);
 
     if ($url == '' || $url == '/' || $url == 'index.php') {
         ViewList(null, null, null, null, null);
