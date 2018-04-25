@@ -1302,7 +1302,7 @@ class ALIOSS
      *
      * @since 2011-11-14
      *
-     * @return boolean
+     * @return bool
      */
     public function is_object_exist($bucket, $object, $options = null)
     {
@@ -1678,7 +1678,7 @@ class ALIOSS
      *
      * @since 2012-06-06
      *
-     * @return boolean
+     * @return bool
      */
     private function chk_chinese($str)
     {
@@ -1850,7 +1850,7 @@ class ALIOSS
      *
      * @since 2011-12-27
      *
-     * @return boolean
+     * @return bool
      */
     private function validate_bucket($bucket)
     {
@@ -1874,7 +1874,7 @@ class ALIOSS
      *
      * @since 2011-12-27
      *
-     * @return boolean
+     * @return bool
      */
     private function validate_object($object)
     {

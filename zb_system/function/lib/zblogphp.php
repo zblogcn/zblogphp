@@ -297,7 +297,7 @@ class ZBlogPHP
         $this->option = &$option;
         $this->lang = &$lang;
         $this->path = &$blogpath;
-        $this->host = &$bloghost;//此值在后边初始化时可能会变化!
+        $this->host = &$bloghost; //此值在后边初始化时可能会变化!
         $this->cookiespath = &$cookiespath;
         $this->usersdir = &$usersdir;
 
@@ -806,12 +806,14 @@ class ZBlogPHP
      */
     public function LoadConfigsOnlySystem($onlysystemoption = true)
     {
-        if($onlysystemoption == true)
+        if ($onlysystemoption == true) {
             $this->configs = array();
-        if($onlysystemoption == true)
+        }
+        if ($onlysystemoption == true) {
             $sql = $this->db->sql->Select($this->table['Config'], array('*'), 'conf_Name = "system"', '', '', '');
-        else
+        } else {
             $sql = $this->db->sql->Select($this->table['Config'], array('*'), 'conf_Name <> "system"', '', '', '');
+        }
 
         /** @var Config[] $array */
         $array = $this->GetListType('Config', $sql);
@@ -820,7 +822,6 @@ class ZBlogPHP
             $this->configs[$n] = $c;
         }
     }
-
 
     /**
      * 保存Configs表.

@@ -291,7 +291,7 @@ if (strpos($default_tab, 'apache') !== false) {
     <?php
     }?>
   <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-  <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/STACentre/logo.png';?>");</script>
+  <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/STACentre/logo.png'; ?>");</script>
 </div>
 
 <?php

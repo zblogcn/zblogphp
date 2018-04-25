@@ -16,4 +16,4 @@
 </header>
 <?php require ZBP_PATH . 'zb_system/admin/admin_left.php'; ?>
 <section class="main">
-<?php $zbp->GetHint();?>
+<?php $zbp->GetHint(); ?>
