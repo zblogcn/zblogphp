@@ -454,6 +454,9 @@ class ZBlogPHP
         if (isset($this->option['ZC_DEBUG_MODE_WARNING'])) {
             ZBlogException::$iswarning = (bool) $this->option['ZC_DEBUG_MODE_WARNING'];
         }
+        if (isset($this->option['ZC_DEBUG_MODE_STRICT'])) {
+            ZBlogException::$isstrict = (bool) $this->option['ZC_DEBUG_MODE_STRICT'];
+        }
         if (isset($this->option['ZC_DEBUG_LOG_ERROR'])) {
             ZBlogException::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
         }
@@ -587,10 +590,6 @@ class ZBlogPHP
 
         if ($this->option['ZC_DEBUG_MODE']) {
             $this->CheckTemplate(false, true);
-        }
-
-        if (isset($this->option['ZC_DEBUG_MODE_STRICT'])) {
-            ZBlogException::$isstrict = (bool) $this->option['ZC_DEBUG_MODE_STRICT'];
         }
 
         $this->isload = true;
