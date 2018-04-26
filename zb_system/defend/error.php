@@ -1,4 +1,5 @@
 <?php
+define('ZBP_ERRORPROCESSING', true);
 if (!isset($GLOBALS['zbp'])) {
     exit;
 }

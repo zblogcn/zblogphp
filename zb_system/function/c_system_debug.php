@@ -118,6 +118,10 @@ function Debug_IgnoreError($errno)
     //E_USER_ERROR
     //E_RECOVERABLE_ERROR
 
+    if (defined('ZBP_ERRORPROCESSING')) {
+        return true;
+    }
+
     return false;
 }
 
