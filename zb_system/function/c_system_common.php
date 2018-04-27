@@ -1125,7 +1125,7 @@ function TransferHTML($source, $para)
 
     if (strpos($para, '[noscript]') !== false) {
         $class = new XssHtml($source);
-        $source = $class->getHtml();
+        $source = trim($class->getHtml());
     }
     if (strpos($para, '[enter]') !== false) {
         $source = str_replace("\r\n", "<br/>", $source);
