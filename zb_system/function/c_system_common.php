@@ -19,15 +19,18 @@ function GetScheme($array)
         if (strtolower($array['REQUEST_SCHEME']) == 'https') {
             return 'https://';
         }
-    } elseif (array_key_exists('HTTPS', $array)) {
+    }
+    if (array_key_exists('HTTPS', $array)) {
         if (strtolower($array['HTTPS']) == 'on') {
             return 'https://';
         }
-    } elseif (array_key_exists('HTTP_FROM_HTTPS', $array)) {
+    }
+    if (array_key_exists('HTTP_FROM_HTTPS', $array)) {
         if (strtolower($array['HTTP_FROM_HTTPS']) == 'on') {
             return 'https://';
         }
-    } elseif (array_key_exists('SERVER_PORT', $array)) {
+    }
+    if (array_key_exists('SERVER_PORT', $array)) {
         if (strtolower($array['SERVER_PORT']) == '443') {
             return 'https://';
         }
