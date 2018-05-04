@@ -5,7 +5,7 @@
  * 后台管理相关
  * @package Z-BlogPHP
  * @subpackage System/Administrator 后台管理
- * @copyright (C) RainbowSoft Studio
+ * @copyright (C)  RainbowSoft Studio
  */
 
 $zbp->ismanage = true;
