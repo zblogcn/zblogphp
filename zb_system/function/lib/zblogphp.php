@@ -802,24 +802,36 @@ class ZBlogPHP
     }
 
     /**
-     * 载入插件Configs表 Only System Option And Cache.
+     * 载入插件Configs表 Only System Option.
      */
+    private $prvConfigList = array();
+
     public function LoadConfigsOnlySystem($onlysystemoption = true)
     {
         if ($onlysystemoption == true) {
             $this->configs = array();
-        }
-        if ($onlysystemoption == true) {
-            $sql = $this->db->sql->Select($this->table['Config'], array('*'), 'conf_Name = "system"', '', '', '');
-        } else {
-            $sql = $this->db->sql->Select($this->table['Config'], array('*'), 'conf_Name <> "system"', '', '', '');
+            $this->prvConfigList = array();
         }
 
-        /** @var Config[] $array */
-        $array = $this->GetListType('Config', $sql);
-        foreach ($array as $c) {
-            $n = $c->GetItemName();
-            $this->configs[$n] = $c;
+        $sql = $this->db->sql->Select($this->table['Config'], array('*'), '', '', '', '');
+
+        if ($onlysystemoption == true) {
+            /* @var Config[] $array */
+            $this->prvConfigList = $this->GetListType('Config', $sql);
+            foreach ($this->prvConfigList as $c) {
+                $n = $c->GetItemName();
+                if ($n == 'system') {
+                    $this->configs[$n] = $c;
+                }
+            }
+        } else {
+            foreach ($this->prvConfigList as $c) {
+                $n = $c->GetItemName();
+                if ($n != 'system') {
+                    $this->configs[$n] = $c;
+                }
+            }
+            $this->prvConfigList = array();
         }
     }
 

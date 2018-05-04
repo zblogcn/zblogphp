@@ -1525,7 +1525,7 @@ function Admin_ModuleMng()
     echo "\r\n";
 
     echo '<div class="clear"></div></div>';
-    //siderbar-list end 
+    //siderbar-list end
     echo "\r\n";
     echo '<div class="clear"></div>';
 
