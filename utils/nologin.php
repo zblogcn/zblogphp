@@ -1,180 +1,167 @@
 <?php
-
 require '../zb_system/function/c_system_base.php';
 $zbp->Load();
 
 if (isset($_GET['uid'])) {
     $m = $zbp->members[$_GET['uid']];
     $un = $m->Name;
+    $zbp->user = $m;
     if ($blogversion > 131221) {
         $ps = md5($m->Password . $zbp->guid);
     } else {
         $ps = md5($m->Password . $zbp->path);
     }
-    setcookie("username", $un, 0, $zbp->cookiespath);
-    setcookie("password", $ps, 0, $zbp->cookiespath);
-    Redirect('zb_system/admin/?act=admin');
+
+    if ($blogversion >= 151910) {
+        SetLoginCookie($m, 0);
+    } else {
+        setcookie("username", $un, 0, $zbp->cookiespath);
+        setcookie("password", $ps, 0, $zbp->cookiespath);
+    }
+
+    if (isset($GLOBALS['hooks']['Filter_Plugin_VerifyLogin_Succeed'])) {
+        foreach ($GLOBALS['hooks']['Filter_Plugin_VerifyLogin_Succeed'] as $fpname => &$fpsignal) {
+            $fpname();
+        }
+    }
+
+    Redirect('../zb_system/admin/?act=admin');
     die();
 }
-
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="Content-Language" content="zh-cn" />
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache,must-revalidate">
-	<meta http-equiv="expires" content="0">
-	<meta name="robots" content="none" />
-	<title>Z-BlogPHP密码重置工具</title>
-<style type="text/css">
-<!--
-*{
-	font-size:14px;
-}
-body{
-	margin:0;
-	padding:0;
-	color: #FFFFFF;
-	font-size:12px;
-	background:#FFFFFF;
-	font-family:"微软雅黑","黑体","宋体";
-}
-h1,h2,h3,h4,h5,h6{
-	font-size:18px;
-	padding:0;
-	margin:0;
-}
-a{
-	text-decoration: none;
-}
-a:link {
-	color:#FFFFFF;
-	text-decoration: none;
-}
-a:visited {
-	color:#FFFFFF;
-	text-decoration: none;
-}
-a:hover {
-	color:yellow;
-	text-decoration: underline;
-}
-a:active {
-	color:yellow;
-	text-decoration: underline;
-}
-p{
-	margin:0;
-	padding:5px;
-}
-table {
-	border-collapse: collapse;
-	border:0px solid #333333;
-	background:#ffffff;
-	margin-top:10px;
-}
-td{
-	border:0px solid #333333;
-	margin:0;
-	padding:3px;
-}
-img{
-	border:0;
-}
-hr{
-	border:0px;
-	border-top:1px solid #666666;
-	background:#666666;
-	margin:2px 0 4px 0;
-	padding:0;
-	height:0px;
-}
-img{
-	margin:0;
-	padding:0;
-}
-form{
-	margin:0;
-	padding:0;
-}
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title>Z-BlogPHP密码重置工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
 
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: normal;
+        }
 
-#frmLogin{
-	position:absolute;
-	left: 50%;
-	top: 40%;
-	margin: -150px 0px 0px -300px;
-	padding:0;
-	overflow:hidden;
-	width:600px;
-	height:400px;
-	background-color:#3a6ea5;
-	border:0px solid #B3C3CD;
-	box-shadow: 0px 0px 15px black;
-}
+        input, textarea, select, label {
+            font-family: microsoft yahei;
+        }
 
-#frmLogin h3{
-	padding:15px 0 5px 0;
-	margin:0;
-	text-align:center;
-	color:white;
-	font-size:24px;
-	height:30px;
-}
+        ul {
+            list-style: none;
+        }
 
-#divHeader{
-	margin:0 0;
-	padding:8px;
-}
-#divMain{
-	height:280px;
-}
-#divFooter{
-	margin:5px 0px 0 0px;
-	text-align:center;
-	padding:2px;
-}
+        body {
+            font-family: microsoft yahei;
+            background: #f0f0f0;
+        }
 
-#divMain_Top{
-	padding:8px;
-	padding-bottom:0;
-}
-#divMain_Center{
-	padding:5px;
-}
-#divMain_Bottom{
-	text-align:right;
-	padding:5px;
-}
-#txaContent{
-	border:1px solid #A1B0B9;
-	background:#FFFFFF;
-}
--->
-</style>
+        .nologin {
+            width: 600px;
+            margin: 0 auto 0;
+            background: #fff;
+            position: fixed;
+            top: 50%;
+            right: 0;
+            left: 0;
+        }
+
+        .loginhead {
+            padding: 30px 0;
+            color: #fff;
+            text-align: center;
+            background: #305e8d;
+        }
+
+        .loginhead h1 {
+            font-size: 22px;
+        }
+
+        .loginhead h2 {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .loginbody {
+            padding: 30px;
+        }
+
+        .loginuser li {
+            padding: 20px 0;
+            line-height: 28px;
+            border-bottom: 1px dotted #eee;
+        }
+
+        .loginuser em {
+            font-size: 12px;
+            color: #999;
+            font-style: normal;
+        }
+
+        .loginuser label {
+            font-size: 14px;
+            color: #305e8d;
+            font-weight: bold;
+        }
+
+        .loginuser input {
+            float: right;
+            padding: 0 20px;
+            font-size: 14px;
+            color: #fff;
+            text-align: center;
+            line-height: 30px;
+            border: 0;
+            border-radius: 2px;
+            cursor: pointer;
+            background: #305e8d;
+        }
+
+        .loginmsg {
+            margin-top: 30px;
+            font-size: 12px;
+            color: red;
+            line-height: 30px;
+            text-align: center;
+        }
+
+        .loginmsg b {
+            color: #333;
+        }
+    </style>
+    <script type="text/javascript" src="./zb_system/script/jquery-1.8.3.min.js"></script>
+    <script>
+      $(function () {
+        $loginh = $('.nologin').height()
+        $('.nologin').css('margin-top', -$loginh / 2)
+      })
+    </script>
 </head>
 <body>
-
-
-<form id="frmLogin" method="post">
-<h3>Z-BlogPHP免输入密码登录工具</h3>
-<div id="divHeader">&nbsp;&nbsp;<a href="http://www.zblogcn.com/" target="_blank">Z-Blog主页</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://bbs.zblogcn.com" class="here" target="_blank">Zblogger社区</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://wiki.zblogcn.com/" target="_blank">Z-Wiki</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://blog.zblogcn.com/" target="_blank">菠萝阁</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.dbshost.cn/" target="_blank">DBS主机</a></div>
-<div id="divMain">
-<input type="hidden" name="userid" id="userid" value="0" />
-<?php
-
-echo '<p></p>';
-
-foreach ($zbp->members as $key => $m) {
-    if ($m->Level < 2) {
-        echo '<p style="padding:10px;">[管理员]' . $m->Name . '<input style="float:right;" type="button" value="&nbsp;&nbsp;登录&nbsp;&nbsp;" onclick="window.location=\'?uid=' . $m->ID . '\'" /></p>';
-    }
-}
-
-?>
+<div class="nologin">
+    <div class="loginhead">
+        <h1>Z-BlogPHP免输入密码登陆工具</h1>
+        <h2>Powered By Z-BlogPHP <?php echo ZC_BLOG_VERSION; ?></h2>
+    </div>
+    <div class="loginbody">
+        <form id="frmLogin" method="post">
+            <div class="loginuser">
+                <ul>
+                    <input type="hidden" name="userid" id="userid" value="0"/>
+                    <?php
+                    foreach ($zbp->members as $key => $m) {
+                        if ($m->Level < 2) {
+                            echo '<li><em>[ 管理员 ]</em> <label for="">' . $m->Name . '</label><input type="button" onclick="window.location=\'?uid=' . $m->ID . '\'" value="登录" /></li>';
+                        }
+                    }
+                    ?>
+                </ul>
+            </div>
+            <div class="loginmsg">[注意] <b>此工具非常危险,使用后请立刻通过FTP删除或改名.</b></div>
+        </form>
+    </div>
 </div>
-<div id="divFooter"><b>[注意]&nbsp;<font color="yellow"> 此工具非常危险,使用后请立刻通过<u>FTP</u>删除或改名.</font></b></div>
-</form>
 </body>
 </html>
