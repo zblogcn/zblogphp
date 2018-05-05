@@ -44,7 +44,7 @@ function ueditor_addscript_end()
 {
     global $zbp;
 
-    $s = <<<'js'
+    $s = <<<js
 <script type="text/javascript">
 
 var EditorIntroOption = {
