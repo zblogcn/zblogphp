@@ -63,7 +63,7 @@ if (isset($_GET['uid'])) {
             margin: 0 auto 0;
             background: #fff;
             position: fixed;
-            top: 50%;
+            top: 20%;
             right: 0;
             left: 0;
         }
