@@ -1900,13 +1900,15 @@ DefinePluginFilter('Filter_Plugin_Module_Save');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Mebmer_Avatar
+'名称:Filter_Plugin_Member_Avatar
 '参数:$member
-'说明:Mebmer类的Avatar接口
+'说明:Member类的Avatar接口
 '调用:返回Avatar值,可以返回null.
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_Mebmer_Avatar');
+DefinePluginFilter('Filter_Plugin_Member_Avatar');
+//修正一个名字错误，以后版本应删除
+$GLOBALS['hooks']['Filter_Plugin_Mebmer_Avatar'] = &$GLOBALS['hooks']['Filter_Plugin_Member_Avatar'];
 
 /*
 '**************************************************<

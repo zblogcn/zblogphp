@@ -119,7 +119,7 @@ class Member extends Base
             return $u->Make();
         }
         if ($name == 'Avatar') {
-            foreach ($GLOBALS['hooks']['Filter_Plugin_Mebmer_Avatar'] as $fpname => &$fpsignal) {
+            foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Avatar'] as $fpname => &$fpsignal) {
                 $fpreturn = $fpname($this);
                 if ($fpreturn) {
                     $fpsignal = PLUGIN_EXITSIGNAL_NONE;
