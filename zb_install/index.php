@@ -355,6 +355,11 @@ function Setup2()
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_pgsql'][1]; ?></td>
         </tr>
         <tr>
+          <td scope="row">OpenSSL</td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['openssl'][0];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['openssl'][1];?></td>
+        </tr>
+        <tr>
           <th colspan="3" scope="row"><?php echo $zbp->lang['zb_install']['permission_check']; ?></th>
         </tr>
         <tr>
@@ -741,6 +746,7 @@ function CheckServer()
         'pgsql'      => array('', ''),
         'pdo_pgsql'  => array('', ''),
         'mbstring'   => array('', ''),
+        'openssl' => array('', ''),
         //权限
         'zb_users'     => array('', ''),
         'cache'        => array('', ''),
@@ -825,6 +831,11 @@ function CheckServer()
         $info = SQLite3::version();
         $CheckResult['sqlite3'][0] = $info['versionString'];
         $CheckResult['sqlite3'][1] = $CheckResult['sqlite3'][0] ? bingo : error;
+    }
+    if (function_exists("openssl_encrypt")) {
+        $info = OPENSSL_VERSION_TEXT;
+        $CheckResult['openssl'][0] = $info;
+        $CheckResult['openssl'][1] = $CheckResult['openssl'][0] ? bingo : error;
     }
 
     getRightsAndExport('', 'zb_users');

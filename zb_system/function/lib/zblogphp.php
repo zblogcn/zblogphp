@@ -461,7 +461,7 @@ class ZBlogPHP
             ZBlogException::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
         }
 
-        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true && isset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']) == false ) {
+        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true && isset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']) == false) {
             $this->host = $this->option['ZC_BLOG_HOST'];
             $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
         } else {
