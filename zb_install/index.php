@@ -356,8 +356,8 @@ function Setup2()
         </tr>
         <tr>
           <td scope="row">OpenSSL</td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['openssl'][0];?></td>
-          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['openssl'][1];?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['openssl'][0]; ?></td>
+          <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['openssl'][1]; ?></td>
         </tr>
         <tr>
           <th colspan="3" scope="row"><?php echo $zbp->lang['zb_install']['permission_check']; ?></th>
@@ -746,7 +746,7 @@ function CheckServer()
         'pgsql'      => array('', ''),
         'pdo_pgsql'  => array('', ''),
         'mbstring'   => array('', ''),
-        'openssl' => array('', ''),
+        'openssl'    => array('', ''),
         //权限
         'zb_users'     => array('', ''),
         'cache'        => array('', ''),
