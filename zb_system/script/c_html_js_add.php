@@ -10,7 +10,7 @@
 require '../function/c_system_base.php';
 
 ob_clean();
-
+// @TODO: Configuable
 ?>
 var zbp = new ZBP({
     bloghost: "<?php echo $zbp->host; ?>",
@@ -21,6 +21,56 @@ var zbp = new ZBP({
             72: "<?php echo $lang['error']['72']; ?>",
             29: "<?php echo $lang['error']['29']; ?>",
             46: "<?php echo $lang['error']['46']; ?>"
+        }
+    },
+    comment: {
+        useDefaultEvents: true,
+        inputs: {
+            action: {
+                getter: function () {
+                    return $("#inpId").parent("form").attr("action");
+                }
+            },
+            name: {
+                selector: '#inpName',
+                saveLocally: true,
+                required: true,
+                validateRule: /^[\.\_A-Za-z0-9\u4e00-\u9fa5@]+$/ig,
+                validateFailedErrorCode: 72,
+            },
+            email: {
+                selector: '#inpEmail',
+                saveLocally: true,
+                required: true,
+                validateRule: /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/ig,
+                validateFailedErrorCode: 29,
+            },
+            homepage: {
+                getter: function () {
+                    var t = $('#inpHomePage').val();
+                    return (!/^(.+)\:\/\//.test(t) && t !== "") ? 'http://' + t : t; 
+                },
+                saveLocally: true
+            },
+            postid: {
+                selector: '#inpId',
+                required: true
+            },
+            verify: {
+                selector: '#inpVerify'
+            },
+            content: {
+                selector: '#txaArticle',
+                required: true,
+                validateRule: /./ig,
+                validateFailedErrorCode: 46,
+            },
+            replyid: {
+                selector: '#inpRevID'
+            },
+            format: {
+                getter: function () {return 'json';}
+            }
         }
     }
 });
