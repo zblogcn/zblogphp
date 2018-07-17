@@ -137,7 +137,7 @@ function Debug_IgnoreError($errno)
  */
 function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
 {
-    if (ZBlogException::$isdisable == true) {
+    if (ZBlogException::$disabled == true) {
         return true;
     }
 
@@ -158,7 +158,6 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
             return true;
         }
     }
-
     if (Debug_IgnoreError($errno)) {
         return true;
     }
@@ -179,10 +178,9 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
  */
 function Debug_Exception_Handler($exception)
 {
-    if (ZBlogException::$isdisable == true) {
+    if (ZBlogException::$disabled == true) {
         return true;
     }
-
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname('Exception', $exception);
     }
@@ -211,7 +209,7 @@ function Debug_Exception_Handler($exception)
 function Debug_Shutdown_Handler()
 {
     if ($error = error_get_last()) {
-        if (ZBlogException::$isdisable == true) {
+        if (ZBlogException::$disabled == true) {
             return true;
         }
 
@@ -248,8 +246,7 @@ function Debug_DoNothing()
 class ZBlogException
 {
     private static $_zbe = null;
-    public static $isdisable = false;
-    private static $_isdisable = null;
+    public static $disabled = false;
     public static $isstrict = false;
     public static $iswarning = true;
     public static $error_id = 0;
@@ -349,7 +346,7 @@ class ZBlogException
      */
     public static function EnableErrorHook()
     {
-        self::$isdisable = false;
+        self::$disabled = false;
     }
 
     /**
@@ -357,7 +354,7 @@ class ZBlogException
      */
     public static function DisableErrorHook()
     {
-        self::$isdisable = true;
+        self::$disabled = true;
     }
 
     /**
@@ -365,12 +362,7 @@ class ZBlogException
      */
     public static function SuspendErrorHook()
     {
-        if (self::$_isdisable !== null) {
-            return;
-        }
-
-        self::$_isdisable = self::$isdisable;
-        self::$isdisable = true;
+        //self::DisableErrorHook();
     }
 
     /**
@@ -378,12 +370,7 @@ class ZBlogException
      */
     public static function ResumeErrorHook()
     {
-        if (self::$_isdisable === null) {
-            return;
-        }
-
-        self::$isdisable = self::$_isdisable;
-        self::$_isdisable = null;
+        //self::EnableErrorHook();
     }
 
     /**

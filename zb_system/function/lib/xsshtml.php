@@ -53,12 +53,10 @@ class XssHtml
 
             return;
         }
-        $this->m_xss = "<meta http-equiv=\"Content-Type\" content=\"text/html;charset={$charset}\"><nouse>" . $this->m_xss . "</nouse>";
+        $this->m_xss = "<meta http-equiv=\"Content-Type\" content=\"text/html;charset={$charset}\"><nouse>" . $this->m_xss . '</nouse>';
         $this->m_dom = new DOMDocument();
         $this->m_dom->strictErrorChecking = false;
-        ZBlogException::SuspendErrorHook();
-        $this->m_ok = $this->m_dom->loadHTML($this->m_xss);
-        ZBlogException::ResumeErrorHook();
+        $this->m_ok = @$this->m_dom->loadHTML($this->m_xss);
     }
 
     /**
