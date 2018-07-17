@@ -15,7 +15,11 @@ ob_clean();
 var zbp = new ZBP({
     bloghost: "<?php echo $zbp->host; ?>",
     ajaxurl: "<?php echo $zbp->ajaxurl; ?>",
-    cookiepath: "<?php echo $zbp->cookiespath; ?>"
+    cookiepath: "<?php echo $zbp->cookiespath; ?>",
+    comment: {
+        useDefaultEvents: false,
+        inputs: { }
+    }
 });
 
 var bloghost = zbp.options.bloghost;
