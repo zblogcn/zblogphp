@@ -362,7 +362,7 @@ class ZBlogException
      */
     public static function SuspendErrorHook()
     {
-        //self::DisableErrorHook();
+        self::DisableErrorHook();
     }
 
     /**
@@ -370,7 +370,7 @@ class ZBlogException
      */
     public static function ResumeErrorHook()
     {
-        //self::EnableErrorHook();
+        self::EnableErrorHook();
     }
 
     /**

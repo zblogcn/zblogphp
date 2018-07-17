@@ -53,10 +53,16 @@ class XssHtml
 
             return;
         }
+        // to disable 'tag nouse is invalid' error in libxml
+        // https://secure.php.net/manual/zh/function.libxml-use-internal-errors.php
+        libxml_use_internal_errors(true);
         $this->m_xss = "<meta http-equiv=\"Content-Type\" content=\"text/html;charset={$charset}\"><nouse>" . $this->m_xss . '</nouse>';
-        $this->m_dom = new DOMDocument();
+        $this->m_dom = new DOMDocument('1.0', 'utf-8');
         $this->m_dom->strictErrorChecking = false;
+        ZBlogException::DisableErrorHook();
         $this->m_ok = @$this->m_dom->loadHTML($this->m_xss);
+        ZBlogException::EnableErrorHook();
+        libxml_use_internal_errors(false);
     }
 
     /**
