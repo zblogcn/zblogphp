@@ -1643,10 +1643,10 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring)
 
     $a = explode(',', $tagnamestring);
     $b = array();
-    foreach ($a as &$value) {
-        $value = trim($value);
-        if ($value) {
-            $b[] = $value;
+    foreach ($a as $value) {
+        $v = trim($value);
+        if ($v) {
+            $b[] = $v;
         }
     }
     $b = array_unique($b);

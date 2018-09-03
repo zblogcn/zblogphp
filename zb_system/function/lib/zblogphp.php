@@ -2697,7 +2697,8 @@ class ZBlogPHP
 
         $a = array();
         $b = array();
-        foreach ($t as $v) {
+        foreach ($t as $value) {
+            $v = trim($value);
             if (isset($this->tagsbyname[$v]) == false) {
                 $a[] = array('tag_Name', $v);
             } else {
