@@ -890,7 +890,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
             }
                 $template = $author->Template;
                 $w[] = array('=', 'log_AuthorID', $author->ID);
-                $pagebar->Count = $author->Articles;
+                //$pagebar->Count = $author->Articles;
                 $pagebar->UrlRule->Rules['{%id%}'] = $author->ID;
                 $pagebar->UrlRule->Rules['{%alias%}'] = $author->Alias == '' ? rawurlencode($author->Name) : $author->Alias;
             break;
