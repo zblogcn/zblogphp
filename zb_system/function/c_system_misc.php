@@ -360,3 +360,9 @@ div.bg {background: #777bb4!important;}
 <?php
 RunTime();
 }
+
+
+function misc_ping(){
+    global $zbp;
+    echo $zbp->lang['msg']['blog_host'] . ': ' . GetVars('newdomain','GET');
+}

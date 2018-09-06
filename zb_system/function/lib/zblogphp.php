@@ -461,7 +461,7 @@ class ZBlogPHP
             ZBlogException::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
         }
 
-        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true && isset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']) == false) {
+        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
             $this->host = $this->option['ZC_BLOG_HOST'];
             $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
         } else {
@@ -604,13 +604,13 @@ class ZBlogPHP
      */
     public function LoadManage()
     {
-        if ($this->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN'] == false) {
-            $this->host = GetCurrentHost($this->path, $this->cookiespath);
-        }
+        //if ($this->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN'] == false) {
+        //     $this->host = GetCurrentHost($this->path, $this->cookiespath);
+        //}
 
-        if (substr($this->host, 0, 8) == 'https://') {
-            $this->isHttps = true;
-        }
+        //if (substr($this->host, 0, 8) == 'https://') {
+        //    $this->isHttps = true;
+        //}
 
         if ($this->user->Status == ZC_MEMBER_STATUS_AUDITING) {
             $this->ShowError(79, __FILE__, __LINE__);
@@ -1000,8 +1000,6 @@ class ZBlogPHP
         }
 
         $this->Config('system')->ZC_BLOG_HOST = chunk_split($this->Config('system')->ZC_BLOG_HOST, 1, "|");
-
-        unset($this->Config('system')->ZC_PERMANENT_DOMAIN_DISABLE);
 
         $this->SaveConfig('system');
 

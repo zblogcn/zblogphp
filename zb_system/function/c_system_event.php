@@ -2917,6 +2917,9 @@ function SaveSetting()
 {
     global $zbp;
 
+    $oldZC_PERMANENT_DOMAIN_ENABLE = $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'];
+    $oldHost = $zbp->option['ZC_BLOG_HOST'];
+
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 2) !== 'ZC') {
             continue;
@@ -2987,6 +2990,12 @@ function SaveSetting()
     $zbp->option['ZC_BLOG_LANGUAGE'] = $lang['lang'];
     $zbp->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
     $zbp->SaveOption();
+
+    if($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == 1){
+        if($oldHost != $zbp->option['ZC_BLOG_HOST']){
+            Redirect($zbp->option['ZC_BLOG_HOST'] . 'zb_system/cmd.php?act=login');
+        }
+    }
 }
 
 //###############################################################################################################

@@ -100,6 +100,9 @@ switch ($action) {
                 }
                 misc_phpif();
                 break;
+            case 'ping':
+                misc_ping();
+                break;
             default:
                 break;
         }
