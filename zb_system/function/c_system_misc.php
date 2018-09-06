@@ -361,8 +361,8 @@ div.bg {background: #777bb4!important;}
 RunTime();
 }
 
-
-function misc_ping(){
+function misc_ping()
+{
     global $zbp;
-    echo $zbp->lang['msg']['blog_host'] . ': ' . GetVars('newdomain','GET');
+    echo $zbp->lang['msg']['blog_host'] . ': ' . GetVars('newdomain', 'GET');
 }
