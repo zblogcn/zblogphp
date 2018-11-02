@@ -136,7 +136,7 @@ function AuditRecords_Edit_Response3()
     echo '<dl style="padding-left:10px;">';
     echo '<dt><b>审核记录</b></dt>';
 
-    $array = $zbp->GetList('AuditRecords', $sql);
+    $array = $zbp->GetListType('AuditRecords', $sql);
     foreach ($array as $key => $ar) {
         echo '<dd style="text-align:left;padding-bottom:5px;"">';
 

@@ -68,7 +68,7 @@ $array = $zbp->GetArticleList(
 
 foreach ($array as $article) {
     $sql = $zbp->db->sql->Select($table['AuditRecords'], '*', array(array('=', 'ar_LogID', $article->ID)), array('ar_PostTime' => 'DESC'), null, null);
-    $array = $zbp->GetList('AuditRecords', $sql);
+    $array = $zbp->GetListType('AuditRecords', $sql);
     $num = count($array);
 
     echo '<tr>';
