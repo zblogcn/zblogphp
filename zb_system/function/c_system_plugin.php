@@ -1205,11 +1205,23 @@ DefinePluginFilter('Filter_Plugin_ViewFeed_End');
 '类型:Filter
 '名称:Filter_Plugin_ViewPost_Begin
 '参数:&$id,&$alias
-'说明:定义列表输出接口
+'说明:定义POST显示输出begin接口
 '调用:
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_ViewPost_Begin');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_ViewPost_Core
+'参数:&$select,&$w,&$order,&$limit,&$option
+'说明:定义POST显示核心接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_ViewPost_Core');
+
 
 /*
 '**************************************************<

@@ -1110,7 +1110,11 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
         }
     }
 
+    $select = '*';
     $w = array();
+    $order = null;
+    $limit = 1;
+    $option = null;
 
     if ($id !== null) {
         if (function_exists('ctype_digit') && !ctype_digit((string) $id)) {
@@ -1133,7 +1137,12 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
         $w[] = array('=', 'log_Status', 0);
     }
 
-    $articles = $zbp->GetPostList('*', $w, null, 1, null);
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Core'] as $fpname => &$fpsignal) {
+        $fpname($select, $w, $order, $limit, $option);
+    }
+
+    $articles = $zbp->GetPostList($select, $w, $order, $limit, $option);
     if (count($articles) == 0) {
         if ($enableRewrite == true) {
             return false;

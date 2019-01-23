@@ -5,7 +5,7 @@
  * Date: 14-04-14
  * Time: 下午19:18.
  */
-set_time_limit(0);
+if(function_exists('set_time_limit')) set_time_limit(0);
 include "Uploader.class.php";
 
 /* 上传配置 */
