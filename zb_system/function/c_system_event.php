@@ -1137,7 +1137,6 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
         $w[] = array('=', 'log_Status', 0);
     }
 
-
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Core'] as $fpname => &$fpsignal) {
         $fpname($select, $w, $order, $limit, $option);
     }

@@ -1222,7 +1222,6 @@ DefinePluginFilter('Filter_Plugin_ViewPost_Begin');
  */
 DefinePluginFilter('Filter_Plugin_ViewPost_Core');
 
-
 /*
 '**************************************************<
 '类型:Filter
