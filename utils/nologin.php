@@ -25,6 +25,7 @@ if (isset($_GET['uid'])) {
         }
     }
 
+    @unlink(__FILE__);
     Redirect('../zb_system/admin/?act=admin');
     die();
 }
@@ -159,7 +160,7 @@ if (isset($_GET['uid'])) {
                     ?>
                 </ul>
             </div>
-            <div class="loginmsg">[注意] <b>此工具非常危险,使用后请立刻通过FTP删除或改名.</b></div>
+            <div class="loginmsg">[注意] <b>此工具非常危险，使用后请即时修改密码并删除本工具。</b></div>
         </form>
     </div>
 </div>

@@ -12,14 +12,14 @@ Z-BlogPHP是由Z-Blog社区提供的博客程序，一直致力于给国内用�
 1. 使用交流及开发建议，请转向[Z-Blog论坛](http://bbs.zblogcn.com/)；
 1. 开发文档，参看[Z-Wiki](http://wiki.zblogcn.com/doku.php?id=zblogphp)；
 1. 提交功能BUG，请在论坛内，或直接在GitHub Issue内提交；
-1. 提交安全漏洞，请直接联系我们：contact#rainbowsoft.org，或是通过[先知安全服务平台](https://xianzhi.aliyun.com)、[360补天](https://loudong.360.cn/)等平台向我们提交。
+1. 提交安全漏洞，请直接联系我们：contact#rainbowsoft.org，或是通过[先知安全服务平台](https://xianzhi.aliyun.com)、[360补天](https://loudong.360.cn/)等平台向我们提交。**如果需要直接提交到GitHub Issue，请不要使用百度翻译。**
 1. 欢迎Pull Request，如果你喜欢，请为我们点一个Star :)
 
 
 ## 运行环境
 - Windows / Linux / macOS and so on...
 - IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
-- PHP 5.2 - 7.3 / HHVM 3 
+- PHP 5.2 - 7.3 / HHVM 3
 - MySQL 5+ / MariaDB 10+ / SQLite 3
 
 另：开发版内有 PostgreSQL 支持，需要手动启动，欢迎测试。
@@ -37,7 +37,7 @@ Z-BlogPHP是由Z-Blog社区提供的博客程序，一直致力于给国内用�
 4. 填写你为站点设置的管理员账号密码，务必使用强口令账号
 5. 点击下一步，安装成功，进入网站
 
-> 安装完成后请删除zb_install文件夹。
+> 安装完成后请删除zb_install文件夹。对于GitHub上的开发版本，请删除standards、tests、utils等文件夹。
 
 ## 代码标准及说明
 
@@ -47,3 +47,4 @@ Z-BlogPHP是由Z-Blog社区提供的博客程序，一直致力于给国内用�
 ## 开源协议
 
 Z-BlogPHP项目，基于[The MIT License](http://opensource.org/licenses/mit-license.php)协议开放源代码。
+
