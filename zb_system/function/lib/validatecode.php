@@ -1,19 +1,22 @@
 <?php
 
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+
 /**
- * 验证码类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/ValidateCode 类库
+ * 验证码类.
  */
 /**
  * Builds a new captcha image
- * Uses the fingerprint parameter, if one is passed, to generate the same image
+ * Uses the fingerprint parameter, if one is passed, to generate the same image.
  *
  * @author Gregwar <g.passault@gmail.com>
  * @author Jeremy Livingston <jeremy.j.livingston@gmail.com>
  * @author zsx <zsx@zsxsoft.com>
+ *
  * @see https://github.com/Gregwar/Captcha
+ *
  * @license MIT
  */
 class ValidateCode
@@ -55,23 +58,23 @@ class ValidateCode
 
     /**
      * The maximum number of lines to draw in front of
-     * the image. null - use default algorithm
+     * the image. null - use default algorithm.
      */
     protected $maxFrontLines = null;
 
     /**
      * The maximum number of lines to draw behind
-     * the image. null - use default algorithm
+     * the image. null - use default algorithm.
      */
     protected $maxBehindLines = null;
 
     /**
-     * The maximum angle of char
+     * The maximum angle of char.
      */
     protected $maxAngle = 8;
 
     /**
-     * The maximum offset of char
+     * The maximum offset of char.
      */
     protected $maxOffset = 5;
 
@@ -83,7 +86,7 @@ class ValidateCode
     protected $interpolation = true;
 
     /**
-     * Ignore all effects
+     * Ignore all effects.
      *
      * @var bool
      */
@@ -97,7 +100,7 @@ class ValidateCode
     protected $fontsize = 15; //字体大小
 
     /**
-     * The image contents
+     * The image contents.
      */
     public function getContents()
     {
@@ -105,7 +108,7 @@ class ValidateCode
     }
 
     /**
-     * Enable/Disables the interpolation
+     * Enable/Disables the interpolation.
      *
      * @param $interpolate bool  True to enable, false to disable
      *
@@ -144,7 +147,7 @@ class ValidateCode
     }
 
     /**
-     * Setting the phrase
+     * Setting the phrase.
      */
     public function setPhrase($phrase)
     {
@@ -152,7 +155,7 @@ class ValidateCode
     }
 
     /**
-     * Enables/disable distortion
+     * Enables/disable distortion.
      */
     public function setDistortion($distortion)
     {
@@ -190,7 +193,7 @@ class ValidateCode
     }
 
     /**
-     * Gets the captcha phrase
+     * Gets the captcha phrase.
      */
     public function getPhrase()
     {
@@ -198,7 +201,7 @@ class ValidateCode
     }
 
     /**
-     * Instantiation
+     * Instantiation.
      */
     public static function create($phrase = null)
     {
@@ -206,7 +209,7 @@ class ValidateCode
     }
 
     /**
-     * Sets the text color to use
+     * Sets the text color to use.
      */
     public function setTextColor($r, $g, $b)
     {
@@ -216,7 +219,7 @@ class ValidateCode
     }
 
     /**
-     * Sets the background color to use
+     * Sets the background color to use.
      */
     public function setBackgroundColor($r, $g, $b)
     {
@@ -226,9 +229,10 @@ class ValidateCode
     }
 
     /**
-     * Sets the ignoreAllEffects value
+     * Sets the ignoreAllEffects value.
      *
      * @param bool $ignoreAllEffects
+     *
      * @return CaptchaBuilder
      */
     public function setIgnoreAllEffects($ignoreAllEffects)
@@ -239,7 +243,7 @@ class ValidateCode
     }
 
     /**
-     * Sets the list of background images to use (one image is randomly selected)
+     * Sets the list of background images to use (one image is randomly selected).
      */
     public function setBackgroundImages(array $backgroundImages)
     {
@@ -249,7 +253,7 @@ class ValidateCode
     }
 
     /**
-     * Draw lines over the image
+     * Draw lines over the image.
      */
     protected function drawLine($image, $width, $height, $tcol = null)
     {
@@ -258,22 +262,22 @@ class ValidateCode
         }
 
         if ($this->rand(0, 1)) { // Horizontal
-            $Xa   = $this->rand(0, $width / 2);
-            $Ya   = $this->rand(0, $height);
-            $Xb   = $this->rand($width / 2, $width);
-            $Yb   = $this->rand(0, $height);
+            $Xa = $this->rand(0, $width / 2);
+            $Ya = $this->rand(0, $height);
+            $Xb = $this->rand($width / 2, $width);
+            $Yb = $this->rand(0, $height);
         } else { // Vertical
-            $Xa   = $this->rand(0, $width);
-            $Ya   = $this->rand(0, $height / 2);
-            $Xb   = $this->rand(0, $width);
-            $Yb   = $this->rand($height / 2, $height);
+            $Xa = $this->rand(0, $width);
+            $Ya = $this->rand(0, $height / 2);
+            $Xb = $this->rand(0, $width);
+            $Yb = $this->rand($height / 2, $height);
         }
         imagesetthickness($image, $this->rand(1, 3));
         imageline($image, $Xa, $Ya, $Xb, $Yb, $tcol);
     }
 
     /**
-     * Apply some post effects
+     * Apply some post effects.
      */
     protected function postEffect($image)
     {
@@ -305,11 +309,10 @@ class ValidateCode
     }
 
     /**
-     * Writes the phrase on the image
+     * Writes the phrase on the image.
      */
     protected function writePhrase($image, $phrase, $font, $width, $height)
     {
-
         $length = strlen($phrase);
         if ($length === 0) {
             return imagecolorallocate($image, 0, 0, 0);
@@ -323,7 +326,7 @@ class ValidateCode
         $x = ($width - $textWidth) / 2;
         $y = ($height - $textHeight) / 2 + $size;
 
-        if (!count($this->textColor)) {
+        if (isset($this->textCount) && is_array($this->textCount) && !count($this->textColor)) {
             $textColor = array($this->rand(0, 150), $this->rand(0, 150), $this->rand(0, 150));
         } else {
             $textColor = $this->textColor;
@@ -344,7 +347,7 @@ class ValidateCode
     }
 
     /**
-     * Generate the image
+     * Generate the image.
      */
     public function build($fingerprint = null)
     {
@@ -359,7 +362,7 @@ class ValidateCode
         }
 
         // if background images list is not set, use a color fill as a background
-        $image   = imagecreatetruecolor($width, $height);
+        $image = imagecreatetruecolor($width, $height);
         if ($this->backgroundColor == null) {
             $bg = imagecolorallocate($image, $this->rand(200, 255), $this->rand(200, 255), $this->rand(200, 255));
         } else {
@@ -422,15 +425,15 @@ class ValidateCode
     }
 
     /**
-     * Distorts the image
+     * Distorts the image.
      */
     public function distort($image, $width, $height, $bg)
     {
         $contents = imagecreatetruecolor($width, $height);
-        $X          = $this->rand(0, $width);
-        $Y          = $this->rand(0, $height);
-        $phase      = $this->rand(0, 10);
-        $scale      = 1.1 + $this->rand(0, 10000) / 30000;
+        $X = $this->rand(0, $width);
+        $Y = $this->rand(0, $height);
+        $phase = $this->rand(0, 10);
+        $scale = 1.1 + $this->rand(0, 10000) / 30000;
         for ($x = 0; $x < $width; $x++) {
             for ($y = 0; $y < $height; $y++) {
                 $Vx = $x - $X;
@@ -439,8 +442,8 @@ class ValidateCode
 
                 if ($Vn != 0) {
                     $Vn2 = $Vn + 4 * sin($Vn / 30);
-                    $nX  = $X + ($Vx * $Vn2 / $Vn);
-                    $nY  = $Y + ($Vy * $Vn2 / $Vn);
+                    $nX = $X + ($Vx * $Vn2 / $Vn);
+                    $nY = $Y + ($Vy * $Vn2 / $Vn);
                 } else {
                     $nX = $X;
                     $nY = $Y;
@@ -472,7 +475,7 @@ class ValidateCode
     }
 
     /**
-     * Gets the image GD
+     * Gets the image GD.
      */
     public function getGd()
     {
@@ -480,7 +483,7 @@ class ValidateCode
     }
 
     /**
-     * Gets the image contents
+     * Gets the image contents.
      */
     public function get($quality = 90)
     {
@@ -491,7 +494,7 @@ class ValidateCode
     }
 
     /**
-     * Gets the HTML inline base64
+     * Gets the HTML inline base64.
      */
     public function inline($quality = 90)
     {
@@ -499,7 +502,7 @@ class ValidateCode
     }
 
     /**
-     * Outputs the image
+     * Outputs the image.
      */
     public function directOutput($quality = 90)
     {
@@ -507,7 +510,7 @@ class ValidateCode
     }
 
     /**
-     * Outputs the image
+     * Outputs the image.
      */
     public function output($n = null)
     {
@@ -518,7 +521,7 @@ class ValidateCode
     }
 
     /**
-     * 对外生成
+     * 对外生成.
      */
     public function GetImg($n = null)
     {
@@ -535,7 +538,7 @@ class ValidateCode
 
     /**
      * Returns a random number or the next number in the
-     * fingerprint
+     * fingerprint.
      */
     protected function rand($min, $max)
     {
@@ -576,15 +579,15 @@ class ValidateCode
 
         $m0 = $cx * $r0 + $x * $r1;
         $m1 = $cx * $r2 + $x * $r3;
-        $r  = (int) ($cy * $m0 + $y * $m1);
+        $r = (int) ($cy * $m0 + $y * $m1);
 
         $m0 = $cx * $g0 + $x * $g1;
         $m1 = $cx * $g2 + $x * $g3;
-        $g  = (int) ($cy * $m0 + $y * $m1);
+        $g = (int) ($cy * $m0 + $y * $m1);
 
         $m0 = $cx * $b0 + $x * $b1;
         $m1 = $cx * $b2 + $x * $b3;
-        $b  = (int) ($cy * $m0 + $y * $m1);
+        $b = (int) ($cy * $m0 + $y * $m1);
 
         return ($r << 16) | ($g << 8) | $b;
     }
@@ -623,6 +626,7 @@ class ValidateCode
 
     /**
      * 获取验证码
+     *
      * @return string
      */
     public function GetCode()

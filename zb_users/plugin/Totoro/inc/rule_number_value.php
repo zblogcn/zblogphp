@@ -1,4 +1,5 @@
 <?php
+
 return 'number_value';
 function number_value($author, $content, $orig_content, &$sv, $config_sv, $config_array)
 {
@@ -9,4 +10,4 @@ function number_value($author, $content, $orig_content, &$sv, $config_sv, $confi
     if ($count > 10) {
         $sv += $config_sv * ($count - 10);
     }
-};
+}

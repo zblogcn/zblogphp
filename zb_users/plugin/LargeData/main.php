@@ -45,7 +45,7 @@ if (GetVars('convert_post2tag_table', 'POST') === '0') {
 }
 
 if (count($_POST) > 0) {
-    $zbp->option['ZC_LARGE_DATA'] = (boolean) $_POST['ZC_LARGE_DATA'];
+    $zbp->option['ZC_LARGE_DATA'] = (bool) $_POST['ZC_LARGE_DATA'];
     $zbp->SaveOption();
     $zbp->SetHint('good');
     Redirect('./main.php');
@@ -59,7 +59,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
 
-  <div class="divHeader2"><?php echo $blogtitle;?></div>
+  <div class="divHeader2"><?php echo $blogtitle; ?></div>
 <div class="SubMenu"></div>
   <div id="divMain2">
 <form method="post" action="main.php">
@@ -119,7 +119,7 @@ echo '</table>';
 
 
     <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/LargeData/logo.png';?>");</script>
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/LargeData/logo.png'; ?>");</script>
   </div>
 </div>
 <?php

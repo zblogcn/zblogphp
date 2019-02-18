@@ -1,21 +1,21 @@
 <?php
-/**
- * sock类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/Network/Networkfsockopen 网络连接
- */
-class Networkfsockopen implements iNetwork
-{
 
-    private $readyState = 0; #状态
-    private $responseBody = null; #返回的二进制
-    private $responseStream = null; #返回的数据流
-    private $responseText = ''; #返回的数据
-    private $responseXML = null; #尝试把responseText格式化为XMLDom
-    private $status = 0; #状态码
-    private $statusText = ''; #状态码文本
-    private $responseVersion = ''; #返回的HTTP版体
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+/**
+ * sock类.
+ */
+class Network__fsockopen implements Network__Interface
+{
+    private $readyState = 0; //状态
+    private $responseBody = null; //返回的二进制
+    private $responseStream = null; //返回的数据流
+    private $responseText = ''; //返回的数据
+    private $responseXML = null; //尝试把responseText格式化为XMLDom
+    private $status = 0; //状态码
+    private $statusText = ''; //状态码文本
+    private $responseVersion = ''; //返回的HTTP版体
 
     private $option = array();
     private $url = '';
@@ -36,6 +36,7 @@ class Networkfsockopen implements iNetwork
     /**
      * @param $property_name
      * @param $value
+     *
      * @throws Exception
      */
     public function __set($property_name, $value)
@@ -45,6 +46,7 @@ class Networkfsockopen implements iNetwork
 
     /**
      * @param $property_name
+     *
      * @return mixed
      */
     public function __get($property_name)
@@ -64,16 +66,13 @@ class Networkfsockopen implements iNetwork
             if (isset($this->parsed_url[strtolower($property_name)])) {
                 return $this->parsed_url[strtolower($property_name)];
             } else {
-                return null;
+                return;
             }
         } else {
             return $this->$property_name;
         }
     }
 
-    /**
-     *
-     */
     public function abort()
     {
     }
@@ -88,6 +87,7 @@ class Networkfsockopen implements iNetwork
 
     /**
      * @param $bstrHeader
+     *
      * @return string
      */
     public function getResponseHeader($bstrHeader)
@@ -115,11 +115,13 @@ class Networkfsockopen implements iNetwork
     /**
      * @param $bstrMethod
      * @param $bstrUrl
-     * @param bool $varAsync
+     * @param bool   $varAsync
      * @param string $bstrUser
      * @param string $bstrPassword
-     * @return bool
+     *
      * @throws Exception
+     *
+     * @return bool
      */
     public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '')
     {
@@ -148,6 +150,9 @@ class Networkfsockopen implements iNetwork
 
     /**
      * @param string $varBody
+     *
+     * @throws Exception
+     *
      * @return mixed|void
      */
     public function send($varBody = '')
@@ -287,6 +292,7 @@ class Networkfsockopen implements iNetwork
      * @param $bstrHeader
      * @param $bstrValue
      * @param bool $append
+     *
      * @return bool
      */
     public function setRequestHeader($bstrHeader, $bstrValue, $append = false)
@@ -319,6 +325,7 @@ class Networkfsockopen implements iNetwork
     /**
      * @param string $name
      * @param string $entity
+     *
      * @return mixed
      */
     public function addBinary($name, $entity, $filename = null, $mime = '')
@@ -351,11 +358,14 @@ class Networkfsockopen implements iNetwork
         $return['mime'] = $mime;
 
         $this->postdata[$name] = $return;
+
+        return true;
     }
 
     /**
      * @param string $name
      * @param string $entity
+     *
      * @return mixed
      */
     public function addText($name, $entity)
@@ -404,7 +414,7 @@ class Networkfsockopen implements iNetwork
     }
 
     /**
-     * Build Boundary
+     * Build Boundary.
      */
     private function __buildBoundary()
     {
@@ -412,9 +422,7 @@ class Networkfsockopen implements iNetwork
         $boundary .= substr(md5(time()), 8, 16);
         $this->__boundary = $boundary;
     }
-    /**
-     *
-     */
+
     private function reinit()
     {
         global $zbp;
@@ -424,13 +432,13 @@ class Networkfsockopen implements iNetwork
             return;
         }
 
-        $this->readyState = 0; #状态
-        $this->responseBody = null; #返回的二进制
-        $this->responseStream = null; #返回的数据流
-        $this->responseText = ''; #返回的数据
-        $this->responseXML = null; #尝试把responseText格式化为XMLDom
-        $this->status = 0; #状态码
-        $this->statusText = ''; #状态码文本
+        $this->readyState = 0; //状态
+        $this->responseBody = null; //返回的二进制
+        $this->responseStream = null; //返回的数据流
+        $this->responseText = ''; //返回的数据
+        $this->responseXML = null; //尝试把responseText格式化为XMLDom
+        $this->status = 0; //状态码
+        $this->statusText = ''; //状态码文本
 
         $this->__isBinary = false;
         $this->__boundary = '';
@@ -450,6 +458,7 @@ class Networkfsockopen implements iNetwork
 
     /**
      * @param $chunk
+     *
      * @return null|string
      */
     private function http_chunked_decode($chunk)
@@ -476,10 +485,11 @@ class Networkfsockopen implements iNetwork
     }
 
     /**
-     * determine if a string can represent a number in hexadecimal
+     * determine if a string can represent a number in hexadecimal.
      *
      * @param string $hex
-     * @return boolean true if the string is a hex, otherwise false
+     *
+     * @return bool true if the string is a hex, otherwise false
      */
     private function is_hex($hex)
     {
@@ -487,25 +497,23 @@ class Networkfsockopen implements iNetwork
         $hex = strtolower(trim(ltrim($hex, "0")));
         if (empty($hex)) {
             $hex = 0;
-        };
+        }
         $dec = hexdec($hex);
 
-        return ($hex == dechex($dec));
+        return $hex == dechex($dec);
     }
 
     /**
      * @param $string
+     *
      * @return string
      */
     private function gzdecode($string)
     {
-// no support for 2nd argument
+        // no support for 2nd argument
         return file_get_contents('compress.zlib://data:zbp/ths;base64,' . base64_encode($string));
     }
 
-    /**
-     *
-     */
     public function enableGzip()
     {
         $this->isgzip = true;

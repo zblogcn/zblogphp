@@ -1,13 +1,13 @@
 <?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
- * 模板类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib 类库
+ * 模板类.
  */
 class Template
 {
-
     protected $path = null;
     protected $entryPage = null;
     protected $uncompiledCodeStore = array();
@@ -38,9 +38,6 @@ class Template
      */
     public $sidebar5 = array();
 
-    /**
-     *
-     */
     public function __construct()
     {
     }
@@ -63,15 +60,17 @@ class Template
 
     /**
      * @param $name
-     * @return boolean
+     *
+     * @return bool
      */
     public function HasTemplate($name)
     {
-        return file_exists($this->path . '/' . $name .'.php');
+        return file_exists($this->path . '/' . $name . '.php');
     }
 
     /**
      * @param $name
+     *
      * @return string
      */
     public function GetTemplate($name)
@@ -80,6 +79,7 @@ class Template
             $fpreturn = $fpname($this, $name);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -97,6 +97,7 @@ class Template
 
     /**
      * @param $name
+     *
      * @return mixed
      */
     public function &GetTags($name)
@@ -132,18 +133,21 @@ class Template
     }
 
     /**
-     * @param $filesarray
+     * 编译所有文件.
      */
     public function CompileFiles()
     {
-
         foreach ($this->templates as $name => $content) {
             $s = RemoveBOM($this->CompileFile($content));
             @file_put_contents($this->path . $name . '.php', $s);
         }
     }
 
-
+    /**
+     * 初始化并编译所有文件.
+     *
+     * @return bool
+     */
     public function BuildTemplate()
     {
         global $zbp;
@@ -158,13 +162,13 @@ class Template
         }
         $this->addNonexistendTags();
 
-        return $this->CompileFiles();
-    }
+        $this->CompileFiles();
 
+        return true;
+    }
 
     protected function addNonexistendTags()
     {
-
         global $zbp;
         $templates = &$this->templates;
 
@@ -209,22 +213,20 @@ class Template
                 $templates['footer'] = '{$footer}' . $templates['footer'];
             }
         }
-
-        return;
     }
-
 
     /**
      * @param $content
+     *
      * @return mixed
      */
     public function CompileFile($content)
     {
-
         foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Compiling_Begin'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $content);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -258,14 +260,13 @@ class Template
             $fpreturn = $fpname($this, $content);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
 
         return $content;
     }
-
-
 
     /**
      * @param $content
@@ -295,8 +296,8 @@ class Template
                 foreach ($matches[2] as $j => $p) {
                     $content = str_replace($p, '<!-- parse_middle_code' . $j . '-->', $content);
                     $this->uncompiledCodeStore[$j] = array(
-                        'type' => $matches[1][$j],
-                        'content' => $p
+                        'type'    => $matches[1][$j],
+                        'content' => $p,
                     );
                 }
             }
@@ -308,8 +309,6 @@ class Template
      */
     protected function parse_back_uncompile_code(&$content)
     {
-                    
-
         foreach ($this->uncompiledCodeStore as $j => $p) {
             if ($p['type'] == 'php') {
                 $content = str_replace('{php}<!-- parse_middle_code' . $j . '-->{/php}', '<' . '?php ' . $p['content'] . ' ?' . '>', $content);
@@ -321,7 +320,7 @@ class Template
                 );
             }
         }
-        
+
         $content = preg_replace('/\{php\}([\D\d]+?)\{\/php\}/', '<' . '?php $1 ?' . '>', $content);
         $this->uncompiledCodeStore = array();
     }
@@ -382,11 +381,11 @@ class Template
 
     /**
      * @param $matches
+     *
      * @return string
      */
     protected function parse_if_sub($matches)
     {
-
         $content = preg_replace_callback(
             '/\{elseif ([^\n\}]+)\}/',
             array($this, 'parse_elseif'),
@@ -402,6 +401,7 @@ class Template
 
     /**
      * @param $matches
+     *
      * @return string
      */
     protected function parse_elseif($matches)
@@ -427,6 +427,7 @@ class Template
 
     /**
      * @param $matches
+     *
      * @return string
      */
     protected function parse_foreach_sub($matches)
@@ -453,6 +454,7 @@ class Template
 
     /**
      * @param $matches
+     *
      * @return string
      */
     protected function parse_for_sub($matches)
@@ -465,6 +467,7 @@ class Template
 
     /**
      * @param $matches
+     *
      * @return string
      */
     protected function parse_vars_replace_dot($matches)
@@ -479,6 +482,7 @@ class Template
 
     /**
      * @param $matches
+     *
      * @return string
      */
     protected function parse_funtion_replace_dot($matches)
@@ -488,6 +492,7 @@ class Template
 
     /**
      * @param $content
+     *
      * @return mixed
      */
     protected function replace_dot($content)
@@ -512,11 +517,12 @@ class Template
         return $content;
     }
 
-
-
-
     /**
      * 显示模板
+     *
+     * @param string $entryPage
+     *
+     * @throws Exception
      */
     public function Display($entryPage = "")
     {
@@ -537,7 +543,7 @@ class Template
         }
         unset($ak, $av);
 
-        #入口处将tags里的变量提升全局!!!
+        // 入口处将tags里的变量提升全局
         foreach ($this->templateTags as $key => &$value) {
             $$key = &$value;
         }
@@ -546,11 +552,16 @@ class Template
     }
 
     /**
+     * 获取输出内容.
+     *
+     * @param string $entryPage
+     *
+     * @throws Exception
+     *
      * @return string
      */
     public function Output($entryPage = "")
     {
-
         ob_start();
         $this->Display($entryPage);
         $data = ob_get_contents();
@@ -560,11 +571,11 @@ class Template
     }
 
     /**
-     * 载入已编译模板s
+     * 载入已编译模板s.
      */
     public function LoadCompiledTemplates()
     {
-        $templates  = array();
+        $templates = array();
 
         // 读取主题模板
         $files = GetFilesInDir($this->path, 'php');
@@ -576,15 +587,14 @@ class Template
     }
 
     /**
-     * 载入未编译模板s
+     * 载入未编译模板s.
      */
     public function LoadTemplates()
     {
-
         global $zbp;
 
         $theme = $this->theme;
-        $templates  = array();
+        $templates = array();
 
         // 读取预置模板
         $files = GetFilesInDir($zbp->path . 'zb_system/defend/default/', 'php');
@@ -607,13 +617,11 @@ class Template
         $this->templates = $templates;
     }
 
-
     /**
-     *解析模板标签
+     *解析模板标签.
      */
     public function MakeTemplateTags()
     {
-
         global $zbp;
 
         $option = $zbp->option;
@@ -709,9 +717,11 @@ class Template
         }
         $this->staticTags = $t + $o;
     }
+
     public function ReplaceStaticTags($s)
     {
         $s = str_replace(array_keys($this->staticTags), array_values($this->staticTags), $s);
+
         return $s;
     }
 }

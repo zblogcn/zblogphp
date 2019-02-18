@@ -1,8 +1,9 @@
 <?php
 /**
- * api
- * @package api
+ * api.
+ *
  * @php >= 5.2
+ *
  * @author zsx<zsx@zsxsoft.com>
  */
 define('API_PATH', dirname(__FILE__));
@@ -11,28 +12,30 @@ require API_PATH . '/io.php';
 require API_PATH . '/user.php';
 
 /**
- * API Singleton
+ * API Singleton.
  */
 class API
 {
     /**
-     * Instance
+     * Instance.
      */
     private static $instance;
     /**
-     * Route
+     * Route.
      */
     public static $Route;
     /**
-     * I/O
+     * I/O.
      */
     public static $IO;
     /**
-     * User
+     * User.
      */
     public static $User;
+
     /**
      * To avoid construct outside this class.
+     *
      * @private
      */
     private function __construct()
@@ -41,12 +44,12 @@ class API
     }
 
     /**
-     * To return instance
+     * To return instance.
+     *
      * @return API
      */
     public static function getInstance()
     {
-
         if (is_null(self::$instance)) {
             $class = __CLASS__;
             self::$instance = new $class();
@@ -56,7 +59,7 @@ class API
     }
 
     /**
-     * To avoid clone
+     * To avoid clone.
      */
     public function __clone()
     {
@@ -64,12 +67,12 @@ class API
     }
 
     /**
-     * Init class
+     * Init class.
+     *
      * @return true
      */
     public static function init()
     {
-
         global $zbp;
         // Set Z-BlogPHP Enviroment
         $zbp->option['ZC_RUNINFO_DISPLAY'] = false;

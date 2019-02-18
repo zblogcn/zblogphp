@@ -7,7 +7,7 @@ define('Qiniu_RSF_EOF', 'EOF');
 /**
  * 1. 首次请求 marker = ""
  * 2. 无论 err 值如何，均应该先看 items 是否有内容
- * 3. 如果后续没有更多数据，err 返回 EOF，markerOut 返回 ""（但不通过该特征来判断是否结束）
+ * 3. 如果后续没有更多数据，err 返回 EOF，markerOut 返回 ""（但不通过该特征来判断是否结束）.
  */
 function Qiniu_RSF_ListPrefix(
     $self, $bucket, $prefix = '', $marker = '', $limit = 0) // => ($items, $markerOut, $err)
@@ -25,7 +25,7 @@ function Qiniu_RSF_ListPrefix(
         $query['limit'] = $limit;
     }
 
-    $url =  $QINIU_RSF_HOST . '/list?' . http_build_query($query);
+    $url = $QINIU_RSF_HOST . '/list?' . http_build_query($query);
     list($ret, $err) = Qiniu_Client_Call($self, $url);
     if ($err !== null) {
         return array(null, '', $err);

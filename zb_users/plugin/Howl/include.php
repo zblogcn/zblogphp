@@ -1,7 +1,7 @@
 <?php
-#注册插件
-RegisterPlugin("Howl", "ActivePlugin_Howl");
 
+//注册插件
+RegisterPlugin("Howl", "ActivePlugin_Howl");
 
 function ActivePlugin_Howl()
 {
@@ -50,7 +50,7 @@ function Howl_CheckRights(&$action)
 
     $g = $zbp->user->Level;
     foreach ($group_key as $key) {
-        $name = 'Group'.$key;
+        $name = 'Group' . $key;
         if ($zbp->Config('Howl')->HasKey($name)) {
             $a[$key] = $zbp->Config('Howl')->$name;
         }
@@ -62,14 +62,13 @@ function Howl_CheckRights(&$action)
         if (array_key_exists($action, $useractions)) {
             $GLOBALS['Filter_Plugin_Zbp_CheckRights']['Howl_CheckRights'] = PLUGIN_EXITSIGNAL_RETURN;
 
-            return (boolean) $useractions[$action];
+            return (bool) $useractions[$action];
         }
     }
-
 
     if (array_key_exists($action, $a[$g])) {
         $GLOBALS['Filter_Plugin_Zbp_CheckRights']['Howl_CheckRights'] = PLUGIN_EXITSIGNAL_RETURN;
 
-        return (boolean) $a[$g][$action];
+        return (bool) $a[$g][$action];
     }
 }

@@ -1,10 +1,15 @@
 <?php
-class SQLSQLite extends SQLGlobal
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+class SQL__SQLite extends SQL__Global
 {
     /**
      * @override
      */
     public $className = __CLASS__;
+
     /**
      * @param object $db
      */
@@ -12,6 +17,7 @@ class SQLSQLite extends SQLGlobal
     {
         parent::__construct($db);
     }
+
     /**
      * @todo
      * @override
@@ -22,6 +28,7 @@ class SQLSQLite extends SQLGlobal
 
         return $this;
     }
+
     /**
      * @todo
      * @override

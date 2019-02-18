@@ -3,8 +3,14 @@ require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 require 'function.php';
 $zbp->Load(); $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('tpluginmaker')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
+if (!$zbp->CheckPlugin('tpluginmaker')) {
+    $zbp->ShowError(48);
+    die();
+}
 
 $step = (int) GetVars('step', 'GET');
 $blogtitle = '主题插件生成器 - STEP ' . (string) ($step + 1) . ' . ' . $message[$step];
@@ -12,8 +18,8 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 ?>
 <script type="text/javascript">
 
-	var current_theme = "<?php echo htmlspecialchars($blogtheme);?>",
-		plugin_exist = <?php echo(check_plugin_exists($blogtheme) ? "true" : "false")?>;
+	var current_theme = "<?php echo htmlspecialchars($blogtheme); ?>",
+		plugin_exist = <?php echo check_plugin_exists($blogtheme) ? "true" : "false"?>;
 		
 </script>
 <style type="text/css">
@@ -26,12 +32,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
   <div class="SubMenu"> </div>
   <div id="divMain2">
     <?php
-    switch((string) GetVars('step', 'GET'))
-    {
+    switch ((string) GetVars('step', 'GET')) {
         case '1': step1(); break;
         case '2': step2(); break;
         default: step0(); break;
@@ -44,14 +49,13 @@ require $blogpath . 'zb_system/admin/admin_footer.php';
 RunTime();
 ?>
 <?php 
-function step2() {
+function step2()
+{
     global $zbp;
-    if(count($_POST) > 0)
-    {
+    if (count($_POST) > 0) {
         $zbp->Config('tpluginmaker')->temp_data = serialize($_POST);
         $zbp->SaveConfig('tpluginmaker');
-    }
-?>
+    } ?>
 <div class="div-wait" style="position:fixed; left: 300px; top: 300px">
   <h1>美好的事情正在开启</h1>
   <div style="text-align:center"> <img src="../../../zb_system/image/admin/loading.gif"/></div>
@@ -60,8 +64,9 @@ function step2() {
 <?php
 }
 
-function step1() {
-?>
+function step1()
+{
+    ?>
 <div style="text-indent:2em;" class="text-note">在主题include文件夹内的文件将在这里即时显示。</div>
 <div id="help001" style="display:none">
   <p>文本文件指扩展名为txt、htm、js、css等允许用户直接使用记事本修改的文件。多媒体文件指图片、视频等无法直接修改的、只能由用户上传的文件。 </p>
@@ -79,21 +84,22 @@ function step1() {
     <th scope="col">文件注释 <a id="help02" href="$help002?width=320" class="betterTip" title="帮助">？</a></th>
     <th scope="col" width="100px"></th>
   </tr>
-  <?php $array = get_theme_data($GLOBALS['blogtheme']);foreach($array as $name => $value){$encode = htmlspecialchars($value['name']);?>
+  <?php $array = get_theme_data($GLOBALS['blogtheme']);
+    foreach ($array as $name => $value) {
+        $encode = htmlspecialchars($value['name']); ?>
   <tr>
     <td><?php echo $encode?></td>
     <td><select name="tplugin_type_<?php echo $encode?>">
         <option value="1">文本</option>
-        <option value="2"<?php echo $value["type"] == 1 ? "" : " selected=\"selected\")";?>>多媒体</option>
+        <option value="2"<?php echo $value["type"] == 1 ? "" : " selected=\"selected\")"; ?>>多媒体</option>
       </select></td>
-    <td><input type="text" id="<?php echo $encode?>" name="tplugin_include_<?php echo $encode?>" value="<?php echo TransferHTML($value["value"], '[textarea]');?>" style="width:98%"/></td>
+    <td><input type="text" id="<?php echo $encode?>" name="tplugin_include_<?php echo $encode?>" value="<?php echo TransferHTML($value["value"], '[textarea]'); ?>" style="width:98%"/></td>
     </td>
     <td align="center"><a href="javascript:;" class="href-rename" data-name="<?php echo $encode?>">改名</a>&nbsp;&nbsp;<a href="javascript:;" class="href-delete" data-name="<?php echo $encode?>">删除</a></td>
     <input type="hidden" value="<?php echo $encode?>" name="tplugin_name_<?php echo $encode?>" />
   </tr>
   <?php
-}
-?>
+    } ?>
   </table>
   <input type="submit" class="button" value="提交" />
 </form>
@@ -129,9 +135,9 @@ function step1() {
 <?php
 }
 
-
-function step0() {
-?>
+function step0()
+{
+    ?>
 <div style="text-indent:2em;" class="text-note">
   <p>&nbsp;</p>
   <ol>
@@ -165,5 +171,5 @@ function step0() {
 })();
 </script>
 <?php
-    }
+}
 ?>

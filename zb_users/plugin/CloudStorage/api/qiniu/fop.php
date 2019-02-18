@@ -5,7 +5,8 @@ require_once "auth_digest.php";
 // --------------------------------------------------------------------------------
 // class Qiniu_ImageView
 
-class Qiniu_ImageView {
+class Qiniu_ImageView
+{
     public $Mode;
     public $Width;
     public $Height;
@@ -36,23 +37,21 @@ class Qiniu_ImageView {
 // --------------------------------------------------------------------------------
 // class Qiniu_Exif
 
-class Qiniu_Exif {
-
+class Qiniu_Exif
+{
     public function MakeRequest($url)
     {
         return $url . "?exif";
     }
-
 }
 
 // --------------------------------------------------------------------------------
 // class Qiniu_ImageInfo
 
-class Qiniu_ImageInfo {
-
+class Qiniu_ImageInfo
+{
     public function MakeRequest($url)
     {
         return $url . "?imageInfo";
     }
-
 }

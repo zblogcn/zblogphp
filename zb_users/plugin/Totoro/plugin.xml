@@ -21,11 +21,13 @@
 <adapted>140220</adapted>
 <version>2.4</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2016-05-21</modified>
+<modified>2018-04-10</modified>
 <price>0</price>
+<phpver>5.2</phpver>
 <advanced>
   <dependency></dependency>
   <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
   <conflict></conflict>
 </advanced>
 <sidebars>

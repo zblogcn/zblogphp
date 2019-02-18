@@ -1,4 +1,5 @@
 <?php
+
 return 'trantosimp';
 function trantosimp(&$content)
 {
@@ -9,16 +10,16 @@ function trantosimp(&$content)
     $len = strlen($content);
     $i = 0;
     while ($i < $len) {
-        $single = $content{$i};
+        $single = $content[$i];
         if (ord($single) >= 224 && ord($single) <= 239) {
-            if (($temp = strpos($utf8_big5, $single . $content{$i + 1} . $content{$i + 2}))) {
-                $str_return .= $utf8_gb2312{$temp} . $utf8_gb2312{$temp + 1} . $utf8_gb2312{$temp + 2};
+            if (($temp = strpos($utf8_big5, $single . $content[$i + 1] . $content[$i + 2]))) {
+                $str_return .= $utf8_gb2312[$temp] . $utf8_gb2312[$temp + 1] . $utf8_gb2312[$temp + 2];
                 $i += 3;
                 continue;
             }
         }
-        $str_return .= $content{$i};
+        $str_return .= $content[$i];
         $i += 1;
     }
     $content = $str_return;
-};
+}

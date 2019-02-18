@@ -1,89 +1,13 @@
 <?php
-/**
- * 自定义网络连接接口
- */
-if (!interface_exists('iNetwork')) {
-    /**
-     * 网络连接接口
-     *
-     * @package Z-BlogPHP
-     * @subpackage Interface/Network 网络连接
-     */
-    interface iNetwork
-    {
-        /**
-         * @return mixed
-         */
-        public function abort();
-        /**
-         * @return mixed
-         */
-        public function getAllResponseHeaders();
 
-        /**
-         * @param $bstrHeader
-         * @return mixed
-         */
-        public function getResponseHeader($bstrHeader);
-        /**
-         * @param $bstrMethod
-         * @param $bstrUrl
-         * @param bool $varAsync
-         * @param string $bstrUser
-         * @param string $bstrPassword
-         * @return mixed
-         */
-        public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '');
-
-        /**
-         * @param string $varBody
-         * @return mixed
-         */
-        public function send($varBody = '');
-
-        /**
-         * @param $bstrHeader
-         * @param $bstrValue
-         * @return mixed
-         */
-        public function setRequestHeader($bstrHeader, $bstrValue);
-
-        /**
-         * @return mixed
-         */
-        public function enableGzip();
-
-        /**
-         * @param int $n
-         * @return mixed
-         */
-        public function setMaxRedirs($n = 0);
-
-        /**
-         * @param string $name
-         * @param string $entity
-         * @return mixed
-         */
-        public function addBinary($name, $entity);
-        /**
-         * @param string $name
-         * @param string $entity
-         * @return mixed
-         */
-        public function addText($name, $entity);
-    }
-
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
 }
-
 /**
- * 网络连接类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/Network
+ * 网络连接类.
  */
 class Network
 {
-
     /**
      * @var null
      */
@@ -105,12 +29,12 @@ class Network
      */
     public $file_get_contents = false;
     /**
-     * @var null
+     * @var Network__Interface[]
      */
     private static $_network = null;
 
     /**
-     * 构造函数
+     * 构造函数.
      */
     public function __construct()
     {
@@ -126,7 +50,7 @@ class Network
         }
         if ((bool) ini_get('allow_url_fopen')) {
             if (function_exists('file_get_contents')) {
-                $this->network_list[] = 'file_get_contents';
+                $this->network_list[] = 'filegetcontents';
             }
             $this->file_get_contents = true;
         }
@@ -134,20 +58,22 @@ class Network
 
     /**
      * @param string $extension
-     * @return bool|network
+     *
+     * @return Network__Interface
      */
     public static function Create($extension = '')
     {
         if (!isset(self::$_network)) {
-            self::$_network = new Network;
+            self::$_network = new self();
         }
         if ((!self::$_network->file_get_contents) && (!self::$_network->fsockopen) && (!self::$_network->curl)) {
-            return false;
+            return;
         }
 
         $extension = ($extension == '' ? self::$_network->network_list[0] : $extension);
-        $type = 'network' . $extension;
+        $type = 'Network__' . $extension;
         $network = new $type();
+
         return $network;
     }
 }

@@ -1,10 +1,15 @@
 <?php
-class SQLPgSQL extends SQLGlobal
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+class SQL__PostgreSQL extends SQL__Global
 {
     /**
      * @override
      */
     public $className = __CLASS__;
+
     /**
      * @param object $db
      */
@@ -12,6 +17,7 @@ class SQLPgSQL extends SQLGlobal
     {
         parent::__construct($db);
     }
+
     /**
      * @todo
      * @override
@@ -22,13 +28,13 @@ class SQLPgSQL extends SQLGlobal
 
         return $this;
     }
+
     /**
      * @todo
      * @override
      */
     protected function buildCreate()
     {
-
         $sqlAll = array();
         foreach ($this->table as $tableIndex => $table) {
             $sql = array();

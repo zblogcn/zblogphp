@@ -1,8 +1,10 @@
 <?php
 /**
- * Z-Blog with PHP
+ * Z-Blog with PHP.
+ *
  * @author
  * @copyright (C) RainbowSoft Studio
+ *
  * @version 2.0 2013-06-14
  */
 require '../function/c_system_base.php';
@@ -13,7 +15,11 @@ ob_clean();
 var zbp = new ZBP({
     bloghost: "<?php echo $zbp->host; ?>",
     ajaxurl: "<?php echo $zbp->ajaxurl; ?>",
-    cookiepath: "<?php echo $zbp->cookiespath; ?>"
+    cookiepath: "<?php echo $zbp->cookiespath; ?>",
+    comment: {
+        useDefaultEvents: false,
+        inputs: { }
+    }
 });
 
 var bloghost = zbp.options.bloghost;
@@ -163,7 +169,7 @@ function notify(s){
 function statistic(s){
     $("#statloading").show();
     $("#updatatime").hide();
-    $.get("<?php echo $bloghost; ?>zb_system/cmd.php"+s+"&tm="+Math.random(),{},
+    $.get(s+"&tm="+Math.random(),{},
         function(data){
             $("#tbStatistic tr:first ~ tr").remove();
             $("#tbStatistic tr:first").after(data);
@@ -176,7 +182,7 @@ function statistic(s){
 
 function updateinfo(s){
     $("#infoloading").show();
-    $.get("<?php echo $bloghost; ?>zb_system/cmd.php"+s+"&tm="+Math.random(),{},
+    $.get(s+"&tm="+Math.random(),{},
         function(data){
             $("#tbUpdateInfo tr:first ~ tr").remove();
             $("#tbUpdateInfo tr:first").after(data);
@@ -193,9 +199,15 @@ function AddHeaderIcon(s){
 
 function AutoHideTips(){
     if($("p.hint:visible").length>0){
-        $("p.hint:visible").delay(3500).hide(1500,function(){});
+        $("p.hint:visible").delay(10000).hide(1500,function(){});
     }
 }
+
+function ShowCSRFHint() {
+    $('.main').prepend('<div class="hint"><p class="hint hint_bad"><?php echo $lang['error']['94']; ?></p></div>'.replace('%s', $('meta[name=csrfExpiration]').attr('content')));
+}
+
+
 //*********************************************************
 // 目的：
 //*********************************************************
@@ -251,6 +263,16 @@ $(document).ready(function(){
     if(s != undefined && s.indexOf("none.gif") != -1 ){
         AddHeaderIcon(bloghost + "zb_system/image/common/window.png");
     }
+
+    var startTime = new Date().getTime();
+    var csrfInterval = setInterval(function () {
+        var timeout = $('meta[name=csrfExpiration]').attr('content') || 1; // Re-get expiration value every time
+        var timeDiff = new Date().getTime() - startTime;
+        if (timeDiff > Math.floor(timeout) * 60 * 60 * 1000) {
+            ShowCSRFHint();
+            clearInterval(csrfInterval);
+        }
+    }, 30 * 60 * 1000);
 });
 
 
@@ -272,11 +294,12 @@ $s = ob_get_clean();
 $m = 'W/' . md5($s);
 
 header('Content-Type: application/x-javascript; charset=utf-8');
-header('Etag: ' . $m);
-
-if ($zbp->option['ZC_JS_304_ENABLE'] && isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
-    SetHttpStatusCode(304);
-    die;
+if ($zbp->option['ZC_JS_304_ENABLE']) {
+    header('Etag: ' . $m);
+    if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
+        SetHttpStatusCode(304);
+        die;
+    }
 }
 
 $zbp->CheckGzip();

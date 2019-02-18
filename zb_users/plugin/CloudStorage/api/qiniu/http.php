@@ -118,13 +118,12 @@ function Qiniu_Client_do($req) // => ($resp, $error)
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_SSL_VERIFYHOST => false,
         CURLOPT_CUSTOMREQUEST  => 'POST',
-        CURLOPT_URL => $url['path']
+        CURLOPT_URL            => $url['path'],
     );
     $httpHeader = $req->Header;
-    if (!empty($httpHeader))
-    {
+    if (!empty($httpHeader)) {
         $header = array();
-        foreach($httpHeader as $key => $parsedUrlValue) {
+        foreach ($httpHeader as $key => $parsedUrlValue) {
             $header[] = "$key: $parsedUrlValue";
         }
         $options[CURLOPT_HTTPHEADER] = $header;
@@ -223,7 +222,7 @@ function Qiniu_Client_CallNoRet($self, $url) // => $error
         return array(null, $err);
     }
     if ($resp->StatusCode === 200) {
-        return null;
+        return;
     }
 
     return Qiniu_ResponseError($resp);

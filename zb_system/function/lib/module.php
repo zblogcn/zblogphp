@@ -1,15 +1,23 @@
 <?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+
 /**
- * 模块类
+ * 模块类.
  *
- * @package Z-BlogPHP
- * @subpackage ClassLib/Module 类库
+ * @property string FileName
+ * @property int|string ID
+ * @property string Source 模块来源
+ * @property string Content
+ * @property string Type 模块显示类型（div / ul）
+ * @property bool NoRefresh 拒绝系统刷新该模块
  */
 class Module extends Base
 {
-
     /**
-     * 构造函数
+     * 构造函数.
      */
     public function __construct()
     {
@@ -19,15 +27,15 @@ class Module extends Base
 
     /**
      * 设置参数值
+     *
      * @param string $name
-     * @param mixed $value
-     * @return null
+     * @param mixed  $value
      */
     public function __set($name, $value)
     {
         global $zbp;
         if ($name == 'SourceType') {
-            return null;
+            return;
         }
         if ($name == 'NoRefresh') {
             if ((bool) $value) {
@@ -36,14 +44,19 @@ class Module extends Base
                 $this->Metas->Del('norefresh');
             }
 
-            return null;
+            return;
+        }
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Set'] as $fpname => &$fpsignal) {
+            $fpname($this, $name, $value);
         }
         parent::__set($name, $value);
     }
 
     /**
      * 获取参数值
+     *
      * @param $name
+     *
      * @return bool|mixed|string
      */
     public function __get($name)
@@ -65,6 +78,14 @@ class Module extends Base
         if ($name == 'NoRefresh') {
             return (bool) $this->Metas->norefresh;
         }
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Get'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($this, $name);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+                return $fpreturn;
+            }
+        }
 
         return parent::__get($name);
     }
@@ -80,6 +101,7 @@ class Module extends Base
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -100,17 +122,18 @@ class Module extends Base
         }
 
         //防Module重复保存的机制
-        $m=$zbp->GetListType('Module',
+        $m = $zbp->GetListType('Module',
                     $zbp->db->sql->get()->select($zbp->table['Module'])
                     ->where(array('=', $zbp->datainfo['Module']['FileName'][0], $this->FileName))
                     ->sql
                 );
-        if (count($m)<1) {
+        if (count($m) < 1) {
             return parent::Save();
         } else {
-            if ($this->ID==0) {
+            if ($this->ID == 0) {
                 return false;
             }
+
             return parent::Save();
         }
     }
@@ -122,7 +145,7 @@ class Module extends Base
     {
         global $zbp;
         foreach ($zbp->modules as $key => $m) {
-            if ($this->ID >0 && $m->ID == $this->ID) {
+            if ($this->ID > 0 && $m->ID == $this->ID) {
                 unset($zbp->modules[$key]);
             }
             if ($this->Source == 'theme') {
@@ -162,7 +185,6 @@ class Module extends Base
 
     public function Build()
     {
-
         if ($this->NoRefresh == true) {
             return;
         }

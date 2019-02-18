@@ -19,6 +19,9 @@ if (!$zbp->CheckPlugin('RegPage')) {
 $blogtitle = '注册组件';
 
 if (count($_POST) > 0) {
+    if (function_exists('CheckIsRefererValid')) {
+        CheckIsRefererValid();
+    }
     if (GetVars('reset', 'POST') == 'add') {
         RegPage_CreateCode(1000);
     }
@@ -30,11 +33,10 @@ if (count($_POST) > 0) {
     if (GetVars('reset', 'POST') == 'ept') {
         RegPage_EmptyCode();
     }
-    
+
     $zbp->SetHint('good');
     Redirect('./main_code.php');
 }
-
 
 require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
@@ -42,13 +44,18 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
 
-  <div class="divHeader"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
 <div class="SubMenu">
  <a href="main.php"><span class="m-left">主设置页</span></a>
  <a href="main_code.php"><span class="m-left m-now">邀请码管理</span></a>
 </div>
   <div id="divMain2">
     <form id="edit" name="edit" method="post" action="#">
+<?php if (function_exists('CheckIsRefererValid')) {
+    echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
+}?>
+
+
 <input id="reset" name="reset" type="hidden" value="" />
       <hr/>
       <p>
@@ -71,10 +78,10 @@ $sql = $zbp->db->sql->Select($RegPage_Table, '*', null, null, null, null);
 $array = $zbp->GetListCustom($RegPage_Table, $RegPage_DataInfo, $sql);
 foreach ($array as $key => $reg) {
     echo '<tr>';
-    echo '<td class="td15">'.$reg->ID.'</td>';
-    echo '<td>'.$reg->InviteCode.'</td>';
-    echo '<td class="td20">'.$zbp->lang['user_level_name'][$reg->Level].'</td>';
-    echo '<td class="td20">'.($reg->AuthorID == 0 ? '' : $zbp->GetMemberByID($reg->AuthorID)->Name).'</td>';
+    echo '<td class="td15">' . $reg->ID . '</td>';
+    echo '<td>' . $reg->InviteCode . '</td>';
+    echo '<td class="td20">' . $zbp->lang['user_level_name'][$reg->Level] . '</td>';
+    echo '<td class="td20">' . ($reg->AuthorID == 0 ? '' : $zbp->GetMemberByID($reg->AuthorID)->Name) . '</td>';
     echo '</tr>';
 }
 ?>
@@ -85,7 +92,7 @@ foreach ($array as $key => $reg) {
 
     </form>
     <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/RegPage/logo.png';?>");</script>  
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/RegPage/logo.png'; ?>");</script>  
   </div>
 </div>
 

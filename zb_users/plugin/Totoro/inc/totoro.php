@@ -45,6 +45,7 @@ class Totoro_Class
     {
         global $zbp;
         $content = $this->config_array[$type][$name]['VALUE'];
+
         return $convert ? TransferHTML($content, '[html-format]') : $content;
     }
 
@@ -98,11 +99,11 @@ class Totoro_Class
 
         return array(
             'author' => array(
-                'id' => $comment->AuthorID,
-                'name' => $comment->Name,
-                'ip' => $comment->IP,
+                'id'    => $comment->AuthorID,
+                'name'  => $comment->Name,
+                'ip'    => $comment->IP,
                 'email' => $comment->Email,
-                'url' => $comment->HomePage,
+                'url'   => $comment->HomePage,
             ),
             'content' => $content,
         );
@@ -132,7 +133,6 @@ class Totoro_Class
 
     public function check_comment(&$comment)
     {
-
         global $zbp;
         $zbp->lang['error'][53] = $this->config_array['STRING_BACK']['CHECKSTR']['VALUE'];
         $zbp->lang['error'][14] = $this->config_array['STRING_BACK']['THROWSTR']['VALUE'];
@@ -193,6 +193,7 @@ class Totoro_Class
                 return true;
             }
         }
+
         return false;
     }
 
@@ -297,24 +298,24 @@ class Totoro_Class
         $array = array(
             array(
                 'action' => 'main',
-                'url' => 'main.php',
+                'url'    => 'main.php',
                 'target' => '_self',
-                'float' => 'left',
-                'title' => '设置页面',
+                'float'  => 'left',
+                'title'  => '设置页面',
             ),
             array(
                 'action' => 'regex_test',
-                'url' => 'regex_test.php',
+                'url'    => 'regex_test.php',
                 'target' => '_self',
-                'float' => 'right',
-                'title' => '正则测试',
+                'float'  => 'right',
+                'title'  => '正则测试',
             ),
             array(
                 'action' => 'online_test',
-                'url' => 'online_test.php',
+                'url'    => 'online_test.php',
                 'target' => '_self',
-                'float' => 'right',
-                'title' => '配置测试',
+                'float'  => 'right',
+                'title'  => '配置测试',
             ),
         );
         $str = '';
@@ -327,6 +328,7 @@ class Totoro_Class
             $str = str_replace('$title', $array[$i]['title'], $str);
             $str = str_replace('$light', ($action == $array[$i]['action'] ? ' m-now' : ''), $str);
         }
+
         return $str;
     }
 }

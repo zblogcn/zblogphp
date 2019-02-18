@@ -1,4 +1,5 @@
 <?php
+
 $blogtitle = 'Z-Blog PHP Development Kit';
 
 class zbpdk_t
@@ -19,7 +20,7 @@ class zbpdk_t
         $current_path = $blogpath . '/zb_users/plugin/ZBPDK/extensions/';
         if ($handle = opendir($current_path)) {
             while (false !== ($filename = readdir($handle))) {
-                if ($filename{0} == '.') {
+                if ($filename[0] == '.') {
                     continue;
                 }
 
@@ -73,7 +74,6 @@ class zbpdk_extension
 
 class zbpdk_submenu
 {
-
     public static $html = '';
     private $actions = array();
     private $template = '';
@@ -83,10 +83,10 @@ class zbpdk_submenu
         global $zbp;
         $this->template = '<a href="' . $zbp->host . 'zb_users/plugin/ZBPDK/extensions/$url"><span class="m-$float$light">$title</span></a>';
         $this->add(array(
-            'url' => '../main.php',
+            'url'   => '../main.php',
             'float' => 'left',
             'title' => '首页',
-            'id' => 'main',
+            'id'    => 'main',
         ));
     }
 
@@ -124,6 +124,7 @@ class zbpdk_submenu
             $temp = str_replace('$light', ($this->actions[$i]['id'] == $id ? ' m-now' : ''), $temp);
             $html .= $temp;
         }
+
         return $html;
     }
 }

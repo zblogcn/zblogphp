@@ -1,11 +1,12 @@
 <?php
 /**
- * Z-Blog with PHP
+ * Z-Blog with PHP.
+ *
  * @author
  * @copyright (C) RainbowSoft Studio
+ *
  * @version 2.0 2013-07-05
  */
-
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
@@ -20,7 +21,6 @@ if (!$zbp->CheckRights($action)) {
 
 $blogtitle = $lang['msg']['module_edit'];
 
-
 require ZBP_PATH . 'zb_system/admin/admin_header.php';
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
@@ -32,13 +32,13 @@ $mod = null;
 
 if (isset($_GET['source'])) {
     if (GetVars('source', 'GET') == 'theme') {
-        $mod = new Module;
+        $mod = new Module();
         $mod->Name = GetVars('filename', 'GET');
         $mod->FileName = GetVars('filename', 'GET');
         $mod->HtmlID = GetVars('filename', 'GET');
         $mod->Source = 'theme';
         if ($mod->FileName) {
-            $mod->Content = file_get_contents($zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $mod->FileName . '.php');
+            $mod->Content = file_get_contents($zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . TransferHTML($mod->FileName, '[filename]') . '.php');
         }
     }
 } elseif (isset($_GET['filename'])) {
@@ -57,7 +57,7 @@ if (isset($_GET['source'])) {
     $mod = $array[0];
 } else {
     if (isset($_GET['id'])) {
-        $modid = (integer) GetVars('id', 'GET');
+        $modid = (int) GetVars('id', 'GET');
     } else {
         $modid = 0;
     }
@@ -94,48 +94,48 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Edit_SubMenu'] as $fpname => &$
 </div>
 <div id="divMain2" class="edit tag_edit">
 <form id="edit" name="edit" method="post" action="#">
-    <input id="edtID" name="ID" type="hidden" value="<?php echo $mod->ID;?>" />
-    <input id="edtSource" name="Source" type="hidden" value="<?php echo $mod->Source;?>" />
+    <input id="edtID" name="ID" type="hidden" value="<?php echo $mod->ID; ?>" />
+    <input id="edtSource" name="Source" type="hidden" value="<?php echo $mod->Source; ?>" />
     <p <?php echo $ishide?>
         >
         <span class="title">
             <?php echo $lang['msg']['name']?>:</span>
         <span class="star">(*)</span>
         <br />
-        <input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $option['ZC_MODULE_NAME_MAX']; ?>" type="text" value="<?php echo $mod->Name;?>" />
+        <input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $option['ZC_MODULE_NAME_MAX']; ?>" type="text" value="<?php echo TransferHTML($mod->Name, '[html-format]'); ?>" />
          (
         <?php echo $lang['msg']['hide_title']?>
         :
-        <input type="text" id="IsHideTitle" name="IsHideTitle" class="checkbox" value="<?php echo $mod->IsHideTitle;?>"/>)</p>
+        <input type="text" id="IsHideTitle" name="IsHideTitle" class="checkbox" value="<?php echo $mod->IsHideTitle; ?>"/>)</p>
     <p>
         <span class="title">
             <?php echo $lang['msg']['filename']?>:</span>
         <span class="star">(*)</span>
         <br />
-        <input id="edtFileName" <?php echo $islock?> class="edit" size="40" name="FileName" type="text" value="<?php echo $mod->FileName;?>" /></p>
+        <input id="edtFileName" <?php echo $islock?> class="edit" size="40" name="FileName" type="text" value="<?php echo TransferHTML($mod->FileName, '[html-format]'); ?>" /></p>
     <p <?php echo $ishide?>>
         <span class="title">
             <?php echo $lang['msg']['htmlid']?>:</span>
         <span class="star">(*)</span>
         <br />
-        <input id="edtHtmlID" class="edit" size="40" name="HtmlID" type="text" value="<?php echo $mod->HtmlID;?>" /></p>
+        <input id="edtHtmlID" class="edit" size="40" name="HtmlID" type="text" value="<?php echo TransferHTML($mod->HtmlID, '[html-format]'); ?>" /></p>
     <p <?php echo $ishide?>>
         <span class='title'>
             <?php echo $lang['msg']['type']?>:</span>
         <br/>
         <label>
-            <input name="Type" type="radio" value="div" <?php echo $mod->Type == 'div' ? 'checked="checked"' : '';?> onclick="$('#pMaxLi').css('display','none');" />&nbsp;DIV
+            <input name="Type" type="radio" value="div" <?php echo $mod->Type == 'div' ? 'checked="checked"' : ''; ?> onclick="$('#pMaxLi').css('display','none');" />&nbsp;DIV
         </label>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <label>
-            <input type="radio" name="Type" value="ul" <?php echo $mod->Type == 'div' ? '' : 'checked="checked"';?> onclick="$('#pMaxLi').css('display','block');" />&nbsp;UL
+            <input type="radio" name="Type" value="ul" <?php echo $mod->Type == 'div' ? '' : 'checked="checked"'; ?> onclick="$('#pMaxLi').css('display','block');" />&nbsp;UL
         </label>
     </p>
-    <p id="pMaxLi" style="<?php echo $mod->Type == 'div' ? 'display:none;' : '';?>" >
+    <p id="pMaxLi" style="<?php echo $mod->Type == 'div' ? 'display:none;' : ''; ?>" >
         <span class='title'>
             <?php echo $lang['msg']['max_li_in_ul']?>:</span>
         <br/>
-        <input type="text" name="MaxLi" value="<?php echo $mod->MaxLi;?>" size="40"  /></p>
+        <input type="text" name="MaxLi" value="<?php echo $mod->MaxLi; ?>" size="40"  /></p>
 <?php
 if ($mod->FileName == 'catalog') {
     ?>
@@ -144,15 +144,15 @@ if ($mod->FileName == 'catalog') {
             <?php echo $lang['msg']['style']?>:</span>
         &nbsp;&nbsp;
         <label>
-            <input name="catalog_style" type="radio" value="0" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '0' ? 'checked="checked"' : '';?> />&nbsp;
+            <input name="catalog_style" type="radio" value="0" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '0' ? 'checked="checked"' : ''; ?> />&nbsp;
             <?php echo $lang['msg']['catalog_style_normal']?></label>
         &nbsp;&nbsp;
         <label>
-            <input name="catalog_style" type="radio" value="1" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '1' ? 'checked="checked"' : '';?> />&nbsp;
+            <input name="catalog_style" type="radio" value="1" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '1' ? 'checked="checked"' : ''; ?> />&nbsp;
             <?php echo $lang['msg']['catalog_style_tree']?></label>
         &nbsp;&nbsp;
         <label>
-            <input name="catalog_style" type="radio" value="2" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '2' ? 'checked="checked"' : '';?> />&nbsp;
+            <input name="catalog_style" type="radio" value="2" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '2' ? 'checked="checked"' : ''; ?> />&nbsp;
             <?php echo $lang['msg']['catalog_style_ul']?></label>
         &nbsp;&nbsp;
     </p>
@@ -163,16 +163,16 @@ if ($mod->FileName == 'catalog') {
         <span class="title">
             <?php echo $lang['msg']['content']?>:</span>
         <br />
-        <textarea name="Content" id="Content"  cols="80" rows="12"  ><?php echo htmlspecialchars($mod->Content);?></textarea>
+        <textarea name="Content" id="Content"  cols="80" rows="12"  ><?php echo htmlspecialchars($mod->Content); ?></textarea>
     </p>
     <p <?php echo $ishide?>>
         <span class='title'>
             <?php echo $lang['msg']['no_refresh_content']?>:</span>
-        <input type="text" id="NoRefresh" name="NoRefresh" class="checkbox" value="<?php echo $mod->NoRefresh;?>"/></p>
+        <input type="text" id="NoRefresh" name="NoRefresh" class="checkbox" value="<?php echo $mod->NoRefresh; ?>"/></p>
     <!-- 1号输出接口 -->
     <div id='response' class='editmod2'>
         <?php foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Edit_Response'] as $fpname => &$fpsignal) {
-            $fpname();
+    $fpname();
 }?>
     </div>
     <p>
@@ -181,7 +181,7 @@ if ($mod->FileName == 'catalog') {
 </form>
 <script type="text/javascript">
 function checkInfo(){
-  document.getElementById("edit").action="../cmd.php?act=ModulePst<?php echo '&token=' . $zbp->GetToken();?>";
+  document.getElementById("edit").action="<?php echo BuildSafeCmdURL('act=ModulePst'); ?>";
 
   if(!$("#edtName").val()){
     alert("<?php echo $lang['error']['72']?>");
@@ -198,7 +198,7 @@ function checkInfo(){
 }
     </script>
 <script type="text/javascript">ActiveLeftMenu("aModuleMng");</script>
-<script type="text/javascript">AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/link_32.png';?>");</script>
+<script type="text/javascript">AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/link_32.png'; ?>");</script>
 </div>
 </div>
 
@@ -206,4 +206,3 @@ function checkInfo(){
 require ZBP_PATH . 'zb_system/admin/admin_footer.php';
 
 RunTime();
-?>

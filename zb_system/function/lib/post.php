@@ -1,19 +1,39 @@
 <?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+
 /**
- * 文章类
+ * 文章类.
  *
- * @package Z-BlogPHP
- * @subpackage ClassLib/Post 类库
+ * @property int|string ID 文章ID
+ * @property string Title 文章标题
+ * @property string Intro 文章摘要
+ * @property string Content 文章内容
+ * @property int Top
+ * @property int Type 文章类型
+ * @property string Template 文章模板
+ * @property int|string AuthorID 文章作者ID
+ * @property Member Author 文章作者类
+ * @property int|string CateID 文章分类ID
+ * @property Category Category 文章分类
+ * @property int|string Status 文章状态
+ * @property int PostTime 发表时间
+ * @property int IsTop 文章置顶状态
+ * @property string Tag 文章标签
+ * @property string Alias 文章别名
+ * @property string Url 文章地址
+ * @property bool IsLock 是否锁定
+ * @property string TypeName 文章类型的具体信息
+ * @property string StatusName 文章状态的详细信息
+ * @property int|string CommNums 评论数量
  */
 class Post extends Base
 {
-
     private $_prev = '';
     private $_next = '';
 
-    /**
-     *
-     */
     public function __construct()
     {
         global $zbp;
@@ -26,6 +46,7 @@ class Post extends Base
     /**
      * @param $method
      * @param $args
+     *
      * @return mixed
      */
     public function __call($method, $args)
@@ -34,6 +55,7 @@ class Post extends Base
             $fpreturn = $fpname($this, $method, $args);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -41,6 +63,7 @@ class Post extends Base
 
     /**
      * @param string $s
+     *
      * @return bool|string
      */
     public function Time($s = 'Y-m-d H:i:s')
@@ -85,7 +108,6 @@ class Post extends Base
     /**
      * @param $name
      * @param $value
-     * @return null|string
      */
     public function __set($name, $value)
     {
@@ -102,29 +124,33 @@ class Post extends Base
             case 'Prev':
             case 'Next':
             case 'RelatedList':
-                return null;
+                return;
             break;
             case 'Template':
                 if ($value == $zbp->GetPostType_Template($this->Type)) {
                     $value = '';
                 }
+                $this->data[$name] = $value;
 
-                return $this->data[$name] = $value;
+                return;
             break;
             case 'TopType':
                 if ($value == 'global') {
                     $this->Top = 1;
-                }elseif ($value == 'index') {
+                } elseif ($value == 'index') {
                     $this->Top = 2;
-                }elseif ($value == 'category') {
+                } elseif ($value == 'category') {
                     $this->Top = 4;
                 } elseif ($value == '' || $value == null) {
                     $this->Top = 0;
                 }
 
-                return null;
+                return;
             break;
             default:
+                foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Set'] as $fpname => &$fpsignal) {
+                    $fpreturn = $fpname($this, $name, $value);
+                }
                 parent::__set($name, $value);
                 break;
         }
@@ -132,6 +158,7 @@ class Post extends Base
 
     /**
      * @param $name
+     *
      * @return array|int|mixed|null|string
      */
     public function __get($name)
@@ -152,6 +179,7 @@ class Post extends Base
                     $fpreturn = $fpname($this);
                     if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                         return $fpreturn;
                     }
                 }
@@ -292,10 +320,20 @@ class Post extends Base
                 if ($this->IsTop == 4) {
                     $toptype = 'category';
                 }
+
                 return $toptype;
             case 'TypeName':
                 return $zbp->GetPostType_Name($this->Type);
             default:
+                foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Get'] as $fpname => &$fpsignal) {
+                    $fpreturn = $fpname($this, $name);
+                    if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+                        return $fpreturn;
+                    }
+                }
+
                 return parent::__get($name);
             break;
         }
@@ -320,6 +358,7 @@ class Post extends Base
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -341,6 +380,7 @@ class Post extends Base
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }

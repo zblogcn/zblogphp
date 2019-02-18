@@ -1,11 +1,10 @@
 <?php
 
-#注册插件
+//注册插件
 RegisterPlugin("Pad", "ActivePlugin_Pad");
 
 function ActivePlugin_Pad()
 {
-
     Add_Filter_Plugin('Filter_Plugin_Index_Begin', 'Pad_Main');
     Add_Filter_Plugin('Filter_Plugin_Cmd_Begin', 'Pad_Template');
 }
@@ -43,7 +42,7 @@ function Pad_Main()
         die;
     }
     if (GetVars('mod', 'GET') == 'pc') {
-        return null;
+        return;
     }
 
     $Pad_List = '/android|iphone|ipad|windows\sphone|kindle|gt\-p|gt\-n|rim\stablet|opera|meego/i';
@@ -78,7 +77,7 @@ function Pad_Login()
 
     Pad_Pre();
 
-    $article = new Post;
+    $article = new Post();
     $article->Title = '登录';
     $article->IsLock = true;
     $article->Type = ZC_POST_TYPE_PAGE;
@@ -118,7 +117,7 @@ function Pad_Pre()
 
     $sidebar_pad = array();
 
-    $mod = new Module;
+    $mod = new Module();
     $mod->Name = '控制面板';
     $mod->Type = 'ul';
     $s = '';
@@ -131,7 +130,7 @@ function Pad_Pre()
     $mod->Content = $s;
     $sidebar_pad[] = $mod;
 
-    $mod = new Module;
+    $mod = new Module();
     $s = '';
     foreach ($zbp->categorys as $key => $value) {
         $s .= '<li><a href="' . $value->Url . '">' . $value->Name . '</a></li>';
@@ -142,7 +141,7 @@ function Pad_Pre()
     $mod->Content = $s;
     $sidebar_pad[] = $mod;
 
-    $mod = new Module;
+    $mod = new Module();
     $mod->Name = '搜索';
     $mod->Content = '<form name="search" method="get" action="#"><input type="hidden" name="mod" value="pad" /><input type="text" name="q" size="11" /> <input type="submit" value="搜索" /></form>';
     $sidebar_pad[] = $mod;
@@ -190,7 +189,7 @@ function Pad_Search()
         Redirect('?mod=pad');
     }
 
-    $article = new Post;
+    $article = new Post();
     $article->Title = $lang['msg']['search'] . '“' . GetVars('q', 'GET') . '”';
     $article->IsLock = true;
     $article->Type = ZC_POST_TYPE_PAGE;

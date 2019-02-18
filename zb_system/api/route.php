@@ -1,23 +1,25 @@
 <?php
 /**
- * api
+ * api.
+ *
  * @author zsx<zsx@zsxsoft.com>
- * @package api/route
  * @php >= 5.2
  */
 class API_Route
 {
     /**
-     * Instance
+     * Instance.
      */
     private static $instance;
     /**
-     * Debug
-     * @var boolean
+     * Debug.
+     *
+     * @var bool
      */
     public static $debug = false;
     /**
-     * Base path
+     * Base path.
+     *
      * @var string
      */
     private static $_base = '';
@@ -26,26 +28,26 @@ class API_Route
      * Some web servers don't support PUT/DELETE.
      */
     private static $_ruleTree = array(
-        "GET" => array(),
-        "POST" => array(),
+        "GET"    => array(),
+        "POST"   => array(),
         "GLOBAL" => array(),
     );
     /**
-     * RegExp List
+     * RegExp List.
      */
     private static $_regExList = array(
-        "GET" => array(),
-        "POST" => array(),
+        "GET"    => array(),
+        "POST"   => array(),
         "GLOBAL" => array(),
     );
 
     /**
-     * To return instance
+     * To return instance.
+     *
      * @return API_Route
      */
     public static function getInstance()
     {
-
         if (is_null(self::$instance)) {
             $class = __CLASS__;
             self::$instance = new $class();
@@ -55,7 +57,7 @@ class API_Route
     }
 
     /**
-     * To avoid clone
+     * To avoid clone.
      */
     public function __clone()
     {
@@ -63,9 +65,10 @@ class API_Route
     }
 
     /**
-     * To build callback to tree
-     * @param  array &$tree
-     * @param  callable $callback
+     * To build callback to tree.
+     *
+     * @param array    &$tree
+     * @param callable $callback
      */
     private static function buildCallback(&$tree, $callback)
     {
@@ -77,8 +80,10 @@ class API_Route
     }
 
     /**
-     * To call callable function
-     * @param  array $callbackTree
+     * To call callable function.
+     *
+     * @param array $callbackTree
+     *
      * @return
      */
     private static function callBack($callbackTree)
@@ -87,16 +92,18 @@ class API_Route
             $value();
         }
     }
+
     /**
-     * To build tree from path
-     * @param int $deep
+     * To build tree from path.
+     *
+     * @param int   $deep
      * @param array $array
      * @param array $tree
+     *
      * @return bool
      */
     private static function buildTree($deep, $array, &$tree, $callback)
     {
-
         if ($deep == count($array) - 1) {
             self::buildCallback($tree, $callback); // Register callback in the deepest path.
             return;
@@ -117,10 +124,12 @@ class API_Route
     }
 
     /**
-     * To build RegExp list
-     * @param string $string
-     * @param array $list
+     * To build RegExp list.
+     *
+     * @param string   $string
+     * @param array    $list
      * @param callable $callback
+     *
      * @return bool
      */
     private static function buildRegExpList($regex, &$list, $callback)
@@ -177,10 +186,13 @@ class API_Route
 
         return false;
     }
+
     /**
-     * Check RegExp
+     * Check RegExp.
+     *
      * @param string $path
-     * @param array $array
+     * @param array  $array
+     *
      * @return bool
      */
     private static function _checkRegExp($path, $array)
@@ -200,18 +212,20 @@ class API_Route
     }
 
     /**
-     * Create Route
-     * @param  string   $url
-     * @param  callable $callback
-     * @param  string $method
-     * @return boolean
+     * Create Route.
+     *
+     * @param string   $url
+     * @param callable $callback
+     * @param string   $method
+     *
+     * @return bool
      */
     public static function route($url, $callback, $method = "GLOBAL")
     {
 
         //if (@preg_match($url, null) === false) {
-            // Test if string is not regex
-            $urlArray = explode("/", $url);
+        // Test if string is not regex
+        $urlArray = explode("/", $url);
         if (count($urlArray) < 0) {
             return false;
         }
@@ -219,19 +233,21 @@ class API_Route
         if ($urlArray[0] == "" && count($urlArray) > 1) {
             array_shift($urlArray);
         }
-            //if ($method == "GLOBAL") var_dump($urlArray);
+        //if ($method == "GLOBAL") var_dump($urlArray);
 
-            return self::buildTree(0, $urlArray, self::$_ruleTree[$method], $callback);
+        return self::buildTree(0, $urlArray, self::$_ruleTree[$method], $callback);
         //} else {
         //	return self::buildRegExpList($url, self::$_regExList[$method], $callback);
         //}
     }
 
     /**
-     * Create GET Route
-     * @param  string   $url
-     * @param  callable $callback
-     * @return boolean
+     * Create GET Route.
+     *
+     * @param string   $url
+     * @param callable $callback
+     *
+     * @return bool
      */
     public static function get($url, $callback)
     {
@@ -242,10 +258,12 @@ class API_Route
     }
 
     /**
-     * Create POST Route
-     * @param  string   $url
-     * @param  callable $callback
-     * @return boolean
+     * Create POST Route.
+     *
+     * @param string   $url
+     * @param callable $callback
+     *
+     * @return bool
      */
     public static function post($url, $callback)
     {
@@ -253,14 +271,15 @@ class API_Route
     }
 
     /**
-     * Scan Route
+     * Scan Route.
+     *
      * @param string $requestMethod
      * @param string $url
+     *
      * @return bool
      */
     public static function scanRoute($requestMethod, $url)
     {
-
         $urlArray = explode("/", $url);
         if ($urlArray[0] == "") {
             array_shift($urlArray);

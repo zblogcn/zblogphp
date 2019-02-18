@@ -1,18 +1,28 @@
 Z-BlogPHP
 =============
+[![StyleCI](https://styleci.io/repos/24038803/shield?branch=master)](https://styleci.io/repos/24038803)
 
-Z-BlogPHP是由Z-Blog社区提供的博客程序，一直致力于给国内用户提供优秀的博客写作体验。从2006年起发布第一版，至今已有11年的历史，是目前国内为数不多的持续提供更新的开源CMS系统之一。我们的目标是使用户沉浸于写作、记录生活，不需要关注繁琐的设置等，让用户专注于创作。对于用户而言，它简单易用，体积小，速度快，支持数据量大。对开发者而言，它又有着强大的可定制性、丰富的插件接口和独立的主题模板。期待Z-BlogPHP能成为您写博客的第一选择。
+Z-BlogPHP是由Z-Blog社区提供的博客程序，一直致力于给国内用户提供优秀的博客写作体验。从2005年起发布第一版，至今已有14年的历史，是目前国内为数不多的持续提供更新的开源CMS系统之一。
+
+我们的目标是使用户沉浸于写作、记录生活，不需要关注繁琐的设置等，让用户专注于创作。对于用户而言，它简单易用，体积小，速度快，支持数据量大。对开发者而言，它又有着强大的可定制性、丰富的插件接口和精美的主题模板。
+
+期待Z-BlogPHP能成为您写博客的第一选择。
 
 ## 社区说明
 1. 使用交流及开发建议，请转向[Z-Blog论坛](http://bbs.zblogcn.com/)；
 1. 开发文档，参看[Z-Wiki](http://wiki.zblogcn.com/doku.php?id=zblogphp)；
 1. 提交功能BUG，请在论坛内，或直接在GitHub Issue内提交；
+1. 提交安全漏洞，请直接联系我们：contact#rainbowsoft.org，或是通过[先知安全服务平台](https://xianzhi.aliyun.com)、[360补天](https://loudong.360.cn/)等平台向我们提交。**如果需要直接提交到GitHub Issue，请不要使用百度翻译。**
 1. 欢迎Pull Request，如果你喜欢，请为我们点一个Star :)
 
+
 ## 运行环境
-- Web Server: IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
-- PHP 5.2 - 7.2 / HHVM 3 
+- Windows / Linux / macOS and so on...
+- IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
+- PHP 5.2 - 7.3 / HHVM 3
 - MySQL 5+ / MariaDB 10+ / SQLite 3
+
+另：开发版内有 PostgreSQL 支持，需要手动启动，欢迎测试。
 
 ## 安装说明
 > 首先请确保网站目录拥有755权限。
@@ -27,7 +37,7 @@ Z-BlogPHP是由Z-Blog社区提供的博客程序，一直致力于给国内用�
 4. 填写你为站点设置的管理员账号密码，务必使用强口令账号
 5. 点击下一步，安装成功，进入网站
 
-> 安装完成后请删除zb_install文件夹。
+> 安装完成后请删除zb_install文件夹。对于GitHub上的开发版本，请删除standards、tests、utils等文件夹。
 
 ## 代码标准及说明
 
@@ -37,3 +47,4 @@ Z-BlogPHP是由Z-Blog社区提供的博客程序，一直致力于给国内用�
 ## 开源协议
 
 Z-BlogPHP项目，基于[The MIT License](http://opensource.org/licenses/mit-license.php)协议开放源代码。
+

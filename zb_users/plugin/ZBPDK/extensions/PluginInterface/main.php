@@ -51,8 +51,8 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 <script type="text/javascript">
 <?php
 $defined_interface = array(
-    "action" => array(),
-    "filter" => array(),
+    "action"   => array(),
+    "filter"   => array(),
     "response" => array(),
 );
 if (isset($hooks)) {
@@ -69,9 +69,9 @@ foreach ($zbpdk_allhooks as $temp_name => $temp_value) {
 
 ?>
 var defined_interface = {
-    "action":[<?php echo implode(",", $defined_interface['action']);?>],
-    "filter":["Filter_ZBPDK_Display_All",<?php echo implode(",", $defined_interface['filter']);?>],
-    "response":[<?php echo implode(",", $defined_interface['response']);?>],
+    "action":[<?php echo implode(",", $defined_interface['action']); ?>],
+    "filter":["Filter_ZBPDK_Display_All",<?php echo implode(",", $defined_interface['filter']); ?>],
+    "response":[<?php echo implode(",", $defined_interface['response']); ?>],
 }
 function write_list(type_name)
 {
@@ -96,8 +96,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
-  <div class="SubMenu"><?php echo $zbpdk->submenu->export('PluginInterface');?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
+  <div class="SubMenu"><?php echo $zbpdk->submenu->export('PluginInterface'); ?></div>
   <div id="divMain2">
     <form id="form1" onSubmit="return false">
       <label for="interface">输入接口名</label>
@@ -135,7 +135,7 @@ $(document).ready(function() {
 });
 
 ActiveTopMenu('zbpdk');
-AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png';?>");
+AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png'; ?>");
 
 </script>
 <?php

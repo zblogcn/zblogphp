@@ -1,11 +1,10 @@
 <?php
 
-#注册插件
+//注册插件
 RegisterPlugin("Gravatar", "ActivePlugin_Gravatar");
 
 function ActivePlugin_Gravatar()
 {
-
     Add_Filter_Plugin('Filter_Plugin_Mebmer_Avatar', 'Gravatar_Url');
 }
 
@@ -38,6 +37,7 @@ function Gravatar_Url(&$member)
             //return null;
             $GLOBALS['Filter_Plugin_Mebmer_Avatar']['Gravatar_Url'] = PLUGIN_EXITSIGNAL_RETURN;
             $s = $zbp->host . 'zb_users/avatar/' . $member->ID . '.png';
+
             return $s;
         }
     }
@@ -47,6 +47,7 @@ function Gravatar_Url(&$member)
         $s = $default_url;
         $s = str_replace('{%source%}', urlencode($source), $s);
         $s = str_replace('{%emailmd5%}', md5($member->Email), $s);
+
         return htmlspecialchars($s);
     } else {
         return $source;

@@ -1,11 +1,12 @@
 <?php
 /**
- * Z-Blog with PHP
+ * Z-Blog with PHP.
+ *
  * @author
  * @copyright (C) RainbowSoft Studio
+ *
  * @version 2.0 2013-07-05
  */
-
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
@@ -32,7 +33,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
 $memberid = null;
 if (isset($_GET['id'])) {
-    $memberid = (integer) GetVars('id', 'GET');
+    $memberid = (int) GetVars('id', 'GET');
 } else {
     $memberid = 0;
 }
@@ -58,38 +59,40 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_SubMenu'] as $fpname => &$
     </div>
     <div id="divMain2" class="edit member_edit">
         <form id="edit" name="edit" method="post" action="#">
-            <input id="edtID" name="ID" type="hidden" value="<?php echo $member->ID;?>" />
+            <input id="edtID" name="ID" type="hidden" value="<?php echo $member->ID; ?>" />
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['member_level']?>:</span>
                 <br />
                 <select class="edit" size="1" name="Level" id="cmbLevel">
-                    <?php echo OutputOptionItemsOfMemberLevel($member->Level);?></select>
-                <?php if ($zbp->CheckRights('MemberAll') && $zbp->user->ID != $member->ID) {?>
+                    <?php echo OutputOptionItemsOfMemberLevel($member->Level); ?></select>
+                <?php if ($zbp->CheckRights('MemberAll') && $zbp->user->ID != $member->ID) {
+    ?>
         &nbsp;(
                 <span class="title">
                     <?php echo $lang['msg']['status']?>:</span>
                 <label>
-                    <input name="Status" type="radio" value="0" <?php echo $member->Status == 0 ? 'checked="checked"' : '';?> />&nbsp;
+                    <input name="Status" type="radio" value="0" <?php echo $member->Status == 0 ? 'checked="checked"' : ''; ?> />&nbsp;
                     <?php echo $lang['user_status_name'][0]?></label>
                 &nbsp;&nbsp;
                 <label>
-                    <input name="Status" type="radio" value="1" <?php echo $member->Status == 1 ? 'checked="checked"' : '';?> />&nbsp;
+                    <input name="Status" type="radio" value="1" <?php echo $member->Status == 1 ? 'checked="checked"' : ''; ?> />&nbsp;
                     <?php echo $lang['user_status_name'][1]?></label>
                 &nbsp;&nbsp;
                 <label>
-                    <input name="Status" type="radio" value="2" <?php echo $member->Status == 2 ? 'checked="checked"' : '';?> />&nbsp;
+                    <input name="Status" type="radio" value="2" <?php echo $member->Status == 2 ? 'checked="checked"' : ''; ?> />&nbsp;
                     <?php echo $lang['user_status_name'][2]?></label>
                 )
-                <?php }?></p>
+                <?php
+}?></p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['name']?>:</span>
                 <span class="star">(*)</span>
                 <br />
-                <input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name;?>" <?php if (!$zbp->CheckRights('MemberAll')) {
-                    echo 'readonly="readonly"';
-}
+                <input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name; ?>" <?php if (!$zbp->CheckRights('MemberAll')) {
+        echo 'readonly="readonly"';
+    }
 ?> /></p>
             <p>
                 <span class='title'>
@@ -107,34 +110,34 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_SubMenu'] as $fpname => &$
                 <span class="title">
                     <?php echo $lang['msg']['alias']?>:</span>
                 <br />
-                <input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $member->Alias;?>" /></p>
+                <input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $member->Alias; ?>" /></p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['email']?>:</span>
                 <span class="star">(*)</span>
                 <br />
-                <input id="edtEmail" class="edit" size="40" name="Email" type="text" value="<?php echo $member->Email;?>" /></p>
+                <input id="edtEmail" class="edit" size="40" name="Email" type="text" value="<?php echo $member->Email; ?>" /></p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['homepage']?>:</span>
                 <br />
-                <input id="edtHomePage" class="edit" size="40" name="HomePage" type="text" value="<?php echo $member->HomePage;?>" /></p>
+                <input id="edtHomePage" class="edit" size="40" name="HomePage" type="text" value="<?php echo $member->HomePage; ?>" /></p>
             <p>
                 <span class='title'>
                     <?php echo $lang['msg']['intro']?>:</span>
                 <br/>
-                <textarea cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;"><?php echo htmlspecialchars($member->Intro);?></textarea>
+                <textarea cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;"><?php echo htmlspecialchars($member->Intro); ?></textarea>
             </p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['template']?>:</span>
                 <br />
                 <select class="edit" size="1" name="Template" id="cmbTemplate">
-                    <?php echo OutputOptionItemsOfTemplate($member->Template);?></select>
+                    <?php echo OutputOptionItemsOfTemplate($member->Template); ?></select>
             </p>
             <div id='response' class='editmod2'>
                 <?php foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal) {
-                    $fpname();
+    $fpname();
 }
 ?>
             </div>
@@ -143,13 +146,13 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_SubMenu'] as $fpname => &$
                     <?php echo $lang['msg']['default_avatar']?>:</span>
                 &nbsp;
                 <br />
-                <?php echo $member->Avatar;?></p>
+                <?php echo $member->Avatar; ?></p>
             <p>
                 <input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" /></p>
         </form>
         <script type="text/javascript">
 function checkInfo(){
-  document.getElementById("edit").action="../cmd.php?act=MemberPst<?php echo '&token=' . $zbp->GetToken();?>";
+  document.getElementById("edit").action="<?php echo BuildSafeCmdURL('act=MemberPst'); ?>";
 
 
   if(!$("#edtEmail").val()){
@@ -171,7 +174,7 @@ function checkInfo(){
 }
     </script>
         <script type="text/javascript">ActiveLeftMenu("aMemberMng");</script>
-        <script type="text/javascript">AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/user_32.png';?>");</script>
+        <script type="text/javascript">AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/user_32.png'; ?>");</script>
     </div>
 </div>
 
@@ -179,4 +182,3 @@ function checkInfo(){
 require ZBP_PATH . 'zb_system/admin/admin_footer.php';
 
 RunTime();
-?>

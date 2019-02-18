@@ -1,13 +1,13 @@
 <?php
-/**
- * SQLite2数据库操作类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase/DbSQLite 类库
- */
-class DbSQLite implements iDataBase
-{
 
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+/**
+ * SQLite2数据库操作类.
+ */
+class Database__SQLite implements Database__Interface
+{
     public $type = 'sqlite';
     public $version = '2';
 
@@ -15,7 +15,7 @@ class DbSQLite implements iDataBase
      * @var string|null 数据库名前缀
      */
     public $dbpre = null;
-    private $db = null; #数据库连接实例
+    private $db = null; //数据库连接实例
     /**
      * @var string|null 数据库名
      */
@@ -24,8 +24,9 @@ class DbSQLite implements iDataBase
      * @var DbSql|null
      */
     public $sql = null;
+
     /**
-     * 构造函数，实例化$sql参数
+     * 构造函数，实例化$sql参数.
      */
     public function __construct()
     {
@@ -34,6 +35,7 @@ class DbSQLite implements iDataBase
 
     /**
      * @param $s
+     *
      * @return string
      */
     public function EscapeString($s)
@@ -43,6 +45,7 @@ class DbSQLite implements iDataBase
 
     /**
      * @param $array
+     *
      * @return bool
      */
     public function Open($array)
@@ -58,7 +61,7 @@ class DbSQLite implements iDataBase
     }
 
     /**
-     * 关闭数据库连接
+     * 关闭数据库连接.
      */
     public function Close()
     {
@@ -71,7 +74,10 @@ class DbSQLite implements iDataBase
     public function QueryMulit($s)
     {
         return $this->QueryMulti($s);
-    }//错别字函数，历史原因保留下来
+    }
+
+    //错别字函数，历史原因保留下来
+
     public function QueryMulti($s)
     {
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
@@ -86,6 +92,7 @@ class DbSQLite implements iDataBase
 
     /**
      * @param $query
+     *
      * @return array
      */
     public function Query($query)
@@ -107,6 +114,7 @@ class DbSQLite implements iDataBase
 
     /**
      * @param $query
+     *
      * @return SQLiteResult
      */
     public function Update($query)
@@ -117,6 +125,7 @@ class DbSQLite implements iDataBase
 
     /**
      * @param $query
+     *
      * @return SQLiteResult
      */
     public function Delete($query)
@@ -127,6 +136,7 @@ class DbSQLite implements iDataBase
 
     /**
      * @param $query
+     *
      * @return int
      */
     public function Insert($query)
@@ -156,11 +166,11 @@ class DbSQLite implements iDataBase
 
     /**
      * @param $table
+     *
      * @return bool
      */
     public function ExistTable($table)
     {
-
         $a = $this->Query($this->sql->ExistTable($table));
         if (!is_array($a)) {
             return false;

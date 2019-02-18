@@ -1,21 +1,21 @@
 <?php
-/**
- * pdo_SQLite数据库操作类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase/Dbpdo_SQLite 类库
- */
-class Dbpdo_SQLite implements iDataBase
-{
 
-    public $type = 'sqlite';
-    public $version = '3';
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+/**
+ * pdo_SQLite数据库操作类.
+ */
+class Database__PDO_PostgreSQL implements Database__Interface
+{
+    public $type = 'postgresql';
+    public $version = '';
 
     /**
      * @var string|null 数据库名前缀
      */
     public $dbpre = null;
-    private $db = null; #数据库连接实例
+    private $db = null; //数据库连接实例
     /**
      * @var string|null 数据库名
      */
@@ -24,8 +24,9 @@ class Dbpdo_SQLite implements iDataBase
      * @var DbSql|null DbSql实例
      */
     public $sql = null;
+
     /**
-     * 构造函数，实例化$sql参数
+     * 构造函数，实例化$sql参数.
      */
     public function __construct()
     {
@@ -34,29 +35,46 @@ class Dbpdo_SQLite implements iDataBase
 
     /**
      * @param $s
+     *
      * @return string
      */
     public function EscapeString($s)
     {
-        return str_ireplace('\'', '\'\'', $s);
+        return str_ireplace("'", "''", $s);
     }
 
     /**
-     * @param $array
+     * 连接数据库.
+     *
+     * @param array $array 数据库连接配置
+     *                     $array=array(
+     *                     'pgsql_server',
+     *                     'pgsql_username',
+     *                     'pgsql_password',
+     *                     'pgsql_name',
+     *                     'pgsql_pre',
+     *                     'pgsql_port',
+     *                     'persistent')
+     *                     )
+     *
      * @return bool
      */
     public function Open($array)
     {
-        $db_link = new PDO('sqlite:' . $array[0]);
+        $s = "pgsql:host={$array[0]};port={$array[5]};dbname={$array[3]};user={$array[1]};password={$array[2]};options='--client_encoding=UTF8'";
+        if (false == $array[5]) {
+            $db_link = new PDO($s);
+        } else {
+            $db_link = new PDO($s, null, null, array(PDO::ATTR_PERSISTENT => true));
+        }
         $this->db = $db_link;
-        $this->dbpre = $array[1];
-        $this->dbname = $array[0];
+        $this->dbpre = $array[4];
 
         return true;
     }
 
     /**
-     * 关闭数据库连接
+     * 关闭数据库连接.
      */
     public function Close()
     {
@@ -64,13 +82,17 @@ class Dbpdo_SQLite implements iDataBase
     }
 
     /**
-     * 执行多行SQL语句
+     * 执行多行SQL语句.
+     *
      * @param $s
      */
     public function QueryMulit($s)
     {
         return $this->QueryMulti($s);
-    }//错别字函数，历史原因保留下来
+    }
+
+    //错别字函数，历史原因保留下来
+
     public function QueryMulti($s)
     {
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
@@ -85,6 +107,7 @@ class Dbpdo_SQLite implements iDataBase
 
     /**
      * @param $query
+     *
      * @return array
      */
     public function Query($query)
@@ -102,6 +125,7 @@ class Dbpdo_SQLite implements iDataBase
 
     /**
      * @param $query
+     *
      * @return bool|mysqli_result
      */
     public function Update($query)
@@ -112,6 +136,7 @@ class Dbpdo_SQLite implements iDataBase
 
     /**
      * @param $query
+     *
      * @return bool|mysqli_result
      */
     public function Delete($query)
@@ -122,14 +147,18 @@ class Dbpdo_SQLite implements iDataBase
 
     /**
      * @param $query
+     *
      * @return int
      */
     public function Insert($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        $this->db->exec($this->sql->Filter($query));
+        $this->db->query($this->sql->Filter($query));
+        $seq = explode(' ', $query, 4);
+        $seq = $seq[2] . '_seq';
+        $id = $this->db->lastInsertId($seq);
 
-        return $this->db->lastInsertId();
+        return $id;
     }
 
     /**
@@ -151,11 +180,11 @@ class Dbpdo_SQLite implements iDataBase
 
     /**
      * @param $table
+     *
      * @return bool
      */
     public function ExistTable($table)
     {
-
         $a = $this->Query($this->sql->ExistTable($table, $this->dbname));
         if (!is_array($a)) {
             return false;
