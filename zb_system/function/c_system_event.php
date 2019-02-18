@@ -2078,7 +2078,15 @@ function CheckComment()
     $orig_check = (bool) $cmt->IsChecking;
     $cmt->IsChecking = $ischecking;
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_CheckComment_Core'] as $fpname => &$fpsignal) {
+        $fpname($cmt);
+    }
+
     $cmt->Save();
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_CheckComment_Succeed'] as $fpname => &$fpsignal) {
+        $fpname($cmt);
+    }
 
     if (($orig_check) && (!$ischecking)) {
         CountPostArray(array($cmt->LogID), +1);
