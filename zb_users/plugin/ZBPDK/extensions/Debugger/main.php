@@ -1,11 +1,10 @@
 <?php
 /**
-* ZBPDK子扩展
-* Debugger配置页.
-* 
-* @author 心扬 <chrishyze@gmail.com>
-*/
-
+ * ZBPDK子扩展
+ * Debugger配置页.
+ *
+ * @author 心扬 <chrishyze@gmail.com>
+ */
 require_once '../../../../../zb_system/function/c_system_base.php';
 require_once '../../../../../zb_system/function/c_system_admin.php';
 header("Cache-Control: no-cache, must-revalidate");
@@ -23,8 +22,12 @@ if (!$zbp->CheckPlugin('ZBPDK')) {
 
 //检测配置提交
 if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
-    if (isset($_POST['show_in_front'])) $zbp->Config('ZBPDK_Debugger')->show_in_front = $_POST['show_in_front'];
-    if (isset($_POST['show_in_admin'])) $zbp->Config('ZBPDK_Debugger')->show_in_admin = $_POST['show_in_admin'];
+    if (isset($_POST['show_in_front'])) {
+        $zbp->Config('ZBPDK_Debugger')->show_in_front = $_POST['show_in_front'];
+    }
+    if (isset($_POST['show_in_admin'])) {
+        $zbp->Config('ZBPDK_Debugger')->show_in_admin = $_POST['show_in_admin'];
+    }
     $zbp->SaveConfig('ZBPDK_Debugger');
 }
 
@@ -34,10 +37,10 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
 
 <div id="divMain">
     <div class="divHeader">
-        <?php echo $blogtitle;?>
+        <?php echo $blogtitle; ?>
     </div>
     <div class="SubMenu">
-        <?php echo $zbpdk->submenu->export('Debugger');?>
+        <?php echo $zbpdk->submenu->export('Debugger'); ?>
     </div>
     <div id="divMain2">
         <form id="edit" name="edit" method="post" action="main.php">
@@ -68,7 +71,7 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
                 </tr>
             </table>
             <hr>
-            <input type="hidden" name="csrfToken" value="<?php echo $zbp->GetCSRFToken();?>">
+            <input type="hidden" name="csrfToken" value="<?php echo $zbp->GetCSRFToken(); ?>">
             <p>
                 <input type="submit" class="button" value="<?php echo $lang['msg']['submit'] ?>">
                 <a href="main.php?act=show_all_interface">查看所有已挂载接口</a>

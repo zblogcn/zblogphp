@@ -30,7 +30,7 @@ function ZBPDK_AddMenu(&$topmenus)
 
 /**
  * 执行子扩展函数.
- * 
+ *
  * @param string $preifx 函数前缀
  */
 function ExtFunc_ZBPDK($prefix)
@@ -38,6 +38,8 @@ function ExtFunc_ZBPDK($prefix)
     global $zbpdk;
     foreach ($zbpdk->objects as $ext) {
         $func = $prefix . $ext->id;
-        if (function_exists($func)) $func();
+        if (function_exists($func)) {
+            $func();
+        }
     }
 }

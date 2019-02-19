@@ -2,10 +2,9 @@
 /**
  * ZBPDK子扩展
  * 编辑器API（EditorApi）调试器.
- * 
+ *
  * @author 心扬 <chrishyze@163.com>
  */
-
 $GLOBALS['zbpdk']->add_extension(array(
     'url'         => 'main.php',
     'description' => '用于调试编辑器Api',
@@ -33,7 +32,7 @@ function ActivePlugin_EditorApi()
 function test_content_editorapi()
 {
     global $zbp;
-    
+
     $script = <<<EOF
 <div class="EditorApiTool">
     <div><label for="ea_content_text" class="editinputname">正文编辑器调试工具</label></div>
@@ -78,7 +77,9 @@ $(function(){
 </script>
 EOF;
 
-    if ($zbp->Config('ZBPDK_EditorApi')->show == '1') echo $script;
+    if ($zbp->Config('ZBPDK_EditorApi')->show == '1') {
+        echo $script;
+    }
 }
 
 /**
@@ -87,7 +88,7 @@ EOF;
 function test_intro_editorapi()
 {
     global $zbp;
-    
+
     $script = <<<EOF
 <div class="EditorApiTool">
     <div><label for="ea_intro_text" class="editinputname">摘要编辑器调试工具</label></div>
@@ -153,7 +154,9 @@ $(function(){
 </script>
 EOF;
 
-    if ($zbp->Config('ZBPDK_EditorApi')->show == '1') echo $script;
+    if ($zbp->Config('ZBPDK_EditorApi')->show == '1') {
+        echo $script;
+    }
 }
 
 function InstallPlugin_EditorApi()

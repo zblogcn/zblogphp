@@ -1,10 +1,9 @@
 <?php
 /**
  * AJAX请求处理.
- * 
+ *
  * @author 心扬 <chrishyze@gmail.com>
  */
-
 require_once '../../../../../zb_system/function/c_system_base.php';
 $zbp->Load();
 if (!headers_sent()) {
@@ -37,10 +36,10 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' && isset($_GET['action'])) {
 /**
  * 获取接口详情
  * SourceCode: PluginInterface @zsx.
- * 
+ *
  * @param string $interface_name 接口名称
  * @param string $func_name      函数名称
- * 
+ *
  * @return string
  */
 function get_interface_detail($interface_name = '', $func_name = '')
@@ -64,15 +63,14 @@ function get_interface_detail($interface_name = '', $func_name = '')
     return $str;
 }
 
-
 /**
  * JSON返回
  * 避免中文转码 Unicode
  * 兼容 PHP5.2.0～PHP7.
- * 
+ *
  * @param bool   $status  状态
  * @param string $message 消息
- * 
+ *
  * @return string
  */
 function json_msg($status, $message)
@@ -89,9 +87,9 @@ function json_msg($status, $message)
 /**
  * 字符编码转换
  * 单独定义函数以兼容PHP5.2.
- * 
+ *
  * @param array $matchs
- * 
+ *
  * @return string
  */
 function get_matched_iconv($matchs)
