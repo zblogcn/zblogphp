@@ -1,11 +1,10 @@
 <?php
 /**
-* ZBPDK子扩展
-* EditorApi配置页.
-*
-* @author 心扬 <chrishyze@163.com>
-*/
-
+ * ZBPDK子扩展
+ * EditorApi配置页.
+ *
+ * @author 心扬 <chrishyze@163.com>
+ */
 require_once '../../../../../zb_system/function/c_system_base.php';
 require_once '../../../../../zb_system/function/c_system_admin.php';
 header("Cache-Control: no-cache, must-revalidate");
@@ -23,7 +22,9 @@ if (!$zbp->CheckPlugin('ZBPDK')) {
 
 //检测配置提交
 if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
-    if (isset($_POST['show'])) $zbp->Config('ZBPDK_EditorApi')->show = $_POST['show'];
+    if (isset($_POST['show'])) {
+        $zbp->Config('ZBPDK_EditorApi')->show = $_POST['show'];
+    }
     $zbp->SaveConfig('ZBPDK_EditorApi');
 }
 
@@ -33,10 +34,10 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
 
 <div id="divMain">
     <div class="divHeader">
-        <?php echo $blogtitle;?>
+        <?php echo $blogtitle; ?>
     </div>
     <div class="SubMenu">
-        <?php echo $zbpdk->submenu->export('EditorApi');?>
+        <?php echo $zbpdk->submenu->export('EditorApi'); ?>
     </div>
     <div id="divMain2">
         <form id="edit" name="edit" method="post" action="main.php">
@@ -59,7 +60,7 @@ require_once $blogpath . 'zb_system/admin/admin_top.php';
                 </tr>
             </table>
             <hr>
-            <input type="hidden" name="csrfToken" value="<?php echo $zbp->GetCSRFToken();?>">
+            <input type="hidden" name="csrfToken" value="<?php echo $zbp->GetCSRFToken(); ?>">
             <p>
                 <input type="submit" class="button" value="<?php echo $lang['msg']['submit'] ?>">
             </p>
@@ -158,7 +159,7 @@ function editor_init() {
         })
     });
 }
-</script>');?></pre>
+</script>'); ?></pre>
             <p>具体的功能实现取决于开发者，更多详情请参阅源码，其源码位于 zb_system/admin/edit.php 文件中。</p>
         </div>
     </div>
@@ -182,7 +183,7 @@ function editor_init() {
     ActiveTopMenu('zbpdk');
 </script>
 <script>
-    AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png';?>");
+    AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png'; ?>");
 </script>
 
 <?php

@@ -2,7 +2,7 @@
 /**
  * ZBPDK子扩展
  * Z-BlogPHP调试器.
- * 
+ *
  * @author 心扬 <chrishyze@gmail.com>
  */
 
@@ -18,7 +18,7 @@ $GLOBALS['zbpdk']->add_extension(array(
     'id'          => 'Debugger',
 ));
 
-/**
+/*
  * 子扩展菜单列表
  * url:相对后台地址
  * float:菜单停靠位置
@@ -69,7 +69,7 @@ function UnInstallPlugin_Debugger()
 
 /**
  * SQL语句记录.
- * 
+ *
  * @param string $sql
  */
 function record_sql_debugger($sql)
@@ -104,8 +104,8 @@ function output_admin_debugger()
 
 /**
  * 输出的信息内容.
- * 
- * @param bool $is_admin 
+ *
+ * @param bool $is_admin
  */
 function output_content_debugger($is_admin)
 {
@@ -114,7 +114,7 @@ function output_content_debugger($is_admin)
     //当前内存占用
     $memory_usage = function_exists('memory_get_usage') ? memory_get_usage() : -1;
     if ($memory_usage < 1024) {
-        $memory_usage =  $memory_usage . ' B';
+        $memory_usage = $memory_usage . ' B';
     } elseif ($memory_usage < 1048576) {
         $memory_usage = round($memory_usage / 1024, 2) . ' KB';
     } else {
@@ -239,15 +239,15 @@ function output_content_debugger($is_admin)
  * 查看对当前页面产生影响的接口
  * 已知BUG:
  * 一些从系统挂载的接口无法获取详情.
- * 
- * @param boolean $is_admin
- * 
+ *
+ * @param bool $is_admin
+ *
  * @return string
  */
 function get_actived_plugins_debugger($is_admin)
 {
     global $zbp;
-    
+
     //前后台对应的接口列表
     $interfaces = $is_admin ? array(
         'Filter_Plugin_Admin_LeftMenu',
@@ -366,9 +366,9 @@ function get_actived_plugins_debugger($is_admin)
 
 /**
  * 获取插件名称.
- * 
+ *
  * @param string $func_name 接口绑定的函数名
- * 
+ *
  * @return string
  */
 function get_plugin_name_debugger($func_name = '')
@@ -381,14 +381,14 @@ function get_plugin_name_debugger($func_name = '')
     if (stripos($func->GetFileName(), 'zb_system/')) {
         return '系统';
     } elseif (stripos($func->GetFileName(), 'zb_users/plugin/')) {
-        $app = new App;
+        $app = new App();
         $app->LoadInfoByXml('plugin', basename(dirname($func->GetFileName())));
 
         return empty($app->name) ? '其他' : $app->name;
     } elseif (stripos($func->GetFileName(), 'zb_users/theme/')) {
-        $app = new App;
+        $app = new App();
         $app->LoadInfoByXml('theme', basename(dirname($func->GetFileName())));
-        
+
         return empty($app->name) ? '其他' : $app->name;
     } else {
         return '非法路径';
