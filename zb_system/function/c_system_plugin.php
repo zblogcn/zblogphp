@@ -1324,6 +1324,17 @@ DefinePluginFilter('Filter_Plugin_PostComment_Core');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_CheckComment_Core
+'参数:&$cmt
+'说明:评论审核的核心接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_CheckComment_Core');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_PostArticle_Core
 '参数:&$article
 '说明:文章编辑的核心接口
@@ -1386,6 +1397,17 @@ DefinePluginFilter('Filter_Plugin_PostCategory_Succeed');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_PostComment_Succeed');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_CheckComment_Succeed
+'参数:&$cmt
+'说明:评论审核成功的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_CheckComment_Succeed');
 
 /*
 '**************************************************<
