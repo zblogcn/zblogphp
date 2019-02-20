@@ -16,7 +16,10 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Begin'] as $fpname => &$fpsignal) 
 switch ($action) {
     case 'login':
         if (!empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
-            Redirect(GetVars('redirect', 'GET'));
+            $a = parse_url(GetVars('redirect', 'GET'));
+            $b = parse_url($zbp->host);
+            if(isset($a['host']) && isset($b['host']) && strtolower($a['host'])==strtolower($b['host']) )
+                Redirect(GetVars('redirect', 'GET'));
         }
         if ($zbp->CheckRights('admin')) {
             Redirect('cmd.php?act=admin');
@@ -40,7 +43,10 @@ switch ($action) {
          */
         if (VerifyLogin()) {
             if (!empty($zbp->user->ID) && GetVars('redirect', 'COOKIE')) {
-                Redirect(GetVars('redirect', 'COOKIE'));
+                $a = parse_url(GetVars('redirect', 'COOKIE'));
+                $b = parse_url($zbp->host);
+                if(isset($a['host']) && isset($b['host']) && strtolower($a['host'])==strtolower($b['host']) )
+                    Redirect(GetVars('redirect', 'COOKIE'));
             }
             Redirect('admin/index.php?act=admin');
         } else {
