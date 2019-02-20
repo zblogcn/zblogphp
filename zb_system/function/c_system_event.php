@@ -3512,7 +3512,6 @@ function Include_ShowError404($errorCode, $errorDescription, $file, $line)
     $zbp->template->SetTemplate('404');
     $zbp->template->Display();
 
-    $GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError']['ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
     exit;
 }
 
