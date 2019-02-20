@@ -724,4 +724,9 @@ class Template
 
         return $s;
     }
+
+    public function GetCurrentTemplate()
+    {
+        return $this->entryPage;
+    }
 }
