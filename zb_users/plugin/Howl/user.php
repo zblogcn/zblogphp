@@ -55,7 +55,10 @@ if (!isset($_GET['id'])) {
     echo '<select name="userid">';
     foreach ($zbp->members as $key => $value) {
         $userid = 'User' . $key;
-        $count = count($zbp->Config('Howl')->$userid);
+        $count = 0;
+        if ($zbp->Config('Howl')->HasKey($userid)) {
+            $count = count($zbp->Config('Howl')->$userid);
+        }
         if ($count > 0) {
             $count = " (已设置{$count}项)";
         } else {
