@@ -248,7 +248,7 @@ return array(
         'permanent_domain_with_admin'       => '後臺也使用永久域名',
         'current_template'                  => '當前模板',
         'additional_security'               => '安全增強',
-        'using_cdn_guest_type'              => '應用CDN下的客戶IP獲取方式',
+        'using_cdn_guest_type'              => '客戶IP獲取来源',
         ''                                  => '',
     ),
 

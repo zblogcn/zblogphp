@@ -248,7 +248,7 @@ return array(
         'permanent_domain_with_admin'       => 'Fixed domain both on background',
         'current_template'                  => 'Current Template',
         'additional_security'               => 'Additional Security',
-        'using_cdn_guest_type'              => 'Select type of get guestip by CDN',
+        'using_cdn_guest_type'              => 'HTTP Header for IP',
         ''                                  => '',
     ),
 
