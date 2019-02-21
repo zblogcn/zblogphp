@@ -788,14 +788,9 @@ function Http304($filename, $time)
  */
 function GetGuestIP()
 {
-    if (isset($zbp->option['ZC_USED_CDN']) && $zbp->option['ZC_USED_CDN'] == true) {
-        if (GetVars("HTTP_X_REAL_IP", "SERVER") != "") {
-            $user_ip = GetVars("HTTP_X_REAL_IP", "SERVER");
-        } elseif (GetVars("HTTP_CLIENT_IP", "SERVER") != "") {
-            $user_ip = GetVars("HTTP_CLIENT_IP", "SERVER");
-        } else {
-            $user_ip = GetVars("HTTP_X_FORWARDED_FOR", "SERVER");
-        }
+    global $zbp;
+    if (isset($zbp->option['ZC_USING_CDN_GUESTIP_TYPE']) && $zbp->option['ZC_USING_CDN_GUESTIP_TYPE'] != '') {
+        $user_ip = GetVars($zbp->option['ZC_USING_CDN_GUESTIP_TYPE'], "SERVER");
     } else {
         $user_ip = GetVars("REMOTE_ADDR", "SERVER");
     }

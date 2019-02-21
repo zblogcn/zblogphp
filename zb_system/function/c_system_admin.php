@@ -550,6 +550,30 @@ function CreateOptionsOfLang($default)
     return $s;
 }
 
+/**
+ * 生成GuestType表单.
+ *
+ * @param $default
+ *
+ * @return string
+ */
+function CreateOptionsOfGuestType($default)
+{
+    $s = '';
+    $tz = array(
+        'REMOTE_ADDR'                    => 'REMOTE_ADDR',
+        'HTTP_X_REAL_IP'                 => 'HTTP_X_REAL_IP',
+        'HTTP_CLIENT_IP'                 => 'HTTP_CLIENT_IP',
+        'HTTP_X_FORWARDED_FOR'           => 'HTTP_X_FORWARDED_FOR',
+    );
+
+    foreach ($tz as $key => $value) {
+        $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $value . '</option>';
+    }
+
+    return $s;
+}
+
 //###############################################################################################################
 /**
  * 后台管理显示网站信息.
@@ -1806,7 +1830,15 @@ function changeDomain(url){
     echo '<tr><td><p><b>' . $zbp->lang['msg']['additional_security'] . '</b></p></td><td><p><input id="ZC_ADDITIONAL_SECURITY" name="ZC_ADDITIONAL_SECURITY" type="text" value="' . $zbp->option['ZC_ADDITIONAL_SECURITY'] . '" class="checkbox"/></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['gzip_compress'] . '</b></p></td><td><p><input id="ZC_GZIP_ENABLE" name="ZC_GZIP_ENABLE" type="text" value="' . $zbp->option['ZC_GZIP_ENABLE'] . '" class="checkbox"/></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['syntax_high_lighter'] . '</b></p></td><td><p><input id="ZC_SYNTAXHIGHLIGHTER_ENABLE" name="ZC_SYNTAXHIGHLIGHTER_ENABLE" type="text" value="' . $zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE'] . '" class="checkbox"/></p></td></tr>';
-    echo '<tr><td><p><b>' . $zbp->lang['msg']['used_cdn'] . '</b></p></td><td><p><input id="ZC_USED_CDN" name="ZC_USED_CDN" type="text" value="' . $zbp->option['ZC_USED_CDN'] . '" class="checkbox"/></p></td></tr>';
+
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['using_cdn_guest_type'] . '</b></p></td><td><p><select id="ZC_USING_CDN_GUESTIP_TYPE" name="ZC_USING_CDN_GUESTIP_TYPE" style="width:600px;" >';
+    echo CreateOptionsOfGuestType($zbp->option['ZC_USING_CDN_GUESTIP_TYPE']);
+    echo '</select></p></td></tr>';
+
+
+
+
+
     echo '<tr><td><p><b>' . $zbp->lang['msg']['close_site'] . '</b></p></td><td><p><input id="ZC_CLOSE_SITE" name="ZC_CLOSE_SITE" type="text" value="' . $zbp->option['ZC_CLOSE_SITE'] . '" class="checkbox"/></p></td></tr>';
 
     echo '</table>';

@@ -210,5 +210,5 @@ return array(
     'ZC_ADDITIONAL_SECURITY'         => true,
     'ZC_XMLRPC_ENABLE'               => true,
     'ZC_XMLRPC_USE_WEBTOKEN'         => false,
-    'ZC_USED_CDN'                    => false,
+    'ZC_USING_CDN_GUESTIP_TYPE'      => 'REMOTE_ADDR',
 );
