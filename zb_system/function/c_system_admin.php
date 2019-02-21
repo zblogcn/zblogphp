@@ -562,7 +562,7 @@ function CreateOptionsOfGuestIPType($default)
     global $zbp;
     $s = '';
     $tz = array(
-        'REMOTE_ADDR'                    => 'REMOTE_ADDR ('.$zbp->lang['msg']['default'].')',
+        'REMOTE_ADDR'                    => 'REMOTE_ADDR (' . $zbp->lang['msg']['default'] . ')',
         'HTTP_X_REAL_IP'                 => 'HTTP_X_REAL_IP',
         'HTTP_CLIENT_IP'                 => 'HTTP_CLIENT_IP',
         'HTTP_X_FORWARDED_FOR'           => 'HTTP_X_FORWARDED_FOR',
