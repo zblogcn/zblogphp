@@ -14,7 +14,7 @@ if (!$zbp->CheckPlugin('SQLLog')) {
 }
 
 $blogtitle = 'SQLLog';
-$filename = GetVars('filename', 'GET');
+$filename = TransferHTML(GetVars('filename', 'GET'), '[filename]');
 $handle = opendir(SQLLOG_LOGPATH);
 
 switch (GetVars('act', 'GET')) {

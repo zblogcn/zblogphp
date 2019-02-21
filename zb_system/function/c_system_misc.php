@@ -364,5 +364,5 @@ RunTime();
 function misc_ping()
 {
     global $zbp;
-    echo $zbp->lang['msg']['blog_host'] . ': ' . GetVars('newdomain', 'GET');
+    echo $zbp->lang['msg']['blog_host'] . ': ' . htmlspecialchars(GetVars('newdomain', 'GET'));
 }
