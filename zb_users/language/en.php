@@ -248,6 +248,7 @@ return array(
         'permanent_domain_with_admin'       => 'Fixed domain both on background',
         'current_template'                  => 'Current Template',
         'additional_security'               => 'Additional Security',
+        'used_cdn'                          => 'Used CDN',
         ''                                  => '',
     ),
 
