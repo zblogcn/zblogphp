@@ -1835,10 +1835,6 @@ function changeDomain(url){
     echo CreateOptionsOfGuestType($zbp->option['ZC_USING_CDN_GUESTIP_TYPE']);
     echo '</select></p></td></tr>';
 
-
-
-
-
     echo '<tr><td><p><b>' . $zbp->lang['msg']['close_site'] . '</b></p></td><td><p><input id="ZC_CLOSE_SITE" name="ZC_CLOSE_SITE" type="text" value="' . $zbp->option['ZC_CLOSE_SITE'] . '" class="checkbox"/></p></td></tr>';
 
     echo '</table>';
