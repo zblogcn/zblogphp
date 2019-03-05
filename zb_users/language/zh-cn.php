@@ -244,6 +244,7 @@ return array(
         'permanent_domain_with_admin'       => '后台也使用固定域名',
         'current_template'                  => '当前模板',
         'additional_security'               => '安全增强',
+        'using_cdn_guest_type'              => '客户IP获取来源',
         ''                                  => '',
     ),
 
