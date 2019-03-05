@@ -1,4 +1,8 @@
 <?php
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+
 /**
  * 上传附件和上传视频
  * User: Jinqn

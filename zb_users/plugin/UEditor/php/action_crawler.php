@@ -1,4 +1,8 @@
 <?php
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+
 /**
  * 抓取远程图片
  * User: Jinqn
