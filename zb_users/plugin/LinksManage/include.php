@@ -9,16 +9,18 @@ function ActivePlugin_LinksManage()
     Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu', 'LinksManage_AddMenu');
     Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu', 'LinksManage_AddMenu');
     Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu', 'LinksManage_ModuleMenu');
-    Add_Filter_Plugin('Filter_Plugin_Zbp_BuildTemplate', 'LinksManage_BuidTemp');
+    Add_Filter_Plugin('Filter_Plugin_Zbp_BuildTemplate', 'LinksManage_BuildTemp');
 }
-function LinksManage_BuidTemp(&$templates)
+
+function LinksManage_BuildTemp(&$templates)
 {
     // global $zbp;
-    // if (is_file(LinksManage_Path("u-temp"))) {
-    $templates['Links_defend'] = file_get_contents(LinksManage_Path("u-temp"));
-    // }
+    if (is_file(LinksManage_Path("u-temp"))) {
+        $templates['Links_defend'] = file_get_contents(LinksManage_Path("u-temp"));
+    }
     $templates['Links_admin'] = file_get_contents(LinksManage_Path("tr"));
 }
+
 function LinksManage_ModuleMenu()
 {
     global $zbp;
@@ -54,6 +56,9 @@ function LinksManage_Path($file, $t = "path")
     global $zbp;
     $result = $zbp->$t . "zb_users/plugin/LinksManage/";
     switch ($file) {
+        case "cache":
+            return $zbp->usersdir . "cache/linksmanage/";
+            break;
         case "u-temp":
             return $result . "usr/li.html";
             break;
@@ -73,7 +78,7 @@ function LinksManage_Path($file, $t = "path")
             return $result . "usr/";
             break;
         case "bakdir":
-            return $result . "backup/";
+            return $zbp->usersdir . "cache/linksmanage/backup/";
             break;
         case "bakfile":
             return 'navbar|favorite|link';
@@ -88,6 +93,10 @@ function LinksManage_Path($file, $t = "path")
 function InstallPlugin_LinksManage()
 {
     global $zbp;
+    $dir = LinksManage_Path("cache");
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0755);
+    }
     $dir = LinksManage_Path("bakdir");
     if (!is_dir($dir)) {
         @mkdir($dir, 0755);
