@@ -1,0 +1,41 @@
+.hidden {
+  display: none;
+}
+.LinksManage {
+  border-left: 2px solid #f93;
+  border-radius: 3px 0 0 3px;
+  text-shadow: 1px 1px #eee;
+}
+.LinksManageSub td {
+  text-indent: 0.5em;
+}
+.LinksManageSub td:before {
+  content: "└ ";
+}
+#LinksManageList td {
+  padding: 7px;
+}
+#LinksManageAdd td {
+  padding: 5px;
+}
+#LinksManageDel {
+  font-size: 15px;
+  visibility: hidden;
+  height: 1px;
+  line-height: 1px;
+}
+#LinksManageDel.active {
+  transition: all linear 0.2s;
+  background: #f36;
+  color: #fff;
+  padding: 20px;
+  visibility: visible;
+}
+#LinksManageDel.hover {
+  transition: all linear 0.2s;
+  border-color: rgba(255, 51, 102, 0.75);
+  box-shadow: 0 0 18px rgba(255, 51, 102, 3);
+}
+.LinksManageAdd {
+  display: none;
+}

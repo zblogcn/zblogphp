@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="php">
+<id>LinksManage</id>
+<name>链接管理中心</name>
+<url>https://app.zblogcn.com/?id=1873</url>
+<note>表单化管理导航、友情链接等</note>
+<description>表单化管理导航、友情链接等</description>
+<path></path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>沉冰浮水</name>
+  <email>wdssmq@qq.com</email>
+  <url>https://www.wdssmq.com</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>151626</adapted>
+<version>1.0</version>
+<pubdate>2018-10-29</pubdate>
+<modified>2019-03-22</modified>
+<price>0</price>
+<phpver>5.4</phpver>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+</sidebars>
+</plugin>
