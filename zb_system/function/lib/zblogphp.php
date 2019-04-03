@@ -461,7 +461,7 @@ class ZBlogPHP
             ZBlogException::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
         }
 
-        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
+        if (isset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']) == false && $this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
             $this->host = $this->option['ZC_BLOG_HOST'];
             $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
         } else {
@@ -952,6 +952,8 @@ class ZBlogPHP
     public function SaveOption()
     {
         $this->option['ZC_BLOG_CLSID'] = $this->guid;
+
+        unset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']);
 
         if (ZC_VERSION_MAJOR === '1' && ZC_VERSION_MINOR === '5') {
             if (is_dir($this->path . 'zb_system/api')) {
@@ -3156,6 +3158,10 @@ class ZBlogPHP
 
         if ($this->option['ZC_PERMANENT_DOMAIN_REDIRECT'] == false) {
             return;
+        }
+
+        if (isset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']) == true) {
+            //return;
         }
 
         $host = str_replace(array('https://', 'http://'), array('', ''), GetCurrentHost(ZBP_PATH, $null));
