@@ -16,19 +16,21 @@ function LinksManage_BuidTemp(&$templates)
 	// if (is_file(LinksManage_Path("u-temp"))) {
   $templates['Links_defend'] = file_get_contents(LinksManage_Path("u-temp"));
 	// }
-	$templates['Links_admin'] = file_get_contents(LinksManage_Path("tr"));
+  $templates['Links_admin'] = file_get_contents(LinksManage_Path("tr"));
 }
 function LinksManage_ModuleMenu()
 {
 	global $zbp;
 
 	$array = $zbp->GetModuleList(
-		array('*'),
-		array(array('=', 'mod_Source', 'plugin_LinksManage'))
+		array('*')
 	);
 	$mods = array();
 	foreach ($array as $mod) {
-		$mods[] = $mod->FileName;
+		if($mod->Type == 'ul'){
+			if($mod->Source=='system' && !in_array($mod->HtmlID,array('navbar','link','misc','favorite')) )continue;
+			$mods[] = $mod->FileName;
+		}
 	}
 
 	$str = '<a href="' . LinksManage_Path("main", "host") . '" class="LinksManage"><span class="m-left">新建链接模块</span></a>';
@@ -85,7 +87,7 @@ function LinksManage_Path($file, $t = "path")
 	}
 }
 function InstallPlugin_LinksManage()
-{
+{/*
 	global $zbp;
 	$dir = LinksManage_Path("bakdir");
 	if (!is_dir($dir)) {
@@ -106,9 +108,10 @@ function InstallPlugin_LinksManage()
 		}
 	}
 	$zbp->BuildTemplate();
-}
+*/}
+
 function UninstallPlugin_LinksManage()
-{
+{/*
 	global $zbp;
 	$links = explode('|', LinksManage_Path("bakfile"));
 	foreach ($links as $mod) {
@@ -122,4 +125,4 @@ function UninstallPlugin_LinksManage()
 			unlink($file);
 		}
 	}
-}
+*/}
