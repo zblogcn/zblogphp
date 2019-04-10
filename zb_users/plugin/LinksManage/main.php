@@ -224,11 +224,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         <?php
 } ?>
       </p>
-      <hr style="border-top:1px solid #ddd!important;visibility:visible;"/>
-      <p>对于每个li，会默认添加 "文件名-item" 作为类名，当前为：<?php echo "{$mod->FileName}-item"; ?></p>
-      <p>默认模板路径：<?php echo LinksManage_Path("u-temp"); ?></p>
-      <p>(暂未实现)自定义模板路径：<?php echo LinksManage_Path("usr/{$mod->FileName}.li"); ?></p>
-      <p>模板编译时会加<b>"Links_"</b>前缀，默认模板编译为<b>Links_defend</b></p>
+      <hr style="margin-top:1em;border-top:1px solid #ddd!important;visibility:visible;"/>
+      <p>·对于每个li，会默认添加 "文件名-item" 作为类名，当前为：<?php echo "{$mod->FileName}-item"; ?></p>
+      <p>·默认模板路径：<?php echo LinksManage_Path("u-temp"); ?></p>
+      <!--<p>(暂未实现)自定义模板路径：<?php echo LinksManage_Path("usr/{$mod->FileName}.li"); ?></p>-->
+      <p>·模板编译时会加<b>"Links_"</b>前缀，默认模板编译为<b>Links_defend</b></p>
     </form>
   </div>
 </div>
