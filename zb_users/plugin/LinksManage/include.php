@@ -23,16 +23,18 @@ function LinksManage_ModuleMenu()
 {
     global $zbp;
 
-	$array = $zbp->GetModuleList(
-		array('*')
-	);
-	$mods = array();
-	foreach ($array as $mod) {
-		if($mod->Type == 'ul'){
-			if($mod->Source=='system' && !in_array($mod->HtmlID,array('navbar','link','misc','favorite')) )continue;
-			$mods[] = $mod->FileName;
-		}
-	}
+    $array = $zbp->GetModuleList(
+        array('*')
+    );
+    $mods = array();
+    foreach ($array as $mod) {
+        if ($mod->Type == 'ul') {
+            if ($mod->Source == 'system' && !in_array($mod->HtmlID, array('navbar', 'link', 'misc', 'favorite'))) {
+                continue;
+            }
+            $mods[] = $mod->FileName;
+        }
+    }
 
     $str = '<a href="' . LinksManage_Path("main", "host") . '" class="LinksManage"><span class="m-left">新建链接模块</span></a>';
 
@@ -89,41 +91,43 @@ function LinksManage_Path($file, $t = "path")
 }
 function InstallPlugin_LinksManage()
 {/*
-	global $zbp;
-	$dir = LinksManage_Path("bakdir");
-	if (!is_dir($dir)) {
-		@mkdir($dir, 0755);
-	}
-	$links = explode('|', LinksManage_Path("bakfile"));
-	foreach ($links as $mod) {
-		$backup = $zbp->modulesbyfilename[$mod]->Content;
-		file_put_contents(LinksManage_Path("bakdir") . $mod . '.txt', $backup);
-	}
-	$filesList = array("temp");
-	foreach ($filesList as $key => $value) {
-		$uFile = LinksManage_Path("u-{$value}");
-		$vFile = LinksManage_Path("v-{$value}");
-		if (!is_file($uFile)) {
-			@mkdir(dirname($uFile));
-			copy($vFile, $uFile);
-		}
-	}
-	$zbp->BuildTemplate();
-*/}
+    global $zbp;
+    $dir = LinksManage_Path("bakdir");
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0755);
+    }
+    $links = explode('|', LinksManage_Path("bakfile"));
+    foreach ($links as $mod) {
+        $backup = $zbp->modulesbyfilename[$mod]->Content;
+        file_put_contents(LinksManage_Path("bakdir") . $mod . '.txt', $backup);
+    }
+    $filesList = array("temp");
+    foreach ($filesList as $key => $value) {
+        $uFile = LinksManage_Path("u-{$value}");
+        $vFile = LinksManage_Path("v-{$value}");
+        if (!is_file($uFile)) {
+            @mkdir(dirname($uFile));
+            copy($vFile, $uFile);
+        }
+    }
+    $zbp->BuildTemplate();
+*/
+}
 
 function UninstallPlugin_LinksManage()
 {/*
-	global $zbp;
-	$links = explode('|', LinksManage_Path("bakfile"));
-	foreach ($links as $mod) {
-		$file = LinksManage_Path("bakdir") . $mod . '.txt';
-		if (is_file($file)) {
-			$backup = file_get_contents($file);
-			$module = $zbp->modulesbyfilename[$mod];
-			$module->Content = $backup;
-			$module->Save();
-			$zbp->AddBuildModule($module->FileName);
-			unlink($file);
-		}
-	}
-*/}
+    global $zbp;
+    $links = explode('|', LinksManage_Path("bakfile"));
+    foreach ($links as $mod) {
+        $file = LinksManage_Path("bakdir") . $mod . '.txt';
+        if (is_file($file)) {
+            $backup = file_get_contents($file);
+            $module = $zbp->modulesbyfilename[$mod];
+            $module->Content = $backup;
+            $module->Save();
+            $zbp->AddBuildModule($module->FileName);
+            unlink($file);
+        }
+    }
+*/
+}
