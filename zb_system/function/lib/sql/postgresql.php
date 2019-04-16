@@ -85,6 +85,11 @@ class SQL__PostgreSQL extends SQL__Global
                 if ($value[1] == 'float') {
                     $sql[] = $value[0] . " real NOT NULL DEFAULT 0" . ',';
                 }
+                if ($value[1] == 'decimal') {
+                    $d1 = $value[2][0];
+                    $d2 = $value[2][1];
+                    $sql[] = $value[0] . " decimal($d1,$d2) NOT NULL DEFAULT 0" . ',';
+                }
                 if ($value[1] == 'date' || $value[1] == 'time') {
                     $sql[] = $value[0] . " $value[1] NOT NULL,";
                 }

@@ -73,6 +73,11 @@ class SQL__SQLite extends SQL__Global
                 if ($value[1] == 'double' || $value[1] == 'float') {
                     $createData[] = $value[0] . " $value[1] NOT NULL DEFAULT 0";
                 }
+                if ($value[1] == 'decimal') {
+                    $d1 = $value[2][0];
+                    $d2 = $value[2][1];
+                    $createData[] = $value[0] . " $value[1]($d1,$d2) NOT NULL DEFAULT 0";
+                }
                 if ($value[1] == 'date' || $value[1] == 'datetime') {
                     $createData[] = $value[0] . " $value[1] NOT NULL";
                 }
