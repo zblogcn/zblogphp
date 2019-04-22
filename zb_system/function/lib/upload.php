@@ -1,16 +1,24 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+
 /**
- * 上传类
+ * 上传类.
  *
- * @package Z-BlogPHP
- * @subpackage ClassLib/Upload 类库
+ * @property string Name
+ * @property string FullFile
+ * @property string Size
+ * @property string Dir
+ * @property int PostTime
+ * @property int|string AuthorID
+ * @property string SourceName
+ * @property string MimeType
+ * @property Member Author
  */
 class Upload extends Base
 {
-
-    /**
-     *
-     */
     public function __construct()
     {
         global $zbp;
@@ -20,19 +28,24 @@ class Upload extends Base
     }
 
     /**
-     * @param string $extlist
+     * @param string $extList
+     *
      * @return bool
      */
-    public function CheckExtName($extlist = '')
+    public function CheckExtName($extList = '')
     {
         global $zbp;
         $e = GetFileExt($this->Name);
-        $extlist = strtolower($extlist);
-        if (trim($extlist) == '') {
-            $extlist = $zbp->option['ZC_UPLOAD_FILETYPE'];
+        $extList = strtolower($extList);
+        // 无论如何，禁止.php、.php5之类的文件的上传
+        if (preg_match('/php/i', $e)) {
+            return false;
+        }
+        if (trim($extList) == '') {
+            $extList = $zbp->option['ZC_UPLOAD_FILETYPE'];
         }
 
-        return HasNameInString($extlist, $e);
+        return HasNameInString($extList, $e);
     }
 
     /**
@@ -51,11 +64,11 @@ class Upload extends Base
      */
     public function DelFile()
     {
-
         foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_DelFile'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -68,6 +81,7 @@ class Upload extends Base
 
     /**
      * @param $tmp
+     *
      * @return bool
      */
     public function SaveFile($tmp)
@@ -78,6 +92,7 @@ class Upload extends Base
             $fpreturn = $fpname($tmp, $this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -97,6 +112,7 @@ class Upload extends Base
 
     /**
      * @param $str64
+     *
      * @return bool
      */
     public function SaveBase64File($str64)
@@ -107,6 +123,7 @@ class Upload extends Base
             $fpreturn = $fpname($str64, $this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -128,6 +145,7 @@ class Upload extends Base
 
     /**
      * @param string $s
+     *
      * @return bool|string
      */
     public function Time($s = 'Y-m-d H:i:s')
@@ -138,28 +156,21 @@ class Upload extends Base
     /**
      * @param $name
      * @param $value
-     * @return null
      */
     public function __set($name, $value)
     {
-        global $zbp;
-        if ($name == 'Url') {
-            return null;
+        if (in_array($name, array('Url', 'Dir', 'FullFile', 'Author'))) {
+            return;
         }
-        if ($name == 'Dir') {
-            return null;
-        }
-        if ($name == 'FullFile') {
-            return null;
-        }
-        if ($name == 'Author') {
-            return null;
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Set'] as $fpname => &$fpsignal) {
+            $fpname($this, $name, $value);
         }
         parent::__set($name, $value);
     }
 
     /**
      * @param $name
+     *
      * @return Member|mixed|string
      */
     public function __get($name)
@@ -184,6 +195,15 @@ class Upload extends Base
         }
         if ($name == 'Author') {
             return $zbp->GetMemberByID($this->AuthorID);
+        }
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Get'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($this, $name);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+                return $fpreturn;
+            }
         }
 
         return parent::__get($name);

@@ -58,7 +58,7 @@ mix-manifest.json
 !/zb_users/plugin/LargeData
 !/zb_users/plugin/ZBPJFExample
 !/zb_users/plugin/markdown
-!/zb_users/plugin/linkmanage
+!/zb_users/plugin/LinksManage
 
 # Unoffical Theme
 /zb_users/theme/*

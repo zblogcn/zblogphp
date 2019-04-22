@@ -1,10 +1,15 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
-class SQLPgSQL extends SQLGlobal
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+class SQL__PostgreSQL extends SQL__Global
 {
     /**
      * @override
      */
     public $className = __CLASS__;
+
     /**
      * @param object $db
      */
@@ -12,6 +17,7 @@ class SQLPgSQL extends SQLGlobal
     {
         parent::__construct($db);
     }
+
     /**
      * @todo
      * @override
@@ -22,13 +28,13 @@ class SQLPgSQL extends SQLGlobal
 
         return $this;
     }
+
     /**
      * @todo
      * @override
      */
     protected function buildCreate()
     {
-
         $sqlAll = array();
         foreach ($this->table as $tableIndex => $table) {
             $sql = array();
@@ -78,6 +84,11 @@ class SQLPgSQL extends SQLGlobal
                 }
                 if ($value[1] == 'float') {
                     $sql[] = $value[0] . " real NOT NULL DEFAULT 0" . ',';
+                }
+                if ($value[1] == 'decimal') {
+                    $d1 = $value[2][0];
+                    $d2 = $value[2][1];
+                    $sql[] = $value[0] . " decimal($d1,$d2) NOT NULL DEFAULT 0" . ',';
                 }
                 if ($value[1] == 'date' || $value[1] == 'time') {
                     $sql[] = $value[0] . " $value[1] NOT NULL,";

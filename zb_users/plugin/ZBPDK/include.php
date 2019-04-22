@@ -1,4 +1,5 @@
 <?php
+
 RegisterPlugin("ZBPDK", "ActivePlugin_ZBPDK");
 
 function ActivePlugin_ZBPDK()

@@ -1,13 +1,13 @@
 <?php
 /**
- * api
+ * api.
+ *
  * @author zsx<zsx@zsxsoft.com>
- * @package api/route/app
  * @php >= 5.2
  */
 
 /**
- * Verify user
+ * Verify user.
  */
 function api_app_get_function()
 {
@@ -21,11 +21,10 @@ API::$Route->route('/app/*', 'api_app_get_function');
 
 /**
  * Enable app
- * now plugin only
+ * now plugin only.
  */
 function api_app_enable_function()
 {
-
     $id = API::$IO->id;
     if ($id == "") {
         API::$IO->end(3);
@@ -35,7 +34,7 @@ function api_app_enable_function()
 API::$Route->post('/app/enable/', 'api_app_enable_function');
 
 /**
- * Disable app
+ * Disable app.
  */
 function api_app_disable_function()
 {
@@ -50,7 +49,7 @@ API::$Route->post('/app/disable/', 'api_app_disable_function');
 
 /**
  * Modify app
- * For theme
+ * For theme.
  */
 function api_app_modify_function()
 {
@@ -58,7 +57,7 @@ function api_app_modify_function()
 API::$Route->post('/app/modify/', 'api_app_modify_function');
 
 /**
- * Delete app
+ * Delete app.
  */
 function api_app_delete_function()
 {

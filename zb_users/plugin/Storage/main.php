@@ -3,8 +3,14 @@ require_once '../../../zb_system/function/c_system_base.php';
 require_once '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
 $action = 'root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('Storage')) {$zbp->ShowError(48);die();}
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+    die();
+}
+if (!$zbp->CheckPlugin('Storage')) {
+    $zbp->ShowError(48);
+    die();
+}
 
 $blogtitle = 'Storage';
 require $blogpath . 'zb_system/admin/admin_header.php';
@@ -15,7 +21,7 @@ if (isset($_POST['Storage_Domain']) && $_POST['Storage_Domain'] != '') {
 }
 ?>
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
   <div class="SubMenu">
   </div>
  <form method="post">
@@ -31,7 +37,7 @@ if (isset($_POST['Storage_Domain']) && $_POST['Storage_Domain'] != '') {
 
 <div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">
 	<table style="padding:0px;margin:0px;width:100%;">
-		<tr><td><p><b>Domain Name</b></p></td><td><p><input id="Storage_Domain" name="Storage_Domain" style="width:600px;" type="text" value="<?php echo $zbp->Config('Storage')->Storage_Domain;?>" /></p></td></tr>
+		<tr><td><p><b>Domain Name</b></p></td><td><p><input id="Storage_Domain" name="Storage_Domain" style="width:600px;" type="text" value="<?php echo $zbp->Config('Storage')->Storage_Domain; ?>" /></p></td></tr>
 
 	</table>
 </div>

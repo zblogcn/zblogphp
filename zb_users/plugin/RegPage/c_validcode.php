@@ -1,11 +1,12 @@
 <?php
 /**
- * Z-Blog with PHP
+ * Z-Blog with PHP.
+ *
  * @author
  * @copyright (C) RainbowSoft Studio
+ *
  * @version
  */
-
 require '../../../zb_system/function/c_system_base.php';
 require './validatecode.php';
 
@@ -18,11 +19,12 @@ $zbp->option['ZC_VERIFYCODE_STRING'] = 'ABCDEFGHJKMNPQRSTUVWXYZ1234567890';
 
 $zbp->ShowValidCode(GetVars('id', 'GET'));
 
-function RegPage_ShowValidCode($id = ''){
+function RegPage_ShowValidCode($id = '')
+{
     global $zbp;
-    $ua_md5 = GetVars('REMOTE_ADDR','SERVER') . GetVars('hash','GET');
+    $ua_md5 = GetVars('REMOTE_ADDR', 'SERVER') . GetVars('hash', 'GET');
     $_vc = new RegPage_ValidateCode();
     $_vc->GetImg();
-    setcookie('captcha_' . crc32($zbp->guid . $id), md5($zbp->guid . date("Ymdh") . $_vc->GetCode() . $ua_md5 ), null, $zbp->cookiespath);
+    setcookie('captcha_' . crc32($zbp->guid . $id), md5($zbp->guid . date("Ymdh") . $_vc->GetCode() . $ua_md5), null, $zbp->cookiespath);
     die;
 }

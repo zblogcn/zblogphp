@@ -1,10 +1,13 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 /**
- * form creat
- * @package Z-BlogPHP
+ * form creat.
+ *
  * @author 未寒 <im@imzhou.com>
- * @subpackage 表单生成操作
  * @copyright (C) RainbowSoft Studio
  */
 
@@ -20,7 +23,6 @@ zbpform::password('aaaa','文本框');
  */
 class ZbpForm
 {
-
     public static function radio($name, $array = array('否', '是'), $checkedkey = 0)
     {
         $s = '';
@@ -68,7 +70,7 @@ class ZbpForm
         foreach ((array) $array as $k => $v) {
             $checked = $v[1] ? ' checked="checked"' : '';
 
-            $s .= "<input type=\"checkbox\" name=\"". $name ."[]\" id=\"$name-$k\" class=\"$name\" value=\"$k\"$checked /><label for=\"$name-$k\">$v[0]</label>\r\n";
+            $s .= "<input type=\"checkbox\" name=\"" . $name . "[]\" id=\"$name-$k\" class=\"$name\" value=\"$k\"$checked /><label for=\"$name-$k\">$v[0]</label>\r\n";
         }
         echo $s;
     }

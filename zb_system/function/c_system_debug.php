@@ -1,15 +1,21 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
- * 错误调试
- * @package Z-BlogPHP
- * @subpackage System/Debug 错误调试
+ * 错误调试.
+ *
  * @copyright (C) RainbowSoft Studio
  */
 
 /**
- * 显示全局变量
+ * 显示全局变量.
+ *
  * @return mixed
+ *
  * @since 1.3.140614
+ *
  * @todo 下版转到debug页
  */
 function Debug_PrintGlobals()
@@ -23,9 +29,12 @@ function Debug_PrintGlobals()
 }
 
 /**
- *  打印全局Include文件
+ *  打印全局Include文件.
+ *
  * @return string
+ *
  * @since 1.3
+ *
  * @todo 下版转到debug页
  */
 function Debug_PrintIncludefiles()
@@ -39,9 +48,12 @@ function Debug_PrintIncludefiles()
 }
 
 /**
- *  打印全局自定义常量
+ *  打印全局自定义常量.
+ *
  * @return string
+ *
  * @since 1.3
+ *
  * @todo 下版转到debug页
  */
 function Debug_PrintConstants()
@@ -55,38 +67,14 @@ function Debug_PrintConstants()
 }
 
 /**
- * 错误调度提示
- * @param int $errno 错误级别
- * @param string $errstr 错误信息
- * @param string $errfile 错误文件名
- * @param int $errline 错误行
+ * Return true if a error can be ignored.
+ *
+ * @param int $errno
+ *
  * @return bool
  */
-function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
+function Debug_IgnoreError($errno)
 {
-
-    if (ZBlogException::$isdisable == true) {
-        return true;
-    }
-
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname('Error', array($errno, $errstr, $errfile, $errline));
-    }
-
-    $_SERVER['_error_count'] = $_SERVER['_error_count'] + 1;
-
-    if (ZBlogException::$islogerror == true) {
-        Logs(var_export(array('Error', $errno, $errstr, $errfile, $errline), true), true);
-    }
-
-    if (is_readable($errfile)) {
-        $a = array_slice(file($errfile), max(0, $errline - 1), 1, true);
-        $s = reset($a);
-        if (strpos($s, '@') !== false) {
-            return true;
-        }
-    }
-
     if (ZBlogException::$iswarning == false) {
         if ($errno == E_WARNING) {
             return true;
@@ -110,7 +98,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         }
     }
 
-    //屏蔽系统的错误，防ZBP报系统的错误，不过也有可能导致ZBP内的DEPRECATED错误也被屏蔽了
+    // 屏蔽系统的错误，防ZBP报系统的错误，不过也有可能导致ZBP内的DEPRECATED错误也被屏蔽了
     if ($errno == E_CORE_WARNING) {
         return true;
     }
@@ -130,23 +118,69 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
     //E_USER_ERROR
     //E_RECOVERABLE_ERROR
 
-    $zbe = ZBlogException::GetInstance();
-    $zbe->ParseError($errno, $errstr, $errfile, $errline);
-    $zbe->Display();
+    if (defined('ZBP_ERRORPROCESSING')) {
+        return true;
+    }
+
+    return false;
 }
 
 /**
- * 异常处理
- * @param $exception 异常事件
+ * 错误调度提示.
+ *
+ * @param int    $errno   错误级别
+ * @param string $errstr  错误信息
+ * @param string $errfile 错误文件名
+ * @param int    $errline 错误行
+ *
+ * @return bool
+ */
+function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
+{
+    if (ZBlogException::$disabled == true) {
+        return true;
+    }
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname('Error', array($errno, $errstr, $errfile, $errline));
+    }
+
+    $_SERVER['_error_count'] = $_SERVER['_error_count'] + 1;
+
+    if (ZBlogException::$islogerror == true) {
+        Logs(var_export(array('Error', $errno, $errstr, $errfile, $errline), true), true);
+    }
+
+    if (is_readable($errfile)) {
+        $a = array_slice(file($errfile), max(0, $errline - 1), 1, true);
+        $s = reset($a);
+        if (strpos($s, '@') !== false) {
+            return true;
+        }
+    }
+    if (Debug_IgnoreError($errno)) {
+        return true;
+    }
+
+    $zbe = ZBlogException::GetInstance();
+    $zbe->ParseError($errno, $errstr, $errfile, $errline);
+    $zbe->Display();
+
+    return true;
+}
+
+/**
+ * 异常处理.
+ *
+ * @param Exception $exception 异常事件
+ *
  * @return bool
  */
 function Debug_Exception_Handler($exception)
 {
-
-    if (ZBlogException::$isdisable == true) {
+    if (ZBlogException::$disabled == true) {
         return true;
     }
-
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname('Exception', $exception);
     }
@@ -154,22 +188,28 @@ function Debug_Exception_Handler($exception)
     $_SERVER['_error_count'] = $_SERVER['_error_count'] + 1;
 
     if (ZBlogException::$islogerror) {
-        Logs(var_export(array('Exception', $exception->getMessage(), $exception->getCode(), $exception->getFile(), $exception->getLine()), true), true);
+        Logs(var_export(
+            array('Exception',
+                $exception->getMessage(), $exception->getCode(), $exception->getFile(), $exception->getLine(),
+            ), true), true);
     }
 
     $zbe = ZBlogException::GetInstance();
     $zbe->ParseException($exception);
     $zbe->Display();
+
+    return true;
 }
 
 /**
- * 当机错误处理
+ * 当机错误处理.
+ *
  * @return bool
  */
 function Debug_Shutdown_Handler()
 {
     if ($error = error_get_last()) {
-        if (ZBlogException::$isdisable == true) {
+        if (ZBlogException::$disabled == true) {
             return true;
         }
 
@@ -183,42 +223,7 @@ function Debug_Shutdown_Handler()
             Logs(var_export(array('Shutdown', $error['type'], $error['message'], $error['file'], $error['line']), true), true);
         }
 
-        if (ZBlogException::$iswarning == false) {
-            if ($error['type'] == E_WARNING) {
-                return true;
-            }
-
-            if ($error['type'] == E_USER_WARNING) {
-                return true;
-            }
-        }
-        if (ZBlogException::$isstrict == false) {
-            if ($error['type'] == E_NOTICE) {
-                return true;
-            }
-
-            if ($error['type'] == E_STRICT) {
-                return true;
-            }
-
-            if ($error['type'] == E_USER_NOTICE) {
-                return true;
-            }
-        }
-
-        if ($error['type'] == E_CORE_WARNING) {
-            return true;
-        }
-
-        if ($error['type'] == E_COMPILE_WARNING) {
-            return true;
-        }
-
-        if (defined('E_DEPRECATED') && $error['type'] == E_DEPRECATED) {
-            return true;
-        }
-
-        if (defined('E_USER_DEPRECATED') && $error['type'] == E_USER_DEPRECATED) {
+        if (Debug_IgnoreError($error['type'])) {
             return true;
         }
 
@@ -226,22 +231,22 @@ function Debug_Shutdown_Handler()
         $zbe->ParseShutdown($error);
         $zbe->Display();
     }
+
+    return true;
 }
 
-function Debug_DoNothing ()
+function Debug_DoNothing()
 {
     return false;
 }
 
 /**
- * Class ZBlogException
- *
+ * Class ZBlogException.
  */
 class ZBlogException
 {
     private static $_zbe = null;
-    public static $isdisable = false;
-    private static $_isdisable = null;
+    public static $disabled = false;
     public static $isstrict = false;
     public static $iswarning = true;
     public static $error_id = 0;
@@ -261,29 +266,31 @@ class ZBlogException
     public function __construct()
     {
         $this->errarray = array(
-            0 => 'UNKNOWN',
-            1 => 'E_ERROR',
-            2 => 'E_WARNING',
-            4 => 'E_PARSE',
-            8 => 'E_NOTICE',
-            16 => 'E_CORE_ERROR',
-            32 => 'E_CORE_WARNING',
-            64 => 'E_COMPILE_ERROR',
-            128 => 'E_COMPILE_WARNING',
-            256 => 'E_USER_ERROR',
-            512 => 'E_USER_WARNING',
-            1024 => 'E_USER_NOTICE',
-            2048 => 'E_STRICT',
-            4096 => 'E_RECOVERABLE_ERROR',
-            8192 => 'E_DEPRECATED',
+            0     => 'UNKNOWN',
+            1     => 'E_ERROR',
+            2     => 'E_WARNING',
+            4     => 'E_PARSE',
+            8     => 'E_NOTICE',
+            16    => 'E_CORE_ERROR',
+            32    => 'E_CORE_WARNING',
+            64    => 'E_COMPILE_ERROR',
+            128   => 'E_COMPILE_WARNING',
+            256   => 'E_USER_ERROR',
+            512   => 'E_USER_WARNING',
+            1024  => 'E_USER_NOTICE',
+            2048  => 'E_STRICT',
+            4096  => 'E_RECOVERABLE_ERROR',
+            8192  => 'E_DEPRECATED',
             16384 => 'E_USER_DEPRECATED',
             30719 => 'E_ALL',
         );
     }
 
     /**
-     * 获取参数
+     * 获取参数.
+     *
      * @param $name
+     *
      * @return mixed
      */
     public function __get($name)
@@ -298,31 +305,34 @@ class ZBlogException
     }
 
     /**
-     * 获取单一实例
+     * 获取单一实例.
+     *
      * @return ZBlogException
      */
     public static function GetInstance()
     {
         if (!isset(self::$_zbe)) {
-            self::$_zbe = new ZBlogException;
+            self::$_zbe = new self();
         }
 
         return self::$_zbe;
     }
 
     /**
-     * 设定错误处理函数
+     * 设定错误处理函数.
      */
     public static function SetErrorHook()
     {
-        if (IS_CLI) return;
+        if (IS_CLI) {
+            return;
+        }
         set_error_handler('Debug_Error_Handler');
         set_exception_handler('Debug_Exception_Handler');
         register_shutdown_function('Debug_Shutdown_Handler');
     }
 
     /**
-     * 清除注册的错误处理程序
+     * 清除注册的错误处理程序.
      */
     public static function ClearErrorHook()
     {
@@ -332,49 +342,39 @@ class ZBlogException
     }
 
     /**
-     * 启用错误调度
+     * 启用错误调度.
      */
     public static function EnableErrorHook()
     {
-        self::$isdisable = false;
+        self::$disabled = false;
     }
 
     /**
-     * 禁止错误调度
+     * 禁止错误调度.
      */
     public static function DisableErrorHook()
     {
-        self::$isdisable = true;
+        self::$disabled = true;
     }
 
     /**
-     * 暂停错误调度
+     * 暂停错误调度.
      */
     public static function SuspendErrorHook()
     {
-        if (self::$_isdisable !== null) {
-            return;
-        }
-
-        self::$_isdisable = self::$isdisable;
-        self::$isdisable = true;
+        self::DisableErrorHook();
     }
 
     /**
-     * 恢复错误调度
+     * 恢复错误调度.
      */
     public static function ResumeErrorHook()
     {
-        if (self::$_isdisable === null) {
-            return;
-        }
-
-        self::$isdisable = self::$_isdisable;
-        self::$_isdisable = null;
+        self::EnableErrorHook();
     }
 
     /**
-     * 恢复错误调度
+     * 恢复错误调度.
      */
     public static function DisableStrict()
     {
@@ -402,7 +402,8 @@ class ZBlogException
     }
 
     /**
-     * 解析错误信息
+     * 解析错误信息.
+     *
      * @param $type
      * @param $message
      * @param $file
@@ -410,46 +411,39 @@ class ZBlogException
      */
     public function ParseError($type, $message, $file, $line)
     {
-
         $this->type = $type;
         $this->message = $message;
         $this->messagefull = $message . ' (set_error_handler) ';
         $this->file = $file;
         $this->line = $line;
-		$this->message = htmlspecialchars($this->message);
-		$this->messagefull = htmlspecialchars($this->messagefull);
     }
 
     /**
-     * 解析错误信息
+     * 解析错误信息.
+     *
      * @param $error
      */
     public function ParseShutdown($error)
     {
-
         $this->type = $error['type'];
         $this->message = $error['message'];
         $this->messagefull = $error['message'] . ' (register_shutdown_function) ';
         $this->file = $error['file'];
         $this->line = $error['line'];
-		$this->message = htmlspecialchars($this->message);
-		$this->messagefull = htmlspecialchars($this->messagefull);
     }
 
     /**
-     * 解析异常信息
-     * @param $exception
+     * 解析异常信息.
+     *
+     * @param Exception $exception
      */
     public function ParseException($exception)
     {
-
         $this->message = $exception->getMessage();
         $this->messagefull = $exception->getMessage() . ' (set_exception_handler) ';
         $this->type = $exception->getCode();
         $this->file = $exception->getFile();
         $this->line = $exception->getLine();
-		$this->message = htmlspecialchars($this->message);
-		$this->messagefull = htmlspecialchars($this->messagefull);
 
         if (self::$error_file !== null) {
             $this->file = self::$error_file;
@@ -461,11 +455,10 @@ class ZBlogException
     }
 
     /**
-     * 输出错误信息
+     * 输出错误信息.
      */
     public function Display()
     {
-
         if (!headers_sent()) {
             Http500();
             ob_clean();
@@ -484,7 +477,7 @@ class ZBlogException
         require dirname(__FILE__) . '/../defend/error.php';
         RunTime();
 
-        /**
+        /*
          * ``flush()`` and ``exit($errorCode)`` is for HHVM.
          * @link https://github.com/zblogcn/zblogphp/issues/32
          */
@@ -493,9 +486,11 @@ class ZBlogException
     }
 
     /**
-     * 获取出错代码信息
+     * 获取出错代码信息.
+     *
      * @param $file
      * @param $line
+     *
      * @return array
      */
     public function get_code($file, $line)
@@ -516,8 +511,10 @@ class ZBlogException
 
         return $aFile;
     }
+
     /**
-     * 得到可能的错误原因
+     * 得到可能的错误原因.
+     *
      * @return string
      */
     public function possible_causes_of_the_error()
@@ -525,10 +522,10 @@ class ZBlogException
         global $lang;
         global $bloghost;
         $result = '';
-        if (ZBlogException::$error_id != 0) {
+        if (self::$error_id != 0) {
             // 代表Z-BlogPHP自身抛出的错误
-            if (isset($lang['error_reasons'][ZBlogException::$error_id])) {
-                $result = $lang['error_reasons'][ZBlogException::$error_id];
+            if (isset($lang['error_reasons'][self::$error_id])) {
+                $result = $lang['error_reasons'][self::$error_id];
             } else {
                 $result = $lang['error_reasons']['default'];
             }
@@ -542,7 +539,7 @@ class ZBlogException
             }
         }
 
-        $errorId = urlencode(ZBlogException::$error_id);
+        $errorId = urlencode(self::$error_id);
         $errorMessage = urlencode($this->message);
         $moreHelp = $lang['offical_urls']['more_help'];
         $moreHelp = str_replace('{%id%}', $errorId, $moreHelp);

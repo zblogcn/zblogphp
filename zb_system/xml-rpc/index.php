@@ -1,14 +1,12 @@
 <?php
 /**
- * XML-RPC接口
- * @package Z-BlogPHP
- * @subpackage System/XML-RPC XML-RPC接口
+ * XML-RPC接口.
+ *
  * @copyright (C) RainbowSoft Studio
- https://codex.wordpress.org/XML-RPC_WordPress_API
- https://codex.wordpress.org/XML-RPC_MetaWeblog_API
- http://codex.wordpress.org.cn/XML-RPC_MetaWeblog_API
+ * https://codex.wordpress.org/XML-RPC_WordPress_API
+ * https://codex.wordpress.org/XML-RPC_MetaWeblog_API
+ * http://codex.wordpress.org.cn/XML-RPC_MetaWeblog_API
  */
-
 require '../function/c_system_base.php';
 
 if (isset($_GET['rsd'])) {
@@ -32,16 +30,16 @@ if (isset($_GET['rsd'])) {
 }
 
 /**
- * XML-RPC 获取用户站点基本信息
+ * XML-RPC 获取用户站点基本信息.
  *
  * 输出用户站点地址,guid,网站名xml
- array
-struct
-string blogid
-string url: Homepage URL for this blog.
-string blogName
-bool isAdmin
-string xmlrpc: URL endpoint to use for XML-RPC requests on this blog.
+ * array
+ * struct
+ * string blogid
+ * string url: Homepage URL for this blog.
+ * string blogName
+ * bool isAdmin
+ * string xmlrpc: URL endpoint to use for XML-RPC requests on this blog.
  */
 function xmlrpc_getUsersBlogs()
 {
@@ -84,19 +82,19 @@ function xmlrpc_wp_getUsersBlogs()
 }
 
 /**
- * XML-RPC 获取分类列表
+ * XML-RPC 获取分类列表.
  *
  * 输出分类列表xml
- wp.getCategories
- array
-struct
-string categoryId
-string parentId
-string categoryName
-string categoryDescription
-string description: Name of the category, equivalent to categoryName.
-string htmlUrl
-string rssUrl
+ * wp.getCategories
+ * array
+ * struct
+ * string categoryId
+ * string parentId
+ * string categoryName
+ * string categoryDescription
+ * string description: Name of the category, equivalent to categoryName.
+ * string htmlUrl
+ * string rssUrl
  */
 function xmlrpc_getCategories()
 {
@@ -131,22 +129,21 @@ function xmlrpc_getCategories()
 }
 
 /**
- * XML-RPC 获取标签列表
+ * XML-RPC 获取标签列表.
  *
  * 输出标签列表xml
- wp.getTags
-array
-struct
-int tag_id
-string name
-string slug
-int count
-string html_url
-string rss_url
+ * wp.getTags
+ * array
+ * struct
+ * int tag_id
+ * string name
+ * string slug
+ * int count
+ * string html_url
+ * string rss_url
  */
 function xmlrpc_getTags()
 {
-
     global $zbp;
 
     $strXML = '<methodResponse><params><param><value><array><data>$%#1#%$</data></array></value></param></params></methodResponse>';
@@ -186,19 +183,18 @@ function xmlrpc_getTags()
 }
 
 /**
- * XML-RPC 获取用户列表
+ * XML-RPC 获取用户列表.
  *
  * 输出用户列表xml
- wp.getAuthors
-array
-struct
-string user_id
-string user_login
-string display_name
+ * wp.getAuthors
+ * array
+ * struct
+ * string user_id
+ * string user_login
+ * string display_name
  */
 function xmlrpc_getAuthors()
 {
-
     global $zbp;
 
     $strXML = '<methodResponse><params><param><value><array><data>$%#1#%$</data></array></value></param></params></methodResponse>';
@@ -223,10 +219,11 @@ function xmlrpc_getAuthors()
 }
 
 /**
- * XML-RPC 获取指定用户创建的页面
+ * XML-RPC 获取指定用户创建的页面.
  *
  * 输出页面列表xml
- * @param  int $n 用户ID
+ *
+ * @param int $n 用户ID
  */
 function xmlrpc_getPages($n)
 {
@@ -282,10 +279,11 @@ function xmlrpc_getPages($n)
 }
 
 /**
- * XML-RPC 获取指定ID页面
+ * XML-RPC 获取指定ID页面.
  *
  * 输出页面列表xml
- * @param  int $id 页面ID
+ *
+ * @param int $id 页面ID
  */
 function xmlrpc_getPage($id)
 {
@@ -307,10 +305,10 @@ function xmlrpc_getPage($id)
 
     $strAll = '';
 
-    $article = new Post;
+    $article = new Post();
     $article->LoadInfoByID($id);
     if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('PageAll'))) {
-        xmlrpc_ShowError(11, __FILE__, __LINE_);
+        xmlrpc_ShowError(11, __FILE__, __LINE__);
     }
 
     $array = array();
@@ -337,10 +335,11 @@ function xmlrpc_getPage($id)
 }
 
 /**
- * XML-RPC 获取指定用户最新文章列表
+ * XML-RPC 获取指定用户最新文章列表.
  *
  * 输出文章列表xml
- * @param  int $n 用户ID
+ *
+ * @param int $n 用户ID
  */
 function xmlrpc_getRecentPosts($n)
 {
@@ -388,7 +387,7 @@ function xmlrpc_getRecentPosts($n)
         if (strpos($value->Content, '<!--more-->') !== false) {
             $description = GetValueInArray(explode('<!--more-->', $value->Content), 1);
             $mt_text_more = GetValueInArray(explode('<!--more-->', $value->Content), 0);
-            //$description=$value->Content;
+        //$description=$value->Content;
         } else {
             $description = $value->Content;
             $mt_excerpt = $value->Intro;
@@ -417,14 +416,16 @@ function xmlrpc_getRecentPosts($n)
 }
 
 /**
- * XML-RPC 删除页面
+ * XML-RPC 删除页面.
  *
  * 输出操作结果
- * @param  int $id 页面ID
+ *
+ * @param int $id 页面ID
+ *
+ * @throws Exception
  */
 function xmlrpc_delPage($id)
 {
-
     $strXML = '<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
 
     $_GET['id'] = $id;
@@ -433,19 +434,21 @@ function xmlrpc_delPage($id)
         $strXML = str_replace("$%#1#%$", 1, $strXML);
         echo $strXML;
     } else {
-        xmlrpc_ShowError(0, __FILE__, __LINE_);
+        xmlrpc_ShowError(0, __FILE__, __LINE__);
     }
 }
 
 /**
- * XML-RPC 删除文章
+ * XML-RPC 删除文章.
  *
  * 输出操作结果
- * @param  int $id 文章ID
+ *
+ * @param int $id 文章ID
+ *
+ * @throws Exception
  */
 function xmlrpc_deletePost($id)
 {
-
     $strXML = '<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
 
     $_GET['id'] = $id;
@@ -454,15 +457,16 @@ function xmlrpc_deletePost($id)
         $strXML = str_replace("$%#1#%$", 1, $strXML);
         echo $strXML;
     } else {
-        xmlrpc_ShowError(0, __FILE__, __LINE_);
+        xmlrpc_ShowError(0, __FILE__, __LINE__);
     }
 }
 
 /**
- * XML-RPC 获取指定文章
+ * XML-RPC 获取指定文章.
  *
  * 输出文章数据xml
- * @param  int $id 文章ID
+ *
+ * @param int $id 文章ID
  */
 function xmlrpc_getPost($id)
 {
@@ -489,10 +493,10 @@ function xmlrpc_getPost($id)
 
     $strAll = '';
 
-    $article = new Post;
+    $article = new Post();
     $article->LoadInfoByID($id);
     if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('ArticleAll'))) {
-        xmlrpc_ShowError(11, __FILE__, __LINE_);
+        xmlrpc_ShowError(11, __FILE__, __LINE__);
     }
 
     $array = array();
@@ -506,7 +510,7 @@ function xmlrpc_getPost($id)
         if (strpos($value->Content, '<!--more-->') !== false) {
             $description = GetValueInArray(explode('<!--more-->', $value->Content), 1);
             $mt_text_more = GetValueInArray(explode('<!--more-->', $value->Content), 0);
-            //$description=$value->Content;
+        //$description=$value->Content;
         } else {
             $description = $value->Content;
             $mt_excerpt = $value->Intro;
@@ -535,10 +539,11 @@ function xmlrpc_getPost($id)
 }
 
 /**
- * XML-RPC 获取指定文章所属分类信息
+ * XML-RPC 获取指定文章所属分类信息.
  *
  * 输出指定文章所属分类信息xml
- * @param  int $id 文章ID
+ *
+ * @param int $id 文章ID
  */
 function xmlrpc_getPostCategories($id)
 {
@@ -553,7 +558,7 @@ function xmlrpc_getPostCategories($id)
 
     $strAll = '';
 
-    $article = new Post;
+    $article = new Post();
     $article->LoadInfoByID($id);
 
     $array = array();
@@ -573,12 +578,15 @@ function xmlrpc_getPostCategories($id)
 }
 
 /**
- * XML-RPC 编辑指定文章
+ * XML-RPC 编辑指定文章.
  *
  * 输出操作结果
- * @param  int $id        文章ID
- * @param  string $xmlstring 文章数据xml
- * @param  boolval $publish   是否直接发布
+ *
+ * @param int     $id        文章ID
+ * @param string  $xmlstring 文章数据xml
+ * @param boolval $publish   是否直接发布
+ *
+ * @throws Exception
  */
 function xmlrpc_editPost($id, $xmlstring, $publish)
 {
@@ -659,13 +667,13 @@ function xmlrpc_editPost($id, $xmlstring, $publish)
             $strXML = str_replace("$%#1#%$", 1, $strXML);
             echo $strXML;
         } else {
-            xmlrpc_ShowError(0, __FILE__, __LINE_);
+            xmlrpc_ShowError(0, __FILE__, __LINE__);
         }
     }
 }
 
 /**
- * XML-RPC 设置文章默认分类
+ * XML-RPC 设置文章默认分类.
  *
  * 输出默认分类id=1
  */
@@ -677,12 +685,15 @@ function xmlrpc_setPostCategories()
 }
 
 /**
- * XML-RPC 编辑指定页面
+ * XML-RPC 编辑指定页面.
  *
  * 输出操作结果
- * @param  int $id        页面ID
- * @param  string $xmlstring 页面数据xml
- * @param  boolval $publish   是否直接发布
+ *
+ * @param int    $id        页面ID
+ * @param string $xmlstring 页面数据xml
+ * @param bool   $publish   是否直接发布
+ *
+ * @throws Exception
  */
 function xmlrpc_editPage($id, $xmlstring, $publish)
 {
@@ -741,17 +752,18 @@ function xmlrpc_editPage($id, $xmlstring, $publish)
             $strXML = str_replace("$%#1#%$", 1, $strXML);
             echo $strXML;
         } else {
-            xmlrpc_ShowError(0, __FILE__, __LINE_);
+            xmlrpc_ShowError(0, __FILE__, __LINE__);
         }
     }
 }
 
 /**
- * XML-RPC 上传媒体文件
+ * XML-RPC 上传媒体文件.
  *
  * 输出操作结果
- * @param  int $id        页面ID
- * @param  string $xmlstring 上传文件数据xml
+ *
+ * @param int    $id        页面ID
+ * @param string $xmlstring 上传文件数据xml
  */
 function xmlrpc_newMediaObject($xmlstring)
 {
@@ -766,7 +778,7 @@ function xmlrpc_newMediaObject($xmlstring)
             $b = $x->value->children();
             $post[$a] = $b;
         }
-        $upload = new Upload;
+        $upload = new Upload();
         $f = GetGuid() . strrchr($post['name'], '.');
         $upload->Name = $f;
         $upload->SourceName = $post['name'];
@@ -783,9 +795,10 @@ function xmlrpc_newMediaObject($xmlstring)
 }
 
 /**
- * XML-RPC辅助
+ * XML-RPC辅助.
  *
  * 验证用户登录
+ *
  * @param
  * @param
  */
@@ -872,7 +885,7 @@ if ($xml) {
             $password = (string) $xml->params->param[2]->value->string;
             xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticleEdt')) {
-                xmlrpc_getPostCategories((integer) $xml->params->param[0]->value->string);
+                xmlrpc_getPostCategories((int) $xml->params->param[0]->value->string);
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -902,7 +915,7 @@ if ($xml) {
             $password = (string) $xml->params->param[2]->value->string;
             xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticleEdt')) {
-                xmlrpc_getRecentPosts((integer) $xml->params->param[3]->value->int);
+                xmlrpc_getRecentPosts((int) $xml->params->param[3]->value->int);
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -912,7 +925,7 @@ if ($xml) {
             $password = (string) $xml->params->param[2]->value->string;
             xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticleEdt')) {
-                xmlrpc_getPost((integer) $xml->params->param[0]->value->string);
+                xmlrpc_getPost((int) $xml->params->param[0]->value->string);
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -922,7 +935,7 @@ if ($xml) {
             $password = (string) $xml->params->param[3]->value->string;
             xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticleDel')) {
-                xmlrpc_deletePost((integer) $xml->params->param[1]->value->string);
+                xmlrpc_deletePost((int) $xml->params->param[1]->value->string);
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -932,9 +945,9 @@ if ($xml) {
             $password = (string) $xml->params->param[2]->value->string;
             xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticlePst')) {
-                xmlrpc_editPost((integer) $xml->params->param[0]->value->string,
+                xmlrpc_editPost((int) $xml->params->param[0]->value->string,
                     $xml->params->param[3]->value->struct->asXML(),
-                    (boolean) $xml->params->param[4]->value->boolean->asXML());
+                    (bool) $xml->params->param[4]->value->boolean->asXML());
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -946,7 +959,7 @@ if ($xml) {
             if ($zbp->CheckRights('ArticlePst')) {
                 xmlrpc_editPost(0,
                     $xml->params->param[3]->value->struct->asXML(),
-                    (boolean) $xml->params->param[4]->value->boolean->asXML());
+                    (bool) $xml->params->param[4]->value->boolean->asXML());
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -958,7 +971,7 @@ if ($xml) {
             if ($zbp->CheckRights('PagePst')) {
                 xmlrpc_editPage(0,
                     $xml->params->param[3]->value->struct->asXML(),
-                    (boolean) $xml->params->param[4]->value->boolean->asXML());
+                    (bool) $xml->params->param[4]->value->boolean->asXML());
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -968,9 +981,9 @@ if ($xml) {
             $password = (string) $xml->params->param[3]->value->string;
             xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('PagePst')) {
-                xmlrpc_editPage((integer) $xml->params->param[1]->value->string,
+                xmlrpc_editPage((int) $xml->params->param[1]->value->string,
                     $xml->params->param[4]->value->struct->asXML(),
-                    (boolean) $xml->params->param[5]->value->boolean->asXML());
+                    (bool) $xml->params->param[5]->value->boolean->asXML());
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -980,7 +993,7 @@ if ($xml) {
             $password = (string) $xml->params->param[2]->value->string;
             xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('PageEdt')) {
-                xmlrpc_getPages((integer) $xml->params->param[3]->value->int);
+                xmlrpc_getPages((int) $xml->params->param[3]->value->int);
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -990,7 +1003,7 @@ if ($xml) {
             $password = (string) $xml->params->param[3]->value->string;
             xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('PageEdt')) {
-                xmlrpc_getPage((integer) $xml->params->param[1]->value->string);
+                xmlrpc_getPage((int) $xml->params->param[1]->value->string);
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -1000,7 +1013,7 @@ if ($xml) {
             $password = (string) $xml->params->param[2]->value->string;
             xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('PageDel')) {
-                xmlrpc_delPage((integer) $xml->params->param[3]->value->string);
+                xmlrpc_delPage((int) $xml->params->param[3]->value->string);
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -1026,7 +1039,7 @@ if ($xml) {
             }
             break;
         default:
-            xmlrpc_ShowError(1, __FILE__, __LINE_);
+            xmlrpc_ShowError(1, __FILE__, __LINE__);
             break;
     }
 }

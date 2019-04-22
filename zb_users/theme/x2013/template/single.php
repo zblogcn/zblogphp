@@ -1,4 +1,4 @@
-﻿{template:header}
+{template:header}
 <meta name="Keywords" content="<#article/tagtoname#>">
 </head>
   <body class="home blog" id="hasfixed">

@@ -1,9 +1,14 @@
 <?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+
 /**
  * 上传附件和上传视频
  * User: Jinqn
  * Date: 14-04-09
- * Time: 上午10:17
+ * Time: 上午10:17.
  */
 include "Uploader.class.php";
 
@@ -13,17 +18,17 @@ switch (htmlspecialchars($_GET['action'])) {
     case 'uploadimage':
         $config = array(
             "pathFormat" => $CONFIG['imagePathFormat'],
-            "maxSize" => $CONFIG['imageMaxSize'],
-            "allowFiles" => $CONFIG['imageAllowFiles']
+            "maxSize"    => $CONFIG['imageMaxSize'],
+            "allowFiles" => $CONFIG['imageAllowFiles'],
         );
         $fieldName = $CONFIG['imageFieldName'];
         break;
     case 'uploadscrawl':
         $config = array(
             "pathFormat" => $CONFIG['scrawlPathFormat'],
-            "maxSize" => $CONFIG['scrawlMaxSize'],
+            "maxSize"    => $CONFIG['scrawlMaxSize'],
             "allowFiles" => $CONFIG['scrawlAllowFiles'],
-            "oriName" => "scrawl.png"
+            "oriName"    => "scrawl.png",
         );
         $fieldName = $CONFIG['scrawlFieldName'];
         $base64 = "base64";
@@ -31,8 +36,8 @@ switch (htmlspecialchars($_GET['action'])) {
     case 'uploadvideo':
         $config = array(
             "pathFormat" => $CONFIG['videoPathFormat'],
-            "maxSize" => $CONFIG['videoMaxSize'],
-            "allowFiles" => $CONFIG['videoAllowFiles']
+            "maxSize"    => $CONFIG['videoMaxSize'],
+            "allowFiles" => $CONFIG['videoAllowFiles'],
         );
         $fieldName = $CONFIG['videoFieldName'];
         break;
@@ -40,8 +45,8 @@ switch (htmlspecialchars($_GET['action'])) {
     default:
         $config = array(
             "pathFormat" => $CONFIG['filePathFormat'],
-            "maxSize" => $CONFIG['fileMaxSize'],
-            "allowFiles" => $CONFIG['fileAllowFiles']
+            "maxSize"    => $CONFIG['fileMaxSize'],
+            "allowFiles" => $CONFIG['fileAllowFiles'],
         );
         $fieldName = $CONFIG['fileFieldName'];
         break;
@@ -50,7 +55,7 @@ switch (htmlspecialchars($_GET['action'])) {
 /* 生成上传实例对象并完成上传 */
 $up = new Uploader($fieldName, $config, $base64);
 
-/**
+/*
  * 得到上传文件所对应的各个参数,数组结构
  * array(
  *     "state" => "",          //上传状态，上传成功时必须返回"SUCCESS"
@@ -63,6 +68,5 @@ $up = new Uploader($fieldName, $config, $base64);
  */
 
 /* 返回数据 */
-
 
 return json_encode($up->getFileInfo());

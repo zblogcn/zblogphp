@@ -1,5 +1,6 @@
 <?php
-#注册插件
+
+//注册插件
 RegisterPlugin("AdminColor", "ActivePlugin_AdminColor");
 
 DefinePluginFilter('Filter_Plugin_AdminColor_CSS_Pre');
@@ -18,12 +19,12 @@ function InstallPlugin_AdminColor()
 {
     global $zbp;
     if ($zbp->HasConfig('AdminColor') == false) {
-        $zbp->Config('AdminColor')->ColorID =  0;
-        $zbp->Config('AdminColor')->BlodColor =  (string) $GLOBALS['AdminColor_BlodColor'][0];
-        $zbp->Config('AdminColor')->NormalColor =  (string) $GLOBALS['AdminColor_NormalColor'][0];
-        $zbp->Config('AdminColor')->LightColor =  (string) $GLOBALS['AdminColor_LightColor'][0];
-        $zbp->Config('AdminColor')->HighColor =  (string) $GLOBALS['AdminColor_HighColor'][0];
-        $zbp->Config('AdminColor')->AntiColor =  (string) $GLOBALS['AdminColor_AntiColor'][0];
+        $zbp->Config('AdminColor')->ColorID = 0;
+        $zbp->Config('AdminColor')->BlodColor = (string) $GLOBALS['AdminColor_BlodColor'][0];
+        $zbp->Config('AdminColor')->NormalColor = (string) $GLOBALS['AdminColor_NormalColor'][0];
+        $zbp->Config('AdminColor')->LightColor = (string) $GLOBALS['AdminColor_LightColor'][0];
+        $zbp->Config('AdminColor')->HighColor = (string) $GLOBALS['AdminColor_HighColor'][0];
+        $zbp->Config('AdminColor')->AntiColor = (string) $GLOBALS['AdminColor_AntiColor'][0];
         $zbp->SaveConfig('AdminColor');
     }
 }
@@ -38,14 +39,13 @@ function AdminColor_Css()
 {
     global $zbp;
 
-    $aly='';
+    $aly = '';
     $f = get_included_files();
-    if (strpos( array_pop($f), 'admin_header.php')!==false) {
-        $aly='?aly';
+    if (strpos(array_pop($f), 'admin_header.php') !== false) {
+        $aly = '?aly';
     }
- 
-    echo '<link rel="stylesheet" type="text/css" href="' . $zbp->host . 'zb_users/plugin/AdminColor/css.php'.$aly.'"/>' . "\r\n";
 
+    echo '<link rel="stylesheet" type="text/css" href="' . $zbp->host . 'zb_users/plugin/AdminColor/css.php' . $aly . '"/>' . "\r\n";
 
     if ($zbp->Config('AdminColor')->ColorID != 10) {
         echo '<script type="text/javascript">var lang_admincolor_closemenu = "' . $zbp->lang['AdminColor']['closemenu'] . '";var lang_admincolor_expandmenu = "' . $zbp->lang['AdminColor']['expandmenu'] . '"</script>' . "\r\n";
@@ -71,7 +71,7 @@ function AdminColor_Css2()
 {
     global $zbp;
     if ($zbp->Config('AdminColor')->ColorID == 10) {
-            echo '
+        echo '
 <script type="text/javascript">
 $("#leftmenu li span").each(function(k){
   if(k>0){
@@ -122,7 +122,7 @@ function AdminColor_ColorButton()
 
     $s .= "&nbsp;&nbsp;<a href='" . $zbp->host . "zb_users/plugin/AdminColor/css.php?setcolor=10' title='阿里云'><span style='height:16px;width:16px;background:#0099CD;'><img src='" . $zbp->host . "zb_system/image/admin/none.gif' width='16' alt=''/></span></a>&nbsp;&nbsp;";
 
-    echo "<div id='admin_color'>" . $s .  "</div>";
+    echo "<div id='admin_color'>" . $s . "</div>";
     //echo "<script type='text/javascript'>$('.divHeader').append(\"<div id='admin_color'>" . $s . "</div>\");</script>";
 }
 

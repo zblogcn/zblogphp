@@ -45,7 +45,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
   <div class="SubMenu" style="display: block;"><a href="main.php"><span class="m-left">系统群组设置</span></a><a href="user.php"><span class="m-left m-now">单独用户设置</span></a></div>
   <div id="divMain2">
     <form id="edit2" name="edit2" method="post" action="#">
@@ -54,14 +54,17 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 if (!isset($_GET['id'])) {
     echo '<select name="userid">';
     foreach ($zbp->members as $key => $value) {
-            $userid = 'User' . $key;
-            $count = Count($zbp->Config('Howl')->$userid);
+        $userid = 'User' . $key;
+        $count = 0;
+        if ($zbp->Config('Howl')->HasKey($userid)) {
+            $count = count($zbp->Config('Howl')->$userid);
+        }
         if ($count > 0) {
             $count = " (已设置{$count}项)";
         } else {
             $count = '';
         }
-            echo '<option value="' . $key . '" >' . $zbp->members[$key]->Name . $count  .'</option>';
+        echo '<option value="' . $key . '" >' . $zbp->members[$key]->Name . $count . '</option>';
     }
     echo '</select>';
     echo '<input type="submit" class="button" value="选择用户" />';
@@ -92,14 +95,14 @@ if (isset($_GET['id'])) {
 
     foreach ($useractions as $key => $value) {
         echo '<tr>';
-        echo '<th>' . $key . '</th><th><input name="' . $key .'" style="" type="text" value="'.(int) $value.'" class="checkbox"/></th><th><input type="submit" onclick="$(this).parent().parent().find(\'input:text\').val(-1);$(\'#edit\').submit();" class="button" value="删除" /></th>';
+        echo '<th>' . $key . '</th><th><input name="' . $key . '" style="" type="text" value="' . (int) $value . '" class="checkbox"/></th><th><input type="submit" onclick="$(this).parent().parent().find(\'input:text\').val(-1);$(\'#edit\').submit();" class="button" value="删除" /></th>';
         echo '</tr>';
     }
     echo '<tr>';
     echo '<th><select onchange="$(\'#addact\').attr(\'name\',$(this).val());"><option value=""></option>';
 
     foreach ($actions as $key => $value) {
-        echo '<option value="'.$key.'">'.$key.' ('.Howl_GetRightName($key).')</option>';
+        echo '<option value="' . $key . '">' . $key . ' (' . Howl_GetRightName($key) . ')</option>';
     }
 
     echo'</select></th><th><input id="addact" type="text" value="1" class="checkbox"/></th><th><input type="submit" class="button" value="添加" /></th>';
@@ -118,7 +121,7 @@ if (isset($_GET['id'])) {
 
     </script>
     <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Howl/logo.png';?>");</script> 
+    <script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Howl/logo.png'; ?>");</script> 
   </div>
 </div>
 

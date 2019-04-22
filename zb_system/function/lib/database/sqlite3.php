@@ -1,31 +1,32 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
-/**
- * pdo_SQLite数据库操作类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase/Dbpdo_PgSQL 类库
- */
-class Dbpdo_PgSQL implements iDataBase
-{
+<?php
 
-    public $type = 'pgsql';
-    public $version = '';
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+/**
+ * SQLite3数据库操作类.
+ */
+class Database__SQLite3 implements Database__Interface
+{
+    public $type = 'sqlite';
+    public $version = '3';
 
     /**
      * @var string|null 数据库名前缀
      */
     public $dbpre = null;
-    private $db = null; #数据库连接实例
+    private $db = null; //数据库连接实例
     /**
      * @var string|null 数据库名
      */
     public $dbname = null;
     /**
-     * @var DbSql|null DbSql实例
+     * @var DbSql|null
      */
     public $sql = null;
+
     /**
-     * 构造函数，实例化$sql参数
+     * 构造函数，实例化$sql参数.
      */
     public function __construct()
     {
@@ -34,58 +35,49 @@ class Dbpdo_PgSQL implements iDataBase
 
     /**
      * @param $s
+     *
      * @return string
      */
     public function EscapeString($s)
     {
-        return str_ireplace("'", "''", $s);
+        return SQLite3::escapeString($s);
     }
 
     /**
-     * 连接数据库
-     * @param array $array 数据库连接配置
-     *              $array=array(
-     *                  'pgsql_server',
-     *                  'pgsql_username',
-     *                  'pgsql_password',
-     *                  'pgsql_name',
-     *                  'pgsql_pre',
-     *                  'pgsql_port',
-     *                  'persistent')
-     *                  )
+     * @param $array
+     *
      * @return bool
      */
     public function Open($array)
     {
+        if ($this->db = new SQLite3($array[0])) {
+            $this->dbpre = $array[1];
+            $this->dbname = $array[0];
 
-        $s = "pgsql:host={$array[0]};port={$array[5]};dbname={$array[3]};user={$array[1]};password={$array[2]};options='--client_encoding=UTF8'";
-        if (false == $array[5]) {
-            $db_link = new PDO($s);
+            return true;
         } else {
-            $db_link = new PDO($s, null, null, array(PDO::ATTR_PERSISTENT => true));
+            return false;
         }
-        $this->db = $db_link;
-        $this->dbpre = $array[4];
-
-        return true;
     }
 
     /**
-     * 关闭数据库连接
+     * 关闭数据库连接.
      */
     public function Close()
     {
-        $this->db = null;
+        $this->db->close();
     }
 
     /**
-     * 执行多行SQL语句
      * @param $s
      */
     public function QueryMulit($s)
     {
         return $this->QueryMulti($s);
-    }//错别字函数，历史原因保留下来
+    }
+
+    //错别字函数，历史原因保留下来
+
     public function QueryMulti($s)
     {
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
@@ -93,13 +85,14 @@ class Dbpdo_PgSQL implements iDataBase
         foreach ($a as $s) {
             $s = trim($s);
             if ($s != '') {
-                $this->db->exec($this->sql->Filter($s));
+                $this->db->query($this->sql->Filter($s));
             }
         }
     }
 
     /**
      * @param $query
+     *
      * @return array
      */
     public function Query($query)
@@ -107,17 +100,25 @@ class Dbpdo_PgSQL implements iDataBase
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
         $results = $this->db->query($this->sql->Filter($query));
-        //fetch || fetchAll
-        if (is_object($results)) {
-            return $results->fetchAll();
-        } else {
-            return array($results);
+        $data = array();
+        if (!($results instanceof Sqlite3Result)) {
+            return $data;
         }
+        if ($results->numColumns() > 0) {
+            while ($row = $results->fetchArray()) {
+                $data[] = $row;
+            }
+        } else {
+            $data[] = $results->numColumns();
+        }
+
+        return $data;
     }
 
     /**
      * @param $query
-     * @return bool|mysqli_result
+     *
+     * @return mixed
      */
     public function Update($query)
     {
@@ -127,7 +128,8 @@ class Dbpdo_PgSQL implements iDataBase
 
     /**
      * @param $query
-     * @return bool|mysqli_result
+     *
+     * @return mixed
      */
     public function Delete($query)
     {
@@ -137,17 +139,15 @@ class Dbpdo_PgSQL implements iDataBase
 
     /**
      * @param $query
-     * @return int
+     *
+     * @return mixed
      */
     public function Insert($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         $this->db->query($this->sql->Filter($query));
-        $seq = explode(' ', $query, 4);
-        $seq = $seq[2] . '_seq';
-        $id = $this->db->lastInsertId($seq);
 
-        return $id;
+        return $this->db->lastInsertRowID();
     }
 
     /**
@@ -169,12 +169,10 @@ class Dbpdo_PgSQL implements iDataBase
 
     /**
      * @param $table
-     * @return bool
      */
     public function ExistTable($table)
     {
-
-        $a = $this->Query($this->sql->ExistTable($table, $this->dbname));
+        $a = $this->Query($this->sql->ExistTable($table));
         if (!is_array($a)) {
             return false;
         }

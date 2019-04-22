@@ -1,15 +1,17 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
-/**
+<?php if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+/*
  * 后台管理相关
  * @package Z-BlogPHP
  * @subpackage System/Administrator 后台管理
- * @copyright (C) RainbowSoft Studio
+ * @copyright (C)  RainbowSoft Studio
  */
 
 $zbp->ismanage = true;
 
 /**
- * 添加页面管理子菜单(内置插件函数)
+ * 添加页面管理子菜单(内置插件函数).
  */
 function Include_Admin_Addpagesubmenu()
 {
@@ -17,7 +19,7 @@ function Include_Admin_Addpagesubmenu()
 }
 
 /**
- * 添加标签管理子菜单(内置插件函数)
+ * 添加标签管理子菜单(内置插件函数).
  */
 function Include_Admin_Addtagsubmenu()
 {
@@ -25,7 +27,7 @@ function Include_Admin_Addtagsubmenu()
 }
 
 /**
- * 添加分类管理子菜单(内置插件函数)
+ * 添加分类管理子菜单(内置插件函数).
  */
 function Include_Admin_Addcatesubmenu()
 {
@@ -33,7 +35,7 @@ function Include_Admin_Addcatesubmenu()
 }
 
 /**
- * 添加用户管理子菜单(内置插件函数)
+ * 添加用户管理子菜单(内置插件函数).
  */
 function Include_Admin_Addmemsubmenu()
 {
@@ -45,7 +47,7 @@ function Include_Admin_Addmemsubmenu()
 }
 
 /**
- * 添加模块管理子菜单(内置插件函数)
+ * 添加模块管理子菜单(内置插件函数).
  */
 function Include_Admin_Addmodsubmenu()
 {
@@ -57,7 +59,7 @@ function Include_Admin_Addmodsubmenu()
 }
 
 /**
- * 添加评论管理子菜单(内置插件函数)
+ * 添加评论管理子菜单(内置插件函数).
  */
 function Include_Admin_Addcmtsubmenu()
 {
@@ -73,17 +75,15 @@ function Include_Admin_Addcmtsubmenu()
     }
 }
 
-################################################################################################################
 $topmenus = array();
 
 $leftmenus = array();
 
 /**
- * 后台管理左侧导航菜单
+ * 后台管理左侧导航菜单.
  */
 function ResponseAdmin_LeftMenu()
 {
-
     global $zbp;
     global $leftmenus;
 
@@ -115,11 +115,10 @@ function ResponseAdmin_LeftMenu()
 }
 
 /**
- * 后台管理顶部菜单
+ * 后台管理顶部菜单.
  */
 function ResponseAdmin_TopMenu()
 {
-
     global $zbp;
     global $topmenus;
 
@@ -138,40 +137,44 @@ function ResponseAdmin_TopMenu()
 }
 
 /**
- * 添加子菜单项
+ * 添加子菜单项.
+ *
  * @param $strName
  * @param $strUrl
  * @param $strClass
  * @param $strTarget
  * @param $strId
  * @param $strTitle
+ *
  * @return null|string
  */
 function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $strId = '', $strTitle = '')
 {
-    $s  = '<a href="' . $strUrl . '" ';
+    $s = '<a href="' . $strUrl . '" ';
     if ($strTarget) {
         $s .= 'target="' . $strTarget . '"';
     }
     if ($strId) {
-        $s .= 'id="' . $id . '"';
+        $s .= 'id="' . $strId . '"';
     }
     if ($strTitle) {
         $s .= 'title="' . $strTitle . '" ' . 'alt="' . $strTitle . '" ';
     }
     $s .= '>';
     $s .= '<span class="' . $strClass . '">' . $strName . '</span></a>';
+
     return $s;
 }
 
-
 /**
- * 添加顶部菜单项
+ * 添加顶部菜单项.
+ *
  * @param $requireAction
  * @param $strName
  * @param $strUrl
  * @param $strTarget
  * @param $strLiId
+ *
  * @return null|string
  */
 function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId)
@@ -180,7 +183,7 @@ function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId)
 
     static $AdminTopMenuCount = 0;
     if ($zbp->CheckRights($requireAction) == false) {
-        return null;
+        return;
     }
 
     $tmp = null;
@@ -197,13 +200,15 @@ function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId)
 }
 
 /**
- * 添加左侧菜单项
+ * 添加左侧菜单项.
+ *
  * @param $requireAction
  * @param $strName
  * @param $strUrl
  * @param $strLiId
  * @param $strAId
  * @param $strImgUrl
+ *
  * @return null|string
  */
 function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $strImgUrl)
@@ -212,7 +217,7 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
 
     static $AdminLeftMenuCount = 0;
     if ($zbp->CheckRights($requireAction) == false) {
-        return null;
+        return;
     }
 
     $AdminLeftMenuCount = $AdminLeftMenuCount + 1;
@@ -226,18 +231,25 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
     return $tmp;
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 生成TYPEselect表单
+ * 生成TYPEselect表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
-function OutputOptionItemsOfType($default) {
+function OutputOptionItemsOfType($default)
+{
     global $zbp;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfType'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($default);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+            return $fpreturn;
+        }
     }
 
     $s = null;
@@ -249,8 +261,10 @@ function OutputOptionItemsOfType($default) {
 }
 
 /**
- * 生成分类select表单
+ * 生成分类select表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
 function OutputOptionItemsOfCategories($default)
@@ -261,6 +275,7 @@ function OutputOptionItemsOfCategories($default)
         $fpreturn = $fpname($default);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
             return $fpreturn;
         }
     }
@@ -274,8 +289,10 @@ function OutputOptionItemsOfCategories($default)
 }
 
 /**
- * 生成模板select表单
+ * 生成模板select表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
 function OutputOptionItemsOfTemplate($default)
@@ -300,7 +317,7 @@ function OutputOptionItemsOfTemplate($default)
         }
 
         if ($default == $key) {
-            $s .= '<option value="' . $key . '" selected="selected">' . $key . ' (' . $zbp->lang['msg']['default_template'] . ')' . '</option>';
+            $s .= '<option value="' . $key . '" selected="selected">' . $key . ' (' . $zbp->lang['msg']['current_template'] . ')' . '</option>';
         } else {
             if ($n !== '') {
                 $s .= '<option value="' . $key . '" >' . $key . ' (' . $n . ')' . '</option>';
@@ -314,8 +331,10 @@ function OutputOptionItemsOfTemplate($default)
 }
 
 /**
- * 生成用户等级select表单
+ * 生成用户等级select表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
 function OutputOptionItemsOfMemberLevel($default)
@@ -326,6 +345,7 @@ function OutputOptionItemsOfMemberLevel($default)
         $fpreturn = $fpname($default);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
             return $fpreturn;
         }
     }
@@ -342,8 +362,10 @@ function OutputOptionItemsOfMemberLevel($default)
 }
 
 /**
- * 生成用户select表单
+ * 生成用户select表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
 function OutputOptionItemsOfMember($default)
@@ -367,10 +389,11 @@ function OutputOptionItemsOfMember($default)
     return $s;
 }
 
-
 /**
- * 生成文章IsTop状态select表单
+ * 生成文章IsTop状态select表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
 function OutputOptionItemsOfIsTop($default)
@@ -381,14 +404,16 @@ function OutputOptionItemsOfIsTop($default)
     $s .= '<option value="0" ' . ($default == 0 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['none'] . '</option>';
     $s .= '<option value="2" ' . ($default == 2 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['top_index'] . '</option>';
     $s .= '<option value="1" ' . ($default == 1 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['top_global'] . '</option>';
-    $s .= '<option value="4" ' . ($default == 4 ? 'selected="selected"' : '') . ' >' .$zbp->lang['msg']['top_category'] . '</option>';
+    $s .= '<option value="4" ' . ($default == 4 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['top_category'] . '</option>';
+
     return $s;
 }
 
-
 /**
- * 生成文章发布状态select表单
+ * 生成文章发布状态select表单.
+ *
  * @param $default
+ *
  * @return null|string
  */
 function OutputOptionItemsOfPostStatus($default)
@@ -412,7 +437,8 @@ function OutputOptionItemsOfPostStatus($default)
 }
 
 /**
- * 创建Div模块
+ * 创建Div模块.
+ *
  * @param $m
  * @param bool $button
  */
@@ -428,7 +454,7 @@ function CreateModuleDiv($m, $button = true)
             echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;id=' . $m->ID . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>';
         } else {
             echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;source=theme&amp;filename=' . $m->FileName . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>';
-            echo '&nbsp;<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=ModuleDel&amp;source=theme&amp;filename=' . $m->FileName . '&amp;token=' . $zbp->GetToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>';
+            echo '&nbsp;<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=ModuleDel&amp;source=theme&amp;filename=' . $m->FileName) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>';
         }
         if ($m->SourceType != 'system'
             && $m->SourceType != 'theme'
@@ -437,7 +463,7 @@ function CreateModuleDiv($m, $button = true)
                 CheckRegExp($m->Source, '/plugin_(' . $zbp->option['ZC_USING_PLUGIN_LIST'] . ')/i')
             )
         ) {
-            echo '&nbsp;<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=ModuleDel&amp;id=' . $m->ID . '&amp;token=' . $zbp->GetToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>';
+            echo '&nbsp;<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=ModuleDel&amp;id=' . $m->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>';
         }
         echo '</span>';
     }
@@ -448,41 +474,42 @@ function CreateModuleDiv($m, $button = true)
 }
 
 /**
- * 生成时区select表单
+ * 生成时区select表单.
+ *
  * @param $default
+ *
  * @return string
  */
 function CreateOptionsOfTimeZone($default)
 {
-    global $zbp;
     $s = '';
     $tz = array(
-        'Etc/GMT+12' => '-12:00',
-        'Pacific/Midway' => '-11:00',
-        'Pacific/Honolulu' => '-10:00',
-        'America/Anchorage' => '-09:00',
-        'America/Los_Angeles' => '-08:00',
-        'America/Denver' => '-07:00',
-        'America/Tegucigalpa' => '-06:00',
-        'America/New_York' => '-05:00',
-        'America/Halifax' => '-04:00',
+        'Etc/GMT+12'                     => '-12:00',
+        'Pacific/Midway'                 => '-11:00',
+        'Pacific/Honolulu'               => '-10:00',
+        'America/Anchorage'              => '-09:00',
+        'America/Los_Angeles'            => '-08:00',
+        'America/Denver'                 => '-07:00',
+        'America/Tegucigalpa'            => '-06:00',
+        'America/New_York'               => '-05:00',
+        'America/Halifax'                => '-04:00',
         'America/Argentina/Buenos_Aires' => '-03:00',
-        'Atlantic/South_Georgia' => '-02:00',
-        'Atlantic/Azores' => '-01:00',
-        'UTC' => '00:00',
-        'Europe/Berlin' => '+01:00',
-        'Europe/Sofia' => '+02:00',
-        'Africa/Nairobi' => '+03:00',
-        'Europe/Moscow' => '+04:00',
-        'Asia/Karachi' => '+05:00',
-        'Asia/Dhaka' => '+06:00',
-        'Asia/Bangkok' => '+07:00',
-        'Asia/Shanghai' => '+08:00',
-        'Asia/Tokyo' => '+09:00',
-        'Pacific/Guam' => '+10:00',
-        'Australia/Sydney' => '+11:00',
-        'Pacific/Fiji' => '+12:00',
-        'Pacific/Tongatapu' => '+13:00',
+        'Atlantic/South_Georgia'         => '-02:00',
+        'Atlantic/Azores'                => '-01:00',
+        'UTC'                            => '00:00',
+        'Europe/Berlin'                  => '+01:00',
+        'Europe/Sofia'                   => '+02:00',
+        'Africa/Nairobi'                 => '+03:00',
+        'Europe/Moscow'                  => '+04:00',
+        'Asia/Karachi'                   => '+05:00',
+        'Asia/Dhaka'                     => '+06:00',
+        'Asia/Bangkok'                   => '+07:00',
+        'Asia/Shanghai'                  => '+08:00',
+        'Asia/Tokyo'                     => '+09:00',
+        'Pacific/Guam'                   => '+10:00',
+        'Australia/Sydney'               => '+11:00',
+        'Pacific/Fiji'                   => '+12:00',
+        'Pacific/Tongatapu'              => '+13:00',
     );
 
     foreach ($tz as $key => $value) {
@@ -493,8 +520,10 @@ function CreateOptionsOfTimeZone($default)
 }
 
 /**
- * 生成语言select表单
+ * 生成语言select表单.
+ *
  * @param $default
+ *
  * @return string
  */
 function CreateOptionsOfLang($default)
@@ -521,16 +550,41 @@ function CreateOptionsOfLang($default)
     return $s;
 }
 
-################################################################################################################
 /**
- * 后台管理显示网站信息
+ * 生成GuestType表单.
+ *
+ * @param $default
+ *
+ * @return string
+ */
+function CreateOptionsOfGuestIPType($default)
+{
+    global $zbp;
+    $s = '';
+    $tz = array(
+        'REMOTE_ADDR'                    => 'REMOTE_ADDR (' . $zbp->lang['msg']['default'] . ')',
+        'HTTP_X_REAL_IP'                 => 'HTTP_X_REAL_IP',
+        'HTTP_CLIENT_IP'                 => 'HTTP_CLIENT_IP',
+        'HTTP_X_FORWARDED_FOR'           => 'HTTP_X_FORWARDED_FOR',
+        'HTTP_CF_CONNECTING_IP'          => 'HTTP_CF_CONNECTING_IP',
+    );
+
+    foreach ($tz as $key => $value) {
+        $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $value . '</option>';
+    }
+
+    return $s;
+}
+
+//###############################################################################################################
+/**
+ * 后台管理显示网站信息.
  */
 function Admin_SiteInfo()
 {
-
     global $zbp;
 
-    $echostatistic = false;
+    $echoStatistic = false;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['info_intro'] . '</div>';
     echo '<div class="SubMenu">';
@@ -540,15 +594,19 @@ function Admin_SiteInfo()
     echo '</div>';
     echo '<div id="divMain2">';
 
-    echo '<table class="tableFull tableBorder table_striped table_hover" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:statistic(\'?act=misc&amp;type=statistic\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>' : '') . ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+    echo '<table class="tableFull tableBorder table_striped table_hover" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'];
+    if ($zbp->CheckRights('root')) {
+        echo '&nbsp;<a href="javascript:statistic(\'' . BuildSafeCmdURL('act=misc&type=statistic') . '\');" id="statistic">[' . $zbp->lang['msg']['refresh_cache'] . ']</a>';
+    }
+    echo ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
     if (((time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60))
               ||
           ($zbp->CheckTemplate(true) == false)
         ) {
-        echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'?act=misc&type=statistic\'); });</script>';
+        echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'' . BuildSafeCmdURL('act=misc&type=statistic') . '\'); });</script>';
     } else {
-        $echostatistic = true;
+        $echoStatistic = true;
         $r = $zbp->cache->reload_statistic;
         $r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
         $r = str_replace('{$zbp->theme}', $zbp->theme, $r);
@@ -560,10 +618,14 @@ function Admin_SiteInfo()
 
     echo '</table>';
 
-    echo '<table class="tableFull tableBorder table_striped table_hover" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'] . ($zbp->CheckRights('root') ? '&nbsp;<a href="javascript:updateinfo(\'?act=misc&amp;type=updateinfo\');">[' . $zbp->lang['msg']['refresh'] . ']</a>' : '') . ' <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+    echo '<table class="tableFull tableBorder table_striped table_hover" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'];
+    if ($zbp->CheckRights('root')) {
+        echo '&nbsp;<a href="javascript:updateinfo(\'' . BuildSafeCmdURL('act=misc&type=updateinfo') . '\');">[' . $zbp->lang['msg']['refresh'] . ']</a>';
+    }
+    echo ' <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
-    if ((time() - (int) $zbp->cache->reload_updateinfo_time) > (47 * 60 * 60) && $zbp->CheckRights('root') && $echostatistic == true) {
-        echo '<script type="text/javascript">$(document).ready(function(){ updateinfo(\'?act=misc&type=updateinfo\'); });</script>';
+    if ((time() - (int) $zbp->cache->reload_updateinfo_time) > (47 * 60 * 60) && $zbp->CheckRights('root') && $echoStatistic == true) {
+        echo '<script type="text/javascript">$(document).ready(function(){ updateinfo(\'' . BuildSafeCmdURL('act=misc&type=updateinfo') . '\'); });</script>';
     } else {
         echo $zbp->cache->reload_updateinfo;
     }
@@ -584,13 +646,12 @@ function Admin_SiteInfo()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/home_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台文章管理
+ * 后台文章管理.
  */
 function Admin_ArticleMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['article_manage'] . '</div>';
@@ -619,7 +680,7 @@ function Admin_ArticleMng()
     $p->UrlRule->Rules['{%category%}'] = GetVars('category');
     $p->UrlRule->Rules['{%search%}'] = rawurlencode(GetVars('search'));
     $p->UrlRule->Rules['{%status%}'] = GetVars('status');
-    $p->UrlRule->Rules['{%istop%}'] = (boolean) GetVars('istop');
+    $p->UrlRule->Rules['{%istop%}'] = (bool) GetVars('istop');
 
     $w = array();
     if (!$zbp->CheckRights('ArticleAll')) {
@@ -629,7 +690,7 @@ function Admin_ArticleMng()
         $w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', GetVars('search'));
     }
     if (GetVars('istop')) {
-        $w[] = array('=', 'log_Istop', '1');
+        $w[] = array('<>', 'log_Istop', '0');
     }
     if (GetVars('status')) {
         $w[] = array('=', 'log_Status', GetVars('status'));
@@ -672,7 +733,7 @@ function Admin_ArticleMng()
     $tableths[] = '</tr>';
 
     foreach ($array as $article) {
-        $tabletds = array();//table string
+        $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $article->ID . '</td>';
         $tabletds[] = '<td class="td10">' . $article->Category->Name . '</td>';
@@ -684,7 +745,7 @@ function Admin_ArticleMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
         '<a href="../cmd.php?act=ArticleEdt&amp;id=' . $article->ID . '"><img src="../image/admin/page_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>' .
         '&nbsp;&nbsp;&nbsp;&nbsp;' .
-        '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=ArticleDel&amp;id=' . $article->ID . '&amp;token=' . $zbp->GetToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
+        '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=ArticleDel&amp;id=' . $article->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
         '</td>';
 
         $tabletds[] = '</tr>';
@@ -715,13 +776,12 @@ function Admin_ArticleMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/article_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台页面管理
+ * 后台页面管理.
  */
 function Admin_PageMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['page_manage'] . '</div>';
@@ -774,9 +834,8 @@ function Admin_PageMng()
     $tableths[] = '<th></th>';
     $tableths[] = '</tr>';
 
-
     foreach ($array as $article) {
-        $tabletds = array();//table string
+        $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $article->ID . '</td>';
         $tabletds[] = '<td class="td10">' . $article->Author->Name . '</td>';
@@ -787,7 +846,7 @@ function Admin_PageMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=PageEdt&amp;id=' . $article->ID . '"><img src="../image/admin/page_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=PageDel&amp;id=' . $article->ID . '&amp;token=' . $zbp->GetToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
+            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=PageDel&id=' . $article->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
              '</td>';
 
         $tabletds[] = '</tr>';
@@ -815,13 +874,12 @@ function Admin_PageMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/page_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台分类管理
+ * 后台分类管理.
  */
 function Admin_CategoryMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['category_manage'] . '</div>';
@@ -845,7 +903,7 @@ function Admin_CategoryMng()
     $tableths[] = '</tr>';
 
     foreach ($zbp->categoriesbyorder as $category) {
-        $tabletds = array();//table string
+        $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $category->ID . '</td>';
         $tabletds[] = '<td class="td5">' . $category->Order . '</td>';
@@ -856,7 +914,7 @@ function Admin_CategoryMng()
             '<a href="../cmd.php?act=CategoryEdt&amp;id=' . $category->ID . '"><img src="../image/admin/folder_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
         ((count($category->SubCategories) == 0) ?
-            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=CategoryDel&amp;id=' . $category->ID . '&amp;token=' . $zbp->GetToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' : '') .
+            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=CategoryDel&amp;id=' . $category->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' : '') .
             '</td>';
 
         $tabletds[] = '</tr>';
@@ -876,13 +934,12 @@ function Admin_CategoryMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/category_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台评论管理
+ * 后台评论管理.
  */
 function Admin_CommentMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['comment_manage'] . '</div>';
@@ -897,6 +954,7 @@ function Admin_CommentMng()
     echo '<p>' . $zbp->lang['msg']['search'] . '&nbsp;&nbsp;&nbsp;&nbsp;<input name="search" style="width:450px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
     echo '</form>';
     echo '<form method="post" action="' . $zbp->host . 'zb_system/cmd.php?act=CommentBat">';
+    echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&page=%page%}{&ischecking=%ischecking%}{&search=%search%}', false);
     $p->PageCount = $zbp->managecount;
@@ -904,7 +962,7 @@ function Admin_CommentMng()
     $p->PageBarCount = $zbp->pagebarcount;
 
     $p->UrlRule->Rules['{%search%}'] = rawurlencode(GetVars('search'));
-    $p->UrlRule->Rules['{%ischecking%}'] = (boolean) GetVars('ischecking');
+    $p->UrlRule->Rules['{%ischecking%}'] = (bool) GetVars('ischecking');
 
     $w = array();
     if (!$zbp->CheckRights('CommentAll')) {
@@ -956,7 +1014,7 @@ function Admin_CommentMng()
             $article = null;
         }
 
-        $tabletds = array();//table string
+        $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5"><a href="?act=CommentMng&id=' . $cmt->ID . '" title="' . $zbp->lang['msg']['jump_comment'] . $cmt->ID . '">' . $cmt->ID . '</a></td>';
         if ($cmt->ParentID > 0) {
@@ -965,7 +1023,7 @@ function Admin_CommentMng()
             $tabletds[] = '<td class="td5"></td>';
         }
 
-        $tabletds[] = '<td class="td10"><span class="cmt-note" title="' . $zbp->lang['msg']['email'] .':' . htmlspecialchars($cmt->Email) . '"><a href="mailto:' . htmlspecialchars($cmt->Email) . '">' . $cmt->Author->Name . '</a></span></td>';
+        $tabletds[] = '<td class="td10"><span class="cmt-note" title="' . $zbp->lang['msg']['email'] . ':' . htmlspecialchars($cmt->Email) . '"><a href="mailto:' . htmlspecialchars($cmt->Email) . '">' . $cmt->Author->Name . '</a></span></td>';
         $tabletds[] = '<td><div style="overflow:hidden;max-width:500px;">' .
         (($article) ?
             '<a href="' . $article->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> '
@@ -976,13 +1034,13 @@ function Admin_CommentMng()
         $tabletds[] = '<td class="td5">' . $cmt->LogID . '</td>';
         $tabletds[] = '<td class="td15">' . $cmt->Time() . '</td>';
         $tabletds[] = '<td class="td10 tdCenter">' .
-            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=CommentDel&amp;id=' . $cmt->ID . '&amp;token=' . $zbp->GetToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
-        '&nbsp;&nbsp;&nbsp;&nbsp;' .
-        (!GetVars('ischecking', 'GET') ?
-            '<a href="../cmd.php?act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET') . '&amp;token=' . $zbp->GetToken() . '"><img src="../image/admin/minus-shield.png" alt="' . $zbp->lang['msg']['audit'] . '" title="' . $zbp->lang['msg']['audit'] . '" width="16" /></a>'
-        :
-            '<a href="../cmd.php?act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET') . '&amp;token=' . $zbp->GetToken() . '"><img src="../image/admin/ok.png" alt="' . $zbp->lang['msg']['pass'] . '" title="' . $zbp->lang['msg']['pass'] . '" width="16" /></a>'
-        ) .
+            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=CommentDel&amp;id=' . $cmt->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
+            '&nbsp;&nbsp;&nbsp;&nbsp;' .
+            (!GetVars('ischecking', 'GET') ?
+                '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><img src="../image/admin/minus-shield.png" alt="' . $zbp->lang['msg']['audit'] . '" title="' . $zbp->lang['msg']['audit'] . '" width="16" /></a>'
+                :
+                '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><img src="../image/admin/ok.png" alt="' . $zbp->lang['msg']['pass'] . '" title="' . $zbp->lang['msg']['pass'] . '" width="16" /></a>'
+            ) .
             '</td>';
         $tabletds[] = '<td class="td5 tdCenter">' . '<input type="checkbox" id="id' . $cmt->ID . '" name="id[]" value="' . $cmt->ID . '"/>' . '</td>';
 
@@ -1001,7 +1059,7 @@ function Admin_CommentMng()
 
     echo '<p style="float:right;">';
 
-    if ((boolean) GetVars('ischecking')) {
+    if ((bool) GetVars('ischecking')) {
         echo '<input type="submit" name="all_del"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         echo '<input type="submit" name="all_pass"  value="' . $zbp->lang['msg']['all_pass'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
     } else {
@@ -1030,13 +1088,12 @@ function Admin_CommentMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/comments_32.png' . '");$(".cmt-note").tooltip();</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台用户管理
+ * 后台用户管理.
  */
 function Admin_MemberMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['member_manage'] . '</div>';
@@ -1095,7 +1152,7 @@ function Admin_MemberMng()
     $tableths[] = '</tr>';
 
     foreach ($array as $member) {
-        $tabletds = array();//table string
+        $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $member->ID . '</td>';
         $tabletds[] = '<td class="td10">' . $member->LevelName . ($member->Status > 0 ? '(' . $zbp->lang['user_status_name'][$member->Status] . ')' : '') . '</td>';
@@ -1109,7 +1166,7 @@ function Admin_MemberMng()
             '<a href="../cmd.php?act=MemberEdt&amp;id=' . $member->ID . '"><img src="../image/admin/user_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>' .
         (($zbp->CheckRights('MemberDel') && ($member->IsGod !== true)) ?
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=MemberDel&amp;id=' . $member->ID . '&amp;token=' . $zbp->GetToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>'
+            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=MemberDel&amp;id=' . $member->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>'
 
         : '') .
             '</td>';
@@ -1140,13 +1197,12 @@ function Admin_MemberMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/user_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- *  后台上传附件管理
+ *  后台上传附件管理.
  */
 function Admin_UploadMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['upload_manage'] . '</div>';
@@ -1157,10 +1213,10 @@ function Admin_UploadMng()
     echo '</div>';
     echo '<div id="divMain2">';
 
-    echo '<form class="search" name="upload" id="upload" method="post" enctype="multipart/form-data" action="../cmd.php?act=UploadPst&token=' . $zbp->GetToken() . '">';
+    echo '<form class="search" name="upload" id="upload" method="post" enctype="multipart/form-data" action="' . BuildSafeCmdURL('act=UploadPst') . '">';
     echo '<p>' . $zbp->lang['msg']['upload_file'] . ': </p>';
     echo '<p><input type="file" name="file" size="60" />&nbsp;&nbsp;';
-    echo '<label><input type="checkbox" name="auto_rename" checked/>'.$zbp->lang['msg']['auto_rename_uploadfile'].'</label>&nbsp;&nbsp;';
+    echo '<label><input type="checkbox" name="auto_rename" checked/>' . $zbp->lang['msg']['auto_rename_uploadfile'] . '</label>&nbsp;&nbsp;';
     echo '<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '" onclick="" />&nbsp;&nbsp;';
     echo '<input class="button" type="reset" value="' . $zbp->lang['msg']['reset'] . '" /></p>';
     echo '</form>';
@@ -1185,40 +1241,40 @@ function Admin_UploadMng()
 
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
     $tables = '';
-    $tableths = array();
-    $tableths[] = '<tr>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['author'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['name'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['date'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['size'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['type'] . '</th>';
-    $tableths[] = '<th></th>';
-    $tableths[] = '</tr>';
+    $tableHeaders = array();
+    $tableHeaders[] = '<tr>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['id'] . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['author'] . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['name'] . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['date'] . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['size'] . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['type'] . '</th>';
+    $tableHeaders[] = '<th></th>';
+    $tableHeaders[] = '</tr>';
 
     foreach ($array as $upload) {
-        $tabletds = array();//table string
-        $tabletds[] = '<tr>';
-        $tabletds[] = '<td class="td5">' . $upload->ID . '</td>';
-        $tabletds[] = '<td class="td10">' . $upload->Author->Name . '</td>';
-        $tabletds[] = '<td><a href="' . $upload->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $upload->Name . '</td>';
-        $tabletds[] = '<td class="td15">' . $upload->Time() . '</td>';
-        $tabletds[] = '<td class="td10">' . $upload->Size . '</td>';
-        $tabletds[] = '<td class="td20">' . $upload->MimeType . '</td>';
-        $tabletds[] = '<td class="td10 tdCenter">' .
-            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=UploadDel&amp;id=' . $upload->ID . '&amp;token=' . $zbp->GetToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
+        $ret = array(); //table string
+        $ret[] = '<tr>';
+        $ret[] = '<td class="td5">' . $upload->ID . '</td>';
+        $ret[] = '<td class="td10">' . htmlspecialchars($upload->Author->Name) . '</td>';
+        $ret[] = '<td><a href="' . htmlspecialchars($upload->Url) . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . htmlspecialchars($upload->Name) . '</td>';
+        $ret[] = '<td class="td15">' . $upload->Time() . '</td>';
+        $ret[] = '<td class="td10">' . $upload->Size . '</td>';
+        $ret[] = '<td class="td20">' . htmlspecialchars($upload->MimeType) . '</td>';
+        $ret[] = '<td class="td10 tdCenter">' .
+            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=UploadDel&amp;id=' . $upload->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
             '</td>';
 
-        $tabletds[] = '</tr>';
+        $ret[] = '</tr>';
         foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_UploadMng_Table'] as $fpname => &$fpsignal) {
             //传入 当前$upload，当前行，表头
-            $fpreturn = $fpname($upload, $tabletds, $tableths);
+            $fpreturn = $fpname($upload, $ret, $tableHeaders);
         }
 
-        $tables .= implode($tabletds);
+        $tables .= implode($ret);
     }
 
-    echo implode($tableths) . $tables;
+    echo implode($tableHeaders) . $tables;
     echo '</table>';
     echo '<hr/><p class="pagebar">';
     foreach ($p->Buttons as $key => $value) {
@@ -1233,13 +1289,12 @@ function Admin_UploadMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/accessories_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台标签管理
+ * 后台标签管理.
  */
 function Admin_TagMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['tag_manage'] . '</div>';
@@ -1277,7 +1332,7 @@ function Admin_TagMng()
     $tableths[] = '</tr>';
 
     foreach ($array as $tag) {
-        $tabletds = array();//table string
+        $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $tag->ID . '</td>';
         $tabletds[] = '<td class="td25"><a href="' . $tag->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $tag->Name . '</td>';
@@ -1286,7 +1341,7 @@ function Admin_TagMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=TagEdt&amp;id=' . $tag->ID . '"><img src="../image/admin/tag_blue_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="../cmd.php?act=TagDel&amp;id=' . $tag->ID . '&amp;token=' . $zbp->GetToken() . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
+            '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=TagDel&amp;id=' . $tag->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
             '</td>';
 
         $tabletds[] = '</tr>';
@@ -1315,13 +1370,12 @@ function Admin_TagMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/tag_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台主题管理
+ * 后台主题管理.
  */
 function Admin_ThemeMng()
 {
-
     global $zbp;
 
     $allthemes = $zbp->LoadThemes();
@@ -1333,6 +1387,7 @@ function Admin_ThemeMng()
     }
     echo '</div>';
     echo '<div id="divMain2"><form id="frmTheme" method="post" action="../cmd.php?act=ThemeSet">';
+    echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
     echo '<input type="hidden" name="theme" id="theme" value="" />';
     echo '<input type="hidden" name="style" id="style" value="" />';
 
@@ -1340,8 +1395,8 @@ function Admin_ThemeMng()
         echo "\n\n";
 
         echo '<div class="theme ' . ($theme->IsUsed() ? 'theme-now' : 'theme-other') . '"';
-        echo ' data-themeid="' . $theme->id . '"';
-        echo ' data-themename="' . $theme->name . '"';
+        echo ' data-themeid="' . htmlspecialchars($theme->id) . '"';
+        echo ' data-themename="' . htmlspecialchars($theme->name) . '"';
         echo '>';
         echo '<div class="theme-name">';
 
@@ -1350,14 +1405,14 @@ function Admin_ThemeMng()
         } else {
             echo '<img width="16" title="" alt="" src="../image/admin/layout.png"/>&nbsp;&nbsp;';
         }
-        echo '<a target="_blank" href="' . $theme->url . '" title=""><strong style="display:none;">' . $theme->id . '</strong>';
-        echo '<b>' . $theme->name . '</b></a></div>';
-        echo '<div><img src="' . $theme->GetScreenshot() . '" title="' . $theme->name . '" alt="' . $theme->name . '" width="200" height="150" /></div>';
-        echo '<div class="theme-author">' . $zbp->lang['msg']['author'] . ': <a target="_blank" href="' . $theme->author_url . '">' . $theme->author_name . '</a></div>';
+        echo '<a target="_blank" href="' . htmlspecialchars($theme->url) . '" title=""><strong style="display:none;">' . htmlspecialchars($theme->id) . '</strong>';
+        echo '<b>' . htmlspecialchars($theme->name) . '</b></a></div>';
+        echo '<div><img src="' . $theme->GetScreenshot() . '" title="' . htmlspecialchars($theme->name) . '" alt="' . htmlspecialchars($theme->name) . '" width="200" height="150" /></div>';
+        echo '<div class="theme-author">' . $zbp->lang['msg']['author'] . ': <a target="_blank" href="' . htmlspecialchars($theme->author_url) . '">' . htmlspecialchars($theme->author_name) . '</a></div>';
         echo '<div class="theme-style">' . $zbp->lang['msg']['style'] . ': ';
         echo '<select class="edit" size="1" style="width:110px;">';
         foreach ($theme->GetCssFiles() as $key => $value) {
-            echo '<option value="' . $key . '" ' . ($theme->IsUsed() ? ($key == $zbp->style ? 'selected="selected"' : '') : '') . '>' . basename($value) . '</option>';
+            echo '<option value="' . htmlspecialchars($key) . '" ' . ($theme->IsUsed() ? ($key == $zbp->style ? 'selected="selected"' : '') : '') . '>' . basename($value) . '</option>';
         }
         echo '</select>';
         echo '<input type="button" onclick="$(\'#style\').val($(this).prev().val());$(\'#theme\').val(\'' . $theme->id . '\');$(\'#frmTheme\').submit();" class="theme-activate button" value="' . $zbp->lang['msg']['enable'] . '">';
@@ -1370,13 +1425,12 @@ function Admin_ThemeMng()
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/themes_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台模块管理
+ * 后台模块管理.
  */
 function Admin_ModuleMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['module_manage'] . '</div>';
@@ -1403,7 +1457,7 @@ function Admin_ModuleMng()
             $pm[] = $m;
         }
     }
-    #widget-list begin
+    //widget-list begin
     echo '<div class="widget-left">';
     echo '<div class="widget-list">';
 
@@ -1442,7 +1496,7 @@ function Admin_ModuleMng()
 
     echo '<hr/>';
     echo "\r\n";
-    echo '<form id="edit" method="post" action="../cmd.php?act=SidebarSet">';
+    echo '<form id="edit" method="post" action="' . BuildSafeCmdURL('act=SidebarSet') . '">';
     echo '<input type="hidden" id="strsidebar" name="edtSidebar" value="' . $zbp->option['ZC_SIDEBAR_ORDER'] . '"/>';
     echo '<input type="hidden" id="strsidebar2" name="edtSidebar2" value="' . $zbp->option['ZC_SIDEBAR2_ORDER'] . '"/>';
     echo '<input type="hidden" id="strsidebar3" name="edtSidebar3" value="' . $zbp->option['ZC_SIDEBAR3_ORDER'] . '"/>';
@@ -1452,12 +1506,12 @@ function Admin_ModuleMng()
     echo "\r\n";
     echo '<div class="clear"></div></div>';
     echo '</div>';
-    #widget-list end
+    //widget-list end
     echo "\r\n";
-    #siderbar-list begin
+    //siderbar-list begin
     echo '<div class="siderbar-list">';
     echo '<div class="siderbar-drop" id="siderbar"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
     foreach ($zbp->template->sidebar as $m) {
         CreateModuleDiv($m, false);
     }
@@ -1465,7 +1519,7 @@ function Admin_ModuleMng()
     echo "\r\n";
 
     echo '<div class="siderbar-drop" id="siderbar2"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar2'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar2), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar2), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
     foreach ($zbp->template->sidebar2 as $m) {
         CreateModuleDiv($m, false);
     }
@@ -1473,7 +1527,7 @@ function Admin_ModuleMng()
     echo "\r\n";
 
     echo '<div class="siderbar-drop" id="siderbar3"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar3'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar3), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar3), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
     foreach ($zbp->template->sidebar3 as $m) {
         CreateModuleDiv($m, false);
     }
@@ -1481,7 +1535,7 @@ function Admin_ModuleMng()
     echo "\r\n";
 
     echo '<div class="siderbar-drop" id="siderbar4"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar4'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar4), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar4), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
     foreach ($zbp->template->sidebar4 as $m) {
         CreateModuleDiv($m, false);
     }
@@ -1489,7 +1543,7 @@ function Admin_ModuleMng()
     echo "\r\n";
 
     echo '<div class="siderbar-drop" id="siderbar5"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar5'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', Count($zbp->template->sidebar5), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar5), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
     foreach ($zbp->template->sidebar5 as $m) {
         CreateModuleDiv($m, false);
     }
@@ -1497,15 +1551,14 @@ function Admin_ModuleMng()
     echo "\r\n";
 
     echo '<div class="clear"></div></div>';
-    #siderbar-list end
+    //siderbar-list end
     echo "\r\n";
     echo '<div class="clear"></div>';
 
     echo '</div>';
     echo "\r\n";
 
-    echo '<script type="text/javascript">ActiveLeftMenu("aModuleMng");</script>';
-    ?>
+    echo '<script type="text/javascript">ActiveLeftMenu("aModuleMng");</script>'; ?>
 <script type="text/javascript">
     $(function() {
         function sortFunction(){
@@ -1616,13 +1669,12 @@ function Admin_ModuleMng()
 echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/link_32.png' . '");</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台插件管理
+ * 后台插件管理.
  */
 function Admin_PluginMng()
 {
-
     global $zbp;
 
     $allplugins = $zbp->LoadPlugins();
@@ -1646,7 +1698,7 @@ function Admin_PluginMng()
 
     $plugins = array();
 
-    $app = new App;
+    $app = new App();
     if ($app->LoadInfoByXml('theme', $zbp->theme) == true) {
         if ($app->HasPlugin()) {
             array_unshift($plugins, $app);
@@ -1671,17 +1723,17 @@ function Admin_PluginMng()
 
     foreach ($plugins as $plugin) {
         echo '<tr>';
-        echo '<td class="td5 tdCenter' . ($plugin->type == 'plugin' ? ' plugin' : '') . ($plugin->IsUsed() ? ' plugin-on' : '') . '" data-pluginid="' . $plugin->id . '"><img ' . ($plugin->IsUsed() ? '' : 'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" height="32" /></td>';
-        echo '<td class="td25"><span class="plugin-note" title="' . htmlspecialchars($plugin->note) . '">' . $plugin->name . ' ' . $plugin->version . '</span></td>';
-        echo '<td class="td20"><a href="' . $plugin->author_url . '" target="_blank">' . $plugin->author_name . '</a></td>';
-        echo '<td class="td20">' . $plugin->modified . '</td>';
+        echo '<td class="td5 tdCenter' . ($plugin->type == 'plugin' ? ' plugin' : '') . ($plugin->IsUsed() ? ' plugin-on' : '') . '" data-pluginid="' . htmlspecialchars($plugin->id) . '"><img ' . ($plugin->IsUsed() ? '' : 'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" height="32" /></td>';
+        echo '<td class="td25"><span class="plugin-note" title="' . htmlspecialchars($plugin->note) . '">' . htmlspecialchars($plugin->name) . ' ' . htmlspecialchars($plugin->version) . '</span></td>';
+        echo '<td class="td20"><a href="' . htmlspecialchars($plugin->author_url) . '" target="_blank">' . htmlspecialchars($plugin->author_name) . '</a></td>';
+        echo '<td class="td20">' . htmlspecialchars($plugin->modified) . '</td>';
         echo '<td class="td10 tdCenter">';
 
         if ($plugin->type == 'plugin') {
             if ($plugin->IsUsed()) {
-                echo '<a href="../cmd.php?act=PluginDis&amp;name=' . htmlspecialchars($plugin->id) . '&amp;token=' . $zbp->GetToken() . '" title="' . $zbp->lang['msg']['disable'] . '"><img width="16" alt="' . $zbp->lang['msg']['disable'] . '" src="../image/admin/control-power.png"/></a>';
+                echo '<a href="' . BuildSafeCmdURL('act=PluginDis&amp;name=' . htmlspecialchars($plugin->id)) . '" title="' . $zbp->lang['msg']['disable'] . '"><img width="16" alt="' . $zbp->lang['msg']['disable'] . '" src="../image/admin/control-power.png"/></a>';
             } else {
-                echo '<a href="../cmd.php?act=PluginEnb&amp;name=' . htmlspecialchars($plugin->id) . '&amp;token=' . $zbp->GetToken() . '" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../image/admin/control-power-off.png"/></a>';
+                echo '<a href="' . BuildSafeCmdURL('act=PluginEnb&amp;name=' . htmlspecialchars($plugin->id)) . '" title="' . $zbp->lang['msg']['enable'] . '"><img width="16" alt="' . $zbp->lang['msg']['enable'] . '" src="../image/admin/control-power-off.png"/></a>';
             }
         }
         if ($plugin->IsUsed() && $plugin->CanManage()) {
@@ -1698,13 +1750,12 @@ function Admin_PluginMng()
     echo 'AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/plugin_32.png' . '");$(".plugin-note").tooltip();</script>';
 }
 
-################################################################################################################
+//###############################################################################################################
 /**
- * 后台网站设置管理
+ * 后台网站设置管理.
  */
 function Admin_SettingMng()
 {
-
     global $zbp;
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['settings'] . '</div>';
@@ -1712,11 +1763,9 @@ function Admin_SettingMng()
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_SettingMng_SubMenu'] as $fpname => &$fpsignal) {
         $fpname();
     }
-    echo '</div>';
+    echo '</div>'; ?>
 
-    ?>
-
-          <form method="post" action="../cmd.php?act=SettingSav<?php echo '&amp;token=' . $zbp->GetToken(); ?>">
+          <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav'); ?>">
             <div id="divMain2">
               <div class="content-box"><!-- Start Content Box -->
 
@@ -1734,17 +1783,34 @@ function Admin_SettingMng()
                 <div class="content-box-content">
 <?php
     $decodedBlogHost = $zbp->option['ZC_BLOG_HOST'];
-if (stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false && function_exists('mb_strtolower')) {
-    $Punycode = new Punycode();
-    $decodedBlogHost = $Punycode->decode($zbp->option['ZC_BLOG_HOST']);
-}
+    if (stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false && function_exists('mb_strtolower')) {
+        $Punycode = new Punycode();
+        $decodedBlogHost = $Punycode->decode($zbp->option['ZC_BLOG_HOST']);
+    }
 
     echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
     echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
-    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/><span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="' . $decodedBlogHost . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly"') . ' />';
-    echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>' . $zbp->lang['msg']['permanent_domain'] . '&nbsp;&nbsp;<input type="text" id="ZC_PERMANENT_DOMAIN_WITH_ADMIN" name="ZC_PERMANENT_DOMAIN_WITH_ADMIN" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN'] . '"/></label>' . $zbp->lang['msg']['permanent_domain_with_admin'] . '</p></td></tr>';
-    echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_name'] . '</b></p></td><td><p><input id="ZC_BLOG_NAME" name="ZC_BLOG_NAME" style="width:600px;" type="text" value="' . $zbp->option['ZC_BLOG_NAME'] . '" /></p></td></tr>';
-    echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_subname'] . '</b></p></td><td><p><input id="ZC_BLOG_SUBNAME" name="ZC_BLOG_SUBNAME" style="width:600px;"  type="text" value="' . $zbp->option['ZC_BLOG_SUBNAME'] . '" /></p></td></tr>';
+    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/><span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="' . $decodedBlogHost . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly"') . 'oninput="changeDomain($(this).val())" />';
+    echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);   if($(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0)$(this).parent().next().hide();else $(this).parent().next().show();"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>' . $zbp->lang['msg']['permanent_domain'] . '<span style="display:none;">&nbsp;&nbsp;<input type="text" id="ZC_PERMANENT_DOMAIN_WITH_ADMIN" name="ZC_PERMANENT_DOMAIN_WITH_ADMIN" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN'] . '"/></label>' . $zbp->lang['msg']['permanent_domain_with_admin'] . '</span></p>';
+    if ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == 0) {
+        echo '<p style="display:none;">';
+    } else {
+        echo '<p>';
+    }
+    echo '在固定您的域名前，请先<a id="newdomainurl" href="' . $zbp->host . 'zb_system/cmd.php?act=misc&type=ping&newdomain=' . urlencode($zbp->host) . '" target="_blank" alt="固定域名链接" title="固定域名链接">【点击这里】</a>确认即将设置的域名是否可访问，如果不能访问请关闭设置。<br/>设置固定域名出错后造成不能访问的情况请访问wiki进行处理。<p>';
+    echo '<script>
+function changeDomain(url){
+    url = url.replace(" ","");
+    if(url.substr(url.length-1,1) != "/" ){
+    	url = url + "/";
+    }
+    url = url + "zb_system/cmd.php?act=misc&type=ping&newdomain=" + encodeURI(url);
+    $("#newdomainurl").attr("href",url);
+}
+    </script>';
+    echo '</td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_name'] . '</b></p></td><td><p><input id="ZC_BLOG_NAME" name="ZC_BLOG_NAME" style="width:600px;" type="text" value="' . htmlspecialchars($zbp->option['ZC_BLOG_NAME']) . '" /></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_subname'] . '</b></p></td><td><p><input id="ZC_BLOG_SUBNAME" name="ZC_BLOG_SUBNAME" style="width:600px;"  type="text" value="' . htmlspecialchars($zbp->option['ZC_BLOG_SUBNAME']) . '" /></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['copyright'] . '</b><br/><span class="note">' . $zbp->lang['msg']['copyright_add'] . '</span></p></td><td><p><textarea cols="3" rows="6" id="ZC_BLOG_COPYRIGHT" name="ZC_BLOG_COPYRIGHT" style="width:600px;">' . htmlspecialchars($zbp->option['ZC_BLOG_COPYRIGHT']) . '</textarea></p></td></tr>';
 
     echo '</table>';
@@ -1760,11 +1826,17 @@ if (stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false && function_exists(
     echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']);
     echo '</select></p></td></tr>';
 
-    echo '<tr><td><p><b>' . $zbp->lang['msg']['allow_upload_type'] . '</b></p></td><td><p><input id="ZC_UPLOAD_FILETYPE" name="ZC_UPLOAD_FILETYPE" style="width:600px;" type="text" value="' . $zbp->option['ZC_UPLOAD_FILETYPE'] . '" /></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['allow_upload_type'] . '</b></p></td><td><p><input id="ZC_UPLOAD_FILETYPE" name="ZC_UPLOAD_FILETYPE" style="width:600px;" type="text" value="' . htmlspecialchars($zbp->option['ZC_UPLOAD_FILETYPE']) . '" /></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['allow_upload_size'] . '</b></p></td><td><p><input id="ZC_UPLOAD_FILESIZE" name="ZC_UPLOAD_FILESIZE" style="width:600px;" type="text" value="' . $zbp->option['ZC_UPLOAD_FILESIZE'] . '" /></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['debug_mode'] . '</b></p></td><td><p><input id="ZC_DEBUG_MODE" name="ZC_DEBUG_MODE" type="text" value="' . $zbp->option['ZC_DEBUG_MODE'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['additional_security'] . '</b></p></td><td><p><input id="ZC_ADDITIONAL_SECURITY" name="ZC_ADDITIONAL_SECURITY" type="text" value="' . $zbp->option['ZC_ADDITIONAL_SECURITY'] . '" class="checkbox"/></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['gzip_compress'] . '</b></p></td><td><p><input id="ZC_GZIP_ENABLE" name="ZC_GZIP_ENABLE" type="text" value="' . $zbp->option['ZC_GZIP_ENABLE'] . '" class="checkbox"/></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['syntax_high_lighter'] . '</b></p></td><td><p><input id="ZC_SYNTAXHIGHLIGHTER_ENABLE" name="ZC_SYNTAXHIGHLIGHTER_ENABLE" type="text" value="' . $zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['using_cdn_guest_type'] . '</b></p></td><td><p><select id="ZC_USING_CDN_GUESTIP_TYPE" name="ZC_USING_CDN_GUESTIP_TYPE" style="width:600px;" >';
+    echo CreateOptionsOfGuestIPType($zbp->option['ZC_USING_CDN_GUESTIP_TYPE']);
+    echo '</select></p></td></tr>';
+
     echo '<tr><td><p><b>' . $zbp->lang['msg']['close_site'] . '</b></p></td><td><p><input id="ZC_CLOSE_SITE" name="ZC_CLOSE_SITE" type="text" value="' . $zbp->option['ZC_CLOSE_SITE'] . '" class="checkbox"/></p></td></tr>';
 
     echo '</table>';
@@ -1789,8 +1861,7 @@ if (stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false && function_exists(
     echo '<tr><td><p><b>' . $zbp->lang['msg']['comment_verify_enable'] . '</b></p></td><td><p><input id="ZC_COMMENT_VERIFY_ENABLE" name="ZC_COMMENT_VERIFY_ENABLE" type="text" value="' . $zbp->option['ZC_COMMENT_VERIFY_ENABLE'] . '" class="checkbox"/></p></td></tr>';
 
     echo '</table>';
-    echo '</div>';
-    ?>
+    echo '</div>'; ?>
                 </div>
                 <!-- End .content-box-content -->
 

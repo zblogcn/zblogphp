@@ -22,6 +22,9 @@ if (!$zbp->CheckPlugin('ZBPDK')) {
 }
 
 if (isset($_GET['act'])) {
+    if (function_exists('CheckHTTPRefererValid') && !CheckHTTPRefererValid()) {
+        return;
+    }
     switch ($_GET['act']) {
         case 'open':
             echo blogconfig_exportlist($_GET['name']);
@@ -52,6 +55,9 @@ if (isset($_GET['act'])) {
 }
 
 if (isset($_POST['act'])) {
+    if (function_exists('CheckHTTPRefererValid') && !CheckHTTPRefererValid()) {
+        return;
+    }
     switch ($_POST['act']) {
         case 'e_del':
             $zbp->configs[$_POST['name2']]->Del($_POST['name1']);
@@ -60,7 +66,7 @@ if (isset($_POST['act'])) {
             exit();
             break;
         case 'e_edit':
-            $name1=$_POST['name1'];
+            $name1 = $_POST['name1'];
             $config = $zbp->configs[$_POST['name2']]->$name1;
             $value = $_POST['post'];
             if (gettype($config) == 'boolean') {
@@ -68,7 +74,7 @@ if (isset($_POST['act'])) {
             } elseif (gettype($config) == 'integer') {
                 $value = (int) $value;
             }
-            $name1=$_POST['name1'];
+            $name1 = $_POST['name1'];
             $zbp->configs[$_POST['name2']]->$name1 = $value;
             $zbp->SaveConfig($_POST['name2']);
             echo blogconfig_exportlist($_POST['name2']);
@@ -90,13 +96,13 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
-  <div class="SubMenu"><?php echo $zbpdk->submenu->export('BlogConfig');?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
+  <div class="SubMenu"><?php echo $zbpdk->submenu->export('BlogConfig'); ?></div>
   <div id="divMain2">
     <div class="DIVBlogConfig">
       <div class="DIVBlogConfignav" name="tree" id="tree">
         <ul>
-            <?php echo blogconfig_left();?>
+            <?php echo blogconfig_left(); ?>
         </ul>
         <script type="text/javascript">
         $(document).ready(function() {
@@ -123,7 +129,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </div>
 
 <script>ActiveTopMenu('zbpdk');</script>
-<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png';?>");</script>
+<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png'; ?>");</script>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 RunTime();

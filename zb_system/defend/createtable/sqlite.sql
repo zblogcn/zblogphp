@@ -14,7 +14,7 @@ CREATE TABLE %pre%post (
   log_PostTime integer NOT NULL DEFAULT 0,
   log_CommNums integer NOT NULL DEFAULT 0,
   log_ViewNums integer NOT NULL DEFAULT 0,
-  log_Template varchar(50) NOT NULL DEFAULT '',
+  log_Template varchar(255) NOT NULL DEFAULT '',
   log_Meta text NOT NULL DEFAULT ''
 );
 
@@ -29,8 +29,8 @@ CREATE TABLE %pre%category (
   cate_Intro text NOT NULL DEFAULT '',
   cate_RootID integer NOT NULL DEFAULT 0,
   cate_ParentID integer NOT NULL DEFAULT 0,
-  cate_Template varchar(50) NOT NULL DEFAULT '',
-  cate_LogTemplate varchar(50) NOT NULL DEFAULT '',
+  cate_Template varchar(255) NOT NULL DEFAULT '',
+  cate_LogTemplate varchar(255) NOT NULL DEFAULT '',
   cate_Meta text NOT NULL DEFAULT ''
 );
 
@@ -42,12 +42,12 @@ CREATE TABLE %pre%comment (
   comm_RootID integer NOT NULL DEFAULT 0,
   comm_ParentID integer NOT NULL DEFAULT 0,
   comm_AuthorID integer NOT NULL DEFAULT 0,
-  comm_Name varchar(50) NOT NULL DEFAULT '',
-  comm_Email varchar(50) NOT NULL DEFAULT '',
+  comm_Name varchar(255) NOT NULL DEFAULT '',
+  comm_Email varchar(255) NOT NULL DEFAULT '',
   comm_HomePage varchar(255) NOT NULL DEFAULT '',
   comm_Content text NOT NULL DEFAULT '',
   comm_PostTime integer NOT NULL DEFAULT 0,
-  comm_IP varchar(15) NOT NULL DEFAULT '',
+  comm_IP varchar(255) NOT NULL DEFAULT '',
   comm_Agent text NOT NULL DEFAULT '',
   comm_Meta text NOT NULL DEFAULT ''
 );
@@ -55,7 +55,7 @@ CREATE TABLE %pre%comment (
 
 CREATE TABLE %pre%config (
   conf_ID integer primary key autoincrement,
-  conf_Name varchar(50) NOT NULL NOT NULL DEFAULT '',
+  conf_Name varchar(255) NOT NULL NOT NULL DEFAULT '',
   conf_Value text
 );
 
@@ -65,19 +65,19 @@ CREATE TABLE %pre%member (
   mem_Guid varchar(36) NOT NULL DEFAULT '',
   mem_Level integer NOT NULL DEFAULT 0,
   mem_Status integer NOT NULL DEFAULT 0,
-  mem_Name varchar(50) NOT NULL DEFAULT '',
+  mem_Name varchar(255) NOT NULL DEFAULT '',
   mem_Password varchar(32) NOT NULL DEFAULT '',
-  mem_Email varchar(50) NOT NULL DEFAULT '',
+  mem_Email varchar(255) NOT NULL DEFAULT '',
   mem_HomePage varchar(255) NOT NULL DEFAULT '',
-  mem_IP varchar(15) NOT NULL DEFAULT '',
+  mem_IP varchar(255) NOT NULL DEFAULT '',
   mem_PostTime integer NOT NULL DEFAULT 0,
-  mem_Alias varchar(50) NOT NULL DEFAULT '',
+  mem_Alias varchar(255) NOT NULL DEFAULT '',
   mem_Intro text NOT NULL DEFAULT '',
   mem_Articles integer NOT NULL DEFAULT 0,
   mem_Pages integer NOT NULL DEFAULT 0,
   mem_Comments integer NOT NULL DEFAULT 0,
   mem_Uploads integer NOT NULL DEFAULT 0,
-  mem_Template varchar(50) NOT NULL DEFAULT '',  
+  mem_Template varchar(255) NOT NULL DEFAULT '',  
   mem_Meta text NOT NULL DEFAULT ''
 );
 
@@ -85,13 +85,13 @@ CREATE TABLE %pre%member (
 CREATE TABLE %pre%module (
   mod_ID integer primary key autoincrement,
   mod_Name varchar(255) NOT NULL DEFAULT '',
-  mod_FileName varchar(50) NOT NULL DEFAULT '',
+  mod_FileName varchar(255) NOT NULL DEFAULT '',
   mod_Content text NOT NULL DEFAULT '',
   mod_SidebarID integer NOT NULL DEFAULT 0,
-  mod_HtmlID varchar(50) NOT NULL DEFAULT '',
+  mod_HtmlID varchar(255) NOT NULL DEFAULT '',
   mod_Type varchar(5) NOT NULL DEFAULT '',
   mod_MaxLi integer NOT NULL DEFAULT 0,
-  mod_Source varchar(50) NOT NULL DEFAULT '',
+  mod_Source varchar(255) NOT NULL DEFAULT '',
   mod_IsHideTitle bit NOT NULL DEFAULT 0,
   mod_Meta text NOT NULL DEFAULT ''
 );
@@ -105,7 +105,7 @@ CREATE TABLE %pre%tag (
   tag_Count integer NOT NULL DEFAULT 0,
   tag_Alias varchar(255) NOT NULL DEFAULT '',  
   tag_Intro text NOT NULL DEFAULT '',
-  tag_Template varchar(50) NOT NULL DEFAULT '',
+  tag_Template varchar(255) NOT NULL DEFAULT '',
   tag_Meta text NOT NULL DEFAULT ''
 );
 
@@ -116,7 +116,7 @@ CREATE TABLE %pre%upload (
   ul_Size integer NOT NULL DEFAULT 0,
   ul_Name varchar(255) NOT NULL DEFAULT '',
   ul_SourceName varchar(255) NOT NULL DEFAULT '',
-  ul_MimeType varchar(50) NOT NULL DEFAULT '',
+  ul_MimeType varchar(255) NOT NULL DEFAULT '',
   ul_PostTime integer NOT NULL DEFAULT 0,
   ul_DownNums integer NOT NULL DEFAULT 0,
   ul_LogID int(11) NOT NULL DEFAULT '0',  

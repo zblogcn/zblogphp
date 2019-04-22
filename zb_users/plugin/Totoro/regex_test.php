@@ -15,35 +15,6 @@ if (!$zbp->CheckPlugin('Totoro')) {
 Totoro_init();
 $blogtitle = 'Totoro反垃圾评论';
 
-/*
-On Error Resume Next
-Set o=New RegExp
-t=Request.Form("string")
-o.Global=True
-o.IgnoreCase=True
-o.Pattern="("&Request.Form("regexp")&")"
-'Set m=o.Execute(t)
-h=TransferHTML(t,"[html-format]")
-t=h
-'For Each s in m
-'h=Replace(h,s.value,"<span style=""background-color:#92d050"">"&s.value&"</span>")
-'Next
-h=o.replace(h,"<span style=""background-color:#92d050"">$1</span>")
-n1=RunTime
-If Err.Number<>0 Then
-
-Else
-n="用时"&n1&"ms"
-if (t<>h) then h=n&"<br/><br/>检测到黑词或敏感词：<br/><br/>"&h  else h=n&"<br/><br/>"&h
-End If
-
-
-
-
-
-Response.Write h
-Response.End
- */
 if (GetVars('type', 'GET') == 'test') {
     set_error_handler(create_function('', ''));
     set_exception_handler(create_function('', ''));
@@ -81,8 +52,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
-  <div class="SubMenu"><?php echo $Totoro->export_submenu('regex_test');?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
+  <div class="SubMenu"><?php echo $Totoro->export_submenu('regex_test'); ?></div>
   <div id="divMain2">
     <table width="100%" style="padding:0px;margin:1px;line-height:20px" cellspacing="0" cellpadding="0">
       <tr height="40">
@@ -120,7 +91,7 @@ $(document).ready(function(e) {
 });
 </script>
 <script type="text/javascript">ActiveLeftMenu("aPluginMng");</script>
-<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Totoro/logo.png';?>");</script>
+<script type="text/javascript">AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/Totoro/logo.png'; ?>");</script>
 </div>
 </div>
 <?php

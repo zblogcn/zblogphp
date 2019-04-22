@@ -19,6 +19,9 @@ if (!$zbp->CheckPlugin('Gravatar')) {
 $blogtitle = 'Gravatar头像';
 
 if (count($_POST) > 0) {
+    if (function_exists('CheckIsRefererValid')) {
+        CheckIsRefererValid();
+    }
     $zbp->Config('Gravatar')->default_url = $_POST['default_url'];
     $zbp->Config('Gravatar')->source = $_POST['source'];
     $zbp->Config('Gravatar')->local_priority = $_POST['local_priority'];
@@ -37,6 +40,10 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div class="SubMenu"></div>
   <div id="divMain2">
     <form id="edit" name="edit" method="post" action="#">
+        <?php if (function_exists('CheckIsRefererValid')) {
+    echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
+}?>
+
 <input id="reset" name="reset" type="hidden" value="" />
 <table border="1" class="tableFull tableBorder tableBorder-thcenter">
 <tr>
@@ -51,11 +58,10 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <td><span class='note'>可选值: </span></td>
 <td>
     <p><b>V2EX</b>：<a href="javascript:void(0)" class="enterGravatar">https://cdn.v2ex.com/gravatar/{%emailmd5%}.png?s=60&d=mm&r=G</a></p>
-    <p><b>MoeNet公共库</b>：<a href="javascript:void(0)" class="enterGravatar">https://gravatar.moefont.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
-    <p><b>多说CDN</b>：<a href="javascript:void(0)" class="enterGravatar">http://gravatar.duoshuo.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
-    <p><b>官方加密</b>：<a href="javascript:void(0)" class="enterGravatar">https://secure.gravatar.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
-    <p><b>官方</b>：<a href="javascript:void(0)" class="enterGravatar">http://cn.gravatar.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
-    </td>
+    <p><b>loli.net</b>：<a href="javascript:void(0)" class="enterGravatar">https://gravatar.loli.net/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
+    <p><b>官方站点1</b>：<a href="javascript:void(0)" class="enterGravatar">https://cn.gravatar.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
+    <p><b>官方站点2</b>：<a href="javascript:void(0)" class="enterGravatar">https://secure.gravatar.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
+        </td>
 </tr>
 <tr>
 <td><p align='left'><b>·无邮箱时的替换图片地址</b><br/><span class='note'></span></p></td>

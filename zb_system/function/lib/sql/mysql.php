@@ -1,5 +1,9 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
-class SQLMySQL extends SQLGlobal
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+class SQL__MySQL extends SQL__Global
 {
     /**
      * @override
@@ -14,6 +18,7 @@ class SQLMySQL extends SQLGlobal
         parent::__construct($db);
         $this->option['engine'] = $GLOBALS['zbp']->option['ZC_MYSQL_ENGINE'];
     }
+
     /**
      * @override
      */
@@ -35,6 +40,7 @@ class SQLMySQL extends SQLGlobal
 
         return $this;
     }
+
     /**
      * @todo
      * @override
@@ -48,7 +54,6 @@ class SQLMySQL extends SQLGlobal
 
             return;
         }
-
 
         $sqlAll = array();
         foreach ($this->table as $tableIndex => $table) {
@@ -104,6 +109,11 @@ class SQLMySQL extends SQLGlobal
                 if ($value[1] == 'double' || $value[1] == 'float') {
                     $sql[] = $value[0] . " $value[1] NOT NULL DEFAULT 0" . ',';
                 }
+                if ($value[1] == 'decimal') {
+                    $d1 = $value[2][0];
+                    $d2 = $value[2][1];
+                    $sql[] = $value[0] . " $value[1]($d1,$d2) NOT NULL DEFAULT 0" . ',';
+                }
                 if ($value[1] == 'date' || $value[1] == 'time' || $value[1] == 'datetime') {
                     $sql[] = $value[0] . " $value[1] NOT NULL,";
                 }
@@ -115,7 +125,7 @@ class SQLMySQL extends SQLGlobal
             $sql[] = 'PRIMARY KEY (' . $idname . ')';
             $myengtype = $this->db->dbengine;
 
-            if (is_array($engine) && count($engine)>0) {
+            if (is_array($engine) && count($engine) > 0) {
                 $myengtype = $engine[1];
             }
 
@@ -128,7 +138,6 @@ class SQLMySQL extends SQLGlobal
         }
         $this->_sql = $sqlAll;
     }
-
 
     protected function buildIndex()
     {

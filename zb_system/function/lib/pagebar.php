@@ -1,13 +1,13 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 /**
  * 分页条码
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/PageBar 类库
  */
 class PageBar
 {
-
     /**
      * @var int|null 内容总数
      */
@@ -75,13 +75,14 @@ class PageBar
 
     /**
      * @param $url
-     * @param bool $makereplace
+     * @param bool $makeReplace
+     * @param bool $isIndex
      */
-    public function __construct($url, $makereplace = true, $isindex = false)
+    public function __construct($url, $makeReplace = true, $isIndex = false)
     {
         $this->UrlRule = new UrlRule($url);
-        $this->UrlRule->MakeReplace = $makereplace;
-        $this->UrlRule->IsIndex = $isindex;
+        $this->UrlRule->MakeReplace = $makeReplace;
+        $this->UrlRule->IsIndex = $isIndex;
         $this->Buttons = &$this->buttons;
         $this->PrevButton = &$this->prevbutton;
         $this->NextButton = &$this->nextbutton;
@@ -89,13 +90,12 @@ class PageBar
 
     /**
      * 构造分页条
-     * @return null
      */
     public function Make()
     {
         global $zbp;
         if ($this->PageCount == 0) {
-            return null;
+            return;
         }
 
         $this->PageAll = ceil($this->Count / $this->PageCount);

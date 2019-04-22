@@ -1,10 +1,15 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
-class SQLSQLite extends SQLGlobal
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+class SQL__SQLite extends SQL__Global
 {
     /**
      * @override
      */
     public $className = __CLASS__;
+
     /**
      * @param object $db
      */
@@ -12,6 +17,7 @@ class SQLSQLite extends SQLGlobal
     {
         parent::__construct($db);
     }
+
     /**
      * @todo
      * @override
@@ -22,6 +28,7 @@ class SQLSQLite extends SQLGlobal
 
         return $this;
     }
+
     /**
      * @todo
      * @override
@@ -65,6 +72,11 @@ class SQLSQLite extends SQLGlobal
                 }
                 if ($value[1] == 'double' || $value[1] == 'float') {
                     $createData[] = $value[0] . " $value[1] NOT NULL DEFAULT 0";
+                }
+                if ($value[1] == 'decimal') {
+                    $d1 = $value[2][0];
+                    $d2 = $value[2][1];
+                    $createData[] = $value[0] . " $value[1]($d1,$d2) NOT NULL DEFAULT 0";
                 }
                 if ($value[1] == 'date' || $value[1] == 'datetime') {
                     $createData[] = $value[0] . " $value[1] NOT NULL";

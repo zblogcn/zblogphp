@@ -1,13 +1,15 @@
 <?php
 /**
- * api
+ * api.
+ *
  * @author zsx<zsx@zsxsoft.com>
- * @package api/route/comment
  * @php >= 5.2
  */
 /**
- * Format single comment object
+ * Format single comment object.
+ *
  * @param object $comment
+ *
  * @return array
  */
 function return_comment($id)
@@ -22,11 +24,10 @@ function return_comment($id)
 }
 
 /**
- * Get comment
+ * Get comment.
  */
 function api_comment_get_function()
 {
-
     $id = (int) API::$IO->id;
     if ($id === 0) {
         API::$IO->end(3);
@@ -39,7 +40,7 @@ function api_comment_get_function()
 API::$Route->get('/comment/', 'api_comment_get_function');
 
 /**
- * Get comments
+ * Get comments.
  */
 function api_comments_get_function()
 {
@@ -47,7 +48,7 @@ function api_comments_get_function()
 API::$Route->get('/comments/', 'api_comments_get_function');
 
 /**
- * Create comment
+ * Create comment.
  */
 function api_comment_create_function()
 {
@@ -55,7 +56,7 @@ function api_comment_create_function()
 API::$Route->post('/comment/create/', 'api_comment_create_function');
 
 /**
- * Update comment
+ * Update comment.
  */
 function api_comment_update_function()
 {
@@ -63,7 +64,7 @@ function api_comment_update_function()
 API::$Route->post('/comment/update/', 'api_comment_update_function');
 
 /**
- * Update comment
+ * Update comment.
  */
 function api_comment_delete_function()
 {

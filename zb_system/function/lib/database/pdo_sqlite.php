@@ -1,13 +1,13 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
-/**
- * SQLite3数据库操作类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/DataBase/DbSQLite3 类库
- */
-class DbSQLite3 implements iDataBase
-{
+<?php
 
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+/**
+ * pdo_SQLite数据库操作类.
+ */
+class Database__PDO_SQLite implements Database__Interface
+{
     public $type = 'sqlite';
     public $version = '3';
 
@@ -15,17 +15,18 @@ class DbSQLite3 implements iDataBase
      * @var string|null 数据库名前缀
      */
     public $dbpre = null;
-    private $db = null; #数据库连接实例
+    private $db = null; //数据库连接实例
     /**
      * @var string|null 数据库名
      */
     public $dbname = null;
     /**
-     * @var DbSql|null
+     * @var DbSql|null DbSql实例
      */
     public $sql = null;
+
     /**
-     * 构造函数，实例化$sql参数
+     * 构造函数，实例化$sql参数.
      */
     public function __construct()
     {
@@ -34,44 +35,49 @@ class DbSQLite3 implements iDataBase
 
     /**
      * @param $s
+     *
      * @return string
      */
     public function EscapeString($s)
     {
-        return SQLite3::escapeString($s);
+        return str_ireplace('\'', '\'\'', $s);
     }
 
     /**
      * @param $array
+     *
      * @return bool
      */
     public function Open($array)
     {
-        if ($this->db = new SQLite3($array[0])) {
-            $this->dbpre = $array[1];
-            $this->dbname = $array[0];
+        $db_link = new PDO('sqlite:' . $array[0]);
+        $this->db = $db_link;
+        $this->dbpre = $array[1];
+        $this->dbname = $array[0];
 
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
 
     /**
-     * 关闭数据库连接
+     * 关闭数据库连接.
      */
     public function Close()
     {
-        $this->db->close();
+        $this->db = null;
     }
 
     /**
+     * 执行多行SQL语句.
+     *
      * @param $s
      */
     public function QueryMulit($s)
     {
         return $this->QueryMulti($s);
-    }//错别字函数，历史原因保留下来
+    }
+
+    //错别字函数，历史原因保留下来
+
     public function QueryMulti($s)
     {
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
@@ -79,13 +85,14 @@ class DbSQLite3 implements iDataBase
         foreach ($a as $s) {
             $s = trim($s);
             if ($s != '') {
-                $this->db->query($this->sql->Filter($s));
+                $this->db->exec($this->sql->Filter($s));
             }
         }
     }
 
     /**
      * @param $query
+     *
      * @return array
      */
     public function Query($query)
@@ -93,24 +100,18 @@ class DbSQLite3 implements iDataBase
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
         $results = $this->db->query($this->sql->Filter($query));
-        $data = array();
-        if (!($results instanceof Sqlite3Result)) {
-            return $data;
-        }
-        if ($results->numColumns() > 0) {
-            while ($row = $results->fetchArray()) {
-                $data[] = $row;
-            }
+        //fetch || fetchAll
+        if (is_object($results)) {
+            return $results->fetchAll();
         } else {
-            $data[] = $results->numColumns();
+            return array($results);
         }
-
-        return $data;
     }
 
     /**
      * @param $query
-     * @return mixed
+     *
+     * @return bool|mysqli_result
      */
     public function Update($query)
     {
@@ -120,7 +121,8 @@ class DbSQLite3 implements iDataBase
 
     /**
      * @param $query
-     * @return mixed
+     *
+     * @return bool|mysqli_result
      */
     public function Delete($query)
     {
@@ -130,14 +132,15 @@ class DbSQLite3 implements iDataBase
 
     /**
      * @param $query
-     * @return mixed
+     *
+     * @return int
      */
     public function Insert($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        $this->db->query($this->sql->Filter($query));
+        $this->db->exec($this->sql->Filter($query));
 
-        return $this->db->lastInsertRowID();
+        return $this->db->lastInsertId();
     }
 
     /**
@@ -159,11 +162,12 @@ class DbSQLite3 implements iDataBase
 
     /**
      * @param $table
+     *
+     * @return bool
      */
     public function ExistTable($table)
     {
-
-        $a = $this->Query($this->sql->ExistTable($table));
+        $a = $this->Query($this->sql->ExistTable($table, $this->dbname));
         if (!is_array($a)) {
             return false;
         }

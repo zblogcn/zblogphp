@@ -1,4 +1,5 @@
 <?php
+
 require './function/c_system_base.php';
 $zbp->Load();
 $action = GetVars('act', 'GET');
@@ -14,18 +15,23 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Begin'] as $fpname => &$fpsignal) 
 
 switch ($action) {
     case 'login':
-        if ( !empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
-            Redirect(GetVars('redirect', 'GET'));
+        if (!empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
+            $a = parse_url(GetVars('redirect', 'GET'));
+            $b = parse_url($zbp->host);
+            if (isset($a['host']) && isset($b['host']) && strtolower($a['host']) == strtolower($b['host'])) {
+                Redirect(GetVars('redirect', 'GET'));
+            }
         }
         if ($zbp->CheckRights('admin')) {
             Redirect('cmd.php?act=admin');
         }
-        if ( empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
+        if (empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
             setcookie("redirect", GetVars('redirect', 'GET'), 0, $zbp->cookiespath);
         }
         Redirect('login.php');
         break;
     case 'logout':
+        CheckIsRefererValid();
         Logout();
         Redirect('../');
         break;
@@ -33,9 +39,16 @@ switch ($action) {
         Redirect('admin/index.php?act=admin');
         break;
     case 'verify':
+        /*
+         * 考虑兼容原因，此处不加CSRF验证。logout加的原因是主题的退出无大碍。
+         */
         if (VerifyLogin()) {
-            if ( !empty($zbp->user->ID) && GetVars('redirect', 'COOKIE')) {
-                Redirect(GetVars('redirect', 'COOKIE'));
+            if (!empty($zbp->user->ID) && GetVars('redirect', 'COOKIE')) {
+                $a = parse_url(GetVars('redirect', 'COOKIE'));
+                $b = parse_url($zbp->host);
+                if (isset($a['host']) && isset($b['host']) && strtolower($a['host']) == strtolower($b['host'])) {
+                    Redirect(GetVars('redirect', 'COOKIE'));
+                }
             }
             Redirect('admin/index.php?act=admin');
         } else {
@@ -58,6 +71,7 @@ switch ($action) {
 
         switch ($miscType) {
             case 'statistic':
+                CheckIsRefererValid();
                 if (!$zbp->CheckRights('admin')) {
                     echo $zbp->ShowError(6, __FILE__, __LINE__);
                     die();
@@ -65,6 +79,7 @@ switch ($action) {
                 misc_statistic();
                 break;
             case 'updateinfo':
+                CheckIsRefererValid();
                 if (!$zbp->CheckRights('root')) {
                     echo $zbp->ShowError(6, __FILE__, __LINE__);
                     die();
@@ -72,6 +87,8 @@ switch ($action) {
                 misc_updateinfo();
                 break;
             case 'showtags':
+                $zbp->csrfExpiration = 48;
+                CheckIsRefererValid();
                 if (!$zbp->CheckRights('ArticleEdt')) {
                     Http404();
                     die();
@@ -90,6 +107,9 @@ switch ($action) {
                     die();
                 }
                 misc_phpif();
+                break;
+            case 'ping':
+                misc_ping();
                 break;
             default:
                 break;
@@ -127,10 +147,7 @@ switch ($action) {
         Redirect('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ArticleDel':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         DelArticle();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -141,24 +158,20 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ArticlePst':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        $zbp->csrfExpiration = 48;
+        CheckIsRefererValid();
         PostArticle();
         $zbp->BuildModule();
         $zbp->SaveCache();
         $zbp->SetHint('good');
-        Redirect('cmd.php?act=ArticleMng');
+        echo '<script>localStorage.removeItem("zblogphp_article_" + decodeURIComponent(' . urlencode(GetVars('ID', 'POST')) . '));</script>';
+        RedirectByScript('cmd.php?act=ArticleMng');
         break;
     case 'PageEdt':
         Redirect('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PageDel':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         DelPage();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -169,15 +182,14 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PagePst':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        $zbp->csrfExpiration = 48;
+        CheckIsRefererValid();
         PostPage();
         $zbp->BuildModule();
         $zbp->SaveCache();
         $zbp->SetHint('good');
-        Redirect('cmd.php?act=PageMng');
+        echo '<script>localStorage.removeItem("zblogphp_article_" + decodeURIComponent(' . urlencode(GetVars('ID', 'POST')) . '));</script>';
+        RedirectByScript('cmd.php?act=PageMng');
         break;
     case 'CategoryMng':
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
@@ -186,10 +198,7 @@ switch ($action) {
         Redirect('admin/category_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'CategoryPst':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         PostCategory();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -197,10 +206,7 @@ switch ($action) {
         Redirect('cmd.php?act=CategoryMng');
         break;
     case 'CategoryDel':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         DelCategory();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -208,10 +214,7 @@ switch ($action) {
         Redirect('cmd.php?act=CategoryMng');
         break;
     case 'CommentDel':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         DelComment();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -219,10 +222,7 @@ switch ($action) {
         Redirect($_SERVER["HTTP_REFERER"]);
         break;
     case 'CommentChk':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         CheckComment();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -230,9 +230,7 @@ switch ($action) {
         Redirect($_SERVER["HTTP_REFERER"]);
         break;
     case 'CommentBat':
-        if (isset($_POST['id']) == false) {
-            Redirect($_SERVER["HTTP_REFERER"]);
-        }
+        CheckIsRefererValid();
         BatchComment();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -252,10 +250,7 @@ switch ($action) {
         Redirect('admin/member_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'MemberPst':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         PostMember();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -263,10 +258,7 @@ switch ($action) {
         Redirect('cmd.php?act=MemberMng');
         break;
     case 'MemberDel':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         if (DelMember()) {
             $zbp->BuildModule();
             $zbp->SaveCache();
@@ -280,19 +272,13 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'UploadPst':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         PostUpload();
         $zbp->SetHint('good');
         Redirect('cmd.php?act=UploadMng');
         break;
     case 'UploadDel':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         DelUpload();
         $zbp->SetHint('good');
         Redirect('cmd.php?act=UploadMng');
@@ -304,10 +290,7 @@ switch ($action) {
         Redirect('admin/tag_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'TagPst':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         PostTag();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -315,10 +298,7 @@ switch ($action) {
         Redirect('cmd.php?act=TagMng');
         break;
     case 'TagDel':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         DelTag();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -334,10 +314,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PluginDis':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         $disableResult = DisablePlugin(GetVars('name', 'GET'));
         if (is_object($disableResult)) {
             // 本来应该用ShowError的，但是不太方便，算了
@@ -353,10 +330,7 @@ switch ($action) {
         Redirect('cmd.php?act=PluginMng');
         break;
     case 'PluginEnb':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         $install = '&install=';
         $install .= EnablePlugin(GetVars('name', 'GET'));
         $zbp->BuildModule();
@@ -374,6 +348,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ThemeSet':
+        CheckIsRefererValid();
         $install = '&install=';
         $install .= SetTheme(GetVars('theme', 'POST'), GetVars('style', 'POST'));
         $zbp->BuildModule();
@@ -382,6 +357,7 @@ switch ($action) {
         Redirect('cmd.php?act=ThemeMng' . $install);
         break;
     case 'SidebarSet':
+        CheckIsRefererValid();
         SetSidebar();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -390,10 +366,7 @@ switch ($action) {
         Redirect('admin/module_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ModulePst':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         PostModule();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -401,10 +374,7 @@ switch ($action) {
         Redirect('cmd.php?act=ModuleMng');
         break;
     case 'ModuleDel':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         DelModule();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -418,10 +388,7 @@ switch ($action) {
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'SettingSav':
-        if (!$zbp->ValidToken(GetVars('token', 'GET'))) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-            die();
-        }
+        CheckIsRefererValid();
         SaveSetting();
         $zbp->BuildModule();
         $zbp->SaveCache();

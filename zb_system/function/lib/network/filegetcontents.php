@@ -1,21 +1,21 @@
-<?php if (!defined('ZBP_PATH')) exit('Access denied');
-/**
- * 获取链接内容类
- *
- * @package Z-BlogPHP
- * @subpackage ClassLib/Network/Networkfile_get_contents 网络连接
- */
-class Networkfile_get_contents implements iNetwork
-{
+<?php
 
-    private $readyState = 0; #状态
-    private $responseBody = null; #返回的二进制
-    private $responseStream = null; #返回的数据流
-    private $responseText = ''; #返回的数据
-    private $responseXML = null; #尝试把responseText格式化为XMLDom
-    private $status = 0; #状态码
-    private $statusText = ''; #状态码文本
-    private $responseVersion = ''; #返回的HTTP版体
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+/**
+ * 获取链接内容类.
+ */
+class Network__Filegetcontents implements Network__Interface
+{
+    private $readyState = 0; //状态
+    private $responseBody = null; //返回的二进制
+    private $responseStream = null; //返回的数据流
+    private $responseText = ''; //返回的数据
+    private $responseXML = null; //尝试把responseText格式化为XMLDom
+    private $status = 0; //状态码
+    private $statusText = ''; //状态码文本
+    private $responseVersion = ''; //返回的HTTP版体
 
     private $option = array();
     private $url = '';
@@ -32,6 +32,7 @@ class Networkfile_get_contents implements iNetwork
     /**
      * @param $property_name
      * @param $value
+     *
      * @throws Exception
      */
     public function __set($property_name, $value)
@@ -41,6 +42,7 @@ class Networkfile_get_contents implements iNetwork
 
     /**
      * @param $property_name
+     *
      * @return mixed
      */
     public function __get($property_name)
@@ -60,16 +62,13 @@ class Networkfile_get_contents implements iNetwork
             if (isset($this->parsed_url[strtolower($property_name)])) {
                 return $this->parsed_url[strtolower($property_name)];
             } else {
-                return null;
+                return;
             }
         } else {
             return $this->$property_name;
         }
     }
 
-    /**
-     *
-     */
     public function abort()
     {
     }
@@ -84,6 +83,7 @@ class Networkfile_get_contents implements iNetwork
 
     /**
      * @param $bstrHeader
+     *
      * @return string
      */
     public function getResponseHeader($bstrHeader)
@@ -111,11 +111,13 @@ class Networkfile_get_contents implements iNetwork
     /**
      * @param $bstrMethod
      * @param $bstrUrl
-     * @param bool $varAsync
+     * @param bool   $varAsync
      * @param string $bstrUser
      * @param string $bstrPassword
-     * @return bool
+     *
      * @throws Exception
+     *
+     * @return bool
      */
     public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '')
     {
@@ -177,7 +179,7 @@ class Networkfile_get_contents implements iNetwork
         if ($this->maxredirs > 0) {
             $this->option['follow_location'] = true;
             //补一个数字 要大于1才跳转
-            $this->option['max_redirects'] = $this->maxredirs+1;
+            $this->option['max_redirects'] = $this->maxredirs + 1;
         } else {
             $this->option['follow_location'] = 0;
             $this->option['max_redirects'] = 0;
@@ -190,7 +192,7 @@ class Networkfile_get_contents implements iNetwork
         ZBlogException::ResumeErrorHook();
 
         foreach ($this->responseHeader as $key => $value) {
-            if (strpos($value, 'HTTP/')===0) {
+            if (strpos($value, 'HTTP/') === 0) {
                 if (isset($this->responseHeader[$key])) {
                     $this->statusText = $this->responseHeader[$key];
                     $a = explode(' ', $this->statusText);
@@ -211,6 +213,7 @@ class Networkfile_get_contents implements iNetwork
      * @param $bstrHeader
      * @param $bstrValue
      * @param bool $append
+     *
      * @return bool
      */
     public function setRequestHeader($bstrHeader, $bstrValue, $append = false)
@@ -239,9 +242,11 @@ class Networkfile_get_contents implements iNetwork
             'type' => 'text',
         );
     }
+
     /**
      * @param string $name
      * @param string $entity
+     *
      * @return mixed
      */
     public function addBinary($name, $entity, $filename = null, $mime = '')
@@ -274,11 +279,14 @@ class Networkfile_get_contents implements iNetwork
         $return['mime'] = $mime;
 
         $this->postdata[$name] = $return;
+
+        return true;
     }
 
     /**
      * @param string $name
      * @param string $entity
+     *
      * @return mixed
      */
     public function addText($name, $entity)
@@ -327,7 +335,7 @@ class Networkfile_get_contents implements iNetwork
     }
 
     /**
-     * Build Boundary
+     * Build Boundary.
      */
     private function __buildBoundary()
     {
@@ -335,19 +343,17 @@ class Networkfile_get_contents implements iNetwork
         $boundary .= substr(md5(time()), 8, 16);
         $this->__boundary = $boundary;
     }
-    /**
-     *
-     */
+
     private function reinit()
     {
         global $zbp;
-        $this->readyState = 0; #状态
-        $this->responseBody = null; #返回的二进制
-        $this->responseStream = null; #返回的数据流
-        $this->responseText = ''; #返回的数据
-        $this->responseXML = null; #尝试把responseText格式化为XMLDom
-        $this->status = 0; #状态码
-        $this->statusText = ''; #状态码文本
+        $this->readyState = 0; //状态
+        $this->responseBody = null; //返回的二进制
+        $this->responseStream = null; //返回的数据流
+        $this->responseText = ''; //返回的数据
+        $this->responseXML = null; //尝试把responseText格式化为XMLDom
+        $this->status = 0; //状态码
+        $this->statusText = ''; //状态码文本
 
         $this->__isBinary = false;
         $this->__boundary = '';
@@ -362,7 +368,7 @@ class Networkfile_get_contents implements iNetwork
     }
 
     /**
-     * 启用Gzip
+     * 启用Gzip.
      */
     public function enableGzip()
     {
