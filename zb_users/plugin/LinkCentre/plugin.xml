@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="php">
+<id>LinkCentre</id>
+<name>链接管理器</name>
+<url>https://www.zblogcn.com/</url>
+<note>管理导航、友情链接等模块</note>
+<description>管理导航、友情链接等模块，在吉光和沉水浮冰的基础上修改的版本！</description>
+<path></path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>zx.asd</name>
+  <email>rainbowsoft@gmail.com</email>
+  <url>https://www.zdevo.com/</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>131221</adapted>
+<version>0.1</version>
+<pubdate>2019-04-24</pubdate>
+<modified>2019-04-24</modified>
+<price>0</price>
+<phpver>5.2</phpver>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+</sidebars>
+</plugin>
