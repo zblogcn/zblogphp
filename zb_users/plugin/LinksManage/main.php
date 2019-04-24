@@ -18,8 +18,11 @@ if (GetVars('act', 'GET') == 'save') {
     if (function_exists('CheckIsRefererValid')) {
         CheckIsRefererValid();
     }
+    // todo
+    // GetModuleByFileName 判断是否重复
     $mod = $zbp->GetModuleByID(GetVars('ID', 'POST'));
     $content = '';
+    // 解析表单内容为数组
     $sub = 0;
     $tree = (int) $_POST['tree'] == 1;
     $items = array();
@@ -31,7 +34,7 @@ if (GetVars('act', 'GET') == 'save') {
         }
         $item->href = $_POST['href'][$k];
         $item->title = $_POST['title'][$k];
-        $item->target = !$_POST['target'][$k] ? '' : '_blank';
+        $item->target = (bool) $_POST['target'][$k] ? '_blank' : '';
         $item->name = $_POST['name'][$k];
         $item->subs = array();
         $item->issub = 0;
@@ -43,10 +46,10 @@ if (GetVars('act', 'GET') == 'save') {
             $parent = &$items[$k];
         }
     }
-    //$fileName = GetVars('FileName', 'POST');
-    //$file = LinksManage_Path("usr") . $fileName . ".json";
-    //file_put_contents($file, json_encode($items));
-    $mod->Metas->LM_json = $file;
+    // 转为JSON后存至Meta
+    $mod->Metas->LM_json = json_encode($items);
+    // 生成content
+    $fileName = GetVars('FileName', 'POST');
     $outTpl = "Links_defend";
     if (isset($zbp->template->templates["Links_{$fileName}"])) {
         $outTpl = "Links_{$fileName}";
@@ -59,36 +62,51 @@ if (GetVars('act', 'GET') == 'save') {
     $content = str_replace(array('target="" ', ' target=""', "\n"), "", CloseTags($content));
     $content = preg_replace('/>\s+</', "><", $content);
     $mod->Content = $content;
+    // 其他字段写入
     $mod->Name = $_POST['Name'];
-    $mod->FileName = $_POST['FileName'];
+    if ($mod->ID == 0) {
+        $mod->FileName = $fileName;
+    }
     $mod->HtmlID = $_POST['HtmlID'];
     $mod->Source = $_POST['Source'];
-    $mod->IsHideTitle = (bool) $_POST['IsHideTitle'];
-    if ($_POST['IsDiv'] == 1) {
-        $mod->Type = 'div';
-    } else {
-        $mod->Type = 'ul';
-    }
+    $mod->IsHideTitle = (int) $_POST['IsHideTitle'];
+    $mod->Type = 'ul';
     $mod->MaxLi = 0;
     FilterModule($mod);
+    // 保存并更新缓存
     $mod->Save();
     $zbp->AddBuildModule($mod->FileName);
     $zbp->BuildModule();
+
+    // 写入文件
+    // $file = LinksManage_Path("usr") . $mod->FileName . ".json";
+    // file_put_contents($file, json_encode($items));
+
     $zbp->SetHint('good');
     Redirect($_POST['stay'] == '1' ? $_SERVER['HTTP_REFERER'] : '../../../zb_system/cmd.php?act=ModuleMng');
 }
+
 $mod = new Module();
 $mod->ID = 0;
 $mod->Source = 'plugin_LinksManage';
 $list = '<tr><td><input type="text" name="href[]" value="http://" size="30" /></td><td><input type="text" name="title[]" value="链接描述" size="30" /></td><td><input type="text" name="name[]" value="新名称" size="20" /></td><td><input type="text" name="target[]" class="checkbox" value="0" /></td><td><input type="text" name="sub[]" class="checkbox" value="0" /></td></tr>';
+
 $islock = '';
 $tree = null;
 $delbtn = '';
+
 if ($edit = GetVars('edit', 'GET')) {
     if (!empty($edit)) {
         $mod = $zbp->modulesbyfilename[$edit];
     }
-    $file_contents = $mod->Metas->LM_json;
+    //旧版升级
+    $file = LinksManage_Path("usr") . $edit . ".json";
+    if (is_file($file)){
+      $file_contents = file_get_contents($file);
+      unlink($file);
+    } else{
+      $file_contents = $mod->Metas->LM_json;
+    }
     if (strlen($file_contents) > 0 && $items = json_decode($file_contents)) {
         $list = '';
         foreach ($items as $item) {
@@ -140,13 +158,18 @@ if ($edit = GetVars('edit', 'GET')) {
         }
     }
     if ($mod->Source == 'system' || $mod->Source == 'theme') {
-        $islock = 'readonly="readonly"';
+      $islock = 'readonly="readonly"';
     }
     $delbtn = $mod->Source === 'plugin_LinksManage' ? '&nbsp;<a title="删除当前模块"
     onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');"
     href="' . BuildSafeCmdURL('act=ModuleDel&amp;source=theme&amp;filename=' . $mod->FileName) . '"><img
       src="' . $zbp->host . 'zb_system/image/admin/delete.png" alt="删除" title="删除" width="16"></a>' : '';
+    $bakFile = LinksManage_Path("bakdir") . "{$mod->FileName}.txt";
+    if (is_file($bakFile)) {
+        $bakUrl = str_replace($zbp->path, $zbp->host, $bakFile);
+    }
 }
+
 $blogtitle = '链接管理';
 $blogtitle .= $mod->Name !== "" ? "（{$mod->Name}）" : "";
 require $blogpath . 'zb_system/admin/admin_header.php';
@@ -196,7 +219,6 @@ require $blogpath . 'zb_system/admin/admin_top.php';
           <th><?php echo $lang['msg']['filename'] ?>（非中文且文件命名可用）</th>
           <th><?php echo $lang['msg']['htmlid'] ?>（HTML规范的元素ID）</th>
           <th class="td10"><?php echo $lang['msg']['hide_title'] ?></th>
-          <th class="td10"><abbr title="手工输入HTML代码，插件不接管内容。">切换为DIV型[?]</abbr></th>
           <th class="td10"><?php echo $lang['msg']['del'] ?></th>
           <th class="td10 hidden"><abbr title="关闭树形则采用嵌套格式，即二级菜单默认隐藏">树形[?]</abbr></th>
         </tr>
@@ -207,8 +229,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
               value="<?php echo $mod->FileName; ?>" <?php echo $islock ?> /></td>
           <td><input id="edtHtmlID" size="20" name="HtmlID" type="text" value="<?php echo $mod->HtmlID; ?>" />
           </td>
-          <td class="tdCenter"><input type="text" id="IsHideTitle" name="IsHideTitle" class="checkbox" value="<?php echo $mod->IsHideTitle; ?>"/></td>
-          <td class="tdCenter"><input type="text" id="IsDiv" name="IsDiv" class="checkbox" value="<?php echo $mod->Type == 'div'; ?>"/></td>
+          <td class="tdCenter"><input type="text" id="IsHideTitle" name="IsHideTitle" class="checkbox"
+              value="<?php echo $mod->IsHideTitle; ?>" /></td>
           <td class="tdCenter"><?php echo $delbtn ?></td>
           <td class="hidden"><input type="text" name="tree" class="checkbox"
               value="<?php echo $tree ? 0 : 1; ?>" /></td>
@@ -217,18 +239,16 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       <p>
         <input type="submit" class="button" value="<?php echo $lang['msg']['submit'] ?>"
           onclick="return checkInfo();" />
-        <input type="text" name="stay" class="checkbox" value="0" /> 提交后返回本页
-        <?php if (isset($bakUrl)) {
-    ?>
+        <input type="text" name="stay" class="checkbox" value="1" /> 提交后返回本页
+        <?php if (isset($bakUrl)) { ?>
         <a title="查看备份" href="<?php echo $bakUrl; ?>" target="_blank">查看备份（<?php echo $mod->FileName; ?>）</a>
-        <?php
-} ?>
+        <?php } ?>
       </p>
-      <hr style="margin-top:1em;border-top:1px solid #ddd!important;visibility:visible;"/>
-      <p>·对于每个li，会默认添加 "文件名-item" 作为类名，当前为：<?php echo "{$mod->FileName}-item"; ?></p>
-      <p>·默认模板路径：<?php echo LinksManage_Path("u-temp"); ?></p>
-      <!--<p>(暂未实现)自定义模板路径：<?php echo LinksManage_Path("usr/{$mod->FileName}.li"); ?></p>-->
-      <p>·模板编译时会加<b>"Links_"</b>前缀，默认模板编译为<b>Links_defend</b></p>
+      ------
+      <p>对于每个li，会默认添加 "文件名-item" 作为类名，当前为：<?php echo "{$mod->FileName}-item"; ?></p>
+      <p>默认模板路径：<?php echo LinksManage_Path("u-temp"); ?></p>
+      <!-- <p>(暂未实现)自定义模板路径：<?php echo LinksManage_Path("usr/{$mod->FileName}.li"); ?></p> -->
+      <p>模板编译时会加<b>"Links_"</b>前缀，默认模板编译为<b>Links_defend</b></p>
     </form>
   </div>
 </div>
@@ -243,7 +263,7 @@ function checkInfo() {
     return false;
   }
   if (!$("#edtHtmlID").val()) {
-    alert("<?php echo $lang['error']['76'] ?>");
+    $("#edtHtmlID").val($("#edtFileName").val());
     return false;
   }
 }
@@ -251,3 +271,4 @@ function checkInfo() {
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 RunTime();
+?>
