@@ -101,11 +101,11 @@ if ($edit = GetVars('edit', 'GET')) {
     }
     //旧版升级
     $file = LinksManage_Path("usr") . $edit . ".json";
-    if (is_file($file)){
-      $file_contents = file_get_contents($file);
-      unlink($file);
-    } else{
-      $file_contents = $mod->Metas->LM_json;
+    if (is_file($file)) {
+        $file_contents = file_get_contents($file);
+        unlink($file);
+    } else {
+        $file_contents = $mod->Metas->LM_json;
     }
     if (strlen($file_contents) > 0 && $items = json_decode($file_contents)) {
         $list = '';
@@ -158,7 +158,7 @@ if ($edit = GetVars('edit', 'GET')) {
         }
     }
     if ($mod->Source == 'system' || $mod->Source == 'theme') {
-      $islock = 'readonly="readonly"';
+        $islock = 'readonly="readonly"';
     }
     $delbtn = $mod->Source === 'plugin_LinksManage' ? '&nbsp;<a title="删除当前模块"
     onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');"
@@ -240,9 +240,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         <input type="submit" class="button" value="<?php echo $lang['msg']['submit'] ?>"
           onclick="return checkInfo();" />
         <input type="text" name="stay" class="checkbox" value="1" /> 提交后返回本页
-        <?php if (isset($bakUrl)) { ?>
+        <?php if (isset($bakUrl)) {
+    ?>
         <a title="查看备份" href="<?php echo $bakUrl; ?>" target="_blank">查看备份（<?php echo $mod->FileName; ?>）</a>
-        <?php } ?>
+        <?php
+} ?>
       </p>
       ------
       <p>对于每个li，会默认添加 "文件名-item" 作为类名，当前为：<?php echo "{$mod->FileName}-item"; ?></p>
