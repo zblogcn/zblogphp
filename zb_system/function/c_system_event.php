@@ -2114,6 +2114,9 @@ function BatchComment()
     } else {
         return;
     }
+    if (!isset($_POST['id'])) {
+        return;
+    }
     $array = $_POST['id'];
     if (is_array($array)) {
         $array = array_unique($array);
