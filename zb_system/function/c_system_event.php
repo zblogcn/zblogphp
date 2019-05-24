@@ -1937,6 +1937,8 @@ function PostComment()
         $cmt->IsChecking = true;
     }
 
+    FilterMeta($cmt);
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostComment_Core'] as $fpname => &$fpsignal) {
         $fpname($cmt);
     }
