@@ -110,7 +110,7 @@ class Module extends Base
                 return true;
             }
 
-            $c = $this->Content;
+            $c = RemovePHPCode($this->Content);
             $d = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/';
             $f = $d . $this->FileName . '.php';
             if (!file_exists($d)) {

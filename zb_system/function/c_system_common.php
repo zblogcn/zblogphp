@@ -1666,6 +1666,33 @@ function CheckHTTPRefererValid()
     return true;
 }
 
+/**
+ * 清除一串代码内所有的PHP代码
+ *
+ * @param string $code
+ *
+ * @return string
+ */
+function RemovePHPCode ($code)
+{
+    // PHP Start tags: <?php <? <?=
+    // PHP 5 supports: <% <script language="php">
+    // Depends on PHP
+    $continue = true;
+    while ($continue) {
+        $tokens = token_get_all($code);
+        $continue = false;
+        foreach ($tokens as $tt) {
+            $name = is_numeric($tt[0]) ? token_name($tt[0]) : '';
+            if ($name === 'T_OPEN_TAG' || $name === 'T_OPEN_TAG_WITH_ECHO' || $name === 'T_CLOSE_TAG') {
+                $code = str_replace($tt[1], "", $code);
+                $continue = true;
+            }
+        }
+    }
+    return $code;
+}
+
 function GetIDArrayByList($array)
 {
     $ids = array();
