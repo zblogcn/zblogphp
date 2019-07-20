@@ -1,6 +1,5 @@
 <?php
 
-
 //注册插件
 RegisterPlugin("AuditRecords", "ActivePlugin_AuditRecords");
 

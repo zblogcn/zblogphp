@@ -1,6 +1,5 @@
 <?php
 
-
 //注册插件
 RegisterPlugin("HeartVote", "ActivePlugin_HeartVote");
 

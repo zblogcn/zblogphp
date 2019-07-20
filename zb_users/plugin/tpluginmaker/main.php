@@ -48,7 +48,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 require $blogpath . 'zb_system/admin/admin_footer.php';
 RunTime();
 ?>
-<?php 
+<?php
 function step2()
 {
     global $zbp;

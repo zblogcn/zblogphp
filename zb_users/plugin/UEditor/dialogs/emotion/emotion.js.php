@@ -63,7 +63,7 @@ while (list($key, $i) = each($f)) {
 		dtc.id='tab<?php echo $x; ?>';
 		tc.appendChild(dtc);
 
-<?php 
+<?php
     $x++;
 }?>
 
