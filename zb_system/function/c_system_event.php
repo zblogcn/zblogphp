@@ -2585,6 +2585,14 @@ function PostModule()
         $zbp->SaveOption();
     }
 
+    if ($_POST['FileName'] == 'archives') {
+        if (isset($_POST['archives_style']))
+        	$zbp->option['ZC_MODULE_ARCHIVES_STYLE'] = 1;
+        else
+            $zbp->option['ZC_MODULE_ARCHIVES_STYLE'] = 0;
+        $zbp->SaveOption();
+    }
+
     if (!isset($_POST['ID'])) {
         return false;
     }

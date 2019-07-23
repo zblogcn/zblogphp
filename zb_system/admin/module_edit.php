@@ -158,6 +158,18 @@ if ($mod->FileName == 'catalog') {
     </p>
     <?php
 }
+if ($mod->FileName == 'archives') {
+
+    if($zbp->option['ZC_MODULE_ARCHIVES_STYLE'] == '1'){
+    ?><label><input name="archives_style" type="checkbox" value="<?php echo $zbp->option['ZC_MODULE_ARCHIVES_STYLE']?>" checked="checked" /><?php echo $lang['msg']['archives_style_select']?></label></label>
+    <?php
+    }else{
+    ?><label><input name="archives_style" type="checkbox" value="<?php echo $zbp->option['ZC_MODULE_ARCHIVES_STYLE']?>" /><?php echo $lang['msg']['archives_style_select']?></label></label>
+    <?php
+    }
+
+
+}
 ?>
     <p >
         <span class="title">

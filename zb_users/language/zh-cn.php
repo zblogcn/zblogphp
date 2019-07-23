@@ -193,6 +193,7 @@ return array(
         'catalog_style_normal'              => '普通型',
         'catalog_style_tree'                => '树型',
         'catalog_style_ul'                  => 'UL嵌套型',
+        'archives_style_select'             => '下拉单表类型',
         'all_del'                           => '删除所选项目',
         'all_pass'                          => '通过所选项目',
         'all_audit'                         => '审核所选项目',

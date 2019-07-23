@@ -198,6 +198,7 @@ return array(
     'ZC_LAST_VERSION'                => '',
     'ZC_HTTP_LASTMODIFIED'           => false,
     'ZC_MODULE_CATALOG_STYLE'        => 0,
+    'ZC_MODULE_ARCHIVES_STYLE'       => 0,
     'ZC_VIEWNUMS_TURNOFF'            => false,
     'ZC_LISTONTOP_TURNOFF'           => false,
     'ZC_RELATEDLIST_COUNT'           => 10,

@@ -197,6 +197,7 @@ return array(
         'catalog_style_normal'              => 'Normal',
         'catalog_style_tree'                => 'Tree',
         'catalog_style_ul'                  => 'UL',
+        'archives_style_select'             => 'Select Option',
         'all_del'                           => 'Bulk Delete',
         'all_pass'                          => 'Bulk Approve',
         'all_audit'                         => 'Bulk Unapprove',

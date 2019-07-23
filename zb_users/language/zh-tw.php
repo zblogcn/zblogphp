@@ -197,6 +197,7 @@ return array(
         'catalog_style_normal'              => '普通型',
         'catalog_style_tree'                => '樹型',
         'catalog_style_ul'                  => 'UL巢狀型',
+        'archives_style_select'             => '下拉单表类型',
         'all_del'                           => '批次刪除',
         'all_pass'                          => '批次通過',
         'all_audit'                         => '批次審核',
