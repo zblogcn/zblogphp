@@ -12,16 +12,12 @@ require '../function/c_system_base.php';
 ob_clean();
 // @TODO: Configuable
 
-
-if( GetVars('postid','GET') > 0 ){
-
-    $key = $zbp->GetCmtKey( GetVars('postid','GET') );
-    $form = GetVars('form','GET');
+if (GetVars('postid', 'GET') > 0) {
+    $key = $zbp->GetCmtKey(GetVars('postid', 'GET'));
+    $form = GetVars('form', 'GET');
     echo '$(function () {
-    $("#'.$form.'").attr("action" , $("#'.$form.'").attr("action") + "&key='.$key.'");
+    $("#' . $form . '").attr("action" , $("#' . $form . '").attr("action") + "&key=' . $key . '");
 });';
 }
 
-
 die();
-?>
