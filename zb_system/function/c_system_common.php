@@ -1437,15 +1437,16 @@ function GetTimeZoneByGMT($z)
  */
 function htmlspecialchars_array($array)
 {
-    foreach ($array as $key => &$value) {
+    $newArray = array();
+    foreach ($array as $key => $value) {
+        $newKey = htmlspecialchars($key);
         if (is_array($value)) {
-            $value = htmlspecialchars_array($value);
+            $newArray[$newKey] = htmlspecialchars_array($value);
         } elseif (is_string($value)) {
-            $value = htmlspecialchars($value);
+            $newArray[$newKey] = htmlspecialchars($value);
         }
     }
-
-    return $array;
+    return $newArray;
 }
 
 /**
@@ -1673,7 +1674,7 @@ function CheckHTTPRefererValid()
  *
  * @return string
  */
-function RemovePHPCode($code)
+function RemovePHPCode ($code)
 {
     // PHP Start tags: <?php <? <?=
     // PHP 5 supports: <% <script language="php">
@@ -1690,7 +1691,6 @@ function RemovePHPCode($code)
             }
         }
     }
-
     return $code;
 }
 
