@@ -243,6 +243,7 @@ class Base
         $array = $this->db->Query($sql);
         if (count($array) > 0) {
             $this->LoadInfoByAssoc($array[0]);
+
             return true;
         } else {
             return false;
