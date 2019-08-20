@@ -223,6 +223,33 @@ class Base
     }
 
     /**
+     * 根据多个特定的字段和值搜索数据.
+     *
+     * @param array $fields 多个字段数组(如 ['AuthorID' => '1', 'CateID' => '1'])
+     *
+     * @return bool
+     */
+    public function LoadInfoByFields($fields)
+    {
+        global $table, $datainfo;
+        $field_table = array_flip($table);
+        $field_table = $field_table[$this->table];
+        $conditions = array();
+        foreach ($fields as $field_key => $field_value) {
+            $field_name = $datainfo[$field_table][$field_key][0];
+            $conditions[] = array('=', $field_name, $field_value);
+        }
+        $sql = $this->db->sql->Select($this->table, array('*'), $conditions, null, null, null);
+        $array = $this->db->Query($sql);
+        if (count($array) > 0) {
+            $this->LoadInfoByAssoc($array[0]);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * 从数组中加载数据.
      *
      * @param $array
