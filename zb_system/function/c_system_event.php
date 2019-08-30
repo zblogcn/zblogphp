@@ -3094,23 +3094,25 @@ function FilterPost(&$article)
 {
     global $zbp;
 
-    $article->Title = strip_tags($article->Title);
     $article->Title = htmlspecialchars($article->Title);
     $article->Alias = TransferHTML($article->Alias, '[normalname]');
     $article->Alias = str_replace(' ', '', $article->Alias);
 
     if ($article->Type == ZC_POST_TYPE_ARTICLE) {
         if (!$zbp->CheckRights('ArticleAll')) {
+            $article->Title = strip_tags($article->Title);
             $article->Content = TransferHTML($article->Content, '[noscript]');
             $article->Intro = TransferHTML($article->Intro, '[noscript]');
         }
     } elseif ($article->Type == ZC_POST_TYPE_PAGE) {
         if (!$zbp->CheckRights('PageAll')) {
+            $article->Title = strip_tags($article->Title);
             $article->Content = TransferHTML($article->Content, '[noscript]');
             $article->Intro = TransferHTML($article->Intro, '[noscript]');
         }
     } else {
         if (!$zbp->CheckRights('ArticleAll')) {
+            $article->Title = strip_tags($article->Title);
             $article->Content = TransferHTML($article->Content, '[noscript]');
             $article->Intro = TransferHTML($article->Intro, '[noscript]');
         }
