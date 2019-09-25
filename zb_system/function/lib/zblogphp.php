@@ -3126,6 +3126,7 @@ class ZBlogPHP
     public function CheckSiteClosed()
     {
         if ($this->option['ZC_CLOSE_SITE']) {
+            Http503();
             $this->ShowError(82, __FILE__, __LINE__);
             exit;
         }
