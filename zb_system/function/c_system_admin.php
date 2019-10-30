@@ -1800,7 +1800,7 @@ function Admin_SettingMng()
     echo '在固定您的域名前，请先<a id="newdomainurl" href="' . $zbp->host . 'zb_system/cmd.php?act=misc&type=ping&newdomain=' . urlencode($zbp->host) . '" target="_blank" alt="固定域名链接" title="固定域名链接">【点击这里】</a>确认即将设置的域名是否可访问，如果不能访问请关闭设置。<br/>设置固定域名出错后造成不能访问的情况请访问wiki进行处理。<p>';
     echo '<script>
 function changeDomain(newurl){
-    var token = "' . CreateWebToken("",time() + 3600) . '";
+    var token = "' . CreateWebToken("", time() + 3600) . '";
     $(".js-tip").html("校验新域名中").css({
         fontWeight: 800
     });
