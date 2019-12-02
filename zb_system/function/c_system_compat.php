@@ -1,7 +1,7 @@
 <?php
 
 /**
- * < PHP 5.2.7
+ * < PHP 5.2.7.
  */
 if (!defined('PHP_VERSION_ID')) {
     $version = explode('.', PHP_VERSION);
