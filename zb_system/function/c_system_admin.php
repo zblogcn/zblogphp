@@ -1790,7 +1790,7 @@ function Admin_SettingMng()
 
     echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
     echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
-    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/><span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="' . $decodedBlogHost . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly"') . 'oninput="changeDomain($(this).val())" />';
+    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/><span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="' . $decodedBlogHost . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly" ') . 'oninput="changeDomain($(this).val())" />';
     echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);   if($(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0)$(this).parent().next().hide();else $(this).parent().next().show();"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>' . $zbp->lang['msg']['permanent_domain'] . '<span style="display:none;">&nbsp;&nbsp;<input type="text" id="ZC_PERMANENT_DOMAIN_WITH_ADMIN" name="ZC_PERMANENT_DOMAIN_WITH_ADMIN" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN'] . '"/></label>' . $zbp->lang['msg']['permanent_domain_with_admin'] . '</span></p>';
     if ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == 0) {
         echo '<p style="display:none;">';
@@ -1799,13 +1799,29 @@ function Admin_SettingMng()
     }
     echo '在固定您的域名前，请先<a id="newdomainurl" href="' . $zbp->host . 'zb_system/cmd.php?act=misc&type=ping&newdomain=' . urlencode($zbp->host) . '" target="_blank" alt="固定域名链接" title="固定域名链接">【点击这里】</a>确认即将设置的域名是否可访问，如果不能访问请关闭设置。<br/>设置固定域名出错后造成不能访问的情况请访问wiki进行处理。<p>';
     echo '<script>
-function changeDomain(url){
-    url = url.replace(" ","");
-    if(url.substr(url.length-1,1) != "/" ){
-    	url = url + "/";
+function changeDomain(newurl){
+    var token = "' . CreateWebToken("", time() + 3600) . '";
+    $(".js-tip").html("校验新域名中").css({
+        fontWeight: 800
+    });
+    $("#btnPost").attr("disabled","disabled");
+    console.log("");
+    newurl = newurl.replace(" ","");
+    if(newurl.substr(newurl.length-1,1) != "/" ){
+        newurl = newurl + "/";
     }
-    url = url + "zb_system/cmd.php?act=misc&type=ping&newdomain=" + encodeURI(url);
-    $("#newdomainurl").attr("href",url);
+    url = bloghost + "zb_system/cmd.php?act=misc&type=ping&token=" + token;
+    $.getJSON(url,{newurl:newurl},function(data) {
+        if (data) {
+            $(".js-tip").html(data.err.msg);
+            data.err === 0 && $("#btnPost").removeAttr("disabled");
+          console.log(data);
+        }
+      }).fail(function() {
+        $(".js-tip").html("校验失败");
+        //console.log( "error" );
+      });
+    //$("#newdomainurl").attr("href",url);
 }
     </script>';
     echo '</td></tr>';

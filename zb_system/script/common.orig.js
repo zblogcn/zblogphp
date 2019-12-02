@@ -4,7 +4,7 @@
         throw Error("Try to get JavaScript Path");
     } catch (ex) {
         if (ex.stack) { // Chrome & IE10+ & Firefox
-            jsPath = ex.stack.match(/(at.+|\@)(http.+?)\:\d+\:\d+/ || ['', '', ''])[2];
+            jsPath = ex.stack.match(/(at.+|\@)(http.+?)\:\d+\:\d+\s/ || ['', '', ''])[2];
         } else { // IE6
             var scripts = document.getElementsByTagName("script");
             for (var item in scripts) {

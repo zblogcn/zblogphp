@@ -1446,6 +1446,7 @@ function htmlspecialchars_array($array)
             $newArray[$newKey] = htmlspecialchars($value);
         }
     }
+
     return $newArray;
 }
 
@@ -1674,7 +1675,7 @@ function CheckHTTPRefererValid()
  *
  * @return string
  */
-function RemovePHPCode ($code)
+function RemovePHPCode($code)
 {
     // PHP Start tags: <?php <? <?=
     // PHP 5 supports: <% <script language="php">
@@ -1691,6 +1692,7 @@ function RemovePHPCode ($code)
             }
         }
     }
+
     return $code;
 }
 
