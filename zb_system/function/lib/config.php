@@ -42,7 +42,7 @@ class Config
     {
         if ($db !== null) {
             $this->db = &$db;
-        } else {
+        } else if (isset($GLOBALS['zbp'])) {
             $this->db = &$GLOBALS['zbp']->db;
         }
 

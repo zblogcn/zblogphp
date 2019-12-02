@@ -370,8 +370,10 @@ if (function_exists('memory_get_usage')) {
 
 /*
  * 版本兼容处理
+ * PHP 7.4移除了get_magic_quotes_gpc
+ * https://github.com/php/php-src/commit/b2ea507beab862a0167af6b99f44fe9c695ca4f0
  */
-if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+if (function_exists('get_magic_quotes_gpc') && PHP_VERSION_ID < 70400 && get_magic_quotes_gpc()) {
     function _stripslashes(&$var)
     {
         if (is_array($var)) {
