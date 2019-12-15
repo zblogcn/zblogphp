@@ -46,7 +46,7 @@ if (GetVars('act', 'GET') == 'save') {
     //$fileName = GetVars('FileName', 'POST');
     //$file = LinkCentre_Path("usr") . $fileName . ".json";
     //file_put_contents($file, json_encode($items));
-    $mod->Metas->LM_json = $file;
+    $mod->Metas->LM_json = json_encode($items);
     $outTpl = "Links_defend";
     if (isset($zbp->template->templates["Links_{$fileName}"])) {
         $outTpl = "Links_{$fileName}";

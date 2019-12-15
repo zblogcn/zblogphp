@@ -11,14 +11,14 @@ $(function() {
           .find("a:first")
           .attr(
             "href",
-            bloghost + "zb_users/plugin/LinksManage/main.php" + "?edit=" + mod
+            bloghost + "zb_users/plugin/LinkCentre/main.php" + "?edit=" + mod
           );
         $(".SubMenu")
           .find("a[href$='" + mod + "']")
           .addClass("LinksManage")
           .attr(
             "href",
-            bloghost + "zb_users/plugin/LinksManage/main.php" + "?edit=" + mod
+            bloghost + "zb_users/plugin/LinkCentre/main.php" + "?edit=" + mod
           );
       }
     }
