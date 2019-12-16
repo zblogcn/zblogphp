@@ -139,7 +139,7 @@ function Setup3(){
   var password = $("#password").val();
   if($("#blogtitle").val()==""){alert("<?php echo $zbp->lang['zb_install']['sitetitle_need']; ?>");return false;};
   if(username == ""){alert("<?php echo $zbp->lang['zb_install']['adminusername_need']; ?>");return false;};
-  if(username.length < <?php echo $zbp->option['ZC_USERNAME_MIN']?> || username.length > <?php echo $zbp->option['ZC_USERNAME_MAX'];?> || !/^[\.\_A-Za-z0-9·@\x4e00-\x9fa5]+$/.test(username)){alert("<?php echo $zbp->lang['error']['77']; ?>");return false;};
+  if(username.length < <?php echo $zbp->option['ZC_USERNAME_MIN']?> || username.length > <?php echo $zbp->option['ZC_USERNAME_MAX']; ?> || !/^[\.\_A-Za-z0-9·@\x4e00-\x9fa5]+$/.test(username)){alert("<?php echo $zbp->lang['error']['77']; ?>");return false;};
   if(password == ""){alert("<?php echo $zbp->lang['zb_install']['adminpassword_need']; ?>");return false;};
   if(password.search("^[A-Za-z0-9`~!@#\$%\^&\*\-_]{8,}$")==-1){alert("<?php echo $zbp->lang['error']['54']; ?>");return false;};
   if(password!==$("#repassword").val()){alert("<?php echo $zbp->lang['error']['73']; ?>");return false;};
