@@ -1661,7 +1661,10 @@ function CheckHTTPRefererValid()
     if (trim($referer) === '') {
         return true;
     }
-    if (stripos($referer, $bloghost) === false) {
+    $s = $bloghost;
+    $s = str_replace(':80/', '/', $s);
+    $s = str_replace(':443/', '/', $s);
+    if (stripos($referer, $s) === false) {
         return false;
     }
 
