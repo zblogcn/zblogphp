@@ -135,11 +135,14 @@ function Setup3(){
     if($("#dbpgsql_username").val()==""){alert("<?php echo $zbp->lang['zb_install']['dbusername_need']; ?>");return false;};
   }
 
+  var username = $("#username").val();
+  var password = $("#password").val();
   if($("#blogtitle").val()==""){alert("<?php echo $zbp->lang['zb_install']['sitetitle_need']; ?>");return false;};
-  if($("#username").val()==""){alert("<?php echo $zbp->lang['zb_install']['adminusername_need']; ?>");return false;};
-  if($("#password").val()==""){alert("<?php echo $zbp->lang['zb_install']['adminpassword_need']; ?>");return false;};
-  if($("#password").val().toString().search("^[A-Za-z0-9`~!@#\$%\^&\*\-_]{8,}$")==-1){alert("<?php echo $zbp->lang['error']['54']; ?>");return false;};
-  if($("#password").val()!==$("#repassword").val()){alert("<?php echo $zbp->lang['error']['73']; ?>");return false;};
+  if(username == ""){alert("<?php echo $zbp->lang['zb_install']['adminusername_need']; ?>");return false;};
+  if(username.length < <?php echo $zbp->option['ZC_USERNAME_MIN']?> || username.length > <?php echo $zbp->option['ZC_USERNAME_MAX'];?> || !/^[\.\_A-Za-z0-9·@\x4e00-\x9fa5]+$/.test(username)){alert("<?php echo $zbp->lang['error']['77']; ?>");return false;};
+  if(password == ""){alert("<?php echo $zbp->lang['zb_install']['adminpassword_need']; ?>");return false;};
+  if(password.search("^[A-Za-z0-9`~!@#\$%\^&\*\-_]{8,}$")==-1){alert("<?php echo $zbp->lang['error']['54']; ?>");return false;};
+  if(password!==$("#repassword").val()){alert("<?php echo $zbp->lang['error']['73']; ?>");return false;};
 
 }
 
@@ -309,7 +312,7 @@ function Setup2()
           <td scope="row" style="width:200px">mbstring</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mbstring'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mbstring'][1]; ?></td>
-        </tr>        
+        </tr>
 <?php if (version_compare(PHP_VERSION, '5.5.0', '<')) {
         ?>
         <tr>
