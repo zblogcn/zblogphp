@@ -14,7 +14,7 @@ GitHub: https://github.com/zblogcn/zblogphp
           运行环境
 =============================
 - Web Server: IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
-- PHP 5.2 - 7.2 / HHVM 3 
+- PHP 5.2 - 7.4 / HHVM 3
 - MySQL 5+ / MariaDB 10+ / SQLite 3
 
 =============================
@@ -28,10 +28,3 @@ GitHub: https://github.com/zblogcn/zblogphp
    - 选择SQLite，请确保服务器支持SQLite，安装程序将在点击下一步后自动创建SQLite数据库文件
 4. 填写你为站点设置的管理员账号密码，务必使用强口令账号
 5. 点击下一步，安装成功，进入网站
-
-=============================
-          一键部署
-=============================
-对于非虚拟主机用户，推荐使用宝塔面板搭建PHP环境并部署Z-BlogPHP。2分钟装好面板，一键管理服务器。
-安装宝塔面板：https://www.bt.cn/download/linux.html?z-blog
-一键部署：https://www.bt.cn/bbs/thread-5443-1-1.html?z-blog

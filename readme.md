@@ -13,7 +13,7 @@ Z-BlogPHP是由Z-Blog社区提供的博客程序，一直致力于给国内用�
 
 For security vulnerabilities, please contact us via ``contact#rainbowsoft.org`` and do not post on GitHub Issue.
 
-提交安全漏洞，请直接联系我们：contact#rainbowsoft.org。您也可以通过[先知安全服务平台](https://xianzhi.aliyun.com)、[360补天](https://loudong.360.cn/)、[国家信息安全漏洞共享平台](http://www.cnvd.org.cn)等平台向我们提交。**请不要在GitHub Issue等公开领域发布和漏洞有关的信息，更不要百度翻译成英文后向我们提交，我们看得懂汉字。** 
+提交安全漏洞，请直接联系我们：contact#rainbowsoft.org。您也可以通过[先知安全服务平台](https://xianzhi.aliyun.com)、[360补天](https://loudong.360.cn/)、[国家信息安全漏洞共享平台](http://www.cnvd.org.cn)等平台向我们提交。**请不要在GitHub Issue等公开领域发布和漏洞有关的信息，更不要百度翻译成英文后向我们提交，我们看得懂汉字。**
 
 ## 社区说明
 1. 使用交流及开发建议，请转向[Z-Blog论坛](http://bbs.zblogcn.com/)；
@@ -25,7 +25,7 @@ For security vulnerabilities, please contact us via ``contact#rainbowsoft.org`` 
 ## 运行环境
 - Windows / Linux / macOS and so on...
 - IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
-- PHP 5.2 - 7.3 / HHVM 3
+- PHP 5.2 - 7.4 / HHVM 3
 - MySQL 5+ / MariaDB 10+ / SQLite 3
 
 另：开发版内有 PostgreSQL 支持，需要手动启动，欢迎测试。
