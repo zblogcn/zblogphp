@@ -177,7 +177,7 @@ return array(
     'ZC_INDEX_DEFAULT_TEMPLATE' => 'index',
     'ZC_POST_DEFAULT_TEMPLATE'  => 'single',
 
-    'ZC_SIDEBAR_ORDER' => 'calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc',
+    'ZC_SIDEBAR_ORDER'  => 'calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc',
     'ZC_SIDEBAR2_ORDER' => '',
     'ZC_SIDEBAR3_ORDER' => '',
     'ZC_SIDEBAR4_ORDER' => '',
