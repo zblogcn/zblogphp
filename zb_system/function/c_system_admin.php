@@ -1828,7 +1828,7 @@ function Admin_SettingMng()
     }
     echo '</div>'; ?>
 
-          <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav');  ?>" onsubmit="return checkDomain();">
+          <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav'); ?>" onsubmit="return checkDomain();">
             <div id="divMain2">
               <div class="content-box"><!-- Start Content Box -->
 
