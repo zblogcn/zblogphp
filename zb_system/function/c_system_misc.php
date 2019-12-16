@@ -365,7 +365,14 @@ function misc_ping()
 {
     global $zbp;
     $data = array();
-
+    $token = GetVars('token', 'GET');
+    if (VerifyWebToken($token, "")) {
+        JsonError(0, "校验成功", $data);
+        return;
+    }
+    JsonError(1, "无效的TOKEN", $data);
+    return;
+/*
     $token = GetVars('token', 'GET');
     if (VerifyWebToken($token, "")) {
         header('Access-Control-Allow-Origin:*');
@@ -393,4 +400,5 @@ function misc_ping()
     }
     JsonReturn($data);
     JsonError(1, "无效的TOKEN", $data);
+*/
 }
