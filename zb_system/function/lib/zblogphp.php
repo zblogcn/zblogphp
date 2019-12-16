@@ -332,7 +332,7 @@ class ZBlogPHP
         foreach ($this->datainfo['Member'] as $key => $value) {
             $this->user->$key = $value[3];
         }
-        $this->user->Metas = new Config();
+        $this->user->Metas = new Metas();
     }
 
     /**
