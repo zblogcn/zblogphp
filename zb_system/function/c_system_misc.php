@@ -368,37 +368,38 @@ function misc_ping()
     $token = GetVars('token', 'GET');
     if (VerifyWebToken($token, "")) {
         JsonError(0, "校验成功", $data);
+
         return;
     }
     JsonError(1, "无效的TOKEN", $data);
-    return;
-/*
-    $token = GetVars('token', 'GET');
-    if (VerifyWebToken($token, "")) {
-        header('Access-Control-Allow-Origin:*');
-        $data["token"] = $token;
-        $data["product"] = $zbp->option['ZC_BLOG_PRODUCT_FULL'];
-        $http = Network::Create();
-        $http->open('GET', GetVars("newurl", "GET"));
-        $http->setTimeOuts(7, 7, 0, 0);
-        $http->send();
-        if ($http->status == 200) {
-            $data["product2"] = $http->getResponseHeader('Product');
-            if ($data["product"] !== $data["product2"]) {
-                JsonError(1, "新地址程序不一致", $data);
 
+    /*
+        $token = GetVars('token', 'GET');
+        if (VerifyWebToken($token, "")) {
+            header('Access-Control-Allow-Origin:*');
+            $data["token"] = $token;
+            $data["product"] = $zbp->option['ZC_BLOG_PRODUCT_FULL'];
+            $http = Network::Create();
+            $http->open('GET', GetVars("newurl", "GET"));
+            $http->setTimeOuts(7, 7, 0, 0);
+            $http->send();
+            if ($http->status == 200) {
+                $data["product2"] = $http->getResponseHeader('Product');
+                if ($data["product"] !== $data["product2"]) {
+                    JsonError(1, "新地址程序不一致", $data);
+    
+                    return;
+                }
+            } else {
+                JsonError(1, "访问检测失败", $data);
+    
                 return;
             }
-        } else {
-            JsonError(1, "访问检测失败", $data);
-
+            JsonError(0, "校验成功", $data);
+    
             return;
         }
-        JsonError(0, "校验成功", $data);
-
-        return;
-    }
-    JsonReturn($data);
-    JsonError(1, "无效的TOKEN", $data);
-*/
+        JsonReturn($data);
+        JsonError(1, "无效的TOKEN", $data);
+    */
 }
