@@ -371,6 +371,7 @@ UE.I18N['en'] = {
         'default':"Default",
         'block':"Display in block",
         'urlError':"The video url format may be wrong!",
+        'videoShouldBeHTML': 'Please paste "Share code" for this video site',
         'loading':" &nbsp;The video is loading, please wait…",
         'clickToSelect':"Click to select",
         'goToSource':'Visit source video ',

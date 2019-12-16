@@ -365,6 +365,7 @@ UE.I18N['zh-cn'] = {
         'floatRight':"右浮动",
         '"default"':"默认",
         'block':"独占一行",
+        'videoShouldBeHTML': '针对爱奇艺、搜狐等网站，请粘贴分享代码而非视频地址',
         'urlError':"输入的视频地址有误，请检查后再试！",
         'loading':" &nbsp;视频加载中，请等待……",
         'clickToSelect':"点击选中",

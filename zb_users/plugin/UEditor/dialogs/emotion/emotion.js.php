@@ -14,43 +14,41 @@ window.onload = function () {
 <?php
 function scansubdir($dir)
 {
-    $files = array();
-    if ($handle = opendir($dir)) {
-        while (($file = readdir($handle)) !== false) {
-            if ($file != ".." && $file != ".") {
-                if (is_dir($dir . "/" . $file)) {
-                    $f = scandir($dir . "/" . $file);
-                    $files[$file] = preg_grep("/(.*).gif|png|jpg$/", $f);
-                    foreach ($files[$file] as $name => $value) {
-                        if (UEDITOR_IS_WINDOWS) {
+     $files = array();
+     if ( $handle = opendir($dir) ) {
+         while ( ($file = readdir($handle)) !== false ) {
+             if ( $file != ".." && $file != "." ) {
+                 if ( is_dir($dir . "/" . $file) ) {
+                     $f= scandir($dir . "/" . $file);
+                     $files[$file] = preg_grep("/(.*).gif|png|jpg|webp$/",$f);
+                     foreach($files[$file] as $name => $value)
+                        if (UEDITOR_IS_WINDOWS)
                             $files[$file][$name] = iconv('GBK', 'UTF-8', $value);
-                        }
-                    }
-                } else {
-                    //$files[] = $file;
-                }
-            }
-        }
-        closedir($handle);
-
-        return $files;
-    }
+                 }else {
+                     //$files[] = $file;
+                 }
+             }
+         }
+         closedir($handle);
+         return $files;
+     }
 }
 
-$d = $blogpath . "zb_users/emotion";
+$d = $blogpath."zb_users/emotion";
 
 $f = scansubdir($d);
 
-$x = 0;
+$x=0;
 ?>
 <?php
-while (list($key, $i) = each($f)) {
-    $e = implode("','", $i);
-    $en = $key;
-    $en = (UEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $en) : $en); ?>
+foreach ($f as $key => $i) {
+	$e = implode("','",$i);
+	$en =$key;
+    $en = (UEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $en) : $en);
+?>
 	emotion.tabNum++;
-	emotion.SmilmgName["tab<?php echo $x; ?>"]=['<?php echo substr($i[2], strlen($i[2]) - 3); ?>',<?php echo count($i); ?>];
-	emotion.imageFolders["tab<?php echo $x; ?>"]='<?php echo urlencode($en); ?>/';
+	emotion.SmilmgName["tab<?php echo $x; ?>"]=['<?php echo substr($i[2],strlen($i[2])-3); ?>',<?php echo count($i); ?>];
+	emotion.imageFolders["tab<?php echo $x; ?>"]='<?php echo urlencode($en);?>/';
 	emotion.imageCss["tab<?php echo $x; ?>"]='<?php echo $en; ?>';
 	emotion.imageCssOffset["tab<?php echo $x; ?>"]=35;
 	emotion.SmileyInfor["tab<?php echo $x; ?>"]=['<?php echo $e; ?>'];
@@ -64,7 +62,7 @@ while (list($key, $i) = each($f)) {
 		tc.appendChild(dtc);
 
 <?php
-    $x++;
+	$x++;
 }?>
 
     emotion.SmileyBox = createTabList( emotion.tabNum );
@@ -79,7 +77,7 @@ function initImgName() {
         var tempName = emotion.SmilmgName[pro],
             tempBox = emotion.SmileyBox[pro],
 			tempStr=emotion.SmileyInfor[pro];
-			
+
         if ( tempBox.length ) return;
         for ( var i = 0; i < tempName[1]; i++ ) {
             tempBox.push( tempStr[i]);
@@ -186,7 +184,7 @@ function createTab( tabName ) {
 function over( td, srcPath, posFlag ) {
     td.style.backgroundColor = "#ACCD3C";
     $G( 'faceReview' ).style.backgroundImage = "url('" + srcPath + "')";
-	$G( 'faceReview' ).src = "<?php echo $bloghost; ?>zb_system/image/admin/none.gif";
+	$G( 'faceReview' ).src = "<?php echo $bloghost;?>zb_system/image/admin/none.gif";
     if ( posFlag == 1 ) $G( "tabIconReview" ).className = "show";
     $G( "tabIconReview" ).style.display = 'block';
 }
