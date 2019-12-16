@@ -90,7 +90,7 @@ class SQL__SQLite extends SQL__Global
             $sql[] = ');';
             $sql[] = 'CREATE UNIQUE INDEX ' . $table . '_' . $idname;
             $sql[] = ' on ' . $table . ' (' . $idname . ');';
-            $sqlAll[] = implode($sql, ' ');
+            $sqlAll[] = implode(' ', $sql);
         }
         $this->_sql = $sqlAll;
     }

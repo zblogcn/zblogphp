@@ -776,9 +776,9 @@ class SQL__Global
             $keyData[] = "$key";
             $valueData[] = " '$v' ";
         }
-        $sql[] = '(' . implode($keyData, ',') . ')';
+        $sql[] = '(' . implode(',', $keyData) . ')';
         $sql[] = ' VALUES (';
-        $sql[] = implode($valueData, ',');
+        $sql[] = implode(',', $valueData);
         $sql[] = ')';
     }
 
