@@ -1828,7 +1828,7 @@ function Admin_SettingMng()
     }
     echo '</div>'; ?>
 
-          <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav'); ?>">
+          <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav');  ?>" onsubmit="return checkDomain();">
             <div id="divMain2">
               <div class="content-box"><!-- Start Content Box -->
 
@@ -1860,20 +1860,30 @@ function Admin_SettingMng()
     } else {
         echo '<p>';
     }
-    echo '<button type="button" id="btnCheckDomain" onclick="changeDomain($(\'#ZC_BLOG_HOST\').val());">&nbsp;检查新固定域名可否访问&nbsp;</button>&nbsp;<span class="js-tip"></span>';
+    echo '<button type="button" id="btnCheckDomain" style="display:none;" onclick="changeDomain($(\'#ZC_BLOG_HOST\').val());">&nbsp;检查新固定域名可否访问&nbsp;</button>&nbsp;<span class="js-tip"></span>';
     echo '</p>';
     echo '<script>
+var bCheck = false;
 function disableSubmit(newurl){
-    $("#btnPost").attr("disabled","disabled");
+    //$("#btnPost").attr("disabled","disabled");
+    bCheck = true;
 }
 function enableSubmit(newurl){
-    $("#btnPost").removeAttr("disabled");
+    //$("#btnPost").removeAttr("disabled");
+    bCheck = false;
+}
+function checkDomain(){
+	if(bCheck === false)return true;
+    if(bCheck === true){
+    	var i = changeDomain($(\'#ZC_BLOG_HOST\').val());
+    	if(i === true)
+    		return true;
+    	else
+    		return false;
+    }
 }
 function changeDomain(newurl){
     var token = "' . CreateWebToken("", time() + 3600) . '";
-    $(".js-tip").html("校验新域名中").css({
-        fontWeight: 800
-    });
 
     console.log("");
     newurl = newurl.replace(" ","");
@@ -1881,16 +1891,20 @@ function changeDomain(newurl){
         newurl = newurl + "/";
     }
     url = newurl + "zb_system/cmd.php?act=misc&type=ping&token=" + token;
+    $(".js-tip").html("校验中");
     $.getJSON(url,{newurl:newurl},function(data) {
         if (data) {
             $(".js-tip").html(data.err.msg);
-            data.err === 0 && $("#btnPost").removeAttr("disabled");
+            //data.err === 0 && $("#btnPost").removeAttr("disabled");
           console.log(data);
           enableSubmit();
+          bCheck = false;
+          return true;
         }
       }).fail(function() {
         $(".js-tip").html("校验失败");
         //console.log( "error" );
+        return false;
       });
     //$("#newdomainurl").attr("href",url);
 }
