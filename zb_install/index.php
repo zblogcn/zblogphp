@@ -1126,6 +1126,10 @@ function SaveConfig()
     $zbp->option['ZC_SIDEBAR3_ORDER'] = '';
     $zbp->option['ZC_SIDEBAR4_ORDER'] = '';
     $zbp->option['ZC_SIDEBAR5_ORDER'] = '';
+    $zbp->option['ZC_SIDEBAR6_ORDER'] = '';
+    $zbp->option['ZC_SIDEBAR7_ORDER'] = '';
+    $zbp->option['ZC_SIDEBAR8_ORDER'] = '';
+    $zbp->option['ZC_SIDEBAR9_ORDER'] = '';
     $zbp->option['ZC_BLOG_THEME'] = 'default';
     $zbp->option['ZC_DEBUG_MODE'] = false;
     $zbp->option['ZC_LAST_VERSION'] = $zbp->version;

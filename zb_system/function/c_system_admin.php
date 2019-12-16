@@ -1502,6 +1502,10 @@ function Admin_ModuleMng()
     echo '<input type="hidden" id="strsidebar3" name="edtSidebar3" value="' . $zbp->option['ZC_SIDEBAR3_ORDER'] . '"/>';
     echo '<input type="hidden" id="strsidebar4" name="edtSidebar4" value="' . $zbp->option['ZC_SIDEBAR4_ORDER'] . '"/>';
     echo '<input type="hidden" id="strsidebar5" name="edtSidebar5" value="' . $zbp->option['ZC_SIDEBAR5_ORDER'] . '"/>';
+    echo '<input type="hidden" id="strsidebar6" name="edtSidebar6" value="' . $zbp->option['ZC_SIDEBAR6_ORDER'] . '"/>';
+    echo '<input type="hidden" id="strsidebar7" name="edtSidebar7" value="' . $zbp->option['ZC_SIDEBAR7_ORDER'] . '"/>';
+    echo '<input type="hidden" id="strsidebar8" name="edtSidebar8" value="' . $zbp->option['ZC_SIDEBAR8_ORDER'] . '"/>';
+    echo '<input type="hidden" id="strsidebar9" name="edtSidebar9" value="' . $zbp->option['ZC_SIDEBAR9_ORDER'] . '"/>';
     echo '</form>';
     echo "\r\n";
     echo '<div class="clear"></div></div>';
@@ -1550,6 +1554,38 @@ function Admin_ModuleMng()
     echo '</div></div>';
     echo "\r\n";
 
+    echo '<div class="siderbar-drop" id="siderbar6"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar6'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar6), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    foreach ($zbp->template->sidebar6 as $m) {
+        CreateModuleDiv($m, false);
+    }
+    echo '</div></div>';
+    echo "\r\n";
+
+    echo '<div class="siderbar-drop" id="siderbar7"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar7'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar7), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    foreach ($zbp->template->sidebar7 as $m) {
+        CreateModuleDiv($m, false);
+    }
+    echo '</div></div>';
+    echo "\r\n";
+
+    echo '<div class="siderbar-drop" id="siderbar8"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar8'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar8), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    foreach ($zbp->template->sidebar8 as $m) {
+        CreateModuleDiv($m, false);
+    }
+    echo '</div></div>';
+    echo "\r\n";
+
+    echo '<div class="siderbar-drop" id="siderbar9"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar9'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar9), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    foreach ($zbp->template->sidebar9 as $m) {
+        CreateModuleDiv($m, false);
+    }
+    echo '</div></div>';
+    echo "\r\n";
+
     echo '<div class="clear"></div></div>';
     //siderbar-list end
     echo "\r\n";
@@ -1587,12 +1623,35 @@ function Admin_ModuleMng()
                s5 += $(this).html() +"|";
              });
 
+             var s6="";
+            $("#siderbar6").find("div.funid").each(function(i){
+               s6 += $(this).html() +"|";
+             });
+
+             var s7="";
+            $("#siderbar7").find("div.funid").each(function(i){
+               s7 += $(this).html() +"|";
+             });
+
+             var s8="";
+            $("#siderbar8").find("div.funid").each(function(i){
+               s8 += $(this).html() +"|";
+             });
+
+             var s9="";
+            $("#siderbar9").find("div.funid").each(function(i){
+               s9 += $(this).html() +"|";
+             });
+
             $("#strsidebar" ).val(s1);
             $("#strsidebar2").val(s2);
             $("#strsidebar3").val(s3);
             $("#strsidebar4").val(s4);
             $("#strsidebar5").val(s5);
-
+            $("#strsidebar6").val(s6);
+            $("#strsidebar7").val(s7);
+            $("#strsidebar8").val(s8);
+            $("#strsidebar9").val(s9);
 
             $.post($("#edit").attr("action"),
                 {
@@ -1600,7 +1659,11 @@ function Admin_ModuleMng()
                 "sidebar2": s2,
                 "sidebar3": s3,
                 "sidebar4": s4,
-                "sidebar5": s5
+                "sidebar5": s5,
+                "sidebar6": s6,
+                "sidebar7": s7,
+                "sidebar8": s8,
+                "sidebar9": s9
                 },
                function(data){
                  //alert("Data Loaded: " + data);

@@ -37,6 +37,22 @@ class Template
      * @var array 侧栏5
      */
     public $sidebar5 = array();
+    /**
+     * @var array 侧栏6
+     */
+    public $sidebar6 = array();
+    /**
+     * @var array 侧栏77
+     */
+    public $sidebar7 = array();
+    /**
+     * @var array 侧栏8
+     */
+    public $sidebar8 = array();
+    /**
+     * @var array 侧栏9
+     */
+    public $sidebar9 = array();
 
     public function __construct()
     {
@@ -608,7 +624,7 @@ class Template
             $templates[$sortname] = file_get_contents($fullname);
         }
 
-        for ($i = 2; $i <= 5; $i++) {
+        for ($i = 2; $i <= 9; $i++) {
             if (!isset($templates['sidebar' . $i])) {
                 $templates['sidebar' . $i] = str_replace('$sidebar', '$sidebar' . $i, $templates['sidebar']);
             }
@@ -678,6 +694,10 @@ class Template
             $option['ZC_SIDEBAR3_ORDER'],
             $option['ZC_SIDEBAR4_ORDER'],
             $option['ZC_SIDEBAR5_ORDER'],
+            $option['ZC_SIDEBAR6_ORDER'],
+            $option['ZC_SIDEBAR7_ORDER'],
+            $option['ZC_SIDEBAR8_ORDER'],
+            $option['ZC_SIDEBAR9_ORDER'],
         );
         foreach ($s as $k => $v) {
             $a = explode('|', $v);
@@ -698,6 +718,10 @@ class Template
         $this->templateTags['sidebar3'] = &$this->sidebar3;
         $this->templateTags['sidebar4'] = &$this->sidebar4;
         $this->templateTags['sidebar5'] = &$this->sidebar5;
+        $this->templateTags['sidebar6'] = &$this->sidebar6;
+        $this->templateTags['sidebar7'] = &$this->sidebar7;
+        $this->templateTags['sidebar8'] = &$this->sidebar8;
+        $this->templateTags['sidebar9'] = &$this->sidebar9;
 
         //foreach ($GLOBALS['hooks']['Filter_Plugin_Template_MakeTemplatetags'] as $fpname => &$fpsignal) {
         //    $fpreturn = $fpname($this->templateTags);

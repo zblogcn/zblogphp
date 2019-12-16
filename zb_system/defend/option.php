@@ -178,14 +178,15 @@ return array(
     'ZC_POST_DEFAULT_TEMPLATE'  => 'single',
 
     'ZC_SIDEBAR_ORDER' => 'calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc',
-
     'ZC_SIDEBAR2_ORDER' => '',
-
     'ZC_SIDEBAR3_ORDER' => '',
-
     'ZC_SIDEBAR4_ORDER' => '',
-
     'ZC_SIDEBAR5_ORDER' => '',
+    'ZC_SIDEBAR6_ORDER' => '',
+    'ZC_SIDEBAR7_ORDER' => '',
+    'ZC_SIDEBAR8_ORDER' => '',
+    'ZC_SIDEBAR9_ORDER' => '',
+
     // '--------------------------其它----------------------------------------
     // '代码高亮
     'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,

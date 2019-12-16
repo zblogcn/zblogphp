@@ -2875,34 +2875,54 @@ function SetTheme($theme, $style)
     $oldtheme = $zbp->option['ZC_BLOG_THEME'];
 
     if ($oldtheme != $theme) {
-        if ($app->sidebars_sidebar1 | $app->sidebars_sidebar2 | $app->sidebars_sidebar3 | $app->sidebars_sidebar4 | $app->sidebars_sidebar5) {
+        if ($app->sidebars_sidebar1 | $app->sidebars_sidebar2 | $app->sidebars_sidebar3 | $app->sidebars_sidebar4 | $app->sidebars_sidebar5 | $app->sidebars_sidebar6 | $app->sidebars_sidebar7 | $app->sidebars_sidebar8 | $app->sidebars_sidebar9) {
             $s1 = $zbp->option['ZC_SIDEBAR_ORDER'];
             $s2 = $zbp->option['ZC_SIDEBAR2_ORDER'];
             $s3 = $zbp->option['ZC_SIDEBAR3_ORDER'];
             $s4 = $zbp->option['ZC_SIDEBAR4_ORDER'];
             $s5 = $zbp->option['ZC_SIDEBAR5_ORDER'];
+            $s6 = $zbp->option['ZC_SIDEBAR6_ORDER'];
+            $s7 = $zbp->option['ZC_SIDEBAR7_ORDER'];
+            $s8 = $zbp->option['ZC_SIDEBAR8_ORDER'];
+            $s9 = $zbp->option['ZC_SIDEBAR9_ORDER'];
             $zbp->option['ZC_SIDEBAR_ORDER'] = $app->sidebars_sidebar1;
             $zbp->option['ZC_SIDEBAR2_ORDER'] = $app->sidebars_sidebar2;
             $zbp->option['ZC_SIDEBAR3_ORDER'] = $app->sidebars_sidebar3;
             $zbp->option['ZC_SIDEBAR4_ORDER'] = $app->sidebars_sidebar4;
             $zbp->option['ZC_SIDEBAR5_ORDER'] = $app->sidebars_sidebar5;
+            $zbp->option['ZC_SIDEBAR6_ORDER'] = $app->sidebars_sidebar6;
+            $zbp->option['ZC_SIDEBAR7_ORDER'] = $app->sidebars_sidebar7;
+            $zbp->option['ZC_SIDEBAR8_ORDER'] = $app->sidebars_sidebar8;
+            $zbp->option['ZC_SIDEBAR9_ORDER'] = $app->sidebars_sidebar9;
             $zbp->cache->zc_sidebar_order1 = $s1;
             $zbp->cache->zc_sidebar_order2 = $s2;
             $zbp->cache->zc_sidebar_order3 = $s3;
             $zbp->cache->zc_sidebar_order4 = $s4;
             $zbp->cache->zc_sidebar_order5 = $s5;
+            $zbp->cache->zc_sidebar_order6 = $s6;
+            $zbp->cache->zc_sidebar_order7 = $s7;
+            $zbp->cache->zc_sidebar_order8 = $s8;
+            $zbp->cache->zc_sidebar_order9 = $s9;
         } else {
-            if ($zbp->cache->zc_sidebar_order1 | $zbp->cache->zc_sidebar_order2 | $zbp->cache->zc_sidebar_order3 | $zbp->cache->zc_sidebar_order4 | $zbp->cache->zc_sidebar_order5) {
+            if ($zbp->cache->zc_sidebar_order1 | $zbp->cache->zc_sidebar_order2 | $zbp->cache->zc_sidebar_order3 | $zbp->cache->zc_sidebar_order4 | $zbp->cache->zc_sidebar_order5 | $app->sidebars_sidebar6 | $app->sidebars_sidebar7 | $app->sidebars_sidebar8 | $app->sidebars_sidebar9) {
                 $zbp->option['ZC_SIDEBAR_ORDER'] = $zbp->cache->zc_sidebar_order1;
                 $zbp->option['ZC_SIDEBAR2_ORDER'] = $zbp->cache->zc_sidebar_order2;
                 $zbp->option['ZC_SIDEBAR3_ORDER'] = $zbp->cache->zc_sidebar_order3;
                 $zbp->option['ZC_SIDEBAR4_ORDER'] = $zbp->cache->zc_sidebar_order4;
                 $zbp->option['ZC_SIDEBAR5_ORDER'] = $zbp->cache->zc_sidebar_order5;
+                $zbp->option['ZC_SIDEBAR6_ORDER'] = $zbp->cache->zc_sidebar_order6;
+                $zbp->option['ZC_SIDEBAR7_ORDER'] = $zbp->cache->zc_sidebar_order7;
+                $zbp->option['ZC_SIDEBAR8_ORDER'] = $zbp->cache->zc_sidebar_order8;
+                $zbp->option['ZC_SIDEBAR9_ORDER'] = $zbp->cache->zc_sidebar_order9;
                 $zbp->cache->zc_sidebar_order1 = '';
                 $zbp->cache->zc_sidebar_order2 = '';
                 $zbp->cache->zc_sidebar_order3 = '';
                 $zbp->cache->zc_sidebar_order4 = '';
                 $zbp->cache->zc_sidebar_order5 = '';
+                $zbp->cache->zc_sidebar_order6 = '';
+                $zbp->cache->zc_sidebar_order7 = '';
+                $zbp->cache->zc_sidebar_order8 = '';
+                $zbp->cache->zc_sidebar_order9 = '';
             }
         }
     }
@@ -2933,6 +2953,10 @@ function SetSidebar()
     $zbp->option['ZC_SIDEBAR3_ORDER'] = trim(GetVars('sidebar3', 'POST'), '|');
     $zbp->option['ZC_SIDEBAR4_ORDER'] = trim(GetVars('sidebar4', 'POST'), '|');
     $zbp->option['ZC_SIDEBAR5_ORDER'] = trim(GetVars('sidebar5', 'POST'), '|');
+    $zbp->option['ZC_SIDEBAR6_ORDER'] = trim(GetVars('sidebar6', 'POST'), '|');
+    $zbp->option['ZC_SIDEBAR7_ORDER'] = trim(GetVars('sidebar7', 'POST'), '|');
+    $zbp->option['ZC_SIDEBAR8_ORDER'] = trim(GetVars('sidebar8', 'POST'), '|');
+    $zbp->option['ZC_SIDEBAR9_ORDER'] = trim(GetVars('sidebar9', 'POST'), '|');
     $zbp->SaveOption();
 }
 
