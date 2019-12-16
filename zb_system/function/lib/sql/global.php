@@ -479,7 +479,7 @@ class SQL__Global
                 $tableData[] = " $tableValue[0] $tableValue[1] ";
             }
         }
-        $sql[] = implode($tableData, ", ");
+        $sql[] = implode(", ", $tableData);
     }
 
     protected function buildColumn()
@@ -487,7 +487,7 @@ class SQL__Global
         $sql = &$this->_sql;
         $columns = &$this->columns;
         if (count($columns) > 0) {
-            $selectStr = implode($columns, ',');
+            $selectStr = implode(',', $columns);
             $sql[] = " {$selectStr} ";
         } else {
             $sql[] = "*";
