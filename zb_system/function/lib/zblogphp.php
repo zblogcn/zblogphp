@@ -2616,7 +2616,7 @@ class ZBlogPHP
     public function LoadTagsByIDString($s)
     {
         $s = trim($s);
-        if ($s == '') {
+        if ($s === '') {
             return array();
         }
 
@@ -2633,7 +2633,7 @@ class ZBlogPHP
         }
         $t = array_unique($b);
 
-        if (count($t) == 0) {
+        if (count($t) === 0) {
             return array();
         }
 
@@ -2641,7 +2641,7 @@ class ZBlogPHP
         $b = array();
         $c = array();
         foreach ($t as $v) {
-            if (isset($this->tags[$v]) == false) {
+            if (!isset($this->tags[$v])) {
                 $a[] = array('tag_ID', $v);
                 $c[] = $v;
             } else {
@@ -2649,7 +2649,7 @@ class ZBlogPHP
             }
         }
 
-        if (count($a) == 0) {
+        if (count($a) === 0) {
             return $b;
         } else {
             $t = array();
@@ -2661,7 +2661,7 @@ class ZBlogPHP
                 $t[$v->ID] = &$this->tags[$v->ID];
             }
 
-            return $b + $t;
+            return array_merge($b, $t);
         }
     }
 
@@ -2680,18 +2680,14 @@ class ZBlogPHP
         $s = str_replace('、', ',', $s);
         $s = trim($s);
         $s = strip_tags($s);
-        if ($s == '') {
-            return array();
-        }
-
-        if ($s == ',') {
+        if ($s === '' || $s === ',') {
             return array();
         }
 
         $a = explode(',', $s);
         $t = array_unique($a);
 
-        if (count($t) == 0) {
+        if (count($t) === 0) {
             return array();
         }
 
@@ -2706,7 +2702,7 @@ class ZBlogPHP
             }
         }
 
-        if (count($a) == 0) {
+        if (count($a) === 0) {
             return $b;
         } else {
             $t = array();
@@ -2717,7 +2713,7 @@ class ZBlogPHP
                 $t[$v->Name] = &$this->tags[$v->ID];
             }
 
-            return $b + $t;
+            return array_merge($b, $t);
         }
     }
 
