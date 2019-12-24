@@ -18,10 +18,10 @@ $zbpvers['150101']='1.4 Deeplue Build 150101';
 $zbpvers['151626']='1.5 Zero Build 151626';
 
  */
-define('ZC_VERSION_MAJOR', '2');
-define('ZC_VERSION_MINOR', '0');
+define('ZC_VERSION_MAJOR', '1');
+define('ZC_VERSION_MINOR', '6');
 define('ZC_VERSION_BUILD', '0');
-define('ZC_VERSION_COMMIT', '1910');
+define('ZC_VERSION_COMMIT', '2000');
 define('ZC_VERSION_CODENAME', 'Beta');
 define('ZC_VERSION', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . '.' . ZC_VERSION_BUILD . '.' . ZC_VERSION_COMMIT);
 define('ZC_VERSION_DISPLAY', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . '.' . ZC_VERSION_BUILD . ' ' . ZC_VERSION_CODENAME);
