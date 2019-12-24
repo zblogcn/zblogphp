@@ -387,16 +387,16 @@ function misc_ping()
                 $data["product2"] = $http->getResponseHeader('Product');
                 if ($data["product"] !== $data["product2"]) {
                     JsonError(1, "新地址程序不一致", $data);
-    
+
                     return;
                 }
             } else {
                 JsonError(1, "访问检测失败", $data);
-    
+
                 return;
             }
             JsonError(0, "校验成功", $data);
-    
+
             return;
         }
         JsonReturn($data);
