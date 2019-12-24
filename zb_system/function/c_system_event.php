@@ -1959,6 +1959,10 @@ function PostComment()
 
     CountPostArray(array($cmt->LogID), +1);
     CountCommentNums(+1, 0);
+    if($zbp->user->ID > 0){
+        CountMember($zbp->user, array(0, 0, 1, 0));
+        $zbp->user->Save();
+    }
 
     $zbp->AddBuildModule('comments');
 
@@ -2007,6 +2011,10 @@ function DelComment()
 
         if ($cmt->IsChecking == false) {
             CountPostArray(array($cmt->LogID), -1);
+            if($cmt->AuthorID > 0){
+                CountMember($cmt->Author, array(0, 0, -1, 0));
+                $cmt->Author->Save();
+            }
         }
 
         $zbp->AddBuildModule('comments');
@@ -2091,9 +2099,17 @@ function CheckComment()
     if (($orig_check) && (!$ischecking)) {
         CountPostArray(array($cmt->LogID), +1);
         CountCommentNums(0, -1);
+        if($cmt->AuthorID > 0){
+            CountMember($cmt->Author, array(0, 0, +1, 0));
+            $cmt->Author->Save();
+        }
     } elseif ((!$orig_check) && ($ischecking)) {
         CountPostArray(array($cmt->LogID), -1);
         CountCommentNums(0, +1);
+        if($cmt->AuthorID > 0){
+            CountMember($cmt->Author, array(0, 0, -1, 0));
+            $cmt->Author->Save();
+        }
     }
 
     $zbp->AddBuildModule('comments');
@@ -2145,8 +2161,13 @@ function BatchComment()
             if (!$cmt->IsChecking) {
                 CountPostArray(array($cmt->LogID), -1);
                 CountCommentNums(-1, 0);
+                if($cmt->AuthorID > 0){
+                    CountMember($cmt->Author, array(0, 0, -1, 0));
+                    $cmt->Author->Save();
+                }
             } else {
                 CountCommentNums(-1, -1);
+
             }
         }
     } elseif ($type == 'all_pass') {
@@ -2159,6 +2180,10 @@ function BatchComment()
             $cmt->Save();
             CountPostArray(array($cmt->LogID), +1);
             CountCommentNums(0, -1);
+            if($cmt->AuthorID > 0){
+                CountMember($cmt->Author, array(0, 0, 1, 0));
+                $cmt->Author->Save();
+            }
         }
     } elseif ($type == 'all_audit') {
         foreach ($childArray as $i => $cmt) {
@@ -2170,6 +2195,10 @@ function BatchComment()
             $cmt->Save();
             CountPostArray(array($cmt->LogID), -1);
             CountCommentNums(0, +1);
+            if($cmt->AuthorID > 0){
+                CountMember($cmt->Author, array(0, 0, -1, 0));
+                $cmt->Author->Save();
+            }
         }
     }
 
@@ -3483,7 +3512,7 @@ function CountMember(&$member, $plus = array(null, null, null, null))
 
     if ($plus[2] === null) {
         if ($member->ID > 0) {
-            $s = $zbp->db->sql->Count($zbp->table['Comment'], array(array('COUNT', '*', 'num')), array(array('=', 'comm_AuthorID', $id)));
+            $s = $zbp->db->sql->Count($zbp->table['Comment'], array(array('COUNT', '*', 'num')), array(array('=', 'comm_AuthorID', $id), array('=', 'comm_IsChecking', 0)));
             $member_Comments = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
             $member->Comments = $member_Comments;
         }
