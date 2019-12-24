@@ -1959,7 +1959,7 @@ function PostComment()
 
     CountPostArray(array($cmt->LogID), +1);
     CountCommentNums(+1, 0);
-    if($zbp->user->ID > 0){
+    if ($zbp->user->ID > 0) {
         CountMember($zbp->user, array(0, 0, 1, 0));
         $zbp->user->Save();
     }
@@ -2011,7 +2011,7 @@ function DelComment()
 
         if ($cmt->IsChecking == false) {
             CountPostArray(array($cmt->LogID), -1);
-            if($cmt->AuthorID > 0){
+            if ($cmt->AuthorID > 0) {
                 CountMember($cmt->Author, array(0, 0, -1, 0));
                 $cmt->Author->Save();
             }
@@ -2099,14 +2099,14 @@ function CheckComment()
     if (($orig_check) && (!$ischecking)) {
         CountPostArray(array($cmt->LogID), +1);
         CountCommentNums(0, -1);
-        if($cmt->AuthorID > 0){
+        if ($cmt->AuthorID > 0) {
             CountMember($cmt->Author, array(0, 0, +1, 0));
             $cmt->Author->Save();
         }
     } elseif ((!$orig_check) && ($ischecking)) {
         CountPostArray(array($cmt->LogID), -1);
         CountCommentNums(0, +1);
-        if($cmt->AuthorID > 0){
+        if ($cmt->AuthorID > 0) {
             CountMember($cmt->Author, array(0, 0, -1, 0));
             $cmt->Author->Save();
         }
@@ -2161,13 +2161,12 @@ function BatchComment()
             if (!$cmt->IsChecking) {
                 CountPostArray(array($cmt->LogID), -1);
                 CountCommentNums(-1, 0);
-                if($cmt->AuthorID > 0){
+                if ($cmt->AuthorID > 0) {
                     CountMember($cmt->Author, array(0, 0, -1, 0));
                     $cmt->Author->Save();
                 }
             } else {
                 CountCommentNums(-1, -1);
-
             }
         }
     } elseif ($type == 'all_pass') {
@@ -2180,7 +2179,7 @@ function BatchComment()
             $cmt->Save();
             CountPostArray(array($cmt->LogID), +1);
             CountCommentNums(0, -1);
-            if($cmt->AuthorID > 0){
+            if ($cmt->AuthorID > 0) {
                 CountMember($cmt->Author, array(0, 0, 1, 0));
                 $cmt->Author->Save();
             }
@@ -2195,7 +2194,7 @@ function BatchComment()
             $cmt->Save();
             CountPostArray(array($cmt->LogID), -1);
             CountCommentNums(0, +1);
-            if($cmt->AuthorID > 0){
+            if ($cmt->AuthorID > 0) {
                 CountMember($cmt->Author, array(0, 0, -1, 0));
                 $cmt->Author->Save();
             }
