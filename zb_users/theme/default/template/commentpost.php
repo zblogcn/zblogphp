@@ -1,5 +1,4 @@
 {* Template Name:评论发布框 *}
-<script src="{$host}zb_system/script/c_refresh_key.php?postid={$article.ID}&amp;form=frmSumbit" type="text/javascript"></script>
 <div class="post" id="divCommentPost">
 	<p class="posttop"><a name="comment">{if $user.ID>0}{$user.StaticName}{/if}{$lang['default']['add_reply']}:</a><a rel="nofollow" id="cancel-reply" href="#divCommentPost" style="display:none;"><small>{$lang['default']['cancel_reply']}</small></a></p>
 	<form id="frmSumbit" target="_self" method="post" action="{$article.CommentPostUrl}" >
