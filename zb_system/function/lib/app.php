@@ -149,16 +149,18 @@ class App
      */
     public $ignore_files = array('.DS_Store', 'Thumbs.db', 'composer.lock', 'zbignore.txt');
 
-    public function __get ($key) 
+    public function __get($key)
     {
         global $zbp;
         if ($key === 'app_path') {
             $appDirectory = $zbp->usersdir . TransferHTML($this->type, '[filename]');
             $appDirectory .= DIRECTORY_SEPARATOR . TransferHTML($this->id, '[filename]') . DIRECTORY_SEPARATOR;
+
             return $appDirectory;
-        } else if ($key === 'app_url') {
+        } elseif ($key === 'app_url') {
             return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id;
         }
+
         return '';
     }
 
@@ -290,6 +292,7 @@ class App
     public function GetCssFiles()
     {
         $dir = $this->app_path . '/style/';
+
         return GetFilesInDir($dir, 'css');
     }
 
@@ -320,7 +323,7 @@ class App
         }
 
         $appver = $xml->attributes();
-        if ((string)$appver->version !== 'php') {
+        if ((string) $appver->version !== 'php') {
             return false;
         }
 
@@ -542,10 +545,12 @@ class App
         $s .= '<sidebar8>' . htmlspecialchars($this->sidebars_sidebar8) . '</sidebar8>';
         $s .= '<sidebar9>' . htmlspecialchars($this->sidebars_sidebar9) . '</sidebar9>';
         $s .= '</sidebars>';
-            $s .= "\n";
+        $s .= "\n";
 
         foreach ($this->dirs as $key => $value) {
-            if ($this->IsPathIgnored($value)) continue;
+            if ($this->IsPathIgnored($value)) {
+                continue;
+            }
             $value = str_replace($dir, '', $value);
             $value = preg_replace('/[^(\x20-\x7F)]*/', '', $value);
             $d = $this->id . '/' . $value;
@@ -553,7 +558,9 @@ class App
             $s .= "\n";
         }
         foreach ($this->files as $key => $value) {
-            if ($this->IsPathIgnored($value)) continue;
+            if ($this->IsPathIgnored($value)) {
+                continue;
+            }
             $d = $this->id . '/' . str_replace($dir, '', $value);
             $ext = pathinfo($value, PATHINFO_EXTENSION);
             if ($ext == 'php' || $ext == 'inc') {
@@ -581,8 +588,7 @@ class App
         return gzencode($this->Pack(), 9, FORCE_GZIP);
     }
 
-
-    private function IsPathIgnored ($path)
+    private function IsPathIgnored($path)
     {
         $path = str_replace('\\', '/', $path);
         $appPath = str_replace('\\', '/', $this->app_path);
@@ -592,6 +598,7 @@ class App
                 return true;
             }
         }
+
         return false;
     }
 

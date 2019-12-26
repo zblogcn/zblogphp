@@ -324,7 +324,6 @@ function GetValueInArray($array, $name)
             return $array[$name];
         }
     }
-    return NULL;
 }
 
 /**
@@ -342,7 +341,6 @@ function GetValueInArrayByCurrent($array, $name)
 
         return GetValueInArray($array, $name);
     }
-    return NULL;
 }
 
 /**
@@ -363,6 +361,7 @@ function SplitAndGet($string, $delimiter = ';', $n = 0)
     if (isset($a[$n])) {
         return $a[$n];
     }
+
     return '';
 }
 
