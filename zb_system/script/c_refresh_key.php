@@ -10,11 +10,13 @@
 require '../function/c_system_base.php';
 
 ob_clean();
+header('Content-Type: application/x-javascript');
 // @TODO: Configuable
 
 if (GetVars('postid', 'GET') > 0) {
     $key = $zbp->GetCmtKey(GetVars('postid', 'GET'));
     $form = GetVars('form', 'GET');
+    $form = TransferHTML($form, '[html-format]');
     echo '$(function () {
     $("#' . $form . '").attr("action" , $("#' . $form . '").attr("action") + "&key=' . $key . '");
 });';

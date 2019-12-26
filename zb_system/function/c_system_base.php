@@ -59,7 +59,7 @@ define('ENGINE_PHP', 1);
 define('ENGINE_HHVM', 2);
 define('PHP_SYSTEM', GetSystem());
 define('PHP_SERVER', GetWebServer());
-define('PHP_ENGINE', GetPHPEngine());
+define('PHP_ENGINE', ENGINE_PHP);
 define('IS_X64', (PHP_INT_SIZE === 8));
 /*
  * 如果想获取准确的值，请zbp->Load后使用$zbp->isHttps

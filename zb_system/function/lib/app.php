@@ -144,6 +144,25 @@ class App
      * @var string PHP最低版本
      */
     public $phpver;
+    /**
+     * @var array 禁止打包文件glob
+     */
+    public $ignore_files = array('.DS_Store', 'Thumbs.db', 'composer.lock', 'zbignore.txt');
+
+    public function __get($key)
+    {
+        global $zbp;
+        if ($key === 'app_path') {
+            $appDirectory = $zbp->usersdir . TransferHTML($this->type, '[filename]');
+            $appDirectory .= DIRECTORY_SEPARATOR . TransferHTML($this->id, '[filename]') . DIRECTORY_SEPARATOR;
+
+            return $appDirectory;
+        } elseif ($key === 'app_url') {
+            return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id;
+        }
+
+        return '';
+    }
 
     /**
      * 得到详细信息数组.
@@ -238,9 +257,7 @@ class App
      */
     public function GetDir()
     {
-        global $zbp;
-
-        return $zbp->path . 'zb_users/' . $this->type . '/' . $this->id . '/';
+        return $this->app_path;
     }
 
     /**
@@ -250,11 +267,10 @@ class App
      */
     public function GetLogo()
     {
-        global $zbp;
         if ($this->type == 'plugin') {
-            return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/logo.png';
+            return $this->app_url . '/logo.png';
         } else {
-            return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
+            return $this->app_url . '/screenshot.png';
         }
     }
 
@@ -265,9 +281,7 @@ class App
      */
     public function GetScreenshot()
     {
-        global $zbp;
-
-        return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/screenshot.png';
+        return $this->app_url . '/screenshot.png';
     }
 
     /**
@@ -277,8 +291,7 @@ class App
      */
     public function GetCssFiles()
     {
-        global $zbp;
-        $dir = $zbp->usersdir . 'theme/' . $this->id . '/style/';
+        $dir = $this->app_path . '/style/';
 
         return GetFilesInDir($dir, 'css');
     }
@@ -294,21 +307,23 @@ class App
     public function LoadInfoByXml($type, $id)
     {
         global $zbp;
-        $path = $zbp->usersdir . TransferHTML($type, '[filename]');
-        $path .= '/' . TransferHTML($id, '[filename]') . '/' . TransferHTML($type, '[filename]') . '.xml';
 
-        if (!is_readable($path)) {
+        $this->id = $id;
+        $this->type = $type;
+        $xmlPath = $this->app_path . TransferHTML($type, '[filename]') . '.xml';
+
+        if (!is_readable($xmlPath)) {
             return false;
         }
 
-        $content = file_get_contents($path);
+        $content = file_get_contents($xmlPath);
         $xml = @simplexml_load_string($content);
         if (!$xml) {
             return false;
         }
 
         $appver = $xml->attributes();
-        if ($appver != 'php') {
+        if ((string) $appver->version !== 'php') {
             return false;
         }
 
@@ -357,6 +372,11 @@ class App
         $this->sidebars_sidebar7 = (string) $xml->sidebars->sidebar7;
         $this->sidebars_sidebar8 = (string) $xml->sidebars->sidebar8;
         $this->sidebars_sidebar9 = (string) $xml->sidebars->sidebar9;
+
+        $appIgnorePath = $this->app_path . '/zbignore.txt';
+        if (is_readable($appIgnorePath)) {
+            $this->ignore_files = explode("\n", trim(file_get_contents($appIgnorePath)));
+        }
 
         return true;
     }
@@ -422,7 +442,7 @@ class App
 
         $s .= '</' . $this->type . '>';
 
-        $path = $zbp->usersdir . $this->type . '/' . $this->id . '/' . $this->type . '.xml';
+        $path = $this->app_path . '/' . $this->type . '.xml';
 
         @file_put_contents($path, $s);
 
@@ -446,32 +466,15 @@ class App
      */
     private function GetAllFileDir($dir)
     {
-        if (function_exists('scandir')) {
-            foreach (scandir($dir) as $d) {
-                if (is_dir($dir . $d)) {
-                    if ((substr($d, 0, 1) != '.') &&
-                        !($d == 'compile' && $this->type == 'theme')) {
-                        $this->GetAllFileDir($dir . $d . '/');
-                        $this->dirs[] = $dir . $d . '/';
-                    }
-                } else {
-                    $this->files[] = $dir . $d;
+        foreach (scandir($dir) as $d) {
+            if (is_dir($dir . $d)) {
+                if ((substr($d, 0, 1) != '.') &&
+                    !($d == 'compile' && $this->type == 'theme')) {
+                    $this->GetAllFileDir($dir . $d . '/');
+                    $this->dirs[] = $dir . $d . '/';
                 }
-            }
-        } else {
-            if ($handle = opendir($dir)) {
-                while (false !== ($file = readdir($handle))) {
-                    if (is_dir($dir . $file)) {
-                        if ((substr($file, 0, 1) != '.') &&
-                            !($file == 'compile' && $this->type == 'theme')) {
-                            $this->dirs[] = $dir . $file . '/';
-                            $this->GetAllFileDir($dir . $file . '/');
-                        }
-                    } else {
-                        $this->files[] = $dir . $file;
-                    }
-                }
-                closedir($handle);
+            } else {
+                $this->files[] = $dir . $d;
             }
         }
     }
@@ -485,7 +488,7 @@ class App
     {
         global $zbp;
 
-        $dir = $this->GetDir();
+        $dir = $this->app_path;
         $this->GetAllFileDir($dir);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_App_Pack'] as $fpname => &$fpsignal) {
@@ -542,14 +545,22 @@ class App
         $s .= '<sidebar8>' . htmlspecialchars($this->sidebars_sidebar8) . '</sidebar8>';
         $s .= '<sidebar9>' . htmlspecialchars($this->sidebars_sidebar9) . '</sidebar9>';
         $s .= '</sidebars>';
+        $s .= "\n";
 
         foreach ($this->dirs as $key => $value) {
+            if ($this->IsPathIgnored($value)) {
+                continue;
+            }
             $value = str_replace($dir, '', $value);
             $value = preg_replace('/[^(\x20-\x7F)]*/', '', $value);
             $d = $this->id . '/' . $value;
             $s .= '<folder><path>' . htmlspecialchars($d) . '</path></folder>';
+            $s .= "\n";
         }
         foreach ($this->files as $key => $value) {
+            if ($this->IsPathIgnored($value)) {
+                continue;
+            }
             $d = $this->id . '/' . str_replace($dir, '', $value);
             $ext = pathinfo($value, PATHINFO_EXTENSION);
             if ($ext == 'php' || $ext == 'inc') {
@@ -562,6 +573,7 @@ class App
             }
 
             $s .= '<file><path>' . htmlspecialchars($d) . '</path><stream>' . $c . '</stream></file>';
+            $s .= "\n";
         }
 
         $s .= '<verify>' . base64_encode($zbp->host . "\n" . $zbp->path) . '</verify>';
@@ -574,6 +586,20 @@ class App
     public function PackGZip()
     {
         return gzencode($this->Pack(), 9, FORCE_GZIP);
+    }
+
+    private function IsPathIgnored($path)
+    {
+        $path = str_replace('\\', '/', $path);
+        $appPath = str_replace('\\', '/', $this->app_path);
+        $fileName = str_replace($appPath, '', $path);
+        foreach ($this->ignore_files as $glob) {
+            if (fnmatch($glob, $fileName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -623,9 +649,7 @@ class App
             $s = base64_decode($file->stream);
             $f = $dir . $file->path;
             @file_put_contents($f, $s);
-            if (function_exists('chmod')) {
-                @chmod($f, 0755);
-            }
+            @chmod($f, 0755);
         }
 
         ZBlogException::ResumeErrorHook();
@@ -658,7 +682,7 @@ class App
                 continue;
             }
 
-            if (function_exists($e) == false) {
+            if (!function_exists($e)) {
                 $zbp->ShowError(str_replace('%s', $e, $zbp->lang['error'][92]), __FILE__, __LINE__);
             }
         }
@@ -692,8 +716,7 @@ class App
      */
     public function Del()
     {
-        global $zbp;
-        rrmdir($zbp->usersdir . $this->type . '/' . $this->id);
+        rrmdir($this->app_path);
         $this->DelCompiled();
     }
 
