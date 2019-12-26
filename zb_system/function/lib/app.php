@@ -125,6 +125,22 @@ class App
      */
     public $sidebars_sidebar5;
     /**
+     * @var string 设置主题侧栏6
+     */
+    public $sidebars_sidebar6;
+    /**
+     * @var string 定义主题侧栏7
+     */
+    public $sidebars_sidebar7;
+    /**
+     * @var string 设置主题侧栏8
+     */
+    public $sidebars_sidebar8;
+    /**
+     * @var string 设置主题侧栏9
+     */
+    public $sidebars_sidebar9;
+    /**
      * @var string PHP最低版本
      */
     public $phpver;
@@ -337,6 +353,10 @@ class App
         $this->sidebars_sidebar3 = (string) $xml->sidebars->sidebar3;
         $this->sidebars_sidebar4 = (string) $xml->sidebars->sidebar4;
         $this->sidebars_sidebar5 = (string) $xml->sidebars->sidebar5;
+        $this->sidebars_sidebar6 = (string) $xml->sidebars->sidebar6;
+        $this->sidebars_sidebar7 = (string) $xml->sidebars->sidebar7;
+        $this->sidebars_sidebar8 = (string) $xml->sidebars->sidebar8;
+        $this->sidebars_sidebar9 = (string) $xml->sidebars->sidebar9;
 
         return true;
     }
@@ -394,6 +414,10 @@ class App
         $s .= '  <sidebar3>' . htmlspecialchars($this->sidebars_sidebar3) . '</sidebar3>' . "\r\n";
         $s .= '  <sidebar4>' . htmlspecialchars($this->sidebars_sidebar4) . '</sidebar4>' . "\r\n";
         $s .= '  <sidebar5>' . htmlspecialchars($this->sidebars_sidebar5) . '</sidebar5>' . "\r\n";
+        $s .= '  <sidebar6>' . htmlspecialchars($this->sidebars_sidebar6) . '</sidebar6>' . "\r\n";
+        $s .= '  <sidebar7>' . htmlspecialchars($this->sidebars_sidebar7) . '</sidebar7>' . "\r\n";
+        $s .= '  <sidebar8>' . htmlspecialchars($this->sidebars_sidebar8) . '</sidebar8>' . "\r\n";
+        $s .= '  <sidebar9>' . htmlspecialchars($this->sidebars_sidebar9) . '</sidebar9>' . "\r\n";
         $s .= '</sidebars>' . "\r\n";
 
         $s .= '</' . $this->type . '>';
@@ -513,6 +537,10 @@ class App
         $s .= '<sidebar3>' . htmlspecialchars($this->sidebars_sidebar3) . '</sidebar3>';
         $s .= '<sidebar4>' . htmlspecialchars($this->sidebars_sidebar4) . '</sidebar4>';
         $s .= '<sidebar5>' . htmlspecialchars($this->sidebars_sidebar5) . '</sidebar5>';
+        $s .= '<sidebar6>' . htmlspecialchars($this->sidebars_sidebar6) . '</sidebar6>';
+        $s .= '<sidebar7>' . htmlspecialchars($this->sidebars_sidebar7) . '</sidebar7>';
+        $s .= '<sidebar8>' . htmlspecialchars($this->sidebars_sidebar8) . '</sidebar8>';
+        $s .= '<sidebar9>' . htmlspecialchars($this->sidebars_sidebar9) . '</sidebar9>';
         $s .= '</sidebars>';
 
         foreach ($this->dirs as $key => $value) {
