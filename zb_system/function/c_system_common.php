@@ -98,10 +98,6 @@ function GetSystem()
  */
 function GetPHPEngine()
 {
-    if (defined('HHVM_VERSION')) {
-        return ENGINE_HHVM;
-    }
-
     return ENGINE_PHP;
 }
 
