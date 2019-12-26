@@ -324,6 +324,7 @@ function GetValueInArray($array, $name)
             return $array[$name];
         }
     }
+    return NULL;
 }
 
 /**
@@ -341,6 +342,7 @@ function GetValueInArrayByCurrent($array, $name)
 
         return GetValueInArray($array, $name);
     }
+    return NULL;
 }
 
 /**
@@ -361,6 +363,7 @@ function SplitAndGet($string, $delimiter = ';', $n = 0)
     if (isset($a[$n])) {
         return $a[$n];
     }
+    return '';
 }
 
 /**
@@ -523,35 +526,19 @@ function GetDirsInDir($dir)
 {
     $dirs = array();
 
-    if (!file_exists($dir)) {
-        return array();
-    }
-    if (!is_dir($dir)) {
-        return array();
-    }
     $dir = str_replace('\\', '/', $dir);
     if (substr($dir, -1) !== '/') {
         $dir .= '/';
     }
+    if (!is_dir($dir)) {
+        return array();
+    }
 
-    if (function_exists('scandir')) {
-        foreach (scandir($dir, 0) as $d) {
-            if (is_dir($dir . $d)) {
-                if (($d != '.') && ($d != '..')) {
-                    $dirs[] = $d;
-                }
+    foreach (scandir($dir, 0) as $d) {
+        if (is_dir($dir . $d)) {
+            if (($d != '.') && ($d != '..')) {
+                $dirs[] = $d;
             }
-        }
-    } else {
-        if ($handle = opendir($dir)) {
-            while (false !== ($file = readdir($handle))) {
-                if ($file != "." && $file != "..") {
-                    if (is_dir($dir . $file)) {
-                        $dirs[] = $file;
-                    }
-                }
-            }
-            closedir($handle);
         }
     }
 
@@ -569,50 +556,25 @@ function GetDirsInDir($dir)
 function GetFilesInDir($dir, $type)
 {
     $files = array();
-
-    if (!file_exists($dir)) {
-        return array();
-    }
-    if (!is_dir($dir)) {
-        return array();
-    }
     $dir = str_replace('\\', '/', $dir);
     if (substr($dir, -1) !== '/') {
         $dir .= '/';
     }
+    if (!is_dir($dir)) {
+        return array();
+    }
 
-    if (function_exists('scandir')) {
-        foreach (scandir($dir) as $f) {
-            if (is_file($dir . $f)) {
-                foreach (explode("|", $type) as $t) {
-                    $t = '.' . $t;
-                    $i = strlen($t);
-                    if (substr($f, -$i, $i) == $t) {
-                        $sortname = substr($f, 0, strlen($f) - $i);
-                        $files[$sortname] = $dir . $f;
-                        break;
-                    }
+    foreach (scandir($dir) as $f) {
+        if (is_file($dir . $f)) {
+            foreach (explode("|", $type) as $t) {
+                $t = '.' . $t;
+                $i = strlen($t);
+                if (substr($f, -$i, $i) == $t) {
+                    $sortname = substr($f, 0, strlen($f) - $i);
+                    $files[$sortname] = $dir . $f;
+                    break;
                 }
             }
-        }
-    } else {
-        if ($handle = opendir($dir)) {
-            while (false !== ($file = readdir($handle))) {
-                if ($file != "." && $file != "..") {
-                    if (is_file($dir . $file)) {
-                        foreach (explode("|", $type) as $t) {
-                            $t = '.' . $t;
-                            $i = strlen($t);
-                            if (substr($file, -$i, $i) == $t) {
-                                $sortname = substr($file, 0, strlen($file) - $i);
-                                $files[$sortname] = $dir . $file;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            closedir($handle);
         }
     }
 
