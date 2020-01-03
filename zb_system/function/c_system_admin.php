@@ -1884,7 +1884,7 @@ function changeDomain(newurl){
         newurl = newurl + "/";
     }
     url = newurl + "zb_system/cmd.php?act=misc&type=ping&token=" + token;
-    $(".js-tip").html("校验中");
+    $(".js-tip").html("' . $zbp->lang['msg']['verifying'] . '");
     $.getJSON(url,{newurl:newurl},function(data) {
         if (data) {
             $(".js-tip").html(data.err.msg);
@@ -1895,7 +1895,7 @@ function changeDomain(newurl){
           return true;
         }
       }).fail(function() {
-        $(".js-tip").html("校验失败");
+        $(".js-tip").html("' . $zbp->lang['msg']['verify_fail'] . '");
         //console.log( "error" );
         return false;
       });

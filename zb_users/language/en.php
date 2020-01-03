@@ -254,6 +254,13 @@ return array(
         'current_template'                  => 'Current Template',
         'additional_security'               => 'Additional Security',
         'using_cdn_guest_type'              => 'HTTP Header for IP',
+        'first_button'                      => '‹‹',
+        'prev_button'                       => '‹',
+        'next_button'                       => '›',
+        'last_button'                       => '››',
+        'verify_succeed'                    => 'Verify succeed',
+        'verify_fail'                       => 'Verify fail',
+        'verifying'                         => 'Verifying',
         ''                                  => '',
     ),
 

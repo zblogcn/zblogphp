@@ -254,6 +254,13 @@ return array(
         'current_template'                  => '當前模板',
         'additional_security'               => '安全增強',
         'using_cdn_guest_type'              => '客戶IP獲取来源',
+        'first_button'                      => '‹‹',
+        'prev_button'                       => '‹',
+        'next_button'                       => '›',
+        'last_button'                       => '››',
+        'verify_succeed'                    => '校验成功',
+        'verify_fail'                       => '校验失败',
+        'verifying'                         => '校验中',
         ''                                  => '',
     ),
 

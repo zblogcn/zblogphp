@@ -648,6 +648,8 @@ class App
         foreach ($xml->file as $file) {
             $s = base64_decode($file->stream);
             $f = $dir . $file->path;
+            $f = str_replace('../', '', $f);
+            $f = str_replace('..\\', '', $f);
             @file_put_contents($f, $s);
             @chmod($f, 0755);
         }

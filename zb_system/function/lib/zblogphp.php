@@ -1490,8 +1490,9 @@ class ZBlogPHP
     public function LoadApp($type, $id)
     {
         $app = new App();
-        $app->LoadInfoByXml($type, $id);
-
+        if($app->LoadInfoByXml($type, $id) != true){
+            $app->id = '';
+        }
         return $app;
     }
 
@@ -3057,6 +3058,14 @@ class ZBlogPHP
         ZBlogException::$error_id = $errorCode;
         ZBlogException::$error_file = $file;
         ZBlogException::$error_line = $line;
+
+        if(stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0){
+            $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);
+            $GLOBALS['hooks']['Filter_Plugin_Debug_Display'] = array();
+            $GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] = array();
+            throw new Exception($errorText);
+            exit(1);
+        }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($errorCode, $errorText, $file, $line);
