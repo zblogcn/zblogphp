@@ -673,8 +673,8 @@ class ZBlogPHP
             case 'pdo_sqlite':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(array(
-                $this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
-                $this->option['ZC_SQLITE_PRE'],
+                    $this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
+                    $this->option['ZC_SQLITE_PRE'],
                 )) == false) {
                     $this->ShowError(69, __FILE__, __LINE__);
                 }
@@ -683,13 +683,13 @@ class ZBlogPHP
             case 'pdo_pgsql':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(array(
-                $this->option['ZC_PGSQL_SERVER'],
-                $this->option['ZC_PGSQL_USERNAME'],
-                $this->option['ZC_PGSQL_PASSWORD'],
-                $this->option['ZC_PGSQL_NAME'],
-                $this->option['ZC_PGSQL_PRE'],
-                $this->option['ZC_PGSQL_PORT'],
-                $this->option['ZC_PGSQL_PERSISTENT'],
+                    $this->option['ZC_PGSQL_SERVER'],
+                    $this->option['ZC_PGSQL_USERNAME'],
+                    $this->option['ZC_PGSQL_PASSWORD'],
+                    $this->option['ZC_PGSQL_NAME'],
+                    $this->option['ZC_PGSQL_PRE'],
+                    $this->option['ZC_PGSQL_PORT'],
+                    $this->option['ZC_PGSQL_PERSISTENT'],
                 )) == false) {
                     $this->ShowError(67, __FILE__, __LINE__);
                 }
@@ -700,14 +700,14 @@ class ZBlogPHP
             default:
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(array(
-                $this->option['ZC_MYSQL_SERVER'],
-                $this->option['ZC_MYSQL_USERNAME'],
-                $this->option['ZC_MYSQL_PASSWORD'],
-                $this->option['ZC_MYSQL_NAME'],
-                $this->option['ZC_MYSQL_PRE'],
-                $this->option['ZC_MYSQL_PORT'],
-                $this->option['ZC_MYSQL_PERSISTENT'],
-                $this->option['ZC_MYSQL_ENGINE'],
+                    $this->option['ZC_MYSQL_SERVER'],
+                    $this->option['ZC_MYSQL_USERNAME'],
+                    $this->option['ZC_MYSQL_PASSWORD'],
+                    $this->option['ZC_MYSQL_NAME'],
+                    $this->option['ZC_MYSQL_PRE'],
+                    $this->option['ZC_MYSQL_PORT'],
+                    $this->option['ZC_MYSQL_PERSISTENT'],
+                    $this->option['ZC_MYSQL_ENGINE'],
                 )) == false) {
                     $this->ShowError(67, __FILE__, __LINE__);
                 }
@@ -1490,9 +1490,10 @@ class ZBlogPHP
     public function LoadApp($type, $id)
     {
         $app = new App();
-        if($app->LoadInfoByXml($type, $id) != true){
+        if ($app->LoadInfoByXml($type, $id) != true) {
             $app->id = '';
         }
+
         return $app;
     }
 
@@ -2429,9 +2430,9 @@ class ZBlogPHP
         $like = ($this->db->type == 'pgsql') ? 'ILIKE' : 'LIKE';
 
         $sql = $this->db->sql->get()->select($this->table['Member'])->where(array("$like array", array(
-                array('mem_Name', $name),
-                array('mem_Alias', $name),
-            )))->limit(1)->sql;
+            array('mem_Name', $name),
+            array('mem_Alias', $name),
+        )))->limit(1)->sql;
 
         /** @var Member[] $am */
         $am = $this->GetListType('Member', $sql);
@@ -3059,10 +3060,11 @@ class ZBlogPHP
         ZBlogException::$error_file = $file;
         ZBlogException::$error_line = $line;
 
-        if(stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0){
+        if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
             $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);
             $GLOBALS['hooks']['Filter_Plugin_Debug_Display'] = array();
             $GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] = array();
+
             throw new Exception($errorText);
             exit(1);
         }

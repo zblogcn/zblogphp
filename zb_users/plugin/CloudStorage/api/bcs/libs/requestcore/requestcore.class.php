@@ -571,8 +571,8 @@ class BCS_RequestCore
         curl_setopt($curl_handle, CURLOPT_REFERER, $this->request_url);
         curl_setopt($curl_handle, CURLOPT_USERAGENT, $this->useragent);
         curl_setopt($curl_handle, CURLOPT_READFUNCTION, array(
-                $this,
-                'streaming_read_callback', ));
+            $this,
+            'streaming_read_callback', ));
         if ($this->debug_mode) {
             curl_setopt($curl_handle, CURLOPT_VERBOSE, true);
         }
@@ -632,8 +632,8 @@ class BCS_RequestCore
                 curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, $this->method);
                 if (isset($this->write_stream)) {
                     curl_setopt($curl_handle, CURLOPT_WRITEFUNCTION, array(
-                            $this,
-                            'streaming_write_callback', ));
+                        $this,
+                        'streaming_write_callback', ));
                     curl_setopt($curl_handle, CURLOPT_HEADER, false);
                 } else {
                     curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $this->request_body);

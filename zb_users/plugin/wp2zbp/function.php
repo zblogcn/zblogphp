@@ -176,7 +176,7 @@ function convert_user_table($_prefix)
         array(
             array('CUSTOM', $_prefix . 'users.ID=' . $_prefix . 'usermeta.user_id'),
             array('CUSTOM', $_prefix . 'usermeta.meta_key="wp_user_level"'),
-            ),
+        ),
         '',
         '',
         ''
@@ -264,7 +264,7 @@ function upgrade_category_and_tag_count($_prefix)
         array(
             array('CUSTOM', $_prefix . 'term_relationships.term_taxonomy_id=' . $_prefix . 'term_taxonomy.term_taxonomy_id'),
             array('CUSTOM', $_prefix . 'term_taxonomy.taxonomy="category"'),
-            ),
+        ),
         '',
         '',
         ''
@@ -286,7 +286,7 @@ function upgrade_category_and_tag_count($_prefix)
         array(
             array('CUSTOM', $_prefix . 'term_relationships.term_taxonomy_id=' . $_prefix . 'term_taxonomy.term_taxonomy_id'),
             array('CUSTOM', $_prefix . 'term_taxonomy.taxonomy="post_tag"'),
-            ),
+        ),
         '',
         '',
         ''

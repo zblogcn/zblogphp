@@ -186,7 +186,7 @@ class Markdown implements MarkdownInterface
         "stripLinkDefinitions" => 20,
 
         "runBasicBlockGamut"   => 30,
-        );
+    );
 
     protected function stripLinkDefinitions($text)
     {
@@ -419,17 +419,17 @@ class Markdown implements MarkdownInterface
     }
 
     protected $block_gamut = array(
-    //
-    // These are all the transformations that form block-level
-    // tags like paragraphs, headers, and list items.
-    //
+        //
+        // These are all the transformations that form block-level
+        // tags like paragraphs, headers, and list items.
+        //
         "doHeaders"         => 10,
         "doHorizontalRules" => 20,
 
         "doLists"           => 40,
         "doCodeBlocks"      => 50,
         "doBlockQuotes"     => 60,
-        );
+    );
 
     protected function runBlockGamut($text)
     {
@@ -482,10 +482,10 @@ class Markdown implements MarkdownInterface
     }
 
     protected $span_gamut = array(
-    //
-    // These are all the transformations that occur *within* block-level
-    // tags like paragraphs, headers, and list items.
-    //
+        //
+        // These are all the transformations that occur *within* block-level
+        // tags like paragraphs, headers, and list items.
+        //
         // Process character escapes, code spans, and inline HTML
         // in one shot.
         "parseSpan"           => -30,
@@ -503,7 +503,7 @@ class Markdown implements MarkdownInterface
 
         "doItalicsAndBold"    => 50,
         "doHardBreaks"        => 60,
-        );
+    );
 
     protected function runSpanGamut($text)
     {
@@ -840,7 +840,7 @@ class Markdown implements MarkdownInterface
         $markers_relist = array(
             $marker_ul_re => $marker_ol_re,
             $marker_ol_re => $marker_ul_re,
-            );
+        );
 
         foreach ($markers_relist as $marker_re => $other_marker_re) {
             // Re-usable pattern to match any entirel ul or ol list:
@@ -1035,17 +1035,17 @@ class Markdown implements MarkdownInterface
         ''  => '(?:(?<!\*)\*(?!\*)|(?<!_)_(?!_))(?![\.,:;]?\s)',
         '*' => '(?<![\s*])\*(?!\*)',
         '_' => '(?<![\s_])_(?!_)',
-        );
+    );
     protected $strong_relist = array(
         ''   => '(?:(?<!\*)\*\*(?!\*)|(?<!_)__(?!_))(?![\.,:;]?\s)',
         '**' => '(?<![\s*])\*\*(?!\*)',
         '__' => '(?<![\s_])__(?!_)',
-        );
+    );
     protected $em_strong_relist = array(
         ''    => '(?:(?<!\*)\*\*\*(?!\*)|(?<!_)___(?!_))(?![\.,:;]?\s)',
         '***' => '(?<![\s*])\*\*\*(?!\*)',
         '___' => '(?<![\s_])___(?!_)',
-        );
+    );
     protected $em_strong_prepared_relist;
 
     protected function prepareItalicsAndBold()
@@ -1679,16 +1679,16 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown
             "stripFootnotes"     => 15,
             "stripAbbreviations" => 25,
             "appendFootnotes"    => 50,
-            );
+        );
         $this->block_gamut += array(
             "doFencedCodeBlocks" => 5,
             "doTables"           => 15,
             "doDefLists"         => 45,
-            );
+        );
         $this->span_gamut += array(
             "doFootnotes"        => 5,
             "doAbbreviations"    => 70,
-            );
+        );
 
         parent::__construct();
     }
@@ -3010,17 +3010,17 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown
         ''  => '(?:(?<!\*)\*(?!\*)|(?<![a-zA-Z0-9_])_(?!_))(?![\.,:;]?\s)',
         '*' => '(?<![\s*])\*(?!\*)',
         '_' => '(?<![\s_])_(?![a-zA-Z0-9_])',
-        );
+    );
     protected $strong_relist = array(
         ''   => '(?:(?<!\*)\*\*(?!\*)|(?<![a-zA-Z0-9_])__(?!_))(?![\.,:;]?\s)',
         '**' => '(?<![\s*])\*\*(?!\*)',
         '__' => '(?<![\s_])__(?![a-zA-Z0-9_])',
-        );
+    );
     protected $em_strong_relist = array(
         ''    => '(?:(?<!\*)\*\*\*(?!\*)|(?<![a-zA-Z0-9_])___(?!_))(?![\.,:;]?\s)',
         '***' => '(?<![\s*])\*\*\*(?!\*)',
         '___' => '(?<![\s_])___(?![a-zA-Z0-9_])',
-        );
+    );
 
     protected function formParagraphs($text)
     {

@@ -1236,13 +1236,10 @@ function SubStrUTF8($sourcestr, $cutlength)
             $n++; //但考虑整体美观，大写字母计成一个高位字符
         } else {
             //其他情况下，包括小写字母和半角标点符号，
-            {
 
-                $ret = $ret . substr($sourcestr, $i, 1);
-                $i = $i + 1; //实际的Byte数计1个
+            $ret = $ret . substr($sourcestr, $i, 1);
+            $i = $i + 1; //实际的Byte数计1个
                 $n = $n + 0.5; //小写字母和半角标点等与半个高位字符宽...
-
-            }
         }
         /*
         if ($str_length > $cutlength) {

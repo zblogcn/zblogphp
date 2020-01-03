@@ -58,22 +58,22 @@ class BaiduBCS
     const BCS_SDK_ACL_ACTION_PUT_OBJECT_POLICY = 'put_object_policy';
     const BCS_SDK_ACL_ACTION_GET_OBJECT_POLICY = 'get_object_policy';
     public static $ACL_ACTIONS = array(
-            self::BCS_SDK_ACL_ACTION_ALL,
-            self::BCS_SDK_ACL_ACTION_LIST_OBJECT,
-            self::BCS_SDK_ACL_ACTION_PUT_BUCKET_POLICY,
-            self::BCS_SDK_ACL_ACTION_GET_BUCKET_POLICY,
-            self::BCS_SDK_ACL_ACTION_DELETE_BUCKET,
-            self::BCS_SDK_ACL_ACTION_GET_OBJECT,
-            self::BCS_SDK_ACL_ACTION_PUT_OBJECT,
-            self::BCS_SDK_ACL_ACTION_DELETE_OBJECT,
-            self::BCS_SDK_ACL_ACTION_PUT_OBJECT_POLICY,
-            self::BCS_SDK_ACL_ACTION_GET_OBJECT_POLICY, );
+        self::BCS_SDK_ACL_ACTION_ALL,
+        self::BCS_SDK_ACL_ACTION_LIST_OBJECT,
+        self::BCS_SDK_ACL_ACTION_PUT_BUCKET_POLICY,
+        self::BCS_SDK_ACL_ACTION_GET_BUCKET_POLICY,
+        self::BCS_SDK_ACL_ACTION_DELETE_BUCKET,
+        self::BCS_SDK_ACL_ACTION_GET_OBJECT,
+        self::BCS_SDK_ACL_ACTION_PUT_OBJECT,
+        self::BCS_SDK_ACL_ACTION_DELETE_OBJECT,
+        self::BCS_SDK_ACL_ACTION_PUT_OBJECT_POLICY,
+        self::BCS_SDK_ACL_ACTION_GET_OBJECT_POLICY, );
     //EFFECT:
     const BCS_SDK_ACL_EFFECT_ALLOW = "allow";
     const BCS_SDK_ACL_EFFECT_DENY = "deny";
     public static $ACL_EFFECTS = array(
-            self::BCS_SDK_ACL_EFFECT_ALLOW,
-            self::BCS_SDK_ACL_EFFECT_DENY, );
+        self::BCS_SDK_ACL_EFFECT_ALLOW,
+        self::BCS_SDK_ACL_EFFECT_DENY, );
     //ACL_TYPE:
     //公开读权限
     const BCS_SDK_ACL_TYPE_PUBLIC_READ = "public-read";
@@ -87,11 +87,11 @@ class BaiduBCS
     const BCS_SDK_ACL_TYPE_PRIVATE = "private";
     //SDK中开放此上五种acl_tpe
     public static $ACL_TYPES = array(
-            self::BCS_SDK_ACL_TYPE_PUBLIC_READ,
-            self::BCS_SDK_ACL_TYPE_PUBLIC_WRITE,
-            self::BCS_SDK_ACL_TYPE_PUBLIC_READ_WRITE,
-            self::BCS_SDK_ACL_TYPE_PUBLIC_CONTROL,
-            self::BCS_SDK_ACL_TYPE_PRIVATE, );
+        self::BCS_SDK_ACL_TYPE_PUBLIC_READ,
+        self::BCS_SDK_ACL_TYPE_PUBLIC_WRITE,
+        self::BCS_SDK_ACL_TYPE_PUBLIC_READ_WRITE,
+        self::BCS_SDK_ACL_TYPE_PUBLIC_CONTROL,
+        self::BCS_SDK_ACL_TYPE_PRIVATE, );
     /*%******************************************************************************************%*/
     // PROPERTIES
     //是否使用ssl
@@ -174,7 +174,7 @@ class BaiduBCS
         //build request
         $request = new BCS_RequestCore($opt['url']);
         $headers = array(
-                'Content-Type' => 'application/x-www-form-urlencoded', );
+            'Content-Type' => 'application/x-www-form-urlencoded', );
         $request->set_method($opt[self::METHOD]);
         //Write get_object content to fileWriteTo
         if (isset($opt['fileWriteTo'])) {
@@ -226,8 +226,8 @@ class BaiduBCS
         foreach ($headers as $header_key => $header_value) {
             // Strip linebreaks from header values as they're illegal and can allow for security issues
             $header_value = str_replace(array(
-                    "\r",
-                    "\n", ), '', $header_value);
+                "\r",
+                "\n", ), '', $header_value);
             // Add the header if it has a value
             if ($header_value !== '') {
                 $request->add_header($header_key, $header_value);
@@ -336,7 +336,7 @@ class BaiduBCS
         $opt[self::METHOD] = 'PUT';
         $opt[self::OBJECT] = '/';
         $opt[self::QUERY_STRING] = array(
-                self::ACL => 1, );
+            self::ACL => 1, );
         $response = $this->authenticate($opt);
         $this->log($response->isOK() ? "Set bucket acl success!" : "Set bucket acl failed! Response: [" . $response->body . "]", $opt);
 
@@ -358,7 +358,7 @@ class BaiduBCS
         $opt[self::METHOD] = 'GET';
         $opt[self::OBJECT] = '/';
         $opt[self::QUERY_STRING] = array(
-                self::ACL => 1, );
+            self::ACL => 1, );
         $response = $this->authenticate($opt);
         $this->log($response->isOK() ? "Get bucket acl success!" : "Get bucket acl failed! Response: [" . $response->body . "]", $opt);
 
@@ -574,7 +574,7 @@ class BaiduBCS
         $sliceNum = intval(ceil($fileSize / $sub_object_size));
         $this->log("File[" . $opt['fileUpload'] . "], size=[$fileSize], sub_object_size=[$sub_object_size], sub_object_num=[$sliceNum]", $opt);
         $object_list = array(
-                'object_list' => array(), );
+            'object_list' => array(), );
         for ($i = 0; $i < $sliceNum; $i++) {
             //send slice
             $opt['seekTo'] = $i * $sub_object_size;
@@ -606,7 +606,7 @@ class BaiduBCS
         unset($opt['seekTo']);
         $opt['content'] = self::array_to_json($object_list);
         $opt[self::QUERY_STRING] = array(
-                "superfile" => 1, );
+            "superfile" => 1, );
         $opt[self::OBJECT] = $object;
         if (isset($opt['filename'])) {
             self::set_header_into_opt("Content-Disposition", 'attachment; filename=' . $opt['filename'], $opt);
@@ -652,9 +652,9 @@ class BaiduBCS
             throw new BCS_Exception("$dir is not a dir!", -1);
         }
         $result = array(
-                "success" => 0,
-                "failed"  => array(),
-                "skipped" => 0, );
+            "success" => 0,
+            "failed"  => array(),
+            "skipped" => 0, );
         $prefix = "";
         if (isset($opt['prefix'])) {
             $prefix = $opt['prefix'];
@@ -854,8 +854,8 @@ class BaiduBCS
             self::set_header_into_opt($header, $value, $opt);
         }
         $source = array(
-                self::BUCKET => $bucket,
-                self::OBJECT => $object, );
+            self::BUCKET => $bucket,
+            self::OBJECT => $object, );
         $response = $this->copy_object($source, $source, $opt);
         $this->log($response->isOK() ? "Set object meta success!" : "Set object meta failed! Response: [" . $response->body . "]", $opt);
 
@@ -880,7 +880,7 @@ class BaiduBCS
         $opt[self::METHOD] = 'GET';
         $opt[self::OBJECT] = $object;
         $opt[self::QUERY_STRING] = array(
-                self::ACL => 1, );
+            self::ACL => 1, );
         $response = $this->authenticate($opt);
         $this->log($response->isOK() ? "Get object acl success!" : "Get object acl failed! Response: [" . $response->body . "]", $opt);
 
@@ -912,7 +912,7 @@ class BaiduBCS
         $opt[self::METHOD] = 'PUT';
         $opt[self::OBJECT] = $object;
         $opt[self::QUERY_STRING] = array(
-                self::ACL => 1, );
+            self::ACL => 1, );
         $response = $this->authenticate($opt);
         $this->log($response->isOK() ? "Set object acl success!" : "Set object acl failed! Response: [" . $response->body . "]", $opt);
 
@@ -1275,7 +1275,7 @@ class BaiduBCS
             if (in_array($acl, self::$ACL_TYPES)) {
                 //(2).a
                 $result["headers"] = array(
-                        "x-bs-acl" => $acl, );
+                    "x-bs-acl" => $acl, );
             } else {
                 //(1).b
                 $result['content'] = $acl;
