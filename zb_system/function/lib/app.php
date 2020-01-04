@@ -648,7 +648,7 @@ class App
         foreach ($xml->file as $file) {
             $s = base64_decode($file->stream);
             $f = $dir . $file->path;
-            $f = str_replace('.', '', pathinfo($f,PATHINFO_DIRNAME)) .'/'. pathinfo($f,PATHINFO_BASENAME);
+            $f = str_replace('.', '', pathinfo($f, PATHINFO_DIRNAME)) . '/' . pathinfo($f, PATHINFO_BASENAME);
             @file_put_contents($f, $s);
             @chmod($f, 0755);
         }

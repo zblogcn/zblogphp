@@ -820,9 +820,9 @@ if (!class_exists('Services_JSON')) {
         }
     } else {
 
-    /**
-     * @todo Ultimately, this class shall be descended from PEAR_Error
-     */
+        /**
+         * @todo Ultimately, this class shall be descended from PEAR_Error
+         */
         class Services_JSON_Error
         {
             public function Services_JSON_Error($message = 'unknown error', $code = null,
