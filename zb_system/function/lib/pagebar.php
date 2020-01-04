@@ -121,21 +121,25 @@ class PageBar
             $this->prevbutton = $this->buttons[$zbp->lang['msg']['prev_button']];
         }
 
-        $j = $this->PageNow;
-        if ($j + $this->PageBarCount > $this->PageAll) {
-            $j = $this->PageAll - $this->PageBarCount + 1;
+        $pageAll = $this->PageAll + 1;
+        $middle = ceil($this->PageBarCount / 2);
+        $start = 1;
+        if ($this->PageNow > $middle) {
+            $start = $this->PageNow - $middle;
         }
-        if ($j < 1) {
-            $j = 1;
+        if ($pageAll > $this->PageBarCount && ($pageAll - $start) < $this->PageBarCount) {
+            $start = $pageAll - $this->PageBarCount;
+        }
+        $end = $start + $this->PageBarCount;
+        if ($end > $pageAll) {
+            $end = $pageAll;
         }
 
-        for ($i = $j; $i < $j + $this->PageBarCount; $i++) {
-            if ($i > $this->PageAll) {
-                break;
-            }
+        for ($i = $start; $i < $end; $i++) {
             $this->UrlRule->Rules['{%page%}'] = $i;
             $this->buttons[$i] = $this->UrlRule->Make();
         }
+
         if ($this->PageNow != $this->PageNext) {
             $this->UrlRule->Rules['{%page%}'] = $this->PageNext;
             $this->buttons[$zbp->lang['msg']['next_button']] = $this->UrlRule->Make();
