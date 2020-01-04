@@ -319,7 +319,7 @@ class ModuleBuilder
         }
 
         $tags['urls'] = $urls;
-
+        $tags['style'] = $zbp->option['ZC_MODULE_ARCHIVES_STYLE'];
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-archives');
 

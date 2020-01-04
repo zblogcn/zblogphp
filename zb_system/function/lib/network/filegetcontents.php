@@ -191,6 +191,9 @@ class Network__Filegetcontents implements Network__Interface
         $this->responseHeader = $http_response_header;
         ZBlogException::ResumeErrorHook();
 
+        if (is_array($this->responseHeader)) {
+            return;
+        }
         foreach ($this->responseHeader as $key => $value) {
             if (strpos($value, 'HTTP/') === 0) {
                 if (isset($this->responseHeader[$key])) {

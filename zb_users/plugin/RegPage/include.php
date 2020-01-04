@@ -1,6 +1,5 @@
 <?php
 
-
 DefinePluginFilter('Filter_Plugin_RegPage_RegSucceed');
 
 //注册插件

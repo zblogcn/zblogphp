@@ -22,6 +22,12 @@ $(function() {
           );
       }
     }
+    // $(".LinksManage").click(function() {
+    //   let x = confirm("此处仅能创建UL列表，DIV创建请用“新建模块”");
+    //   if (!x) {
+    //     return false;
+    //   }
+    // });
   }
   ///////////
   $(".js-add").click(function() {

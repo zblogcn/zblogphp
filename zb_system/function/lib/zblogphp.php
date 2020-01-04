@@ -332,7 +332,7 @@ class ZBlogPHP
         foreach ($this->datainfo['Member'] as $key => $value) {
             $this->user->$key = $value[3];
         }
-        $this->user->Metas = new Config();
+        $this->user->Metas = new Metas();
     }
 
     /**
@@ -673,8 +673,8 @@ class ZBlogPHP
             case 'pdo_sqlite':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(array(
-                $this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
-                $this->option['ZC_SQLITE_PRE'],
+                    $this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
+                    $this->option['ZC_SQLITE_PRE'],
                 )) == false) {
                     $this->ShowError(69, __FILE__, __LINE__);
                 }
@@ -683,13 +683,13 @@ class ZBlogPHP
             case 'pdo_pgsql':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(array(
-                $this->option['ZC_PGSQL_SERVER'],
-                $this->option['ZC_PGSQL_USERNAME'],
-                $this->option['ZC_PGSQL_PASSWORD'],
-                $this->option['ZC_PGSQL_NAME'],
-                $this->option['ZC_PGSQL_PRE'],
-                $this->option['ZC_PGSQL_PORT'],
-                $this->option['ZC_PGSQL_PERSISTENT'],
+                    $this->option['ZC_PGSQL_SERVER'],
+                    $this->option['ZC_PGSQL_USERNAME'],
+                    $this->option['ZC_PGSQL_PASSWORD'],
+                    $this->option['ZC_PGSQL_NAME'],
+                    $this->option['ZC_PGSQL_PRE'],
+                    $this->option['ZC_PGSQL_PORT'],
+                    $this->option['ZC_PGSQL_PERSISTENT'],
                 )) == false) {
                     $this->ShowError(67, __FILE__, __LINE__);
                 }
@@ -700,14 +700,14 @@ class ZBlogPHP
             default:
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(array(
-                $this->option['ZC_MYSQL_SERVER'],
-                $this->option['ZC_MYSQL_USERNAME'],
-                $this->option['ZC_MYSQL_PASSWORD'],
-                $this->option['ZC_MYSQL_NAME'],
-                $this->option['ZC_MYSQL_PRE'],
-                $this->option['ZC_MYSQL_PORT'],
-                $this->option['ZC_MYSQL_PERSISTENT'],
-                $this->option['ZC_MYSQL_ENGINE'],
+                    $this->option['ZC_MYSQL_SERVER'],
+                    $this->option['ZC_MYSQL_USERNAME'],
+                    $this->option['ZC_MYSQL_PASSWORD'],
+                    $this->option['ZC_MYSQL_NAME'],
+                    $this->option['ZC_MYSQL_PRE'],
+                    $this->option['ZC_MYSQL_PORT'],
+                    $this->option['ZC_MYSQL_PERSISTENT'],
+                    $this->option['ZC_MYSQL_ENGINE'],
                 )) == false) {
                     $this->ShowError(67, __FILE__, __LINE__);
                 }
@@ -1490,7 +1490,9 @@ class ZBlogPHP
     public function LoadApp($type, $id)
     {
         $app = new App();
-        $app->LoadInfoByXml($type, $id);
+        if ($app->LoadInfoByXml($type, $id) != true) {
+            $app->id = '';
+        }
 
         return $app;
     }
@@ -2428,9 +2430,9 @@ class ZBlogPHP
         $like = ($this->db->type == 'pgsql') ? 'ILIKE' : 'LIKE';
 
         $sql = $this->db->sql->get()->select($this->table['Member'])->where(array("$like array", array(
-                array('mem_Name', $name),
-                array('mem_Alias', $name),
-            )))->limit(1)->sql;
+            array('mem_Name', $name),
+            array('mem_Alias', $name),
+        )))->limit(1)->sql;
 
         /** @var Member[] $am */
         $am = $this->GetListType('Member', $sql);
@@ -2616,7 +2618,7 @@ class ZBlogPHP
     public function LoadTagsByIDString($s)
     {
         $s = trim($s);
-        if ($s == '') {
+        if ($s === '') {
             return array();
         }
 
@@ -2633,7 +2635,7 @@ class ZBlogPHP
         }
         $t = array_unique($b);
 
-        if (count($t) == 0) {
+        if (count($t) === 0) {
             return array();
         }
 
@@ -2641,7 +2643,7 @@ class ZBlogPHP
         $b = array();
         $c = array();
         foreach ($t as $v) {
-            if (isset($this->tags[$v]) == false) {
+            if (!isset($this->tags[$v])) {
                 $a[] = array('tag_ID', $v);
                 $c[] = $v;
             } else {
@@ -2649,7 +2651,7 @@ class ZBlogPHP
             }
         }
 
-        if (count($a) == 0) {
+        if (count($a) === 0) {
             return $b;
         } else {
             $t = array();
@@ -2661,7 +2663,7 @@ class ZBlogPHP
                 $t[$v->ID] = &$this->tags[$v->ID];
             }
 
-            return $b + $t;
+            return array_merge($b, $t);
         }
     }
 
@@ -2680,18 +2682,14 @@ class ZBlogPHP
         $s = str_replace('、', ',', $s);
         $s = trim($s);
         $s = strip_tags($s);
-        if ($s == '') {
-            return array();
-        }
-
-        if ($s == ',') {
+        if ($s === '' || $s === ',') {
             return array();
         }
 
         $a = explode(',', $s);
         $t = array_unique($a);
 
-        if (count($t) == 0) {
+        if (count($t) === 0) {
             return array();
         }
 
@@ -2706,7 +2704,7 @@ class ZBlogPHP
             }
         }
 
-        if (count($a) == 0) {
+        if (count($a) === 0) {
             return $b;
         } else {
             $t = array();
@@ -2717,7 +2715,7 @@ class ZBlogPHP
                 $t[$v->Name] = &$this->tags[$v->ID];
             }
 
-            return $b + $t;
+            return array_merge($b, $t);
         }
     }
 
@@ -3062,6 +3060,15 @@ class ZBlogPHP
         ZBlogException::$error_file = $file;
         ZBlogException::$error_line = $line;
 
+        if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
+            $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);
+            $GLOBALS['hooks']['Filter_Plugin_Debug_Display'] = array();
+            $GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] = array();
+
+            throw new Exception($errorText);
+            exit(1);
+        }
+
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($errorCode, $errorText, $file, $line);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -3126,6 +3133,7 @@ class ZBlogPHP
     public function CheckSiteClosed()
     {
         if ($this->option['ZC_CLOSE_SITE']) {
+            Http503();
             $this->ShowError(82, __FILE__, __LINE__);
             exit;
         }

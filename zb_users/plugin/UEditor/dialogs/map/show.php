@@ -14,7 +14,7 @@
             overflow: hidden;
         }
     </style>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?key=&v=1.3&services=true&s=1"></script>
 </head>
 
 <body onload="initMap();">
@@ -32,7 +32,6 @@
     var heightParam = getParam('height');
     var markersParam = getParam('markers');
     var markerStylesParam = getParam('markerStyles');
-
     //创建和初始化地图函数：
     function initMap() {
         // [FF]切换模式后报错
@@ -42,23 +41,19 @@
         var dituContent = document.getElementById('dituContent');
         dituContent.style.width = widthParam + 'px';
         dituContent.style.height = heightParam + 'px';
-
         createMap();//创建地图
         setMapEvent();//设置地图事件
         addMapControl();//向地图添加控件
-
         // 创建标注
         var markersArr = markersParam.split(',');
         var point = new BMap.Point(markersArr[0], markersArr[1]);
         marker = new BMap.Marker(point);
         marker.enableDragging();
         map.addOverlay(marker); // 将标注添加到地图中
-
         if(parent.editor && parent.document.body.contentEditable=="true") { //在编辑状态下
             setMapListener();//地图改变修改外层的iframe标签src属性
         }
     }
-
     //创建地图函数：
     function createMap() {
         map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
@@ -66,7 +61,6 @@
         var point = new BMap.Point(parseFloat(centerArr[0]), parseFloat(centerArr[1]));//定义一个中心点坐标
         map.centerAndZoom(point, parseInt(zoomParam));//设定地图的中心点和坐标并将地图显示在地图容器中
     }
-
     //地图事件设置函数：
     function setMapEvent() {
         map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
@@ -74,7 +68,6 @@
         map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
         map.enableKeyboard();//启用键盘上下左右键移动地图
     }
-
     //地图控件添加函数：
     function addMapControl() {
         //向地图中添加缩放控件
@@ -87,7 +80,6 @@
         var ctrl_sca = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
         map.addControl(ctrl_sca);
     }
-
     function setMapListener() {
         var editor = parent.editor, containerIframe,
             iframes = parent.document.getElementsByTagName('iframe');
@@ -102,7 +94,6 @@
             map.addEventListener('zoomend', mapListenerHandler);
             marker.addEventListener('dragend', mapListenerHandler);
         }
-
         function mapListenerHandler() {
             var zoom = map.getZoom(),
                 center = map.getCenter(),

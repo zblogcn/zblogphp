@@ -20,7 +20,7 @@ function scansubdir($dir)
             if ($file != ".." && $file != ".") {
                 if (is_dir($dir . "/" . $file)) {
                     $f = scandir($dir . "/" . $file);
-                    $files[$file] = preg_grep("/(.*).gif|png|jpg$/", $f);
+                    $files[$file] = preg_grep("/(.*).gif|png|jpg|webp$/", $f);
                     foreach ($files[$file] as $name => $value) {
                         if (UEDITOR_IS_WINDOWS) {
                             $files[$file][$name] = iconv('GBK', 'UTF-8', $value);
@@ -44,7 +44,7 @@ $f = scansubdir($d);
 $x = 0;
 ?>
 <?php
-while (list($key, $i) = each($f)) {
+foreach ($f as $key => $i) {
     $e = implode("','", $i);
     $en = $key;
     $en = (UEDITOR_IS_WINDOWS ? iconv('GBK', 'UTF-8', $en) : $en); ?>
@@ -63,7 +63,7 @@ while (list($key, $i) = each($f)) {
 		dtc.id='tab<?php echo $x; ?>';
 		tc.appendChild(dtc);
 
-<?php 
+<?php
     $x++;
 }?>
 
@@ -79,7 +79,7 @@ function initImgName() {
         var tempName = emotion.SmilmgName[pro],
             tempBox = emotion.SmileyBox[pro],
 			tempStr=emotion.SmileyInfor[pro];
-			
+
         if ( tempBox.length ) return;
         for ( var i = 0; i < tempName[1]; i++ ) {
             tempBox.push( tempStr[i]);

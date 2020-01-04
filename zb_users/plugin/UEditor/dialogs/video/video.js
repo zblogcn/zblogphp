@@ -118,14 +118,22 @@
             height = $G("videoHeight"),
             url=$G('videoUrl').value,
             align = findFocus("videoFloat","name");
-        if(!url) return false;
+
+        var newurl = convert_url(url);
+
+        if(!newurl) return false;
+
         if ( !checkNum( [width, height] ) ) return false;
-        editor.execCommand('insertvideo', {
-            url: convert_url(url),
-            width: width.value,
-            height: height.value,
-            align: align
-        }, isModifyUploadVideo ? 'upload':null);
+        if (/<(embed|iframe)/.test(newurl)) {
+            editor.execCommand('inserthtml', url)
+        } else {
+            editor.execCommand('insertvideo', {
+                url: newurl,
+                width: width.value,
+                height: height.value,
+                align: align
+            }, isModifyUploadVideo ? 'upload':null);
+        }
     }
 
     /**
@@ -166,20 +174,23 @@
     }
     function convert_url(url){
         if ( !url ) return '';
+        //去掉多余参数，否则可能导致插入后无法播放
+        var arr = url.split('?');
+        if (arr && arr.length > 1) {
+            url = arr[0];
+        }
         url = utils.trim(url)
-            .replace(/v\.youku\.com\/v_show\/id_([\w\-=]+)\.html/i, 'player.youku.com/player.php/sid/$1/v.swf')
-            .replace(/(www\.)?youtube\.com\/watch\?v=([\w\-]+)/i, "www.youtube.com/v/$2")
-            .replace(/youtu.be\/(\w+)$/i, "www.youtube.com/v/$1")
-            .replace(/v\.ku6\.com\/.+\/([\w\.]+)\.html.*$/i, "player.ku6.com/refer/$1/v.swf")
-            .replace(/www\.56\.com\/u\d+\/v_([\w\-]+)\.html/i, "player.56.com/v_$1.swf")
-            .replace(/www.56.com\/w\d+\/play_album\-aid\-\d+_vid\-([^.]+)\.html/i, "player.56.com/v_$1.swf")
-            .replace(/v\.pps\.tv\/play_([\w]+)\.html.*$/i, "player.pps.tv/player/sid/$1/v.swf")
-            .replace(/www\.letv\.com\/ptv\/vplay\/([\d]+)\.html.*$/i, "i7.imgs.letv.com/player/swfPlayer.swf?id=$1&autoplay=0")
-            .replace(/www\.tudou\.com\/programs\/view\/([\w\-]+)\/?/i, "www.tudou.com/v/$1")
-            .replace(/v\.qq\.com\/cover\/[\w]+\/[\w]+\/([\w]+)\.html/i, "static.video.qq.com/TPout.swf?vid=$1")
-            .replace(/v\.qq\.com\/.+[\?\&]vid=([^&]+).*$/i, "static.video.qq.com/TPout.swf?vid=$1")
-            .replace(/my\.tv\.sohu\.com\/[\w]+\/[\d]+\/([\d]+)\.shtml.*$/i, "share.vrs.sohu.com/my/v.swf&id=$1")
-            .replace(/www\.letv\.com\/ptv\/vplay\/(\d+).html/i, "http://player.letvcdn.com/lc01_p/201506/03/10/37/11/newplayer/LetvPlayer.swf?newlist=1&showdock=0&share=0&vid=$1");
+            .replace(/v\.youku\.com\/v_show\/id_([\w\-=]+)\.html/i, 'player.youku.com/embed/$1')
+            .replace(/(www\.)?youtube\.com\/watch\?v=([\w\-]+)/i, "www.youtube.com/embed/$2")
+            .replace(/youtu.be\/(\w+)$/i, "www.youtube.com/embed/$1")
+            .replace(/www\.bilibili\.com\/video\/av(\d+)/i, "player.bilibili.com/player.html?aid=$1")
+            .replace(/www\.acfun\.cn\/v\/ac(\d+)/i, "www.acfun.cn/player/ac$1")
+            .replace(/v\.qq\.com\/x\/[\w]+\/[\w]+\/([\w]+)\.html/i, "v.qq.com/txp/iframe/player.html?vid=$1")
+            .replace(/v\.qq\.com\/.+[\?\&]vid=([^&]+).*$/i, "v.qq.com/txp/iframe/player.html?vid=$1")
+
+        if (/iqiyi|sohu/.test(url) && !/iframe/.test(url)) {
+            alert(lang.videoShouldBeHTML)
+        }
 
         return url;
     }
@@ -267,17 +278,29 @@
      * @param url
      */
     function createPreviewVideo(url){
-        if ( !url )return;
+        if ( !url ) return;
 
-        var conUrl = convert_url(url);
-
-        $G("preview").innerHTML = '<div class="previewMsg"><span>'+lang.urlError+'</span></div>'+
-        '<embed class="previewVideo" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"' +
-            ' src="' + conUrl + '"' +
+        if (url.startsWith("http") && url.indexOf(".mp4") > 0) {
+            $G("preview").innerHTML = '<div class="previewMsg"><span>'+lang.urlError+'</span></div>'+
+            '<video class="previewVideo"' +
+            ' src="' + url + '"' +
             ' width="' + 420  + '"' +
             ' height="' + 280  + '"' +
-            ' wmode="transparent" play="true" loop="false" menu="false" allowscriptaccess="never" allowfullscreen="true" >' +
-        '</embed>';
+            ' play="true" loop="false" data-setup="{}" controls="controls" preload="auto">' +
+            '</video>';
+        } else if (url.startsWith("<embed") || url.startsWith("<iframe")) {
+            url = url.replace(/class=(['"])/, 'class=$1previewVideo ')
+            if (!/class=/.test(url)) {
+                url = url.replace('>', ' class="previewVideo">')
+            }
+            $G("preview").innerHTML = '<div class="previewMsg"><span>'+lang.urlError+'</span></div>'+url;
+        } else {
+            $G("preview").innerHTML = '<div class="previewMsg"><span>'+lang.urlError+'</span></div>' +
+            '<iframe class="previewVideo" src="' + convert_url(url) + '"' +
+            ' width="' + 420  + '"' +
+            ' height="' + 280  + '"' +
+            ' frameborder="0"></iframe>'
+        }
     }
 
 
@@ -375,7 +398,7 @@
                 uploader,
                 actionUrl = editor.getActionUrl(editor.getOpt('videoActionName')),
                 fileMaxSize = editor.getOpt('videoMaxSize'),
-                acceptExtensions = (editor.getOpt('videoAllowFiles') || []).join('').replace(/\./g, ',').replace(/^[,]/, '');;
+                acceptExtensions = (editor.getOpt('videoAllowFiles') || [".mp4", ".webm", ".flv", ".ogg", ".f4v"]).join('').replace(/\./g, ',').replace(/^[,]/, '');;
 
             if (!WebUploader.Uploader.support()) {
                 $('#filePickerReady').after($('<div>').html(lang.errorNotSupport)).hide();
@@ -763,9 +786,13 @@
                 }
 
                 if (state === 'ready') {
-                    uploader.upload();
+                    window.setTimeout(function() {
+                        uploader.upload();
+                    }, 500);
                 } else if (state === 'paused') {
-                    uploader.upload();
+                    window.setTimeout(function() {
+                        uploader.upload();
+                    }, 500);
                 } else if (state === 'uploading') {
                     uploader.stop();
                 }

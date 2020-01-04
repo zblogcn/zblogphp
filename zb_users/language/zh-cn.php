@@ -15,7 +15,7 @@ return array(
     'font_size'             => '',
     'windows_character_set' => 'GBK',
 
-//Front-End & Back-End
+    //Front-End & Back-End
     'msg' => array(
         'id'                                => 'ID',
         'name'                              => '名称',
@@ -161,6 +161,10 @@ return array(
         'sidebar3'                          => '侧栏 3',
         'sidebar4'                          => '侧栏 4',
         'sidebar5'                          => '侧栏 5',
+        'sidebar6'                          => '侧栏 6',
+        'sidebar7'                          => '侧栏 7',
+        'sidebar8'                          => '侧栏 8',
+        'sidebar9'                          => '侧栏 9',
         'display_subcategorys'              => '列出分类下所有子分类的文章',
         'drag_module_to_sidebar'            => '请拖动需要的模块到右侧区域指定侧栏。侧栏中的模块可排序，也可拖至左侧区域移除。',
         'sidebar_module_count'              => '内置有%s个模块',
@@ -193,6 +197,7 @@ return array(
         'catalog_style_normal'              => '普通型',
         'catalog_style_tree'                => '树型',
         'catalog_style_ul'                  => 'UL嵌套型',
+        'archives_style_select'             => '下拉单表类型',
         'all_del'                           => '删除所选项目',
         'all_pass'                          => '通过所选项目',
         'all_audit'                         => '审核所选项目',
@@ -245,10 +250,17 @@ return array(
         'current_template'                  => '当前模板',
         'additional_security'               => '安全增强',
         'using_cdn_guest_type'              => '客户IP获取来源',
+        'first_button'                      => '‹‹', //'⏮️',
+        'prev_button'                       => '‹', //'◀️',
+        'next_button'                       => '›', //'▶️',
+        'last_button'                       => '››', //'⏭️',
+        'verify_succeed'                    => '校验成功',
+        'verify_fail'                       => '校验失败',
+        'verifying'                         => '校验中',
         ''                                  => '',
     ),
 
-//Action
+    //Action
     'actions' => array(
         'login'       => '登录',
         'logout'      => '登出',
@@ -315,14 +327,14 @@ return array(
         'NoValidCode' => '无视验证码',
     ),
 
-//Article Level
+    //Article Level
     'post_status_name' => array(
         '0' => '公开',
         '1' => '草稿',
         '2' => '审核',
     ),
 
-//User Level
+    //User Level
     'user_level_name' => array(
         '1' => '管理员',
         '2' => '网站编辑',
@@ -338,7 +350,7 @@ return array(
         '2' => '禁止',
     ),
 
-//January, February...
+    //January, February...
     'month' => array(
         '1'  => '一月',
         '2'  => '二月',
@@ -354,7 +366,7 @@ return array(
         '12' => '十二月',
     ),
 
-//Jan., Feb. ...
+    //Jan., Feb. ...
     'month_abbr' => array(
         '1'  => '1月',
         '2'  => '2月',
@@ -370,7 +382,7 @@ return array(
         '12' => '12月',
     ),
 
-//Sunday, Monday..
+    //Sunday, Monday..
     'week' => array(
         '7' => '星期日',
         '1' => '星期一',
@@ -381,7 +393,7 @@ return array(
         '6' => '星期六',
     ),
 
-//Sun., Mon. ...
+    //Sun., Mon. ...
     'week_abbr' => array(
         '7' => '日',
         '1' => '一',
@@ -402,7 +414,7 @@ return array(
         '6' => '周六',
     ),
 
-//Custom Error Information
+    //Custom Error Information
     'error' => array(
         '0'  => '未知错误',
         '1'  => '未知命令',
@@ -447,7 +459,7 @@ return array(
         '40' => '评论功能已关闭',
         '41' => '引用功能已关闭',
         '42' => '编辑评论失败',
-        '43' => '校验码错误，请勿发布垃圾信息。',
+        '43' => '校验码错误',
         '44' => '非公开文章不能发表评论',
         '45' => '留言本只允许注册用户回复，游客只能留言。',
         '46' => '评论内容不能为空或过长',
@@ -505,7 +517,7 @@ return array(
         'more_help' => 'https://www.zblogcn.com/help/?id={%id%}&message={%message%}',
     ),
 
-// Possible causes of the error
+    // Possible causes of the error
     'error_reasons' => array(
         // -1 for default
         'default' => '',

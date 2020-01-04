@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <script type="text/javascript" src="../internal.js"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.1&services=true"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=1.3&services=true&s=1"></script>
     <style type="text/css">
         .content{width:530px; height: 350px;margin: 10px auto;}
         .content table{width: 100%}
@@ -24,11 +24,11 @@
             <td><input id="city" type="text" /></td>
             <td><var id="lang_address"></var>:</td>
             <td><input id="address" type="text" value="" /></td>
-            <td><a href="javascript:doSearch()" class="button"><var id="lang_search"></var></a></td>
+            <td><a href="javascript:doSearch()" class="button" id="search"><var id="lang_search"></var></a></td>
             <td><label id="is_dynamic_label" for="is_dynamic"><input id="is_dynamic" type="checkbox" name="is_dynamic" /><span><var id="lang_dynamicmap"></var></span></label></td>
         </tr>
     </table>
-    <div style="width:100%;height:340px;margin:5px auto;border:1px solid gray" id="container"></div>
+    <div style="width:100%;height:363px;margin:20px auto;border:none" id="container"></div>
 
 </div>
 <script type="text/javascript">
@@ -53,7 +53,7 @@
                         map.centerAndZoom(points[0], 13);
                     }
                     point = map.getCenter();
-                    marker.setPoint(point);
+                    marker.setPosition(point);
                 } else {
                     alert(lang.errorMsg);
                 }
@@ -80,9 +80,8 @@
                 url = mapNode.getAttribute("src");
                 styleStr = mapNode.style.cssText;
             }
-
             centerPos = getPars(url,"center").split(",");
-            markerPos = getPars(url, "markers").split(",");
+            markerPos = getPars(url, "mMarkerarkers").split(",");
             point = new BMap.Point(Number(centerPos[0]),Number(centerPos[1]));
             marker = new BMap.Marker(new BMap.Point(Number(markerPos[0]), Number(markerPos[1])));
             map.addControl(new BMap.NavigationControl());
@@ -109,8 +108,7 @@
         var size = map.getSize();
         var mapWidth = size.width;
         var mapHeight = size.height;
-        var point = marker.getPoint();
-
+        var point = marker.getPosition();
         if($G('is_dynamic').checked) {
             var URL = editor.options.UEDITOR_HOME_URL,
                 url = [URL + (/\/$/.test(URL) ? '':'/') + "dialogs/map/show.php" +
@@ -122,9 +120,9 @@
                     '&markerStyles=' + 'l,A'].join('');
             editor.execCommand('inserthtml', '<iframe class="ueditor_baidumap" src="' + url + '"' + (styleStr ? ' style="' + styleStr + '"' :'') + ' frameborder="0" width="' + (mapWidth+4) + '" height="' + (mapHeight+4) + '"></iframe>');
         } else {
-            var url = "http://api.map.baidu.com/staticimage?center=" + center.lng + ',' + center.lat +
+            var url = "https://api.map.baidu.com/staticimage?center=" + center.lng + ',' + center.lat +
                     "&zoom=" + zoom + "&width=" + size.width + '&height=' + size.height + "&markers=" + point.lng + ',' + point.lat;
-            editor.execCommand('inserthtml', '<img width="'+ size.width +'"height="'+ size.height +'" src="' + url + '"' + (styleStr ? ' style="' + styleStr + '"' :'') + '/>');
+                    editor.execCommand('inserthtml', '<img width="'+ size.width +'" height="'+ size.height +'" src="' + url + '"' + (styleStr ? ' style="' + styleStr + '"' :'') + '/>');
         }
     };
     document.getElementById("address").focus();

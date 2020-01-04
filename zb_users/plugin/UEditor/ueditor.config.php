@@ -28,7 +28,7 @@ $array_config = array(
     'toolbars'         => "[ " .
     "[ 'source', '|', 'undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript','forecolor', 'backcolor', '|', " .
     "'insertorderedlist', 'insertunorderedlist','indent', 'justifyleft', 'justifycenter', 'justifyright','|', 'removeformat','formatmatch','autotypeset', 'pasteplain'], " .
-    "['paragraph', 'fontfamily', 'fontsize','|', 'emotion','link','music','insertimage','scrawl','insertvideo', 'attachment','spechars', 'map','|', "
+    "['paragraph', 'fontfamily', 'fontsize','|', 'emotion','link','insertimage','scrawl','insertvideo', 'attachment','spechars', 'map','|', "
     . ($zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE'] ? "'insertcode'," : '')
     . "'blockquote', 'wordimage','inserttable', 'horizontal','fullscreen']]",
     'shortcutMenu'           => "['fontfamily', 'fontsize', 'bold', 'italic', 'underline', 'forecolor', 'backcolor']",

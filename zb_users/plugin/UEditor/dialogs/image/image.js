@@ -177,22 +177,22 @@
             domUtils.on($G("title"), 'keyup', updatePreview);
 
             domUtils.on($G("width"), 'keyup', function(){
-                updatePreview();
                 if(locker.checked) {
                     var proportion =locker.getAttribute('data-proportion');
                     $G('height').value = Math.round(this.value / proportion);
                 } else {
                     _this.updateLocker();
                 }
+                updatePreview();
             });
             domUtils.on($G("height"), 'keyup', function(){
-                updatePreview();
                 if(locker.checked) {
                     var proportion =locker.getAttribute('data-proportion');
                     $G('width').value = Math.round(this.value * proportion);
                 } else {
                     _this.updateLocker();
                 }
+                updatePreview();
             });
             domUtils.on($G("lock"), 'change', function(){
                 var proportion = parseInt($G("width").value) /parseInt($G("height").value);
@@ -703,7 +703,7 @@
             uploader.on('uploadBeforeSend', function (file, data, header) {
                 //这里可以通过data对象添加POST参数
                 if (actionUrl.toLowerCase().indexOf('jsp') != -1) {
-                    header['X_Requested_With'] = 'XMLHttpRequest';
+                    header['X-Requested-With'] = 'XMLHttpRequest';
                 }
             });
 
@@ -1042,7 +1042,7 @@
                 key = $G('searchTxt').value,
                 type = $G('searchType').value,
                 keepOriginName = editor.options.keepOriginName ? "1" : "0",
-                url = "http://image.baidu.com/i?ct=201326592&cl=2&lm=-1&st=-1&tn=baiduimagejson&istype=2&rn=32&fm=index&pv=&word=" + key + type + "&ie=utf-8&oe=utf-8&keeporiginname=" + keepOriginName + "&" + +new Date;
+                url = "https://image.baidu.com/i?ct=201326592&cl=2&lm=-1&st=-1&tn=baiduimagejson&istype=2&rn=32&fm=index&pv=&word=" + key + type + "&ie=utf-8&oe=utf-8&keeporiginname=" + keepOriginName + "&" + +new Date;
 
             $G('searchListUl').innerHTML = lang.searchLoading;
             ajax.request(url, {

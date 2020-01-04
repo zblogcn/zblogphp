@@ -19,7 +19,7 @@ return array(
     'font_size'             => '',
     'windows_character_set' => 'BIG5',
 
-//Front-End & Back-End
+    //Front-End & Back-End
     'msg' => array(
         'id'                                => 'ID',
         'name'                              => '名稱',
@@ -165,6 +165,10 @@ return array(
         'sidebar3'                          => '側邊欄 3',
         'sidebar4'                          => '側邊欄 4',
         'sidebar5'                          => '側邊欄 5',
+        'sidebar6'                          => '側邊欄 6',
+        'sidebar7'                          => '側邊欄 7',
+        'sidebar8'                          => '側邊欄 8',
+        'sidebar9'                          => '側邊欄 9',
         'display_subcategorys'              => '列出分類下所有子分類的文章',
         'drag_module_to_sidebar'            => '請拖曳需要的模組到右側區域指定側邊欄。側邊欄中的模組可排序，也可拖曳至左側區域移除。',
         'sidebar_module_count'              => '內建有%s個模組',
@@ -197,6 +201,7 @@ return array(
         'catalog_style_normal'              => '普通型',
         'catalog_style_tree'                => '樹型',
         'catalog_style_ul'                  => 'UL巢狀型',
+        'archives_style_select'             => '下拉单表类型',
         'all_del'                           => '批次刪除',
         'all_pass'                          => '批次通過',
         'all_audit'                         => '批次審核',
@@ -249,10 +254,17 @@ return array(
         'current_template'                  => '當前模板',
         'additional_security'               => '安全增強',
         'using_cdn_guest_type'              => '客戶IP獲取来源',
+        'first_button'                      => '‹‹',
+        'prev_button'                       => '‹',
+        'next_button'                       => '›',
+        'last_button'                       => '››',
+        'verify_succeed'                    => '校验成功',
+        'verify_fail'                       => '校验失败',
+        'verifying'                         => '校验中',
         ''                                  => '',
     ),
 
-//Action
+    //Action
     'actions' => array(
         'login'       => '登入',
         'logout'      => '登出',
@@ -319,14 +331,14 @@ return array(
         'NoValidCode' => '驗證碼',
     ),
 
-//Article Level
+    //Article Level
     'post_status_name' => array(
         '0' => '公開',
         '1' => '草稿',
         '2' => '待審',
     ),
 
-//User Level
+    //User Level
     'user_level_name' => array(
         '1' => '管理員',
         '2' => '網站編輯',
@@ -342,7 +354,7 @@ return array(
         '2' => '禁止',
     ),
 
-//January, February...
+    //January, February...
     'month' => array(
         '1'  => '一月',
         '2'  => '二月',
@@ -358,7 +370,7 @@ return array(
         '12' => '十二月',
     ),
 
-//Jan., Feb. ...
+    //Jan., Feb. ...
     'month_abbr' => array(
         '1'  => '01月',
         '2'  => '02月',
@@ -374,7 +386,7 @@ return array(
         '12' => '12月',
     ),
 
-//Sunday, Monday..
+    //Sunday, Monday..
     'week' => array(
         '7' => '星期日',
         '1' => '星期一',
@@ -385,7 +397,7 @@ return array(
         '6' => '星期六',
     ),
 
-//Sun., Mon. ...
+    //Sun., Mon. ...
     'week_abbr' => array(
         '7' => '日',
         '1' => '一',
@@ -406,7 +418,7 @@ return array(
         '6' => '周六',
     ),
 
-//Custom Error Information
+    //Custom Error Information
     'error' => array(
         '0'  => '未知錯誤',
         '1'  => '未知命令',
@@ -509,7 +521,7 @@ return array(
         'more_help' => 'https://www.zblogcn.com/help/?id={%id%}&message={%message%}',
     ),
 
-// Possible causes of the error
+    // Possible causes of the error
     'error_reasons' => array(
         // -1 for default
         'default' => '',

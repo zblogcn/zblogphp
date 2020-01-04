@@ -98,10 +98,6 @@ function GetSystem()
  */
 function GetPHPEngine()
 {
-    if (defined('HHVM_VERSION')) {
-        return ENGINE_HHVM;
-    }
-
     return ENGINE_PHP;
 }
 
@@ -361,6 +357,8 @@ function SplitAndGet($string, $delimiter = ';', $n = 0)
     if (isset($a[$n])) {
         return $a[$n];
     }
+
+    return '';
 }
 
 /**
@@ -523,35 +521,19 @@ function GetDirsInDir($dir)
 {
     $dirs = array();
 
-    if (!file_exists($dir)) {
-        return array();
-    }
-    if (!is_dir($dir)) {
-        return array();
-    }
     $dir = str_replace('\\', '/', $dir);
     if (substr($dir, -1) !== '/') {
         $dir .= '/';
     }
+    if (!is_dir($dir)) {
+        return array();
+    }
 
-    if (function_exists('scandir')) {
-        foreach (scandir($dir, 0) as $d) {
-            if (is_dir($dir . $d)) {
-                if (($d != '.') && ($d != '..')) {
-                    $dirs[] = $d;
-                }
+    foreach (scandir($dir, 0) as $d) {
+        if (is_dir($dir . $d)) {
+            if (($d != '.') && ($d != '..')) {
+                $dirs[] = $d;
             }
-        }
-    } else {
-        if ($handle = opendir($dir)) {
-            while (false !== ($file = readdir($handle))) {
-                if ($file != "." && $file != "..") {
-                    if (is_dir($dir . $file)) {
-                        $dirs[] = $file;
-                    }
-                }
-            }
-            closedir($handle);
         }
     }
 
@@ -569,50 +551,25 @@ function GetDirsInDir($dir)
 function GetFilesInDir($dir, $type)
 {
     $files = array();
-
-    if (!file_exists($dir)) {
-        return array();
-    }
-    if (!is_dir($dir)) {
-        return array();
-    }
     $dir = str_replace('\\', '/', $dir);
     if (substr($dir, -1) !== '/') {
         $dir .= '/';
     }
+    if (!is_dir($dir)) {
+        return array();
+    }
 
-    if (function_exists('scandir')) {
-        foreach (scandir($dir) as $f) {
-            if (is_file($dir . $f)) {
-                foreach (explode("|", $type) as $t) {
-                    $t = '.' . $t;
-                    $i = strlen($t);
-                    if (substr($f, -$i, $i) == $t) {
-                        $sortname = substr($f, 0, strlen($f) - $i);
-                        $files[$sortname] = $dir . $f;
-                        break;
-                    }
+    foreach (scandir($dir) as $f) {
+        if (is_file($dir . $f)) {
+            foreach (explode("|", $type) as $t) {
+                $t = '.' . $t;
+                $i = strlen($t);
+                if (substr($f, -$i, $i) == $t) {
+                    $sortname = substr($f, 0, strlen($f) - $i);
+                    $files[$sortname] = $dir . $f;
+                    break;
                 }
             }
-        }
-    } else {
-        if ($handle = opendir($dir)) {
-            while (false !== ($file = readdir($handle))) {
-                if ($file != "." && $file != "..") {
-                    if (is_file($dir . $file)) {
-                        foreach (explode("|", $type) as $t) {
-                            $t = '.' . $t;
-                            $i = strlen($t);
-                            if (substr($file, -$i, $i) == $t) {
-                                $sortname = substr($file, 0, strlen($file) - $i);
-                                $files[$sortname] = $dir . $file;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            closedir($handle);
         }
     }
 
@@ -1279,13 +1236,10 @@ function SubStrUTF8($sourcestr, $cutlength)
             $n++; //但考虑整体美观，大写字母计成一个高位字符
         } else {
             //其他情况下，包括小写字母和半角标点符号，
-            {
 
-                $ret = $ret . substr($sourcestr, $i, 1);
-                $i = $i + 1; //实际的Byte数计1个
+            $ret = $ret . substr($sourcestr, $i, 1);
+            $i = $i + 1; //实际的Byte数计1个
                 $n = $n + 0.5; //小写字母和半角标点等与半个高位字符宽...
-
-            }
         }
         /*
         if ($str_length > $cutlength) {
@@ -1437,15 +1391,17 @@ function GetTimeZoneByGMT($z)
  */
 function htmlspecialchars_array($array)
 {
-    foreach ($array as $key => &$value) {
+    $newArray = array();
+    foreach ($array as $key => $value) {
+        $newKey = htmlspecialchars($key);
         if (is_array($value)) {
-            $value = htmlspecialchars_array($value);
+            $newArray[$newKey] = htmlspecialchars_array($value);
         } elseif (is_string($value)) {
-            $value = htmlspecialchars($value);
+            $newArray[$newKey] = htmlspecialchars($value);
         }
     }
 
-    return $array;
+    return $newArray;
 }
 
 /**
@@ -1659,11 +1615,42 @@ function CheckHTTPRefererValid()
     if (trim($referer) === '') {
         return true;
     }
-    if (stripos($referer, $bloghost) === false) {
+    $s = $bloghost;
+    $s = str_replace(':80/', '/', $s);
+    $s = str_replace(':443/', '/', $s);
+    if (stripos($referer, $s) === false) {
         return false;
     }
 
     return true;
+}
+
+/**
+ * 清除一串代码内所有的PHP代码
+ *
+ * @param string $code
+ *
+ * @return string
+ */
+function RemovePHPCode($code)
+{
+    // PHP Start tags: <?php <? <?=
+    // PHP 5 supports: <% <script language="php">
+    // Depends on PHP
+    $continue = true;
+    while ($continue) {
+        $tokens = token_get_all($code);
+        $continue = false;
+        foreach ($tokens as $tt) {
+            $name = is_numeric($tt[0]) ? token_name($tt[0]) : '';
+            if ($name === 'T_OPEN_TAG' || $name === 'T_OPEN_TAG_WITH_ECHO' || $name === 'T_CLOSE_TAG') {
+                $code = str_replace($tt[1], "", $code);
+                $continue = true;
+            }
+        }
+    }
+
+    return $code;
 }
 
 function GetIDArrayByList($array)

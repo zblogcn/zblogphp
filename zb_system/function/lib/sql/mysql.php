@@ -134,7 +134,7 @@ class SQL__MySQL extends SQL__Global
             }
 
             $sql[] = ') ENGINE=' . $myengtype . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
-            $sqlAll[] = implode($sql, ' ');
+            $sqlAll[] = implode(' ', $sql);
         }
         $this->_sql = $sqlAll;
     }
@@ -156,7 +156,7 @@ class SQL__MySQL extends SQL__Global
             }
             array_pop($sql);
             $sql[] = ') ;';
-            $sqlAll[] = implode($sql, ' ');
+            $sqlAll[] = implode(' ', $sql);
             $this->_sql = $sqlAll;
             $sqlAll = array();
         }
@@ -169,21 +169,21 @@ class SQL__MySQL extends SQL__Global
     {
         if (isset($this->option['useindex'])) {
             if (is_array($this->option['useindex'])) {
-                $this->_sqlPush('USE INDEX (' . implode($this->option['useindex'], ',') . ') ');
+                $this->_sqlPush('USE INDEX (' . implode(',', $this->option['useindex']) . ') ');
             } else {
                 $this->_sqlPush('USE INDEX (' . $this->option['useindex'] . ') ');
             }
         }
         if (isset($this->option['forceindex'])) {
             if (is_array($this->option['forceindex'])) {
-                $this->_sqlPush('FORCE INDEX (' . implode($this->option['forceindex'], ',') . ') ');
+                $this->_sqlPush('FORCE INDEX (' . implode(',', $this->option['forceindex']) . ') ');
             } else {
                 $this->_sqlPush('FORCE INDEX (' . $this->option['forceindex'] . ') ');
             }
         }
         if (isset($this->option['ignoreindex'])) {
             if (is_array($this->option['ignoreindex'])) {
-                $this->_sqlPush('IGNORE INDEX (' . implode($this->option['ignoreindex'], ',') . ') ');
+                $this->_sqlPush('IGNORE INDEX (' . implode(',', $this->option['ignoreindex']) . ') ');
             } else {
                 $this->_sqlPush('IGNORE INDEX (' . $this->option['ignoreindex'] . ') ');
             }

@@ -150,6 +150,7 @@ class Network__curl implements Network__Interface
 
         curl_setopt($this->ch, CURLOPT_URL, $bstrUrl);
         curl_setopt($this->ch, CURLOPT_HEADER, 1);
+
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
         //curl_setopt($this->ch, CURLOPT_REFERER, 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
         curl_setopt($this->ch, CURLOPT_POST, ($method == 'POST' ? 1 : 0));
@@ -194,6 +195,8 @@ class Network__curl implements Network__Interface
                 curl_setopt($this->ch, CURLOPT_POST, 1);
             }
             curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
+        } else {
+            curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $this->option['method']);
         }
 
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);

@@ -1502,6 +1502,10 @@ function Admin_ModuleMng()
     echo '<input type="hidden" id="strsidebar3" name="edtSidebar3" value="' . $zbp->option['ZC_SIDEBAR3_ORDER'] . '"/>';
     echo '<input type="hidden" id="strsidebar4" name="edtSidebar4" value="' . $zbp->option['ZC_SIDEBAR4_ORDER'] . '"/>';
     echo '<input type="hidden" id="strsidebar5" name="edtSidebar5" value="' . $zbp->option['ZC_SIDEBAR5_ORDER'] . '"/>';
+    echo '<input type="hidden" id="strsidebar6" name="edtSidebar6" value="' . $zbp->option['ZC_SIDEBAR6_ORDER'] . '"/>';
+    echo '<input type="hidden" id="strsidebar7" name="edtSidebar7" value="' . $zbp->option['ZC_SIDEBAR7_ORDER'] . '"/>';
+    echo '<input type="hidden" id="strsidebar8" name="edtSidebar8" value="' . $zbp->option['ZC_SIDEBAR8_ORDER'] . '"/>';
+    echo '<input type="hidden" id="strsidebar9" name="edtSidebar9" value="' . $zbp->option['ZC_SIDEBAR9_ORDER'] . '"/>';
     echo '</form>';
     echo "\r\n";
     echo '<div class="clear"></div></div>';
@@ -1550,6 +1554,38 @@ function Admin_ModuleMng()
     echo '</div></div>';
     echo "\r\n";
 
+    echo '<div class="siderbar-drop" id="siderbar6"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar6'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar6), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    foreach ($zbp->template->sidebar6 as $m) {
+        CreateModuleDiv($m, false);
+    }
+    echo '</div></div>';
+    echo "\r\n";
+
+    echo '<div class="siderbar-drop" id="siderbar7"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar7'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar7), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    foreach ($zbp->template->sidebar7 as $m) {
+        CreateModuleDiv($m, false);
+    }
+    echo '</div></div>';
+    echo "\r\n";
+
+    echo '<div class="siderbar-drop" id="siderbar8"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar8'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar8), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    foreach ($zbp->template->sidebar8 as $m) {
+        CreateModuleDiv($m, false);
+    }
+    echo '</div></div>';
+    echo "\r\n";
+
+    echo '<div class="siderbar-drop" id="siderbar9"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar9'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar9), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+    foreach ($zbp->template->sidebar9 as $m) {
+        CreateModuleDiv($m, false);
+    }
+    echo '</div></div>';
+    echo "\r\n";
+
     echo '<div class="clear"></div></div>';
     //siderbar-list end
     echo "\r\n";
@@ -1587,12 +1623,35 @@ function Admin_ModuleMng()
                s5 += $(this).html() +"|";
              });
 
+             var s6="";
+            $("#siderbar6").find("div.funid").each(function(i){
+               s6 += $(this).html() +"|";
+             });
+
+             var s7="";
+            $("#siderbar7").find("div.funid").each(function(i){
+               s7 += $(this).html() +"|";
+             });
+
+             var s8="";
+            $("#siderbar8").find("div.funid").each(function(i){
+               s8 += $(this).html() +"|";
+             });
+
+             var s9="";
+            $("#siderbar9").find("div.funid").each(function(i){
+               s9 += $(this).html() +"|";
+             });
+
             $("#strsidebar" ).val(s1);
             $("#strsidebar2").val(s2);
             $("#strsidebar3").val(s3);
             $("#strsidebar4").val(s4);
             $("#strsidebar5").val(s5);
-
+            $("#strsidebar6").val(s6);
+            $("#strsidebar7").val(s7);
+            $("#strsidebar8").val(s8);
+            $("#strsidebar9").val(s9);
 
             $.post($("#edit").attr("action"),
                 {
@@ -1600,7 +1659,11 @@ function Admin_ModuleMng()
                 "sidebar2": s2,
                 "sidebar3": s3,
                 "sidebar4": s4,
-                "sidebar5": s5
+                "sidebar5": s5,
+                "sidebar6": s6,
+                "sidebar7": s7,
+                "sidebar8": s8,
+                "sidebar9": s9
                 },
                function(data){
                  //alert("Data Loaded: " + data);
@@ -1765,7 +1828,7 @@ function Admin_SettingMng()
     }
     echo '</div>'; ?>
 
-          <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav'); ?>">
+          <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav'); ?>" onsubmit="return checkDomain();">
             <div id="divMain2">
               <div class="content-box"><!-- Start Content Box -->
 
@@ -1790,22 +1853,53 @@ function Admin_SettingMng()
 
     echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
     echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
-    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/><span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="' . $decodedBlogHost . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly"') . 'oninput="changeDomain($(this).val())" />';
-    echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);   if($(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0)$(this).parent().next().hide();else $(this).parent().next().show();"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>' . $zbp->lang['msg']['permanent_domain'] . '<span style="display:none;">&nbsp;&nbsp;<input type="text" id="ZC_PERMANENT_DOMAIN_WITH_ADMIN" name="ZC_PERMANENT_DOMAIN_WITH_ADMIN" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN'] . '"/></label>' . $zbp->lang['msg']['permanent_domain_with_admin'] . '</span></p>';
-    if ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == 0) {
-        echo '<p style="display:none;">';
-    } else {
-        echo '<p>';
-    }
-    echo '在固定您的域名前，请先<a id="newdomainurl" href="' . $zbp->host . 'zb_system/cmd.php?act=misc&type=ping&newdomain=' . urlencode($zbp->host) . '" target="_blank" alt="固定域名链接" title="固定域名链接">【点击这里】</a>确认即将设置的域名是否可访问，如果不能访问请关闭设置。<br/>设置固定域名出错后造成不能访问的情况请访问wiki进行处理。<p>';
+    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/><span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="' . $decodedBlogHost . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly" ') . 'oninput="disableSubmit($(this).val())" />';
+    echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);   if($(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0){enableSubmit();$(this).parent().next().hide();$(\'.js-tip\').html(\'\');}else {disableSubmit();$(this).parent().next().show();}"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>' . $zbp->lang['msg']['permanent_domain'] . '<span style="display:none;">&nbsp;&nbsp;<input type="text" id="ZC_PERMANENT_DOMAIN_WITH_ADMIN" name="ZC_PERMANENT_DOMAIN_WITH_ADMIN" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN'] . '"/></label>' . $zbp->lang['msg']['permanent_domain_with_admin'] . '</span>&nbsp;&nbsp;<span class="js-tip"></span></p>';
     echo '<script>
-function changeDomain(url){
-    url = url.replace(" ","");
-    if(url.substr(url.length-1,1) != "/" ){
-    	url = url + "/";
+var bCheck = false;
+function disableSubmit(newurl){
+    //$("#btnPost").attr("disabled","disabled");
+    bCheck = true;
+}
+function enableSubmit(newurl){
+    //$("#btnPost").removeAttr("disabled");
+    bCheck = false;
+}
+function checkDomain(){
+	if(bCheck === false)return true;
+    if(bCheck === true){
+    	var i = changeDomain($(\'#ZC_BLOG_HOST\').val());
+    	if(i === true)
+    		return true;
+    	else
+    		return false;
     }
-    url = url + "zb_system/cmd.php?act=misc&type=ping&newdomain=" + encodeURI(url);
-    $("#newdomainurl").attr("href",url);
+}
+function changeDomain(newurl){
+    var token = "' . CreateWebToken("", time() + 3600) . '";
+
+    console.log("");
+    newurl = newurl.replace(" ","");
+    if(newurl.substr(newurl.length-1,1) != "/" ){
+        newurl = newurl + "/";
+    }
+    url = newurl + "zb_system/cmd.php?act=misc&type=ping&token=" + token;
+    $(".js-tip").html("' . $zbp->lang['msg']['verifying'] . '");
+    $.getJSON(url,{newurl:newurl},function(data) {
+        if (data) {
+            $(".js-tip").html(data.err.msg);
+            //data.err === 0 && $("#btnPost").removeAttr("disabled");
+          console.log(data);
+          enableSubmit();
+          bCheck = false;
+          return true;
+        }
+      }).fail(function() {
+        $(".js-tip").html("' . $zbp->lang['msg']['verify_fail'] . '");
+        //console.log( "error" );
+        return false;
+      });
+    //$("#newdomainurl").attr("href",url);
 }
     </script>';
     echo '</td></tr>';

@@ -28,7 +28,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         <th style="width:30%"><p align="left"><b>大小</b></p></th>
         <th style="width:20%"><p align="left"><b>操作</b></p></th>
       </tr>
-      <?php 
+      <?php
         $handle = opendir(SQLLOG_LOGPATH);
         if ($handle) {
             while (($filename = readdir($handle))) {

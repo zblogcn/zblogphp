@@ -1065,6 +1065,11 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Template'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($zbp->template);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+            return $fpreturn;
+        }
     }
 
     $zbp->template->Display();
@@ -1871,9 +1876,9 @@ function PostComment()
 
     $_POST['LogID'] = $_GET['postid'];
 
-    if ($zbp->ValidCmtKey($_GET['postid'], $_GET['key']) == false) {
-        $zbp->ShowError(43, __FILE__, __LINE__);
-    }
+    //if ($zbp->ValidCmtKey($_GET['postid'], $_GET['key']) == false) {
+    //    $zbp->ShowError(43, __FILE__, __LINE__);
+    //}
 
     if ($zbp->option['ZC_COMMENT_VERIFY_ENABLE']) {
         if (!$zbp->CheckRights('NoValidCode')) {
@@ -1959,6 +1964,10 @@ function PostComment()
 
     CountPostArray(array($cmt->LogID), +1);
     CountCommentNums(+1, 0);
+    if ($zbp->user->ID > 0) {
+        CountMember($zbp->user, array(0, 0, 1, 0));
+        $zbp->user->Save();
+    }
 
     $zbp->AddBuildModule('comments');
 
@@ -2007,6 +2016,10 @@ function DelComment()
 
         if ($cmt->IsChecking == false) {
             CountPostArray(array($cmt->LogID), -1);
+            if ($cmt->AuthorID > 0) {
+                CountMember($cmt->Author, array(0, 0, -1, 0));
+                $cmt->Author->Save();
+            }
         }
 
         $zbp->AddBuildModule('comments');
@@ -2091,9 +2104,17 @@ function CheckComment()
     if (($orig_check) && (!$ischecking)) {
         CountPostArray(array($cmt->LogID), +1);
         CountCommentNums(0, -1);
+        if ($cmt->AuthorID > 0) {
+            CountMember($cmt->Author, array(0, 0, +1, 0));
+            $cmt->Author->Save();
+        }
     } elseif ((!$orig_check) && ($ischecking)) {
         CountPostArray(array($cmt->LogID), -1);
         CountCommentNums(0, +1);
+        if ($cmt->AuthorID > 0) {
+            CountMember($cmt->Author, array(0, 0, -1, 0));
+            $cmt->Author->Save();
+        }
     }
 
     $zbp->AddBuildModule('comments');
@@ -2112,6 +2133,9 @@ function BatchComment()
     } elseif (isset($_POST['all_audit'])) {
         $type = 'all_audit';
     } else {
+        return;
+    }
+    if (!isset($_POST['id'])) {
         return;
     }
     $array = $_POST['id'];
@@ -2142,6 +2166,10 @@ function BatchComment()
             if (!$cmt->IsChecking) {
                 CountPostArray(array($cmt->LogID), -1);
                 CountCommentNums(-1, 0);
+                if ($cmt->AuthorID > 0) {
+                    CountMember($cmt->Author, array(0, 0, -1, 0));
+                    $cmt->Author->Save();
+                }
             } else {
                 CountCommentNums(-1, -1);
             }
@@ -2156,6 +2184,10 @@ function BatchComment()
             $cmt->Save();
             CountPostArray(array($cmt->LogID), +1);
             CountCommentNums(0, -1);
+            if ($cmt->AuthorID > 0) {
+                CountMember($cmt->Author, array(0, 0, 1, 0));
+                $cmt->Author->Save();
+            }
         }
     } elseif ($type == 'all_audit') {
         foreach ($childArray as $i => $cmt) {
@@ -2167,6 +2199,10 @@ function BatchComment()
             $cmt->Save();
             CountPostArray(array($cmt->LogID), -1);
             CountCommentNums(0, +1);
+            if ($cmt->AuthorID > 0) {
+                CountMember($cmt->Author, array(0, 0, -1, 0));
+                $cmt->Author->Save();
+            }
         }
     }
 
@@ -2582,6 +2618,15 @@ function PostModule()
         $zbp->SaveOption();
     }
 
+    if ($_POST['FileName'] == 'archives') {
+        if (isset($_POST['archives_style'])) {
+            $zbp->option['ZC_MODULE_ARCHIVES_STYLE'] = 1;
+        } else {
+            $zbp->option['ZC_MODULE_ARCHIVES_STYLE'] = 0;
+        }
+        $zbp->SaveOption();
+    }
+
     if (!isset($_POST['ID'])) {
         return false;
     }
@@ -2860,37 +2905,23 @@ function SetTheme($theme, $style)
     $app = $zbp->LoadApp('theme', $theme);
     $app->CheckCompatibility();
 
-    $oldtheme = $zbp->option['ZC_BLOG_THEME'];
+    $oldTheme = $zbp->option['ZC_BLOG_THEME'];
 
-    if ($oldtheme != $theme) {
-        if ($app->sidebars_sidebar1 | $app->sidebars_sidebar2 | $app->sidebars_sidebar3 | $app->sidebars_sidebar4 | $app->sidebars_sidebar5) {
-            $s1 = $zbp->option['ZC_SIDEBAR_ORDER'];
-            $s2 = $zbp->option['ZC_SIDEBAR2_ORDER'];
-            $s3 = $zbp->option['ZC_SIDEBAR3_ORDER'];
-            $s4 = $zbp->option['ZC_SIDEBAR4_ORDER'];
-            $s5 = $zbp->option['ZC_SIDEBAR5_ORDER'];
-            $zbp->option['ZC_SIDEBAR_ORDER'] = $app->sidebars_sidebar1;
-            $zbp->option['ZC_SIDEBAR2_ORDER'] = $app->sidebars_sidebar2;
-            $zbp->option['ZC_SIDEBAR3_ORDER'] = $app->sidebars_sidebar3;
-            $zbp->option['ZC_SIDEBAR4_ORDER'] = $app->sidebars_sidebar4;
-            $zbp->option['ZC_SIDEBAR5_ORDER'] = $app->sidebars_sidebar5;
-            $zbp->cache->zc_sidebar_order1 = $s1;
-            $zbp->cache->zc_sidebar_order2 = $s2;
-            $zbp->cache->zc_sidebar_order3 = $s3;
-            $zbp->cache->zc_sidebar_order4 = $s4;
-            $zbp->cache->zc_sidebar_order5 = $s5;
+    // @TODO: 将此处的9常量化
+    for ($i = 1; $i <= 9; $i++) {
+        $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : "ZC_SIDEBAR${i}_ORDER";
+        $appSideBarName = "sidebars_sidebar${i}";
+        $cacheName = "zc_sidebar_order${i}";
+        if ($oldTheme !== $theme) {
+            if (isset($app->$appSideBarName) && $app->$appSideBarName) {
+                $temp = $zbp->option[$optionName];
+                $zbp->option[$optionName] = $app->$appSideBarName;
+                $zbp->cache->$cacheName = $temp;
+            }
         } else {
-            if ($zbp->cache->zc_sidebar_order1 | $zbp->cache->zc_sidebar_order2 | $zbp->cache->zc_sidebar_order3 | $zbp->cache->zc_sidebar_order4 | $zbp->cache->zc_sidebar_order5) {
-                $zbp->option['ZC_SIDEBAR_ORDER'] = $zbp->cache->zc_sidebar_order1;
-                $zbp->option['ZC_SIDEBAR2_ORDER'] = $zbp->cache->zc_sidebar_order2;
-                $zbp->option['ZC_SIDEBAR3_ORDER'] = $zbp->cache->zc_sidebar_order3;
-                $zbp->option['ZC_SIDEBAR4_ORDER'] = $zbp->cache->zc_sidebar_order4;
-                $zbp->option['ZC_SIDEBAR5_ORDER'] = $zbp->cache->zc_sidebar_order5;
-                $zbp->cache->zc_sidebar_order1 = '';
-                $zbp->cache->zc_sidebar_order2 = '';
-                $zbp->cache->zc_sidebar_order3 = '';
-                $zbp->cache->zc_sidebar_order4 = '';
-                $zbp->cache->zc_sidebar_order5 = '';
+            if (isset($zbp->cache->$cacheName) && $zbp->cache->$cacheName) {
+                $zbp->option[$optionName] = $zbp->cache->$cacheName;
+                $zbp->cache->$cacheName = '';
             }
         }
     }
@@ -2900,10 +2931,8 @@ function SetTheme($theme, $style)
 
     $zbp->SaveOption();
 
-    if ($oldtheme != $theme) {
-        UninstallPlugin($oldtheme);
-
-        return $theme;
+    if ($oldTheme != $theme) {
+        UninstallPlugin($oldTheme);
     }
 
     return $theme;
@@ -2915,12 +2944,12 @@ function SetTheme($theme, $style)
 function SetSidebar()
 {
     global $zbp;
-
-    $zbp->option['ZC_SIDEBAR_ORDER'] = trim(GetVars('sidebar', 'POST'), '|');
-    $zbp->option['ZC_SIDEBAR2_ORDER'] = trim(GetVars('sidebar2', 'POST'), '|');
-    $zbp->option['ZC_SIDEBAR3_ORDER'] = trim(GetVars('sidebar3', 'POST'), '|');
-    $zbp->option['ZC_SIDEBAR4_ORDER'] = trim(GetVars('sidebar4', 'POST'), '|');
-    $zbp->option['ZC_SIDEBAR5_ORDER'] = trim(GetVars('sidebar5', 'POST'), '|');
+    // @TODO: 将此处的9常量化
+    for ($i = 1; $i <= 9; $i++) {
+        $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : "ZC_SIDEBAR${i}_ORDER";
+        $formName = $i === 1 ? 'sidebar' : "sidebar${i}";
+        $zbp->option[$optionName] = trim(GetVars($formName, 'POST'), '|');
+    }
     $zbp->SaveOption();
 }
 
@@ -3447,7 +3476,7 @@ function CountMember(&$member, $plus = array(null, null, null, null))
 
     if ($plus[2] === null) {
         if ($member->ID > 0) {
-            $s = $zbp->db->sql->Count($zbp->table['Comment'], array(array('COUNT', '*', 'num')), array(array('=', 'comm_AuthorID', $id)));
+            $s = $zbp->db->sql->Count($zbp->table['Comment'], array(array('COUNT', '*', 'num')), array(array('=', 'comm_AuthorID', $id), array('=', 'comm_IsChecking', 0)));
             $member_Comments = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
             $member->Comments = $member_Comments;
         }

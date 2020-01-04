@@ -9,31 +9,31 @@ function ActivePlugin_LinksManage()
     Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu', 'LinksManage_AddMenu');
     Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu', 'LinksManage_AddMenu');
     Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu', 'LinksManage_ModuleMenu');
-    Add_Filter_Plugin('Filter_Plugin_Zbp_BuildTemplate', 'LinksManage_BuidTemp');
+    Add_Filter_Plugin('Filter_Plugin_Zbp_BuildTemplate', 'LinksManage_BuildTemp');
 }
-function LinksManage_BuidTemp(&$templates)
+
+function LinksManage_BuildTemp(&$templates)
 {
     // global $zbp;
-    // if (is_file(LinksManage_Path("u-temp"))) {
-    $templates['Links_defend'] = file_get_contents(LinksManage_Path("u-temp"));
-    // }
+    if (is_file(LinksManage_Path("u-temp"))) {
+        $templates['Links_defend'] = file_get_contents(LinksManage_Path("u-temp"));
+    } else {
+        $templates['Links_defend'] = file_get_contents(LinksManage_Path("v-temp"));
+    }
     $templates['Links_admin'] = file_get_contents(LinksManage_Path("tr"));
 }
+
 function LinksManage_ModuleMenu()
 {
     global $zbp;
 
     $array = $zbp->GetModuleList(
-        array('*')
-    );
+    array('*'),
+    array(array('=', 'mod_Source', 'plugin_LinksManage'))
+  );
     $mods = array();
     foreach ($array as $mod) {
-        if ($mod->Type == 'ul') {
-            if ($mod->Source == 'system' && !in_array($mod->HtmlID, array('navbar', 'link', 'misc', 'favorite'))) {
-                continue;
-            }
-            $mods[] = $mod->FileName;
-        }
+        $mods[] = $mod->FileName;
     }
 
     $str = '<a href="' . LinksManage_Path("main", "host") . '" class="LinksManage"><span class="m-left">新建链接模块</span></a>';
@@ -58,65 +58,79 @@ function LinksManage_Path($file, $t = "path")
     global $zbp;
     $result = $zbp->$t . "zb_users/plugin/LinksManage/";
     switch ($file) {
-        case "u-temp":
-            return $result . "usr/li.html";
-            break;
-        case "v-temp":
-            return $result . "var/li.html";
-            break;
-        case "tr":
-            return $result . "var/tr.html";
-            break;
-        case "style":
-            return $result . "var/style.css";
-            break;
-        case "script":
-            return $result . "var/script.js";
-            break;
-        case "usr":
-            return $result . "usr/";
-            break;
-        case "bakdir":
-            return $result . "backup/";
-            break;
-        case "bakfile":
-            return 'navbar|favorite|link';
-            break;
-        case "main":
-            return $result . "main.php";
-            break;
-        default:
-            return $result . $file;
-    }
+    case "cache":
+      return $zbp->usersdir . "cache/linksmanage/";
+      break;
+    case "u-temp":
+      return $result . "usr/li.html";
+      break;
+    case "v-temp":
+      return $result . "var/li.html";
+      break;
+    case "tr":
+      return $result . "var/tr.html";
+      break;
+    case "style":
+      return $result . "var/style.css";
+      break;
+    case "script":
+      return $result . "var/script.js";
+      break;
+    case "usr":
+      return $result . "usr/";
+      break;
+    case "bakdir":
+      return $zbp->usersdir . "cache/linksmanage/backup/";
+      break;
+    case "bakfile":
+      return 'navbar|favorite|link';
+      break;
+    case "main":
+      return $result . "main.php";
+      break;
+    default:
+      return $result . $file;
+  }
 }
 function InstallPlugin_LinksManage()
-{/*
+{
     global $zbp;
+
+    $dir = LinksManage_Path("cache");
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0755);
+    }
     $dir = LinksManage_Path("bakdir");
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0755);
+    }
+    $dir = LinksManage_Path("usr");
     if (!is_dir($dir)) {
         @mkdir($dir, 0755);
     }
     $links = explode('|', LinksManage_Path("bakfile"));
     foreach ($links as $mod) {
         $backup = $zbp->modulesbyfilename[$mod]->Content;
-        file_put_contents(LinksManage_Path("bakdir") . $mod . '.txt', $backup);
-    }
-    $filesList = array("temp");
-    foreach ($filesList as $key => $value) {
-        $uFile = LinksManage_Path("u-{$value}");
-        $vFile = LinksManage_Path("v-{$value}");
-        if (!is_file($uFile)) {
-            @mkdir(dirname($uFile));
-            copy($vFile, $uFile);
+        $bakFile = LinksManage_Path("bakdir") . $mod . '.txt';
+        if (!is_file($bakFile)) {
+            file_put_contents($bakFile, $backup);
         }
     }
+    // $filesList = array("temp");
+    // foreach ($filesList as $key => $value) {
+    //   $uFile = LinksManage_Path("u-{$value}");
+    //   $vFile = LinksManage_Path("v-{$value}");
+    //   if (!is_file($uFile)) {
+    //     @mkdir(dirname($uFile));
+    //     copy($vFile, $uFile);
+    //   }
+    // }
     $zbp->BuildTemplate();
-*/
 }
-
 function UninstallPlugin_LinksManage()
-{/*
+{
     global $zbp;
+    $zbp->LoadModules();
     $links = explode('|', LinksManage_Path("bakfile"));
     foreach ($links as $mod) {
         $file = LinksManage_Path("bakdir") . $mod . '.txt';
@@ -129,5 +143,21 @@ function UninstallPlugin_LinksManage()
             unlink($file);
         }
     }
-*/
 }
+
+// function FixSth()
+// {
+//   global $zbp;
+//   $zbp->LoadModules();
+//   // $module = $zbp->modulesbyfilename["navbar"];
+//   $module = $zbp->GetModuleByID(1);
+//   var_dump($module->GetData());
+//   $module->Content = "";
+//   $module->Name = "导航栏";
+//   $module->FileName = "navbar";
+//   $module->HtmlID = "divNavBar";
+//   $module->Type = "ul";
+//   $module->Source = "system";
+//   $module->Save();
+// }
+// FixSth();

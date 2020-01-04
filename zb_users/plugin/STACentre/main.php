@@ -56,7 +56,7 @@ $ua = array(
         '{%host%}post/{%id%}.html',
         '{%host%}post/{%alias%}.html',
         '{%host%}{%year%}/{%month%}/{%id%}/',
-        '{%host%}{%category%}/{%alias%}',
+        '{%host%}{%category%}/{%alias%}/',
     ),
 
     'ZC_PAGE_REGEX' => array(
@@ -65,7 +65,7 @@ $ua = array(
         '{%host%}{%id%}.html',
         '{%host%}{%alias%}.html',
         '{%host%}{%alias%}/',
-        '{%host%}{%alias%}',
+        //'{%host%}{%alias%}',
     ),
 
     'ZC_INDEX_REGEX' => array(
@@ -73,7 +73,7 @@ $ua = array(
         '{%host%}index.php/page_{%page%}.html',
         '{%host%}page_{%page%}.html',
         '{%host%}page_{%page%}/',
-        '{%host%}page_{%page%}',
+        //'{%host%}page_{%page%}',
         '{%host%}page/{%page%}/',
     ),
 
@@ -83,7 +83,7 @@ $ua = array(
         '{%host%}category-{%id%}_{%page%}.html',
         '{%host%}category-{%alias%}_{%page%}.html',
         '{%host%}category/{%alias%}/{%page%}/',
-        '{%host%}category/{%id%}/{%page%}',
+        '{%host%}category/{%id%}/{%page%}/',
     ),
 
     'ZC_TAGS_REGEX' => array(

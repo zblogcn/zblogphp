@@ -105,7 +105,7 @@ class SQL__PostgreSQL extends SQL__Global
 
             $sql[] = ');';
             $sql[] = 'CREATE INDEX ' . $table . '_ix_id on ' . $table . '(' . $idname . ');';
-            $sqlAll[] = implode($sql, ' ');
+            $sqlAll[] = implode(' ', $sql);
         }
         $this->_sql = $sqlAll;
     }
