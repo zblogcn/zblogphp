@@ -125,7 +125,7 @@ class PageBar
         $middle = ceil($this->PageBarCount / 2);
         $start = 1;
         if ($this->PageNow > $middle) {
-            $start = $this->PageNow - $middle;
+            $start = $this->PageNow - $middle + 1;
         }
         if ($pageAll > $this->PageBarCount && ($pageAll - $start) < $this->PageBarCount) {
             $start = $pageAll - $this->PageBarCount;
