@@ -54,7 +54,7 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
             ->create('zbp_post')
             ->data(
                 array(
-                'ID' => array('log_ID', 'integer', '', 0),
+                    'ID' => array('log_ID', 'integer', '', 0),
                 )
             );
         $this->assertEquals('CREATE TABLE IF NOT EXISTS zbp_post  ( log_ID int(11) NOT NULL AUTO_INCREMENT, PRIMARY KEY (log_ID) ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;', self::$db->sql);
@@ -150,10 +150,10 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
                 ->select("zbp_post")
                 ->where(
                     array('array',
-                    array(
-                    array('log_ID', '1'),
-                    array('log_Title', '2'),
-                    ),
+                        array(
+                            array('log_ID', '1'),
+                            array('log_Title', '2'),
+                        ),
                     )
                 )
                 ->sql
@@ -164,10 +164,10 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
                 ->select("zbp_post")
                 ->where(
                     array('not array',
-                    array(
-                    array('log_ID', '1'),
-                    array('log_Title', '2'),
-                    ),
+                        array(
+                            array('log_ID', '1'),
+                            array('log_Title', '2'),
+                        ),
                     )
                 )
                 ->sql
@@ -178,10 +178,10 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
                 ->select("zbp_post")
                 ->where(
                     array('like array',
-                    array(
-                    array('log_ID', '1'),
-                    array('log_Title', '2'),
-                    ),
+                        array(
+                            array('log_ID', '1'),
+                            array('log_Title', '2'),
+                        ),
                     )
                 )
                 ->sql
@@ -192,10 +192,10 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
                 ->select("zbp_post")
                 ->where(
                     array('ilike array',
-                    array(
-                    array('log_ID', '1'),
-                    array('log_Title', '2'),
-                    ),
+                        array(
+                            array('log_ID', '1'),
+                            array('log_Title', '2'),
+                        ),
                     )
                 )
                 ->sql

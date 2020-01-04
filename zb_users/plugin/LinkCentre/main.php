@@ -102,11 +102,11 @@ if ($edit = GetVars('edit', 'GET')) {
             $content = str_replace(array('<ul>', '</ul></li>'), array("</li>\n", ''), $content);
         }
         $preg = array(
-      'tag'    => '/<li.*?<\/li>/',
-      'sub'    => '/<li.*?class=[\'|\"](.*?)[\'|\"]/i',
-      'href'   => '/<a.*?href=[\'|\"](.*?)[\'|\"]/i',
-      'target' => '/<a.*?target=[\'|\"](.*?)[\'|\"]/i',
-      'name'   => '/<a.*?>(.*?)<\/a>/i', 'title'=> '/<a.*?title=[\'|\"](.*?)[\'|\"]/i', );
+            'tag'    => '/<li.*?<\/li>/',
+            'sub'    => '/<li.*?class=[\'|\"](.*?)[\'|\"]/i',
+            'href'   => '/<a.*?href=[\'|\"](.*?)[\'|\"]/i',
+            'target' => '/<a.*?target=[\'|\"](.*?)[\'|\"]/i',
+            'name'   => '/<a.*?>(.*?)<\/a>/i', 'title'=> '/<a.*?title=[\'|\"](.*?)[\'|\"]/i', );
         $link = array();
         preg_match_all($preg['tag'], $content, $tag);
         foreach ($tag[0] as $key=> $val) {

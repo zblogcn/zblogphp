@@ -29,7 +29,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div class="SubMenu"><?php echo changyan_SubMenus(); ?></div>
   <div id="divMain2">
 <?php
-{
+
 ?>
 <div class="margin heiti" style="width: 800px">
     <table class="tableFull tableBorder">
@@ -180,7 +180,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     </table>
 </div>
 <?php
-}
+
 ?>
 
     <script type="text/javascript">ActiveLeftMenu("aChangYan");</script> 

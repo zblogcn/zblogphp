@@ -188,9 +188,9 @@ class ALIOSS
 
     //OSS ACL数组
     public static $OSS_ACL_TYPES = array(
-    self::OSS_ACL_TYPE_PRIVATE,
-    self::OSS_ACL_TYPE_PUBLIC_READ,
-    self::OSS_ACL_TYPE_PUBLIC_READ_WRITE,
+        self::OSS_ACL_TYPE_PRIVATE,
+        self::OSS_ACL_TYPE_PUBLIC_READ,
+        self::OSS_ACL_TYPE_PUBLIC_READ_WRITE,
     );
 
     /*%******************************************************************************************%*/
@@ -889,10 +889,10 @@ class ALIOSS
         $options[self::OSS_METHOD] = 'GET';
         $options[self::OSS_OBJECT] = '/';
         $options[self::OSS_HEADERS] = array(
-        self::OSS_DELIMITER => isset($options[self::OSS_DELIMITER]) ? $options[self::OSS_DELIMITER] : '/',
-        self::OSS_PREFIX    => isset($options[self::OSS_PREFIX]) ? $options[self::OSS_PREFIX] : '',
-        self::OSS_MAX_KEYS  => isset($options[self::OSS_MAX_KEYS]) ? $options[self::OSS_MAX_KEYS] : self::OSS_MAX_KEYS_VALUE,
-        self::OSS_MARKER    => isset($options[self::OSS_MARKER]) ? $options[self::OSS_MARKER] : '',
+            self::OSS_DELIMITER => isset($options[self::OSS_DELIMITER]) ? $options[self::OSS_DELIMITER] : '/',
+            self::OSS_PREFIX    => isset($options[self::OSS_PREFIX]) ? $options[self::OSS_PREFIX] : '',
+            self::OSS_MAX_KEYS  => isset($options[self::OSS_MAX_KEYS]) ? $options[self::OSS_MAX_KEYS] : self::OSS_MAX_KEYS_VALUE,
+            self::OSS_MARKER    => isset($options[self::OSS_MARKER]) ? $options[self::OSS_MARKER] : '',
         );
 
         $response = $this->auth($options);
