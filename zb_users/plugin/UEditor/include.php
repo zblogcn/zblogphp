@@ -77,9 +77,11 @@ editor_api.editor.intro.obj=UE.getEditor('editor_intro',EditorIntroOption);
 editor_api.editor.content.get=function(){return this.obj.getContent()};
 editor_api.editor.content.put=function(str){return this.obj.setContent(str)};
 editor_api.editor.content.focus=function(){return this.obj.focus()};
+editor_api.editor.content.insert=function(str){return this.obj.execCommand("insertHtml", str)};
 editor_api.editor.intro.get=function(){return this.obj.getContent()};
 editor_api.editor.intro.put=function(str){return this.obj.setContent(str)};
 editor_api.editor.intro.focus=function(){return this.obj.focus()};
+editor_api.editor.intro.insert=function(str){return this.obj.execCommand("insertHtml", str)};
 
 
 editor_api.editor.content.obj.ready(function(){sContent=editor_api.editor.content.get();});
