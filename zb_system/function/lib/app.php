@@ -648,7 +648,7 @@ class App
         foreach ($xml->file as $file) {
             $s = base64_decode($file->stream);
             $f = $dir . $file->path;
-            $f = str_replace('.', '', pathinfo($f, PATHINFO_DIRNAME)) . '/' . pathinfo($f, PATHINFO_BASENAME);
+            $f = str_replace('./', '', pathinfo($f, PATHINFO_DIRNAME)) . '/' . pathinfo($f, PATHINFO_BASENAME);
             @file_put_contents($f, $s);
             @chmod($f, 0755);
         }
@@ -656,6 +656,48 @@ class App
         ZBlogException::ResumeErrorHook();
 
         return true;
+    }
+
+    /**
+     * 检查应用包解开后的文件.
+     *
+     * @param $xml
+     *
+     * @return integer 返回校验不同的文件数量
+     */
+    public static function CheckFiles($xml)
+    {
+        global $zbp;
+        $charset = array();
+        $charset[1] = substr($xml, 0, 1);
+        $charset[2] = substr($xml, 1, 1);
+        if (ord($charset[1]) == 31 && ord($charset[2]) == 139) {
+            $xml = gzdecode($xml);
+        }
+
+        $xml = simplexml_load_string($xml);
+        if (!$xml) {
+            return false;
+        }
+
+        if ($xml['version'] != 'php') {
+            return false;
+        }
+
+        $type = $xml['type'];
+        $id = $xml->id;
+        $dir = $zbp->path . 'zb_users/' . $type . '/';
+
+        $number = 0;
+        foreach ($xml->file as $file) {
+            $s1 = base64_decode($file->stream);
+            $f = $dir . $file->path;
+            $s2 = file_get_contents($f);
+            if(md5($s1) != md5($s2)){
+            	$number = $number + 1;
+            }
+        }
+        return $number;
     }
 
     /**
