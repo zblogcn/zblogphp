@@ -663,7 +663,7 @@ class App
      *
      * @param $xml
      *
-     * @return integer 返回校验不同的文件数量
+     * @return int 返回校验不同的文件数量
      */
     public static function CheckFiles($xml)
     {
@@ -693,10 +693,11 @@ class App
             $s1 = base64_decode($file->stream);
             $f = $dir . $file->path;
             $s2 = file_get_contents($f);
-            if(md5($s1) != md5($s2)){
-            	$number = $number + 1;
+            if (md5($s1) != md5($s2)) {
+                $number = $number + 1;
             }
         }
+
         return $number;
     }
 
