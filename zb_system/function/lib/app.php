@@ -659,7 +659,6 @@ class App
             if (md5($s) != md5($s2)) {
                 self::$check_error_count = self::$check_error_count + 1;
             }
-
         }
 
         ZBlogException::ResumeErrorHook();
