@@ -93,11 +93,13 @@ parse_str($s, $array);
 unset($array['step']);
 $s = '';
 foreach ($array as $key => $value) {
-  $s .= '&amp;' . $key . '=' . urlencode($value);
+    $s .= '&amp;' . $key . '=' . urlencode($value);
 }
-if($zblogstep>= 3)$s='';
+if ($zblogstep >= 3) {
+    $s = '';
+}
 ?>
-  <form method="post" action="./index.php?step=<?php echo ($zblogstep + 1) . $s ?>">
+  <form method="post" action="./index.php?step=<?php echo($zblogstep + 1) . $s ?>">
     <input type="hidden" name="zbloglang" id="zbloglang" value="<?php echo $zbloglang; ?>"/>
     <?php
 
@@ -451,24 +453,27 @@ function Setup3()
 
     $hasPgsql = (bool) ((bool) ($CheckResult['pgsql'][0]) or (bool) ($CheckResult['pdo_pgsql'][0]));
 
-$option2 = array();
-$option2['blogtitle'] = GetVars('blogtitle', 'GET');
-$option2['username'] = GetVars('username', 'GET');
-$option2['password'] = GetVars('password', 'GET');
-$option2['repassword'] = GetVars('repassword', 'GET');
+    $option2 = array();
+    $option2['blogtitle'] = GetVars('blogtitle', 'GET');
+    $option2['username'] = GetVars('username', 'GET');
+    $option2['password'] = GetVars('password', 'GET');
+    $option2['repassword'] = GetVars('repassword', 'GET');
 
-if(GetVars('dbmysql_server', 'GET') != '')
-$option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'GET');
-if(GetVars('dbmysql_name', 'GET') != '')
-$option['ZC_MYSQL_NAME']  = GetVars('dbmysql_name', 'GET');
-if(GetVars('dbmysql_username', 'GET') != '')
-$option['ZC_MYSQL_USERNAME'] = GetVars('dbmysql_username', 'GET');
-if(GetVars('dbmysql_password', 'GET') != '')
-$option['ZC_MYSQL_PASSWORD'] = GetVars('dbmysql_password', 'GET');
-if(GetVars('dbmysql_pre', 'GET') != '')
-$option['ZC_MYSQL_PRE']  = GetVars('dbmysql_pre', 'GET');
-
-?>
+    if (GetVars('dbmysql_server', 'GET') != '') {
+        $option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'GET');
+    }
+    if (GetVars('dbmysql_name', 'GET') != '') {
+        $option['ZC_MYSQL_NAME'] = GetVars('dbmysql_name', 'GET');
+    }
+    if (GetVars('dbmysql_username', 'GET') != '') {
+        $option['ZC_MYSQL_USERNAME'] = GetVars('dbmysql_username', 'GET');
+    }
+    if (GetVars('dbmysql_password', 'GET') != '') {
+        $option['ZC_MYSQL_PASSWORD'] = GetVars('dbmysql_password', 'GET');
+    }
+    if (GetVars('dbmysql_pre', 'GET') != '') {
+        $option['ZC_MYSQL_PRE'] = GetVars('dbmysql_pre', 'GET');
+    } ?>
 <dl>
   <dt></dt>
   <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
@@ -595,16 +600,16 @@ $option['ZC_MYSQL_PRE']  = GetVars('dbmysql_pre', 'GET');
 
       <p class="title"><?php echo $zbp->lang['zb_install']['website_setting']; ?></p>
       <p><b><?php echo $zbp->lang['zb_install']['blog_name']; ?></b>
-        <input type="text" name="blogtitle" id="blogtitle" value="<?php echo $option2['blogtitle'];?>" style="width:350px;" />
+        <input type="text" name="blogtitle" id="blogtitle" value="<?php echo $option2['blogtitle']; ?>" style="width:350px;" />
       </p>
       <p><b><?php echo $zbp->lang['zb_install']['admin_username']; ?></b>
-        <input type="text" name="username" id="username" value="<?php echo $option2['username'];?>" style="width:200px;" />
+        <input type="text" name="username" id="username" value="<?php echo $option2['username']; ?>" style="width:200px;" />
         &nbsp;<small><?php echo $zbp->lang['zb_install']['username_intro']; ?></small></p>
       <p><b><?php echo $zbp->lang['zb_install']['admin_password']; ?></b>
-        <input type="password" name="password" id="password" value="<?php echo $option2['password'];?>" style="width:200px;" />
+        <input type="password" name="password" id="password" value="<?php echo $option2['password']; ?>" style="width:200px;" />
         &nbsp;<small><?php echo $zbp->lang['zb_install']['password_intro']; ?></small></p>
       <p><b><?php echo $zbp->lang['zb_install']['re_password']; ?></b>
-        <input type="password" name="repassword" id="repassword" value="<?php echo $option2['repassword'];?>" style="width:200px;" />
+        <input type="password" name="repassword" id="repassword" value="<?php echo $option2['repassword']; ?>" style="width:200px;" />
       </p>
       <p><b><?php echo $zbp->lang['zb_install']['theme']; ?></b>
         <label><input value="Zti" type="radio" name="blogtheme"/> 吉光Zti</label>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -1213,7 +1218,6 @@ function SaveConfig()
         return false;
     }
 
-
     $zbp->Config('cache')->templates_md5 = '';
     $zbp->SaveCache();
 
@@ -1223,21 +1227,19 @@ function SaveConfig()
     $zbp->Config('AppCentre')->enablegzipapp = 0;
     $zbp->SaveConfig('AppCentre');
 
-
-    if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/'.$zbp->option['ZC_BLOG_THEME'].'/include.php')){
+    if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $zbp->option['ZC_BLOG_THEME'] . '/include.php')) {
         require $file_base;
     }
     if (function_exists($fn = 'InstallPlugin_' . $zbp->option['ZC_BLOG_THEME'])) {
-       $fn();
+        $fn();
     }
 
     $zbp->template = $zbp->PrepareTemplate();
     $zbp->BuildTemplate();
 
-    if (file_exists($zbp->path . 'zb_users/cache/compiled/'.$zbp->option['ZC_BLOG_THEME'].'/index.php') == false) {
+    if (file_exists($zbp->path . 'zb_users/cache/compiled/' . $zbp->option['ZC_BLOG_THEME'] . '/index.php') == false) {
         echo $zbp->lang['zb_install']['not_create_template_file'] . "<br/>";
     }
-
 
     echo $zbp->lang['zb_install']['save_option'] . "<br/>";
 
