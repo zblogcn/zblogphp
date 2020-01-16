@@ -400,7 +400,7 @@ function GetVars($name, $type = 'REQUEST')
     if (isset($array[$name])) {
         return $array[$name];
     } else {
-        return;
+        return null;
     }
 }
 

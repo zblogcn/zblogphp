@@ -84,5 +84,6 @@ return array(
     'not_insert_data'                 => '插入數據失敗。',
     'not_create_option_file'          => '創建c_option.php失敗，请創建"網站目錄/zb_users/c_option.php"文件並將下邊的代碼複製進文件並保存。',
     'not_create_template_file'        => '編譯主題模板失敗。',
+    'theme'                           => '主題：',
     ''                                => '',
 );
