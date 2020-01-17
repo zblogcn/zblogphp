@@ -3402,7 +3402,7 @@ class ZBlogPHP
     }
 
     /**
-     * GetLang 用于替换$zbp->lang
+     * GetLang 用于替换$zbp->lang.
      *
      * @param $name
      * @param $name2
@@ -3411,22 +3411,26 @@ class ZBlogPHP
      */
     public function GetLang($name, $name2 = null)
     {
-        if($name2 === null){
-            if(isset($this->lang[$name])){
+        if ($name2 === null) {
+            if (isset($this->lang[$name])) {
                 return $this->lang[$name];
             }
+
             return null;
         }
-        if(isset($this->lang[$name])){
+        if (isset($this->lang[$name])) {
             $a = &$this->lang[$name];
-            if(is_array($a)){
-                if(isset($a[$name2])){
+            if (is_array($a)) {
+                if (isset($a[$name2])) {
                     return $a[$name2];
                 }
+
                 return null;
             }
+
             return $a;
         }
+
         return null;
     }
 }
