@@ -2533,7 +2533,9 @@ function PostMember()
 
     if (isset($data['Password'])) {
         if ($mem->ID == $zbp->user->ID) {
-            if(defined('IN_CMD_PROCESSING')) Redirect($zbp->host . 'zb_system/cmd.php?act=login');
+            if (defined('IN_CMD_PROCESSING')) {
+                Redirect($zbp->host . 'zb_system/cmd.php?act=login');
+            }
         }
     }
 
@@ -3038,7 +3040,9 @@ function SaveSetting()
 
     if ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == 1) {
         if ($oldHost != $zbp->option['ZC_BLOG_HOST']) {
-            if(defined('IN_CMD_PROCESSING')) Redirect($zbp->option['ZC_BLOG_HOST'] . 'zb_system/cmd.php?act=login');
+            if (defined('IN_CMD_PROCESSING')) {
+                Redirect($zbp->option['ZC_BLOG_HOST'] . 'zb_system/cmd.php?act=login');
+            }
         }
     }
 }
