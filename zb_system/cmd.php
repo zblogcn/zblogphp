@@ -114,6 +114,9 @@ switch ($action) {
             case 'ping':
                 misc_ping();
                 break;
+            case 'updatedapp':
+                misc_updatedapp();
+                break;
             default:
                 break;
         }

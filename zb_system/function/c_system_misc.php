@@ -403,3 +403,21 @@ function misc_ping()
         JsonError(1, "无效的TOKEN", $data);
     */
 }
+
+
+function misc_updatedapp()
+{
+    global $zbp;
+
+    header('Content-Type: application/x-javascript; Charset=utf-8');
+
+    if($zbp->cache->success_updated_app !== ''){
+        
+        $fn = $zbp->cache->success_updated_app . '_Updated';
+        if (function_exists($fn)) $fn();
+
+        $zbp->cache->success_updated_app = '';
+        $zbp->SaveCache();
+        die;
+    }
+}
