@@ -295,7 +295,7 @@ function OutputOptionItemsOfCategories($default)
  *
  * @return null|string
  */
-function OutputOptionItemsOfTemplate($default,$file_filter_array=array())
+function OutputOptionItemsOfTemplate($default, $file_filter_array = array())
 {
     global $zbp;
     $testRegExp = "/^(\.|post-|module|header|footer|comment|sidebar|pagebar|[a-zA-Z]\_)/si";
@@ -311,11 +311,11 @@ function OutputOptionItemsOfTemplate($default,$file_filter_array=array())
         foreach ($file_filter_array as $key2 => $value2) {
             $testRegExp2 = "/^($value2)/si";
             if (preg_match($testRegExp2, $key)) {
-              $b = true;
+                $b = true;
             }
         }
-        if($b == true){
-           continue;
+        if ($b == true) {
+            continue;
         }
 
         $n = "";
@@ -686,7 +686,7 @@ function Admin_ArticleMng()
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&page=%page%}{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
-    if(GetVars('search')!==GetVars('search','GET')){
+    if (GetVars('search') !== GetVars('search', 'GET')) {
         $p->PageNow = 1;
     }
     $p->PageBarCount = $zbp->pagebarcount;
@@ -973,7 +973,7 @@ function Admin_CommentMng()
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&page=%page%}{&ischecking=%ischecking%}{&search=%search%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
-    if(GetVars('search')!==GetVars('search','GET')){
+    if (GetVars('search') !== GetVars('search', 'GET')) {
         $p->PageNow = 1;
     }
     $p->PageBarCount = $zbp->pagebarcount;
@@ -1133,7 +1133,7 @@ function Admin_MemberMng()
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=MemberMng{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
-    if(GetVars('search')!==GetVars('search','GET')){
+    if (GetVars('search') !== GetVars('search', 'GET')) {
         $p->PageNow = 1;
     }
     $p->PageBarCount = $zbp->pagebarcount;
