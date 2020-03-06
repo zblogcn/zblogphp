@@ -296,13 +296,16 @@ class App
         $dir = $this->app_path . 'style/';
 
         $array = GetFilesInDir($dir, 'css');
-        if (isset($array['default'])) {
-            $array = array_merge(array('default'=>$array['default']), $array);
+        if(isset($array['default'])){
+            $a = array('style'=>$array['default']);
+            unset($array['default']);
+            $array = array_merge($a , $array);
         }
-        if (isset($array['style'])) {
-            $array = array_merge(array('style'=>$array['style']), $array);
+        if(isset($array['style'])){
+            $a = array('style'=>$array['style']);
+            unset($array['style']);
+            $array = array_merge($a , $array);
         }
-
         return $array;
     }
 

@@ -295,7 +295,11 @@ div.bg {background: #777bb4!important;}
     echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Plugin Filters</th></tr>';
     foreach ($ca as $key => $value) {
         $i++;
-        echo '<tr><td class="e">' . $i . '</td><td class="v">' . $value . '</td></tr>';
+        $s = '';
+        foreach ($GLOBALS['hooks'][$value] as $function => $sg) {
+            $s .= '<br/>&nbsp;&nbsp;→' . $function;
+        }
+        echo '<tr><td class="e">' . $i . '</td><td class="v">' . $value .$s . '</td></tr>';
     }
     foreach ($badfilter as $key => $value) {
         $i++;
