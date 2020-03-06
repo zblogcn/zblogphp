@@ -122,11 +122,12 @@ class Module extends Base
         }
 
         //防Module重复保存的机制
-        $m = $zbp->GetListType('Module',
-                    $zbp->db->sql->get()->select($zbp->table['Module'])
+        $m = $zbp->GetListType(
+            'Module',
+            $zbp->db->sql->get()->select($zbp->table['Module'])
                     ->where(array('=', $zbp->datainfo['Module']['FileName'][0], $this->FileName))
                     ->sql
-                );
+        );
         if (count($m) < 1) {
             return parent::Save();
         } else {

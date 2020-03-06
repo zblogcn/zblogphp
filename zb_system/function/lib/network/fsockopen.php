@@ -217,7 +217,8 @@ class Network__fsockopen implements Network__Interface
         if (isset($this->parsed_url["query"])) {
             $url .= "?" . $this->parsed_url["query"];
         }
-        fwrite($socket,
+        fwrite(
+            $socket,
             $url . ' HTTP/1.0' . "\r\n" // Not support 100 Continue
         );
         fwrite($socket, $this->option['header'] . "\r\n");

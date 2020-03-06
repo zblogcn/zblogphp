@@ -346,9 +346,12 @@ if (!class_exists('Services_JSON')) {
                             }
                             // characters U-00000800 - U-0000FFFF, mask 1110XXXX
                             // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-                            $char = pack('C*', $ord_var_c,
-                                        @ord($var[$c + 1]),
-                                        @ord($var[$c + 2]));
+                            $char = pack(
+                                'C*',
+                                $ord_var_c,
+                                @ord($var[$c + 1]),
+                                @ord($var[$c + 2])
+                            );
                             $c += 2;
                             $utf16 = $this->utf82utf16($char);
                             $ascii .= sprintf('\u%04s', bin2hex($utf16));
@@ -362,10 +365,13 @@ if (!class_exists('Services_JSON')) {
                             }
                             // characters U-00010000 - U-001FFFFF, mask 11110XXX
                             // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-                            $char = pack('C*', $ord_var_c,
-                                        ord($var[$c + 1]),
-                                        ord($var[$c + 2]),
-                                        ord($var[$c + 3]));
+                            $char = pack(
+                                'C*',
+                                $ord_var_c,
+                                ord($var[$c + 1]),
+                                ord($var[$c + 2]),
+                                ord($var[$c + 3])
+                            );
                             $c += 3;
                             $utf16 = $this->utf82utf16($char);
                             $ascii .= sprintf('\u%04s', bin2hex($utf16));
@@ -379,11 +385,14 @@ if (!class_exists('Services_JSON')) {
                                 $ascii .= '?';
                                 break;
                             }
-                            $char = pack('C*', $ord_var_c,
-                                        ord($var[$c + 1]),
-                                        ord($var[$c + 2]),
-                                        ord($var[$c + 3]),
-                                        ord($var[$c + 4]));
+                            $char = pack(
+                                'C*',
+                                $ord_var_c,
+                                ord($var[$c + 1]),
+                                ord($var[$c + 2]),
+                                ord($var[$c + 3]),
+                                ord($var[$c + 4])
+                            );
                             $c += 4;
                             $utf16 = $this->utf82utf16($char);
                             $ascii .= sprintf('\u%04s', bin2hex($utf16));
@@ -397,12 +406,15 @@ if (!class_exists('Services_JSON')) {
                         }
                             // characters U-04000000 - U-7FFFFFFF, mask 1111110X
                             // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-                            $char = pack('C*', $ord_var_c,
-                                        ord($var[$c + 1]),
-                                        ord($var[$c + 2]),
-                                        ord($var[$c + 3]),
-                                        ord($var[$c + 4]),
-                                        ord($var[$c + 5]));
+                            $char = pack(
+                                'C*',
+                                $ord_var_c,
+                                ord($var[$c + 1]),
+                                ord($var[$c + 2]),
+                                ord($var[$c + 3]),
+                                ord($var[$c + 4]),
+                                ord($var[$c + 5])
+                            );
                             $c += 5;
                             $utf16 = $this->utf82utf16($char);
                             $ascii .= sprintf('\u%04s', bin2hex($utf16));
@@ -433,9 +445,11 @@ if (!class_exists('Services_JSON')) {
 
                 // treat as a JSON object
                 if (is_array($var) && count($var) && (array_keys($var) !== range(0, count($var) - 1))) {
-                    $properties = array_map(array($this, 'name_value'),
-                                            array_keys($var),
-                                            array_values($var));
+                    $properties = array_map(
+                        array($this, 'name_value'),
+                        array_keys($var),
+                        array_values($var)
+                    );
 
                     foreach ($properties as $property) {
                         if (self::isError($property)) {
@@ -460,9 +474,11 @@ if (!class_exists('Services_JSON')) {
             case 'object':
                 $vars = get_object_vars($var);
 
-                $properties = array_map(array($this, 'name_value'),
-                                        array_keys($vars),
-                                        array_values($vars));
+                $properties = array_map(
+                    array($this, 'name_value'),
+                    array_keys($vars),
+                    array_values($vars)
+                );
 
                 foreach ($properties as $property) {
                     if (self::isError($property)) {
@@ -812,8 +828,13 @@ if (!class_exists('Services_JSON')) {
     if (class_exists('PEAR_Error')) {
         class Services_JSON_Error extends PEAR_Error
         {
-            public function Services_JSON_Error($message = 'unknown error', $code = null,
-                                    $mode = null, $options = null, $userinfo = null)
+            public function Services_JSON_Error(
+                $message = 'unknown error',
+                $code = null,
+                $mode = null,
+                $options = null,
+                $userinfo = null
+            )
             {
                 parent::PEAR_Error($message, $code, $mode, $options, $userinfo);
             }
@@ -825,8 +846,13 @@ if (!class_exists('Services_JSON')) {
          */
         class Services_JSON_Error
         {
-            public function Services_JSON_Error($message = 'unknown error', $code = null,
-                                    $mode = null, $options = null, $userinfo = null)
+            public function Services_JSON_Error(
+                $message = 'unknown error',
+                $code = null,
+                $mode = null,
+                $options = null,
+                $userinfo = null
+            )
             {
             }
         }

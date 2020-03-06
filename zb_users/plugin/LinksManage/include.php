@@ -28,9 +28,9 @@ function LinksManage_ModuleMenu()
     global $zbp;
 
     $array = $zbp->GetModuleList(
-    array('*'),
-    array(array('=', 'mod_Source', 'plugin_LinksManage'))
-  );
+        array('*'),
+        array(array('=', 'mod_Source', 'plugin_LinksManage'))
+    );
     $mods = array();
     foreach ($array as $mod) {
         $mods[] = $mod->FileName;

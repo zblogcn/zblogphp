@@ -142,9 +142,9 @@ if ($edit = GetVars('edit', 'GET')) {
                     }
                     if ($k == 'sub') {
                         $m[1] = !preg_match(
-              '/sub/i',
-              $m[1]
-            ) ? '' : 'LinksManageSub';
+                            '/sub/i',
+                            $m[1]
+                        ) ? '' : 'LinksManageSub';
                     }
                     $link[$k][$key] = $m[1];
                 } else {

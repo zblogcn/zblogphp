@@ -191,7 +191,9 @@ function Debug_Exception_Handler($exception)
         Logs(var_export(
             array('Exception',
                 $exception->getMessage(), $exception->getCode(), $exception->getFile(), $exception->getLine(),
-            ), true), true);
+            ),
+            true
+        ), true);
     }
 
     $zbe = ZBlogException::GetInstance();

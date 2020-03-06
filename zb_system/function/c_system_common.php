@@ -245,9 +245,11 @@ function GetEnvironment()
     }
     $system_environment = PHP_OS . '; ' .
     GetValueInArray(
-        explode(' ',
+        explode(
+            ' ',
             str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))
-        ), 0
+        ),
+        0
     ) . '; ' .
     'PHP ' . GetPHPVersion() . (IS_X64 ? ' x64' : '') . '; ' .
     $zbp->option['ZC_DATABASE_TYPE'] . '; ' . $ajax;
