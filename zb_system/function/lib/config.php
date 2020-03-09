@@ -127,15 +127,22 @@ class Config
     }
 
     /**
+     * 双重意义的函数
+     * $name为null就转向Delete()
+     * $name不为null就转向DelKey()
      * 删除KVData属性（数组）中的相应项
      * Del名称和数据库删除函数有冲突
      *
      * @param string $name key名
      */
-    public function Del($name)
+    public function Del($name = null)
     {
-        $name = FilterCorrectName($name);
-        unset($this->kvdata[$name]);
+        if($name === null){
+            return $this->Delete();
+        }
+        if($name !== null){
+            return $this->DelKey($name);
+        }
     }
 
     /**
@@ -227,10 +234,12 @@ class Config
         }
 
         $kv = array('conf_Name' => $name, 'conf_Value' => $value);
-        $sql = $this->db->sql->Select($this->table, 'conf_Name', array(array('=', 'conf_Name', $name)), '', '', '');
-        $array = $this->db->Query($sql);
-
-        if (count($array) == 0) {
+        //$sql = $this->db->sql->Select($this->table, 'conf_Name', array(array('=', 'conf_Name', $name)), '', '', '');
+        //$array = $this->db->Query($sql);
+        $id_name = key($this->datainfo);
+        //var_dump($id_name,$this->data,$this->data[$id_name]);die;
+        if ($this->data[$id_name] == 0) {
+        //if (count($array) == 0) {
             $sql = $this->db->sql->Insert($this->table, $kv);
             $this->db->Insert($sql);
         } else {
@@ -244,7 +253,7 @@ class Config
 
     /**
      * 删除数据
-     * Del名字已被占用，改用Delete表示从数据库删除
+     * Delete表示从数据库删除
      * 从$zbp及数据库中删除该实例数据.
      *
      * @return bool
@@ -271,19 +280,24 @@ class Config
     }
 
     /**
-     * 占位.
+     * 添加or修改Key
      *
      * @param $name
      *
      * @return bool
      */
-    public function SaveKey($name)
+    public function AddKey($name, $value)
     {
-        return $this->Save();
+        $name = FilterCorrectName($name);
+        if (!$name) {
+            return;
+        }
+        $this->kvdata[$name] = $value;
+        return true;
     }
 
     /**
-     * 占位.
+     * 删除Key，不推荐使用Del($name).
      *
      * @param $name
      *
@@ -293,11 +307,10 @@ class Config
     {
         $name = FilterCorrectName($name);
         if (!isset($this->kvdata[$name])) {
-            return false;
+            return;
         }
 
         unset($this->kvdata[$name]);
-
-        return $this->Save();
+        return true;
     }
 }

@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS %pre%post (
   log_Type tinyint(4) NOT NULL DEFAULT '0',
   log_Alias varchar(255) NOT NULL DEFAULT '',
   log_IsTop int(11) NOT NULL DEFAULT '0',
-  log_IsLock tinyint(1) NOT NULL DEFAULT '0',
+  log_IsLock tinyint(4) NOT NULL DEFAULT '0',
   log_Title varchar(255) NOT NULL DEFAULT '',
   log_Intro text NOT NULL,
   log_Content longtext NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS %pre%category (
 CREATE TABLE IF NOT EXISTS %pre%comment (
   comm_ID int(11) NOT NULL AUTO_INCREMENT,
   comm_LogID int(11) NOT NULL DEFAULT '0',
-  comm_IsChecking tinyint(1) NOT NULL DEFAULT '0',
+  comm_IsChecking tinyint(4) NOT NULL DEFAULT '0',
   comm_RootID int(11) NOT NULL DEFAULT '0',
   comm_ParentID int(11) NOT NULL DEFAULT '0',
   comm_AuthorID int(11) NOT NULL DEFAULT '0',
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS %pre%comment (
 CREATE TABLE IF NOT EXISTS %pre%config (
   conf_ID int(11) NOT NULL AUTO_INCREMENT,
   conf_Name varchar(255) NOT NULL DEFAULT '',
-  conf_Value longtext,
+  conf_Value longtext NOT NULL,
   PRIMARY KEY (conf_ID),
   KEY %pre%conf_Name (conf_Name)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS %pre%module (
   mod_Type varchar(5) NOT NULL DEFAULT '',
   mod_MaxLi int(11) NOT NULL DEFAULT '0',
   mod_Source varchar(255) NOT NULL DEFAULT '',
-  mod_IsHideTitle tinyint(1) NOT NULL DEFAULT '0',
+  mod_IsHideTitle tinyint(4) NOT NULL DEFAULT '0',
   mod_Meta longtext NOT NULL,
   PRIMARY KEY (mod_ID)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

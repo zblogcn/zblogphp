@@ -80,7 +80,7 @@ class Database__MySQL implements Database__Interface
         }
 
         $myver = mysql_get_server_info($db_link);
-        $this->version = substr($myver, 0, strpos($myver, "-"));
+        $this->version = SplitAndGet($myver, '-', 0);
         if (version_compare($this->version, '5.5.3') >= 0) {
             $u = "utf8mb4";
         } else {

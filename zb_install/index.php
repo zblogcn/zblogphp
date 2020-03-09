@@ -621,9 +621,9 @@ function Setup3()
         <input type="password" name="repassword" id="repassword" value="<?php echo $option2['repassword']; ?>" style="width:200px;" />
       </p>
       <p><b><?php echo $zbp->lang['zb_install']['theme']; ?></b><span class="themelist">
-        <label><input value="Zit|style" type="radio" name="blogtheme"/> 吉光Zit<span><img src="../zb_users/theme/zit/screenshot.png" alt=""></span></label>&nbsp;&nbsp;&nbsp;&nbsp;
-        <label><input value="tpure|style" type="radio" name="blogtheme"/> 拓源tpure<span><img src="../zb_users/theme/tpure/screenshot.png" alt=""></span></label></span>
-        <label><input value="default|default" type="radio" name="blogtheme"/> Default<span><img src="../zb_users/theme/default/screenshot.png" alt=""></span></label>&nbsp;&nbsp;&nbsp;&nbsp;
+        <label><input value="Zit|style" type="radio" name="blogtheme"/> Zit<span><img src="../zb_users/theme/zit/screenshot.png" alt=""></span></label>&nbsp;&nbsp;&nbsp;&nbsp;
+        <label><input value="tpure|style" type="radio" name="blogtheme"/> tpure<span><img src="../zb_users/theme/tpure/screenshot.png" alt=""></span></label>&nbsp;&nbsp;&nbsp;&nbsp;
+        <label><input value="default|default" type="radio" name="blogtheme"/> Default<span><img src="../zb_users/theme/default/screenshot.png" alt=""></span></label>
       </p>      
     </div>
     <div id="bottom">
@@ -1185,7 +1185,7 @@ function SaveConfig()
     $zbp->option['ZC_SIDEBAR6_ORDER'] = '';
     $zbp->option['ZC_SIDEBAR7_ORDER'] = '';
     $zbp->option['ZC_SIDEBAR8_ORDER'] = '';
-    $zbp->option['ZC_SIDEBAR9_ORDER'] = '';
+    $zbp->option['ZC_SIDEBAR9_ORDER'] = '';  
     $zbp->option['ZC_BLOG_THEME'] = SplitAndGet(GetVars('blogtheme', 'POST'), '|', 0);
     $zbp->option['ZC_BLOG_CSS'] = SplitAndGet(GetVars('blogtheme', 'POST'), '|', 1);
     $zbp->option['ZC_DEBUG_MODE'] = false;

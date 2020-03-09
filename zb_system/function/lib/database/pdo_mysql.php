@@ -79,7 +79,7 @@ class Database__PDO_MySQL implements Database__Interface
             $this->dbengine = $array[7];
 
             $myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
-            $this->version = substr($myver, 0, strpos($myver, "-"));
+            $this->version = SplitAndGet($myver, '-', 0);
             if (version_compare($this->version, '5.5.3') >= 0) {
                 $u = "utf8mb4";
             } else {
