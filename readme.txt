@@ -14,7 +14,7 @@ GitHub: https://github.com/zblogcn/zblogphp
           运行环境
 =============================
 - Web Server: IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
-- PHP 5.2 - 7.4
+- PHP 5.2 - 7.4 / HHVM 3
 - MySQL 5+ / MariaDB 10+ / SQLite 3
 
 =============================

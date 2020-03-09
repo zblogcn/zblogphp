@@ -56,7 +56,11 @@ if ($_POST) {
 
 $blogtitle = 'Zit ' . $msg->setting;
 
-if (!empty(array_diff_key($def, $cfg->GetData())) || !empty(array_diff_key($cfg->GetData(), $def))) {
+$cfgData = $cfg->GetData();
+$diffKeys1 = array_diff_key($def, $cfgData);
+$diffKeys2 = array_diff_key($cfgData, $def);
+
+if (!empty($diffKeys1) || !empty($diffKeys2)) {
     $submit = '<button type="submit" class="btn update" name="update">' . $msg->update . '</button>';
 } else {
     $submit = '<button type="submit" class="btn">' . $msg->submit . '</button>';
