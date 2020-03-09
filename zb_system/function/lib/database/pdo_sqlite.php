@@ -51,12 +51,12 @@ class Database__PDO_SQLite implements Database__Interface
     public function Open($array)
     {
         //pdo_sqlite优先使用sqlite3
-        $a=PDO::getAvailableDrivers();
+        $a = PDO::getAvailableDrivers();
         $dns = 'sqlite';
-        if(in_array('sqlite2',$a)){
+        if (in_array('sqlite2', $a)) {
             $dns = 'sqlite2';
         }
-        if(in_array('sqlite',$a)){
+        if (in_array('sqlite', $a)) {
             $dns = 'sqlite';
         }
         $db_link = new PDO($dns . ':' . $array[0]);
@@ -65,6 +65,7 @@ class Database__PDO_SQLite implements Database__Interface
         $this->dbname = $array[0];
         $myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
         $this->version = SplitAndGet($myver, '-', 0);
+
         return true;
     }
 

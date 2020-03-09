@@ -53,7 +53,8 @@ class Database__SQLite3 implements Database__Interface
         if ($this->db = new SQLite3($array[0])) {
             $this->dbpre = $array[1];
             $this->dbname = $array[0];
-            $this->version = substr(GetValueInArray(SQLite3::version(),'versionString'),1);
+            $this->version = substr(GetValueInArray(SQLite3::version(), 'versionString'), 1);
+
             return true;
         } else {
             return false;

@@ -54,6 +54,7 @@ class Database__SQLite implements Database__Interface
             $this->dbpre = $array[1];
             $this->dbname = $array[0];
             $this->version = sqlite_libversion();
+
             return true;
         } else {
             return false;

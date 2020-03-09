@@ -20,7 +20,7 @@ function ActivePlugin_Zit()
     Add_Filter_Plugin('Filter_Plugin_Admin_Header', $name . '_AdminHeader');
     Add_Filter_Plugin('Filter_Plugin_Login_Header', $name . '_LoginHeader');
     Add_Filter_Plugin('Filter_Plugin_Zbp_BuildModule', $name . '_BuildModule');
-    Add_Filter_Plugin('Filter_Plugin_Zbp_MakeTemplatetags',$name.'_MakeTemplatetags');  
+    Add_Filter_Plugin('Filter_Plugin_Zbp_MakeTemplatetags', $name . '_MakeTemplatetags');
 }
 
 function InstallPlugin_Zit()
@@ -193,11 +193,12 @@ function Zit_BuildModule()
     $mod->Save();
 }
 
-function Zit_MakeTemplatetags(&$templateTags){
-  global $zbp;
-  $templateTags['msg'] = (object)$zbp->lang['Zit'];
+function Zit_MakeTemplatetags(&$templateTags)
+{
+    global $zbp;
+    $templateTags['msg'] = (object) $zbp->lang['Zit'];
 
-  $templateTags['cfg'] = $zbp->Config('Zit');
+    $templateTags['cfg'] = $zbp->Config('Zit');
 
-  $templateTags['sideMods'] = $templateTags['cfg']->MobileSide?array():explode(' ',trim($templateTags['cfg']->SideMods));
+    $templateTags['sideMods'] = $templateTags['cfg']->MobileSide ? array() : explode(' ', trim($templateTags['cfg']->SideMods));
 }
