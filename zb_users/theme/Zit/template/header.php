@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <html xml:lang="{$lang['lang_bcp47']}" lang="{$lang['lang_bcp47']}">
-{$cfg=$zbp.Config('Zit')}
-{$msg=(object)$lang[$theme]}
-{$sideMods=$cfg.MobileSide?array():explode(' ',trim($cfg.SideMods))}
 <head>
   <meta charset="utf-8">
   <title>{$title} - {$name}</title>

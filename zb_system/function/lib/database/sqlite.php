@@ -53,7 +53,7 @@ class Database__SQLite implements Database__Interface
         if ($this->db = sqlite_open($array[0], 0666, $sqliteerror)) {
             $this->dbpre = $array[1];
             $this->dbname = $array[0];
-
+            $this->version = sqlite_libversion();
             return true;
         } else {
             return false;

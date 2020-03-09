@@ -50,11 +50,21 @@ class Database__PDO_SQLite implements Database__Interface
      */
     public function Open($array)
     {
-        $db_link = new PDO('sqlite:' . $array[0]);
+        //pdo_sqlite优先使用sqlite3
+        $a=PDO::getAvailableDrivers();
+        $dns = 'sqlite';
+        if(in_array('sqlite2',$a)){
+            $dns = 'sqlite2';
+        }
+        if(in_array('sqlite',$a)){
+            $dns = 'sqlite';
+        }
+        $db_link = new PDO($dns . ':' . $array[0]);
         $this->db = $db_link;
         $this->dbpre = $array[1];
         $this->dbname = $array[0];
-
+        $myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
+        $this->version = SplitAndGet($myver, '-', 0);
         return true;
     }
 

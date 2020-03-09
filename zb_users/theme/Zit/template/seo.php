@@ -5,7 +5,7 @@ if($type=='category'){
   if($category->Intro) $sdesc=$category->Intro;
 }elseif($type=='article'){
   $skw=$article->TagsName;
-  $sdesc=SubstrUTF8(FormatString(trim($article->Intro),'[nohtml][noenter]'),180);
+  $sdesc=SubstrUTF8(TransferHTML(trim($article->Intro),'[nohtml][noenter]'),180);
 }elseif($type=='author'){
   if($author->Intro) $sdesc=$author->Intro;
 }

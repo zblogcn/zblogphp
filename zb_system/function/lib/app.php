@@ -297,7 +297,7 @@ class App
 
         $array = GetFilesInDir($dir, 'css');
         if (isset($array['default'])) {
-            $a = array('style'=>$array['default']);
+            $a = array('default'=>$array['default']);
             unset($array['default']);
             $array = array_merge($a, $array);
         }
