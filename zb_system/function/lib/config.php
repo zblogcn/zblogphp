@@ -137,10 +137,10 @@ class Config
      */
     public function Del($name = null)
     {
-        if($name === null){
+        if ($name === null) {
             return $this->Delete();
         }
-        if($name !== null){
+        if ($name !== null) {
             return $this->DelKey($name);
         }
     }
@@ -239,7 +239,7 @@ class Config
         $id_name = key($this->datainfo);
         //var_dump($id_name,$this->data,$this->data[$id_name]);die;
         if ($this->data[$id_name] == 0) {
-        //if (count($array) == 0) {
+            //if (count($array) == 0) {
             $sql = $this->db->sql->Insert($this->table, $kv);
             $this->db->Insert($sql);
         } else {
@@ -280,7 +280,7 @@ class Config
     }
 
     /**
-     * 添加or修改Key
+     * 添加or修改Key.
      *
      * @param $name
      *
@@ -293,6 +293,7 @@ class Config
             return;
         }
         $this->kvdata[$name] = $value;
+
         return true;
     }
 
@@ -311,6 +312,7 @@ class Config
         }
 
         unset($this->kvdata[$name]);
+
         return true;
     }
 }

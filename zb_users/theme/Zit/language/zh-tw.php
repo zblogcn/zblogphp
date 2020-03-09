@@ -73,7 +73,7 @@ return array(
     'cmtids_tip'     => '填寫指定評論ID，上方設置失效，英文逗號分隔',
     'gbook'          => '留言本頁面ID',
     'gbook_tip'      => '無評論時顯示，請在 <a href="../../../zb_system/cmd.php?act=PageMng" target="_blank"><b>頁面管理</b></a> 中確認</small>',
-    
+
     'seo'            => 'SEO設定',
     'description'    => '網站描述',
     'description_tip'=> '留空將不輸出內容',

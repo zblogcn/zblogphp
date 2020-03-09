@@ -245,15 +245,17 @@ function GetEnvironment()
     }
     $system_environment = PHP_OS . SplitAndGet(php_uname('r'), '-', 0) . '; ' .
     GetValueInArray(
-        explode(' ',
+        explode(
+            ' ',
             str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))
-        ), 0
+        ),
+        0
     ) . '; ' .
     'PHP' . GetPHPVersion() . (IS_X64 ? ' x64' : '') . '; ' .
     $zbp->option['ZC_DATABASE_TYPE'] . $zbp->db->version . '; ' . $ajax;
 
-    if(defined('OPENSSL_VERSION_TEXT')){
-        $system_environment .= '; ' . str_replace(' ','',OPENSSL_VERSION_TEXT);
+    if (defined('OPENSSL_VERSION_TEXT')) {
+        $system_environment .= '; ' . str_replace(' ', '', OPENSSL_VERSION_TEXT);
     }
 
     return $system_environment;
@@ -359,7 +361,7 @@ function SplitAndGet($string, $delimiter = ';', $n = 0)
         $a = array();
     }
     if (isset($a[$n])) {
-        return (string)$a[$n];
+        return (string) $a[$n];
     }
 
     return '';

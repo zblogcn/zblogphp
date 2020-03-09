@@ -1185,7 +1185,7 @@ function SaveConfig()
     $zbp->option['ZC_SIDEBAR6_ORDER'] = '';
     $zbp->option['ZC_SIDEBAR7_ORDER'] = '';
     $zbp->option['ZC_SIDEBAR8_ORDER'] = '';
-    $zbp->option['ZC_SIDEBAR9_ORDER'] = '';  
+    $zbp->option['ZC_SIDEBAR9_ORDER'] = '';
     $zbp->option['ZC_BLOG_THEME'] = SplitAndGet(GetVars('blogtheme', 'POST'), '|', 0);
     $zbp->option['ZC_BLOG_CSS'] = SplitAndGet(GetVars('blogtheme', 'POST'), '|', 1);
     $zbp->option['ZC_DEBUG_MODE'] = false;

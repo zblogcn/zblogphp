@@ -61,7 +61,7 @@ return array(
     'sidemods'       => 'Mobile Modules',
     'sidemods_place' => 'Remain blank to hide all modules of sidebar',
     'sidemods_tip'   => 'Enter module filename to display in mobile device, split by space',
-    
+
     'rand'           => 'Random Comment Setting',
     'during'         => 'Time Period',
     'during_place'   => 'try 3*365 to calculate days',

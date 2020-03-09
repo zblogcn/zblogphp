@@ -11,44 +11,55 @@ require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
-$action='root';
-if (!$zbp->CheckRights($action)) $zbp->ShowError(6);
-if (!$zbp->CheckPlugin('Zit')) $zbp->ShowError(48);
-
-$cfg=$zbp->Config('Zit');
-$def=Zit_Defaults(1);
-$msg=(object)$lang['Zit'];
-
-if($_POST){
-  
-  if (!$zbp->ValidToken($_POST['csrfToken'])) $zbp->ShowError(5);
-
-  if(isset($_POST['update'])){
-    foreach($def as $k=>$v){
-      if(!$cfg->HasKey($k)) $cfg->$k=$v;
-    }
-    foreach($cfg->GetData() as $k=>$v){
-      if(!isset($def[$k])) $cfg->DelKey($k);
-    }
-  }else{
-    foreach($_POST as $k=>$v){
-      if($cfg->HasKey($k)) $cfg->$k=$v;
-    }
-    $cfg->Custom=1;
-  }
-
-  $cfg->Save();
-  $zbp->SetHint('good');
-  $zbp->BuildModule();
-  redirect('main.php');
+$action = 'root';
+if (!$zbp->CheckRights($action)) {
+    $zbp->ShowError(6);
+}
+if (!$zbp->CheckPlugin('Zit')) {
+    $zbp->ShowError(48);
 }
 
-$blogtitle='Zit '.$msg->setting;
+$cfg = $zbp->Config('Zit');
+$def = Zit_Defaults(1);
+$msg = (object) $lang['Zit'];
 
-if(!empty(array_diff_key($def,$cfg->GetData()))||!empty(array_diff_key($cfg->GetData(),$def))){
-  $submit='<button type="submit" class="btn update" name="update">'.$msg->update.'</button>';
-}else{
-  $submit='<button type="submit" class="btn">'.$msg->submit.'</button>';
+if ($_POST) {
+    if (!$zbp->ValidToken($_POST['csrfToken'])) {
+        $zbp->ShowError(5);
+    }
+
+    if (isset($_POST['update'])) {
+        foreach ($def as $k=>$v) {
+            if (!$cfg->HasKey($k)) {
+                $cfg->$k = $v;
+            }
+        }
+        foreach ($cfg->GetData() as $k=>$v) {
+            if (!isset($def[$k])) {
+                $cfg->DelKey($k);
+            }
+        }
+    } else {
+        foreach ($_POST as $k=>$v) {
+            if ($cfg->HasKey($k)) {
+                $cfg->$k = $v;
+            }
+        }
+        $cfg->Custom = 1;
+    }
+
+    $cfg->Save();
+    $zbp->SetHint('good');
+    $zbp->BuildModule();
+    redirect('main.php');
+}
+
+$blogtitle = 'Zit ' . $msg->setting;
+
+if (!empty(array_diff_key($def, $cfg->GetData())) || !empty(array_diff_key($cfg->GetData(), $def))) {
+    $submit = '<button type="submit" class="btn update" name="update">' . $msg->update . '</button>';
+} else {
+    $submit = '<button type="submit" class="btn">' . $msg->submit . '</button>';
 }
 
 require $blogpath . 'zb_system/admin/admin_header.php';
@@ -74,7 +85,7 @@ select.disabled{background:#eee;}
 .required{border-color:#f36!important;}
 </style>
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
   <div class="SubMenu"></div>
 <div id="divMain2">
 <?php
@@ -121,7 +132,7 @@ $(function(){
     $(".imgcheck").addClass("disabled").click(function(){
       return false;
     });
-    $(".main").prepend('<div class="hint"><p class="hint_bad"><?php echo $msg->update_tip;?></p></div>');
+    $(".main").prepend('<div class="hint"><p class="hint_bad"><?php echo $msg->update_tip; ?></p></div>');
   }
   $("#calc").blur(function(){
     var nums=this.value.split("*"),num=parseFloat(nums[0])||1;
@@ -138,7 +149,7 @@ $(function(){
       }
     });
     if($(this).find("button.update")[0]) pass=true;
-    if(!pass) alert("<?php echo $msg->required;?>");
+    if(!pass) alert("<?php echo $msg->required; ?>");
     return pass;
   });
   $(".required").on("keyup blur",function(){
