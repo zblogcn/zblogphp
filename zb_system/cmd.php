@@ -3,6 +3,9 @@
 require './function/c_system_base.php';
 $zbp->Load();
 $action = GetVars('act', 'GET');
+if ($action == 'ajax') {
+    define('IN_AJAX_PROCESSING', true);
+}
 
 if (!$zbp->CheckRights($action)) {
     $zbp->ShowError(6, __FILE__, __LINE__);
@@ -110,6 +113,9 @@ switch ($action) {
                 break;
             case 'ping':
                 misc_ping();
+                break;
+            case 'updatedapp':
+                misc_updatedapp();
                 break;
             default:
                 break;

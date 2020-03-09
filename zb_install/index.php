@@ -474,6 +474,15 @@ function Setup3()
     if (GetVars('dbmysql_pre', 'GET') != '') {
         $option['ZC_MYSQL_PRE'] = GetVars('dbmysql_pre', 'GET');
     } ?>
+<style type="text/css">
+.themelist label { margin-right:50px; position:relative; }
+.themelist input[type=radio] { margin-right:5px; }
+.themelist em { font-size:16px; font-style:normal; }
+.themelist span { width:210px; margin-left:-100px; padding:10px; border:1px solid #ccc; background:#fff; position:absolute; left:50%; bottom:32px; display:none; }
+.themelist span img { width:188px; }
+.themelist span:before { content:""; width:0; height:0; margin-left:-10px; border-style:solid; border-width:10px 10px 0 10px; border-color:#fff transparent transparent transparent; position:absolute; bottom:-9px; left:50%; z-index:1; }
+.themelist span:after { content:""; width:0; height:0; margin-left:-10px; border-style:solid; border-width:10px 10px 0 10px; border-color:#ccc transparent transparent transparent; position:absolute; bottom:-10px; left:50%; }
+</style>
 <dl>
   <dt></dt>
   <dd id="ddleft"><div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
@@ -611,9 +620,10 @@ function Setup3()
       <p><b><?php echo $zbp->lang['zb_install']['re_password']; ?></b>
         <input type="password" name="repassword" id="repassword" value="<?php echo $option2['repassword']; ?>" style="width:200px;" />
       </p>
-      <p><b><?php echo $zbp->lang['zb_install']['theme']; ?></b>
-        <label><input value="Zti" type="radio" name="blogtheme"/> 吉光Zti</label>&nbsp;&nbsp;&nbsp;&nbsp;
-        <label><input value="tpure" type="radio" name="blogtheme"/> 拓源tpure</label>
+      <p><b><?php echo $zbp->lang['zb_install']['theme']; ?></b><span class="themelist">
+        <label><input value="Zit|style" type="radio" name="blogtheme"/> Zit<span><img src="../zb_users/theme/zit/screenshot.png" alt=""></span></label>&nbsp;&nbsp;&nbsp;&nbsp;
+        <label><input value="tpure|style" type="radio" name="blogtheme"/> tpure<span><img src="../zb_users/theme/tpure/screenshot.png" alt=""></span></label>&nbsp;&nbsp;&nbsp;&nbsp;
+        <label><input value="default|default" type="radio" name="blogtheme"/> Default<span><img src="../zb_users/theme/default/screenshot.png" alt=""></span></label>
       </p>      
     </div>
     <div id="bottom">
@@ -631,7 +641,13 @@ $(".dbdetail").hide();
 $("#"+$(".dbselect").attr("id").split("_radio")[0]).show();
 $("input[name='dbtype']:visible").get(0).click();
 $("input[name='fdbtype']:visible").get(0).click();
-$("input[name='blogtheme']:visible").get( Math.round(Math.random()) ).click();
+$("input[name='blogtheme']:visible").get( Math.round(Math.random()*3-1) ).click();
+
+$(".themelist label").hover(function(){
+    $(this).find("span").show();
+},function(){
+    $(this).find("span").hide();
+});
 </script>
 <?php
 }
@@ -1170,8 +1186,8 @@ function SaveConfig()
     $zbp->option['ZC_SIDEBAR7_ORDER'] = '';
     $zbp->option['ZC_SIDEBAR8_ORDER'] = '';
     $zbp->option['ZC_SIDEBAR9_ORDER'] = '';
-    $zbp->option['ZC_BLOG_THEME'] = GetVars('blogtheme', 'POST');
-    $zbp->option['ZC_BLOG_CSS'] = 'style';
+    $zbp->option['ZC_BLOG_THEME'] = SplitAndGet(GetVars('blogtheme', 'POST'), '|', 0);
+    $zbp->option['ZC_BLOG_CSS'] = SplitAndGet(GetVars('blogtheme', 'POST'), '|', 1);
     $zbp->option['ZC_DEBUG_MODE'] = false;
     $zbp->option['ZC_LAST_VERSION'] = $zbp->version;
     $zbp->option['ZC_NOW_VERSION'] = $zbp->version;

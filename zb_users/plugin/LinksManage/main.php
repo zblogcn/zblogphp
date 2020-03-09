@@ -27,16 +27,17 @@ if (GetVars('act', 'GET') == 'save') {
     $tree = (int) $_POST['tree'] == 1;
     $items = array();
     $parent = null;
-    foreach ($_POST['name'] as $k => $v) {
+    foreach ($_POST['text'] as $k => $v) {
         $item = (object) array();
-        if ($k == count($_POST['name']) - 1) {
+        if ($k == count($_POST['text']) - 1) {
             continue;
         }
         $item->href = $_POST['href'][$k];
+        $item->href = str_replace($zbp->host, "{#ZC_BLOG_HOST#}", $item->href);
         $item->ico = $_POST['ico'][$k];
         $item->title = $_POST['title'][$k];
         $item->target = (bool) $_POST['target'][$k] ? '_blank' : '';
-        $item->name = $_POST['name'][$k];
+        $item->text = $_POST['text'][$k];
         $item->subs = array();
         $item->issub = 0;
         if ($k > 0 && $_POST['sub'][$k]) {
@@ -51,9 +52,9 @@ if (GetVars('act', 'GET') == 'save') {
     $mod->Metas->LM_json = json_encode($items);
     // 生成content
     $fileName = GetVars('FileName', 'POST');
-    $outTpl = "Links_defend";
-    if (isset($zbp->template->templates["Links_{$fileName}"])) {
-        $outTpl = "Links_{$fileName}";
+    $outTpl = "lm-module-defend";
+    if (isset($zbp->template->templates["lm-module-{$fileName}"])) {
+        $outTpl = "lm-module-{$fileName}";
     }
     foreach ($items as $item) {
         if ($item->ico) {
@@ -61,7 +62,6 @@ if (GetVars('act', 'GET') == 'save') {
         }
         $zbp->template->SetTags('item', $item);
         $zbp->template->SetTags('id', $fileName);
-        $zbp->template->SetTags('item', $item);
         $content .= $zbp->template->Output($outTpl);
     }
     $content = str_replace(array('target="" ', ' target=""', "\n"), "", CloseTags($content));
@@ -94,7 +94,14 @@ if (GetVars('act', 'GET') == 'save') {
 $mod = new Module();
 $mod->ID = 0;
 $mod->Source = 'plugin_LinksManage';
-$list = '<tr><td><input type="text" name="href[]" value="http://" size="30" /></td><td><input type="text" name="ico[]" value="" size="15" /></td><td><input type="text" name="title[]" value="链接描述" size="30" /></td><td><input type="text" name="name[]" value="新名称" size="20" /></td><td><input type="text" name="target[]" class="checkbox" value="0" /></td><td><input type="text" name="sub[]" class="checkbox" value="0" /></td></tr>';
+
+// 新链接表单项
+$outTpl = "lm-module-admin";
+$zbp->template->SetTags('item', json_decode(file_get_contents(LinksManage_Path("new-tr"))));
+$new_tr = $list = $zbp->template->Output($outTpl);
+$new_tr = str_replace('<tr class="">', '<tr class="LinksManageAdd">', $new_tr);
+
+// $list = '<tr><td><input type="text" name="href[]" value="http://" size="30" /></td><td><input type="text" name="ico[]" value="" size="15" /></td><td><input type="text" name="title[]" value="链接描述" size="30" /></td><td><input type="text" name="name[]" value="新名称" size="20" /></td><td><input type="text" name="target[]" class="checkbox" value="0" /></td><td><input type="text" name="sub[]" class="checkbox" value="0" /></td></tr>';
 
 $islock = '';
 $tree = null;
@@ -104,19 +111,12 @@ if ($edit = GetVars('edit', 'GET')) {
     if (!empty($edit)) {
         $mod = $zbp->modulesbyfilename[$edit];
     }
-    //旧版升级
-    $file = LinksManage_Path("usr") . $edit . ".json";
-    if (is_file($file)) {
-        $file_contents = file_get_contents($file);
-        unlink($file);
-    } else {
-        $file_contents = $mod->Metas->LM_json;
-    }
+    $file_contents = $mod->Metas->LM_json;
     if (strlen($file_contents) > 0 && $items = json_decode($file_contents)) {
         $list = '';
         foreach ($items as $item) {
             $zbp->template->SetTags('item', $item);
-            $list .= $zbp->template->Output("Links_admin");
+            $list .= $zbp->template->Output($outTpl);
         }
     } else {
         $content = $mod->Content;
@@ -129,7 +129,7 @@ if ($edit = GetVars('edit', 'GET')) {
             'sub'    => '/<li.*?class=[\'|\"](.*?)[\'|\"]/i',
             'href'   => '/<a.*?href=[\'|\"](.*?)[\'|\"]/i',
             'target' => '/<a.*?target=[\'|\"](.*?)[\'|\"]/i',
-            'name'   => '/<a.*?>(.*?)<\/a>/i', 'title' => '/<a.*?title=[\'|\"](.*?)[\'|\"]/i',
+            'text'   => '/<a.*?>(.*?)<\/a>/i', 'title' => '/<a.*?title=[\'|\"](.*?)[\'|\"]/i',
         );
         $link = array();
         preg_match_all($preg['tag'], $content, $tag);
@@ -137,14 +137,14 @@ if ($edit = GetVars('edit', 'GET')) {
             foreach ($preg as $k => $v) {
                 preg_match($v, $val, $m);
                 if (count($m) > 1) {
-                    if ($k == 'name') {
+                    if ($k == 'text') {
                         $m[1] = preg_replace('/<img.*?[\/]>/i', '', $m[1]);
                     }
                     if ($k == 'sub') {
                         $m[1] = !preg_match(
-              '/sub/i',
-              $m[1]
-            ) ? '' : 'LinksManageSub';
+                            '/sub/i',
+                            $m[1]
+                        ) ? '' : 'LinksManageSub';
                     }
                     $link[$k][$key] = $m[1];
                 } else {
@@ -159,7 +159,7 @@ if ($edit = GetVars('edit', 'GET')) {
           <td><input name="href[]" value="' . $link['href'][$k] . '" size="30" /></td>
           <td><input name="ico[]" value="" size="15" /></td>
           <td><input name="title[]" value="' . $link['title'][$k] . '" size="20" /></td>
-          <td><input name="name[]" value="' . $link['name'][$k] . '" size="20" /></td>
+          <td><input name="text[]" value="' . $link['text'][$k] . '" size="20" /></td>
           <td><input name="target[]" value="' . ($link['target'][$k] ? 1 : 0) . '" class="checkbox" /></td>
           <td><input name="sub[]" value="' . ($link['sub'][$k] ? 1 : 0) . '" class="checkbox" /></td>
         <tr>';
@@ -213,14 +213,9 @@ require $blogpath . 'zb_system/admin/admin_top.php';
           <tr id="LinksManageDel">
             <td colspan="6" class="tdCenter">拖入这里删除</td>
           </tr>
-          <tr class="LinksManageAdd">
-            <td><input type="text" name="href[]" value="http://" size="30" /></td>
-            <td><input type="text" name="ico[]" value="" size="15"></td>
-            <td><input type="text" name="title[]" value="链接描述" size="30" /></td>
-            <td><input type="text" name="name[]" value="新名称" size="20" /></td>
-            <td><input type="text" name="target[]" class="checkbox" value="0" /></td>
-            <td><input type="text" name="sub[]" class="checkbox" value="0" /></td>
-          </tr>
+          <!-- tr class="LinksManageAdd" -->
+          <?php echo $new_tr; ?>
+          <!-- .LinksManageAdd End -->
         </tfoot>
       </table>
       <table class="tableFull tableBorder tableBorder-thcenter">
@@ -251,9 +246,10 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       </p>
       ------
       <p>对于每个li，会默认添加 "文件名-item" 作为类名，当前为：<?php echo "{$mod->FileName}-item"; ?></p>
-      <p>默认模板路径：<?php echo LinksManage_Path("u-temp"); ?></p>
-      <!-- <p>(暂未实现)自定义模板路径：<?php echo LinksManage_Path("usr/{$mod->FileName}.li"); ?></p> -->
-      <p>模板编译时会加<b>"Links_"</b>前缀，默认模板编译为<b>Links_defend</b></p>
+      <p>主题作者可设置<b>lm-module-<?php echo "{$mod->FileName}"; ?></b>模板对当前模块进行自定义</p>
+      <p>参考：zb_users/plugin/LinksManage/var/li.html</p>
+      <p>自定义通用模板：zb_users/plugin/LinksManage/usr/li.html（不推荐）</p>
+      <p>通用模板编译为<b>lm-module-defend</b></p>
     </form>
   </div>
 </div>

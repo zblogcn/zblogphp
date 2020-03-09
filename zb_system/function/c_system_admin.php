@@ -295,7 +295,7 @@ function OutputOptionItemsOfCategories($default)
  *
  * @return null|string
  */
-function OutputOptionItemsOfTemplate($default)
+function OutputOptionItemsOfTemplate($default, $file_filter_array = array())
 {
     global $zbp;
     $testRegExp = "/^(\.|post-|module|header|footer|comment|sidebar|pagebar|[a-zA-Z]\_)/si";
@@ -304,6 +304,17 @@ function OutputOptionItemsOfTemplate($default)
 
     foreach ($zbp->template->templates as $key => $value) {
         if (preg_match($testRegExp, $key)) {
+            continue;
+        }
+
+        $b = false;
+        foreach ($file_filter_array as $key2 => $value2) {
+            $testRegExp2 = "/^($value2)/si";
+            if (preg_match($testRegExp2, $key)) {
+                $b = true;
+            }
+        }
+        if ($b == true) {
             continue;
         }
 
@@ -675,6 +686,9 @@ function Admin_ArticleMng()
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&page=%page%}{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
+    if (GetVars('search') !== GetVars('search', 'GET')) {
+        $p->PageNow = 1;
+    }
     $p->PageBarCount = $zbp->pagebarcount;
 
     $p->UrlRule->Rules['{%category%}'] = GetVars('category');
@@ -959,6 +973,9 @@ function Admin_CommentMng()
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&page=%page%}{&ischecking=%ischecking%}{&search=%search%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
+    if (GetVars('search') !== GetVars('search', 'GET')) {
+        $p->PageNow = 1;
+    }
     $p->PageBarCount = $zbp->pagebarcount;
 
     $p->UrlRule->Rules['{%search%}'] = rawurlencode(GetVars('search'));
@@ -1025,7 +1042,8 @@ function Admin_CommentMng()
 
         $tabletds[] = '<td class="td10"><span class="cmt-note" title="' . $zbp->lang['msg']['email'] . ':' . htmlspecialchars($cmt->Email) . '"><a href="mailto:' . htmlspecialchars($cmt->Email) . '">' . $cmt->Author->Name . '</a></span></td>';
         $tabletds[] = '<td><div style="overflow:hidden;max-width:500px;">' .
-        (($article) ?
+        (
+            ($article) ?
             '<a href="' . $article->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> '
         :
             '<a href="javascript:;"><img src="../image/admin/delete.png" alt="no exists" title="no exists" width="16" /></a>'
@@ -1036,7 +1054,8 @@ function Admin_CommentMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=CommentDel&amp;id=' . $cmt->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            (!GetVars('ischecking', 'GET') ?
+            (
+                !GetVars('ischecking', 'GET') ?
                 '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><img src="../image/admin/minus-shield.png" alt="' . $zbp->lang['msg']['audit'] . '" title="' . $zbp->lang['msg']['audit'] . '" width="16" /></a>'
                 :
                 '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><img src="../image/admin/ok.png" alt="' . $zbp->lang['msg']['pass'] . '" title="' . $zbp->lang['msg']['pass'] . '" width="16" /></a>'
@@ -1116,6 +1135,9 @@ function Admin_MemberMng()
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=MemberMng{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
+    if (GetVars('search') !== GetVars('search', 'GET')) {
+        $p->PageNow = 1;
+    }
     $p->PageBarCount = $zbp->pagebarcount;
 
     $w = array();

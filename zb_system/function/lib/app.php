@@ -160,7 +160,7 @@ class App
 
             return $appDirectory;
         } elseif ($key === 'app_url') {
-            return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id;
+            return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/';
         }
 
         return '';
@@ -270,9 +270,9 @@ class App
     public function GetLogo()
     {
         if ($this->type == 'plugin') {
-            return $this->app_url . '/logo.png';
+            return $this->app_url . 'logo.png';
         } else {
-            return $this->app_url . '/screenshot.png';
+            return $this->app_url . 'screenshot.png';
         }
     }
 
@@ -283,7 +283,7 @@ class App
      */
     public function GetScreenshot()
     {
-        return $this->app_url . '/screenshot.png';
+        return $this->app_url . 'screenshot.png';
     }
 
     /**
@@ -293,9 +293,21 @@ class App
      */
     public function GetCssFiles()
     {
-        $dir = $this->app_path . '/style/';
+        $dir = $this->app_path . 'style/';
 
-        return GetFilesInDir($dir, 'css');
+        $array = GetFilesInDir($dir, 'css');
+        if (isset($array['default'])) {
+            $a = array('style'=>$array['default']);
+            unset($array['default']);
+            $array = array_merge($a, $array);
+        }
+        if (isset($array['style'])) {
+            $a = array('style'=>$array['style']);
+            unset($array['style']);
+            $array = array_merge($a, $array);
+        }
+
+        return $array;
     }
 
     /**
@@ -375,7 +387,7 @@ class App
         $this->sidebars_sidebar8 = (string) $xml->sidebars->sidebar8;
         $this->sidebars_sidebar9 = (string) $xml->sidebars->sidebar9;
 
-        $appIgnorePath = $this->app_path . '/zbignore.txt';
+        $appIgnorePath = $this->app_path . 'zbignore.txt';
         if (is_readable($appIgnorePath)) {
             $this->ignore_files = explode("\n", trim(file_get_contents($appIgnorePath)));
         }
@@ -444,7 +456,7 @@ class App
 
         $s .= '</' . $this->type . '>';
 
-        $path = $this->app_path . '/' . $this->type . '.xml';
+        $path = $this->app_path . $this->type . '.xml';
 
         @file_put_contents($path, $s);
 

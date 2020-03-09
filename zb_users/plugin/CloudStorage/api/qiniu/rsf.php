@@ -10,7 +10,12 @@ define('Qiniu_RSF_EOF', 'EOF');
  * 3. 如果后续没有更多数据，err 返回 EOF，markerOut 返回 ""（但不通过该特征来判断是否结束）.
  */
 function Qiniu_RSF_ListPrefix(
-    $self, $bucket, $prefix = '', $marker = '', $limit = 0) // => ($items, $markerOut, $err)
+    $self,
+    $bucket,
+    $prefix = '',
+    $marker = '',
+    $limit = 0
+) // => ($items, $markerOut, $err)
 {
     global $QINIU_RSF_HOST;
 

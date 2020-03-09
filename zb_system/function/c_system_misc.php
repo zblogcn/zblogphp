@@ -295,7 +295,11 @@ div.bg {background: #777bb4!important;}
     echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Plugin Filters</th></tr>';
     foreach ($ca as $key => $value) {
         $i++;
-        echo '<tr><td class="e">' . $i . '</td><td class="v">' . $value . '</td></tr>';
+        $s = '';
+        foreach ($GLOBALS['hooks'][$value] as $function => $sg) {
+            $s .= '<br/>&nbsp;&nbsp;→' . $function;
+        }
+        echo '<tr><td class="e">' . $i . '</td><td class="v">' . $value . $s . '</td></tr>';
     }
     foreach ($badfilter as $key => $value) {
         $i++;
@@ -402,4 +406,22 @@ function misc_ping()
         JsonReturn($data);
         JsonError(1, "无效的TOKEN", $data);
     */
+}
+
+function misc_updatedapp()
+{
+    global $zbp;
+
+    header('Content-Type: application/x-javascript; Charset=utf-8');
+
+    if ($zbp->cache->success_updated_app !== '') {
+        $fn = $zbp->cache->success_updated_app . '_Updated';
+        if (function_exists($fn)) {
+            $fn();
+        }
+
+        $zbp->cache->success_updated_app = '';
+        $zbp->SaveCache();
+        die;
+    }
 }

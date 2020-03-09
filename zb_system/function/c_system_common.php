@@ -243,14 +243,20 @@ function GetEnvironment()
     if ($ajax) {
         $ajax = substr(get_class($ajax), 9);
     }
-    $system_environment = PHP_OS . '; ' .
+    $system_environment = PHP_OS . SplitAndGet(php_uname('r'), '-', 0) . '; ' .
     GetValueInArray(
-        explode(' ',
+        explode(
+            ' ',
             str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))
-        ), 0
+        ),
+        0
     ) . '; ' .
-    'PHP ' . GetPHPVersion() . (IS_X64 ? ' x64' : '') . '; ' .
-    $zbp->option['ZC_DATABASE_TYPE'] . '; ' . $ajax;
+    'PHP' . GetPHPVersion() . (IS_X64 ? ' x64' : '') . '; ' .
+    $zbp->option['ZC_DATABASE_TYPE'] . $zbp->db->version . '; ' . $ajax;
+
+    if (defined('OPENSSL_VERSION_TEXT')) {
+        $system_environment .= '; ' . str_replace(' ', '', OPENSSL_VERSION_TEXT);
+    }
 
     return $system_environment;
 }
@@ -346,7 +352,7 @@ function GetValueInArrayByCurrent($array, $name)
  * @param string $delimiter
  * @param int    $n
  *
- * @return mixed
+ * @return string
  */
 function SplitAndGet($string, $delimiter = ';', $n = 0)
 {
@@ -355,7 +361,7 @@ function SplitAndGet($string, $delimiter = ';', $n = 0)
         $a = array();
     }
     if (isset($a[$n])) {
-        return $a[$n];
+        return (string) $a[$n];
     }
 
     return '';

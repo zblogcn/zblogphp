@@ -103,11 +103,12 @@ function convert_attachment_table($_prefix)
         $ary1[] = $name;
         $ary2[] = $value . ' AS ' . $name;
     }
-    $sql = build_sql('Upload',
-    $_prefix . 'posts' . '`,`' . $_prefix . 'postmeta',
-    $ary1,
-    $ary2,
-    ' WHERE (`' . $_prefix . 'posts`.`ID`=`' . $_prefix . 'postmeta`.`post_id` AND `' . $_prefix . 'posts`.`post_type`="attachment" AND `' . $_prefix . 'postmeta`.`meta_key`="_wp_attached_file")'
+    $sql = build_sql(
+        'Upload',
+        $_prefix . 'posts' . '`,`' . $_prefix . 'postmeta',
+        $ary1,
+        $ary2,
+        ' WHERE (`' . $_prefix . 'posts`.`ID`=`' . $_prefix . 'postmeta`.`post_id` AND `' . $_prefix . 'posts`.`post_type`="attachment" AND `' . $_prefix . 'postmeta`.`meta_key`="_wp_attached_file")'
     );
     //die($sql);
     return $zbp->db->QueryMulit($sql);
@@ -272,11 +273,12 @@ function upgrade_category_and_tag_count($_prefix)
 
     $array = $zbp->db->Query($sql);
     foreach ($array as $key => $value) {
-        $zbp->db->Query($zbp->db->sql->Update(
-                $zbp->table['Post'],
-                array('log_CateID' => $value['term_id']),
-                array(array('=', 'log_ID', $value['object_id']))
-            )
+        $zbp->db->Query(
+            $zbp->db->sql->Update(
+            $zbp->table['Post'],
+            array('log_CateID' => $value['term_id']),
+            array(array('=', 'log_ID', $value['object_id']))
+        )
         );
     }
 
@@ -303,11 +305,12 @@ function upgrade_category_and_tag_count($_prefix)
     }
 
     foreach ($array2 as $key => $value) {
-        $zbp->db->Query($zbp->db->sql->Update(
-                $zbp->table['Post'],
-                array('log_Tag' => $value),
-                array(array('=', 'log_ID', $key))
-            )
+        $zbp->db->Query(
+            $zbp->db->sql->Update(
+            $zbp->table['Post'],
+            array('log_Tag' => $value),
+            array(array('=', 'log_ID', $key))
+        )
         );
     }
 

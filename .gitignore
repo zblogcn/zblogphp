@@ -69,6 +69,8 @@ mix-manifest.json
 !/zb_users/theme/clear
 !/zb_users/theme/x2013
 !/zb_users/theme/WhitePage
+!/zb_users/theme/tpure
+!/zb_users/theme/Zit
 
 # Rules
 .htaccess
