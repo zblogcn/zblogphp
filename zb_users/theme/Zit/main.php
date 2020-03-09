@@ -24,9 +24,7 @@ $def = Zit_Defaults(1);
 $msg = (object) $lang['Zit'];
 
 if ($_POST) {
-    if (!$zbp->ValidToken($_POST['csrfToken'])) {
-        $zbp->ShowError(5);
-    }
+    CheckIsRefererValid();
 
     if (isset($_POST['update'])) {
         foreach ($def as $k=>$v) {
@@ -109,8 +107,6 @@ echo <<<FORM
   </div>
   <div class="pane">
     <h3 class="zit">{$msg->rand}</h3>
-    <p><dfn>{$msg->during}</dfn> <input type="text" name="During" value="{$cfg->During}" id="calc" placeholder="{$msg->during_place}"> <small>{$msg->during_tip}</small></p>
-    <p><dfn>{$msg->cmtlen}</dfn> <input type="text" name="CmtLen" value="{$cfg->CmtLen}" required> <small>{$msg->cmtlen_tip}</small></p>
     <p><dfn>{$msg->cmtids}</dfn> <textarea name="CmtIds">{$cfg->CmtIds}</textarea> <small>{$msg->cmtids_tip}</small></p>
     <p><dfn>{$msg->gbook}</dfn> <input type="text" name="GbookID" value="{$cfg->GbookID}" required> <small>{$msg->gbook_tip}</p>
   </div>

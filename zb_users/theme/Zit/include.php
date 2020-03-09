@@ -12,9 +12,7 @@ RegisterPlugin('Zit', 'ActivePlugin_Zit');
 function ActivePlugin_Zit()
 {
     global $zbp;
-
-    $name = substr(__FUNCTION__, 13);
-
+    $name = 'Zit';
     $zbp->LoadLanguage('theme', $name);
 
     Add_Filter_Plugin('Filter_Plugin_Post_Get', $name . '_PostGet');
@@ -27,9 +25,7 @@ function ActivePlugin_Zit()
 function InstallPlugin_Zit()
 {
     global $zbp;
-
-    $name = substr(__FUNCTION__, 14);
-
+    $name = 'Zit';
     $cfg = $zbp->Config($name);
     $def = Zit_Defaults(!$cfg->Custom);
     foreach ($def as $k=>$v) {
@@ -54,8 +50,6 @@ function Zit_Defaults($init = false)
         $cfg->HideIntro = 0;
         $cfg->SideMods = '';
 
-        $cfg->During = 0;
-        $cfg->CmtLen = 10;
         $cfg->CmtIds = '';
         $cfg->GbookID = 2;
 
@@ -70,7 +64,10 @@ function Zit_Defaults($init = false)
     return (array) $cfg;
 }
 
-// function UninstallPlugin_Zit() {}
+function UninstallPlugin_Zit()
+{
+
+}
 
 function Zit_TopMenu(&$m)
 {
@@ -184,17 +181,9 @@ function Zit_BuildModule()
         $mod->Source = 'theme_Zit';
     }
 
-    $during = (int) $cfg->During;
-    $len = (int) $cfg->CmtLen;
     $where = array(
         array('=', 'comm_IsChecking', 0),
     );
-    if ($during) {
-        $where[] = array('<=', 'TO_DAYS(NOW()) - TO_DAYS(FROM_UNIXTIME(`comm_PostTime`))', $during);
-    }
-    if ($len) {
-        $where[] = array('>=', 'char_length(`comm_Content`)', $len);
-    }
     $ids = array();
     $cmts = $zbp->GetCommentList('', $where, array('comm_PostTime' => 'DESC'));
     foreach ($cmts as $cmt) {
