@@ -66,7 +66,6 @@ function Zit_Defaults($init = false)
 
 function UninstallPlugin_Zit()
 {
-
 }
 
 function Zit_TopMenu(&$m)
