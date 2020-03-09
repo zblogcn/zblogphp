@@ -245,7 +245,7 @@ div.bg {background: #777bb4!important;}
     $ca = $ca['user'];
     echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Z-BlogPHP Constants</th></tr>';
     foreach ($ca as $key => $value) {
-        echo '<tr><td class="e">' . $key . '</td><td class="v">' . TransferHTML($value, '[nohtml]') . '</td></tr>';
+        echo '<tr><td class="e">' . $key . '</td><td class="v">' . FormatString($value, '[nohtml]') . '</td></tr>';
     }
     echo '</tbody></table>';
 
@@ -256,7 +256,7 @@ div.bg {background: #777bb4!important;}
     foreach ($GLOBALS as $n => $v) {
         if (strpos($n, 'Filter_Plugin_') === false) {
             if (gettype($v) == 'integer' || gettype($v) == 'double' || gettype($v) == 'string' || gettype($v) == 'boolean') {
-                $ca['$' . $n] = '(' . gettype($v) . ') ' . TransferHTML($v, '[nohtml]');
+                $ca['$' . $n] = '(' . gettype($v) . ') ' . FormatString($v, '[nohtml]');
             } else {
                 $ca['$' . $n] = '(' . gettype($v) . ')';
             }

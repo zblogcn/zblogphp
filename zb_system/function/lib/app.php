@@ -155,8 +155,8 @@ class App
     {
         global $zbp;
         if ($key === 'app_path') {
-            $appDirectory = $zbp->usersdir . TransferHTML($this->type, '[filename]');
-            $appDirectory .= DIRECTORY_SEPARATOR . TransferHTML($this->id, '[filename]') . DIRECTORY_SEPARATOR;
+            $appDirectory = $zbp->usersdir . FormatString($this->type, '[filename]');
+            $appDirectory .= DIRECTORY_SEPARATOR . FormatString($this->id, '[filename]') . DIRECTORY_SEPARATOR;
 
             return $appDirectory;
         } elseif ($key === 'app_url') {
@@ -312,7 +312,7 @@ class App
 
         $this->id = $id;
         $this->type = $type;
-        $xmlPath = $this->app_path . TransferHTML($type, '[filename]') . '.xml';
+        $xmlPath = $this->app_path . FormatString($type, '[filename]') . '.xml';
 
         if (!is_readable($xmlPath)) {
             return false;

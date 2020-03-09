@@ -1215,10 +1215,10 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
         foreach ($comments as &$comment) {
             $floorid += 1;
             $comment->FloorID = $floorid;
-            $comment->Content = TransferHTML($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+            $comment->Content = FormatString($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
         }
         foreach ($comments2 as &$comment) {
-            $comment->Content = TransferHTML($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+            $comment->Content = FormatString($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
         }
     }
 
@@ -1311,10 +1311,10 @@ function ViewComments($postid, $page)
     foreach ($comments as &$comment) {
         $floorid += 1;
         $comment->FloorID = $floorid;
-        $comment->Content = TransferHTML($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+        $comment->Content = FormatString($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
     }
     foreach ($comments2 as &$comment) {
-        $comment->Content = TransferHTML($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+        $comment->Content = FormatString($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
     }
 
     $zbp->template->SetTags('title', $zbp->title);
@@ -1365,7 +1365,7 @@ function ViewComment($id)
     $post = new Post();
     $post->LoadInfoByID($comment->LogID);
 
-    $comment->Content = TransferHTML(htmlspecialchars($comment->Content), '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+    $comment->Content = FormatString(htmlspecialchars($comment->Content), '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
 
     $zbp->template->SetTags('title', $zbp->title);
     $zbp->template->SetTags('comment', $comment);
@@ -1410,7 +1410,7 @@ function PostArticle()
     }
 
     if (isset($_POST['Tag'])) {
-        $_POST['Tag'] = TransferHTML($_POST['Tag'], '[noscript]');
+        $_POST['Tag'] = FormatString($_POST['Tag'], '[noscript]');
         $_POST['Tag'] = PostArticle_CheckTagAndConvertIDtoString($_POST['Tag']);
     }
     if (isset($_POST['Content'])) {
@@ -1425,7 +1425,7 @@ function PostArticle()
                 if ($_POST['Intro'] == '' || (stripos($_POST['Intro'], '<!--autointro-->') !== false)) {
                     //$_POST['Intro'] = SubStrUTF8_Html($_POST['Content'], (int) strpos($_POST['Content'], '>') + (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
                     //改纯HTML摘要
-                    $_POST['Intro'] = TransferHTML($_POST['Content'], "[nohtml]");
+                    $_POST['Intro'] = FormatString($_POST['Content'], "[nohtml]");
                     $_POST['Intro'] = SubStrUTF8_Html($_POST['Intro'], (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
                     $_POST['Intro'] .= '<!--autointro-->';
                 }
@@ -1446,7 +1446,7 @@ function PostArticle()
     }
 
     if (isset($_POST['Alias'])) {
-        $_POST['Alias'] = TransferHTML($_POST['Alias'], '[noscript]');
+        $_POST['Alias'] = FormatString($_POST['Alias'], '[noscript]');
     }
 
     if (isset($_POST['PostTime'])) {
@@ -1743,7 +1743,7 @@ function PostPage()
     }
 
     if (isset($_POST['Alias'])) {
-        $_POST['Alias'] = TransferHTML($_POST['Alias'], '[noscript]');
+        $_POST['Alias'] = FormatString($_POST['Alias'], '[noscript]');
     }
 
     $article = new Post();
@@ -2222,7 +2222,7 @@ function PostCategory()
     }
 
     if (isset($_POST['Alias'])) {
-        $_POST['Alias'] = TransferHTML($_POST['Alias'], '[noscript]');
+        $_POST['Alias'] = FormatString($_POST['Alias'], '[noscript]');
     }
 
     $parentid = (int) GetVars('ParentID', 'POST');
@@ -2345,7 +2345,7 @@ function PostTag()
     }
 
     if (isset($_POST['Alias'])) {
-        $_POST['Alias'] = TransferHTML($_POST['Alias'], '[noscript]');
+        $_POST['Alias'] = FormatString($_POST['Alias'], '[noscript]');
     }
 
     $tag = new Tag();
@@ -2466,7 +2466,7 @@ function PostMember()
     }
 
     if (isset($data['Alias'])) {
-        $data['Alias'] = TransferHTML($data['Alias'], '[noscript]');
+        $data['Alias'] = FormatString($data['Alias'], '[noscript]');
     }
 
     if ($data['ID'] == 0) {
@@ -3093,7 +3093,7 @@ function FilterComment(&$comment)
     $comment->Email = SubStrUTF8_Start($comment->Email, 0, $zbp->option['ZC_EMAIL_MAX']);
     $comment->HomePage = SubStrUTF8_Start($comment->HomePage, 0, $zbp->option['ZC_HOMEPAGE_MAX']);
 
-    $comment->Content = TransferHTML($comment->Content, '[nohtml]');
+    $comment->Content = FormatString($comment->Content, '[nohtml]');
 
     $comment->Content = SubStrUTF8_Start($comment->Content, 0, 1000);
     $comment->Content = trim($comment->Content);
@@ -3113,23 +3113,23 @@ function FilterPost(&$article)
 
     $article->Title = strip_tags($article->Title);
     $article->Title = htmlspecialchars($article->Title);
-    $article->Alias = TransferHTML($article->Alias, '[normalname]');
+    $article->Alias = FormatString($article->Alias, '[normalname]');
     $article->Alias = str_replace(' ', '', $article->Alias);
 
     if ($article->Type == ZC_POST_TYPE_ARTICLE) {
         if (!$zbp->CheckRights('ArticleAll')) {
-            $article->Content = TransferHTML($article->Content, '[noscript]');
-            $article->Intro = TransferHTML($article->Intro, '[noscript]');
+            $article->Content = FormatString($article->Content, '[noscript]');
+            $article->Intro = FormatString($article->Intro, '[noscript]');
         }
     } elseif ($article->Type == ZC_POST_TYPE_PAGE) {
         if (!$zbp->CheckRights('PageAll')) {
-            $article->Content = TransferHTML($article->Content, '[noscript]');
-            $article->Intro = TransferHTML($article->Intro, '[noscript]');
+            $article->Content = FormatString($article->Content, '[noscript]');
+            $article->Intro = FormatString($article->Intro, '[noscript]');
         }
     } else {
         if (!$zbp->CheckRights('ArticleAll')) {
-            $article->Content = TransferHTML($article->Content, '[noscript]');
-            $article->Intro = TransferHTML($article->Intro, '[noscript]');
+            $article->Content = FormatString($article->Content, '[noscript]');
+            $article->Intro = FormatString($article->Intro, '[noscript]');
         }
     }
 }
@@ -3144,8 +3144,8 @@ function FilterPost(&$article)
 function FilterMember(&$member)
 {
     global $zbp;
-    $member->Intro = TransferHTML($member->Intro, '[noscript]');
-    $member->Alias = TransferHTML($member->Alias, '[normalname]');
+    $member->Intro = FormatString($member->Intro, '[noscript]');
+    $member->Alias = FormatString($member->Alias, '[normalname]');
     $member->Alias = str_replace('/', '', $member->Alias);
     $member->Alias = str_replace('.', '', $member->Alias);
     $member->Alias = str_replace(' ', '', $member->Alias);
@@ -3193,8 +3193,8 @@ function FilterMember(&$member)
 function FilterModule(&$module)
 {
     global $zbp;
-    $module->FileName = TransferHTML($module->FileName, '[filename]');
-    $module->HtmlID = TransferHTML($module->HtmlID, '[normalname]');
+    $module->FileName = FormatString($module->FileName, '[filename]');
+    $module->HtmlID = FormatString($module->HtmlID, '[normalname]');
 }
 
 /**
@@ -3206,7 +3206,7 @@ function FilterCategory(&$category)
 {
     global $zbp;
     $category->Name = strip_tags($category->Name);
-    $category->Alias = TransferHTML($category->Alias, '[normalname]');
+    $category->Alias = FormatString($category->Alias, '[normalname]');
     //$category->Alias=str_replace('/','',$category->Alias);
     $category->Alias = str_replace('.', '', $category->Alias);
     $category->Alias = str_replace(' ', '', $category->Alias);
@@ -3222,7 +3222,7 @@ function FilterTag(&$tag)
 {
     global $zbp;
     $tag->Name = strip_tags($tag->Name);
-    $tag->Alias = TransferHTML($tag->Alias, '[normalname]');
+    $tag->Alias = FormatString($tag->Alias, '[normalname]');
 }
 
 //###############################################################################################################

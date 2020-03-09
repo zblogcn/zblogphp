@@ -1019,8 +1019,8 @@ function RespondError($errorCode, $errorString)
 {
     $strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><fault><value><struct><member><name>faultCode</name><value><int>$1</int></value></member><member><name>faultString</name><value><string>$2</string></value></member></struct></value></fault></methodResponse>';
     $strError = $strXML;
-    $strError = str_replace("$1", TransferHTML($errorCode, "[html-format]"), $strError);
-    $strError = str_replace("$2", TransferHTML($errorString, "[html-format]"), $strError);
+    $strError = str_replace("$1", FormatString($errorCode, "[html-format]"), $strError);
+    $strError = str_replace("$2", FormatString($errorString, "[html-format]"), $strError);
 
     ob_clean();
     echo $strError;
@@ -1070,14 +1070,14 @@ function CheckRegExp($source, $para)
 }
 
 /**
- *  通过正则表达式格式化字符串.
+ *  格式化字符串.
  *
  * @param string $source 字符串
  * @param string $para   正则表达式，可用[html-format]|[nohtml]|[noscript]|[enter]|[noenter]|[filename]|[normalname]或自定义表达式
  *
  * @return string
  */
-function TransferHTML($source, $para)
+function FormatString($source, $para)
 {
     if (strpos($para, '[html-format]') !== false) {
         $source = htmlspecialchars($source);
@@ -1112,6 +1112,15 @@ function TransferHTML($source, $para)
     }
 
     return $source;
+}
+
+/**
+ * @Deprecated
+ * 格式化字符串
+ **/
+function TransferHTML($source, $param)
+{
+    return FormatString($source, $param);
 }
 
 /**

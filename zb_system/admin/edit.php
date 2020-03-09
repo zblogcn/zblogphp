@@ -152,7 +152,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                             <span class="editinputname"></span>
                         </div>
                         <div id="carea" style="margin:5px 0 0 0" class="editmod editmod3">
-                            <textarea id="editor_content" name="Content"><?php echo TransferHTML($article->Content, '[html-format]'); ?></textarea>
+                            <textarea id="editor_content" name="Content"><?php echo FormatString($article->Content, '[html-format]'); ?></textarea>
                         </div>
                         <div id="contentready" style="display:none">
                             <img alt="loading" id="statloading1" src="../image/admin/loading.gif"/>Waiting...
@@ -211,7 +211,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                             </label>
                         </div>
                         <div id="tarea" style="margin:5px 0 0 0" class="editmod editmod3">
-                            <textarea id="editor_intro" name="Intro"><?php echo TransferHTML($article->Intro, '[html-format]'); ?></textarea>
+                            <textarea id="editor_intro" name="Intro"><?php echo FormatString($article->Intro, '[html-format]'); ?></textarea>
                         </div>
                         <div id="introready" style="display:none">
                             <img alt="loading" id="statloading2" src="../image/admin/loading.gif"/>Waiting...

@@ -38,7 +38,7 @@ if (isset($_GET['source'])) {
         $mod->HtmlID = GetVars('filename', 'GET');
         $mod->Source = 'theme';
         if ($mod->FileName) {
-            $mod->Content = file_get_contents($zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . TransferHTML($mod->FileName, '[filename]') . '.php');
+            $mod->Content = file_get_contents($zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . FormatString($mod->FileName, '[filename]') . '.php');
         }
     }
 } elseif (isset($_GET['filename'])) {
@@ -102,7 +102,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Edit_SubMenu'] as $fpname => &$
             <?php echo $lang['msg']['name']?>:</span>
         <span class="star">(*)</span>
         <br />
-        <input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $option['ZC_MODULE_NAME_MAX']; ?>" type="text" value="<?php echo TransferHTML($mod->Name, '[html-format]'); ?>" />
+        <input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $option['ZC_MODULE_NAME_MAX']; ?>" type="text" value="<?php echo FormatString($mod->Name, '[html-format]'); ?>" />
          (
         <?php echo $lang['msg']['hide_title']?>
         :
@@ -112,13 +112,13 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Edit_SubMenu'] as $fpname => &$
             <?php echo $lang['msg']['filename']?>:</span>
         <span class="star">(*)</span>
         <br />
-        <input id="edtFileName" <?php echo $islock?> class="edit" size="40" name="FileName" type="text" value="<?php echo TransferHTML($mod->FileName, '[html-format]'); ?>" /></p>
+        <input id="edtFileName" <?php echo $islock?> class="edit" size="40" name="FileName" type="text" value="<?php echo FormatString($mod->FileName, '[html-format]'); ?>" /></p>
     <p <?php echo $ishide?>>
         <span class="title">
             <?php echo $lang['msg']['htmlid']?>:</span>
         <span class="star">(*)</span>
         <br />
-        <input id="edtHtmlID" class="edit" size="40" name="HtmlID" type="text" value="<?php echo TransferHTML($mod->HtmlID, '[html-format]'); ?>" /></p>
+        <input id="edtHtmlID" class="edit" size="40" name="HtmlID" type="text" value="<?php echo FormatString($mod->HtmlID, '[html-format]'); ?>" /></p>
     <p <?php echo $ishide?>>
         <span class='title'>
             <?php echo $lang['msg']['type']?>:</span>
