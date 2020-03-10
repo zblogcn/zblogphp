@@ -251,7 +251,7 @@ function GetEnvironment()
         ),
         0
     ) . '; ' .
-    'PHP' . GetPHPVersion() . (IS_X64 ? ' x64' : '') . '; ' .
+    'PHP' . GetPHPVersion() . (IS_X64 ? 'x64' : '') . '; ' .
     $zbp->option['ZC_DATABASE_TYPE'] . $zbp->db->version . '; ' . $ajax;
 
     if (defined('OPENSSL_VERSION_TEXT')) {

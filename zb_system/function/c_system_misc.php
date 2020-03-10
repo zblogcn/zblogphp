@@ -60,6 +60,7 @@ function misc_statistic()
     $current_member = '{$zbp->user->Name}';
     $current_version = '{$zbp->version}';
     $system_environment = '{$system_environment}';
+    $current_theme_version = '{$theme_version}';
 
     if ($zbp->option['ZC_DEBUG_MODE']) {
         $r .= "<tr><td colspan='4' style='text-align: center'>{$zbp->lang['msg']['debugging_warning']}</td></tr>";
@@ -68,7 +69,7 @@ function misc_statistic()
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_articles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categories}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
-    $r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']} / {$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
+    $r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']} / {$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style} {$current_theme_version}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td><a href='../cmd.php?act=misc&type=phpinfo' target='_blank'>{$system_environment}</a></td></tr>";
     $r .= "<script type=\"text/javascript\">$('#statistic').attr('title','" . date("c", $zbp->cache->reload_statistic_time) . "');</script>";
 
@@ -91,6 +92,7 @@ function misc_statistic()
     $r = str_replace('{$zbp->style}', $zbp->style, $r);
     $r = str_replace('{$zbp->version}', ZC_VERSION_FULL, $r);
     $r = str_replace('{$system_environment}', $zbp->cache->system_environment, $r);
+    $r = str_replace('{$theme_version}', '(ver' . $zbp->LoadApp('theme', $zbp->theme)->version . ')', $r);    
 
     echo $r;
 }
@@ -245,7 +247,7 @@ div.bg {background: #777bb4!important;}
     $ca = $ca['user'];
     echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Z-BlogPHP Constants</th></tr>';
     foreach ($ca as $key => $value) {
-        echo '<tr><td class="e">' . $key . '</td><td class="v">' . FormatString($value, '[nohtml]') . '</td></tr>';
+        echo '<tr><td class="e">' . $key . '</td><td class="v">' . TransferHTML($value, '[nohtml]') . '</td></tr>';
     }
     echo '</tbody></table>';
 
@@ -256,7 +258,7 @@ div.bg {background: #777bb4!important;}
     foreach ($GLOBALS as $n => $v) {
         if (strpos($n, 'Filter_Plugin_') === false) {
             if (gettype($v) == 'integer' || gettype($v) == 'double' || gettype($v) == 'string' || gettype($v) == 'boolean') {
-                $ca['$' . $n] = '(' . gettype($v) . ') ' . FormatString($v, '[nohtml]');
+                $ca['$' . $n] = '(' . gettype($v) . ') ' . TransferHTML($v, '[nohtml]');
             } else {
                 $ca['$' . $n] = '(' . gettype($v) . ')';
             }
