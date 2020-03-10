@@ -72,7 +72,7 @@ return array(
     'cmtids_tip'     => '填写指定评论ID，上方设置失效，英文逗号分隔',
     'gbook'          => '留言本页面ID',
     'gbook_tip'      => '无评论时显示，请在 <a href="../../../zb_system/cmd.php?act=PageMng" target="_blank"><b>页面管理</b></a> 中确认</small>',
-
+    
     'seo'            => 'SEO设置',
     'description'    => '网站描述',
     'description_tip'=> '留空将不输出内容',
@@ -81,4 +81,6 @@ return array(
     'relatedtitle'   => '相关文章标题',
     'commenttitle'   => '评论列表标题',
 
+    'colorchange'    => '改变整体配色',
+    'colorchange_tip'=> '保存后请Ctrl+F5刷新',
 );

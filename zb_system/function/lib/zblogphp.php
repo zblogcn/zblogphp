@@ -26,6 +26,10 @@ class ZBlogPHP
      */
     public $lang = array();
     /**
+     * @var json类型 语言
+     */
+    public $langs = null;
+    /**
      * @var array 语言包list
      */
     public $langpacklist = array();
@@ -472,8 +476,8 @@ class ZBlogPHP
         $this->option['ZC_BLOG_VERSION'] = ZC_BLOG_VERSION;
         $this->option['ZC_NOW_VERSION'] = $this->version;  //ZC_LAST_VERSION
         $this->option['ZC_BLOG_PRODUCT_FULL'] = $this->option['ZC_BLOG_PRODUCT'] . ' ' . ZC_VERSION_DISPLAY;
-        $this->option['ZC_BLOG_PRODUCT_FULLHTML'] = '<a href="https://www.zblogcn.com/" title="Z-BlogPHP ' . ZC_BLOG_VERSION . '" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
-        $this->option['ZC_BLOG_PRODUCT_HTML'] = '<a href="https://www.zblogcn.com/" title="Z-BlogPHP ' . ZC_BLOG_VERSION . '" target="_blank">' . $this->option['ZC_BLOG_PRODUCT'] . '</a>';
+        $this->option['ZC_BLOG_PRODUCT_FULLHTML'] = '<a href="https://www.zblogcn.com/" title="Z-BlogPHP '. ZC_BLOG_VERSION .'" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
+        $this->option['ZC_BLOG_PRODUCT_HTML'] = '<a href="https://www.zblogcn.com/" title="Z-BlogPHP '. ZC_BLOG_VERSION .'" target="_blank">' . $this->option['ZC_BLOG_PRODUCT'] . '</a>';
 
         if ($oldZone != $this->option['ZC_TIME_ZONE_NAME']) {
             date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
@@ -1607,7 +1611,7 @@ class ZBlogPHP
         $languagePath .= $language . '.php';
         $languagePtr = require $languagePath;
         $this->langpacklist[] = array($type, $id, $language);
-
+        $this->langs = json_decode(json_encode($this->lang));
         return true;
     }
 
@@ -3401,36 +3405,4 @@ class ZBlogPHP
         return false;
     }
 
-    /**
-     * GetLang 用于替换$zbp->lang.
-     *
-     * @param $name
-     * @param $name2
-     *
-     * @return string or array or null
-     */
-    public function GetLang($name, $name2 = null)
-    {
-        if ($name2 === null) {
-            if (isset($this->lang[$name])) {
-                return $this->lang[$name];
-            }
-
-            return null;
-        }
-        if (isset($this->lang[$name])) {
-            $a = &$this->lang[$name];
-            if (is_array($a)) {
-                if (isset($a[$name2])) {
-                    return $a[$name2];
-                }
-
-                return null;
-            }
-
-            return $a;
-        }
-
-        return null;
-    }
 }

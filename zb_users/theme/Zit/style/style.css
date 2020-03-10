@@ -32,14 +32,14 @@ ul::after,
 .clear::after{display:table;clear:both;content:""}
 .avatar{border-radius:100%;vertical-align: middle;}
 
-.zit{color:#fff;background:#39c;filter:url(fliter.svg#deep);padding:.5em;line-height:1;position:absolute;z-index:2;min-width: 2em;display:inline-block;min-height: 1em;}
+.zit{color:#fff;background:#39c;filter:url(fliter.svg.php#deep);padding:.5em;line-height:1;position:absolute;z-index:2;min-width: 2em;display:inline-block;min-height: 1em;}
 .zit::after{content:"Z";position:absolute;left:.5em;bottom:-.5em;transform:rotate(30deg);display:inline-block;margin:0 .2em 0 0;z-index:-1;color:#39c;font-weight:bold;transition:all .5s;}
 .zit a{color:#fff;}
 
 .pane{box-shadow:0 0 2em rgba(0,0,0,.05);padding:2em;position: relative;background:#fff;margin:0 0 4em;}
-.pane .zit{top:-1.5em;left:1em;filter:url(fliter.svg#change);box-shadow:-.5em .5em .5em -.3em rgba(0,0,0,.3);font-weight:normal;text-transform: uppercase;font-size:1em;padding:.6em;}
+.pane .zit{top:-1.5em;left:1em;filter:url(fliter.svg.php#change);box-shadow:-.5em .5em .5em -.3em rgba(0,0,0,.3);font-weight:normal;text-transform: uppercase;font-size:1em;padding:.6em;}
 
-.cover{ background-position: center; background-repeat: no-repeat;transition:all 1s;filter:url(fliter.svg#change);}
+.cover{ background-position: center; background-repeat: no-repeat;transition:all 1s;filter:url(fliter.svg.php#change);}
 
 .log h3{line-height:1.5;font-size:1.5em;}
 .log h5{margin:1em 0;}
@@ -61,7 +61,7 @@ a.tag,
 a.tag{color:#18c;display:inline-block;padding:0 .6em;overflow:hidden;}
 a.tag:hover{border-color:#39c;color:#39c;}
 a.tag::before{margin:0 .3em 0 0;}
-.more{border-color:#18a;color:#18a;filter:url(fliter.svg#change);}
+.more{border-color:#18a;color:#18a;filter:url(fliter.svg.php#change);}
 .more:hover{background:#18c;color:#def}
 
 .cmt{margin:2em 0 4em 2em;}
@@ -83,7 +83,7 @@ a.tag::before{margin:0 .3em 0 0;}
 form.cmt label::after{content:"✏";font-family:KandyIcons;margin:0 0 0 -1em;position:absolute;display:none;}
 .kandyIcons form.cmt:hover label::after{display:inline;}
 .kandyIcons form.cmt:hover input{padding-right:1.2em;}
-form.cmt button{border:none;padding:.3em 1.5em;background:#39c;color:#fff;font-size:1.3em;border-radius:2em;cursor:pointer;float:right;margin:0;overflow:hidden;}
+form.cmt button{border:none;padding:.3em 1.5em;background:#39c;color:#fff;font-size:1.3em;border-radius:2em;cursor:pointer;float:right;margin:0;overflow:hidden;filter:url(fliter.svg.php#change);}
 form.cmt button:hover{box-shadow:0 0 2em rgba(0,0,0,.2) inset;}
 .captcha{float:left;margin:-.5em 0 0;position: relative;}
 .captcha img{display:block;}
@@ -125,7 +125,7 @@ form.cmt .revoke{background:#abc;margin-right:1em;}
 #face.swell{background:none;box-shadow:none;padding:1.5em 1em;border-bottom:1px dotted rgba(255,255,255,.3);}
 
 #logo{position:absolute;left:0;top:0;line-height:1;font-size:2em;}
-#logo a{color:#18a;background:#fff;padding:.23em;position:static;border-radius:.2em;filter:url(fliter.svg#change);}
+#logo a{color:#18a;background:#fff;padding:.23em;position:static;border-radius:.2em;filter:url(fliter.svg.php#change);}
 #logo a::after{color:#fff;bottom:-.75em}
 
 #menu{margin:0 auto;display:inline-block;padding:.5em 0;transition:all .5s;}
@@ -156,7 +156,7 @@ form.cmt .revoke{background:#abc;margin-right:1em;}
 #seek.invis p{display:none;}
 #seek.invis button{font-size:1em;color:#234;line-height:1;}
 
-#banner{height:30em;background:#eee center no-repeat;background-image:url(bg.jpg);filter:url(fliter.svg#change);background-size:cover;position:relative;animation:slide 120s infinite linear;}
+#banner{height:30em;background:#eee center no-repeat;background-image:url(bg.jpg);filter:url(fliter.svg.php#change);background-size:cover;position:relative;animation:slide 120s infinite linear;}
 #banner::after{content:".";display:block;position:absolute;left:0;top:-2em;right:0;box-shadow:0 3em 10em #123;overflow:hidden;}
 #banner .inner{padding:0 50px;}
 #banner .zit{bottom:2.2em;z-index:10;font-size:2em;border-radius:0;box-shadow:0 .5em .3em -.3em rgba(0,0,0,.3);max-width:1100px;margin-right:50px;}
@@ -178,7 +178,7 @@ form.cmt .revoke{background:#abc;margin-right:1em;}
 #topic small{color:#789;margin:1em 0 0}
 
 #main{width:65%;float:left;}
-#main .zit{box-shadow:.5em .5em .5em -.3em rgba(0,0,0,.3);}
+#main .zit{box-shadow:.5em .5em .5em -.3em rgba(0,0,0,.3);filter:url(fliter.svg.php#change);}
 
 #path{position:absolute;top:-3.5em;right:0;color:#fff;font-size:1.4em;}
 #path a{color:#fff;font-size:.8em;position:relative;top:-.4em;font-family: "微软雅黑";font-weight:normal;}
@@ -207,7 +207,7 @@ form.cmt .revoke{background:#abc;margin-right:1em;}
 #pagi{text-align:center;margin:0 0 2em;}
 #pagi b,
 #pagi a,
-#pagi select{margin:0 .2em;filter: url(fliter.svg#change);padding:.5em;border-radius:.5em;border:2px solid #def;display:inline-block;line-height:1}
+#pagi select{margin:0 .2em;filter: url(fliter.svg.php#change);padding:.5em;border-radius:.5em;border:2px solid #def;display:inline-block;line-height:1}
 #pagi a:hover{background:#def}
 #pagi select{padding:.25em .5em;}
 #pagi .zit{position:relative;box-shadow:none;}
@@ -221,7 +221,7 @@ form.cmt .revoke{background:#abc;margin-right:1em;}
 #side .tags span{display:inline-block;margin:0 -.6em 0 .3em;background:#abc;color:#fff;padding:.1em .5em;}
 #side form[name='search']{padding-right:5em;position: relative;}
 #side form[name='search'] input{width:100%;border:2px solid #abc;height:2.2em;}
-#side form[name='search'] input[type='submit']{width:5em;border:2px solid #18c;background:#18c;color:#fff;position: absolute;right:0;top:0;cursor: pointer;filter:url(fliter.svg#change);}
+#side form[name='search'] input[type='submit']{width:5em;border:2px solid #18c;background:#18c;color:#fff;position: absolute;right:0;top:0;cursor: pointer;filter:url(fliter.svg.php#change);}
 
 #minfo{text-align:center;}
 #minfo img{width:60%;height:auto;margin:0 auto 1em;display:block;}
@@ -230,7 +230,7 @@ form.cmt .revoke{background:#abc;margin-right:1em;}
 #tbCalendar caption{font-size:1.2em;}
 #tbCalendar th{background:#eee;color:#345;}
 #tbCalendar td{border-bottom:1px solid #cde;}
-#tbCalendar td a{border-bottom:2px solid #39c;display:block;filter:url(fliter.svg#change);}
+#tbCalendar td a{border-bottom:2px solid #39c;display:block;filter:url(fliter.svg.php#change);}
 
 .onlym{display:none;}
 
@@ -239,7 +239,7 @@ form.cmt .revoke{background:#abc;margin-right:1em;}
 #base h5,
 #base h5 a{color:#789;margin:1em 0 0}
 #base h5 a:hover{color:#39c;}
-#base .zit{position:relative;border-radius:.3em;padding:.3em;}
+#base .zit{position:relative;border-radius:.3em;padding:.3em;filter:url(fliter.svg.php#change);}
 #base .zit:hover{color:#def;}
 
 #KandyGoTop{background:#18a}

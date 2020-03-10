@@ -104,6 +104,20 @@ echo <<<FORM
     <p><dfn>{$msg->hideintro}</dfn> <input type="text" class="checkbox" name="HideIntro" value="{$cfg->HideIntro}"> <small>{$msg->hideintro_tip}</small></p>
     <p><dfn>{$msg->mobileside}</dfn> <input type="text" class="checkbox" name="MobileSide" value="{$cfg->MobileSide}"> <small>{$msg->mobileside_tip}</small></p>
     <p><dfn>{$msg->sidemods}</dfn> <textarea name="SideMods" placeholder="{$msg->sidemods_place}">{$cfg->SideMods}</textarea> <small>{$msg->sidemods_tip}</small></p>
+    <p>
+  <script>
+  function refreshColor() {
+    var color = $( "#slider" ).slider( "value" );
+    $("input[name$='ColorChange']").val(color);
+    $("input[name$='ColorBanner']").css( "filter", "hue-rotate("+color+"deg)" );
+  }
+  $(function() {
+    $( "#slider" ).slider({max: 360,value: '{$cfg->ColorChange}',slide:refreshColor,change:refreshColor});
+  });
+  </script>
+    <dfn>{$msg->colorchange}</dfn> <input type="hidden" name="ColorChange" value="{$cfg->ColorChange}"><input type="text" name="ColorBanner" style="background-image:url($cfg->Cover);filter:hue-rotate({$cfg->ColorChange}deg)" disabled="disabled"> <small>{$msg->colorchange_tip}</small>
+     <div id="slider"></div>
+    </p>
   </div>
   <div class="pane">
     <h3 class="zit">{$msg->rand}</h3>

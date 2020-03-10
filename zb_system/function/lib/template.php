@@ -659,6 +659,7 @@ class Template
         $this->templateTags['user'] = &$zbp->user;
         $this->templateTags['option'] = &$option;
         $this->templateTags['lang'] = &$zbp->lang;
+        $this->templateTags['langs'] = &$zbp->langs;
         $this->templateTags['version'] = &$zbp->version;
         $this->templateTags['categorys'] = &$zbp->categories;
         $this->templateTags['categories'] = &$zbp->categories;

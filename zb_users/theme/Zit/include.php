@@ -60,6 +60,7 @@ function Zit_Defaults($init = false)
         $cfg->CommentTitle = '群贤毕至';
 
         $cfg->Custom = false;
+        $cfg->ColorChange = 0;
     }
 
     return (array) $cfg;
