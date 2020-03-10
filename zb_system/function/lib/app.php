@@ -150,6 +150,7 @@ class App
     public $ignore_files = array('.DS_Store', 'Thumbs.db', 'composer.lock', 'zbignore.txt');
 
     public static $check_error_count = 0;
+    public static $unpack_app = null;
 
     public function __get($key)
     {
@@ -296,17 +297,16 @@ class App
         $dir = $this->app_path . 'style/';
 
         $array = GetFilesInDir($dir, 'css');
-        if (isset($array['default'])) {
+        if(isset($array['default'])){
             $a = array('default'=>$array['default']);
             unset($array['default']);
-            $array = array_merge($a, $array);
+            $array = array_merge($a , $array);
         }
-        if (isset($array['style'])) {
+        if(isset($array['style'])){
             $a = array('style'=>$array['style']);
             unset($array['style']);
-            $array = array_merge($a, $array);
+            $array = array_merge($a , $array);
         }
-
         return $array;
     }
 
@@ -648,6 +648,8 @@ class App
 
         ZBlogException::SuspendErrorHook();
 
+        self::$unpack_app = null;
+
         if (!file_exists($dir . $id . '/')) {
             @mkdir($dir . $id . '/', 0755, true);
         }
@@ -672,6 +674,8 @@ class App
                 self::$check_error_count = self::$check_error_count + 1;
             }
         }
+
+        self::$unpack_app = $zbp->LoadApp($type, $id);
 
         ZBlogException::ResumeErrorHook();
 
