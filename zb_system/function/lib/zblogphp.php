@@ -288,7 +288,7 @@ class ZBlogPHP
      */
     public function __construct()
     {
-        global $option, $lang, $blogpath, $bloghost, $cookiespath, $usersdir, $table,
+        global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath, $usersdir, $table,
         $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname,
         $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype;
 
@@ -300,6 +300,7 @@ class ZBlogPHP
         $this->version = &$blogversion;
         $this->option = &$option;
         $this->lang = &$lang;
+        $this->langs = &$langs;
         $this->path = &$blogpath;
         $this->host = &$bloghost; //此值在后边初始化时可能会变化!
         $this->cookiespath = &$cookiespath;

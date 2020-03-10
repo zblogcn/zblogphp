@@ -422,6 +422,7 @@ $GLOBALS['currenturl'] = GetRequestUri();
  * 语言包
  */
 $GLOBALS['lang'] = array();
+$GLOBALS['langs'] = array();
 /*
  * 系统根路径
  */
