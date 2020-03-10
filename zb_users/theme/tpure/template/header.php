@@ -164,6 +164,12 @@ if(isset($SEOON) && $SEOON == '1'){
     <script src="{$host}zb_system/script/jquery-2.2.4.min.js" type="text/javascript"></script>
     <script src="{$host}zb_system/script/zblogphp.js" type="text/javascript"></script>
     <script src="{$host}zb_system/script/c_html_js_add.php" type="text/javascript"></script>
+{if $zbp->Config('tpure')->PostAJAXON == '1'}
+    <script type="text/javascript" src="{$host}zb_users/theme/{$theme}/script/ajaxscroll.js"></script>
+{/if}
+{if $zbp->Config('tpure')->PostLAZYLOADON == '1'}
+    <script type="text/javascript" src="{$host}zb_users/theme/{$theme}/script/lazyload.js"></script>
+{/if}
     <script type="text/javascript" src="{$host}zb_users/theme/{$theme}/script/common.js"></script>
     <script type="text/javascript">window.tpure={{if $zbp->Config('tpure')->PostBANNERDISPLAYON=='1'}bannerdisplay:'on',{/if}{if $zbp->Config('tpure')->PostVIEWALLON=='1'}viewall:'on',{/if}{if $zbp->Config('tpure')->PostVIEWALLSTYLE}viewallstyle:'1',{else}viewallstyle:'0',{/if}{if $zbp->Config('tpure')->PostVIEWALLHEIGHT}viewallheight:'{$zbp->Config('tpure')->PostVIEWALLHEIGHT}',{/if}{if $zbp->Config('tpure')->PostAJAXON=='1'}ajaxpager:'on',{/if}{if $zbp->Config('tpure')->PostLOADPAGENUM}loadpagenum:'{$zbp->Config('tpure')->PostLOADPAGENUM}',{/if}{if $zbp->Config('tpure')->PostLAZYLOADON=='1'}lazyload:'on',{/if}{if $zbp->Config('tpure')->PostSELECTON=='1'}selectstart:'on',{/if}{if $zbp->Config('tpure')->PostSINGLEKEY=='1'}singlekey:'on',{/if}{if $zbp->Config('tpure')->PostPAGEKEY=='1'}pagekey:'on',{/if}{if $zbp->Config('tpure')->PostREMOVEPON=='1'}removep:'on',{/if}{if $zbp->Config('tpure')->PostBACKTOTOPON=='1'}backtotop:'on'{/if}}</script>
 {if $zbp->Config('tpure')->PostBLANKON=='1'}

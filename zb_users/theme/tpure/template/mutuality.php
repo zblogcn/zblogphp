@@ -1,4 +1,4 @@
-<?php die(); ?>{* Template Name:相关文章模块 *}
+<?php die();?>{* Template Name:相关文章模块 *}
 {if $zbp->Config('tpure')->PostRELATEON=='1'}
 {$aid=$article.ID}
 {$tagid=$article.Tags}
