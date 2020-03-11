@@ -1744,7 +1744,7 @@ class ZBlogPHP
      */
     public function AddBuildModule($moduleFileName, $parameters = null)
     {
-        call_user_func_array('ModuleBuilder::Add',func_get_args());
+        call_user_func_array('ModuleBuilder::Add', func_get_args());
     }
 
     /**
@@ -3301,7 +3301,7 @@ class ZBlogPHP
     }
 
     /**
-     * 以下部分为已废弃，但考虑到兼容性保留的代码**************************************************************
+     * 以下部分为已废弃，但考虑到兼容性保留的代码**************************************************************.
      */
 
     /**

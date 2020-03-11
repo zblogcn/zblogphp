@@ -301,16 +301,17 @@ class App
         $dir = $this->app_path . 'style/';
 
         $array = GetFilesInDir($dir, 'css');
-        if(isset($array['default'])){
+        if (isset($array['default'])) {
             $a = array('default'=>$array['default']);
             unset($array['default']);
-            $array = array_merge($a , $array);
+            $array = array_merge($a, $array);
         }
-        if(isset($array['style'])){
+        if (isset($array['style'])) {
             $a = array('style'=>$array['style']);
             unset($array['style']);
-            $array = array_merge($a , $array);
+            $array = array_merge($a, $array);
         }
+
         return $array;
     }
 
@@ -397,6 +398,7 @@ class App
         }
 
         $this->isloaded = true;
+
         return true;
     }
 
@@ -760,45 +762,47 @@ class App
     }
 
     /**
-     * LoadSideBars 从xml和cache里
+     * LoadSideBars 从xml和cache里.
      */
     public function LoadSideBars()
     {
         global $zbp;
 
-        if(is_null($zbp->cache)){
+        if (is_null($zbp->cache)) {
             $zbp->cache = new Config('cache');
         }
         $s = $zbp->cache->{'sidebars_' . $this->id};
-        $a = json_decode($s,true);
-        if(is_array($a)){
+        $a = json_decode($s, true);
+        if (is_array($a)) {
             foreach ($a as $key => $value) {
-                $zbp->option['ZC_SIDEBAR' . (($key>1)?$key:'') . '_ORDER'] = $value;
-            } 
+                $zbp->option['ZC_SIDEBAR' . (($key > 1) ? $key : '') . '_ORDER'] = $value;
+            }
+
             return true;
         }
 
         $s = '';
-        for ($i = 1; $i < 10 ; $i++) { 
+        for ($i = 1; $i < 10; $i++) {
             $s .= $this->{'sidebars_sidebar' . $i};
         }
-        if(!empty($s)){
-            for ($i = 1; $i < 10; $i++) { 
-                $zbp->option['ZC_SIDEBAR' . (($i>1)?$i:'') . '_ORDER'] = $this->{'sidebars_sidebar' . $i};
+        if (!empty($s)) {
+            for ($i = 1; $i < 10; $i++) {
+                $zbp->option['ZC_SIDEBAR' . (($i > 1) ? $i : '') . '_ORDER'] = $this->{'sidebars_sidebar' . $i};
             }
         }
+
         return true;
     }
 
     /**
-     * SaveSideBars 保存到cache
+     * SaveSideBars 保存到cache.
      */
     public function SaveSideBars()
     {
         global $zbp;
 
-        for ($i = 1; $i < 10; $i++) { 
-            $a[$i] = $zbp->option['ZC_SIDEBAR' . (($i>1)?$i:'') . '_ORDER'];
+        for ($i = 1; $i < 10; $i++) {
+            $a[$i] = $zbp->option['ZC_SIDEBAR' . (($i > 1) ? $i : '') . '_ORDER'];
         }
         $zbp->cache->{'sidebars_' . $this->id} = json_encode($a);
         $zbp->SaveCache();

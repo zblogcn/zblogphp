@@ -131,8 +131,8 @@ class Module extends Base
         if (count($m) >= 1 && $this->ID == 0) {//如果已有同名，且新ID为0就不存
             return false;
         }
-        return parent::Save();
 
+        return parent::Save();
     }
 
     /**
@@ -191,6 +191,7 @@ class Module extends Base
                 $this->Content = call_user_func_array(ModuleBuilder::$List[$this->FileName]['function'], ModuleBuilder::$List[$this->FileName]['parameters']);
             }
         }
+
         return true;
     }
 }

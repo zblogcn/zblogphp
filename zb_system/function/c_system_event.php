@@ -2908,16 +2908,16 @@ function SetTheme($theme, $style)
     $app->CheckCompatibility();
 
     $oldTheme = $zbp->option['ZC_BLOG_THEME'];
-    $old = $zbp->LoadApp('theme',$oldTheme);
-    if($theme <> $oldTheme && $old->isloaded == true){
+    $old = $zbp->LoadApp('theme', $oldTheme);
+    if ($theme != $oldTheme && $old->isloaded == true) {
         $old->SaveSideBars();
     }
 
     $zbp->option['ZC_BLOG_THEME'] = $theme;
     $zbp->option['ZC_BLOG_CSS'] = $style;
-    if($theme <> $oldTheme){
+    if ($theme != $oldTheme) {
         $app->LoadSideBars();
-    }else{
+    } else {
         $app->SaveSideBars();
     }
 

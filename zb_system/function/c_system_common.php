@@ -1698,15 +1698,16 @@ function GetBackendCSPHeader()
     return implode('; ', $ret);
 }
 
-
 /**
- * 检查重复加载的
+ * 检查重复加载的.
  */
-function CheckIncludedFiles($file){
+function CheckIncludedFiles($file)
+{
     $a = get_included_files();
     $file = str_replace('\\', '/', $file);
     foreach ($a as $key => $value) {
         $a[$key] = trim(str_replace('\\', '/', $value));
     }
-    return in_array(trim($file),$a);
+
+    return in_array(trim($file), $a);
 }
