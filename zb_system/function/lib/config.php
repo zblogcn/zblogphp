@@ -234,12 +234,11 @@ class Config
         }
 
         $kv = array('conf_Name' => $name, 'conf_Value' => $value);
-        //$sql = $this->db->sql->Select($this->table, 'conf_Name', array(array('=', 'conf_Name', $name)), '', '', '');
-        //$array = $this->db->Query($sql);
+
+        reset($this->datainfo);
         $id_name = key($this->datainfo);
-        //var_dump($id_name,$this->data,$this->data[$id_name]);die;
+
         if ($this->data[$id_name] == 0) {
-            //if (count($array) == 0) {
             $sql = $this->db->sql->Insert($this->table, $kv);
             $this->db->Insert($sql);
         } else {

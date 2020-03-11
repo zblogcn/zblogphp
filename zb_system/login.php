@@ -16,7 +16,8 @@ if ($zbp->CheckRights('admin')) {
     <meta name="generator" content="<?php echo $option['ZC_BLOG_PRODUCT_FULL'] ?>" />
     <meta name="renderer" content="webkit" />
     <link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
-    <script src="script/common.js" type="text/javascript"></script>
+    <script src="script/jquery-2.2.4.min.js" type="text/javascript"></script>
+    <script src="script/zblogphp.js?v=<?php echo $blogversion; ?>" type="text/javascript"></script>
     <script src="script/md5.js" type="text/javascript"></script>
     <script src="script/c_admin_js_add.php" type="text/javascript"></script>
     <title><?php echo $blogname . '-' . $lang['msg']['login'] ?></title>
