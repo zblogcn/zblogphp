@@ -44,19 +44,21 @@ class ModuleBuilder
     }
 
     /**
-     * 添加模块.
+     * 添加进Ready List模块.
      *
      * @param string $modfilename 模块名
      * @param null   $parameters  模块参数
      */
     public static function Add($modfilename, $parameters = null)
     {
+        $p = func_get_args();
+        array_shift($p);
+        self::$List[$modfilename]['parameters'] = $p;
         self::$Ready[$modfilename] = $modfilename;
-        self::$List[$modfilename]['parameters'] = $parameters;
     }
 
     /**
-     * 删除模块.
+     * 删除进Ready List模块.
      *
      * @param string $modfilename 模块名
      */

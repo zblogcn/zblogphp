@@ -320,50 +320,63 @@ function Setup2()
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mbstring'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mbstring'][1]; ?></td>
         </tr>
-<?php if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+        <?php if($GLOBALS['CheckResult']['mysql'][0]){?>
         ?>
         <tr>
           <td scope="row">mysql</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][1]; ?></td>
         </tr>
-<?php
-    } ?>
+        <?php }?>
+        <?php if($GLOBALS['CheckResult']['mysqli'][0]){?>
         <tr>
           <td scope="row">mysqli</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysqli'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysqli'][1]; ?></td>
         </tr>
+        <?php }?>
+        <?php if($GLOBALS['CheckResult']['sqlite3'][0]){?>
         <tr>
           <td scope="row">sqlite3</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][1]; ?></td>
         </tr>
+        <?php }?>
+        <?php if($GLOBALS['CheckResult']['sqlite'][0]){?>
         <tr>
-          <td scope="row">sqlite</td>
+          <td scope="row">sqlite2</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1]; ?></td>
         </tr>
+        <?php }?>
+        <?php if($GLOBALS['CheckResult']['pgsql'][0]){?>
         <tr>
           <td scope="row">pgsql</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][1]; ?></td>
         </tr>
+        <?php }?>
+        <?php if($GLOBALS['CheckResult']['pdo_mysql'][0]){?>
         <tr>
           <td scope="row">pdo_mysql</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][1]; ?></td>
         </tr>
+        <?php }?>
+        <?php if($GLOBALS['CheckResult']['pdo_sqlite'][0]){?>
         <tr>
           <td scope="row">pdo_sqlite</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][1]; ?></td>
         </tr>
+        <?php }?>
+        <?php if($GLOBALS['CheckResult']['pdo_pgsql'][0]){?>
         <tr>
           <td scope="row">pdo_pgsql</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_pgsql'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_pgsql'][1]; ?></td>
         </tr>
+        <?php }?>
         <tr>
           <td scope="row">OpenSSL</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['openssl'][0]; ?></td>
@@ -995,6 +1008,7 @@ function InsertInfo()
     $t->HtmlID = "divCalendar";
     $t->Type = "div";
     $t->IsHideTitle = true;
+    $t->Build();
     $t->Save();
 
     $t = new Module();
@@ -1177,20 +1191,16 @@ function SaveConfig()
     $zbp->option['ZC_BLOG_VERSION'] = ZC_BLOG_VERSION;
     $zbp->option['ZC_BLOG_NAME'] = GetVars('blogtitle', 'POST');
     $zbp->option['ZC_USING_PLUGIN_LIST'] = 'AppCentre|UEditor|Totoro|LinksManage';
-    $zbp->option['ZC_SIDEBAR_ORDER'] = 'calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc';
-    $zbp->option['ZC_SIDEBAR2_ORDER'] = '';
-    $zbp->option['ZC_SIDEBAR3_ORDER'] = '';
-    $zbp->option['ZC_SIDEBAR4_ORDER'] = '';
-    $zbp->option['ZC_SIDEBAR5_ORDER'] = '';
-    $zbp->option['ZC_SIDEBAR6_ORDER'] = '';
-    $zbp->option['ZC_SIDEBAR7_ORDER'] = '';
-    $zbp->option['ZC_SIDEBAR8_ORDER'] = '';
-    $zbp->option['ZC_SIDEBAR9_ORDER'] = '';
+
     $zbp->option['ZC_BLOG_THEME'] = SplitAndGet(GetVars('blogtheme', 'POST'), '|', 0);
     $zbp->option['ZC_BLOG_CSS'] = SplitAndGet(GetVars('blogtheme', 'POST'), '|', 1);
     $zbp->option['ZC_DEBUG_MODE'] = false;
     $zbp->option['ZC_LAST_VERSION'] = $zbp->version;
     $zbp->option['ZC_NOW_VERSION'] = $zbp->version;
+
+    $app = $zbp->LoadApp('theme',$zbp->option['ZC_BLOG_THEME']);
+    $app->LoadSideBars();
+
     $zbp->SaveOption();
 
     if (file_exists($zbp->path . 'zb_users/c_option.php') == false) {
@@ -1230,8 +1240,6 @@ function SaveConfig()
         $s .= ";\r\n</pre>";
 
         echo $s;
-
-        return false;
     }
 
     $zbp->Config('cache')->templates_md5 = '';
@@ -1244,7 +1252,9 @@ function SaveConfig()
     $zbp->SaveConfig('AppCentre');
 
     if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $zbp->option['ZC_BLOG_THEME'] . '/include.php')) {
-        require $file_base;
+        if(CheckIncludedFiles($file_base) == false ){
+            require $file_base;
+        }
     }
     if (function_exists($fn = 'InstallPlugin_' . $zbp->option['ZC_BLOG_THEME'])) {
         $fn();
@@ -1256,6 +1266,14 @@ function SaveConfig()
     if (file_exists($zbp->path . 'zb_users/cache/compiled/' . $zbp->option['ZC_BLOG_THEME'] . '/index.php') == false) {
         echo $zbp->lang['zb_install']['not_create_template_file'] . "<br/>";
     }
+
+    $zbp->LoadCategories();
+    $zbp->LoadModules();
+    $zbp->RegBuildModules();
+    $zbp->modulesbyfilename['calendar']->Build();
+    $zbp->modulesbyfilename['calendar']->Save();
+    $zbp->modulesbyfilename['catalog']->Build();
+    $zbp->modulesbyfilename['catalog']->Save();
 
     echo $zbp->lang['zb_install']['save_option'] . "<br/>";
 

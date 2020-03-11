@@ -128,15 +128,11 @@ class Module extends Base
                     ->where(array('=', $zbp->datainfo['Module']['FileName'][0], $this->FileName))
                     ->sql
         );
-        if (count($m) < 1) {
-            return parent::Save();
-        } else {
-            if ($this->ID == 0) {
-                return false;
-            }
-
-            return parent::Save();
+        if (count($m) >= 1 && $this->ID == 0) {//如果已有同名，且新ID为0就不存
+            return false;
         }
+        return parent::Save();
+
     }
 
     /**
@@ -192,12 +188,9 @@ class Module extends Base
 
         if (isset(ModuleBuilder::$List[$this->FileName])) {
             if (isset(ModuleBuilder::$List[$this->FileName]['function'])) {
-                if (isset(ModuleBuilder::$List[$this->FileName]['parameters'])) {
-                    $this->Content = call_user_func(ModuleBuilder::$List[$this->FileName]['function'], ModuleBuilder::$List[$this->FileName]['parameters']);
-                } else {
-                    $this->Content = call_user_func(ModuleBuilder::$List[$this->FileName]['function']);
-                }
+                $this->Content = call_user_func_array(ModuleBuilder::$List[$this->FileName]['function'], ModuleBuilder::$List[$this->FileName]['parameters']);
             }
         }
+        return true;
     }
 }

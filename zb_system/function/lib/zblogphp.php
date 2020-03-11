@@ -247,6 +247,11 @@ class ZBlogPHP
     public $csrfExpiration = 1;
 
     /**
+     * @var App 当前主题类
+     */
+    public $themeapp = null;
+
+    /**
      * 获取唯一实例.
      *
      * @return null|ZBlogPHP
@@ -557,29 +562,17 @@ class ZBlogPHP
         $this->LoadCategories();
         //$this->LoadTags();
         $this->LoadModules();
+        $this->RegBuildModules();
 
         if (!(get_class($this->user) === 'Member' && $this->user->Level > 0 && !empty($this->user->ID))) {
             $this->Verify();
         }
 
-        $this->RegBuildModule('catalog', 'ModuleBuilder::Catalog');
-        $this->RegBuildModule('calendar', 'ModuleBuilder::Calendar');
-        $this->RegBuildModule('comments', 'ModuleBuilder::Comments');
-        $this->RegBuildModule('previous', 'ModuleBuilder::LatestArticles');
-        $this->RegBuildModule('archives', 'ModuleBuilder::Archives');
-        $this->RegBuildModule('navbar', 'ModuleBuilder::Navbar');
-        $this->RegBuildModule('tags', 'ModuleBuilder::TagList');
-        $this->RegBuildModule('statistics', 'ModuleBuilder::Statistics');
-        $this->RegBuildModule('authors', 'ModuleBuilder::Authors');
-
         //创建模板类
         $this->template = $this->PrepareTemplate();
 
         // 读主题版本信息
-        $app = $this->LoadApp('theme', $this->theme);
-        if ($app->type !== '') {
-            $this->themeinfo = $app->GetInfoArray();
-        }
+        $this->themeapp = $this->LoadApp('theme', $this->theme);
 
         if ($this->ismanage) {
             $this->LoadManage();
@@ -1496,7 +1489,7 @@ class ZBlogPHP
     {
         $app = new App();
         if ($app->LoadInfoByXml($type, $id) != true) {
-            $app->id = '';
+            $app->isloaded = true;
         }
 
         return $app;
@@ -1706,7 +1699,7 @@ class ZBlogPHP
     }
 
     /**
-     * 生成模块.
+     * 生成所有进Ready List的模块的Content内容并保存.
      */
     public function BuildModule()
     {
@@ -1728,18 +1721,34 @@ class ZBlogPHP
     }
 
     /**
-     * 添加模块.
+     * 系统默认注册模块.
+     */
+    public function RegBuildModules()
+    {
+        $this->RegBuildModule('catalog', 'ModuleBuilder::Catalog');
+        $this->RegBuildModule('calendar', 'ModuleBuilder::Calendar');
+        $this->RegBuildModule('comments', 'ModuleBuilder::Comments');
+        $this->RegBuildModule('previous', 'ModuleBuilder::LatestArticles');
+        $this->RegBuildModule('archives', 'ModuleBuilder::Archives');
+        $this->RegBuildModule('navbar', 'ModuleBuilder::Navbar');
+        $this->RegBuildModule('tags', 'ModuleBuilder::TagList');
+        $this->RegBuildModule('statistics', 'ModuleBuilder::Statistics');
+        $this->RegBuildModule('authors', 'ModuleBuilder::Authors');
+    }
+
+    /**
+     * 添加进入Build Ready列表的模块.
      *
      * @param string $moduleFileName 模块名
      * @param null   $parameters     模块参数
      */
     public function AddBuildModule($moduleFileName, $parameters = null)
     {
-        ModuleBuilder::Add($moduleFileName, $parameters);
+        call_user_func_array('ModuleBuilder::Add',func_get_args());
     }
 
     /**
-     * 删除模块.
+     * 删除进入Build Ready列表模块.
      *
      * @param string $moduleFileName 模块名
      */
@@ -3292,7 +3301,7 @@ class ZBlogPHP
     }
 
     /**
-     * 以下部分为已废弃，但考虑到兼容性保留的代码
+     * 以下部分为已废弃，但考虑到兼容性保留的代码**************************************************************
      */
 
     /**
@@ -3360,15 +3369,6 @@ class ZBlogPHP
     public function LoadCategorys()
     {
         return $this->LoadCategories();
-    }
-
-    /**
-     * 所有模块重置.
-     *
-     * @deprecated
-     */
-    public function AddBuildModuleAll()
-    {
     }
 
     /**

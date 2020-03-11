@@ -2908,28 +2908,18 @@ function SetTheme($theme, $style)
     $app->CheckCompatibility();
 
     $oldTheme = $zbp->option['ZC_BLOG_THEME'];
-
-    // @TODO: 将此处的9常量化
-    for ($i = 1; $i <= 9; $i++) {
-        $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : "ZC_SIDEBAR${i}_ORDER";
-        $appSideBarName = "sidebars_sidebar${i}";
-        $cacheName = "zc_sidebar_order${i}";
-        if ($oldTheme !== $theme) {
-            if (isset($app->$appSideBarName) && $app->$appSideBarName) {
-                $temp = $zbp->option[$optionName];
-                $zbp->option[$optionName] = $app->$appSideBarName;
-                $zbp->cache->$cacheName = $temp;
-            }
-        } else {
-            if (isset($zbp->cache->$cacheName) && $zbp->cache->$cacheName) {
-                $zbp->option[$optionName] = $zbp->cache->$cacheName;
-                $zbp->cache->$cacheName = '';
-            }
-        }
+    $old = $zbp->LoadApp('theme',$oldTheme);
+    if($theme <> $oldTheme && $old->isloaded == true){
+        $old->SaveSideBars();
     }
 
     $zbp->option['ZC_BLOG_THEME'] = $theme;
     $zbp->option['ZC_BLOG_CSS'] = $style;
+    if($theme <> $oldTheme){
+        $app->LoadSideBars();
+    }else{
+        $app->SaveSideBars();
+    }
 
     $zbp->SaveOption();
 
