@@ -1197,6 +1197,17 @@ function SaveConfig()
     $zbp->option['ZC_LAST_VERSION'] = $zbp->version;
     $zbp->option['ZC_NOW_VERSION'] = $zbp->version;
 
+    $zbp->LoadCache();
+    $app = $zbp->LoadApp('theme','default');
+    $app->SaveSideBars();
+
+    $app = $zbp->LoadApp('theme','Zit');
+    $app->SaveSideBars();
+
+    $app = $zbp->LoadApp('theme','tpure');
+    $app->LoadSideBars();
+    $app->SaveSideBars();
+
     $app = $zbp->LoadApp('theme',$zbp->option['ZC_BLOG_THEME']);
     $app->LoadSideBars();
 

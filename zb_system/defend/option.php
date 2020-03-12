@@ -186,6 +186,7 @@ return array(
     'ZC_SIDEBAR7_ORDER' => '',
     'ZC_SIDEBAR8_ORDER' => '',
     'ZC_SIDEBAR9_ORDER' => '',
+    //'ZC_SIDEBARS_DEFAULT'  => '{"1":"calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc","2":"","3":"","4":"","5":"","6":"","7":"","8":"","9":""}';
 
     // '--------------------------其它----------------------------------------
     // '代码高亮
