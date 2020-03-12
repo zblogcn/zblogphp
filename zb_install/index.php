@@ -320,62 +320,62 @@ function Setup2()
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mbstring'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mbstring'][1]; ?></td>
         </tr>
-        <?php if($GLOBALS['CheckResult']['mysql'][0]){?>
+        <?php if ($GLOBALS['CheckResult']['mysql'][0]) {?>
         <tr>
           <td scope="row">mysql</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysql'][1]; ?></td>
         </tr>
-        <?php }?>
-        <?php if($GLOBALS['CheckResult']['mysqli'][0]){?>
+        <?php } ?>
+        <?php if ($GLOBALS['CheckResult']['mysqli'][0]) {?>
         <tr>
           <td scope="row">mysqli</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysqli'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['mysqli'][1]; ?></td>
         </tr>
-        <?php }?>
-        <?php if($GLOBALS['CheckResult']['sqlite3'][0]){?>
+        <?php } ?>
+        <?php if ($GLOBALS['CheckResult']['sqlite3'][0]) {?>
         <tr>
           <td scope="row">sqlite3</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite3'][1]; ?></td>
         </tr>
-        <?php }?>
-        <?php if($GLOBALS['CheckResult']['sqlite'][0]){?>
+        <?php } ?>
+        <?php if ($GLOBALS['CheckResult']['sqlite'][0]) {?>
         <tr>
           <td scope="row">sqlite2</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['sqlite'][1]; ?></td>
         </tr>
-        <?php }?>
-        <?php if($GLOBALS['CheckResult']['pgsql'][0]){?>
+        <?php } ?>
+        <?php if ($GLOBALS['CheckResult']['pgsql'][0]) {?>
         <tr>
           <td scope="row">pgsql</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pgsql'][1]; ?></td>
         </tr>
-        <?php }?>
-        <?php if($GLOBALS['CheckResult']['pdo_mysql'][0]){?>
+        <?php } ?>
+        <?php if ($GLOBALS['CheckResult']['pdo_mysql'][0]) {?>
         <tr>
           <td scope="row">pdo_mysql</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_mysql'][1]; ?></td>
         </tr>
-        <?php }?>
-        <?php if($GLOBALS['CheckResult']['pdo_sqlite'][0]){?>
+        <?php } ?>
+        <?php if ($GLOBALS['CheckResult']['pdo_sqlite'][0]) {?>
         <tr>
           <td scope="row">pdo_sqlite</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_sqlite'][1]; ?></td>
         </tr>
-        <?php }?>
-        <?php if($GLOBALS['CheckResult']['pdo_pgsql'][0]){?>
+        <?php } ?>
+        <?php if ($GLOBALS['CheckResult']['pdo_pgsql'][0]) {?>
         <tr>
           <td scope="row">pdo_pgsql</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_pgsql'][0]; ?></td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['pdo_pgsql'][1]; ?></td>
         </tr>
-        <?php }?>
+        <?php } ?>
         <tr>
           <td scope="row">OpenSSL</td>
           <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['openssl'][0]; ?></td>
@@ -1198,17 +1198,17 @@ function SaveConfig()
     $zbp->option['ZC_NOW_VERSION'] = $zbp->version;
 
     $zbp->LoadCache();
-    $app = $zbp->LoadApp('theme','default');
+    $app = $zbp->LoadApp('theme', 'default');
     $app->SaveSideBars();
 
-    $app = $zbp->LoadApp('theme','Zit');
+    $app = $zbp->LoadApp('theme', 'Zit');
     $app->SaveSideBars();
 
-    $app = $zbp->LoadApp('theme','tpure');
+    $app = $zbp->LoadApp('theme', 'tpure');
     $app->LoadSideBars();
     $app->SaveSideBars();
 
-    $app = $zbp->LoadApp('theme',$zbp->option['ZC_BLOG_THEME']);
+    $app = $zbp->LoadApp('theme', $zbp->option['ZC_BLOG_THEME']);
     $app->LoadSideBars();
 
     $zbp->SaveOption();
@@ -1262,7 +1262,7 @@ function SaveConfig()
     $zbp->SaveConfig('AppCentre');
 
     if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $zbp->option['ZC_BLOG_THEME'] . '/include.php')) {
-        if(CheckIncludedFiles($file_base) == false ){
+        if (CheckIncludedFiles($file_base) == false) {
             require $file_base;
         }
     }
