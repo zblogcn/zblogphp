@@ -48,7 +48,7 @@ class ModuleBuilder
         self::$Ready[$modfilename] = $modfilename;
         $p = func_get_args();
         array_shift($p);
-        $p = is_array($p)?$p:array();
+        $p = is_array($p) ? $p : array();
         self::$List[$modfilename]['parameters'] = $p;
     }
 

@@ -131,8 +131,8 @@ class Module extends Base
         if (count($m) >= 1 && $this->ID == 0) {//如果已有同名，且新ID为0就不存
             return false;
         }
-        return parent::Save();
 
+        return parent::Save();
     }
 
     /**
@@ -190,7 +190,7 @@ class Module extends Base
             if (isset(ModuleBuilder::$List[$this->FileName]['function'])) {
                 $f = str_replace(' ', '', ModuleBuilder::$List[$this->FileName]['function']);
                 $p = ModuleBuilder::$List[$this->FileName]['parameters'];
-                $p = is_array($p)?$p:array();
+                $p = is_array($p) ? $p : array();
 
                 if (function_exists($f)) {
                     $this->Content = call_user_func_array($f, $p);
@@ -199,15 +199,16 @@ class Module extends Base
                     if (method_exists($a[0], $a[1])) {
                         $this->Content = call_user_func_array($f, $p);
                     }
-                }  elseif (strpos($f, '->') !== false){
+                } elseif (strpos($f, '->') !== false) {
                     $f = str_replace(array('$', '{', '}'), '', $f);
                     $a = explode('->', $f);
-                    if (is_callable( array($GLOBALS[$a[0]] ,$a[1]))) {
+                    if (is_callable(array($GLOBALS[$a[0]], $a[1]))) {
                         $this->Content = call_user_func_array(array($GLOBALS[$a[0]], $a[1]), $p);
                     }
-                }               
+                }
             }
         }
+
         return true;
     }
 }
