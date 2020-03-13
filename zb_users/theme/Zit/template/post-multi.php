@@ -6,7 +6,7 @@
 {/if}
 <article class="log{if $article.IsTop} pin{/if}{if $article.Cover} poster{/if}">
   {if $article.Cover}
-  <figure><a href="{$article.Url}"><img src="{$article.Cover}" alt="{$article.Title}" class="cover"></a></figure>
+  <figure><a href="{$article.Url}"><img src="{$article.Cover}" alt="{$article.Title}" class="cover{if $article.Cover===$host . 'zb_users/theme/Zit/style/bg.jpg'} hue{/if}"></a></figure>
   {/if}
   <section class="pane">
     <h4 class="zit">{if $article.IsTop}<b>{$msg.sticky}</b> {/if}<a href="{$article.Category.Url}" title="{$article.Category.Name}">{$article.Category.Name}</a></h4>

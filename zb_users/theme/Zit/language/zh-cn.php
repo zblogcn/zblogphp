@@ -48,8 +48,12 @@ return array(
     'motto'          => '页眉标语',
     'motto_tip'      => '留空将显示网站副标题',
     'cover'          => '默认封面图',
-    'cover_place'    => '建议宽度：800px',
+    'cover_place'    => '填写图片地址，建议宽度：800px',
     'cover_tip'      => '留空则无图文章将不显示封面图',
+    'backdrop'       => '页眉背景图',
+    'backdrop_place' => '填写图片地址，建议宽度：1200px',
+    'backdrop_tip'   => '留空则显示默认背景图，自定义背景图不支持调色',
+    'defaultadmin'   => '恢复默认后台外观',
     'profile'        => '文章侧栏作者简介',
     'profile_tip'    => '填写用户摘要后效果更佳',
     'listtags'       => '列表文章显示标签',
@@ -61,6 +65,8 @@ return array(
     'sidemods'       => '移动设备侧栏模块',
     'sidemods_place' => '留空将隐藏所有模块',
     'sidemods_tip'   => '填写指定模块文件名，空格分隔',
+    'hue'            => '调整配色',
+    'hue_tip'        => '保存后请用Ctrl+F5刷新',
 
     'rand'           => '随机评论设置',
     'during'         => '指定天数以内',
@@ -72,7 +78,7 @@ return array(
     'cmtids_tip'     => '填写指定评论ID，上方设置失效，英文逗号分隔',
     'gbook'          => '留言本页面ID',
     'gbook_tip'      => '无评论时显示，请在 <a href="../../../zb_system/cmd.php?act=PageMng" target="_blank"><b>页面管理</b></a> 中确认</small>',
-
+    
     'seo'            => 'SEO设置',
     'description'    => '网站描述',
     'description_tip'=> '留空将不输出内容',
@@ -81,6 +87,4 @@ return array(
     'relatedtitle'   => '相关文章标题',
     'commenttitle'   => '评论列表标题',
 
-    'colorchange'    => '改变整体配色',
-    'colorchange_tip'=> '保存后请Ctrl+F5刷新',
 );

@@ -68,13 +68,14 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
-<style>
+<style type="text/css">
 .pane{margin-top:3em;}
 .pane .zit{top:-1em;left:1em;}
 .pane p{padding:.5em;transition:all 1s;}
 .pane p:hover{background:#f7f8f9;margin:0 -1em;padding:.5em 1.5em;}
 .pane dfn{font:bold 1em arial;display:inline-block;width:9em;}
 .pane small{color:#789;margin-left:.5em}
+.pane samp{position:relative;}
 .pane input,
 .pane textarea{border:1px solid #cde;line-height:2;border-radius:.2em;padding:.3em;width:26em;vertical-align:middle;}
 .pane textarea{height:4em;overflow:auto;font:1em/1.5 arial;}
@@ -85,6 +86,22 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 textarea.disabled,
 select.disabled{background:#eee;}
 .required{border-color:#f36!important;}
+#hue{color:rgba(255,255,255,.5);text-align:center;background:#39c;filter:hue-rotate(<?php echo $cfg->Hue;?>deg)}
+#slider{position:absolute;top:.3em;left:.7em;width:24.6em;background:none;border-style:dotted;}
+#slider span{cursor:grab;border-radius:100%}
+.btn.update{filter:none;}
+.pic{transition:text-indent .2s;}
+.picable{background-size:3em 100%;background-repeat:no-repeat;text-indent:3em;}
+<?php
+  if ($cfg->DefaultAdmin) {
+    echo <<<CSS
+    .zit{color:#fff;background:#39c;padding:0.5em;line-height:1;position:absolute;z-index:2;min-width:2em;display:inline-block;min-height:1em;font-family:verdana;margin:0;}
+    .zit::after{content:"Z";position:absolute;left:0.5em;bottom:-0.5em;transform:rotate(30deg);display:inline-block;margin:0 0.2em 0 0;z-index:-1;color:#39c;font-weight:bold;transition:all 0.5s;}
+    .pane{box-shadow:0 0 2em rgba(0,0,0,0.05);padding:2em;position:relative;background:#fff;margin:2em 0;border-radius:0.1em;margin:2em;}
+    .zit,.btn{filter:hue-rotate({$cfg->Hue}deg);}
+CSS;
+  }
+?>
 </style>
 <div id="divMain">
   <div class="divHeader"><?php echo $blogtitle; ?></div>
@@ -98,26 +115,17 @@ echo <<<FORM
     <h3 class="zit">{$msg->appearance}</h3>
     <p><dfn>{$msg->logo}</dfn> <input type="text" name="Logo" value="{$cfg->Logo}"> <small>{$msg->logo_tip}</small></p>
     <p><dfn>{$msg->motto}</dfn> <input type="text" name="Motto" value="{$cfg->Motto}"> <small>{$msg->motto_tip}</small></p>
-    <p><dfn>{$msg->cover}</dfn> <input type="text" name="Cover" placeholder="{$msg->cover_place}" value="{$cfg->Cover}"> <small>{$msg->cover_tip}</small></p>
+    <p><dfn>{$msg->backdrop}</dfn> <input type="text" name="Backdrop" placeholder="{$msg->backdrop_place}" value="{$cfg->Backdrop}" class="pic"> <small>{$msg->backdrop_tip}</small></p>
+    <p><dfn>{$msg->cover}</dfn> <input type="text" name="Cover" placeholder="{$msg->cover_place}" value="{$cfg->Cover}" class="pic"> <small>{$msg->cover_tip}</small></p>
+    <p>
+    <dfn>{$msg->hue}</dfn> <samp><input type="text" id="hue" name="Hue" value="{$cfg->Hue}" readonly><span id="slider"></span></samp> <small>{$msg->hue_tip}</small>
+    </p>
+    <p><dfn>{$msg->defaultadmin}</dfn> <input type="text" class="checkbox" name="DefaultAdmin" value="{$cfg->DefaultAdmin}"></p>
     <p><dfn>{$msg->profile}</dfn> <input type="text" class="checkbox" name="Profile" value="{$cfg->Profile}"> <small>{$msg->profile_tip}</small></p>
     <p><dfn>{$msg->listtags}</dfn> <input type="text" class="checkbox" name="ListTags" value="{$cfg->ListTags}"> <small>{$msg->listtags_tip}</small></p>
     <p><dfn>{$msg->hideintro}</dfn> <input type="text" class="checkbox" name="HideIntro" value="{$cfg->HideIntro}"> <small>{$msg->hideintro_tip}</small></p>
     <p><dfn>{$msg->mobileside}</dfn> <input type="text" class="checkbox" name="MobileSide" value="{$cfg->MobileSide}"> <small>{$msg->mobileside_tip}</small></p>
     <p><dfn>{$msg->sidemods}</dfn> <textarea name="SideMods" placeholder="{$msg->sidemods_place}">{$cfg->SideMods}</textarea> <small>{$msg->sidemods_tip}</small></p>
-    <p>
-  <script>
-  function refreshColor() {
-    var color = $( "#slider" ).slider( "value" );
-    $("input[name$='ColorChange']").val(color);
-    $("input[name$='ColorBanner']").css( "filter", "hue-rotate("+color+"deg)" );
-  }
-  $(function() {
-    $( "#slider" ).slider({max: 360,value: '{$cfg->ColorChange}',slide:refreshColor,change:refreshColor});
-  });
-  </script>
-    <dfn>{$msg->colorchange}</dfn> <input type="hidden" name="ColorChange" value="{$cfg->ColorChange}"><input type="text" name="ColorBanner" style="background-image:url($cfg->Cover);filter:hue-rotate({$cfg->ColorChange}deg)" disabled="disabled"> <small>{$msg->colorchange_tip}</small>
-     <div id="slider"></div>
-    </p>
   </div>
   <div class="pane">
     <h3 class="zit">{$msg->rand}</h3>
@@ -140,36 +148,49 @@ FORM;
 <script type="text/javascript">
 ActiveTopMenu("topmenu_Zit");
 ActiveLeftMenu("aThemeMng");
-$(function(){
-  if($("button.update")[0]){
-    $(":text,textarea,select").addClass("disabled").prop("disabled",true);
-    $(".imgcheck").addClass("disabled").click(function(){
-      return false;
-    });
-    $(".main").prepend('<div class="hint"><p class="hint_bad"><?php echo $msg->update_tip; ?></p></div>');
-  }
-  $("#calc").blur(function(){
-    var nums=this.value.split("*"),num=parseFloat(nums[0])||1;
-    if(!this.value||this.value==0) num=0;
-    if(nums[1]) num=num*(parseFloat(nums[1])||1);
-    this.value=Math.abs(num);
+if($("button.update")[0]){
+  $(":text,textarea,select").addClass("disabled").prop("disabled",true);
+  $(".imgcheck").addClass("disabled").click(function(){
+    return false;
   });
-  $("#edit").submit(function(){
-    var pass=true;
-    $(this).find("[required]").each(function(){
-      if(!this.value){
-        $(this).addClass("required");
-        pass=false;
-      }
-    });
-    if($(this).find("button.update")[0]) pass=true;
-    if(!pass) alert("<?php echo $msg->required; ?>");
-    return pass;
-  });
-  $(".required").on("keyup blur",function(){
-    $(this)[this.value?"removeClass":"addClass"]("required");
-  });
+  $(".main").prepend('<div class="hint"><p class="hint_bad"><?php echo $msg->update_tip; ?></p></div>');
+}
+$("#calc").blur(function(){
+  var nums=this.value.split("*"),num=parseFloat(nums[0])||1;
+  if(!this.value||this.value==0) num=0;
+  if(nums[1]) num=num*(parseFloat(nums[1])||1);
+  this.value=Math.abs(num);
 });
+$("#edit").submit(function(){
+  var pass=true;
+  $(this).find("[required]").each(function(){
+    if(!this.value){
+      $(this).addClass("required");
+      pass=false;
+    }
+  });
+  if($(this).find("button.update")[0]) pass=true;
+  if(!pass) alert("<?php echo $msg->required; ?>");
+  return pass;
+});
+$(".required").on("keyup blur",function(){
+  $(this)[this.value?"removeClass":"addClass"]("required");
+});
+$("#hue").focus(function(){
+  $(this).blur();
+}).val(<?php echo $cfg->Hue; ?>);
+$("#slider").slider({
+  max: 360,
+  value: "<?php echo $cfg->Hue; ?>",
+  slide:function(item,ui){
+    $("#hue").css("filter","hue-rotate("+ui.value+"deg)").val(ui.value);
+  },
+});
+$("input.pic").focus(function(){
+  $(this).removeClass("picable").css("background-image","none");
+}).blur(function(){
+  if(this.value) $(this).addClass("picable").css("background-image","url("+this.value+")");
+}).blur();
 </script>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';

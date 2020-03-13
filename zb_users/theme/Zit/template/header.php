@@ -42,6 +42,7 @@
   </div>
 </header>
 <section id="banner">
+  <b id="backdrop"></b>
   <div class="inner">
     <h3 id="motto" class="zit">{$cfg.Motto?$cfg.Motto:$subname}</h3>
   </div>

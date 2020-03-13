@@ -23,7 +23,7 @@
 {else}
   <h2>{$msg.welcome}</h2>
   <small>{$msg.advice}</small>
-  {$gbook=$zbp.GetPostByID(trim($cfg.BbookID))}
+  {$gbook=$zbp.GetPostByID(trim($cfg.GbookID))}
   <a href="{$gbook.Url}" rel="nofollow" class="more">{$msg.message}<span class="zit">{$msg.sofa}</span></a>
 {/if}
 </article>

@@ -4,7 +4,7 @@
  * @Author   : 吉光片羽
  * @Support  : jgpy.cn
  * @Create   : 2019-12-25 20:10:23
- * @Update   : 2020-02-19 13:57:48
+ * @Update   : 2020-03-12 23:19:28
  */
 
 RegisterPlugin('Zit', 'ActivePlugin_Zit');
@@ -21,6 +21,21 @@ function ActivePlugin_Zit()
     Add_Filter_Plugin('Filter_Plugin_Login_Header', $name . '_LoginHeader');
     Add_Filter_Plugin('Filter_Plugin_Zbp_BuildModule', $name . '_BuildModule');
     Add_Filter_Plugin('Filter_Plugin_Zbp_MakeTemplatetags', $name . '_MakeTemplatetags');
+
+    $cfg = $zbp->Config($name);
+    $css = '';
+    if ((int)$cfg->Hue) {
+      $css .= 'input,button,a,.zit,.hue,#navim,#backdrop{filter:hue-rotate(' . $cfg->Hue . 'deg)}';
+      $css .= '.more span{filter:none}';
+      $css .= '#backdrop{animation:none;}';
+      $css .= 'a img{filter:hue-rotate(-' . $cfg->Hue . 'deg)}';
+      $css .= 'figure>a>img{filter:hue-rotate(0deg)!important}';
+    }
+    if ($cfg->Backdrop) {
+      $css .= '#backdrop{background-image:url(' . $cfg->Backdrop . ');filter:none;}';
+    }
+
+    if ($css) $zbp->header .= '  <style type="text/css">' . $css . '</style>'.PHP_EOL;
 }
 
 function InstallPlugin_Zit()
@@ -45,11 +60,14 @@ function Zit_Defaults($init = false)
         $cfg->Logo = 'ZBlogIt';
         $cfg->Motto = 'Nice to meet you, too!';
         $cfg->Cover = $bloghost . 'zb_users/theme/Zit/style/bg.jpg';
+        $cfg->Backdrop = '';
+        $cfg->DefaultAdmin = 0;
         $cfg->Profile = 1;
         $cfg->ListTags = 0;
         $cfg->MobileSide = 0;
         $cfg->HideIntro = 0;
         $cfg->SideMods = '';
+        $cfg->Hue = 0;
 
         $cfg->CmtIds = '';
         $cfg->GbookID = 2;
@@ -60,7 +78,6 @@ function Zit_Defaults($init = false)
         $cfg->CommentTitle = '群贤毕至';
 
         $cfg->Custom = false;
-        $cfg->ColorChange = 0;
     }
 
     return (array) $cfg;
@@ -101,35 +118,59 @@ function Zit_LoginHeader()
 {
     global $zbp;
 
-    $logo = $zbp->Config('Zit')->Logo ? $zbp->Config('Zit')->Logo : $zbp->name;
+    $cfg = $zbp->Config('Zit');
+    if ($cfg->DefaultAdmin) return;
+    $logo = $cfg->Logo ? $cfg->Logo : $zbp->name;
+    $bg = $cfg->Backdrop ? $cfg->Backdrop : $zbp->host . 'zb_users/theme/Zit/style/bg.jpg';
+    $bghue = $cfg->Backdrop ? 'none' : $cfg->Hue;
+    $hue = $cfg->Backdrop ? $cfg->Hue : 'none';
 
     echo <<<CSSJS
   <style>
-    .bg{background-image:url({$zbp->host}zb_users/theme/Zit/style/bg.jpg);background-size:cover;animation:slide 600s infinite linear;}
-    .zit{color:#18a;background:#fff;padding:.3em;line-height:1;position:absolute;z-index:2;min-width:2em;display:inline-block;min-height:1em;font-size:2em;border-radius:.2em;margin:0 auto;box-shadow:.5em .5em .5em -.3em rgba(0,0,0,.3);font-family:verdana}
-    .zit::after{content:"Z";position:absolute;left:.5em;bottom:-.5em;transform:rotate(30deg);display:inline-block;margin:0 .2em 0 0;z-index:-1;color:#fff;font-weight:bold;}
-    @keyframes slide{
-      0% {background-position:center;}
-      25% {background-position:0 0;}
-      75% {background-position:100% 100%;}
-      100% {background-position:center;}
+    .bg{background:url({$bg}) center;background-size:cover;filter:hue-rotate({$bghue}deg);}
+    .zit{color:#fff;background:#18a;padding:.5em;line-height:1;position:relative;min-width:2em;display:inline-block;min-height:1em;font-size:2em;margin:0 1em 0 0;box-shadow:.5em .5em .5em -.3em rgba(0,0,0,.3);}
+    .zit::after{content:"Z";position:absolute;left:.5em;bottom:-.5em;transform:rotate(30deg);display:inline-block;margin:0 .2em 0 0;z-index:-1;color:#18a;font-weight:bold;}
+    #wrapper{filter:hue-rotate({$hue}deg);position:relative;max-width:600px;padding-top:300px;}
+    .logo{position:absolute;bottom:125px;left:0;height:auto;width:auto;margin:0;word-break:break-all;}
+    @media only screen and (max-width:768px) {
+      #wrapper{padding-top:200px;}
+      .logo{left:2em}
     }
   </style>
-  <script>$(function(){
-    $(".logo").find("img").replaceWith('<b class="zit">{$logo}</b>').end().wrapInner("<a href='"+bloghost+"'/>");
-  })</script>
+  <script>
+    $(function(){
+      $(".logo").find("img").replaceWith('<b class="zit">{$logo}</b>').end().wrapInner("<a href='"+bloghost+"'/>");
+    })
+  </script>
 CSSJS;
 }
 
 function Zit_AdminHeader()
 {
-    global $zbp;
+  global $zbp;
 
-    echo '<link href="' . $zbp->host . 'zb_users/theme/Zit/admin.css" rel="stylesheet">';
-    $logo = $zbp->Config('Zit')->Logo ? $zbp->Config('Zit')->Logo : $zbp->name;
-    $username = $zbp->user->Name;
+  $cfg = $zbp->Config('Zit');
+  if ($cfg->DefaultAdmin) return;
+  
+  echo '<link href="' . $zbp->host . 'zb_users/theme/Zit/admin.css" rel="stylesheet">';
+  $logo = $cfg->Logo ? $cfg->Logo : $zbp->name;
+  $username = $zbp->user->Name;
 
-    echo <<<JS
+  echo <<<CSS
+  <style>
+    input.button,
+    input[type="submit"],
+    input[type="button"],
+    .btn,
+    .zit,
+    .left,
+    .pagebar span,
+    .theme-now,
+    .SubMenu{filter:hue-rotate({$cfg->Hue}deg);}
+  </style>
+CSS;
+
+  echo <<<JS
   <script>$(function(){
     //logo
     $(".logo").find("img").replaceWith('<b class="zit">{$logo}</b>');

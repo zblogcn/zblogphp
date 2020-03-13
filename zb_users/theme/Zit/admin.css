@@ -10,7 +10,7 @@ html body{font-size:16px;background:#fafbfc;color:#345;}
 
 a{transition:all 0.5s;}
 
-.zit{color:#fff;background:#39c;padding:0.5em;line-height:1;position:absolute;z-index:2;min-width:2em;display:inline-block;min-height:1em;font-family:verdana;margin:0;filter:url(style/fliter.svg.php#change);}
+.zit{color:#fff;background:#39c;padding:0.5em;line-height:1;position:absolute;z-index:2;min-width:2em;display:inline-block;min-height:1em;font-family:verdana;margin:0;}
 .zit::after{content:"Z";position:absolute;left:0.5em;bottom:-0.5em;transform:rotate(30deg);display:inline-block;margin:0 0.2em 0 0;z-index:-1;color:#39c;font-weight:bold;transition:all 0.5s;}
 .zit a{color:#fff;}
 
@@ -61,7 +61,7 @@ ol::after,
 .userbtn{margin:0 0 0.5em;}
 .userbtn a:visited{color:#fff;}
 
-.left{width:10em;position:fixed;left:0;top:0;bottom:0;z-index:9;padding-top:9em;background-image:url(style/bg.jpg);filter:url(style/fliter.svg.php#change);background-size:cover;animation:slide 600s infinite linear;}
+.left{width:10em;position:fixed;left:0;top:0;bottom:0;z-index:9;padding-top:9em;background-image:url(style/bg.jpg);background-repeat:no-repeat;background-size:auto 100%;animation:slide 300s infinite linear;}
 
 #menuwrap{overflow:scroll;overflow-x:hidden;height:100%;}
 
@@ -94,7 +94,7 @@ div.hint p{line-height:2;padding:0.5em 2em 0.5em 0;background-position:99% 50% !
 
 .widget_id_zit_cmtids,
 .widget-left .pane{display:none;}
-.widget-left .widget{width:248px;}
+.widget-left .widget{width:247px;}
 .widget-list-header,
 .siderbar-header{padding:0.6em;}
 
@@ -109,13 +109,9 @@ div.hint p{line-height:2;padding:0.5em 2em 0.5em 0;background-position:99% 50% !
 #divMain2>.pane>.warning{transform:none;max-width:35em;position:static;margin:0 auto;font-size:1em;}
 #divMain2>.pane>.warning form{margin:1em 0 0;}
 
-@keyframes slide {
-  0%  {background-position:center;}
-  25% {background-position:0 0;}
-  75% {background-position:100% 100%;}
-  100%{background-position:center;}
+@keyframes slide{
+  0% {background-position:center;}
+  25% {background-position:0;}
+  75% {background-position:100%;}
+  100% {background-position:center;}
 }
-
-input.button,input[type="submit"],input[type="button"] {filter:url(style/fliter.svg.php#change);}
-.pagebar span{filter:url(style/fliter.svg.php#change);}
-.btn {filter:url(style/fliter.svg.php#change);}
