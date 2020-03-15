@@ -24,18 +24,20 @@ function ActivePlugin_Zit()
 
     $cfg = $zbp->Config($name);
     $css = '';
-    if ((int)$cfg->Hue) {
-      $css .= 'input,button,a,.zit,.hue,#navim,#backdrop{filter:hue-rotate(' . $cfg->Hue . 'deg)}';
-      $css .= '.more span{filter:none}';
-      $css .= '#backdrop{animation:none;}';
-      $css .= 'a img{filter:hue-rotate(-' . $cfg->Hue . 'deg)}';
-      $css .= 'figure>a>img{filter:hue-rotate(0deg)!important}';
+    if ((int) $cfg->Hue) {
+        $css .= 'input,button,a,.zit,.hue,#navim,#backdrop{filter:hue-rotate(' . $cfg->Hue . 'deg)}';
+        $css .= '.more span{filter:none}';
+        $css .= '#backdrop{animation:none;}';
+        $css .= 'a img{filter:hue-rotate(-' . $cfg->Hue . 'deg)}';
+        $css .= 'figure>a>img{filter:hue-rotate(0deg)!important}';
     }
     if ($cfg->Backdrop) {
-      $css .= '#backdrop{background-image:url(' . $cfg->Backdrop . ');filter:none;}';
+        $css .= '#backdrop{background-image:url(' . $cfg->Backdrop . ');filter:none;}';
     }
 
-    if ($css) $zbp->header .= '  <style type="text/css">' . $css . '</style>'.PHP_EOL;
+    if ($css) {
+        $zbp->header .= '  <style type="text/css">' . $css . '</style>' . PHP_EOL;
+    }
 }
 
 function InstallPlugin_Zit()
@@ -119,7 +121,9 @@ function Zit_LoginHeader()
     global $zbp;
 
     $cfg = $zbp->Config('Zit');
-    if ($cfg->DefaultAdmin) return;
+    if ($cfg->DefaultAdmin) {
+        return;
+    }
     $logo = $cfg->Logo ? $cfg->Logo : $zbp->name;
     $bg = $cfg->Backdrop ? $cfg->Backdrop : $zbp->host . 'zb_users/theme/Zit/style/bg.jpg';
     $bghue = $cfg->Backdrop ? 'none' : $cfg->Hue;
@@ -147,16 +151,18 @@ CSSJS;
 
 function Zit_AdminHeader()
 {
-  global $zbp;
+    global $zbp;
 
-  $cfg = $zbp->Config('Zit');
-  if ($cfg->DefaultAdmin) return;
-  
-  echo '<link href="' . $zbp->host . 'zb_users/theme/Zit/admin.css" rel="stylesheet">';
-  $logo = $cfg->Logo ? $cfg->Logo : $zbp->name;
-  $username = $zbp->user->Name;
+    $cfg = $zbp->Config('Zit');
+    if ($cfg->DefaultAdmin) {
+        return;
+    }
 
-  echo <<<CSS
+    echo '<link href="' . $zbp->host . 'zb_users/theme/Zit/admin.css" rel="stylesheet">';
+    $logo = $cfg->Logo ? $cfg->Logo : $zbp->name;
+    $username = $zbp->user->Name;
+
+    echo <<<CSS
   <style>
     input.button,
     input[type="submit"],
@@ -170,7 +176,7 @@ function Zit_AdminHeader()
   </style>
 CSS;
 
-  echo <<<JS
+    echo <<<JS
   <script>$(function(){
     //logo
     $(".logo").find("img").replaceWith('<b class="zit">{$logo}</b>');
