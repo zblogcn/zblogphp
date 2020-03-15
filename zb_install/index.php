@@ -218,7 +218,7 @@ function Setup1()
 
 感谢您选择Z-BlogPHP。 Z-BlogPHP 基于 PHP 技术开发，采用 MySQL 或 SQLite 或 PostgreSQL 作为数据库，全部源码开放。她既是博客程序，也是CMS建站系统。已走过十余年风雨的她们，有着强大的可定制性、丰富的主题和插件，致力于给国内用户提供优秀的博客写作体验。期待能成为您写博客的第一选择。
 
-Z-BlogPHP官方网址：http://www.zblogcn.com/
+Z-BlogPHP官方网址：https://www.zblogcn.com/
 
 为了使您正确并合法的使用本软件，请您在使用前务必阅读清楚下面的协议条款：
 
@@ -1075,7 +1075,7 @@ function InsertInfo()
     $t->FileName = "favorite";
     $t->Source = "system";
     $t->SidebarID = 1;
-    $t->Content = '<li><a href="http://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="http://weibo.com/zblogcn" target="_blank">Z-Blog官方微博</a></li><li><a href="http://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li>';
+    $t->Content = '<li><a href="https://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="https://weibo.com/zblogcn" target="_blank">Z-Blog官方微博</a></li><li><a href="https://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li>';
     $t->HtmlID = "divFavorites";
     $t->Type = "ul";
     $t->Save();
@@ -1095,7 +1095,7 @@ function InsertInfo()
     $t->FileName = "misc";
     $t->Source = "system";
     $t->SidebarID = 1;
-    $t->Content = '<li><a href="http://www.zblogcn.com/" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/zblog.gif" height="31" width="88" alt="Z-BlogPHP" /></a></li><li><a href="{#ZC_BLOG_HOST#}feed.php" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/rss.png" height="31" width="88" alt="订阅本站的 RSS 2.0 新闻聚合" /></a></li>';
+    $t->Content = '<li><a href="https://www.zblogcn.com/" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/zblog.gif" height="31" width="88" alt="Z-BlogPHP" /></a></li><li><a href="{#ZC_BLOG_HOST#}feed.php" target="_blank"><img src="{#ZC_BLOG_HOST#}zb_system/image/logo/rss.png" height="31" width="88" alt="订阅本站的 RSS 2.0 新闻聚合" /></a></li>';
     $t->HtmlID = "divMisc";
     $t->Type = "ul";
     $t->IsHideTitle = true;
@@ -1202,6 +1202,7 @@ function SaveConfig()
     $app->SaveSideBars();
 
     $app = $zbp->LoadApp('theme', 'Zit');
+    $app->LoadSideBars();
     $app->SaveSideBars();
 
     $app = $zbp->LoadApp('theme', 'tpure');

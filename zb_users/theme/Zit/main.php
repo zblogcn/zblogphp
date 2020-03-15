@@ -86,7 +86,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 textarea.disabled,
 select.disabled{background:#eee;}
 .required{border-color:#f36!important;}
-#hue{color:rgba(255,255,255,.5);text-align:center;background:#39c;filter:hue-rotate(<?php echo $cfg->Hue; ?>deg)}
+#hue{color:rgba(255,255,255,.5);text-align:center;background:#39c;filter:hue-rotate(<?php echo $cfg->Hue;?>deg)}
 #slider{position:absolute;top:.3em;left:.7em;width:24.6em;background:none;border-style:dotted;}
 #slider span{cursor:grab;border-radius:100%}
 .btn.update{filter:none;}
@@ -94,7 +94,7 @@ select.disabled{background:#eee;}
 .picable{background-size:3em 100%;background-repeat:no-repeat;text-indent:3em;}
 <?php
   if ($cfg->DefaultAdmin) {
-      echo <<<CSS
+    echo <<<CSS
     .zit{color:#fff;background:#39c;padding:0.5em;line-height:1;position:absolute;z-index:2;min-width:2em;display:inline-block;min-height:1em;font-family:verdana;margin:0;}
     .zit::after{content:"Z";position:absolute;left:0.5em;bottom:-0.5em;transform:rotate(30deg);display:inline-block;margin:0 0.2em 0 0;z-index:-1;color:#39c;font-weight:bold;transition:all 0.5s;}
     .pane{box-shadow:0 0 2em rgba(0,0,0,0.05);padding:2em;position:relative;background:#fff;margin:2em 0;border-radius:0.1em;margin:2em;}

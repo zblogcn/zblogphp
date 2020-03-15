@@ -63,8 +63,6 @@
   {template:comments}
 </main>
 <aside id="side">
-{$author=$article.Author}  
-{template:kit-minfo}
 {template:sidebar3}
 {template:kit-mside}
 </aside>

@@ -1021,7 +1021,7 @@ function JsonReturn($data)
  *
  * @return void
  */
-function RespondError($errorCode, $errorString)
+function RespondError($errorCode, $errorString = '', $file = '', $line = '')
 {
     $strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><fault><value><struct><member><name>faultCode</name><value><int>$1</int></value></member><member><name>faultString</name><value><string>$2</string></value></member></struct></value></fault></methodResponse>';
     $strError = $strXML;
@@ -1036,15 +1036,16 @@ function RespondError($errorCode, $errorString)
 /**
  * XML-RPC脚本错误页面.
  *
- * @param string $faultString 错误提示字符串
+ * @param string $errorCode 错误提示字符串
+ * @param $errorString
  *
  * @return void
  */
-function ScriptError($faultString)
+function ScriptError($errorCode, $errorText = '', $file = '', $line = '')
 {
     header('Content-type: application/x-javascript; Charset=utf-8');
     ob_clean();
-    echo 'alert("' . str_replace('"', '\"', $faultString) . '")';
+    echo 'alert("' . str_replace('"', '\"', $errorCode . ':' . $errorText) . '")';
     die();
 }
 

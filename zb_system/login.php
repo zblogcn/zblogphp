@@ -65,6 +65,7 @@ $("#btnPost").click(function(){
 
     $("#edtUserName").remove();
     $("#edtPassWord").remove();
+    $("#chkRemember").remove();
 
     $("form").attr("action","cmd.php?act=verify");
     $("#username").val(strUserName);
@@ -73,7 +74,7 @@ $("#btnPost").click(function(){
 })
 
 $("#chkRemember").click(function(){
-    $("#savedate").attr("value", $("#chkRemember").attr("checked") == "checked" ? 30 : 1);
+    $("#savedate").attr("value", $("#chkRemember").prop("checked") == true ? 30 : 1);
 })
 
 </script>

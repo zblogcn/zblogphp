@@ -8,8 +8,8 @@
   })
 })
 
-zbp.plugin.unbind("comment.reply", "system")
-zbp.plugin.on("comment.reply", "default", function(id) {
+zbp.plugin.unbind("comment.reply.start", "system")
+zbp.plugin.on("comment.reply.start", "default", function(id) {
   var i = id
   $("#inpRevID").val(i)
   var frm = $('#divCommentPost')
@@ -44,6 +44,6 @@ zbp.plugin.on("comment.got", "default", function () {
   $("#cancel-reply").click()
 })
 
-zbp.plugin.on("comment.postsuccess", "default", function () {
+zbp.plugin.on("comment.post.success", "default", function () {
   $("#cancel-reply").click()
 })

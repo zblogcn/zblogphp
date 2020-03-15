@@ -21,7 +21,7 @@
 <adapted>151935</adapted>
 <version>1.0</version>
 <pubdate>2019-11-27</pubdate>
-<modified>2019-02-14</modified>
+<modified>2020-03-14</modified>
 <price>0</price>
 <phpver>5.2</phpver>
 <advanced>
@@ -31,10 +31,14 @@
   <conflict></conflict>
 </advanced>
 <sidebars>
-  <sidebar1></sidebar1>
-  <sidebar2></sidebar2>
-  <sidebar3></sidebar3>
-  <sidebar4></sidebar4>
-  <sidebar5></sidebar5>
+  <sidebar1>calendar|controlpanel|catalog|favorite|link|misc</sidebar1>
+  <sidebar2>calendar|catalog|archives|previous</sidebar2>
+  <sidebar3>catalog|previous|comments</sidebar3>
+  <sidebar4>comments</sidebar4>
+  <sidebar5>comments</sidebar5>
+  <sidebar6></sidebar6>
+  <sidebar7></sidebar7>
+  <sidebar8></sidebar8>
+  <sidebar9></sidebar9>
 </sidebars>
 </theme>

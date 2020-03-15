@@ -216,7 +216,10 @@ h2 {font-size: 125%;}
 .v i {color: #999;}
 img {float: right; border: 0;}
 hr {display:none;}
-div.bg {background: #777bb4!important;}
+div.bg {background: #3a6ea5!important;}
+.h{background: #78a2ce!important;}
+.e{background: #c6dcf3!important;}
+table a img {filter:hue-rotate(-30deg);}
     </style>
 </head>
 <body class="short">
