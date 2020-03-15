@@ -87,10 +87,11 @@ return array(
     'ZC_BLOG_PRODUCT_FULLHTML' => '',
 
     // '留言评论
-    'ZC_COMMENT_TURNOFF'       => false,
-    'ZC_COMMENT_VERIFY_ENABLE' => false,
-    'ZC_COMMENT_REVERSE_ORDER' => false,
-    'ZC_COMMENT_AUDIT'         => false,
+    'ZC_COMMENT_TURNOFF'           => false,
+    'ZC_COMMENT_VERIFY_ENABLE'     => false,
+    'ZC_COMMENT_REVERSE_ORDER'     => false,
+    'ZC_COMMENT_AUDIT'             => false,
+    'ZC_COMMENT_VALIDCMTKEY_ENABLE'=> false,
 
     // '验证码
     'ZC_VERIFYCODE_STRING' => 'ABCDEFGHKMNPRSTUVWXYZ123456789',

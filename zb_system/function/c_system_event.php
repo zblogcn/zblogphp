@@ -1876,9 +1876,11 @@ function PostComment()
 
     $_POST['LogID'] = $_GET['postid'];
 
-    //if ($zbp->ValidCmtKey($_GET['postid'], $_GET['key']) == false) {
-    //    $zbp->ShowError(43, __FILE__, __LINE__);
-    //}
+    if ($zbp->ValidCmtKey($_GET['postid'], $_GET['key']) == false) {
+        if (isset($zbp->option['ZC_COMMENT_VALIDCMTKEY_ENABLE']) && $zbp->option['ZC_COMMENT_VALIDCMTKEY_ENABLE']) {
+            $zbp->ShowError(43, __FILE__, __LINE__);
+        }
+    }
 
     if ($zbp->option['ZC_COMMENT_VERIFY_ENABLE']) {
         if (!$zbp->CheckRights('NoValidCode')) {
