@@ -1968,8 +1968,7 @@ abstract class _MarkdownExtra_TmpImpl extends Markdown
         $indent = 0,
         $enclosing_tag_re = '',
         $span = false
-    )
-    {
+    ) {
         //
         // Parse markdown text, calling _HashHTMLBlocks_InHTML for block tags.
         //

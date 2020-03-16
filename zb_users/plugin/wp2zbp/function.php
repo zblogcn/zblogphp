@@ -275,10 +275,10 @@ function upgrade_category_and_tag_count($_prefix)
     foreach ($array as $key => $value) {
         $zbp->db->Query(
             $zbp->db->sql->Update(
-            $zbp->table['Post'],
-            array('log_CateID' => $value['term_id']),
-            array(array('=', 'log_ID', $value['object_id']))
-        )
+                $zbp->table['Post'],
+                array('log_CateID' => $value['term_id']),
+                array(array('=', 'log_ID', $value['object_id']))
+            )
         );
     }
 
@@ -307,10 +307,10 @@ function upgrade_category_and_tag_count($_prefix)
     foreach ($array2 as $key => $value) {
         $zbp->db->Query(
             $zbp->db->sql->Update(
-            $zbp->table['Post'],
-            array('log_Tag' => $value),
-            array(array('=', 'log_ID', $key))
-        )
+                $zbp->table['Post'],
+                array('log_Tag' => $value),
+                array(array('=', 'log_ID', $key))
+            )
         );
     }
 

@@ -834,8 +834,7 @@ if (!class_exists('Services_JSON')) {
                 $mode = null,
                 $options = null,
                 $userinfo = null
-            )
-            {
+            ) {
                 parent::PEAR_Error($message, $code, $mode, $options, $userinfo);
             }
         }
@@ -852,8 +851,7 @@ if (!class_exists('Services_JSON')) {
                 $mode = null,
                 $options = null,
                 $userinfo = null
-            )
-            {
+            ) {
             }
         }
     }
