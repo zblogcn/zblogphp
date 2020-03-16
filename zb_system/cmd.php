@@ -328,6 +328,8 @@ switch ($action) {
             $hint = $lang['error']['84'];
             $hint = str_replace('%s', "【$disableResult->name ($disableResult->id)】", $hint);
             $zbp->SetHint('bad', $hint);
+        } elseif ($disableResult === false) {
+            $zbp->SetHint('bad');
         } else {
             $zbp->BuildModule();
             $zbp->SaveCache();

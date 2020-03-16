@@ -2150,3 +2150,25 @@ DefinePluginFilter('Filter_Plugin_Xmlrpc_Begin');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_CSP_Backend');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_EnablePlugin
+'参数:&name
+'说明:EnablePlugin(1.6.0加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_EnablePlugin');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_DisablePlugin
+'参数:&name
+'说明:DisablePlugin(1.6.0加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_DisablePlugin');

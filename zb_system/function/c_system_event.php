@@ -2830,6 +2830,15 @@ function EnablePlugin($name)
 {
     global $zbp;
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_EnablePlugin'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($name);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+            return $fpreturn;
+        }
+    }
+
     $app = $zbp->LoadApp('plugin', $name);
     $app->CheckCompatibility();
 
@@ -2860,6 +2869,16 @@ function EnablePlugin($name)
 function DisablePlugin($name)
 {
     global $zbp;
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_DisablePlugin'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($name);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+            return $fpreturn;
+        }
+    }
+
     $apps = $zbp->LoadPlugins();
     $apps[] = $zbp->LoadApp('theme', $zbp->theme);
     foreach ($apps as $app) {
