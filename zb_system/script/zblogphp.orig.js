@@ -63,35 +63,42 @@
     options.comment.useDefaultEvents = options.comment.useDefaultEvents || false
 
     this.eachOnCommentInputs = function (callback) {
-      return this.$.each(options.comment.inputs, callback)
+      return self.$.each(options.comment.inputs, callback)
     }
 
     this.eachOnCommentInputs(function (key, value) {
       if (!value.getter && value.selector) {
         value.getter = function () {
-          return this.$(value.selector).val()
+          return self.$(value.selector).val()
         }
       }
       if (!value.setter && value.selector) {
         value.setter = function (val) {
-          return this.$(value.selector).val(val)
+          return self.$(value.selector).val(val)
         }
       }
       if (!value.validator) {
         value.validator = function (text, callback) {
           text = text || value.getter()
           while (true) {
-            if (value.required && text.trim() === '') break
+            text = text || ''
+            text = text.toString().trim()
+            if (text === '') {
+              if (value.required) {
+                break
+              } else {
+                return callback(null)
+              }
+            }
             if (value.validateRule) {
               value.validateRule.lastIndex = 0
               if (!value.validateRule.test(text)) break
             }
             return callback(null)
           }
-          return callback(new Error({
-            code: value.validateFailedErrorCode,
-            message: value.validateFailedMessage || self.options.lang.error[value.validateFailedErrorCode]
-          }))
+          var error = new Error(value.validateFailedMessage || self.options.lang.error[value.validateFailedErrorCode])
+          error.code = value.validateFailedErrorCode
+          return callback(error)
         }
       }
     })
