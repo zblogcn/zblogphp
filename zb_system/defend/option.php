@@ -173,6 +173,7 @@ return array(
 
     'ZC_SEARCH_COUNT' => 20,
     'ZC_SEARCH_REGEX' => '{%host%}search.php?q={%q%}&page={%page%}',
+    'ZC_SEARCH_TYPE' => 'single',// 1.6.0  single|list
 
     //首页，分类页，文章页，页面页的默认模板
     'ZC_INDEX_DEFAULT_TEMPLATE' => 'index',

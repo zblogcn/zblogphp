@@ -2,7 +2,7 @@
 body{
 	margin:0;
 	padding:0;
-	color:#555;
+	color:#444;
 	font-size:14px;
     	font-family: "微软雅黑","宋体","Trebuchet MS", Tahoma, Arial, sans-serif;
 	background:url("default/bg-top.png") repeat-x 0 0;
@@ -352,22 +352,24 @@ div.post-nav {
 
 div.post .post-title{
     margin:0 0 0 0;
-    padding:0 0 5px 0;
+    padding:10px;
     font-size:1.4em;
     line-height:1.4em; 
 	color: #284259;
     text-align:left;
 	background:#FFF;
-	width:80%;
+	width:98%;
 	float:left;
+	background: #fbfbfb;
+    border:1px solid #efefef;
+    clear:both;
 
 }
 
 div.istop-post .post-title{
     text-align:left;
-	border-bottom:none;
-    margin:0 0 0 0;
-	padding-bottom:0px;
+	background:none;
+    border:none;
 }
 
 div.post .post-date{
@@ -375,10 +377,9 @@ div.post .post-date{
 	line-height:1em;
 	margin:0 0 0 0;
 	padding:10px 0 0 0;
-	font-size:0.9em;
+	font-size:0.6em;
 	font-weight: normal;
     text-align:right;
-	width:20%;
 	float:right;
 	color:#666;
 }
@@ -387,13 +388,15 @@ div.post .post-date{
 div.post .post-footer{
 	width:100%;
 	margin:30px 0 40px 0;
-	padding:0 0 5px 0;
+	padding:0 0 0 0;
 	font-size:0.9em;
     font-weight: normal;
-	color:#aaa;
+	color:#666;
 	text-align:right;
 }
-
+div.post .post-footer small{
+	color:#ccc;
+}
 
 div.post .post-tags{
 	width:100%;
@@ -409,13 +412,12 @@ div.post .post-tags{
 
 div.post div.post-body{
 	width:100%;
-	margin:0 0 15px 0;
-	padding:0 0 0 0;
+	margin:0 0 0 0;
+	padding:1em 0 1em 0;
 	font-size:1em;
     text-align:justify;
 	line-height:180%;
 	clear:both;
-	border-top:1px solid #dbe0e6;
 	word-break:break-all;
 }
 
@@ -571,7 +573,7 @@ div.post-body h6{
 	font-weight:normal;
 }
 #BlogPowerBy a,#BlogCopyRight a{
-	color:#666;
+	color:#333;
 }
 #BlogPowerBy a:hover,#BlogCopyRight a:hover{
 	color:red;
@@ -603,10 +605,11 @@ ul.msg{
 }
 
 li.msgname{
-	padding:0 0 10px 5px;
+	padding:0 0 10px 10px;
 	margin:0px;   
 	font-weight: bold;
     font-size:1em;
+    border-bottom:1px solid #eaeaea;
 }
 
 li.msgname *{
@@ -634,7 +637,6 @@ li.msgarticle{
 	line-height:160%; 
     background:#FFF;
 	padding-left:55px;
-    border-bottom:1px solid #eaeaea;
 }
 li.msgtime{
 	padding:5px 0 0 0;
@@ -645,18 +647,16 @@ img.avatar{
 	width:40px;
 	height:40px;
 	float:left;
-	padding:4px;
-	border:1px solid #eaeaea;
+	padding:0px 4px 4px 0px;
+	border:0px solid #eaeaea;
 }
 ul.msg ul.msg{
 	padding:10px 0 0 0;
 	margin:20px 0 0 0;
-    border-top:1px solid #eaeaea;
     border-bottom:none;
 }
 ul.msg ul.msg li.msgarticle{
 	padding-bottom:0px;
-    border-bottom:0px solid #eaeaea;
 }
 
 ul.msg ul.msg li.msgname{
@@ -671,8 +671,9 @@ ul.mutuality,ul.pagebar,ul.msghead{
 }
 ul.mutuality li.tbname,ul.msghead li.tbname{
 	color:#3c6da7;
-	padding-bottom:10px;
-	border-bottom:1px solid #dbe0e6;
+	padding:10px;
+	border:1px solid #eaeaea;
+	background: #fbfbfb;
 }
 ul.mutuality li.msgarticle{
 	padding-left:0px;
@@ -718,7 +719,7 @@ color:#3c6da7;
 #cancel-reply{float:right;margin-right: 2em;}
 div.reply-frm{
 	background:#f0f0f0;
-	box-shadow: 0 0 15px #666;
+	box-shadow: 0 0 15px #333;
 	margin:1em 1% !important;
 	padding:.3em .8em !important;
 	min-width:330px;
@@ -737,24 +738,21 @@ input.button {color:#FFFFFF; font-size:14px; width:100px; height:32px; backgroun
 
 /*--------------------------分页条-------------------------------*/
 span.page{
-	color:#666;
+	color:#333;
 	font-weight:bolder;
 	padding:2px 5px 2px 5px;
 	margin:4px;
-	border:1px solid #cccccc;
 }
 
 span.now-page{
-	color:#666;
+	color:#333;
 	font-weight:bolder;
 	padding:2px 5px 2px 5px;
 	margin:5px;
-	border:1px solid #666;
 }
 
 a:hover span.page{
 	color:red;
-	border:1px solid red;
 }
 
 ul.ul-subcates{
@@ -768,6 +766,6 @@ span.sh{
 	font-size:.5em;
 	font-family:monospace;
 	cursor:pointer;
-	color:#666;
+	color:#333;
 }
 

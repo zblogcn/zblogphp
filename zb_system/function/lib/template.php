@@ -689,6 +689,7 @@ class Template
         $this->templateTags['feedurl'] = &$zbp->feedurl;
         $this->templateTags['searchurl'] = &$zbp->searchurl;
         $this->templateTags['ajaxurl'] = &$zbp->ajaxurl;
+        $this->templateTags['issearch'] = false;
         $s = array(
             $option['ZC_SIDEBAR_ORDER'],
             $option['ZC_SIDEBAR2_ORDER'],

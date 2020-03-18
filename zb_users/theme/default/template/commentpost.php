@@ -19,7 +19,7 @@
 {/if}
 
 {/if}
-	<p><label for="txaArticle">{$lang['msg']['content']}(*)</label></p>
+	<p style="display:none;"><label for="txaArticle">{$lang['msg']['content']}(*)</label></p>
 	<p><textarea name="txaArticle" id="txaArticle" class="text" cols="50" rows="4" tabindex="5" ></textarea></p>
 	<p><input name="sumbit" type="submit" tabindex="6" value="提交" onclick="return zbp.comment.post()" class="button" /></p>
 	</form>

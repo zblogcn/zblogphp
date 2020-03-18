@@ -213,8 +213,10 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
             } else {
                 $arysubcate = array();
                 $arysubcate[] = array('log_CateID', $category->ID);
-                foreach ($zbp->categories[$category->ID]->ChildrenCategories as $subcate) {
-                    $arysubcate[] = array('log_CateID', $subcate->ID);
+                if (isset($zbp->categories[$category->ID])) {
+                    foreach ($zbp->categories[$category->ID]->ChildrenCategories as $subcate) {
+                        $arysubcate[] = array('log_CateID', $subcate->ID);
+                    }
                 }
                 $w[] = array('array', $arysubcate);
             }
@@ -466,7 +468,7 @@ function ViewSearch()
 
     $article = new Post();
     $article->ID = 0;
-    $article->Title = $zbp->lang['msg']['search'] . ' &quot;' . $q . '&quot;';
+    $article->Title = $zbp->langs->msg->search . '&nbsp;&quot;<span>' . $q . '</span>&quot;';
     $article->IsLock = true;
     $article->Type = ZC_POST_TYPE_PAGE;
 
@@ -506,9 +508,13 @@ function ViewSearch()
         false
     );
 
+    $results = array();
+
     foreach ($array as $a) {
+        $r = new Post();
+        $r->LoadInfoByArray($a->GetData());
         $article->Content .= '<p><a href="' . $a->Url . '">' . str_replace($q, '<strong>' . $q . '</strong>', $a->Title) . '</a><br/>';
-        $s = strip_tags($a->Intro) . '' . strip_tags($a->Content);
+        $s = strip_tags($a->Intro) . ' ' . strip_tags($a->Content);
         $i = strpos($s, $q, 0);
         if ($i !== false) {
             if ($i > 50) {
@@ -517,20 +523,53 @@ function ViewSearch()
                 $t = SubStrUTF8_Start($s, 0, 100);
             }
             $article->Content .= str_replace($q, '<strong>' . $q . '</strong>', $t) . '<br/>';
+            $r->Intro = str_replace($q, '<strong>' . $q . '</strong>', $t);
+            $r->Content = str_replace($q, '<strong>' . $q . '</strong>', $t);
+        }else{
+            $s = strip_tags($a->Title);
+            $i = strpos($s, $q, 0);
+            if ($i > 50) {
+                $t = SubStrUTF8_Start($s, $i - 50, 100);
+            } else {
+                $t = SubStrUTF8_Start($s, 0, 100);
+            }
+            $article->Content .= str_replace($q, '<strong>' . $q . '</strong>', $t) . '<br/>';
+            $r->Intro = str_replace($q, '<strong>' . $q . '</strong>', $t);
+            $r->Content = str_replace($q, '<strong>' . $q . '</strong>', $t);
         }
+        $r->Title = str_replace($q, '<strong>' . $q . '</strong>', $r->Title);
         $article->Content .= '<a href="' . $a->Url . '">' . $a->Url . '</a><br/></p>';
+        $results[] = $r;
     }
 
+    $r0 = new Post();
+    $r0->ID = 0;
+    $r0->Title = $zbp->lang['msg']['search'] . ' &quot;' . $q . '&quot;';
+    $r0->Type = ZC_POST_TYPE_ARTICLE;
+    $results = $results;
+
     $zbp->header .= '<meta name="robots" content="noindex,follow" />' . "\r\n";
-    $zbp->template->SetTags('title', $article->Title);
+    $zbp->template->SetTags('title', str_replace(array('<span>','</span>'), '', $article->Title));
     $zbp->template->SetTags('article', $article);
     $zbp->template->SetTags('search', $q);
-    $zbp->template->SetTags('articles', $array);
-    $zbp->template->SetTags('type', $article->TypeName);
     $zbp->template->SetTags('page', $page);
     $zbp->template->SetTags('pagebar', $pagebar);
     $zbp->template->SetTags('comments', array());
-    $zbp->template->SetTemplate($article->Template);
+    $zbp->template->SetTags('issearch', true);
+
+    //1.6新加设置，可以让搜索变为列表模式运行
+    $zbp->template->SetTags('type', 'search'); //1.6统一改为search
+    if (isset($zbp->option['ZC_SEARCH_TYPE']) && $zbp->option['ZC_SEARCH_TYPE']=='list') {
+        $zbp->template->SetTags('articles', $results);
+        if ($zbp->template->hasTemplate('search')) {
+            $zbp->template->SetTemplate('search');
+        } else {
+            $zbp->template->SetTemplate('index');
+        }
+    }else{
+        $zbp->template->SetTags('articles', $array);
+        $zbp->template->SetTemplate($article->Template);
+    }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($zbp->template);

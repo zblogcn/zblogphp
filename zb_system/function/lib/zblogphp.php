@@ -573,6 +573,7 @@ class ZBlogPHP
 
         // 读主题版本信息
         $this->themeapp = $this->LoadApp('theme', $this->theme);
+        $this->themeinfo = $this->themeapp->GetInfoArray();
 
         if ($this->ismanage) {
             $this->LoadManage();
@@ -1605,7 +1606,13 @@ class ZBlogPHP
         $languagePath .= $language . '.php';
         $languagePtr = require $languagePath;
         $this->langpacklist[] = array($type, $id, $language);
-        $this->langs = json_decode(json_encode($this->lang));
+        if($type == 'system'){
+            $this->langs = json_decode(json_encode($this->lang));
+        }else{
+            if ($id<>'' && isset($this->lang[$id])) {
+                $this->langs->$id = json_decode(json_encode($this->lang[$id]));
+            }
+        }
 
         return true;
     }

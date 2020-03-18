@@ -131,6 +131,17 @@ function RemovePluginFilter($strPluginFilter)
 
 /*
 '*********************************************************
+' 目的： 设置插件信号
+'*********************************************************
+ */
+function SetPluginSignal($plugname,$function,$signal = 'PLUGIN_EXITSIGNAL_NONE')
+{
+    $GLOBALS['hooks'][$plugname][$function] = $signal;
+    return true;
+}
+
+/*
+'*********************************************************
 ' 目的：挂上Action接口
 ' 参数：'plugname:接口名称
 'actioncode:要执行的语句，要转义为Execute可执行语句

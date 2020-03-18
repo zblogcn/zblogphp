@@ -260,27 +260,24 @@ class Base
     public function LoadInfoByArray($array)
     {
         global $bloghost;
-        $i = 0;
-        foreach ($this->datainfo as $key => $value) {
-            if (count($array) == $i) {
-                continue;
-            }
 
+        foreach ($this->datainfo as $key => $value) {
+
+            $a = $array[$key];
             if ($value[1] == 'boolean') {
-                $this->data[$key] = (bool) $array[$i];
+                $this->data[$key] = (bool) $a;
             } elseif ($value[1] == 'string') {
                 if ($key == 'Meta') {
-                    $this->data[$key] = $array[$i];
+                    $this->data[$key] = (string) $a;
                     if (isset($this->data['Meta'])) {
                         $this->Metas->Unserialize($this->data['Meta']);
                     }
                 } else {
-                    $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $array[$i]);
+                    $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, (string) $a);
                 }
             } else {
-                $this->data[$key] = $array[$i];
+                $this->data[$key] = $a;
             }
-            $i += 1;
         }
         //foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
         //    $fpname($this, $this->data);
