@@ -1606,10 +1606,10 @@ class ZBlogPHP
         $languagePath .= $language . '.php';
         $languagePtr = require $languagePath;
         $this->langpacklist[] = array($type, $id, $language);
-        if($type == 'system'){
+        if ($type == 'system') {
             $this->langs = json_decode(json_encode($this->lang));
-        }else{
-            if ($id<>'' && isset($this->lang[$id])) {
+        } else {
+            if ($id != '' && isset($this->lang[$id])) {
                 $this->langs->$id = json_decode(json_encode($this->lang[$id]));
             }
         }

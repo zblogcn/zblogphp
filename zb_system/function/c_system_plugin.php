@@ -134,9 +134,10 @@ function RemovePluginFilter($strPluginFilter)
 ' 目的： 设置插件信号
 '*********************************************************
  */
-function SetPluginSignal($plugname,$function,$signal = 'PLUGIN_EXITSIGNAL_NONE')
+function SetPluginSignal($plugname, $function, $signal = 'PLUGIN_EXITSIGNAL_NONE')
 {
     $GLOBALS['hooks'][$plugname][$function] = $signal;
+
     return true;
 }
 

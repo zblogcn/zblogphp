@@ -262,7 +262,6 @@ class Base
         global $bloghost;
 
         foreach ($this->datainfo as $key => $value) {
-
             $a = $array[$key];
             if ($value[1] == 'boolean') {
                 $this->data[$key] = (bool) $a;
