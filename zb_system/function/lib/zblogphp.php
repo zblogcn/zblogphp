@@ -1490,7 +1490,7 @@ class ZBlogPHP
     {
         $app = new App();
         if ($app->LoadInfoByXml($type, $id) != true) {
-            $app->isloaded = true;
+            $app->isloaded = false;
         }
 
         return $app;

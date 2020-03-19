@@ -28,6 +28,12 @@ class Config
     protected $kvdata = array();
 
     /**
+     * @var array 存储Config相应原始数据的数组
+     */
+
+    protected $origkvdata = array();
+
+    /**
      * @var Database__Interface
      */
     protected $db = null;
@@ -195,6 +201,8 @@ class Config
             }
         }
 
+        $this->origkvdata = $this->kvdata;
+
         return true;
     }
 
@@ -226,6 +234,16 @@ class Config
      */
     public function Save()
     {
+        $add = array_diff($this->kvdata, $this->origkvdata);
+        $del = array_diff($this->origkvdata, $this->kvdata);
+        $mod = array_intersect_key($add, $del);
+        $add = array_diff_key($add, $mod);
+        $del = array_diff_key($del, $mod);
+
+        if ( ($add + $del + $mod) == array() ) {
+            return true;
+        }
+
         $name = $this->GetItemName();
         $value = $this->Serialize();
 
