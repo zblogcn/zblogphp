@@ -30,7 +30,6 @@ class Config
     /**
      * @var array 存储Config相应原始数据的数组
      */
-
     protected $origkvdata = array();
 
     /**
@@ -240,7 +239,7 @@ class Config
         $add = array_diff_key($add, $mod);
         $del = array_diff_key($del, $mod);
 
-        if ( ($add + $del + $mod) == array() ) {
+        if (($add + $del + $mod) == array()) {
             return true;
         }
 
