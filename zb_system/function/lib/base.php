@@ -206,20 +206,9 @@ class Base
      */
     public function LoadInfoByField($field, $field_value)
     {
-        global $table, $datainfo;
-        $field_table = array_flip($table);
-        $field_table = $field_table[$this->table];
-        $field_name = $datainfo[$field_table][$field][0];
-        $sql = $this->db->sql->Select($this->table, array('*'), array(array('=', $field_name, $field_value)), null, 1, null);
-        $array = $this->db->Query($sql);
-
-        if (count($array) > 0) {
-            $this->LoadInfoByAssoc($array[0]);
-
-            return true;
-        } else {
-            return false;
-        }
+        return $this->LoadInfoByFields(array(
+            $field => $field_value
+        ));
     }
 
     /**
