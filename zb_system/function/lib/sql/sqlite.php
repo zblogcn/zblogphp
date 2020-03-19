@@ -63,7 +63,7 @@ class SQL__SQLite extends SQL__Global
                 if ($value[1] == 'string') {
                     if ($value[2] != '') {
                         if (strpos($value[2], 'char') !== false) {
-                            $createData[] = $value[0] . ' char(' . (int) str_replace(array('char','(',')'), '', $value[2]) . ') NOT NULL DEFAULT \'' . $value[3] . '\'';
+                            $createData[] = $value[0] . ' char(' . (int) str_replace(array('char', '(', ')'), '', $value[2]) . ') NOT NULL DEFAULT \'' . $value[3] . '\'';
                         } elseif (is_int($value[2])) {
                             $createData[] = $value[0] . ' varchar(' . $value[2] . ') NOT NULL DEFAULT \'' . $value[3] . '\'';
                         } else {

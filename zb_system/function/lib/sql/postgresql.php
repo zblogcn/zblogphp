@@ -72,7 +72,7 @@ class SQL__PostgreSQL extends SQL__Global
                 if ($value[1] == 'string') {
                     if ($value[2] != '') {
                         if (strpos($value[2], 'char') !== false) {
-                            $sql[] = $value[0] . ' char(' . (int) str_replace(array('char','(',')'), '', $value[2]) . ') NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
+                            $sql[] = $value[0] . ' char(' . (int) str_replace(array('char', '(', ')'), '', $value[2]) . ') NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
                         } elseif (is_int($value[2])) {
                             $sql[] = $value[0] . ' varchar(' . $value[2] . ') NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
                         } else {

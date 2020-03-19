@@ -555,7 +555,7 @@ class Template
         $file = $this->path . $entryPage . '.php';
 
         for ($i = 1; $i < 10; $i++) {
-            $j = ($i==1)?'':$i;
+            $j = ($i == 1) ? '' : $i;
             foreach ($this->{'sidebar' . $j} as $key => $m) {
                 $m->Content = $this->ReplaceStaticTags($m->Content);
             }
@@ -723,9 +723,8 @@ class Template
         }
 
         for ($i = 1; $i < 10; $i++) {
-            $j = ($i==1)?'':$i;
+            $j = ($i == 1) ? '' : $i;
             $this->templateTags['sidebar' . $j] = &$this->{'sidebar' . $j};
-
         }
 
         //foreach ($GLOBALS['hooks']['Filter_Plugin_Template_MakeTemplatetags'] as $fpname => &$fpsignal) {

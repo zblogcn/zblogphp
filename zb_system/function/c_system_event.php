@@ -525,7 +525,7 @@ function ViewSearch()
             $article->Content .= str_replace($q, '<strong>' . $q . '</strong>', $t) . '<br/>';
             $r->Intro = str_replace($q, '<strong>' . $q . '</strong>', $t);
             $r->Content = str_replace($q, '<strong>' . $q . '</strong>', $t);
-        }else{
+        } else {
             $s = strip_tags($a->Title);
             $i = strpos($s, $q, 0);
             if ($i > 50) {
@@ -549,7 +549,7 @@ function ViewSearch()
     $results = $results;
 
     $zbp->header .= '<meta name="robots" content="noindex,follow" />' . "\r\n";
-    $zbp->template->SetTags('title', str_replace(array('<span>','</span>'), '', $article->Title));
+    $zbp->template->SetTags('title', str_replace(array('<span>', '</span>'), '', $article->Title));
     $zbp->template->SetTags('article', $article);
     $zbp->template->SetTags('search', $q);
     $zbp->template->SetTags('page', $page);
@@ -559,14 +559,14 @@ function ViewSearch()
 
     //1.6新加设置，可以让搜索变为列表模式运行
     $zbp->template->SetTags('type', 'search'); //1.6统一改为search
-    if (isset($zbp->option['ZC_SEARCH_TYPE']) && $zbp->option['ZC_SEARCH_TYPE']=='list') {
+    if (isset($zbp->option['ZC_SEARCH_TYPE']) && $zbp->option['ZC_SEARCH_TYPE'] == 'list') {
         $zbp->template->SetTags('articles', $results);
         if ($zbp->template->hasTemplate('search')) {
             $zbp->template->SetTemplate('search');
         } else {
             $zbp->template->SetTemplate('index');
         }
-    }else{
+    } else {
         $zbp->template->SetTags('articles', $array);
         $zbp->template->SetTemplate($article->Template);
     }
