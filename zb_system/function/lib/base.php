@@ -207,7 +207,7 @@ class Base
     public function LoadInfoByField($field, $field_value)
     {
         return $this->LoadInfoByFields(array(
-            $field => $field_value
+            $field => $field_value,
         ));
     }
 
