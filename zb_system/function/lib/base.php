@@ -178,7 +178,7 @@ class Base
 
             if ($value[1] == 'boolean') {
                 $this->data[$key] = (bool) $array[$value[0]];
-            } elseif ($value[1] == 'string') {
+            } elseif ($value[1] == 'string' || $value[1] == 'char') {
                 if ($key == 'Meta') {
                     $this->data[$key] = $array[$value[0]];
                     $this->Metas->Unserialize($this->data['Meta']);
@@ -206,9 +206,9 @@ class Base
      */
     public function LoadInfoByField($field, $field_value)
     {
-        return $this->LoadInfoByFields(array(
-            $field => $field_value,
-        ));
+        return $this->LoadInfoByFields(
+            array($field => $field_value)
+        );
     }
 
     /**
@@ -240,7 +240,7 @@ class Base
     }
 
     /**
-     * 从数组中加载数据.
+     * 从数组(整数索引key)中加载数据.
      *
      * @param $array
      *
@@ -249,29 +249,55 @@ class Base
     public function LoadInfoByArray($array)
     {
         global $bloghost;
-
+        $i = 0;
+        reset($array);
         foreach ($this->datainfo as $key => $value) {
-            $a = $array[$key];
+            if (count($array) == $i) {
+                continue;
+            }
+
             if ($value[1] == 'boolean') {
-                $this->data[$key] = (bool) $a;
-            } elseif ($value[1] == 'string') {
+                $this->data[$key] = (bool) $array[$i];
+            } elseif ($value[1] == 'string' || $value[1] == 'char') {
                 if ($key == 'Meta') {
-                    $this->data[$key] = (string) $a;
+                    $this->data[$key] = $array[$i];
                     if (isset($this->data['Meta'])) {
                         $this->Metas->Unserialize($this->data['Meta']);
                     }
                 } else {
-                    $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, (string) $a);
+                    $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $array[$i]);
                 }
             } else {
-                $this->data[$key] = $a;
+                $this->data[$key] = $array[$i];
             }
+            $i += 1;
         }
         //foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
         //    $fpname($this, $this->data);
         //}
 
         return true;
+    }
+
+    /**
+     * 从Data数组中加载数据.
+     *
+     * @param $array
+     *
+     * @return bool
+     */
+    public function LoadInfoByDataArray($array)
+    {
+        global $bloghost;
+
+        $newarray = array();
+        $i = 0;
+        foreach ($array as $key => $value) {
+            $newarray[$i] = $value;
+            $i = $i + 1;
+        }
+
+        return $this->LoadInfoByArray($newarray);
     }
 
     /**

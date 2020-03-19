@@ -14,7 +14,7 @@
 </ul>
 		</div>
 		<div id="divMain">
-<div class="post multi">
+<div class="post istop istop-post">
 	<h2 class="post-title">{$article.Title}</h2>
 </div>
 {foreach $articles as $article}

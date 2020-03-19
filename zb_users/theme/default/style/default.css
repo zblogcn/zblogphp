@@ -352,13 +352,13 @@ div.post-nav {
 
 div.post .post-title{
     margin:0 0 0 0;
-    padding:10px;
+    padding:0.3em 2% 0.3em 2%;
     font-size:1.4em;
     line-height:1.4em; 
 	color: #284259;
     text-align:left;
 	background:#FFF;
-	width:98%;
+	width:96%;
 	float:left;
 	background: #fbfbfb;
     border:1px solid #efefef;
@@ -386,22 +386,22 @@ div.post .post-date{
 
 
 div.post .post-footer{
-	width:100%;
-	margin:30px 0 40px 0;
+	width:98%;
+	margin:1em 1% 2em 1%;
 	padding:0 0 0 0;
 	font-size:0.9em;
     font-weight: normal;
 	color:#666;
 	text-align:right;
 }
-div.post .post-footer small{
+div.post .post-footer small, div.post .post-tags small{
 	color:#ccc;
 }
 
 div.post .post-tags{
-	width:100%;
+	width:98%;
 	margin:0 0 0 0;
-	padding:2px 0 0 0;
+	padding:0 1% 0 1%;
 	font-size:1em;
     font-weight: normal;
 	color:gray;
@@ -411,9 +411,9 @@ div.post .post-tags{
 }
 
 div.post div.post-body{
-	width:100%;
+	width:98%;
 	margin:0 0 0 0;
-	padding:1em 0 1em 0;
+	padding:1em 1% 1em 1%;
 	font-size:1em;
     text-align:justify;
 	line-height:180%;
@@ -605,11 +605,11 @@ ul.msg{
 }
 
 li.msgname{
-	padding:0 0 10px 10px;
+	padding:0 0 0.8em 0.5em;
 	margin:0px;   
 	font-weight: bold;
     font-size:1em;
-    border-bottom:1px solid #eaeaea;
+    border-bottom:1px dotted #eaeaea;
 }
 
 li.msgname *{
@@ -660,7 +660,7 @@ ul.msg ul.msg li.msgarticle{
 }
 
 ul.msg ul.msg li.msgname{
-	padding:0px;
+
 }
 
 
@@ -671,7 +671,7 @@ ul.mutuality,ul.pagebar,ul.msghead{
 }
 ul.mutuality li.tbname,ul.msghead li.tbname{
 	color:#3c6da7;
-	padding:10px;
+	padding:0.4em 1em 0.4em 1em;
 	border:1px solid #eaeaea;
 	background: #fbfbfb;
 }
@@ -703,9 +703,9 @@ li.msgarticle div.quote-title{
 
 /************评论发表用的样式*************/
 #divCommentPost{
-	width:98%;
+	width:96%;
 	margin:0 0 0 0;
-	padding:5px 1% 15px 1%;
+	padding:1em 2% 1.5em 2%;
 }
 
 #divCommentPost p{margin-top:10px;}
@@ -731,7 +731,7 @@ line-height:20px;
 height:24px;
 padding:2px 5px 2px 5px;
 }
-#txaArticle{padding:5px;width:95%;height:150px;border:1px solid #d7d7d7;}
+#txaArticle{padding:0.5em;width:98%;height:150px;border:1px solid #d7d7d7;}
 input.button {color:#FFFFFF; font-size:14px; width:100px; height:32px; background:#3a6ea5; border:1px solid #3399CC;cursor: pointer;}
 
 
