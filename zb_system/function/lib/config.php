@@ -26,12 +26,10 @@ class Config
      * @var array 存储Config相应key-value数值的数组
      */
     protected $kvdata = array();
-
     /**
      * @var array 存储Config相应原始数据的数组
      */
     protected $origkvdata = array();
-
     /**
      * @var Database__Interface
      */
@@ -233,13 +231,17 @@ class Config
      */
     public function Save()
     {
-        $add = array_diff($this->kvdata, $this->origkvdata);
-        $del = array_diff($this->origkvdata, $this->kvdata);
-        $mod = array_intersect_key($add, $del);
-        $add = array_diff_key($add, $mod);
-        $del = array_diff_key($del, $mod);
-
-        if (($add + $del + $mod) == array()) {
+        $add = array_diff_key($this->kvdata, $this->origkvdata);
+        $del = array_diff_key($this->origkvdata, $this->kvdata);
+        $mod = array();//array_intersect($this->kvdata, $this->origkvdata);
+        foreach ($this->kvdata as $key => $value) {
+            if (isset($this->origkvdata[$key]) == true && $this->kvdata[$key] !== $this->origkvdata[$key]) {
+                $mod[$key] = $value;
+            }
+        }
+        //logs(var_export( array($this->origkvdata['ZC_DEBUG_MODE'], $this->kvdata['ZC_DEBUG_MODE']), true ) );
+        //logs(var_export( array('add'=>$add , 'del'=>$del , 'mod'=>$mod),true ) );
+        if ( ($add + $del + $mod) == array() ) {
             return true;
         }
 

@@ -471,7 +471,7 @@ class ZBlogPHP
             ZBlogException::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
         }
 
-        if (isset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']) == false && $this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
+        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true && (isset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']) == true && $this->option['ZC_PERMANENT_DOMAIN_DISABLE'] = true) ) {
             $this->host = $this->option['ZC_BLOG_HOST'];
             $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
         } else {
@@ -785,19 +785,12 @@ class ZBlogPHP
     }
 
     /**
-     * 载入插件Configs表.
+     * Load or ReLoad插件Configs表.
      */
     public function LoadConfigs()
     {
-        $this->configs = array();
-        $sql = $this->db->sql->Select($this->table['Config'], array('*'), '', '', '', '');
-
-        /** @var Config[] $array */
-        $array = $this->GetListType('Config', $sql);
-        foreach ($array as $c) {
-            $n = $c->GetItemName();
-            $this->configs[$n] = $c;
-        }
+        $this->LoadConfigsOnlySystem(true);
+        $this->LoadConfigsOnlySystem(false);
     }
 
     /**
@@ -813,21 +806,25 @@ class ZBlogPHP
         }
 
         $sql = $this->db->sql->Select($this->table['Config'], array('*'), '', '', '', '');
-
+        $type = 'Config';
         if ($onlysystemoption == true) {
             /* @var Config[] $array */
-            $this->prvConfigList = $this->GetListType('Config', $sql);
+            $this->prvConfigList = $this->GetListOrigin($sql);
             foreach ($this->prvConfigList as $c) {
-                $n = $c->GetItemName();
+                $l = new $type();
+                $l->LoadInfoByAssoc($c);
+                $n = $l->GetItemName();
                 if ($n == 'system') {
-                    $this->configs[$n] = $c;
+                    $this->configs[$n] = $l;
                 }
             }
         } else {
             foreach ($this->prvConfigList as $c) {
-                $n = $c->GetItemName();
+                $l = new $type();
+                $l->LoadInfoByAssoc($c);
+                $n = $l->GetItemName();
                 if ($n != 'system') {
-                    $this->configs[$n] = $c;
+                    $this->configs[$n] = $l;
                 }
             }
             $this->prvConfigList = array();
@@ -1054,7 +1051,8 @@ class ZBlogPHP
                 ($key == 'ZC_PGSQL_PRE') ||
                 ($key == 'ZC_PGSQL_PORT') ||
                 ($key == 'ZC_PGSQL_PERSISTENT') ||
-                ($key == 'ZC_CLOSE_WHOLE_SITE')
+                ($key == 'ZC_CLOSE_WHOLE_SITE') ||
+                ($key == 'ZC_PERMANENT_DOMAIN_DISABLE')
             ) {
                 continue;
             }
@@ -1849,6 +1847,28 @@ class ZBlogPHP
             $l = new $type();
             $l->LoadInfoByAssoc($a);
             $list[] = $l;
+        }
+
+        return $list;
+    }
+
+    /**
+     * GetListOrigin.
+     *
+     * @param $sql
+     *
+     * @return Base[]
+     */
+    public function GetListOrigin($sql)
+    {
+        $array = null;
+        $list = array();
+        $array = $this->db->Query($sql);
+        if (!isset($array)) {
+            return array();
+        }
+        foreach ($array as $a) {
+            $list[] = $a;
         }
 
         return $list;
@@ -3183,16 +3203,16 @@ class ZBlogPHP
      */
     public function RedirectPermanentDomain()
     {
+        if (isset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']) == true && $this->option['ZC_PERMANENT_DOMAIN_DISABLE'] = true) {
+            return;
+        }
+
         if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == false) {
             return;
         }
 
         if ($this->option['ZC_PERMANENT_DOMAIN_REDIRECT'] == false) {
             return;
-        }
-
-        if (isset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']) == true) {
-            //return;
         }
 
         $host = str_replace(array('https://', 'http://'), array('', ''), GetCurrentHost(ZBP_PATH, $null));
