@@ -3211,10 +3211,6 @@ class ZBlogPHP
             return;
         }
 
-        if ($this->option['ZC_PERMANENT_DOMAIN_REDIRECT'] == false) {
-            return;
-        }
-
         $host = str_replace(array('https://', 'http://'), array('', ''), GetCurrentHost(ZBP_PATH, $null));
         $host2 = str_replace(array('https://', 'http://'), array('', ''), $this->host);
 
