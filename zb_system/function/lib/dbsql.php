@@ -299,9 +299,10 @@ class DbSql
     }
 
     //command = 'begin','commit','rollback'
-    public function Transaction($command) {
+    public function Transaction($command)
+    {
         $command = strtoupper(trim($command));
-        if ( $command == 'BEGIN' || $command == 'COMMIT' || $command == 'ROLLBACK' ){
+        if ($command == 'BEGIN' || $command == 'COMMIT' || $command == 'ROLLBACK') {
             return $command;
         }
     }

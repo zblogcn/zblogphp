@@ -233,7 +233,7 @@ class Config
     {
         $add = array_diff_key($this->kvdata, $this->origkvdata);
         $del = array_diff_key($this->origkvdata, $this->kvdata);
-        $mod = array();//array_intersect($this->kvdata, $this->origkvdata);
+        $mod = array(); //array_intersect($this->kvdata, $this->origkvdata);
         foreach ($this->kvdata as $key => $value) {
             if (isset($this->origkvdata[$key]) == true && $this->kvdata[$key] !== $this->origkvdata[$key]) {
                 $mod[$key] = $value;
@@ -241,7 +241,7 @@ class Config
         }
         //logs(var_export( array($this->origkvdata['ZC_DEBUG_MODE'], $this->kvdata['ZC_DEBUG_MODE']), true ) );
         //logs(var_export( array('add'=>$add , 'del'=>$del , 'mod'=>$mod),true ) );
-        if ( ($add + $del + $mod) == array() ) {
+        if (($add + $del + $mod) == array()) {
             return true;
         }
 
