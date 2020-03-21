@@ -5,7 +5,9 @@
 (function () {
   var SYSTEM_DEFAULT_EVENT_NAME = 'system-default'
   var deprecatedEvents = [ // then it will be concated by deprecatedMappings
-    'comment.verifydata'
+    'comment.verifydata',
+    'comment.postsuccess',
+    'comment.posterror'
   ]
   var deprecatedMappings = {}
   deprecatedMappings['comment.reply'] = 'comment.reply.start'
@@ -193,6 +195,8 @@
 
     this.plugin.on('comment.post.validate.success', 'system', function (formData) {
       self.$.post(formData.action, formData).done(function (data, textStatus, jqXhr) {
+        // 兼容性接口，未来删除
+        self.plugin.emit('comment.postsuccess', formData, data, textStatus, jqXhr)
         var json = self.$.parseJSON(data)
         if (json.err && json.err.code > 0) {
           var error = new Error(json.err.msg)
@@ -213,6 +217,12 @@
     })
 
     this.plugin.on('comment.post.error', 'system', function (error, formData, data, textStatus, jqXhr) {
+      // 兼容性接口
+      self.plugin.emit("comment.posterror", {
+        jqXHR: jqXHR,
+        msg: error.message,
+        code: error.code,
+      }, formData);
       self.plugin.emit('comment.post.done', error, formData, data, textStatus, jqXhr)
     })
 
@@ -295,7 +305,7 @@
 
     Plugin.prototype.checkIsInterfaceDeprecated = function (interfaceName) {
       if (deprecatedEvents.indexOf(interfaceName) >= 0) {
-        console.error("Interface '" + interfaceName + "' is deprecated, please update your plugin or theme!")
+        console.error("Interface '" + interfaceName + "' is deprecated in ZBP 1.6, please update your plugin or theme!")
         return true
       }
       return false
@@ -360,11 +370,7 @@
     Plugin.prototype.emit = function (interfaceName) {
       var args = self.utils.getFromIndex(1, arguments)
       for (var item in self._plugins[interfaceName]) {
-        setTimeout((function (item) { // To keep event order
-          return function () {
-            self._plugins[interfaceName][item].apply(self, args)
-          }
-        })(item), 0)
+        self._plugins[interfaceName][item].apply(self, args)
       }
       return self
     }
