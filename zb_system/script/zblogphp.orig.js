@@ -9,9 +9,7 @@
   ]
   var deprecatedMappings = {}
   deprecatedMappings['comment.reply'] = 'comment.reply.start'
-  deprecatedMappings['comment.postsuccess'] = 'comment.post.success'
   deprecatedMappings['userinfo.savefromhtml'] = 'userinfo.readFromHtml'
-  deprecatedMappings['comment.posterror'] = 'comment.post.error'
 
   /**
    * Class ZBP
@@ -165,15 +163,14 @@
           var err = {no: 0, msg: ''}
           self.plugin.emit('comment.verifydata', err, formData)
           if (err.no > 0) {
-            self.plugin.emit('comment.post.validate.error', {
-              number: err.no,
-              message: err.msg
-            }, formData)
+            var error = new Error(err.msg)
+            error.code = err.no
+            self.plugin.emit('comment.post.validate.error', error, formData)
             return
           }
 
           // Then now this is modern code.
-          self.plugin.emit('comment.post.validate.done', formData)
+          self.plugin.emit('comment.post.validate.success', formData)
         }
       }
 
@@ -191,31 +188,39 @@
     })
 
     this.plugin.on('comment.post.validate.error', 'system', function (error, formData) {
-      alert(error.message)
-      console.error(formData)
-      console.error('ERROR - ' + error.message)
       self.plugin.emit('comment.post.error', error, formData)
     })
 
-    this.plugin.on('comment.post.validate.done', 'system', function (formData) {
+    this.plugin.on('comment.post.validate.success', 'system', function (formData) {
       self.$.post(formData.action, formData).done(function (data, textStatus, jqXhr) {
-        self.plugin.emit('comment.post.success', formData, data, textStatus, jqXhr)
-      }).fail(function (jqXHR, textStatus) {
-        var errorObject = {
-          jqXHR: jqXHR,
-          message: textStatus,
-          code: 255
+        var json = self.$.parseJSON(data)
+        if (json.err && json.err.code > 0) {
+          var error = new Error(json.err.msg)
+          error.code = json.err.code
+          self.plugin.emit('comment.post.error', error, formData, json, textStatus, jqXhr)
+        } else {
+          self.plugin.emit('comment.post.success', formData, json, textStatus, jqXhr)
         }
-        self.plugin.emit('comment.post.error', formData, errorObject)
-      }).always(function (a, b, c) {
-        self.plugin.emit('comment.post.done', formData, a, b, c)
+      }).fail(function (jqXhr, textStatus) {
+        var error = new Error(textStatus)
+        error.code = 255
+        self.plugin.emit('comment.post.error', error, formData, textStatus, jqXhr)
       })
+    })
+
+    this.plugin.on('comment.post.success', 'system', function (formData, data, textStatus, jqXhr) {
+      self.plugin.emit('comment.post.done', null, formData, data, textStatus, jqXhr)
+    })
+
+    this.plugin.on('comment.post.error', 'system', function (error, formData, data, textStatus, jqXhr) {
+      self.plugin.emit('comment.post.done', error, formData, data, textStatus, jqXhr)
     })
 
     if (this.options.comment.useDefaultEvents) {
       this.plugin.on('comment.reply.start', SYSTEM_DEFAULT_EVENT_NAME, function (id) {
         this.$('#inpRevID').val(id)
         this.$('#cancel-reply').show().bind('click', function () {
+          this.plugin.emit('comment.reply.cancel')
           self.$('#inpRevID').val(0)
           self.$(this).hide()
           window.location.hash = '#comment'
@@ -230,28 +235,19 @@
       })
 
       this.plugin.on('comment.post.start', SYSTEM_DEFAULT_EVENT_NAME, function () {
-        var objSubmit = this.$('#inpId').parent('form').find(':submit')
+        var objSubmit = self.$('#inpId').parent('form').find(':submit')
         objSubmit.data('orig', objSubmit.val()).val('Waiting...').attr('disabled', 'disabled').addClass('loading')
       })
 
       this.plugin.on('comment.post.done', SYSTEM_DEFAULT_EVENT_NAME, function (formData) {
-        var objSubmit = this.$('#inpId').parent('form').find(':submit')
+        var objSubmit = self.$('#inpId').parent('form').find(':submit')
         objSubmit.removeClass('loading').removeAttr('disabled')
         if (objSubmit.data('orig')) {
           objSubmit.val(objSubmit.data('orig'))
         }
       })
 
-      this.plugin.on('comment.post.success', SYSTEM_DEFAULT_EVENT_NAME, function (formData, retString, textStatus, jqXhr) {
-        var objSubmit = this.$('#inpId').parent('form').find(':submit')
-        objSubmit.removeClass('loading').removeAttr('disabled').val(objSubmit.data('orig'))
-
-        var data = this.$.parseJSON(retString)
-        if (data.err.code !== 0) {
-          alert(data.err.msg)
-          throw new Error('ERROR - ' + data.err.msg)
-        }
-
+      this.plugin.on('comment.post.success', SYSTEM_DEFAULT_EVENT_NAME, function (formData, data, textStatus, jqXhr) {
         if (formData.replyid.toString() === '0') {
           this.$(data.data.html).insertAfter('#AjaxCommentBegin')
         } else {
@@ -260,6 +256,11 @@
         location.hash = '#cmt' + data.data.ID
         this.$('#txaArticle').val('')
         this.userinfo.readFromHtml()
+      })
+
+      this.plugin.on('comment.post.error', SYSTEM_DEFAULT_EVENT_NAME, function (err) {
+        alert(err.message)
+        throw new Error('ERROR - ' + err.message)
       })
     }
 

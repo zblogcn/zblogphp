@@ -38,6 +38,7 @@ $(function(){
   $revoke=$("<button type='button' class='revoke'>"+msg.cancel+"</button>").click(function(){
     $("#inpRevID").val(0);
     $("#txaArticle").attr("placeholder","").blur();
+    zbp.plugin.emit('comment.reply.cancel');
     $(this).fadeOut();
   }),
   $len=$("<span style='position:fixed;top:-999em;transition:none;'></span>"),
@@ -116,11 +117,10 @@ function posting(state){
   $("#postcmt").find(":submit").text(state?msg.submitting:msg.submit).prop("disabled",state)[state?"addClass":"removeClass"]("kico-dai kico-gap");
 }
 
-zbp.plugin.on("comment.post.success", "zit", function (a,b) {
+zbp.plugin.on("comment.post.success", "zit", function (formData, data) {
   $("#inpRevID").val(0);
   $("#txaArticle").attr("placeholder","");
-  var cmt=$.parseJSON(b);
-  $("#cmt"+cmt.data.ID).addClass("hilite");
+  $("#cmt"+data.data.ID).addClass("hilite");
   fitfix();
 });
 
