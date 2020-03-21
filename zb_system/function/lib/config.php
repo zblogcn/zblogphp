@@ -240,7 +240,7 @@ class Config
             }
         }
 
-        if ( ($add + $del + $mod) == array() ) {
+        if (($add + $del + $mod) == array()) {
             return true;
         }
 
@@ -253,7 +253,7 @@ class Config
 
         $kv = array('conf_Name' => $name, 'conf_Value' => $value);
 
-        $old = $this->db->Query($this->db->sql->Select($this->table,'*',array( array('=','conf_Name',$name))) );
+        $old = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', 'conf_Name', $name))));
         if (count($old) == 0) {
             $sql = $this->db->sql->Insert($this->table, $kv);
             $this->db->Insert($sql);

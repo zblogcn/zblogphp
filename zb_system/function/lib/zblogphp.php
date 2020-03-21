@@ -812,27 +812,25 @@ class ZBlogPHP
         $this->prvConfigList = $this->GetListOrigin($sql);
         foreach ($this->prvConfigList as $c) {
             $name = $c['conf_Name'];
-            if ( ($name == 'system' && $onlysystemoption == true) || ($name != 'system' && $onlysystemoption == false) ) {
-                if ( !isset($this->configs[$name]) ){
+            if (($name == 'system' && $onlysystemoption == true) || ($name != 'system' && $onlysystemoption == false)) {
+                if (!isset($this->configs[$name])) {
                     $l = new $type($name);
                     $this->configs[$name] = $l;
-                }else{
+                } else {
                     $l = $this->configs[$name];
                 }
-                if ( get_class($l) != $type ){
-                   $l = new $type($name);
-                   $this->configs[$name] = $l;
+                if (get_class($l) != $type) {
+                    $l = new $type($name);
+                    $this->configs[$name] = $l;
                 }
 
                 $l->LoadInfoByAssoc($c);
-
-            }                    
+            }
         }
 
         if ($onlysystemoption == false) {
             $this->prvConfigList = array();
         }
-
     }
 
     /**
