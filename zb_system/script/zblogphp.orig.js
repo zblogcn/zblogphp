@@ -219,7 +219,7 @@
     this.plugin.on('comment.post.error', 'system', function (error, formData, data, textStatus, jqXhr) {
       // 兼容性接口
       self.plugin.emit("comment.posterror", {
-        jqXHR: jqXHR,
+        jqXHR: jqXhr,
         msg: error.message,
         code: error.code,
       }, formData);
