@@ -805,30 +805,34 @@ class ZBlogPHP
             $this->prvConfigList = array();
         }
 
-        $sql = $this->db->sql->Select($this->table['Config'], array('*'), '', '', '', '');
+        $sql = $this->db->sql->Select($this->table['Config'], '', '', '', '', '');
         $type = 'Config';
-        if ($onlysystemoption == true) {
-            /* @var Config[] $array */
-            $this->prvConfigList = $this->GetListOrigin($sql);
-            foreach ($this->prvConfigList as $c) {
-                $l = new $type();
-                $l->LoadInfoByAssoc($c);
-                $n = $l->GetItemName();
-                if ($n == 'system') {
-                    $this->configs[$n] = $l;
+
+        /* @var Config[] $array */
+        $this->prvConfigList = $this->GetListOrigin($sql);
+        foreach ($this->prvConfigList as $c) {
+            $name = $c['conf_Name'];
+            if ( ($name == 'system' && $onlysystemoption == true) || ($name != 'system' && $onlysystemoption == false) ) {
+                if ( !isset($this->configs[$name]) ){
+                    $l = new $type($name);
+                    $this->configs[$name] = $l;
+                }else{
+                    $l = $this->configs[$name];
                 }
-            }
-        } else {
-            foreach ($this->prvConfigList as $c) {
-                $l = new $type();
-                $l->LoadInfoByAssoc($c);
-                $n = $l->GetItemName();
-                if ($n != 'system') {
-                    $this->configs[$n] = $l;
+                if ( get_class($l) != $type ){
+                   $l = new $type($name);
+                   $this->configs[$name] = $l;
                 }
-            }
+
+                $l->LoadInfoByAssoc($c);
+
+            }                    
+        }
+
+        if ($onlysystemoption == false) {
             $this->prvConfigList = array();
         }
+
     }
 
     /**
