@@ -15,7 +15,7 @@ return array(
     'font_size'             => '',
     'windows_character_set' => 'GBK',
 
-//Front-End & Back-End
+    //Front-End & Back-End
     'msg' => array(
         'id'                                => 'ID',
         'name'                              => '名称',
@@ -250,10 +250,10 @@ return array(
         'current_template'                  => '当前模板',
         'additional_security'               => '安全增强',
         'using_cdn_guest_type'              => '客户IP获取来源',
-        'first_button'                      => '‹‹',//'⏮️',
-        'prev_button'                       => '‹',//'◀️',
-        'next_button'                       => '›',//'▶️',
-        'last_button'                       => '››',//'⏭️',
+        'first_button'                      => '‹‹', //'⏮️',
+        'prev_button'                       => '‹', //'◀️',
+        'next_button'                       => '›', //'▶️',
+        'last_button'                       => '››', //'⏭️',
         'numeral_button'                    => '%num%',
         'verify_succeed'                    => '校验成功,请提交!',
         'verify_fail'                       => '校验失败',
@@ -261,7 +261,7 @@ return array(
         ''                                  => '',
     ),
 
-//Action
+    //Action
     'actions' => array(
         'login'       => '登录',
         'logout'      => '登出',
@@ -328,14 +328,14 @@ return array(
         'NoValidCode' => '无视验证码',
     ),
 
-//Article Level
+    //Article Level
     'post_status_name' => array(
         '0' => '公开',
         '1' => '草稿',
         '2' => '审核',
     ),
 
-//User Level
+    //User Level
     'user_level_name' => array(
         '1' => '管理员',
         '2' => '网站编辑',
@@ -351,7 +351,7 @@ return array(
         '2' => '禁止',
     ),
 
-//January, February...
+    //January, February...
     'month' => array(
         '1'  => '一月',
         '2'  => '二月',
@@ -367,7 +367,7 @@ return array(
         '12' => '十二月',
     ),
 
-//Jan., Feb. ...
+    //Jan., Feb. ...
     'month_abbr' => array(
         '1'  => '1月',
         '2'  => '2月',
@@ -383,7 +383,7 @@ return array(
         '12' => '12月',
     ),
 
-//Sunday, Monday..
+    //Sunday, Monday..
     'week' => array(
         '7' => '星期日',
         '1' => '星期一',
@@ -394,7 +394,7 @@ return array(
         '6' => '星期六',
     ),
 
-//Sun., Mon. ...
+    //Sun., Mon. ...
     'week_abbr' => array(
         '7' => '日',
         '1' => '一',
@@ -415,7 +415,7 @@ return array(
         '6' => '周六',
     ),
 
-//Custom Error Information
+    //Custom Error Information
     'error' => array(
         '0'  => '未知错误',
         '1'  => '未知命令',
@@ -518,7 +518,7 @@ return array(
         'more_help' => 'https://www.zblogcn.com/help/?id={%id%}&message={%message%}',
     ),
 
-// Possible causes of the error
+    // Possible causes of the error
     'error_reasons' => array(
         // -1 for default
         'default' => '',

@@ -52,5 +52,4 @@ function Gravatar_Url(&$member)
     } else {
         return $source;
     }
-
 }
