@@ -41,7 +41,6 @@ var zbp = new ZBP({
             email: {
                 selector: '#inpEmail',
                 saveLocally: true,
-                required: true,
                 validateRule: /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/ig,
                 validateFailedErrorCode: 29,
             },
