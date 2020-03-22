@@ -587,6 +587,8 @@ class ZBlogPHP
             $fpname();
         }
 
+        $this->ReflushLanguages();
+
         if ($this->option['ZC_DEBUG_MODE']) {
             $this->CheckTemplate(false, true);
         }
@@ -812,25 +814,27 @@ class ZBlogPHP
         $this->prvConfigList = $this->GetListOrigin($sql);
         foreach ($this->prvConfigList as $c) {
             $name = $c['conf_Name'];
-            if (($name == 'system' && $onlysystemoption == true) || ($name != 'system' && $onlysystemoption == false)) {
-                if (!isset($this->configs[$name])) {
+            if ( ($name == 'system' && $onlysystemoption == true) || ($name != 'system' && $onlysystemoption == false) ) {
+                if ( !isset($this->configs[$name]) ){
                     $l = new $type($name);
                     $this->configs[$name] = $l;
-                } else {
+                }else{
                     $l = $this->configs[$name];
                 }
-                if (get_class($l) != $type) {
-                    $l = new $type($name);
-                    $this->configs[$name] = $l;
+                if ( get_class($l) != $type ){
+                   $l = new $type($name);
+                   $this->configs[$name] = $l;
                 }
 
                 $l->LoadInfoByAssoc($c);
-            }
+
+            }                    
         }
 
         if ($onlysystemoption == false) {
             $this->prvConfigList = array();
         }
+
     }
 
     /**
@@ -1615,6 +1619,11 @@ class ZBlogPHP
         }
 
         return true;
+    }
+
+    public function ReflushLanguages()
+    {
+        $this->langs = json_decode(json_encode($this->lang));
     }
 
     /**
