@@ -19,7 +19,7 @@ return array(
     'font_size'             => '',
     'windows_character_set' => 'ISO-8859-1',
 
-    //Front-End & Back-End
+//Front-End & Back-End
     'msg' => array(
         'id'                                => 'ID',
         'name'                              => 'Name',
@@ -258,13 +258,14 @@ return array(
         'prev_button'                       => '‹',
         'next_button'                       => '›',
         'last_button'                       => '››',
+        'numeral_button'                    => '%num%',
         'verify_succeed'                    => 'Verify succeed',
         'verify_fail'                       => 'Verify fail',
         'verifying'                         => 'Verifying',
         ''                                  => '',
     ),
 
-    //Action
+//Action
     'actions' => array(
         'login'       => 'Log in',
         'logout'      => 'Log Out',
@@ -331,14 +332,14 @@ return array(
         'NoValidCode' => 'Ignore Captcha',
     ),
 
-    //Article Level
+//Article Level
     'post_status_name' => array(
         '0' => 'Published',
         '1' => 'Draft',
         '2' => 'Pending',
     ),
 
-    //User Level
+//User Level
     'user_level_name' => array(
         '1' => 'Administrator',
         '2' => 'Redactor',
@@ -354,7 +355,7 @@ return array(
         '2' => 'Disabled',
     ),
 
-    //January, February...
+//January, February...
     'month' => array(
         '1'  => 'January',
         '2'  => 'February',
@@ -370,7 +371,7 @@ return array(
         '12' => 'December',
     ),
 
-    //Jan., Feb. ...
+//Jan., Feb. ...
     'month_abbr' => array(
         '1'  => 'Jan',
         '2'  => 'Feb',
@@ -386,7 +387,7 @@ return array(
         '12' => 'Dec',
     ),
 
-    //Sunday, Monday..
+//Sunday, Monday..
     'week' => array(
         '7' => 'Sunday',
         '1' => 'Monday',
@@ -397,7 +398,7 @@ return array(
         '6' => 'Saturday',
     ),
 
-    //Sun., Mon. ...
+//Sun., Mon. ...
     'week_abbr' => array(
         '7' => 'Sun',
         '1' => 'Mon',
@@ -418,7 +419,7 @@ return array(
         '6' => 'S',
     ),
 
-    //Custom Error Information
+//Custom Error Information
     'error' => array(
         '0'  => 'Unknown Error',
         '1'  => 'Unknown Command',
@@ -521,7 +522,7 @@ return array(
         'more_help' => 'https://www.zblogcn.com/help/?id={%id%}&message={%message%}',
     ),
 
-    // Possible causes of the error
+// Possible causes of the error
     'error_reasons' => array(
         // -1 for default
         'default' => '',

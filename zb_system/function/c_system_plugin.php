@@ -1259,6 +1259,17 @@ DefinePluginFilter('Filter_Plugin_ViewPost_Template');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_ViewSearch_Template
+'参数:&$template
+'说明:
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_ViewSearch_Template');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_ViewComments_Template
 '参数:&$template
 '说明:

@@ -135,9 +135,11 @@ class PageBar
             $end = $pageAll;
         }
 
+        $j = trim($zbp->langs->msg->numeral_button);
+        $j = ($j=='')?'%num%':$j;
         for ($i = $start; $i < $end; $i++) {
             $this->UrlRule->Rules['{%page%}'] = $i;
-            $this->buttons[$i] = $this->UrlRule->Make();
+            $this->buttons[str_ireplace('%num%', $i, $j)] = $this->UrlRule->Make();
         }
 
         if ($this->PageNow != $this->PageNext) {
