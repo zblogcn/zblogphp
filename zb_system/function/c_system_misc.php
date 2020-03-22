@@ -376,7 +376,7 @@ function misc_ping()
     $data = array();
     $token = GetVars('token', 'GET');
     if (VerifyWebToken($token, "")) {
-        JsonError(0, '<em>'.$zbp->lang['msg']['verify_succeed'].'</em>', $data);
+        JsonError(0, '<em>' . $zbp->lang['msg']['verify_succeed'] . '</em>', $data);
 
         return;
     }
