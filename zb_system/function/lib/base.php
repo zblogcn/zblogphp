@@ -176,17 +176,18 @@ class Base
                 continue;
             }
 
-            if ($value[1] == 'boolean') {
-                $this->data[$key] = (bool) $array[$value[0]];
-            } elseif ($value[1] == 'string' || $value[1] == 'char') {
-                if ($key == 'Meta') {
-                    $this->data[$key] = $array[$value[0]];
-                    $this->Metas->Unserialize($this->data['Meta']);
+            $v = $array[$value[0]];
+            if ($value[1] == 'string' || $value[1] == 'char') {
+                if ($key != 'Meta') {
+                    $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $v);
                 } else {
-                    $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $array[$value[0]]);
+                    $this->data[$key] = $v;
+                    $this->Metas->Unserialize($this->data['Meta']);
                 }
+            } elseif ($value[1] != 'boolean') {
+                $this->data[$key] = $v;
             } else {
-                $this->data[$key] = $array[$value[0]];
+                $this->data[$key] = (bool) $v;
             }
         }
         //foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
@@ -249,26 +250,25 @@ class Base
     public function LoadInfoByArray($array)
     {
         global $bloghost;
+
         $i = 0;
-        reset($array);
         foreach ($this->datainfo as $key => $value) {
             if (count($array) == $i) {
                 continue;
             }
 
-            if ($value[1] == 'boolean') {
-                $this->data[$key] = (bool) $array[$i];
-            } elseif ($value[1] == 'string' || $value[1] == 'char') {
-                if ($key == 'Meta') {
-                    $this->data[$key] = $array[$i];
-                    if (isset($this->data['Meta'])) {
-                        $this->Metas->Unserialize($this->data['Meta']);
-                    }
+            $v = $array[$i];
+            if ($value[1] == 'string' || $value[1] == 'char') {
+                if ($key != 'Meta') {
+                    $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $v);
                 } else {
-                    $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $array[$i]);
+                    $this->data[$key] = $v;
+                    $this->Metas->Unserialize($this->data['Meta']);
                 }
+            } elseif ($value[1] != 'boolean') {
+                $this->data[$key] = $v;
             } else {
-                $this->data[$key] = $array[$i];
+                $this->data[$key] = (bool) $v;
             }
             $i += 1;
         }
@@ -290,14 +290,30 @@ class Base
     {
         global $bloghost;
 
-        $newarray = array();
-        $i = 0;
-        foreach ($array as $key => $value) {
-            $newarray[$i] = $value;
-            $i = $i + 1;
-        }
+        foreach ($this->datainfo as $key => $value) {
+            if (!isset($array[$key])) {
+                continue;
+            }
 
-        return $this->LoadInfoByArray($newarray);
+            $v = $array[$key];
+            if ($value[1] == 'string' || $value[1] == 'char') {
+                if ($key != 'Meta') {
+                    $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $v);
+                } else {
+                    $this->data[$key] = $v;
+                    $this->Metas->Unserialize($this->data['Meta']);
+                }
+            } elseif ($value[1] != 'boolean') {
+                $this->data[$key] = $v;
+            } else {
+                $this->data[$key] = (bool) $v;
+            }
+        }
+        //foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
+        //    $fpname($this, $this->data);
+        //}
+
+        return true;
     }
 
     /**
