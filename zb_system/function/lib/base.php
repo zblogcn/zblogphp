@@ -108,7 +108,7 @@ class Base
     }
 
     /**
-     * 获取数据库数据.
+     * 获取数据库数据(不设$key就返回整个data数组).
      *
      * @return array
      */
@@ -119,6 +119,28 @@ class Base
         } else {
             return $this->data[$key];
         }
+    }
+
+    /**
+     * 获取数据库数据.
+     *
+     * @param key 如果是array，就忽略$value
+     *
+     * @return array
+     */
+    public function SetData($key, $value = null)
+    {
+        if (is_array($key)) {
+            foreach ($key as $key2 => $value2) {
+                $this->data[$key2] = $value2;
+            }
+            return true;
+        }
+        if ($value === null) {
+            return false;
+        }
+        $this->data[$key] = $value;
+        return true;
     }
 
     /**
