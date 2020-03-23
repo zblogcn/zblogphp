@@ -107,12 +107,12 @@ switch ($action) {
         //复杂的退出机制
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Other_Action'] as $fpname => &$fpsignal) {
-            $fpsignal = $fpname($action);
+            $fpsignal = $fpname($action, $admin_function);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN || $fpsignal == PLUGIN_EXITSIGNAL_BREAK) {
                 break;
             }
         }
-        if ($fpsignal != PLUGIN_EXITSIGNAL_NONE) {
+        if ($fpsignal == PLUGIN_EXITSIGNAL_NONE) {
             $zbp->ShowError(6, __FILE__, __LINE__);
             die();
         }

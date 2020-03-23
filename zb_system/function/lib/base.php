@@ -112,9 +112,13 @@ class Base
      *
      * @return array
      */
-    public function GetData()
+    public function GetData($key = null)
     {
-        return $this->data;
+        if(null == $key){
+            return $this->data;
+        }else{
+            return $this->data[$key];
+        }
     }
 
     /**
