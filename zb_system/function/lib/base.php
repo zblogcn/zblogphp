@@ -134,12 +134,14 @@ class Base
             foreach ($key as $key2 => $value2) {
                 $this->data[$key2] = $value2;
             }
+
             return true;
         }
         if ($value === null) {
             return false;
         }
         $this->data[$key] = $value;
+
         return true;
     }
 
