@@ -129,7 +129,7 @@ function ResponseAdmin_TopMenu()
         $fpname($topmenus);
     }
 
-    $topmenus[] = MakeTopMenu("misc", $zbp->lang['msg']['official_website'], "http://www.zblogcn.com/", "_blank", "");
+    $topmenus[] = MakeTopMenu("misc", $zbp->lang['msg']['official_website'], "https://www.zblogcn.com/", "_blank", "");
 
     foreach ($topmenus as $m) {
         echo $m;
