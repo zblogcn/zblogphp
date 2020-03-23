@@ -1669,16 +1669,17 @@ function RemovePHPCode($code)
     return $code;
 }
 
-function GetIDArrayByList($array,$keyname = null)
+function GetIDArrayByList($array, $keyname = null)
 {
     $ids = array();
     foreach ($array as $key => $value) {
         if ($keyname == null) {
             $ids[] = reset($value->GetData());
-        }else{
+        } else {
             $ids[] = $value->GetData()[$keyname];
         }
     }
+
     return $ids;
 }
 

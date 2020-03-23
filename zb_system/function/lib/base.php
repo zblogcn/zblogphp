@@ -114,9 +114,9 @@ class Base
      */
     public function GetData($key = null)
     {
-        if(null == $key){
+        if (null == $key) {
             return $this->data;
-        }else{
+        } else {
             return $this->data[$key];
         }
     }
