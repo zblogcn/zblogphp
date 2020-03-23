@@ -591,10 +591,10 @@ function GetFilesInDir($dir, $type)
  *
  * @return bool
  */
-function SetHttpStatusCode($number)
+function SetHttpStatusCode($number, $force = false)
 {
     static $status = '';
-    if ($status != '') {
+    if ($status != '' && $force == false) {
         return false;
     }
 
