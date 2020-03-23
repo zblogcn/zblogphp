@@ -575,6 +575,17 @@ DefinePluginFilter('Filter_Plugin_Admin_Begin');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Admin_Other_Action
+'参数:
+'说明:后台管理页的拦截后台管理请求实现自己的Action
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_Other_Action');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Admin_End
 '参数:
 '说明:后台管理页的终结接口
