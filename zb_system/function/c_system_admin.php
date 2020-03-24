@@ -719,8 +719,9 @@ function Admin_ArticleMng()
     $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
     $op = array('pagebar' => $p);
 
+    $type = null;
     foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_Article'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($s, $w, $or, $l, $op);
+        $fpreturn = $fpname($s, $w, $or, $l, $op, $type);
     }
 
     $array = $zbp->GetArticleList(

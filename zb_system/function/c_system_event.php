@@ -1065,7 +1065,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
     $option = array('pagebar' => $pagebar);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_Article'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($select, $w, $order, $limit, $option);
+        $fpreturn = $fpname($select, $w, $order, $limit, $option, $type);
     }
 
     $articles = $zbp->GetArticleList(
