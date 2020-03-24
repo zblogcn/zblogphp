@@ -69,12 +69,19 @@ class Module extends Base
                 return 'user';
             } elseif ($this->Source == 'theme') {
                 return 'theme';
-            } elseif ($this->Source == 'plugin_' . $zbp->theme) {
+            } elseif (stripos($this->Source, 'theme_') === 0) {
                 return 'theme';
-            } elseif ($this->Source == 'theme_' . $zbp->theme) {
-                return 'theme';
-            } else {
+            } elseif (stripos($this->Source, 'plugin_') === 0) {
+                //如果是plugin_主题名，还是判断为theme，修正历史遗留问题
+                $ts = $zbp->LoadThemes();
+                foreach ($ts as $t) {
+                    if ( $this->Source == 'plugin_' . $t->id ) {
+                        return 'theme';
+                    }
+                }
                 return 'plugin';
+            } else {
+                 return 'plugin';
             }
         }
         if ($name == 'NoRefresh') {
