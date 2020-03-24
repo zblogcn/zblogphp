@@ -451,11 +451,21 @@ DefinePluginFilter('Filter_Plugin_Index_End');
 '类型:Filter
 '名称:Filter_Plugin_Html_Js_Add
 '参数:
-'说明:c_html_js_add.php脚本调用,JS页接口需要强制开启
+'说明:c_html_js_add.php脚本接口，允许插件在c_html_js_add.php内输出内容
 '调用:
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Html_Js_Add');
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Html_Js_ZbpConfig
+'参数:
+'说明:c_html_js_add.php脚本接口，允许插件设置zbpConfig
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Html_Js_ZbpConfig');
 
 /*
 '**************************************************<
