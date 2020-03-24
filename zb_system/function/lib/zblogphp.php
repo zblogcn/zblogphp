@@ -3335,25 +3335,29 @@ class ZBlogPHP
 
     //举例：backend-ui,,,
     protected $_exclusive = array();
+
     /**
-     * 通知系统控制权
+     * 通知系统控制权.
      */
-    public function SetExclusive($function,$appid)
+    public function SetExclusive($function, $appid)
     {
         if ($appid == false) {
             return false;
         }
         $this->_exclusive[$function] = $appid;
+
         return true;
     }
+
     /**
-     * 查询系统控制权
+     * 查询系统控制权.
      */
     public function IsExclusive($function)
     {
         if (isset($this->_exclusive[$function])) {
             return $this->_exclusive[$function];
         }
+
         return false;
     }
 
