@@ -44,6 +44,6 @@ zbp.plugin.on("comment.got", "default", function () {
   $("#cancel-reply").click()
 })
 
-zbp.plugin.on("comment.post.success", "default", function () {
+zbp.plugin.on("comment.post.done", "default", function () {
   $("#cancel-reply").click()
 })

@@ -8,11 +8,10 @@
 	
 
 	// 评论字段校验规则，要求提交的内容必须有一个test字段
-	// 更好的办法是在c_html_js_add.php里挂接口添加，这里仅为示例
 	zbp.options.comment.inputs.test = {
 		required: true,
 		getter: function () {
-			return 'ZBPJF2'
+			return 'ZBPJF'
 		},
 		validator: function (text, callback) {
 			if (text !== 'ZBPJF') {
@@ -40,7 +39,6 @@
 	// 评论开始接口，只能对formData进行读取和修改
 	zbp.plugin.on("comment.post.start", "ZBPJFExample", function (formData) {
 		console.log('开始评论！')
-		formData.test = 'ZBPJF'
 	})
 
 	// 评论验证中接口
