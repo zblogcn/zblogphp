@@ -28,7 +28,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Header'] as $fpname => &$fpsigna
 
 ?>
 </head>
-<body>
+<body class="login">
 <div class="bg">
 <div id="wrapper">
   <div class="logo"><img src="image/admin/none.gif" title="<?php echo htmlspecialchars($blogname) ?>" alt="<?php echo htmlspecialchars($blogname) ?>"/></div>

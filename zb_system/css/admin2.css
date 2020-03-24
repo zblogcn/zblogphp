@@ -273,9 +273,9 @@ input.theme-config { margin-top: -3px; }
 span.title { font-weight: bold; }
 span.star { display: inline-block; margin: 6px; color: red; }
 span.note { font-size: 0.9em; }
-.pagebar span { color: #333; font-weight: bolder; padding: 3px 5px 2px 5px; border: 1px solid #999; background: #aaa; margin: 1px; }
-.pagebar a { border: 1px solid #999; background: #eee; padding: 2px; padding: 2px 5px 2px 5px; margin: 1px; }
-
+.pagebar span { color: #333; font-weight: bolder; padding: 3px 5px 2px 5px; margin: 1px; }
+.pagebar a { border-radius:0.3em;border: 1px solid #efefef;padding: 2px; padding: 2px 5px 2px 5px; margin: 1px; }
+.pagebar a:hover{border: 1px solid #ccc;}
 /*正文DIV下的导航条*/
 .SubMenu { padding: 0 0 0px 0; margin: 0 0 5px 0; width: 100%; text-align: left; font-size: 1em; height: 30px; line-height: 30px; border-bottom: 0px solid #3399cc; display: none; }
 .SubMenu span { float: left; margin: 0 0 0 0; text-align: center; padding: 0px 10px; cursor: pointer; color: #333333; }
@@ -309,7 +309,7 @@ span.button { cursor: pointer; }
 a.button,
 span.button { border-radius: 2px; padding: 2px 3px 2px 3px; line-height: 1.0em; font-size: 1em; }
 a.button:hover,
-span.button:hover { box-shadow: 0 0 1px #000; border-radius: 2px; -ms-border-radius: 2px; padding: 2px 3px 2px 3px; }
+span.button:hover { box-shadow: 0 0 1px #000; border-radius: 0.3em; padding: 2px 3px 2px 3px; }
 
 /*侧栏管理*/
 .widget-left { float: left; clear: left; width: 100%; margin-right: -290px; overflow: hidden; }
@@ -348,3 +348,8 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 2px; -ms-border-rad
 #loading { display: none; position: fixed; z-index: 1000; top: 0; left: 0; height: 100%; width: 100%; background: rgba(170, 170, 170, .3) url('../image/admin/loading-big.gif') 50% 50% no-repeat; }
 .login { height: 100px; margin: 0 auto; padding-left: 10px; }
 .login dd { width: 180px; float: left; }
+
+form.search{box-shadow:0 0 0.3em rgba(0,0,0,0.1);padding:1em;position:relative;background:#fff;margin:1em 0;border-radius:0.1em;}
+table{margin:0;border:none;line-height:1.8;box-shadow:0 0 0.5em rgba(0,0,0,0.2);}
+td,th{border:none;padding:0.5em;}
+th{background:none;}

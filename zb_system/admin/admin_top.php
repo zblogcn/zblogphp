@@ -2,7 +2,7 @@
     exit('Access denied');
 } ?>
 </head>
-<body>
+<body calss="admin admin-<?php echo $action;?>">
 <header class="header">
     <div class="logo"><a href="<?php echo $bloghost ?>" title="<?php echo htmlspecialchars($blogname) ?>" target="_blank"><img src="<?php echo $bloghost ?>zb_system/image/admin/none.gif" alt="Z-Blog"/></a></div>
     <div class="user"> <a href="<?php echo $bloghost ?>zb_system/cmd.php?act=MemberEdt&amp;id=<?php echo $zbp->user->ID ?>" title="<?php echo $lang['msg']['edit'] ?>"><img src="<?php echo $zbp->user->Avatar ?>" width="40" height="40" id="avatar" alt="Avatar" /></a>
