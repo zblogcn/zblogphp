@@ -23,7 +23,7 @@ unset($post_data['token']);
 } ?>
 
 </head>
-<body class="short">
+<body class="error short">
 <div class="bg">
     <div id="wrapper">
         <div class="logo"><img src="<?php echo $GLOBALS['bloghost']; ?>zb_system/image/admin/none.gif" title="Z-BlogPHP"
