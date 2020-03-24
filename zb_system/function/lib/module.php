@@ -71,6 +71,8 @@ class Module extends Base
                 return 'theme';
             } elseif ($this->Source == 'plugin_' . $zbp->theme) {
                 return 'theme';
+            } elseif ($this->Source == 'theme_' . $zbp->theme) {
+                return 'theme';
             } else {
                 return 'plugin';
             }

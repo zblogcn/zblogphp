@@ -137,12 +137,11 @@ class Base
 
             return true;
         }
-        if ($value === null) {
-            return false;
+        if ($value !== null) {
+            $this->data[$key] = $value;
+            return true;
         }
-        $this->data[$key] = $value;
-
-        return true;
+        return false;
     }
 
     /**
