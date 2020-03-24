@@ -139,8 +139,10 @@ class Base
         }
         if ($value !== null) {
             $this->data[$key] = $value;
+
             return true;
         }
+
         return false;
     }
 
