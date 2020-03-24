@@ -75,13 +75,14 @@ class Module extends Base
                 //如果是plugin_主题名，还是判断为theme，修正历史遗留问题
                 $ts = $zbp->LoadThemes();
                 foreach ($ts as $t) {
-                    if ( $this->Source == 'plugin_' . $t->id ) {
+                    if ($this->Source == 'plugin_' . $t->id) {
                         return 'theme';
                     }
                 }
+
                 return 'plugin';
             } else {
-                 return 'plugin';
+                return 'plugin';
             }
         }
         if ($name == 'NoRefresh') {
