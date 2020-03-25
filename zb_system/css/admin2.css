@@ -49,10 +49,10 @@ ol { list-style-type: decimal; margin-left: 2em; }
 label { cursor: pointer; }
 
 /**/
-table { border-collapse: collapse; border: 1px solid #E1E1E1; background: #ffffff; line-height: 120%; }
+table { border-collapse: collapse; background: #ffffff; line-height: 120%; }
 table label { -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
 td,
-th { border: 1px solid #E1E1E1; margin: 0; padding: 3px 5px; text-indent: 0; vertical-align: middle; }
+th { margin: 0; text-indent: 0; vertical-align: middle; }
 tr img { margin-bottom: -4px; }
 tr.color1 { background: #ededed; }
 tr.color2 { background: #F4F4F4; }
@@ -351,5 +351,6 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 0.3em; padding: 2px
 
 form.search{box-shadow:0 0 0.3em rgba(0,0,0,0.1);padding:1em;position:relative;background:#fff;margin:1em 0;border-radius:0.1em;}
 table{margin:0;border:none;line-height:1.8;box-shadow:0 0 0.5em rgba(0,0,0,0.2);}
-td,th{border:none;padding:0.5em;}
-th{background:none;}
+td,th{border:none;padding:0.5em; border-right: 1px solid #efefef;}
+td:last-child{border-right:none;}
+th:last-child{border-right:none;}

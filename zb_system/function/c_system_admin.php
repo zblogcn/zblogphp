@@ -456,7 +456,7 @@ function OutputOptionItemsOfPostStatus($default)
 function CreateModuleDiv($m, $button = true)
 {
     global $zbp;
-    //if($m->FileName == 'zit_cmtids'){
+
     echo '<div class="widget widget_source_' . $m->SourceType . ' widget_id_' . $m->FileName . '">';
     echo '<div class="widget-title"><img class="more-action" width="16" src="../image/admin/brick.png" alt="" />' . (($m->SourceType != 'theme' || $m->Source == 'plugin_' . $zbp->theme) ? $m->Name : $m->FileName) . '';
 
@@ -482,7 +482,7 @@ function CreateModuleDiv($m, $button = true)
     echo '</div>';
     echo '<div class="funid" style="display:none">' . $m->FileName . '</div>';
     echo '</div>';
-    //}
+
 }
 
 /**
@@ -1478,11 +1478,11 @@ function Admin_ModuleMng()
             $um[] = $m;
         } elseif ($m->SourceType == 'theme') {
             //判断模块归属当前主题
-            if ((substr($m->Source, -1 - strlen($zbp->theme))) == ('_' . $zbp->theme)) {
+            if ( (substr($m->Source, -1-strlen($zbp->theme))) == ('_' . $zbp->theme) ) {
                 $tm[] = $m;
             }
         } else {
-            $pm[] = $m;
+                $pm[] = $m;
         }
     }
 

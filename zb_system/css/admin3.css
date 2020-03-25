@@ -4,6 +4,7 @@ body { padding: 0; margin: 0; font-family: "Microsoft YaHei", STHeiti, "Hiragino
 font[color='#3D69AA'] { background: #3D69AA; }
 #ddleft { float: left; width: 340px; height: 400px; font-size: 14px; margin-right: 20px; }
 #ddright { float: left; width: 600px; height: 400px; }
+input,select{border:1px solid #999;line-height: 1.5em;border-radius:2px;}
 input[type="text"],
 input[type="password"] { padding: 3px 5px; }
 input[readonly] { background: #eee; border: 1px solid #ccc; }
@@ -25,12 +26,13 @@ p { line-height: 2.5em; clear: both; }
 #content b { font-weight: blod; width: 120px; float: left; }
 #content small { font-size: 12px; }
 label { cursor: pointer; }
-
+textarea{padding:0.5em;box-shadow:0 0 0.5em rgba(0,0,0,0.2);}
 /*表   格*/
-table { border-collapse: collapse; border: 1px solid #E1E1E1; background: #ffffff; line-height: 120%; }
+table { border-collapse: collapse; background: #ffffff; line-height: 120%;box-shadow:0 0 0.5em rgba(0,0,0,0.2); }
 td,
-th { border: 1px solid #E1E1E1; margin: 0; padding: 3px 5px; vertical-align: middle; }
-
+th { border-right: 1px solid #efefef; margin: 0; padding: 5px 5px; vertical-align: middle; }
+td:last-child{border-right:none;}
+th:last-child{border-right:none;}
 .table_hover > tbody > tr > td:hover,
 .table_hover > tbody > tr > th:hover,
 .table_hover > tbody > tr:hover > td,

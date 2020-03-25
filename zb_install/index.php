@@ -84,7 +84,7 @@ if (($zbp->option['ZC_DATABASE_TYPE'] !== '') && ($zbp->option['ZC_YUN_SITE'] ==
 Include_AddonAdminFont();
 ?>
 </head>
-<body>
+<body clas="install">
 <div class="setup">
 <?php
 $s = $_SERVER['QUERY_STRING'];
