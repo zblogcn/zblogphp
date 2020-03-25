@@ -25,7 +25,6 @@ function VerifyLogin($throwException = true)
     /** @var Member $m */
     $m = null;
     if ($zbp->Verify_MD5(trim(GetVars('username', 'POST')), trim(GetVars('password', 'POST')), $m)) {
-
         $zbp->user = $m;
         $sd = (float) GetVars('savedate');
         $sd = ($sd < 0.003472) ? 0.003472 : $sd; // > 5 min
