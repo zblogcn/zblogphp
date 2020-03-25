@@ -8,9 +8,10 @@ input,select{border:1px solid #999;line-height: 1.5em;border-radius:2px;}
 input[type="text"],
 input[type="password"] { padding: 3px 5px; }
 input[readonly] { background: #eee; border: 1px solid #ccc; }
-input[type="submit"],
-input[type="button"] { color: #FFFFFF; font-size: 1.1em; height: 1.8em; padding: 0.15em 2em 0.20em 2em; padding: 0.15em 1em 0.20em 1em\9; margin: 0.2em 0.5em; background: #3a6ea5; border: 1px solid #3a6ea5; cursor: pointer; }
-input[disabled] { background: #eee; color: #999; border: 1px solid #ddd; }
+input[type="submit"],button,
+input[type="button"] { color: #FFFFFF; font-size: 1.1em; height: 1.8em; padding: 0.15em 2em 0.20em 2em;margin: 0.2em 0.5em; background: #3a6ea5; border: 1px solid #3a6ea5; cursor: pointer; }
+input[type="submit"]:hover,input[type="button"]:hover,button:hover{background: #3399cc;border: 1px solid #3399cc;}
+input[disabled], input[disabled]:hover{ background: #eee; color: #999; border: 1px solid #ddd; }
 #title { color: #3d69aa; border-bottom: 1px solid #3d69aa; font-size: 20px; font-weight: bolder; padding-bottom: 5px; margin-bottom: 5px; }
 .title { color: #3d69aa; border-bottom: 1px solid #fff; font-size: 18px; font-weight: bolder; padding-top: 10px; }
 #content { padding: 15px 0 }

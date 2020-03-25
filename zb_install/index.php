@@ -547,7 +547,7 @@ function Setup3()
 <?php if ($zbp->option['ZC_YUN_SITE'] == '') {
                 ?>
         <p><b><?php echo $zbp->lang['zb_install']['db_engine']; ?></b>
-          <select id="dbengine" name="dbengine" style="width:360px;" >
+          <select id="dbengine" name="dbengine" style="width:350px;padding:0.3em 0;" >
           <option value="MyISAM" selected>MyISAM(<?php echo $zbp->lang['msg']['default']; ?>)</option>
           <option value="InnoDB" >InnoDB</option>
         </select>

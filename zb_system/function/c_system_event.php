@@ -24,21 +24,13 @@ function VerifyLogin($throwException = true)
     global $zbp;
     /** @var Member $m */
     $m = null;
-    $u = trim(GetVars('username', 'POST'));
-    $p = trim(GetVars('password', 'POST'));
-    if ($zbp->Verify_MD5(GetVars('username', 'POST'), GetVars('password', 'POST'), $m)) {
+    if ($zbp->Verify_MD5(trim(GetVars('username', 'POST')), trim(GetVars('password', 'POST')), $m)) {
+
         $zbp->user = $m;
-        $un = $m->Name;
-        $ps = $zbp->VerifyResult($m);
-        $sd = (int) GetVars('savedate');
-
-        if ($sd == 0) {
-            $sdt = 0;
-        } else {
-            $sdt = time() + 3600 * 24 * $sd;
-        }
-
-        SetLoginCookie($m, $sdt);
+        $sd = (float) GetVars('savedate');
+        $sd = ($sd < 0.003472) ? 0.003472 : $sd; // > 5 min
+        $sdt = time() + 3600 * 24 * $sd;
+        SetLoginCookie($m, (int) $sdt);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_VerifyLogin_Succeed'] as $fpname => &$fpsignal) {
             $fpname();
