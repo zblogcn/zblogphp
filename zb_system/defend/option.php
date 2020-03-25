@@ -61,7 +61,6 @@ return array(
     'ZC_USING_PLUGIN_LIST' => '',
 
     // '-------------------------------全局配置-----------------------------------
-    'ZC_YUN_SITE'        => '',
     'ZC_BLOG_CLSID'      => '',
     'ZC_TIME_ZONE_NAME'  => 'Asia/Shanghai',
     'ZC_UPDATE_INFO_URL' => 'https://update.zblogcn.com/info/',

@@ -961,13 +961,12 @@ class ZBlogPHP
             }
         }
 
-        if (strpos('|SAE|BAE2|ACE|TXY|', '|' . $this->option['ZC_YUN_SITE'] . '|') === false && file_exists($this->usersdir . 'c_option.php') == false) {
+        if (file_exists($this->usersdir . 'c_option.php') == false) {
             $s = "<" . "?" . "php\r\n";
             $s .= "return ";
             $option = array();
             foreach ($this->option as $key => $value) {
-                if (($key == 'ZC_YUN_SITE') ||
-                    ($key == 'ZC_DATABASE_TYPE') ||
+                if (($key == 'ZC_DATABASE_TYPE') ||
                     ($key == 'ZC_SQLITE_NAME') ||
                     ($key == 'ZC_SQLITE_PRE') ||
                     ($key == 'ZC_MYSQL_SERVER') ||
@@ -1034,8 +1033,7 @@ class ZBlogPHP
                 $value = str_replace('|', '', $value);
             }
 
-            if (($key == 'ZC_YUN_SITE') ||
-                ($key == 'ZC_DATABASE_TYPE') ||
+            if (($key == 'ZC_DATABASE_TYPE') ||
                 ($key == 'ZC_SQLITE_NAME') ||
                 ($key == 'ZC_SQLITE_PRE') ||
                 ($key == 'ZC_MYSQL_SERVER') ||
@@ -3161,7 +3159,7 @@ class ZBlogPHP
                 return false;
             }
 
-            if (function_exists('ini_set') && function_exists('zlib_encode') && $this->option['ZC_YUN_SITE'] !== 'SAE') {
+            if (function_exists('ini_set') && function_exists('zlib_encode')) {
                 @ob_end_clean();
                 @ini_set('zlib.output_compression', 'On');
                 @ini_set('zlib.output_compression_level', '5');
@@ -3200,11 +3198,6 @@ class ZBlogPHP
             Redirect('./zb_install/index.php');
         }
 
-        if ($this->option['ZC_YUN_SITE']) {
-            if ($this->Config('system')->CountItem() == 0) {
-                Redirect('./zb_install/index.php');
-            }
-        }
     }
 
     /**
@@ -3335,29 +3328,25 @@ class ZBlogPHP
 
     //举例：backend-ui,,,
     protected $_exclusive = array();
-
     /**
-     * 通知系统控制权.
+     * 通知系统控制权
      */
-    public function SetExclusive($function, $appid)
+    public function SetExclusive($function,$appid)
     {
         if ($appid == false) {
             return false;
         }
         $this->_exclusive[$function] = $appid;
-
         return true;
     }
-
     /**
-     * 查询系统控制权.
+     * 查询系统控制权
      */
     public function IsExclusive($function)
     {
         if (isset($this->_exclusive[$function])) {
             return $this->_exclusive[$function];
         }
-
         return false;
     }
 

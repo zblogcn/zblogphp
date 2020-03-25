@@ -58,12 +58,8 @@ if ($zblogstep == 0) {
     $zblogstep = 1;
 }
 
-if (($zbp->option['ZC_DATABASE_TYPE'] !== '') && ($zbp->option['ZC_YUN_SITE'] == '')) {
+if ($zbp->option['ZC_DATABASE_TYPE'] !== '') {
     $zblogstep = 0;
-} elseif (($zbp->option['ZC_DATABASE_TYPE']) && ($zbp->option['ZC_YUN_SITE'])) {
-    if ($zbp->Config('system')->CountItem() > 0) {
-        $zblogstep = 0;
-    }
 }
 ?>
 <!DOCTYPE HTML>
@@ -544,16 +540,12 @@ function Setup3()
         <p><b><?php echo $zbp->lang['zb_install']['db_pre']; ?></b>
           <input type="text" name="dbmysql_pre" id="dbmysql_pre" value="<?php echo $option['ZC_MYSQL_PRE']; ?>" style="width:350px;" />
         </p>
-<?php if ($zbp->option['ZC_YUN_SITE'] == '') {
-                ?>
         <p><b><?php echo $zbp->lang['zb_install']['db_engine']; ?></b>
           <select id="dbengine" name="dbengine" style="width:350px;padding:0.3em 0;" >
           <option value="MyISAM" selected>MyISAM(<?php echo $zbp->lang['msg']['default']; ?>)</option>
           <option value="InnoDB" >InnoDB</option>
         </select>
         </p>
-<?php
-            } ?>
       <p><b><?php echo $zbp->lang['zb_install']['db_drive']; ?></b>
         <?php if ($CheckResult['mysqli'][0]) {
                 ?>
@@ -691,10 +683,6 @@ function Setup4()
             case 'mysqli':
             case 'pdo_mysql':
                 $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/mysql.sql');
-
-                if ($zbp->option['ZC_YUN_SITE'] != '') {
-                    break;
-                }
 
                 $zbp->option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'POST');
                 if (strpos($zbp->option['ZC_MYSQL_SERVER'], ':') !== false) {
@@ -1221,8 +1209,7 @@ function SaveConfig()
         $s .= "return ";
         $option = array();
         foreach ($zbp->option as $key => $value) {
-            if (($key == 'ZC_YUN_SITE') ||
-                ($key == 'ZC_DATABASE_TYPE') ||
+            if (($key == 'ZC_DATABASE_TYPE') ||
                 ($key == 'ZC_SQLITE_NAME') ||
                 ($key == 'ZC_SQLITE_PRE') ||
                 ($key == 'ZC_MYSQL_SERVER') ||
