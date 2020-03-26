@@ -472,15 +472,15 @@ class ZBlogPHP
         }
 
         //ZC_PERMANENT_DOMAIN_WHOLE_DISABLE不存在 或是 ZC_PERMANENT_DOMAIN_WHOLE_DISABLE存在但为假
-        $domain_disable = GetValueInArray($this->option,'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
+        $domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
         if ($domain_disable == false) {
             //如果ZC_PERMANENT_DOMAIN_FORCED_URL存在 且不为空
-            $forced_url = GetValueInArray($this->option,'ZC_PERMANENT_DOMAIN_FORCED_URL');
-            if ($forced_url != ''){
+            $forced_url = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
+            if ($forced_url != '') {
                 $this->host = (string) $forced_url;
                 $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
             //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
-            }elseif ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
+            } elseif ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
                 $this->host = $this->option['ZC_BLOG_HOST'];
                 $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
             //默认自动识别域名
@@ -3212,7 +3212,6 @@ class ZBlogPHP
         if (!$this->option['ZC_DATABASE_TYPE']) {
             Redirect('./zb_install/index.php');
         }
-
     }
 
     /**
@@ -3220,12 +3219,12 @@ class ZBlogPHP
      */
     public function RedirectPermanentDomain()
     {
-        $domain_disable = GetValueInArray($this->option,'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
+        $domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
         if ($domain_disable == true) {
             return;
         }
 
-        $forced = GetValueInArray($this->option,'ZC_PERMANENT_DOMAIN_FORCED_URL');
+        $forced = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
         if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == false && $forced == '') {
             return;
         }
@@ -3345,25 +3344,29 @@ class ZBlogPHP
 
     //举例：backend-ui,,,
     protected $_exclusive = array();
+
     /**
-     * 通知系统控制权
+     * 通知系统控制权.
      */
-    public function SetExclusive($function,$appid)
+    public function SetExclusive($function, $appid)
     {
         if ($appid == false) {
             return false;
         }
         $this->_exclusive[$function] = $appid;
+
         return true;
     }
+
     /**
-     * 查询系统控制权
+     * 查询系统控制权.
      */
     public function IsExclusive($function)
     {
         if (isset($this->_exclusive[$function])) {
             return $this->_exclusive[$function];
         }
+
         return false;
     }
 
