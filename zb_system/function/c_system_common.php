@@ -527,19 +527,36 @@ function GetDirsInDir($dir)
 {
     $dirs = array();
 
-    $dir = str_replace('\\', '/', $dir);
-    if (substr($dir, -1) !== '/') {
-        $dir .= '/';
+    if (!file_exists($dir)) {
+        return array();
     }
     if (!is_dir($dir)) {
         return array();
     }
+    $dir = str_replace('\\', '/', $dir);
+    if (substr($dir, -1) !== '/') {
+        $dir .= '/';
+    }
 
-    foreach (scandir($dir, 0) as $d) {
-        if (is_dir($dir . $d)) {
-            if (($d != '.') && ($d != '..')) {
-                $dirs[] = $d;
+    //lnmp.org原来是这个傻逼去禁用scandir，不然就要删除这里的兼容处理了
+    if (function_exists('scandir')) {
+        foreach (scandir($dir, 0) as $d) {
+            if (is_dir($dir . $d)) {
+                if (($d != '.') && ($d != '..')) {
+                    $dirs[] = $d;
+                }
             }
+        }
+    } else {
+        if ($handle = opendir($dir)) {
+            while (false !== ($file = readdir($handle))) {
+                if ($file != "." && $file != "..") {
+                    if (is_dir($dir . $file)) {
+                        $dirs[] = $file;
+                    }
+                }
+            }
+            closedir($handle);
         }
     }
 
@@ -1676,7 +1693,8 @@ function GetIDArrayByList($array, $keyname = null)
         if ($keyname == null) {
             $ids[] = reset($value->GetData());
         } else {
-            $ids[] = $value->GetData()[$keyname];
+            $a = &$value->GetData();
+            $ids[] = $a[$keyname];
         }
     }
 
