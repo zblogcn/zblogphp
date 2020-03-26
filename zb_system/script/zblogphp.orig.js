@@ -40,7 +40,7 @@
     if (!console) {
       window.console = {}
       console.logs = []
-      console.log = console.error = console.warning = function () {
+      console.log = console.error = console.warn = function () {
         console.logs.push(arguments)
       }
     }
@@ -305,7 +305,7 @@
 
     Plugin.prototype.checkIsInterfaceDeprecated = function (interfaceName) {
       if (deprecatedEvents.indexOf(interfaceName) >= 0) {
-        console.warning("Interface '" + interfaceName + "' is deprecated in ZBP 1.6, please update your plugin or theme!")
+        console.warn("Interface '" + interfaceName + "' is deprecated in ZBP 1.6, please update your plugin or theme!")
         return true
       }
       return false
