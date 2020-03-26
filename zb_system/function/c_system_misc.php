@@ -370,47 +370,36 @@ table a img {filter:hue-rotate(-30deg);}
 RunTime();
 }
 
+
+function misc_respondping(){
+    $token = GetVars('token', 'GET');
+    if (VerifyWebToken($token, "")) {
+        echo 'ok';
+        die;
+    }
+}
+
 function misc_ping()
 {
     global $zbp;
     $data = array();
     $token = GetVars('token', 'GET');
+
     if (VerifyWebToken($token, "")) {
-        JsonError(0, '<em>' . $zbp->lang['msg']['verify_succeed'] . '</em>', $data);
-
-        return;
-    }
-    JsonError(1, $zbp->lang['error'][38], $data);
-
-    /*
-        $token = GetVars('token', 'GET');
-        if (VerifyWebToken($token, "")) {
-            header('Access-Control-Allow-Origin:*');
-            $data["token"] = $token;
-            $data["product"] = $zbp->option['ZC_BLOG_PRODUCT_FULL'];
-            $http = Network::Create();
-            $http->open('GET', GetVars("newurl", "GET"));
-            $http->setTimeOuts(7, 7, 0, 0);
-            $http->send();
-            if ($http->status == 200) {
-                $data["product2"] = $http->getResponseHeader('Product');
-                if ($data["product"] !== $data["product2"]) {
-                    JsonError(1, "新地址程序不一致", $data);
-
-                    return;
-                }
-            } else {
-                JsonError(1, "访问检测失败", $data);
-
-                return;
+        $url = GetVars('url') . 'zb_system/cmd.php?act=misc&type=respondping&token=' . $token;
+        $http = Network::Create();
+        $http->open('GET', $url);
+        $http->setTimeOuts(10, 10, 0, 0);
+        $http->send();
+        if ($http->status == 200) {
+            $s = $http->responseText;
+            if ( $s == 'ok') {
+                JsonError(0, '<em>' . $zbp->lang['msg']['verify_succeed'] . '</em>', $data);
             }
-            JsonError(0, "校验成功", $data);
-
             return;
         }
-        JsonReturn($data);
-        JsonError(1, "无效的TOKEN", $data);
-    */
+    }
+    JsonError(1, $zbp->lang['error'][5], $data);
 }
 
 function misc_updatedapp()

@@ -1911,9 +1911,9 @@ function changeDomain(newurl){
     if(newurl.substr(newurl.length-1,1) != "/" ){
         newurl = newurl + "/";
     }
-    url = newurl + "zb_system/cmd.php?act=misc&type=ping&token=" + token;
+    url = bloghost + "zb_system/cmd.php?act=misc&type=ping&token=" + token;
     $(".js-tip").html("<em>' . $zbp->lang['msg']['verifying'] . '</em>");
-    $.getJSON(url,{newurl:newurl},function(data) {
+    $.getJSON(url,{url:newurl},function(data) {
         if (data) {
             $(".js-tip").html(data.err.msg);
             //data.err === 0 && $("#btnPost").removeAttr("disabled");
