@@ -277,7 +277,7 @@ span.note { font-size: 0.9em; }
 .pagebar a { border-radius:0.3em;border: 1px solid #efefef;padding: 2px; padding: 2px 5px 2px 5px; margin: 1px; }
 .pagebar a:hover{border: 1px solid #ccc;}
 /*正文DIV下的导航条*/
-.SubMenu { padding: 0 0 0px 0; margin: 0 0 5px 0; width: 100%; text-align: left; font-size: 1em; height: 30px; line-height: 30px; border-bottom: 0px solid #3399cc; display: none; }
+.SubMenu { padding: 0 0 0px 0; margin: 0.3em 0 1em 0; width: 100%; text-align: left; font-size: 1em; height: 30px; line-height: 30px; border-bottom: 0px solid #3399cc; display: none; }
 .SubMenu span { float: left; margin: 0 0 0 0; text-align: center; padding: 0px 10px; cursor: pointer; color: #333333; }
 .SubMenu span.m-left,
 .SubMenu span.m-right { float: left; }
