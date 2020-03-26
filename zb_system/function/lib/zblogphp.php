@@ -471,9 +471,22 @@ class ZBlogPHP
             ZBlogException::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
         }
 
-        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true && (isset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']) == true && $this->option['ZC_PERMANENT_DOMAIN_DISABLE'] = true)) {
-            $this->host = $this->option['ZC_BLOG_HOST'];
-            $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
+        //ZC_PERMANENT_DOMAIN_WHOLE_DISABLE不存在 或是 ZC_PERMANENT_DOMAIN_WHOLE_DISABLE存在但为假
+        $domain_disable = GetValueInArray($this->option,'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
+        if ($domain_disable == false) {
+            //如果ZC_PERMANENT_DOMAIN_FORCED_URL存在 且不为空
+            $forced_url = GetValueInArray($this->option,'ZC_PERMANENT_DOMAIN_FORCED_URL');
+            if ($forced_url != ''){
+                $this->host = (string) $forced_url;
+                $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
+            //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
+            }elseif ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
+                $this->host = $this->option['ZC_BLOG_HOST'];
+                $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
+            //默认自动识别域名
+            } else {
+                $this->option['ZC_BLOG_HOST'] = $this->host;
+            }
         } else {
             $this->option['ZC_BLOG_HOST'] = $this->host;
         }
@@ -953,7 +966,8 @@ class ZBlogPHP
     {
         $this->option['ZC_BLOG_CLSID'] = $this->guid;
 
-        unset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']);
+        unset($this->option['ZC_PERMANENT_DOMAIN_WHOLE_DISABLE']);
+        unset($this->option['ZC_PERMANENT_DOMAIN_FORCED_URL']);
 
         if (ZC_VERSION_MAJOR === '1' && ZC_VERSION_MINOR === '5') {
             if (is_dir($this->path . 'zb_system/api')) {
@@ -1054,7 +1068,8 @@ class ZBlogPHP
                 ($key == 'ZC_PGSQL_PORT') ||
                 ($key == 'ZC_PGSQL_PERSISTENT') ||
                 ($key == 'ZC_CLOSE_WHOLE_SITE') ||
-                ($key == 'ZC_PERMANENT_DOMAIN_DISABLE')
+                ($key == 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE') ||
+                ($key == 'ZC_PERMANENT_DOMAIN_FORCED_URL')
             ) {
                 continue;
             }
@@ -3197,6 +3212,7 @@ class ZBlogPHP
         if (!$this->option['ZC_DATABASE_TYPE']) {
             Redirect('./zb_install/index.php');
         }
+
     }
 
     /**
@@ -3204,11 +3220,13 @@ class ZBlogPHP
      */
     public function RedirectPermanentDomain()
     {
-        if (isset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']) == true && $this->option['ZC_PERMANENT_DOMAIN_DISABLE'] = true) {
+        $domain_disable = GetValueInArray($this->option,'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
+        if ($domain_disable == true) {
             return;
         }
 
-        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == false) {
+        $forced = GetValueInArray($this->option,'ZC_PERMANENT_DOMAIN_FORCED_URL');
+        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == false && $forced == '') {
             return;
         }
 
@@ -3327,29 +3345,25 @@ class ZBlogPHP
 
     //举例：backend-ui,,,
     protected $_exclusive = array();
-
     /**
-     * 通知系统控制权.
+     * 通知系统控制权
      */
-    public function SetExclusive($function, $appid)
+    public function SetExclusive($function,$appid)
     {
         if ($appid == false) {
             return false;
         }
         $this->_exclusive[$function] = $appid;
-
         return true;
     }
-
     /**
-     * 查询系统控制权.
+     * 查询系统控制权
      */
     public function IsExclusive($function)
     {
         if (isset($this->_exclusive[$function])) {
             return $this->_exclusive[$function];
         }
-
         return false;
     }
 
