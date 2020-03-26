@@ -165,12 +165,12 @@ if(isset($SEOON) && $SEOON == '1'){
     <script src="{$host}zb_system/script/zblogphp.js" type="text/javascript"></script>
     <script src="{$host}zb_system/script/c_html_js_add.php" type="text/javascript"></script>
     <script type="text/javascript" src="{$host}zb_users/theme/{$theme}/script/common.js"></script>
-    <script type="text/javascript">window.tpure={{if $zbp->Config('tpure')->PostBANNERDISPLAYON=='1'}bannerdisplay:'on',{/if}{if $zbp->Config('tpure')->PostVIEWALLON=='1'}viewall:'on',{/if}{if $zbp->Config('tpure')->PostVIEWALLSTYLE}viewallstyle:'1',{else}viewallstyle:'0',{/if}{if $zbp->Config('tpure')->PostVIEWALLHEIGHT}viewallheight:'{$zbp->Config('tpure')->PostVIEWALLHEIGHT}',{/if}{if $zbp->Config('tpure')->PostSELECTON=='1'}selectstart:'on',{/if}{if $zbp->Config('tpure')->PostSINGLEKEY=='1'}singlekey:'on',{/if}{if $zbp->Config('tpure')->PostPAGEKEY=='1'}pagekey:'on',{/if}{if $zbp->Config('tpure')->PostREMOVEPON=='1'}removep:'on',{/if}{if $zbp->Config('tpure')->PostBACKTOTOPON=='1'}backtotop:'on'{/if}}</script>
+    <script type="text/javascript">window.tpure={{if $zbp->Config('tpure')->PostBANNERDISPLAYON=='1'}bannerdisplay:'on',{/if}{if $zbp->Config('tpure')->PostVIEWALLON=='1'}viewall:'on',{/if}{if $zbp->Config('tpure')->PostVIEWALLSTYLE}viewallstyle:'1',{else}viewallstyle:'0',{/if}{if $zbp->Config('tpure')->PostVIEWALLHEIGHT}viewallheight:'{$zbp->Config('tpure')->PostVIEWALLHEIGHT}',{/if}{if $zbp->Config('tpure')->PostSINGLEKEY=='1'}singlekey:'on',{/if}{if $zbp->Config('tpure')->PostPAGEKEY=='1'}pagekey:'on',{/if}{if $zbp->Config('tpure')->PostREMOVEPON=='1'}removep:'on',{/if}{if $zbp->Config('tpure')->PostBACKTOTOPON=='1'}backtotop:'on'{/if}}</script>
 {if $zbp->Config('tpure')->PostBLANKON=='1'}
     <base target="_blank" />
 {/if}
 {if $zbp->Config('tpure')->PostGREYON=='1'}
-<style>html {filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);-webkit-filter: grayscale(100%);}</style>
+<style>html {filter: grayscale(100%);}</style>
 {/if}
 {if $type=='article'}
     <link rel="canonical" href="{$article.Url}"/>

@@ -49,6 +49,7 @@ if ($zbp->CheckPlugin('UEditor')) {
 <?php
 if ($act == 'base') {
     if (isset($_POST['PostLOGO'])) {
+    	CheckIsRefererValid();
         $zbp->Config('tpure')->PostLOGO = $_POST['PostLOGO'];					//网站LOGO
         $zbp->Config('tpure')->PostLOGOON = $_POST['PostLOGOON'];					//图片LOGO开关
         $zbp->Config('tpure')->PostFAVICON = $_POST['PostFAVICON'];				//浏览器标签栏图标
@@ -81,8 +82,6 @@ if ($act == 'base') {
         $zbp->Config('tpure')->PostBLANKON = $_POST['PostBLANKON'];				//全局链接新窗口开关
         $zbp->Config('tpure')->PostGREYON = $_POST['PostGREYON'];				//整站变灰开关
         $zbp->Config('tpure')->PostREMOVEPON = $_POST['PostREMOVEPON'];			//隐藏文章空段落开关
-        $zbp->Config('tpure')->PostSELECTON = $_POST['PostSELECTON'];			//全局鼠标选中限制开关
-        $zbp->Config('tpure')->PostGLOBALSEARCHON = $_POST['PostGLOBALSEARCHON'];	//全局搜索开关
         $zbp->Config('tpure')->PostTIMEAGOON = $_POST['PostTIMEAGOON'];			//个性化时间
         $zbp->Config('tpure')->PostBACKTOTOPON = $_POST['PostBACKTOTOPON'];		//返回顶部开关
         $zbp->Config('tpure')->PostSAVECONFIG = $_POST['PostSAVECONFIG'];			//保存配置开关
@@ -345,16 +344,6 @@ if ($act == 'base') {
 			<label>清理空段落</label>
 			<input type="text" id="PostREMOVEPON" name="PostREMOVEPON" class="checkbox" value="<?php echo $zbp->Config('tpure')->PostREMOVEPON; ?>" />
 			<i class="help"></i><span class="helpcon">“ON”为清理文章页空白段落；<br>“OFF”为显示文章页空白段落。</span>
-		</dd>
-		<dd class="half">
-			<label>内容保护</label>
-			<input type="text" id="PostSELECTON" name="PostSELECTON" class="checkbox" value="<?php echo $zbp->Config('tpure')->PostSELECTON; ?>" />
-			<i class="help"></i><span class="helpcon">“ON”为启用内容保护(禁止选中文字、禁止鼠标右键，禁止调试)；“OFF”为关闭保护；</span>
-		</dd>
-		<dd class="half">
-			<label>全局搜索</label>
-			<input type="text" id="PostGLOBALSEARCHON" name="PostGLOBALSEARCHON" class="checkbox" value="<?php echo $zbp->Config('tpure')->PostGLOBALSEARCHON; ?>" />
-			<i class="help"></i><span class="helpcon">“ON”为启用全局搜索(搜索文章及页面)；<br>“OFF”为关闭全局搜索，仅搜索文章；</span>
 		</dd>
 		<dd class="half">
 			<label>友好化时间</label>

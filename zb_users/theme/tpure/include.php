@@ -413,8 +413,6 @@ function InstallPlugin_tpure()
             'PostBLANKON'         => '0',
             'PostGREYON'          => '0',
             'PostREMOVEPON'       => '1',
-            'PostSELECTON'        => '0',
-            'PostGLOBALSEARCHON'  => '0',
             'PostTIMEAGOON'       => '1',
             'PostBACKTOTOPON'     => '1',
             'PostSAVECONFIG'      => '1',
