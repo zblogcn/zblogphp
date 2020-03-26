@@ -103,6 +103,7 @@ CSS;
   }
 ?>
 </style>
+<style style="text/css" id="custom-hug"></style>
 <div id="divMain">
   <div class="divHeader"><?php echo $blogtitle; ?></div>
   <div class="SubMenu"></div>
@@ -184,6 +185,7 @@ $("#slider").slider({
   value: "<?php echo $cfg->Hue; ?>",
   slide:function(item,ui){
     $("#hue").css("filter","hue-rotate("+ui.value+"deg)").val(ui.value);
+    $("#custom-hug").html('input,button,.zit,.hue,#navim,#backdrop,a img,input.button,.btn,.left,.pagebar span,.theme-now,.SubMenu{filter:hue-rotate(' + ui.value + 'deg)}');
   },
 });
 $("input.pic").focus(function(){
