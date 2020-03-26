@@ -538,7 +538,10 @@ function GetDirsInDir($dir)
         $dir .= '/';
     }
 
-    //lnmp.org原来是这个傻逼去禁用scandir，不然就要删除这里的兼容处理了
+    // 此处的scandir虽然是PHP 5就已加入的内容，但必须加上兼容处理
+    // 部分一键安装包的早期版本对其进行了禁用
+    // 这一禁用对安全没有任何帮助，推测是早期互联网流传下来的“安全秘笈”。
+    // @see: https://github.com/licess/lnmp/commit/bd34d5c803308afdac61626018e4168716d089ae#diff-6282e7667da1e2fc683bed06f87f74c1
     if (function_exists('scandir')) {
         foreach (scandir($dir, 0) as $d) {
             if (is_dir($dir . $d)) {
