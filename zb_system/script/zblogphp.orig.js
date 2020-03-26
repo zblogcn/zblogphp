@@ -305,7 +305,7 @@
 
     Plugin.prototype.checkIsInterfaceDeprecated = function (interfaceName) {
       if (deprecatedEvents.indexOf(interfaceName) >= 0) {
-        console.error("Interface '" + interfaceName + "' is deprecated in ZBP 1.6, please update your plugin or theme!")
+        console.warning("Interface '" + interfaceName + "' is deprecated in ZBP 1.6, please update your plugin or theme!")
         return true
       }
       return false
