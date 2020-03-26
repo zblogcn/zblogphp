@@ -230,7 +230,7 @@
       this.plugin.on('comment.reply.start', SYSTEM_DEFAULT_EVENT_NAME, function (id) {
         this.$('#inpRevID').val(id)
         this.$('#cancel-reply').show().bind('click', function () {
-          this.plugin.emit('comment.reply.cancel')
+          self.plugin.emit('comment.reply.cancel')
           self.$('#inpRevID').val(0)
           self.$(this).hide()
           window.location.hash = '#comment'
