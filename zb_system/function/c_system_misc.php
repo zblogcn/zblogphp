@@ -370,8 +370,8 @@ table a img {filter:hue-rotate(-30deg);}
 RunTime();
 }
 
-
-function misc_respondping(){
+function misc_respondping()
+{
     $token = GetVars('token', 'GET');
     if (VerifyWebToken($token, "")) {
         echo 'ok';
@@ -393,9 +393,10 @@ function misc_ping()
         $http->send();
         if ($http->status == 200) {
             $s = $http->responseText;
-            if ( $s == 'ok') {
+            if ($s == 'ok') {
                 JsonError(0, '<em>' . $zbp->lang['msg']['verify_succeed'] . '</em>', $data);
             }
+
             return;
         }
     }
