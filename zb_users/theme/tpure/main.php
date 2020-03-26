@@ -49,7 +49,7 @@ if ($zbp->CheckPlugin('UEditor')) {
 <?php
 if ($act == 'base') {
     if (isset($_POST['PostLOGO'])) {
-    	CheckIsRefererValid();
+        CheckIsRefererValid();
         $zbp->Config('tpure')->PostLOGO = $_POST['PostLOGO'];					//网站LOGO
         $zbp->Config('tpure')->PostLOGOON = $_POST['PostLOGOON'];					//图片LOGO开关
         $zbp->Config('tpure')->PostFAVICON = $_POST['PostFAVICON'];				//浏览器标签栏图标
