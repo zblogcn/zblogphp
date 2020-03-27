@@ -1738,10 +1738,11 @@ function CheckIncludedFiles($file)
 /**
  * logs指定的变量的值
  */
-function Logs_Dump(){
+function Logs_Dump()
+{
     $a = func_get_args();
     foreach ($a as $key => $value) {
-        $s = var_export($value, TRUE);
+        $s = var_export($value, true);
         Logs($s);
     }
 }
