@@ -156,7 +156,7 @@ tr.color4 { background: #ffffdd; }
 
 
 /*表   格*/
-.tableBorder { line-height: 1.8em; margin-bottom: 0.8em; margin-top: 0.2em; -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
+.tableBorder { line-height: 1.8em; margin-bottom: 0.8em; margin-top: 0.4em; -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
 .tableBorder th { text-align: left; }
 .tableBorder-thcenter th { text-align: center; }
 .ui-sortable tr.color4 { cursor: move; }
@@ -277,7 +277,7 @@ span.note { font-size: 0.9em; }
 .pagebar a { border-radius:0.3em;border: 1px solid #efefef;padding: 2px; padding: 2px 5px 2px 5px; margin: 1px; }
 .pagebar a:hover{border: 1px solid #ccc;}
 /*正文DIV下的导航条*/
-.SubMenu { padding: 0 0 0px 0; margin: 0.3em 0 1em 0; width: 100%; text-align: left; font-size: 1em; height: 30px; line-height: 30px; border-bottom: 0px solid #3399cc; display: none; }
+.SubMenu { padding: 0 0 0px 0; margin: 0.4em 0 0.8em 0; width: 100%; text-align: left; font-size: 1em; height: 30px; line-height: 30px; border-bottom: 0px solid #3399cc; display: none; }
 .SubMenu span { float: left; margin: 0 0 0 0; text-align: center; padding: 0px 10px; cursor: pointer; color: #333333; }
 .SubMenu span.m-left,
 .SubMenu span.m-right { float: left; }
@@ -349,8 +349,8 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 0.3em; padding: 2px
 .login { height: 100px; margin: 0 auto; padding-left: 10px; }
 .login dd { width: 180px; float: left; }
 
-form.search{box-shadow:0 0 0.3em rgba(0,0,0,0.1);padding:1em;position:relative;background:#fff;margin:1em 0;border-radius:0.1em;}
-table{margin:0;border:none;line-height:1.8;box-shadow:0 0 0.5em rgba(0,0,0,0.2);}
+form.search{box-shadow:0 0 0.3em rgba(0,0,0,0.2);padding:1em;position:relative;background:#fff;margin:0.4em 0 0.8em 0;border-radius:0.2em;}
+table{margin:0.5em 0 0.5em 0;border:none;line-height:1.8;box-shadow:0 0 0.5em rgba(0,0,0,0.2);}
 td,th{border:none;padding:0.5em; border-right: 1px solid #efefef;}
 td:last-child{border-right:none;}
 th:last-child{border-right:none;}

@@ -1477,7 +1477,7 @@ function Admin_ModuleMng()
             $um[] = $m;
         } elseif ($m->SourceType == 'theme') {
             //判断模块归属当前主题
-            if ((substr($m->Source, -1 - strlen($zbp->theme))) == ('_' . $zbp->theme)) {
+            if ( $m->Source == 'theme' || (substr($m->Source, -1-strlen($zbp->theme))) == ('_' . $zbp->theme) ) {
                 $tm[] = $m;
             }
         } else {
