@@ -181,6 +181,7 @@ tr.color4 { background: #ffffdd; }
 .table_striped > thead > tr {
   background-color: #ededed;
 }
+
 /*表   单*/
 form { border: 0px solid black; padding: 0.0em; margin: 0.5em 0; }
 form p { padding: 0.5em 0  0.5em 0; line-height: 1.5em; }
