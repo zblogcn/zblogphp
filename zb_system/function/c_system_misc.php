@@ -10,6 +10,12 @@ function misc_updateinfo()
 {
     global $zbp;
 
+    CheckIsRefererValid();
+    if (!$zbp->CheckRights('root')) {
+        echo $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
+
     $r = GetHttpContent($zbp->option['ZC_UPDATE_INFO_URL']);
     $r = TransferHTML($r, '[noscript]');
 
@@ -30,6 +36,12 @@ function misc_updateinfo()
 function misc_statistic()
 {
     global $zbp;
+
+    CheckIsRefererValid();
+    if (!$zbp->CheckRights('admin')) {
+        echo $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
 
     if ($zbp->CheckRights('root') || $zbp->CheckTemplate(true) == false) {
         $zbp->CheckTemplate(false, true);
@@ -101,6 +113,13 @@ function misc_showtags()
 {
     global $zbp;
 
+    $zbp->csrfExpiration = 48;
+    CheckIsRefererValid();
+    if (!$zbp->CheckRights('ArticleEdt')) {
+        Http404();
+        die();
+    }
+
     header('Content-Type: application/x-javascript; Charset=utf-8');
 
     echo '$("#ajaxtags").html("';
@@ -116,9 +135,13 @@ function misc_showtags()
     echo '");$("#ulTag").tagTo("#edtTag");';
 }
 
-function misc_viewrights()
+function misc_vrs()
 {
     global $zbp, $blogtitle;
+
+    if (!$zbp->CheckRights('misc')) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+    }
 
     $blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights']; ?><!DOCTYPE HTML>
 <html>
@@ -166,9 +189,15 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsigna
 RunTime();
 }
 
-function misc_phpif()
+function misc_phpinfo()
 {
     global $zbp, $blogtitle;
+
+    if (!$zbp->CheckRights('root')) {
+        echo $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
+
     $match = array();
     $blogtitle = $zbp->name . '-phpinfo';
     ob_start();
@@ -370,8 +399,8 @@ table a img {filter:hue-rotate(-30deg);}
 RunTime();
 }
 
-function misc_respondping()
-{
+
+function misc_respondping(){
     $token = GetVars('token', 'GET');
     if (VerifyWebToken($token, "")) {
         echo 'ok';
@@ -393,10 +422,9 @@ function misc_ping()
         $http->send();
         if ($http->status == 200) {
             $s = $http->responseText;
-            if ($s == 'ok') {
+            if ( $s == 'ok') {
                 JsonError(0, '<em>' . $zbp->lang['msg']['verify_succeed'] . '</em>', $data);
             }
-
             return;
         }
     }

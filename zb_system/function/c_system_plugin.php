@@ -2001,7 +2001,7 @@ DefinePluginFilter('Filter_Plugin_Upload_SaveFile');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Upload_SaveBase64File=
+'名称:Filter_Plugin_Upload_SaveBase64File
 '参数:$str64,$this
 '说明:Upload类的SaveBase64File方法接口
 '调用:

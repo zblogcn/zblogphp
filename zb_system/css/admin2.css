@@ -48,17 +48,6 @@ li { list-style-type: none; }
 ol { list-style-type: decimal; margin-left: 2em; }
 label { cursor: pointer; }
 
-/**/
-table { border-collapse: collapse; background: #ffffff; line-height: 120%; }
-table label { -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
-td,
-th { margin: 0; text-indent: 0; vertical-align: middle; }
-tr img { margin-bottom: -4px; }
-tr.color1 { background: #ededed; }
-tr.color2 { background: #F4F4F4; }
-tr.color3 { background: #ffffff; }
-tr.color4 { background: #ffffdd; }
-
 /*后台顶部*/
 .header { margin-bottom: 5px; height: 85px; padding: 0; background: #3a6ea5; position: relative; }
 .header .top { }
@@ -156,6 +145,14 @@ tr.color4 { background: #ffffdd; }
 
 
 /*表   格*/
+table { border-collapse: collapse; background: #ffffff; line-height: 120%; }
+table label { -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
+td,th { margin: 0; text-indent: 0; vertical-align: middle; }
+tr img { margin-bottom: -4px; }
+tr.color1 { background: #ededed; }
+tr.color2 { background: #F4F4F4; }
+tr.color3 { background: #ffffff; }
+tr.color4 { background: #ffffdd; }
 .tableBorder { line-height: 1.8em; margin-bottom: 0.8em; margin-top: 0.4em; -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
 .tableBorder th { text-align: left; }
 .tableBorder-thcenter th { text-align: center; }
@@ -163,24 +160,23 @@ tr.color4 { background: #ffffdd; }
 .noteinfo { font-weight: normal; font-size: 0.9em; color: #666; font-style: italic; }
 .tableFull { width: 100%; }
 .tdCenter { text-align: center; }
-.td20 { width: 20%; }
-.td30 { width: 30%; }
-.td5 { width: 5%; }
+.td5  { width: 5%; }
 .td10 { width: 10%; }
 .td15 { width: 15%; }
+.td20 { width: 20%; }
 .td25 { width: 25%; }
-.table_hover > tbody > tr > td:hover,
-.table_hover > tbody > tr > th:hover,
-.table_hover > tbody > tr:hover > td,
-.table_hover > tbody > tr:hover > th {
-  background-color: #ffffdd;
-}
-.table_striped > tbody > tr:nth-of-type(odd) {
-  background-color: #F4F4F4;
-}
-.table_striped > thead > tr {
-  background-color: #ededed;
-}
+.td30 { width: 30%; }
+.td35 { width: 30%; }
+table > tbody > tr > td:hover,
+table > tbody > tr > th:hover,
+table > tbody > tr:hover > td,
+table > tbody > tr:hover > th {background-color: #ffffdd;}
+table > tbody > tr:nth-of-type(odd) {background-color: #F4F4F4;}
+table > thead > tr {background-color: #ededed;}
+table{margin:0.5em 0 0.5em 0;border:none;line-height:1.8;box-shadow:0 0 0.5em rgba(0,0,0,0.2);}
+td,th{border:none;padding:0.5em; border-right: 1px solid #efefef;}
+td:last-child{border-right:none;}
+th:last-child{border-right:none;}
 
 /*表   单*/
 form { border: 0px solid black; padding: 0.0em; margin: 0.5em 0; }
@@ -351,7 +347,3 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 0.3em; padding: 2px
 .login dd { width: 180px; float: left; }
 
 form.search{box-shadow:0 0 0.3em rgba(0,0,0,0.2);padding:1em;position:relative;background:#fff;margin:0.4em 0 0.8em 0;border-radius:0.2em;}
-table{margin:0.5em 0 0.5em 0;border:none;line-height:1.8;box-shadow:0 0 0.5em rgba(0,0,0,0.2);}
-td,th{border:none;padding:0.5em; border-right: 1px solid #efefef;}
-td:last-child{border-right:none;}
-th:last-child{border-right:none;}
