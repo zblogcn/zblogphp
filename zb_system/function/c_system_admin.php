@@ -1150,7 +1150,7 @@ function Admin_MemberMng()
         $w[] = array('=', 'mem_Level', GetVars('level'));
     }
     if (GetVars('search')) {
-        $w[] = array('search', 'mem_Name', 'mem_Email', GetVars('search'));
+        $w[] = array('search', 'mem_Name', 'mem_Alias', 'mem_Email', GetVars('search'));
     }
     $array = $zbp->GetMemberList(
         '',

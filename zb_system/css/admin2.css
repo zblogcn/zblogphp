@@ -22,7 +22,6 @@ textarea,
 select,
 img,
 span { margin: 0; padding: 0; }
-table { border-collapse: collapse; }
 a { text-decoration: none; color: #333333; }
 a:hover { color: #d60000; }
 .clear { clear: both; }
@@ -173,7 +172,7 @@ table > tbody > tr:hover > td,
 table > tbody > tr:hover > th {background-color: #ffffdd;}
 table > tbody > tr:nth-of-type(odd) {background-color: #F4F4F4;}
 table > thead > tr {background-color: #ededed;}
-table{margin:0.5em 0 0.5em 0;border:none;line-height:1.8;box-shadow:0 0 0.5em rgba(0,0,0,0.2);}
+table{margin:0.5em 0 0.5em 0;border:none;line-height:1.8;box-shadow:0 0 0.1em rgba(0,0,0,0.3);}
 td,th{border:none;padding:0.5em; border-right: 1px solid #efefef;}
 td:last-child{border-right:none;}
 th:last-child{border-right:none;}
