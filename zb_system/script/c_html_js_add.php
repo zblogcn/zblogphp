@@ -14,6 +14,7 @@ ob_clean();
 ?>
 var zbpConfig = {
     bloghost: "<?php echo $zbp->host; ?>",
+    blogversion: "<?php echo $zbp->version; ?>",
     ajaxurl: "<?php echo $zbp->ajaxurl; ?>",
     cookiepath: "<?php echo $zbp->cookiespath; ?>",
     lang: {

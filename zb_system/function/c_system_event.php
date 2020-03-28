@@ -2973,6 +2973,20 @@ function SetTheme($theme, $style)
     }
 
     $zbp->SaveOption();
+    //del oldtheme SideBars cache
+    $aa = array();
+    foreach ($zbp->cache as $key => $value) {
+        if( stripos($value, 'sidebars_') !== false) {
+            $aa[] = substr($value,9);
+        }
+    }
+    foreach ($aa as $key => $value) {
+        $a = $zbp->LoadApp('theme', $value);
+        if ($a->isloaded == false) {
+            $zbp->cache->DelKey('sidebars_' . $a->id);
+        }
+    }
+    $zbp->SaveCache();
 
     if ($oldTheme != $theme) {
         UninstallPlugin($oldTheme);
