@@ -9,30 +9,34 @@ if (!defined('ZBP_PATH')) {
  */
 class Config implements Iterator
 {
-
     private $position = 0;
-    private $array = array();//存$key的数组，非$value
+    private $array = array(); //存$key的数组，非$value
 
-    public function rewind() {
+    public function rewind()
+    {
         foreach ($this->kvdata as $key => $value) {
             $this->array[] = $key;
         }
         $this->position = 0;
     }
 
-    public function current() {
+    public function current()
+    {
         return $this->array[$this->position];
     }
 
-    public function key() {
+    public function key()
+    {
         return $this->position;
     }
 
-    public function next() {
-        ++$this->position;
+    public function next()
+    {
+        $this->position++;
     }
 
-    public function valid() {
+    public function valid()
+    {
         return isset($this->array[$this->position]);
     }
 

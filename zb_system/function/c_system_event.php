@@ -2976,8 +2976,8 @@ function SetTheme($theme, $style)
     //del oldtheme SideBars cache
     $aa = array();
     foreach ($zbp->cache as $key => $value) {
-        if( stripos($value, 'sidebars_') !== false) {
-            $aa[] = substr($value,9);
+        if (stripos($value, 'sidebars_') !== false) {
+            $aa[] = substr($value, 9);
         }
     }
     foreach ($aa as $key => $value) {
