@@ -138,7 +138,7 @@ class SQL__MySQL extends SQL__Global
 
             $collate = 'utf8mb4';
             $charset = 'utf8';
-            if ($GLOBALS['zbp']->option['ZC_MYSQL_CHARSET'] == 'utf8mb4'){
+            if ($GLOBALS['zbp']->option['ZC_MYSQL_CHARSET'] == 'utf8mb4') {
                 $collate = 'utf8mb4_general_ci';
                 $charset = 'utf8mb4';
             }

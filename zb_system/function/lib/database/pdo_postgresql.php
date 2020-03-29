@@ -102,7 +102,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 $this->db->exec($this->sql->Filter($s));
-                if ($this->db->errorCode() > 0){
+                if ($this->db->errorCode() > 0) {
                     $this->error[] = array($this->db->errorCode(), $this->db->errorInfo());
                 }
             }

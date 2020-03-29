@@ -757,7 +757,7 @@ function Setup4()
     <div id="bottom">
         <?php
         if ($hasError == true) {
-          echo '<p><input type="button" name="next" onClick="javascript:history.go(-1)" id="netx" value="'.$zbp->lang['zb_install']['clicktoback'].'"/></p>';
+            echo '<p><input type="button" name="next" onClick="javascript:history.go(-1)" id="netx" value="' . $zbp->lang['zb_install']['clicktoback'] . '"/></p>';
         } else {
             ?>
         <input type="button" name="next" onClick="window.location.href='../'" id="netx" value="<?php echo $zbp->lang['zb_install']['ok']; ?>" />
@@ -953,6 +953,7 @@ function CreateTable($sql)
             var_dump($zbp->db->error);
             echo '</pre>';
         }
+
         return false;
     }
 
