@@ -17,6 +17,7 @@ if (!defined('ZBP_PATH')) {
 class Module extends Base
 {
     protected $_isincludefile = false;
+
     /**
      * 构造函数.
      */
@@ -44,10 +45,12 @@ class Module extends Base
             } else {
                 $this->Metas->Del('norefresh');
             }
+
             return;
         }
         if ($name == 'IsIncludeFile') {
             $this->_isincludefile = (bool) $value;
+
             return;
         }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Set'] as $fpname => &$fpsignal) {
