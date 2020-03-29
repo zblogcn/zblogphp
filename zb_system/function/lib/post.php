@@ -277,9 +277,9 @@ class Post extends Base
                 }
 
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Next'] as $fpname => &$fpsignal) {
-                    $this->_prev = $fpname($this);
-                    if ($this->_prev !== '') {
-                        return $this->_prev;
+                    $this->_next = $fpname($this);
+                    if ($this->_next !== '') {
+                        return $this->_next;
                     }
                 }
 
