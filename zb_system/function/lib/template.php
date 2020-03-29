@@ -554,11 +554,8 @@ class Template
         }
         $file = $this->path . $entryPage . '.php';
 
-        for ($i = 1; $i < 10; $i++) {
-            $j = ($i == 1) ? '' : $i;
-            foreach ($this->{'sidebar' . $j} as $key => $m) {
-                $m->Content = $this->ReplaceStaticTags($m->Content);
-            }
+        foreach ($zbp->modulesbyfilename as $m) {
+            $m->Content = $this->ReplaceStaticTags($m->Content);
         }
 
         if (!is_readable($file)) {
