@@ -230,8 +230,6 @@ class Config implements Iterator
             }
         }
 
-        $this->origkvdata = $this->kvdata;
-
         return true;
     }
 
@@ -252,6 +250,7 @@ class Config implements Iterator
             $this->data[$key] = $array[$value[0]];
         }
         $this->Unserialize($this->data['Value']);
+        $this->origkvdata = $this->kvdata;
 
         return true;
     }
@@ -295,7 +294,7 @@ class Config implements Iterator
             $this->db->Update($sql);
         }
         //存储成功后
-        $this->kvdata = $this->origkvdata;
+        $this->origkvdata = $this->kvdata;
 
         return true;
     }

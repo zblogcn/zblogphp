@@ -1439,9 +1439,14 @@ class ZBlogPHP
             foreach ($files as $sortname => $fullname) {
                 $m = new Module();
                 $m->FileName = $sortname;
+                $m->HtmlID = $sortname;
                 $m->Content = file_get_contents($fullname);
-                $m->Type = 'div';
-                $m->Source = 'theme';
+                if ( stripos($m->Content,'<li') !== false && stripos($m->Content,'</li>') !== false ) {
+                    $m->Type = 'ul';
+                } else {
+                    $m->Type = 'div';
+                }
+                $m->Source = 'theme_' . $this->theme;
                 $this->modules[] = $m;
                 $this->modulesbyfilename[$m->FileName] = $m;
             }
