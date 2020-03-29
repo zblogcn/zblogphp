@@ -992,6 +992,7 @@ class ZBlogPHP
                     ($key == 'ZC_MYSQL_ENGINE') ||
                     ($key == 'ZC_MYSQL_PORT') ||
                     ($key == 'ZC_MYSQL_PERSISTENT') ||
+                    ($key == 'ZC_MYSQL_PORT') ||
                     ($key == 'ZC_PGSQL_SERVER') ||
                     ($key == 'ZC_PGSQL_USERNAME') ||
                     ($key == 'ZC_PGSQL_PASSWORD') ||

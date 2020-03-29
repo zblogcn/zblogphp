@@ -10,6 +10,7 @@ class Database__SQLite implements Database__Interface
 {
     public $type = 'sqlite';
     public $version = '2';
+    public $error = array();
 
     /**
      * @var string|null 数据库名前缀
@@ -87,6 +88,10 @@ class Database__SQLite implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 sqlite_query($this->db, $this->sql->Filter($s));
+                $e = sqlite_last_error($this->db);
+                if ($e > 0) {
+                    $this->error[] = array($e, sqlite_error_string($e));
+                }
             }
         }
     }

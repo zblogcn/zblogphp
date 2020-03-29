@@ -10,6 +10,7 @@ class Database__PostgreSQL implements Database__Interface
 {
     public $type = 'postgresql';
     public $version = '';
+    public $error = array();
 
     /**
      * @var string|null 数据库名前缀

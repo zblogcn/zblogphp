@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS %pre%post (
   PRIMARY KEY (log_ID),
   KEY %pre%log_TPISC (log_Type,log_PostTime,log_IsTop,log_Status,log_CateID),
   KEY %pre%log_VTSC (log_ViewNums,log_Type,log_Status,log_CateID)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE IF NOT EXISTS %pre%category (
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS %pre%category (
   cate_Meta longtext NOT NULL,
   PRIMARY KEY (cate_ID),
   KEY %pre%cate_Order (cate_Order)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE IF NOT EXISTS %pre%comment (
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS %pre%comment (
   PRIMARY KEY (comm_ID),
   KEY %pre%comm_LRI (comm_LogID,comm_RootID,comm_IsChecking),
   KEY %pre%comm_IsChecking (comm_IsChecking)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE IF NOT EXISTS %pre%config (
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS %pre%config (
   conf_Value longtext NOT NULL,
   PRIMARY KEY (conf_ID),
   KEY %pre%conf_Name (conf_Name)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS %pre%member (
   mem_ID int(11) NOT NULL AUTO_INCREMENT,
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS %pre%member (
   KEY %pre%mem_Name (mem_Name),
   KEY %pre%mem_Alias (mem_Alias),
   KEY %pre%mem_Level (mem_Level)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE IF NOT EXISTS %pre%module (
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS %pre%module (
   mod_IsHideTitle tinyint(4) NOT NULL DEFAULT '0',
   mod_Meta longtext NOT NULL,
   PRIMARY KEY (mod_ID)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE IF NOT EXISTS %pre%tag (
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS %pre%tag (
   tag_Template varchar(255) NOT NULL DEFAULT '',
   tag_Meta longtext NOT NULL,
   PRIMARY KEY (tag_ID)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE IF NOT EXISTS %pre%upload (
@@ -138,4 +138,4 @@ CREATE TABLE IF NOT EXISTS %pre%upload (
   ul_Intro text NOT NULL,
   ul_Meta longtext NOT NULL,
   PRIMARY KEY (ul_ID)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;

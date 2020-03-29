@@ -129,14 +129,30 @@ class SQL__MySQL extends SQL__Global
             $myengtype = $this->db->dbengine;
 
             if (is_array($engine) && count($engine) > 0) {
-                $myengtype = $engine[1];
+                $myengtype = $engine[0];
             }
 
             if (!$myengtype) {
                 $myengtype = $GLOBALS['zbp']->option['ZC_MYSQL_ENGINE'];
             }
 
-            $sql[] = ') ENGINE=' . $myengtype . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
+            $collate = 'utf8mb4';
+            $charset = 'utf8';
+            if ($GLOBALS['zbp']->option['ZC_MYSQL_CHARSET'] == 'utf8mb4'){
+                $collate = 'utf8mb4_general_ci';
+                $charset = 'utf8mb4';
+            }
+            if (isset($this->option['collate']) && !empty($this->option['collate'])) {
+                $collate = $this->option['collate'];
+            }
+            if (isset($this->option['charset']) && !empty($this->option['charset'])) {
+                $charset = $this->option['charset'];
+            }
+            $s = ' DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;';
+            $s = str_replace('COLLATE=utf8_general_ci', 'COLLATE=' . $collate, $s);
+            $s = str_replace('CHARSET=utf8', 'CHARSET=' . $charset, $s);
+
+            $sql[] = ') ENGINE=' . $myengtype . $s;
             $sqlAll[] = implode(' ', $sql);
         }
         $this->_sql = $sqlAll;

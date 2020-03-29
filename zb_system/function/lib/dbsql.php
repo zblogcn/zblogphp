@@ -90,12 +90,18 @@ class DbSql
      *
      * @return string
      */
-    public function CreateTable($table, $datainfo, $engine = null)
+    public function CreateTable($table, $datainfo, $engine = null, $charset = null, $collate = null)
     {
         $sql = $this->get();
         $sql->create($table)->data($datainfo);
         if (!is_null($engine)) {
             $sql->option(array('engine' => $engine));
+        }
+        if (!is_null($charset)) {
+            $sql->option(array('charset' => $charset));
+        }
+        if (!is_null($collate)) {
+            $sql->option(array('collate' => $collate));
         }
 
         return $sql->sql;

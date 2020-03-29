@@ -10,6 +10,7 @@ class Database__PDO_MySQL implements Database__Interface
 {
     public $type = 'mysql';
     public $version = '';
+    public $error = array();
 
     /**
      * @var string|null 数据库名前缀
@@ -163,6 +164,9 @@ class Database__PDO_MySQL implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 $this->db->exec($this->sql->Filter($s));
+                if ($this->db->errorCode() > 0){
+                    $this->error[] = array($this->db->errorCode(), $this->db->errorInfo());
+                }
             }
         }
     }

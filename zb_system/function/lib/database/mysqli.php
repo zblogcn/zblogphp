@@ -10,6 +10,7 @@ class Database__MySQLi implements Database__Interface
 {
     public $type = 'mysql';
     public $version = '';
+    public $error = array();
 
     /**
      * @var string|null 数据库名前缀
@@ -177,6 +178,9 @@ class Database__MySQLi implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 mysqli_query($this->db, $this->sql->Filter($s));
+                if (mysqli_errno($this->db) > 0) {
+                    $this->error[] = array(mysqli_errno($this->db), mysqli_error($this->db));
+                }
             }
         }
     }

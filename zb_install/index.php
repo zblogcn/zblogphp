@@ -757,7 +757,7 @@ function Setup4()
     <div id="bottom">
         <?php
         if ($hasError == true) {
-            echo '<p><a href="javascript:history.go(-1)">' . $zbp->lang['zb_install']['clicktoback'] . '</a></p>';
+          echo '<p><input type="button" name="next" onClick="javascript:history.go(-1)" id="netx" value="'.$zbp->lang['zb_install']['clicktoback'].'"/></p>';
         } else {
             ?>
         <input type="button" name="next" onClick="window.location.href='../'" id="netx" value="<?php echo $zbp->lang['zb_install']['ok']; ?>" />
@@ -931,6 +931,11 @@ function CreateTable($sql)
 {
     global $zbp;
 
+    if (version_compare($zbp->db->version, '5.5.3') >= 0) {
+        $sql = str_ireplace('COLLATE=utf8_general_ci', 'COLLATE=utf8mb4_general_ci', $sql);
+        $sql = str_ireplace('CHARSET=utf8', 'CHARSET=utf8mb4', $sql);
+    }
+
     if ($zbp->db->ExistTable($GLOBALS['table']['Config']) == true) {
         echo $zbp->lang['zb_install']['exist_table_in_db'];
 
@@ -938,11 +943,16 @@ function CreateTable($sql)
     }
 
     $sql = $zbp->db->sql->ReplacePre($sql);
+
     $zbp->db->QueryMulit($sql);
 
     if ($zbp->db->ExistTable($GLOBALS['table']['Config']) == false) {
         echo $zbp->lang['zb_install']['not_create_table'];
-
+        if (!empty($zbp->db->error)) {
+            echo '<pre>';
+            var_dump($zbp->db->error);
+            echo '</pre>';
+        }
         return false;
     }
 
