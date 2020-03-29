@@ -1441,7 +1441,7 @@ class ZBlogPHP
                 $m->FileName = $sortname;
                 $m->HtmlID = $sortname;
                 $m->Content = file_get_contents($fullname);
-                if ( stripos($m->Content,'<li') !== false && stripos($m->Content,'</li>') !== false ) {
+                if (stripos($m->Content, '<li') !== false && stripos($m->Content, '</li>') !== false) {
                     $m->Type = 'ul';
                 } else {
                     $m->Type = 'div';
