@@ -1447,6 +1447,7 @@ class ZBlogPHP
                     $m->Type = 'div';
                 }
                 $m->Source = 'theme_' . $this->theme;
+                $m->IsIncludeFile = true;
                 $this->modules[] = $m;
                 $this->modulesbyfilename[$m->FileName] = $m;
             }

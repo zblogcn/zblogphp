@@ -461,7 +461,7 @@ function CreateModuleDiv($m, $button = true)
     echo '<div class="widget-title"><img class="more-action" width="16" src="../image/admin/brick.png" alt="" />' . (($m->SourceType != 'theme' || $m->Source == 'plugin_' . $zbp->theme) ? $m->Name : $m->FileName) . '';
 
     if ($button) {
-        if ($m->SourceType != 'theme' || $m->Source == 'plugin_' . $zbp->theme) {
+        if (!$m->IsIncludeFile) {
             echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;id=' . $m->ID . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>';
         } else {
             echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;source=theme&amp;filename=' . $m->FileName . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>';

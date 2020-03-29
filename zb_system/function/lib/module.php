@@ -16,6 +16,7 @@ if (!defined('ZBP_PATH')) {
  */
 class Module extends Base
 {
+    protected $_isincludefile = false;
     /**
      * 构造函数.
      */
@@ -43,7 +44,10 @@ class Module extends Base
             } else {
                 $this->Metas->Del('norefresh');
             }
-
+            return;
+        }
+        if ($name == 'IsIncludeFile') {
+            $this->_isincludefile = (bool) $value;
             return;
         }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Set'] as $fpname => &$fpsignal) {
@@ -88,6 +92,9 @@ class Module extends Base
         if ($name == 'NoRefresh') {
             return (bool) $this->Metas->norefresh;
         }
+        if ($name == 'IsIncludeFile') {
+            return $this->_isincludefile;
+        }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Get'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $name);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -115,8 +122,8 @@ class Module extends Base
                 return $fpreturn;
             }
         }
-        if ($this->Source == 'theme') {
-            if (!$this->FileName) {
+        if ($this->IsIncludeFile) {
+            if (empty($this->FileName)) {
                 return true;
             }
 
@@ -155,7 +162,7 @@ class Module extends Base
             if ($this->ID > 0 && $m->ID == $this->ID) {
                 unset($zbp->modules[$key]);
             }
-            if ($this->Source == 'theme') {
+            if ($this->IsIncludeFile) {
                 if ($this->FileName != '' && $m->FileName == $this->FileName) {
                     unset($zbp->modules[$key]);
                 }
@@ -174,8 +181,8 @@ class Module extends Base
                 return $fpreturn;
             }
         }
-        if ($this->Source == 'theme') {
-            if (!$this->FileName) {
+        if ($this->IsIncludeFile) {
+            if (empty($this->FileName)) {
                 return true;
             }
 
