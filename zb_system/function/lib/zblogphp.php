@@ -2810,7 +2810,7 @@ class ZBlogPHP
 
     public function GetTopArticle($type = 0)
     {
-    	return $this->GetTopPost($type);
+        return $this->GetTopPost($type);
     }
 
     /**
