@@ -243,7 +243,12 @@ function GetEnvironment()
     if ($ajax) {
         $ajax = substr(get_class($ajax), 9);
     }
-    $system_environment = PHP_OS . SplitAndGet(php_uname('r'), '-', 0) . '; ' .
+    if (function_exists('php_uname') == true) {
+        $uname = SplitAndGet(php_uname('r'), '-', 0);
+    } else {
+        $uname = '';
+    }
+    $system_environment = PHP_OS . $uname . '; ' .
     GetValueInArray(
         explode(
             ' ',

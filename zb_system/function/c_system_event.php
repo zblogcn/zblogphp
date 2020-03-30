@@ -1067,6 +1067,13 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
         $option,
         true
     );
+
+    //处理原置顶文章回到正常时的属性先改为0
+    foreach ($articles as $key3 => $value3) {
+        if ($value3->IsTop > 0) {
+            $value3->IsTop = 0;
+        }
+    }
     foreach ($articles_top as $key1 => $value1) {
         foreach ($articles as $key2 => $value2) {
             if ($value1->ID == $value2->ID) {

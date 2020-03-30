@@ -327,8 +327,8 @@ div.post {
 }
 
 div.istop-post{
-	padding-top:0px;
-	padding-bottom:35px;
+	padding-top:15px;
+	padding-bottom:25px;
 }
 
 div.pagebar{
@@ -370,6 +370,7 @@ div.istop-post .post-title{
     text-align:left;
 	background:none;
     border:none;
+   	background:url("default/pointblue.gif") no-repeat 4px center;
 }
 
 div.post .post-date{

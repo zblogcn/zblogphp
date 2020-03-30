@@ -1434,7 +1434,7 @@ function Admin_ThemeMng()
         echo '<div><img src="' . $theme->GetScreenshot() . '" title="' . htmlspecialchars($theme->name) . '" alt="' . htmlspecialchars($theme->name) . '" width="200" height="150" /></div>';
         echo '<div class="theme-author">' . $zbp->lang['msg']['author'] . ': <a target="_blank" href="' . htmlspecialchars($theme->author_url) . '">' . htmlspecialchars($theme->author_name) . '</a></div>';
         echo '<div class="theme-style">' . $zbp->lang['msg']['style'] . ': ';
-        echo '<select class="edit" size="1" style="width:110px;">';
+        echo '<select class="edit" size="1" style="width:100px;">';
         foreach ($theme->GetCssFiles() as $key => $value) {
             echo '<option value="' . htmlspecialchars($key) . '" ' . ($theme->IsUsed() ? ($key == $zbp->style ? 'selected="selected"' : '') : '') . '>' . basename($value) . '</option>';
         }

@@ -60,7 +60,7 @@ function tpure_LoginHeader()
         .bg { height:100%; background:url({$zbp->host}zb_users/theme/tpure/style/images/banner.jpg) no-repeat center top; background-size:cover; }
         .logo { width:100%; height:120px; margin:0 auto 40px; padding-top:24px; text-align:center; border-bottom:1px solid #eee; }
         .logo img { background:none; }
-        #wrapper { width:400px; height:350px; border-radius:8px; background:#fff; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); }
+        #wrapper { width:400px; min-height:350px;height:auto; border-radius:8px; background:#fff; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); }
         .login { width:auto; }
         .login input[type="text"], .login input[type="password"] { width:240px; border:1px solid #e4e8eb; outline:0; border-radius:3px; }
         .login input[type="text"]:focus, .login input[type="password"]:focus { color:#0188fb; background-color:#fff; border-color:#aab7c1; outline:0; box-shadow:0 0 0 0.2rem rgba(31,73,119,0.1); }
