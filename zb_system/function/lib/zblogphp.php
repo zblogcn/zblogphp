@@ -2808,6 +2808,11 @@ class ZBlogPHP
         return $s;
     }
 
+    public function GetTopArticle($type = 0)
+    {
+    	return $this->GetTopPost($type);
+    }
+
     /**
      * 获取全部置顶文章（优先从cache里读数组）.
      *
@@ -2815,7 +2820,7 @@ class ZBlogPHP
      *
      * @return array
      */
-    public function GetTopArticle($type = 0)
+    public function GetTopPost($type = 0)
     {
         $varname = 'top_post_array_' . $type;
         if ($this->cache->HasKey($varname) == false) {
@@ -2824,7 +2829,7 @@ class ZBlogPHP
 
         $articles_top_notorder_idarray = unserialize($this->cache->$varname);
         if (!is_array($articles_top_notorder_idarray)) {
-            CountTopArticle($type, null, null);
+            CountTopPost($type, null, null);
             $articles_top_notorder_idarray = unserialize($this->cache->$varname);
         }
         $articles_top_notorder = $this->GetPostByArray($articles_top_notorder_idarray);

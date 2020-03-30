@@ -54,7 +54,7 @@ function misc_statistic()
     $r = null;
 
     CountNormalArticleNums();
-    CountTopArticle(0, null, null);
+    CountTopPost(ZC_POST_TYPE_ARTICLE, null, null);
     CountCommentNums(null, null);
     $all_comments = $zbp->cache->all_comment_nums;
 

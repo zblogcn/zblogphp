@@ -219,6 +219,7 @@ div.hint p.hint_tips { background: #dbe3ff url(../image/admin/information.png) n
 
 /*后台*/
 form.search { background: #f0f0f0; padding: 0.5em; -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
+form.search{box-shadow:0 0 0.1em rgba(0,0,0,0.3);padding:1em;position:relative;background:#fff;margin:0.4em 0 0.8em 0;border-radius:0.1em;}
 hr { width: 100%; height: 1px; border: none; padding: 0; visibility: hidden; }
 
 /*后台编辑页,文章编辑和页面编辑*/
@@ -344,5 +345,3 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 0.3em; padding: 2px
 #loading { display: none; position: fixed; z-index: 1000; top: 0; left: 0; height: 100%; width: 100%; background: rgba(170, 170, 170, .3) url('../image/admin/loading-big.gif') 50% 50% no-repeat; }
 .login { height: 100px; margin: 0 auto; padding-left: 10px; }
 .login dd { width: 180px; float: left; }
-
-form.search{box-shadow:0 0 0.3em rgba(0,0,0,0.2);padding:1em;position:relative;background:#fff;margin:0.4em 0 0.8em 0;border-radius:0.2em;}

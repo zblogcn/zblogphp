@@ -813,7 +813,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
     $tag = null;
 
     $w = array();
-    $w[] = array('=', 'log_IsTop', 0);
+    //$w[] = array('=', 'log_IsTop', 0);
     $w[] = array('=', 'log_Status', 0);
 
     $page = (int) $page == 0 ? 1 : (int) $page;
@@ -1026,7 +1026,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
     }
 
     if ($zbp->option['ZC_LISTONTOP_TURNOFF'] == false) {
-        $articles_top_notorder = $zbp->GetTopArticle();
+        $articles_top_notorder = $zbp->GetTopPost(ZC_POST_TYPE_ARTICLE);
         foreach ($articles_top_notorder as $articles_top_notorder_post) {
             if ($articles_top_notorder_post->TopType == 'global') {
                 $articles_top[] = $articles_top_notorder_post;
@@ -1067,6 +1067,14 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
         $option,
         true
     );
+    foreach ($articles_top as $key1 => $value1) {
+        foreach ($articles as $key2 => $value2) {
+            if ($value1->ID == $value2->ID) {
+                unset($articles[$key2]);
+                break;
+            }
+        }
+    }
 
     if (count($articles) <= 0 && $page > 1) {
         $zbp->ShowError(2, __FILE__, __LINE__);
@@ -1584,9 +1592,9 @@ function PostArticle()
         }
     }
     if ($article->IsTop == true && $article->Status == ZC_POST_STATUS_PUBLIC) {
-        CountTopArticle($article->Type, $article->ID, null);
+        CountTopPost($article->Type, $article->ID, null);
     } else {
-        CountTopArticle($article->Type, null, $article->ID);
+        CountTopPost($article->Type, null, $article->ID);
     }
 
     $zbp->AddBuildModule('previous');
@@ -1640,7 +1648,7 @@ function DelArticle()
             CountNormalArticleNums(-1);
         }
         if ($article->IsTop == true) {
-            CountTopArticle($article->Type, null, $article->ID);
+            CountTopPost($article->Type, null, $article->ID);
         }
 
         $zbp->AddBuildModule('previous');
@@ -3293,7 +3301,7 @@ function FilterTag(&$tag)
  * @param null $addplus
  * @param null $delplus
  */
-function CountTopArticle($type = 0, $addplus = null, $delplus = null)
+function CountTopPost($type = 0, $addplus = null, $delplus = null)
 {
     global $zbp;
     $varname = 'top_post_array_' . $type;
@@ -3303,7 +3311,7 @@ function CountTopArticle($type = 0, $addplus = null, $delplus = null)
     }
 
     if ($addplus === null && $delplus === null) {
-        $s = $zbp->db->sql->Select($zbp->table['Post'], 'log_ID', array(array('=', 'log_Type', $type), array('=', 'log_IsTop', 1), array('=', 'log_Status', 0)), null, null, null);
+        $s = $zbp->db->sql->Select($zbp->table['Post'], 'log_ID', array(array('=', 'log_Type', $type), array('>', 'log_IsTop', 0), array('=', 'log_Status', 0)), null, null, null);
         $a = $zbp->db->Query($s);
         foreach ($a as $id) {
             $array[(int) current($id)] = (int) current($id);
