@@ -487,9 +487,7 @@ function Setup3()
     }
     if (GetVars('dbcharset', 'GET') != '') {
         $option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'GET');
-    }
-
-     ?>
+    } ?>
 <style type="text/css">
 .themelist label { margin-right:50px; position:relative; }
 .themelist input[type=radio] { margin-right:5px; }

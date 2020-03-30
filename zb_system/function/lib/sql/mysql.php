@@ -147,7 +147,7 @@ class SQL__MySQL extends SQL__Global
             if (isset($this->option['charset']) && !empty($this->option['charset'])) {
                 $charset = $this->option['charset'];
             }
-            if ($charset == 'utf8mb4' && stripos($collate, 'utf8mb4_') === false){
+            if ($charset == 'utf8mb4' && stripos($collate, 'utf8mb4_') === false) {
                 $collate = 'utf8mb4_general_ci';
             }
 
