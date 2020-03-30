@@ -39,6 +39,7 @@ return array(
     'db_password'                     => 'DB Password:',
     'db_name'                         => 'Database Name:',
     'db_pre'                          => 'Database Prefix:',
+    'db_charset'                      => 'Charset',
     'db_engine'                       => 'Storage Engine:',
     'db_drive'                        => 'Database Driver:',
     'db_set_port'                     => '(Default database port 3306. If you need to change this database port, please follow the example:"Database Host:Database Prefix".)',

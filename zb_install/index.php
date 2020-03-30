@@ -481,7 +481,15 @@ function Setup3()
     }
     if (GetVars('dbmysql_pre', 'GET') != '') {
         $option['ZC_MYSQL_PRE'] = GetVars('dbmysql_pre', 'GET');
-    } ?>
+    }
+    if (GetVars('dbengine', 'GET') != '') {
+        $option['ZC_MYSQL_ENGINE'] = GetVars('dbengine', 'GET');
+    }
+    if (GetVars('dbcharset', 'GET') != '') {
+        $option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'GET');
+    }
+
+     ?>
 <style type="text/css">
 .themelist label { margin-right:50px; position:relative; }
 .themelist input[type=radio] { margin-right:5px; }
@@ -544,29 +552,34 @@ function Setup3()
           <select id="dbengine" name="dbengine" style="width:350px;padding:0.3em 0;" >
           <option value="MyISAM" selected>MyISAM(<?php echo $zbp->lang['msg']['default']; ?>)</option>
           <option value="InnoDB" >InnoDB</option>
-        </select>
+        </select><script type="text/javascript">$("#dbengine").val("<?php echo $option['ZC_MYSQL_ENGINE']; ?>");</script>
+        </p>
+        <p><b><?php echo $zbp->lang['zb_install']['db_charset']; ?></b>
+          <select id="dbcharset" name="dbcharset" style="width:350px;padding:0.3em 0;" >
+          <option value="utf8" selected>utf8(<?php echo $zbp->lang['msg']['default']; ?>)</option>
+          <option value="utf8mb4" >utf8mb4</option>
+        </select><script type="text/javascript">$("#dbcharset").val("<?php echo $option['ZC_MYSQL_CHARSET']; ?>");</script>
         </p>
       <p><b><?php echo $zbp->lang['zb_install']['db_drive']; ?></b>
         <?php if ($CheckResult['mysqli'][0]) {
                 ?>
         <label>
-          <input value="mysqli" type="radio" name="dbtype"/> mysqli</label>
+          <input value="mysqli" type="radio" name="dbtype"/> mysqli</label>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php
-            } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+            } ?>
         <?php if ($CheckResult['pdo_mysql'][0]) {
                 ?>
         <label>
-          <input value="pdo_mysql" type="radio" name="dbtype"/> pdo_mysql</label>
+          <input value="pdo_mysql" type="radio" name="dbtype"/> pdo_mysql</label>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php
             } ?>
-&nbsp;&nbsp;&nbsp;&nbsp;
 <?php if (version_compare(PHP_VERSION, '5.5.0', '<')) {
                 ?>
         <?php if ($CheckResult['mysql'][0] && !$CheckResult['mysqli'][0] && !$CheckResult['pdo_mysql'][0]) { // 强制淘汰mysql?>
         <label>
-          <input value="mysql" type="radio" name="dbtype"/> mysql</label>
+          <input value="mysql" type="radio" name="dbtype"/> mysql</label>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php
-                } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+                } ?>
 <?php
             } ?>
         <br/><small><?php echo $zbp->lang['zb_install']['db_set_port']; ?></small>
@@ -683,7 +696,6 @@ function Setup4()
             case 'mysqli':
             case 'pdo_mysql':
                 $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/mysql.sql');
-
                 $zbp->option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'POST');
                 if (strpos($zbp->option['ZC_MYSQL_SERVER'], ':') !== false) {
                     $servers = explode(':', $zbp->option['ZC_MYSQL_SERVER']);
@@ -695,6 +707,7 @@ function Setup4()
 
                     unset($servers);
                 }
+                $zbp->option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'POST');
                 $zbp->option['ZC_MYSQL_USERNAME'] = trim(GetVars('dbmysql_username', 'POST'));
                 $zbp->option['ZC_MYSQL_PASSWORD'] = trim(GetVars('dbmysql_password', 'POST'));
                 $zbp->option['ZC_MYSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_name', 'POST')));
@@ -931,7 +944,7 @@ function CreateTable($sql)
 {
     global $zbp;
 
-    if (version_compare($zbp->db->version, '5.5.3') >= 0) {
+    if ($zbp->option['ZC_MYSQL_CHARSET'] == 'utf8mb4') {
         $sql = str_ireplace('COLLATE=utf8_general_ci', 'COLLATE=utf8mb4_general_ci', $sql);
         $sql = str_ireplace('CHARSET=utf8', 'CHARSET=utf8mb4', $sql);
     }
@@ -949,7 +962,7 @@ function CreateTable($sql)
     if ($zbp->db->ExistTable($GLOBALS['table']['Config']) == false) {
         echo $zbp->lang['zb_install']['not_create_table'];
         if (!empty($zbp->db->error)) {
-            echo '<pre>';
+            echo '<pre style="height:30em;overflow:scroll ">';
             var_dump($zbp->db->error);
             echo '</pre>';
         }

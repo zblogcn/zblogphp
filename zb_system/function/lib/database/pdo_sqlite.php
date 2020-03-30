@@ -98,8 +98,9 @@ class Database__PDO_SQLite implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 $this->db->exec($this->sql->Filter($s));
-                if ($this->db->errorCode() > 0) {
-                    $this->error[] = array($this->db->errorCode(), $this->db->errorInfo());
+                $e = $this->db->errorCode();
+                if ($e > 0) {
+                    $this->error[] = array($e, $this->db->errorInfo());
                 }
             }
         }

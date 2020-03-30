@@ -36,6 +36,7 @@ return array(
     'db_password'                     => '数据库密码：',
     'db_name'                         => '数据库名：',
     'db_pre'                          => '表前缀：',
+    'db_charset'                      => '字符集',
     'db_engine'                       => '表存储引擎：',
     'db_drive'                        => '数据库驱动：',
     'db_set_port'                     => '端口号默认3306，如需要修改请在\'数据库地址\'里追加\':端口号\'。',

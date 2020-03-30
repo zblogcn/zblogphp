@@ -115,6 +115,10 @@ class Database__PostgreSQL implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 pg_query($this->db, $this->sql->Filter($s));
+                $st = pg_result_status($this->db);
+                if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
+                    $this->error[] = array($st, pg_result_error($this->db));
+                }
             }
         }
     }
@@ -131,7 +135,10 @@ class Database__PostgreSQL implements Database__Interface
         //$query=str_replace('%pre%', $this->dbpre, $query);
         logs($this->sql->Filter($query));
         $results = pg_query($this->db, $this->sql->Filter($query));
-        //if(mysql_errno())trigger_error(mysql_error($this->db),E_USER_NOTICE);
+        $st = pg_result_status($this->db);
+        if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
+            trigger_error(pg_result_error($this->db), E_USER_NOTICE);
+        }
         $data = array();
         if (is_resource($results)) {
             while ($row = pg_fetch_assoc($results)) {

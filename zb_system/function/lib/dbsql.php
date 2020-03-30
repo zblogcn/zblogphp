@@ -86,7 +86,9 @@ class DbSql
      *
      * @param string $table
      * @param array  $datainfo
-     * @param null   $engine
+     * @param string $engine
+     * @param string $charset
+     * @param string $collate
      *
      * @return string
      */
@@ -94,13 +96,13 @@ class DbSql
     {
         $sql = $this->get();
         $sql->create($table)->data($datainfo);
-        if (!is_null($engine)) {
+        if (trim($engine) != '') {
             $sql->option(array('engine' => $engine));
         }
-        if (!is_null($charset)) {
+        if (trim($charset) != '') {
             $sql->option(array('charset' => $charset));
         }
-        if (!is_null($collate)) {
+        if (trim($collate) != '') {
             $sql->option(array('collate' => $collate));
         }
 

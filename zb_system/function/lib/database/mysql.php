@@ -183,8 +183,9 @@ class Database__MySQL implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 mysql_query($this->sql->Filter($s), $this->db);
-                if (mysql_errno($this->db) > 0) {
-                    $this->error[] = array(mysql_errno($this->db), mysql_error($this->db));
+                $e = mysql_errno($this->db);
+                if ($e > 0) {
+                    $this->error[] = array($e, mysql_error($this->db));
                 }
             }
         }

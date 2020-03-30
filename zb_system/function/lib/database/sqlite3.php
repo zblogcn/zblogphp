@@ -88,8 +88,9 @@ class Database__SQLite3 implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 $this->db->query($this->sql->Filter($s));
-                if ($this->db->lastErrorCode() > 0) {
-                    $this->error[] = array($this->db->lastErrorCode(), $this->db->lastErrorMsg());
+                $e = $this->db->lastErrorCode();
+                if ($e > 0) {
+                    $this->error[] = array($e, $this->db->lastErrorMsg());
                 }
             }
         }
