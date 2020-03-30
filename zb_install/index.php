@@ -487,7 +487,9 @@ function Setup3()
     }
     if (GetVars('dbcharset', 'GET') != '') {
         $option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'GET');
-    } ?>
+    }
+
+     ?>
 <style type="text/css">
 .themelist label { margin-right:50px; position:relative; }
 .themelist input[type=radio] { margin-right:5px; }
@@ -523,6 +525,14 @@ function Setup3()
             ?>
                   <label class="dbselect" id="sqlite_radio">
                   <input type="radio" name="fdbtype" value="sqlite"/> SQLite</label>
+                <?php
+                echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+        } ?>
+        <?php
+        if ($hasPgsql) {
+            ?>
+                  <label class="dbselect" id="pgsql_radio">
+                  <input type="radio" name="fdbtype" value="pgsql"/> PostgreSQL</label>
                 <?php
                 echo '&nbsp;&nbsp;&nbsp;&nbsp;';
         } ?>
@@ -621,7 +631,42 @@ function Setup3()
       </div>
         <?php
         } ?>
-
+        <?php if ($hasSqlite) {
+            ?>
+      <div class="dbdetail" id="pgsql">
+        <p><b><?php echo $zbp->lang['zb_install']['db_server']; ?></b>
+          <input type="text" name="dbpgsql_server" id="dbpgsql_server" value="<?php echo $option['ZC_PGSQL_SERVER']; ?>" style="width:350px;" />
+        </p>
+        <p><b><?php echo $zbp->lang['zb_install']['db_name']; ?></b>
+          <input type="text" name="dbpgsql_name" id="dbpgsql_name" value="<?php echo $option['ZC_PGSQL_NAME']; ?>" style="width:350px;" />
+        </p>
+        <p><b><?php echo $zbp->lang['zb_install']['db_username']; ?></b>
+          <input type="text" name="dbpgsql_username" id="dbpgsql_username" value="<?php echo $option['ZC_PGSQL_USERNAME']; ?>" style="width:350px;" />
+        </p>
+        <p><b><?php echo $zbp->lang['zb_install']['db_password']; ?></b>
+          <input type="password" name="dbpgsql_password" id="dbpgsql_password" value="<?php echo $option['ZC_PGSQL_PASSWORD']; ?>" style="width:350px;" />
+        </p>
+        <p><b><?php echo $zbp->lang['zb_install']['db_pre']; ?></b>
+          <input type="text" name="dbpgsql_pre" id="dbpgsql_pre" value="<?php echo $option['ZC_PGSQL_PRE']; ?>" style="width:350px;" />
+        </p>
+      <p><b><?php echo $zbp->lang['zb_install']['db_drive']; ?></b>
+        <?php if ($CheckResult['pgsql'][0]) {
+                ?>
+        <label>
+          <input value="postgresql" type="radio" name="dbtype"/> pgsql</label>&nbsp;&nbsp;&nbsp;&nbsp;
+        <?php
+            } ?>
+        <?php if ($CheckResult['pdo_pgsql'][0]) {
+                ?>
+        <label>
+          <input value="pdo_postgresql" type="radio" name="dbtype"/> pdo_pgsql</label>&nbsp;&nbsp;&nbsp;&nbsp;
+        <?php
+            } ?>
+        <br/><small><?php echo $zbp->lang['zb_install']['db_set_port']; ?></small>
+      </p>
+      </div>
+        <?php
+        } ?>
       <p class="title"><?php echo $zbp->lang['zb_install']['website_setting']; ?></p>
       <p><b><?php echo $zbp->lang['zb_install']['blog_name']; ?></b>
         <input type="text" name="blogtitle" id="blogtitle" value="<?php echo $option2['blogtitle']; ?>" style="width:350px;" />
@@ -736,6 +781,38 @@ function Setup4()
                 $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
                 $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
                 $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
+                break;
+            case 'postgresql':
+            case 'pdo_postgresql':
+
+
+                $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/pgsql.sql');
+                $zbp->option['ZC_PGSQL_SERVER'] = GetVars('dbpgsql_server', 'POST');
+                if (strpos($zbp->option['ZC_PGSQL_SERVER'], ':') !== false) {
+                    $servers = explode(':', $zbp->option['ZC_PGSQL_SERVER']);
+                    $zbp->option['ZC_PGSQL_SERVER'] = trim($servers[0]);
+                    $zbp->option['ZC_PGSQL_PORT'] = (int) $servers[1];
+                    if ($zbp->option['ZC_PGSQL_PORT'] == 0) {
+                        $zbp->option['ZC_PGSQL_PORT'] = 5432;
+                    }
+
+                    unset($servers);
+                }
+                $zbp->option['ZC_PGSQL_CHARSET'] = 'utf8';
+                $zbp->option['ZC_PGSQL_USERNAME'] = trim(GetVars('dbpgsql_username', 'POST'));
+                $zbp->option['ZC_PGSQL_PASSWORD'] = trim(GetVars('dbpgsql_password', 'POST'));
+                $zbp->option['ZC_PGSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_name', 'POST')));
+                $zbp->option['ZC_PGSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_pre', 'POST')));
+                if ($zbp->option['ZC_PGSQL_PRE'] == '') {
+                    $zbp->option['ZC_PGSQL_PRE'] == 'zbp_';
+                }
+
+                $zbp->db = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
+                if ($zbp->db->CreateDB($zbp->option['ZC_PGSQL_SERVER'], $zbp->option['ZC_PGSQL_PORT'], $zbp->option['ZC_PGSQL_USERNAME'], $zbp->option['ZC_PGSQL_PASSWORD'], $zbp->option['ZC_PGSQL_NAME']) == true) {
+                    echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_PGSQL_NAME'] . "<br/>";
+                }
+                $zbp->db->dbpre = $zbp->option['ZC_PGSQL_PRE'];
+                $zbp->db->Close();
                 break;
             default:
                 $isInstallFlag = false;
@@ -942,7 +1019,7 @@ function CreateTable($sql)
 {
     global $zbp;
 
-    if ($zbp->option['ZC_MYSQL_CHARSET'] == 'utf8mb4') {
+    if (stripos($zbp->option['ZC_DATABASE_TYPE'],'mysql') !== false && $zbp->option['ZC_MYSQL_CHARSET'] == 'utf8mb4') {
         $sql = str_ireplace('COLLATE=utf8_general_ci', 'COLLATE=utf8mb4_general_ci', $sql);
         $sql = str_ireplace('CHARSET=utf8', 'CHARSET=utf8mb4', $sql);
     }

@@ -79,10 +79,42 @@ class Database__PostgreSQL implements Database__Interface
             $this->dbpre = $array[4];
             $this->db = $db_link;
             $v = pg_version($db_link);
-            $this->version = $v['client'];
+            if (isset($v['client'])){
+                $this->version = $v['client'];
+            }
+            if (isset($v['server'])){
+                $this->version = $v['server'];
+            }
 
             return true;
         }
+    }
+
+    /**
+     * @param string $dbpgsql_server
+     * @param string $dbpgsql_port
+     * @param string $dbpgsql_username
+     * @param string $dbpgsql_password
+     * @param string $dbpgsql_name
+     */
+    public function CreateDB($dbpgsql_server, $dbpgsql_port, $dbpgsql_username, $dbpgsql_password, $dbpgsql_name)
+    {
+        $s = "host={$dbpgsql_server} port={$dbpgsql_port} user={$dbpgsql_username} password={$dbpgsql_password} options='--client_encoding=UTF8'";
+        $this->db = pg_connect($s);
+        $this->dbname = $dbpgsql_name;
+
+        $r = @pg_query($this->db, $this->sql->Filter('CREATE DATABASE ' . $dbpgsql_name));
+
+        if (is_resource($r)) {
+            $st = pg_result_status($r);
+            if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
+                $this->error[] = array($st, pg_result_error($r));
+            }
+        }else{
+            $this->error[] = array(PGSQL_BAD_RESPONSE, pg_last_error($this->db));
+        }
+
+        return true;
     }
 
     /**
@@ -114,10 +146,14 @@ class Database__PostgreSQL implements Database__Interface
         foreach ($a as $s) {
             $s = trim($s);
             if ($s != '') {
-                pg_query($this->db, $this->sql->Filter($s));
-                $st = pg_result_status($this->db);
-                if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
-                    $this->error[] = array($st, pg_result_error($this->db));
+                $r = pg_query($this->db, $this->sql->Filter($s));
+                if (is_resource($r)) {
+                    $st = pg_result_status($r);
+                    if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
+                        $this->error[] = array($st, pg_result_error($r));
+                    }
+                }else{
+                    $this->error[] = array(PGSQL_BAD_RESPONSE, pg_last_error($this->db));
                 }
             }
         }
@@ -133,12 +169,15 @@ class Database__PostgreSQL implements Database__Interface
     public function Query($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        logs($this->sql->Filter($query));
         $results = pg_query($this->db, $this->sql->Filter($query));
-        $st = pg_result_status($this->db);
-        if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
-            trigger_error(pg_result_error($this->db), E_USER_NOTICE);
+
+        if (is_resource($results)) {
+                $st = pg_result_status($results);
+                if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
+                trigger_error(pg_result_error($results), E_USER_NOTICE);
+            }
         }
+
         $data = array();
         if (is_resource($results)) {
             while ($row = pg_fetch_assoc($results)) {
@@ -161,7 +200,9 @@ class Database__PostgreSQL implements Database__Interface
     public function Update($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
+        //logs($query);
         return pg_query($this->db, $this->sql->Filter($query));
+
     }
 
     /**
@@ -188,9 +229,13 @@ class Database__PostgreSQL implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         pg_query($this->db, $this->sql->Filter($query));
-        $seq = explode(' ', $query, 4);
-        $seq = $seq[2] . '_seq';
-        $r = pg_query('SELECT CURRVAL(\'' . $seq . '\')');
+        $seq = explode(' ', $query);
+        $seq = $seq[3];
+        $seq = trim($seq);
+        //$seq = 'select lastval();';
+        $seq = "select currval('{$seq}_seq'::regclass)";
+
+        $r = pg_query($this->db,$seq);
         $id = pg_fetch_result($r, 0, 0);
 
         return (int) $id;

@@ -160,7 +160,10 @@ class Config implements Iterator
     {
         return count($this->kvdata);
     }
-
+    public function CountItemOrig()
+    {
+        return count($this->origkvdata);
+    }
     /**
      * 双重意义的函数
      * $name为null就转向Delete()
@@ -246,7 +249,6 @@ class Config implements Iterator
             if (!isset($array[$value[0]])) {
                 continue;
             }
-
             $this->data[$key] = $array[$value[0]];
         }
         $this->Unserialize($this->data['Value']);
@@ -262,6 +264,7 @@ class Config implements Iterator
      */
     public function Save()
     {
+
         $add = array_diff_key($this->kvdata, $this->origkvdata);
         $del = array_diff_key($this->origkvdata, $this->kvdata);
         $mod = array();
@@ -293,6 +296,7 @@ class Config implements Iterator
             $sql = $this->db->sql->Update($this->table, $kv, array(array('=', 'conf_Name', $name)));
             $this->db->Update($sql);
         }
+
         //存储成功后
         $this->origkvdata = $this->kvdata;
 

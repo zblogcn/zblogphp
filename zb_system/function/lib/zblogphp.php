@@ -606,6 +606,8 @@ class ZBlogPHP
             $this->CheckTemplate(false, true);
         }
 
+        $this->ConvertTableAndDatainfo();
+
         $this->isload = true;
 
         return true;
@@ -693,8 +695,8 @@ class ZBlogPHP
                     $this->ShowError(69, __FILE__, __LINE__);
                 }
                 break;
-            case 'pgsql':
-            case 'pdo_pgsql':
+            case 'postgresql':
+            case 'pdo_postgresql':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(array(
                     $this->option['ZC_PGSQL_SERVER'],
@@ -825,8 +827,10 @@ class ZBlogPHP
 
         /* @var Config[] $array */
         $this->prvConfigList = $this->GetListOrigin($sql);
+
         foreach ($this->prvConfigList as $c) {
-            $name = $c['conf_Name'];
+
+            $name = $c[$this->datainfo['Config']['Name'][0]];
             if (($name == 'system' && $onlysystemoption == true) || ($name != 'system' && $onlysystemoption == false)) {
                 if (!isset($this->configs[$name])) {
                     $l = new $type($name);
@@ -838,7 +842,6 @@ class ZBlogPHP
                     $l = new $type($name);
                     $this->configs[$name] = $l;
                 }
-
                 $l->LoadInfoByAssoc($c);
             }
         }
@@ -3176,6 +3179,7 @@ class ZBlogPHP
      */
     public function StartGzip()
     {
+        return false;
         if (!headers_sent() && $this->isGzip && $this->option['ZC_GZIP_ENABLE']) {
             if (ini_get('output_handler')) {
                 return false;

@@ -319,12 +319,13 @@ class Base
     {
         global $bloghost;
 
+        $array = array_change_key_case($array, CASE_LOWER);
         foreach ($this->datainfo as $key => $value) {
-            if (!isset($array[$key])) {
+            if (!isset($array[strtolower($key)])) {
                 continue;
             }
 
-            $v = $array[$key];
+            $v = $array[strtolower($key)];
             if ($value[1] == 'string' || $value[1] == 'char') {
                 if ($key != 'Meta') {
                     $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $v);
