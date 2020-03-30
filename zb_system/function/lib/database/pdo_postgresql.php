@@ -72,6 +72,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
         $this->dbpre = $array[4];
         $myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
         $this->version = SplitAndGet($myver, '-', 0);
+
         return true;
     }
 
@@ -96,6 +97,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
         if ($e > 0) {
             $this->error[] = array($e, $this->db->errorInfo());
         }
+
         return true;
     }
 

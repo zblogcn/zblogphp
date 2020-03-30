@@ -829,7 +829,6 @@ class ZBlogPHP
         $this->prvConfigList = $this->GetListOrigin($sql);
 
         foreach ($this->prvConfigList as $c) {
-
             $name = $c[$this->datainfo['Config']['Name'][0]];
             if (($name == 'system' && $onlysystemoption == true) || ($name != 'system' && $onlysystemoption == false)) {
                 if (!isset($this->configs[$name])) {
