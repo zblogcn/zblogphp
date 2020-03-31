@@ -830,7 +830,7 @@ class ZBlogPHP
             $this->prvConfigList = $this->GetListOrigin($sql);
         }
 
-        $type = 'Config';        
+        $type = 'Config';
 
         foreach ($this->prvConfigList as $c) {
             $name = $c[$this->d['Config']['Name'][0]];
@@ -845,9 +845,9 @@ class ZBlogPHP
                     $l = new $type($name);
                     $this->configs[$name] = $l;
                 }
-                if(isset($c[$this->d['Config']['Key'][0]]) && $c[$this->d['Config']['Key'][0]] != '' ){
+                if (isset($c[$this->d['Config']['Key'][0]]) && $c[$this->d['Config']['Key'][0]] != '') {
                     $l->LoadInfoByAssocSingleWithPre($c);
-                }else{
+                } else {
                     $l->LoadInfoByAssoc($c);
                 }
             }
@@ -856,7 +856,7 @@ class ZBlogPHP
         foreach ($this->configs as $key => $value) {
             if (is_object($value) && ($key == 'system' && $onlysystemoption == true) || ($key != 'system' && $onlysystemoption == false)) {
                 $value->LoadInfoByAssocSingleWithAfter();
-            }else{
+            } else {
                 $value->LoadInfoByAssocSingleWithAfter();
             }
         }

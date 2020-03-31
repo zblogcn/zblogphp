@@ -264,34 +264,38 @@ class Config implements Iterator
     }
 
     /**
-     * 为了加快处理速度才写的一对WithPre,WithAfter函数
+     * 为了加快处理速度才写的一对WithPre,WithAfter函数.
      */
     private $data_pre_key = array();
     private $data_pre_value = array();
-    public function LoadInfoByAssocSingleWithPre($array){
+
+    public function LoadInfoByAssocSingleWithPre($array)
+    {
         $key = trim($array[$this->d['Key'][0]]);
         $value = trim($array[$this->d['Value'][0]]);
         $this->data_pre_key[] = $key;
         $this->data_pre_value[] = $value;
+
         return true;
     }
+
     public function LoadInfoByAssocSingleWithAfter()
     {
         global $bloghost;
-        if (count($this->data_pre_value)==0 || count($this->data_pre_key)==0) {
+        if (count($this->data_pre_value) == 0 || count($this->data_pre_key) == 0) {
             return false;
         }
         $a = array();
         foreach ($this->data_pre_value as $key => $value) {
-            if( is_array($this->data_pre_key[$key]) ){
+            if (is_array($this->data_pre_key[$key])) {
                 unset($this->data_pre_key[$key]);
                 unset($this->data_pre_value[$key]);
                 continue;
             }
-            $a[] = 's:'.strlen($this->data_pre_key[$key]).':"'.$this->data_pre_key[$key].'";'.$value;
+            $a[] = 's:' . strlen($this->data_pre_key[$key]) . ':"' . $this->data_pre_key[$key] . '";' . $value;
         }
-        $s = 'a:'.count($this->data_pre_value).':{' . implode ( '' , $a ) . '}'; 
-        $b=unserialize($s);
+        $s = 'a:' . count($this->data_pre_value) . ':{' . implode('', $a) . '}';
+        $b = unserialize($s);
         $this->kvdata = $b;
         foreach ($this->kvdata as $key => &$value) {
             if (is_string($value)) {
@@ -301,6 +305,7 @@ class Config implements Iterator
         $this->origkvdata = $this->kvdata;
         $this->data_pre_key[] = array();
         $this->data_pre_value[] = array();
+
         return true;
     }
 
@@ -322,6 +327,7 @@ class Config implements Iterator
         if (is_string($value)) {
             $value = str_replace($bloghost, '{#ZC_BLOG_HOST#}', $value);
         }
+
         return serialize($value);
     }
 
@@ -333,6 +339,7 @@ class Config implements Iterator
         if (is_string($value)) {
             $value = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $value);
         }
+
         return $value;
     }
 
@@ -368,17 +375,17 @@ class Config implements Iterator
             return true;
         }
 
-        $old = $this->db->Query($this->db->sql->Select($this->table,'*',array( array('=',$this->d['Key'][0],''))) );
+        $old = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', $this->d['Key'][0], ''))));
         //没有这个字段：array(1) { [0]=> bool(false) }
-        if ( count($old)==1 && $old[0]===false ) {//如果还没有建conf_Key字段就不要原子化存储
+        if (count($old) == 1 && $old[0] === false) {//如果还没有建conf_Key字段就不要原子化存储
 
             $value = $this->Serialize();
 
             $kv = array($this->d['Name'][0] => $name, $this->d['Value'][0] => $value);
 
-            $old = $this->db->Query($this->db->sql->Select($this->table,'*',array( array('=',$this->d['Name'][0],$name))) );
+            $old = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', $this->d['Name'][0], $name))));
             //没有这一行数据 array(0) { }
-            if ( count($old) == 0 ) {
+            if (count($old) == 0) {
                 $sql = $this->db->sql->Insert($this->table, $kv);
                 $this->db->Insert($sql);
             } else {
@@ -392,13 +399,13 @@ class Config implements Iterator
             return true;
         }
 
-        $old = $this->db->Query($this->db->sql->Select($this->table,'*',array( array('=',$this->d['Name'][0],$name),array('=',$this->d['Key'][0],'') )) );
+        $old = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], ''))));
         if (count($old) > 0) {//如果存在老数据，先删除老的
             $del = array();
             $mod = array();
             $add = $this->kvdata;
 
-            $sql = $this->db->sql->Delete($this->table, array(array('=', $this->d['Name'][0], $name),array('=',$this->d['Key'][0],'')));
+            $sql = $this->db->sql->Delete($this->table, array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], '')));
             $this->db->Delete($sql);
         }
         if (($add + $del + $mod) == array()) {
@@ -411,7 +418,7 @@ class Config implements Iterator
         foreach ($add as $key2 => $value2) {
             $kv2 = array($this->d['Name'][0] => $name, $this->d['Key'][0] => $key2, $this->d['Value'][0] => $this->SerializeSingle($value2));
             $sql = $this->db->sql->Insert($this->table, $kv2);
-            $old = $this->db->Query($this->db->sql->Select($this->table,'*',array( array('=',$this->d['Name'][0],$name),array('=',$this->d['Key'][0],$key2) )) );
+            $old = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], $key2))));
             if (count($old) == 0) {
                 $this->db->Insert($sql);
             }
@@ -419,12 +426,12 @@ class Config implements Iterator
         //mod
         foreach ($mod as $key3 => $value3) {
             $kv3 = array($this->d['Value'][0] => $this->SerializeSingle($value3));
-            $sql = $this->db->sql->Update($this->table, $kv3, array(array('=', $this->d['Name'][0], $name),array('=', $this->d['Key'][0], $key3)));
+            $sql = $this->db->sql->Update($this->table, $kv3, array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], $key3)));
             $this->db->Update($sql);
         }
         //del
         foreach ($del as $key4 => $value4) {
-            $sql = $this->db->sql->Delete($this->table, array(array('=', $this->d['Name'][0], $name),array('=', $this->d['Key'][0], $key4)));
+            $sql = $this->db->sql->Delete($this->table, array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], $key4)));
             $this->db->Delete($sql);
         }
         //var_dump($add,$del,$mod);die;
@@ -433,7 +440,6 @@ class Config implements Iterator
         $this->origkvdata = $this->kvdata;
 
         return true;
-
     }
 
     /**
