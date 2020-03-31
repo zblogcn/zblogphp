@@ -172,10 +172,12 @@ class ZBlogPHP
      * @var array|null 数据表
      */
     public $table = null;
+    public $t = null;
     /**
      * @var array|null 数据表信息
      */
     public $datainfo = null;
+    public $d = null;
     /**
      * @var array|null 类型序列
      */
@@ -313,6 +315,8 @@ class ZBlogPHP
 
         $this->table = &$table;
         $this->datainfo = &$datainfo;
+        $this->t = &$this->table;
+        $this->d = &$this->datainfo;
         $this->actions = &$actions;
         $this->posttype = &$posttype;
         $this->currenturl = &$currenturl;
@@ -813,23 +817,23 @@ class ZBlogPHP
     /**
      * 载入插件Configs表 Only System Option.
      */
-    private $prvConfigList = array();
+    private $prvConfigList = null;
 
     public function LoadConfigsOnlySystem($onlysystemoption = true)
     {
         if ($onlysystemoption == true) {
             $this->configs = array();
             $this->prvConfigList = array();
+
+            $sql = $this->db->sql->Select($this->table['Config'], '', '', '', '', '');
+            /* @var Config[] $array */
+            $this->prvConfigList = $this->GetListOrigin($sql);
         }
 
-        $sql = $this->db->sql->Select($this->table['Config'], '', '', '', '', '');
-        $type = 'Config';
-
-        /* @var Config[] $array */
-        $this->prvConfigList = $this->GetListOrigin($sql);
+        $type = 'Config';        
 
         foreach ($this->prvConfigList as $c) {
-            $name = $c[$this->datainfo['Config']['Name'][0]];
+            $name = $c[$this->d['Config']['Name'][0]];
             if (($name == 'system' && $onlysystemoption == true) || ($name != 'system' && $onlysystemoption == false)) {
                 if (!isset($this->configs[$name])) {
                     $l = new $type($name);
@@ -841,7 +845,19 @@ class ZBlogPHP
                     $l = new $type($name);
                     $this->configs[$name] = $l;
                 }
-                $l->LoadInfoByAssoc($c);
+                if(isset($c[$this->d['Config']['Key'][0]]) && $c[$this->d['Config']['Key'][0]] != '' ){
+                    $l->LoadInfoByAssocSingleWithPre($c);
+                }else{
+                    $l->LoadInfoByAssoc($c);
+                }
+            }
+        }
+        //将读出来的数组再拼成序列化数据再反序列化
+        foreach ($this->configs as $key => $value) {
+            if (is_object($value) && ($key == 'system' && $onlysystemoption == true) || ($key != 'system' && $onlysystemoption == false)) {
+                $value->LoadInfoByAssocSingleWithAfter();
+            }else{
+                $value->LoadInfoByAssocSingleWithAfter();
             }
         }
 

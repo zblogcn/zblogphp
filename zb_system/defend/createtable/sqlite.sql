@@ -56,6 +56,7 @@ CREATE TABLE %pre%comment (
 CREATE TABLE %pre%config (
   conf_ID integer primary key autoincrement,
   conf_Name varchar(255) NOT NULL NOT NULL DEFAULT '',
+  conf_Key varchar(255) NOT NULL NOT NULL DEFAULT '',
   conf_Value text
 );
 

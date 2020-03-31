@@ -14,11 +14,13 @@ class Base
     /**
      * @var string 数据表
      */
-    protected $table = '';
+    protected $table = null;
+    protected $t = null;
     /**
      * @var array 表结构信息
      */
-    protected $datainfo = array();
+    protected $datainfo = null;
+    protected $d = null;
     /**
      * @var array 数据
      */
@@ -54,7 +56,8 @@ class Base
 
         $this->table = &$table;
         $this->datainfo = &$datainfo;
-
+        $this->t = &$table;
+        $this->d = &$datainfo;
         if (function_exists('get_called_class')) {
             $this->classname = get_called_class();
         } elseif (is_string($classname)) {

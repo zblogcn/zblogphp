@@ -248,6 +248,7 @@ $GLOBALS['datainfo'] = array(
     'Config' => array(
         'ID'    => array('conf_ID', 'integer', '', 0),
         'Name'  => array('conf_Name', 'string', 250, ''),
+        'Key'  => array('conf_Key', 'string', 250, ''),
         'Value' => array('conf_Value', 'string', '', ''),
     ),
     'Post' => array(

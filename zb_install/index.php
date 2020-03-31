@@ -487,7 +487,9 @@ function Setup3()
     }
     if (GetVars('dbcharset', 'GET') != '') {
         $option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'GET');
-    } ?>
+    }
+
+     ?>
 <style type="text/css">
 .themelist label { margin-right:50px; position:relative; }
 .themelist input[type=radio] { margin-right:5px; }
@@ -660,7 +662,7 @@ function Setup3()
           <input value="pdo_postgresql" type="radio" name="dbtype"/> pdo_pgsql</label>&nbsp;&nbsp;&nbsp;&nbsp;
         <?php
             } ?>
-        <br/><small><?php echo $zbp->lang['zb_install']['db_set_port']; ?></small>
+        <br/><small><?php echo str_ireplace('3306', '5432', $zbp->lang['zb_install']['db_set_port']); ?></small>
       </p>
       </div>
         <?php
@@ -782,6 +784,7 @@ function Setup4()
                 break;
             case 'postgresql':
             case 'pdo_postgresql':
+
 
                 $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/pgsql.sql');
                 $zbp->option['ZC_PGSQL_SERVER'] = GetVars('dbpgsql_server', 'POST');
@@ -1016,7 +1019,7 @@ function CreateTable($sql)
 {
     global $zbp;
 
-    if (stripos($zbp->option['ZC_DATABASE_TYPE'], 'mysql') !== false && $zbp->option['ZC_MYSQL_CHARSET'] == 'utf8mb4') {
+    if (stripos($zbp->option['ZC_DATABASE_TYPE'],'mysql') !== false && $zbp->option['ZC_MYSQL_CHARSET'] == 'utf8mb4') {
         $sql = str_ireplace('COLLATE=utf8_general_ci', 'COLLATE=utf8mb4_general_ci', $sql);
         $sql = str_ireplace('CHARSET=utf8', 'CHARSET=utf8mb4', $sql);
     }

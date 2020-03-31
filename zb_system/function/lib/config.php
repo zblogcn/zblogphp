@@ -44,10 +44,12 @@ class Config implements Iterator
      * @var string 数据表
      */
     protected $table = '';
+    protected $t = null;
     /**
      * @var array 表结构信息
      */
     protected $datainfo = array();
+    protected $d = null;
     /**
      * @var array 原始db数据数组
      */
@@ -82,6 +84,8 @@ class Config implements Iterator
 
         $this->table = &$GLOBALS['table']['Config'];
         $this->datainfo = &$GLOBALS['datainfo']['Config'];
+        $this->t = &$this->table;
+        $this->d = &$this->datainfo;
 
         foreach ($this->datainfo as $key => $value) {
             $this->data[$key] = $value[3];
@@ -260,62 +264,192 @@ class Config implements Iterator
     }
 
     /**
+     * 为了加快处理速度才写的一对WithPre,WithAfter函数
+     */
+    private $data_pre_key = array();
+    private $data_pre_value = array();
+    public function LoadInfoByAssocSingleWithPre($array){
+        $key = trim($array[$this->d['Key'][0]]);
+        $value = trim($array[$this->d['Value'][0]]);
+        $this->data_pre_key[] = $key;
+        $this->data_pre_value[] = $value;
+        return true;
+    }
+    public function LoadInfoByAssocSingleWithAfter()
+    {
+        global $bloghost;
+        if (count($this->data_pre_value)==0 || count($this->data_pre_key)==0) {
+            return false;
+        }
+        $a = array();
+        foreach ($this->data_pre_value as $key => $value) {
+            if( is_array($this->data_pre_key[$key]) ){
+                unset($this->data_pre_key[$key]);
+                unset($this->data_pre_value[$key]);
+                continue;
+            }
+            $a[] = 's:'.strlen($this->data_pre_key[$key]).':"'.$this->data_pre_key[$key].'";'.$value;
+        }
+        $s = 'a:'.count($this->data_pre_value).':{' . implode ( '' , $a ) . '}'; 
+        $b=unserialize($s);
+        $this->kvdata = $b;
+        foreach ($this->kvdata as $key => &$value) {
+            if (is_string($value)) {
+                $value = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $value);
+            }
+        }
+        $this->origkvdata = $this->kvdata;
+        $this->data_pre_key[] = array();
+        $this->data_pre_value[] = array();
+        return true;
+    }
+
+    public function LoadInfoByAssocSingle($array)
+    {
+        $key = trim($array[$this->d['Key'][0]]);
+        $value = trim($array[$this->d['Value'][0]]);
+
+        $value = $this->UnserializeSingle($value);
+        $this->kvdata[$key] = $value;
+        $this->origkvdata[$key] = $value;
+
+        return true;
+    }
+
+    public function SerializeSingle($value)
+    {
+        global $bloghost;
+        if (is_string($value)) {
+            $value = str_replace($bloghost, '{#ZC_BLOG_HOST#}', $value);
+        }
+        return serialize($value);
+    }
+
+    public function UnserializeSingle($value)
+    {
+        global $bloghost;
+        $value = @unserialize($value);
+
+        if (is_string($value)) {
+            $value = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $value);
+        }
+        return $value;
+    }
+
+    /**
      * 保存数据.
      *
      * @return bool
      */
     public function Save()
     {
+        $name = $this->GetItemName();
+        if ($name == '') {
+            return false;
+        }
+
         $add = array_diff_key($this->kvdata, $this->origkvdata);
         $del = array_diff_key($this->origkvdata, $this->kvdata);
-        $mod = array();
+        $mod = array(); //array_intersect($this->kvdata, $this->origkvdata);
         foreach ($this->kvdata as $key => $value) {
-            if (isset($this->origkvdata[$key]) == true && $this->kvdata[$key] !== $this->origkvdata[$key]) {
+            if (isset($this->origkvdata[$key]) == true && $this->kvdata[$key] != $this->origkvdata[$key]) {
                 $mod[$key] = $value;
             }
         }
+        //var_dump(count($this->kvdata),count($this->origkvdata));die;
+        //logs(var_export( array($this->origkvdata['ZC_DEBUG_MODE'], $this->kvdata['ZC_DEBUG_MODE']), true ) );
+        //logs(var_export( array('add'=>$add , 'del'=>$del , 'mod'=>$mod),true ) );
+        //var_dump($this->origkvdata['ZC_DEBUG_MODE'], $this->kvdata['ZC_DEBUG_MODE']);
+        //var_dump($add , $del , $mod);
+        //var_dump($this->d);
+        //die;
 
         if (($add + $del + $mod) == array()) {
             return true;
         }
 
-        $name = $this->GetItemName();
-        $value = $this->Serialize();
+        $old = $this->db->Query($this->db->sql->Select($this->table,'*',array( array('=',$this->d['Key'][0],''))) );
+        //没有这个字段：array(1) { [0]=> bool(false) }
+        if ( count($old)==1 && $old[0]===false ) {//如果还没有建conf_Key字段就不要原子化存储
 
-        if ($name == '') {
-            return false;
+            $value = $this->Serialize();
+
+            $kv = array($this->d['Name'][0] => $name, $this->d['Value'][0] => $value);
+
+            $old = $this->db->Query($this->db->sql->Select($this->table,'*',array( array('=',$this->d['Name'][0],$name))) );
+            //没有这一行数据 array(0) { }
+            if ( count($old) == 0 ) {
+                $sql = $this->db->sql->Insert($this->table, $kv);
+                $this->db->Insert($sql);
+            } else {
+                array_shift($kv);
+                $sql = $this->db->sql->Update($this->table, $kv, array(array('=', $this->d['Name'][0], $name)));
+                $this->db->Update($sql);
+            }
+            //存储成功后重置origkvdata
+            $this->origkvdata = $this->kvdata;
+
+            return true;
         }
 
-        $kv = array('conf_Name' => $name, 'conf_Value' => $value);
+        $old = $this->db->Query($this->db->sql->Select($this->table,'*',array( array('=',$this->d['Name'][0],$name),array('=',$this->d['Key'][0],'') )) );
+        if (count($old) > 0) {//如果存在老数据，先删除老的
+            $del = array();
+            $mod = array();
+            $add = $this->kvdata;
 
-        $old = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', 'conf_Name', $name))));
-        if (count($old) == 0) {
-            $sql = $this->db->sql->Insert($this->table, $kv);
-            $this->db->Insert($sql);
-        } else {
-            array_shift($kv);
-            $sql = $this->db->sql->Update($this->table, $kv, array(array('=', 'conf_Name', $name)));
+            $sql = $this->db->sql->Delete($this->table, array(array('=', $this->d['Name'][0], $name),array('=',$this->d['Key'][0],'')));
+            $this->db->Delete($sql);
+        }
+        if (($add + $del + $mod) == array()) {
+            return true;
+        }
+
+        $this->db->Query($this->db->sql->Transaction('begin'));
+
+        //add
+        foreach ($add as $key2 => $value2) {
+            $kv2 = array($this->d['Name'][0] => $name, $this->d['Key'][0] => $key2, $this->d['Value'][0] => $this->SerializeSingle($value2));
+            $sql = $this->db->sql->Insert($this->table, $kv2);
+            $old = $this->db->Query($this->db->sql->Select($this->table,'*',array( array('=',$this->d['Name'][0],$name),array('=',$this->d['Key'][0],$key2) )) );
+            if (count($old) == 0) {
+                $this->db->Insert($sql);
+            }
+        }
+        //mod
+        foreach ($mod as $key3 => $value3) {
+            $kv3 = array($this->d['Value'][0] => $this->SerializeSingle($value3));
+            $sql = $this->db->sql->Update($this->table, $kv3, array(array('=', $this->d['Name'][0], $name),array('=', $this->d['Key'][0], $key3)));
             $this->db->Update($sql);
         }
-
-        //存储成功后
+        //del
+        foreach ($del as $key4 => $value4) {
+            $sql = $this->db->sql->Delete($this->table, array(array('=', $this->d['Name'][0], $name),array('=', $this->d['Key'][0], $key4)));
+            $this->db->Delete($sql);
+        }
+        //var_dump($add,$del,$mod);die;
+        $this->db->Query($this->db->sql->Transaction('commit'));
+        //存储成功后重置origkvdata
         $this->origkvdata = $this->kvdata;
 
         return true;
+
     }
 
     /**
      * 删除数据
      * Delete表示从数据库删除
-     * 从$zbp及数据库中删除该实例数据.
+     * 从$zbp及数据库中删除该实例Config数据.
      *
      * @return bool
      */
     public function Delete()
     {
+        global $zbp;
         $name = $this->GetItemName();
-        $sql = $this->db->sql->Delete($this->table, array(array('=', 'conf_Name', $name)));
+        $sql = $this->db->sql->Delete($this->table, array(array('=', $this->d['Name'][0], $name)));
         $this->db->Delete($sql);
+        unset($zbp->configs[$name]);
 
         return true;
     }
