@@ -281,7 +281,7 @@ class Punycode
             ($firstTime)
                 ? $delta / self::DAMP
                 : $delta / 2
-            );
+        );
         $delta += (int) ($delta / $numPoints);
         $k = 0;
         while ($delta > ((self::BASE - self::TMIN) * self::TMAX) / 2) {

@@ -144,8 +144,10 @@ class XssHtml
     {
         $list = array();
         foreach ($node->attributes as $attr) {
-            if (!in_array($attr->nodeName,
-                $this->m_AllowAttr)) {
+            if (!in_array(
+                $attr->nodeName,
+                $this->m_AllowAttr
+            )) {
                 $list[] = $attr->nodeName;
             }
         }

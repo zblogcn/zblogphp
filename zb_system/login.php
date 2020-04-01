@@ -16,7 +16,8 @@ if ($zbp->CheckRights('admin')) {
     <meta name="generator" content="<?php echo $option['ZC_BLOG_PRODUCT_FULL'] ?>" />
     <meta name="renderer" content="webkit" />
     <link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
-    <script src="script/common.js" type="text/javascript"></script>
+    <script src="script/jquery-2.2.4.min.js" type="text/javascript"></script>
+    <script src="script/zblogphp.js?v=<?php echo $blogversion; ?>" type="text/javascript"></script>
     <script src="script/md5.js" type="text/javascript"></script>
     <script src="script/c_admin_js_add.php" type="text/javascript"></script>
     <title><?php echo $blogname . '-' . $lang['msg']['login'] ?></title>
@@ -27,7 +28,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Header'] as $fpname => &$fpsigna
 
 ?>
 </head>
-<body>
+<body class="login">
 <div class="bg">
 <div id="wrapper">
   <div class="logo"><img src="image/admin/none.gif" title="<?php echo htmlspecialchars($blogname) ?>" alt="<?php echo htmlspecialchars($blogname) ?>"/></div>
@@ -64,6 +65,7 @@ $("#btnPost").click(function(){
 
     $("#edtUserName").remove();
     $("#edtPassWord").remove();
+    $("#chkRemember").remove();
 
     $("form").attr("action","cmd.php?act=verify");
     $("#username").val(strUserName);
@@ -72,7 +74,7 @@ $("#btnPost").click(function(){
 })
 
 $("#chkRemember").click(function(){
-    $("#savedate").attr("value", $("#chkRemember").attr("checked") == "checked" ? 30 : 1);
+    $("#savedate").attr("value", $("#chkRemember").prop("checked") == true ? 30 : 1);
 })
 
 </script>

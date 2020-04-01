@@ -10,6 +10,7 @@ class Database__PDO_MySQL implements Database__Interface
 {
     public $type = 'mysql';
     public $version = '';
+    public $error = array();
 
     /**
      * @var string|null 数据库名前缀
@@ -79,7 +80,7 @@ class Database__PDO_MySQL implements Database__Interface
             $this->dbengine = $array[7];
 
             $myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
-            $this->version = substr($myver, 0, strpos($myver, "-"));
+            $this->version = SplitAndGet($myver, '-', 0);
             if (version_compare($this->version, '5.5.3') >= 0) {
                 $u = "utf8mb4";
             } else {
@@ -163,6 +164,10 @@ class Database__PDO_MySQL implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 $this->db->exec($this->sql->Filter($s));
+                $e = $this->db->errorCode();
+                if ($e > 0) {
+                    $this->error[] = array($e, $this->db->errorInfo());
+                }
             }
         }
     }

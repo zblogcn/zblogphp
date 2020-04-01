@@ -389,12 +389,12 @@ class Changyan_Synchronizer
             $comments = array();
 
             $commentsList = $zbp->GetCommentList(
-                    '*',
-                    array(
-                        array('=', 'comm_IsChecking', 0),
-                        array('=', 'comm_LogID', $aPostID),
-                    )
-                );
+                '*',
+                array(
+                    array('=', 'comm_IsChecking', 0),
+                    array('=', 'comm_LogID', $aPostID),
+                )
+            );
             $comments = array();
             //insert comments into the commentsArray
             foreach ($commentsList as $comment) {

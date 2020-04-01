@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<theme version="php">
+<id>tpure</id>
+<name>拓源纯净主题</name>
+<url>https://www.toyean.com/post/tpure.html</url>
+<note>响应式博客主题，视觉质感纯净无暇。</note>
+<description>用一颗纯净的心，写一款纯净的主题，生活从不亏待每一个努力向上的人，未来的幸运都是过往努力的积攒。</description>
+<path>main.php?act=base</path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>TOYEAN</name>
+  <email>toyean@qq.com</email>
+  <url>https://www.toyean.com/</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>162090</adapted>
+<version>1.3</version>
+<pubdate>2020-01-01</pubdate>
+<modified>2020-03-26</modified>
+<price>0</price>
+<phpver>5.2</phpver>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1>controlpanel|catalog|comments</sidebar1>
+  <sidebar2>previous|tags</sidebar2>
+  <sidebar3>catalog|tags|comments</sidebar3>
+  <sidebar4>tags</sidebar4>
+  <sidebar5>tags</sidebar5>
+  <sidebar6></sidebar6>
+  <sidebar7></sidebar7>
+  <sidebar8></sidebar8>
+  <sidebar9></sidebar9>
+</sidebars>
+</theme>

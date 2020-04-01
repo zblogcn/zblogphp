@@ -3,6 +3,9 @@
 require './function/c_system_base.php';
 $zbp->Load();
 $action = GetVars('act', 'GET');
+if ($action == 'ajax') {
+    define('IN_AJAX_PROCESSING', true);
+}
 
 if (!$zbp->CheckRights($action)) {
     $zbp->ShowError(6, __FILE__, __LINE__);
@@ -69,52 +72,8 @@ switch ($action) {
             $fpname($miscType);
         }
 
-        switch ($miscType) {
-            case 'statistic':
-                CheckIsRefererValid();
-                if (!$zbp->CheckRights('admin')) {
-                    echo $zbp->ShowError(6, __FILE__, __LINE__);
-                    die();
-                }
-                misc_statistic();
-                break;
-            case 'updateinfo':
-                CheckIsRefererValid();
-                if (!$zbp->CheckRights('root')) {
-                    echo $zbp->ShowError(6, __FILE__, __LINE__);
-                    die();
-                }
-                misc_updateinfo();
-                break;
-            case 'showtags':
-                $zbp->csrfExpiration = 48;
-                CheckIsRefererValid();
-                if (!$zbp->CheckRights('ArticleEdt')) {
-                    Http404();
-                    die();
-                }
-                misc_showtags();
-                break;
-            case 'vrs':
-                if (!$zbp->CheckRights('misc')) {
-                    $zbp->ShowError(6, __FILE__, __LINE__);
-                }
-                misc_viewrights();
-                break;
-            case 'phpinfo':
-                if (!$zbp->CheckRights('root')) {
-                    echo $zbp->ShowError(6, __FILE__, __LINE__);
-                    die();
-                }
-                misc_phpif();
-                break;
-            case 'ping':
-                misc_ping();
-                break;
-            default:
-                break;
-        }
-
+        $function = 'misc_' . $miscType;
+        $function();
         break;
     case 'cmt':
         $die = false;
@@ -322,6 +281,8 @@ switch ($action) {
             $hint = $lang['error']['84'];
             $hint = str_replace('%s', "【$disableResult->name ($disableResult->id)】", $hint);
             $zbp->SetHint('bad', $hint);
+        } elseif ($disableResult === false) {
+            $zbp->SetHint('bad');
         } else {
             $zbp->BuildModule();
             $zbp->SaveCache();

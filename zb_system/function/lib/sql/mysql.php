@@ -87,10 +87,13 @@ class SQL__MySQL extends SQL__Global
                 if ($value[1] == 'boolean') {
                     $sql[] = $value[0] . ' tinyint(1) NOT NULL DEFAULT \'' . (int) $value[3] . '\'' . ',';
                 }
+                if ($value[1] == 'char') {
+                    $sql[] = $value[0] . ' char(' . (int) $value[2] . ') NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
+                }
                 if ($value[1] == 'string') {
                     if ($value[2] != '') {
                         if (strpos($value[2], 'char') !== false) {
-                            $sql[] = $value[0] . ' char(' . str_replace('char', '', $value[2]) . ') NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
+                            $sql[] = $value[0] . ' char(' . (int) str_replace(array('char', '(', ')'), '', $value[2]) . ') NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
                         } elseif (is_int($value[2])) {
                             $sql[] = $value[0] . ' varchar(' . $value[2] . ') NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
                         } elseif ($value[2] == 'tinytext') {
@@ -128,12 +131,27 @@ class SQL__MySQL extends SQL__Global
             if (is_array($engine) && count($engine) > 0) {
                 $myengtype = $engine[1];
             }
-
             if (!$myengtype) {
                 $myengtype = $GLOBALS['zbp']->option['ZC_MYSQL_ENGINE'];
             }
 
-            $sql[] = ') ENGINE=' . $myengtype . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;';
+            $collate = 'utf8_general_ci';
+            $charset = 'utf8';
+            if ($GLOBALS['zbp']->option['ZC_MYSQL_CHARSET'] == 'utf8mb4') {
+                $collate = 'utf8mb4_general_ci';
+                $charset = 'utf8mb4';
+            }
+            if (isset($this->option['collate']) && !empty($this->option['collate'])) {
+                $collate = $this->option['collate'];
+            }
+            if (isset($this->option['charset']) && !empty($this->option['charset'])) {
+                $charset = $this->option['charset'];
+            }
+            if ($charset == 'utf8mb4' && stripos($collate, 'utf8mb4_') === false) {
+                $collate = 'utf8mb4_general_ci';
+            }
+
+            $sql[] = ') ENGINE=' . $myengtype . ' DEFAULT CHARSET=' . $charset . ' COLLATE=' . $collate . ' AUTO_INCREMENT=1 ;';
             $sqlAll[] = implode(' ', $sql);
         }
         $this->_sql = $sqlAll;

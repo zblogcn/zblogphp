@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<theme version="php">
+<id>Zit</id>
+<name>ZBlogIt</name>
+<url>https://jgpy.cn</url>
+<note></note>
+<description></description>
+<path>main.php</path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>吉光片羽</name>
+  <email>i@jgpy.cn</email>
+  <url>https://jgpy.cn</url>
+</author>
+<source>
+  <name>吉光片羽</name>
+  <email>i@jgpy.cn</email>
+  <url>https://jgpy.cn</url>
+</source>
+<adapted>151935</adapted>
+<version>1.0</version>
+<pubdate>2019-11-27</pubdate>
+<modified>2020-03-14</modified>
+<price>0</price>
+<phpver>5.2</phpver>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1>calendar|controlpanel|catalog|favorite|link|misc</sidebar1>
+  <sidebar2>calendar|catalog|archives|previous</sidebar2>
+  <sidebar3>catalog|previous|comments</sidebar3>
+  <sidebar4>comments</sidebar4>
+  <sidebar5>comments</sidebar5>
+  <sidebar6></sidebar6>
+  <sidebar7></sidebar7>
+  <sidebar8></sidebar8>
+  <sidebar9></sidebar9>
+</sidebars>
+</theme>

@@ -10,6 +10,7 @@ class Database__SQLite3 implements Database__Interface
 {
     public $type = 'sqlite';
     public $version = '3';
+    public $error = array();
 
     /**
      * @var string|null 数据库名前缀
@@ -53,6 +54,7 @@ class Database__SQLite3 implements Database__Interface
         if ($this->db = new SQLite3($array[0])) {
             $this->dbpre = $array[1];
             $this->dbname = $array[0];
+            $this->version = substr(GetValueInArray(SQLite3::version(), 'versionString'), 1);
 
             return true;
         } else {
@@ -86,6 +88,10 @@ class Database__SQLite3 implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 $this->db->query($this->sql->Filter($s));
+                $e = $this->db->lastErrorCode();
+                if ($e > 0) {
+                    $this->error[] = array($e, $this->db->lastErrorMsg());
+                }
             }
         }
     }

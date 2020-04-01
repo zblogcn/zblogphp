@@ -16,7 +16,7 @@
 		<div id="divMain">
 {foreach $articles as $article}
 
-{if $article.IsTop}
+{if $article.TopType}
 {template:post-istop}
 {else}
 {template:post-multi}

@@ -229,7 +229,11 @@ function Qiniu_Client_CallNoRet($self, $url) // => $error
 }
 
 function Qiniu_Client_CallWithForm(
-    $self, $url, $params, $contentType = 'application/x-www-form-urlencoded') // => ($data, $error)
+    $self,
+    $url,
+    $params,
+    $contentType = 'application/x-www-form-urlencoded'
+) // => ($data, $error)
 {
     $u = array('path' => $url);
     if ($contentType === 'application/x-www-form-urlencoded') {

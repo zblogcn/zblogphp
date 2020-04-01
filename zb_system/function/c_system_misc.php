@@ -10,6 +10,12 @@ function misc_updateinfo()
 {
     global $zbp;
 
+    CheckIsRefererValid();
+    if (!$zbp->CheckRights('root')) {
+        echo $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
+
     $r = GetHttpContent($zbp->option['ZC_UPDATE_INFO_URL']);
     $r = TransferHTML($r, '[noscript]');
 
@@ -31,6 +37,12 @@ function misc_statistic()
 {
     global $zbp;
 
+    CheckIsRefererValid();
+    if (!$zbp->CheckRights('admin')) {
+        echo $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
+
     if ($zbp->CheckRights('root') || $zbp->CheckTemplate(true) == false) {
         $zbp->CheckTemplate(false, true);
     }
@@ -42,7 +54,7 @@ function misc_statistic()
     $r = null;
 
     CountNormalArticleNums();
-    CountTopArticle(0, null, null);
+    CountTopPost(ZC_POST_TYPE_ARTICLE, null, null);
     CountCommentNums(null, null);
     $all_comments = $zbp->cache->all_comment_nums;
 
@@ -60,6 +72,7 @@ function misc_statistic()
     $current_member = '{$zbp->user->Name}';
     $current_version = '{$zbp->version}';
     $system_environment = '{$system_environment}';
+    $current_theme_version = '{$theme_version}';
 
     if ($zbp->option['ZC_DEBUG_MODE']) {
         $r .= "<tr><td colspan='4' style='text-align: center'>{$zbp->lang['msg']['debugging_warning']}</td></tr>";
@@ -68,7 +81,7 @@ function misc_statistic()
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_articles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categories}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
-    $r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']} / {$zbp->lang['msg']['current_style']}</td><td>{$current_theme}/{$current_style}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
+    $r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}</td><td>{$current_theme}/{$current_style} {$current_theme_version}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td><a href='../cmd.php?act=misc&type=phpinfo' target='_blank'>{$system_environment}</a></td></tr>";
     $r .= "<script type=\"text/javascript\">$('#statistic').attr('title','" . date("c", $zbp->cache->reload_statistic_time) . "');</script>";
 
@@ -91,6 +104,7 @@ function misc_statistic()
     $r = str_replace('{$zbp->style}', $zbp->style, $r);
     $r = str_replace('{$zbp->version}', ZC_VERSION_FULL, $r);
     $r = str_replace('{$system_environment}', $zbp->cache->system_environment, $r);
+    $r = str_replace('{$theme_version}', '(v' . $zbp->themeapp->version . ')', $r);
 
     echo $r;
 }
@@ -98,6 +112,13 @@ function misc_statistic()
 function misc_showtags()
 {
     global $zbp;
+
+    $zbp->csrfExpiration = 48;
+    CheckIsRefererValid();
+    if (!$zbp->CheckRights('ArticleEdt')) {
+        Http404();
+        die();
+    }
 
     header('Content-Type: application/x-javascript; Charset=utf-8');
 
@@ -114,9 +135,13 @@ function misc_showtags()
     echo '");$("#ulTag").tagTo("#edtTag");';
 }
 
-function misc_viewrights()
+function misc_vrs()
 {
     global $zbp, $blogtitle;
+
+    if (!$zbp->CheckRights('misc')) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+    }
 
     $blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights']; ?><!DOCTYPE HTML>
 <html>
@@ -164,9 +189,15 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsigna
 RunTime();
 }
 
-function misc_phpif()
+function misc_phpinfo()
 {
     global $zbp, $blogtitle;
+
+    if (!$zbp->CheckRights('root')) {
+        echo $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
+
     $match = array();
     $blogtitle = $zbp->name . '-phpinfo';
     ob_start();
@@ -214,7 +245,10 @@ h2 {font-size: 125%;}
 .v i {color: #999;}
 img {float: right; border: 0;}
 hr {display:none;}
-div.bg {background: #777bb4!important;}
+div.bg {background: #3a6ea5!important;}
+.h{background: #78a2ce!important;}
+.e{background: #c6dcf3!important;}
+table a img {filter:hue-rotate(-30deg);}
     </style>
 </head>
 <body class="short">
@@ -295,7 +329,11 @@ div.bg {background: #777bb4!important;}
     echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Plugin Filters</th></tr>';
     foreach ($ca as $key => $value) {
         $i++;
-        echo '<tr><td class="e">' . $i . '</td><td class="v">' . $value . '</td></tr>';
+        $s = '';
+        foreach ($GLOBALS['hooks'][$value] as $function => $sg) {
+            $s .= '<br/>&nbsp;&nbsp;→' . $function;
+        }
+        echo '<tr><td class="e">' . $i . '</td><td class="v">' . $value . $s . '</td></tr>';
     }
     foreach ($badfilter as $key => $value) {
         $i++;
@@ -361,45 +399,53 @@ div.bg {background: #777bb4!important;}
 RunTime();
 }
 
+function misc_respondping()
+{
+    $token = GetVars('token', 'GET');
+    if (VerifyWebToken($token, "")) {
+        echo 'ok';
+        die;
+    }
+}
+
 function misc_ping()
 {
     global $zbp;
     $data = array();
     $token = GetVars('token', 'GET');
+
     if (VerifyWebToken($token, "")) {
-        JsonError(0, $zbp->lang['msg']['verify_succeed'], $data);
-
-        return;
-    }
-    JsonError(1, $zbp->lang['error'][38], $data);
-
-    /*
-        $token = GetVars('token', 'GET');
-        if (VerifyWebToken($token, "")) {
-            header('Access-Control-Allow-Origin:*');
-            $data["token"] = $token;
-            $data["product"] = $zbp->option['ZC_BLOG_PRODUCT_FULL'];
-            $http = Network::Create();
-            $http->open('GET', GetVars("newurl", "GET"));
-            $http->setTimeOuts(7, 7, 0, 0);
-            $http->send();
-            if ($http->status == 200) {
-                $data["product2"] = $http->getResponseHeader('Product');
-                if ($data["product"] !== $data["product2"]) {
-                    JsonError(1, "新地址程序不一致", $data);
-
-                    return;
-                }
-            } else {
-                JsonError(1, "访问检测失败", $data);
-
-                return;
+        $url = GetVars('url') . 'zb_system/cmd.php?act=misc&type=respondping&token=' . $token;
+        $http = Network::Create();
+        $http->open('GET', $url);
+        $http->setTimeOuts(10, 10, 0, 0);
+        $http->send();
+        if ($http->status == 200) {
+            $s = $http->responseText;
+            if ($s == 'ok') {
+                JsonError(0, '<em>' . $zbp->lang['msg']['verify_succeed'] . '</em>', $data);
             }
-            JsonError(0, "校验成功", $data);
 
             return;
         }
-        JsonReturn($data);
-        JsonError(1, "无效的TOKEN", $data);
-    */
+    }
+    JsonError(1, $zbp->lang['error'][5], $data);
+}
+
+function misc_updatedapp()
+{
+    global $zbp;
+
+    header('Content-Type: application/x-javascript; Charset=utf-8');
+
+    if ($zbp->cache->success_updated_app !== '') {
+        $fn = $zbp->cache->success_updated_app . '_Updated';
+        if (function_exists($fn)) {
+            $fn();
+        }
+
+        $zbp->cache->success_updated_app = '';
+        $zbp->SaveCache();
+        die;
+    }
 }

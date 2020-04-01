@@ -257,12 +257,12 @@ class Post extends Base
                 }
 
                 $articles = $zbp->GetPostList(
-                array('*'),
-                array(array('=', 'log_Type', 0), array('=', 'log_Status', 0), array('<', 'log_PostTime', $this->PostTime)),
-                array('log_PostTime' => 'DESC'),
-                array(1),
-                null
-                    );
+                    array('*'),
+                    array(array('=', 'log_Type', 0), array('=', 'log_Status', 0), array('<', 'log_PostTime', $this->PostTime)),
+                    array('log_PostTime' => 'DESC'),
+                    array(1),
+                    null
+                );
                 if (count($articles) == 1) {
                     $this->_prev = $articles[0];
                 } else {
@@ -277,19 +277,19 @@ class Post extends Base
                 }
 
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Next'] as $fpname => &$fpsignal) {
-                    $this->_prev = $fpname($this);
-                    if ($this->_prev !== '') {
-                        return $this->_prev;
+                    $this->_next = $fpname($this);
+                    if ($this->_next !== '') {
+                        return $this->_next;
                     }
                 }
 
                 $articles = $zbp->GetPostList(
-                array('*'),
-                array(array('=', 'log_Type', 0), array('=', 'log_Status', 0), array('>', 'log_PostTime', $this->PostTime)),
-                array('log_PostTime' => 'ASC'),
-                array(1),
-                null
-                    );
+                    array('*'),
+                    array(array('=', 'log_Type', 0), array('=', 'log_Status', 0), array('>', 'log_PostTime', $this->PostTime)),
+                    array('log_PostTime' => 'ASC'),
+                    array(1),
+                    null
+                );
                 if (count($articles) == 1) {
                     $this->_next = $articles[0];
                 } else {

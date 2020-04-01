@@ -31,7 +31,7 @@ function Totoro_Admin_CommentMng_SubMenu()
 {
     global $zbp;
     echo '<a href="' . $zbp->host . 'zb_users/plugin/Totoro/main.php"><span class="m-right">Totoro设置</span></a>';
-    echo '<script src="' . $zbp->host . 'zb_users/plugin/Totoro/submenu.js"></script>';
+    //echo '<script src="' . $zbp->host . 'zb_users/plugin/Totoro/submenu.js"></script>';
 }
 
 function Totoro_PostComment_Core(&$comment)

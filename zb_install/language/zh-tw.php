@@ -39,6 +39,7 @@ return array(
     'db_password'                     => '資料庫密碼：',
     'db_name'                         => '資料庫名稱：',
     'db_pre'                          => '資料表前置字串：',
+    'db_charset'                      => '字符集',
     'db_engine'                       => '資料表存儲引擎：',
     'db_drive'                        => '資料庫驅動：',
     'db_set_port'                     => '（資料庫通訊埠號默認3306，如需要修改，請在「資料庫主機」裡追加「:資料庫通訊埠號」。）',
@@ -84,5 +85,6 @@ return array(
     'not_insert_data'                 => '插入數據失敗。',
     'not_create_option_file'          => '創建c_option.php失敗，请創建"網站目錄/zb_users/c_option.php"文件並將下邊的代碼複製進文件並保存。',
     'not_create_template_file'        => '編譯主題模板失敗。',
+    'theme'                           => '主題：',
     ''                                => '',
 );

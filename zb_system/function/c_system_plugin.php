@@ -131,6 +131,18 @@ function RemovePluginFilter($strPluginFilter)
 
 /*
 '*********************************************************
+' 目的： 设置插件信号
+'*********************************************************
+ */
+function SetPluginSignal($plugname, $function, $signal = 'PLUGIN_EXITSIGNAL_NONE')
+{
+    $GLOBALS['hooks'][$plugname][$function] = $signal;
+
+    return true;
+}
+
+/*
+'*********************************************************
 ' 目的：挂上Action接口
 ' 参数：'plugname:接口名称
 'actioncode:要执行的语句，要转义为Execute可执行语句
@@ -439,11 +451,21 @@ DefinePluginFilter('Filter_Plugin_Index_End');
 '类型:Filter
 '名称:Filter_Plugin_Html_Js_Add
 '参数:
-'说明:c_html_js_add.php脚本调用,JS页接口需要强制开启
+'说明:c_html_js_add.php脚本接口，允许插件在c_html_js_add.php内输出内容
 '调用:
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Html_Js_Add');
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Html_Js_ZbpConfig
+'参数:
+'说明:c_html_js_add.php脚本接口，允许插件设置zbpConfig
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Html_Js_ZbpConfig');
 
 /*
 '**************************************************<
@@ -559,6 +581,17 @@ DefinePluginFilter('Filter_Plugin_Misc_Begin');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Admin_Begin');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_Other_Action
+'参数:
+'说明:后台管理页的拦截后台管理请求实现自己的Action
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_Other_Action');
 
 /*
 '**************************************************<
@@ -1243,6 +1276,17 @@ DefinePluginFilter('Filter_Plugin_ViewList_Template');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_ViewPost_Template');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_ViewSearch_Template
+'参数:&$template
+'说明:
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_ViewSearch_Template');
 
 /*
 '**************************************************<
@@ -1957,7 +2001,7 @@ DefinePluginFilter('Filter_Plugin_Upload_SaveFile');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Upload_SaveBase64File=
+'名称:Filter_Plugin_Upload_SaveBase64File
 '参数:$str64,$this
 '说明:Upload类的SaveBase64File方法接口
 '调用:
@@ -2150,3 +2194,25 @@ DefinePluginFilter('Filter_Plugin_Xmlrpc_Begin');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_CSP_Backend');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_EnablePlugin
+'参数:&name
+'说明:EnablePlugin(1.6.0加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_EnablePlugin');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_DisablePlugin
+'参数:&name
+'说明:DisablePlugin(1.6.0加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_DisablePlugin');

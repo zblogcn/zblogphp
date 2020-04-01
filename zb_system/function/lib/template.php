@@ -543,28 +543,31 @@ class Template
     public function Display($entryPage = "")
     {
         global $zbp;
+
+        //此处似乎差一个接口？
+        //foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Display'] as $fpname => &$fpsignal) {
+        //    $fpreturn = $fpname($this, $entryPage);
+        //}
+
         if ($entryPage == "") {
             $entryPage = $this->entryPage;
         }
-        $f = $this->path . $entryPage . '.php';
+        $file = $this->path . $entryPage . '.php';
 
-        if (!is_readable($f)) {
+        foreach ($zbp->modulesbyfilename as $m) {
+            $m->Content = $this->ReplaceStaticTags($m->Content);
+        }
+
+        if (!is_readable($file)) {
             $zbp->ShowError(86, __FILE__, __LINE__);
         }
-
-        $ak = array_keys($this->staticTags);
-        $av = array_values($this->staticTags);
-        foreach ($zbp->modulesbyfilename as &$m) {
-            $m->Content = str_replace($ak, $av, $m->Content);
-        }
-        unset($ak, $av);
 
         // 入口处将tags里的变量提升全局
         foreach ($this->templateTags as $key => &$value) {
             $$key = &$value;
         }
 
-        include $f;
+        include $file;
     }
 
     /**
@@ -624,7 +627,7 @@ class Template
             $templates[$sortname] = file_get_contents($fullname);
         }
 
-        for ($i = 2; $i <= 9; $i++) {
+        for ($i = 2; $i < 10; $i++) {
             if (!isset($templates['sidebar' . $i])) {
                 $templates['sidebar' . $i] = str_replace('$sidebar', '$sidebar' . $i, $templates['sidebar']);
             }
@@ -659,6 +662,7 @@ class Template
         $this->templateTags['user'] = &$zbp->user;
         $this->templateTags['option'] = &$option;
         $this->templateTags['lang'] = &$zbp->lang;
+        $this->templateTags['langs'] = &$zbp->langs;
         $this->templateTags['version'] = &$zbp->version;
         $this->templateTags['categorys'] = &$zbp->categories;
         $this->templateTags['categories'] = &$zbp->categories;
@@ -688,6 +692,7 @@ class Template
         $this->templateTags['feedurl'] = &$zbp->feedurl;
         $this->templateTags['searchurl'] = &$zbp->searchurl;
         $this->templateTags['ajaxurl'] = &$zbp->ajaxurl;
+        $this->templateTags['issearch'] = false;
         $s = array(
             $option['ZC_SIDEBAR_ORDER'],
             $option['ZC_SIDEBAR2_ORDER'],
@@ -713,15 +718,11 @@ class Template
             $this->$s = $ms;
             $ms = null;
         }
-        $this->templateTags['sidebar'] = &$this->sidebar;
-        $this->templateTags['sidebar2'] = &$this->sidebar2;
-        $this->templateTags['sidebar3'] = &$this->sidebar3;
-        $this->templateTags['sidebar4'] = &$this->sidebar4;
-        $this->templateTags['sidebar5'] = &$this->sidebar5;
-        $this->templateTags['sidebar6'] = &$this->sidebar6;
-        $this->templateTags['sidebar7'] = &$this->sidebar7;
-        $this->templateTags['sidebar8'] = &$this->sidebar8;
-        $this->templateTags['sidebar9'] = &$this->sidebar9;
+
+        for ($i = 1; $i < 10; $i++) {
+            $j = ($i == 1) ? '' : $i;
+            $this->templateTags['sidebar' . $j] = &$this->{'sidebar' . $j};
+        }
 
         //foreach ($GLOBALS['hooks']['Filter_Plugin_Template_MakeTemplatetags'] as $fpname => &$fpsignal) {
         //    $fpreturn = $fpname($this->templateTags);

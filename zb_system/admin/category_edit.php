@@ -100,14 +100,14 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_SubMenu'] as $fpname => 
                     <?php echo $lang['msg']['template']?>:</span>
                 <br />
                 <select class="edit" size="1" name="Template" id="cmbTemplate">
-                    <?php echo OutputOptionItemsOfTemplate($cate->Template); ?></select>
+                    <?php echo OutputOptionItemsOfTemplate($cate->Template, array('single', '404', 'search', 'lm-')); ?></select>
                 <input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $cate->Template; ?>" /></p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['category_aritles_default_template']?>:</span>
                 <br />
                 <select class="edit" size="1" name="LogTemplate" id="cmbLogTemplate">
-                    <?php echo OutputOptionItemsOfTemplate($cate->LogTemplate); ?></select>
+                    <?php echo OutputOptionItemsOfTemplate($cate->LogTemplate, array('index', '404', 'search', 'lm-')); ?></select>
             </p>
             <p>
                 <span class='title'>

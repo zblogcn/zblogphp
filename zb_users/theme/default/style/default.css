@@ -2,7 +2,7 @@
 body{
 	margin:0;
 	padding:0;
-	color:#555;
+	color:#444;
 	font-size:14px;
     	font-family: "微软雅黑","宋体","Trebuchet MS", Tahoma, Arial, sans-serif;
 	background:url("default/bg-top.png") repeat-x 0 0;
@@ -327,8 +327,8 @@ div.post {
 }
 
 div.istop-post{
-	padding-top:0px;
-	padding-bottom:35px;
+	padding-top:15px;
+	padding-bottom:25px;
 }
 
 div.pagebar{
@@ -352,22 +352,25 @@ div.post-nav {
 
 div.post .post-title{
     margin:0 0 0 0;
-    padding:0 0 5px 0;
+    padding:0.3em 2% 0.3em 2%;
     font-size:1.4em;
     line-height:1.4em; 
 	color: #284259;
     text-align:left;
 	background:#FFF;
-	width:80%;
+	width:96%;
 	float:left;
+	background: #fbfbfb;
+    border:1px solid #efefef;
+    clear:both;
 
 }
 
 div.istop-post .post-title{
     text-align:left;
-	border-bottom:none;
-    margin:0 0 0 0;
-	padding-bottom:0px;
+	background:none;
+    border:none;
+   	background:url("default/pointblue.gif") no-repeat 4px center;
 }
 
 div.post .post-date{
@@ -375,30 +378,31 @@ div.post .post-date{
 	line-height:1em;
 	margin:0 0 0 0;
 	padding:10px 0 0 0;
-	font-size:0.9em;
+	font-size:0.6em;
 	font-weight: normal;
     text-align:right;
-	width:20%;
 	float:right;
 	color:#666;
 }
 
 
 div.post .post-footer{
-	width:100%;
-	margin:30px 0 40px 0;
-	padding:0 0 5px 0;
+	width:98%;
+	margin:1em 1% 2em 1%;
+	padding:0 0 0 0;
 	font-size:0.9em;
     font-weight: normal;
-	color:#aaa;
+	color:#666;
 	text-align:right;
 }
-
+div.post .post-footer small, div.post .post-tags small{
+	color:#ccc;
+}
 
 div.post .post-tags{
-	width:100%;
+	width:98%;
 	margin:0 0 0 0;
-	padding:2px 0 0 0;
+	padding:0 1% 0 1%;
 	font-size:1em;
     font-weight: normal;
 	color:gray;
@@ -408,14 +412,13 @@ div.post .post-tags{
 }
 
 div.post div.post-body{
-	width:100%;
-	margin:0 0 15px 0;
-	padding:0 0 0 0;
+	width:98%;
+	margin:0 0 0 0;
+	padding:1em 1% 1em 1%;
 	font-size:1em;
     text-align:justify;
 	line-height:180%;
 	clear:both;
-	border-top:1px solid #dbe0e6;
 	word-break:break-all;
 }
 
@@ -571,7 +574,7 @@ div.post-body h6{
 	font-weight:normal;
 }
 #BlogPowerBy a,#BlogCopyRight a{
-	color:#666;
+	color:#333;
 }
 #BlogPowerBy a:hover,#BlogCopyRight a:hover{
 	color:red;
@@ -603,10 +606,11 @@ ul.msg{
 }
 
 li.msgname{
-	padding:0 0 10px 5px;
+	padding:0 0 0.8em 0.5em;
 	margin:0px;   
 	font-weight: bold;
     font-size:1em;
+    border-bottom:1px dotted #eaeaea;
 }
 
 li.msgname *{
@@ -634,7 +638,6 @@ li.msgarticle{
 	line-height:160%; 
     background:#FFF;
 	padding-left:55px;
-    border-bottom:1px solid #eaeaea;
 }
 li.msgtime{
 	padding:5px 0 0 0;
@@ -645,22 +648,20 @@ img.avatar{
 	width:40px;
 	height:40px;
 	float:left;
-	padding:4px;
-	border:1px solid #eaeaea;
+	padding:0px 4px 4px 0px;
+	border:0px solid #eaeaea;
 }
 ul.msg ul.msg{
 	padding:10px 0 0 0;
 	margin:20px 0 0 0;
-    border-top:1px solid #eaeaea;
     border-bottom:none;
 }
 ul.msg ul.msg li.msgarticle{
 	padding-bottom:0px;
-    border-bottom:0px solid #eaeaea;
 }
 
 ul.msg ul.msg li.msgname{
-	padding:0px;
+
 }
 
 
@@ -671,8 +672,9 @@ ul.mutuality,ul.pagebar,ul.msghead{
 }
 ul.mutuality li.tbname,ul.msghead li.tbname{
 	color:#3c6da7;
-	padding-bottom:10px;
-	border-bottom:1px solid #dbe0e6;
+	padding:0.4em 1em 0.4em 1em;
+	border:1px solid #eaeaea;
+	background: #fbfbfb;
 }
 ul.mutuality li.msgarticle{
 	padding-left:0px;
@@ -702,9 +704,9 @@ li.msgarticle div.quote-title{
 
 /************评论发表用的样式*************/
 #divCommentPost{
-	width:98%;
+	width:96%;
 	margin:0 0 0 0;
-	padding:5px 1% 15px 1%;
+	padding:1em 2% 1.5em 2%;
 }
 
 #divCommentPost p{margin-top:10px;}
@@ -718,7 +720,7 @@ color:#3c6da7;
 #cancel-reply{float:right;margin-right: 2em;}
 div.reply-frm{
 	background:#f0f0f0;
-	box-shadow: 0 0 15px #666;
+	box-shadow: 0 0 15px #333;
 	margin:1em 1% !important;
 	padding:.3em .8em !important;
 	min-width:330px;
@@ -730,31 +732,28 @@ line-height:20px;
 height:24px;
 padding:2px 5px 2px 5px;
 }
-#txaArticle{padding:5px;width:95%;height:150px;border:1px solid #d7d7d7;}
+#txaArticle{padding:0.5em;width:98%;height:150px;border:1px solid #d7d7d7;}
 input.button {color:#FFFFFF; font-size:14px; width:100px; height:32px; background:#3a6ea5; border:1px solid #3399CC;cursor: pointer;}
 
 
 
 /*--------------------------分页条-------------------------------*/
 span.page{
-	color:#666;
+	color:#333;
 	font-weight:bolder;
 	padding:2px 5px 2px 5px;
 	margin:4px;
-	border:1px solid #cccccc;
 }
 
 span.now-page{
-	color:#666;
+	color:#333;
 	font-weight:bolder;
 	padding:2px 5px 2px 5px;
 	margin:5px;
-	border:1px solid #666;
 }
 
 a:hover span.page{
 	color:red;
-	border:1px solid red;
 }
 
 ul.ul-subcates{
@@ -768,6 +767,6 @@ span.sh{
 	font-size:.5em;
 	font-family:monospace;
 	cursor:pointer;
-	color:#666;
+	color:#333;
 }
 

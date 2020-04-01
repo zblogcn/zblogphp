@@ -945,9 +945,11 @@ if ($xml) {
             $password = (string) $xml->params->param[2]->value->string;
             xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticlePst')) {
-                xmlrpc_editPost((int) $xml->params->param[0]->value->string,
+                xmlrpc_editPost(
+                    (int) $xml->params->param[0]->value->string,
                     $xml->params->param[3]->value->struct->asXML(),
-                    (bool) $xml->params->param[4]->value->boolean->asXML());
+                    (bool) $xml->params->param[4]->value->boolean->asXML()
+                );
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -957,9 +959,11 @@ if ($xml) {
             $password = (string) $xml->params->param[2]->value->string;
             xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('ArticlePst')) {
-                xmlrpc_editPost(0,
+                xmlrpc_editPost(
+                    0,
                     $xml->params->param[3]->value->struct->asXML(),
-                    (bool) $xml->params->param[4]->value->boolean->asXML());
+                    (bool) $xml->params->param[4]->value->boolean->asXML()
+                );
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -969,9 +973,11 @@ if ($xml) {
             $password = (string) $xml->params->param[2]->value->string;
             xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('PagePst')) {
-                xmlrpc_editPage(0,
+                xmlrpc_editPage(
+                    0,
                     $xml->params->param[3]->value->struct->asXML(),
-                    (bool) $xml->params->param[4]->value->boolean->asXML());
+                    (bool) $xml->params->param[4]->value->boolean->asXML()
+                );
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
@@ -981,9 +987,11 @@ if ($xml) {
             $password = (string) $xml->params->param[3]->value->string;
             xmlrpc_Verify($username, $password);
             if ($zbp->CheckRights('PagePst')) {
-                xmlrpc_editPage((int) $xml->params->param[1]->value->string,
+                xmlrpc_editPage(
+                    (int) $xml->params->param[1]->value->string,
                     $xml->params->param[4]->value->struct->asXML(),
-                    (bool) $xml->params->param[5]->value->boolean->asXML());
+                    (bool) $xml->params->param[5]->value->boolean->asXML()
+                );
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }

@@ -10,6 +10,7 @@ class Database__MySQL implements Database__Interface
 {
     public $type = 'mysql';
     public $version = '';
+    public $error = array();
 
     /**
      * @var string|null 数据库名前缀
@@ -80,7 +81,7 @@ class Database__MySQL implements Database__Interface
         }
 
         $myver = mysql_get_server_info($db_link);
-        $this->version = substr($myver, 0, strpos($myver, "-"));
+        $this->version = SplitAndGet($myver, '-', 0);
         if (version_compare($this->version, '5.5.3') >= 0) {
             $u = "utf8mb4";
         } else {
@@ -182,6 +183,10 @@ class Database__MySQL implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 mysql_query($this->sql->Filter($s), $this->db);
+                $e = mysql_errno($this->db);
+                if ($e > 0) {
+                    $this->error[] = array($e, mysql_error($this->db));
+                }
             }
         }
     }

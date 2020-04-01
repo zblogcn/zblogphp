@@ -10,6 +10,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
 {
     public $type = 'postgresql';
     public $version = '';
+    public $error = array();
 
     /**
      * @var string|null 数据库名前缀
@@ -69,6 +70,33 @@ class Database__PDO_PostgreSQL implements Database__Interface
         }
         $this->db = $db_link;
         $this->dbpre = $array[4];
+        $myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
+        $this->version = SplitAndGet($myver, '-', 0);
+
+        return true;
+    }
+
+    /**
+     * @param string $dbpgsql_server
+     * @param string $dbpgsql_port
+     * @param string $dbpgsql_username
+     * @param string $dbpgsql_password
+     * @param string $dbpgsql_name
+     */
+    public function CreateDB($dbpgsql_server, $dbpgsql_port, $dbpgsql_username, $dbpgsql_password, $dbpgsql_name)
+    {
+        $db_link = new PDO('pgsql:host=' . $dbpgsql_server . ';port=' . $dbpgsql_port, $dbpgsql_username, $dbpgsql_password);
+        $this->db = $db_link;
+        $this->dbname = $dbpgsql_name;
+
+        $db_link->query("SET client_encoding='UTF-8';");
+
+        $r = $this->db->exec($this->sql->Filter('CREATE DATABASE ' . $dbpgsql_name));
+
+        $e = $this->db->errorCode();
+        if ($e > 0) {
+            $this->error[] = array($e, $this->db->errorInfo());
+        }
 
         return true;
     }
@@ -101,6 +129,10 @@ class Database__PDO_PostgreSQL implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 $this->db->exec($this->sql->Filter($s));
+                $e = $this->db->errorCode();
+                if ($e > 0) {
+                    $this->error[] = array($e, $this->db->errorInfo());
+                }
             }
         }
     }
@@ -126,7 +158,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
     /**
      * @param $query
      *
-     * @return bool|mysqli_result
+     * @return bool|pgsql_result
      */
     public function Update($query)
     {
@@ -137,7 +169,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
     /**
      * @param $query
      *
-     * @return bool|mysqli_result
+     * @return bool|pgsql_result
      */
     public function Delete($query)
     {

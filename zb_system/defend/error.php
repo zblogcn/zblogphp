@@ -23,7 +23,7 @@ unset($post_data['token']);
 } ?>
 
 </head>
-<body class="short">
+<body class="error short">
 <div class="bg">
     <div id="wrapper">
         <div class="logo"><img src="<?php echo $GLOBALS['bloghost']; ?>zb_system/image/admin/none.gif" title="Z-BlogPHP"
@@ -33,7 +33,7 @@ unset($post_data['token']);
                 <?php if (!$GLOBALS['option']['ZC_DEBUG_MODE']) {
     ?>
                     <div class="divHeader lessinfo" style="margin-bottom:10px;">
-                        <b><?php echo TransferHTML($error->message, '[noscript]'); ?></b></div>
+                        <b><?php echo FormatString($error->message, '[noscript]'); ?></b></div>
                     <div class="content lessinfo">
                         <div>
                             <p style="font-weight: normal;"><?php echo $GLOBALS['lang']['msg']['possible_causes_error']; ?></p>
@@ -49,7 +49,7 @@ unset($post_data['token']);
                     <div class="content moreinfo">
                         <div>
                             <p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p>
-                            <?php echo '(' . $error->type . ')' . $error->typeName . ' :   ' . (TransferHTML($error->messagefull, '[noscript]')); ?>
+                            <?php echo '(' . $error->type . ')' . $error->typeName . ' :   ' . (FormatString($error->messagefull, '[noscript]')); ?>
                             <?php echo ' (' . ZC_VERSION_FULL . ') ';
         if (!in_array('Status: 404 Not Found', headers_list())) {
             echo '(' . GetEnvironment() . ') ';

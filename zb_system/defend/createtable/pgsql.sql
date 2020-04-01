@@ -7,7 +7,7 @@ CREATE TABLE %pre%post (
  log_Status smallint NOT NULL DEFAULT '0',
  log_Type smallint NOT NULL DEFAULT '0',
  log_Alias varchar(255) NOT NULL DEFAULT '',
- log_IsTop integer NOT NULL DEFAULT '0',
+ log_IsTop smallint NOT NULL DEFAULT '0',
  log_IsLock char(1) NOT NULL DEFAULT '0',
  log_Title varchar(255) NOT NULL DEFAULT '',
  log_Intro text NOT NULL,
@@ -66,6 +66,7 @@ CREATE SEQUENCE %pre%config_seq;
 CREATE TABLE %pre%config (
  conf_ID INT NOT NULL DEFAULT nextval('%pre%config_seq'),
  conf_Name varchar(255) NOT NULL DEFAULT '',
+ conf_Key varchar(255) NOT NULL DEFAULT '',
  conf_Value text,
   PRIMARY KEY (conf_ID)
 ) ;

@@ -22,7 +22,6 @@ textarea,
 select,
 img,
 span { margin: 0; padding: 0; }
-table { border-collapse: collapse; }
 a { text-decoration: none; color: #333333; }
 a:hover { color: #d60000; }
 .clear { clear: both; }
@@ -47,17 +46,6 @@ ul { list-style: none; }
 li { list-style-type: none; }
 ol { list-style-type: decimal; margin-left: 2em; }
 label { cursor: pointer; }
-
-/**/
-table { border-collapse: collapse; border: 1px solid #E1E1E1; background: #ffffff; line-height: 120%; }
-table label { -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
-td,
-th { border: 1px solid #E1E1E1; margin: 0; padding: 3px 5px; text-indent: 0; vertical-align: middle; }
-tr img { margin-bottom: -4px; }
-tr.color1 { background: #ededed; }
-tr.color2 { background: #F4F4F4; }
-tr.color3 { background: #ffffff; }
-tr.color4 { background: #ffffdd; }
 
 /*后台顶部*/
 .header { margin-bottom: 5px; height: 85px; padding: 0; background: #3a6ea5; position: relative; }
@@ -156,31 +144,39 @@ tr.color4 { background: #ffffdd; }
 
 
 /*表   格*/
-.tableBorder { line-height: 1.8em; margin-bottom: 0.8em; margin-top: 0.2em; -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
+table { border-collapse: collapse; background: #ffffff; line-height: 120%; }
+table label { -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
+td,th { margin: 0; text-indent: 0; vertical-align: middle; }
+tr img { margin-bottom: -4px; }
+tr.color1 { background: #ededed; }
+tr.color2 { background: #F4F4F4; }
+tr.color3 { background: #ffffff; }
+tr.color4 { background: #ffffdd; }
+.tableBorder { line-height: 1.8em; margin-bottom: 0.8em; margin-top: 0.4em; -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
 .tableBorder th { text-align: left; }
 .tableBorder-thcenter th { text-align: center; }
 .ui-sortable tr.color4 { cursor: move; }
 .noteinfo { font-weight: normal; font-size: 0.9em; color: #666; font-style: italic; }
 .tableFull { width: 100%; }
 .tdCenter { text-align: center; }
-.td20 { width: 20%; }
-.td30 { width: 30%; }
-.td5 { width: 5%; }
+.td5  { width: 5%; }
 .td10 { width: 10%; }
 .td15 { width: 15%; }
+.td20 { width: 20%; }
 .td25 { width: 25%; }
-.table_hover > tbody > tr > td:hover,
-.table_hover > tbody > tr > th:hover,
-.table_hover > tbody > tr:hover > td,
-.table_hover > tbody > tr:hover > th {
-  background-color: #ffffdd;
-}
-.table_striped > tbody > tr:nth-of-type(odd) {
-  background-color: #F4F4F4;
-}
-.table_striped > thead > tr {
-  background-color: #ededed;
-}
+.td30 { width: 30%; }
+.td35 { width: 30%; }
+table > tbody > tr > td:hover,
+table > tbody > tr > th:hover,
+table > tbody > tr:hover > td,
+table > tbody > tr:hover > th {background-color: #ffffdd;}
+table > tbody > tr:nth-of-type(odd) {background-color: #F4F4F4;}
+table > thead > tr {background-color: #ededed;}
+table{margin:0.5em 0 0.5em 0;border:none;line-height:1.8;box-shadow:0 0 0.1em rgba(0,0,0,0.3);}
+td,th{border:none;padding:0.5em; border-right: 1px solid #efefef;}
+td:last-child{border-right:none;}
+th:last-child{border-right:none;}
+
 /*表   单*/
 form { border: 0px solid black; padding: 0.0em; margin: 0.5em 0; }
 form p { padding: 0.5em 0  0.5em 0; line-height: 1.5em; }
@@ -223,6 +219,7 @@ div.hint p.hint_tips { background: #dbe3ff url(../image/admin/information.png) n
 
 /*后台*/
 form.search { background: #f0f0f0; padding: 0.5em; -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
+form.search{box-shadow:0 0 0.1em rgba(0,0,0,0.3);padding:1em;position:relative;background:#fff;margin:0.4em 0 0.8em 0;border-radius:0.1em;}
 hr { width: 100%; height: 1px; border: none; padding: 0; visibility: hidden; }
 
 /*后台编辑页,文章编辑和页面编辑*/
@@ -273,11 +270,11 @@ input.theme-config { margin-top: -3px; }
 span.title { font-weight: bold; }
 span.star { display: inline-block; margin: 6px; color: red; }
 span.note { font-size: 0.9em; }
-.pagebar span { color: #333; font-weight: bolder; padding: 3px 5px 2px 5px; border: 1px solid #999; background: #aaa; margin: 1px; }
-.pagebar a { border: 1px solid #999; background: #eee; padding: 2px; padding: 2px 5px 2px 5px; margin: 1px; }
-
+.pagebar span { color: #333; font-weight: bolder; padding: 3px 5px 2px 5px; margin: 1px; }
+.pagebar a { border-radius:0.3em;border: 1px solid #efefef;padding: 2px; padding: 2px 5px 2px 5px; margin: 1px; }
+.pagebar a:hover{border: 1px solid #ccc;}
 /*正文DIV下的导航条*/
-.SubMenu { padding: 0 0 0px 0; margin: 0 0 5px 0; width: 100%; text-align: left; font-size: 1em; height: 30px; line-height: 30px; border-bottom: 0px solid #3399cc; display: none; }
+.SubMenu { padding: 0 0 0px 0; margin: 0.4em 0 0.8em 0; width: 100%; text-align: left; font-size: 1em; height: 30px; line-height: 30px; border-bottom: 0px solid #3399cc; display: none; }
 .SubMenu span { float: left; margin: 0 0 0 0; text-align: center; padding: 0px 10px; cursor: pointer; color: #333333; }
 .SubMenu span.m-left,
 .SubMenu span.m-right { float: left; }
@@ -309,7 +306,7 @@ span.button { cursor: pointer; }
 a.button,
 span.button { border-radius: 2px; padding: 2px 3px 2px 3px; line-height: 1.0em; font-size: 1em; }
 a.button:hover,
-span.button:hover { box-shadow: 0 0 1px #000; border-radius: 2px; -ms-border-radius: 2px; padding: 2px 3px 2px 3px; }
+span.button:hover { box-shadow: 0 0 1px #000; border-radius: 0.3em; padding: 2px 3px 2px 3px; }
 
 /*侧栏管理*/
 .widget-left { float: left; clear: left; width: 100%; margin-right: -290px; overflow: hidden; }

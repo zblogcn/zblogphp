@@ -86,16 +86,24 @@ class DbSql
      *
      * @param string $table
      * @param array  $datainfo
-     * @param null   $engine
+     * @param string $engine
+     * @param string $charset
+     * @param string $collate
      *
      * @return string
      */
-    public function CreateTable($table, $datainfo, $engine = null)
+    public function CreateTable($table, $datainfo, $engine = null, $charset = null, $collate = null)
     {
         $sql = $this->get();
         $sql->create($table)->data($datainfo);
-        if (!is_null($engine)) {
+        if (trim($engine) != '') {
             $sql->option(array('engine' => $engine));
+        }
+        if (trim($charset) != '') {
+            $sql->option(array('charset' => $charset));
+        }
+        if (trim($collate) != '') {
+            $sql->option(array('collate' => $collate));
         }
 
         return $sql->sql;
@@ -296,5 +304,14 @@ class DbSql
         $sql .= ')';
 
         return $sql . ";\r\n";
+    }
+
+    //command = 'begin','commit','rollback'
+    public function Transaction($command)
+    {
+        $command = strtoupper(trim($command));
+        if ($command == 'BEGIN' || $command == 'COMMIT' || $command == 'ROLLBACK') {
+            return $command;
+        }
     }
 }

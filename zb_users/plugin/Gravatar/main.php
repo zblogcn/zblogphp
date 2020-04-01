@@ -57,10 +57,13 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <tr>
 <td><span class='note'>可选值: </span></td>
 <td>
-    <p><b>V2EX</b>：<a href="javascript:void(0)" class="enterGravatar">https://cdn.v2ex.com/gravatar/{%emailmd5%}.png?s=60&d=mm&r=G</a></p>
-    <p><b>loli.net</b>：<a href="javascript:void(0)" class="enterGravatar">https://gravatar.loli.net/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
-    <p><b>官方站点1</b>：<a href="javascript:void(0)" class="enterGravatar">https://cn.gravatar.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
-    <p><b>官方站点2</b>：<a href="javascript:void(0)" class="enterGravatar">https://secure.gravatar.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
+    <p><b>极客族CDN</b>：<a href="javascript:void(0)" title="点我设置URL" alt="点我设置URL" class="enterGravatar">http://fdn.geekzu.org/avatar/{%emailmd5%}.png?s=60&d=mm&r=G</a></p>
+    <p><b>极客族CDN SSL</b>：<a href="javascript:void(0)" title="点我设置URL" alt="点我设置URL" class="enterGravatar">https://sdn.geekzu.org/avatar/{%emailmd5%}.png?s=60&d=mm&r=G</a></p>	
+    <p><b>七牛Gravatar</b>：<a href="javascript:void(0)" title="点我设置URL" alt="点我设置URL" class="enterGravatar">//dn-qiniu-avatar.qbox.me/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
+    <p><b>loli.net SSL</b>：<a href="javascript:void(0)" title="点我设置URL" alt="点我设置URL" class="enterGravatar">https://gravatar.loli.net/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
+    <p><b>V2EX SSL</b>：<a href="javascript:void(0)" title="点我设置URL" alt="点我设置URL" class="enterGravatar">https://cdn.v2ex.com/gravatar/{%emailmd5%}.png?s=60&d=mm&r=G</a></p>
+    <p><b>官方站点1</b>：<a href="javascript:void(0)" title="点我设置URL" alt="点我设置URL" class="enterGravatar">//cn.gravatar.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
+    <p><b>官方站点2</b>：<a href="javascript:void(0)" title="点我设置URL" alt="点我设置URL" class="enterGravatar">https://secure.gravatar.com/avatar/{%emailmd5%}?s=60&amp;d=mm&amp;r=G</a></p>
         </td>
 </tr>
 <tr>
@@ -77,6 +80,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 
 </table>
+    <p>CDN源有不能访问的问题或是有新的CDN源出现，请在插件发布<a target="_blank" href="https://app.zblogcn.com/?id=223">https://app.zblogcn.com/?id=223</a>页面讨论。</p>
       <hr/>
       <p>
         <input type="submit" class="button" value="<?php echo $lang['msg']['submit'] ?>" />

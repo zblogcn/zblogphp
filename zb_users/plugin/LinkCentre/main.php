@@ -117,8 +117,10 @@ if ($edit = GetVars('edit', 'GET')) {
                         $m[1] = preg_replace('/<img.*?[\/]>/i', '', $m[1]);
                     }
                     if ($k == 'sub') {
-                        $m[1] = !preg_match('/sub/i',
-      $m[1]) ? '' : 'LinkCentreSub';
+                        $m[1] = !preg_match(
+                            '/sub/i',
+                            $m[1]
+                        ) ? '' : 'LinkCentreSub';
                     }
                     $link[$k][$key] = $m[1];
                 } else {

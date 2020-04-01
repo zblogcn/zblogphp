@@ -12,8 +12,9 @@ require '../function/c_system_base.php';
 ob_clean();
 // @TODO: Configuable
 ?>
-var zbp = new ZBP({
+var zbpConfig = {
     bloghost: "<?php echo $zbp->host; ?>",
+    blogversion: "<?php echo $zbp->version; ?>",
     ajaxurl: "<?php echo $zbp->ajaxurl; ?>",
     cookiepath: "<?php echo $zbp->cookiespath; ?>",
     lang: {
@@ -41,7 +42,6 @@ var zbp = new ZBP({
             email: {
                 selector: '#inpEmail',
                 saveLocally: true,
-                required: true,
                 validateRule: /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/ig,
                 validateFailedErrorCode: 29,
             },
@@ -73,7 +73,13 @@ var zbp = new ZBP({
             }
         }
     }
-});
+};
+<?php
+foreach ($GLOBALS['hooks']['Filter_Plugin_Html_Js_ZbpConfig'] as $fpname => &$fpsignal) {
+    $fpname();
+}
+?>
+var zbp = new ZBP(zbpConfig);
 
 var bloghost = zbp.options.bloghost;
 var cookiespath = zbp.options.cookiepath;
@@ -125,19 +131,13 @@ $s = ob_get_clean();
 $m = 'W/' . md5($s);
 
 header('Content-Type: application/x-javascript; charset=utf-8');
+header('Etag: ' . $m);
 
-if ($zbp->option['ZC_JS_304_ENABLE']) {
-    if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
-        SetHttpStatusCode(304);
-        die;
-    }
-    header('Etag: ' . $m);
+if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
+    SetHttpStatusCode(304);
+    die;
 }
-
-$zbp->CheckGzip();
-$zbp->StartGzip();
 
 echo $s;
 
 die();
-?>

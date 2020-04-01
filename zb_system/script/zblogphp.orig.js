@@ -5,13 +5,13 @@
 (function () {
   var SYSTEM_DEFAULT_EVENT_NAME = 'system-default'
   var deprecatedEvents = [ // then it will be concated by deprecatedMappings
-    'comment.verifydata'
+    'comment.verifydata',
+    'comment.postsuccess',
+    'comment.posterror'
   ]
   var deprecatedMappings = {}
   deprecatedMappings['comment.reply'] = 'comment.reply.start'
-  deprecatedMappings['comment.postsuccess'] = 'comment.post.success'
   deprecatedMappings['userinfo.savefromhtml'] = 'userinfo.readFromHtml'
-  deprecatedMappings['comment.posterror'] = 'comment.post.error'
 
   /**
    * Class ZBP
@@ -40,7 +40,7 @@
     if (!console) {
       window.console = {}
       console.logs = []
-      console.log = console.error = console.warning = function () {
+      console.log = console.error = console.warn = function () {
         console.logs.push(arguments)
       }
     }
@@ -63,35 +63,42 @@
     options.comment.useDefaultEvents = options.comment.useDefaultEvents || false
 
     this.eachOnCommentInputs = function (callback) {
-      return this.$.each(options.comment.inputs, callback)
+      return self.$.each(options.comment.inputs, callback)
     }
 
     this.eachOnCommentInputs(function (key, value) {
       if (!value.getter && value.selector) {
         value.getter = function () {
-          return this.$(value.selector).val()
+          return self.$(value.selector).val()
         }
       }
       if (!value.setter && value.selector) {
         value.setter = function (val) {
-          return this.$(value.selector).val(val)
+          return self.$(value.selector).val(val)
         }
       }
       if (!value.validator) {
         value.validator = function (text, callback) {
           text = text || value.getter()
           while (true) {
-            if (value.required && text.trim() === '') break
+            text = text || ''
+            text = text.toString().trim()
+            if (text === '') {
+              if (value.required) {
+                break
+              } else {
+                return callback(null)
+              }
+            }
             if (value.validateRule) {
               value.validateRule.lastIndex = 0
               if (!value.validateRule.test(text)) break
             }
             return callback(null)
           }
-          return callback(new Error({
-            code: value.validateFailedErrorCode,
-            message: value.validateFailedMessage || self.options.lang.error[value.validateFailedErrorCode]
-          }))
+          var error = new Error(value.validateFailedMessage || self.options.lang.error[value.validateFailedErrorCode])
+          error.code = value.validateFailedErrorCode
+          return callback(error)
         }
       }
     })
@@ -158,15 +165,14 @@
           var err = {no: 0, msg: ''}
           self.plugin.emit('comment.verifydata', err, formData)
           if (err.no > 0) {
-            self.plugin.emit('comment.post.validate.error', {
-              number: err.no,
-              message: err.msg
-            }, formData)
+            var error = new Error(err.msg)
+            error.code = err.no
+            self.plugin.emit('comment.post.validate.error', error, formData)
             return
           }
 
           // Then now this is modern code.
-          self.plugin.emit('comment.post.validate.done', formData)
+          self.plugin.emit('comment.post.validate.success', formData)
         }
       }
 
@@ -184,31 +190,47 @@
     })
 
     this.plugin.on('comment.post.validate.error', 'system', function (error, formData) {
-      alert(error.message)
-      console.error(formData)
-      console.error('ERROR - ' + error.message)
       self.plugin.emit('comment.post.error', error, formData)
     })
 
-    this.plugin.on('comment.post.validate.done', 'system', function (formData) {
+    this.plugin.on('comment.post.validate.success', 'system', function (formData) {
       self.$.post(formData.action, formData).done(function (data, textStatus, jqXhr) {
-        self.plugin.emit('comment.post.success', formData, data, textStatus, jqXhr)
-      }).fail(function (jqXHR, textStatus) {
-        var errorObject = {
-          jqXHR: jqXHR,
-          message: textStatus,
-          code: 255
+        // 兼容性接口，未来删除
+        self.plugin.emit('comment.postsuccess', formData, data, textStatus, jqXhr)
+        var json = self.$.parseJSON(data)
+        if (json.err && json.err.code > 0) {
+          var error = new Error(json.err.msg)
+          error.code = json.err.code
+          self.plugin.emit('comment.post.error', error, formData, json, textStatus, jqXhr)
+        } else {
+          self.plugin.emit('comment.post.success', formData, json, textStatus, jqXhr)
         }
-        self.plugin.emit('comment.post.error', formData, errorObject)
-      }).always(function (a, b, c) {
-        self.plugin.emit('comment.post.done', formData, a, b, c)
+      }).fail(function (jqXhr, textStatus) {
+        var error = new Error(textStatus)
+        error.code = 255
+        self.plugin.emit('comment.post.error', error, formData, textStatus, jqXhr)
       })
+    })
+
+    this.plugin.on('comment.post.success', 'system', function (formData, data, textStatus, jqXhr) {
+      self.plugin.emit('comment.post.done', null, formData, data, textStatus, jqXhr)
+    })
+
+    this.plugin.on('comment.post.error', 'system', function (error, formData, data, textStatus, jqXhr) {
+      // 兼容性接口
+      self.plugin.emit("comment.posterror", {
+        jqXHR: jqXhr,
+        msg: error.message,
+        code: error.code,
+      }, formData);
+      self.plugin.emit('comment.post.done', error, formData, data, textStatus, jqXhr)
     })
 
     if (this.options.comment.useDefaultEvents) {
       this.plugin.on('comment.reply.start', SYSTEM_DEFAULT_EVENT_NAME, function (id) {
         this.$('#inpRevID').val(id)
         this.$('#cancel-reply').show().bind('click', function () {
+          self.plugin.emit('comment.reply.cancel')
           self.$('#inpRevID').val(0)
           self.$(this).hide()
           window.location.hash = '#comment'
@@ -223,28 +245,19 @@
       })
 
       this.plugin.on('comment.post.start', SYSTEM_DEFAULT_EVENT_NAME, function () {
-        var objSubmit = this.$('#inpId').parent('form').find(':submit')
+        var objSubmit = self.$('#inpId').parent('form').find(':submit')
         objSubmit.data('orig', objSubmit.val()).val('Waiting...').attr('disabled', 'disabled').addClass('loading')
       })
 
       this.plugin.on('comment.post.done', SYSTEM_DEFAULT_EVENT_NAME, function (formData) {
-        var objSubmit = this.$('#inpId').parent('form').find(':submit')
+        var objSubmit = self.$('#inpId').parent('form').find(':submit')
         objSubmit.removeClass('loading').removeAttr('disabled')
         if (objSubmit.data('orig')) {
           objSubmit.val(objSubmit.data('orig'))
         }
       })
 
-      this.plugin.on('comment.post.success', SYSTEM_DEFAULT_EVENT_NAME, function (formData, retString, textStatus, jqXhr) {
-        var objSubmit = this.$('#inpId').parent('form').find(':submit')
-        objSubmit.removeClass('loading').removeAttr('disabled').val(objSubmit.data('orig'))
-
-        var data = this.$.parseJSON(retString)
-        if (data.err.code !== 0) {
-          alert(data.err.msg)
-          throw new Error('ERROR - ' + data.err.msg)
-        }
-
+      this.plugin.on('comment.post.success', SYSTEM_DEFAULT_EVENT_NAME, function (formData, data, textStatus, jqXhr) {
         if (formData.replyid.toString() === '0') {
           this.$(data.data.html).insertAfter('#AjaxCommentBegin')
         } else {
@@ -253,6 +266,11 @@
         location.hash = '#cmt' + data.data.ID
         this.$('#txaArticle').val('')
         this.userinfo.readFromHtml()
+      })
+
+      this.plugin.on('comment.post.error', SYSTEM_DEFAULT_EVENT_NAME, function (err) {
+        alert(err.message)
+        throw new Error('ERROR - ' + err.message)
       })
     }
 
@@ -287,7 +305,7 @@
 
     Plugin.prototype.checkIsInterfaceDeprecated = function (interfaceName) {
       if (deprecatedEvents.indexOf(interfaceName) >= 0) {
-        console.error("Interface '" + interfaceName + "' is deprecated, please update your plugin or theme!")
+        console.warn("Interface '" + interfaceName + "' is deprecated in ZBP 1.6, please update your plugin or theme!")
         return true
       }
       return false
@@ -352,11 +370,7 @@
     Plugin.prototype.emit = function (interfaceName) {
       var args = self.utils.getFromIndex(1, arguments)
       for (var item in self._plugins[interfaceName]) {
-        setTimeout((function (item) { // To keep event order
-          return function () {
-            self._plugins[interfaceName][item].apply(self, args)
-          }
-        })(item), 0)
+        self._plugins[interfaceName][item].apply(self, args)
       }
       return self
     }

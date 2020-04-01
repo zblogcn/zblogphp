@@ -243,14 +243,25 @@ function GetEnvironment()
     if ($ajax) {
         $ajax = substr(get_class($ajax), 9);
     }
-    $system_environment = PHP_OS . '; ' .
+    if (function_exists('php_uname') == true) {
+        $uname = SplitAndGet(php_uname('r'), '-', 0);
+    } else {
+        $uname = '';
+    }
+    $system_environment = PHP_OS . $uname . '; ' .
     GetValueInArray(
-        explode(' ',
+        explode(
+            ' ',
             str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))
-        ), 0
+        ),
+        0
     ) . '; ' .
-    'PHP ' . GetPHPVersion() . (IS_X64 ? ' x64' : '') . '; ' .
-    $zbp->option['ZC_DATABASE_TYPE'] . '; ' . $ajax;
+    'PHP' . GetPHPVersion() . (IS_X64 ? 'x64' : '') . '; ' .
+    $zbp->option['ZC_DATABASE_TYPE'] . $zbp->db->version . '; ' . $ajax;
+
+    if (defined('OPENSSL_VERSION_TEXT')) {
+        $system_environment .= '; ' . str_replace(' ', '', OPENSSL_VERSION_TEXT);
+    }
 
     return $system_environment;
 }
@@ -346,7 +357,7 @@ function GetValueInArrayByCurrent($array, $name)
  * @param string $delimiter
  * @param int    $n
  *
- * @return mixed
+ * @return string
  */
 function SplitAndGet($string, $delimiter = ';', $n = 0)
 {
@@ -355,7 +366,7 @@ function SplitAndGet($string, $delimiter = ';', $n = 0)
         $a = array();
     }
     if (isset($a[$n])) {
-        return $a[$n];
+        return (string) $a[$n];
     }
 
     return '';
@@ -400,7 +411,7 @@ function GetVars($name, $type = 'REQUEST')
     if (isset($array[$name])) {
         return $array[$name];
     } else {
-        return;
+        return null;
     }
 }
 
@@ -521,19 +532,39 @@ function GetDirsInDir($dir)
 {
     $dirs = array();
 
-    $dir = str_replace('\\', '/', $dir);
-    if (substr($dir, -1) !== '/') {
-        $dir .= '/';
+    if (!file_exists($dir)) {
+        return array();
     }
     if (!is_dir($dir)) {
         return array();
     }
+    $dir = str_replace('\\', '/', $dir);
+    if (substr($dir, -1) !== '/') {
+        $dir .= '/';
+    }
 
-    foreach (scandir($dir, 0) as $d) {
-        if (is_dir($dir . $d)) {
-            if (($d != '.') && ($d != '..')) {
-                $dirs[] = $d;
+    // 此处的scandir虽然是PHP 5就已加入的内容，但必须加上兼容处理
+    // 部分一键安装包的早期版本对其进行了禁用
+    // 这一禁用对安全没有任何帮助，推测是早期互联网流传下来的“安全秘笈”。
+    // @see: https://github.com/licess/lnmp/commit/bd34d5c803308afdac61626018e4168716d089ae#diff-6282e7667da1e2fc683bed06f87f74c1
+    if (function_exists('scandir')) {
+        foreach (scandir($dir, 0) as $d) {
+            if (is_dir($dir . $d)) {
+                if (($d != '.') && ($d != '..')) {
+                    $dirs[] = $d;
+                }
             }
+        }
+    } else {
+        if ($handle = opendir($dir)) {
+            while (false !== ($file = readdir($handle))) {
+                if ($file != "." && $file != "..") {
+                    if (is_dir($dir . $file)) {
+                        $dirs[] = $file;
+                    }
+                }
+            }
+            closedir($handle);
         }
     }
 
@@ -585,10 +616,10 @@ function GetFilesInDir($dir, $type)
  *
  * @return bool
  */
-function SetHttpStatusCode($number)
+function SetHttpStatusCode($number, $force = false)
 {
     static $status = '';
-    if ($status != '') {
+    if ($status != '' && $force == false) {
         return false;
     }
 
@@ -1015,12 +1046,12 @@ function JsonReturn($data)
  *
  * @return void
  */
-function RespondError($errorCode, $errorString)
+function RespondError($errorCode, $errorString = '', $file = '', $line = '')
 {
     $strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><fault><value><struct><member><name>faultCode</name><value><int>$1</int></value></member><member><name>faultString</name><value><string>$2</string></value></member></struct></value></fault></methodResponse>';
     $strError = $strXML;
-    $strError = str_replace("$1", TransferHTML($errorCode, "[html-format]"), $strError);
-    $strError = str_replace("$2", TransferHTML($errorString, "[html-format]"), $strError);
+    $strError = str_replace("$1", FormatString($errorCode, "[html-format]"), $strError);
+    $strError = str_replace("$2", FormatString($errorString, "[html-format]"), $strError);
 
     ob_clean();
     echo $strError;
@@ -1030,15 +1061,16 @@ function RespondError($errorCode, $errorString)
 /**
  * XML-RPC脚本错误页面.
  *
- * @param string $faultString 错误提示字符串
+ * @param string $errorCode 错误提示字符串
+ * @param $errorString
  *
  * @return void
  */
-function ScriptError($faultString)
+function ScriptError($errorCode, $errorText = '', $file = '', $line = '')
 {
     header('Content-type: application/x-javascript; Charset=utf-8');
     ob_clean();
-    echo 'alert("' . str_replace('"', '\"', $faultString) . '")';
+    echo 'alert("' . str_replace('"', '\"', $errorCode . ':' . $errorText) . '")';
     die();
 }
 
@@ -1070,14 +1102,14 @@ function CheckRegExp($source, $para)
 }
 
 /**
- *  通过正则表达式格式化字符串.
+ *  格式化字符串.
  *
  * @param string $source 字符串
  * @param string $para   正则表达式，可用[html-format]|[nohtml]|[noscript]|[enter]|[noenter]|[filename]|[normalname]或自定义表达式
  *
  * @return string
  */
-function TransferHTML($source, $para)
+function FormatString($source, $para)
 {
     if (strpos($para, '[html-format]') !== false) {
         $source = htmlspecialchars($source);
@@ -1112,6 +1144,15 @@ function TransferHTML($source, $para)
     }
 
     return $source;
+}
+
+/**
+ * @Deprecated
+ * 格式化字符串
+ **/
+function TransferHTML($source, $param)
+{
+    return FormatString($source, $param);
 }
 
 /**
@@ -1653,11 +1694,16 @@ function RemovePHPCode($code)
     return $code;
 }
 
-function GetIDArrayByList($array)
+function GetIDArrayByList($array, $keyname = null)
 {
     $ids = array();
     foreach ($array as $key => $value) {
-        $ids[] = reset($value->GetData());
+        if ($keyname == null) {
+            $ids[] = reset($value->GetData());
+        } else {
+            $a = &$value->GetData();
+            $ids[] = $a[$keyname];
+        }
     }
 
     return $ids;
@@ -1681,4 +1727,30 @@ function GetBackendCSPHeader()
     }
 
     return implode('; ', $ret);
+}
+
+/**
+ * 检查重复加载的.
+ */
+function CheckIncludedFiles($file)
+{
+    $a = get_included_files();
+    $file = str_replace('\\', '/', $file);
+    foreach ($a as $key => $value) {
+        $a[$key] = trim(str_replace('\\', '/', $value));
+    }
+
+    return in_array(trim($file), $a);
+}
+
+/**
+ * logs指定的变量的值
+ */
+function Logs_Dump()
+{
+    $a = func_get_args();
+    foreach ($a as $key => $value) {
+        $s = var_export($value, true);
+        Logs($s);
+    }
 }

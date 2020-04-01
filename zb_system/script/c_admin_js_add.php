@@ -14,6 +14,7 @@ ob_clean();
 ?>
 var zbp = new ZBP({
     bloghost: "<?php echo $zbp->host; ?>",
+    blogversion: "<?php echo $zbp->version; ?>",
     ajaxurl: "<?php echo $zbp->ajaxurl; ?>",
     cookiepath: "<?php echo $zbp->cookiespath; ?>",
     comment: {
@@ -294,18 +295,13 @@ $s = ob_get_clean();
 $m = 'W/' . md5($s);
 
 header('Content-Type: application/x-javascript; charset=utf-8');
-if ($zbp->option['ZC_JS_304_ENABLE']) {
-    header('Etag: ' . $m);
-    if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
-        SetHttpStatusCode(304);
-        die;
-    }
-}
+header('Etag: ' . $m);
 
-$zbp->CheckGzip();
-$zbp->StartGzip();
+if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
+    SetHttpStatusCode(304);
+    die;
+}
 
 echo $s;
 
 die();
-?>

@@ -129,7 +129,7 @@ function ResponseAdmin_TopMenu()
         $fpname($topmenus);
     }
 
-    $topmenus[] = MakeTopMenu("misc", $zbp->lang['msg']['official_website'], "http://www.zblogcn.com/", "_blank", "");
+    $topmenus[] = MakeTopMenu("misc", $zbp->lang['msg']['official_website'], "https://www.zblogcn.com/", "_blank", "");
 
     foreach ($topmenus as $m) {
         echo $m;
@@ -295,7 +295,7 @@ function OutputOptionItemsOfCategories($default)
  *
  * @return null|string
  */
-function OutputOptionItemsOfTemplate($default)
+function OutputOptionItemsOfTemplate($default, $file_filter_array = array())
 {
     global $zbp;
     $testRegExp = "/^(\.|post-|module|header|footer|comment|sidebar|pagebar|[a-zA-Z]\_)/si";
@@ -304,6 +304,17 @@ function OutputOptionItemsOfTemplate($default)
 
     foreach ($zbp->template->templates as $key => $value) {
         if (preg_match($testRegExp, $key)) {
+            continue;
+        }
+
+        $b = false;
+        foreach ($file_filter_array as $key2 => $value2) {
+            $testRegExp2 = "/^($value2)/si";
+            if (preg_match($testRegExp2, $key)) {
+                $b = true;
+            }
+        }
+        if ($b == true) {
             continue;
         }
 
@@ -450,7 +461,7 @@ function CreateModuleDiv($m, $button = true)
     echo '<div class="widget-title"><img class="more-action" width="16" src="../image/admin/brick.png" alt="" />' . (($m->SourceType != 'theme' || $m->Source == 'plugin_' . $zbp->theme) ? $m->Name : $m->FileName) . '';
 
     if ($button) {
-        if ($m->SourceType != 'theme' || $m->Source == 'plugin_' . $zbp->theme) {
+        if (!$m->IsIncludeFile) {
             echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;id=' . $m->ID . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>';
         } else {
             echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;source=theme&amp;filename=' . $m->FileName . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>';
@@ -613,6 +624,7 @@ function Admin_SiteInfo()
         $r = str_replace('{$zbp->style}', $zbp->style, $r);
         $r = str_replace('{$system_environment}', GetEnvironment(), $r);
         $r = str_replace('{$zbp->version}', ZC_VERSION_FULL, $r);
+        $r = str_replace('{$theme_version}', '(v' . $zbp->themeapp->version . ')', $r);
         echo $r;
     }
 
@@ -675,6 +687,9 @@ function Admin_ArticleMng()
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&page=%page%}{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
+    if (GetVars('search') !== GetVars('search', 'GET')) {
+        $p->PageNow = 1;
+    }
     $p->PageBarCount = $zbp->pagebarcount;
 
     $p->UrlRule->Rules['{%category%}'] = GetVars('category');
@@ -704,8 +719,9 @@ function Admin_ArticleMng()
     $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
     $op = array('pagebar' => $p);
 
+    $type = null;
     foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_Article'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($s, $w, $or, $l, $op);
+        $fpreturn = $fpname($s, $w, $or, $l, $op, $type);
     }
 
     $array = $zbp->GetArticleList(
@@ -959,6 +975,9 @@ function Admin_CommentMng()
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&page=%page%}{&ischecking=%ischecking%}{&search=%search%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
+    if (GetVars('search') !== GetVars('search', 'GET')) {
+        $p->PageNow = 1;
+    }
     $p->PageBarCount = $zbp->pagebarcount;
 
     $p->UrlRule->Rules['{%search%}'] = rawurlencode(GetVars('search'));
@@ -1025,7 +1044,8 @@ function Admin_CommentMng()
 
         $tabletds[] = '<td class="td10"><span class="cmt-note" title="' . $zbp->lang['msg']['email'] . ':' . htmlspecialchars($cmt->Email) . '"><a href="mailto:' . htmlspecialchars($cmt->Email) . '">' . $cmt->Author->Name . '</a></span></td>';
         $tabletds[] = '<td><div style="overflow:hidden;max-width:500px;">' .
-        (($article) ?
+        (
+            ($article) ?
             '<a href="' . $article->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> '
         :
             '<a href="javascript:;"><img src="../image/admin/delete.png" alt="no exists" title="no exists" width="16" /></a>'
@@ -1036,7 +1056,8 @@ function Admin_CommentMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=CommentDel&amp;id=' . $cmt->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            (!GetVars('ischecking', 'GET') ?
+            (
+                !GetVars('ischecking', 'GET') ?
                 '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><img src="../image/admin/minus-shield.png" alt="' . $zbp->lang['msg']['audit'] . '" title="' . $zbp->lang['msg']['audit'] . '" width="16" /></a>'
                 :
                 '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><img src="../image/admin/ok.png" alt="' . $zbp->lang['msg']['pass'] . '" title="' . $zbp->lang['msg']['pass'] . '" width="16" /></a>'
@@ -1060,10 +1081,10 @@ function Admin_CommentMng()
     echo '<p style="float:right;">';
 
     if ((bool) GetVars('ischecking')) {
-        echo '<input type="submit" name="all_del"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        echo '<input type="submit" name="all_del" onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         echo '<input type="submit" name="all_pass"  value="' . $zbp->lang['msg']['all_pass'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
     } else {
-        echo '<input type="submit" name="all_del"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        echo '<input type="submit" name="all_del" onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         echo '<input type="submit" name="all_audit"  value="' . $zbp->lang['msg']['all_audit'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
     }
 
@@ -1116,6 +1137,9 @@ function Admin_MemberMng()
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=MemberMng{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
+    if (GetVars('search') !== GetVars('search', 'GET')) {
+        $p->PageNow = 1;
+    }
     $p->PageBarCount = $zbp->pagebarcount;
 
     $w = array();
@@ -1126,7 +1150,7 @@ function Admin_MemberMng()
         $w[] = array('=', 'mem_Level', GetVars('level'));
     }
     if (GetVars('search')) {
-        $w[] = array('search', 'mem_Name', 'mem_Email', GetVars('search'));
+        $w[] = array('search', 'mem_Name', 'mem_Alias', 'mem_Email', GetVars('search'));
     }
     $array = $zbp->GetMemberList(
         '',
@@ -1410,7 +1434,7 @@ function Admin_ThemeMng()
         echo '<div><img src="' . $theme->GetScreenshot() . '" title="' . htmlspecialchars($theme->name) . '" alt="' . htmlspecialchars($theme->name) . '" width="200" height="150" /></div>';
         echo '<div class="theme-author">' . $zbp->lang['msg']['author'] . ': <a target="_blank" href="' . htmlspecialchars($theme->author_url) . '">' . htmlspecialchars($theme->author_name) . '</a></div>';
         echo '<div class="theme-style">' . $zbp->lang['msg']['style'] . ': ';
-        echo '<select class="edit" size="1" style="width:110px;">';
+        echo '<select class="edit" size="1" style="width:100px;">';
         foreach ($theme->GetCssFiles() as $key => $value) {
             echo '<option value="' . htmlspecialchars($key) . '" ' . ($theme->IsUsed() ? ($key == $zbp->style ? 'selected="selected"' : '') : '') . '>' . basename($value) . '</option>';
         }
@@ -1452,11 +1476,15 @@ function Admin_ModuleMng()
         } elseif ($m->SourceType == 'user') {
             $um[] = $m;
         } elseif ($m->SourceType == 'theme') {
-            $tm[] = $m;
+            //判断模块归属当前主题
+            if ($m->Source == 'theme' || (substr($m->Source, -1 - strlen($zbp->theme))) == ('_' . $zbp->theme)) {
+                $tm[] = $m;
+            }
         } else {
             $pm[] = $m;
         }
     }
+
     //widget-list begin
     echo '<div class="widget-left">';
     echo '<div class="widget-list">';
@@ -1853,8 +1881,8 @@ function Admin_SettingMng()
 
     echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
     echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
-    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/><span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="' . $decodedBlogHost . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly" ') . 'oninput="disableSubmit($(this).val())" />';
-    echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);   if($(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0){enableSubmit();$(this).parent().next().hide();$(\'.js-tip\').html(\'\');}else {disableSubmit();$(this).parent().next().show();}"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>' . $zbp->lang['msg']['permanent_domain'] . '<span style="display:none;">&nbsp;&nbsp;<input type="text" id="ZC_PERMANENT_DOMAIN_WITH_ADMIN" name="ZC_PERMANENT_DOMAIN_WITH_ADMIN" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN'] . '"/></label>' . $zbp->lang['msg']['permanent_domain_with_admin'] . '</span>&nbsp;&nbsp;<span class="js-tip"></span></p>';
+    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/><span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span></p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="' . $decodedBlogHost . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly" ') . 'oninput="disableSubmit($(this).val())" />&nbsp;&nbsp;<span class="js-tip"></span>';
+    echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);   if($(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0){enableSubmit();$(this).parent().next().hide();$(\'.js-tip\').html(\'\');}else {disableSubmit();$(this).parent().next().show();}"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>' . $zbp->lang['msg']['permanent_domain'] . '<span style="display:none;">&nbsp;&nbsp;<input type="text" id="ZC_PERMANENT_DOMAIN_WITH_ADMIN" name="ZC_PERMANENT_DOMAIN_WITH_ADMIN" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN'] . '"/></label>' . $zbp->lang['msg']['permanent_domain_with_admin'] . '</span></p>';
     echo '<script>
 var bCheck = false;
 function disableSubmit(newurl){
@@ -1883,9 +1911,9 @@ function changeDomain(newurl){
     if(newurl.substr(newurl.length-1,1) != "/" ){
         newurl = newurl + "/";
     }
-    url = newurl + "zb_system/cmd.php?act=misc&type=ping&token=" + token;
-    $(".js-tip").html("' . $zbp->lang['msg']['verifying'] . '");
-    $.getJSON(url,{newurl:newurl},function(data) {
+    url = bloghost + "zb_system/cmd.php?act=misc&type=ping&token=" + token;
+    $(".js-tip").html("<em>' . $zbp->lang['msg']['verifying'] . '</em>");
+    $.getJSON(url,{url:newurl},function(data) {
         if (data) {
             $(".js-tip").html(data.err.msg);
             //data.err === 0 && $("#btnPost").removeAttr("disabled");
@@ -1895,7 +1923,7 @@ function changeDomain(newurl){
           return true;
         }
       }).fail(function() {
-        $(".js-tip").html("' . $zbp->lang['msg']['verify_fail'] . '");
+        $(".js-tip").html("<em>' . $zbp->lang['msg']['verify_fail'] . '</em>");
         //console.log( "error" );
         return false;
       });
@@ -1924,7 +1952,7 @@ function changeDomain(newurl){
     echo '<tr><td><p><b>' . $zbp->lang['msg']['allow_upload_size'] . '</b></p></td><td><p><input id="ZC_UPLOAD_FILESIZE" name="ZC_UPLOAD_FILESIZE" style="width:600px;" type="text" value="' . $zbp->option['ZC_UPLOAD_FILESIZE'] . '" /></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['debug_mode'] . '</b></p></td><td><p><input id="ZC_DEBUG_MODE" name="ZC_DEBUG_MODE" type="text" value="' . $zbp->option['ZC_DEBUG_MODE'] . '" class="checkbox"/></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['additional_security'] . '</b></p></td><td><p><input id="ZC_ADDITIONAL_SECURITY" name="ZC_ADDITIONAL_SECURITY" type="text" value="' . $zbp->option['ZC_ADDITIONAL_SECURITY'] . '" class="checkbox"/></p></td></tr>';
-    echo '<tr><td><p><b>' . $zbp->lang['msg']['gzip_compress'] . '</b></p></td><td><p><input id="ZC_GZIP_ENABLE" name="ZC_GZIP_ENABLE" type="text" value="' . $zbp->option['ZC_GZIP_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+    //echo '<tr><td><p><b>' . $zbp->lang['msg']['gzip_compress'] . '</b></p></td><td><p><input id="ZC_GZIP_ENABLE" name="ZC_GZIP_ENABLE" type="text" value="' . $zbp->option['ZC_GZIP_ENABLE'] . '" class="checkbox"/></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['syntax_high_lighter'] . '</b></p></td><td><p><input id="ZC_SYNTAXHIGHLIGHTER_ENABLE" name="ZC_SYNTAXHIGHLIGHTER_ENABLE" type="text" value="' . $zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE'] . '" class="checkbox"/></p></td></tr>';
 
     echo '<tr><td><p><b>' . $zbp->lang['msg']['using_cdn_guest_type'] . '</b></p></td><td><p><select id="ZC_USING_CDN_GUESTIP_TYPE" name="ZC_USING_CDN_GUESTIP_TYPE" style="width:600px;" >';

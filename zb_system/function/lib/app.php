@@ -148,17 +148,24 @@ class App
      * @var array 禁止打包文件glob
      */
     public $ignore_files = array('.DS_Store', 'Thumbs.db', 'composer.lock', 'zbignore.txt');
+    /**
+     * @var bool 加载xml成功否
+     */
+    public $isloaded = false;
+
+    public static $check_error_count = 0;
+    public static $unpack_app = null;
 
     public function __get($key)
     {
         global $zbp;
         if ($key === 'app_path') {
-            $appDirectory = $zbp->usersdir . TransferHTML($this->type, '[filename]');
-            $appDirectory .= DIRECTORY_SEPARATOR . TransferHTML($this->id, '[filename]') . DIRECTORY_SEPARATOR;
+            $appDirectory = $zbp->usersdir . FormatString($this->type, '[filename]');
+            $appDirectory .= DIRECTORY_SEPARATOR . FormatString($this->id, '[filename]') . DIRECTORY_SEPARATOR;
 
             return $appDirectory;
         } elseif ($key === 'app_url') {
-            return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id;
+            return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/';
         }
 
         return '';
@@ -268,9 +275,9 @@ class App
     public function GetLogo()
     {
         if ($this->type == 'plugin') {
-            return $this->app_url . '/logo.png';
+            return $this->app_url . 'logo.png';
         } else {
-            return $this->app_url . '/screenshot.png';
+            return $this->app_url . 'screenshot.png';
         }
     }
 
@@ -281,7 +288,7 @@ class App
      */
     public function GetScreenshot()
     {
-        return $this->app_url . '/screenshot.png';
+        return $this->app_url . 'screenshot.png';
     }
 
     /**
@@ -291,9 +298,21 @@ class App
      */
     public function GetCssFiles()
     {
-        $dir = $this->app_path . '/style/';
+        $dir = $this->app_path . 'style/';
 
-        return GetFilesInDir($dir, 'css');
+        $array = GetFilesInDir($dir, 'css');
+        if (isset($array['default'])) {
+            $a = array('default'=>$array['default']);
+            unset($array['default']);
+            $array = array_merge($a, $array);
+        }
+        if (isset($array['style'])) {
+            $a = array('style'=>$array['style']);
+            unset($array['style']);
+            $array = array_merge($a, $array);
+        }
+
+        return $array;
     }
 
     /**
@@ -310,7 +329,7 @@ class App
 
         $this->id = $id;
         $this->type = $type;
-        $xmlPath = $this->app_path . TransferHTML($type, '[filename]') . '.xml';
+        $xmlPath = $this->app_path . FormatString($type, '[filename]') . '.xml';
 
         if (!is_readable($xmlPath)) {
             return false;
@@ -373,10 +392,12 @@ class App
         $this->sidebars_sidebar8 = (string) $xml->sidebars->sidebar8;
         $this->sidebars_sidebar9 = (string) $xml->sidebars->sidebar9;
 
-        $appIgnorePath = $this->app_path . '/zbignore.txt';
+        $appIgnorePath = $this->app_path . 'zbignore.txt';
         if (is_readable($appIgnorePath)) {
             $this->ignore_files = explode("\n", trim(file_get_contents($appIgnorePath)));
         }
+
+        $this->isloaded = true;
 
         return true;
     }
@@ -442,7 +463,7 @@ class App
 
         $s .= '</' . $this->type . '>';
 
-        $path = $this->app_path . '/' . $this->type . '.xml';
+        $path = $this->app_path . $this->type . '.xml';
 
         @file_put_contents($path, $s);
 
@@ -634,6 +655,8 @@ class App
 
         ZBlogException::SuspendErrorHook();
 
+        self::$unpack_app = null;
+
         if (!file_exists($dir . $id . '/')) {
             @mkdir($dir . $id . '/', 0755, true);
         }
@@ -645,14 +668,21 @@ class App
             }
         }
 
+        self::$check_error_count = 0;
         foreach ($xml->file as $file) {
             $s = base64_decode($file->stream);
             $f = $dir . $file->path;
-            $f = str_replace('../', '', $f);
-            $f = str_replace('..\\', '', $f);
+            $f = str_replace('./', '', pathinfo($f, PATHINFO_DIRNAME)) . '/' . pathinfo($f, PATHINFO_BASENAME);
             @file_put_contents($f, $s);
             @chmod($f, 0755);
+
+            $s2 = file_get_contents($f);
+            if (md5($s) != md5($s2)) {
+                self::$check_error_count = self::$check_error_count + 1;
+            }
         }
+
+        self::$unpack_app = $zbp->LoadApp($type, $id);
 
         ZBlogException::ResumeErrorHook();
 
@@ -729,5 +759,52 @@ class App
     {
         global $zbp;
         rrmdir($zbp->usersdir . 'cache/compiled/' . $this->id);
+    }
+
+    /**
+     * LoadSideBars 从xml和cache里.
+     */
+    public function LoadSideBars()
+    {
+        global $zbp;
+
+        if (is_null($zbp->cache)) {
+            $zbp->cache = new Config('cache');
+        }
+        $s = $zbp->cache->{'sidebars_' . $this->id};
+        $a = json_decode($s, true);
+        if (is_array($a)) {
+            foreach ($a as $key => $value) {
+                $zbp->option['ZC_SIDEBAR' . (($key > 1) ? $key : '') . '_ORDER'] = $value;
+            }
+
+            return true;
+        }
+
+        $s = '';
+        for ($i = 1; $i < 10; $i++) {
+            $s .= $this->{'sidebars_sidebar' . $i};
+        }
+        if (!empty($s)) {
+            for ($i = 1; $i < 10; $i++) {
+                $zbp->option['ZC_SIDEBAR' . (($i > 1) ? $i : '') . '_ORDER'] = $this->{'sidebars_sidebar' . $i};
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * SaveSideBars 保存到cache.
+     */
+    public function SaveSideBars()
+    {
+        global $zbp;
+
+        for ($i = 1; $i < 10; $i++) {
+            $a[$i] = $zbp->option['ZC_SIDEBAR' . (($i > 1) ? $i : '') . '_ORDER'];
+        }
+        $zbp->cache->{'sidebars_' . $this->id} = json_encode($a);
+        $zbp->SaveCache();
     }
 }

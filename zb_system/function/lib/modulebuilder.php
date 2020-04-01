@@ -8,24 +8,24 @@ if (!defined('ZBP_PATH')) {
  */
 class ModuleBuilder
 {
-    public static $List = array(); //array('filename'=>,'function' => '', 'paramters' => '');
     //需要重建的module list
     private static $Ready = array(); //'filename';
+
+    public static $List = array(); //array('filename'=>,'function' => '', 'paramters' => '');
 
     public static function Build()
     {
         global $zbp;
         foreach (self::$Ready as $m) {
             if (isset($zbp->modulesbyfilename[$m])) {
-                $m = $zbp->modulesbyfilename[$m];
-                $m->Build();
-                $m->Save();
+                $zbp->modulesbyfilename[$m]->Build();
+                $zbp->modulesbyfilename[$m]->Save();
             }
         }
     }
 
     /**
-     * 重建模块.
+     * 将模块注册进Ready重建列表.
      *
      * @param string $modfilename 模块名
      * @param string $userfunc    用户函数
@@ -33,18 +33,12 @@ class ModuleBuilder
     public static function Reg($modfilename, $userfunc)
     {
         self::$List[$modfilename]['filename'] = $modfilename;
-        if (function_exists($userfunc)) {
-            self::$List[$modfilename]['function'] = $userfunc;
-        } elseif (strpos($userfunc, '::') !== false) {
-            $a = explode('::', $userfunc);
-            if (method_exists($a[0], $a[1])) {
-                self::$List[$modfilename]['function'] = $userfunc;
-            }
-        }
+        self::$List[$modfilename]['function'] = $userfunc;
+        self::$List[$modfilename]['parameters'] = array();
     }
 
     /**
-     * 添加模块.
+     * 添加进Ready List模块.
      *
      * @param string $modfilename 模块名
      * @param null   $parameters  模块参数
@@ -52,11 +46,14 @@ class ModuleBuilder
     public static function Add($modfilename, $parameters = null)
     {
         self::$Ready[$modfilename] = $modfilename;
-        self::$List[$modfilename]['parameters'] = $parameters;
+        $p = func_get_args();
+        array_shift($p);
+        $p = is_array($p) ? $p : array();
+        self::$List[$modfilename]['parameters'] = $p;
     }
 
     /**
-     * 删除模块.
+     * 删除进Ready List模块.
      *
      * @param string $modfilename 模块名
      */

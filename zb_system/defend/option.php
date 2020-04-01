@@ -61,15 +61,12 @@ return array(
     'ZC_USING_PLUGIN_LIST' => '',
 
     // '-------------------------------全局配置-----------------------------------
-    'ZC_YUN_SITE'        => '',
     'ZC_BLOG_CLSID'      => '',
     'ZC_TIME_ZONE_NAME'  => 'Asia/Shanghai',
     'ZC_UPDATE_INFO_URL' => 'https://update.zblogcn.com/info/',
 
     // '固定域名,默认为false
     'ZC_PERMANENT_DOMAIN_ENABLE'     => false,
-    'ZC_PERMANENT_DOMAIN_REDIRECT'   => true,
-    'ZC_PERMANENT_DOMAIN_WITH_ADMIN' => false,
 
     //
     'ZC_DEBUG_MODE'         => false,
@@ -87,10 +84,11 @@ return array(
     'ZC_BLOG_PRODUCT_FULLHTML' => '',
 
     // '留言评论
-    'ZC_COMMENT_TURNOFF'       => false,
-    'ZC_COMMENT_VERIFY_ENABLE' => false,
-    'ZC_COMMENT_REVERSE_ORDER' => false,
-    'ZC_COMMENT_AUDIT'         => false,
+    'ZC_COMMENT_TURNOFF'           => false,
+    'ZC_COMMENT_VERIFY_ENABLE'     => false,
+    'ZC_COMMENT_REVERSE_ORDER'     => false,
+    'ZC_COMMENT_AUDIT'             => false,
+    'ZC_COMMENT_VALIDCMTKEY_ENABLE'=> false,
 
     // '验证码
     'ZC_VERIFYCODE_STRING' => 'ABCDEFGHKMNPRSTUVWXYZ123456789',
@@ -120,7 +118,7 @@ return array(
     'ZC_EMOTICONS_FILESIZE' => '16',
 
     // '上传相关
-    'ZC_UPLOAD_FILETYPE' => 'jpg|gif|png|jpeg|bmp|psd|wmf|ico|rpm|deb|tar|gz|sit|7z|bz2|zip|rar|xml|xsl|svg|svgz|rtf|doc|docx|ppt|pptx|xls|xlsx|wps|chm|txt|pdf|mp3|mp4|avi|mpg|rm|ra|rmvb|mov|wmv|wma|swf|fla|torrent|apk|zba|gzba',
+    'ZC_UPLOAD_FILETYPE' => 'jpg|gif|png|jpeg|bmp|webp|psd|wmf|ico|rpm|deb|tar|gz|xz|sit|7z|bz2|zip|rar|xml|xsl|svg|svgz|rtf|doc|docx|ppt|pptx|xls|xlsx|wps|chm|txt|md|pdf|mp3|flac|ape|mp4|mkv|avi|mpg|rm|ra|rmvb|mov|wmv|wma|torrent|apk|json|zba|gzba',
 
     'ZC_UPLOAD_FILESIZE' => 2,
 
@@ -172,6 +170,7 @@ return array(
 
     'ZC_SEARCH_COUNT' => 20,
     'ZC_SEARCH_REGEX' => '{%host%}search.php?q={%q%}&page={%page%}',
+    'ZC_SEARCH_TYPE'  => 'single', // 1.6.0  single|list
 
     //首页，分类页，文章页，页面页的默认模板
     'ZC_INDEX_DEFAULT_TEMPLATE' => 'index',
@@ -186,6 +185,7 @@ return array(
     'ZC_SIDEBAR7_ORDER' => '',
     'ZC_SIDEBAR8_ORDER' => '',
     'ZC_SIDEBAR9_ORDER' => '',
+    //'ZC_SIDEBARS_DEFAULT'  => '{"1":"calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc","2":"","3":"","4":"","5":"","6":"","7":"","8":"","9":""}';
 
     // '--------------------------其它----------------------------------------
     // '代码高亮
@@ -196,6 +196,7 @@ return array(
     'ZC_GZIP_ENABLE'                 => false,
     'ZC_ADMIN_HTML5_ENABLE'          => true,
     'ZC_LOADMEMBERS_LEVEL'           => 0,
+    //ZC_LAST_VERSION 本意是指数据库对应的系统版本号，非当前系统未更新版本号
     'ZC_LAST_VERSION'                => '',
     'ZC_HTTP_LASTMODIFIED'           => false,
     'ZC_MODULE_CATALOG_STYLE'        => 0,

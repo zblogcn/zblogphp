@@ -10,6 +10,7 @@ class Database__MySQLi implements Database__Interface
 {
     public $type = 'mysql';
     public $version = '';
+    public $error = array();
 
     /**
      * @var string|null 数据库名前缀
@@ -76,7 +77,7 @@ class Database__MySQLi implements Database__Interface
         //mysqli_options($db,MYSQLI_READ_DEFAULT_GROUP,"max_allowed_packet=50M");
         if (@mysqli_real_connect($db, $array[0], $array[1], $array[2], $array[3], $array[5])) {
             $myver = mysqli_get_server_info($db);
-            $this->version = substr($myver, 0, strpos($myver, "-"));
+            $this->version = SplitAndGet($myver, '-', 0);
             if (version_compare($this->version, '5.5.3') >= 0) {
                 $u = "utf8mb4";
             } else {
@@ -177,6 +178,10 @@ class Database__MySQLi implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 mysqli_query($this->db, $this->sql->Filter($s));
+                $e = mysqli_errno($this->db);
+                if ($e > 0) {
+                    $this->error[] = array($e, mysqli_error($this->db));
+                }
             }
         }
     }

@@ -26,6 +26,10 @@ class ZBlogPHP
      */
     public $lang = array();
     /**
+     * @var json类型 语言
+     */
+    public $langs = null;
+    /**
      * @var array 语言包list
      */
     public $langpacklist = array();
@@ -168,10 +172,12 @@ class ZBlogPHP
      * @var array|null 数据表
      */
     public $table = null;
+    public $t = null;
     /**
      * @var array|null 数据表信息
      */
     public $datainfo = null;
+    public $d = null;
     /**
      * @var array|null 类型序列
      */
@@ -243,6 +249,11 @@ class ZBlogPHP
     public $csrfExpiration = 1;
 
     /**
+     * @var App 当前主题类
+     */
+    public $themeapp = null;
+
+    /**
      * 获取唯一实例.
      *
      * @return null|ZBlogPHP
@@ -284,7 +295,7 @@ class ZBlogPHP
      */
     public function __construct()
     {
-        global $option, $lang, $blogpath, $bloghost, $cookiespath, $usersdir, $table,
+        global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath, $usersdir, $table,
         $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname,
         $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype;
 
@@ -296,6 +307,7 @@ class ZBlogPHP
         $this->version = &$blogversion;
         $this->option = &$option;
         $this->lang = &$lang;
+        $this->langs = &$langs;
         $this->path = &$blogpath;
         $this->host = &$bloghost; //此值在后边初始化时可能会变化!
         $this->cookiespath = &$cookiespath;
@@ -303,6 +315,8 @@ class ZBlogPHP
 
         $this->table = &$table;
         $this->datainfo = &$datainfo;
+        $this->t = &$this->table;
+        $this->d = &$this->datainfo;
         $this->actions = &$actions;
         $this->posttype = &$posttype;
         $this->currenturl = &$currenturl;
@@ -461,9 +475,22 @@ class ZBlogPHP
             ZBlogException::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
         }
 
-        if (isset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']) == false && $this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
-            $this->host = $this->option['ZC_BLOG_HOST'];
-            $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
+        //ZC_PERMANENT_DOMAIN_WHOLE_DISABLE不存在 或是 ZC_PERMANENT_DOMAIN_WHOLE_DISABLE存在但为假
+        $domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
+        if ($domain_disable == false) {
+            //如果ZC_PERMANENT_DOMAIN_FORCED_URL存在 且不为空
+            $forced_url = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
+            if ($forced_url != '') {
+                $this->host = (string) $forced_url;
+                $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
+            //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
+            } elseif ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
+                $this->host = $this->option['ZC_BLOG_HOST'];
+                $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
+            //默认自动识别域名
+            } else {
+                $this->option['ZC_BLOG_HOST'] = $this->host;
+            }
         } else {
             $this->option['ZC_BLOG_HOST'] = $this->host;
         }
@@ -472,8 +499,8 @@ class ZBlogPHP
         $this->option['ZC_BLOG_VERSION'] = ZC_BLOG_VERSION;
         $this->option['ZC_NOW_VERSION'] = $this->version;  //ZC_LAST_VERSION
         $this->option['ZC_BLOG_PRODUCT_FULL'] = $this->option['ZC_BLOG_PRODUCT'] . ' ' . ZC_VERSION_DISPLAY;
-        $this->option['ZC_BLOG_PRODUCT_FULLHTML'] = '<a href="http://www.zblogcn.com/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
-        $this->option['ZC_BLOG_PRODUCT_HTML'] = '<a href="http://www.zblogcn.com/" title="RainbowSoft Z-BlogPHP" target="_blank">' . $this->option['ZC_BLOG_PRODUCT'] . '</a>';
+        $this->option['ZC_BLOG_PRODUCT_FULLHTML'] = '<a href="https://www.zblogcn.com/" title="Z-BlogPHP ' . ZC_BLOG_VERSION . '" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
+        $this->option['ZC_BLOG_PRODUCT_HTML'] = '<a href="https://www.zblogcn.com/" title="Z-BlogPHP ' . ZC_BLOG_VERSION . '" target="_blank">' . $this->option['ZC_BLOG_PRODUCT'] . '</a>';
 
         if ($oldZone != $this->option['ZC_TIME_ZONE_NAME']) {
             date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
@@ -552,29 +579,18 @@ class ZBlogPHP
         $this->LoadCategories();
         //$this->LoadTags();
         $this->LoadModules();
+        $this->RegBuildModules();
 
         if (!(get_class($this->user) === 'Member' && $this->user->Level > 0 && !empty($this->user->ID))) {
             $this->Verify();
         }
 
-        $this->RegBuildModule('catalog', 'ModuleBuilder::Catalog');
-        $this->RegBuildModule('calendar', 'ModuleBuilder::Calendar');
-        $this->RegBuildModule('comments', 'ModuleBuilder::Comments');
-        $this->RegBuildModule('previous', 'ModuleBuilder::LatestArticles');
-        $this->RegBuildModule('archives', 'ModuleBuilder::Archives');
-        $this->RegBuildModule('navbar', 'ModuleBuilder::Navbar');
-        $this->RegBuildModule('tags', 'ModuleBuilder::TagList');
-        $this->RegBuildModule('statistics', 'ModuleBuilder::Statistics');
-        $this->RegBuildModule('authors', 'ModuleBuilder::Authors');
-
         //创建模板类
         $this->template = $this->PrepareTemplate();
 
         // 读主题版本信息
-        $app = $this->LoadApp('theme', $this->theme);
-        if ($app->type !== '') {
-            $this->themeinfo = $app->GetInfoArray();
-        }
+        $this->themeapp = $this->LoadApp('theme', $this->theme);
+        $this->themeinfo = $this->themeapp->GetInfoArray();
 
         if ($this->ismanage) {
             $this->LoadManage();
@@ -588,9 +604,13 @@ class ZBlogPHP
             $fpname();
         }
 
+        $this->ReflushLanguages();
+
         if ($this->option['ZC_DEBUG_MODE']) {
             $this->CheckTemplate(false, true);
         }
+
+        $this->ConvertTableAndDatainfo();
 
         $this->isload = true;
 
@@ -679,8 +699,8 @@ class ZBlogPHP
                     $this->ShowError(69, __FILE__, __LINE__);
                 }
                 break;
-            case 'pgsql':
-            case 'pdo_pgsql':
+            case 'postgresql':
+            case 'pdo_postgresql':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(array(
                     $this->option['ZC_PGSQL_SERVER'],
@@ -786,51 +806,62 @@ class ZBlogPHP
     }
 
     /**
-     * 载入插件Configs表.
+     * Load or ReLoad插件Configs表.
      */
     public function LoadConfigs()
     {
-        $this->configs = array();
-        $sql = $this->db->sql->Select($this->table['Config'], array('*'), '', '', '', '');
-
-        /** @var Config[] $array */
-        $array = $this->GetListType('Config', $sql);
-        foreach ($array as $c) {
-            $n = $c->GetItemName();
-            $this->configs[$n] = $c;
-        }
+        $this->LoadConfigsOnlySystem(true);
+        $this->LoadConfigsOnlySystem(false);
     }
 
     /**
      * 载入插件Configs表 Only System Option.
      */
-    private $prvConfigList = array();
+    private $prvConfigList = null;
 
     public function LoadConfigsOnlySystem($onlysystemoption = true)
     {
         if ($onlysystemoption == true) {
             $this->configs = array();
             $this->prvConfigList = array();
+
+            $sql = $this->db->sql->Select($this->table['Config'], '', '', '', '', '');
+            /* @var Config[] $array */
+            $this->prvConfigList = $this->GetListOrigin($sql);
         }
 
-        $sql = $this->db->sql->Select($this->table['Config'], array('*'), '', '', '', '');
+        $type = 'Config';
 
-        if ($onlysystemoption == true) {
-            /* @var Config[] $array */
-            $this->prvConfigList = $this->GetListType('Config', $sql);
-            foreach ($this->prvConfigList as $c) {
-                $n = $c->GetItemName();
-                if ($n == 'system') {
-                    $this->configs[$n] = $c;
+        foreach ($this->prvConfigList as $c) {
+            $name = $c[$this->d['Config']['Name'][0]];
+            if (($name == 'system' && $onlysystemoption == true) || ($name != 'system' && $onlysystemoption == false)) {
+                if (!isset($this->configs[$name])) {
+                    $l = new $type($name);
+                    $this->configs[$name] = $l;
+                } else {
+                    $l = $this->configs[$name];
+                }
+                if (get_class($l) != $type) {
+                    $l = new $type($name);
+                    $this->configs[$name] = $l;
+                }
+                if (isset($c[$this->d['Config']['Key'][0]]) && $c[$this->d['Config']['Key'][0]] != '') {
+                    $l->LoadInfoByAssocSingleWithPre($c);
+                } else {
+                    $l->LoadInfoByAssoc($c);
                 }
             }
-        } else {
-            foreach ($this->prvConfigList as $c) {
-                $n = $c->GetItemName();
-                if ($n != 'system') {
-                    $this->configs[$n] = $c;
-                }
+        }
+        //将读出来的数组再拼成序列化数据再反序列化
+        foreach ($this->configs as $key => $value) {
+            if (is_object($value) && ($key == 'system' && $onlysystemoption == true) || ($key != 'system' && $onlysystemoption == false)) {
+                $value->LoadInfoByAssocSingleWithAfter();
+            } else {
+                $value->LoadInfoByAssocSingleWithAfter();
             }
+        }
+
+        if ($onlysystemoption == false) {
             $this->prvConfigList = array();
         }
     }
@@ -953,7 +984,8 @@ class ZBlogPHP
     {
         $this->option['ZC_BLOG_CLSID'] = $this->guid;
 
-        unset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']);
+        unset($this->option['ZC_PERMANENT_DOMAIN_WHOLE_DISABLE']);
+        unset($this->option['ZC_PERMANENT_DOMAIN_FORCED_URL']);
 
         if (ZC_VERSION_MAJOR === '1' && ZC_VERSION_MINOR === '5') {
             if (is_dir($this->path . 'zb_system/api')) {
@@ -961,13 +993,12 @@ class ZBlogPHP
             }
         }
 
-        if (strpos('|SAE|BAE2|ACE|TXY|', '|' . $this->option['ZC_YUN_SITE'] . '|') === false && file_exists($this->usersdir . 'c_option.php') == false) {
+        if (file_exists($this->usersdir . 'c_option.php') == false) {
             $s = "<" . "?" . "php\r\n";
             $s .= "return ";
             $option = array();
             foreach ($this->option as $key => $value) {
-                if (($key == 'ZC_YUN_SITE') ||
-                    ($key == 'ZC_DATABASE_TYPE') ||
+                if (($key == 'ZC_DATABASE_TYPE') ||
                     ($key == 'ZC_SQLITE_NAME') ||
                     ($key == 'ZC_SQLITE_PRE') ||
                     ($key == 'ZC_MYSQL_SERVER') ||
@@ -979,6 +1010,7 @@ class ZBlogPHP
                     ($key == 'ZC_MYSQL_ENGINE') ||
                     ($key == 'ZC_MYSQL_PORT') ||
                     ($key == 'ZC_MYSQL_PERSISTENT') ||
+                    ($key == 'ZC_MYSQL_PORT') ||
                     ($key == 'ZC_PGSQL_SERVER') ||
                     ($key == 'ZC_PGSQL_USERNAME') ||
                     ($key == 'ZC_PGSQL_PASSWORD') ||
@@ -1034,8 +1066,7 @@ class ZBlogPHP
                 $value = str_replace('|', '', $value);
             }
 
-            if (($key == 'ZC_YUN_SITE') ||
-                ($key == 'ZC_DATABASE_TYPE') ||
+            if (($key == 'ZC_DATABASE_TYPE') ||
                 ($key == 'ZC_SQLITE_NAME') ||
                 ($key == 'ZC_SQLITE_PRE') ||
                 ($key == 'ZC_MYSQL_SERVER') ||
@@ -1055,7 +1086,9 @@ class ZBlogPHP
                 ($key == 'ZC_PGSQL_PRE') ||
                 ($key == 'ZC_PGSQL_PORT') ||
                 ($key == 'ZC_PGSQL_PERSISTENT') ||
-                ($key == 'ZC_CLOSE_WHOLE_SITE')
+                ($key == 'ZC_CLOSE_WHOLE_SITE') ||
+                ($key == 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE') ||
+                ($key == 'ZC_PERMANENT_DOMAIN_FORCED_URL')
             ) {
                 continue;
             }
@@ -1425,9 +1458,15 @@ class ZBlogPHP
             foreach ($files as $sortname => $fullname) {
                 $m = new Module();
                 $m->FileName = $sortname;
+                $m->HtmlID = $sortname;
                 $m->Content = file_get_contents($fullname);
-                $m->Type = 'div';
-                $m->Source = 'theme';
+                if (stripos($m->Content, '<li') !== false && stripos($m->Content, '</li>') !== false) {
+                    $m->Type = 'ul';
+                } else {
+                    $m->Type = 'div';
+                }
+                $m->Source = 'theme_' . $this->theme;
+                $m->IsIncludeFile = true;
                 $this->modules[] = $m;
                 $this->modulesbyfilename[$m->FileName] = $m;
             }
@@ -1491,7 +1530,7 @@ class ZBlogPHP
     {
         $app = new App();
         if ($app->LoadInfoByXml($type, $id) != true) {
-            $app->id = '';
+            $app->isloaded = false;
         }
 
         return $app;
@@ -1607,8 +1646,20 @@ class ZBlogPHP
         $languagePath .= $language . '.php';
         $languagePtr = require $languagePath;
         $this->langpacklist[] = array($type, $id, $language);
+        if ($type == 'system') {
+            $this->langs = json_decode(json_encode($this->lang));
+        } else {
+            if ($id != '' && isset($this->lang[$id])) {
+                $this->langs->$id = json_decode(json_encode($this->lang[$id]));
+            }
+        }
 
         return true;
+    }
+
+    public function ReflushLanguages()
+    {
+        $this->langs = json_decode(json_encode($this->lang));
     }
 
     /**
@@ -1700,7 +1751,7 @@ class ZBlogPHP
     }
 
     /**
-     * 生成模块.
+     * 生成所有进Ready List的模块的Content内容并保存.
      */
     public function BuildModule()
     {
@@ -1722,18 +1773,35 @@ class ZBlogPHP
     }
 
     /**
-     * 添加模块.
+     * 系统默认注册模块.
+     */
+    public function RegBuildModules()
+    {
+        $this->RegBuildModule('catalog', 'ModuleBuilder::Catalog');
+        $this->RegBuildModule('calendar', 'ModuleBuilder::Calendar');
+        $this->RegBuildModule('comments', 'ModuleBuilder::Comments');
+        $this->RegBuildModule('previous', 'ModuleBuilder::LatestArticles');
+        $this->RegBuildModule('archives', 'ModuleBuilder::Archives');
+        $this->RegBuildModule('navbar', 'ModuleBuilder::Navbar');
+        $this->RegBuildModule('tags', 'ModuleBuilder::TagList');
+        $this->RegBuildModule('statistics', 'ModuleBuilder::Statistics');
+        $this->RegBuildModule('authors', 'ModuleBuilder::Authors');
+    }
+
+    /**
+     * 添加进入Build Ready列表的模块.
      *
      * @param string $moduleFileName 模块名
      * @param null   $parameters     模块参数
      */
     public function AddBuildModule($moduleFileName, $parameters = null)
     {
-        ModuleBuilder::Add($moduleFileName, $parameters);
+        $p = func_get_args();
+        call_user_func_array('ModuleBuilder::Add', $p);
     }
 
     /**
-     * 删除模块.
+     * 删除进入Build Ready列表模块.
      *
      * @param string $moduleFileName 模块名
      */
@@ -1826,6 +1894,28 @@ class ZBlogPHP
             $l = new $type();
             $l->LoadInfoByAssoc($a);
             $list[] = $l;
+        }
+
+        return $list;
+    }
+
+    /**
+     * GetListOrigin.
+     *
+     * @param $sql
+     *
+     * @return Base[]
+     */
+    public function GetListOrigin($sql)
+    {
+        $array = null;
+        $list = array();
+        $array = $this->db->Query($sql);
+        if (!isset($array)) {
+            return array();
+        }
+        foreach ($array as $a) {
+            $list[] = $a;
         }
 
         return $list;
@@ -2736,6 +2826,11 @@ class ZBlogPHP
         return $s;
     }
 
+    public function GetTopArticle($type = 0)
+    {
+        return $this->GetTopPost($type);
+    }
+
     /**
      * 获取全部置顶文章（优先从cache里读数组）.
      *
@@ -2743,7 +2838,7 @@ class ZBlogPHP
      *
      * @return array
      */
-    public function GetTopArticle($type = 0)
+    public function GetTopPost($type = 0)
     {
         $varname = 'top_post_array_' . $type;
         if ($this->cache->HasKey($varname) == false) {
@@ -2752,7 +2847,7 @@ class ZBlogPHP
 
         $articles_top_notorder_idarray = unserialize($this->cache->$varname);
         if (!is_array($articles_top_notorder_idarray)) {
-            CountTopArticle($type, null, null);
+            CountTopPost($type, null, null);
             $articles_top_notorder_idarray = unserialize($this->cache->$varname);
         }
         $articles_top_notorder = $this->GetPostByArray($articles_top_notorder_idarray);
@@ -3099,6 +3194,7 @@ class ZBlogPHP
      */
     public function StartGzip()
     {
+        return false;
         if (!headers_sent() && $this->isGzip && $this->option['ZC_GZIP_ENABLE']) {
             if (ini_get('output_handler')) {
                 return false;
@@ -3109,7 +3205,7 @@ class ZBlogPHP
                 return false;
             }
 
-            if (function_exists('ini_set') && function_exists('zlib_encode') && $this->option['ZC_YUN_SITE'] !== 'SAE') {
+            if (function_exists('ini_set') && function_exists('zlib_encode')) {
                 @ob_end_clean();
                 @ini_set('zlib.output_compression', 'On');
                 @ini_set('zlib.output_compression_level', '5');
@@ -3147,12 +3243,6 @@ class ZBlogPHP
         if (!$this->option['ZC_DATABASE_TYPE']) {
             Redirect('./zb_install/index.php');
         }
-
-        if ($this->option['ZC_YUN_SITE']) {
-            if ($this->Config('system')->CountItem() == 0) {
-                Redirect('./zb_install/index.php');
-            }
-        }
     }
 
     /**
@@ -3160,16 +3250,14 @@ class ZBlogPHP
      */
     public function RedirectPermanentDomain()
     {
-        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == false) {
+        $domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
+        if ($domain_disable == true) {
             return;
         }
 
-        if ($this->option['ZC_PERMANENT_DOMAIN_REDIRECT'] == false) {
+        $forced = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
+        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == false && $forced == '') {
             return;
-        }
-
-        if (isset($this->option['ZC_PERMANENT_DOMAIN_DISABLE']) == true) {
-            //return;
         }
 
         $host = str_replace(array('https://', 'http://'), array('', ''), GetCurrentHost(ZBP_PATH, $null));
@@ -3285,8 +3373,36 @@ class ZBlogPHP
         return $name;
     }
 
+    //举例：backend-ui,,,
+    protected $_exclusive = array();
+
     /**
-     * 以下部分为已废弃，但考虑到兼容性保留的代码
+     * 通知系统控制权.
+     */
+    public function SetExclusive($function, $appid)
+    {
+        if ($appid == false) {
+            return false;
+        }
+        $this->_exclusive[$function] = $appid;
+
+        return true;
+    }
+
+    /**
+     * 查询系统控制权.
+     */
+    public function IsExclusive($function)
+    {
+        if (isset($this->_exclusive[$function])) {
+            return $this->_exclusive[$function];
+        }
+
+        return false;
+    }
+
+    /**
+     * 以下部分为已废弃，但考虑到兼容性保留的代码**************************************************************.
      */
 
     /**
@@ -3354,15 +3470,6 @@ class ZBlogPHP
     public function LoadCategorys()
     {
         return $this->LoadCategories();
-    }
-
-    /**
-     * 所有模块重置.
-     *
-     * @deprecated
-     */
-    public function AddBuildModuleAll()
-    {
     }
 
     /**

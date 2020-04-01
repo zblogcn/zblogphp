@@ -1,6 +1,6 @@
 <li class="{$id}-item">
-  <a href="{$item.href}" target="{$item.target}" title="{$item.title}">{$item.ico}{$item.name}</a>
+  <a href="{$item.href}" target="{$item.target}" title="{$item.title}">{$item.ico}{$item.text}</a>
   {if count($item.subs)}
-  <ul>{foreach $item.subs as $item}{template:Links_defend}{/foreach}</ul>
+  <ul>{foreach $item.subs as $item}{template:lm-module-defend}{/foreach}</ul>
   {/if}
 </li>

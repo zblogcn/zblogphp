@@ -73,25 +73,29 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
     {
         self::$db = new SQLMySQL($GLOBALS['zbp']->db);
         $this->assertEquals(
-            'SELECT  COUNT(log_id) AS countid  FROM  zbp_post ', self::$db
+            'SELECT  COUNT(log_id) AS countid  FROM  zbp_post ',
+            self::$db
                 ->select("zbp_post")
                 ->count('log_id', 'countid')
                 ->sql
         );
         $this->assertEquals(
-            'SELECT  COUNT(log_id) AS countid  FROM  zbp_post ', self::$db
+            'SELECT  COUNT(log_id) AS countid  FROM  zbp_post ',
+            self::$db
                 ->select("zbp_post")
                 ->count(array('log_id', 'countid'))
                 ->sql
         );
         $this->assertEquals(
-            'SELECT  COUNT(log_id)  FROM  zbp_post ', self::$db
+            'SELECT  COUNT(log_id)  FROM  zbp_post ',
+            self::$db
                 ->select("zbp_post")
                 ->count('log_id')
                 ->sql
         );
         $this->assertEquals(
-            'SELECT  COUNT(log_id),log_authorid  FROM  zbp_post ', self::$db
+            'SELECT  COUNT(log_id),log_authorid  FROM  zbp_post ',
+            self::$db
                 ->select("zbp_post")
                 ->count('log_id')
                 ->column('log_authorid')

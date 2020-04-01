@@ -258,6 +258,7 @@ return array(
         'prev_button'                       => '‹',
         'next_button'                       => '›',
         'last_button'                       => '››',
+        'numeral_button'                    => '%num%',
         'verify_succeed'                    => 'Verify succeed',
         'verify_fail'                       => 'Verify fail',
         'verifying'                         => 'Verifying',

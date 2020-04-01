@@ -113,12 +113,12 @@ class PageBar
         }
 
         $this->UrlRule->Rules['{%page%}'] = $this->PageFirst;
-        $this->buttons[$zbp->lang['msg']['first_button']] = $this->UrlRule->Make();
+        $this->buttons[$zbp->langs->msg->first_button] = $this->UrlRule->Make();
 
         if ($this->PageNow != $this->PageFirst) {
             $this->UrlRule->Rules['{%page%}'] = $this->PagePrevious;
-            $this->buttons[$zbp->lang['msg']['prev_button']] = $this->UrlRule->Make();
-            $this->prevbutton = $this->buttons[$zbp->lang['msg']['prev_button']];
+            $this->buttons[$zbp->langs->msg->prev_button] = $this->UrlRule->Make();
+            $this->prevbutton = $this->buttons[$zbp->langs->msg->prev_button];
         }
 
         $pageAll = $this->PageAll + 1;
@@ -135,18 +135,20 @@ class PageBar
             $end = $pageAll;
         }
 
+        $j = trim($zbp->langs->msg->numeral_button);
+        $j = ($j == '') ? '%num%' : $j;
         for ($i = $start; $i < $end; $i++) {
             $this->UrlRule->Rules['{%page%}'] = $i;
-            $this->buttons[$i] = $this->UrlRule->Make();
+            $this->buttons[str_ireplace('%num%', $i, $j)] = $this->UrlRule->Make();
         }
 
         if ($this->PageNow != $this->PageNext) {
             $this->UrlRule->Rules['{%page%}'] = $this->PageNext;
-            $this->buttons[$zbp->lang['msg']['next_button']] = $this->UrlRule->Make();
-            $this->nextbutton = $this->buttons[$zbp->lang['msg']['next_button']];
+            $this->buttons[$zbp->langs->msg->next_button] = $this->UrlRule->Make();
+            $this->nextbutton = $this->buttons[$zbp->langs->msg->next_button];
         }
 
         $this->UrlRule->Rules['{%page%}'] = $this->PageLast;
-        $this->buttons[$zbp->lang['msg']['last_button']] = $this->UrlRule->Make();
+        $this->buttons[$zbp->langs->msg->last_button] = $this->UrlRule->Make();
     }
 }
