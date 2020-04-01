@@ -44,7 +44,7 @@ function misc_statistic()
     }
 
     //当需要rebuild才会rebuild
-    if ($zbp->CheckTemplate(true) == false) {
+    if ($zbp->CheckRights('root') || $zbp->CheckTemplate(true) == false) {
         $zbp->CheckTemplate(false, true);
     }
     if (!($zbp->CheckRights('root') || (time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60))) {

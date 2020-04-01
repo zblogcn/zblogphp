@@ -295,10 +295,10 @@ function OutputOptionItemsOfCategories($default)
  *
  * @return null|string
  */
-function OutputOptionItemsOfTemplate($default, $file_filter_array = array())
+function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $accept_type = array())
 {
     global $zbp;
-    $testRegExp = "/^(\.|post-|module|header|footer|comment|sidebar|pagebar|[a-zA-Z]\_)/si";
+    $testRegExp = "/.*(\.|post-|module|header|footer|comment|sidebar|pagebar|[a-zA-Z]\_)/si";
     $s = null;
     $s .= '<option value="" >' . $zbp->lang['msg']['none'] . '</option>';
 
@@ -308,8 +308,8 @@ function OutputOptionItemsOfTemplate($default, $file_filter_array = array())
         }
 
         $b = false;
-        foreach ($file_filter_array as $key2 => $value2) {
-            $testRegExp2 = "/^($value2)/si";
+        foreach ($refuse_file_filter as $key2 => $value2) {
+            $testRegExp2 = "/.*($value2)/si";
             if (preg_match($testRegExp2, $key)) {
                 $b = true;
             }
@@ -318,20 +318,15 @@ function OutputOptionItemsOfTemplate($default, $file_filter_array = array())
             continue;
         }
 
-        $n = "";
-        $t = $value;
-
-        if (stristr($value, 'Template Name:')) {
-            $t = stristr($t, 'Template Name:');
-            $t = str_ireplace('Template Name:', '', $t);
-            $n = strtok($t, ' *');
-        }
+        $name = $zbp->template->templates_Name[$key];
+        $type = $zbp->template->templates_Type[$key];
+        $typeArray = explode('|',$type);
 
         if ($default == $key) {
             $s .= '<option value="' . $key . '" selected="selected">' . $key . ' (' . $zbp->lang['msg']['current_template'] . ')' . '</option>';
         } else {
-            if ($n !== '') {
-                $s .= '<option value="' . $key . '" >' . $key . ' (' . $n . ')' . '</option>';
+            if ($name !== '') {
+                $s .= '<option value="' . $key . '" >' . $key . ' (' . $name . ')' . '</option>';
             } else {
                 $s .= '<option value="' . $key . '" >' . $key . '</option>';
             }

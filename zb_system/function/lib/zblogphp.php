@@ -604,12 +604,14 @@ class ZBlogPHP
             $fpname();
         }
 
-        $this->ReflushLanguages();
-
         if ($this->option['ZC_DEBUG_MODE']) {
-            $this->CheckTemplate();
+            //只有当index.php被执行时才检查模板并自动重建
+            //if( substr(GetValueInArray(get_included_files(),0),-9) == 'index.php') {
+                $this->CheckTemplate();
+            //}
         }
 
+        $this->ReflushLanguages();
         $this->ConvertTableAndDatainfo();
 
         $this->isload = true;
@@ -638,6 +640,8 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu', 'Include_Admin_Addmemsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu', 'Include_Admin_Addmodsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu', 'Include_Admin_Addcmtsubmenu');
+
+        $this->CheckTemplate(true);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) {
             $fpname();

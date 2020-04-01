@@ -275,7 +275,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                     </label>
                                     <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate"
                                             onChange="cmbTemplate.value=this.options[this.selectedIndex].value">
-                                        <?php echo OutputOptionItemsOfTemplate($article->Template, array('index', '404', 'search', 'lm-')); ?>
+                                        <?php echo OutputOptionItemsOfTemplate($article->Template, array('index', '404', 'module', 'search', 'lm-'), array()); ?>
                                     </select>
                                 </div>
                                 <!-- )template -->
