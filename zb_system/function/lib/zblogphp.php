@@ -624,7 +624,6 @@ class ZBlogPHP
      */
     public function LoadManage()
     {
-
         if ($this->user->Status == ZC_MEMBER_STATUS_AUDITING) {
             $this->ShowError(79, __FILE__, __LINE__);
         }
@@ -1734,6 +1733,7 @@ class ZBlogPHP
             $this->BuildTemplate();
             $this->cache->templates_md5 = $md5;
             $this->SaveCache();
+
             return true;
         }
         //如果对比一样的话，$forcebuild就有用了
@@ -1744,6 +1744,7 @@ class ZBlogPHP
                 $this->SaveCache();
             }
         }
+
         return true;
     }
 
