@@ -607,7 +607,7 @@ class ZBlogPHP
         if ($this->option['ZC_DEBUG_MODE']) {
             //只有当index.php被执行时才检查模板并自动重建
             //if( substr(GetValueInArray(get_included_files(),0),-9) == 'index.php') {
-                $this->CheckTemplate();
+            $this->CheckTemplate();
             //}
         }
 

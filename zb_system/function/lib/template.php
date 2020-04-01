@@ -156,8 +156,8 @@ class Template
     public function CompileFiles()
     {
         foreach ($this->dirs as $key => $value) {
-            $value = str_ireplace('/theme/'.$this->theme.'/template', '/cache/compiled/' . $this->theme, $value);
-            if(!file_exists($value)){
+            $value = str_ireplace('/theme/' . $this->theme . '/template', '/cache/compiled/' . $this->theme, $value);
+            if (!file_exists($value)) {
                 mkdir($value, 0755, true);
             }
         }
@@ -184,12 +184,12 @@ class Template
                 @unlink($fullname);
             }
             foreach ($this->files as $key => $value) {
-                $s = $zbp->path . 'zb_users/cache/compiled/'.$this->theme.'/' . $key . '.php';
+                $s = $zbp->path . 'zb_users/cache/compiled/' . $this->theme . '/' . $key . '.php';
                 @unlink($s);
             }
             $this->dirs = array_reverse($this->dirs);
             foreach ($this->dirs as $key => $value) {
-                $s = str_replace('/theme/'.$this->theme.'/template', '/cache/compiled/' . $this->theme, $value);
+                $s = str_replace('/theme/' . $this->theme . '/template', '/cache/compiled/' . $this->theme, $value);
                 @rmdir($s);
             }
         }
@@ -649,7 +649,7 @@ class Template
         $this->files = array();
         $this->GetAllFileDir($zbp->usersdir . 'theme/' . $theme . '/template/');
         foreach ($this->dirs as $key => $value) {
-            if (substr($this->dirs[$key],-1) != '/'){
+            if (substr($this->dirs[$key], -1) != '/') {
                 $this->dirs[$key] .= '/';
             }
         }
@@ -665,7 +665,7 @@ class Template
         }
 
         foreach ($templates as $key => $value) {
-            $a = $this->GetTemplateNameAndType($key,$value);
+            $a = $this->GetTemplateNameAndType($key, $value);
             $templates_Name[$key] = $a[0];
             $templates_Type[$key] = $a[1];
         }
@@ -673,11 +673,12 @@ class Template
         $this->templates = $templates;
         $this->templates_Name = $templates_Name;
         $this->templates_Type = $templates_Type;
+
         return true;
     }
 
     //获取 模板的名称和类型
-    private function GetTemplateNameAndType($filename,$content)
+    private function GetTemplateNameAndType($filename, $content)
     {
         $name = '';
         $type = '';
@@ -699,6 +700,7 @@ class Template
 
     private $dirs = array();
     private $files = array();
+
     private function GetAllFileDir($dir)
     {
         global $zbp;
@@ -709,13 +711,13 @@ class Template
                         $this->dirs[] = $dir . $d . '/';
                         $this->GetAllFileDir($dir . $d . '/');
                     }
-                } elseif(is_readable($dir . $d)) {
+                } elseif (is_readable($dir . $d)) {
                     $s = $dir . $d;
                     $i = strlen($zbp->usersdir . 'theme/' . $this->theme . '/template/');
-                    if(substr($s,-4) == '.php'){
-                        $s2 = substr($s,$i-strlen($s));
-                        $s3 = substr($s2,0,strlen($s2)-4);
-                        $this->files[$s3] = file_get_contents($s);//$dir . $d;
+                    if (substr($s, -4) == '.php') {
+                        $s2 = substr($s, $i - strlen($s));
+                        $s3 = substr($s2, 0, strlen($s2) - 4);
+                        $this->files[$s3] = file_get_contents($s); //$dir . $d;
                     }
                 }
             }
@@ -723,17 +725,17 @@ class Template
             if ($handle = opendir($dir)) {
                 while (false !== ($file = readdir($handle))) {
                     if ($file != "." && $file != "..") {
-                        $d = str_replace('template//', 'template/', str_replace('\\', '/', $dir .'/'. $file));
-                        if (is_dir($dir .'/'. $file)) {
+                        $d = str_replace('template//', 'template/', str_replace('\\', '/', $dir . '/' . $file));
+                        if (is_dir($dir . '/' . $file)) {
                             $this->dirs[] = $d;
                             $this->GetAllFileDir($d);
                         } elseif (is_readable($d)) {
                             $s = $d;
                             $i = strlen($zbp->usersdir . 'theme/' . $this->theme . '/template/');
-                            if(substr($s,-4) == '.php'){
-                                $s2 = substr($s,$i-strlen($s));
-                                $s3 = substr($s2,0,strlen($s2)-4);
-                                $this->files[$s3] = file_get_contents($s);//$dir . $d;
+                            if (substr($s, -4) == '.php') {
+                                $s2 = substr($s, $i - strlen($s));
+                                $s3 = substr($s2, 0, strlen($s2) - 4);
+                                $this->files[$s3] = file_get_contents($s); //$dir . $d;
                             }
                         }
                     }

@@ -320,7 +320,7 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
 
         $name = $zbp->template->templates_Name[$key];
         $type = $zbp->template->templates_Type[$key];
-        $typeArray = explode('|',$type);
+        $typeArray = explode('|', $type);
 
         if ($default == $key) {
             $s .= '<option value="' . $key . '" selected="selected">' . $key . ' (' . $zbp->lang['msg']['current_template'] . ')' . '</option>';
