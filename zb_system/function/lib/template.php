@@ -11,6 +11,7 @@ class Template
     protected $path = null;
     protected $entryPage = null;
     protected $uncompiledCodeStore = array();
+    protected $childDirs = array();
     public $theme = "";
     public $templates = array();
     public $compiledTemplates = array();
@@ -172,15 +173,48 @@ class Template
         if (!file_exists($this->path)) {
             @mkdir($this->path, 0755, true);
         } else {
-            foreach (GetFilesInDir($this->path, 'php') as $fullname) {
-                @unlink($fullname);
-            }
+            $this->RemoveTemplateList($this->path);
         }
         $this->addNonexistendTags();
+
+        // 创建子目录文件夹
+        foreach ($this->childDirs as $dirName) {
+            $buildDirPath = $this->path . $dirName;
+            if (!file_exists($buildDirPath)) {
+                @mkdir($buildDirPath, 0755, true);
+            }
+        }
 
         $this->CompileFiles();
 
         return true;
+    }
+
+    /**
+     * 删除旧的文件
+     */
+    public function RemoveTemplateList($tplPath, $dirName = null)
+    {
+        /**
+         * 构建读取目录
+         */
+        $loadTplPath = $tplPath;
+        if (isset($dirName)) {
+            $loadTplPath .= $dirName . '/';
+        }
+
+        $dirs = GetDirsInDir($loadTplPath);
+        foreach ($dirs as $childDirName) {
+            $childDirNameFull = isset($dirName) ? $dirName . '/' : '';
+            $childDirNameFull .= $childDirName;
+            $this->RemoveTemplateList($tplPath, $childDirNameFull);
+            @unlink($tplPath . $childDirNameFull);
+        }
+
+        $files = GetFilesInDir($loadTplPath, 'php');
+        foreach ($files as $filePath) {
+            @unlink($filePath);
+        }
     }
 
     protected function addNonexistendTags()
@@ -594,13 +628,8 @@ class Template
      */
     public function LoadCompiledTemplates()
     {
-        $templates = array();
 
-        // 读取主题模板
-        $files = GetFilesInDir($this->path, 'php');
-        foreach ($files as $sortname => $fullname) {
-            $templates[$sortname] = file_get_contents($fullname);
-        }
+        $templates = $this->LoadTemplateList($this->path);
 
         $this->compiledTemplates = $templates;
     }
@@ -615,16 +644,21 @@ class Template
         $theme = $this->theme;
         $templates = array();
 
-        // 读取预置模板
+        /**
+         * 读取系统预置模板
+         */
         $files = GetFilesInDir($zbp->path . 'zb_system/defend/default/', 'php');
-        foreach ($files as $sortname => $fullname) {
-            $templates[$sortname] = file_get_contents($fullname);
+        foreach ($files as $name => $filePath) {
+            $templates[$name] = file_get_contents($filePath);
         }
-
-        // 读取主题模板
-        $files = GetFilesInDir($zbp->usersdir . 'theme/' . $theme . '/template/', 'php');
-        foreach ($files as $sortname => $fullname) {
-            $templates[$sortname] = file_get_contents($fullname);
+        
+        /**
+         * 读取主题目录下的模板
+         */
+        $tplPath = $zbp->usersdir . 'theme/' . $theme . '/template/';
+        $tplList = $this->LoadTemplateList($tplPath);
+        if (count($tplList)) {
+            $templates = array_merge($templates, $tplList);
         }
 
         for ($i = 2; $i < 10; $i++) {
@@ -632,8 +666,57 @@ class Template
                 $templates['sidebar' . $i] = str_replace('$sidebar', '$sidebar' . $i, $templates['sidebar']);
             }
         }
-
+        
         $this->templates = $templates;
+    }
+
+    /**
+     * 递归读取指定目录下的模板文件列表
+     * @param {String} $tplPath 读取路径
+     * @param {String} $dirName 相对读取目录
+     *
+     * @return {Array} 目录集合
+     */
+    public function LoadTemplateList($tplPath, $dirName = null)
+    {
+        global $zbp;
+
+        $templates = array();
+
+        /**
+         * 构建读取目录
+         */
+        $loadTplPath = $tplPath;
+        if (isset($dirName)) {
+            $loadTplPath .= $dirName . '/';
+        }
+        /**
+         * 读取PHP文件
+         */
+        $files = GetFilesInDir($loadTplPath, 'php');
+        foreach ($files as $name => $filePath) {
+            $key = $name;
+            if (isset($dirName)) {
+                $key = $dirName . '/' . $key;
+            }
+            $templates[$key] = file_get_contents($filePath);
+        }
+
+        /**
+         * 读取子目录
+         */
+        $dirs = GetDirsInDir($loadTplPath);
+        foreach ($dirs as $childDirName) {
+            $childDirNameFull = isset($dirName) ? $dirName . '/' : '';
+            $childDirNameFull .= $childDirName;
+            $childTemplates = $this->LoadTemplateList($tplPath, $childDirNameFull);
+            if (count($childTemplates)) {
+                $this->childDirs[] = $childDirNameFull;
+                $templates = array_merge($templates, $childTemplates);
+            }
+        }
+
+        return $templates;
     }
 
     /**
