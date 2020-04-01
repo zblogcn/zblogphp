@@ -35,6 +35,9 @@ class SQL__SQLite extends SQL__Global
      */
     protected function buildCreate()
     {
+        global $zbp;
+        $zbp->ConvertTableAndDatainfo();
+
         $sqlAll = array();
         foreach ($this->table as $tableIndex => $table) {
             $sql = array();

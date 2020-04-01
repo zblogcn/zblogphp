@@ -19,9 +19,9 @@
   <url></url>
 </source>
 <adapted>151626</adapted>
-<version>1.1</version>
+<version>1.2</version>
 <pubdate>2018-10-29</pubdate>
-<modified>2020-03-12</modified>
+<modified>2020-04-01</modified>
 <price>0</price>
 <phpver>5.2</phpver>
 <advanced>
@@ -36,5 +36,9 @@
   <sidebar3></sidebar3>
   <sidebar4></sidebar4>
   <sidebar5></sidebar5>
+  <sidebar6></sidebar6>
+  <sidebar7></sidebar7>
+  <sidebar8></sidebar8>
+  <sidebar9></sidebar9>
 </sidebars>
 </plugin>

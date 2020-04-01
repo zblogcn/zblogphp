@@ -11,7 +11,7 @@
             'cmt'=>$article->CommNums,
         );
         $list_info = json_decode($zbp->Config('tpure')->PostLISTINFO,true);
-        if(count($list_info)){
+        if(count((array)$list_info)){
             foreach($list_info as $key => $info){
                 echo $info==1?'<span class="'.$key.'">'.$post_info[$key].'</span>':'';
             }

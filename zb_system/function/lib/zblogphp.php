@@ -607,7 +607,7 @@ class ZBlogPHP
         $this->ReflushLanguages();
 
         if ($this->option['ZC_DEBUG_MODE']) {
-            $this->CheckTemplate(false, true);
+            $this->CheckTemplate();
         }
 
         $this->ConvertTableAndDatainfo();
@@ -624,13 +624,6 @@ class ZBlogPHP
      */
     public function LoadManage()
     {
-        //if ($this->option['ZC_PERMANENT_DOMAIN_WITH_ADMIN'] == false) {
-        //     $this->host = GetCurrentHost($this->path, $this->cookiespath);
-        //}
-
-        //if (substr($this->host, 0, 8) == 'https://') {
-        //    $this->isHttps = true;
-        //}
 
         if ($this->user->Status == ZC_MEMBER_STATUS_AUDITING) {
             $this->ShowError(79, __FILE__, __LINE__);
@@ -646,8 +639,6 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu', 'Include_Admin_Addmemsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu', 'Include_Admin_Addmodsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu', 'Include_Admin_Addcmtsubmenu');
-
-        $this->CheckTemplate(true);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) {
             $fpname();
@@ -1732,6 +1723,10 @@ class ZBlogPHP
         $s = implode($this->template->templates);
         $md5 = md5($s);
 
+        //本函数的返回值很有意思，为false表示需要rebuild 为true表示已重建完成或是不需要rebuild
+        //$zbp->CheckTemplate(true) == false 的意思，就是判断模板需需要重刷新吗？
+
+        //如果对比不一样,$onlycheck就有用了
         if ($md5 != $this->cache->templates_md5) {
             if ($onlycheck == true && $forcebuild == false) {
                 return false;
@@ -1739,14 +1734,16 @@ class ZBlogPHP
             $this->BuildTemplate();
             $this->cache->templates_md5 = $md5;
             $this->SaveCache();
-        } else {
+            return true;
+        }
+        //如果对比一样的话，$forcebuild就有用了
+        if ($md5 == $this->cache->templates_md5) {
             if ($forcebuild == true) {
                 $this->BuildTemplate();
                 $this->cache->templates_md5 = $md5;
                 $this->SaveCache();
             }
         }
-
         return true;
     }
 

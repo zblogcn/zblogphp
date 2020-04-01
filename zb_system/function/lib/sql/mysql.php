@@ -47,8 +47,9 @@ class SQL__MySQL extends SQL__Global
      */
     protected function buildCreate()
     {
+        global $zbp;
+        $zbp->ConvertTableAndDatainfo();
 
-        //parent::buildCreate();
         if (!empty($this->index) && empty($this->data)) {
             $this->buildIndex();
 
