@@ -489,7 +489,7 @@ function Setup3()
         $option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'GET');
     } ?>
 <style type="text/css">
-.themelist label { margin-right:50px; position:relative; }
+.themelist label { margin-right:40px; position:relative; }
 .themelist input[type=radio] { margin-right:5px; }
 .themelist em { font-size:16px; font-style:normal; }
 .themelist span { width:210px; margin-left:-100px; padding:10px; border:1px solid #ccc; background:#fff; position:absolute; left:50%; bottom:32px; display:none; }
@@ -679,9 +679,24 @@ function Setup3()
         <input type="password" name="repassword" id="repassword" value="<?php echo $option2['repassword']; ?>" style="width:200px;" />
       </p>
       <p><b><?php echo $zbp->lang['zb_install']['theme']; ?></b><span class="themelist">
-        <label><input value="Zit|style" type="radio" name="blogtheme"/> Zit<span><img src="../zb_users/theme/Zit/screenshot.png" alt=""></span></label>&nbsp;&nbsp;&nbsp;&nbsp;
-        <label><input value="tpure|style" type="radio" name="blogtheme"/> tpure<span><img src="../zb_users/theme/tpure/screenshot.png" alt=""></span></label>&nbsp;&nbsp;&nbsp;&nbsp;
-        <label><input value="default|default" type="radio" name="blogtheme"/> Default<span><img src="../zb_users/theme/default/screenshot.png" alt=""></span></label>
+<?php //add four themes
+$themes2 = array(
+	'Zit' => 'style',
+	'tpure' => 'style',
+	'default' => 'default',
+	'WhitePage' => 'default',
+);
+$themes = array();
+foreach ($themes2 as $key => $value) {
+	$app = $zbp->LoadApp('theme',$key);
+	if ($app->isloaded == true){
+		$themes[$key] =$value;
+	}
+}
+foreach ($themes as $key => $value) {
+	echo '<label><input value="'.$key.'|'.$value.'" type="radio" name="blogtheme"/> '.$key.'<span><img src="../zb_users/theme/'.$key.'/screenshot.png" alt=""></span></label>';
+}
+?>
       </p>      
     </div>
     <div id="bottom">
@@ -699,7 +714,7 @@ $(".dbdetail").hide();
 $("#"+$(".dbselect").attr("id").split("_radio")[0]).show();
 $("input[name='dbtype']:visible").get(0).click();
 $("input[name='fdbtype']:visible").get(0).click();
-$("input[name='blogtheme']:visible").get( Math.round(Math.random()*3-1) ).click();
+$("input[name='blogtheme']:visible").get( Math.round(Math.random()*<?php echo count($themes)?>-1) ).click();
 
 $(".themelist label").hover(function(){
     $(this).find("span").show();
