@@ -681,22 +681,21 @@ function Setup3()
       <p><b><?php echo $zbp->lang['zb_install']['theme']; ?></b><span class="themelist">
 <?php //add four themes
 $themes2 = array(
-	'Zit' => 'style',
-	'tpure' => 'style',
-	'default' => 'default',
-	'WhitePage' => 'default',
+    'Zit'       => 'style',
+    'tpure'     => 'style',
+    'default'   => 'default',
+    'WhitePage' => 'default',
 );
-$themes = array();
-foreach ($themes2 as $key => $value) {
-	$app = $zbp->LoadApp('theme',$key);
-	if ($app->isloaded == true){
-		$themes[$key] =$value;
-	}
-}
-foreach ($themes as $key => $value) {
-	echo '<label><input value="'.$key.'|'.$value.'" type="radio" name="blogtheme"/> '.$key.'<span><img src="../zb_users/theme/'.$key.'/screenshot.png" alt=""></span></label>';
-}
-?>
+    $themes = array();
+    foreach ($themes2 as $key => $value) {
+        $app = $zbp->LoadApp('theme', $key);
+        if ($app->isloaded == true) {
+            $themes[$key] = $value;
+        }
+    }
+    foreach ($themes as $key => $value) {
+        echo '<label><input value="' . $key . '|' . $value . '" type="radio" name="blogtheme"/> ' . $key . '<span><img src="../zb_users/theme/' . $key . '/screenshot.png" alt=""></span></label>';
+    } ?>
       </p>      
     </div>
     <div id="bottom">
