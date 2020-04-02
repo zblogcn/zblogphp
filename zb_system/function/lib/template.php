@@ -180,17 +180,23 @@ class Template
         if (!file_exists($this->path)) {
             @mkdir($this->path, 0755, true);
         } else {
-            foreach (GetFilesInDir($this->path, 'php') as $fullname) {
-                @unlink($fullname);
+            foreach (GetFilesInDir($this->path, 'php') as $s) {
+                if (file_exists($s)) {
+                    @unlink($s);
+                }
             }
             foreach ($this->files as $key => $value) {
                 $s = $zbp->path . 'zb_users/cache/compiled/' . $this->theme . '/' . $key . '.php';
-                @unlink($s);
+                if (file_exists($s)) {
+                    @unlink($s);
+                }
             }
             $this->dirs = array_reverse($this->dirs);
             foreach ($this->dirs as $key => $value) {
                 $s = str_replace('/theme/' . $this->theme . '/template', '/cache/compiled/' . $this->theme, $value);
-                @rmdir($s);
+                if (file_exists($s)) {
+                    @rmdir($s);
+                }
             }
         }
         $this->addNonexistendTags();
@@ -664,6 +670,7 @@ class Template
             }
         }
 
+        $this->template_json_file = null;
         foreach ($templates as $key => $value) {
             $a = $this->GetTemplateNameAndType($key, $value);
             $templates_Name[$key] = $a[0];
