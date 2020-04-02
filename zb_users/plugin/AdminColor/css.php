@@ -98,7 +98,6 @@ if ($zbp->Config('AdminColor')->LogoPath) {
     $c .= '.logo img{background:url(' . $zbp->Config('AdminColor')->LogoPath . ') no-repeat center center;}';
 }
 
-
 $c .= '
 .pane,.theme,form.search{padding:1em;position:relative;background:#fff;margin:1em 0;border-radius:0.1em;}
 div.theme{height:340px;margin:0 2em 2em 0;}
@@ -243,15 +242,14 @@ body[class~=login] input[type="text"], body[class~=login] input[type="password"]
 body[class~=login] input.button:hover {background-color: #3a6ea5;}
 ';
 
-if($GLOBALS['blogversion'] < 162090 && stripos($_SERVER['HTTP_REFERER'],'login.php')){
-    $c .= 'body{background:none;}';
+    if ($GLOBALS['blogversion'] < 162090 && stripos($_SERVER['HTTP_REFERER'], 'login.php')) {
+        $c .= 'body{background:none;}';
+    }
 }
-
-}
-if( $zbp->Config('AdminColor')->TableShadow ){
-	$c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.5em rgba(0,0,0,0.2);}';
-}else{
-	$c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.1em rgba(0,0,0,0.3);}';
+if ($zbp->Config('AdminColor')->TableShadow) {
+    $c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.5em rgba(0,0,0,0.2);}';
+} else {
+    $c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.1em rgba(0,0,0,0.3);}';
 }
 
 $c1 = "#1d4c7d";
@@ -277,7 +275,6 @@ $c = str_ireplace($c2, $AdminColor_Colors['Normal'], $c);
 $c = str_ireplace($c3, $AdminColor_Colors['Light'], $c);
 $c = str_ireplace($c4, $AdminColor_Colors['High'], $c);
 $c = str_ireplace($c5, $AdminColor_Colors['Anti'], $c);
-
 
 $m = 'W/' . md5($c);
 

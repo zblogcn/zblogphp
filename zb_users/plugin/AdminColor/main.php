@@ -44,9 +44,9 @@ if (GetVars('act') == 'save') {
     $zbp->Config('AdminColor')->HighColor = (string) GetVars("ac_HighColor");
     $zbp->Config('AdminColor')->AntiColor = (string) GetVars("ac_AntiColor");
     $zbp->Config('AdminColor')->HeaderPath = (string) GetVars("ac_HeaderPath");
-    $zbp->Config('AdminColor')->SlidingButton = (boolean) GetVars("ac_SlidingButton");
-    $zbp->Config('AdminColor')->HeaderPathUse = (boolean) GetVars("ac_HeaderPathUse");
-    $zbp->Config('AdminColor')->TableShadow = (boolean) GetVars("ac_TableShadow");
+    $zbp->Config('AdminColor')->SlidingButton = (bool) GetVars("ac_SlidingButton");
+    $zbp->Config('AdminColor')->HeaderPathUse = (bool) GetVars("ac_HeaderPathUse");
+    $zbp->Config('AdminColor')->TableShadow = (bool) GetVars("ac_TableShadow");
     //if ( $zbp->Config('AdminColor')->ColorID == 10 )
     //    $zbp->Config('AdminColor')->HeaderPathUse = true;
     $zbp->SaveConfig('AdminColor');
@@ -69,7 +69,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div id="divMain2">
 
             <form action="?act=save" method="post">
-              <input type="hidden" name="csrfToken" value="<?php echo $zbp->GetCsrfToken();?>">
+              <input type="hidden" name="csrfToken" value="<?php echo $zbp->GetCsrfToken(); ?>">
               <table width="100%" border="0">
                 <tr height="32">
                   <th colspan="2" align="center">设置
