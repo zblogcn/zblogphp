@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>AdminColor</id>
 <name>后台配色器</name>
@@ -18,10 +18,10 @@
   <email></email>
   <url></url>
 </source>
-<adapted>150101</adapted>
-<version>3.3</version>
+<adapted>151935</adapted>
+<version>4.5</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2017-02-10</modified>
+<modified>2020-03-31</modified>
 <price>0</price>
 <phpver>5.2</phpver>
 <advanced>
@@ -36,5 +36,9 @@
   <sidebar3></sidebar3>
   <sidebar4></sidebar4>
   <sidebar5></sidebar5>
+  <sidebar6></sidebar6>
+  <sidebar7></sidebar7>
+  <sidebar8></sidebar8>
+  <sidebar9></sidebar9>
 </sidebars>
 </plugin>

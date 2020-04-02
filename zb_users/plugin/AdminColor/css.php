@@ -2,28 +2,8 @@
 
 require '../../../zb_system/function/c_system_base.php';
 
-if (isset($_GET['setcolor'])) {
-    $zbp->Load();
-    $action = 'root';
-    if ($zbp->CheckRights($action)) {
-        $i = (int) $_GET['setcolor'];
-        $zbp->Config('AdminColor')->ColorID = $i;
-        $zbp->Config('AdminColor')->BlodColor = (string) $GLOBALS['AdminColor_BlodColor'][$i];
-        $zbp->Config('AdminColor')->NormalColor = (string) $GLOBALS['AdminColor_NormalColor'][$i];
-        $zbp->Config('AdminColor')->LightColor = (string) $GLOBALS['AdminColor_LightColor'][$i];
-        $zbp->Config('AdminColor')->HighColor = (string) $GLOBALS['AdminColor_HighColor'][$i];
-        $zbp->Config('AdminColor')->AntiColor = (string) $GLOBALS['AdminColor_AntiColor'][$i];
-        $zbp->SaveConfig('AdminColor');
-        Redirect($zbp->host . 'zb_users/plugin/AdminColor/main.php');
-        die();
-    }
-}
-
-header('Content-Type: text/css; Charset=utf-8');
-
 $id = (int) $zbp->Config('AdminColor')->ColorID;
-$c = '';
-
+$c = '/*admincolor*/';
 $c .= '
   .ui-tooltip, .arrow_leftmenu:after {
     background: #3a6ea5;
@@ -60,74 +40,90 @@ $c .= '
     transform: rotate(45deg);
   }';
 
-$c .= "header,.header{background-color:#3a6ea5;}" . "\r\n";
-$c .= "input.button,input[type='submit'],input[type='button'] {background-color:#3a6ea5;}" . "\r\n";
-$c .= "div.theme-now .betterTip img{box-shadow: 0 0 10px #3a6ea5;}" . "\r\n";
+$c .= "header,.header{background-color:#3a6ea5;}" . PHP_EOL;
+$c .= "input.button,input[type='submit'],input[type='button'] {background-color:#3a6ea5;}" . PHP_EOL;
+$c .= "div.theme-now .betterTip img{box-shadow: 0 0 10px #3a6ea5;}" . PHP_EOL;
 
-$c .= "#divMain a,#divMain2 a{color:#1d4c7d;}" . "\r\n";
+$c .= "#divMain a,#divMain2 a{color:#1d4c7d;}" . PHP_EOL;
 
-$c .= ".menu ul li a:hover {background-color: #b0cdee;}" . "\r\n";
-$c .= "#leftmenu a:hover {background-color: #b0cdee!important;}" . "\r\n";
-$c .= "div.theme-now{background-color:#b0cdee;}" . "\r\n";
-$c .= "div.theme-other .betterTip img:hover{border-color:#b0cdee;}" . "\r\n";
-$c .= ".SubMenu a:hover {background-color:#b0cdee;}" . "\r\n";
-$c .= ".siderbar-header:hover {background-color:#b0cdee;}" . "\r\n";
+$c .= ".menu ul li a:hover {background-color: #b0cdee;}" . PHP_EOL;
+$c .= "#leftmenu a:hover {background-color: #b0cdee!important;}" . PHP_EOL;
+$c .= "div.theme-now{background-color:#b0cdee;}" . PHP_EOL;
+$c .= "div.theme-other .betterTip img:hover{border-color:#b0cdee;}" . PHP_EOL;
+$c .= ".SubMenu a:hover {background-color:#b0cdee;}" . PHP_EOL;
+$c .= ".siderbar-header:hover {background-color:#b0cdee;}" . PHP_EOL;
 
-$c .= "#leftmenu .on a,#leftmenu #on a:hover {background-color:#3399cc!important;}" . "\r\n";
-$c .= "input.button,input[type=\"submit\"],input[type=\"button\"] { border-color:#3399cc;}" . "\r\n";
-$c .= "input.button:hover {background-color: #3399cc;}" . "\r\n";
-$c .= "div.theme-other .betterTip img:hover{box-shadow: 0 0 10px #3399cc;}" . "\r\n";
-$c .= ".SubMenu{border-bottom-color:#3399cc;}" . "\r\n";
-$c .= ".SubMenu span.m-now{background-color:#3399cc;}" . "\r\n";
-$c .= "div #BT_title {background-color: #3399cc;border-color:#3399cc;}" . "\r\n";
+$c .= "#leftmenu .on a,#leftmenu #on a:hover {background-color:#3399cc!important;}" . PHP_EOL;
+$c .= "input.button,input[type=\"submit\"],input[type=\"button\"] { border-color:#3399cc;}" . PHP_EOL;
+$c .= "input.button:hover {background-color: #3399cc;}" . PHP_EOL;
+$c .= "div.theme-other .betterTip img:hover{box-shadow: 0 0 10px #3399cc;}" . PHP_EOL;
+$c .= ".SubMenu{border-bottom-color:#3399cc;}" . PHP_EOL;
+$c .= ".SubMenu span.m-now{background-color:#3399cc;}" . PHP_EOL;
+$c .= "div #BT_title {background-color: #3399cc;border-color:#3399cc;}" . PHP_EOL;
 
-$c .= "a:hover { color:#d60000;}" . "\r\n";
-$c .= "#divMain a:hover,#divMain2  a:hover{color:#d60000;}" . "\r\n";
+$c .= "a:hover { color:#d60000;}" . PHP_EOL;
+$c .= "#divMain a:hover,#divMain2  a:hover{color:#d60000;}" . PHP_EOL;
 
 //appcenter
-$c .= ".tabs { border-bottom-color:#3a6ea5!important;}" . "\r\n";
-$c .= ".tabs li a.selected {background-color:#3a6ea5!important;}" . "\r\n";
-$c .= "div.heart-vote {background-color:#3a6ea5!important;}" . "\r\n";
-$c .= "div.heart-vote ul {border-color:#3a6ea5!important;}" . "\r\n";
-$c .= ".install {background-color:#3a6ea5!important;}" . "\r\n";
-$c .= ".install:hover{background-color: #3399cc!important;}" . "\r\n";
-$c .= "input.button{background-color:#3a6ea5!important;border-color:#3399cc!important;}" . "\r\n";
-$c .= "input.button:hover{background-color:#3399cc!important;}" . "\r\n";
-$c .= ".themes_body ul li img:hover,.plugin_body ul li img:hover,.main_plugin ul li img:hover,.main_theme ul li img:hover{box-shadow: 0 0 10px #3399cc!important;}" . "\r\n";
-$c .= ".left_nav h2,.text h2 {color: #3a6ea5!important;}" . "\r\n";
-$c .= ".pagebar span{ background:#3399cc!important; border-color:#3399cc!important;color:#fff;}" . "\r\n";
-$c .= ".pagebar span.now-page,.pagebar span:hover{ background:#eee!important;border-color:#eee!important; color:#3399cc!important;}" . "\r\n";
-
+/*
+$c .= ".tabs { border-bottom-color:#3a6ea5!important;}" . PHP_EOL;
+$c .= ".tabs li a.selected {background-color:#3a6ea5!important;}" . PHP_EOL;
+$c .= "div.heart-vote {background-color:#3a6ea5!important;}" . PHP_EOL;
+$c .= "div.heart-vote ul {border-color:#3a6ea5!important;}" . PHP_EOL;
+$c .= ".install {background-color:#3a6ea5!important;}" . PHP_EOL;
+$c .= ".install:hover{background-color: #3399cc!important;}" . PHP_EOL;
+$c .= "input.button{background-color:#3a6ea5!important;border-color:#3399cc!important;}" . PHP_EOL;
+$c .= "input.button:hover{background-color:#3399cc!important;}" . PHP_EOL;
+$c .= ".themes_body ul li img:hover,.plugin_body ul li img:hover,.main_plugin ul li img:hover,.main_theme ul li img:hover{box-shadow: 0 0 10px #3399cc!important;}" . PHP_EOL;
+$c .= ".left_nav h2,.text h2 {color: #3a6ea5!important;}" . PHP_EOL;
+$c .= ".pagebar span{ background:#3399cc!important; border-color:#3399cc!important;color:#fff;}" . PHP_EOL;
+$c .= ".pagebar span.now-page,.pagebar span:hover{ background:#fff!important;border-color:#fff!important; color:#3399cc!important;}" . PHP_EOL;
+*/
 //zbdk
-$c .= "#divMain .DIVBlogConfignav ul li a:hover {background-color: #3399cc!important;}" . "\r\n";
-$c .= "#divMain .DIVBlogConfignav ul li a.clicked{background-color: #b0cdee!important;}" . "\r\n";
-$c .= ".DIVBlogConfignav {background-color: #ededed!important;}" . "\r\n";
-$c .= "#divMain .DIVBlogConfigtop {background-color: #3399cc!important;}" . "\r\n";
-$c .= "#divMain .DIVBlogConfig {background-color: #ededed!important;}" . "\r\n";
+$c .= "#divMain .DIVBlogConfignav ul li a:hover {background-color: #3399cc!important;}" . PHP_EOL;
+$c .= "#divMain .DIVBlogConfignav ul li a.clicked{background-color: #b0cdee!important;}" . PHP_EOL;
+$c .= ".DIVBlogConfignav {background-color: #ededed!important;}" . PHP_EOL;
+$c .= "#divMain .DIVBlogConfigtop {background-color: #3399cc!important;}" . PHP_EOL;
+$c .= "#divMain .DIVBlogConfig {background-color: #ededed!important;}" . PHP_EOL;
+$c .= "div.bg {background: #3a6ea5;}" . PHP_EOL;
+$c .= "div.bg input[type=\"text\"], input[type=\"password\"] {border-color:#3a6ea5}" . PHP_EOL;
 
-$c .= "div.bg {background: #3a6ea5;!important;}" . "\r\n";
-$c .= "div.bg input[type=\"text\"], input[type=\"password\"] {border-color:#3a6ea5!important;}" . "\r\n";
+$c .= PHP_EOL . "/*AdminColor*/" . PHP_EOL . "#admin_color{float:left;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
 
-$c .= "\r\n" . "/*AdminColor*/" . "\r\n" . "#admin_color{float:left;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
-
-if ($id == 9) {
-    $c .= 'header,.header {background:url(header.jpg) no-repeat 0 0;}' . "\r\n";
-    $c .= 'body{background:url(body.jpg) no-repeat 0 0;background-attachment:fixed;}' . "\r\n";
-    $c .= '#topmenu{opacity:0.8;}' . "\r\n";
+if ($zbp->Config('AdminColor')->HeaderPathUse == true || $id == 9) {
+    $c .= 'header,.header{background:url(' . $zbp->Config('AdminColor')->HeaderPath . ') no-repeat center center;background-size:cover}' . PHP_EOL;
+    $c .= 'div.bg{background:url(' . $zbp->Config('AdminColor')->HeaderPath . ') no-repeat center center;background-size:cover}' . PHP_EOL;
 }
 if ($zbp->Config('AdminColor')->LogoPath) {
     $c .= '.logo img{background:url(' . $zbp->Config('AdminColor')->LogoPath . ') no-repeat center center;}';
 }
 
+
+$c .= '
+.pane,.theme,form.search{padding:1em;position:relative;background:#fff;margin:1em 0;border-radius:0.1em;}
+div.theme{height:340px;margin:0 2em 2em 0;}
+div.theme-other{background:#fff;}
+form.search p{padding:0;}
+td,th{border:none;border-right: 1px solid #efefef;padding:0.6em;}
+table{border-collapse: collapse;background: #ffffff;line-height: 120%;margin:0.5em 0 0.5em 0;border:none;line-height:1.5em;}
+';
+
+if ($id == 9) {
+    $c .= '
+header, .header {background-color:#17365d;}
+.left #leftmenu li {background: #ededed;}
+table.tableBorder,table.tableFull,table.table_hover,table.table_striped{background-color: #e3eaf3;}
+table > tbody > tr:nth-of-type(odd) {background-color: #b8cce4;}
+td,th{border:none;padding:0.5em; border-right: 1px solid #d3e1f2;}
+.content-box .content-box-tabs a.current {background-color:#b8cce4;}
+form.search{background-color: #e3eaf3;}
+.left #leftmenu li {background: #e3eaf3;}
+body{background-colo1r: #edf2f8;}
+';
+}
+
 if ($id == 10) {
     $c .= '
-table{
-border-collapse: collapse;
-border: 1px solid #eee;
-background: #ffffff;
-line-height: 120%;
-}
-td,th { border: none;padding: 5px 7px;}
 .header .menu {
     height: 60px;
     position: relative;
@@ -142,7 +138,7 @@ td,th { border: none;padding: 5px 7px;}
     font-size:1.2em;
     color: #fff;
     background: none;
-    border-right:1px solid  #0087B5;
+    border-right:1px solid  #3f474f;
 }
 
 .header {
@@ -150,24 +146,26 @@ td,th { border: none;padding: 5px 7px;}
     margin-bottom: 0px;
 }
 header, .header {
-    background-color: #0099CD;
+    background-color: #262f3e;
 }
   .left{
 padding-top:0px;
 float:left;
 height:100%;
-background-image:url("' . 'lb.png");
-background-repeat: no-repeat;
 background-position: -30px -2px;
 width:160px;
+background-color:#333333;
   }
+.left #leftmenu{
+    border-top: 10px solid #333;
+}
 .left #leftmenu a{
 color:#fff;
 width: 160px;
 height: 40px;
 }
 .left #leftmenu li{
-background-color:#22282e;
+background-color:#333;
 color:#fff;
 width: 160px;
 height: 40px;
@@ -197,10 +195,10 @@ padding-right: 10px;
 div.hint {margin-top:0.5em;}
 
 .left #leftmenu #nav_admincolor2 {
-background-color:Transparent;
+background-color:#444;
 color:#fff;
 width: 160px;
-height: 30px;
+height: 40px;
 }
 
 .left #leftmenu #nav_admincolor2 span {
@@ -214,29 +212,46 @@ height: 30px;
     padding-left: 60px;
     background-position: 40px 12px;
 }
-.left #leftmenu #nav_admincolor2 a:hover { background-color: Transparent!important ; }
-
-';
-
-    if (isset($_GET['aly'])) {
-        $c .= '
-body {background:url("l.png") repeat-y 0 top}
-.logo{
-    background-color: #0087B5;
+.left #leftmenu #nav_admincolor2 a:hover { background-color: Transparent!important;}
+.left #leftmenu li span {color:black;filter: invert(0.8);font-weight:bold;}
+.left #leftmenu li.on span {color:white;filter: none;font-weight:bold;}
+.left #leftmenu li a:hover span {color:black;filter: invert(0.1);font-weight:bold;}
+.left #leftmenu li.on a:hover span {color:white;filter: invert(0.1);font-weight:bold;}
+body{background:url("images/l.png") repeat-y 0 top;}
+body[class~=login] {background:none;}
+header div.logo{
+    background-color: Transparent;
     width: 62px;
     height: 60px;
     padding: 0 0 0 0;
     left: 0px;
     float:left;
 }
-.logo img{
+header div.logo img{
     width: 60px;
     height: 60px;
     background-position: -5px -5px;
 }
-.logo img{background:url("sl.png")}
+header div.logo img{background:url("images/sl.png")}
+.pagebar a{border:1px solid white;}
+body[class~=login],body[class~=error],body[class~=short]{background:none;}
+body[class~=login] div.bg,body[class~=error] div.bg,body[class~=short] div.bg {background: #3399cc;}
+body[class~=login] input[type="text"], body[class~=login] input[type="password"] {border-color:#3399cc}
+body[class~=login] input.button, input[type="submit"], input[type="button"] {border-color: #3399cc;}
+body[class~=login] input.button, body[class~=login] input[type="submit"], body[class~=login] input[type="button"] {background-color: #3399cc;}
+body[class~=login] input[type="text"], body[class~=login] input[type="password"] {border-color: #3399cc;}
+body[class~=login] input.button:hover {background-color: #3a6ea5;}
 ';
-    }
+
+if($GLOBALS['blogversion'] < 162090 && stripos($_SERVER['HTTP_REFERER'],'login.php')){
+    $c .= 'body{background:none;}';
+}
+
+}
+if( $zbp->Config('AdminColor')->TableShadow ){
+	$c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.5em rgba(0,0,0,0.2);}';
+}else{
+	$c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.1em rgba(0,0,0,0.3);}';
 }
 
 $c1 = "#1d4c7d";
@@ -257,10 +272,23 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_AdminColor_CSS_Pre'] as $fpname => &$f
     $fpname($AdminColor_Colors, $c);
 }
 
-$c = str_replace($c1, $AdminColor_Colors['Blod'], $c);
-$c = str_replace($c2, $AdminColor_Colors['Normal'], $c);
-$c = str_replace($c3, $AdminColor_Colors['Light'], $c);
-$c = str_replace($c4, $AdminColor_Colors['High'], $c);
-$c = str_replace($c5, $AdminColor_Colors['Anti'], $c);
+$c = str_ireplace($c1, $AdminColor_Colors['Blod'], $c);
+$c = str_ireplace($c2, $AdminColor_Colors['Normal'], $c);
+$c = str_ireplace($c3, $AdminColor_Colors['Light'], $c);
+$c = str_ireplace($c4, $AdminColor_Colors['High'], $c);
+$c = str_ireplace($c5, $AdminColor_Colors['Anti'], $c);
+
+
+$m = 'W/' . md5($c);
+
+header('Content-Type: text/css; Charset=utf-8');
+header('Etag: ' . $m);
+
+if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
+    SetHttpStatusCode(304);
+    die;
+}
 
 echo $c;
+
+die();

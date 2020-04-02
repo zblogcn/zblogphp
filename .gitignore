@@ -30,6 +30,7 @@ mix-manifest.json
 # Unoffical Plugin
 /zb_users/plugin/*
 !/zb_users/plugin/api
+!/zb_users/plugin/AdminColor
 !/zb_users/plugin/AuditRecords
 !/zb_users/plugin/AutoPublisher
 !/zb_users/plugin/CloudStorage
@@ -48,7 +49,6 @@ mix-manifest.json
 !/zb_users/plugin/UEditor
 !/zb_users/plugin/ZBPDK
 !/zb_users/plugin/alipay
-!/zb_users/plugin/changyan
 !/zb_users/plugin/clinic
 !/zb_users/plugin/passwordvisit
 !/zb_users/plugin/upyun
@@ -59,14 +59,13 @@ mix-manifest.json
 !/zb_users/plugin/ZBPJFExample
 !/zb_users/plugin/markdown
 !/zb_users/plugin/LinksManage
-!/zb_users/plugin/LinkCentre
 
 # Unoffical Theme
 /zb_users/theme/*
 !/zb_users/theme/default
+!/zb_users/theme/garland
 !/zb_users/theme/HTML5CSS3
 !/zb_users/theme/metro
-!/zb_users/theme/clear
 !/zb_users/theme/x2013
 !/zb_users/theme/WhitePage
 !/zb_users/theme/tpure
@@ -78,15 +77,11 @@ httpd.*
 web.config
 
 # Others
-zh.php
 testcode1.php
 test2.php
 test.php
-13更新.txt
 phpinfo.php
 /phpMyAdmin/
-/abc/
-wincache.php
 /Beta/
 /vendor/
 /.idea/
