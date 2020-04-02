@@ -695,16 +695,15 @@ class Template
             $type = strtok($t, ' ');
         }
 
-        if (is_readable($f = $GLOBALS['blogpath'] .'zb_users/theme/'.$this->theme.'/template.json')) {
-            if(!is_object($this->template_json_file)){
+        if (is_readable($f = $GLOBALS['blogpath'] . 'zb_users/theme/' . $this->theme . '/template.json')) {
+            if (!is_object($this->template_json_file)) {
                 $this->template_json_file = json_decode(file_get_contents($f));
-
             }
         }
-        if(is_object($this->template_json_file)){
-            if(is_array($this->template_json_file->templates)){
+        if (is_object($this->template_json_file)) {
+            if (is_array($this->template_json_file->templates)) {
                 foreach ($this->template_json_file->templates as $key => $value) {
-                    if (strtolower($filename) ==  strtolower($value->filename)) {
+                    if (strtolower($filename) == strtolower($value->filename)) {
                         $name = $value->name;
                         $type = $value->type;
                         break;
@@ -715,6 +714,7 @@ class Template
 
         return array($name, $type);
     }
+
     private $template_json_file = null;
     private $dirs = array();
     private $files = array();

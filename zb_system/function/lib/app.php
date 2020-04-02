@@ -584,7 +584,7 @@ class App
 
         foreach ($this->ignore_files as $glob) {
             if (is_dir($d = $this->app_path . $glob)) {
-                $this->ignored_dirs[crc32($d)] = rtrim($d,'/').'/';
+                $this->ignored_dirs[crc32($d)] = rtrim($d, '/') . '/';
             }
         }
         foreach ($this->dirs as $key => $value) {
@@ -629,6 +629,7 @@ class App
     }
 
     private $ignored_dirs = array();
+
     private function IsPathIgnored($path)
     {
         $path = str_ireplace('\\', '/', $path);
@@ -640,14 +641,14 @@ class App
             }
             if (is_file($path)) {
                 foreach ($this->ignored_dirs as $key => $value) {
-                    if ( stripos($path, $value) !== false ) {
+                    if (stripos($path, $value) !== false) {
                         return true;
                     }
                 }
             }
-            if(is_dir($path) && is_dir($d = $appPath . $glob) ){
-                $d = rtrim($d,'/') . '/';
-                if ( stripos($path, $d) !== false ) {
+            if (is_dir($path) && is_dir($d = $appPath . $glob)) {
+                $d = rtrim($d, '/') . '/';
+                if (stripos($path, $d) !== false) {
                     return true;
                 }
             }
