@@ -147,7 +147,7 @@ class App
     /**
      * @var array 禁止打包文件glob
      */
-    public $ignore_files = array('.DS_Store', 'Thumbs.db', 'composer.lock', 'zbignore.txt');
+    public $ignore_files = array('.gitignore', '.DS_Store', 'Thumbs.db', 'composer.lock', 'zbignore.txt');
     /**
      * @var bool 加载xml成功否
      */
@@ -161,7 +161,7 @@ class App
         global $zbp;
         if ($key === 'app_path') {
             $appDirectory = $zbp->usersdir . FormatString($this->type, '[filename]');
-            $appDirectory .= DIRECTORY_SEPARATOR . FormatString($this->id, '[filename]') . DIRECTORY_SEPARATOR;
+            $appDirectory .= '/' . FormatString($this->id, '[filename]') . '/';
 
             return $appDirectory;
         } elseif ($key === 'app_url') {
@@ -393,10 +393,16 @@ class App
         $this->sidebars_sidebar9 = (string) $xml->sidebars->sidebar9;
 
         $appIgnorePath = $this->app_path . 'zbignore.txt';
+        $appIgnores = array();
         if (is_readable($appIgnorePath)) {
-            $this->ignore_files = explode("\n", trim(file_get_contents($appIgnorePath)));
+            $appIgnores = explode("\n", str_replace("\r", "\n", trim(file_get_contents($appIgnorePath))));
         }
-
+        foreach ($appIgnores as $key => $value) {
+            if (!empty($value)) {
+                $this->ignore_files[] = $value;
+            }
+        }
+        $this->ignore_files = array_unique($this->ignore_files);
         $this->isloaded = true;
 
         return true;
@@ -508,9 +514,17 @@ class App
     public function Pack()
     {
         global $zbp;
+        $this->dirs = array();
+        $this->files = array();
 
         $dir = $this->app_path;
         $this->GetAllFileDir($dir);
+        foreach ($this->dirs as $key => $value) {
+            $this->dirs[$key] = str_ireplace('\\', '/', $this->dirs[$key]);
+        }
+        foreach ($this->files as $key => $value) {
+            $this->files[$key] = str_ireplace('\\', '/', $this->files[$key]);
+        }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_App_Pack'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $this->dirs, $this->files);
@@ -568,6 +582,11 @@ class App
         $s .= '</sidebars>';
         $s .= "\n";
 
+        foreach ($this->ignore_files as $glob) {
+            if (is_dir($d = $this->app_path . $glob)) {
+                $this->ignored_dirs[crc32($d)] = rtrim($d,'/').'/';
+            }
+        }
         foreach ($this->dirs as $key => $value) {
             if ($this->IsPathIgnored($value)) {
                 continue;
@@ -609,14 +628,28 @@ class App
         return gzencode($this->Pack(), 9, FORCE_GZIP);
     }
 
+    private $ignored_dirs = array();
     private function IsPathIgnored($path)
     {
-        $path = str_replace('\\', '/', $path);
-        $appPath = str_replace('\\', '/', $this->app_path);
-        $fileName = str_replace($appPath, '', $path);
+        $path = str_ireplace('\\', '/', $path);
+        $appPath = str_ireplace('\\', '/', $this->app_path);
+        $fileName = str_ireplace($appPath, '', $path);
         foreach ($this->ignore_files as $glob) {
             if (fnmatch($glob, $fileName)) {
                 return true;
+            }
+            if (is_file($path)) {
+                foreach ($this->ignored_dirs as $key => $value) {
+                    if ( stripos($path, $value) !== false ) {
+                        return true;
+                    }
+                }
+            }
+            if(is_dir($path) && is_dir($d = $appPath . $glob) ){
+                $d = rtrim($d,'/') . '/';
+                if ( stripos($path, $d) !== false ) {
+                    return true;
+                }
             }
         }
 
