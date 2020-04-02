@@ -44,7 +44,7 @@ function misc_statistic()
     }
 
     //当需要rebuild才会rebuild,如果forced=1就强制rebuild
-    $zbp->CheckTemplate(false, (bool)GetVars('forced','GET'));
+    $zbp->CheckTemplate(false, (bool) GetVars('forced', 'GET'));
 
     if (!($zbp->CheckRights('root') || (time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60))) {
         echo $zbp->ShowError(6, __FILE__, __LINE__);
