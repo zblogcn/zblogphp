@@ -604,8 +604,8 @@ class ZBlogPHP
             $fpname();
         }
 
-        if ($this->option['ZC_DEBUG_MODE']) {
-            //只有当index.php被执行时才检查模板并自动重建
+        //进后台时已自动检测模板并自动重建了，所以这里只针对开调试后的前台的访问进行
+        if ($this->option['ZC_DEBUG_MODE'] && $this->ismanage == false) {
             //if( substr(GetValueInArray(get_included_files(),0),-9) == 'index.php') {
             $this->CheckTemplate();
             //}
@@ -641,7 +641,7 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu', 'Include_Admin_Addmodsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu', 'Include_Admin_Addcmtsubmenu');
 
-        $this->CheckTemplate(true);
+        $this->CheckTemplate();
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) {
             $fpname();

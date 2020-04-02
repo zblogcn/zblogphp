@@ -323,13 +323,20 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
         $typeArray = explode('|', $type);
 
         if ($default == $key) {
-            $s .= '<option value="' . $key . '" selected="selected">' . $key . ' (' . $zbp->lang['msg']['current_template'] . ')' . '</option>';
+            if ($name !== '') {
+                $s2 = ' (' . $name . ')';
+            } else {
+                $s2 = $name;
+            }
+            $s .= '<option value="' . $key . '" selected="selected">' . '[' . $zbp->lang['msg']['current_template'] . '] '  . $key . $s2 . '</option>';
         } else {
             if ($name !== '') {
-                $s .= '<option value="' . $key . '" >' . $key . ' (' . $name . ')' . '</option>';
+                $s2 = ' (' . $name . ')';
             } else {
-                $s .= '<option value="' . $key . '" >' . $key . '</option>';
+                $s2 = $name;
             }
+            $s .= '<option value="' . $key . '" >' . $key . $s2 . '</option>';
+
         }
     }
 
