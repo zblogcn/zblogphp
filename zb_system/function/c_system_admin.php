@@ -328,7 +328,7 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
             } else {
                 $s2 = $name;
             }
-            $s .= '<option value="' . $key . '" selected="selected">' . '[' . $zbp->lang['msg']['current_template'] . '] '  . $key . $s2 . '</option>';
+            $s .= '<option value="' . $key . '" selected="selected">' . '[' . $zbp->lang['msg']['current_template'] . '] ' . $key . $s2 . '</option>';
         } else {
             if ($name !== '') {
                 $s2 = ' (' . $name . ')';
@@ -336,7 +336,6 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
                 $s2 = $name;
             }
             $s .= '<option value="' . $key . '" >' . $key . $s2 . '</option>';
-
         }
     }
 
