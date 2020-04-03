@@ -323,19 +323,12 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
         $typeArray = explode('|', $type);
 
         if ($default == $key) {
-            if ($name !== '') {
-                $s2 = ' (' . $name . ')';
-            } else {
-                $s2 = $name;
-            }
-            $s .= '<option value="' . $key . '" selected="selected">' . '[' . $zbp->lang['msg']['current_template'] . '] ' . $key . $s2 . '</option>';
+            $s2 = ($name !== '') ? ' (' . $name . ')' : $name;
+            $s .= '<option value="' . $key . '" selected="selected">' . '[' . $zbp->lang['msg']['current_template'] . '] '  . $key . $s2 . '</option>';
         } else {
-            if ($name !== '') {
-                $s2 = ' (' . $name . ')';
-            } else {
-                $s2 = $name;
-            }
+            $s2 = ($name !== '') ? ' (' . $name . ')' : $name;
             $s .= '<option value="' . $key . '" >' . $key . $s2 . '</option>';
+
         }
     }
 
@@ -1884,11 +1877,9 @@ function Admin_SettingMng()
     echo '<script>
 var bCheck = false;
 function disableSubmit(newurl){
-    //$("#btnPost").attr("disabled","disabled");
     bCheck = true;
 }
 function enableSubmit(newurl){
-    //$("#btnPost").removeAttr("disabled");
     bCheck = false;
 }
 function checkDomain(){
@@ -1903,8 +1894,6 @@ function checkDomain(){
 }
 function changeDomain(newurl){
     var token = "' . CreateWebToken("", time() + 3600) . '";
-
-    console.log("");
     newurl = newurl.replace(" ","");
     if(newurl.substr(newurl.length-1,1) != "/" ){
         newurl = newurl + "/";
@@ -1913,19 +1902,21 @@ function changeDomain(newurl){
     $(".js-tip").html("<em>' . $zbp->lang['msg']['verifying'] . '</em>");
     $.getJSON(url,{url:newurl},function(data) {
         if (data) {
-            $(".js-tip").html(data.err.msg);
-            //data.err === 0 && $("#btnPost").removeAttr("disabled");
+          $(".js-tip").html(data.err.msg);
+          if(data.err.code == 0){
+            enableSubmit();
+            return true;
+          }
           console.log(data);
-          enableSubmit();
-          bCheck = false;
-          return true;
+          disableSubmit();
+          return false;
         }
       }).fail(function() {
         $(".js-tip").html("<em>' . $zbp->lang['msg']['verify_fail'] . '</em>");
-        //console.log( "error" );
+        console.log( "error" );
+        disableSubmit();
         return false;
       });
-    //$("#newdomainurl").attr("href",url);
 }
     </script>';
     echo '</td></tr>';
