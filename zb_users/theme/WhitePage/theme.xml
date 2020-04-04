@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<theme version="php">
+<id>WhitePage</id>
+<name>WhitePage超简快主题</name>
+<url>https://www.zblogcn.com/</url>
+<note>ZB史上第二快的主题，不能说“D一”,因为违反广告法！！！</note>
+<description>ZB史上第二快的主题，不能说“D一”,因为违反广告法！！！</description>
+<path>main.php</path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>zx.asd</name>
+  <email>rainbowsoft@gmail.com</email>
+  <url>http://www.zdevo.com/</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>151935</adapted>
+<version>2.6</version>
+<pubdate>2013-09-23</pubdate>
+<modified>2020-04-01</modified>
+<price>0</price>
+<phpver>5.2</phpver>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+  <sidebar6></sidebar6>
+  <sidebar7></sidebar7>
+  <sidebar8></sidebar8>
+  <sidebar9></sidebar9>
+</sidebars>
+</theme>
