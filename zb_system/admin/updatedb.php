@@ -28,11 +28,11 @@ function updatedb_162090to169999()
     if (count($old) == 1 && $old[0] === false) {
         $zbp->db->Query("ALTER TABLE {$table['Config']} ADD {$d['Config']['Key'][0]} VARCHAR(255) NOT NULL DEFAULT '';");
     }
-    $old = @$zbp->db->Query('' .  $zbp->db->sql->Select($t['Post'], '*', array(array('=', $d['Post']['CreateTime'][0], ''))) . '');
+    $old = @$zbp->db->Query('' . $zbp->db->sql->Select($t['Post'], '*', array(array('=', $d['Post']['CreateTime'][0], ''))) . '');
     if (count($old) == 1 && $old[0] === false) {
         $zbp->db->Query("ALTER TABLE {$t['Post']} ADD {$d['Post']['CreateTime'][0]} integer NOT NULL DEFAULT 0;");
     }
-    $old = @$zbp->db->Query('' .  $zbp->db->sql->Select($t['Post'], '*', array(array('=', $d['Post']['UpdateTime'][0], ''))) . '');
+    $old = @$zbp->db->Query('' . $zbp->db->sql->Select($t['Post'], '*', array(array('=', $d['Post']['UpdateTime'][0], ''))) . '');
     if (count($old) == 1 && $old[0] === false) {
         $zbp->db->Query("ALTER TABLE {$t['Post']} ADD {$d['Post']['UpdateTime'][0]} integer NOT NULL DEFAULT 0;");
     }
