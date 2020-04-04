@@ -40,10 +40,10 @@ class SQL__Global
     protected $groupBy = array();
     protected $having = array();
     protected $index = array();
-    private $methodKeyword = array('ALTER','SELECT','INSERT', 'DROP', 'DELETE', 'CREATE', 'UPDATE', 'TRUNCATE');
+    private $methodKeyword = array('ALTER', 'SELECT', 'INSERT', 'DROP', 'DELETE', 'CREATE', 'UPDATE', 'TRUNCATE');
     private $selectFunctionKeyword = array('COUNT', 'MIN', 'MAX', 'SUM');
-    private $otherKeyword = array('FIELD','INDEX','TABLE','DATABASE');
-    private $extendKeyword = array('SELECTANY','FROM','IFEXISTS','INNERJOIN','LEFTJOIN','RIGHTJOIN','JOIN','FULLJOIN','UNION','ADDCOLUMN','DROPCOLUMN','ALTERCOLUMN');
+    private $otherKeyword = array('FIELD', 'INDEX', 'TABLE', 'DATABASE');
+    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'ADDCOLUMN', 'DROPCOLUMN', 'ALTERCOLUMN');
     protected $extend = array();
     protected $other = array();
 
@@ -98,16 +98,17 @@ class SQL__Global
         $upperKeyword = strtoupper($callName);
         if (in_array($upperKeyword, $this->methodKeyword)) {
             $this->method = $upperKeyword;
-            if(!isset($argu[0])){
-                $argu[0]='';
+            if (!isset($argu[0])) {
+                $argu[0] = '';
             }
             $this->table = is_array($argu[0]) ? $argu[0] : $argu;
             $this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
+
             return $this;
         } elseif (in_array($upperKeyword, $this->otherKeyword)) {
             if ($upperKeyword == 'INDEX') {
                 foreach ($argu as $key => $value) {
-                    if(!is_array($value)){
+                    if (!is_array($value)) {
                         $this->other[$upperKeyword] = $argu;
                         break;
                     }
@@ -119,6 +120,7 @@ class SQL__Global
             } else {
                 $this->data = is_array($argu[0]) ? $argu[0] : $argu;
             }
+
             return $this;
         } elseif (in_array($upperKeyword, $this->selectFunctionKeyword)) {
             /*
@@ -142,6 +144,7 @@ class SQL__Global
             return $this;
         } elseif (in_array($upperKeyword, $this->extendKeyword)) {
             $this->extend[$upperKeyword] = $argu;
+
             return $this;
         } else {
             $lowerKeyword = strtolower($callName);
@@ -639,7 +642,7 @@ class SQL__Global
             $whereData = "($value[1] LIKE '%$sqlMeta%')";
         } elseif ($eq == "CUSTOM") {
             $whereData = $value[1];
-        } elseif(count($value) == 1 ) {
+        } elseif (count($value) == 1) {
             $whereData = '(' . $value[0] . ')';
         }
 
@@ -730,11 +733,11 @@ class SQL__Global
 
         $sql[] = 'TABLE';
         $this->buildTable();
-        if( array_key_exists ('ADDCOLUMN',$this->extend) ){
+        if (array_key_exists('ADDCOLUMN', $this->extend)) {
             $this->buildADDCOLUMN();
-        }elseif( array_key_exists ('DROPCOLUMN',$this->extend) ){
+        } elseif (array_key_exists('DROPCOLUMN', $this->extend)) {
             $this->buildDROPCOLUMN();
-        }elseif( array_key_exists ('ALTERCOLUMN',$this->extend) ){
+        } elseif (array_key_exists('ALTERCOLUMN', $this->extend)) {
             $this->buildLEFTJOIN();
         }
     }
@@ -744,29 +747,30 @@ class SQL__Global
         $sql = &$this->_sql;
 
         // Unimplemented select2count
-        if( array_key_exists ('UNION',$this->extend) ){
+        if (array_key_exists('UNION', $this->extend)) {
             $this->buildUnion();
-            return ;
+
+            return;
         }
-        if( array_key_exists ('SELECTANY',$this->extend) ){
+        if (array_key_exists('SELECTANY', $this->extend)) {
             $this->buildSelectAny();
         }
         $this->buildColumn();
-        if( array_key_exists ('FROM',$this->extend) ){
+        if (array_key_exists('FROM', $this->extend)) {
             $this->buildFrom();
-        }else{
+        } else {
             $sql[] = 'FROM';
             $this->buildTable();
         }
-        if( array_key_exists ('JOIN',$this->extend) ){
+        if (array_key_exists('JOIN', $this->extend)) {
             $this->buildJOIN();
-        }elseif( array_key_exists ('INNERJOIN',$this->extend) ){
+        } elseif (array_key_exists('INNERJOIN', $this->extend)) {
             $this->buildINNERJOIN();
-        }elseif( array_key_exists ('LEFTJOIN',$this->extend) ){
+        } elseif (array_key_exists('LEFTJOIN', $this->extend)) {
             $this->buildLEFTJOIN();
-        }elseif( array_key_exists ('RIGHTJOIN',$this->extend) ){
+        } elseif (array_key_exists('RIGHTJOIN', $this->extend)) {
             $this->buildRIGHTJOIN();
-        }elseif( array_key_exists ('FULLJOIN',$this->extend) ){
+        } elseif (array_key_exists('FULLJOIN', $this->extend)) {
             $this->buildFULLJOIN();
         }
 
@@ -782,7 +786,7 @@ class SQL__Global
     protected function buildSELECTANY()
     {
         $sql = &$this->_sql;
-        $this->extend['SELECTANY'] = empty($this->extend['SELECTANY'])?array('*'):$this->extend['SELECTANY'];
+        $this->extend['SELECTANY'] = empty($this->extend['SELECTANY']) ? array('*') : $this->extend['SELECTANY'];
         //$sql[] = implode(' ,',$this->extend['SELECTANY']);
         foreach ($this->extend['SELECTANY'] as $key => $value) {
             $this->columns[] = $value;
@@ -793,57 +797,63 @@ class SQL__Global
     {
         $sql = &$this->_sql;
         $sql[] = ' ADD COLUMN';
-        $sql[] = implode(' ',$this->extend['ADDCOLUMN']);
+        $sql[] = implode(' ', $this->extend['ADDCOLUMN']);
     }
+
     protected function buildALTERCOLUMN()
     {
         $sql = &$this->_sql;
         $sql[] = ' ALTER COLUMN';
-        $sql[] = implode(' ',$this->extend['ALTERCOLUMN']);
+        $sql[] = implode(' ', $this->extend['ALTERCOLUMN']);
     }
+
     protected function buildDROPCOLUMN()
     {
         $sql = &$this->_sql;
         $sql[] = ' DROP COLUMN';
-        $sql[] = implode(' ',$this->extend['DROPCOLUMN']);
+        $sql[] = implode(' ', $this->extend['DROPCOLUMN']);
     }
 
     protected function buildJOIN()
     {
         $sql = &$this->_sql;
         $sql[] = ' JOIN';
-        $sql[] = implode(' ,',$this->extend['JOIN']);
+        $sql[] = implode(' ,', $this->extend['JOIN']);
     }
+
     protected function buildINNERJOIN()
     {
         $sql = &$this->_sql;
         $sql[] = ' INNER JOIN';
-        $sql[] = implode(' ,',$this->extend['INNERJOIN']);
+        $sql[] = implode(' ,', $this->extend['INNERJOIN']);
     }
+
     protected function buildLEFTJOIN()
     {
         $sql = &$this->_sql;
         $sql[] = ' LEFT JOIN';
-        $sql[] = implode(' ,',$this->extend['LEFTJOIN']);
+        $sql[] = implode(' ,', $this->extend['LEFTJOIN']);
     }
+
     protected function buildRIGHTJOIN()
     {
         $sql = &$this->_sql;
         $sql[] = ' RIGHT JOIN';
-        $sql[] = implode(' ,',$this->extend['RIGHTJOIN']);
+        $sql[] = implode(' ,', $this->extend['RIGHTJOIN']);
     }
+
     protected function buildFULLJOIN()
     {
         $sql = &$this->_sql;
         $sql[] = ' FULL JOIN';
-        $sql[] = implode(' ,',$this->extend['FULLJOIN']);
+        $sql[] = implode(' ,', $this->extend['FULLJOIN']);
     }
 
     protected function buildFROM()
     {
         $sql = &$this->_sql;
         $sql[] = ' FROM';
-        $sql[] = implode(' ,',$this->extend['FROM']);
+        $sql[] = implode(' ,', $this->extend['FROM']);
     }
 
     protected function buildUnion()
@@ -914,7 +924,7 @@ class SQL__Global
     protected function buildIFEXISTS()
     {
         $sql = &$this->_sql;
-        if( array_key_exists ('IFEXISTS',$this->extend) ){
+        if (array_key_exists('IFEXISTS', $this->extend)) {
             $sql[] = 'IF EXISTS';
         }
     }
@@ -923,27 +933,29 @@ class SQL__Global
     {
         $sql = &$this->_sql;
 
-        if( array_key_exists ('INDEX',$this->other) ){
+        if (array_key_exists('INDEX', $this->other)) {
             $sql[] = 'INDEX';
-            $sql[] = implode(' ,',$this->other['INDEX']);
+            $sql[] = implode(' ,', $this->other['INDEX']);
             if ($this->db->type == 'mysql') {
                 $sql[] = 'ON';
                 $this->buildTable();
             }
-            return ;
+
+            return;
         }
-        if( array_key_exists ('DATABASE',$this->other) ){
+        if (array_key_exists('DATABASE', $this->other)) {
             $sql[] = 'DATABASE';
             $this->buildIFEXISTS();
-            $sql[] = implode(' ,',$this->other['DATABASE']);
-            return ;
+            $sql[] = implode(' ,', $this->other['DATABASE']);
+
+            return;
         }
 
         $sql[] = 'TABLE';
         $this->buildIFEXISTS();
         $this->buildTable();
-        if(empty( trim(implode('',$this->table)) )){
-            $sql[] = implode(' ,',$this->other['TABLE']);
+        if (empty(trim(implode('', $this->table)))) {
+            $sql[] = implode(' ,', $this->other['TABLE']);
         }
     }
 
