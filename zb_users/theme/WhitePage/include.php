@@ -1,63 +1,61 @@
 <?php
-#注册插件
+
+//注册插件
 RegisterPlugin("WhitePage", "ActivePlugin_WhitePage");
 
-
-function ActivePlugin_WhitePage() {
+function ActivePlugin_WhitePage()
+{
     global $zbp;
 
     Add_Filter_Plugin('Filter_Plugin_Cmd_Begin', 'WhitePage_CMT');
     Add_Filter_Plugin('Filter_Plugin_Admin_TopMenu', 'WhitePage_AddMenu');
-    if($zbp->Config('WhitePage')->SuperFast)
+    if ($zbp->Config('WhitePage')->SuperFast) {
         Add_Filter_Plugin('Filter_Plugin_Html_Js_Add', 'WhitePage_SuperFast_Pre');
-    else
+    } else {
         Add_Filter_Plugin('Filter_Plugin_Html_Js_Add', 'WhitePage_AddJS');
+    }
 
     $s = '';
-    if($zbp->Config('WhitePage')->HasKey("custom_bgcolor")){
-        $s .=   "body{background-color:#" . $zbp->Config('WhitePage')->custom_bgcolor . ";}div.post-body>p>code,div.post-body>pre.prism-highlight,div.post-body blockquote{background-color:#" . $zbp->Config('WhitePage')->custom_bgcolor . ";}";
+    if ($zbp->Config('WhitePage')->HasKey("custom_bgcolor")) {
+        $s .= "body{background-color:#" . $zbp->Config('WhitePage')->custom_bgcolor . ";}div.post-body>p>code,div.post-body>pre.prism-highlight,div.post-body blockquote{background-color:#" . $zbp->Config('WhitePage')->custom_bgcolor . ";}";
     }
-    if($zbp->Config('WhitePage')->HasKey("custom_pagecolor")){  
-        $s .=   "textarea,input[type=text]{background-color:#".$zbp->Config('WhitePage')->custom_pagecolor."}";
+    if ($zbp->Config('WhitePage')->HasKey("custom_pagecolor")) {
+        $s .= "textarea,input[type=text]{background-color:#" . $zbp->Config('WhitePage')->custom_pagecolor . "}";
     }
-    if($zbp->Config('WhitePage')->HasKey("custom_fontcolor")){
-        $s .=  "body{color:#" . $zbp->Config('WhitePage')->custom_fontcolor . ";}textarea,input[type=text]{color:#" . $zbp->Config('WhitePage')->custom_fontcolor . ";}";
+    if ($zbp->Config('WhitePage')->HasKey("custom_fontcolor")) {
+        $s .= "body{color:#" . $zbp->Config('WhitePage')->custom_fontcolor . ";}textarea,input[type=text]{color:#" . $zbp->Config('WhitePage')->custom_fontcolor . ";}";
     }
-    if($zbp->Config('WhitePage')->HasKey("custom_acolor")){
-        $s .=  "a,span.now-page,#BlogTitle a{color:#" . $zbp->Config('WhitePage')->custom_acolor . ";}";
+    if ($zbp->Config('WhitePage')->HasKey("custom_acolor")) {
+        $s .= "a,span.now-page,#BlogTitle a{color:#" . $zbp->Config('WhitePage')->custom_acolor . ";}";
     }
-    if($zbp->Config('WhitePage')->HasKey("custom_ahovercolor")){
-        $s .=  "a:hover,a:hover span.page,#BlogTitle a:hover,#divNavBar a:hover{color:#" . $zbp->Config('WhitePage')->custom_ahovercolor . ";}";
+    if ($zbp->Config('WhitePage')->HasKey("custom_ahovercolor")) {
+        $s .= "a:hover,a:hover span.page,#BlogTitle a:hover,#divNavBar a:hover{color:#" . $zbp->Config('WhitePage')->custom_ahovercolor . ";}";
     }
-    if($zbp->Config('WhitePage')->HasKey("custom_blogtitlecolor")){
-        $s .=  "#BlogTitle a{color:#" . $zbp->Config('WhitePage')->custom_blogtitlecolor . ";}";
+    if ($zbp->Config('WhitePage')->HasKey("custom_blogtitlecolor")) {
+        $s .= "#BlogTitle a{color:#" . $zbp->Config('WhitePage')->custom_blogtitlecolor . ";}";
     }
-    if($zbp->Config('WhitePage')->HasKey("text_indent")){
-            $s .=  "div.post-body p{text-indent:".(int) $zbp->Config('WhitePage')->text_indent."em;}";
+    if ($zbp->Config('WhitePage')->HasKey("text_indent")) {
+        $s .= "div.post-body p{text-indent:" . (int) $zbp->Config('WhitePage')->text_indent . "em;}";
     }
-    if($zbp->Config('WhitePage')->HasKey("custom_pagetype")){
-        if($zbp->Config('WhitePage')->custom_pagetype == 2){
-            $s .=  "#divAll{box-shadow: 0 0 0.6em #333;border-radius: 0;}";
-            $s .=  "#divAll{background:#" . $zbp->Config('WhitePage')->custom_pagecolor . ";}#divMiddle{background:none;}";
-        }
-        elseif($zbp->Config('WhitePage')->custom_pagetype == 3){
-            $s .=  "#divAll{box-shadow: 0 0 0.6em #333;border-radius: 1em;}";
-            $s .=  "#divAll{background:#" . $zbp->Config('WhitePage')->custom_pagecolor . ";}#divMiddle{background:none;}";
-        }
-        elseif($zbp->Config('WhitePage')->custom_pagetype == 4){
-            $s .=  "#divAll{box-shadow: none;border-radius: 0;}";
-            $s .=  "#divAll{background:#" . $zbp->Config('WhitePage')->custom_pagecolor . ";}#divMiddle{background:none;}";
-        }
-        elseif($zbp->Config('WhitePage')->custom_pagetype == 5){
-            $s .=  "#divAll{box-shadow: none;border-radius: 1em;}";
-            $s .=  "#divAll{background:#" . $zbp->Config('WhitePage')->custom_pagecolor . ";}#divMiddle{background:none;}";
-        }
-        else{
-            $s .=  "#divAll{background:#" . $zbp->Config('WhitePage')->custom_pagecolor . ";}#divMiddle{background:none;}";
+    if ($zbp->Config('WhitePage')->HasKey("custom_pagetype")) {
+        if ($zbp->Config('WhitePage')->custom_pagetype == 2) {
+            $s .= "#divAll{box-shadow: 0 0 0.6em #333;border-radius: 0;}";
+            $s .= "#divAll{background:#" . $zbp->Config('WhitePage')->custom_pagecolor . ";}#divMiddle{background:none;}";
+        } elseif ($zbp->Config('WhitePage')->custom_pagetype == 3) {
+            $s .= "#divAll{box-shadow: 0 0 0.6em #333;border-radius: 1em;}";
+            $s .= "#divAll{background:#" . $zbp->Config('WhitePage')->custom_pagecolor . ";}#divMiddle{background:none;}";
+        } elseif ($zbp->Config('WhitePage')->custom_pagetype == 4) {
+            $s .= "#divAll{box-shadow: none;border-radius: 0;}";
+            $s .= "#divAll{background:#" . $zbp->Config('WhitePage')->custom_pagecolor . ";}#divMiddle{background:none;}";
+        } elseif ($zbp->Config('WhitePage')->custom_pagetype == 5) {
+            $s .= "#divAll{box-shadow: none;border-radius: 1em;}";
+            $s .= "#divAll{background:#" . $zbp->Config('WhitePage')->custom_pagecolor . ";}#divMiddle{background:none;}";
+        } else {
+            $s .= "#divAll{background:#" . $zbp->Config('WhitePage')->custom_pagecolor . ";}#divMiddle{background:none;}";
         }
     }
 
-    $zbp->header .= '   <style type="text/css">'.$s.'</style>' . "\r\n";
+    $zbp->header .= '   <style type="text/css">' . $s . '</style>' . "\r\n";
     $zbp->option['ZC_SEARCH_TYPE'] = 'list';
     $zbp->option['ZC_SEARCH_COUNT'] = 10;
     $zbp->lang['msg']['first_button'] = '&lt;&lt;';
@@ -66,20 +64,22 @@ function ActivePlugin_WhitePage() {
     $zbp->lang['msg']['last_button'] = '&gt;&gt;';
 }
 
-
-function InstallPlugin_WhitePage() {
+function InstallPlugin_WhitePage()
+{
     global $zbp;
 }
 
-function UninstallPlugin_WhitePage() {
+function UninstallPlugin_WhitePage()
+{
     global $zbp;
 }
 
-function WhitePage_CMT(){
+function WhitePage_CMT()
+{
     global $zbp, $action;
 
     if ($action == 'cmt') {
-        if( empty($zbp->user->ID)== false ){
+        if (empty($zbp->user->ID) == false) {
             $_POST['email'] = $zbp->user->Email;
             $_POST['homepage'] = $zbp->user->HomePage;
             $_POST['name'] = $zbp->user->Name;
@@ -87,15 +87,15 @@ function WhitePage_CMT(){
     }
 }
 
-
-function WhitePage_AddMenu(&$m) {
+function WhitePage_AddMenu(&$m)
+{
     global $zbp;
     $m[] = MakeTopMenu("root", '主题配置', $zbp->host . "zb_users/theme/WhitePage/main.php", "", "topmenu_WhitePage");
 }
 
-
-function WhitePage_AddJS($echo = true){
-$s = <<<JS
+function WhitePage_AddJS($echo = true)
+{
+    $s = <<<JS
 $(function() {
     var s = document.location;
     $("#divNavBar a").each(function() {
@@ -159,16 +159,20 @@ zbp.plugin.on("comment.post.success", "WhitePage", function () {
 });
 JS;
 
-if ($echo){echo $s;}
-return $s;
+    if ($echo) {
+        echo $s;
+    }
+
+    return $s;
 }
 
-function WhitePage_SuperFast_Pre(){
+function WhitePage_SuperFast_Pre()
+{
     Add_Filter_Plugin('Filter_Plugin_Html_Js_Add', 'WhitePage_SuperFast');
 }
 
-function WhitePage_SuperFast(){
-
+function WhitePage_SuperFast()
+{
     $s = ob_get_clean();
     $zbpjs = file_get_contents(ZBP_PATH . 'zb_system/script/zblogphp.js');
     $jqjs = file_get_contents(ZBP_PATH . 'zb_system/script/jquery-2.2.4.min.js');
@@ -187,5 +191,4 @@ function WhitePage_SuperFast(){
 
     echo $s;
     die;
-
 }
