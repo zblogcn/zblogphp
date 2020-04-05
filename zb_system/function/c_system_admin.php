@@ -1319,16 +1319,29 @@ function Admin_TagMng()
     echo '</div>';
 
     echo '<div id="divMain2">';
-    echo '<!--<form class="search" id="edit" method="post" action="#"></form>-->';
+    echo '<form class="search" id="edit" method="post" action="#">';
+    echo '<p>' . $zbp->lang['msg']['search'] . ':&nbsp;&nbsp;
+	<input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
+    echo '</form>';
 
-    $p = new Pagebar('{%host%}zb_system/cmd.php?act=TagMng&page={%page%}', false);
+    $p = new Pagebar('{%host%}zb_system/cmd.php?act=TagMng&page={%page%}{&search=%search%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
     $p->PageBarCount = $zbp->pagebarcount;
+    if (GetVars('search') !== GetVars('search', 'GET')) {
+        $p->PageNow = 1;
+    }
+    
+    $p->UrlRule->Rules['{%search%}'] = rawurlencode(GetVars('search'));
+    
+    $w = [];
+    if (GetVars('search')) {
+        $w[] = array('search', 'tag_Name', 'tag_Alias', 'tag_Intro', GetVars('search'));
+    }
 
     $array = $zbp->GetTagList(
         '',
-        '',
+        $w,
         array('tag_ID' => 'ASC'),
         array(($p->PageNow - 1) * $p->PageCount, $p->PageCount),
         array('pagebar' => $p)
