@@ -137,6 +137,7 @@ function Debug_IgnoreError($errno)
  */
 function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
 {
+    ZBlogException::$errors_msg[] = array($errno, $errstr, $errfile, $errline);
     if (ZBlogException::$disabled == true) {
         return true;
     }
@@ -208,6 +209,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
  */
 function Debug_Exception_Handler($exception)
 {
+    ZBlogException::$errors_msg[] = array($exception->getCode(), $exception->getMessage(), $exception->getFile(), $exception->getLine());
     if (ZBlogException::$disabled == true) {
         return true;
     }
@@ -244,6 +246,7 @@ function Debug_Exception_Handler($exception)
 function Debug_Shutdown_Handler()
 {
     if ($error = error_get_last()) {
+        ZBlogException::$errors_msg[] = array($error['type'], $error['message'], $error['file'], $error['line']);
         if (ZBlogException::$disabled == true) {
             return true;
         }
@@ -280,7 +283,6 @@ function Debug_DoNothing()
  */
 class ZBlogException
 {
-
     private static $_zbe = null;
 
     public static $disabled = false;
@@ -296,6 +298,8 @@ class ZBlogException
     public static $error_line = null;
 
     public static $islogerror = false;
+
+    public static $errors_msg = array();
 
     public $type;
 
@@ -600,5 +604,4 @@ class ZBlogException
 
         return $result;
     }
-
 }

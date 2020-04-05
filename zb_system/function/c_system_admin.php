@@ -464,7 +464,7 @@ function CreateModuleDiv($m, $button = true)
         }
         if ($m->SourceType != 'system'
             && $m->SourceType != 'theme'
-            && !(            $m->SourceType == 'plugin'
+            && !($m->SourceType == 'plugin'
             && CheckRegExp($m->Source, '/plugin_(' . $zbp->option['ZC_USING_PLUGIN_LIST'] . ')/i'))
         ) {
             echo '&nbsp;<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=ModuleDel&amp;id=' . $m->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>';
@@ -566,11 +566,11 @@ function CreateOptionsOfGuestIPType($default)
     global $zbp;
     $s = '';
     $tz = array(
-        'REMOTE_ADDR'                    => 'REMOTE_ADDR (' . $zbp->lang['msg']['default'] . ')',
-        'HTTP_X_REAL_IP'                 => 'HTTP_X_REAL_IP',
-        'HTTP_CLIENT_IP'                 => 'HTTP_CLIENT_IP',
-        'HTTP_X_FORWARDED_FOR'           => 'HTTP_X_FORWARDED_FOR',
-        'HTTP_CF_CONNECTING_IP'          => 'HTTP_CF_CONNECTING_IP',
+        'REMOTE_ADDR'                    => 'REMOTE_ADDR (' . $zbp->lang['msg']['default'] . ') ' . GetVars('REMOTE_ADDR', 'SERVER'),
+        'HTTP_X_FORWARDED_FOR'           => 'HTTP_X_FORWARDED_FOR (腾讯云,阿里云,七牛) ' . GetVars('HTTP_X_FORWARDED_FOR', 'SERVER'),
+        'HTTP_X_REAL_IP'                 => 'HTTP_X_REAL_IP (又拍云,百度CDN)' . GetVars('HTTP_X_REAL_IP', 'SERVER'),
+        'HTTP_CF_CONNECTING_IP'          => 'HTTP_CF_CONNECTING_IP (CloudFlare) ' . GetVars('HTTP_CF_CONNECTING_IP', 'SERVER'),
+        'HTTP_CLIENT_IP'                 => 'HTTP_CLIENT_IP ' . GetVars('HTTP_CLIENT_IP', 'SERVER'),
     );
 
     foreach ($tz as $key => $value) {
@@ -1846,8 +1846,7 @@ function Admin_SettingMng()
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_SettingMng_SubMenu'] as $fpname => &$fpsignal) {
         $fpname();
     }
-    echo '</div>';
-    ?>
+    echo '</div>'; ?>
 
           <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav'); ?>" onsubmit="return checkDomain();">
             <div id="divMain2">
@@ -1942,8 +1941,9 @@ function changeDomain(newurl){
     echo '<tr><td><p><b>' . $zbp->lang['msg']['allow_upload_type'] . '</b></p></td><td><p><input id="ZC_UPLOAD_FILETYPE" name="ZC_UPLOAD_FILETYPE" style="width:600px;" type="text" value="' . htmlspecialchars($zbp->option['ZC_UPLOAD_FILETYPE']) . '" /></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['allow_upload_size'] . '</b></p></td><td><p><input id="ZC_UPLOAD_FILESIZE" name="ZC_UPLOAD_FILESIZE" style="width:600px;" type="text" value="' . $zbp->option['ZC_UPLOAD_FILESIZE'] . '" /></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['debug_mode'] . '</b></p></td><td><p><input id="ZC_DEBUG_MODE" name="ZC_DEBUG_MODE" type="text" value="' . $zbp->option['ZC_DEBUG_MODE'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->langs->msg->show_warning_error . '</b></p></td><td><p><input id="ZC_DEBUG_MODE_WARNING" name="ZC_DEBUG_MODE_WARNING" type="text" value="' . $zbp->option['ZC_DEBUG_MODE_WARNING'] . '" class="checkbox"/></p></td></tr>';
     echo '<tr><td><p><b>' . $zbp->lang['msg']['additional_security'] . '</b></p></td><td><p><input id="ZC_ADDITIONAL_SECURITY" name="ZC_ADDITIONAL_SECURITY" type="text" value="' . $zbp->option['ZC_ADDITIONAL_SECURITY'] . '" class="checkbox"/></p></td></tr>';
-    //echo '<tr><td><p><b>' . $zbp->lang['msg']['gzip_compress'] . '</b></p></td><td><p><input id="ZC_GZIP_ENABLE" name="ZC_GZIP_ENABLE" type="text" value="' . $zbp->option['ZC_GZIP_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+
     echo '<tr><td><p><b>' . $zbp->lang['msg']['syntax_high_lighter'] . '</b></p></td><td><p><input id="ZC_SYNTAXHIGHLIGHTER_ENABLE" name="ZC_SYNTAXHIGHLIGHTER_ENABLE" type="text" value="' . $zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE'] . '" class="checkbox"/></p></td></tr>';
 
     echo '<tr><td><p><b>' . $zbp->lang['msg']['using_cdn_guest_type'] . '</b></p></td><td><p><select id="ZC_USING_CDN_GUESTIP_TYPE" name="ZC_USING_CDN_GUESTIP_TYPE" style="width:600px;" >';
@@ -1974,8 +1974,7 @@ function changeDomain(newurl){
     echo '<tr><td><p><b>' . $zbp->lang['msg']['comment_verify_enable'] . '</b></p></td><td><p><input id="ZC_COMMENT_VERIFY_ENABLE" name="ZC_COMMENT_VERIFY_ENABLE" type="text" value="' . $zbp->option['ZC_COMMENT_VERIFY_ENABLE'] . '" class="checkbox"/></p></td></tr>';
 
     echo '</table>';
-    echo '</div>';
-    ?>
+    echo '</div>'; ?>
                 </div>
                 <!-- End .content-box-content -->
 

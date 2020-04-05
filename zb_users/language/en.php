@@ -262,6 +262,7 @@ return array(
         'verify_succeed'                    => 'Verify succeed',
         'verify_fail'                       => 'Verify fail',
         'verifying'                         => 'Verifying',
+        'show_warning_error'                => 'Allow warning level error',
         ''                                  => '',
     ),
 
