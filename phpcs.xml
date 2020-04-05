@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="PSR2" xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
+    <description>Z-BlogPHP Code Standard</description>
+    <exclude-pattern>*.js</exclude-pattern>
+    <exclude-pattern>*.css</exclude-pattern>
+    <arg name="tab-width" value="4"/>
+
+    <rule ref="Internal.NoCodeFound">
+      <severity>0</severity>
+    </rule>
+
+    <rule ref="PSR2">
+      <exclude name="Generic.Files.LineEndings" />
+      <exclude name="Generic.Files.LineLength" />
+      <exclude name="PSR1.Files.SideEffects" />
+
+      <!-- 都没有namespace要了干嘛-->
+      <exclude name="PSR1.Classes.ClassDeclaration" />
+
+      <!-- 采用PascalCase式，不考虑小驼峰；不过PHPCS不提供配置，也懒得写了 -->
+      <exclude name="PSR1.Methods.CamelCapsMethodName" />
+    </rule>
+
+    <!-- 这里的代码规范是PascalCase__XXX__XXX -->
+    <rule ref="Squiz.Classes.ValidClassName">
+      <exclude-pattern>zb_system/function/lib/*/*</exclude-pattern>
+    </rule>
+
+    <!-- 自定义测试 -->
+    <rule ref="PHPCompatibility">
+      <exclude name="PHPCompatibility.ParameterValues.NewHTMLEntitiesEncodingDefault" />
+      <exclude name="PHPCompatibility.ParameterValues.NewIconvMbstringCharsetDefault" />
+
+      <!-- 已做兼容处理 -->
+      <exclude name="PHPCompatibility.Classes.NewClasses.CURLFile.Found" />
+      <exclude name="PHPCompatibility.IniDirectives.RemovedIniDirectives.safe_mode.Found" />
+      <exclude name="PHPCompatibility.Extensions.RemovedExtensions.sqlite.Found" />
+      <exclude name="PHPCompatibility.Extensions.RemovedExtensions.mysql_.Found" />
+
+      <!-- 已做废弃处理，不再需要 -->
+      <exclude name="PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_gpc.Found" />
+
+      <!-- 此部份函数由于已有定义，不再需要 -->
+      <exclude name="PHPCompatibility.FunctionUse.NewFunctions.hex2bin.Found" />
+      <exclude name="PHPCompatibility.FunctionUse.NewFunctions.fnmatch.Found" />
+      <exclude name="PHPCompatibility.FunctionUse.NewFunctions.http_build_url.Found" />
+      <exclude name="PHPCompatibility.FunctionUse.NewFunctions.rrmdir.Found" />
+      <exclude name="PHPCompatibility.FunctionUse.NewFunctions.gzdecode.Found" />
+      <exclude name="PHPCompatibility.FunctionUse.NewFunctions.array_replace_recursive.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.PHP_VERSION_ID.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.FNM_PATHNAME.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.FNM_NOESCAPE.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.FNM_PERIOD.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.FNM_CASEFOLD.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.HTTP_URL_REPLACE.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.HTTP_URL_JOIN_PATH.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.HTTP_URL_JOIN_QUERY.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.HTTP_URL_STRIP_USER.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.HTTP_URL_STRIP_PASS.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.HTTP_URL_STRIP_AUTH.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.HTTP_URL_STRIP_PORT.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.HTTP_URL_STRIP_PATH.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.HTTP_URL_STRIP_QUERY.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.HTTP_URL_STRIP_FRAGMENT.Found" />
+      <exclude name="PHPCompatibility.Constants.NewConstants.HTTP_URL_STRIP_ALL.Found" />
+    </rule>
+    <config name="testVersion" value="5.2-"/>
+
+    <rule ref="Squiz">
+      <exclude name="Squiz.Commenting" />
+      <exclude name="Squiz.NamingConventions" />
+      <exclude name="Squiz.Arrays.ArrayDeclaration" />
+      <exclude name="Squiz.Operators.ComparisonOperatorUsage" />
+      <exclude name="Squiz.Classes.ClassFileName" />
+      <exclude name="Squiz.ControlStructures.InlineIfDeclaration" />
+      <exclude name="Squiz.ControlStructures.ElseIfDeclaration" />
+      <exclude name="Squiz.ControlStructures.SwitchDeclaration" />
+      <exclude name="Squiz.Files.FileExtension" />
+      <exclude name="Squiz.Functions.GlobalFunction" />
+      <exclude name="Squiz.PHP.GlobalKeyword" />
+      <exclude name="Squiz.PHP.DisallowInlineIf" />
+      <exclude name="Squiz.PHP.DisallowComparisonAssignment" />
+      <exclude name="Squiz.PHP.DisallowBooleanStatement" />
+      <exclude name="Squiz.PHP.CommentedOutCode" />
+      <exclude name="Squiz.Strings.DoubleQuoteUsage" />
+      <exclude name="Squiz.WhiteSpace.FunctionClosingBraceSpace" />
+      <exclude name="Generic.Commenting.DocComment" />
+      <exclude name="Generic.Arrays.DisallowLongArraySyntax" />
+      <exclude name="Generic.Formatting.MultipleStatementAlignment" />
+      <!-- 这两个不应该关掉，但好像不少地方用了奇怪的特性-->
+      <exclude name="Squiz.PHP.DisallowSizeFunctionsInLoops" />
+      <exclude name="Squiz.PHP.DisallowMultipleAssignments" />
+    </rule>
+    <rule ref="Squiz.Strings.ConcatenationSpacing">
+      <properties>
+        <property name="spacing" value="1"/>
+        <property name="ignoreNewlines" value="true"/>
+      </properties>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing">
+      <properties>
+        <property name="spacing" value="1"/>
+      </properties>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.FunctionSpacing">
+      <properties>
+        <property name="spacing" value="1"/>
+      </properties>
+    </rule>
+    <rule ref="Generic.PHP.ForbiddenFunctions">
+        <properties>
+            <property name="forbiddenFunctions" type="array">
+                <element key="sizeof" value="count"/>
+                <element key="delete" value="unset"/>
+                <element key="print" value="echo"/>
+                <element key="create_function" value="null"/>
+            </property>
+        </properties>
+    </rule>
+    <rule ref="Generic.Arrays.DisallowShortArraySyntax" />
+</ruleset>
