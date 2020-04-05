@@ -1548,6 +1548,8 @@ function PostArticle()
 
     $article->Type = ZC_POST_TYPE_ARTICLE;
 
+    $article->PostTime = time();
+
     FilterMeta($article);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostArticle_Core'] as $fpname => &$fpsignal) {

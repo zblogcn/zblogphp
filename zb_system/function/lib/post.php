@@ -31,7 +31,6 @@ if (!defined('ZBP_PATH')) {
  */
 class Post extends Base
 {
-
     private $_prev = '';
 
     private $_next = '';
@@ -43,6 +42,8 @@ class Post extends Base
 
         $this->Title = $zbp->lang['msg']['unnamed'];
         $this->PostTime = time();
+        $this->CreateTime = $this->PostTime;
+        $this->UpdateTime = $this->PostTime;
     }
 
     /**
@@ -389,5 +390,4 @@ class Post extends Base
 
         return parent::Del();
     }
-
 }
