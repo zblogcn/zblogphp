@@ -19,6 +19,9 @@
 
       <!-- 采用PascalCase式，不考虑小驼峰；不过PHPCS不提供配置，也懒得写了 -->
       <exclude name="PSR1.Methods.CamelCapsMethodName" />
+
+      <!-- 好像和什么别的规则冲突了 -->
+      <exclude name="PSR2.Classes.ClassDeclaration" />
     </rule>
 
     <!-- 这里的代码规范是PascalCase__XXX__XXX -->
@@ -117,5 +120,4 @@
             </property>
         </properties>
     </rule>
-    <rule ref="Generic.Arrays.DisallowShortArraySyntax" />
 </ruleset>
