@@ -1,13 +1,13 @@
 <?php
 
-class ClassSQL__PgSQLTest extends PHPUnit\Framework\TestCase
+class ClassSQL__PostgreSQLTest extends PHPUnit\Framework\TestCase
 {
     protected $backupGlobalsBlacklist = array('zbp');
     protected static $db = null;
 
     public function setUp(): void
     {
-        self::$db = new SQL__PgSQL($GLOBALS['zbp']->db);
+        self::$db = new SQL__PostgreSQL($GLOBALS['zbp']->db);
     }
 
     public function tearDown(): void
