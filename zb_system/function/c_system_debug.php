@@ -151,14 +151,10 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         Logs(var_export(array('Error', $errno, $errstr, $errfile, $errline), true), true);
     }
 
-    /*if (is_readable($errfile)) {
-        $a = array_slice(file($errfile), max(0, $errline - 1), 1, true);
-        $s = reset($a);
-        if (strpos($s, '@') !== false) {
-            return true;
-        }
-    }*/
     //@符号的错误抑制功能的实现
+    if (error_reporting()==0) {
+        return true;
+    }
     $da = debug_backtrace();
     foreach ($da as $key => $value) {
         $errfile = null;
