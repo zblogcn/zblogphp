@@ -366,3 +366,7 @@ switch ($action) {
         // code...
         break;
 }
+
+foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_End'] as $fpname => &$fpsignal) {
+    $fpname();
+}

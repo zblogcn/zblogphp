@@ -59,11 +59,15 @@ class SQL__Global
 
     private $otherKeyword = array('FIELD', 'INDEX', 'TABLE', 'DATABASE');
 
-    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'ADDCOLUMN', 'DROPCOLUMN', 'ALTERCOLUMN');
+    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX');
+
+    private $complexKeyword = array('ADDCOLUMN', 'DROPCOLUMN', 'ALTERCOLUMN');
 
     protected $extend = array();
 
     protected $other = array();
+
+    protected $complex = array();
 
     /**
      * @var null 数据库连接实例
@@ -139,7 +143,6 @@ class SQL__Global
             } else {
                 $this->data = is_array($argu[0]) ? $argu[0] : $argu;
             }
-
             return $this;
         } elseif (in_array($upperKeyword, $this->selectFunctionKeyword)) {
             /*
@@ -163,6 +166,10 @@ class SQL__Global
             return $this;
         } elseif (in_array($upperKeyword, $this->extendKeyword)) {
             $this->extend[$upperKeyword] = $argu;
+
+            return $this;
+        } elseif (in_array($upperKeyword, $this->complexKeyword)) {
+            $this->complex[$upperKeyword][] = implode(' ', $argu);
 
             return $this;
         } else {
@@ -752,11 +759,11 @@ class SQL__Global
 
         $sql[] = 'TABLE';
         $this->buildTable();
-        if (array_key_exists('ADDCOLUMN', $this->extend)) {
+        if (array_key_exists('ADDCOLUMN', $this->complex)) {
             $this->buildADDCOLUMN();
-        } elseif (array_key_exists('DROPCOLUMN', $this->extend)) {
+        } elseif (array_key_exists('DROPCOLUMN', $this->complex)) {
             $this->buildDROPCOLUMN();
-        } elseif (array_key_exists('ALTERCOLUMN', $this->extend)) {
+        } elseif (array_key_exists('ALTERCOLUMN', $this->complex)) {
             $this->buildLEFTJOIN();
         }
     }
@@ -781,6 +788,16 @@ class SQL__Global
             $sql[] = 'FROM';
             $this->buildTable();
         }
+        if ($this->db->type == 'mysql' && array_key_exists('USEINDEX', $this->extend)) {
+            $this->buildUSEINDEX();
+        }
+        if ($this->db->type == 'mysql' && array_key_exists('FORCEINDEX', $this->extend)) {
+            $this->buildFORCEINDEX();
+        }
+        if ($this->db->type == 'mysql' && array_key_exists('IGNOREINDEX', $this->extend)) {
+            $this->buildIGNOREINDEX();
+        }
+
         if (array_key_exists('JOIN', $this->extend)) {
             $this->buildJOIN();
         } elseif (array_key_exists('INNERJOIN', $this->extend)) {
@@ -815,22 +832,56 @@ class SQL__Global
     protected function buildADDCOLUMN()
     {
         $sql = &$this->_sql;
-        $sql[] = ' ADD COLUMN';
-        $sql[] = implode(' ', $this->extend['ADDCOLUMN']);
+        $sql[] = ' ';
+        foreach ($this->complex['ADDCOLUMN'] as $key => $value) {
+            $this->complex['ADDCOLUMN'][$key] = 'ADD COLUMN ' . $this->complex['ADDCOLUMN'][$key];
+        }
+        $sql[] = implode(' ,', $this->complex['ADDCOLUMN']);
     }
 
     protected function buildALTERCOLUMN()
     {
         $sql = &$this->_sql;
-        $sql[] = ' ALTER COLUMN';
-        $sql[] = implode(' ', $this->extend['ALTERCOLUMN']);
+        $sql[] = ' ';
+        foreach ($this->complex['ALTERCOLUMN'] as $key => $value) {
+            $this->complex['ALTERCOLUMN'][$key] = 'ALTER COLUMN ' . $this->complex['ALTERCOLUMN'][$key];
+        }
+        $sql[] = implode(' ,', $this->complex['ALTERCOLUMN']);
     }
 
     protected function buildDROPCOLUMN()
     {
         $sql = &$this->_sql;
-        $sql[] = ' DROP COLUMN';
-        $sql[] = implode(' ', $this->extend['DROPCOLUMN']);
+        $sql[] = ' ';
+        foreach ($this->complex['DROPCOLUMN'] as $key => $value) {
+            $this->complex['DROPCOLUMN'][$key] = 'DROP COLUMN ' . $this->complex['DROPCOLUMN'][$key];
+        }
+        $sql[] = implode(' ,', $this->complex['DROPCOLUMN']);
+    }
+
+
+    protected function buildUSEINDEX()
+    {
+        $sql = &$this->_sql;
+        $sql[] = ' USE INDEX (';
+        $sql[] = implode(' ,', $this->extend['USEINDEX']);
+        $sql[] = ')';
+    }
+
+    protected function buildFORCEINDEX()
+    {
+        $sql = &$this->_sql;
+        $sql[] = ' FORCE INDEX (';
+        $sql[] = implode(' ,', $this->extend['FORCEINDEX']);
+        $sql[] = ')';
+    }
+
+    protected function buildIGNOREINDEX()
+    {
+        $sql = &$this->_sql;
+        $sql[] = ' IGNORE INDEX (';
+        $sql[] = implode(' ,', $this->extend['IGNOREINDEX']);
+        $sql[] = ')';
     }
 
     protected function buildJOIN()
@@ -986,7 +1037,28 @@ class SQL__Global
 
     protected function buildIndex()
     {
-        // Do nothing yet
-    }
+        $sql = array();
+        foreach ($this->index as $indexkey => $indexvalue) {
+            $indexname = $indexkey;
+            $indexfield = $indexvalue;
 
+            if (isset($this->option['uniqueindex']) && $this->option['uniqueindex']==true) {
+                $sql[] = 'CREATE UNIQUE INDEX ' . $indexname;
+            } else {
+                $sql[] = 'CREATE INDEX ' . $indexname;
+            }
+            $sql[] = 'ON';
+            $sql[] = implode('', $this->table);
+            $sql[] = '(';
+            foreach ($indexfield as $key => $value) {
+                $sql[] = $value;
+                $sql[] = ',';
+            }
+            array_pop($sql);
+            $sql[] = ')';
+            $sqlAll[] = implode(' ', $sql);
+            $this->_sql = $sqlAll;
+            $sqlAll = array();
+        }
+    }
 }

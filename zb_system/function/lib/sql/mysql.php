@@ -159,29 +159,6 @@ class SQL__MySQL extends SQL__Global
         $this->_sql = $sqlAll;
     }
 
-    protected function buildIndex()
-    {
-        $sql = array();
-        //var_dump($this->index);
-        foreach ($this->index as $indexkey => $indexvalue) {
-            $indexname = $indexkey;
-            $indexfield = $indexvalue;
-
-            $sql[] = 'CREATE INDEX ' . $indexname;
-            $sql[] = '(';
-
-            foreach ($indexfield as $key => $value) {
-                $sql[] = $value;
-                $sql[] = ',';
-            }
-            array_pop($sql);
-            $sql[] = ') ;';
-            $sqlAll[] = implode(' ', $sql);
-            $this->_sql = $sqlAll;
-            $sqlAll = array();
-        }
-    }
-
     /**
      * @override
      */
@@ -226,5 +203,4 @@ class SQL__MySQL extends SQL__Global
         }
         parent::buildSelect();
     }
-
 }

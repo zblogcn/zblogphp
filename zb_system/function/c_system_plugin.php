@@ -527,6 +527,17 @@ DefinePluginFilter('Filter_Plugin_Cmd_Begin');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Cmd_End
+'参数:
+'说明:cmd.php的结束接口,可以在这里拦截各种action之后的
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Cmd_End');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Cmd_Ajax
 '参数:
 '说明:cmd.php的Ajax命令专用接口，插件需要自行判断权限
@@ -1205,7 +1216,7 @@ DefinePluginFilter('Filter_Plugin_ViewList_Core');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_ViewList_Core
+'名称:Filter_Plugin_ViewSearch_Core
 '参数:$q, $page, $w, $pagebar
 '说明:定义搜索核心接口
 '调用:
