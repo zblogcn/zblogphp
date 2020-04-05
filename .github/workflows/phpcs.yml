@@ -1,0 +1,24 @@
+name: Run PHPCS
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  phpcs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    - name: Install dependencies
+      run: composer install --dev --prefer-dist --no-progress --no-suggest
+    - name: Get file changes
+      id: get_file_changes
+      uses: dorner/file-changes-action@v1.2.0
+      with:
+        githubToken: ${{ secrets.GH_BOT_TOKEN }}
+        plaintext: true
+    - name: PHPCS check
+      run: ./vendor/bin/phpcs ${{ steps.get_file_changes.outputs.files }} --report=checkstyle

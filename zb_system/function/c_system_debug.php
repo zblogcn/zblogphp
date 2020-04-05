@@ -145,7 +145,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         $fpreturn = $fpname('Error', array($errno, $errstr, $errfile, $errline));
     }
 
-    $_SERVER['_error_count'] = $_SERVER['_error_count'] + 1;
+    $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
 
     if (ZBlogException::$islogerror == true) {
         Logs(var_export(array('Error', $errno, $errstr, $errfile, $errline), true), true);
@@ -168,7 +168,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
             $errline = $value['line'];
         }
         if (is_readable($errfile)) {
-            $a = array_slice(file($errfile), max(0, $errline - 1), 1, true);
+            $a = array_slice(file($errfile), max(0, ($errline - 1)), 1, true);
             $s = reset($a);
             $matches = null;
             $pattern = '#\'(.*?)\'#i';
@@ -215,15 +215,18 @@ function Debug_Exception_Handler($exception)
         $fpreturn = $fpname('Exception', $exception);
     }
 
-    $_SERVER['_error_count'] = $_SERVER['_error_count'] + 1;
+    $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
 
     if (ZBlogException::$islogerror) {
-        Logs(var_export(
-            array('Exception',
-                $exception->getMessage(), $exception->getCode(), $exception->getFile(), $exception->getLine(),
+        Logs(
+            var_export(
+                array('Exception',
+                    $exception->getMessage(), $exception->getCode(), $exception->getFile(), $exception->getLine(),
+                ),
+                true
             ),
             true
-        ), true);
+        );
     }
 
     $zbe = ZBlogException::GetInstance();
@@ -249,7 +252,7 @@ function Debug_Shutdown_Handler()
             $fpreturn = $fpname('Shutdown', $error);
         }
 
-        $_SERVER['_error_count'] = $_SERVER['_error_count'] + 1;
+        $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
 
         if (ZBlogException::$islogerror) {
             Logs(var_export(array('Shutdown', $error['type'], $error['message'], $error['file'], $error['line']), true), true);
@@ -277,19 +280,33 @@ function Debug_DoNothing()
  */
 class ZBlogException
 {
+
     private static $_zbe = null;
+
     public static $disabled = false;
+
     public static $isstrict = false;
+
     public static $iswarning = true;
+
     public static $error_id = 0;
+
     public static $error_file = null;
+
     public static $error_line = null;
+
     public static $islogerror = false;
+
     public $type;
+
     public $message;
+
     public $messagefull;
+
     public $file;
+
     public $line;
+
     public $errarray = array();
 
     /**
@@ -506,7 +523,7 @@ class ZBlogException
             }
         }
 
-        require dirname(__FILE__) . '/../defend/error.php';
+        include dirname(__FILE__) . '/../defend/error.php';
         RunTime();
 
         /*
@@ -535,7 +552,7 @@ class ZBlogException
             return array();
         }
 
-        $aFile = array_slice(file($file), max(0, $line - 5), 10, true);
+        $aFile = array_slice(file($file), max(0, ($line - 5)), 10, true);
         foreach ($aFile as &$sData) {
             //&$ = ByRef
             $sData = htmlspecialchars($sData);
@@ -583,4 +600,5 @@ class ZBlogException
 
         return $result;
     }
+
 }

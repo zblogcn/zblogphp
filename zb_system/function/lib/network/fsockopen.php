@@ -8,29 +8,49 @@ if (!defined('ZBP_PATH')) {
  */
 class Network__fsockopen implements Network__Interface
 {
+
     private $readyState = 0; //状态
+
     private $responseBody = null; //返回的二进制
+
     private $responseStream = null; //返回的数据流
+
     private $responseText = ''; //返回的数据
+
     private $responseXML = null; //尝试把responseText格式化为XMLDom
+
     private $status = 0; //状态码
+
     private $statusText = ''; //状态码文本
+
     private $responseVersion = ''; //返回的HTTP版体
 
     private $option = array();
+
     private $url = '';
+
     private $postdata = array();
+
     private $httpheader = array();
+
     private $responseHeader = array();
+
     private $parsed_url = array();
+
     private $timeout = 30;
+
     private $errstr = '';
+
     private $errno = 0;
+
     private $isgzip = false;
+
     private $maxredirs = 0;
+
     private $canreinit = true;
 
     private $__isBinary = false;
+
     private $__boundary = '';
 
     /**
@@ -55,14 +75,15 @@ class Network__fsockopen implements Network__Interface
             $w = new DOMDocument();
 
             return $w->loadXML($this->responseText);
-        } elseif (strtolower($property_name) == 'scheme' ||
-            strtolower($property_name) == 'host' ||
-            strtolower($property_name) == 'port' ||
-            strtolower($property_name) == 'user' ||
-            strtolower($property_name) == 'pass' ||
-            strtolower($property_name) == 'path' ||
-            strtolower($property_name) == 'query' ||
-            strtolower($property_name) == 'fragment') {
+        } elseif (strtolower($property_name) == 'scheme'
+            || strtolower($property_name) == 'host'
+            || strtolower($property_name) == 'port'
+            || strtolower($property_name) == 'user'
+            || strtolower($property_name) == 'pass'
+            || strtolower($property_name) == 'path'
+            || strtolower($property_name) == 'query'
+            || strtolower($property_name) == 'fragment'
+        ) {
             if (isset($this->parsed_url[strtolower($property_name)])) {
                 return $this->parsed_url[strtolower($property_name)];
             } else {
@@ -234,16 +255,16 @@ class Network__fsockopen implements Network__Interface
 
         $this->responseHeader = substr($this->responseText, 0, strpos($this->responseText, "\r\n\r\n"));
 
-        $this->responseText = substr($this->responseText, strpos($this->responseText, "\r\n\r\n") + 4);
+        $this->responseText = substr($this->responseText, (strpos($this->responseText, "\r\n\r\n") + 4));
 
         $this->responseHeader = explode("\r\n", $this->responseHeader);
 
         $i = $this->maxredirs;
         if ($this->maxredirs > 0) {
-            if (strstr($this->responseHeader[0], ' 301 ') ||
-                strstr($this->responseHeader[0], ' 302 ') ||
-                strstr($this->responseHeader[0], ' 303 ') ||
-                strstr($this->responseHeader[0], ' 307 ')
+            if (strstr($this->responseHeader[0], ' 301 ')
+                || strstr($this->responseHeader[0], ' 302 ')
+                || strstr($this->responseHeader[0], ' 303 ')
+                || strstr($this->responseHeader[0], ' 307 ')
             ) {
                 fclose($socket);
                 $url = $this->getResponseHeader('Location');
@@ -469,17 +490,17 @@ class Network__fsockopen implements Network__Interface
         $dechunk = null;
 
         while (($pos < $len)
-            && ($chunkLenHex = substr($chunk, $pos, ($newlineAt = strpos($chunk, "\n", $pos + 1)) - $pos))) {
+            && ($chunkLenHex = substr($chunk, $pos, (($newlineAt = strpos($chunk, "\n", ($pos + 1))) - $pos)))) {
             if (!$this->is_hex($chunkLenHex)) {
                 trigger_error('Value is not properly chunk encoded', E_USER_WARNING);
 
                 return $chunk;
             }
 
-            $pos = $newlineAt + 1;
+            $pos = ($newlineAt + 1);
             $chunkLen = hexdec(rtrim($chunkLenHex, "\r\n"));
             $dechunk .= substr($chunk, $pos, $chunkLen);
-            $pos = strpos($chunk, "\n", $pos + $chunkLen) + 1;
+            $pos = (strpos($chunk, "\n", ($pos + $chunkLen)) + 1);
         }
 
         return $dechunk;
@@ -527,4 +548,5 @@ class Network__fsockopen implements Network__Interface
     {
         $this->maxredirs = $n;
     }
+
 }

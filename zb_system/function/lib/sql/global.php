@@ -20,6 +20,7 @@ if (!defined('ZBP_PATH')) {
  */
 class SQL__Global
 {
+
     /**
      * @var string 类名
      * @description 如果是PHP 5.3的话，可以用get_called_class
@@ -27,30 +28,48 @@ class SQL__Global
     public $className = __CLASS__;
 
     private $_sql = array();
+
     protected $option = array(
         'whereKeyword' => 'WHERE',
     );
+
     protected $method = 'SELECT';
+
     protected $table = array();
+
     protected $data = array();
+
     protected $columns = array();
+
     protected $where = array();
+
     protected $join = array();
+
     protected $orderBy = array();
+
     protected $groupBy = array();
+
     protected $having = array();
+
     protected $index = array();
+
     private $methodKeyword = array('ALTER', 'SELECT', 'INSERT', 'DROP', 'DELETE', 'CREATE', 'UPDATE', 'TRUNCATE');
+
     private $selectFunctionKeyword = array('COUNT', 'MIN', 'MAX', 'SUM');
+
     private $otherKeyword = array('FIELD', 'INDEX', 'TABLE', 'DATABASE');
+
     private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'ADDCOLUMN', 'DROPCOLUMN', 'ALTERCOLUMN');
+
     protected $extend = array();
+
     protected $other = array();
 
     /**
      * @var null 数据库连接实例
      */
     private $db = null;
+
     /**
      * @var null|string 数据库类型名称
      */
@@ -559,9 +578,9 @@ class SQL__Global
         } elseif ($eq == 'SEARCH') {
             $searchCount = count($value);
             $sqlSearch = array();
-            for ($i = 1; $i <= $searchCount - 1 - 1; $i++) {
+            for ($i = 1; $i <= ($searchCount - 1 - 1); $i++) {
                 $x = (string) $value[$i];
-                $y = $this->db->EscapeString((string) $value[$searchCount - 1]);
+                $y = $this->db->EscapeString((string) $value[($searchCount - 1)]);
                 $sqlSearch[] = " ($x LIKE '%$y%') ";
             }
             $whereData = " ((1 = 1) AND (" . implode(' OR ', $sqlSearch) . ') )';
@@ -954,7 +973,8 @@ class SQL__Global
         $sql[] = 'TABLE';
         $this->buildIFEXISTS();
         $this->buildTable();
-        if (empty(trim(implode('', $this->table)))) {
+        $str = trim(implode('', $this->table));
+        if ($str === '') {
             $sql[] = implode(' ,', $this->other['TABLE']);
         }
     }
@@ -968,4 +988,5 @@ class SQL__Global
     {
         // Do nothing yet
     }
+
 }

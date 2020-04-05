@@ -53,6 +53,7 @@ function xmlrpc_getUsersBlogs()
 
     echo $strXML;
 }
+
 /*
 array
 struct
@@ -636,7 +637,7 @@ function xmlrpc_editPost($id, $xmlstring, $publish)
         }
         if (isset($post['mt_allow_comments'])) {
             if ($post['mt_allow_comments'] > 0) {
-                $_POST['IsLock'] = $post['mt_allow_comments'] - 1;
+                $_POST['IsLock'] = ($post['mt_allow_comments'] - 1);
             } else {
                 $_POST['IsLock'] = $post['mt_allow_comments'];
             }
@@ -740,7 +741,7 @@ function xmlrpc_editPage($id, $xmlstring, $publish)
         }
         if (isset($post['mt_allow_comments'])) {
             if ($post['mt_allow_comments'] > 0) {
-                $_POST['IsLock'] = $post['mt_allow_comments'] - 1;
+                $_POST['IsLock'] = ($post['mt_allow_comments'] - 1);
             } else {
                 $_POST['IsLock'] = $post['mt_allow_comments'];
             }

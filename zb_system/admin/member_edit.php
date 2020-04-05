@@ -49,7 +49,7 @@ $member = $zbp->GetMemberByID($memberid);
 ?>
 <div id="divMain">
     <div class="divHeader2">
-        <?php echo $lang['msg']['member_edit']?></div>
+        <?php echo $lang['msg']['member_edit']; ?></div>
     <div class="SubMenu">
 <?php
 foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_SubMenu'] as $fpname => &$fpsignal) {
@@ -62,93 +62,100 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_SubMenu'] as $fpname => &$
             <input id="edtID" name="ID" type="hidden" value="<?php echo $member->ID; ?>" />
             <p>
                 <span class="title">
-                    <?php echo $lang['msg']['member_level']?>:</span>
+                    <?php echo $lang['msg']['member_level']; ?>:</span>
                 <br />
                 <select class="edit" size="1" name="Level" id="cmbLevel">
                     <?php echo OutputOptionItemsOfMemberLevel($member->Level); ?></select>
-                <?php if ($zbp->CheckRights('MemberAll') && $zbp->user->ID != $member->ID) {
-    ?>
+    <?php
+    if ($zbp->CheckRights('MemberAll') && $zbp->user->ID != $member->ID) {
+        ?>
         &nbsp;(
                 <span class="title">
-                    <?php echo $lang['msg']['status']?>:</span>
+        <?php echo $lang['msg']['status']; ?>:</span>
                 <label>
                     <input name="Status" type="radio" value="0" <?php echo $member->Status == 0 ? 'checked="checked"' : ''; ?> />&nbsp;
-                    <?php echo $lang['user_status_name'][0]?></label>
+                    <?php echo $lang['user_status_name'][0]; ?></label>
                 &nbsp;&nbsp;
                 <label>
                     <input name="Status" type="radio" value="1" <?php echo $member->Status == 1 ? 'checked="checked"' : ''; ?> />&nbsp;
-                    <?php echo $lang['user_status_name'][1]?></label>
+                    <?php echo $lang['user_status_name'][1]; ?></label>
                 &nbsp;&nbsp;
                 <label>
                     <input name="Status" type="radio" value="2" <?php echo $member->Status == 2 ? 'checked="checked"' : ''; ?> />&nbsp;
-                    <?php echo $lang['user_status_name'][2]?></label>
+                    <?php echo $lang['user_status_name'][2]; ?></label>
                 )
-                <?php
-}?></p>
+                    <?php
+    }
+    ?>
+    </p>
             <p>
                 <span class="title">
-                    <?php echo $lang['msg']['name']?>:</span>
+                    <?php echo $lang['msg']['name']; ?>:</span>
                 <span class="star">(*)</span>
                 <br />
-                <input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name; ?>" <?php if (!$zbp->CheckRights('MemberAll')) {
-        echo 'readonly="readonly"';
-    }
-?> /></p>
+                <input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name; ?>" 
+                    <?php
+                    if (!$zbp->CheckRights('MemberAll')) {
+                        echo 'readonly="readonly"';
+                    }
+                    ?>
+                                                                                                             /></p>
             <p>
                 <span class='title'>
-                    <?php echo $lang['msg']['password']?>:</span>
+                    <?php echo $lang['msg']['password']; ?>:</span>
                 <br/>
                 <input id="edtPassword" class="edit" size="40" name="Password"  type="password" value="" />
             </p>
             <p>
                 <span class='title'>
-                    <?php echo $lang['msg']['re_password']?>:</span>
+                    <?php echo $lang['msg']['re_password']; ?>:</span>
                 <br/>
                 <input id="edtPasswordRe" class="edit" size="40" name="PasswordRe"  type="password" value="" />
             </p>
             <p>
                 <span class="title">
-                    <?php echo $lang['msg']['alias']?>:</span>
+                    <?php echo $lang['msg']['alias']; ?>:</span>
                 <br />
                 <input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $member->Alias; ?>" /></p>
             <p>
                 <span class="title">
-                    <?php echo $lang['msg']['email']?>:</span>
+                    <?php echo $lang['msg']['email']; ?>:</span>
                 <span class="star">(*)</span>
                 <br />
                 <input id="edtEmail" class="edit" size="40" name="Email" type="text" value="<?php echo $member->Email; ?>" /></p>
             <p>
                 <span class="title">
-                    <?php echo $lang['msg']['homepage']?>:</span>
+                    <?php echo $lang['msg']['homepage']; ?>:</span>
                 <br />
                 <input id="edtHomePage" class="edit" size="40" name="HomePage" type="text" value="<?php echo $member->HomePage; ?>" /></p>
             <p>
                 <span class='title'>
-                    <?php echo $lang['msg']['intro']?>:</span>
+                    <?php echo $lang['msg']['intro']; ?>:</span>
                 <br/>
                 <textarea cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;"><?php echo htmlspecialchars($member->Intro); ?></textarea>
             </p>
             <p>
                 <span class="title">
-                    <?php echo $lang['msg']['template']?>:</span>
+                    <?php echo $lang['msg']['template']; ?>:</span>
                 <br />
                 <select class="edit" size="1" name="Template" id="cmbTemplate">
                     <?php echo OutputOptionItemsOfTemplate($member->Template); ?></select>
             </p>
             <div id='response' class='editmod2'>
-                <?php foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal) {
-    $fpname();
-}
-?>
+                <?php
+                foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal) {
+                    $fpname();
+                }
+                ?>
             </div>
             <p>
                 <span class="title">
-                    <?php echo $lang['msg']['default_avatar']?>:</span>
+                    <?php echo $lang['msg']['default_avatar']; ?>:</span>
                 &nbsp;
                 <br />
                 <?php echo $member->Avatar; ?></p>
             <p>
-                <input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" /></p>
+                <input type="submit" class="button" value="<?php echo $lang['msg']['submit']; ?>" id="btnPost" onclick="return checkInfo();" /></p>
         </form>
         <script type="text/javascript">
 function checkInfo(){
@@ -156,18 +163,18 @@ function checkInfo(){
 
 
   if(!$("#edtEmail").val()){
-    alert("<?php echo $lang['error']['29']?>");
+    alert("<?php echo $lang['error']['29']; ?>");
     return false
   }
 
 
   if(!$("#edtName").val()){
-    alert("<?php echo $lang['error']['72']?>");
+    alert("<?php echo $lang['error']['72']; ?>");
     return false
   }
 
   if($("#edtPassword").val()!==$("#edtPasswordRe").val()){
-    alert("<?php echo $lang['error']['73']?>");
+    alert("<?php echo $lang['error']['73']; ?>");
     return false
   }
 

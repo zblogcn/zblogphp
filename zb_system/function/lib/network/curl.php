@@ -10,26 +10,45 @@ if (!defined('ZBP_PATH')) {
  */
 class Network__curl implements Network__Interface
 {
+
     private $readyState = 0; //状态
+
     private $responseBody = null; //返回的二进制
+
     private $responseStream = null; //返回的数据流
+
     private $responseText = ''; //返回的数据
+
     private $responseXML = null; //尝试把responseText格式化为XMLDom
+
     private $status = 0; //状态码
+
     private $statusText = ''; //状态码文本
+
     private $responseVersion = ''; //返回的HTTP版体
 
     private $option = array();
+
     private $url = '';
+
     private $postdata = array();
+
     private $httpheader = array();
+
     private $responseHeader = array();
+
     private $parsed_url = array();
+
     private $timeout = 30;
+
     private $errstr = '';
+
     private $errno = 0;
+
     private $ch = null;
+
     private $isgzip = false;
+
     private $maxredirs = 0;
 
     private $__isBinary = false;
@@ -64,14 +83,15 @@ class Network__curl implements Network__Interface
             $w = new DOMDocument();
 
             return $w->loadXML($this->responseText);
-        } elseif (strtolower($property_name) == 'scheme' ||
-            strtolower($property_name) == 'host' ||
-            strtolower($property_name) == 'port' ||
-            strtolower($property_name) == 'user' ||
-            strtolower($property_name) == 'pass' ||
-            strtolower($property_name) == 'path' ||
-            strtolower($property_name) == 'query' ||
-            strtolower($property_name) == 'fragment') {
+        } elseif (strtolower($property_name) == 'scheme'
+            || strtolower($property_name) == 'host'
+            || strtolower($property_name) == 'port'
+            || strtolower($property_name) == 'user'
+            || strtolower($property_name) == 'pass'
+            || strtolower($property_name) == 'path'
+            || strtolower($property_name) == 'query'
+            || strtolower($property_name) == 'fragment'
+        ) {
             if (isset($this->parsed_url[strtolower($property_name)])) {
                 return $this->parsed_url[strtolower($property_name)];
             } else {
@@ -218,7 +238,7 @@ class Network__curl implements Network__Interface
         $result = curl_exec($this->ch);
         $header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
 
-        $this->responseHeader = explode("\r\n", substr($result, 0, $header_size - 4));
+        $this->responseHeader = explode("\r\n", substr($result, 0, ($header_size - 4)));
         $this->responseText = substr($result, $header_size);
         curl_close($this->ch);
 
@@ -384,4 +404,5 @@ class Network__curl implements Network__Interface
     {
         $this->maxredirs = (int) $n;
     }
+
 }

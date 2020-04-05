@@ -18,6 +18,7 @@ if (!defined('ZBP_PATH')) {
  */
 interface Network__Interface
 {
+
     /**
      * @return mixed
      */
@@ -98,4 +99,5 @@ interface Network__Interface
      * @return mixed
      */
     public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout);
+
 }

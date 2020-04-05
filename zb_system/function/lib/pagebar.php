@@ -8,66 +8,82 @@ if (!defined('ZBP_PATH')) {
  */
 class PageBar
 {
+
     /**
      * @var int|null 内容总数
      */
     public $Count = null;
+
     /**
      * @var int Pagebar长度数量
      */
     public $PageBarCount = 0;
+
     /**
      * @var int 每页数量
      */
     public $PageCount = 0;
+
     /**
      * @var int 总页数
      */
     public $PageAll = 0;
+
     /**
      * @var int 当前页
      */
     public $PageNow = 0;
+
     /**
      * @var int 起始页
      */
     public $PageFirst = 0;
+
     /**
      * @var int 最后页
      */
     public $PageLast = 0;
+
     /**
      * @var int 上一页
      */
     public $PagePrevious = 0;
+
     /**
      * @var int 下一页
      */
     public $PageNext = 0;
+
     /**
      * @var null|UrlRule
      */
     public $UrlRule = null;
+
     /**
      * @var array
      */
     public $buttons = array();
+
     /**
      * @var null
      */
     public $prevbutton = null;
+
     /**
      * @var null
      */
     public $nextbutton = null;
+
     /**
      * @var array
      */
     public $Buttons = array();
+
     /**
      * @var null
      */
     public $PrevButton = null;
+
     /**
      * @var null
      */
@@ -102,12 +118,12 @@ class PageBar
         $this->PageFirst = 1;
         $this->PageLast = $this->PageAll;
 
-        $this->PagePrevious = $this->PageNow - 1;
+        $this->PagePrevious = ($this->PageNow - 1);
         if ($this->PagePrevious < 1) {
             $this->PagePrevious = 1;
         }
 
-        $this->PageNext = $this->PageNow + 1;
+        $this->PageNext = ($this->PageNow + 1);
         if ($this->PageNext > $this->PageAll) {
             $this->PageNext = $this->PageAll;
         }
@@ -121,16 +137,16 @@ class PageBar
             $this->prevbutton = $this->buttons[$zbp->langs->msg->prev_button];
         }
 
-        $pageAll = $this->PageAll + 1;
+        $pageAll = ($this->PageAll + 1);
         $middle = ceil($this->PageBarCount / 2);
         $start = 1;
         if ($this->PageNow > $middle) {
-            $start = $this->PageNow - $middle + 1;
+            $start = ($this->PageNow - $middle + 1);
         }
         if ($pageAll > $this->PageBarCount && ($pageAll - $start) < $this->PageBarCount) {
-            $start = $pageAll - $this->PageBarCount;
+            $start = ($pageAll - $this->PageBarCount);
         }
-        $end = $start + $this->PageBarCount;
+        $end = ($start + $this->PageBarCount);
         if ($end > $pageAll) {
             $end = $pageAll;
         }
@@ -151,4 +167,5 @@ class PageBar
         $this->UrlRule->Rules['{%page%}'] = $this->PageLast;
         $this->buttons[$zbp->langs->msg->last_button] = $this->UrlRule->Make();
     }
+
 }

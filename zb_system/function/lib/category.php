@@ -23,16 +23,19 @@ if (!defined('ZBP_PATH')) {
  */
 class Category extends Base
 {
+
     /**
      * @var array 下层分类
      */
     public $SubCategories = array(); //子分类
+
     /**
      * @deprecated
      *
      * @var array|null
      */
     public $SubCategorys = null; // 拼写错误，保持兼容
+
     public $ChildrenCategories = array(); //子孙分类
 
     /**
@@ -130,7 +133,7 @@ class Category extends Base
             } else {
                 $l = $this->Level;
 
-                return str_repeat('&nbsp;', $l * 2 - 1) . '└';
+                return str_repeat('&nbsp;', ($l * 2 - 1)) . '└';
             }
         }
         if ($name == 'Level') {
@@ -244,7 +247,7 @@ class Category extends Base
         } elseif (!isset($zbp->categories[$object->ParentID])) {
             return 0;
         } else {
-            return $this->GetDeep($zbp->categories[$object->ParentID], $deep + 1);
+            return $this->GetDeep($zbp->categories[$object->ParentID], ($deep + 1));
         }
     }
 
@@ -271,4 +274,5 @@ class Category extends Base
             return 0;
         }
     }
+
 }

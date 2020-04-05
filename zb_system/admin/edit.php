@@ -118,12 +118,12 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                         <input type="hidden" name="Type" id="edtType" value="<?php echo $article->Type; ?>"/>
                         <!-- title( -->
                         <div id="titleheader" class="editmod">
-                            <label for="edtTitle" class="editinputname"><?php echo $lang['msg']['title'] ?></label>
+                            <label for="edtTitle" class="editinputname"><?php echo $lang['msg']['title']; ?></label>
                             <div>
                                 <input type="text" name="Title" id="edtTitle"
                                         maxlength="<?php echo $option['ZC_ARTICLE_TITLE_MAX']; ?>"
-                                        onBlur="if(this.value==='') this.value='<?php echo $lang['msg']['unnamed'] ?>'"
-                                        onFocus="if(this.value==='<?php echo $lang['msg']['unnamed'] ?>') this.value=''"
+                                        onBlur="if(this.value==='') this.value='<?php echo $lang['msg']['unnamed']; ?>'"
+                                        onFocus="if(this.value==='<?php echo $lang['msg']['unnamed']; ?>') this.value=''"
                                         value="<?php echo $article->Title; ?>"/>
                             </div>
                         </div>
@@ -143,7 +143,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                     <div id="divContent" class="editmod2" style="clear:both;">
                         <div id="cheader" class="editmod editmod3">
                             <label for="editor_content" class="editinputname">
-                                <?php echo $lang['msg']['content'] ?>
+                                <?php echo $lang['msg']['content']; ?>
                             </label>
                             &nbsp;&nbsp;
                             <span id="timemsg"></span>
@@ -172,23 +172,24 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                     <!-- alias( -->
                     <div id="alias" class="editmod2">
                         <label for="edtAlias" class="editinputname">
-                            <?php echo $lang['msg']['alias'] ?>
+                            <?php echo $lang['msg']['alias']; ?>
                         </label>
                         <input type="text" name="Alias" id="edtAlias" maxlength="250" value="<?php echo $article->Alias; ?>"/>
                     </div>
                     <!-- )alias -->
 
-                    <?php if (!$ispage) {
-                            ?>
+                    <?php
+                    if (!$ispage) {
+                        ?>
                         <!-- tags( -->
                         <div id="tags" class="editmod2">
                             <label for="edtTag" class='editinputname'>
-                                <?php echo $lang['msg']['tags'] ?>
+                                <?php echo $lang['msg']['tags']; ?>
                             </label>
                             <input type="text" name="Tag" id="edtTag"
                                    value="<?php echo $article->TagsToNameString(); ?>"/>
-                            (<?php echo $lang['msg']['use_commas_to_separate'] ?>)
-                            <a href="#" id="showtags"><?php echo $lang['msg']['show_common_tags'] ?></a>
+                            (<?php echo $lang['msg']['use_commas_to_separate']; ?>)
+                            <a href="#" id="showtags"><?php echo $lang['msg']['show_common_tags']; ?></a>
                         </div>
                         <!-- Tags -->
                         <div id="ulTag" class="editmod2" style="display:none;">
@@ -197,17 +198,22 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                         <!-- )tags -->
 
                         <div id="insertintro" class="editmod2" style="padding-top:0.5em;paddding-bottom:0.5em;">
-                            <span>* <?php echo $lang['msg']['help_generate_summary'] ?>
-                                <a href="#" onClick="AutoIntro()">[<?php echo $lang['msg']['generate_summary'] ?>]</a></span></div>
+                            <span>* <?php echo $lang['msg']['help_generate_summary']; ?>
+                                <a href="#" onClick="AutoIntro()">[<?php echo $lang['msg']['generate_summary']; ?>]</a></span></div>
                         <?php
-                        } ?>
+                    }
+                    ?>
 
-                    <div id="divIntro" class="editmod2" <?php if (!$article->Intro) {
+                    <div id="divIntro" class="editmod2" 
+                    <?php
+                    if (!$article->Intro) {
                             echo 'style="display:none;"';
-                        } ?>>
+                    }
+                    ?>
+                        >
                         <div id="theader" class="editmod editmod3">
                             <label for="editor_intro" class="editinputname">
-                                <?php echo $lang['msg']['intro'] ?>
+                                <?php echo $lang['msg']['intro']; ?>
                             </label>
                         </div>
                         <div id="tarea" style="margin:5px 0 0 0" class="editmod editmod3">
@@ -237,29 +243,31 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                             <div id="divFloat">
                                 <div id='post' class="editmod">
                                     <input class="button" style="width:180px;height:38px;" type="submit"
-                                           value="<?php echo $lang['msg']['submit'] ?>" id="btnPost"
+                                           value="<?php echo $lang['msg']['submit']; ?>" id="btnPost"
                                            onclick='return checkArticleInfo();'/>
                                 </div>
 
                                 <!-- cate -->
-                                <?php if (!$ispage) {
-                            ?>
+                                <?php
+                                if (!$ispage) {
+                                    ?>
                                     <div id="cate" class="editmod">
                                         <label for="cmbCateID" class="editinputname" style="max-width:65px;text-overflow:ellipsis;">
-                                            <?php echo $lang['msg']['category'] ?>
+                                            <?php echo $lang['msg']['category']; ?>
                                         </label>
                                         <select style="width:180px;" class="edit" size="1" name="CateID" id="cmbCateID">
                                             <?php echo OutputOptionItemsOfCategories($article->CateID); ?>
                                         </select>
                                     </div>
-                                <?php
-                        } ?>
+                                    <?php
+                                }
+                                ?>
                                 <!-- )cate -->
 
                                 <!-- level -->
                                 <div id='level' class="editmod">
                                     <label for="cmbPostStatus" class="editinputname" style="max-width:65px;text-overflow:ellipsis;">
-                                        <?php echo $lang['msg']['status'] ?>
+                                        <?php echo $lang['msg']['status']; ?>
                                     </label>
                                     <select class="edit" style="width:180px;" size="1" name="Status" id="cmbPostStatus"
                                             onChange="cmbPostStatus.value=this.options[this.selectedIndex].value">
@@ -271,7 +279,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                 <!-- template( -->
                                 <div id='template' class="editmod">
                                     <label for="cmbTemplate" class="editinputname" style="max-width:65px;text-overflow:ellipsis;">
-                                        <?php echo $lang['msg']['template'] ?>
+                                        <?php echo $lang['msg']['template']; ?>
                                     </label>
                                     <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate"
                                             onChange="cmbTemplate.value=this.options[this.selectedIndex].value">
@@ -283,7 +291,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                 <!-- user( -->
                                 <div id='user' class="editmod">
                                     <label for="cmbUser" class="editinputname" style="max-width:65px;text-overflow:ellipsis;">
-                                        <?php echo $lang['msg']['author'] ?>
+                                        <?php echo $lang['msg']['author']; ?>
                                     </label>
                                     <select style="width:180px;" size="1" name="AuthorID" id="cmbUser"
                                             onChange="cmbUser.value=this.options[this.selectedIndex].value">
@@ -295,24 +303,28 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                 <!-- newdatetime( -->
                                 <div id='newdatetime' class="editmod">
                                     <label for="edtDateTime" class="editinputname" style="max-width:65px;text-overflow:ellipsis;">
-                                        <?php echo $lang['msg']['date'] ?>
+                                        <?php echo $lang['msg']['date']; ?>
                                     </label>
                                     <input type="text" name="PostTime" id="edtDateTime" value="<?php echo $article->Time(); ?>" style="width:180px;"/>
                                 </div>
 
                                 <!-- )newdatetime -->
 
-                                <!-- Istop( --><?php if (!$ispage && $zbp->CheckRights('ArticleAll')) {
-                            ?>
+                                <!-- Istop( -->
+                                <?php
+                                if (!$ispage && $zbp->CheckRights('ArticleAll')) {
+                                    ?>
                                     <div id='istop' class="editmod">
                                     <label for="edtIstop"
-                                           class="editinputname"><?php echo $lang['msg']['top'] ?></label>
+                                           class="editinputname"><?php echo $lang['msg']['top']; ?></label>
                                     <select style="width:80px;" size="1" name="IsTop" id="edtIstopType"
                                             class="off-hide">
                                         <?php echo OutputOptionItemsOfIsTop($article->IsTop); ?>
                                     </select>
-                                    </div><?php
-                        } ?>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
 
                                 <!-- )Istop -->
 
@@ -320,22 +332,26 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
                                 <div id='islock' class="editmod">
                                     <label for="edtIslock"
-                                           class='editinputname'><?php echo $lang['msg']['disable_comment'] ?></label>
+                                           class='editinputname'><?php echo $lang['msg']['disable_comment']; ?></label>
                                     <input id="edtIslock" name="IsLock" style="" type="text"
                                            value="<?php echo (int) $article->IsLock; ?>" class="checkbox"/>
                                 </div>
                                 <!-- )IsLock -->
 
-                                <!-- Navbar( --><?php if ($ispage) {
-                            ?>
+                                <!-- Navbar( -->
+                                <?php
+                                if ($ispage) {
+                                    ?>
                                     <div id='AddNavbar' class="editmod">
                                     <label for="edtAddNavbar"
-                                           class='editinputname'><?php echo $lang['msg']['add_to_navbar'] ?></label>
+                                           class='editinputname'><?php echo $lang['msg']['add_to_navbar']; ?></label>
                                     <input type="text" name="AddNavbar" id="edtAddNavbar"
-                                           value="<?php echo (int) $zbp->CheckItemToNavbar('page', $article->ID) ?>"
+                                           value="<?php echo (int) $zbp->CheckItemToNavbar('page', $article->ID); ?>"
                                            class="checkbox"/>
-                                    </div><?php
-                        } ?>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
                                 <!-- )Navbar -->
 
                                 <!-- 3号输出接口 -->
@@ -427,37 +443,37 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
             }
 
             //日期时间控件
-            $.datepicker.regional['<?php echo $lang['lang'] ?>'] = {
-                closeText: '<?php echo $lang['msg']['close'] ?>',
-                prevText: '<?php echo $lang['msg']['prev_month'] ?>',
-                nextText: '<?php echo $lang['msg']['next_month'] ?>',
-                currentText: '<?php echo $lang['msg']['current'] ?>',
-                monthNames: ['<?php echo $lang['month']['1'] ?>', '<?php echo $lang['month']['2'] ?>', '<?php echo $lang['month']['3'] ?>', '<?php echo $lang['month']['4'] ?>', '<?php echo $lang['month']['5'] ?>', '<?php echo $lang['month']['6'] ?>', '<?php echo $lang['month']['7'] ?>', '<?php echo $lang['month']['8'] ?>', '<?php echo $lang['month']['9'] ?>', '<?php echo $lang['month']['10'] ?>', '<?php echo $lang['month']['11'] ?>', '<?php echo $lang['month']['12'] ?>'],
-                monthNamesShort: ['<?php echo $lang['month_abbr']['1'] ?>', '<?php echo $lang['month_abbr']['2'] ?>', '<?php echo $lang['month_abbr']['3'] ?>', '<?php echo $lang['month_abbr']['4'] ?>', '<?php echo $lang['month_abbr']['5'] ?>', '<?php echo $lang['month_abbr']['6'] ?>', '<?php echo $lang['month_abbr']['7'] ?>', '<?php echo $lang['month_abbr']['8'] ?>', '<?php echo $lang['month_abbr']['9'] ?>', '<?php echo $lang['month_abbr']['10'] ?>', '<?php echo $lang['month_abbr']['11'] ?>', '<?php echo $lang['month_abbr']['12'] ?>'],
-                dayNames: ['<?php echo $lang['week']['7'] ?>', '<?php echo $lang['week']['1'] ?>', '<?php echo $lang['week']['2'] ?>', '<?php echo $lang['week']['3'] ?>', '<?php echo $lang['week']['4'] ?>', '<?php echo $lang['week']['5'] ?>', '<?php echo $lang['week']['6'] ?>'],
-                dayNamesShort: ['<?php echo $lang['week_short']['7'] ?>', '<?php echo $lang['week_short']['1'] ?>', '<?php echo $lang['week_short']['2'] ?>', '<?php echo $lang['week_short']['3'] ?>', '<?php echo $lang['week_short']['4'] ?>', '<?php echo $lang['week_short']['5'] ?>', '<?php echo $lang['week_short']['6'] ?>'],
-                dayNamesMin: ['<?php echo $lang['week_abbr']['7'] ?>', '<?php echo $lang['week_abbr']['1'] ?>', '<?php echo $lang['week_abbr']['2'] ?>', '<?php echo $lang['week_abbr']['3'] ?>', '<?php echo $lang['week_abbr']['4'] ?>', '<?php echo $lang['week_abbr']['5'] ?>', '<?php echo $lang['week_abbr']['6'] ?>'],
-                weekHeader: '<?php echo $lang['msg']['week_suffix'] ?>',
+            $.datepicker.regional['<?php echo $lang['lang']; ?>'] = {
+                closeText: '<?php echo $lang['msg']['close']; ?>',
+                prevText: '<?php echo $lang['msg']['prev_month']; ?>',
+                nextText: '<?php echo $lang['msg']['next_month']; ?>',
+                currentText: '<?php echo $lang['msg']['current']; ?>',
+                monthNames: ['<?php echo $lang['month']['1']; ?>', '<?php echo $lang['month']['2']; ?>', '<?php echo $lang['month']['3']; ?>', '<?php echo $lang['month']['4']; ?>', '<?php echo $lang['month']['5']; ?>', '<?php echo $lang['month']['6']; ?>', '<?php echo $lang['month']['7']; ?>', '<?php echo $lang['month']['8']; ?>', '<?php echo $lang['month']['9']; ?>', '<?php echo $lang['month']['10']; ?>', '<?php echo $lang['month']['11']; ?>', '<?php echo $lang['month']['12']; ?>'],
+                monthNamesShort: ['<?php echo $lang['month_abbr']['1']; ?>', '<?php echo $lang['month_abbr']['2']; ?>', '<?php echo $lang['month_abbr']['3']; ?>', '<?php echo $lang['month_abbr']['4']; ?>', '<?php echo $lang['month_abbr']['5']; ?>', '<?php echo $lang['month_abbr']['6']; ?>', '<?php echo $lang['month_abbr']['7']; ?>', '<?php echo $lang['month_abbr']['8']; ?>', '<?php echo $lang['month_abbr']['9']; ?>', '<?php echo $lang['month_abbr']['10']; ?>', '<?php echo $lang['month_abbr']['11']; ?>', '<?php echo $lang['month_abbr']['12']; ?>'],
+                dayNames: ['<?php echo $lang['week']['7']; ?>', '<?php echo $lang['week']['1']; ?>', '<?php echo $lang['week']['2']; ?>', '<?php echo $lang['week']['3']; ?>', '<?php echo $lang['week']['4']; ?>', '<?php echo $lang['week']['5']; ?>', '<?php echo $lang['week']['6']; ?>'],
+                dayNamesShort: ['<?php echo $lang['week_short']['7']; ?>', '<?php echo $lang['week_short']['1']; ?>', '<?php echo $lang['week_short']['2']; ?>', '<?php echo $lang['week_short']['3']; ?>', '<?php echo $lang['week_short']['4']; ?>', '<?php echo $lang['week_short']['5']; ?>', '<?php echo $lang['week_short']['6']; ?>'],
+                dayNamesMin: ['<?php echo $lang['week_abbr']['7']; ?>', '<?php echo $lang['week_abbr']['1']; ?>', '<?php echo $lang['week_abbr']['2']; ?>', '<?php echo $lang['week_abbr']['3']; ?>', '<?php echo $lang['week_abbr']['4']; ?>', '<?php echo $lang['week_abbr']['5']; ?>', '<?php echo $lang['week_abbr']['6']; ?>'],
+                weekHeader: '<?php echo $lang['msg']['week_suffix']; ?>',
                 dateFormat: 'yy-mm-dd',
                 firstDay: 1,
                 isRTL: false,
                 showMonthAfterYear: true,
-                yearSuffix: ' <?php echo $lang['msg']['year_suffix'] ?>  '
+                yearSuffix: ' <?php echo $lang['msg']['year_suffix']; ?>  '
             };
-            $.datepicker.setDefaults($.datepicker.regional['<?php echo $lang['lang'] ?>']);
-            $.timepicker.regional['<?php echo $lang['lang'] ?>'] = {
-                timeOnlyTitle: '<?php echo $lang['msg']['time'] ?>',
-                timeText: '<?php echo $lang['msg']['time'] ?>',
-                hourText: '<?php echo $lang['msg']['hour'] ?>',
-                minuteText: '<?php echo $lang['msg']['minute'] ?>',
-                secondText: '<?php echo $lang['msg']['second'] ?>',
-                millisecText: '<?php echo $lang['msg']['millisec'] ?>',
-                currentText: '<?php echo $lang['msg']['current'] ?>',
-                closeText: '<?php echo $lang['msg']['close'] ?>',
+            $.datepicker.setDefaults($.datepicker.regional['<?php echo $lang['lang']; ?>']);
+            $.timepicker.regional['<?php echo $lang['lang']; ?>'] = {
+                timeOnlyTitle: '<?php echo $lang['msg']['time']; ?>',
+                timeText: '<?php echo $lang['msg']['time']; ?>',
+                hourText: '<?php echo $lang['msg']['hour']; ?>',
+                minuteText: '<?php echo $lang['msg']['minute']; ?>',
+                secondText: '<?php echo $lang['msg']['second']; ?>',
+                millisecText: '<?php echo $lang['msg']['millisec']; ?>',
+                currentText: '<?php echo $lang['msg']['current']; ?>',
+                closeText: '<?php echo $lang['msg']['close']; ?>',
                 timeFormat: 'HH:mm:ss',
                 ampm: false
             };
-            $.timepicker.setDefaults($.timepicker.regional['<?php echo $lang['lang'] ?>']);
+            $.timepicker.setDefaults($.timepicker.regional['<?php echo $lang['lang']; ?>']);
             $('#edtDateTime').datetimepicker({
                 showSecond: true
                 //changeMonth: true,

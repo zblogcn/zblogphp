@@ -8,49 +8,67 @@ if (!defined('ZBP_PATH')) {
  */
 class Template
 {
+
     protected $path = null;
+
     protected $entryPage = null;
+
     protected $uncompiledCodeStore = array();
+
     public $theme = "";
+
     public $templates = array();
+
     public $templates_Name = array();
+
     public $templates_Type = array();
+
     public $compiledTemplates = array();
+
     public $templateTags = array();
+
     public $staticTags = array();
 
     /**
      * @var array 默认侧栏
      */
     public $sidebar = array();
+
     /**
      * @var array 侧栏2
      */
     public $sidebar2 = array();
+
     /**
      * @var array 侧栏3
      */
     public $sidebar3 = array();
+
     /**
      * @var array 侧栏4
      */
     public $sidebar4 = array();
+
     /**
      * @var array 侧栏5
      */
     public $sidebar5 = array();
+
     /**
      * @var array 侧栏6
      */
     public $sidebar6 = array();
+
     /**
      * @var array 侧栏77
      */
     public $sidebar7 = array();
+
     /**
      * @var array 侧栏8
      */
     public $sidebar8 = array();
+
     /**
      * @var array 侧栏9
      */
@@ -146,7 +164,7 @@ class Template
     public function SetTagsAll(&$array)
     {
         if (is_array($array)) {
-            $this->templateTags = $array + $this->templateTags;
+            $this->templateTags = ($array + $this->templateTags);
         }
     }
 
@@ -723,7 +741,9 @@ class Template
     }
 
     private $template_json_file = null;
+
     private $dirs = array();
+
     private $files = array();
 
     private function GetAllFileDir($dir)
@@ -740,8 +760,8 @@ class Template
                     $s = $dir . $d;
                     $i = strlen($zbp->usersdir . 'theme/' . $this->theme . '/template/');
                     if (substr($s, -4) == '.php') {
-                        $s2 = substr($s, $i - strlen($s));
-                        $s3 = substr($s2, 0, strlen($s2) - 4);
+                        $s2 = substr($s, ($i - strlen($s)));
+                        $s3 = substr($s2, 0, (strlen($s2) - 4));
                         $this->files[$s3] = file_get_contents($s); //$dir . $d;
                     }
                 }
@@ -758,8 +778,8 @@ class Template
                             $s = $d;
                             $i = strlen($zbp->usersdir . 'theme/' . $this->theme . '/template/');
                             if (substr($s, -4) == '.php') {
-                                $s2 = substr($s, $i - strlen($s));
-                                $s3 = substr($s2, 0, strlen($s2) - 4);
+                                $s2 = substr($s, ($i - strlen($s)));
+                                $s3 = substr($s2, 0, (strlen($s2) - 4));
                                 $this->files[$s3] = file_get_contents($s); //$dir . $d;
                             }
                         }
@@ -874,7 +894,7 @@ class Template
                 $o['{#' . $k . '#}'] = $v;
             }
         }
-        $this->staticTags = $t + $o;
+        $this->staticTags = ($t + $o);
     }
 
     public function ReplaceStaticTags($s)
@@ -888,4 +908,5 @@ class Template
     {
         return $this->entryPage;
     }
+
 }

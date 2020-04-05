@@ -26,7 +26,6 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
 ?>
 <?php
-
 $cateid = null;
 if (isset($_GET['id'])) {
     $cateid = (int) GetVars('id', 'GET');
@@ -60,7 +59,7 @@ foreach ($zbp->categoriesbyorder as $k => $v) {
 ?>
 <div id="divMain">
     <div class="divHeader2">
-        <?php echo $lang['msg']['category_edit']?></div>
+        <?php echo $lang['msg']['category_edit']; ?></div>
     <div class="SubMenu">
 <?php
 foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_SubMenu'] as $fpname => &$fpsignal) {
@@ -73,70 +72,72 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_SubMenu'] as $fpname => 
             <input id="edtID" name="ID" type="hidden" value="<?php echo $cate->ID; ?>" />
             <p>
                 <span class="title">
-                    <?php echo $lang['msg']['name']?>:</span>
+                    <?php echo $lang['msg']['name']; ?>:</span>
                 <span class="star">(*)</span>
                 <br />
                 <input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $option['ZC_CATEGORY_NAME_MAX']; ?>" type="text" value="<?php echo $cate->Name; ?>" /></p>
             <p>
                 <span class="title">
-                    <?php echo $lang['msg']['alias']?>:</span>
+                    <?php echo $lang['msg']['alias']; ?>:</span>
                 <br />
                 <input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $cate->Alias; ?>" /></p>
 
             <p>
                 <span class="title">
-                    <?php echo $lang['msg']['order']?>:</span>
+                    <?php echo $lang['msg']['order']; ?>:</span>
                 <br />
                 <input id="edtOrder" class="edit" size="40" name="Order" type="text" value="<?php echo $cate->Order; ?>" /></p>
             <p>
                 <span class="title">
-                    <?php echo $lang['msg']['parent_category']?>:</span>
+                    <?php echo $lang['msg']['parent_category']; ?>:</span>
                 <br />
                 <select id="edtParentID" name="ParentID" class="edit" size="1">
                     <?php echo $p; ?></select>
             </p>
             <p>
                 <span class="title">
-                    <?php echo $lang['msg']['template']?>:</span>
+                    <?php echo $lang['msg']['template']; ?>:</span>
                 <br />
                 <select class="edit" size="1" name="Template" id="cmbTemplate">
                     <?php echo OutputOptionItemsOfTemplate($cate->Template, array('single', '404', 'search', 'module', 'lm-'), array()); ?></select>
                 <input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $cate->Template; ?>" /></p>
             <p>
                 <span class="title">
-                    <?php echo $lang['msg']['category_aritles_default_template']?>:</span>
+                    <?php echo $lang['msg']['category_aritles_default_template']; ?>:</span>
                 <br />
                 <select class="edit" size="1" name="LogTemplate" id="cmbLogTemplate">
                     <?php echo OutputOptionItemsOfTemplate($cate->LogTemplate, array('index', '404', 'search', 'module', 'lm-'), array()); ?></select>
             </p>
             <p>
                 <span class='title'>
-                    <?php echo $lang['msg']['intro']?>:</span>
+                    <?php echo $lang['msg']['intro']; ?>:</span>
                 <br/>
                 <textarea  cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;"><?php echo htmlspecialchars($cate->Intro); ?></textarea>
             </p>
             <p>
                 <label>
                     <span class="title">
-                        <?php echo $lang['msg']['add_to_navbar']?>:</span>
-                    <input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int) $zbp->CheckItemToNavbar('category', $cate->ID)?>" class="checkbox" />
+                        <?php echo $lang['msg']['add_to_navbar']; ?>:</span>
+                    <input type="text" name="AddNavbar" id="edtAddNavbar" value="<?php echo (int) $zbp->CheckItemToNavbar('category', $cate->ID); ?>" class="checkbox" />
                 </label>
             </p>
             <!-- 1号输出接口 -->
             <div id='response' class='editmod2'>
-                <?php foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_Response'] as $fpname => &$fpsignal) {
-    $fpname();
-}?>
+                <?php
+                foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_Response'] as $fpname => &$fpsignal) {
+                    $fpname();
+                }
+                ?>
             </div>
             <p>
-                <input type="submit" class="button" value="<?php echo $lang['msg']['submit']?>" id="btnPost" onclick="return checkInfo();" /></p>
+                <input type="submit" class="button" value="<?php echo $lang['msg']['submit']; ?>" id="btnPost" onclick="return checkInfo();" /></p>
         </form>
         <script type="text/javascript">
 function checkInfo(){
   document.getElementById("edit").action="<?php echo BuildSafeCmdURL('act=CategoryPst'); ?>";
 
   if(!$("#edtName").val()){
-    alert("<?php echo $lang['error']['72']?>");
+    alert("<?php echo $lang['error']['72']; ?>");
     return false
   }
 

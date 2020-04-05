@@ -28,6 +28,7 @@ if (!defined('ZBP_PATH')) {
  */
 class Member extends Base
 {
+
     /**
      * @var string 头像图片地址
      */
@@ -216,7 +217,7 @@ class Member extends Base
     public function GetHashByToken($wt_id = '', $day = 30)
     {
         global $zbp;
-        $t = intval($day * 24 * 3600) + time();
+        $t = (intval($day * 24 * 3600) + time());
 
         return CreateWebToken($wt_id, $t, $zbp->guid, $this->ID, $this->Password);
     }
@@ -279,4 +280,5 @@ class Member extends Base
 
         return parent::Del();
     }
+
 }

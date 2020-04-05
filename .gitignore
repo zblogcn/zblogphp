@@ -7,7 +7,7 @@ mix-manifest.json
 /zb_users/c_option*.php
 /zb_users/data/*.db
 
-# Cache 
+# Cache
 /zb_users/cache/*
 /zb_users/logs/*
 
@@ -85,10 +85,10 @@ phpinfo.php
 /Beta/
 /vendor/
 /.idea/
-composer.lock
 .php_cs.cache
 favicon.ico
 nologin.php
 test1.php
 test3.php
 test4.php
+.vscode

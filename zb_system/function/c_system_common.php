@@ -15,28 +15,28 @@
  */
 function GetScheme($array)
 {
-    if (
-        (array_key_exists('REQUEST_SCHEME', $array)
-            &&
-            (strtolower($array['REQUEST_SCHEME']) == 'https'))
-        ||
-        (array_key_exists('HTTPS', $array)
-            &&
-            (strtolower($array['HTTPS']) == 'on'))
-        ||
-        (array_key_exists('HTTP_FROM_HTTPS', $array)
-            &&
-            (strtolower($array['HTTP_FROM_HTTPS']) == 'on'))
-        ||
-        (array_key_exists('SERVER_PORT', $array)
-            &&
-            (strtolower($array['SERVER_PORT']) == '443'))
+    if ((array_key_exists('REQUEST_SCHEME', $array)
+        
+        && (strtolower($array['REQUEST_SCHEME']) == 'https'))
+        
+        || (array_key_exists('HTTPS', $array)
+        
+        && (strtolower($array['HTTPS']) == 'on'))
+        
+        || (array_key_exists('HTTP_FROM_HTTPS', $array)
+        
+        && (strtolower($array['HTTP_FROM_HTTPS']) == 'on'))
+        
+        || (array_key_exists('SERVER_PORT', $array)
+        
+        && (strtolower($array['SERVER_PORT']) == '443'))
     ) {
         return 'https://';
     }
 
     return 'http://';
 }
+
 /**
  * 获取服务器.
  *
@@ -138,7 +138,7 @@ function AutoloadClass($className)
     $className = str_replace('__', '/', $className);
     $fileName = ZBP_PATH . 'zb_system/function/lib/' . strtolower($className) . '.php';
     if (is_readable($fileName)) {
-        require $fileName;
+        include $fileName;
 
         return true;
     }
@@ -179,7 +179,8 @@ function Logs($logString, $isError = false)
         }
     }
     ZBlogException::SuspendErrorHook();
-    if ($handle = @fopen($f, 'a+')) {
+    $handle = @fopen($f, 'a+');
+    if ($handle) {
         $t = date('Y-m-d') . ' ' . date('H:i:s') . ' ' . substr(microtime(), 1, 9) . ' ' . date('P');
         @fwrite($handle, '[' . $t . ']' . "\r\n" . $logString . "\r\n");
         @fclose($handle);
@@ -201,7 +202,7 @@ function RunTime($isOutput = true)
     global $zbp;
 
     $rt = array();
-    $rt['time'] = number_format(1000 * (microtime(1) - $_SERVER['_start_time']), 2);
+    $rt['time'] = number_format((1000 * (microtime(1) - $_SERVER['_start_time'])), 2);
     $rt['query'] = $_SERVER['_query_count'];
     $rt['memory'] = $_SERVER['_memory_usage'];
     $rt['error'] = $_SERVER['_error_count'];
@@ -255,8 +256,7 @@ function GetEnvironment()
             str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))
         ),
         0
-    ) . '; ' .
-    'PHP' . GetPHPVersion() . (IS_X64 ? 'x64' : '') . '; ' .
+    ) . '; PHP' . GetPHPVersion() . (IS_X64 ? 'x64' : '') . '; ' .
     $zbp->option['ZC_DATABASE_TYPE'] . $zbp->db->version . '; ' . $ajax;
 
     if (defined('OPENSSL_VERSION_TEXT')) {
@@ -464,7 +464,7 @@ function GetCurrentHost($blogpath, &$cookiesPath)
         $x = $_SERVER['SCRIPT_NAME'];
         $y = $blogpath;
         for ($i = 0; $i < strlen($x); $i++) {
-            $f = $y . substr($x, $i - strlen($x));
+            $f = $y . substr($x, ($i - strlen($x)));
             $z = substr($x, 0, $i);
             if (file_exists($f) && is_file($f)) {
                 $z = trim($z, '/');
@@ -489,7 +489,7 @@ function GetCurrentHost($blogpath, &$cookiesPath)
 
     for ($i = strlen($x); $i > 0; $i--) {
         $z = substr($x, 0, $i);
-        if (strtolower(substr($y, strlen($y) - $i)) == strtolower($z)) {
+        if (strtolower(substr($y, (strlen($y) - $i))) == strtolower($z)) {
             break;
         }
     }
@@ -556,7 +556,8 @@ function GetDirsInDir($dir)
             }
         }
     } else {
-        if ($handle = opendir($dir)) {
+        $handle = opendir($dir);
+        if ($handle) {
             while (false !== ($file = readdir($handle))) {
                 if ($file != "." && $file != "..") {
                     if (is_dir($dir . $file)) {
@@ -596,7 +597,7 @@ function GetFilesInDir($dir, $type)
                 $t = '.' . $t;
                 $i = strlen($t);
                 if (substr($f, -$i, $i) == $t) {
-                    $sortname = substr($f, 0, strlen($f) - $i);
+                    $sortname = substr($f, 0, (strlen($f) - $i));
                     $files[$sortname] = $dir . $f;
                     break;
                 }
@@ -704,6 +705,7 @@ function RedirectByScript($url)
     echo '<script>location.href = decodeURIComponent("' . urlencode($url) . '");</script>';
     die();
 }
+
 /**
  * 302跳转.
  *
@@ -727,6 +729,7 @@ function Redirect301($url)
     header('Location: ' . $url);
     die();
 }
+
 /**
  * @ignore
  */
@@ -735,6 +738,7 @@ function Http404()
     SetHttpStatusCode(404);
     header("Status: 404 Not Found");
 }
+
 /**
  * @ignore
  */
@@ -742,6 +746,7 @@ function Http500()
 {
     SetHttpStatusCode(500);
 }
+
 /**
  * @ignore
  */
@@ -963,7 +968,7 @@ function DelNameInString($s, $name)
     $pl = $s;
     $name = (string) $name;
     $apl = explode('|', $pl);
-    for ($i = 0; $i <= count($apl) - 1; $i++) {
+    for ($i = 0; $i <= (count($apl) - 1); $i++) {
         if ($apl[$i] == $name) {
             unset($apl[$i]);
         }
@@ -1122,7 +1127,7 @@ function FormatString($source, $para)
     }
 
     if (strpos($para, '[noscript]') !== false) {
-        $class = new XssHtml($source);
+        $class  = new XssHtml($source);
         $source = trim($class->getHtml());
     }
     if (strpos($para, '[enter]') !== false) {
@@ -1164,7 +1169,6 @@ function TransferHTML($source, $param)
  */
 function CloseTags($html)
 {
-
     // strip fraction of open or close tag from end (e.g. if we take first x characters, we might cut off a tag at the end!)
     $html = preg_replace('/<[^>]*$/', '', $html); // ending with fraction of open tag
 
@@ -1265,22 +1269,22 @@ function SubStrUTF8($sourcestr, $cutlength)
         $ascnum = ord($temp_str); //得到字符串中第$i位字符的ascii码
         if ($ascnum >= 224) { //如果ASCII位高与224，
             $ret = $ret . substr($sourcestr, $i, 3); //根据UTF-8编码规范，将3个连续的字符计为单个字符
-            $i = $i + 3; //实际Byte计为3
+            $i = ($i + 3); //实际Byte计为3
             $n++; //字串长度计1
         } elseif ($ascnum >= 192) { //如果ASCII位高与192，
             $ret = $ret . substr($sourcestr, $i, 2); //根据UTF-8编码规范，将2个连续的字符计为单个字符
-            $i = $i + 2; //实际Byte计为2
+            $i = ($i + 2); //实际Byte计为2
             $n++; //字串长度计1
         } elseif ($ascnum >= 65 && $ascnum <= 90) { //如果是大写字母，
             $ret = $ret . substr($sourcestr, $i, 1);
-            $i = $i + 1; //实际的Byte数仍计1个
+            $i = ($i + 1); //实际的Byte数仍计1个
             $n++; //但考虑整体美观，大写字母计成一个高位字符
         } else {
             //其他情况下，包括小写字母和半角标点符号，
 
             $ret = $ret . substr($sourcestr, $i, 1);
-            $i = $i + 1; //实际的Byte数计1个
-                $n = $n + 0.5; //小写字母和半角标点等与半个高位字符宽...
+            $i = ($i + 1); //实际的Byte数计1个
+                $n = ($n + 0.5); //小写字母和半角标点等与半个高位字符宽...
         }
         /*
         if ($str_length > $cutlength) {
@@ -1476,7 +1480,7 @@ function CheckCanBeString($obj)
         return true;
     }
 
-    if (is_null($obj)) {
+    if ($obj === null) {
         return true;
     }
 

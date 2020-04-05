@@ -23,6 +23,7 @@ zbpform::password('aaaa','文本框');
  */
 class ZbpForm
 {
+
     public static function radio($name, $array = array('否', '是'), $checkedkey = 0)
     {
         $s = '';
@@ -101,4 +102,5 @@ class ZbpForm
         $s = "<input type=\"password\" name=\"$name\" id=\"$name\" class=\"$name\" value=\"$value\"$style/>\r\n";
         echo $s;
     }
+
 }

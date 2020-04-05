@@ -5,6 +5,7 @@ if (!defined('ZBP_PATH')) {
 }
 class SQL__MySQL extends SQL__Global
 {
+
     /**
      * @override
      */
@@ -225,4 +226,5 @@ class SQL__MySQL extends SQL__Global
         }
         parent::buildSelect();
     }
+
 }

@@ -8,152 +8,189 @@ if (!defined('ZBP_PATH')) {
  */
 class App
 {
+
     /**
      * @var string 应用类型，'plugin'表示插件，'theme'表示主题
      */
     public $type = '';
+
     /**
      * @var string 应用ID,必须以应用文件目录为ID
      */
     public $id;
+
     /**
      * @var string 应用名
      */
     public $name;
+
     /**
      * @var string 应用发布链接
      */
     public $url;
+
     /**
      * @var string 应用说明
      */
     public $note;
+
     /**
      * @var string 应用详细信息
      */
     public $description;
+
     /**
      * @var string 管理页面路径
      */
     public $path;
+
     /**
      * @var string include文件
      */
     public $include;
+
     /**
      * @var int 应用权限等级
      */
     public $level;
+
     /**
      * @var string 应用作者
      */
     public $author_name;
+
     /**
      * @var string 作者邮箱
      */
     public $author_email;
+
     /**
      * @var string 作者链接
      */
     public $author_url;
+
     /**
      * @var string 原作者名
      */
     public $source_name;
+
     /**
      * @var string 原作者邮箱
      */
     public $source_email;
+
     /**
      * @var string 原作者链接
      */
     public $source_url;
+
     /**
      * @var string 适用版本
      */
     public $adapted;
+
     /**
      * @var string 版本号
      */
     public $version;
+
     /**
      * @var string 发布时间
      */
     public $pubdate;
+
     /**
      * @var string 最后更新时间
      */
     public $modified;
+
     /**
      * @var string 应用价格
      */
     public $price;
+
     /**
      * @var string 高级选项：依赖插件列表（以|分隔）
      */
     public $advanced_dependency;
+
     /**
      * @var string 高级选项：重写函数列表（以|分隔）
      */
     public $advanced_rewritefunctions;
+
     /**
      * @var string 高级选项：必须函数列表（以|分隔）
      */
     public $advanced_existsfunctions;
+
     /**
      * @var string 高级选项：冲突插件列表（以|分隔）
      */
     public $advanced_conflict;
+
     /**
      * @var string 设置主题侧栏1
      */
     public $sidebars_sidebar1;
+
     /**
      * @var string 定义主题侧栏2
      */
     public $sidebars_sidebar2;
+
     /**
      * @var string 设置主题侧栏3
      */
     public $sidebars_sidebar3;
+
     /**
      * @var string 设置主题侧栏4
      */
     public $sidebars_sidebar4;
+
     /**
      * @var string 设置主题侧栏5
      */
     public $sidebars_sidebar5;
+
     /**
      * @var string 设置主题侧栏6
      */
     public $sidebars_sidebar6;
+
     /**
      * @var string 定义主题侧栏7
      */
     public $sidebars_sidebar7;
+
     /**
      * @var string 设置主题侧栏8
      */
     public $sidebars_sidebar8;
+
     /**
      * @var string 设置主题侧栏9
      */
     public $sidebars_sidebar9;
+
     /**
      * @var string PHP最低版本
      */
     public $phpver;
+
     /**
      * @var array 禁止打包文件glob
      */
     public $ignore_files = array('.gitignore', '.DS_Store', 'Thumbs.db', 'composer.lock', 'zbignore.txt');
+
     /**
      * @var bool 加载xml成功否
      */
     public $isloaded = false;
 
     public static $check_error_count = 0;
+
     public static $unpack_app = null;
 
     public function __get($key)
@@ -302,12 +339,12 @@ class App
 
         $array = GetFilesInDir($dir, 'css');
         if (isset($array['default'])) {
-            $a = array('default'=>$array['default']);
+            $a = array('default' => $array['default']);
             unset($array['default']);
             $array = array_merge($a, $array);
         }
         if (isset($array['style'])) {
-            $a = array('style'=>$array['style']);
+            $a = array('style' => $array['style']);
             unset($array['style']);
             $array = array_merge($a, $array);
         }
@@ -481,6 +518,7 @@ class App
      * @private
      */
     private $dirs = array();
+
     /**
      * @var array 所有文件列表
      * @private
@@ -495,8 +533,9 @@ class App
     {
         foreach (scandir($dir) as $d) {
             if (is_dir($dir . $d)) {
-                if ((substr($d, 0, 1) != '.') &&
-                    !($d == 'compile' && $this->type == 'theme')) {
+                if ((substr($d, 0, 1) != '.')
+                    && !($d == 'compile' && $this->type == 'theme')
+                ) {
                     $this->GetAllFileDir($dir . $d . '/');
                     $this->dirs[] = $dir . $d . '/';
                 }
@@ -712,7 +751,7 @@ class App
 
             $s2 = file_get_contents($f);
             if (md5($s) != md5($s2)) {
-                self::$check_error_count = self::$check_error_count + 1;
+                self::$check_error_count = (self::$check_error_count + 1);
             }
         }
 
@@ -841,4 +880,5 @@ class App
         $zbp->cache->{'sidebars_' . $this->id} = json_encode($a);
         $zbp->SaveCache();
     }
+
 }

@@ -8,127 +8,160 @@ if (!defined('ZBP_PATH')) {
  */
 class ZBlogPHP
 {
+
     private static $_zbp = null;
+
     /**
      * @var string 版本号
      */
     public $version = null;
+
     /**
      * @var Database__Interface 数据库
      */
     public $db = null;
+
     /**
      * @var array 配置选项
      */
     public $option = array();
+
     /**
      * @var array 语言
      */
     public $lang = array();
+
     /**
      * @var json类型 语言
      */
     public $langs = null;
+
     /**
      * @var array 语言包list
      */
     public $langpacklist = array();
+
     /**
      * @var string 路径
      */
     public $path = null;
+
     /**
      * @var string 域名
      */
     public $host = null;
+
     /**
      * @var string cookie作用域
      */
     public $cookiespath = null;
+
     /**
      * @var string guid
      */
     public $guid = null;
+
     /**
      * @var string 当前链接
      */
     public $currenturl = null;
+
     /**
      * @var string 当前链接
      */
     public $fullcurrenturl = null;
+
     /**
      * @var string 用户目录
      */
     public $usersdir = null;
+
     /**
      * @var string 验证码地址
      */
     public $verifyCodeUrl = null;
+
     /**
      * @var string 验证码地址（拼写错误）
      *
      * @deprecated
      */
     public $validcodeurl = null;
+
     /**
      * @var string
      */
     public $feedurl = null;
+
     /**
      * @var string
      */
     public $searchurl = null;
+
     /**
      * @var string
      */
     public $ajaxurl = null;
+
     /**
      * @var string
      */
     public $xmlrpcurl = null;
+
     /**
      * @var Member[] 用户数组
      */
     public $members = array();
+
     /**
      * @var Member[] 用户数组（以用户名为键）
      */
     public $membersbyname = array();
+
     /**
      * @var Category[] 分类数组
      */
     public $categorys = array();
+
     public $categories = null;
+
     /**
      * @var Category[] 分类数组（已排序）
      */
     public $categorysbyorder = array();
+
     public $categoriesbyorder = null;
+
     /**
      * @var Module[] 模块数组
      */
     public $modules = array();
+
     /**
      * @var Module[] 模块数组（以文件名为键）
      */
     public $modulesbyfilename = array();
+
     /**
      * @var Config[] 配置选项
      */
     public $configs = array();
+
     /**
      * @var Tag[] 标签数组
      */
     public $tags = array();
+
     /**
      * @var Tag[] 标签数组（以标签名为键）
      */
     public $tagsbyname = array();
+
     /**
      * @var Comment[] 评论数组
      */
     public $comments = array();
+
     /**
      * @var Post[] 文章列表数组
      */
@@ -138,22 +171,27 @@ class ZBlogPHP
      * @var string 当前页面标题
      */
     public $title = null;
+
     /**
      * @var string 网站名
      */
     public $name = null;
+
     /**
      * @var string 网站子标题
      */
     public $subname = null;
+
     /**
      * @var App 当前主题
      */
     public $theme = null;
+
     /**
      * @var array() 当前主题版本信息
      */
     public $themeinfo = array();
+
     /**
      * @var string 当前主题风格
      */
@@ -163,6 +201,7 @@ class ZBlogPHP
      * @var Member 当前用户
      */
     public $user = null;
+
     /**
      * @var Config 缓存
      */
@@ -172,45 +211,60 @@ class ZBlogPHP
      * @var array|null 数据表
      */
     public $table = null;
+
     public $t = null;
+
     /**
      * @var array|null 数据表信息
      */
     public $datainfo = null;
+
     public $d = null;
+
     /**
      * @var array|null 类型序列
      */
     public $posttype = null;
+
     /**
      * @var array|null 操作列表
      */
     public $actions = null;
+
     /**
      * @var mixed|null|string 当前操作
      */
     public $action = null;
 
     private $isinitialized = false; //是否初始化成功
+
     private $isconnected = false; //是否连接成功
+
     private $isload = false; //是否载入
+
     private $issession = false; //是否使用session
+
     public $ismanage = false; //是否加载管理模式
+
     private $isGzip = false; //是否开启gzip
+
     public $isHttps = false; //是否HTTPS
 
     /**
      * @var Template 当前模板
      */
     public $template = null;
+
     /**
      * @var null 社会化评论
      */
     public $socialcomment = null;
+
     /**
      * @var null 模板头部
      */
     public $header = null;
+
     /**
      * @var null 模板尾部
      */
@@ -220,24 +274,29 @@ class ZBlogPHP
      * @var array 激活的插件列表
      */
     public $activedapps = array();
+
     public $activeapps;
 
     /**
      * @var int 管理页面显示条数
      */
     public $managecount = 50;
+
     /**
      * @var int 页码显示条数
      */
     public $pagebarcount = 10;
+
     /**
      * @var int 搜索返回条数
      */
     public $searchcount = 10;
+
     /**
      * @var int 文章列表显示条数
      */
     public $displaycount = 10;
+
     /**
      * @var int 评论显示数量
      */
@@ -262,7 +321,7 @@ class ZBlogPHP
     {
         if (!isset(self::$_zbp)) {
             if (isset($GLOBALS['option']['ZC_GODZBP_FILE']) && isset($GLOBALS['option']['ZC_GODZBP_NAME']) && is_readable(ZBP_PATH . $GLOBALS['option']['ZC_GODZBP_FILE'])) {
-                require ZBP_PATH . $GLOBALS['option']['ZC_GODZBP_FILE'];
+                include ZBP_PATH . $GLOBALS['option']['ZC_GODZBP_FILE'];
                 self::$_zbp = new $GLOBALS['option']['ZC_GODZBP_NAME']();
             } else {
                 self::$_zbp = new self();
@@ -686,25 +745,31 @@ class ZBlogPHP
             case 'sqlite3':
             case 'pdo_sqlite':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-                if ($this->db->Open(array(
-                    $this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
-                    $this->option['ZC_SQLITE_PRE'],
-                )) == false) {
+                if ($this->db->Open(
+                    array(
+                        $this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
+                        $this->option['ZC_SQLITE_PRE'],
+                    )
+                ) == false
+                ) {
                     $this->ShowError(69, __FILE__, __LINE__);
                 }
                 break;
             case 'postgresql':
             case 'pdo_postgresql':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-                if ($this->db->Open(array(
-                    $this->option['ZC_PGSQL_SERVER'],
-                    $this->option['ZC_PGSQL_USERNAME'],
-                    $this->option['ZC_PGSQL_PASSWORD'],
-                    $this->option['ZC_PGSQL_NAME'],
-                    $this->option['ZC_PGSQL_PRE'],
-                    $this->option['ZC_PGSQL_PORT'],
-                    $this->option['ZC_PGSQL_PERSISTENT'],
-                )) == false) {
+                if ($this->db->Open(
+                    array(
+                        $this->option['ZC_PGSQL_SERVER'],
+                        $this->option['ZC_PGSQL_USERNAME'],
+                        $this->option['ZC_PGSQL_PASSWORD'],
+                        $this->option['ZC_PGSQL_NAME'],
+                        $this->option['ZC_PGSQL_PRE'],
+                        $this->option['ZC_PGSQL_PORT'],
+                        $this->option['ZC_PGSQL_PERSISTENT'],
+                    )
+                ) == false
+                ) {
                     $this->ShowError(67, __FILE__, __LINE__);
                 }
                 break;
@@ -713,16 +778,19 @@ class ZBlogPHP
             case 'pdo_mysql':
             default:
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-                if ($this->db->Open(array(
-                    $this->option['ZC_MYSQL_SERVER'],
-                    $this->option['ZC_MYSQL_USERNAME'],
-                    $this->option['ZC_MYSQL_PASSWORD'],
-                    $this->option['ZC_MYSQL_NAME'],
-                    $this->option['ZC_MYSQL_PRE'],
-                    $this->option['ZC_MYSQL_PORT'],
-                    $this->option['ZC_MYSQL_PERSISTENT'],
-                    $this->option['ZC_MYSQL_ENGINE'],
-                )) == false) {
+                if ($this->db->Open(
+                    array(
+                        $this->option['ZC_MYSQL_SERVER'],
+                        $this->option['ZC_MYSQL_USERNAME'],
+                        $this->option['ZC_MYSQL_PASSWORD'],
+                        $this->option['ZC_MYSQL_NAME'],
+                        $this->option['ZC_MYSQL_PRE'],
+                        $this->option['ZC_MYSQL_PORT'],
+                        $this->option['ZC_MYSQL_PERSISTENT'],
+                        $this->option['ZC_MYSQL_ENGINE'],
+                    )
+                ) == false
+                ) {
                     $this->ShowError(67, __FILE__, __LINE__);
                 }
                 break;
@@ -988,32 +1056,33 @@ class ZBlogPHP
         }
 
         if (file_exists($this->usersdir . 'c_option.php') == false) {
-            $s = "<" . "?" . "php\r\n";
+            $s = "<";
+            $s .= "?php\r\n";
             $s .= "return ";
             $option = array();
             foreach ($this->option as $key => $value) {
-                if (($key == 'ZC_DATABASE_TYPE') ||
-                    ($key == 'ZC_SQLITE_NAME') ||
-                    ($key == 'ZC_SQLITE_PRE') ||
-                    ($key == 'ZC_MYSQL_SERVER') ||
-                    ($key == 'ZC_MYSQL_USERNAME') ||
-                    ($key == 'ZC_MYSQL_PASSWORD') ||
-                    ($key == 'ZC_MYSQL_NAME') ||
-                    ($key == 'ZC_MYSQL_CHARSET') ||
-                    ($key == 'ZC_MYSQL_PRE') ||
-                    ($key == 'ZC_MYSQL_ENGINE') ||
-                    ($key == 'ZC_MYSQL_PORT') ||
-                    ($key == 'ZC_MYSQL_PERSISTENT') ||
-                    ($key == 'ZC_MYSQL_PORT') ||
-                    ($key == 'ZC_PGSQL_SERVER') ||
-                    ($key == 'ZC_PGSQL_USERNAME') ||
-                    ($key == 'ZC_PGSQL_PASSWORD') ||
-                    ($key == 'ZC_PGSQL_NAME') ||
-                    ($key == 'ZC_PGSQL_CHARSET') ||
-                    ($key == 'ZC_PGSQL_PRE') ||
-                    ($key == 'ZC_PGSQL_PORT') ||
-                    ($key == 'ZC_PGSQL_PERSISTENT') ||
-                    ($key == 'ZC_CLOSE_WHOLE_SITE')
+                if (($key == 'ZC_DATABASE_TYPE')
+                    || ($key == 'ZC_SQLITE_NAME')
+                    || ($key == 'ZC_SQLITE_PRE')
+                    || ($key == 'ZC_MYSQL_SERVER')
+                    || ($key == 'ZC_MYSQL_USERNAME')
+                    || ($key == 'ZC_MYSQL_PASSWORD')
+                    || ($key == 'ZC_MYSQL_NAME')
+                    || ($key == 'ZC_MYSQL_CHARSET')
+                    || ($key == 'ZC_MYSQL_PRE')
+                    || ($key == 'ZC_MYSQL_ENGINE')
+                    || ($key == 'ZC_MYSQL_PORT')
+                    || ($key == 'ZC_MYSQL_PERSISTENT')
+                    || ($key == 'ZC_MYSQL_PORT')
+                    || ($key == 'ZC_PGSQL_SERVER')
+                    || ($key == 'ZC_PGSQL_USERNAME')
+                    || ($key == 'ZC_PGSQL_PASSWORD')
+                    || ($key == 'ZC_PGSQL_NAME')
+                    || ($key == 'ZC_PGSQL_CHARSET')
+                    || ($key == 'ZC_PGSQL_PRE')
+                    || ($key == 'ZC_PGSQL_PORT')
+                    || ($key == 'ZC_PGSQL_PERSISTENT')
+                    || ($key == 'ZC_CLOSE_WHOLE_SITE')
                 ) {
                     $option[$key] = $value;
                 }
@@ -1060,29 +1129,29 @@ class ZBlogPHP
                 $value = str_replace('|', '', $value);
             }
 
-            if (($key == 'ZC_DATABASE_TYPE') ||
-                ($key == 'ZC_SQLITE_NAME') ||
-                ($key == 'ZC_SQLITE_PRE') ||
-                ($key == 'ZC_MYSQL_SERVER') ||
-                ($key == 'ZC_MYSQL_USERNAME') ||
-                ($key == 'ZC_MYSQL_PASSWORD') ||
-                ($key == 'ZC_MYSQL_NAME') ||
-                ($key == 'ZC_MYSQL_CHARSET') ||
-                ($key == 'ZC_MYSQL_PRE') ||
-                ($key == 'ZC_MYSQL_ENGINE') ||
-                ($key == 'ZC_MYSQL_PORT') ||
-                ($key == 'ZC_MYSQL_PERSISTENT') ||
-                ($key == 'ZC_PGSQL_SERVER') ||
-                ($key == 'ZC_PGSQL_USERNAME') ||
-                ($key == 'ZC_PGSQL_PASSWORD') ||
-                ($key == 'ZC_PGSQL_NAME') ||
-                ($key == 'ZC_PGSQL_CHARSET') ||
-                ($key == 'ZC_PGSQL_PRE') ||
-                ($key == 'ZC_PGSQL_PORT') ||
-                ($key == 'ZC_PGSQL_PERSISTENT') ||
-                ($key == 'ZC_CLOSE_WHOLE_SITE') ||
-                ($key == 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE') ||
-                ($key == 'ZC_PERMANENT_DOMAIN_FORCED_URL')
+            if (($key == 'ZC_DATABASE_TYPE')
+                || ($key == 'ZC_SQLITE_NAME')
+                || ($key == 'ZC_SQLITE_PRE')
+                || ($key == 'ZC_MYSQL_SERVER')
+                || ($key == 'ZC_MYSQL_USERNAME')
+                || ($key == 'ZC_MYSQL_PASSWORD')
+                || ($key == 'ZC_MYSQL_NAME')
+                || ($key == 'ZC_MYSQL_CHARSET')
+                || ($key == 'ZC_MYSQL_PRE')
+                || ($key == 'ZC_MYSQL_ENGINE')
+                || ($key == 'ZC_MYSQL_PORT')
+                || ($key == 'ZC_MYSQL_PERSISTENT')
+                || ($key == 'ZC_PGSQL_SERVER')
+                || ($key == 'ZC_PGSQL_USERNAME')
+                || ($key == 'ZC_PGSQL_PASSWORD')
+                || ($key == 'ZC_PGSQL_NAME')
+                || ($key == 'ZC_PGSQL_CHARSET')
+                || ($key == 'ZC_PGSQL_PRE')
+                || ($key == 'ZC_PGSQL_PORT')
+                || ($key == 'ZC_PGSQL_PERSISTENT')
+                || ($key == 'ZC_CLOSE_WHOLE_SITE')
+                || ($key == 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE')
+                || ($key == 'ZC_PERMANENT_DOMAIN_FORCED_URL')
             ) {
                 continue;
             }
@@ -1186,7 +1255,7 @@ class ZBlogPHP
     public function GenerateUserToken($user, $time = 0)
     {
         if ($time === 0) {
-            $time = time() + 3600 * 24;
+            $time = (time() + 3600 * 24);
         }
 
         return CreateWebToken($user->ID, $time, $user->Guid, $user->PassWord_MD5Path);
@@ -1638,7 +1707,7 @@ class ZBlogPHP
         }
 
         $languagePath .= $language . '.php';
-        $languagePtr = require $languagePath;
+        $languagePtr = include $languagePath;
         $this->langpacklist[] = array($type, $id, $language);
         if ($type == 'system') {
             $this->langs = json_decode(json_encode($this->lang));
@@ -2521,10 +2590,13 @@ class ZBlogPHP
 
         $like = ($this->db->type == 'pgsql') ? 'ILIKE' : 'LIKE';
 
-        $sql = $this->db->sql->get()->select($this->table['Member'])->where(array("$like array", array(
-            array('mem_Name', $name),
-            array('mem_Alias', $name),
-        )))->limit(1)->sql;
+        $sql = $this->db->sql->get()->select($this->table['Member'])->where(
+            array("$like array", array(
+                array('mem_Name', $name),
+                array('mem_Alias', $name),
+            )
+            )
+        )->limit(1)->sql;
 
         /** @var Member[] $am */
         $am = $this->GetListType('Member', $sql);
@@ -2883,7 +2955,7 @@ class ZBlogPHP
     public function ValidCmtKey($id, $key)
     {
         $nowkey = md5($this->guid . $id . date('Ymdh'));
-        $nowkey2 = md5($this->guid . $id . date('Ymdh', time() - (3600 * 1)));
+        $nowkey2 = md5($this->guid . $id . date('Ymdh', (time() - (3600 * 1))));
 
         return $key == $nowkey || $key == $nowkey2;
     }
@@ -2916,7 +2988,7 @@ class ZBlogPHP
         $tokenString = $this->guid . $userString . $id;
 
         for ($i = 0; $i <= $this->csrfExpiration; $i++) {
-            if ($token === md5($tokenString . date('Ymdh', time() - (3600 * $i)))) {
+            if ($token === md5($tokenString . date('Ymdh', (time() - (3600 * $i))))) {
                 return true;
             }
         }
@@ -2964,11 +3036,11 @@ class ZBlogPHP
         }
 
         $original = GetVars('captcha_' . crc32($this->guid . $id), 'COOKIE');
-        setcookie('captcha_' . crc32($this->guid . $id), '', time() - 3600, $this->cookiespath);
+        setcookie('captcha_' . crc32($this->guid . $id), '', (time() - 3600), $this->cookiespath);
 
         return md5($this->guid . date("Ymdh") . strtolower($verifyCode)) == $original
                 ||
-                md5($this->guid . date("Ymdh", time() - (3600 * 1)) . strtolower($verifyCode)) == $original;
+                md5($this->guid . date("Ymdh", (time() - (3600 * 1))) . strtolower($verifyCode)) == $original;
     }
 
     /**
@@ -3043,9 +3115,13 @@ class ZBlogPHP
 
     //$signal = good,bad,tips
     private $hint1 = null;
+
     private $hint2 = null;
+
     private $hint3 = null;
+
     private $hint4 = null;
+
     private $hint5 = null;
 
     /**
@@ -3095,7 +3171,7 @@ class ZBlogPHP
             if ($signal) {
                 $a = explode('|', $signal);
                 $this->ShowHint($a[0], $a[1]);
-                setcookie("hint_signal" . $i, '', time() - 3600, $this->cookiespath);
+                setcookie("hint_signal" . $i, '', (time() - 3600), $this->cookiespath);
             }
         }
         for ($i = 1; $i <= 5; $i++) {
@@ -3103,7 +3179,7 @@ class ZBlogPHP
             if ($signal) {
                 $a = explode('|', $signal);
                 $this->ShowHint($a[0], $a[1]);
-                setcookie("hint_signal" . $i, '', time() - 3600, $this->cookiespath);
+                setcookie("hint_signal" . $i, '', (time() - 3600), $this->cookiespath);
             }
         }
     }
@@ -3183,9 +3259,9 @@ class ZBlogPHP
      */
     public function CheckGzip()
     {
-        if (extension_loaded("zlib") &&
-            isset($_SERVER["HTTP_ACCEPT_ENCODING"]) &&
-            strstr($_SERVER["HTTP_ACCEPT_ENCODING"], "gzip")
+        if (extension_loaded("zlib")
+            && isset($_SERVER["HTTP_ACCEPT_ENCODING"])
+            && strstr($_SERVER["HTTP_ACCEPT_ENCODING"], "gzip")
         ) {
             $this->isGzip = true;
         }
@@ -3196,7 +3272,7 @@ class ZBlogPHP
      */
     public function StartGzip()
     {
-        return false;
+        /*
         if (!headers_sent() && $this->isGzip && $this->option['ZC_GZIP_ENABLE']) {
             if (ini_get('output_handler')) {
                 return false;
@@ -3219,7 +3295,7 @@ class ZBlogPHP
 
             return true;
         }
-
+        */
         return false;
     }
 
@@ -3486,7 +3562,7 @@ class ZBlogPHP
      */
     public function GetWebToken($wt_id = '', $day = 1)
     {
-        $t = intval($day * 24 * 3600) + time();
+        $t = (intval($day * 24 * 3600) + time());
 
         return CreateWebToken($wt_id, $t, $this->guid, $this->user->Status, $this->user->ID, $this->user->Password);
     }
@@ -3509,4 +3585,5 @@ class ZBlogPHP
 
         return false;
     }
+
 }

@@ -12,14 +12,17 @@ if (!defined('ZBP_PATH')) {
  */
 class DbSql
 {
+
     /**
      * @var Database__Interface 数据库连接实例
      */
     private $db = null;
+
     /**
      * @var null|string 数据库类型名称
      */
     private $dbclass = null;
+
     /**
      * @param object $db
      */
@@ -229,7 +232,7 @@ class DbSql
      */
     public function Filter($sql)
     {
-        $_SERVER['_query_count'] = $_SERVER['_query_count'] + 1;
+        $_SERVER['_query_count'] = ($_SERVER['_query_count'] + 1);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_DbSql_Filter'] as $fpname => &$fpsignal) {
             $fpname($sql);
@@ -314,4 +317,5 @@ class DbSql
             return $command;
         }
     }
+
 }

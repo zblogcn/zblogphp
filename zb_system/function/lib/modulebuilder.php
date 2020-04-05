@@ -8,6 +8,7 @@ if (!defined('ZBP_PATH')) {
  */
 class ModuleBuilder
 {
+
     //需要重建的module list
     private static $Ready = array(); //'filename';
 
@@ -269,18 +270,18 @@ class ModuleBuilder
 
         $arraydate = array();
 
-        for ($i = $fdate[0]; $i < $ldate[0] + 1; $i++) {
+        for ($i = $fdate[0]; $i < ($ldate[0] + 1); $i++) {
             for ($j = 1; $j < 13; $j++) {
                 $arraydate[] = strtotime($i . '-' . $j);
             }
         }
 
         foreach ($arraydate as $key => $value) {
-            if ($value - strtotime($ldate[0] . '-' . $ldate[1]) > 0) {
+            if (($value - strtotime($ldate[0] . '-' . $ldate[1])) > 0) {
                 unset($arraydate[$key]);
             }
 
-            if ($value - strtotime($fdate[0] . '-' . $fdate[1]) < 0) {
+            if (($value - strtotime($fdate[0] . '-' . $fdate[1])) < 0) {
                 unset($arraydate[$key]);
             }
         }
@@ -530,4 +531,5 @@ class ModuleBuilder
 
         return $ret;
     }
+
 }

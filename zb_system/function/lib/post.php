@@ -31,7 +31,9 @@ if (!defined('ZBP_PATH')) {
  */
 class Post extends Base
 {
+
     private $_prev = '';
+
     private $_next = '';
 
     public function __construct()
@@ -387,4 +389,5 @@ class Post extends Base
 
         return parent::Del();
     }
+
 }
