@@ -1,4 +1,4 @@
-﻿vendor
+vendor
 node_modules
 mix-manifest.json
 
@@ -87,3 +87,8 @@ phpinfo.php
 /.idea/
 composer.lock
 .php_cs.cache
+favicon.ico
+nologin.php
+test1.php
+test3.php
+test4.php
