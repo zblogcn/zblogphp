@@ -10,6 +10,7 @@ if (!defined('ZBP_PATH')) {
  */
 
 //###############################################################################################################
+
 /**
  * 验证登录.
  *
@@ -28,7 +29,7 @@ function VerifyLogin($throwException = true)
         $zbp->user = $m;
         $sd = (float) GetVars('savedate');
         $sd = ($sd < 1) ? 1 : $sd; // must >= 1 day
-        $sdt = time() + 3600 * 24 * $sd;
+        $sdt = (time() + 3600 * 24 * $sd);
         SetLoginCookie($m, (int) $sdt);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_VerifyLogin_Succeed'] as $fpname => &$fpsignal) {
@@ -76,10 +77,10 @@ function Logout()
 {
     global $zbp;
 
-    setcookie('username', '', time() - 3600, $zbp->cookiespath);
-    setcookie('password', '', time() - 3600, $zbp->cookiespath);
-    setcookie('token', '', time() - 3600, $zbp->cookiespath);
-    setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), '', time() - 3600, $zbp->cookiespath);
+    setcookie('username', '', (time() - 3600), $zbp->cookiespath);
+    setcookie('password', '', (time() - 3600), $zbp->cookiespath);
+    setcookie('token', '', (time() - 3600), $zbp->cookiespath);
+    setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), '', (time() - 3600), $zbp->cookiespath);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Logout_Succeed'] as $fpname => &$fpsignal) {
         $fpname();
@@ -87,6 +88,7 @@ function Logout()
 }
 
 //###############################################################################################################
+
 /**
  * 获取文章.
  *
@@ -181,7 +183,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
             return array();
         }
 
-        $count = $count + 1;
+        $count = ($count + 1);
     }
 
     $w = array();
@@ -297,6 +299,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 }
 
 //###############################################################################################################
+
 /**
  * ViewIndex,首页，搜索页，feed页的主函数.
  *
@@ -353,11 +356,13 @@ function ViewIndex()
         default:
             if ($url == $zbp->cookiespath || $url == $zbp->cookiespath . 'index.php') {
                 ViewList(null, null, null, null, null);
-            } elseif (($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || isset($_GET['rewrite'])) &&
-            (isset($_GET['id']) || isset($_GET['alias']))) {
+            } elseif (($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || isset($_GET['rewrite']))
+                && (isset($_GET['id']) || isset($_GET['alias']))
+            ) {
                 ViewPost(GetVars('id', 'GET'), GetVars('alias', 'GET'));
-            } elseif (($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || isset($_GET['rewrite'])) &&
-                (isset($_GET['page']) || isset($_GET['cate']) || isset($_GET['auth']) || isset($_GET['date']) || isset($_GET['tags']))) {
+            } elseif (($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || isset($_GET['rewrite']))
+                && (isset($_GET['page']) || isset($_GET['cate']) || isset($_GET['auth']) || isset($_GET['date']) || isset($_GET['tags']))
+            ) {
                 ViewList(GetVars('page', 'GET'), GetVars('cate', 'GET'), GetVars('auth', 'GET'), GetVars('date', 'GET'), GetVars('tags', 'GET'));
             } else {
                 ViewAuto($url);
@@ -509,7 +514,7 @@ function ViewSearch()
         $i = strpos($s, $q, 0);
         if ($i !== false) {
             if ($i > 50) {
-                $t = SubStrUTF8_Start($s, $i - 50, 100);
+                $t = SubStrUTF8_Start($s, ($i - 50), 100);
             } else {
                 $t = SubStrUTF8_Start($s, 0, 100);
             }
@@ -520,7 +525,7 @@ function ViewSearch()
             $s = strip_tags($a->Title);
             $i = strpos($s, $q, 0);
             if ($i > 50) {
-                $t = SubStrUTF8_Start($s, $i - 50, 100);
+                $t = SubStrUTF8_Start($s, ($i - 50), 100);
             } else {
                 $t = SubStrUTF8_Start($s, 0, 100);
             }
@@ -577,6 +582,7 @@ function ViewSearch()
 }
 
 //###############################################################################################################
+
 /**
  * 根据Rewrite_url规则显示页面.
  *
@@ -1256,7 +1262,7 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
             null,
             null
         );
-        $floorid = ($pagebar->PageNow - 1) * $pagebar->PageCount;
+        $floorid = (($pagebar->PageNow - 1) * $pagebar->PageCount);
         foreach ($comments as &$comment) {
             $floorid += 1;
             $comment->FloorID = $floorid;
@@ -1352,7 +1358,7 @@ function ViewComments($postid, $page)
         null
     );
 
-    $floorid = ($pagebar->PageNow - 1) * $pagebar->PageCount;
+    $floorid = (($pagebar->PageNow - 1) * $pagebar->PageCount);
     foreach ($comments as &$comment) {
         $floorid += 1;
         $comment->FloorID = $floorid;
@@ -1429,6 +1435,7 @@ function ViewComment($id)
 }
 
 //###############################################################################################################
+
 /**
  * 提交文章数据.
  *
@@ -1761,6 +1768,7 @@ function DelArticle_Comments($id)
 }
 
 //###############################################################################################################
+
 /**
  * 提交页面数据.
  *
@@ -1894,6 +1902,7 @@ function DelPage()
 }
 
 //###############################################################################################################
+
 /**
  * 提交评论.
  *
@@ -2026,9 +2035,14 @@ function PostComment()
         ob_clean();
         ViewComment($cmt->ID);
         $commentHtml = ob_get_clean();
-        JsonReturn(array_merge_recursive(array(
-            "html" => $commentHtml,
-        ), array_intersect_key($cmt->GetData(), $returnCommentWhiteList)));
+        JsonReturn(
+            array_merge_recursive(
+                array(
+                    "html" => $commentHtml,
+                ),
+                array_intersect_key($cmt->GetData(), $returnCommentWhiteList)
+            )
+        );
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostComment_Succeed'] as $fpname => &$fpsignal) {
@@ -2255,7 +2269,9 @@ function BatchComment()
 
     $zbp->AddBuildModule('comments');
 }
+
 //###############################################################################################################
+
 /**
  * 提交分类数据.
  *
@@ -2379,6 +2395,7 @@ function DelCategory_Articles($id)
 }
 
 //###############################################################################################################
+
 /**
  * 提交标签数据.
  *
@@ -2465,6 +2482,7 @@ function DelTag()
 }
 
 //###############################################################################################################
+
 /**
  * 提交用户数据.
  *
@@ -2653,6 +2671,7 @@ function DelMember_AllData($id)
 }
 
 //###############################################################################################################
+
 /**
  * 提交模块数据.
  *
@@ -2783,6 +2802,7 @@ function DelModule()
 }
 
 //###############################################################################################################
+
 /**
  * 附件上传.
  *
@@ -2862,6 +2882,7 @@ function DelUpload()
 }
 
 //###############################################################################################################
+
 /**
  * 启用插件.
  *
@@ -3042,28 +3063,28 @@ function SaveSetting()
             continue;
         }
 
-        if ($key == 'ZC_PERMANENT_DOMAIN_ENABLE' ||
-            $key == 'ZC_COMMENT_TURNOFF' ||
-            $key == 'ZC_COMMENT_REVERSE_ORDER' ||
-            $key == 'ZC_COMMENT_AUDIT' ||
-            $key == 'ZC_DISPLAY_SUBCATEGORYS' ||
-            $key == 'ZC_GZIP_ENABLE' ||
-            $key == 'ZC_SYNTAXHIGHLIGHTER_ENABLE' ||
-            $key == 'ZC_COMMENT_VERIFY_ENABLE' ||
-            $key == 'ZC_CLOSE_SITE' ||
-            $key == 'ZC_PERMANENT_DOMAIN_WITH_ADMIN' ||
-            $key == 'ZC_ADDITIONAL_SECURITY'
+        if ($key == 'ZC_PERMANENT_DOMAIN_ENABLE'
+            || $key == 'ZC_COMMENT_TURNOFF'
+            || $key == 'ZC_COMMENT_REVERSE_ORDER'
+            || $key == 'ZC_COMMENT_AUDIT'
+            || $key == 'ZC_DISPLAY_SUBCATEGORYS'
+            || $key == 'ZC_GZIP_ENABLE'
+            || $key == 'ZC_SYNTAXHIGHLIGHTER_ENABLE'
+            || $key == 'ZC_COMMENT_VERIFY_ENABLE'
+            || $key == 'ZC_CLOSE_SITE'
+            || $key == 'ZC_PERMANENT_DOMAIN_WITH_ADMIN'
+            || $key == 'ZC_ADDITIONAL_SECURITY'
         ) {
             $zbp->option[$key] = (bool) $value;
             continue;
         }
-        if ($key == 'ZC_RSS2_COUNT' ||
-            $key == 'ZC_UPLOAD_FILESIZE' ||
-            $key == 'ZC_DISPLAY_COUNT' ||
-            $key == 'ZC_SEARCH_COUNT' ||
-            $key == 'ZC_PAGEBAR_COUNT' ||
-            $key == 'ZC_COMMENTS_DISPLAY_COUNT' ||
-            $key == 'ZC_MANAGE_COUNT'
+        if ($key == 'ZC_RSS2_COUNT'
+            || $key == 'ZC_UPLOAD_FILESIZE'
+            || $key == 'ZC_DISPLAY_COUNT'
+            || $key == 'ZC_SEARCH_COUNT'
+            || $key == 'ZC_PAGEBAR_COUNT'
+            || $key == 'ZC_COMMENTS_DISPLAY_COUNT'
+            || $key == 'ZC_MANAGE_COUNT'
         ) {
             $zbp->option[$key] = (int) $value;
             continue;
@@ -3093,7 +3114,7 @@ function SaveSetting()
         $zbp->option['ZC_BLOG_HOST'] = $zbp->host;
     }
     $usePC = false;
-    for ($i = 0; $i < strlen($zbp->option['ZC_BLOG_HOST']) - 1; $i++) {
+    for ($i = 0; $i < (strlen($zbp->option['ZC_BLOG_HOST']) - 1); $i++) {
         $l = substr($zbp->option['ZC_BLOG_HOST'], $i, 1);
         if (ord($l) >= 192) {
             $usePC = true;
@@ -3103,7 +3124,7 @@ function SaveSetting()
         $Punycode = new Punycode();
         $zbp->option['ZC_BLOG_HOST'] = $Punycode->encode($zbp->option['ZC_BLOG_HOST']);
     }
-    $lang = require $zbp->usersdir . 'language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php';
+    $lang = include $zbp->usersdir . 'language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php';
     $zbp->option['ZC_BLOG_LANGUAGE'] = $lang['lang'];
     $zbp->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
     $zbp->SaveOption();
@@ -3118,6 +3139,7 @@ function SaveSetting()
 }
 
 //###############################################################################################################
+
 /**
  * 过滤扩展数据.
  *
@@ -3125,12 +3147,11 @@ function SaveSetting()
  */
 function FilterMeta(&$object)
 {
-
     //$type=strtolower(get_class($object));
 
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 5) == 'meta_') {
-            $name = substr($key, 5 - strlen($key));
+            $name = substr($key, (5 - strlen($key)));
             $object->Metas->$name = $value;
         }
     }
@@ -3301,6 +3322,7 @@ function FilterTag(&$tag)
 
 //###############################################################################################################
 //统计函数
+
 /**
  *统计置顶文章数组.
  *
@@ -3590,6 +3612,7 @@ function CountMemberArray($array, $plus = array(null, null, null, null))
 }
 
 //###############################################################################################################
+
 /**
  * 显示404页面(内置插件函数).
  *

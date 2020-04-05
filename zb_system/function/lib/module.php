@@ -16,6 +16,7 @@ if (!defined('ZBP_PATH')) {
  */
 class Module extends Base
 {
+
     protected $_isincludefile = false;
 
     /**
@@ -144,9 +145,7 @@ class Module extends Base
         //防Module重复保存的机制
         $m = $zbp->GetListType(
             'Module',
-            $zbp->db->sql->get()->select($zbp->table['Module'])
-                    ->where(array('=', $zbp->datainfo['Module']['FileName'][0], $this->FileName))
-                    ->sql
+            $zbp->db->sql->get()->select($zbp->table['Module'])->where(array('=', $zbp->datainfo['Module']['FileName'][0], $this->FileName))->sql
         );
         if (count($m) >= 1 && $this->ID == 0) {//如果已有同名，且新ID为0就不存
             return false;
@@ -231,4 +230,5 @@ class Module extends Base
 
         return true;
     }
+
 }

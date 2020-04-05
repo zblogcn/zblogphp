@@ -9,7 +9,9 @@ if (!defined('ZBP_PATH')) {
  */
 class Config implements Iterator
 {
+
     private $position = 0;
+
     private $array = array(); //存$key的数组，非$value
 
     public function rewind()
@@ -44,12 +46,16 @@ class Config implements Iterator
      * @var string 数据表
      */
     protected $table = '';
+
     protected $t = null;
+
     /**
      * @var array 表结构信息
      */
     protected $datainfo = array();
+
     protected $d = null;
+
     /**
      * @var array 原始db数据数组
      */
@@ -59,10 +65,12 @@ class Config implements Iterator
      * @var array 存储Config相应key-value数值的数组
      */
     protected $kvdata = array();
+
     /**
      * @var array 存储Config相应原始数据的数组
      */
     protected $origkvdata = array();
+
     /**
      * @var Database__Interface
      */
@@ -267,6 +275,7 @@ class Config implements Iterator
      * 为了加快处理速度才写的一对WithPre,WithAfter函数.
      */
     private $data_pre_key = array();
+
     private $data_pre_value = array();
 
     public function LoadInfoByAssocSingleWithPre($array)
@@ -378,7 +387,6 @@ class Config implements Iterator
         $old = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', $this->d['Key'][0], ''))));
         //没有这个字段：array(1) { [0]=> bool(false) }
         if (count($old) == 1 && $old[0] === false) {//如果还没有建conf_Key字段就不要原子化存储
-
             $value = $this->Serialize();
 
             $kv = array($this->d['Name'][0] => $name, $this->d['Value'][0] => $value);
@@ -508,4 +516,5 @@ class Config implements Iterator
 
         return true;
     }
+
 }

@@ -8,19 +8,25 @@ if (!defined('ZBP_PATH')) {
  */
 class Database__SQLite3 implements Database__Interface
 {
+
     public $type = 'sqlite';
+
     public $version = '3';
+
     public $error = array();
 
     /**
      * @var string|null 数据库名前缀
      */
     public $dbpre = null;
+
     private $db = null; //数据库连接实例
+
     /**
      * @var string|null 数据库名
      */
     public $dbname = null;
+
     /**
      * @var DbSql|null
      */
@@ -195,4 +201,5 @@ class Database__SQLite3 implements Database__Interface
             return false;
         }
     }
+
 }

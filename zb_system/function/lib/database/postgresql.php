@@ -8,19 +8,25 @@ if (!defined('ZBP_PATH')) {
  */
 class Database__PostgreSQL implements Database__Interface
 {
+
     public $type = 'postgresql';
+
     public $version = '';
+
     public $error = array();
 
     /**
      * @var string|null 数据库名前缀
      */
     public $dbpre = null;
+
     private $db = null; //数据库连接
+
     /**
      * @var string|null 数据库名
      */
     public $dbname = null;
+
     /**
      * @var DbSql|null DbSql实例
      */
@@ -287,4 +293,5 @@ class Database__PostgreSQL implements Database__Interface
             return false;
         }
     }
+
 }

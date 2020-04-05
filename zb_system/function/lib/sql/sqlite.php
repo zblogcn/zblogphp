@@ -5,6 +5,7 @@ if (!defined('ZBP_PATH')) {
 }
 class SQL__SQLite extends SQL__Global
 {
+
     /**
      * @override
      */
@@ -100,4 +101,5 @@ class SQL__SQLite extends SQL__Global
         }
         $this->_sql = $sqlAll;
     }
+
 }

@@ -11,16 +11,21 @@ if (!defined('ZBP_PATH')) {
  */
 class Base
 {
+
     /**
      * @var string 数据表
      */
     protected $table = null;
+
     protected $t = null;
+
     /**
      * @var array 表结构信息
      */
     protected $datainfo = null;
+
     protected $d = null;
+
     /**
      * @var array 数据
      */
@@ -30,10 +35,12 @@ class Base
      * @var Metas|null 扩展元数据
      */
     public $Metas = null;
+
     /**
      * @var Database__Interface db
      */
     protected $db = null;
+
     /**
      * @var string 类名
      */
@@ -437,4 +444,5 @@ class Base
     {
         return (string) json_encode($this->data);
     }
+
 }

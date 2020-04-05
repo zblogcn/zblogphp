@@ -19,6 +19,7 @@ if (!defined('ZBP_PATH')) {
  */
 class Upload extends Base
 {
+
     public function __construct()
     {
         global $zbp;
@@ -54,7 +55,7 @@ class Upload extends Base
     public function CheckSize()
     {
         global $zbp;
-        $n = 1024 * 1024 * (int) $zbp->option['ZC_UPLOAD_FILESIZE'];
+        $n = (1024 * 1024 * (int) $zbp->option['ZC_UPLOAD_FILESIZE']);
 
         return $n >= $this->Size;
     }
@@ -208,4 +209,5 @@ class Upload extends Base
 
         return parent::__get($name);
     }
+
 }

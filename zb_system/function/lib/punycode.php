@@ -34,6 +34,7 @@ class Punycode
     const INITIAL_N = 128;
     const PREFIX = 'xn--';
     const DELIMITER = '-';
+
     /**
      * Encode table.
      *
@@ -44,19 +45,21 @@ class Punycode
         'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
         'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     );
+
     /**
      * Decode table.
      *
      * @param array
      */
     protected static $decodeTable = array(
-        'a' => 0, 'b' =>  1, 'c' =>  2, 'd' =>  3, 'e' =>  4, 'f' =>  5,
-        'g' => 6, 'h' =>  7, 'i' =>  8, 'j' =>  9, 'k' => 10, 'l' => 11,
+        'a' => 0, 'b' => 1, 'c' => 2, 'd' => 3, 'e' => 4, 'f' => 5,
+        'g' => 6, 'h' => 7, 'i' => 8, 'j' => 9, 'k' => 10, 'l' => 11,
         'm' => 12, 'n' => 13, 'o' => 14, 'p' => 15, 'q' => 16, 'r' => 17,
         's' => 18, 't' => 19, 'u' => 20, 'v' => 21, 'w' => 22, 'x' => 23,
         'y' => 24, 'z' => 25, '0' => 26, '1' => 27, '2' => 28, '3' => 29,
         '4' => 30, '5' => 31, '6' => 32, '7' => 33, '8' => 34, '9' => 35,
     );
+
     /**
      * Character encoding.
      *
@@ -134,7 +137,7 @@ class Punycode
         $length = mb_strlen($input, $this->encoding);
         while ($h < $length) {
             $m = $codePoints['nonBasic'][$i++];
-            $delta = $delta + ($m - $n) * ($h + 1);
+            $delta = ($delta + ($m - $n) * ($h + 1));
             $n = $m;
             foreach ($codePoints['all'] as $c) {
                 if ($c < $n || $c < self::INITIAL_N) {
@@ -142,17 +145,17 @@ class Punycode
                 }
                 if ($c === $n) {
                     $q = $delta;
-                    for ($k = self::BASE; ; $k += self::BASE) {
+                    for ($k = self::BASE;; $k += self::BASE) {
                         $t = $this->calculateThreshold($k, $bias);
                         if ($q < $t) {
                             break;
                         }
-                        $code = $t + (($q - $t) % (self::BASE - $t));
+                        $code = ($t + (($q - $t) % (self::BASE - $t)));
                         $output .= self::$encodeTable[$code];
-                        $q = ($q - $t) / (self::BASE - $t);
+                        $q = (($q - $t) / (self::BASE - $t));
                     }
                     $output .= self::$encodeTable[$q];
-                    $bias = $this->adapt($delta, $h + 1, ($h === $b));
+                    $bias = $this->adapt($delta, ($h + 1), ($h === $b));
                     $delta = 0;
                     $h++;
                 }
@@ -228,19 +231,19 @@ class Punycode
         while ($pos < $inputLength) {
             $oldi = $i;
             $w = 1;
-            for ($k = self::BASE; ; $k += self::BASE) {
+            for ($k = self::BASE;; $k += self::BASE) {
                 $digit = self::$decodeTable[$input[$pos++]];
-                $i = $i + ($digit * $w);
+                $i = ($i + ($digit * $w));
                 $t = $this->calculateThreshold($k, $bias);
                 if ($digit < $t) {
                     break;
                 }
-                $w = $w * (self::BASE - $t);
+                $w = ($w * (self::BASE - $t));
             }
-            $bias = $this->adapt($i - $oldi, ++$outputLength, ($oldi === 0));
-            $n = $n + (int) ($i / $outputLength);
-            $i = $i % ($outputLength);
-            $output = mb_substr($output, 0, $i, $this->encoding) . $this->codePointToChar($n) . mb_substr($output, $i, $outputLength - 1, $this->encoding);
+            $bias = $this->adapt(($i - $oldi), ++$outputLength, ($oldi === 0));
+            $n = ($n + (int) ($i / $outputLength));
+            $i = ($i % ($outputLength));
+            $output = mb_substr($output, 0, $i, $this->encoding) . $this->codePointToChar($n) . mb_substr($output, $i, ($outputLength - 1), $this->encoding);
             $i++;
         }
 
@@ -257,13 +260,13 @@ class Punycode
      */
     protected function calculateThreshold($k, $bias)
     {
-        if ($k <= $bias + self::TMIN) {
+        if ($k <= ($bias + self::TMIN)) {
             return self::TMIN;
-        } elseif ($k >= $bias + self::TMAX) {
+        } elseif ($k >= ($bias + self::TMAX)) {
             return self::TMAX;
         }
 
-        return $k - $bias;
+        return ($k - $bias);
     }
 
     /**
@@ -278,17 +281,15 @@ class Punycode
     protected function adapt($delta, $numPoints, $firstTime)
     {
         $delta = (int) (
-            ($firstTime)
-                ? $delta / self::DAMP
-                : $delta / 2
+            ($firstTime) ? $delta / self::DAMP : $delta / 2
         );
         $delta += (int) ($delta / $numPoints);
         $k = 0;
-        while ($delta > ((self::BASE - self::TMIN) * self::TMAX) / 2) {
+        while ($delta > (((self::BASE - self::TMIN) * self::TMAX) / 2)) {
             $delta = (int) ($delta / (self::BASE - self::TMIN));
-            $k = $k + self::BASE;
+            $k = ($k + self::BASE);
         }
-        $k = $k + (int) (((self::BASE - self::TMIN + 1) * $delta) / ($delta + self::SKEW));
+        $k = ($k + (int) (((self::BASE - self::TMIN + 1) * $delta) / ($delta + self::SKEW)));
 
         return $k;
     }
@@ -334,11 +335,11 @@ class Punycode
         if ($code < 128) {
             return $code;
         } elseif ($code < 224) {
-            return (($code - 192) * 64) + (ord($char[1]) - 128);
+            return ((($code - 192) * 64) + (ord($char[1]) - 128));
         } elseif ($code < 240) {
-            return (($code - 224) * 4096) + ((ord($char[1]) - 128) * 64) + (ord($char[2]) - 128);
+            return ((($code - 224) * 4096) + ((ord($char[1]) - 128) * 64) + (ord($char[2]) - 128));
         } else {
-            return (($code - 240) * 262144) + ((ord($char[1]) - 128) * 4096) + ((ord($char[2]) - 128) * 64) + (ord($char[3]) - 128);
+            return ((($code - 240) * 262144) + ((ord($char[1]) - 128) * 4096) + ((ord($char[2]) - 128) * 64) + (ord($char[3]) - 128));
         }
     }
 
@@ -361,4 +362,5 @@ class Punycode
             return chr(($code >> 18) + 240) . chr((($code >> 12) & 63) + 128) . chr((($code >> 6) & 63) + 128) . chr(($code & 63) + 128);
         }
     }
+
 }

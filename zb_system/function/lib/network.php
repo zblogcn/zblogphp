@@ -8,26 +8,32 @@ if (!defined('ZBP_PATH')) {
  */
 class Network
 {
+
     /**
      * @var null
      */
     public $networktype = null;
+
     /**
      * @var array
      */
     public $network_list = array();
+
     /**
      * @var bool
      */
     public $curl = false;
+
     /**
      * @var bool
      */
     public $fsockopen = false;
+
     /**
      * @var bool
      */
     public $file_get_contents = false;
+
     /**
      * @var Network__Interface[]
      */
@@ -76,4 +82,5 @@ class Network
 
         return $network;
     }
+
 }

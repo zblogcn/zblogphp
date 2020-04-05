@@ -17,6 +17,7 @@ if (!defined('ZBP_PATH')) {
  */
 interface Database__Interface
 {
+
     public function Open($array);
 
     public function Close();
@@ -38,4 +39,5 @@ interface Database__Interface
     public function DelTable($table);
 
     public function ExistTable($table);
+
 }

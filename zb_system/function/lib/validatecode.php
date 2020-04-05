@@ -21,6 +21,7 @@ if (!defined('ZBP_PATH')) {
  */
 class ValidateCode
 {
+
     /**
      * @var array
      */
@@ -93,10 +94,15 @@ class ValidateCode
     protected $ignoreAllEffects = false;
 
     protected $charset = 'ABCDEFGHKMNPRSTUVWXYZ123456789';
+
     protected $codelen = 5; //位数
+
     protected $width = 90; //宽度
+
     protected $height = 30; //高度
+
     protected $font; //字体
+
     protected $fontsize = 15; //字体大小
 
     /**
@@ -140,7 +146,7 @@ class ValidateCode
 
             return;
         }
-        $_len = strlen($this->charset) - 1;
+        $_len = (strlen($this->charset) - 1);
         for ($i = 0; $i < $this->codelen; $i++) {
             $this->phrase .= $this->charset[mt_rand(0, $_len)];
         }
@@ -262,15 +268,15 @@ class ValidateCode
         }
 
         if ($this->rand(0, 1)) { // Horizontal
-            $Xa = $this->rand(0, $width / 2);
+            $Xa = $this->rand(0, ($width / 2));
             $Ya = $this->rand(0, $height);
-            $Xb = $this->rand($width / 2, $width);
+            $Xb = $this->rand(($width / 2), $width);
             $Yb = $this->rand(0, $height);
         } else { // Vertical
             $Xa = $this->rand(0, $width);
-            $Ya = $this->rand(0, $height / 2);
+            $Ya = $this->rand(0, ($height / 2));
             $Xb = $this->rand(0, $width);
-            $Yb = $this->rand($height / 2, $height);
+            $Yb = $this->rand(($height / 2), $height);
         }
         imagesetthickness($image, $this->rand(1, 3));
         imageline($image, $Xa, $Ya, $Xb, $Yb, $tcol);
@@ -321,10 +327,10 @@ class ValidateCode
         // Gets the text size and start position
         $size = $this->fontsize;
         $box = imagettfbbox($size, 0, $font, $phrase);
-        $textWidth = $box[2] - $box[0];
-        $textHeight = $box[1] - $box[7];
-        $x = ($width - $textWidth) / 2;
-        $y = ($height - $textHeight) / 2 + $size;
+        $textWidth = ($box[2] - $box[0]);
+        $textHeight = ($box[1] - $box[7]);
+        $x = (($width - $textWidth) / 2);
+        $y = (($height - $textHeight) / 2 + $size);
 
         if (isset($this->textCount) && is_array($this->textCount) && !count($this->textColor)) {
             $textColor = array($this->rand(0, 150), $this->rand(0, 150), $this->rand(0, 150));
@@ -336,10 +342,10 @@ class ValidateCode
         // Write the letters one by one, with random angle
         for ($i = 0; $i < $length; $i++) {
             $box = imagettfbbox($size, 0, $font, $phrase[$i]);
-            $w = $box[2] - $box[0];
+            $w = ($box[2] - $box[0]);
             $angle = $this->rand(-$this->maxAngle, $this->maxAngle);
             $offset = $this->rand(-$this->maxOffset, $this->maxOffset);
-            imagettftext($image, $size, $angle, $x, $y + $offset, $col, $font, $phrase[$i]);
+            imagettftext($image, $size, $angle, $x, ($y + $offset), $col, $font, $phrase[$i]);
             $x += $w;
         }
 
@@ -374,8 +380,8 @@ class ValidateCode
 
         // Apply effects
         if (!$this->ignoreAllEffects) {
-            $square = $width * $height;
-            $effects = $this->rand($square / 3000, $square / 2000);
+            $square = ($width * $height);
+            $effects = $this->rand(($square / 3000), ($square / 2000));
 
             // set the maximum number of lines to draw in front of the text
             if ($this->maxBehindLines != null && $this->maxBehindLines > 0) {
@@ -394,8 +400,8 @@ class ValidateCode
 
         // Apply effects
         if (!$this->ignoreAllEffects) {
-            $square = $width * $height;
-            $effects = $this->rand($square / 2000, $square / 2000);
+            $square = ($width * $height);
+            $effects = $this->rand(($square / 2000), ($square / 2000));
 
             // set the maximum number of lines to draw in front of the text
             if ($this->maxFrontLines != null && $this->maxFrontLines > 0) {
@@ -433,27 +439,27 @@ class ValidateCode
         $X = $this->rand(0, $width);
         $Y = $this->rand(0, $height);
         $phase = $this->rand(0, 10);
-        $scale = 1.1 + $this->rand(0, 10000) / 30000;
+        $scale = (1.1 + $this->rand(0, 10000) / 30000);
         for ($x = 0; $x < $width; $x++) {
             for ($y = 0; $y < $height; $y++) {
-                $Vx = $x - $X;
-                $Vy = $y - $Y;
+                $Vx = ($x - $X);
+                $Vy = ($y - $Y);
                 $Vn = sqrt($Vx * $Vx + $Vy * $Vy);
 
                 if ($Vn != 0) {
-                    $Vn2 = $Vn + 4 * sin($Vn / 30);
-                    $nX = $X + ($Vx * $Vn2 / $Vn);
-                    $nY = $Y + ($Vy * $Vn2 / $Vn);
+                    $Vn2 = ($Vn + 4 * sin($Vn / 30));
+                    $nX = ($X + ($Vx * $Vn2 / $Vn));
+                    $nY = ($Y + ($Vy * $Vn2 / $Vn));
                 } else {
                     $nX = $X;
                     $nY = $Y;
                 }
-                $nY = $nY + $scale * sin($phase + $nX * 0.2);
+                $nY = ($nY + $scale * sin($phase + $nX * 0.2));
 
                 if ($this->interpolation) {
                     $p = $this->interpolate(
-                        $nX - floor($nX),
-                        $nY - floor($nY),
+                        ($nX - floor($nX)),
+                        ($nY - floor($nY)),
                         $this->getCol($image, floor($nX), floor($nY), $bg),
                         $this->getCol($image, ceil($nX), floor($nY), $bg),
                         $this->getCol($image, floor($nX), ceil($nY), $bg),
@@ -574,22 +580,22 @@ class ValidateCode
         list($r2, $g2, $b2) = $this->getRGB($sw);
         list($r3, $g3, $b3) = $this->getRGB($se);
 
-        $cx = 1.0 - $x;
-        $cy = 1.0 - $y;
+        $cx = (1.0 - $x);
+        $cy = (1.0 - $y);
 
-        $m0 = $cx * $r0 + $x * $r1;
-        $m1 = $cx * $r2 + $x * $r3;
+        $m0 = ($cx * $r0 + $x * $r1);
+        $m1 = ($cx * $r2 + $x * $r3);
         $r = (int) ($cy * $m0 + $y * $m1);
 
-        $m0 = $cx * $g0 + $x * $g1;
-        $m1 = $cx * $g2 + $x * $g3;
+        $m0 = ($cx * $g0 + $x * $g1);
+        $m1 = ($cx * $g2 + $x * $g3);
         $g = (int) ($cy * $m0 + $y * $m1);
 
-        $m0 = $cx * $b0 + $x * $b1;
-        $m1 = $cx * $b2 + $x * $b3;
+        $m0 = ($cx * $b0 + $x * $b1);
+        $m1 = ($cx * $b2 + $x * $b3);
         $b = (int) ($cy * $m0 + $y * $m1);
 
-        return ($r << 16) | ($g << 8) | $b;
+        return (($r << 16) | ($g << 8) | $b);
     }
 
     /**
@@ -633,4 +639,5 @@ class ValidateCode
     {
         return $this->getPhrase();
     }
+
 }

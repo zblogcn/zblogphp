@@ -377,6 +377,7 @@ if (function_exists('memory_get_usage')) {
  * https://github.com/php/php-src/commit/b2ea507beab862a0167af6b99f44fe9c695ca4f0
  */
 if (function_exists('get_magic_quotes_gpc') && PHP_VERSION_ID < 70400 && get_magic_quotes_gpc()) {
+
     function _stripslashes(&$var)
     {
         if (is_array($var)) {
@@ -387,6 +388,7 @@ if (function_exists('get_magic_quotes_gpc') && PHP_VERSION_ID < 70400 && get_mag
             $var = stripslashes($var);
         }
     }
+
     _stripslashes($_GET);
     _stripslashes($_POST);
     _stripslashes($_COOKIE);
@@ -444,13 +446,13 @@ $GLOBALS['activeapps'] = &$GLOBALS['activedapps'];
 /*
  * 加载设置
  */
-$GLOBALS['option'] = require ZBP_PATH . 'zb_system/defend/option.php';
+$GLOBALS['option'] = include ZBP_PATH . 'zb_system/defend/option.php';
 $op_users = null;
 if (!ZBP_HOOKERROR && isset($_ENV['ZBP_USER_OPTION']) && is_readable($file_base = $_ENV['ZBP_USER_OPTION'])) {
-    $op_users = require $file_base;
+    $op_users = include $file_base;
     $GLOBALS['option'] = array_merge($GLOBALS['option'], $op_users);
 } elseif (is_readable($file_base = $GLOBALS['usersdir'] . 'c_option.php')) {
-    $op_users = require $file_base;
+    $op_users = include $file_base;
     $GLOBALS['option'] = array_merge($GLOBALS['option'], $op_users);
 }
 
@@ -481,7 +483,7 @@ if (ZBP_SAFEMODE === false) {
     }
 
     if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/include.php')) {
-        require $file_base;
+        include $file_base;
     }
 
     $aps = $GLOBALS['zbp']->GetPreActivePlugin();
@@ -490,7 +492,7 @@ if (ZBP_SAFEMODE === false) {
             $GLOBALS['activedapps'][] = $ap;
         }
         if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/include.php')) {
-            require $file_base;
+            include $file_base;
         }
     }
 

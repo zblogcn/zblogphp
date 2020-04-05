@@ -8,19 +8,24 @@ if (!defined('ZBP_PATH')) {
  */
 class UrlRule
 {
+
     /**
      * @var array
      */
     public $Rules = array();
+
     /**
      * @var string
      */
     public $Url = '';
+
     private $PreUrl = '';
+
     /**
      * @var bool
      */
     public $MakeReplace = true;
+
     /**
      * @var bool
      */
@@ -112,10 +117,10 @@ class UrlRule
         }
 
         if (substr($this->PreUrl, -1) != '/' && substr($s, -1) == '/' && $s != $zbp->host) {
-            $s = substr($s, 0, strlen($s) - 1);
+            $s = substr($s, 0, (strlen($s) - 1));
         }
         if (substr($s, -1) == '&') {
-            $s = substr($s, 0, strlen($s) - 1);
+            $s = substr($s, 0, (strlen($s) - 1));
         }
 
         $this->Url = htmlspecialchars($s);
@@ -470,4 +475,5 @@ class UrlRule
 
         return 'RewriteRule ' . $zbp->cookiespath . $url . '&full_uri=$0 [I,L]';
     }
+
 }

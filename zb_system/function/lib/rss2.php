@@ -8,7 +8,9 @@ if (!defined('ZBP_PATH')) {
  */
 class Rss2
 {
+
     private $channel;
+
     /**
      * @var string xml文档
      */
@@ -81,4 +83,5 @@ class Rss2
 
         return $this->xml;
     }
+
 }

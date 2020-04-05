@@ -16,6 +16,7 @@ if (!defined('ZBP_PATH')) {
  */
 class Tag extends Base
 {
+
     public function __construct()
     {
         global $zbp;
@@ -154,4 +155,5 @@ class Tag extends Base
 
         return parent::Del();
     }
+
 }

@@ -13,6 +13,7 @@ if (!defined('ZBP_PATH')) {
  */
 class Metas
 {
+
     /**
      * @var array 存储Metas相应数值的数组
      */
@@ -204,4 +205,5 @@ class Metas
 
         return true;
     }
+
 }
