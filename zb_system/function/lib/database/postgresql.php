@@ -170,14 +170,14 @@ class Database__PostgreSQL implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         $results = pg_query($this->db, $this->sql->Filter($query));
-
-        if (is_resource($results)) {
-            $st = pg_result_status($results);
-            if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
-                trigger_error(pg_result_error($results), E_USER_NOTICE);
-            }
-        }
-
+        //if (is_resource($results)) {
+        //    $st = pg_result_status($results);
+        //    if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
+        //        trigger_error(pg_result_error($results), E_USER_NOTICE);
+        //  }
+        //} else {
+        //  trigger_error(pg_last_error($this->db), E_USER_NOTICE);
+        //}
         $data = array();
         if (is_resource($results)) {
             while ($row = pg_fetch_assoc($results)) {
