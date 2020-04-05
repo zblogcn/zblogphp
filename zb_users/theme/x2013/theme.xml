@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<theme version="php">
+<id>x2013</id>
+<name>X2013</name>
+<url>http://app.rainbowsoft.org/?auth=4</url>
+<note>Z-BlogPHP 超级简洁HTML5主题</note>
+<description></description>
+<path>main.php</path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>未寒</name>
+  <email>im@imzhou.com</email>
+  <url>http://imzhou.com/</url>
+</author>
+<source>
+  <name>李思章</name>
+  <email></email>
+  <url>http://lisizhang.com/</url>
+</source>
+<adapted>151740</adapted>
+<version>2.3</version>
+<pubdate>2013-01-31</pubdate>
+<modified>2017-08-18</modified>
+<price>0</price>
+<phpver>5.2</phpver>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+</sidebars>
+</theme>

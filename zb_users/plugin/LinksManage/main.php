@@ -142,11 +142,11 @@ if ($edit = GetVars('edit', 'GET')) {
             foreach ($link['tag'] as $k => $v) {
                 $list .= '<tr class="' . $link['sub'][$k] . '">
           <td><input name="href[]" value="' . $link['href'][$k] . '" size="30" /></td>
-          <td><input name="ico[]" value="" size="15" /></td>
           <td><input name="title[]" value="' . $link['title'][$k] . '" size="20" /></td>
           <td><input name="text[]" value="' . $link['text'][$k] . '" size="20" /></td>
           <td><input name="target[]" value="' . ($link['target'][$k] ? 1 : 0) . '" class="checkbox" /></td>
           <td><input name="sub[]" value="' . ($link['sub'][$k] ? 1 : 0) . '" class="checkbox" /></td>
+          <td><input name="ico[]" value="" size="15" /></td>
         <tr>';
             }
         }
@@ -181,11 +181,11 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         <thead>
           <tr>
             <th>链接</th>
+            <th class="td10">描述</th>
+            <th class="td10">文本</th>
+            <th class="td5"><abbr title="是否在新窗口打开">新窗</abbr></th>
+            <th class="td5"><abbr title="作为前一个一级链接的二级链接">二级</abbr></th>
             <th>图标（class属性值）</th>
-            <th>描述</th>
-            <th>名称</th>
-            <th class="td10"><abbr title="是否在新窗口打开">新窗</abbr></th>
-            <th class="td10"><abbr title="作为前一个一级链接的二级链接">二级</abbr></th>
           </tr>
         </thead>
         <tbody id="LinksManageList">
@@ -227,6 +227,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         <input type="text" name="stay" class="checkbox" value="1" /> 提交后返回本页
         <?php if (isset($bakUrl)) { ?>
           <a title="查看备份" href="<?php echo $bakUrl; ?>" target="_blank">查看备份（<?php echo $mod->FileName; ?>）</a>
+          [直接打开会乱码，请另存到本地查看，停用链接管理插件时会恢复进模块，但是上述配置不会丢失]
         <?php } ?>
       </p>
       ------

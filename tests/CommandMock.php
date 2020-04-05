@@ -5,8 +5,8 @@ $_SERVER["HTTP_HOST"] = "http://localhost";
 $_SERVER['SERVER_SOFTWARE'] = "IIS";
 define('ZBP_HOOKERROR', false);
 
-
-function returnFalse () {
+function returnFalse()
+{
     return false;
 }
 
