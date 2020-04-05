@@ -52,7 +52,8 @@ function RegisterPlugin($strPluginName, $strPluginActiveFunction)
  */
 function InstallPlugin($strPluginName)
 {
-    if (function_exists($f = 'InstallPlugin_' . $strPluginName)) {
+    $f = 'InstallPlugin_' . $strPluginName;
+    if (function_exists($f)) {
         $f();
     }
 }
@@ -66,7 +67,8 @@ function InstallPlugin($strPluginName)
  */
 function UninstallPlugin($strPluginName)
 {
-    if (function_exists($f = 'UninstallPlugin_' . $strPluginName) == true) {
+    $f = 'UninstallPlugin_' . $strPluginName;
+    if (function_exists($f) == true) {
         $f();
     }
 }
@@ -148,9 +150,9 @@ function SetPluginSignal($plugname, $function, $signal = 'PLUGIN_EXITSIGNAL_NONE
 'actioncode:要执行的语句，要转义为Execute可执行语句
 '*********************************************************
  */
-//function Add_Action_Plugin($plugname,$actioncode){
-//	$GLOBALS['hooks'][$plugname][]=$actioncode;
-//}
+// function Add_Action_Plugin($plugname,$actioncode){
+// $GLOBALS['hooks'][$plugname][]=$actioncode;
+// }
 
 /*
 '*********************************************************
@@ -201,9 +203,9 @@ function Remove_Filter_Plugin($plugname, $functionname)
 'parameter:要写入的内容
 '*********************************************************
  */
-//function Add_Response_Plugin($plugname,$functionname){
-//	$GLOBALS['hooks'][$plugname][]=$functionname;
-//}
+// function Add_Response_Plugin($plugname,$functionname){
+// $GLOBALS['hooks'][$plugname][]=$functionname;
+// }
 
 //###############################################################################################################
 //dubug,common里的

@@ -954,7 +954,8 @@ class SQL__Global
         $sql[] = 'TABLE';
         $this->buildIFEXISTS();
         $this->buildTable();
-        if (empty(trim(implode('', $this->table)))) {
+        $str = trim(implode('', $this->table));
+        if ($str === '') {
             $sql[] = implode(' ,', $this->other['TABLE']);
         }
     }

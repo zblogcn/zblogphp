@@ -1,4 +1,5 @@
-<?php if (!defined('ZBP_PATH')) {
+<?php
+if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
 /*
@@ -1746,8 +1747,8 @@ function Admin_ModuleMng()
 });
 
 </script>
-<?php
-echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/link_32.png' . '");</script>';
+    <?php
+    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/link_32.png' . '");</script>';
 }
 
 //###############################################################################################################
@@ -1862,7 +1863,7 @@ function Admin_SettingMng()
                 <!-- End .content-box-header -->
 
                 <div class="content-box-content">
-<?php
+    <?php
     $decodedBlogHost = $zbp->option['ZC_BLOG_HOST'];
     if (stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false && function_exists('mb_strtolower')) {
         $Punycode = new Punycode();
@@ -1980,7 +1981,7 @@ function changeDomain(newurl){
               <p><input type="submit" class="button" value="<?php echo $zbp->lang['msg']['submit'] ?>" id="btnPost" onclick="" /></p>
             </div>
           </form>
-<?php
+    <?php
 
     echo '<script type="text/javascript">ActiveTopMenu("topmenu2");</script>';
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/setting_32.png' . '");</script>';
