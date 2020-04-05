@@ -1,22 +1,22 @@
 <?php
 
-class ClassSQLMySQLTest extends PHPUnit_Framework_TestCase
+class ClassSQL__MySQLTest extends PHPUnit\Framework\TestCase
 {
     protected $backupGlobalsBlacklist = array('zbp');
     protected static $db = null;
 
-    public function setUp()
+    public function setUp(): void
     {
-        self::$db = new SQLMySQL($GLOBALS['zbp']->db);
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         self::$db->reset();
         self::$db = null;
     }
 
-    public function testExist()
+    public function testExist(): void
     {
         self::$db->exist('zbp_post', 'zbphp');
         $this->assertEquals('SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA=\'zbphp\' AND TABLE_NAME=\'zbp_post\'', self::$db->sql);

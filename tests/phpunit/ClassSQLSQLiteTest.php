@@ -1,16 +1,16 @@
 <?php
 
-class ClassSQLSQLiteTest extends PHPUnit_Framework_TestCase
+class ClassSQL__SQLiteTest extends PHPUnit\Framework\TestCase
 {
     protected $backupGlobalsBlacklist = array('zbp');
     protected static $db = null;
 
-    public function setUp()
+    public function setUp(): void
     {
-        self::$db = new SQLSQLite($GLOBALS['zbp']->db);
+        self::$db = new SQL__SQLite($GLOBALS['zbp']->db);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         self::$db->reset();
         self::$db = null;

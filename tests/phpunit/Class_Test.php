@@ -6,7 +6,7 @@
 require_once './tests/CommandMock.php';
 commandmock_loadzbp();
 
-class Class_Test extends PHPUnit_Framework_TestCase
+class Class_Test extends PHPUnit\Framework\TestCase
 {
     public function testUseless()
     {

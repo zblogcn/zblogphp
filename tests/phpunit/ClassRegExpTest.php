@@ -1,18 +1,18 @@
 <?php
 
-class ClassRegExpTest extends PHPUnit_Framework_TestCase
+class ClassRegExpTest extends PHPUnit\Framework\TestCase 
 {
     protected $backupGlobalsBlacklist = array('zbp');
 
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
-    public function testNickname()
+    public function testNickname(): void
     {
         $this->assertFalse(CheckRegExp("@", '[nickname]'));
         $this->assertFalse(CheckRegExp("\x05", '[nickname]'));

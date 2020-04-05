@@ -1,6 +1,6 @@
 <?php
 
-class ClassUrlRewriteTest extends PHPUnit_Framework_TestCase
+class ClassUrlRewriteTest extends PHPUnit\Framework\TestCase
 {
     protected $backupGlobalsBlacklist = array('zbp');
     protected $testRules = array(
@@ -117,11 +117,11 @@ class ClassUrlRewriteTest extends PHPUnit_Framework_TestCase
         ),
     );
 
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 

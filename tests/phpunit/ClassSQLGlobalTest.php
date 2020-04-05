@@ -1,19 +1,19 @@
 <?php
 
-class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
+class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
 {
     protected $backupGlobalsBlacklist = array('zbp');
     protected static $db = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         /*
          * Use MySQL to test Global
          */
-        self::$db = new SQLMySQL($GLOBALS['zbp']->db);
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         self::$db->reset();
         self::$db = null;
@@ -28,28 +28,28 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
 
     public function testInsert()
     {
-        self::$db = new SQLMySQL($GLOBALS['zbp']->db);
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
         self::$db->insert('zbp_post')->data(array('log_Title' => 'test'));
         $this->assertEquals('INSERT INTO  zbp_post  (log_Title)  VALUES (  \'test\'  )', self::$db->sql);
     }
 
     public function testDelete()
     {
-        self::$db = new SQLMySQL($GLOBALS['zbp']->db);
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
         self::$db->delete('zbp_post');
         $this->assertEquals('DELETE FROM  zbp_post ', self::$db->sql);
     }
 
     public function testDrop()
     {
-        self::$db = new SQLMySQL($GLOBALS['zbp']->db);
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
         self::$db->drop('zbp_post');
         $this->assertEquals('DROP TABLE  zbp_post ', self::$db->sql);
     }
 
     public function testCreate()
     {
-        self::$db = new SQLMySQL($GLOBALS['zbp']->db);
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
         self::$db
             ->create('zbp_post')
             ->data(
@@ -62,7 +62,7 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
 
     public function testUpdate()
     {
-        self::$db = new SQLMySQL($GLOBALS['zbp']->db);
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
         self::$db
             ->update('zbp_post')
             ->data(array('log_Title' => 'test'));
@@ -71,7 +71,7 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
 
     public function testCount()
     {
-        self::$db = new SQLMySQL($GLOBALS['zbp']->db);
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
         $this->assertEquals(
             'SELECT  COUNT(log_id) AS countid  FROM  zbp_post ',
             self::$db
@@ -105,7 +105,7 @@ class ClassSQLGlobalTest extends PHPUnit_Framework_TestCase
 
     public function testWhere()
     {
-        self::$db = new SQLMySQL($GLOBALS['zbp']->db);
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
         $this->assertEquals(
             'SELECT * FROM  zbp_post  WHERE  log_ID = \'1\' ',
             self::$db

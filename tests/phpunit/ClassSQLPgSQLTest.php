@@ -1,16 +1,16 @@
 <?php
 
-class ClassSQLPgSQLTest extends PHPUnit_Framework_TestCase
+class ClassSQL__PgSQLTest extends PHPUnit\Framework\TestCase
 {
     protected $backupGlobalsBlacklist = array('zbp');
     protected static $db = null;
 
-    public function setUp()
+    public function setUp(): void
     {
-        self::$db = new SQLPgSQL($GLOBALS['zbp']->db);
+        self::$db = new SQL__PgSQL($GLOBALS['zbp']->db);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         self::$db->reset();
         self::$db = null;
