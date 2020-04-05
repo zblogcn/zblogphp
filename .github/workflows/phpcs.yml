@@ -16,3 +16,5 @@ jobs:
     - uses: docker://rtcamp/action-phpcs-code-review:v2.0.0
       env:
         GH_BOT_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
+      with:
+        args: "WordPress,WordPress-Core,WordPress-Docs"
