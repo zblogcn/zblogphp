@@ -1,6 +1,6 @@
 <?php
 
-class ClassRegExpTest extends PHPUnit\Framework\TestCase 
+class ClassRegExpTest extends PHPUnit\Framework\TestCase
 {
     protected $backupGlobalsBlacklist = array('zbp');
 
