@@ -1,9 +1,10 @@
 <?php
+
 /**
  * KindEditor for Z-BlogPHP.
  *
  * @author 未寒
- * @copyright (C) RainbowSoft Studio
+ *
  */
 require '../../../../../zb_system/function/c_system_base.php';
 
@@ -21,33 +22,33 @@ $max_size = 1024 * 1024 * (int) $zbp->option['ZC_UPLOAD_FILESIZE'];
 //PHP上传失败
 if (!empty($_FILES['imgFile']['error'])) {
     switch ($_FILES['imgFile']['error']) {
-    case '1':
-        $error = '超过php.ini允许的大小。';
-        break;
-    case '2':
-        $error = '超过表单允许的大小。';
-        break;
-    case '3':
-        $error = '图片只有部分被上传。';
-        break;
-    case '4':
-        $error = '请选择图片。';
-        break;
-    case '5':
-        $error = '上传文件大小为0。';
-        break;
-    case '6':
-        $error = '找不到临时目录。';
-        break;
-    case '7':
-        $error = '写文件到硬盘出错。';
-        break;
-    case '8':
-        $error = 'File upload stopped by extension。';
-        break;
-    case '999':
-    default:
-        $error = '未知错误。';
+        case '1':
+            $error = '超过php.ini允许的大小。';
+            break;
+        case '2':
+            $error = '超过表单允许的大小。';
+            break;
+        case '3':
+            $error = '图片只有部分被上传。';
+            break;
+        case '4':
+            $error = '请选择图片。';
+            break;
+        case '5':
+            $error = '上传文件大小为0。';
+            break;
+        case '6':
+            $error = '找不到临时目录。';
+            break;
+        case '7':
+            $error = '写文件到硬盘出错。';
+            break;
+        case '8':
+            $error = 'File upload stopped by extension。';
+            break;
+        case '999':
+        default:
+            $error = '未知错误。';
     }
     alert($error);
 }

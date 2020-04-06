@@ -5,7 +5,7 @@
 /**
  * 系统信息.
  *
- * @copyright (C) RainbowSoft Studio
+ *
  */
 function misc_updateinfo()
 {
@@ -144,53 +144,57 @@ function misc_vrs()
         $zbp->ShowError(6, __FILE__, __LINE__);
     }
 
-    $blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights']; ?><!DOCTYPE HTML>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <?php
-    if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) {
-        ?>
-        <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+    $blogtitle = $zbp->name . '-' . $zbp->lang['msg']['view_rights']; ?>
+    <!DOCTYPE HTML>
+    <html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <?php
-    }
-    ?>
-    <meta name="robots" content="none"/>
-    <meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']; ?>"/>
-    <link rel="stylesheet" href="css/admin.css" type="text/css" media="screen"/>
-    <script src="script/common.js" type="text/javascript"></script>
-    <script src="script/c_admin_js_add.php" type="text/javascript"></script>
-    <?php
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {
-        $fpname();
-    }
-    ?>
-    <title><?php echo $blogtitle; ?></title>
-</head>
-<body class="short">
-<div class="bg">
-    <div id="wrapper">
-        <div class="logo"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></div>
-        <div class="login">
-            <form method="post" action="#">
-                <dl>
-                    <dt><?php echo $zbp->lang['msg']['current_member'] . ' : <b>' . $zbp->user->Name; ?></b><br/>
-                        <?php echo $zbp->lang['msg']['member_level'] . ' : <b>' . $zbp->user->LevelName; ?></b></dt>
-    <?php
-    foreach ($GLOBALS['actions'] as $key => $value) {
-        if ($GLOBALS['zbp']->CheckRights($key)) {
-            echo '<dd><b>' . $zbp->GetActionDescription($key) . '</b> : ' . ($zbp->CheckRights($key) ? '<span style="color:green">true</span>' : '<span style="color:red">false</span>') . '</dd>';
+        if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) {
+        ?>
+            <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+        <?php
         }
-    }
-    ?>
-                </dl>
-            </form>
+        ?>
+        <meta name="robots" content="none" />
+        <meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']; ?>" />
+        <link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
+        <script src="script/common.js" type="text/javascript"></script>
+        <script src="script/c_admin_js_add.php" type="text/javascript"></script>
+        <?php
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {
+            $fpname();
+        }
+        ?>
+        <title><?php echo $blogtitle; ?></title>
+    </head>
+
+    <body class="short">
+        <div class="bg">
+            <div id="wrapper">
+                <div class="logo"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP" /></div>
+                <div class="login">
+                    <form method="post" action="#">
+                        <dl>
+                            <dt><?php echo $zbp->lang['msg']['current_member'] . ' : <b>' . $zbp->user->Name; ?></b><br />
+                                <?php echo $zbp->lang['msg']['member_level'] . ' : <b>' . $zbp->user->LevelName; ?></b></dt>
+                            <?php
+                            foreach ($GLOBALS['actions'] as $key => $value) {
+                                if ($GLOBALS['zbp']->CheckRights($key)) {
+                                    echo '<dd><b>' . $zbp->GetActionDescription($key) . '</b> : ' . ($zbp->CheckRights($key) ? '<span style="color:green">true</span>' : '<span style="color:red">false</span>') . '</dd>';
+                                }
+                            }
+                            ?>
+                        </dl>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-</body>
-</html>
-    <?php
+    </body>
+
+    </html>
+<?php
     RunTime();
 }
 
@@ -213,200 +217,285 @@ function misc_phpinfo()
     if (PHP_ENGINE !== ENGINE_HHVM) {
         preg_match("/<body.*?>(.*?)<\/body>/is", $s, $match);
     }
-    ?>
+?>
     <!DOCTYPE HTML>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <?php
-    if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) {
+    <html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <?php
+        if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) {
         ?>
-        <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
         <?php
-    }
-    ?>
-    <meta name="robots" content="none"/>
-    <meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']; ?>"/>
-    <link rel="stylesheet" href="css/admin.css" type="text/css" media="screen"/>
-    <script src="script/common.js" type="text/javascript"></script>
-    <script src="script/c_admin_js_add.php" type="text/javascript"></script>
-    <?php
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {
-        $fpname();
-    }
-    ?>
-    <title><?php echo $blogtitle; ?></title>
-    <style type="text/css">
-*{color:#000;}
-pre {margin: 0; font-family: monospace;}
-a:link {color: #009; text-decoration: none; background-color: #fff;}
-a:hover {text-decoration: underline;}
-table {border-collapse: collapse; border: 0; width: 934px; box-shadow: 1px 2px 3px #ccc;}
-.center {text-align: center;}
-.center table {margin: 1em auto; text-align: left;}
-.center th {text-align: center !important;}
-td, th {border: 1px solid #666; font-size: 75%; vertical-align: baseline; padding: 4px 5px;}
-h1 {font-size: 150%;}
-h2 {font-size: 125%;}
-.p {text-align: left;}
-.e {background-color: #ccf; width: 300px; font-weight: bold;}
-.h {background-color: #99c; font-weight: bold;}
-.v {background-color: #ddd; max-width: 300px; overflow-x: auto;}
-.v i {color: #999;}
-img {float: right; border: 0;}
-hr {display:none;}
-div.bg {background: #3a6ea5!important;}
-.h{background: #78a2ce!important;}
-.e{background: #c6dcf3!important;}
-table a img {filter:hue-rotate(-30deg);}
-    </style>
-</head>
-<body class="short">
-<div class="bg">
-    <div id="wrapper">
-        <div class="logo"><a href="#zblogphp"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP"/></a></div>
-        <?php
-        if (PHP_ENGINE === ENGINE_HHVM) {
-            echo '<p style="text-align: center;">' . GetEnvironment() . '</p>';
-        } else {
-            echo $match[0];
         }
-
-        $c = 'PHP_VERSION , PHP_OS , PHP_SAPI , PHP_EOL ,  PHP_INT_MAX ,  PHP_INT_SIZE ,  DEFAULT_INCLUDE_PATH , PEAR_INSTALL_DIR , PEAR_EXTENSION_DIR , PHP_EXTENSION_DIR , PHP_PREFIX , PHP_BINDIR , PHP_LIBDIR , PHP_DATADIR , PHP_SYSCONFDIR , PHP_LOCALSTATEDIR , PHP_CONFIG_FILE_PATH , PHP_CONFIG_FILE_SCAN_DIR , PHP_SHLIB_SUFFIX ,  PHP_OUTPUT_HANDLER_START , PHP_OUTPUT_HANDLER_CONT , PHP_OUTPUT_HANDLER_END , E_ERROR , E_WARNING , E_PARSE , E_NOTICE , E_CORE_ERROR , E_CORE_WARNING , E_COMPILE_ERROR , E_COMPILE_WARNING , E_USER_ERROR , E_USER_WARNING , E_USER_NOTICE , E_ALL , E_STRICT , __COMPILER_HALT_OFFSET__ ,  EXTR_OVERWRITE , EXTR_SKIP , EXTR_PREFIX_SAME , EXTR_PREFIX_ALL , EXTR_PREFIX_INVALID , EXTR_PREFIX_IF_EXISTS , EXTR_IF_EXISTS , SORT_ASC , SORT_DESC , SORT_REGULAR , SORT_NUMERIC , SORT_STRING , CASE_LOWER , CASE_UPPER , COUNT_NORMAL , COUNT_RECURSIVE , ASSERT_ACTIVE , ASSERT_CALLBACK , ASSERT_BAIL , ASSERT_WARNING , ASSERT_QUIET_EVAL , CONNECTION_ABORTED , CONNECTION_NORMAL , CONNECTION_TIMEOUT , INI_USER , INI_PERDIR , INI_SYSTEM , INI_ALL , M_E , M_LOG2E , M_LOG10E , M_LN2 , M_LN10 , M_PI , M_PI_2 , M_PI_4 , M_1_PI , M_2_PI , M_2_SQRTPI , M_SQRT2 , M_SQRT1_2 , CRYPT_SALT_LENGTH , CRYPT_STD_DES , CRYPT_EXT_DES , CRYPT_MD5 , CRYPT_BLOWFISH , DIRECTORY_SEPARATOR , SEEK_SET , SEEK_CUR , SEEK_END , LOCK_SH , LOCK_EX , LOCK_UN , LOCK_NB , HTML_SPECIALCHARS , HTML_ENTITIES , ENT_COMPAT , ENT_QUOTES , ENT_NOQUOTES , INFO_GENERAL , INFO_CREDITS , INFO_CONFIGURATION , INFO_MODULES , INFO_ENVIRONMENT , INFO_VARIABLES , INFO_LICENSE , INFO_ALL , CREDITS_GROUP , CREDITS_GENERAL , CREDITS_SAPI , CREDITS_MODULES , CREDITS_DOCS , CREDITS_FULLPAGE , CREDITS_QA , CREDITS_ALL , STR_PAD_LEFT , STR_PAD_RIGHT , STR_PAD_BOTH , PATHINFO_DIRNAME , PATHINFO_BASENAME , PATHINFO_EXTENSION , PATH_SEPARATOR , CHAR_MAX , LC_CTYPE , LC_NUMERIC , LC_TIME , LC_COLLATE , LC_MONETARY , LC_ALL , LC_MESSAGES , ABDAY_1 , ABDAY_2 , ABDAY_3 , ABDAY_4 , ABDAY_5 , ABDAY_6 , ABDAY_7 , DAY_1 , DAY_2 , DAY_3 , DAY_4 , DAY_5 , DAY_6 , DAY_7 , ABMON_1 , ABMON_2 , ABMON_3 , ABMON_4 , ABMON_5 , ABMON_6 , ABMON_7 , ABMON_8 , ABMON_9 , ABMON_10 , ABMON_11 , ABMON_12 , MON_1 , MON_2 , MON_3 , MON_4 , MON_5 , MON_6 , MON_7 , MON_8 , MON_9 , MON_10 , MON_11 , MON_12 , AM_STR , PM_STR , D_T_FMT , D_FMT , T_FMT , T_FMT_AMPM , ERA , ERA_YEAR , ERA_D_T_FMT , ERA_D_FMT , ERA_T_FMT , ALT_DIGITS , INT_CURR_SYMBOL , CURRENCY_SYMBOL , CRNCYSTR , MON_DECIMAL_POINT , MON_THOUSANDS_SEP , MON_GROUPING , POSITIVE_SIGN , NEGATIVE_SIGN , INT_FRAC_DIGITS , FRAC_DIGITS , P_CS_PRECEDES , P_SEP_BY_SPACE , N_CS_PRECEDES , N_SEP_BY_SPACE , P_SIGN_POSN , N_SIGN_POSN , DECIMAL_POINT , RADIXCHAR , THOUSANDS_SEP , THOUSEP , GROUPING , YESEXPR , NOEXPR , YESSTR , NOSTR , CODESET , LOG_EMERG , LOG_ALERT , LOG_CRIT , LOG_ERR , LOG_WARNING , LOG_NOTICE , LOG_INFO , LOG_DEBUG , LOG_KERN , LOG_USER , LOG_MAIL , LOG_DAEMON , LOG_AUTH , LOG_SYSLOG , LOG_LPR , LOG_NEWS , LOG_UUCP , LOG_CRON , LOG_AUTHPRIV , LOG_LOCAL0 , LOG_LOCAL1 , LOG_LOCAL2 , LOG_LOCAL3 , LOG_LOCAL4 , LOG_LOCAL5 , LOG_LOCAL6 , LOG_LOCAL7 , LOG_PID , LOG_CONS , LOG_ODELAY , LOG_NDELAY , LOG_NOWAIT , LOG_PERROR ,  PCRE_VERSION';
-        echo '<div class="center"><div><br/><br/><a name="zblogphp"><h1>Z-BlogPHP</h1></a><br/></div>';
-        echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">PHP Constants</th></tr>';
-        $ca = explode(",", $c);
-        foreach ($ca as $key => $value) {
-            echo '<tr><td class="e">' . $value . '</td><td class="v">';
-            if (defined(trim($value))) {
-                echo constant(trim($value));
+        ?>
+        <meta name="robots" content="none" />
+        <meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']; ?>" />
+        <link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
+        <script src="script/common.js" type="text/javascript"></script>
+        <script src="script/c_admin_js_add.php" type="text/javascript"></script>
+        <?php
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {
+            $fpname();
+        }
+        ?>
+        <title><?php echo $blogtitle; ?></title>
+        <style type="text/css">
+            * {
+                color: #000;
             }
-            echo '</td></tr>';
-        }
-        echo '</tbody></table>';
 
-        $ca = get_defined_constants(true);
-        $ca = $ca['user'];
-        echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Z-BlogPHP Constants</th></tr>';
-        foreach ($ca as $key => $value) {
-            echo '<tr><td class="e">' . $key . '</td><td class="v">' . TransferHTML($value, '[nohtml]') . '</td></tr>';
-        }
-        echo '</tbody></table>';
+            pre {
+                margin: 0;
+                font-family: monospace;
+            }
 
-        echo '</tbody></table>';
+            a:link {
+                color: #009;
+                text-decoration: none;
+                background-color: #fff;
+            }
 
-        $ca = array();
-        $badfilter = array();
-        foreach ($GLOBALS as $n => $v) {
-            if (strpos($n, 'Filter_Plugin_') === false) {
-                if (gettype($v) == 'integer' || gettype($v) == 'double' || gettype($v) == 'string' || gettype($v) == 'boolean') {
-                    $ca['$' . $n] = '(' . gettype($v) . ') ' . TransferHTML($v, '[nohtml]');
+            a:hover {
+                text-decoration: underline;
+            }
+
+            table {
+                border-collapse: collapse;
+                border: 0;
+                width: 934px;
+                box-shadow: 1px 2px 3px #ccc;
+            }
+
+            .center {
+                text-align: center;
+            }
+
+            .center table {
+                margin: 1em auto;
+                text-align: left;
+            }
+
+            .center th {
+                text-align: center !important;
+            }
+
+            td,
+            th {
+                border: 1px solid #666;
+                font-size: 75%;
+                vertical-align: baseline;
+                padding: 4px 5px;
+            }
+
+            h1 {
+                font-size: 150%;
+            }
+
+            h2 {
+                font-size: 125%;
+            }
+
+            .p {
+                text-align: left;
+            }
+
+            .e {
+                background-color: #ccf;
+                width: 300px;
+                font-weight: bold;
+            }
+
+            .h {
+                background-color: #99c;
+                font-weight: bold;
+            }
+
+            .v {
+                background-color: #ddd;
+                max-width: 300px;
+                overflow-x: auto;
+            }
+
+            .v i {
+                color: #999;
+            }
+
+            img {
+                float: right;
+                border: 0;
+            }
+
+            hr {
+                display: none;
+            }
+
+            div.bg {
+                background: #3a6ea5 !important;
+            }
+
+            .h {
+                background: #78a2ce !important;
+            }
+
+            .e {
+                background: #c6dcf3 !important;
+            }
+
+            table a img {
+                filter: hue-rotate(-30deg);
+            }
+        </style>
+    </head>
+
+    <body class="short">
+        <div class="bg">
+            <div id="wrapper">
+                <div class="logo"><a href="#zblogphp"><img src="image/admin/none.gif" title="Z-BlogPHP" alt="Z-BlogPHP" /></a></div>
+                <?php
+                if (PHP_ENGINE === ENGINE_HHVM) {
+                    echo '<p style="text-align: center;">' . GetEnvironment() . '</p>';
                 } else {
-                    $ca['$' . $n] = '(' . gettype($v) . ')';
+                    echo $match[0];
                 }
-            } else {
-                $badfilter[$n] = $n;
-            }
-        }
-        echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Globals Variables</th></tr>';
-        foreach ($ca as $key => $value) {
-            echo '<tr><td class="e">' . $key . '</td><td class="v">' . $value . '</td></tr>';
-        }
-        echo '</tbody></table>';
 
-        echo '</tbody></table>';
+                $c = 'PHP_VERSION , PHP_OS , PHP_SAPI , PHP_EOL ,  PHP_INT_MAX ,  PHP_INT_SIZE ,  DEFAULT_INCLUDE_PATH , PEAR_INSTALL_DIR , PEAR_EXTENSION_DIR , PHP_EXTENSION_DIR , PHP_PREFIX , PHP_BINDIR , PHP_LIBDIR , PHP_DATADIR , PHP_SYSCONFDIR , PHP_LOCALSTATEDIR , PHP_CONFIG_FILE_PATH , PHP_CONFIG_FILE_SCAN_DIR , PHP_SHLIB_SUFFIX ,  PHP_OUTPUT_HANDLER_START , PHP_OUTPUT_HANDLER_CONT , PHP_OUTPUT_HANDLER_END , E_ERROR , E_WARNING , E_PARSE , E_NOTICE , E_CORE_ERROR , E_CORE_WARNING , E_COMPILE_ERROR , E_COMPILE_WARNING , E_USER_ERROR , E_USER_WARNING , E_USER_NOTICE , E_ALL , E_STRICT , __COMPILER_HALT_OFFSET__ ,  EXTR_OVERWRITE , EXTR_SKIP , EXTR_PREFIX_SAME , EXTR_PREFIX_ALL , EXTR_PREFIX_INVALID , EXTR_PREFIX_IF_EXISTS , EXTR_IF_EXISTS , SORT_ASC , SORT_DESC , SORT_REGULAR , SORT_NUMERIC , SORT_STRING , CASE_LOWER , CASE_UPPER , COUNT_NORMAL , COUNT_RECURSIVE , ASSERT_ACTIVE , ASSERT_CALLBACK , ASSERT_BAIL , ASSERT_WARNING , ASSERT_QUIET_EVAL , CONNECTION_ABORTED , CONNECTION_NORMAL , CONNECTION_TIMEOUT , INI_USER , INI_PERDIR , INI_SYSTEM , INI_ALL , M_E , M_LOG2E , M_LOG10E , M_LN2 , M_LN10 , M_PI , M_PI_2 , M_PI_4 , M_1_PI , M_2_PI , M_2_SQRTPI , M_SQRT2 , M_SQRT1_2 , CRYPT_SALT_LENGTH , CRYPT_STD_DES , CRYPT_EXT_DES , CRYPT_MD5 , CRYPT_BLOWFISH , DIRECTORY_SEPARATOR , SEEK_SET , SEEK_CUR , SEEK_END , LOCK_SH , LOCK_EX , LOCK_UN , LOCK_NB , HTML_SPECIALCHARS , HTML_ENTITIES , ENT_COMPAT , ENT_QUOTES , ENT_NOQUOTES , INFO_GENERAL , INFO_CREDITS , INFO_CONFIGURATION , INFO_MODULES , INFO_ENVIRONMENT , INFO_VARIABLES , INFO_LICENSE , INFO_ALL , CREDITS_GROUP , CREDITS_GENERAL , CREDITS_SAPI , CREDITS_MODULES , CREDITS_DOCS , CREDITS_FULLPAGE , CREDITS_QA , CREDITS_ALL , STR_PAD_LEFT , STR_PAD_RIGHT , STR_PAD_BOTH , PATHINFO_DIRNAME , PATHINFO_BASENAME , PATHINFO_EXTENSION , PATH_SEPARATOR , CHAR_MAX , LC_CTYPE , LC_NUMERIC , LC_TIME , LC_COLLATE , LC_MONETARY , LC_ALL , LC_MESSAGES , ABDAY_1 , ABDAY_2 , ABDAY_3 , ABDAY_4 , ABDAY_5 , ABDAY_6 , ABDAY_7 , DAY_1 , DAY_2 , DAY_3 , DAY_4 , DAY_5 , DAY_6 , DAY_7 , ABMON_1 , ABMON_2 , ABMON_3 , ABMON_4 , ABMON_5 , ABMON_6 , ABMON_7 , ABMON_8 , ABMON_9 , ABMON_10 , ABMON_11 , ABMON_12 , MON_1 , MON_2 , MON_3 , MON_4 , MON_5 , MON_6 , MON_7 , MON_8 , MON_9 , MON_10 , MON_11 , MON_12 , AM_STR , PM_STR , D_T_FMT , D_FMT , T_FMT , T_FMT_AMPM , ERA , ERA_YEAR , ERA_D_T_FMT , ERA_D_FMT , ERA_T_FMT , ALT_DIGITS , INT_CURR_SYMBOL , CURRENCY_SYMBOL , CRNCYSTR , MON_DECIMAL_POINT , MON_THOUSANDS_SEP , MON_GROUPING , POSITIVE_SIGN , NEGATIVE_SIGN , INT_FRAC_DIGITS , FRAC_DIGITS , P_CS_PRECEDES , P_SEP_BY_SPACE , N_CS_PRECEDES , N_SEP_BY_SPACE , P_SIGN_POSN , N_SIGN_POSN , DECIMAL_POINT , RADIXCHAR , THOUSANDS_SEP , THOUSEP , GROUPING , YESEXPR , NOEXPR , YESSTR , NOSTR , CODESET , LOG_EMERG , LOG_ALERT , LOG_CRIT , LOG_ERR , LOG_WARNING , LOG_NOTICE , LOG_INFO , LOG_DEBUG , LOG_KERN , LOG_USER , LOG_MAIL , LOG_DAEMON , LOG_AUTH , LOG_SYSLOG , LOG_LPR , LOG_NEWS , LOG_UUCP , LOG_CRON , LOG_AUTHPRIV , LOG_LOCAL0 , LOG_LOCAL1 , LOG_LOCAL2 , LOG_LOCAL3 , LOG_LOCAL4 , LOG_LOCAL5 , LOG_LOCAL6 , LOG_LOCAL7 , LOG_PID , LOG_CONS , LOG_ODELAY , LOG_NDELAY , LOG_NOWAIT , LOG_PERROR ,  PCRE_VERSION';
+                echo '<div class="center"><div><br/><br/><a name="zblogphp"><h1>Z-BlogPHP</h1></a><br/></div>';
+                echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">PHP Constants</th></tr>';
+                $ca = explode(",", $c);
+                foreach ($ca as $key => $value) {
+                    echo '<tr><td class="e">' . $value . '</td><td class="v">';
+                    if (defined(trim($value))) {
+                        echo constant(trim($value));
+                    }
+                    echo '</td></tr>';
+                }
+                echo '</tbody></table>';
 
-        $ca = array();
-        foreach (get_included_files() as $n => $v) {
-            $ca[] = $v;
-        }
-        echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Include Files</th></tr>';
-        $i = 0;
-        foreach ($ca as $key => $value) {
-            $i++;
-            echo '<tr><td class="e">' . $i . '</td><td class="v">' . $value . '</td></tr>';
-        }
-        echo '</tbody></table>';
+                $ca = get_defined_constants(true);
+                $ca = $ca['user'];
+                echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Z-BlogPHP Constants</th></tr>';
+                foreach ($ca as $key => $value) {
+                    echo '<tr><td class="e">' . $key . '</td><td class="v">' . TransferHTML($value, '[nohtml]') . '</td></tr>';
+                }
+                echo '</tbody></table>';
 
-        echo '</tbody></table>';
+                echo '</tbody></table>';
 
-        $ca = array();
-        foreach ($GLOBALS['hooks'] as $n => $v) {
-            $ca[$n] = $n;
-        }
-        $i = 0;
-        $badfilter = array_diff_key($badfilter, $ca);
-        echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Plugin Filters</th></tr>';
-        foreach ($ca as $key => $value) {
-            $i++;
-            $s = '';
-            foreach ($GLOBALS['hooks'][$value] as $function => $sg) {
-                $s .= '<br/>&nbsp;&nbsp;→' . $function;
-            }
-            echo '<tr><td class="e">' . $i . '</td><td class="v">' . $value . $s . '</td></tr>';
-        }
-        foreach ($badfilter as $key => $value) {
-            $i++;
-            echo '<tr><td class="e">' . $i . '(no specification)' . '</td><td class="v">' . $value . '</td></tr>';
-        }
-        echo '</tbody></table>';
+                $ca = array();
+                $badfilter = array();
+                foreach ($GLOBALS as $n => $v) {
+                    if (strpos($n, 'Filter_Plugin_') === false) {
+                        if (gettype($v) == 'integer' || gettype($v) == 'double' || gettype($v) == 'string' || gettype($v) == 'boolean') {
+                            $ca['$' . $n] = '(' . gettype($v) . ') ' . TransferHTML($v, '[nohtml]');
+                        } else {
+                            $ca['$' . $n] = '(' . gettype($v) . ')';
+                        }
+                    } else {
+                        $badfilter[$n] = $n;
+                    }
+                }
+                echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Globals Variables</th></tr>';
+                foreach ($ca as $key => $value) {
+                    echo '<tr><td class="e">' . $key . '</td><td class="v">' . $value . '</td></tr>';
+                }
+                echo '</tbody></table>';
 
-        $ca = get_defined_functions();
-        $i = 0;
-        echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">User Functions</th></tr>';
-        foreach ($ca as $key => $value) {
-            if ($key !== 'user') {
-                continue;
-            }
-            foreach ($value as $key2 => $value2) {
-                $i++;
-                echo '<tr><td class="e">' . $i . '</td><td class="v">' . $value2 . '</td></tr>';
-            }
-        }
-        echo '</tbody></table>';
+                echo '</tbody></table>';
 
-        echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Others</th></tr>';
-        if (function_exists('php_uname')) {
-            $pu = 'php' . "_" . 'uname';
-            echo '<tr><td class="e">' . 'php_uname()' . '</td><td class="v">' . $pu() . '</td></tr>';
-            echo '<tr><td class="e">' . 'php_uname(s)' . '</td><td class="v">' . $pu('s') . '</td></tr>';
-            echo '<tr><td class="e">' . 'php_uname(n)' . '</td><td class="v">' . $pu('n') . '</td></tr>';
-            echo '<tr><td class="e">' . 'php_uname(r)' . '</td><td class="v">' . $pu('r') . '</td></tr>';
-            echo '<tr><td class="e">' . 'php_uname(v)' . '</td><td class="v">' . $pu('v') . '</td></tr>';
-            echo '<tr><td class="e">' . 'php_uname(m)' . '</td><td class="v">' . $pu('m') . '</td></tr>';
-        }
+                $ca = array();
+                foreach (get_included_files() as $n => $v) {
+                    $ca[] = $v;
+                }
+                echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Include Files</th></tr>';
+                $i = 0;
+                foreach ($ca as $key => $value) {
+                    $i++;
+                    echo '<tr><td class="e">' . $i . '</td><td class="v">' . $value . '</td></tr>';
+                }
+                echo '</tbody></table>';
 
-        $a = array();
-        if (function_exists('get_declared_classes')) {
-            $a = get_declared_classes();
-        }
-        foreach ($a as $key => $value) {
-            echo '<tr><td class="e">' . 'classes' . '</td><td class="v">' . $value . '</td></tr>';
-        }
-        $a = array();
-        if (function_exists('get_declared_interfaces')) {
-            $a = get_declared_interfaces();
-        }
-        foreach ($a as $key => $value) {
-            echo '<tr><td class="e">' . 'interfaces' . '</td><td class="v">' . $value . '</td></tr>';
-        }
+                echo '</tbody></table>';
 
-        $a = array();
-        if (function_exists('get_declared_traits')) {
-            $a = get_declared_traits();
-        }
-        foreach ($a as $key => $value) {
-            echo '<tr><td class="e">' . 'traits' . '</td><td class="v">' . $value . '</td></tr>';
-        }
+                $ca = array();
+                foreach ($GLOBALS['hooks'] as $n => $v) {
+                    $ca[$n] = $n;
+                }
+                $i = 0;
+                $badfilter = array_diff_key($badfilter, $ca);
+                echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Plugin Filters</th></tr>';
+                foreach ($ca as $key => $value) {
+                    $i++;
+                    $s = '';
+                    foreach ($GLOBALS['hooks'][$value] as $function => $sg) {
+                        $s .= '<br/>&nbsp;&nbsp;→' . $function;
+                    }
+                    echo '<tr><td class="e">' . $i . '</td><td class="v">' . $value . $s . '</td></tr>';
+                }
+                foreach ($badfilter as $key => $value) {
+                    $i++;
+                    echo '<tr><td class="e">' . $i . '(no specification)' . '</td><td class="v">' . $value . '</td></tr>';
+                }
+                echo '</tbody></table>';
 
-        echo '</tbody></table>';
-        echo '</div>';
-        ?>
-    </div>
-</div>
-</body>
-</html>
-    <?php
+                $ca = get_defined_functions();
+                $i = 0;
+                echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">User Functions</th></tr>';
+                foreach ($ca as $key => $value) {
+                    if ($key !== 'user') {
+                        continue;
+                    }
+                    foreach ($value as $key2 => $value2) {
+                        $i++;
+                        echo '<tr><td class="e">' . $i . '</td><td class="v">' . $value2 . '</td></tr>';
+                    }
+                }
+                echo '</tbody></table>';
+
+                echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Others</th></tr>';
+                if (function_exists('php_uname')) {
+                    $pu = 'php' . "_" . 'uname';
+                    echo '<tr><td class="e">' . 'php_uname()' . '</td><td class="v">' . $pu() . '</td></tr>';
+                    echo '<tr><td class="e">' . 'php_uname(s)' . '</td><td class="v">' . $pu('s') . '</td></tr>';
+                    echo '<tr><td class="e">' . 'php_uname(n)' . '</td><td class="v">' . $pu('n') . '</td></tr>';
+                    echo '<tr><td class="e">' . 'php_uname(r)' . '</td><td class="v">' . $pu('r') . '</td></tr>';
+                    echo '<tr><td class="e">' . 'php_uname(v)' . '</td><td class="v">' . $pu('v') . '</td></tr>';
+                    echo '<tr><td class="e">' . 'php_uname(m)' . '</td><td class="v">' . $pu('m') . '</td></tr>';
+                }
+
+                $a = array();
+                if (function_exists('get_declared_classes')) {
+                    $a = get_declared_classes();
+                }
+                foreach ($a as $key => $value) {
+                    echo '<tr><td class="e">' . 'classes' . '</td><td class="v">' . $value . '</td></tr>';
+                }
+                $a = array();
+                if (function_exists('get_declared_interfaces')) {
+                    $a = get_declared_interfaces();
+                }
+                foreach ($a as $key => $value) {
+                    echo '<tr><td class="e">' . 'interfaces' . '</td><td class="v">' . $value . '</td></tr>';
+                }
+
+                $a = array();
+                if (function_exists('get_declared_traits')) {
+                    $a = get_declared_traits();
+                }
+                foreach ($a as $key => $value) {
+                    echo '<tr><td class="e">' . 'traits' . '</td><td class="v">' . $value . '</td></tr>';
+                }
+
+                echo '</tbody></table>';
+                echo '</div>';
+                ?>
+            </div>
+        </div>
+    </body>
+
+    </html>
+<?php
     RunTime();
 }
 

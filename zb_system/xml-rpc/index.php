@@ -1,8 +1,9 @@
 <?php
+
 /**
  * XML-RPC接口.
  *
- * @copyright (C) RainbowSoft Studio
+ *
  * https://codex.wordpress.org/XML-RPC_WordPress_API
  * https://codex.wordpress.org/XML-RPC_MetaWeblog_API
  * http://codex.wordpress.org.cn/XML-RPC_MetaWeblog_API
@@ -388,7 +389,7 @@ function xmlrpc_getRecentPosts($n)
         if (strpos($value->Content, '<!--more-->') !== false) {
             $description = GetValueInArray(explode('<!--more-->', $value->Content), 1);
             $mt_text_more = GetValueInArray(explode('<!--more-->', $value->Content), 0);
-        //$description=$value->Content;
+            //$description=$value->Content;
         } else {
             $description = $value->Content;
             $mt_excerpt = $value->Intro;
@@ -511,7 +512,7 @@ function xmlrpc_getPost($id)
         if (strpos($value->Content, '<!--more-->') !== false) {
             $description = GetValueInArray(explode('<!--more-->', $value->Content), 1);
             $mt_text_more = GetValueInArray(explode('<!--more-->', $value->Content), 0);
-        //$description=$value->Content;
+            //$description=$value->Content;
         } else {
             $description = $value->Content;
             $mt_excerpt = $value->Intro;

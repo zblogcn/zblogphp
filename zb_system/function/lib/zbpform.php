@@ -8,7 +8,7 @@ if (!defined('ZBP_PATH')) {
  * form creat.
  *
  * @author 未寒 <im@imzhou.com>
- * @copyright (C) RainbowSoft Studio
+ *
  */
 
 /**用法
@@ -102,5 +102,4 @@ class ZbpForm
         $s = "<input type=\"password\" name=\"$name\" id=\"$name\" class=\"$name\" value=\"$value\"$style/>\r\n";
         echo $s;
     }
-
 }

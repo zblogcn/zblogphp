@@ -8,7 +8,7 @@ if (!defined('ZBP_PATH')) {
  * 接口模式复制自Z-Blog ASP版
  * @package Z-BlogPHP
  * @subpackage System/Plugin 操作API
- * @copyright (C) RainbowSoft Studio
+*
  */
 
 /*

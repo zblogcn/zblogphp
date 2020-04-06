@@ -6,7 +6,7 @@ if (!defined('ZBP_PATH')) {
 /**
  * 事件相关函数.
  *
- * @copyright (C) RainbowSoft Studio
+ *
  */
 
 //###############################################################################################################
@@ -828,7 +828,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
     $articles_top = array();
 
     switch ($type) {
-    //#######################################################################################################
+            //#######################################################################################################
         case 'index':
             $pagebar = new Pagebar($zbp->option['ZC_INDEX_REGEX'], true, true);
             $pagebar->Count = $zbp->cache->normal_article_nums;
@@ -839,7 +839,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
                 $zbp->title = str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
             }
             break;
-    //#######################################################################################################
+            //#######################################################################################################
         case 'category':
             $pagebar = new Pagebar($zbp->option['ZC_CATEGORY_REGEX']);
             $category = new Category();
@@ -872,7 +872,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
             } else {
                 $zbp->title = $category->Name . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
             }
-                $template = $category->Template;
+            $template = $category->Template;
 
             if (!$zbp->option['ZC_DISPLAY_SUBCATEGORYS']) {
                 $w[] = array('=', 'log_CateID', $category->ID);
@@ -886,10 +886,10 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
                 $w[] = array('array', $arysubcate);
             }
 
-                $pagebar->UrlRule->Rules['{%id%}'] = $category->ID;
-                $pagebar->UrlRule->Rules['{%alias%}'] = $category->Alias == '' ? rawurlencode($category->Name) : $category->Alias;
+            $pagebar->UrlRule->Rules['{%id%}'] = $category->ID;
+            $pagebar->UrlRule->Rules['{%alias%}'] = $category->Alias == '' ? rawurlencode($category->Name) : $category->Alias;
             break;
-    //#######################################################################################################
+            //#######################################################################################################
         case 'author':
             $pagebar = new Pagebar($zbp->option['ZC_AUTHOR_REGEX']);
             $author = new Member();
@@ -924,13 +924,13 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
             } else {
                 $zbp->title = $author->StaticName . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
             }
-                $template = $author->Template;
-                $w[] = array('=', 'log_AuthorID', $author->ID);
-                //$pagebar->Count = $author->Articles;
-                $pagebar->UrlRule->Rules['{%id%}'] = $author->ID;
-                $pagebar->UrlRule->Rules['{%alias%}'] = $author->Alias == '' ? rawurlencode($author->Name) : $author->Alias;
+            $template = $author->Template;
+            $w[] = array('=', 'log_AuthorID', $author->ID);
+            //$pagebar->Count = $author->Articles;
+            $pagebar->UrlRule->Rules['{%id%}'] = $author->ID;
+            $pagebar->UrlRule->Rules['{%alias%}'] = $author->Alias == '' ? rawurlencode($author->Name) : $author->Alias;
             break;
-    //#######################################################################################################
+            //#######################################################################################################
         case 'date':
             $pagebar = new Pagebar($zbp->option['ZC_DATE_REGEX']);
 
@@ -940,14 +940,14 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
                 $datetime = $date['date'];
             }
 
-                $dateregex_ymd = '/[0-9]{1,4}-[0-9]{1,2}-[0-9]{1,2}/i';
-                $dateregex_ym = '/[0-9]{1,4}-[0-9]{1,2}/i';
+            $dateregex_ymd = '/[0-9]{1,4}-[0-9]{1,2}-[0-9]{1,2}/i';
+            $dateregex_ym = '/[0-9]{1,4}-[0-9]{1,2}/i';
 
             if (preg_match($dateregex_ymd, $datetime) == 0 && preg_match($dateregex_ym, $datetime) == 0) {
                 return false;
             }
-                $datetime_txt = $datetime;
-                $datetime = strtotime($datetime);
+            $datetime_txt = $datetime;
+            $datetime = strtotime($datetime);
             if ($datetime == false) {
                 return false;
             }
@@ -964,9 +964,9 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
                 $zbp->title = $datetitle . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
             }
 
-                $zbp->modulesbyfilename['calendar']->Content = ModuleBuilder::Calendar(date('Y', $datetime) . '-' . date('n', $datetime));
+            $zbp->modulesbyfilename['calendar']->Content = ModuleBuilder::Calendar(date('Y', $datetime) . '-' . date('n', $datetime));
 
-                $template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+            $template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
 
             if (preg_match($dateregex_ymd, $datetime_txt) != 0) {
                 $w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 day', $datetime));
@@ -976,9 +976,9 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
                 $pagebar->UrlRule->Rules['{%date%}'] = date('Y-n', $datetime);
             }
 
-                $datetime = Metas::ConvertArray(getdate($datetime));
+            $datetime = Metas::ConvertArray(getdate($datetime));
             break;
-    //#######################################################################################################
+            //#######################################################################################################
         case 'tag':
             $pagebar = new Pagebar($zbp->option['ZC_TAGS_REGEX']);
             $tag = new Tag();
@@ -1013,10 +1013,10 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
                 $zbp->title = $tag->Name . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
             }
 
-                $template = $tag->Template;
-                $w[] = array('LIKE', 'log_Tag', '%{' . $tag->ID . '}%');
-                $pagebar->UrlRule->Rules['{%id%}'] = $tag->ID;
-                $pagebar->UrlRule->Rules['{%alias%}'] = $tag->Alias == '' ? rawurlencode($tag->Name) : $tag->Alias;
+            $template = $tag->Template;
+            $w[] = array('LIKE', 'log_Tag', '%{' . $tag->ID . '}%');
+            $pagebar->UrlRule->Rules['{%id%}'] = $tag->ID;
+            $pagebar->UrlRule->Rules['{%alias%}'] = $tag->Alias == '' ? rawurlencode($tag->Name) : $tag->Alias;
             break;
         default:
             throw new Exception('Unknown type');
@@ -3065,7 +3065,8 @@ function SaveSetting()
             continue;
         }
 
-        if ($key == 'ZC_PERMANENT_DOMAIN_ENABLE'
+        if (
+            $key == 'ZC_PERMANENT_DOMAIN_ENABLE'
             || $key == 'ZC_COMMENT_TURNOFF'
             || $key == 'ZC_COMMENT_REVERSE_ORDER'
             || $key == 'ZC_COMMENT_AUDIT'
@@ -3080,7 +3081,8 @@ function SaveSetting()
             $zbp->option[$key] = (bool) $value;
             continue;
         }
-        if ($key == 'ZC_RSS2_COUNT'
+        if (
+            $key == 'ZC_RSS2_COUNT'
             || $key == 'ZC_UPLOAD_FILESIZE'
             || $key == 'ZC_DISPLAY_COUNT'
             || $key == 'ZC_SEARCH_COUNT'

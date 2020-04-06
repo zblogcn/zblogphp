@@ -1,10 +1,9 @@
 <?php
+
 /**
  * Z-Blog with PHP.
  *
- * @author
- * @copyright (C) RainbowSoft Studio
- *
+ * @author Z-BlogPHP Team
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';
@@ -39,11 +38,11 @@ $tag = $zbp->GetTagByID($tagid);
     <div class="divHeader2">
         <?php echo $lang['msg']['tag_edit']; ?></div>
     <div class="SubMenu">
-<?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Edit_SubMenu'] as $fpname => &$fpsignal) {
-    $fpname();
-}
-?>
+        <?php
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Edit_SubMenu'] as $fpname => &$fpsignal) {
+            $fpname();
+        }
+        ?>
     </div>
     <div id="divMain2" class="edit tag_edit">
         <form id="edit" name="edit" method="post" action="#">
@@ -73,7 +72,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Edit_SubMenu'] as $fpname => &$fps
             <p>
                 <span class='title'>
                     <?php echo $lang['msg']['intro']; ?>:</span>
-                <br/>
+                <br />
                 <textarea cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;"><?php echo htmlspecialchars($tag->Intro); ?></textarea>
             </p>
             <p>
@@ -93,18 +92,22 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Edit_SubMenu'] as $fpname => &$fps
                 <input type="submit" class="button" value="<?php echo $lang['msg']['submit']; ?>" id="btnPost" onclick="return checkInfo();" /></p>
         </form>
         <script type="text/javascript">
-function checkInfo(){
-  document.getElementById("edit").action="<?php echo BuildSafeCmdURL('act=TagPst'); ?>";
+            function checkInfo() {
+                document.getElementById("edit").action = "<?php echo BuildSafeCmdURL('act=TagPst'); ?>";
 
-  if(!$("#edtName").val()){
-    alert("<?php echo $lang['error']['72']; ?>");
-    return false
-  }
+                if (!$("#edtName").val()) {
+                    alert("<?php echo $lang['error']['72']; ?>");
+                    return false
+                }
 
-}
-    </script>
-        <script type="text/javascript">ActiveLeftMenu("aTagMng");</script>
-        <script type="text/javascript">AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/tag_32.png'; ?>");</script>
+            }
+        </script>
+        <script type="text/javascript">
+            ActiveLeftMenu("aTagMng");
+        </script>
+        <script type="text/javascript">
+            AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/tag_32.png'; ?>");
+        </script>
     </div>
 </div>
 

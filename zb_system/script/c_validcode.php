@@ -1,10 +1,9 @@
 <?php
+
 /**
  * Z-Blog with PHP.
  *
- * @author
- * @copyright (C) RainbowSoft Studio
- *
+ * @author Z-BlogPHP Team
  * @version
  */
 require '../function/c_system_base.php';

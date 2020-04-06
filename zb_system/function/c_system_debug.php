@@ -6,7 +6,7 @@ if (!defined('ZBP_PATH')) {
 /**
  * 错误调试.
  *
- * @copyright (C) RainbowSoft Studio
+ *
  */
 
 /**
@@ -222,7 +222,8 @@ function Debug_Exception_Handler($exception)
     if (ZBlogException::$islogerror) {
         Logs(
             var_export(
-                array('Exception',
+                array(
+                    'Exception',
                     $exception->getMessage(), $exception->getCode(), $exception->getFile(), $exception->getLine(),
                 ),
                 true

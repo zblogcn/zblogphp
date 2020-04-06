@@ -1,10 +1,9 @@
 <?php
+
 /**
  * Z-Blog with PHP.
  *
- * @author
- * @copyright (C) RainbowSoft Studio
- *
+ * @author Z-BlogPHP Team
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';
@@ -125,9 +124,9 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
-<?php
-$admin_function();
-?>
+    <?php
+    $admin_function();
+    ?>
 </div>
 <?php
 require ZBP_PATH . 'zb_system/admin/admin_footer.php';

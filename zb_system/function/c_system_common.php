@@ -1,8 +1,9 @@
 <?php
+
 /**
  * 辅助通用函数.
  *
- * @copyright (C) RainbowSoft Studio
+ *
  */
 
 /**
@@ -16,20 +17,20 @@
 function GetScheme($array)
 {
     if ((array_key_exists('REQUEST_SCHEME', $array)
-        
-        && (strtolower($array['REQUEST_SCHEME']) == 'https'))
-        
+
+            && (strtolower($array['REQUEST_SCHEME']) == 'https'))
+
         || (array_key_exists('HTTPS', $array)
-        
-        && (strtolower($array['HTTPS']) == 'on'))
-        
+
+            && (strtolower($array['HTTPS']) == 'on'))
+
         || (array_key_exists('HTTP_FROM_HTTPS', $array)
-        
-        && (strtolower($array['HTTP_FROM_HTTPS']) == 'on'))
-        
+
+            && (strtolower($array['HTTP_FROM_HTTPS']) == 'on'))
+
         || (array_key_exists('SERVER_PORT', $array)
-        
-        && (strtolower($array['SERVER_PORT']) == '443'))
+
+            && (strtolower($array['SERVER_PORT']) == '443'))
     ) {
         return 'https://';
     }
@@ -250,14 +251,14 @@ function GetEnvironment()
         $uname = '';
     }
     $system_environment = PHP_OS . $uname . '; ' .
-    GetValueInArray(
-        explode(
-            ' ',
-            str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))
-        ),
-        0
-    ) . '; PHP' . GetPHPVersion() . (IS_X64 ? 'x64' : '') . '; ' .
-    $zbp->option['ZC_DATABASE_TYPE'] . $zbp->db->version . '; ' . $ajax;
+        GetValueInArray(
+            explode(
+                ' ',
+                str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))
+            ),
+            0
+        ) . '; PHP' . GetPHPVersion() . (IS_X64 ? 'x64' : '') . '; ' .
+        $zbp->option['ZC_DATABASE_TYPE'] . $zbp->db->version . '; ' . $ajax;
 
     if (defined('OPENSSL_VERSION_TEXT')) {
         $system_environment .= '; ' . str_replace(' ', '', OPENSSL_VERSION_TEXT);
@@ -1284,7 +1285,7 @@ function SubStrUTF8($sourcestr, $cutlength)
 
             $ret = $ret . substr($sourcestr, $i, 1);
             $i = ($i + 1); //实际的Byte数计1个
-                $n = ($n + 0.5); //小写字母和半角标点等与半个高位字符宽...
+            $n = ($n + 0.5); //小写字母和半角标点等与半个高位字符宽...
         }
         /*
         if ($str_length > $cutlength) {

@@ -1,9 +1,10 @@
 <?php
+
 /**
  * KindEditor for Z-BlogPHP.
  *
  * @author 未寒
- * @copyright (C) RainbowSoft Studio
+ *
  */
 require '../../../../../zb_system/function/c_system_base.php';
 global $zbp;

@@ -1,8 +1,9 @@
 <?php
+
 /**
  * 系统初始化等相关操作.
  *
- * @copyright (C) RainbowSoft Studio
+ *
  */
 
 /**
