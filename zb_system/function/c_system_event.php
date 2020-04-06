@@ -511,7 +511,7 @@ function ViewSearch()
         $r->LoadInfoByDataArray($a->GetData());
         $article->Content .= '<p><a href="' . $a->Url . '">' . str_replace($q, '<strong>' . $q . '</strong>', $a->Title) . '</a><br/>';
         $s = strip_tags($a->Intro) . ' ' . strip_tags($a->Content);
-        $i = strpos($s, $q, 0);
+        $i = Zbp_Strpos($s, $q, 0);
         if ($i !== false) {
             if ($i > 50) {
                 $t = SubStrUTF8_Start($s, ($i - 50), 100);
@@ -523,7 +523,7 @@ function ViewSearch()
             $r->Content = str_replace($q, '<strong>' . $q . '</strong>', $t);
         } else {
             $s = strip_tags($a->Title);
-            $i = strpos($s, $q, 0);
+            $i = Zbp_Strpos($s, $q, 0);
             if ($i > 50) {
                 $t = SubStrUTF8_Start($s, ($i - 50), 100);
             } else {
@@ -1468,20 +1468,31 @@ function PostArticle()
     if (isset($_POST['Content'])) {
         $_POST['Content'] = str_replace('<hr class="more" />', '<!--more-->', $_POST['Content']);
         $_POST['Content'] = str_replace('<hr class="more"/>', '<!--more-->', $_POST['Content']);
-        if (strpos($_POST['Content'], '<!--more-->') !== false) {
+        if (stripos($_POST['Content'], '<!--more-->') !== false) {
             if (isset($_POST['Intro'])) {
                 $_POST['Intro'] = GetValueInArray(explode('<!--more-->', $_POST['Content']), 0);
             }
         } else {
             if (isset($_POST['Intro'])) {
-                if ($_POST['Intro'] == '' || (stripos($_POST['Intro'], '<!--autointro-->') !== false)) {
-                    //$_POST['Intro'] = SubStrUTF8_Html($_POST['Content'], (int) strpos($_POST['Content'], '>') + (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
-                    //改纯HTML摘要
-                    $_POST['Intro'] = FormatString($_POST['Content'], "[nohtml]");
-                    $_POST['Intro'] = SubStrUTF8_Html($_POST['Intro'], (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
+                if (trim($_POST['Intro']) == '' || (stripos($_POST['Intro'], '<!--autointro-->') !== false)) {
+                    if ($zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] == true) {
+                        //改纯HTML摘要
+                        $_POST['Intro'] = FormatString($_POST['Content'], "[nohtml]");
+                        $_POST['Intro'] = SubStrUTF8_Html($_POST['Intro'], (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
+                    } else {
+                        $i = (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];
+                        $_POST['Intro'] = SubStrUTF8_Html($_POST['Content'], (int) Zbp_Strpos($_POST['Content'], '>', $i));
+                        $_POST['Intro'] = CloseTags($_POST['Intro']);
+                    }
+
                     $_POST['Intro'] .= '<!--autointro-->';
+                } else {
+                    if ($zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] == true) {
+                        //改纯HTML摘要
+                        $_POST['Intro'] = FormatString($_POST['Intro'], "[nohtml]");
+                    }
+                    $_POST['Intro'] = CloseTags($_POST['Intro']);
                 }
-                $_POST['Intro'] = CloseTags($_POST['Intro']);
             }
         }
     }

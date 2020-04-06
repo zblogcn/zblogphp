@@ -263,6 +263,9 @@ return array(
         'verify_fail'                       => 'Verify fail',
         'verifying'                         => 'Verifying',
         'show_warning_error'                => 'Allow warning level error',
+        'backend_setting'                   => 'Bakcend Setting',
+        'get_text_intro'                    => 'Get a plain text intro',
+        'update_db'                         => 'Please click the link to upgrade the database structure.',
         ''                                  => '',
     ),
 

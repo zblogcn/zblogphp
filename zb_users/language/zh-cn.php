@@ -259,6 +259,9 @@ return array(
         'verify_fail'                       => '校验失败',
         'verifying'                         => '校验中',
         'show_warning_error'                => '允许报Warning级别错误',
+        'backend_setting'                   => '后台设置',
+        'get_text_intro'                    => '文章编辑时获取纯文本摘要',
+        'update_db'                         => '请点击该链接升级数据库结构。',
         ''                                  => '',
     ),
 

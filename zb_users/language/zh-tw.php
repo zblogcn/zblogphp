@@ -262,7 +262,10 @@ return array(
         'verify_succeed'                    => '校验成功,请提交!',
         'verify_fail'                       => '校验失败',
         'verifying'                         => '校验中',
-        'show_warning_error'                => '允许Warning级报错',
+        'show_warning_error'                => '允許Warning級別報錯',
+        'backend_setting'                   => '後台設置',
+        'get_text_intro'                    => '文章編輯時獲取純文本摘要',
+        'update_db'                         => '請點擊該鏈接升級數據庫結構。',
         ''                                  => '',
     ),
 

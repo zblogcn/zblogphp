@@ -1297,6 +1297,20 @@ function SubStrUTF8($sourcestr, $cutlength)
     return $ret;
 }
 
+function Zbp_Strpos($haystack, $needle, $offset = 0)
+{
+    if (function_exists('mb_strpos') && function_exists('mb_internal_encoding')) {
+        mb_internal_encoding('UTF-8');
+        return mb_strpos($haystack, $needle, $offset);
+    }
+    if (function_exists('iconv_strpos') && function_exists('iconv_set_encoding')) {
+        iconv_set_encoding("internal_encoding", "UTF-8");
+        iconv_set_encoding("output_encoding", "UTF-8");
+        return iconv_strpos($haystack, $needle, $offset);
+    }
+    return strpos($haystack, $needle, $offset);
+}
+
 /**
  * 截取HTML格式的UTF8格式的字符串的子串.
  *

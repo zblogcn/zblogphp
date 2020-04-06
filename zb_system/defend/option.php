@@ -143,6 +143,7 @@ return array(
 
     // '自动摘要字数
     'ZC_ARTICLE_EXCERPT_MAX' => 250,
+    'ZC_ARTICLE_INTRO_WITH_TEXT' => true,
 
     // '侧栏评论最大字数
     'ZC_COMMENT_EXCERPT_MAX' => 20,

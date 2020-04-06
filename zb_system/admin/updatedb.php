@@ -47,7 +47,7 @@ function updatedb_162090to162300()
     $zbp->SaveOption();
 }
 
-//if ($zbp->version >= 162300 && (int) $zbp->option['ZC_LAST_VERSION'] < 162300) {
-updatedb_162090to162300();
-//}
+if ($zbp->version >= 162300 && (int) $zbp->option['ZC_LAST_VERSION'] < 162300) {
+    updatedb_162090to162300();
+}
 die;
