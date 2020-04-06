@@ -3096,20 +3096,21 @@ function SaveSetting()
             $value = DelNameInString($value, 'php');
             $value = DelNameInString($value, 'asp');
         }
-        if ($key == 'ZC_DEBUG_MODE') {
-            if ((bool) $value) {
-                $zbp->option['ZC_DEBUG_MODE'] = true;
-                $zbp->option['ZC_DEBUG_MODE_STRICT'] = true;
-                $zbp->option['ZC_DEBUG_LOG_ERROR'] = true;
-            } else {
-                $zbp->option['ZC_DEBUG_MODE'] = false;
-                $zbp->option['ZC_DEBUG_MODE_STRICT'] = false;
-                $zbp->option['ZC_DEBUG_LOG_ERROR'] = false;
-            }
-        }
         $zbp->option[$key] = trim(str_replace(array("\r", "\n"), array("", ""), $value));
     }
     $zbp->option['ZC_DEBUG_MODE'] = (bool) $zbp->option['ZC_DEBUG_MODE'];
+
+    if ($zbp->option['ZC_DEBUG_MODE']) {
+        $zbp->option['ZC_DEBUG_MODE'] = true;
+        $zbp->option['ZC_DEBUG_MODE_STRICT'] = true;
+        $zbp->option['ZC_DEBUG_MODE_WARNING'] = true;
+        $zbp->option['ZC_DEBUG_LOG_ERROR'] = true;
+    } else {
+        $zbp->option['ZC_DEBUG_MODE'] = false;
+        $zbp->option['ZC_DEBUG_MODE_STRICT'] = false;
+        $zbp->option['ZC_DEBUG_LOG_ERROR'] = false;
+    }
+
     $zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST']);
     $zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST'], '/') . '/';
     if ($zbp->option['ZC_BLOG_HOST'] == '/') {
