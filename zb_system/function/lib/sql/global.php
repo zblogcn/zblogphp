@@ -59,7 +59,7 @@ class SQL__Global
 
     private $otherKeyword = array('FIELD', 'INDEX', 'TABLE', 'DATABASE');
 
-    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX');
+    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON');
 
     private $complexKeyword = array('ADDCOLUMN', 'DROPCOLUMN', 'ALTERCOLUMN');
 
@@ -800,14 +800,25 @@ class SQL__Global
 
         if (array_key_exists('JOIN', $this->extend)) {
             $this->buildJOIN();
+            if (array_key_exists('ON', $this->extend)) {
+                $this->buildON();
+            }
         } elseif (array_key_exists('INNERJOIN', $this->extend)) {
             $this->buildINNERJOIN();
+            if (array_key_exists('ON', $this->extend)) {
+                $this->buildON();
+            }
         } elseif (array_key_exists('LEFTJOIN', $this->extend)) {
             $this->buildLEFTJOIN();
+            $this->buildON();
         } elseif (array_key_exists('RIGHTJOIN', $this->extend)) {
             $this->buildRIGHTJOIN();
+            $this->buildON();
         } elseif (array_key_exists('FULLJOIN', $this->extend)) {
             $this->buildFULLJOIN();
+            if (array_key_exists('ON', $this->extend)) {
+                $this->buildON();
+            }
         }
 
         $this->buildBeforeWhere();
@@ -884,46 +895,89 @@ class SQL__Global
         $sql[] = ')';
     }
 
+    protected function buildON()
+    {
+        $sql = &$this->_sql;
+        $sql[] = ' ON';
+        $sql[] = implode(' AND ', $this->extend['ON']);
+    }
+
     protected function buildJOIN()
     {
         $sql = &$this->_sql;
         $sql[] = ' JOIN';
-        $sql[] = implode(' ,', $this->extend['JOIN']);
+        if (is_array($this->extend['JOIN'][0]) == true) {
+            $sql[] = key($this->extend['JOIN'][0]);
+            $sql[] = ' AS ';
+            $sql[] = current($this->extend['JOIN'][0]);
+        } else {
+            $sql[] = implode(' ,', $this->extend['JOIN']);
+        }
     }
 
     protected function buildINNERJOIN()
     {
         $sql = &$this->_sql;
         $sql[] = ' INNER JOIN';
-        $sql[] = implode(' ,', $this->extend['INNERJOIN']);
+        if (is_array($this->extend['INNERJOIN'][0]) == true) {
+            $sql[] = key($this->extend['INNERJOIN'][0]);
+            $sql[] = ' AS ';
+            $sql[] = current($this->extend['INNERJOIN'][0]);
+        } else {
+            $sql[] = implode(' ,', $this->extend['INNERJOIN']);
+        }
     }
 
     protected function buildLEFTJOIN()
     {
         $sql = &$this->_sql;
         $sql[] = ' LEFT JOIN';
-        $sql[] = implode(' ,', $this->extend['LEFTJOIN']);
+        if (is_array($this->extend['LEFTJOIN'][0]) == true) {
+            $sql[] = key($this->extend['LEFTJOIN'][0]);
+            $sql[] = ' AS ';
+            $sql[] = current($this->extend['LEFTJOIN'][0]);
+        } else {
+            $sql[] = implode(' ,', $this->extend['LEFTJOIN']);
+        }
     }
 
     protected function buildRIGHTJOIN()
     {
         $sql = &$this->_sql;
         $sql[] = ' RIGHT JOIN';
-        $sql[] = implode(' ,', $this->extend['RIGHTJOIN']);
+        if (is_array($this->extend['RIGHTJOIN'][0]) == true) {
+            $sql[] = key($this->extend['RIGHTJOIN'][0]);
+            $sql[] = ' AS ';
+            $sql[] = current($this->extend['RIGHTJOIN'][0]);
+        } else {
+            $sql[] = implode(' ,', $this->extend['RIGHTJOIN']);
+        }
     }
 
     protected function buildFULLJOIN()
     {
         $sql = &$this->_sql;
         $sql[] = ' FULL JOIN';
-        $sql[] = implode(' ,', $this->extend['FULLJOIN']);
+        if (is_array($this->extend['FULLJOIN'][0]) == true) {
+            $sql[] = key($this->extend['FULLJOIN'][0]);
+            $sql[] = ' AS ';
+            $sql[] = current($this->extend['FULLJOIN'][0]);
+        } else {
+            $sql[] = implode(' ,', $this->extend['FULLJOIN']);
+        }
     }
 
     protected function buildFROM()
     {
         $sql = &$this->_sql;
         $sql[] = ' FROM';
-        $sql[] = implode(' ,', $this->extend['FROM']);
+        if (is_array($this->extend['FROM'][0]) == true) {
+            $sql[] = key($this->extend['FROM'][0]);
+            $sql[] = ' AS ';
+            $sql[] = current($this->extend['FROM'][0]);
+        } else {
+            $sql[] = implode(' ,', $this->extend['FROM']);
+        }
     }
 
     protected function buildUnion()
@@ -1041,14 +1095,18 @@ class SQL__Global
         foreach ($this->index as $indexkey => $indexvalue) {
             $indexname = $indexkey;
             $indexfield = $indexvalue;
+            $table = $this->table[0];
+            if (stripos($indexname, $table . '_') === false) {
+                $indexname = $table . '_' . $indexname;
+            }
 
-            if (isset($this->option['uniqueindex']) && $this->option['uniqueindex']==true) {
+            if (isset($this->option['uniqueindex']) && $this->option['uniqueindex'] == true) {
                 $sql[] = 'CREATE UNIQUE INDEX ' . $indexname;
             } else {
                 $sql[] = 'CREATE INDEX ' . $indexname;
             }
             $sql[] = 'ON';
-            $sql[] = implode('', $this->table);
+            $sql[] = $this->table[0];
             $sql[] = '(';
             foreach ($indexfield as $key => $value) {
                 $sql[] = $value;

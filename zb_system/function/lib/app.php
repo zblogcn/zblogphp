@@ -188,6 +188,11 @@ class App
      * @var bool 加载xml成功否
      */
     public $isloaded = false;
+    /**
+     * @var string 当前样式表的crc32
+     */
+    public $css_crc32 = '';
+
 
     public static $check_error_count = 0;
 
@@ -440,6 +445,13 @@ class App
             }
         }
         $this->ignore_files = array_unique($this->ignore_files);
+
+
+        $stylecss_file = $this->app_path . 'style/' . $zbp->style . '.css';
+        if (is_readable($stylecss_file)) {
+            $this->css_crc32 = crc32(file_get_contents($stylecss_file));
+        }
+
         $this->isloaded = true;
 
         return true;
