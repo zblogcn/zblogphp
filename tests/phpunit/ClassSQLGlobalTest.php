@@ -56,8 +56,12 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
                 array(
                     'ID' => array('log_ID', 'integer', '', 0),
                 )
-            );
-        $this->assertEquals('CREATE TABLE IF NOT EXISTS zbp_post  ( log_ID int(11) NOT NULL AUTO_INCREMENT, PRIMARY KEY (log_ID) ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;', self::$db->sql);
+            )
+            ->option(array('engine' => 'MyISAM'))
+            ->option(array('charset' => 'utf8'))
+            ->option(array('collate' => 'utf8_general_ci'))
+            ;
+        $this->assertEquals('CREATE TABLE IF NOT EXISTS zbp_post  ( log_ID int(11) NOT NULL AUTO_INCREMENT, PRIMARY KEY (log_ID) ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;', self::$db->sql);
     }
 
     public function testUpdate()

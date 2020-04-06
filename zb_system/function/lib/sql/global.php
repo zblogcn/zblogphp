@@ -613,7 +613,7 @@ class SQL__Global
                 $symbol = '=';
             }
             $sqlArray = array();
-            if (!is_array($value[1])) {
+            if (!is_array($value[1]) || empty($value[1])) {
                 $whereData = " (1 = 1) ";
 
                 return $whereData;

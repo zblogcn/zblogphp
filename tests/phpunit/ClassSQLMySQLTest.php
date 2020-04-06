@@ -25,7 +25,7 @@ class ClassSQL__MySQLTest extends PHPUnit\Framework\TestCase
     public function testIndex()
     {
         self::$db->create('zbp_post')->index(array('indexname' => array('ddd', 'eee', 'eeee')));
-        $this->assertEquals('CREATE INDEX indexname ( ddd , eee , eeee ) ;', self::$db->sql);
+        $this->assertEquals('CREATE INDEX indexname ON zbp_post ( ddd , eee , eeee )', self::$db->sql);
     }
 
     public function testCreateTable()
@@ -50,8 +50,8 @@ class ClassSQL__MySQLTest extends PHPUnit\Framework\TestCase
             'q' => array('q', 'datetime', '', ''),
             'r' => array('r', 'float', '', ''),
         );
-        self::$db->create('zbp_post')->data($tableData);
-        $this->assertEquals('CREATE TABLE IF NOT EXISTS zbp_post  ( a int(11) NOT NULL AUTO_INCREMENT, b tinyint(4) NOT NULL DEFAULT \'0\', c smallint(6) NOT NULL DEFAULT \'0\', d mediumint(9) NOT NULL DEFAULT \'0\', e int(11) NOT NULL DEFAULT \'0\', f bigint(20) NOT NULL DEFAULT \'0\', g int(11) NOT NULL DEFAULT \'0\', h timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, i tinyint(1) NOT NULL DEFAULT \'0\', j char() NOT NULL DEFAULT \'\', k varchar(250) NOT NULL DEFAULT \'\', l tinytext NOT NULL , m text NOT NULL , n mediumtext NOT NULL , o longtext NOT NULL , p longtext NOT NULL , q datetime NOT NULL, r float NOT NULL DEFAULT 0, PRIMARY KEY (a) ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;', self::$db->sql);
+        self::$db->create('zbp_post')->data($tableData)->option(array('engine' => 'MyISAM'))->option(array('charset' => 'utf8'))->option(array('collate' => 'utf8_general_ci'));
+        $this->assertEquals('CREATE TABLE IF NOT EXISTS zbp_post  ( a int(11) NOT NULL AUTO_INCREMENT, b tinyint(4) NOT NULL DEFAULT \'0\', c smallint(6) NOT NULL DEFAULT \'0\', d mediumint(9) NOT NULL DEFAULT \'0\', e int(11) NOT NULL DEFAULT \'0\', f bigint(20) NOT NULL DEFAULT \'0\', g int(11) NOT NULL DEFAULT \'0\', h timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, i tinyint(1) NOT NULL DEFAULT \'0\', j char(250) NOT NULL DEFAULT \'\', k varchar(250) NOT NULL DEFAULT \'\', l tinytext NOT NULL , m text NOT NULL , n mediumtext NOT NULL , o longtext NOT NULL , p longtext NOT NULL , q datetime NOT NULL, r float NOT NULL DEFAULT 0, PRIMARY KEY (a) ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;', self::$db->sql);
     }
 
     public function testOption()
