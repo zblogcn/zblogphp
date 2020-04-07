@@ -67,65 +67,70 @@ class SQL__MySQL extends SQL__Global
 
             $i = 0;
             foreach ($this->data as $key => $value) {
+                $comment = '';
+                if (isset($value[4])) {
+                    $value[4] = str_replace('\'', '', $value[4]);
+                    $comment = " COMMENT '{$value[4]}'";
+                }
                 if ($value[1] == 'integer') {
                     if ($i == 0) {
-                        $sql[] = $value[0] . ' int(11) NOT NULL AUTO_INCREMENT' . ',';
+                        $sql[] = $value[0] . ' int(11) NOT NULL AUTO_INCREMENT' . "{$comment},";
                     } else {
                         if ($value[2] == '') {
-                            $sql[] = $value[0] . ' int(11) NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
+                            $sql[] = $value[0] . ' int(11) NOT NULL DEFAULT \'' . $value[3] . '\'' . "{$comment},";
                         } elseif ($value[2] == 'tinyint') {
-                            $sql[] = $value[0] . ' tinyint(4) NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
+                            $sql[] = $value[0] . ' tinyint(4) NOT NULL DEFAULT \'' . $value[3] . '\'' . "{$comment},";
                         } elseif ($value[2] == 'smallint') {
-                            $sql[] = $value[0] . ' smallint(6) NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
+                            $sql[] = $value[0] . ' smallint(6) NOT NULL DEFAULT \'' . $value[3] . '\'' . "{$comment},";
                         } elseif ($value[2] == 'mediumint') {
-                            $sql[] = $value[0] . ' mediumint(9) NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
+                            $sql[] = $value[0] . ' mediumint(9) NOT NULL DEFAULT \'' . $value[3] . '\'' . "{$comment},";
                         } elseif ($value[2] == 'int') {
-                            $sql[] = $value[0] . ' int(11) NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
+                            $sql[] = $value[0] . ' int(11) NOT NULL DEFAULT \'' . $value[3] . '\'' . "{$comment},";
                         } elseif ($value[2] == 'bigint') {
-                            $sql[] = $value[0] . ' bigint(20) NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
+                            $sql[] = $value[0] . ' bigint(20) NOT NULL DEFAULT \'' . $value[3] . '\'' . "{$comment},";
                         }
                     }
                 }
                 if ($value[1] == 'boolean') {
-                    $sql[] = $value[0] . ' tinyint(1) NOT NULL DEFAULT \'' . (int) $value[3] . '\'' . ',';
+                    $sql[] = $value[0] . ' tinyint(1) NOT NULL DEFAULT \'' . (int) $value[3] . '\'' . "{$comment},";
                 }
                 if ($value[1] == 'char') {
-                    $sql[] = $value[0] . ' char(' . (int) $value[2] . ') NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
+                    $sql[] = $value[0] . ' char(' . (int) $value[2] . ') NOT NULL DEFAULT \'' . $value[3] . '\'' . "{$comment},";
                 }
                 if ($value[1] == 'string') {
                     if ($value[2] != '') {
                         if (strpos($value[2], 'char') !== false) {
                             $charnumber = (int) str_replace(array('char', '(', ')'), '', $value[2]);
                             $charnumber = ($charnumber == 0) ? 250 : $charnumber;
-                            $sql[] = $value[0] . ' char(' . $charnumber . ') NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
+                            $sql[] = $value[0] . ' char(' . $charnumber . ') NOT NULL DEFAULT \'' . $value[3] . '\'' . "{$comment},";
                         } elseif (is_int($value[2])) {
-                            $sql[] = $value[0] . ' varchar(' . $value[2] . ') NOT NULL DEFAULT \'' . $value[3] . '\'' . ',';
+                            $sql[] = $value[0] . ' varchar(' . $value[2] . ') NOT NULL DEFAULT \'' . $value[3] . '\'' . "{$comment},";
                         } elseif ($value[2] == 'tinytext') {
-                            $sql[] = $value[0] . ' tinytext NOT NULL ' . ',';
+                            $sql[] = $value[0] . ' tinytext NOT NULL ' . "{$comment},";
                         } elseif ($value[2] == 'text') {
-                            $sql[] = $value[0] . ' text NOT NULL ' . ',';
+                            $sql[] = $value[0] . ' text NOT NULL ' . "{$comment},";
                         } elseif ($value[2] == 'mediumtext') {
-                            $sql[] = $value[0] . ' mediumtext NOT NULL ' . ',';
+                            $sql[] = $value[0] . ' mediumtext NOT NULL ' . "{$comment},";
                         } elseif ($value[2] == 'longtext') {
-                            $sql[] = $value[0] . ' longtext NOT NULL ' . ',';
+                            $sql[] = $value[0] . ' longtext NOT NULL ' . "{$comment},";
                         }
                     } else {
-                        $sql[] = $value[0] . ' longtext NOT NULL ' . ',';
+                        $sql[] = $value[0] . ' longtext NOT NULL ' . "{$comment},";
                     }
                 }
                 if ($value[1] == 'double' || $value[1] == 'float') {
-                    $sql[] = $value[0] . " $value[1] NOT NULL DEFAULT 0" . ',';
+                    $sql[] = $value[0] . " $value[1] NOT NULL DEFAULT 0" . "{$comment},";
                 }
                 if ($value[1] == 'decimal') {
                     $d1 = $value[2][0];
                     $d2 = $value[2][1];
-                    $sql[] = $value[0] . " $value[1]($d1,$d2) NOT NULL DEFAULT 0" . ',';
+                    $sql[] = $value[0] . " $value[1]($d1,$d2) NOT NULL DEFAULT 0" . "{$comment},";
                 }
                 if ($value[1] == 'date' || $value[1] == 'time' || $value[1] == 'datetime') {
-                    $sql[] = $value[0] . " $value[1] NOT NULL,";
+                    $sql[] = $value[0] . " $value[1] NOT NULL" . "{$comment},";
                 }
                 if ($value[1] == 'timestamp') {
-                    $sql[] = $value[0] . " $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,";
+                    $sql[] = $value[0] . " $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" . "{$comment},";
                 }
                 $i += 1;
             }

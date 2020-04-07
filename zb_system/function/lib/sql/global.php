@@ -559,8 +559,17 @@ class SQL__Global
     {
         $whereData = '';
         $eq = strtoupper($value[0]);
-        if (in_array($eq, array('=', '<>', '>', '<', '>=', '<=', 'NOT LIKE', 'LIKE', 'ILIKE', 'NOT ILIKE'))) {
+        if (in_array($eq, array('=', '<>', '>', '<', '>=', '!=', '<=', 'NOT LIKE', 'LIKE', 'ILIKE', 'NOT ILIKE'))) {
             $x = (string) $value[1];
+            if ($this->db->type != 'postgresql' && $eq == 'ILIKE') {
+                $eq = 'LIKE';
+            }
+            if ($this->db->type != 'postgresql' && $eq == 'NOT ILIKE') {
+                $eq = 'NOT LIKE';
+            }
+            if ($eq == '!=') {
+                $eq = '<>';
+            }
             $y = $this->db->EscapeString((string) $value[2]);
             $whereData = " $x $eq '$y' ";
         } elseif (($eq == 'AND') && count($value) > 2) {
@@ -582,33 +591,35 @@ class SQL__Global
             }
         } elseif ($eq == 'BETWEEN') {
             $whereData = " ($value[1] BETWEEN '$value[2]' AND '$value[3]') ";
-        } elseif ($eq == 'SEARCH') {
+        } elseif ($eq == 'SEARCH') {//SEARCH模式搜索字符自动两边加%
             $searchCount = count($value);
             $sqlSearch = array();
             for ($i = 1; $i <= ($searchCount - 1 - 1); $i++) {
                 $x = (string) $value[$i];
                 $y = $this->db->EscapeString((string) $value[($searchCount - 1)]);
-                $sqlSearch[] = " ($x LIKE '%$y%') ";
+                if ($eq == 'SEARCH') {
+                    $sqlSearch[] = " ($x LIKE '%$y%') ";
+                }
             }
             $whereData = " ((1 = 1) AND (" . implode(' OR ', $sqlSearch) . ') )';
-        } elseif (($eq == 'OR' || $eq == 'ARRAY') && count($value) > 2) {
+        } elseif (($eq == 'OR' || $eq == 'ARRAY') && count($value) > 2) {//此块是处理array('or','条件1','条件2','条件3')时
             $sqlArray = array();
             foreach ($value as $x => $y) {
-                if ($x == 0) {
+                if ($x == 0) {//当是or就跳开
                     continue;
                 }
                 $sqlArray[] = $this->buildWhere_Single($y);
             }
             $whereData = " ( " . implode(' OR ', $sqlArray) . ') ';
-        } elseif ($eq == 'ARRAY' || $eq == 'NOT ARRAY' || $eq == 'LIKE ARRAY' || $eq == 'ILIKE ARRAY' || $eq == 'ARRAY_LIKE' || $eq == 'ARRAY_ILIKE') {
-            if ($eq == 'ARRAY') {
+        } elseif ($eq == 'OR' || $eq == 'ARRAY' || $eq == 'NOT ARRAY' || $eq == 'LIKE ARRAY' || $eq == 'ILIKE ARRAY' || $eq == 'ARRAY_LIKE' || $eq == 'ARRAY_ILIKE') {
+            if ($eq == 'OR' || $eq == 'ARRAY') {
                 $symbol = '=';
             } elseif ($eq == 'NOT ARRAY') {
                 $symbol = '<>';
             } elseif ($eq == 'LIKE ARRAY' || $eq == 'ARRAY_LIKE') {
                 $symbol = 'LIKE';
             } elseif ($eq == 'ILIKE ARRAY' || $eq == 'ARRAY_ILIKE') {
-                $symbol = 'ILIKE';
+                $symbol = ($this->db->type != 'postgresql') ? 'LIKE' : 'ILIKE';
             } else {
                 $symbol = '=';
             }
@@ -619,8 +630,12 @@ class SQL__Global
                 return $whereData;
             }
             foreach ($value[1] as $x => $y) {
-                $y[1] = $this->db->EscapeString($y[1]);
-                $sqlArray[] = " $y[0] $symbol '$y[1]' ";
+                if (count($y) == 2) {
+                    $y[1] = $this->db->EscapeString($y[1]);
+                    $sqlArray[] = " $y[0] $symbol '$y[1]' ";
+                } else {
+                    $sqlArray[] = $this->buildWhere_Single($y);
+                }
             }
             $whereData = " ((1 = 1) AND (" . implode(' OR ', $sqlArray) . ') )';
         } elseif ($eq == 'IN' || $eq == 'NOT IN') {
@@ -669,7 +684,7 @@ class SQL__Global
         } elseif ($eq == "CUSTOM") {
             $whereData = $value[1];
         } elseif (count($value) == 1) {
-            $whereData = '(' . $value[0] . ')';
+            $whereData = ' ( ' . $value[0] . ' ) ';
         }
 
         return $whereData;
@@ -898,17 +913,17 @@ class SQL__Global
     protected function buildON()
     {
         $sql = &$this->_sql;
-        $sql[] = ' ON';
+        $sql[] = 'ON';
         $sql[] = implode(' AND ', $this->extend['ON']);
     }
 
     protected function buildJOIN()
     {
         $sql = &$this->_sql;
-        $sql[] = ' JOIN';
+        $sql[] = 'JOIN';
         if (is_array($this->extend['JOIN'][0]) == true) {
             $sql[] = key($this->extend['JOIN'][0]);
-            $sql[] = ' AS ';
+            $sql[] = 'AS';
             $sql[] = current($this->extend['JOIN'][0]);
         } else {
             $sql[] = implode(' ,', $this->extend['JOIN']);
@@ -918,10 +933,10 @@ class SQL__Global
     protected function buildINNERJOIN()
     {
         $sql = &$this->_sql;
-        $sql[] = ' INNER JOIN';
+        $sql[] = 'INNER JOIN';
         if (is_array($this->extend['INNERJOIN'][0]) == true) {
             $sql[] = key($this->extend['INNERJOIN'][0]);
-            $sql[] = ' AS ';
+            $sql[] = 'AS';
             $sql[] = current($this->extend['INNERJOIN'][0]);
         } else {
             $sql[] = implode(' ,', $this->extend['INNERJOIN']);
@@ -931,10 +946,10 @@ class SQL__Global
     protected function buildLEFTJOIN()
     {
         $sql = &$this->_sql;
-        $sql[] = ' LEFT JOIN';
+        $sql[] = 'LEFT JOIN';
         if (is_array($this->extend['LEFTJOIN'][0]) == true) {
             $sql[] = key($this->extend['LEFTJOIN'][0]);
-            $sql[] = ' AS ';
+            $sql[] = 'AS';
             $sql[] = current($this->extend['LEFTJOIN'][0]);
         } else {
             $sql[] = implode(' ,', $this->extend['LEFTJOIN']);
@@ -944,7 +959,7 @@ class SQL__Global
     protected function buildRIGHTJOIN()
     {
         $sql = &$this->_sql;
-        $sql[] = ' RIGHT JOIN';
+        $sql[] = 'RIGHT JOIN';
         if (is_array($this->extend['RIGHTJOIN'][0]) == true) {
             $sql[] = key($this->extend['RIGHTJOIN'][0]);
             $sql[] = ' AS ';
@@ -957,10 +972,10 @@ class SQL__Global
     protected function buildFULLJOIN()
     {
         $sql = &$this->_sql;
-        $sql[] = ' FULL JOIN';
+        $sql[] = 'FULL JOIN';
         if (is_array($this->extend['FULLJOIN'][0]) == true) {
             $sql[] = key($this->extend['FULLJOIN'][0]);
-            $sql[] = ' AS ';
+            $sql[] = 'AS';
             $sql[] = current($this->extend['FULLJOIN'][0]);
         } else {
             $sql[] = implode(' ,', $this->extend['FULLJOIN']);
@@ -970,10 +985,10 @@ class SQL__Global
     protected function buildFROM()
     {
         $sql = &$this->_sql;
-        $sql[] = ' FROM';
+        $sql[] = 'FROM';
         if (is_array($this->extend['FROM'][0]) == true) {
             $sql[] = key($this->extend['FROM'][0]);
-            $sql[] = ' AS ';
+            $sql[] = 'AS';
             $sql[] = current($this->extend['FROM'][0]);
         } else {
             $sql[] = implode(' ,', $this->extend['FROM']);
