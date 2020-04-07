@@ -189,7 +189,7 @@ return array(
 
     // '--------------------------其它----------------------------------------
     // '代码高亮
-    'ZC_SYNTAXHIGHLIGHTER_ENABLE' => true,
+    'ZC_SYNTAXHIGHLIGHTER_ENABLE' => false,
     // '源码编辑高亮
     'ZC_CODEMIRROR_ENABLE' => true,
 

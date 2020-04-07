@@ -46,6 +46,8 @@ $c .= "div.theme-now .betterTip img{box-shadow: 0 0 10px #3a6ea5;}" . PHP_EOL;
 
 $c .= "#divMain a,#divMain2 a{color:#1d4c7d;}" . PHP_EOL;
 
+$c .= ".menu ul li a{background-color: rgb(255,255,255,0.9);}" . PHP_EOL;
+$c .= ".menu ul li.on a {background-color: rgb(255,255,255,1);}" . PHP_EOL;
 $c .= ".menu ul li a:hover {background-color: #b0cdee;}" . PHP_EOL;
 $c .= "#leftmenu a:hover {background-color: #b0cdee!important;}" . PHP_EOL;
 $c .= "div.theme-now{background-color:#b0cdee;}" . PHP_EOL;

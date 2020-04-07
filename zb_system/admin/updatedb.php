@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Z-Blog with PHP.
  *
@@ -38,9 +39,9 @@ function updatedb_162090to162300()
     }
 
     if ($zbp->db->type == 'mysql') {
-        $zbp->db->Query("ALTER TABLE " . $t['Post'] . " MODIFY  `log_Type` INT(11) NOT NULL DEFAULT '0';");
-        $zbp->db->Query("ALTER TABLE " . $t['Tag'] . " MODIFY  `tag_Type` INT(11) NOT NULL DEFAULT '0';");
-        $zbp->db->Query("ALTER TABLE " . $t['Category'] . " MODIFY  `cate_Type` INT(11) NOT NULL DEFAULT '0';");
+        @$zbp->db->Query("ALTER TABLE " . $t['Post'] . " MODIFY  `{$d['{Post}']['Type'][0]}` INT(11) NOT NULL DEFAULT '0';");
+        @$zbp->db->Query("ALTER TABLE " . $t['Tag'] . " MODIFY  `{$d['Tag']['Type'][0]}` INT(11) NOT NULL DEFAULT '0';");
+        @$zbp->db->Query("ALTER TABLE " . $t['Category'] . " MODIFY  `{$d['Category']['Type'][0]}` INT(11) NOT NULL DEFAULT '0';");
     }
     //ZBlogException::ResumeErrorHook();
     $zbp->option['ZC_LAST_VERSION'] = 162300;
