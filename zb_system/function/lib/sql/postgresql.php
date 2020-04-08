@@ -45,7 +45,7 @@ class SQL__PostgreSQL extends SQL__Global
             $this->buildDatabase();
             return;
         }
-        
+
         $zbp->ConvertTableAndDatainfo();
 
         $sqlAll = array();
@@ -137,5 +137,4 @@ class SQL__PostgreSQL extends SQL__Global
         }
         $this->_sql = $sql;
     }
-
 }

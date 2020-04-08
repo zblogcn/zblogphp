@@ -44,7 +44,7 @@ class SQL__MySQL extends SQL__Global
 
     /**
      * @todo
-     * 
+     *
      * @override
      */
     protected function buildCreate()
@@ -176,13 +176,13 @@ class SQL__MySQL extends SQL__Global
     protected function buildSelect()
     {
         if (isset($this->option['sql_no_cache'])) {
-            $this->_sqlPush('SQL_NO_CACHE ');
+            $this->sqlPush('SQL_NO_CACHE ');
         }
         if (isset($this->option['sql_cache'])) {
-            $this->_sqlPush('SQL_CACHE ');
+            $this->sqlPush('SQL_CACHE ');
         }
         if (isset($this->option['sql_buffer_result'])) {
-            $this->_sqlPush('SQL_BUFFER_RESULT ');
+            $this->sqlPush('SQL_BUFFER_RESULT ');
         }
         parent::buildSelect();
     }

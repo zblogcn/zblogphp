@@ -27,7 +27,7 @@ class SQL__Global
      */
     public $className = __CLASS__;
 
-    private $_sql = array();
+    private $pri_sql = array();
 
     protected $option = array(
         'whereKeyword' => 'WHERE',
@@ -227,9 +227,9 @@ class SQL__Global
      *
      * @param $sql
      */
-    public function _sqlPush($sql)
+    public function sqlPush($sql)
     {
-        $this->_sql[] = $sql;
+        $this->pri_sql[] = $sql;
     }
 
     /**
@@ -484,7 +484,7 @@ class SQL__Global
 
     private function sql()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
 
         if (count($sql) == 0) {
             $sql = array("$this->method");
@@ -501,7 +501,7 @@ class SQL__Global
 
     protected function buildTable()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $table = &$this->table;
         $tableData = array();
 
@@ -523,7 +523,7 @@ class SQL__Global
 
     protected function buildColumn()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $columns = &$this->columns;
         if (count($columns) > 0) {
             $selectStr = implode(',', $columns);
@@ -535,7 +535,7 @@ class SQL__Global
 
     protected function buildWhere($originalWhere = null, $whereKeyword = null)
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $where = is_null($originalWhere) ? $this->where : $originalWhere;
         if (count($where) == 0) {
             return;
@@ -690,7 +690,7 @@ class SQL__Global
 
     protected function buildOrderBy()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         if (count($this->orderBy) == 0) {
             return;
         }
@@ -711,7 +711,7 @@ class SQL__Global
 
     protected function buildGroupBy()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         if (count($this->groupBy) == 0) {
             return;
         }
@@ -726,7 +726,7 @@ class SQL__Global
 
     protected function buildHaving()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         if (count($this->having) == 0) {
             return;
         }
@@ -737,7 +737,7 @@ class SQL__Global
 
     protected function buildLimit()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
 
         if (isset($this->option['limit'])) {
             if ($this->option['limit'] > 0) {
@@ -769,7 +769,7 @@ class SQL__Global
 
     protected function buildALTER()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
 
         $sql[] = 'TABLE';
         $this->buildTable();
@@ -784,7 +784,7 @@ class SQL__Global
 
     protected function buildSelect()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
 
         // Unimplemented select2count
         if (array_key_exists('UNION', $this->extend)) {
@@ -864,13 +864,13 @@ class SQL__Global
 
     protected function buildDISTINCT()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = 'DISTINCT';
     }
 
     protected function buildSELECTANY()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $this->extend['SELECTANY'] = empty($this->extend['SELECTANY']) ? array('*') : $this->extend['SELECTANY'];
         //$sql[] = implode(' ,',$this->extend['SELECTANY']);
         foreach ($this->extend['SELECTANY'] as $key => $value) {
@@ -880,7 +880,7 @@ class SQL__Global
 
     protected function buildADDCOLUMN()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = ' ';
         foreach ($this->complex['ADDCOLUMN'] as $key => $value) {
             $this->complex['ADDCOLUMN'][$key] = 'ADD COLUMN ' . $this->complex['ADDCOLUMN'][$key];
@@ -890,7 +890,7 @@ class SQL__Global
 
     protected function buildALTERCOLUMN()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = ' ';
         foreach ($this->complex['ALTERCOLUMN'] as $key => $value) {
             if ($this->db->type == 'mysql') {
@@ -905,7 +905,7 @@ class SQL__Global
 
     protected function buildDROPCOLUMN()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = ' ';
         foreach ($this->complex['DROPCOLUMN'] as $key => $value) {
             $this->complex['DROPCOLUMN'][$key] = 'DROP COLUMN ' . $this->complex['DROPCOLUMN'][$key];
@@ -913,10 +913,9 @@ class SQL__Global
         $sql[] = implode(' ,', $this->complex['DROPCOLUMN']);
     }
 
-
     protected function buildUSEINDEX()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = ' USE INDEX (';
         $sql[] = implode(' ,', $this->extend['USEINDEX']);
         $sql[] = ')';
@@ -924,7 +923,7 @@ class SQL__Global
 
     protected function buildFORCEINDEX()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = ' FORCE INDEX (';
         $sql[] = implode(' ,', $this->extend['FORCEINDEX']);
         $sql[] = ')';
@@ -932,7 +931,7 @@ class SQL__Global
 
     protected function buildIGNOREINDEX()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = ' IGNORE INDEX (';
         $sql[] = implode(' ,', $this->extend['IGNOREINDEX']);
         $sql[] = ')';
@@ -940,14 +939,14 @@ class SQL__Global
 
     protected function buildON()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = 'ON';
         $sql[] = implode(' AND ', $this->extend['ON']);
     }
 
     protected function buildJOIN()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = 'JOIN';
         if (is_array($this->extend['JOIN'][0]) == true) {
             $sql[] = key($this->extend['JOIN'][0]);
@@ -960,7 +959,7 @@ class SQL__Global
 
     protected function buildINNERJOIN()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = 'INNER JOIN';
         if (is_array($this->extend['INNERJOIN'][0]) == true) {
             $sql[] = key($this->extend['INNERJOIN'][0]);
@@ -973,7 +972,7 @@ class SQL__Global
 
     protected function buildLEFTJOIN()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = 'LEFT JOIN';
         if (is_array($this->extend['LEFTJOIN'][0]) == true) {
             $sql[] = key($this->extend['LEFTJOIN'][0]);
@@ -986,7 +985,7 @@ class SQL__Global
 
     protected function buildRIGHTJOIN()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = 'RIGHT JOIN';
         if (is_array($this->extend['RIGHTJOIN'][0]) == true) {
             $sql[] = key($this->extend['RIGHTJOIN'][0]);
@@ -999,7 +998,7 @@ class SQL__Global
 
     protected function buildFULLJOIN()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = 'FULL JOIN';
         if (is_array($this->extend['FULLJOIN'][0]) == true) {
             $sql[] = key($this->extend['FULLJOIN'][0]);
@@ -1012,7 +1011,7 @@ class SQL__Global
 
     protected function buildFROM()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = 'FROM';
         if (is_array($this->extend['FROM'][0]) == true) {
             $sql[] = key($this->extend['FROM'][0]);
@@ -1025,7 +1024,7 @@ class SQL__Global
 
     protected function buildUnion()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql = array();
         $sql[] = $this->extend['UNION'][0];
         $sql[] = ' UNION ';
@@ -1034,7 +1033,7 @@ class SQL__Global
 
     protected function buildUnionALL()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql = array();
         $sql[] = $this->extend['UNIONALL'][0];
         $sql[] = ' UNION ALL ';
@@ -1043,7 +1042,7 @@ class SQL__Global
 
     protected function buildUpdate()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = $this->buildTable();
         $sql[] = 'SET';
         $updateData = array();
@@ -1062,7 +1061,7 @@ class SQL__Global
 
     protected function buildDelete()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = 'FROM';
         $this->buildTable();
         $this->buildWhere();
@@ -1070,7 +1069,7 @@ class SQL__Global
 
     protected function buildInsert()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = 'INTO';
         $this->buildTable();
         $keyData = array();
@@ -1092,14 +1091,14 @@ class SQL__Global
 
     protected function buildTRUNCATE()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = 'TABLE';
         $this->buildTable();
     }
 
     protected function buildIFEXISTS()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         if (array_key_exists('IFEXISTS', $this->extend)) {
             $sql[] = 'IF EXISTS';
         }
@@ -1107,7 +1106,7 @@ class SQL__Global
 
     protected function buildDrop()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
 
         if (array_key_exists('INDEX', $this->other)) {
             $sql[] = 'INDEX';
@@ -1167,14 +1166,14 @@ class SQL__Global
             array_pop($sql);
             $sql[] = ')';
             $sqlAll[] = implode(' ', $sql);
-            $this->_sql = $sqlAll;
+            $this->pri_sql = $sqlAll;
             $sqlAll = array();
         }
     }
 
     protected function buildDatabase()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         $sql[] = 'DATABASE ' . implode('', $this->other['DATABASE']);
     }
 
@@ -1186,17 +1185,19 @@ class SQL__Global
             $datainfo = $GLOBALS['datainfo'][$key];
             $d = reset($datainfo);
             $id = $d[0];
-            if ($this->db->type == 'mysql') {
-                $this->where[] = "{$id} >= ((SELECT MAX({$id}) FROM {$table}) - (SELECT MIN({$id}) FROM {$table})) * RAND() + (SELECT MIN({$id}) FROM {$table})";
-            } else {
-                //$this->where[] = "{$id} >= ((SELECT MAX({$id}) FROM {$table}) - (SELECT MIN({$id}) FROM {$table})) * RANDOM() + (SELECT MIN({$id}) FROM {$table})";
-            }
+            //if ($this->db->type == 'mysql') {
+            //$this->where[] = "{$id} >= ((SELECT MAX({$id}) FROM {$table}) - (SELECT MIN({$id}) FROM {$table})) * RAND() + (SELECT MIN({$id}) FROM {$table})";
+
+            $this->where[] = "{$id} >= (SELECT FLOOR( RAND() * ((SELECT MAX({$id}) FROM `{$table}`)-(SELECT MIN({$id}) FROM `{$table}`)) + (SELECT MIN({$id}) FROM `{$table}`)))";
+            //} else {
+            //$this->where[] = "{$id} >= ((SELECT MAX({$id}) FROM {$table}) - (SELECT MIN({$id}) FROM {$table})) * RANDOM() + (SELECT MIN({$id}) FROM {$table})";
+            //}
         }
     }
 
     protected function buildRandom()
     {
-        $sql = &$this->_sql;
+        $sql = &$this->pri_sql;
         if ($this->db->type == 'mysql') {
             $table = $this->table[0];
             if (in_array($table, $GLOBALS['table'])) {
@@ -1207,11 +1208,11 @@ class SQL__Global
         }
         if ($this->db->type != 'mysql') {
             $table = $this->table[0];
-            if (in_array($table, $GLOBALS['table'])) {
-                //$sql[] = ' LIMIT ' . implode('', $this->extend['RANDOM']);
-            } else {
-                //$sql[] = 'ORDER BY RANDOM() LIMIT ' . implode('', $this->extend['RANDOM']);
-            }
+            //if (in_array($table, $GLOBALS['table'])) {
+            //$sql[] = ' LIMIT ' . implode('', $this->extend['RANDOM']);
+            //} else {
+            //$sql[] = 'ORDER BY RANDOM() LIMIT ' . implode('', $this->extend['RANDOM']);
+            //}
             $sql[] = 'ORDER BY RANDOM() LIMIT ' . implode('', $this->extend['RANDOM']);
         }
     }
