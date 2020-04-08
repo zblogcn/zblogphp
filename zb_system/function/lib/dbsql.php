@@ -156,6 +156,15 @@ class DbSql
                 $option['pagebar']->Count = (int) $option['pagebar']->Count;
                 $option['pagebar']->make();
             }
+            if (isset($option['groupby'])) {
+                $sql->qroupby($option['groupby']);
+            }
+            if (isset($option['having'])) {
+                $sql->having($option['having']);
+            }
+            if (isset($option['random'])) {
+                $sql->random($option['random']);
+            }
         }
         $sql = $sql->sql;
 

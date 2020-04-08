@@ -2050,10 +2050,11 @@ class ZBlogPHP
         if (empty($select)) {
             $select = array('*');
         }
-        if (empty($where)) {
-            $where = array();
+        if (get_parent_class($select) == 'SQL__Global') {
+            $sql = $select->sql;
+        } else {
+            $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);
         }
-        $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);
 
         /** @var Post[] $array */
         $array = $this->GetListType('Post', $sql);
@@ -2111,7 +2112,12 @@ class ZBlogPHP
             }
         }
 
-        $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);
+        if (get_parent_class($select) == 'SQL__Global') {
+            $sql = $select->sql;
+        } else {
+            $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);
+        }
+
 
         /** @var Post[] $array */
         $array = $this->GetListType('Post', $sql);
@@ -2152,7 +2158,12 @@ class ZBlogPHP
             array_unshift($where, array('=', 'log_Type', '1'));
         }
 
-        $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);
+        if (get_parent_class($select) == 'SQL__Global') {
+            $sql = $select->sql;
+        } else {
+            $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);
+        }
+
         /** @var Post[] $array */
         $array = $this->GetListType('Post', $sql);
         foreach ($array as $a) {
@@ -2176,7 +2187,13 @@ class ZBlogPHP
         if (empty($select)) {
             $select = array('*');
         }
-        $sql = $this->db->sql->Select($this->table['Comment'], $select, $where, $order, $limit, $option);
+
+        if (get_parent_class($select) == 'SQL__Global') {
+            $sql = $select->sql;
+        } else {
+            $sql = $this->db->sql->Select($this->table['Comment'], $select, $where, $order, $limit, $option);
+        }
+
         /** @var Comment[] $array */
         $array = $this->GetListType('Comment', $sql);
         foreach ($array as $comment) {
@@ -2200,7 +2217,12 @@ class ZBlogPHP
         if (empty($select)) {
             $select = array('*');
         }
-        $sql = $this->db->sql->Select($this->table['Member'], $select, $where, $order, $limit, $option);
+
+        if (get_parent_class($select) == 'SQL__Global') {
+            $sql = $select->sql;
+        } else {
+            $sql = $this->db->sql->Select($this->table['Member'], $select, $where, $order, $limit, $option);
+        }
 
         return $this->GetListType('Member', $sql);
     }
@@ -2219,7 +2241,12 @@ class ZBlogPHP
         if (empty($select)) {
             $select = array('*');
         }
-        $sql = $this->db->sql->Select($this->table['Tag'], $select, $where, $order, $limit, $option);
+
+        if (get_parent_class($select) == 'SQL__Global') {
+            $sql = $select->sql;
+        } else {
+            $sql = $this->db->sql->Select($this->table['Tag'], $select, $where, $order, $limit, $option);
+        }
 
         return $this->GetListType('Tag', $sql);
     }
@@ -2238,7 +2265,12 @@ class ZBlogPHP
         if (empty($select)) {
             $select = array('*');
         }
-        $sql = $this->db->sql->Select($this->table['Category'], $select, $where, $order, $limit, $option);
+
+        if (get_parent_class($select) == 'SQL__Global') {
+            $sql = $select->sql;
+        } else {
+            $sql = $this->db->sql->Select($this->table['Category'], $select, $where, $order, $limit, $option);
+        }
 
         return $this->GetListType('Category', $sql);
     }
@@ -2257,7 +2289,12 @@ class ZBlogPHP
         if (empty($select)) {
             $select = array('*');
         }
-        $sql = $this->db->sql->Select($this->table['Module'], $select, $where, $order, $limit, $option);
+
+        if (get_parent_class($select) == 'SQL__Global') {
+            $sql = $select->sql;
+        } else {
+            $sql = $this->db->sql->Select($this->table['Module'], $select, $where, $order, $limit, $option);
+        }
 
         return $this->GetListType('Module', $sql);
     }
@@ -2276,7 +2313,12 @@ class ZBlogPHP
         if (empty($select)) {
             $select = array('*');
         }
-        $sql = $this->db->sql->Select($this->table['Upload'], $select, $where, $order, $limit, $option);
+
+        if (get_parent_class($select) == 'SQL__Global') {
+            $sql = $select->sql;
+        } else {
+            $sql = $this->db->sql->Select($this->table['Upload'], $select, $where, $order, $limit, $option);
+        }
 
         return $this->GetListType('Upload', $sql);
     }

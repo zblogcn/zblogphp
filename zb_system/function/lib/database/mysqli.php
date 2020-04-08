@@ -269,9 +269,9 @@ class Database__MySQLi implements Database__Interface
      * @param $table
      * @param $datainfo
      */
-    public function CreateTable($table, $datainfo, $engine = null)
+    public function CreateTable($table, $datainfo, $engine = null, $charset = null, $collate = null)
     {
-        $this->QueryMulit($this->sql->CreateTable($table, $datainfo));
+        $this->QueryMulit($this->sql->CreateTable($table, $datainfo, $engine, $charset, $collate));
     }
 
     /**

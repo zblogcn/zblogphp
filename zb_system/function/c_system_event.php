@@ -278,7 +278,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
         $fpreturn = $fpname($select, $w, $order, $count, $option);
     }
 
-    $list = $zbp->GetArticleList($select, $w, $order, $count, null, false);
+    $list = $zbp->GetArticleList($select, $w, $order, $count, $option, false);
 
     if ($option['is_related']) {
         foreach ($list as $k => $a) {

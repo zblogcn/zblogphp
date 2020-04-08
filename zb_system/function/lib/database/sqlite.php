@@ -163,7 +163,7 @@ class Database__SQLite implements Database__Interface
      * @param $table
      * @param $datainfo
      */
-    public function CreateTable($table, $datainfo)
+    public function CreateTable($table, $datainfo, $engine = null, $charset = null, $collate = null)
     {
         $this->QueryMulit($this->sql->CreateTable($table, $datainfo));
     }

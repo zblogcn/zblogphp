@@ -252,7 +252,7 @@ class Database__PostgreSQL implements Database__Interface
      * @param string $tablename 表名
      * @param array  $datainfo  表结构
      */
-    public function CreateTable($table, $datainfo)
+    public function CreateTable($table, $datainfo, $engine = null, $charset = null, $collate = null)
     {
         $this->QueryMulit($this->sql->CreateTable($table, $datainfo));
     }
