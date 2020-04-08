@@ -37,6 +37,15 @@ class SQL__SQLite extends SQL__Global
     protected function buildCreate()
     {
         global $zbp;
+
+        if (!empty($this->index) && empty($this->data)) {
+            $this->buildIndex();
+            return;
+        } elseif (isset($this->other) && empty($this->data)) {
+            $this->buildDatabase();
+            return;
+        }
+        
         $zbp->ConvertTableAndDatainfo();
 
         $sqlAll = array();

@@ -59,7 +59,7 @@ class SQL__Global
 
     private $otherKeyword = array('FIELD', 'INDEX', 'TABLE', 'DATABASE');
 
-    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'UNIONALL');
+    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'UNIONALL', 'RANDOM');
 
     private $complexKeyword = array('ADDCOLUMN', 'DROPCOLUMN', 'ALTERCOLUMN');
 
@@ -485,6 +485,7 @@ class SQL__Global
     private function sql()
     {
         $sql = &$this->_sql;
+
         if (count($sql) == 0) {
             $sql = array("$this->method");
             $callableMethod = 'build' . ucfirst($this->method);
@@ -841,11 +842,23 @@ class SQL__Global
         }
 
         $this->buildBeforeWhere();
+
+        //if ($this->db->type == 'mysql' && array_key_exists('RANDOM', $this->extend)) {
+        if (array_key_exists('RANDOM', $this->extend)) {
+            $this->buildRandomBefore();
+        }
+
         $this->buildWhere();
         $this->buildGroupBy();
         $this->buildHaving();
-        $this->buildOrderBy();
-        $this->buildLimit();
+
+        if (array_key_exists('RANDOM', $this->extend)) {
+            $this->buildRandom();
+        } else {
+            $this->buildOrderBy();
+            $this->buildLimit();
+        }
+
         $this->buildOthers();
     }
 
@@ -1109,7 +1122,7 @@ class SQL__Global
         if (array_key_exists('DATABASE', $this->other)) {
             $sql[] = 'DATABASE';
             $this->buildIFEXISTS();
-            $sql[] = implode(' ,', $this->other['DATABASE']);
+            $sql[] = implode('', $this->other['DATABASE']);
 
             return;
         }
@@ -1156,6 +1169,50 @@ class SQL__Global
             $sqlAll[] = implode(' ', $sql);
             $this->_sql = $sqlAll;
             $sqlAll = array();
+        }
+    }
+
+    protected function buildDatabase()
+    {
+        $sql = &$this->_sql;
+        $sql[] = 'DATABASE ' . implode('', $this->other['DATABASE']);
+    }
+
+    protected function buildRandomBefore()
+    {
+        $table = $this->table[0];
+        if (in_array($table, $GLOBALS['table'])) {
+            $key = array_search($table, $GLOBALS['table']);
+            $datainfo = $GLOBALS['datainfo'][$key];
+            $d = reset($datainfo);
+            $id = $d[0];
+            if ($this->db->type == 'mysql') {
+                $this->where[] = "{$id} >= ((SELECT MAX({$id}) FROM {$table}) - (SELECT MIN({$id}) FROM {$table})) * RAND() + (SELECT MIN({$id}) FROM {$table})";
+            } else {
+                //$this->where[] = "{$id} >= ((SELECT MAX({$id}) FROM {$table}) - (SELECT MIN({$id}) FROM {$table})) * RANDOM() + (SELECT MIN({$id}) FROM {$table})";
+            }
+        }
+    }
+
+    protected function buildRandom()
+    {
+        $sql = &$this->_sql;
+        if ($this->db->type == 'mysql') {
+            $table = $this->table[0];
+            if (in_array($table, $GLOBALS['table'])) {
+                $sql[] = ' LIMIT ' . implode('', $this->extend['RANDOM']);
+            } else {
+                $sql[] = 'ORDER BY RAND() LIMIT ' . implode('', $this->extend['RANDOM']);
+            }
+        }
+        if ($this->db->type != 'mysql') {
+            $table = $this->table[0];
+            if (in_array($table, $GLOBALS['table'])) {
+                //$sql[] = ' LIMIT ' . implode('', $this->extend['RANDOM']);
+            } else {
+                //$sql[] = 'ORDER BY RANDOM() LIMIT ' . implode('', $this->extend['RANDOM']);
+            }
+            $sql[] = 'ORDER BY RANDOM() LIMIT ' . implode('', $this->extend['RANDOM']);
         }
     }
 }

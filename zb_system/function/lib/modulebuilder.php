@@ -256,7 +256,7 @@ class ModuleBuilder
             return '';
         }
 
-        $ldate = array(date('Y', $array[0]['log_PostTime']), date('m', $array[0]['log_PostTime']));
+        $ldate = array(date('Y', $array[0][$zbp->datainfo['Post']['PostTime'][0]]), date('m', $array[0][$zbp->datainfo['Post']['PostTime'][0]]));
 
         $sql = $zbp->db->sql->Select($zbp->table['Post'], array('log_PostTime'), null, array('log_PostTime' => 'ASC'), array(1), null);
 
@@ -266,7 +266,7 @@ class ModuleBuilder
             return '';
         }
 
-        $fdate = array(date('Y', $array[0]['log_PostTime']), date('m', $array[0]['log_PostTime']));
+        $fdate = array(date('Y', $array[0][$zbp->datainfo['Post']['PostTime'][0]]), date('m', $array[0][$zbp->datainfo['Post']['PostTime'][0]]));
 
         $arraydate = array();
 

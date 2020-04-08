@@ -44,18 +44,22 @@ class SQL__MySQL extends SQL__Global
 
     /**
      * @todo
+     * 
      * @override
      */
     protected function buildCreate()
     {
         global $zbp;
-        $zbp->ConvertTableAndDatainfo();
 
         if (!empty($this->index) && empty($this->data)) {
             $this->buildIndex();
-
+            return;
+        } elseif (isset($this->other) && empty($this->data)) {
+            $this->buildDatabase();
             return;
         }
+
+        $zbp->ConvertTableAndDatainfo();
 
         $sqlAll = array();
         foreach ($this->table as $tableIndex => $table) {
