@@ -1559,7 +1559,7 @@ function PostArticle()
 
     $article->Type = ZC_POST_TYPE_ARTICLE;
 
-    $article->PostTime = time();
+    $article->UpdateTime = time();
 
     FilterMeta($article);
 
