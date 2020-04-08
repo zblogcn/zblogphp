@@ -25,7 +25,7 @@ class ClassSQL__MySQLTest extends PHPUnit\Framework\TestCase
     public function testIndex()
     {
         self::$db->create('zbp_post')->index(array('indexname' => array('ddd', 'eee', 'eeee')));
-        $this->assertEquals('CREATE INDEX indexname ON zbp_post ( ddd , eee , eeee )', self::$db->sql);
+        $this->assertEquals('CREATE INDEX zbp_post_indexname ON zbp_post ( ddd , eee , eeee )', self::$db->sql);
     }
 
     public function testCreateTable()

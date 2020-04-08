@@ -195,7 +195,7 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
                 ->sql
         );
         $this->assertEquals(
-            'SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND ( log_ID ILIKE \'1\'  OR  log_Title ILIKE \'2\' ) )',
+            'SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND ( log_ID LIKE \'1\'  OR  log_Title LIKE \'2\' ) )',
             self::$db
                 ->select("zbp_post")
                 ->where(
@@ -248,21 +248,21 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
     public function testOrderby()
     {
         $this->assertEquals(
-            'SELECT * FROM  zbp_post  ORDER BY bbb desc, aaa ',
+            'SELECT * FROM  zbp_post  ORDER BY bbb DESC, aaa ',
             self::$db
                 ->select("zbp_post")
                 ->orderBy(array('bbb' => 'desc'), 'aaa')
                 ->sql
         );
         $this->assertEquals(
-            'SELECT * FROM  zbp_post  ORDER BY bbb desc',
+            'SELECT * FROM  zbp_post  ORDER BY bbb DESC',
             self::$db
                 ->select("zbp_post")
                 ->orderBy(array('bbb' => 'desc'))
                 ->sql
         );
         $this->assertEquals(
-            'SELECT * FROM  zbp_post  ORDER BY bbb desc, aaa asc',
+            'SELECT * FROM  zbp_post  ORDER BY bbb DESC, aaa ASC',
             self::$db
                 ->select("zbp_post")
                 ->orderBy(array('bbb' => 'desc', 'aaa' => 'asc'))
@@ -369,12 +369,11 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
                 ->sql
         );
         $this->assertEquals(
-            'SELECT  * AS sum,log_Content AS content,log_AuthorID AS author,log_Title,log_PostTime,log_ID AS ID  FROM  zbp_post ',
+            'SELECT  log_Content AS content,,log_AuthorID AS author,,log_Title,log_PostTime,log_ID AS ID  FROM  zbp_post ',
             self::$db
                 ->select("zbp_post")
-                ->column(array('*', 'sum'))
-                ->column(array(array('log_Content', 'content'), array('log_AuthorID', 'author')))
-                ->column('log_Title', 'log_PostTime', array('log_ID', 'ID'))
+                ->column(array(array('log_Content'=>'content'), array('log_AuthorID'=>'author')))
+                ->column('log_Title', 'log_PostTime', array('log_ID'=>'ID'))
                 ->sql
         );
     }

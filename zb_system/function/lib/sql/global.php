@@ -55,11 +55,11 @@ class SQL__Global
 
     private $methodKeyword = array('ALTER', 'SELECT', 'INSERT', 'DROP', 'DELETE', 'CREATE', 'UPDATE', 'TRUNCATE');
 
-    private $selectFunctionKeyword = array('COUNT', 'MIN', 'MAX', 'SUM');
+    private $selectFunctionKeyword = array('COUNT', 'MIN', 'MAX', 'SUM', 'AVG');
 
     private $otherKeyword = array('FIELD', 'INDEX', 'TABLE', 'DATABASE');
 
-    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON');
+    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'UNIONALL');
 
     private $complexKeyword = array('ADDCOLUMN', 'DROPCOLUMN', 'ALTERCOLUMN');
 
@@ -166,7 +166,15 @@ class SQL__Global
             return $this;
         } elseif (in_array($upperKeyword, $this->extendKeyword)) {
             $this->extend[$upperKeyword] = $argu;
-
+            if ($upperKeyword == 'DISTINCT') {
+                foreach ($argu as $key => $value) {
+                    if (is_string($value)) {
+                        $this->columns[] = $value;
+                    } elseif (is_array($value)) {
+                        $this->columns[] = key($value) . " AS " . current($value);
+                    }
+                }
+            }
             return $this;
         } elseif (in_array($upperKeyword, $this->complexKeyword)) {
             $this->complex[$upperKeyword][] = implode(' ', $argu);
@@ -261,15 +269,15 @@ class SQL__Global
 
     protected function columnLoaderArray($columns)
     {
-        foreach ($columns as $column) {
+        foreach ($columns as $key => $column) {
             if (is_array($column)) {
-                if (count($column) > 1) {
-                    $this->columns[] = "$column[0] AS $column[1]";
-                } else {
-                    $this->columns[] = $column[0];
-                }
+                $this->columns[] = $this->columnLoaderArray($column);
             } else {
-                $this->columns[] = $column;
+                if (is_integer($key)) {
+                    $this->columns[] = $column;
+                } else {
+                    $this->columns[] = $key . ' AS ' . $column;
+                }
             }
         }
     }
@@ -286,28 +294,14 @@ class SQL__Global
         if (!$this->validateParamater($columns)) {
             return $this;
         }
-        $nums = func_num_args();
-        if ($nums == 1) {
-            if (is_array($columns)) {
-                if (count($columns) == 2) {
-                    if (is_string($columns[1])) {
-                        $this->columns[] = "$columns[0] AS $columns[1]";
-                    } else {
-                        $this->columnLoaderArray($columns);
-                    }
-                } elseif (count($columns) == 1) {
-                    $this->columns[] = "$columns[0]";
-                } else {
-                    $this->columnLoaderArray($columns);
-                }
+        $args = func_get_args();
+        foreach ($args as $key => $value) {
+            if (is_array($value)) {
+                $this->columnLoaderArray($value);
             } else {
-                $this->columns[] = $columns;
+                $this->columns[] = $value;
             }
-        } else {
-            $args = func_get_args(); // Fuck PHP 5.2
-            $this->columnLoaderArray($args);
         }
-
         return $this;
     }
 
@@ -441,7 +435,6 @@ class SQL__Global
             if (!is_array($ret)) {
                 $ret = array($value => '');
             }
-
             $this->orderBy = array_merge_recursive($this->orderBy, $ret);
         }
 
@@ -514,7 +507,11 @@ class SQL__Global
         //array_walk
         foreach ($table as $index => $tableValue) {
             if (is_string($tableValue)) {
-                $tableData[] = " $tableValue "; // 为保证兼容性，不加反引号
+                if (!is_integer($index)) {
+                    $tableData[] = " $index AS $tableValue "; //给表加AS
+                } else {
+                    $tableData[] = " $tableValue "; // 为保证兼容性，不加反引号
+                }
             }
             if (is_array($tableValue)) {
                 $tableData[] = " $tableValue[0] $tableValue[1] ";
@@ -591,7 +588,7 @@ class SQL__Global
             }
         } elseif ($eq == 'BETWEEN') {
             $whereData = " ($value[1] BETWEEN '$value[2]' AND '$value[3]') ";
-        } elseif ($eq == 'SEARCH') {//SEARCH模式搜索字符自动两边加%
+        } elseif ($eq == 'SEARCH') { //SEARCH模式搜索字符自动两边加%
             $searchCount = count($value);
             $sqlSearch = array();
             for ($i = 1; $i <= ($searchCount - 1 - 1); $i++) {
@@ -602,10 +599,10 @@ class SQL__Global
                 }
             }
             $whereData = " ((1 = 1) AND (" . implode(' OR ', $sqlSearch) . ') )';
-        } elseif (($eq == 'OR' || $eq == 'ARRAY') && count($value) > 2) {//此块是处理array('or','条件1','条件2','条件3')时
+        } elseif (($eq == 'OR' || $eq == 'ARRAY') && count($value) > 2) { //此块是处理array('or','条件1','条件2','条件3')时
             $sqlArray = array();
             foreach ($value as $x => $y) {
-                if ($x == 0) {//当是or就跳开
+                if ($x == 0) { //当是or就跳开
                     continue;
                 }
                 $sqlArray[] = $this->buildWhere_Single($y);
@@ -704,6 +701,7 @@ class SQL__Global
             if (is_int($key)) {
                 $orderByData[] = "$value";
             } else {
+                $value = strtoupper($value);
                 $orderByData[] = "$key $value";
             }
         }
@@ -779,7 +777,7 @@ class SQL__Global
         } elseif (array_key_exists('DROPCOLUMN', $this->complex)) {
             $this->buildDROPCOLUMN();
         } elseif (array_key_exists('ALTERCOLUMN', $this->complex)) {
-            $this->buildLEFTJOIN();
+            $this->buildALTERCOLUMN();
         }
     }
 
@@ -790,8 +788,14 @@ class SQL__Global
         // Unimplemented select2count
         if (array_key_exists('UNION', $this->extend)) {
             $this->buildUnion();
-
             return;
+        }
+        if (array_key_exists('UNIONALL', $this->extend)) {
+            $this->buildUnionALL();
+            return;
+        }
+        if (array_key_exists('DISTINCT', $this->extend)) {
+            $this->buildDISTINCT();
         }
         if (array_key_exists('SELECTANY', $this->extend)) {
             $this->buildSelectAny();
@@ -845,6 +849,12 @@ class SQL__Global
         $this->buildOthers();
     }
 
+    protected function buildDISTINCT()
+    {
+        $sql = &$this->_sql;
+        $sql[] = 'DISTINCT';
+    }
+
     protected function buildSELECTANY()
     {
         $sql = &$this->_sql;
@@ -870,7 +880,12 @@ class SQL__Global
         $sql = &$this->_sql;
         $sql[] = ' ';
         foreach ($this->complex['ALTERCOLUMN'] as $key => $value) {
-            $this->complex['ALTERCOLUMN'][$key] = 'ALTER COLUMN ' . $this->complex['ALTERCOLUMN'][$key];
+            if ($this->db->type == 'mysql') {
+                $this->complex['ALTERCOLUMN'][$key] = 'MODIFY ' . $this->complex['ALTERCOLUMN'][$key];
+            }
+            if ($this->db->type == 'postgresql') {
+                $this->complex['ALTERCOLUMN'][$key] = 'ALTER COLUMN ' . $this->complex['ALTERCOLUMN'][$key];
+            }
         }
         $sql[] = implode(' ,', $this->complex['ALTERCOLUMN']);
     }
@@ -1002,6 +1017,15 @@ class SQL__Global
         $sql[] = $this->extend['UNION'][0];
         $sql[] = ' UNION ';
         $sql[] = $this->extend['UNION'][1];
+    }
+
+    protected function buildUnionALL()
+    {
+        $sql = &$this->_sql;
+        $sql = array();
+        $sql[] = $this->extend['UNIONALL'][0];
+        $sql[] = ' UNION ALL ';
+        $sql[] = $this->extend['UNIONALL'][1];
     }
 
     protected function buildUpdate()
