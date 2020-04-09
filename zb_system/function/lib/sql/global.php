@@ -526,9 +526,12 @@ class SQL__Global
     {
         $sql = &$this->pri_sql;
         $columns = &$this->columns;
-        if (count($columns) == 1 && empty($columns[0])) {
-            $sql[] = "*";
-        } elseif (count($columns) > 0) {
+        foreach ($columns as $key => $value) {
+            if (empty(trim($value))) {
+                unset($columns[$key]);
+            }
+        }
+        if (count($columns) > 0) {
             $selectStr = implode(',', $columns);
             $sql[] = " {$selectStr} ";
         } else {
@@ -789,7 +792,6 @@ class SQL__Global
     {
         $sql = &$this->pri_sql;
 
-        // Unimplemented select2count
         if (array_key_exists('UNION', $this->extend)) {
             $this->buildUnion();
             return;

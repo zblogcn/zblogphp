@@ -3407,12 +3407,12 @@ function CountCommentNums($allplus = null, $chkplus = null)
     global $zbp;
 
     if ($allplus === null) {
-        $zbp->cache->all_comment_nums = (int) GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('comm_ID'=>'num'))->query, 'num');
+        $zbp->cache->all_comment_nums = (int) GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('*'=>'num'))->query, 'num');
     } else {
         $zbp->cache->all_comment_nums += $allplus;
     }
     if ($chkplus === null) {
-        $zbp->cache->check_comment_nums = (int) GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('comm_ID'=>'num'))->where('=', 'comm_Ischecking', '1')->query, 'num');
+        $zbp->cache->check_comment_nums = (int) GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('*'=>'num'))->where('=', 'comm_Ischecking', '1')->query, 'num');
     } else {
         $zbp->cache->check_comment_nums += $chkplus;
     }

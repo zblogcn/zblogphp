@@ -132,24 +132,22 @@ class DbSql
 
         $sql = $this->get()->select($table)->option($option)->where($where)->orderBy($order)->limit($limit);
 
-        if (!empty($option)) {
-            if (isset($option['pagebar'])) {
-                if ($option['pagebar']->Count === null) {
-                    $s2 = $this->Count($table, array(array('*', 'num')), $where);
-                    $option['pagebar']->Count = GetValueInArrayByCurrent($this->db->Query($s2), 'num');
-                }
-                $option['pagebar']->Count = (int) $option['pagebar']->Count;
-                $option['pagebar']->make();
+        //定义出key array
+        $array = array('COUNT', 'MIN', 'MAX', 'SUM', 'AVG', 'SELECTANY', 'FROM', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'RANDOM', 'COLUMN', 'GROUPBY', 'HAVING', 'WHERE', 'ORDER', 'LIMIT');
+        foreach ($array as $key => $keyword) {
+            if (isset($option[strtolower($keyword)])) {
+                $args = array($option[strtolower($keyword)]);
+                call_user_func_array(array($sql, $keyword), $args);
             }
+        }
 
-            //定义出key array
-            $array = array('COUNT', 'MIN', 'MAX', 'SUM', 'AVG', 'SELECTANY', 'FROM', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'RANDOM', 'COLUMN', 'GROUPBY', 'HAVING', 'WHERE', 'ORDER', 'LIMIT');
-            foreach ($array as $key => $keyword) {
-                if (isset($option[strtolower($keyword)])) {
-                    $args = array($option[strtolower($keyword)]);
-                    call_user_func_array(array($sql, $keyword), $args);
-                }
+        if (isset($option['pagebar'])) {
+            if ($option['pagebar']->Count === null) {
+                $s2 = $this->Count($table, array(array('COUNT(*)'=>'num')), $where);
+                $option['pagebar']->Count = GetValueInArrayByCurrent($this->db->Query($s2), 'num');
             }
+            $option['pagebar']->Count = (int) $option['pagebar']->Count;
+            $option['pagebar']->make();
         }
 
         if (!is_array($select)) {
@@ -174,13 +172,9 @@ class DbSql
      *
      * @return string 返回构造的语句
      */
-    public function Count($table, $count, $where = null, $option = null)
+    public function Count($table, $countofnum, $where = null, $option = null)
     {
-        if (!is_array($option)) {
-            $option = array('select2count' => true);
-        }
-
-        return $this->Select($table, $count, $where, null, null, $option);
+        return $this->Select($table, $countofnum, $where, null, null, $option);
     }
 
     /**
