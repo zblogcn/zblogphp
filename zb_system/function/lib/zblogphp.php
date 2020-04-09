@@ -1961,6 +1961,9 @@ class ZBlogPHP
      */
     public function GetListType($type, $sql)
     {
+        if (get_parent_class($sql) == 'SQL__Global') {
+            $sql = $sql->sql;
+        }
         $array = null;
         $list = array();
         $array = $this->db->Query($sql);
@@ -1986,6 +1989,9 @@ class ZBlogPHP
      */
     public function GetListOrigin($sql)
     {
+        if (get_parent_class($sql) == 'SQL__Global') {
+            $sql = $sql->sql;
+        }
         $array = null;
         $list = array();
         $array = $this->db->Query($sql);

@@ -200,7 +200,12 @@ class SQL__Global
 
             return $ret;
         }
+        if ($upperKeyword == "QUERY") {
+            $ret = $this->query();
+            $this->reset();
 
+            return $ret;
+        }
         return $this->$getName;
     }
 
@@ -487,6 +492,12 @@ class SQL__Global
         //return var_export($this->extend,true);
 
         return implode(' ', $sql);
+    }
+
+    private function query()
+    {
+        $sql = $this->sql();
+        return $this->db->Query($sql);
     }
 
     protected function buildTable()

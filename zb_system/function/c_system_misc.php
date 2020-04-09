@@ -62,12 +62,12 @@ function misc_statistic()
     $xmlrpc_address = $zbp->xmlrpcurl;
     $current_member = $zbp->user->Name;
     $current_version = ZC_VERSION_FULL;
-    $all_articles = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=\'0\''), 'num');
-    $all_pages = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Post'] . ' WHERE log_Type=\'1\''), 'num');
-    $all_categories = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Category']), 'num');
-    $all_views = $zbp->option['ZC_VIEWNUMS_TURNOFF'] == true ? 0 : GetValueInArrayByCurrent($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post']), 'num');
-    $all_tags = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) as num FROM ' . $GLOBALS['table']['Tag']), 'num');
-    $all_members = GetValueInArrayByCurrent($zbp->db->Query('SELECT COUNT(*) AS num FROM ' . $GLOBALS['table']['Member']), 'num');
+    $all_articles = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('log_ID'=>'num'))->where(array('=', 'log_Type' ,'0'))->query, 'num');
+    $all_pages = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('log_ID'=>'num'))->where(array('=', 'log_Type' ,'1'))->query, 'num');
+    $all_categories = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Category'])->count(array('cate_ID'=>'num'))->query, 'num');
+    $all_views = $zbp->option['ZC_VIEWNUMS_TURNOFF'] == true ? 0 : GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->sum(array('log_ViewNums'=>'num'))->query, 'num');
+    $all_tags = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Tag'])->count(array('tag_ID'=>'num'))->query, 'num');
+    $all_members = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Member'])->count(array('mem_ID'=>'num'))->query, 'num');
     $current_theme = '{$zbp->theme}';
     $current_style = '{$zbp->style}';
     $current_member = '{$zbp->user->Name}';
@@ -75,9 +75,8 @@ function misc_statistic()
     $system_environment = '{$system_environment}';
     $current_theme_version = '{$theme_version}';
 
-    if ($zbp->option['ZC_DEBUG_MODE']) {
-        $r .= "<tr><td colspan='4' style='text-align: center'>{$zbp->lang['msg']['debugging_warning']}</td></tr>";
-    }
+    $r .= '<!--debug_mode_note-->';
+
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}</td><td class='td30'><a href='../cmd.php?act=misc&type=vrs' target='_blank'>{$current_member}</a></td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_articles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categories}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
@@ -107,6 +106,9 @@ function misc_statistic()
     $r = str_replace('{$system_environment}', $zbp->cache->system_environment, $r);
     $r = str_replace('{$theme_version}', '(v' . $zbp->themeapp->version . ')', $r);
 
+    if ($zbp->option['ZC_DEBUG_MODE']) {
+        $r = str_replace('<!--debug_mode_note-->', "<tr><td colspan='4' style='text-align: center'>{$zbp->lang['msg']['debugging_warning']}</td></tr>", $r);
+    }
     echo $r;
 }
 
