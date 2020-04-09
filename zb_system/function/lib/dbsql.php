@@ -143,15 +143,21 @@ class DbSql
 
         if (isset($option['pagebar'])) {
             if ($option['pagebar']->Count === null) {
-                $s2 = $this->Count($table, array(array('COUNT(*)'=>'num')), $where);
-                $option['pagebar']->Count = GetValueInArrayByCurrent($this->db->Query($s2), 'num');
+                $optionpb = array();
+                foreach (array('FROM', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'WHERE', 'GROUPBY', 'HAVING') as $key => $keyword) {
+                    if (isset($option[strtolower($keyword)])) {
+                        $optionpb[strtolower($keyword)] = $option[strtolower($keyword)];
+                    }
+                }
+                $query = $this->get()->select($table)->count(array('*'=>'num'))->where($where)->option($optionpb)->query;
+                $option['pagebar']->Count = GetValueInArrayByCurrent($query, 'num');
             }
             $option['pagebar']->Count = (int) $option['pagebar']->Count;
             $option['pagebar']->make();
         }
 
         if (!is_array($select)) {
-            if (!empty(trim($select))) {
+            if (!empty($select)) {
                  $select = array(trim($select));
             }
         }

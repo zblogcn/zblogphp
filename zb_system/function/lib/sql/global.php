@@ -527,7 +527,7 @@ class SQL__Global
         $sql = &$this->pri_sql;
         $columns = &$this->columns;
         foreach ($columns as $key => $value) {
-            if (empty(trim($value))) {
+            if (empty($value)) {
                 unset($columns[$key]);
             }
         }
