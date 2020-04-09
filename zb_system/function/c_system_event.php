@@ -290,12 +290,12 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
             array_pop($list);
         }
     }
-    if (isset($option['orderbymetas'])) {//从meta里的值排序
-        if (is_array($option['orderbymetas'])) {
-            $orderkey= key($option['orderbymetas']);
-            $order = current($option['orderbymetas']);
+    if (isset($option['order_by_metas'])) {//从meta里的值排序
+        if (is_array($option['order_by_metas'])) {
+            $orderkey= key($option['order_by_metas']);
+            $order = current($option['order_by_metas']);
         } else {
-            $orderkey= current($option['orderbymetas']);
+            $orderkey= current($option['order_by_metas']);
             $order = 'asc';
         }
         $orderarray = array();
