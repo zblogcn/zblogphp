@@ -290,6 +290,30 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
             array_pop($list);
         }
     }
+    if (isset($option['orderbymetas'])) {//从meta里的值排序
+        if (is_array($option['orderbymetas'])) {
+            $orderkey= key($option['orderbymetas']);
+            $order = current($option['orderbymetas']);
+        } else {
+            $orderkey= current($option['orderbymetas']);
+            $order = 'asc';
+        }
+        $orderarray = array();
+        foreach ($list as $key => $value) {
+            $orderarray[$key] = $value->Metas->$orderkey;
+        }
+        if (strtolower($order) == 'desc') {
+            arsort($orderarray);
+        } else {
+            asort($orderarray);
+        }
+        $newlist = array();
+        foreach ($orderarray as $key => $value) {
+            $newlist[] = $list[$key];
+        }
+        $list =  $newlist;
+    }
+
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_GetList_Result'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($list);
