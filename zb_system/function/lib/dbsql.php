@@ -132,21 +132,6 @@ class DbSql
 
         $sql = $this->get()->select($table)->option($option)->where($where)->orderBy($order)->limit($limit);
 
-        if (isset($option['select2count'])) {
-            foreach ($select as $key => $value) {
-                if (count($value) > 2) {
-                    $sql->count(array_slice($value, 1));
-                } else {
-                    $sql->count($value);
-                }
-            }
-        } else {
-            if (!is_array($select)) {
-                $select = array($select);
-            }
-            call_user_func_array(array($sql, 'column'), $select);
-        }
-
         if (!empty($option)) {
             if (isset($option['pagebar'])) {
                 if ($option['pagebar']->Count === null) {
@@ -156,16 +141,24 @@ class DbSql
                 $option['pagebar']->Count = (int) $option['pagebar']->Count;
                 $option['pagebar']->make();
             }
-            if (isset($option['groupby'])) {
-                $sql->qroupby($option['groupby']);
-            }
-            if (isset($option['having'])) {
-                $sql->having($option['having']);
-            }
-            if (isset($option['random'])) {
-                $sql->random($option['random']);
+
+            //定义出key array
+            $array = array('COUNT', 'MIN', 'MAX', 'SUM', 'AVG', 'SELECTANY', 'FROM', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'RANDOM', 'COLUMN', 'GROUPBY', 'HAVING', 'WHERE', 'ORDER', 'LIMIT');
+            foreach ($array as $key => $keyword) {
+                if (isset($option[strtolower($keyword)])) {
+                    $args = array($option[strtolower($keyword)]);
+                    call_user_func_array(array($sql, $keyword), $args);
+                }
             }
         }
+
+        if (!is_array($select)) {
+            if (!empty(trim($select))) {
+                 $select = array(trim($select));
+            }
+        }
+        $sql->column($select);
+
         $sql = $sql->sql;
 
         return $sql;
@@ -257,36 +250,36 @@ class DbSql
      *
      * @return mixed
      */
-    private $_explort_db = null;
+    private $pri_explort_db = null;
 
     public function Export($table, $keyvalue, $type = 'mysql')
     {
-        if ($type == 'mysql' && $this->_explort_db === null) {
-            $this->_explort_db = new Database_MySQL();
+        if ($type == 'mysql' && $this->pri_explort_db === null) {
+            $this->pri_explort_db = new Database_MySQL();
         }
 
-        if ($type == 'mysqli' && $this->_explort_db === null) {
-            $this->_explort_db = new Database_MySQLi();
+        if ($type == 'mysqli' && $this->pri_explort_db === null) {
+            $this->pri_explort_db = new Database_MySQLi();
         }
 
-        if ($type == 'pdo_mysql' && $this->_explort_db === null) {
-            $this->_explort_db = new Database_PDOMySQL();
+        if ($type == 'pdo_mysql' && $this->pri_explort_db === null) {
+            $this->pri_explort_db = new Database_PDOMySQL();
         }
 
-        if ($type == 'sqlite' && $this->_explort_db === null) {
-            $this->_explort_db = new Database_SQLite();
+        if ($type == 'sqlite' && $this->pri_explort_db === null) {
+            $this->pri_explort_db = new Database_SQLite();
         }
 
-        if ($type == 'sqlite3' && $this->_explort_db === null) {
-            $this->_explort_db = new Database_SQLite();
+        if ($type == 'sqlite3' && $this->pri_explort_db === null) {
+            $this->pri_explort_db = new Database_SQLite();
         }
 
-        if ($type == 'pdo_sqlite' && $this->_explort_db === null) {
-            $this->_explort_db = new Database_SQLite3();
+        if ($type == 'pdo_sqlite' && $this->pri_explort_db === null) {
+            $this->pri_explort_db = new Database_SQLite3();
         }
 
-        if ($this->_explort_db === null) {
-            $this->_explort_db = new Database_MySQL();
+        if ($this->pri_explort_db === null) {
+            $this->pri_explort_db = new Database_MySQL();
         }
 
         $sql = "INSERT INTO $table ";
@@ -309,7 +302,7 @@ class DbSql
                 continue;
             }
 
-            $v = $this->_explort_db->EscapeString($v);
+            $v = $this->pri_explort_db->EscapeString($v);
             $sql .= $comma . "'$v'";
             $comma = ',';
         }
@@ -326,5 +319,4 @@ class DbSql
             return $command;
         }
     }
-
 }

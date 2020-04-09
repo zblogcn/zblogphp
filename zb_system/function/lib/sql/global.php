@@ -59,7 +59,7 @@ class SQL__Global
 
     private $otherKeyword = array('FIELD', 'INDEX', 'TABLE', 'DATABASE');
 
-    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'UNIONALL', 'RANDOM');
+    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'IFNOTEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'UNIONALL', 'RANDOM');
 
     private $complexKeyword = array('ADDCOLUMN', 'DROPCOLUMN', 'ALTERCOLUMN');
 
@@ -147,17 +147,22 @@ class SQL__Global
         } elseif (in_array($upperKeyword, $this->selectFunctionKeyword)) {
             /*
              * Count
-             * @example count('log_ID')
-             * @example count('log_ID', 'countLogId')
+             * @example count(log_ID)
+             * @example count(log_ID, countLogId)
              * @example count(array('log_Id', 'countLogId'))
              * @return [type] [description]
              */
             if (count($argu) == 1) {
                 $arg = $argu[0];
+
                 if (is_string($arg)) {
                     $this->columns[] = "$upperKeyword($arg)";
                 } else {
-                    $this->columns[] = "$upperKeyword($arg[0]) AS $arg[1]";
+                    if (is_integer(key($arg))) {
+                        $this->columns[] = "$upperKeyword($arg[0]) AS $arg[1]";
+                    } else {
+                        $this->columns[] = "$upperKeyword(".key($arg).") AS " . current($arg);
+                    }
                 }
             } else {
                 $this->columns[] = "$upperKeyword($argu[0]) AS $argu[1]";
@@ -166,13 +171,9 @@ class SQL__Global
             return $this;
         } elseif (in_array($upperKeyword, $this->extendKeyword)) {
             $this->extend[$upperKeyword] = $argu;
-            if ($upperKeyword == 'DISTINCT') {
+            if ($upperKeyword == 'DISTINCT' || $upperKeyword == 'SELECTANY') {
                 foreach ($argu as $key => $value) {
-                    if (is_string($value)) {
-                        $this->columns[] = $value;
-                    } elseif (is_array($value)) {
-                        $this->columns[] = key($value) . " AS " . current($value);
-                    }
+                    $this->column($value);
                 }
             }
             return $this;
@@ -335,7 +336,6 @@ class SQL__Global
                 $this->option['limit'] = $arg;
             }
         }
-
         return $this;
     }
 
@@ -472,16 +472,6 @@ class SQL__Global
         return $this;
     }
 
-    /**
-     * @param $sql
-     */
-    public function query($sql = null)
-    {
-        if (is_null($sql)) {
-            $sql = $this->sql(); // wtf is it??
-        }
-    }
-
     private function sql()
     {
         $sql = &$this->pri_sql;
@@ -525,7 +515,9 @@ class SQL__Global
     {
         $sql = &$this->pri_sql;
         $columns = &$this->columns;
-        if (count($columns) > 0) {
+        if (count($columns) == 1 && empty($columns[0])) {
+            $sql[] = "*";
+        } elseif (count($columns) > 0) {
             $selectStr = implode(',', $columns);
             $sql[] = " {$selectStr} ";
         } else {
@@ -871,11 +863,7 @@ class SQL__Global
     protected function buildSELECTANY()
     {
         $sql = &$this->pri_sql;
-        $this->extend['SELECTANY'] = empty($this->extend['SELECTANY']) ? array('*') : $this->extend['SELECTANY'];
-        //$sql[] = implode(' ,',$this->extend['SELECTANY']);
-        foreach ($this->extend['SELECTANY'] as $key => $value) {
-            $this->columns[] = $value;
-        }
+        //no use
     }
 
     protected function buildADDCOLUMN()
@@ -1013,13 +1001,15 @@ class SQL__Global
     {
         $sql = &$this->pri_sql;
         $sql[] = 'FROM';
-        if (is_array($this->extend['FROM'][0]) == true) {
-            $sql[] = key($this->extend['FROM'][0]);
-            $sql[] = 'AS';
-            $sql[] = current($this->extend['FROM'][0]);
-        } else {
-            $sql[] = implode(' ,', $this->extend['FROM']);
+        $array = array();
+        foreach ($this->extend['FROM'] as $key => $value) {
+            if (is_array($value)) {
+                $array[] = key($value)  . ' AS ' . current($value);
+            } else {
+                $array[] = $value;
+            }
         }
+        $sql[] = implode(' ,', $array);
     }
 
     protected function buildUnion()
@@ -1104,6 +1094,14 @@ class SQL__Global
         }
     }
 
+    protected function buildIFNOTEXISTS()
+    {
+        $sql = &$this->pri_sql;
+        if (array_key_exists('IFNOTEXISTS', $this->extend)) {
+            $sql[] = 'IF NOT EXISTS';
+        }
+    }
+
     protected function buildDrop()
     {
         $sql = &$this->pri_sql;
@@ -1174,7 +1172,9 @@ class SQL__Global
     protected function buildDatabase()
     {
         $sql = &$this->pri_sql;
-        $sql[] = 'DATABASE ' . implode('', $this->other['DATABASE']);
+        $sql[] = 'DATABASE';
+        $this->buildIFNOTEXISTS();
+        $sql[] = implode('', $this->other['DATABASE']);
     }
 
     protected function buildRandomBefore()
@@ -1185,13 +1185,16 @@ class SQL__Global
             $datainfo = $GLOBALS['datainfo'][$key];
             $d = reset($datainfo);
             $id = $d[0];
-            //if ($this->db->type == 'mysql') {
-            //$this->where[] = "{$id} >= ((SELECT MAX({$id}) FROM {$table}) - (SELECT MIN({$id}) FROM {$table})) * RAND() + (SELECT MIN({$id}) FROM {$table})";
-
-            $this->where[] = "{$id} >= (SELECT FLOOR( RAND() * ((SELECT MAX({$id}) FROM `{$table}`)-(SELECT MIN({$id}) FROM `{$table}`)) + (SELECT MIN({$id}) FROM `{$table}`)))";
-            //} else {
-            //$this->where[] = "{$id} >= ((SELECT MAX({$id}) FROM {$table}) - (SELECT MIN({$id}) FROM {$table})) * RANDOM() + (SELECT MIN({$id}) FROM {$table})";
-            //}
+            if ($this->db->type == 'mysql') {
+                $this->where[] = "{$id} >= (SELECT FLOOR( RAND() * ((SELECT MAX({$id}) FROM `{$table}`)-(SELECT MIN({$id}) FROM `{$table}`)) + (SELECT MIN({$id}) FROM `{$table}`)))";
+            }
+            if ($this->db->type == 'sqlite') {
+                $i = 0;
+            }
+            if ($this->db->type == 'postgresql') {
+                $i = 0;
+                //$this->where[] = "{$id} >= (SELECT FLOOR( RANDOM() * ((SELECT MAX({$id}) FROM {$table})-(SELECT MIN({$id}) FROM {$table})) + (SELECT MIN({$id}) FROM {$table})))";
+            }
         }
     }
 
@@ -1206,14 +1209,17 @@ class SQL__Global
                 $sql[] = 'ORDER BY RAND() LIMIT ' . implode('', $this->extend['RANDOM']);
             }
         }
-        if ($this->db->type != 'mysql') {
-            $table = $this->table[0];
-            //if (in_array($table, $GLOBALS['table'])) {
-            //$sql[] = ' LIMIT ' . implode('', $this->extend['RANDOM']);
-            //} else {
-            //$sql[] = 'ORDER BY RANDOM() LIMIT ' . implode('', $this->extend['RANDOM']);
-            //}
+        if ($this->db->type == 'sqlite') {
             $sql[] = 'ORDER BY RANDOM() LIMIT ' . implode('', $this->extend['RANDOM']);
+        }
+        if ($this->db->type == 'postgresql') {
+            $table = $this->table[0];
+            if (in_array($table, $GLOBALS['table'])) {
+                $sql[] = 'ORDER BY RANDOM() LIMIT ' . implode('', $this->extend['RANDOM']);
+                //$sql[] = ' LIMIT ' . implode('', $this->extend['RANDOM']);
+            } else {
+                $sql[] = 'ORDER BY RANDOM() LIMIT ' . implode('', $this->extend['RANDOM']);
+            }
         }
     }
 }

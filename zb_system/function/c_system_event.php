@@ -271,7 +271,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
         }
     }
 
-    $select = '*';
+    $select = '';
     $order = array('log_PostTime' => 'DESC');
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_GetList'] as $fpname => &$fpsignal) {
@@ -1056,7 +1056,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
         }
     }
 
-    $select = '*';
+    $select = '';
     $order = array('log_PostTime' => 'DESC');
     $limit = array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount);
     $option = array('pagebar' => $pagebar);
@@ -1166,7 +1166,7 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
         }
     }
 
-    $select = '*';
+    $select = '';
     $w = array();
     $order = null;
     $limit = 1;

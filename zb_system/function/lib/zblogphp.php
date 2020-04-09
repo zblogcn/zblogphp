@@ -2047,9 +2047,6 @@ class ZBlogPHP
      */
     public function GetPostList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (empty($select)) {
-            $select = array('*');
-        }
         if (get_parent_class($select) == 'SQL__Global') {
             $sql = $select->sql;
         } else {
@@ -2089,27 +2086,12 @@ class ZBlogPHP
      */
     public function GetArticleList($select = null, $where = null, $order = null, $limit = null, $option = null, $readtags = true)
     {
-        if (empty($select)) {
-            $select = array('*');
-        }
         if (empty($where)) {
             $where = array();
         }
 
         if (is_array($where)) {
-            $hasType = false;
-            foreach ($where as $key => $value) {
-                if (is_array($value)) {
-                    foreach ($value as $key2 => $value2) {
-                        if ($key2 == 1 && $value2 == 'log_Type') {
-                            $hasType = true;
-                        }
-                    }
-                }
-            }
-            if (!$hasType) {
-                array_unshift($where, array('=', 'log_Type', '0'));
-            }
+            array_unshift($where, array('=', 'log_Type', '0'));
         }
 
         if (get_parent_class($select) == 'SQL__Global') {
@@ -2148,9 +2130,6 @@ class ZBlogPHP
      */
     public function GetPageList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (empty($select)) {
-            $select = array('*');
-        }
         if (empty($where)) {
             $where = array();
         }
@@ -2184,10 +2163,6 @@ class ZBlogPHP
      */
     public function GetCommentList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (empty($select)) {
-            $select = array('*');
-        }
-
         if (get_parent_class($select) == 'SQL__Global') {
             $sql = $select->sql;
         } else {
@@ -2214,10 +2189,6 @@ class ZBlogPHP
      */
     public function GetMemberList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (empty($select)) {
-            $select = array('*');
-        }
-
         if (get_parent_class($select) == 'SQL__Global') {
             $sql = $select->sql;
         } else {
@@ -2238,10 +2209,6 @@ class ZBlogPHP
      */
     public function GetTagList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (empty($select)) {
-            $select = array('*');
-        }
-
         if (get_parent_class($select) == 'SQL__Global') {
             $sql = $select->sql;
         } else {
@@ -2262,10 +2229,6 @@ class ZBlogPHP
      */
     public function GetCategoryList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (empty($select)) {
-            $select = array('*');
-        }
-
         if (get_parent_class($select) == 'SQL__Global') {
             $sql = $select->sql;
         } else {
@@ -2286,10 +2249,6 @@ class ZBlogPHP
      */
     public function GetModuleList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (empty($select)) {
-            $select = array('*');
-        }
-
         if (get_parent_class($select) == 'SQL__Global') {
             $sql = $select->sql;
         } else {
@@ -2310,10 +2269,6 @@ class ZBlogPHP
      */
     public function GetUploadList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (empty($select)) {
-            $select = array('*');
-        }
-
         if (get_parent_class($select) == 'SQL__Global') {
             $sql = $select->sql;
         } else {
