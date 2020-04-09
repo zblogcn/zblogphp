@@ -92,8 +92,14 @@ class SQL__SQLite extends SQL__Global
                     $createData[] = $value[0] . " $value[1] NOT NULL DEFAULT 0";
                 }
                 if ($value[1] == 'decimal') {
-                    $d1 = $value[2][0];
-                    $d2 = $value[2][1];
+                    if (is_array($value[2])) {
+                        $d1 = $value[2][0];
+                        $d2 = $value[2][1];
+                    } else {
+                        $d = str_replace(array('(', ')'), '', $value[2]);
+                        $d1 = SplitAndGet($d, ',', 0);
+                        $d2 = SplitAndGet($d, ',', 1);
+                    }
                     $createData[] = $value[0] . " $value[1]($d1,$d2) NOT NULL DEFAULT 0";
                 }
                 if ($value[1] == 'date' || $value[1] == 'datetime') {

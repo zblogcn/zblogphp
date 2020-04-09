@@ -104,8 +104,14 @@ class SQL__PostgreSQL extends SQL__Global
                     $sql[] = $value[0] . " real NOT NULL DEFAULT 0" . ',';
                 }
                 if ($value[1] == 'decimal') {
-                    $d1 = $value[2][0];
-                    $d2 = $value[2][1];
+                    if (is_array($value[2])) {
+                        $d1 = $value[2][0];
+                        $d2 = $value[2][1];
+                    } else {
+                        $d = str_replace(array('(', ')'), '', $value[2]);
+                        $d1 = SplitAndGet($d, ',', 0);
+                        $d2 = SplitAndGet($d, ',', 1);
+                    }
                     $sql[] = $value[0] . " decimal($d1,$d2) NOT NULL DEFAULT 0" . ',';
                 }
                 if ($value[1] == 'date' || $value[1] == 'time') {

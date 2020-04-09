@@ -172,7 +172,7 @@ class DbSql
      * 构造计数语句.
      *
      * @param string $table
-     * @param mixed  $count
+     * @param mixed  $count 不只是count,还有sum,avg,min,max
      * @param mixed  $where
      * @param null   $option
      *
@@ -180,7 +180,23 @@ class DbSql
      */
     public function Count($table, $countofnum, $where = null, $option = null)
     {
-        return $this->Select($table, $countofnum, $where, null, null, $option);
+        $sql = $this->get()->select($table)->option($option)->where($where);
+        $countofnum = $countofnum[0];
+
+        //为了兼容以前的做法才写了一堆的语句
+        if (count($countofnum) == 3) {//array('sum','*','asname')
+            call_user_func_array(array($sql, strtolower($countofnum[0])), array(array($countofnum[1]=>$countofnum[2])));
+        }
+        if (count($countofnum) == 2) {
+            if (in_array(strtoupper($countofnum[0]), array('COUNT', 'MIN', 'MAX', 'SUM', 'AVG'))){//array('AVG','*')
+                call_user_func_array(array($sql, $countofnum[0]), array($countofnum[1]));
+            } else {//array('*','asname')
+                call_user_func_array(array($sql, 'count'), array(array($countofnum[0]=>$countofnum[1])));
+            }
+        }
+
+        return $sql->sql;
+
     }
 
     /**

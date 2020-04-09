@@ -390,8 +390,8 @@ class Base
             } elseif ($value[1] == 'float') {
                 $keyvalue[$value[0]] = (float) $this->data[$key];
             } elseif ($value[1] == 'double') {
-                $keyvalue[$value[0]] = (float) $this->data[$key];
-            } elseif ($value[1] == 'string') {
+                $keyvalue[$value[0]] = (double) $this->data[$key];
+            } elseif ($value[1] == 'string' || $value[1] == 'char') {
                 if ($key == 'Meta') {
                     $keyvalue[$value[0]] = $this->data[$key];
                 } else {

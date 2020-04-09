@@ -150,21 +150,27 @@ class SQL__Global
              * @example count(log_ID)
              * @example count(log_ID, countLogId)
              * @example count(array('log_Id', 'countLogId'))
+             * @example count(array('log_Id'=>'countLogId'))
              * @return [type] [description]
              */
+
             if (count($argu) == 1) {
                 $arg = $argu[0];
-
                 if (is_string($arg)) {
                     $this->columns[] = "$upperKeyword($arg)";
                 } else {
                     if (is_integer(key($arg))) {
-                        $this->columns[] = "$upperKeyword($arg[0]) AS $arg[1]";
+                        if (count($arg)>1) { 
+                            $this->columns[] = "$upperKeyword($arg[0]) AS $arg[1]";
+                        } else {
+                            $this->columns[] = "$upperKeyword($arg[0])";
+                        }
                     } else {
                         $this->columns[] = "$upperKeyword(".key($arg).") AS " . current($arg);
                     }
                 }
             } else {
+
                 $this->columns[] = "$upperKeyword($argu[0]) AS $argu[1]";
             }
 
@@ -532,7 +538,7 @@ class SQL__Global
             }
         }
         if (count($columns) > 0) {
-            $selectStr = implode(',', $columns);
+            $selectStr = implode(', ', $columns);
             $sql[] = " {$selectStr} ";
         } else {
             $sql[] = "*";
