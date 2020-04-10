@@ -62,12 +62,12 @@ function misc_statistic()
     $xmlrpc_address = $zbp->xmlrpcurl;
     $current_member = $zbp->user->Name;
     $current_version = ZC_VERSION_FULL;
-    $all_articles = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('*'=>'num'))->where(array('=', 'log_Type' ,'0'))->query, 'num');
-    $all_pages = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('*'=>'num'))->where(array('=', 'log_Type' ,'1'))->query, 'num');
-    $all_categories = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Category'])->count(array('*'=>'num'))->query, 'num');
-    $all_views = $zbp->option['ZC_VIEWNUMS_TURNOFF'] == true ? 0 : GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->sum(array('log_ViewNums'=>'num'))->query, 'num');
-    $all_tags = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Tag'])->count(array('*'=>'num'))->query, 'num');
-    $all_members = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Member'])->count(array('*'=>'num'))->query, 'num');
+    $all_articles = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('*' => 'num'))->where(array('=', 'log_Type', '0'))->query, 'num');
+    $all_pages = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('*' => 'num'))->where(array('=', 'log_Type', '1'))->query, 'num');
+    $all_categories = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Category'])->count(array('*' => 'num'))->query, 'num');
+    $all_views = $zbp->option['ZC_VIEWNUMS_TURNOFF'] == true ? 0 : GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->sum(array('log_ViewNums' => 'num'))->query, 'num');
+    $all_tags = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Tag'])->count(array('*' => 'num'))->query, 'num');
+    $all_members = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Member'])->count(array('*' => 'num'))->query, 'num');
     $current_theme = '{$zbp->theme}';
     $current_style = '{$zbp->style}';
     $current_member = '{$zbp->user->Name}';

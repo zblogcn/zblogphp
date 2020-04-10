@@ -143,7 +143,7 @@ class DbSql
 
         if (isset($option['pagebar'])) {
             if ($option['pagebar']->Count === null) {
-                $sqlpb = $this->get()->select($table)->count(array('*'=>'num'))->where($where)->option($option);
+                $sqlpb = $this->get()->select($table)->count(array('*' => 'num'))->where($where)->option($option);
                 foreach (array('FROM', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'WHERE', 'GROUPBY', 'HAVING') as $key => $keyword) {
                     if (isset($option[strtolower($keyword)])) {
                         $args = array($option[strtolower($keyword)]);
@@ -159,7 +159,7 @@ class DbSql
 
         if (!is_array($select)) {
             if (!empty($select)) {
-                 $select = array(trim($select));
+                $select = array(trim($select));
             }
         }
         $sql->column($select);
@@ -186,19 +186,18 @@ class DbSql
             $countofnum = $countofnum[0];
         }
         //为了兼容以前的做法才写了一堆的语句
-        if (count($countofnum) == 3) {//array('sum','*','asname')
-            call_user_func_array(array($sql, strtolower($countofnum[0])), array(array($countofnum[1]=>$countofnum[2])));
+        if (count($countofnum) == 3) { //array('sum','*','asname')
+            call_user_func_array(array($sql, strtolower($countofnum[0])), array(array($countofnum[1] => $countofnum[2])));
         }
         if (count($countofnum) == 2) {
-            if (in_array(strtoupper($countofnum[0]), array('COUNT', 'MIN', 'MAX', 'SUM', 'AVG'))){//array('AVG','*')
+            if (in_array(strtoupper($countofnum[0]), array('COUNT', 'MIN', 'MAX', 'SUM', 'AVG'))) { //array('AVG','*')
                 call_user_func_array(array($sql, $countofnum[0]), array($countofnum[1]));
-            } else {//array('*','asname')
-                call_user_func_array(array($sql, 'count'), array(array($countofnum[0]=>$countofnum[1])));
+            } else { //array('*','asname')
+                call_user_func_array(array($sql, 'count'), array(array($countofnum[0] => $countofnum[1])));
             }
         }
 
         return $sql->sql;
-
     }
 
     /**

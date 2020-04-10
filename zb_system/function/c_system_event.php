@@ -290,12 +290,12 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
             array_pop($list);
         }
     }
-    if (isset($option['order_by_metas'])) {//从meta里的值排序
+    if (isset($option['order_by_metas'])) { //从meta里的值排序
         if (is_array($option['order_by_metas'])) {
-            $orderkey= key($option['order_by_metas']);
+            $orderkey = key($option['order_by_metas']);
             $order = current($option['order_by_metas']);
         } else {
-            $orderkey= current($option['order_by_metas']);
+            $orderkey = current($option['order_by_metas']);
             $order = 'asc';
         }
         $orderarray = array();
@@ -311,7 +311,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
         foreach ($orderarray as $key => $value) {
             $newlist[] = $list[$key];
         }
-        $list =  $newlist;
+        $list = $newlist;
     }
 
 
@@ -3407,12 +3407,12 @@ function CountCommentNums($allplus = null, $chkplus = null)
     global $zbp;
 
     if ($allplus === null) {
-        $zbp->cache->all_comment_nums = (int) GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('*'=>'num'))->query, 'num');
+        $zbp->cache->all_comment_nums = (int) GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('*' => 'num'))->query, 'num');
     } else {
         $zbp->cache->all_comment_nums += $allplus;
     }
     if ($chkplus === null) {
-        $zbp->cache->check_comment_nums = (int) GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('*'=>'num'))->where('=', 'comm_Ischecking', '1')->query, 'num');
+        $zbp->cache->check_comment_nums = (int) GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('*' => 'num'))->where('=', 'comm_Ischecking', '1')->query, 'num');
     } else {
         $zbp->cache->check_comment_nums += $chkplus;
     }

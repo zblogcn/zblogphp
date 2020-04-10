@@ -160,17 +160,16 @@ class SQL__Global
                     $this->columns[] = "$upperKeyword($arg)";
                 } else {
                     if (is_integer(key($arg))) {
-                        if (count($arg)>1) { 
+                        if (count($arg) > 1) {
                             $this->columns[] = "$upperKeyword($arg[0]) AS $arg[1]";
                         } else {
                             $this->columns[] = "$upperKeyword($arg[0])";
                         }
                     } else {
-                        $this->columns[] = "$upperKeyword(".key($arg).") AS " . current($arg);
+                        $this->columns[] = "$upperKeyword(" . key($arg) . ") AS " . current($arg);
                     }
                 }
             } else {
-
                 $this->columns[] = "$upperKeyword($argu[0]) AS $argu[1]";
             }
 
@@ -401,7 +400,7 @@ class SQL__Global
             $this->having[] = $having;
         }*/
         if (is_array($having)) {
-            $this->having[]= $this->buildWhere_Single($having);
+            $this->having[] = $this->buildWhere_Single($having);
         } else {
             $this->having[] = $having;
         }
@@ -1037,7 +1036,7 @@ class SQL__Global
         $array = array();
         foreach ($this->extend['FROM'] as $key => $value) {
             if (is_array($value)) {
-                $array[] = key($value)  . ' AS ' . current($value);
+                $array[] = key($value) . ' AS ' . current($value);
             } else {
                 $array[] = $value;
             }

@@ -368,7 +368,7 @@ class Config implements Iterator
         $del = array_diff_key($this->origkvdata, $this->kvdata);
         $mod = array(); //array_intersect($this->kvdata, $this->origkvdata);
         foreach ($this->kvdata as $key => $value) {
-            if (array_key_exists("normal_article_nums",$this->origkvdata) && $this->kvdata[$key] != $this->origkvdata[$key]) {
+            if (array_key_exists("normal_article_nums", $this->origkvdata) && $this->kvdata[$key] != $this->origkvdata[$key]) {
                 $mod[$key] = $value;
             }
         }
@@ -384,7 +384,7 @@ class Config implements Iterator
 
         $old = @$this->db->Query($this->db->sql->Select($this->t, '*', array(array('=', $this->d['Key'][0], ''))));
         //没有这个字段：array(1) { [0]=> bool(false) }
-        if (count($old) == 1 && $old[0] === false) {//如果还没有建conf_Key字段就不要原子化存储
+        if (count($old) == 1 && $old[0] === false) { //如果还没有建conf_Key字段就不要原子化存储
             $value = $this->Serialize();
 
             $kv = array($this->d['Name'][0] => $name, $this->d['Value'][0] => $value);
@@ -406,7 +406,7 @@ class Config implements Iterator
         }
 
         $old = $this->db->Query($this->db->sql->Select($this->t, '*', array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], ''))));
-        if (count($old) > 0) {//如果存在老数据，先删除老的
+        if (count($old) > 0) { //如果存在老数据，先删除老的
             $del = array();
             $mod = array();
             $add = $this->kvdata;
@@ -514,5 +514,4 @@ class Config implements Iterator
 
         return true;
     }
-
 }
