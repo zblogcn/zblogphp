@@ -894,7 +894,7 @@ class ZBlogPHP
             $this->configs = array();
             $this->prvConfigList = array();
 
-            $sql = $this->db->sql->Select($this->table['Config'], '', '', '', '', '');
+            $sql = $this->db->sql->get()->select($this->table['Config']);
             /* @var Config[] $array */
             $this->prvConfigList = $this->GetListOrigin($sql);
         }
