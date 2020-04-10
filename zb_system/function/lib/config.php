@@ -368,7 +368,7 @@ class Config implements Iterator
         $del = array_diff_key($this->origkvdata, $this->kvdata);
         $mod = array(); //array_intersect($this->kvdata, $this->origkvdata);
         foreach ($this->kvdata as $key => $value) {
-            if (isset($this->origkvdata[$key]) == true && $this->kvdata[$key] != $this->origkvdata[$key]) {
+            if (array_key_exists("normal_article_nums",$this->origkvdata) && $this->kvdata[$key] != $this->origkvdata[$key]) {
                 $mod[$key] = $value;
             }
         }
@@ -377,9 +377,7 @@ class Config implements Iterator
         //logs(var_export( array('add'=>$add , 'del'=>$del , 'mod'=>$mod),true ) );
         //var_dump($this->origkvdata['ZC_DEBUG_MODE'], $this->kvdata['ZC_DEBUG_MODE']);
         //var_dump($add , $del , $mod);
-        //var_dump($this->d);
-        //die;
-
+        //var_dump($this->kvdata, $this->origkvdata);die;
         if (($add + $del + $mod) == array()) {
             return true;
         }

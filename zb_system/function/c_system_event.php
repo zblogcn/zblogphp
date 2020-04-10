@@ -3429,7 +3429,7 @@ function CountNormalArticleNums($plus = null)
     global $zbp;
 
     if ($plus === null) {
-        $s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 0), array('=', 'log_Status', 0)));
+        $s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_Status', 0)));
         $num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 
         $zbp->cache->normal_article_nums = $num;
