@@ -37,7 +37,7 @@ class SQL__MySQL extends SQL__Global
      */
     public function exist($table, $dbname = '')
     {
-        $this->_sql = array("SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$table'");
+        $this->pri_sql = array("SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$table'");
 
         return $this;
     }
@@ -173,7 +173,7 @@ class SQL__MySQL extends SQL__Global
             $sql[] = ') ENGINE=' . $myengtype . ' DEFAULT CHARSET=' . $charset . ' COLLATE=' . $collate . ' AUTO_INCREMENT=1 ;';
             $sqlAll[] = implode(' ', $sql);
         }
-        $this->_sql = $sqlAll;
+        $this->pri_sql = $sqlAll;
     }
 
     /**

@@ -57,45 +57,45 @@ class ClassSQL__MySQLTest extends PHPUnit\Framework\TestCase
     public function testOption()
     {
         $this->assertEquals(
-            'SELECT * FROM  zbp_post  USE INDEX (test) ',
+            'SELECT * FROM  zbp_post   USE INDEX ( test )',
             self::$db
                 ->select("zbp_post")
-                ->option(array('useindex' => 'test'))
+                ->useindex('test')
                 ->sql
         );
         $this->assertEquals(
-            'SELECT * FROM  zbp_post  USE INDEX (a, b) ',
+            'SELECT * FROM  zbp_post   USE INDEX ( a, b )',
             self::$db
                 ->select("zbp_post")
-                ->option(array('useindex' => array('a, b')))
+                ->useindex(array('a, b'))
                 ->sql
         );
         $this->assertEquals(
-            'SELECT * FROM  zbp_post  FORCE INDEX (test) ',
+            'SELECT * FROM  zbp_post   FORCE INDEX ( test )',
             self::$db
                 ->select("zbp_post")
-                ->option(array('forceindex' => 'test'))
+                ->forceindex('test')
                 ->sql
         );
         $this->assertEquals(
-            'SELECT * FROM  zbp_post  FORCE INDEX (a, b) ',
+            'SELECT * FROM  zbp_post   FORCE INDEX ( a, b )',
             self::$db
                 ->select("zbp_post")
-                ->option(array('forceindex' => array('a, b')))
+                ->forceindex('a, b')
                 ->sql
         );
         $this->assertEquals(
-            'SELECT * FROM  zbp_post  IGNORE INDEX (test) ',
+            'SELECT * FROM  zbp_post   IGNORE INDEX ( test )',
             self::$db
                 ->select("zbp_post")
-                ->option(array('ignoreindex' => 'test'))
+                ->ignoreindex('test')
                 ->sql
         );
         $this->assertEquals(
-            'SELECT * FROM  zbp_post  IGNORE INDEX (a, b) ',
+            'SELECT * FROM  zbp_post   IGNORE INDEX ( a, b )',
             self::$db
                 ->select("zbp_post")
-                ->option(array('ignoreindex' => array('a, b')))
+                ->ignoreindex(array('a, b'))
                 ->sql
         );
         $this->assertEquals(

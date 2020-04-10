@@ -25,7 +25,7 @@ class SQL__SQLite extends SQL__Global
      */
     public function exist($table, $dbname = '')
     {
-        $this->_sql = array("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='$table'");
+        $this->pri_sql = array("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='$table'");
 
         return $this;
     }
@@ -116,7 +116,7 @@ class SQL__SQLite extends SQL__Global
             $sql[] = ' on ' . $table . ' (' . $idname . ');';
             $sqlAll[] = implode(' ', $sql);
         }
-        $this->_sql = $sqlAll;
+        $this->pri_sql = $sqlAll;
     }
 
 }

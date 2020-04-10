@@ -98,7 +98,7 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
                 ->sql
         );
         $this->assertEquals(
-            'SELECT  COUNT(log_id),log_authorid  FROM  zbp_post ',
+            'SELECT  COUNT(log_id), log_authorid  FROM  zbp_post ',
             self::$db
                 ->select("zbp_post")
                 ->count('log_id')
@@ -369,7 +369,7 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
                 ->sql
         );
         $this->assertEquals(
-            'SELECT  log_Content AS content,,log_AuthorID AS author,,log_Title,log_PostTime,log_ID AS ID  FROM  zbp_post ',
+            'SELECT  log_Content AS content, log_AuthorID AS author, log_Title, log_PostTime, log_ID AS ID  FROM  zbp_post ',
             self::$db
                 ->select("zbp_post")
                 ->column(array(array('log_Content'=>'content'), array('log_AuthorID'=>'author')))

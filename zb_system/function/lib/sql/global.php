@@ -283,7 +283,7 @@ class SQL__Global
     {
         foreach ($columns as $key => $column) {
             if (is_array($column)) {
-                $this->columns[] = $this->columnLoaderArray($column);
+                $this->columnLoaderArray($column);
             } else {
                 if (is_integer($key)) {
                     $this->columns[] = $column;
@@ -392,15 +392,19 @@ class SQL__Global
     {
         if (!$this->validateParamater($having)) {
             return $this;
-        } elseif (is_array($having)) {
+        }/* elseif (is_array($having)) {
             $this->having = array_merge($this->having, $having);
         } elseif (func_num_args() > 1) {
             $args = func_get_args(); // Fuck PHP 5.2
             $this->having = array_merge($this->having, $args);
         } else {
             $this->having[] = $having;
+        }*/
+        if (is_array($having)) {
+            $this->having[]= $this->buildWhere_Single($having);
+        } else {
+            $this->having[] = $having;
         }
-
         return $this;
     }
 
@@ -423,7 +427,6 @@ class SQL__Global
         } else {
             $this->groupBy[] = $groupBy;
         }
-
         return $this;
     }
 
@@ -492,10 +495,6 @@ class SQL__Global
             $callableMethod = 'build' . ucfirst($this->method);
             $this->$callableMethod();
         }
-
-        //logs(implode(' ', $sql) . "\r\n");
-        //return var_export($sql,true);
-        //return var_export($this->extend,true);
 
         return implode(' ', $sql);
     }
@@ -923,6 +922,11 @@ class SQL__Global
     protected function buildUSEINDEX()
     {
         $sql = &$this->pri_sql;
+        foreach ($this->extend['USEINDEX'] as $key => $value) {
+            if (is_array($value)) {
+                $this->extend['USEINDEX'][$key] = implode(' ', $value);
+            }
+        }
         $sql[] = ' USE INDEX (';
         $sql[] = implode(' ,', $this->extend['USEINDEX']);
         $sql[] = ')';
@@ -931,6 +935,11 @@ class SQL__Global
     protected function buildFORCEINDEX()
     {
         $sql = &$this->pri_sql;
+        foreach ($this->extend['FORCEINDEX'] as $key => $value) {
+            if (is_array($value)) {
+                $this->extend['FORCEINDEX'][$key] = implode(' ', $value);
+            }
+        }
         $sql[] = ' FORCE INDEX (';
         $sql[] = implode(' ,', $this->extend['FORCEINDEX']);
         $sql[] = ')';
@@ -939,6 +948,11 @@ class SQL__Global
     protected function buildIGNOREINDEX()
     {
         $sql = &$this->pri_sql;
+        foreach ($this->extend['IGNOREINDEX'] as $key => $value) {
+            if (is_array($value)) {
+                $this->extend['IGNOREINDEX'][$key] = implode(' ', $value);
+            }
+        }
         $sql[] = ' IGNORE INDEX (';
         $sql[] = implode(' ,', $this->extend['IGNOREINDEX']);
         $sql[] = ')';

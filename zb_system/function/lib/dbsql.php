@@ -143,13 +143,14 @@ class DbSql
 
         if (isset($option['pagebar'])) {
             if ($option['pagebar']->Count === null) {
-                $optionpb = array();
+                $sqlpb = $this->get()->select($table)->count(array('*'=>'num'))->where($where)->option($option);
                 foreach (array('FROM', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'WHERE', 'GROUPBY', 'HAVING') as $key => $keyword) {
                     if (isset($option[strtolower($keyword)])) {
-                        $optionpb[strtolower($keyword)] = $option[strtolower($keyword)];
+                        $args = array($option[strtolower($keyword)]);
+                        call_user_func_array(array($sqlpb, $keyword), $args);
                     }
                 }
-                $query = $this->get()->select($table)->count(array('*'=>'num'))->where($where)->option($optionpb)->query;
+                $query = $sqlpb->query;
                 $option['pagebar']->Count = GetValueInArrayByCurrent($query, 'num');
             }
             $option['pagebar']->Count = (int) $option['pagebar']->Count;
@@ -181,8 +182,9 @@ class DbSql
     public function Count($table, $countofnum, $where = null, $option = null)
     {
         $sql = $this->get()->select($table)->option($option)->where($where);
-        $countofnum = $countofnum[0];
-
+        if (count($countofnum) == 1) {
+            $countofnum = $countofnum[0];
+        }
         //为了兼容以前的做法才写了一堆的语句
         if (count($countofnum) == 3) {//array('sum','*','asname')
             call_user_func_array(array($sql, strtolower($countofnum[0])), array(array($countofnum[1]=>$countofnum[2])));

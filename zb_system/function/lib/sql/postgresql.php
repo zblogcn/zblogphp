@@ -25,7 +25,7 @@ class SQL__PostgreSQL extends SQL__Global
      */
     public function exist($table, $dbname = '')
     {
-        $this->_sql = array("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='public' AND  table_name ='$table'");
+        $this->pri_sql = array("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='public' AND  table_name ='$table'");
 
         return $this;
     }
@@ -131,7 +131,7 @@ class SQL__PostgreSQL extends SQL__Global
             $sql[] = 'CREATE INDEX ' . $table . '_ix_id on ' . $table . '(' . $idname . ');';
             $sqlAll[] = implode(' ', $sql);
         }
-        $this->_sql = $sqlAll;
+        $this->pri_sql = $sqlAll;
     }
 
     protected function buildDrop()
@@ -141,6 +141,6 @@ class SQL__PostgreSQL extends SQL__Global
             $sql[] = 'DROP TABLE ' . $table . ';';
             $sql[] = 'DROP SEQUENCE ' . $table . '_seq;';
         }
-        $this->_sql = $sql;
+        $this->pri_sql = $sql;
     }
 }
