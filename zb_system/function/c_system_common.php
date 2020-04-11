@@ -203,27 +203,32 @@ function RunTime($isOutput = true)
     global $zbp;
 
     $rt = array();
-    $rt['time'] = number_format((1000 * (microtime(1) - $_SERVER['_start_time'])), 2);
+    $_end_time = microtime(true);
+    $rt['time'] = number_format((1000 * ($_end_time - $_SERVER['_start_time'])), 2);
     $rt['query'] = $_SERVER['_query_count'];
     $rt['memory'] = $_SERVER['_memory_usage'];
     $rt['error'] = $_SERVER['_error_count'];
+    $rt['error_detail'] = $_SERVER['_error_detail'];
     if (function_exists('memory_get_usage')) {
         $rt['memory'] = (int) ((memory_get_usage() - $_SERVER['_memory_usage']) / 1024);
     }
 
-    if (isset($zbp->option['ZC_RUNINFO_DISPLAY']) && $zbp->option['ZC_RUNINFO_DISPLAY'] == false) {
-        $_SERVER['_runtime_result'] = $rt;
+    $_SERVER['_runtime_result'] = $rt;
 
+    if(array_key_exists('_end_time', $_SERVER)) {
+        return $rt;
+    } else {
+        $_SERVER['_end_time'] = $_end_time;
+    }
+
+    if (isset($zbp->option['ZC_RUNINFO_DISPLAY']) && $zbp->option['ZC_RUNINFO_DISPLAY'] == false) {
         return $rt;
     }
 
     if ($isOutput) {
         echo '<!--' . $rt['time'] . ' ms , ';
         echo $rt['query'] . ' query';
-        if (function_exists('memory_get_usage')) {
-            echo ' , ' . $rt['memory'] . 'kb memory';
-        }
-
+        echo ' , ' . $rt['memory'] . 'kb memory';
         echo ' , ' . $rt['error'] . ' error';
         echo '-->';
     }

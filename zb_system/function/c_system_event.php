@@ -544,7 +544,7 @@ function ViewSearch()
             }
             $article->Content .= str_replace($q, '<strong>' . $q . '</strong>', $t) . '<br/>';
             $r->Intro = str_replace($q, '<strong>' . $q . '</strong>', $t);
-            $r->Content = $article->Content;
+            $r->Content = $a->Content;
         } else {
             $s = strip_tags($a->Title);
             $i = Zbp_Strpos($s, $q, 0);
@@ -555,18 +555,12 @@ function ViewSearch()
             }
             $article->Content .= str_replace($q, '<strong>' . $q . '</strong>', $t) . '<br/>';
             $r->Intro = str_replace($q, '<strong>' . $q . '</strong>', $t);
-            $r->Content = $article->Content;
+            $r->Content = $a->Content;
         }
         $r->Title = str_replace($q, '<strong>' . $q . '</strong>', $r->Title);
         $article->Content .= '<a href="' . $a->Url . '">' . $a->Url . '</a><br/></p>';
         $results[] = $r;
     }
-
-    $r0 = new Post();
-    $r0->ID = 0;
-    $r0->Title = $zbp->lang['msg']['search'] . ' &quot;' . $q . '&quot;';
-    $r0->Type = ZC_POST_TYPE_ARTICLE;
-    $results = $results;
 
     $zbp->header .= '<meta name="robots" content="noindex,follow" />' . "\r\n";
     $zbp->template->SetTags('title', str_replace(array('<span>', '</span>'), '', $article->Title));
