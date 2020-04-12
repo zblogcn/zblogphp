@@ -1747,7 +1747,7 @@ function GetIDArrayByList($array, $keyname = null)
         if ($keyname == null) {
             $ids[] = reset($value->GetData());
         } else {
-            $a = &$value->GetData();
+            $a = $value->GetData();
             $ids[] = $a[$keyname];
         }
     }

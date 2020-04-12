@@ -157,6 +157,21 @@ class Base
     }
 
     /**
+     * 删除data的键，谨用.
+     *
+     * @return boolean
+     */
+    public function UnsetData($key)
+    {
+        if (array_key_exists($key, $this->data) {
+            unset($this->data[$key]);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 获取数据表.
      *
      * @return string
