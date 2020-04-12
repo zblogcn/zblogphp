@@ -163,7 +163,7 @@ class Base
      */
     public function UnsetData($key)
     {
-        if (array_key_exists($key, $this->data) {
+        if (array_key_exists($key, $this->data)) {
             unset($this->data[$key]);
             return true;
         }
