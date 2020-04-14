@@ -188,6 +188,24 @@ h1,h2,h3,h4,h5,h6{
 	background: #226bb8;
 }
 
+#divNavBar li {
+  position: relative;
+}
+
+#divNavBar li ul {
+  display: none;
+  position: absolute;
+  left: 0;
+  white-space: nowrap;
+  /* ↓↓ 一般设置为和#divNavBar高度相同 */
+  top: 36px;
+  /* ↓↓ 背景色同样以实际为准 */
+  background-color: #297bc4;
+}
+
+#divNavBar li:hover ul {
+  display: block;
+}
 
 
 /*------------------------------侧边栏定义---------------------------*/

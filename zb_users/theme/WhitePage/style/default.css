@@ -103,8 +103,8 @@ strong {
 #divNavBar {
 	float:left;
 	width:100%;
-	padding:0.4em 0;
-	margin:0.3em 0;
+	padding:0 0;
+	margin:0 0;
 	clear:both;
 }
 #divNavBar hr{
@@ -113,6 +113,9 @@ strong {
 	border: none;
 	border-top:1px solid #888;
 	opacity:0.2;filter:alpha(opacity=20);
+	height: 1px;
+    padding: 0px;
+    margin: 0px;
 }
 #divNavBar ul {
 	margin:0;
@@ -123,14 +126,14 @@ strong {
 	float:left;
 	padding:0 0 0 0;
 	margin:0 0 0 0;
-	height:2.5em;
+	height:3em;
 }
 #divNavBar a {
 	float:left;
 	margin:0 1em 0 1em;
 	padding:0 1em;
 	text-decoration:none;
-	line-height:2.5em;
+	line-height:3em;
 	font-weight:lighter;
 }
 #divNavBar a.on {
@@ -141,6 +144,22 @@ strong {
 	color:#B22222;
 	text-shadow:0 0  0.05em #888;
 }
+#divNavBar li {
+  position: relative;
+}
+#divNavBar li ul {
+  display: none;
+  position: absolute;
+  left: 0;
+  white-space: nowrap;
+  top: 3em;
+  z-index: 1000;
+}
+
+#divNavBar li:hover ul {
+  display: block;
+}
+
 .function {
 	float:left;
 	width:100%;

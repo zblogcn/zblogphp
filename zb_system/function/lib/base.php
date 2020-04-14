@@ -106,7 +106,7 @@ class Base
      */
     public function __isset($name)
     {
-        return isset($this->data[$name]);
+        return array_key_exists($name, $this->data);
     }
 
     /**
@@ -226,7 +226,7 @@ class Base
     {
         global $bloghost;
         foreach ($this->datainfo as $key => $value) {
-            if (!isset($array[$value[0]])) {
+            if (!array_key_exists($value[0], $array)) {
                 continue;
             }
 
@@ -346,7 +346,7 @@ class Base
 
         $array = array_change_key_case($array, CASE_LOWER);
         foreach ($this->datainfo as $key => $value) {
-            if (!isset($array[strtolower($key)])) {
+            if (!array_key_exists(strtolower($key), $array)) {
                 continue;
             }
 
@@ -379,7 +379,7 @@ class Base
     public function Save()
     {
         global $bloghost;
-        if (isset($this->data['Meta'])) {
+        if (array_key_exists('Meta', $this->data)) {
             $this->data['Meta'] = $this->Metas->Serialize();
         }
 
@@ -405,7 +405,7 @@ class Base
             } elseif ($value[1] == 'float') {
                 $keyvalue[$value[0]] = (float) $this->data[$key];
             } elseif ($value[1] == 'double') {
-                $keyvalue[$value[0]] = (double) $this->data[$key];
+                $keyvalue[$value[0]] = (float) $this->data[$key];
             } elseif ($value[1] == 'string' || $value[1] == 'char') {
                 if ($key == 'Meta') {
                     $keyvalue[$value[0]] = $this->data[$key];
@@ -459,5 +459,4 @@ class Base
     {
         return (string) json_encode($this->data);
     }
-
 }

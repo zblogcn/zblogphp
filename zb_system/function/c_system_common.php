@@ -208,7 +208,7 @@ function RunTime($isOutput = true)
     $rt['query'] = $_SERVER['_query_count'];
     $rt['memory'] = $_SERVER['_memory_usage'];
     $rt['error'] = $_SERVER['_error_count'];
-    $rt['error_detail'] = $_SERVER['_error_detail'];
+    $rt['error_detail'] = ZBlogException::$errors_msg;
     if (function_exists('memory_get_usage')) {
         $rt['memory'] = (int) ((memory_get_usage() - $_SERVER['_memory_usage']) / 1024);
     }
