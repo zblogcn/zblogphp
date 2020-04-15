@@ -313,6 +313,16 @@ class ZBlogPHP
     public $themeapp = null;
 
     /**
+     * @var 分类递归层数
+     */
+    public $category_recursion_level = 5;
+
+    /**
+     * @var 评论递归层数
+     */
+    public $comment_recursion_level = 4;
+
+    /**
      * 获取唯一实例.
      *
      * @return null|ZBlogPHP
@@ -1412,6 +1422,27 @@ class ZBlogPHP
         return true;
     }
 
+    private function LoadCategories_Recursion($deep, $id, &$lv)
+    {
+        for ($i = 0; $i < $this->category_recursion_level; $i++) {
+            $name = 'lv' . $i;
+            ${$name} = &$lv[$i];
+        }
+        $lvdeep = 'lv' . $deep;
+        $this->categoriesbyorder[$id] = &$this->categories[$id];
+        if ($deep < $this->category_recursion_level - 1) {
+            $deep = $deep + 1;
+            $lvdeepnext = 'lv' . $deep;
+            if (isset(${$lvdeepnext}[$id])) {
+                foreach (${$lvdeepnext}[$id] as $idnow) {
+                    $this->categories[$id]->SubCategories[] = $this->categories[$idnow];
+                    $this->categories[$id]->ChildrenCategories[] = $this->categories[$idnow];
+                    $this->LoadCategories_Recursion($deep, $idnow, $lv);
+                }
+            }
+        }
+    }
+
     /**
      * 载入分类列表.
      *
@@ -1421,10 +1452,13 @@ class ZBlogPHP
     {
         $this->categories = array();
         $this->categoriesbyorder = array();
-        $lv0 = array();
-        $lv1 = array();
-        $lv2 = array();
-        $lv3 = array();
+
+        $lv = array();
+        for ($i = 0; $i < $this->category_recursion_level; $i++) {
+            $name = 'lv' . $i;
+            ${$name} = array();
+            $lv[$i] = &${$name};
+        }
         $array = $this->GetCategoryList(null, null, array('cate_Order' => 'ASC'), null, null);
         if (count($array) == 0) {
             return false;
@@ -1443,47 +1477,8 @@ class ZBlogPHP
             $lv0[0] = array();
         }
 
-        /*
-         * 以下垃圾代码，必须重构！
-         */
         foreach ($lv0[0] as $id0) {
-            $this->categoriesbyorder[$id0] = &$this->categories[$id0];
-            if (!isset($lv1[$id0])) {
-                continue;
-            }
-            foreach ($lv1[$id0] as $id1) {
-                if ($this->categories[$id1]->ParentID == $id0) {
-                    $this->categories[$id1]->RootID = $id0;
-                    $this->categories[$id0]->SubCategories[] = $this->categories[$id1];
-                    $this->categories[$id0]->ChildrenCategories[] = $this->categories[$id1];
-                    $this->categoriesbyorder[$id1] = &$this->categories[$id1];
-                    if (!isset($lv2[$id1])) {
-                        continue;
-                    }
-                    foreach ($lv2[$id1] as $id2) {
-                        if ($this->categories[$id2]->ParentID == $id1) {
-                            $this->categories[$id2]->RootID = $id0;
-                            $this->categories[$id0]->ChildrenCategories[] = $this->categories[$id2];
-                            $this->categories[$id1]->SubCategories[] = $this->categories[$id2];
-                            $this->categories[$id1]->ChildrenCategories[] = $this->categories[$id2];
-                            $this->categoriesbyorder[$id2] = &$this->categories[$id2];
-                            if (!isset($lv3[$id2])) {
-                                continue;
-                            }
-                            foreach ($lv3[$id2] as $id3) {
-                                if ($this->categories[$id3]->ParentID == $id2) {
-                                    $this->categories[$id3]->RootID = $id0;
-                                    $this->categories[$id0]->ChildrenCategories[] = $this->categories[$id3];
-                                    $this->categories[$id1]->ChildrenCategories[] = $this->categories[$id3];
-                                    $this->categories[$id2]->SubCategories[] = $this->categories[$id3];
-                                    $this->categories[$id2]->ChildrenCategories[] = $this->categories[$id3];
-                                    $this->categoriesbyorder[$id3] = &$this->categories[$id3];
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            $this->LoadCategories_Recursion(0, $id0, $lv);
         }
 
         return true;

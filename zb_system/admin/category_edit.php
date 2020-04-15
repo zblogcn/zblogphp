@@ -50,7 +50,7 @@ foreach ($zbp->categoriesbyorder as $k => $v) {
             continue;
         }
     }
-    if ($v->Level < 3) {
+    if ($v->Level < ($zbp->category_recursion_level - 1)) {
         $p .= '<option ' . ($v->ID == $cate->ParentID ? 'selected="selected"' : '') . ' value="' . $v->ID . '">' . $v->SymbolName . '</option>';
     }
 }

@@ -1991,7 +1991,7 @@ function PostComment()
     } else {
         $_POST['ParentID'] = $replyid;
         $c = $zbp->GetCommentByID($replyid);
-        if ($c->Level == 3) {
+        if ($c->Level > ($zbp->comment_recursion_level - 2)) {
             $zbp->ShowError(52, __FILE__, __LINE__);
         }
         $_POST['RootID'] = Comment::GetRootID($c->ID);
@@ -2321,7 +2321,7 @@ function PostCategory()
 
     $parentid = (int) GetVars('ParentID', 'POST');
     if ($parentid > 0) {
-        if ($zbp->categories[$parentid]->Level > 2) {
+        if ($zbp->categories[$parentid]->Level > ($zbp->category_recursion_level - 2)) {
             $_POST['ParentID'] = '0';
         }
     }
@@ -2927,14 +2927,14 @@ function EnablePlugin($name)
 {
     global $zbp;
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_EnablePlugin'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($name);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+    //foreach ($GLOBALS['hooks']['Filter_Plugin_EnablePlugin'] as $fpname => &$fpsignal) {
+    //$fpreturn = $fpname($name);
+    //if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+    //$fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
-            return $fpreturn;
-        }
-    }
+    //return $fpreturn;
+    //}
+    //}
 
     $app = $zbp->LoadApp('plugin', $name);
     $app->CheckCompatibility();
@@ -2967,14 +2967,14 @@ function DisablePlugin($name)
 {
     global $zbp;
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_DisablePlugin'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($name);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+    //foreach ($GLOBALS['hooks']['Filter_Plugin_DisablePlugin'] as $fpname => &$fpsignal) {
+    //$fpreturn = $fpname($name);
+    //if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+    //$fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
-            return $fpreturn;
-        }
-    }
+    //return $fpreturn;
+    //}
+    //}
 
     $apps = $zbp->LoadPlugins();
     $apps[] = $zbp->LoadApp('theme', $zbp->theme);
