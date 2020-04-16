@@ -504,10 +504,4 @@ if (ZBP_SAFEMODE === false) {
     }
 }
 
-if (!in_array('AppCentre', $aps) && !function_exists('AppCentre_VerifyV2')) {
-    function AppCentre_VerifyV2()
-    {
-    }
-}
-
 unset($file_base, $aps, $fn, $ap, $op_users, $opk, $opv);
