@@ -1424,6 +1424,7 @@ class ZBlogPHP
 
     private function LoadCategories_Recursion($deep, $id, &$lv)
     {
+        $subarray = array();
         for ($i = 0; $i < $this->category_recursion_level; $i++) {
             $name = 'lv' . $i;
             ${$name} = &$lv[$i];
@@ -1435,12 +1436,21 @@ class ZBlogPHP
             $lvdeepnext = 'lv' . $deep;
             if (isset(${$lvdeepnext}[$id])) {
                 foreach (${$lvdeepnext}[$id] as $idnow) {
-                    $this->categories[$id]->SubCategories[] = $this->categories[$idnow];
-                    $this->categories[$id]->ChildrenCategories[] = $this->categories[$idnow];
-                    $this->LoadCategories_Recursion($deep, $idnow, $lv);
+                    $subarray[] = $idnow;
+                    $this->categoriesbyorder[$id]->SubCategories[] = &$this->categories[$idnow];
+                    //$this->categoriesbyorder[$id]->ChildrenCategories[] = &$this->categories[$idnow];
+                    $array = $this->LoadCategories_Recursion($deep, $idnow, $lv);
+                    foreach ($array as $key => $value) {
+                        $subarray[] = $value;
+                    }
                 }
             }
         }
+        $subarray = array_unique($subarray);
+        foreach ($subarray as $key => $value) {
+            $this->categoriesbyorder[$id]->ChildrenCategories[] = &$this->categories[$value];
+        }
+        return $subarray;
     }
 
     /**
