@@ -118,8 +118,8 @@ return array(
 
     // '上传相关
     'ZC_UPLOAD_FILETYPE' => 'jpg|gif|png|jpeg|bmp|webp|psd|wmf|ico|rpm|deb|tar|gz|xz|sit|7z|bz2|zip|rar|xml|xsl|svg|svgz|rtf|doc|docx|ppt|pptx|xls|xlsx|wps|chm|txt|md|pdf|mp3|flac|ape|mp4|mkv|avi|mpg|rm|ra|rmvb|mov|wmv|wma|torrent|apk|json|zba|gzba',
-
     'ZC_UPLOAD_FILESIZE' => 2,
+    'ZC_UPLOAD_DIR_YEARMONTHDAY' => false,
 
     // '用户名,密码,评论长度等限制
     'ZC_USERNAME_MIN' => 3,

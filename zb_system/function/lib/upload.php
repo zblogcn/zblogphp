@@ -188,8 +188,11 @@ class Upload extends Base
             foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Dir'] as $fpname => &$fpsignal) {
                 return $fpname($this);
             }
-
-            return 'upload/' . date('Y', $this->PostTime) . '/' . date('m', $this->PostTime) . '/';
+            $dir = 'upload/' . date('Y', $this->PostTime) . '/' . date('m', $this->PostTime) . '/';
+            if ($zbp->option['ZC_UPLOAD_DIR_YEARMONTHDAY']) {
+                $dir .= date('d', $this->PostTime) . '/';
+            }
+            return $dir;
         }
         if ($name == 'FullFile') {
             return $zbp->usersdir . $this->Dir . $this->Name;
