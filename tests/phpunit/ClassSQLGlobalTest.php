@@ -312,10 +312,11 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
     public function testHaving()
     {
         $this->assertEquals(
-            'SELECT * FROM  zbp_post  HAVING   bbb > 0 AND aaa < 0',
+            'SELECT * FROM  zbp_post  HAVING    ( bbb > 0 )  AND  aaa < \'0\' ',
             self::$db
                 ->select("zbp_post")
-                ->having(array('bbb > 0', 'aaa < 0'))
+                ->having(array('bbb > 0'))
+                ->having(array('<','aaa','0'))
                 ->sql
         );
         $this->assertEquals(

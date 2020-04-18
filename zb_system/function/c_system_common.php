@@ -215,7 +215,7 @@ function RunTime($isOutput = true)
 
     $_SERVER['_runtime_result'] = $rt;
 
-    if(array_key_exists('_end_time', $_SERVER)) {
+    if (array_key_exists('_end_time', $_SERVER)) {
         return $rt;
     } else {
         $_SERVER['_end_time'] = $_end_time;
@@ -1245,22 +1245,22 @@ function CloseTags($html)
  *
  * @return string
  */
-function SubStrUTF8_Start($sourcestr, $start, $cutlength)
+function SubStrUTF8_Start($sourcestr, $start)
 {
+    $args = func_get_args();
     if (function_exists('mb_substr') && function_exists('mb_internal_encoding')) {
         mb_internal_encoding('UTF-8');
-
-        return mb_substr($sourcestr, $start, $cutlength);
+        return call_user_func_array('mb_substr', $args);
     }
 
     if (function_exists('iconv_substr') && function_exists('iconv_set_encoding')) {
         iconv_set_encoding("internal_encoding", "UTF-8");
         iconv_set_encoding("output_encoding", "UTF-8");
 
-        return iconv_substr($sourcestr, $start, $cutlength);
+        return call_user_func_array('iconv_substr', $args);
     }
 
-    return substr($sourcestr, $start, $cutlength);
+    return call_user_func_array('substr', $args);
 }
 
 /**
@@ -1324,6 +1324,26 @@ function SubStrUTF8($sourcestr, $cutlength)
     return $ret;
 }
 
+function Zbp_SubStr($sourcestr, $start)
+{
+    $args = func_get_args();
+    return call_user_func_array('SubStrUTF8_Start', $args);
+}
+
+function Zbp_StrLen($string)
+{
+    if (function_exists('mb_strlen') && function_exists('mb_internal_encoding')) {
+        mb_internal_encoding('UTF-8');
+        return mb_strlen($string);
+    }
+    if (function_exists('iconv_strlen') && function_exists('iconv_set_encoding')) {
+        iconv_set_encoding("internal_encoding", "UTF-8");
+        iconv_set_encoding("output_encoding", "UTF-8");
+        return iconv_strlen($string);
+    }
+    return strlen($string);
+}
+
 function Zbp_Strpos($haystack, $needle, $offset = 0)
 {
     if (function_exists('mb_strpos') && function_exists('mb_internal_encoding')) {
@@ -1336,6 +1356,22 @@ function Zbp_Strpos($haystack, $needle, $offset = 0)
         return iconv_strpos($haystack, $needle, $offset);
     }
     return strpos($haystack, $needle, $offset);
+}
+
+function Zbp_Stripos($haystack, $needle, $offset = 0)
+{
+    if (function_exists('mb_strpos') && function_exists('mb_internal_encoding')) {
+        mb_internal_encoding('UTF-8');
+        return mb_stripos($haystack, $needle, $offset);
+    }
+    if (function_exists('iconv_strpos') && function_exists('iconv_set_encoding')) {
+        iconv_set_encoding("internal_encoding", "UTF-8");
+        iconv_set_encoding("output_encoding", "UTF-8");
+        $haystack = strtolower($haystack);
+        $needle = strtolower($needle);
+        return iconv_strpos($haystack, $needle, $offset);
+    }
+    return stripos($haystack, $needle, $offset);
 }
 
 /**

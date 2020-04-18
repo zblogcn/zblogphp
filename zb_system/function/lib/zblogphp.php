@@ -668,6 +668,8 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Login_Header', 'Include_AddonAdminFont');
         Add_Filter_Plugin('Filter_Plugin_Other_Header', 'Include_AddonAdminFont');
         Add_Filter_Plugin('Filter_Plugin_Admin_Header', 'Include_AddonAdminFont');
+        Add_Filter_Plugin('Filter_Plugin_BatchPost', 'Include_BatchPost_Article');
+        Add_Filter_Plugin('Filter_Plugin_BatchPost', 'Include_BatchPost_Page');
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) {
             $fpname();
@@ -710,7 +712,7 @@ class ZBlogPHP
 
         if ($this->version >= 162300 && (int) $this->option['ZC_LAST_VERSION'] < 162300) {
             if (substr(GetValueInArray(get_included_files(), 0), -9) == 'index.php') {
-                $this->SetHint('tips', '<a href="#" onclick="$.get(bloghost+\'zb_system/admin/updatedb.php\', function(data){alert(\'' . $this->langs->msg->operation_succeed . '\');window.location.reload();});">' . $this->langs->msg->update_db . '</a>');
+                $this->SetHint('tips', '<a href="#" onclick="$.get(bloghost+\'zb_system/admin/updatedb.php\', function(data){alert(\'' . $this->langs->msg->operation_succeed . '\');window.location.reload();});">' . @$this->langs->msg->update_db . '</a>');
             }
         }
 

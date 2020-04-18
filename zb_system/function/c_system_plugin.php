@@ -2229,3 +2229,14 @@ DefinePluginFilter('Filter_Plugin_EnablePlugin');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_DisablePlugin');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_BatchPost
+'参数:&type
+'说明:BatchPost(1.6.1加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_BatchPost');

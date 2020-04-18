@@ -198,7 +198,6 @@ return array(
     'ZC_LOADMEMBERS_LEVEL'           => 0,
     //ZC_LAST_VERSION 本意是指数据库对应的系统版本号，非当前系统未更新版本号
     'ZC_LAST_VERSION'                => '',
-    'ZC_HTTP_LASTMODIFIED'           => false,
     'ZC_MODULE_CATALOG_STYLE'        => 0,
     'ZC_MODULE_ARCHIVES_STYLE'       => 0,
     'ZC_VIEWNUMS_TURNOFF'            => false,
@@ -208,10 +207,10 @@ return array(
     'ZC_POST_ALIAS_USE_ID_NOT_TITLE' => false,
     'ZC_COMPATIBLE_ASP_URL'          => true,
     'ZC_LARGE_DATA'                  => false,
-    'ZC_JS_304_ENABLE'               => false,
     'ZC_VERSION_IN_HEADER'           => true,
     'ZC_ADDITIONAL_SECURITY'         => true,
     'ZC_XMLRPC_ENABLE'               => true,
     'ZC_XMLRPC_USE_WEBTOKEN'         => false,
     'ZC_USING_CDN_GUESTIP_TYPE'      => 'REMOTE_ADDR',
+    'ZC_POST_BATCH_DELETE'           => false,
 );

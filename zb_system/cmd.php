@@ -362,6 +362,12 @@ switch ($action) {
         }
 
         break;
+    case 'PostBat':
+        BatchPost(GetVars('type', 'GET'));
+        $zbp->BuildModule();
+        $zbp->SaveCache();
+        $zbp->SetHint('good');
+        Redirect($_SERVER["HTTP_REFERER"]);
     default:
         // code...
         break;

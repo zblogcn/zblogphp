@@ -1495,11 +1495,19 @@ function PostArticle()
                 if (trim($_POST['Intro']) == '' || (stripos($_POST['Intro'], '<!--autointro-->') !== false)) {
                     if ($zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] == true) {
                         //改纯HTML摘要
+                        $i = (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];
                         $_POST['Intro'] = FormatString($_POST['Content'], "[nohtml]");
-                        $_POST['Intro'] = SubStrUTF8_Html($_POST['Intro'], (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX']);
+                        $_POST['Intro'] = SubStrUTF8_Html($_POST['Intro'], $i);
                     } else {
                         $i = (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];
-                        $_POST['Intro'] = SubStrUTF8_Html($_POST['Content'], (int) Zbp_Strpos($_POST['Content'], '>', $i));
+                        $i = (int) Zbp_Strpos($_POST['Content'], '>', $i);
+                        if ($i == 0) {
+                            $i = (int) Zbp_StrLen($_POST['Content']);
+                        }
+                        if ($i < $zbp->option['ZC_ARTICLE_EXCERPT_MAX']) {
+                            $i = (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];
+                        }
+                        $_POST['Intro'] = SubStrUTF8_Html($_POST['Content'], $i);
                         $_POST['Intro'] = CloseTags($_POST['Intro']);
                     }
 
@@ -3170,6 +3178,112 @@ function SaveSetting()
             }
         }
     }
+}
+
+
+/**
+ * 批量删除Post.
+ *
+ * @param $type
+ */
+function BatchPost($type)
+{
+    foreach ($GLOBALS['hooks']['Filter_Plugin_BatchPost'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($type);
+    }
+}
+
+function Include_BatchPost_Article($type)
+{
+    global $zbp;
+    if ($type != ZC_POST_TYPE_ARTICLE) {
+        return;
+    }
+    if (!isset($_POST['id'])) {
+        return;
+    }
+    $arrayid = $_POST['id'];
+    foreach ($arrayid as $key => $value) {
+        $id = (int) $value;
+        $article = new Post();
+        $article->LoadInfoByID($id);
+        if ($article->ID > 0) {
+            if (!$zbp->CheckRights('ArticleAll') && $article->AuthorID != $zbp->user->ID) {
+                continue;
+            }
+
+            $pre_author = $article->AuthorID;
+            $pre_tag = $article->Tag;
+            $pre_category = $article->CateID;
+            $pre_istop = $article->IsTop;
+            $pre_status = $article->Status;
+
+            $article->Del();
+
+            DelArticle_Comments($article->ID);
+
+            CountTagArrayString($pre_tag, -1, $article->ID);
+            CountMemberArray(array($pre_author), array(-1, 0, 0, 0));
+            CountCategoryArray(array($pre_category), -1);
+            if (($pre_istop == 0 && $pre_status == 0)) {
+                CountNormalArticleNums(-1);
+            }
+            if ($article->IsTop == true) {
+                CountTopPost($article->Type, null, $article->ID);
+            }
+
+            foreach ($GLOBALS['hooks']['Filter_Plugin_DelArticle_Succeed'] as $fpname => &$fpsignal) {
+                $fpname($article);
+            }
+        }
+    }
+    $zbp->AddBuildModule('previous');
+    $zbp->AddBuildModule('calendar');
+    $zbp->AddBuildModule('comments');
+    $zbp->AddBuildModule('archives');
+    $zbp->AddBuildModule('tags');
+    $zbp->AddBuildModule('authors');
+
+    return true;
+}
+
+function Include_BatchPost_Page($type)
+{
+    global $zbp;
+    if ($type != ZC_POST_TYPE_PAGE) {
+        return;
+    }
+    if (!isset($_POST['id'])) {
+        return;
+    }
+    $arrayid = $_POST['id'];
+    foreach ($arrayid as $key => $value) {
+        $id = (int) $value;
+        $article = new Post();
+        $article->LoadInfoByID($id);
+        if ($article->ID > 0) {
+            if (!$zbp->CheckRights('PageAll') && $article->AuthorID != $zbp->user->ID) {
+                continue;
+            }
+
+            $pre_author = $article->AuthorID;
+
+            $article->Del();
+
+            DelArticle_Comments($article->ID);
+
+            CountMemberArray(array($pre_author), array(0, -1, 0, 0));
+
+            $zbp->AddBuildModule('comments');
+
+            $zbp->DelItemToNavbar('page', $article->ID);
+
+            foreach ($GLOBALS['hooks']['Filter_Plugin_DelPage_Succeed'] as $fpname => &$fpsignal) {
+                $fpname($article);
+            }
+        }
+    }
+    return true;
 }
 
 //###############################################################################################################

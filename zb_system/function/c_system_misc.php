@@ -68,6 +68,7 @@ function misc_statistic()
     $all_views = $zbp->option['ZC_VIEWNUMS_TURNOFF'] == true ? 0 : GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->sum(array('log_ViewNums' => 'num'))->query, 'num');
     $all_tags = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Tag'])->count(array('*' => 'num'))->query, 'num');
     $all_members = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Member'])->count(array('*' => 'num'))->query, 'num');
+    $check_comment_nums = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('*' => 'num'))->where('=', 'comm_Ischecking', '1')->query, 'num');
     $current_theme = '{$zbp->theme}';
     $current_style = '{$zbp->style}';
     $current_member = '{$zbp->user->Name}';
@@ -93,6 +94,7 @@ function misc_statistic()
     $zbp->cache->all_category_nums = $all_categories;
     $zbp->cache->all_view_nums = $all_views;
     $zbp->cache->all_tag_nums = $all_tags;
+    $zbp->cache->check_comment_nums = $check_comment_nums;
 
     $zbp->AddBuildModule('statistics', array($all_articles, $all_pages, $all_categories, $all_tags, $all_views, $all_comments));
     $zbp->BuildModule();

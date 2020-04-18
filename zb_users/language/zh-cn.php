@@ -262,6 +262,7 @@ return array(
         'backend_setting'                   => '后台设置',
         'get_text_intro'                    => '文章编辑时获取纯文本摘要',
         'update_db'                         => '请点击该链接升级数据库结构。',
+        'enable_post_batch_delete'          => '启用文章批量删除',
         ''                                  => '',
     ),
 

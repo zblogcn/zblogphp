@@ -57,7 +57,7 @@ class SQL__Global
 
     private $selectFunctionKeyword = array('COUNT', 'MIN', 'MAX', 'SUM', 'AVG');
 
-    private $otherKeyword = array('FIELD', 'INDEX', 'TABLE', 'DATABASE');
+    private $otherKeyword = array('INDEX', 'TABLE', 'DATABASE');//remove 'FIELD', 
 
     private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'IFNOTEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'UNIONALL', 'RANDOM');
 
@@ -399,10 +399,13 @@ class SQL__Global
         } else {
             $this->having[] = $having;
         }*/
-        if (is_array($having)) {
-            $this->having[] = $this->buildWhere_Single($having);
-        } else {
-            $this->having[] = $having;
+        $args = func_get_args();
+        foreach ($args as $key => $value) {
+            if (is_array($value)) {
+                $this->having[] = $this->buildWhere_Single($value);
+            } else {
+                $this->having[] = $value;
+            }
         }
         return $this;
     }

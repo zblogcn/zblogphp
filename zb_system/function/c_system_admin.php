@@ -676,8 +676,8 @@ function Admin_ArticleMng()
         echo '<option value="' . $cate->ID . '">' . $cate->SymbolName . '</option>';
     }
     echo '</select>&nbsp;&nbsp;&nbsp;&nbsp;' . $zbp->lang['msg']['type'] . ' <select class="edit" size="1" name="status" style="width:100px;" ><option value="">' . $zbp->lang['msg']['any'] . '</option> <option value="0" >' . $zbp->lang['post_status_name']['0'] . '</option><option value="1" >' . $zbp->lang['post_status_name']['1'] . '</option><option value="2" >' . $zbp->lang['post_status_name']['2'] . '</option></select>&nbsp;&nbsp;&nbsp;&nbsp;
-	<label><input type="checkbox" name="istop" value="True"/>&nbsp;' . $zbp->lang['msg']['top'] . '</label>&nbsp;&nbsp;&nbsp;&nbsp;
-	<input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
+    <label><input type="checkbox" name="istop" value="True"/>&nbsp;' . $zbp->lang['msg']['top'] . '</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
     echo '</form>';
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&page=%page%}{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}', false);
@@ -729,6 +729,7 @@ function Admin_ArticleMng()
         false
     );
 
+    echo '<form method="post" action="' . $zbp->host . 'zb_system/cmd.php?act=PostBat&type=' . ZC_POST_TYPE_ARTICLE . '">';
     echo '<table border="1" class="tableFull tableBorder table_hover table_striped tableBorder-thcenter">';
 
     $tables = '';
@@ -742,6 +743,9 @@ function Admin_ArticleMng()
     $tableths[] = '<th>' . $zbp->lang['msg']['comment'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['status'] . '</th>';
     $tableths[] = '<th></th>';
+    if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
+        $tableths[] = '<th><a href="" onclick="BatchSelectAll();return false;">' . $zbp->lang['msg']['select_all'] . '</a></th>';
+    }
     $tableths[] = '</tr>';
 
     foreach ($array as $article) {
@@ -759,7 +763,9 @@ function Admin_ArticleMng()
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
             '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=ArticleDel&amp;id=' . $article->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
             '</td>';
-
+        if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
+            $tabletds[] = '<td class="td5 tdCenter"><input type="checkbox" id="id' . $article->ID . '" name="id[]" value="' . $article->ID . '"></td>';
+        }
         $tabletds[] = '</tr>';
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_ArticleMng_Table'] as $fpname => &$fpsignal) {
@@ -782,8 +788,10 @@ function Admin_ArticleMng()
             echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
         }
     }
-
-    echo '</p></div>';
+    if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
+        echo '<input  style="float:right;" type="submit" name="all_del" onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" value="' . $zbp->lang['msg']['all_del'] . '">';
+    }
+    echo '</p></form></div>';
     echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/article_32.png' . '");</script>';
 }
@@ -833,6 +841,7 @@ function Admin_PageMng()
         $op
     );
 
+    echo '<form method="post" action="' . $zbp->host . 'zb_system/cmd.php?act=PostBat&type=' . ZC_POST_TYPE_PAGE . '">';
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 
     $tables = '';
@@ -845,6 +854,9 @@ function Admin_PageMng()
     $tableths[] = '<th>' . $zbp->lang['msg']['comment'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['status'] . '</th>';
     $tableths[] = '<th></th>';
+    if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
+        $tableths[] = '<th><a href="" onclick="BatchSelectAll();return false;">' . $zbp->lang['msg']['select_all'] . '</a></th>';
+    }
     $tableths[] = '</tr>';
 
     foreach ($array as $article) {
@@ -861,7 +873,9 @@ function Admin_PageMng()
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
             '<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=PageDel&id=' . $article->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
             '</td>';
-
+        if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
+            $tabletds[] = '<td class="td5 tdCenter"><input type="checkbox" id="id' . $article->ID . '" name="id[]" value="' . $article->ID . '"></td>';
+        }
         $tabletds[] = '</tr>';
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_PageMng_Table'] as $fpname => &$fpsignal) {
@@ -882,7 +896,10 @@ function Admin_PageMng()
             echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
         }
     }
-    echo '</p></div>';
+    if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
+        echo '<input  style="float:right;" type="submit" name="all_del" onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" value="' . $zbp->lang['msg']['all_del'] . '">';
+    }
+    echo '</p><form></div>';
     echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/page_32.png' . '");</script>';
 }
@@ -1121,7 +1138,7 @@ function Admin_MemberMng()
         echo '<option value="' . $id . '">' . $name . '</option>';
     }
     echo '</select>&nbsp;&nbsp;&nbsp;&nbsp;
-	<input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
+    <input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
     echo '</form>';
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=MemberMng{&page=%page%}', false);
@@ -1320,7 +1337,7 @@ function Admin_TagMng()
     echo '<div id="divMain2">';
     echo '<form class="search" id="edit" method="post" action="#">';
     echo '<p>' . $zbp->lang['msg']['search'] . ':&nbsp;&nbsp;
-	<input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
+    <input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
     echo '</form>';
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=TagMng&page={%page%}{&search=%search%}', false);
@@ -1787,12 +1804,12 @@ function Admin_PluginMng()
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
     echo '<tr>
 
-	<th></th>
-	<th>' . $zbp->lang['msg']['name'] . '</th>
-	<th>' . $zbp->lang['msg']['author'] . '</th>
-	<th>' . $zbp->lang['msg']['date'] . '</th>
-	<th></th>
-	</tr>';
+    <th></th>
+    <th>' . $zbp->lang['msg']['name'] . '</th>
+    <th>' . $zbp->lang['msg']['author'] . '</th>
+    <th>' . $zbp->lang['msg']['date'] . '</th>
+    <th></th>
+    </tr>';
 
     $plugins = array();
 
@@ -1903,13 +1920,13 @@ function enableSubmit(newurl){
     bCheck = false;
 }
 function checkDomain(){
-	if(bCheck === false)return true;
+    if(bCheck === false)return true;
     if(bCheck === true){
-    	var i = changeDomain($(\'#ZC_BLOG_HOST\').val());
-    	if(i === true)
-    		return true;
-    	else
-    		return false;
+        var i = changeDomain($(\'#ZC_BLOG_HOST\').val());
+        if(i === true)
+            return true;
+        else
+            return false;
     }
 }
 function changeDomain(newurl){
@@ -1974,7 +1991,7 @@ function changeDomain(newurl){
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['display_subcategorys'] . '</b></p></td><td><p><input id="ZC_DISPLAY_SUBCATEGORYS" name="ZC_DISPLAY_SUBCATEGORYS" type="text" value="' . $zbp->option['ZC_DISPLAY_SUBCATEGORYS'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['pagebar_count'] . '</b></p></td><td><p><input id="ZC_PAGEBAR_COUNT" name="ZC_PAGEBAR_COUNT" style="width:600px;" type="text" value="' . $zbp->option['ZC_PAGEBAR_COUNT'] . '" /></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['search_count'] . '</b></p></td><td><p><input id="ZC_SEARCH_COUNT" name="ZC_SEARCH_COUNT" style="width:600px;" type="text" value="' . $zbp->option['ZC_SEARCH_COUNT'] . '" /></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['manage_count'] . '</b></p></td><td><p><input id="ZC_MANAGE_COUNT" name="ZC_MANAGE_COUNT" style="width:600px;" type="text" value="' . $zbp->option['ZC_MANAGE_COUNT'] . '" /></p></td></tr>';
+                    echo '<tr><td><p><b>' . $zbp->lang['msg']['syntax_high_lighter'] . '</b></p></td><td><p><input id="ZC_SYNTAXHIGHLIGHTER_ENABLE" name="ZC_SYNTAXHIGHLIGHTER_ENABLE" type="text" value="' . $zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE'] . '" class="checkbox"/></p></td></tr>';
                     echo '</table>';
                     echo '</div>';
                     echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab4">';
@@ -1993,7 +2010,8 @@ function changeDomain(newurl){
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['allow_upload_type'] . '</b></p></td><td><p><input id="ZC_UPLOAD_FILETYPE" name="ZC_UPLOAD_FILETYPE" style="width:600px;" type="text" value="' . htmlspecialchars($zbp->option['ZC_UPLOAD_FILETYPE']) . '" /></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['allow_upload_size'] . '</b></p></td><td><p><input id="ZC_UPLOAD_FILESIZE" name="ZC_UPLOAD_FILESIZE" style="width:600px;" type="text" value="' . $zbp->option['ZC_UPLOAD_FILESIZE'] . '" /></p></td></tr>';
                     echo '<tr><td><p><b>' . @$zbp->langs->msg->get_text_intro . '</b></p></td><td><p><input id="ZC_ARTICLE_INTRO_WITH_TEXT" name="ZC_ARTICLE_INTRO_WITH_TEXT" type="text" value="' . $zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['syntax_high_lighter'] . '</b></p></td><td><p><input id="ZC_SYNTAXHIGHLIGHTER_ENABLE" name="ZC_SYNTAXHIGHLIGHTER_ENABLE" type="text" value="' . $zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+                    echo '<tr><td><p><b>' . $zbp->lang['msg']['manage_count'] . '</b></p></td><td><p><input id="ZC_MANAGE_COUNT" name="ZC_MANAGE_COUNT" style="width:600px;" type="text" value="' . $zbp->option['ZC_MANAGE_COUNT'] . '" /></p></td></tr>';
+                    echo '<tr><td><p><b>' . @$zbp->langs->msg->enable_post_batch_delete . '</b></p></td><td><p><input id="ZC_POST_BATCH_DELETE" name="ZC_POST_BATCH_DELETE" type="text" value="' . $zbp->option['ZC_POST_BATCH_DELETE'] . '" class="checkbox"/></p></td></tr>';
                     echo '</table>';
                     echo '</div>';
                     ?>

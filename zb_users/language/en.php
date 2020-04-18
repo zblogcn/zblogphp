@@ -266,6 +266,7 @@ return array(
         'backend_setting'                   => 'Bakcend Setting',
         'get_text_intro'                    => 'Get a plain text intro',
         'update_db'                         => 'Please click the link to upgrade the database structure.',
+        'enable_post_batch_delete'          => 'Enable Batch Delete of Post',
         ''                                  => '',
     ),
 

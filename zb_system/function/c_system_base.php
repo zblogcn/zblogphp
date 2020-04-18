@@ -214,6 +214,7 @@ $GLOBALS['actions'] = array(
     'PluginMng'   => 1,
     'ModuleMng'   => 1,
 
+    'PostBat'     => 2,
     'ArticleAll'  => 2,
     'PageAll'     => 2,
     'CategoryAll' => 2,

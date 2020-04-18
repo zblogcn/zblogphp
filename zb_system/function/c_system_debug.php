@@ -156,38 +156,6 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
     if (error_reporting() == 0) {
         return true;
     }
-    $da = debug_backtrace();
-    foreach ($da as $key => $value) {
-        $errfile = null;
-        $errline = null;
-        if (isset($value['args'][2]) && isset($value['args'][3])) {
-            $errfile = $value['args'][2];
-            $errline = $value['args'][3];
-        }
-        if (isset($value['file']) && isset($value['line'])) {
-            $errfile = $value['file'];
-            $errline = $value['line'];
-        }
-        if (is_readable($errfile)) {
-            $a = array_slice(file($errfile), max(0, ($errline - 1)), 1, true);
-            $s = reset($a);
-            $matches = null;
-            $pattern = '#\'(.*?)\'#i';
-            preg_match_all($pattern, $s, $matches);
-            foreach ($matches[0] as $key => $value) {
-                $s = str_replace($value, '', $s);
-            }
-            $matches = null;
-            $pattern = '#"(.*?)"#i';
-            preg_match_all($pattern, $s, $matches);
-            foreach ($matches[0] as $key => $value) {
-                $s = str_replace($value, '', $s);
-            }
-            if (strpos($s, '@') !== false) {
-                return true;
-            }
-        }
-    }
 
     if (Debug_IgnoreError($errno)) {
         return true;
