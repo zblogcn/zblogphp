@@ -44,6 +44,7 @@ var zbpConfig = {
                 validateFailedErrorCode: 29,
             },
             homepage: {
+                selector: '#inpHomePage',
                 getter: function () {
                     var t = $('#inpHomePage').val();
                     return (!/^(.+)\:\/\//.test(t) && t !== "") ? 'http://' + t : t; 
@@ -117,7 +118,7 @@ $(function () {
         }
         $cpVrs.attr("href", zbp.options.bloghost + "zb_system/cmd.php?act=ArticleEdt");
     }
-
+    zbp.userinfo.output();
 });
 <?php
 }

@@ -1278,7 +1278,7 @@ function InsertInfo()
     $t->FileName = "favorite";
     $t->Source = "system";
     $t->SidebarID = 1;
-    $t->Content = '<li><a href="https://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="https://weibo.com/zblogcn" target="_blank">Z-Blog官方微博</a></li><li><a href="https://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li>';
+    $t->Content = '<li><a href="https://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="https://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li>';
     $t->HtmlID = "divFavorites";
     $t->Type = "ul";
     $t->Save();
