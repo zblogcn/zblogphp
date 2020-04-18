@@ -3604,7 +3604,7 @@ function CountCategory(&$category, $plus = null)
     if ($plus === null) {
         $id = $category->ID;
 
-        $s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 0), array('=', 'log_Status', 0), array('=', 'log_CateID', $id)));
+        $s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_Status', 0), array('=', 'log_CateID', $id)));
         $num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 
         $category->Count = $num;
