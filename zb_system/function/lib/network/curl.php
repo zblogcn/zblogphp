@@ -209,6 +209,9 @@ class Network__curl implements Network__Interface
             if ($data == '') {
                 $data = $this->postdata;
             }
+            if (is_array($varBody) && count($this->postdata) > 0) {
+                $data = $varBody + $this->postdata;
+            }
             if ($this->__isBinary) {
                 curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'POST');
             } else {
@@ -328,7 +331,7 @@ class Network__curl implements Network__Interface
 
         $filename = ($filename === null ? basename($entity) : $filename);
         if (class_exists('CURLFile')) {
-            $this->postdata[$name] = new CURLFile($entity, $mime, $filename);
+            $this->postdata[$name] = new CURLFile(realpath($entity), $mime, $filename);
 
             return;
         }

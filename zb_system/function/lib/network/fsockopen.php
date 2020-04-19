@@ -184,6 +184,12 @@ class Network__fsockopen implements Network__Interface
         }
 
         if ($this->option['method'] == 'POST') {
+            if (is_array($varBody) && count($this->postdata) > 0) {
+                foreach ($varBody as $key => $value) {
+                    $this->add_postdata($key, $value);
+                }
+                $data = '';
+            }
             if ($data == '') {
                 $data = $this->__buildPostData(); //http_build_query($this->postdata);
             }
