@@ -192,4 +192,28 @@ class SQL__MySQL extends SQL__Global
         }
         parent::buildSelect();
     }
+
+    protected function buildRandomBefore()
+    {
+        $table = $this->table[0];
+        if (in_array($table, $GLOBALS['table'])) {
+            $key = array_search($table, $GLOBALS['table']);
+            $datainfo = $GLOBALS['datainfo'][$key];
+            $d = reset($datainfo);
+            $id = $d[0];
+            $this->where[] = "{$id} >= (SELECT FLOOR( RAND() * ((SELECT MAX({$id}) FROM `{$table}`)-(SELECT MIN({$id}) FROM `{$table}`)) + (SELECT MIN({$id}) FROM `{$table}`)))";
+        }
+    }
+
+    protected function buildRandom()
+    {
+        $sql = &$this->pri_sql;
+        $table = $this->table[0];
+        if (in_array($table, $GLOBALS['table'])) {
+            $sql[] = ' LIMIT ' . implode('', $this->extend['RANDOM']);
+        } else {
+            $sql[] = 'ORDER BY RAND() LIMIT ' . implode('', $this->extend['RANDOM']);
+        }
+    }
+
 }

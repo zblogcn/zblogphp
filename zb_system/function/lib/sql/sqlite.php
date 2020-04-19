@@ -119,4 +119,22 @@ class SQL__SQLite extends SQL__Global
         $this->pri_sql = $sqlAll;
     }
 
+    protected function buildRandomBefore()
+    {
+        $table = $this->table[0];
+        if (in_array($table, $GLOBALS['table'])) {
+            $key = array_search($table, $GLOBALS['table']);
+            $datainfo = $GLOBALS['datainfo'][$key];
+            $d = reset($datainfo);
+            $id = $d[0];
+            $i = 0;
+        }
+    }
+
+    protected function buildRandom()
+    {
+        $sql = &$this->pri_sql;
+        $sql[] = 'ORDER BY RANDOM() LIMIT ' . implode('', $this->extend['RANDOM']);
+    }
+
 }

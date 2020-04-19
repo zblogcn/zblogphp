@@ -636,7 +636,7 @@ class ZBlogPHP
             return false;
         }
 
-        $this->StartGzip();
+        //$this->StartGzip();
 
         if (!headers_sent()) {
             header('Content-type: text/html; charset=utf-8');
@@ -709,12 +709,7 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Admin_MemberMng_SubMenu', 'Include_Admin_Addmemsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu', 'Include_Admin_Addmodsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu', 'Include_Admin_Addcmtsubmenu');
-
-        if ($this->version >= 162300 && (int) $this->option['ZC_LAST_VERSION'] < 162300) {
-            if (substr(GetValueInArray(get_included_files(), 0), -9) == 'index.php') {
-                $this->SetHint('tips', '<a href="#" onclick="$.get(bloghost+\'zb_system/admin/updatedb.php\', function(data){alert(\'' . $this->langs->msg->operation_succeed . '\');window.location.reload();});">' . @$this->langs->msg->update_db . '</a>');
-            }
-        }
+        Add_Filter_Plugin('Filter_Plugin_Zbp_LoadManage', 'Include_Admin_UpdateDB');
 
         $this->CheckTemplate();
 

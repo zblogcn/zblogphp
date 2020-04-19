@@ -382,7 +382,7 @@ class Config implements Iterator
             return true;
         }
 
-        $old = @$this->db->Query($this->db->sql->Select($this->t, '*', array(array('=', $this->d['Key'][0], ''))));
+        $old = @$this->db->Query($this->db->sql->Select($this->t, $this->d['Key'][0], null, null, 1));
         //没有这个字段：array(1) { [0]=> bool(false) }
         if (count($old) == 1 && $old[0] === false) { //如果还没有建conf_Key字段就不要原子化存储
             $value = $this->Serialize();
@@ -427,13 +427,28 @@ class Config implements Iterator
             $old = $this->db->Query($this->db->sql->Select($this->t, '*', array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], $key2))));
             if (count($old) == 0) {
                 $this->db->Insert($sql);
+            } else {
+                $key3 = $key2;
+                $value3 = $value2;
+                $kv3 = array($this->d['Value'][0] => $this->SerializeSingle($value3));
+                $sql = $this->db->sql->Update($this->t, $kv3, array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], $key3)));
+                $this->db->Update($sql);
             }
         }
         //mod
-        foreach ($mod as $key3 => $value3) {
-            $kv3 = array($this->d['Value'][0] => $this->SerializeSingle($value3));
-            $sql = $this->db->sql->Update($this->t, $kv3, array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], $key3)));
-            $this->db->Update($sql);
+        foreach ($mod as $key2 => $value2) {
+            $kv2 = array($this->d['Name'][0] => $name, $this->d['Key'][0] => $key2, $this->d['Value'][0] => $this->SerializeSingle($value2));
+            $sql = $this->db->sql->Insert($this->t, $kv2);
+            $old = $this->db->Query($this->db->sql->Select($this->t, '*', array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], $key2))));
+            if (count($old) == 0) {
+                $this->db->Insert($sql);
+            } else {
+                $key3 = $key2;
+                $value3 = $value2;
+                $kv3 = array($this->d['Value'][0] => $this->SerializeSingle($value3));
+                $sql = $this->db->sql->Update($this->t, $kv3, array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], $key3)));
+                $this->db->Update($sql);
+            }
         }
         //del
         foreach ($del as $key4 => $value4) {

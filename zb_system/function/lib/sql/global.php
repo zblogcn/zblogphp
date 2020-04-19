@@ -27,7 +27,7 @@ class SQL__Global
      */
     public $className = __CLASS__;
 
-    private $pri_sql = array();
+    protected $pri_sql = array();
 
     protected $option = array(
         'whereKeyword' => 'WHERE',
@@ -59,7 +59,7 @@ class SQL__Global
 
     private $otherKeyword = array('INDEX', 'TABLE', 'DATABASE');//remove 'FIELD', 
 
-    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'IFNOTEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'UNIONALL', 'RANDOM');
+    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'IFNOTEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'UNIONALL', 'RANDOM', 'TRANSACTION');
 
     private $complexKeyword = array('ADDCOLUMN', 'DROPCOLUMN', 'ALTERCOLUMN');
 
@@ -799,6 +799,11 @@ class SQL__Global
     {
         $sql = &$this->pri_sql;
 
+        if (array_key_exists('TRANSACTION', $this->extend)) {
+            $this->buildTransaction();
+            return;
+        }
+
         if (array_key_exists('UNION', $this->extend)) {
             $this->buildUnion();
             return;
@@ -1056,6 +1061,22 @@ class SQL__Global
         $sql[] = $this->extend['UNION'][1];
     }
 
+    protected function buildTransaction()
+    {
+        $sql = &$this->pri_sql;
+        $sql = array();
+        $args = implode('', $this->extend['TRANSACTION']);
+        if (strtoupper($args) == 'BEGIN') {
+            $sql[] = 'BEGIN';
+        }
+        if (strtoupper($args) == 'COMMIT') {
+            $sql[] = 'COMMIT';
+        }
+        if (strtoupper($args) == 'ROLLBACK') {
+            $sql[] = 'ROLLBACK';
+        }
+    }
+
     protected function buildUnionALL()
     {
         $sql = &$this->pri_sql;
@@ -1214,47 +1235,11 @@ class SQL__Global
 
     protected function buildRandomBefore()
     {
-        $table = $this->table[0];
-        if (in_array($table, $GLOBALS['table'])) {
-            $key = array_search($table, $GLOBALS['table']);
-            $datainfo = $GLOBALS['datainfo'][$key];
-            $d = reset($datainfo);
-            $id = $d[0];
-            if ($this->db->type == 'mysql') {
-                $this->where[] = "{$id} >= (SELECT FLOOR( RAND() * ((SELECT MAX({$id}) FROM `{$table}`)-(SELECT MIN({$id}) FROM `{$table}`)) + (SELECT MIN({$id}) FROM `{$table}`)))";
-            }
-            if ($this->db->type == 'sqlite') {
-                $i = 0;
-            }
-            if ($this->db->type == 'postgresql') {
-                $i = 0;
-                //$this->where[] = "{$id} >= (SELECT FLOOR( RANDOM() * ((SELECT MAX({$id}) FROM {$table})-(SELECT MIN({$id}) FROM {$table})) + (SELECT MIN({$id}) FROM {$table})))";
-            }
-        }
+        // Do nothing yet
     }
 
     protected function buildRandom()
     {
-        $sql = &$this->pri_sql;
-        if ($this->db->type == 'mysql') {
-            $table = $this->table[0];
-            if (in_array($table, $GLOBALS['table'])) {
-                $sql[] = ' LIMIT ' . implode('', $this->extend['RANDOM']);
-            } else {
-                $sql[] = 'ORDER BY RAND() LIMIT ' . implode('', $this->extend['RANDOM']);
-            }
-        }
-        if ($this->db->type == 'sqlite') {
-            $sql[] = 'ORDER BY RANDOM() LIMIT ' . implode('', $this->extend['RANDOM']);
-        }
-        if ($this->db->type == 'postgresql') {
-            $table = $this->table[0];
-            if (in_array($table, $GLOBALS['table'])) {
-                $sql[] = 'ORDER BY RANDOM() LIMIT ' . implode('', $this->extend['RANDOM']);
-                //$sql[] = ' LIMIT ' . implode('', $this->extend['RANDOM']);
-            } else {
-                $sql[] = 'ORDER BY RANDOM() LIMIT ' . implode('', $this->extend['RANDOM']);
-            }
-        }
+        // Do nothing yet
     }
 }
