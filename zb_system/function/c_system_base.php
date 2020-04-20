@@ -142,6 +142,14 @@ define('ZC_MEMBER_STATUS_AUDITING', 1);
  * 用户状态：已锁定
  */
 define('ZC_MEMBER_STATUS_LOCKED', 2);
+/*
+ * 文章状态：私人
+ */
+define('ZC_POST_STATUS_PRIVATE', 4);
+/*
+ * 文章状态：加锁
+ */
+define('ZC_POST_STATUS_LOCKED', 8);
 
 /*
  *定义命令

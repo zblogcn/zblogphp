@@ -375,7 +375,7 @@ UE.I18N['zh-tw'] = {
         'floatRight':"右浮動",
         '"default"':"默認",
         'block':"獨佔一行",
-        'videoShouldBeHTML': '針對愛奇藝、搜狐等，請粘貼分享代碼而非視訊地址,
+        'videoShouldBeHTML': '針對愛奇藝、搜狐等，請粘貼分享代碼而非視訊地址',
         'urlError':"輸入的視訊地址有誤，請檢查後再試！",
         'loading':" &nbsp;視訊載入中，請等待……",
         'clickToSelect':"點選選中",
