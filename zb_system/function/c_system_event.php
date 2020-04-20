@@ -1500,7 +1500,9 @@ function PostArticle()
                         $_POST['Intro'] = SubStrUTF8_Html($_POST['Intro'], $i);
                     } else {
                         $i = (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];
-                        $i = (int) Zbp_Strpos($_POST['Content'], '>', $i);
+                        if (Zbp_StrLen($_POST['Content']) > $i) {
+                        	$i = (int) Zbp_Strpos($_POST['Content'], '>', $i);
+                        }
                         if ($i == 0) {
                             $i = (int) Zbp_StrLen($_POST['Content']);
                         }

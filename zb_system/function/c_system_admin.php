@@ -1909,7 +1909,7 @@ function Admin_SettingMng()
                         <li><a href="#tab2"><span><?php echo $zbp->lang['msg']['global_setting']; ?></span></a></li>
                         <li><a href="#tab3"><span><?php echo $zbp->lang['msg']['page_setting']; ?></span></a></li>
                         <li><a href="#tab4"><span><?php echo $zbp->lang['msg']['comment_setting']; ?></span></a></li>
-                        <li><a href="#tab5"><span><?php echo $zbp->lang['msg']['backend_setting']; ?></span></a></li>
+                        <li><a href="#tab5"><span><?php echo @$zbp->langs->msg->backend_setting; ?></span></a></li>
                     </ul>
                     <div class="clear"></div>
                 </div>
@@ -1990,7 +1990,7 @@ function changeDomain(newurl){
                     echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']);
                     echo '</select></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['debug_mode'] . '</b></p></td><td><p><input id="ZC_DEBUG_MODE" name="ZC_DEBUG_MODE" type="text" value="' . $zbp->option['ZC_DEBUG_MODE'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->langs->msg->show_warning_error . '</b></p></td><td><p><input id="ZC_DEBUG_MODE_WARNING" name="ZC_DEBUG_MODE_WARNING" type="text" value="' . $zbp->option['ZC_DEBUG_MODE_WARNING'] . '" class="checkbox"/></p></td></tr>';
+                    echo '<tr><td><p><b>' . @$zbp->langs->msg->show_warning_error . '</b></p></td><td><p><input id="ZC_DEBUG_MODE_WARNING" name="ZC_DEBUG_MODE_WARNING" type="text" value="' . $zbp->option['ZC_DEBUG_MODE_WARNING'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['additional_security'] . '</b></p></td><td><p><input id="ZC_ADDITIONAL_SECURITY" name="ZC_ADDITIONAL_SECURITY" type="text" value="' . $zbp->option['ZC_ADDITIONAL_SECURITY'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['using_cdn_guest_type'] . '</b></p></td><td><p><select id="ZC_USING_CDN_GUESTIP_TYPE" name="ZC_USING_CDN_GUESTIP_TYPE" style="width:600px;" >';
                     echo CreateOptionsOfGuestIPType($zbp->option['ZC_USING_CDN_GUESTIP_TYPE']);

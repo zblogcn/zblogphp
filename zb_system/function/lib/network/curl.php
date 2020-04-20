@@ -206,10 +206,10 @@ class Network__curl implements Network__Interface
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->httpheader);
 
         if ($this->option['method'] == 'POST') {
-            if ($data == '') {
-                $data = $this->postdata;
-            }
-            if (is_array($varBody) && count($this->postdata) > 0) {
+            if (is_string($varBody) && count($this->postdata) > 0) {
+            	parse_str($varBody, $data);
+                $data = $data + $this->postdata;
+            } elseif (is_array($varBody) && count($this->postdata) > 0) {
                 $data = $varBody + $this->postdata;
             }
             if ($this->__isBinary) {

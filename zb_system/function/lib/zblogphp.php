@@ -932,9 +932,9 @@ class ZBlogPHP
         foreach ($this->configs as $key => $value) {
             if (is_object($value) && ($key == 'system' && $onlysystemoption == true) || ($key != 'system' && $onlysystemoption == false)) {
                 $value->LoadInfoByAssocSingleWithAfter();
-            } else {
-                $value->LoadInfoByAssocSingleWithAfter();
-            }
+            }// else {
+                //$value->LoadInfoByAssocSingleWithAfter();
+            //}
         }
 
         if ($onlysystemoption == false) {

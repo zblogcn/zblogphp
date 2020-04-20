@@ -390,6 +390,28 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    public function testTransaction()
+    {
+        $this->assertEquals(
+            'BEGIN',
+            self::$db
+                ->transaction("begin")
+                ->sql
+        );
+        $this->assertEquals(
+            'COMMIT',
+            self::$db
+                ->transaction("Commit")
+                ->sql
+        );
+        $this->assertEquals(
+            'ROLLBACK',
+            self::$db
+                ->transaction("ROLLBACK")
+                ->sql
+        );
+    }
+
     public function testInvalid()
     {
         $this->assertEquals(
