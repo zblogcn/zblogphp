@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<theme version="php">
-<id>WhitePage</id>
-<name>WhitePage超简快主题</name>
+<plugin version="php">
+<id>Arrietty</id>
+<name>借物少女的工具箱</name>
 <url>https://www.zblogcn.com/</url>
-<note>ZB史上第二快的主题，不能说“D一”,因为违反广告法！！！</note>
-<description>ZB史上第二快的主题，不能说“D一”,因为违反广告法！！！</description>
-<path>main.php</path>
+<note>艾莉缇的私人文章和加锁文章工具箱</note>
+<description></description>
+<path></path>
 <include>include.php</include>
 <level>1</level>
 <author>
   <name>zx.asd</name>
   <email>rainbowsoft@gmail.com</email>
-  <url>http://www.zdevo.com/</url>
+  <url>https://www.zblogcn.com/</url>
 </author>
 <source>
   <name></name>
   <email></email>
   <url></url>
 </source>
-<adapted>151935</adapted>
-<version>2.9</version>
-<pubdate>2013-09-23</pubdate>
+<adapted>162100</adapted>
+<version>1.01</version>
+<pubdate>2013-07-07</pubdate>
 <modified>2020-04-21</modified>
 <price>0</price>
 <phpver>5.2</phpver>
@@ -41,4 +41,4 @@
   <sidebar8></sidebar8>
   <sidebar9></sidebar9>
 </sidebars>
-</theme>
+</plugin>

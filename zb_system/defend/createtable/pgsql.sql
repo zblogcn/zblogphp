@@ -23,7 +23,7 @@ CREATE TABLE %pre%post (
 ) ;
 CREATE INDEX %pre%post_ix_id ON %pre%post(log_ID);
 CREATE INDEX %pre%post_ix_pt ON %pre%post(log_PostTime);
-CREATE INDEX %pre%post_ix_tpisc ON %pre%post(log_Type,log_PostTime,log_IsTop,log_Status,log_CateID);
+CREATE INDEX %pre%post_ix_tpsca ON %pre%post(log_Type,log_PostTime,log_Status,log_CateID,log_AuthorID);
 CREATE INDEX %pre%post_ix_vtsc ON %pre%post(log_ViewNums,log_Type,log_Status,log_CateID);
 
 CREATE SEQUENCE %pre%category_seq;

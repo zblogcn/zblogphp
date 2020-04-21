@@ -1060,17 +1060,6 @@ DefinePluginFilter('Filter_Plugin_Admin_Js_Add');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_OutputOptionItemsOfType
-'参数:
-'说明:定义OutputOptionItemsOfType函数里的接口
-'调用:
-'**************************************************>
- */
-DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfType');
-
-/*
-'**************************************************<
-'类型:Filter
 '名称:Filter_Plugin_OutputOptionItemsOfMemberLevel
 '参数:
 '说明:定义OutputOptionItemsOfMemberLevel函数里的接口
@@ -1083,12 +1072,67 @@ DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfMemberLevel');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_OutputOptionItemsOfCategories
-'参数:
+'参数:$default,$tz
 '说明:定义OutputOptionItemsOfCategories函数里的接口
 '调用:
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfCategories');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_OutputOptionItemsOfPostStatus
+'参数:$default,$tz
+'说明:定义OutputOptionItemsOfPostStatus函数里的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfPostStatus');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_OutputOptionItemsOfIsTop
+'参数:$default,$tz
+'说明:定义OutputOptionItemsOfIsTop函数里的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfIsTop');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_OutputOptionItemsOfMember
+'参数:$default,$tz
+'说明:定义OutputOptionItemsOfMember函数里的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfMember');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_OutputOptionItemsOfTemplate
+'参数:$default,$tz
+'说明:定义OutputOptionItemsOfTemplate函数里的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfTemplate');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_OutputOptionItemsOfCommon
+'参数:$default,$array,$name
+'说明:定义OutputOptionItemsOfCommon函数里的接口，因为是通用型的，所以有$name
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfCommon');
 
 //###############################################################################################################
 //Event里的接口

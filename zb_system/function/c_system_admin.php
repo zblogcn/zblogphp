@@ -249,32 +249,31 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
 }
 
 //###############################################################################################################
-
 /**
- * 生成TYPEselect表单.
+ * 生成通用表单的option列表.
  *
  * @param $default
+ * @param $array
+ * @param $name
  *
  * @return null|string
  */
-function OutputOptionItemsOfType($default)
+function OutputOptionItemsOfCommon($default, $array, $name = 'Common')
 {
     global $zbp;
-
-    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfType'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($default);
+    $s = null;
+    $tz = $array;
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCommon'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($default, $tz, $name);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
             return $fpreturn;
         }
     }
 
-    $s = null;
-    foreach ($zbp->posttype as $key => $value) {
-        $s .= '<option ' . ($default == $key ? 'selected="selected"' : '') . ' value="' . $key . '">' . $value[0] . '</option>';
+    foreach ($tz as $key => $value) {
+        $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $value . '</option>';
     }
-
     return $s;
 }
 
@@ -289,20 +288,22 @@ function OutputOptionItemsOfCategories($default)
 {
     global $zbp;
 
+    $s = null;
+    $tz = array();
+    foreach ($zbp->categoriesbyorder as $id => $cate) {
+        $tz[$cate->ID] = $cate->SymbolName;
+    }
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCategories'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($default);
+        $fpreturn = $fpname($default, $tz);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
             return $fpreturn;
         }
     }
 
-    $s = null;
-    foreach ($zbp->categoriesbyorder as $id => $cate) {
-        $s .= '<option ' . ($default == $cate->ID ? 'selected="selected"' : '') . ' value="' . $cate->ID . '">' . $cate->SymbolName . '</option>';
+    foreach ($tz as $key => $value) {
+        $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $value . '</option>';
     }
-
     return $s;
 }
 
@@ -318,7 +319,8 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
     global $zbp;
     $testRegExp = "/.*(\.|post-|module|header|footer|comment|sidebar|pagebar|[a-zA-Z]\_)/si";
     $s = null;
-    $s .= '<option value="" >' . $zbp->lang['msg']['none'] . '</option>';
+    $tz = array();
+    $tz[''] = $zbp->lang['msg']['none'];
 
     foreach ($zbp->template->templates as $key => $value) {
         if (preg_match($testRegExp, $key)) {
@@ -342,13 +344,24 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
 
         if ($default == $key) {
             $s2 = ($name !== '') ? ' (' . $name . ')' : $name;
-            $s .= '<option value="' . $key . '" selected="selected">' . '[' . $zbp->lang['msg']['current_template'] . '] ' . $key . $s2 . '</option>';
+            $tz[$key] = '[' . $zbp->lang['msg']['current_template'] . '] ' . $key . $s2;
         } else {
             $s2 = ($name !== '') ? ' (' . $name . ')' : $name;
-            $s .= '<option value="' . $key . '" >' . $key . $s2 . '</option>';
+            $tz[$key] = $key . $s2;
         }
     }
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfTemplate'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($default, $tz);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
+    }
+
+    foreach ($tz as $key => $value) {
+        $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $value . '</option>';
+    }
     return $s;
 }
 
@@ -363,23 +376,27 @@ function OutputOptionItemsOfMemberLevel($default)
 {
     global $zbp;
 
+    $s = null;
+    $tz = array();
+    if (!$zbp->CheckRights('MemberAll')) {
+        $tz[$default] = $zbp->lang['user_level_name'][$default];
+    } else {
+        for ($i = 1; $i < 7; $i++) {
+            $tz[$i] = $zbp->lang['user_level_name'][$i];
+        }
+    }
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfMemberLevel'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($default);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
             return $fpreturn;
         }
     }
 
-    $s = null;
-    if (!$zbp->CheckRights('MemberAll')) {
-        return '<option value="' . $default . '" selected="selected" >' . $zbp->lang['user_level_name'][$default] . '</option>';
+    foreach ($tz as $key => $value) {
+        $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $value . '</option>';
     }
-    for ($i = 1; $i < 7; $i++) {
-        $s .= '<option value="' . $i . '" ' . ($default == $i ? 'selected="selected"' : '') . ' >' . $zbp->lang['user_level_name'][$i] . '</option>';
-    }
-
     return $s;
 }
 
@@ -395,19 +412,32 @@ function OutputOptionItemsOfMember($default)
     global $zbp;
 
     $s = null;
+    $tz = array();
     if (!$zbp->CheckRights('ArticleAll')) {
         if (!isset($zbp->members[$default])) {
-            return '<option value="0" selected="selected" ></option>';
+            $tz[0] = '';
+        } else {
+            $tz[$default] = $zbp->members[$default]->Name;
         }
-
-        return '<option value="' . $default . '" selected="selected" >' . $zbp->members[$default]->Name . '</option>';
-    }
-    foreach ($zbp->members as $key => $value) {
-        if ($zbp->CheckRightsByLevel('ArticleEdt', $zbp->members[$key]->Level)) {
-            $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $zbp->members[$key]->Name . '</option>';
+    } else {
+        foreach ($zbp->members as $key => $value) {
+            if ($zbp->CheckRightsByLevel('ArticleEdt', $zbp->members[$key]->Level)) {
+                $tz[$key] = $zbp->members[$key]->Name;
+            }
         }
     }
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfMember'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($default, $tz);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
+    }
+
+    foreach ($tz as $key => $value) {
+        $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $value . '</option>';
+    }
     return $s;
 }
 
@@ -423,10 +453,23 @@ function OutputOptionItemsOfIsTop($default)
     global $zbp;
 
     $s = null;
-    $s .= '<option value="0" ' . ($default == 0 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['none'] . '</option>';
-    $s .= '<option value="2" ' . ($default == 2 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['top_index'] . '</option>';
-    $s .= '<option value="1" ' . ($default == 1 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['top_global'] . '</option>';
-    $s .= '<option value="4" ' . ($default == 4 ? 'selected="selected"' : '') . ' >' . $zbp->lang['msg']['top_category'] . '</option>';
+    $tz = array();
+    $tz[0] = $zbp->lang['msg']['none'];
+    $tz[2] = $zbp->lang['msg']['top_index'];
+    $tz[1] = $zbp->lang['msg']['top_global'];
+    $tz[4] = $zbp->lang['msg']['top_category'];
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfIsTop'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($default, $tz);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
+    }
+
+    foreach ($tz as $key => $value) {
+        $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $value . '</option>';
+    }
 
     return $s;
 }
@@ -442,17 +485,30 @@ function OutputOptionItemsOfPostStatus($default)
 {
     global $zbp;
 
-    $s = null;
+    $s = '';
+    $tz = array();
     if (!$zbp->CheckRights('ArticlePub') && $default == 2) {
-        return '<option value="2" ' . ($default == 2 ? 'selected="selected"' : '') . ' >' . $zbp->lang['post_status_name']['2'] . '</option>';
+        $tz[2] = $zbp->lang['post_status_name']['2'];
+    } elseif (!$zbp->CheckRights('ArticleAll') && $default == 2) {
+        $tz[2] = $zbp->lang['post_status_name']['2'];
+    }else{
+        $tz[0] = $zbp->lang['post_status_name']['0'];
+        $tz[1] = $zbp->lang['post_status_name']['1'];
+        if ($zbp->CheckRights('ArticleAll')) {
+            $tz[2] = $zbp->lang['post_status_name']['2'];
+        }
     }
-    if (!$zbp->CheckRights('ArticleAll') && $default == 2) {
-        return '<option value="2" ' . ($default == 2 ? 'selected="selected"' : '') . ' >' . $zbp->lang['post_status_name']['2'] . '</option>';
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfPostStatus'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($default, $tz);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
     }
-    $s .= '<option value="0" ' . ($default == 0 ? 'selected="selected"' : '') . ' >' . $zbp->lang['post_status_name']['0'] . '</option>';
-    $s .= '<option value="1" ' . ($default == 1 ? 'selected="selected"' : '') . ' >' . $zbp->lang['post_status_name']['1'] . '</option>';
-    if ($zbp->CheckRights('ArticleAll')) {
-        $s .= '<option value="2" ' . ($default == 2 ? 'selected="selected"' : '') . ' >' . $zbp->lang['post_status_name']['2'] . '</option>';
+
+    foreach ($tz as $key => $value) {
+        $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $value . '</option>';
     }
 
     return $s;
@@ -495,6 +551,37 @@ function CreateModuleDiv($m, $button = true)
 }
 
 /**
+ * 生成TYPEselect表单.
+ *
+ * @param $default
+ *
+ * @return null|string
+ */
+function OutputOptionItemsOfPostType($default)
+{
+    global $zbp;
+    $s = null;
+    $tz = array();
+
+    foreach ($zbp->posttype as $key => $value) {
+        $tz[$key] = $value[0];
+    }
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCommon'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($default, $tz, 'PostType');
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
+    }
+
+    foreach ($tz as $key => $value) {
+        $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $value . '</option>';
+    }
+    return $s;
+}
+
+/**
  * 生成时区select表单.
  *
  * @param $default
@@ -533,6 +620,14 @@ function CreateOptionsOfTimeZone($default)
         'Pacific/Tongatapu'              => '+13:00',
     );
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCommon'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($default, $tz, 'TimeZone');
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
+    }
+
     foreach ($tz as $key => $value) {
         $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $key . ' ' . $value . '</option>';
     }
@@ -553,6 +648,7 @@ function CreateOptionsOfLang($default)
     $s = '';
     $dir = $zbp->usersdir . 'language/';
     $files = GetFilesInDir($dir, 'php');
+    $tz = array();
     foreach ($files as $f) {
         $n = basename($f, '.php');
         //fix 1.3 to 1.4 warning
@@ -565,9 +661,20 @@ function CreateOptionsOfLang($default)
         }
 
         $t = include $f;
-        $s .= '<option value="' . $n . '" ' . ($default == $n ? 'selected="selected"' : '') . ' >' . $t['lang_name'] . ' (' . $n . ')' . '</option>';
+        $tz[$n] = $t['lang_name'] . ' (' . $n . ')';
     }
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCommon'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($default, $tz, 'Lang');
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
+    }
+
+    foreach ($tz as $key => $value) {
+        $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $key . ' ' . $value . '</option>';
+    }
     return $s;
 }
 
@@ -590,10 +697,17 @@ function CreateOptionsOfGuestIPType($default)
         'HTTP_CLIENT_IP'                 => 'HTTP_CLIENT_IP ' . GetVars('HTTP_CLIENT_IP', 'SERVER'),
     );
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCommon'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($default, $tz, 'GuestIPType');
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
+    }
+
     foreach ($tz as $key => $value) {
         $s .= '<option value="' . $key . '" ' . ($default == $key ? 'selected="selected"' : '') . ' >' . $value . '</option>';
     }
-
     return $s;
 }
 

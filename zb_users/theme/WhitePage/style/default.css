@@ -154,6 +154,9 @@ strong {
   white-space: nowrap;
   top: 3em;
   z-index: 1000;
+  border-left:1px solid rgb(88,88,88,0.2);;
+  border-right:1px solid rgb(88,88,88,0.2);;
+  border-bottom:1px solid rgb(88,88,88,0.2);;
 }
 
 #divNavBar li:hover ul {

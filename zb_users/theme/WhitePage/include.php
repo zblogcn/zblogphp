@@ -17,10 +17,10 @@ function ActivePlugin_WhitePage()
 
     $s = '';
     if ($zbp->Config('WhitePage')->HasKey("custom_bgcolor")) {
-        $s .= "body{background-color:#" . $zbp->Config('WhitePage')->custom_bgcolor . ";}div.post-body>p>code,div.post-body>pre.prism-highlight,div.post-body blockquote,#divNavBar li ul{background-color:#" . $zbp->Config('WhitePage')->custom_bgcolor . ";}";
+        $s .= "body{background-color:#" . $zbp->Config('WhitePage')->custom_bgcolor . ";}div.post-body>p>code,div.post-body>pre.prism-highlight,div.post-body blockquote{background-color:#" . $zbp->Config('WhitePage')->custom_bgcolor . ";}";
     }
     if ($zbp->Config('WhitePage')->HasKey("custom_pagecolor")) {
-        $s .= "textarea,input[type=text]{background-color:#" . $zbp->Config('WhitePage')->custom_pagecolor . "}";
+        $s .= "textarea,input[type=text],#divNavBar li ul{background-color:#" . $zbp->Config('WhitePage')->custom_pagecolor . "}";
     }
     if ($zbp->Config('WhitePage')->HasKey("custom_fontcolor")) {
         $s .= "body{color:#" . $zbp->Config('WhitePage')->custom_fontcolor . ";}textarea,input[type=text]{color:#" . $zbp->Config('WhitePage')->custom_fontcolor . ";}";

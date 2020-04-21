@@ -236,7 +236,6 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                             <div id='post' class="editmod">
                                 <input class="button" style="width:180px;height:38px;" type="submit" value="<?php echo $lang['msg']['submit']; ?>" id="btnPost" onclick='return checkArticleInfo();' />
                             </div>
-
                             <!-- cate -->
                             <?php
                             if (!$ispage) {

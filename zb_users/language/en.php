@@ -342,6 +342,8 @@ return array(
         '0' => 'Published',
         '1' => 'Draft',
         '2' => 'Pending',
+        '4' => 'Private',
+        '8' => 'Locked',
     ),
 
     //User Level
