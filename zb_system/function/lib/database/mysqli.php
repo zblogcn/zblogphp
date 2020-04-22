@@ -186,7 +186,7 @@ class Database__MySQLi implements Database__Interface
             if ($s != '') {
                 mysqli_query($this->db, $this->sql->Filter($s));
                 $e = mysqli_errno($this->db);
-                if ($e > 0) {
+                if ($e != 0) {
                     $this->error[] = array($e, mysqli_error($this->db));
                 }
             }
@@ -202,9 +202,10 @@ class Database__MySQLi implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         $results = mysqli_query($this->db, $this->sql->Filter($query));
-        //if (mysqli_errno($this->db)) {
-        //    trigger_error(mysqli_error($this->db), E_USER_NOTICE);
-        //}
+        $e = mysqli_errno($this->db);
+        if ($e != 0) {
+            trigger_error($e . mysqli_error($this->db), E_USER_NOTICE);
+        }
         $data = array();
         if (is_object($results)) {
             while ($row = mysqli_fetch_assoc($results)) {

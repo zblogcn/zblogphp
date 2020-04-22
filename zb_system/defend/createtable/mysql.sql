@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS %pre%post (
   log_Template varchar(255) NOT NULL DEFAULT '',
   log_Meta longtext NOT NULL,
   PRIMARY KEY (log_ID),
-  KEY %pre%log_TPSCA (log_Type,log_PostTime,log_Status,log_CateID,log_AuthorID),
+  KEY %pre%log_TPISC (log_Type,log_PostTime,log_IsTop,log_Status,log_CateID),
   KEY %pre%log_VTSC (log_ViewNums,log_Type,log_Status,log_CateID)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;
 
@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS %pre%category (
   cate_Type smallint(6) NOT NULL DEFAULT '0',
   cate_Count int(11) NOT NULL DEFAULT '0',
   cate_Alias varchar(255) NOT NULL DEFAULT '',
+  cate_Group varchar(255) NOT NULL DEFAULT '',
   cate_Intro text NOT NULL,
   cate_RootID int(11) NOT NULL DEFAULT '0',
   cate_ParentID int(11) NOT NULL DEFAULT '0',
@@ -120,7 +121,8 @@ CREATE TABLE IF NOT EXISTS %pre%tag (
   tag_Order int(11) NOT NULL DEFAULT '0',
   tag_Type smallint(6) NOT NULL DEFAULT '0',
   tag_Count int(11) NOT NULL DEFAULT '0',
-  tag_Alias varchar(255) NOT NULL DEFAULT '', 
+  tag_Alias varchar(255) NOT NULL DEFAULT '',
+  tag_Group varchar(255) NOT NULL DEFAULT '',
   tag_Intro text NOT NULL,  
   tag_Template varchar(255) NOT NULL DEFAULT '',
   tag_Meta longtext NOT NULL,

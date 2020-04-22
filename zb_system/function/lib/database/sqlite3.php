@@ -111,7 +111,11 @@ class Database__SQLite3 implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
-        $results = $this->db->query($this->sql->Filter($query));
+        $results = @$this->db->query($this->sql->Filter($query));
+        $e = $this->db->lastErrorCode();
+        if ($e != 0) {
+            trigger_error($e . $this->db->lastErrorMsg(), E_USER_NOTICE);
+        }
         $data = array();
         if (!($results instanceof Sqlite3Result)) {
             return $data;
@@ -123,7 +127,6 @@ class Database__SQLite3 implements Database__Interface
         } else {
             $data[] = $results->numColumns();
         }
-
         return $data;
     }
 

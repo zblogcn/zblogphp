@@ -147,7 +147,7 @@ if ($zbp->option['ZC_DATABASE_TYPE'] !== '') {
           return false;
         };
       }
-      if ($("input[name='fdbtype']:checked").val() == "pgsql") {
+      if ($("input[name='fdbtype']:checked").val() == "postgresql") {
         if ($("#dbpgsql_server").val() == "") {
           alert("<?php echo $zbp->lang['zb_install']['dbserver_need']; ?>");
           return false;
@@ -501,13 +501,13 @@ function Setup3()
 
     $hasSqlite = false;
 
-    $hasPgsql = false;
+    $hasPostgresql = false;
 
     $hasMysql = (bool) ((bool) ($CheckResult['mysql'][0]) or (bool) ($CheckResult['mysqli'][0]) or (bool) ($CheckResult['pdo_mysql'][0]));
 
     $hasSqlite = (bool) ((bool) ($CheckResult['sqlite3'][0]) or (bool) ($CheckResult['sqlite'][0]) or (bool) ($CheckResult['pdo_sqlite'][0]));
 
-    $hasPgsql = (bool) ((bool) ($CheckResult['pgsql'][0]) or (bool) ($CheckResult['pdo_pgsql'][0]));
+    $hasPostgresql = (bool) ((bool) ($CheckResult['pgsql'][0]) or (bool) ($CheckResult['pdo_pgsql'][0]));
 
     $option2 = array();
     $option2['blogtitle'] = GetVars('blogtitle', 'GET');
@@ -535,7 +535,23 @@ function Setup3()
     }
     if (GetVars('dbcharset', 'GET') != '') {
         $option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'GET');
-    } ?>
+    }
+    if (GetVars('dbpgsql_server', 'GET') != '') {
+        $option['ZC_PGSQL_SERVER'] = GetVars('dbpgsql_server', 'GET');
+    }
+    if (GetVars('dbpgsql_name', 'GET') != '') {
+        $option['ZC_PGSQL_NAME'] = GetVars('dbpgsql_name', 'GET');
+    }
+    if (GetVars('dbpgsql_username', 'GET') != '') {
+        $option['ZC_PGSQL_USERNAME'] = GetVars('dbpgsql_username', 'GET');
+    }
+    if (GetVars('dbpgsql_password', 'GET') != '') {
+        $option['ZC_PGSQL_PASSWORD'] = GetVars('dbpgsql_password', 'GET');
+    }
+    if (GetVars('dbpgsql_pre', 'GET') != '') {
+        $option['ZC_PGSQL_PRE'] = GetVars('dbpgsql_pre', 'GET');
+    }
+    ?>
   <style type="text/css">
     .themelist label {
       margin-right: 40px;
@@ -625,10 +641,10 @@ function Setup3()
                 echo '&nbsp;&nbsp;&nbsp;&nbsp;';
             } ?>
             <?php
-            if ($hasPgsql) {
+            if ($hasPostgresql) {
                 ?>
-              <label class="dbselect" id="pgsql_radio">
-                <input type="radio" name="fdbtype" value="pgsql" /> PostgreSQL</label>
+              <label class="dbselect" id="postgresql_radio">
+                <input type="radio" name="fdbtype" value="postgresql" /> PostgreSQL</label>
                 <?php
                 echo '&nbsp;&nbsp;&nbsp;&nbsp;';
             } ?>
@@ -734,9 +750,9 @@ function Setup3()
           </div>
             <?php
         } ?>
-        <?php if ($hasSqlite) {
+        <?php if ($hasPostgresql) {
             ?>
-          <div class="dbdetail" id="pgsql">
+          <div class="dbdetail" id="postgresql">
             <p><b><?php echo $zbp->lang['zb_install']['db_server']; ?></b>
               <input type="text" name="dbpgsql_server" id="dbpgsql_server" value="<?php echo $option['ZC_PGSQL_SERVER']; ?>" style="width:350px;" />
             </p>
@@ -756,13 +772,13 @@ function Setup3()
               <?php if ($CheckResult['pgsql'][0]) {
                     ?>
                 <label>
-                  <input value="postgresql" type="radio" name="dbtype" /> pgsql</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input value="postgresql" type="radio" name="dbtype" /> postgresql</label>&nbsp;&nbsp;&nbsp;&nbsp;
                     <?php
               } ?>
               <?php if ($CheckResult['pdo_pgsql'][0]) {
                     ?>
                 <label>
-                  <input value="pdo_postgresql" type="radio" name="dbtype" /> pdo_pgsql</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input value="pdo_postgresql" type="radio" name="dbtype" /> pdo_postgresql</label>&nbsp;&nbsp;&nbsp;&nbsp;
                     <?php
               } ?>
               <br /><small><?php echo str_ireplace('3306', '5432', $zbp->lang['zb_install']['db_set_port']); ?></small>
@@ -825,6 +841,11 @@ function Setup3()
     }, function() {
       $(this).find("span").hide();
     });
+<?php
+if (GetVars('dbselect', 'GET') != '') {
+  echo '$("input:radio[name=fdbtype][value=' . GetVars('dbselect', 'GET') . ']").click();';
+}
+?>
   </script>
     <?php
 }

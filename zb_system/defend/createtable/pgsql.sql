@@ -22,8 +22,7 @@ CREATE TABLE %pre%post (
   PRIMARY KEY (log_ID)
 ) ;
 CREATE INDEX %pre%post_ix_id ON %pre%post(log_ID);
-CREATE INDEX %pre%post_ix_pt ON %pre%post(log_PostTime);
-CREATE INDEX %pre%post_ix_tpsca ON %pre%post(log_Type,log_PostTime,log_Status,log_CateID,log_AuthorID);
+CREATE INDEX %pre%post_ix_tpisc ON %pre%post(log_Type,log_PostTime,log_IsTop,log_Status,log_CateID);
 CREATE INDEX %pre%post_ix_vtsc ON %pre%post(log_ViewNums,log_Type,log_Status,log_CateID);
 
 CREATE SEQUENCE %pre%category_seq;
@@ -34,6 +33,7 @@ CREATE TABLE %pre%category (
  cate_Type smallint NOT NULL DEFAULT '0',
  cate_Count integer NOT NULL DEFAULT '0',
  cate_Alias varchar(255) NOT NULL DEFAULT '',
+ cate_Group varchar(255) NOT NULL DEFAULT '',
  cate_Intro text NOT NULL,
  cate_RootID integer NOT NULL DEFAULT '0',
  cate_ParentID integer NOT NULL DEFAULT '0',
@@ -63,6 +63,8 @@ CREATE TABLE %pre%comment (
   PRIMARY KEY (comm_ID)
 ) ;
 CREATE INDEX %pre%comment_ix_id ON %pre%comment(comm_ID);
+CREATE INDEX %pre%comment_lri ON %pre%comment(comm_LogID,comm_RootID,comm_IsChecking);
+CREATE INDEX %pre%comment_ischecking ON %pre%comment(comm_IsChecking);
 
 CREATE SEQUENCE %pre%config_seq;
 CREATE TABLE %pre%config (
@@ -124,7 +126,8 @@ CREATE TABLE %pre%tag (
   tag_Order integer NOT NULL DEFAULT '0',
   tag_Type smallint NOT NULL DEFAULT '0',
   tag_Count integer NOT NULL DEFAULT '0',
-  tag_Alias varchar(255) NOT NULL DEFAULT '', 
+  tag_Alias varchar(255) NOT NULL DEFAULT '',
+  tag_Group varchar(255) NOT NULL DEFAULT '',
   tag_Intro text NOT NULL,  
   tag_Template varchar(255) NOT NULL DEFAULT '',
   tag_Meta text NOT NULL,

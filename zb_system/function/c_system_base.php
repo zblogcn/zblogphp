@@ -150,10 +150,7 @@ define('ZC_POST_STATUS_PRIVATE', 4);
  * 文章状态：加密
  */
 define('ZC_POST_STATUS_PASSWORD', 8);
-/*
- * 文章状态：锁定
- */
-define('ZC_POST_STATUS_LOCKED', 16);
+
 
 /*
  *定义命令

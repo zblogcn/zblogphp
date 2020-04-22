@@ -28,6 +28,7 @@ CREATE TABLE %pre%category (
   cate_Type integer NOT NULL DEFAULT 0,
   cate_Count integer NOT NULL DEFAULT 0,
   cate_Alias varchar(255) NOT NULL DEFAULT '',
+  cate_Group varchar(255) NOT NULL DEFAULT '',
   cate_Intro text NOT NULL DEFAULT '',
   cate_RootID integer NOT NULL DEFAULT 0,
   cate_ParentID integer NOT NULL DEFAULT 0,
@@ -106,7 +107,8 @@ CREATE TABLE %pre%tag (
   tag_Order integer NOT NULL DEFAULT 0,
   tag_Type integer NOT NULL DEFAULT 0,
   tag_Count integer NOT NULL DEFAULT 0,
-  tag_Alias varchar(255) NOT NULL DEFAULT '',  
+  tag_Alias varchar(255) NOT NULL DEFAULT '',
+  tag_Group varchar(255) NOT NULL DEFAULT '',
   tag_Intro text NOT NULL DEFAULT '',
   tag_Template varchar(255) NOT NULL DEFAULT '',
   tag_Meta text NOT NULL DEFAULT ''
@@ -127,10 +129,12 @@ CREATE TABLE %pre%upload (
   ul_Meta text NOT NULL DEFAULT ''
 );
 
-CREATE INDEX %pre%log_PostTime on %pre%post (log_PostTime);
+CREATE INDEX %pre%log_TPISC on %pre%post (log_Type,log_PostTime,log_IsTop,log_Status,log_CateID);
 CREATE INDEX %pre%cate_Order on %pre%category (cate_Order);
 CREATE INDEX %pre%mem_Name on %pre%member (mem_Name);
 CREATE INDEX %pre%mem_Alias on %pre%member (mem_Alias);
+CREATE INDEX %pre%comm_LRI on %pre%comment (comm_LogID,comm_RootID,comm_IsChecking);
+CREATE INDEX %pre%comm_IsChecking on %pre%comment (comm_IsChecking);
 CREATE UNIQUE INDEX %pre%tag_ID on %pre%tag (tag_ID);
 CREATE UNIQUE INDEX %pre%log_ID on %pre%post (log_ID);
 CREATE UNIQUE INDEX %pre%cate_ID on %pre%category (cate_ID);

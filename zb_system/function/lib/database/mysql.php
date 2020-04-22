@@ -191,7 +191,7 @@ class Database__MySQL implements Database__Interface
             if ($s != '') {
                 mysql_query($this->sql->Filter($s), $this->db);
                 $e = mysql_errno($this->db);
-                if ($e > 0) {
+                if ($e != 0) {
                     $this->error[] = array($e, mysql_error($this->db));
                 }
             }
@@ -209,8 +209,9 @@ class Database__MySQL implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         $results = mysql_query($this->sql->Filter($query), $this->db);
-        if (mysql_errno()) {
-            trigger_error(mysql_error($this->db), E_USER_NOTICE);
+        $e = mysql_errno($this->db);
+        if ($e != 0) {
+            trigger_error($e . mysql_error($this->db), E_USER_NOTICE);
         }
 
         $data = array();

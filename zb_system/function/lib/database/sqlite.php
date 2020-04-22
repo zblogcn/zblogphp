@@ -95,7 +95,7 @@ class Database__SQLite implements Database__Interface
             if ($s != '') {
                 sqlite_query($this->db, $this->sql->Filter($s));
                 $e = sqlite_last_error($this->db);
-                if ($e > 0) {
+                if ($e != 0) {
                     $this->error[] = array($e, sqlite_error_string($e));
                 }
             }
@@ -111,7 +111,11 @@ class Database__SQLite implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
-        $results = sqlite_query($this->db, $this->sql->Filter($query));
+        $results = @sqlite_query($this->db, $this->sql->Filter($query));
+        $e = sqlite_last_error($this->db);
+        if ($e != 0) {
+            trigger_error($e . sqlite_error_string($e), E_USER_NOTICE);
+        }
         $data = array();
         if (is_resource($results)) {
             while ($row = sqlite_fetch_array($results)) {

@@ -189,6 +189,11 @@ class Database__PDO_MySQL implements Database__Interface
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
         $results = $this->db->query($this->sql->Filter($query));
+        $e = $this->db->errorCode();
+        if ($e > 0) {
+            trigger_error(implode(' ', $this->db->errorInfo()), E_USER_NOTICE);
+        }
+
         //fetch || fetchAll
         if (is_object($results)) {
             //if(true==true){
