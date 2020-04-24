@@ -118,7 +118,15 @@ $(function () {
         }
         $cpVrs.attr("href", zbp.options.bloghost + "zb_system/cmd.php?act=ArticleEdt");
     }
+});
+$(function(){
+  let inpNameVal = $(zbpConfig.comment.inputs.name.selector).val();
+  if (typeof inpNameVal === "undefined") {
+    return;
+  }
+  if (inpNameVal.trim() === "" || inpNameVal === "<?php echo $zbp->lang['msg']['anonymous']; ?>"){
     zbp.userinfo.output();
+  }
 });
 <?php
 }

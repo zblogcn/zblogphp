@@ -120,7 +120,8 @@
     this.plugin.on('userinfo.output', 'system', function () {
       self.eachOnCommentInputs(function (key, value) {
         if (value.saveLocally) {
-          value.setter(self.userinfo[key])
+          self.userinfo[key] = self.cookie.get('zbp_userinfo_' + key)
+          self.userinfo[key] && value.setter(self.userinfo[key])
         }
       })
     })
