@@ -670,6 +670,11 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Admin_Header', 'Include_AddonAdminFont');
         Add_Filter_Plugin('Filter_Plugin_BatchPost', 'Include_BatchPost_Article');
         Add_Filter_Plugin('Filter_Plugin_BatchPost', 'Include_BatchPost_Page');
+        Add_Filter_Plugin('Filter_Plugin_Index_End', 'Include_Index_End');
+        Add_Filter_Plugin('Filter_Plugin_Search_End', 'Include_Index_End');
+        Add_Filter_Plugin('Filter_Plugin_Index_Begin', 'Include_Index_Begin');
+        Add_Filter_Plugin('Filter_Plugin_Search_Begin', 'Include_Index_Begin');
+        Add_Filter_Plugin('Filter_Plugin_Feed_Begin', 'Include_Index_Begin');
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) {
             $fpname();
@@ -3359,7 +3364,7 @@ class ZBlogPHP
 
         if ($host != $host2) {
             $u = GetRequestUri();
-            $u = $this->host . substr($u, 1, strlen($u));
+            $u = $this->host . substr($u, 1);
             Redirect301($u);
         }
     }

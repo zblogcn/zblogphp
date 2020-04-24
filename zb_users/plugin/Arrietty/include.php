@@ -64,7 +64,7 @@ function Arrietty_ViewList_Core($type, $page, $category, $author, $datetime, $ta
     if ($zbp->user->ID != null) {
         foreach ($w as $key => $value) {
             if(count($value) == 3 && $value[1] == 'log_Status'){
-                $w[$key] = array('OR',array('=','log_Status',0), array('=','log_Status',8), array('=','log_Status',4));
+                $w[$key] = array('OR',array('=','log_Status',0), array('=','log_Status',8), array('log_Status = 4 AND log_AuthorID = ' . $zbp->user->ID));
             }
         }
     } else {
@@ -198,7 +198,7 @@ function Arrietty_Html_Js_Add(){
     $script=<<<script
 function arrietty_getrandpw(id){
 
-$.get(bloghost + "zb_system/cmd.php", { act: "ajax", src: "Arrietty", subact: "getrandpw", postid: id  },
+$.get(ajaxurl + "Arrietty", { subact: "getrandpw", postid: id  },
   function(data){
     $("#arrietty_password_" + id).val(data);
   });
@@ -208,7 +208,7 @@ $.get(bloghost + "zb_system/cmd.php", { act: "ajax", src: "Arrietty", subact: "g
 function arrietty_setpassword(id){
 
 var pw = $("#arrietty_password_" + id).val();
-$.get(bloghost + "zb_system/cmd.php", { act: "ajax", src: "Arrietty", subact: "setpassword", postid: id, password: pw },
+$.get(ajaxurl + "Arrietty", { subact: "setpassword", postid: id, password: pw },
   function(data){
     alert(data);
   });
@@ -217,7 +217,7 @@ $.get(bloghost + "zb_system/cmd.php", { act: "ajax", src: "Arrietty", subact: "s
 function arrietty_submitpw(id){
 
 var pw = $("#arrietty_password_" + id).val();
-$.get(bloghost + "zb_system/cmd.php", { act: "ajax", src: "Arrietty", subact: "submitpw", postid: id, password: pw },
+$.get(ajaxurl + "Arrietty", { subact: "submitpw", postid: id, password: pw },
   function(data){
     var data = $.parseJSON(data);
     if(data.err == 0){

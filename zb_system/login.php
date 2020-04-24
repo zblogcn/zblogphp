@@ -1,7 +1,6 @@
 <?php
 require './function/c_system_base.php';
 
-$zbp->CheckGzip();
 $zbp->Load();
 if ($zbp->CheckRights('admin')) {
     Redirect('cmd.php?act=admin');

@@ -24,7 +24,7 @@ define('PLUGIN_EXITSIGNAL_RETURN', 'return');
  */
 define('PLUGIN_EXITSIGNAL_BREAK', 'break');
 
-//定义总插件激活函数列表
+//定义总插件激活列表
 $GLOBALS['plugins'] = array();
 
 //定义总接口列表，1.5版启用，逐渐过度到hooks
@@ -195,17 +195,6 @@ function Remove_Filter_Plugin($plugname, $functionname)
 
     return false;
 }
-
-/*
-'*********************************************************
-' 目的：挂上Response接口
-' 参数：'plugname:接口名称
-'parameter:要写入的内容
-'*********************************************************
- */
-// function Add_Response_Plugin($plugname,$functionname){
-// $GLOBALS['hooks'][$plugname][]=$functionname;
-// }
 
 //###############################################################################################################
 //dubug,common里的

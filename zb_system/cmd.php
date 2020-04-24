@@ -2,12 +2,12 @@
 
 require './function/c_system_base.php';
 $zbp->Load();
-$action = GetVars('act', 'GET');
-if ($action == 'ajax') {
+$zbp->action = GetVars('act', 'GET');
+if ($zbp->action == 'ajax') {
     define('IN_AJAX_PROCESSING', true);
 }
 
-if (!$zbp->CheckRights($action)) {
+if (!$zbp->CheckRights($zbp->action)) {
     $zbp->ShowError(6, __FILE__, __LINE__);
     die();
 }
@@ -16,7 +16,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Begin'] as $fpname => &$fpsignal) 
     $fpname();
 }
 
-switch ($action) {
+switch ($zbp->action) {
     case 'login':
         if (!empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
             $a = parse_url(GetVars('redirect', 'GET'));

@@ -116,10 +116,10 @@ class Database__SQLite3 implements Database__Interface
         if ($e != 0) {
             trigger_error($e . $this->db->lastErrorMsg(), E_USER_NOTICE);
         }
-        $data = array();
         if (!($results instanceof Sqlite3Result)) {
-            return $data;
+            return array($results);
         }
+        $data = array();
         if ($results->numColumns() > 0) {
             while ($row = $results->fetchArray()) {
                 $data[] = $row;

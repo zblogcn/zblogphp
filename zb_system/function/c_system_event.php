@@ -337,10 +337,6 @@ function ViewIndex()
 {
     global $zbp, $action;
 
-    if ($zbp->template->hasTemplate('404')) {
-        Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'Include_ShowError404');
-    }
-
     if (IS_IIS && isset($_GET['rewrite']) && isset($_GET['full_uri'])) {
         //对iis + rewrite进行修正
         $uri_array = parse_url($_GET['full_uri']);
@@ -350,13 +346,6 @@ function ViewIndex()
             $_REQUEST = array_merge($_REQUEST, $uri_query);
         }
         unset($uri_array, $uri_query);
-    }
-
-    if ($zbp->option['ZC_ADDITIONAL_SECURITY']) {
-        header('X-XSS-Protection: 1; mode=block');
-        if ($zbp->isHttps) {
-            header('Upgrade-Insecure-Requests: 1');
-        }
     }
 
     $url = $zbp->currenturl;
@@ -3177,6 +3166,56 @@ function BatchPost($type)
     }
 }
 
+//###############################################################################################################
+
+/**
+ * 显示404页面(内置插件函数).
+ *
+ * 可通过主题中的404.php模板自定义显示效果
+ *
+ * @api Filter_Plugin_Zbp_ShowError
+ *
+ * @param $errorCode
+ * @param $errorDescription
+ * @param $file
+ * @param $line
+ *
+ * @throws Exception
+ */
+function Include_ShowError404($errorCode, $errorDescription, $file, $line)
+{
+    global $zbp;
+    if (!in_array("Status: 404 Not Found", headers_list())) {
+        return;
+    }
+
+    $zbp->template->SetTags('title', $zbp->title);
+    $zbp->template->SetTemplate('404');
+    $zbp->template->Display();
+
+    exit;
+}
+
+/**
+ * 输出后台指定字体family(内置插件函数).
+ */
+function Include_AddonAdminFont()
+{
+    global $zbp;
+    $f = $s = '';
+    if (isset($zbp->lang['font_family']) && trim($zbp->lang['font_family'])) {
+        $f = 'font-family:' . $zbp->lang['font_family'] . ';';
+    }
+
+    if (isset($zbp->lang['font_size']) && trim($zbp->lang['font_size'])) {
+        $s = 'font-size:' . $zbp->lang['font_size'] . ';';
+    }
+
+    if ($f || $s) {
+        echo '<style type="text/css">body{' . $s . $f . '}</style>';
+    }
+}
+
 function Include_BatchPost_Article($type)
 {
     global $zbp;
@@ -3268,6 +3307,35 @@ function Include_BatchPost_Page($type)
         }
     }
     return true;
+}
+
+function Include_Index_End()
+{
+    global $zbp;
+    if ($zbp->option['ZC_RUNINFO_DISPLAY'] == false) {
+        RunTime();
+    }
+
+}
+
+function Include_Index_Begin()
+{
+    global $zbp;
+    $zbp->CheckSiteClosed();
+
+    $zbp->RedirectPermanentDomain();
+
+    if ($zbp->template->hasTemplate('404')) {
+        Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'Include_ShowError404');
+    }
+
+    if ($zbp->option['ZC_ADDITIONAL_SECURITY']) {
+        header('X-XSS-Protection: 1; mode=block');
+        if ($zbp->isHttps) {
+            header('Upgrade-Insecure-Requests: 1');
+        }
+    }
+
 }
 
 //###############################################################################################################
@@ -3744,54 +3812,6 @@ function CountMemberArray($array, $plus = array(null, null, null, null))
 }
 
 //###############################################################################################################
-
-/**
- * 显示404页面(内置插件函数).
- *
- * 可通过主题中的404.php模板自定义显示效果
- *
- * @api Filter_Plugin_Zbp_ShowError
- *
- * @param $errorCode
- * @param $errorDescription
- * @param $file
- * @param $line
- *
- * @throws Exception
- */
-function Include_ShowError404($errorCode, $errorDescription, $file, $line)
-{
-    global $zbp;
-    if (!in_array("Status: 404 Not Found", headers_list())) {
-        return;
-    }
-
-    $zbp->template->SetTags('title', $zbp->title);
-    $zbp->template->SetTemplate('404');
-    $zbp->template->Display();
-
-    exit;
-}
-
-/**
- * 输出后台指定字体family(内置插件函数).
- */
-function Include_AddonAdminFont()
-{
-    global $zbp;
-    $f = $s = '';
-    if (isset($zbp->lang['font_family']) && trim($zbp->lang['font_family'])) {
-        $f = 'font-family:' . $zbp->lang['font_family'] . ';';
-    }
-
-    if (isset($zbp->lang['font_size']) && trim($zbp->lang['font_size'])) {
-        $s = 'font-size:' . $zbp->lang['font_size'] . ';';
-    }
-
-    if ($f || $s) {
-        echo '<style type="text/css">body{' . $s . $f . '}</style>';
-    }
-}
 
 /**
  * @deprecated

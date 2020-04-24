@@ -9,18 +9,15 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
-$zbp->CheckGzip();
 $zbp->Load();
 
-$action = GetVars('act', 'GET');
+$zbp->action = GetVars('act', 'GET');
 
 $admin_function = null;
 
-if (($action == '') || ($action == null)) {
-    $action = 'admin';
-}
+$zbp->action = ($zbp->action == '') ? 'admin' : $zbp->action;
 
-if (!$zbp->CheckRights($action)) {
+if (!$zbp->CheckRights($zbp->action)) {
     $zbp->ShowError(6, __FILE__, __LINE__);
     die();
 }
@@ -29,7 +26,7 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Begin'] as $fpname => &$fpsignal
     $fpname();
 }
 
-switch ($action) {
+switch ($zbp->action) {
     case 'ArticleMng':
         if (is_null($admin_function)) {
             $admin_function = 'Admin_ArticleMng';
@@ -103,17 +100,11 @@ switch ($action) {
         }
         break;
     default:
-        //复杂的退出机制
-        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Other_Action'] as $fpname => &$fpsignal) {
-            $fpsignal = $fpname($action, $admin_function);
+            $fpsignal = $fpname($zbp->action, $admin_function);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN || $fpsignal == PLUGIN_EXITSIGNAL_BREAK) {
                 break;
             }
-        }
-        if ($fpsignal == PLUGIN_EXITSIGNAL_NONE) {
-            $zbp->ShowError(6, __FILE__, __LINE__);
-            die();
         }
         unset($fpsignal);
         break;
