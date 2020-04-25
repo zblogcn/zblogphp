@@ -65,7 +65,7 @@ function misc_statistic()
     $all_articles = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('*' => 'num'))->where(array('=', 'log_Type', '0'))->query, 'num');
     $all_pages = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('*' => 'num'))->where(array('=', 'log_Type', '1'))->query, 'num');
     $all_categories = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Category'])->count(array('*' => 'num'))->query, 'num');
-    $all_views = $zbp->option['ZC_VIEWNUMS_TURNOFF'] == true ? 0 : GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->sum(array('log_ViewNums' => 'num'))->query, 'num');
+    $all_views = ($zbp->option['ZC_LARGE_DATA'] == false && $zbp->option['ZC_VIEWNUMS_TURNOFF'] == true) ? 0 : GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->sum(array('log_ViewNums' => 'num'))->query, 'num');
     $all_tags = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Tag'])->count(array('*' => 'num'))->query, 'num');
     $all_members = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Member'])->count(array('*' => 'num'))->query, 'num');
     $check_comment_nums = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('*' => 'num'))->where('=', 'comm_Ischecking', '1')->query, 'num');
@@ -126,7 +126,7 @@ function misc_showtags()
     }
 
     header('Content-Type: application/x-javascript; Charset=utf-8');
-
+    header('Cache-Control: private'); 
     echo '$("#ajaxtags").html("';
 
     $array = $zbp->GetTagList(null, null, array('tag_Count' => 'DESC', 'tag_ID' => 'ASC'), array(100), null);
@@ -539,9 +539,10 @@ function misc_ping()
 function misc_updatedapp()
 {
     global $zbp;
-
-    header('Content-Type: application/x-javascript; Charset=utf-8');
-
+    if (!$zbp->CheckRights('admin')) {
+        echo $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
     if ($zbp->cache->success_updated_app !== '') {
         $fn = $zbp->cache->success_updated_app . '_Updated';
         if (function_exists($fn)) {

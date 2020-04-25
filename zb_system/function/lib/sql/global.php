@@ -1164,7 +1164,9 @@ class SQL__Global
 
         if (array_key_exists('INDEX', $this->other)) {
             $sql[] = 'INDEX';
-            $sql[] = implode(' ,', $this->other['INDEX']);
+            $s = implode(' ,', $this->other['INDEX']);
+            $s = str_replace('%pre%', $this->db->dbpre, $s);
+            $sql[] = $s;
             if ($this->db->type == 'mysql') {
                 $sql[] = 'ON';
                 $this->buildTable();
@@ -1185,8 +1187,15 @@ class SQL__Global
         $this->buildTable();
         $str = trim(implode('', $this->table));
         if ($str === '') {
-            $sql[] = implode(' ,', $this->other['TABLE']);
+            $s = implode(' ,', $this->other['TABLE']);
+            $s = str_replace('%pre%', $this->db->dbpre, $s);
+            $str = $s;
         }
+        $sql[] = $s;
+        $sql[] = ';';
+        $s = 'DROP SEQUENCE ' . $str . '_seq;';
+        $s = str_replace('%pre%', $this->db->dbpre, $s);
+        $sql[] = $s; 
     }
 
     protected function buildCreate()
@@ -1204,7 +1213,7 @@ class SQL__Global
             if (stripos($indexname, $table . '_') === false) {
                 $indexname = $table . '_' . $indexname;
             }
-
+            $indexname = str_replace('%pre%', $this->db->dbpre, $indexname);
             if (isset($this->option['uniqueindex']) && $this->option['uniqueindex'] == true) {
                 $sql[] = 'CREATE UNIQUE INDEX ' . $indexname;
             } else {

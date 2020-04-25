@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>LinksManage</id>
-<name>链接管理中心</name>
+<name>链接模块管理</name>
 <url>https://app.zblogcn.com/?id=1873</url>
 <note>表单化管理导航、友情链接等</note>
 <description>表单化管理导航、友情链接等</description>
@@ -21,7 +21,7 @@
 <adapted>151626</adapted>
 <version>1.2</version>
 <pubdate>2018-10-29</pubdate>
-<modified>2020-04-04</modified>
+<modified>2020-04-24</modified>
 <price>0</price>
 <phpver>5.2</phpver>
 <advanced>

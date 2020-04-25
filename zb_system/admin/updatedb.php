@@ -65,6 +65,8 @@ function updatedb()
         @$db->Query("ALTER TABLE {$table['Category']} ADD  {$d['Category']['Group'][0]} VARCHAR(255) NOT NULL DEFAULT '';");
     }
 
+    //删除一个长期存在而又无用的索引
+    @$db->sql->get()->drop($t['Post'])->index('%pre%log_VTSC')->query;
 
     //ZBlogException::ResumeErrorHook();
     $zbp->option['ZC_LAST_VERSION'] = 162315;

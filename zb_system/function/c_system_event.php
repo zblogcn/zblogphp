@@ -3312,7 +3312,7 @@ function Include_BatchPost_Page($type)
 function Include_Index_End()
 {
     global $zbp;
-    if ($zbp->option['ZC_RUNINFO_DISPLAY'] == false) {
+    if ($zbp->option['ZC_RUNINFO_DISPLAY'] == true) {
         RunTime();
     }
 

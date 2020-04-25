@@ -180,9 +180,9 @@ class Database__PostgreSQL implements Database__Interface
             $st = pg_result_status($results);
             if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
                 trigger_error(pg_result_error($results), E_USER_NOTICE);
-          }
+            }
         } else {
-          trigger_error(pg_last_error($this->db), E_USER_NOTICE);
+            trigger_error(pg_last_error($this->db), E_USER_NOTICE);
         }
         $data = array();
         if (is_resource($results)) {

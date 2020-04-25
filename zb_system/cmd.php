@@ -62,19 +62,6 @@ switch ($zbp->action) {
         $q = rawurlencode(trim(strip_tags(GetVars('q', 'POST'))));
         Redirect($zbp->searchurl . '?q=' . $q);
         break;
-    case 'misc':
-        include './function/c_system_misc.php';
-        ob_clean();
-
-        $miscType = GetVars('type', 'GET');
-
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Misc_Begin'] as $fpname => &$fpsignal) {
-            $fpname($miscType);
-        }
-
-        $function = 'misc_' . $miscType;
-        $function();
-        break;
     case 'cmt':
         $die = false;
         if (GetVars('isajax', 'POST')) {
@@ -356,18 +343,31 @@ switch ($zbp->action) {
         $zbp->SetHint('good');
         Redirect('cmd.php?act=SettingMng');
         break;
-    case 'ajax':
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Ajax'] as $fpname => &$fpsignal) {
-            $fpname(GetVars('src', 'GET'));
-        }
-
-        break;
     case 'PostBat':
         BatchPost(GetVars('type', 'GET'));
         $zbp->BuildModule();
         $zbp->SaveCache();
         $zbp->SetHint('good');
         Redirect($_SERVER["HTTP_REFERER"]);
+    case 'misc':
+        include './function/c_system_misc.php';
+        ob_clean();
+
+        $miscType = GetVars('type', 'GET');
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Misc_Begin'] as $fpname => &$fpsignal) {
+            $fpname($miscType);
+        }
+
+        $function = 'misc_' . $miscType;
+        $function();
+        break;
+    case 'ajax':
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Ajax'] as $fpname => &$fpsignal) {
+            $fpname(GetVars('src', 'GET'));
+        }
+
+        break;
     default:
         // code...
         break;

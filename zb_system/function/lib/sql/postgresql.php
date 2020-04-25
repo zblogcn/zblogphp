@@ -134,16 +134,6 @@ class SQL__PostgreSQL extends SQL__Global
         $this->pri_sql = $sqlAll;
     }
 
-    protected function buildDrop()
-    {
-        foreach ($this->table as $tableIndex => $table) {
-            $sql = array();
-            $sql[] = 'DROP TABLE ' . $table . ';';
-            $sql[] = 'DROP SEQUENCE ' . $table . '_seq;';
-        }
-        $this->pri_sql = $sql;
-    }
-
     protected function buildRandomBefore()
     {
         $table = $this->table[0];
