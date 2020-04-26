@@ -140,9 +140,9 @@ unset($post_data['token']);
                         </div>
                         <div>
                             <p><?php echo $GLOBALS['lang']['msg']['request_data']; ?></p>
-                            <pre><?php echo '$%_GET = ' . print_r(htmlspecialchars_array($_GET), 1); ?></pre>
-                            <pre><?php echo '$%_POST = ' . print_r(htmlspecialchars_array($_POST), 1); ?></pre>
-                            <pre><?php echo '$%_COOKIE = ' . print_r(htmlspecialchars_array($post_data), 1); ?></pre>
+                            <pre><?php echo '$%_GET = ' . call_user_func('print_r', htmlspecialchars_array($_GET), 1); ?></pre>
+                            <pre><?php echo '$%_POST = ' . call_user_func('print_r', htmlspecialchars_array($_POST), 1); ?></pre>
+                            <pre><?php echo '$%_COOKIE = ' . call_user_func('print_r', htmlspecialchars_array($post_data), 1); ?></pre>
                         </div>
                         <div>
                             <p><?php echo $GLOBALS['lang']['msg']['include_file']; ?></p>

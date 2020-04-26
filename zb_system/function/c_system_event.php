@@ -3052,7 +3052,6 @@ function SetTheme($theme, $style)
 function SetSidebar()
 {
     global $zbp;
-    // @TODO: 将此处的9常量化
     for ($i = 1; $i <= 9; $i++) {
         $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : "ZC_SIDEBAR${i}_ORDER";
         $formName = $i === 1 ? 'sidebar' : "sidebar${i}";

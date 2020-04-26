@@ -191,7 +191,7 @@ class Network__fsockopen implements Network__Interface
                 $data = '';
             }
             if ($data == '') {
-                $data = $this->__buildPostData(); //http_build_query($this->postdata);
+                $data = $this->private_buildPostData(); //http_build_query($this->postdata);
             }
             $this->option['content'] = $data;
             if (!isset($this->httpheader['Content-Type'])) {
@@ -404,7 +404,7 @@ class Network__fsockopen implements Network__Interface
     /**
      * @return string
      */
-    private function __buildPostData()
+    private function private_buildPostData()
     {
         if (!$this->private_isBinary) {
             $array = array();
@@ -414,7 +414,7 @@ class Network__fsockopen implements Network__Interface
 
             return http_build_query($array);
         }
-        $this->__buildBoundary();
+        $this->private_buildBoundary();
         $boundary = $this->private_boundary;
         $data = '';
 
@@ -444,7 +444,7 @@ class Network__fsockopen implements Network__Interface
     /**
      * Build Boundary.
      */
-    private function __buildBoundary()
+    private function private_buildBoundary()
     {
         $boundary = '----ZBLOGPHPBOUNDARY';
         $boundary .= substr(md5(time()), 8, 16);

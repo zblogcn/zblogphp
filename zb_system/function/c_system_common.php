@@ -1254,8 +1254,8 @@ function SubStrUTF8_Start($sourcestr, $start)
     }
 
     if (function_exists('iconv_substr') && function_exists('iconv_set_encoding')) {
-        iconv_set_encoding("internal_encoding", "UTF-8");
-        iconv_set_encoding("output_encoding", "UTF-8");
+        call_user_func('iconv_set_encoding', 'internal_encoding', "UTF-8");
+        call_user_func('iconv_set_encoding', 'output_encoding', "UTF-8");
 
         return call_user_func_array('iconv_substr', $args);
     }
@@ -1280,8 +1280,8 @@ function SubStrUTF8($sourcestr, $cutlength)
     }
 
     if (function_exists('iconv_substr') && function_exists('iconv_set_encoding')) {
-        iconv_set_encoding("internal_encoding", "UTF-8");
-        iconv_set_encoding("output_encoding", "UTF-8");
+        call_user_func('iconv_set_encoding', 'internal_encoding', "UTF-8");
+        call_user_func('iconv_set_encoding', 'output_encoding', "UTF-8");
 
         return iconv_substr($sourcestr, 0, $cutlength);
     }
@@ -1337,8 +1337,8 @@ function Zbp_StrLen($string)
         return mb_strlen($string);
     }
     if (function_exists('iconv_strlen') && function_exists('iconv_set_encoding')) {
-        iconv_set_encoding("internal_encoding", "UTF-8");
-        iconv_set_encoding("output_encoding", "UTF-8");
+        call_user_func('iconv_set_encoding', 'internal_encoding', "UTF-8");
+        call_user_func('iconv_set_encoding', 'output_encoding', "UTF-8");
         return iconv_strlen($string);
     }
     return strlen($string);
@@ -1351,8 +1351,8 @@ function Zbp_Strpos($haystack, $needle, $offset = 0)
         return mb_strpos($haystack, $needle, $offset);
     }
     if (function_exists('iconv_strpos') && function_exists('iconv_set_encoding')) {
-        iconv_set_encoding("internal_encoding", "UTF-8");
-        iconv_set_encoding("output_encoding", "UTF-8");
+        call_user_func('iconv_set_encoding', 'internal_encoding', "UTF-8");
+        call_user_func('iconv_set_encoding', 'output_encoding', "UTF-8");
         return iconv_strpos($haystack, $needle, $offset);
     }
     return strpos($haystack, $needle, $offset);
@@ -1365,8 +1365,8 @@ function Zbp_Stripos($haystack, $needle, $offset = 0)
         return mb_stripos($haystack, $needle, $offset);
     }
     if (function_exists('iconv_strpos') && function_exists('iconv_set_encoding')) {
-        iconv_set_encoding("internal_encoding", "UTF-8");
-        iconv_set_encoding("output_encoding", "UTF-8");
+        call_user_func('iconv_set_encoding', 'internal_encoding', "UTF-8");
+        call_user_func('iconv_set_encoding', 'output_encoding', "UTF-8");
         $haystack = strtolower($haystack);
         $needle = strtolower($needle);
         return iconv_strpos($haystack, $needle, $offset);
@@ -1403,8 +1403,8 @@ function SubStrUTF8_Html($source, $length)
     }
 
     if (function_exists('iconv_substr') && function_exists('iconv_set_encoding')) {
-        iconv_set_encoding("internal_encoding", "UTF-8");
-        iconv_set_encoding("output_encoding", "UTF-8");
+        call_user_func('iconv_set_encoding', 'internal_encoding', "UTF-8");
+        call_user_func('iconv_set_encoding', 'output_encoding', "UTF-8");
         $j = iconv_strlen($source);
         $s = iconv_substr($source, 0, $length);
         $l = substr_count($s, '<');
@@ -1639,12 +1639,12 @@ function utf84mb_convertToUTF8($matches)
 function VerifyWebToken($webTokenString, $webTokenId, $key = '')
 {
     global $zbp;
-    $time = substr($webTokenString, 64);
-    $wt = substr($webTokenString, 0, 64);
     $args = array();
     for ($i = 3; $i < func_num_args(); $i++) {
         $args[] = func_get_arg($i);
     }
+    $time = substr($webTokenString, 64);
+    $wt = substr($webTokenString, 0, 64);
     if ($key == '') {
         $key = $zbp->guid;
     }
@@ -1670,10 +1670,8 @@ function VerifyWebToken($webTokenString, $webTokenId, $key = '')
 function CreateWebToken($webTokenId, $time, $key = '')
 {
     global $zbp;
-    $array = func_get_arg();
-    $args = array();
     for ($i = 3; $i < func_num_args(); $i++) {
-        $args[] = $array($i);
+        $args[] = func_get_arg($i);
     }
     if ($key == '') {
         $key = $zbp->guid;

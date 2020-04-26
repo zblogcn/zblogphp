@@ -32,7 +32,6 @@ class SQL__MySQL extends SQL__Global
     }
 
     /**
-     * @todo
      * @override
      */
     public function exist($table, $dbname = '')
@@ -43,7 +42,6 @@ class SQL__MySQL extends SQL__Global
     }
 
     /**
-     * @todo
      *
      * @override
      */

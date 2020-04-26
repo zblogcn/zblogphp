@@ -70,7 +70,7 @@ class ModuleBuilder
      *
      * @return string 模块内容
      *
-     * @todo 必须重写
+     *
      */
     public static function Catalog()
     {

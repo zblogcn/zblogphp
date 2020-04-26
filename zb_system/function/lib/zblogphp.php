@@ -3252,7 +3252,6 @@ class ZBlogPHP
             $GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] = array();
 
             throw new Exception($errorText);
-            exit(1);
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {

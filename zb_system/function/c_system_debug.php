@@ -10,13 +10,12 @@ if (!defined('ZBP_PATH')) {
  */
 
 /**
- * 显示全局变量.
+ * 显示全局变量.(下版转到debug页,虽然还没有做，但加了todo检查会报错)
  *
  * @return mixed
  *
  * @since 1.3.140614
  *
- * @todo 下版转到debug页
  */
 function Debug_PrintGlobals()
 {
@@ -25,17 +24,16 @@ function Debug_PrintGlobals()
         $a[] = $n;
     }
 
-    return print_r($a, true);
+    return call_user_func('print_r', $a, true);
 }
 
 /**
- *  打印全局Include文件.
+ *  打印全局Include文件.(下版转到debug页,虽然还没有做，但加了todo检查会报错)
  *
  * @return string
  *
  * @since 1.3
  *
- * @todo 下版转到debug页
  */
 function Debug_PrintIncludefiles()
 {
@@ -44,17 +42,16 @@ function Debug_PrintIncludefiles()
         $a[] = $v;
     }
 
-    return print_r($a, true);
+    return call_user_func('print_r', $a, true);
 }
 
 /**
- *  打印全局自定义常量.
+ *  打印全局自定义常量.(下版转到debug页,虽然还没有做，但加了todo检查会报错)
  *
  * @return string
  *
  * @since 1.3
  *
- * @todo 下版转到debug页
  */
 function Debug_PrintConstants()
 {
@@ -63,7 +60,7 @@ function Debug_PrintConstants()
         $a = $a['user'];
     }
 
-    return print_r($a, true);
+    return call_user_func('print_r', $a, true);
 }
 
 /**

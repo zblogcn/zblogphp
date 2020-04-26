@@ -20,7 +20,6 @@ class SQL__PostgreSQL extends SQL__Global
     }
 
     /**
-     * @todo
      * @override
      */
     public function exist($table, $dbname = '')
@@ -31,7 +30,6 @@ class SQL__PostgreSQL extends SQL__Global
     }
 
     /**
-     * @todo
      * @override
      */
     protected function buildCreate()

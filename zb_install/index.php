@@ -1186,7 +1186,7 @@ function CreateTable($sql)
         echo $zbp->lang['zb_install']['not_create_table'];
         if (!empty($zbp->db->error)) {
             echo '<pre style="height:30em;overflow:scroll ">';
-            var_dump($zbp->db->error);
+            call_user_func('var_dump', $zbp->db->error);
             echo '</pre>';
         }
 

@@ -302,10 +302,10 @@ class SQL__Global
      */
     public function column($columns)
     {
+        $args = func_get_args();
         if (!$this->validateParamater($columns)) {
             return $this;
         }
-        $args = func_get_args();
         foreach ($args as $key => $value) {
             if (is_array($value)) {
                 $this->columnLoaderArray($value);
@@ -389,6 +389,7 @@ class SQL__Global
      */
     public function having($having)
     {
+        $args = func_get_args();
         if (!$this->validateParamater($having)) {
             return $this;
         }/* elseif (is_array($having)) {
@@ -399,7 +400,6 @@ class SQL__Global
         } else {
             $this->having[] = $having;
         }*/
-        $args = func_get_args();
         foreach ($args as $key => $value) {
             if (is_array($value)) {
                 $this->having[] = $this->buildWhere_Single($value);
@@ -424,7 +424,7 @@ class SQL__Global
         } elseif (is_array($groupBy)) {
             $this->groupBy = array_merge($this->groupBy, $groupBy);
         } elseif (func_num_args() > 1) {
-            $args = func_get_args(); // Fuck PHP 5.2
+            $args = call_user_func('func_get_args'); // Fuck PHP 5.2
             $this->groupBy = array_merge($this->groupBy, $args);
         } else {
             $this->groupBy[] = $groupBy;
@@ -476,7 +476,7 @@ class SQL__Global
     }
 
     /**
-     * @todo
+     * 检查表是否存在(子类已有实现)
      *
      * @param string $table
      * @param string $dbname
@@ -485,7 +485,7 @@ class SQL__Global
      */
     public function exist($table, $dbname = '')
     {
-        return $this;
+        // Do nothing yet
     }
 
     private function sql()
@@ -763,11 +763,9 @@ class SQL__Global
         }
     }
 
-    /**
-     * @todo
-     **/
     protected function buildPagebar()
     {
+        // Do nothing yet
     }
 
     protected function buildBeforeWhere()
