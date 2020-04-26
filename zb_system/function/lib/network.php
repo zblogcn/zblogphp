@@ -37,7 +37,7 @@ class Network
     /**
      * @var Network__Interface[]
      */
-    private static $_network = null;
+    private static $private_network = null;
 
     /**
      * 构造函数.
@@ -69,14 +69,14 @@ class Network
      */
     public static function Create($extension = '')
     {
-        if (!isset(self::$_network)) {
-            self::$_network = new self();
+        if (!isset(self::$private_network)) {
+            self::$private_network = new self();
         }
-        if ((!self::$_network->file_get_contents) && (!self::$_network->fsockopen) && (!self::$_network->curl)) {
+        if ((!self::$private_network->file_get_contents) && (!self::$private_network->fsockopen) && (!self::$private_network->curl)) {
             return;
         }
 
-        $extension = ($extension == '' ? self::$_network->network_list[0] : $extension);
+        $extension = ($extension == '' ? self::$private_network->network_list[0] : $extension);
         $type = 'Network__' . $extension;
         $network = new $type();
 

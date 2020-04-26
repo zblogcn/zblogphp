@@ -102,4 +102,5 @@ class ZbpForm
         $s = "<input type=\"password\" name=\"$name\" id=\"$name\" class=\"$name\" value=\"$value\"$style/>\r\n";
         echo $s;
     }
+
 }

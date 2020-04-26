@@ -9,7 +9,7 @@ if (!defined('ZBP_PATH')) {
 class ZBlogPHP
 {
 
-    private static $_zbp = null;
+    private static $private_zbp = null;
 
     /**
      * @var string 版本号
@@ -329,16 +329,16 @@ class ZBlogPHP
      */
     public static function GetInstance()
     {
-        if (!isset(self::$_zbp)) {
+        if (!isset(self::$private_zbp)) {
             if (isset($GLOBALS['option']['ZC_GODZBP_FILE']) && isset($GLOBALS['option']['ZC_GODZBP_NAME']) && is_readable(ZBP_PATH . $GLOBALS['option']['ZC_GODZBP_FILE'])) {
                 include ZBP_PATH . $GLOBALS['option']['ZC_GODZBP_FILE'];
-                self::$_zbp = new $GLOBALS['option']['ZC_GODZBP_NAME']();
+                self::$private_zbp = new $GLOBALS['option']['ZC_GODZBP_NAME']();
             } else {
-                self::$_zbp = new self();
+                self::$private_zbp = new self();
             }
         }
 
-        return self::$_zbp;
+        return self::$private_zbp;
     }
 
     /**
@@ -761,13 +761,11 @@ class ZBlogPHP
             case 'sqlite3':
             case 'pdo_sqlite':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-                if (
-                    $this->db->Open(
-                        array(
-                            $this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
-                            $this->option['ZC_SQLITE_PRE'],
-                        )
-                    ) == false
+                if ($this->db->Open(
+                    array($this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
+                        $this->option['ZC_SQLITE_PRE'],
+                    )
+                ) == false
                 ) {
                     $this->ShowError(69, __FILE__, __LINE__);
                 }
@@ -775,18 +773,16 @@ class ZBlogPHP
             case 'postgresql':
             case 'pdo_postgresql':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-                if (
-                    $this->db->Open(
-                        array(
-                            $this->option['ZC_PGSQL_SERVER'],
-                            $this->option['ZC_PGSQL_USERNAME'],
-                            $this->option['ZC_PGSQL_PASSWORD'],
-                            $this->option['ZC_PGSQL_NAME'],
-                            $this->option['ZC_PGSQL_PRE'],
-                            $this->option['ZC_PGSQL_PORT'],
-                            $this->option['ZC_PGSQL_PERSISTENT'],
-                        )
-                    ) == false
+                if ($this->db->Open(
+                    array($this->option['ZC_PGSQL_SERVER'],
+                        $this->option['ZC_PGSQL_USERNAME'],
+                        $this->option['ZC_PGSQL_PASSWORD'],
+                        $this->option['ZC_PGSQL_NAME'],
+                        $this->option['ZC_PGSQL_PRE'],
+                        $this->option['ZC_PGSQL_PORT'],
+                        $this->option['ZC_PGSQL_PERSISTENT'],
+                    )
+                ) == false
                 ) {
                     $this->ShowError(67, __FILE__, __LINE__);
                 }
@@ -796,19 +792,18 @@ class ZBlogPHP
             case 'pdo_mysql':
             default:
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-                if (
-                    $this->db->Open(
-                        array(
-                            $this->option['ZC_MYSQL_SERVER'],
-                            $this->option['ZC_MYSQL_USERNAME'],
-                            $this->option['ZC_MYSQL_PASSWORD'],
-                            $this->option['ZC_MYSQL_NAME'],
-                            $this->option['ZC_MYSQL_PRE'],
-                            $this->option['ZC_MYSQL_PORT'],
-                            $this->option['ZC_MYSQL_PERSISTENT'],
-                            $this->option['ZC_MYSQL_ENGINE'],
-                        )
-                    ) == false
+                if ($this->db->Open(
+                    array(
+                        $this->option['ZC_MYSQL_SERVER'],
+                        $this->option['ZC_MYSQL_USERNAME'],
+                        $this->option['ZC_MYSQL_PASSWORD'],
+                        $this->option['ZC_MYSQL_NAME'],
+                        $this->option['ZC_MYSQL_PRE'],
+                        $this->option['ZC_MYSQL_PORT'],
+                        $this->option['ZC_MYSQL_PERSISTENT'],
+                        $this->option['ZC_MYSQL_ENGINE'],
+                    )
+                ) == false
                 ) {
                     $this->ShowError(67, __FILE__, __LINE__);
                 }
@@ -1433,8 +1428,8 @@ class ZBlogPHP
         }
         $lvdeep = 'lv' . $deep;
         $this->categoriesbyorder[$id] = &$this->categories[$id];
-        if ($deep < $this->category_recursion_level - 1) {
-            $deep = $deep + 1;
+        if ($deep < ($this->category_recursion_level - 1)) {
+            $deep += 1;
             $lvdeepnext = 'lv' . $deep;
             if (isset(${$lvdeepnext}[$id])) {
                 foreach (${$lvdeepnext}[$id] as $idnow) {
@@ -3273,52 +3268,6 @@ class ZBlogPHP
     }
 
     /**
-     * 检查并开启Gzip压缩.
-     */
-    public function CheckGzip()
-    {
-        if (
-            extension_loaded("zlib")
-            && isset($_SERVER["HTTP_ACCEPT_ENCODING"])
-            && strstr($_SERVER["HTTP_ACCEPT_ENCODING"], "gzip")
-        ) {
-            $this->isGzip = true;
-        }
-    }
-
-    /**
-     * 启用Gzip.
-     */
-    public function StartGzip()
-    {
-        /*
-        if (!headers_sent() && $this->isGzip && $this->option['ZC_GZIP_ENABLE']) {
-            if (ini_get('output_handler')) {
-                return false;
-            }
-
-            $a = ob_list_handlers();
-            if (in_array('ob_gzhandler', $a) || in_array('zlib output compression', $a)) {
-                return false;
-            }
-
-            if (function_exists('ini_set') && function_exists('zlib_encode')) {
-                @ob_end_clean();
-                @ini_set('zlib.output_compression', 'On');
-                @ini_set('zlib.output_compression_level', '5');
-            } elseif (function_exists('ob_gzhandler')) {
-                @ob_end_clean();
-                @ob_start('ob_gzhandler');
-            }
-            ob_start();
-
-            return true;
-        }
-        */
-        return false;
-    }
-
-    /**
      * 检测网站关闭，如果关闭，则抛出错误.
      *
      * @throws Exception
@@ -3473,7 +3422,7 @@ class ZBlogPHP
     }
 
     //举例：backend-ui,,,
-    protected $_exclusive = array();
+    protected $protect_exclusive = array();
 
     /**
      * 通知系统控制权.
@@ -3483,7 +3432,7 @@ class ZBlogPHP
         if ($appid == false) {
             return false;
         }
-        $this->_exclusive[$function] = $appid;
+        $this->protect_exclusive[$function] = $appid;
 
         return true;
     }
@@ -3493,8 +3442,8 @@ class ZBlogPHP
      */
     public function IsExclusive($function)
     {
-        if (isset($this->_exclusive[$function])) {
-            return $this->_exclusive[$function];
+        if (isset($this->protect_exclusive[$function])) {
+            return $this->protect_exclusive[$function];
         }
 
         return false;
@@ -3503,6 +3452,20 @@ class ZBlogPHP
     /**
      * 以下部分为已废弃，但考虑到兼容性保留的代码**************************************************************.
      */
+
+    /**
+     * 检查并开启Gzip压缩.
+     */
+    public function CheckGzip()
+    {
+    }
+
+    /**
+     * 启用Gzip.
+     */
+    public function StartGzip()
+    {
+    }
 
     /**
      * 验证用户登录（MD5加zbp->guid盐后的密码）.
@@ -3606,4 +3569,5 @@ class ZBlogPHP
 
         return false;
     }
+
 }

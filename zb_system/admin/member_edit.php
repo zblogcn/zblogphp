@@ -9,7 +9,6 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
-$zbp->CheckGzip();
 $zbp->Load();
 
 $action = '';
@@ -65,38 +64,40 @@ $member = $zbp->GetMemberByID($memberid);
                 <br />
                 <select class="edit" size="1" name="Level" id="cmbLevel">
                     <?php echo OutputOptionItemsOfMemberLevel($member->Level); ?></select>
-                <?php
-                if ($zbp->CheckRights('MemberAll') && $zbp->user->ID != $member->ID) {
-                ?>
+    <?php
+    if ($zbp->CheckRights('MemberAll') && $zbp->user->ID != $member->ID) {
+        ?>
                     &nbsp;(
                     <span class="title">
-                        <?php echo $lang['msg']['status']; ?>:</span>
+            <?php echo $lang['msg']['status']; ?>:</span>
                     <label>
                         <input name="Status" type="radio" value="0" <?php echo $member->Status == 0 ? 'checked="checked"' : ''; ?> />&nbsp;
-                        <?php echo $lang['user_status_name'][0]; ?></label>
+            <?php echo $lang['user_status_name'][0]; ?></label>
                     &nbsp;&nbsp;
                     <label>
                         <input name="Status" type="radio" value="1" <?php echo $member->Status == 1 ? 'checked="checked"' : ''; ?> />&nbsp;
-                        <?php echo $lang['user_status_name'][1]; ?></label>
+            <?php echo $lang['user_status_name'][1]; ?></label>
                     &nbsp;&nbsp;
                     <label>
                         <input name="Status" type="radio" value="2" <?php echo $member->Status == 2 ? 'checked="checked"' : ''; ?> />&nbsp;
-                        <?php echo $lang['user_status_name'][2]; ?></label>
+            <?php echo $lang['user_status_name'][2]; ?></label>
                     )
-                <?php
-                }
-                ?>
+                    <?php
+    }
+    ?>
             </p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['name']; ?>:</span>
                 <span class="star">(*)</span>
                 <br />
-                <input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name; ?>" <?php
-                                                                                                                                        if (!$zbp->CheckRights('MemberAll')) {
-                                                                                                                                            echo 'readonly="readonly"';
-                                                                                                                                        }
-                                                                                                                                        ?> /></p>
+                <input id="edtName" class="edit" size="40" name="Name" maxlength="20" type="text" value="<?php echo $member->Name; ?>" 
+                    <?php
+                    if (!$zbp->CheckRights('MemberAll')) {
+                        echo 'readonly="readonly"';
+                    }
+                    ?>
+                                                                                                                                         /></p>
             <p>
                 <span class='title'>
                     <?php echo $lang['msg']['password']; ?>:</span>

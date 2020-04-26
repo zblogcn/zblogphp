@@ -76,9 +76,8 @@ function Include_Admin_Addcmtsubmenu()
     }
 }
 
-
 /**
- * 
+ *
  */
 function Include_Admin_UpdateDB()
 {
@@ -90,7 +89,6 @@ function Include_Admin_UpdateDB()
         }
     }
 }
-
 
 $topmenus = array();
 
@@ -249,6 +247,7 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
 }
 
 //###############################################################################################################
+
 /**
  * 生成通用表单的option列表.
  *
@@ -491,7 +490,7 @@ function OutputOptionItemsOfPostStatus($default)
         $tz[2] = $zbp->lang['post_status_name']['2'];
     } elseif (!$zbp->CheckRights('ArticleAll') && $default == 2) {
         $tz[2] = $zbp->lang['post_status_name']['2'];
-    }else{
+    } else {
         $tz[0] = $zbp->lang['post_status_name']['0'];
         $tz[1] = $zbp->lang['post_status_name']['1'];
         if ($zbp->CheckRights('ArticleAll')) {
@@ -534,11 +533,10 @@ function CreateModuleDiv($m, $button = true)
             echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;source=theme&amp;filename=' . $m->FileName . '"><img class="edit-action" src="../image/admin/brick_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>';
             echo '&nbsp;<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=ModuleDel&amp;source=theme&amp;filename=' . $m->FileName) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>';
         }
-        if (
-            $m->SourceType != 'system'
+        if ($m->SourceType != 'system'
             && $m->SourceType != 'theme'
             && !($m->SourceType == 'plugin'
-                && CheckRegExp($m->Source, '/plugin_(' . $zbp->option['ZC_USING_PLUGIN_LIST'] . ')/i'))
+            && CheckRegExp($m->Source, '/plugin_(' . $zbp->option['ZC_USING_PLUGIN_LIST'] . ')/i'))
         ) {
             echo '&nbsp;<a onclick="return window.confirm(\'' . $zbp->lang['msg']['confirm_operating'] . '\');" href="' . BuildSafeCmdURL('act=ModuleDel&amp;id=' . $m->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>';
         }
@@ -1909,7 +1907,7 @@ function Admin_ModuleMng()
 
         });
     </script>
-<?php
+    <?php
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/link_32.png' . '");</script>';
 }
 
@@ -2010,8 +2008,7 @@ function Admin_SettingMng()
         $fpname();
     }
     echo '</div>';
-?>
-
+    ?>
     <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav'); ?>" onsubmit="return checkDomain();">
         <div id="divMain2">
             <div class="content-box">
@@ -2153,7 +2150,7 @@ function changeDomain(newurl){
             <p><input type="submit" class="button" value="<?php echo $zbp->lang['msg']['submit']; ?>" id="btnPost" onclick="" /></p>
         </div>
     </form>
-<?php
+    <?php
     echo '<script type="text/javascript">ActiveTopMenu("topmenu2");</script>';
     echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/setting_32.png' . '");</script>';
 }

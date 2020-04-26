@@ -9,7 +9,6 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
-$zbp->CheckGzip();
 $zbp->Load();
 
 $action = 'TagEdt';

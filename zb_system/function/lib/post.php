@@ -31,9 +31,10 @@ if (!defined('ZBP_PATH')) {
  */
 class Post extends Base
 {
-    private $_prev = '';
+    
+    private $private_prev = '';
 
-    private $_next = '';
+    private $private_next = '';
 
     public function __construct()
     {
@@ -128,7 +129,6 @@ class Post extends Base
             case 'Next':
             case 'RelatedList':
                 return;
-            break;
             case 'Template':
                 if ($value == $zbp->GetPostType_Template($this->Type)) {
                     $value = '';
@@ -136,7 +136,6 @@ class Post extends Base
                 $this->data[$name] = $value;
 
                 return;
-            break;
             case 'TopType':
                 if ($value == 'global') {
                     $this->Top = 1;
@@ -149,7 +148,6 @@ class Post extends Base
                 }
 
                 return;
-            break;
             default:
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Set'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this, $name, $value);
@@ -170,13 +168,10 @@ class Post extends Base
         switch ($name) {
             case 'Category':
                 return $zbp->GetCategoryByID($this->CateID);
-            break;
             case 'Author':
                 return $zbp->GetMemberByID($this->AuthorID);
-            break;
             case 'StatusName':
                 return $zbp->lang['post_status_name'][$this->Status];
-            break;
             case 'Url':
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Url'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this);
@@ -212,13 +207,10 @@ class Post extends Base
                 }
 
                 return $u->Make();
-            break;
             case 'Tags':
                 return $zbp->LoadTagsByIDString($this->Tag);
-            break;
             case 'TagsCount':
                 return substr_count($this->Tag, '{');
-            break;
             case 'TagsName':
                 return $this->TagsToNameString();
             case 'Template':
@@ -229,7 +221,6 @@ class Post extends Base
                         $value = $zbp->GetPostType_Template($this->Type);
                     }
                 }
-
                 return $value;
             case 'CommentPostUrl':
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
@@ -243,19 +234,17 @@ class Post extends Base
                 $key = '&amp;key=' . $zbp->GetCmtKey($this->ID);
 
                 return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
-            break;
             case 'ValidCodeUrl':
                 return $zbp->validcodeurl . '?id=cmt';
-            break;
             case 'Prev':
-                if ($this->_prev !== '') {
-                    return $this->_prev;
+                if ($this->private_prev !== '') {
+                    return $this->private_prev;
                 }
 
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Prev'] as $fpname => &$fpsignal) {
-                    $this->_prev = $fpname($this);
-                    if ($this->_prev !== '') {
-                        return $this->_prev;
+                    $this->private_prev = $fpname($this);
+                    if ($this->private_prev !== '') {
+                        return $this->private_prev;
                     }
                 }
 
@@ -267,22 +256,21 @@ class Post extends Base
                     null
                 );
                 if (count($articles) == 1) {
-                    $this->_prev = $articles[0];
+                    $this->private_prev = $articles[0];
                 } else {
-                    $this->_prev = null;
+                    $this->private_prev = null;
                 }
 
-                return $this->_prev;
-            break;
+                return $this->private_prev;
             case 'Next':
-                if ($this->_next !== '') {
-                    return $this->_next;
+                if ($this->private_next !== '') {
+                    return $this->private_next;
                 }
 
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Next'] as $fpname => &$fpsignal) {
-                    $this->_next = $fpname($this);
-                    if ($this->_next !== '') {
-                        return $this->_next;
+                    $this->private_next = $fpname($this);
+                    if ($this->private_next !== '') {
+                        return $this->private_next;
                     }
                 }
 
@@ -294,13 +282,12 @@ class Post extends Base
                     null
                 );
                 if (count($articles) == 1) {
-                    $this->_next = $articles[0];
+                    $this->private_next = $articles[0];
                 } else {
-                    $this->_next = null;
+                    $this->private_next = null;
                 }
 
-                return $this->_next;
-            break;
+                return $this->private_next;
             case 'RelatedList':
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_RelatedList'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this);
@@ -338,7 +325,6 @@ class Post extends Base
                 }
 
                 return parent::__get($name);
-            break;
         }
     }
 
@@ -390,4 +376,5 @@ class Post extends Base
 
         return parent::Del();
     }
+
 }

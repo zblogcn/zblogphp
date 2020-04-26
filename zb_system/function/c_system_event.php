@@ -1162,7 +1162,7 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
-        $fpargs = func_get_args();
+        $fpargs = array($object, $theSecondParam, $enableRewrite);
         $fpargs[0] = $id;
         $fpargs[1] = $alias;
         $fpreturn = call_user_func_array($fpname, $fpargs);
@@ -1490,7 +1490,7 @@ function PostArticle()
                     } else {
                         $i = (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];
                         if (Zbp_StrLen($_POST['Content']) > $i) {
-                        	$i = (int) Zbp_Strpos($_POST['Content'], '>', $i);
+                            $i = (int) Zbp_Strpos($_POST['Content'], '>', $i);
                         }
                         if ($i == 0) {
                             $i = (int) Zbp_StrLen($_POST['Content']);
@@ -1833,6 +1833,7 @@ function PostPage()
     $pre_author = null;
     $orig_id = 0;
     if (GetVars('ID', 'POST') == 0) {
+        $i = 0;
     } else {
         $article->LoadInfoByID(GetVars('ID', 'POST'));
         if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('PageAll'))) {
@@ -2327,6 +2328,7 @@ function PostCategory()
 
     $cate = new Category();
     if (GetVars('ID', 'POST') == 0) {
+        $i = 0;
     } else {
         $cate->LoadInfoByID(GetVars('ID', 'POST'));
     }
@@ -2444,6 +2446,7 @@ function PostTag()
 
     $tag = new Tag();
     if (GetVars('ID', 'POST') == 0) {
+        $i = 0;
     } else {
         $tag->LoadInfoByID(GetVars('ID', 'POST'));
     }
@@ -3075,8 +3078,7 @@ function SaveSetting()
             continue;
         }
 
-        if (
-            $key == 'ZC_PERMANENT_DOMAIN_ENABLE'
+        if ($key == 'ZC_PERMANENT_DOMAIN_ENABLE'
             || $key == 'ZC_COMMENT_TURNOFF'
             || $key == 'ZC_COMMENT_REVERSE_ORDER'
             || $key == 'ZC_COMMENT_AUDIT'
@@ -3091,8 +3093,7 @@ function SaveSetting()
             $zbp->option[$key] = (bool) $value;
             continue;
         }
-        if (
-            $key == 'ZC_RSS2_COUNT'
+        if ($key == 'ZC_RSS2_COUNT'
             || $key == 'ZC_UPLOAD_FILESIZE'
             || $key == 'ZC_DISPLAY_COUNT'
             || $key == 'ZC_SEARCH_COUNT'
@@ -3152,7 +3153,6 @@ function SaveSetting()
         }
     }
 }
-
 
 /**
  * 批量删除Post.
@@ -3315,7 +3315,6 @@ function Include_Index_End()
     if ($zbp->option['ZC_RUNINFO_DISPLAY'] == true) {
         RunTime();
     }
-
 }
 
 function Include_Index_Begin()
@@ -3335,7 +3334,6 @@ function Include_Index_Begin()
             header('Upgrade-Insecure-Requests: 1');
         }
     }
-
 }
 
 //###############################################################################################################

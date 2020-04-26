@@ -54,9 +54,9 @@ unset($post_data['token']);
                     <div class="content moreinfo">
                         <div>
                             <p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p>
-                <?php echo '(' . $error->type . ')' . $error->typeName . ' :   ' . (FormatString($error->messagefull, '[noscript]')); ?>
         <?php
-    echo ' (' . ZC_VERSION_FULL . ') ';
+        echo '(' . $error->type . ')' . $error->typeName . ' :   ' . (FormatString($error->messagefull, '[noscript]'));
+        echo ' (' . ZC_VERSION_FULL . ') ';
         if (!in_array('Status: 404 Not Found', headers_list())) {
                 echo '(' . GetEnvironment() . ') ';
         }

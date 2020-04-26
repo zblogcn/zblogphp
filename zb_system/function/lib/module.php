@@ -17,7 +17,7 @@ if (!defined('ZBP_PATH')) {
 class Module extends Base
 {
 
-    protected $_isincludefile = false;
+    protected $protect_isincludefile = false;
 
     /**
      * 构造函数.
@@ -50,7 +50,7 @@ class Module extends Base
             return;
         }
         if ($name == 'IsIncludeFile') {
-            $this->_isincludefile = (bool) $value;
+            $this->protect_isincludefile = (bool) $value;
 
             return;
         }
@@ -97,7 +97,7 @@ class Module extends Base
             return (bool) $this->Metas->norefresh;
         }
         if ($name == 'IsIncludeFile') {
-            return $this->_isincludefile;
+            return $this->protect_isincludefile;
         }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Get'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $name);

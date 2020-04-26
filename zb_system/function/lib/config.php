@@ -529,4 +529,5 @@ class Config implements Iterator
 
         return true;
     }
+
 }

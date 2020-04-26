@@ -188,11 +188,11 @@ class App
      * @var bool 加载xml成功否
      */
     public $isloaded = false;
+
     /**
      * @var string 当前样式表的crc32
      */
     public $css_crc32 = '';
-
 
     public static $check_error_count = 0;
 

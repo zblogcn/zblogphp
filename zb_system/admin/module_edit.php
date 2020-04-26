@@ -9,7 +9,6 @@
 require '../function/c_system_base.php';
 require '../function/c_system_admin.php';
 
-$zbp->CheckGzip();
 $zbp->Load();
 
 $action = 'ModuleEdt';
@@ -135,7 +134,7 @@ if ($mod->Source == 'theme') {
                 <input type="text" name="MaxLi" value="<?php echo $mod->MaxLi; ?>" size="40" /></p>
             <?php
             if ($mod->FileName == 'catalog') {
-            ?>
+                ?>
                 <p>
                     <span class='title'>
                         <?php echo $lang['msg']['style']; ?>:</span>
@@ -157,13 +156,13 @@ if ($mod->Source == 'theme') {
             }
             if ($mod->FileName == 'archives') {
                 if ($zbp->option['ZC_MODULE_ARCHIVES_STYLE'] == '1') {
-                ?>
+                    ?>
                     <label><input name="archives_style" type="checkbox" value="<?php echo $zbp->option['ZC_MODULE_ARCHIVES_STYLE']; ?>" checked="checked" /><?php echo $lang['msg']['archives_style_select']; ?></label></label>
-                <?php
+                    <?php
                 } else {
-                ?>
+                    ?>
                     <label><input name="archives_style" type="checkbox" value="<?php echo $zbp->option['ZC_MODULE_ARCHIVES_STYLE']; ?>" /><?php echo $lang['msg']['archives_style_select']; ?></label></label>
-            <?php
+                    <?php
                 }
             }
             ?>

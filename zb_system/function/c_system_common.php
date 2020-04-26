@@ -17,20 +17,20 @@
 function GetScheme($array)
 {
     if ((array_key_exists('REQUEST_SCHEME', $array)
-
-            && (strtolower($array['REQUEST_SCHEME']) == 'https'))
-
+        
+        && (strtolower($array['REQUEST_SCHEME']) == 'https'))
+        
         || (array_key_exists('HTTPS', $array)
-
-            && (strtolower($array['HTTPS']) == 'on'))
-
+        
+        && (strtolower($array['HTTPS']) == 'on'))
+        
         || (array_key_exists('HTTP_FROM_HTTPS', $array)
-
-            && (strtolower($array['HTTP_FROM_HTTPS']) == 'on'))
-
+        
+        && (strtolower($array['HTTP_FROM_HTTPS']) == 'on'))
+        
         || (array_key_exists('SERVER_PORT', $array)
-
-            && (strtolower($array['SERVER_PORT']) == '443'))
+        
+        && (strtolower($array['SERVER_PORT']) == '443'))
     ) {
         return 'https://';
     }
@@ -1292,7 +1292,7 @@ function SubStrUTF8($sourcestr, $cutlength)
 
     $str_length = strlen($sourcestr); //字符串的字节数
 
-    while (($n < $cutlength) and ($i <= $str_length)) {
+    while (($n < $cutlength) && ($i <= $str_length)) {
         $temp_str = substr($sourcestr, $i, 1);
         $ascnum = ord($temp_str); //得到字符串中第$i位字符的ascii码
         if ($ascnum >= 224) { //如果ASCII位高与224，
@@ -1670,15 +1670,15 @@ function VerifyWebToken($webTokenString, $webTokenId, $key = '')
 function CreateWebToken($webTokenId, $time, $key = '')
 {
     global $zbp;
-    $time = (int) $time;
+    $array = func_get_arg();
     $args = array();
     for ($i = 3; $i < func_num_args(); $i++) {
-        $args[] = func_get_arg($i);
+        $args[] = $array($i);
     }
     if ($key == '') {
         $key = $zbp->guid;
     }
-
+    $time = (int) $time;
     return hash_hmac('sha256', $time . $webTokenId . implode($args), $key) . $time;
 }
 

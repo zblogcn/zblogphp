@@ -105,7 +105,7 @@ class Database__PDO_SQLite implements Database__Interface
             if ($s != '') {
                 $this->db->exec($this->sql->Filter($s));
                 $e = trim($this->db->errorCode(), '0');
-                if ( $e != null) {
+                if ($e != null) {
                     $this->error[] = array($e, $this->db->errorInfo());
                 }
             }
@@ -123,7 +123,7 @@ class Database__PDO_SQLite implements Database__Interface
         // 遍历出来
         $results = $this->db->query($this->sql->Filter($query));
         $e = trim($this->db->errorCode(), '0');
-        if ( $e != null) {
+        if ($e != null) {
             trigger_error(implode(' ', $this->db->errorInfo()), E_USER_NOTICE);
         }
         //fetch || fetchAll

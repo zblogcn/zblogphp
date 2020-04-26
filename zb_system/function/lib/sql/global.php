@@ -57,7 +57,7 @@ class SQL__Global
 
     private $selectFunctionKeyword = array('COUNT', 'MIN', 'MAX', 'SUM', 'AVG');
 
-    private $otherKeyword = array('INDEX', 'TABLE', 'DATABASE');//remove 'FIELD', 
+    private $otherKeyword = array('INDEX', 'TABLE', 'DATABASE');
 
     private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'IFNOTEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'UNIONALL', 'RANDOM', 'TRANSACTION');
 
@@ -1195,7 +1195,7 @@ class SQL__Global
         $sql[] = ';';
         $s = 'DROP SEQUENCE ' . $str . '_seq;';
         $s = str_replace('%pre%', $this->db->dbpre, $s);
-        $sql[] = $s; 
+        $sql[] = $s;
     }
 
     protected function buildCreate()
@@ -1251,4 +1251,5 @@ class SQL__Global
     {
         // Do nothing yet
     }
+
 }

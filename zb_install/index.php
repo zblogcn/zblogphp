@@ -41,8 +41,8 @@ require '../zb_system/function/c_system_admin.php';
 
 header('Content-type: text/html; charset=utf-8');
 
-define('bingo', '<span class="bingo"></span>');
-define('error', '<span class="error"></span>');
+define('BINGO', '<span class="bingo"></span>');
+define('ERROR', '<span class="error"></span>');
 
 $zbloglang = &$zbp->option['ZC_BLOG_LANGUAGEPACK'];
 if (isset($_POST['zbloglang'])) {
@@ -75,10 +75,8 @@ if ($zbp->option['ZC_DATABASE_TYPE'] !== '') {
   <script src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
   <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
-  <title>Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_program'] ?> </title>
-  <?php
-    Include_AddonAdminFont();
-    ?>
+  <title>Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_program']; ?> </title>
+  <?php Include_AddonAdminFont(); ?>
 </head>
 
 <body clas="install">
@@ -96,32 +94,31 @@ if ($zbp->option['ZC_DATABASE_TYPE'] !== '') {
         $s = '';
     }
     ?>
-    <form method="post" action="./index.php?step=<?php echo($zblogstep + 1) . $s ?>">
+    <form method="post" action="./index.php?step=<?php echo($zblogstep + 1) . $s; ?>">
       <input type="hidden" name="zbloglang" id="zbloglang" value="<?php echo $zbloglang; ?>" />
-      <?php
+<?php
+switch ($zblogstep) {
+    case 0:
+        Setup0();
+        break;
+    case 1:
+        Setup1();
+        break;
+    case 2:
+        Setup2();
+        break;
+    case 3:
+        Setup3();
+        break;
+    case 4:
+        Setup4();
+        break;
+    case 5:
+        Setup5();
+        break;
+}
 
-        switch ($zblogstep) {
-            case 0:
-                Setup0();
-                break;
-            case 1:
-                Setup1();
-                break;
-            case 2:
-                Setup2();
-                break;
-            case 3:
-                Setup3();
-                break;
-            case 4:
-                Setup4();
-                break;
-            case 5:
-                Setup5();
-                break;
-        }
-
-        ?>
+?>
     </form>
   </div>
   <script type="text/javascript">
@@ -172,7 +169,7 @@ if ($zbp->option['ZC_DATABASE_TYPE'] !== '') {
         alert("<?php echo $zbp->lang['zb_install']['adminusername_need']; ?>");
         return false;
       };
-      if (username.length < <?php echo $zbp->option['ZC_USERNAME_MIN'] ?> || username.length > <?php echo $zbp->option['ZC_USERNAME_MAX']; ?> || !/^[\.\_A-Za-z0-9·@\u4e00-\u9fa5]+$/.test(username)) {
+      if (username.length < <?php echo $zbp->option['ZC_USERNAME_MIN']; ?> || username.length > <?php echo $zbp->option['ZC_USERNAME_MAX']; ?> || !/^[\.\_A-Za-z0-9·@\u4e00-\u9fa5]+$/.test(username)) {
         alert("<?php echo $zbp->lang['error']['77']; ?>");
         return false;
       };
@@ -215,7 +212,8 @@ if ($zbp->option['ZC_DATABASE_TYPE'] !== '') {
 <?php
 function Setup0()
 {
-          global $zbp; ?>
+    global $zbp;
+    ?>
   <dl>
     <dt></dt>
     <dd id="ddleft">
@@ -241,7 +239,8 @@ function Setup0()
 
 function Setup1()
 {
-    global $zbp; ?>
+    global $zbp;
+    ?>
   <dl>
     <dt></dt>
     <dd id="ddleft">
@@ -255,7 +254,7 @@ function Setup1()
       <p style="float:left;clear:both;width:100%;text-align:right;padding-bottom:0.5em;"><b><?php echo $zbp->lang['zb_install']['language']; ?></b>&nbsp;<select id="language" name="language" style="width:150px;">
           <?php echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']); ?>
         </select></p>
-      <div id="title">Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_license'] ?></div>
+      <div id="title">Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_license']; ?></div>
       <div id="content">
         <textarea readonly>
     <?php echo $zbp->lang['zb_install']['license_title'] . "\r\n"; ?>
@@ -314,7 +313,8 @@ Z-BlogPHP官方网址：https://www.zblogcn.com/
 function Setup2()
 {
     global $zbp;
-    CheckServer(); ?>
+    CheckServer();
+    ?>
   <dl>
     <dt></dt>
     <dd id="ddleft">
@@ -462,22 +462,22 @@ function Setup2()
             <th colspan="3" scope="row"><?php echo $zbp->lang['zb_install']['function_check']; ?></th>
           </tr>
           <tr>
-            <td scope="row"><?php echo $zbp->lang['zb_install']['environment_network'] ?></td>
+            <td scope="row"><?php echo $zbp->lang['zb_install']['environment_network']; ?></td>
             <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['network'][0]; ?></td>
             <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['network'][1]; ?></td>
           </tr>
           <tr>
-            <td scope="row"><?php echo $zbp->lang['zb_install']['environment_xml'] ?></td>
+            <td scope="row"><?php echo $zbp->lang['zb_install']['environment_xml']; ?></td>
             <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['simplexml_load_string'][0]; ?></td>
             <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['simplexml_load_string'][1]; ?></td>
           </tr>
           <tr>
-            <td scope="row"><?php echo $zbp->lang['zb_install']['environment_json'] ?></td>
+            <td scope="row"><?php echo $zbp->lang['zb_install']['environment_json']; ?></td>
             <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['json_decode'][0]; ?></td>
             <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['json_decode'][1]; ?></td>
           </tr>
           <tr>
-            <td scope="row"><?php echo $zbp->lang['zb_install']['environment_iconv'] ?></td>
+            <td scope="row"><?php echo $zbp->lang['zb_install']['environment_iconv']; ?></td>
             <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['iconv'][0]; ?></td>
             <td style="text-align:center"><?php echo $GLOBALS['CheckResult']['iconv'][1]; ?></td>
           </tr>
@@ -503,11 +503,11 @@ function Setup3()
 
     $hasPostgresql = false;
 
-    $hasMysql = (bool) ((bool) ($CheckResult['mysql'][0]) or (bool) ($CheckResult['mysqli'][0]) or (bool) ($CheckResult['pdo_mysql'][0]));
+    $hasMysql = (bool) ((bool) ($CheckResult['mysql'][0]) || (bool) ($CheckResult['mysqli'][0]) || (bool) ($CheckResult['pdo_mysql'][0]));
 
-    $hasSqlite = (bool) ((bool) ($CheckResult['sqlite3'][0]) or (bool) ($CheckResult['sqlite'][0]) or (bool) ($CheckResult['pdo_sqlite'][0]));
+    $hasSqlite = (bool) ((bool) ($CheckResult['sqlite3'][0]) || (bool) ($CheckResult['sqlite'][0]) || (bool) ($CheckResult['pdo_sqlite'][0]));
 
-    $hasPostgresql = (bool) ((bool) ($CheckResult['pgsql'][0]) or (bool) ($CheckResult['pdo_pgsql'][0]));
+    $hasPostgresql = (bool) ((bool) ($CheckResult['pgsql'][0]) || (bool) ($CheckResult['pdo_pgsql'][0]));
 
     $option2 = array();
     $option2['blogtitle'] = GetVars('blogtitle', 'GET');
@@ -631,26 +631,26 @@ function Setup3()
                 <input type="radio" name="fdbtype" value="mysql" /> MySQL</label>
                 <?php
                 echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-            } ?>
-            <?php
+            }
             if ($hasSqlite) {
                 ?>
               <label class="dbselect" id="sqlite_radio">
                 <input type="radio" name="fdbtype" value="sqlite" /> SQLite</label>
                 <?php
                 echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-            } ?>
-            <?php
+            }
             if ($hasPostgresql) {
                 ?>
               <label class="dbselect" id="postgresql_radio">
                 <input type="radio" name="fdbtype" value="postgresql" /> PostgreSQL</label>
                 <?php
                 echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-            } ?>
+            }
+            ?>
           </p>
         </div>
-        <?php if ($hasMysql) {
+        <?php
+        if ($hasMysql) {
             ?>
           <div class="dbdetail" id="mysql">
             <p><b><?php echo $zbp->lang['zb_install']['db_server']; ?></b>
@@ -687,70 +687,71 @@ function Setup3()
               </script>
             </p>
             <p><b><?php echo $zbp->lang['zb_install']['db_drive']; ?></b>
-              <?php if ($CheckResult['mysqli'][0]) {
-                    ?>
+            <?php
+            if ($CheckResult['mysqli'][0]) {
+                ?>
                 <label>
                   <input value="mysqli" type="radio" name="dbtype" /> mysqli</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <?php
-              } ?>
-              <?php if ($CheckResult['pdo_mysql'][0]) {
-                    ?>
+                <?php
+            }
+            if ($CheckResult['pdo_mysql'][0]) {
+                ?>
                 <label>
                   <input value="pdo_mysql" type="radio" name="dbtype" /> pdo_mysql</label>&nbsp;&nbsp;&nbsp;&nbsp;
                     <?php
-              } ?>
-              <?php if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+            }
+            if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+                if ($CheckResult['mysql'][0] && !$CheckResult['mysqli'][0] && !$CheckResult['pdo_mysql'][0]) { // 强制淘汰mysql
                     ?>
-                    <?php if ($CheckResult['mysql'][0] && !$CheckResult['mysqli'][0] && !$CheckResult['pdo_mysql'][0]) { // 强制淘汰mysql
-                        ?>
                   <label>
                     <input value="mysql" type="radio" name="dbtype" /> mysql</label>&nbsp;&nbsp;&nbsp;&nbsp;
                         <?php
-                    } ?>
-                    <?php
-              } ?>
+                }
+            }
+            ?>
               <br /><small><?php echo $zbp->lang['zb_install']['db_set_port']; ?></small>
             </p>
           </div>
             <?php
-        } ?>
-
-        <?php if ($hasSqlite) {
+        }
+        if ($hasSqlite) {
             ?>
           <div class="dbdetail" id="sqlite">
             <p><b><?php echo $zbp->lang['zb_install']['db_name']; ?></b>
-              <input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo GetDbName() ?>" readonly style="width:350px;" />
+              <input type="text" name="dbsqlite_name" id="dbsqlite_name" value="<?php echo GetDbName(); ?>" readonly style="width:350px;" />
             </p>
             <p><b><?php echo $zbp->lang['zb_install']['db_pre']; ?></b>
               <input type="text" name="dbsqlite_pre" id="dbsqlite_pre" value="zbp_" style="width:350px;" />
             </p>
             <p><b><?php echo $zbp->lang['zb_install']['db_drive']; ?></b>
-              <?php if ($CheckResult['sqlite3'][0]) {
-                    ?>
+            <?php
+            if ($CheckResult['sqlite3'][0]) {
+                ?>
                 <label>
                   <input value="sqlite3" type="radio" name="dbtype" /> sqlite3</label>
                     <?php
                     echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-              } ?>
-              <?php if ($CheckResult['pdo_sqlite'][0]) {
-                    ?>
+            }
+            if ($CheckResult['pdo_sqlite'][0]) {
+                ?>
                 <label>
                   <input value="pdo_sqlite" type="radio" name="dbtype" /> pdo_sqlite</label>
                     <?php
                     echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-              } ?>
-              <?php if ($CheckResult['sqlite'][0]) {
-                    ?>
+            }
+            if ($CheckResult['sqlite'][0]) {
+                ?>
                 <label>
                   <input value="sqlite" type="radio" name="dbtype" /> sqlite</label>
                     <?php
                     echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-              } ?>
+            }
+            ?>
             </p>
           </div>
             <?php
-        } ?>
-        <?php if ($hasPostgresql) {
+        }
+        if ($hasPostgresql) {
             ?>
           <div class="dbdetail" id="postgresql">
             <p><b><?php echo $zbp->lang['zb_install']['db_server']; ?></b>
@@ -769,23 +770,26 @@ function Setup3()
               <input type="text" name="dbpgsql_pre" id="dbpgsql_pre" value="<?php echo $option['ZC_PGSQL_PRE']; ?>" style="width:350px;" />
             </p>
             <p><b><?php echo $zbp->lang['zb_install']['db_drive']; ?></b>
-              <?php if ($CheckResult['pgsql'][0]) {
+                <?php
+                if ($CheckResult['pgsql'][0]) {
                     ?>
                 <label>
                   <input value="postgresql" type="radio" name="dbtype" /> postgresql</label>&nbsp;&nbsp;&nbsp;&nbsp;
                     <?php
-              } ?>
-              <?php if ($CheckResult['pdo_pgsql'][0]) {
+                }
+                if ($CheckResult['pdo_pgsql'][0]) {
                     ?>
                 <label>
                   <input value="pdo_postgresql" type="radio" name="dbtype" /> pdo_postgresql</label>&nbsp;&nbsp;&nbsp;&nbsp;
                     <?php
-              } ?>
+                }
+                ?>
               <br /><small><?php echo str_ireplace('3306', '5432', $zbp->lang['zb_install']['db_set_port']); ?></small>
             </p>
           </div>
             <?php
-        } ?>
+        }
+        ?>
         <p class="title"><?php echo $zbp->lang['zb_install']['website_setting']; ?></p>
         <p><b><?php echo $zbp->lang['zb_install']['blog_name']; ?></b>
           <input type="text" name="blogtitle" id="blogtitle" value="<?php echo $option2['blogtitle']; ?>" style="width:350px;" />
@@ -800,12 +804,13 @@ function Setup3()
           <input type="password" name="repassword" id="repassword" value="<?php echo $option2['repassword']; ?>" style="width:200px;" />
         </p>
         <p><b><?php echo $zbp->lang['zb_install']['theme']; ?></b><span class="themelist">
-            <?php //add four themes
+            <?php
+            //add four themes
             $themes2 = array(
-              'Zit'       => 'style',
-              'tpure'     => 'style',
-              'default'   => 'default',
-              'WhitePage' => 'default',
+                'Zit'       => 'style',
+                'tpure'     => 'style',
+                'default'   => 'default',
+                'WhitePage' => 'default',
             );
             $themes = array();
             foreach ($themes2 as $key => $value) {
@@ -816,7 +821,8 @@ function Setup3()
             }
             foreach ($themes as $key => $value) {
                 echo '<label><input value="' . $key . '|' . $value . '" type="radio" name="blogtheme"/> ' . $key . '<span><img src="../zb_users/theme/' . $key . '/screenshot.png" alt=""></span></label>';
-            } ?>
+            }
+            ?>
         </p>
       </div>
       <div id="bottom">
@@ -834,18 +840,18 @@ function Setup3()
     $("#" + $(".dbselect").attr("id").split("_radio")[0]).show();
     $("input[name='dbtype']:visible").get(0).click();
     $("input[name='fdbtype']:visible").get(0).click();
-    $("input[name='blogtheme']:visible").get(Math.round(Math.random() * <?php echo count($themes) ?> - 1)).click();
+    $("input[name='blogtheme']:visible").get(Math.round(Math.random() * <?php echo count($themes); ?> - 1)).click();
 
     $(".themelist label").hover(function() {
       $(this).find("span").show();
     }, function() {
       $(this).find("span").hide();
     });
-<?php
-if (GetVars('dbselect', 'GET') != '') {
-  echo '$("input:radio[name=fdbtype][value=' . GetVars('dbselect', 'GET') . ']").click();';
-}
-?>
+    <?php
+    if (GetVars('dbselect', 'GET') != '') {
+        echo '$("input:radio[name=fdbtype][value=' . GetVars('dbselect', 'GET') . ']").click();';
+    }
+    ?>
   </script>
     <?php
 }
@@ -854,7 +860,8 @@ if (GetVars('dbselect', 'GET') != '') {
 //4
 function Setup4()
 {
-    global $zbp; ?>
+    global $zbp;
+    ?>
   <dl>
     <dt></dt>
     <dd id="ddleft">
@@ -963,8 +970,10 @@ function Setup4()
                 if (InsertInfo()) {
                     if (SaveConfig()) {
                         //ok
+                        $i = 0;
                     } else {
                         //$hasError = true;
+                        $i = 0;
                     }
                 } else {
                     $hasError = true;
@@ -976,7 +985,8 @@ function Setup4()
             $zbp->CloseConnect();
         } else {
             $hasError = true;
-        } ?>
+        }
+        ?>
 
       </div>
       <div id="bottom">
@@ -987,7 +997,8 @@ function Setup4()
             ?>
           <input type="button" name="next" onClick="window.location.href='../'" id="netx" value="<?php echo $zbp->lang['zb_install']['ok']; ?>" />
             <?php
-        } ?>
+        }
+        ?>
       </div>
     </dd>
   </dl>
@@ -1008,70 +1019,70 @@ function CheckServer()
     global $CheckResult;
 
     $CheckResult = array(
-    //服务器
-    'server'  => array(GetVars('SERVER_SOFTWARE', 'SERVER'), bingo),
-    'phpver'  => array(PHP_VERSION, ''),
-    'zbppath' => array($zbp->path, bingo),
-    //组件
-    'pcre'       => array('', ''),
-    'gd2'        => array('', ''),
-    'mysql'      => array('', ''),
-    'mysqli'     => array('', ''),
-    'pdo_mysql'  => array('', ''),
-    'sqlite'     => array('', ''),
-    'sqlite3'    => array('', ''),
-    'pdo_sqlite' => array('', ''),
-    'pgsql'      => array('', ''),
-    'pdo_pgsql'  => array('', ''),
-    'mbstring'   => array('', ''),
-    'openssl'    => array('', ''),
-    //权限
-    'zb_users'     => array('', ''),
-    'cache'        => array('', ''),
-    'data'         => array('', ''),
-    'include'      => array('', ''),
-    'theme'        => array('', ''),
-    'plugin'       => array('', ''),
-    'upload'       => array('', ''),
-    'c_option.php' => array('', ''),
-    //函数
-    'curl'            => array($zbp->lang['zb_install']['connect_appcenter'], ''),
-    'allow_url_fopen' => array($zbp->lang['zb_install']['connect_appcenter'], ''),
-    'gethostbyname'   => array($zbp->lang['zb_install']['whois_dns'], ''),
+        //服务器
+        'server'  => array(GetVars('SERVER_SOFTWARE', 'SERVER'), BINGO),
+        'phpver'  => array(PHP_VERSION, ''),
+        'zbppath' => array($zbp->path, BINGO),
+        //组件
+        'pcre'       => array('', ''),
+        'gd2'        => array('', ''),
+        'mysql'      => array('', ''),
+        'mysqli'     => array('', ''),
+        'pdo_mysql'  => array('', ''),
+        'sqlite'     => array('', ''),
+        'sqlite3'    => array('', ''),
+        'pdo_sqlite' => array('', ''),
+        'pgsql'      => array('', ''),
+        'pdo_pgsql'  => array('', ''),
+        'mbstring'   => array('', ''),
+        'openssl'    => array('', ''),
+        //权限
+        'zb_users'     => array('', ''),
+        'cache'        => array('', ''),
+        'data'         => array('', ''),
+        'include'      => array('', ''),
+        'theme'        => array('', ''),
+        'plugin'       => array('', ''),
+        'upload'       => array('', ''),
+        'c_option.php' => array('', ''),
+        //函数
+        'curl'            => array($zbp->lang['zb_install']['connect_appcenter'], ''),
+        'allow_url_fopen' => array($zbp->lang['zb_install']['connect_appcenter'], ''),
+        'gethostbyname'   => array($zbp->lang['zb_install']['whois_dns'], ''),
 
     );
 
     if (version_compare(PHP_VERSION, '5.2.0') >= 0) {
-        $CheckResult['phpver'][1] = bingo;
+        $CheckResult['phpver'][1] = BINGO;
     } else {
-        $CheckResult['phpver'][1] = error;
+        $CheckResult['phpver'][1] = ERROR;
     }
 
     //针对PCRE老版本报错
     $pv = explode(' ', PCRE_VERSION);
     $CheckResult['pcre'][0] = PCRE_VERSION;
     if (version_compare($pv[0], '6.6') <= 0) {
-        $CheckResult['pcre'][1] = error;
+        $CheckResult['pcre'][1] = ERROR;
     } else {
-        $CheckResult['pcre'][1] = bingo;
+        $CheckResult['pcre'][1] = BINGO;
     }
 
     if (function_exists("gd_info")) {
         $info = gd_info();
         $CheckResult['gd2'][0] = $info['GD Version'];
-        $CheckResult['gd2'][1] = $CheckResult['gd2'][0] ? bingo : error;
+        $CheckResult['gd2'][1] = $CheckResult['gd2'][0] ? BINGO : ERROR;
     }
     if (function_exists("mysql_get_client_info")) {
         $CheckResult['mysql'][0] = strtok(mysql_get_client_info(), '$');
-        $CheckResult['mysql'][1] = $CheckResult['mysql'][0] ? bingo : error;
+        $CheckResult['mysql'][1] = $CheckResult['mysql'][0] ? BINGO : ERROR;
     }
     if (function_exists("mysqli_get_client_info")) {
         $CheckResult['mysqli'][0] = strtok(mysqli_get_client_info(), '$');
-        $CheckResult['mysqli'][1] = $CheckResult['mysqli'][0] ? bingo : error;
+        $CheckResult['mysqli'][1] = $CheckResult['mysqli'][0] ? BINGO : ERROR;
     }
     if (function_exists("mb_language")) {
         $CheckResult['mbstring'][0] = mb_language();
-        $CheckResult['mbstring'][1] = $CheckResult['mbstring'][0] ? bingo : error;
+        $CheckResult['mbstring'][1] = $CheckResult['mbstring'][0] ? BINGO : ERROR;
     }
     if (class_exists("PDO", false)) {
         if (extension_loaded('pdo_mysql')) {
@@ -1079,7 +1090,7 @@ function CheckServer()
             $v = ' '; //strtok($pdo->getAttribute(PDO::ATTR_CLIENT_VERSION),'$');
             $pdo = null;
             $CheckResult['pdo_mysql'][0] = $v;
-            $CheckResult['pdo_mysql'][1] = $CheckResult['pdo_mysql'][0] ? bingo : error;
+            $CheckResult['pdo_mysql'][1] = $CheckResult['pdo_mysql'][0] ? BINGO : ERROR;
         }
 
         if (extension_loaded('pdo_sqlite')) {
@@ -1087,33 +1098,33 @@ function CheckServer()
             $v = ' '; //$pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
             $pdo = null;
             $CheckResult['pdo_sqlite'][0] = $v;
-            $CheckResult['pdo_sqlite'][1] = $CheckResult['pdo_sqlite'][0] ? bingo : error;
+            $CheckResult['pdo_sqlite'][1] = $CheckResult['pdo_sqlite'][0] ? BINGO : ERROR;
         }
 
         if (extension_loaded('pdo_pgsql')) {
             $v = ' ';
             $pdo = null;
             $CheckResult['pdo_pgsql'][0] = $v;
-            $CheckResult['pdo_pgsql'][1] = $CheckResult['pdo_pgsql'][0] ? bingo : error;
+            $CheckResult['pdo_pgsql'][1] = $CheckResult['pdo_pgsql'][0] ? BINGO : ERROR;
         }
     }
     if (defined("PGSQL_STATUS_STRING")) {
         $CheckResult['pgsql'][0] = PGSQL_STATUS_STRING;
-        $CheckResult['pgsql'][1] = $CheckResult['pgsql'][0] ? bingo : error;
+        $CheckResult['pgsql'][1] = $CheckResult['pgsql'][0] ? BINGO : ERROR;
     }
     if (function_exists("sqlite_libversion")) {
         $CheckResult['sqlite'][0] = sqlite_libversion();
-        $CheckResult['sqlite'][1] = $CheckResult['sqlite'][0] ? bingo : error;
+        $CheckResult['sqlite'][1] = $CheckResult['sqlite'][0] ? BINGO : ERROR;
     }
     if (class_exists('SQLite3', false)) {
         $info = SQLite3::version();
         $CheckResult['sqlite3'][0] = $info['versionString'];
-        $CheckResult['sqlite3'][1] = $CheckResult['sqlite3'][0] ? bingo : error;
+        $CheckResult['sqlite3'][1] = $CheckResult['sqlite3'][0] ? BINGO : ERROR;
     }
     if (defined('OPENSSL_VERSION_TEXT')) {
         $info = OPENSSL_VERSION_TEXT;
         $CheckResult['openssl'][0] = $info;
-        $CheckResult['openssl'][1] = $CheckResult['openssl'][0] ? bingo : error;
+        $CheckResult['openssl'][1] = $CheckResult['openssl'][0] ? BINGO : ERROR;
     }
 
     getRightsAndExport('', 'zb_users');
@@ -1131,11 +1142,11 @@ function CheckServer()
     $CheckResult['mb_strlen'][0] = $zbp->lang['zb_install']['environment_mb_description'];
 
     $networkTest = Network::create();
-    $CheckResult['network'][1] = ($networkTest == false) ? error : bingo;
-    $CheckResult['simplexml_load_string'][1] = function_exists('simplexml_load_string') ? bingo : error;
-    $CheckResult['json_decode'][1] = function_exists('json_decode') ? bingo : error;
-    $CheckResult['iconv'][1] = function_exists('iconv') ? bingo : error;
-    $CheckResult['mb_strlen'][1] = function_exists('mb_strlen') ? bingo : error;
+    $CheckResult['network'][1] = ($networkTest == false) ? ERROR : BINGO;
+    $CheckResult['simplexml_load_string'][1] = function_exists('simplexml_load_string') ? BINGO : ERROR;
+    $CheckResult['json_decode'][1] = function_exists('json_decode') ? BINGO : ERROR;
+    $CheckResult['iconv'][1] = function_exists('iconv') ? BINGO : ERROR;
+    $CheckResult['mb_strlen'][1] = function_exists('mb_strlen') ? BINGO : ERROR;
 }
 
 function getRightsAndExport($folderparent, $folder)
@@ -1146,9 +1157,9 @@ function getRightsAndExport($folderparent, $folder)
     $GLOBALS['CheckResult'][$folder][0] = $s . ' | ' . $o;
 
     if (substr($s, 0, 1) == '-') {
-        $GLOBALS['CheckResult'][$folder][1] = (substr($s, 1, 1) == 'r' && substr($s, 2, 1) == 'w' && substr($s, 4, 1) == 'r' && substr($s, 7, 1) == 'r') ? bingo : error;
+        $GLOBALS['CheckResult'][$folder][1] = (substr($s, 1, 1) == 'r' && substr($s, 2, 1) == 'w' && substr($s, 4, 1) == 'r' && substr($s, 7, 1) == 'r') ? BINGO : ERROR;
     } else {
-        $GLOBALS['CheckResult'][$folder][1] = (substr($s, 1, 1) == 'r' && substr($s, 2, 1) == 'w' && substr($s, 3, 1) == 'x' && substr($s, 4, 1) == 'r' && substr($s, 7, 1) == 'r' && substr($s, 6, 1) == 'x' && substr($s, 9, 1) == 'x') ? bingo : error;
+        $GLOBALS['CheckResult'][$folder][1] = (substr($s, 1, 1) == 'r' && substr($s, 2, 1) == 'w' && substr($s, 3, 1) == 'x' && substr($s, 4, 1) == 'r' && substr($s, 7, 1) == 'r' && substr($s, 6, 1) == 'x' && substr($s, 9, 1) == 'x') ? BINGO : ERROR;
     }
 }
 
@@ -1445,27 +1456,27 @@ function SaveConfig()
         $s .= "return ";
         $option = array();
         foreach ($zbp->option as $key => $value) {
-            if (($key == 'ZC_DATABASE_TYPE') ||
-            ($key == 'ZC_SQLITE_NAME') ||
-            ($key == 'ZC_SQLITE_PRE') ||
-            ($key == 'ZC_MYSQL_SERVER') ||
-            ($key == 'ZC_MYSQL_USERNAME') ||
-            ($key == 'ZC_MYSQL_PASSWORD') ||
-            ($key == 'ZC_MYSQL_NAME') ||
-            ($key == 'ZC_MYSQL_CHARSET') ||
-            ($key == 'ZC_MYSQL_PRE') ||
-            ($key == 'ZC_MYSQL_ENGINE') ||
-            ($key == 'ZC_MYSQL_PORT') ||
-            ($key == 'ZC_MYSQL_PERSISTENT') ||
-            ($key == 'ZC_PGSQL_SERVER') ||
-            ($key == 'ZC_PGSQL_USERNAME') ||
-            ($key == 'ZC_PGSQL_PASSWORD') ||
-            ($key == 'ZC_PGSQL_NAME') ||
-            ($key == 'ZC_PGSQL_CHARSET') ||
-            ($key == 'ZC_PGSQL_PRE') ||
-            ($key == 'ZC_PGSQL_PORT') ||
-            ($key == 'ZC_PGSQL_PERSISTENT') ||
-            ($key == 'ZC_CLOSE_WHOLE_SITE')
+            if (($key == 'ZC_DATABASE_TYPE')
+                || ($key == 'ZC_SQLITE_NAME')
+                || ($key == 'ZC_SQLITE_PRE')
+                || ($key == 'ZC_MYSQL_SERVER')
+                || ($key == 'ZC_MYSQL_USERNAME')
+                || ($key == 'ZC_MYSQL_PASSWORD')
+                || ($key == 'ZC_MYSQL_NAME')
+                || ($key == 'ZC_MYSQL_CHARSET')
+                || ($key == 'ZC_MYSQL_PRE')
+                || ($key == 'ZC_MYSQL_ENGINE')
+                || ($key == 'ZC_MYSQL_PORT')
+                || ($key == 'ZC_MYSQL_PERSISTENT')
+                || ($key == 'ZC_PGSQL_SERVER')
+                || ($key == 'ZC_PGSQL_USERNAME')
+                || ($key == 'ZC_PGSQL_PASSWORD')
+                || ($key == 'ZC_PGSQL_NAME')
+                || ($key == 'ZC_PGSQL_CHARSET')
+                || ($key == 'ZC_PGSQL_PRE')
+                || ($key == 'ZC_PGSQL_PORT')
+                || ($key == 'ZC_PGSQL_PERSISTENT')
+                || ($key == 'ZC_CLOSE_WHOLE_SITE')
             ) {
                 $option[$key] = $value;
             }
@@ -1487,7 +1498,7 @@ function SaveConfig()
 
     if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $zbp->option['ZC_BLOG_THEME'] . '/include.php')) {
         if (CheckIncludedFiles($file_base) == false) {
-            require $file_base;
+            include $file_base;
         }
     }
     if (function_exists($fn = 'InstallPlugin_' . $zbp->option['ZC_BLOG_THEME'])) {

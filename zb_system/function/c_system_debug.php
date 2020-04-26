@@ -252,7 +252,8 @@ function Debug_DoNothing()
  */
 class ZBlogException
 {
-    private static $_zbe = null;
+
+    private static $private_zbe = null;
 
     public static $disabled = false;
 
@@ -333,11 +334,11 @@ class ZBlogException
      */
     public static function GetInstance()
     {
-        if (!isset(self::$_zbe)) {
-            self::$_zbe = new self();
+        if (!isset(self::$private_zbe)) {
+            self::$private_zbe = new self();
         }
 
-        return self::$_zbe;
+        return self::$private_zbe;
     }
 
     /**
@@ -573,4 +574,5 @@ class ZBlogException
 
         return $result;
     }
+
 }

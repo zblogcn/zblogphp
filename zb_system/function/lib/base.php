@@ -459,4 +459,5 @@ class Base
     {
         return (string) json_encode($this->data);
     }
+
 }

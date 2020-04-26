@@ -65,7 +65,7 @@ function misc_statistic()
     $all_articles = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('*' => 'num'))->where(array('=', 'log_Type', '0'))->query, 'num');
     $all_pages = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('*' => 'num'))->where(array('=', 'log_Type', '1'))->query, 'num');
     $all_categories = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Category'])->count(array('*' => 'num'))->query, 'num');
-    $all_views = ($zbp->option['ZC_LARGE_DATA'] == false && $zbp->option['ZC_VIEWNUMS_TURNOFF'] == true) ? 0 : GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->sum(array('log_ViewNums' => 'num'))->query, 'num');
+    $all_views = ($zbp->option['ZC_LARGE_DATA'] == true || $zbp->option['ZC_VIEWNUMS_TURNOFF'] == true) ? 0 : GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->sum(array('log_ViewNums' => 'num'))->query, 'num');
     $all_tags = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Tag'])->count(array('*' => 'num'))->query, 'num');
     $all_members = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Member'])->count(array('*' => 'num'))->query, 'num');
     $check_comment_nums = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('*' => 'num'))->where('=', 'comm_Ischecking', '1')->query, 'num');
@@ -126,7 +126,7 @@ function misc_showtags()
     }
 
     header('Content-Type: application/x-javascript; Charset=utf-8');
-    header('Cache-Control: private'); 
+    header('Cache-Control: private');
     echo '$("#ajaxtags").html("';
 
     $array = $zbp->GetTagList(null, null, array('tag_Count' => 'DESC', 'tag_ID' => 'ASC'), array(100), null);
@@ -156,9 +156,9 @@ function misc_vrs()
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <?php
         if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) {
-        ?>
+            ?>
             <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-        <?php
+            <?php
         }
         ?>
         <meta name="robots" content="none" />
@@ -183,13 +183,13 @@ function misc_vrs()
                         <dl>
                             <dt><?php echo $zbp->lang['msg']['current_member'] . ' : <b>' . $zbp->user->Name; ?></b><br />
                                 <?php echo $zbp->lang['msg']['member_level'] . ' : <b>' . $zbp->user->LevelName; ?></b></dt>
-                            <?php
-                            foreach ($GLOBALS['actions'] as $key => $value) {
-                                if ($GLOBALS['zbp']->CheckRights($key)) {
-                                    echo '<dd><b>' . $zbp->GetActionDescription($key) . '</b> : ' . ($zbp->CheckRights($key) ? '<span style="color:green">true</span>' : '<span style="color:red">false</span>') . '</dd>';
-                                }
-                            }
-                            ?>
+    <?php
+    foreach ($GLOBALS['actions'] as $key => $value) {
+        if ($GLOBALS['zbp']->CheckRights($key)) {
+            echo '<dd><b>' . $zbp->GetActionDescription($key) . '</b> : ' . ($zbp->CheckRights($key) ? '<span style="color:green">true</span>' : '<span style="color:red">false</span>') . '</dd>';
+        }
+    }
+    ?>
                         </dl>
                     </form>
                 </div>
@@ -198,7 +198,7 @@ function misc_vrs()
     </body>
 
     </html>
-<?php
+    <?php
     RunTime();
 }
 
@@ -221,7 +221,7 @@ function misc_phpinfo()
     if (PHP_ENGINE !== ENGINE_HHVM) {
         preg_match("/<body.*?>(.*?)<\/body>/is", $s, $match);
     }
-?>
+    ?>
     <!DOCTYPE HTML>
     <html>
 
@@ -229,9 +229,9 @@ function misc_phpinfo()
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <?php
         if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) {
-        ?>
+            ?>
             <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-        <?php
+            <?php
         }
         ?>
         <meta name="robots" content="none" />
@@ -499,7 +499,7 @@ function misc_phpinfo()
     </body>
 
     </html>
-<?php
+    <?php
     RunTime();
 }
 

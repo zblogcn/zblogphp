@@ -49,9 +49,9 @@ class Network__fsockopen implements Network__Interface
 
     private $canreinit = true;
 
-    private $__isBinary = false;
+    private $private_isBinary = false;
 
-    private $__boundary = '';
+    private $private_boundary = '';
 
     /**
      * @param $property_name
@@ -195,8 +195,8 @@ class Network__fsockopen implements Network__Interface
             }
             $this->option['content'] = $data;
             if (!isset($this->httpheader['Content-Type'])) {
-                if ($this->__isBinary) {
-                    $this->httpheader['Content-Type'] = 'Content-Type: multipart/form-data; boundary=' . $this->__boundary;
+                if ($this->private_isBinary) {
+                    $this->httpheader['Content-Type'] = 'Content-Type: multipart/form-data; boundary=' . $this->private_boundary;
                 } else {
                     $this->httpheader['Content-Type'] = 'Content-Type: application/x-www-form-urlencoded';
                 }
@@ -358,7 +358,7 @@ class Network__fsockopen implements Network__Interface
      */
     public function addBinary($name, $entity, $filename = null, $mime = '')
     {
-        $this->__isBinary = true;
+        $this->private_isBinary = true;
         $return = array();
 
         $return['type'] = 'binary';
@@ -406,7 +406,7 @@ class Network__fsockopen implements Network__Interface
      */
     private function __buildPostData()
     {
-        if (!$this->__isBinary) {
+        if (!$this->private_isBinary) {
             $array = array();
             foreach ($this->postdata as $name => $value) {
                 $array[$name] = $value['data'];
@@ -415,7 +415,7 @@ class Network__fsockopen implements Network__Interface
             return http_build_query($array);
         }
         $this->__buildBoundary();
-        $boundary = $this->__boundary;
+        $boundary = $this->private_boundary;
         $data = '';
 
         foreach ($this->postdata as $name => $value) {
@@ -448,7 +448,7 @@ class Network__fsockopen implements Network__Interface
     {
         $boundary = '----ZBLOGPHPBOUNDARY';
         $boundary .= substr(md5(time()), 8, 16);
-        $this->__boundary = $boundary;
+        $this->private_boundary = $boundary;
     }
 
     private function reinit()
@@ -468,8 +468,8 @@ class Network__fsockopen implements Network__Interface
         $this->status = 0; //状态码
         $this->statusText = ''; //状态码文本
 
-        $this->__isBinary = false;
-        $this->__boundary = '';
+        $this->private_isBinary = false;
+        $this->private_boundary = '';
 
         $this->option = array();
         $this->url = '';

@@ -32,12 +32,12 @@ class Member extends Base
     /**
      * @var string 头像图片地址
      */
-    private $_avatar = '';
+    private $private_avatar = '';
 
     /**
      * @var bool 创始id
      */
-    private $_isgod = null;
+    private $private_isgod = null;
 
     /**
      * 构造函数，默认用户设为anonymous.
@@ -128,19 +128,19 @@ class Member extends Base
                     return $fpreturn;
                 }
             }
-            if ($this->_avatar) {
-                return $this->_avatar;
+            if ($this->private_avatar) {
+                return $this->private_avatar;
             }
 
             $s = $zbp->usersdir . 'avatar/' . $this->ID . '.png';
             if (is_readable($s)) {
-                $this->_avatar = $zbp->host . 'zb_users/avatar/' . $this->ID . '.png';
+                $this->private_avatar = $zbp->host . 'zb_users/avatar/' . $this->ID . '.png';
 
-                return $this->_avatar;
+                return $this->private_avatar;
             }
-            $this->_avatar = $zbp->host . 'zb_users/avatar/0.png';
+            $this->private_avatar = $zbp->host . 'zb_users/avatar/0.png';
 
-            return $this->_avatar;
+            return $this->private_avatar;
         }
         if ($name == 'LevelName') {
             return $zbp->lang['user_level_name'][$this->Level];
@@ -167,18 +167,18 @@ class Member extends Base
             return $this->GetHashByMD5Path();
         }
         if ($name == 'IsGod') {
-            if ($this->_isgod === true || $this->_isgod === false) {
-                return $this->_isgod;
+            if ($this->private_isgod === true || $this->private_isgod === false) {
+                return $this->private_isgod;
             } else {
                 $sql = $zbp->db->sql->Select($zbp->table['Member'], '*', array(array('=', 'mem_Level', 1)), 'mem_ID ASC', 1, null);
                 $am = $zbp->GetListType('Member', $sql);
                 if ($am[0]->ID == $this->ID) {
-                    $this->_isgod = true;
+                    $this->private_isgod = true;
                 } else {
-                    $this->_isgod = false;
+                    $this->private_isgod = false;
                 }
 
-                return $this->_isgod;
+                return $this->private_isgod;
             }
         }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Get'] as $fpname => &$fpsignal) {

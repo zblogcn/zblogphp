@@ -51,7 +51,7 @@ class Network__curl implements Network__Interface
 
     private $maxredirs = 0;
 
-    private $__isBinary = false;
+    private $private_isBinary = false;
 
     /**
      * @ignore
@@ -207,12 +207,12 @@ class Network__curl implements Network__Interface
 
         if ($this->option['method'] == 'POST') {
             if (is_string($varBody) && count($this->postdata) > 0) {
-            	parse_str($varBody, $data);
-                $data = $data + $this->postdata;
+                parse_str($varBody, $data);
+                $data = ($data + $this->postdata);
             } elseif (is_array($varBody) && count($this->postdata) > 0) {
-                $data = $varBody + $this->postdata;
+                $data = ($varBody + $this->postdata);
             }
-            if ($this->__isBinary) {
+            if ($this->private_isBinary) {
                 curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'POST');
             } else {
                 curl_setopt($this->ch, CURLOPT_POST, 1);
@@ -307,7 +307,7 @@ class Network__curl implements Network__Interface
     public function addBinary($name, $entity, $filename = null, $mime = '')
     {
         global $zbp;
-        $this->__isBinary = true;
+        $this->private_isBinary = true;
 
         if (!is_file($entity)) {
             $filename = ($filename === null ? $name : $filename);
@@ -373,7 +373,7 @@ class Network__curl implements Network__Interface
         $this->status = 0; //状态码
         $this->statusText = ''; //状态码文本
 
-        $this->__isBinary = false;
+        $this->private_isBinary = false;
 
         $this->option = array();
         $this->url = '';
