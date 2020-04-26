@@ -38,6 +38,7 @@ For security vulnerabilities, please contact us via ``contact#rainbowsoft.org`` 
 3. 建立数据库
    - 选择MySQL数据库，请输入空间商为您提供的MySQL帐号密码等信息
    - 选择SQLite，请确保服务器支持SQLite，安装程序将在点击下一步后自动创建SQLite数据库文件
+   - 选择Postgresql数据库，请Postgresql相关的主机名数据库名帐号密码等信息
 4. 填写你为站点设置的管理员账号密码，务必使用强口令账号
 5. 点击下一步，安装成功，进入网站
 

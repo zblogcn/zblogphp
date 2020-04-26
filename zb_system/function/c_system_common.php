@@ -1670,6 +1670,7 @@ function VerifyWebToken($webTokenString, $webTokenId, $key = '')
 function CreateWebToken($webTokenId, $time, $key = '')
 {
     global $zbp;
+    $args = array();
     for ($i = 3; $i < func_num_args(); $i++) {
         $args[] = func_get_arg($i);
     }

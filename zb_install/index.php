@@ -1310,7 +1310,7 @@ function InsertInfo()
     $t->FileName = "favorite";
     $t->Source = "system";
     $t->SidebarID = 1;
-    $t->Content = '<li><a href="https://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="https://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li>';
+    $t->Content = '<li><a href="https://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="https://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li><li><a href="https://z5encrypt.com/" target="_blank" title="全新的PHP加密方案，致力于PHP源码的保护">Z5 PHP加密</a></li>';
     $t->HtmlID = "divFavorites";
     $t->Type = "ul";
     $t->Save();
