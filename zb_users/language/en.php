@@ -77,6 +77,7 @@ return array(
         'check_comment'                     => 'Pending',
         'dashboard'                         => 'Dashboard Home',
         'settings'                          => 'Settings',
+        'web_settings'                      => 'Settings',
         'official_website'                  => 'Support',
         'parend_id'                         => 'Parent ID',
         'select_all'                        => 'Check All',

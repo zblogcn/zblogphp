@@ -49,7 +49,7 @@ function updatedb()
         @$db->Query("ALTER TABLE {$t['Post']} ADD {$d['Post']['UpdateTime'][0]} integer NOT NULL DEFAULT 0;");
     }
 
-    if ($db->type == 'mysql') {
+    if ($zbp->option['ZC_LAST_VERSION'] < 162315 && $db->type == 'mysql') {
         @$db->Query("ALTER TABLE {$t['Post']} MODIFY  `{$d['Post']['Type'][0]}` INT(11) NOT NULL DEFAULT '0';");
         @$db->Query("ALTER TABLE {$t['Tag']} MODIFY  `{$d['Tag']['Type'][0]}` INT(11) NOT NULL DEFAULT '0';");
         @$db->Query("ALTER TABLE {$t['Category']} MODIFY  `{$d['Category']['Type'][0]}` INT(11) NOT NULL DEFAULT '0';");

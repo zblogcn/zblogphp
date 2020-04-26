@@ -138,7 +138,7 @@ function ResponseAdmin_TopMenu()
     global $topmenus;
 
     $topmenus[] = MakeTopMenu("admin", $zbp->lang['msg']['dashboard'], $zbp->host . "zb_system/cmd.php?act=admin", "", "");
-    $topmenus[] = MakeTopMenu("SettingMng", $zbp->lang['msg']['settings'], $zbp->host . "zb_system/cmd.php?act=SettingMng", "", "");
+    $topmenus[] = MakeTopMenu("SettingMng", @$zbp->lang['msg']['web_settings'], $zbp->host . "zb_system/cmd.php?act=SettingMng", "", "");
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_TopMenu'] as $fpname => &$fpsignal) {
         $fpname($topmenus);
