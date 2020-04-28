@@ -159,7 +159,7 @@ form.cmt .revoke{background:#abc;margin-right:1em;}
 #banner{height:30em;background:#39c;position:relative;}
 #banner::after{content:".";display:block;position:absolute;left:0;top:-2em;right:0;box-shadow:0 3em 10em #123;overflow:hidden;}
 #banner .inner{padding:0 50px;}
-#banner .zit{bottom:2.2em;z-index:10;font-size:2em;border-radius:0;box-shadow:0 .5em .3em -.3em rgba(0,0,0,.3);max-width:1100px;margin-right:50px;}
+#banner .zit{bottom:2.2em;z-index:10;font-size:2em;border-radius:0;box-shadow:0 .5em .3em -.3em rgba(0,0,0,.3);max-width:1100px;margin-right:50px;line-height:1.2}
 #backdrop{position:absolute;top:0;left:0;right:0;bottom:0;background:#39c url(bg.jpg) center no-repeat;background-size:cover;animation:slide 30s infinite linear;}
 
 #wrap .inner{background:#fff;margin-top:-5em;padding-top:2em;position:relative;}
@@ -203,7 +203,8 @@ form.cmt .revoke{background:#abc;margin-right:1em;}
 #rel a:hover .cover{opacity:1}
 #rel a:hover .pane{background:#18a;margin:-2em 0 0;}
 #rel a:hover,
-#rel a:hover small{color:#fff;}
+#rel a:hover small,
+#rel a:hover b{color:#fff;}
 
 #pagi{text-align:center;margin:0 0 2em;}
 #pagi b,
@@ -233,6 +234,8 @@ form.cmt .revoke{background:#abc;margin-right:1em;}
 #tbCalendar td{border-bottom:1px solid #cde;}
 #tbCalendar td a{border-bottom:2px solid #39c;display:block;}
 
+#slArchives{border:2px solid #cde;width:100%;padding:.3em .2em;}
+
 .onlym{display:none;}
 
 #base{border-top:1px dotted #cde;text-align:center;padding:4em 0;margin:2em 0 0;}
@@ -259,6 +262,7 @@ form.cmt .revoke{background:#abc;margin-right:1em;}
   #rel h3.zit,
   #cmts h3.zit{left:auto;}
   #path{display:none;}
+  #topic{margin-left:0;margin-right:0;}
 }
 
 @media only screen and (max-width:900px){
@@ -317,14 +321,14 @@ form.cmt .revoke{background:#abc;margin-right:1em;}
   #topic{padding:0 0 4em;margin-bottom:3em;}
   #topic .more{bottom:0;right:0;top:auto;}
   .article #topic,
-  .page #topic{margin:1em;padding:0;}
+  .page #topic{margin:1em 0;padding:0;}
   .article #topic .more,
   .page #topic .more{display:none;}
 
   #main{float:none;width:auto;}
   #side{float:none;width:auto;padding:2em 0 0;}
 
-  #cont{margin:1em 1em 4em;}
+  #cont{margin:1em 0 4em;}
 
   .poster{margin:0 -1em;}
   .poster .cover{height:18em;}

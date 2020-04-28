@@ -718,6 +718,10 @@ class ZBlogPHP
 
         $this->CheckTemplate();
 
+        if (isset($GLOBALS['zbpvers'])) {
+            $GLOBALS['zbpvers'][$GLOBALS['blogversion']] = ZC_VERSION_DISPLAY . ' Build ' . $GLOBALS['blogversion'];
+        }
+
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) {
             $fpname();
         }
@@ -1083,6 +1087,7 @@ class ZBlogPHP
                     || ($key == 'ZC_MYSQL_PASSWORD')
                     || ($key == 'ZC_MYSQL_NAME')
                     || ($key == 'ZC_MYSQL_CHARSET')
+                    || ($key == 'ZC_MYSQL_COLLATE')
                     || ($key == 'ZC_MYSQL_PRE')
                     || ($key == 'ZC_MYSQL_ENGINE')
                     || ($key == 'ZC_MYSQL_PORT')
@@ -1151,6 +1156,7 @@ class ZBlogPHP
                 || ($key == 'ZC_MYSQL_PASSWORD')
                 || ($key == 'ZC_MYSQL_NAME')
                 || ($key == 'ZC_MYSQL_CHARSET')
+                || ($key == 'ZC_MYSQL_COLLATE')
                 || ($key == 'ZC_MYSQL_PRE')
                 || ($key == 'ZC_MYSQL_ENGINE')
                 || ($key == 'ZC_MYSQL_PORT')

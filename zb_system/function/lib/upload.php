@@ -36,10 +36,23 @@ class Upload extends Base
     public function CheckExtName($extList = '')
     {
         global $zbp;
+        $fn = $this->Name;
+        if (stripos($fn, '.htaccess') !== false) {
+            return false;
+        }
+        if (stripos($fn, 'web.config') !== false) {
+            return false;
+        }
         $e = GetFileExt($this->Name);
         $extList = strtolower($extList);
         // 无论如何，禁止.php、.php5之类的文件的上传
         if (preg_match('/php/i', $e)) {
+            return false;
+        }
+        if (preg_match('/pht(ml)?(\d*)/i', $e)) {
+            return false;
+        }
+        if (in_array(strtolower($e), array('phar', 'phtml', 'pht', 'php3', 'php4', 'php5', 'php6', 'php7', 'php8'))) {
             return false;
         }
         if (trim($extList) == '') {

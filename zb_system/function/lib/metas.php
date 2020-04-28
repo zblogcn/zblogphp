@@ -17,7 +17,7 @@ class Metas
     /**
      * @var array 存储Metas相应数值的数组
      */
-    private $private_data = array();
+    private $p_data = array();
 
     /**
      * @param string $name key名
@@ -25,7 +25,7 @@ class Metas
      */
     public function __set($name, $value)
     {
-        $this->private_data[$name] = $value;
+        $this->p_data[$name] = $value;
     }
 
     /**
@@ -35,11 +35,11 @@ class Metas
      */
     public function __get($name)
     {
-        if (!isset($this->private_data[$name])) {
+        if (!isset($this->p_data[$name])) {
             return;
         }
 
-        return $this->private_data[$name];
+        return $this->p_data[$name];
     }
 
     /**
@@ -49,7 +49,7 @@ class Metas
      */
     public function __isset($name)
     {
-        return isset($this->private_data[$name]);
+        return isset($this->p_data[$name]);
     }
 
     /**
@@ -57,7 +57,7 @@ class Metas
      */
     public function __unset($name)
     {
-        unset($this->private_data[$name]);
+        unset($this->p_data[$name]);
     }
 
     /**
@@ -71,7 +71,7 @@ class Metas
     {
         $m = new self();
         if (is_array($a)) {
-            $m->private_data = $a;
+            $m->p_data = $a;
         }
 
         return $m;
@@ -84,7 +84,7 @@ class Metas
      */
     public function GetData()
     {
-        return $this->private_data;
+        return $this->p_data;
     }
 
     /**
@@ -124,7 +124,7 @@ class Metas
      */
     public function HasKey($name)
     {
-        return array_key_exists($name, $this->private_data);
+        return array_key_exists($name, $this->p_data);
     }
 
     /**
@@ -134,7 +134,7 @@ class Metas
      */
     public function CountItem()
     {
-        return count($this->private_data);
+        return count($this->p_data);
     }
 
     /**
@@ -144,7 +144,7 @@ class Metas
      */
     public function Del($name)
     {
-        unset($this->private_data[$name]);
+        unset($this->p_data[$name]);
     }
 
     /**
@@ -154,11 +154,11 @@ class Metas
      */
     public function Serialize()
     {
-        if (count($this->private_data) == 0) {
+        if (count($this->p_data) == 0) {
             return '';
         }
 
-        $data = $this->private_data;
+        $data = $this->p_data;
         foreach ($data as $key => $value) {
             if (is_string($value)) {
                 $data[$key] = self::ReplaceHost2Tag($value);
@@ -183,22 +183,22 @@ class Metas
         }
 
         //if(strpos($s,'{')===0){
-        //$this->private_data=json_decode($s,true);
+        //$this->p_data=json_decode($s,true);
         //}else{
-        $this->private_data = @unserialize($s);
+        $this->p_data = @unserialize($s);
         //}
-        if (is_array($this->private_data)) {
-            if (count($this->private_data) == 0) {
+        if (is_array($this->p_data)) {
+            if (count($this->p_data) == 0) {
                 return true;
             }
 
-            foreach ($this->private_data as $key => $value) {
+            foreach ($this->p_data as $key => $value) {
                 if (is_string($value)) {
-                    $this->private_data[$key] = self::ReplaceTag2Host($value);
+                    $this->p_data[$key] = self::ReplaceTag2Host($value);
                 }
             }
         } else {
-            $this->private_data = array();
+            $this->p_data = array();
 
             return false;
         }

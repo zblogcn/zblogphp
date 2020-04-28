@@ -1,3 +1,5 @@
+{$userName=$article.Author.Name}
+{if $cfg->StaticName}{$userName=$article.Author.StaticName}{/if}
 <div id="topic">
   <nav id="path" class="kico-dao kico-gap"><a href="{$host}">{$msg.home}</a> | <a href="{$article.Category.Url}">{$article.Category.Name}</a> | <a href="{$article->TimeUrl}">{$article.Time('Y-m-d')}</a></nav>
   <h4>
@@ -6,7 +8,7 @@
     {/foreach}
   </h4>
   <h1>{$article.Title}</h1>
-  <h5><time class="kico-time"><dfn>{$msg.post}</dfn>{$article.Time('Y-m-d H:i:s')}</time> <span class="kico-eye"><dfn>{$msg.views}</dfn>{$article.ViewNums}</span> <span  class="kico-ping"><dfn>{$msg.comments}</dfn>{$article.CommNums}</span></h5>
+  <h5><img src="{$article.Author.Avatar}" class="avatar" alt="{$userName}"> <a href="{$article.Author.Url}" title="{$msg.view} {$userName}{$msg.logs}">{$userName}</a> <span class="kico-time"><dfn>{$msg.post}</dfn>{$article.Time('Y-m-d H:i:s')}</span> <span class="kico-eye"><dfn>{$msg.views}</dfn>{$article.ViewNums}</span> <span  class="kico-ping"><dfn>{$msg.comments}</dfn>{$article.CommNums}</span></h5>
   <p><a href="#cmts" class="more"><span class="zit">{if $article.CommNums}{$article.CommNums}{$msg.partake}{else}{$msg.sofa}{/if}</span>{$msg.comment}</a></p>
 </div>
 {$blank='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='}

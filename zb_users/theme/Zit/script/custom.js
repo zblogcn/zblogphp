@@ -84,8 +84,8 @@ $(function(){
   $side.find("#tbCalendar").parent("div").css("margin","-1em -1em -.5em");
 
   $side.find(".cp-hello").parent().addClass("cpanel").find("a").addClass("more");
-  $side.find(".cp-login a").addClass("kico-hu");
-  $side.find(".cp-vrs a").addClass("kico-wen");
+  $side.find(".cp-login a").addClass("kico-user");
+  $side.find(".cp-vrs a").addClass("kico-page");
 
   $cmt[0]&&$len.appendTo("body");
   $cmt.find("input:text").on("focus keyup keydown init",function(){
@@ -126,6 +126,7 @@ zbp.plugin.on("comment.post.success", "zit", function (formData, data) {
 
 zbp.plugin.on("comment.post.done", "zit", function () {
   posting(false);
+  $(".revoke").fadeOut();
 });
 
 zbp.plugin.on("comment.reply.start", "zit", function (id) {

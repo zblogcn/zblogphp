@@ -5,7 +5,7 @@
 
 {if $article.CommNums>0}
 <ul class="msg msghead">
-	<li class="tbname">{$lang['default']['comment_list']}:</li>
+	<li class="tbname">{$lang['default']['comment_list']}</li>
 </ul>
 {/if}
 

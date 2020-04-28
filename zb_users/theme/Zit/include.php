@@ -25,11 +25,11 @@ function ActivePlugin_Zit()
     $cfg = $zbp->Config($name);
     $css = '';
     if ((int) $cfg->Hue) {
-        $css .= 'input,button,a,.zit,.hue,#navim,#backdrop{filter:hue-rotate(' . $cfg->Hue . 'deg)}';
+        $css .= 'input,button,textarea,select,th,td,a,.zit,.hue,#navim,#backdrop,#topic h5,#rel .log,.cmt small{filter:hue-rotate(' . $cfg->Hue . 'deg)}';
         $css .= '.more span{filter:none}';
         $css .= '#backdrop{animation:none;}';
         $css .= 'a img{filter:hue-rotate(-' . $cfg->Hue . 'deg)}';
-        $css .= 'figure>a>img{filter:hue-rotate(0deg)!important}';
+        $css .= 'td a,#rel .log .zit,#topic h5 a,.cmt small a,.cmt small input{filter:none}';
     }
     if ($cfg->Backdrop) {
         $css .= '#backdrop{background-image:url(' . $cfg->Backdrop . ');filter:none;}';
@@ -60,17 +60,23 @@ function Zit_Defaults($init = false)
 
     if ($init) {
         $cfg->Logo = 'ZBlogIt';
-        $cfg->Motto = 'Nice to meet you, too!';
         $cfg->Cover = $bloghost . 'zb_users/theme/Zit/style/bg.jpg';
         $cfg->Backdrop = '';
         $cfg->DefaultAdmin = 0;
-        $cfg->Profile = 1;
+        //$cfg->Profile = 1;
         $cfg->ListTags = 0;
         $cfg->MobileSide = 0;
         $cfg->HideIntro = 0;
         $cfg->SideMods = '';
         $cfg->Hue = 0;
+        $cfg->StaticName = 1;
 
+        $cfg->Motto = 'Nice to meet you, too!';
+        $cfg->MottoUrl = '';
+        $cfg->MottoSize = '';
+
+        #TODO add in 1.2, fit main.php and languages
+        //$cfg->CmtLink = 1;
         $cfg->CmtIds = '';
         $cfg->GbookID = 2;
 
@@ -79,7 +85,7 @@ function Zit_Defaults($init = false)
         $cfg->RelatedTitle = '少长咸集';
         $cfg->CommentTitle = '群贤毕至';
 
-        $cfg->Custom = false;
+        $cfg->Custom = 0;
     }
 
     return (array) $cfg;
@@ -132,7 +138,7 @@ function Zit_LoginHeader()
     echo <<<CSSJS
   <style>
     .bg{background:url({$bg}) center;background-size:cover;filter:hue-rotate({$bghue}deg);}
-    .zit{color:#fff;background:#18a;padding:.5em;line-height:1;position:relative;min-width:2em;display:inline-block;min-height:1em;font-size:2em;margin:0 1em 0 0;box-shadow:.5em .5em .5em -.3em rgba(0,0,0,.3);}
+    .zit{color:#fff;background:#18a;padding:.5em;line-height:1;position:relative;min-width:2em;display:inline-block;min-height:1em;font-size:2em;margin:0 1em 0 0;box-shadow:.5em .5em .5em -.3em rgba(0,0,0,.3);border-radius:0.1em;}
     .zit::after{content:"Z";position:absolute;left:.5em;bottom:-.5em;transform:rotate(30deg);display:inline-block;margin:0 .2em 0 0;z-index:-1;color:#18a;font-weight:bold;}
     #wrapper{filter:hue-rotate({$hue}deg);position:relative;max-width:600px;padding-top:300px;}
     .logo{position:absolute;bottom:125px;left:0;height:auto;width:auto;margin:0;word-break:break-all;}
@@ -172,7 +178,11 @@ function Zit_AdminHeader()
     .left,
     .pagebar span,
     .theme-now,
+    #topmenu a,
     .SubMenu{filter:hue-rotate({$cfg->Hue}deg);}
+    .theme-now input,
+    #kandyApps a{filter:none;}
+    .theme-now img{filter:hue-rotate(-{$cfg->Hue}deg);}
   </style>
 CSS;
 
@@ -244,9 +254,19 @@ function Zit_BuildModule()
 function Zit_MakeTemplatetags(&$templateTags)
 {
     global $zbp;
+
+    $cfg = $zbp->Config('Zit');
+
     $templateTags['msg'] = (object) $zbp->lang['Zit'];
 
-    $templateTags['cfg'] = $zbp->Config('Zit');
+    $templateTags['cfg'] = $cfg;
 
-    $templateTags['sideMods'] = $templateTags['cfg']->MobileSide ? array() : explode(' ', trim($templateTags['cfg']->SideMods));
+    $templateTags['sideMods'] = $cfg->MobileSide ? array() : explode(' ', trim($cfg->SideMods));
+
+    $motto=$cfg->Motto?$cfg->Motto:$zbp->subname;
+    
+    if($cfg->MottoSize) $motto='<span style="display:block;font-size:'.$cfg->MottoSize.'">'.$motto.'</span>';
+    if($cfg->MottoUrl) $motto='<a href="'.trim(str_replace('~',$zbp->host,$cfg->MottoUrl)).'" targe="_blank">'.$motto.'</a>';
+
+    $templateTags['motto']=$motto;
 }

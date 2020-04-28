@@ -1,4 +1,6 @@
-<?php if (!defined('ZBP_PATH')) {
+<?php
+
+if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
 

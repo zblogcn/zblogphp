@@ -1,5 +1,11 @@
 <table id="tbCalendar">
-    <caption><a href="{$prevMonthUrl}">«</a>&nbsp;&nbsp;&nbsp;<a href="{$nowMonthUrl}">{$nowYear}年{$nowMonth}月</a>&nbsp;&nbsp;&nbsp;<a href="{$nextMonthUrl}">»</a></caption>
+    <caption><a href="{$prevMonthUrl}">«</a>&nbsp;&nbsp;&nbsp;<a href="{$nowMonthUrl}">
+{if $option['ZC_BLOG_LANGUAGEPACK'] == 'zh-cn' || $option['ZC_BLOG_LANGUAGEPACK'] == 'zh-tw'}
+    {$nowYear}年{$nowMonth}月
+{else}
+    {date("F , Y", mktime(0, 0, 0, $nowMonth, 1, $nowYear))}
+{/if}
+    </a>&nbsp;&nbsp;&nbsp;<a href="{$nextMonthUrl}">»</a></caption>
     <thead><tr>{for $i = 1; $i <= 7; $i++}<th title="{$lang['week'][$i]}" scope="col"><small>{$lang['week_abbr'][$i]}</small></th>{/for}</tr></thead>
     <tbody>
     <tr>

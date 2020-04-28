@@ -8,14 +8,14 @@
   <meta name="theme" content="吉光片羽,jgpy.cn">
   <meta name="generator" content="{$zblogphp}">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
   <meta http-equiv="Cache-Control" content="no-siteapp">
   <link rel="shortcut icon" href="{$host}favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="{$host}zb_users/theme/{$theme}/style/{$style}.css" type="text/css" media="all">
+  <link rel="stylesheet" href="{$host}zb_users/theme/{$theme}/style/{$style}.css?v={$cfg->Custom}" type="text/css" media="all">
   <script src="{$host}zb_system/script/jquery-2.2.4.min.js" type="text/javascript"></script>
   <script src="{$host}zb_system/script/zblogphp.js" type="text/javascript"></script>
   <script src="{$host}zb_system/script/c_html_js_add.php" type="text/javascript"></script>
-  <script src="{$host}zb_users/theme/{$theme}/script/custom.js" type="text/javascript"></script>
+  <script src="{$host}zb_users/theme/{$theme}/script/custom.js?v={$cfg->Custom}" type="text/javascript"></script>
 {$header}
 {if $type=='index'&&$page=='1'}
   <link rel="alternate" type="application/rss+xml" href="{$feedurl}" title="{$name}">
@@ -35,7 +35,7 @@
     </nav>
     <div id="seek" class="invis">
         <form name="search" method="post" action="{$host}zb_system/cmd.php?act=search">
-          <input name="q" min="1" type="text" placeholder="{$msg.keywords}"><button type="submit" class="kico-magnify"><dfn>{$msg.search}</dfn></button>
+          <input name="q" type="text" placeholder="{$msg.keyword}"><button type="submit" class="kico-magnify"><dfn>{$msg.search}</dfn></button>
           <p>{module:zit-searchtag} <i id="shuts" class="kico">&times;</i></p>
         </form>
     </div>
@@ -44,6 +44,6 @@
 <section id="banner">
   <b id="backdrop"></b>
   <div class="inner">
-    <h3 id="motto" class="zit">{$cfg.Motto?$cfg.Motto:$subname}</h3>
+    <h2 id="motto" class="zit">{$motto}</h2>
   </div>
 </section>

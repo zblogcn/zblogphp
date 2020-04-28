@@ -152,20 +152,17 @@ class SQL__MySQL extends SQL__Global
                 $myengtype = $GLOBALS['zbp']->option['ZC_MYSQL_ENGINE'];
             }
 
-            $collate = 'utf8_general_ci';
-            $charset = 'utf8';
-            if ($GLOBALS['zbp']->option['ZC_MYSQL_CHARSET'] == 'utf8mb4') {
-                $collate = 'utf8mb4_general_ci';
-                $charset = 'utf8mb4';
+            $charset = $GLOBALS['zbp']->option['ZC_MYSQL_CHARSET'];
+            $collate = $GLOBALS['zbp']->option['ZC_MYSQL_COLLATE'];
+
+            if (isset($this->option['charset']) && !empty($this->option['charset'])) {
+                $charset = strtolower($this->option['charset']);
             }
             if (isset($this->option['collate']) && !empty($this->option['collate'])) {
-                $collate = $this->option['collate'];
-            }
-            if (isset($this->option['charset']) && !empty($this->option['charset'])) {
-                $charset = $this->option['charset'];
+                $collate = strtolower($this->option['collate']);
             }
             if ($charset == 'utf8mb4' && stripos($collate, 'utf8mb4_') === false) {
-                $collate = 'utf8mb4_general_ci';
+                $collate = str_ireplace('utf8_', 'utf8mb4_', $collate);
             }
 
             $sql[] = ') ENGINE=' . $myengtype . ' DEFAULT CHARSET=' . $charset . ' COLLATE=' . $collate . ' AUTO_INCREMENT=1 ;';

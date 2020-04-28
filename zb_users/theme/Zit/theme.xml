@@ -2,9 +2,20 @@
 <theme version="php">
 <id>Zit</id>
 <name>ZBlogIt</name>
-<url>https://jgpy.cn</url>
-<note></note>
-<description></description>
+<url>https://jgpy.cn/blog/front-end/ZBlogIt.htm</url>
+<note>可丰富变换外观的ZBlogPHP1.6系统自带主题</note>
+<description>更新日志
+2020-04-28 V1.11
+BUG 修复移动设备侧栏错误显示模块的问题
+2020-04-27 V1.1
+NEW 新增文章作者别名选择开关
+NEW 新增标语自定义链接功能
+NEW 新增标语自定义字号功能
+FIX 优化了相关样式
+BUG 修复部分图片错误应用滤镜问题
+BUG 修复了部分元素滤镜未应用的问题
+2020-03-27 V1.0
+主题首发</description>
 <path>main.php</path>
 <include>include.php</include>
 <level>1</level>
@@ -18,10 +29,10 @@
   <email>i@jgpy.cn</email>
   <url>https://jgpy.cn</url>
 </source>
-<adapted>151935</adapted>
-<version>1.0</version>
+<adapted>162090</adapted>
+<version>1.11</version>
 <pubdate>2019-11-27</pubdate>
-<modified>2020-03-14</modified>
+<modified>2020-04-28</modified>
 <price>0</price>
 <phpver>5.2</phpver>
 <advanced>
@@ -31,7 +42,7 @@
   <conflict></conflict>
 </advanced>
 <sidebars>
-  <sidebar1>calendar|controlpanel|catalog|favorite|link|misc</sidebar1>
+  <sidebar1>calendar|archives|controlpanel|catalog|favorite|link|misc</sidebar1>
   <sidebar2>calendar|catalog|archives|previous</sidebar2>
   <sidebar3>catalog|previous|comments</sidebar3>
   <sidebar4>comments</sidebar4>

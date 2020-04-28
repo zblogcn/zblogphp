@@ -42,6 +42,7 @@ return array(
     'ZC_MYSQL_PASSWORD'   => '',
     'ZC_MYSQL_NAME'       => '',
     'ZC_MYSQL_CHARSET'    => 'utf8',
+    'ZC_MYSQL_COLLATE'    => 'utf8_general_ci',
     'ZC_MYSQL_PRE'        => 'zbp_',
     'ZC_MYSQL_ENGINE'     => 'MyISAM',
     'ZC_MYSQL_PORT'       => '3306',

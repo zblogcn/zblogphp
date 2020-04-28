@@ -185,7 +185,7 @@ return array(
         'use_commas_to_separate'            => 'Separated by Commas',
         'show_common_tags'                  => 'Choose from the most used tags',
         'category_aritles_default_template' => 'The Default Template for the Category',
-        'confirm_operating'                 => 'Click "OK" to continue or click "Cancel" to stop.',
+        'confirm_operating'                 => 'Click [OK] to continue or click [Cancel] to stop.',
         'batch_operation'                   => 'Bulk Actions',
         'operation_succeed'                 => 'Successfully Completed',
         'operation_failed'                  => 'Operation Failure',

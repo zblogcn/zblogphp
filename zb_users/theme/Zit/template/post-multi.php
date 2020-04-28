@@ -1,5 +1,6 @@
 {$logTitle=$article.Title}
 {$logIntro=SubstrUTF8(TransferHTML($article.Intro,'[nohtml]'),120) . '...'}
+{if $logIntro==='...'}{$logIntro=''}{/if}
 {if $type==='search'}
 {$logTitle=preg_replace('/' . preg_quote(GetVars('q'),'/') . '/i',"<mark>$0</mark>",$logTitle)}
 {$logIntro=preg_replace('/' . preg_quote(GetVars('q'),'/') . '/i',"<mark>$0</mark>",$logIntro)}

@@ -10,7 +10,7 @@ html body{font-size:16px;background:#fafbfc;color:#345;}
 
 a{transition:all 0.5s;}
 
-.zit{color:#fff;background:#39c;padding:0.5em;line-height:1;position:absolute;z-index:2;min-width:2em;display:inline-block;min-height:1em;font-family:verdana;margin:0;}
+.zit{color:#fff;background:#39c;padding:0.5em;line-height:1;position:absolute;z-index:2;min-width:2em;display:inline-block;min-height:1em;margin:0;}
 .zit::after{content:"Z";position:absolute;left:0.5em;bottom:-0.5em;transform:rotate(30deg);display:inline-block;margin:0 0.2em 0 0;z-index:-1;color:#39c;font-weight:bold;transition:all 0.5s;}
 .zit a{color:#fff;}
 
@@ -25,7 +25,7 @@ div.theme{height:340px;margin:0 2em 2em 0;}
 div.theme-other{background:#fff;}
 form.search p{padding:0;}
 
-.pane table{margin:0;border:none;line-height:1.8;}
+.pane table{margin:0;border:none;line-height:1.8;box-shadow:none;}
 .pane td,
 .pane th{border:none;padding:0.8em;}
 .pane th{background:none;}

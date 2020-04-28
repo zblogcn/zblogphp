@@ -62,9 +62,9 @@ label { cursor: pointer; }
 .userbtn { padding: 0; height: 20px; line-height: 20px; }
 .userbtn a { padding: 0; margin-left: 15px; color: #ffffff; height: 20px; line-height: 20px; vertical-align: top; }
 .userbtn a.logout { padding-left: 20px; background: url(../image/common/tuic_2.png) no-repeat left center; }
-.userbtn .logout:hover { padding-left: 20px;text-shadow: 0px 0px 3px #FFF; color: #000; background: url(../image/common/tuic_1.png) no-repeat left center; }
+.userbtn .logout:hover { padding-left: 20px;text-shadow: 0px 0px 2px #fff; color: #fff; background: url(../image/common/tuic_2.png) no-repeat left center; }
 .userbtn a.profile { padding-left: 20px; background: url(../image/common/home_2.png) no-repeat left center; }
-.userbtn .profile:hover { padding-left: 20px;text-shadow: 0px 0px 3px #FFF; color: #000; background: url(../image/common/home_1.png) no-repeat left center; }
+.userbtn .profile:hover { padding-left: 20px;text-shadow: 0px 0px 2px #fff; color: #fff; background: url(../image/common/home_2.png) no-repeat left center; }
 
 /**/
 .menu { height: 30px; position: absolute; right: 10px; bottom: 0px; }
@@ -263,7 +263,7 @@ div.theme-other .betterTip img:hover { border: 2px solid #b0cdee; box-shadow: 0 
 div.theme-now div,
 div.theme-other div { max-width: 220px;     /*overflow:hidden;*/ padding: 0.5em 0 0.5em 0; }
 input.theme-config,
-input.theme-activate { float: right; height: 26px; width: 46px; margin: 0; padding: 2px 5px 3px 5px; font-size: 1em; }
+input.theme-activate { float: right; height: 26px; width: 64px; margin: 0; padding: 2px 5px 3px 5px; font-size: 1em; }
 input.theme-config { margin-top: -3px; }
 .hidden { display: none; }
 .pagebar { padding: 1em 0 2em 0; }

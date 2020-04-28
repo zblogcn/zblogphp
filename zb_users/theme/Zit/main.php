@@ -43,7 +43,7 @@ if ($_POST) {
                 $cfg->$k = $v;
             }
         }
-        $cfg->Custom = 1;
+        $cfg->Custom = time();
     }
 
     $cfg->Save();
@@ -115,18 +115,23 @@ echo <<<FORM
   <div class="pane">
     <h3 class="zit">{$msg->appearance}</h3>
     <p><dfn>{$msg->logo}</dfn> <input type="text" name="Logo" value="{$cfg->Logo}"> <small>{$msg->logo_tip}</small></p>
-    <p><dfn>{$msg->motto}</dfn> <input type="text" name="Motto" value="{$cfg->Motto}"> <small>{$msg->motto_tip}</small></p>
     <p><dfn>{$msg->backdrop}</dfn> <input type="text" name="Backdrop" placeholder="{$msg->backdrop_place}" value="{$cfg->Backdrop}" class="pic"> <small>{$msg->backdrop_tip}</small></p>
     <p><dfn>{$msg->cover}</dfn> <input type="text" name="Cover" placeholder="{$msg->cover_place}" value="{$cfg->Cover}" class="pic"> <small>{$msg->cover_tip}</small></p>
     <p>
     <dfn>{$msg->hue}</dfn> <samp><input type="text" id="hue" name="Hue" value="{$cfg->Hue}" readonly><span id="slider"></span></samp> <small>{$msg->hue_tip}</small>
     </p>
     <p><dfn>{$msg->defaultadmin}</dfn> <input type="text" class="checkbox" name="DefaultAdmin" value="{$cfg->DefaultAdmin}"></p>
-    <p><dfn>{$msg->profile}</dfn> <input type="text" class="checkbox" name="Profile" value="{$cfg->Profile}"> <small>{$msg->profile_tip}</small></p>
+    <p><dfn>{$msg->staticname}</dfn> <input type="text" class="checkbox" name="StaticName" value="{$cfg->StaticName}"> <small>{$msg->staticname_tip}</small></p>
     <p><dfn>{$msg->listtags}</dfn> <input type="text" class="checkbox" name="ListTags" value="{$cfg->ListTags}"> <small>{$msg->listtags_tip}</small></p>
     <p><dfn>{$msg->hideintro}</dfn> <input type="text" class="checkbox" name="HideIntro" value="{$cfg->HideIntro}"> <small>{$msg->hideintro_tip}</small></p>
     <p><dfn>{$msg->mobileside}</dfn> <input type="text" class="checkbox" name="MobileSide" value="{$cfg->MobileSide}"> <small>{$msg->mobileside_tip}</small></p>
     <p><dfn>{$msg->sidemods}</dfn> <textarea name="SideMods" placeholder="{$msg->sidemods_place}">{$cfg->SideMods}</textarea> <small>{$msg->sidemods_tip}</small></p>
+  </div>
+  <div class="pane">
+    <h3 class="zit">{$msg->motto}</h3>
+    <p><dfn>{$msg->mottotxt}</dfn> <textarea name="Motto">{$cfg->Motto}</textarea> <small>{$msg->mottotxt_tip}</small></p>
+    <p><dfn>{$msg->mottourl}</dfn> <input type="text" name="MottoUrl" value="{$cfg->MottoUrl}" placeholder="//"> <small>{$msg->mottourl_tip}{$bloghost}</small></p>
+    <p><dfn>{$msg->mottosize}</dfn> <input type="text" name="MottoSize" value="{$cfg->MottoSize}"> <small>{$msg->mottosize_tip}<var>px</var> <var>%</var> <var>em</var></small></p>
   </div>
   <div class="pane">
     <h3 class="zit">{$msg->rand}</h3>

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Z-Blog with PHP.
+ *
+ * @author Z-BlogPHP Team
+ * @version
+ */
+
 require './function/c_system_base.php';
 $zbp->Load();
 $zbp->action = GetVars('act', 'GET');
@@ -87,8 +94,7 @@ switch ($zbp->action) {
         break;
     case 'getcmt':
         ViewComments((int) GetVars('postid', 'GET'), (int) GetVars('page', 'GET'));
-        die();
-    break;
+        break;
     case 'ArticleEdt':
         Redirect('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
@@ -349,6 +355,7 @@ switch ($zbp->action) {
         $zbp->SaveCache();
         $zbp->SetHint('good');
         Redirect($_SERVER["HTTP_REFERER"]);
+        break;
     case 'misc':
         include './function/c_system_misc.php';
         ob_clean();
