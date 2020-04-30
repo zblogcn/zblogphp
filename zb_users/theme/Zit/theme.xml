@@ -5,6 +5,9 @@
 <url>https://jgpy.cn/blog/front-end/ZBlogIt.htm</url>
 <note>可丰富变换外观的ZBlogPHP1.6系统自带主题</note>
 <description>更新日志
+2020-04-29 V1.12
+BUG 修复上一版测试文件被打包的错误
+BUG 修复单页面发表评论按钮无内容的问题
 2020-04-28 V1.11
 BUG 修复移动设备侧栏错误显示模块的问题
 2020-04-27 V1.1
@@ -30,9 +33,9 @@ BUG 修复了部分元素滤镜未应用的问题
   <url>https://jgpy.cn</url>
 </source>
 <adapted>162090</adapted>
-<version>1.11</version>
+<version>1.12</version>
 <pubdate>2019-11-27</pubdate>
-<modified>2020-04-28</modified>
+<modified>2020-04-29</modified>
 <price>0</price>
 <phpver>5.2</phpver>
 <advanced>

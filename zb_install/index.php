@@ -858,7 +858,7 @@ function Setup3()
         echo '$("input:radio[name=fdbtype][value=' . GetVars('dbselect', 'GET') . ']").click();';
     }
     if (GetVars('dbtype', 'GET') != '') {
-        echo '$("input[name=\'dbtype\'][value='. GetVars('dbtype', 'GET') .']:visible").get(0).click();';
+        echo '$("input[name=\'dbtype\'][value=' . GetVars('dbtype', 'GET') . ']:visible").get(0).click();';
     }
     ?>
   </script>

@@ -1050,12 +1050,23 @@ DefinePluginFilter('Filter_Plugin_Admin_Js_Add');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_OutputOptionItemsOfMemberLevel
-'参数:
+'参数:$default,$tz
 '说明:定义OutputOptionItemsOfMemberLevel函数里的接口
 '调用:
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfMemberLevel');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_OutputOptionItemsOfMember_Begin
+'参数:$default,$tz
+'说明:定义Filter_Plugin_OutputOptionItemsOfMember函数里的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_OutputOptionItemsOfMember_Begin');
 
 /*
 '**************************************************<

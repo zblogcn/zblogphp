@@ -49,10 +49,7 @@ class Upload extends Base
         if (preg_match('/php/i', $e)) {
             return false;
         }
-        if (preg_match('/pht(ml)?(\d*)/i', $e)) {
-            return false;
-        }
-        if (in_array(strtolower($e), array('phar', 'phtml', 'pht', 'php3', 'php4', 'php5', 'php6', 'php7', 'php8'))) {
+        if (preg_match('/pht(ml)?(\d*)|phar/i', $e)) {
             return false;
         }
         if (trim($extList) == '') {

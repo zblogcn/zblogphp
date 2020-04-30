@@ -381,7 +381,7 @@ function OutputOptionItemsOfMemberLevel($default)
     if (!$zbp->CheckRights('MemberAll')) {
         $tz[$default] = $zbp->lang['user_level_name'][$default];
     } else {
-        for ($i = 1; $i < 7; $i++) {
+        for ($i = 1; $i < (count($zbp->lang['user_level_name']) + 1); $i++) {
             $tz[$i] = $zbp->lang['user_level_name'][$i];
         }
     }
@@ -413,6 +413,15 @@ function OutputOptionItemsOfMember($default)
 
     $s = null;
     $tz = array();
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfMember_Begin'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($default, $tz);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
+    }
+
     if (!$zbp->CheckRights('ArticleAll')) {
         if (!isset($zbp->members[$default])) {
             $tz[0] = '';
@@ -420,10 +429,21 @@ function OutputOptionItemsOfMember($default)
             $tz[$default] = $zbp->members[$default]->Name;
         }
     } else {
+        for ($i = 1; $i < (count($zbp->lang['user_level_name']) + 1); $i++) {
+            if ($zbp->CheckRightsByLevel('ArticleEdt', $i) == false) {
+                break;
+            }
+        }
+        $zbp->LoadMembers($i);
+        $memberbyname = array();
         foreach ($zbp->members as $key => $value) {
             if ($zbp->CheckRightsByLevel('ArticleEdt', $zbp->members[$key]->Level)) {
-                $tz[$key] = $zbp->members[$key]->Name;
+                $memberbyname[$zbp->members[$key]->Name] = $zbp->members[$key]->ID;
             }
+        }
+        ksort($memberbyname);
+        foreach ($memberbyname as $key => $value) {
+            $tz[$value] = $key;
         }
     }
 

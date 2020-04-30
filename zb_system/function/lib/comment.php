@@ -121,7 +121,7 @@ class Comment extends Base
         global $zbp;
         if ($name === 'Author') {
             $m = $zbp->GetMemberByID($this->AuthorID);
-            if ($m->ID == 0) {
+            if ($m->ID == null) {
                 $m->Name = $this->Name;
                 $m->Alias = $this->Name;
                 $m->Email = $this->Email;

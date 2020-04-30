@@ -196,7 +196,7 @@ return array(
 
     'ZC_GZIP_ENABLE'                 => false,
     'ZC_ADMIN_HTML5_ENABLE'          => true,
-    'ZC_LOADMEMBERS_LEVEL'           => 0,
+    'ZC_LOADMEMBERS_LEVEL'           => 1,
     //ZC_LAST_VERSION 本意是指数据库对应的系统版本号，非当前系统未更新版本号
     'ZC_LAST_VERSION'                => '',
     'ZC_MODULE_CATALOG_STYLE'        => 0,

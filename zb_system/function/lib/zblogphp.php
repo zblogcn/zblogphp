@@ -643,7 +643,9 @@ class ZBlogPHP
         }
 
         $this->ConvertTableAndDatainfo();
-
+        if ($this->option['ZC_LOADMEMBERS_LEVEL'] == 0) {
+            $this->option['ZC_LOADMEMBERS_LEVEL'] = 1;
+        }
         $this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
         $this->LoadCategories();
         //$this->LoadTags();
@@ -1241,7 +1243,7 @@ class ZBlogPHP
         $username = trim(GetVars('username', 'COOKIE'));
         $token = trim(GetVars('token', 'COOKIE'));
         $user = $this->VerifyUserToken($token, $username);
-        if (!is_null($user)) {
+        if (is_object($user)) {
             $this->user = $user;
 
             return true;
@@ -1292,7 +1294,7 @@ class ZBlogPHP
     public function VerifyUserToken($token, $username)
     {
         $user = $this->GetMemberByName($username);
-        if ($user->ID > 0) {
+        if ($user->ID != null) {
             if (VerifyWebToken($token, $user->ID, $user->Guid, $user->PassWord_MD5Path)) {
                 return $user;
             }
@@ -1314,7 +1316,7 @@ class ZBlogPHP
             return false;
         }
         $member = $this->GetMemberByName($name);
-        if ($member->ID > 0) {
+        if ($member->ID != null) {
             return $this->Verify_Final($name, md5($md5pw . $member->Guid), $member);
         }
 
@@ -1336,7 +1338,7 @@ class ZBlogPHP
             return false;
         }
         $m = $this->GetMemberByName($name);
-        if ($m->ID > 0) {
+        if ($m->ID != null) {
             return $this->Verify_MD5($name, md5($originalpw), $member);
         }
 
@@ -1358,7 +1360,7 @@ class ZBlogPHP
             return false;
         }
         $m = $this->GetMemberByName($name);
-        if ($m->ID > 0) {
+        if ($m->ID != null) {
             if (strcasecmp($m->Password, $password) == 0) {
                 $member = $m;
 
@@ -1386,7 +1388,7 @@ class ZBlogPHP
         }
         $m = null;
         $m = $this->GetMemberByName($name);
-        if ($m->ID > 0) {
+        if ($m->ID != null) {
             if (VerifyWebToken($wt, $wt_id, $this->guid, $m->ID, $m->Password) === true) {
                 $member = $m;
 
@@ -1397,6 +1399,8 @@ class ZBlogPHP
         return false;
     }
 
+    private $loadmembers_level = 0;
+
     /**
      * 载入用户列表.
      *
@@ -1406,13 +1410,14 @@ class ZBlogPHP
      */
     public function LoadMembers($level = 0)
     {
-        if ($level < 0) {
+        $this->loadmembers_level = $level;
+        if ($this->loadmembers_level < 0) {
             return false;
         }
 
         $where = null;
-        if ($level > 0) {
-            $where = array(array('<=', 'mem_Level', $level));
+        if ($this->loadmembers_level > 0) {
+            $where = array(array('<=', 'mem_Level', $this->loadmembers_level));
         }
         $this->members = array();
         $this->membersbyname = array();
@@ -2527,10 +2532,10 @@ class ZBlogPHP
     {
         /** @var Member $ret */
         $ret = $this->GetSomeThing('members', 'ID', $id, 'Member');
-        if ($ret->ID == 0) {
+        if ($ret->ID == null) {
             $ret->Guid = GetGuid();
             //如果是部份加载用户
-            if ($this->option['ZC_LOADMEMBERS_LEVEL'] != 0) {
+            if ($this->loadmembers_level != 0) {
                 if ($ret->LoadInfoByID($id) == true) {
                     $this->members[$ret->ID] = $ret;
                     $this->membersbyname[$ret->Name] = &$this->members[$ret->ID];
@@ -2567,7 +2572,7 @@ class ZBlogPHP
         }
 
         $like = ($this->db->type == 'pgsql') ? 'ILIKE' : 'LIKE';
-        $sql = $this->db->sql->Select($this->table['Member'], '*', array(array($like, 'mem_Name', $name)), null, 1, null);
+        $sql = $this->db->sql->Select($this->table['Member'], '*', array(array($like, 'mem_Name', $name)), array('mem_ID' => 'ASC'), 1, null);
 
         /** @var Member[] $am */
         $am = $this->GetListType('Member', $sql);
@@ -2677,7 +2682,7 @@ class ZBlogPHP
     {
         $m = $this->GetMemberByName($name);
 
-        return $m->ID > 0;
+        return $m->ID != null;
     }
 
     /**
@@ -3489,7 +3494,7 @@ class ZBlogPHP
             return false;
         }
         $m = $this->GetMemberByName($name);
-        if ($m->ID > 0) {
+        if ($m->ID != null) {
             if ($m->PassWord_MD5Path == $ps_path_hash) {
                 $member = $m;
 
