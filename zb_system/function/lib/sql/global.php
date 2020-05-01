@@ -1183,6 +1183,7 @@ class SQL__Global
         $sql[] = 'TABLE';
         $this->buildIFEXISTS();
         $this->buildTable();
+        $s = '';
         $str = trim(implode('', $this->table));
         if ($str === '') {
             $s = implode(' ,', $this->other['TABLE']);
@@ -1191,9 +1192,11 @@ class SQL__Global
         }
         $sql[] = $s;
         $sql[] = ';';
-        $s = 'DROP SEQUENCE ' . $str . '_seq;';
-        $s = str_replace('%pre%', $this->db->dbpre, $s);
-        $sql[] = $s;
+        if ($this->db->type == 'postgresql') {
+            $s = 'DROP SEQUENCE ' . $str . '_seq;';
+            $s = str_replace('%pre%', $this->db->dbpre, $s);
+            $sql[] = $s;
+        }
     }
 
     protected function buildCreate()

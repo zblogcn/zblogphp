@@ -1463,36 +1463,15 @@ function SaveConfig()
 
     $zbp->SaveOption();
 
-    if (file_exists($zbp->path . 'zb_users/c_option.php') == false) {
+    if (!file_exists($zbp->path . 'zb_users/c_option.php') == false) {
         echo $zbp->lang['zb_install']['not_create_option_file'] . "<br/>";
 
         $s = "<pre>&lt;" . "?" . "php\r\n";
         $s .= "return ";
         $option = array();
+        $reserve_keys = explode('|', ZBlogPHP::OPTION_RESERVE_KEYS);
         foreach ($zbp->option as $key => $value) {
-            if (($key == 'ZC_DATABASE_TYPE')
-                || ($key == 'ZC_SQLITE_NAME')
-                || ($key == 'ZC_SQLITE_PRE')
-                || ($key == 'ZC_MYSQL_SERVER')
-                || ($key == 'ZC_MYSQL_USERNAME')
-                || ($key == 'ZC_MYSQL_PASSWORD')
-                || ($key == 'ZC_MYSQL_NAME')
-                || ($key == 'ZC_MYSQL_CHARSET')
-                || ($key == 'ZC_MYSQL_COLLATE')
-                || ($key == 'ZC_MYSQL_PRE')
-                || ($key == 'ZC_MYSQL_ENGINE')
-                || ($key == 'ZC_MYSQL_PORT')
-                || ($key == 'ZC_MYSQL_PERSISTENT')
-                || ($key == 'ZC_PGSQL_SERVER')
-                || ($key == 'ZC_PGSQL_USERNAME')
-                || ($key == 'ZC_PGSQL_PASSWORD')
-                || ($key == 'ZC_PGSQL_NAME')
-                || ($key == 'ZC_PGSQL_CHARSET')
-                || ($key == 'ZC_PGSQL_PRE')
-                || ($key == 'ZC_PGSQL_PORT')
-                || ($key == 'ZC_PGSQL_PERSISTENT')
-                || ($key == 'ZC_CLOSE_WHOLE_SITE')
-            ) {
+            if (in_array($key, $reserve_keys)) {
                 $option[$key] = $value;
             }
         }

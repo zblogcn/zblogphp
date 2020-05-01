@@ -322,6 +322,8 @@ class ZBlogPHP
      */
     public $comment_recursion_level = 4;
 
+    const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_PERMANENT_DOMAIN_WHOLE_DISABLE';
+
     /**
      * 获取唯一实例.
      *
@@ -547,17 +549,17 @@ class ZBlogPHP
         //ZC_PERMANENT_DOMAIN_WHOLE_DISABLE不存在 或是 ZC_PERMANENT_DOMAIN_WHOLE_DISABLE存在但为假
         $domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
         if ($domain_disable == false) {
-            //如果ZC_PERMANENT_DOMAIN_FORCED_URL存在 且不为空
             $forced_url = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
             if ($forced_url != '') {
+                //如果ZC_PERMANENT_DOMAIN_FORCED_URL存在 且不为空
                 $this->host = (string) $forced_url;
                 $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
-                //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
             } elseif ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
+                //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
                 $this->host = $this->option['ZC_BLOG_HOST'];
                 $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
-                //默认自动识别域名
             } else {
+                //默认自动识别域名
                 $this->option['ZC_BLOG_HOST'] = $this->host;
             }
         } else {
@@ -1075,36 +1077,15 @@ class ZBlogPHP
             }
         }
 
+        $reserve_keys = explode('|', self::OPTION_RESERVE_KEYS);
+
         if (file_exists($this->usersdir . 'c_option.php') == false) {
             $s = "<";
             $s .= "?php\r\n";
             $s .= "return ";
             $option = array();
             foreach ($this->option as $key => $value) {
-                if (($key == 'ZC_DATABASE_TYPE')
-                    || ($key == 'ZC_SQLITE_NAME')
-                    || ($key == 'ZC_SQLITE_PRE')
-                    || ($key == 'ZC_MYSQL_SERVER')
-                    || ($key == 'ZC_MYSQL_USERNAME')
-                    || ($key == 'ZC_MYSQL_PASSWORD')
-                    || ($key == 'ZC_MYSQL_NAME')
-                    || ($key == 'ZC_MYSQL_CHARSET')
-                    || ($key == 'ZC_MYSQL_COLLATE')
-                    || ($key == 'ZC_MYSQL_PRE')
-                    || ($key == 'ZC_MYSQL_ENGINE')
-                    || ($key == 'ZC_MYSQL_PORT')
-                    || ($key == 'ZC_MYSQL_PERSISTENT')
-                    || ($key == 'ZC_MYSQL_PORT')
-                    || ($key == 'ZC_PGSQL_SERVER')
-                    || ($key == 'ZC_PGSQL_USERNAME')
-                    || ($key == 'ZC_PGSQL_PASSWORD')
-                    || ($key == 'ZC_PGSQL_NAME')
-                    || ($key == 'ZC_PGSQL_CHARSET')
-                    || ($key == 'ZC_PGSQL_PRE')
-                    || ($key == 'ZC_PGSQL_PORT')
-                    || ($key == 'ZC_PGSQL_PERSISTENT')
-                    || ($key == 'ZC_CLOSE_WHOLE_SITE')
-                ) {
+                if (in_array($key, $reserve_keys)) {
                     $option[$key] = $value;
                 }
             }
@@ -1115,6 +1096,9 @@ class ZBlogPHP
 
         foreach ($this->option as $key => $value) {
             $this->Config('system')->$key = $value;
+        }
+        foreach ($reserve_keys as $key => $value) {
+            $this->Config('system')->DelKey($value);
         }
 
         $this->Config('system')->ZC_BLOG_HOST = chunk_split($this->Config('system')->ZC_BLOG_HOST, 1, "|");
@@ -1141,40 +1125,14 @@ class ZBlogPHP
             return false;
         }
 
+        $reserve_keys = explode('|', self::OPTION_RESERVE_KEYS);
+
         foreach ($array as $key => $value) {
-            //if($key=='ZC_PERMANENT_DOMAIN_ENABLE')continue;
-            //if($key=='ZC_BLOG_HOST')continue;
-            //if($key=='ZC_BLOG_CLSID')continue;
-            //if($key=='ZC_BLOG_LANGUAGEPACK')continue;
             if ($key == 'ZC_BLOG_HOST') {
                 $value = str_replace('|', '', $value);
             }
 
-            if (($key == 'ZC_DATABASE_TYPE')
-                || ($key == 'ZC_SQLITE_NAME')
-                || ($key == 'ZC_SQLITE_PRE')
-                || ($key == 'ZC_MYSQL_SERVER')
-                || ($key == 'ZC_MYSQL_USERNAME')
-                || ($key == 'ZC_MYSQL_PASSWORD')
-                || ($key == 'ZC_MYSQL_NAME')
-                || ($key == 'ZC_MYSQL_CHARSET')
-                || ($key == 'ZC_MYSQL_COLLATE')
-                || ($key == 'ZC_MYSQL_PRE')
-                || ($key == 'ZC_MYSQL_ENGINE')
-                || ($key == 'ZC_MYSQL_PORT')
-                || ($key == 'ZC_MYSQL_PERSISTENT')
-                || ($key == 'ZC_PGSQL_SERVER')
-                || ($key == 'ZC_PGSQL_USERNAME')
-                || ($key == 'ZC_PGSQL_PASSWORD')
-                || ($key == 'ZC_PGSQL_NAME')
-                || ($key == 'ZC_PGSQL_CHARSET')
-                || ($key == 'ZC_PGSQL_PRE')
-                || ($key == 'ZC_PGSQL_PORT')
-                || ($key == 'ZC_PGSQL_PERSISTENT')
-                || ($key == 'ZC_CLOSE_WHOLE_SITE')
-                || ($key == 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE')
-                || ($key == 'ZC_PERMANENT_DOMAIN_FORCED_URL')
-            ) {
+            if (in_array($key, $reserve_keys)) {
                 continue;
             }
 
