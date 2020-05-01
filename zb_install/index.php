@@ -533,9 +533,9 @@ function Setup3()
     if (GetVars('dbengine', 'GET') != '') {
         $option['ZC_MYSQL_ENGINE'] = GetVars('dbengine', 'GET');
     }
-    if (GetVars('dbcharset', 'GET') != '') {
-        $option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'GET');
-    }
+    //if (GetVars('dbcharset', 'GET') != '') {
+        //$option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'GET');
+    //}
     if (GetVars('dbpgsql_server', 'GET') != '') {
         $option['ZC_PGSQL_SERVER'] = GetVars('dbpgsql_server', 'GET');
     }
@@ -670,11 +670,11 @@ function Setup3()
             </p>
             <p><b><?php echo $zbp->lang['zb_install']['db_engine']; ?></b>
               <select id="dbengine" name="dbengine" style="width:350px;padding:0.3em 0;">
-                <option value="MyISAM" selected>MyISAM(<?php echo $zbp->lang['msg']['default']; ?>)</option>
+                <option value="MyISAM" selected>MyISAM</option>
                 <option value="InnoDB">InnoDB</option>
               </select>
             </p>
-            <p><b><?php echo $zbp->lang['zb_install']['db_charset']; ?></b>
+            <!--<p><b><?php echo $zbp->lang['zb_install']['db_charset']; ?></b>
               <select id="dbcharset" name="dbcharset" style="width:350px;padding:0.3em 0;">
                 <option value="utf8" selected>utf8(<?php echo $zbp->lang['msg']['default']; ?>)</option>
                 <option value="utf8mb4">utf8mb4</option>
@@ -687,7 +687,7 @@ function Setup3()
               </script>
               <script type="text/javascript">
                 $("#dbcharset").val("<?php echo $option['ZC_MYSQL_CHARSET']; ?>");
-              </script>
+              </script>-->
               <script type="text/javascript">
                 $("#dbengine").val("<?php echo $option['ZC_MYSQL_ENGINE']; ?>");
               </script>
@@ -905,10 +905,7 @@ function Setup4()
 
                     unset($servers);
                 }
-                $zbp->option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'POST');
-                if ($zbp->option['ZC_MYSQL_CHARSET'] == 'utf8mb4') {
-                    $zbp->option['ZC_MYSQL_COLLATE'] = 'utf8mb4_unicode_ci';
-                }
+                //$zbp->option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'POST');
                 $zbp->option['ZC_MYSQL_USERNAME'] = trim(GetVars('dbmysql_username', 'POST'));
                 $zbp->option['ZC_MYSQL_PASSWORD'] = trim(GetVars('dbmysql_password', 'POST'));
                 $zbp->option['ZC_MYSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_name', 'POST')));
@@ -1180,6 +1177,11 @@ function CreateTable($sql)
     global $zbp;
 
     if (stripos($zbp->option['ZC_DATABASE_TYPE'], 'mysql') !== false) {
+        $zbp->option['ZC_MYSQL_CHARSET'] = $zbp->db->charset;
+        $zbp->option['ZC_MYSQL_COLLATE'] = $zbp->db->collate;
+        if ($zbp->option['ZC_MYSQL_CHARSET'] == 'utf8mb4') {
+            $zbp->option['ZC_MYSQL_COLLATE'] = 'utf8mb4_unicode_ci';
+        }
         $sql = str_ireplace('CHARSET=utf8', 'CHARSET=' . $zbp->option['ZC_MYSQL_CHARSET'], $sql);
         $sql = str_ireplace('COLLATE=utf8_general_ci', 'COLLATE=' . $zbp->option['ZC_MYSQL_COLLATE'], $sql);
     }

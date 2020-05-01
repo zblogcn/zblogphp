@@ -33,6 +33,16 @@ class Database__PDO_SQLite implements Database__Interface
     public $sql = null;
 
     /**
+     * @var 字符集
+     */
+    public $charset = 'utf8';
+
+    /**
+     * @var 字符排序
+     */
+    public $collate = null;
+
+    /**
      * 构造函数，实例化$sql参数.
      */
     public function __construct()

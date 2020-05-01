@@ -3451,7 +3451,7 @@ function FilterMember(&$member)
         $zbp->ShowError(77, __FILE__, __LINE__);
     }
 
-    if ($member->Alias !== '' && !CheckRegExp($member->Alias, '[nickname]')) {
+    if ($member->Alias != '' && !CheckRegExp($member->Alias, '[nickname]')) {
         $zbp->ShowError(90, __FILE__, __LINE__);
     }
 

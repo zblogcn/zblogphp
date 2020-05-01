@@ -38,6 +38,16 @@ class Database__MySQLi implements Database__Interface
     public $sql = null;
 
     /**
+     * @var 字符集
+     */
+    public $charset = 'utf8';
+
+    /**
+     * @var 字符排序
+     */
+    public $collate = null;
+
+    /**
      * 构造函数，实例化$sql参数.
      */
     public function __construct()
@@ -87,12 +97,18 @@ class Database__MySQLi implements Database__Interface
             $this->version = SplitAndGet($myver, '-', 0);
             if (version_compare($this->version, '5.5.3') >= 0) {
                 $u = "utf8mb4";
+                $c = 'utf8mb4_general_ci';
             } else {
                 $u = "utf8";
+                $c = 'utf8_general_ci';
             }
             if (mysqli_set_charset($db, $u) == false) {
                 mysqli_set_charset($db, "utf8");
+            } else {
+                mysqli_query($db, "SET NAMES {$u} COLLATE {$c}");
             }
+            $this->charset = $u;
+            $this->collate = $c;
 
             $this->db = $db;
             $this->dbname = $array[3];
@@ -121,35 +137,30 @@ class Database__MySQLi implements Database__Interface
         $db = mysqli_connect($dbmysql_server, $dbmysql_username, $dbmysql_password, null, $dbmysql_port);
 
         $myver = mysqli_get_server_info($db);
-        $myver = substr($myver, 0, strpos($myver, "-"));
-        if (version_compare($myver, '5.5.3') >= 0) {
+        $this->version = SplitAndGet($myver, '-', 0);
+        if (version_compare($this->version, '5.5.3') >= 0) {
             $u = "utf8mb4";
+            $c = 'utf8mb4_general_ci';
         } else {
             $u = "utf8";
+            $c = 'utf8_general_ci';
         }
         if (mysqli_set_charset($db, $u) == false) {
             mysqli_set_charset($db, "utf8");
         }
+        $this->charset = $u;
+        $this->collate = $c;
 
         $this->db = $db;
         $this->dbname = $dbmysql_name;
-        $s = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbmysql_name'";
-        $a = $this->Query($s);
-        $c = 0;
-        if (is_array($a)) {
-            $b = current($a);
-            if (is_array($b)) {
-                $c = (int) current($b);
-            }
-        }
-        if ($c == 0) {
-            $r = mysqli_query($this->db, $this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
-            if ($r === false) {
-                return false;
-            }
 
-            return true;
+        $s = "CREATE DATABASE IF NOT EXISTS {$dbmysql_name} DEFAULT CHARACTER SET {$u}";
+        $r = mysqli_query($this->db, $this->sql->Filter($s));
+        if ($r === false) {
+            return false;
         }
+
+        return true;
     }
 
     /**

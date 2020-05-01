@@ -46,6 +46,16 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
+     * @var 字符集
+     */
+    public $charset = 'utf8';
+
+    /**
+     * @var 字符排序
+     */
+    public $collate = null;
+
+    /**
      * 对字符串进行转义，在指定的字符前添加反斜杠，即执行addslashes函数.
      *
      * @use addslashes
@@ -78,27 +88,33 @@ class Database__MySQL implements Database__Interface
     public function Open($array)
     {
         if ($array[6] == false) {
-            $db_link = @mysql_connect($array[0] . ':' . $array[5], $array[1], $array[2]);
+            $db = @mysql_connect($array[0] . ':' . $array[5], $array[1], $array[2]);
         } else {
-            $db_link = @mysql_pconnect($array[0] . ':' . $array[5], $array[1], $array[2]);
+            $db = @mysql_pconnect($array[0] . ':' . $array[5], $array[1], $array[2]);
         }
 
-        if (!$db_link) {
+        if (!$db) {
             return false;
         }
 
-        $myver = mysql_get_server_info($db_link);
+        $myver = mysql_get_server_info($db);
         $this->version = SplitAndGet($myver, '-', 0);
         if (version_compare($this->version, '5.5.3') >= 0) {
-            $u = "utf8mb4";
+            $u = 'utf8mb4';
+            $c = 'utf8mb4_general_ci';
         } else {
-            $u = "utf8";
+            $u = 'utf8';
+            $c = 'utf8_general_ci';
         }
-        if (mysql_set_charset($u, $db_link) == false) {
-            mysql_set_charset("utf8", $db_link);
+        if (mysql_set_charset($u, $db) == false) {
+            mysql_set_charset("utf8", $db);
+        } else {
+            mysql_query("SET NAMES {$u} COLLATE {$c}", $db);
         }
+        $this->charset = $u;
+        $this->collate = $c;
 
-        $this->db = $db_link;
+        $this->db = $db;
         if (mysql_select_db($array[3], $this->db)) {
             $this->dbpre = $array[4];
             $this->dbname = $array[3];
@@ -125,38 +141,33 @@ class Database__MySQL implements Database__Interface
      */
     public function CreateDB($dbmysql_server, $dbmysql_port, $dbmysql_username, $dbmysql_password, $dbmysql_name)
     {
-        $db_link = mysql_connect($dbmysql_server . ':' . $dbmysql_port, $dbmysql_username, $dbmysql_password);
+        $db = mysql_connect($dbmysql_server . ':' . $dbmysql_port, $dbmysql_username, $dbmysql_password);
 
-        $myver = mysql_get_server_info($db_link);
-        $myver = substr($myver, 0, strpos($myver, "-"));
-        if (version_compare($myver, '5.5.3') >= 0) {
+        $myver = mysql_get_server_info($db);
+        $this->version = SplitAndGet($myver, '-', 0);
+        if (version_compare($this->version, '5.5.3') >= 0) {
             $u = "utf8mb4";
+            $c = 'utf8mb4_general_ci';
         } else {
             $u = "utf8";
+            $c = 'utf8_general_ci';
         }
-        if (mysql_set_charset($u, $db_link) == false) {
-            mysql_set_charset("utf8", $db_link);
+        if (mysql_set_charset($u, $db) == false) {
+            mysql_set_charset("utf8", $db);
         }
+        $this->charset = $u;
+        $this->collate = $c;
 
-        $this->db = $db_link;
+        $this->db = $db;
         $this->dbname = $dbmysql_name;
-        $s = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbmysql_name'";
-        $a = $this->Query($s);
-        $c = 0;
-        if (is_array($a)) {
-            $b = current($a);
-            if (is_array($b)) {
-                $c = (int) current($b);
-            }
-        }
-        if ($c == 0) {
-            $r = mysql_query($this->sql->Filter('CREATE DATABASE ' . $dbmysql_name), $this->db);
-            if ($r === false) {
-                return false;
-            }
 
-            return true;
+        $s = "CREATE DATABASE IF NOT EXISTS {$dbmysql_name} DEFAULT CHARACTER SET {$u}";
+        $r = mysql_query($this->sql->Filter($s), $this->db);
+        if ($r === false) {
+            return false;
         }
+
+        return true;
     }
 
     /**

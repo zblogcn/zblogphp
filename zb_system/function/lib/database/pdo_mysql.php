@@ -38,6 +38,16 @@ class Database__PDO_MySQL implements Database__Interface
     public $sql = null;
 
     /**
+     * @var 字符集
+     */
+    public $charset = 'utf8';
+
+    /**
+     * @var 字符排序
+     */
+    public $collate = null;
+
+    /**
      * 构造函数，实例化$sql参数.
      */
     public function __construct()
@@ -90,10 +100,14 @@ class Database__PDO_MySQL implements Database__Interface
             $this->version = SplitAndGet($myver, '-', 0);
             if (version_compare($this->version, '5.5.3') >= 0) {
                 $u = "utf8mb4";
+                $c = 'utf8mb4_general_ci';
             } else {
                 $u = "utf8";
+                $c = 'utf8_general_ci';
             }
-            $db_link->query("SET NAMES '" . $u . "'");
+            $db_link->query("SET NAMES {$u} COLLATE {$c}");
+            $this->charset = $u;
+            $this->collate = $c;
 
             return true;
         } catch (PDOException $e) {
@@ -116,31 +130,25 @@ class Database__PDO_MySQL implements Database__Interface
         $this->dbname = $dbmysql_name;
 
         $myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
-        $myver = substr($myver, 0, strpos($myver, "-"));
-        if (version_compare($myver, '5.5.3') >= 0) {
+        $this->version = SplitAndGet($myver, '-', 0);
+        if (version_compare($this->version, '5.5.3') >= 0) {
             $u = "utf8mb4";
+            $c = 'utf8mb4_general_ci';
         } else {
             $u = "utf8";
+            $c = 'utf8_general_ci';
         }
-        $db_link->query("SET NAMES '" . $u . "'");
+        $this->db->query("SET NAMES '" . $u . "'");
+        $this->charset = $u;
+        $this->collate = $c;
 
-        $s = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$dbmysql_name'";
-        $a = $this->Query($s);
-        $c = 0;
-        if (is_array($a)) {
-            $b = current($a);
-            if (is_array($b)) {
-                $c = (int) current($b);
-            }
+        $s = "CREATE DATABASE IF NOT EXISTS {$dbmysql_name} DEFAULT CHARACTER SET {$u}";
+        $r = $this->db->exec($this->sql->Filter($s));
+        if ($r === false) {
+            return false;
         }
-        if ($c == 0) {
-            $r = $this->db->exec($this->sql->Filter('CREATE DATABASE ' . $dbmysql_name));
-            if ($r === false) {
-                return false;
-            }
 
-            return true;
-        }
+        return true;
     }
 
     /**
