@@ -1100,6 +1100,9 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
         $zbp->ShowError(2, __FILE__, __LINE__);
     }
 
+    $zbp->LoadMembersInList($articles_top);
+    $zbp->LoadMembersInList($articles);
+
     $zbp->template->SetTags('title', $zbp->title);
     $zbp->template->SetTags('articles', array_merge($articles_top, $articles));
     if ($pagebar->PageAll == 0) {
@@ -1279,6 +1282,8 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
             $comment->Content = FormatString($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
         }
     }
+
+    $zbp->LoadMembersInList($comments);
 
     $zbp->template->SetTags('title', ($article->Status == 0 ? '' : '[' . $zbp->lang['post_status_name'][$article->Status] . ']') . $article->Title);
     $zbp->template->SetTags('article', $article);
