@@ -2,7 +2,9 @@
 
 class Totoro_Class
 {
+
     public $config_array = array();
+
     public $sv = 0;
 
     public function __construct()
@@ -91,7 +93,7 @@ class Totoro_Class
                 $low_name = strtolower($name);
                 $file = TOTORO_INCPATH . 'build_' . $low_name . '.php';
                 if (file_exists($file)) {
-                    $func = include $file;
+                    $func = Totoro_Include($file);
                     $func($content);
                 }
             }
@@ -120,7 +122,7 @@ class Totoro_Class
             $low_name = strtolower($name);
             $file = TOTORO_INCPATH . 'rule_' . $low_name . '.php';
             if (file_exists($file) && $value['VALUE'] > 0) {
-                $func = include $file;
+                $func = Totoro_Include($file);
                 $func($build['author'], $build['content'], $comment->Content, $this->sv, $value['VALUE'], $this->config_array);
                 if ($debug) {
                     echo 'AFTER ' . $value['NAME'] . ': ' . $this->sv . "\n";
@@ -331,4 +333,5 @@ class Totoro_Class
 
         return $str;
     }
+
 }
