@@ -44,7 +44,23 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
     {
         self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
         self::$db->drop('zbp_post');
-        $this->assertEquals('DROP TABLE  zbp_post ', self::$db->sql);
+        $this->assertEquals('DROP TABLE  zbp_post   ;', self::$db->sql);
+        self::$db->drop('zbp_post')->ifexists();
+        $this->assertEquals('DROP TABLE IF EXISTS  zbp_post   ;', self::$db->sql);
+    }
+
+    public function testDropIndex()
+    {
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
+        self::$db->drop('zbp_post')->index('zbp_log_VTSC');
+        $this->assertEquals('DROP INDEX zbp_log_VTSC ON  zbp_post ', self::$db->sql);
+    }
+
+    public function testCreateIndex()
+    {
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
+        self::$db->CREATE('zbp_post')->index(array('zbp_post_index_stt'=>array('log_Status','log_Type','log_Tag')));
+        $this->assertEquals('CREATE INDEX zbp_post_index_stt ON zbp_post ( log_Status , log_Type , log_Tag )', self::$db->sql);
     }
 
     public function testCreate()
@@ -504,4 +520,53 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
             )->sql
         );
     }
+
+    public function testUnion()
+    {
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
+        self::$db->unionall(
+                              self::$db->select('zbp_table')->sql,
+                              self::$db->select('zbp_table2')->sql
+                           );
+        $this->assertEquals('SELECT * FROM  zbp_table   UNION ALL  SELECT * FROM  zbp_table2 ', self::$db->sql);
+        self::$db->union(
+                              self::$db->select('zbp_table')->sql,
+                              self::$db->select('zbp_table2')->sql
+                           );
+        $this->assertEquals('SELECT * FROM  zbp_table   UNION  SELECT * FROM  zbp_table2 ', self::$db->sql);
+    }
+
+    public function testGroupbyHaving()
+    {
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
+        self::$db->select("zbp_post")
+                           ->column('log_CateID')
+                           ->column('SUM(log_CommNums)')
+                           ->groupby('log_CateID')
+                           ->having('SUM(log_CommNums) > 10');
+        $this->assertEquals('SELECT  log_CateID, SUM(log_CommNums)  FROM  zbp_post  GROUP BY log_CateID HAVING   SUM(log_CommNums) > 10', self::$db->sql);
+    }    
+
+
+    public function testADDCOLUMN()
+    {
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
+        self::$db->ALTER("zbp_post")
+            ->ADDCOLUMN('log_IsHide tinyint(4) NOT NULL DEFAULT \'0\'')
+            ->ADDCOLUMN('log_CreateTime', 'int(11) NOT NULL DEFAULT \'0\'')
+            ->ADDCOLUMN('log_Note', 'longtext', 'NOT NULL');
+        $this->assertEquals('ALTER TABLE  zbp_post    ADD COLUMN log_IsHide tinyint(4) NOT NULL DEFAULT \'0\' ,ADD COLUMN log_CreateTime int(11) NOT NULL DEFAULT \'0\' ,ADD COLUMN log_Note longtext NOT NULL', self::$db->sql);
+    }
+
+    public function testJoin()
+    {
+        self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
+        self::$db->selectany('log_ID')->
+            from(array('zbp_post'=>'p'))
+            ->leftjoin(array('zbp_postrelation'=>'pr'))
+            ->on('log_ID = pr_PostID')
+            ->where('1 = 1');
+        $this->assertEquals('SELECT  log_ID  FROM zbp_post AS p LEFT JOIN zbp_postrelation AS pr ON log_ID = pr_PostID WHERE 1 = 1', self::$db->sql);
+    }
+
 }

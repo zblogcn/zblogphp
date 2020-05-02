@@ -59,6 +59,6 @@ class ClassSQL__PostgreSQLTest extends PHPUnit\Framework\TestCase
     public function testDropTable()
     {
         self::$db->drop('zbp_post');
-        $this->assertEquals('DROP TABLE zbp_post; DROP SEQUENCE zbp_post_seq;', self::$db->sql);
+        $this->assertEquals('DROP TABLE  zbp_post   ; DROP SEQUENCE zbp_post_seq;', self::$db->sql);
     }
 }

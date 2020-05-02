@@ -823,13 +823,13 @@ class SQL__Global
             $sql[] = 'FROM';
             $this->buildTable();
         }
-        if ($this->db->type == 'mysql' && array_key_exists('USEINDEX', $this->extend)) {
+        if (get_class($this) == 'SQL__MySQL' && array_key_exists('USEINDEX', $this->extend)) {
             $this->buildUSEINDEX();
         }
-        if ($this->db->type == 'mysql' && array_key_exists('FORCEINDEX', $this->extend)) {
+        if (get_class($this) == 'SQL__MySQL' && array_key_exists('FORCEINDEX', $this->extend)) {
             $this->buildFORCEINDEX();
         }
-        if ($this->db->type == 'mysql' && array_key_exists('IGNOREINDEX', $this->extend)) {
+        if (get_class($this) == 'SQL__MySQL' && array_key_exists('IGNOREINDEX', $this->extend)) {
             $this->buildIGNOREINDEX();
         }
 
@@ -858,7 +858,7 @@ class SQL__Global
 
         $this->buildBeforeWhere();
 
-        //if ($this->db->type == 'mysql' && array_key_exists('RANDOM', $this->extend)) {
+        //if (get_class($this) == 'SQL__MySQL' && array_key_exists('RANDOM', $this->extend)) {
         if (array_key_exists('RANDOM', $this->extend)) {
             $this->buildRandomBefore();
         }
@@ -904,10 +904,10 @@ class SQL__Global
         $sql = &$this->pri_sql;
         $sql[] = ' ';
         foreach ($this->complex['ALTERCOLUMN'] as $key => $value) {
-            if ($this->db->type == 'mysql') {
+            if (get_class($this) == 'SQL__MySQL') {
                 $this->complex['ALTERCOLUMN'][$key] = 'MODIFY ' . $this->complex['ALTERCOLUMN'][$key];
             }
-            if ($this->db->type == 'postgresql') {
+            if (get_class($this) == 'SQL__PostgreSQL') {
                 $this->complex['ALTERCOLUMN'][$key] = 'ALTER COLUMN ' . $this->complex['ALTERCOLUMN'][$key];
             }
         }
@@ -1165,7 +1165,7 @@ class SQL__Global
             $s = implode(' ,', $this->other['INDEX']);
             $s = str_replace('%pre%', $this->db->dbpre, $s);
             $sql[] = $s;
-            if ($this->db->type == 'mysql') {
+            if (get_class($this) == 'SQL__MySQL') {
                 $sql[] = 'ON';
                 $this->buildTable();
             }
@@ -1192,7 +1192,8 @@ class SQL__Global
         }
         $sql[] = $s;
         $sql[] = ';';
-        if ($this->db->type == 'postgresql') {
+
+        if (get_class($this) == 'SQL__PostgreSQL') {
             $s = 'DROP SEQUENCE ' . $str . '_seq;';
             $s = str_replace('%pre%', $this->db->dbpre, $s);
             $sql[] = $s;

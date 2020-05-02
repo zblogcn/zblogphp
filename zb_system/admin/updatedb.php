@@ -38,7 +38,7 @@ function updatedb()
     //162300
     $old = @$db->sql->get()->select($t['Config'])->column($d['Config']['Key'][0])->limit(1)->query;
     if (count($old) == 1 && $old[0] === false) {
-        @$db->Query("ALTER TABLE {$table['Config']} ADD {$d['Config']['Key'][0]} VARCHAR(255) NOT NULL DEFAULT '';");
+        @$db->Query("ALTER TABLE {$table['Config']} ADD {$d['Config']['Key'][0]} VARCHAR(250) NOT NULL DEFAULT '';");
     }
     $old = @$db->sql->get()->select($t['Post'])->column($d['Post']['CreateTime'][0])->limit(1)->query;
     if (count($old) == 1 && $old[0] === false) {
@@ -58,11 +58,11 @@ function updatedb()
     //162315
     $old = @$db->sql->get()->select($t['Tag'])->column($d['Tag']['Group'][0])->limit(1)->query;
     if (count($old) == 1 && $old[0] === false) {
-        @$db->Query("ALTER TABLE {$table['Tag']} ADD  {$d['Tag']['Group'][0]} VARCHAR(255) NOT NULL DEFAULT '';");
+        @$db->Query("ALTER TABLE {$table['Tag']} ADD  {$d['Tag']['Group'][0]} VARCHAR(250) NOT NULL DEFAULT '';");
     }
     $old = @$db->sql->get()->select($t['Category'])->column($d['Category']['Group'][0])->limit(1)->query;
     if (count($old) == 1 && $old[0] === false) {
-        @$db->Query("ALTER TABLE {$table['Category']} ADD  {$d['Category']['Group'][0]} VARCHAR(255) NOT NULL DEFAULT '';");
+        @$db->Query("ALTER TABLE {$table['Category']} ADD  {$d['Category']['Group'][0]} VARCHAR(250) NOT NULL DEFAULT '';");
     }
 
     //删除一个长期存在而又无用的索引
