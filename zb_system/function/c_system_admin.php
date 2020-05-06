@@ -91,6 +91,28 @@ function Include_Admin_UpdateDB()
     }
 }
 
+function Include_Admin_CheckHttp304OK()
+{
+    global $zbp, $action;
+    if ($action != 'admin') {
+        return;
+    }
+    if (GetVars('http304ok', 'COOKIE') !== '1') {
+        echo '<script>$(function () { $.ajax({type: "GET",url: "' . $zbp->host . 'zb_system/cmd.php?act=checkhttp304ok",success: function(msg){zbp.cookie.set(\'http304ok\',\'0\',365);},statusCode: {500: function() {zbp.cookie.set(\'http304ok\',\'1\',365);}}}); });</script>';
+    }
+    if (GetVars('http304ok', 'COOKIE') === '0') {
+        if ($zbp->option['ZC_JS_304_ENABLE'] == true) {
+            $zbp->option['ZC_JS_304_ENABLE'] = false;
+            $zbp->SaveOption();
+        }
+    } elseif (GetVars('http304ok', 'COOKIE') === '1') {
+        if ($zbp->option['ZC_JS_304_ENABLE'] == false) {
+            $zbp->option['ZC_JS_304_ENABLE'] = true;
+            $zbp->SaveOption();
+        }
+    }
+}
+
 $topmenus = array();
 
 $leftmenus = array();
@@ -1592,6 +1614,10 @@ function Admin_ThemeMng()
         echo ' data-themename="' . htmlspecialchars($theme->name) . '"';
         echo '>';
         echo '<div class="theme-name">';
+
+        if (isset($zbp->lang[$theme->id]['theme_name'])) {
+            $theme->name = $zbp->lang[$theme->id]['theme_name'];
+        }
 
         if ($theme->IsUsed() && $theme->path) {
             echo '<a href="' . $theme->GetManageUrl() . '" title="管理" class="button"><img width="16" title="" alt="" src="../image/admin/setting_tools.png"/></a>&nbsp;&nbsp;';

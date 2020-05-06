@@ -296,8 +296,10 @@ header('Content-Type: application/x-javascript; charset=utf-8');
 header('Etag: ' . $m);
 
 if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
-    SetHttpStatusCode(304);
-    die;
+    if (isset($zbp->option['ZC_JS_304_ENABLE']) && $zbp->option['ZC_JS_304_ENABLE']) {
+        SetHttpStatusCode(304);
+        die;
+    }
 }
 
 echo $s;

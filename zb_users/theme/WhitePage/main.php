@@ -11,7 +11,7 @@ if (!$zbp->CheckPlugin('WhitePage')) {
     $zbp->ShowError(48);
     die();
 }
-$blogtitle = 'WhitePage主题配置';
+$blogtitle = $zbp->lang['WhitePage']['theme_config'];
 
 if (count($_POST) > 0) {
     CheckIsRefererValid();
@@ -91,188 +91,188 @@ border: 1px solid white;
 cursor: pointer; 
 box-sizing: border-box;
 }
-.color-box-picker{ 	
+.color-box-picker{
 margin: 8px 10px;
 border: 1px solid #aaa; width: 86px;height: 27px;
 }
 </style>
 <!--#include file="..\..\..\..\zb_system\admin\admin_top.asp"-->
 <div id="divMain">
-	<div class="divHeader"><?php echo $blogtitle; ?></div>
-	<div class="SubMenu"></div>
-	<div id="divMain2"> 
-		<form action="?save" method="post">
-			<input type="hidden" name="csrfToken" value="<?php echo $zbp->GetCsrfToken(); ?>">
-			<table width="100%" border="1" width="100%" class="tableBorder">
-				<tr>
-					<th scope="col"  height="32" width="20%">整体设置</th>	
-					<th></th>
-				</tr>
-				<tr>
-					<td scope="col"  height="52">页面类型</td>					
-					<td >
-						<label><input type="radio" id="pt2" name="pagetype" value="2" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 2) ? 'checked="checked"' : ''; ?>/>&nbsp;CSS3阴影(直角)</label>
-						&nbsp;&nbsp;
-						<label><input type="radio" id="pt3" name="pagetype" value="3" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 3) ? 'checked="checked"' : ''; ?>/>&nbsp;CSS3阴影(圆角)</label>
-						&nbsp;&nbsp;
-						<label><input type="radio" id="pt4" name="pagetype" value="4" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 4) ? 'checked="checked"' : ''; ?>/>&nbsp;平面无阴影(直角)</label>
-						&nbsp;&nbsp;
-						<label><input type="radio" id="pt5" name="pagetype" value="5" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 5) ? 'checked="checked"' : ''; ?>/>&nbsp;平面(CSS3圆角)</label>
-						&nbsp;&nbsp;
-						<label><input type="radio" id="pt1" name="pagetype" value="1" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 1) ? 'checked="checked"' : ''; ?>/>&nbsp;无</label>
-					</td>
-				</tr>
-				<tr>
-					<td scope="col"  height="52">正文缩进</td>					
-					<td >
-						<label><input type="radio" id="text_indent1" name="text_indent" value="0" <?php echo($zbp->Config('WhitePage')->text_indent == 0) ? 'checked="checked"' : ''; ?>/>&nbsp;无</label>
-						&nbsp;&nbsp;
-						<label><input type="radio" id="text_indent2" name="text_indent" value="2" <?php echo($zbp->Config('WhitePage')->text_indent == 2) ? 'checked="checked"' : ''; ?>/>&nbsp;标准</label>
-					</td>
-				</tr>
+    <div class="divHeader"><?php echo $blogtitle; ?></div>
+    <div class="SubMenu"></div>
+    <div id="divMain2"> 
+        <form action="?save" method="post">
+            <input type="hidden" name="csrfToken" value="<?php echo $zbp->GetCsrfToken(); ?>">
+            <table width="100%" border="1" width="100%" class="tableBorder">
                 <tr>
-                 <td scope="col"  height="52">显示评论头像</td>	
+                    <th scope="col"  height="32" width="20%"><?php echo $zbp->lang['WhitePage']['global_settings']; ?></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td scope="col"  height="52"><?php echo $zbp->lang['WhitePage']['page_type']; ?></td>
+                    <td >
+                        <label><input type="radio" id="pt2" name="pagetype" value="2" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 2) ? 'checked="checked"' : ''; ?>/>&nbsp;CSS3 <?php echo $zbp->lang['WhitePage']['shadow']; ?>(<?php echo $zbp->lang['WhitePage']['right_angle']; ?>)</label>
+                        &nbsp;&nbsp;
+                        <label><input type="radio" id="pt3" name="pagetype" value="3" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 3) ? 'checked="checked"' : ''; ?>/>&nbsp;CSS3 <?php echo $zbp->lang['WhitePage']['shadow']; ?>(<?php echo $zbp->lang['WhitePage']['rounded_corner']; ?>)</label>
+                        &nbsp;&nbsp;
+                        <label><input type="radio" id="pt4" name="pagetype" value="4" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 4) ? 'checked="checked"' : ''; ?>/>&nbsp;<?php echo $zbp->lang['WhitePage']['flat']; ?>(<?php echo $zbp->lang['WhitePage']['right_angle']; ?>)</label>
+                        &nbsp;&nbsp;
+                        <label><input type="radio" id="pt5" name="pagetype" value="5" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 5) ? 'checked="checked"' : ''; ?>/>&nbsp;<?php echo $zbp->lang['WhitePage']['flat']; ?>(CSS3<?php echo $zbp->lang['WhitePage']['rounded_corner']; ?>)</label>
+                        &nbsp;&nbsp;
+                        <label><input type="radio" id="pt1" name="pagetype" value="1" <?php echo($zbp->Config('WhitePage')->custom_pagetype == 1) ? 'checked="checked"' : ''; ?>/>&nbsp;<?php echo $zbp->lang['WhitePage']['none']; ?></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td scope="col"  height="52"><?php echo $zbp->lang['WhitePage']['text_indent']; ?></td>
+                    <td >
+                        <label><input type="radio" id="text_indent1" name="text_indent" value="0" <?php echo($zbp->Config('WhitePage')->text_indent == 0) ? 'checked="checked"' : ''; ?>/>&nbsp;<?php echo $zbp->lang['WhitePage']['none']; ?></label>
+                        &nbsp;&nbsp;
+                        <label><input type="radio" id="text_indent2" name="text_indent" value="2" <?php echo($zbp->Config('WhitePage')->text_indent == 2) ? 'checked="checked"' : ''; ?>/>&nbsp;<?php echo $zbp->lang['WhitePage']['standard']; ?></label>
+                    </td>
+                </tr>
+                <tr>
+                 <td scope="col"  height="52"><?php echo $zbp->lang['WhitePage']['display_avatar']; ?></td>
                   <td>
 <input id="show_avatar" name="show_avatar" class="checkbox" type="text" value="<?php echo (bool) $zbp->Config('WhitePage')->ShowAvatar; ?>"  size="100"/><br/>
                   </td>
-                </tr> 				
+                </tr>
                 <tr>
-                 <td scope="col"  height="52">超级速模式</td>	
+                 <td scope="col"  height="52"><?php echo $zbp->lang['WhitePage']['super_fast_mode']; ?></td>
                   <td>
-<input id="super_fast" name="super_fast" class="checkbox" type="text" value="<?php echo (bool) $zbp->Config('WhitePage')->SuperFast; ?>"  size="100"/> (只加载一个css和一个js)<br/>
+<input id="super_fast" name="super_fast" class="checkbox" type="text" value="<?php echo (bool) $zbp->Config('WhitePage')->SuperFast; ?>"  size="100"/> (<?php echo $zbp->lang['WhitePage']['only_one_cssjs']; ?>)<br/>
                   </td>
                 </tr> 
-			</table>
+            </table>
 
-			<table width="100%" border="1" width="100%" class="tableBorder">
-				<tr>
-					<th scope="col" height="32" width="20%">颜色配置</th>
-					<th scope="col" colspan="4">				
-					<div  style="float:left;margin: 0.25em"></div>
-					<div id="loadconfig">				
-					<?php
-                        foreach ($percolors as $key => $value) {
-                            echo "<span class='color-box' data-order='" . $value[0] . "' style='background-color:#" . $value[1] . "'></span><em style='float:left;padding:0.5em 1em 0 0;'>" . $key . "</em>";
-                        }
+            <table width="100%" border="1" width="100%" class="tableBorder">
+                <tr>
+                    <th scope="col" height="32" width="20%"><?php echo $zbp->lang['WhitePage']['color_config']; ?></th>
+                    <th scope="col" colspan="4">
+                    <div  style="float:left;margin: 0.25em"></div>
+                    <div id="loadconfig">
+                    <?php
+                    foreach ($percolors as $key => $value) {
+                        echo "<span class='color-box' data-order='" . $value[0] . "' style='background-color:#" . $value[1] . "'></span><em style='float:left;padding:0.5em 1em 0 0;'>" . $key . "</em>";
+                    }
                     ?>
-					</div>
-					</th>
-				</tr>
+                    </div>
+                    </th>
+                </tr>
 
-				<tr>
-					<td></td>
-					<td colspan="2">背景色
-						<div class="color-box-picker">
-							<input type="text" id="bgpicker" class="colorpicker" name="bgcolor" value="<?php echo $zbp->Config('WhitePage')->custom_bgcolor; ?>" style="border-color:#<?php echo $zbp->Config('WhitePage')->custom_bgcolor; ?>" />
-						</div>
-					</td>
-					<td colspan="2">页面颜色
-						<div class="color-box-picker">
-							<input type="text" id="bgpicker2" class="colorpicker" name="pagecolor" value="<?php echo $zbp->Config('WhitePage')->custom_pagecolor; ?>" style="border-color:#<?php echo $zbp->Config('WhitePage')->custom_pagecolor; ?>" />
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-<td>字体颜色:
-						<div class="color-box-picker">
-							<input type="text" id="bgpicker3" class="colorpicker" name="fontcolor" value="<?php echo $zbp->Config('WhitePage')->custom_fontcolor; ?>" style="border-color:#<?php echo $zbp->Config('WhitePage')->custom_fontcolor; ?>" />
-						</div>	
+                <tr>
+                    <td></td>
+                    <td colspan="2"><?php echo $zbp->lang['WhitePage']['background_color']; ?>
+                        <div class="color-box-picker">
+                            <input type="text" id="bgpicker" class="colorpicker" name="bgcolor" value="<?php echo $zbp->Config('WhitePage')->custom_bgcolor; ?>" style="border-color:#<?php echo $zbp->Config('WhitePage')->custom_bgcolor; ?>" />
+                        </div>
+                    </td>
+                    <td colspan="2"><?php echo $zbp->lang['WhitePage']['page_color']; ?>
+                        <div class="color-box-picker">
+                            <input type="text" id="bgpicker2" class="colorpicker" name="pagecolor" value="<?php echo $zbp->Config('WhitePage')->custom_pagecolor; ?>" style="border-color:#<?php echo $zbp->Config('WhitePage')->custom_pagecolor; ?>" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+<td><?php echo $zbp->lang['WhitePage']['font_color']; ?>:
+                        <div class="color-box-picker">
+                            <input type="text" id="bgpicker3" class="colorpicker" name="fontcolor" value="<?php echo $zbp->Config('WhitePage')->custom_fontcolor; ?>" style="border-color:#<?php echo $zbp->Config('WhitePage')->custom_fontcolor; ?>" />
+                        </div>
 </td>
-<td>标题颜色:
-						<div class="color-box-picker">
-							<input type="text" id="bgpicker4" class="colorpicker" name="blogtitlecolor" value="<?php echo $zbp->Config('WhitePage')->custom_blogtitlecolor; ?>" style="border-color:#<?php echo $zbp->Config('WhitePage')->custom_blogtitlecolor; ?>" />
-						</div>
+<td><?php echo $zbp->lang['WhitePage']['title_color']; ?>:
+                        <div class="color-box-picker">
+                            <input type="text" id="bgpicker4" class="colorpicker" name="blogtitlecolor" value="<?php echo $zbp->Config('WhitePage')->custom_blogtitlecolor; ?>" style="border-color:#<?php echo $zbp->Config('WhitePage')->custom_blogtitlecolor; ?>" />
+                        </div>
 </td>
-<td>链接颜色:
-						<div class="color-box-picker">
-							<input type="text" id="bgpicker5" class="colorpicker" name="acolor" value="<?php echo $zbp->Config('WhitePage')->custom_acolor; ?>" style="border-color:#<?php echo $zbp->Config('WhitePage')->custom_acolor; ?>" />
-						</div>	
+<td><?php echo $zbp->lang['WhitePage']['a_color']; ?>:
+                        <div class="color-box-picker">
+                            <input type="text" id="bgpicker5" class="colorpicker" name="acolor" value="<?php echo $zbp->Config('WhitePage')->custom_acolor; ?>" style="border-color:#<?php echo $zbp->Config('WhitePage')->custom_acolor; ?>" />
+                        </div>
 </td>
-<td>链接选定颜色:
-						<div class="color-box-picker">
-							<input type="text" id="bgpicker6" class="colorpicker" name="ahovercolor" value="<?php echo $zbp->Config('WhitePage')->custom_ahovercolor; ?>" style="border-color:#<?php echo $zbp->Config('WhitePage')->custom_ahovercolor; ?>" />
-						</div>	
+<td><?php echo $zbp->lang['WhitePage']['active_a_color']; ?>:
+                        <div class="color-box-picker">
+                            <input type="text" id="bgpicker6" class="colorpicker" name="ahovercolor" value="<?php echo $zbp->Config('WhitePage')->custom_ahovercolor; ?>" style="border-color:#<?php echo $zbp->Config('WhitePage')->custom_ahovercolor; ?>" />
+                        </div>
 </td>
 
-				</tr>
-			</table>
-			<input name="ok" type="submit" class="button" value="保存配置"/>
-		</form>
-	</div>
+                </tr>
+            </table>
+            <input name="ok" type="submit" class="button" value="<?php echo $zbp->lang['WhitePage']['save']; ?>"/>
+        </form>
+    </div>
 </div>
 <!--#include file="..\..\..\..\zb_system\admin\admin_footer.asp"-->
 <script type="text/javascript">
 ActiveTopMenu("topmenu_WhitePage");
-AddHeaderIcon("<?php echo $zbp->host?>zb_system/image/common/themes_32.png");
+AddHeaderIcon("<?php echo $zbp->host; ?>zb_system/image/common/themes_32.png");
 $('#bgpicker').colpick({
-	layout:'hex',
-	submit:0,
-	onChange:function(hsb,hex,rgb,el,bySetColor) {
-		$(el).css('border-color','#'+hex);
-		if(!bySetColor) $(el).val(hex);
-	}
+    layout:'hex',
+    submit:0,
+    onChange:function(hsb,hex,rgb,el,bySetColor) {
+        $(el).css('border-color','#'+hex);
+        if(!bySetColor) $(el).val(hex);
+    }
 }).keyup(function(){
-	$(this).colpickSetColor(this.value);
+    $(this).colpickSetColor(this.value);
 });
 $('#bgpicker2').colpick({
-	layout:'hex',
-	submit:0,
-	onChange:function(hsb,hex,rgb,el,bySetColor) {
-		$(el).css('border-color','#'+hex);
-		if(!bySetColor) $(el).val(hex);
-	}
+    layout:'hex',
+    submit:0,
+    onChange:function(hsb,hex,rgb,el,bySetColor) {
+        $(el).css('border-color','#'+hex);
+        if(!bySetColor) $(el).val(hex);
+    }
 }).keyup(function(){
-	$(this).colpickSetColor(this.value);
+    $(this).colpickSetColor(this.value);
 });
 $('#bgpicker3').colpick({
-	layout:'hex',
-	submit:0,
-	onChange:function(hsb,hex,rgb,el,bySetColor) {
-		$(el).css('border-color','#'+hex);
-		if(!bySetColor) $(el).val(hex);
-	}
+    layout:'hex',
+    submit:0,
+    onChange:function(hsb,hex,rgb,el,bySetColor) {
+        $(el).css('border-color','#'+hex);
+        if(!bySetColor) $(el).val(hex);
+    }
 }).keyup(function(){
-	$(this).colpickSetColor(this.value);
+    $(this).colpickSetColor(this.value);
 });
 $('#bgpicker4').colpick({
-	layout:'hex',
-	submit:0,
-	onChange:function(hsb,hex,rgb,el,bySetColor) {
-		$(el).css('border-color','#'+hex);
-		if(!bySetColor) $(el).val(hex);
-	}
+    layout:'hex',
+    submit:0,
+    onChange:function(hsb,hex,rgb,el,bySetColor) {
+        $(el).css('border-color','#'+hex);
+        if(!bySetColor) $(el).val(hex);
+    }
 }).keyup(function(){
-	$(this).colpickSetColor(this.value);
+    $(this).colpickSetColor(this.value);
 });
 $('#bgpicker5').colpick({
-	layout:'hex',
-	submit:0,
-	onChange:function(hsb,hex,rgb,el,bySetColor) {
-		$(el).css('border-color','#'+hex);
-		if(!bySetColor) $(el).val(hex);
-	}
+    layout:'hex',
+    submit:0,
+    onChange:function(hsb,hex,rgb,el,bySetColor) {
+        $(el).css('border-color','#'+hex);
+        if(!bySetColor) $(el).val(hex);
+    }
 }).keyup(function(){
-	$(this).colpickSetColor(this.value);
+    $(this).colpickSetColor(this.value);
 });
 $('#bgpicker6').colpick({
-	layout:'hex',
-	submit:0,
-	onChange:function(hsb,hex,rgb,el,bySetColor) {
-		$(el).css('border-color','#'+hex);
-		if(!bySetColor) $(el).val(hex);
-	}
+    layout:'hex',
+    submit:0,
+    onChange:function(hsb,hex,rgb,el,bySetColor) {
+        $(el).css('border-color','#'+hex);
+        if(!bySetColor) $(el).val(hex);
+    }
 }).keyup(function(){
-	$(this).colpickSetColor(this.value);
+    $(this).colpickSetColor(this.value);
 });
 
 $('.color-box').click(function() {
-	    var x = $(this).data('order');
-	    var z = Array();
+        var x = $(this).data('order');
+        var z = Array();
 <?php
 foreach ($percolors as $key => $value) {
-                        echo 'z[' . $value[0] . ']' . '=new Array("' . $value[2] . '","' . $value[3] . '","' . $value[4] . '","' . $value[5] . '","' . $value[6] . '","' . $value[7] . '");' . PHP_EOL;
-                    }
+    echo 'z[' . $value[0] . ']' . '=new Array("' . $value[2] . '","' . $value[3] . '","' . $value[4] . '","' . $value[5] . '","' . $value[6] . '","' . $value[7] . '");' . PHP_EOL;
+}
 ?>
 a=z[x][0];
 b=z[x][1];
@@ -293,4 +293,3 @@ $('#bgpicker6').colpickSetColor(f);$('#bgpicker6').val(f);$('#bgpicker6').css('b
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 RunTime();
-?>

@@ -47,14 +47,10 @@ class Config implements Iterator
      */
     protected $table = '';
 
-    protected $t = null;
-
     /**
      * @var array 表结构信息
      */
     protected $datainfo = array();
-
-    protected $d = null;
 
     /**
      * @var array 原始db数据数组
@@ -92,8 +88,6 @@ class Config implements Iterator
 
         $this->table = &$GLOBALS['table']['Config'];
         $this->datainfo = &$GLOBALS['datainfo']['Config'];
-        $this->t = &$this->table;
-        $this->d = &$this->datainfo;
 
         foreach ($this->datainfo as $key => $value) {
             $this->data[$key] = $value[3];
@@ -280,8 +274,8 @@ class Config implements Iterator
 
     public function LoadInfoByAssocSingleWithPre($array)
     {
-        $key = trim($array[$this->d['Key'][0]]);
-        $value = trim($array[$this->d['Value'][0]]);
+        $key = trim($array[$this->datainfo['Key'][0]]);
+        $value = trim($array[$this->datainfo['Value'][0]]);
         $this->data_pre_key[] = $key;
         $this->data_pre_value[] = $value;
 
@@ -320,8 +314,8 @@ class Config implements Iterator
 
     public function LoadInfoByAssocSingle($array)
     {
-        $key = trim($array[$this->d['Key'][0]]);
-        $value = trim($array[$this->d['Value'][0]]);
+        $key = trim($array[$this->datainfo['Key'][0]]);
+        $value = trim($array[$this->datainfo['Value'][0]]);
 
         $value = $this->UnserializeSingle($value);
         $this->kvdata[$key] = $value;
@@ -382,21 +376,21 @@ class Config implements Iterator
             return true;
         }
 
-        $old = @$this->db->Query($this->db->sql->Select($this->t, $this->d['Key'][0], null, null, 1));
+        $old = @$this->db->Query($this->db->sql->Select($this->table, $this->datainfo['Key'][0], null, null, 1));
         //没有这个字段：array(1) { [0]=> bool(false) }
         if (count($old) == 1 && $old[0] === false) { //如果还没有建conf_Key字段就不要原子化存储
             $value = $this->Serialize();
 
-            $kv = array($this->d['Name'][0] => $name, $this->d['Value'][0] => $value);
+            $kv = array($this->datainfo['Name'][0] => $name, $this->datainfo['Value'][0] => $value);
 
-            $old = $this->db->Query($this->db->sql->Select($this->t, '*', array(array('=', $this->d['Name'][0], $name))));
+            $old = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', $this->datainfo['Name'][0], $name))));
             //没有这一行数据 array(0) { }
             if (count($old) == 0) {
-                $sql = $this->db->sql->Insert($this->t, $kv);
+                $sql = $this->db->sql->Insert($this->table, $kv);
                 $this->db->Insert($sql);
             } else {
                 array_shift($kv);
-                $sql = $this->db->sql->Update($this->t, $kv, array(array('=', $this->d['Name'][0], $name)));
+                $sql = $this->db->sql->Update($this->table, $kv, array(array('=', $this->datainfo['Name'][0], $name)));
                 $this->db->Update($sql);
             }
             //存储成功后重置origkvdata
@@ -405,13 +399,13 @@ class Config implements Iterator
             return true;
         }
 
-        $old = $this->db->Query($this->db->sql->Select($this->t, '*', array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], ''))));
+        $old = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], ''))));
         if (count($old) > 0) { //如果存在老数据，先删除老的
             $del = array();
             $mod = array();
             $add = $this->kvdata;
 
-            $sql = $this->db->sql->Delete($this->t, array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], '')));
+            $sql = $this->db->sql->Delete($this->table, array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], '')));
             $this->db->Delete($sql);
         }
         if (($add + $del + $mod) == array()) {
@@ -422,37 +416,37 @@ class Config implements Iterator
 
         //add
         foreach ($add as $key2 => $value2) {
-            $kv2 = array($this->d['Name'][0] => $name, $this->d['Key'][0] => $key2, $this->d['Value'][0] => $this->SerializeSingle($value2));
-            $sql = $this->db->sql->Insert($this->t, $kv2);
-            $old = $this->db->Query($this->db->sql->Select($this->t, '*', array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], $key2))));
+            $kv2 = array($this->datainfo['Name'][0] => $name, $this->datainfo['Key'][0] => $key2, $this->datainfo['Value'][0] => $this->SerializeSingle($value2));
+            $sql = $this->db->sql->Insert($this->table, $kv2);
+            $old = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], $key2))));
             if (count($old) == 0) {
                 $this->db->Insert($sql);
             } else {
                 $key3 = $key2;
                 $value3 = $value2;
-                $kv3 = array($this->d['Value'][0] => $this->SerializeSingle($value3));
-                $sql = $this->db->sql->Update($this->t, $kv3, array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], $key3)));
+                $kv3 = array($this->datainfo['Value'][0] => $this->SerializeSingle($value3));
+                $sql = $this->db->sql->Update($this->table, $kv3, array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], $key3)));
                 $this->db->Update($sql);
             }
         }
         //mod
         foreach ($mod as $key2 => $value2) {
-            $kv2 = array($this->d['Name'][0] => $name, $this->d['Key'][0] => $key2, $this->d['Value'][0] => $this->SerializeSingle($value2));
-            $sql = $this->db->sql->Insert($this->t, $kv2);
-            $old = $this->db->Query($this->db->sql->Select($this->t, '*', array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], $key2))));
+            $kv2 = array($this->datainfo['Name'][0] => $name, $this->datainfo['Key'][0] => $key2, $this->datainfo['Value'][0] => $this->SerializeSingle($value2));
+            $sql = $this->db->sql->Insert($this->table, $kv2);
+            $old = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], $key2))));
             if (count($old) == 0) {
                 $this->db->Insert($sql);
             } else {
                 $key3 = $key2;
                 $value3 = $value2;
-                $kv3 = array($this->d['Value'][0] => $this->SerializeSingle($value3));
-                $sql = $this->db->sql->Update($this->t, $kv3, array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], $key3)));
+                $kv3 = array($this->datainfo['Value'][0] => $this->SerializeSingle($value3));
+                $sql = $this->db->sql->Update($this->table, $kv3, array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], $key3)));
                 $this->db->Update($sql);
             }
         }
         //del
         foreach ($del as $key4 => $value4) {
-            $sql = $this->db->sql->Delete($this->t, array(array('=', $this->d['Name'][0], $name), array('=', $this->d['Key'][0], $key4)));
+            $sql = $this->db->sql->Delete($this->table, array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], $key4)));
             $this->db->Delete($sql);
         }
         //var_dump($add,$del,$mod);die;
@@ -474,7 +468,7 @@ class Config implements Iterator
     {
         global $zbp;
         $name = $this->GetItemName();
-        $sql = $this->db->sql->Delete($this->t, array(array('=', $this->d['Name'][0], $name)));
+        $sql = $this->db->sql->Delete($this->table, array(array('=', $this->datainfo['Name'][0], $name)));
         $this->db->Delete($sql);
         unset($zbp->configs[$name]);
 

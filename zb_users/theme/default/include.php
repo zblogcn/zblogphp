@@ -13,7 +13,8 @@ function ActivePlugin_default()
     Add_Filter_Plugin('Filter_Plugin_ViewSearch_Begin', 'default_ViewSearch_Begin');
 }
 
-function default_ViewSearch_Begin(){
+function default_ViewSearch_Begin()
+{
     global $zbp;
     $zbp->option['ZC_SEARCH_TYPE'] = 'list';
 }

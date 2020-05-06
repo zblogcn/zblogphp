@@ -64,7 +64,11 @@ function Arrietty_ViewList_Core($type, $page, $category, $author, $datetime, $ta
     if ($zbp->user->ID != null) {
         foreach ($w as $key => $value) {
             if(count($value) == 3 && $value[1] == 'log_Status'){
-                $w[$key] = array('OR',array('=','log_Status',0), array('=','log_Status',8), array('log_Status = 4 AND log_AuthorID = \'' . $zbp->user->ID . '\''));
+                if ($zbp->version < 162300) {
+                    $w[$key] = "log_Status = '0' OR log_Status = '8' OR (log_Status = '4' AND log_AuthorID = '{$zbp->user->ID}')";
+                } else {
+                    $w[$key] = array('OR',array('=','log_Status',0), array('=','log_Status',8), array('log_Status = 4 AND log_AuthorID = \'' . $zbp->user->ID . '\''));
+                }
             }
         }
     } else {

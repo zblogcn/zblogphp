@@ -121,7 +121,7 @@ function GetPost($idorname, $option = null)
         } elseif ($option['only_page'] == true) {
             $w[] = array('=', 'log_Type', '1');
         }
-        $articles = $zbp->GetPostList('*', $w, null, 1, null);
+        $articles = $zbp->GetPostList('*', $w, null, 1, $option);
         if (count($articles) == 0) {
             $post = new Post();
         } else {

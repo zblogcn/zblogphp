@@ -1,0 +1,26 @@
+<?php
+
+return array(
+    'theme_name'      => 'WhitePage主題',
+    'theme_config'    => 'WhitePage主題配置',
+    'global_settings' => '整體設置',
+    'page_type'       => '頁面類型',
+    'text_indent'     => '正文縮進',
+    'none'            => '無',
+    'standard'        => '標準',
+    'display_avatar'  => '顯示評論頭像',
+    'super_fast_mode' => '超級速模式',
+    'color_config'    => '顏色配置',
+    'background_color'=> '背景色',
+    'page_color'      => '頁面顏色',
+    'font_color'      => '字體顏色',
+    'title_color'     => '標題顏色',
+    'a_color'         => '鏈接顏色',
+    'active_a_color'  => '鏈接選定顏色',
+    'save'            => '保存配置',
+    'only_one_cssjs'  => '只加載壹個css和壹個js',
+    'shadow'          => '陰影',
+    'flat'            => '平面',
+    'right_angle'     => '直角',
+    'rounded_corner'  => '圓角',
+);

@@ -638,8 +638,6 @@ class ZBlogPHP
             return false;
         }
 
-        //$this->StartGzip();
-
         if (!headers_sent()) {
             header('Content-type: text/html; charset=utf-8');
         }
@@ -719,6 +717,7 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu', 'Include_Admin_Addmodsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu', 'Include_Admin_Addcmtsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Zbp_LoadManage', 'Include_Admin_UpdateDB');
+        Add_Filter_Plugin('Filter_Plugin_Admin_End', 'Include_Admin_CheckHttp304OK');
 
         $this->CheckTemplate();
 
@@ -940,9 +939,7 @@ class ZBlogPHP
         foreach ($this->configs as $key => $value) {
             if (is_object($value) && ($key == 'system' && $onlysystemoption == true) || ($key != 'system' && $onlysystemoption == false)) {
                 $value->LoadInfoByAssocSingleWithAfter();
-            }// else {
-                //$value->LoadInfoByAssocSingleWithAfter();
-            //}
+            }
         }
 
         if ($onlysystemoption == false) {

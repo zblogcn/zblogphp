@@ -62,7 +62,11 @@ class SQL__MySQL extends SQL__Global
         $sqlAll = array();
         foreach ($this->table as $tableIndex => $table) {
             $sql = array();
-            $sql[] = 'CREATE TABLE IF NOT EXISTS ' . $table;
+            if (isset($this->option['temporary'])) {
+                $sql[] = 'CREATE TEMPORARY TABLE IF NOT EXISTS ' . $table;
+            } else {
+                $sql[] = 'CREATE TABLE IF NOT EXISTS ' . $table;
+            }
             $sql[] = ' (';
             $engine = $this->option['engine'];
             $idname = GetValueInArrayByCurrent($this->data, 0);
@@ -178,12 +182,17 @@ class SQL__MySQL extends SQL__Global
     {
         if (isset($this->option['sql_no_cache'])) {
             $this->sqlPush('SQL_NO_CACHE ');
-        }
-        if (isset($this->option['sql_cache'])) {
+        } elseif (isset($this->option['sql_cache'])) {
             $this->sqlPush('SQL_CACHE ');
         }
         if (isset($this->option['sql_buffer_result'])) {
             $this->sqlPush('SQL_BUFFER_RESULT ');
+        }
+        if (isset($this->option['sql_big_result'])) {
+            $this->sqlPush(' SQL_BIG_RESULT ');
+        }
+        if (isset($this->option['sql_small_result'])) {
+            $this->sqlPush('SQL_SMALL_RESULT ');
         }
         parent::buildSelect();
     }

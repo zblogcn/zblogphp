@@ -1,0 +1,26 @@
+<?php
+
+return array(
+    'theme_name'     => 'WhitePage',
+    'theme_config'    => 'Theme Configuration',
+    'global_settings' => 'Global Settings',
+    'page_type'       => 'Page type',
+    'text_indent'     => 'Text indent',
+    'none'            => 'None',
+    'standard'        => 'Standard',
+    'display_avatar'  => 'Display comment avatar',
+    'super_fast_mode' => 'Super fast mode',
+    'color_config'    => 'Color Configuration',
+    'background_color'=> 'Background color',
+    'page_color'      => 'Page color',
+    'font_color'      => 'Font color',
+    'title_color'     => 'Title color',
+    'a_color'         => 'Href color',
+    'active_a_color'  => 'Active href color',
+    'save'            => 'Save',
+    'only_one_cssjs'  => 'Only load one css and one js',
+    'shadow'          => 'Shadow',
+    'flat'            => 'Flat',
+    'right_angle'     => 'Right angle',
+    'rounded_corner'  => 'Rounded corner',
+);

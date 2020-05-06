@@ -119,5 +119,29 @@ class ClassSQL__MySQLTest extends PHPUnit\Framework\TestCase
                 ->option(array('sql_buffer_result' => true))
                 ->sql
         );
+        $this->assertEquals(
+            'SELECT  log_ID  FROM zbp_post AS p STRAIGHT_JOIN zbp_postrelation AS pr ON p.log_ID = pr.pr_PostID WHERE 1 = 1',
+                  self::$db->selectany('log_ID')
+                           ->from(array('zbp_post'=>'p'))
+                           ->innerjoin(array('zbp_postrelation'=>'pr'))
+                           ->on('p.log_ID = pr.pr_PostID')
+                           ->where('1 = 1')
+                           ->option(array('straight_join' => true))
+                           ->sql
+        );
+        $tableData = array(
+            'a' => array('a', 'integer', '', 0),
+            'i' => array('i', 'boolean', '', false),
+            'j' => array('j', 'string', 'char250', ''),
+            'k' => array('k', 'string', 250, ''),
+            'o' => array('o', 'string', 'longtext', ''),
+            'p' => array('p', 'string', '', ''),
+        );
+        self::$db->create('zbp_post2')->data($tableData)
+        ->option(array('temporary' => true))
+        ->option(array('engine' => 'Memory'))
+        ->option(array('charset' => 'utf8'))
+        ->option(array('collate' => 'utf8_general_ci'));
+        $this->assertEquals('CREATE TEMPORARY TABLE IF NOT EXISTS zbp_post2  ( a int(11) NOT NULL AUTO_INCREMENT, i tinyint(1) NOT NULL DEFAULT \'0\', j char(250) NOT NULL DEFAULT \'\', k varchar(250) NOT NULL DEFAULT \'\', o longtext NOT NULL , p longtext NOT NULL , PRIMARY KEY (a) ) ENGINE=Memory DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;', self::$db->sql);
     }
 }

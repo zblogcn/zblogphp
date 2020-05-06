@@ -6,6 +6,7 @@ RegisterPlugin("WhitePage", "ActivePlugin_WhitePage");
 function ActivePlugin_WhitePage()
 {
     global $zbp;
+    $zbp->LoadLanguage('theme', 'WhitePage');
 
     Add_Filter_Plugin('Filter_Plugin_Cmd_Begin', 'WhitePage_CMT');
     Add_Filter_Plugin('Filter_Plugin_Admin_TopMenu', 'WhitePage_AddMenu');
@@ -63,11 +64,11 @@ function ActivePlugin_WhitePage()
     Add_Filter_Plugin('Filter_Plugin_ViewSearch_Begin', 'WhitePage_ViewSearch_Begin');
 }
 
-function WhitePage_ViewSearch_Begin(){
+function WhitePage_ViewSearch_Begin()
+{
     global $zbp;
     $zbp->option['ZC_SEARCH_TYPE'] = 'list';
 }
-
 
 function InstallPlugin_WhitePage()
 {
@@ -95,7 +96,7 @@ function WhitePage_CMT()
 function WhitePage_AddMenu(&$m)
 {
     global $zbp;
-    $m[] = MakeTopMenu("root", '主题配置', $zbp->host . "zb_users/theme/WhitePage/main.php", "", "topmenu_WhitePage");
+    $m[] = MakeTopMenu("root", $zbp->lang['WhitePage']['theme_config'], $zbp->host . "zb_users/theme/WhitePage/main.php", "", "topmenu_WhitePage");
 }
 
 function WhitePage_AddJS($echo = true)

@@ -214,4 +214,5 @@ return array(
     'ZC_XMLRPC_USE_WEBTOKEN'         => false,
     'ZC_USING_CDN_GUESTIP_TYPE'      => 'REMOTE_ADDR',
     'ZC_POST_BATCH_DELETE'           => false,
+    'ZC_JS_304_ENABLE'               => true,
 );

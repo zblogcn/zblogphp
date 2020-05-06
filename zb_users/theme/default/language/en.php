@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'theme_name'     => 'Default',
     'view'           => 'Views',
     'comment_list'   => 'Comments',
     'comment_post_on'=> 'Published in',

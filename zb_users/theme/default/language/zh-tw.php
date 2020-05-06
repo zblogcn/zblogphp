@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'theme_name'     => 'Default',
     'view'           => '瀏覽',
     'comment_list'   => '迴響清單',
     'comment_post_on'=> '發佈於',

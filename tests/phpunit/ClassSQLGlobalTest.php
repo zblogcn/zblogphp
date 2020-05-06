@@ -259,6 +259,13 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
                 ->where(array('CUSTOM', '1=1'))
                 ->sql
         );
+        $this->assertEquals(
+            'SELECT * FROM  zbp_post  WHERE log_ID >= ANY(select log_id from zbp_post) ',
+            self::$db
+                ->select("zbp_post")
+                ->where(array('ANY', 'log_ID', '>=', 'select log_id from zbp_post'))
+                ->sql
+        );
     }
 
     public function testOrderby()

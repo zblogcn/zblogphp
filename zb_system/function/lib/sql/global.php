@@ -59,7 +59,7 @@ class SQL__Global
 
     private $otherKeyword = array('INDEX', 'TABLE', 'DATABASE');
 
-    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'IFNOTEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'UNIONALL', 'RANDOM', 'TRANSACTION');
+    private $extendKeyword = array('SELECTANY', 'FROM', 'IFEXISTS', 'IFNOTEXISTS', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'UNION', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'DISTINCTROW', 'UNIONALL', 'RANDOM', 'TRANSACTION');
 
     private $complexKeyword = array('ADDCOLUMN', 'DROPCOLUMN', 'ALTERCOLUMN');
 
@@ -176,7 +176,7 @@ class SQL__Global
             return $this;
         } elseif (in_array($upperKeyword, $this->extendKeyword)) {
             $this->extend[$upperKeyword] = $argu;
-            if ($upperKeyword == 'DISTINCT' || $upperKeyword == 'SELECTANY') {
+            if ($upperKeyword == 'DISTINCT' || $upperKeyword == 'DISTINCTROW' || $upperKeyword == 'SELECTANY') {
                 foreach ($argu as $key => $value) {
                     $this->column($value);
                 }
@@ -569,6 +569,9 @@ class SQL__Global
     protected function buildWhere_Single($value)
     {
         $whereData = '';
+        if (is_array($value[0])) {
+            return $this->buildWhere_Single($value[0]);
+        }
         $eq = strtoupper($value[0]);
         if (in_array($eq, array('=', '<>', '>', '<', '>=', '!=', '<=', 'NOT LIKE', 'LIKE', 'ILIKE', 'NOT ILIKE'))) {
             $x = (string) $value[1];
@@ -593,8 +596,16 @@ class SQL__Global
             }
             $whereData = " ( " . implode(' AND ', $sqlArray) . ') ';
         } elseif ($eq == 'EXISTS' || $eq == 'NOT EXISTS') {
-            if (!isset($value[2])) {
+            if (isset($value[1]) && !isset($value[2])) {
                 $whereData = " $eq ( $value[1] ) ";
+            } else {
+                $whereData = " (1 = 1) ";
+
+                return $whereData;
+            }
+        } elseif ($eq == 'ANY' || $eq == 'ALL' || $eq == 'SOME') {
+            if (isset($value[3])) {
+                $whereData = "$value[1] $value[2] $eq($value[3]) ";
             } else {
                 $whereData = " (1 = 1) ";
 
@@ -695,7 +706,11 @@ class SQL__Global
         } elseif ($eq == "CUSTOM") {
             $whereData = $value[1];
         } elseif (count($value) == 1) {
-            $whereData = ' ( ' . $value[0] . ' ) ';
+            if (is_array($value[0])) {
+                $whereData = $this->buildWhere_Single($value[0]);
+            } else {
+                $whereData = ' ( ' . $value[0] . ' ) ';
+            }
         }
 
         return $whereData;
@@ -813,9 +828,19 @@ class SQL__Global
         if (array_key_exists('DISTINCT', $this->extend)) {
             $this->buildDISTINCT();
         }
+        if (array_key_exists('DISTINCTROW', $this->extend)) {
+            $this->buildDISTINCTROW();
+        }
         if (array_key_exists('SELECTANY', $this->extend)) {
             $this->buildSelectAny();
         }
+
+        if (get_class($this) == 'SQL__MySQL') {
+            if (isset($this->option['high_priority'])) {
+                $sql[] = 'HIGH_PRIORITY';
+            }
+        }
+
         $this->buildColumn();
         if (array_key_exists('FROM', $this->extend)) {
             $this->buildFrom();
@@ -881,6 +906,12 @@ class SQL__Global
     {
         $sql = &$this->pri_sql;
         $sql[] = 'DISTINCT';
+    }
+
+    protected function buildDISTINCTROW()
+    {
+        $sql = &$this->pri_sql;
+        $sql[] = 'DISTINCTROW';
     }
 
     protected function buildSELECTANY()
@@ -986,7 +1017,13 @@ class SQL__Global
     protected function buildINNERJOIN()
     {
         $sql = &$this->pri_sql;
-        $sql[] = 'INNER JOIN';
+        $s = 'INNER JOIN';
+        if (get_class($this) == 'SQL__MySQL') {
+            if (isset($this->option['straight_join'])) {
+                $s = 'STRAIGHT_JOIN';
+            }
+        }
+        $sql[] = $s;
         if (is_array($this->extend['INNERJOIN'][0]) == true) {
             $sql[] = key($this->extend['INNERJOIN'][0]);
             $sql[] = 'AS';
@@ -1087,6 +1124,11 @@ class SQL__Global
     protected function buildUpdate()
     {
         $sql = &$this->pri_sql;
+        if (get_class($this) == 'SQL__MySQL') {
+            if (isset($this->option['low_priority'])) {
+                $sql[] = 'LOW_PRIORITY';
+            }
+        }
         $sql[] = $this->buildTable();
         $sql[] = 'SET';
         $updateData = array();
@@ -1114,6 +1156,16 @@ class SQL__Global
     protected function buildInsert()
     {
         $sql = &$this->pri_sql;
+        if (get_class($this) == 'SQL__MySQL') {
+            if (isset($this->option['high_priority'])) {
+                $sql[] = 'HIGH_PRIORITY';
+            } elseif (isset($this->option['low_priority'])) {
+                $sql[] = 'LOW_PRIORITY';
+            }
+            if (isset($this->option['delayed'])) {
+                $sql[] = 'DELAYED';
+            }
+        }
         $sql[] = 'INTO';
         $this->buildTable();
         $keyData = array();

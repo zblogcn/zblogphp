@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'theme_name'     => 'Default主题',
     'view'           => '浏览',
     'comment_list'   => '评论列表',
     'comment_post_on'=> '发布于',

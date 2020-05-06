@@ -29,7 +29,7 @@ if ($zbp->option['ZC_ADDITIONAL_SECURITY']) {
 <script>if (!window.bloghost && window.confirm("<?php echo $lang['msg']['error_load_js']; ?>")) window.open('<?php echo str_replace('{%message%}', '', str_replace('{%id%}', 89, $lang['offical_urls']['more_help'])); ?>');</script>
 <?php
 if ($zbp->cache->success_updated_app !== '') {
-    echo '<script src="' . $bloghost . 'zb_system/cmd.php?act=misc&type=updatedapp" type="text/javascript"></script>';
+    echo '<script src="' . $bloghost . 'zb_system/cmd.php?act=misc&type=updatedapp"></script>';
 }
 
 foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Header'] as $fpname => &$fpsignal) {

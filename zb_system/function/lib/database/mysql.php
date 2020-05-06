@@ -153,7 +153,8 @@ class Database__MySQL implements Database__Interface
             $c = 'utf8_general_ci';
         }
         if (mysql_set_charset($u, $db) == false) {
-            mysql_set_charset("utf8", $db);
+            $u = "utf8";
+            mysql_set_charset($u, $db);
         }
         $this->charset = $u;
         $this->collate = $c;
