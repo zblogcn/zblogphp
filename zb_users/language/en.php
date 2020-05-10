@@ -227,6 +227,7 @@ return array(
         'top_category'                      => 'Categorys',
         'jump_comment'                      => 'View Comment ID=',
         'year_suffix'                       => '',
+        'month_suffix'                      => '',
         'week_suffix'                       => '',
         'time'                              => 'Time',
         'hour'                              => 'Hour',

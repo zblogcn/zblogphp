@@ -59,7 +59,6 @@ mix-manifest.json
 !/zb_users/plugin/ZBPJFExample
 !/zb_users/plugin/markdown
 !/zb_users/plugin/LinksManage
-!/zb_users/plugin/Arrietty
 
 # Unoffical Theme
 /zb_users/theme/*

@@ -34,7 +34,7 @@ var zbpConfig = {
                 selector: '#inpName',
                 saveLocally: true,
                 required: true,
-                validateRule: /^[\.\_A-Za-z0-9\u4e00-\u9fa5@]+$/ig,
+                validateRule: /^[^\s　]+$/ig,
                 validateFailedErrorCode: 72,
             },
             email: {

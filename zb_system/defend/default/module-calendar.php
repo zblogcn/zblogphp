@@ -1,7 +1,7 @@
 <table id="tbCalendar">
     <caption><a href="{$prevMonthUrl}">«</a>&nbsp;&nbsp;&nbsp;<a href="{$nowMonthUrl}">
 {if $option['ZC_BLOG_LANGUAGEPACK'] == 'zh-cn' || $option['ZC_BLOG_LANGUAGEPACK'] == 'zh-tw'}
-    {$nowYear}年{$nowMonth}月
+    {php}echo str_replace(array('%y%', '%m%'), array($nowYear, $nowMonth), $lang['msg']['year_month']);{/php}
 {else}
     {date("F , Y", mktime(0, 0, 0, $nowMonth, 1, $nowYear))}
 {/if}

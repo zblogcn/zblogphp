@@ -223,6 +223,7 @@ return array(
         'top_category'                      => '分类',
         'jump_comment'                      => '查看评论ID=',
         'year_suffix'                       => '年',
+        'month_suffix'                      => '月',
         'week_suffix'                       => '周',
         'time'                              => '时间',
         'hour'                              => '小时',

@@ -126,6 +126,14 @@ class Config implements Iterator
     }
 
     /**
+     * @param $name
+     */
+    public function __unset($name)
+    {
+        unset($this->kvdata[$name]);
+    }
+
+    /**
      * 获取Data数据.
      *
      * @return array

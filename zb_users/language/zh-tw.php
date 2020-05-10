@@ -227,6 +227,7 @@ return array(
         'top_category'                      => '分類',
         'jump_comment'                      => '檢視迴響ID=',
         'year_suffix'                       => '年',
+        'month_suffix'                      => '月',
         'week_suffix'                       => '周',
         'time'                              => '時間',
         'hour'                              => '小時',

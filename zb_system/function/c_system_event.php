@@ -3371,7 +3371,7 @@ function FilterComment(&$comment)
 {
     global $zbp;
 
-    if (!CheckRegExp($comment->Name, '[username]')) {
+    if (!CheckRegExp($comment->Name, '[nickname]')) {
         $zbp->ShowError(15, __FILE__, __LINE__);
     }
     if ($comment->Email && (!CheckRegExp($comment->Email, '[email]'))) {
@@ -3381,6 +3381,8 @@ function FilterComment(&$comment)
         $zbp->ShowError(30, __FILE__, __LINE__);
     }
 
+    $comment->Name = FormatString($comment->Name, '[nohtml]');
+    $comment->Name = str_replace(array('<', '>', ' ', '　'), '', $comment->Name);
     $comment->Name = SubStrUTF8_Start($comment->Name, 0, $zbp->option['ZC_USERNAME_MAX']);
     $comment->Email = SubStrUTF8_Start($comment->Email, 0, $zbp->option['ZC_EMAIL_MAX']);
     $comment->HomePage = SubStrUTF8_Start($comment->HomePage, 0, $zbp->option['ZC_HOMEPAGE_MAX']);
@@ -3407,6 +3409,7 @@ function FilterPost(&$article)
     $article->Title = htmlspecialchars($article->Title);
     $article->Alias = FormatString($article->Alias, '[normalname]');
     $article->Alias = str_replace(' ', '', $article->Alias);
+    $article->Alias = str_replace('　', '', $article->Alias);
 
     if ($article->Type == ZC_POST_TYPE_ARTICLE) {
         if (!$zbp->CheckRights('ArticleAll')) {
@@ -3438,10 +3441,7 @@ function FilterMember(&$member)
     global $zbp;
     $member->Intro = FormatString($member->Intro, '[noscript]');
     $member->Alias = FormatString($member->Alias, '[normalname]');
-    $member->Alias = str_replace('/', '', $member->Alias);
-    $member->Alias = str_replace('.', '', $member->Alias);
-    $member->Alias = str_replace(' ', '', $member->Alias);
-    $member->Alias = str_replace('_', '', $member->Alias);
+    $member->Alias = str_replace(array('/', '.', ' ', '　', '_'), '', $member->Alias);
     $member->Alias = SubStrUTF8_Start($member->Alias, 0, (int) $zbp->datainfo['Member']['Alias'][2]);
     if (strlen($member->Name) < $zbp->option['ZC_USERNAME_MIN'] || strlen($member->Name) > $zbp->option['ZC_USERNAME_MAX']) {
         $zbp->ShowError(77, __FILE__, __LINE__);
