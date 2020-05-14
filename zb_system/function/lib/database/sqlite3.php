@@ -104,10 +104,7 @@ class Database__SQLite3 implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 $this->db->query($this->sql->Filter($s));
-                $e = $this->db->lastErrorCode();
-                if ($e > 0) {
-                    $this->error[] = array($e, $this->db->lastErrorMsg());
-                }
+                $this->LogsError();
             }
         }
     }
@@ -126,6 +123,7 @@ class Database__SQLite3 implements Database__Interface
         if ($e != 0) {
             trigger_error($e . $this->db->lastErrorMsg(), E_USER_NOTICE);
         }
+        $this->LogsError();
         if (!($results instanceof Sqlite3Result)) {
             return array($results);
         }
@@ -148,7 +146,9 @@ class Database__SQLite3 implements Database__Interface
     public function Update($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return $this->db->query($this->sql->Filter($query));
+        $r = $this->db->query($this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -159,7 +159,9 @@ class Database__SQLite3 implements Database__Interface
     public function Delete($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return $this->db->query($this->sql->Filter($query));
+        $r = $this->db->query($this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -171,7 +173,7 @@ class Database__SQLite3 implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         $this->db->query($this->sql->Filter($query));
-
+        $this->LogsError();
         return $this->db->lastInsertRowID();
     }
 
@@ -212,6 +214,14 @@ class Database__SQLite3 implements Database__Interface
             return true;
         } else {
             return false;
+        }
+    }
+
+    private function LogsError()
+    {
+        $e = $this->db->lastErrorCode();
+        if ($e > 0) {
+            $this->error[] = array($e, $this->db->lastErrorMsg());
         }
     }
 

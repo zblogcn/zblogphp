@@ -120,16 +120,7 @@ class Database__PostgreSQL implements Database__Interface
         $this->dbname = $dbpgsql_name;
 
         $r = @pg_query($this->db, $this->sql->Filter('CREATE DATABASE ' . $dbpgsql_name));
-
-        if (is_resource($r)) {
-            $st = pg_result_status($r);
-            if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
-                $this->error[] = array($st, pg_result_error($r));
-            }
-        } else {
-            $this->error[] = array(PGSQL_BAD_RESPONSE, pg_last_error($this->db));
-        }
-
+        $this->LogsError();
         return true;
     }
 
@@ -163,14 +154,7 @@ class Database__PostgreSQL implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 $r = pg_query($this->db, $this->sql->Filter($s));
-                if (is_resource($r)) {
-                    $st = pg_result_status($r);
-                    if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
-                        $this->error[] = array($st, pg_result_error($r));
-                    }
-                } else {
-                    $this->error[] = array(PGSQL_BAD_RESPONSE, pg_last_error($this->db));
-                }
+                $this->LogsError();
             }
         }
     }
@@ -194,6 +178,7 @@ class Database__PostgreSQL implements Database__Interface
         } else {
             trigger_error(pg_last_error($this->db), E_USER_NOTICE);
         }
+        $this->LogsError();
         $data = array();
         if (is_resource($results)) {
             while ($row = pg_fetch_assoc($results)) {
@@ -216,8 +201,9 @@ class Database__PostgreSQL implements Database__Interface
     public function Update($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        //logs($query);
-        return pg_query($this->db, $this->sql->Filter($query));
+        $r = pg_query($this->db, $this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -230,7 +216,9 @@ class Database__PostgreSQL implements Database__Interface
     public function Delete($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return pg_query($this->db, $this->sql->Filter($query));
+        $r = pg_query($this->db, $this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -244,6 +232,7 @@ class Database__PostgreSQL implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         pg_query($this->db, $this->sql->Filter($query));
+        $this->LogsError();
         $seq = explode(' ', $query);
         $seq = $seq[3];
         $seq = trim($seq);
@@ -301,6 +290,18 @@ class Database__PostgreSQL implements Database__Interface
             return true;
         } else {
             return false;
+        }
+    }
+
+    private function LogsError()
+    {
+        if (is_resource($r)) {
+            $st = pg_result_status($r);
+            if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
+                $this->error[] = array($st, pg_result_error($r));
+            }
+        } else {
+            $this->error[] = array(PGSQL_BAD_RESPONSE, pg_last_error($this->db));
         }
     }
 

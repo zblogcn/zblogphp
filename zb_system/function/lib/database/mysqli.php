@@ -157,6 +157,7 @@ class Database__MySQLi implements Database__Interface
 
         $s = "CREATE DATABASE IF NOT EXISTS {$dbmysql_name} DEFAULT CHARACTER SET {$u}";
         $r = mysqli_query($this->db, $this->sql->Filter($s));
+        $this->LogsError();
         if ($r === false) {
             return false;
         }
@@ -197,10 +198,7 @@ class Database__MySQLi implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 mysqli_query($this->db, $this->sql->Filter($s));
-                $e = mysqli_errno($this->db);
-                if ($e != 0) {
-                    $this->error[] = array($e, mysqli_error($this->db));
-                }
+                $this->LogsError();
             }
         }
     }
@@ -218,6 +216,7 @@ class Database__MySQLi implements Database__Interface
         if ($e != 0) {
             trigger_error($e . mysqli_error($this->db), E_USER_NOTICE);
         }
+        $this->LogsError();
         $data = array();
         if (is_object($results)) {
             while ($row = mysqli_fetch_assoc($results)) {
@@ -251,7 +250,9 @@ class Database__MySQLi implements Database__Interface
     public function Update($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return mysqli_query($this->db, $this->sql->Filter($query));
+        $r = mysqli_query($this->db, $this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -262,7 +263,9 @@ class Database__MySQLi implements Database__Interface
     public function Delete($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return mysqli_query($this->db, $this->sql->Filter($query));
+        $r = mysqli_query($this->db, $this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -274,7 +277,7 @@ class Database__MySQLi implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         mysqli_query($this->db, $this->sql->Filter($query));
-
+        $this->LogsError();
         return mysqli_insert_id($this->db);
     }
 
@@ -303,6 +306,7 @@ class Database__MySQLi implements Database__Interface
     public function ExistTable($table)
     {
         $a = $this->Query($this->sql->ExistTable($table, $this->dbname));
+        $this->LogsError();
         if (!is_array($a)) {
             return false;
         }
@@ -317,6 +321,14 @@ class Database__MySQLi implements Database__Interface
             return true;
         } else {
             return false;
+        }
+    }
+
+    private function LogsError()
+    {
+        $e = mysqli_errno($this->db);
+        if ($e != 0) {
+            $this->error[] = array($e, mysqli_error($this->db));
         }
     }
 

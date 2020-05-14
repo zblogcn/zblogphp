@@ -65,15 +65,25 @@ function updatedb()
         @$db->Query("ALTER TABLE {$table['Category']} ADD  {$d['Category']['Group'][0]} VARCHAR(250) NOT NULL DEFAULT '';");
     }
 
+    //162330
+    $old = @$db->sql->get()->select($t['Member'])->column($d['Member']['CreateTime'][0])->limit(1)->query;
+    if (count($old) == 1 && $old[0] === false) {
+        @$db->Query("ALTER TABLE {$t['Member']} ADD {$d['Member']['CreateTime'][0]} integer NOT NULL DEFAULT 0;");
+    }
+    $old = @$db->sql->get()->select($t['Member'])->column($d['Member']['UpdateTime'][0])->limit(1)->query;
+    if (count($old) == 1 && $old[0] === false) {
+        @$db->Query("ALTER TABLE {$t['Member']} ADD {$d['Member']['UpdateTime'][0]} integer NOT NULL DEFAULT 0;");
+    }
+
     //删除一个长期存在而又无用的索引
     @$db->sql->get()->drop($t['Post'])->index('%pre%log_VTSC')->query;
 
     //ZBlogException::ResumeErrorHook();
-    $zbp->option['ZC_LAST_VERSION'] = 162315;
+    $zbp->option['ZC_LAST_VERSION'] = 162330;
     $zbp->SaveOption();
 }
 
-if ($zbp->version >= 162315 && (int) $zbp->option['ZC_LAST_VERSION'] < 162315) {
+if ($zbp->version >= 162330 && (int) $zbp->option['ZC_LAST_VERSION'] < 162330) {
     updatedb();
 }
 die;

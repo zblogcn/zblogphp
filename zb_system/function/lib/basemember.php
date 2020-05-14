@@ -48,6 +48,9 @@ class BaseMember extends Base
         parent::__construct($zbp->table['Member'], $zbp->datainfo['Member'], __CLASS__);
 
         $this->Name = $zbp->lang['msg']['anonymous'];
+
+        $this->CreateTime = time();
+        $this->UpdateTime = $this->UpdateTime;
     }
 
     /**

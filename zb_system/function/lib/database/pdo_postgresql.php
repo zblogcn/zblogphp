@@ -108,12 +108,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
         $db_link->query("SET client_encoding='UTF-8';");
 
         $r = $this->db->exec($this->sql->Filter('CREATE DATABASE ' . $dbpgsql_name));
-
-        $e = $this->db->errorCode();
-        if ($e > 0) {
-            $this->error[] = array($e, $this->db->errorInfo());
-        }
-
+        $this->LogsError();
         return true;
     }
 
@@ -145,10 +140,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 $this->db->exec($this->sql->Filter($s));
-                $e = $this->db->errorCode();
-                if ($e > 0) {
-                    $this->error[] = array($e, $this->db->errorInfo());
-                }
+                $this->LogsError();
             }
         }
     }
@@ -167,6 +159,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
         if ($e > 0) {
             trigger_error(implode(' ', $this->db->errorInfo()), E_USER_NOTICE);
         }
+        $this->LogsError();
         //fetch || fetchAll
         if (is_object($results)) {
             return $results->fetchAll();
@@ -183,7 +176,9 @@ class Database__PDO_PostgreSQL implements Database__Interface
     public function Update($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return $this->db->query($this->sql->Filter($query));
+        $r = $this->db->query($this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -194,7 +189,9 @@ class Database__PDO_PostgreSQL implements Database__Interface
     public function Delete($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return $this->db->query($this->sql->Filter($query));
+        $r = $this->db->query($this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -206,10 +203,10 @@ class Database__PDO_PostgreSQL implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         $this->db->query($this->sql->Filter($query));
+        $this->LogsError();
         $seq = explode(' ', $query, 4);
         $seq = $seq[2] . '_seq';
         $id = $this->db->lastInsertId($seq);
-
         return $id;
     }
 
@@ -252,6 +249,14 @@ class Database__PDO_PostgreSQL implements Database__Interface
             return true;
         } else {
             return false;
+        }
+    }
+
+    private function LogsError()
+    {
+        $e = $this->db->errorCode();
+        if ($e > 0) {
+            $this->error[] = array($e, $this->db->errorInfo());
         }
     }
 

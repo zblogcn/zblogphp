@@ -132,8 +132,17 @@ class ValidateCode
         global $zbp;
         $this->font = $zbp->path . (isset($zbp->option['ZC_VERIFYCODE_FONT']) ? $zbp->option['ZC_VERIFYCODE_FONT'] : 'zb_system/defend/arial.ttf');
         $this->charset = $zbp->option['ZC_VERIFYCODE_STRING'];
+        if ($this->charset == null) {
+            $this->charset = 'ABCDEFGHKMNPRSTUVWXYZ123456789';
+        }
         $this->width = $zbp->option['ZC_VERIFYCODE_WIDTH'];
+        if ($this->width == 0) {
+            $this->width = 90;
+        }
         $this->height = $zbp->option['ZC_VERIFYCODE_HEIGHT'];
+        if ($this->height == 0) {
+            $this->height = 30;
+        }
     }
 
     /**
@@ -148,7 +157,11 @@ class ValidateCode
         }
         $_len = (strlen($this->charset) - 1);
         for ($i = 0; $i < $this->codelen; $i++) {
-            $this->phrase .= $this->charset[mt_rand(0, $_len)];
+            if (function_exists('mt_rand')) {
+                $this->phrase .= $this->charset[mt_rand(0, $_len)];
+            } else {
+                $this->phrase .= $this->charset[rand(0, $_len)];
+            }
         }
     }
 

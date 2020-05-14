@@ -379,7 +379,7 @@ class Base
 
         $keys = array();
         foreach ($this->datainfo as $key => $value) {
-            if (!is_array($value) || count($value) != 4) {
+            if (!is_array($value) || count($value) < 4) {
                 continue;
             }
 
@@ -388,7 +388,7 @@ class Base
         $keyvalue = array_fill_keys($keys, '');
 
         foreach ($this->datainfo as $key => $value) {
-            if (!is_array($value) || count($value) != 4) {
+            if (!is_array($value) || count($value) < 4) {
                 continue;
             }
 

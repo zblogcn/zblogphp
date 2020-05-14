@@ -104,10 +104,7 @@ class Database__SQLite implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 sqlite_query($this->db, $this->sql->Filter($s));
-                $e = sqlite_last_error($this->db);
-                if ($e != 0) {
-                    $this->error[] = array($e, sqlite_error_string($e));
-                }
+                $this->LogsError();
             }
         }
     }
@@ -126,6 +123,7 @@ class Database__SQLite implements Database__Interface
         if ($e != 0) {
             trigger_error($e . sqlite_error_string($e), E_USER_NOTICE);
         }
+        $this->LogsError();
         $data = array();
         if (is_resource($results)) {
             while ($row = sqlite_fetch_array($results)) {
@@ -146,7 +144,9 @@ class Database__SQLite implements Database__Interface
     public function Update($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return sqlite_query($this->db, $this->sql->Filter($query));
+        $r = sqlite_query($this->db, $this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -157,7 +157,9 @@ class Database__SQLite implements Database__Interface
     public function Delete($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return sqlite_query($this->db, $this->sql->Filter($query));
+        $r = sqlite_query($this->db, $this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -168,6 +170,7 @@ class Database__SQLite implements Database__Interface
     public function Insert($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
+        $this->LogsError();
         sqlite_query($this->db, $this->sql->Filter($query));
 
         return sqlite_last_insert_rowid($this->db);
@@ -212,6 +215,14 @@ class Database__SQLite implements Database__Interface
             return true;
         } else {
             return false;
+        }
+    }
+
+    private function LogsError()
+    {
+        $e = sqlite_last_error($this->db);
+        if ($e != 0) {
+            $this->error[] = array($e, sqlite_error_string($e));
         }
     }
 

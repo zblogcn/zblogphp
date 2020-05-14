@@ -144,6 +144,7 @@ class Database__PDO_MySQL implements Database__Interface
 
         $s = "CREATE DATABASE IF NOT EXISTS {$dbmysql_name} DEFAULT CHARACTER SET {$u}";
         $r = $this->db->exec($this->sql->Filter($s));
+        $this->LogsError();
         if ($r === false) {
             return false;
         }
@@ -179,10 +180,7 @@ class Database__PDO_MySQL implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 $this->db->exec($this->sql->Filter($s));
-                $e = $this->db->errorCode();
-                if ($e > 0) {
-                    $this->error[] = array($e, $this->db->errorInfo());
-                }
+                $this->LogsError();
             }
         }
     }
@@ -201,7 +199,7 @@ class Database__PDO_MySQL implements Database__Interface
         if ($e > 0) {
             trigger_error(implode(' ', $this->db->errorInfo()), E_USER_NOTICE);
         }
-
+        $this->LogsError();
         //fetch || fetchAll
         if (is_object($results)) {
             //if(true==true){
@@ -228,7 +226,9 @@ class Database__PDO_MySQL implements Database__Interface
     public function Update($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return $this->db->query($this->sql->Filter($query));
+        $r = $this->db->query($this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -239,7 +239,9 @@ class Database__PDO_MySQL implements Database__Interface
     public function Delete($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return $this->db->query($this->sql->Filter($query));
+        $r = $this->db->query($this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -251,7 +253,7 @@ class Database__PDO_MySQL implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         $this->db->exec($this->sql->Filter($query));
-
+        $this->LogsError();
         return $this->db->lastInsertId();
     }
 
@@ -294,6 +296,14 @@ class Database__PDO_MySQL implements Database__Interface
             return true;
         } else {
             return false;
+        }
+    }
+
+    private function LogsError()
+    {
+        $e = $this->db->errorCode();
+        if ($e > 0) {
+            $this->error[] = array($e, $this->db->errorInfo());
         }
     }
 

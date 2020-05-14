@@ -114,10 +114,7 @@ class Database__PDO_SQLite implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 $this->db->exec($this->sql->Filter($s));
-                $e = trim($this->db->errorCode(), '0');
-                if ($e != null) {
-                    $this->error[] = array($e, $this->db->errorInfo());
-                }
+                $this->LogsError();
             }
         }
     }
@@ -136,6 +133,7 @@ class Database__PDO_SQLite implements Database__Interface
         if ($e != null) {
             trigger_error(implode(' ', $this->db->errorInfo()), E_USER_NOTICE);
         }
+        $this->LogsError();
         //fetch || fetchAll
         if (is_object($results)) {
             return $results->fetchAll();
@@ -152,7 +150,9 @@ class Database__PDO_SQLite implements Database__Interface
     public function Update($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return $this->db->query($this->sql->Filter($query));
+        $r = $this->db->query($this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -163,7 +163,9 @@ class Database__PDO_SQLite implements Database__Interface
     public function Delete($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return $this->db->query($this->sql->Filter($query));
+        $r = $this->db->query($this->sql->Filter($query));
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -175,7 +177,7 @@ class Database__PDO_SQLite implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         $this->db->exec($this->sql->Filter($query));
-
+        $this->LogsError();
         return $this->db->lastInsertId();
     }
 
@@ -218,6 +220,14 @@ class Database__PDO_SQLite implements Database__Interface
             return true;
         } else {
             return false;
+        }
+    }
+
+    private function LogsError()
+    {
+        $e = trim($this->db->errorCode(), '0');
+        if ($e != null) {
+            $this->error[] = array($e, $this->db->errorInfo());
         }
     }
 

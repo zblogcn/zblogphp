@@ -164,6 +164,7 @@ class Database__MySQL implements Database__Interface
 
         $s = "CREATE DATABASE IF NOT EXISTS {$dbmysql_name} DEFAULT CHARACTER SET {$u}";
         $r = mysql_query($this->sql->Filter($s), $this->db);
+        $this->LogsError();
         if ($r === false) {
             return false;
         }
@@ -202,10 +203,7 @@ class Database__MySQL implements Database__Interface
             $s = trim($s);
             if ($s != '') {
                 mysql_query($this->sql->Filter($s), $this->db);
-                $e = mysql_errno($this->db);
-                if ($e != 0) {
-                    $this->error[] = array($e, mysql_error($this->db));
-                }
+                $this->LogsError();
             }
         }
     }
@@ -225,7 +223,7 @@ class Database__MySQL implements Database__Interface
         if ($e != 0) {
             trigger_error($e . mysql_error($this->db), E_USER_NOTICE);
         }
-
+        $this->LogsError();
         $data = array();
         if (is_resource($results)) {
             while ($row = mysql_fetch_assoc($results)) {
@@ -261,7 +259,9 @@ class Database__MySQL implements Database__Interface
     public function Update($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return mysql_query($this->sql->Filter($query), $this->db);
+        $r = mysql_query($this->sql->Filter($query), $this->db);
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -274,7 +274,9 @@ class Database__MySQL implements Database__Interface
     public function Delete($query)
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
-        return mysql_query($this->sql->Filter($query), $this->db);
+        $r = mysql_query($this->sql->Filter($query), $this->db);
+        $this->LogsError();
+        return $r;
     }
 
     /**
@@ -288,7 +290,7 @@ class Database__MySQL implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         mysql_query($this->sql->Filter($query), $this->db);
-
+        $this->LogsError();
         return mysql_insert_id($this->db);
     }
 
@@ -337,6 +339,14 @@ class Database__MySQL implements Database__Interface
             return true;
         } else {
             return false;
+        }
+    }
+
+    private function LogsError()
+    {
+        $e = mysql_errno($this->db);
+        if ($e != 0) {
+            $this->error[] = array($e, mysql_error($this->db));
         }
     }
 

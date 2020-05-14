@@ -299,7 +299,7 @@ class Network__fsockopen implements Network__Interface
             }
         }
 
-        if (isset($this->responseHeader[0])) {
+        if (is_array($this->responseHeader) && isset($this->responseHeader[0])) {
             $this->statusText = $this->responseHeader[0];
             $a = explode(' ', $this->statusText);
             if (isset($a[0])) {

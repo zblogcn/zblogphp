@@ -397,9 +397,8 @@ function RemoveMoreSpaces($s)
  */
 function GetGuid()
 {
-    $s = str_replace('.', '', trim(uniqid('zbp', true), 'zbp'));
-
-    return $s;
+    $charid = strtolower(md5(uniqid(mt_rand(), true)));
+    return $charid;
 }
 
 /**

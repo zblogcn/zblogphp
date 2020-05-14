@@ -8,7 +8,7 @@
 require '../function/c_system_base.php';
 
 ob_clean();
-// @TODO: Configuable
+
 ?>
 var zbpConfig = {
     bloghost: "<?php echo $zbp->host; ?>",

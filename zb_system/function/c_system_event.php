@@ -496,6 +496,7 @@ function ViewSearch()
     if (!($zbp->CheckRights('ArticleAll') && $zbp->CheckRights('PageAll'))) {
         $w[] = array('=', 'log_Status', 0);
     }
+    $order = array('log_PostTime' => 'DESC');
 
     $pagebar = new Pagebar($zbp->option['ZC_SEARCH_REGEX'], true);
     $pagebar->PageCount = $zbp->searchcount;
@@ -505,13 +506,13 @@ function ViewSearch()
     $pagebar->UrlRule->Rules['{%q%}'] = rawurlencode($q);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewSearch_Core'] as $fpname => &$fpsignal) {
-        $fpname($q, $page, $w, $pagebar);
+        $fpname($q, $page, $w, $pagebar, $order);
     }
 
     $array = $zbp->GetArticleList(
         '',
         $w,
-        array('log_PostTime' => 'DESC'),
+        $order,
         array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
         array('pagebar' => $pagebar),
         false
