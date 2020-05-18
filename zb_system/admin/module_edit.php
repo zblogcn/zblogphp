@@ -3,7 +3,7 @@
 /**
  * Z-Blog with PHP.
  *
- * @author Z-BlogPHP Team
+ * @author  Z-BlogPHP Team
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';
@@ -188,7 +188,7 @@ if ($mod->Source == 'theme') {
 
                 <input type="submit" class="button" value="<?php echo $lang['msg']['submit']; ?>" id="btnPost" onclick="return checkInfo();" /></p>
         </form>
-        <script type="text/javascript">
+        <script>
             function checkInfo() {
                 document.getElementById("edit").action = "<?php echo BuildSafeCmdURL('act=ModulePst'); ?>";
 
@@ -206,10 +206,10 @@ if ($mod->Source == 'theme') {
                 }
             }
         </script>
-        <script type="text/javascript">
+        <script>
             ActiveLeftMenu("aModuleMng");
         </script>
-        <script type="text/javascript">
+        <script>
             AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/link_32.png'; ?>");
         </script>
     </div>

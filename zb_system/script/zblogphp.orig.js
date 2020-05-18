@@ -5,7 +5,6 @@
 (function () {
   var SYSTEM_DEFAULT_EVENT_NAME = 'system-default'
   var deprecatedEvents = [ // then it will be concated by deprecatedMappings
-    'comment.verifydata',
     'comment.postsuccess',
     'comment.posterror'
   ]

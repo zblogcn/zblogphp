@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project title="API Documentation" version="v2.9.0">
+  <partials/>
+  <file path="c_system_debug.php" generated-path="c_system_debug.html" hash="b980f8d3cb750659aa749fdc05b3ef6b" package="Default">
+    <docblock line="0">
+      <description>错误调试.</description>
+      <long-description></long-description>
+      <tag name="package" line="0" description="Default"/>
+    </docblock>
+    <function namespace="" line="17" package="Default">
+      <name>Debug_PrintGlobals</name>
+      <full_name>\Debug_PrintGlobals()</full_name>
+      <docblock line="17">
+        <description>显示全局变量.(下版转到debug页,虽然还没有做，但加了todo检查会报错)</description>
+        <long-description></long-description>
+        <tag name="package" line="17" description="Default"/>
+        <tag name="return" line="17" description="" type="mixed">
+          <type>mixed</type>
+        </tag>
+        <tag name="since" line="17" description="1.3.140614"/>
+      </docblock>
+    </function>
+    <function namespace="" line="34" package="Default">
+      <name>Debug_PrintIncludefiles</name>
+      <full_name>\Debug_PrintIncludefiles()</full_name>
+      <docblock line="34">
+        <description>打印全局Include文件.(下版转到debug页,虽然还没有做，但加了todo检查会报错)</description>
+        <long-description></long-description>
+        <tag name="package" line="34" description="Default"/>
+        <tag name="return" line="34" description="" type="string">
+          <type>string</type>
+        </tag>
+        <tag name="since" line="34" description="1.3"/>
+      </docblock>
+    </function>
+    <function namespace="" line="51" package="Default">
+      <name>Debug_PrintConstants</name>
+      <full_name>\Debug_PrintConstants()</full_name>
+      <docblock line="51">
+        <description>打印全局自定义常量.(下版转到debug页,虽然还没有做，但加了todo检查会报错)</description>
+        <long-description></long-description>
+        <tag name="package" line="51" description="Default"/>
+        <tag name="return" line="51" description="" type="string">
+          <type>string</type>
+        </tag>
+        <tag name="since" line="51" description="1.3"/>
+      </docblock>
+    </function>
+    <function namespace="" line="68" package="Default">
+      <name>Debug_IgnoreError</name>
+      <full_name>\Debug_IgnoreError()</full_name>
+      <docblock line="68">
+        <description>Return true if a error can be ignored.</description>
+        <long-description></long-description>
+        <tag name="package" line="68" description="Default"/>
+        <tag name="param" line="68" description="" type="integer" variable="$errno">
+          <type>integer</type>
+        </tag>
+        <tag name="return" line="68" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$errno</name>
+        <default></default>
+        <type>integer</type>
+      </argument>
+    </function>
+    <function namespace="" line="130" package="Default">
+      <name>Debug_Error_Handler</name>
+      <full_name>\Debug_Error_Handler()</full_name>
+      <docblock line="130">
+        <description>错误调度提示.</description>
+        <long-description></long-description>
+        <tag name="package" line="130" description="Default"/>
+        <tag name="param" line="130" description="&lt;p&gt;错误级别&lt;/p&gt;" type="integer" variable="$errno">
+          <type>integer</type>
+        </tag>
+        <tag name="param" line="130" description="&lt;p&gt;错误信息&lt;/p&gt;" type="string" variable="$errstr">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="130" description="&lt;p&gt;错误文件名&lt;/p&gt;" type="string" variable="$errfile">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="130" description="&lt;p&gt;错误行&lt;/p&gt;" type="integer" variable="$errline">
+          <type>integer</type>
+        </tag>
+        <tag name="return" line="130" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$errno</name>
+        <default></default>
+        <type>integer</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$errstr</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$errfile</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$errline</name>
+        <default></default>
+        <type>integer</type>
+      </argument>
+    </function>
+    <function namespace="" line="170" package="Default">
+      <name>Debug_Exception_Handler</name>
+      <full_name>\Debug_Exception_Handler()</full_name>
+      <docblock line="170">
+        <description>异常处理.</description>
+        <long-description></long-description>
+        <tag name="package" line="170" description="Default"/>
+        <tag name="param" line="170" description="&lt;p&gt;异常事件&lt;/p&gt;" type="\Exception" variable="$exception">
+          <type>\Exception</type>
+        </tag>
+        <tag name="return" line="170" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$exception</name>
+        <default></default>
+        <type>\Exception</type>
+      </argument>
+    </function>
+    <function namespace="" line="207" package="Default">
+      <name>Debug_Shutdown_Handler</name>
+      <full_name>\Debug_Shutdown_Handler()</full_name>
+      <docblock line="207">
+        <description>当机错误处理.</description>
+        <long-description></long-description>
+        <tag name="package" line="207" description="Default"/>
+        <tag name="return" line="207" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="240" package="Default">
+      <name>Debug_DoNothing</name>
+      <full_name>\Debug_DoNothing()</full_name>
+      <docblock line="240">
+        <description>Debug DoNothing</description>
+        <long-description></long-description>
+        <tag name="package" line="240" description="Default"/>
+      </docblock>
+    </function>
+    <class final="false" abstract="false" namespace="" line="248" package="Default">
+      <extends/>
+      <name>ZBlogException</name>
+      <full_name>\ZBlogException</full_name>
+      <docblock line="248">
+        <description>Class ZBlogException.</description>
+        <long-description></long-description>
+        <tag name="package" line="248" description="Default"/>
+      </docblock>
+      <property static="true" visibility="private" namespace="" line="254" package="Default">
+        <name>$private_zbe</name>
+        <full_name>\ZBlogException::private_zbe</full_name>
+        <default>null</default>
+        <docblock line="254">
+          <description>静态zbe</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="true" visibility="public" namespace="" line="259" package="Default">
+        <name>$disabled</name>
+        <full_name>\ZBlogException::disabled</full_name>
+        <default>false</default>
+        <docblock line="259">
+          <description>静态disabled</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="true" visibility="public" namespace="" line="264" package="Default">
+        <name>$isstrict</name>
+        <full_name>\ZBlogException::isstrict</full_name>
+        <default>false</default>
+        <docblock line="264">
+          <description>静态isstrict</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="true" visibility="public" namespace="" line="269" package="Default">
+        <name>$iswarning</name>
+        <full_name>\ZBlogException::iswarning</full_name>
+        <default>true</default>
+        <docblock line="269">
+          <description>静态iswarning</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="true" visibility="public" namespace="" line="274" package="Default">
+        <name>$error_id</name>
+        <full_name>\ZBlogException::error_id</full_name>
+        <default>0</default>
+        <docblock line="274">
+          <description>静态error_id</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="true" visibility="public" namespace="" line="279" package="Default">
+        <name>$error_file</name>
+        <full_name>\ZBlogException::error_file</full_name>
+        <default>null</default>
+        <docblock line="279">
+          <description>静态error_file</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="true" visibility="public" namespace="" line="284" package="Default">
+        <name>$error_line</name>
+        <full_name>\ZBlogException::error_line</full_name>
+        <default>null</default>
+        <docblock line="284">
+          <description>静态error_line</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="true" visibility="public" namespace="" line="289" package="Default">
+        <name>$islogerror</name>
+        <full_name>\ZBlogException::islogerror</full_name>
+        <default>false</default>
+        <docblock line="289">
+          <description>静态islogerror</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="true" visibility="public" namespace="" line="294" package="Default">
+        <name>$errors_msg</name>
+        <full_name>\ZBlogException::errors_msg</full_name>
+        <default>array()</default>
+        <docblock line="294">
+          <description>静态errors_msg</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="" line="299" package="Default">
+        <name>$type</name>
+        <full_name>\ZBlogException::type</full_name>
+        <default></default>
+        <docblock line="299">
+          <description>类型</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="" line="304" package="Default">
+        <name>$message</name>
+        <full_name>\ZBlogException::message</full_name>
+        <default></default>
+        <docblock line="304">
+          <description>消息</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="" line="309" package="Default">
+        <name>$messagefull</name>
+        <full_name>\ZBlogException::messagefull</full_name>
+        <default></default>
+        <docblock line="309">
+          <description>完全消息</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="" line="314" package="Default">
+        <name>$file</name>
+        <full_name>\ZBlogException::file</full_name>
+        <default></default>
+        <docblock line="314">
+          <description>文件</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="" line="319" package="Default">
+        <name>$line</name>
+        <full_name>\ZBlogException::line</full_name>
+        <default></default>
+        <docblock line="319">
+          <description>行号</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="" line="324" package="Default">
+        <name>$errarray</name>
+        <full_name>\ZBlogException::errarray</full_name>
+        <default>array()</default>
+        <docblock line="324">
+          <description>错误数组</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="329" package="Default">
+        <name>__construct</name>
+        <full_name>\ZBlogException::__construct()</full_name>
+        <docblock line="329">
+          <description>构造函数，定义常见错误代码</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="359" package="Default">
+        <name>__get</name>
+        <full_name>\ZBlogException::__get()</full_name>
+        <docblock line="359">
+          <description>获取参数.</description>
+          <long-description></long-description>
+          <tag name="param" line="359" description="" type="" variable="$name"/>
+          <tag name="return" line="359" description="" type="mixed">
+            <type>mixed</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="" line="375" package="Default">
+        <name>GetInstance</name>
+        <full_name>\ZBlogException::GetInstance()</full_name>
+        <docblock line="375">
+          <description>获取单一实例.</description>
+          <long-description></long-description>
+          <tag name="return" line="375" description="" type="\ZBlogException">
+            <type>\ZBlogException</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="" line="387" package="Default">
+        <name>SetErrorHook</name>
+        <full_name>\ZBlogException::SetErrorHook()</full_name>
+        <docblock line="387">
+          <description>设定错误处理函数.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="" line="400" package="Default">
+        <name>ClearErrorHook</name>
+        <full_name>\ZBlogException::ClearErrorHook()</full_name>
+        <docblock line="400">
+          <description>清除注册的错误处理程序.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="" line="410" package="Default">
+        <name>EnableErrorHook</name>
+        <full_name>\ZBlogException::EnableErrorHook()</full_name>
+        <docblock line="410">
+          <description>启用错误调度.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="" line="418" package="Default">
+        <name>DisableErrorHook</name>
+        <full_name>\ZBlogException::DisableErrorHook()</full_name>
+        <docblock line="418">
+          <description>禁止错误调度.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="" line="426" package="Default">
+        <name>SuspendErrorHook</name>
+        <full_name>\ZBlogException::SuspendErrorHook()</full_name>
+        <docblock line="426">
+          <description>暂停错误调度.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="" line="434" package="Default">
+        <name>ResumeErrorHook</name>
+        <full_name>\ZBlogException::ResumeErrorHook()</full_name>
+        <docblock line="434">
+          <description>恢复错误调度.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="" line="442" package="Default">
+        <name>DisableStrict</name>
+        <full_name>\ZBlogException::DisableStrict()</full_name>
+        <docblock line="442">
+          <description>禁用严格模式.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="" line="450" package="Default">
+        <name>EnableStrict</name>
+        <full_name>\ZBlogException::EnableStrict()</full_name>
+        <docblock line="450">
+          <description>启用严格模式.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="" line="458" package="Default">
+        <name>DisableWarning</name>
+        <full_name>\ZBlogException::DisableWarning()</full_name>
+        <docblock line="458">
+          <description>禁用警告模式.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="" line="466" package="Default">
+        <name>EnableWarning</name>
+        <full_name>\ZBlogException::EnableWarning()</full_name>
+        <docblock line="466">
+          <description>启用警告模式.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="" line="476" package="Default">
+        <name>Trace</name>
+        <full_name>\ZBlogException::Trace()</full_name>
+        <docblock line="476">
+          <description>Trace记录错误.</description>
+          <long-description></long-description>
+          <tag name="param" line="476" description="" type="string" variable="$s">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$s</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="489" package="Default">
+        <name>ParseError</name>
+        <full_name>\ZBlogException::ParseError()</full_name>
+        <docblock line="489">
+          <description>解析错误信息.</description>
+          <long-description></long-description>
+          <tag name="param" line="489" description="" type="" variable="$type"/>
+          <tag name="param" line="489" description="" type="" variable="$message"/>
+          <tag name="param" line="489" description="" type="" variable="$file"/>
+          <tag name="param" line="489" description="" type="" variable="$line"/>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$type</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$message</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$file</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$line</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="503" package="Default">
+        <name>ParseShutdown</name>
+        <full_name>\ZBlogException::ParseShutdown()</full_name>
+        <docblock line="503">
+          <description>解析错误信息.</description>
+          <long-description></long-description>
+          <tag name="param" line="503" description="" type="" variable="$error"/>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$error</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="517" package="Default">
+        <name>ParseException</name>
+        <full_name>\ZBlogException::ParseException()</full_name>
+        <docblock line="517">
+          <description>解析异常信息.</description>
+          <long-description></long-description>
+          <tag name="param" line="517" description="" type="\Exception" variable="$exception">
+            <type>\Exception</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$exception</name>
+          <default></default>
+          <type>\Exception</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="537" package="Default">
+        <name>Display</name>
+        <full_name>\ZBlogException::Display()</full_name>
+        <docblock line="537">
+          <description>输出错误信息.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="573" package="Default">
+        <name>get_code</name>
+        <full_name>\ZBlogException::get_code()</full_name>
+        <docblock line="573">
+          <description>获取出错代码信息.</description>
+          <long-description></long-description>
+          <tag name="param" line="573" description="" type="" variable="$file"/>
+          <tag name="param" line="573" description="" type="" variable="$line"/>
+          <tag name="return" line="573" description="" type="array">
+            <type>array</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$file</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$line</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="" line="597" package="Default">
+        <name>possible_causes_of_the_error</name>
+        <full_name>\ZBlogException::possible_causes_of_the_error()</full_name>
+        <docblock line="597">
+          <description>得到可能的错误原因.</description>
+          <long-description></long-description>
+          <tag name="return" line="597" description="" type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </method>
+    </class>
+    <source>eJzFW+tzE0cS/04V/8NSpbASJyTbGI6EM4mxBXadsV2ySa7iopa1tJK2WO+qdlc8kkoVTgDzckwqkAOSA5wAceVhO8kdcYxN/hmvJH/Kv3A9M/uefcmBO30g1kx3T8+vp3u6e5S/vV2v1Xfvyu/bt3sXs4/ZvnO/vbLSXv2kvXI3h0byu3ft3iVWmPSeslARZaGcZt8/Ns6N908OsZkM8yHQwEe4IOpptr9UEjSNKQuyKJTZzJHduz5C3Jbs5r2XrSfrxpUl46dLxsK97bmFXHpr7Wbr+rX25g/GtdWyMN2obi/+J9u+v9m6/Lz9+73mz4vNr64bsw/+2Li1tXnVuPF4a/2qrpSV5jeXmo+ebm08aN54CipnkHy8xjuqoDdUmZkRLwhlZ1QT5ZLAdOcO5Lp7uw5195o7qzTkki4qMjOIlubGVVHWT0jKNC9paZBpbi7FM30Mr6r8xTTaExqqKKrAl2pMOnViZOxY/8gEw2tMSmb6jjKpczYqhHnqNLCnZJMTI4L+MBUt8ZLENTRB5ZAyabaOdOBUNgucWUZXGwKFI9O8/rkxv0qAHJZLUqMsNL+Y23rx/PXhqemgVzUA0AgkTdUqoiQkhbMq6JxI2MqcyRgL7bnXBG177jtj+cHWb9eNtbXXelh3Au6AIms6L+sUsghC01W5kk1k7RaRIW8WNU3Q04AgiwBiT2d8yCJc7clXh2+RcKI5pAbPCKqqqCBJZqZhpCrDQSjnHCTqvMrPMCCWSQGlrFDQTSuKFIzSMBZWQPLThNkBCiHw/jFJqRYulIQ6YnrrrZSonedVGQzB9PUxFQgBggcTxEPkoPkC915/cXR49ISHxgUO2uIRZ8bGLkjUqYlCsXN5rv+E7Aedq5KebDsTk8XhgclXsZvRscnhgcIrw6VTcR6p+Txj/LTQvrPZ+uVF68Wj1oPL5IIDF92+9zNcZOCS9NTW2nz797mt3x4hf15YaX+yaaxstOf+DfTG1StAOVgYLxYG+icLg4QHSNtff09WAqd3jOLezcBYMfjU0Fux9adlnBwfHtmRGPv6LnCO+myG2buXca/gzO1QODZa1Ao+gqTL5PMma6FYHCs6YyBm7N1Csf8YwGJOBeiFchY8O14cGyhMTAB4bCbp0uYUdiJ/RLMTJmP9WXPhNiQ4geELPiYGjMnSWv/WuPa9m45cA5gO/rTotn5fbM6uhNChK9KkIxmAcXs+ZGkJgLC0XbzVQSDFIZQb4uWyJFihNGtpmbXVyNqrOHGWikk43GvcjFbFVzfJApKIdF1dlNCyqPHTklBGxwvfOgnNSiVxU2xNUc5q7Okp9rgo6XCxjUuNqihzBAgTAvY0zkgqdZmfEVBashf+1uDu4iXvJVqpm4v3WdTgHwgAuCGT7zzjVzvFgRfAiZ9iOQwn3PINWWcRnunQub8w3UhQ5HUBA+Q6DsJxRKlq6XO8ygkX6oqqp8kG7P0k2YmZEzipgc+/32n98MxY+NWOxM0bnxnXnhs3HkEAhkFj+WHr01VnB2SDqoDUAX+ARBH07uokaoUmCkmFpD6ArKWPOuYnBMh9UeJVEuwUF5HuPzrOq5pnqUSnnvAOilpdMpNmT1wyNfOEJWPjY8hajSeXW7evUgHJVhVWsv8kHFvrNyGKdBIdLAGuCGENdR4ILIr9RyGNHVDKgF+W8Q2fhBqTrwbNgNMGDY8AlOnMKw4h/7cAYmnNuvf5vw8SdHDw5meuUOGdQB9ibnocfdw7DKZIfB5CDlDkMQlYM2gMHQbvqJ/KS0EbaGehw6JM07bfSZTY/Lz51TqJtlSsiHX9iVpDLyvnHc/3Flgp8zIhNR6H6lKJ1/S0N7omTxEUdYrVL9YF9jSJkOj7DLG9ewiFUPd3FEihvnUVCZ1HABpGa9RTv7zmeICNHBQTLEOw1q4zYRr++bAQCmBIaECfkNyBUvvP2DcwuaD2H37rO6tndmL6DtzZ59IWCmnadLRHe9aNcGy8R2ZQGVX0mtlaov3XnnY5blSpMwDuq/m2aPWISwFzWKiZ3GER6AMV07/uNy/NwtaskTz5o66K53hdgPKG18USkzK/cwRZuSFJR8LFWe7rl9mYlkCWJdJxcnuHYQKt7km0QKfHkkCg2V6Kk2h3oSzLhkkkXirG7NmiAnldscKQcyURh+vOWKMQWuSgSWTiAjVWphNm4nB0yplY2zh3TgJFMZ2nhU2Lbf30wnh4M1hYCoWZQK7m82uk1A/iMkNhIKOxfMu4spSEvRKGLmkfhDAjcwdytRdvQcUWwoUMGgw6Ke/urrZeXA7hBaQxvjE4Nx9e3r702JjbBGF/bNyy2/Xtb2fN7smLb1qPZ4MXscMhRxrlaqOko1CISNxpOMRIbf9RSiPvHdGF/4XLmz01+vfRsfdG/dlrt01g9qn8BD0uArO/5yfpdZGM9xcnCn6Cwy4C0jil1DjkUOCOZKAuB3p8VCEKHep105HeZKDA7p7DFGGIzJ6Dh2xSp+HnpzrY3eOlCpHW3dXT66ELhqWnq/ewRUZa4RT2XW8esiioniNlh+43eyxiVy+UssWBw71u3cJJD3T9tftNk7R/ZMQ9TXdS3A766a/GwhfGwsfgIDlr1J41+wEplEbSk76nVDwa6kFV9JyE5NAOhIsBktv2MTjJGoUvLJVmud6lvC43ZX5HrAHpGfqYukYxHvFyfcQIcCl0IKuLkuDJBeNMMH93a+2Ssfxw6+XNAEOYa/oTqCDQzcvIxt6TYwaCv4egqglSBRJ1V15FY0nToCtZOI8n0qF5tfWQSXFHns3llxCw3dUnCeS5ZPueEHScvg9BiRWy8eEJbmBkOCSfp5+NCAC6Wf7UzKqWDWiDs24kMIvdBvOz+ftjHlZVqIoaqgs1q5a2tmfx+4tsNtLdm2tXtu8/af6yZFy9ZfdRCbatpZvG+kJCbAckgVej0A2FyS4qkkMUzBIPDc0XiIlxe6V1Z8n9TpMQhIKMioVoFPB5DygrQrVpPZtt/vj1DrQZJIt0pk7gQ5r7vDz42Jj9agfaTDS0uiCX47Wh1Y7UZ/Zr48n8DvQpClpjJgE4lE1jbAUnZ2vtafPxRnNp0dhI6j7mpidwbRhuqIDqMeYU70AXsuMOVIk7MwSV9o/PjM9u7ASV90h9G6WLUwInxGUH2hBcOlImDplJlS8J7eVVY/MuOcKhGZf1hKsl0xULTqc0WkvcWoOJyHv222+aD2+7X5PDM0GUKVGDZu1Ijbu7BfZgeLlvb8f9CoYWzNpLZInQLBETWoshJtQANStp36wpCxE4RXMwDSqHXXRMjmGZNHW3ZRiWlmC2QKza2DdrNjOsGviV2Cai6+GF1t9SjIPR0/6MxNPflo0F1s9AEA6/2yOh9nSAwzH3NIbjwTcfPqPBD3oyTXTKgx5swuzhBjr4iSse72A+18H2Z2GBiNsnI+A9LcI+Ac9sEWYKeH2jnhnMKOzqOu7pIz1C+mnEowzFGPUk4CHG+sWtYm6CYqSLiuCT9/JzY2490O1DTpP9CkAdHlzh1QS+LKgapwmy/4UNfYZ0vX6wq8tjDvRRprkSpPpyeGVnv+LhjXvs0+lzl7mFDp+7yAwoMD5y6sTwKFf4x/DkxPCJ0f4RbnRstHCEYqDex+iHFQs2l/gg+cXC5KniaGS/wVousjXgshX5bTNTFlWsGscdR50wDjtoPpfLl4UKpNV5rHGuXqu7fbPYkCfFGb+X5Pe5lt7HnDlTkRpaLZ05c4YBB4fv+Lf5BAPkwGhC1JDxmKGhd0/mPNzvwBk+y9TgtGhv5fNVUa81pnMlZSb/wbSkVEsy+S/olYeEsSFo+QM9bv6863AQLVzqYz26k3SrsGeQzm3cnRibgjiTpslwMyfG2dBbdQkFu+hsBIcOXS3xmlCaqVvE7Cn5rIyeNQN+kOQ6Ot5fwNMnhfRtOHCxMkpUifTQt8kYaSn+OAmLmI7TYLdCGgk0xWaZGf5CuisLLoEj237mYAYGu7vo91TH64lM8OW9KW2Q13lKt3x+bwrWPHaxKFR8booZYK6mz0hQSZZEXirV4MJMm6JiGk1k7ci64OU/jWur5Ne7Tifk00fGl4/D22/2D/GjDkdd0TQRLMKV+IYmaJxS4fSaQDLGgPBcxf8/CRwhXq4eoYeRP9UUTXffkyoUsxIqxVi3+1MXlViGayrggOXzDDhPe3Hp/f2onTg+NN6e+669/n3zxpfgWjYYdDg0m69I0ynW+nkdrykyCum+pUP6sI7uCcUk7srGSmYhdvJAwUb3aV2RM880H//WnF82rvyyfWe5vTLffPS0ef2lH56UpJwXSDesiFdDF7+u6goeT3sTsWBXCdFYgYNj/fzjrHCR/D8uvBTw6xMz1MDZS1PqZDFzhjnK7O+ONEquzxSfECBipWHUSGqokiDjkOgzoCfBw4Mn7SzWYQrHKDUDIA0JUt0xrFKpiCVe4oAdo4QouBqQeJN+FyMgg34IKqEqmf3wDbH8xkf2j0qGy1mHNmxlnwBTT5eUk3Z96hZF+2wu/HjCve7dgH2gfatbIYEsb33LWgyZJDKQlggyIsPS2SODDqpkzh1V4Z//Av3ShRg=</source>
+  </file>
+  <package name="Default" full_name="Default"/>
+  <package name="global" full_name="global"/>
+  <namespace name="global" full_name="global"/>
+  <deprecated count="0"/>
+</project>

@@ -3,7 +3,7 @@
 /**
  * Z-Blog with PHP.
  *
- * @author Z-BlogPHP Team
+ * @author  Z-BlogPHP Team
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';
@@ -97,14 +97,14 @@ foreach ($zbp->categoriesbyorder as $k => $v) {
                     <?php echo $lang['msg']['template']; ?>:</span>
                 <br />
                 <select class="edit" size="1" name="Template" id="cmbTemplate">
-                    <?php echo OutputOptionItemsOfTemplate($cate->Template, array('single', '404', 'search', 'module', 'lm-'), array()); ?></select>
+                    <?php echo OutputOptionItemsOfTemplate($cate->Template, array('single', '404', 'search', 'module', 'lm-'), array('single', 'article')); ?></select>
                 <input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $cate->Template; ?>" /></p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['category_aritles_default_template']; ?>:</span>
                 <br />
                 <select class="edit" size="1" name="LogTemplate" id="cmbLogTemplate">
-                    <?php echo OutputOptionItemsOfTemplate($cate->LogTemplate, array('index', '404', 'search', 'module', 'lm-'), array()); ?></select>
+                    <?php echo OutputOptionItemsOfTemplate($cate->LogTemplate, array('index', '404', 'search', 'module', 'lm-'), array('list', 'category')); ?></select>
             </p>
             <p>
                 <span class='title'>
@@ -130,7 +130,7 @@ foreach ($zbp->categoriesbyorder as $k => $v) {
             <p>
                 <input type="submit" class="button" value="<?php echo $lang['msg']['submit']; ?>" id="btnPost" onclick="return checkInfo();" /></p>
         </form>
-        <script type="text/javascript">
+        <script >
             function checkInfo() {
                 document.getElementById("edit").action = "<?php echo BuildSafeCmdURL('act=CategoryPst'); ?>";
 
@@ -141,10 +141,10 @@ foreach ($zbp->categoriesbyorder as $k => $v) {
 
             }
         </script>
-        <script type="text/javascript">
+        <script >
             ActiveLeftMenu("aCategoryMng");
         </script>
-        <script type="text/javascript">
+        <script >
             AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/category_32.png'; ?>");
         </script>
     </div>

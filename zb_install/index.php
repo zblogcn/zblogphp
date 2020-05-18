@@ -3,7 +3,7 @@
 /**
  * Z-Blog with PHP.
  *
- * @author Z-BlogPHP Team
+ * @author  Z-BlogPHP Team
  * @version 2.0 2013-07-05
  */
 /**
@@ -69,10 +69,10 @@ if ($zbp->option['ZC_DATABASE_TYPE'] !== '') {
   <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
   <meta name="generator" content="Z-BlogPHP" />
   <meta name="robots" content="noindex,nofollow" />
-  <script src="../zb_system/script/common.js" type="text/javascript"></script>
-  <script src="../zb_system/script/c_admin_js_add.php" type="text/javascript"></script>
-  <script src="../zb_system/script/md5.js" type="text/javascript"></script>
-  <script src="../zb_system/script/jquery-ui.custom.min.js" type="text/javascript"></script>
+  <script src="../zb_system/script/common.js"></script>
+  <script src="../zb_system/script/c_admin_js_add.php"></script>
+  <script src="../zb_system/script/md5.js"></script>
+  <script src="../zb_system/script/jquery-ui.custom.min.js"></script>
   <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
   <title>Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_program']; ?> </title>
@@ -121,7 +121,7 @@ switch ($zblogstep) {
 ?>
     </form>
   </div>
-  <script type="text/javascript">
+  <script>
     $("#language").change(function() {
       $("#zbloglang").val($(this).val());
       $("form").attr('action', './index.php');
@@ -295,7 +295,7 @@ Z-BlogPHP官方网址：https://www.zblogcn.com/
           <?php echo $zbp->lang['zb_install']['i_agree']; ?></label>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <input type="submit" name="next" id="netx" value="<?php echo $zbp->lang['zb_install']['next']; ?>" disabled="disabled" />
-        <script type="text/javascript">
+        <script>
           $("input[type=checkbox]").change(function() {
             if ($(this).prop("checked")) {
               $("#netx").prop("disabled", false);
@@ -682,17 +682,17 @@ function Setup3()
                 <option value="utf8" selected>utf8(<?php echo $zbp->lang['msg']['default']; ?>)</option>
                 <option value="utf8mb4">utf8mb4</option>
               </select>
-              <script type="text/javascript">
+              <script>
                 $("#dbengine").change(function(){
                   if($("#dbengine").val()=='InnoDB')
                     $("#dbcharset").val("utf8mb4");
                 });
               </script>
-              <script type="text/javascript">
+              <script>
                 $("#dbcharset").val("<?php echo $option['ZC_MYSQL_CHARSET']; ?>");
               </script>-->
               <?php echo '<input type="hidden" name="dbcollate" id="dbcollate" value="' . $option['ZC_MYSQL_COLLATE'] . '" />'; ?>
-              <script type="text/javascript">
+              <script>
                 $("#dbengine").val("<?php echo $option['ZC_MYSQL_ENGINE']; ?>");
               </script>
             </p>
@@ -735,17 +735,17 @@ function Setup3()
             </p>
             <p><b><?php echo $zbp->lang['zb_install']['db_drive']; ?></b>
             <?php
-            if ($CheckResult['sqlite3'][0]) {
-                ?>
-                <label>
-                  <input value="sqlite3" type="radio" name="dbtype" /> sqlite3</label>
-                    <?php
-                    echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-            }
             if ($CheckResult['pdo_sqlite'][0]) {
                 ?>
                 <label>
                   <input value="pdo_sqlite" type="radio" name="dbtype" /> pdo_sqlite</label>
+                    <?php
+                    echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+            }
+            if ($CheckResult['sqlite3'][0]) {
+                ?>
+                <label>
+                  <input value="sqlite3" type="radio" name="dbtype" /> sqlite3</label>
                     <?php
                     echo '&nbsp;&nbsp;&nbsp;&nbsp;';
             }
@@ -840,7 +840,7 @@ function Setup3()
       </div>
     </dd>
   </dl>
-  <script type="text/javascript">
+  <script>
     $(".dbselect").click(function() {
       $(".dbdetail").hide();
       $("#" + $(this).attr("id").split("_radio")[0]).show();

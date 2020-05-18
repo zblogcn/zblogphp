@@ -5,9 +5,7 @@ if (!defined('ZBP_PATH')) {
 }
 
 /**
- * 系统信息.
- *
- *
+ * 吏新官网信息.
  */
 function misc_updateinfo()
 {
@@ -34,7 +32,7 @@ function misc_updateinfo()
 }
 
 /**
- * @throws Exception
+ * 杂项之统计函数
  */
 function misc_statistic()
 {
@@ -61,7 +59,8 @@ function misc_statistic()
     CountCommentNums(null, null);
     $all_comments = $zbp->cache->all_comment_nums;
 
-    $xmlrpc_address = $zbp->xmlrpcurl;
+    $xmlrpc_address = '<a href="' . $zbp->xmlrpcurl . '" target="_blank">' . $zbp->lang['msg']['xmlrpc_address'] . '</a>';
+    $api_address = '<a href="' . $zbp->apiurl . '" target="_blank">' . $zbp->lang['msg']['api_address'] . '</a>';
     $current_member = $zbp->user->Name;
     $current_version = ZC_VERSION_FULL;
     $all_articles = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('*' => 'num'))->where(array('=', 'log_Type', '0'))->query, 'num');
@@ -85,7 +84,7 @@ function misc_statistic()
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}</td><td>{$current_theme}/{$current_style} {$current_theme_version}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
-    $r .= "<tr><td class='td20'>{$zbp->lang['msg']['xmlrpc_address']}</td><td>{$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td><a href='../cmd.php?act=misc&type=phpinfo' target='_blank'>{$system_environment}</a></td></tr>";
+    $r .= "<tr><td class='td20'>{$zbp->lang['msg']['protocol_address']}</td><td>{$xmlrpc_address} , {$api_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td><a href='../cmd.php?act=misc&type=phpinfo' target='_blank'>{$system_environment}</a></td></tr>";
     $r .= "<script type=\"text/javascript\">$('#statistic').attr('title','" . date("c", $zbp->cache->reload_statistic_time) . "');</script>";
 
     $zbp->cache->reload_statistic = $r;
@@ -116,6 +115,9 @@ function misc_statistic()
     echo $r;
 }
 
+/**
+ * 杂项之显示标签
+ */
 function misc_showtags()
 {
     global $zbp;
@@ -142,6 +144,9 @@ function misc_showtags()
     echo '");$("#ulTag").tagTo("#edtTag");';
 }
 
+/**
+ * 杂项之显示权项
+ */
 function misc_vrs()
 {
     global $zbp, $blogtitle;
@@ -166,8 +171,8 @@ function misc_vrs()
         <meta name="robots" content="none" />
         <meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']; ?>" />
         <link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
-        <script src="script/common.js" type="text/javascript"></script>
-        <script src="script/c_admin_js_add.php" type="text/javascript"></script>
+        <script src="script/common.js"></script>
+        <script src="script/c_admin_js_add.php"></script>
         <?php
         foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {
             $fpname();
@@ -204,6 +209,9 @@ function misc_vrs()
     RunTime();
 }
 
+/**
+ * 杂项之显示PhpInfo
+ */
 function misc_phpinfo()
 {
     global $zbp, $blogtitle;
@@ -239,8 +247,8 @@ function misc_phpinfo()
         <meta name="robots" content="none" />
         <meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']; ?>" />
         <link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
-        <script src="script/common.js" type="text/javascript"></script>
-        <script src="script/c_admin_js_add.php" type="text/javascript"></script>
+        <script src="script/common.js"></script>
+        <script src="script/c_admin_js_add.php"></script>
         <?php
         foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {
             $fpname();
@@ -509,6 +517,9 @@ function misc_phpinfo()
     RunTime();
 }
 
+/**
+ * 杂项之响应Ping
+ */
 function misc_respondping()
 {
     $token = GetVars('token', 'GET');
@@ -518,6 +529,9 @@ function misc_respondping()
     }
 }
 
+/**
+ * 杂项之Ping
+ */
 function misc_ping()
 {
     global $zbp;
@@ -542,6 +556,9 @@ function misc_ping()
     JsonError(1, $zbp->lang['error'][5], $data);
 }
 
+/**
+ * 杂项之执之更新应用之后的操作
+ */
 function misc_updatedapp()
 {
     global $zbp;

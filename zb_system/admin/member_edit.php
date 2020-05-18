@@ -3,7 +3,7 @@
 /**
  * Z-Blog with PHP.
  *
- * @author Z-BlogPHP Team
+ * @author  Z-BlogPHP Team
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';
@@ -137,7 +137,7 @@ $member = $zbp->GetMemberByID($memberid);
                     <?php echo $lang['msg']['template']; ?>:</span>
                 <br />
                 <select class="edit" size="1" name="Template" id="cmbTemplate">
-                    <?php echo OutputOptionItemsOfTemplate($member->Template); ?></select>
+                    <?php echo OutputOptionItemsOfTemplate($member->Template, array('single', '404', 'module', 'search', 'lm-'), array('list', 'author')); ?></select>
             </p>
             <div id='response' class='editmod2'>
                 <?php
@@ -155,7 +155,7 @@ $member = $zbp->GetMemberByID($memberid);
             <p>
                 <input type="submit" class="button" value="<?php echo $lang['msg']['submit']; ?>" id="btnPost" onclick="return checkInfo();" /></p>
         </form>
-        <script type="text/javascript">
+        <script>
             function checkInfo() {
                 document.getElementById("edit").action = "<?php echo BuildSafeCmdURL('act=MemberPst'); ?>";
 
@@ -178,10 +178,10 @@ $member = $zbp->GetMemberByID($memberid);
 
             }
         </script>
-        <script type="text/javascript">
+        <script>
             ActiveLeftMenu("aMemberMng");
         </script>
-        <script type="text/javascript">
+        <script>
             AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/user_32.png'; ?>");
         </script>
     </div>

@@ -3,9 +3,7 @@
 /**
  * Z-Blog with PHP.
  *
- * @author
- * @copyright (C) ZBlogger社区
- *
+ * @author  Z-BlogPHP Team
  * @version 1.0 2020-03-26
  */
 require '../function/c_system_base.php';

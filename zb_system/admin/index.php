@@ -3,7 +3,7 @@
 /**
  * Z-Blog with PHP.
  *
- * @author Z-BlogPHP Team
+ * @author  Z-BlogPHP Team
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';

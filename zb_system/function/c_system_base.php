@@ -5,6 +5,8 @@
  */
 
 /**
+ * ZBLOGPHP
+ *
  * @var ZBlogPHP;
  */
 $zbp = null;

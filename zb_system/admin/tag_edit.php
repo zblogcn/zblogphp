@@ -3,7 +3,7 @@
 /**
  * Z-Blog with PHP.
  *
- * @author Z-BlogPHP Team
+ * @author  Z-BlogPHP Team
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';
@@ -66,7 +66,7 @@ $tag = $zbp->GetTagByID($tagid);
                     <?php echo $lang['msg']['template']; ?>:</span>
                 <br />
                 <select class="edit" size="1" name="Template" id="cmbTemplate">
-                    <?php echo OutputOptionItemsOfTemplate($tag->Template); ?></select>
+                    <?php echo OutputOptionItemsOfTemplate($tag->Template, array('single', '404', 'module', 'search', 'lm-'), array('list', 'tag')); ?></select>
             </p>
             <p>
                 <span class='title'>
@@ -90,7 +90,7 @@ $tag = $zbp->GetTagByID($tagid);
             <p>
                 <input type="submit" class="button" value="<?php echo $lang['msg']['submit']; ?>" id="btnPost" onclick="return checkInfo();" /></p>
         </form>
-        <script type="text/javascript">
+        <script>
             function checkInfo() {
                 document.getElementById("edit").action = "<?php echo BuildSafeCmdURL('act=TagPst'); ?>";
 
@@ -101,10 +101,10 @@ $tag = $zbp->GetTagByID($tagid);
 
             }
         </script>
-        <script type="text/javascript">
+        <script>
             ActiveLeftMenu("aTagMng");
         </script>
-        <script type="text/javascript">
+        <script>
             AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/tag_32.png'; ?>");
         </script>
     </div>

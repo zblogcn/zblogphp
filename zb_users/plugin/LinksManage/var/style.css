@@ -19,17 +19,19 @@
   padding: 5px;
 }
 #LinksManageDel {
+  transition: all linear 0.2s;
   font-size: 15px;
   visibility: hidden;
   height: 1px;
   line-height: 1px;
 }
 #LinksManageDel.active {
-  transition: all linear 0.2s;
   background: #f36;
   color: #fff;
   padding: 20px;
   visibility: visible;
+  height: 2em;
+  line-height: 2em;
 }
 #LinksManageDel.hover {
   transition: all linear 0.2s;

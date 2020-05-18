@@ -74,6 +74,11 @@ class Template
      */
     public $sidebar9 = array();
 
+    /**
+     * @var bool 是否启用标识模板类型
+     */
+    public $isnamedtype = array();
+
     public function __construct()
     {
     }
@@ -585,19 +590,19 @@ class Template
     {
         global $zbp;
 
-        //此处似乎差一个接口？
-        //foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Display'] as $fpname => &$fpsignal) {
-        //    $fpreturn = $fpname($this, $entryPage);
-        //}
+        foreach ($zbp->modulesbyfilename as $m) {
+            $m->Content = $this->ReplaceStaticTags($m->Content);
+        }
 
         if ($entryPage == "") {
             $entryPage = $this->entryPage;
         }
-        $file = $this->path . $entryPage . '.php';
 
-        foreach ($zbp->modulesbyfilename as $m) {
-            $m->Content = $this->ReplaceStaticTags($m->Content);
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Display'] as $fpname => &$fpsignal) {
+            $fpname($this, $entryPage);
         }
+
+        $file = $this->path . $entryPage . '.php';
 
         if (!is_readable($file)) {
             $zbp->ShowError(86, __FILE__, __LINE__);
@@ -736,7 +741,23 @@ class Template
                 }
             }
         }
-
+        $name = trim($name);
+        $type = trim($type);
+        if ($type != null) {
+            $this->isnamedtype = true;
+        }
+        if ($filename == 'index' && $type == null) {
+            $type = 'list';
+        }
+        if ($filename == 'single' && $type == null) {
+            $type = 'single';
+        }
+        if ($filename == '404' && $type == null) {
+            $type = '404';
+        }
+        if ($filename == 'search' && $type == null) {
+            $type = 'search';
+        }
         return array($name, $type);
     }
 

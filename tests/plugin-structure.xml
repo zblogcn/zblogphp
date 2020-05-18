@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project title="API Documentation" version="v2.9.0">
+  <partials/>
+  <file path="c_system_plugin.php" generated-path="c_system_plugin.html" hash="e532325d3484e85ef5d962f20d057433" package="Z-BlogPHP\System/Plugin 操作API">
+    <docblock line="0">
+      <description>插件接口相关
+接口模式复制自Z-Blog ASP版</description>
+      <long-description></long-description>
+      <tag name="package" line="0" description="Z-BlogPHP"/>
+      <tag name="subpackage" line="0" description="System/Plugin 操作API"/>
+    </docblock>
+    <constant namespace="" line="17" package="Z-BlogPHP">
+      <name>PLUGIN_EXITSIGNAL_NONE</name>
+      <full_name>\PLUGIN_EXITSIGNAL_NONE</full_name>
+      <value>''</value>
+      <docblock line="17">
+        <description></description>
+        <long-description></long-description>
+        <tag name="package" line="17" description="Z-BlogPHP"/>
+      </docblock>
+    </constant>
+    <constant namespace="" line="21" package="Z-BlogPHP">
+      <name>PLUGIN_EXITSIGNAL_RETURN</name>
+      <full_name>\PLUGIN_EXITSIGNAL_RETURN</full_name>
+      <value>'return'</value>
+      <docblock line="21">
+        <description></description>
+        <long-description></long-description>
+        <tag name="package" line="21" description="Z-BlogPHP"/>
+      </docblock>
+    </constant>
+    <constant namespace="" line="25" package="Z-BlogPHP">
+      <name>PLUGIN_EXITSIGNAL_BREAK</name>
+      <full_name>\PLUGIN_EXITSIGNAL_BREAK</full_name>
+      <value>'break'</value>
+      <docblock line="25">
+        <description></description>
+        <long-description></long-description>
+        <tag name="package" line="25" description="Z-BlogPHP"/>
+      </docblock>
+    </constant>
+    <function namespace="" line="41" package="Z-BlogPHP">
+      <name>RegisterPlugin</name>
+      <full_name>\RegisterPlugin()</full_name>
+      <docblock line="41">
+        <description>注册插件函数，由每个插件主动调用.</description>
+        <long-description></long-description>
+        <tag name="package" line="41" description="Z-BlogPHP"/>
+        <tag name="param" line="41" description="&lt;p&gt;插件ID&lt;/p&gt;" type="string" variable="$strPluginName">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="41" description="&lt;p&gt;插件激活时执行的函数名&lt;/p&gt;" type="string" variable="$strPluginActiveFunction">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="41" description="" type="void">
+          <type>void</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$strPluginName</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$strPluginActiveFunction</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="53" package="Z-BlogPHP">
+      <name>InstallPlugin</name>
+      <full_name>\InstallPlugin()</full_name>
+      <docblock line="53">
+        <description>插件安装函数，只在插件安装时运行一次</description>
+        <long-description></long-description>
+        <tag name="package" line="53" description="Z-BlogPHP"/>
+        <tag name="param" line="53" description="&lt;p&gt;插件ID&lt;/p&gt;" type="string" variable="$strPluginName">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="53" description="" type="void">
+          <type>void</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$strPluginName</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="68" package="Z-BlogPHP">
+      <name>UninstallPlugin</name>
+      <full_name>\UninstallPlugin()</full_name>
+      <docblock line="68">
+        <description>插件删除函数，只在插件删除时运行一次</description>
+        <long-description></long-description>
+        <tag name="package" line="68" description="Z-BlogPHP"/>
+        <tag name="param" line="68" description="&lt;p&gt;插件ID&lt;/p&gt;" type="" variable="$strPluginName"/>
+        <tag name="return" line="68" description="" type="void">
+          <type>void</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$strPluginName</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="83" package="Z-BlogPHP">
+      <name>DefinePluginFilter</name>
+      <full_name>\DefinePluginFilter()</full_name>
+      <docblock line="83">
+        <description>创建插件接口</description>
+        <long-description></long-description>
+        <tag name="package" line="83" description="Z-BlogPHP"/>
+        <tag name="param" line="83" description="&lt;p&gt;插件接口&lt;/p&gt;" type="" variable="$strPluginFilter"/>
+        <tag name="return" line="83" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$strPluginFilter</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="102" package="Z-BlogPHP">
+      <name>ExistsPluginFilter</name>
+      <full_name>\ExistsPluginFilter()</full_name>
+      <docblock line="102">
+        <description>检查插件接口</description>
+        <long-description></long-description>
+        <tag name="package" line="102" description="Z-BlogPHP"/>
+        <tag name="param" line="102" description="&lt;p&gt;插件接口&lt;/p&gt;" type="" variable="$strPluginFilter"/>
+        <tag name="return" line="102" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$strPluginFilter</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="114" package="Z-BlogPHP">
+      <name>UsingPluginFilter</name>
+      <full_name>\UsingPluginFilter()</full_name>
+      <docblock line="114">
+        <description>调用插件接口(没用)</description>
+        <long-description></long-description>
+        <tag name="package" line="114" description="Z-BlogPHP"/>
+        <tag name="param" line="114" description="&lt;p&gt;插件接口&lt;/p&gt;" type="" variable="$strPluginFilter"/>
+        <tag name="return" line="114" description="" type="array">
+          <type>array</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$strPluginFilter</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="130" package="Z-BlogPHP">
+      <name>RemovePluginFilter</name>
+      <full_name>\RemovePluginFilter()</full_name>
+      <docblock line="130">
+        <description>移除插件接口</description>
+        <long-description></long-description>
+        <tag name="package" line="130" description="Z-BlogPHP"/>
+        <tag name="param" line="130" description="&lt;p&gt;插件接口&lt;/p&gt;" type="" variable="$strPluginFilter"/>
+        <tag name="return" line="130" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$strPluginFilter</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="151" package="Z-BlogPHP">
+      <name>SetPluginSignal</name>
+      <full_name>\SetPluginSignal()</full_name>
+      <docblock line="151">
+        <description>设置插件信号</description>
+        <long-description></long-description>
+        <tag name="package" line="151" description="Z-BlogPHP"/>
+        <tag name="param" line="151" description="" type="" variable="$plugname"/>
+        <tag name="param" line="151" description="" type="" variable="$function"/>
+        <tag name="param" line="151" description="" type="" variable="$signal"/>
+        <tag name="return" line="151" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$plugname</name>
+        <default></default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$function</name>
+        <default></default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$signal</name>
+        <default>'PLUGIN_EXITSIGNAL_NONE'</default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="167" package="Z-BlogPHP">
+      <name>Add_Filter_Plugin</name>
+      <full_name>\Add_Filter_Plugin()</full_name>
+      <docblock line="167">
+        <description>挂上Filter接口</description>
+        <long-description></long-description>
+        <tag name="package" line="167" description="Z-BlogPHP"/>
+        <tag name="param" line="167" description="&lt;p&gt;接口名称&lt;/p&gt;" type="" variable="$plugname"/>
+        <tag name="param" line="167" description="&lt;p&gt;要挂接的函数名&lt;/p&gt;" type="" variable="$functionname"/>
+        <tag name="param" line="167" description="&lt;p&gt;:return,break,continue&lt;/p&gt;" type="" variable="$exitsignal"/>
+        <tag name="return" line="167" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$plugname</name>
+        <default></default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$functionname</name>
+        <default></default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$exitsignal</name>
+        <default>PLUGIN_EXITSIGNAL_NONE</default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="188" package="Z-BlogPHP">
+      <name>Remove_Filter_Plugin</name>
+      <full_name>\Remove_Filter_Plugin()</full_name>
+      <docblock line="188">
+        <description>卸载Filter接口的某项挂载函数</description>
+        <long-description></long-description>
+        <tag name="package" line="188" description="Z-BlogPHP"/>
+        <tag name="param" line="188" description="&lt;p&gt;接口名称&lt;/p&gt;" type="" variable="$plugname"/>
+        <tag name="param" line="188" description="&lt;p&gt;要挂接的函数名&lt;/p&gt;" type="" variable="$functionname"/>
+        <tag name="return" line="188" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$plugname</name>
+        <default></default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$functionname</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <source>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</source>
+  </file>
+  <package name="Z-BlogPHP" full_name="Z-BlogPHP">
+    <package name="System/Plugin 操作API" full_name="Z-BlogPHP\System/Plugin 操作API"/>
+  </package>
+  <package name="global" full_name="global"/>
+  <namespace name="global" full_name="global"/>
+  <deprecated count="0"/>
+</project>

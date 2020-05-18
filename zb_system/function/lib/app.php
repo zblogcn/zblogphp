@@ -194,8 +194,14 @@ class App
      */
     public $css_crc32 = '';
 
+    /**
+     * @var string 静态访法返回unpack后的错误文件数
+     */
     public static $check_error_count = 0;
 
+    /**
+     * @var string 静态访法返回unpack成功后的app
+     */
     public static $unpack_app = null;
 
     public function __get($key)
@@ -711,21 +717,21 @@ class App
     /**
      * 解开应用包.
      *
-     * @param $xml
+     * @param $s
      *
      * @return bool
      */
-    public static function UnPack($xml)
+    public static function UnPack($s)
     {
         global $zbp;
         $charset = array();
-        $charset[1] = substr($xml, 0, 1);
-        $charset[2] = substr($xml, 1, 1);
+        $charset[1] = substr($s, 0, 1);
+        $charset[2] = substr($s, 1, 1);
         if (ord($charset[1]) == 31 && ord($charset[2]) == 139) {
-            $xml = gzdecode($xml);
+            $s = gzdecode($s);
         }
 
-        $xml = simplexml_load_string($xml);
+        $xml = @simplexml_load_string($s, 'SimpleXMLElement', (LIBXML_COMPACT | LIBXML_PARSEHUGE));
         if (!$xml) {
             return false;
         }

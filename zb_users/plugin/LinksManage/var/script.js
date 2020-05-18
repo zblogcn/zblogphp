@@ -68,12 +68,12 @@ $(function() {
   $("#LinksManageDel").droppable({
     accept: "#LinksManageList tr",
     addClasses: false,
-    create: function(event, ui) {
-      $(this).css({
-        height: "2em",
-        lineHeight: "2em"
-      });
-    },
+    // create: function(event, ui) {
+      // $(this).css({
+       // height: "2em",
+       // lineHeight: "2em"
+      // });
+    // },
     drop: function(event, ui) {
       ui.draggable.remove();
     },

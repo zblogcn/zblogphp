@@ -1,14 +1,14 @@
 <?php
-if (!defined('ZBP_PATH')) {
-    exit('Access denied');
-}
-
-/*
+/**
  * 后台管理相关
  * @package Z-BlogPHP
  * @subpackage System/Administrator 后台管理
  * @author Z-BlogPHP Team
  */
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
 
 $zbp->ismanage = true;
 
@@ -78,7 +78,7 @@ function Include_Admin_Addcmtsubmenu()
 }
 
 /**
- *
+ * 升级数据库
  */
 function Include_Admin_UpdateDB()
 {
@@ -91,6 +91,9 @@ function Include_Admin_UpdateDB()
     }
 }
 
+/**
+ * Check Http 304OK
+ */
 function Include_Admin_CheckHttp304OK()
 {
     global $zbp, $action;
@@ -333,6 +336,8 @@ function OutputOptionItemsOfCategories($default)
  * 生成模板select表单.
  *
  * @param $default
+ * @param $refuse_file_filter
+ * @param $accept_type
  *
  * @return null|string
  */
@@ -343,6 +348,8 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
     $s = null;
     $tz = array();
     $tz[''] = $zbp->lang['msg']['none'];
+
+    //type = list,single,article,page,category,tag,author,date，可以并列多个
 
     foreach ($zbp->template->templates as $key => $value) {
         if (preg_match($testRegExp, $key)) {
@@ -374,7 +381,7 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfTemplate'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($default, $tz);
+        $fpreturn = $fpname($default, $tz, $refuse_file_filter, $accept_type);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             return $fpreturn;
@@ -778,7 +785,7 @@ function Admin_SiteInfo()
     echo ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
     if ((time() - (int) $zbp->cache->reload_statistic_time) > (6 * 24 * 60 * 60)) {
-        echo '<script type="text/javascript">$(document).ready(function(){ statistic(\'' . BuildSafeCmdURL('act=misc&type=statistic') . '\'); });</script>';
+        echo '<script>$(document).ready(function(){ statistic(\'' . BuildSafeCmdURL('act=misc&type=statistic') . '\'); });</script>';
     } else {
         $echoStatistic = true;
         $r = $zbp->cache->reload_statistic;
@@ -803,7 +810,7 @@ function Admin_SiteInfo()
     echo ' <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
 
     if ((time() - (int) $zbp->cache->reload_updateinfo_time) > (47 * 60 * 60) && $zbp->CheckRights('root') && $echoStatistic == true) {
-        echo '<script type="text/javascript">$(document).ready(function(){ updateinfo(\'' . BuildSafeCmdURL('act=misc&type=updateinfo') . '\'); });</script>';
+        echo '<script>$(document).ready(function(){ updateinfo(\'' . BuildSafeCmdURL('act=misc&type=updateinfo') . '\'); });</script>';
     } else {
         echo $zbp->cache->reload_updateinfo;
     }
@@ -820,8 +827,8 @@ function Admin_SiteInfo()
     $s = str_replace('感谢', $zbp->lang['msg']['thanks'], $s);
     $s = str_replace('相关链接', $zbp->lang['msg']['website'], $s);
     echo $s;
-    echo '<script type="text/javascript">ActiveTopMenu("topmenu1");</script>';
-    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/home_32.png' . '");</script>';
+    echo '<script>ActiveTopMenu("topmenu1");</script>';
+    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/home_32.png' . '");</script>';
 }
 
 //###############################################################################################################
@@ -963,8 +970,8 @@ function Admin_ArticleMng()
         echo '<input  style="float:right;" type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" value="' . $zbp->lang['msg']['all_del'] . '">';
     }
     echo '</p></form></div>';
-    echo '<script type="text/javascript">ActiveLeftMenu("aArticleMng");</script>';
-    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/article_32.png' . '");</script>';
+    echo '<script>ActiveLeftMenu("aArticleMng");</script>';
+    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/article_32.png' . '");</script>';
 }
 
 //###############################################################################################################
@@ -1071,8 +1078,8 @@ function Admin_PageMng()
         echo '<input  style="float:right;" type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" value="' . $zbp->lang['msg']['all_del'] . '">';
     }
     echo '</p><form></div>';
-    echo '<script type="text/javascript">ActiveLeftMenu("aPageMng");</script>';
-    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/page_32.png' . '");</script>';
+    echo '<script>ActiveLeftMenu("aPageMng");</script>';
+    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/page_32.png' . '");</script>';
 }
 
 //###############################################################################################################
@@ -1131,8 +1138,8 @@ function Admin_CategoryMng()
 
     echo '</table>';
     echo '</div>';
-    echo '<script type="text/javascript">ActiveLeftMenu("aCategoryMng");</script>';
-    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/category_32.png' . '");</script>';
+    echo '<script>ActiveLeftMenu("aCategoryMng");</script>';
+    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/category_32.png' . '");</script>';
 }
 
 //###############################################################################################################
@@ -1282,8 +1289,8 @@ function Admin_CommentMng()
     echo '<hr/></form>';
 
     echo '</div>';
-    echo '<script type="text/javascript">ActiveLeftMenu("aCommentMng");</script>';
-    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/comments_32.png' . '");$(".cmt-note").tooltip();</script>';
+    echo '<script>ActiveLeftMenu("aCommentMng");</script>';
+    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/comments_32.png' . '");$(".cmt-note").tooltip();</script>';
 }
 
 //###############################################################################################################
@@ -1392,8 +1399,8 @@ function Admin_MemberMng()
         }
     }
     echo '</p></div>';
-    echo '<script type="text/javascript">ActiveLeftMenu("aMemberMng");</script>';
-    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/user_32.png' . '");</script>';
+    echo '<script>ActiveLeftMenu("aMemberMng");</script>';
+    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/user_32.png' . '");</script>';
 }
 
 //###############################################################################################################
@@ -1485,8 +1492,8 @@ function Admin_UploadMng()
         }
     }
     echo '</p></div>';
-    echo '<script type="text/javascript">ActiveLeftMenu("aUploadMng");</script>';
-    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/accessories_32.png' . '");</script>';
+    echo '<script>ActiveLeftMenu("aUploadMng");</script>';
+    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/accessories_32.png' . '");</script>';
 }
 
 //###############################################################################################################
@@ -1580,8 +1587,8 @@ function Admin_TagMng()
     }
     echo '</p></div>';
 
-    echo '<script type="text/javascript">ActiveLeftMenu("aTagMng");</script>';
-    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/tag_32.png' . '");</script>';
+    echo '<script>ActiveLeftMenu("aTagMng");</script>';
+    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/tag_32.png' . '");</script>';
 }
 
 //###############################################################################################################
@@ -1640,8 +1647,8 @@ function Admin_ThemeMng()
     }
 
     echo '</form></div>';
-    echo '<script type="text/javascript">ActiveLeftMenu("aThemeMng");</script>';
-    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/themes_32.png' . '");</script>';
+    echo '<script>ActiveLeftMenu("aThemeMng");</script>';
+    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/themes_32.png' . '");</script>';
 }
 
 //###############################################################################################################
@@ -1685,7 +1692,7 @@ function Admin_ModuleMng()
     echo '<div class="widget-left">';
     echo '<div class="widget-list">';
 
-    echo '<script type="text/javascript">';
+    echo '<script>';
     echo 'var functions = {';
     foreach ($zbp->modules as $key => $value) {
         echo "'" . $value->FileName . "':'" . $value->Source . "' ,";
@@ -1818,8 +1825,8 @@ function Admin_ModuleMng()
     echo '</div>';
     echo "\r\n";
 
-    echo '<script type="text/javascript">ActiveLeftMenu("aModuleMng");</script>'; ?>
-    <script type="text/javascript">
+    echo '<script>ActiveLeftMenu("aModuleMng");</script>'; ?>
+    <script>
         $(function() {
             function sortFunction() {
                 var s1 = "";
@@ -1955,7 +1962,7 @@ function Admin_ModuleMng()
         });
     </script>
     <?php
-    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/link_32.png' . '");</script>';
+    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/link_32.png' . '");</script>';
 }
 
 //###############################################################################################################
@@ -2036,7 +2043,7 @@ function Admin_PluginMng()
     }
     echo '</table>';
     echo '</div>';
-    echo '<script type="text/javascript">ActiveLeftMenu("aPluginMng");';
+    echo '<script>ActiveLeftMenu("aPluginMng");';
     echo 'AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/plugin_32.png' . '");$(".plugin-note").tooltip();</script>';
 }
 
@@ -2198,6 +2205,6 @@ function changeDomain(newurl){
         </div>
     </form>
     <?php
-    echo '<script type="text/javascript">ActiveTopMenu("topmenu2");</script>';
-    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/setting_32.png' . '");</script>';
+    echo '<script>ActiveTopMenu("topmenu2");</script>';
+    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/setting_32.png' . '");</script>';
 }

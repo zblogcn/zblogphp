@@ -2,39 +2,45 @@
 
 /**
  * 辅助通用函数.
- *
- *
  */
 
 /**
- * 得到请求协议（考虑到反向代理等原因，未必准确）
+ * 得到请求协议（考虑到不正确的配置反向代理等原因，未必准确）
  * 如果想获取准确的值，请zbp->Load后使用$zbp->isHttps.
  *
- * @param $array
+ * @param array $array
  *
- * @return $string
+ * @return string
  */
 function GetScheme($array)
 {
-    if ((array_key_exists('REQUEST_SCHEME', $array)
-        
-        && (strtolower($array['REQUEST_SCHEME']) == 'https'))
-        
-        || (array_key_exists('HTTPS', $array)
-        
-        && (strtolower($array['HTTPS']) == 'on'))
-        
-        || (array_key_exists('HTTP_FROM_HTTPS', $array)
-        
-        && (strtolower($array['HTTP_FROM_HTTPS']) == 'on'))
-        
-        || (array_key_exists('SERVER_PORT', $array)
-        
-        && (strtolower($array['SERVER_PORT']) == '443'))
-    ) {
+    $array = array_change_key_case($array, CASE_UPPER);
+
+    if (array_key_exists('REQUEST_SCHEME', $array) && (strtolower($array['REQUEST_SCHEME']) == 'https')) {
+        return 'https://';
+    } elseif (array_key_exists('HTTPS', $array) && (strtolower($array['HTTPS']) == 'on')) {
+        return 'https://';
+    } elseif (array_key_exists('SERVER_PORT', $array) && ($array['SERVER_PORT'] == 443)) {
+        return 'https://';
+    } elseif (array_key_exists('HTTP_X_FORWARDED_PORT', $array) && ($array['HTTP_X_FORWARDED_PORT'] == 443)) {
+        return 'https://';
+    } elseif (array_key_exists('HTTP_X_FORWARDED_PROTO', $array) && (strtolower($array['HTTP_X_FORWARDED_PROTO']) == 'https')) {
+        return 'https://';
+    } elseif (array_key_exists('HTTP_X_FORWARDED_PROTOCOL', $array) && (strtolower($array['HTTP_X_FORWARDED_PROTOCOL']) == 'https')) {
+        return 'https://';
+    } elseif (array_key_exists('HTTP_X_FORWARDED_SSL', $array) && (strtolower($array['HTTP_X_FORWARDED_SSL']) == 'on')) {
+        return 'https://';
+    } elseif (array_key_exists('HTTP_X_URL_SCHEME', $array) && (strtolower($array['HTTP_X_URL_SCHEME']) == 'https')) {
+        return 'https://';
+    } elseif (array_key_exists('HTTP_CF_VISITOR', $array) && (stripos($array['HTTP_CF_VISITOR'], 'https') !== false)) {
+        return 'https://';
+    } elseif (array_key_exists('HTTP_FROM_HTTPS', $array) && (strtolower($array['HTTP_FROM_HTTPS']) == 'on')) {
+        return 'https://';
+    } elseif (array_key_exists('HTTP_FRONT_END_HTTPS', $array) && (strtolower($array['HTTP_FRONT_END_HTTPS']) == 'on')) {
+        return 'https://';
+    } elseif (array_key_exists('SERVER_PORT_SECURE', $array) && ($array['SERVER_PORT_SECURE'] == 1)) {
         return 'https://';
     }
-
     return 'http://';
 }
 
@@ -120,10 +126,10 @@ function GetPHPVersion()
 /**
  * 自动加载类文件.
  *
- * @api Filter_Plugin_Autoload
- *
  * @param string $className 类名
  *
+ * @api    Filter_Plugin_Autoload
+ * *
  * @return mixed
  */
 function AutoloadClass($className)
@@ -249,6 +255,9 @@ function GetEnvironment()
     $ajax = Network::Create();
     if ($ajax) {
         $ajax = substr(get_class($ajax), 9);
+    }
+    if ($ajax == 'curl' && ini_get("safe_mode")) {
+        $ajax .= '-safemode';
     }
     if (function_exists('php_uname') == true) {
         $uname = SplitAndGet(php_uname('r'), '-', 0);
@@ -398,6 +407,7 @@ function RemoveMoreSpaces($s)
 function GetGuid()
 {
     $charid = strtolower(md5(uniqid(mt_rand(), true)));
+
     return $charid;
 }
 
@@ -758,7 +768,7 @@ function Redirect301($url)
 }
 
 /**
- * @ignore
+ * Http404
  */
 function Http404()
 {
@@ -767,7 +777,7 @@ function Http404()
 }
 
 /**
- * @ignore
+ * Http500
  */
 function Http500()
 {
@@ -775,7 +785,7 @@ function Http500()
 }
 
 /**
- * @ignore
+ * Http503
  */
 function Http503()
 {
@@ -1075,6 +1085,8 @@ function JsonReturn($data)
  *
  * @param $errorCode
  * @param $errorString
+ * @param $file
+ * @param $line
  *
  * @return void
  */
@@ -1094,7 +1106,9 @@ function RespondError($errorCode, $errorString = '', $file = '', $line = '')
  * XML-RPC脚本错误页面.
  *
  * @param string $errorCode 错误提示字符串
- * @param $errorString
+ * @param string $errorText
+ * @param string $file
+ * @param string $line
  *
  * @return void
  */
@@ -1179,8 +1193,12 @@ function FormatString($source, $para)
 }
 
 /**
- * @Deprecated
  * 格式化字符串
+ *
+ * @param string $source
+ * @param string $param
+ *
+ * @Deprecated
  **/
 function TransferHTML($source, $param)
 {
@@ -1240,7 +1258,6 @@ function CloseTags($html)
  *
  * @param string $sourcestr 源字符串
  * @param int    $start     起始位置
- * @param int    $cutlength 子串长度
  *
  * @return string
  */
@@ -1323,12 +1340,27 @@ function SubStrUTF8($sourcestr, $cutlength)
     return $ret;
 }
 
+/**
+ *  ZBP版获取UTF8格式的字符串的子串.
+ *
+ * @param string $sourcestr
+ * @param int    $start
+ *
+ * @return string
+ */
 function Zbp_SubStr($sourcestr, $start)
 {
     $args = func_get_args();
     return call_user_func_array('SubStrUTF8_Start', $args);
 }
 
+/**
+ *  ZBP版StrLen.
+ *
+ * @param string $string
+ *
+ * @return string
+ */
 function Zbp_StrLen($string)
 {
     if (function_exists('mb_strlen') && function_exists('mb_internal_encoding')) {
@@ -1343,6 +1375,15 @@ function Zbp_StrLen($string)
     return strlen($string);
 }
 
+/**
+ *  ZBP版Strpos
+ *
+ * @param string $haystack
+ * @param string $needle
+ * @param int $offset
+ *
+ * @return string
+ */
 function Zbp_Strpos($haystack, $needle, $offset = 0)
 {
     if (function_exists('mb_strpos') && function_exists('mb_internal_encoding')) {
@@ -1357,6 +1398,15 @@ function Zbp_Strpos($haystack, $needle, $offset = 0)
     return strpos($haystack, $needle, $offset);
 }
 
+/**
+ *  ZBP版Stripos
+ *
+ * @param string $haystack
+ * @param string $needle
+ * @param int $offset
+ *
+ * @return string
+ */
 function Zbp_Stripos($haystack, $needle, $offset = 0)
 {
     if (function_exists('mb_strpos') && function_exists('mb_internal_encoding')) {
@@ -1604,11 +1654,23 @@ function BuildSafeCmdURL($paramters)
     return BuildSafeURL('/zb_system/cmd.php?' . $paramters);
 }
 
+/**
+ * 实现utf84mb4的过滤
+ *
+ * @param string $sql
+ *
+ * @return string
+ */
 function utf84mb_filter(&$sql)
 {
     $sql = preg_replace_callback("/[\x{10000}-\x{10FFFF}]/u", 'utf84mb_convertToUCS4', $sql);
 }
 
+/**
+ * 实现utf84mb的fixHtmlSpecialChars
+ *
+ * @return string
+ */
 function utf84mb_fixHtmlSpecialChars()
 {
     global $article;
@@ -1616,11 +1678,25 @@ function utf84mb_fixHtmlSpecialChars()
     $article->Intro = preg_replace_callback("/\&\#x([0-9A-Z]{2,6})\;/u", 'utf84mb_convertToUTF8', $article->Intro);
 }
 
+/**
+ * 实现utf84mb的convertToUCS4
+ *
+ * @param string $matches
+ *
+ * @return string
+ */
 function utf84mb_convertToUCS4($matches)
 {
     return sprintf("&#x%s;", ltrim(strtoupper(bin2hex(iconv('UTF-8', 'UCS-4', $matches[0]))), "0"));
 }
 
+/**
+ * 实现utf84mb的convertToUTF8
+ *
+ * @param string $matches
+ *
+ * @return string
+ */
 function utf84mb_convertToUTF8($matches)
 {
     return iconv('UCS-4', 'UTF-8', hex2bin(str_pad($matches[1], 8, "0", STR_PAD_LEFT)));
@@ -1774,6 +1850,14 @@ function RemovePHPCode($code)
     return $code;
 }
 
+/**
+ * 拿到ID数组byList列表
+ *
+ * @param array $array
+ * @param string $keyname
+ *
+ * @return array
+ */
 function GetIDArrayByList($array, $keyname = null)
 {
     $ids = array();
@@ -1789,6 +1873,11 @@ function GetIDArrayByList($array, $keyname = null)
     return $ids;
 }
 
+/**
+ * 拿到后台的CSP Heaeder
+ *
+ * @return string
+ */
 function GetBackendCSPHeader()
 {
     $defaultCSP = array(
@@ -1811,6 +1900,10 @@ function GetBackendCSPHeader()
 
 /**
  * 检查重复加载的.
+ *
+ * @param string $file
+ *
+ * @return boolean
  */
 function CheckIncludedFiles($file)
 {
@@ -1824,7 +1917,7 @@ function CheckIncludedFiles($file)
 }
 
 /**
- * logs指定的变量的值
+ * Logs指定的变量的值
  */
 function Logs_Dump()
 {

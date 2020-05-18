@@ -1,13 +1,11 @@
 <?php
+/**
+ * 错误调试.
+ */
 
 if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
-/**
- * 错误调试.
- *
- *
- */
 
 /**
  * 显示全局变量.(下版转到debug页,虽然还没有做，但加了todo检查会报错)
@@ -15,7 +13,6 @@ if (!defined('ZBP_PATH')) {
  * @return mixed
  *
  * @since 1.3.140614
- *
  */
 function Debug_PrintGlobals()
 {
@@ -33,7 +30,6 @@ function Debug_PrintGlobals()
  * @return string
  *
  * @since 1.3
- *
  */
 function Debug_PrintIncludefiles()
 {
@@ -51,7 +47,6 @@ function Debug_PrintIncludefiles()
  * @return string
  *
  * @since 1.3
- *
  */
 function Debug_PrintConstants()
 {
@@ -239,6 +234,9 @@ function Debug_Shutdown_Handler()
     return true;
 }
 
+/**
+ * Debug DoNothing
+ */
 function Debug_DoNothing()
 {
     return false;
@@ -250,34 +248,79 @@ function Debug_DoNothing()
 class ZBlogException
 {
 
+    /**
+     * 静态zbe
+     */
     private static $private_zbe = null;
 
+    /**
+     * 静态disabled
+     */
     public static $disabled = false;
 
+    /**
+     * 静态isstrict
+     */
     public static $isstrict = false;
 
+    /**
+     * 静态iswarning
+     */
     public static $iswarning = true;
 
+    /**
+     * 静态error_id
+     */
     public static $error_id = 0;
 
+    /**
+     * 静态error_file
+     */
     public static $error_file = null;
 
+    /**
+     * 静态error_line
+     */
     public static $error_line = null;
 
+    /**
+     * 静态islogerror
+     */
     public static $islogerror = false;
 
+    /**
+     * 静态errors_msg
+     */
     public static $errors_msg = array();
 
+    /**
+     * 类型
+     */
     public $type;
 
+    /**
+     * 消息
+     */
     public $message;
 
+    /**
+     * 完全消息
+     */
     public $messagefull;
 
+    /**
+     * 文件
+     */
     public $file;
 
+    /**
+     * 行号
+     */
     public $line;
 
+    /**
+     * 错误数组
+     */
     public $errarray = array();
 
     /**
@@ -394,28 +437,42 @@ class ZBlogException
     }
 
     /**
-     * 恢复错误调度.
+     * 禁用严格模式.
      */
     public static function DisableStrict()
     {
         self::$isstrict = false;
     }
 
+    /**
+     * 启用严格模式.
+     */
     public static function EnableStrict()
     {
         self::$isstrict = true;
     }
 
+    /**
+     * 禁用警告模式.
+     */
     public static function DisableWarning()
     {
         self::$iswarning = false;
     }
 
+    /**
+     * 启用警告模式.
+     */
     public static function EnableWarning()
     {
         self::$iswarning = true;
     }
 
+    /**
+     * Trace记录错误.
+     *
+     * @param string $s
+     */
     public static function Trace($s)
     {
         Logs($s);

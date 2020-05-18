@@ -3,7 +3,7 @@
 /**
  * Z-Blog with PHP.
  *
- * @author Z-BlogPHP Team
+ * @author  Z-Blog Team
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';
@@ -39,9 +39,11 @@ $article = new Post();
 $article->AuthorID = $zbp->user->ID;
 
 $ispage = false;
+$typename = 'article';
 if ($action == 'PageEdt') {
     $ispage = true;
-    $article->Type = 1;
+    $article->Type = ZC_POST_TYPE_PAGE;
+    $typename = 'page';
 }
 
 if (!$zbp->CheckRights('ArticlePub')) {
@@ -77,8 +79,8 @@ if ($article->Intro) {
 
 require ZBP_PATH . 'zb_system/admin/admin_header.php';
 ?>
-<script type="text/javascript" src="../script/jquery.tagto.js"></script>
-<script type="text/javascript" src="../script/jquery-ui-timepicker-addon.js"></script>
+<script  src="../script/jquery.tagto.js"></script>
+<script  src="../script/jquery-ui-timepicker-addon.js"></script>
 <?php
 foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Begin'] as $fpname => &$fpsignal) {
     $fpname();
@@ -271,7 +273,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                     <?php echo $lang['msg']['template']; ?>
                                 </label>
                                 <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate" onChange="cmbTemplate.value=this.options[this.selectedIndex].value">
-                                    <?php echo OutputOptionItemsOfTemplate($article->Template, array('index', '404', 'module', 'search', 'lm-'), array()); ?>
+                                    <?php echo OutputOptionItemsOfTemplate($article->Template, array('index', '404', 'module', 'search', 'lm-'), array('single', $typename)); ?>
                                 </select>
                             </div>
                             <!-- )template -->
@@ -359,7 +361,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
     } else {
         echo '<script>ActiveLeftMenu("aArticleMng");</script>';
     }
-    echo '<script type="text/javascript">AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/new_32.png' . '");</script>';
+    echo '<script >AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/new_32.png' . '");</script>';
     ?>
 
     <script>
@@ -568,7 +570,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
         // Auto-save module
         (function() {
             var $idElement = $('#edtID');
-            var articleKey = 'zblogphp_article_' + $idElement.val();
+            var articleKey = 'zblog_article_' + $idElement.val();
             var isFirstOpenPage = true;
             var hint = '<?php echo $lang['error']['93']; ?>';
             var currentStatus = {

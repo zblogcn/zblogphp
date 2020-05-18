@@ -1,13 +1,11 @@
 <?php
+/**
+ * 事件相关函数.
+ */
 
 if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
-/**
- * 事件相关函数.
- *
- *
- */
 
 //###############################################################################################################
 
@@ -23,7 +21,7 @@ if (!defined('ZBP_PATH')) {
 function VerifyLogin($throwException = true)
 {
     global $zbp;
-    /** @var Member $m */
+    /* @var Member $m */
     $m = null;
     if ($zbp->Verify_MD5(trim(GetVars('username', 'POST')), trim(GetVars('password', 'POST')), $m)) {
         $zbp->user = $m;
@@ -93,7 +91,7 @@ function Logout()
  * 获取文章.
  *
  * @param mixed $idorname    文章id 或 名称、别名
- * @param array $option|null
+ * @param array $option |null
  *
  * @return Post
  */
@@ -594,10 +592,10 @@ function ViewSearch()
 /**
  * 根据Rewrite_url规则显示页面.
  *
+ * @param string $inpurl 页面url
+ *
  * @api Filter_Plugin_ViewAuto_Begin
  * @api Filter_Plugin_ViewAuto_End
- *
- * @param string $inpurl 页面url
  *
  * @throws Exception
  *
@@ -776,15 +774,15 @@ function ViewAuto($inpurl)
 /**
  * 显示列表页面.
  *
- * @api Filter_Plugin_ViewList_Begin
- * @api Filter_Plugin_ViewList_Template
- *
  * @param int   $page
  * @param mixed $cate
  * @param mixed $auth
  * @param mixed $date
  * @param mixed $tags      tags列表
  * @param bool  $isrewrite 是否启用urlrewrite
+ *
+ * @api Filter_Plugin_ViewList_Begin
+ * @api Filter_Plugin_ViewList_Template
  *
  * @throws Exception
  *
@@ -913,10 +911,10 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
                 }
             }
             if (isset($auth['id'])) {
-                /** @var Member $author */
+                /* @var Member $author */
                 $author = $zbp->GetMemberByID($auth['id']);
             } else {
-                /** @var Member $author */
+                /* @var Member $author */
                 $author = $zbp->GetMemberByNameOrAlias($auth['alias']);
             }
 
@@ -1419,7 +1417,7 @@ function ViewComment($id)
     global $zbp;
 
     $template = 'comment';
-    /** @var Comment $comment */
+    /* @var Comment $comment */
     $comment = $zbp->GetCommentByID($id);
     $post = new Post();
     $post->LoadInfoByID($comment->LogID);
@@ -2159,7 +2157,7 @@ function GetSubComments($id, &$array)
 {
     global $zbp;
 
-    /** @var Comment $cmt */
+    /* @var Comment $cmt */
     $cmt = $zbp->GetCommentByID($id);
 
     foreach ($cmt->Comments as $comment) {
@@ -2239,7 +2237,7 @@ function BatchComment()
     }
 
     // Search Child Comments
-    /** @var Comment[] $childArray */
+    /* @var Comment[] $childArray */
     $childArray = array();
     foreach ($array as $i => $id) {
         $cmt = $zbp->GetCommentByID($id);
@@ -2679,7 +2677,7 @@ function DelMember_AllData($id)
     $w = array();
     $w[] = array('=', 'log_AuthorID', $id);
 
-    /** @var Post[] $articles */
+    /* @var Post[] $articles */
     $articles = $zbp->GetPostList('*', $w);
     foreach ($articles as $a) {
         $a->Del();
@@ -2687,7 +2685,7 @@ function DelMember_AllData($id)
 
     $w = array();
     $w[] = array('=', 'comm_AuthorID', $id);
-    /** @var Comment[] $comments */
+    /* @var Comment[] $comments */
     $comments = $zbp->GetCommentList('*', $w);
     foreach ($comments as $c) {
         $c->AuthorID = 0;
@@ -2696,7 +2694,7 @@ function DelMember_AllData($id)
 
     $w = array();
     $w[] = array('=', 'ul_AuthorID', $id);
-    /** @var Upload[] $uploads */
+    /* @var Upload[] $uploads */
     $uploads = $zbp->GetUploadList('*', $w);
     foreach ($uploads as $u) {
         $u->Del();
@@ -2756,7 +2754,7 @@ function PostModule()
         }
     }
 
-    /** @var Module $mod */
+    /* @var Module $mod */
     $mod = $zbp->GetModuleByID(GetVars('ID', 'POST'));
 
     foreach ($zbp->datainfo['Module'] as $key => $value) {
@@ -3173,12 +3171,12 @@ function BatchPost($type)
  *
  * 可通过主题中的404.php模板自定义显示效果
  *
- * @api Filter_Plugin_Zbp_ShowError
- *
  * @param $errorCode
  * @param $errorDescription
  * @param $file
  * @param $line
+ *
+ * @api Filter_Plugin_Zbp_ShowError
  *
  * @throws Exception
  */
@@ -3216,6 +3214,11 @@ function Include_AddonAdminFont()
     }
 }
 
+/**
+ * 批处理文章
+ *
+ * @param int $type
+ */
 function Include_BatchPost_Article($type)
 {
     global $zbp;
@@ -3270,6 +3273,11 @@ function Include_BatchPost_Article($type)
     return true;
 }
 
+/**
+ * 批处理页面
+ *
+ * @param int $type
+ */
 function Include_BatchPost_Page($type)
 {
     global $zbp;
@@ -3309,6 +3317,9 @@ function Include_BatchPost_Page($type)
     return true;
 }
 
+/**
+ * 首页index.php的结尾处理
+ */
 function Include_Index_End()
 {
     global $zbp;
@@ -3317,6 +3328,9 @@ function Include_Index_End()
     }
 }
 
+/**
+ * 首页index.php的开头处理
+ */
 function Include_Index_Begin()
 {
     global $zbp;
@@ -3710,13 +3724,14 @@ function CountTag(&$tag, $plus = null)
  *
  * @param string $string 类似'{1}{2}{3}{4}{4}'的tagID串
  * @param int    $plus   控制是否要进行全表扫描
+ * @param int    $articleid   暂没发现有用处的参数
  *
  * @return bool
  */
 function CountTagArrayString($string, $plus = null, $articleid = null)
 {
     global $zbp;
-    /** @var Tag[] $array */
+    /* @var Tag[] $array */
     $array = $zbp->LoadTagsByIDString($string);
 
     //添加大数据接口,tag,plus,id
@@ -3812,6 +3827,8 @@ function CountMemberArray($array, $plus = array(null, null, null, null))
 //###############################################################################################################
 
 /**
+ * BuildModule_catalog
+ *
  * @deprecated
  *
  * @throws Exception
@@ -3824,9 +3841,11 @@ function BuildModule_catalog()
 }
 
 /**
- * @deprecated
+ * BuildModule_calendar
  *
  * @param string $date
+ *
+ * @deprecated
  *
  * @throws Exception
  *
@@ -3838,6 +3857,8 @@ function BuildModule_calendar($date = '')
 }
 
 /**
+ * BuildModule_comments
+ *
  * @deprecated
  *
  * @throws Exception
@@ -3850,6 +3871,8 @@ function BuildModule_comments()
 }
 
 /**
+ * BuildModule_previous
+ *
  * @deprecated
  *
  * @throws Exception
@@ -3862,6 +3885,8 @@ function BuildModule_previous()
 }
 
 /**
+ * BuildModule_archives
+ *
  * @deprecated
  *
  * @throws Exception
@@ -3874,6 +3899,8 @@ function BuildModule_archives()
 }
 
 /**
+ * BuildModule_navbar
+ *
  * @deprecated
  *
  * @throws Exception
@@ -3886,6 +3913,8 @@ function BuildModule_navbar()
 }
 
 /**
+ * BuildModule_tags
+ *
  * @deprecated
  *
  * @throws Exception
@@ -3898,9 +3927,11 @@ function BuildModule_tags()
 }
 
 /**
- * @deprecated
+ * BuildModule_authors
  *
  * @param int $level
+ *
+ * @deprecated
  *
  * @throws Exception
  *
@@ -3912,9 +3943,11 @@ function BuildModule_authors($level = 4)
 }
 
 /**
- * @deprecated
+ * BuildModule_statistics
  *
  * @param array $array
+ *
+ * @deprecated
  *
  * @throws Exception
  *

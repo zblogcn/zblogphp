@@ -1,0 +1,1690 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project title="API Documentation" version="v2.9.0">
+  <partials/>
+  <file path="c_system_common.php" generated-path="c_system_common.html" hash="f2524b7038ae16798598bc103c6341be" package="Default">
+    <docblock line="0">
+      <description>辅助通用函数.</description>
+      <long-description></long-description>
+      <tag name="package" line="0" description="Default"/>
+    </docblock>
+    <function namespace="" line="15" package="Default">
+      <name>GetScheme</name>
+      <full_name>\GetScheme()</full_name>
+      <docblock line="15">
+        <description>得到请求协议（考虑到不正确的配置反向代理等原因，未必准确）
+如果想获取准确的值，请zbp-&gt;Load后使用$zbp-&gt;isHttps.</description>
+        <long-description></long-description>
+        <tag name="package" line="15" description="Default"/>
+        <tag name="param" line="15" description="" type="array" variable="$array">
+          <type>array</type>
+        </tag>
+        <tag name="return" line="15" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$array</name>
+        <default></default>
+        <type>array</type>
+      </argument>
+    </function>
+    <function namespace="" line="52" package="Default">
+      <name>GetWebServer</name>
+      <full_name>\GetWebServer()</full_name>
+      <docblock line="52">
+        <description>获取服务器.</description>
+        <long-description></long-description>
+        <tag name="package" line="52" description="Default"/>
+        <tag name="return" line="52" description="" type="integer">
+          <type>integer</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="82" package="Default">
+      <name>GetSystem</name>
+      <full_name>\GetSystem()</full_name>
+      <docblock line="82">
+        <description>获取操作系统</description>
+        <long-description></long-description>
+        <tag name="package" line="82" description="Default"/>
+        <tag name="return" line="82" description="" type="integer">
+          <type>integer</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="106" package="Default">
+      <name>GetPHPEngine</name>
+      <full_name>\GetPHPEngine()</full_name>
+      <docblock line="106">
+        <description>获取PHP解析引擎.</description>
+        <long-description></long-description>
+        <tag name="package" line="106" description="Default"/>
+        <tag name="return" line="106" description="" type="integer">
+          <type>integer</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="116" package="Default">
+      <name>GetPHPVersion</name>
+      <full_name>\GetPHPVersion()</full_name>
+      <docblock line="116">
+        <description>获取PHP Version.</description>
+        <long-description></long-description>
+        <tag name="package" line="116" description="Default"/>
+        <tag name="return" line="116" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="135" package="Default">
+      <name>AutoloadClass</name>
+      <full_name>\AutoloadClass()</full_name>
+      <docblock line="135">
+        <description>自动加载类文件.</description>
+        <long-description></long-description>
+        <tag name="package" line="135" description="Default"/>
+        <tag name="param" line="135" description="&lt;p&gt;类名&lt;/p&gt;" type="string" variable="$className">
+          <type>string</type>
+        </tag>
+        <tag name="api" line="135" description="Filter_Plugin_Autoload&#10;*"/>
+        <tag name="return" line="135" description="" type="mixed">
+          <type>mixed</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$className</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="164" package="Default">
+      <name>Logs</name>
+      <full_name>\Logs()</full_name>
+      <docblock line="164">
+        <description>记录日志.</description>
+        <long-description></long-description>
+        <tag name="package" line="164" description="Default"/>
+        <tag name="param" line="164" description="" type="string" variable="$logString">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="164" description="" type="boolean" variable="$isError">
+          <type>boolean</type>
+        </tag>
+        <tag name="return" line="164" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$logString</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$isError</name>
+        <default>false</default>
+        <type>boolean</type>
+      </argument>
+    </function>
+    <function namespace="" line="207" package="Default">
+      <name>RunTime</name>
+      <full_name>\RunTime()</full_name>
+      <docblock line="207">
+        <description>输出页面运行时长</description>
+        <long-description></long-description>
+        <tag name="package" line="207" description="Default"/>
+        <tag name="param" line="207" description="&lt;p&gt;是否输出（考虑历史原因，默认输出）&lt;/p&gt;" type="boolean" variable="$isOutput">
+          <type>boolean</type>
+        </tag>
+        <tag name="return" line="207" description="" type="array">
+          <type>array</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$isOutput</name>
+        <default>true</default>
+        <type>boolean</type>
+      </argument>
+    </function>
+    <function namespace="" line="252" package="Default">
+      <name>GetEnvironment</name>
+      <full_name>\GetEnvironment()</full_name>
+      <docblock line="252">
+        <description>获得系统信息.</description>
+        <long-description></long-description>
+        <tag name="package" line="252" description="Default"/>
+        <tag name="return" line="252" description="系统信息" type="string">
+          <type>string</type>
+        </tag>
+        <tag name="since" line="252" description="1.4"/>
+      </docblock>
+    </function>
+    <function namespace="" line="291" package="Default">
+      <name>plugin_dir_url</name>
+      <full_name>\plugin_dir_url()</full_name>
+      <docblock line="291">
+        <description>通过文件获取应用URL地址</description>
+        <long-description></long-description>
+        <tag name="package" line="291" description="Default"/>
+        <tag name="param" line="291" description="&lt;p&gt;文件名&lt;/p&gt;" type="string" variable="$file">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="291" description="返回URL地址" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$file</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="316" package="Default">
+      <name>plugin_dir_path</name>
+      <full_name>\plugin_dir_path()</full_name>
+      <docblock line="316">
+        <description>通过文件获取应用目录路径.</description>
+        <long-description></long-description>
+        <tag name="package" line="316" description="Default"/>
+        <tag name="param" line="316" description="" type="" variable="$file"/>
+        <tag name="return" line="316" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$file</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="342" package="Default">
+      <name>GetValueInArray</name>
+      <full_name>\GetValueInArray()</full_name>
+      <docblock line="342">
+        <description>通过Key从数组获取数据.</description>
+        <long-description></long-description>
+        <tag name="package" line="342" description="Default"/>
+        <tag name="param" line="342" description="&lt;p&gt;数组名&lt;/p&gt;" type="array" variable="$array">
+          <type>array</type>
+        </tag>
+        <tag name="param" line="342" description="&lt;p&gt;下标key&lt;/p&gt;" type="string" variable="$name">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="342" description="" type="mixed">
+          <type>mixed</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$array</name>
+        <default></default>
+        <type>array</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$name</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="359" package="Default">
+      <name>GetValueInArrayByCurrent</name>
+      <full_name>\GetValueInArrayByCurrent()</full_name>
+      <docblock line="359">
+        <description>获取数组中的当前元素数据.</description>
+        <long-description></long-description>
+        <tag name="package" line="359" description="Default"/>
+        <tag name="param" line="359" description="&lt;p&gt;数组名&lt;/p&gt;" type="string" variable="$array">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="359" description="&lt;p&gt;下标key&lt;/p&gt;" type="string" variable="$name">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="359" description="" type="mixed">
+          <type>mixed</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$array</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$name</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="377" package="Default">
+      <name>SplitAndGet</name>
+      <full_name>\SplitAndGet()</full_name>
+      <docblock line="377">
+        <description>分割string并取某项数据.</description>
+        <long-description></long-description>
+        <tag name="package" line="377" description="Default"/>
+        <tag name="param" line="377" description="" type="string" variable="$string">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="377" description="" type="string" variable="$delimiter">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="377" description="" type="integer" variable="$n">
+          <type>integer</type>
+        </tag>
+        <tag name="return" line="377" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$string</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$delimiter</name>
+        <default>';'</default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$n</name>
+        <default>0</default>
+        <type>integer</type>
+      </argument>
+    </function>
+    <function namespace="" line="397" package="Default">
+      <name>RemoveMoreSpaces</name>
+      <full_name>\RemoveMoreSpaces()</full_name>
+      <docblock line="397">
+        <description>删除连续空格</description>
+        <long-description></long-description>
+        <tag name="package" line="397" description="Default"/>
+        <tag name="param" line="397" description="" type="" variable="$s"/>
+        <tag name="return" line="397" description="" type="null|string|array&lt;mixed,string&gt;">
+          <type>null</type>
+          <type>string</type>
+          <type>array&lt;mixed,string&gt;</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$s</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="407" package="Default">
+      <name>GetGuid</name>
+      <full_name>\GetGuid()</full_name>
+      <docblock line="407">
+        <description>获取Guid.</description>
+        <long-description></long-description>
+        <tag name="package" line="407" description="Default"/>
+        <tag name="return" line="407" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="422" package="Default">
+      <name>GetVars</name>
+      <full_name>\GetVars()</full_name>
+      <docblock line="422">
+        <description>获取参数值</description>
+        <long-description></long-description>
+        <tag name="package" line="422" description="Default"/>
+        <tag name="param" line="422" description="&lt;p&gt;数组key名&lt;/p&gt;" type="string" variable="$name">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="422" description="&lt;p&gt;默认为REQUEST&lt;/p&gt;" type="string" variable="$type">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="422" description="" type="mixed|null">
+          <type>mixed</type>
+          <type>null</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$name</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$type</name>
+        <default>'REQUEST'</default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="444" package="Default">
+      <name>GetVarsByDefault</name>
+      <full_name>\GetVarsByDefault()</full_name>
+      <docblock line="444">
+        <description>获取参数值（可设置默认返回值）.</description>
+        <long-description></long-description>
+        <tag name="package" line="444" description="Default"/>
+        <tag name="param" line="444" description="&lt;p&gt;数组key名&lt;/p&gt;" type="string" variable="$name">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="444" description="&lt;p&gt;默认为REQUEST&lt;/p&gt;" type="string" variable="$type">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="444" description="&lt;p&gt;默认为null&lt;/p&gt;" type="string" variable="$default">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="444" description="" type="mixed|null">
+          <type>mixed</type>
+          <type>null</type>
+        </tag>
+        <tag name="since" line="444" description="1.3.140614"/>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$name</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$type</name>
+        <default>'REQUEST'</default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$default</name>
+        <default>null</default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="459" package="Default">
+      <name>GetDbName</name>
+      <full_name>\GetDbName()</full_name>
+      <docblock line="459">
+        <description>获取数据库名.</description>
+        <long-description></long-description>
+        <tag name="package" line="459" description="Default"/>
+        <tag name="return" line="459" description="返回一个随机的SQLite数据文件名" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="472" package="Default">
+      <name>GetCurrentHost</name>
+      <full_name>\GetCurrentHost()</full_name>
+      <docblock line="472">
+        <description>获取当前网站地址</description>
+        <long-description></long-description>
+        <tag name="package" line="472" description="Default"/>
+        <tag name="param" line="472" description="&lt;p&gt;网站域名&lt;/p&gt;" type="string" variable="$blogpath">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="472" description="&lt;p&gt;&amp;$cookiesPath 返回cookie作用域值，要传引入&lt;/p&gt;" type="string" variable="$cookiesPath">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="472" description="返回网站完整地址，如http://localhost/zbp/" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$blogpath</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="true">
+        <name>$cookiesPath</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="524" package="Default">
+      <name>GetHttpContent</name>
+      <full_name>\GetHttpContent()</full_name>
+      <docblock line="524">
+        <description>通过URL获取远程页面内容.</description>
+        <long-description></long-description>
+        <tag name="package" line="524" description="Default"/>
+        <tag name="param" line="524" description="&lt;p&gt;URL地址&lt;/p&gt;" type="string" variable="$url">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="524" description="返回页面文本内容，默认为null" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$url</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="546" package="Default">
+      <name>GetDirsInDir</name>
+      <full_name>\GetDirsInDir()</full_name>
+      <docblock line="546">
+        <description>获取目录下文件夹列表.</description>
+        <long-description></long-description>
+        <tag name="package" line="546" description="Default"/>
+        <tag name="param" line="546" description="&lt;p&gt;目录&lt;/p&gt;" type="string" variable="$dir">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="546" description="文件夹列表" type="array">
+          <type>array</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$dir</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="598" package="Default">
+      <name>GetFilesInDir</name>
+      <full_name>\GetFilesInDir()</full_name>
+      <docblock line="598">
+        <description>获取目录下指定类型文件列表.</description>
+        <long-description></long-description>
+        <tag name="package" line="598" description="Default"/>
+        <tag name="param" line="598" description="&lt;p&gt;目录&lt;/p&gt;" type="string" variable="$dir">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="598" description="&lt;p&gt;文件类型，以｜分隔&lt;/p&gt;" type="string" variable="$type">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="598" description="文件列表" type="array">
+          <type>array</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$dir</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$type</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="740" package="Default">
+      <name>RedirectByScript</name>
+      <full_name>\RedirectByScript()</full_name>
+      <docblock line="740">
+        <description>用script标签进行跳转.</description>
+        <long-description></long-description>
+        <tag name="package" line="740" description="Default"/>
+        <tag name="param" line="740" description="&lt;p&gt;跳转链接&lt;/p&gt;" type="string" variable="$url">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$url</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="751" package="Default">
+      <name>Redirect</name>
+      <full_name>\Redirect()</full_name>
+      <docblock line="751">
+        <description>302跳转.</description>
+        <long-description></long-description>
+        <tag name="package" line="751" description="Default"/>
+        <tag name="param" line="751" description="&lt;p&gt;跳转链接&lt;/p&gt;" type="string" variable="$url">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$url</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="763" package="Default">
+      <name>Redirect301</name>
+      <full_name>\Redirect301()</full_name>
+      <docblock line="763">
+        <description>301跳转.</description>
+        <long-description></long-description>
+        <tag name="package" line="763" description="Default"/>
+        <tag name="param" line="763" description="&lt;p&gt;跳转链接&lt;/p&gt;" type="string" variable="$url">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$url</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="773" package="Default">
+      <name>Http404</name>
+      <full_name>\Http404()</full_name>
+      <docblock line="773">
+        <description>Http404</description>
+        <long-description></long-description>
+        <tag name="package" line="773" description="Default"/>
+      </docblock>
+    </function>
+    <function namespace="" line="782" package="Default">
+      <name>Http500</name>
+      <full_name>\Http500()</full_name>
+      <docblock line="782">
+        <description>Http500</description>
+        <long-description></long-description>
+        <tag name="package" line="782" description="Default"/>
+      </docblock>
+    </function>
+    <function namespace="" line="790" package="Default">
+      <name>Http503</name>
+      <full_name>\Http503()</full_name>
+      <docblock line="790">
+        <description>Http503</description>
+        <long-description></long-description>
+        <tag name="package" line="790" description="Default"/>
+      </docblock>
+    </function>
+    <function namespace="" line="801" package="Default">
+      <name>Http304</name>
+      <full_name>\Http304()</full_name>
+      <docblock line="801">
+        <description>设置304缓存头.</description>
+        <long-description></long-description>
+        <tag name="package" line="801" description="Default"/>
+        <tag name="param" line="801" description="&lt;p&gt;文件名&lt;/p&gt;" type="string" variable="$filename">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="801" description="&lt;p&gt;缓存时间&lt;/p&gt;" type="string" variable="$time">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$filename</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$time</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="819" package="Default">
+      <name>GetGuestIP</name>
+      <full_name>\GetGuestIP()</full_name>
+      <docblock line="819">
+        <description>获取客户端IP.</description>
+        <long-description></long-description>
+        <tag name="package" line="819" description="Default"/>
+        <tag name="return" line="819" description="返回IP地址" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="836" package="Default">
+      <name>GetGuestAgent</name>
+      <full_name>\GetGuestAgent()</full_name>
+      <docblock line="836">
+        <description>获取客户端Agent.</description>
+        <long-description></long-description>
+        <tag name="package" line="836" description="Default"/>
+        <tag name="return" line="836" description="返回Agent" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="846" package="Default">
+      <name>GetRequestUri</name>
+      <full_name>\GetRequestUri()</full_name>
+      <docblock line="846">
+        <description>获取请求来源URL.</description>
+        <long-description></long-description>
+        <tag name="package" line="846" description="Default"/>
+        <tag name="return" line="846" description="返回URL" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="889" package="Default">
+      <name>GetFileExt</name>
+      <full_name>\GetFileExt()</full_name>
+      <docblock line="889">
+        <description>获取文件后缀名.</description>
+        <long-description></long-description>
+        <tag name="package" line="889" description="Default"/>
+        <tag name="param" line="889" description="&lt;p&gt;文件名&lt;/p&gt;" type="string" variable="$f">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="889" description="返回小写的后缀名" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$f</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="907" package="Default">
+      <name>GetFilePermsOct</name>
+      <full_name>\GetFilePermsOct()</full_name>
+      <docblock line="907">
+        <description>获取文件权限.</description>
+        <long-description></long-description>
+        <tag name="package" line="907" description="Default"/>
+        <tag name="param" line="907" description="&lt;p&gt;文件名&lt;/p&gt;" type="string" variable="$f">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="907" description="返回文件权限，数值格式，如0644" type="string|null">
+          <type>string</type>
+          <type>null</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$f</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="923" package="Default">
+      <name>GetFilePerms</name>
+      <full_name>\GetFilePerms()</full_name>
+      <docblock line="923">
+        <description>获取文件权限.</description>
+        <long-description></long-description>
+        <tag name="package" line="923" description="Default"/>
+        <tag name="param" line="923" description="&lt;p&gt;文件名&lt;/p&gt;" type="string" variable="$f">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="923" description="返回文件权限，字符表达格式，如-rw-r--r--" type="string|null">
+          <type>string</type>
+          <type>null</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$f</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="982" package="Default">
+      <name>AddNameInString</name>
+      <full_name>\AddNameInString()</full_name>
+      <docblock line="982">
+        <description>向字符串型的参数表加入一个新参数.</description>
+        <long-description></long-description>
+        <tag name="package" line="982" description="Default"/>
+        <tag name="param" line="982" description="&lt;p&gt;字符串型的参数表，以|符号分隔&lt;/p&gt;" type="string" variable="$s">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="982" description="&lt;p&gt;参数名&lt;/p&gt;" type="string" variable="$name">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="982" description="返回新字符串，以|符号分隔" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$s</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$name</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1003" package="Default">
+      <name>DelNameInString</name>
+      <full_name>\DelNameInString()</full_name>
+      <docblock line="1003">
+        <description>从字符串型的参数表中删除一个参数.</description>
+        <long-description></long-description>
+        <tag name="package" line="1003" description="Default"/>
+        <tag name="param" line="1003" description="&lt;p&gt;字符串型的参数表，以|符号分隔&lt;/p&gt;" type="string" variable="$s">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1003" description="&lt;p&gt;参数名&lt;/p&gt;" type="string" variable="$name">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1003" description="返回新字符串，以|符号分隔" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$s</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$name</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1026" package="Default">
+      <name>HasNameInString</name>
+      <full_name>\HasNameInString()</full_name>
+      <docblock line="1026">
+        <description>在字符串参数值查找参数.</description>
+        <long-description></long-description>
+        <tag name="package" line="1026" description="Default"/>
+        <tag name="param" line="1026" description="&lt;p&gt;字符串型的参数表，以|符号分隔&lt;/p&gt;" type="string" variable="$s">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1026" description="&lt;p&gt;参数名&lt;/p&gt;" type="string" variable="$name">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1026" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$s</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$name</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1043" package="Default">
+      <name>JsonError4ShowErrorHook</name>
+      <full_name>\JsonError4ShowErrorHook()</full_name>
+      <docblock line="1043">
+        <description>以JSON形式输出错误信息（用于ShowError接口）.</description>
+        <long-description></long-description>
+        <tag name="package" line="1043" description="Default"/>
+        <tag name="param" line="1043" description="" type="" variable="$errorCode"/>
+        <tag name="param" line="1043" description="" type="" variable="$errorString"/>
+        <tag name="param" line="1043" description="" type="" variable="$file"/>
+        <tag name="param" line="1043" description="" type="" variable="$line"/>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$errorCode</name>
+        <default></default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$errorString</name>
+        <default></default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$file</name>
+        <default></default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$line</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="1055" package="Default">
+      <name>JsonError</name>
+      <full_name>\JsonError()</full_name>
+      <docblock line="1055">
+        <description>以JSON形式输出错误信息.</description>
+        <long-description></long-description>
+        <tag name="package" line="1055" description="Default"/>
+        <tag name="param" line="1055" description="&lt;p&gt;错误编号&lt;/p&gt;" type="string" variable="$errorCode">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1055" description="&lt;p&gt;错误内容&lt;/p&gt;" type="string" variable="$errorString">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1055" description="" type="object" variable="$data">
+          <type>object</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$errorCode</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$errorString</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$data</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="1078" package="Default">
+      <name>JsonReturn</name>
+      <full_name>\JsonReturn()</full_name>
+      <docblock line="1078">
+        <description>当代码正常运行时，以JSON形式输出信息.</description>
+        <long-description></long-description>
+        <tag name="package" line="1078" description="Default"/>
+        <tag name="param" line="1078" description="&lt;p&gt;待返回内容&lt;/p&gt;" type="object" variable="$data">
+          <type>object</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$data</name>
+        <default></default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="1093" package="Default">
+      <name>RespondError</name>
+      <full_name>\RespondError()</full_name>
+      <docblock line="1093">
+        <description>XML-RPC应答错误页面.</description>
+        <long-description></long-description>
+        <tag name="package" line="1093" description="Default"/>
+        <tag name="param" line="1093" description="" type="" variable="$errorCode"/>
+        <tag name="param" line="1093" description="" type="" variable="$errorString"/>
+        <tag name="param" line="1093" description="" type="" variable="$file"/>
+        <tag name="param" line="1093" description="" type="" variable="$line"/>
+        <tag name="return" line="1093" description="" type="void">
+          <type>void</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$errorCode</name>
+        <default></default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$errorString</name>
+        <default>''</default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$file</name>
+        <default>''</default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$line</name>
+        <default>''</default>
+        <type/>
+      </argument>
+    </function>
+    <function namespace="" line="1115" package="Default">
+      <name>ScriptError</name>
+      <full_name>\ScriptError()</full_name>
+      <docblock line="1115">
+        <description>XML-RPC脚本错误页面.</description>
+        <long-description></long-description>
+        <tag name="package" line="1115" description="Default"/>
+        <tag name="param" line="1115" description="&lt;p&gt;错误提示字符串&lt;/p&gt;" type="string" variable="$errorCode">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1115" description="" type="string" variable="$errorText">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1115" description="" type="string" variable="$file">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1115" description="" type="string" variable="$line">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1115" description="" type="void">
+          <type>void</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$errorCode</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$errorText</name>
+        <default>''</default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$file</name>
+        <default>''</default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$line</name>
+        <default>''</default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1131" package="Default">
+      <name>CheckRegExp</name>
+      <full_name>\CheckRegExp()</full_name>
+      <docblock line="1131">
+        <description>验证字符串是否符合正则表达式.</description>
+        <long-description></long-description>
+        <tag name="package" line="1131" description="Default"/>
+        <tag name="param" line="1131" description="&lt;p&gt;字符串&lt;/p&gt;" type="string" variable="$source">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1131" description="&lt;p&gt;正则表达式，可用[username]|[password]|[email]|[homepage]或自定义表达式&lt;/p&gt;" type="string" variable="$para">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1131" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$source</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$para</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1158" package="Default">
+      <name>FormatString</name>
+      <full_name>\FormatString()</full_name>
+      <docblock line="1158">
+        <description>格式化字符串.</description>
+        <long-description></long-description>
+        <tag name="package" line="1158" description="Default"/>
+        <tag name="param" line="1158" description="&lt;p&gt;字符串&lt;/p&gt;" type="string" variable="$source">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1158" description="&lt;p&gt;正则表达式，可用[html-format]|[nohtml]|[noscript]|[enter]|[noenter]|[filename]|[normalname]或自定义表达式&lt;/p&gt;" type="string" variable="$para">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1158" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$source</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$para</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1203" package="Default">
+      <name>TransferHTML</name>
+      <full_name>\TransferHTML()</full_name>
+      <docblock line="1203">
+        <description>格式化字符串</description>
+        <long-description></long-description>
+        <tag name="package" line="1203" description="Default"/>
+        <tag name="param" line="1203" description="" type="string" variable="$source">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1203" description="" type="string" variable="$param">
+          <type>string</type>
+        </tag>
+        <tag name="Deprecated" line="1203" description=""/>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$source</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$param</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1215" package="Default">
+      <name>CloseTags</name>
+      <full_name>\CloseTags()</full_name>
+      <docblock line="1215">
+        <description>封装HTML标签.</description>
+        <long-description></long-description>
+        <tag name="package" line="1215" description="Default"/>
+        <tag name="param" line="1215" description="&lt;p&gt;html源码&lt;/p&gt;" type="string" variable="$html">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1215" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$html</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1264" package="Default">
+      <name>SubStrUTF8_Start</name>
+      <full_name>\SubStrUTF8_Start()</full_name>
+      <docblock line="1264">
+        <description>获取UTF8格式的字符串的子串.</description>
+        <long-description></long-description>
+        <tag name="package" line="1264" description="Default"/>
+        <tag name="param" line="1264" description="&lt;p&gt;源字符串&lt;/p&gt;" type="string" variable="$sourcestr">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1264" description="&lt;p&gt;起始位置&lt;/p&gt;" type="integer" variable="$start">
+          <type>integer</type>
+        </tag>
+        <tag name="return" line="1264" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$sourcestr</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$start</name>
+        <default></default>
+        <type>integer</type>
+      </argument>
+    </function>
+    <function namespace="" line="1290" package="Default">
+      <name>SubStrUTF8</name>
+      <full_name>\SubStrUTF8()</full_name>
+      <docblock line="1290">
+        <description>获取UTF8格式的字符串的子串.</description>
+        <long-description></long-description>
+        <tag name="package" line="1290" description="Default"/>
+        <tag name="param" line="1290" description="&lt;p&gt;源字符串&lt;/p&gt;" type="string" variable="$sourcestr">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1290" description="&lt;p&gt;子串长度&lt;/p&gt;" type="integer" variable="$cutlength">
+          <type>integer</type>
+        </tag>
+        <tag name="return" line="1290" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$sourcestr</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$cutlength</name>
+        <default></default>
+        <type>integer</type>
+      </argument>
+    </function>
+    <function namespace="" line="1351" package="Default">
+      <name>Zbp_SubStr</name>
+      <full_name>\Zbp_SubStr()</full_name>
+      <docblock line="1351">
+        <description>ZBP版获取UTF8格式的字符串的子串.</description>
+        <long-description></long-description>
+        <tag name="package" line="1351" description="Default"/>
+        <tag name="param" line="1351" description="" type="string" variable="$sourcestr">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1351" description="" type="integer" variable="$start">
+          <type>integer</type>
+        </tag>
+        <tag name="return" line="1351" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$sourcestr</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$start</name>
+        <default></default>
+        <type>integer</type>
+      </argument>
+    </function>
+    <function namespace="" line="1364" package="Default">
+      <name>Zbp_StrLen</name>
+      <full_name>\Zbp_StrLen()</full_name>
+      <docblock line="1364">
+        <description>ZBP版StrLen.</description>
+        <long-description></long-description>
+        <tag name="package" line="1364" description="Default"/>
+        <tag name="param" line="1364" description="" type="string" variable="$string">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1364" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$string</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1387" package="Default">
+      <name>Zbp_Strpos</name>
+      <full_name>\Zbp_Strpos()</full_name>
+      <docblock line="1387">
+        <description>ZBP版Strpos</description>
+        <long-description></long-description>
+        <tag name="package" line="1387" description="Default"/>
+        <tag name="param" line="1387" description="" type="string" variable="$haystack">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1387" description="" type="string" variable="$needle">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1387" description="" type="integer" variable="$offset">
+          <type>integer</type>
+        </tag>
+        <tag name="return" line="1387" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$haystack</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$needle</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$offset</name>
+        <default>0</default>
+        <type>integer</type>
+      </argument>
+    </function>
+    <function namespace="" line="1410" package="Default">
+      <name>Zbp_Stripos</name>
+      <full_name>\Zbp_Stripos()</full_name>
+      <docblock line="1410">
+        <description>ZBP版Stripos</description>
+        <long-description></long-description>
+        <tag name="package" line="1410" description="Default"/>
+        <tag name="param" line="1410" description="" type="string" variable="$haystack">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1410" description="" type="string" variable="$needle">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1410" description="" type="integer" variable="$offset">
+          <type>integer</type>
+        </tag>
+        <tag name="return" line="1410" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$haystack</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$needle</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$offset</name>
+        <default>0</default>
+        <type>integer</type>
+      </argument>
+    </function>
+    <function namespace="" line="1434" package="Default">
+      <name>SubStrUTF8_Html</name>
+      <full_name>\SubStrUTF8_Html()</full_name>
+      <docblock line="1434">
+        <description>截取HTML格式的UTF8格式的字符串的子串.</description>
+        <long-description></long-description>
+        <tag name="package" line="1434" description="Default"/>
+        <tag name="param" line="1434" description="&lt;p&gt;源字符串&lt;/p&gt;" type="string" variable="$source">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1434" description="&lt;p&gt;子串长度&lt;/p&gt;" type="integer" variable="$length">
+          <type>integer</type>
+        </tag>
+        <tag name="return" line="1434" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$source</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$length</name>
+        <default></default>
+        <type>integer</type>
+      </argument>
+    </function>
+    <function namespace="" line="1496" package="Default">
+      <name>RemoveBOM</name>
+      <full_name>\RemoveBOM()</full_name>
+      <docblock line="1496">
+        <description>删除文件BOM头.</description>
+        <long-description></long-description>
+        <tag name="package" line="1496" description="Default"/>
+        <tag name="param" line="1496" description="&lt;p&gt;文件内容&lt;/p&gt;" type="string" variable="$s">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1496" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$s</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1518" package="Default">
+      <name>GetTimeZoneByGMT</name>
+      <full_name>\GetTimeZoneByGMT()</full_name>
+      <docblock line="1518">
+        <description>获取指定时区名.</description>
+        <long-description></long-description>
+        <tag name="package" line="1518" description="Default"/>
+        <tag name="param" line="1518" description="&lt;p&gt;时区号&lt;/p&gt;" type="integer" variable="$z">
+          <type>integer</type>
+        </tag>
+        <tag name="return" line="1518" description="时区名" type="string">
+          <type>string</type>
+        </tag>
+        <tag name="since" line="1518" description="1.3.140614"/>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$z</name>
+        <default></default>
+        <type>integer</type>
+      </argument>
+    </function>
+    <function namespace="" line="1564" package="Default">
+      <name>htmlspecialchars_array</name>
+      <full_name>\htmlspecialchars_array()</full_name>
+      <docblock line="1564">
+        <description>对数组内的字符串进行htmlspecialchars.</description>
+        <long-description></long-description>
+        <tag name="package" line="1564" description="Default"/>
+        <tag name="param" line="1564" description="&lt;p&gt;待过滤字符串&lt;/p&gt;" type="array" variable="$array">
+          <type>array</type>
+        </tag>
+        <tag name="return" line="1564" description="" type="array">
+          <type>array</type>
+        </tag>
+        <tag name="since" line="1564" description="1.4"/>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$array</name>
+        <default></default>
+        <type>array</type>
+      </argument>
+    </function>
+    <function namespace="" line="1588" package="Default">
+      <name>FilterCorrectName</name>
+      <full_name>\FilterCorrectName()</full_name>
+      <docblock line="1588">
+        <description>获得一个只含数字字母和-线的string.</description>
+        <long-description></long-description>
+        <tag name="package" line="1588" description="Default"/>
+        <tag name="param" line="1588" description="&lt;p&gt;待过滤字符串&lt;/p&gt;" type="string" variable="$s">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1588" description="" type="string|array&lt;mixed,string&gt;">
+          <type>string</type>
+          <type>array&lt;mixed,string&gt;</type>
+        </tag>
+        <tag name="since" line="1588" description="1.4"/>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$s</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1602" package="Default">
+      <name>CheckCanBeString</name>
+      <full_name>\CheckCanBeString()</full_name>
+      <docblock line="1602">
+        <description>确认一个对象是否可被转换为string.</description>
+        <long-description></long-description>
+        <tag name="package" line="1602" description="Default"/>
+        <tag name="param" line="1602" description="" type="object" variable="$obj">
+          <type>object</type>
+        </tag>
+        <tag name="return" line="1602" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+        <tag name="since" line="1602" description="1.4"/>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$obj</name>
+        <default></default>
+        <type>object</type>
+      </argument>
+    </function>
+    <function namespace="" line="1627" package="Default">
+      <name>BuildSafeURL</name>
+      <full_name>\BuildSafeURL()</full_name>
+      <docblock line="1627">
+        <description>构造带Token的安全URL.</description>
+        <long-description></long-description>
+        <tag name="package" line="1627" description="Default"/>
+        <tag name="param" line="1627" description="" type="string" variable="$url">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1627" description="&lt;p&gt;应用ID，可以生成一个应用专属的Token&lt;/p&gt;" type="string" variable="$appId">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1627" description="" type="string">
+          <type>string</type>
+        </tag>
+        <tag name="since" line="1627" description="1.5.2"/>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$url</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$appId</name>
+        <default>''</default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1652" package="Default">
+      <name>BuildSafeCmdURL</name>
+      <full_name>\BuildSafeCmdURL()</full_name>
+      <docblock line="1652">
+        <description>构造cmd.php的访问链接.</description>
+        <long-description></long-description>
+        <tag name="package" line="1652" description="Default"/>
+        <tag name="param" line="1652" description="&lt;p&gt;cmd.php参数&lt;/p&gt;" type="string" variable="$paramters">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1652" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+        <tag name="since" line="1652" description="1.5.2"/>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$paramters</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1664" package="Default">
+      <name>utf84mb_filter</name>
+      <full_name>\utf84mb_filter()</full_name>
+      <docblock line="1664">
+        <description>实现utf84mb4的过滤</description>
+        <long-description></long-description>
+        <tag name="package" line="1664" description="Default"/>
+        <tag name="param" line="1664" description="" type="string" variable="$sql">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1664" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="true">
+        <name>$sql</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1674" package="Default">
+      <name>utf84mb_fixHtmlSpecialChars</name>
+      <full_name>\utf84mb_fixHtmlSpecialChars()</full_name>
+      <docblock line="1674">
+        <description>实现utf84mb的fixHtmlSpecialChars</description>
+        <long-description></long-description>
+        <tag name="package" line="1674" description="Default"/>
+        <tag name="return" line="1674" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="1688" package="Default">
+      <name>utf84mb_convertToUCS4</name>
+      <full_name>\utf84mb_convertToUCS4()</full_name>
+      <docblock line="1688">
+        <description>实现utf84mb的convertToUCS4</description>
+        <long-description></long-description>
+        <tag name="package" line="1688" description="Default"/>
+        <tag name="param" line="1688" description="" type="string" variable="$matches">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1688" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$matches</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1700" package="Default">
+      <name>utf84mb_convertToUTF8</name>
+      <full_name>\utf84mb_convertToUTF8()</full_name>
+      <docblock line="1700">
+        <description>实现utf84mb的convertToUTF8</description>
+        <long-description></long-description>
+        <tag name="package" line="1700" description="Default"/>
+        <tag name="param" line="1700" description="" type="string" variable="$matches">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1700" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$matches</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1714" package="Default">
+      <name>VerifyWebToken</name>
+      <full_name>\VerifyWebToken()</full_name>
+      <docblock line="1714">
+        <description>验证Web Token是否合法.</description>
+        <long-description></long-description>
+        <tag name="package" line="1714" description="Default"/>
+        <tag name="param" line="1714" description="" type="" variable="$webTokenString"/>
+        <tag name="param" line="1714" description="" type="" variable="$webTokenId"/>
+        <tag name="param" line="1714" description="" type="string" variable="$key">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1714" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$webTokenString</name>
+        <default></default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$webTokenId</name>
+        <default></default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$key</name>
+        <default>''</default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1745" package="Default">
+      <name>CreateWebToken</name>
+      <full_name>\CreateWebToken()</full_name>
+      <docblock line="1745">
+        <description>创建Web Token.</description>
+        <long-description></long-description>
+        <tag name="package" line="1745" description="Default"/>
+        <tag name="param" line="1745" description="" type="" variable="$webTokenId"/>
+        <tag name="param" line="1745" description="" type="" variable="$time"/>
+        <tag name="param" line="1745" description="" type="string" variable="$key">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1745" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$webTokenId</name>
+        <default></default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$time</name>
+        <default></default>
+        <type/>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$key</name>
+        <default>''</default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1764" package="Default">
+      <name>CheckIsRefererValid</name>
+      <full_name>\CheckIsRefererValid()</full_name>
+      <docblock line="1764">
+        <description>检测来源是否合法，这包括CSRF检测，在开启增强安全模式时加入来源检测.</description>
+        <long-description></long-description>
+        <tag name="package" line="1764" description="Default"/>
+        <tag name="throws" line="1764" description="" type="\Exception">
+          <type>\Exception</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="1786" package="Default">
+      <name>CheckCSRFTokenValid</name>
+      <full_name>\CheckCSRFTokenValid()</full_name>
+      <docblock line="1786">
+        <description>验证CSRF Token是否合法.</description>
+        <long-description></long-description>
+        <tag name="package" line="1786" description="Default"/>
+        <tag name="param" line="1786" description="" type="string" variable="$fieldName">
+          <type>string</type>
+        </tag>
+        <tag name="param" line="1786" description="" type="array" variable="$methods">
+          <type>array</type>
+        </tag>
+        <tag name="return" line="1786" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$fieldName</name>
+        <default>'csrfToken'</default>
+        <type>string</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$methods</name>
+        <default>array('get', 'post')</default>
+        <type>array</type>
+      </argument>
+    </function>
+    <function namespace="" line="1808" package="Default">
+      <name>CheckHTTPRefererValid</name>
+      <full_name>\CheckHTTPRefererValid()</full_name>
+      <docblock line="1808">
+        <description>检测HTTP Referer是否合法.</description>
+        <long-description></long-description>
+        <tag name="package" line="1808" description="Default"/>
+        <tag name="return" line="1808" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="1832" package="Default">
+      <name>RemovePHPCode</name>
+      <full_name>\RemovePHPCode()</full_name>
+      <docblock line="1832">
+        <description>清除一串代码内所有的PHP代码</description>
+        <long-description></long-description>
+        <tag name="package" line="1832" description="Default"/>
+        <tag name="param" line="1832" description="" type="string" variable="$code">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1832" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$code</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1861" package="Default">
+      <name>GetIDArrayByList</name>
+      <full_name>\GetIDArrayByList()</full_name>
+      <docblock line="1861">
+        <description>拿到ID数组byList列表</description>
+        <long-description></long-description>
+        <tag name="package" line="1861" description="Default"/>
+        <tag name="param" line="1861" description="" type="array" variable="$array">
+          <type>array</type>
+        </tag>
+        <tag name="param" line="1861" description="" type="string" variable="$keyname">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1861" description="" type="array">
+          <type>array</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$array</name>
+        <default></default>
+        <type>array</type>
+      </argument>
+      <argument line="0" by_reference="false">
+        <name>$keyname</name>
+        <default>null</default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1881" package="Default">
+      <name>GetBackendCSPHeader</name>
+      <full_name>\GetBackendCSPHeader()</full_name>
+      <docblock line="1881">
+        <description>拿到后台的CSP Heaeder</description>
+        <long-description></long-description>
+        <tag name="package" line="1881" description="Default"/>
+        <tag name="return" line="1881" description="" type="string">
+          <type>string</type>
+        </tag>
+      </docblock>
+    </function>
+    <function namespace="" line="1908" package="Default">
+      <name>CheckIncludedFiles</name>
+      <full_name>\CheckIncludedFiles()</full_name>
+      <docblock line="1908">
+        <description>检查重复加载的.</description>
+        <long-description></long-description>
+        <tag name="package" line="1908" description="Default"/>
+        <tag name="param" line="1908" description="" type="string" variable="$file">
+          <type>string</type>
+        </tag>
+        <tag name="return" line="1908" description="" type="boolean">
+          <type>boolean</type>
+        </tag>
+      </docblock>
+      <argument line="0" by_reference="false">
+        <name>$file</name>
+        <default></default>
+        <type>string</type>
+      </argument>
+    </function>
+    <function namespace="" line="1922" package="Default">
+      <name>Logs_Dump</name>
+      <full_name>\Logs_Dump()</full_name>
+      <docblock line="1922">
+        <description>Logs指定的变量的值</description>
+        <long-description></long-description>
+        <tag name="package" line="1922" description="Default"/>
+      </docblock>
+    </function>
+    <source>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</source>
+  </file>
+  <package name="Default" full_name="Default"/>
+  <package name="global" full_name="global"/>
+  <namespace name="global" full_name="global"/>
+  <deprecated count="0"/>
+</project>

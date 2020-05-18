@@ -109,6 +109,11 @@ class ZBlogPHP
     public $xmlrpcurl = null;
 
     /**
+     * @var string
+     */
+    public $apiurl = null;
+
+    /**
      * @var Member[] 用户数组
      */
     public $members = array();
@@ -602,6 +607,7 @@ class ZBlogPHP
         $this->searchurl = $this->host . 'search.php';
         $this->ajaxurl = $this->host . 'zb_system/cmd.php?act=ajax&src=';
         $this->xmlrpcurl = $this->host . 'zb_system/xml-rpc/index.php';
+        $this->apiurl = $this->host . 'zb_system/api/index.php';
 
         $this->LoadConfigsOnlySystem(false);
 
@@ -1067,12 +1073,6 @@ class ZBlogPHP
 
         unset($this->option['ZC_PERMANENT_DOMAIN_WHOLE_DISABLE']);
         unset($this->option['ZC_PERMANENT_DOMAIN_FORCED_URL']);
-
-        if (ZC_VERSION_MAJOR === '1' && ZC_VERSION_MINOR === '5') {
-            if (is_dir($this->path . 'zb_system/api')) {
-                @rrmdir($this->path . 'zb_system/api'); // Fix bug!!!
-            }
-        }
 
         $reserve_keys = explode('|', self::OPTION_RESERVE_KEYS);
 
