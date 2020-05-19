@@ -3,7 +3,7 @@
 /**
  * Z-Blog with PHP.
  *
- * @author  Z-Blog Team
+ * @author  Z-BlogPHP Team
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';
@@ -570,7 +570,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
         // Auto-save module
         (function() {
             var $idElement = $('#edtID');
-            var articleKey = 'zblog_article_' + $idElement.val();
+            var articleKey = 'zblogphp_article_' + $idElement.val();
             var isFirstOpenPage = true;
             var hint = '<?php echo $lang['error']['93']; ?>';
             var currentStatus = {

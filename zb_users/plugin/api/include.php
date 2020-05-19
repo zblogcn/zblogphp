@@ -1,8 +1,7 @@
 <?php
 
 //注册插件
-RegisterPlugin("AdminColor", "ActivePlugin_api");
-
+RegisterPlugin("api", "ActivePlugin_api");
 
 function ActivePlugin_api()
 {

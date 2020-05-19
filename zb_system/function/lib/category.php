@@ -20,6 +20,7 @@ if (!defined('ZBP_PATH')) {
  * @property string Url
  * @property int|string Order 分类顺序
  * @property string SymbolName 层次标识符+名字
+ * @property int AllCount 本分类及子孙分类下所有文章数量
  */
 class Category extends Base
 {
@@ -164,14 +165,20 @@ class Category extends Base
             }
 
             return $value;
-        } else {
-            foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Get'] as $fpname => &$fpsignal) {
-                $fpreturn = $fpname($this, $name);
-                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-                    $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+        }
+        if ($name == 'AllCount') {
+            $i = $this->Count;
+            foreach ($this->ChildrenCategories as $c) {
+                $i += $c->Count;
+            }
+            return $i;
+        }
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Get'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($this, $name);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
-                    return $fpreturn;
-                }
+                return $fpreturn;
             }
         }
 
