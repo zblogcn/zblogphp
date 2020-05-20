@@ -226,8 +226,10 @@ class Network__curl implements Network__Interface
 
         if ($this->maxredirs > 0) {
             if (ini_get("safe_mode") == false) {
-                curl_setopt($this->ch, CURLOPT_MAXREDIRS, $this->maxredirs);
-                curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
+                if (version_compare(PHP_VERSION, '5.6.0', '>=') || (ini_get("safe_mode") == false && version_compare(PHP_VERSION, '5.6.0', '<') && ini_get("open_basedir") == false)) {
+                    curl_setopt($this->ch, CURLOPT_MAXREDIRS, $this->maxredirs);
+                    curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
+                }
             }
         }
 

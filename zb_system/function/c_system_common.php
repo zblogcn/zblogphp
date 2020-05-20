@@ -256,8 +256,12 @@ function GetEnvironment()
     if ($ajax) {
         $ajax = substr(get_class($ajax), 9);
     }
-    if ($ajax == 'curl' && ini_get("safe_mode")) {
-        $ajax .= '-safemode';
+    if ($ajax == 'curl') {
+        if (ini_get("safe_mode") || (version_compare(PHP_VERSION, '5.6.0', '<') && ini_get("open_basedir"))) {
+            $ajax .= '-safemode';
+        }
+        $array = curl_version();
+        $ajax .= $array['version'];
     }
     if (function_exists('php_uname') == true) {
         $uname = SplitAndGet(php_uname('r'), '-', 0);
