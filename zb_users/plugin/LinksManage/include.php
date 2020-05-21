@@ -92,7 +92,7 @@ function LinksManage_AddItem2Mod($item, $fileName)
     }
   }
   if ($singlal !== "break") {
-    $items[] = $item;
+    $items[$item->text] = $item;
     $mod->Metas->LM_json = json_encode($items);
   }
   $mod->Content = LinksManage_GenModCon($items, $fileName);
@@ -112,6 +112,7 @@ function LinksManage_GenModCon($items, $fileName)
     } else {
       $item->ico = "";
     }
+    $item->subs = (array) $item->subs;
     $zbp->template->SetTags('item', $item);
     $zbp->template->SetTags('id', $fileName);
     $content .= $zbp->template->Output($outTpl);

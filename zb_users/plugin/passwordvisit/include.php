@@ -38,7 +38,7 @@ function passwordvisit_input_password(&$template)
                 die();
             }
         } else {
-            if (GetVars('password', 'POST') == $zbp->Config('passwordvisit')->default_password) {
+            if (GetVars('password', 'POST') === $zbp->Config('passwordvisit')->default_password) {
                 return;
             } else {
                 echo '<script type="text/javascript">alert("密码错误，请重新输入！");window.location="' . $article->Url . '";</script>';
