@@ -1316,7 +1316,7 @@ class ZBlogPHP
         }
         $m = $this->GetMemberByName($name);
         if ($m->ID != null) {
-            if (strcasecmp($m->Password, $password) == 0) {
+            if (hash_equals($m->Password, $password) === true) {
                 $member = $m;
 
                 return true;

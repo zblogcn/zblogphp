@@ -31,7 +31,7 @@ function passwordvisit_input_password(&$template)
     if (isset($_POST['password']) && $_POST['password'] != '') {
         $article = $template->GetTags('article');
         if ($article->Metas->passwordvisit_password != '') {
-            if (GetVars('password', 'POST') == $article->Metas->passwordvisit_password) {
+            if (GetVars('password', 'POST') === $article->Metas->passwordvisit_password) {
                 return;
             } else {
                 echo '<script type="text/javascript">alert("密码错误，请重新输入！");window.location="' . $article->Url . '";</script>';
