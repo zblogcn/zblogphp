@@ -112,8 +112,6 @@ function ActiveTopMenu(name){
 // 返回：    无
 //*********************************************************
 function bmx2table(){
-    $("table:not(.table_striped)").addClass("table_striped");
-    $("table:not(.table_hover)").addClass("table_hover");
 };
 //*********************************************************
 
@@ -168,15 +166,25 @@ function notify(s){
 function statistic(s){
     $("#statloading").show();
     $("#updatatime").hide();
-    $.get(s+"&tm="+Math.random(),{},
-        function(data){
+    $.ajax({
+        type: "GET",
+        url: s+"&tm="+Math.random(),
+        data: {},
+        error: function(xhr, exception){
+            if( xhr.status == "500") {
+                 alert('<?php echo $lang['msg']['refresh_cache']; ?>\n\r<?php echo $lang['msg']['operation_failed']; ?>');
+            }
+            $("#statloading").hide();
+            $("#updatatime").show();
+        },
+        success: function(data){
             $("#tbStatistic tr:first ~ tr").remove();
             $("#tbStatistic tr:first").after(data);
-            //bmx2table();
             $("#statloading").hide();
             $("#updatatime").show();
         }
-    );
+    });
+
 }
 
 function updateinfo(s){
@@ -227,9 +235,6 @@ $(document).ready(function(){
             return false;
         }
     );
-
-    //斑马线化表格（老版本兼容代码）
-    bmx2table();
 
     if($('.SubMenu').find('span').length>0){
         $('.SubMenu').show();
